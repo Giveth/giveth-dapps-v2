@@ -44,7 +44,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			<HomePartners />
 			<Separator />
 			{newCampaigns && newCampaigns.length > 0 ? (
-				<CampaignsBlock campaigns={campaigns} />
+				<CampaignsBlock campaigns={newCampaigns} />
 			) : (
 				''
 			)}

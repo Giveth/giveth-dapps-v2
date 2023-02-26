@@ -1,7 +1,6 @@
 import {
 	B,
 	brandColors,
-	H3,
 	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -63,7 +62,6 @@ const WhyGiveth: FC<IWhyGivethProps> = props => {
 	return (
 		<Relative>
 			<GivethStats>
-				<Title weight={700}>WAGMI 🤘💜</Title>
 				<Stats>
 					{statsArray.map(i => (
 						<StatsCard
@@ -256,10 +254,6 @@ const Stats = styled(Flex)`
 	${mediaQueries.laptopS} {
 		gap: 180px;
 	}
-`;
-
-const Title = styled(H3)`
-	color: ${brandColors.giv[600]};
 `;
 
 const GivethStats = styled.div`

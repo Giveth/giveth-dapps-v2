@@ -19,10 +19,11 @@ interface IProps {
 	date: string;
 	time: string;
 	link: string;
+	calendarLink: string;
 }
 
 const CalendarItem: FC<IProps> = props => {
-	const { title, lecturer, date, time, link } = props;
+	const { title, lecturer, date, time, link, calendarLink } = props;
 	return (
 		<Wrapper>
 			<H5 weight={700}>{title}</H5>
@@ -42,12 +43,14 @@ const CalendarItem: FC<IProps> = props => {
 						icon={<IconExternalLink24 />}
 					/>
 				</ExternalLink>
-				<GhostButton
-					label='Add to calendar'
-					size='large'
-					color={neutralColors.gray[700]}
-					icon={<Image src={CalendarGray} alt='Calendar black' />}
-				/>
+				<a href={calendarLink} target='_blank' rel='noreferrer'>
+					<GhostButton
+						label='Add to calendar'
+						size='large'
+						color={neutralColors.gray[700]}
+						icon={<Image src={CalendarGray} alt='Calendar black' />}
+					/>
+				</a>
 			</Buttons>
 		</Wrapper>
 	);
