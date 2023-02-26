@@ -94,6 +94,7 @@ const QuarterCircle = styled.div`
 
 const SpanStyled = styled.span`
 	color: ${neutralColors.gray[900]};
+	font-weight: bold;
 `;
 
 const StyledContainer = styled(Container)`
