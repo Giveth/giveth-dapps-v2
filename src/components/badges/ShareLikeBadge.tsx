@@ -15,7 +15,7 @@ const ShareLikeBadge = (props: {
 	type: 'share' | 'like';
 	active?: boolean;
 	onClick: () => void;
-	isSimple?: boolean;
+	isSimple?: boolean | null;
 }) => {
 	const { formatMessage } = useIntl();
 	const { type, active, onClick, isSimple } = props;
@@ -39,7 +39,7 @@ const ShareLikeBadge = (props: {
 	);
 };
 
-const Wrapper = styled(FlexCenter)<{ isSimple?: boolean }>`
+const Wrapper = styled(FlexCenter)<{ isSimple?: boolean | null }>`
 	height: 48px;
 	max-width: 130px;
 	width: 100%;

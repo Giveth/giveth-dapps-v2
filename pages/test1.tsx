@@ -3,12 +3,20 @@ import { GetServerSideProps } from 'next';
 import { useWeb3React } from '@web3-react/core';
 import { IconHelpFilled16 } from '@giveth/ui-design-system';
 import { useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
 import { FlowRateTooltip } from '@/components/homeTabs/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { zIndex } from '@/lib/constants/constants';
+import { Container } from '@/components/Grid';
+import { removeQueryParamAndRedirect } from '@/helpers/url';
+
+const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
+	ssr: false,
+});
 
 const TestRoute = () => {
 	// const xDaiValues = useSelector(
@@ -18,6 +26,8 @@ const TestRoute = () => {
 	const dispatch = useAppDispatch();
 	const functionRef = useRef<Function>();
 	const [state, setState] = useState(0);
+	const [description, setDescription] = useState('');
+	const router = useRouter();
 
 	// const { data, isLoading, error, refetch } = useGetSubgraphValuesQuery({
 	// 	chain: chainId,
@@ -98,6 +108,17 @@ const TestRoute = () => {
 				>
 					increase
 				</button>
+				<button
+					type='button'
+					onClick={() => {
+						removeQueryParamAndRedirect(router, [
+							'filter',
+							'campaign',
+						]);
+					}}
+				>
+					remove search
+				</button>
 				<div>
 					--------------------------------------------
 					<IconWithTooltip
@@ -111,6 +132,12 @@ const TestRoute = () => {
 						</FlowRateTooltip>
 					</IconWithTooltip>
 				</div>
+				redeploy!
+				<RichTextInput
+					setValue={setDescription}
+					value={description}
+					limit={200}
+				/>
 			</TestContainer>
 		</>
 	);
@@ -129,7 +156,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 	};
 };
 
-const TestContainer = styled.div`
+const TestContainer = styled(Container)`
 	padding: 200px 0;
 `;
 

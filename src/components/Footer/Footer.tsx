@@ -106,13 +106,6 @@ const Footer = () => {
 						</Link>
 					</LinkColumn>
 					<LinkColumn>
-						<a href={links.TRACE}>
-							<LinkItem color={textColor}>
-								{formatMessage({
-									id: 'component.title.giveth_trace',
-								})}
-							</LinkItem>
-						</a>
 						<a href={links.COMMONS_STACK}>
 							<LinkItem color={textColor}>
 								{formatMessage({

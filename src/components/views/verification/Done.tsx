@@ -2,11 +2,12 @@ import { useIntl } from 'react-intl';
 import { B, brandColors, H4, neutralColors, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import React from 'react';
-import ConfettiAnimation from '@/components/animations/confetti';
 import CheckCircle from '@/components/views/verification/CheckCircle';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useVerificationData } from '@/context/verification.context';
 import { EVerificationStatus } from '@/apollo/types/types';
+import CongratsAnimation from '@/animations/congrats.json';
+import LottieControl from '@/components/LottieControl';
 
 const Done = () => {
 	const { isMobile } = useDetectDevice();
@@ -56,7 +57,10 @@ const Done = () => {
 				<P>{subtitles[status ?? EVerificationStatus.SUBMITTED]} </P>
 				{status === EVerificationStatus.DRAFT && (
 					<ConfettiContainer>
-						<ConfettiAnimation size={isMobile ? 200 : 600} />
+						<LottieControl
+							size={isMobile ? 200 : 600}
+							animationData={CongratsAnimation}
+						/>
 					</ConfettiContainer>
 				)}
 				<StagesContainer>
@@ -135,8 +139,6 @@ const ConfettiContainer = styled.div`
 	top: 50px;
 	left: 0;
 	right: 0;
-	margin-left: auto;
-	margin-right: auto;
 `;
 
 const Container = styled.div`

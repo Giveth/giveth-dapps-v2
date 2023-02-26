@@ -1,5 +1,5 @@
-import { neutralColors } from '@giveth/ui-design-system';
-import { createGlobalStyle } from 'styled-components';
+import { brandColors, neutralColors } from '@giveth/ui-design-system';
+import { createGlobalStyle, css } from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -35,9 +35,20 @@ const GeneralController = () => {
 
 const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
   body {
-    background-color: ${props =>
-		props.theme === ETheme.Dark ? '#090446' : neutralColors.gray[200]};
-	color: ${props => (props.theme === ETheme.Dark ? 'white' : '#212529')};
+	${props =>
+		props.theme === ETheme.Dark
+			? css`
+					background-color: ${brandColors.giv[900]};
+					color: ${'white'};
+			  `
+			: props.theme === ETheme.Light
+			? css`
+					background-color: ${neutralColors.gray[200]};
+					color: ${neutralColors.gray[900]};
+			  `
+			: ''}
+    
+	
   }
 `;
 

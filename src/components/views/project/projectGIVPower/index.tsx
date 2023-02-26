@@ -7,7 +7,7 @@ import { IPowerBoosting, IProjectPower } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import { Flex } from '@/components/styled-components/Flex';
 import LoadingAnimation from '@/animations/loading_giv.json';
-import LottieControl from '@/components/animations/lottieControl';
+import LottieControl from '@/components/LottieControl';
 import { useProjectContext } from '@/context/project.context';
 
 export interface IPowerBoostingWithUserGIVpower
@@ -40,40 +40,34 @@ const ProjectGIVPowerIndex = ({
 	const totalCount = boostersData?.totalCount ?? 0;
 
 	if (isBoostingsLoading)
-		return <LottieControl animationData={LoadingAnimation} size={150} />;
+		return <LottieControl animationData={LoadingAnimation} size={250} />;
 
-	return (
+	return hasGivPower ? (
 		<>
-			{hasGivPower ? (
-				<>
-					<GIVPowerHeader
-						projectPower={projectPower}
-						projectFuturePower={projectFuturePower}
-					/>
-					<GIVPowerTable
-						powerBoostings={
-							boostersData?.powerBoostings.slice(
-								page * itemPerPage,
-								(page + 1) * itemPerPage,
-							) || []
-						}
-						totalPowerBoosting={
-							boostersData?.totalPowerBoosting || '0'
-						}
-					/>
-					<Flex justifyContent='flex-end'>
-						<Pagination
-							totalCount={totalCount}
-							currentPage={page}
-							setPage={setPage}
-							itemPerPage={itemPerPage}
-						/>
-					</Flex>
-				</>
-			) : (
-				<NoBoost isAdmin={isAdmin} />
-			)}
+			<GIVPowerHeader
+				projectPower={projectPower}
+				projectFuturePower={projectFuturePower}
+			/>
+			<GIVPowerTable
+				powerBoostings={
+					boostersData?.powerBoostings.slice(
+						page * itemPerPage,
+						(page + 1) * itemPerPage,
+					) || []
+				}
+				totalPowerBoosting={boostersData?.totalPowerBoosting || '0'}
+			/>
+			<Flex justifyContent='flex-end'>
+				<Pagination
+					totalCount={totalCount}
+					currentPage={page}
+					setPage={setPage}
+					itemPerPage={itemPerPage}
+				/>
+			</Flex>
 		</>
+	) : (
+		<NoBoost isAdmin={isAdmin} />
 	);
 };
 

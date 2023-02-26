@@ -21,7 +21,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
-import { timeFromNow, htmlToText } from '@/lib/helpers';
+import { timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import {
 	addressToUserView,
@@ -38,13 +38,14 @@ const SIDE_PADDING = '26px';
 
 interface IProjectCard {
 	project: IProject;
+	className?: string;
 }
 
 const ProjectCard = (props: IProjectCard) => {
-	const { project } = props;
+	const { project, className } = props;
 	const {
 		title,
-		description,
+		descriptionSummary,
 		image,
 		slug,
 		adminUser,
@@ -67,6 +68,7 @@ const ProjectCard = (props: IProjectCard) => {
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
+			className={className}
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges project={project} />
@@ -99,7 +101,7 @@ const ProjectCard = (props: IProjectCard) => {
 						</Title>
 					</Link>
 				</TitleWrapper>
-				<PaddedRow>
+				<PaddedRow style={{ marginTop: '6px' }}>
 					{adminUser?.name && !isForeignOrg && (
 						<Link
 							href={addressToUserView(adminUser?.walletAddress)}
@@ -114,10 +116,10 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				</PaddedRow>
 				<Link href={slugToProjectView(slug)}>
-					<Description>{htmlToText(description)}</Description>
+					<Description>{descriptionSummary}</Description>
 					<PaddedRow alignItems='center' gap='4px'>
 						<PriceText>
-							${Math.ceil(totalDonations as number)}
+							${Math.round(totalDonations as number)}
 						</PriceText>
 						<LightSubline>
 							{' '}
@@ -239,6 +241,8 @@ const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
 `;
 
 const Hr = styled.hr`
+	margin-left: ${SIDE_PADDING};
+	margin-right: ${SIDE_PADDING};
 	border: 1px solid ${neutralColors.gray[300]};
 `;
 
@@ -279,20 +283,21 @@ const TitleWrapper = styled.div`
 `;
 
 const Title = styled(H6)<{ isHover?: boolean }>`
-	color: ${props =>
-		props.isHover ? brandColors.pinky[500] : brandColors.deep[700]};
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	margin-bottom: 2px;
+	&:hover {
+		color: ${brandColors.pinky[500]};
+	}
 `;
 
 const Author = styled(GLink)`
-	color: ${brandColors.pinky[500]};
+	color: ${neutralColors.gray[700]};
 	margin-bottom: 16px;
 	display: block;
 	&:hover {
-		color: ${brandColors.pinky[800]};
+		color: ${brandColors.pinky[500]};
 	}
 `;
 

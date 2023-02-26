@@ -1,28 +1,16 @@
-import Image from 'next/image';
 import { IconVerifiedBadge, Overline } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
 import { useIntl } from 'react-intl';
 import { FlexCenter } from '../styled-components/Flex';
-import TraceIcon from '/public/images/trace.svg';
 
-const VerificationBadge = (props: { verified?: boolean; trace?: boolean }) => {
+const VerificationBadge = () => {
 	const { formatMessage } = useIntl();
-	const { verified, trace } = props;
-	const text = verified
-		? formatMessage({ id: 'label.verified' })
-		: trace
-		? 'TRACE'
-		: '';
-
 	return (
 		<Wrapper>
-			{verified ? (
-				<IconVerifiedBadge />
-			) : trace ? (
-				<Image src={TraceIcon} alt='badge icon' />
-			) : null}
-			<TextBadge styleType='Small'>{text}</TextBadge>
+			<IconVerifiedBadge />
+			<TextBadge styleType='Small'>
+				{formatMessage({ id: 'label.verified' })}
+			</TextBadge>
 		</Wrapper>
 	);
 };

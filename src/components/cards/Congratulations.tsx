@@ -14,7 +14,7 @@ import { Flex } from '../styled-components/Flex';
 import { AddTokenButton } from '../AddTokenButton';
 import { Container } from '@/components/Grid';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
-import LottieControl from '@/components/animations/lottieControl';
+import LottieControl from '@/components/LottieControl';
 
 const SmileImage = styled.div`
 	position: absolute;

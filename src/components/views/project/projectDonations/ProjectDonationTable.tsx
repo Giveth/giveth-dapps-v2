@@ -3,12 +3,11 @@ import styled from 'styled-components';
 import {
 	B,
 	brandColors,
-	H6,
 	IconExternalLink,
 	neutralColors,
 } from '@giveth/ui-design-system';
-
 import { useIntl } from 'react-intl';
+
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation } from '@/apollo/types/types';
@@ -76,12 +75,11 @@ const ProjectDonationTable = ({
 		by: EOrderBy.CreationDate,
 		direction: EDirection.DESC,
 	});
-	const [activeTab, setActiveTab] = useState<number>(0);
 	const [searchTerm, setSearchTerm] = useState<string>('');
 	const { projectData } = useProjectContext();
 	const user = useAppSelector(state => state.user.userData);
 	const { formatMessage, locale } = useIntl();
-	const { id, traceCampaignId, adminUser } = projectData || {};
+	const { id, adminUser } = projectData || {};
 	const isAdmin = compareAddresses(
 		adminUser?.walletAddress,
 		user?.walletAddress,
@@ -134,139 +132,104 @@ const ProjectDonationTable = ({
 
 	return (
 		<Wrapper>
-			<UpperSection>
-				<Tabs>
-					<Tab
-						onClick={() => setActiveTab(0)}
-						className={activeTab === 0 ? 'active' : ''}
+			<SearchBox
+				onChange={event => setSearchTerm(event)}
+				value={searchTerm}
+			/>
+			<DonationTableWrapper>
+				<DonationTableContainer isAdmin={isAdmin}>
+					<TableHeader
+						onClick={() =>
+							orderChangeHandler(EOrderBy.CreationDate)
+						}
 					>
-						{formatMessage({ id: 'label.donations' })}
-					</Tab>
-					{!!traceCampaignId && (
-						<Tab
-							onClick={() => setActiveTab(1)}
-							className={activeTab === 1 ? 'active' : ''}
-						>
-							Traces
-						</Tab>
+						{formatMessage({ id: 'label.donated_at' })}
+						<SortIcon order={order} title={EOrderBy.CreationDate} />
+					</TableHeader>
+					<TableHeader>
+						{formatMessage({ id: 'label.donor' })}
+					</TableHeader>
+					{isAdmin && (
+						<TableHeader>
+							{formatMessage({ id: 'label.status' })}
+						</TableHeader>
 					)}
-				</Tabs>
-				<SearchBox
-					onChange={event => setSearchTerm(event)}
-					value={searchTerm}
-				/>
-			</UpperSection>
-			{activeTab === 0 && (
-				<DonationTableWrapper>
-					<DonationTableContainer isAdmin={isAdmin}>
-						<TableHeader
-							onClick={() =>
-								orderChangeHandler(EOrderBy.CreationDate)
-							}
-						>
-							{formatMessage({ id: 'label.donated_at' })}
-							<SortIcon
-								order={order}
-								title={EOrderBy.CreationDate}
-							/>
-						</TableHeader>
-						<TableHeader>
-							{formatMessage({ id: 'label.donor' })}
-						</TableHeader>
-						{isAdmin && (
-							<TableHeader>
-								{formatMessage({ id: 'label.status' })}
-							</TableHeader>
-						)}
-						<TableHeader>
-							{formatMessage({ id: 'label.network' })}
-						</TableHeader>
-						<TableHeader
-							onClick={() =>
-								orderChangeHandler(EOrderBy.TokenAmount)
-							}
-						>
-							{formatMessage({ id: 'label.amount' })}
-							<SortIcon
-								order={order}
-								title={EOrderBy.TokenAmount}
-							/>
-						</TableHeader>
-						<TableHeader
-							onClick={() =>
-								orderChangeHandler(EOrderBy.UsdAmount)
-							}
-						>
-							{formatMessage({ id: 'label.usd_value' })}
-							<SortIcon
-								order={order}
-								title={EOrderBy.UsdAmount}
-							/>
-						</TableHeader>
-						{pageDonations?.donations?.map(donation => (
-							<DonationRowWrapper key={donation.id}>
-								<DonationTableCell>
-									{smallFormatDate(
-										new Date(donation.createdAt),
-										locale,
-									)}
-								</DonationTableCell>
-								<DonationTableCell>
-									{donation.donationType ===
-									EDonationType.POIGNART
-										? 'PoignART'
-										: donation.anonymous
-										? 'Anonymous'
-										: donation.user?.name ||
-										  donation.user?.firstName}
-								</DonationTableCell>
-								{isAdmin && (
-									<DonationTableCell>
-										<DonationStatus
-											status={donation.status}
-										/>
-									</DonationTableCell>
+					<TableHeader>
+						{formatMessage({ id: 'label.network' })}
+					</TableHeader>
+					<TableHeader
+						onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
+					>
+						{formatMessage({ id: 'label.amount' })}
+						<SortIcon order={order} title={EOrderBy.TokenAmount} />
+					</TableHeader>
+					<TableHeader
+						onClick={() => orderChangeHandler(EOrderBy.UsdAmount)}
+					>
+						{formatMessage({ id: 'label.usd_value' })}
+						<SortIcon order={order} title={EOrderBy.UsdAmount} />
+					</TableHeader>
+					{pageDonations?.donations?.map(donation => (
+						<DonationRowWrapper key={donation.id}>
+							<DonationTableCell>
+								{smallFormatDate(
+									new Date(donation.createdAt),
+									locale,
 								)}
+							</DonationTableCell>
+							<DonationTableCell>
+								{donation.donationType ===
+								EDonationType.POIGNART
+									? 'PoignART'
+									: donation.anonymous
+									? 'Anonymous'
+									: donation.user?.name ||
+									  donation.user?.firstName}
+							</DonationTableCell>
+							{isAdmin && (
 								<DonationTableCell>
-									{donation.transactionNetworkId ===
-									config.XDAI_NETWORK_NUMBER ? (
-										<>
-											<IconGnosisChain size={24} />
-											Gnosis
-										</>
-									) : (
-										<>
-											<IconEthereum size={24} />
-											Ethereum
-										</>
-									)}
+									<DonationStatus status={donation.status} />
 								</DonationTableCell>
-								<DonationTableCell>
-									<B>{donation.amount}</B>
-									<Currency>{donation.currency}</Currency>
-									{!donation.anonymous && (
-										<ExternalLink
-											href={formatTxLink(
-												donation.transactionNetworkId,
-												donation.transactionId,
-											)}
-										>
-											<IconExternalLink
-												size={16}
-												color={brandColors.pinky[500]}
-											/>
-										</ExternalLink>
-									)}
-								</DonationTableCell>
-								<DonationTableCell>
-									{donation.valueUsd &&
-										'$' + formatUSD(donation.valueUsd)}
-								</DonationTableCell>
-							</DonationRowWrapper>
-						))}
-					</DonationTableContainer>
-				</DonationTableWrapper>
-			)}
+							)}
+							<DonationTableCell>
+								{donation.transactionNetworkId ===
+								config.XDAI_NETWORK_NUMBER ? (
+									<>
+										<IconGnosisChain size={24} />
+										Gnosis
+									</>
+								) : (
+									<>
+										<IconEthereum size={24} />
+										Ethereum
+									</>
+								)}
+							</DonationTableCell>
+							<DonationTableCell>
+								<B>{donation.amount}</B>
+								<Currency>{donation.currency}</Currency>
+								{!donation.anonymous && (
+									<ExternalLink
+										href={formatTxLink(
+											donation.transactionNetworkId,
+											donation.transactionId,
+										)}
+									>
+										<IconExternalLink
+											size={16}
+											color={brandColors.pinky[500]}
+										/>
+									</ExternalLink>
+								)}
+							</DonationTableCell>
+							<DonationTableCell>
+								{donation.valueUsd &&
+									'$' + formatUSD(donation.valueUsd)}
+							</DonationTableCell>
+						</DonationRowWrapper>
+					))}
+				</DonationTableContainer>
+			</DonationTableWrapper>
 			<Pagination
 				currentPage={page}
 				totalCount={pageDonations?.totalCount ?? 0}
@@ -292,25 +255,6 @@ const UpperSection = styled.div`
 	display: flex;
 	gap: 30px;
 	align-items: center;
-`;
-
-const Tabs = styled.div`
-	display: flex;
-	gap: 16px;
-
-	> h6:nth-of-type(2) {
-		border-left: 2px solid ${neutralColors.gray[300]};
-		padding-left: 16px;
-	}
-`;
-
-const Tab = styled(H6)`
-	font-weight: 400;
-	cursor: pointer;
-
-	&.active {
-		font-weight: 700;
-	}
 `;
 
 const DonationTableWrapper = styled.div`
