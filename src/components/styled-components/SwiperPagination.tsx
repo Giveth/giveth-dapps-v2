@@ -17,6 +17,8 @@ export const NavigationWrapper = styled.div<{ disabled?: boolean }>`
 		opacity: 0.4;
 		cursor: default;
 	}
+	height: 40px;
+	width: 50px;
 `;
 
 export const SwiperPaginationWrapper = styled(FlexCenter)`
