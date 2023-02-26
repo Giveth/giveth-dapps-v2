@@ -191,7 +191,7 @@ export const HeaderLinks = styled(Flex)`
 `;
 
 export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
-	padding: 8px 16px 7px;
+	padding: 10px 16px 10px;
 	border-radius: 72px;
 	background-color: ${props => {
 		if (props.active) {
