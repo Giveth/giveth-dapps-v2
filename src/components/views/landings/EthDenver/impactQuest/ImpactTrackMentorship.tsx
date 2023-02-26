@@ -8,6 +8,8 @@ import ImpactTrackImg from '/public/images/ETHDenver-Impact-mentorship.png';
 import Image from 'next/image';
 import { GhostButton } from '@/components/styled-components/Button';
 import { Col, Row, Container } from '@/components/Grid';
+import ExternalLink from '@/components/ExternalLink';
+import links from '@/lib/constants/links';
 
 const ImpactTrackMentorship = () => {
 	return (
@@ -34,11 +36,13 @@ const ImpactTrackMentorship = () => {
 						Reach out to us on the ETHDenver Discord server under
 						the "Building" section!
 					</Desc>
-					<GhostButton
-						label='Join us on Discord'
-						size='large'
-						icon={<IconChevronRight32 />}
-					/>
+					<ExternalLink href={links.DISCORD}>
+						<GhostButton
+							label='Join us on Discord'
+							size='large'
+							icon={<IconChevronRight32 />}
+						/>
+					</ExternalLink>
 				</Col>
 			</InnerWrapper>
 		</Wrapper>
