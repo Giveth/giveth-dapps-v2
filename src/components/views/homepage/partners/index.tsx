@@ -37,7 +37,9 @@ const HomePartners = () => {
 		<Wrapper>
 			<Container>
 				<FlexCenter direction='column' gap='60px'>
-					<CustomHeading>Proud of our partners</CustomHeading>
+					<CustomHeading weight={700}>
+						Proud of our partners
+					</CustomHeading>
 					<CustomFlex justifyContent='space-around'>
 						{PartnersArray.map(partner => (
 							<FlexCenter
