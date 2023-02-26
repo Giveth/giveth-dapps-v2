@@ -43,6 +43,7 @@ const Routes = {
 	Claim: '/claim',
 	GivethProject: '/project/the-giveth-community-of-makers',
 	NFT: '/nft',
+	Landing: '/landings',
 };
 
 export default Routes;

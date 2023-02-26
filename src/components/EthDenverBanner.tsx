@@ -11,6 +11,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
+import Routes from '@/lib/constants/Routes';
 import { Container } from './Grid';
 import { Flex } from './styled-components/Flex';
 import { Relative } from './styled-components/Position';
@@ -25,7 +26,7 @@ export const EthDenverBanner = () => {
 						The Giveth team will be at ETHDenver this year, and we
 						couldn’t be more excited for what we have in store.
 					</Lead>
-					<Link href='/links/ethdenver'>
+					<Link href={`${Routes.Landing}/ethdenver`}>
 						<LearnMoreLink
 							label='Learn more'
 							linkType='primary'
