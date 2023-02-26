@@ -70,6 +70,7 @@ export const Modal: FC<IModal> = ({
 		}
 		return () => {
 			modalRoot.removeEventListener('keydown', handleKeyDown);
+			modalRoot.style.overflowY = 'auto';
 			modalRoot.style.overflowY = 'overlay';
 			modalRoot!.removeChild(current);
 		};
