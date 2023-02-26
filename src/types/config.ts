@@ -154,6 +154,8 @@ interface XDaiNetworkConfig extends BasicNetworkConfig {
 }
 interface MicroservicesConfig {
 	authentication: string;
+	notification: string;
+	notificationSettings: string;
 }
 
 export interface EnvConfig {
@@ -180,6 +182,7 @@ export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
 	SUBGRAPH_POLLING_INTERVAL: number;
+	NOTIFICATION_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
 	PRIMARY_NETWORK: INetworkConfig;
 	SECONDARY_NETWORK: INetworkConfig;

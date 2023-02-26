@@ -12,6 +12,8 @@ const ProjectsFiltersButton = () => {
 	const { variables } = useProjectsContext();
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
 	const filtersCount = variables?.filters?.length ?? 0;
+	const campaignCount = variables?.campaignSlug ? 1 : 0;
+	const count = filtersCount + campaignCount;
 
 	const delayedIsFilterOpen = useDelay(isFilterOpen, 280);
 
@@ -28,8 +30,8 @@ const ProjectsFiltersButton = () => {
 		<>
 			<FiltersButton onClick={() => setIsFilterOpen(true)}>
 				{formatMessage({ id: 'label.filters' })}
-				{filtersCount !== 0 && (
-					<PinkyColoredNumber>{filtersCount}</PinkyColoredNumber>
+				{count !== 0 && (
+					<PinkyColoredNumber>{count}</PinkyColoredNumber>
 				)}
 				<IconOptions16 />
 			</FiltersButton>

@@ -10,6 +10,7 @@ import modalReducer from './modal/modal.slice';
 import userReducer from './user/user.slice';
 import priceReducer from './price/price.slice';
 import generalReducer from './general/general.slice';
+import notificationReducer from './notification/notification.slice';
 
 const rootReducer = combineReducers({
 	subgraph: subgraphReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
 	user: userReducer,
 	price: priceReducer,
 	general: generalReducer,
+	notification: notificationReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {

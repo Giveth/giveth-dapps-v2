@@ -9,6 +9,7 @@ export const FETCH_ALL_PROJECTS = gql`
 		$searchTerm: String
 		$category: String
 		$mainCategory: String
+		$campaignSlug: String
 		$connectedWalletUserId: Int
 	) {
 		allProjects(
@@ -19,6 +20,7 @@ export const FETCH_ALL_PROJECTS = gql`
 			searchTerm: $searchTerm
 			category: $category
 			mainCategory: $mainCategory
+			campaignSlug: $campaignSlug
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
@@ -26,10 +28,9 @@ export const FETCH_ALL_PROJECTS = gql`
 				title
 				image
 				slug
-				description
+				descriptionSummary
 				verified
 				totalDonations
-				traceCampaignId
 				reaction {
 					id
 					userId
@@ -71,7 +72,6 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			slug
 			description
 			verified
-			traceCampaignId
 			addresses {
 				address
 				isRecipient
@@ -79,14 +79,12 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			}
 			totalProjectUpdates
 			totalDonations
-			totalTraceDonations
 			creationDate
 			reaction {
 				id
 				userId
 			}
 			totalReactions
-			traceCampaignId
 			categories {
 				name
 				value
@@ -261,7 +259,7 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 				id
 				title
 				balance
-				description
+				descriptionSummary
 				image
 				slug
 				creationDate
@@ -440,7 +438,7 @@ export const SIMILAR_PROJECTS = gql`
 				image
 				slug
 				creationDate
-				description
+				descriptionSummary
 				verified
 				adminUser {
 					name
@@ -469,6 +467,75 @@ export const FETCH_MAIN_CATEGORIES = gql`
 				value
 				isActive
 			}
+		}
+	}
+`;
+
+export const FETCH_PROJECTS_BY_SLUG = gql`
+	query ($take: Float, $skip: Float, $slugs: [String!]!) {
+		projectsBySlugs(take: $take, skip: $skip, slugs: $slugs) {
+			projects {
+				id
+				title
+				balance
+				descriptionSummary
+				image
+				slug
+				description
+				verified
+				traceCampaignId
+				addresses {
+					address
+					isRecipient
+					networkId
+				}
+				totalProjectUpdates
+				totalDonations
+				totalTraceDonations
+				creationDate
+				reaction {
+					id
+					userId
+				}
+				totalReactions
+				traceCampaignId
+				categories {
+					name
+					value
+					mainCategory {
+						title
+					}
+				}
+				adminUser {
+					id
+					name
+					walletAddress
+				}
+				status {
+					id
+					name
+				}
+				organization {
+					name
+					label
+					supportCustomTokens
+				}
+				projectVerificationForm {
+					status
+				}
+				verificationFormStatus
+				projectPower {
+					powerRank
+					totalPower
+					round
+				}
+				projectFuturePower {
+					totalPower
+					powerRank
+					round
+				}
+			}
+			totalCount
 		}
 	}
 `;

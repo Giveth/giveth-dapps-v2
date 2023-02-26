@@ -35,7 +35,7 @@ declare module 'react-select/dist/declarations/src/Select' {
 		IsMulti extends boolean,
 		Group extends GroupBase<Option>,
 	> {
-		isMobile?: boolean;
+		isMobile?: boolean | null;
 		setIsOpen?: any;
 		projectVerified?: boolean;
 	}
@@ -358,7 +358,7 @@ const OverLay = styled.div`
 
 interface ITokenPicker {
 	isOpen: boolean;
-	isMobile?: boolean;
+	isMobile?: boolean | null;
 	disabled?: boolean;
 }
 

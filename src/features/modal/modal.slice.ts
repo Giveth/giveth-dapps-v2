@@ -6,6 +6,7 @@ const initialState = {
 	showFirstWelcomeModal: false,
 	showSignWithWallet: false,
 	showCompleteProfile: false,
+	showSearchModal: false,
 };
 
 export const ModalSlice = createSlice({
@@ -27,6 +28,9 @@ export const ModalSlice = createSlice({
 		setShowWelcomeModal: (state, action: PayloadAction<boolean>) => {
 			state.showWelcomeModal = action.payload;
 		},
+		setShowSearchModal: (state, action: PayloadAction<boolean>) => {
+			state.showSearchModal = action.payload;
+		},
 	},
 });
 
@@ -36,6 +40,7 @@ export const {
 	setShowSignWithWallet,
 	setShowWalletModal,
 	setShowWelcomeModal,
+	setShowSearchModal,
 } = ModalSlice.actions;
 
 export default ModalSlice.reducer;

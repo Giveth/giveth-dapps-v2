@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { H2, Lead } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 import { Button } from '../styled-components/Button';
@@ -13,7 +14,9 @@ import { Flex } from '../styled-components/Flex';
 import { AddTokenButton } from '../AddTokenButton';
 import { Container } from '@/components/Grid';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
-import LottieControl from '@/components/animations/lottieControl';
+import LottieControl from '@/components/LottieControl';
+import ExternalLink from '@/components/ExternalLink';
+import links from '@/lib/constants/links';
 
 const SmileImage = styled.div`
 	position: absolute;
@@ -129,6 +132,7 @@ const BlowingContainer = styled.div`
 `;
 
 export const CongratulationsCard = () => {
+	const { formatMessage } = useIntl();
 	const [streamValue, setStreamValue] = useState<string>('0');
 	const { totalAmount, resetWallet } = useClaim();
 	const { library } = useWeb3React();
@@ -145,7 +149,7 @@ export const CongratulationsCard = () => {
 		<CongratulationsView>
 			<CongratulationsContainer>
 				<CongHeader weight={700}>
-					Congratulations!
+					{formatMessage({ id: 'label.congratulations' })}!
 					<SparkleContainer>
 						<LottieControl
 							animationData={SparkleAnimation}
@@ -156,7 +160,11 @@ export const CongratulationsCard = () => {
 				</CongHeader>
 				<CongContent>
 					<ClaimedSubtitleA>
-						<Lead>You have successfully claimed </Lead>
+						<Lead>
+							{formatMessage({
+								id: 'label.you_have_successfuly_claimed',
+							})}
+						</Lead>
 						<Lead>
 							{formatWeiHelper(totalAmount.div(10))} GIV.{' '}
 						</Lead>
@@ -179,11 +187,13 @@ export const CongratulationsCard = () => {
 					</ClaimedSubtitleA>
 
 					<ClaimedSubtitleB>
-						Plus you&apos;re getting an additional{' '}
+						{formatMessage({
+							id: 'label.plus_you_are_getting_an_additional',
+						})}{' '}
 						<span style={{ color: '#FED670' }}>
 							{streamValue} GIV
 						</span>{' '}
-						per week.
+						{formatMessage({ id: 'label.per_week' })}.
 					</ClaimedSubtitleB>
 				</CongContent>
 
@@ -194,7 +204,7 @@ export const CongratulationsCard = () => {
 						rel='noreferrer'
 					>
 						<SocialButton>
-							share on twitter
+							{formatMessage({ id: 'label.share_on_twitter' })}
 							<Image
 								src='/images/icons/twitter.svg'
 								height='15'
@@ -203,13 +213,11 @@ export const CongratulationsCard = () => {
 							/>
 						</SocialButton>
 					</a>
-					<a
-						href='https://swag.giveth.io/'
-						target='_blank'
-						rel='noreferrer'
-					>
+					<ExternalLink href={links.SWAG}>
 						<SocialButton>
-							claim your free swag
+							{formatMessage({
+								id: 'label.claim_your_free_swag',
+							})}
 							<Image
 								src='/images/icons/tshirt.svg'
 								height='15'
@@ -217,14 +225,10 @@ export const CongratulationsCard = () => {
 								alt='T shirt.'
 							/>
 						</SocialButton>
-					</a>
-					<a
-						href='https://discord.giveth.io/'
-						target='_blank'
-						rel='noreferrer'
-					>
+					</ExternalLink>
+					<ExternalLink href={links.DISCORD}>
 						<SocialButton>
-							join our discord
+							{formatMessage({ id: 'label.join_our_discord' })}
 							<Image
 								src='/images/icons/discord.svg'
 								height='15'
@@ -232,11 +236,15 @@ export const CongratulationsCard = () => {
 								alt='discord logo.'
 							/>
 						</SocialButton>
-					</a>
+					</ExternalLink>
 				</SocialButtonsContainer>
 				<ExploreRow>
 					<a href='/' target='_blank'>
-						<ExploreButton>explore the giveconomy</ExploreButton>
+						<ExploreButton>
+							{formatMessage({
+								id: 'label.explore_the_giveconomy',
+							})}
+						</ExploreButton>
 					</a>
 					<BlowingContainer>
 						<LottieControl
@@ -251,7 +259,7 @@ export const CongratulationsCard = () => {
 						resetWallet();
 					}}
 				>
-					Claim from another address!
+					{formatMessage({ id: 'label.check_another_address' })}
 				</ClaimFromAnother>
 			</CongratulationsContainer>
 		</CongratulationsView>

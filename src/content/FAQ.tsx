@@ -118,7 +118,6 @@ const faqContent = (formatMessage: any) => {
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.how_is_giveth_funder.content.one' />{' '}
-						(
 						<a
 							href='https://panvala.com/'
 							target='_blank'
@@ -150,7 +149,14 @@ const faqContent = (formatMessage: any) => {
 				question:
 					'page.faq.is_giveth_recognized_as_an_official_charity',
 				answer: (
-					<FormattedMessage id='page.faq.is_giveth_recognized_as_an_official_charity.content' />
+					<>
+						<FormattedMessage id='page.faq.is_giveth_recognized_as_an_official_charity.content' />
+						<ExternalLink
+							href='https://www.sdgimpactfund.org/'
+							title='SDG Impact Fund'
+						/>
+						<FormattedMessage id='page.faq.is_giveth_recognized_as_an_official_charity.content.two' />
+					</>
 				),
 			},
 			{
@@ -299,14 +305,11 @@ const faqContent = (formatMessage: any) => {
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.how_do_i_knnow_projects_get_my_money.content.one' />{' '}
-						(i.e{' '}
-						<a
+						(e.g.,{' '}
+						<ExternalLink
 							href='https://etherscan.io'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							etherscan.io
-						</a>
+							title='etherscan.io'
+						/>
 						){' '}
 						<FormattedMessage id='page.faq.how_do_i_knnow_projects_get_my_money.content.two' />
 					</>
@@ -336,29 +339,24 @@ const faqContent = (formatMessage: any) => {
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.what_types_of_projects_are_prohibited.content.one' />{' '}
-						<a
-							href='https://docs.giveth.io/whatisgiveth/covenant/'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							<FormattedMessage id='label.covenant' />
-						</a>{' '}
+						<ExternalLink
+							href={links.COVENANT_DOC}
+							title={<FormattedMessage id='label.covenant' />}
+						/>{' '}
 						<FormattedMessage id='label.and_or' />{' '}
-						<a
-							href='https://giveth.io/tos'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							<FormattedMessage id='component.title.tos' />
-						</a>{' '}
+						<ExternalLink
+							href={Routes.Terms}
+							title={
+								<FormattedMessage id='component.title.tos' />
+							}
+						/>{' '}
 						<FormattedMessage id='page.faq.what_types_of_projects_are_prohibited.content.two' />{' '}
-						<a
-							href='https://docs.giveth.io/dapps/listedUnlisted/#cancelled-projects'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							<FormattedMessage id='page.faq.what_types_of_projects_are_prohibited.content.three' />
-						</a>
+						<ExternalLink
+							href={links.CANCELLED_PROJECTS_DOCS}
+							title={
+								<FormattedMessage id='page.faq.what_types_of_projects_are_prohibited.content.three' />
+							}
+						/>
 						.
 					</>
 				),
@@ -405,21 +403,15 @@ const faqContent = (formatMessage: any) => {
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.i_still_need_more_detail_on_how_giveth_works.content.one' />{' '}
-						<a
-							href='https://docs.giveth.io'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							<FormattedMessage id='label.docs' />
-						</a>
+						<ExternalLink
+							href={links.DOCS}
+							title={<FormattedMessage id='label.docs' />}
+						/>
 						<FormattedMessage id='page.faq.i_still_need_more_detail_on_how_giveth_works.content.two' />{' '}
-						<a
-							href='https://giveth.io/join'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							<FormattedMessage id='label.join_page' />
-						</a>
+						<ExternalLink
+							href={Routes.Join}
+							title={<FormattedMessage id='label.join_page' />}
+						/>
 						.
 					</>
 				),
@@ -435,7 +427,8 @@ const faqContent = (formatMessage: any) => {
 							title={formatMessage({
 								id: 'label.join_us_on_any_social_media',
 							})}
-						/>{' '}
+						/>
+						{', '}
 						<FormattedMessage id='page.faq.i_love_giveth_but_right_now_i_have_no_funds.content.two' />{' '}
 					</>
 				),
@@ -447,13 +440,12 @@ const faqContent = (formatMessage: any) => {
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.why_is_giveth_launching_a_token.content.one' />{' '}
-						<a
-							href='https://docs.giveth.io/giveconomy/givbacks/'
-							target='_blank'
-							rel='noreferrer'
-						>
-							<FormattedMessage id='label.givbacks_program' />
-						</a>{' '}
+						<ExternalLink
+							href={links.GIVBACK_DOC}
+							title={
+								<FormattedMessage id='label.givbacks_program' />
+							}
+						/>{' '}
 						<FormattedMessage id='page.faq.why_is_giveth_launching_a_token.content.two' />
 					</>
 				),
@@ -475,13 +467,10 @@ const faqContent = (formatMessage: any) => {
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.what_can_i_do_with_giv.content' />{' '}
-						<a
-							href='https://giveth.io/giveconomy'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							<FormattedMessage id='label.here' />
-						</a>
+						<ExternalLink
+							href={Routes.GIVECONOMY}
+							title={<FormattedMessage id='label.here' />}
+						/>
 						.
 					</>
 				),
@@ -493,19 +482,16 @@ const faqContent = (formatMessage: any) => {
 						<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.one' />{' '}
 						<ul>
 							<li>
-								<FormattedMessage id='label.faq_by' />{' '}
+								<FormattedMessage id='label.faq_by.two' />{' '}
 								<ExternalLink
 									href={Routes.Projects}
 									title='donating'
 								/>{' '}
 								<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.two' />{' '}
-								<a
-									href='https://docs.giveth.io/giveconomy/givbacks/'
-									target='_blank'
-									rel='noreferrer'
-								>
-									GIVbacks
-								</a>
+								<ExternalLink
+									href={links.GIVBACK_DOC}
+									title='GIVbacks'
+								/>
 								.
 							</li>
 							<li>
@@ -525,14 +511,13 @@ const faqContent = (formatMessage: any) => {
 								.
 							</li>
 							<li>
-								<FormattedMessage id='label.faq_by' />{' '}
-								<a
-									href='https://giveth.io/join'
-									target='_blank'
-									rel='noreferrer'
-								>
-									<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.five' />
-								</a>
+								<FormattedMessage id='label.faq_by.two' />{' '}
+								<ExternalLink
+									href={Routes.Join}
+									title={
+										<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.five' />
+									}
+								/>
 								.
 							</li>
 						</ul>
@@ -544,21 +529,18 @@ const faqContent = (formatMessage: any) => {
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.who_is_eligible_to_receive_givdrop.content.one' />{' '}
-						<a
-							href='https://giveth.io/giveconomy'
-							target='_blank'
-							rel='noreferrer'
-						>
-							GIVdrop
-						</a>{' '}
+						<ExternalLink
+							href={Routes.GIVECONOMY}
+							title='GIVdrop'
+						/>
+						{', '}
 						<FormattedMessage id='page.faq.who_is_eligible_to_receive_givdrop.content.two' />{' '}
-						<a
-							href='https://docs.giveth.io/giveconomy/givdrop/'
-							target='_blank'
-							rel='noreferrer'
-						>
-							<FormattedMessage id='label.documentation' />
-						</a>
+						<ExternalLink
+							href={links.GIVDROP_DOC}
+							title={
+								<FormattedMessage id='label.documentation' />
+							}
+						/>
 						.
 					</>
 				),
@@ -568,13 +550,10 @@ const faqContent = (formatMessage: any) => {
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.will_there_be_another_givdrop.content.one' />{' '}
-						<a
-							href='https://docs.giveth.io/giveconomy/givbacks/'
-							target='_blank'
-							rel='noreferrer'
-						>
-							GIVbacks
-						</a>{' '}
+						<ExternalLink
+							href={links.GIVBACK_DOC}
+							title='GIVbacks'
+						/>{' '}
 						<FormattedMessage id='page.faq.will_there_be_another_givdrop.content.two' />
 					</>
 				),
@@ -584,21 +563,16 @@ const faqContent = (formatMessage: any) => {
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.how_do_i_claim_my_givdrop.content.one' />{' '}
-						<a
-							href='https://giveth.io/giveconomy'
-							target='_blank'
-							rel='noreferrer'
-						>
-							<FormattedMessage id='label.here' />
-						</a>{' '}
+						<ExternalLink
+							href={Routes.GIVECONOMY}
+							title={<FormattedMessage id='label.here' />}
+						/>
+						{', '}
 						<FormattedMessage id='page.faq.how_do_i_claim_my_givdrop.content.two' />{' '}
-						<a
-							href='https://docs.giveth.io/giveconomy/givdrop/#claiming-your-givdrop'
-							target='_blank'
-							rel='noreferrer'
-						>
-							<FormattedMessage id='label.tutorial' />
-						</a>{' '}
+						<ExternalLink
+							href={links.CLAIM_GIVDROP_DOC}
+							title={<FormattedMessage id='label.tutorial' />}
+						/>{' '}
 						<FormattedMessage id='page.faq.how_do_i_claim_my_givdrop.content.three' />
 					</>
 				),
@@ -626,13 +600,12 @@ const faqContent = (formatMessage: any) => {
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.im_eligible_for_givdrop_but_lost_keys.content.one' />{' '}
-						<a
-							href='https://giveth.io/support'
-							target='_blank'
-							rel='noreferrer'
-						>
-							<FormattedMessage id='page.faq.im_eligible_for_givdrop_but_lost_keys.content.two' />
-						</a>{' '}
+						<ExternalLink
+							href={Routes.Support}
+							title={
+								<FormattedMessage id='page.faq.im_eligible_for_givdrop_but_lost_keys.content.two' />
+							}
+						/>{' '}
 						<FormattedMessage id='page.faq.im_eligible_for_givdrop_but_lost_keys.content.three' />
 					</>
 				),
@@ -641,26 +614,22 @@ const faqContent = (formatMessage: any) => {
 				question: 'page.faq.how_do_i_get_involved_in_governance',
 				answer: (
 					<>
-						<a
-							href='https://discord.giveth.io/'
-							target='_blank'
-							rel='noreferrer'
-						>
-							<FormattedMessage id='page.faq.how_do_i_get_involved_in_governance.content.one' />
-						</a>{' '}
+						<ExternalLink
+							href={links.DISCORD}
+							title={
+								<FormattedMessage id='page.faq.how_do_i_get_involved_in_governance.content.one' />
+							}
+						/>{' '}
 						<FormattedMessage id='page.faq.how_do_i_get_involved_in_governance.content.two' />{' '}
 						<ExternalLink
 							href={Routes.GIVgarden}
 							title='GIVgarden'
 						/>{' '}
 						<FormattedMessage id='page.faq.how_do_i_get_involved_in_governance.content.three' />{' '}
-						<a
-							href='https://forum.giveth.io/'
-							target='_blank'
-							rel='noreferrer'
-						>
-							<FormattedMessage id='label.forum' />
-						</a>
+						<ExternalLink
+							href={links.DISCOURSE}
+							title={<FormattedMessage id='label.forum' />}
+						/>
 						.
 					</>
 				),
@@ -670,13 +639,10 @@ const faqContent = (formatMessage: any) => {
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.what_is_the_givbacks_program.content.one' />{' '}
-						<a
-							href='https://docs.giveth.io/giveconomy/givbacks/'
-							target='_blank'
-							rel='noreferrer'
-						>
-							GIVbacks
-						</a>{' '}
+						<ExternalLink
+							href={links.GIVBACK_DOC}
+							title='GIVbacks'
+						/>{' '}
 						<FormattedMessage id='page.faq.what_is_the_givbacks_program.content.two' />
 					</>
 				),
@@ -722,7 +688,7 @@ const faqContent = (formatMessage: any) => {
 				question: 'page.faq.what_is_the_givgarden',
 				answer: (
 					<>
-						<FormattedMessage id='label.the' />{' '}
+						<FormattedMessage id='label.the.two' />{' '}
 						<ExternalLink
 							href={Routes.GIVgarden}
 							title='GIVgarden'
@@ -736,13 +702,12 @@ const faqContent = (formatMessage: any) => {
 							<FormattedMessage id='page.faq.what_is_the_givgarden.content.two' />
 						</a>
 						<FormattedMessage id='page.faq.what_is_the_givgarden.content.three' />{' '}
-						<a
-							href='https://docs.giveth.io/giveconomy/givgarden/'
-							target='_blank'
-							rel='noreferrer'
-						>
-							<FormattedMessage id='label.givgarden_documentation' />
-						</a>
+						<ExternalLink
+							href={links.GIVGARDEN_DOC}
+							title={
+								<FormattedMessage id='label.givgarden_documentation' />
+							}
+						/>
 						.
 					</>
 				),
@@ -751,7 +716,7 @@ const faqContent = (formatMessage: any) => {
 				question: 'page.faq.what_is_the_givfarm',
 				answer: (
 					<>
-						<FormattedMessage id='label.the' />{' '}
+						<FormattedMessage id='label.the.two' />{' '}
 						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />{' '}
 						<FormattedMessage id='page.faq.what_is_the_givfarm.content' />{' '}
 						<ExternalLink
@@ -768,7 +733,7 @@ const faqContent = (formatMessage: any) => {
 				question: 'page.faq.what_is_the_givstream',
 				answer: (
 					<>
-						<FormattedMessage id='label.the' />{' '}
+						<FormattedMessage id='label.the.two' />{' '}
 						<ExternalLink
 							href={Routes.GIVstream}
 							title='GIVstream'
@@ -836,7 +801,7 @@ const faqContent = (formatMessage: any) => {
 							title='GIVstream'
 						/>{' '}
 						<FormattedMessage id='page.faq.can_i_speed_up_my_givstream.content.two' />{' '}
-						<ExternalLink href={Routes.GIVbacks} title='GIVbacks' />{' '}
+						<ExternalLink href={Routes.GIVbacks} title='GIVbacks' />
 						, <FormattedMessage id='label.the' />{' '}
 						<ExternalLink
 							href={Routes.GIVgarden}
@@ -844,7 +809,7 @@ const faqContent = (formatMessage: any) => {
 						/>
 						, <FormattedMessage id='label.or' />{' '}
 						<FormattedMessage id='label.the' />{' '}
-						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />.
+						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />.{' '}
 						<FormattedMessage id='page.faq.can_i_speed_up_my_givstream.content.three' />
 					</>
 				),

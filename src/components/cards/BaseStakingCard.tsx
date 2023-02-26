@@ -71,7 +71,7 @@ import { IconBalancer } from '../Icons/Balancer';
 import { IconUniswap } from '../Icons/Uniswap';
 import { HarvestAllModal } from '../modals/HarvestAll';
 import { useFarms } from '@/context/farm.context';
-import { WhatisStreamModal } from '../modals/WhatisStream';
+import { WhatIsStreamModal } from '../modals/WhatIsStream';
 import { IconSushiswap } from '../Icons/Sushiswap';
 import { UniV3APRModal } from '../modals/UNIv3APR';
 import StakingCardIntro from './StakingCardIntro';
@@ -837,7 +837,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (
-				<WhatisStreamModal
+				<WhatIsStreamModal
 					setShowModal={setShowWhatIsGIVstreamModal}
 					tokenDistroHelper={tokenDistroHelper}
 					regenStreamConfig={regenStreamConfig}

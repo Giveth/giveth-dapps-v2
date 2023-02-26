@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
-	fetchEthPriceAsync,
 	fetchGIVPriceAsync,
 	fetchGnosisThirdPartyTokensPriceAsync,
 	fetchMainnetThirdPartyTokensPriceAsync,
@@ -28,9 +27,6 @@ export const priceSlice = createSlice({
 	reducers: {},
 	extraReducers: builder => {
 		builder
-			.addCase(fetchEthPriceAsync.fulfilled, (state, action) => {
-				state.ethPrice = action.payload;
-			})
 			.addCase(fetchGIVPriceAsync.fulfilled, (state, action) => {
 				state.givPrice = action.payload;
 			})

@@ -20,7 +20,6 @@ import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import {
 	BACKEND_QUERY_LIMIT,
-	device,
 	deviceSize,
 	mediaQueries,
 } from '@/lib/constants/constants';
@@ -31,12 +30,11 @@ import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
 import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
-import LottieControl from '@/components/animations/lottieControl';
+import LottieControl from '@/components/LottieControl';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
-import useMediaQuery from '@/hooks/useMediaQuery';
 import ProjectsMiddleBanner from './ProjectsMiddleBanner';
 
 export interface IProjectsView {
@@ -54,7 +52,6 @@ interface IQueries {
 const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
-
 	const user = useAppSelector(state => state.user.userData);
 
 	const [isLoading, setIsLoading] = useState(false);
@@ -75,7 +72,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const pageNum = useRef(0);
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
-	const { isDesktop, isTablet, isMobile, isLaptopL } = useDetectDevice();
+	const { isTablet, isMobile } = useDetectDevice();
 
 	const fetchProjects = useCallback(
 		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
@@ -111,6 +108,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					const data = res.data?.allProjects?.projects;
 					const count = res.data?.allProjects?.totalCount;
 					setTotalCount(count);
+
 					setFilteredProjects(prevProjects => {
 						isInfiniteScrolling.current =
 							(data.length + prevProjects.length) % 45 !== 0;
@@ -147,17 +145,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		fetchProjects(false, 0);
 	}, [contextVariables]);
 
-	useEffect(() => {
-		if (router.query?.slug) {
-			setVariables(prevVariables => {
-				return {
-					...prevVariables,
-					mainCategory: router.query?.slug?.toString(),
-				};
-			});
-		}
-	}, [router.query?.slug]);
-
 	const loadMore = useCallback(() => {
 		if (isLoading) return;
 		fetchProjects(true, pageNum.current + 1);
@@ -174,12 +161,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const showLoadMore =
 		totalCount > filteredProjects?.length && !isInfiniteScrolling.current;
-	const isTabletSlice = useMediaQuery(device.tablet);
 
 	const handleSliceNumber = () => {
 		if (isMobile) {
 			return 1;
-		} else if (isTabletSlice && !isLaptopL) {
+		} else if (isTablet) {
 			return 2;
 		} else {
 			return 3;
@@ -245,7 +231,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				<Loading>
 					<LottieControl
 						animationData={LoadingAnimation}
-						size={150}
+						size={250}
 					/>
 				</Loading>
 			)}
@@ -253,7 +239,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
 				<FiltersContainer>
-					{isDesktop && <ProjectsFiltersDesktop />}
+					{!isTablet && !isMobile && <ProjectsFiltersDesktop />}
 					{isTablet && <ProjectsFiltersTablet />}
 					{isMobile && <ProjectsFiltersMobile />}
 				</FiltersContainer>
@@ -353,11 +339,11 @@ const FiltersContainer = styled.div`
 	}
 `;
 
-const ProjectsWrapper = styled.div`
+export const ProjectsWrapper = styled.div`
 	margin-bottom: 64px;
 `;
 
-const ProjectsContainer = styled.div`
+export const ProjectsContainer = styled.div`
 	display: grid;
 	gap: 25px;
 	padding: 0 23px;
