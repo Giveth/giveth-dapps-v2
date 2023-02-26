@@ -50,7 +50,7 @@ const GoldSpork = styled.div`
 const SporkWhale = styled.div`
 	position: absolute;
 	top: 0;
-	left: 520px;
+	left: 30%;
 `;
 
 const H1Styled = styled(H1)`
