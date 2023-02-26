@@ -9,6 +9,8 @@ import {
 import SwagImg from '/public/images/swag.png';
 import Image from 'next/image';
 import { GhostButton } from '@/components/styled-components/Button';
+import ExternalLink from '@/components/ExternalLink';
+import links from '@/lib/constants/links';
 
 const GivethSwag = () => {
 	return (
@@ -21,11 +23,13 @@ const GivethSwag = () => {
 					Impact Quests to claim cool prizes. Or if you prefer, order
 					yours now from our new and improved swag shop.
 				</Desc>
-				<GhostButton
-					label='Go to Swag shop'
-					size='large'
-					icon={<IconExternalLink24 />}
-				/>
+				<ExternalLink href={links.SWAG}>
+					<GhostButton
+						label='Go to Swag shop'
+						size='large'
+						icon={<IconExternalLink24 />}
+					/>
+				</ExternalLink>
 			</Text>
 			<Img>
 				<Image src={SwagImg} alt='Swag Image' />
