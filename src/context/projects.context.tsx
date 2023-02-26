@@ -4,16 +4,19 @@ import {
 	ReactNode,
 	SetStateAction,
 	useContext,
+	useEffect,
 	useState,
 } from 'react';
-import { IMainCategory } from '@/apollo/types/types';
-import { ESortbyAllProjects } from '@/apollo/types/gqlEnums';
+import { useRouter } from 'next/router';
+import { EProjectsFilter, IMainCategory } from '@/apollo/types/types';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 interface IVariables {
-	sortingBy?: string;
-	filters?: string[];
+	sortingBy?: EProjectsSortBy;
+	filters?: EProjectsFilter[];
 	mainCategory?: string;
 	category?: string;
+	campaignSlug?: string;
 	searchTerm?: string;
 }
 
@@ -25,7 +28,7 @@ interface IProjectsContext {
 }
 
 const variablesDefaultValue = {
-	sortingBy: ESortbyAllProjects.GIVPOWER,
+	sortingBy: EProjectsSortBy.GIVPOWER,
 	filters: undefined,
 };
 
@@ -47,6 +50,72 @@ export const ProjectsProvider = (props: {
 	const [variables, setVariables] = useState<IVariables>(
 		variablesDefaultValue,
 	);
+	const router = useRouter();
+
+	useEffect(() => {
+		let sort: EProjectsSortBy | undefined;
+		if (router.query.sort) {
+			switch ((router.query.sort as string).toLowerCase()) {
+				case EProjectsSortBy.MOST_FUNDED.toLowerCase():
+					sort = EProjectsSortBy.MOST_FUNDED;
+					break;
+				case EProjectsSortBy.MOST_LIKED.toLowerCase():
+					sort = EProjectsSortBy.MOST_LIKED;
+					break;
+				case EProjectsSortBy.NEWEST.toLowerCase():
+					sort = EProjectsSortBy.NEWEST;
+					break;
+				case EProjectsSortBy.OLDEST.toLowerCase():
+					sort = EProjectsSortBy.OLDEST;
+					break;
+				case EProjectsSortBy.QUALITY_SCORE.toLowerCase():
+					sort = EProjectsSortBy.QUALITY_SCORE;
+					break;
+				case EProjectsSortBy.GIVPOWER.toLowerCase():
+					sort = EProjectsSortBy.GIVPOWER;
+					break;
+				case EProjectsSortBy.RECENTLY_UPDATED.toLowerCase():
+					sort = EProjectsSortBy.RECENTLY_UPDATED;
+					break;
+				default:
+					break;
+			}
+		}
+		let filters: EProjectsFilter[] | undefined;
+		if (router.query.filter) {
+			filters = (
+				Array.isArray(router.query.filter)
+					? router.query.filter
+					: [router.query.filter]
+			) as EProjectsFilter[];
+		}
+
+		let term = router.query.term as string;
+		let campaignSlug = router.query.campaign as string;
+		const variablesObject = router.query?.slug
+			? {
+					...variables,
+					sortingBy: sort,
+					searchTerm: term,
+					filters,
+					campaignSlug,
+					mainCategory: router.query?.slug?.toString(),
+			  }
+			: {
+					...variables,
+					sortingBy: sort,
+					searchTerm: term,
+					filters,
+					campaignSlug,
+			  };
+		setVariables(variablesObject);
+	}, [
+		router.query.sort,
+		router.query.term,
+		router.query.filter,
+		router.query.campaign,
+		router.query?.slug,
+	]);
 
 	return (
 		<ProjectsContext.Provider

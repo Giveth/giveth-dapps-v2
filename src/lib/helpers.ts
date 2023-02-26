@@ -45,6 +45,10 @@ export const formatPrice = (balance?: string | number) => {
 	});
 };
 
+export const thousandsSeparator = (x?: string | number): string | undefined => {
+	return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
 export const formatTxLink = (networkId?: number, txHash?: string) => {
 	if (!networkId || !txHash || !networksParams[networkId]) return '';
 	return `${networksParams[networkId].blockExplorerUrls[0]}/tx/${txHash}`;
@@ -482,3 +486,10 @@ export const createSiweMessage = async (
 export function isObjEmpty(obj: Object) {
 	return Object.keys(obj).length > 0;
 }
+
+export const ArrayFrom0ToN = (n: number) => {
+	let a = Array(n),
+		b = 0;
+	while (b < n) a[b] = b++;
+	return a;
+};

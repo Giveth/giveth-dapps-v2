@@ -22,7 +22,7 @@ import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import { mediaQueries } from '@/lib/constants/constants';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
-import { compareAddresses, showToastError } from '@/lib/helpers';
+import { compareAddresses, isSSRMode, showToastError } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 import { Col, Row } from '@/components/Grid';
@@ -54,6 +54,16 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
+
+	useEffect(() => {
+		// Used when user clicks on recent donations in homepage
+		if (!isSSRMode) {
+			const hash = window?.location.hash;
+			if (hash === '#donations') {
+				setActiveTab(2);
+			}
+		}
+	}, []);
 
 	const {
 		adminUser,

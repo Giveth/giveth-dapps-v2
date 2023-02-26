@@ -4,7 +4,6 @@ import { brandColors, H6, Lead, ButtonLink } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import check_stars from '/public/images/icons/check_stars.svg';
 import failed_stars from '/public/images/icons/failed_stars.svg';
@@ -19,7 +18,7 @@ import {
 	VerificationCard,
 	VerificationContainer,
 } from './Common.sc';
-import LottieControl from '@/components/animations/lottieControl';
+import LottieControl from '@/components/LottieControl';
 
 export enum EEmailVerificationStatus {
 	Pending = 'Pending',
@@ -39,12 +38,7 @@ const ContentSelector: FC<IContentSelector> = ({ status }) => {
 			return <Rejected />;
 		default:
 			return (
-				<FlexCenter>
-					<LottieControl
-						animationData={LoadingAnimation}
-						size={150}
-					/>
-				</FlexCenter>
+				<LottieControl animationData={LoadingAnimation} size={250} />
 			);
 	}
 };

@@ -9,6 +9,7 @@ export const FETCH_ALL_PROJECTS = gql`
 		$searchTerm: String
 		$category: String
 		$mainCategory: String
+		$campaignSlug: String
 		$connectedWalletUserId: Int
 	) {
 		allProjects(
@@ -19,6 +20,7 @@ export const FETCH_ALL_PROJECTS = gql`
 			searchTerm: $searchTerm
 			category: $category
 			mainCategory: $mainCategory
+			campaignSlug: $campaignSlug
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
@@ -26,7 +28,7 @@ export const FETCH_ALL_PROJECTS = gql`
 				title
 				image
 				slug
-				description
+				descriptionSummary
 				verified
 				totalDonations
 				reaction {
@@ -257,7 +259,7 @@ export const FETCH_USER_LIKED_PROJECTS = gql`
 				id
 				title
 				balance
-				description
+				descriptionSummary
 				image
 				slug
 				creationDate
@@ -436,7 +438,7 @@ export const SIMILAR_PROJECTS = gql`
 				image
 				slug
 				creationDate
-				description
+				descriptionSummary
 				verified
 				adminUser {
 					name
@@ -475,6 +477,8 @@ export const FETCH_PROJECTS_BY_SLUG = gql`
 			projects {
 				id
 				title
+				balance
+				descriptionSummary
 				image
 				slug
 				description

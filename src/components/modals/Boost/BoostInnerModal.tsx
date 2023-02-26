@@ -13,8 +13,8 @@ import {
 import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import LottieControl from '@/components/animations/lottieControl';
 
+import LottieControl from '@/components/LottieControl';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { LockInfotooltip } from '../StakeLock/LockInfo';
 import { Flex } from '@/components/styled-components/Flex';
@@ -207,7 +207,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	};
 
 	if (loading) {
-		return <LottieControl animationData={LoadingAnimation} size={50} />;
+		return <LottieControl animationData={LoadingAnimation} size={200} />;
 	}
 
 	if (state === EBoostModalState.LIMIT_EXCEEDED) {

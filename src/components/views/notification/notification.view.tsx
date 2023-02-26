@@ -18,7 +18,7 @@ import {
 	MarkAllNotifsButton,
 	Loading,
 } from './notification.sc';
-import LottieControl from '@/components/animations/lottieControl';
+import LottieControl from '@/components/LottieControl';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import {
 	TabsContainer,
@@ -126,7 +126,7 @@ function NotificationView() {
 				<Loading>
 					<LottieControl
 						animationData={LoadingAnimation}
-						size={150}
+						size={250}
 					/>
 				</Loading>
 			)}

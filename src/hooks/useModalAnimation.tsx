@@ -7,6 +7,7 @@ export const useModalAnimation = (setShowModal: (value: boolean) => void) => {
 		setIsAnimating(true);
 		setTimeout(() => {
 			setShowModal(false);
+			setIsAnimating(false);
 		}, 300);
 	}, []);
 
