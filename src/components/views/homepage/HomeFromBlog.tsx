@@ -57,7 +57,7 @@ const HomeFromBlog = () => {
 				</BlockHeader>
 				<CardsRow>
 					{mediumPosts?.map(post => (
-						<Col sm={12} lg={4} key={post.guid}>
+						<ColStyled sm={12} lg={4} key={post.guid}>
 							<BlogCard
 								title={post.title}
 								description={post.description}
@@ -66,13 +66,17 @@ const HomeFromBlog = () => {
 								author={post.author}
 								date={post.pubDate}
 							/>
-						</Col>
+						</ColStyled>
 					))}
 				</CardsRow>
 			</Container>
 		</Wrapper>
 	);
 };
+
+const ColStyled = styled(Col)`
+	margin-top: 24px;
+`;
 
 const VisitBlog = styled(FlexCenter)`
 	color: ${brandColors.giv[500]};

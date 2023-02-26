@@ -14,48 +14,51 @@ import TrazadoGivIcon from 'public/images/particles/trazado-giv.svg';
 import { Container } from '@/components/Grid';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
+import { Relative } from '@/components/styled-components/Position';
 
 const InformationBlock = () => {
 	const { formatMessage } = useIntl();
 
 	return (
-		<StyledContainer>
-			<H3 weight={700}>
-				{formatMessage({ id: 'page.home.philanthropy_needs_more' })}
-			</H3>
-			<br />
-			<br />
-			<Lead size='large'>
-				{formatMessage({
-					id: 'page.home.philanthropy_needs_more_desc_1',
-				})}
-			</Lead>
-			<br />
-			<Lead size='large'>
-				{formatMessage({
-					id: 'page.home.philanthropy_needs_more_desc_2',
-				}) + ' '}
-				<SpanStyled>
+		<Relative>
+			<StyledContainer>
+				<H3 weight={700}>
+					{formatMessage({ id: 'page.home.philanthropy_needs_more' })}
+				</H3>
+				<br />
+				<br />
+				<Lead size='large'>
 					{formatMessage({
-						id: 'page.home.philanthropy_needs_more_desc_3',
+						id: 'page.home.philanthropy_needs_more_desc_1',
 					})}
-				</SpanStyled>
-			</Lead>
-			<ExternalLink href={links.OUR_MISSION}>
-				<ButtonStyled
-					size='small'
-					label={formatMessage({ id: 'label.learn_more' })}
-					icon={<IconChevronRight />}
-				/>
-			</ExternalLink>
+				</Lead>
+				<br />
+				<Lead size='large'>
+					{formatMessage({
+						id: 'page.home.philanthropy_needs_more_desc_2',
+					}) + ' '}
+					<SpanStyled>
+						{formatMessage({
+							id: 'page.home.philanthropy_needs_more_desc_3',
+						})}
+					</SpanStyled>
+				</Lead>
+				<ExternalLink href={links.OUR_MISSION}>
+					<ButtonStyled
+						size='small'
+						label={formatMessage({ id: 'label.learn_more' })}
+						icon={<IconChevronRight />}
+					/>
+				</ExternalLink>
+				<QuarterCircle />
+			</StyledContainer>
 			<TrazadoGiv>
 				<Image src={TrazadoGivIcon} alt='Trazado Giv' />
 			</TrazadoGiv>
 			<TrazadoPink>
 				<Image src={TrazadoPinkIcon} alt='Trazado Pink' />
 			</TrazadoPink>
-			<QuarterCircle />
-		</StyledContainer>
+		</Relative>
 	);
 };
 
@@ -74,7 +77,7 @@ const TrazadoGiv = styled.div`
 const TrazadoPink = styled.div`
 	position: absolute;
 	bottom: 35px;
-	left: -30px;
+	left: 0;
 `;
 
 const QuarterCircle = styled.div`
