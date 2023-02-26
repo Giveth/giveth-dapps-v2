@@ -53,7 +53,9 @@ const VideoBlock = () => {
 							{formatMessage({ id: 'label.what_is_giveth' })}
 						</H2>
 						<Desc>
-							{formatMessage({ id: 'label.what_people_say' })}
+							{formatMessage({
+								id: 'label.discover_what_makes_giveth_different',
+							})}
 						</Desc>
 						<Link href={Routes.AboutUs} passHref>
 							<AboutUsButton
