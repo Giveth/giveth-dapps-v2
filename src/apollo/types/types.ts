@@ -97,8 +97,9 @@ export interface ICampaign {
 	description: string;
 	relatedProjects: IProject[];
 	relatedProjectsCount: number;
-	photo: string;
-	video: string;
+	photo?: string;
+	video?: string;
+	videoPreview?: string;
 	type: ECampaignType;
 	isActive: boolean;
 	order: number;
