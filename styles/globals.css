@@ -13,6 +13,8 @@ html {
 }
 
 body {
+	/* Please don't remove this */
+	overflow-y: auto; 
 	overflow-y: overlay;
 }
 
