@@ -213,8 +213,8 @@ const Header: FC<IHeader> = () => {
 						<GIVeconomyMenu />
 					</LinkWithMenu>
 					<HeaderLink theme={theme}>
-						<Link href={Routes.NFT}>
-							<GLink>NFTs</GLink>
+						<Link href={Routes.Join}>
+							<GLink>Community</GLink>
 						</Link>
 					</HeaderLink>
 					<SearchButton
