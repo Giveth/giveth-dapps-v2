@@ -13,7 +13,7 @@ const ImpactTrackMentorship = () => {
 	return (
 		<Wrapper>
 			<InnerWrapper>
-				<Col xs={12} md={6}>
+				<Col xs={12} lg={6}>
 					<Img>
 						<Image
 							src={ImpactTrackImg}
@@ -21,7 +21,7 @@ const ImpactTrackMentorship = () => {
 						/>
 					</Img>
 				</Col>
-				<Col xs={12} md={6}>
+				<Col xs={12} lg={6}>
 					<H3 weight={700}>Impact Track Mentorship</H3>
 					<Desc>
 						We love the great things that get built at ETHDenver
@@ -52,13 +52,14 @@ const Desc = styled.div`
 const Img = styled.div`
 	display: flex;
 	justify-content: center;
+	width: 100%;
+	padding-bottom: 40px;
 `;
 
 const InnerWrapper = styled(Row)`
 	padding: 40px;
 	background: ${neutralColors.gray[200]};
 	border-radius: 16px;
-	gap: 24px;
 	align-items: center;
 `;
 
