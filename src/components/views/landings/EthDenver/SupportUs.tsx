@@ -5,6 +5,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { GhostButton } from '@/components/styled-components/Button';
+import { Container } from '@/components/Grid';
 
 const SupportUs = () => {
 	return (
@@ -23,15 +24,13 @@ const SupportUs = () => {
 	);
 };
 
-const Wrapper = styled.div`
-	max-width: 1200px;
-	padding: 40px;
-	margin: 60px auto;
+const Wrapper = styled(Container)`
+	padding-top: 40px;
+	padding-bottom: 40px;
 	color: ${neutralColors.gray[900]};
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 16px;
+	& > h4 {
+		margin-bottom: 16px;
+	}
 `;
 
 export default SupportUs;
