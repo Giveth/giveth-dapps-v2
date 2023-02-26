@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import ETHDenverIcon from '/public/images/ETHDenver_2023.png';
 import SporkWhaleIcon from '/public/images/ETHDenver-spork-whale.png';
 import GoldSporkIcon from '/public/images/ETHDenver-gold-sporke.png';
-
 import Image from 'next/image';
+import { Container } from '@/components/Grid';
 
 const EventBanner = () => {
 	return (
 		<Wrapper>
-			<InnerWrapper>
+			<Container>
 				<TextBox>
 					<H5>Learn What We’re Up To and How to Get Involved!</H5>
 					<H1Styled weight={700}>Giveth at ETHDenver 2023</H1Styled>
@@ -21,15 +21,10 @@ const EventBanner = () => {
 				<GoldSpork>
 					<Image src={GoldSporkIcon} alt='Gold Spork' />
 				</GoldSpork>
-			</InnerWrapper>
+			</Container>
 		</Wrapper>
 	);
 };
-
-const InnerWrapper = styled.div`
-	max-width: 1200px;
-	margin: 0 auto;
-`;
 
 const TextBox = styled.div`
 	max-width: 701px;
