@@ -7,7 +7,6 @@ import GivethTalks from '@/components/views/landings/EthDenver/givethTalks';
 import GivethSwag from '@/components/views/landings/EthDenver/GivethSwag';
 import ImpactQuest from '@/components/views/landings/EthDenver/impactQuest';
 import SupportUs from '@/components/views/landings/EthDenver/SupportUs';
-import HomeGetUpdates from '@/components/views/homepage/HomeGetUpdates';
 import { IEthDenverProps } from 'pages/landings/ethdenver';
 
 const EthDenverView: FC<IEthDenverProps> = ({ campaign }) => {
@@ -26,7 +25,7 @@ const EthDenverView: FC<IEthDenverProps> = ({ campaign }) => {
 			<SupportUs />
 			<Separator />
 			<Separator />
-			<HomeGetUpdates />
+			{/* <HomeGetUpdates /> */}
 		</Wrapper>
 	);
 };

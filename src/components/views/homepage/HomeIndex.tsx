@@ -2,7 +2,6 @@ import { FC, Fragment } from 'react';
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 import HomeFromBlog from './HomeFromBlog';
-import HomeGetUpdates from './HomeGetUpdates';
 import WhyGiveth from '@/components/views/homepage/whyGiveth';
 import ProjectsCampaignBlock from '@/components/views/homepage/ProjectsCampaignBlock';
 import IntroBlock from './introBlock';
@@ -50,7 +49,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 				''
 			)}
 			<HomeFromBlog />
-			<HomeGetUpdates />
+			{/* <HomeGetUpdates /> */}
 		</Wrapper>
 	);
 };
