@@ -1,4 +1,3 @@
-import { GLink } from '@giveth/ui-design-system';
 import React, { FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
@@ -14,6 +13,7 @@ import {
 	CoverLine,
 	HeaderSidebarButtonWrapper,
 	SidebarInnerContainer,
+	UserName,
 } from '../Header/Header.sc';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
@@ -107,9 +107,9 @@ const HeaderUserButton = ({}) => {
 				height={'24px'}
 			/>
 			<WBInfo>
-				<GLink size='Medium'>
+				<UserName size='Medium'>
 					{userData?.name || shortenAddress(account)}
-				</GLink>
+				</UserName>
 				<WBNetwork size='Tiny'>
 					{formatMessage({
 						id: 'label.connected_to',
