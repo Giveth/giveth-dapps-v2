@@ -5,13 +5,13 @@ import {
 	IconArrowRight32,
 	IconChevronRight32,
 	Lead,
-	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import DiscordIcon from '/public/images/ETHDenver-discord.svg';
 import MapImage from '/public/images/ETHDenver-map.png';
 import Image from 'next/image';
 import { GhostButton } from '@/components/styled-components/Button';
+import { Container, Row } from '@/components/Grid';
 
 const EventDetails = () => {
 	return (
@@ -80,22 +80,16 @@ const FindUsText = styled.div`
 
 const Map = styled.div``;
 
-const FindUs = styled.div`
-	margin: 203px 0 150px;
-	display: flex;
-	gap: 22px;
-	flex-direction: column;
-	${mediaQueries.tablet} {
-		flex-direction: row;
-	}
+const FindUs = styled(Row)`
+	padding-top: 203px;
+	padding-bottom: 150px;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled(Container)`
 	background: white;
 	color: ${neutralColors.gray[900]};
-	padding: 120px 80px 40px;
-	max-width: 1200px;
-	margin: 0 auto;
+	padding-top: 120px;
+	padding-bottom: 40px;
 `;
 
 export default EventDetails;

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
+import { FC } from 'react';
 import EventBanner from '@/components/views/landings/EthDenver/EventBanner';
 import EventDetails from '@/components/views/landings/EthDenver/EventDetails';
 import GivethTalks from '@/components/views/landings/EthDenver/givethTalks';
@@ -7,8 +8,10 @@ import GivethSwag from '@/components/views/landings/EthDenver/GivethSwag';
 import ImpactQuest from '@/components/views/landings/EthDenver/impactQuest';
 import SupportUs from '@/components/views/landings/EthDenver/SupportUs';
 import HomeGetUpdates from '@/components/views/homepage/HomeGetUpdates';
+import { IEthDenverProps } from 'pages/landings/ethdenver';
+import ProjectsCampaignBlock from '../../homepage/ProjectsCampaignBlock';
 
-const EthDenverView = () => {
+const EthDenverView: FC<IEthDenverProps> = ({ campaign }) => {
 	return (
 		<Wrapper>
 			<EventBanner />
@@ -20,6 +23,7 @@ const EthDenverView = () => {
 			<GivethSwag />
 			<Separator />
 			<ImpactQuest />
+			{campaign && <ProjectsCampaignBlock campaign={campaign} />}
 			<Separator />
 			<SupportUs />
 			<Separator />
