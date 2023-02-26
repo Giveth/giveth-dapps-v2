@@ -57,6 +57,7 @@ export const HOMEPAGE_DATA = gql`
 			title
 			slug
 			isFeatured
+			isNew
 			description
 			relatedProjects {
 				id
