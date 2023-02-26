@@ -6,6 +6,7 @@ import {
 } from '@giveth/ui-design-system';
 import { GhostButton } from '@/components/styled-components/Button';
 import { Container } from '@/components/Grid';
+import ExternalLink from '@/components/ExternalLink';
 
 const SupportUs = () => {
 	return (
@@ -15,11 +16,13 @@ const SupportUs = () => {
 				Are you an organization that wants to contribute to our Impact
 				Quest prize pool?
 			</H4>
-			<GhostButton
-				label='Learn more here'
-				size='large'
-				icon={<IconChevronRight32 />}
-			/>
+			<ExternalLink href='https://giveth.notion.site/Become-an-Impact-Quest-Partner-f3c29ec6685a4a75b46a0f6a0a3ea917'>
+				<GhostButton
+					label='Learn more here'
+					size='large'
+					icon={<IconChevronRight32 />}
+				/>
+			</ExternalLink>
 		</Wrapper>
 	);
 };

@@ -13,6 +13,8 @@ import Image from 'next/image';
 import { GhostButton } from '@/components/styled-components/Button';
 import { Col, Container, Row } from '@/components/Grid';
 import { mediaQueries } from '@/lib/constants/constants';
+import ExternalLink from '@/components/ExternalLink';
+import links from '@/lib/constants/links';
 
 const EventDetails = () => {
 	return (
@@ -34,11 +36,13 @@ const EventDetails = () => {
 							Complex: 4655 Humboldt St, Denver, CO 80216
 						</Lead>
 						<br />
-						<GhostButton
-							size='large'
-							label='Get Directions'
-							icon={<IconArrowRight32 />}
-						/>
+						<ExternalLink href='https://maps.app.goo.gl/hg2LicDFbsUBWdCYA?g_st=ic'>
+							<GhostButton
+								size='large'
+								label='Get Directions'
+								icon={<IconArrowRight32 />}
+							/>
+						</ExternalLink>
 					</FindUsText>
 				</Col>
 				<Col xs={12} md={6}>
@@ -55,11 +59,13 @@ const EventDetails = () => {
 						Swing by our 👋 <b>say-hi</b> channel, and we’ll let you
 						know who’s around to meet up.
 					</H4>
-					<GhostButton
-						label='Join us on Discord'
-						size='large'
-						icon={<IconChevronRight32 />}
-					/>
+					<ExternalLink href={links.DISCORD}>
+						<GhostButton
+							label='Join us on Discord'
+							size='large'
+							icon={<IconChevronRight32 />}
+						/>
+					</ExternalLink>
 				</DiscordText>
 			</Discord>
 		</Wrapper>
