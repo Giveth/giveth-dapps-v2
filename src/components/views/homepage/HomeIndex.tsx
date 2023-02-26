@@ -23,6 +23,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 	return (
 		<Wrapper>
 			<IntroBlock />
+			<Separator />
 			<EthDenverBanner />
 			<Separator />
 			{featuredProjectsCampaigns.length > 0
