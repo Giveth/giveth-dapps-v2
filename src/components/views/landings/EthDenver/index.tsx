@@ -39,6 +39,8 @@ const Separator = styled.div`
 
 const Wrapper = styled.div`
 	background: white;
+	overflow-x: hidden;
+	width: 100vw;
 `;
 
 export default EthDenverView;
