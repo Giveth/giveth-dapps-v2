@@ -185,6 +185,7 @@ const Title = styled(FlexCenter)`
 	box-shadow: 12px 0 20px rgba(212, 218, 238, 0.4);
 	margin: 0 32px;
 	user-select: none;
+	padding-right: 24px;
 	${mediaQueries.tablet} {
 		margin: 0;
 		width: 263px;
