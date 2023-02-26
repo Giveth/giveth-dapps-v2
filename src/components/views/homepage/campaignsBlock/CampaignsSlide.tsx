@@ -5,6 +5,7 @@ import {
 	H2,
 	H4,
 	IconChevronRight32,
+	neutralColors,
 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
@@ -42,8 +43,8 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 	return (
 		<Row>
 			<ContentCol sm={12} md={5}>
-				<H2>{campaign.title}</H2>
-				<H4>{campaign.description}</H4>
+				<H2 weight={700}>{campaign.title}</H2>
+				<Desc>{campaign.description}</Desc>
 				<Link href={campaignLinkGenerator(campaign) || ''}>
 					<ExploreLink>
 						Explore <IconChevronRight32 />
@@ -105,7 +106,6 @@ const ImageWrapper = styled.div`
 const ContentCol = styled(Col)`
 	display: flex;
 	justify-content: center;
-	align-items: center;
 	gap: 24px;
 	flex-direction: column;
 `;
@@ -115,4 +115,9 @@ const ExploreLink = styled(ButtonText)`
 	display: flex;
 	align-items: center;
 	gap: 10px;
+	justify-content: center;
+`;
+
+const Desc = styled(H4)`
+	color: ${neutralColors.gray[800]};
 `;
