@@ -45,8 +45,6 @@ export const getStaticProps: GetStaticProps = async context => {
 	});
 	return {
 		props: {
-			projects: data.allProjects.projects,
-			totalCount: data.allProjects.totalCount,
 			recentDonations: data.recentDonations,
 			projectsPerDate: data.projectsPerDate,
 			totalDonorsCountPerDate: data.totalDonorsCountPerDate,
