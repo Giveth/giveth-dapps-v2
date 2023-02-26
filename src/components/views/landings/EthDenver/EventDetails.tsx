@@ -12,6 +12,7 @@ import MapImage from '/public/images/ETHDenver-map.png';
 import Image from 'next/image';
 import { GhostButton } from '@/components/styled-components/Button';
 import { Col, Container, Row } from '@/components/Grid';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const EventDetails = () => {
 	return (
@@ -74,8 +75,13 @@ const DiscordText = styled.div`
 
 const Discord = styled.div`
 	display: flex;
+	flex-direction: column;
+	align-items: center;
 	gap: 40px;
-	padding: 40px;
+	padding-bottom: 60px;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
 `;
 
 const FindUsText = styled.div`
@@ -99,7 +105,6 @@ const Wrapper = styled(Container)`
 	background: white;
 	color: ${neutralColors.gray[900]};
 	padding-top: 120px;
-	padding-bottom: 40px;
 `;
 
 export default EventDetails;
