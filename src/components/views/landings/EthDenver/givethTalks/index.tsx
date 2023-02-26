@@ -4,6 +4,7 @@ import {
 	Button,
 	H3,
 	Lead,
+	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import CalendarWhite from '/public/images/calendar-white.svg';
@@ -54,6 +55,9 @@ const GivethTalks = () => {
 const Calendar = styled(Col)`
 	> :first-of-type {
 		margin-bottom: 40px;
+	}
+	${mediaQueries.laptopS} {
+		padding-left: 60px;
 	}
 `;
 
