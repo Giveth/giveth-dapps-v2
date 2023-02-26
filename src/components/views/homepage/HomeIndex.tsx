@@ -16,7 +16,7 @@ import HomePartners from './partners';
 const HomeIndex: FC<IHomeRoute> = props => {
 	const { campaigns, latestUpdates, ...rest } = props;
 	const featuredProjectsCampaigns = campaigns.filter(
-		campaign => campaign.isFeatured && campaign.relatedProjects.length > 0,
+		campaign => campaign.isFeatured && campaign.relatedProjects?.length > 0,
 	);
 	return (
 		<Wrapper>
