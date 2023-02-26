@@ -9,12 +9,27 @@ export const getServerSideProps: GetServerSideProps = async context => {
 	const { query } = context;
 	const slug = query.slug as string;
 	const newSlug = slug.toLowerCase();
-	const newURL = 'landings\\ ' + newSlug;
+	const newURL = '/landings/' + newSlug;
+
+	let rules: any = {};
+	if (slug && newSlug !== slug) {
+		rules.redirect = {
+			permanent: true,
+			destination: newSlug,
+		};
+	}
+	if (newSlug === slug) {
+		rules.notFound = true;
+	}
+
+	console.log('ajab', {
+		props: {},
+		...rules,
+	});
 
 	return {
 		props: {},
-		redirect: slug && newSlug !== slug ? newURL : undefined,
-		notFound: newSlug === slug,
+		...rules,
 	};
 };
 
