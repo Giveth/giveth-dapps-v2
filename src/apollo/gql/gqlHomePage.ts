@@ -93,6 +93,7 @@ export const HOMEPAGE_DATA = gql`
 			hashtags
 			photo
 			video
+			videoPreview
 			type
 			isActive
 			order

@@ -9,6 +9,7 @@ import Consensys from '/public/images/icons/impactQuests/Consensys.svg';
 import DogeClaren from '/public/images/icons/impactQuests/dogeClaren.png';
 import ETHDenver from '/public/images/icons/impactQuests/ETHDenver.png';
 import Image from 'next/image';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 const Partners = () => {
 	return (
@@ -25,10 +26,10 @@ const Partners = () => {
 
 const PartnerItem = ({ name, image }: { name: string; image: string }) => {
 	return (
-		<div>
+		<FlexCenter direction='column' gap='16px'>
 			<Image src={image} alt={name} />
 			<B>{name}</B>
-		</div>
+		</FlexCenter>
 	);
 };
 

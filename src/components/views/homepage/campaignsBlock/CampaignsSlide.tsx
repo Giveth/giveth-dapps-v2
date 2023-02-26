@@ -60,6 +60,7 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 							onClick={handleVideoClick}
 							width='100%'
 							onEnded={handleVideoEnd}
+							poster={campaign.videoPreview}
 						>
 							<source src={campaign.video} type='video/mp4' />
 						</video>

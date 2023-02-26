@@ -7,9 +7,7 @@ import GivethTalks from '@/components/views/landings/EthDenver/givethTalks';
 import GivethSwag from '@/components/views/landings/EthDenver/GivethSwag';
 import ImpactQuest from '@/components/views/landings/EthDenver/impactQuest';
 import SupportUs from '@/components/views/landings/EthDenver/SupportUs';
-import HomeGetUpdates from '@/components/views/homepage/HomeGetUpdates';
 import { IEthDenverProps } from 'pages/landings/ethdenver';
-import ProjectsCampaignBlock from '../../homepage/ProjectsCampaignBlock';
 
 const EthDenverView: FC<IEthDenverProps> = ({ campaign }) => {
 	return (
@@ -22,13 +20,12 @@ const EthDenverView: FC<IEthDenverProps> = ({ campaign }) => {
 			<Separator />
 			<GivethSwag />
 			<Separator />
-			<ImpactQuest />
-			{campaign && <ProjectsCampaignBlock campaign={campaign} />}
+			<ImpactQuest campaign={campaign} />
 			<Separator />
 			<SupportUs />
 			<Separator />
 			<Separator />
-			<HomeGetUpdates />
+			{/* <HomeGetUpdates /> */}
 		</Wrapper>
 	);
 };
@@ -41,6 +38,8 @@ const Separator = styled.div`
 
 const Wrapper = styled.div`
 	background: white;
+	overflow-x: hidden;
+	width: 100vw;
 `;
 
 export default EthDenverView;

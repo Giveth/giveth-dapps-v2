@@ -1,40 +1,50 @@
 import styled from 'styled-components';
-import { brandColors, H1, Lead } from '@giveth/ui-design-system';
-import { useEffect, useState } from 'react';
-import ExternalLink from '@/components/ExternalLink';
+import { H1, Lead } from '@giveth/ui-design-system';
+import { FC, useEffect, useState } from 'react';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_CAMPAIGNS } from '@/apollo/gql/gqlCampaign';
 import { ICampaign } from '@/apollo/types/types';
 import ProjectsCampaignBlock from '@/components/views/homepage/ProjectsCampaignBlock';
+import { FETCH_CAMPAIGN_BY_SLUG } from '@/apollo/gql/gqlCampaign';
+import { useAppSelector } from '@/features/hooks';
 
-const ImpactDenver = () => {
-	const [campaign, setCampaign] = useState<ICampaign>();
+interface IImpactDenver {
+	campaign?: ICampaign;
+}
+
+const ImpactDenver: FC<IImpactDenver> = props => {
+	const [campaign, setCampaign] = useState<ICampaign | undefined>(
+		props.campaign,
+	);
+	const { userData: user } = useAppSelector(state => state.user);
 
 	useEffect(() => {
-		const getCampaigns = async () => {
+		if (!user?.id) return;
+		const getCampaign = async () => {
 			const { data } = await client.query({
-				query: FETCH_CAMPAIGNS,
+				query: FETCH_CAMPAIGN_BY_SLUG,
+				variables: {
+					slug: 'ethDenver',
+					connectedWalletUserId: Number(user?.id),
+				},
 				fetchPolicy: 'no-cache',
 			});
-			console.log(data);
-			setCampaign(data?.campaigns[0]);
+			console.log('data.findCampaignBySlug', data.findCampaignBySlug);
+			if (data.findCampaignBySlug) {
+				setCampaign(data.findCampaignBySlug);
+			}
 		};
-		getCampaigns().catch(console.log);
-	}, []);
+		getCampaign();
+	}, [user?.id]);
+	console.log('campaign', campaign);
 
 	return (
 		<Wrapper>
 			<H1 weight={700}>Impact @ Denver</H1>
 			<Lead size='large'>
 				We’re all about supporting real world impact at Giveth. If
-				you’re feeling generous and want to take part in our{' '}
-				<ExternalLink
-					color={brandColors.pinky[500]}
-					href=''
-					title='Impact Quests'
-				/>
-				, discover some of our favorite on-the-ground projects in the
-				Denver area.
+				you’re feeling generous and want to take part in our Impact
+				Quests, discover some of our favorite on-the-ground projects in
+				the Denver area.
 			</Lead>
 			{campaign && <ProjectsCampaignBlock campaign={campaign} />}
 		</Wrapper>

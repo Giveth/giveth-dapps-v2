@@ -39,12 +39,14 @@ const GivethTalks = () => {
 						lecturer='Griff Green'
 						date='Mar 03, 2023'
 						time='13:00 - 13:15 MST'
+						link='https://events.ethdenver.com/eden23/attendease/networking/experience/9dfae4fa-a017-47bb-837c-e2b7b8da8468/af96b57b-a734-45c0-918f-f32bb030cbcc'
 					/>
 					<CalendarItem
 						title='Why DAOs will change the world'
 						lecturer='Lauren Luz'
 						date='Mar 04, 2023'
 						time='10:20 - 10:40 MST'
+						link='https://events.ethdenver.com/eden23/attendease/networking/experience/3185f05e-1283-47c4-b1cd-c456c3b6af3a/dd50c09c-f707-4389-a60a-75c2d37c2aa5'
 					/>
 				</Calendar>
 			</Row>

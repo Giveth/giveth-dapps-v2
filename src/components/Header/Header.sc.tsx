@@ -294,3 +294,10 @@ export const SidebarInnerContainer = styled(Flex)`
 export const HeaderPlaceHolder = styled.div`
 	height: 92px;
 `;
+
+export const UserName = styled(GLink)`
+	display: block;
+	width: 128px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+`;

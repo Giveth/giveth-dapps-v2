@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { GhostButton } from '@/components/styled-components/Button';
 import PizzaImage from '/public/images/ETHDenver-pizza.png';
 import { Col, Row } from '@/components/Grid';
+import ExternalLink from '@/components/ExternalLink';
 
 const ImpactQuests = () => {
 	return (
@@ -27,25 +28,24 @@ const ImpactQuests = () => {
 						participate virtually if you can't make it to the
 						conference.
 					</LeadStyled>
-					<GhostButton
-						label='Learn more about our Impact Quests'
-						size='large'
-						icon={<IconExternalLink24 />}
-					/>
+					<ExternalLink href='https://giveth.notion.site/Giveth-s-Galactic-Impact-Quests-f8ef267e16d14acfaba41b43183c17de'>
+						<GhostButton
+							label='Learn about Impact Quests'
+							size='large'
+							icon={<IconExternalLink24 />}
+						/>
+					</ExternalLink>
 				</Col>
 				<Col xs={12} md={6}>
-					<Img>
-						<Image src={PizzaImage} alt='EthDenver Pizza Image' />
-					</Img>
+					<Img src={PizzaImage} alt='EthDenver Pizza Image' />
 				</Col>
 			</Row>
 		</Wrapper>
 	);
 };
 
-const Img = styled.div`
-	display: flex;
-	justify-content: center;
+const Img = styled(Image)`
+	max-width: 100%;
 `;
 
 const LeadStyled = styled(Lead)`

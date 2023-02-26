@@ -2,7 +2,6 @@ import { FC, Fragment } from 'react';
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 import HomeFromBlog from './HomeFromBlog';
-import HomeGetUpdates from './HomeGetUpdates';
 import WhyGiveth from '@/components/views/homepage/whyGiveth';
 import ProjectsCampaignBlock from '@/components/views/homepage/ProjectsCampaignBlock';
 import IntroBlock from './introBlock';
@@ -12,6 +11,7 @@ import { IHomeRoute } from '../../../../pages';
 import InformationBlock from '@/components/views/homepage/InformationBlock';
 import { CampaignsBlock } from './campaignsBlock/CampaignsBlock';
 import HomePartners from './partners';
+import { EthDenverBanner } from '@/components/EthDenverBanner';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const { campaigns, latestUpdates, ...rest } = props;
@@ -22,6 +22,8 @@ const HomeIndex: FC<IHomeRoute> = props => {
 	return (
 		<Wrapper>
 			<IntroBlock />
+			<Separator />
+			<EthDenverBanner />
 			<Separator />
 			{featuredProjectsCampaigns.length > 0
 				? featuredProjectsCampaigns.map(campaign => (
@@ -47,7 +49,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 				''
 			)}
 			<HomeFromBlog />
-			<HomeGetUpdates />
+			{/* <HomeGetUpdates /> */}
 		</Wrapper>
 	);
 };
