@@ -23,6 +23,7 @@ import {
 	HeaderLink,
 	HomeButton,
 	SearchButton,
+	GLinkNoWrap,
 } from './Header.sc';
 import { isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
@@ -187,7 +188,7 @@ const Header: FC<IHeader> = () => {
 										width='50'
 										height='50'
 										alt='Giveth logo'
-										src='/images/logo/logo1.png'
+										src='/images/logo/logo.svg'
 									/>
 								</Logo>
 							</Link>
@@ -222,7 +223,9 @@ const Header: FC<IHeader> = () => {
 						onClick={() => dispatch(setShowSearchModal(true))}
 					>
 						<Flex alignItems='center' gap='16px'>
-							<GLink size='Big'>Search projects</GLink>
+							<GLinkNoWrap size='Big'>
+								Search projects
+							</GLinkNoWrap>
 							<IconSearch24 />
 						</Flex>
 					</SearchButton>

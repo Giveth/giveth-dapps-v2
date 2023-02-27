@@ -31,9 +31,9 @@ export const HomeSidebar = () => {
 				<GIVeconomyItems />
 			</SidebarParentItem>
 			<ItemSpacer />
-			<Link href={Routes.NFT}>
+			<Link href={Routes.Join}>
 				<Item theme={theme}>
-					<GLink size='Big'>NFT</GLink>
+					<GLink size='Big'>Community</GLink>
 				</Item>
 			</Link>
 			<SearchButton

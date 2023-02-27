@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import {
+	Button,
 	H3,
 	IconExternalLink24,
 	Lead,
@@ -7,7 +8,6 @@ import {
 } from '@giveth/ui-design-system';
 import SwagImg from '/public/images/swag.png';
 import Image from 'next/image';
-import { GhostButton } from '@/components/styled-components/Button';
 import { Col, Container, Row } from '@/components/Grid';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
@@ -28,9 +28,10 @@ const GivethSwag = () => {
 								from our new and improved swag shop.
 							</Desc>
 							<ExternalLink href={links.SWAG}>
-								<GhostButton
+								<Button
 									label='Go to Swag shop'
 									size='large'
+									buttonType='texty-primary'
 									icon={<IconExternalLink24 />}
 								/>
 							</ExternalLink>

@@ -46,11 +46,11 @@ export const SidebarParentItem: FC<ISidebarItemProps> = ({
 
 const ItemWrapper = styled(Flex)`
 	cursor: pointer;
-	padding: 12px 8px;
+	padding: 12px 16px;
 `;
 
 const ChildrenWrapper = styled.div`
-	padding: 12px 8px;
+	padding: 12px 0;
 	border-bottom: 1px solid
 		${props =>
 			props.theme === ETheme.Dark

@@ -64,5 +64,5 @@ export const GIVeconomyItems = () => {
 };
 
 const LabelStyle = styled(Caption)`
-	margin: 24px 8px 16px;
+	margin: 24px 16px 16px;
 `;
