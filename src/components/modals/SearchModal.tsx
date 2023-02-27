@@ -123,6 +123,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 			isAnimating={isAnimating}
 			theme={theme}
 			fullScreen
+			hiddenClose
 		>
 			<SearchModalContainer>
 				<SearchBox>
