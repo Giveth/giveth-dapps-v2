@@ -4,7 +4,6 @@ import { AddressZero } from '@ethersproject/constants';
 import { useAppSelector } from '@/features/hooks';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { defaultXdaiSubgraphValues } from '@/features/subgraph/subgraph.slice';
 
 export const defaultTokenDistroHelper = new TokenDistroHelper({
 	contractAddress: AddressZero,
@@ -21,9 +20,8 @@ const useGIVTokenDistroHelper = (disable = false) => {
 		useState<TokenDistroHelper>(defaultTokenDistroHelper);
 	const [isLoaded, setIsLoaded] = useState(false);
 	const currentValue = useAppSelector(
-		state =>
-			disable ? defaultXdaiSubgraphValues : state.subgraph.currentValues,
-		shallowEqual,
+		state => state.subgraph.currentValues,
+		(objA, objB) => (disable ? true : shallowEqual(objA, objB)),
 	);
 	useEffect(() => {
 		const sdh = new SubgraphDataHelper(currentValue);
