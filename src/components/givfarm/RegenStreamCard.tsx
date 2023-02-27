@@ -71,7 +71,10 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 		constants.Zero,
 	);
 
-	const currentValues = useAppSelector(state => state.subgraph.currentValues);
+	const currentValues = useAppSelector(
+		state => state.subgraph.currentValues,
+		() => (showModal ? true : false),
+	);
 	const { regenTokenDistroHelper, tokenDistroBalance } = useMemo(() => {
 		const sdh = new SubgraphDataHelper(currentValues);
 		const tokenDistroBalance = sdh.getTokenDistroBalance(
