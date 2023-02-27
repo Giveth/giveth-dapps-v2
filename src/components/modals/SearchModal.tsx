@@ -1,13 +1,20 @@
 import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { brandColors, H6, Lead, neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	ButtonText,
+	H6,
+	IconX16,
+	Lead,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Col, Container, Row } from '../Grid';
-import { Flex } from '../styled-components/Flex';
+import { Flex, FlexCenter } from '../styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppSelector } from '@/features/hooks';
@@ -17,6 +24,7 @@ import Routes from '@/lib/constants/Routes';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_CAMPAIGN_BY_SLUG } from '@/apollo/gql/gqlCampaign';
 import { ICampaign, IProject } from '@/apollo/types/types';
+import { Shadow } from '../styled-components/Shadow';
 
 const quickLinks = [
 	{
@@ -126,6 +134,10 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 			hiddenClose
 		>
 			<SearchModalContainer>
+				<CloseModal theme={theme} onClick={closeModal}>
+					<ButtonText>Close</ButtonText>
+					<IconX16 />
+				</CloseModal>
 				<SearchBox>
 					<H6 weight={700}>Find awesome projects on Giveth</H6>
 					<SearchInput setTerm={setTerm} />
@@ -202,8 +214,23 @@ const StyledModal = styled(Modal)`
 			: neutralColors.gray[200]};
 `;
 
+const CloseModal = styled(FlexCenter)`
+	position: absolute;
+	top: 0;
+	left: 32px;
+	gap: 8px;
+	padding: 12px 16px;
+	background-color: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[700]
+			: neutralColors.gray[100]};
+	border-radius: 50px;
+	box-shadow: ${Shadow.Neutral[400]};
+	cursor: pointer;
+`;
+
 const SearchModalContainer = styled(Container)`
-	padding-top: 36px;
+	padding-top: 96px;
 	${mediaQueries.tablet} {
 		padding-top: 132px;
 	}
