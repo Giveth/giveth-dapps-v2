@@ -95,8 +95,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
 	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
 
-	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
-
 	const { chainId } = useWeb3React();
 
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
@@ -185,13 +183,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			{showGIVPowerExplain && (
 				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
 			)}
-
-			{/* {showLockDetailModal && (
-				<LockupDetailsModal
-					setShowModal={setShowLockDetailModal}
-					unstakeable={availableStakedToken}
-				/>
-			)} */}
 		</>
 	);
 };
