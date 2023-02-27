@@ -6,7 +6,6 @@ import {
 	PoolStakingConfig,
 	RegenFarmConfig,
 	RegenPoolStakingConfig,
-	SimplePoolStakingConfig,
 	StakingPlatform,
 	StakingType,
 } from '@/types/config';
@@ -36,7 +35,6 @@ import { ArchiveCover } from './ArchiveCover';
 import { StakingCardHeader } from './StakingCardHeader';
 import { getNowUnixMS } from '@/helpers/time';
 import { StakingPoolInfoAndActions } from './StakingPoolInfoAndActions';
-import { UnStakeModal } from '@/components/modals/Unstake/UnStake';
 import { HarvestAllModal } from '@/components/modals/HarvestAll';
 import type { LiquidityPosition } from '@/types/nfts';
 
@@ -96,7 +94,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { formatMessage } = useIntl();
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
-	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showLockModal, setShowLockModal] = useState(false);
 	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
@@ -174,7 +171,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							regenStreamConfig={regenStreamConfig}
 							isDiscontinued={isDiscontinued}
 							isGIVpower={isGIVpower}
-							setShowUnStakeModal={setShowUnStakeModal}
 							setShowHarvestModal={setShowHarvestModal}
 						/>
 					</>
@@ -192,15 +188,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
 			)}
 
-			{showUnStakeModal && (
-				<UnStakeModal
-					setShowModal={setShowUnStakeModal}
-					poolStakingConfig={
-						poolStakingConfig as SimplePoolStakingConfig
-					}
-					regenStreamConfig={regenStreamConfig}
-				/>
-			)}
 			{showHarvestModal && chainId && (
 				<HarvestAllModal
 					title={formatMessage({ id: 'label.givfarm_rewards' })}

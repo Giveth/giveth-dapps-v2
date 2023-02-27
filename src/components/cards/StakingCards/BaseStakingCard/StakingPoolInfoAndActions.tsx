@@ -52,12 +52,12 @@ import { StakeModal } from '@/components/modals/StakeLock/Stake';
 import { StakeGIVModal } from '@/components/modals/StakeLock/StakeGIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
+import { UnStakeModal } from '@/components/modals/Unstake/UnStake';
 interface IStakingPoolInfoAndActionsProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
 	regenStreamConfig?: RegenFarmConfig;
 	isDiscontinued: boolean;
 	isGIVpower: boolean;
-	setShowUnStakeModal: React.Dispatch<React.SetStateAction<boolean>>;
 	setShowHarvestModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -66,7 +66,6 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	regenStreamConfig,
 	isDiscontinued,
 	isGIVpower,
-	setShowUnStakeModal,
 	setShowHarvestModal,
 }) => {
 	const [started, setStarted] = useState(true);
@@ -76,6 +75,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	//Modals
 	const [showAPRModal, setShowAPRModal] = useState(false);
 	const [showStakeModal, setShowStakeModal] = useState(false);
+	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 
 	const { formatMessage } = useIntl();
 	const { setInfo } = useFarms();
@@ -466,6 +466,15 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						regenStreamConfig={regenStreamConfig}
 					/>
 				))}
+			{showUnStakeModal && (
+				<UnStakeModal
+					setShowModal={setShowUnStakeModal}
+					poolStakingConfig={
+						poolStakingConfig as SimplePoolStakingConfig
+					}
+					regenStreamConfig={regenStreamConfig}
+				/>
+			)}
 		</StakePoolInfoContainer>
 	);
 };
