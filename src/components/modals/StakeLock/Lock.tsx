@@ -6,7 +6,6 @@ import {
 	P,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { BigNumber } from 'ethers';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
@@ -35,11 +34,13 @@ import { Flex } from '@/components/styled-components/Flex';
 import links from '@/lib/constants/links';
 import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
+import { useStakingPool } from '@/hooks/useStakingPool';
+import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import type { PoolStakingConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
-	maxAmount: BigNumber;
+	isGIVpower: boolean;
 }
 
 export enum ELockState {
@@ -52,7 +53,7 @@ export enum ELockState {
 
 const LockModal: FC<ILockModalProps> = ({
 	poolStakingConfig,
-	maxAmount,
+	isGIVpower,
 	setShowModal,
 }) => {
 	const { formatMessage } = useIntl();
@@ -61,6 +62,17 @@ const LockModal: FC<ILockModalProps> = ({
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
 	const { library } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { stakedAmount: stakedLpAmount } = useStakingPool(poolStakingConfig);
+
+	const { network: poolNetwork } = poolStakingConfig;
+
+	const { sdh } = useTokenDistroHelper(poolNetwork);
+
+	const userGIVLocked = sdh.getUserGIVLockedBalance();
+
+	const maxAmount = isGIVpower
+		? stakedLpAmount.sub(userGIVLocked.balance)
+		: stakedLpAmount;
 
 	const onLock = async () => {
 		const contractAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
