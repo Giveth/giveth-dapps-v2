@@ -10,6 +10,7 @@ import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
+import { useRouter } from 'next/router';
 import FarmCountDown from '@/components/FarmCountDown';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { FlexCenter, Flex } from '@/components/styled-components/Flex';
@@ -19,6 +20,7 @@ import {
 	PoolStakingConfig,
 	RegenFarmConfig,
 	RegenPoolStakingConfig,
+	SimplePoolStakingConfig,
 	StakingType,
 } from '@/types/config';
 import {
@@ -46,12 +48,15 @@ import { useStakingPool } from '@/hooks/useStakingPool';
 import { useFarms } from '@/context/farm.context';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import { APRModal } from '@/components/modals/APR';
+import { StakeModal } from '@/components/modals/StakeLock/Stake';
+import { StakeGIVModal } from '@/components/modals/StakeLock/StakeGIV';
+import config from '@/configuration';
+import Routes from '@/lib/constants/Routes';
 interface IStakingPoolInfoAndActionsProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
 	regenStreamConfig?: RegenFarmConfig;
 	isDiscontinued: boolean;
 	isGIVpower: boolean;
-	setShowStakeModal: React.Dispatch<React.SetStateAction<boolean>>;
 	setShowUnStakeModal: React.Dispatch<React.SetStateAction<boolean>>;
 	setShowHarvestModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -61,25 +66,27 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	regenStreamConfig,
 	isDiscontinued,
 	isGIVpower,
-	setShowStakeModal,
 	setShowUnStakeModal,
 	setShowHarvestModal,
 }) => {
 	const [started, setStarted] = useState(true);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
+	const [isFirstStakeShown, setIsFirstStakeShown] = useState(false);
 	//Modals
 	const [showAPRModal, setShowAPRModal] = useState(false);
+	const [showStakeModal, setShowStakeModal] = useState(false);
 
 	const { formatMessage } = useIntl();
 	const { setInfo } = useFarms();
-	const { account } = useWeb3React();
+	const router = useRouter();
 	const {
 		apr,
 		notStakedAmount: userNotStakedAmount,
 		stakedAmount: stakedLpAmount,
 		earned,
 	} = useStakingPool(poolStakingConfig);
+	const { chainId, account, active: isWalletActive } = useWeb3React();
 
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 
@@ -121,6 +128,33 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 			);
 		}
 	}, [earned, tokenDistroHelper]);
+
+	useEffect(() => {
+		if (isFirstStakeShown || !router) return;
+		const { open, chain } = router.query;
+		const _open = Array.isArray(open) ? open[0] : open;
+		const _chain = Array.isArray(chain) ? chain[0] : chain;
+		const _chainId =
+			_chain === 'gnosis'
+				? config.XDAI_NETWORK_NUMBER
+				: config.MAINNET_NETWORK_NUMBER;
+		const checkNetworkAndShowStakeModal = async () => {
+			if (
+				_chainId === chainId &&
+				_chainId === poolNetwork &&
+				_open === type
+			) {
+				if (account) {
+					setShowStakeModal(true);
+					setIsFirstStakeShown(true);
+					router.replace(Routes.GIVfarm, undefined, {
+						shallow: true,
+					});
+				}
+			}
+		};
+		checkNetworkAndShowStakeModal();
+	}, [router, account, isWalletActive]);
 
 	const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
 	const rewardTokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
@@ -413,6 +447,25 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 					poolNetwork={poolNetwork}
 				/>
 			)}
+			{showStakeModal &&
+				(isGIVpower ? (
+					<StakeGIVModal
+						setShowModal={setShowStakeModal}
+						poolStakingConfig={
+							poolStakingConfig as SimplePoolStakingConfig
+						}
+						// showLockModal={() => setShowLockModal(true)}
+						showLockModal={() => console.log('TODO!')}
+					/>
+				) : (
+					<StakeModal
+						setShowModal={setShowStakeModal}
+						poolStakingConfig={
+							poolStakingConfig as SimplePoolStakingConfig
+						}
+						regenStreamConfig={regenStreamConfig}
+					/>
+				))}
 		</StakePoolInfoContainer>
 	);
 };

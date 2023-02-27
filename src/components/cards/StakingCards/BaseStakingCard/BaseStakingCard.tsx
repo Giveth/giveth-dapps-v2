@@ -1,7 +1,6 @@
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, { FC, ReactNode, useState } from 'react';
 import { Caption, IconAlertCircle32 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useRouter } from 'next/router';
 import { useWeb3React } from '@web3-react/core';
 import {
 	PoolStakingConfig,
@@ -35,11 +34,8 @@ import GIVpowerCardIntro from '../GIVpowerCard/GIVpowerCardIntro';
 import StakingCardIntro from '../StakingCardIntro';
 import { ArchiveCover } from './ArchiveCover';
 import { StakingCardHeader } from './StakingCardHeader';
-import Routes from '@/lib/constants/Routes';
 import { getNowUnixMS } from '@/helpers/time';
 import { StakingPoolInfoAndActions } from './StakingPoolInfoAndActions';
-import { StakeModal } from '@/components/modals/StakeLock/Stake';
-import { StakeGIVModal } from '@/components/modals/StakeLock/StakeGIV';
 import { UnStakeModal } from '@/components/modals/Unstake/UnStake';
 import { HarvestAllModal } from '@/components/modals/HarvestAll';
 import type { LiquidityPosition } from '@/types/nfts';
@@ -100,8 +96,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { formatMessage } = useIntl();
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
-	const [showStakeModal, setShowStakeModal] = useState(false);
-	const [isFirstStakeShown, setIsFirstStakeShown] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showLockModal, setShowLockModal] = useState(false);
@@ -110,9 +104,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		useState(false);
 	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
 
-	const router = useRouter();
-
-	const { chainId, account, active: isWalletActive } = useWeb3React();
+	const { chainId } = useWeb3React();
 
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 
@@ -127,33 +119,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		exploited,
 		network: poolNetwork,
 	} = poolStakingConfig;
-
-	useEffect(() => {
-		if (isFirstStakeShown || !router) return;
-		const { open, chain } = router.query;
-		const _open = Array.isArray(open) ? open[0] : open;
-		const _chain = Array.isArray(chain) ? chain[0] : chain;
-		const _chainId =
-			_chain === 'gnosis'
-				? config.XDAI_NETWORK_NUMBER
-				: config.MAINNET_NETWORK_NUMBER;
-		const checkNetworkAndShowStakeModal = async () => {
-			if (
-				_chainId === chainId &&
-				_chainId === poolNetwork &&
-				_open === type
-			) {
-				if (account) {
-					setShowStakeModal(true);
-					setIsFirstStakeShown(true);
-					router.replace(Routes.GIVfarm, undefined, {
-						shallow: true,
-					});
-				}
-			}
-		};
-		checkNetworkAndShowStakeModal();
-	}, [router, account, isWalletActive]);
 
 	const isGIVStaking = type === StakingType.GIV_LM;
 	const isGIVpower =
@@ -209,7 +174,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							regenStreamConfig={regenStreamConfig}
 							isDiscontinued={isDiscontinued}
 							isGIVpower={isGIVpower}
-							setShowStakeModal={setShowStakeModal}
 							setShowUnStakeModal={setShowUnStakeModal}
 							setShowHarvestModal={setShowHarvestModal}
 						/>
@@ -227,24 +191,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			{showGIVPowerExplain && (
 				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
 			)}
-			{showStakeModal &&
-				(isGIVpower ? (
-					<StakeGIVModal
-						setShowModal={setShowStakeModal}
-						poolStakingConfig={
-							poolStakingConfig as SimplePoolStakingConfig
-						}
-						showLockModal={() => setShowLockModal(true)}
-					/>
-				) : (
-					<StakeModal
-						setShowModal={setShowStakeModal}
-						poolStakingConfig={
-							poolStakingConfig as SimplePoolStakingConfig
-						}
-						regenStreamConfig={regenStreamConfig}
-					/>
-				))}
+
 			{showUnStakeModal && (
 				<UnStakeModal
 					setShowModal={setShowUnStakeModal}
