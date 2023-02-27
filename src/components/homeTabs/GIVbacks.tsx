@@ -50,8 +50,11 @@ export const TabGIVbacksTop = () => {
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
-	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showHarvestModal);
+	const xDaiValues = useAppSelector(
+		state => state.subgraph.xDaiValues,
+		() => (showHarvestModal ? true : false),
+	);
 	const givTokenDistroBalance = useMemo(() => {
 		const sdh = new SubgraphDataHelper(xDaiValues);
 		return sdh.getGIVTokenDistroBalance();
