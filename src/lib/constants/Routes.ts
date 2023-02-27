@@ -24,7 +24,7 @@ const Routes = {
 	Support: '/support',
 	Join: '/join',
 	Terms: '/tos',
-	GIVfriends: '/GIVfriends',
+	Partnerships: '/partnerships',
 	MyAccount,
 	MyProjects: MyAccount + profileTabs.projects,
 	MyDonations: MyAccount + profileTabs.donations,
@@ -42,6 +42,8 @@ const Routes = {
 	GIVbacks: '/givbacks',
 	Claim: '/claim',
 	GivethProject: '/project/the-giveth-community-of-makers',
+	NFT: '/nft',
+	Landing: '/landings',
 };
 
 export default Routes;

@@ -10,6 +10,7 @@ import {
 	DataBlockWithMargin,
 	VoteCardQuote,
 	DataBlockButton,
+	TopSpacer,
 } from './Overview.sc';
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
@@ -23,6 +24,7 @@ export const TabOverview = () => {
 
 	return (
 		<>
+			<TopSpacer />
 			<VideoBlock
 				src='/video/giveconomy.mp4'
 				poster='/video/giveconomy.webp'

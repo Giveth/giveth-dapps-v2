@@ -1,10 +1,10 @@
-import { ESortbyAllProjects } from '../types/gqlEnums';
+import { EProjectsSortBy } from '../types/gqlEnums';
 
 export const OPTIONS_HOME_PROJECTS = {
 	variables: {
 		limit: 15,
 		skip: 0,
-		sortingBy: ESortbyAllProjects.GIVPOWER,
+		sortingBy: EProjectsSortBy.GIVPOWER,
 	},
 	notifyOnNetworkStatusChange: true,
 };

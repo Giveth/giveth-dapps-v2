@@ -2,7 +2,6 @@ import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/features/hooks';
 import {
-	fetchEthPriceAsync,
 	fetchGIVPriceAsync,
 	fetchGnosisThirdPartyTokensPriceAsync,
 	fetchMainnetThirdPartyTokensPriceAsync,
@@ -14,7 +13,6 @@ const PriceController = () => {
 
 	useEffect(() => {
 		const _chainId = chainId ?? 0;
-		dispatch(fetchEthPriceAsync());
 		dispatch(fetchGIVPriceAsync(_chainId));
 		dispatch(fetchMainnetThirdPartyTokensPriceAsync());
 		dispatch(fetchGnosisThirdPartyTokensPriceAsync());

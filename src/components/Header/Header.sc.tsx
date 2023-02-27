@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
 	neutralColors,
 	brandColors,
@@ -18,9 +18,20 @@ export const StyledHeader = styled(Flex)<IHeader>`
 	left: 0;
 	right: 0;
 	top: ${props => (props.show ? 0 : '-100px')};
-	padding: 16px 32px;
 	z-index: ${zIndex.HEADER};
 	transition: top 0.3s ease;
+	padding: 16px 24px;
+	background: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[600]
+			: neutralColors.gray[100]};
+	box-shadow: ${props =>
+		props.theme === ETheme.Dark
+			? '0px 3px 20px rgba(33, 32, 60, 0.24)'
+			: '0px 3px 20px rgba(212, 218, 238, 0.4)'};
+	${mediaQueries.tablet} {
+		padding: 16px 32px;
+	}
 `;
 
 export const Logo = styled.span`
@@ -29,19 +40,19 @@ export const Logo = styled.span`
 	align-items: center;
 	background: ${neutralColors.gray[100]};
 	box-shadow: ${props =>
-		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+		props.theme === ETheme.Dark ? '' : Shadow.Neutral[400]};
 	border-radius: 99px;
 	padding: 8px;
-	width: 64px;
-	height: 64px;
+	width: 60px;
+	height: 60px;
 	cursor: pointer;
 `;
 
-interface IThemed {
-	theme?: ETheme;
+interface IHeaderButtonProps {
+	isHover: boolean;
 }
 
-export const HeaderButton = styled(CButton)<IThemed>`
+export const HeaderButton = styled(CButton)<IHeaderButtonProps>`
 	display: flex;
 	height: 50px;
 	font-weight: normal;
@@ -58,7 +69,22 @@ export const HeaderButton = styled(CButton)<IThemed>`
 		${props =>
 			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
 	box-shadow: ${props =>
-		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+		props.theme === ETheme.Dark ? Shadow.Dark[500] : Shadow.Neutral[500]};
+	${props =>
+		props.isHover
+			? css`
+					background-color: ${props =>
+						props.theme === ETheme.Dark
+							? brandColors.giv[600]
+							: 'white'};
+					.cover-line {
+						background-color: ${props =>
+							props.theme === ETheme.Dark
+								? brandColors.giv[600]
+								: 'white'};
+					}
+			  `
+			: ''}
 `;
 
 export const BalanceButton = styled(HeaderButton)`
@@ -159,25 +185,13 @@ interface IHeaderLinkProps {
 	theme?: ETheme;
 }
 
-export const HeaderLinks = styled(Flex)<IThemed>`
-	background-color: ${props =>
-		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
-	border: 1px solid
-		${props =>
-			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
-	border-radius: 48px;
-	padding: 6px;
+export const HeaderLinks = styled(Flex)`
+	margin-left: 48px;
 	gap: 8px;
-	display: none;
-	box-shadow: ${props =>
-		props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
-	${mediaQueries.laptopL} {
-		display: flex;
-	}
 `;
 
 export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
-	padding: 8px 16px 7px;
+	padding: 10px 16px 10px;
 	border-radius: 72px;
 	background-color: ${props => {
 		if (props.active) {
@@ -190,8 +204,24 @@ export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 	&:hover {
 		background-color: ${props =>
 			props.theme === ETheme.Dark
-				? brandColors.giv[800]
-				: neutralColors.gray[200]};
+				? brandColors.giv[300]
+				: brandColors.giv[50]};
+	}
+`;
+
+export const SearchButton = styled(HeaderLink)`
+	cursor: pointer;
+	background-color: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[300]
+			: neutralColors.gray[200]};
+	& > div > span {
+		display: none;
+	}
+	${mediaQueries.desktop} {
+		& > div > span {
+			display: inline-block;
+		}
 	}
 `;
 
@@ -242,7 +272,7 @@ export const MenuAndButtonContainer = styled.div`
 	z-index: 2;
 `;
 
-export const CoverLine = styled.div<IThemed>`
+export const CoverLine = styled.div`
 	background-color: ${props =>
 		props.theme === ETheme.Dark ? brandColors.giv[900] : 'white'};
 	position: absolute;
@@ -254,9 +284,33 @@ export const CoverLine = styled.div<IThemed>`
 	border-radius: 48px;
 `;
 
-export const MainLogoBtn = styled.div`
-	display: none;
-	${mediaQueries.laptopL} {
-		display: flex;
-	}
+export const HomeButton = styled(Flex)`
+	padding: 10px 16px;
+	cursor: pointer;
+`;
+
+export const HeaderSidebarButtonWrapper = styled.div`
+	padding: 12px;
+`;
+
+export const SidebarInnerContainer = styled(Flex)`
+	padding: 4px 16px 16px;
+	flex-direction: column;
+	gap: 16px;
+`;
+
+export const HeaderPlaceHolder = styled.div`
+	height: 92px;
+`;
+
+export const UserName = styled(GLink)`
+	display: block;
+	width: 128px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+`;
+
+export const GLinkNoWrap = styled(GLink)`
+	text-overflow: ellipsis;
+	white-space: nowrap;
 `;

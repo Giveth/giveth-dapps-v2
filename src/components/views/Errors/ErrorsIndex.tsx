@@ -2,7 +2,6 @@ import { D3 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { statusCodes } from '@/lib/constants/constants';
 import error401 from '/public/images/icons/errors/401.svg';
 import error403 from '/public/images/icons/errors/403.svg';
 import error404 from '/public/images/icons/errors/404.svg';
@@ -33,7 +32,7 @@ import {
 import { useAppDispatch } from '@/features/hooks';
 
 interface IErrorProps {
-	statusCode: typeof statusCodes[number];
+	statusCode: '401' | '403' | '404' | '500' | '502' | '503' | '504';
 }
 
 const ErrorsIndex = ({ statusCode }: IErrorProps) => {

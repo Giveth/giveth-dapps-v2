@@ -8,6 +8,10 @@ import {
 } from '@giveth/ui-design-system';
 import { device, mediaQueries } from '@/lib/constants/constants';
 
+export const TopSpacer = styled.div`
+	height: 24px;
+`;
+
 export const OverviewBottomContainer = styled.div`
 	background-image: url('/images/backgrounds/wave.svg');
 	background-position: center;

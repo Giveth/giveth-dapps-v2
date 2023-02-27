@@ -39,6 +39,19 @@ export default class MyDocument extends Document {
 			<Html>
 				<Head>
 					<link rel='shortcut icon' href='/favicon.svg' />
+					<script
+						type='text/javascript'
+						dangerouslySetInnerHTML={{
+							__html: `if (
+								window?.location &&
+								(window.location.pathname.toLowerCase().startsWith('/giv') || window.location.pathname.toLowerCase().startsWith('/nft'))
+							) {
+								const r = document.querySelector(':root');
+								r.style.setProperty('--bgColor', '#090446');
+								r.style.setProperty('--color', '#FFFFFF');
+							}`,
+						}}
+					></script>
 				</Head>
 				<body>
 					<Main />

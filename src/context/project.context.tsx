@@ -168,6 +168,7 @@ export const ProjectProvider = ({
 								powerAmount: +_total
 									.div(10 ** 18)
 									.toFixed(2, BigNumber.ROUND_UP),
+								projectId: projectId,
 							},
 						);
 						if (_projectedRank?.data?.powerAmountRank) {
