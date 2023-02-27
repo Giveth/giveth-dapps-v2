@@ -16,7 +16,7 @@ import {
 	Lead,
 	P,
 } from '@giveth/ui-design-system';
-import { ethers } from 'ethers';
+import { constants, BigNumber as EthBigNumber } from 'ethers';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
@@ -130,20 +130,18 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const { account, library } = useWeb3React();
 	const [txHash, setTxHash] = useState('');
 	//GIVdrop TODO: Should we show Givdrop in new  design?
-	const [givDrop, setGIVdrop] = useState(ethers.constants.Zero);
+	const [givDrop, setGIVdrop] = useState(constants.Zero);
 	const [givDropStream, setGIVdropStream] = useState<BigNumber>(Zero);
 	//GIVstream
-	const [rewardLiquidPart, setRewardLiquidPart] = useState(
-		ethers.constants.Zero,
-	);
+	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber>(Zero);
 	//GIVfarm
-	const [earnedLiquid, setEarnedLiquid] = useState(ethers.constants.Zero);
+	const [earnedLiquid, setEarnedLiquid] = useState(constants.Zero);
 	const [earnedStream, setEarnedStream] = useState<BigNumber>(Zero);
 	//GIVbacks
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
 	//Sum
-	const [sumLiquid, setSumLiquid] = useState(ethers.constants.Zero);
+	const [sumLiquid, setSumLiquid] = useState(constants.Zero);
 	const [sumStream, setSumStream] = useState<BigNumber>(Zero);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -156,11 +154,11 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const tokenDistroBalance = regenStreamConfig
 		? sdh.getTokenDistroBalance(regenStreamConfig.tokenDistroAddress)
 		: sdh.getGIVTokenDistroBalance();
-	const givback = useMemo<ethers.BigNumber>(
+	const givback = useMemo<EthBigNumber>(
 		() => BN(tokenDistroBalance.givback),
 		[tokenDistroBalance],
 	);
-	const givbackLiquidPart = useMemo<ethers.BigNumber>(
+	const givbackLiquidPart = useMemo<EthBigNumber>(
 		() => BN(tokenDistroBalance.givbackLiquidPart),
 		[tokenDistroBalance],
 	);
@@ -210,7 +208,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		) {
 			fetchAirDropClaimData(account).then(claimData => {
 				if (claimData) {
-					const givDrop = ethers.BigNumber.from(claimData.amount);
+					const givDrop = EthBigNumber.from(claimData.amount);
 					setGIVdrop(givDrop.div(10));
 					setGIVdropStream(
 						tokenDistroHelper.getStreamPartTokenPerWeek(givDrop),
@@ -634,10 +632,10 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 interface IEarnedBreakDownProps {
 	poolStakingConfig: PoolStakingConfig;
 	tokenDistroHelper: TokenDistroHelper;
-	setRewardLiquidPart: Dispatch<SetStateAction<ethers.BigNumber>>;
+	setRewardLiquidPart: Dispatch<SetStateAction<EthBigNumber>>;
 	setEarnedStream: Dispatch<SetStateAction<BigNumber>>;
 	regenStreamConfig?: RegenFarmConfig;
-	rewardLiquidPart: ethers.BigNumber;
+	rewardLiquidPart: EthBigNumber;
 	tokenSymbol: string;
 	earnedStream: BigNumber;
 }
