@@ -628,7 +628,6 @@ const ArchiveButton = styled(Button)`
 	margin: 12px 0 0;
 	padding-bottom: 0;
 	color: ${brandColors.giv[500]};
-
 	&:hover {
 		color: ${brandColors.giv[500]};
 		background-color: transparent;
