@@ -10,18 +10,21 @@ const ExternalLink = (props: {
 }) => {
 	const { children, href, title, color } = props;
 	return (
-		<a href={href} rel='noopener noreferrer' target='_blank'>
+		<StyledLink href={href} rel='noopener noreferrer' target='_blank'>
 			{title ? (
 				<StyledGLink color={color}>{title}</StyledGLink>
 			) : (
 				children
 			)}
-		</a>
+		</StyledLink>
 	);
 };
 
 const StyledGLink = styled(GLink)`
 	color: ${props => props.color || 'inherit'};
+`;
+const StyledLink = styled.a`
+	display: inline-block;
 `;
 
 export default ExternalLink;
