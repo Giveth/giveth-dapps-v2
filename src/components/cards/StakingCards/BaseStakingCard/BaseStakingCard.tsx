@@ -93,7 +93,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { formatMessage } = useIntl();
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
-	const [showLockModal, setShowLockModal] = useState(false);
 	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
@@ -188,13 +187,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
 			)}
 
-			{/* {showLockModal && (
-				<LockModal
-					setShowModal={setShowLockModal}
-					poolStakingConfig={poolStakingConfig}
-					maxAmount={availableStakedToken}
-				/>
-			)} */}
 			{/* {showWhatIsGIVstreamModal && (
 				<WhatisStreamModal
 					setShowModal={setShowWhatIsGIVstreamModal}

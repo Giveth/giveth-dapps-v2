@@ -55,6 +55,7 @@ import Routes from '@/lib/constants/Routes';
 import { UnStakeModal } from '@/components/modals/Unstake/UnStake';
 import { HarvestAllModal } from '@/components/modals/HarvestAll';
 import { LiquidityPosition } from '@/types/nfts';
+import LockModal from '@/components/modals/StakeLock/Lock';
 interface IStakingPoolInfoAndActionsProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
 	regenStreamConfig?: RegenFarmConfig;
@@ -85,6 +86,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const [showStakeModal, setShowStakeModal] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
+	const [showLockModal, setShowLockModal] = useState(false);
 
 	const { formatMessage } = useIntl();
 	const { setInfo } = useFarms();
@@ -493,6 +495,13 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 					regenStreamConfig={regenStreamConfig}
 					stakedPositions={stakedPositions}
 					currentIncentive={currentIncentive}
+				/>
+			)}
+			{showLockModal && (
+				<LockModal
+					setShowModal={setShowLockModal}
+					poolStakingConfig={poolStakingConfig}
+					maxAmount={availableStakedToken}
 				/>
 			)}
 		</StakePoolInfoContainer>
