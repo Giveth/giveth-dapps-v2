@@ -15,13 +15,13 @@ export const defaultTokenDistroHelper = new TokenDistroHelper({
 	endTime: 0,
 });
 
-const useGIVTokenDistroHelper = (disable = false) => {
+const useGIVTokenDistroHelper = (hold = false) => {
 	const [givTokenDistroHelper, setGIVTokenDistroHelper] =
 		useState<TokenDistroHelper>(defaultTokenDistroHelper);
 	const [isLoaded, setIsLoaded] = useState(false);
 	const currentValue = useAppSelector(
 		state => state.subgraph.currentValues,
-		(objA, objB) => (disable ? true : shallowEqual(objA, objB)),
+		(objA, objB) => (hold ? true : shallowEqual(objA, objB)),
 	);
 	useEffect(() => {
 		const sdh = new SubgraphDataHelper(currentValue);
