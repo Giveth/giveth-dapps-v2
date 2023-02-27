@@ -94,6 +94,12 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
 
+	const hold =
+		showAPRModal ||
+		showStakeModal ||
+		showUnStakeModal ||
+		showHarvestModal ||
+		showLockModal;
 	const { formatMessage } = useIntl();
 	const { setInfo } = useFarms();
 	const router = useRouter();
@@ -102,7 +108,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		notStakedAmount: userNotStakedAmount,
 		stakedAmount: stakedLpAmount,
 		earned,
-	} = useStakingPool(poolStakingConfig);
+	} = useStakingPool(poolStakingConfig, hold);
 	const { chainId, account, active: isWalletActive } = useWeb3React();
 
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
@@ -119,6 +125,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		poolNetwork,
 		regenStreamType,
 		regenStreamConfig,
+		hold,
 	);
 
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
@@ -507,7 +514,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 				<LockModal
 					setShowModal={setShowLockModal}
 					poolStakingConfig={poolStakingConfig}
-					maxAmount={availableStakedToken}
+					isGIVpower={isGIVpower}
 				/>
 			)}
 			{showWhatIsGIVstreamModal && (
