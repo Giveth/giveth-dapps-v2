@@ -105,6 +105,7 @@ export interface ICreateDonation {
 	setFailedModalType: (i: EDonationFailedType) => void;
 	setTxHash: (i: string) => void;
 	anonymous?: boolean;
+	chainvineReferred?: string | null;
 }
 
 export interface ICreateDonationResult {
