@@ -11,7 +11,6 @@ import {
 import DiscordIcon from '/public/images/ETHDenver-discord.svg';
 import MapImage from '/public/images/ETHDenver-map.png';
 import Image from 'next/image';
-import { GhostButton } from '@/components/styled-components/Button';
 import { Col, Container, Row } from '@/components/Grid';
 import { mediaQueries } from '@/lib/constants/constants';
 import ExternalLink from '@/components/ExternalLink';
@@ -38,8 +37,9 @@ const EventDetails = () => {
 						</Lead>
 						<br />
 						<ExternalLink href='https://maps.app.goo.gl/hg2LicDFbsUBWdCYA?g_st=ic'>
-							<GhostButton
+							<Button
 								size='large'
+								buttonType='texty-primary'
 								label='Get Directions'
 								icon={<IconArrowRight32 />}
 							/>
