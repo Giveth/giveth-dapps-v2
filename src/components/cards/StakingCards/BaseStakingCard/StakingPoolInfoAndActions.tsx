@@ -113,6 +113,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		farmStartTimeMS,
 		exploited,
 		network: poolNetwork,
+		provideLiquidityLink,
 	} = poolStakingConfig;
 	const { tokenDistroHelper, sdh } = useTokenDistroHelper(
 		poolNetwork,
@@ -362,7 +363,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 				{isGIVpower && (
 					<ClaimButton
 						disabled={availableStakedToken.lte(constants.Zero)}
-						// onClick={() => setShowLockModal(true)}
+						onClick={() => setShowLockModal(true)}
 						label={formatMessage({
 							id: 'label.increase_rewards',
 						})}
@@ -427,13 +428,13 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 							label={formatMessage({
 								id: 'label.provide_liquidity',
 							})}
-							// onClick={() => {
-							// 	if (type === StakingType.UNISWAPV3_ETH_GIV) {
-							// 		setShowUniV3APRModal(true);
-							// 	} else {
-							// 		window.open(provideLiquidityLink);
-							// 	}
-							// }}
+							onClick={() => {
+								if (type === StakingType.UNISWAPV3_ETH_GIV) {
+									// setShowUniV3APRModal(true);
+								} else {
+									window.open(provideLiquidityLink);
+								}
+							}}
 							buttonType='texty'
 							icon={
 								<IconExternalLink
@@ -451,9 +452,9 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 							id: 'label.locked_giv_details',
 						})}
 						disabled={!isLocked}
-						// onClick={() => {
-						// 	setShowLockDetailModal(true);
-						// }}
+						onClick={() => {
+							setShowLockDetailModal(true);
+						}}
 					/>
 				))}
 			{showAPRModal && (
@@ -471,8 +472,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						poolStakingConfig={
 							poolStakingConfig as SimplePoolStakingConfig
 						}
-						// showLockModal={() => setShowLockModal(true)}
-						showLockModal={() => console.log('TODO!')}
+						showLockModal={() => setShowLockModal(true)}
 					/>
 				) : (
 					<StakeModal
