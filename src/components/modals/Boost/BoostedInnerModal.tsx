@@ -74,12 +74,6 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 					label={formatMessage({ id: 'label.dismiss' })}
 					onClick={closeModal}
 				/>
-				<CustomButton
-					buttonType='texty'
-					size='small'
-					label='DISMISS'
-					onClick={closeModal}
-				/>
 			</ActionsSection>
 		</div>
 	);
