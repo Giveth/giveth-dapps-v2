@@ -1,12 +1,11 @@
-import { useState } from 'react';
+import { FC } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
-
 import { useIntl } from 'react-intl';
 import { B, GLink } from '@giveth/ui-design-system';
+
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
-import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { switchNetworkHandler } from '@/lib/wallet';
 import { isUserRegistered, networkInfo, shortenAddress } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
@@ -19,11 +18,15 @@ import { signOut } from '@/features/user/user.thunks';
 import { ItemRow, ItemTitle, ItemAction, ItemSpacer } from './common';
 import { Item } from './Item';
 
-export const UserItems = () => {
+interface IProps {
+	setSignWithWallet: (input: boolean) => void;
+	setQueueRoute: (input: string) => void;
+}
+
+export const UserItems: FC<IProps> = props => {
+	const { setSignWithWallet, setQueueRoute } = props;
 	const { formatMessage } = useIntl();
 	const { chainId, account } = useWeb3React();
-	const [SignWithWallet, setSignWithWallet] = useState<boolean>(false);
-	const [queueRoute, setQueueRoute] = useState<string>('');
 
 	const router = useRouter();
 	const dispatch = useAppDispatch();
@@ -93,18 +96,6 @@ export const UserItems = () => {
 						{formatMessage({ id: 'label.sign_out' })}
 					</GLink>
 				</Item>
-			)}
-			{SignWithWallet && (
-				<SignWithWalletModal
-					callback={() => {
-						router.push(queueRoute);
-						setQueueRoute('');
-					}}
-					setShowModal={() => {
-						setSignWithWallet(false);
-						setQueueRoute('');
-					}}
-				/>
 			)}
 		</>
 	);

@@ -1,6 +1,7 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
+import { useRouter } from 'next/router';
 import { networksParams } from '@/helpers/blockchain';
 import { shortenAddress } from '@/lib/helpers';
 import {
@@ -25,6 +26,7 @@ import { MenuContainer } from './Menu.sc';
 import { UserItems } from './UserItems';
 import { FlexSpacer } from '../styled-components/Flex';
 import { ItemsProvider } from '@/context/Items.context';
+import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -42,6 +44,11 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 	const isDesktop = useMediaQuery(device.laptopL);
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
+
+	const [signWithWallet, setSignWithWallet] = useState<boolean>(false);
+	const [queueRoute, setQueueRoute] = useState<string>('');
+
+	const router = useRouter();
 
 	useEffect(() => {
 		if (!isHeaderShowing) {
@@ -65,7 +72,10 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 			{menuCondition && (
 				<MenuContainer isAnimating={showMenu} theme={theme}>
 					<ItemsProvider close={closeMenu}>
-						<UserItems />
+						<UserItems
+							setQueueRoute={setQueueRoute}
+							setSignWithWallet={setSignWithWallet}
+						/>
 					</ItemsProvider>
 				</MenuContainer>
 			)}
@@ -85,10 +95,26 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 				>
 					<SidebarInnerContainer>
 						<ItemsProvider close={closeSidebar}>
-							<UserItems />
+							<UserItems
+								setQueueRoute={setQueueRoute}
+								setSignWithWallet={setSignWithWallet}
+							/>
 						</ItemsProvider>
 					</SidebarInnerContainer>
 				</SideBar>
+			)}
+			{signWithWallet && (
+				<SignWithWalletModal
+					callback={() => {
+						router.push(queueRoute);
+						setQueueRoute('');
+						setSignWithWallet(false);
+					}}
+					setShowModal={() => {
+						setSignWithWallet(false);
+						setQueueRoute('');
+					}}
+				/>
 			)}
 		</MenuAndButtonContainer>
 	);
