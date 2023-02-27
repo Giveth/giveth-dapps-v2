@@ -45,12 +45,12 @@ import { getNowUnixMS } from '@/helpers/time';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useFarms } from '@/context/farm.context';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
+import { APRModal } from '@/components/modals/APR';
 interface IStakingPoolInfoAndActionsProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
 	regenStreamConfig?: RegenFarmConfig;
 	isDiscontinued: boolean;
 	isGIVpower: boolean;
-	setShowAPRModal: React.Dispatch<React.SetStateAction<boolean>>;
 	setShowStakeModal: React.Dispatch<React.SetStateAction<boolean>>;
 	setShowUnStakeModal: React.Dispatch<React.SetStateAction<boolean>>;
 	setShowHarvestModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -61,7 +61,6 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	regenStreamConfig,
 	isDiscontinued,
 	isGIVpower,
-	setShowAPRModal,
 	setShowStakeModal,
 	setShowUnStakeModal,
 	setShowHarvestModal,
@@ -69,10 +68,12 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const [started, setStarted] = useState(true);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
+	//Modals
+	const [showAPRModal, setShowAPRModal] = useState(false);
 
 	const { formatMessage } = useIntl();
 	const { setInfo } = useFarms();
-	const { chainId, account, active: isWalletActive } = useWeb3React();
+	const { account } = useWeb3React();
 	const {
 		apr,
 		notStakedAmount: userNotStakedAmount,
@@ -404,6 +405,14 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						// }}
 					/>
 				))}
+			{showAPRModal && (
+				<APRModal
+					setShowModal={setShowAPRModal}
+					regenStreamConfig={regenStreamConfig}
+					regenStreamType={regenStreamType}
+					poolNetwork={poolNetwork}
+				/>
+			)}
 		</StakePoolInfoContainer>
 	);
 };

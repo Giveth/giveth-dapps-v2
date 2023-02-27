@@ -29,7 +29,6 @@ import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconHoneyswap } from '@/components/Icons/Honeyswap';
 import { IconSushiswap } from '@/components/Icons/Sushiswap';
 import { IconUniswap } from '@/components/Icons/Uniswap';
-import { APRModal } from '@/components/modals/APR';
 import { GIVPowerExplainModal } from '@/components/modals/GIVPowerExplain';
 import { StakingPoolImages } from '@/components/StakingPoolImages';
 import GIVpowerCardIntro from '../GIVpowerCard/GIVpowerCardIntro';
@@ -100,7 +99,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const [state, setState] = useState(StakeCardState.NORMAL);
-	const [showAPRModal, setShowAPRModal] = useState(false);
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
 	const [showStakeModal, setShowStakeModal] = useState(false);
 	const [isFirstStakeShown, setIsFirstStakeShown] = useState(false);
@@ -211,7 +209,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							regenStreamConfig={regenStreamConfig}
 							isDiscontinued={isDiscontinued}
 							isGIVpower={isGIVpower}
-							setShowAPRModal={setShowAPRModal}
 							setShowStakeModal={setShowStakeModal}
 							setShowUnStakeModal={setShowUnStakeModal}
 							setShowHarvestModal={setShowHarvestModal}
@@ -229,14 +226,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 			</StakingPoolContainer>
 			{showGIVPowerExplain && (
 				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
-			)}
-			{showAPRModal && (
-				<APRModal
-					setShowModal={setShowAPRModal}
-					regenStreamConfig={regenStreamConfig}
-					regenStreamType={regenStreamType}
-					poolNetwork={poolNetwork}
-				/>
 			)}
 			{showStakeModal &&
 				(isGIVpower ? (
