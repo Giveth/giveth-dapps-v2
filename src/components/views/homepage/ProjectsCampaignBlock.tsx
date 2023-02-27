@@ -1,6 +1,5 @@
 import {
-	brandColors,
-	ButtonText,
+	Button,
 	H1,
 	IconChevronRight32,
 	IconPointerLeft,
@@ -12,6 +11,7 @@ import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FC, useEffect, useRef, useState } from 'react';
 import { Swiper as SwiperClass } from 'swiper/types';
+import Link from 'next/link';
 import { ICampaign } from '@/apollo/types/types';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectCard from '@/components/project-card/ProjectCard';
@@ -26,7 +26,6 @@ import {
 	PaginationWrapper,
 	SwiperPaginationWrapper,
 } from '@/components/styled-components/SwiperPagination';
-import InternalLink from '@/components/InternalLink';
 import { campaignLinkGenerator } from '@/helpers/url';
 
 interface IProjectsCampaignBlockProps {
@@ -83,14 +82,13 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 			<BottomSection>
 				<Title>
 					<H1 weight={700}>{campaign.title}</H1>
-					<InternalLink
-						href={campaignLinkGenerator(campaign) || ''}
-						color={brandColors.giv[500]}
-					>
-						<ExploreText>
-							EXPLORE <IconChevronRight32 />
-						</ExploreText>
-					</InternalLink>
+					<Link href={campaignLinkGenerator(campaign) || ''}>
+						<Button
+							buttonType='texty-primary'
+							label='EXPLORE'
+							icon={<IconChevronRight32 />}
+						/>
+					</Link>
 				</Title>
 				<SwiperWrapper>
 					<Swiper
@@ -165,12 +163,7 @@ const BottomSection = styled(Flex)`
 	}
 `;
 
-const ExploreText = styled(ButtonText)`
-	margin-top: 44px;
-	display: flex;
-	align-items: center;
-	gap: 10px;
-`;
+// const ExploreText = styled(Button)``;
 
 const Title = styled(FlexCenter)`
 	flex-direction: column;
@@ -179,6 +172,7 @@ const Title = styled(FlexCenter)`
 	margin: 0 32px;
 	user-select: none;
 	padding-right: 24px;
+	gap: 24px;
 	${mediaQueries.tablet} {
 		margin: 0;
 		width: 263px;
