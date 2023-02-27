@@ -187,7 +187,7 @@ const Header: FC<IHeader> = () => {
 										width='50'
 										height='50'
 										alt='Giveth logo'
-										src='/images/logo/logo1.png'
+										src='/images/logo/logo.svg'
 									/>
 								</Logo>
 							</Link>
