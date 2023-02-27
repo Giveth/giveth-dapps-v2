@@ -9,7 +9,7 @@ export const useTokenDistroHelper = (
 	poolNetwork: number,
 	regenStreamType?: StreamType,
 	regenStreamConfig?: RegenFarmConfig,
-	hold?: boolean,
+	hold: boolean = false,
 ) => {
 	const [tokenDistroHelper, setTokenDistroHelper] =
 		useState<TokenDistroHelper>();
