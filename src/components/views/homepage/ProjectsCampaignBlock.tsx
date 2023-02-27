@@ -10,7 +10,7 @@ import {
 import styled from 'styled-components';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FC, Fragment, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { Swiper as SwiperClass } from 'swiper/types';
 import InternalLink from '@/components/InternalLink';
 import { ICampaign } from '@/apollo/types/types';
@@ -83,12 +83,13 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 			<BottomSection>
 				<Title>
 					<H1 weight={700} style={{ overflowWrap: 'anywhere' }}>
-						{campaign.title.split(' ').map((t, index) => (
+						{/* {campaign.title.split(' ').map((t, index) => (
 							<Fragment key={index}>
 								<span>{t}</span>
 								<br />
 							</Fragment>
-						))}
+						))} */}
+						{campaign.title}
 					</H1>
 					<InternalLink
 						href={campaignLinkGenerator(campaign) || ''}
