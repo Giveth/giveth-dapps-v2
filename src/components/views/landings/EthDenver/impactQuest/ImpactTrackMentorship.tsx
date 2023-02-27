@@ -1,14 +1,13 @@
 import styled from 'styled-components';
 import {
+	Button,
 	H3,
 	IconChevronRight32,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import ImpactTrackImg from '/public/images/ETHDenver-Impact-mentorship.png';
 import Image from 'next/image';
-import { GhostButton } from '@/components/styled-components/Button';
 import { Col, Row } from '@/components/Grid';
-import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 
 const ImpactTrackMentorship = () => {
@@ -30,15 +29,20 @@ const ImpactTrackMentorship = () => {
 							<br />
 							Do you need help with your project for the Impact
 							Track? Reach out to us on the ETHDenver Discord
-							server under the "Building" section!
+							server under the &quot;Building&quot; section!
 						</Desc>
-						<ExternalLink href={links.DISCORD}>
-							<GhostButton
+						<a
+							href={links.DISCORD}
+							target='_blank'
+							rel='noreferrer'
+						>
+							<Button
+								buttonType='texty-primary'
 								label='Join us on Discord'
 								size='large'
 								icon={<IconChevronRight32 />}
 							/>
-						</ExternalLink>
+						</a>
 					</div>
 				</Col>
 			</InnerWrapper>
