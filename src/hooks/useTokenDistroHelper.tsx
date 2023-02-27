@@ -9,15 +9,18 @@ export const useTokenDistroHelper = (
 	poolNetwork: number,
 	regenStreamType?: StreamType,
 	regenStreamConfig?: RegenFarmConfig,
+	hold?: boolean,
 ) => {
 	const [tokenDistroHelper, setTokenDistroHelper] =
 		useState<TokenDistroHelper>();
 
-	const { mainnetValues, xDaiValues } = useAppSelector(
-		state => state.subgraph,
+	const currentValues = useAppSelector(
+		state =>
+			poolNetwork === config.XDAI_NETWORK_NUMBER
+				? state.subgraph.xDaiValues
+				: state.subgraph.mainnetValues,
+		() => (hold ? true : false),
 	);
-	const currentValues =
-		poolNetwork === config.XDAI_NETWORK_NUMBER ? xDaiValues : mainnetValues;
 	const sdh = new SubgraphDataHelper(currentValues);
 
 	useEffect(() => {
