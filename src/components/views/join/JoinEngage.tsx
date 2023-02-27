@@ -15,7 +15,6 @@ import twitter_icon from '/public/images/twitter_icon.svg';
 import youtube_icon from '/public/images/youtube_icon.svg';
 import reddit_icon from '/public/images/reddit_icon.svg';
 import links from '@/lib/constants/links';
-import JoinSubscriptionCard from './JoinSubscriptionCard';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { ButtonStyled } from '@/components/GeneralCard.sc';
 import { Container } from '@/components/Grid';
@@ -122,7 +121,7 @@ const JoinEngage = () => {
 						{consumeArray.map(i => (
 							<Card key={i.title} content={i} isHorizontal />
 						))}
-						<JoinSubscriptionCard />
+						{/* <JoinSubscriptionCard /> */}
 					</CardsConsumeSection>
 				</Section>
 			</ContainerStyled>

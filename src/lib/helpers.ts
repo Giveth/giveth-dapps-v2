@@ -45,6 +45,10 @@ export const formatPrice = (balance?: string | number) => {
 	});
 };
 
+export const thousandsSeparator = (x?: string | number): string | undefined => {
+	return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
 export const formatTxLink = (networkId?: number, txHash?: string) => {
 	if (!networkId || !txHash || !networksParams[networkId]) return '';
 	return `${networksParams[networkId].blockExplorerUrls[0]}/tx/${txHash}`;
@@ -55,7 +59,7 @@ export function formatWalletLink(chainId?: number, address?: string) {
 	return `${networksParams[chainId]?.blockExplorerUrls[0]}/address/${address}`;
 }
 
-export const durationToYMDh = (ms: number) => {
+export const durationToYMDh = (ms: number, full: boolean = false) => {
 	const baseTime = new Date(0);
 	const duration = new Date(ms);
 
@@ -66,17 +70,29 @@ export const durationToYMDh = (ms: number) => {
 	const min = duration.getUTCMinutes() - baseTime.getUTCMinutes();
 	const sec = duration.getUTCSeconds() - baseTime.getUTCSeconds();
 
-	return { y, m, d, h, min, sec };
+	// { year: y, month: m, day: d, hour: h, minute: min, second: sec }
+	const shortRes = { y, m, d, h, min, sec };
+	if (full) {
+		let fullRes: any = {};
+		if (y) fullRes[`year${y > 1 ? 's' : ''}`] = y;
+		if (m) fullRes[`month${m > 1 ? 's' : ''}`] = m;
+		if (d) fullRes[`day${d > 1 ? 's' : ''}`] = d;
+		if (h) fullRes[`hour${h > 1 ? 's' : ''}`] = h;
+		if (min) fullRes[`minute${min > 1 ? 's' : ''}`] = min;
+		if (sec) fullRes[`second${sec > 1 ? 's' : ''}`] = sec;
+		return fullRes;
+	}
+	return shortRes;
 };
 
-export const durationToString = (ms: number, length = 3) => {
-	const temp: { [key: string]: number } = durationToYMDh(ms);
+export const durationToString = (ms: number, length = 3, full = false) => {
+	const temp: { [key: string]: number } = durationToYMDh(ms, full);
 	const res: string[] = [];
 	for (const key in temp) {
 		if (Object.prototype.hasOwnProperty.call(temp, key)) {
 			const value: number = temp[key];
 			if (value) {
-				res.push(`${value}${key}`);
+				res.push(`${value} ${key}`);
 			}
 		}
 	}
@@ -433,11 +449,10 @@ export const networkInfo = (networkId?: number) => {
 export const createSiweMessage = async (
 	address: string,
 	chainId: number,
-	host: string,
 	statement: string,
 ) => {
 	try {
-		let domain = host;
+		let domain = 'giveth.io';
 
 		if (typeof window !== 'undefined') {
 			domain = window.location.hostname;
@@ -471,3 +486,10 @@ export const createSiweMessage = async (
 export function isObjEmpty(obj: Object) {
 	return Object.keys(obj).length > 0;
 }
+
+export const ArrayFrom0ToN = (n: number) => {
+	let a = Array(n),
+		b = 0;
+	while (b < n) a[b] = b++;
+	return a;
+};

@@ -533,7 +533,7 @@ const BadgeWrapper = styled.div`
 `;
 
 interface IWrapper {
-	isMobile: boolean;
+	isMobile: boolean | null;
 }
 
 interface IWrapperWithHeight extends IWrapper {

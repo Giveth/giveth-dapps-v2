@@ -13,17 +13,13 @@ import { captureException } from '@sentry/nextjs';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
-import {
-	FETCH_ALL_PROJECTS,
-	FETCH_PROJECTS_BY_SLUG,
-} from '@/apollo/gql/gqlProjects';
+import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import {
 	BACKEND_QUERY_LIMIT,
-	device,
 	deviceSize,
 	mediaQueries,
 } from '@/lib/constants/constants';
@@ -34,13 +30,11 @@ import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
 import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
-import CampaignBlock from '../homepage/CampaignBlock';
-import LottieControl from '@/components/animations/lottieControl';
+import LottieControl from '@/components/LottieControl';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
-import useMediaQuery from '@/hooks/useMediaQuery';
 import ProjectsMiddleBanner from './ProjectsMiddleBanner';
 
 export interface IProjectsView {
@@ -64,7 +58,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
 	const [totalCount, setTotalCount] = useState(_totalCount);
-	const [turkeyReliefProjects, setTurkeyReliefProjects] = useState([]);
 
 	const dispatch = useAppDispatch();
 
@@ -79,30 +72,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const pageNum = useRef(0);
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
-	const { isDesktop, isTablet, isMobile, isLaptopL } = useDetectDevice();
-
-	const fetchTurkeyReliefProjects = async () => {
-		const variables: any = {
-			skip: 0,
-			slugs: [
-				'gnosisdao-earthquake-relief',
-				'banklessdao-turkey-disaster-relief-fund',
-				'graceaid-earthquake-relief',
-				'anka-relief',
-				'earthquake-relief-qf-matching-pool',
-			],
-		};
-		try {
-			const { data } = await client.query({
-				query: FETCH_PROJECTS_BY_SLUG,
-				variables,
-				fetchPolicy: 'network-only',
-			});
-			return data.projectsBySlugs;
-		} catch (error) {
-			console.log({ error });
-		}
-	};
+	const { isTablet, isMobile } = useDetectDevice();
 
 	const fetchProjects = useCallback(
 		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
@@ -175,17 +145,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		fetchProjects(false, 0);
 	}, [contextVariables]);
 
-	useEffect(() => {
-		if (router.query?.slug) {
-			setVariables(prevVariables => {
-				return {
-					...prevVariables,
-					mainCategory: router.query?.slug?.toString(),
-				};
-			});
-		}
-	}, [router.query?.slug]);
-
 	const loadMore = useCallback(() => {
 		if (isLoading) return;
 		fetchProjects(true, pageNum.current + 1);
@@ -202,12 +161,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const showLoadMore =
 		totalCount > filteredProjects?.length && !isInfiniteScrolling.current;
-	const isTabletSlice = useMediaQuery(device.tablet);
 
 	const handleSliceNumber = () => {
 		if (isMobile) {
 			return 1;
-		} else if (isTabletSlice && !isLaptopL) {
+		} else if (isTablet) {
 			return 2;
 		} else {
 			return 3;
@@ -267,43 +225,21 @@ const ProjectsIndex = (props: IProjectsView) => {
 		};
 	}, [loadMore]);
 
-	useEffect(() => {
-		const fetchReliefProjects = async () => {
-			const { projects: reliefProjects } =
-				await fetchTurkeyReliefProjects();
-			setTurkeyReliefProjects(reliefProjects);
-		};
-		fetchReliefProjects();
-	}, []);
-
 	return (
 		<>
 			{isLoading && (
 				<Loading>
 					<LottieControl
 						animationData={LoadingAnimation}
-						size={150}
+						size={250}
 					/>
 				</Loading>
 			)}
 
 			<ProjectsBanner mainCategory={selectedMainCategory} />
 			<Wrapper>
-				{turkeyReliefProjects && turkeyReliefProjects.length > 0 && (
-					<CampaignBlock
-						projects={
-							turkeyReliefProjects
-								?.slice()
-								.sort(
-									(a: IProject, b: IProject) =>
-										b?.totalDonations! - a?.totalDonations!,
-								) || []
-						}
-					/>
-				)}
-
 				<FiltersContainer>
-					{isDesktop && <ProjectsFiltersDesktop />}
+					{!isTablet && !isMobile && <ProjectsFiltersDesktop />}
 					{isTablet && <ProjectsFiltersTablet />}
 					{isMobile && <ProjectsFiltersMobile />}
 				</FiltersContainer>
@@ -403,11 +339,11 @@ const FiltersContainer = styled.div`
 	}
 `;
 
-const ProjectsWrapper = styled.div`
+export const ProjectsWrapper = styled.div`
 	margin-bottom: 64px;
 `;
 
-const ProjectsContainer = styled.div`
+export const ProjectsContainer = styled.div`
 	display: grid;
 	gap: 25px;
 	padding: 0 23px;

@@ -17,11 +17,10 @@ export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 	const [show, setShow] = useState(false);
 	const elRef = useRef<HTMLDivElement>(null);
 
-	function handleRemoveTooltip() {
-		setShow(false);
-	}
-
 	useEffect(() => {
+		function handleRemoveTooltip() {
+			setShow(false);
+		}
 		window.addEventListener('scroll', handleRemoveTooltip);
 
 		return () => {

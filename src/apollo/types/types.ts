@@ -3,6 +3,7 @@ import {
 	EDonationType,
 	EProjectStatus,
 	EProjectVerificationStatus,
+	EProjectsSortBy,
 } from '@/apollo/types/gqlEnums';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
@@ -21,6 +22,7 @@ export interface IProject {
 	creationDate?: string;
 	admin?: string;
 	description?: string;
+	descriptionSummary?: string;
 	addresses?: IWalletAddress[];
 	impactLocation?: string;
 	qualityScore?: number;
@@ -41,9 +43,7 @@ export interface IProject {
 	}[];
 	users: IUser[];
 	totalDonations?: number;
-	totalTraceDonations?: number;
 	totalProjectUpdates?: number;
-	traceCampaignId: string | null;
 	status: {
 		id?: string;
 		name?: EProjectStatus;
@@ -62,6 +62,52 @@ export interface IProject {
 
 export interface IDonationProject extends IProject {
 	givethAddresses: IWalletAddress[];
+}
+
+export enum EProjectsFilter {
+	ACCEPT_GIV = 'AcceptGiv',
+	VERIFIED = 'Verified',
+	BOOSTED_WITH_GIVPOWER = 'BoostedWithGivPower',
+	GIVING_BLOCK = 'GivingBlock',
+	ACCEPT_FUND_ON_GNOSIS = 'AcceptFundOnGnosis',
+}
+
+export enum ECampaignType {
+	MANUALLY_SELECTED = 'ManuallySelected',
+	SORT_FIELD = 'SortField',
+	FILTER_FIELDS = 'FilterFields',
+	WITHOUT_PROJECTS = 'WithoutProjects',
+}
+
+export enum ECampaignFilterField {
+	Verified = 'verified',
+	AcceptGiv = 'givingBlocksId',
+	AcceptFundOnGnosis = 'acceptFundOnGnosis',
+	GivingBlock = 'fromGivingBlock',
+	BoostedWithGivPower = 'boostedWithGivPower',
+}
+
+export interface ICampaign {
+	id: string;
+	title: string;
+	hashtags: string[];
+	slug: string;
+	isFeatured: boolean;
+	isNew: boolean;
+	description: string;
+	relatedProjects: IProject[];
+	relatedProjectsCount: number;
+	photo?: string;
+	video?: string;
+	videoPreview?: string;
+	type: ECampaignType;
+	isActive: boolean;
+	order: number;
+	landingLink: string;
+	filterFields: ECampaignFilterField[];
+	sortingField: EProjectsSortBy;
+	createdAt: string;
+	updatedAt: string;
 }
 
 export interface IWalletAddress {
@@ -161,6 +207,7 @@ export interface IMediumBlogPost {
 	link: string;
 	pubDate: string;
 	guid: string;
+	thumbnail: string;
 }
 
 export interface ICategory {
@@ -180,11 +227,19 @@ export interface IProjectBySlug {
 
 export interface IProjectUpdate {
 	content: string;
+	contentSummary: string;
 	createdAt: string;
 	id: string;
 	projectId: string;
 	title: string;
 	userId: string;
+}
+
+export interface IProjectUpdateWithProject extends IProjectUpdate {
+	project: {
+		slug: string;
+		image: string;
+	};
 }
 
 export interface ISiweMessage {
@@ -290,4 +345,12 @@ export interface IPowerBoosting {
 	user: IUser;
 	project: IProject;
 	percentage: number;
+}
+
+export interface IRecentDonation {
+	createAt: string;
+	id: string;
+	project: { title: string; slug: string };
+	user: { walletAddress: string };
+	valueUsd: number | null;
 }

@@ -5,7 +5,6 @@ import { Navigation } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { useRouter } from 'next/router';
-
 import { useEffect } from 'react';
 import Routes from '@/lib/constants/Routes';
 import { IMainCategory } from '@/apollo/types/types';

@@ -1,6 +1,5 @@
 import Alibre from '/public/images/partnerships/Alibre.svg';
 import Maker_DAO from '/public/images/partnerships/Maker_DAO.svg';
-import MyCrypto from '/public/images/partnerships/MyCrypto.svg';
 import Aragon from '/public/images/partnerships/Aragon.svg';
 import MyEtherWallet from '/public/images/partnerships/MyEtherWallet.svg';
 import Status_im from '/public/images/partnerships/Status.im.svg';
@@ -32,6 +31,7 @@ import DappNode from '/public/images/partnerships/DappNode.svg';
 import Datafund from '/public/images/partnerships/Datafund.svg';
 import BrightID from '/public/images/partnerships/BrightID.svg';
 import Gnosis_Chain from '/public/images/partnerships/Gnosis_Chain.svg';
+import Crypto_Currency from '/public/images/partnerships/cryptocurrency-jobs.svg';
 
 export interface IPartner {
 	icon: any;
@@ -70,6 +70,12 @@ export const PartnershipArray: IPartner[] = [
 		title: 'clr.fund',
 		description: 'page.partnerships.clrfund',
 		link: 'https://clr.fund/#/',
+	},
+	{
+		icon: Crypto_Currency,
+		title: 'Cryptocurrency Jobs',
+		description: 'page.partnerships.cryptocurrency_jobs',
+		link: 'https://cryptocurrencyjobs.co',
 	},
 	{
 		icon: DappNode,
@@ -137,12 +143,6 @@ export const PartnershipArray: IPartner[] = [
 		title: 'Meta Gamma Delta',
 		description: 'page.partnerships.metagammadelta',
 		link: 'https://metagammadelta.com/',
-	},
-	{
-		icon: MyCrypto,
-		title: 'MyCrypto',
-		description: 'page.partnerships.mycrypto',
-		link: 'https://mycrypto.com/',
 	},
 	{
 		icon: MyEtherWallet,

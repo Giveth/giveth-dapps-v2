@@ -59,7 +59,7 @@ const Sections = styled.div`
 	}
 `;
 
-const Right = styled.div<{ isMobile: boolean }>`
+const Right = styled.div<{ isMobile: boolean | null }>`
 	z-index: 1;
 	background: white;
 	text-align: left;

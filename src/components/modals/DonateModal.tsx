@@ -32,6 +32,7 @@ import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useDonateData } from '@/context/donate.context';
 import { fetchPrice } from '@/services/token';
+import { fetchEthPrice } from '@/features/price/price.services';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -64,8 +65,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const { formatMessage } = useIntl();
 	const { setSuccessDonation, project } = useDonateData();
 
-	const ethPrice = useAppSelector(state => state.price.ethPrice);
-	const mainTokenPrice = new BigNumber(ethPrice).toNumber();
+	const givPrice = useAppSelector(state => state.price.givPrice);
+	const givTokenPrice = new BigNumber(givPrice).toNumber();
 	const isGnosis = chainId === gnosisChain.id;
 
 	const [donating, setDonating] = useState(false);
@@ -178,8 +179,11 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		const setPrice = async () => {
 			if (token?.symbol && stableCoins.includes(token.symbol)) {
 				setTokenPrice(1);
+			} else if (token?.symbol === 'GIV') {
+				setTokenPrice(givTokenPrice || 0);
 			} else if (token?.symbol === ethereumChain.mainToken) {
-				setTokenPrice(mainTokenPrice || 0);
+				const ethPrice = await fetchEthPrice();
+				setTokenPrice(ethPrice || 0);
 			} else if (token?.address) {
 				let tokenAddress = token.address;
 				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
@@ -200,7 +204,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		if (token) {
 			setPrice().catch(() => setTokenPrice(0));
 		}
-	}, [token, mainTokenPrice]);
+	}, [token]);
 
 	if (!projectWalletAddress) {
 		showToastError('There is no eth address assigned for this project');

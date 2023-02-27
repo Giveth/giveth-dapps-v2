@@ -71,7 +71,7 @@ import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '../styled-components/Flex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import LottieControl from '@/components/animations/lottieControl';
+import LottieControl from '@/components/LottieControl';
 import { getPoolIconWithName } from '../cards/StakingCards/BaseStakingCard/BaseStakingCard';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import { useStakingPool } from '@/hooks/useStakingPool';

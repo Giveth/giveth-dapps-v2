@@ -40,7 +40,7 @@ export const FETCH_USER_PROJECTS = gql`
 				id
 				title
 				balance
-				description
+				descriptionSummary
 				image
 				slug
 				creationDate
