@@ -92,5 +92,5 @@ const CategoriesGrid = styled.div<{ inSidebar?: boolean }>`
 `;
 
 const Label = styled(Caption)`
-	padding-left: 8px;
+	padding-left: 16px;
 `;
