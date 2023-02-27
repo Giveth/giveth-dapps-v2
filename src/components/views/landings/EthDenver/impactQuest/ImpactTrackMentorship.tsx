@@ -9,6 +9,7 @@ import ImpactTrackImg from '/public/images/ETHDenver-Impact-mentorship.png';
 import Image from 'next/image';
 import { Col, Row } from '@/components/Grid';
 import links from '@/lib/constants/links';
+import ExternalLink from '@/components/ExternalLink';
 
 const ImpactTrackMentorship = () => {
 	return (
@@ -31,18 +32,14 @@ const ImpactTrackMentorship = () => {
 							Track? Reach out to us on the ETHDenver Discord
 							server under the &quot;Building&quot; section!
 						</Desc>
-						<a
-							href={links.DISCORD}
-							target='_blank'
-							rel='noreferrer'
-						>
+						<ExternalLink href={links.DISCORD}>
 							<Button
-								buttonType='texty-primary'
 								label='Join us on Discord'
+								buttonType='texty-primary'
 								size='large'
 								icon={<IconChevronRight32 />}
 							/>
-						</a>
+						</ExternalLink>
 					</div>
 				</Col>
 			</InnerWrapper>
