@@ -94,8 +94,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
 	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
-	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
-		useState(false);
+
 	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
 
 	const { chainId } = useWeb3React();
@@ -187,13 +186,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
 			)}
 
-			{/* {showWhatIsGIVstreamModal && (
-				<WhatisStreamModal
-					setShowModal={setShowWhatIsGIVstreamModal}
-					tokenDistroHelper={tokenDistroHelper}
-					regenStreamConfig={regenStreamConfig}
-				/>
-			)} */}
 			{/* {showLockDetailModal && (
 				<LockupDetailsModal
 					setShowModal={setShowLockDetailModal}

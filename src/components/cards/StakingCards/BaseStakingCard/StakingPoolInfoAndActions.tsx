@@ -56,6 +56,8 @@ import { UnStakeModal } from '@/components/modals/Unstake/UnStake';
 import { HarvestAllModal } from '@/components/modals/HarvestAll';
 import { LiquidityPosition } from '@/types/nfts';
 import LockModal from '@/components/modals/StakeLock/Lock';
+import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
+
 interface IStakingPoolInfoAndActionsProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
 	regenStreamConfig?: RegenFarmConfig;
@@ -87,6 +89,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showLockModal, setShowLockModal] = useState(false);
+	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
+		useState(false);
 
 	const { formatMessage } = useIntl();
 	const { setInfo } = useFarms();
@@ -310,9 +314,9 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 								})}
 							</DetailLabel>
 							<IconHelpFilledWrapper
-							// onClick={() => {
-							// 	setShowWhatIsGIVstreamModal(true);
-							// }}
+								onClick={() => {
+									setShowWhatIsGIVstreamModal(true);
+								}}
 							>
 								<IconHelpFilled16 />
 							</IconHelpFilledWrapper>
@@ -502,6 +506,13 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 					setShowModal={setShowLockModal}
 					poolStakingConfig={poolStakingConfig}
 					maxAmount={availableStakedToken}
+				/>
+			)}
+			{showWhatIsGIVstreamModal && (
+				<WhatIsStreamModal
+					setShowModal={setShowWhatIsGIVstreamModal}
+					tokenDistroHelper={tokenDistroHelper}
+					regenStreamConfig={regenStreamConfig}
 				/>
 			)}
 		</StakePoolInfoContainer>
