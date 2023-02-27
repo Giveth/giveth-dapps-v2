@@ -43,14 +43,14 @@ const CalendarItem: FC<IProps> = props => {
 						icon={<IconExternalLink24 />}
 					/>
 				</ExternalLink>
-				<a href={calendarLink} target='_blank' rel='noreferrer'>
+				<ExternalLink href={calendarLink}>
 					<GhostButton
 						label='Add to calendar'
 						size='large'
 						color={neutralColors.gray[700]}
 						icon={<Image src={CalendarGray} alt='Calendar black' />}
 					/>
-				</a>
+				</ExternalLink>
 			</Buttons>
 		</Wrapper>
 	);
