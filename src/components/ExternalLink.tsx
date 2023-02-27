@@ -1,26 +1,26 @@
+import { GLink } from '@giveth/ui-design-system';
 import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 
 const ExternalLink = (props: {
-	children?: ReactElement[] | ReactElement;
 	href: string;
+	children?: ReactElement[] | ReactElement;
 	title?: string | ReactElement;
 	color?: string;
 }) => {
 	const { children, href, title, color } = props;
 	return (
-		<Styled
-			color={color}
-			href={href}
-			rel='noopener noreferrer'
-			target='_blank'
-		>
-			{title || children}
-		</Styled>
+		<a href={href} rel='noopener noreferrer' target='_blank'>
+			{title ? (
+				<StyledGLink color={color}>{title}</StyledGLink>
+			) : (
+				children
+			)}
+		</a>
 	);
 };
 
-const Styled = styled.a`
+const StyledGLink = styled(GLink)`
 	color: ${props => props.color || 'inherit'};
 `;
 
