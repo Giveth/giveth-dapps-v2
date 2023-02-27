@@ -12,7 +12,6 @@ import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FC, useEffect, useRef, useState } from 'react';
 import { Swiper as SwiperClass } from 'swiper/types';
-import InternalLink from '@/components/InternalLink';
 import { ICampaign } from '@/apollo/types/types';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectCard from '@/components/project-card/ProjectCard';
@@ -22,12 +21,13 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_CAMPAIGN_BY_SLUG } from '@/apollo/gql/gqlCampaign';
 import { BlockHeader, BlockTitle } from './common';
 import { Container } from '@/components/Grid';
-import { campaignLinkGenerator } from '@/helpers/url';
 import {
 	NavigationWrapper,
 	PaginationWrapper,
 	SwiperPaginationWrapper,
 } from '@/components/styled-components/SwiperPagination';
+import InternalLink from '@/components/InternalLink';
+import { campaignLinkGenerator } from '@/helpers/url';
 
 interface IProjectsCampaignBlockProps {
 	campaign: ICampaign;
@@ -82,15 +82,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 			</BlockHeader>
 			<BottomSection>
 				<Title>
-					<H1 weight={700} style={{ overflowWrap: 'anywhere' }}>
-						{/* {campaign.title.split(' ').map((t, index) => (
-							<Fragment key={index}>
-								<span>{t}</span>
-								<br />
-							</Fragment>
-						))} */}
-						{campaign.title}
-					</H1>
+					<H1 weight={700}>{campaign.title}</H1>
 					<InternalLink
 						href={campaignLinkGenerator(campaign) || ''}
 						color={brandColors.giv[500]}
