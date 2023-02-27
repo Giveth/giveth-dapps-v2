@@ -69,16 +69,18 @@ import { Container, Row, Col } from '@/components/Grid';
 import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { defaultSubgraphValues } from '@/features/subgraph/subgraph.slice';
 
 export const TabGIVstreamTop = () => {
 	const { formatMessage } = useIntl();
 	const [showModal, setShowModal] = useState(false);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
-	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.currentValues),
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showModal);
+	const currentValues = useAppSelector(state =>
+		!showModal ? state.subgraph.currentValues : defaultSubgraphValues,
 	);
+	const sdh = new SubgraphDataHelper(currentValues);
 	const { allocatedTokens, claimed, givback } =
 		sdh.getGIVTokenDistroBalance();
 	const { chainId } = useWeb3React();
