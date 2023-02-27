@@ -53,12 +53,18 @@ import { StakeGIVModal } from '@/components/modals/StakeLock/StakeGIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import { UnStakeModal } from '@/components/modals/Unstake/UnStake';
+import { HarvestAllModal } from '@/components/modals/HarvestAll';
+import { LiquidityPosition } from '@/types/nfts';
 interface IStakingPoolInfoAndActionsProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
 	regenStreamConfig?: RegenFarmConfig;
 	isDiscontinued: boolean;
 	isGIVpower: boolean;
-	setShowHarvestModal: React.Dispatch<React.SetStateAction<boolean>>;
+	stakedPositions?: LiquidityPosition[];
+	unstakedPositions?: LiquidityPosition[];
+	currentIncentive?: {
+		key?: (string | number)[] | null | undefined;
+	};
 }
 
 export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
@@ -66,7 +72,9 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	regenStreamConfig,
 	isDiscontinued,
 	isGIVpower,
-	setShowHarvestModal,
+	stakedPositions,
+	unstakedPositions,
+	currentIncentive,
 }) => {
 	const [started, setStarted] = useState(true);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
@@ -76,6 +84,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const [showAPRModal, setShowAPRModal] = useState(false);
 	const [showStakeModal, setShowStakeModal] = useState(false);
 	const [showUnStakeModal, setShowUnStakeModal] = useState(false);
+	const [showHarvestModal, setShowHarvestModal] = useState(false);
 
 	const { formatMessage } = useIntl();
 	const { setInfo } = useFarms();
@@ -473,6 +482,17 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						poolStakingConfig as SimplePoolStakingConfig
 					}
 					regenStreamConfig={regenStreamConfig}
+				/>
+			)}
+			{showHarvestModal && chainId && (
+				<HarvestAllModal
+					title={formatMessage({ id: 'label.givfarm_rewards' })}
+					setShowModal={setShowHarvestModal}
+					poolStakingConfig={poolStakingConfig}
+					network={chainId}
+					regenStreamConfig={regenStreamConfig}
+					stakedPositions={stakedPositions}
+					currentIncentive={currentIncentive}
 				/>
 			)}
 		</StakePoolInfoContainer>

@@ -35,7 +35,6 @@ import { ArchiveCover } from './ArchiveCover';
 import { StakingCardHeader } from './StakingCardHeader';
 import { getNowUnixMS } from '@/helpers/time';
 import { StakingPoolInfoAndActions } from './StakingPoolInfoAndActions';
-import { HarvestAllModal } from '@/components/modals/HarvestAll';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -94,7 +93,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const { formatMessage } = useIntl();
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
-	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showLockModal, setShowLockModal] = useState(false);
 	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
@@ -171,7 +169,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							regenStreamConfig={regenStreamConfig}
 							isDiscontinued={isDiscontinued}
 							isGIVpower={isGIVpower}
-							setShowHarvestModal={setShowHarvestModal}
+							stakedPositions={stakedPositions}
+							unstakedPositions={unstakedPositions}
+							currentIncentive={currentIncentive}
 						/>
 					</>
 				) : state === StakeCardState.GIVPOWER_INTRO ? (
@@ -188,17 +188,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
 			)}
 
-			{showHarvestModal && chainId && (
-				<HarvestAllModal
-					title={formatMessage({ id: 'label.givfarm_rewards' })}
-					setShowModal={setShowHarvestModal}
-					poolStakingConfig={poolStakingConfig}
-					network={chainId}
-					regenStreamConfig={regenStreamConfig}
-					stakedPositions={stakedPositions}
-					currentIncentive={currentIncentive}
-				/>
-			)}
 			{/* {showLockModal && (
 				<LockModal
 					setShowModal={setShowLockModal}
