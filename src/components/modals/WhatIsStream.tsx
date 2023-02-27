@@ -42,7 +42,7 @@ export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 	};
 	const closeModalWithCb = () => {
 		closeModal();
-		cb();
+		cb && cb();
 	};
 
 	return (
