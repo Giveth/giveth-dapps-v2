@@ -37,15 +37,14 @@ const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
 
 export const TabGardenTop = () => {
 	const { chainId } = useWeb3React();
-	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { formatMessage } = useIntl();
-
 	const [showModal, setShowModal] = useState(false);
 	const [earnedLiquidPart, setEarnedLiquidPart] =
 		useState<ethers.BigNumber>(Zero);
 	const [earnedStream, setEarnedStream] = useState<BigNumber>(
 		new BigNumber(0),
 	);
+	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showModal);
+	const { formatMessage } = useIntl();
 
 	const { earned } = useStakingPool(poolStakingConfig);
 
