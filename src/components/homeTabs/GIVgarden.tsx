@@ -96,9 +96,7 @@ export const TabGardenTop = () => {
 					title={formatMessage({ id: 'label.givgarden_rewards' })}
 					setShowModal={setShowModal}
 					poolStakingConfig={poolStakingConfig}
-					earned={earned}
 					network={config.XDAI_NETWORK_NUMBER}
-					tokenDistroHelper={givTokenDistroHelper}
 				/>
 			)}
 		</GardenTopContainer>

@@ -239,7 +239,6 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 					setShowModal={setShowModal}
 					network={network}
 					regenStreamConfig={streamConfig}
-					tokenDistroHelper={regenTokenDistroHelper}
 				/>
 			)}
 		</RegenStreamContainer>

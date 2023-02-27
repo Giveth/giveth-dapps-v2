@@ -144,7 +144,6 @@ export const TabGIVstreamTop = () => {
 					title='GIVstream Rewards'
 					setShowModal={setShowModal}
 					network={chainId}
-					tokenDistroHelper={givTokenDistroHelper}
 				/>
 			)}
 		</>

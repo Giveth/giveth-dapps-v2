@@ -121,7 +121,6 @@ export const TabGIVbacksTop = () => {
 					title={formatMessage({ id: 'label.givbacks_rewards' })}
 					setShowModal={setShowHarvestModal}
 					network={config.XDAI_NETWORK_NUMBER}
-					tokenDistroHelper={givTokenDistroHelper}
 				/>
 			)}
 			{showGivBackExplain && (
