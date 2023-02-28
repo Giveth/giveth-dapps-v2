@@ -35,7 +35,7 @@ export const StakingPoolExchange = styled(Overline)`
 
 export const SPTitle = styled(Flex)`
 	margin-top: 2px;
-	margin-bottom: 24px;
+	margin-bottom: 36px;
 `;
 
 export const StakingPoolLabel = styled(H4)``;
@@ -46,15 +46,9 @@ export const StakePoolInfoContainer = styled.div`
 	padding: 0 24px;
 `;
 
-export const Details = styled.div`
-	margin: 12px 0;
-`;
-export const FirstDetail = styled(Flex)`
-	margin-bottom: 28px;
-`;
-
-export const Detail = styled(Flex)`
-	margin-bottom: 16px;
+export const Details = styled(Flex)`
+	flex-direction: column;
+	gap: 16px;
 `;
 
 export const DetailLabel = styled(Caption)``;

@@ -25,12 +25,10 @@ import {
 } from '@/types/config';
 import {
 	Details,
-	FirstDetail,
 	DetailLabel,
 	AngelVaultTooltip,
 	DetailValue,
 	IconContainer,
-	Detail,
 	IconHelpFilledWrapper,
 	DetailUnit,
 	StakePoolInfoContainer,
@@ -190,7 +188,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		<StakePoolInfoContainer>
 			{started ? (
 				<Details>
-					<FirstDetail justifyContent='space-between'>
+					<Flex justifyContent='space-between'>
 						<FlexCenter gap='8px'>
 							<DetailLabel>APR</DetailLabel>
 							{type === StakingType.ICHI_GIV_ONEGIV && (
@@ -295,8 +293,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 								</div>
 							)}
 						</Flex>
-					</FirstDetail>
-					<Detail justifyContent='space-between'>
+					</Flex>
+					<Flex justifyContent='space-between'>
 						<DetailLabel>
 							{formatMessage({
 								id: 'label.claimable',
@@ -315,8 +313,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 								</div>
 							)}
 						</DetailValue>
-					</Detail>
-					<Detail justifyContent='space-between'>
+					</Flex>
+					<Flex justifyContent='space-between'>
 						<Flex gap='8px' alignItems='center'>
 							<DetailLabel>
 								{formatMessage({
@@ -350,7 +348,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 								})}
 							</DetailUnit>
 						</Flex>
-					</Detail>
+					</Flex>
 				</Details>
 			) : (
 				<FarmCountDown
