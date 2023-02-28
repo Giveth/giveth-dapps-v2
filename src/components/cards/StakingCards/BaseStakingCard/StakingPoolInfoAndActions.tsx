@@ -56,6 +56,7 @@ import { LiquidityPosition } from '@/types/nfts';
 import LockModal from '@/components/modals/StakeLock/Lock';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import { LockupDetailsModal } from '@/components/modals/LockupDetailsModal';
+import ExternalLink from '@/components/ExternalLink';
 
 interface IStakingPoolInfoAndActionsProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
@@ -428,18 +429,12 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 			</StakeButtonsRow>
 			{!(exploited || isDiscontinued) &&
 				(!isGIVpower ? (
-					<Flex>
+					<ExternalLink href={provideLiquidityLink || ''} fullWidth>
 						<LiquidityButton
+							size='small'
 							label={formatMessage({
 								id: 'label.provide_liquidity',
 							})}
-							onClick={() => {
-								if (type === StakingType.UNISWAPV3_ETH_GIV) {
-									// setShowUniV3APRModal(true);
-								} else {
-									window.open(provideLiquidityLink);
-								}
-							}}
 							buttonType='texty'
 							icon={
 								<IconExternalLink
@@ -448,9 +443,9 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 								/>
 							}
 						/>
-					</Flex>
+					</ExternalLink>
 				) : (
-					<ClaimButton
+					<LiquidityButton
 						buttonType='texty'
 						size='small'
 						label={formatMessage({

@@ -62,7 +62,7 @@ export const ClaimButton = styled(Button)`
 `;
 
 export const StakeButtonsRow = styled(Flex)`
-	margin: 16px 0;
+	margin-top: 16px;
 	gap: 16px;
 `;
 
@@ -79,8 +79,8 @@ export const StakeAmount = styled(Caption)`
 `;
 
 export const LiquidityButton = styled(Button)`
+	margin-top: 8px;
 	width: 100%;
-	margin-bottom: 16px;
 `;
 
 export const IconContainer = styled.div`
