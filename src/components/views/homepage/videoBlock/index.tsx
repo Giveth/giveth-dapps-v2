@@ -1,6 +1,6 @@
 import {
 	brandColors,
-	ButtonLink,
+	Button,
 	H2,
 	H4,
 	IconChevronRight24,
@@ -59,7 +59,7 @@ const VideoBlock = () => {
 						</Desc>
 						<Link href={Routes.AboutUs} passHref>
 							<AboutUsButton
-								linkType='texty-secondary'
+								buttonType='texty-secondary'
 								label={formatMessage({
 									id: 'label.more_about_us',
 								})}
@@ -163,7 +163,7 @@ const QuarterCircleContainer = styled.div`
 	left: 30%;
 `;
 
-const AboutUsButton = styled(ButtonLink)`
+const AboutUsButton = styled(Button)`
 	max-width: 200px;
 `;
 
