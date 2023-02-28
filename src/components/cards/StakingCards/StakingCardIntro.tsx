@@ -51,6 +51,7 @@ const StakingCardIntro: FC<IStakingCardIntro> = ({
 					})}
 					href={introCard?.link}
 					linkType='texty'
+					size='small'
 					target='_blank'
 					icon={
 						<IconExternalLink
@@ -80,7 +81,7 @@ const Back = styled.div`
 `;
 
 const ContentWrapper = styled(Flex)`
-	height: 380px;
+	height: 448px;
 `;
 
 const Description = styled(Caption)`
