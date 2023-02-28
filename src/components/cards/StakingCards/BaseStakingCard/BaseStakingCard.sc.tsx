@@ -59,7 +59,6 @@ export const DetailUnit = styled(P)`
 
 export const ClaimButton = styled(Button)`
 	width: 100%;
-	margin-top: 16px;
 `;
 
 export const StakeButtonsRow = styled(Flex)`
@@ -182,5 +181,9 @@ export const GIVgardenTooltip = styled.div`
 `;
 
 export const HarvestButtonsWrapper = styled(Flex)`
+	margin-top: 32px;
 	flex-direction: column;
+	height: 112px;
+	gap: 16px;
+	justify-content: center;
 `;
