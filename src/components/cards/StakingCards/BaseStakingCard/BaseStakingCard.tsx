@@ -92,20 +92,15 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const [state, setState] = useState(StakeCardState.NORMAL);
-	const [showUniV3APRModal, setShowUniV3APRModal] = useState(false);
 	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
 
 	const { chainId } = useWeb3React();
-
-	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 
 	const {
 		type,
 		title,
 		icon,
 		description,
-		provideLiquidityLink,
-		unit,
 		farmEndTimeMS,
 		exploited,
 		network: poolNetwork,
