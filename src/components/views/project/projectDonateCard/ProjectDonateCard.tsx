@@ -354,7 +354,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						/>
 					)}
 					{isAdmin ? (
-						<>
+						<FullWidth>
 							<FullButton
 								buttonType='primary'
 								label='EDIT'
@@ -398,7 +398,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 									label='PUBLISH PROJECT'
 								/>
 							)}
-						</>
+						</FullWidth>
 					) : (
 						<FullButton
 							onClick={() =>
@@ -470,6 +470,12 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 		</>
 	);
 };
+
+const FullWidth = styled.div`
+	> * {
+		width: 100%;
+	}
+`;
 
 const BoostButton = styled(Flex)`
 	border-radius: 48px;
