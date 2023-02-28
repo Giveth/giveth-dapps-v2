@@ -96,11 +96,11 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 
 const ImageWrapper = styled.div`
 	width: 100%;
+	height: 100%;
 	border-radius: 16px;
 	overflow: hidden;
 	& > img {
 		position: relative !important;
-		max-height: 380px;
 	}
 `;
 
