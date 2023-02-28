@@ -77,6 +77,7 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 							const event = new Event(EModalEvents.SIGNEDIN);
 							window.dispatchEvent(event);
 							callback && callback();
+							closeModal();
 						}
 					}}
 					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}

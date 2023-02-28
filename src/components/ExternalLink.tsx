@@ -7,10 +7,18 @@ const ExternalLink = (props: {
 	children?: ReactElement[] | ReactElement;
 	title?: string | ReactElement;
 	color?: string;
+	fullWidth?: boolean;
+	className?: string;
 }) => {
-	const { children, href, title, color } = props;
+	const { children, href, title, color, fullWidth, className } = props;
 	return (
-		<StyledLink href={href} rel='noopener noreferrer' target='_blank'>
+		<StyledLink
+			className={className}
+			fullWidth={fullWidth}
+			href={href}
+			rel='noopener noreferrer'
+			target='_blank'
+		>
 			{title ? (
 				<StyledGLink color={color}>{title}</StyledGLink>
 			) : (
@@ -23,8 +31,8 @@ const ExternalLink = (props: {
 const StyledGLink = styled(GLink)`
 	color: ${props => props.color || 'inherit'};
 `;
-const StyledLink = styled.a`
-	display: inline-block;
+const StyledLink = styled.a<{ fullWidth?: boolean }>`
+	display: ${props => (props.fullWidth ? 'block' : 'inline-block')};
 `;
 
 export default ExternalLink;

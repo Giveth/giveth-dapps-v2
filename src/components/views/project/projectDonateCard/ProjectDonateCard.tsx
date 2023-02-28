@@ -379,7 +379,10 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 									/>
 								)}
 							{isVerDraft && (
-								<ExternalLink href={slugToVerification(slug)}>
+								<ExternalLink
+									href={slugToVerification(slug)}
+									fullWidth
+								>
 									<FullOutlineButton
 										buttonType='primary'
 										label={
