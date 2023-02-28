@@ -308,6 +308,7 @@ export const UserName = styled(GLink)`
 	width: 128px;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	white-space: nowrap;
 `;
 
 export const GLinkNoWrap = styled(GLink)`
