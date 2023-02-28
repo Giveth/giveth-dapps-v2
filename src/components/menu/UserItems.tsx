@@ -1,12 +1,10 @@
-import { useState } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { useWeb3React } from '@web3-react/core';
-import { useRouter } from 'next/router';
 
 import { useIntl } from 'react-intl';
 import { B, GLink } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
-import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { switchNetworkHandler } from '@/lib/wallet';
 import { isUserRegistered, networkInfo, shortenAddress } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
@@ -19,13 +17,17 @@ import { signOut } from '@/features/user/user.thunks';
 import { ItemRow, ItemTitle, ItemAction, ItemSpacer } from './common';
 import { Item } from './Item';
 
-export const UserItems = () => {
+interface IUserItemsProps {
+	setSignWithWallet: Dispatch<SetStateAction<boolean>>;
+	setQueueRoute: Dispatch<SetStateAction<string>>;
+}
+
+export const UserItems: FC<IUserItemsProps> = ({
+	setSignWithWallet,
+	setQueueRoute,
+}) => {
 	const { formatMessage } = useIntl();
 	const { chainId, account } = useWeb3React();
-	const [SignWithWallet, setSignWithWallet] = useState<boolean>(false);
-	const [queueRoute, setQueueRoute] = useState<string>('');
-
-	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
 	const theme = useAppSelector(state => state.general.theme);
@@ -43,7 +45,6 @@ export const UserItems = () => {
 			setQueueRoute(url);
 			return setSignWithWallet(true);
 		}
-		router.push(url);
 	};
 
 	const { networkName } = networkInfo(chainId);
@@ -93,18 +94,6 @@ export const UserItems = () => {
 						{formatMessage({ id: 'label.sign_out' })}
 					</GLink>
 				</Item>
-			)}
-			{SignWithWallet && (
-				<SignWithWalletModal
-					callback={() => {
-						router.push(queueRoute);
-						setQueueRoute('');
-					}}
-					setShowModal={() => {
-						setSignWithWallet(false);
-						setQueueRoute('');
-					}}
-				/>
 			)}
 		</>
 	);
