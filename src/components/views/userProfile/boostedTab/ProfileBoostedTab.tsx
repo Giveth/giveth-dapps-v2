@@ -25,7 +25,10 @@ import {
 	PublicGIVpowerContributeCard,
 } from '@/components/ContributeCard';
 import { formatWeiHelper } from '@/helpers/number';
-import { Row, Col } from '@/components/Grid';
+import { Col, Row } from '@/components/Grid';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import Routes from '@/lib/constants/Routes';
+import { StakingType } from '@/types/config';
 
 export enum EPowerBoostingOrder {
 	CreationAt = 'createdAt',
@@ -55,6 +58,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 	const { userData } = useAppSelector(state => state.user);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
 	const givPower = sdh.getUserGIVPowerBalance();
+	const isZeroGivPower = givPower.balance === '0';
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
@@ -215,6 +219,21 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 					)}
 				</Col>
 			</Row>
+			{boostedProjectsCount &&
+			boostedProjectsCount > 0 &&
+			isZeroGivPower ? (
+				<ZeroGivPowerContainer>
+					<InlineToast
+						title='Your GIVpower balance is zero!'
+						message='Stake GIV to boost these projects again.'
+						type={EToastType.Warning}
+						link={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
+						linkText='Stake GIV'
+					/>
+				</ZeroGivPowerContainer>
+			) : (
+				<Margin />
+			)}
 			<PowerBoostingContainer>
 				{loading && <Loading />}
 				{boostedProjectsCount && boostedProjectsCount > 0 ? (
@@ -242,6 +261,14 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 // 		width: 614px;
 // 	}
 // `;
+
+const Margin = styled.div`
+	height: 70px;
+`;
+
+const ZeroGivPowerContainer = styled.div`
+	margin: 50px 0 34px;
+`;
 
 export const PowerBoostingContainer = styled.div`
 	position: relative;
