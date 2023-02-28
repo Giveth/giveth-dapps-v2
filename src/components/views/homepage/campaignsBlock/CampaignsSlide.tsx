@@ -15,6 +15,7 @@ import { ICampaign } from '@/apollo/types/types';
 import { Col, Row } from '@/components/Grid';
 import { VideoContainer, VideoOverlay } from '@/components/VideoBlock';
 import { campaignLinkGenerator } from '@/helpers/url';
+import { mediaQueries } from '@/lib/constants/constants';
 
 interface ICampaignsSlideProps {
 	campaign: ICampaign;
@@ -99,8 +100,18 @@ const ImageWrapper = styled.div`
 	height: 100%;
 	border-radius: 16px;
 	overflow: hidden;
-	& > img {
-		position: relative !important;
+	position: relative;
+	${mediaQueries.tablet} {
+		height: 360px;
+	}
+	${mediaQueries.laptopS} {
+		height: 298px;
+	}
+	${mediaQueries.laptopL} {
+		height: 373px;
+	}
+	${mediaQueries.desktop} {
+		height: 407px;
 	}
 `;
 
