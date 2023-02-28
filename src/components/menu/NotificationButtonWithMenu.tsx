@@ -66,14 +66,6 @@ export const NotificationButtonWithMenu: FC<
 			}
 		};
 
-		if (
-			typeof lastFetchedNotificationId === 'number' &&
-			lastNotificationId > lastFetchedNotificationId
-		) {
-			fetchNotificationsAndSetState();
-			return;
-		}
-
 		fetchNotificationsAndSetState();
 	}, [lastNotificationId, isSignedIn]);
 
