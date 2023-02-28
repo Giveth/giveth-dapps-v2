@@ -219,7 +219,9 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 					)}
 				</Col>
 			</Row>
-			{isZeroGivPower ? (
+			{boostedProjectsCount &&
+			boostedProjectsCount > 0 &&
+			isZeroGivPower ? (
 				<ZeroGivPowerContainer>
 					<InlineToast
 						title='Your GIVpower balance is zero!'
