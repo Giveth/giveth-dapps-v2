@@ -75,7 +75,7 @@ export const NotificationButtonWithMenu: FC<
 		}
 
 		fetchNotificationsAndSetState();
-	}, [lastNotificationId]);
+	}, [lastFetchedNotificationId, lastNotificationId, setNotifications]);
 
 	useEffect(() => {
 		if (!isHeaderShowing) {
