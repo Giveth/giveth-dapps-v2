@@ -37,13 +37,13 @@ export const UserItems: FC<IUserItemsProps> = ({
 		requiresRegistration?: boolean;
 	}) => {
 		const { url, requiresSign, requiresRegistration } = input;
-		if (requiresRegistration && !isUserRegistered(userData)) {
-			dispatch(setShowCompleteProfile(true));
-			if (url === Routes.CreateProject) return;
-		}
 		if (requiresSign && !isSignedIn) {
 			setQueueRoute(url);
 			return setSignWithWallet(true);
+		}
+		if (requiresRegistration && !isUserRegistered(userData)) {
+			dispatch(setShowCompleteProfile(true));
+			if (url === Routes.CreateProject) return;
 		}
 	};
 
