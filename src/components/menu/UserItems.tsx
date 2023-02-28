@@ -3,6 +3,7 @@ import { useWeb3React } from '@web3-react/core';
 
 import { useIntl } from 'react-intl';
 import { B, GLink } from '@giveth/ui-design-system';
+import { useRouter } from 'next/router';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 import { switchNetworkHandler } from '@/lib/wallet';
@@ -29,6 +30,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 	const { formatMessage } = useIntl();
 	const { chainId, account } = useWeb3React();
 	const dispatch = useAppDispatch();
+	const router = useRouter();
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
 	const theme = useAppSelector(state => state.general.theme);
 	const goRoute = (input: {
@@ -45,6 +47,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 			dispatch(setShowCompleteProfile(true));
 			if (url === Routes.CreateProject) return;
 		}
+		router.push(url);
 	};
 
 	const { networkName } = networkInfo(chainId);
