@@ -55,7 +55,8 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 			<Col sm={12} md={7}>
 				{campaign.video ? (
 					<VideoContainer>
-						<video
+						<StyledVideo
+							as='video'
 							ref={videoRef}
 							id='video'
 							onClick={handleVideoClick}
@@ -64,7 +65,7 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 							poster={campaign.videoPreview}
 						>
 							<source src={campaign.video} type='video/mp4' />
-						</video>
+						</StyledVideo>
 						<VideoOverlay
 							onClick={handleVideoClick}
 							hidden={isPlaying}
@@ -95,12 +96,8 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 	);
 };
 
-const ImageWrapper = styled.div`
-	width: 100%;
+const HeightResponsive = styled.div`
 	height: 100%;
-	border-radius: 16px;
-	overflow: hidden;
-	position: relative;
 	${mediaQueries.tablet} {
 		height: 360px;
 	}
@@ -113,6 +110,15 @@ const ImageWrapper = styled.div`
 	${mediaQueries.desktop} {
 		height: 407px;
 	}
+`;
+
+const StyledVideo = styled(HeightResponsive)``;
+
+const ImageWrapper = styled(HeightResponsive)`
+	width: 100%;
+	border-radius: 16px;
+	overflow: hidden;
+	position: relative;
 `;
 
 const ContentCol = styled(Col)`
