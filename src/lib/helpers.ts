@@ -440,9 +440,11 @@ export function pollEvery(fn: Function, delay: any) {
 export const networkInfo = (networkId?: number) => {
 	if (!networkId || !networksParams[networkId]) return {};
 	const info = networksParams[networkId];
+	const icon = `/images/chains/${info ? networkId : 0}.svg`;
 	return {
 		networkName: info.chainName,
 		networkToken: info.nativeCurrency.symbol,
+		networkIcon: icon,
 	};
 };
 
