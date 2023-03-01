@@ -4,7 +4,6 @@ import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import {
 	PoolStakingConfig,
-	RegenFarmConfig,
 	RegenPoolStakingConfig,
 	StakingPlatform,
 	StakingType,
@@ -74,7 +73,6 @@ export const getPoolIconWithName = (
 interface IBaseStakingCardProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
 	notif?: ReactNode;
-	regenStreamConfig?: RegenFarmConfig;
 	stakedPositions?: LiquidityPosition[];
 	unstakedPositions?: LiquidityPosition[];
 	currentIncentive?: {
@@ -85,7 +83,6 @@ interface IBaseStakingCardProps {
 const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	poolStakingConfig,
 	notif,
-	regenStreamConfig,
 	stakedPositions,
 	unstakedPositions,
 	currentIncentive,
@@ -157,7 +154,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						</SPTitle>
 						<StakingPoolInfoAndActions
 							poolStakingConfig={poolStakingConfig}
-							regenStreamConfig={regenStreamConfig}
 							isDiscontinued={isDiscontinued}
 							isGIVpower={isGIVpower}
 							stakedPositions={stakedPositions}
