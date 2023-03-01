@@ -57,8 +57,18 @@ const renderPool = (
 const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 	const pools =
 		chainId === config.XDAI_NETWORK_NUMBER
-			? [...config.XDAI_CONFIG.pools, ...config.MAINNET_CONFIG.pools]
-			: [...config.MAINNET_CONFIG.pools, ...config.XDAI_CONFIG.pools];
+			? [
+					...config.XDAI_CONFIG.pools,
+					...config.XDAI_CONFIG.regenPools,
+					...config.MAINNET_CONFIG.pools,
+					...config.MAINNET_CONFIG.regenPools,
+			  ]
+			: [
+					...config.MAINNET_CONFIG.pools,
+					...config.MAINNET_CONFIG.regenPools,
+					...config.XDAI_CONFIG.pools,
+					...config.XDAI_CONFIG.regenPools,
+			  ];
 
 	const now = getNowUnixMS();
 	const filteredPools = [];
