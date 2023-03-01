@@ -11,7 +11,7 @@ import {
 	VoteCardQuote,
 	DataBlockButton,
 	TopSpacer,
-} from './Overview.sc';
+} from './GIVeconomy.sc';
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
