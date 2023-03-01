@@ -30,7 +30,7 @@ const ImpactTrackMentorship = () => {
 							<br />
 							Do you need help with your project for the Impact
 							Track? Reach out to us on the ETHDenver Discord
-							server under the &quot;Building&quot; section!
+							server under the &quot;Partners&quot; section!
 						</Desc>
 						<ExternalLink href={links.DISCORD}>
 							<Button
