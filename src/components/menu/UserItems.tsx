@@ -4,6 +4,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import { B, Caption, GLink } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 import { switchNetworkHandler } from '@/lib/wallet';
@@ -17,6 +18,7 @@ import {
 import { signOut } from '@/features/user/user.thunks';
 import { ItemRow, ItemTitle, ItemAction, ItemSpacer } from './common';
 import { Item } from './Item';
+import { FlexCenter } from '../styled-components/Flex';
 
 interface IUserItemsProps {
 	setSignWithWallet: Dispatch<SetStateAction<boolean>>;
@@ -50,7 +52,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 		router.push(url);
 	};
 
-	const { networkName } = networkInfo(chainId);
+	const { networkName, networkIcon } = networkInfo(chainId);
 
 	return (
 		<>
@@ -76,7 +78,17 @@ export const UserItems: FC<IUserItemsProps> = ({
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>
-					<Caption>{networkName}</Caption>
+					<FlexCenter gap='4px'>
+						{networkIcon && (
+							<Image
+								alt={`${networkName} logo`}
+								src={networkIcon}
+								width={16}
+								height={16}
+							/>
+						)}
+						<Caption medium>{networkName}</Caption>
+					</FlexCenter>
 					<ItemAction
 						size='Small'
 						onClick={() => switchNetworkHandler(chainId)}
