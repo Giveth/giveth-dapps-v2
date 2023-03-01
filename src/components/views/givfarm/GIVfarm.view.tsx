@@ -1,13 +1,13 @@
-import { TabGIVfarmTop, TabGIVfarmBottom } from '../GIVeconomyPages/GIVfarm';
-
 import { FarmProvider } from '@/context/farm.context';
+import { GIVfarmBottom } from './GIVfarmBottom';
+import { GIVfarmTop } from './GIVfarmTop';
 
 function GIVfarmView() {
 	return (
 		<>
 			<FarmProvider>
-				<TabGIVfarmTop />
-				<TabGIVfarmBottom />
+				<GIVfarmTop />
+				<GIVfarmBottom />
 			</FarmProvider>
 		</>
 	);
