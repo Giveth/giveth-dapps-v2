@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import config from '@/configuration';
-import { StreamType, RegenFarmConfig } from '@/types/config';
+import { StreamType, RegenStreamConfig } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 
 export const useTokenDistroHelper = (
 	poolNetwork: number,
 	regenStreamType?: StreamType,
-	regenStreamConfig?: RegenFarmConfig,
+	regenStreamConfig?: RegenStreamConfig,
 	hold: boolean = false,
 ) => {
 	const [tokenDistroHelper, setTokenDistroHelper] =

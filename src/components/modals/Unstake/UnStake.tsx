@@ -23,7 +23,7 @@ import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
 import {
 	PoolStakingConfig,
-	RegenFarmConfig,
+	RegenStreamConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 } from '@/types/config';
@@ -37,7 +37,7 @@ import { useStakingPool } from '@/hooks/useStakingPool';
 
 interface IUnStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
-	regenStreamConfig?: RegenFarmConfig;
+	regenStreamConfig?: RegenStreamConfig;
 }
 
 interface IUnStakeModalProps extends IModal, IUnStakeInnerModalProps {}

@@ -25,7 +25,7 @@ import {
 	PercentageRow,
 } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { RegenFarmConfig, StreamType } from '@/types/config';
+import { RegenStreamConfig, StreamType } from '@/types/config';
 import { BN, formatWeiHelper } from '@/helpers/number';
 import { IconFox } from '@/components/Icons/Fox';
 import { IconCult } from '@/components/Icons/Cult';
@@ -40,7 +40,7 @@ import { StakeCardState } from '../cards/StakingCards/BaseStakingCard/BaseStakin
 
 interface RegenStreamProps {
 	network: number;
-	streamConfig: RegenFarmConfig;
+	streamConfig: RegenStreamConfig;
 }
 
 export const getStreamIconWithType = (type: StreamType, size?: number) => {

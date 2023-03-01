@@ -34,7 +34,7 @@ import {
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
 	PoolStakingConfig,
-	RegenFarmConfig,
+	RegenStreamConfig,
 	SimplePoolStakingConfig,
 	StakingPlatform,
 } from '@/types/config';
@@ -43,7 +43,7 @@ import { useStakingPool } from '@/hooks/useStakingPool';
 
 interface IStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
-	regenStreamConfig?: RegenFarmConfig;
+	regenStreamConfig?: RegenStreamConfig;
 }
 
 interface IStakeModalProps extends IModal, IStakeInnerModalProps {}

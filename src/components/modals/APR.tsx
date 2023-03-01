@@ -12,13 +12,13 @@ import { Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
 import { IModal } from '@/types/common';
 import { mediaQueries } from '@/lib/constants/constants';
-import { RegenFarmConfig, StreamType } from '@/types/config';
+import { RegenStreamConfig, StreamType } from '@/types/config';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IAPRInnerModalProps {
 	poolNetwork: number;
-	regenStreamConfig?: RegenFarmConfig;
+	regenStreamConfig?: RegenStreamConfig;
 	regenStreamType?: StreamType;
 }
 

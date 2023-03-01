@@ -25,7 +25,7 @@ import { Modal } from './Modal';
 import LoadingAnimation from '@/animations/loading.json';
 import {
 	PoolStakingConfig,
-	RegenFarmConfig,
+	RegenStreamConfig,
 	SimplePoolStakingConfig,
 	StreamType,
 } from '@/types/config';
@@ -81,7 +81,7 @@ interface IHarvestAllInnerModalProps {
 	title: string;
 	poolStakingConfig?: PoolStakingConfig;
 	network: number;
-	regenStreamConfig?: RegenFarmConfig;
+	regenStreamConfig?: RegenStreamConfig;
 	regenStreamType?: StreamType;
 	stakedPositions?: LiquidityPosition[];
 	currentIncentive?: {
@@ -93,7 +93,7 @@ interface IHarvestAllModalProps extends IModal, IHarvestAllInnerModalProps {
 	title: string;
 	poolStakingConfig?: PoolStakingConfig;
 	network: number;
-	regenStreamConfig?: RegenFarmConfig;
+	regenStreamConfig?: RegenStreamConfig;
 	regenStreamType?: StreamType;
 	stakedPositions?: LiquidityPosition[];
 	currentIncentive?: {
@@ -634,7 +634,7 @@ interface IEarnedBreakDownProps {
 	tokenDistroHelper: TokenDistroHelper;
 	setRewardLiquidPart: Dispatch<SetStateAction<EthBigNumber>>;
 	setEarnedStream: Dispatch<SetStateAction<BigNumber>>;
-	regenStreamConfig?: RegenFarmConfig;
+	regenStreamConfig?: RegenStreamConfig;
 	rewardLiquidPart: EthBigNumber;
 	tokenSymbol: string;
 	earnedStream: BigNumber;

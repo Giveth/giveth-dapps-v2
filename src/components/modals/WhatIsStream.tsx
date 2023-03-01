@@ -19,12 +19,12 @@ import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { RegenFarmConfig } from '@/types/config';
+import { RegenStreamConfig } from '@/types/config';
 import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 
 interface IWhatIsStreamModal extends IModal {
 	tokenDistroHelper?: TokenDistroHelper;
-	regenStreamConfig?: RegenFarmConfig;
+	regenStreamConfig?: RegenStreamConfig;
 	cb?: any;
 }
 
