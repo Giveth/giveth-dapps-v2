@@ -293,6 +293,7 @@ const Content = styled.div`
 	margin-top: 15px;
 	margin-bottom: 42px;
 	align-items: flex-end;
+	max-width: 668px;
 `;
 
 const Title = styled(H5)`
