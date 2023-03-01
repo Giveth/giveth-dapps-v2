@@ -102,7 +102,7 @@ export interface GasPreference {
 	maxPriorityFeePerGas?: string;
 }
 
-export interface RegenFarmConfig {
+export interface RegenStreamConfig {
 	title: string;
 	tokenDistroAddress: string;
 	type: StreamType;
@@ -110,7 +110,6 @@ export interface RegenFarmConfig {
 	rewardTokenSymbol: string;
 	// For price purpose
 	tokenAddressOnUniswapV2: string;
-	pools: RegenPoolStakingConfig[];
 	introCard?: IntroCardConfig;
 }
 
@@ -139,9 +138,9 @@ export interface BasicNetworkConfig {
 		| UniswapV3PoolStakingConfig
 		| ICHIPoolStakingConfig
 	>;
+	regenPools: RegenPoolStakingConfig[];
 	uniswapV2Subgraph: string;
-
-	regenFarms: RegenFarmConfig[];
+	regenStreams: RegenStreamConfig[];
 }
 
 interface MainnetNetworkConfig extends BasicNetworkConfig {
