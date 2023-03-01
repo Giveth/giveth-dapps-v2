@@ -38,6 +38,17 @@ export const networksParams: {
 		},
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 	},
+	137: {
+		chainId: '0x89',
+		chainName: 'Polygon',
+		iconUrls: ['https://icons.llamao.fi/icons/chains/rsz_polygon.jpg'],
+		nativeCurrency: {
+			name: 'MATIK',
+			symbol: 'MATIK',
+			decimals: 18,
+		},
+		blockExplorerUrls: ['https://polygonscan.com/'],
+	},
 	3: {
 		chainId: '0x3',
 		chainName: 'Ropsten',
