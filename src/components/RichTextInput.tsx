@@ -255,6 +255,11 @@ const ReactQuillStyled = styled(ReactQuill)<{ noShadow?: boolean }>`
 		height: 30rem;
 		> .ql-editor {
 			word-break: break-word;
+			font-family: 'Red Hat Text', sans-serif;
+			font-size: 16px;
+			p {
+				line-height: 24px;
+			}
 		}
 	}
 	> div:first-of-type {
@@ -277,7 +282,6 @@ const CounterContainer = styled(SublineBold)`
 	background-color: ${neutralColors.gray[300]};
 	border-radius: 64px;
 	padding: 6px 10px;
-	z-index: 2;
 	color: ${neutralColors.gray[700]};
 	opacity: 0.8;
 `;

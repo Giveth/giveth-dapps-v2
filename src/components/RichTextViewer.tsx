@@ -23,6 +23,12 @@ const Wrapper = styled.div`
 
 	.ql-container > .ql-editor {
 		word-break: break-word;
+		padding: 0;
+		font-family: 'Red Hat Text', sans-serif;
+		font-size: 16px;
+		p {
+			line-height: 24px;
+		}
 	}
 `;
 

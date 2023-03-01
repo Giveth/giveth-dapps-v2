@@ -13,6 +13,7 @@ import {
 	IconTrash,
 	IconEdit,
 	mediaQueries,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { IProjectUpdate } from '@/apollo/types/types';
@@ -199,7 +200,7 @@ const TimelineStyled = styled.div`
 `;
 
 const Description = styled(P)`
-	color: ${brandColors.giv[900]};
+	color: ${neutralColors.gray[900]};
 `;
 
 const Title = styled(H5)`
@@ -240,6 +241,12 @@ const Buttons = styled.div`
 	> button {
 		padding-right: 10px;
 		padding-left: 10px;
+	}
+	> button:first-child {
+		color: ${semanticColors.punch[200]};
+	}
+	> button:last-child {
+		color: ${brandColors.deep[100]};
 	}
 `;
 

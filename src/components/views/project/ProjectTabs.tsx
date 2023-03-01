@@ -84,8 +84,8 @@ const Tab = styled(P)`
 `;
 
 const Wrapper = styled(Flex)`
-	padding: 24px 0 24px 0;
-	margin-bottom: 16px;
+	padding: 24px 0 24px;
+	margin-bottom: 14px;
 	color: ${brandColors.deep[600]};
 	align-items: center;
 	z-index: 1;
@@ -95,7 +95,7 @@ const Wrapper = styled(Flex)`
 	max-width: calc(100vw - 32px);
 
 	${mediaQueries.tablet} {
-		padding: 16px 0 12px;
+		padding: 16px 0 24px;
 		position: sticky;
 		top: 200px;
 	}
