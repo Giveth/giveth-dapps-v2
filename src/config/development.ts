@@ -246,7 +246,6 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x18cE354571ba71bC7b3d633b254954C5A9cfC195/0x69F79C9eA174d4659B18c7993c7EFbBbB58cF068',
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
-
 				farmStartTimeMS: 1646306818206,
 				farmEndTimeMS: 1665932450000,
 				introCard: {

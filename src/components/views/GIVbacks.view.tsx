@@ -1,6 +1,6 @@
 import { TabGIVbacksTop, TabGIVbacksBottom } from '../homeTabs/GIVbacks';
 
-function GIVbackView() {
+function GIVbacksView() {
 	return (
 		<>
 			<TabGIVbacksTop />
@@ -9,4 +9,4 @@ function GIVbackView() {
 	);
 }
 
-export default GIVbackView;
+export default GIVbacksView;
