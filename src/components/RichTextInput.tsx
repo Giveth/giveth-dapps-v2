@@ -22,6 +22,7 @@ import ImageUploader from './richImageUploader/imageUploader';
 import { UPLOAD_IMAGE } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { isSSRMode, showToastError } from '@/lib/helpers';
+import { Relative } from '@/components/styled-components/Position';
 
 (window as any).Quill = Quill;
 
@@ -187,7 +188,7 @@ const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 	if (!mod) return null;
 
 	return (
-		<>
+		<Relative>
 			<ReactQuillStyled
 				modules={mod}
 				formats={formats}
@@ -204,7 +205,7 @@ const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 					setIsLimitExceeded={setIsLimitExceeded}
 				/>
 			)}
-		</>
+		</Relative>
 	);
 };
 
@@ -244,6 +245,7 @@ const RichtextCounter: FC<IRichtextCounterProps> = ({
 };
 
 const ReactQuillStyled = styled(ReactQuill)`
+	margin-bottom: 0 !important;
 	> .ql-container {
 		height: 30rem;
 		> .ql-editor {
@@ -254,12 +256,14 @@ const ReactQuillStyled = styled(ReactQuill)`
 
 const CounterContainer = styled.div`
 	position: absolute;
+	bottom: 10px;
+	right: 10px;
 	background-color: ${neutralColors.gray[300]};
 	border-radius: 64px;
 	padding: 6px 10px;
 	z-index: 2;
-	margin: 0 20px 50px 0;
 	color: ${neutralColors.gray[700]};
+	opacity: 0.8;
 `;
 
 export default TextRichWithQuill;
