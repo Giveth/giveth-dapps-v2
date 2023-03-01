@@ -18,7 +18,6 @@ import { avgAPR } from '@/helpers/givpower';
 import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
 	PoolStakingConfig,
-	RegenFarmConfig,
 	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
 	StakingType,
@@ -60,7 +59,6 @@ import ExternalLink from '@/components/ExternalLink';
 
 interface IStakingPoolInfoAndActionsProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
-	regenStreamConfig?: RegenFarmConfig;
 	isDiscontinued: boolean;
 	isGIVpower: boolean;
 	stakedPositions?: LiquidityPosition[];
@@ -72,7 +70,6 @@ interface IStakingPoolInfoAndActionsProps {
 
 export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	poolStakingConfig,
-	regenStreamConfig,
 	isDiscontinued,
 	isGIVpower,
 	stakedPositions,
@@ -111,7 +108,6 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const { chainId, account, active: isWalletActive } = useWeb3React();
 
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
-
 	const {
 		type,
 		unit,
@@ -120,6 +116,12 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		network: poolNetwork,
 		provideLiquidityLink,
 	} = poolStakingConfig;
+	const regenStreamConfig = regenStreamType
+		? config.NETWORKS_CONFIG[poolNetwork].regenStreams.find(
+				regenStream => regenStream.type === regenStreamType,
+		  )
+		: undefined;
+
 	const { tokenDistroHelper, sdh } = useTokenDistroHelper(
 		poolNetwork,
 		regenStreamType,
