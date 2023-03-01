@@ -1,6 +1,5 @@
 import {
 	EnvConfig,
-	RegenFarmType,
 	StakingPlatform,
 	StakingType,
 	StreamType,
@@ -143,7 +142,6 @@ const config: EnvConfig = {
 			// 				'https://app.uniswap.org/#/add/v2/0x3e4d3FadEE2338D420bb5E5cB26aAd96c165476c/ETH?chain=kovan',
 			// 			unit: 'LP',
 			// 			regenStreamType: StreamType.CULT,
-			// 			regenFarmType: RegenFarmType.CULT_ETH,
 			// 			introCard: {
 			// 				title: 'CULT',
 			// 				description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
@@ -248,7 +246,6 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x18cE354571ba71bC7b3d633b254954C5A9cfC195/0x69F79C9eA174d4659B18c7993c7EFbBbB58cF068',
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
-				regenFarmType: RegenFarmType.FOX_HNY,
 
 				farmStartTimeMS: 1646306818206,
 				farmEndTimeMS: 1665932450000,
@@ -271,7 +268,6 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x18cE354571ba71bC7b3d633b254954C5A9cfC195/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
-				regenFarmType: RegenFarmType.FOX_XDAI,
 				farmStartTimeMS: 1646306818206,
 				introCard: {
 					title: 'ShapeShift DAO',

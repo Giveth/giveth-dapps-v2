@@ -31,12 +31,6 @@ export enum StakingType {
 	UNISWAPV2_CULT_ETH = 'UniswapV2_CULT_ETH',
 }
 
-export enum RegenFarmType {
-	FOX_HNY = 'FOX_HNY_FARM',
-	FOX_XDAI = 'FOX_XDAI_FARM',
-	CULT_ETH = 'CULT_ETH_FARM',
-}
-
 export enum StreamType {
 	FOX = 'FOX_STREAM',
 	CULT = 'CULT_STREAM',
@@ -93,7 +87,6 @@ export interface IntroCardConfig {
 
 export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
 	regenStreamType: StreamType;
-	regenFarmType: RegenFarmType;
 	dontArchive?: boolean;
 }
 

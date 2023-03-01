@@ -1,6 +1,5 @@
 import {
 	EnvConfig,
-	RegenFarmType,
 	StakingPlatform,
 	StakingType,
 	StreamType,
@@ -154,7 +153,6 @@ const config: EnvConfig = {
 					'https://app.uniswap.org/#/add/v2/0xf0f9D895aCa5c8678f706FB8216fa22957685A13/ETH?chain=mainnet',
 				unit: 'LP',
 				regenStreamType: StreamType.CULT,
-				regenFarmType: RegenFarmType.CULT_ETH,
 				farmStartTimeMS: 1655218800000,
 				introCard: {
 					title: 'CULT',
@@ -176,7 +174,6 @@ const config: EnvConfig = {
 					'https://app.uniswap.org/#/add/v2/0xf0f9D895aCa5c8678f706FB8216fa22957685A13/ETH?chain=mainnet',
 				unit: 'LP',
 				regenStreamType: StreamType.CULT,
-				regenFarmType: RegenFarmType.CULT_ETH,
 				farmStartTimeMS: 1668691800000,
 				farmEndTimeMS: 1669901843000,
 				dontArchive: true,
@@ -294,7 +291,6 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x21a42669643f45bc0e086b8fc2ed70c23d67509d/0x71850b7e9ee3f13ab46d67167341e4bdc905eef9?chainId=100',
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
-				regenFarmType: RegenFarmType.FOX_HNY,
 				farmStartTimeMS: 1649001600000,
 				farmEndTimeMS: 1665932450000,
 				introCard: {
@@ -316,7 +312,6 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x21a42669643f45bc0e086b8fc2ed70c23d67509d/XDAI?chainId=100',
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
-				regenFarmType: RegenFarmType.FOX_XDAI,
 				farmStartTimeMS: 1666026660000,
 				introCard: {
 					title: 'ShapeShift DAO',
