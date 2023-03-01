@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
-import { FlowRateTooltip } from '@/components/homeTabs/GIVstream.sc';
+import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Container } from '@/components/Grid';
 import { removeQueryParamAndRedirect } from '@/helpers/url';

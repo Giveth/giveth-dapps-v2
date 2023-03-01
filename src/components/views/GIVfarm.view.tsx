@@ -1,4 +1,4 @@
-import { TabGIVfarmTop, TabGIVfarmBottom } from '../homeTabs/GIVfarm';
+import { TabGIVfarmTop, TabGIVfarmBottom } from '../GIVeconomyPages/GIVfarm';
 
 import { FarmProvider } from '@/context/farm.context';
 

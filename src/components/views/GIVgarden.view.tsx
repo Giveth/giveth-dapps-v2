@@ -1,4 +1,4 @@
-import { TabGardenTop, TabGardenBottom } from '../homeTabs/GIVgarden';
+import { TabGardenTop, TabGardenBottom } from '../GIVeconomyPages/GIVgarden';
 
 function GIVgardenView() {
 	return (

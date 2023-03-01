@@ -23,7 +23,7 @@ import {
 	Bar,
 	GsPTooltip,
 	PercentageRow,
-} from '@/components/homeTabs/GIVstream.sc';
+} from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { RegenFarmConfig, StreamType } from '@/types/config';
 import { BN, formatWeiHelper } from '@/helpers/number';

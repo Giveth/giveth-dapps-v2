@@ -1,4 +1,4 @@
-import { TabGIVbacksTop, TabGIVbacksBottom } from '../homeTabs/GIVbacks';
+import { TabGIVbacksTop, TabGIVbacksBottom } from '../GIVeconomyPages/GIVbacks';
 
 function GIVbacksView() {
 	return (

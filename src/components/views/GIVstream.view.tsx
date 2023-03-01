@@ -1,4 +1,7 @@
-import { TabGIVstreamTop, TabGIVstreamBottom } from '../homeTabs/GIVstream';
+import {
+	TabGIVstreamTop,
+	TabGIVstreamBottom,
+} from '../GIVeconomyPages/GIVstream';
 
 function GIVstreamView() {
 	return (

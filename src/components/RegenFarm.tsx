@@ -4,7 +4,7 @@ import { H4 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { Row, Col } from './Grid';
-import { PoolRow } from './homeTabs/GIVfarm.sc';
+import { PoolRow } from './GIVeconomyPages/GIVfarm.sc';
 import config from '@/configuration';
 import { DAOChangeNetworkModal } from './DAOChangeNetworkModal';
 import { DAOContainer, DAOChangeNetwork } from './givfarm/GIVfrens.sc';

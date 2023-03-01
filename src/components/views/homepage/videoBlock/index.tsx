@@ -16,7 +16,7 @@ import { Container } from '@/components/Grid';
 import {
 	VideoContainer,
 	VideoOverlay,
-} from '@/components/homeTabs/Overview.sc';
+} from '@/components/GIVeconomyPages/Overview.sc';
 import { mediaQueries } from '@/lib/constants/constants';
 import Wave from '@/components/particles/Wave';
 import SemiCircle from '@/components/particles/SemiCircle';

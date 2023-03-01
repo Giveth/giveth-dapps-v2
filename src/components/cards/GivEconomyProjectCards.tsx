@@ -3,7 +3,10 @@ import { useIntl } from 'react-intl';
 import { Row, Col } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
 import config from '@/configuration';
-import { IGsDataBox, GsButton } from '@/components/homeTabs/GIVstream.sc';
+import {
+	IGsDataBox,
+	GsButton,
+} from '@/components/GIVeconomyPages/GIVstream.sc';
 
 const GivEconomyProjectCards = () => {
 	const { formatMessage } = useIntl();

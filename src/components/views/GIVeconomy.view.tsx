@@ -1,4 +1,4 @@
-import { TabOverview } from '../homeTabs/GIVeconomy';
+import { TabOverview } from '../GIVeconomyPages/GIVeconomy';
 
 function GIVeconomyView() {
 	return (
