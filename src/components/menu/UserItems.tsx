@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction } from 'react';
 import { useWeb3React } from '@web3-react/core';
 
 import { useIntl } from 'react-intl';
-import { B, GLink } from '@giveth/ui-design-system';
+import { B, Caption, GLink } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
@@ -76,7 +76,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>
-					<B>{networkName}</B>
+					<Caption>{networkName}</Caption>
 					<ItemAction
 						size='Small'
 						onClick={() => switchNetworkHandler(chainId)}
