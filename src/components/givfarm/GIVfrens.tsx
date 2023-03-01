@@ -19,7 +19,7 @@ export const GIVfrens: FC<IGIVfrensProps> = ({ showArchivedPools }) => {
 
 	return (
 		<>
-			<H3 weight={700}>RegenFarms</H3>
+			<H3 weight={700}>RegenStreams</H3>
 			<Col md={8} lg={6}>
 				<Subtitle>
 					{formatMessage({
