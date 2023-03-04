@@ -257,8 +257,20 @@ const ReactQuillStyled = styled(ReactQuill)<{ noShadow?: boolean }>`
 			word-break: break-word;
 			font-family: 'Red Hat Text', sans-serif;
 			font-size: 16px;
-			p {
+			p, li, blockquote {
 				line-height: 24px;
+			}
+			h1, h2 {
+				font-family: 'TeX Gyre Adventor', serif;
+			}
+			.ql-size-small {
+				line-height: 18px;
+			}
+			.ql-size-large {
+				line-height: 36px;
+			}
+			.ql-size-huge {
+				line-height: 56px;
 			}
 		}
 	}
