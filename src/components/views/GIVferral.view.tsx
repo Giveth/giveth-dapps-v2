@@ -132,7 +132,7 @@ const GIVferralView = () => {
 					/>
 				</CompleteBox>
 			</Section>
-			<Section>
+			{/* <Section>
 				<FloatingFigure3 />
 
 				<VideoBox>
@@ -153,7 +153,7 @@ const GIVferralView = () => {
 				</VideoBox>
 				<FloatingFigure1 />
 				<FloatingFigure2 />
-			</Section>
+			</Section> */}
 		</Container>
 	);
 };
