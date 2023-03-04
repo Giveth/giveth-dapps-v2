@@ -223,7 +223,7 @@ const ProjectUpdates = () => {
 			)}
 			{isOwner && (
 				<InputContainer>
-					<TimelineSection date='' newUpdate={true} />
+					<TimelineSection date='' newUpdate />
 					<Content>
 						<div>
 							<Title>Post an update</Title>
@@ -278,18 +278,16 @@ const ProjectUpdates = () => {
 };
 
 const Wrapper = styled.div`
-	padding: 0 16px;
-	margin-left: 0;
-
+	margin-left: -10px;
 	${mediaQueries.tablet} {
 		margin-left: 20px;
-		padding: 0;
 	}
 `;
 
 const Content = styled.div`
 	display: flex;
 	flex-direction: column;
+	gap: 25px 0;
 	margin-top: 15px;
 	margin-bottom: 42px;
 	align-items: flex-end;
