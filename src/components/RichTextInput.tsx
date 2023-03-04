@@ -232,7 +232,7 @@ const RichtextCounter: FC<IRichtextCounterProps> = ({
 		const temp = setTimeout(() => {
 			const _count = calcLengthOfHTML(value);
 			setCount(_count);
-			setIsLimitExceeded && _count > limit && setIsLimitExceeded(true);
+			setIsLimitExceeded && setIsLimitExceeded(_count > limit);
 		}, 1000);
 
 		return () => {
