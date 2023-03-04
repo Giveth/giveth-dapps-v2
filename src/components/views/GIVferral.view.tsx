@@ -15,7 +15,7 @@ import {
 } from '@giveth/ui-design-system';
 import { isProduction } from '@/configuration';
 import { Col, Container, Row } from '@/components/Grid';
-import VideoBlock from '@/components/VideoBlock';
+// import VideoBlock from '@/components/VideoBlock';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 
@@ -132,7 +132,7 @@ const GIVferralView = () => {
 					/>
 				</CompleteBox>
 			</Section>
-			<Section>
+			{/* <Section>
 				<FloatingFigure3 />
 
 				<VideoBox>
@@ -153,7 +153,7 @@ const GIVferralView = () => {
 				</VideoBox>
 				<FloatingFigure1 />
 				<FloatingFigure2 />
-			</Section>
+			</Section> */}
 		</Container>
 	);
 };
