@@ -15,7 +15,7 @@ import {
 } from '@giveth/ui-design-system';
 import { isProduction } from '@/configuration';
 import { Col, Container, Row } from '@/components/Grid';
-import VideoBlock from '@/components/VideoBlock';
+// import VideoBlock from '@/components/VideoBlock';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 
