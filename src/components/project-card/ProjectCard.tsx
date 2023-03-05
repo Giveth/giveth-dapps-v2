@@ -81,7 +81,13 @@ const ProjectCard = (props: IProjectCard) => {
 				</Link>
 			</ImagePlaceholder>
 			<CardBody
-				isHover={isHover}
+				isHover={
+					isHover
+						? verified
+							? ECardBodyHover.FULL
+							: ECardBodyHover.HALF
+						: ECardBodyHover.NONE
+				}
 				isOtherOrganization={
 					orgLabel && orgLabel !== ORGANIZATION.giveth
 				}
@@ -254,9 +260,15 @@ const Description = styled(P)`
 	margin-bottom: 16px;
 `;
 
+enum ECardBodyHover {
+	NONE,
+	HALF,
+	FULL,
+}
+
 const CardBody = styled.div<{
 	isOtherOrganization?: boolean | '';
-	isHover?: boolean;
+	isHover: ECardBodyHover;
 }>`
 	position: absolute;
 	left: 0;
@@ -267,13 +279,12 @@ const CardBody = styled.div<{
 	border-radius: ${props =>
 		props.isOtherOrganization ? '0 12px 12px 12px' : '12px'};
 	${mediaQueries.laptopS} {
-		top: ${props => {
-			if (props.isHover) {
-				return '109px';
-			} else {
-				return '186px';
-			}
-		}};
+		top: ${props =>
+			props.isHover == ECardBodyHover.FULL
+				? '109px'
+				: props.isHover == ECardBodyHover.HALF
+				? '150px'
+				: '186px'};
 	}
 `;
 
