@@ -28,14 +28,12 @@ const ImpactDenver: FC<IImpactDenver> = props => {
 				},
 				fetchPolicy: 'no-cache',
 			});
-			console.log('data.findCampaignBySlug', data.findCampaignBySlug);
 			if (data.findCampaignBySlug) {
 				setCampaign(data.findCampaignBySlug);
 			}
 		};
 		getCampaign();
 	}, [user?.id]);
-	console.log('campaign', campaign);
 
 	return (
 		<Wrapper>

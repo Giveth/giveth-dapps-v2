@@ -1,6 +1,6 @@
 import {
 	brandColors,
-	ButtonLink,
+	Button,
 	H2,
 	H4,
 	IconChevronRight24,
@@ -53,11 +53,13 @@ const VideoBlock = () => {
 							{formatMessage({ id: 'label.what_is_giveth' })}
 						</H2>
 						<Desc>
-							{formatMessage({ id: 'label.what_people_say' })}
+							{formatMessage({
+								id: 'label.discover_what_makes_giveth_different',
+							})}
 						</Desc>
 						<Link href={Routes.AboutUs} passHref>
 							<AboutUsButton
-								linkType='texty-secondary'
+								buttonType='texty-secondary'
 								label={formatMessage({
 									id: 'label.more_about_us',
 								})}
@@ -161,7 +163,7 @@ const QuarterCircleContainer = styled.div`
 	left: 30%;
 `;
 
-const AboutUsButton = styled(ButtonLink)`
+const AboutUsButton = styled(Button)`
 	max-width: 200px;
 `;
 

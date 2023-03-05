@@ -53,7 +53,7 @@ export const ProjectsProvider = (props: {
 	const router = useRouter();
 
 	useEffect(() => {
-		let sort: EProjectsSortBy | undefined;
+		let sort = EProjectsSortBy.GIVPOWER;
 		if (router.query.sort) {
 			switch ((router.query.sort as string).toLowerCase()) {
 				case EProjectsSortBy.MOST_FUNDED.toLowerCase():

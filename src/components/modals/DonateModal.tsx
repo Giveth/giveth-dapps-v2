@@ -11,6 +11,7 @@ import {
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 
+import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
@@ -56,7 +57,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		anonymous,
 		givBackEligible,
 	} = props;
-
 	const web3Context = useWeb3React();
 	const { account, chainId } = web3Context;
 	const dispatch = useAppDispatch();
@@ -81,6 +81,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 
+	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses, givethAddresses } = project || {};
 
 	const projectWalletAddress =
@@ -148,6 +149,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			setDonationSaved: setFirstDonationSaved,
 			walletAddress: projectWalletAddress,
 			projectId: Number(project.id),
+			chainvineReferred,
 		})
 			.then(({ isSaved, txHash: firstHash }) => {
 				setIsFirstTxSuccess(true);

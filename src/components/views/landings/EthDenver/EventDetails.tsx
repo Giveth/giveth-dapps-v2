@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import {
+	Button,
 	H3,
 	H4,
 	IconArrowRight32,
@@ -10,7 +11,6 @@ import {
 import DiscordIcon from '/public/images/ETHDenver-discord.svg';
 import MapImage from '/public/images/ETHDenver-map.png';
 import Image from 'next/image';
-import { GhostButton } from '@/components/styled-components/Button';
 import { Col, Container, Row } from '@/components/Grid';
 import { mediaQueries } from '@/lib/constants/constants';
 import ExternalLink from '@/components/ExternalLink';
@@ -37,8 +37,9 @@ const EventDetails = () => {
 						</Lead>
 						<br />
 						<ExternalLink href='https://maps.app.goo.gl/hg2LicDFbsUBWdCYA?g_st=ic'>
-							<GhostButton
+							<Button
 								size='large'
+								buttonType='texty-primary'
 								label='Get Directions'
 								icon={<IconArrowRight32 />}
 							/>
@@ -60,7 +61,8 @@ const EventDetails = () => {
 						know who’s around to meet up.
 					</H4>
 					<ExternalLink href={links.DISCORD}>
-						<GhostButton
+						<Button
+							buttonType='texty-primary'
 							label='Join us on Discord'
 							size='large'
 							icon={<IconChevronRight32 />}

@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import {
+	Button,
 	H3,
 	IconExternalLink24,
 	Lead,
 	mediaQueries,
 } from '@giveth/ui-design-system';
 import Image from 'next/image';
-import { GhostButton } from '@/components/styled-components/Button';
 import PizzaImage from '/public/images/ETHDenver-pizza.png';
 import { Col, Row } from '@/components/Grid';
 import ExternalLink from '@/components/ExternalLink';
@@ -29,7 +29,8 @@ const ImpactQuests = () => {
 						conference.
 					</LeadStyled>
 					<ExternalLink href='https://giveth.notion.site/Giveth-s-Galactic-Impact-Quests-f8ef267e16d14acfaba41b43183c17de'>
-						<GhostButton
+						<Button
+							buttonType='texty-primary'
 							label='Learn about Impact Quests'
 							size='large'
 							icon={<IconExternalLink24 />}

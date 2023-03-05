@@ -215,6 +215,14 @@ export const SearchButton = styled(HeaderLink)`
 		props.theme === ETheme.Dark
 			? brandColors.giv[300]
 			: neutralColors.gray[200]};
+	& > div > span {
+		display: none;
+	}
+	${mediaQueries.desktop} {
+		& > div > span {
+			display: inline-block;
+		}
+	}
 `;
 
 export const ConnectButton = styled(Button)`
@@ -300,4 +308,9 @@ export const UserName = styled(GLink)`
 	width: 128px;
 	overflow: hidden;
 	text-overflow: ellipsis;
+`;
+
+export const GLinkNoWrap = styled(GLink)`
+	text-overflow: ellipsis;
+	white-space: nowrap;
 `;
