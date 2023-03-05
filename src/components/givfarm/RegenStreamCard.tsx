@@ -9,8 +9,8 @@ import {
 	H6,
 	IconGIVStream,
 	IconHelpFilled16,
+	IconInfoOutline16,
 	Lead,
-	neutralColors,
 	P,
 	Subline,
 } from '@giveth/ui-design-system';
@@ -19,11 +19,7 @@ import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { durationToString } from '@/lib/helpers';
-import {
-	Bar,
-	GsPTooltip,
-	PercentageRow,
-} from '@/components/GIVeconomyPages/GIVstream.sc';
+import { Bar, GsPTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { RegenStreamConfig, StreamType } from '@/types/config';
 import { BN, formatWeiHelper } from '@/helpers/number';
@@ -132,21 +128,25 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 		<Wrapper>
 			<Title>{streamConfig.title}</Title>
 			<RegenStreamContainer>
-				<HeaderRow justifyContent='space-between' wrap={1}>
-					<Flex gap='8px' style={{ position: 'relative' }}>
-						{icon}
-						<H5>{streamConfig.title}</H5>{' '}
-					</Flex>
-					<RateRow>
-						<IconGIVStream size={32} />
-						<StreamRate>{formatWeiHelper(rewardStream)}</StreamRate>
-						<StreamRateUnit>
-							{streamConfig.rewardTokenSymbol}
-							{formatMessage({ id: 'label./week' })}
-						</StreamRateUnit>
-					</RateRow>
-				</HeaderRow>
-				<div>
+				<InfoContainer flexDirection='column'>
+					<HeaderRow justifyContent='space-between' wrap={1}>
+						<Flex gap='8px' style={{ position: 'relative' }}>
+							{icon}
+							<H5>
+								{streamConfig.rewardTokenSymbol} Flowrate
+							</H5>{' '}
+						</Flex>
+						<RateRow>
+							<IconGIVStream size={32} />
+							<StreamRate>
+								{formatWeiHelper(rewardStream)}
+							</StreamRate>
+							<StreamRateUnit>
+								{streamConfig.rewardTokenSymbol}
+								{formatMessage({ id: 'label./week' })}
+							</StreamRateUnit>
+						</RateRow>
+					</HeaderRow>
 					<RegenStreamInfoRow>
 						<Flex alignItems='flex-end' gap='6px'>
 							<H6>
@@ -179,15 +179,16 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 						</Flex>
 					</RegenStreamInfoRow>
 					<Bar percentage={percentage} />
-					<PercentageRow justifyContent='space-between'>
+					<Flex justifyContent='space-between'>
 						<B>{percentage?.toFixed(2)}%</B>
 						<B>100%</B>
-					</PercentageRow>
-				</div>
-				<Remaining>
-					{`${formatMessage({ id: 'label.time_remaining' })}: ` +
-						remainTime}
-				</Remaining>
+					</Flex>
+					<Remaining>
+						{`${formatMessage({ id: 'label.time_remaining' })}: ` +
+							remainTime}
+					</Remaining>
+				</InfoContainer>
+				<Separator />
 				<HarvestContainer wrap={1} gap='24px'>
 					<div>
 						<AmountInfo alignItems='flex-end' gap='4px'>
@@ -199,15 +200,24 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 						</AmountInfo>
 						<Converted>~${usdAmount}</Converted>
 					</div>
-					<HarvestButton
-						label={`${formatMessage({ id: 'label.harvest' })} ${
-							streamConfig.rewardTokenSymbol
-						}`}
-						onClick={() => setShowModal(true)}
-						buttonType='primary'
-						disabled={rewardLiquidPart.isZero()}
-						size='large'
-					/>
+					<Flex flexDirection='column'>
+						<HarvestButton
+							label={`${formatMessage({ id: 'label.harvest' })} ${
+								streamConfig.rewardTokenSymbol
+							}`}
+							onClick={() => setShowModal(true)}
+							buttonType='primary'
+							disabled={rewardLiquidPart.isZero()}
+							size='large'
+						/>
+						<Flex>
+							<IconInfoOutline16 />
+							<Caption>
+								Use the Harvest button harvest this liquid
+								stream alone.
+							</Caption>
+						</Flex>
+					</Flex>
 				</HarvestContainer>
 				{showModal && (
 					<HarvestAllModal
@@ -228,38 +238,31 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	);
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+	margin-bottom: 74px;
+`;
 
 const Title = styled(H4)`
 	margin-bottom: 16px;
 `;
 
 const RegenStreamContainer = styled(Flex)`
-	height: 488px;
 	padding: 32px 24px;
 	background-color: ${brandColors.giv[700]};
 	border-radius: 8px;
 	position: relative;
-	flex-direction: column;
-	justify-content: space-between;
+	/* flex-direction: column; */
+	justify-content: stretch;
 	overflow: hidden;
-	flex-direction: column;
+	gap: 32px;
+`;
+
+const InfoContainer = styled(Flex)`
+	flex: 1;
 `;
 
 const HeaderRow = styled(Flex)`
-	margin-bottom: 24px;
-`;
-
-export const IntroIcon = styled.div`
-	position: absolute;
-	top: 4px;
-	right: -24px;
-	cursor: pointer;
-	color: ${brandColors.deep[100]};
-	transition: color 0.3s ease;
-	:hover {
-		color: ${neutralColors.gray[100]};
-	}
+	margin-bottom: 20px;
 `;
 
 const RateRow = styled(Flex)`
@@ -281,16 +284,15 @@ const RegenStreamInfoRow = styled(Flex)`
 	margin-bottom: 24px;
 `;
 
-const Remaining = styled(P)`
-	/* margin-top: 24px; */
+const Remaining = styled(P)``;
+
+const Separator = styled.div`
+	width: 1px;
+	background-color: ${brandColors.giv[500]};
 `;
 
 const HarvestContainer = styled(Flex)`
-	/* margin-top: 90px; */
-	padding-top: 24px;
-	border-top: 1px solid ${brandColors.giv[500]};
-	justify-content: space-between;
-	align-items: center;
+	flex: 1;
 `;
 
 const AmountInfo = styled(Flex)`
@@ -312,8 +314,4 @@ const Converted = styled(Caption)`
 	padding-left: 32px;
 `;
 
-const HarvestButton = styled(Button)`
-	width: auto;
-	flex: 1;
-	max-width: 264px;
-`;
+const HarvestButton = styled(Button)``;
