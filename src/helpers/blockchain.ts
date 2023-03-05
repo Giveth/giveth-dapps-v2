@@ -82,7 +82,7 @@ export const networksParams: {
 	},
 	137: {
 		chainId: '0x89',
-		chainName: 'Polygon',
+		chainName: 'Polygon Mainnet',
 		nativeCurrency: {
 			name: 'Matic',
 			symbol: 'MATIC',

@@ -14,7 +14,13 @@ import {
 	setShowWalletModal,
 } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
-import { ItemRow, ItemTitle, ItemAction, ItemSpacer } from './common';
+import {
+	ItemRow,
+	ItemTitle,
+	ItemAction,
+	ItemSpacer,
+	NetworkName,
+} from './common';
 import { Item } from './Item';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
@@ -81,7 +87,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 				<ItemRow>
 					<FlexCenter gap='4px'>
 						<NetworkLogo chainId={chainId} logoSize={16} />
-						<B>{networkName}</B>
+						<NetworkName>{networkName}</NetworkName>
 					</FlexCenter>
 					<ItemAction
 						size='Small'

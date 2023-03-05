@@ -54,7 +54,7 @@ const networks = [
 	},
 	{
 		id: 100,
-		name: 'Gnosis Chain',
+		name: 'Gnosis',
 	},
 	{
 		id: 137,

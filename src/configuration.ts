@@ -25,7 +25,7 @@ const config: GlobalConfig = {
 		mainToken: 'XDAI',
 	},
 	POLYGON_NETWORK: {
-		name: 'Polygon',
+		name: 'Polygon Mainnet',
 		id: 137,
 		chain: '0x89',
 		mainToken: 'MATIC',
