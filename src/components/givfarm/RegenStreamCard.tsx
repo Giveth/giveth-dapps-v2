@@ -129,8 +129,9 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	const icon = getStreamIconWithType(streamConfig.type, 40);
 
 	return (
-		<RegenStreamContainer>
-			<RegenStreamInnerContainer>
+		<Wrapper>
+			<Title>{streamConfig.title}</Title>
+			<RegenStreamContainer>
 				<HeaderRow justifyContent='space-between' wrap={1}>
 					<Flex gap='8px' style={{ position: 'relative' }}>
 						{icon}
@@ -208,37 +209,41 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 						size='large'
 					/>
 				</HarvestContainer>
-			</RegenStreamInnerContainer>
-			{showModal && (
-				<HarvestAllModal
-					title={formatMessage(
-						{ id: 'label.token_stream_rewards' },
-						{ rewardTokenSymbol: streamConfig.rewardTokenSymbol },
-					)}
-					setShowModal={setShowModal}
-					network={network}
-					regenStreamConfig={streamConfig}
-				/>
-			)}
-		</RegenStreamContainer>
+				{showModal && (
+					<HarvestAllModal
+						title={formatMessage(
+							{ id: 'label.token_stream_rewards' },
+							{
+								rewardTokenSymbol:
+									streamConfig.rewardTokenSymbol,
+							},
+						)}
+						setShowModal={setShowModal}
+						network={network}
+						regenStreamConfig={streamConfig}
+					/>
+				)}
+			</RegenStreamContainer>
+		</Wrapper>
 	);
 };
 
-const RegenStreamContainer = styled.div`
+const Wrapper = styled.div``;
+
+const Title = styled(H4)`
+	margin-bottom: 16px;
+`;
+
+const RegenStreamContainer = styled(Flex)`
 	height: 488px;
+	padding: 32px 24px;
 	background-color: ${brandColors.giv[700]};
 	border-radius: 8px;
 	position: relative;
 	flex-direction: column;
 	justify-content: space-between;
 	overflow: hidden;
-`;
-
-const RegenStreamInnerContainer = styled(Flex)`
-	height: 488px;
-	padding: 24px;
 	flex-direction: column;
-	justify-content: space-between;
 `;
 
 const HeaderRow = styled(Flex)`
