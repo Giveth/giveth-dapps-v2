@@ -177,9 +177,7 @@ export const GIVfarmBottom = () => {
 					{renderPools(chainId, showArchivedPools)}
 				</PoolRow>
 				<RegenStreamSection showArchivedPools={showArchivedPools} />
-				<Col xs={12}>
-					<DaoCard />
-				</Col>
+				<DaoCard />
 			</Container>
 		</GIVfarmBottomContainer>
 	);
