@@ -256,6 +256,7 @@ const ResponsiveFlex = styled(Flex)`
 	flex-direction: column;
 	align-items: center;
 	${mediaQueries.tablet} {
+		align-items: unset;
 		flex-direction: row;
 	}
 `;
