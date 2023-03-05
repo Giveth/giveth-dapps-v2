@@ -139,7 +139,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 							</H5>{' '}
 						</Flex>
 						<RateRow>
-							<IconGIVStream size={32} />
+							<IconGIVStream size={16} />
 							<StreamRate>
 								{formatWeiHelper(rewardStream)}
 							</StreamRate>
@@ -274,15 +274,13 @@ const HeaderRow = styled(Flex)`
 
 const RateRow = styled(Flex)`
 	gap: 8px;
-	align-items: flex-end;
+	align-items: center;
 	overflow: hidden;
 `;
 
-const StreamRate = styled(H4)`
-	line-height: 2.4rem;
-`;
+const StreamRate = styled(B)``;
 
-const StreamRateUnit = styled(H6)`
+const StreamRateUnit = styled(P)`
 	color: ${brandColors.giv[200]};
 `;
 
