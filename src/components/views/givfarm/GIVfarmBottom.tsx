@@ -22,11 +22,11 @@ import { ExtLinkRow } from '../../GIVeconomyPages/commons';
 import { shortenAddress } from '@/lib/helpers';
 import { Col, Container } from '@/components/Grid';
 
-import { GIVStreamSection } from '@/components/givfarm/RegenStreamSection';
 import { DaoCard } from '../../givfarm/DaoCard';
 import { getNowUnixMS } from '@/helpers/time';
 import { TWO_WEEK } from '@/lib/constants/constants';
 import StakingPoolCard from '../../cards/StakingCards/StakingPoolCard';
+import { RegenStreamSection } from '@/components/givfarm/RegenStreamSection';
 
 const renderPool = (
 	pool: SimplePoolStakingConfig | UniswapV3PoolStakingConfig,
@@ -176,7 +176,7 @@ export const GIVfarmBottom = () => {
 					)}
 					{renderPools(chainId, showArchivedPools)}
 				</PoolRow>
-				<GIVStreamSection showArchivedPools={showArchivedPools} />
+				<RegenStreamSection showArchivedPools={showArchivedPools} />
 				<Col xs={12}>
 					<DaoCard />
 				</Col>
