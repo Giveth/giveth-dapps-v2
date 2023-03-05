@@ -80,9 +80,9 @@ const Option: ComponentType<OptionProps<ISelectedNetwork>> = props => {
 			<OptionContainer>
 				<RowContainer>
 					{label === 'Gnosis' ? (
-						<IconGnosisChain size={24} />
+						<IconGnosisChain size={40} />
 					) : (
-						<IconEthereum size={24} />
+						<IconEthereum size={40} />
 					)}
 					<B>{label}</B>
 				</RowContainer>
