@@ -103,7 +103,6 @@ export interface RegenStreamConfig {
 	rewardTokenSymbol: string;
 	// For price purpose
 	tokenAddressOnUniswapV2: string;
-	introCard?: IntroCardConfig;
 }
 
 export interface BasicNetworkConfig {

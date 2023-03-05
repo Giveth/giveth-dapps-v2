@@ -35,8 +35,6 @@ import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
-import StakingCardIntro from '../cards/StakingCards/StakingCardIntro';
-import { StakeCardState } from '../cards/StakingCards/BaseStakingCard/BaseStakingCard';
 
 interface RegenStreamProps {
 	network: number;
@@ -59,7 +57,6 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	streamConfig,
 }) => {
 	const { formatMessage } = useIntl();
-	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [showModal, setShowModal] = useState(false);
 	const [usdAmount, setUSDAmount] = useState('0');
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
@@ -133,106 +130,85 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 
 	return (
 		<RegenStreamContainer>
-			{state === StakeCardState.NORMAL ? (
-				<RegenStreamInnerContainer>
-					<HeaderRow justifyContent='space-between' wrap={1}>
-						<Flex gap='8px' style={{ position: 'relative' }}>
-							{icon}
-							<H5>{streamConfig.title}</H5>
-							{streamConfig.introCard && (
-								<IntroIcon
-									onClick={() =>
-										setState(StakeCardState.INTRO)
-									}
-								>
-									<IconHelpFilled16 />
-								</IntroIcon>
-							)}
-						</Flex>
-						<RateRow>
-							<IconGIVStream size={32} />
-							<StreamRate>
-								{formatWeiHelper(rewardStream)}
-							</StreamRate>
-							<StreamRateUnit>
-								{streamConfig.rewardTokenSymbol}
-								{formatMessage({ id: 'label./week' })}
-							</StreamRateUnit>
-						</RateRow>
-					</HeaderRow>
-					<div>
-						<RegenStreamInfoRow>
-							<Flex alignItems='flex-end' gap='6px'>
-								<H6>
+			<RegenStreamInnerContainer>
+				<HeaderRow justifyContent='space-between' wrap={1}>
+					<Flex gap='8px' style={{ position: 'relative' }}>
+						{icon}
+						<H5>{streamConfig.title}</H5>{' '}
+					</Flex>
+					<RateRow>
+						<IconGIVStream size={32} />
+						<StreamRate>{formatWeiHelper(rewardStream)}</StreamRate>
+						<StreamRateUnit>
+							{streamConfig.rewardTokenSymbol}
+							{formatMessage({ id: 'label./week' })}
+						</StreamRateUnit>
+					</RateRow>
+				</HeaderRow>
+				<div>
+					<RegenStreamInfoRow>
+						<Flex alignItems='flex-end' gap='6px'>
+							<H6>
+								{formatMessage(
+									{
+										id: 'label.stream_progress',
+									},
+									{
+										token: streamConfig.rewardTokenSymbol,
+									},
+								)}
+							</H6>
+
+							<IconWithTooltip
+								icon={<IconHelpFilled16 />}
+								direction={'bottom'}
+							>
+								<GsPTooltip>
 									{formatMessage(
 										{
-											id: 'label.stream_progress',
+											id: 'label.liquid_reward_token_that_has_flowed',
 										},
 										{
-											token: streamConfig.rewardTokenSymbol,
+											rewardTokenSymbol:
+												streamConfig.rewardTokenSymbol,
 										},
 									)}
-								</H6>
-
-								<IconWithTooltip
-									icon={<IconHelpFilled16 />}
-									direction={'bottom'}
-								>
-									<GsPTooltip>
-										{formatMessage(
-											{
-												id: 'label.liquid_reward_token_that_has_flowed',
-											},
-											{
-												rewardTokenSymbol:
-													streamConfig.rewardTokenSymbol,
-											},
-										)}
-									</GsPTooltip>
-								</IconWithTooltip>
-							</Flex>
-						</RegenStreamInfoRow>
-						<Bar percentage={percentage} />
-						<PercentageRow justifyContent='space-between'>
-							<B>{percentage?.toFixed(2)}%</B>
-							<B>100%</B>
-						</PercentageRow>
+								</GsPTooltip>
+							</IconWithTooltip>
+						</Flex>
+					</RegenStreamInfoRow>
+					<Bar percentage={percentage} />
+					<PercentageRow justifyContent='space-between'>
+						<B>{percentage?.toFixed(2)}%</B>
+						<B>100%</B>
+					</PercentageRow>
+				</div>
+				<Remaining>
+					{`${formatMessage({ id: 'label.time_remaining' })}: ` +
+						remainTime}
+				</Remaining>
+				<HarvestContainer wrap={1} gap='24px'>
+					<div>
+						<AmountInfo alignItems='flex-end' gap='4px'>
+							{getStreamIconWithType(streamConfig.type, 24)}
+							<Amount>{formatWeiHelper(rewardLiquidPart)}</Amount>
+							<AmountUnit>
+								{streamConfig.rewardTokenSymbol}
+							</AmountUnit>
+						</AmountInfo>
+						<Converted>~${usdAmount}</Converted>
 					</div>
-					<Remaining>
-						{`${formatMessage({ id: 'label.time_remaining' })}: ` +
-							remainTime}
-					</Remaining>
-					<HarvestContainer wrap={1} gap='24px'>
-						<div>
-							<AmountInfo alignItems='flex-end' gap='4px'>
-								{getStreamIconWithType(streamConfig.type, 24)}
-								<Amount>
-									{formatWeiHelper(rewardLiquidPart)}
-								</Amount>
-								<AmountUnit>
-									{streamConfig.rewardTokenSymbol}
-								</AmountUnit>
-							</AmountInfo>
-							<Converted>~${usdAmount}</Converted>
-						</div>
-						<HarvestButton
-							label={`${formatMessage({ id: 'label.harvest' })} ${
-								streamConfig.rewardTokenSymbol
-							}`}
-							onClick={() => setShowModal(true)}
-							buttonType='primary'
-							disabled={rewardLiquidPart.isZero()}
-							size='large'
-						/>
-					</HarvestContainer>
-				</RegenStreamInnerContainer>
-			) : (
-				<StakingCardIntro
-					symbol={streamConfig.rewardTokenSymbol}
-					introCard={streamConfig.introCard}
-					setState={setState}
-				/>
-			)}
+					<HarvestButton
+						label={`${formatMessage({ id: 'label.harvest' })} ${
+							streamConfig.rewardTokenSymbol
+						}`}
+						onClick={() => setShowModal(true)}
+						buttonType='primary'
+						disabled={rewardLiquidPart.isZero()}
+						size='large'
+					/>
+				</HarvestContainer>
+			</RegenStreamInnerContainer>
 			{showModal && (
 				<HarvestAllModal
 					title={formatMessage(
