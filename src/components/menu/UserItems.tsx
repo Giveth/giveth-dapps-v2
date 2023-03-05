@@ -28,7 +28,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 	setQueueRoute,
 }) => {
 	const { formatMessage } = useIntl();
-	const { chainId, account } = useWeb3React();
+	const { chainId, account, deactivate } = useWeb3React();
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
@@ -91,13 +91,18 @@ export const UserItems: FC<IUserItemsProps> = ({
 					<GLink size='Big'>{formatMessage({ id: i.title })}</GLink>
 				</Item>
 			))}
-			{isSignedIn && (
-				<Item onClick={() => dispatch(signOut(token!))} theme={theme}>
-					<GLink size='Big'>
-						{formatMessage({ id: 'label.sign_out' })}
-					</GLink>
-				</Item>
-			)}
+			<Item
+				onClick={() => {
+					isSignedIn && dispatch(signOut(token!));
+					deactivate();
+					localStorage.removeItem(StorageLabel.WALLET);
+				}}
+				theme={theme}
+			>
+				<GLink size='Big'>
+					{formatMessage({ id: 'label.sign_out' })}
+				</GLink>
+			</Item>
 		</>
 	);
 };
