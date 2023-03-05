@@ -110,6 +110,7 @@ export const CREATE_DONATION = gql`
 		$transakId: String
 		$tokenAddress: String
 		$anonymous: Boolean
+		$referrerId: String
 	) {
 		createDonation(
 			transactionId: $transactionId
@@ -121,6 +122,7 @@ export const CREATE_DONATION = gql`
 			transakId: $transakId
 			tokenAddress: $tokenAddress
 			anonymous: $anonymous
+			referrerId: $referrerId
 		)
 	}
 `;
