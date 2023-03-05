@@ -28,7 +28,7 @@ const ProjectTotalFundCard: FC = () => {
 					</NoDonation>
 				)}
 			</UpperSection>
-			<ProjectWalletAddress addresses={addresses} />
+			{addresses && <ProjectWalletAddress addresses={addresses} />}
 		</Wrapper>
 	);
 };
