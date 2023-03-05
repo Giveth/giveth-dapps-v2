@@ -24,6 +24,12 @@ const config: GlobalConfig = {
 		chain: '0x64',
 		mainToken: 'XDAI',
 	},
+	POLYGON_NETWORK: {
+		name: 'Polygon',
+		id: 137,
+		chain: '0x89',
+		mainToken: 'MATIC',
+	},
 	...envConfig,
 	NETWORKS_CONFIG: {
 		[envConfig.MAINNET_NETWORK_NUMBER]: envConfig.MAINNET_CONFIG,

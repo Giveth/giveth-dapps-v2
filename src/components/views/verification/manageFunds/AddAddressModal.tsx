@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import React, { FC } from 'react';
-import { Button, IconWalletOutline } from '@giveth/ui-design-system';
+import { Button, IconWalletOutline24 } from '@giveth/ui-design-system';
 import { Controller, useForm } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
 import { utils } from 'ethers';
@@ -104,7 +104,7 @@ const AddAddressModal: FC<IProps> = ({
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
 			headerTitle='Add an Address'
-			headerIcon={<IconWalletOutline />}
+			headerIcon={<IconWalletOutline24 />}
 		>
 			<Container>
 				<form onSubmit={handleSubmit(handleAdd)}>

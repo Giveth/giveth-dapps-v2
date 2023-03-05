@@ -1,9 +1,10 @@
 import { ethers } from 'ethers';
 
-interface NetworkParam {
+export interface INetworkParam {
 	chainId: string;
 	chainName: string;
 	blockExplorerUrls: Array<string>;
+	rpcUrls?: Array<string>;
 	iconUrls?: Array<string>;
 	nativeCurrency: {
 		name: string;
@@ -13,7 +14,7 @@ interface NetworkParam {
 }
 
 export const networksParams: {
-	[key: number]: NetworkParam;
+	[key: number]: INetworkParam;
 } = {
 	1: {
 		chainId: '0x1', // A 0x-prefixed hexadecimal string
@@ -27,7 +28,7 @@ export const networksParams: {
 	},
 	100: {
 		chainId: '0x64',
-		chainName: 'Gnosis Chain',
+		chainName: 'Gnosis',
 		iconUrls: [
 			'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
 		],
@@ -37,6 +38,7 @@ export const networksParams: {
 			decimals: 18,
 		},
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
+		rpcUrls: ['https://rpc.gnosischain.com/'],
 	},
 	3: {
 		chainId: '0x3',
@@ -77,6 +79,17 @@ export const networksParams: {
 			decimals: 18,
 		},
 		blockExplorerUrls: ['https://kovan.etherscan.io'],
+	},
+	137: {
+		chainId: '0x89',
+		chainName: 'Polygon',
+		nativeCurrency: {
+			name: 'Matic',
+			symbol: 'MATIC',
+			decimals: 18,
+		},
+		blockExplorerUrls: ['https://polygonscan.com/'],
+		rpcUrls: ['https://polygon-rpc.com'],
 	},
 };
 
