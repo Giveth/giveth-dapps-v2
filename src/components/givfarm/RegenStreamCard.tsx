@@ -327,6 +327,7 @@ const HarvestButton = styled(Button)`
 	& > span {
 		text-overflow: ellipsis;
 	}
+	margin-bottom: 40px;
 `;
 
 const HarvestButtonDesc = styled(Flex)`
