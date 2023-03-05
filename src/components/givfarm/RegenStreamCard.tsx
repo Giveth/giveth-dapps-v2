@@ -131,7 +131,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 			<Title>{streamConfig.title}</Title>
 			<RegenStreamContainer>
 				<InfoContainer flexDirection='column'>
-					<HeaderRow justifyContent='space-between' wrap={1}>
+					<HeaderRow justifyContent='space-between' flexWrap>
 						<Flex gap='8px' style={{ position: 'relative' }}>
 							{icon}
 							<H5>
@@ -191,7 +191,11 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 					</Remaining>
 				</InfoContainer>
 				<Separator />
-				<HarvestContainer gap='24px' justifyContent='space-between'>
+				<HarvestContainer
+					flexWrap
+					gap='24px'
+					justifyContent='space-between'
+				>
 					<div>
 						<AmountInfo alignItems='flex-end' gap='4px'>
 							{getStreamIconWithType(streamConfig.type, 24)}
@@ -248,28 +252,41 @@ const Title = styled(H4)`
 	margin-bottom: 16px;
 `;
 
+const ResponsiveFlex = styled(Flex)`
+	flex-direction: column;
+	align-items: center;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
+`;
+
 const RegenStreamContainer = styled(Flex)`
 	padding: 32px 24px;
 	background-color: ${brandColors.giv[700]};
 	border-radius: 8px;
 	position: relative;
-	/* flex-direction: column; */
 	justify-content: stretch;
 	overflow: hidden;
 	gap: 32px;
+	flex-direction: column;
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+	}
 `;
 
-const SideContainer = styled(Flex)`
+const InfoContainer = styled(Flex)`
 	${mediaQueries.tablet} {
 		width: calc(100% - 33px);
 		overflow: hidden;
 	}
 `;
 
-const InfoContainer = styled(SideContainer)``;
-
-const HeaderRow = styled(Flex)`
+const HeaderRow = styled(ResponsiveFlex)`
 	margin-bottom: 20px;
+	${mediaQueries.tablet} {
+		width: calc(100% - 33px);
+		overflow: hidden;
+	}
 `;
 
 const RateRow = styled(Flex)`
@@ -292,11 +309,15 @@ const RegenStreamInfoRow = styled(Flex)`
 const Remaining = styled(P)``;
 
 const Separator = styled.div`
-	width: 1px;
-	background-color: ${brandColors.giv[500]};
+	display: none;
+	${mediaQueries.laptopS} {
+		display: block;
+		width: 1px;
+		background-color: ${brandColors.giv[500]};
+	}
 `;
 
-const HarvestContainer = styled(SideContainer)``;
+const HarvestContainer = styled(ResponsiveFlex)``;
 
 const AmountInfo = styled(Flex)`
 	align-items: center;
@@ -325,9 +346,10 @@ const HarvestButton = styled(Button)`
 	& > span {
 		text-overflow: ellipsis;
 	}
-	margin-bottom: 40px;
+	margin-bottom: 64px;
 `;
 
 const HarvestButtonDesc = styled(Flex)`
 	position: absolute;
+	bottom: 0px;
 `;
