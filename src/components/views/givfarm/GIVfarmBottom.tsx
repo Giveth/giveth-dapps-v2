@@ -85,11 +85,11 @@ export const GIVfarmBottom = () => {
 				<Flex
 					alignItems='center'
 					gap='24px'
-					wrap={1}
+					flexWrap
 					justifyContent='space-between'
 				>
 					<NetworkSelector />
-					<Flex alignItems='center' gap='24px' wrap={1}>
+					<Flex alignItems='center' gap='24px' flexWrap>
 						<ExtLinkRow alignItems='center'>
 							<GLink
 								as='a'

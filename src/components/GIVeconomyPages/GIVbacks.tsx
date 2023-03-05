@@ -227,7 +227,7 @@ export const TabGIVbacksBottom = () => {
 									<RoundInfoTallRow
 										justifyContent='space-between'
 										alignItems='center'
-										wrap={1}
+										flexWrap
 									>
 										{' '}
 										<P>
@@ -251,7 +251,7 @@ export const TabGIVbacksBottom = () => {
 									<RoundInfoTallRow
 										justifyContent='space-between'
 										alignItems='center'
-										wrap={1}
+										flexWrap
 									>
 										<P>
 											<NoWrap>
@@ -274,7 +274,7 @@ export const TabGIVbacksBottom = () => {
 									<RoundInfoTallRow
 										justifyContent='space-between'
 										alignItems='center'
-										wrap={1}
+										flexWrap
 									>
 										<P>
 											<NoWrap>

@@ -21,7 +21,7 @@ const GetMoreGIVpowerBanner = () => {
 			<QuoteText size='small'>
 				Stake & lock GIV to get GIVpower to boost projects.
 			</QuoteText>
-			<Actions gap='16px' wrap={1}>
+			<Actions gap='16px' flexWrap>
 				<Link
 					href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
 				>

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface IFlexProps {
-	wrap?: number;
+	flexWrap?: boolean;
 	alignItems?: 'stretch' | 'center' | 'flex-start' | 'flex-end' | 'baseline';
 	justifyContent?:
 		| 'flex-start'
@@ -18,7 +18,7 @@ export const Flex = styled.div<IFlexProps>`
 	display: flex;
 	flex-direction: ${props =>
 		props.flexDirection ? props.flexDirection : 'initial'};
-	flex-wrap: ${props => (props.wrap ? 'wrap' : 'nowrap')};
+	flex-wrap: ${props => (props.flexWrap ? 'wrap' : 'nowrap')};
 	align-items: ${props => (props.alignItems ? props.alignItems : 'initial')};
 	justify-content: ${props =>
 		props.justifyContent ? props.justifyContent : 'initial'};

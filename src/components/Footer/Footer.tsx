@@ -30,7 +30,7 @@ const Footer = () => {
 	return (
 		<FooterContainer>
 			<ContainerStyled>
-				<LeftContainer wrap={1}>
+				<LeftContainer flexWrap>
 					<LinkColumn>
 						<Link href={Routes.Home}>
 							<LinkItem color={textColor}>
