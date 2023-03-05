@@ -285,10 +285,6 @@ const InfoContainer = styled(Flex)`
 
 const HeaderRow = styled(ResponsiveFlex)`
 	margin-bottom: 20px;
-	${mediaQueries.tablet} {
-		width: calc(100% - 33px);
-		overflow: hidden;
-	}
 `;
 
 const PercentageRow = styled(Flex)`
@@ -309,7 +305,6 @@ const StreamRateUnit = styled(P)`
 
 const RegenStreamInfoRow = styled(Flex)`
 	justify-content: space-between;
-	margin-bottom: 24px;
 `;
 
 const Remaining = styled(P)``;
@@ -323,7 +318,12 @@ const Separator = styled.div`
 	}
 `;
 
-const HarvestContainer = styled(ResponsiveFlex)``;
+const HarvestContainer = styled(ResponsiveFlex)`
+	${mediaQueries.tablet} {
+		width: calc(100% - 33px);
+		overflow: hidden;
+	}
+`;
 
 const AmountInfo = styled(Flex)`
 	align-items: center;
