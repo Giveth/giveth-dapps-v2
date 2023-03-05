@@ -1,7 +1,7 @@
-import Image from 'next/image';
 import React from 'react';
 import { IconEthereum } from '@/components/Icons/Eth';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
+import { IconPolygon } from '@/components/Icons/Polygon';
 
 const NetworkLogo = (props: { chainId?: number; logoSize?: number }) => {
 	const { chainId, logoSize } = props;
@@ -10,15 +10,7 @@ const NetworkLogo = (props: { chainId?: number; logoSize?: number }) => {
 	} else if (chainId === 100) {
 		return <IconGnosisChain size={logoSize} />;
 	} else if (chainId === 137) {
-		return (
-			<Image
-				src='/images/currencies/polygon/16.svg'
-				alt='Polygon'
-				width={logoSize}
-				height={logoSize}
-				loading='lazy'
-			/>
-		);
+		return <IconPolygon size={logoSize} />;
 	} else return null;
 };
 
