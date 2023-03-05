@@ -105,6 +105,7 @@ interface IBarProps {
 }
 export const Bar = styled.div<IBarProps>`
 	height: 12px;
+	width: 100%;
 
 	background: ${brandColors.giv[800]};
 	border-radius: 12px;

@@ -181,10 +181,10 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 						</Flex>
 					</RegenStreamInfoRow>
 					<Bar percentage={percentage} />
-					<Flex justifyContent='space-between'>
+					<PercentageRow justifyContent='space-between'>
 						<B>{percentage?.toFixed(2)}%</B>
 						<B>100%</B>
-					</Flex>
+					</PercentageRow>
 					<Remaining>
 						{`${formatMessage({ id: 'label.time_remaining' })}: ` +
 							remainTime}
@@ -275,9 +275,11 @@ const RegenStreamContainer = styled(Flex)`
 `;
 
 const InfoContainer = styled(Flex)`
+	align-items: center;
 	${mediaQueries.tablet} {
 		width: calc(100% - 33px);
 		overflow: hidden;
+		align-items: unset;
 	}
 `;
 
@@ -287,6 +289,10 @@ const HeaderRow = styled(ResponsiveFlex)`
 		width: calc(100% - 33px);
 		overflow: hidden;
 	}
+`;
+
+const PercentageRow = styled(Flex)`
+	width: 100%;
 `;
 
 const RateRow = styled(Flex)`
