@@ -3,13 +3,15 @@ import { H3 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import { Col } from '../Grid';
-import { Subtitle, GIVfrensLink } from './GIVfrens.sc';
+import { Subtitle, GIVfrensLink } from './RegenStreamSection.sc';
 
-interface IGIVfrensProps {
+interface IRegenStreamSectionProps {
 	showArchivedPools: boolean;
 }
 
-export const GIVfrens: FC<IGIVfrensProps> = ({ showArchivedPools }) => {
+export const RegenStreamSection: FC<IRegenStreamSectionProps> = ({
+	showArchivedPools,
+}) => {
 	const { chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 	// const regenFarms =

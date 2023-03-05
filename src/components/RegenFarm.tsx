@@ -7,7 +7,10 @@ import { Row, Col } from './Grid';
 import { PoolRow } from './GIVeconomyPages/GIVfarm.sc';
 import config from '@/configuration';
 import { DAOChangeNetworkModal } from './DAOChangeNetworkModal';
-import { DAOContainer, DAOChangeNetwork } from './givfarm/GIVfrens.sc';
+import {
+	DAOContainer,
+	DAOChangeNetwork,
+} from './givfarm/RegenStreamSection.sc';
 import { RegenStreamCard } from './givfarm/RegenStreamCard';
 import { getNowUnixMS } from '@/helpers/time';
 import { RegenStreamConfig } from '@/types/config';
