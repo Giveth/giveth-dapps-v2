@@ -25,12 +25,17 @@ const networkOptions = [
 	{
 		value: config.PRIMARY_NETWORK.id,
 		label: 'Ethereum Mainnet',
-		name: 'Ethereum',
+		id: config.PRIMARY_NETWORK.id,
 	},
 	{
 		value: config.SECONDARY_NETWORK.id,
 		label: 'Gnosis',
-		name: 'Gnosis',
+		id: config.SECONDARY_NETWORK.id,
+	},
+	{
+		value: config.POLYGON_NETWORK.id,
+		label: 'Polygon Mainnet',
+		id: config.POLYGON_NETWORK.id,
 	},
 ];
 
