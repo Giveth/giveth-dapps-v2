@@ -11,6 +11,7 @@ import {
 	IconHelpFilled16,
 	IconInfoOutline16,
 	Lead,
+	mediaQueries,
 	P,
 	Subline,
 } from '@giveth/ui-design-system';
@@ -31,6 +32,7 @@ import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
+import { Relative } from '../styled-components/Position';
 
 interface RegenStreamProps {
 	network: number;
@@ -189,7 +191,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 					</Remaining>
 				</InfoContainer>
 				<Separator />
-				<HarvestContainer wrap={1} gap='24px'>
+				<HarvestContainer gap='24px' justifyContent='space-between'>
 					<div>
 						<AmountInfo alignItems='flex-end' gap='4px'>
 							{getStreamIconWithType(streamConfig.type, 24)}
@@ -200,7 +202,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 						</AmountInfo>
 						<Converted>~${usdAmount}</Converted>
 					</div>
-					<Flex flexDirection='column'>
+					<HarvestButtonWrapper>
 						<HarvestButton
 							label={`${formatMessage({ id: 'label.harvest' })} ${
 								streamConfig.rewardTokenSymbol
@@ -210,14 +212,14 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 							disabled={rewardLiquidPart.isZero()}
 							size='large'
 						/>
-						<Flex>
+						<HarvestButtonDesc gap='8px'>
 							<IconInfoOutline16 />
 							<Caption>
 								Use the Harvest button harvest this liquid
 								stream alone.
 							</Caption>
-						</Flex>
-					</Flex>
+						</HarvestButtonDesc>
+					</HarvestButtonWrapper>
 				</HarvestContainer>
 				{showModal && (
 					<HarvestAllModal
@@ -257,9 +259,14 @@ const RegenStreamContainer = styled(Flex)`
 	gap: 32px;
 `;
 
-const InfoContainer = styled(Flex)`
-	flex: 1;
+const SideContainer = styled(Flex)`
+	${mediaQueries.tablet} {
+		width: calc(100% - 33px);
+		overflow: hidden;
+	}
 `;
+
+const InfoContainer = styled(SideContainer)``;
 
 const HeaderRow = styled(Flex)`
 	margin-bottom: 20px;
@@ -291,9 +298,7 @@ const Separator = styled.div`
 	background-color: ${brandColors.giv[500]};
 `;
 
-const HarvestContainer = styled(Flex)`
-	flex: 1;
-`;
+const HarvestContainer = styled(SideContainer)``;
 
 const AmountInfo = styled(Flex)`
 	align-items: center;
@@ -314,4 +319,16 @@ const Converted = styled(Caption)`
 	padding-left: 32px;
 `;
 
-const HarvestButton = styled(Button)``;
+const HarvestButtonWrapper = styled(Relative)``;
+
+const HarvestButton = styled(Button)`
+	width: auto;
+	min-width: 320px;
+	& > span {
+		text-overflow: ellipsis;
+	}
+`;
+
+const HarvestButtonDesc = styled(Flex)`
+	position: absolute;
+`;
