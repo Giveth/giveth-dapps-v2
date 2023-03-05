@@ -640,7 +640,9 @@ const ArchiveButton = styled(Button)`
 
 export const BoostTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
-	width: 260px;
+	${mediaQueries.tablet} {
+		width: 260px;
+	}
 `;
 
 export default ProjectDonateCard;

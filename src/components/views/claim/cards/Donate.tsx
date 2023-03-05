@@ -9,6 +9,7 @@ import {
 	H5,
 	Lead,
 	IconHelpFilled16,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
@@ -73,7 +74,9 @@ const DonateCardContainer = styled(Card)`
 
 const GdropDonateTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
-	width: 260px;
+	${mediaQueries.tablet} {
+		width: 260px;
+	}
 `;
 
 const DonateHeader = styled.div`

@@ -77,7 +77,9 @@ export const FlowRateRow = styled(Flex)`
 
 export const FlowRateTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
-	width: 260px;
+	${mediaQueries.tablet} {
+		width: 260px;
+	}
 `;
 
 export const FlowRateUnit = styled(H4)`

@@ -35,6 +35,7 @@ import { DeletePowerBoostModal } from '@/components/modals/Boost/DeletePowerBoos
 import { slugToProjectView } from '@/lib/routeCreators';
 import { ApprovePowerBoostModal } from '@/components/modals/Boost/ApprovePowerBoostModal';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { mediaQueries } from '@/lib/constants/constants';
 
 interface IBoostsTable {
 	boosts: IPowerBoosting[];
@@ -515,7 +516,9 @@ const Percentage = styled(InputSuffix)`
 
 const BoostTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
-	width: 240px;
+	${mediaQueries.tablet} {
+		width: 240px;
+	}
 `;
 
 export default BoostsTable;

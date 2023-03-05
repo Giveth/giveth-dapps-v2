@@ -6,6 +6,7 @@ import {
 	H6,
 	IconHelpFilled16,
 	IconSpark,
+	mediaQueries,
 	neutralColors,
 	Subline,
 } from '@giveth/ui-design-system';
@@ -159,7 +160,9 @@ const LockInfoRowSpark = styled.div`
 
 export const LockInfoTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
-	width: 160px;
+	${mediaQueries.tablet} {
+		width: 160px;
+	}
 `;
 
 export default LockInfo;
