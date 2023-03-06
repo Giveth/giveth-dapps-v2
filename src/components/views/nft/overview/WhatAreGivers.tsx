@@ -30,7 +30,7 @@ const DesktopImages = () => {
 				}}
 			/>
 			<Image
-				src={'/images/nft/pfp-o-1.png'}
+				src={'/images/nft/pfp-o-2.png'}
 				width={450}
 				height={450}
 				alt='pfp-image'
