@@ -27,7 +27,7 @@ export const RegenStreamSection: FC<IRegenStreamSectionProps> = ({
 					...config.XDAI_CONFIG.regenStreams,
 			  ];
 	const regenStreams = showArchivedPools
-		? _regenStreams
+		? _regenStreams.filter(regenStream => regenStream.archived)
 		: _regenStreams.filter(regenStream => !regenStream.archived);
 
 	return (

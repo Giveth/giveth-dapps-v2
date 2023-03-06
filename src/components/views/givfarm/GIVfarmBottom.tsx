@@ -32,10 +32,6 @@ const renderPool = (
 	id: number,
 ) => (
 	<Col sm={6} lg={4} key={`staking_pool_card_${pool.network}_${id}`}>
-		{/* {pool.type === StakingType.UNISWAPV3_ETH_GIV ? (
-			<StakingPositionCard poolStakingConfig={pool} />
-		) : (
-			)} */}
 		<StakingPoolCard poolStakingConfig={pool as SimplePoolStakingConfig} />
 	</Col>
 );
@@ -58,19 +54,18 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 
 	const now = getNowUnixMS();
 	const filteredPools = [];
-	const discontinuedPools = [];
+	const archivedPools = [];
 	for (let i = 0; i < pools.length; i++) {
 		const pool = pools[i];
 		const { farmEndTimeMS } = pool;
 		const archived = farmEndTimeMS && now > farmEndTimeMS + TWO_WEEK;
-		if (!showArchivedPools && archived) continue;
-		if (farmEndTimeMS && now > farmEndTimeMS) {
-			discontinuedPools.push(renderPool(pool, i));
+		if (archived) {
+			archivedPools.push(renderPool(pool, i));
 		} else {
 			filteredPools.push(renderPool(pool, i));
 		}
 	}
-	return [...filteredPools, ...discontinuedPools];
+	return showArchivedPools ? archivedPools : filteredPools;
 };
 
 export const GIVfarmBottom = () => {
@@ -155,13 +150,15 @@ export const GIVfarmBottom = () => {
 					</Flex>
 				</Flex>
 				<PoolRow>
-					<Col sm={6} lg={4} key={`givpower_card`}>
-						<StakingPoolCard
-							poolStakingConfig={getGivStakingConfig(
-								config.XDAI_CONFIG,
-							)}
-						/>
-					</Col>
+					{!showArchivedPools && (
+						<Col sm={6} lg={4} key={`givpower_card`}>
+							<StakingPoolCard
+								poolStakingConfig={getGivStakingConfig(
+									config.XDAI_CONFIG,
+								)}
+							/>
+						</Col>
+					)}
 					{showArchivedPools && (
 						<Col sm={6} lg={4}>
 							<StakingPoolCard
