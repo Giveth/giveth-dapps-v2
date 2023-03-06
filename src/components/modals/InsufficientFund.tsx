@@ -55,7 +55,7 @@ const OkButton = styled(Button)`
 `;
 
 const InsufficientFundTitle = styled(H5)`
-	margin-top: 34px;
+	margin-top: 16px;
 	font-weight: 700;
 `;
 

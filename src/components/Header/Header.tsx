@@ -96,6 +96,8 @@ const Header: FC<IHeader> = () => {
 			router?.query?.token
 		) {
 			router.push(`${Routes.Verification}/${calculateSlug()}`);
+		} else if (router.route.startsWith(Routes.NFTMint)) {
+			router.push(Routes.NFT);
 		} else {
 			router.back();
 		}
@@ -109,7 +111,8 @@ const Header: FC<IHeader> = () => {
 		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
 		setShowBackBtn(
 			router.route.startsWith(Routes.CreateProject) ||
-				router.route.startsWith(Routes.Verification),
+				router.route.startsWith(Routes.Verification) ||
+				router.route.startsWith(Routes.NFTMint),
 		);
 	}, [router.route]);
 
