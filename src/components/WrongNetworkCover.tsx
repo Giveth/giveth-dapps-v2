@@ -1,14 +1,14 @@
 import { FC } from 'react';
 import {
-	IconAlertCircle32,
 	Caption,
 	brandColors,
+	IconAlertCircle16,
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { chainName } from '@/lib/constants/constants';
-import { Flex } from './styled-components/Flex';
+import { FlexCenter } from './styled-components/Flex';
 
 interface IWrongNetworkCoverProps {
 	targetNetwork: number;
@@ -22,8 +22,10 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 
 	return targetNetwork !== chainId ? (
 		<WrongNetworkContainer>
-			<IconAlertCircle32 />
-			<Caption>
+			<IconWrapper>
+				<IconAlertCircle16 />
+			</IconWrapper>
+			<Caption medium>
 				{formatMessage({
 					id: 'label.you_are_currently_connected_to',
 				})}{' '}
@@ -38,7 +40,7 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 	) : null;
 };
 
-const WrongNetworkContainer = styled(Flex)`
+const WrongNetworkContainer = styled(FlexCenter)`
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -47,11 +49,12 @@ const WrongNetworkContainer = styled(Flex)`
 	left: 0;
 	right: 0;
 	padding: 24px;
-	flex-direction: row;
-	align-items: center;
 	background: ${brandColors.giv[900]}dd;
 	z-index: 2;
-	div {
-		padding: 0 0 0 17px;
-	}
+	gap: 16px;
+`;
+
+const IconWrapper = styled.div`
+	width: 16px;
+	height: 16px;
 `;
