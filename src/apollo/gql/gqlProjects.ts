@@ -209,6 +209,51 @@ export const FETCH_PROJECT_UPDATES = gql`
 	}
 `;
 
+export const FETCH_FEATURED_UPDATE_PROJECTS = gql`
+	query fetchFeaturedProjects(
+		$limit: Int
+		$skip: Int
+		$connectedWalletUserId: Int
+	) {
+		featuredProjects(
+			limit: $limit
+			skip: $skip
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			projects {
+				id
+				title
+				image
+				slug
+				descriptionSummary
+				verified
+				totalDonations
+				reaction {
+					id
+					userId
+				}
+				totalReactions
+				adminUser {
+					name
+					walletAddress
+				}
+				updatedAt
+				organization {
+					name
+					label
+					supportCustomTokens
+				}
+				projectPower {
+					powerRank
+					totalPower
+					round
+				}
+			}
+			totalCount
+		}
+	}
+`;
+
 export const FETCH_FEATURED_PROJECT_UPDATES = gql`
 	query featuredProjectUpdate($projectId: Int!) {
 		featuredProjectUpdate(projectId: $projectId) {
