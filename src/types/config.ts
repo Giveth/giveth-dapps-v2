@@ -87,7 +87,6 @@ export interface IntroCardConfig {
 
 export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
 	regenStreamType: StreamType;
-	dontArchive?: boolean;
 }
 
 export interface GasPreference {
@@ -102,6 +101,7 @@ export interface RegenStreamConfig {
 	type: StreamType;
 	rewardTokenAddress: string;
 	rewardTokenSymbol: string;
+	archived?: boolean;
 	// For price purpose
 	tokenAddressOnUniswapV2: string;
 }
