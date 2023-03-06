@@ -912,5 +912,9 @@
 	"label.an_evolution_in_community_fundrising": "",
 	"label.your_donations_and_participation_in_the_giveconomy": "",
 	"label.discover_our_roadmap": "",
-	"label.more_about_us": ""
+	"label.more_about_us": "",
+	"modal.news_letter": "",
+	"section.we_wont_send_it": "",
+	"section.subscribe_to_our_newsletter": "",
+	"section.get_the_latest_updates": ""
 }

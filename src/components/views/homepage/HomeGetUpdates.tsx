@@ -1,155 +1,129 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-	H3,
 	brandColors,
-	P,
 	Button,
+	H3,
+	Lead,
+	mediaQueries,
 	neutralColors,
-	SublineBold,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import useNewsletterSubscription from '@/hooks/useNewsletterSubscription';
-import { Container } from '@/components/Grid';
+import { Relative } from '@/components/styled-components/Position';
+import QuarterCircle from '@/components/particles/QuarterCircle';
+import Wave from '@/components/particles/Wave';
+import QuarterArc from '@/components/particles/QuarterArc';
+import SubscribeNewsletter from '@/components/modals/SubscribeNewsletter';
 
 const HomeGetUpdates = () => {
 	const { formatMessage } = useIntl();
-	const {
-		email,
-		setEmail,
-		validateEmail,
-		submitSubscription,
-		error,
-		successSubscription,
-	} = useNewsletterSubscription();
+	const [showModal, setShowModal] = useState(false);
+
 	return (
 		<Wrapper>
-			<Container>
-				<Title weight={700}>
-					{successSubscription
-						? formatMessage({ id: 'page.home.section.you_in' })
-						: formatMessage({
-								id: 'page.home.section.get_updates',
-						  })}
-				</Title>
-				<P>
-					{successSubscription ? (
-						<span>
-							{formatMessage({
-								id: 'page.home.section.success_subs_one',
-							})}
-							<br />
-							{formatMessage({
-								id: 'page.home.section.success_subs_two',
-							})}{' '}
-							<StyledLink
-								href='http://news.giveth.io/'
-								target='_blank'
-								rel='noreferrer'
-							>
-								GIVnews page
-								{formatMessage({
-									id: 'page.home.section.givnews_page',
-								})}
-							</StyledLink>
-							.
-						</span>
-					) : (
-						<span>
-							{formatMessage({
-								id: 'page.home.section.subscribe_newsletter',
-							})}
-						</span>
-					)}
-				</P>
-				{!successSubscription && (
-					<form
-						action='https://www.getrevue.co/profile/giveth/add_subscriber'
-						method='post'
-						id='revue-form'
-						name='revue-form'
-						target='_blank'
-						onSubmit={submitSubscription}
-					>
-						<InputBox>
-							<div>
-								<EmailInput
-									placeholder={formatMessage({
-										id: 'component.button.your_email_address',
-									})}
-									error={error}
-									onChange={e => setEmail(e.target.value)}
-									name='member[email]'
-									id='member_email'
-								/>
-								{error && (
-									<InvalidEmail>
-										Please insert a valid email address!
-									</InvalidEmail>
-								)}
-							</div>
-							<SubscribeButton
-								disabled={!validateEmail(email)}
-								label={formatMessage({
-									id: 'component.button.subscribe',
-								})}
-								type='submit'
-							/>
-						</InputBox>
-					</form>
-				)}
-			</Container>
+			<InnerWrapper>
+				<H3 weight={700}>
+					{formatMessage({ id: 'section.get_the_latest_updates' })}
+				</H3>
+				<Lead>
+					{formatMessage({
+						id: 'section.subscribe_to_our_newsletter',
+					})}
+				</Lead>
+				<LeadStyled>
+					{formatMessage({ id: 'section.we_wont_send_it' })}
+				</LeadStyled>
+				<Button
+					label={formatMessage({ id: 'component.button.subscribe' })}
+					size='small'
+					onClick={() => setShowModal(true)}
+				/>
+				<QuarterCircleStyle>
+					<QuarterCircle color={brandColors.pinky[500]} />
+				</QuarterCircleStyle>
+				<QuarterArcStyle>
+					<QuarterArc color={brandColors.giv[200]} />
+				</QuarterArcStyle>
+			</InnerWrapper>
+			<PinkWaveStyle>
+				<Wave color={brandColors.pinky[200]} />
+			</PinkWaveStyle>
+			<GivWaveStyle>
+				<Wave color={brandColors.giv[200]} />
+			</GivWaveStyle>
+			{showModal && <SubscribeNewsletter setShowModal={setShowModal} />}
 		</Wrapper>
 	);
 };
 
-const Title = styled(H3)`
-	color: ${brandColors.giv[500]};
-	margin-bottom: 0.5rem;
-`;
-
-const InputBox = styled.div`
-	display: flex;
-	align-items: start;
-	flex-wrap: wrap;
-	gap: 16px;
-	margin-top: 24px;
-`;
-
-const EmailInput = styled.input<{ error?: boolean }>`
-	border: 1px solid #d7ddea;
-	border-radius: 56px;
-	padding: 14px 25px;
-	height: 50px;
-	&:focus {
-		outline: none !important;
-		border: 2px solid
-			${props =>
-				props.error ? brandColors.pinky[500] : brandColors.giv[500]};
+const QuarterArcStyle = styled.div`
+	position: absolute;
+	bottom: 40px;
+	display: none;
+	${mediaQueries.tablet} {
+		left: 200px;
+		display: block;
 	}
 `;
 
-const InvalidEmail = styled(SublineBold)`
-	color: ${brandColors.pinky[500]};
-	margin-top: 4px;
-	margin-left: 24px;
-`;
-
-const SubscribeButton = styled(Button)`
-	&:disabled {
-		background-color: ${neutralColors.gray[400]};
-		color: white;
+const GivWaveStyle = styled.div`
+	position: absolute;
+	bottom: 90px;
+	display: none;
+	${mediaQueries.tablet} {
+		display: block;
+		right: -59px;
+	}
+	${mediaQueries.laptopL} {
+		right: -50px;
 	}
 `;
 
-const Wrapper = styled.div`
-	padding-bottom: 48px;
+const PinkWaveStyle = styled.div`
+	position: absolute;
+	top: 40px;
+	display: none;
+	${mediaQueries.tablet} {
+		display: block;
+		left: 0;
+	}
+`;
+
+const QuarterCircleStyle = styled.div`
+	position: absolute;
+	top: 10px;
+	display: none;
+	${mediaQueries.tablet} {
+		right: 60px;
+		display: block;
+	}
+`;
+
+const Wrapper = styled(Relative)`
 	background: ${neutralColors.gray[200]};
+	overflow: hidden;
 `;
 
-const StyledLink = styled.a`
-	color: ${brandColors.pinky[500]};
-	cursor: pointer;
+const LeadStyled = styled(Lead)`
+	color: ${neutralColors.gray[700]};
+`;
+
+const InnerWrapper = styled(Relative)`
+	padding: 30px 24px 45px;
+	text-align: center;
+	margin: 0 auto;
+	max-width: 1200px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 15px;
+	> h3 {
+		color: ${brandColors.giv[500]};
+	}
+	> button {
+		padding-left: 58px;
+		padding-right: 58px;
+	}
 `;
 
 export default HomeGetUpdates;

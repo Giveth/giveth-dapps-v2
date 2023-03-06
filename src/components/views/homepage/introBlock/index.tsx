@@ -1,4 +1,5 @@
 import {
+	brandColors,
 	ButtonLink,
 	H3,
 	IconChevronRight24,
@@ -20,6 +21,7 @@ import introBanner from '/public/images/banners/introBanner.svg';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Container } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
+import links from '@/lib/constants/links';
 
 const SemiCircle = dynamic(() => import('@/components/particles/SemiCircle'));
 const Circle = dynamic(() => import('@/components/particles/Circle'));
@@ -29,7 +31,7 @@ const IntroBlock = () => {
 	const { formatMessage } = useIntl();
 	return (
 		<SectionContainer>
-			<Container style={{ position: 'relative' }}>
+			<ContainerStyled>
 				<IntroContainer>
 					<TopSectionContainer
 						justifyContent='space-around'
@@ -55,10 +57,7 @@ const IntroBlock = () => {
 										icon={<IconChevronRight24 />}
 									/>
 								</Link>
-								<Link
-									href='https://docs.giveth.io/whatisgiveth/#our-mission'
-									target='_blank'
-								>
+								<Link href={links.OUR_MISSION} target='_blank'>
 									<OurMissionButton
 										linkType='texty-secondary'
 										label={formatMessage({
@@ -69,18 +68,18 @@ const IntroBlock = () => {
 								</Link>
 							</ButtonsContainer>
 						</IntroTitle>
-						<div>
+						<IntroBanner>
 							<Image
 								src={introBanner}
 								alt='intro-banner'
 								width={350}
 							/>
-						</div>
+						</IntroBanner>
 						<TopWaveContainer>
 							<Wave />
 						</TopWaveContainer>
 						<BottomWaveContainer>
-							<Wave color='#FFC9E2' />
+							<Wave color={brandColors.pinky[200]} />
 						</BottomWaveContainer>
 						<SemiCircleContainer>
 							<SemiCircle />
@@ -156,7 +155,7 @@ const IntroBlock = () => {
 						/>
 					</IntroCards>
 				</IntroContainer>
-			</Container>
+			</ContainerStyled>
 		</SectionContainer>
 	);
 };
@@ -186,6 +185,20 @@ const IntroContainer = styled.div`
 	padding: 0 8px;
 `;
 
+const ContainerStyled = styled(Container)`
+	position: relative;
+	${mediaQueries.tablet} {
+		padding: 0;
+	}
+`;
+
+const IntroBanner = styled.div`
+	width: 100%;
+	> img {
+		width: 100%;
+	}
+`;
+
 const IntroTitle = styled.div`
 	max-width: 500px;
 `;
@@ -199,11 +212,6 @@ const TopSectionContainer = styled(Flex)`
 		flex-direction: row;
 		align-items: stretch;
 	}
-`;
-
-const UnderlinedText = styled.span`
-	text-decoration: underline;
-	text-decoration-skip-ink: none;
 `;
 
 const ButtonsContainer = styled(Flex)`
