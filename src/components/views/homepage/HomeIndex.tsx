@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react';
+import { FC, Fragment, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 import HomeFromBlog from './HomeFromBlog';
@@ -7,19 +7,53 @@ import ProjectsCampaignBlock from '@/components/views/homepage/ProjectsCampaignB
 import IntroBlock from './introBlock';
 import VideoBlock from './videoBlock';
 import AboutGiveconomy from './aboutGiveconomy';
-import { IHomeRoute } from '../../../../pages';
+import { HOME_QUERY_VARIABLES, IHomeRoute } from '../../../../pages';
 import InformationBlock from '@/components/views/homepage/InformationBlock';
 import { CampaignsBlock } from './campaignsBlock/CampaignsBlock';
 import HomePartners from './partners';
 import { EthDenverBanner } from '@/components/EthDenverBanner';
 import { ProjectUpdatesBlock } from './projectUpdatesBlock/ProjectUpdatesBlock';
+import { useAppSelector } from '@/features/hooks';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
 
 const HomeIndex: FC<IHomeRoute> = props => {
-	const { campaigns, featuredProjects, latestUpdates, ...rest } = props;
+	const {
+		campaigns: campaignsFromServer,
+		featuredProjects: featuredProjectsFromServer,
+		latestUpdates,
+		...rest
+	} = props;
+	const [campaigns, setCampaigns] = useState(campaignsFromServer);
+	const [featuredProjects, setFeaturedProjects] = useState(
+		featuredProjectsFromServer,
+	);
 	const featuredProjectsCampaigns = campaigns.filter(
 		campaign => campaign.isFeatured && campaign.relatedProjects?.length > 0,
 	);
 	const newCampaigns = campaigns.filter(campaign => campaign.isNew);
+	const userData = useAppSelector(state => state.user.userData);
+
+	useEffect(() => {
+		if (!userData?.id) return;
+		async function fetchFeaturedUpdateProjects() {
+			const { data } = await client.query({
+				query: FETCH_HOMEPAGE_DATA,
+				variables: {
+					...HOME_QUERY_VARIABLES,
+					connectedWalletUserId: Number(userData?.id),
+				},
+				fetchPolicy: 'no-cache',
+			});
+			const _campaigns = data.campaigns;
+			const _featuredProjects = data.featuredProjects.projects;
+
+			_campaigns && setCampaigns(_campaigns);
+			_featuredProjects && setFeaturedProjects(_featuredProjects);
+		}
+		fetchFeaturedUpdateProjects();
+	}, [userData?.id]);
+
 	return (
 		<Wrapper>
 			<IntroBlock />

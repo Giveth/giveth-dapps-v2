@@ -9,16 +9,13 @@ import {
 import styled from 'styled-components';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 import { Swiper as SwiperClass } from 'swiper/types';
 import Link from 'next/link';
 import { ICampaign } from '@/apollo/types/types';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import 'swiper/css';
-import { useAppSelector } from '@/features/hooks';
-import { client } from '@/apollo/apolloClient';
-import { FETCH_CAMPAIGN_BY_SLUG } from '@/apollo/gql/gqlCampaign';
 import { BlockHeader, BlockTitle } from './common';
 import { Container } from '@/components/Grid';
 import {
@@ -35,29 +32,9 @@ interface IProjectsCampaignBlockProps {
 const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 	campaign,
 }) => {
-	const user = useAppSelector(state => state.user.userData);
-	const [projects, setProjects] = useState(campaign.relatedProjects);
-
 	const pagElRef = useRef<HTMLDivElement>(null);
 	const nextElRef = useRef<HTMLDivElement>(null);
 	const prevElRef = useRef<HTMLDivElement>(null);
-
-	useEffect(() => {
-		if (!user || !user.id) return;
-		const variables: any = {
-			slug: campaign.slug,
-		};
-		const fetchCampaign = async (userId: string) => {
-			variables.connectedWalletUserId = Number(userId);
-			const { data } = await client.query({
-				query: FETCH_CAMPAIGN_BY_SLUG,
-				variables,
-				fetchPolicy: 'network-only',
-			});
-			setProjects(data.findCampaignBySlug.relatedProjects);
-		};
-		fetchCampaign(user.id);
-	}, [campaign.slug, user]);
 
 	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
 
@@ -129,7 +106,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 							},
 						}}
 					>
-						{projects.map(project => (
+						{campaign.relatedProjects.map(project => (
 							<SwiperSlide key={project.id}>
 								<ProjectCard project={project} />
 							</SwiperSlide>
