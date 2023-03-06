@@ -10,7 +10,7 @@ import {
 } from '@/apollo/types/types';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
-import { HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
+import { FETCH_HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
 
 export interface IHomeRoute {
 	recentDonations: IRecentDonation[];
@@ -32,7 +32,7 @@ const HomeRoute = (props: IHomeRoute) => {
 
 export const getStaticProps: GetStaticProps = async context => {
 	const { data } = await client.query({
-		query: HOMEPAGE_DATA,
+		query: FETCH_HOMEPAGE_DATA,
 		variables: {
 			take: 50,
 			takeLatestUpdates: 50,

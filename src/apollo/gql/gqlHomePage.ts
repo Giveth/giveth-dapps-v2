@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const HOMEPAGE_DATA = gql`
+export const FETCH_HOMEPAGE_DATA = gql`
 	query (
 		$take: Int
 		$takeLatestUpdates: Int
