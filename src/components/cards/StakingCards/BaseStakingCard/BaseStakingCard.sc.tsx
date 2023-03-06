@@ -157,22 +157,6 @@ export const LockInfoTooltip = styled(Subline)`
 	width: 180px;
 `;
 
-export const WrongNetworkContainer = styled(Flex)`
-	flex-direction: row;
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	height: 257px;
-	padding: 0 20px;
-	align-items: center;
-	background: linear-gradient(180deg, transparent 0%, #17096a 50%);
-	opacity: 0.9;
-	z-index: 2;
-	div {
-		padding: 0 0 0 17px;
-	}
-`;
-
 export const GIVgardenTooltip = styled.div`
 	color: ${neutralColors.gray[100]};
 	text-align: center;

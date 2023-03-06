@@ -1,5 +1,4 @@
 import React, { FC, ReactNode, useState } from 'react';
-import { Caption, IconAlertCircle32 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import {
@@ -13,10 +12,8 @@ import {
 	StakingPoolContainer,
 	StakingPoolLabel,
 	StakingPoolSubtitle,
-	WrongNetworkContainer,
 } from './BaseStakingCard.sc';
 
-import { chainName } from '@/lib/constants/constants';
 import config from '@/configuration';
 import { IconAngelVault } from '@/components/Icons/AngelVault';
 import { IconBalancer } from '@/components/Icons/Balancer';
@@ -34,6 +31,7 @@ import { ArchiveCover } from './ArchiveCover';
 import { StakingCardHeader } from './StakingCardHeader';
 import { getNowUnixMS } from '@/helpers/time';
 import { StakingPoolInfoAndActions } from './StakingPoolInfoAndActions';
+import { WrongNetworkCover } from '@/components/WrongNetworkCover';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -114,22 +112,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	return (
 		<>
 			<StakingPoolContainer>
-				{poolNetwork !== chainId && (
-					<WrongNetworkContainer>
-						<IconAlertCircle32 />
-						<Caption>
-							{formatMessage({
-								id: 'label.you_are_currently_connected_to',
-							})}{' '}
-							{chainName(chainId || 0)}{' '}
-							{formatMessage({ id: 'label.switch_to' })}{' '}
-							{chainName(poolNetwork || 0)}{' '}
-							{formatMessage({
-								id: 'label.to_interact_with_this_farm',
-							})}
-						</Caption>
-					</WrongNetworkContainer>
-				)}
+				<WrongNetworkCover poolNetwork={poolNetwork} />
 				{(isDiscontinued || exploited) && (
 					<ArchiveCover isExploited={exploited} />
 				)}
