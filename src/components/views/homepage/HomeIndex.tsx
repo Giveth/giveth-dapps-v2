@@ -16,6 +16,7 @@ import { ProjectUpdatesBlock } from './projectUpdatesBlock/ProjectUpdatesBlock';
 import { useAppSelector } from '@/features/hooks';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
+import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const {
@@ -85,6 +86,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			{featuredProjects && featuredProjects.length > 0 ? (
 				<ProjectUpdatesBlock projects={featuredProjects} />
 			) : null}
+			<LatestUpdatesBlock updates={latestUpdates} />
 		</Wrapper>
 	);
 };
