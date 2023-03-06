@@ -58,7 +58,7 @@ const ProjectTabs = (props: IProjectTabs) => {
 			{tabsArray.map((i, index) => (
 				<Link
 					key={i.title}
-					href={`/${Routes.Project}/${slug}${
+					href={`${Routes.Project}/${slug}${
 						i.query ? `?tab=${i.query}` : ''
 					}`}
 					scroll={false}
