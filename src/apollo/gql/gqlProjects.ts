@@ -209,6 +209,21 @@ export const FETCH_PROJECT_UPDATES = gql`
 	}
 `;
 
+export const FETCH_FEATURED_PROJECT_UPDATES = gql`
+	query featuredProjectUpdate($projectId: Int!) {
+		featuredProjectUpdate(projectId: $projectId) {
+			id
+			title
+			projectId
+			userId
+			content
+			isMain
+			totalReactions
+			createdAt
+		}
+	}
+`;
+
 export const ADD_PROJECT_UPDATE = gql`
 	mutation ($projectId: Float!, $title: String!, $content: String!) {
 		addProjectUpdate(
