@@ -11,16 +11,16 @@ import { chainName } from '@/lib/constants/constants';
 import { Flex } from './styled-components/Flex';
 
 interface IWrongNetworkCoverProps {
-	poolNetwork: number;
+	targetNetwork: number;
 }
 
 export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
-	poolNetwork,
+	targetNetwork,
 }) => {
 	const { formatMessage } = useIntl();
 	const { chainId } = useWeb3React();
 
-	return poolNetwork !== chainId ? (
+	return targetNetwork !== chainId ? (
 		<WrongNetworkContainer>
 			<IconAlertCircle32 />
 			<Caption>
@@ -29,7 +29,7 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 				})}{' '}
 				{chainName(chainId || 0)}{' '}
 				{formatMessage({ id: 'label.switch_to' })}{' '}
-				{chainName(poolNetwork || 0)}{' '}
+				{chainName(targetNetwork || 0)}{' '}
 				{formatMessage({
 					id: 'label.to_interact_with_this_farm',
 				})}

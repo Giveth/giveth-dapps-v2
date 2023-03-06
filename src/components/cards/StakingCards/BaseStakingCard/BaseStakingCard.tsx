@@ -112,7 +112,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	return (
 		<>
 			<StakingPoolContainer>
-				<WrongNetworkCover poolNetwork={poolNetwork} />
 				{(isDiscontinued || exploited) && (
 					<ArchiveCover isExploited={exploited} />
 				)}
@@ -153,6 +152,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						setState={setState}
 					/>
 				)}
+				<WrongNetworkCover targetNetwork={poolNetwork} />
 			</StakingPoolContainer>
 			{showGIVPowerExplain && (
 				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
