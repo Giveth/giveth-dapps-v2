@@ -147,7 +147,7 @@ export const GIVfarmBottom = () => {
 						</ContractRow>
 						<ToggleSwitch
 							label={formatMessage({
-								id: 'label.show_archived_pools',
+								id: 'label.switch_to_archive_cards',
 							})}
 							checked={showArchivedPools}
 							setStateChange={setShowArchivedPools}
