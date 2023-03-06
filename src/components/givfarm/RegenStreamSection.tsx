@@ -16,7 +16,7 @@ export const RegenStreamSection: FC<IRegenStreamSectionProps> = ({
 }) => {
 	const { chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
-	const regenStreams =
+	const _regenStreams =
 		chainId === config.XDAI_NETWORK_NUMBER
 			? [
 					...config.XDAI_CONFIG.regenStreams,
@@ -26,6 +26,9 @@ export const RegenStreamSection: FC<IRegenStreamSectionProps> = ({
 					...config.MAINNET_CONFIG.regenStreams,
 					...config.XDAI_CONFIG.regenStreams,
 			  ];
+	const regenStreams = showArchivedPools
+		? _regenStreams
+		: _regenStreams.filter(regenStream => !regenStream.archived);
 
 	return (
 		<>
