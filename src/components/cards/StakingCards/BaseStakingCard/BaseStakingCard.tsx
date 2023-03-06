@@ -1,6 +1,4 @@
 import React, { FC, ReactNode, useState } from 'react';
-import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import {
 	PoolStakingConfig,
 	RegenPoolStakingConfig,
@@ -27,11 +25,11 @@ import { GIVPowerExplainModal } from '@/components/modals/GIVPowerExplain';
 import { StakingPoolImages } from '@/components/StakingPoolImages';
 import GIVpowerCardIntro from '../GIVpowerCard/GIVpowerCardIntro';
 import StakingCardIntro from '../StakingCardIntro';
-import { ArchiveCover } from './ArchiveCover';
 import { StakingCardHeader } from './StakingCardHeader';
 import { getNowUnixMS } from '@/helpers/time';
 import { StakingPoolInfoAndActions } from './StakingPoolInfoAndActions';
 import { WrongNetworkCover } from '@/components/WrongNetworkCover';
+import { ArchiveCover } from '@/components/ArchiveCover';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -85,11 +83,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	unstakedPositions,
 	currentIncentive,
 }) => {
-	const { formatMessage } = useIntl();
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
-
-	const { chainId } = useWeb3React();
 
 	const {
 		type,
@@ -112,9 +107,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	return (
 		<>
 			<StakingPoolContainer>
-				{(isDiscontinued || exploited) && (
-					<ArchiveCover isExploited={exploited} />
-				)}
 				{state === StakeCardState.NORMAL ? (
 					<>
 						<StakingCardHeader
@@ -153,6 +145,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 					/>
 				)}
 				<WrongNetworkCover targetNetwork={poolNetwork} />
+				{(isDiscontinued || exploited) && (
+					<ArchiveCover isExploited={exploited} />
+				)}
 			</StakingPoolContainer>
 			{showGIVPowerExplain && (
 				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />
