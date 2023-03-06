@@ -15,7 +15,7 @@ import { IProject, IProjectUpdate } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { mediaQueries } from '@/lib/constants/constants';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_UPDATES } from '@/apollo/gql/gqlProjects';
+import { FETCH_FEATURED_PROJECT_UPDATES } from '@/apollo/gql/gqlProjects';
 import Routes from '@/lib/constants/Routes';
 
 interface IProjectUpdateSlideProps {
@@ -36,15 +36,13 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 			if (project.id && target.isIntersecting) {
 				setLoading(true);
 				const { data } = await client.query({
-					query: FETCH_PROJECT_UPDATES,
+					query: FETCH_FEATURED_PROJECT_UPDATES,
 					variables: {
 						projectId: parseInt(project.id),
-						take: 1,
-						skip: 0,
 					},
 				});
 				setLoading(false);
-				const _update = data.getProjectUpdates[0];
+				const _update = data.featuredProjectUpdate;
 				_update && setUpdate(_update);
 			}
 		};
