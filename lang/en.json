@@ -732,6 +732,7 @@
 	"label.switch_to": "switch to",
 	"label.to_interact_with_this_farm": "to interact with this farm.",
 	"label.this_farm_has_ended": "This farm has ended",
+	"label.this_stream_has_ended": "This farm has ended",
 	"label.an_exploit_has_removed_available_rewards": "An exploit has removed available rewards from this pool. Please refer to",
 	"label.this_forum_post": "this forum post",
 	"label.for_details": "for details.",
@@ -928,5 +929,6 @@
 	"label.an_evolution_in_community_fundrising": "An evolution in community fundraising.",
 	"label.your_donations_and_participation_in_the_giveconomy": "Your donations, and participation in the GIVeconomy, enables us to build a new future where real world impact projects benefit from their own community-driven regenerative economies.",
 	"label.discover_our_roadmap": "discover our roadmap",
-	"label.more_about_us": "More about us"
+	"label.more_about_us": "More about us",
+	"component.archive_cover.archived": "ARCHIVED!!"
 }

@@ -11,10 +11,14 @@ import styled from 'styled-components';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 
 interface IArchiveCoverProps {
+	isStream?: boolean;
 	isExploited?: boolean;
 }
 
-export const ArchiveCover: FC<IArchiveCoverProps> = ({ isExploited }) => {
+export const ArchiveCover: FC<IArchiveCoverProps> = ({
+	isStream,
+	isExploited,
+}) => {
 	const [showModal, setShowModal] = useState<boolean>(true);
 	const { formatMessage } = useIntl();
 
@@ -27,7 +31,7 @@ export const ArchiveCover: FC<IArchiveCoverProps> = ({ isExploited }) => {
 				<Flex flexDirection='column' justifyContent='space-evenly'>
 					<ArchiveModalText weight={700}>
 						{formatMessage({
-							id: 'label.this_farm_has_ended',
+							id: 'component.archive_cover.archived',
 						})}
 					</ArchiveModalText>
 					<ArchiveModalText>
@@ -53,6 +57,12 @@ export const ArchiveCover: FC<IArchiveCoverProps> = ({ isExploited }) => {
 								})}
 							</>
 						) : (
+							formatMessage({
+								id: isStream
+									? 'label.this_stream_has_ended'
+									: 'label.this_farm_has_ended',
+							}) +
+							'. ' +
 							formatMessage({
 								id: 'label.harvest_your_rewards_and_remove_your_funds',
 							})
