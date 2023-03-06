@@ -23,6 +23,15 @@ export interface IHomeRoute {
 	featuredProjects: IProject[];
 }
 
+export const HOME_QUERY_VARIABLES = {
+	take: 50,
+	takeLatestUpdates: 50,
+	skipLatestUpdates: 0,
+	fromDate: '2021-01-01',
+	limit: 12,
+	sortingBy: EProjectsSortBy.GIVPOWER,
+};
+
 const HomeRoute = (props: IHomeRoute) => {
 	return (
 		<>
@@ -35,14 +44,7 @@ const HomeRoute = (props: IHomeRoute) => {
 export const getStaticProps: GetStaticProps = async context => {
 	const { data } = await client.query({
 		query: FETCH_HOMEPAGE_DATA,
-		variables: {
-			take: 50,
-			takeLatestUpdates: 50,
-			skipLatestUpdates: 0,
-			fromDate: '2021-01-01',
-			limit: 12,
-			sortingBy: EProjectsSortBy.GIVPOWER,
-		},
+		variables: HOME_QUERY_VARIABLES,
 		fetchPolicy: 'no-cache',
 	});
 	return {
