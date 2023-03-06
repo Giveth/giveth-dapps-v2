@@ -306,7 +306,6 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			{chainId && stakeState === StakeState.ERROR && (
 				<ErrorInnerModal
 					title='Something went wrong!'
-					walletNetwork={chainId}
 					txHash={txHash}
 				/>
 			)}

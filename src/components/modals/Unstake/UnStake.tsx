@@ -185,14 +185,12 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 				{chainId && unStakeState === StakeState.REJECT && (
 					<ErrorInnerModal
 						title='You rejected the transaction.'
-						walletNetwork={chainId}
 						txHash={txHash}
 					/>
 				)}
 				{chainId && unStakeState === StakeState.SUBMITTING && (
 					<SubmittedInnerModal
 						title={title}
-						walletNetwork={chainId}
 						txHash={txHash}
 						rewardTokenAddress={
 							regenStreamConfig?.rewardTokenAddress
@@ -203,7 +201,6 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 				{chainId && unStakeState === StakeState.CONFIRMED && (
 					<ConfirmedInnerModal
 						title={title}
-						walletNetwork={chainId}
 						txHash={txHash}
 						rewardTokenAddress={
 							regenStreamConfig?.rewardTokenAddress
@@ -214,7 +211,6 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 				{chainId && unStakeState === StakeState.ERROR && (
 					<ErrorInnerModal
 						title='Something went wrong!'
-						walletNetwork={chainId}
 						txHash={txHash}
 						rewardTokenAddress={
 							regenStreamConfig?.rewardTokenAddress

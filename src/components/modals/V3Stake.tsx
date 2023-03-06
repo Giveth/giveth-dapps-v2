@@ -207,28 +207,24 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 					{chainId && stakeStatus === StakeState.REJECT && (
 						<ErrorInnerModal
 							title='You rejected the transaction.'
-							walletNetwork={chainId}
 							txHash={txStatus?.hash}
 						/>
 					)}
 					{chainId && stakeStatus === StakeState.SUBMITTING && (
 						<SubmittedInnerModal
 							title={title}
-							walletNetwork={chainId}
 							txHash={txStatus?.hash}
 						/>
 					)}
 					{chainId && stakeStatus === StakeState.CONFIRMED && (
 						<ConfirmedInnerModal
 							title='Successful transaction.'
-							walletNetwork={chainId}
 							txHash={txStatus?.hash}
 						/>
 					)}
 					{chainId && stakeStatus === StakeState.ERROR && (
 						<ErrorInnerModal
 							title='Something went wrong!'
-							walletNetwork={chainId}
 							txHash={txStatus?.hash}
 						/>
 					)}

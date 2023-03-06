@@ -285,7 +285,6 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 			{chainId && stakeState === StakeState.CONFIRMING && (
 				<SubmittedInnerModal
 					title={title}
-					walletNetwork={chainId}
 					txHash={txHash}
 					rewardTokenAddress={regenStreamConfig?.rewardTokenAddress}
 					rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
@@ -294,7 +293,6 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 			{chainId && stakeState === StakeState.CONFIRMED && (
 				<ConfirmedInnerModal
 					title={title}
-					walletNetwork={chainId}
 					txHash={txHash}
 					rewardTokenAddress={regenStreamConfig?.rewardTokenAddress}
 					rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
@@ -303,7 +301,6 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 			{chainId && stakeState === StakeState.ERROR && (
 				<ErrorInnerModal
 					title='Something went wrong!'
-					walletNetwork={chainId}
 					txHash={txHash}
 					rewardTokenAddress={regenStreamConfig?.rewardTokenAddress}
 					rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}

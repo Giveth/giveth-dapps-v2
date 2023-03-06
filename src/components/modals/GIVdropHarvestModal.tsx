@@ -349,24 +349,15 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 					</HarvestBoxes>
 				)}
 				{claimState === ClaimState.SUBMITTING && (
-					<SubmittedInnerModal
-						title='GIV'
-						walletNetwork={network}
-						txHash={txResp?.hash}
-					/>
+					<SubmittedInnerModal title='GIV' txHash={txResp?.hash} />
 				)}
 				{claimState === ClaimState.CLAIMED && (
-					<ConfirmedInnerModal
-						title='GIV'
-						walletNetwork={network}
-						txHash={txResp?.hash}
-					/>
+					<ConfirmedInnerModal title='GIV' txHash={txResp?.hash} />
 				)}
 				{claimState === ClaimState.ERROR && (
 					<>
 						<ErrorInnerModal
 							title='GIV'
-							walletNetwork={network}
 							txHash={txResp?.hash}
 							message='Something went wrong.'
 						/>
