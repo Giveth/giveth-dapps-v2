@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { IconExternalLink, GLink, IconCopy } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
-import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import {
 	SimplePoolStakingConfig,
@@ -13,6 +12,7 @@ import {
 	ContractRow,
 	CopyWrapper,
 	GIVfarmBottomContainer,
+	GIVfarmToolBoxRow,
 } from '../../GIVeconomyPages/GIVfarm.sc';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
@@ -76,79 +76,76 @@ export const GIVfarmBottom = () => {
 	return (
 		<GIVfarmBottomContainer>
 			<Container>
-				<Flex
+				<GIVfarmToolBoxRow
 					alignItems='center'
 					gap='24px'
 					flexWrap
 					justifyContent='space-between'
 				>
 					<NetworkSelector />
-					<Flex alignItems='center' gap='24px' flexWrap>
-						<ExtLinkRow alignItems='center'>
-							<GLink
-								as='a'
-								size='Big'
-								target='_blank'
-								rel='noreferrer'
-								href='https://omni.xdaichain.com/bridge'
-							>
-								{formatMessage({ id: 'label.bridge_your_giv' })}
-							</GLink>
-							<IconExternalLink />
-						</ExtLinkRow>
-						<ExtLinkRow alignItems='center'>
-							<GLink
-								as='a'
-								size='Big'
-								target='_blank'
-								rel='noreferrer'
-								href={
-									chainId === config.XDAI_NETWORK_NUMBER
-										? config.XDAI_CONFIG.GIV.BUY_LINK
-										: config.MAINNET_CONFIG.GIV.BUY_LINK
-								}
-							>
-								{formatMessage({ id: 'label.buy_giv_token' })}
-							</GLink>
-							<IconExternalLink />
-						</ExtLinkRow>
-						<ContractRow>
-							<GLink>{`${formatMessage({
-								id: 'label.contract',
-							})} (${
+					<ExtLinkRow alignItems='center'>
+						<GLink
+							as='a'
+							size='Big'
+							target='_blank'
+							rel='noreferrer'
+							href='https://omni.xdaichain.com/bridge'
+						>
+							{formatMessage({ id: 'label.bridge_your_giv' })}
+						</GLink>
+						<IconExternalLink />
+					</ExtLinkRow>
+					<ExtLinkRow alignItems='center'>
+						<GLink
+							as='a'
+							size='Big'
+							target='_blank'
+							rel='noreferrer'
+							href={
 								chainId === config.XDAI_NETWORK_NUMBER
-									? config.XDAI_CONFIG.chainName
-									: config.MAINNET_CONFIG.chainName
-							}):`}</GLink>
-							<GLink>
-								{shortenAddress(
+									? config.XDAI_CONFIG.GIV.BUY_LINK
+									: config.MAINNET_CONFIG.GIV.BUY_LINK
+							}
+						>
+							{formatMessage({ id: 'label.buy_giv_token' })}
+						</GLink>
+						<IconExternalLink />
+					</ExtLinkRow>
+					<ContractRow>
+						<GLink>{`${formatMessage({
+							id: 'label.contract',
+						})} (${
+							chainId === config.XDAI_NETWORK_NUMBER
+								? config.XDAI_CONFIG.chainName
+								: config.MAINNET_CONFIG.chainName
+						}):`}</GLink>
+						<GLink>
+							{shortenAddress(
+								chainId === config.XDAI_NETWORK_NUMBER
+									? config.XDAI_CONFIG.TOKEN_ADDRESS
+									: config.MAINNET_CONFIG.TOKEN_ADDRESS,
+							)}
+						</GLink>
+						<CopyWrapper
+							onClick={() => {
+								navigator.clipboard.writeText(
 									chainId === config.XDAI_NETWORK_NUMBER
 										? config.XDAI_CONFIG.TOKEN_ADDRESS
 										: config.MAINNET_CONFIG.TOKEN_ADDRESS,
-								)}
-							</GLink>
-							<CopyWrapper
-								onClick={() => {
-									navigator.clipboard.writeText(
-										chainId === config.XDAI_NETWORK_NUMBER
-											? config.XDAI_CONFIG.TOKEN_ADDRESS
-											: config.MAINNET_CONFIG
-													.TOKEN_ADDRESS,
-									);
-								}}
-							>
-								<IconCopy />
-							</CopyWrapper>
-						</ContractRow>
-						<ToggleSwitch
-							label={formatMessage({
-								id: 'label.switch_to_archive_cards',
-							})}
-							checked={showArchivedPools}
-							setStateChange={setShowArchivedPools}
-						/>
-					</Flex>
-				</Flex>
+								);
+							}}
+						>
+							<IconCopy />
+						</CopyWrapper>
+					</ContractRow>
+					<ToggleSwitch
+						label={formatMessage({
+							id: 'label.switch_to_archive_cards',
+						})}
+						checked={showArchivedPools}
+						setStateChange={setShowArchivedPools}
+					/>
+				</GIVfarmToolBoxRow>
 				<PoolRow>
 					{!showArchivedPools && (
 						<Col sm={6} lg={4} key={`givpower_card`}>

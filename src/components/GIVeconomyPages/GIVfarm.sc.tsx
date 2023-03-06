@@ -36,21 +36,17 @@ export const GIVfarmRewardCard = styled(EnhancedRewardCard)`
 	}
 `;
 
-export const ArchivedPoolsToggle = styled.div`
-	margin-top: 25px;
-	display: inline-block;
+export const GIVfarmToolBoxRow = styled(Flex)`
+	flex-direction: column;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
 `;
 
-interface PoolRowProps {
-	disabled?: boolean;
-}
-
-export const PoolRow = styled(Row)<PoolRowProps>`
+export const PoolRow = styled(Row)`
 	align-items: center;
 	margin-top: 24px;
 	margin-bottom: 24px;
-	opacity: ${props => (props.disabled ? '0.6' : '1')};
-	pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
 `;
 
 export const ContractRow = styled(Flex)`
