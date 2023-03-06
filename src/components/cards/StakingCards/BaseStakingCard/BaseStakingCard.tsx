@@ -1,4 +1,5 @@
 import React, { FC, ReactNode, useState } from 'react';
+import { useWeb3React } from '@web3-react/core';
 import {
 	PoolStakingConfig,
 	RegenPoolStakingConfig,
@@ -86,6 +87,8 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	const [state, setState] = useState(StakeCardState.NORMAL);
 	const [showGIVPowerExplain, setShowGIVPowerExplain] = useState(false);
 
+	const { chainId } = useWeb3React();
+
 	const {
 		type,
 		title,
@@ -144,10 +147,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						setState={setState}
 					/>
 				)}
-				<WrongNetworkCover targetNetwork={poolNetwork} />
-				{(isDiscontinued || exploited) && (
+				{chainId !== poolNetwork ? (
+					<WrongNetworkCover targetNetwork={poolNetwork} />
+				) : isDiscontinued || exploited ? (
 					<ArchiveCover isExploited={exploited} />
-				)}
+				) : null}
 			</StakingPoolContainer>
 			{showGIVPowerExplain && (
 				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />

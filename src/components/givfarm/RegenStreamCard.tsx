@@ -243,8 +243,11 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 						regenStreamConfig={streamConfig}
 					/>
 				)}
-				{archived && <ArchiveCover />}
-				<WrongNetworkCover targetNetwork={streamNetwork} />
+				{chainId !== streamNetwork ? (
+					<WrongNetworkCover targetNetwork={streamNetwork} />
+				) : archived ? (
+					<ArchiveCover />
+				) : null}
 			</RegenStreamContainer>
 		</Wrapper>
 	);
