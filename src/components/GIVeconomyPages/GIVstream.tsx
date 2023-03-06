@@ -145,7 +145,6 @@ export const TabGIVstreamTop = () => {
 				<HarvestAllModal
 					title='GIVstream Rewards'
 					setShowModal={setShowModal}
-					network={chainId}
 				/>
 			)}
 		</>

@@ -54,7 +54,6 @@ export const RegenStreamSection: FC<IRegenStreamSectionProps> = ({
 				<RegenStreamCard
 					key={regenStream.type}
 					streamConfig={regenStream}
-					network={chainId || 1}
 				/>
 			))}
 		</>

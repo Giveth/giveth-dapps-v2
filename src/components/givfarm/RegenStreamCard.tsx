@@ -19,6 +19,7 @@ import { constants, BigNumber as EthBignumber } from 'ethers';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useWeb3React } from '@web3-react/core';
 import { durationToString } from '@/lib/helpers';
 import { Bar, GsPTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -35,7 +36,6 @@ import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { Relative } from '../styled-components/Position';
 
 interface RegenStreamProps {
-	network: number;
 	streamConfig: RegenStreamConfig;
 }
 
@@ -50,10 +50,7 @@ export const getStreamIconWithType = (type: StreamType, size?: number) => {
 	}
 };
 
-export const RegenStreamCard: FC<RegenStreamProps> = ({
-	network,
-	streamConfig,
-}) => {
+export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	const { formatMessage } = useIntl();
 	const [showModal, setShowModal] = useState(false);
 	const [usdAmount, setUSDAmount] = useState('0');
@@ -65,6 +62,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 	const [claimedAmount, setClaimedAmount] = useState<EthBignumber>(
 		constants.Zero,
 	);
+	const { chainId } = useWeb3React();
 
 	const currentValues = useAppSelector(
 		state => state.subgraph.currentValues,
@@ -86,7 +84,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 
 	useEffect(() => {
 		const currentPrice =
-			network === config.MAINNET_NETWORK_NUMBER
+			chainId === config.MAINNET_NETWORK_NUMBER
 				? mainnetThirdPartyTokensPrice
 				: xDaiThirdPartyTokensPrice;
 		const price = new BigNumber(
@@ -101,7 +99,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 		setUSDAmount(usd);
 	}, [
 		rewardLiquidPart,
-		network,
+		chainId,
 		streamConfig.tokenAddressOnUniswapV2,
 		mainnetThirdPartyTokensPrice,
 		xDaiThirdPartyTokensPrice,
@@ -235,7 +233,6 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({
 							},
 						)}
 						setShowModal={setShowModal}
-						network={network}
 						regenStreamConfig={streamConfig}
 					/>
 				)}
