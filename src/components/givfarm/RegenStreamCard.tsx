@@ -35,6 +35,7 @@ import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { Relative } from '../styled-components/Position';
 import { WrongNetworkCover } from '../WrongNetworkCover';
+import { ArchiveCover } from '../ArchiveCover';
 
 interface RegenStreamProps {
 	streamConfig: RegenStreamConfig;
@@ -77,6 +78,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		type,
 		rewardTokenSymbol,
 		network: streamNetwork,
+		archived,
 	} = streamConfig;
 
 	const { regenTokenDistroHelper, tokenDistroBalance } = useMemo(() => {
@@ -241,6 +243,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 						regenStreamConfig={streamConfig}
 					/>
 				)}
+				{archived && <ArchiveCover />}
 				<WrongNetworkCover targetNetwork={streamNetwork} />
 			</RegenStreamContainer>
 		</Wrapper>
