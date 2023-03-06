@@ -25,7 +25,7 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 			<IconWrapper>
 				<IconAlertCircle16 />
 			</IconWrapper>
-			<Caption medium>
+			<Content medium>
 				{formatMessage({
 					id: 'label.you_are_currently_connected_to',
 				})}{' '}
@@ -35,7 +35,7 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 				{formatMessage({
 					id: 'label.to_interact_with_this_farm',
 				})}
-			</Caption>
+			</Content>
 		</WrongNetworkContainer>
 	) : null;
 };
@@ -57,4 +57,8 @@ const WrongNetworkContainer = styled(FlexCenter)`
 const IconWrapper = styled.div`
 	width: 16px;
 	height: 16px;
+`;
+
+const Content = styled(Caption)`
+	max-width: 320px;
 `;
