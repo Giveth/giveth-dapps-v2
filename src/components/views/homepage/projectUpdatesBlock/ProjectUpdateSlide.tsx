@@ -17,6 +17,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_FEATURED_PROJECT_UPDATES } from '@/apollo/gql/gqlProjects';
 import Routes from '@/lib/constants/Routes';
+import { EProjectPageTabs } from '../../project/ProjectIndex';
 
 interface IProjectUpdateSlideProps {
 	project: IProject;
@@ -87,7 +88,9 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 							}}
 						/>
 						<Flex justifyContent='flex-end'>
-							<Link href={`${Routes.Project}/${project.slug}`}>
+							<Link
+								href={`${Routes.Project}/${project.slug}?tab=${EProjectPageTabs.UPDATES}`}
+							>
 								<ReadMore gap='22px'>
 									<ButtonText>Read more</ButtonText>
 									<IconChevronRight32 />
