@@ -15,7 +15,7 @@ import { EthDenverBanner } from '@/components/EthDenverBanner';
 import { ProjectUpdatesBlock } from './projectUpdatesBlock/ProjectUpdatesBlock';
 
 const HomeIndex: FC<IHomeRoute> = props => {
-	const { campaigns, latestUpdates, ...rest } = props;
+	const { campaigns, featuredProjects, latestUpdates, ...rest } = props;
 	const featuredProjectsCampaigns = campaigns.filter(
 		campaign => campaign.isFeatured && campaign.relatedProjects?.length > 0,
 	);
@@ -48,8 +48,9 @@ const HomeIndex: FC<IHomeRoute> = props => {
 				<CampaignsBlock campaigns={newCampaigns} />
 			) : null}
 			<HomeFromBlog />
-			<ProjectUpdatesBlock projects={[]} />
-			{/* <HomeGetUpdates /> */}
+			{featuredProjects && featuredProjects.length > 0 ? (
+				<ProjectUpdatesBlock projects={featuredProjects} />
+			) : null}
 		</Wrapper>
 	);
 };
