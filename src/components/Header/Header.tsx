@@ -9,8 +9,8 @@ import {
 	IconMenu24,
 	IconSearch24,
 } from '@giveth/ui-design-system';
-
 import { useIntl } from 'react-intl';
+
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
 	ConnectButton,
@@ -25,7 +25,7 @@ import {
 	SearchButton,
 	GLinkNoWrap,
 } from './Header.sc';
-import { isUserRegistered } from '@/lib/helpers';
+import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
@@ -36,8 +36,7 @@ import {
 	setShowSearchModal,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
-
-import { useModalCallback } from '@/hooks/useModalCallback';
+import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
 import { LinkWithMenu } from '../menu/LinkWithMenu';
 import { ProjectsMenu } from '../menu/ProjectsMenu';
 import { GIVeconomyMenu } from '../menu/GIVeconomyMenu';
@@ -155,9 +154,15 @@ const Header: FC<IHeader> = () => {
 		router.push(Routes.CreateProject),
 	);
 
+	const { modalCallback: connectThenSignIn } = useModalCallback(
+		signInThenCreate,
+		EModalEvents.CONNECTED,
+	);
+
 	const handleCreateButton = () => {
+		if (isSSRMode) return;
 		if (!isEnabled) {
-			dispatch(setShowWelcomeModal(true));
+			connectThenSignIn();
 		} else if (!isSignedIn) {
 			signInThenCreate();
 		} else if (isUserRegistered(userData)) {
