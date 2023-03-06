@@ -96,6 +96,7 @@ export interface GasPreference {
 }
 
 export interface RegenStreamConfig {
+	network: number;
 	title: string;
 	tokenDistroAddress: string;
 	type: StreamType;

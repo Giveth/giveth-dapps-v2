@@ -88,71 +88,11 @@ const config: EnvConfig = {
 					'https://goerli.balancer.fi/#/pool/0xf8cba1c22b6515982bf43e71b7e8b546a3323ea80002000000000000000000df',
 				unit: 'LP',
 			},
-			// {
-			// 	// TODO: GOERLI
-			// 	POOL_ADDRESS: '0xA0D500fd3479CBCb64a2238082b7a1Df9f87d98D',
-			// 	LM_ADDRESS: '0x7CD371D230338C74563A9A23AF72dd009a7D1b1C',
-			// 	type: StakingType.ICHI_GIV_ONEGIV,
-			// 	platform: StakingPlatform.ICHI,
-			// 	ichiApi: 'https://api.ichi.org/v1/farms/20009',
-			// 	platformTitle: 'Angel Vault',
-			// 	title: 'oneGIV / GIV',
-			// 	description: 'Angel Vault',
-			// 	provideLiquidityLink:
-			// 		'https://3ea0967f.appichiorg.pages.dev/vault/?poolId=5004&back=vault',
-			// 	unit: 'LP',
-			// 	active: true,
-			// 	farmStartTimeMS: 1659366000000,
-			// 	introCard: {
-			// 		icon: 'angelVault',
-			// 		title: 'Angel Vault',
-			// 		description: `The Angel Vault is shared Univ3 position structured to protect GIV from downward volatility.\n\nProvide oneGIV as liquidity in our Angel Vault and stake the LP token to earn rewards proportional to the liquidity provided. When you remove liquidity, you will get oneGIV & GIV proportional to the holdings in the Angel Vault.`,
-			// 		link: 'https://docs.ichi.org/ichi-docs-v3/ichi-vaults/angel-vaults',
-			// 	},
-			// },
 		],
 		regenPools: [],
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
-		regenStreams: [
-			// // TODO: GOERLI
-			// {
-			// 	tokenDistroAddress:
-			// 		'0xBb974e08774544a361BCF496fE61DaB9Df29AFFc',
-			// 	type: StreamType.CULT,
-			// 	title: 'CULT DAO',
-			// 	rewardTokenAddress:
-			// 		'0x3e4d3FadEE2338D420bb5E5cB26aAd96c165476c',
-			// 	rewardTokenSymbol: 'CULT',
-			// 	tokenAddressOnUniswapV2:
-			// 		'0xf0f9d895aca5c8678f706fb8216fa22957685a13',
-			// 	pools: [
-			// 		// TODO: GOERLI
-			// 		{
-			// 			network: MAINNET_NETWORK_NUMBER,
-			// 			POOL_ADDRESS:
-			// 				'0x6bb32725aa31b1a99e7c782e0605b0fb57e4b9e6',
-			// 			LM_ADDRESS:
-			// 				'0x9d23d449af3e2c07a286688c85ff5d3d4c219d79',
-			// 			type: StakingType.UNISWAPV2_CULT_ETH,
-			// 			platform: StakingPlatform.UNISWAP,
-			// 			title: 'CULT / ETH',
-			// 			description: '50% CULT, 50% ETH',
-			// 			provideLiquidityLink:
-			// 				'https://app.uniswap.org/#/add/v2/0x3e4d3FadEE2338D420bb5E5cB26aAd96c165476c/ETH?chain=kovan',
-			// 			unit: 'LP',
-			// 			regenStreamType: StreamType.CULT,
-			// 			introCard: {
-			// 				title: 'CULT',
-			// 				description: `The purpose of CULT is to empower those building and contributing to our decentralized future. Our society makes it as difficult as possible to break away from societal, economic and other norms, and CULT serves to fund and support those who are working to take back our future. CULT is a reminder that the power in people is stronger than the people in power.\n\n CULT is the governance token of the Cult DAO. Every transaction of the CULT token allows you to contribute & fast-forward economic & societal change by contributing a 0.4% tax to the treasury. Fight from within until you get out, or change the system in doing so.`,
-			// 				link: 'https://cultdao.io/',
-			// 			},
-			// 			farmStartTimeMS: 1646306818206,
-			// 			active: true,
-			// 		},
-			// 	],
-			// },
-		],
+		regenStreams: [],
 	},
 
 	XDAI_CONFIG: {
@@ -282,6 +222,7 @@ const config: EnvConfig = {
 
 		regenStreams: [
 			{
+				network: XDAI_NETWORK_NUMBER,
 				tokenDistroAddress:
 					'0xCA29ec6F4218E230294993E0d77d5ece5a6573D8',
 				type: StreamType.FOX,

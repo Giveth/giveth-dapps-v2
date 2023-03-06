@@ -188,6 +188,7 @@ const config: EnvConfig = {
 			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
 		regenStreams: [
 			{
+				network: MAINNET_NETWORK_NUMBER,
 				tokenDistroAddress:
 					'0x73f2D115C2cBAa3b5F477A78F7A7CD348D8b70a2',
 				type: StreamType.CULT,
@@ -327,6 +328,7 @@ const config: EnvConfig = {
 
 		regenStreams: [
 			{
+				network: XDAI_NETWORK_NUMBER,
 				tokenDistroAddress:
 					'0xA9a37a14E562D0E1d335B4714E3455483ede7A9a',
 				type: StreamType.FOX,
