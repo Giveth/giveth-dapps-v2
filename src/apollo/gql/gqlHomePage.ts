@@ -91,7 +91,7 @@ export const FETCH_HOMEPAGE_DATA = gql`
 			}
 			count
 		}
-		campaigns {
+		campaigns(connectedWalletUserId: $connectedWalletUserId) {
 			id
 			title
 			slug
