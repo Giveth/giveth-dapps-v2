@@ -499,7 +499,6 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 					title={formatMessage({ id: 'label.givfarm_rewards' })}
 					setShowModal={setShowHarvestModal}
 					poolStakingConfig={poolStakingConfig}
-					network={chainId}
 					regenStreamConfig={regenStreamConfig}
 					stakedPositions={stakedPositions}
 					currentIncentive={currentIncentive}
