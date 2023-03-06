@@ -80,7 +80,6 @@ import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 interface IHarvestAllInnerModalProps {
 	title: string;
 	poolStakingConfig?: PoolStakingConfig;
-	network: number;
 	regenStreamConfig?: RegenStreamConfig;
 	regenStreamType?: StreamType;
 	stakedPositions?: LiquidityPosition[];
@@ -89,17 +88,7 @@ interface IHarvestAllInnerModalProps {
 	};
 }
 
-interface IHarvestAllModalProps extends IModal, IHarvestAllInnerModalProps {
-	title: string;
-	poolStakingConfig?: PoolStakingConfig;
-	network: number;
-	regenStreamConfig?: RegenStreamConfig;
-	regenStreamType?: StreamType;
-	stakedPositions?: LiquidityPosition[];
-	currentIncentive?: {
-		key?: (string | number)[] | null | undefined;
-	};
-}
+interface IHarvestAllModalProps extends IModal, IHarvestAllInnerModalProps {}
 
 enum HarvestStates {
 	HARVEST,
@@ -113,7 +102,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	title,
 	setShowModal,
 	poolStakingConfig,
-	network,
 	regenStreamConfig,
 	regenStreamType,
 	stakedPositions,
@@ -145,8 +133,9 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const [sumStream, setSumStream] = useState<BigNumber>(Zero);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
+	const { chainId } = useWeb3React();
 	const { tokenDistroHelper, sdh } = useTokenDistroHelper(
-		network,
+		chainId!,
 		regenStreamType,
 		regenStreamConfig,
 	);
@@ -165,14 +154,14 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 
 	const tokenPrice = useMemo(() => {
 		const currentPrice =
-			network === config.MAINNET_NETWORK_NUMBER
+			chainId === config.MAINNET_NETWORK_NUMBER
 				? mainnetThirdPartyTokensPrice
 				: xDaiThirdPartyTokensPrice;
 		const price = regenStreamConfig
 			? currentPrice[regenStreamConfig.tokenAddressOnUniswapV2]
 			: givPrice;
 		return new BigNumber(price);
-	}, [givPrice, network, regenStreamConfig]);
+	}, [givPrice, chainId, regenStreamConfig]);
 
 	useEffect(() => {
 		if (!tokenDistroHelper) return;
@@ -202,7 +191,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		if (!tokenDistroHelper) return;
 		if (
 			!regenStreamConfig &&
-			network === config.XDAI_NETWORK_NUMBER &&
+			chainId === config.XDAI_NETWORK_NUMBER &&
 			!tokenDistroBalance.givDropClaimed &&
 			account
 		) {
@@ -218,7 +207,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		}
 	}, [
 		account,
-		network,
+		chainId,
 		tokenDistroBalance?.givDropClaimed,
 		tokenDistroHelper,
 		regenStreamConfig,
@@ -596,7 +585,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				{state === HarvestStates.SUBMITTED && (
 					<SubmittedInnerModal
 						title={title}
-						walletNetwork={network}
 						txHash={txHash}
 						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
 						rewardTokenAddress={
@@ -607,7 +595,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				{state === HarvestStates.CONFIRMED && (
 					<ConfirmedInnerModal
 						title={title}
-						walletNetwork={network}
 						txHash={txHash}
 						rewardTokenSymbol={regenStreamConfig?.rewardTokenSymbol}
 						rewardTokenAddress={
@@ -620,7 +607,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 						title={formatMessage({
 							id: 'label.something_went_wrong',
 						})}
-						walletNetwork={network}
 						txHash={txHash}
 					/>
 				)}
