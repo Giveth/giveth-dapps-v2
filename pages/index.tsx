@@ -5,6 +5,7 @@ import { client } from '@/apollo/apolloClient';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import {
 	ICampaign,
+	IProject,
 	IProjectUpdateWithProject,
 	IRecentDonation,
 } from '@/apollo/types/types';
@@ -19,6 +20,7 @@ export interface IHomeRoute {
 	donationsTotalUsdPerDate: { total: number };
 	latestUpdates: IProjectUpdateWithProject[];
 	campaigns: ICampaign[];
+	featuredProjects: IProject[];
 }
 
 const HomeRoute = (props: IHomeRoute) => {
@@ -51,6 +53,7 @@ export const getStaticProps: GetStaticProps = async context => {
 			donationsTotalUsdPerDate: data.donationsTotalUsdPerDate,
 			latestUpdates: data.projectUpdates.projectUpdates,
 			campaigns: data.campaigns,
+			featuredProjects: data.featuredProjects.projects,
 		},
 		revalidate: 600,
 	};
