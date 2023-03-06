@@ -57,13 +57,6 @@ export const RegenStreamSection: FC<IRegenStreamSectionProps> = ({
 					network={chainId || 1}
 				/>
 			))}
-			{/* {regenFarms.map((regenFarm, index) => (
-				<RegenFarm
-					key={index}
-					regenFarm={regenFarm}
-					showArchivedPools={showArchivedPools}
-				/>
-			))} */}
 		</>
 	);
 };
