@@ -13,9 +13,7 @@ import {
 	ContractRow,
 	CopyWrapper,
 	GIVfarmBottomContainer,
-	ArchivedPoolsToggle,
 } from '../../GIVeconomyPages/GIVfarm.sc';
-import RadioButton from '@/components/RadioButton';
 import { NetworkSelector } from '@/components/NetworkSelector';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { ExtLinkRow } from '../../GIVeconomyPages/commons';
@@ -27,6 +25,7 @@ import { getNowUnixMS } from '@/helpers/time';
 import { TWO_WEEK } from '@/lib/constants/constants';
 import StakingPoolCard from '../../cards/StakingCards/StakingPoolCard';
 import { RegenStreamSection } from '@/components/givfarm/RegenStreamSection';
+import ToggleSwitch from '@/components/styled-components/Switch';
 
 const renderPool = (
 	pool: SimplePoolStakingConfig | UniswapV3PoolStakingConfig,
@@ -77,7 +76,7 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 export const GIVfarmBottom = () => {
 	const { formatMessage } = useIntl();
 	const { chainId } = useWeb3React();
-	const [showArchivedPools, setArchivedPools] = useState(false);
+	const [showArchivedPools, setShowArchivedPools] = useState(false);
 
 	return (
 		<GIVfarmBottomContainer>
@@ -146,17 +145,15 @@ export const GIVfarmBottom = () => {
 								<IconCopy />
 							</CopyWrapper>
 						</ContractRow>
+						<ToggleSwitch
+							label={formatMessage({
+								id: 'label.show_archived_pools',
+							})}
+							checked={showArchivedPools}
+							setStateChange={setShowArchivedPools}
+						/>
 					</Flex>
 				</Flex>
-				<ArchivedPoolsToggle>
-					<RadioButton
-						title={formatMessage({
-							id: 'label.show_archived_pools',
-						})}
-						toggleRadio={() => setArchivedPools(!showArchivedPools)}
-						isSelected={showArchivedPools}
-					/>
-				</ArchivedPoolsToggle>
 				<PoolRow>
 					<Col sm={6} lg={4} key={`givpower_card`}>
 						<StakingPoolCard
