@@ -78,7 +78,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					break;
 			}
 		}
-	}, []);
+	}, [router.query.tab]);
 
 	const {
 		adminUser,
@@ -161,6 +161,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						{projectData && !isDraft && (
 							<ProjectTabs
 								activeTab={activeTab}
+								slug={slug}
 								totalDonations={totalDonations}
 							/>
 						)}
