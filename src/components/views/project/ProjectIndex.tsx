@@ -43,6 +43,7 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 export enum EProjectPageTabs {
 	DONATIONS = 'donations',
 	UPDATES = 'updates',
+	GIVPOWER = 'givpower',
 }
 
 const donationsPerPage = 10;
@@ -68,6 +69,9 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					break;
 				case EProjectPageTabs.DONATIONS:
 					setActiveTab(2);
+					break;
+				case EProjectPageTabs.GIVPOWER:
+					setActiveTab(3);
 					break;
 				default:
 					setActiveTab(0);
@@ -157,7 +161,6 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						{projectData && !isDraft && (
 							<ProjectTabs
 								activeTab={activeTab}
-								setActiveTab={setActiveTab}
 								totalDonations={totalDonations}
 							/>
 						)}
