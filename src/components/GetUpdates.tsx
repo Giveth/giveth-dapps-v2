@@ -15,7 +15,7 @@ import Wave from '@/components/particles/Wave';
 import QuarterArc from '@/components/particles/QuarterArc';
 import SubscribeNewsletter from '@/components/modals/SubscribeNewsletter';
 
-const HomeGetUpdates = () => {
+const GetUpdates = () => {
 	const { formatMessage } = useIntl();
 	const [showModal, setShowModal] = useState(false);
 
@@ -126,4 +126,4 @@ const InnerWrapper = styled(Relative)`
 	}
 `;
 
-export default HomeGetUpdates;
+export default GetUpdates;

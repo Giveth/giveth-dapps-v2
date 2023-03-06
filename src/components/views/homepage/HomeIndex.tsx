@@ -12,7 +12,7 @@ import InformationBlock from '@/components/views/homepage/InformationBlock';
 import { CampaignsBlock } from './campaignsBlock/CampaignsBlock';
 import HomePartners from './partners';
 import { EthDenverBanner } from '@/components/EthDenverBanner';
-import HomeGetUpdates from '@/components/views/homepage/HomeGetUpdates';
+import GetUpdates from '@/components/GetUpdates';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const { campaigns, latestUpdates, ...rest } = props;
@@ -50,7 +50,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 				''
 			)}
 			<HomeFromBlog />
-			<HomeGetUpdates />
+			<GetUpdates />
 		</Wrapper>
 	);
 };
