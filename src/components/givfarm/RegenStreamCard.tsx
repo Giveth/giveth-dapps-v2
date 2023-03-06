@@ -34,8 +34,7 @@ import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { Relative } from '../styled-components/Position';
-import { WrongNetworkCover } from '../WrongNetworkCover';
-import { ArchiveCover } from '../ArchiveCover';
+import { ArchiveAndNetworkCover } from '../ArchiveAndNetworkCover/ArchiveAndNetworkCover';
 
 interface RegenStreamProps {
 	streamConfig: RegenStreamConfig;
@@ -243,11 +242,11 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 						regenStreamConfig={streamConfig}
 					/>
 				)}
-				{chainId !== streamNetwork ? (
-					<WrongNetworkCover targetNetwork={streamNetwork} />
-				) : archived ? (
-					<ArchiveCover />
-				) : null}
+				<ArchiveAndNetworkCover
+					isStream={true}
+					targetNetwork={streamNetwork}
+					isArchived={archived}
+				/>
 			</RegenStreamContainer>
 		</Wrapper>
 	);

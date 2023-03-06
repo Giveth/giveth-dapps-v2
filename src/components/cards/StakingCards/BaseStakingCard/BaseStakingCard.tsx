@@ -29,8 +29,7 @@ import StakingCardIntro from '../StakingCardIntro';
 import { StakingCardHeader } from './StakingCardHeader';
 import { getNowUnixMS } from '@/helpers/time';
 import { StakingPoolInfoAndActions } from './StakingPoolInfoAndActions';
-import { WrongNetworkCover } from '@/components/WrongNetworkCover';
-import { ArchiveCover } from '@/components/ArchiveCover';
+import { ArchiveAndNetworkCover } from '@/components/ArchiveAndNetworkCover/ArchiveAndNetworkCover';
 import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
@@ -147,11 +146,11 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						setState={setState}
 					/>
 				)}
-				{chainId !== poolNetwork ? (
-					<WrongNetworkCover targetNetwork={poolNetwork} />
-				) : isDiscontinued || exploited ? (
-					<ArchiveCover isExploited={exploited} />
-				) : null}
+				<ArchiveAndNetworkCover
+					targetNetwork={poolNetwork}
+					isArchived={isDiscontinued}
+					isExploited={exploited}
+				/>
 			</StakingPoolContainer>
 			{showGIVPowerExplain && (
 				<GIVPowerExplainModal setShowModal={setShowGIVPowerExplain} />

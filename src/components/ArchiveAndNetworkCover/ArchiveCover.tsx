@@ -8,7 +8,8 @@ import {
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { Flex } from '@/components/styled-components/Flex';
+import { Cover } from './common';
 
 interface IArchiveCoverProps {
 	isStream?: boolean;
@@ -79,17 +80,6 @@ export const ArchiveCover: FC<IArchiveCoverProps> = ({
 		</Cover>
 	) : null;
 };
-
-const Cover = styled(FlexCenter)`
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	right: 0;
-	left: 0;
-	z-index: 10;
-	background: ${brandColors.giv[900]}cc;
-`;
 
 const ArchiveModal = styled.div`
 	display: flex;

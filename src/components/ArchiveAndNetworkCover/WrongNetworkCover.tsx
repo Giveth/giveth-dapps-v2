@@ -1,14 +1,10 @@
 import { FC } from 'react';
-import {
-	Caption,
-	brandColors,
-	IconAlertCircle16,
-} from '@giveth/ui-design-system';
+import { Caption, IconAlertCircle16 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { chainName } from '@/lib/constants/constants';
-import { FlexCenter } from './styled-components/Flex';
+import { Cover } from './common';
 
 interface IWrongNetworkCoverProps {
 	targetNetwork: number;
@@ -21,7 +17,7 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 	const { chainId } = useWeb3React();
 
 	return targetNetwork !== chainId ? (
-		<WrongNetworkContainer>
+		<Cover>
 			<IconWrapper>
 				<IconAlertCircle16 />
 			</IconWrapper>
@@ -36,23 +32,9 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 					id: 'label.to_interact_with_this_farm',
 				})}
 			</Content>
-		</WrongNetworkContainer>
+		</Cover>
 	) : null;
 };
-
-const WrongNetworkContainer = styled(FlexCenter)`
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	padding: 24px;
-	background: ${brandColors.giv[900]}dd;
-	z-index: 2;
-	gap: 16px;
-`;
 
 const IconWrapper = styled.div`
 	width: 16px;
