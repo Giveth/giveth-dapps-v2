@@ -8,7 +8,7 @@ import {
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 
 interface IArchiveCoverProps {
@@ -16,11 +16,11 @@ interface IArchiveCoverProps {
 }
 
 export const ArchiveCover: FC<IArchiveCoverProps> = ({ isExploited }) => {
-	const [disableModal, setDisableModal] = useState<boolean>(true);
+	const [showModal, setShowModal] = useState<boolean>(true);
 	const { formatMessage } = useIntl();
 
-	return disableModal ? (
-		<DisableModal>
+	return showModal ? (
+		<Cover>
 			<DisableModalContent>
 				<DisableModalImage>
 					<IconInfoFilled24 />
@@ -63,24 +63,23 @@ export const ArchiveCover: FC<IArchiveCoverProps> = ({ isExploited }) => {
 						label={formatMessage({
 							id: 'label.got_it',
 						})}
-						onClick={() => setDisableModal(false)}
+						onClick={() => setShowModal(false)}
 					/>
 				</Flex>
 			</DisableModalContent>
-		</DisableModal>
+		</Cover>
 	) : null;
 };
 
-const DisableModal = styled.div`
+const Cover = styled(FlexCenter)`
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	background: transparent;
+	top: 0;
+	right: 0;
+	left: 0;
 	z-index: 10;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: #00000070;
+	background: ${brandColors.giv[900]}cc;
 `;
 
 const DisableModalContent = styled.div`
