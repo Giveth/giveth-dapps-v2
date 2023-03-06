@@ -34,6 +34,7 @@ import config from '@/configuration';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { Relative } from '../styled-components/Position';
+import { WrongNetworkCover } from '../WrongNetworkCover';
 
 interface RegenStreamProps {
 	streamConfig: RegenStreamConfig;
@@ -68,16 +69,25 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		state => state.subgraph.currentValues,
 		() => (showModal ? true : false),
 	);
+
+	const {
+		title,
+		tokenDistroAddress,
+		tokenAddressOnUniswapV2,
+		type,
+		rewardTokenSymbol,
+		network: streamNetwork,
+	} = streamConfig;
+
 	const { regenTokenDistroHelper, tokenDistroBalance } = useMemo(() => {
 		const sdh = new SubgraphDataHelper(currentValues);
-		const tokenDistroBalance = sdh.getTokenDistroBalance(
-			streamConfig.tokenDistroAddress,
-		);
+		const tokenDistroBalance =
+			sdh.getTokenDistroBalance(tokenDistroAddress);
 		const regenTokenDistroHelper = new TokenDistroHelper(
-			sdh.getTokenDistro(streamConfig.tokenDistroAddress),
+			sdh.getTokenDistro(tokenDistroAddress),
 		);
 		return { regenTokenDistroHelper, tokenDistroBalance };
-	}, [currentValues, streamConfig.tokenDistroAddress]);
+	}, [currentValues, tokenDistroAddress]);
 
 	const { mainnetThirdPartyTokensPrice, xDaiThirdPartyTokensPrice } =
 		useAppSelector(state => state.price);
@@ -88,7 +98,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 				? mainnetThirdPartyTokensPrice
 				: xDaiThirdPartyTokensPrice;
 		const price = new BigNumber(
-			currentPrice[streamConfig.tokenAddressOnUniswapV2.toLowerCase()],
+			currentPrice[tokenAddressOnUniswapV2.toLowerCase()],
 		);
 		if (!price || price.isNaN()) return;
 
@@ -100,7 +110,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	}, [
 		rewardLiquidPart,
 		chainId,
-		streamConfig.tokenAddressOnUniswapV2,
+		tokenAddressOnUniswapV2,
 		mainnetThirdPartyTokensPrice,
 		xDaiThirdPartyTokensPrice,
 	]);
@@ -122,19 +132,17 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 
 	const percentage = regenTokenDistroHelper?.GlobalReleasePercentage || 0;
 	const remainTime = durationToString(regenTokenDistroHelper?.remain || 0);
-	const icon = getStreamIconWithType(streamConfig.type, 40);
+	const icon = getStreamIconWithType(type, 40);
 
 	return (
 		<Wrapper>
-			<Title>{streamConfig.title}</Title>
+			<Title>{title}</Title>
 			<RegenStreamContainer>
 				<InfoContainer flexDirection='column'>
 					<HeaderRow justifyContent='space-between' flexWrap>
 						<Flex gap='8px' style={{ position: 'relative' }}>
 							{icon}
-							<H5>
-								{streamConfig.rewardTokenSymbol} Flowrate
-							</H5>{' '}
+							<H5>{rewardTokenSymbol} Flowrate</H5>{' '}
 						</Flex>
 						<RateRow>
 							<IconGIVStream size={16} />
@@ -142,7 +150,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 								{formatWeiHelper(rewardStream)}
 							</StreamRate>
 							<StreamRateUnit>
-								{streamConfig.rewardTokenSymbol}
+								{rewardTokenSymbol}
 								{formatMessage({ id: 'label./week' })}
 							</StreamRateUnit>
 						</RateRow>
@@ -155,7 +163,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 										id: 'label.stream_progress',
 									},
 									{
-										token: streamConfig.rewardTokenSymbol,
+										token: rewardTokenSymbol,
 									},
 								)}
 							</H6>
@@ -171,7 +179,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 										},
 										{
 											rewardTokenSymbol:
-												streamConfig.rewardTokenSymbol,
+												rewardTokenSymbol,
 										},
 									)}
 								</GsPTooltip>
@@ -196,19 +204,17 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 				>
 					<div>
 						<AmountInfo alignItems='flex-end' gap='4px'>
-							{getStreamIconWithType(streamConfig.type, 24)}
+							{getStreamIconWithType(type, 24)}
 							<Amount>{formatWeiHelper(rewardLiquidPart)}</Amount>
-							<AmountUnit>
-								{streamConfig.rewardTokenSymbol}
-							</AmountUnit>
+							<AmountUnit>{rewardTokenSymbol}</AmountUnit>
 						</AmountInfo>
 						<Converted>~${usdAmount}</Converted>
 					</div>
 					<HarvestButtonWrapper>
 						<HarvestButton
-							label={`${formatMessage({ id: 'label.harvest' })} ${
-								streamConfig.rewardTokenSymbol
-							}`}
+							label={`${formatMessage({
+								id: 'label.harvest',
+							})} ${rewardTokenSymbol}`}
 							onClick={() => setShowModal(true)}
 							buttonType='primary'
 							disabled={rewardLiquidPart.isZero()}
@@ -228,14 +234,14 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 						title={formatMessage(
 							{ id: 'label.token_stream_rewards' },
 							{
-								rewardTokenSymbol:
-									streamConfig.rewardTokenSymbol,
+								rewardTokenSymbol: rewardTokenSymbol,
 							},
 						)}
 						setShowModal={setShowModal}
 						regenStreamConfig={streamConfig}
 					/>
 				)}
+				<WrongNetworkCover targetNetwork={streamNetwork} />
 			</RegenStreamContainer>
 		</Wrapper>
 	);
