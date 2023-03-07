@@ -81,80 +81,57 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 					</SwiperPaginationWrapper>
 				</BlockHeader>
 			</TopContainer>
-			<Wrapper>
-				<BottomContainer>
-					<BottomSection>
-						<Title>
-							<H1 weight={700}>{campaign.title}</H1>
-							<Link href={campaignLinkGenerator(campaign) || ''}>
-								<Button
-									buttonType='texty-primary'
-									label='EXPLORE'
-									icon={<IconChevronRight32 />}
-								/>
-							</Link>
-						</Title>
-						<SwiperWrapper>
-							<Swiper
-								onSwiper={setSwiperInstance}
-								modules={[Navigation, Pagination]}
-								navigation={{
-									nextEl: nextElRef.current,
-									prevEl: prevElRef.current,
-								}}
-								pagination={{
-									el: pagElRef.current,
-									clickable: true,
-									type: 'bullets',
-									renderBullet: function (index, className) {
-										return (
-											'<span class="' +
-											className +
-											'">' +
-											(index + 1) +
-											'</span>'
-										);
-									},
-								}}
-								slidesPerView={'auto'}
-								spaceBetween={30}
-								// slidesPerGroupAuto
-								// breakpoints={{
-								// 	320: {
-								// 		slidesPerView: 1,
-								// 	},
-								// 	768: {
-								// 		slidesPerView: 1.3,
-								// 	},
-								// 	1024: {
-								// 		slidesPerView: 2.1,
-								// 	},
-								// 	1280: {
-								// 		slidesPerView: 2.2,
-								// 	},
-								// }}
-							>
-								{projects.map(project => (
-									<SwiperSlide key={project.id}>
-										<StyledProjectCard>
-											<ProjectCard project={project} />
-										</StyledProjectCard>
-									</SwiperSlide>
-								))}
-							</Swiper>
-						</SwiperWrapper>
-					</BottomSection>
-				</BottomContainer>
-			</Wrapper>
+			<BottomContainer>
+				<BottomSection>
+					<Title>
+						<H1 weight={700}>{campaign.title}</H1>
+						<Link href={campaignLinkGenerator(campaign) || ''}>
+							<Button
+								buttonType='texty-primary'
+								label='EXPLORE'
+								icon={<IconChevronRight32 />}
+							/>
+						</Link>
+					</Title>
+					<SwiperWrapper>
+						<Swiper
+							onSwiper={setSwiperInstance}
+							modules={[Navigation, Pagination]}
+							navigation={{
+								nextEl: nextElRef.current,
+								prevEl: prevElRef.current,
+							}}
+							pagination={{
+								el: pagElRef.current,
+								clickable: true,
+								type: 'bullets',
+								renderBullet: function (index, className) {
+									return (
+										'<span class="' +
+										className +
+										'">' +
+										(index + 1) +
+										'</span>'
+									);
+								},
+							}}
+							slidesPerView={'auto'}
+							spaceBetween={30}
+						>
+							{projects.map(project => (
+								<SwiperSlide key={project.id}>
+									<StyledProjectCard project={project} />
+								</SwiperSlide>
+							))}
+						</Swiper>
+					</SwiperWrapper>
+				</BottomSection>
+			</BottomContainer>
 		</>
 	);
 };
-const Wrapper = styled.div`
-	width: 100vw;
-	overflow-x: hidden;
-`;
 
-const StyledProjectCard = styled.div`
+const StyledProjectCard = styled(ProjectCard)`
 	width: 360px;
 	margin: 0;
 `;
