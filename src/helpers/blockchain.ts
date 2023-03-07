@@ -88,7 +88,7 @@ export const networksParams: {
 			symbol: 'MATIC',
 			decimals: 18,
 		},
-		blockExplorerUrls: ['https://polygonscan.com/'],
+		blockExplorerUrls: ['https://polygonscan.com'],
 		rpcUrls: ['https://polygon-rpc.com'],
 	},
 };

@@ -19,7 +19,6 @@ import {
 	compareAddresses,
 	formatUSD,
 } from '@/lib/helpers';
-import config from '@/configuration';
 import {
 	EDirection,
 	EDonationStatus,
@@ -29,15 +28,15 @@ import ExternalLink from '@/components/ExternalLink';
 import SortIcon from '@/components/SortIcon';
 import { useAppSelector } from '@/features/hooks';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
-import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import useDebounce from '@/hooks/useDebounce';
 import {
 	RowWrapper,
 	TableCell,
 	TableHeader,
 } from '@/components/styled-components/Table';
-import { IconEthereum } from '@/components/Icons/Eth';
 import { useProjectContext } from '@/context/project.context';
+import NetworkLogo from '@/components/NetworkLogo';
+import { networksParams } from '@/helpers/blockchain';
 
 const itemPerPage = 10;
 
@@ -66,6 +65,7 @@ const ProjectDonationTable = ({
 	donations,
 	totalDonations,
 }: IProjectDonationTable) => {
+	console.log('ProjectDonationTable', donations);
 	const [pageDonations, setPageDonations] = useState<PageDonations>({
 		donations: donations,
 		totalCount: totalDonations,
@@ -192,18 +192,17 @@ const ProjectDonationTable = ({
 								</DonationTableCell>
 							)}
 							<DonationTableCell>
-								{donation.transactionNetworkId ===
-								config.XDAI_NETWORK_NUMBER ? (
-									<>
-										<IconGnosisChain size={24} />
-										Gnosis
-									</>
-								) : (
-									<>
-										<IconEthereum size={24} />
-										Ethereum
-									</>
-								)}
+								<NetworkLogo
+									logoSize={24}
+									chainId={donation.transactionNetworkId}
+								/>
+								<NetworkName>
+									{
+										networksParams[
+											donation.transactionNetworkId
+										].chainName
+									}
+								</NetworkName>
 							</DonationTableCell>
 							<DonationTableCell>
 								<B>{donation.amount}</B>
@@ -251,10 +250,11 @@ const Wrapper = styled.div`
 	gap: 16px;
 `;
 
-const UpperSection = styled.div`
-	display: flex;
-	gap: 30px;
-	align-items: center;
+const NetworkName = styled.div`
+	width: 70px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 `;
 
 const DonationTableWrapper = styled.div`
