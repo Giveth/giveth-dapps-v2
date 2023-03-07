@@ -251,7 +251,7 @@ const Wrapper = styled.div`
 `;
 
 const NetworkName = styled.div`
-	width: 70px;
+	width: 80px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;

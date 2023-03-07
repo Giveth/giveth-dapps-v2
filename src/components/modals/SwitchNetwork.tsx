@@ -3,6 +3,7 @@ import {
 	B,
 	brandColors,
 	IconNetwork32,
+	neutralColors,
 	Overline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -80,6 +81,9 @@ const NetworkItem = styled.div<{ isSelected: boolean }>`
 	display: flex;
 	align-items: center;
 	gap: 16px;
+	:hover {
+		background-color: ${neutralColors.gray[200]};
+	}
 	border: 1px solid
 		${({ isSelected }) =>
 			isSelected ? brandColors.giv[500] : 'transparent'};
