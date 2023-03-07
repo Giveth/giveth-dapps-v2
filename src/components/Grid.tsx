@@ -52,34 +52,22 @@ export const Container = styled.div`
 `;
 
 export const OneSideContainer = styled.div`
-	width: calc(50vw + 660px);
-	/* height: 100px; */
-	/* background-color: red; */
-	/* margin-right: auto;
-	margin-left: auto;
-	padding-left: ${margins.xs};
-	padding-right: ${margins.xs}; */
-	/* @media (min-width: ${minWidth.sm}px) {
-		width: 704px;
-		padding-left: ${margins.sm};
-		padding-right: ${margins.sm};
+	@media (min-width: ${minWidth.sm}px) {
+		width: calc(50vw + 352px);
+		margin-left: calc(50vw - 352px);
 	}
 	@media (min-width: ${minWidth.md}px) {
-		width: 944px;
-		padding-left: ${margins.md};
-		padding-right: ${margins.md};
+		width: calc(50vw + 472px);
+		margin-left: calc(50vw - 472px);
 	}
 	@media (min-width: ${minWidth.lg}px) {
-		width: 1218px;
-		padding-left: ${margins.lg};
-		padding-right: ${margins.lg};
+		width: calc(50vw + 609px);
+		margin-left: calc(50vw - 609px);
 	}
 	@media (min-width: ${minWidth.xl}px) {
-		width: 1320px;
-		padding-left: ${margins.xl};
-		padding-right: ${margins.xl};
-	} */
-	margin-left: calc(50vw - 660px);
+		width: calc(50vw + 660px);
+		margin-left: calc(50vw - 660px);
+	}
 `;
 
 export const Row = styled.div`
