@@ -152,6 +152,11 @@ const SwiperWrapper = styled.div`
 	.swiper-slide {
 		width: auto !important;
 	}
+	${mediaQueries.tablet} {
+		.swiper-slide:last-of-type {
+			margin-right: 60px;
+		}
+	}
 `;
 
 const BottomSection = styled(Flex)`
