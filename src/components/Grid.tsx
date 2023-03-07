@@ -52,7 +52,7 @@ export const Container = styled.div`
 `;
 
 export const OneSideContainer = styled.div`
-	width: 100%;
+	width: calc(50vw + 660px);
 	/* height: 100px; */
 	/* background-color: red; */
 	/* margin-right: auto;
