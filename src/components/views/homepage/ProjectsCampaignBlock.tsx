@@ -171,6 +171,7 @@ const Title = styled(FlexCenter)`
 	user-select: none;
 	padding-right: 24px;
 	gap: 24px;
+	z-index: 10;
 	${mediaQueries.tablet} {
 		margin: 0;
 		width: 263px;
