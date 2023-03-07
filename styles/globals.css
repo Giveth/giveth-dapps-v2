@@ -237,6 +237,10 @@ a {
 	background-color: #8668fc;
 }
 
+.swiper-slide {
+    width: auto !important;
+}
+
 .swiper-pagination-bullet {
 	border-radius: 50%;
     cursor: pointer;
