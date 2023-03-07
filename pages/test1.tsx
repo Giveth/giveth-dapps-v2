@@ -129,7 +129,7 @@ const TestRoute = () => {
 					>
 						<FlowRateTooltip>
 							The rate at which you receive liquid GIV from your
-							GIVstream.
+							GIVstream.here!
 						</FlowRateTooltip>
 					</IconWithTooltip>
 				</div>
