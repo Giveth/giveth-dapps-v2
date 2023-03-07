@@ -38,6 +38,7 @@ const config: EnvConfig = {
 			decimals: 18,
 		},
 		DAI_CONTRACT_ADDRESS: '0x6b175474e89094c44da98b954eedeac495271d0f',
+		PFP_CONTRACT_ADDRESS: '0x78fde77737d5b9ab32fc718c9535c7f1b8ce84db',
 
 		gasPreference: {
 			// Keep it empty for automatic configuration
