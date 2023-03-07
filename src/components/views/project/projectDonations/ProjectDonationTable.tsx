@@ -7,7 +7,6 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation } from '@/apollo/types/types';
