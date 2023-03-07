@@ -23,6 +23,13 @@ const minWidth = {
 	xl: 1440,
 };
 
+const width = {
+	sm: 704,
+	md: 944,
+	lg: 1218,
+	xl: 1320,
+};
+
 export const Container = styled.div`
 	width: 100%;
 	margin-right: auto;
@@ -30,22 +37,22 @@ export const Container = styled.div`
 	padding-left: ${margins.xs};
 	padding-right: ${margins.xs};
 	@media (min-width: ${minWidth.sm}px) {
-		width: 704px;
+		width: ${width.sm}px;
 		padding-left: ${margins.sm};
 		padding-right: ${margins.sm};
 	}
 	@media (min-width: ${minWidth.md}px) {
-		width: 944px;
+		width: ${width.md}px;
 		padding-left: ${margins.md};
 		padding-right: ${margins.md};
 	}
 	@media (min-width: ${minWidth.lg}px) {
-		width: 1218px;
+		width: ${width.lg}px;
 		padding-left: ${margins.lg};
 		padding-right: ${margins.lg};
 	}
 	@media (min-width: ${minWidth.xl}px) {
-		width: 1320px;
+		width: ${width.xl}px;
 		padding-left: ${margins.xl};
 		padding-right: ${margins.xl};
 	}
@@ -53,20 +60,20 @@ export const Container = styled.div`
 
 export const OneSideContainer = styled.div`
 	@media (min-width: ${minWidth.sm}px) {
-		width: calc(50vw + 352px);
-		margin-left: calc(50vw - 352px);
+		width: calc(50vw + ${width.sm / 2}px);
+		margin-left: calc(50vw - ${width.sm / 2}px);
 	}
 	@media (min-width: ${minWidth.md}px) {
-		width: calc(50vw + 472px);
-		margin-left: calc(50vw - 472px);
+		width: calc(50vw + ${width.md / 2}px);
+		margin-left: calc(50vw - ${width.md / 2}px);
 	}
 	@media (min-width: ${minWidth.lg}px) {
-		width: calc(50vw + 609px);
-		margin-left: calc(50vw - 609px);
+		width: calc(50vw + ${width.lg / 2}px);
+		margin-left: calc(50vw - ${width.lg / 2}px);
 	}
 	@media (min-width: ${minWidth.xl}px) {
-		width: calc(50vw + 660px);
-		margin-left: calc(50vw - 660px);
+		width: calc(50vw + ${width.xl / 2}px);
+		margin-left: calc(50vw - ${width.xl / 2}px);
 	}
 `;
 
