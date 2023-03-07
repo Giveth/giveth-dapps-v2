@@ -172,6 +172,9 @@ const SwiperWrapper = styled.div`
 	${mediaQueries.desktop} {
 		padding-right: 10px;
 	}
+	.swiper-slide {
+		width: auto !important;
+	}
 `;
 
 const BottomSection = styled(Flex)`
