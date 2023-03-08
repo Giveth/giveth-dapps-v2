@@ -1,6 +1,8 @@
 import { gql } from '@apollo/client';
+import { PROJECT_CARD_FIELDS } from './gqlProjects';
 
 export const FETCH_CAMPAIGNS = gql`
+	${PROJECT_CARD_FIELDS}
 	query FetchCampaigns($connectedWalletUserId: Int) {
 		campaigns(connectedWalletUserId: $connectedWalletUserId) {
 			id
@@ -10,34 +12,7 @@ export const FETCH_CAMPAIGNS = gql`
 			isNew
 			description
 			relatedProjects {
-				id
-				title
-				image
-				slug
-				descriptionSummary
-				verified
-				totalDonations
-				traceCampaignId
-				reaction {
-					id
-					userId
-				}
-				totalReactions
-				adminUser {
-					name
-					walletAddress
-				}
-				updatedAt
-				organization {
-					name
-					label
-					supportCustomTokens
-				}
-				projectPower {
-					powerRank
-					totalPower
-					round
-				}
+				...ProjectCardFields
 			}
 			relatedProjectsCount
 			photo
