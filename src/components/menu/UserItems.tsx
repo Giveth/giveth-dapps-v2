@@ -1,12 +1,11 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import { useWeb3React } from '@web3-react/core';
-
 import { useIntl } from 'react-intl';
 import { B, GLink } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
+
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
-import { switchNetworkHandler } from '@/lib/wallet';
 import { isUserRegistered, networkInfo, shortenAddress } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -15,17 +14,27 @@ import {
 	setShowWalletModal,
 } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
-import { ItemRow, ItemTitle, ItemAction, ItemSpacer } from './common';
+import {
+	ItemRow,
+	ItemTitle,
+	ItemAction,
+	ItemSpacer,
+	NetworkName,
+} from './common';
 import { Item } from './Item';
+import { FlexCenter } from '@/components/styled-components/Flex';
+import NetworkLogo from '@/components/NetworkLogo';
 
 interface IUserItemsProps {
 	setSignWithWallet: Dispatch<SetStateAction<boolean>>;
 	setQueueRoute: Dispatch<SetStateAction<string>>;
+	setShowSwitchNetwork: Dispatch<SetStateAction<boolean>>;
 }
 
 export const UserItems: FC<IUserItemsProps> = ({
 	setSignWithWallet,
 	setQueueRoute,
+	setShowSwitchNetwork,
 }) => {
 	const { formatMessage } = useIntl();
 	const { chainId, account, deactivate } = useWeb3React();
@@ -76,10 +85,13 @@ export const UserItems: FC<IUserItemsProps> = ({
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>
-					<B>{networkName}</B>
+					<FlexCenter gap='4px'>
+						<NetworkLogo chainId={chainId} logoSize={16} />
+						<NetworkName>{networkName}</NetworkName>
+					</FlexCenter>
 					<ItemAction
 						size='Small'
-						onClick={() => switchNetworkHandler(chainId)}
+						onClick={() => setShowSwitchNetwork(true)}
 					>
 						{formatMessage({ id: 'label.switch_network' })}
 					</ItemAction>

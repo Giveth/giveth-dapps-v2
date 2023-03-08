@@ -46,6 +46,7 @@ interface IDonateModalProps extends IModal {
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const gnosisChain = config.SECONDARY_NETWORK;
+const polygonChain = config.POLYGON_NETWORK;
 const stableCoins = [gnosisChain.mainToken, 'DAI', 'USDT'];
 
 const DonateModal: FC<IDonateModalProps> = props => {
@@ -68,6 +69,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const givPrice = useAppSelector(state => state.price.givPrice);
 	const givTokenPrice = new BigNumber(givPrice).toNumber();
 	const isGnosis = chainId === gnosisChain.id;
+	const isMainnet = chainId === ethereumChain.id;
+	const isPolygon = chainId === polygonChain.id;
 
 	const [donating, setDonating] = useState(false);
 	const [firstDonationSaved, setFirstDonationSaved] = useState(false);
@@ -189,13 +192,15 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			} else if (token?.address) {
 				let tokenAddress = token.address;
 				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
-				if (isGnosis && token.mainnetAddress) {
+				if ((isGnosis || isPolygon) && token.mainnetAddress) {
 					tokenAddress = token.mainnetAddress || '';
 				}
 				const coingeckoChainId =
-					!isGnosis || token.mainnetAddress
+					isMainnet || token.mainnetAddress
 						? ethereumChain.id
-						: gnosisChain.id;
+						: isGnosis
+						? gnosisChain.id
+						: polygonChain.id;
 				const fetchedPrice = await fetchPrice(
 					coingeckoChainId,
 					tokenAddress,

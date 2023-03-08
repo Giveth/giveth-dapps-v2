@@ -186,6 +186,7 @@ export interface GlobalConfig extends EnvConfig {
 	TOKEN_PRECISION: number;
 	PRIMARY_NETWORK: INetworkConfig;
 	SECONDARY_NETWORK: INetworkConfig;
+	POLYGON_NETWORK: INetworkConfig;
 	NETWORKS_CONFIG: {
 		[key: number]: MainnetNetworkConfig | XDaiNetworkConfig;
 	};
