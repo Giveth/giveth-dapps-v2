@@ -1,18 +1,26 @@
 import { gql } from '@apollo/client';
 import { PROJECT_CARD_FIELDS } from './gqlProjects';
 
+export const USER_CORE_FIELDS = gql`
+	fragment UserCoreFields on Project {
+		__typename
+		id
+		firstName
+		lastName
+		name
+		email
+		avatar
+		walletAddress
+		url
+		location
+	}
+`;
+
 export const GET_USER_BY_ADDRESS = gql`
+	${USER_CORE_FIELDS}
 	query UserByAddress($address: String!) {
 		userByAddress(address: $address) {
-			id
-			firstName
-			lastName
-			name
-			email
-			avatar
-			walletAddress
-			url
-			location
+			...UserCoreFields
 			totalDonated
 			totalReceived
 			likedProjectsCount
