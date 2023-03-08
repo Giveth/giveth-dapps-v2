@@ -13,7 +13,6 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { zIndex } from '@/lib/constants/constants';
 import { Container } from '@/components/Grid';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
-import { EthDenverBanner } from '@/components/EthDenverBanner';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -140,7 +139,6 @@ const TestRoute = () => {
 					limit={200}
 				/>
 			</TestContainer>
-			<EthDenverBanner />
 		</>
 	);
 };
