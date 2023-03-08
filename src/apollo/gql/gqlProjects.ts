@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
-export const CORE_PROJECT_FIELDS = gql`
-	fragment CoreProjectFields on Project {
+export const PROJECT_CORE_FIELDS = gql`
+	fragment ProjectCoreFields on Project {
 		__typename
 		id
 		title
@@ -12,8 +12,36 @@ export const CORE_PROJECT_FIELDS = gql`
 	}
 `;
 
+export const PROJECT_CARD_FIELDS = gql`
+	${PROJECT_CORE_FIELDS}
+	fragment ProjectCardFields on Project {
+		...ProjectCoreFields
+		descriptionSummary
+		totalReactions
+		reaction {
+			id
+			userId
+		}
+		adminUser {
+			name
+			walletAddress
+		}
+		updatedAt
+		organization {
+			name
+			label
+			supportCustomTokens
+		}
+		projectPower {
+			powerRank
+			totalPower
+			round
+		}
+	}
+`;
+
 export const FETCH_ALL_PROJECTS = gql`
-	${CORE_PROJECT_FIELDS}
+	${PROJECT_CARD_FIELDS}
 	query FetchAllProjects(
 		$limit: Int
 		$skip: Int
@@ -37,28 +65,7 @@ export const FETCH_ALL_PROJECTS = gql`
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
-				...CoreProjectFields
-				descriptionSummary
-				reaction {
-					id
-					userId
-				}
-				totalReactions
-				adminUser {
-					name
-					walletAddress
-				}
-				updatedAt
-				organization {
-					name
-					label
-					supportCustomTokens
-				}
-				projectPower {
-					powerRank
-					totalPower
-					round
-				}
+				...ProjectCardFields
 			}
 			totalCount
 			categories {
@@ -69,13 +76,13 @@ export const FETCH_ALL_PROJECTS = gql`
 `;
 
 export const FETCH_PROJECT_BY_SLUG = gql`
-	${CORE_PROJECT_FIELDS}
+	${PROJECT_CORE_FIELDS}
 	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
 		projectBySlug(
 			slug: $slug
 			connectedWalletUserId: $connectedWalletUserId
 		) {
-			...CoreProjectFields
+			...ProjectCoreFields
 			description
 			addresses {
 				address
@@ -214,7 +221,7 @@ export const FETCH_PROJECT_UPDATES = gql`
 `;
 
 export const FETCH_FEATURED_UPDATE_PROJECTS = gql`
-	${CORE_PROJECT_FIELDS}
+	${PROJECT_CORE_FIELDS}
 	query fetchFeaturedProjects(
 		$limit: Int
 		$skip: Int
@@ -226,7 +233,7 @@ export const FETCH_FEATURED_UPDATE_PROJECTS = gql`
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
-				...CoreProjectFields
+				...ProjectCoreFields
 
 				descriptionSummary
 				reaction {
@@ -314,11 +321,11 @@ export const EDIT_PROJECT_UPDATE = gql`
 `;
 
 export const FETCH_USER_LIKED_PROJECTS = gql`
-	${CORE_PROJECT_FIELDS}
+	${PROJECT_CORE_FIELDS}
 	query FetchUserLikedProjects($take: Int, $skip: Int, $userId: Int!) {
 		likedProjectsByUserId(take: $take, skip: $skip, userId: $userId) {
 			projects {
-				...CoreProjectFields
+				...ProjectCoreFields
 
 				balance
 				descriptionSummary
@@ -488,11 +495,11 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 `;
 
 export const SIMILAR_PROJECTS = gql`
-	${CORE_PROJECT_FIELDS}
+	${PROJECT_CORE_FIELDS}
 	query SimilarProjectsBySlug($slug: String!, $take: Int, $skip: Int) {
 		similarProjectsBySlug(slug: $slug, take: $take, skip: $skip) {
 			projects {
-				...CoreProjectFields
+				...ProjectCoreFields
 
 				creationDate
 				descriptionSummary
@@ -527,11 +534,11 @@ export const FETCH_MAIN_CATEGORIES = gql`
 `;
 
 export const FETCH_PROJECTS_BY_SLUG = gql`
-	${CORE_PROJECT_FIELDS}
+	${PROJECT_CORE_FIELDS}
 	query ($take: Float, $skip: Float, $slugs: [String!]!) {
 		projectsBySlugs(take: $take, skip: $skip, slugs: $slugs) {
 			projects {
-				...CoreProjectFields
+				...ProjectCoreFields
 
 				balance
 				descriptionSummary
