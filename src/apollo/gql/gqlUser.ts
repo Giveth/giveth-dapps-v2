@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { PROJECT_CARD_FIELDS } from './gqlProjects';
 
 export const GET_USER_BY_ADDRESS = gql`
 	query UserByAddress($address: String!) {
@@ -23,6 +24,7 @@ export const GET_USER_BY_ADDRESS = gql`
 `;
 
 export const FETCH_USER_PROJECTS = gql`
+	${PROJECT_CARD_FIELDS}
 	query FetchUserProjects(
 		$take: Float
 		$skip: Float
@@ -37,34 +39,13 @@ export const FETCH_USER_PROJECTS = gql`
 			orderBy: { field: $orderBy, direction: $direction }
 		) {
 			projects {
-				id
-				title
-				balance
-				descriptionSummary
-				image
-				slug
+				...ProjectCardFields
 				creationDate
-				admin
-				walletAddress
-				impactLocation
 				listed
-				totalDonations
-				totalReactions
-				verified
-				verificationStatus
 				status {
 					id
 					name
 				}
-				categories {
-					name
-				}
-				qualityScore
-				projectVerificationForm {
-					status
-				}
-				updatedAt
-				verified
 			}
 			totalCount
 		}
