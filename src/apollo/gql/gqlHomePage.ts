@@ -75,34 +75,7 @@ export const FETCH_HOMEPAGE_DATA = gql`
 			isNew
 			description
 			relatedProjects {
-				id
-				title
-				image
-				slug
-				descriptionSummary
-				verified
-				totalDonations
-				traceCampaignId
-				reaction {
-					id
-					userId
-				}
-				totalReactions
-				adminUser {
-					name
-					walletAddress
-				}
-				updatedAt
-				organization {
-					name
-					label
-					supportCustomTokens
-				}
-				projectPower {
-					powerRank
-					totalPower
-					round
-				}
+				...ProjectCardFields
 			}
 			relatedProjectsCount
 			hashtags
