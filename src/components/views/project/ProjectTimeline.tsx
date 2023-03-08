@@ -72,14 +72,14 @@ const UpdatesSection = (props: {
 	editUpdate?: Function;
 	isOwner?: boolean;
 }) => {
-	const { isOwner, removeUpdate, editUpdate } = props;
-	const { content, createdAt, title, projectId, id } = props.projectUpdate;
+	const { isOwner, removeUpdate, editUpdate, projectUpdate } = props;
+	const { content, createdAt, title, projectId, id } = projectUpdate;
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const [updateContent, setUpdateContent] = useState<string>(content);
 	const [newTitle, setNewTitle] = useState<string>(title);
 
 	return (
-		<Wrapper>
+		<Wrapper id={id}>
 			<TimelineSection date={createdAt} />
 			<Content>
 				<ContentSection>

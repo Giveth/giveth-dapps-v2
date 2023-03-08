@@ -8,11 +8,11 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { IProjectUpdateWithProject } from '@/apollo/types/types';
 
 interface ILatestUpdatesBlockProps {
-	latestUpdates: IProjectUpdateWithProject[];
+	updates: IProjectUpdateWithProject[];
 }
 
 export const LatestUpdatesBlock: FC<ILatestUpdatesBlockProps> = ({
-	latestUpdates,
+	updates,
 }) => {
 	return (
 		<LatestUpdatesBlockWrapper>
@@ -21,7 +21,7 @@ export const LatestUpdatesBlock: FC<ILatestUpdatesBlockProps> = ({
 			</Container>
 			<LatestUpdatesCardsWrapper>
 				<LatestUpdatesCardsContainer>
-					{latestUpdates.map((update, idx) => (
+					{updates.map((update, idx) => (
 						<LatestUpdateCard key={update.id} update={update} />
 					))}
 				</LatestUpdatesCardsContainer>

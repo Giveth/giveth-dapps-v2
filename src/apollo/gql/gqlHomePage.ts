@@ -1,12 +1,15 @@
 import { gql } from '@apollo/client';
 
-export const HOMEPAGE_DATA = gql`
+export const FETCH_HOMEPAGE_DATA = gql`
 	query (
 		$take: Int
 		$takeLatestUpdates: Int
 		$skipLatestUpdates: Int
 		$fromDate: String
 		$toDate: String
+		$featuredProjectsLimit: Int
+		$featuredProjectsSkip: Int
+		$connectedWalletUserId: Int
 	) {
 		recentDonations(take: $take) {
 			createdAt
@@ -28,6 +31,42 @@ export const HOMEPAGE_DATA = gql`
 		}
 		donationsTotalUsdPerDate(fromDate: $fromDate, toDate: $toDate) {
 			total
+		}
+		featuredProjects(
+			limit: $featuredProjectsLimit
+			skip: $featuredProjectsSkip
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			projects {
+				id
+				title
+				image
+				slug
+				descriptionSummary
+				verified
+				totalDonations
+				reaction {
+					id
+					userId
+				}
+				totalReactions
+				adminUser {
+					name
+					walletAddress
+				}
+				updatedAt
+				organization {
+					name
+					label
+					supportCustomTokens
+				}
+				projectPower {
+					powerRank
+					totalPower
+					round
+				}
+			}
+			totalCount
 		}
 		projectUpdates(take: $takeLatestUpdates, skip: $skipLatestUpdates) {
 			projectUpdates {
@@ -52,7 +91,7 @@ export const HOMEPAGE_DATA = gql`
 			}
 			count
 		}
-		campaigns {
+		campaigns(connectedWalletUserId: $connectedWalletUserId) {
 			id
 			title
 			slug
