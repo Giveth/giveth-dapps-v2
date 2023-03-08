@@ -5,6 +5,7 @@ import { IconHelpFilled16 } from '@giveth/ui-design-system';
 import { FC, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
