@@ -187,9 +187,6 @@ const IntroContainer = styled.div`
 
 const ContainerStyled = styled(Container)`
 	position: relative;
-	${mediaQueries.tablet} {
-		padding: 0;
-	}
 `;
 
 const IntroBanner = styled.div`
