@@ -244,6 +244,8 @@ a {
     color: #82899A;
     font-weight: 500;
 	padding: 0 8px;
+	margin-left: 4px;
+	margin-right: 4px;
 } 
 
 .swiper-pagination-bullet-active{
