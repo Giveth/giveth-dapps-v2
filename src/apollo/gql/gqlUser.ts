@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import { PROJECT_CARD_FIELDS } from './gqlProjects';
 
 export const USER_CORE_FIELDS = gql`
-	fragment UserCoreFields on Project {
+	fragment UserCoreFields on User {
 		__typename
 		id
 		firstName
