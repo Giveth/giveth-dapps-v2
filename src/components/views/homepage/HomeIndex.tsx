@@ -11,7 +11,6 @@ import { HOME_QUERY_VARIABLES, IHomeRoute } from '../../../../pages';
 import InformationBlock from '@/components/views/homepage/InformationBlock';
 import { CampaignsBlock } from './campaignsBlock/CampaignsBlock';
 import HomePartners from './partners';
-import { EthDenverBanner } from '@/components/EthDenverBanner';
 import GetUpdates from '@/components/GetUpdates';
 import { ProjectUpdatesBlock } from './projectUpdatesBlock/ProjectUpdatesBlock';
 import { useAppSelector } from '@/features/hooks';
@@ -60,7 +59,6 @@ const HomeIndex: FC<IHomeRoute> = props => {
 		<Wrapper>
 			<IntroBlock />
 			<Separator />
-			<EthDenverBanner />
 			<Separator />
 			{featuredProjectsCampaigns.length > 0
 				? featuredProjectsCampaigns.map(campaign => (
