@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { DONATION_CORE_FIELDS } from './gqlDonations';
 import { PROJECT_CARD_FIELDS } from './gqlProjects';
 
 export const USER_CORE_FIELDS = gql`
@@ -61,6 +62,7 @@ export const FETCH_USER_PROJECTS = gql`
 `;
 
 export const FETCH_USER_DONATIONS = gql`
+	${DONATION_CORE_FIELDS}
 	query FetchUserProjects(
 		$take: Int
 		$skip: Int
@@ -77,15 +79,7 @@ export const FETCH_USER_DONATIONS = gql`
 			status: $status
 		) {
 			donations {
-				id
-				transactionId
-				transactionNetworkId
-				toWalletAddress
-				fromWalletAddress
-				currency
-				anonymous
-				valueUsd
-				amount
+				...DonationCoreFields
 				user {
 					id
 				}
