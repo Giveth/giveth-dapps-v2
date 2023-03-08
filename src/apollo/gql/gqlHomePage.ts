@@ -1,8 +1,10 @@
 import { gql } from '@apollo/client';
+import { CAMPAIGN_CORE_FIELDS } from './gqlCampaign';
 import { PROJECT_CARD_FIELDS } from './gqlProjects';
 
 export const FETCH_HOMEPAGE_DATA = gql`
 	${PROJECT_CARD_FIELDS}
+	${CAMPAIGN_CORE_FIELDS}
 	query (
 		$take: Int
 		$takeLatestUpdates: Int
@@ -68,28 +70,7 @@ export const FETCH_HOMEPAGE_DATA = gql`
 			count
 		}
 		campaigns(connectedWalletUserId: $connectedWalletUserId) {
-			id
-			title
-			slug
-			isFeatured
-			isNew
-			description
-			relatedProjects {
-				...ProjectCardFields
-			}
-			relatedProjectsCount
-			hashtags
-			photo
-			video
-			videoPreview
-			type
-			isActive
-			order
-			landingLink
-			filterFields
-			sortingField
-			createdAt
-			updatedAt
+			...CampaignCoreFields
 		}
 	}
 `;
