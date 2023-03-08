@@ -30,6 +30,7 @@ export const FETCH_CAMPAIGNS = gql`
 `;
 
 export const FETCH_CAMPAIGN_BY_SLUG = gql`
+	${PROJECT_CARD_FIELDS}
 	query FetchCampaignBySlug($slug: String, $connectedWalletUserId: Int) {
 		findCampaignBySlug(
 			slug: $slug
@@ -39,34 +40,7 @@ export const FETCH_CAMPAIGN_BY_SLUG = gql`
 			title
 			description
 			relatedProjects {
-				id
-				title
-				image
-				slug
-				descriptionSummary
-				verified
-				totalDonations
-				traceCampaignId
-				reaction {
-					id
-					userId
-				}
-				totalReactions
-				adminUser {
-					name
-					walletAddress
-				}
-				updatedAt
-				organization {
-					name
-					label
-					supportCustomTokens
-				}
-				projectPower {
-					powerRank
-					totalPower
-					round
-				}
+				...ProjectCardFields
 			}
 			relatedProjectsCount
 			hashtags
