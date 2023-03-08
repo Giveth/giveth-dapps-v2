@@ -4,11 +4,12 @@ import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
 import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
-
 import { captureException } from '@sentry/nextjs';
 import { useRouter } from 'next/router';
+
 import {
 	EWallets,
+	injectedConnector,
 	IWallet,
 	torusWallet,
 	useWalletName,
@@ -16,13 +17,14 @@ import {
 } from '@/lib/wallet/walletTypes';
 import { Modal } from '@/components/modals/Modal';
 import { ETheme } from '@/features/general/general.slice';
-import { detectBrave, showToastError } from '@/lib/helpers';
+import { detectBrave, isSSRMode, showToastError } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import LowerShields from '@/components/modals/LowerShields';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { EModalEvents } from '@/hooks/useModalCallback';
+import Web3Icon from 'public/images/icons/web3.png';
 
 const WalletModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
@@ -88,6 +90,19 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 		setShowLowerShields(false);
 	};
 
+	const wallets = [...walletsArray];
+	if (!isSSRMode) {
+		const isTally = (window as any).ethereum?.isTally;
+		if (isTally) {
+			wallets[0] = {
+				name: 'Web3',
+				image: Web3Icon,
+				value: EWallets.METAMASK,
+				connector: injectedConnector,
+			};
+		}
+	}
+
 	return (
 		<>
 			{showLowerShields && <LowerShields onClose={onCloseLowerShields} />}
@@ -97,7 +112,7 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 				customTheme={ETheme.Light}
 			>
 				<IconsContainer>
-					{walletsArray.map(i => (
+					{wallets.map(i => (
 						<WalletItem
 							onClick={() => checkLowerShields(i)}
 							key={i.value}
