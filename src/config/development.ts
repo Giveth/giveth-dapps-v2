@@ -8,7 +8,7 @@ import {
 import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
-const BASE_ROUTE = 'https://serve.giveth.io';
+const BASE_ROUTE = 'https://dev.serve.giveth.io';
 const NOTIFICATION_BASE_ROUTE = 'https://staging.notification.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
@@ -29,6 +29,7 @@ const config: EnvConfig = {
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
 
+	OPENSEA_ADDRESS: 'https://testnets.opensea.io/',
 	MAINNET_CONFIG: {
 		chainId: '0x5', // A 0x-prefixed hexadecimal string
 		chainName: 'Goerli',
@@ -37,6 +38,8 @@ const config: EnvConfig = {
 			symbol: 'ETH', // 2-6 characters long
 			decimals: 18,
 		},
+		DAI_CONTRACT_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',
+		PFP_CONTRACT_ADDRESS: '0x9F8c0e0353234F6f644fc7AF84Ac006f02cecE77',
 
 		gasPreference: {
 			// Keep it empty for automatic configuration

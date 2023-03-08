@@ -8,7 +8,7 @@ import { useEvent } from './useEvent';
 
 export enum EModalEvents {
 	SIGNEDIN = 'signedin',
-	CONNECTED = 'conneced',
+	CONNECTED = 'connected',
 }
 
 const stateObj: Record<EModalEvents, 'showSignWithWallet' | 'showWalletModal'> =

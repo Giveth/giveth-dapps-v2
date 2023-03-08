@@ -53,6 +53,7 @@ import { useModalCallback } from '@/hooks/useModalCallback';
 
 const ethereumChain = config.PRIMARY_NETWORK;
 const gnosisChain = config.SECONDARY_NETWORK;
+const polygonChain = config.POLYGON_NETWORK;
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
 interface IInputBox {
@@ -192,7 +193,8 @@ const CryptoDonation: FC = () => {
 		// Native token balance is provided by the Web3Provider
 		if (
 			selectedToken.symbol === ethereumChain.mainToken ||
-			selectedToken.symbol === gnosisChain.mainToken
+			selectedToken.symbol === gnosisChain.mainToken ||
+			selectedToken.symbol === polygonChain.mainToken
 		) {
 			return setSelectedTokenBalance(balance);
 		}

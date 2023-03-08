@@ -1,4 +1,5 @@
 import {
+	B,
 	brandColors,
 	GLink,
 	neutralColors,
@@ -47,6 +48,13 @@ export const ItemTitle = styled(Overline)<IItemTitle>`
 export const ItemRow = styled(Flex)`
 	justify-content: space-between;
 	align-items: center;
+`;
+
+export const NetworkName = styled(B)`
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	width: 90px;
 `;
 
 export const ItemAction = styled(GLink)`

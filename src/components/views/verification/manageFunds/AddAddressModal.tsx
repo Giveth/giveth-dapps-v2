@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import React, { FC } from 'react';
-import { Button, IconWalletOutline } from '@giveth/ui-design-system';
+import { Button, IconWalletOutline24 } from '@giveth/ui-design-system';
 import { Controller, useForm } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
 import { utils } from 'ethers';
@@ -25,12 +25,17 @@ const networkOptions = [
 	{
 		value: config.PRIMARY_NETWORK.id,
 		label: 'Ethereum Mainnet',
-		name: 'Ethereum',
+		id: config.PRIMARY_NETWORK.id,
 	},
 	{
 		value: config.SECONDARY_NETWORK.id,
 		label: 'Gnosis',
-		name: 'Gnosis',
+		id: config.SECONDARY_NETWORK.id,
+	},
+	{
+		value: config.POLYGON_NETWORK.id,
+		label: 'Polygon Mainnet',
+		id: config.POLYGON_NETWORK.id,
 	},
 ];
 
@@ -104,7 +109,7 @@ const AddAddressModal: FC<IProps> = ({
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
 			headerTitle='Add an Address'
-			headerIcon={<IconWalletOutline />}
+			headerIcon={<IconWalletOutline24 />}
 		>
 			<Container>
 				<form onSubmit={handleSubmit(handleAdd)}>
