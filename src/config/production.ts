@@ -28,6 +28,7 @@ const config: EnvConfig = {
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
 
+	OPENSEA_ADDRESS: 'https://opensea.io/',
 	MAINNET_CONFIG: {
 		chainId: '0x1', // A 0x-prefixed hexadecimal string
 		chainName: 'Ethereum Mainnet',
@@ -36,6 +37,9 @@ const config: EnvConfig = {
 			symbol: 'ETH', // 2-6 characters long
 			decimals: 18,
 		},
+		DAI_CONTRACT_ADDRESS: '0x6b175474e89094c44da98b954eedeac495271d0f',
+		PFP_CONTRACT_ADDRESS: '0x78fde77737d5b9ab32fc718c9535c7f1b8ce84db',
+
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},

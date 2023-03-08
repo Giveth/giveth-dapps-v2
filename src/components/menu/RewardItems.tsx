@@ -1,5 +1,5 @@
 import {
-	B,
+	Caption,
 	IconForward16,
 	IconHelpFilled16,
 	OutlineLinkButton,
@@ -119,7 +119,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>
-					<B>{networkName}</B>
+					<Caption medium>{networkName}</Caption>
 					<ItemAction
 						size='Small'
 						onClick={() => switchNetworkHandler(chainId)}

@@ -27,6 +27,7 @@ import { UserItems } from './UserItems';
 import { FlexSpacer } from '../styled-components/Flex';
 import { ItemsProvider } from '@/context/Items.context';
 import { SignWithWalletModal } from '../modals/SignWithWalletModal';
+import SwitchNetwork from '@/components/modals/SwitchNetwork';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -42,6 +43,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 	const [showMenu, menuCondition, openMenu, closeMenu] = useDelayedState();
 	const [signWithWallet, setSignWithWallet] = useState<boolean>(false);
 	const [queueRoute, setQueueRoute] = useState<string>('');
+	const [showSwitchNetwork, setShowSwitchNetwork] = useState(false);
 
 	const router = useRouter();
 	const isDesktop = useMediaQuery(device.laptopL);
@@ -73,6 +75,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 						<UserItems
 							setQueueRoute={setQueueRoute}
 							setSignWithWallet={setSignWithWallet}
+							setShowSwitchNetwork={setShowSwitchNetwork}
 						/>
 					</ItemsProvider>
 				</MenuContainer>
@@ -96,6 +99,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 							<UserItems
 								setQueueRoute={setQueueRoute}
 								setSignWithWallet={setSignWithWallet}
+								setShowSwitchNetwork={setShowSwitchNetwork}
 							/>
 						</ItemsProvider>
 					</SidebarInnerContainer>
@@ -114,6 +118,9 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 						setQueueRoute('');
 					}}
 				/>
+			)}
+			{showSwitchNetwork && (
+				<SwitchNetwork setShowModal={setShowSwitchNetwork} />
 			)}
 		</MenuAndButtonContainer>
 	);

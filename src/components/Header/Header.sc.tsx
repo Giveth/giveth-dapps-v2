@@ -157,6 +157,9 @@ export const WBNetwork = styled(GLink)`
 	line-height: 13px;
 	color: #b9a7ff;
 	width: 123px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 `;
 
 export const HBPic = styled.img`

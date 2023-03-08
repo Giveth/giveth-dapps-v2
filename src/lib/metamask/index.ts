@@ -90,12 +90,9 @@ export async function addToken(
 
 export async function addNetwork(network: number): Promise<void> {
 	const { ethereum } = window;
-
-	const nodeUrl = config.NETWORKS_CONFIG[network]?.nodeUrl;
-	const rpcUrls = nodeUrl ? [nodeUrl] : [];
-	const res = await ethereum.request({
+	await ethereum.request({
 		method: 'wallet_addEthereumChain',
-		params: [{ ...networksParams[network], rpcUrls }],
+		params: [networksParams[network]],
 	});
 }
 
