@@ -14,6 +14,7 @@ import { IProjectUpdateWithProject } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
+import { EProjectPageTabs } from '../../project/ProjectIndex';
 
 interface ILatestUpdateCardProps {
 	update: IProjectUpdateWithProject;
@@ -21,7 +22,9 @@ interface ILatestUpdateCardProps {
 
 export const LatestUpdateCard: FC<ILatestUpdateCardProps> = ({ update }) => {
 	return (
-		<Link href={`${Routes.Project}/${update.project.slug}`}>
+		<Link
+			href={`${Routes.Project}/${update.project.slug}?tab=${EProjectPageTabs.UPDATES}`}
+		>
 			<LatestUpdateCardContainer>
 				<ImageWrapper>
 					{update.project.image && (
