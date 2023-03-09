@@ -13,6 +13,8 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { zIndex } from '@/lib/constants/constants';
 import { Container } from '@/components/Grid';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
+import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
+import { client } from '@/apollo/apolloClient';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -46,6 +48,14 @@ const TestRoute = () => {
 			dismissLabel: 'OK :D',
 			position: 'bottom-center',
 		});
+
+	const fetchProjects = async () => {
+		const res = await client.query({
+			query: FETCH_ALL_PROJECTS,
+			fetchPolicy: 'network-only',
+		});
+		console.log('res', res);
+	};
 
 	// console.log('xDaiValues', xDaiValues);
 	// useEffect(() => {
@@ -118,6 +128,9 @@ const TestRoute = () => {
 					}}
 				>
 					remove search
+				</button>
+				<button type='button' onClick={fetchProjects}>
+					Fetch Projects
 				</button>
 				<div>
 					--------------------------------------------

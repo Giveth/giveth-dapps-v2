@@ -1,6 +1,45 @@
 import { gql } from '@apollo/client';
 
+export const PROJECT_CORE_FIELDS = gql`
+	fragment ProjectCoreFields on Project {
+		__typename
+		id
+		title
+		image
+		slug
+		verified
+		totalDonations
+	}
+`;
+
+export const PROJECT_CARD_FIELDS = gql`
+	${PROJECT_CORE_FIELDS}
+	fragment ProjectCardFields on Project {
+		...ProjectCoreFields
+		descriptionSummary
+		totalReactions
+		reaction {
+			id
+			userId
+		}
+		adminUser {
+			name
+			walletAddress
+		}
+		updatedAt
+		organization {
+			label
+		}
+		projectPower {
+			powerRank
+			totalPower
+			round
+		}
+	}
+`;
+
 export const FETCH_ALL_PROJECTS = gql`
+	${PROJECT_CARD_FIELDS}
 	query FetchAllProjects(
 		$limit: Int
 		$skip: Int
@@ -24,33 +63,7 @@ export const FETCH_ALL_PROJECTS = gql`
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
-				id
-				title
-				image
-				slug
-				descriptionSummary
-				verified
-				totalDonations
-				reaction {
-					id
-					userId
-				}
-				totalReactions
-				adminUser {
-					name
-					walletAddress
-				}
-				updatedAt
-				organization {
-					name
-					label
-					supportCustomTokens
-				}
-				projectPower {
-					powerRank
-					totalPower
-					round
-				}
+				...ProjectCardFields
 			}
 			totalCount
 			categories {
@@ -61,24 +74,20 @@ export const FETCH_ALL_PROJECTS = gql`
 `;
 
 export const FETCH_PROJECT_BY_SLUG = gql`
+	${PROJECT_CORE_FIELDS}
 	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
 		projectBySlug(
 			slug: $slug
 			connectedWalletUserId: $connectedWalletUserId
 		) {
-			id
-			title
-			image
-			slug
+			...ProjectCoreFields
 			description
-			verified
 			addresses {
 				address
 				isRecipient
 				networkId
 			}
 			totalProjectUpdates
-			totalDonations
 			creationDate
 			reaction {
 				id
@@ -210,6 +219,7 @@ export const FETCH_PROJECT_UPDATES = gql`
 `;
 
 export const FETCH_FEATURED_UPDATE_PROJECTS = gql`
+	${PROJECT_CARD_FIELDS}
 	query fetchFeaturedProjects(
 		$limit: Int
 		$skip: Int
@@ -221,33 +231,7 @@ export const FETCH_FEATURED_UPDATE_PROJECTS = gql`
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
-				id
-				title
-				image
-				slug
-				descriptionSummary
-				verified
-				totalDonations
-				reaction {
-					id
-					userId
-				}
-				totalReactions
-				adminUser {
-					name
-					walletAddress
-				}
-				updatedAt
-				organization {
-					name
-					label
-					supportCustomTokens
-				}
-				projectPower {
-					powerRank
-					totalPower
-					round
-				}
+				...ProjectCardFields
 			}
 			totalCount
 		}
@@ -313,43 +297,11 @@ export const EDIT_PROJECT_UPDATE = gql`
 `;
 
 export const FETCH_USER_LIKED_PROJECTS = gql`
+	${PROJECT_CARD_FIELDS}
 	query FetchUserLikedProjects($take: Int, $skip: Int, $userId: Int!) {
 		likedProjectsByUserId(take: $take, skip: $skip, userId: $userId) {
 			projects {
-				id
-				title
-				balance
-				descriptionSummary
-				image
-				slug
-				creationDate
-				admin
-				addresses {
-					address
-					isRecipient
-					networkId
-				}
-				adminUser {
-					walletAddress
-					name
-				}
-				impactLocation
-				listed
-				totalDonations
-				categories {
-					name
-					value
-				}
-				reaction {
-					id
-					userId
-				}
-				qualityScore
-				updatedAt
-				organization {
-					label
-				}
-				verified
+				...ProjectCardFields
 			}
 			totalCount
 		}
@@ -490,26 +442,11 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 `;
 
 export const SIMILAR_PROJECTS = gql`
+	${PROJECT_CARD_FIELDS}
 	query SimilarProjectsBySlug($slug: String!, $take: Int, $skip: Int) {
 		similarProjectsBySlug(slug: $slug, take: $take, skip: $skip) {
 			projects {
-				id
-				title
-				image
-				slug
-				creationDate
-				descriptionSummary
-				verified
-				adminUser {
-					name
-					walletAddress
-				}
-				totalDonations
-				updatedAt
-				organization {
-					name
-					label
-				}
+				...ProjectCardFields
 			}
 		}
 	}
@@ -527,75 +464,6 @@ export const FETCH_MAIN_CATEGORIES = gql`
 				value
 				isActive
 			}
-		}
-	}
-`;
-
-export const FETCH_PROJECTS_BY_SLUG = gql`
-	query ($take: Float, $skip: Float, $slugs: [String!]!) {
-		projectsBySlugs(take: $take, skip: $skip, slugs: $slugs) {
-			projects {
-				id
-				title
-				balance
-				descriptionSummary
-				image
-				slug
-				description
-				verified
-				traceCampaignId
-				addresses {
-					address
-					isRecipient
-					networkId
-				}
-				totalProjectUpdates
-				totalDonations
-				totalTraceDonations
-				creationDate
-				reaction {
-					id
-					userId
-				}
-				totalReactions
-				traceCampaignId
-				categories {
-					name
-					value
-					mainCategory {
-						title
-					}
-				}
-				adminUser {
-					id
-					name
-					walletAddress
-				}
-				status {
-					id
-					name
-				}
-				organization {
-					name
-					label
-					supportCustomTokens
-				}
-				projectVerificationForm {
-					status
-				}
-				verificationFormStatus
-				projectPower {
-					powerRank
-					totalPower
-					round
-				}
-				projectFuturePower {
-					totalPower
-					powerRank
-					round
-				}
-			}
-			totalCount
 		}
 	}
 `;

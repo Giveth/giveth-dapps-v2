@@ -178,7 +178,6 @@ export interface IDonation {
 		name?: string;
 		firstName?: string;
 	};
-	fromWalletAddress: string;
 	amount: number;
 	currency: string;
 	valueUsd?: number;
@@ -195,7 +194,6 @@ export interface IWalletDonation extends IDonation {
 	priceEth: number;
 	priceUsd: number;
 	project: IProject;
-	toWalletAddress: string;
 	valueEth: number;
 	valueUsd: number;
 }

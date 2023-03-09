@@ -1,6 +1,10 @@
 import { gql } from '@apollo/client';
+import { CAMPAIGN_CORE_FIELDS } from './gqlCampaign';
+import { PROJECT_CARD_FIELDS } from './gqlProjects';
 
 export const FETCH_HOMEPAGE_DATA = gql`
+	${PROJECT_CARD_FIELDS}
+	${CAMPAIGN_CORE_FIELDS}
 	query (
 		$take: Int
 		$takeLatestUpdates: Int
@@ -38,33 +42,7 @@ export const FETCH_HOMEPAGE_DATA = gql`
 			connectedWalletUserId: $connectedWalletUserId
 		) {
 			projects {
-				id
-				title
-				image
-				slug
-				descriptionSummary
-				verified
-				totalDonations
-				reaction {
-					id
-					userId
-				}
-				totalReactions
-				adminUser {
-					name
-					walletAddress
-				}
-				updatedAt
-				organization {
-					name
-					label
-					supportCustomTokens
-				}
-				projectPower {
-					powerRank
-					totalPower
-					round
-				}
+				...ProjectCardFields
 			}
 			totalCount
 		}
@@ -92,55 +70,7 @@ export const FETCH_HOMEPAGE_DATA = gql`
 			count
 		}
 		campaigns(connectedWalletUserId: $connectedWalletUserId) {
-			id
-			title
-			slug
-			isFeatured
-			isNew
-			description
-			relatedProjects {
-				id
-				title
-				image
-				slug
-				descriptionSummary
-				verified
-				totalDonations
-				traceCampaignId
-				reaction {
-					id
-					userId
-				}
-				totalReactions
-				adminUser {
-					name
-					walletAddress
-				}
-				updatedAt
-				organization {
-					name
-					label
-					supportCustomTokens
-				}
-				projectPower {
-					powerRank
-					totalPower
-					round
-				}
-			}
-			relatedProjectsCount
-			hashtags
-			photo
-			video
-			videoPreview
-			type
-			isActive
-			order
-			landingLink
-			filterFields
-			sortingField
-			createdAt
-			updatedAt
+			...CampaignCoreFields
 		}
 	}
 `;
