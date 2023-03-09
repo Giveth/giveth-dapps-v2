@@ -5,11 +5,9 @@ import { Navigation } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import Routes from '@/lib/constants/Routes';
 import { IMainCategory } from '@/apollo/types/types';
 import InternalLink from '@/components/InternalLink';
-import { useProjectsContext } from '@/context/projects.context';
 
 interface IProjectsFilterProps {
 	mainCategories: IMainCategory[];
@@ -18,20 +16,12 @@ interface IProjectsFilterProps {
 function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 	const projectsRoute = Routes.Projects + '/';
 	const { query } = useRouter();
-	const { variables, setVariables } = useProjectsContext();
 	const handleIsSelected = (categorySlug: string) => {
 		if (!query?.slug) {
 			return categorySlug === 'all';
 		}
 		return categorySlug === query.slug;
 	};
-
-	useEffect(() => {
-		setVariables({
-			...variables,
-			category: undefined,
-		});
-	}, [query?.slug]);
 
 	return (
 		<Swiper
