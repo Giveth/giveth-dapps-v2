@@ -167,11 +167,10 @@ const SectionContainer = styled.div`
 	margin-top: 10px;
 	::before {
 		content: '';
-		background-image: url('/images/backgrounds/giv-outlined-bright-opacity.png');
+		background-image: url('/images/backgrounds/giv-background-homepage.svg');
 		background-repeat: repeat;
 		position: absolute;
 		height: 100%;
-		opacity: 0.5;
 		top: 0;
 		left: 0;
 		right: 0;
