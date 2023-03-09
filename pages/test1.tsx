@@ -13,7 +13,6 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { zIndex } from '@/lib/constants/constants';
 import { Container } from '@/components/Grid';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
-import { EthDenverBanner } from '@/components/EthDenverBanner';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 
@@ -153,7 +152,6 @@ const TestRoute = () => {
 					limit={200}
 				/>
 			</TestContainer>
-			<EthDenverBanner />
 		</>
 	);
 };
