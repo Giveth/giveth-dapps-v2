@@ -24,7 +24,7 @@ export const LatestUpdateCard: FC<ILatestUpdateCardProps> = ({ update }) => {
 		<Link href={`${Routes.Project}/${update.project.slug}`}>
 			<LatestUpdateCardContainer>
 				<ImageWrapper>
-					{update.project.image?.startsWith('http') && (
+					{update.project.image && (
 						<Image
 							fill
 							src={update.project.image || ''}
