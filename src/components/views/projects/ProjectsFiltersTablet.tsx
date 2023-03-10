@@ -1,6 +1,7 @@
 import { IconDots, IconX } from '@giveth/ui-design-system';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/dist/client/router';
 import ProjectsSearchTablet from '@/components/views/projects/ProjectsSearchTablet';
 import ProjectsFiltersSwiper from '@/components/views/projects/ProjectsFiltersSwiper';
 import { Flex } from '@/components/styled-components/Flex';
@@ -16,6 +17,11 @@ import ProjectsFiltersButton from '@/components/views/projects/ProjectsFiltersBu
 const ProjectsFiltersTablet = () => {
 	const { selectedMainCategory } = useProjectsContext();
 	const [showSearchAndFilter, setShowSearchAndFilter] = useState(false);
+	const router = useRouter();
+
+	useEffect(() => {
+		if (router.query.term) setShowSearchAndFilter(true);
+	}, [router.query.term]);
 
 	return (
 		<>

@@ -12,34 +12,35 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import styled, { css } from 'styled-components';
 import {
-	Button,
 	brandColors,
+	Button,
+	ButtonText,
+	Caption,
+	IconArchiving,
+	IconHelpFilled16,
+	IconRocketInSpace,
+	IconRocketInSpace24,
+	IconRocketInSpace32,
 	neutralColors,
 	OutlineButton,
-	IconArchiving,
-	Caption,
-	IconRocketInSpace,
-	ButtonText,
-	IconRocketInSpace24,
 	Subline,
-	IconHelpFilled16,
-	IconRocketInSpace32,
 } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
 
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { compareAddresses, showToastError } from '@/lib/helpers';
-import { EVerificationStatus } from '@/apollo/types/types';
+import { compareAddresses, isSSRMode, showToastError } from '@/lib/helpers';
+import { EVerificationStatus, IReaction } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
 import ShareModal from '@/components/modals/ShareModal';
-import { IReaction } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
+import {
+	ACTIVATE_PROJECT,
+	FETCH_PROJECT_REACTION_BY_ID,
+} from '@/apollo/gql/gqlProjects';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
-import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import {
 	idToProjectEdit,
 	slugToProjectDonate,
@@ -52,8 +53,8 @@ import ExternalLink from '@/components/ExternalLink';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import {
-	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
+	incrementLikedProjectsCount,
 } from '@/features/user/user.slice';
 import { EProjectVerificationStatus } from '@/apollo/types/gqlEnums';
 import VerificationStatus from '@/components/views/project/projectDonateCard/VerificationStatus';
@@ -65,7 +66,7 @@ import CategoryBadge from '@/components/badges/CategoryBadge';
 import { mapCategoriesToMainCategories } from '@/helpers/singleProject';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
-import { useModalCallback } from '@/hooks/useModalCallback';
+import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
 import { useProjectContext } from '@/context/project.context';
 
 interface IProjectDonateCard {
@@ -79,6 +80,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	const { formatMessage } = useIntl();
 	const {
 		isSignedIn,
+		isEnabled,
 		userData: user,
 		isLoading: isUserLoading,
 	} = useAppSelector(state => state.user);
@@ -165,9 +167,16 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	const { modalCallback: signInThenLike } =
 		useModalCallback(likeUnlikeProject);
 
+	const { modalCallback: connectThenSignIn } = useModalCallback(
+		signInThenLike,
+		EModalEvents.CONNECTED,
+	);
+
 	const checkSignInThenLike = () => {
-		if (typeof window === 'undefined') return;
-		if (!isSignedIn) {
+		if (isSSRMode) return;
+		if (!isEnabled) {
+			connectThenSignIn();
+		} else if (!isSignedIn) {
 			signInThenLike();
 		} else {
 			likeUnlikeProject();
@@ -208,8 +217,16 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 
 	const { modalCallback: signInThenBoost } = useModalCallback(showBoostModal);
 
+	const { modalCallback: connectThenSign } = useModalCallback(
+		signInThenBoost,
+		EModalEvents.CONNECTED,
+	);
+
 	const handleBoostClick = () => {
-		if (!isSignedIn) {
+		if (isSSRMode) return;
+		if (!isEnabled) {
+			connectThenSign();
+		} else if (!isSignedIn) {
 			signInThenBoost();
 		} else {
 			showBoostModal();
@@ -354,7 +371,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						/>
 					)}
 					{isAdmin ? (
-						<>
+						<FullWidth>
 							<FullButton
 								buttonType='primary'
 								label='EDIT'
@@ -379,7 +396,10 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 									/>
 								)}
 							{isVerDraft && (
-								<ExternalLink href={slugToVerification(slug)}>
+								<ExternalLink
+									href={slugToVerification(slug)}
+									fullWidth
+								>
 									<FullOutlineButton
 										buttonType='primary'
 										label={
@@ -398,7 +418,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 									label='PUBLISH PROJECT'
 								/>
 							)}
-						</>
+						</FullWidth>
 					) : (
 						<FullButton
 							onClick={() =>
@@ -471,6 +491,12 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 	);
 };
 
+const FullWidth = styled.div`
+	> * {
+		width: 100%;
+	}
+`;
+
 const BoostButton = styled(Flex)`
 	border-radius: 48px;
 	box-shadow: ${Shadow.Neutral[500]};
@@ -533,7 +559,7 @@ const BadgeWrapper = styled.div`
 `;
 
 interface IWrapper {
-	isMobile: boolean;
+	isMobile: boolean | null;
 }
 
 interface IWrapperWithHeight extends IWrapper {

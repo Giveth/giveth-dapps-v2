@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
 	P,
+	Lead,
 	brandColors,
 	neutralColors,
 	IconDocs,
@@ -11,13 +12,12 @@ import {
 	IconTwitter,
 	Caption,
 	IconDiscord,
-	Lead,
 } from '@giveth/ui-design-system';
+import Image from 'next/image';
 import Link from 'next/link';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
-import Image from 'next/image';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -30,165 +30,156 @@ import { LanguageModal } from '../modals/LanguageModal';
 const Footer = () => {
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
-	const [showLanguageModal, setShowLanguageModal] = useState(false);
 	const textColor =
 		theme === ETheme.Dark ? brandColors.deep[100] : brandColors.deep[800];
 	const isDark = theme === ETheme.Dark;
+	const [showLanguageModal, setShowLanguageModal] = useState(false);
 
 	return (
 		<FooterContainer>
 			{showLanguageModal && (
 				<LanguageModal setShowModal={setShowLanguageModal} />
 			)}
-			<OutterContainer>
-				<ContainerStyled isDark={isDark}>
-					<LeftContainer wrap={1}>
-						<LinkColumn>
-							<Link href={Routes.Home}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.home',
-									})}
-								</LinkItem>
-							</Link>
-							<Link href={Routes.Projects}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.projects',
-									})}
-								</LinkItem>
-							</Link>
-							<Link href={Routes.AboutUs}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.about_us',
-									})}
-								</LinkItem>
-							</Link>
-							<Link href={Routes.Faq}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.faq',
-									})}
-								</LinkItem>
-							</Link>
-							<Link href={Routes.Support}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.support',
-									})}
-								</LinkItem>
-							</Link>
-						</LinkColumn>
-						<LinkColumn>
-							<Link href={Routes.Join}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.join_our_community',
-									})}
-								</LinkItem>
-							</Link>
-							<a href={links.GIVETH_DOCS}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.what_is_giveth',
-									})}
-								</LinkItem>
-							</a>
-							<a href={links.USER_DOCS}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.user_guides',
-									})}
-								</LinkItem>
-							</a>
-							<a href={links.DEVELOPER_DOCS}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.dev_docs',
-									})}
-								</LinkItem>
-							</a>
-							<Link href={Routes.Terms}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.tos',
-									})}
-								</LinkItem>
-							</Link>
-						</LinkColumn>
-						<LinkColumn>
-							<a href={links.TRACE}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.giveth_trace',
-									})}
-								</LinkItem>
-							</a>
-							<a href={links.COMMONS_STACK}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.commons_stack',
-									})}
-								</LinkItem>
-							</a>
-							<Link href={Routes.Partnerships}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.partnerships',
-									})}
-								</LinkItem>
-							</Link>
-							<a href={links.RECRUITEE}>
-								<LinkItem color={textColor}>
-									{formatMessage({
-										id: 'component.title.we_hiring',
-									})}
-								</LinkItem>
-							</a>
-						</LinkColumn>
-					</LeftContainer>
-					<RightContainer color={textColor}>
-						<SocialContainer>
-							<a href={links.MEDIUM}>
-								<IconMedium size={24} color={textColor} />
-							</a>
-							<a href={links.GITHUB}>
-								<IconGithub size={24} color={textColor} />
-							</a>
-							<a href={links.REDDIT}>
-								<IconRedit size={24} color={textColor} />
-							</a>
-							<a href={links.TWITTER}>
-								<IconTwitter size={24} color={textColor} />
-							</a>
-							<a href={links.YOUTUBE}>
-								<IconYoutube size={24} color={textColor} />
-							</a>
-							<a href={links.DISCORD}>
-								<IconDiscord size={24} color={textColor} />
-							</a>
-							<a href={links.DOCS}>
-								<IconDocs size={24} color={textColor} />
-							</a>
-						</SocialContainer>
-						<SupportUs>
-							<Caption medium>
+			<ContainerStyled>
+				<LeftContainer wrap={1}>
+					<LinkColumn>
+						<Link href={Routes.Home}>
+							<LinkItem color={textColor}>
 								{formatMessage({
-									id: 'component.title.support_us',
+									id: 'component.title.home',
 								})}
-							</Caption>
-							<Link href={links.SUPPORT_US}>
-								<CaptionRed medium>
-									&nbsp;
-									{formatMessage({
-										id: 'component.title.with_your_donation',
-									})}
-								</CaptionRed>
-							</Link>
-						</SupportUs>
-					</RightContainer>
-				</ContainerStyled>
+							</LinkItem>
+						</Link>
+						<Link href={Routes.Projects}>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.projects',
+								})}
+							</LinkItem>
+						</Link>
+						<Link href={Routes.AboutUs}>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.about_us',
+								})}
+							</LinkItem>
+						</Link>
+						<Link href={Routes.Faq}>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.faq',
+								})}
+							</LinkItem>
+						</Link>
+						<Link href={Routes.Support}>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.support',
+								})}
+							</LinkItem>
+						</Link>
+					</LinkColumn>
+					<LinkColumn>
+						<Link href={Routes.Join}>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.join_our_community',
+								})}
+							</LinkItem>
+						</Link>
+						<a href={links.GIVETH_DOCS}>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.what_is_giveth',
+								})}
+							</LinkItem>
+						</a>
+						<a href={links.USER_DOCS}>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.user_guides',
+								})}
+							</LinkItem>
+						</a>
+						<a href={links.DEVELOPER_DOCS}>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.dev_docs',
+								})}
+							</LinkItem>
+						</a>
+						<Link href={Routes.Terms}>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.tos',
+								})}
+							</LinkItem>
+						</Link>
+					</LinkColumn>
+					<LinkColumn>
+						<a href={links.COMMONS_STACK}>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.commons_stack',
+								})}
+							</LinkItem>
+						</a>
+						<Link href={Routes.Partnerships}>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.partnerships',
+								})}
+							</LinkItem>
+						</Link>
+						<a href={links.RECRUITEE}>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.we_hiring',
+								})}
+							</LinkItem>
+						</a>
+					</LinkColumn>
+				</LeftContainer>
+				<RightContainer color={textColor}>
+					<SocialContainer>
+						<a href={links.MEDIUM}>
+							<IconMedium size={24} color={textColor} />
+						</a>
+						<a href={links.GITHUB}>
+							<IconGithub size={24} color={textColor} />
+						</a>
+						<a href={links.REDDIT}>
+							<IconRedit size={24} color={textColor} />
+						</a>
+						<a href={links.TWITTER}>
+							<IconTwitter size={24} color={textColor} />
+						</a>
+						<a href={links.YOUTUBE}>
+							<IconYoutube size={24} color={textColor} />
+						</a>
+						<a href={links.DISCORD}>
+							<IconDiscord size={24} color={textColor} />
+						</a>
+						<a href={links.DOCS}>
+							<IconDocs size={24} color={textColor} />
+						</a>
+					</SocialContainer>
+					<SupportUs>
+						<Caption medium>
+							{formatMessage({
+								id: 'component.title.support_us',
+							})}
+						</Caption>
+						<Link href={links.SUPPORT_US}>
+							<CaptionRed medium>
+								&nbsp;
+								{formatMessage({
+									id: 'component.title.with_your_donation',
+								})}
+							</CaptionRed>
+						</Link>
+					</SupportUs>
+				</RightContainer>
 				<Language
 					isDark={isDark}
 					onClick={() => {
@@ -205,53 +196,23 @@ const Footer = () => {
 						{formatMessage({ id: 'label.choose_language' })}
 					</Lang>
 				</Language>
-			</OutterContainer>
+			</ContainerStyled>
 		</FooterContainer>
 	);
 };
 
 export default Footer;
 
-const Language = styled.div<{ isDark?: boolean }>`
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	margin: 24px;
-	color: ${props =>
-		props.isDark ? brandColors.deep[100] : neutralColors.gray[800]};
-
-	${mediaQueries.laptopS} {
-		margin: 16px 0 32px 0;
-	}
-`;
-
-const Lang = styled(Lead)`
-	cursor: pointer;
-`;
-
-const OutterContainer = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	flex-direction: column;
-	align-items: flex-end;
-`;
-
-const ContainerStyled = styled(Container)<{ isDark?: boolean }>`
+const ContainerStyled = styled(Container)`
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
-	border-bottom: 1px solid
-		${props =>
-			props.isDark ? brandColors.ocean[200] : neutralColors.gray[500]};
 `;
 
 const FooterContainer = styled.div`
-	display: flex;
-	flex-direction: column;
 	position: relative;
 	padding: 35px 0 12px;
 	z-index: 2;
-	align-items: center;
 `;
 
 const LeftContainer = styled(Flex)`
@@ -307,4 +268,20 @@ const LinkItem = styled(P)<{ color: string }>`
 
 const CaptionRed = styled(Caption)`
 	color: ${brandColors.pinky[500]};
+`;
+
+const Language = styled.div<{ isDark?: boolean }>`
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 24px;
+	color: ${props =>
+		props.isDark ? brandColors.deep[100] : neutralColors.gray[800]};
+	${mediaQueries.laptopS} {
+		margin: 16px 0 32px 0;
+	}
+`;
+
+const Lang = styled(Lead)`
+	cursor: pointer;
 `;

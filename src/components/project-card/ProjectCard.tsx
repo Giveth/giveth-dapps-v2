@@ -21,7 +21,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
-import { timeFromNow, htmlToText } from '@/lib/helpers';
+import { timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import {
 	addressToUserView,
@@ -38,13 +38,14 @@ const SIDE_PADDING = '26px';
 
 interface IProjectCard {
 	project: IProject;
+	className?: string;
 }
 
 const ProjectCard = (props: IProjectCard) => {
-	const { project } = props;
+	const { project, className } = props;
 	const {
 		title,
-		description,
+		descriptionSummary,
 		image,
 		slug,
 		adminUser,
@@ -67,6 +68,7 @@ const ProjectCard = (props: IProjectCard) => {
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
+			className={className}
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges project={project} />
@@ -79,7 +81,13 @@ const ProjectCard = (props: IProjectCard) => {
 				</Link>
 			</ImagePlaceholder>
 			<CardBody
-				isHover={isHover}
+				isHover={
+					isHover
+						? verified
+							? ECardBodyHover.FULL
+							: ECardBodyHover.HALF
+						: ECardBodyHover.NONE
+				}
 				isOtherOrganization={
 					orgLabel && orgLabel !== ORGANIZATION.giveth
 				}
@@ -114,7 +122,7 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				</PaddedRow>
 				<Link href={slugToProjectView(slug)}>
-					<Description>{htmlToText(description)}</Description>
+					<Description>{descriptionSummary}</Description>
 					<PaddedRow alignItems='center' gap='4px'>
 						<PriceText>
 							${Math.round(totalDonations as number)}
@@ -239,6 +247,8 @@ const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
 `;
 
 const Hr = styled.hr`
+	margin-left: ${SIDE_PADDING};
+	margin-right: ${SIDE_PADDING};
 	border: 1px solid ${neutralColors.gray[300]};
 `;
 
@@ -250,9 +260,15 @@ const Description = styled(P)`
 	margin-bottom: 16px;
 `;
 
+enum ECardBodyHover {
+	NONE,
+	HALF,
+	FULL,
+}
+
 const CardBody = styled.div<{
 	isOtherOrganization?: boolean | '';
-	isHover?: boolean;
+	isHover: ECardBodyHover;
 }>`
 	position: absolute;
 	left: 0;
@@ -263,13 +279,12 @@ const CardBody = styled.div<{
 	border-radius: ${props =>
 		props.isOtherOrganization ? '0 12px 12px 12px' : '12px'};
 	${mediaQueries.laptopS} {
-		top: ${props => {
-			if (props.isHover) {
-				return '109px';
-			} else {
-				return '186px';
-			}
-		}};
+		top: ${props =>
+			props.isHover == ECardBodyHover.FULL
+				? '109px'
+				: props.isHover == ECardBodyHover.HALF
+				? '150px'
+				: '186px'};
 	}
 `;
 

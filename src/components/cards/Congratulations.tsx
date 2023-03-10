@@ -14,7 +14,9 @@ import { Flex } from '../styled-components/Flex';
 import { AddTokenButton } from '../AddTokenButton';
 import { Container } from '@/components/Grid';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
-import LottieControl from '@/components/animations/lottieControl';
+import LottieControl from '@/components/LottieControl';
+import ExternalLink from '@/components/ExternalLink';
+import links from '@/lib/constants/links';
 
 const SmileImage = styled.div`
 	position: absolute;
@@ -211,11 +213,7 @@ export const CongratulationsCard = () => {
 							/>
 						</SocialButton>
 					</a>
-					<a
-						href='https://swag.giveth.io/'
-						target='_blank'
-						rel='noreferrer'
-					>
+					<ExternalLink href={links.SWAG}>
 						<SocialButton>
 							{formatMessage({
 								id: 'label.claim_your_free_swag',
@@ -227,12 +225,8 @@ export const CongratulationsCard = () => {
 								alt='T shirt.'
 							/>
 						</SocialButton>
-					</a>
-					<a
-						href='https://discord.giveth.io/'
-						target='_blank'
-						rel='noreferrer'
-					>
+					</ExternalLink>
+					<ExternalLink href={links.DISCORD}>
 						<SocialButton>
 							{formatMessage({ id: 'label.join_our_discord' })}
 							<Image
@@ -242,7 +236,7 @@ export const CongratulationsCard = () => {
 								alt='discord logo.'
 							/>
 						</SocialButton>
-					</a>
+					</ExternalLink>
 				</SocialButtonsContainer>
 				<ExploreRow>
 					<a href='/' target='_blank'>

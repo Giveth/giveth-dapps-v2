@@ -6,11 +6,16 @@ import {
 	FETCH_GNOSIS_TOKEN_PRICE,
 } from './price.queries';
 
-export const fetchEthPrice = async (): Promise<string> => {
+export const fetchEthPrice = async (): Promise<number> => {
 	const res = await getRequest(
-		'https://feathers.giveth.io/conversionRates?from=ETH&to=USD&interval=hourly',
+		'https://api.coingecko.com/api/v3/simple/price',
+		undefined,
+		{
+			ids: 'ethereum',
+			vs_currencies: 'usd',
+		},
 	);
-	return res.rate;
+	return res?.ethereum?.usd;
 };
 
 export const fetchMainnetTokenPrice = async (

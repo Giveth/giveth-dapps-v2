@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { brandColors } from '@giveth/ui-design-system';
+import { Button as GivethButton } from '@giveth/ui-design-system';
 
 interface IButtonProps {
 	secondary?: boolean;
@@ -51,4 +53,15 @@ export const Button = styled.button<IButtonProps>`
 	text-align: center;
 	cursor: pointer;
 	display: block;
+`;
+
+export const GhostButton = styled(GivethButton)<{ color?: string }>`
+	color: ${({ color }) => color || brandColors.pinky[500]};
+	background: transparent;
+	border-color: transparent;
+	padding: 10px;
+	:hover {
+		color: ${({ color }) => color || brandColors.pinky[500]};
+		background: transparent;
+	}
 `;

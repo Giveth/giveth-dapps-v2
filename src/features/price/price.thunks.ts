@@ -1,18 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import config from '@/configuration';
 import {
-	fetchEthPrice,
 	fetchGnosisTokenPrice,
 	fetchMainnetTokenPrice,
 } from './price.services';
-
-export const fetchEthPriceAsync = createAsyncThunk(
-	'price/fetchEthPrice',
-	async () => {
-		const rate = await fetchEthPrice();
-		return rate;
-	},
-);
 
 export const fetchGIVPriceAsync = createAsyncThunk(
 	'price/fetchGIVPrice',

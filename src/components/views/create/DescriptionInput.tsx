@@ -55,6 +55,7 @@ const DescriptionInput = () => {
 					style={TextInputStyle}
 					setValue={handleDescription}
 					value={description}
+					noShadow
 				/>
 			</InputContainerStyled>
 			{/*<ErrorStyled>{error || null}</ErrorStyled>*/}

@@ -42,6 +42,9 @@ const Routes = {
 	GIVbacks: '/givbacks',
 	Claim: '/claim',
 	GivethProject: '/project/the-giveth-community-of-makers',
+	NFT: '/nft',
+	NFTMint: '/nft/mint',
+	Landing: '/landings',
 };
 
 export default Routes;

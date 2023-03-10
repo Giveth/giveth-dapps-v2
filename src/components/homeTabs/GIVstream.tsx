@@ -191,9 +191,10 @@ export const TabGIVstreamBottom = () => {
 	return (
 		<GIVstreamBottomContainer>
 			<Container>
+				<div id='flowRate'></div>
 				<NetworkSelector />
 				<FlowRateRow alignItems='baseline' gap='8px' wrap={1}>
-					<H3 id='flowRate' weight={700}>
+					<H3 weight={700}>
 						{formatMessage({ id: 'label.your_flowrate' })}:
 					</H3>
 					<IconGIVStream size={64} />

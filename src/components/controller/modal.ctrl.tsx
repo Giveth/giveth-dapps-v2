@@ -12,8 +12,10 @@ import {
 	setShowFirstWelcomeModal,
 	setShowWalletModal,
 	setShowSignWithWallet,
+	setShowSearchModal,
 } from '@/features/modal/modal.slice';
 import { isUserRegistered } from '@/lib/helpers';
+import { SearchModal } from '../modals/SearchModal';
 
 const ModalController = () => {
 	const {
@@ -22,6 +24,7 @@ const ModalController = () => {
 		showSignWithWallet,
 		showWalletModal,
 		showWelcomeModal,
+		showSearchModal,
 	} = useAppSelector(state => state.modal);
 
 	const { userData, isSignedIn } = useAppSelector(state => state.user);
@@ -83,6 +86,11 @@ const ModalController = () => {
 					setShowModal={state =>
 						dispatch(setShowFirstWelcomeModal(state))
 					}
+				/>
+			)}
+			{showSearchModal && (
+				<SearchModal
+					setShowModal={state => dispatch(setShowSearchModal(state))}
 				/>
 			)}
 		</>

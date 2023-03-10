@@ -21,8 +21,7 @@ import { FieldError } from 'react-hook-form';
 
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
-import { IconGnosisChain } from '@/components/Icons/GnosisChain';
-import { IconEthereum } from '@/components/Icons/Eth';
+import NetworkLogo from '@/components/NetworkLogo';
 
 declare module 'react-select/dist/declarations/src/Select' {
 	export interface Props<
@@ -74,16 +73,12 @@ const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 
 const Option: ComponentType<OptionProps<ISelectedNetwork>> = props => {
 	const { data, isSelected } = props;
-	const { label } = data;
+	const { label, id } = data;
 	return (
 		<components.Option {...props}>
 			<OptionContainer>
 				<RowContainer>
-					{label === 'Gnosis' ? (
-						<IconGnosisChain size={24} />
-					) : (
-						<IconEthereum size={24} />
-					)}
+					<NetworkLogo chainId={id} logoSize={40} />
 					<B>{label}</B>
 				</RowContainer>
 				{isSelected && <IconCheck color={brandColors.giv[500]} />}

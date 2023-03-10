@@ -9,8 +9,8 @@ import {
 } from 'react';
 import styled from 'styled-components';
 import { createPortal } from 'react-dom';
-import { zIndex } from '@/lib/constants/constants';
-import useDetectDevice from '@/hooks/useDetectDevice';
+import { deviceSize, zIndex } from '@/lib/constants/constants';
+import useMediaQuery from '@/hooks/useMediaQuery';
 
 export interface ITooltipDirection {
 	direction: 'right' | 'left' | 'top' | 'bottom';
@@ -33,7 +33,7 @@ export const Tooltip: FC<ITooltipProps> = ({
 	const [style, setStyle] = useState<CSSProperties>({});
 	const el = useRef(document.createElement('div'));
 	const childRef = useRef<HTMLDivElement>(null);
-	const { isMobile } = useDetectDevice();
+	const isMobile = useMediaQuery(`(max-width: ${deviceSize.tablet - 1}px)`);
 
 	useEffect(() => {
 		const current = el.current;
@@ -59,7 +59,7 @@ export const Tooltip: FC<ITooltipProps> = ({
 				direction,
 				align,
 			},
-			isMobile,
+			!!isMobile,
 			parentRect,
 			childRect,
 		);
@@ -114,7 +114,7 @@ const translateYForRightLeft = (
 
 const tooltipStyleCalc = (
 	position: ITooltipDirection,
-	isMobile: Boolean,
+	isMobile: Boolean | null,
 	parentRect: DOMRect,
 	childRect?: DOMRect, // left it here for future usage
 ): CSSProperties => {

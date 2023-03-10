@@ -1,17 +1,27 @@
 import { gql } from '@apollo/client';
+import { DONATION_CORE_FIELDS } from './gqlDonations';
+import { PROJECT_CARD_FIELDS } from './gqlProjects';
+
+export const USER_CORE_FIELDS = gql`
+	fragment UserCoreFields on User {
+		__typename
+		id
+		firstName
+		lastName
+		name
+		email
+		avatar
+		walletAddress
+		url
+		location
+	}
+`;
 
 export const GET_USER_BY_ADDRESS = gql`
+	${USER_CORE_FIELDS}
 	query UserByAddress($address: String!) {
 		userByAddress(address: $address) {
-			id
-			firstName
-			lastName
-			name
-			email
-			avatar
-			walletAddress
-			url
-			location
+			...UserCoreFields
 			totalDonated
 			totalReceived
 			likedProjectsCount
@@ -23,6 +33,7 @@ export const GET_USER_BY_ADDRESS = gql`
 `;
 
 export const FETCH_USER_PROJECTS = gql`
+	${PROJECT_CARD_FIELDS}
 	query FetchUserProjects(
 		$take: Float
 		$skip: Float
@@ -37,34 +48,13 @@ export const FETCH_USER_PROJECTS = gql`
 			orderBy: { field: $orderBy, direction: $direction }
 		) {
 			projects {
-				id
-				title
-				balance
-				description
-				image
-				slug
+				...ProjectCardFields
 				creationDate
-				admin
-				walletAddress
-				impactLocation
 				listed
-				totalDonations
-				totalReactions
-				verified
-				verificationStatus
 				status {
 					id
 					name
 				}
-				categories {
-					name
-				}
-				qualityScore
-				projectVerificationForm {
-					status
-				}
-				updatedAt
-				verified
 			}
 			totalCount
 		}
@@ -72,6 +62,7 @@ export const FETCH_USER_PROJECTS = gql`
 `;
 
 export const FETCH_USER_DONATIONS = gql`
+	${DONATION_CORE_FIELDS}
 	query FetchUserProjects(
 		$take: Int
 		$skip: Int
@@ -88,15 +79,7 @@ export const FETCH_USER_DONATIONS = gql`
 			status: $status
 		) {
 			donations {
-				id
-				transactionId
-				transactionNetworkId
-				toWalletAddress
-				fromWalletAddress
-				currency
-				anonymous
-				valueUsd
-				amount
+				...DonationCoreFields
 				user {
 					id
 				}

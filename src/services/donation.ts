@@ -29,9 +29,16 @@ export const updateDonation = (donationId: number, status: EDonationStatus) => {
 };
 
 export async function saveDonation(props: IOnTxHash) {
-	const { web3Context, txHash, amount, token, projectId, anonymous, nonce } =
-		props;
-
+	const {
+		web3Context,
+		txHash,
+		amount,
+		token,
+		projectId,
+		anonymous,
+		nonce,
+		chainvineReferred,
+	} = props;
 	const { chainId } = web3Context;
 	const { address, symbol } = token;
 
@@ -48,6 +55,7 @@ export async function saveDonation(props: IOnTxHash) {
 				projectId,
 				tokenAddress: address,
 				anonymous,
+				referrerId: chainvineReferred,
 			},
 		});
 		donationId = data.createDonation;
@@ -96,7 +104,6 @@ export async function saveDonation(props: IOnTxHash) {
 //     if (data?.eventName === 'TRANSAK_ORDER_CREATED') {
 //       // data.status
 //       await saveDonationFromTransak(
-//         data.status.fromWalletAddress,
 //         data.status.walletAddress,
 //         data.status.cryptoAmount,
 //         data.status.cryptoCurrency,

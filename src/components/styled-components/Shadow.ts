@@ -9,4 +9,7 @@ export const Shadow = {
 	Giv: {
 		400: '0 3px 20px rgba(83, 38, 236, 0.13)',
 	},
+	Ocean: {
+		400: '0px 3px 20px rgba(49, 11, 181, 0.5)',
+	},
 };

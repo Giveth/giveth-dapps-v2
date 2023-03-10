@@ -20,7 +20,7 @@ import { formatWeiHelper, Zero } from '@/helpers/number';
 import config from '@/configuration';
 import { IconEthereum } from './Icons/Eth';
 import { IconGnosisChain } from './Icons/GnosisChain';
-import { WhatisStreamModal } from '@/components/modals/WhatisStream';
+import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { WrongNetworkInnerModal } from '@/components//modals/WrongNetworkInnerModal';
@@ -143,7 +143,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 				)}
 			</RewadCardContainer>
 			{showWhatIsGIVstreamModal && (
-				<WhatisStreamModal
+				<WhatIsStreamModal
 					setShowModal={setShowWhatIsGIVstreamModal}
 					tokenDistroHelper={givTokenDistroHelper}
 				/>
