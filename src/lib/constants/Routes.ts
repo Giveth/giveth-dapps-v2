@@ -46,6 +46,7 @@ const Routes = {
 	NFTMint: '/nft/mint',
 	Landing: '/landings',
 	HowToBuyXdai: '/how-to-buy-xdai',
+	PurchaseXdai: '/purchase-xdai',
 };
 
 export default Routes;

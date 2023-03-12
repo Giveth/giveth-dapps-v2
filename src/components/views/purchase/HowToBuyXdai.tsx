@@ -6,8 +6,12 @@ import {
 	mediaQueries,
 	H3,
 	Lead,
+	Button,
+	IconChevronRight,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import { useIntl } from 'react-intl';
 
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -19,13 +23,20 @@ import {
 } from '@/components/styled-components/SwiperPagination';
 import 'swiper/css';
 
+import { Flex } from '@/components/styled-components/Flex';
 import { BigArc } from '@/components/styled-components/Arc';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useDonateData } from '@/context/donate.context';
+import Routes from '@/lib/constants/Routes';
 
 const BuyXDAI: FC = () => {
+	const router = useRouter();
+	const { query } = router;
+	const slug = query?.slug;
+
 	const { isMobile } = useDetectDevice();
 	const { project } = useDonateData();
+	const { formatMessage } = useIntl();
 
 	const pagElRef = useRef<HTMLDivElement>(null);
 	const nextElRef = useRef<HTMLDivElement>(null);
@@ -36,51 +47,53 @@ const BuyXDAI: FC = () => {
 	const items = [
 		{
 			id: 1,
-			title: 'Buy xDAI with FIAT',
-			description:
-				'The Ramp allows users to purchase xDai or other tokens using fiat currency and deposit it directly into their web3 (Metamask) wallets.  Select first the method of payment (in this case by credit card), then select the currency you want to purchase xDai with. Select xDai in the ‘You Get’ section, after that select the network you want to use (Gnosis chain by default) and then click "BUY XDAI.',
+			title: 'label.buy_xdai_with_fiat',
+			description: 'label.the_ramp_allows_users',
 		},
 		{
 			id: 2,
-			title: 'Phone Number',
-			description: 'Enter your phone number and click next.',
+			title: 'label.phone_number',
+			description: 'label.enter_your_phone_number_and_click_next',
 		},
 		{
 			id: 3,
-			title: 'Email Address',
-			description:
-				'Write your email address, mark the checkbox "I accept the T&C of Mt Pelerin" and click next.',
+			title: 'label.email_address',
+			description: 'label.write_your_email_address',
 		},
 		{
 			id: 4,
-			title: 'Registration Confirmation',
-			description: 'Enter your phone number and click next.',
+			title: 'label.registration_confirmation',
+			description: 'label.wait_confirmation',
 		},
 		{
 			id: 5,
-			title: 'Wallet Connect',
-			description: 'Choose your receiving address',
+			title: 'label.wallet_connect',
+			description: 'label.choose_your_receiving_address',
 		},
 		{
 			id: 6,
-			title: 'Receiving Address',
-			description:
-				'Choose the wallet address where you want to receive your funds. (Mt Pelerin will display the chain where you will receive your funds below), click "Validate this address" and then click Next.',
+			title: 'label.receiving_address',
+			description: 'label.choose_the_wallet_address',
 		},
 		{
 			id: 7,
-			title: 'Credit Card Information',
-			description:
-				'Fill in your credit card information and then click "BUY XDAI".',
+			title: 'label.credit_card_info',
+			description: 'label.fill_in_your_credit_card_info',
 		},
-		{ id: 8, title: 'Confirmation', description: 'Wait for confirmation.' },
+		{
+			id: 8,
+			title: 'label.confirmation',
+			description: 'label.wait_for_confirmation',
+		},
 		{
 			id: 9,
-			title: 'Transaction Status',
-			description:
-				'If the payment is approved it will display "Payment successful" and information of the transaction.',
+			title: 'label.transaction_status',
+			description: 'label.if_the_payment_is_approved_it_will_display',
 		},
 	];
+
+	console.log({ currentSlide, e: items.length - 1 });
+
 	return (
 		<>
 			<BigArc />
@@ -88,8 +101,16 @@ const BuyXDAI: FC = () => {
 				<Sections>
 					<Content>
 						<Info>
-							<H3>{items[currentSlide].title}</H3>
-							<Lead>{items[currentSlide].description}</Lead>
+							<H3>
+								{formatMessage({
+									id: items[currentSlide].title,
+								})}
+							</H3>
+							<Lead>
+								{formatMessage({
+									id: items[currentSlide].description,
+								})}
+							</Lead>
 						</Info>
 
 						<PwdMtPelerin>
@@ -146,6 +167,37 @@ const BuyXDAI: FC = () => {
 								<IconPointerRight size={24} />
 							</NavigationWrapper>
 						</SwiperPaginationWrapper>
+
+						{currentSlide == items.length - 2 && (
+							<Btns>
+								<Button
+									label={formatMessage({
+										id: 'label.buy_xdai',
+									})}
+									buttonType='primary'
+									icon={<IconChevronRight />}
+									onClick={() =>
+										router.push({
+											pathname: Routes.PurchaseXdai,
+										})
+									}
+								/>
+								<Button
+									label={formatMessage({
+										id: 'label.go_back_to_donation_page',
+									})}
+									buttonType='texty-primary'
+									icon={<IconChevronRight />}
+									onClick={() =>
+										router.push({
+											pathname: slug
+												? `${Routes.Donate}/${slug}`
+												: Routes.Projects,
+										})
+									}
+								/>
+							</Btns>
+						)}
 					</Right>
 				</Sections>
 			</Wrapper>
@@ -198,16 +250,20 @@ const SwiperWrapper = styled.div`
 	}
 `;
 const HowToImg = styled.img`
-	width: 514px;
+	width: 300px;
 	max-height: 500px;
 	object-fit: contain;
+	${mediaQueries.tablet} {
+		width: 514px;
+	}
 `;
 
 const Content = styled.div`
-	max-width: 555px;
+	width: 100%;
 	text-align: left;
 	color: ${neutralColors.gray[900]};
 	margin: 50px 0;
+	padding: 20px;
 
 	h3 {
 		margin: 0 0 10px 0;
@@ -218,6 +274,7 @@ const Content = styled.div`
 
 	${mediaQueries.tablet} {
 		margin: 0;
+		max-width: 555px;
 	}
 `;
 
@@ -235,6 +292,13 @@ const PwdMtPelerin = styled.div`
 	font-size: 19.3613px;
 	line-height: 150%;
 	color: ${neutralColors.gray[800]} !important;
+`;
+
+const Btns = styled(Flex)`
+	flex-direction: row;
+	gap: 20px;
+	margin: 40px 0 0 0;
+	justify-content: center;
 `;
 
 export default BuyXDAI;

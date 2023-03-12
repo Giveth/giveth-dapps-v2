@@ -9,15 +9,20 @@ import {
 	IconSpark,
 	Button,
 } from '@giveth/ui-design-system';
+import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import routes from '@/lib/constants/Routes';
 import { useDonateData } from '@/context/donate.context';
+import Routes from '@/lib/constants/Routes';
 
 const PurchaseXDAI: FC = () => {
 	const { project } = useDonateData();
-
+	const router = useRouter();
 	const { formatMessage } = useIntl();
+
+	const { query } = router;
+
 	return (
 		<Container>
 			<BgImage />
@@ -34,7 +39,7 @@ const PurchaseXDAI: FC = () => {
 						as='a'
 						rel='noopener noreferrer'
 						target='_blank'
-						href={routes.HowToBuyXdai}
+						href={`${routes.HowToBuyXdai}?slug=${query.slug}`}
 					>
 						<span>
 							{formatMessage({ id: 'label.how_to_buy' })}{' '}
@@ -46,7 +51,15 @@ const PurchaseXDAI: FC = () => {
 					</InfoHowToBuy>
 				</Lead>
 			</Content>
-			<BuyButton label='Buy xDAI' />
+			<BuyButton
+				label='Buy xDAI'
+				onClick={() =>
+					router.push({
+						pathname: Routes.PurchaseXdai,
+						query: { slug: project.slug },
+					})
+				}
+			/>
 		</Container>
 	);
 };
