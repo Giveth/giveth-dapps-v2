@@ -11,6 +11,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import ExternalLink from '@/components/ExternalLink';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 export enum EToastType {
 	Error = 'error',
@@ -22,9 +23,11 @@ export enum EToastType {
 
 interface IProps {
 	message: string | JSX.Element;
+	title?: string;
 	type: EToastType;
 	isHidden?: boolean;
 	link?: string;
+	linkText?: string;
 	noIcon?: boolean;
 }
 
@@ -35,7 +38,7 @@ interface IColorType {
 }
 
 const InlineToast: FC<IProps> = props => {
-	const { message, type, isHidden, noIcon, link } = props;
+	const { message, title, type, isHidden, noIcon, link, linkText } = props;
 	const { formatMessage } = useIntl();
 	const colorType: IColorType = {};
 	if (type === EToastType.Error) {
@@ -66,37 +69,55 @@ const InlineToast: FC<IProps> = props => {
 			className={isHidden ? 'fadeOut' : 'fadeIn'}
 			colorType={colorType}
 		>
-			{!noIcon && colorType.icon}
-			<Caption>{message}</Caption>
-			{link && (
-				<ExternalLink color={colorType.color} href={link}>
-					<Caption medium>
-						{formatMessage({ id: 'label.learn_more' })}
-					</Caption>
-				</ExternalLink>
-			)}
+			{!noIcon && <IconContainer>{colorType.icon}</IconContainer>}
+			<Text>
+				<div>
+					{title && <Title medium>{title}</Title>}
+					<Caption>{message}</Caption>
+				</div>
+				{link && (
+					<ExternalLink color={colorType.color} href={link}>
+						<Caption medium>
+							{linkText ||
+								formatMessage({ id: 'label.learn_more' })}
+						</Caption>
+					</ExternalLink>
+				)}
+			</Text>
 		</Container>
 	);
 };
 
-const Container = styled.div<{ colorType: IColorType }>`
+const Title = styled(Caption)`
+	margin-bottom: 4px;
+`;
+
+const IconContainer = styled(FlexCenter)`
+	height: 21px;
+`;
+
+const Text = styled.div`
 	display: flex;
+	justify-content: space-between;
 	align-items: center;
 	gap: 16px;
+	width: 100%;
+`;
+
+const Container = styled.div<{ colorType: IColorType }>`
+	display: flex;
+	gap: 16px;
+	text-align: left;
 	padding: 16px;
 	background: ${({ colorType }) => colorType.backgroundColor};
 	border-radius: 8px;
 	border: 1px solid ${({ colorType }) => colorType.color};
 	margin: 24px 0;
-	max-width: 750px;
 	color: ${({ colorType }) => colorType.color};
 	word-break: break-word;
 	> svg:first-child,
 	a {
 		flex-shrink: 0;
-	}
-	a {
-		font-weight: 500;
 	}
 `;
 

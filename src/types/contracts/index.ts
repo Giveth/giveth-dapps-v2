@@ -14,5 +14,6 @@ export type { GIVpower } from "./GIVpower";
 export type { IVault } from "./IVault";
 export type { WeightedPool } from "./WeightedPool";
 export type { INonfungiblePositionManager } from "./INonfungiblePositionManager";
+export type { GiversPFP } from "./GiversPFP";
 
 

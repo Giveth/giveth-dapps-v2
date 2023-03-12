@@ -128,18 +128,15 @@ export const FETCH_PROJECT_BY_SLUG = `
 			slug
 			description
 			verified
-			traceCampaignId
 			walletAddress
 			totalProjectUpdates
 			totalDonations
-			totalTraceDonations
 			creationDate
 			reaction {
 				id
 				userId
 			}
 			totalReactions
-			traceCampaignId
 			categories {
 				name
 			}

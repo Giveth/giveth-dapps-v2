@@ -1,4 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+	Dispatch,
+	FC,
+	SetStateAction,
+	useEffect,
+	useState,
+} from 'react';
 // eslint-disable-next-line import/named
 import ReactQuill, { Quill } from 'react-quill';
 import QuillImageDropAndPaste from 'quill-image-drop-and-paste';
@@ -9,13 +15,14 @@ import 'quill-emoji/dist/quill-emoji.css';
 import MagicUrl from 'quill-magic-url';
 // @ts-ignore
 import * as Emoji from 'quill-emoji';
-import { neutralColors } from '@giveth/ui-design-system';
-
+import { neutralColors, SublineBold } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import ImageUploader from './richImageUploader/imageUploader';
 import { UPLOAD_IMAGE } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { isSSRMode, showToastError } from '@/lib/helpers';
+import { Relative } from '@/components/styled-components/Position';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 (window as any).Quill = Quill;
 
@@ -153,10 +160,27 @@ const formats = [
 	'video',
 	'emoji',
 ];
+interface ITextRichWithQuillProps {
+	value: string;
+	setValue: (value: string) => void;
+	setIsLimitExceeded?: Dispatch<SetStateAction<boolean>>;
+	placeholder?: string;
+	limit?: number;
+	style?: any;
+	projectId?: string;
+	noShadow?: boolean;
+}
 
-function TextRichWithQuill(props: any) {
-	const { value, setValue, placeholder, withLimit, style, projectId } = props;
-
+const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
+	value,
+	setValue,
+	placeholder,
+	limit,
+	style,
+	projectId,
+	setIsLimitExceeded,
+	noShadow,
+}) => {
 	const [mod, setMod] = useState<any>();
 
 	useEffect(() => {
@@ -166,8 +190,9 @@ function TextRichWithQuill(props: any) {
 	if (!mod) return null;
 
 	return (
-		<>
+		<Relative>
 			<ReactQuillStyled
+				noShadow={noShadow}
 				modules={mod}
 				formats={formats}
 				theme='snow'
@@ -176,32 +201,101 @@ function TextRichWithQuill(props: any) {
 				style={style}
 				placeholder={placeholder}
 			/>
-			{withLimit && (
-				<Counter>
-					{value?.length} / {withLimit}
-				</Counter>
+			{limit && (
+				<RichtextCounter
+					limit={limit}
+					value={value}
+					setIsLimitExceeded={setIsLimitExceeded}
+				/>
 			)}
-		</>
+		</Relative>
 	);
+};
+
+const calcLengthOfHTML = (html: string) => {
+	const plainString = html.replace(/<[^>]+>/g, '');
+	return plainString.length;
+};
+interface IRichtextCounterProps {
+	value: string;
+	limit: number;
+	setIsLimitExceeded?: Dispatch<SetStateAction<boolean>>;
 }
 
-const ReactQuillStyled = styled(ReactQuill)`
+const RichtextCounter: FC<IRichtextCounterProps> = ({
+	value,
+	limit,
+	setIsLimitExceeded,
+}) => {
+	const [count, setCount] = useState(0);
+	useEffect(() => {
+		const temp = setTimeout(() => {
+			const _count = calcLengthOfHTML(value);
+			setCount(_count);
+			setIsLimitExceeded && setIsLimitExceeded(_count > limit);
+		}, 1000);
+
+		return () => {
+			clearTimeout(temp);
+		};
+	}, [limit, setIsLimitExceeded, value]);
+
+	return (
+		<CounterContainer>
+			{count} / {limit}
+		</CounterContainer>
+	);
+};
+
+const ReactQuillStyled = styled(ReactQuill)<{ noShadow?: boolean }>`
+	margin-bottom: 0 !important;
+	border-radius: 8px;
+	box-shadow: ${({ noShadow }) => !noShadow && Shadow.Neutral[400]};
 	> .ql-container {
 		height: 30rem;
 		> .ql-editor {
 			word-break: break-word;
+			font-family: 'Red Hat Text', sans-serif;
+			font-size: 16px;
+			p, li, blockquote {
+				line-height: 24px;
+			}
+			h1, h2 {
+				font-family: 'TeX Gyre Adventor', serif;
+			}
+			.ql-size-small {
+				line-height: 18px;
+			}
+			.ql-size-large {
+				line-height: 36px;
+			}
+			.ql-size-huge {
+				line-height: 56px;
+			}
 		}
+	}
+	> div:first-of-type {
+		border-width: 2px;
+		border-radius: 8px 8px 0 0;
+		border-color: ${neutralColors.gray[300]}};
+	}
+	> div:last-of-type {
+		border-radius: 0 0 8px 8px;
+		border-color: ${neutralColors.gray[300]};
+		border-width: 2px;
+		border-top-color: transparent;
 	}
 `;
 
-const Counter = styled.div`
+const CounterContainer = styled(SublineBold)`
 	position: absolute;
+	bottom: 10px;
+	right: 10px;
 	background-color: ${neutralColors.gray[300]};
 	border-radius: 64px;
 	padding: 6px 10px;
-	z-index: 2;
-	margin: 0 20px 50px 0;
 	color: ${neutralColors.gray[700]};
+	opacity: 0.8;
 `;
 
 export default TextRichWithQuill;

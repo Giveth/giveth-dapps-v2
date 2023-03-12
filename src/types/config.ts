@@ -128,6 +128,8 @@ export interface BasicNetworkConfig {
 		symbol: string; // 2-6 characters long
 		decimals: 18;
 	};
+	DAI_CONTRACT_ADDRESS?: string;
+	PFP_CONTRACT_ADDRESS?: string;
 	blockExplorerUrls?: string[];
 	iconUrls?: string[]; // Currently ignored.
 	blockExplorerName: string[];
@@ -152,6 +154,8 @@ interface XDaiNetworkConfig extends BasicNetworkConfig {
 }
 interface MicroservicesConfig {
 	authentication: string;
+	notification: string;
+	notificationSettings: string;
 }
 
 export interface EnvConfig {
@@ -164,6 +168,7 @@ export interface EnvConfig {
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
+	OPENSEA_ADDRESS: string;
 }
 
 interface INetworkConfig {
@@ -177,9 +182,11 @@ export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
 	SUBGRAPH_POLLING_INTERVAL: number;
+	NOTIFICATION_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
 	PRIMARY_NETWORK: INetworkConfig;
 	SECONDARY_NETWORK: INetworkConfig;
+	POLYGON_NETWORK: INetworkConfig;
 	NETWORKS_CONFIG: {
 		[key: number]: MainnetNetworkConfig | XDaiNetworkConfig;
 	};

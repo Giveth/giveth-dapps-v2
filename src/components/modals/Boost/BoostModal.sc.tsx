@@ -191,8 +191,6 @@ export const ConfettiContainer = styled.div`
 	top: 50px;
 	left: 0;
 	right: 0;
-	margin-left: auto;
-	margin-right: auto;
 	height: 200px;
 	overflow-y: hidden;
 `;

@@ -1,6 +1,24 @@
 import { gql } from '@apollo/client';
 
+export const DONATION_CORE_FIELDS = gql`
+	fragment DonationCoreFields on Donation {
+		__typename
+		id
+		anonymous
+		amount
+		valueUsd
+		currency
+		transactionId
+		transactionNetworkId
+		createdAt
+		donationType
+		status
+		onramperId
+	}
+`;
+
 export const FETCH_PROJECT_DONATIONS = gql`
+	${DONATION_CORE_FIELDS}
 	query DonationsByProjectId(
 		$take: Int
 		$skip: Int
@@ -20,50 +38,12 @@ export const FETCH_PROJECT_DONATIONS = gql`
 			status: $status
 		) {
 			donations {
-				id
-				anonymous
+				...DonationCoreFields
 				user {
 					name
 				}
-				fromWalletAddress
-				amount
-				valueUsd
-				currency
-				transactionId
-				transactionNetworkId
-				createdAt
-				donationType
-				status
-				onramperId
 			}
 			totalCount
-		}
-	}
-`;
-
-export const WALLET_DONATIONS = gql`
-	query donationsFromWallets($fromWalletAddresses: [String!]!) {
-		donationsFromWallets(fromWalletAddresses: $fromWalletAddresses) {
-			transactionId
-			transactionNetworkId
-			toWalletAddress
-			fromWalletAddress
-			anonymous
-			amount
-			valueUsd
-			valueEth
-			priceEth
-			priceUsd
-			user {
-				id
-				firstName
-				lastName
-			}
-			project {
-				title
-			}
-			createdAt
-			currency
 		}
 	}
 `;
@@ -111,6 +91,7 @@ export const CREATE_DONATION = gql`
 		$transakId: String
 		$tokenAddress: String
 		$anonymous: Boolean
+		$referrerId: String
 	) {
 		createDonation(
 			transactionId: $transactionId
@@ -122,6 +103,7 @@ export const CREATE_DONATION = gql`
 			transakId: $transakId
 			tokenAddress: $tokenAddress
 			anonymous: $anonymous
+			referrerId: $referrerId
 		)
 	}
 `;

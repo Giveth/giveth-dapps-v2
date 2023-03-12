@@ -43,6 +43,7 @@ const ProjectUpdates = () => {
 	const [title, setTitle] = useState<string>('');
 	const [currentUpdate, setCurrentUpdate] = useState<string>('');
 	const [showRemoveUpdateModal, setShowRemoveUpdateModal] = useState(false);
+	const [isLimitExceeded, setIsLimitExceeded] = useState(false);
 
 	const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE);
 	const [deleteUpdateMutation] = useMutation(DELETE_PROJECT_UPDATE);
@@ -163,7 +164,7 @@ const ProjectUpdates = () => {
 					position: 'top-center',
 				});
 			}
-			if (newUpdate.length > UPDATE_LIMIT) {
+			if (isLimitExceeded) {
 				return gToast(
 					`Please enter less than ${UPDATE_LIMIT} characters`,
 					{
@@ -222,7 +223,7 @@ const ProjectUpdates = () => {
 			)}
 			{isOwner && (
 				<InputContainer>
-					<TimelineSection date='' newUpdate={true} />
+					<TimelineSection date='' newUpdate />
 					<Content>
 						<div>
 							<Title>Post an update</Title>
@@ -236,7 +237,8 @@ const ProjectUpdates = () => {
 								value={newUpdate}
 								style={TextInputStyle}
 								setValue={setNewUpdate}
-								withLimit={UPDATE_LIMIT}
+								setIsLimitExceeded={setIsLimitExceeded}
+								limit={UPDATE_LIMIT}
 								placeholder='Clear project description explaining who your are and what you want to do with the funds...'
 							/>
 						</div>
@@ -276,21 +278,20 @@ const ProjectUpdates = () => {
 };
 
 const Wrapper = styled.div`
-	padding: 0 16px;
-	margin-left: 0;
-
+	margin-left: -10px;
 	${mediaQueries.tablet} {
 		margin-left: 20px;
-		padding: 0;
 	}
 `;
 
 const Content = styled.div`
 	display: flex;
 	flex-direction: column;
+	gap: 25px 0;
 	margin-top: 15px;
 	margin-bottom: 42px;
 	align-items: flex-end;
+	max-width: 668px;
 `;
 
 const Title = styled(H5)`
@@ -323,7 +324,7 @@ const Input = styled.input`
 
 const TextInputStyle = {
 	marginTop: '4px',
-	marginBottom: '100px',
+	marginBottom: '24px',
 	fontFamily: 'body',
 	backgroundColor: 'white',
 };

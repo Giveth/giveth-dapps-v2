@@ -12,8 +12,9 @@ import {
 } from '@/features/user/user.slice';
 import { isSSRMode } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
-import { fetchUserByAddress, signOut } from '@/features/user/user.thunks';
+import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { walletsArray } from '@/lib/wallet/walletTypes';
+import { getTokens } from '@/helpers/user';
 
 const UserController = () => {
 	const { account, library, chainId, activate } = useWeb3React();
@@ -26,6 +27,16 @@ const UserController = () => {
 	useEffect(() => {
 		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
 		const wallet = walletsArray.find(w => w.value === selectedWalletName);
+		// try to connect to safe. this is only for the gnosis safe environment, it won't stop the flow if it fails
+		const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
+		if (safeWallet) {
+			activate(safeWallet.connector, console.log)
+				.then(() => setIsActivatedCalled(true))
+				.finally(() => {
+					if (!token) dispatch(setIsLoading(false));
+				});
+		}
+
 		if (wallet && wallet.connector instanceof InjectedConnector) {
 			wallet.connector
 				.isAuthorized()
@@ -52,21 +63,23 @@ const UserController = () => {
 				// Case when wallet is locked
 				dispatch(setIsEnabled(false));
 			}
-			// Sign out if wallet is changed
-			dispatch(signOut());
 		}
 		if (account) {
+			const tokens = getTokens();
+			const _account = account.toLowerCase();
+			if (tokens[_account]) {
+				dispatch(setToken(tokens[_account]));
+				localStorage.setItem(StorageLabel.USER, _account);
+				localStorage.setItem(StorageLabel.TOKEN, tokens[_account]);
+			} else {
+				localStorage.removeItem(StorageLabel.TOKEN);
+				localStorage.removeItem(StorageLabel.USER);
+			}
 			isMounted.current = true;
 			dispatch(fetchUserByAddress(account));
 			dispatch(setIsEnabled(true));
 		}
 	}, [account]);
-
-	useEffect(() => {
-		if (token) {
-			dispatch(setToken(token));
-		}
-	}, [token]);
 
 	useEffect(() => {
 		if (account && library) {

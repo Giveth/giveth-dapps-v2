@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
 import {
@@ -9,7 +9,9 @@ import {
 	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import BigNumber from 'bignumber.js';
 
+import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
@@ -21,7 +23,7 @@ import FailedDonation, {
 } from '@/components/modals/FailedDonation';
 import { client } from '@/apollo/apolloClient';
 import { VALIDATE_TOKEN } from '@/apollo/gql/gqlUser';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { signOut } from '@/features/user/user.thunks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -30,27 +32,32 @@ import DonateSummary from '@/components/views/donate/DonateSummary';
 import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useDonateData } from '@/context/donate.context';
+import { fetchPrice } from '@/services/token';
+import { fetchEthPrice } from '@/features/price/price.services';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
 	amount: number;
 	donationToGiveth: number;
-	price?: number;
+	tokenPrice?: number;
 	anonymous?: boolean;
 	givBackEligible?: boolean;
 }
+
+const ethereumChain = config.PRIMARY_NETWORK;
+const gnosisChain = config.SECONDARY_NETWORK;
+const polygonChain = config.POLYGON_NETWORK;
+const stableCoins = [gnosisChain.mainToken, 'DAI', 'USDT'];
 
 const DonateModal: FC<IDonateModalProps> = props => {
 	const {
 		token,
 		amount,
-		price,
 		setShowModal,
 		donationToGiveth,
 		anonymous,
 		givBackEligible,
 	} = props;
-
 	const web3Context = useWeb3React();
 	const { account, chainId } = web3Context;
 	const dispatch = useAppDispatch();
@@ -58,6 +65,12 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const isDonatingToGiveth = donationToGiveth > 0;
 	const { formatMessage } = useIntl();
 	const { setSuccessDonation, project } = useDonateData();
+
+	const givPrice = useAppSelector(state => state.price.givPrice);
+	const givTokenPrice = new BigNumber(givPrice).toNumber();
+	const isGnosis = chainId === gnosisChain.id;
+	const isMainnet = chainId === ethereumChain.id;
+	const isPolygon = chainId === polygonChain.id;
 
 	const [donating, setDonating] = useState(false);
 	const [firstDonationSaved, setFirstDonationSaved] = useState(false);
@@ -67,9 +80,11 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const [isFirstTxSuccess, setIsFirstTxSuccess] = useState(false);
 	const [secondTxStatus, setSecondTxStatus] = useState<EToastType>();
 	const [processFinished, setProcessFinished] = useState(false);
+	const [tokenPrice, setTokenPrice] = useState<number>();
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 
+	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses, givethAddresses } = project || {};
 
 	const projectWalletAddress =
@@ -80,12 +95,13 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		givethAddresses?.find(a => a.isRecipient && a.networkId === chainId)
 			?.address || '';
 
-	const avgPrice = price && price * amount;
+	const avgPrice = tokenPrice && tokenPrice * amount;
 	let donationToGivethAmount = (amount * donationToGiveth) / 100;
 	if (donationToGivethAmount < minDonationAmount && isDonatingToGiveth) {
 		donationToGivethAmount = minDonationAmount;
 	}
-	const donationToGivethPrice = price && donationToGivethAmount * price;
+	const donationToGivethPrice =
+		tokenPrice && donationToGivethAmount * tokenPrice;
 
 	const validateToken = async () => {
 		setDonating(true);
@@ -136,6 +152,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			setDonationSaved: setFirstDonationSaved,
 			walletAddress: projectWalletAddress,
 			projectId: Number(project.id),
+			chainvineReferred,
 		})
 			.then(({ isSaved, txHash: firstHash }) => {
 				setIsFirstTxSuccess(true);
@@ -160,8 +177,41 @@ const DonateModal: FC<IDonateModalProps> = props => {
 					delayedCloseModal(firstHash);
 				}
 			})
-			.catch(showToastError);
+			.catch(console.log);
 	};
+
+	useEffect(() => {
+		const setPrice = async () => {
+			if (token?.symbol && stableCoins.includes(token.symbol)) {
+				setTokenPrice(1);
+			} else if (token?.symbol === 'GIV') {
+				setTokenPrice(givTokenPrice || 0);
+			} else if (token?.symbol === ethereumChain.mainToken) {
+				const ethPrice = await fetchEthPrice();
+				setTokenPrice(ethPrice || 0);
+			} else if (token?.address) {
+				let tokenAddress = token.address;
+				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
+				if ((isGnosis || isPolygon) && token.mainnetAddress) {
+					tokenAddress = token.mainnetAddress || '';
+				}
+				const coingeckoChainId =
+					isMainnet || token.mainnetAddress
+						? ethereumChain.id
+						: isGnosis
+						? gnosisChain.id
+						: polygonChain.id;
+				const fetchedPrice = await fetchPrice(
+					coingeckoChainId,
+					tokenAddress,
+				);
+				setTokenPrice(fetchedPrice || 0);
+			}
+		};
+		if (token) {
+			setPrice().catch(() => setTokenPrice(0));
+		}
+	}, [token]);
 
 	if (!projectWalletAddress) {
 		showToastError('There is no eth address assigned for this project');

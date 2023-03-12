@@ -22,7 +22,7 @@ import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import { mediaQueries } from '@/lib/constants/constants';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
-import { compareAddresses, showToastError } from '@/lib/helpers';
+import { compareAddresses, isSSRMode, showToastError } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 import { Col, Row } from '@/components/Grid';
@@ -40,6 +40,12 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 	ssr: false,
 });
 
+export enum EProjectPageTabs {
+	DONATIONS = 'donations',
+	UPDATES = 'updates',
+	GIVPOWER = 'givpower',
+}
+
 const donationsPerPage = 10;
 
 const ProjectIndex: FC<IProjectBySlug> = () => {
@@ -53,6 +59,25 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
+
+	useEffect(() => {
+		if (!isSSRMode) {
+			switch (router.query.tab) {
+				case EProjectPageTabs.UPDATES:
+					setActiveTab(1);
+					break;
+				case EProjectPageTabs.DONATIONS:
+					setActiveTab(2);
+					break;
+				case EProjectPageTabs.GIVPOWER:
+					setActiveTab(3);
+					break;
+				default:
+					setActiveTab(0);
+					break;
+			}
+		}
+	}, [router.query.tab]);
 
 	const {
 		adminUser,
@@ -118,7 +143,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 			<Wrapper>
 				<Head>
 					<title>{title && `${title} |`} Giveth</title>
-					<ProjectMeta project={projectData} preTitle='Check out' />
+					<ProjectMeta project={projectData} />
 				</Head>
 
 				<ProjectHeader />
@@ -135,7 +160,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						{projectData && !isDraft && (
 							<ProjectTabs
 								activeTab={activeTab}
-								setActiveTab={setActiveTab}
+								slug={slug}
 								totalDonations={totalDonations}
 							/>
 						)}

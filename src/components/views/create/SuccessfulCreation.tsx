@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
 import { IProject } from '@/apollo/types/types';
-import ConfettiAnimation from '../../animations/confetti';
 import { slugToProjectView } from '@/lib/routeCreators';
 import SocialBox from '@/components/views/donate/SocialBox';
 import CopyLink from '@/components/CopyLink';
@@ -14,6 +13,8 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { fullPath } from '@/lib/helpers';
 import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
+import CongratsAnimation from '@/animations/congrats.json';
+import LottieControl from '@/components/LottieControl';
 
 const SuccessfulCreation = (props: {
 	project: IProject;
@@ -43,7 +44,10 @@ const SuccessfulCreation = (props: {
 					</Left>
 					<Right xs={12} md={6}>
 						<ConfettiContainer>
-							<ConfettiAnimation size={300} />
+							<LottieControl
+								size={400}
+								animationData={CongratsAnimation}
+							/>
 						</ConfettiContainer>
 						<GiverH4>High five!</GiverH4>
 						<SuccessMessage>
@@ -78,7 +82,6 @@ const SuccessfulCreation = (props: {
 
 const ConfettiContainer = styled.div`
 	position: absolute;
-	top: 200px;
 	z-index: -1;
 `;
 const GiverH4 = styled(H2)`
@@ -111,6 +114,7 @@ const Left = styled(Col)`
 	}
 `;
 const Right = styled(Col)`
+	position: relative;
 	z-index: 1;
 	padding: 0 32px 32px;
 	margin-top: 30px;

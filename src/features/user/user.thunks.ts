@@ -7,6 +7,7 @@ import { RootState } from '../store';
 import { postRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import StorageLabel from '@/lib/localStorage';
+import { getTokens } from '@/helpers/user';
 
 export const fetchUserByAddress = createAsyncThunk(
 	'user/fetchUser',
@@ -18,14 +19,13 @@ export const fetchUserByAddress = createAsyncThunk(
 export const signToGetToken = createAsyncThunk(
 	'user/signToGetToken',
 	async (
-		{ address, chainId, signer, pathname }: ISignToGetToken,
+		{ address, chainId, signer }: ISignToGetToken,
 		{ getState, dispatch },
 	) => {
 		try {
 			const siweMessage: any = await createSiweMessage(
 				address!,
 				chainId!,
-				pathname!,
 				'Login into Giveth services',
 			);
 			const { nonce, message } = siweMessage;
@@ -44,8 +44,15 @@ export const signToGetToken = createAsyncThunk(
 						nonce,
 					},
 				);
-				localStorage.setItem(StorageLabel.USER, address);
+				const _address = address.toLowerCase();
+				localStorage.setItem(StorageLabel.USER, _address);
 				localStorage.setItem(StorageLabel.TOKEN, token.jwt);
+				const tokens = getTokens();
+				tokens[_address] = token.jwt;
+				localStorage.setItem(
+					StorageLabel.TOKENS,
+					JSON.stringify(tokens),
+				);
 				// When token is fetched, user should be fetched again to get email address
 				await dispatch(fetchUserByAddress(address));
 				return token.jwt;
@@ -65,6 +72,7 @@ export const signOut = createAsyncThunk(
 		// this is in the case we fail to grab the token from local storage
 		//  but still want to remove the whole user
 		if (!token) return Promise.resolve(true);
+		console.log(Date.now(), 'signOut in user thunk');
 
 		return await postRequest(
 			`${config.MICROSERVICES.authentication}/logout`,

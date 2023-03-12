@@ -52,7 +52,6 @@ export const device = {
 	laptopS: `(min-width: ${deviceSize.laptopS}px)`,
 	laptopL: `(min-width: ${deviceSize.laptopL}px)`,
 	desktop: `(min-width: ${deviceSize.desktop}px)`,
-	desktopL: `(min-width: ${deviceSize.desktop}px)`,
 };
 
 export const mediaQueries = {
@@ -107,16 +106,6 @@ export const zIndex = {
 	NAVBAR: 1100,
 };
 
-export const statusCodes = [
-	'401',
-	'403',
-	'404',
-	'500',
-	'502',
-	'503',
-	'504',
-] as const;
-
 export const searchSuggestions = [
 	'open source',
 	'blockchain',
@@ -134,3 +123,5 @@ export const regenFarmStreamCardCol = {
 export const TWO_WEEK = 1_209_600_000;
 
 export const minDonationAmount = 0.000001;
+
+export const BACKEND_QUERY_LIMIT = 50;

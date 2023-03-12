@@ -3,53 +3,53 @@ import { FC, useState, useEffect } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Button, GLink } from '@giveth/ui-design-system';
-
+import {
+	Button,
+	GLink,
+	IconMenu24,
+	IconSearch24,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
-import { formatWeiHelper } from '@/helpers/number';
-import { networksParams } from '@/helpers/blockchain';
+
+import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
 	ConnectButton,
-	HBContainer,
-	HBContent,
-	HBPic,
-	BalanceButton,
 	HeaderLinks,
-	HeaderLink,
 	StyledHeader,
-	WalletButton,
-	WBInfo,
-	WBNetwork,
 	SmallCreateProject,
 	Logo,
-	MenuAndButtonContainer,
-	CoverLine,
 	SmallCreateProjectParent,
 	LargeCreateProject,
-	MainLogoBtn,
+	HeaderLink,
+	HomeButton,
+	SearchButton,
+	GLinkNoWrap,
 } from './Header.sc';
-import { RewardMenu } from '@/components/menu/RewardMenu';
-import MenuWallet from '@/components/menu/MenuWallet';
-import { menuRoutes } from '../menu/menuRoutes';
-import { isUserRegistered, shortenAddress } from '@/lib/helpers';
-import HeaderRoutesResponsive from './HeaderResponsiveRoutes';
+import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
-import {
-	currentValuesHelper,
-	useAppDispatch,
-	useAppSelector,
-} from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import {
 	setShowWalletModal,
 	setShowWelcomeModal,
 	setShowCompleteProfile,
+	setShowSearchModal,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { IconGIV } from '../Icons/GIV';
-import { useModalCallback } from '@/hooks/useModalCallback';
+import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
+import { LinkWithMenu } from '../menu/LinkWithMenu';
+import { ProjectsMenu } from '../menu/ProjectsMenu';
+import { GIVeconomyMenu } from '../menu/GIVeconomyMenu';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import { device } from '@/lib/constants/constants';
+import { ESideBarDirection, SideBar } from '../sidebar/SideBar';
+import { useDelayedState } from '@/hooks/useDelayedState';
+import { RewardButtonWithMenu } from '../menu/RewardButtonWithMenu';
+import { UserButtonWithMenu } from '../menu/UserButtonWithMenu';
+import { NotificationButtonWithMenu } from '../menu/NotificationButtonWithMenu';
+import { HomeSidebar } from '../sidebar/HomeSidebar';
+import { fetchMainCategories } from '@/features/general/general.thunk';
+import { ItemsProvider } from '@/context/Items.context';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -57,26 +57,25 @@ export interface IHeader {
 }
 
 const Header: FC<IHeader> = () => {
-	const [showRewardMenu, setShowRewardMenu] = useState(false);
-	const [showRewardMenuModal, setShowRewardMenuModal] = useState(false);
-	const [showUserMenu, setShowUserMenu] = useState(false);
 	const [showHeader, setShowHeader] = useState(true);
 	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [showBackBtn, setShowBackBtn] = useState(false);
 
-	const { chainId, active, account, library } = useWeb3React();
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),
-	);
-	const givBalance = sdh.getGIVTokenBalance();
+	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
+		useDelayedState();
+
+	const { chainId, active, account } = useWeb3React();
+
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
 	);
 	const theme = useAppSelector(state => state.general.theme);
+
 	const router = useRouter();
 	const { formatMessage } = useIntl();
-	const isLight = theme === ETheme.Light;
+	const isDesktop = useMediaQuery(device.laptopL);
+	const isMobile = useMediaQuery(device.mobileL);
 
 	const handleBack = () => {
 		const calculateSlug = () => {
@@ -96,16 +95,23 @@ const Header: FC<IHeader> = () => {
 			router?.query?.token
 		) {
 			router.push(`${Routes.Verification}/${calculateSlug()}`);
+		} else if (router.route.startsWith(Routes.NFTMint)) {
+			router.push(Routes.NFT);
 		} else {
 			router.back();
 		}
 	};
 
 	useEffect(() => {
+		dispatch(fetchMainCategories());
+	}, []);
+
+	useEffect(() => {
 		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
 		setShowBackBtn(
 			router.route.startsWith(Routes.CreateProject) ||
-				router.route.startsWith(Routes.Verification),
+				router.route.startsWith(Routes.Verification) ||
+				router.route.startsWith(Routes.NFTMint),
 		);
 	}, [router.route]);
 
@@ -123,10 +129,6 @@ const Header: FC<IHeader> = () => {
 			}
 			const show = scrollY <= lastScrollY;
 			setShowHeader(show);
-			if (!show) {
-				setShowRewardMenu(false);
-				setShowUserMenu(false);
-			}
 			lastScrollY = scrollY > 0 ? scrollY : 0;
 			ticking = false;
 		};
@@ -155,9 +157,15 @@ const Header: FC<IHeader> = () => {
 		router.push(Routes.CreateProject),
 	);
 
+	const { modalCallback: connectThenSignIn } = useModalCallback(
+		signInThenCreate,
+		EModalEvents.CONNECTED,
+	);
+
 	const handleCreateButton = () => {
+		if (isSSRMode) return;
 		if (!isEnabled) {
-			dispatch(setShowWelcomeModal(true));
+			connectThenSignIn();
 		} else if (!isSignedIn) {
 			signInThenCreate();
 		} else if (isUserRegistered(userData)) {
@@ -167,19 +175,8 @@ const Header: FC<IHeader> = () => {
 		}
 	};
 
-	const handleRewardMenuOnLeave = () => {
-		if (!showRewardMenuModal) {
-			setShowRewardMenu(false);
-		}
-	};
-
 	return (
-		<StyledHeader
-			justifyContent='space-between'
-			alignItems='center'
-			theme={theme}
-			show={showHeader}
-		>
+		<StyledHeader alignItems='center' theme={theme} show={showHeader}>
 			<Flex>
 				{showBackBtn ? (
 					<Logo onClick={handleBack}>
@@ -191,39 +188,58 @@ const Header: FC<IHeader> = () => {
 						/>
 					</Logo>
 				) : (
-					<>
-						<MainLogoBtn>
+					<Flex gap='24px' alignItems='center'>
+						{isMobile && (
 							<Link href={Routes.Home}>
 								<Logo>
 									<Image
-										width='48'
-										height='48'
+										width='50'
+										height='50'
 										alt='Giveth logo'
-										src='/images/logo/logo1.png'
+										src='/images/logo/logo.svg'
 									/>
 								</Logo>
 							</Link>
-						</MainLogoBtn>
-						<HeaderRoutesResponsive />
-					</>
+						)}
+						{!isDesktop && (
+							<HomeButton gap='4px' onClick={openSidebar}>
+								<IconMenu24 />
+								<GLink size='Big'>Home</GLink>
+							</HomeButton>
+						)}
+					</Flex>
 				)}
 			</Flex>
-			{!showBackBtn && (
+			{isDesktop && !showBackBtn && (
 				<HeaderLinks theme={theme}>
-					{menuRoutes.map((link, index) => (
-						<Link href={link.href[0]} key={index}>
-							<HeaderLink
-								size='Big'
-								theme={theme}
-								active={link.href.includes(router.route)}
-							>
-								{formatMessage({ id: link.title })}
-							</HeaderLink>
+					<LinkWithMenu title='Projects' isHeaderShowing={showHeader}>
+						<ProjectsMenu />
+					</LinkWithMenu>
+					<LinkWithMenu
+						title='GIVeconomy'
+						isHeaderShowing={showHeader}
+					>
+						<GIVeconomyMenu />
+					</LinkWithMenu>
+					<HeaderLink theme={theme}>
+						<Link href={Routes.Join}>
+							<GLink size='Big'>Community</GLink>
 						</Link>
-					))}
+					</HeaderLink>
+					<SearchButton
+						theme={theme}
+						onClick={() => dispatch(setShowSearchModal(true))}
+					>
+						<Flex alignItems='center' gap='16px'>
+							<GLinkNoWrap size='Big'>
+								Search projects
+							</GLinkNoWrap>
+							<IconSearch24 />
+						</Flex>
+					</SearchButton>
 				</HeaderLinks>
 			)}
-
+			<FlexSpacer />
 			<Flex gap='8px'>
 				<LargeCreateProject>
 					<Button
@@ -231,80 +247,31 @@ const Header: FC<IHeader> = () => {
 							id: 'component.button.create_project',
 						})}
 						size='small'
-						buttonType={isLight ? 'primary' : 'secondary'}
+						buttonType='primary'
 						onClick={handleCreateButton}
 					/>
 				</LargeCreateProject>
 				<SmallCreateProjectParent>
 					<SmallCreateProject
 						onClick={handleCreateButton}
-						theme={theme}
+						buttonType='primary'
 						label='+'
-						linkType={isLight ? 'primary' : 'secondary'}
 					/>
 				</SmallCreateProjectParent>
 				{active && account && chainId ? (
 					<>
-						<MenuAndButtonContainer
-							onClick={() => setShowRewardMenu(true)}
-							onMouseEnter={() => setShowRewardMenu(true)}
-							onMouseLeave={handleRewardMenuOnLeave}
-						>
-							<BalanceButton outline theme={theme}>
-								<HBContainer>
-									<IconGIV size={24} />
-									<HBContent size='Big'>
-										{formatWeiHelper(givBalance.balance)}
-									</HBContent>
-								</HBContainer>
-								<CoverLine theme={theme} />
-							</BalanceButton>
-							{showRewardMenu && (
-								<RewardMenu
-									showWhatIsGIVstreamModal={
-										showRewardMenuModal
-									}
-									setShowWhatIsGIVstreamModal={
-										setShowRewardMenuModal
-									}
-								/>
-							)}
-						</MenuAndButtonContainer>
-						<MenuAndButtonContainer
-							onClick={() => setShowUserMenu(true)}
-							onMouseEnter={() => setShowUserMenu(true)}
-							onMouseLeave={() => setShowUserMenu(false)}
-						>
-							<WalletButton outline theme={theme}>
-								<HBContainer>
-									<HBPic
-										src={
-											userData?.avatar ||
-											'/images/placeholders/profile.png'
-										}
-										alt='Profile Pic'
-										width={'24px'}
-										height={'24px'}
-									/>
-									<WBInfo>
-										<GLink size='Medium'>
-											{userData?.name ||
-												shortenAddress(account)}
-										</GLink>
-										<WBNetwork size='Tiny'>
-											{formatMessage({
-												id: 'label.connected_to',
-											})}{' '}
-											{networksParams[chainId]
-												?.chainName ||
-												library?._network?.name}
-										</WBNetwork>
-									</WBInfo>
-								</HBContainer>
-								<CoverLine theme={theme} />
-							</WalletButton>
-							{showUserMenu && <MenuWallet />}
-						</MenuAndButtonContainer>
+						<NotificationButtonWithMenu
+							isHeaderShowing={showHeader}
+							theme={theme}
+						/>
+						<RewardButtonWithMenu
+							isHeaderShowing={showHeader}
+							theme={theme}
+						/>
+						<UserButtonWithMenu
+							isHeaderShowing={showHeader}
+							theme={theme}
+						/>
 					</>
 				) : (
 					<ConnectButton
@@ -319,6 +286,17 @@ const Header: FC<IHeader> = () => {
 					/>
 				)}
 			</Flex>
+			{sidebarCondition && (
+				<SideBar
+					close={closeSidebar}
+					isAnimating={showSidebar}
+					direction={ESideBarDirection.Left}
+				>
+					<ItemsProvider close={closeSidebar}>
+						<HomeSidebar />
+					</ItemsProvider>
+				</SideBar>
+			)}
 		</StyledHeader>
 	);
 };

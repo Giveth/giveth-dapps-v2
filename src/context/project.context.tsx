@@ -156,6 +156,10 @@ export const ProjectProvider = ({
 					_boostersData.powerBoostings.sort((pb1, pb2) =>
 						pb1.user.allocated.gt(pb2.user.allocated) ? -1 : 1,
 					);
+					_boostersData.powerBoostings =
+						_boostersData.powerBoostings.filter(pb =>
+							pb.user.allocated.isZero() ? false : true,
+						);
 					_boostersData.totalPowerBoosting = formatWeiHelper(_total);
 					if (status === EProjectStatus.ACTIVE) {
 						const _projectedRank = await backendGQLRequest(
@@ -164,6 +168,7 @@ export const ProjectProvider = ({
 								powerAmount: +_total
 									.div(10 ** 18)
 									.toFixed(2, BigNumber.ROUND_UP),
+								projectId: projectId,
 							},
 						);
 						if (_projectedRank?.data?.powerAmountRank) {

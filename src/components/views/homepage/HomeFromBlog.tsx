@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { brandColors, SemiTitle } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	ButtonText,
+	IconChevronRight,
+	mediaQueries,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
 import { useIntl } from 'react-intl';
-import HomeBlogPost from './HomeBlogPost';
 import { IMediumBlogPost } from '@/apollo/types/types';
-import { HomeContainer } from '@/components/views/homepage/Home.sc';
-import { Col, Row } from '@/components/Grid';
-import { deviceSize } from '@/lib/constants/constants';
+import BlogCard from '@/components/BlogCard';
+import { FlexCenter } from '@/components/styled-components/Flex';
+import ExternalLink from '@/components/ExternalLink';
+import links from '@/lib/constants/links';
+import { Col, Container, Row } from '@/components/Grid';
+import { BlockHeader, BlockTitle } from './common';
 
 const HomeFromBlog = () => {
 	const [mediumPosts, setMediumPosts] = useState<IMediumBlogPost[]>();
@@ -15,48 +22,79 @@ const HomeFromBlog = () => {
 
 	useEffect(() => {
 		const getPosts = async () => {
-			const medium = await fetch(
-				'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth/',
-			);
-			const posts = await medium.json();
-			setMediumPosts(posts?.items?.slice(0, 2));
+			try {
+				const medium = await fetch(
+					'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth/',
+				);
+				const posts = await medium.json();
+				setMediumPosts(posts?.items?.slice(0, 3));
+			} catch (error) {
+				console.log('error', error);
+			}
 		};
-		getPosts().then();
+		getPosts();
 	}, []);
 
 	return (
 		<Wrapper>
 			<Container>
-				<Title>
-					{formatMessage({ id: 'page.home.section.from_blog' })}
-				</Title>
-				{mediumPosts && (
-					<Row>
-						{mediumPosts.map((post: IMediumBlogPost) => (
-							<Col md={6} key={post.guid}>
-								<HomeBlogPost post={post} />
-							</Col>
-						))}
-					</Row>
-				)}
+				<BlockHeader>
+					<BlockTitle weight={700}>
+						{formatMessage({
+							id: 'page.home.section.recent_posts',
+						})}
+					</BlockTitle>
+					<ExternalLink href={links.MEDIUM}>
+						<VisitBlog>
+							<ButtonText size='large'>
+								{formatMessage({
+									id: 'page.home.section.visit_blog',
+								})}
+							</ButtonText>
+							<IconChevronRight size={28} />
+						</VisitBlog>
+					</ExternalLink>
+				</BlockHeader>
+				<CardsRow>
+					{mediumPosts?.map(post => (
+						<ColStyled sm={12} lg={4} key={post.guid}>
+							<BlogCard
+								title={post.title}
+								description={post.description}
+								image={post.thumbnail}
+								link={post.link}
+								author={post.author}
+								date={post.pubDate}
+							/>
+						</ColStyled>
+					))}
+				</CardsRow>
 			</Container>
 		</Wrapper>
 	);
 };
 
-const Title = styled(SemiTitle)`
+const ColStyled = styled(Col)`
+	margin-top: 24px;
+`;
+
+const VisitBlog = styled(FlexCenter)`
 	color: ${brandColors.giv[500]};
+	text-transform: uppercase;
+	gap: 5px;
 `;
 
-const Container = styled.div`
-	margin: 0 auto;
-	max-width: ${deviceSize.desktop + 'px'};
+const CardsRow = styled(Row)`
+	flex-direction: column;
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+	}
 `;
 
-const Wrapper = styled(HomeContainer)`
-	background: url('/images/curves_homepage.svg');
-	padding-top: 90px;
-	padding-bottom: 40px;
+const Wrapper = styled.div`
+	padding-top: 70px;
+	padding-bottom: 110px;
+	background: ${neutralColors.gray[200]};
 `;
 
 export default HomeFromBlog;

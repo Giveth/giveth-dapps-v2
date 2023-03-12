@@ -1,27 +1,38 @@
+import { GLink } from '@giveth/ui-design-system';
 import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 
 const ExternalLink = (props: {
-	children?: ReactElement[] | ReactElement;
 	href: string;
-	title?: string;
+	children?: ReactElement[] | ReactElement;
+	title?: string | ReactElement;
 	color?: string;
+	fullWidth?: boolean;
+	className?: string;
 }) => {
-	const { children, href, title, color } = props;
+	const { children, href, title, color, fullWidth, className } = props;
 	return (
-		<Styled
-			color={color}
+		<StyledLink
+			className={className}
+			fullWidth={fullWidth}
 			href={href}
 			rel='noopener noreferrer'
 			target='_blank'
 		>
-			{title || children}
-		</Styled>
+			{title ? (
+				<StyledGLink color={color}>{title}</StyledGLink>
+			) : (
+				children
+			)}
+		</StyledLink>
 	);
 };
 
-const Styled = styled.a`
+const StyledGLink = styled(GLink)`
 	color: ${props => props.color || 'inherit'};
+`;
+const StyledLink = styled.a<{ fullWidth?: boolean }>`
+	display: ${props => (props.fullWidth ? 'block' : 'inline-block')};
 `;
 
 export default ExternalLink;

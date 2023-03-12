@@ -1,80 +1,60 @@
 import Image from 'next/image';
 import { neutralColors, Subline } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import WalletIcon from '/public/images/wallet_donate_tab.svg';
-import { IconEthereum } from '@/components/Icons/Eth';
-import { IconGnosisChain } from '@/components/Icons/GnosisChain';
-import config from '@/configuration';
 import { IWalletAddress } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
+import NetworkLogo from '@/components/NetworkLogo';
 
 interface IProjectWalletAddress {
-	addresses?: IWalletAddress[];
+	addresses: IWalletAddress[];
 }
 
-const { SECONDARY_NETWORK, PRIMARY_NETWORK } = config;
-const gnosisId = SECONDARY_NETWORK.id;
-const mainnetId = PRIMARY_NETWORK.id;
-
 const ProjectWalletAddress: FC<IProjectWalletAddress> = ({ addresses }) => {
-	// we may need to change this in the future if we allow more networks config for addresses
-	const [sharedAddress, setSharedAddress] = useState<string>();
-
-	const checkAddresses = () => {
-		const onlyAddresses = addresses?.map(item => {
-			if (item.isRecipient) {
-				return item.address;
-			}
-		});
-		const addressesDuplicated = onlyAddresses?.some((item, index) => {
-			return onlyAddresses.indexOf(item) !== index;
-		});
-		if (addressesDuplicated) {
-			setSharedAddress(addresses![0].address);
-		}
-	};
-
-	useEffect(() => {
-		if (addresses) checkAddresses();
-	}, [addresses]);
+	const recipientAddresses = addresses
+		.filter(a => a.isRecipient)
+		.map(a => a.address?.toLowerCase());
+	const uniqueAddresses = new Set(recipientAddresses);
+	const groupedAddresses: Array<IWalletAddress[]> = [];
+	uniqueAddresses.forEach(address => {
+		const filteredItems = addresses.filter(
+			a => a.isRecipient && a.address?.toLowerCase() === address,
+		);
+		groupedAddresses.push(filteredItems);
+	});
 
 	return (
 		<BottomSection>
-			{sharedAddress ? (
-				<WalletAddress address={sharedAddress} />
-			) : (
-				addresses?.map(address => {
-					if (!address.isRecipient) return null;
-					return (
-						<WalletAddress
-							key={`${address.networkId}${address.address}`}
-							address={address.address!}
-							networkId={address.networkId}
-						/>
-					);
-				})
-			)}
+			{groupedAddresses?.map(group => (
+				<WalletAddress
+					key={group[0].address!}
+					address={group[0].address!}
+					networkIds={group.map(g => g.networkId)}
+				/>
+			))}
 		</BottomSection>
 	);
 };
 
-const WalletAddress = (props: { address: string; networkId?: number }) => {
-	const { address, networkId } = props;
+const WalletAddress = (props: {
+	address: string;
+	networkIds?: Array<number | undefined>;
+}) => {
+	const { address, networkIds } = props;
 	return (
 		<AddressContainer>
 			<Image src={WalletIcon} alt='wallet icon' />
 			<Subline>{address}</Subline>
-			{networkId === gnosisId ? (
-				<IconGnosisChain size={16} />
-			) : networkId === mainnetId ? (
-				<IconEthereum size={16} />
-			) : (
-				<Flex gap='8px'>
-					<IconEthereum size={16} />
-					<IconGnosisChain size={16} />
-				</Flex>
-			)}
+			<Flex gap='8px'>
+				{networkIds?.map(networkId => (
+					<NetworkLogo
+						logoSize={16}
+						chainId={networkId}
+						key={networkId}
+					/>
+				))}
+			</Flex>
 		</AddressContainer>
 	);
 };

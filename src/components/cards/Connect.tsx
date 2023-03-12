@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { GLink, H2, Lead } from '@giveth/ui-design-system';
+import { GLink, H2, Lead, brandColors } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
 import { Button } from '../styled-components/Button';
@@ -132,6 +132,13 @@ const WalletCheckButton = styled.button`
 	cursor: pointer;
 `;
 
+const GoProjects = styled(Lead)`
+	font-size: 16px;
+	color: ${brandColors.mustard[500]};
+	cursor: pointer;
+	margin: 18px 0 0 0;
+`;
+
 export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [walletIsChanged, setWalletIsChanged] = useState(false);
 
@@ -171,9 +178,9 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 	switch (giveDropState) {
 		case GiveDropStateType.notConnected:
-			title = formatMessage({ id: 'label.claim_your_givdrop' });
+			title = formatMessage({ id: 'label.the_givdrop_has_ended' });
 			desc = formatMessage({
-				id: 'label.connect_your_wallet_or_check_an_eth_address',
+				id: 'label.but_you_can_still_get_giv',
 			});
 			btnLabel = isloading
 				? formatMessage({ id: 'label.loading_data' })
@@ -235,6 +242,13 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 							{title}
 						</Title>
 						<Desc>{desc}</Desc>
+						<Link href={Routes.Projects}>
+							<GoProjects>
+								{formatMessage({
+									id: 'label.go_to_projets_page',
+								})}
+							</GoProjects>
+						</Link>
 					</Header>
 				)}
 				{giveDropState !== GiveDropStateType.Success &&

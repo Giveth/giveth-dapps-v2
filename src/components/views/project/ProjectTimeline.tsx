@@ -10,11 +10,13 @@ import {
 	H5,
 	Lead,
 	SublineBold,
+	IconTrash,
+	IconEdit,
+	mediaQueries,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { IProjectUpdate } from '@/apollo/types/types';
-import { Flex } from '@/components/styled-components/Flex';
 
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 	ssr: false,
@@ -25,10 +27,6 @@ const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 });
 
 const UPDATE_LIMIT = 2000;
-
-interface IContent {
-	isEditing?: boolean;
-}
 
 const ProjectTimeline = (props: {
 	projectUpdate?: IProjectUpdate;
@@ -74,16 +72,16 @@ const UpdatesSection = (props: {
 	editUpdate?: Function;
 	isOwner?: boolean;
 }) => {
-	const { isOwner, removeUpdate, editUpdate } = props;
-	const { content, createdAt, title, projectId, id } = props.projectUpdate;
+	const { isOwner, removeUpdate, editUpdate, projectUpdate } = props;
+	const { content, createdAt, title, projectId, id } = projectUpdate;
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const [updateContent, setUpdateContent] = useState<string>(content);
 	const [newTitle, setNewTitle] = useState<string>(title);
 
 	return (
-		<Wrapper>
+		<Wrapper id={id}>
 			<TimelineSection date={createdAt} />
-			<Content isEditing={isEditing}>
+			<Content>
 				<ContentSection>
 					{isEditing ? (
 						<Input
@@ -101,7 +99,7 @@ const UpdatesSection = (props: {
 								value={updateContent}
 								style={TextInputStyle}
 								setValue={setUpdateContent}
-								withLimit={UPDATE_LIMIT}
+								limit={UPDATE_LIMIT}
 								placeholder='Edit your project'
 							/>
 						) : (
@@ -109,13 +107,14 @@ const UpdatesSection = (props: {
 						)}
 					</Description>
 				</ContentSection>
-				{isOwner &&
-					(isEditing ? (
-						<AbsolutButtons>
-							<UpdateBtn
-								label='SAVE'
-								buttonType='texty'
-								onClick={async () => {
+				{isOwner && (
+					<Buttons>
+						<Button
+							label={isEditing ? 'SAVE' : 'REMOVE'}
+							buttonType='texty-primary'
+							icon={isEditing ? null : <IconTrash />}
+							onClick={async () => {
+								if (isEditing) {
 									editUpdate &&
 										(await editUpdate(
 											newTitle,
@@ -123,28 +122,25 @@ const UpdatesSection = (props: {
 											id,
 										));
 									setIsEditing(false);
-								}}
-							/>
-							<CancelContainer
-								onClick={() => setIsEditing(false)}
-							>
-								<EditBtn label='CANCEL' buttonType='texty' />
-							</CancelContainer>
-						</AbsolutButtons>
-					) : (
-						<ExtraButtons>
-							<RemoveContainer
-								onClick={() => removeUpdate && removeUpdate()}
-							>
-								<RemoveBtn label='REMOVE' buttonType='texty' />
-								<img src='/images/trash.svg' />
-							</RemoveContainer>
-							<EditContainer onClick={() => setIsEditing(true)}>
-								<EditBtn label='EDIT' buttonType='texty' />
-								<img src='/images/edit.svg' />
-							</EditContainer>
-						</ExtraButtons>
-					))}
+								} else {
+									removeUpdate && removeUpdate();
+								}
+							}}
+						/>
+						<Button
+							label={isEditing ? 'CANCEL' : 'EDIT'}
+							buttonType='texty-secondary'
+							icon={isEditing ? null : <IconEdit />}
+							onClick={() => {
+								setIsEditing(!isEditing);
+								if (isEditing) {
+									setUpdateContent(content);
+									setNewTitle(title);
+								}
+							}}
+						/>
+					</Buttons>
+				)}
 			</Content>
 		</Wrapper>
 	);
@@ -204,7 +200,7 @@ const TimelineStyled = styled.div`
 `;
 
 const Description = styled(P)`
-	color: ${brandColors.giv[900]};
+	color: ${neutralColors.gray[900]};
 `;
 
 const Title = styled(H5)`
@@ -217,16 +213,21 @@ const Title = styled(H5)`
 const Content = styled.div`
 	display: flex;
 	width: 100%;
-	flex-direction: ${(props: IContent) =>
-		props.isEditing ? 'row-reverse' : 'row'};
 	justify-content: space-between;
 	margin-top: 15px;
 	margin-bottom: 42px;
+	flex-direction: column;
+	gap: 25px 0;
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+	}
 `;
 
 const Wrapper = styled.div`
 	display: flex;
-	gap: 50px;
+	${mediaQueries.tablet} {
+		gap: 50px;
+	}
 `;
 
 const NewUpdate = styled.div`
@@ -234,56 +235,23 @@ const NewUpdate = styled.div`
 	color: ${neutralColors.gray[600]};
 `;
 
-const ExtraButtons = styled.div`
+const Buttons = styled.div`
 	display: flex;
-	flex-direction: row;
 	align-items: flex-start;
-	img {
-		width: 12px;
+	> button {
+		padding-right: 10px;
+		padding-left: 10px;
 	}
-`;
-
-const AbsolutButtons = styled(ExtraButtons)`
-	position: absolute;
-`;
-
-const RemoveContainer = styled(Flex)`
-	display: flex;
-	flex-direction: row;
-	cursor: pointer;
-	img {
-		margin-left: -15px;
+	> button:first-child {
+		color: ${semanticColors.punch[200]};
+	}
+	> button:last-child {
+		color: ${brandColors.deep[100]};
 	}
 `;
 
 const ContentSection = styled.div`
 	width: 100%;
-`;
-
-const EditContainer = styled(RemoveContainer)``;
-const CancelContainer = styled(RemoveContainer)``;
-const RemoveBtn = styled(Button)`
-	color: ${semanticColors.punch[200]};
-	:hover {
-		color: ${semanticColors.punch[200]};
-		background: transparent;
-	}
-`;
-
-const EditBtn = styled(Button)`
-	color: ${brandColors.deep[100]};
-	:hover {
-		color: ${brandColors.deep[100]};
-		background: transparent;
-	}
-`;
-
-const UpdateBtn = styled(Button)`
-	color: ${brandColors.pinky[500]};
-	:hover {
-		color: ${brandColors.pinky[600]};
-		background: transparent;
-	}
 `;
 
 const Input = styled.input`
@@ -296,7 +264,7 @@ const Input = styled.input`
 	background: transparent;
 	color: ${brandColors.deep[600]};
 	width: 100%;
-	margin: 30px 0 15px 0;
+	margin-bottom: 15px;
 	::placeholder {
 		color: ${neutralColors.gray[600]};
 	}

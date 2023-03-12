@@ -18,7 +18,7 @@ interface ModalWrapperProps {
 	fullScreen?: boolean;
 }
 
-interface IModal extends ModalWrapperProps {
+interface IModal {
 	fullScreen?: boolean;
 	closeModal: () => void;
 	callback?: () => void;
@@ -32,6 +32,7 @@ interface IModal extends ModalWrapperProps {
 	headerColor?: string;
 	children: ReactNode;
 	doNotCloseOnClickOutside?: boolean;
+	className?: string;
 }
 
 export const Modal: FC<IModal> = ({
@@ -47,6 +48,7 @@ export const Modal: FC<IModal> = ({
 	fullScreen = false,
 	headerColor,
 	doNotCloseOnClickOutside,
+	className,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const el = useRef(document.createElement('div'));
@@ -55,10 +57,12 @@ export const Modal: FC<IModal> = ({
 	useEffect(() => {
 		const current = el.current;
 		const modalRoot = document.querySelector('body') as HTMLElement;
-		const innerWindowDiff =
-			window.innerWidth - modalRoot.getBoundingClientRect().width;
 		modalRoot.style.overflowY = 'hidden';
-		modalRoot.style.paddingRight = `${innerWindowDiff}px`;
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				closeModal();
+			}
+		};
 
 		if (modalRoot) {
 			modalRoot.addEventListener('keydown', handleKeyDown);
@@ -66,17 +70,11 @@ export const Modal: FC<IModal> = ({
 		}
 		return () => {
 			modalRoot.removeEventListener('keydown', handleKeyDown);
-			modalRoot.style.overflowY = 'unset';
-			modalRoot.style.paddingRight = '0';
+			modalRoot.style.overflowY = 'auto';
+			modalRoot.style.overflowY = 'overlay';
 			modalRoot!.removeChild(current);
 		};
-	}, []);
-
-	const handleKeyDown = (e: KeyboardEvent) => {
-		if (e.key === 'Escape') {
-			closeModal();
-		}
-	};
+	}, [closeModal]);
 
 	const ScrollBarsNotFullScreenProps = {
 		autoHeight: true,
@@ -90,7 +88,11 @@ export const Modal: FC<IModal> = ({
 			onClick={e => e.stopPropagation()}
 		>
 			{!doNotCloseOnClickOutside && <Surrounding onClick={closeModal} />}
-			<ModalWrapper fullScreen={fullScreen} theme={customTheme || theme}>
+			<ModalWrapper
+				fullScreen={fullScreen}
+				theme={customTheme || theme}
+				className={className}
+			>
 				<ModalHeader
 					hiddenClose={hiddenClose}
 					hiddenHeader={hiddenHeader}

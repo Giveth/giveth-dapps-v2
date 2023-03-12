@@ -7,6 +7,9 @@ import { LOGIN_USER } from '@/apollo/gql/gqlAuth';
 import { showToastError } from '@/lib/helpers';
 import config from '@/configuration';
 
+const POLYGON_NETWORK = config.POLYGON_NETWORK;
+const SECONDARY_NETWORK = config.SECONDARY_NETWORK;
+
 const apolloClient = initializeApollo();
 
 export async function __oldWay_getToken(
@@ -44,21 +47,20 @@ export async function __oldWay_getToken(
 	}
 }
 
-export const fetchPrice = async (
-	chainId: number,
-	tokenAddress: string | undefined,
-	catchFunction: any,
-) => {
+export const fetchPrice = async (chainId: number, tokenAddress?: string) => {
 	try {
 		const chain =
-			chainId === config.PRIMARY_NETWORK.id ? 'ethereum' : 'xdai';
+			chainId === POLYGON_NETWORK.id
+				? 'polygon-pos'
+				: chainId === SECONDARY_NETWORK.id
+				? 'xdai'
+				: 'ethereum';
 		const fetchCall = await fetch(
 			`https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`,
 		);
 		const data = await fetchCall.json();
-		return parseFloat(data[Object.keys(data)[0]]?.usd?.toFixed(2));
+		return parseFloat(data[Object.keys(data)[0]]?.usd);
 	} catch (error) {
-		catchFunction(0);
 		captureException(error, {
 			tags: {
 				section: 'fetchPrice',

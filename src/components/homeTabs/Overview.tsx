@@ -10,20 +10,22 @@ import {
 	DataBlockWithMargin,
 	VoteCardQuote,
 	DataBlockButton,
+	TopSpacer,
 } from './Overview.sc';
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import { Col, Container, Row } from '@/components/Grid';
 import { StakingType } from '@/types/config';
-import TabOverviewVideo from './TabOverviewVideo';
+import VideoBlock from '@/components/VideoBlock';
 
 export const TabOverview = () => {
 	const { formatMessage } = useIntl();
 
 	return (
 		<>
-			<TabOverviewVideo
+			<TopSpacer />
+			<VideoBlock
 				src='/video/giveconomy.mp4'
 				poster='/video/giveconomy.webp'
 			/>
@@ -112,9 +114,9 @@ export const TabOverview = () => {
 					</Row>
 				</Container>
 			</OverviewBottomContainer>
-			<TabOverviewVideo
+			<VideoBlock
 				src='/video/givpower.mp4'
-				poster='/video/givpower.webp'
+				poster='/video/giv-giv-giv.jpg'
 			/>
 			<Container>
 				<VoteCard>

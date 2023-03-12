@@ -9,11 +9,14 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { forwardRef } from 'react';
+import { useRouter } from 'next/router';
 import { mediaQueries } from '@/lib/constants/constants';
 import { FlexCenter } from '../styled-components/Flex';
 import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
 import { zIndex } from '@/lib/constants/constants';
+import { EProjectsFilter } from '@/apollo/types/types';
+import { removeQueryParamAndRedirect } from '@/helpers/url';
 
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
@@ -25,8 +28,11 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const { formatMessage } = useIntl();
 		const { setVariables, variables } = useProjectsContext();
 		const filtersCount = variables?.filters?.length ?? 0;
+		const campaignCount = variables?.campaignSlug ? 1 : 0;
+		const count = filtersCount + campaignCount;
+		const router = useRouter();
 
-		const handleSelectFilter = (e: boolean, filter: string) => {
+		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
 			if (e) {
 				setVariables({
 					...variables,
@@ -48,7 +54,9 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 			setVariables({
 				...variables,
 				filters: [],
+				campaignSlug: undefined,
 			});
+			removeQueryParamAndRedirect(router, ['filter', 'campaign']);
 		};
 
 		return (
@@ -61,9 +69,9 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 						<ButtonText size='medium'>
 							{formatMessage({ id: 'label.filters' })}
 						</ButtonText>
-						{filtersCount !== 0 && (
+						{count !== 0 && (
 							<PinkyColoredNumber size='medium'>
-								{filtersCount}
+								{count}
 							</PinkyColoredNumber>
 						)}
 					</FlexCenter>
@@ -86,10 +94,28 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 							/>
 						</FeatureItem>
 					))}
+					{variables?.campaignSlug && (
+						<FeatureItem>
+							<CheckBox
+								label='Campaign'
+								onChange={e => {
+									setVariables({
+										...variables,
+										campaignSlug: undefined,
+									});
+									removeQueryParamAndRedirect(router, [
+										'campaign',
+									]);
+								}}
+								checked={!!variables?.campaignSlug}
+								size={14}
+							/>
+						</FeatureItem>
+					)}
 				</Section>
 				<ButtonStyled
 					onClick={clearFilters}
-					disabled={filtersCount === 0}
+					disabled={count === 0}
 					buttonType='texty-secondary'
 					label={formatMessage({ id: 'label.clear_all_filters' })}
 				/>
@@ -101,11 +127,17 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 FilterMenu.displayName = 'FilterMenu';
 
 const projectFeatures = [
-	{ label: 'Accepts GIV', value: 'AcceptGiv' },
-	{ label: 'Verified', value: 'Verified' },
-	{ label: 'Boosted with GIVpower', value: 'BoostedWithGivPower' },
-	{ label: 'From GivingBlock', value: 'GivingBlock' },
-	{ label: 'Accepts Funds on Gnosis', value: 'AcceptFundOnGnosis' },
+	{ label: 'Accepts GIV', value: EProjectsFilter.ACCEPT_GIV },
+	{ label: 'Verified', value: EProjectsFilter.VERIFIED },
+	{
+		label: 'Boosted with GIVpower',
+		value: EProjectsFilter.BOOSTED_WITH_GIVPOWER,
+	},
+	{ label: 'From GivingBlock', value: EProjectsFilter.GIVING_BLOCK },
+	{
+		label: 'Accepts Funds on Gnosis',
+		value: EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
+	},
 ];
 
 const ButtonStyled = styled(Button)`

@@ -137,7 +137,7 @@ export const FETCH_PROJECT_BOOSTINGS = gql`
 `;
 
 export const FETCH_PROJECTED_RANK = `
-	query powerAmountRank($powerAmount: Float!) {
-		powerAmountRank(powerAmount: $powerAmount)
+	query powerAmountRank($powerAmount: Float!, $projectId: Int) {
+		powerAmountRank(powerAmount: $powerAmount, projectId: $projectId)
 	}
 `;
