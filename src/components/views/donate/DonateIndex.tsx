@@ -8,6 +8,7 @@ import SuccessView from '@/components/views/donate/SuccessView';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import DonationTypes from '@/components/views/donate/DonationTypes';
 import NiceBanner from './NiceBanner';
+import PurchaseXDAI from './PurchaseXDAIBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useDonateData } from '@/context/donate.context';
 
@@ -19,6 +20,7 @@ const DonateIndex: FC = () => {
 		<>
 			<BigArc />
 			<Wrapper>
+				<PurchaseXDAI />
 				<NiceBanner />
 				<Sections>
 					<ProjectCardSelector />

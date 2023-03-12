@@ -917,5 +917,9 @@
 	"modal.news_letter": "Newsletter sign up",
 	"section.we_wont_send_it": "We won’t send it every 5 second! Promise :)",
 	"section.subscribe_to_our_newsletter": "Subscribe to our newsletter and get all updates straight to your mailbox!",
-	"section.get_the_latest_updates": "Get the latest updates"
+	"section.get_the_latest_updates": "Get the latest updates",
+	"label.source": "Source",
+	"label.how_to_buy": "How to buy",
+	"label.buy_xdai_with_fiat": "Buy xDAI with FIAT",
+	"label.purchase_xdai_with_fiat_currency": "Purchase xDAI with fiat currency, deposit it directly into your web3 wallet and subsequently donate."
 }

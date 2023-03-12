@@ -901,5 +901,9 @@
 	"modal.news_letter": "",
 	"section.we_wont_send_it": "",
 	"section.subscribe_to_our_newsletter": "",
-	"section.get_the_latest_updates": ""
+	"section.get_the_latest_updates": "",
+	"label.source": "Origen",
+	"label.how_to_buy": "¿Cómo comprar?",
+	"label.buy_xdai_with_fiat": "Comprar xDAI con FIAT",
+	"label.purchase_xdai_with_fiat_currency": "Adquiere xDAI con fiat, deposita en tu billetera y comienza a donar!"
 }
