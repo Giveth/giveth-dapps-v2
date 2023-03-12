@@ -18,7 +18,7 @@ export const ArchiveAndNetworkCover: FC<IArchiveAndNetworkCoverProps> = ({
 }) => {
 	const { chainId } = useWeb3React();
 
-	return chainId !== targetNetwork ? (
+	return chainId === undefined || chainId !== targetNetwork ? (
 		<WrongNetworkCover targetNetwork={targetNetwork} />
 	) : isArchived || isExploited ? (
 		<ArchiveCover isStream={isStream} isExploited={isExploited} />

@@ -21,17 +21,25 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 			<IconWrapper>
 				<IconAlertCircle16 />
 			</IconWrapper>
-			<Content medium>
-				{formatMessage({
-					id: 'label.you_are_currently_connected_to',
-				})}{' '}
-				{chainName(chainId || 0)}{' '}
-				{formatMessage({ id: 'label.switch_to' })}{' '}
-				{chainName(targetNetwork || 0)}{' '}
-				{formatMessage({
-					id: 'label.to_interact_with_this_farm',
-				})}
-			</Content>
+			{chainId !== undefined ? (
+				<Content medium>
+					{formatMessage({
+						id: 'label.you_are_currently_connected_to',
+					})}{' '}
+					{chainName(chainId || 0)}{' '}
+					{formatMessage({ id: 'label.switch_to' })}{' '}
+					{chainName(targetNetwork || 0)}{' '}
+					{formatMessage({
+						id: 'label.to_interact_with_this_farm',
+					})}
+				</Content>
+			) : (
+				<Content medium>
+					{formatMessage({
+						id: 'label.please_connect_your_wallet',
+					})}
+				</Content>
+			)}
 		</Cover>
 	) : null;
 };
