@@ -168,7 +168,7 @@ const BuyXDAI: FC = () => {
 							</NavigationWrapper>
 						</SwiperPaginationWrapper>
 
-						{currentSlide == items.length - 2 && (
+						{currentSlide >= items.length - 2 && (
 							<Btns>
 								<Button
 									label={formatMessage({

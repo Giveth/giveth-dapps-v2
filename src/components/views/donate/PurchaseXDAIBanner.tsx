@@ -56,7 +56,6 @@ const PurchaseXDAI: FC = () => {
 				onClick={() =>
 					router.push({
 						pathname: Routes.PurchaseXdai,
-						query: { slug: project.slug },
 					})
 				}
 			/>
