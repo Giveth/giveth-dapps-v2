@@ -23,15 +23,15 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 			</IconWrapper>
 			{chainId !== undefined ? (
 				<Content medium>
-					{formatMessage({
-						id: 'label.you_are_currently_connected_to',
-					})}{' '}
-					{chainName(chainId || 0)}{' '}
-					{formatMessage({ id: 'label.switch_to' })}{' '}
-					{chainName(targetNetwork || 0)}{' '}
-					{formatMessage({
-						id: 'label.to_interact_with_this_farm',
-					})}
+					{formatMessage(
+						{
+							id: 'label.wrong_network',
+						},
+						{
+							chainName: chainName(chainId || 0),
+							targetChain: chainName(targetNetwork || 0),
+						},
+					)}
 				</Content>
 			) : (
 				<Content medium>
