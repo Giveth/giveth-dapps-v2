@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Button, B, neutralColors } from '@giveth/ui-design-system';
+import { Button, B, H4, neutralColors } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 import { InputSize } from '@/components/Input';
@@ -51,6 +51,12 @@ const FiatDonation = () => {
 		hostApiKey: 've2mesm3jbhjjoqs8t57v3qzdnveza662sugh88e',
 		url: 'https://ri-widget-staging.firebaseapp.com/',
 	});
+
+	return (
+		<FiatContainer style={{ marginTop: 40 }}>
+			<H4>Coming soon ...</H4>
+		</FiatContainer>
+	);
 
 	return (
 		<>
