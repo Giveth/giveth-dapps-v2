@@ -1,4 +1,5 @@
 import { captureException } from '@sentry/nextjs';
+import config from '@/configuration';
 
 let initialized = false;
 let timeDifference = 0;
@@ -23,7 +24,7 @@ const fetchServerTime = async () => {
 
 	try {
 		fetching = true;
-		const response = await fetch('/api/time', {
+		const response = await fetch(`${config.BASE_ROUTE}/api/time`, {
 			mode: 'cors',
 			cache: 'no-cache',
 			credentials: 'same-origin',
