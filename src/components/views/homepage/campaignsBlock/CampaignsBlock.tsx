@@ -7,6 +7,7 @@ import {
 	IconPointerRight,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { Navigation, Pagination } from 'swiper';
 import { Container, Row } from '@/components/Grid';
@@ -31,12 +32,15 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 	const pagElRef = useRef<HTMLDivElement>(null);
 	const nextElRef = useRef<HTMLDivElement>(null);
 	const prevElRef = useRef<HTMLDivElement>(null);
+	const { formatMessage } = useIntl();
 
 	return (
 		<CampaignsBlockWrapper>
 			<ContainerRelative>
 				<BlockHeader>
-					<BlockTitle>What’s up on Giveth</BlockTitle>
+					<BlockTitle>
+						{formatMessage({ id: 'label.whats_up_on_giveth' })}
+					</BlockTitle>
 					<SwiperPaginationWrapper>
 						<NavigationWrapper ref={prevElRef}>
 							<IconPointerLeft size={24} />

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { GLink, IconSearch24 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
@@ -16,15 +17,23 @@ import { setShowSearchModal } from '@/features/modal/modal.slice';
 export const HomeSidebar = () => {
 	const { theme } = useAppSelector(state => state.general);
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 
 	return (
 		<HomeSidebarContainer>
 			<Link href='/'>
 				<Item theme={theme}>
-					<GLink size='Big'>Home</GLink>
+					<GLink size='Big'>
+						{formatMessage({ id: 'label.home' })}
+					</GLink>
 				</Item>
 			</Link>
-			<SidebarParentItem item={{ title: 'Projects', href: '/projects' }}>
+			<SidebarParentItem
+				item={{
+					title: formatMessage({ id: 'label.projects' }),
+					href: '/projects',
+				}}
+			>
 				<ProjectsItems inSidebar />
 			</SidebarParentItem>
 			<SidebarParentItem item={{ title: 'GIVeconomy' }}>
@@ -33,7 +42,9 @@ export const HomeSidebar = () => {
 			<ItemSpacer />
 			<Link href={Routes.Join}>
 				<Item theme={theme}>
-					<GLink size='Big'>Community</GLink>
+					<GLink size='Big'>
+						{formatMessage({ id: 'label.community' })}
+					</GLink>
 				</Item>
 			</Link>
 			<SearchButton
@@ -42,7 +53,9 @@ export const HomeSidebar = () => {
 				onClick={() => dispatch(setShowSearchModal(true))}
 			>
 				<Flex alignItems='center' justifyContent='space-between'>
-					<GLink size='Big'>Search</GLink>
+					<GLink size='Big'>
+						{formatMessage({ id: 'label.search' })}
+					</GLink>
 					<IconSearch24 />
 				</Flex>
 			</SearchButton>

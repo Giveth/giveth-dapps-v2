@@ -64,12 +64,16 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 			<ProfileTabsContainer>
 				<Link href={pathname + profileTabs.overview}>
 					<ProfileTab active={tab === EProfile.OVERVIEW}>
-						Overview
+						{formatMessage({ id: 'label.overview' })}
 					</ProfileTab>
 				</Link>
 				<Link href={pathname + profileTabs.givpower}>
 					<ProfileTab active={tab === EProfile.GIVPOWER}>
-						{`${myAccount ? 'My ' : ''} GIVpower`}
+						{`${
+							myAccount
+								? formatMessage({ id: 'label.my_givpower' })
+								: 'GIVpower'
+						}`}
 						{myAccount && user?.boostedProjectsCount !== 0 && (
 							<Count active={tab === EProfile.GIVPOWER}>
 								{user?.boostedProjectsCount}
