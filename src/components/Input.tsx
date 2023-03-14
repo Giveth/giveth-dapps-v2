@@ -162,6 +162,7 @@ const Input: FC<InputType> = props => {
 						? register(registerName, registerOptions)
 						: {})}
 					{...rest}
+					data-testid='styled-input'
 				/>
 				<SuffixWrapper
 					style={{
