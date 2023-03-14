@@ -34,7 +34,7 @@ declare global {
 
 const DEFAULT_WRITE_KEY = 'MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB';
 
-const messages = {
+export const IntlMessages = {
 	en,
 	es,
 };
@@ -99,7 +99,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 			<Provider store={store}>
 				<IntlProvider
 					locale={locale!}
-					messages={messages[locale as keyof typeof messages]}
+					messages={IntlMessages[locale as keyof typeof IntlMessages]}
 					defaultLocale='en'
 				>
 					<ApolloProvider client={apolloClient}>
