@@ -165,6 +165,7 @@ export interface EnvConfig {
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	XDAI_CONFIG: XDaiNetworkConfig;
 	GARDEN_LINK: string;
+	BASE_ROUTE: string;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
