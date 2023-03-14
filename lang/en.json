@@ -973,5 +973,12 @@
 	"label.see_how_others_have_done_it": "See how others have done it,",
 	"label.browse_examples": "Browse Examples",
 	"label.read_this_blog_post_tutorial": "Read this blog post tutorial,",
-	"label.how_to_write_a_fundraising_project": "How to write a fundraising project description to increase donations."
+	"label.how_to_write_a_fundraising_project": "How to write a fundraising project description to increase donations.",
+	"label.now_its_time_to_complete_your_profile": "Now it’s time to complete your profile!",
+	"label.complete_your_profile": "Complete your profile",
+	"label.with_a_complete_profile_you_can": "With a complete profile you can:",
+	"label.create_projects_and_receive_funds": "Create projects and receive funds.",
+	"label.better_communicate_with_the_community": "Better communicate with the community.",
+	"label.let_others_know_you_a_little_better": "Let others know you a little better.",
+	"label.you_need_to_complete_your_profile_first": "You need to complete your profile first!"
 }

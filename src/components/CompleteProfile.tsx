@@ -7,6 +7,7 @@ import {
 	IconProfile,
 	IconXCircle,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InternalLink from '@/components/InternalLink';
@@ -16,6 +17,7 @@ import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 
 const CompleteProfile = () => {
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 
 	const completeProfile = () => {
 		dispatch(setShowCompleteProfile(true));
@@ -29,17 +31,23 @@ const CompleteProfile = () => {
 					<IconXCircle color={brandColors.pinky[500]} size={30} />
 				</IconXContainer>
 			</IconContainer>
-			<H4Styled>You need to complete your profile first!</H4Styled>
+			<H4Styled>
+				{formatMessage({
+					id: 'label.you_need_to_complete_your_profile_first',
+				})}
+			</H4Styled>
 			<ButtonStyled
 				onClick={completeProfile}
 				size='medium'
-				label='complete profile'
+				label={formatMessage({
+					id: 'component.button.complete_profile',
+				})}
 				buttonType='primary'
 			/>
 			<InternalLink href={Routes.Home}>
 				<ButtonTexty
 					buttonType='texty'
-					label='or Go back to Homepage'
+					label={formatMessage({ id: 'label.or_go_back_to_home' })}
 				/>
 			</InternalLink>
 		</ContainerStyled>
