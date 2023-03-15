@@ -27,8 +27,9 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 	project,
 	setShowModal,
 }) => {
-	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [loading, setLoading] = useState(false);
+	const [submitError, setSubmitError] = useState();
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const {
 		register,
 		handleSubmit,
@@ -48,7 +49,9 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 					address: _address,
 				},
 			});
-		} catch (error) {}
+		} catch (error) {
+			console.log('error', { error });
+		}
 
 		setLoading(false);
 	};
