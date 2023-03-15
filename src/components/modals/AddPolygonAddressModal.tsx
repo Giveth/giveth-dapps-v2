@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { getAddress, isAddress } from 'ethers/lib/utils';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
-import { useRouter } from 'next/router';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from './Modal';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -32,7 +31,6 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 }) => {
 	const [loading, setLoading] = useState(false);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const router = useRouter();
 	const {
 		register,
 		handleSubmit,
@@ -106,7 +104,7 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 		>
 			<ModalContainer>
 				<Content>
-					<P>Adding polygon address for</P>
+					<P>Adding Polygon address for</P>
 					<B>{project.title}</B>
 				</Content>
 				<form onSubmit={handleSubmit(handleAdd)}>
