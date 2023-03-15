@@ -28,12 +28,12 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 	setShowModal,
 }) => {
 	const [loading, setLoading] = useState(false);
-	const [submitError, setSubmitError] = useState();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
+		setError,
 	} = useForm<IAddressForm>({ mode: 'onSubmit', reValidateMode: 'onSubmit' });
 
 	const handleAdd = async (formData: IAddressForm) => {
@@ -49,8 +49,14 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 					address: _address,
 				},
 			});
-		} catch (error) {
-			console.log('error', { error });
+		} catch (error: any) {
+			if (error.message) {
+				setError(
+					'address',
+					{ type: 'focus', message: error.message },
+					{ shouldFocus: true },
+				);
+			}
 		}
 
 		setLoading(false);
@@ -91,7 +97,7 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 					{errors.address && (
 						<StyledInlineToast
 							type={EToastType.Error}
-							message={errors.address.message as string}
+							message={errors.address?.message as string}
 						/>
 					)}
 					<Button
@@ -111,7 +117,7 @@ const ModalContainer = styled.div`
 	text-align: left;
 	padding: 32px 24px 24px;
 	${mediaQueries.tablet} {
-		width: 462px;
+		width: 470px;
 	}
 `;
 
