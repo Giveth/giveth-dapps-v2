@@ -77,6 +77,7 @@ const Selected = styled(Overline)`
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	padding: 0 3px;
+	border-radius: 4px;
 `;
 
 const NetworkItem = styled.div<{ isSelected: boolean }>`
