@@ -14,6 +14,8 @@ interface IPFPMintContext {
 	setQty: Dispatch<SetStateAction<number>>;
 	tx: string;
 	setTx: Dispatch<SetStateAction<string>>;
+	isEligible: boolean;
+	setIsEligible: Dispatch<SetStateAction<boolean>>;
 }
 
 const PFPMintContext = createContext<IPFPMintContext>({
@@ -29,6 +31,10 @@ const PFPMintContext = createContext<IPFPMintContext>({
 	setTx: () => {
 		console.log('setTx not initialed yet!');
 	},
+	isEligible: false,
+	setIsEligible: () => {
+		console.log('setIsEligible not initialed yet!');
+	},
 });
 
 PFPMintContext.displayName = 'PFPMintContext';
@@ -37,6 +43,7 @@ export const PFPMintProvider = ({ children }: { children: ReactNode }) => {
 	const [step, setStep] = useState(EPFPMinSteps.MINT);
 	const [qty, setQty] = useState(1);
 	const [tx, setTx] = useState<string>('');
+	const [isEligible, setIsEligible] = useState(false);
 
 	return (
 		<PFPMintContext.Provider
@@ -47,6 +54,8 @@ export const PFPMintProvider = ({ children }: { children: ReactNode }) => {
 				setQty,
 				tx,
 				setTx,
+				isEligible,
+				setIsEligible,
 			}}
 		>
 			{children}
