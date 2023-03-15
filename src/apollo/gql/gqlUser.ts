@@ -56,6 +56,7 @@ export const FETCH_USER_PROJECTS = gql`
 					name
 				}
 				addresses {
+					address
 					isRecipient
 					networkId
 				}
