@@ -116,7 +116,7 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 							...requiredOptions.walletAddress,
 							validate: validateAddress,
 						}}
-						value={generatePolygonAddress(project.addresses)}
+						defaultValue={generatePolygonAddress(project.addresses)}
 					/>
 					{errors.address && (
 						<StyledInlineToast
