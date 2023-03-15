@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 import {
 	B,
@@ -8,20 +8,30 @@ import {
 } from '@giveth/ui-design-system';
 import { IProject } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
+import { AddPolygonAddress } from '@/components/modals/AddPolygonAddress';
 
 interface IAddPolygonToastProps {
 	project: IProject;
 }
 
-export const AddPolygonToast: FC<IAddPolygonToastProps> = () => {
+export const AddPolygonToast: FC<IAddPolygonToastProps> = ({ project }) => {
+	const [showModal, setShowModal] = useState(false);
 	return (
-		<Wrapper>
-			<P>Add polygon address for this project</P>
-			<Flex gap='8px' alignItems='center'>
-				<B>Add</B>
-				<IconChevronRight16 />
-			</Flex>
-		</Wrapper>
+		<>
+			<Wrapper onClick={() => setShowModal(true)}>
+				<P>Add polygon address for this project</P>
+				<Flex gap='8px' alignItems='center'>
+					<B>Add</B>
+					<IconChevronRight16 />
+				</Flex>
+			</Wrapper>
+			{showModal && (
+				<AddPolygonAddress
+					project={project}
+					setShowModal={setShowModal}
+				/>
+			)}
+		</>
 	);
 };
 
