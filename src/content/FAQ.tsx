@@ -362,7 +362,7 @@ const faqContent = (formatMessage: any) => {
 				),
 			},
 			{
-				question: 'page.faq.what_is_a_traceable_project',
+				question: 'page.faq.what_was_giveth_trace',
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.one' />{' '}
