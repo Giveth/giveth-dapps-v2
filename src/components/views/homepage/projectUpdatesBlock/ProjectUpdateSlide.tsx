@@ -116,6 +116,7 @@ const ProjectUpdateSlideWrapper = styled(Flex)`
 	${mediaQueries.laptopS} {
 		flex-direction: row;
 	}
+	overflow: hidden;
 `;
 
 const StyledProjectCard = styled(ProjectCard)`
@@ -129,6 +130,7 @@ const ProjectUpdateCard = styled.div`
 	padding: 32px;
 	border: 1px solid ${neutralColors.gray[300]};
 	border-radius: 16px;
+	overflow: hidden;
 `;
 
 const UpdateDate = styled(B)`
