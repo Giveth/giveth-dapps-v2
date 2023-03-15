@@ -55,6 +55,10 @@ export const FETCH_USER_PROJECTS = gql`
 					id
 					name
 				}
+				addresses {
+					isRecipient
+					networkId
+				}
 			}
 			totalCount
 		}
