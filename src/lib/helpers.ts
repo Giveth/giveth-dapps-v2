@@ -141,11 +141,9 @@ export const generatePolygonAddress = (addresses?: IWalletAddress[]) => {
 	const mainnetAddress = addresses.find(
 		address => address.networkId === config.PRIMARY_NETWORK.id,
 	);
-	console.log('mainnetAddress', mainnetAddress);
 	const gnosisAddress = addresses.find(
 		address => address.networkId === config.SECONDARY_NETWORK.id,
 	);
-	console.log('gnosisAddress', gnosisAddress);
 	const isSame = compareAddressesArray([
 		mainnetAddress?.address,
 		gnosisAddress?.address,
