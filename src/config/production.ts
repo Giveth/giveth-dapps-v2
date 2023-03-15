@@ -356,6 +356,24 @@ const config: EnvConfig = {
 			},
 		],
 	},
+
+	POLYGON_CONFIG: {
+		nodeUrl: '',
+		chainId: '0x89', // A 0x-prefixed hexadecimal string
+		chainName: 'Polygon',
+		nativeCurrency: {
+			name: 'MATIK',
+			symbol: 'MATIK',
+			decimals: 18,
+		},
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		blockExplorerUrls: ['https://polygonscan.com/'],
+		iconUrls: ['https://icons.llamao.fi/icons/chains/rsz_polygon.jpg'], // Currently ignored.
+		blockExplorerName: ['PolygonScan'],
+		subgraphAddress: '',
+	},
 };
 
 export default config;
