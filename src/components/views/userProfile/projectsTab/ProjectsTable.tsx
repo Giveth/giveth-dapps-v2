@@ -3,7 +3,7 @@ import {
 	neutralColors,
 	IconHeartFilled,
 } from '@giveth/ui-design-system';
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
@@ -24,17 +24,21 @@ import {
 	TableCell,
 	TableHeader,
 } from '@/components/styled-components/Table';
+import config from '@/configuration';
+import { AddPolygonToast } from './AddPolygonToast';
 
 interface IProjectsTable {
 	projects: IProject[];
 	order: IOrder;
 	changeOrder: (orderBy: EOrderBy) => void;
+	setProjects: Dispatch<SetStateAction<IProject[]>>;
 }
 
 const ProjectsTable: FC<IProjectsTable> = ({
 	projects,
 	changeOrder,
 	order,
+	setProjects,
 }) => {
 	const { formatMessage, locale } = useIntl();
 	return (
@@ -70,6 +74,9 @@ const ProjectsTable: FC<IProjectsTable> = ({
 			{projects?.map(project => {
 				const status = project.status.name;
 				const isCancelled = status === EProjectStatus.CANCEL;
+				const hasPolyGonAddress = project.addresses?.find(
+					address => address.networkId === config.POLYGON_NETWORK.id,
+				);
 				const verStatus = project.verified
 					? EVerificationStatus.VERIFIED
 					: project.projectVerificationForm?.status;
@@ -88,6 +95,12 @@ const ProjectsTable: FC<IProjectsTable> = ({
 							<ProjectTitle>
 								{project.title}
 								<VerificationBadge status={verStatus} />
+								{!hasPolyGonAddress && (
+									<AddPolygonToast
+										project={project}
+										setProjects={setProjects}
+									/>
+								)}
 							</ProjectTitle>
 						</ProjectTableCell>
 						<ProjectTableCell>
@@ -139,7 +152,7 @@ const ProjectsTableHeader = styled(TableHeader)`
 
 const ProjectTableCell = styled(TableCell)<{ bold?: boolean }>`
 	width: 100%;
-	height: 60px;
+	min-height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	font-weight: ${props => (props.bold ? 500 : 400)};
 `;
@@ -163,8 +176,8 @@ const Actions = styled(Flex)<{ isCancelled: boolean }>`
 	}
 `;
 
-const ProjectTitle = styled.div`
-	display: flex;
+const ProjectTitle = styled(Flex)`
+	padding-top: 8px;
 	flex-wrap: wrap;
 	gap: 0 10px;
 `;
