@@ -2,7 +2,8 @@ import { B, Button, IconWalletOutline32, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { getAddress, isAddress } from 'ethers/lib/utils';
-import { FC, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { useRouter } from 'next/router';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from './Modal';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -17,6 +18,7 @@ import type { IModal } from '@/types/common';
 
 interface IAddPolygonAddressModal extends IModal {
 	project: IProject;
+	setProjects: Dispatch<SetStateAction<IProject[]>>;
 }
 
 interface IAddressForm {
@@ -26,9 +28,11 @@ interface IAddressForm {
 export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 	project,
 	setShowModal,
+	setProjects,
 }) => {
 	const [loading, setLoading] = useState(false);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const router = useRouter();
 	const {
 		register,
 		handleSubmit,
@@ -48,6 +52,26 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 					networkId: config.POLYGON_NETWORK.id,
 					address: _address,
 				},
+			});
+			console.log('data', data.addRecipientAddressToProject);
+			setProjects((projects: IProject[]) => {
+				const _projects = structuredClone(projects);
+				const newProjects = [];
+				for (let i = 0; i < _projects.length; i++) {
+					const _project = _projects[i];
+					if (_project.id === project.id) {
+						_project.addresses = [
+							...[],
+							{
+								address: _address,
+								isRecipient: true,
+								networkId: config.POLYGON_NETWORK.id,
+							},
+						];
+					}
+					newProjects.push(_project);
+				}
+				return newProjects;
 			});
 			closeModal();
 		} catch (error: any) {

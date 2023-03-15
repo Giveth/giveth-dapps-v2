@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -12,9 +12,13 @@ import { AddPolygonAddressModal } from '@/components/modals/AddPolygonAddressMod
 
 interface IAddPolygonToastProps {
 	project: IProject;
+	setProjects: Dispatch<SetStateAction<IProject[]>>;
 }
 
-export const AddPolygonToast: FC<IAddPolygonToastProps> = ({ project }) => {
+export const AddPolygonToast: FC<IAddPolygonToastProps> = ({
+	project,
+	setProjects,
+}) => {
 	const [showModal, setShowModal] = useState(false);
 	return (
 		<>
@@ -33,6 +37,7 @@ export const AddPolygonToast: FC<IAddPolygonToastProps> = ({ project }) => {
 				<AddPolygonAddressModal
 					project={project}
 					setShowModal={setShowModal}
+					setProjects={setProjects}
 				/>
 			)}
 		</>

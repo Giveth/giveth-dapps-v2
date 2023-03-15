@@ -3,7 +3,7 @@ import {
 	neutralColors,
 	IconHeartFilled,
 } from '@giveth/ui-design-system';
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
@@ -31,12 +31,14 @@ interface IProjectsTable {
 	projects: IProject[];
 	order: IOrder;
 	changeOrder: (orderBy: EOrderBy) => void;
+	setProjects: Dispatch<SetStateAction<IProject[]>>;
 }
 
 const ProjectsTable: FC<IProjectsTable> = ({
 	projects,
 	changeOrder,
 	order,
+	setProjects,
 }) => {
 	const { formatMessage, locale } = useIntl();
 	return (
@@ -94,7 +96,10 @@ const ProjectsTable: FC<IProjectsTable> = ({
 								{project.title}
 								<VerificationBadge status={verStatus} />
 								{!hasPolyGonAddress && (
-									<AddPolygonToast project={project} />
+									<AddPolygonToast
+										project={project}
+										setProjects={setProjects}
+									/>
 								)}
 							</ProjectTitle>
 						</ProjectTableCell>
