@@ -10,6 +10,7 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
+import { useIntl } from 'react-intl';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { IProject, IProjectUpdate } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
@@ -29,6 +30,7 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 	const [update, setUpdate] = useState<IProjectUpdate>();
 	const [loading, setLoading] = useState(true);
 	const elRef = useRef<HTMLDivElement>(null);
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		if (update) return;
@@ -95,7 +97,11 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 								href={`${Routes.Project}/${project.slug}?tab=${EProjectPageTabs.UPDATES}`}
 							>
 								<ReadMore gap='22px'>
-									<ButtonText>Read more</ButtonText>
+									<ButtonText>
+										{formatMessage({
+											id: 'label.read_more',
+										})}
+									</ButtonText>
 									<IconChevronRight32 />
 								</ReadMore>
 							</Link>

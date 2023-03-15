@@ -10,6 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import links from '@/lib/constants/links';
@@ -18,20 +19,23 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 export const GIVBackExplainModal: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	return (
 		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<GIVBackExplainContainer>
 				<TitleRow alignItems='center' justifyContent='center'>
 					<IconGIVBack size={24} />
-					<Title>Why don&apos;t I have GIVbacks?</Title>
+					<Title>
+						{formatMessage({
+							id: 'label.why_dont_i_have_givbacks',
+						})}
+					</Title>
 				</TitleRow>
 				<Desc>
-					GIVbacks rewards corresponding to the current round become
-					available after the round ends. If you donated to a verified
-					project and do not yet have rewards to claim, it is likely
-					that GIVbacks have not yet been distributed for that round,
-					or that you claimed your GIVbacks rewards already.
+					{formatMessage({
+						id: 'label.givbacks_rewards_corresponding_to_the_current_round',
+					})}
 				</Desc>
 				<LinksRow alignItems='center' justifyContent='center'>
 					<GLink
@@ -41,7 +45,9 @@ export const GIVBackExplainModal: FC<IModal> = ({ setShowModal }) => {
 						href={links.GIVBACK_DOC}
 					>
 						<LinksRow justifyContent='center'>
-							Read More
+							{formatMessage({
+								id: 'label.read_more',
+							})}
 							<IconExternalLink
 								size={16}
 								color={'currentColor'}
@@ -49,7 +55,10 @@ export const GIVBackExplainModal: FC<IModal> = ({ setShowModal }) => {
 						</LinksRow>
 					</GLink>
 				</LinksRow>
-				<GotItButton label='GOT IT' onClick={closeModal} />
+				<GotItButton
+					label={formatMessage({ id: 'label.got_it' })}
+					onClick={closeModal}
+				/>
 			</GIVBackExplainContainer>
 		</Modal>
 	);

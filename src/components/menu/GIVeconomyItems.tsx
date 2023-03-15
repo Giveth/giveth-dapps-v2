@@ -8,6 +8,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { useAppSelector } from '@/features/hooks';
 import { ItemRow, ItemTitle } from './common';
 import Routes from '@/lib/constants/Routes';
@@ -29,12 +30,15 @@ const giveconomyItems = [
 
 export const GIVeconomyItems = () => {
 	const theme = useAppSelector(state => state.general.theme);
+	const { formatMessage } = useIntl();
 
 	return (
 		<>
 			<Link href={Routes.GIVfarm}>
 				<Item isHighlighted theme={theme}>
-					<ItemTitle theme={theme}>Use your GIV</ItemTitle>
+					<ItemTitle theme={theme}>
+						{formatMessage({ id: 'label.use_your_giv' })}
+					</ItemTitle>
 					<ItemRow>
 						<B>GIVfarm</B>
 						<IconGIVFarm
@@ -48,7 +52,9 @@ export const GIVeconomyItems = () => {
 					</ItemRow>
 				</Item>
 			</Link>
-			<LabelStyle medium>Explore</LabelStyle>
+			<LabelStyle medium>
+				{formatMessage({ id: 'page.projects.title.explore' })}
+			</LabelStyle>
 			{giveconomyItems.map((item, idx) => (
 				<Link key={idx} href={item.href}>
 					<Item theme={theme}>

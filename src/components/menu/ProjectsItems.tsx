@@ -1,6 +1,7 @@
 import { B, Caption, GLink } from '@giveth/ui-design-system';
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
@@ -31,11 +32,14 @@ interface IProjectsItems {
 
 export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 	const { theme, mainCategories } = useAppSelector(state => state.general);
+	const { formatMessage } = useIntl();
 
 	return (
 		<>
 			<HighlightSection theme={theme}>
-				<Label medium>Explore by</Label>
+				<Label medium>
+					{formatMessage({ id: 'label.explore_by' })}
+				</Label>
 				<ExploreByRow
 					gap='6px'
 					flexDirection={inSidebar ? 'column' : undefined}
@@ -53,7 +57,9 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				</ExploreByRow>
 			</HighlightSection>
 			<NormalSection inSidebar={inSidebar}>
-				<Label medium>BY CATEGORY</Label>
+				<Label medium>
+					{formatMessage({ id: 'label.by_category' })}
+				</Label>
 				<CategoriesGrid inSidebar={inSidebar}>
 					{mainCategories.map((category, idx) => (
 						<Link
@@ -93,4 +99,5 @@ const CategoriesGrid = styled.div<{ inSidebar?: boolean }>`
 
 const Label = styled(Caption)`
 	padding-left: 16px;
+	text-transform: uppercase;
 `;
