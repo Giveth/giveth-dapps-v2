@@ -9,6 +9,10 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { IProject } from '@/apollo/types/types';
 import Input from '../Input';
 import { requiredOptions } from '@/lib/constants/regex';
+import { client } from '@/apollo/apolloClient';
+import { ADD_RECIPIENT_ADDRESS_TO_PROJECT } from '@/apollo/gql/gqlProjects';
+import config from '@/configuration';
+import InlineToast, { EToastType } from '../toasts/InlineToast';
 import type { IModal } from '@/types/common';
 
 interface IAddPolygonAddressModal extends IModal {
@@ -34,14 +38,27 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 	const handleAdd = async (formData: IAddressForm) => {
 		setLoading(true);
 		const { address } = formData;
-		const _address = getAddress(address);
+		try {
+			const _address = getAddress(address);
+			const { data } = await client.mutate({
+				mutation: ADD_RECIPIENT_ADDRESS_TO_PROJECT,
+				variables: {
+					projectId: Number(project.id),
+					networkId: config.POLYGON_NETWORK.id,
+					address: _address,
+				},
+			});
+		} catch (error) {}
+
 		setLoading(false);
 	};
 
 	const validateAddress = async (address: string) => {
 		setLoading(true);
-		if (!isAddress(address)) return 'Invalid address';
-		setLoading(false);
+		if (!isAddress(address)) {
+			setLoading(false);
+			return 'Invalid address';
+		}
 		return true;
 	};
 
@@ -64,8 +81,13 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 							...requiredOptions.walletAddress,
 							validate: validateAddress,
 						}}
-						error={errors.address}
 					/>
+					{errors.address && (
+						<StyledInlineToast
+							type={EToastType.Error}
+							message={errors.address.message as string}
+						/>
+					)}
 					<Button
 						size='small'
 						label='SAVE ADDRESS'
@@ -85,4 +107,8 @@ const ModalContainer = styled.div`
 	${mediaQueries.tablet} {
 		width: 462px;
 	}
+`;
+
+const StyledInlineToast = styled(InlineToast)`
+	margin-top: 0;
 `;
