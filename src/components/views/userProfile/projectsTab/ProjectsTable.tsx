@@ -24,6 +24,8 @@ import {
 	TableCell,
 	TableHeader,
 } from '@/components/styled-components/Table';
+import config from '@/configuration';
+import { AddPolygonToast } from './AddPolygonToast';
 
 interface IProjectsTable {
 	projects: IProject[];
@@ -70,6 +72,9 @@ const ProjectsTable: FC<IProjectsTable> = ({
 			{projects?.map(project => {
 				const status = project.status.name;
 				const isCancelled = status === EProjectStatus.CANCEL;
+				const hasPolyGonAddress = project.addresses?.find(
+					address => address.networkId === config.POLYGON_NETWORK.id,
+				);
 				const verStatus = project.verified
 					? EVerificationStatus.VERIFIED
 					: project.projectVerificationForm?.status;
@@ -88,6 +93,9 @@ const ProjectsTable: FC<IProjectsTable> = ({
 							<ProjectTitle>
 								{project.title}
 								<VerificationBadge status={verStatus} />
+								{!hasPolyGonAddress && (
+									<AddPolygonToast project={project} />
+								)}
 							</ProjectTitle>
 						</ProjectTableCell>
 						<ProjectTableCell>
@@ -139,7 +147,6 @@ const ProjectsTableHeader = styled(TableHeader)`
 
 const ProjectTableCell = styled(TableCell)<{ bold?: boolean }>`
 	width: 100%;
-	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	font-weight: ${props => (props.bold ? 500 : 400)};
 `;
@@ -163,8 +170,8 @@ const Actions = styled(Flex)<{ isCancelled: boolean }>`
 	}
 `;
 
-const ProjectTitle = styled.div`
-	display: flex;
+const ProjectTitle = styled(Flex)`
+	padding-top: 8px;
 	flex-wrap: wrap;
 	gap: 0 10px;
 `;
