@@ -18,10 +18,17 @@ export const USER_CORE_FIELDS = gql`
 `;
 
 export const GET_USER_BY_ADDRESS = gql`
-	${USER_CORE_FIELDS}
 	query UserByAddress($address: String!) {
 		userByAddress(address: $address) {
-			...UserCoreFields
+			id
+			firstName
+			lastName
+			name
+			email
+			avatar
+			walletAddress
+			url
+			location
 			totalDonated
 			totalReceived
 			likedProjectsCount
