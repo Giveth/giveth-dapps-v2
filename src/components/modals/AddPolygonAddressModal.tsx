@@ -1,4 +1,4 @@
-import { Button, IconNetwork32, P } from '@giveth/ui-design-system';
+import { B, Button, IconNetwork32, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { getAddress, isAddress } from 'ethers/lib/utils';
@@ -74,7 +74,10 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 			headerTitlePosition='left'
 		>
 			<ModalContainer>
-				<P>Adding polygon address for {project.title}</P>
+				<Content>
+					<P>Adding polygon address for</P>
+					<B>{project.title}</B>
+				</Content>
 				<form onSubmit={handleSubmit(handleAdd)}>
 					<Input
 						register={register}
@@ -109,6 +112,14 @@ const ModalContainer = styled.div`
 	padding: 32px 24px 24px;
 	${mediaQueries.tablet} {
 		width: 462px;
+	}
+`;
+
+const Content = styled.div`
+	margin-bottom: 32px;
+	& > div {
+		display: inline-block;
+		padding-right: 4px;
 	}
 `;
 
