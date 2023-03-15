@@ -1,4 +1,4 @@
-import { B, Button, IconNetwork32, P } from '@giveth/ui-design-system';
+import { B, Button, IconWalletOutline32, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { getAddress, isAddress } from 'ethers/lib/utils';
@@ -67,7 +67,7 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 
 	return (
 		<Modal
-			headerIcon={<IconNetwork32 />}
+			headerIcon={<IconWalletOutline32 />}
 			headerTitle='Add polygon address'
 			closeModal={closeModal}
 			isAnimating={isAnimating}
