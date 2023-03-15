@@ -23,7 +23,7 @@ export const AddPolygonToast: FC<IAddPolygonToastProps> = ({
 	return (
 		<>
 			<Wrapper>
-				<Caption>Add polygon address for this project</Caption>
+				<Caption>Add Polygon address for this project</Caption>
 				<Action
 					gap='8px'
 					alignItems='center'
