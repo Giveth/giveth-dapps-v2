@@ -15,6 +15,7 @@ import NetworkLogo from '@/components/NetworkLogo';
 import { switchNetwork } from '@/lib/wallet';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
+import { ETheme } from '@/features/general/general.slice';
 
 const networks = [
 	config.MAINNET_CONFIG,
@@ -46,11 +47,14 @@ const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 							}}
 							isSelected={_chainId === chainId}
 							key={_chainId}
+							theme={theme}
 						>
 							<NetworkLogo chainId={_chainId} logoSize={32} />
 							<B>{network.chainName}</B>
 							{_chainId === chainId && (
-								<Selected styleType='Small'>Selected</Selected>
+								<Selected styleType='Small' theme={theme}>
+									Selected
+								</Selected>
 							)}
 						</NetworkItem>
 					);
@@ -61,11 +65,17 @@ const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 };
 
 const Selected = styled(Overline)`
-	color: ${brandColors.giv[500]};
+	color: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[100]
+			: brandColors.giv[500]};
 	position: absolute;
 	top: -8px;
 	left: 10px;
-	background: white;
+	background: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[600]
+			: neutralColors.gray[100]};
 	padding: 0 3px;
 `;
 
@@ -79,7 +89,10 @@ const NetworkItem = styled.div<{ isSelected: boolean }>`
 	align-items: center;
 	gap: 16px;
 	:hover {
-		background-color: ${neutralColors.gray[200]};
+		background-color: ${props =>
+			props.theme === ETheme.Dark
+				? brandColors.giv[700]
+				: neutralColors.gray[200]};
 	}
 	border: 1px solid
 		${({ isSelected }) =>
