@@ -67,24 +67,27 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 			<StyledProjectCard project={project} />
 			<ProjectUpdateCard>
 				{loading ? (
-					'Loading'
+					<LoadingDotIcon>
+						<div className='dot-flashing' />
+					</LoadingDotIcon>
 				) : update ? (
 					<>
 						<UpdateDate>
-							{update?.createdAt &&
-								new Date(update.createdAt).toLocaleString(
-									'en-GB',
-									{
-										day: 'numeric',
-										month: 'short',
-										year: 'numeric',
-									},
-								)}
+							{update && update.createdAt
+								? new Date(update.createdAt).toLocaleString(
+										'en-GB',
+										{
+											day: 'numeric',
+											month: 'short',
+											year: 'numeric',
+										},
+								  )
+								: ''}
 						</UpdateDate>
-						<UpdateTitle weight={700}>{update.title}</UpdateTitle>
+						<UpdateTitle weight={700}>{update?.title}</UpdateTitle>
 						<UpdateDesc
 							dangerouslySetInnerHTML={{
-								__html: update.content,
+								__html: update?.content || '',
 							}}
 						/>
 						<Flex justifyContent='flex-end'>
@@ -149,4 +152,8 @@ const UpdateDesc = styled(P)`
 const ReadMore = styled(FlexCenter)`
 	color: ${brandColors.giv[500]};
 	cursor: pointer;
+`;
+
+export const LoadingDotIcon = styled.div`
+	padding: 4px 50%;
 `;
