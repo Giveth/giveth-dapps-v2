@@ -75,7 +75,7 @@ const VideoBlock = () => {
 								onClick={handleVideoClick}
 								width='100%'
 								onEnded={handleVideoEnd}
-								poster='https://giveth.mypinata.cloud/ipfs/QmXbNQFJHYQxFPiriLWPWs6VpJQLcmemZKm7Wz9GZ2EAFR'
+								poster='https://giveth.mypinata.cloud/ipfs/QmZ3Xw8EbiirXFFvEzUWSZDwqjg2Y2acQj7H6tgxWoC7SX'
 							>
 								<source
 									src='/video/homepage-intro.mp4'

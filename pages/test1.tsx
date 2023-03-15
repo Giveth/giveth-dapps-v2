@@ -13,11 +13,12 @@ import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Container } from '@/components/Grid';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
-import { EthDenverBanner } from '@/components/EthDenverBanner';
 import { TestProvider, useTestData } from '@/context/test.context';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
+import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
+import { client } from '@/apollo/apolloClient';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -68,6 +69,14 @@ const TestIndex = () => {
 			dismissLabel: 'OK :D',
 			position: 'bottom-center',
 		});
+
+	const fetchProjects = async () => {
+		const res = await client.query({
+			query: FETCH_ALL_PROJECTS,
+			fetchPolicy: 'network-only',
+		});
+		console.log('res', res);
+	};
 
 	// console.log('xDaiValues', xDaiValues);
 	// useEffect(() => {
@@ -144,6 +153,9 @@ const TestIndex = () => {
 				<button type='button' onClick={() => setShowModal(true)}>
 					show Modal
 				</button>
+				<button type='button' onClick={fetchProjects}>
+					Fetch Projects
+				</button>
 				<div>
 					--------------------------------------------
 					<IconWithTooltip
@@ -153,7 +165,7 @@ const TestIndex = () => {
 					>
 						<FlowRateTooltip>
 							The rate at which you receive liquid GIV from your
-							GIVstream.
+							GIVstream.here!
 						</FlowRateTooltip>
 					</IconWithTooltip>
 				</div>
@@ -164,7 +176,6 @@ const TestIndex = () => {
 					limit={200}
 				/>
 			</TestContainer>
-			<EthDenverBanner />
 			{showModal && <TestModal setShowModal={setShowModal} />}
 		</>
 	);

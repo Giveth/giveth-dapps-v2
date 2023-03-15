@@ -4,26 +4,23 @@ import { P, H4, brandColors, Caption } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
 import { mediaQueries } from '@/lib/constants/constants';
-import config from '@/configuration';
-import { IconEthereum } from '../Icons/Eth';
-import { IconGnosisChain } from '../Icons/GnosisChain';
 import { Modal } from './Modal';
-import { switchNetwork } from '@/lib/wallet';
 import { getNetworkNames } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
+import NetworkLogo from '@/components/NetworkLogo';
+import { FlexCenter } from '@/components/styled-components/Flex';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
 
 interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
-
-const { PRIMARY_NETWORK, SECONDARY_NETWORK } = config;
-const { id: primaryId } = PRIMARY_NETWORK;
-const { id: secondaryId } = SECONDARY_NETWORK;
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { setShowModal, acceptedChains } = props;
 	const { chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		if (chainId && acceptedChains?.includes(chainId)) {
@@ -31,33 +28,28 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 		}
 	}, [chainId, acceptedChains]);
 
-	const NetworkName = getNetworkNames(acceptedChains!, 'or');
-
-	const gnosisOnly =
-		acceptedChains?.length === 1 && acceptedChains[0] === secondaryId;
-	const ethereumOnly =
-		acceptedChains?.length === 1 && acceptedChains[0] === primaryId;
+	const networkNames = getNetworkNames(acceptedChains!, 'or');
 
 	return (
 		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<ModalContainer>
-				{gnosisOnly ? (
-					<IconGnosisChain size={64} />
-				) : ethereumOnly ? (
-					<IconEthereum size={64} />
-				) : (
-					<>
-						<IconEthereum size={64} />
-						<IconGnosisChain size={64} />
-					</>
-				)}
-				<Title>Switch to {NetworkName}</Title>
+				<FlexCenter gap='8px'>
+					{acceptedChains?.map(chainId => (
+						<NetworkLogo
+							logoSize={64}
+							chainId={chainId}
+							key={chainId}
+						/>
+					))}
+				</FlexCenter>
+				<Title>Switch to {networkNames}</Title>
 				<P>
 					This project doesn&apos;t accept donations in your connected
-					network. Please switch your wallet network to {NetworkName}.
+					network. Please switch your wallet network to {networkNames}
+					.
 				</P>
 				<SwitchCaption
-					onClick={() => switchNetwork(acceptedChains![0])}
+					onClick={() => dispatch(setShowSwitchNetworkModal(true))}
 				>
 					Switch network
 				</SwitchCaption>

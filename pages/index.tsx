@@ -5,12 +5,13 @@ import { client } from '@/apollo/apolloClient';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import {
 	ICampaign,
+	IProject,
 	IProjectUpdateWithProject,
 	IRecentDonation,
 } from '@/apollo/types/types';
 import { homeMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
-import { HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
+import { FETCH_HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
 
 export interface IHomeRoute {
 	recentDonations: IRecentDonation[];
@@ -19,7 +20,17 @@ export interface IHomeRoute {
 	donationsTotalUsdPerDate: { total: number };
 	latestUpdates: IProjectUpdateWithProject[];
 	campaigns: ICampaign[];
+	featuredProjects: IProject[];
 }
+
+export const HOME_QUERY_VARIABLES = {
+	take: 50,
+	takeLatestUpdates: 50,
+	skipLatestUpdates: 0,
+	fromDate: '2021-01-01',
+	limit: 12,
+	sortingBy: EProjectsSortBy.GIVPOWER,
+};
 
 const HomeRoute = (props: IHomeRoute) => {
 	return (
@@ -32,15 +43,8 @@ const HomeRoute = (props: IHomeRoute) => {
 
 export const getStaticProps: GetStaticProps = async context => {
 	const { data } = await client.query({
-		query: HOMEPAGE_DATA,
-		variables: {
-			take: 50,
-			takeLatestUpdates: 50,
-			skipLatestUpdates: 0,
-			fromDate: '2021-01-01',
-			limit: 12,
-			sortingBy: EProjectsSortBy.GIVPOWER,
-		},
+		query: FETCH_HOMEPAGE_DATA,
+		variables: HOME_QUERY_VARIABLES,
 		fetchPolicy: 'no-cache',
 	});
 	return {
@@ -51,6 +55,7 @@ export const getStaticProps: GetStaticProps = async context => {
 			donationsTotalUsdPerDate: data.donationsTotalUsdPerDate,
 			latestUpdates: data.projectUpdates.projectUpdates,
 			campaigns: data.campaigns,
+			featuredProjects: data.featuredProjects.projects,
 		},
 		revalidate: 600,
 	};

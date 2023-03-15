@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { Flex } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ContentSelector from '@/components/views/verification/ContentSelector';
 import HintModal from '@/components/views/verification/HintModal';
@@ -29,9 +29,6 @@ const VerificationIndex = () => {
 					<ContentSection sm={8} md={9}>
 						<AbsoluteSection>
 							<AutoSave />
-							{/* <GuideSection onClick={() => setShowModal(true)}>
-								<Image src={BulbIcon} alt='light bulb' />
-							</GuideSection> */}
 						</AbsoluteSection>
 						<ContentSelector />
 					</ContentSection>
@@ -49,13 +46,6 @@ const AbsoluteSection = styled(Flex)`
 	top: 29px;
 	right: 16px;
 	gap: 23px;
-`;
-
-const GuideSection = styled(FlexCenter)`
-	box-shadow: ${Shadow.Giv[400]};
-	padding: 10px;
-	border-radius: 16px;
-	cursor: pointer;
 `;
 
 const ContentSection = styled(Col)`

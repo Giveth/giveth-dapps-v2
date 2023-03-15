@@ -18,6 +18,7 @@ import links from '@/lib/constants/links';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { ButtonStyled } from '@/components/GeneralCard.sc';
 import { Container } from '@/components/Grid';
+import GetUpdates from '@/components/GetUpdates';
 
 const JoinEngage = () => {
 	const { formatMessage } = useIntl();
@@ -121,10 +122,11 @@ const JoinEngage = () => {
 						{consumeArray.map(i => (
 							<Card key={i.title} content={i} isHorizontal />
 						))}
-						{/* <JoinSubscriptionCard /> */}
 					</CardsConsumeSection>
 				</Section>
 			</ContainerStyled>
+			<GetUpdates />
+			<br />
 			<YellowFlowerComponent>
 				<Image src={YellowFlower} alt='yellow flower' />
 			</YellowFlowerComponent>

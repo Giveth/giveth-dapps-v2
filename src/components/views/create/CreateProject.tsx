@@ -38,7 +38,7 @@ import {
 	WalletAddressInput,
 } from './Inputs';
 import SuccessfulCreation from './SuccessfulCreation';
-import { compareAddresses, showToastError } from '@/lib/helpers';
+import { compareAddressesArray, showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
@@ -54,9 +54,10 @@ import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
 
-const { PRIMARY_NETWORK, SECONDARY_NETWORK } = config;
+const { PRIMARY_NETWORK, SECONDARY_NETWORK, POLYGON_NETWORK } = config;
 const ethereumId = PRIMARY_NETWORK.id;
 const gnosisId = SECONDARY_NETWORK.id;
+const polygonId = POLYGON_NETWORK.id;
 
 interface ICreateProjectProps {
 	project?: IProjectEdition;
@@ -71,6 +72,7 @@ export enum EInputs {
 	draft = 'draft',
 	mainAddress = 'mainAddress',
 	secondaryAddress = 'secondaryAddress',
+	polygonAddress = 'polygonAddress',
 }
 
 export type TInputs = {
@@ -82,6 +84,7 @@ export type TInputs = {
 	[EInputs.draft]?: boolean;
 	[EInputs.mainAddress]: string;
 	[EInputs.secondaryAddress]: string;
+	[EInputs.polygonAddress]: string;
 };
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
@@ -97,22 +100,26 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = impactLocation || '';
 
-	const defaultMainAddress = addresses?.find(
+	const prevMainAddress = addresses?.find(
 		a => a.isRecipient && a.networkId === ethereumId,
 	)?.address;
-	const defaultSecondaryAddress = addresses?.find(
+	const prevSecondaryAddress = addresses?.find(
 		a => a.isRecipient && a.networkId === gnosisId,
 	)?.address;
-	const isSameDefaultAddresses = compareAddresses(
-		defaultMainAddress,
-		defaultSecondaryAddress,
-	);
+	const prevPolygonAddress = addresses?.find(
+		a => a.isRecipient && a.networkId === polygonId,
+	)?.address;
+	const isSamePrevAddresses = compareAddressesArray([
+		prevMainAddress,
+		prevSecondaryAddress,
+		prevPolygonAddress,
+	]);
 	const userAddresses: string[] = [];
-	if (isSameDefaultAddresses) userAddresses.push(defaultMainAddress!);
+	if (isSamePrevAddresses) userAddresses.push(prevMainAddress!);
 	else {
-		if (defaultMainAddress) userAddresses.push(defaultMainAddress);
-		if (defaultSecondaryAddress)
-			userAddresses.push(defaultSecondaryAddress);
+		if (prevMainAddress) userAddresses.push(prevMainAddress);
+		if (prevSecondaryAddress) userAddresses.push(prevSecondaryAddress);
+		if (prevPolygonAddress) userAddresses.push(prevPolygonAddress);
 	}
 
 	const formMethods = useForm<TInputs>({
@@ -124,8 +131,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.categories]: categories || [],
 			[EInputs.impactLocation]: defaultImpactLocation,
 			[EInputs.image]: image || '',
-			[EInputs.mainAddress]: defaultMainAddress || '',
-			[EInputs.secondaryAddress]: defaultSecondaryAddress || '',
+			[EInputs.mainAddress]: prevMainAddress || '',
+			[EInputs.secondaryAddress]: prevSecondaryAddress || '',
+			[EInputs.polygonAddress]: prevPolygonAddress || '',
 		},
 	});
 
@@ -133,13 +141,17 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
 	const [mainnetAddressActive, setMainnetAddressActive] = useState(
-		isEditMode ? !!defaultMainAddress : true,
+		isEditMode ? !!prevMainAddress : true,
 	);
 	const [gnosisAddressActive, setGnosisAddressActive] = useState(
-		isEditMode ? !!defaultSecondaryAddress : true,
+		isEditMode ? !!prevSecondaryAddress : true,
 	);
-	const [isSameMainnetGnosisAddress, setIsSameMainnetGnosisAddress] =
-		useState(isEditMode ? isSameDefaultAddresses : true);
+	const [polygonAddressActive, setPolygonAddressActive] = useState(
+		isEditMode ? !!prevPolygonAddress : true,
+	);
+	const [isSameAddress, setIsSameAddress] = useState(
+		isEditMode ? isSamePrevAddresses : true,
+	);
 	const [isLoading, setIsLoading] = useState(false);
 	const [resolvedENS, setResolvedENS] = useState('');
 
@@ -152,6 +164,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			const {
 				mainAddress,
 				secondaryAddress,
+				polygonAddress,
 				name,
 				description,
 				categories,
@@ -160,7 +173,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				draft,
 			} = formData;
 
-			if (isSameMainnetGnosisAddress) {
+			if (isSameAddress) {
 				const address = isAddressENS(mainAddress)
 					? resolvedENS
 					: mainAddress;
@@ -168,6 +181,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				addresses.push(
 					{ address: checksumAddress, networkId: ethereumId },
 					{ address: checksumAddress, networkId: gnosisId },
+					{ address: checksumAddress, networkId: polygonId },
 				);
 			} else {
 				if (mainnetAddressActive) {
@@ -185,6 +199,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					addresses.push({
 						address: checksumAddress,
 						networkId: gnosisId,
+					});
+				}
+				if (polygonAddressActive) {
+					const checksumAddress = utils.getAddress(polygonAddress);
+					addresses.push({
+						address: checksumAddress,
+						networkId: polygonId,
 					});
 				}
 			}
@@ -293,21 +314,25 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							})}
 						</CaptionContainer>
 						<CheckBox
-							onChange={setIsSameMainnetGnosisAddress}
-							checked={isSameMainnetGnosisAddress}
+							onChange={setIsSameAddress}
+							checked={isSameAddress}
 							label={formatMessage({
 								id: 'label.ill_raise_and_receive_funds_on_mainnet_and_gnosis',
 							})}
 						/>
 						<WalletAddressInput
 							networkId={ethereumId}
-							sameAddress={isSameMainnetGnosisAddress}
+							sameAddress={isSameAddress}
 							isActive={mainnetAddressActive}
 							userAddresses={userAddresses}
 							resolvedENS={resolvedENS}
 							setResolvedENS={setResolvedENS}
 							setIsActive={e => {
-								if (!e && !gnosisAddressActive)
+								if (
+									!e &&
+									!gnosisAddressActive &&
+									!polygonAddressActive
+								)
 									return showToastError(
 										formatMessage({
 											id: 'label.you_must_select_at_least_one_address',
@@ -319,12 +344,16 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						/>
 						<WalletAddressInput
 							networkId={gnosisId}
-							sameAddress={isSameMainnetGnosisAddress}
+							sameAddress={isSameAddress}
 							isActive={gnosisAddressActive}
 							userAddresses={userAddresses}
 							setResolvedENS={() => {}}
 							setIsActive={e => {
-								if (!e && !mainnetAddressActive)
+								if (
+									!e &&
+									!mainnetAddressActive &&
+									!polygonAddressActive
+								)
 									return showToastError(
 										formatMessage({
 											id: 'label.you_must_select_at_least_one_address',
@@ -332,6 +361,27 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									);
 								if (!e) unregister(EInputs.secondaryAddress);
 								setGnosisAddressActive(e);
+							}}
+						/>
+						<WalletAddressInput
+							networkId={polygonId}
+							sameAddress={isSameAddress}
+							isActive={polygonAddressActive}
+							userAddresses={userAddresses}
+							setResolvedENS={() => {}}
+							setIsActive={e => {
+								if (
+									!e &&
+									!mainnetAddressActive &&
+									!gnosisAddressActive
+								)
+									return showToastError(
+										formatMessage({
+											id: 'label.you_must_select_at_least_one_address',
+										}),
+									);
+								if (!e) unregister(EInputs.polygonAddress);
+								setPolygonAddressActive(e);
 							}}
 						/>
 						<PublishTitle>

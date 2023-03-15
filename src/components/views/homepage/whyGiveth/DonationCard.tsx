@@ -11,6 +11,7 @@ import { shortenAddress } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ExternalLink from '@/components/ExternalLink';
 import { slugToProjectView } from '@/lib/routeCreators';
+import { EProjectPageTabs } from '../../project/ProjectIndex';
 
 interface IDonationCard {
 	address: string;
@@ -23,7 +24,13 @@ const DonationCard: FC<IDonationCard> = props => {
 	const { address, amount, projectTitle, slug } = props;
 	return (
 		<CardWrapper>
-			<ExternalLink href={slugToProjectView(slug) + '#donations'}>
+			<ExternalLink
+				href={
+					slugToProjectView(slug) +
+					'tab=' +
+					EProjectPageTabs.DONATIONS
+				}
+			>
 				<CardContainer>
 					<Section>
 						<B>{'@' + shortenAddress(address)}</B>

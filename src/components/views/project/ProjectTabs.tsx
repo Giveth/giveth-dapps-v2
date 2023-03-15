@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
 import {
 	Subline,
 	brandColors,
@@ -8,15 +7,18 @@ import {
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
+import Link from 'next/link';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
+import Routes from '@/lib/constants/Routes';
+import { EProjectPageTabs } from './ProjectIndex';
 
 interface IProjectTabs {
 	activeTab: number;
+	slug: string;
 	totalDonations?: number;
-	setActiveTab: Dispatch<SetStateAction<number>>;
 }
 
 const badgeCount = (count?: number) => {
@@ -24,7 +26,7 @@ const badgeCount = (count?: number) => {
 };
 
 const ProjectTabs = (props: IProjectTabs) => {
-	const { activeTab, setActiveTab, totalDonations } = props;
+	const { activeTab, slug, totalDonations } = props;
 	const { projectData } = useProjectContext();
 	const { totalProjectUpdates } = projectData || {};
 	const { formatMessage } = useIntl();
@@ -32,27 +34,40 @@ const ProjectTabs = (props: IProjectTabs) => {
 
 	const tabsArray = [
 		{ title: 'label.about' },
-		{ title: 'label.updates', badge: totalProjectUpdates },
-		{ title: 'label.donations', badge: totalDonations },
+		{
+			title: 'label.updates',
+			badge: totalProjectUpdates,
+			query: EProjectPageTabs.UPDATES,
+		},
+		{
+			title: 'label.donations',
+			badge: totalDonations,
+			query: EProjectPageTabs.DONATIONS,
+		},
 	];
 
 	if (projectData?.verified)
 		tabsArray.push({
 			title: 'label.givpower',
 			badge: boostersData?.powerBoostings.length,
+			query: EProjectPageTabs.GIVPOWER,
 		});
 
 	return (
 		<Wrapper>
 			{tabsArray.map((i, index) => (
-				<Tab
-					onClick={() => setActiveTab(index)}
+				<Link
 					key={i.title}
-					className={activeTab === index ? 'active' : ''}
+					href={`${Routes.Project}/${slug}${
+						i.query ? `?tab=${i.query}` : ''
+					}`}
+					scroll={false}
 				>
-					{formatMessage({ id: i.title })}
-					{badgeCount(i.badge) && <Badge>{i.badge}</Badge>}
-				</Tab>
+					<Tab className={activeTab === index ? 'active' : ''}>
+						{formatMessage({ id: i.title })}
+						{badgeCount(i.badge) && <Badge>{i.badge}</Badge>}
+					</Tab>
+				</Link>
 			))}
 		</Wrapper>
 	);
@@ -84,8 +99,8 @@ const Tab = styled(P)`
 `;
 
 const Wrapper = styled(Flex)`
-	padding: 24px 0 24px 0;
-	margin-bottom: 16px;
+	padding: 24px 0 24px;
+	margin-bottom: 14px;
 	color: ${brandColors.deep[600]};
 	align-items: center;
 	z-index: 1;
@@ -95,7 +110,7 @@ const Wrapper = styled(Flex)`
 	max-width: calc(100vw - 32px);
 
 	${mediaQueries.tablet} {
-		padding: 16px 0 12px;
+		padding: 16px 0 24px;
 		position: sticky;
 		top: 200px;
 	}

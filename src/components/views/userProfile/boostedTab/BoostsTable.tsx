@@ -439,12 +439,11 @@ const BoostsTable: FC<IBoostsTable> = ({
 };
 
 const Header = styled(Flex)`
-	margin: 68px 0 48px;
+	margin-bottom: 48px;
 `;
 
 const Actions = styled(Flex)`
 	overflow: auto;
-	padding-bottom: 16px;
 `;
 
 const Table = styled.div<{ hasLastCol: boolean }>`

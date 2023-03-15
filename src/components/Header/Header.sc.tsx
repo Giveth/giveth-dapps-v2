@@ -157,6 +157,9 @@ export const WBNetwork = styled(GLink)`
 	line-height: 13px;
 	color: #b9a7ff;
 	width: 123px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 `;
 
 export const HBPic = styled.img`
@@ -308,6 +311,7 @@ export const UserName = styled(GLink)`
 	width: 128px;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	white-space: nowrap;
 `;
 
 export const GLinkNoWrap = styled(GLink)`

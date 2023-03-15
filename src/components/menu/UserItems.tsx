@@ -1,22 +1,30 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import { useWeb3React } from '@web3-react/core';
-
 import { useIntl } from 'react-intl';
 import { B, GLink } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
+
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
-import { switchNetworkHandler } from '@/lib/wallet';
 import { isUserRegistered, networkInfo, shortenAddress } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
+	setShowSwitchNetworkModal,
 	setShowWalletModal,
 } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
-import { ItemRow, ItemTitle, ItemAction, ItemSpacer } from './common';
+import {
+	ItemRow,
+	ItemTitle,
+	ItemAction,
+	ItemSpacer,
+	NetworkName,
+} from './common';
 import { Item } from './Item';
+import { FlexCenter } from '@/components/styled-components/Flex';
+import NetworkLogo from '@/components/NetworkLogo';
 
 interface IUserItemsProps {
 	setSignWithWallet: Dispatch<SetStateAction<boolean>>;
@@ -28,7 +36,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 	setQueueRoute,
 }) => {
 	const { formatMessage } = useIntl();
-	const { chainId, account } = useWeb3React();
+	const { chainId, account, deactivate } = useWeb3React();
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
@@ -76,10 +84,15 @@ export const UserItems: FC<IUserItemsProps> = ({
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>
-					<B>{networkName}</B>
+					<FlexCenter gap='4px'>
+						<NetworkLogo chainId={chainId} logoSize={16} />
+						<NetworkName>{networkName}</NetworkName>
+					</FlexCenter>
 					<ItemAction
 						size='Small'
-						onClick={() => switchNetworkHandler(chainId)}
+						onClick={() =>
+							dispatch(setShowSwitchNetworkModal(true))
+						}
 					>
 						{formatMessage({ id: 'label.switch_network' })}
 					</ItemAction>
@@ -91,13 +104,18 @@ export const UserItems: FC<IUserItemsProps> = ({
 					<GLink size='Big'>{formatMessage({ id: i.title })}</GLink>
 				</Item>
 			))}
-			{isSignedIn && (
-				<Item onClick={() => dispatch(signOut(token!))} theme={theme}>
-					<GLink size='Big'>
-						{formatMessage({ id: 'label.sign_out' })}
-					</GLink>
-				</Item>
-			)}
+			<Item
+				onClick={() => {
+					isSignedIn && dispatch(signOut(token!));
+					deactivate();
+					localStorage.removeItem(StorageLabel.WALLET);
+				}}
+				theme={theme}
+			>
+				<GLink size='Big'>
+					{formatMessage({ id: 'label.sign_out' })}
+				</GLink>
+			</Item>
 		</>
 	);
 };

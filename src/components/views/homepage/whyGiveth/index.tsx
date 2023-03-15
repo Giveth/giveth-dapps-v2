@@ -16,7 +16,10 @@ import { Relative } from '@/components/styled-components/Position';
 import CominhoPlusIcon from 'public/images/cominho-plus.svg';
 import { IHomeRoute } from 'pages';
 
-type IWhyGivethProps = Omit<IHomeRoute, 'campaigns' | 'latestUpdates'>;
+type IWhyGivethProps = Omit<
+	IHomeRoute,
+	'campaigns' | 'latestUpdates' | 'featuredProjects'
+>;
 
 const WhyGiveth: FC<IWhyGivethProps> = props => {
 	const {

@@ -9,12 +9,12 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
-
 import { captureException } from '@sentry/nextjs';
 import { useRouter } from 'next/router';
+
 import ShareModal from '../modals/ShareModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
-import { showToastError } from '@/lib/helpers';
+import { isSSRMode, showToastError } from '@/lib/helpers';
 import { Flex } from '../styled-components/Flex';
 import { IProject } from '@/apollo/types/types';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -23,7 +23,7 @@ import {
 	incrementLikedProjectsCount,
 } from '@/features/user/user.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
-import { useModalCallback } from '@/hooks/useModalCallback';
+import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
 
 interface IProjectCardLikeAndShareButtons {
 	project: IProject;
@@ -41,7 +41,11 @@ const ProjectCardLikeAndShareButtons = (
 	);
 	const [boostLoading, setBoostLoading] = useState(false);
 	const [likeLoading, setLikeLoading] = useState(false);
-	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
+	const {
+		isSignedIn,
+		userData: user,
+		isEnabled,
+	} = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 
@@ -100,9 +104,16 @@ const ProjectCardLikeAndShareButtons = (
 	const { modalCallback: signInThenLike } =
 		useModalCallback(likeUnlikeProject);
 
+	const { modalCallback: connectThenSignIn } = useModalCallback(
+		signInThenLike,
+		EModalEvents.CONNECTED,
+	);
+
 	const checkSignInThenLike = () => {
-		if (typeof window === 'undefined') return;
-		if (!isSignedIn) {
+		if (isSSRMode) return;
+		if (!isEnabled) {
+			connectThenSignIn();
+		} else if (!isSignedIn) {
 			signInThenLike();
 		} else {
 			likeUnlikeProject();

@@ -1,6 +1,8 @@
 import { gql } from '@apollo/client';
+import { USER_CORE_FIELDS } from './gqlUser';
 
 export const LOGIN_USER = gql`
+	${USER_CORE_FIELDS}
 	mutation DoLoginWallet(
 		$walletAddress: String!
 		$signature: String!
@@ -21,14 +23,7 @@ export const LOGIN_USER = gql`
 		) {
 			token
 			user {
-				id
-				firstName
-				lastName
-				name
-				email
-				avatar
-				url
-				location
+				...UserCoreFields
 			}
 		}
 	}
