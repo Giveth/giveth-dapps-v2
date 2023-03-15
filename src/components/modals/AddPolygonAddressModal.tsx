@@ -49,6 +49,7 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 					address: _address,
 				},
 			});
+			closeModal();
 		} catch (error: any) {
 			if (error.message) {
 				setError(
