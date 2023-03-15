@@ -22,6 +22,7 @@ import { FlexSpacer } from '../styled-components/Flex';
 import { RewardItems } from './RewardItems';
 import { MenuContainer } from './Menu.sc';
 import { ItemsProvider } from '@/context/Items.context';
+import SwitchNetwork from '../modals/SwitchNetwork';
 
 interface IRewardButtonWithMenuProps extends IHeaderButtonProps {}
 
@@ -30,6 +31,7 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 	theme,
 }) => {
 	const [showRewardMenuModal, setShowRewardMenuModal] = useState(false);
+	const [showSwitchNetwork, setShowSwitchNetwork] = useState(false);
 	const isDesktop = useMediaQuery(device.laptopL);
 	const [showMenu, menuCondition, openMenu, closeMenu] = useDelayedState();
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
@@ -61,6 +63,7 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 						<RewardItems
 							showWhatIsGIVstreamModal={showRewardMenuModal}
 							setShowWhatIsGIVstreamModal={setShowRewardMenuModal}
+							setShowSwitchNetwork={setShowSwitchNetwork}
 							theme={theme}
 						/>
 					</ItemsProvider>
@@ -87,11 +90,15 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 								setShowWhatIsGIVstreamModal={
 									setShowRewardMenuModal
 								}
+								setShowSwitchNetwork={setShowSwitchNetwork}
 								theme={theme}
 							/>
 						</ItemsProvider>
 					</SidebarInnerContainer>
 				</SideBar>
+			)}
+			{showSwitchNetwork && (
+				<SwitchNetwork setShowModal={setShowSwitchNetwork} />
 			)}
 		</MenuAndButtonContainer>
 	);

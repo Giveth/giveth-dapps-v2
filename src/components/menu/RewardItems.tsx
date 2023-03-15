@@ -4,7 +4,7 @@ import {
 	IconHelpFilled16,
 	OutlineLinkButton,
 } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import BigNumber from 'bignumber.js';
@@ -13,7 +13,6 @@ import Link from 'next/link';
 import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { Flex } from '../styled-components/Flex';
-import { switchNetworkHandler } from '@/lib/wallet';
 import config from '@/configuration';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { BN, formatWeiHelper } from '@/helpers/number';
@@ -42,12 +41,14 @@ import { useItemsContext } from '@/context/Items.context';
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;
 	setShowWhatIsGIVstreamModal: (value: boolean) => void;
+	setShowSwitchNetwork: Dispatch<SetStateAction<boolean>>;
 	theme: ETheme;
 }
 
 export const RewardItems: FC<IRewardItemsProps> = ({
 	showWhatIsGIVstreamModal,
 	setShowWhatIsGIVstreamModal,
+	setShowSwitchNetwork,
 	theme,
 }) => {
 	const { formatMessage } = useIntl();
@@ -122,7 +123,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 					<Caption medium>{networkName}</Caption>
 					<ItemAction
 						size='Small'
-						onClick={() => switchNetworkHandler(chainId)}
+						onClick={() => setShowSwitchNetwork(true)}
 					>
 						{formatMessage({ id: 'label.switch_network' })}
 					</ItemAction>
