@@ -75,7 +75,6 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 						<UserItems
 							setQueueRoute={setQueueRoute}
 							setSignWithWallet={setSignWithWallet}
-							setShowSwitchNetwork={setShowSwitchNetwork}
 						/>
 					</ItemsProvider>
 				</MenuContainer>
@@ -99,7 +98,6 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 							<UserItems
 								setQueueRoute={setQueueRoute}
 								setSignWithWallet={setSignWithWallet}
-								setShowSwitchNetwork={setShowSwitchNetwork}
 							/>
 						</ItemsProvider>
 					</SidebarInnerContainer>

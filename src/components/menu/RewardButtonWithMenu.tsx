@@ -63,7 +63,6 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 						<RewardItems
 							showWhatIsGIVstreamModal={showRewardMenuModal}
 							setShowWhatIsGIVstreamModal={setShowRewardMenuModal}
-							setShowSwitchNetwork={setShowSwitchNetwork}
 							theme={theme}
 						/>
 					</ItemsProvider>
@@ -90,7 +89,6 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 								setShowWhatIsGIVstreamModal={
 									setShowRewardMenuModal
 								}
-								setShowSwitchNetwork={setShowSwitchNetwork}
 								theme={theme}
 							/>
 						</ItemsProvider>

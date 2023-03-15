@@ -4,7 +4,7 @@ import {
 	IconHelpFilled16,
 	OutlineLinkButton,
 } from '@giveth/ui-design-system';
-import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import BigNumber from 'bignumber.js';
@@ -21,7 +21,7 @@ import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { getUserStakeInfo } from '@/lib/stakingPool';
 import Routes from '@/lib/constants/Routes';
 import { networkInfo } from '@/lib/helpers';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
@@ -37,18 +37,17 @@ import {
 import { ItemAction, ItemRow, ItemTitle } from './common';
 import { Item } from './Item';
 import { useItemsContext } from '@/context/Items.context';
+import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
 
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;
 	setShowWhatIsGIVstreamModal: (value: boolean) => void;
-	setShowSwitchNetwork: Dispatch<SetStateAction<boolean>>;
 	theme: ETheme;
 }
 
 export const RewardItems: FC<IRewardItemsProps> = ({
 	showWhatIsGIVstreamModal,
 	setShowWhatIsGIVstreamModal,
-	setShowSwitchNetwork,
 	theme,
 }) => {
 	const { formatMessage } = useIntl();
@@ -59,6 +58,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainId } = useWeb3React();
+	const dispatch = useAppDispatch();
 
 	const sdh = new SubgraphDataHelper(currentValues);
 
@@ -123,7 +123,9 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 					<Caption medium>{networkName}</Caption>
 					<ItemAction
 						size='Small'
-						onClick={() => setShowSwitchNetwork(true)}
+						onClick={() =>
+							dispatch(setShowSwitchNetworkModal(true))
+						}
 					>
 						{formatMessage({ id: 'label.switch_network' })}
 					</ItemAction>
