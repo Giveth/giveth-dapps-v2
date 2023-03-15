@@ -13,7 +13,6 @@ import { client } from '@/apollo/apolloClient';
 import { ADD_RECIPIENT_ADDRESS_TO_PROJECT } from '@/apollo/gql/gqlProjects';
 import config from '@/configuration';
 import InlineToast, { EToastType } from '../toasts/InlineToast';
-import { generatePolygonAddress } from '@/lib/helpers';
 import type { IModal } from '@/types/common';
 
 interface IAddPolygonAddressModal extends IModal {
@@ -44,7 +43,7 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 		const { address } = formData;
 		try {
 			const _address = getAddress(address);
-			const { data } = await client.mutate({
+			await client.mutate({
 				mutation: ADD_RECIPIENT_ADDRESS_TO_PROJECT,
 				variables: {
 					projectId: Number(project.id),
@@ -116,7 +115,6 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 							...requiredOptions.walletAddress,
 							validate: validateAddress,
 						}}
-						value={generatePolygonAddress(project.addresses)}
 					/>
 					{errors.address && (
 						<StyledInlineToast
