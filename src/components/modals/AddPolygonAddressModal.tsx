@@ -111,7 +111,7 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 					<Input
 						register={register}
 						registerName='address'
-						label='Enter a polygon address'
+						label='Enter a Polygon address'
 						registerOptions={{
 							...requiredOptions.walletAddress,
 							validate: validateAddress,
