@@ -7,11 +7,11 @@ import { IProject } from '@/apollo/types/types';
 import type { IModal } from '@/types/common';
 import type { FC } from 'react';
 
-interface IAddPolygonAddress extends IModal {
+interface IAddPolygonAddressModal extends IModal {
 	project: IProject;
 }
 
-export const AddPolygonAddress: FC<IAddPolygonAddress> = ({
+export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 	project,
 	setShowModal,
 }) => {

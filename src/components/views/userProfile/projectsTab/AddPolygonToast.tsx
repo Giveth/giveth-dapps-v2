@@ -8,7 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import { IProject } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
-import { AddPolygonAddress } from '@/components/modals/AddPolygonAddress';
+import { AddPolygonAddressModal } from '@/components/modals/AddPolygonAddressModal';
 
 interface IAddPolygonToastProps {
 	project: IProject;
@@ -30,7 +30,7 @@ export const AddPolygonToast: FC<IAddPolygonToastProps> = ({ project }) => {
 				</Action>
 			</Wrapper>
 			{showModal && (
-				<AddPolygonAddress
+				<AddPolygonAddressModal
 					project={project}
 					setShowModal={setShowModal}
 				/>
