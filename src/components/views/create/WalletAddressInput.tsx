@@ -62,7 +62,11 @@ const WalletAddressInput: FC<IProps> = ({
 	const user = useAppSelector(state => state.user?.userData);
 	const isGnosis = networkId === config.SECONDARY_NETWORK.id;
 	const isPolygon = networkId === config.POLYGON_NETWORK.id;
-	const inputName = isGnosis ? EInputs.secondaryAddress : EInputs.mainAddress;
+	const inputName = isGnosis
+		? EInputs.secondaryAddress
+		: isPolygon
+		? EInputs.polygonAddress
+		: EInputs.mainAddress;
 	const value = getValues(inputName);
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
 	const error = errors[inputName];

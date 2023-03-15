@@ -5,13 +5,14 @@ import { useWeb3React } from '@web3-react/core';
 
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
-import { switchNetwork } from '@/lib/wallet';
 import { getNetworkNames } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
 import NetworkLogo from '@/components/NetworkLogo';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
 
 interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
 
@@ -19,6 +20,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { setShowModal, acceptedChains } = props;
 	const { chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		if (chainId && acceptedChains?.includes(chainId)) {
@@ -47,7 +49,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 					.
 				</P>
 				<SwitchCaption
-					onClick={() => switchNetwork(acceptedChains![0])}
+					onClick={() => dispatch(setShowSwitchNetworkModal(true))}
 				>
 					Switch network
 				</SwitchCaption>

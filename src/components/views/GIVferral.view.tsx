@@ -15,7 +15,7 @@ import {
 } from '@giveth/ui-design-system';
 import { isProduction } from '@/configuration';
 import { Col, Container, Row } from '@/components/Grid';
-// import VideoBlock from '@/components/VideoBlock';
+import VideoBlock from '@/components/VideoBlock';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 
@@ -132,7 +132,7 @@ const GIVferralView = () => {
 					/>
 				</CompleteBox>
 			</Section>
-			{/* <Section>
+			<Section>
 				<FloatingFigure3 />
 
 				<VideoBox>
@@ -146,14 +146,11 @@ const GIVferralView = () => {
 							})}
 						</H4Text>
 					</LargeBox>
-					<VideoBlock
-						src='/video/giveconomy.mp4'
-						poster='/video/giveconomy.webp'
-					/>
+					<VideoBlock src='/video/giveth-referral-program-v1.mp4' />
 				</VideoBox>
 				<FloatingFigure1 />
 				<FloatingFigure2 />
-			</Section> */}
+			</Section>
 		</Container>
 	);
 };
@@ -246,7 +243,7 @@ const Wrapper = styled.div`
 	justify-content: center;
 	position: relative;
 	width: 100%;
-	margin: 150px 0 0 0;
+	margin: 40px 0 0 0;
 	color: ${neutralColors.gray[100]};
 `;
 
