@@ -149,9 +149,14 @@ export const compareAddressesArray = (
 ) => {
 	if (!addresses || addresses.length === 0) return false;
 	const lowerCaseAddresses: string[] = [];
-	addresses.forEach(address => {
-		if (address) lowerCaseAddresses.push(address.toLowerCase());
-	});
+	for (let i = 0; i < addresses.length; i++) {
+		const address = addresses[i];
+		if (address) {
+			lowerCaseAddresses.push(address.toLowerCase());
+		} else {
+			return false;
+		}
+	}
 	return new Set(lowerCaseAddresses).size === 1;
 };
 
