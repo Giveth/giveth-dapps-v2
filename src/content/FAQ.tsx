@@ -373,26 +373,12 @@ const faqContent = (formatMessage: any) => {
 							title={formatMessage({ id: 'label.campaign' })}
 						/>{' '}
 						<FormattedMessage id='label.on' />{' '}
-						<ExternalLink href={links.TRACE} title='Giveth TRACE' />
-						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.three' />{' '}
-						<b>
-							<FormattedMessage id='label.traceable_project' />
-						</b>
-						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.four' />{' '}
-						<ExternalLink href={links.TRACES_DOCS} title='Traces' />
-						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.five' />{' '}
-						<ExternalLink href={links.TRACES_DOCS} title='Traces' />
-						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.six' />
-						{'  '}
-						<ExternalLink href={links.TRACE} title='Giveth TRACE' />
-						{'  '}
-						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.seven' />{' '}
-						<ExternalLink href={Routes.Home} title='Giveth.io' />,{' '}
-						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.eight' />{' '}
 						<ExternalLink
-							href={links.MAKE_TRACEABLE_DOCS}
-							title={formatMessage({ id: 'label.documentation' })}
+							href={links.TRACE}
+							title='Giveth TRACE '
 						/>
+						<FormattedMessage id='page.faq.what_is_a_traceable_project.content.three' />{' '}
+						<ExternalLink href={links.TRACES_DOCS} title='Traces' />
 						.
 					</>
 				),
