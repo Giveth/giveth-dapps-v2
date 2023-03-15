@@ -15,8 +15,9 @@ import { IProject, IProjectUpdate } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { mediaQueries } from '@/lib/constants/constants';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_UPDATES } from '@/apollo/gql/gqlProjects';
+import { FETCH_FEATURED_PROJECT_UPDATES } from '@/apollo/gql/gqlProjects';
 import Routes from '@/lib/constants/Routes';
+import { EProjectPageTabs } from '../../project/ProjectIndex';
 
 interface IProjectUpdateSlideProps {
 	project: IProject;
@@ -36,15 +37,13 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 			if (project.id && target.isIntersecting) {
 				setLoading(true);
 				const { data } = await client.query({
-					query: FETCH_PROJECT_UPDATES,
+					query: FETCH_FEATURED_PROJECT_UPDATES,
 					variables: {
 						projectId: parseInt(project.id),
-						take: 1,
-						skip: 0,
 					},
 				});
 				setLoading(false);
-				const _update = data.getProjectUpdates[0];
+				const _update = data.featuredProjectUpdate;
 				_update && setUpdate(_update);
 			}
 		};
@@ -68,28 +67,33 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 			<StyledProjectCard project={project} />
 			<ProjectUpdateCard>
 				{loading ? (
-					'Loading'
+					<LoadingDotIcon>
+						<div className='dot-flashing' />
+					</LoadingDotIcon>
 				) : update ? (
 					<>
 						<UpdateDate>
-							{update?.createdAt &&
-								new Date(update.createdAt).toLocaleString(
-									'en-GB',
-									{
-										day: 'numeric',
-										month: 'short',
-										year: 'numeric',
-									},
-								)}
+							{update && update.createdAt
+								? new Date(update.createdAt).toLocaleString(
+										'en-GB',
+										{
+											day: 'numeric',
+											month: 'short',
+											year: 'numeric',
+										},
+								  )
+								: ''}
 						</UpdateDate>
-						<UpdateTitle weight={700}>{update.title}</UpdateTitle>
+						<UpdateTitle weight={700}>{update?.title}</UpdateTitle>
 						<UpdateDesc
 							dangerouslySetInnerHTML={{
-								__html: update.content,
+								__html: update?.content || '',
 							}}
 						/>
 						<Flex justifyContent='flex-end'>
-							<Link href={`${Routes.Project}/${project.slug}`}>
+							<Link
+								href={`${Routes.Project}/${project.slug}?tab=${EProjectPageTabs.UPDATES}`}
+							>
 								<ReadMore gap='22px'>
 									<ButtonText>Read more</ButtonText>
 									<IconChevronRight32 />
@@ -148,4 +152,8 @@ const UpdateDesc = styled(P)`
 const ReadMore = styled(FlexCenter)`
 	color: ${brandColors.giv[500]};
 	cursor: pointer;
+`;
+
+export const LoadingDotIcon = styled.div`
+	padding: 4px 50%;
 `;

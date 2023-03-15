@@ -144,6 +144,22 @@ export const compareAddresses = (
 	return add1?.toLowerCase() === add2?.toLowerCase();
 };
 
+export const compareAddressesArray = (
+	addresses?: Array<string | undefined>,
+) => {
+	if (!addresses || addresses.length === 0) return false;
+	const lowerCaseAddresses: string[] = [];
+	for (let i = 0; i < addresses.length; i++) {
+		const address = addresses[i];
+		if (address) {
+			lowerCaseAddresses.push(address.toLowerCase());
+		} else {
+			return false;
+		}
+	}
+	return new Set(lowerCaseAddresses).size === 1;
+};
+
 export const isUserRegistered = (user?: IUser) => {
 	// You should check if user is isSignedIn then call this function
 	return Boolean(user && user.name && user.email);

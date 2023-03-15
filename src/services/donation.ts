@@ -104,7 +104,6 @@ export async function saveDonation(props: IOnTxHash) {
 //     if (data?.eventName === 'TRANSAK_ORDER_CREATED') {
 //       // data.status
 //       await saveDonationFromTransak(
-//         data.status.fromWalletAddress,
 //         data.status.walletAddress,
 //         data.status.cryptoAmount,
 //         data.status.cryptoCurrency,

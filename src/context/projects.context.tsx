@@ -92,6 +92,10 @@ export const ProjectsProvider = (props: {
 
 		let term = router.query.term as string;
 		let campaignSlug = router.query.campaign as string;
+		let category =
+			router.query?.slug === variables.mainCategory
+				? variables.category
+				: undefined;
 		const variablesObject = router.query?.slug
 			? {
 					...variables,
@@ -100,6 +104,7 @@ export const ProjectsProvider = (props: {
 					filters,
 					campaignSlug,
 					mainCategory: router.query?.slug?.toString(),
+					category,
 			  }
 			: {
 					...variables,

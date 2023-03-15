@@ -40,6 +40,12 @@ const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 	ssr: false,
 });
 
+export enum EProjectPageTabs {
+	DONATIONS = 'donations',
+	UPDATES = 'updates',
+	GIVPOWER = 'givpower',
+}
+
 const donationsPerPage = 10;
 
 const ProjectIndex: FC<IProjectBySlug> = () => {
@@ -56,14 +62,23 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	const slug = router.query.projectIdSlug as string;
 
 	useEffect(() => {
-		// Used when user clicks on recent donations in homepage
 		if (!isSSRMode) {
-			const hash = window?.location.hash;
-			if (hash === '#donations') {
-				setActiveTab(2);
+			switch (router.query.tab) {
+				case EProjectPageTabs.UPDATES:
+					setActiveTab(1);
+					break;
+				case EProjectPageTabs.DONATIONS:
+					setActiveTab(2);
+					break;
+				case EProjectPageTabs.GIVPOWER:
+					setActiveTab(3);
+					break;
+				default:
+					setActiveTab(0);
+					break;
 			}
 		}
-	}, []);
+	}, [router.query.tab]);
 
 	const {
 		adminUser,
@@ -146,7 +161,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						{projectData && !isDraft && (
 							<ProjectTabs
 								activeTab={activeTab}
-								setActiveTab={setActiveTab}
+								slug={slug}
 								totalDonations={totalDonations}
 							/>
 						)}

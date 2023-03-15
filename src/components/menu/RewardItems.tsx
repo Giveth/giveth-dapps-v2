@@ -1,5 +1,5 @@
 import {
-	B,
+	Caption,
 	IconForward16,
 	IconHelpFilled16,
 	OutlineLinkButton,
@@ -13,7 +13,6 @@ import Link from 'next/link';
 import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { Flex } from '../styled-components/Flex';
-import { switchNetworkHandler } from '@/lib/wallet';
 import config from '@/configuration';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { BN, formatWeiHelper } from '@/helpers/number';
@@ -22,7 +21,7 @@ import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { getUserStakeInfo } from '@/lib/stakingPool';
 import Routes from '@/lib/constants/Routes';
 import { networkInfo } from '@/lib/helpers';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
@@ -38,6 +37,7 @@ import {
 import { ItemAction, ItemRow, ItemTitle } from './common';
 import { Item } from './Item';
 import { useItemsContext } from '@/context/Items.context';
+import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
 
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;
@@ -58,6 +58,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainId } = useWeb3React();
+	const dispatch = useAppDispatch();
 
 	const sdh = new SubgraphDataHelper(currentValues);
 
@@ -119,10 +120,12 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>
-					<B>{networkName}</B>
+					<Caption medium>{networkName}</Caption>
 					<ItemAction
 						size='Small'
-						onClick={() => switchNetworkHandler(chainId)}
+						onClick={() =>
+							dispatch(setShowSwitchNetworkModal(true))
+						}
 					>
 						{formatMessage({ id: 'label.switch_network' })}
 					</ItemAction>

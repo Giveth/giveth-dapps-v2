@@ -15,6 +15,7 @@ import { ICampaign } from '@/apollo/types/types';
 import { Col, Row } from '@/components/Grid';
 import { VideoContainer, VideoOverlay } from '@/components/VideoBlock';
 import { campaignLinkGenerator } from '@/helpers/url';
+import { mediaQueries } from '@/lib/constants/constants';
 
 interface ICampaignsSlideProps {
 	campaign: ICampaign;
@@ -54,7 +55,8 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 			<Col sm={12} md={7}>
 				{campaign.video ? (
 					<VideoContainer>
-						<video
+						<StyledVideo
+							as='video'
 							ref={videoRef}
 							id='video'
 							onClick={handleVideoClick}
@@ -63,7 +65,7 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 							poster={campaign.videoPreview}
 						>
 							<source src={campaign.video} type='video/mp4' />
-						</video>
+						</StyledVideo>
 						<VideoOverlay
 							onClick={handleVideoClick}
 							hidden={isPlaying}
@@ -94,14 +96,29 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 	);
 };
 
-const ImageWrapper = styled.div`
+const HeightResponsive = styled.div`
+	height: 100%;
+	${mediaQueries.tablet} {
+		height: 360px;
+	}
+	${mediaQueries.laptopS} {
+		height: 298px;
+	}
+	${mediaQueries.laptopL} {
+		height: 373px;
+	}
+	${mediaQueries.desktop} {
+		height: 407px;
+	}
+`;
+
+const StyledVideo = styled(HeightResponsive)``;
+
+const ImageWrapper = styled(HeightResponsive)`
 	width: 100%;
 	border-radius: 16px;
 	overflow: hidden;
-	& > img {
-		position: relative !important;
-		max-height: 380px;
-	}
+	position: relative;
 `;
 
 const ContentCol = styled(Col)`
