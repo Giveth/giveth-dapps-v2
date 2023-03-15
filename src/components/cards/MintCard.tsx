@@ -47,7 +47,7 @@ export const MintCard = () => {
 	const { account, library, chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
-	const { setQty } = usePFPMintData();
+	const { setQty, isEligible } = usePFPMintData();
 
 	useEffect(() => {
 		async function fetchData() {
@@ -238,7 +238,12 @@ export const MintCard = () => {
 						label={formatMessage({ id: 'label.mint' })}
 						buttonType='primary'
 						onClick={handleMint}
-						disabled={Number(qtyNFT) < 1 || !pfpData || !!errorMsg}
+						disabled={
+							Number(qtyNFT) < 1 ||
+							!pfpData ||
+							!!errorMsg ||
+							!isEligible
+						}
 					/>
 				)}
 			</MintCardContainer>
