@@ -377,6 +377,32 @@ export const UPDATE_PROJECT = gql`
 	}
 `;
 
+export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
+	${PROJECT_CARD_FIELDS}
+	mutation ($projectId: Float!, $networkId: Float!, $address: String!) {
+		addRecipientAddressToProject(
+			projectId: $projectId
+			networkId: $networkId
+			address: $address
+		) {
+			projects {
+				...ProjectCardFields
+				creationDate
+				listed
+				status {
+					id
+					name
+				}
+				addresses {
+					isRecipient
+					networkId
+				}
+			}
+			totalCount
+		}
+	}
+`;
+
 export const LIKE_PROJECT_MUTATION = gql`
 	mutation ($projectId: Int!) {
 		likeProject(projectId: $projectId) {
