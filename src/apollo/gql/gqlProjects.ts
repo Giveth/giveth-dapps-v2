@@ -378,27 +378,45 @@ export const UPDATE_PROJECT = gql`
 `;
 
 export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
-	${PROJECT_CARD_FIELDS}
 	mutation ($projectId: Float!, $networkId: Float!, $address: String!) {
 		addRecipientAddressToProject(
 			projectId: $projectId
 			networkId: $networkId
 			address: $address
 		) {
-			projects {
-				...ProjectCardFields
-				creationDate
-				listed
-				status {
-					id
-					name
-				}
-				addresses {
-					isRecipient
-					networkId
-				}
+			id
+			title
+			description
+			descriptionSummary
+			image
+			slug
+			listed
+			reviewStatus
+			verified
+			slugHistory
+			creationDate
+			admin
+			walletAddress
+			impactLocation
+			categories {
+				name
 			}
-			totalCount
+			addresses {
+				address
+				isRecipient
+				networkId
+			}
+			adminUser {
+				id
+				name
+				email
+				walletAddress
+			}
+			addresses {
+				address
+				isRecipient
+				networkId
+			}
 		}
 	}
 `;
