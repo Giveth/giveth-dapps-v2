@@ -15,22 +15,42 @@ import Routes from '@/lib/constants/Routes';
 import { ETheme } from '@/features/general/general.slice';
 import { Item } from './Item';
 
-const giveconomyItems = [
-	{
-		title: 'An Economy of Giving',
-		label: 'Giveconomy',
-		href: Routes.GIVECONOMY,
-	},
-	{ title: 'Governance', label: 'GIVgarden', href: Routes.GIVgarden },
-	{ title: 'Earn with Liqudity', label: 'GIVfarm', href: Routes.GIVfarm },
-	{ title: 'Donor Rewards', label: 'GIVbacks', href: Routes.GIVbacks },
-	{ title: 'Curate Projects', label: 'GIVpower', href: Routes.GIVpower },
-	{ title: 'Streamed Rewards', label: 'GIVstream', href: Routes.GIVstream },
-];
-
 export const GIVeconomyItems = () => {
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
+
+	const giveconomyItems = [
+		{
+			title: formatMessage({ id: 'label.an_economy_of_giving' }),
+			label: 'Giveconomy',
+			href: Routes.GIVECONOMY,
+		},
+		{
+			title: formatMessage({ id: 'label.governance' }),
+			label: 'GIVgarden',
+			href: Routes.GIVgarden,
+		},
+		{
+			title: formatMessage({ id: 'label.earn_with_liquidity' }),
+			label: 'GIVfarm',
+			href: Routes.GIVfarm,
+		},
+		{
+			title: formatMessage({ id: 'label.donor_rewards' }),
+			label: 'GIVbacks',
+			href: Routes.GIVbacks,
+		},
+		{
+			title: formatMessage({ id: 'label.curate_projects' }),
+			label: 'GIVpower',
+			href: Routes.GIVpower,
+		},
+		{
+			title: formatMessage({ id: 'label.streamed_rewards' }),
+			label: 'GIVstream',
+			href: Routes.GIVstream,
+		},
+	];
 
 	return (
 		<>

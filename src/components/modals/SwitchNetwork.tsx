@@ -7,6 +7,7 @@ import {
 	Overline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
@@ -17,10 +18,11 @@ import { switchNetwork } from '@/lib/wallet';
 const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chainId } = useWeb3React();
+	const { formatMessage } = useIntl();
 
 	return (
 		<Modal
-			headerTitle='Switch Network'
+			headerTitle={formatMessage({ id: 'label.switch_network' })}
 			headerIcon={<IconNetwork32 />}
 			closeModal={closeModal}
 			isAnimating={isAnimating}
@@ -39,7 +41,9 @@ const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 						<NetworkLogo chainId={i.id} logoSize={32} />
 						<B>{i.name}</B>
 						{i.id === chainId && (
-							<Selected styleType='Small'>Selected</Selected>
+							<Selected styleType='Small'>
+								{formatMessage({ id: 'label.selected' })}
+							</Selected>
 						)}
 					</NetworkItem>
 				))}

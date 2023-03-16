@@ -180,23 +180,21 @@ const Footer = () => {
 						</Link>
 					</SupportUs>
 				</RightContainer>
-				<Language
-					isDark={isDark}
-					onClick={() => {
-						setShowLanguageModal(true);
-					}}
-				>
-					<Image
-						src={`/images/${isDark ? 'globe_white' : 'globe'}.svg`}
-						alt='glboe'
-						width={16}
-						height={16}
-					/>
-					<Lang>
-						{formatMessage({ id: 'label.choose_language' })}
-					</Lang>
-				</Language>
 			</ContainerStyled>
+			<Language
+				isDark={isDark}
+				onClick={() => {
+					setShowLanguageModal(true);
+				}}
+			>
+				<Image
+					src={`/images/${isDark ? 'globe_white' : 'globe'}.svg`}
+					alt='glboe'
+					width={16}
+					height={16}
+				/>
+				<Lang>{formatMessage({ id: 'label.choose_language' })}</Lang>
+			</Language>
 		</FooterContainer>
 	);
 };
@@ -272,9 +270,13 @@ const CaptionRed = styled(Caption)`
 
 const Language = styled.div<{ isDark?: boolean }>`
 	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
 	align-items: center;
 	gap: 8px;
 	margin: 24px;
+	padding: 24px 48px;
+
 	color: ${props =>
 		props.isDark ? brandColors.deep[100] : neutralColors.gray[800]};
 	${mediaQueries.laptopS} {

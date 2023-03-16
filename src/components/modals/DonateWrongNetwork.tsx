@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { P, H4, brandColors, Caption } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
+import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { getNetworkNames } from '@/components/views/donate/helpers';
@@ -21,6 +22,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		if (chainId && acceptedChains?.includes(chainId)) {
@@ -42,16 +44,24 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 						/>
 					))}
 				</FlexCenter>
-				<Title>Switch to {networkNames}</Title>
+				<Title>
+					{formatMessage(
+						{ id: 'label.switch_to_network_name' },
+						{ networkNames },
+					)}
+				</Title>
 				<P>
-					This project doesn&apos;t accept donations in your connected
-					network. Please switch your wallet network to {networkNames}
-					.
+					{formatMessage(
+						{
+							id: 'label.this_project_doesnt_accept_donations_in_your_connected_net',
+						},
+						{ networkNames },
+					)}
 				</P>
 				<SwitchCaption
 					onClick={() => dispatch(setShowSwitchNetworkModal(true))}
 				>
-					Switch network
+					{formatMessage({ id: 'label.switch_network' })}
 				</SwitchCaption>
 			</ModalContainer>
 		</Modal>
