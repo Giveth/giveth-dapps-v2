@@ -115,11 +115,6 @@ export interface RegenFarmConfig {
 }
 
 export interface BasicNetworkConfig {
-	TOKEN_ADDRESS: string;
-	gGIV_ADDRESS?: string;
-	tokenAddressOnUniswapV2: string; // For price purpose in test env, on production this must have the same value of `TOKEN_ADDRESS`
-	TOKEN_DISTRO_ADDRESS: string;
-	GIV: BasicStakingConfig | SimplePoolStakingConfig;
 	nodeUrl: string;
 	chainId: string; // A 0x-prefixed hexadecimal string
 	chainName: string;
@@ -128,13 +123,21 @@ export interface BasicNetworkConfig {
 		symbol: string; // 2-6 characters long
 		decimals: 18;
 	};
-	DAI_CONTRACT_ADDRESS?: string;
-	PFP_CONTRACT_ADDRESS?: string;
+	gasPreference: GasPreference;
 	blockExplorerUrls?: string[];
 	iconUrls?: string[]; // Currently ignored.
 	blockExplorerName: string[];
 	subgraphAddress: string;
-	gasPreference: GasPreference;
+}
+
+export interface SimpleNetworkConfig extends BasicNetworkConfig {
+	TOKEN_ADDRESS: string;
+	gGIV_ADDRESS?: string;
+	tokenAddressOnUniswapV2: string; // For price purpose in test env, on production this must have the same value of `TOKEN_ADDRESS`
+	TOKEN_DISTRO_ADDRESS: string;
+	GIV: BasicStakingConfig | SimplePoolStakingConfig;
+	DAI_CONTRACT_ADDRESS?: string;
+	PFP_CONTRACT_ADDRESS?: string;
 	pools: Array<
 		| SimplePoolStakingConfig
 		| BalancerPoolStakingConfig
@@ -146,10 +149,10 @@ export interface BasicNetworkConfig {
 	regenFarms: RegenFarmConfig[];
 }
 
-interface MainnetNetworkConfig extends BasicNetworkConfig {
+interface MainnetNetworkConfig extends SimpleNetworkConfig {
 	WETH_TOKEN_ADDRESS: string;
 }
-interface XDaiNetworkConfig extends BasicNetworkConfig {
+interface XDaiNetworkConfig extends SimpleNetworkConfig {
 	MERKLE_ADDRESS: string;
 }
 interface MicroservicesConfig {
@@ -164,7 +167,9 @@ export interface EnvConfig {
 	XDAI_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	XDAI_CONFIG: XDaiNetworkConfig;
+	POLYGON_CONFIG: BasicNetworkConfig;
 	GARDEN_LINK: string;
+	BASE_ROUTE: string;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;

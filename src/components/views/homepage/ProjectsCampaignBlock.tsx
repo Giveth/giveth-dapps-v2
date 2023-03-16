@@ -115,6 +115,9 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 const StyledProjectCard = styled(ProjectCard)`
 	width: 360px;
 	margin: 0;
+	${mediaQueries.laptopS} {
+		width: 384px !important;
+	}
 `;
 
 const SwiperWrapper = styled.div`

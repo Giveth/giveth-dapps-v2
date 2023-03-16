@@ -1,5 +1,5 @@
 import {
-	BasicNetworkConfig,
+	SimpleNetworkConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 	UniswapV3PoolStakingConfig,
@@ -24,7 +24,7 @@ export class SubgraphQueryBuilder {
 	};
 
 	static getBalanceQuery = (
-		{ TOKEN_ADDRESS, gGIV_ADDRESS }: BasicNetworkConfig,
+		{ TOKEN_ADDRESS, gGIV_ADDRESS }: SimpleNetworkConfig,
 		userAddress?: string,
 	): string => {
 		if (!userAddress) return '';
@@ -77,7 +77,7 @@ export class SubgraphQueryBuilder {
 	};
 
 	private static generateTokenDistroQueries = (
-		networkConfig: BasicNetworkConfig,
+		networkConfig: SimpleNetworkConfig,
 		userAddress?: string,
 	): string => {
 		return [

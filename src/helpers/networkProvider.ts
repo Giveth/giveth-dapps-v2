@@ -1,6 +1,6 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
 import {
-	BasicNetworkConfig,
+	SimpleNetworkConfig,
 	SimplePoolStakingConfig,
 	StakingPlatform,
 	StakingType,
@@ -24,7 +24,7 @@ for (const network in NETWORKS_CONFIG) {
 export const networkProviders = _networksProviders;
 
 export const getGivStakingConfig = (
-	networkConfig: BasicNetworkConfig,
+	networkConfig: SimpleNetworkConfig,
 ): SimplePoolStakingConfig => {
 	return {
 		...networkConfig.GIV,
