@@ -25,6 +25,10 @@ const DeckRoute = () => {
 					alt={'deck-fundraising-' + slide}
 					width={1280}
 					height={720}
+					style={{
+						display:
+							slide === 17 || slide === 18 ? 'none' : 'unset',
+					}}
 				/>
 			))}
 		</Wrapper>
@@ -32,6 +36,8 @@ const DeckRoute = () => {
 };
 
 const Wrapper = styled.div`
+	max-width: 1200px;
+	margin: 0 auto;
 	> img {
 		width: 100%;
 		height: auto;
