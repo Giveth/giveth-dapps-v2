@@ -1,6 +1,8 @@
 import { promisify } from 'util';
 // eslint-disable-next-line import/named
 import { unescape } from 'lodash';
+import moment from 'moment';
+
 import { parseEther, parseUnits } from '@ethersproject/units';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
@@ -21,6 +23,8 @@ import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
 import config from '@/configuration';
 import { ERC20 } from '@/types/contracts';
+
+import 'moment/locale/es';
 
 declare let window: any;
 
@@ -83,6 +87,13 @@ export const durationToYMDh = (ms: number, full: boolean = false) => {
 		return fullRes;
 	}
 	return shortRes;
+};
+
+export const getTimeAgo = (date: number, locale?: string) => {
+	const m = moment(date)
+		.locale(locale || 'en')
+		.fromNow();
+	return m;
 };
 
 export const durationToString = (ms: number, length = 3, full = false) => {

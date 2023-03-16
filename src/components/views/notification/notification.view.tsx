@@ -7,6 +7,7 @@ import {
 	OutlineButton,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import {
 	NotificationContainer,
@@ -67,6 +68,7 @@ function NotificationView() {
 		supportedProjects,
 		givEconomyRelated,
 	} = useAppSelector(state => state.notification.notificationInfo);
+	const { formatMessage } = useIntl();
 
 	const { isMobile } = useDetectDevice();
 
@@ -136,7 +138,9 @@ function NotificationView() {
 				</IconContainer>
 				<NotificationDesc flexDirection='column'>
 					<Flex justifyContent='space-between'>
-						<H5 weight={700}>Notification Center</H5>
+						<H5 weight={700}>
+							{formatMessage({ id: 'label.notification_center' })}
+						</H5>
 						<InternalLink href={Routes.NotificationsSettings}>
 							<ConfigContainer>
 								<IconConfig24 />
@@ -144,8 +148,9 @@ function NotificationView() {
 						</InternalLink>
 					</Flex>
 					<Lead>
-						Your history of notifications, starting with the most
-						recent.
+						{formatMessage({
+							id: 'label.your_history_of_notifications_startimg_with_the_most_recent',
+						})}
 					</Lead>
 				</NotificationDesc>
 			</Flex>
@@ -159,7 +164,7 @@ function NotificationView() {
 						active={tab === ENotificationTabs.ALL}
 						onClick={() => handleChangeTab(ENotificationTabs.ALL)}
 					>
-						All
+						{formatMessage({ id: 'label.all_fem' })}
 						{totalUnreadNotifications !== 0 && (
 							<TabItemCount
 								active={tab === ENotificationTabs.ALL}
@@ -174,7 +179,7 @@ function NotificationView() {
 							handleChangeTab(ENotificationTabs.GENERAL)
 						}
 					>
-						General
+						{formatMessage({ id: 'general' })}
 						{general !== 0 && (
 							<TabItemCount
 								active={tab === ENotificationTabs.GENERAL}
@@ -189,7 +194,7 @@ function NotificationView() {
 							handleChangeTab(ENotificationTabs.PROJECTS)
 						}
 					>
-						My projects
+						{formatMessage({ id: 'label.my_projects' })}
 						{projectsRelated !== 0 && (
 							<TabItemCount
 								active={tab === ENotificationTabs.PROJECTS}
@@ -204,7 +209,7 @@ function NotificationView() {
 							handleChangeTab(ENotificationTabs.SUPPORTED)
 						}
 					>
-						Supported projects
+						{formatMessage({ id: 'label.supported_projects' })}
 						{supportedProjects !== 0 && (
 							<TabItemCount
 								active={tab === ENotificationTabs.SUPPORTED}
@@ -219,7 +224,7 @@ function NotificationView() {
 							handleChangeTab(ENotificationTabs.GIVECONOMY)
 						}
 					>
-						Rewards
+						{formatMessage({ id: 'label.rewards' })}
 						{givEconomyRelated !== 0 && (
 							<TabItemCount
 								active={tab === ENotificationTabs.GIVECONOMY}
@@ -231,7 +236,7 @@ function NotificationView() {
 				</TabsContainer>
 				<MarkAllNotifsButton
 					size='small'
-					label='Mark all As read'
+					label={formatMessage({ id: 'label.mark_all_as_read' })}
 					onClick={() => {
 						return readAllNotifications().then(() => {
 							setMarkedAllNotificationsRead(
@@ -259,7 +264,11 @@ function NotificationView() {
 					  ))
 					: !loading && (
 							<FlexCenter>
-								<Lead>You don't have any notifications</Lead>
+								<Lead>
+									{formatMessage({
+										id: 'label.you_dont_have_any_notifications',
+									})}
+								</Lead>
 							</FlexCenter>
 					  )}
 			</div>
@@ -267,7 +276,9 @@ function NotificationView() {
 				{showLoadMore && !loading && (
 					<OutlineButton
 						buttonType='primary'
-						label='Load More'
+						label={formatMessage({
+							id: 'component.button.load_more',
+						})}
 						onClick={handleLoadMore}
 					/>
 				)}
