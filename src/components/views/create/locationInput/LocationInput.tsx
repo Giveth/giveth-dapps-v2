@@ -75,6 +75,7 @@ class LocationInput extends Component<MyProps, MyState> {
 					onSelect={this.handleSelect}
 				/>
 				<CheckBox
+					//  TODO: FORMAT THIS TO BE A FUNCTIONAL COMPONENT AND ADD USE INTL FOR TRANSLATIONS
 					label='This project has a global impact'
 					checked={isGlobal}
 					onChange={() => {

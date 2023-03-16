@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { H1, neutralColors, SemiTitle } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { IMainCategory } from '@/apollo/types/types';
 import { FlexCenter } from '@/components/styled-components/Flex';
@@ -10,16 +11,19 @@ interface IProjectsBanner {
 	mainCategory?: IMainCategory;
 }
 
-const allCategory = {
-	title: 'Giveth Projects',
-	banner: '/images/banners/categories/all.png',
-	slug: 'Explore awesome projects on Giveth and support',
-	description: '',
-	categories: [],
-};
-
 const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
+	const { formatMessage } = useIntl();
+
+	const allCategory = {
+		title: formatMessage({ id: 'label.giveth_projects' }),
+		banner: '/images/banners/categories/all.png',
+		slug: 'Explore awesome projects on Giveth and support',
+		description: '',
+		categories: [],
+	};
+
 	const _mainCategory = mainCategory ?? allCategory;
+
 	return (
 		<BannerContainer direction='column'>
 			<Image

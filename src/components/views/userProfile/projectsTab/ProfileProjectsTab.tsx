@@ -2,6 +2,7 @@ import { neutralColors } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import { useIntl } from 'react-intl';
 import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
 import ProjectsTable from './ProjectsTable';
 import { Col, Row } from '@/components/Grid';
@@ -27,6 +28,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [page, setPage] = useState(0);
+	const { formatMessage } = useIntl();
 
 	const [order, setOrder] = useState<IOrder>({
 		by: EOrderBy.CreationDate,
@@ -89,17 +91,30 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 				</Row>
 			)}
 			{!myAccount && (
-				<UserContributeTitle
-					weight={700}
-				>{`${userName}’s donations & projects`}</UserContributeTitle>
+				<UserContributeTitle weight={700}>
+					{formatMessage(
+						{
+							id: 'label.user_donations_and_projects',
+						},
+						{
+							userName,
+						},
+					)}
+				</UserContributeTitle>
 			)}
 			<ProjectsContainer>
 				{!loading && totalCount === 0 ? (
 					<NothingWrapper>
 						<NothingToSee
 							title={`${
-								myAccount ? "You haven't" : "This user hasn't"
-							} created any projects yet!`}
+								myAccount
+									? formatMessage({
+											id: 'label.you_havent_created_any_projects_yet',
+									  })
+									: formatMessage({
+											id: 'label.this_user_hasnt_created_any_project_yet',
+									  })
+							} `}
 						/>
 					</NothingWrapper>
 				) : myAccount ? (
