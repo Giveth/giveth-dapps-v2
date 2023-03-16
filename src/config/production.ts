@@ -16,6 +16,7 @@ const NOTIFICATION_BASE_ROUTE = 'https://notification.giveth.io';
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
+	BASE_ROUTE: BASE_ROUTE,
 	BACKEND_LINK: 'https://mainnet.serve.giveth.io/graphql',
 	FRONTEND_LINK: 'https://giveth.io',
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,

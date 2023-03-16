@@ -123,7 +123,7 @@ function NotificationView() {
 	return (
 		<NotificationContainer>
 			{loading && (
-				<Loading>
+				<Loading data-testid='loading'>
 					<LottieControl
 						animationData={LoadingAnimation}
 						size={250}

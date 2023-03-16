@@ -9,7 +9,7 @@ export interface INotificationCountState {
 
 export interface IHtmlTemplate {
 	type: 'p' | 'b' | 'a' | 'br' | string;
-	content: string;
+	content?: string;
 	href?: string;
 }
 

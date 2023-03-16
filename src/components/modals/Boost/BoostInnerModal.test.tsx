@@ -6,6 +6,7 @@ import { renderWithProviders } from '@/tests/utils';
 import '@testing-library/jest-dom';
 import { BN } from '@/helpers/number';
 import BoostInnerModal from './BoostInnerModal';
+import { EBoostModalState } from './BoostModal';
 
 export const handlers = [
 	graphql.query('getPowerBoostingsQuery', (req, res, ctx) => {
@@ -40,6 +41,8 @@ test('showing user total GIVpower amount correctly', async () => {
 			projectId='0'
 			setPercentage={setStateMock}
 			setState={setStateMock}
+			setShowModal={setStateMock}
+			state={EBoostModalState.BOOSTING}
 		/>,
 		{
 			preloadedState: {
@@ -70,6 +73,8 @@ test('showing user total GIVpower amount correctly', async () => {
 			projectId='0'
 			setPercentage={setStateMock}
 			setState={setStateMock}
+			setShowModal={setStateMock}
+			state={EBoostModalState.BOOSTING}
 		/>,
 		{
 			preloadedState: {
