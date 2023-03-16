@@ -3,7 +3,7 @@ import { DONATION_CORE_FIELDS } from './gqlDonations';
 import { PROJECT_CARD_FIELDS } from './gqlProjects';
 
 export const USER_CORE_FIELDS = gql`
-	fragment UserCoreFields on User {
+	fragment UserCoreFields on UserByAddressResponse {
 		__typename
 		id
 		firstName
@@ -18,17 +18,10 @@ export const USER_CORE_FIELDS = gql`
 `;
 
 export const GET_USER_BY_ADDRESS = gql`
+	${USER_CORE_FIELDS}
 	query UserByAddress($address: String!) {
 		userByAddress(address: $address) {
-			id
-			firstName
-			lastName
-			name
-			email
-			avatar
-			walletAddress
-			url
-			location
+			...UserCoreFields
 			totalDonated
 			totalReceived
 			likedProjectsCount
