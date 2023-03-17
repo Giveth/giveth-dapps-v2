@@ -35,8 +35,10 @@ const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 				objectFit='cover'
 				objectPosition='left'
 			/>
-			<Title weight={700}>{_mainCategory.title}</Title>
-			<Desc>{_mainCategory.description}</Desc>
+			<Title weight={700}>
+				{formatMessage({ id: _mainCategory.slug })}
+			</Title>
+			<Desc>{formatMessage({ id: `${_mainCategory.slug}_desc` })}</Desc>
 		</BannerContainer>
 	);
 };
@@ -62,6 +64,7 @@ const Title = styled(H1)`
 const Desc = styled(SemiTitle)`
 	z-index: 1;
 	color: ${neutralColors.gray[100]};
+	text-transform: uppercase;
 `;
 
 export default ProjectsBanner;

@@ -16,13 +16,15 @@ const projectsItems = {
 		{
 			name: 'Recently Updated',
 			query: '?sort=' + EProjectsSortBy.RECENTLY_UPDATED,
+			label: 'label.recently_updated',
 		},
 		{
 			name: 'Just Launched',
 			query: '?sort=' + EProjectsSortBy.NEWEST,
+			label: 'label.just_launched',
 		},
 		// { name: 'Popular', query: '?q=popular' },
-		{ name: 'All Projects', query: '' },
+		{ name: 'All Projects', query: '', label: 'label.all_projects' },
 	],
 };
 
@@ -50,7 +52,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 							href={`${Routes.Projects}${explore.query}`}
 						>
 							<Item theme={theme} isHighlighted>
-								<B>{explore.name}</B>
+								<B>{formatMessage({ id: explore.label })}</B>
 							</Item>
 						</Link>
 					))}
@@ -67,7 +69,9 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 							href={`${Routes.Projects}/${category.slug}`}
 						>
 							<Item theme={theme}>
-								<GLink size='Big'>{category.title}</GLink>
+								<GLink size='Big'>
+									{formatMessage({ id: category.slug })}
+								</GLink>
 							</Item>
 						</Link>
 					))}
