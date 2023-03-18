@@ -5,7 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
 import { OvalHorizontalGradient, OvalVerticalGradient } from '../common.styles';
-import Routes from '@/lib/constants/Routes';
+// uncomment this line when minting is live
+// import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/lib/constants/constants';
 
 const SayHelloSection = () => {
