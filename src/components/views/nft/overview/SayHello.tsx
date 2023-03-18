@@ -22,7 +22,7 @@ const SayHelloSection = () => {
 							unlock your unique Giveth flair by minting one of
 							the first NFT PFP artworks inspired by Giveth.
 						</QuoteText>
-						{/* uncomment this when the minting is live */}
+						{/* replace CustoLink with this when the minting is live */}
 						{/* 						
 						<CustomLink href={Routes.NFTMint} passHref>
 							<MintNowButton
@@ -30,6 +30,16 @@ const SayHelloSection = () => {
 								linkType='primary'
 							/>
 						</CustomLink> */}
+						<CustomLink
+							href='https://medium.com/giveth/the-givers-nfts-for-the-giveth-community-fa335ef9db01'
+							passHref
+							target='_blank'
+						>
+							<MintNowButton
+								label='Learn More'
+								linkType='primary'
+							/>
+						</CustomLink>
 					</Flex>
 					<CustomImage
 						src={'/images/nft/pfp-o-5.png'}
