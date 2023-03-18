@@ -149,7 +149,7 @@ const CustomQuote = styled(QuoteText)`
 `;
 
 const CustomButton = styled(Button)`
-	margin-top: 20px;
+	margin: 20px 0 100px 0;
 	width: 250px;
 `;
 
