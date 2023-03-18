@@ -1172,7 +1172,17 @@
     "schooling": "Enseñanza",
     "air": "Aire",
     "research": "Investigación",
-    "label.high_five": "",
+    "label.high_five": "¡Choca esas cinco!",
     "label.your_project_is_being_reviewed": "Tu proyecto esta siendo revisado por nuestro equipo. Recibirás un email una vez tu proyecto haya sido listado.",
-    "label.you_can_still_access": "Sin embargo puedes acceder a tu proyecto desde tu cuenta y compartirlo con tus amigos."
+    "label.you_can_still_access": "Sin embargo puedes acceder a tu proyecto desde tu cuenta y compartirlo con tus amigos.",
+    "economic-and-infrastructure_desc": "Apoyar proyectos económicos y de infraestructuras centrados en el empleo, las infraestructuras, el sector inmobiliario, la pobreza, la ubi, la industria y la innovación.",
+    "environment-and-energy_desc": "Apoyar proyectos medioambientales y energéticos centrados en la lucha contra el cambio climático, la energía, la conservación de los océanos y las ciudades y comunidades sostenibles",
+    "nature_desc": "Apoyar proyectos de naturaleza centrados en la agricultura, el aire, los animales, la conservación y la biodiversidad.",
+    "ngo_desc": "Apoye proyectos sin ánimo de lucro donando directamente.",
+    "community_desc": "Apoyar proyectos comunitarios centrados en iniciativas de base, vivienda, inclusión, servicios sociales, agua y saneamiento, familia e infancia, etc.",
+    "education_desc": "Apoyar proyectos educativos centrados en la tecnología del aprendizaje y la escolarización.",
+    "equality_desc": "Apoyar proyectos de igualdad centrados en la igualdad de género, el bipartidismo y la inclusión.",
+    "finance_desc": "Apoyo a proyectos financieros centrados en la refinanciación y la captación de fondos.",
+    "health-and-wellness_desc": "Apoyar proyectos de salud y bienestar centrados en la atención sanitaria, la salud mental, la nutrición y la salud infantil.",
+    "technology_desc": "Apoyo a proyectos tecnológicos centrados en la tecnología, la investigación y el diseño."
 }
