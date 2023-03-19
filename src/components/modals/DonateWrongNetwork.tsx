@@ -14,7 +14,6 @@ import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
 import { useAppDispatch } from '@/features/hooks';
-import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
 import config from '@/configuration';
 import { BasicNetworkConfig } from '@/types/config';
 import { switchNetwork } from '@/lib/metamask';
@@ -95,12 +94,6 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 						);
 					})}
 				</Flex>
-
-				<SwitchCaption
-					onClick={() => dispatch(setShowSwitchNetworkModal(true))}
-				>
-					Switch network
-				</SwitchCaption>
 			</ModalContainer>
 		</Modal>
 	);
