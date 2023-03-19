@@ -1,38 +1,40 @@
 import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import {
-	P,
-	H4,
 	brandColors,
 	Caption,
 	IconRocketInSpace32,
+	Lead,
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
-import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
-import { getNetworkNames } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
+import config from '@/configuration';
 
 interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
+
+const networks = [
+	config.MAINNET_CONFIG,
+	config.XDAI_CONFIG,
+	config.POLYGON_CONFIG,
+];
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { setShowModal, acceptedChains } = props;
 	const { chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();
-
+	console.log('acceptedChains', acceptedChains);
 	useEffect(() => {
 		if (chainId && acceptedChains?.includes(chainId)) {
 			closeModal();
 		}
 	}, [chainId, acceptedChains]);
-
-	const networkNames = getNetworkNames(acceptedChains!, 'or');
 
 	return (
 		<Modal
@@ -44,12 +46,11 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 			headerTitlePosition='left'
 		>
 			<ModalContainer>
-				<Title>Switch to {networkNames}</Title>
-				<P>
-					This project doesn&apos;t accept donations in your connected
-					network. Please switch your wallet network to {networkNames}
-					.
-				</P>
+				<Lead>
+					Sorry, this project doesn’t support your current network.
+				</Lead>
+				<br />
+				<Lead>Please switch your network</Lead>
 				<SwitchCaption
 					onClick={() => dispatch(setShowSwitchNetworkModal(true))}
 				>
@@ -67,15 +68,6 @@ const SwitchCaption = styled(Caption)`
 `;
 
 const ModalContainer = styled.div`
-	padding: 62px 60px;
-	color: ${brandColors.giv[700]};
-	width: 100%;
-	${mediaQueries.tablet} {
-		width: 500px;
-	}
-`;
-
-const Title = styled(H4)`
-	margin: 18px 0 24px;
-	color: ${brandColors.giv[700]};
+	padding: 24px;
+	text-align: left;
 `;
