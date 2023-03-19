@@ -71,7 +71,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 				<br />
 				<Lead>Please switch your network</Lead>
 				<br />
-				<Flex gap='60px'>
+				<CustomFlex>
 					{eligibleNetworks.map(network => {
 						const _chainId = parseInt(network.chainId);
 						return (
@@ -97,7 +97,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 							</NetworkItem>
 						);
 					})}
-				</Flex>
+				</CustomFlex>
 				<br />
 				<CustomHr margin='0' />
 				<FlexCenter direction='column'>
@@ -135,4 +135,13 @@ const FooterText = styled(Lead)`
 
 const BackButton = styled(ButtonText)`
 	color: ${brandColors.giv[500]};
+`;
+
+const CustomFlex = styled(Flex)`
+	flex-direction: column;
+	gap: 24px;
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+		gap: 60px;
+	}
 `;
