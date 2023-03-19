@@ -4,7 +4,6 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Button, B, H4, neutralColors } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
-import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk';
 import { InputSize } from '@/components/Input';
 import InputStyled from '@/components/styled-components/Input';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -45,18 +44,11 @@ const FiatDonation = () => {
 		ETH: { address: mainnetAddress },
 	};
 
-	const rampNetwork = new RampInstantSDK({
-		hostAppName: 'giveth',
-		hostLogoUrl: 'https://rampnetwork.github.io/assets/misc/test-logo.png',
-		hostApiKey: 've2mesm3jbhjjoqs8t57v3qzdnveza662sugh88e',
-		url: 'https://ri-widget-staging.firebaseapp.com/',
-	});
-
-	return (
-		<FiatContainer style={{ marginTop: 40 }}>
-			<H4>Coming soon ...</H4>
-		</FiatContainer>
-	);
+	// return (
+	// 	<FiatContainer style={{ marginTop: 40 }}>
+	// 		<H4>{formatMessage({ id: 'label.coming_soon' })}</H4>
+	// 	</FiatContainer>
+	// );
 
 	return (
 		<>
@@ -135,9 +127,9 @@ const FiatDonation = () => {
 								/>
 							</ImageContainer>
 							<Info>
-								Buy crypto with your credit without leaving the
-								platform. Donate the purchase to this project
-								directly with your credit card with Onramper
+								{formatMessage({
+									id: 'label.buy_crypto_with_your_credit_card_without_leaving_the_platform',
+								})}
 							</Info>
 							<Button
 								label='CONTINUE WITH ONRAMPER'
@@ -156,12 +148,14 @@ const FiatDonation = () => {
 										/>
 									</ImageContainer>
 									<Info>
-										Easily connect a PayPal or Stripe
-										account to this form and donate directly
-										from your account with Donorbox
+										{formatMessage({
+											id: 'label.easily_connect_a_paypal_or_stripe_account',
+										})}
 									</Info>
 									<Button
-										label='CONTINUE WITH DONORBOX'
+										label={formatMessage({
+											id: 'label.continue_with_donorbox',
+										})}
 										onClick={() =>
 											setDonorboxConfirmationModal(true)
 										}
@@ -177,11 +171,15 @@ const FiatDonation = () => {
 							inputSize={InputSize.LARGE}
 							hasLeftIcon={false}
 							value={temporaryEmail}
-							placeholder='Proceed with an email'
+							placeholder={formatMessage({
+								id: 'label.proceed_with_an_email',
+							})}
 							onChange={e => setTemporaryEmail(e.target.value)}
 						/>
 						<StyledButton
-							label={'Donate with email'}
+							label={formatMessage({
+								id: 'label.donate_with_email',
+							})}
 							buttonType='secondary'
 							size='medium'
 							disabled={!temporaryEmail}
@@ -205,7 +203,6 @@ const FiatDonation = () => {
 					</FirstContainer>
 				)}
 			</FiatContainer>
-			{/* <a onClick={() => rampNetwork.show()}>ramp-network</a> */}
 		</>
 	);
 };

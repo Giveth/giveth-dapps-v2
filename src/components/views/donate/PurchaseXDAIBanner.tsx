@@ -100,6 +100,7 @@ const BgImage = styled.div`
 	position: absolute;
 	width: 100%;
 	height: 100%;
+	top: 0;
 	background-image: url('/images/backgrounds/GIVGIVGIV.png');
 	opacity: 0.1;
 `;

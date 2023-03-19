@@ -16,7 +16,7 @@ const PurchaseXDai: FC = () => {
 			<Wrapper>
 				<MtpelerinBanner />
 				<Sections>
-					<Left isMobile={isMobile}>
+					<Left>
 						<Title>
 							{formatMessage({
 								id: 'label.but_xdai_with_fiat_made_easy',
@@ -51,7 +51,7 @@ const PurchaseXDai: FC = () => {
 							Powered By <img src='/images/mtpelerin.svg' />
 						</PwdMtPelerin>
 					</Left>
-					<Right isMobile={isMobile}>
+					<Right>
 						<MtPelerinIFrame
 							allow='usb'
 							src={`https://widget.mtpelerin.com/?lang=${
@@ -86,16 +86,17 @@ const Sections = styled.div`
 	}
 `;
 
-const Right = styled.div<{ isMobile: boolean | null }>`
+const Right = styled.div`
 	z-index: 1;
 	background: transparent;
 	text-align: left;
-	border-radius: ${props => (props.isMobile ? '16px' : '0 16px 16px 0')};
 	min-height: 450px;
 	padding: 12px;
+	border-radius: 16px;
 	${mediaQueries.tablet} {
 		min-height: 620px;
 		background: white;
+		border-radius: 0 16px 16px 0;
 	}
 `;
 

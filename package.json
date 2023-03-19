@@ -12,7 +12,7 @@
 		"cypress": "cypress open"
 	},
 	"engines": {
-		"node": ">=16.11.1"
+		"node": ">=18"
 	},
 	"resolutions": {
 		"styled-components": "^5",
@@ -26,7 +26,6 @@
 		"@ethersproject/units": "^5.5.0",
 		"@giveth/ui-design-system": "^1.11.4",
 		"@gnosis.pm/safe-apps-web3-react": "^1.5.0",
-		"@ramp-network/ramp-instant-sdk": "^4.0.1",
 		"@reduxjs/toolkit": "^1.8.1",
 		"@segment/snippet": "^4.15.3",
 		"@sentry/nextjs": "^6.19.3",

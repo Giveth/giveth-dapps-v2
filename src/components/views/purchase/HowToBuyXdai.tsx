@@ -28,6 +28,7 @@ import { BigArc } from '@/components/styled-components/Arc';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useDonateData } from '@/context/donate.context';
 import Routes from '@/lib/constants/Routes';
+import { MtPelerinTutorialSteps } from '@/lib/constants/MtPelerinTutorial';
 
 const BuyXDAI: FC = () => {
 	const router = useRouter();
@@ -44,55 +45,7 @@ const BuyXDAI: FC = () => {
 
 	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
 	const [currentSlide, setCurrentSlide] = useState(0);
-	const items = [
-		{
-			id: 1,
-			title: 'label.buy_xdai_with_fiat',
-			description: 'label.the_ramp_allows_users',
-		},
-		{
-			id: 2,
-			title: 'label.phone_number',
-			description: 'label.enter_your_phone_number_and_click_next',
-		},
-		{
-			id: 3,
-			title: 'label.email_address',
-			description: 'label.write_your_email_address',
-		},
-		{
-			id: 4,
-			title: 'label.registration_confirmation',
-			description: 'label.wait_confirmation',
-		},
-		{
-			id: 5,
-			title: 'label.wallet_connect',
-			description: 'label.choose_your_receiving_address',
-		},
-		{
-			id: 6,
-			title: 'label.receiving_address',
-			description: 'label.choose_the_wallet_address',
-		},
-		{
-			id: 7,
-			title: 'label.credit_card_info',
-			description: 'label.fill_in_your_credit_card_info',
-		},
-		{
-			id: 8,
-			title: 'label.confirmation',
-			description: 'label.wait_for_confirmation',
-		},
-		{
-			id: 9,
-			title: 'label.transaction_status',
-			description: 'label.if_the_payment_is_approved_it_will_display',
-		},
-	];
-
-	console.log({ currentSlide, e: items.length - 1 });
+	const items = MtPelerinTutorialSteps;
 
 	return (
 		<>
@@ -117,7 +70,7 @@ const BuyXDAI: FC = () => {
 							Powered By <img src='/images/mtpelerin.svg' />
 						</PwdMtPelerin>
 					</Content>
-					<Right isMobile={isMobile}>
+					<Right>
 						<SwiperWrapper>
 							<Swiper
 								onSwiper={setSwiperInstance}
@@ -224,11 +177,14 @@ const Sections = styled.div`
 	}
 `;
 
-const Right = styled.div<{ isMobile: boolean | null }>`
+const Right = styled.div`
 	z-index: 1;
 	text-align: left;
 	margin: 0 -30px 0 0;
-	border-radius: ${props => (props.isMobile ? '16px' : '0 16px 16px 0')};
+	border-radius: 16px;
+	${mediaQueries.tablet} {
+		border-radius: 0 16px 16px 0;
+	}
 `;
 
 const SwiperWrapper = styled.div`

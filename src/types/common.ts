@@ -1,5 +1,8 @@
 export interface IModal {
 	setShowModal: (showModal: boolean) => void;
-	continueProcess?: () => void;
 	type?: string;
+}
+
+export interface IFiatConfirmationModal extends IModal {
+	continueProcess?: () => void;
 }

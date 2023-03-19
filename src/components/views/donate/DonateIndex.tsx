@@ -24,7 +24,7 @@ const DonateIndex: FC = () => {
 				<NiceBanner />
 				<Sections>
 					<ProjectCardSelector />
-					<Right isMobile={isMobile}>
+					<Right>
 						{isSuccessDonation ? (
 							<SuccessView />
 						) : (
@@ -61,13 +61,16 @@ const Sections = styled.div`
 	}
 `;
 
-const Right = styled.div<{ isMobile: boolean | null }>`
+const Right = styled.div`
 	z-index: 1;
 	background: white;
 	text-align: left;
 	padding: 32px;
-	border-radius: ${props => (props.isMobile ? '16px' : '0 16px 16px 0')};
 	min-height: 620px;
+	border-radius: 16px;
+	${mediaQueries.tablet} {
+		border-radius: 0 16px 16px 0;
+	}
 `;
 
 export default DonateIndex;

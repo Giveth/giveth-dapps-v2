@@ -946,5 +946,18 @@
 	"label.mtpelerin_pricing_starts_at_zero": "MtPelerin's pricing starts at 0%, hard to beat that! Overall, we try to keep our pricing structure as attractive, simple and transparent as possible. We give the user the best exchange rate that we can find as pro traders on the market. We charge a small percentage on top of that rate above $500 per year, below that we don't charge anything.",
 	"label.purchase_with_credit_debit": "Purchase with Credit, Debit, Visa, or Mastercard",
 	"label.zero_gas_fees_straight_to_your_wallet": "Zero Gas Fees, Straight To Your Wallet",
-	"label.kyc_less_the_service_is_based_in_sw": " KYC-Less: the service is based in Switzerland and is an authorized financial intermediary"
+	"label.kyc_less_the_service_is_based_in_sw": " KYC-Less: the service is based in Switzerland and is an authorized financial intermediary",
+	"label.you_will_be_purchasing_crypto_on_behalf_of_the_project_account": "You will be purchasing crypto on behalf of the project account, the destination address will be the one set for the project.",
+	"label.note_that_your_donations_history_will_be_updated_some_time_after": "Note that your donations history will be updated some time after a successful transaction.",
+	"label.donations_will_only_be_confirmed_after_a_while_of_being_sent": "Donations will only be confirmed after a while of being sent, time depends on the chosen onramp.",
+	"label.this_is_a_way_to_support_giveth_using_our": "This is a way to support Giveth using our",
+	"label.sdg_impact_fund": "SDG impact fund",
+	"label.youll_get_a_confirmation_from_donorbox_on_your_email": "You'll get a confirmation from donorbox on your email but you won't see it listed on our platform, we will be very very grateful for your support!",
+	"label.continue": "Continue",
+	"label.buy_crypto_with_your_credit_card_without_leaving_the_platform": "Buy crypto with your credit card without leaving the platform. Donate the purchase to this project directly with your credit card with Onramper",
+	"label.easily_connect_a_paypal_or_stripe_account": "Easily connect a PayPal or Stripe account to this form and donate directly from your account with Donorbox",
+	"label.continue_with_donorbox": "Continue with Donorbox",
+	"label.proceed_with_an_email": "Proceed with an email",
+	"label.donate_with_email": "Donate with an email",
+	"label.coming_soon": "Coming soon..."
 }

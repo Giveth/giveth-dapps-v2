@@ -5,12 +5,12 @@ import { Button, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
 
 import { Modal } from '@/components/modals/Modal';
-import { IModal } from '@/types/common';
+import { IFiatConfirmationModal } from '@/types/common';
 import { Bullets } from '@/components/styled-components/Bullets';
 import BulbIcon from '/public/images/icons/lightbulb.svg';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 
-export const FiatDonationConfirmationModal: FC<IModal> = ({
+export const FiatDonationConfirmationModal: FC<IFiatConfirmationModal> = ({
 	setShowModal,
 	continueProcess,
 	type,
@@ -31,38 +31,42 @@ export const FiatDonationConfirmationModal: FC<IModal> = ({
 					{type === 'onramper' ? (
 						<>
 							<li>
-								You will be purchasing crypto on behalf of the
-								project account, the destination address will be
-								the one set for the project.
+								{formatMessage({
+									id: 'label.you_will_be_purchasing_crypto_on_behalf_of_the_project_account',
+								})}
 							</li>
 							<li>
-								Note that your donations history will be updated
-								some time after a successful transaction.
+								{formatMessage({
+									id: 'label.note_that_your_donations_history_will_be_updated_some_time_after',
+								})}
 							</li>
 							<li>
-								Donations will only be confirmed after a while
-								of being sent, time depends on the chosen
-								onramp.
+								{formatMessage({
+									id: 'label.donations_will_only_be_confirmed_after_a_while_of_being_sent',
+								})}
 							</li>
 						</>
 					) : (
 						type === 'donorbox' && (
 							<>
 								<li>
-									This is a way to support Giveth using our{' '}
+									{formatMessage({
+										id: 'label.this_is_a_way_to_support_giveth_using_our',
+									})}{' '}
 									<a
 										href='https://www.sdgimpactfund.org/giveth-foundation'
 										target='_blank'
 										rel='noreferrer'
 									>
-										SDG impact fund
+										{formatMessage({
+											id: 'label.sdg_impact_fund',
+										})}
 									</a>
 								</li>
 								<li>
-									You'll get a confirmation from donorbox on
-									your email but you won't see it listed on
-									our platform, we will be very very grateful
-									for your support!
+									{formatMessage({
+										id: 'label.youll_get_a_confirmation_from_donorbox_on_your_email',
+									})}
 								</li>
 							</>
 						)
@@ -70,12 +74,12 @@ export const FiatDonationConfirmationModal: FC<IModal> = ({
 				</Bullets>
 				<Buttons>
 					<OkButton
-						label='Cancel'
+						label={formatMessage({ id: 'label.cancel' })}
 						onClick={closeModal}
 						buttonType='texty'
 					/>
 					<OkButton
-						label='Continue'
+						label={formatMessage({ id: 'label.continue' })}
 						onClick={continueProcess}
 						buttonType='secondary'
 					/>
