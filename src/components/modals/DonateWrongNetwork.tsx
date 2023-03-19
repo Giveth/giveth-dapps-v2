@@ -63,7 +63,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 			hiddenClose
 			headerTitlePosition='left'
 		>
-			<CustomHr />
+			<CustomHr margin='24px' />
 			<ModalContainer>
 				<Lead>
 					Sorry, this project doesn’t support your current network.
@@ -99,7 +99,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 					})}
 				</Flex>
 				<br />
-				<CustomHr />
+				<CustomHr margin='0' />
 				<FlexCenter direction='column'>
 					<FooterText>or</FooterText>
 					<Link href={`${Routes.Project}/${slug}`}>
@@ -115,16 +115,16 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 };
 
 const ModalContainer = styled.div`
-	padding: 24px;
+	padding: 32px;
 	text-align: left;
 	${mediaQueries.laptopS} {
 		min-width: 866px;
 	}
 `;
 
-const CustomHr = styled.hr`
-	margin-left: 24px;
-	margin-right: 24px;
+const CustomHr = styled.hr<{ margin: string }>`
+	margin-left: ${props => props.margin};
+	margin-right: ${props => props.margin};
 	border: 1px solid ${neutralColors.gray[400]};
 `;
 
