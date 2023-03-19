@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {
 	brandColors,
 	Caption,
-	IconRocketInSpace32,
+	IconNetwork32,
 	Lead,
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
@@ -15,6 +15,7 @@ import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
 import config from '@/configuration';
+import { BasicNetworkConfig } from '@/types/config';
 
 interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
 
@@ -29,7 +30,14 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();
-	console.log('acceptedChains', acceptedChains);
+	console.log('acceptedChains', acceptedChains, networks[0].chainId);
+
+	const eligibleNetworks: BasicNetworkConfig[] = networks.filter(network =>
+		acceptedChains?.includes(parseInt(network.chainId)),
+	);
+
+	console.log('eligibleNetworks', eligibleNetworks);
+
 	useEffect(() => {
 		if (chainId && acceptedChains?.includes(chainId)) {
 			closeModal();
@@ -41,7 +49,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitle='Switch Network'
-			headerIcon={<IconRocketInSpace32 />}
+			headerIcon={<IconNetwork32 />}
 			hiddenClose
 			headerTitlePosition='left'
 		>
