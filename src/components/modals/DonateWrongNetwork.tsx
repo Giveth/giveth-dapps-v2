@@ -63,7 +63,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 			hiddenClose
 			headerTitlePosition='left'
 		>
-			<CustomHr margin='32px' />
+			<CustomHr margin='24px' />
 			<ModalContainer>
 				<Lead>
 					Sorry, this project doesn’t support your current network.
@@ -115,7 +115,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 };
 
 const ModalContainer = styled.div`
-	padding: 32px;
+	padding: 32px 24px;
 	text-align: left;
 	${mediaQueries.laptopS} {
 		min-width: 866px;
