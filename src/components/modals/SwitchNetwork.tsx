@@ -13,10 +13,20 @@ import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import NetworkLogo from '@/components/NetworkLogo';
 import { switchNetwork } from '@/lib/wallet';
+import { useAppSelector } from '@/features/hooks';
+import config from '@/configuration';
+import { ETheme } from '@/features/general/general.slice';
+
+const networks = [
+	config.MAINNET_CONFIG,
+	config.XDAI_CONFIG,
+	config.POLYGON_CONFIG,
+];
 
 const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chainId } = useWeb3React();
+	const theme = useAppSelector(state => state.general.theme);
 
 	return (
 		<Modal
@@ -27,52 +37,53 @@ const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 			headerTitlePosition='left'
 		>
 			<Wrapper>
-				{networks.map(i => (
-					<NetworkItem
-						onClick={() => {
-							switchNetwork(i.id);
-							closeModal();
-						}}
-						isSelected={i.id === chainId}
-						key={i.id}
-					>
-						<NetworkLogo chainId={i.id} logoSize={32} />
-						<B>{i.name}</B>
-						{i.id === chainId && (
-							<Selected styleType='Small'>Selected</Selected>
-						)}
-					</NetworkItem>
-				))}
+				{networks.map(network => {
+					const _chainId = parseInt(network.chainId);
+					return (
+						<NetworkItem
+							onClick={() => {
+								switchNetwork(_chainId);
+								closeModal();
+							}}
+							isSelected={_chainId === chainId}
+							key={_chainId}
+							theme={theme}
+						>
+							<NetworkLogo chainId={_chainId} logoSize={32} />
+							<B>{network.chainName}</B>
+							{_chainId === chainId && (
+								<SelectedNetwork
+									styleType='Small'
+									theme={theme}
+								>
+									Selected
+								</SelectedNetwork>
+							)}
+						</NetworkItem>
+					);
+				})}
 			</Wrapper>
 		</Modal>
 	);
 };
 
-const networks = [
-	{
-		id: 1,
-		name: 'Ethereum Mainnet',
-	},
-	{
-		id: 100,
-		name: 'Gnosis',
-	},
-	{
-		id: 137,
-		name: 'Polygon Mainnet',
-	},
-];
-
-const Selected = styled(Overline)`
-	color: ${brandColors.giv[500]};
+export const SelectedNetwork = styled(Overline)`
+	color: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[100]
+			: brandColors.giv[500]};
 	position: absolute;
 	top: -8px;
 	left: 10px;
-	background: white;
+	background: ${props =>
+		props.theme === ETheme.Dark
+			? brandColors.giv[600]
+			: neutralColors.gray[100]};
 	padding: 0 3px;
+	border-radius: 4px;
 `;
 
-const NetworkItem = styled.div<{ isSelected: boolean }>`
+export const NetworkItem = styled.div<{ isSelected: boolean }>`
 	position: relative;
 	padding: 8px;
 	width: 213px;
@@ -82,7 +93,10 @@ const NetworkItem = styled.div<{ isSelected: boolean }>`
 	align-items: center;
 	gap: 16px;
 	:hover {
-		background-color: ${neutralColors.gray[200]};
+		background-color: ${props =>
+			props.theme === ETheme.Dark
+				? brandColors.giv[700]
+				: neutralColors.gray[200]};
 	}
 	border: 1px solid
 		${({ isSelected }) =>

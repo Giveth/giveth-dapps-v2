@@ -67,24 +67,27 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 			<StyledProjectCard project={project} />
 			<ProjectUpdateCard>
 				{loading ? (
-					'Loading'
+					<LoadingDotIcon>
+						<div className='dot-flashing' />
+					</LoadingDotIcon>
 				) : update ? (
 					<>
 						<UpdateDate>
-							{update?.createdAt &&
-								new Date(update.createdAt).toLocaleString(
-									'en-GB',
-									{
-										day: 'numeric',
-										month: 'short',
-										year: 'numeric',
-									},
-								)}
+							{update && update.createdAt
+								? new Date(update.createdAt).toLocaleString(
+										'en-GB',
+										{
+											day: 'numeric',
+											month: 'short',
+											year: 'numeric',
+										},
+								  )
+								: ''}
 						</UpdateDate>
-						<UpdateTitle weight={700}>{update.title}</UpdateTitle>
+						<UpdateTitle weight={700}>{update?.title}</UpdateTitle>
 						<UpdateDesc
 							dangerouslySetInnerHTML={{
-								__html: update.content,
+								__html: update?.content || '',
 							}}
 						/>
 						<Flex justifyContent='flex-end'>
@@ -113,6 +116,7 @@ const ProjectUpdateSlideWrapper = styled(Flex)`
 	${mediaQueries.laptopS} {
 		flex-direction: row;
 	}
+	overflow: hidden;
 `;
 
 const StyledProjectCard = styled(ProjectCard)`
@@ -126,6 +130,7 @@ const ProjectUpdateCard = styled.div`
 	padding: 32px;
 	border: 1px solid ${neutralColors.gray[300]};
 	border-radius: 16px;
+	overflow: hidden;
 `;
 
 const UpdateDate = styled(B)`
@@ -149,4 +154,8 @@ const UpdateDesc = styled(P)`
 const ReadMore = styled(FlexCenter)`
 	color: ${brandColors.giv[500]};
 	cursor: pointer;
+`;
+
+export const LoadingDotIcon = styled.div`
+	padding: 4px 50%;
 `;

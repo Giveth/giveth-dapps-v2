@@ -16,6 +16,7 @@ const XDAI_NETWORK_NUMBER = 100; // xDAI
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
+	BASE_ROUTE: BASE_ROUTE,
 	BACKEND_LINK: `${BASE_ROUTE}/graphql`,
 	FRONTEND_LINK: 'https://staging.giveth.io',
 	MICROSERVICES: {
@@ -303,6 +304,24 @@ const config: EnvConfig = {
 				],
 			},
 		],
+	},
+
+	POLYGON_CONFIG: {
+		nodeUrl: '',
+		chainId: '0x89', // A 0x-prefixed hexadecimal string
+		chainName: 'Polygon',
+		nativeCurrency: {
+			name: 'MATIK',
+			symbol: 'MATIK',
+			decimals: 18,
+		},
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		blockExplorerUrls: ['https://polygonscan.com/'],
+		iconUrls: ['https://icons.llamao.fi/icons/chains/rsz_polygon.jpg'], // Currently ignored.
+		blockExplorerName: ['PolygonScan'],
+		subgraphAddress: '',
 	},
 };
 

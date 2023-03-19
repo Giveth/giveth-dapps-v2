@@ -14,7 +14,7 @@ import { captureException } from '@sentry/nextjs';
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
-import { IUser } from '@/apollo/types/types';
+import { IUser, IWalletAddress } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';
@@ -136,6 +136,25 @@ export const getGasPreference = (
 
 export const isSSRMode = typeof window === 'undefined';
 
+export const generatePolygonAddress = (addresses?: IWalletAddress[]) => {
+	if (!addresses || addresses.length !== 2) return '';
+	const mainnetAddress = addresses.find(
+		address => address.networkId === config.PRIMARY_NETWORK.id,
+	);
+	const gnosisAddress = addresses.find(
+		address => address.networkId === config.SECONDARY_NETWORK.id,
+	);
+	const isSame = compareAddressesArray([
+		mainnetAddress?.address,
+		gnosisAddress?.address,
+	]);
+	if (isSame) {
+		return mainnetAddress?.address;
+	} else {
+		return '';
+	}
+};
+
 export const compareAddresses = (
 	add1: string | undefined | null,
 	add2: string | undefined | null,
@@ -149,9 +168,14 @@ export const compareAddressesArray = (
 ) => {
 	if (!addresses || addresses.length === 0) return false;
 	const lowerCaseAddresses: string[] = [];
-	addresses.forEach(address => {
-		if (address) lowerCaseAddresses.push(address.toLowerCase());
-	});
+	for (let i = 0; i < addresses.length; i++) {
+		const address = addresses[i];
+		if (address) {
+			lowerCaseAddresses.push(address.toLowerCase());
+		} else {
+			return false;
+		}
+	}
 	return new Set(lowerCaseAddresses).size === 1;
 };
 

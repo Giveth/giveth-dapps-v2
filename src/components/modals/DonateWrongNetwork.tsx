@@ -1,24 +1,52 @@
 import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
-import { P, H4, brandColors, Caption } from '@giveth/ui-design-system';
+import {
+	B,
+	brandColors,
+	IconBackward24,
+	IconNetwork32,
+	Lead,
+	neutralColors,
+	ButtonText,
+} from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
-import { mediaQueries } from '@/lib/constants/constants';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { Modal } from './Modal';
-import { switchNetwork } from '@/lib/wallet';
-import { getNetworkNames } from '@/components/views/donate/helpers';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
-import NetworkLogo from '@/components/NetworkLogo';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import config from '@/configuration';
+import { BasicNetworkConfig } from '@/types/config';
+import { switchNetwork } from '@/lib/metamask';
+import NetworkLogo from '../NetworkLogo';
+import { NetworkItem, SelectedNetwork } from './SwitchNetwork';
+import { useAppSelector } from '@/features/hooks';
+import { Flex, FlexCenter } from '../styled-components/Flex';
+import { mediaQueries } from '@/lib/constants/constants';
+import Routes from '@/lib/constants/Routes';
 
 interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
+
+const networks = [
+	config.MAINNET_CONFIG,
+	config.XDAI_CONFIG,
+	config.POLYGON_CONFIG,
+];
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { setShowModal, acceptedChains } = props;
 	const { chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const theme = useAppSelector(state => state.general.theme);
+	const router = useRouter();
+
+	const { slug } = router.query;
+
+	const eligibleNetworks: BasicNetworkConfig[] = networks.filter(network =>
+		acceptedChains?.includes(parseInt(network.chainId)),
+	);
 
 	useEffect(() => {
 		if (chainId && acceptedChains?.includes(chainId)) {
@@ -26,52 +54,94 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 		}
 	}, [chainId, acceptedChains]);
 
-	const networkNames = getNetworkNames(acceptedChains!, 'or');
-
 	return (
-		<Modal closeModal={closeModal} isAnimating={isAnimating}>
+		<Modal
+			closeModal={closeModal}
+			isAnimating={isAnimating}
+			headerTitle='Switch Network'
+			headerIcon={<IconNetwork32 />}
+			hiddenClose
+			headerTitlePosition='left'
+		>
+			<CustomHr margin='24px' />
 			<ModalContainer>
-				<FlexCenter gap='8px'>
-					{acceptedChains?.map(chainId => (
-						<NetworkLogo
-							logoSize={64}
-							chainId={chainId}
-							key={chainId}
-						/>
-					))}
+				<Lead>
+					Sorry, this project doesn’t support your current network.
+				</Lead>
+				<br />
+				<Lead>Please switch your network</Lead>
+				<br />
+				<CustomFlex>
+					{eligibleNetworks.map(network => {
+						const _chainId = parseInt(network.chainId);
+						return (
+							<NetworkItem
+								onClick={() => {
+									switchNetwork(_chainId);
+									closeModal();
+								}}
+								isSelected={_chainId === chainId}
+								key={_chainId}
+								theme={theme}
+							>
+								<NetworkLogo chainId={_chainId} logoSize={32} />
+								<B>{network.chainName}</B>
+								{_chainId === chainId && (
+									<SelectedNetwork
+										styleType='Small'
+										theme={theme}
+									>
+										Selected
+									</SelectedNetwork>
+								)}
+							</NetworkItem>
+						);
+					})}
+				</CustomFlex>
+				<br />
+				<CustomHr margin='0' />
+				<FlexCenter direction='column'>
+					<FooterText>or</FooterText>
+					<Link href={`${Routes.Project}/${slug}`}>
+						<Flex gap='12px' alignItems='center'>
+							<IconBackward24 color={brandColors.giv[500]} />
+							<BackButton>GO BACK TO PROJECT DETAILS</BackButton>
+						</Flex>
+					</Link>
 				</FlexCenter>
-				<Title>Switch to {networkNames}</Title>
-				<P>
-					This project doesn&apos;t accept donations in your connected
-					network. Please switch your wallet network to {networkNames}
-					.
-				</P>
-				<SwitchCaption
-					onClick={() => switchNetwork(acceptedChains![0])}
-				>
-					Switch network
-				</SwitchCaption>
 			</ModalContainer>
 		</Modal>
 	);
 };
 
-const SwitchCaption = styled(Caption)`
-	color: ${brandColors.pinky[500]};
-	cursor: pointer;
-	margin: 20px auto 0;
-`;
-
 const ModalContainer = styled.div`
-	padding: 62px 60px;
-	color: ${brandColors.giv[700]};
-	width: 100%;
-	${mediaQueries.tablet} {
-		width: 500px;
+	padding: 32px 24px;
+	text-align: left;
+	${mediaQueries.laptopS} {
+		min-width: 866px;
 	}
 `;
 
-const Title = styled(H4)`
-	margin: 18px 0 24px;
-	color: ${brandColors.giv[700]};
+const CustomHr = styled.hr<{ margin: string }>`
+	margin-left: ${props => props.margin};
+	margin-right: ${props => props.margin};
+	border: 1px solid ${neutralColors.gray[400]};
+`;
+
+const FooterText = styled(Lead)`
+	color: ${neutralColors.gray[700]};
+	margin: 16px 0;
+`;
+
+const BackButton = styled(ButtonText)`
+	color: ${brandColors.giv[500]};
+`;
+
+const CustomFlex = styled(Flex)`
+	flex-direction: column;
+	gap: 24px;
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+		gap: 60px;
+	}
 `;

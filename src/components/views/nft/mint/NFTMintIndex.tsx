@@ -25,10 +25,10 @@ import EligibilityModal from '../overview/EligibilityModal';
 import { Flex } from '@/components/styled-components/Flex';
 
 export const NFTMintIndex = () => {
+	const [showEligibilityModal, setShowEligibilityModal] = useState(false);
 	const { formatMessage } = useIntl();
 	const { account, library, chainId } = useWeb3React();
-	const { step, setStep, qty, tx: txHash } = usePFPMintData();
-	const [showEligibilityModal, setShowEligibilityModal] = useState(false);
+	const { step, setStep, qty, tx: txHash, setIsEligible } = usePFPMintData();
 
 	useEffect(() => {
 		const checkAddress = async () => {
@@ -48,7 +48,11 @@ export const NFTMintIndex = () => {
 					const res = await PFPContract.allowList(account);
 					if (!res) {
 						setShowEligibilityModal(true);
+					} else {
+						setIsEligible(true);
 					}
+				} else {
+					setIsEligible(true);
 				}
 			} catch (error) {
 				console.log('Error on check allow List', error);

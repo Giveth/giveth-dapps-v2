@@ -14,7 +14,7 @@ import { IUserProfileView } from './UserProfile.view';
 import { Container } from '@/components/Grid';
 import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
 import { profileTabs } from '@/lib/constants/Routes';
-import { isSSRMode } from '@/lib/helpers';
+import { removeQueryParam } from '@/helpers/url';
 
 enum EProfile {
 	OVERVIEW,
@@ -56,8 +56,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 		}
 	}, [router?.query?.tab]);
 
-	const userName = user?.name || 'Unknown';
-	const { pathname = '' } = isSSRMode ? {} : window.location;
+	const pathname = removeQueryParam(router.asPath, ['tab'], true);
 
 	return (
 		<ProfileContainer>

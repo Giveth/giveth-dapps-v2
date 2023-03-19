@@ -29,6 +29,7 @@ interface IProps {
 	link?: string;
 	linkText?: string;
 	noIcon?: boolean;
+	className?: string;
 }
 
 interface IColorType {
@@ -66,7 +67,7 @@ const InlineToast: FC<IProps> = props => {
 
 	return (
 		<Container
-			className={isHidden ? 'fadeOut' : 'fadeIn'}
+			className={`${props.className} ${isHidden ? 'fadeOut' : 'fadeIn'}`}
 			colorType={colorType}
 		>
 			{!noIcon && <IconContainer>{colorType.icon}</IconContainer>}

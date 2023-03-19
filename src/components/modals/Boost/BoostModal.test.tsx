@@ -24,7 +24,7 @@ beforeAll(() => {
 
 test('showing the ZeroGivpowerModal if the user GIVpower balance is zero', async () => {
 	const setStateMock = jest.fn();
-	const useStateMock: any = (useState: any) => [useState, setStateMock];
+	const useStateMock: any = (state: any) => [state, setStateMock];
 	jest.spyOn(React, 'useState').mockImplementation(useStateMock);
 	const xDaiValues: ISubgraphState = {};
 	xDaiValues[
@@ -51,7 +51,7 @@ test('showing the ZeroGivpowerModal if the user GIVpower balance is zero', async
 
 test('showing the BoostModal if the user GIVpower balance is not zero', async () => {
 	const setStateMock = jest.fn();
-	const useStateMock: any = (useState: any) => [useState, setStateMock];
+	const useStateMock: any = (state: any) => [state, setStateMock];
 	jest.spyOn(React, 'useState').mockImplementation(useStateMock);
 	const xDaiValues: ISubgraphState = {};
 	xDaiValues[

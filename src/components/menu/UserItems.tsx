@@ -11,6 +11,7 @@ import StorageLabel from '@/lib/localStorage';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
+	setShowSwitchNetworkModal,
 	setShowWalletModal,
 } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
@@ -28,13 +29,11 @@ import NetworkLogo from '@/components/NetworkLogo';
 interface IUserItemsProps {
 	setSignWithWallet: Dispatch<SetStateAction<boolean>>;
 	setQueueRoute: Dispatch<SetStateAction<string>>;
-	setShowSwitchNetwork: Dispatch<SetStateAction<boolean>>;
 }
 
 export const UserItems: FC<IUserItemsProps> = ({
 	setSignWithWallet,
 	setQueueRoute,
-	setShowSwitchNetwork,
 }) => {
 	const { formatMessage } = useIntl();
 	const { chainId, account, deactivate } = useWeb3React();
@@ -91,7 +90,9 @@ export const UserItems: FC<IUserItemsProps> = ({
 					</FlexCenter>
 					<ItemAction
 						size='Small'
-						onClick={() => setShowSwitchNetwork(true)}
+						onClick={() =>
+							dispatch(setShowSwitchNetworkModal(true))
+						}
 					>
 						{formatMessage({ id: 'label.switch_network' })}
 					</ItemAction>
