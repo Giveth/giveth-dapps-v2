@@ -1,21 +1,31 @@
 import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
-import { B, IconNetwork32, Lead } from '@giveth/ui-design-system';
+import {
+	B,
+	brandColors,
+	IconBackward24,
+	IconNetwork32,
+	Lead,
+	neutralColors,
+	ButtonText,
+} from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
-import { useAppDispatch } from '@/features/hooks';
 import config from '@/configuration';
 import { BasicNetworkConfig } from '@/types/config';
 import { switchNetwork } from '@/lib/metamask';
 import NetworkLogo from '../NetworkLogo';
 import { NetworkItem, SelectedNetwork } from './SwitchNetwork';
 import { useAppSelector } from '@/features/hooks';
-import { Flex } from '../styled-components/Flex';
+import { Flex, FlexCenter } from '../styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
+import Routes from '@/lib/constants/Routes';
 
 interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
 
@@ -30,15 +40,12 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const theme = useAppSelector(state => state.general.theme);
-	const dispatch = useAppDispatch();
-
-	console.log('acceptedChains', acceptedChains, networks[0].chainId);
-
+	const router = useRouter();
+	const { slug } = router.query;
+	console.log('router', slug);
 	const eligibleNetworks: BasicNetworkConfig[] = networks.filter(network =>
 		acceptedChains?.includes(parseInt(network.chainId)),
 	);
-
-	console.log('eligibleNetworks', eligibleNetworks);
 
 	useEffect(() => {
 		if (chainId && acceptedChains?.includes(chainId)) {
@@ -55,6 +62,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 			hiddenClose
 			headerTitlePosition='left'
 		>
+			<CustomHr />
 			<ModalContainer>
 				<Lead>
 					Sorry, this project doesn’t support your current network.
@@ -62,7 +70,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 				<br />
 				<Lead>Please switch your network</Lead>
 				<br />
-				<Flex gap='70px'>
+				<Flex gap='60px'>
 					{eligibleNetworks.map(network => {
 						const _chainId = parseInt(network.chainId);
 						return (
@@ -89,6 +97,17 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 						);
 					})}
 				</Flex>
+				<br />
+				<CustomHr />
+				<FlexCenter direction='column'>
+					<FooterText>or</FooterText>
+					<Link href={`${Routes.Project}/${slug}`}>
+						<Flex gap='12px' alignItems='center'>
+							<IconBackward24 color={brandColors.giv[500]} />
+							<BackButton>GO BACK TO PROJECT DETAILS</BackButton>
+						</Flex>
+					</Link>
+				</FlexCenter>
 			</ModalContainer>
 		</Modal>
 	);
@@ -100,4 +119,19 @@ const ModalContainer = styled.div`
 	${mediaQueries.laptopS} {
 		min-width: 866px;
 	}
+`;
+
+const CustomHr = styled.hr`
+	margin-left: 24px;
+	margin-right: 24px;
+	border: 1px solid ${neutralColors.gray[400]};
+`;
+
+const FooterText = styled(Lead)`
+	color: ${neutralColors.gray[700]};
+	margin: 16px 0;
+`;
+
+const BackButton = styled(ButtonText)`
+	color: ${brandColors.giv[500]};
 `;
