@@ -54,9 +54,12 @@ const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 							<NetworkLogo chainId={_chainId} logoSize={32} />
 							<B>{network.chainName}</B>
 							{_chainId === chainId && (
-								<Selected styleType='Small' theme={theme}>
+								<SelectedNetwork
+									styleType='Small'
+									theme={theme}
+								>
 									{formatMessage({ id: 'label.selected' })}
-								</Selected>
+								</SelectedNetwork>
 							)}
 						</NetworkItem>
 					);
@@ -66,7 +69,7 @@ const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 	);
 };
 
-const Selected = styled(Overline)`
+export const SelectedNetwork = styled(Overline)`
 	color: ${props =>
 		props.theme === ETheme.Dark
 			? brandColors.giv[100]
@@ -82,7 +85,7 @@ const Selected = styled(Overline)`
 	border-radius: 4px;
 `;
 
-const NetworkItem = styled.div<{ isSelected: boolean }>`
+export const NetworkItem = styled.div<{ isSelected: boolean }>`
 	position: relative;
 	padding: 8px;
 	width: 213px;
