@@ -1,12 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
-import {
-	B,
-	brandColors,
-	Caption,
-	IconNetwork32,
-	Lead,
-} from '@giveth/ui-design-system';
+import { B, IconNetwork32, Lead } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
 import { Modal } from './Modal';
@@ -21,6 +15,7 @@ import NetworkLogo from '../NetworkLogo';
 import { NetworkItem, SelectedNetwork } from './SwitchNetwork';
 import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
+import { mediaQueries } from '@/lib/constants/constants';
 
 interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
 
@@ -99,13 +94,10 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	);
 };
 
-const SwitchCaption = styled(Caption)`
-	color: ${brandColors.pinky[500]};
-	cursor: pointer;
-	margin: 20px auto 0;
-`;
-
 const ModalContainer = styled.div`
 	padding: 24px;
 	text-align: left;
+	${mediaQueries.laptopS} {
+		min-width: 866px;
+	}
 `;
