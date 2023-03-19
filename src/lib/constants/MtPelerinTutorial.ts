@@ -1,8 +1,9 @@
 export const MtPelerinTutorialSteps = [
 	{
 		id: 1,
-		title: 'label.buy_xdai_with_fiat',
-		description: 'label.the_ramp_allows_users',
+		title: 'label.getting_started',
+		description:
+			'label.the_mt_pelerin_onramp_allows_you_to_use_a_credit_card_or_bank_transfer',
 	},
 	{
 		id: 2,
@@ -36,8 +37,9 @@ export const MtPelerinTutorialSteps = [
 	},
 	{
 		id: 8,
-		title: 'label.confirmation',
-		description: 'label.wait_for_confirmation',
+		title: 'label.wait_for_confirmation',
+		description:
+			'label.you_can_wait_on_this_page_until_the_payment_goes_through',
 	},
 	{
 		id: 9,

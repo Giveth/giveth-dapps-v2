@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Button, B, H4, neutralColors } from '@giveth/ui-design-system';
+import { Button, B, neutralColors } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { InputSize } from '@/components/Input';
 import InputStyled from '@/components/styled-components/Input';
