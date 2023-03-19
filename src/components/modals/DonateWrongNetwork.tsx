@@ -12,9 +12,9 @@ import {
 import { useWeb3React } from '@web3-react/core';
 
 import { useIntl } from 'react-intl';
-import { mediaQueries } from '@/lib/constants/constants';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
