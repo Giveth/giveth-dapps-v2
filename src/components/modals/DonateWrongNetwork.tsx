@@ -41,8 +41,9 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
+
 	const { slug } = router.query;
-	console.log('router', slug);
+
 	const eligibleNetworks: BasicNetworkConfig[] = networks.filter(network =>
 		acceptedChains?.includes(parseInt(network.chainId)),
 	);
