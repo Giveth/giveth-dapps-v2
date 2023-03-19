@@ -63,7 +63,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 			hiddenClose
 			headerTitlePosition='left'
 		>
-			<CustomHr margin='24px' />
+			<CustomHr margin='32px' />
 			<ModalContainer>
 				<Lead>
 					Sorry, this project doesn’t support your current network.
