@@ -119,30 +119,30 @@ const config: EnvConfig = {
 				exploited: true,
 				farmEndTimeMS: 1660946400000,
 			},
-			{
-				network: MAINNET_NETWORK_NUMBER,
-				INCENTIVE_START_TIME: 1640361600,
-				INCENTIVE_END_TIME: 1656086400,
-				INCENTIVE_REWARD_AMOUNT: 10000000,
-				NFT_POSITIONS_MANAGER_ADDRESS:
-					'0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
-				UNISWAP_V3_STAKER: '0x1f98407aaB862CdDeF78Ed252D6f557aA5b0f00d',
-				STAKING_REWARDS_CONTRACT:
-					'0x79A7CAD3Ac4554C133dCaaa9Bc3319385Eb7FD5D',
-				REWARD_TOKEN: '0x3115e5aAa3D6f742d09fbB649150dfE285a9c2A3',
-				UNISWAP_V3_LP_POOL:
-					'0xc763b6b3d0f75167db95daa6a0a0d75dd467c4e1',
-				INCENTIVE_REFUNDEE_ADDRESS:
-					'0x34d27210cC319EC5281bDc4DC2ad8FbcF4EAEAEB',
-				type: StakingType.UNISWAPV3_ETH_GIV,
-				platform: StakingPlatform.UNISWAP,
-				title: 'GIV / ETH',
-				description: '0.3% tier only',
-				provideLiquidityLink: `https://app.uniswap.org/#/add/ETH/0x900dB999074d9277c5DA2A43F252D74366230DA0/3000`,
-				unit: 'NFT',
-				infinitePositionId: 193935,
-				farmEndTimeMS: 1660946400000,
-			},
+			// {
+			// 	network: MAINNET_NETWORK_NUMBER,
+			// 	INCENTIVE_START_TIME: 1640361600,
+			// 	INCENTIVE_END_TIME: 1656086400,
+			// 	INCENTIVE_REWARD_AMOUNT: 10000000,
+			// 	NFT_POSITIONS_MANAGER_ADDRESS:
+			// 		'0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
+			// 	UNISWAP_V3_STAKER: '0x1f98407aaB862CdDeF78Ed252D6f557aA5b0f00d',
+			// 	STAKING_REWARDS_CONTRACT:
+			// 		'0x79A7CAD3Ac4554C133dCaaa9Bc3319385Eb7FD5D',
+			// 	REWARD_TOKEN: '0x3115e5aAa3D6f742d09fbB649150dfE285a9c2A3',
+			// 	UNISWAP_V3_LP_POOL:
+			// 		'0xc763b6b3d0f75167db95daa6a0a0d75dd467c4e1',
+			// 	INCENTIVE_REFUNDEE_ADDRESS:
+			// 		'0x34d27210cC319EC5281bDc4DC2ad8FbcF4EAEAEB',
+			// 	type: StakingType.UNISWAPV3_ETH_GIV,
+			// 	platform: StakingPlatform.UNISWAP,
+			// 	title: 'GIV / ETH',
+			// 	description: '0.3% tier only',
+			// 	provideLiquidityLink: `https://app.uniswap.org/#/add/ETH/0x900dB999074d9277c5DA2A43F252D74366230DA0/3000`,
+			// 	unit: 'NFT',
+			// 	infinitePositionId: 193935,
+			// 	farmEndTimeMS: 1660946400000,
+			// },
 		],
 		regenPools: [
 			{
