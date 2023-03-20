@@ -12,8 +12,8 @@ export const Cover = styled(FlexCenter)`
 	padding: 24px;
 	background: linear-gradient(
 		180deg,
-		rgba(56, 17, 191, 0) 32.57%,
-		rgba(26, 4, 102, 0.9) 84.84%
+		rgba(56, 17, 191, 0) 30%,
+		rgba(26, 4, 102, 1) 80%
 	);
 	z-index: 2;
 	gap: 16px;
