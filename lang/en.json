@@ -1231,5 +1231,9 @@
 	"label.crypto_made_easy": "Crypto made easy",
 	"label.thanks_to_mtpelerin_you_can_onramp_your_dollars": "Thanks to Mt Pelerin, you can 'onramp' your dollars and get the crypto you want to donate to projects. There is a 0% fee for onramping funds under $500/year, and they charge a small fee for anything over that.",
 	"label.the_funds_are_sent_to_your_wallet_within_minutes": "The funds are sent to your wallet within minutes with zero gas fees",
-	"label.the_service_is_a_kycfree_authorized_financial_intermediary": "The service is a KYC-free authorized financial intermediary based in Switzerland"
+	"label.the_service_is_a_kycfree_authorized_financial_intermediary": "The service is a KYC-free authorized financial intermediary based in Switzerland",
+	"label.use_your_bank_account_or_credit_card_to_send_crypto_to_your_wallet": "Use your bank account or credit card to send crypto to your web3 wallet, then donate to support projects!",
+	"label.donate_with_dollars": "Donate with Dollars",
+	"label.see_how_it_works": "see how it works",
+	"label.get_crypto": "Get crypto"
 }

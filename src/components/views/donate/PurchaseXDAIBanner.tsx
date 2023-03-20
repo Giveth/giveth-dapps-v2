@@ -28,12 +28,12 @@ const PurchaseXDAI: FC = () => {
 			<BgImage />
 			<Content>
 				<Title>
-					{formatMessage({ id: 'label.get_crypto_with_mtpelerin' })}{' '}
+					{formatMessage({ id: 'label.donate_with_dollars' })}{' '}
 					<IconSpark size={32} color={brandColors.giv[500]} />
 				</Title>
 				<Lead>
 					{formatMessage({
-						id: 'label.purchase_xdai_with_fiat_currency',
+						id: 'label.use_your_bank_account_or_credit_card_to_send_crypto_to_your_wallet',
 					})}
 					<InfoHowToBuy
 						as='a'
@@ -42,7 +42,7 @@ const PurchaseXDAI: FC = () => {
 						href={`${routes.HowToBuyXdai}?slug=${query.slug}`}
 					>
 						<span>
-							{formatMessage({ id: 'label.how_to_buy' })}{' '}
+							{formatMessage({ id: 'label.see_how_it_works' })}{' '}
 						</span>
 						<IconExternalLink
 							size={16}
@@ -52,7 +52,7 @@ const PurchaseXDAI: FC = () => {
 				</Lead>
 			</Content>
 			<BuyButton
-				label='Buy xDAI'
+				label={formatMessage({ id: 'label.get_crypto' })}
 				onClick={() =>
 					router.push({
 						pathname: Routes.PurchaseXdai,
