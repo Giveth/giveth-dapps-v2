@@ -15,9 +15,9 @@ const GIVeconomyTab: FC = () => {
 	const { asPath } = useRouter();
 
 	return (
-		<LabelsContainer>
-			<Container>
-				<Flex gap='16px'>
+		<Container>
+			<LabelsContainer>
+				<Flex gap='16px' justifyContent='space-between'>
 					{giveconomyTabs.map((tab, idx) => (
 						<Link key={idx} href={tab.href}>
 							<Label size='Big' isActive={asPath === tab.href}>
@@ -26,8 +26,8 @@ const GIVeconomyTab: FC = () => {
 						</Link>
 					))}
 				</Flex>
-			</Container>
-		</LabelsContainer>
+			</LabelsContainer>
+		</Container>
 	);
 };
 
