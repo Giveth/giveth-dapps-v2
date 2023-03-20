@@ -9,9 +9,9 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
+import { Container } from '@giveth/ui-design-system';
 import TrazadoPinkIcon from 'public/images/particles/trazado-pink.svg';
 import TrazadoGivIcon from 'public/images/particles/trazado-giv.svg';
-import { Container } from '@/components/Grid';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { Relative } from '@/components/styled-components/Position';

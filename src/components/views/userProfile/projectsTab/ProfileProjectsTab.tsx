@@ -3,9 +3,9 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
+import { Col, Row } from '@giveth/ui-design-system';
 import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
 import ProjectsTable from './ProjectsTable';
-import { Col, Row } from '@/components/Grid';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import { client } from '@/apollo/apolloClient';

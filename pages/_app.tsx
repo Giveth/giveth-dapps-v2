@@ -27,6 +27,8 @@ import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import StorageLabel from '@/lib/localStorage';
 import NotificationController from '@/components/controller/notification.ctrl';
 
+import { isGIVeconomyRoute } from '@/lib/helpers';
+import GIVeconomyTab from '@/components/GIVeconomyTab';
 import type { AppProps } from 'next/app';
 
 declare global {
@@ -117,6 +119,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 							<SubgraphController />
 							<UserController />
 							<HeaderWrapper />
+							{isGIVeconomyRoute(router.route) && (
+								<GIVeconomyTab />
+							)}
 							{(pageProps as any).errorStatus ? (
 								<ErrorsIndex
 									statusCode={(pageProps as any).errorStatus}

@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { IconPointerLeft, IconPointerRight } from '@giveth/ui-design-system';
 import { Navigation, Pagination } from 'swiper';
+import { Container, Row } from '@giveth/ui-design-system';
 import { IProject } from '@/apollo/types/types';
-import { Container, Row } from '@/components/Grid';
 import { ProjectUpdateSlide } from './ProjectUpdateSlide';
 import { BlockHeader, BlockTitle } from '../common';
 import {

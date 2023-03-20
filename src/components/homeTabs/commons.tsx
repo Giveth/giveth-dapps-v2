@@ -1,6 +1,6 @@
 import { brandColors, D1, GLink } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Container } from '@/components/Grid';
+import { Container } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 import { RewardCard } from '../RewardCard';

@@ -15,11 +15,11 @@ import { useIntl } from 'react-intl';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Container } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 import IntroCard from './IntroCard';
 import introBanner from '/public/images/banners/introBanner.svg';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Container } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 

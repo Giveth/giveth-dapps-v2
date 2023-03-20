@@ -11,10 +11,10 @@ import {
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
+import { Col, Container, Row } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { Col, Container, Row } from '../Grid';
 import { Flex, FlexCenter } from '../styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ETheme } from '@/features/general/general.slice';

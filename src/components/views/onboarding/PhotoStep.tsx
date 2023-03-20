@@ -6,6 +6,7 @@ import { useMutation } from '@apollo/client';
 
 import { captureException } from '@sentry/nextjs';
 import { useWeb3React } from '@web3-react/core';
+import { Col } from '@giveth/ui-design-system';
 import {
 	IStep,
 	OnboardActionsContainer,
@@ -20,7 +21,6 @@ import ImageUploader from '@/components/ImageUploader';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
-import { Col } from '@/components/Grid';
 import useUpload from '@/hooks/useUpload';
 
 const PhotoStep: FC<IStep> = ({ setStep }) => {

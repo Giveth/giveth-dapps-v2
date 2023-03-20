@@ -68,6 +68,9 @@ const HomeIndex: FC<IHomeRoute> = props => {
 						</Fragment>
 				  ))
 				: []}
+			{newCampaigns && newCampaigns.length > 0 ? (
+				<CampaignsBlock campaigns={newCampaigns} />
+			) : null}
 			<InformationBlock />
 			<Separator />
 			<WhyGiveth {...rest} />
@@ -78,9 +81,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			<Separator />
 			<HomePartners />
 			<Separator />
-			{newCampaigns && newCampaigns.length > 0 ? (
-				<CampaignsBlock campaigns={newCampaigns} />
-			) : null}
+
 			<HomeFromBlog />
 			<GetUpdates />
 			{featuredProjects && featuredProjects.length > 0 ? (

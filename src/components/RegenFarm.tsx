@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { H4 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { Row, Col } from '@giveth/ui-design-system';
 import {
 	givEconomySupportedNetworks,
 	regenFarmStreamCardCol,
 	TWO_WEEK,
 } from '@/lib/constants/constants';
 import StakingPoolCard from './cards/StakingPoolCard';
-import { Row, Col } from './Grid';
 import { PoolRow } from './homeTabs/GIVfarm.sc';
 import config from '@/configuration';
 import { RegenFarmConfig } from '@/types/config';

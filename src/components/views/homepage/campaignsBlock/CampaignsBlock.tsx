@@ -7,10 +7,10 @@ import {
 	IconPointerRight,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { Navigation, Pagination } from 'swiper';
-import { Container, Row } from '@/components/Grid';
+import { useIntl } from 'react-intl';
+import { Container, Row } from '@giveth/ui-design-system';
 import { BlockHeader, BlockTitle } from '../common';
 import { ICampaign } from '@/apollo/types/types';
 import { CampaignsSlide } from './CampaignsSlide';
@@ -39,7 +39,9 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 			<ContainerRelative>
 				<BlockHeader>
 					<BlockTitle>
-						{formatMessage({ id: 'label.whats_up_on_giveth' })}
+						{formatMessage({
+							id: 'label.whats_up_on_giveth',
+						})}
 					</BlockTitle>
 					<SwiperPaginationWrapper>
 						<NavigationWrapper ref={prevElRef}>
