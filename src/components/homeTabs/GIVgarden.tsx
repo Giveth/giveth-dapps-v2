@@ -31,7 +31,7 @@ import { useStakingPool } from '@/hooks/useStakingPool';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { TopInnerContainer } from './commons';
-import { Col, Container, Row } from '@/components/Grid';
+import { Col, Container, Row } from '@giveth/ui-design-system';
 
 const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
 

@@ -15,7 +15,7 @@ import {
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
-import { Col, Container, Row } from '@/components/Grid';
+import { Col, Container, Row } from '@giveth/ui-design-system';
 import { StakingType } from '@/types/config';
 import VideoBlock from '@/components/VideoBlock';
 

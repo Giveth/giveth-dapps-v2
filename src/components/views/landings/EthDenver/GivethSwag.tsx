@@ -8,7 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import SwagImg from '/public/images/swag.png';
 import Image from 'next/image';
-import { Col, Container, Row } from '@/components/Grid';
+import { Col, Container, Row } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 

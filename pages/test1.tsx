@@ -11,7 +11,7 @@ import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
 import { FlowRateTooltip } from '@/components/homeTabs/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { zIndex } from '@/lib/constants/constants';
-import { Container } from '@/components/Grid';
+import { Container } from '@giveth/ui-design-system';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';

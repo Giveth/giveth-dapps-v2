@@ -39,7 +39,7 @@ import { formatDate } from '@/lib/helpers';
 import { GIVBackExplainModal } from '../modals/GIVBackExplain';
 import { NoWrap, TopInnerContainer } from './commons';
 import links from '@/lib/constants/links';
-import { Col, Container, Row } from '@/components/Grid';
+import { Col, Container, Row } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
 import { BN } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';

@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 
+import { Col, Row } from '@giveth/ui-design-system';
 import { IUserProfileView } from '../UserProfile.view';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import BoostsTable from './BoostsTable';
@@ -25,7 +26,6 @@ import {
 	PublicGIVpowerContributeCard,
 } from '@/components/ContributeCard';
 import { formatWeiHelper } from '@/helpers/number';
-import { Col, Row } from '@/components/Grid';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import Routes from '@/lib/constants/Routes';
 import { StakingType } from '@/types/config';

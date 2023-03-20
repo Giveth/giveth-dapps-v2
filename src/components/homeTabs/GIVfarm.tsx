@@ -36,7 +36,7 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useFarms } from '@/context/farm.context';
 import { TopInnerContainer, ExtLinkRow } from './commons';
 import { shortenAddress } from '@/lib/helpers';
-import { Col, Container, Row } from '@/components/Grid';
+import { Col, Container, Row } from '@giveth/ui-design-system';
 
 import { GIVfrens } from '@/components/givfarm/GIVfrens';
 import GIVpowerStakingPoolCard from '../cards/GIVpowerStakingPoolCard';

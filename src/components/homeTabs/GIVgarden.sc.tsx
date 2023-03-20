@@ -16,7 +16,7 @@ import {
 	MobileD1,
 } from './commons';
 import { device, mediaQueries } from '@/lib/constants/constants';
-import { Row } from '../Grid';
+import { Row } from '@giveth/ui-design-system';
 
 export const GivGardenSection = styled.div`
 	justify-content: space-between;

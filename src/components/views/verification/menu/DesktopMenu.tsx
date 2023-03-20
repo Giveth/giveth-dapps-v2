@@ -1,8 +1,8 @@
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { B, neutralColors } from '@giveth/ui-design-system';
+import { Col } from '@giveth/ui-design-system';
 import CheckCircle from '@/components/views/verification/CheckCircle';
-import { Col } from '@/components/Grid';
 import { Shadow } from '@/components/styled-components/Shadow';
 import menuList from '@/components/views/verification/menu/menuList';
 import { useVerificationData } from '@/context/verification.context';

@@ -12,7 +12,7 @@ import SparkleAnimation from '@/animations/sparkle.json';
 import BlowingAnimation from '@/animations/blowing.json';
 import { Flex } from '../styled-components/Flex';
 import { AddTokenButton } from '../AddTokenButton';
-import { Container } from '@/components/Grid';
+import { Container } from '@giveth/ui-design-system';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import LottieControl from '@/components/LottieControl';
 import ExternalLink from '@/components/ExternalLink';

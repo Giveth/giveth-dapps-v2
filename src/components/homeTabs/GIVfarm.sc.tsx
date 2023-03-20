@@ -8,7 +8,7 @@ import {
 	TopContainer,
 } from './commons';
 import { Flex } from '../styled-components/Flex';
-import { Row } from '../Grid';
+import { Row } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 
 export const GIVfarmTopContainer = styled(TopContainer)`

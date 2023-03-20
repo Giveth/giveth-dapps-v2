@@ -10,8 +10,8 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
+import { Col, Row } from '@giveth/ui-design-system';
 import { IProjectPower } from '@/apollo/types/types';
-import { Col, Row } from '@/components/Grid';
 import { Flex } from '@/components/styled-components/Flex';
 import links from '@/lib/constants/links';
 import { CurrentRank, NextRank } from '@/components/GIVpowerRank';

@@ -65,7 +65,7 @@ import { IconGIV } from '../Icons/GIV';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import Pagination from '../Pagination';
-import { Container, Row, Col } from '@/components/Grid';
+import { Container, Row, Col } from '@giveth/ui-design-system';
 import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
