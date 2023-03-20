@@ -6,7 +6,7 @@ import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { TabItem } from '@/components/styled-components/Tabs';
 
 export const NotificationContainer = styled(Container)`
-	margin-top: 176px;
+	margin-top: 70px;
 	margin-bottom: 267px;
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 8px;
