@@ -12,12 +12,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FC, useRef, useState } from 'react';
 import { Swiper as SwiperClass } from 'swiper/types';
 import Link from 'next/link';
+import { Container, OneSideContainer } from '@giveth/ui-design-system';
 import { ICampaign } from '@/apollo/types/types';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import 'swiper/css';
 import { BlockHeader, BlockTitle } from './common';
-import { Container, OneSideContainer } from '@/components/Grid';
 import {
 	NavigationWrapper,
 	PaginationWrapper,

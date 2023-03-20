@@ -9,6 +9,7 @@ import { useIntl } from 'react-intl';
 import { BigNumber } from 'bignumber.js';
 import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
+import { Col, Container, Row } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 import StakingPoolCard from '@/components/cards/StakingPoolCard';
 import config from '@/configuration';
@@ -36,7 +37,6 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useFarms } from '@/context/farm.context';
 import { TopInnerContainer, ExtLinkRow } from './commons';
 import { shortenAddress } from '@/lib/helpers';
-import { Col, Container, Row } from '@/components/Grid';
 
 import { GIVfrens } from '@/components/givfarm/GIVfrens';
 import GIVpowerStakingPoolCard from '../cards/GIVpowerStakingPoolCard';

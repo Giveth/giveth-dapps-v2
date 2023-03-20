@@ -1,6 +1,6 @@
 import { brandColors, GLink, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Col } from '../Grid';
+import { Col } from '@giveth/ui-design-system';
 
 export const Subtitle = styled(Lead)`
 	margin-bottom: 24px;

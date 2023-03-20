@@ -11,6 +11,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 
+import { Container } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 import ProfileContributes from './ProfileContributes';
 import { IUser } from '@/apollo/types/types';
@@ -21,7 +22,6 @@ import {
 	isUserRegistered,
 	shortenAddress,
 } from '@/lib/helpers';
-import { Container } from '@/components/Grid';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
 import IncompleteProfileToast from '@/components/views/userProfile/IncompleteProfileToast';

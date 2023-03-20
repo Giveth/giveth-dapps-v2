@@ -3,12 +3,12 @@ import { brandColors, Button, H2, Lead, P } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
 
+import { Col, Row, Container } from '@giveth/ui-design-system';
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
 import { IProject } from '@/apollo/types/types';
 import { slugToProjectView } from '@/lib/routeCreators';
 import SocialBox from '@/components/views/donate/SocialBox';
 import CopyLink from '@/components/CopyLink';
-import { Col, Row, Container } from '@/components/Grid';
 import { mediaQueries } from '@/lib/constants/constants';
 import { fullPath } from '@/lib/helpers';
 import { setShowFooter } from '@/features/general/general.slice';

@@ -8,7 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import PizzaImage from '/public/images/ETHDenver-pizza.png';
-import { Col, Row } from '@/components/Grid';
+import { Col, Row } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
 
 const ImpactQuests = () => {

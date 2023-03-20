@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 
 // import SearchBox from '../SearchBox';
+import { Container } from '@giveth/ui-design-system';
 import Accordion from '../Accordion';
 import _faqContent from '@/content/FAQ';
 import { Arc } from '@/components/styled-components/Arc';
 import FlowerIcon from '/public//images/flower_faq.svg';
-import { Container } from '@/components/Grid';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 
 type TFAQ = 'General' | 'Giveth' | 'GIVeconomy';
