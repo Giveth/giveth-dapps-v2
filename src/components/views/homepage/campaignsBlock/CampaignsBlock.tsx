@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { Navigation, Pagination } from 'swiper';
+import { useIntl } from 'react-intl';
 import { Container, Row } from '@/components/Grid';
 import { BlockHeader, BlockTitle } from '../common';
 import { ICampaign } from '@/apollo/types/types';
@@ -31,12 +32,17 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 	const pagElRef = useRef<HTMLDivElement>(null);
 	const nextElRef = useRef<HTMLDivElement>(null);
 	const prevElRef = useRef<HTMLDivElement>(null);
+	const { formatMessage } = useIntl();
 
 	return (
 		<CampaignsBlockWrapper>
 			<ContainerRelative>
 				<BlockHeader>
-					<BlockTitle>What’s up on Giveth</BlockTitle>
+					<BlockTitle>
+						{formatMessage({
+							id: 'component.campaigns_block.title',
+						})}
+					</BlockTitle>
 					<SwiperPaginationWrapper>
 						<NavigationWrapper ref={prevElRef}>
 							<IconPointerLeft size={24} />
