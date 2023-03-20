@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
+import { Col, Container, Row } from '@giveth/ui-design-system';
 import {
 	OverviewBottomContainer,
 	VoteCard,
@@ -15,7 +16,6 @@ import {
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
-import { Col, Container, Row } from '@giveth/ui-design-system';
 import { StakingType } from '@/types/config';
 import VideoBlock from '@/components/VideoBlock';
 

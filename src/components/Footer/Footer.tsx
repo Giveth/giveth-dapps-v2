@@ -14,11 +14,11 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
+import { Container } from '@giveth/ui-design-system';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
-import { Container } from '@giveth/ui-design-system';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 

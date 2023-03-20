@@ -12,6 +12,7 @@ import {
 	Subline,
 	ButtonLink,
 } from '@giveth/ui-design-system';
+import { Col } from '@giveth/ui-design-system';
 import {
 	TopContainer,
 	TopInnerContainer,
@@ -22,7 +23,6 @@ import {
 import { Flex } from '../styled-components/Flex';
 import { DataBox } from '../DataBox';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Col } from '@giveth/ui-design-system';
 
 export const GIVstreamTopContainer = styled(TopContainer)`
 	overflow: hidden;
