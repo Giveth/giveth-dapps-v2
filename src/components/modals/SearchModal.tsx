@@ -10,6 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useIntl } from 'react-intl';
 import { Col, Container, Row } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
@@ -99,6 +100,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 	const [projects, setProjects] = useState<IProject[]>();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { theme } = useAppSelector(state => state.general);
+	const { formatMessage } = useIntl();
 	const router = useRouter();
 
 	useEffect(() => {
@@ -135,18 +137,24 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 		>
 			<SearchModalContainer>
 				<CloseModal theme={theme} onClick={closeModal}>
-					<ButtonText>Close</ButtonText>
+					<ButtonText>
+						{formatMessage({ id: 'label.close' })}
+					</ButtonText>
 					<IconX16 />
 				</CloseModal>
 				<SearchBox>
-					<H6 weight={700}>Find awesome projects on Giveth</H6>
+					<H6 weight={700}>
+						{formatMessage({
+							id: 'label.find_awesome_projects_on_giveth',
+						})}
+					</H6>
 					<SearchInput setTerm={setTerm} />
 				</SearchBox>
 				<Row>
 					<Col xs={12} sm={3}>
 						<Columns>
 							<Title size='large' theme={theme}>
-								Quick links
+								{formatMessage({ id: 'label.quick_links' })}
 							</Title>
 							{quickLinks.map((item, idx) => (
 								<Link
@@ -163,7 +171,9 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 					<Col xs={12} sm={6}>
 						<Columns>
 							<Title size='large' theme={theme}>
-								Featured projects
+								{formatMessage({
+									id: 'label.featured_projects',
+								})}
 							</Title>
 							{projects &&
 								projects.length > 0 &&
@@ -187,7 +197,9 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 					<Col xs={12} sm={3}>
 						<Columns>
 							<Title size='large' theme={theme}>
-								Popular categories
+								{formatMessage({
+									id: 'label.popular_categories',
+								})}
 							</Title>
 							{popular_categories.map((category, idx) => (
 								<Link
@@ -195,7 +207,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 									href={Routes.Projects + '/' + category.slug}
 								>
 									<Item theme={theme} onClick={closeModal}>
-										{category.title}
+										{formatMessage({ id: category.slug })}
 									</Item>
 								</Link>
 							))}

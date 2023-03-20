@@ -130,7 +130,9 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 					{myAccount ? (
 						<ContributeCard
 							data1={{
-								label: 'Projects Boosted',
+								label: formatMessage({
+									id: 'label.projects_boosted',
+								}),
 								value: boostedProjectsCount,
 							}}
 							data2={{

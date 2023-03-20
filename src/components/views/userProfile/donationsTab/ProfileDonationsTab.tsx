@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
 import { EDirection, EDonationStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
@@ -25,6 +26,7 @@ const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 		by: EOrderBy.CreationDate,
 		direction: EDirection.DESC,
 	});
+	const { formatMessage } = useIntl();
 
 	const changeOrder = (orderBy: EOrderBy) => {
 		if (orderBy === order.by) {
@@ -76,8 +78,14 @@ const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 					<NothingWrapper>
 						<NothingToSee
 							title={`${
-								myAccount ? "You haven't" : "This user hasn't"
-							} donated to any projects yet!`}
+								myAccount
+									? formatMessage({
+											id: 'label.you_havent_donated_to_any_projects_yet',
+									  })
+									: formatMessage({
+											id: 'label.this_user_hasnt_donated_to_any_project_yet',
+									  })
+							}`}
 						/>
 					</NothingWrapper>
 				) : (

@@ -8,6 +8,7 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from './Modal';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -21,41 +22,46 @@ interface IBridgeGIVModal extends IModal {}
 
 export const BridgeGIVModal: FC<IBridgeGIVModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	return (
 		<Modal
 			headerIcon={<IconRocketInSpace32 />}
-			headerTitle='Stake GIV on Gnosis Chain'
+			headerTitle={formatMessage({
+				id: 'label.stake_giv_on_gnosis_chain',
+			})}
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
 		>
 			<ModalContainer>
 				<P>
-					GIV staking is available on Gnosis Chain. Please bridge your
-					GIV to Gnosis Chain, then switch network and stake to earn
-					rewards.
+					{formatMessage({
+						id: 'label.giv_staking_is_available_on_gnosis_chain',
+					})}
 				</P>
 				<P>
-					Please note, it will take few minutes for your GIV to
-					bridge.
+					{formatMessage({
+						id: 'label.please_note_it_will_take_few_minutes_for_your_giv_to_bridge',
+					})}
 				</P>
 				<BridgeButton
 					isExternal
 					size='medium'
-					label='Bridge your GIV'
+					label={formatMessage({ id: 'label.bridge_your_giv' })}
 					icon={<IconExternalLink size={16} />}
 					href={links.GIV_BRIDGE}
 					target='_blank'
 				/>
 				<DescContainer>
-					If you already bridged your GIV, please switch network to
-					stake for GIVpower!
+					{formatMessage({
+						id: 'label.if_you_already_bridged_your_giv_please_switch_network',
+					})}
 				</DescContainer>
 				<SwitchNetworkButton
 					buttonType='texty'
 					size='medium'
-					label='Switch network'
+					label={formatMessage({ id: 'label.switch_network' })}
 					onClick={() => switchNetwork(config.XDAI_NETWORK_NUMBER)}
 				/>
 			</ModalContainer>

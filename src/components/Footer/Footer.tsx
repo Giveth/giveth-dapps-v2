@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import {
 	P,
+	Lead,
 	brandColors,
+	neutralColors,
 	IconDocs,
 	IconMedium,
 	IconGithub,
@@ -10,6 +13,7 @@ import {
 	Caption,
 	IconDiscord,
 } from '@giveth/ui-design-system';
+import Image from 'next/image';
 import Link from 'next/link';
 import styled from 'styled-components';
 
@@ -21,14 +25,21 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
+import { LanguageModal } from '../modals/LanguageModal';
 
 const Footer = () => {
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
 	const textColor =
 		theme === ETheme.Dark ? brandColors.deep[100] : brandColors.deep[800];
+	const isDark = theme === ETheme.Dark;
+	const [showLanguageModal, setShowLanguageModal] = useState(false);
+
 	return (
 		<FooterContainer>
+			{showLanguageModal && (
+				<LanguageModal setShowModal={setShowLanguageModal} />
+			)}
 			<ContainerStyled>
 				<LeftContainer wrap={1}>
 					<LinkColumn>
@@ -170,6 +181,20 @@ const Footer = () => {
 					</SupportUs>
 				</RightContainer>
 			</ContainerStyled>
+			<Language
+				isDark={isDark}
+				onClick={() => {
+					setShowLanguageModal(true);
+				}}
+			>
+				<Image
+					src={`/images/${isDark ? 'globe_white' : 'globe'}.svg`}
+					alt='glboe'
+					width={16}
+					height={16}
+				/>
+				<Lang>{formatMessage({ id: 'label.choose_language' })}</Lang>
+			</Language>
 		</FooterContainer>
 	);
 };
@@ -241,4 +266,24 @@ const LinkItem = styled(P)<{ color: string }>`
 
 const CaptionRed = styled(Caption)`
 	color: ${brandColors.pinky[500]};
+`;
+
+const Language = styled.div<{ isDark?: boolean }>`
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 8px;
+	margin: 24px;
+	padding: 24px 48px;
+
+	color: ${props =>
+		props.isDark ? brandColors.deep[100] : neutralColors.gray[800]};
+	${mediaQueries.laptopS} {
+		margin: 16px 0 32px 0;
+	}
+`;
+
+const Lang = styled(Lead)`
+	cursor: pointer;
 `;

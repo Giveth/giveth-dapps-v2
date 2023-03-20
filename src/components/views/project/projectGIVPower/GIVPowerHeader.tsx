@@ -10,6 +10,7 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 import { Col, Row } from '@giveth/ui-design-system';
 import { IProjectPower } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
@@ -25,41 +26,52 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 	projectPower,
 	projectFuturePower,
 }) => {
+	const { formatMessage } = useIntl();
+
 	return (
 		<Container>
 			<H5 weight={700}>
-				Boost this project with GIVpower to improve its rank!
+				{formatMessage({
+					id: 'label.boost_this_project_with_givpower',
+				})}
 			</H5>
 			<Desc>
-				Donors to higher ranked projects get more GIVbacks.
+				{formatMessage({
+					id: 'label.donors_to_higher_ranked_projects',
+				})}
 				<LearnMoreLink
 					as='a'
 					href={links.GIVPOWER_DOC}
 					size='Big'
 					target='_blank'
 				>
-					&nbsp;Learn more.
+					&nbsp;{formatMessage({ id: 'label.learn_more' })}
 				</LearnMoreLink>
 			</Desc>
 			<RanksRow>
 				<Col xs={12} md={6}>
 					<RankBox>
-						<RankTitle>Current Rank</RankTitle>
+						<RankTitle>
+							{formatMessage({ id: 'label.current_rank' })}
+						</RankTitle>
 						<CurrentRank projectPower={projectPower} />
 						<RankDescContainer gap='6px'>
 							<IconWrapper>
 								<IconAlertCircle16 />
 							</IconWrapper>
 							<Caption>
-								The rank will update at the start of the next
-								GIVbacks round.
+								{formatMessage({
+									id: 'label.the_rank_will_update_at_the_start_of_the_next_round',
+								})}
 							</Caption>
 						</RankDescContainer>
 					</RankBox>
 				</Col>
 				<Col xs={12} md={6}>
 					<RankBox>
-						<RankTitle>Projected Rank</RankTitle>
+						<RankTitle>
+							{formatMessage({ id: 'label.projected_rank' })}
+						</RankTitle>
 						<NextRank
 							projectPower={projectPower}
 							projectFuturePower={projectFuturePower}
@@ -69,8 +81,9 @@ const GIVPowerHeader: FC<IGIVPowerHeader> = ({
 								<IconAlertCircle16 />
 							</IconWrapper>
 							<Caption>
-								This is the expected rank for the next round
-								based on current GIVpower.
+								{formatMessage({
+									id: 'label.this_is_the_expected_rank_for_the_next_round',
+								})}
 							</Caption>
 						</RankDescContainer>
 					</RankBox>

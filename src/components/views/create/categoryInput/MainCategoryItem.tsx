@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { neutralColors, SemiTitle } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { Col, Row } from '@giveth/ui-design-system';
 import CheckBox from '@/components/Checkbox';
 import { ICategory, IMainCategory } from '@/apollo/types/types';
@@ -17,6 +18,7 @@ const MainCategoryItem: FC<IProps> = props => {
 		props;
 
 	const isMaxCategories = selectedCategories.length >= maxSelectedCategory;
+	const { formatMessage } = useIntl();
 
 	const onChange = (isChecked: boolean, name: string) => {
 		const newCategories = [...selectedCategories];
@@ -34,7 +36,9 @@ const MainCategoryItem: FC<IProps> = props => {
 
 	return (
 		<Container>
-			<CategoryTitle>{mainCategoryItem.title}</CategoryTitle>
+			<CategoryTitle>
+				{formatMessage({ id: mainCategoryItem.slug })}
+			</CategoryTitle>
 			<SubCategoryItems>
 				{mainCategoryItem.categories.map(subcategory => {
 					const checked = selectedCategories.find(
@@ -44,7 +48,7 @@ const MainCategoryItem: FC<IProps> = props => {
 						<SubCategory xs={6} sm={3} key={subcategory.value}>
 							<CheckBox
 								size={20}
-								label={subcategory.value!}
+								label={formatMessage({ id: subcategory.name! })}
 								checked={!!checked}
 								onChange={e => onChange(e, subcategory.name)}
 								disabled={isMaxCategories && !checked}

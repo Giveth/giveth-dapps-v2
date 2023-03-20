@@ -7,6 +7,7 @@ import {
 	Overline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
@@ -26,11 +27,12 @@ const networks = [
 const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chainId } = useWeb3React();
+	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
 
 	return (
 		<Modal
-			headerTitle='Switch Network'
+			headerTitle={formatMessage({ id: 'label.switch_network' })}
 			headerIcon={<IconNetwork32 />}
 			closeModal={closeModal}
 			isAnimating={isAnimating}
@@ -56,7 +58,7 @@ const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 									styleType='Small'
 									theme={theme}
 								>
-									Selected
+									{formatMessage({ id: 'label.selected' })}
 								</SelectedNetwork>
 							)}
 						</NetworkItem>

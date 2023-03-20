@@ -1,15 +1,15 @@
 import styled from 'styled-components';
 import { brandColors, Caption, neutralColors } from '@giveth/ui-design-system';
 import { FC, useEffect, useRef } from 'react';
+import { useIntl } from 'react-intl';
 import { Flex } from '../styled-components/Flex';
 import {
 	convertRawDataToHTML,
 	convertBackendIconsToComponents,
 } from '@/helpers/html';
-import { durationToString } from '@/lib/helpers';
+import { getTimeAgo } from '@/lib/helpers';
 import { INotification } from '@/features/notification/notification.types';
 import { setNotificationRead } from '@/features/notification/notification.services';
-import { getNowUnixMS } from '@/helpers/time';
 
 interface INotificationBox {
 	notification: INotification;
@@ -23,6 +23,7 @@ export const NotificationBox: FC<INotificationBox> = ({
 	markOneNotificationRead,
 }) => {
 	const NotifRef = useRef(null);
+	const { locale } = useIntl();
 
 	useEffect(() => {
 		if (notification.isRead) return;
@@ -67,12 +68,10 @@ export const NotificationBox: FC<INotificationBox> = ({
 					{convertRawDataToHTML(notification)}
 				</ConvertedTextContainer>
 				<NotificationTime medium>
-					{durationToString(
-						getNowUnixMS() -
-							new Date(notification.createdAt).getTime(),
-						1,
-						true,
-					) + ' ago'}
+					{getTimeAgo(
+						new Date(notification.createdAt).getTime(),
+						locale,
+					)}
 				</NotificationTime>
 			</NotificationContent>
 		</NotificationBoxContainer>

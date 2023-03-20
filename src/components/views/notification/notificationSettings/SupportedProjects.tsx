@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { useNotificationSettingsData } from '@/context/notificationSettings.context';
 import { ENotificationCategory } from '@/features/notification/notification.types';
 import { GrayBar } from '@/components/views/notification/notification.sc';
@@ -12,6 +13,7 @@ import { SectionItem } from '@/components/views/notification/notificationSetting
 const SupportedProjects = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [itemsHeight, setItemsHeight] = useState(0);
+	const { formatMessage } = useIntl();
 
 	const { notificationSettings } = useNotificationSettingsData();
 	const supportedProjects = notificationSettings?.filter(
@@ -38,8 +40,12 @@ const SupportedProjects = () => {
 			<GrayBar />
 			<SectionContainer>
 				<SectionHeader
-					title='Supported Project Activity'
-					description='Notifications related to projects you liked, donated to, or boosted'
+					title={formatMessage({
+						id: 'label.supported_project_activity',
+					})}
+					description={formatMessage({
+						id: 'label.notifications_related_to_projects_you_liked_donated_boosted',
+					})}
 					isOpen={isOpen}
 					onClick={() => setIsOpen(!isOpen)}
 				/>
