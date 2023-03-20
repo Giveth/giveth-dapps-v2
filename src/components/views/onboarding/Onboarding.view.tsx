@@ -2,7 +2,7 @@ import { B, brandColors, H5 } from '@giveth/ui-design-system';
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { Container } from '@/components/Grid';
+import { Container } from '@giveth/ui-design-system';
 import DoneStep from './DoneStep';
 import InfoStep from './InfoStep';
 import PhotoStep from './PhotoStep';

@@ -6,6 +6,7 @@ import { captureException } from '@sentry/nextjs';
 
 import { useForm } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
+import { Col, Row } from '@giveth/ui-design-system';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { SkipOnboardingModal } from '@/components/modals/SkipOnboardingModal';
 import { gToast, ToastType } from '@/components/toasts';
@@ -17,7 +18,6 @@ import {
 	SkipButton,
 } from './common';
 import { OnboardSteps } from './Onboarding.view';
-import { Col, Row } from '@/components/Grid';
 import Input from '@/components/Input';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';

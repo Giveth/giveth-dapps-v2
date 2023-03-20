@@ -9,6 +9,7 @@ import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
+import { Col, Container, Row } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
 import {
 	GIVbacksTopContainer,
@@ -39,7 +40,6 @@ import { formatDate } from '@/lib/helpers';
 import { GIVBackExplainModal } from '../modals/GIVBackExplain';
 import { NoWrap, TopInnerContainer } from './commons';
 import links from '@/lib/constants/links';
-import { Col, Container, Row } from '@/components/Grid';
 import Routes from '@/lib/constants/Routes';
 import { BN } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';

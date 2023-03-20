@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import { Col, Row } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ContentSelector from '@/components/views/verification/ContentSelector';
 import HintModal from '@/components/views/verification/HintModal';
-import { Col, Row } from '@/components/Grid';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import DesktopMenu from '@/components/views/verification/menu/DesktopMenu';

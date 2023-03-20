@@ -14,8 +14,8 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
+import { Container } from '@giveth/ui-design-system';
 import links from '@/lib/constants/links';
-import { Container } from '@/components/Grid';
 import { mediaQueries } from '@/lib/constants/constants';
 import Routes from '@/lib/constants/Routes';
 import ExternalLink from '@/components/ExternalLink';
