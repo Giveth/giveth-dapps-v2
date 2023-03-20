@@ -896,5 +896,7 @@
 	"modal.news_letter": "",
 	"section.we_wont_send_it": "",
 	"section.subscribe_to_our_newsletter": "",
-	"section.get_the_latest_updates": ""
+	"section.get_the_latest_updates": "",
+	"label.explore": "",
+	"component.campaigns_block.title": ""
 }

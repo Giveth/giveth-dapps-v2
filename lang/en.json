@@ -912,5 +912,7 @@
 	"modal.news_letter": "Newsletter sign up",
 	"section.we_wont_send_it": "We won’t send it every 5 second! Promise :)",
 	"section.subscribe_to_our_newsletter": "Subscribe to our newsletter and get all updates straight to your mailbox!",
-	"section.get_the_latest_updates": "Get the latest updates"
+	"section.get_the_latest_updates": "Get the latest updates",
+	"label.explore": "Explore",
+	"component.campaigns_block.title": "What’s up on Giveth"
 }
