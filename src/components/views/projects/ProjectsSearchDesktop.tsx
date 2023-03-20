@@ -24,9 +24,11 @@ const ProjectsSearchDesktop = () => {
 	};
 
 	useEffect(() => {
+		if (inputRef.current) {
+			inputRef.current.focus();
+		}
 		setSearchValue(variables.searchTerm);
-		inputRef?.current?.focus();
-	}, [variables.searchTerm]);
+	}, [variables.searchTerm, inputRef.current]);
 
 	return (
 		<SearchContainer className='fadeIn'>
