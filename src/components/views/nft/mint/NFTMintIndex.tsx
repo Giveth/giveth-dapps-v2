@@ -64,7 +64,7 @@ export const NFTMintIndex = () => {
 	return (
 		<MintViewContainer>
 			<OvalVerticalGradient />
-			<OvalHorizontalGradient />
+			<StyledOvalHorizontalGradient />
 			<MintContainer>
 				<Row style={{ paddingBottom: '20px' }}>
 					<Col xs={12} sm={8} md={6}>
@@ -114,8 +114,8 @@ export const NFTMintIndex = () => {
 									<Image
 										src='/images/yellow_flower_full.svg'
 										alt='yellow flower'
-										width={360}
-										height={360}
+										width={320}
+										height={320}
 									/>
 								</ContentWrapperCenter>
 							</>
@@ -150,8 +150,8 @@ export const NFTMintIndex = () => {
 									<Image
 										src='/images/yellow_flower_full.svg'
 										alt='yellow flower'
-										width={360}
-										height={360}
+										width={320}
+										height={320}
 										style={{
 											margin: 'auto',
 											display: 'block',
@@ -255,7 +255,6 @@ const MintAgainButton = styled(Button)`
 
 const ImagesWrapper = styled.div`
 	position: relative;
-	height: 1000px;
 `;
 
 const ImageWrapper = styled.div`
@@ -274,8 +273,8 @@ const ImageWrapper = styled.div`
 
 const Image1 = styled(ImageWrapper)`
 	z-index: 2;
+	display: none;
 	${mediaQueries.tablet} {
-		display: none;
 	}
 	${mediaQueries.laptopS} {
 		display: block;
@@ -297,5 +296,12 @@ const Image2 = styled(ImageWrapper)`
 	${mediaQueries.laptopS} {
 		right: 92px;
 		top: 200px;
+	}
+`;
+
+const StyledOvalHorizontalGradient = styled(OvalHorizontalGradient)`
+	display: none;
+	${mediaQueries.tablet} {
+		display: block;
 	}
 `;
