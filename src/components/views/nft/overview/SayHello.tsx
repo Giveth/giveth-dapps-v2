@@ -5,7 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
 import { OvalHorizontalGradient, OvalVerticalGradient } from '../common.styles';
-import Routes from '@/lib/constants/Routes';
+// uncomment this line when minting is live
+// import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/lib/constants/constants';
 
 const SayHelloSection = () => {
@@ -22,9 +23,21 @@ const SayHelloSection = () => {
 							unlock your unique Giveth flair by minting one of
 							the first NFT PFP artworks inspired by Giveth.
 						</QuoteText>
+						{/* replace CustoLink with this when the minting is live */}
+						{/* 						
 						<CustomLink href={Routes.NFTMint} passHref>
 							<MintNowButton
 								label='Mint Now'
+								linkType='primary'
+							/>
+						</CustomLink> */}
+						<CustomLink
+							href='https://medium.com/giveth/the-givers-nfts-for-the-giveth-community-fa335ef9db01'
+							passHref
+							target='_blank'
+						>
+							<MintNowButton
+								label='Learn More'
 								linkType='primary'
 							/>
 						</CustomLink>
