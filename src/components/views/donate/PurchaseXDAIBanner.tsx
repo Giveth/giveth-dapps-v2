@@ -28,7 +28,7 @@ const PurchaseXDAI: FC = () => {
 			<BgImage />
 			<Content>
 				<Title>
-					{formatMessage({ id: 'label.buy_xdai_with_fiat' })}{' '}
+					{formatMessage({ id: 'label.get_crypto_with_mtpelerin' })}{' '}
 					<IconSpark size={32} color={brandColors.giv[500]} />
 				</Title>
 				<Lead>

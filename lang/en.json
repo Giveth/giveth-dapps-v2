@@ -1225,5 +1225,11 @@
 	"label.coming_soon": "Coming soon...",
 	"label.getting_started": "Getting Started",
 	"label.the_mt_pelerin_onramp_allows_you_to_use_a_credit_card_or_bank_transfer": "The Mt Pelerin 'onramp' allows you to use a credit card or bank transfer to get crypto in your web3 wallet to donate. First, select the method of payment (bank transfer or credit card), and then select the currency you want to use to purchase crypto. Then, select the crypto currency you wish to purchase. The currency xDAI and network Gnosis Chain will be selected by default. Finally, click 'Buy'.",
-	"label.you_can_wait_on_this_page_until_the_payment_goes_through": "You can wait on this page until the payment goes through, or you can close it. If the payment is successful, the funds will automatically appear in your chosen wallet after some time. Note: If you click 'Close', you will be redirected back to the start and will not get to the next page."
+	"label.you_can_wait_on_this_page_until_the_payment_goes_through": "You can wait on this page until the payment goes through, or you can close it. If the payment is successful, the funds will automatically appear in your chosen wallet after some time. Note: If you click 'Close', you will be redirected back to the start and will not get to the next page.",
+	"label.get_crypto_with_mtpelerin": "Get Crypto with Mt Pelerin",
+	"label.use_a_bank_transfer_or_credit_Card": "Use a bank transfer or credit card to purchase crypto and deposit it directly into your web3 wallet.",
+	"label.crypto_made_easy": "Crypto made easy",
+	"label.thanks_to_mtpelerin_you_can_onramp_your_dollars": "Thanks to Mt Pelerin, you can 'onramp' your dollars and get the crypto you want to donate to projects. There is a 0% fee for onramping funds under $500/year, and they charge a small fee for anything over that.",
+	"label.the_funds_are_sent_to_your_wallet_within_minutes": "The funds are sent to your wallet within minutes with zero gas fees",
+	"label.the_service_is_a_kycfree_authorized_financial_intermediary": "The service is a KYC-free authorized financial intermediary based in Switzerland"
 }

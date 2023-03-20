@@ -10,10 +10,12 @@ const MtpelerinBanner: FC = () => {
 	return (
 		<Container>
 			<Content>
-				<Title>{formatMessage({ id: 'label.mtpelerin_ramp' })}</Title>
+				<Title>
+					{formatMessage({ id: 'label.get_crypto_with_mtpelerin' })}
+				</Title>
 				<Lead>
 					{formatMessage({
-						id: 'label.purchase_xdai_with_mtpelerin',
+						id: 'label.use_a_bank_transfer_or_credit_Card',
 					})}
 				</Lead>
 			</Content>

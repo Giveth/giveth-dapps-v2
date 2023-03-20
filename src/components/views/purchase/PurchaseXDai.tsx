@@ -19,12 +19,12 @@ const PurchaseXDai: FC = () => {
 					<Left>
 						<Title>
 							{formatMessage({
-								id: 'label.but_xdai_with_fiat_made_easy',
+								id: 'label.crypto_made_easy',
 							})}
 						</Title>
 						<Desc>
 							{formatMessage({
-								id: 'label.mtpelerin_pricing_starts_at_zero',
+								id: 'label.thanks_to_mtpelerin_you_can_onramp_your_dollars',
 							})}
 						</Desc>
 						<Info>
@@ -37,13 +37,13 @@ const PurchaseXDai: FC = () => {
 							<P>
 								&bull;{' '}
 								{formatMessage({
-									id: 'label.zero_gas_fees_straight_to_your_wallet',
+									id: 'label.the_funds_are_sent_to_your_wallet_within_minutes',
 								})}
 							</P>
 							<P>
 								&bull;
 								{formatMessage({
-									id: 'label.kyc_less_the_service_is_based_in_sw',
+									id: 'label.the_service_is_a_kycfree_authorized_financial_intermediary',
 								})}
 							</P>
 						</Info>
