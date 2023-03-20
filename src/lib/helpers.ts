@@ -15,7 +15,6 @@ import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
-import Routes from '@/lib/constants/Routes';
 import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
@@ -380,17 +379,7 @@ export async function signMessage(
 	}
 }
 
-export const checkLinkActive = (route: string, href: string) => {
-	if (route === href) {
-		return true;
-	}
-	if (href === Routes.GIVECONOMY) {
-		return isGivEconomyRoute(route);
-	}
-	return false;
-};
-
-export const isGivEconomyRoute = (route: string) => {
+export const isGIVeconomyRoute = (route: string) => {
 	const givEconomyRoute = giveconomyTabs.find(
 		giveconomyTab => giveconomyTab.href === route,
 	);
