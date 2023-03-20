@@ -48,7 +48,7 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 				activate(selected.connector, showToastError, true)
 					.then(() => {
 						//Temporary Disable FirstWelcomeModal
-						// const isGIVeconomyRoute = isGivEconomyRoute(
+						// const isGIVeconomyRoute = isGIVeconomyRoute(
 						// 	router.route,
 						// );
 						// const isModalShowedBefor =

@@ -385,12 +385,12 @@ export const checkLinkActive = (route: string, href: string) => {
 		return true;
 	}
 	if (href === Routes.GIVECONOMY) {
-		return isGivEconomyRoute(route);
+		return isGIVeconomyRoute(route);
 	}
 	return false;
 };
 
-export const isGivEconomyRoute = (route: string) => {
+export const isGIVeconomyRoute = (route: string) => {
 	const givEconomyRoute = giveconomyTabs.find(
 		giveconomyTab => giveconomyTab.href === route,
 	);
