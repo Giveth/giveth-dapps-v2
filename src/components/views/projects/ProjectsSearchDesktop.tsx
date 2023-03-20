@@ -1,7 +1,7 @@
 import { IconSearch, neutralColors } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Input from '@/components/Input';
 import IconEnter from '../../../../public/images/icons/enter.svg';
@@ -13,6 +13,7 @@ const ProjectsSearchDesktop = () => {
 	const { variables, setVariables } = useProjectsContext();
 	const [searchValue, setSearchValue] = useState(variables.searchTerm);
 	const router = useRouter();
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const handleSearch = (searchTerm?: string) =>
 		setVariables(prevVariables => ({ ...prevVariables, searchTerm }));
@@ -23,8 +24,11 @@ const ProjectsSearchDesktop = () => {
 	};
 
 	useEffect(() => {
+		if (inputRef.current) {
+			inputRef.current.focus();
+		}
 		setSearchValue(variables.searchTerm);
-	}, [variables.searchTerm]);
+	}, [variables.searchTerm, inputRef.current]);
 
 	return (
 		<SearchContainer className='fadeIn'>
@@ -39,6 +43,7 @@ const ProjectsSearchDesktop = () => {
 					value={searchValue}
 					onChange={e => setSearchValue(e.target.value)}
 					LeftIcon={<IconSearch color={neutralColors.gray[600]} />}
+					ref={inputRef}
 				/>
 			</form>
 			{variables.searchTerm ? (
