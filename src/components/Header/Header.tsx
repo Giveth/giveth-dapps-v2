@@ -50,6 +50,7 @@ import { NotificationButtonWithMenu } from '../menu/NotificationButtonWithMenu';
 import { HomeSidebar } from '../sidebar/HomeSidebar';
 import { fetchMainCategories } from '@/features/general/general.thunk';
 import { ItemsProvider } from '@/context/Items.context';
+import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -58,7 +59,6 @@ export interface IHeader {
 
 const Header: FC<IHeader> = () => {
 	const [showHeader, setShowHeader] = useState(true);
-	const [isGIVeconomyRoute, setIsGIVeconomyRoute] = useState(false);
 	const [showBackBtn, setShowBackBtn] = useState(false);
 
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
@@ -76,6 +76,7 @@ const Header: FC<IHeader> = () => {
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const isMobile = useMediaQuery(device.mobileL);
+	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
 	const handleBack = () => {
 		const calculateSlug = () => {
@@ -107,7 +108,6 @@ const Header: FC<IHeader> = () => {
 	}, []);
 
 	useEffect(() => {
-		setIsGIVeconomyRoute(router.route.startsWith('/giv'));
 		setShowBackBtn(
 			router.route.startsWith(Routes.CreateProject) ||
 				router.route.startsWith(Routes.Verification) ||
@@ -204,7 +204,9 @@ const Header: FC<IHeader> = () => {
 						{!isDesktop && (
 							<HomeButton gap='4px' onClick={openSidebar}>
 								<IconMenu24 />
-								<GLink size='Big'>Home</GLink>
+								<GLink size='Big'>
+									{formatMessage({ id: 'label.home' })}
+								</GLink>
 							</HomeButton>
 						)}
 					</Flex>
@@ -212,7 +214,10 @@ const Header: FC<IHeader> = () => {
 			</Flex>
 			{isDesktop && !showBackBtn && (
 				<HeaderLinks theme={theme}>
-					<LinkWithMenu title='Projects' isHeaderShowing={showHeader}>
+					<LinkWithMenu
+						title={formatMessage({ id: 'label.projects' })}
+						isHeaderShowing={showHeader}
+					>
 						<ProjectsMenu />
 					</LinkWithMenu>
 					<LinkWithMenu
@@ -223,7 +228,9 @@ const Header: FC<IHeader> = () => {
 					</LinkWithMenu>
 					<HeaderLink theme={theme}>
 						<Link href={Routes.Join}>
-							<GLink size='Big'>Community</GLink>
+							<GLink size='Big'>
+								{formatMessage({ id: 'label.community' })}
+							</GLink>
 						</Link>
 					</HeaderLink>
 					<SearchButton
@@ -232,7 +239,7 @@ const Header: FC<IHeader> = () => {
 					>
 						<Flex alignItems='center' gap='16px'>
 							<GLinkNoWrap size='Big'>
-								Search projects
+								{formatMessage({ id: 'label.search_projects' })}
 							</GLinkNoWrap>
 							<IconSearch24 />
 						</Flex>

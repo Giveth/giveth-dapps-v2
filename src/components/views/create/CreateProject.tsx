@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { Container } from '@giveth/ui-design-system';
 import {
 	ACTIVATE_PROJECT,
 	CREATE_PROJECT,
@@ -49,7 +50,6 @@ import config from '@/configuration';
 import CheckBox from '@/components/Checkbox';
 import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import { Container } from '@/components/Grid';
 import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';

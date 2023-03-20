@@ -9,8 +9,8 @@ import {
 } from '@giveth/ui-design-system';
 import CalendarWhite from '/public/images/calendar-white.svg';
 import Image from 'next/image';
+import { Col, Container, Row } from '@giveth/ui-design-system';
 import CalendarItem from '@/components/views/landings/EthDenver/givethTalks/CalendarItem';
-import { Col, Container, Row } from '@/components/Grid';
 import { Flex } from '@/components/styled-components/Flex';
 
 const GivethTalks = () => {

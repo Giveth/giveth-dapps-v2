@@ -1,6 +1,7 @@
 import { ButtonLink, H6, Lead } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useVerificationData } from '@/context/verification.context';
 import LoadingVerification from './Loading';
@@ -37,15 +38,19 @@ export const VerificationStatusReport = () => {
 function Submitted() {
 	const router = useRouter();
 	const { slug } = router.query;
+	const { formatMessage } = useIntl();
 
 	return (
 		<>
-			<H6 weight={700}>Submitted</H6>
+			<H6 weight={700}>{formatMessage({ id: 'label.submitted' })}</H6>
 			<Lead>
-				Your project is now submitted, our team will check your request.
+				{formatMessage({ id: 'label.your_project_is_now_submitted' })}
 			</Lead>
 			<Link href={slugToProjectView(slug as string)}>
-				<ButtonLink size='small' label='GO TO THE PROJECT' />
+				<ButtonLink
+					size='small'
+					label={formatMessage({ id: 'label.go_to_projets_page' })}
+				/>
 			</Link>
 			<VCImageContainer>
 				<Link href='/'>
@@ -64,6 +69,7 @@ function Submitted() {
 function Verified() {
 	const router = useRouter();
 	const { slug } = router.query;
+	const { formatMessage } = useIntl();
 
 	return (
 		<>
@@ -73,15 +79,19 @@ function Verified() {
 				height={80}
 				alt='success icon'
 			/>
-			<H6 weight={700}>Well Done</H6>
+			<H6 weight={700}>{formatMessage({ id: 'label.well_done' })}</H6>
 			<Lead>
-				Congratulations!
+				{formatMessage({ id: 'label.congratulations' })}
 				<br />
-				Your project is now verified, so the donors may have GIVbacks
-				for their donations to your projects.
+				{formatMessage({
+					id: 'label.your_project_is_now_verified_so_the_donors_may_have_givbacks',
+				})}
 			</Lead>
 			<Link href={slugToProjectView(slug as string)}>
-				<ButtonLink size='small' label='GO TO THE PROJECT' />
+				<ButtonLink
+					size='small'
+					label={formatMessage({ id: 'label.go_to_projets_page' })}
+				/>
 			</Link>
 			<VCImageContainer>
 				<Link href='/'>

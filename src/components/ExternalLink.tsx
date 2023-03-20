@@ -30,6 +30,7 @@ const ExternalLink = (props: {
 
 const StyledGLink = styled(GLink)`
 	color: ${props => props.color || 'inherit'};
+	font-size: inherit;
 `;
 const StyledLink = styled.a<{ fullWidth?: boolean }>`
 	display: ${props => (props.fullWidth ? 'block' : 'inline-block')};

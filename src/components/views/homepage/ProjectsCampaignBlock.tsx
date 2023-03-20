@@ -7,17 +7,18 @@ import {
 	mediaQueries,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FC, useRef, useState } from 'react';
 import { Swiper as SwiperClass } from 'swiper/types';
 import Link from 'next/link';
+import { Container, OneSideContainer } from '@giveth/ui-design-system';
 import { ICampaign } from '@/apollo/types/types';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import 'swiper/css';
 import { BlockHeader, BlockTitle } from './common';
-import { Container, OneSideContainer } from '@/components/Grid';
 import {
 	NavigationWrapper,
 	PaginationWrapper,
@@ -37,6 +38,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 	const prevElRef = useRef<HTMLDivElement>(null);
 
 	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
+	const { formatMessage } = useIntl();
 
 	return (
 		<>
@@ -65,7 +67,9 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 						<Link href={campaignLinkGenerator(campaign) || ''}>
 							<Button
 								buttonType='texty-primary'
-								label='EXPLORE'
+								label={formatMessage({
+									id: 'page.projects.title.explore',
+								})}
 								icon={<IconChevronRight32 />}
 							/>
 						</Link>

@@ -5,13 +5,13 @@ import { brandColors, neutralColors, P } from '@giveth/ui-design-system';
 import Link from 'next/link';
 
 import { useIntl } from 'react-intl';
+import { Container } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 import ProfileDonationsTab from './donationsTab/ProfileDonationsTab';
 import ProfileLikedTab from './ProfileLikedTab';
 import ProfileProjectsTab from './projectsTab/ProfileProjectsTab';
 import ProfileOverviewTab from './ProfileOverviewTab';
 import { IUserProfileView } from './UserProfile.view';
-import { Container } from '@/components/Grid';
 import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
 import { profileTabs } from '@/lib/constants/Routes';
 import { removeQueryParam } from '@/helpers/url';
@@ -63,12 +63,16 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 			<ProfileTabsContainer>
 				<Link href={pathname + profileTabs.overview}>
 					<ProfileTab active={tab === EProfile.OVERVIEW}>
-						Overview
+						{formatMessage({ id: 'label.overview' })}
 					</ProfileTab>
 				</Link>
 				<Link href={pathname + profileTabs.givpower}>
 					<ProfileTab active={tab === EProfile.GIVPOWER}>
-						{`${myAccount ? 'My ' : ''} GIVpower`}
+						{`${
+							myAccount
+								? formatMessage({ id: 'label.my_givpower' })
+								: 'GIVpower'
+						}`}
 						{myAccount && user?.boostedProjectsCount !== 0 && (
 							<Count active={tab === EProfile.GIVPOWER}>
 								{user?.boostedProjectsCount}

@@ -6,12 +6,15 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import AutoSave from '@/components/AutoSave';
 
 const HeaderSection = () => {
+	const { formatMessage } = useIntl();
+
 	return (
 		<Header>
 			<HeaderTop>
@@ -20,15 +23,17 @@ const HeaderSection = () => {
 						<IconArrowLeft size={20} />
 					</BackButton>
 				</InternalLink>
-				<H5 weight={700}>Notification Settings</H5>
+				<H5 weight={700}>
+					{formatMessage({ id: 'label.notifications_settings' })}
+				</H5>
 			</HeaderTop>
 			<AutoSaveContainer>
 				<AutoSave />
 			</AutoSaveContainer>
 			<Lead>
-				Change your settings at any time to adjust how and when you see
-				notifications. Important notifications outside of your settings
-				may still be sent to you.
+				{formatMessage({
+					id: 'label.change_your_settings_at_any_time_to_adjust',
+				})}
 			</Lead>
 		</Header>
 	);

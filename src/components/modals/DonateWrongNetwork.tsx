@@ -11,8 +11,10 @@ import {
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
+import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -24,7 +26,6 @@ import NetworkLogo from '../NetworkLogo';
 import { NetworkItem, SelectedNetwork } from './SwitchNetwork';
 import { useAppSelector } from '@/features/hooks';
 import { Flex, FlexCenter } from '../styled-components/Flex';
-import { mediaQueries } from '@/lib/constants/constants';
 import Routes from '@/lib/constants/Routes';
 
 interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
@@ -39,6 +40,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { setShowModal, acceptedChains } = props;
 	const { chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
 
@@ -58,7 +60,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerTitle='Switch Network'
+			headerTitle={formatMessage({ id: 'label.switch_network' })}
 			headerIcon={<IconNetwork32 />}
 			hiddenClose
 			headerTitlePosition='left'
@@ -66,10 +68,14 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 			<CustomHr margin='24px' />
 			<ModalContainer>
 				<Lead>
-					Sorry, this project doesn’t support your current network.
+					{formatMessage({
+						id: 'label.sorry_this_projet_doesnt_support_your_current_net',
+					})}
 				</Lead>
 				<br />
-				<Lead>Please switch your network</Lead>
+				<Lead>
+					{formatMessage({ id: 'label.please_switch_your_network' })}
+				</Lead>
 				<br />
 				<CustomFlex>
 					{eligibleNetworks.map(network => {
@@ -91,7 +97,9 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 										styleType='Small'
 										theme={theme}
 									>
-										Selected
+										{formatMessage({
+											id: 'label.selected',
+										})}
 									</SelectedNetwork>
 								)}
 							</NetworkItem>
@@ -101,11 +109,15 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 				<br />
 				<CustomHr margin='0' />
 				<FlexCenter direction='column'>
-					<FooterText>or</FooterText>
+					<FooterText>{formatMessage({ id: 'label.or' })}</FooterText>
 					<Link href={`${Routes.Project}/${slug}`}>
 						<Flex gap='12px' alignItems='center'>
 							<IconBackward24 color={brandColors.giv[500]} />
-							<BackButton>GO BACK TO PROJECT DETAILS</BackButton>
+							<BackButton>
+								{formatMessage({
+									id: 'label.go_back_to_project_details',
+								})}
+							</BackButton>
 						</Flex>
 					</Link>
 				</FlexCenter>

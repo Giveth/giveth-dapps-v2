@@ -32,6 +32,29 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const count = filtersCount + campaignCount;
 		const router = useRouter();
 
+		const projectFeatures = [
+			{
+				label: formatMessage({ id: 'label.accepts_giv' }),
+				value: EProjectsFilter.ACCEPT_GIV,
+			},
+			{
+				label: formatMessage({ id: 'label.verified' }),
+				value: EProjectsFilter.VERIFIED,
+			},
+			{
+				label: formatMessage({ id: 'label.boosted_with_giv_power' }),
+				value: EProjectsFilter.BOOSTED_WITH_GIVPOWER,
+			},
+			{
+				label: formatMessage({ id: 'label.from_giving_block' }),
+				value: EProjectsFilter.GIVING_BLOCK,
+			},
+			{
+				label: formatMessage({ id: 'label.accepts_funds_on_gnosis' }),
+				value: EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
+			},
+		];
+
 		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
 			if (e) {
 				setVariables({
@@ -125,20 +148,6 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 );
 
 FilterMenu.displayName = 'FilterMenu';
-
-const projectFeatures = [
-	{ label: 'Accepts GIV', value: EProjectsFilter.ACCEPT_GIV },
-	{ label: 'Verified', value: EProjectsFilter.VERIFIED },
-	{
-		label: 'Boosted with GIVpower',
-		value: EProjectsFilter.BOOSTED_WITH_GIVPOWER,
-	},
-	{ label: 'From GivingBlock', value: EProjectsFilter.GIVING_BLOCK },
-	{
-		label: 'Accepts Funds on Gnosis',
-		value: EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
-	},
-];
 
 const ButtonStyled = styled(Button)`
 	margin: 0 auto;

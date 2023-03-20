@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { H4, B, brandColors, Caption } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
+import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
@@ -26,6 +27,7 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 	const theme = useAppSelector(state => state.general.theme);
 
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		if (chainId === targetNetwork) {
@@ -36,7 +38,7 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 	const NetworkName =
 		targetNetwork === config.MAINNET_NETWORK_NUMBER
 			? 'Ethereum Mainnet'
-			: 'Ethereum Mainnet or Gnosis Chain';
+			: formatMessage({ id: 'label.ethereum_mainnet_or_gnosis_chain' });
 
 	return (
 		<Modal closeModal={closeModal} isAnimating={isAnimating}>
@@ -49,12 +51,24 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 						<IconGnosisChain size={64} />
 					</>
 				)}
-				<Title theme={theme}>Switch to {NetworkName}</Title>
-				<B>Please switch your wallet network to {NetworkName}.</B>
+				<Title theme={theme}>
+					{formatMessage(
+						{ id: 'label.switch_to_network_name' },
+						{ networkNames: NetworkName },
+					)}
+				</Title>
+				<B>
+					{formatMessage(
+						{
+							id: 'label.please_switch_your_wallet_net_to_net_name',
+						},
+						{ networkName: NetworkName },
+					)}
+				</B>
 				<SwitchCaption
 					onClick={() => switchNetwork(config.MAINNET_NETWORK_NUMBER)}
 				>
-					Switch network
+					{formatMessage({ id: 'label.switch_network' })}
 				</SwitchCaption>
 			</ChangeNetworkModalContainer>
 		</Modal>

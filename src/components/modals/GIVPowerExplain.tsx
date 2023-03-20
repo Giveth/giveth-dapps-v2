@@ -31,7 +31,7 @@ export const GIVPowerExplainModal: FC<IModal> = ({ setShowModal }) => {
 		>
 			<GIVPowerExplainContainer>
 				<GivPowerContainer>
-					<H6>You have</H6>
+					<H6>{formatMessage({ id: 'label.you_have' })}</H6>
 					<AmountContainer>
 						<IconRocketInSpace32 color={brandColors.mustard[500]} />
 						<H5>0</H5>
@@ -39,12 +39,9 @@ export const GIVPowerExplainModal: FC<IModal> = ({ setShowModal }) => {
 					</AmountContainer>
 				</GivPowerContainer>
 				<Desc>
-					You can boost your favorite projects with GIVpower or
-					delegate to community top supporters. GIVpower allows you to
-					influence the ranking of projects on Giveth. Get GIVpower
-					when you stake &amp; lock GIV. Top ranked projects from
-					GIVpower get additional matching funds &amp; their donors
-					get more GIVbacks.
+					{formatMessage({
+						id: 'label.you_can_boost_your_favorite_projects',
+					})}
 					<GLink
 						onClick={() => setShowModal(false)}
 						as='a'
@@ -59,7 +56,7 @@ export const GIVPowerExplainModal: FC<IModal> = ({ setShowModal }) => {
 				</Desc>
 
 				<BoostButton
-					label='BOOST PROJECT'
+					label={formatMessage({ id: 'label.boost_project' })}
 					onClick={() => {
 						setShowModal(false);
 					}}

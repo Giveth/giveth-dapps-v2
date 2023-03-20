@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { ItemsWrapper, SectionContainer } from './common/common.sc';
 import SectionHeader from './common/SectionHeader';
 import { SectionItem } from './common/SectionItem';
@@ -9,6 +10,7 @@ import { ENotificationCategory } from '@/features/notification/notification.type
 const GIVeconomySection = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [itemsHeight, setItemsHeight] = useState(0);
+	const { formatMessage } = useIntl();
 
 	const { notificationSettings } = useNotificationSettingsData();
 	const givEconomyItems = notificationSettings?.filter(
@@ -31,8 +33,10 @@ const GIVeconomySection = () => {
 			<GrayBar />
 			<SectionContainer>
 				<SectionHeader
-					title='GIVeconomy activities'
-					description='All notifications related to GIVeconomy'
+					title={formatMessage({ id: 'label.giveconomy_activities' })}
+					description={formatMessage({
+						id: 'label.all_notifications_related_to_giveconomy',
+					})}
 					isOpen={isOpen}
 					onClick={() => setIsOpen(!isOpen)}
 				/>

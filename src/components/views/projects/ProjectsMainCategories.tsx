@@ -1,5 +1,6 @@
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper';
 import 'swiper/css';
@@ -16,6 +17,8 @@ interface IProjectsFilterProps {
 function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 	const projectsRoute = Routes.Projects + '/';
 	const { query } = useRouter();
+	const { formatMessage } = useIntl();
+
 	const handleIsSelected = (categorySlug: string) => {
 		if (!query?.slug) {
 			return categorySlug === 'all';
@@ -55,7 +58,7 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 						<MainCategoryItem
 							isSelected={handleIsSelected(category.slug)}
 						>
-							{category.title}
+							{formatMessage({ id: category.slug })}
 						</MainCategoryItem>
 					</InternalLink>
 				</SwiperSlide>

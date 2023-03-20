@@ -6,6 +6,7 @@ import { Caption, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 
+import { Col, Row } from '@giveth/ui-design-system';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import ProjectDonateCard from './projectDonateCard/ProjectDonateCard';
@@ -25,7 +26,6 @@ import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { compareAddresses, isSSRMode, showToastError } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
-import { Col, Row } from '@/components/Grid';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
 

@@ -11,11 +11,11 @@ import {
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import React from 'react';
+import { Col, Row } from '@giveth/ui-design-system';
 import { OnboardStep } from './common';
 import { Flex } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
-import { Col, Row } from '@/components/Grid';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { fetchUserByAddress } from '@/features/user/user.thunks';

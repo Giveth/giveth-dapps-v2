@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
-import { Row, Col } from '@/components/Grid';
+import { Row, Col } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
 import { GsButton, IGsDataBox } from '../homeTabs/GIVstream.sc';
 import config from '@/configuration';
