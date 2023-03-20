@@ -27,7 +27,7 @@ const DonationCard: FC<IDonationCard> = props => {
 			<ExternalLink
 				href={
 					slugToProjectView(slug) +
-					'tab=' +
+					'?tab=' +
 					EProjectPageTabs.DONATIONS
 				}
 			>
