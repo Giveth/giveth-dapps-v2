@@ -1,8 +1,9 @@
 import { IconSearch, neutralColors } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useIntl } from 'react-intl';
 import Input from '@/components/Input';
 import IconEnter from '../../../../public/images/icons/enter.svg';
 import { FlexCenter } from '@/components/styled-components/Flex';
@@ -13,7 +14,7 @@ const ProjectsSearchDesktop = () => {
 	const { variables, setVariables } = useProjectsContext();
 	const [searchValue, setSearchValue] = useState(variables.searchTerm);
 	const router = useRouter();
-	const inputRef = useRef<HTMLInputElement>(null);
+	const { formatMessage } = useIntl();
 
 	const handleSearch = (searchTerm?: string) =>
 		setVariables(prevVariables => ({ ...prevVariables, searchTerm }));
@@ -24,11 +25,8 @@ const ProjectsSearchDesktop = () => {
 	};
 
 	useEffect(() => {
-		if (inputRef.current) {
-			inputRef.current.focus();
-		}
 		setSearchValue(variables.searchTerm);
-	}, [variables.searchTerm, inputRef.current]);
+	}, [variables.searchTerm]);
 
 	return (
 		<SearchContainer className='fadeIn'>
@@ -39,19 +37,24 @@ const ProjectsSearchDesktop = () => {
 				}}
 			>
 				<Input
-					placeholder='Search for a project or a cause on all of the categories'
+					placeholder={formatMessage({
+						id: 'label.search_for_a_project_or_a_cause',
+					})}
 					value={searchValue}
 					onChange={e => setSearchValue(e.target.value)}
 					LeftIcon={<IconSearch color={neutralColors.gray[600]} />}
-					ref={inputRef}
 				/>
 			</form>
 			{variables.searchTerm ? (
-				<ClearSearch onClick={removeSearch}>CLEAR</ClearSearch>
+				<ClearSearch onClick={removeSearch}>
+					{formatMessage({ id: 'label.clear' })}
+				</ClearSearch>
 			) : (
 				<SearchHint onClick={() => handleSearch(searchValue)}>
 					<Image src={IconEnter} alt='icon enter' />{' '}
-					<div>Press Enter to search</div>
+					<div>
+						{formatMessage({ id: 'label.press_enter_to_search' })}
+					</div>
 				</SearchHint>
 			)}
 		</SearchContainer>
@@ -72,6 +75,7 @@ const SearchHint = styled(FlexCenter)`
 const ClearSearch = styled(SearchHint)`
 	color: ${neutralColors.gray[900]};
 	margin-top: 4px;
+	text-transform: uppercase;
 `;
 
 const SearchContainer = styled.div`

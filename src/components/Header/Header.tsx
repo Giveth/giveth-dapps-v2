@@ -204,7 +204,9 @@ const Header: FC<IHeader> = () => {
 						{!isDesktop && (
 							<HomeButton gap='4px' onClick={openSidebar}>
 								<IconMenu24 />
-								<GLink size='Big'>Home</GLink>
+								<GLink size='Big'>
+									{formatMessage({ id: 'label.home' })}
+								</GLink>
 							</HomeButton>
 						)}
 					</Flex>
@@ -212,7 +214,10 @@ const Header: FC<IHeader> = () => {
 			</Flex>
 			{isDesktop && !showBackBtn && (
 				<HeaderLinks theme={theme}>
-					<LinkWithMenu title='Projects' isHeaderShowing={showHeader}>
+					<LinkWithMenu
+						title={formatMessage({ id: 'label.projects' })}
+						isHeaderShowing={showHeader}
+					>
 						<ProjectsMenu />
 					</LinkWithMenu>
 					<LinkWithMenu
@@ -223,7 +228,9 @@ const Header: FC<IHeader> = () => {
 					</LinkWithMenu>
 					<HeaderLink theme={theme}>
 						<Link href={Routes.Join}>
-							<GLink size='Big'>Community</GLink>
+							<GLink size='Big'>
+								{formatMessage({ id: 'label.community' })}
+							</GLink>
 						</Link>
 					</HeaderLink>
 					<SearchButton
@@ -232,7 +239,7 @@ const Header: FC<IHeader> = () => {
 					>
 						<Flex alignItems='center' gap='16px'>
 							<GLinkNoWrap size='Big'>
-								Search projects
+								{formatMessage({ id: 'label.search_projects' })}
 							</GLinkNoWrap>
 							<IconSearch24 />
 						</Flex>

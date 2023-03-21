@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 import Checkbox from '@/components/Checkbox';
 import { useNotificationSettingsData } from '@/context/notificationSettings.context';
 import { INotificationSetting } from '@/features/notification/notification.types';
@@ -10,6 +11,7 @@ interface IDappMailCheckbox {
 
 const DappMailCheckbox: FC<IDappMailCheckbox> = ({ notificationItem }) => {
 	const { setNotificationSettings } = useNotificationSettingsData();
+	const { formatMessage } = useIntl();
 	const {
 		id,
 		allowDappPushNotification,
@@ -29,14 +31,14 @@ const DappMailCheckbox: FC<IDappMailCheckbox> = ({ notificationItem }) => {
 	return (
 		<Container>
 			<Checkbox
-				label='Send me an email'
+				label={formatMessage({ id: 'label.send_me_an_email' })}
 				checked={allowEmailNotification}
 				onChange={setEmailNotification}
 				disabled={!isEmailEditable}
 				size={18}
 			/>
 			<Checkbox
-				label='Notify me in the DApp'
+				label={formatMessage({ id: 'label.notify_me_in_the_dapp' })}
 				checked={allowDappPushNotification}
 				onChange={setDappNotification}
 				disabled={!isWebEditable}

@@ -9,6 +9,7 @@ import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
+
 import Script from 'next/script';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
@@ -23,7 +24,9 @@ import ModalController from '@/components/controller/modal.ctrl';
 import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
+import StorageLabel from '@/lib/localStorage';
 import NotificationController from '@/components/controller/notification.ctrl';
+
 import { isGIVeconomyRoute } from '@/lib/helpers';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import type { AppProps } from 'next/app';
@@ -89,6 +92,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 			router.events.off('routeChangeError', handleChangeError);
 		};
 	}, [router]);
+
+	useEffect(() => {
+		localStorage.setItem(StorageLabel.LOCALE, locale || 'en');
+	}, [locale]);
 
 	return (
 		<>

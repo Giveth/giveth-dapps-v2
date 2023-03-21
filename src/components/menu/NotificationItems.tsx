@@ -8,6 +8,7 @@ import {
 import Link from 'next/link';
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import Routes from '@/lib/constants/Routes';
 import { NotificationBox } from '../notification/NotificationBox';
 import { useItemsContext } from '@/context/Items.context';
@@ -23,11 +24,12 @@ export const NotificationItems: FC<INotificationMenuProps> = ({
 	markOneNotificationRead,
 }) => {
 	const { close } = useItemsContext();
+	const { formatMessage } = useIntl();
 
 	return (
 		<>
 			<NotificationsTitle styleType='Small'>
-				NOTIFICATIONS
+				{formatMessage({ id: 'label.notifications' })}
 			</NotificationsTitle>
 			{notifications?.length > 0 ? (
 				notifications.map(notification => (
@@ -39,7 +41,9 @@ export const NotificationItems: FC<INotificationMenuProps> = ({
 					/>
 				))
 			) : (
-				<P>You have no notification</P>
+				<P>
+					{formatMessage({ id: 'label.you_have_no_notifications' })}
+				</P>
 			)}
 			<br />
 			<Link href={Routes.Notifications} passHref>
@@ -47,7 +51,7 @@ export const NotificationItems: FC<INotificationMenuProps> = ({
 					onClick={close}
 					color={brandColors.pinky[500]}
 				>
-					All notifications
+					{formatMessage({ id: 'label.all_notifications' })}
 				</AllNotificationsLink>
 			</Link>
 		</>
@@ -56,6 +60,7 @@ export const NotificationItems: FC<INotificationMenuProps> = ({
 
 const NotificationsTitle = styled(Overline)`
 	color: ${neutralColors.gray[700]};
+	text-transform: uppercase;
 `;
 
 const AllNotificationsLink = styled(GLink)`

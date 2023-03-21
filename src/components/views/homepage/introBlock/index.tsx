@@ -45,8 +45,9 @@ const IntroBlock = () => {
 							</H3>
 							<br />
 							<CustomLead>
-								Join our community-driven movement to transform
-								the way we fund nonprofits and social causes.
+								{formatMessage({
+									id: 'label.join_our_community_driven_movement',
+								})}
 							</CustomLead>
 							<ButtonsContainer gap='16px'>
 								<Link href={Routes.Projects}>
