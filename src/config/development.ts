@@ -1,3 +1,4 @@
+import { parseUnits } from '@ethersproject/units';
 import {
 	EnvConfig,
 	RegenFarmType,
@@ -5,7 +6,6 @@ import {
 	StakingType,
 	StreamType,
 } from '@/types/config';
-import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://serve.giveth.io';
@@ -13,6 +13,8 @@ const NOTIFICATION_BASE_ROUTE = 'https://staging.notification.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const XDAI_NETWORK_NUMBER = 100; // xDAI
+const POLYGON_NETWORK_NUMBER = 137;
+const OPTIMISM_NETWORK_NUMBER = 10;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -26,6 +28,8 @@ const config: EnvConfig = {
 	},
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
+	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
+	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
@@ -170,8 +174,8 @@ const config: EnvConfig = {
 		},
 
 		gasPreference: {
-			maxFeePerGas: gwei2wei('2'),
-			maxPriorityFeePerGas: gwei2wei('1'),
+			maxFeePerGas: parseUnits('2', 'gwei').toString(),
+			maxPriorityFeePerGas: parseUnits('1', 'gwei').toString(),
 		},
 
 		blockExplorerName: ['Blockscout'],
@@ -326,7 +330,7 @@ const config: EnvConfig = {
 
 	OPTIMISM_CONFIG: {
 		nodeUrl: 'mainnet.optimism.io',
-		chainId: '0x10', // A 0x-prefixed hexadecimal string
+		chainId: '0xA', // A 0x-prefixed hexadecimal string
 		chainName: 'Optimism',
 		nativeCurrency: {
 			name: 'OP',
