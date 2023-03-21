@@ -1,3 +1,4 @@
+import { parseUnits } from '@ethersproject/units';
 import {
 	EnvConfig,
 	RegenFarmType,
@@ -5,7 +6,6 @@ import {
 	StakingType,
 	StreamType,
 } from '@/types/config';
-import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://serve.giveth.io';
@@ -174,8 +174,8 @@ const config: EnvConfig = {
 		},
 
 		gasPreference: {
-			maxFeePerGas: gwei2wei('2'),
-			maxPriorityFeePerGas: gwei2wei('1'),
+			maxFeePerGas: parseUnits('2', 'gwei').toString(),
+			maxPriorityFeePerGas: parseUnits('1', 'gwei').toString(),
 		},
 
 		blockExplorerName: ['Blockscout'],

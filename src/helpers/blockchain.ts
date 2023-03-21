@@ -1,17 +1,5 @@
-import { ethers } from 'ethers';
-
-export interface INetworkParam {
-	chainId: string;
-	chainName: string;
-	blockExplorerUrls: Array<string>;
-	rpcUrls?: Array<string>;
-	iconUrls?: Array<string>;
-	nativeCurrency: {
-		name: string;
-		symbol: string;
-		decimals: number;
-	};
-}
+import config from '@/config/production';
+import { INetworkParam } from '@/types/config';
 
 export const networksParams: {
 	[key: number]: INetworkParam;
@@ -70,6 +58,7 @@ export const networksParams: {
 		},
 		blockExplorerUrls: ['https://goerli.etherscan.io'],
 	},
+	10: { ...config.OPTIMISM_CONFIG },
 	42: {
 		chainId: '0x2A',
 		chainName: 'Kovan',
@@ -92,6 +81,3 @@ export const networksParams: {
 		rpcUrls: ['https://polygon-rpc.com'],
 	},
 };
-
-export const gwei2wei = (gweiAmount: string): string =>
-	ethers.utils.parseUnits(gweiAmount, 'gwei').toString();

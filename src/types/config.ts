@@ -114,19 +114,23 @@ export interface RegenFarmConfig {
 	introCard?: IntroCardConfig;
 }
 
-export interface BasicNetworkConfig {
-	nodeUrl: string;
-	chainId: string; // A 0x-prefixed hexadecimal string
+export interface INetworkParam {
+	chainId: string;
 	chainName: string;
 	nativeCurrency: {
 		name: string;
-		symbol: string; // 2-6 characters long
-		decimals: 18;
+		symbol: string;
+		decimals: number;
 	};
-	gasPreference: GasPreference;
-	blockExplorerUrls?: string[];
-	iconUrls?: string[]; // Currently ignored.
+	blockExplorerUrls: Array<string>;
+	rpcUrls?: Array<string>;
+	iconUrls?: Array<string>;
+}
+
+export interface BasicNetworkConfig extends INetworkParam {
+	nodeUrl: string;
 	blockExplorerName: string[];
+	gasPreference: GasPreference;
 	subgraphAddress: string;
 }
 
