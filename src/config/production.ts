@@ -9,23 +9,29 @@ import { gwei2wei } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://mainnet.serve.giveth.io';
+const NOTIFICATION_BASE_ROUTE = 'https://notification.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
 const XDAI_NETWORK_NUMBER = 100; // xDAI
-const NOTIFICATION_BASE_ROUTE = 'https://notification.giveth.io';
+const POLYGON_NETWORK_NUMBER = 137;
+const OPTIMISM_NETWORK_NUMBER = 10;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
 	BASE_ROUTE: BASE_ROUTE,
 	BACKEND_LINK: 'https://mainnet.serve.giveth.io/graphql',
 	FRONTEND_LINK: 'https://giveth.io',
-	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
-	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
 	MICROSERVICES: {
 		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
+
+	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
+	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
+	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
+	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
+
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
 
