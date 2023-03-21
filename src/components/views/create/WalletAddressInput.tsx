@@ -60,8 +60,8 @@ const WalletAddressInput: FC<IProps> = ({
 	const { chainId, library } = useWeb3React();
 
 	const user = useAppSelector(state => state.user?.userData);
-	const isGnosis = networkId === config.SECONDARY_NETWORK.id;
-	const isPolygon = networkId === config.POLYGON_NETWORK.id;
+	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
+	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
 	const inputName = isGnosis
 		? EInputs.secondaryAddress
 		: isPolygon
@@ -111,7 +111,7 @@ const WalletAddressInput: FC<IProps> = ({
 	};
 
 	const ENSHandler = async (ens: string) => {
-		if (networkId !== config.PRIMARY_NETWORK.id) {
+		if (networkId !== config.MAINNET_NETWORK_NUMBER) {
 			throw formatMessage({
 				id: 'label.ens_is_only_supported_on_mainnet',
 			});
@@ -266,7 +266,7 @@ const WalletAddressInput: FC<IProps> = ({
 
 const PolygonIcon = () => (
 	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.POLYGON_NETWORK.id} />
+		<NetworkLogo logoSize={24} chainId={config.POLYGON_NETWORK_NUMBER} />
 	</ChainIconShadow>
 );
 

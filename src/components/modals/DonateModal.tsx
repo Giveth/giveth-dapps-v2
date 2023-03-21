@@ -44,10 +44,11 @@ interface IDonateModalProps extends IModal {
 	givBackEligible?: boolean;
 }
 
-const ethereumChain = config.PRIMARY_NETWORK;
-const gnosisChain = config.SECONDARY_NETWORK;
-const polygonChain = config.POLYGON_NETWORK;
-const stableCoins = [gnosisChain.mainToken, 'DAI', 'USDT'];
+const ethereumChain = config.MAINNET_CONFIG;
+const gnosisChain = config.XDAI_CONFIG;
+const polygonChain = config.POLYGON_CONFIG;
+const optimismChain = config.OPTIMISM_CONFIG;
+const stableCoins = [gnosisChain.nativeCurrency, 'DAI', 'USDT'];
 
 const DonateModal: FC<IDonateModalProps> = props => {
 	const {
@@ -68,9 +69,9 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 	const givPrice = useAppSelector(state => state.price.givPrice);
 	const givTokenPrice = new BigNumber(givPrice).toNumber();
-	const isGnosis = chainId === gnosisChain.id;
-	const isMainnet = chainId === ethereumChain.id;
-	const isPolygon = chainId === polygonChain.id;
+	const isMainnet = chainId === config.MAINNET_NETWORK_NUMBER;
+	const isGnosis = chainId === config.XDAI_NETWORK_NUMBER;
+	const isPolygon = chainId === config.POLYGON_NETWORK_NUMBER;
 
 	const [donating, setDonating] = useState(false);
 	const [firstDonationSaved, setFirstDonationSaved] = useState(false);
@@ -186,7 +187,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				setTokenPrice(1);
 			} else if (token?.symbol === 'GIV') {
 				setTokenPrice(givTokenPrice || 0);
-			} else if (token?.symbol === ethereumChain.mainToken) {
+			} else if (token?.symbol === ethereumChain.nativeCurrency.symbol) {
 				const ethPrice = await fetchEthPrice();
 				setTokenPrice(ethPrice || 0);
 			} else if (token?.address) {
@@ -197,10 +198,12 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				}
 				const coingeckoChainId =
 					isMainnet || token.mainnetAddress
-						? ethereumChain.id
+						? config.MAINNET_NETWORK_NUMBER
 						: isGnosis
-						? gnosisChain.id
-						: polygonChain.id;
+						? config.XDAI_NETWORK_NUMBER
+						: isPolygon
+						? config.POLYGON_NETWORK_NUMBER
+						: config.OPTIMISM_NETWORK_NUMBER;
 				const fetchedPrice = await fetchPrice(
 					coingeckoChainId,
 					tokenAddress,
