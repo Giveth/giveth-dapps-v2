@@ -23,19 +23,24 @@ interface IProps extends IModal {
 
 const networkOptions = [
 	{
-		value: config.PRIMARY_NETWORK.id,
+		value: config.MAINNET_NETWORK_NUMBER,
 		label: 'Ethereum Mainnet',
-		id: config.PRIMARY_NETWORK.id,
+		id: config.MAINNET_NETWORK_NUMBER,
 	},
 	{
-		value: config.SECONDARY_NETWORK.id,
+		value: config.XDAI_NETWORK_NUMBER,
 		label: 'Gnosis',
-		id: config.SECONDARY_NETWORK.id,
+		id: config.XDAI_NETWORK_NUMBER,
 	},
 	{
-		value: config.POLYGON_NETWORK.id,
+		value: config.POLYGON_NETWORK_NUMBER,
 		label: 'Polygon Mainnet',
-		id: config.POLYGON_NETWORK.id,
+		id: config.POLYGON_NETWORK_NUMBER,
+	},
+	{
+		value: config.OPTIMISM_NETWORK_NUMBER,
+		label: 'Optimism',
+		id: config.OPTIMISM_NETWORK_NUMBER,
 	},
 ];
 

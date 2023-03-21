@@ -60,12 +60,15 @@ const WalletAddressInput: FC<IProps> = ({
 	const { chainId, library } = useWeb3React();
 
 	const user = useAppSelector(state => state.user?.userData);
-	const isGnosis = networkId === config.SECONDARY_NETWORK.id;
-	const isPolygon = networkId === config.POLYGON_NETWORK.id;
+	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
+	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
+	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
 	const inputName = isGnosis
 		? EInputs.secondaryAddress
 		: isPolygon
 		? EInputs.polygonAddress
+		: isOptimism
+		? EInputs.optimismAddress
 		: EInputs.mainAddress;
 	const value = getValues(inputName);
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
@@ -98,6 +101,8 @@ const WalletAddressInput: FC<IProps> = ({
 				? 'Gnosis Chain'
 				: isPolygon
 				? 'Polygon Mainnet'
+				: isOptimism
+				? 'Optimism'
 				: 'Mainnet'
 		}.`;
 	}
@@ -111,7 +116,7 @@ const WalletAddressInput: FC<IProps> = ({
 	};
 
 	const ENSHandler = async (ens: string) => {
-		if (networkId !== config.PRIMARY_NETWORK.id) {
+		if (networkId !== config.MAINNET_NETWORK_NUMBER) {
 			throw formatMessage({
 				id: 'label.ens_is_only_supported_on_mainnet',
 			});
@@ -165,16 +170,20 @@ const WalletAddressInput: FC<IProps> = ({
 		}
 	}, [sameAddress]);
 
-	if (isHidden && (isGnosis || isPolygon)) return null;
+	if (isHidden && (isGnosis || isPolygon || isOptimism)) return null;
 
 	return (
-		<Container hide={sameAddress && (isGnosis || isPolygon)}>
+		<Container hide={sameAddress && (isGnosis || isPolygon || isOptimism)}>
 			<Header>
 				<H6>
 					{isGnosis
 						? formatMessage({ id: 'label.gnosis_chain_address' })
 						: isPolygon
 						? formatMessage({ id: 'label.polygon_mainnet_address' })
+						: isOptimism
+						? formatMessage({
+								id: 'label.optimism_mainnet_address',
+						  })
 						: sameAddress
 						? formatMessage({ id: 'label.receiving_address' })
 						: formatMessage({ id: 'label.mainnet_address' })}
@@ -185,11 +194,14 @@ const WalletAddressInput: FC<IProps> = ({
 							<MainnetIcon />
 							<GnosisIcon />
 							<PolygonIcon />
+							<OptimismIcon />
 						</>
 					) : isGnosis ? (
 						<GnosisIcon />
 					) : isPolygon ? (
 						<PolygonIcon />
+					) : isOptimism ? (
+						<OptimismIcon />
 					) : (
 						<MainnetIcon />
 					)}
@@ -204,6 +216,10 @@ const WalletAddressInput: FC<IProps> = ({
 						: isPolygon
 						? formatMessage({
 								id: 'label.receiving_address_on_polygon',
+						  })
+						: isOptimism
+						? formatMessage({
+								id: 'label.receiving_address_on_optimism',
 						  })
 						: sameAddress
 						? formatMessage({ id: 'label.receiving_address' })
@@ -264,9 +280,15 @@ const WalletAddressInput: FC<IProps> = ({
 	);
 };
 
+const OptimismIcon = () => (
+	<ChainIconShadow>
+		<NetworkLogo logoSize={24} chainId={config.OPTIMISM_NETWORK_NUMBER} />
+	</ChainIconShadow>
+);
+
 const PolygonIcon = () => (
 	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.POLYGON_NETWORK.id} />
+		<NetworkLogo logoSize={24} chainId={config.POLYGON_NETWORK_NUMBER} />
 	</ChainIconShadow>
 );
 

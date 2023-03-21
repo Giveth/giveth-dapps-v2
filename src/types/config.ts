@@ -183,22 +183,12 @@ export interface EnvConfig {
 	OPENSEA_ADDRESS: string;
 }
 
-interface INetworkConfig {
-	name: string;
-	id: number;
-	chain: string;
-	mainToken: string;
-}
-
 export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
 	SUBGRAPH_POLLING_INTERVAL: number;
 	NOTIFICATION_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
-	PRIMARY_NETWORK: INetworkConfig;
-	SECONDARY_NETWORK: INetworkConfig;
-	POLYGON_NETWORK: INetworkConfig;
 	NETWORKS_CONFIG: {
 		[key: number]: MainnetNetworkConfig | XDaiNetworkConfig;
 	};

@@ -54,11 +54,12 @@ import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
 
-const { PRIMARY_NETWORK, SECONDARY_NETWORK, POLYGON_NETWORK } = config;
-const ethereumId = PRIMARY_NETWORK.id;
-const gnosisId = SECONDARY_NETWORK.id;
-const polygonId = POLYGON_NETWORK.id;
-
+const {
+	MAINNET_NETWORK_NUMBER,
+	XDAI_NETWORK_NUMBER,
+	POLYGON_NETWORK_NUMBER,
+	OPTIMISM_NETWORK_NUMBER,
+} = config;
 interface ICreateProjectProps {
 	project?: IProjectEdition;
 }
@@ -73,6 +74,7 @@ export enum EInputs {
 	mainAddress = 'mainAddress',
 	secondaryAddress = 'secondaryAddress',
 	polygonAddress = 'polygonAddress',
+	optimismAddress = 'optimismAddress',
 }
 
 export type TInputs = {
@@ -85,6 +87,7 @@ export type TInputs = {
 	[EInputs.mainAddress]: string;
 	[EInputs.secondaryAddress]: string;
 	[EInputs.polygonAddress]: string;
+	[EInputs.optimismAddress]: string;
 };
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
@@ -101,18 +104,22 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const defaultImpactLocation = impactLocation || '';
 
 	const prevMainAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === ethereumId,
+		a => a.isRecipient && a.networkId === MAINNET_NETWORK_NUMBER,
 	)?.address;
 	const prevSecondaryAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === gnosisId,
+		a => a.isRecipient && a.networkId === XDAI_NETWORK_NUMBER,
 	)?.address;
 	const prevPolygonAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === polygonId,
+		a => a.isRecipient && a.networkId === POLYGON_NETWORK_NUMBER,
+	)?.address;
+	const prevOptimismAddress = addresses?.find(
+		a => a.isRecipient && a.networkId === OPTIMISM_NETWORK_NUMBER,
 	)?.address;
 	const isSamePrevAddresses = compareAddressesArray([
 		prevMainAddress,
 		prevSecondaryAddress,
 		prevPolygonAddress,
+		prevOptimismAddress,
 	]);
 	const userAddresses: string[] = [];
 	if (isSamePrevAddresses) userAddresses.push(prevMainAddress!);
@@ -120,6 +127,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		if (prevMainAddress) userAddresses.push(prevMainAddress);
 		if (prevSecondaryAddress) userAddresses.push(prevSecondaryAddress);
 		if (prevPolygonAddress) userAddresses.push(prevPolygonAddress);
+		if (prevOptimismAddress) userAddresses.push(prevOptimismAddress);
 	}
 
 	const formMethods = useForm<TInputs>({
@@ -134,6 +142,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.mainAddress]: prevMainAddress || '',
 			[EInputs.secondaryAddress]: prevSecondaryAddress || '',
 			[EInputs.polygonAddress]: prevPolygonAddress || '',
+			[EInputs.optimismAddress]: prevOptimismAddress || '',
 		},
 	});
 
@@ -148,6 +157,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	);
 	const [polygonAddressActive, setPolygonAddressActive] = useState(
 		isEditMode ? !!prevPolygonAddress : true,
+	);
+	const [optimismAddressActive, setOptimismAddressActive] = useState(
+		isEditMode ? !!prevOptimismAddress : true,
 	);
 	const [isSameAddress, setIsSameAddress] = useState(
 		isEditMode ? isSamePrevAddresses : true,
@@ -165,6 +177,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				mainAddress,
 				secondaryAddress,
 				polygonAddress,
+				optimismAddress,
 				name,
 				description,
 				categories,
@@ -179,9 +192,22 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					: mainAddress;
 				const checksumAddress = utils.getAddress(address);
 				addresses.push(
-					{ address: checksumAddress, networkId: ethereumId },
-					{ address: checksumAddress, networkId: gnosisId },
-					{ address: checksumAddress, networkId: polygonId },
+					{
+						address: checksumAddress,
+						networkId: MAINNET_NETWORK_NUMBER,
+					},
+					{
+						address: checksumAddress,
+						networkId: XDAI_NETWORK_NUMBER,
+					},
+					{
+						address: checksumAddress,
+						networkId: POLYGON_NETWORK_NUMBER,
+					},
+					{
+						address: checksumAddress,
+						networkId: OPTIMISM_NETWORK_NUMBER,
+					},
 				);
 			} else {
 				if (mainnetAddressActive) {
@@ -191,21 +217,28 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					const checksumAddress = utils.getAddress(address);
 					addresses.push({
 						address: checksumAddress,
-						networkId: ethereumId,
+						networkId: MAINNET_NETWORK_NUMBER,
 					});
 				}
 				if (gnosisAddressActive) {
 					const checksumAddress = utils.getAddress(secondaryAddress);
 					addresses.push({
 						address: checksumAddress,
-						networkId: gnosisId,
+						networkId: XDAI_NETWORK_NUMBER,
 					});
 				}
 				if (polygonAddressActive) {
 					const checksumAddress = utils.getAddress(polygonAddress);
 					addresses.push({
 						address: checksumAddress,
-						networkId: polygonId,
+						networkId: POLYGON_NETWORK_NUMBER,
+					});
+				}
+				if (optimismAddressActive) {
+					const checksumAddress = utils.getAddress(optimismAddress);
+					addresses.push({
+						address: checksumAddress,
+						networkId: OPTIMISM_NETWORK_NUMBER,
 					});
 				}
 			}
@@ -321,7 +354,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							})}
 						/>
 						<WalletAddressInput
-							networkId={ethereumId}
+							networkId={MAINNET_NETWORK_NUMBER}
 							sameAddress={isSameAddress}
 							isActive={mainnetAddressActive}
 							userAddresses={userAddresses}
@@ -331,7 +364,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (
 									!e &&
 									!gnosisAddressActive &&
-									!polygonAddressActive
+									!polygonAddressActive &&
+									!optimismAddressActive
 								)
 									return showToastError(
 										formatMessage({
@@ -343,7 +377,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							}}
 						/>
 						<WalletAddressInput
-							networkId={gnosisId}
+							networkId={XDAI_NETWORK_NUMBER}
 							sameAddress={isSameAddress}
 							isActive={gnosisAddressActive}
 							userAddresses={userAddresses}
@@ -352,7 +386,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (
 									!e &&
 									!mainnetAddressActive &&
-									!polygonAddressActive
+									!polygonAddressActive &&
+									!optimismAddressActive
 								)
 									return showToastError(
 										formatMessage({
@@ -364,7 +399,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							}}
 						/>
 						<WalletAddressInput
-							networkId={polygonId}
+							networkId={POLYGON_NETWORK_NUMBER}
 							sameAddress={isSameAddress}
 							isActive={polygonAddressActive}
 							userAddresses={userAddresses}
@@ -373,7 +408,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (
 									!e &&
 									!mainnetAddressActive &&
-									!gnosisAddressActive
+									!gnosisAddressActive &&
+									!optimismAddressActive
 								)
 									return showToastError(
 										formatMessage({
@@ -382,6 +418,28 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									);
 								if (!e) unregister(EInputs.polygonAddress);
 								setPolygonAddressActive(e);
+							}}
+						/>
+						<WalletAddressInput
+							networkId={OPTIMISM_NETWORK_NUMBER}
+							sameAddress={isSameAddress}
+							isActive={optimismAddressActive}
+							userAddresses={userAddresses}
+							setResolvedENS={() => {}}
+							setIsActive={e => {
+								if (
+									!e &&
+									!mainnetAddressActive &&
+									!gnosisAddressActive &&
+									!polygonAddressActive
+								)
+									return showToastError(
+										formatMessage({
+											id: 'label.you_must_select_at_least_one_address',
+										}),
+									);
+								if (!e) unregister(EInputs.optimismAddress);
+								setOptimismAddressActive(e);
 							}}
 						/>
 						<PublishTitle>

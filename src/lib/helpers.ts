@@ -149,10 +149,10 @@ export const isSSRMode = typeof window === 'undefined';
 export const generatePolygonAddress = (addresses?: IWalletAddress[]) => {
 	if (!addresses || addresses.length !== 2) return '';
 	const mainnetAddress = addresses.find(
-		address => address.networkId === config.PRIMARY_NETWORK.id,
+		address => address.networkId === config.MAINNET_NETWORK_NUMBER,
 	);
 	const gnosisAddress = addresses.find(
-		address => address.networkId === config.SECONDARY_NETWORK.id,
+		address => address.networkId === config.XDAI_NETWORK_NUMBER,
 	);
 	const isSame = compareAddressesArray([
 		mainnetAddress?.address,
