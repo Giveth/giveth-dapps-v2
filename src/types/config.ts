@@ -196,9 +196,6 @@ export interface GlobalConfig extends EnvConfig {
 	SUBGRAPH_POLLING_INTERVAL: number;
 	NOTIFICATION_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
-	PRIMARY_NETWORK: INetworkConfig;
-	SECONDARY_NETWORK: INetworkConfig;
-	POLYGON_NETWORK: INetworkConfig;
 	NETWORKS_CONFIG: {
 		[key: number]: MainnetNetworkConfig | XDaiNetworkConfig;
 	};
