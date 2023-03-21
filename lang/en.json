@@ -698,7 +698,7 @@
 	"label.contract": "Contract",
 	"label.switch_to_archive_cards": "Switch to Archive Cards",
 	"label.wrong_network": "You are currently connected to {chainName} switch to {targetChain} to interact with this farm.",
-	"label.switch_to": "",
+	"label.switch_to": "switch to",
 	"label.please_connect_your_wallet": "Please connect your wallet",
 	"label.this_farm_has_ended": "This farm has ended",
 	"label.this_stream_has_ended": "This stream has ended",
