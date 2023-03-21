@@ -6,7 +6,7 @@ export const IconOptimism: FC<ICurrencyIconProps> = ({ size = 16 }) => {
 	return (
 		<Image
 			src={`/images/currencies/optimism/16.svg`}
-			alt='polygon'
+			alt='optimism'
 			width={size}
 			height={size}
 			loading='lazy'

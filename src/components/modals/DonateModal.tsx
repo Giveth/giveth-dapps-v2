@@ -46,8 +46,6 @@ interface IDonateModalProps extends IModal {
 
 const ethereumChain = config.MAINNET_CONFIG;
 const gnosisChain = config.XDAI_CONFIG;
-const polygonChain = config.POLYGON_CONFIG;
-const optimismChain = config.OPTIMISM_CONFIG;
 const stableCoins = [gnosisChain.nativeCurrency, 'DAI', 'USDT'];
 
 const DonateModal: FC<IDonateModalProps> = props => {
@@ -72,6 +70,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const isMainnet = chainId === config.MAINNET_NETWORK_NUMBER;
 	const isGnosis = chainId === config.XDAI_NETWORK_NUMBER;
 	const isPolygon = chainId === config.POLYGON_NETWORK_NUMBER;
+	const isOptimism = chainId === config.OPTIMISM_NETWORK_NUMBER;
 
 	const [donating, setDonating] = useState(false);
 	const [firstDonationSaved, setFirstDonationSaved] = useState(false);
@@ -193,7 +192,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			} else if (token?.address) {
 				let tokenAddress = token.address;
 				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
-				if ((isGnosis || isPolygon) && token.mainnetAddress) {
+				if (
+					(isGnosis || isPolygon || isOptimism) &&
+					token.mainnetAddress
+				) {
 					tokenAddress = token.mainnetAddress || '';
 				}
 				const coingeckoChainId =
