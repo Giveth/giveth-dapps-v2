@@ -40,6 +40,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 				...DonationCoreFields
 				user {
 					name
+					walletAddress
 				}
 			}
 			totalCount

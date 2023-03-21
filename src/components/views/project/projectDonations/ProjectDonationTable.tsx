@@ -17,6 +17,7 @@ import {
 	formatTxLink,
 	compareAddresses,
 	formatUSD,
+	shortenAddress,
 } from '@/lib/helpers';
 import {
 	EDirection,
@@ -64,7 +65,6 @@ const ProjectDonationTable = ({
 	donations,
 	totalDonations,
 }: IProjectDonationTable) => {
-	console.log('ProjectDonationTable', donations);
 	const [pageDonations, setPageDonations] = useState<PageDonations>({
 		donations: donations,
 		totalCount: totalDonations,
@@ -183,7 +183,10 @@ const ProjectDonationTable = ({
 									: donation.anonymous
 									? 'Anonymous'
 									: donation.user?.name ||
-									  donation.user?.firstName}
+									  donation.user?.firstName ||
+									  shortenAddress(
+											donation.user.walletAddress,
+									  )}
 							</DonationTableCell>
 							{isAdmin && (
 								<DonationTableCell>
