@@ -384,7 +384,7 @@ const config: EnvConfig = {
 
 	OPTIMISM_CONFIG: {
 		nodeUrl: 'mainnet.optimism.io',
-		chainId: '0x10', // A 0x-prefixed hexadecimal string
+		chainId: '0xA', // A 0x-prefixed hexadecimal string
 		chainName: 'Optimism',
 		nativeCurrency: {
 			name: 'OP',
