@@ -183,13 +183,6 @@ export interface EnvConfig {
 	OPENSEA_ADDRESS: string;
 }
 
-interface INetworkConfig {
-	name: string;
-	id: number;
-	chain: string;
-	mainToken: string;
-}
-
 export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
