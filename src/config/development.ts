@@ -323,6 +323,24 @@ const config: EnvConfig = {
 		blockExplorerName: ['PolygonScan'],
 		subgraphAddress: '',
 	},
+
+	OPTIMISM_CONFIG: {
+		nodeUrl: 'mainnet.optimism.io',
+		chainId: '0x10', // A 0x-prefixed hexadecimal string
+		chainName: 'Optimism',
+		nativeCurrency: {
+			name: 'OP',
+			symbol: 'OP',
+			decimals: 18,
+		},
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		blockExplorerUrls: ['https://optimistic.etherscan.io/'],
+		iconUrls: ['https://icons.llamao.fi/icons/chains/rsz_polygon.jpg'], // Currently ignored.
+		blockExplorerName: ['OptimismScan'],
+		subgraphAddress: '',
+	},
 };
 
 export default config;
