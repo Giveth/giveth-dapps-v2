@@ -40,7 +40,7 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 				<BlockHeader>
 					<BlockTitle>
 						{formatMessage({
-							id: 'component.campaigns_block.title',
+							id: 'label.whats_up_on_giveth',
 						})}
 					</BlockTitle>
 					<SwiperPaginationWrapper>

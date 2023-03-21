@@ -6,6 +6,7 @@ import {
 	IconX,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
@@ -16,6 +17,7 @@ interface IIncompleteToast {
 
 const IncompleteProfileToast = ({ close }: IIncompleteToast) => {
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 
 	return (
 		<IncompleteToast>
@@ -25,16 +27,21 @@ const IncompleteProfileToast = ({ close }: IIncompleteToast) => {
 			<IncompleteProfile>
 				<IconAlertTriangleFilled16 color={brandColors.mustard[700]} />
 				<div>
-					<Caption medium>Your profile is incomplete</Caption>
+					<Caption medium>
+						{formatMessage({
+							id: 'label.your_profile_is_incomplete',
+						})}
+					</Caption>
 					<Caption>
-						You can’t create project unless you complete your
-						profile.
+						{formatMessage({
+							id: 'label.you_cant_create_a_project_unless',
+						})}
 					</Caption>
 				</div>
 			</IncompleteProfile>
 			<LetsDoIt
 				size='small'
-				label="LET'S DO IT"
+				label={formatMessage({ id: 'label.lets_do_it' })}
 				buttonType='texty'
 				onClick={() => dispatch(setShowCompleteProfile(true))}
 			/>

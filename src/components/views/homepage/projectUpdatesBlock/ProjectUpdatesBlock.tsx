@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { IconPointerLeft, IconPointerRight } from '@giveth/ui-design-system';
 import { Navigation, Pagination } from 'swiper';
 import { Container, Row } from '@giveth/ui-design-system';
@@ -26,12 +27,15 @@ export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = ({
 	const pagElRef = useRef<HTMLDivElement>(null);
 	const nextElRef = useRef<HTMLDivElement>(null);
 	const prevElRef = useRef<HTMLDivElement>(null);
+	const { formatMessage } = useIntl();
 
 	return (
 		<ProjectUpdatesBlockWrapper>
 			<Container>
 				<BlockHeader>
-					<BlockTitle>Awesome Project Updates</BlockTitle>
+					<BlockTitle>
+						{formatMessage({ id: 'label.awesome_project_updates' })}
+					</BlockTitle>
 					<SwiperPaginationWrapper>
 						<NavigationWrapper ref={prevElRef}>
 							<IconPointerLeft size={24} />

@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { Container } from '@giveth/ui-design-system';
 import { BlockTitle } from '../common';
 import { LatestUpdateCard } from './LatestUpdateCard';
@@ -14,10 +15,13 @@ interface ILatestUpdatesBlockProps {
 export const LatestUpdatesBlock: FC<ILatestUpdatesBlockProps> = ({
 	updates,
 }) => {
+	const { formatMessage } = useIntl();
 	return (
 		<LatestUpdatesBlockWrapper>
 			<Container>
-				<BlockTitle>Latest updates</BlockTitle>
+				<BlockTitle>
+					{formatMessage({ id: 'label.latest_updates' })}
+				</BlockTitle>
 			</Container>
 			<LatestUpdatesCardsWrapper>
 				<LatestUpdatesCardsContainer>

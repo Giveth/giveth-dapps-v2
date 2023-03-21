@@ -34,17 +34,17 @@ const WhyGiveth: FC<IWhyGivethProps> = props => {
 
 	const statsArray = [
 		{
-			title: 'Projects on Giveth',
+			title: 'label.projects_on_giveth',
 			value: thousandsSeparator(projectsPerDate.total),
 		},
 		{
-			title: 'Donated to projects',
+			title: 'label.donated_to_projects',
 			value:
 				'~$' +
 				thousandsSeparator(donationsTotalUsdPerDate.total.toFixed()),
 		},
 		{
-			title: '# of givers',
+			title: 'label.number_of_givers',
 			value: thousandsSeparator(totalDonorsCountPerDate.total),
 		},
 	];
@@ -69,7 +69,7 @@ const WhyGiveth: FC<IWhyGivethProps> = props => {
 					{statsArray.map(i => (
 						<StatsCard
 							key={i.title}
-							title={i.title}
+							title={formatMessage({ id: i.title })}
 							value={i.value}
 						/>
 					))}

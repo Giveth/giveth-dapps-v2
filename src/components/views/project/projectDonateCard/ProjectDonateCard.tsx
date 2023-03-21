@@ -8,7 +8,6 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import styled, { css } from 'styled-components';
 import {
@@ -25,6 +24,7 @@ import {
 	OutlineButton,
 	Subline,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { motion } from 'framer-motion';
 import { captureException } from '@sentry/nextjs';
 
@@ -330,17 +330,19 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						{!isMobile && (
 							<Flex gap='8px' alignItems='center'>
 								<IconRocketInSpace24 />
-								<Subline>GIVPOWER RANK</Subline>
+								<RankSubline>
+									{formatMessage({
+										id: 'label.givpower_rank',
+									})}
+								</RankSubline>
 								<IconWithTooltip
 									icon={<IconHelpFilled16 />}
 									direction={'bottom'}
 								>
 									<BoostTooltip>
-										Boost this project with GIVpower to
-										improve its rank! Rank is updated at the
-										beginning of every GIVbacks round. You
-										can see the projected rank for next
-										round as well below.
+										{formatMessage({
+											id: 'label.boost_this_project_with_givpower_to_improve_its_rank',
+										})}
 									</BoostTooltip>
 								</IconWithTooltip>
 							</Flex>
@@ -357,7 +359,9 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 							<FlexSpacer />
 							<BoostButton onClick={handleBoostClick}>
 								<IconRocketInSpace />
-								<BoostButtonText>Boost</BoostButtonText>
+								<BoostButtonText>
+									{formatMessage({ id: 'label.boost' })}
+								</BoostButtonText>
 							</BoostButton>
 						</Flex>
 					</BoostWrapper>
@@ -374,7 +378,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						<FullWidth>
 							<FullButton
 								buttonType='primary'
-								label='EDIT'
+								label={formatMessage({ id: 'label.edit' })}
 								disabled={!isActive && !isDraft}
 								onClick={() =>
 									router.push(
@@ -388,7 +392,9 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 								!verStatus && (
 									<FullOutlineButton
 										buttonType='primary'
-										label='VERIFY YOUR PROJECT'
+										label={formatMessage({
+											id: 'label.verify_your_project',
+										})}
 										disabled={!isActive}
 										onClick={() =>
 											setShowVerificationModal(true)
@@ -404,8 +410,12 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 										buttonType='primary'
 										label={
 											isRevoked
-												? 'Re-apply'
-												: 'RESUME VERIFICATION'
+												? formatMessage({
+														id: 'label.re_apply',
+												  })
+												: formatMessage({
+														id: 'label.resume_verification',
+												  })
 										}
 									/>
 								</ExternalLink>
@@ -415,7 +425,9 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 								<FullButton
 									buttonType='primary'
 									onClick={() => handleProjectStatus(false)}
-									label='PUBLISH PROJECT'
+									label={formatMessage({
+										id: 'label.publish_project',
+									})}
 								/>
 							)}
 						</FullWidth>
@@ -424,7 +436,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 							onClick={() =>
 								router.push(slugToProjectDonate(slug || ''))
 							}
-							label='DONATE'
+							label={formatMessage({ id: 'label.donate' })}
 							buttonType='primary'
 							disabled={!isActive}
 						/>
@@ -468,10 +480,14 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						<Links>
 							<ExternalLink
 								href={links.REPORT_ISSUE}
-								title='Report an issue'
+								title={formatMessage({
+									id: 'label.report_an_issue',
+								})}
 							/>
 							<div onClick={scrollToSimilarProjects}>
-								View similar projects
+								{formatMessage({
+									id: 'label.view_similar_projects',
+								})}
 							</div>
 						</Links>
 					)}
@@ -480,7 +496,15 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 						<ArchiveButton
 							buttonType='texty'
 							size='small'
-							label={`${isActive ? 'DE' : ''}ACTIVATE PROJECT`}
+							label={`${
+								isActive
+									? formatMessage({
+											id: 'label.deactivate_project',
+									  })
+									: formatMessage({
+											id: 'component.button.activate_project',
+									  })
+							}`}
 							icon={<IconArchiving size={16} />}
 							onClick={() => handleProjectStatus(isActive)}
 						/>
@@ -659,6 +683,10 @@ const ArchiveButton = styled(Button)`
 		color: ${brandColors.giv[500]};
 		background-color: transparent;
 	}
+`;
+
+const RankSubline = styled(Subline)`
+	text-transform: uppercase;
 `;
 
 export const BoostTooltip = styled(Subline)`

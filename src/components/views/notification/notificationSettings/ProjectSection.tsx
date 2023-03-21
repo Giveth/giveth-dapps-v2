@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import { ItemsWrapper, SectionContainer } from './common/common.sc';
 import SectionHeader from './common/SectionHeader';
 import { SectionItem } from './common/SectionItem';
@@ -9,6 +10,7 @@ import { ENotificationCategory } from '@/features/notification/notification.type
 const ProjectSection = () => {
 	const [isOpen, setIsOpen] = useState(true);
 	const [itemsHeight, setItemsHeight] = useState(0);
+	const { formatMessage } = useIntl();
 
 	const { notificationSettings } = useNotificationSettingsData();
 	const projectItems = notificationSettings?.filter(
@@ -33,8 +35,10 @@ const ProjectSection = () => {
 			<GrayBar />
 			<SectionContainer>
 				<SectionHeader
-					title='My Project Activity'
-					description='Notifications for project owners about project activity'
+					title={formatMessage({ id: 'label.my_project_activity' })}
+					description={formatMessage({
+						id: 'label.notifications_for_project_owners_about_project_activity',
+					})}
 					isOpen={isOpen}
 					onClick={() => setIsOpen(!isOpen)}
 				/>

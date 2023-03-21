@@ -48,7 +48,7 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 				<Desc>{campaign.description}</Desc>
 				<Link href={campaignLinkGenerator(campaign) || ''}>
 					<ExploreLink>
-						{formatMessage({ id: 'label.explore' })}{' '}
+						{formatMessage({ id: 'page.projects.title.explore' })}{' '}
 						<IconChevronRight32 />
 					</ExploreLink>
 				</Link>

@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_USER_LIKED_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IUserLikedProjects } from '@/apollo/types/gqlTypes';
@@ -19,6 +20,7 @@ const ProfileLikedTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [page, setPage] = useState(0);
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		if (!user) return;
@@ -49,8 +51,14 @@ const ProfileLikedTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 				<NothingWrapper>
 					<NothingToSee
 						title={`${
-							myAccount ? "You haven't" : "This user hasn't"
-						} liked any projects yet!`}
+							myAccount
+								? formatMessage({
+										id: 'label.you_havent_liked_any_projects_yet',
+								  })
+								: formatMessage({
+										id: 'label.this_user_hasnt_liked_any_project_yet',
+								  })
+						}`}
 						heartIcon
 					/>
 				</NothingWrapper>
