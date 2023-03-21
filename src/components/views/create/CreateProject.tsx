@@ -127,6 +127,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		if (prevMainAddress) userAddresses.push(prevMainAddress);
 		if (prevSecondaryAddress) userAddresses.push(prevSecondaryAddress);
 		if (prevPolygonAddress) userAddresses.push(prevPolygonAddress);
+		if (prevOptimismAddress) userAddresses.push(prevOptimismAddress);
 	}
 
 	const formMethods = useForm<TInputs>({
@@ -141,6 +142,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.mainAddress]: prevMainAddress || '',
 			[EInputs.secondaryAddress]: prevSecondaryAddress || '',
 			[EInputs.polygonAddress]: prevPolygonAddress || '',
+			[EInputs.optimismAddress]: prevOptimismAddress || '',
 		},
 	});
 
@@ -155,6 +157,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	);
 	const [polygonAddressActive, setPolygonAddressActive] = useState(
 		isEditMode ? !!prevPolygonAddress : true,
+	);
+	const [optimismAddressActive, setOptimismAddressActive] = useState(
+		isEditMode ? !!prevOptimismAddress : true,
 	);
 	const [isSameAddress, setIsSameAddress] = useState(
 		isEditMode ? isSamePrevAddresses : true,
@@ -172,6 +177,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				mainAddress,
 				secondaryAddress,
 				polygonAddress,
+				optimismAddress,
 				name,
 				description,
 				categories,
@@ -198,6 +204,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						address: checksumAddress,
 						networkId: POLYGON_NETWORK_NUMBER,
 					},
+					{
+						address: checksumAddress,
+						networkId: OPTIMISM_NETWORK_NUMBER,
+					},
 				);
 			} else {
 				if (mainnetAddressActive) {
@@ -222,6 +232,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					addresses.push({
 						address: checksumAddress,
 						networkId: POLYGON_NETWORK_NUMBER,
+					});
+				}
+				if (optimismAddressActive) {
+					const checksumAddress = utils.getAddress(optimismAddress);
+					addresses.push({
+						address: checksumAddress,
+						networkId: OPTIMISM_NETWORK_NUMBER,
 					});
 				}
 			}
@@ -347,7 +364,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (
 									!e &&
 									!gnosisAddressActive &&
-									!polygonAddressActive
+									!polygonAddressActive &&
+									!optimismAddressActive
 								)
 									return showToastError(
 										formatMessage({
@@ -368,7 +386,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (
 									!e &&
 									!mainnetAddressActive &&
-									!polygonAddressActive
+									!polygonAddressActive &&
+									!optimismAddressActive
 								)
 									return showToastError(
 										formatMessage({
@@ -389,7 +408,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (
 									!e &&
 									!mainnetAddressActive &&
-									!gnosisAddressActive
+									!gnosisAddressActive &&
+									!optimismAddressActive
 								)
 									return showToastError(
 										formatMessage({
@@ -398,6 +418,28 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									);
 								if (!e) unregister(EInputs.polygonAddress);
 								setPolygonAddressActive(e);
+							}}
+						/>
+						<WalletAddressInput
+							networkId={OPTIMISM_NETWORK_NUMBER}
+							sameAddress={isSameAddress}
+							isActive={optimismAddressActive}
+							userAddresses={userAddresses}
+							setResolvedENS={() => {}}
+							setIsActive={e => {
+								if (
+									!e &&
+									!mainnetAddressActive &&
+									!gnosisAddressActive &&
+									!polygonAddressActive
+								)
+									return showToastError(
+										formatMessage({
+											id: 'label.you_must_select_at_least_one_address',
+										}),
+									);
+								if (!e) unregister(EInputs.optimismAddress);
+								setOptimismAddressActive(e);
 							}}
 						/>
 						<PublishTitle>
