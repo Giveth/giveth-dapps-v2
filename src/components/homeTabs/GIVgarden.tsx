@@ -6,6 +6,7 @@ import { Zero } from '@ethersproject/constants';
 import { ethers } from 'ethers';
 import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
+import { Col, Container, Row } from '@giveth/ui-design-system';
 import {
 	GardenTopContainer,
 	GardenBottomContainer,
@@ -31,7 +32,6 @@ import { useStakingPool } from '@/hooks/useStakingPool';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { TopInnerContainer } from './commons';
-import { Col, Container, Row } from '@/components/Grid';
 
 const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
 

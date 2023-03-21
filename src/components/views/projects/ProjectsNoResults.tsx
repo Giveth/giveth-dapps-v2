@@ -1,6 +1,7 @@
 import { brandColors, neutralColors, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { useIntl } from 'react-intl';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries, searchSuggestions } from '@/lib/constants/constants';
 import { IMainCategory } from '@/apollo/types/types';
@@ -12,12 +13,21 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 
 	const handleSearch = (searchTerm?: string) =>
 		setVariables(prevVariables => ({ ...prevVariables, searchTerm }));
+	const { formatMessage } = useIntl();
 
 	return (
 		<Wrapper>
-			<Content>It seems we couldn’t find any result!</Content>
-			<LeadMedium>Try another keyword or broaden your search</LeadMedium>
-			<GrayLead>Try these</GrayLead>
+			<Content>
+				{formatMessage({
+					id: 'label.it_seems_we_couldnt_find_any_result',
+				})}
+			</Content>
+			<LeadMedium>
+				{formatMessage({
+					id: 'label.try_another_keyword_or_broaden_your_search',
+				})}
+			</LeadMedium>
+			<GrayLead>{formatMessage({ id: 'label.try_these' })}</GrayLead>
 			<Categories>
 				{searchSuggestions.map((suggestion, index) => {
 					return (
@@ -32,7 +42,9 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 					);
 				})}
 			</Categories>
-			<GrayLead>Or go back to main categories</GrayLead>
+			<GrayLead>
+				{formatMessage({ id: 'label.or_go_back_to_main_categories' })}
+			</GrayLead>
 			<Categories>
 				{props.mainCategories.map((category, index) => {
 					return (
@@ -53,7 +65,7 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 									}));
 								}}
 							>
-								{category.title}
+								{formatMessage({ id: category.slug })}
 							</MainCategoryItem>
 						</Link>
 					);

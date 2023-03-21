@@ -6,7 +6,7 @@ export const SectionContainer = styled.div`
 `;
 
 export const SettingsContainer = styled(Container)`
-	margin-top: 176px;
+	margin-top: 70px;
 	margin-bottom: 107px;
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 8px;

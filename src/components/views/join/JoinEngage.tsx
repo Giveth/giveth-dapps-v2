@@ -3,6 +3,7 @@ import { Lead, brandColors, H2 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 
+import { Container } from '@giveth/ui-design-system';
 import Card from '@/components/GeneralCard';
 import YellowFlower from '/public/images/yellow_flower.svg';
 import BlueFlower from '/public/images/blue_flower.svg';
@@ -17,7 +18,6 @@ import reddit_icon from '/public/images/reddit_icon.svg';
 import links from '@/lib/constants/links';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { ButtonStyled } from '@/components/GeneralCard.sc';
-import { Container } from '@/components/Grid';
 import GetUpdates from '@/components/GetUpdates';
 
 const JoinEngage = () => {

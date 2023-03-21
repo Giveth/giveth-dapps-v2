@@ -169,6 +169,7 @@ export interface EnvConfig {
 	XDAI_CONFIG: XDaiNetworkConfig;
 	POLYGON_CONFIG: BasicNetworkConfig;
 	GARDEN_LINK: string;
+	BASE_ROUTE: string;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;

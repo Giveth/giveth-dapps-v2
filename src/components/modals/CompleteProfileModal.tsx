@@ -8,6 +8,7 @@ import {
 	IconProfile,
 	Lead,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 
 import { Modal } from '@/components/modals/Modal';
 import Routes from '@/lib/constants/Routes';
@@ -20,6 +21,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 export const CompleteProfileModal: FC<IModal> = ({ setShowModal }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	const handleClick = () => {
 		router.push(Routes.Onboard);
@@ -31,16 +33,36 @@ export const CompleteProfileModal: FC<IModal> = ({ setShowModal }) => {
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerIcon={<IconProfile />}
-			headerTitle='Complete your profile'
+			headerTitle={formatMessage({ id: 'label.complete_your_profile' })}
 			headerTitlePosition='left'
 		>
 			<Container>
-				<Title>Now it’s time to complete your profile!</Title>
-				<div>With a complete profile you can:</div>
+				<Title>
+					{formatMessage({
+						id: 'label.now_its_time_to_complete_your_profile',
+					})}
+				</Title>
+				<div>
+					{formatMessage({
+						id: 'label.with_a_complete_profile_you_can',
+					})}
+				</div>
 				<Bullets>
-					<li>Create projects and receive funds.</li>
-					<li>Better communicate with the community.</li>
-					<li>Let others know you a little better.</li>
+					<li>
+						{formatMessage({
+							id: 'label.create_projects_and_receive_funds',
+						})}
+					</li>
+					<li>
+						{formatMessage({
+							id: 'label.better_communicate_with_the_community',
+						})}
+					</li>
+					<li>
+						{formatMessage({
+							id: 'label.let_others_know_you_a_little_better',
+						})}
+					</li>
 				</Bullets>
 				<OkButton
 					label='OK'
@@ -48,7 +70,7 @@ export const CompleteProfileModal: FC<IModal> = ({ setShowModal }) => {
 					buttonType={theme === ETheme.Dark ? 'primary' : 'secondary'}
 				/>
 				<SkipButton
-					label='SKIP FOR NOW'
+					label={formatMessage({ id: 'label.skip_for_now' })}
 					onClick={closeModal}
 					buttonType='primary'
 				/>

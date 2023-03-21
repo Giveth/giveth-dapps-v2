@@ -1,6 +1,7 @@
 import PlacesAutocomplete from 'react-places-autocomplete';
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { globalLocation } from '@/lib/constants/projects';
 import { Shadow } from '@/components/styled-components/Shadow';
 import Input from '@/components/styled-components/Input';
@@ -13,6 +14,7 @@ interface IMyProps {
 
 const SearchPlaces: FC<IMyProps> = ({ setLocation, address, onSelect }) => {
 	const isGlobal = address === globalLocation;
+	const { formatMessage } = useIntl();
 
 	return (
 		<PlacesAutocomplete
@@ -30,8 +32,10 @@ const SearchPlaces: FC<IMyProps> = ({ setLocation, address, onSelect }) => {
 					<InputStyled
 						{...getInputProps({
 							placeholder: isGlobal
-								? 'Global Impact'
-								: 'Search Places...',
+								? formatMessage({ id: 'label.global_impact' })
+								: formatMessage({
+										id: 'label.search_places...',
+								  }),
 						})}
 						disabled={isGlobal}
 					/>

@@ -2,6 +2,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { Button, Lead, brandColors, H5 } from '@giveth/ui-design-system';
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 
 import Routes from '@/lib/constants/Routes';
 import { Modal } from '@/components/modals/Modal';
@@ -13,44 +14,59 @@ import links from '@/lib/constants/links';
 
 export const GoodProjectDescription: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	return (
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerIcon={<Image src={BulbIcon} alt='light bulb' />}
-			headerTitle='How to write a great project description'
+			headerTitle={formatMessage({
+				id: 'label.how_to_write_a_great_project_description',
+			})}
 			headerTitlePosition='left'
 		>
 			<Container>
 				<Title>
-					Try to use this structure as a guide when writing the
-					description
+					{formatMessage({ id: 'label.try_to_use_this_structure' })}
 				</Title>
-				<Description>Who?</Description>
-				<Description>What?</Description>
-				<Description>Why?</Description>
-				<Description>Where?</Description>
-				<Description>How?</Description>
-				<Description>When?</Description>
+				<Description>{formatMessage({ id: 'label.who?' })}</Description>
+				<Description>
+					{formatMessage({ id: 'label.what?' })}
+				</Description>
+				<Description>{formatMessage({ id: 'label.why?' })}</Description>
+				<Description>
+					{formatMessage({ id: 'label.where?' })}
+				</Description>
+				<Description>{formatMessage({ id: 'label.how?' })}</Description>
+				<Description>
+					{formatMessage({ id: 'label.when?' })}
+				</Description>
 
-				<LeadStyled>See how others have done it,</LeadStyled>
+				<LeadStyled>
+					{formatMessage({ id: 'label.see_how_others_have_done_it' })}
+				</LeadStyled>
 				<ExternalLink
-					title='Browse examples.'
+					title={formatMessage({ id: 'label.browse_examples' })}
 					href={Routes.Projects}
 					color={brandColors.pinky[500]}
 				/>
 
-				<LeadStyled>Read this blog post tutorial,</LeadStyled>
+				<LeadStyled>
+					{formatMessage({
+						id: 'label.read_this_blog_post_tutorial',
+					})}
+				</LeadStyled>
 				<ExternalLink
-					title='How to write a fundraising project description to increase
-					donations.'
+					title={formatMessage({
+						id: 'label.how_to_write_a_fundraising_project',
+					})}
 					href={links.FUNDRAISING_DOCS}
 					color={brandColors.pinky[500]}
 				/>
 
 				<OkButton
-					label='DISMISS'
+					label={formatMessage({ id: 'label.dismiss' })}
 					onClick={closeModal}
 					buttonType='texty'
 				/>

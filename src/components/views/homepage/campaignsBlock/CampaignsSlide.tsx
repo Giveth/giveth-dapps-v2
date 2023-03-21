@@ -11,8 +11,8 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
+import { Col, Row } from '@giveth/ui-design-system';
 import { ICampaign } from '@/apollo/types/types';
-import { Col, Row } from '@/components/Grid';
 import { VideoContainer, VideoOverlay } from '@/components/VideoBlock';
 import { campaignLinkGenerator } from '@/helpers/url';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -48,7 +48,8 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 				<Desc>{campaign.description}</Desc>
 				<Link href={campaignLinkGenerator(campaign) || ''}>
 					<ExploreLink>
-						Explore <IconChevronRight32 />
+						{formatMessage({ id: 'page.projects.title.explore' })}{' '}
+						<IconChevronRight32 />
 					</ExploreLink>
 				</Link>
 			</ContentCol>

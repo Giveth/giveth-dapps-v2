@@ -2,13 +2,14 @@ import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { brandColors, Button, H2, Lead, P } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 
+import { Col, Row, Container } from '@giveth/ui-design-system';
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
 import { IProject } from '@/apollo/types/types';
 import { slugToProjectView } from '@/lib/routeCreators';
 import SocialBox from '@/components/views/donate/SocialBox';
 import CopyLink from '@/components/CopyLink';
-import { Col, Row, Container } from '@/components/Grid';
 import { mediaQueries } from '@/lib/constants/constants';
 import { fullPath } from '@/lib/helpers';
 import { setShowFooter } from '@/features/general/general.slice';
@@ -24,6 +25,7 @@ const SuccessfulCreation = (props: {
 	const { slug } = project;
 	const projectPath = slugToProjectView(slug);
 	const dispatch = useAppDispatch();
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		setTimeout(() => window.scrollTo(0, 0), 200);
@@ -49,11 +51,13 @@ const SuccessfulCreation = (props: {
 								animationData={CongratsAnimation}
 							/>
 						</ConfettiContainer>
-						<GiverH4>High five!</GiverH4>
+						<GiverH4>
+							{formatMessage({ id: 'label.high_five' })}
+						</GiverH4>
 						<SuccessMessage>
-							Your project is being reviewed by our team.
-							You&apos;ll receive an email from us once your
-							project is listed.
+							{formatMessage({
+								id: 'label.your_project_is_being_reviewed',
+							})}
 						</SuccessMessage>
 						<CopyLink url={fullPath(projectPath)} />
 						<br />
@@ -62,15 +66,18 @@ const SuccessfulCreation = (props: {
 						<SocialBox project={project} isSuccess />
 						<br />
 						<P>
-							You can still access your project from your account
-							and share it with your friends.
+							{formatMessage({
+								id: 'label.you_can_still_access',
+							})}
 						</P>
 						<Link href={projectPath}>
 							<ProjectsButton
 								onClick={() =>
 									showSuccess && showSuccess(false)
 								}
-								label='VIEW PROJECT'
+								label={formatMessage({
+									id: 'label.view_project',
+								})}
 							/>
 						</Link>
 					</Right>

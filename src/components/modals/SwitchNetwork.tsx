@@ -7,6 +7,7 @@ import {
 	Overline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
@@ -26,11 +27,12 @@ const networks = [
 const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chainId } = useWeb3React();
+	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
 
 	return (
 		<Modal
-			headerTitle='Switch Network'
+			headerTitle={formatMessage({ id: 'label.switch_network' })}
 			headerIcon={<IconNetwork32 />}
 			closeModal={closeModal}
 			isAnimating={isAnimating}
@@ -52,9 +54,12 @@ const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 							<NetworkLogo chainId={_chainId} logoSize={32} />
 							<B>{network.chainName}</B>
 							{_chainId === chainId && (
-								<Selected styleType='Small' theme={theme}>
-									Selected
-								</Selected>
+								<SelectedNetwork
+									styleType='Small'
+									theme={theme}
+								>
+									{formatMessage({ id: 'label.selected' })}
+								</SelectedNetwork>
 							)}
 						</NetworkItem>
 					);
@@ -64,7 +69,7 @@ const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 	);
 };
 
-const Selected = styled(Overline)`
+export const SelectedNetwork = styled(Overline)`
 	color: ${props =>
 		props.theme === ETheme.Dark
 			? brandColors.giv[100]
@@ -80,7 +85,7 @@ const Selected = styled(Overline)`
 	border-radius: 4px;
 `;
 
-const NetworkItem = styled.div<{ isSelected: boolean }>`
+export const NetworkItem = styled.div<{ isSelected: boolean }>`
 	position: relative;
 	padding: 8px;
 	width: 213px;

@@ -8,6 +8,7 @@ import {
 import { useWeb3React } from '@web3-react/core';
 import { InjectedConnector } from '@web3-react/injected-connector';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { switchNetwork } from '@/lib/metamask';
 import { Flex } from './styled-components/Flex';
 import config from '@/configuration';
@@ -20,6 +21,8 @@ export const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
 	const { account, activate } = useWeb3React();
 	const networkLabel =
 		network === config.XDAI_NETWORK_NUMBER ? 'Gnosis chain' : 'Mainnet';
+
+	const { formatMessage } = useIntl();
 
 	const checkWalletAndSwitchNetwork = async (network: number) => {
 		if (!account) {
@@ -34,9 +37,14 @@ export const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
 		<DAOChangeNetworkModalContainer>
 			<Flex gap='16px'>
 				<IconInfoFilled16 />
-				<Title>Switch network</Title>
+				<Title>{formatMessage({ id: 'label.switch_network' })}</Title>
 			</Flex>
-			<Desc>This RegenFarm is only available on {networkLabel}</Desc>
+			<Desc>
+				{formatMessage(
+					{ id: 'label.this_regenfarm_is_only_available_on_network' },
+					{ networkLabel },
+				)}
+			</Desc>
 			<ChangeButton
 				buttonType='texty'
 				label={`Switch to ${networkLabel}`}

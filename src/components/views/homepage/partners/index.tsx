@@ -1,6 +1,7 @@
 import { B, Container, H3, neutralColors } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 import The_Commons_Stack from '/public/images/partnerships/The_Commons_Stack.svg';
@@ -33,12 +34,14 @@ const PartnersArray = [
 ];
 
 const HomePartners = () => {
+	const { formatMessage } = useIntl();
+
 	return (
 		<Wrapper>
 			<Container>
 				<FlexCenter direction='column' gap='60px'>
 					<CustomHeading weight={700}>
-						Proud of our partners
+						{formatMessage({ id: 'label.proud_of_our_partners' })}
 					</CustomHeading>
 					<CustomFlex justifyContent='space-around'>
 						{PartnersArray.map(partner => (

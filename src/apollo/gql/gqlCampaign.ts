@@ -17,6 +17,7 @@ export const CAMPAIGN_CORE_FIELDS = gql`
 		relatedProjectsCount
 		photo
 		video
+		videoPreview
 		type
 		isActive
 		order

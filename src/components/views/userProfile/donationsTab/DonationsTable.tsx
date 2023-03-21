@@ -40,7 +40,6 @@ const DonationTable: FC<DonationTable> = ({
 	myAccount,
 }) => {
 	const { formatMessage, locale } = useIntl();
-	console.log({ locale });
 	return (
 		<DonationTableContainer myAccount={myAccount}>
 			<TableHeader onClick={() => changeOrder(EOrderBy.CreationDate)}>

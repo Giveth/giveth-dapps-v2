@@ -6,12 +6,12 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import React, {
-	FC,
 	InputHTMLAttributes,
 	ReactElement,
 	useCallback,
 	useId,
 	useRef,
+	forwardRef,
 } from 'react';
 import styled, { css } from 'styled-components';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
@@ -91,7 +91,7 @@ type InputType =
 			registerOptions?: never;
 	  } & IInput);
 
-const Input: FC<InputType> = props => {
+const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 	const {
 		label,
 		caption,
@@ -162,6 +162,8 @@ const Input: FC<InputType> = props => {
 						? register(registerName, registerOptions)
 						: {})}
 					{...rest}
+					data-testid='styled-input'
+					ref={inputRef}
 				/>
 				<SuffixWrapper
 					style={{
@@ -199,7 +201,9 @@ const Input: FC<InputType> = props => {
 			)}
 		</InputContainer>
 	);
-};
+});
+
+Input.displayName = 'Input';
 
 const Absolute = styled(FlexCenter)`
 	position: absolute;

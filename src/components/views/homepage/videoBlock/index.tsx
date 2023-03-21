@@ -11,8 +11,8 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { Container } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
-import { Container } from '@/components/Grid';
 import {
 	VideoContainer,
 	VideoOverlay,
