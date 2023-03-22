@@ -6,6 +6,7 @@ import {
 	StakingType,
 	StreamType,
 } from '@/types/config';
+import { networksParams } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://mainnet.serve.giveth.io';
@@ -37,13 +38,8 @@ const config: EnvConfig = {
 
 	OPENSEA_ADDRESS: 'https://opensea.io/',
 	MAINNET_CONFIG: {
-		chainId: '0x1', // A 0x-prefixed hexadecimal string
-		chainName: 'Ethereum Mainnet',
-		nativeCurrency: {
-			name: 'ETH',
-			symbol: 'ETH', // 2-6 characters long
-			decimals: 18,
-		},
+		...networksParams[1],
+
 		DAI_CONTRACT_ADDRESS: '0x6b175474e89094c44da98b954eedeac495271d0f',
 		PFP_CONTRACT_ADDRESS: '0x78fde77737d5b9ab32fc718c9535c7f1b8ce84db',
 
@@ -52,7 +48,6 @@ const config: EnvConfig = {
 		},
 
 		blockExplorerName: ['etherscan'],
-		blockExplorerUrls: ['https://etherscan.io/'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
 
@@ -220,21 +215,13 @@ const config: EnvConfig = {
 	},
 
 	XDAI_CONFIG: {
-		chainId: '0x64',
-		chainName: 'Gnosis Chain',
-		nativeCurrency: {
-			name: 'XDAI',
-			symbol: 'XDAI',
-			decimals: 18,
-		},
-
+		...networksParams[100],
 		gasPreference: {
 			maxFeePerGas: parseUnits('2', 'gwei').toString(),
 			maxPriorityFeePerGas: parseUnits('1', 'gwei').toString(),
 		},
 
 		blockExplorerName: ['Blockscout'],
-		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
 
@@ -366,36 +353,20 @@ const config: EnvConfig = {
 
 	POLYGON_CONFIG: {
 		nodeUrl: '',
-		chainId: '0x89', // A 0x-prefixed hexadecimal string
-		chainName: 'Polygon',
-		nativeCurrency: {
-			name: 'MATIK',
-			symbol: 'MATIK',
-			decimals: 18,
-		},
+		...networksParams[137],
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerUrls: ['https://polygonscan.com/'],
-		iconUrls: ['https://icons.llamao.fi/icons/chains/rsz_polygon.jpg'], // Currently ignored.
 		blockExplorerName: ['PolygonScan'],
 		subgraphAddress: '',
 	},
 
 	OPTIMISM_CONFIG: {
 		nodeUrl: 'mainnet.optimism.io',
-		chainId: '0xA', // A 0x-prefixed hexadecimal string
-		chainName: 'Optimism',
-		nativeCurrency: {
-			name: 'ETH',
-			symbol: 'ETH',
-			decimals: 18,
-		},
+		...networksParams[10],
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerUrls: ['https://optimistic.etherscan.io/'],
-		iconUrls: ['https://icons.llamao.fi/icons/chains/rsz_polygon.jpg'], // Currently ignored.
 		blockExplorerName: ['OptimismScan'],
 		subgraphAddress: '',
 	},
