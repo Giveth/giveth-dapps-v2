@@ -8,7 +8,7 @@ import { useIntl } from 'react-intl';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { FlexSpacer } from '@/components/styled-components/Flex';
 import { PoolStakingConfig, StakingType } from '@/types/config';
-import { getPoolIconWithName, StakeCardState } from './BaseStakingCard';
+import { StakeCardState } from './BaseStakingCard';
 import {
 	StakingPoolExchangeRow,
 	StakingPoolExchange,
@@ -42,7 +42,6 @@ export const StakingCardHeader: FC<IStakingCardHeaderProps> = ({
 
 	return (
 		<StakingPoolExchangeRow gap='4px' alignItems='center'>
-			{getPoolIconWithName(platform, poolNetwork)}
 			<StakingPoolExchange styleType='Small'>
 				{platformTitle || platform}
 			</StakingPoolExchange>
