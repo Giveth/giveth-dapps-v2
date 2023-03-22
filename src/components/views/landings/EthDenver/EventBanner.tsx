@@ -4,7 +4,7 @@ import ETHDenverIcon from '/public/images/ETHDenver_2023.png';
 import SporkWhaleIcon from '/public/images/ETHDenver-spork-whale.png';
 import GoldSporkIcon from '/public/images/ETHDenver-gold-sporke.png';
 import Image from 'next/image';
-import { Container } from '@/components/Grid';
+import { Container } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 
 const EventBanner = () => {

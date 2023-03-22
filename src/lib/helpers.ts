@@ -1,6 +1,8 @@
 import { promisify } from 'util';
 // eslint-disable-next-line import/named
 import { unescape } from 'lodash';
+import moment from 'moment';
+
 import { parseEther, parseUnits } from '@ethersproject/units';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
@@ -14,13 +16,14 @@ import { captureException } from '@sentry/nextjs';
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
-import { IUser } from '@/apollo/types/types';
-import Routes from '@/lib/constants/Routes';
+import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
 import config from '@/configuration';
 import { ERC20 } from '@/types/contracts';
+
+import 'moment/locale/es';
 
 declare let window: any;
 
@@ -85,6 +88,13 @@ export const durationToYMDh = (ms: number, full: boolean = false) => {
 	return shortRes;
 };
 
+export const getTimeAgo = (date: number, locale?: string) => {
+	const m = moment(date)
+		.locale(locale || 'en')
+		.fromNow();
+	return m;
+};
+
 export const durationToString = (ms: number, length = 3, full = false) => {
 	const temp: { [key: string]: number } = durationToYMDh(ms, full);
 	const res: string[] = [];
@@ -135,6 +145,25 @@ export const getGasPreference = (
 };
 
 export const isSSRMode = typeof window === 'undefined';
+
+export const generatePolygonAddress = (addresses?: IWalletAddress[]) => {
+	if (!addresses || addresses.length !== 2) return '';
+	const mainnetAddress = addresses.find(
+		address => address.networkId === config.PRIMARY_NETWORK.id,
+	);
+	const gnosisAddress = addresses.find(
+		address => address.networkId === config.SECONDARY_NETWORK.id,
+	);
+	const isSame = compareAddressesArray([
+		mainnetAddress?.address,
+		gnosisAddress?.address,
+	]);
+	if (isSame) {
+		return mainnetAddress?.address;
+	} else {
+		return '';
+	}
+};
 
 export const compareAddresses = (
 	add1: string | undefined | null,
@@ -361,17 +390,7 @@ export async function signMessage(
 	}
 }
 
-export const checkLinkActive = (route: string, href: string) => {
-	if (route === href) {
-		return true;
-	}
-	if (href === Routes.GIVECONOMY) {
-		return isGivEconomyRoute(route);
-	}
-	return false;
-};
-
-export const isGivEconomyRoute = (route: string) => {
+export const isGIVeconomyRoute = (route: string) => {
 	const givEconomyRoute = giveconomyTabs.find(
 		giveconomyTab => giveconomyTab.href === route,
 	);

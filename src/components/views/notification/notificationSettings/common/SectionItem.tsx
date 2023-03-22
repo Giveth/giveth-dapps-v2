@@ -1,7 +1,7 @@
 import { B, neutralColors, P } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { Col, Row } from '@/components/Grid';
+import { Col, Row } from '@giveth/ui-design-system';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import DappMailCheckbox from '@/components/views/notification/notificationSettings/common/DappMailCheckbox';
 import { INotificationSetting } from '@/features/notification/notification.types';

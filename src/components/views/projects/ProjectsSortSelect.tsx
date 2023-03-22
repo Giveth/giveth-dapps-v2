@@ -21,6 +21,7 @@ import Select, {
 
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
+import { useIntl } from 'react-intl';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { useProjectsContext } from '@/context/projects.context';
@@ -37,40 +38,42 @@ const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 	return props.selectProps.menuIsOpen ? <IconCaretUp /> : <IconCaretDown />;
 };
 
-const sortByOptions = [
-	{
-		label: 'Rank',
-		value: EProjectsSortBy.GIVPOWER,
-		icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
-	},
-	{
-		label: 'Newest',
-		value: EProjectsSortBy.NEWEST,
-		icon: <IconArrowTop size={16} color={brandColors.deep[900]} />,
-	},
-	{
-		label: 'Oldest',
-		value: EProjectsSortBy.OLDEST,
-		icon: <IconArrowBottom size={16} color={brandColors.deep[900]} />,
-	},
-	{
-		label: 'Most liked',
-		value: EProjectsSortBy.MOST_LIKED,
-		icon: <IconHeartOutline16 color={brandColors.deep[900]} />,
-	},
-	{
-		label: 'Most funded',
-		value: EProjectsSortBy.MOST_FUNDED,
-		icon: <IconDonation16 color={brandColors.deep[900]} />,
-	},
-	{
-		label: 'RecentlyUpdated',
-		value: EProjectsSortBy.RECENTLY_UPDATED,
-		icon: <IconFast16 color={brandColors.deep[900]} />,
-	},
-];
-
 const ProjectsSortSelect = () => {
+	const { formatMessage } = useIntl();
+
+	const sortByOptions = [
+		{
+			label: formatMessage({ id: 'label.rank' }),
+			value: EProjectsSortBy.GIVPOWER,
+			icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
+		},
+		{
+			label: formatMessage({ id: 'label.newest' }),
+			value: EProjectsSortBy.NEWEST,
+			icon: <IconArrowTop size={16} color={brandColors.deep[900]} />,
+		},
+		{
+			label: formatMessage({ id: 'label.oldest' }),
+			value: EProjectsSortBy.OLDEST,
+			icon: <IconArrowBottom size={16} color={brandColors.deep[900]} />,
+		},
+		{
+			label: formatMessage({ id: 'label.most_liked' }),
+			value: EProjectsSortBy.MOST_LIKED,
+			icon: <IconHeartOutline16 color={brandColors.deep[900]} />,
+		},
+		{
+			label: formatMessage({ id: 'label.most_funded' }),
+			value: EProjectsSortBy.MOST_FUNDED,
+			icon: <IconDonation16 color={brandColors.deep[900]} />,
+		},
+		{
+			label: formatMessage({ id: 'label.recently_updated' }),
+			value: EProjectsSortBy.RECENTLY_UPDATED,
+			icon: <IconFast16 color={brandColors.deep[900]} />,
+		},
+	];
+
 	const [value, setValue] = useState(sortByOptions[0]);
 	const { variables, setVariables } = useProjectsContext();
 	const { isMobile } = useDetectDevice();
@@ -93,7 +96,9 @@ const ProjectsSortSelect = () => {
 			alignItems={isMobile ? 'stretch' : 'center'}
 			flexDirection={isMobile ? 'column' : 'row'}
 		>
-			<SortingLabel htmlFor='sorting'>Sort by</SortingLabel>
+			<SortingLabel htmlFor='sorting'>
+				{formatMessage({ id: 'label.sort_by' })}
+			</SortingLabel>
 			<Select
 				components={{
 					DropdownIndicator,

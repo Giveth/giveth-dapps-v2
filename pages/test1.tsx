@@ -6,12 +6,12 @@ import { FC, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
+import { Container } from '@giveth/ui-design-system';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { Container } from '@/components/Grid';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
 import { TestProvider, useTestData } from '@/context/test.context';
 import { IModal } from '@/types/common';

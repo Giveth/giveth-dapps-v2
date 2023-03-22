@@ -16,6 +16,7 @@ import {
 	useState,
 } from 'react';
 import styled, { css } from 'styled-components';
+import { useIntl } from 'react-intl';
 import { ETheme } from '@/features/general/general.slice';
 import { Flex } from './styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
@@ -28,6 +29,7 @@ interface ISearchInputProps {
 export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 	const [value, setValue] = useState<string>('');
 	const theme = useAppSelector(state => state.general.theme);
+	const { formatMessage } = useIntl();
 
 	function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
 		if (event.code === 'Enter' && value.length > 2) {
@@ -45,7 +47,9 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 				<StyledInput
 					onChange={handleOnChange}
 					as='input'
-					placeholder='Search for project...'
+					placeholder={formatMessage({
+						id: 'label.search_for_project',
+					})}
 					theme={theme}
 					value={value}
 				/>
@@ -68,12 +72,20 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 				{value.length > 0 ? (
 					value.length > 2 ? (
 						<>
-							<Hint>Press Enter to search</Hint>
+							<Hint>
+								{formatMessage({
+									id: 'label.press_enter_to_search',
+								})}
+							</Hint>
 							<IconEnter24 />
 						</>
 					) : (
 						<>
-							<Hint>Minimum 3 characters</Hint>
+							<Hint>
+								{formatMessage({
+									id: 'label.minimum_three_characters',
+								})}
+							</Hint>
 							<IconAlertCircle16 />
 						</>
 					)

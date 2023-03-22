@@ -92,7 +92,7 @@ const CheckEligibility = () => {
 
 	return (
 		<SectionContainer>
-			<H2>Early Minting has started!</H2>
+			<H2>Early Minting begins March 22!</H2>
 			<br />
 			<CustomQuote size='small'>
 				Check here to verify your eligibility
@@ -149,7 +149,7 @@ const CustomQuote = styled(QuoteText)`
 `;
 
 const CustomButton = styled(Button)`
-	margin-top: 20px;
+	margin: 20px 0 100px 0;
 	width: 250px;
 `;
 

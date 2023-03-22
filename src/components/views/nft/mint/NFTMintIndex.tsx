@@ -14,8 +14,8 @@ import Image from 'next/image';
 import { Contract } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { JsonRpcProvider } from '@ethersproject/providers';
+import { Col, Container, Row } from '@giveth/ui-design-system';
 import { OvalVerticalGradient, OvalHorizontalGradient } from '../common.styles';
-import { Col, Container, Row } from '@/components/Grid';
 import { MintCard } from '@/components/cards/MintCard';
 import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
@@ -25,10 +25,10 @@ import EligibilityModal from '../overview/EligibilityModal';
 import { Flex } from '@/components/styled-components/Flex';
 
 export const NFTMintIndex = () => {
+	const [showEligibilityModal, setShowEligibilityModal] = useState(false);
 	const { formatMessage } = useIntl();
 	const { account, library, chainId } = useWeb3React();
-	const { step, setStep, qty, tx: txHash } = usePFPMintData();
-	const [showEligibilityModal, setShowEligibilityModal] = useState(false);
+	const { step, setStep, qty, tx: txHash, setIsEligible } = usePFPMintData();
 
 	useEffect(() => {
 		const checkAddress = async () => {
@@ -48,7 +48,11 @@ export const NFTMintIndex = () => {
 					const res = await PFPContract.allowList(account);
 					if (!res) {
 						setShowEligibilityModal(true);
+					} else {
+						setIsEligible(true);
 					}
+				} else {
+					setIsEligible(true);
 				}
 			} catch (error) {
 				console.log('Error on check allow List', error);
@@ -60,7 +64,7 @@ export const NFTMintIndex = () => {
 	return (
 		<MintViewContainer>
 			<OvalVerticalGradient />
-			<OvalHorizontalGradient />
+			<StyledOvalHorizontalGradient />
 			<MintContainer>
 				<Row style={{ paddingBottom: '20px' }}>
 					<Col xs={12} sm={8} md={6}>
@@ -110,8 +114,8 @@ export const NFTMintIndex = () => {
 									<Image
 										src='/images/yellow_flower_full.svg'
 										alt='yellow flower'
-										width={360}
-										height={360}
+										width={320}
+										height={320}
 									/>
 								</ContentWrapperCenter>
 							</>
@@ -146,8 +150,8 @@ export const NFTMintIndex = () => {
 									<Image
 										src='/images/yellow_flower_full.svg'
 										alt='yellow flower'
-										width={360}
-										height={360}
+										width={320}
+										height={320}
 										style={{
 											margin: 'auto',
 											display: 'block',
@@ -251,7 +255,6 @@ const MintAgainButton = styled(Button)`
 
 const ImagesWrapper = styled.div`
 	position: relative;
-	height: 1000px;
 `;
 
 const ImageWrapper = styled.div`
@@ -270,8 +273,8 @@ const ImageWrapper = styled.div`
 
 const Image1 = styled(ImageWrapper)`
 	z-index: 2;
+	display: none;
 	${mediaQueries.tablet} {
-		display: none;
 	}
 	${mediaQueries.laptopS} {
 		display: block;
@@ -293,5 +296,12 @@ const Image2 = styled(ImageWrapper)`
 	${mediaQueries.laptopS} {
 		right: 92px;
 		top: 200px;
+	}
+`;
+
+const StyledOvalHorizontalGradient = styled(OvalHorizontalGradient)`
+	display: none;
+	${mediaQueries.tablet} {
+		display: block;
 	}
 `;

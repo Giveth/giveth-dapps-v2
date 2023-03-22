@@ -211,7 +211,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 			</Link>
 			<OutlineLinkButton
 				isExternal
-				label='Get GIV Token'
+				label={formatMessage({ id: 'label.get_giv_token' })}
 				size='small'
 				linkType='primary'
 				href={config.XDAI_CONFIG.GIV.BUY_LINK}

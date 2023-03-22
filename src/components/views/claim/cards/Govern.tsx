@@ -179,17 +179,26 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 				/>
 			</BeeImage>
 			<GovernHeader>
-				<Title as='h1'>Engage in Governance</Title>
+				<Title as='h1'>
+					{formatMessage({ id: 'label.engage_in_governance' })}
+				</Title>
 
 				<Desc>
-					Participate in Giveth governance using the <b>GIVgarden</b>.
-					Wrap GIV to vote on proposals and earn rewards.
+					{formatMessage({
+						id: 'label.participate_in_giveth_governance_using_the',
+					})}{' '}
+					<b>GIVgarden</b>.{' '}
+					{formatMessage({
+						id: 'label.wrap_give_to_vote_on_proposals_and_earn_rewards',
+					})}
 				</Desc>
 			</GovernHeader>
 			<APRRow alignItems={'center'} justifyContent={'flex-end'}>
 				<ImpactCard>
 					<H5 as='h2' weight={700}>
-						If you vote with GIV tokens
+						{formatMessage({
+							id: 'label.if_you_vote_with_giv_tokens',
+						})}
 					</H5>
 					<div>
 						<Flex
@@ -197,7 +206,9 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 							justifyContent={'space-between'}
 						>
 							<ImpactCardLabel>
-								Amount of GIV wrapped
+								{formatMessage({
+									id: 'label.amount_of_giv_wrapped',
+								})}
 							</ImpactCardLabel>
 							<MaxStakeGIV
 								onClick={() =>
@@ -220,7 +231,11 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 					</div>
 				</ImpactCard>
 				<PoolCardContainer>
-					<PoolCardTitle>If you wrap for 1 month:</PoolCardTitle>
+					<PoolCardTitle>
+						{formatMessage({
+							id: 'label.if_you_wrap_for_one_month',
+						})}
+					</PoolCardTitle>
 					<PoolCard>
 						<PoolItems>
 							<Flex justifyContent='space-between'>
@@ -239,13 +254,17 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 								</PoolItemBold>
 							</Flex>
 							<Flex justifyContent='space-between'>
-								<PoolItem>Claimable</PoolItem>
+								<PoolItem>
+									{formatMessage({ id: 'label.claimable' })}
+								</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(potentialClaim)} GIV
 								</PoolItemBold>
 							</Flex>
 							<Flex justifyContent='space-between'>
-								<PoolItem>Streaming</PoolItem>
+								<PoolItem>
+									{formatMessage({ id: 'label.streaming' })}
+								</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(earnEstimate)} GIV
 									{formatMessage({ id: 'label./week' })}
@@ -256,9 +275,15 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 				</PoolCardContainer>
 			</APRRow>
 			<PoolCardFooter>
-				These calculators demonstrate how you can use GIV to participate
-				in the GIVeconomy! <b>These are just simulations.</b> To
-				participate for real, claim your GIV.
+				{formatMessage({
+					id: 'label.these_calculators_demonstrate_how_you_can_use_giv',
+				})}{' '}
+				<b>
+					{formatMessage({ id: 'label.these_are_just_simulations' })}
+				</b>{' '}
+				{formatMessage({
+					id: 'label.to_participate_for_real_claim_your_giv',
+				})}
 			</PoolCardFooter>
 			{step === index && (
 				<>

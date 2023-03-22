@@ -9,6 +9,7 @@ import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
+
 import Script from 'next/script';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
@@ -23,7 +24,11 @@ import ModalController from '@/components/controller/modal.ctrl';
 import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
+import StorageLabel from '@/lib/localStorage';
 import NotificationController from '@/components/controller/notification.ctrl';
+
+import { isGIVeconomyRoute } from '@/lib/helpers';
+import GIVeconomyTab from '@/components/GIVeconomyTab';
 import type { AppProps } from 'next/app';
 
 declare global {
@@ -34,7 +39,7 @@ declare global {
 
 const DEFAULT_WRITE_KEY = 'MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB';
 
-const messages = {
+export const IntlMessages = {
 	en,
 	es,
 };
@@ -88,6 +93,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 		};
 	}, [router]);
 
+	useEffect(() => {
+		localStorage.setItem(StorageLabel.LOCALE, locale || 'en');
+	}, [locale]);
+
 	return (
 		<>
 			<Head>
@@ -99,7 +108,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 			<Provider store={store}>
 				<IntlProvider
 					locale={locale!}
-					messages={messages[locale as keyof typeof messages]}
+					messages={IntlMessages[locale as keyof typeof IntlMessages]}
 					defaultLocale='en'
 				>
 					<ApolloProvider client={apolloClient}>
@@ -110,6 +119,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 							<SubgraphController />
 							<UserController />
 							<HeaderWrapper />
+							{isGIVeconomyRoute(router.route) && (
+								<GIVeconomyTab />
+							)}
 							{(pageProps as any).errorStatus ? (
 								<ErrorsIndex
 									statusCode={(pageProps as any).errorStatus}

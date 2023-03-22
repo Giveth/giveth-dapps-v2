@@ -73,7 +73,10 @@ export const VoteCardTitle = styled(H1)`
 `;
 
 export const DataBlockWithMargin = styled(DataBlock)`
-	margin-bottom: 32px;
+	display: flex;
+	height: 100%;
+	flex-direction: column;
+	justify-content: space-between;
 `;
 
 export const DataBlockButton = styled(ButtonLink)`

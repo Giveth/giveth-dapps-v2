@@ -7,6 +7,7 @@ import {
 	QuoteText,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { Flex } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
@@ -14,26 +15,33 @@ import { StakingType } from '@/types/config';
 import config from '@/configuration';
 
 const GetMoreGIVpowerBanner = () => {
+	const { formatMessage } = useIntl();
+
 	return (
 		<GetMoreGIVpowerContainer>
 			<Background />
-			<H1 weight={700}>Get more GIVpower</H1>
+			<H1 weight={700}>
+				{formatMessage({ id: 'label.get_more_givpower' })}
+			</H1>
 			<QuoteText size='small'>
-				Stake & lock GIV to get GIVpower to boost projects.
+				{formatMessage({
+					id: 'label.stake_and_lock_giv_to_get_givpower_to_boost_projects',
+				})}
+				.
 			</QuoteText>
 			<Actions gap='16px' flexWrap>
 				<Link
 					href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
 				>
 					<ButtonLink
-						label='Stake GIV'
+						label={formatMessage({ id: 'label.stake_giv' })}
 						size='small'
 						linkType='primary'
 					/>
 				</Link>
 				<OutlineLinkButton
 					isExternal
-					label='Get GIV'
+					label={formatMessage({ id: 'label.get_giv' })}
 					size='small'
 					linkType='primary'
 					href={config.XDAI_CONFIG.GIV.BUY_LINK}

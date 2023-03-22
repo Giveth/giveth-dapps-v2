@@ -4,6 +4,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Contract, ethers } from 'ethers';
 import { captureException } from '@sentry/nextjs';
 import { ButtonLink, H5, IconExternalLink } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { Modal } from '../Modal';
 import { AmountInput } from '../../AmountInput';
 import { approveERC20tokenTransfer, wrapToken } from '@/lib/stakingPool';
@@ -77,6 +78,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	showLockModal,
 	setShowModal,
 }) => {
+	const { formatMessage } = useIntl();
 	const [amount, setAmount] = useState('0');
 	const [txHash, setTxHash] = useState('');
 	const [stakeState, setStakeState] = useState<StakeState>(
@@ -198,7 +200,11 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 							{(stakeState === StakeState.APPROVE ||
 								stakeState === StakeState.APPROVING) && (
 								<>
-									<SectionTitle>Amount to stake</SectionTitle>
+									<SectionTitle>
+										{formatMessage({
+											id: 'label.amount_to_stake',
+										})}
+									</SectionTitle>
 									<AmountInput
 										setAmount={setAmount}
 										maxAmount={maxAmount}
@@ -208,11 +214,13 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 										}
 									/>
 									<StyledOutlineButton
-										label={
-											stakeState === StakeState.APPROVE
-												? 'APPROVE'
-												: 'approve pending'
-										}
+										label={formatMessage({
+											id:
+												stakeState ===
+												StakeState.APPROVE
+													? 'label.approve'
+													: 'label.approve_pending',
+										})}
 										onClick={onApprove}
 										disabled={
 											amount == '0' ||
@@ -225,7 +233,9 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 									/>
 									<ButtonLink
 										isExternal
-										label='get more giv'
+										label={formatMessage({
+											id: 'label.get_more_giv',
+										})}
 										linkType='texty'
 										size='small'
 										href={poolStakingConfig.BUY_LINK}
@@ -239,17 +249,22 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 								stakeState === StakeState.WRAPPING) && (
 								<>
 									<BriefContainer>
-										<H5>You are staking</H5>
+										<H5>
+											{formatMessage({
+												id: 'label.you_are_staking',
+											})}
+										</H5>
 										<H5White weight={700}>
 											{formatWeiHelper(amount)} GIV
 										</H5White>
 									</BriefContainer>
 									<StyledOutlineButton
-										label={
-											stakeState === StakeState.WRAP
-												? 'stake'
-												: 'stake pending'
-										}
+										label={formatMessage({
+											id:
+												stakeState === StakeState.WRAP
+													? 'label.stake'
+													: 'label.stake_pending',
+										})}
 										onClick={onWrap}
 										disabled={
 											amount == '0' ||
@@ -263,7 +278,9 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 									<CancelButton
 										buttonType='texty'
 										size='small'
-										label='CANCEL'
+										label={formatMessage({
+											id: 'label.cancel',
+										})}
 										onClick={() => {
 											setShowModal(false);
 										}}

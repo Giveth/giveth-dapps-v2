@@ -1,10 +1,8 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
+import Image from 'next/image';
 import { setShowFooter, setShowHeader } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
-
-const deckPDFUrl =
-	'https://docs.google.com/gview?embedded=true&url=https://giveth.mypinata.cloud/ipfs/QmTbtB4nVToViVuPP2qsiSSqNH4dzfGaZULBfZJbafJoiU';
 
 const DeckRoute = () => {
 	const dispatch = useAppDispatch();
@@ -14,21 +12,32 @@ const DeckRoute = () => {
 		dispatch(setShowHeader(false));
 	}, []);
 
+	const slidesArray = Array.from(Array(40).keys());
+
 	return (
 		<Wrapper>
-			<iframe
-				width='100%'
-				height='100%'
-				src={deckPDFUrl}
-				title='PDF View'
-			/>
+			{slidesArray.map(slide => (
+				<Image
+					key={slide}
+					src={
+						'/images/deck-fundraising/Slide' + (slide + 1) + '.webp'
+					}
+					alt={'deck-fundraising-' + slide}
+					width={1280}
+					height={720}
+				/>
+			))}
 		</Wrapper>
 	);
 };
 
 const Wrapper = styled.div`
-	height: 100vh;
-	overflow: hidden;
+	max-width: 1200px;
+	margin: 0 auto;
+	> img {
+		width: 100%;
+		height: auto;
+	}
 `;
 
 export default DeckRoute;

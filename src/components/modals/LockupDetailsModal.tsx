@@ -11,6 +11,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
+import { useIntl } from 'react-intl';
 import { smallFormatDate } from '@/lib/helpers';
 import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
@@ -42,6 +43,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	const { account } = useWeb3React();
 	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		async function fetchGIVLockDetails() {
@@ -60,16 +62,19 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerTitle='Locked GIV Details'
+			headerTitle={formatMessage({ id: 'label.locked_giv_details' })}
 			headerTitlePosition='left'
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<LockupDetailsContainer>
 				<Desc>
-					Review your staked GIV, lockup periods, multipliers &amp;
-					earnings.
+					{formatMessage({
+						id: 'label.review_your_staked_giv_lockup_period',
+					})}
 				</Desc>
-				<Subtitle>Available to unstake</Subtitle>
+				<Subtitle>
+					{formatMessage({ id: 'label.available_to_unstake' })}
+				</Subtitle>
 				<UnstakeContainer>
 					<div>
 						<IconUnlock32 />
@@ -90,8 +95,9 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 								align='right'
 							>
 								<TooltipContent>
-									The minimum APR for staked (not locked) GIV.
-									Lock your GIV to increase your rewards.
+									{formatMessage({
+										id: 'label.the_min_apr_for_staked_not_locked_giv',
+									})}
 								</TooltipContent>
 							</IconWithTooltip>
 						</CloseText>
@@ -99,14 +105,22 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 				</UnstakeContainer>
 
 				<LockedContainer>
-					<Subtitle>Locked GIV</Subtitle>
+					<Subtitle>
+						{formatMessage({ id: 'label.locekd_giv' })}
+					</Subtitle>
 					{locksInfo?.length > 0 ? (
 						<LockedTable>
 							<LockTableHeader>GIV</LockTableHeader>
-							<LockTableHeader>Locked for</LockTableHeader>
-							<LockTableHeader>Multiplier</LockTableHeader>
+							<LockTableHeader>
+								{formatMessage({ id: 'label.locked_for' })}
+							</LockTableHeader>
+							<LockTableHeader>
+								{formatMessage({ id: 'label.multiplier' })}
+							</LockTableHeader>
 							<LockTableHeader>APR</LockTableHeader>
-							<LockTableHeader>Unlock Date</LockTableHeader>
+							<LockTableHeader>
+								{formatMessage({ id: 'label.unlock_date' })}
+							</LockTableHeader>
 							{locksInfo?.map(
 								(locksInfo: IGIVpowerPosition, key) => {
 									const multiplier = Math.sqrt(
@@ -120,10 +134,19 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 												)}
 											</LockTableCell>
 											<LockTableCell>
-												{`${locksInfo.rounds}  Round${
+												{`${
 													locksInfo.rounds > 1
-														? 's'
-														: ''
+														? formatMessage(
+																{
+																	id: 'label.number_of_rounds',
+																},
+																{
+																	rounds: locksInfo.rounds,
+																},
+														  )
+														: formatMessage({
+																id: 'label.one_round',
+														  })
 												}`}
 											</LockTableCell>
 											<LockTableCell>
@@ -160,14 +183,17 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 
 				<StakedContainer>
 					<SubtitleWithTooltip>
-						<Subtitle>Total staked GIV</Subtitle>
+						<Subtitle>
+							{formatMessage({ id: 'label.total_staked_giv' })}
+						</Subtitle>
 						<IconWithTooltip
 							icon={<IconHelpFilled />}
 							direction='top'
 						>
 							<TooltipContent>
-								All your staked GIV, including GIV that is
-								locked.
+								{formatMessage({
+									id: 'label.all_your_staked_giv_including_the_locked',
+								})}
 							</TooltipContent>
 						</IconWithTooltip>
 					</SubtitleWithTooltip>

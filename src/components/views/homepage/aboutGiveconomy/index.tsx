@@ -11,8 +11,8 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { Container } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
-import { Container } from '@/components/Grid';
 import { mediaQueries } from '@/lib/constants/constants';
 
 interface CustomBtn {

@@ -11,6 +11,7 @@ import {
 } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
+import { Row, Col } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
 import { Flex } from '@/components/styled-components/Flex';
 import { isUserRegistered } from '@/lib/helpers';
@@ -24,7 +25,6 @@ import {
 	ProjectsContributeCard,
 	PublicGIVpowerContributeCard,
 } from '@/components/ContributeCard';
-import { Row, Col } from '@/components/Grid';
 import { formatWeiHelper } from '@/helpers/number';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
@@ -130,7 +130,9 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 					{myAccount ? (
 						<ContributeCard
 							data1={{
-								label: 'Projects Boosted',
+								label: formatMessage({
+									id: 'label.projects_boosted',
+								}),
 								value: boostedProjectsCount,
 							}}
 							data2={{
