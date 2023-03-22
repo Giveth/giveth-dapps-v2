@@ -43,11 +43,10 @@ const EligibilityModal = ({ isSuccess, setShowModal }: IEligibilityModal) => {
 			</ModalContentContainer>
 			{isSuccess ? (
 				<CustomizedLink href={Routes.NFTMint} passHref>
-					{/* uncomment this when the minting is live */}
-					{/* <CustomizedButtonLink
+					<CustomizedButtonLink
 						linkType='texty-secondary'
 						label='GO TO MINTING PAGE'
-					/> */}
+					/>
 				</CustomizedLink>
 			) : (
 				// if it is not successful we should link to the documentation article - mitch needs to publish this!!
