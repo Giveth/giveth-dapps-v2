@@ -1,4 +1,3 @@
-import config from '@/config/production';
 import { INetworkParam } from '@/types/config';
 
 export const networksParams: {
@@ -58,7 +57,16 @@ export const networksParams: {
 		},
 		blockExplorerUrls: ['https://goerli.etherscan.io'],
 	},
-	10: { ...config.OPTIMISM_CONFIG },
+	10: {
+		chainId: '0xA',
+		chainName: 'Optimism',
+		nativeCurrency: {
+			name: 'ETH',
+			symbol: 'ETH',
+			decimals: 18,
+		},
+		blockExplorerUrls: ['https://optimistic.etherscan.io/'],
+	},
 	42: {
 		chainId: '0x2A',
 		chainName: 'Kovan',
