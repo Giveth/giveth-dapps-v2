@@ -66,6 +66,7 @@ export const networksParams: {
 			decimals: 18,
 		},
 		blockExplorerUrls: ['https://optimistic.etherscan.io/'],
+		rpcUrls: ['https://mainnet.optimism.io'],
 	},
 	42: {
 		chainId: '0x2A',
