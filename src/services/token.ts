@@ -49,7 +49,7 @@ export const fetchPrice = async (chainId: number, tokenAddress?: string) => {
 		const chain =
 			chainId === config.OPTIMISM_NETWORK_NUMBER
 				? 'optimism-pos'
-				: config.POLYGON_NETWORK_NUMBER
+				: chainId === config.POLYGON_NETWORK_NUMBER
 				? 'polygon-pos'
 				: chainId === config.XDAI_NETWORK_NUMBER
 				? 'xdai'
