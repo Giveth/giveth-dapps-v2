@@ -387,8 +387,8 @@ const config: EnvConfig = {
 		chainId: '0xA', // A 0x-prefixed hexadecimal string
 		chainName: 'Optimism',
 		nativeCurrency: {
-			name: 'OP',
-			symbol: 'OP',
+			name: 'ETH',
+			symbol: 'ETH',
 			decimals: 18,
 		},
 		gasPreference: {
