@@ -72,7 +72,7 @@ import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '../styled-components/Flex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import LottieControl from '@/components/LottieControl';
-import { getPoolIconWithName } from '../cards/StakingCards/BaseStakingCard/BaseStakingCard';
+import { getPoolIconWithName } from '@/helpers/platform';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';

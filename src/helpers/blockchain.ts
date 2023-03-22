@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { parseUnits } from '@ethersproject/units';
 
 export interface INetworkParam {
 	chainId: string;
@@ -94,4 +94,4 @@ export const networksParams: {
 };
 
 export const gwei2wei = (gweiAmount: string): string =>
-	ethers.utils.parseUnits(gweiAmount, 'gwei').toString();
+	parseUnits(gweiAmount, 'gwei').toString();

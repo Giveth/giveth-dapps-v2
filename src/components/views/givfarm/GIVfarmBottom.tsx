@@ -23,7 +23,7 @@ import { Col, Container } from '@/components/Grid';
 import { DaoCard } from '../../givfarm/DaoCard';
 import { getNowUnixMS } from '@/helpers/time';
 import { TWO_WEEK } from '@/lib/constants/constants';
-import StakingPoolCard from '../../cards/StakingCards/StakingPoolCard';
+import StakingPoolCard from '@/components/cards/StakingCards/BaseStakingCard/BaseStakingCard';
 import { RegenStreamSection } from '@/components/givfarm/RegenStreamSection';
 import ToggleSwitch from '@/components/styled-components/Switch';
 
