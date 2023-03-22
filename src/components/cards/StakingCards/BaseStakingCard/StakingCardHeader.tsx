@@ -7,7 +7,11 @@ import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useIntl } from 'react-intl';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { FlexSpacer } from '@/components/styled-components/Flex';
-import { PoolStakingConfig, StakingType } from '@/types/config';
+import {
+	PoolStakingConfig,
+	RegenPoolStakingConfig,
+	StakingType,
+} from '@/types/config';
 import { StakeCardState } from './BaseStakingCard';
 import {
 	StakingPoolExchangeRow,
@@ -32,18 +36,17 @@ export const StakingCardHeader: FC<IStakingCardHeaderProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 
-	const {
-		type,
-		platform,
-		platformTitle,
-		introCard,
-		network: poolNetwork,
-	} = poolStakingConfig;
+	const { type, introCard, network: poolNetwork } = poolStakingConfig;
+	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 
 	return (
 		<StakingPoolExchangeRow gap='4px' alignItems='center'>
 			<StakingPoolExchange styleType='Small'>
-				{platformTitle || platform}
+				{regenStreamType
+					? 'REGENFARM'
+					: isGIVpower
+					? 'GIVPOWER'
+					: 'GIVFARM'}
 			</StakingPoolExchange>
 			{poolNetwork === config.XDAI_NETWORK_NUMBER &&
 				type === StakingType.GIV_LM && (
