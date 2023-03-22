@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
-import { H3 } from '@giveth/ui-design-system';
+import { Col, H3, Row } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
-import { Col, Row } from '../Grid';
 import { Subtitle, GIVfrensLink } from './RegenStreamSection.sc';
 import config from '@/configuration';
 import { RegenStreamCard } from './RegenStreamCard';

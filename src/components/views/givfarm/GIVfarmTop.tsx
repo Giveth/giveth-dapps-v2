@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IconGIVFarm } from '@giveth/ui-design-system';
+import { Col, IconGIVFarm, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { BigNumber } from 'bignumber.js';
 import { constants } from 'ethers';
@@ -16,7 +16,6 @@ import {
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useFarms } from '@/context/farm.context';
 import { TopInnerContainer } from '../../GIVeconomyPages/commons';
-import { Col, Row } from '@/components/Grid';
 
 export const GIVfarmTop = () => {
 	const { formatMessage } = useIntl();

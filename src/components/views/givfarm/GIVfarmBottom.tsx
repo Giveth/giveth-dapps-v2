@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { IconExternalLink, GLink, IconCopy } from '@giveth/ui-design-system';
+import {
+	IconExternalLink,
+	GLink,
+	IconCopy,
+	Col,
+	Container,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import config from '@/configuration';
@@ -18,7 +24,6 @@ import { NetworkSelector } from '@/components/NetworkSelector';
 import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { ExtLinkRow } from '../../GIVeconomyPages/commons';
 import { shortenAddress } from '@/lib/helpers';
-import { Col, Container } from '@/components/Grid';
 
 import { DaoCard } from '../../givfarm/DaoCard';
 import { getNowUnixMS } from '@/helpers/time';
