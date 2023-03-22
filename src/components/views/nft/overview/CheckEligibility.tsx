@@ -92,7 +92,7 @@ const CheckEligibility = () => {
 
 	return (
 		<SectionContainer>
-			<H2>Early Minting begins March 22!</H2>
+			<H2>Early Minting has begun!</H2>
 			<br />
 			<CustomQuote size='small'>
 				Check here to verify your eligibility
