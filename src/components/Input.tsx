@@ -6,7 +6,7 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import React, {
-	FC,
+	forwardRef,
 	InputHTMLAttributes,
 	ReactElement,
 	useCallback,
@@ -91,7 +91,7 @@ type InputType =
 			registerOptions?: never;
 	  } & IInput);
 
-const Input: FC<InputType> = props => {
+const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 	const {
 		label,
 		caption,
@@ -111,6 +111,7 @@ const Input: FC<InputType> = props => {
 	} = props;
 	const id = useId();
 	const canvasRef = useRef<HTMLCanvasElement>();
+	// const inputRef = useRef<HTMLInputElement | null>(null);
 	const validationStatus =
 		!error || isValidating
 			? EInputValidation.NORMAL
@@ -130,6 +131,9 @@ const Input: FC<InputType> = props => {
 		}
 		return 0;
 	}, [size, value, LeftIcon]);
+
+	const { ref = undefined, ...restRegProps } =
+		registerName && register ? register(registerName, registerOptions) : {};
 
 	return (
 		<InputContainer className={className}>
@@ -158,10 +162,12 @@ const Input: FC<InputType> = props => {
 					maxLength={maxLength}
 					value={value}
 					id={id}
-					{...(registerName && register
-						? register(registerName, registerOptions)
-						: {})}
+					{...restRegProps}
 					{...rest}
+					ref={e => {
+						ref !== undefined && ref(e);
+						if (inputRef) (inputRef as any).current = e;
+					}}
 					data-testid='styled-input'
 				/>
 				<SuffixWrapper
@@ -200,7 +206,9 @@ const Input: FC<InputType> = props => {
 			)}
 		</InputContainer>
 	);
-};
+});
+
+Input.displayName = 'Input';
 
 const Absolute = styled(FlexCenter)`
 	position: absolute;
