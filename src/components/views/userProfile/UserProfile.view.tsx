@@ -53,7 +53,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 
-	const { chainId, account } = useWeb3React();
+	const { chainId } = useWeb3React();
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
@@ -61,19 +61,32 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 		!isUserRegistered(user) && showIncompleteWarning && myAccount;
 
 	useEffect(() => {
+		const fetchPFPInfo = async (walletAddress: string) => {
+			try {
+				const query = buildUsersPfpInfoQuery([walletAddress]);
+				const { data } = await gqlRequest(
+					config.MAINNET_CONFIG.subgraphAddress,
+					false,
+					query,
+				);
+				if (data[`user_${walletAddress}`]) {
+					console.log(
+						'data[`user_${walletAddress}`]',
+						data[`user_${walletAddress}`],
+						user,
+					);
+				}
+			} catch (error) {
+				console.error('error', error);
+			}
+		};
 		if (myAccount && !isSignedIn) {
 			dispatch(setShowSignWithWallet(true));
 		}
-	}, [user, isSignedIn]);
-
-	useEffect(() => {
-		if (account) {
-			const query = buildUsersPfpInfoQuery([account]);
-			gqlRequest(config.MAINNET_CONFIG.subgraphAddress, false, query)
-				.then(data => console.log('data', data))
-				.catch(err => console.log('err', err));
+		if (user?.walletAddress) {
+			fetchPFPInfo(user.walletAddress);
 		}
-	}, [account]);
+	}, [user, isSignedIn, myAccount, dispatch]);
 
 	if (myAccount && !isSignedIn)
 		return (
