@@ -30,7 +30,7 @@ import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import { gqlRequest } from '@/helpers/requests';
 import config from '@/configuration';
-import UploadProfilePicModal from '@/components/modals/UploadProfilePicModal';
+import UploadProfilePicModal from '@/components/modals/UploadProfilePicModal/UploadProfilePicModal';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
