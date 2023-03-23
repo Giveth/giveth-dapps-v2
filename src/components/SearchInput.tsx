@@ -14,6 +14,8 @@ import {
 	KeyboardEvent,
 	ChangeEvent,
 	useState,
+	useEffect,
+	useRef,
 } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -28,6 +30,7 @@ interface ISearchInputProps {
 
 export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 	const [value, setValue] = useState<string>('');
+	const inputRef = useRef<HTMLInputElement>(null);
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
 
@@ -41,6 +44,12 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 		setValue(event.target.value);
 	}
 
+	useEffect(() => {
+		if (inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, [inputRef.current]);
+
 	return (
 		<SearchInputContainer className={className} theme={theme}>
 			<InputContainer theme={theme} onKeyDown={handleKeyDown}>
@@ -52,6 +61,7 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 					})}
 					theme={theme}
 					value={value}
+					ref={inputRef}
 				/>
 				{value.length > 0 ? (
 					<IconRemoveWrapper
