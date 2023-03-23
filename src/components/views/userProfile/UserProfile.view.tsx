@@ -27,6 +27,9 @@ import ExternalLink from '@/components/ExternalLink';
 import IncompleteProfileToast from '@/components/views/userProfile/IncompleteProfileToast';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
+import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
+import { gqlRequest } from '@/helpers/requests';
+import config from '@/configuration';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -50,7 +53,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 
-	const { chainId } = useWeb3React();
+	const { chainId, account } = useWeb3React();
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
@@ -62,6 +65,15 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 			dispatch(setShowSignWithWallet(true));
 		}
 	}, [user, isSignedIn]);
+
+	useEffect(() => {
+		if (account) {
+			const query = buildUsersPfpInfoQuery([account]);
+			gqlRequest(config.MAINNET_CONFIG.subgraphAddress, false, query)
+				.then(data => console.log('data', data))
+				.catch(err => console.log('err', err));
+		}
+	}, [account]);
 
 	if (myAccount && !isSignedIn)
 		return (
