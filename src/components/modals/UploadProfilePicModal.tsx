@@ -10,9 +10,11 @@ import { IUser } from '@/apollo/types/types';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { TabItem } from '../styled-components/Tabs';
+import { IUserNFT } from '../views/userProfile/UserProfile.view';
 
 interface IUploadProfilePicModal extends IModal {
 	user: IUser;
+	pfpData?: IUserNFT[];
 }
 
 const tabs = [
@@ -78,7 +80,8 @@ const UploadProfilePicModal = ({
 				)}
 				{activeTab === 2 && (
 					<Flex flexDirection='column' gap='36px'>
-						<ImageUploader {...useUploadProps} />
+						NFT
+						{/* <ImageUploader {...useUploadProps} /> */}
 						<Flex
 							flexDirection='row'
 							justifyContent='space-between'
