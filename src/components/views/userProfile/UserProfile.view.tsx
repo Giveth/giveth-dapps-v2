@@ -30,6 +30,7 @@ import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import { gqlRequest } from '@/helpers/requests';
 import config from '@/configuration';
+import UploadProfilePicModa from '@/components/modals/UploadProfilePicModal';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -56,6 +57,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const { chainId } = useWeb3React();
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
+	const [showUploadProfileModal, setShowUploadProfileModal] = useState(false);
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
 	const showCompleteProfile =
 		!isUserRegistered(user) && showIncompleteWarning && myAccount;
@@ -152,6 +154,12 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 			<ProfileContributes user={user} myAccount={myAccount} />
 			{showModal && (
 				<EditUserModal setShowModal={setShowModal} user={user} />
+			)}
+			{showUploadProfileModal && (
+				<UploadProfilePicModa
+					setShowModal={setShowUploadProfileModal}
+					user={user}
+				/>
 			)}
 		</>
 	);
