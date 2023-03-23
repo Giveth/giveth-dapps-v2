@@ -23,7 +23,8 @@ export function showPendingClaim(network: number, txHash: string): void {
 export function wrongWallet(address: string): void {
 	toast(
 		<span>
-			Please connect to the eligible wallet address on xDai: {address}
+			Please connect to the eligible wallet address on xDai:{' '}
+			{address?.toLowerCase()}
 		</span>,
 		{
 			duration: 3000,
