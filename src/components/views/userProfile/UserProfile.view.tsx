@@ -49,6 +49,12 @@ export interface IUserProfileView {
 	myAccount?: boolean;
 }
 
+export interface IUserNFT {
+	id: string;
+	imageIpfs: string;
+	tokenId: number;
+}
+
 const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const dispatch = useAppDispatch();
 	const { isSignedIn } = useAppSelector(state => state.user);
@@ -58,6 +64,8 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showUploadProfileModal, setShowUploadProfileModal] = useState(false);
+	const [pfpData, setPfpData] = useState<IUserNFT[]>();
+
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
 	const showCompleteProfile =
 		!isUserRegistered(user) && showIncompleteWarning && myAccount;
@@ -78,6 +86,8 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 						user,
 					);
 				}
+				console.log('data', data);
+				setPfpData(data[`user_${walletAddress}`]);
 			} catch (error) {
 				console.error('error', error);
 			}
@@ -163,6 +173,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 				<UploadProfilePicModal
 					setShowModal={setShowUploadProfileModal}
 					user={user}
+					pfpData={pfpData}
 				/>
 			)}
 		</>
