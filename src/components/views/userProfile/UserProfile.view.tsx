@@ -30,7 +30,7 @@ import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import { gqlRequest } from '@/helpers/requests';
 import config from '@/configuration';
-import UploadProfilePicModa from '@/components/modals/UploadProfilePicModal';
+import UploadProfilePicModal from '@/components/modals/UploadProfilePicModal';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -153,10 +153,14 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 			</ProfileHeader>
 			<ProfileContributes user={user} myAccount={myAccount} />
 			{showModal && (
-				<EditUserModal setShowModal={setShowModal} user={user} />
+				<EditUserModal
+					setShowModal={setShowModal}
+					user={user}
+					setShowProfilePicModal={setShowUploadProfileModal}
+				/>
 			)}
 			{showUploadProfileModal && (
-				<UploadProfilePicModa
+				<UploadProfilePicModal
 					setShowModal={setShowUploadProfileModal}
 					user={user}
 				/>
