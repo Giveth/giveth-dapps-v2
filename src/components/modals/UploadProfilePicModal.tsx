@@ -9,10 +9,16 @@ import { Modal } from './Modal';
 import { IUser } from '@/apollo/types/types';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { TabItem } from '../styled-components/Tabs';
 
 interface IUploadProfilePicModal extends IModal {
 	user: IUser;
 }
+
+const tabs = [
+	{ id: 1, title: 'Upload Image' },
+	{ id: 2, title: 'My NFTs' },
+];
 
 const UploadProfilePicModal = ({
 	setShowModal,
@@ -21,7 +27,7 @@ const UploadProfilePicModal = ({
 	const useUploadProps = useUpload();
 	const { formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-
+	const [activeTab, setActiveTab] = React.useState(1);
 	const { url, onDelete } = useUploadProps;
 
 	console.log('user', user);
@@ -34,25 +40,66 @@ const UploadProfilePicModal = ({
 			headerTitlePosition='left'
 		>
 			<Wrapper>
-				<Flex flexDirection='column' gap='36px'>
-					<ImageUploader {...useUploadProps} />
-					<Flex flexDirection='row' justifyContent='space-between'>
-						<Button
-							buttonType='secondary'
-							label='SAVE'
-							disabled={!url}
-						/>
-						<TextButton
-							buttonType='texty'
-							label={formatMessage({
-								id: 'label.cancel',
-							})}
-							onClick={() => {
-								onDelete();
-							}}
-						/>
-					</Flex>
+				<Flex gap='16px'>
+					{tabs.map(i => (
+						<TabItem
+							onClick={() => setActiveTab(i.id)}
+							className={activeTab === i.id ? 'active' : ''}
+							key={i.id}
+							active={activeTab === i.id}
+						>
+							{i.title}
+						</TabItem>
+					))}
 				</Flex>
+				{activeTab === 1 && (
+					<Flex flexDirection='column' gap='36px'>
+						<ImageUploader {...useUploadProps} />
+						<Flex
+							flexDirection='row'
+							justifyContent='space-between'
+						>
+							<Button
+								buttonType='secondary'
+								label='SAVE'
+								disabled={!url}
+							/>
+							<TextButton
+								buttonType='texty'
+								label={formatMessage({
+									id: 'label.cancel',
+								})}
+								onClick={() => {
+									onDelete();
+								}}
+							/>
+						</Flex>
+					</Flex>
+				)}
+				{activeTab === 2 && (
+					<Flex flexDirection='column' gap='36px'>
+						<ImageUploader {...useUploadProps} />
+						<Flex
+							flexDirection='row'
+							justifyContent='space-between'
+						>
+							<Button
+								buttonType='secondary'
+								label='SAVE'
+								disabled={!url}
+							/>
+							<TextButton
+								buttonType='texty'
+								label={formatMessage({
+									id: 'label.cancel',
+								})}
+								onClick={() => {
+									onDelete();
+								}}
+							/>
+						</Flex>
+					</Flex>
+				)}
 			</Wrapper>
 		</Modal>
 	);
