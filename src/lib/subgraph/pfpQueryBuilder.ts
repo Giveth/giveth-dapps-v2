@@ -4,7 +4,6 @@ export function buildUsersPfpInfoQuery(users: string[]) {
 			const _user = user.toLowerCase();
 			return `
 		  user_${_user}: giversPFPTokens(
-			first: 5
 			where: {user: "${_user}" }
 		  ) {
 				id
