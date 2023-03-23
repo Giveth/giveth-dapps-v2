@@ -5,7 +5,15 @@ import SayHelloSection from './SayHello';
 import WhatAreGivers from './WhatAreGivers';
 import WhatElse from './WhatElse';
 
+function isAfterDate(): boolean {
+	const targetDate = new Date('2023-03-24T11:00:00-06:00'); // 24th March 2023, 11am CST
+	const currentDate = new Date();
+
+	return currentDate.getTime() > targetDate.getTime();
+}
+
 const OverviewIndex = () => {
+	console.log('isAfterDate', isAfterDate());
 	return (
 		<div>
 			<SayHelloSection />
@@ -16,7 +24,7 @@ const OverviewIndex = () => {
 			<Separator />
 			<Separator />
 			<Separator />
-			<CheckEligibility />
+			{!isAfterDate() && <CheckEligibility />}
 		</div>
 	);
 };
