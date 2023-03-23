@@ -353,3 +353,15 @@ export interface IRecentDonation {
 	user: { walletAddress: string };
 	valueUsd: number | null;
 }
+
+export interface IGiversPFPToken {
+	user: {
+		id: string;
+	};
+	tokenId: string;
+	imageIpfs: string;
+}
+
+export interface IUserPFPTokens {
+	[key: string]: IGiversPFPToken;
+}
