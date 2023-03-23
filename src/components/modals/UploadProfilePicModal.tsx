@@ -30,28 +30,28 @@ const UploadProfilePicModal = ({
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerTitle={formatMessage({
-				id: 'label.edit_profile',
-			})}
+			headerTitle='Upload Your Images or NFTs'
 			headerTitlePosition='left'
 		>
 			<Wrapper>
 				<Flex flexDirection='column' gap='36px'>
 					<ImageUploader {...useUploadProps} />
-					<Button
-						buttonType='secondary'
-						label='SAVE'
-						disabled={!url}
-					/>
-					<TextButton
-						buttonType='texty'
-						label={formatMessage({
-							id: 'label.cancel',
-						})}
-						onClick={() => {
-							onDelete();
-						}}
-					/>
+					<Flex flexDirection='row' justifyContent='space-between'>
+						<Button
+							buttonType='secondary'
+							label='SAVE'
+							disabled={!url}
+						/>
+						<TextButton
+							buttonType='texty'
+							label={formatMessage({
+								id: 'label.cancel',
+							})}
+							onClick={() => {
+								onDelete();
+							}}
+						/>
+					</Flex>
 				</Flex>
 			</Wrapper>
 		</Modal>
@@ -62,8 +62,8 @@ export default UploadProfilePicModal;
 
 const Wrapper = styled.div`
 	padding: 24px;
-	${mediaQueries.tablet} {
-		width: 448px;
+	${mediaQueries.laptopL} {
+		width: 1100px;
 	}
 `;
 
