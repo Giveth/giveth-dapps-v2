@@ -185,7 +185,7 @@ const ProjectDonationTable = ({
 									: donation.user?.name ||
 									  donation.user?.firstName ||
 									  shortenAddress(
-											donation.user.walletAddress,
+											donation.user.walletAddress?.toLowerCase(),
 									  )}
 							</DonationTableCell>
 							{isAdmin && (

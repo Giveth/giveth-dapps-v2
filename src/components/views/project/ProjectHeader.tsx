@@ -45,7 +45,11 @@ const ProjectHeader = () => {
 					<Title fixSize={adjustTitle} weight={700}>
 						{title}
 					</Title>
-					<Link href={addressToUserView(adminUser?.walletAddress)}>
+					<Link
+						href={addressToUserView(
+							adminUser?.walletAddress?.toLowerCase(),
+						)}
+					>
 						<Author>{name}</Author>
 					</Link>
 				</TitleContainer>
