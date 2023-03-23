@@ -63,7 +63,11 @@ const ProjectCard = (props: IProjectCard) => {
 				</InternalLink>
 				{name && (
 					<div>
-						<InternalLink href={addressToUserView(walletAddress)}>
+						<InternalLink
+							href={addressToUserView(
+								walletAddress?.toLowerCase(),
+							)}
+						>
 							<Author>{name}</Author>
 						</InternalLink>
 					</div>
