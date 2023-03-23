@@ -11,23 +11,26 @@ import {
 import { Modal } from './Modal';
 import { Flex } from '../styled-components/Flex';
 import { IModal } from '@/types/common';
-import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { mediaQueries } from '@/lib/constants/constants';
-import { RegenFarmConfig } from '@/types/config';
-import type { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
+import { RegenStreamConfig, StreamType } from '@/types/config';
+import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
-interface IAPRModalProps extends IModal {
-	tokenDistroHelper?: TokenDistroHelper;
-	regenStreamConfig?: RegenFarmConfig;
+interface IAPRInnerModalProps {
+	poolNetwork: number;
+	regenStreamConfig?: RegenStreamConfig;
+	regenStreamType?: StreamType;
 }
+
+interface IAPRModalProps extends IModal, IAPRInnerModalProps {}
 
 export const APRModal: FC<IAPRModalProps> = ({
 	setShowModal,
-	tokenDistroHelper,
 	regenStreamConfig,
+	poolNetwork,
+	regenStreamType,
 }) => {
 	const { rewardTokenSymbol = 'GIV' } = regenStreamConfig || {};
-	const streamName = regenStreamConfig ? 'RegenStream' : 'GIVstream';
 
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -56,21 +59,43 @@ export const APRModal: FC<IAPRModalProps> = ({
 						total earnings will be claimable immediately.
 					</Desc>
 					<DescTitle>Current Distribution:</DescTitle>
-					<Desc>
-						Claimable immediately:{' '}
-						{tokenDistroHelper?.GlobalReleasePercentage.toFixed(2)}%
-					</Desc>
-					<Desc>
-						Increasing your {streamName}:{' '}
-						{(
-							100 -
-							(tokenDistroHelper?.GlobalReleasePercentage || 0)
-						).toFixed(2)}
-						%
-					</Desc>
+					<Content
+						regenStreamConfig={regenStreamConfig}
+						poolNetwork={poolNetwork}
+						regenStreamType={regenStreamType}
+					/>
 				</DescContainer>
 			</APRModalContainer>
 		</Modal>
+	);
+};
+
+const Content: FC<IAPRInnerModalProps> = ({
+	regenStreamConfig,
+	poolNetwork,
+	regenStreamType,
+}) => {
+	const { tokenDistroHelper } = useTokenDistroHelper(
+		poolNetwork,
+		regenStreamType,
+		regenStreamConfig,
+	);
+	const streamName = regenStreamConfig ? 'RegenStream' : 'GIVstream';
+
+	return (
+		<>
+			<Desc>
+				Claimable immediately:{' '}
+				{tokenDistroHelper?.GlobalReleasePercentage.toFixed(2)}%
+			</Desc>
+			<Desc>
+				Increasing your {streamName}:{' '}
+				{(
+					100 - (tokenDistroHelper?.GlobalReleasePercentage || 0)
+				).toFixed(2)}
+				%
+			</Desc>
+		</>
 	);
 };
 

@@ -38,12 +38,11 @@ const FarmCountDown: FC<IFarmCountDown> = ({ startTime, setStarted }) => {
 };
 
 const FarmCountDownContainer = styled(Flex)`
-	height: 132px;
+	height: 104px;
 	gap: 8px;
 `;
 
 const Timer = styled(Lead)`
-	/* width: 132px; */
 	& > span {
 		width: 1ch;
 		display: inline-block;
