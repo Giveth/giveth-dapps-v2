@@ -47,7 +47,7 @@ export const MintCard = () => {
 	const { account, library, chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
-	const { setQty, isEligible } = usePFPMintData();
+	const { setQty, isEligible, setIsEligible } = usePFPMintData();
 
 	useEffect(() => {
 		async function fetchData() {
@@ -65,7 +65,7 @@ export const MintCard = () => {
 				const _maxMintAmount = await PFPContract.maxMintAmount();
 				const _totalSupply = await PFPContract.totalSupply();
 				const _maxSupply = await PFPContract.maxSupply();
-				let _balanceOf;
+				setIsEligible(true);
 				setPfpData({
 					price: new BigNumber(_price.toString()),
 					maxMintAmount: _maxMintAmount || 0,

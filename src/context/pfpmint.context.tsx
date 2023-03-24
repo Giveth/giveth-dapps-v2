@@ -43,7 +43,7 @@ export const PFPMintProvider = ({ children }: { children: ReactNode }) => {
 	const [step, setStep] = useState(EPFPMinSteps.MINT);
 	const [qty, setQty] = useState(1);
 	const [tx, setTx] = useState<string>('');
-	const [isEligible, setIsEligible] = useState(true);
+	const [isEligible, setIsEligible] = useState(false);
 
 	return (
 		<PFPMintContext.Provider
