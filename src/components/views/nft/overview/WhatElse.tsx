@@ -13,26 +13,33 @@ const WhatElse = () => {
 				<ContentContainer>
 					<CustomFlex gap='64px'>
 						<Flex flexDirection='column' gap='16px'>
-							<HeaderTitle>Get on the "$nice list".</HeaderTitle>
+							<HeaderTitle>Get your Giveth Name.</HeaderTitle>
 							<Lead>
-								Anyone who donates 100 or more DAI, USDC or xDAI
-								to the Giveth Project is on our $nice list and
-								eligible for early minting of a Giver. Eligible
-								donations will also earn additional rewards
-								through the $nice token program.{' '}
-								<DocLink href='https://docs.giveth.io/giveconomy/niceToken'>
-									Learn more about $nice.
-								</DocLink>
+								Givers PFP Holders will be able to claim their
+								own unique <code>.giveth</code> domain name at a
+								50% discount, thanks to Punk Domains. Reserve
+								your name (e.g. <code>griff.giveth</code>) on
+								Gnosis Chain and on top of that, 80% of the
+								registration fees go to the Giveth Matching
+								Pool!
+								<p>
+									Already own a Giver?{' '}
+									<DocLink href='https://giveth.punk.domains/#/'>
+										Register your <code>.giveth</code> name.
+									</DocLink>
+								</p>
 							</Lead>
 						</Flex>
 						<Flex flexDirection='column' gap='16px'>
-							<HeaderTitle>Unlock special benefits.</HeaderTitle>
+							<HeaderTitle>Unlock your Giveth Flair.</HeaderTitle>
 							<Lead>
-								If you hold a Giver, your profile will be
-								emphasized wherever you make an impact on
-								Giveth. You’ll also receive a discount to
-								register a custom <code>.giveth</code> Punk
-								Domain name (e.g. <code>vitalik.giveth</code>).{' '}
+								If you hold a Giver, you will soon be able to
+								set it as your profile picture on the Giveth.io
+								DApp. With your Giver equipped, whatever you do
+								on on Giveth, boosting with GIVpower, donating
+								or founding a project, you will be shown
+								prominently on the platform along with your
+								unique Giver NFT badge.{' '}
 								<DocLink href='https://docs.giveth.io/dapps/giverspfp/#benefits'>
 									Learn more about the benefits.
 								</DocLink>
