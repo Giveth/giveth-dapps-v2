@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -21,11 +21,10 @@ import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { GiversPFP } from '@/types/contracts';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
-import EligibilityModal from '../overview/EligibilityModal';
 import { Flex } from '@/components/styled-components/Flex';
 
 export const NFTMintIndex = () => {
-	const [showEligibilityModal, setShowEligibilityModal] = useState(false);
+	// const [showEligibilityModal, setShowEligibilityModal] = useState(false);
 	const { formatMessage } = useIntl();
 	const { account, library, chainId } = useWeb3React();
 	const { step, setStep, qty, tx: txHash, setIsEligible } = usePFPMintData();
@@ -43,17 +42,17 @@ export const NFTMintIndex = () => {
 					PFP_ABI,
 					_provider,
 				) as GiversPFP;
-				const _allowListOnly = await PFPContract.allowListOnly();
-				if (_allowListOnly) {
-					const res = await PFPContract.allowList(account);
-					if (!res) {
-						setShowEligibilityModal(true);
-					} else {
-						setIsEligible(true);
-					}
-				} else {
-					setIsEligible(true);
-				}
+				// const _allowListOnly = await PFPContract.allowListOnly();
+				// if (_allowListOnly) {
+				// 	const res = await PFPContract.allowList(account);
+				// 	if (!res) {
+				// 		setShowEligibilityModal(true);
+				// 	} else {
+				// 		setIsEligible(true);
+				// 	}
+				// } else {
+				// 	setIsEligible(true);
+				// }
 			} catch (error) {
 				console.log('Error on check allow List', error);
 			}
@@ -181,12 +180,12 @@ export const NFTMintIndex = () => {
 					</Col>
 				</Row>
 			</MintContainer>
-			{showEligibilityModal && (
+			{/* {showEligibilityModal && (
 				<EligibilityModal
 					isSuccess={false}
 					setShowModal={setShowEligibilityModal}
 				/>
-			)}
+			)} */}
 		</MintViewContainer>
 	);
 };
