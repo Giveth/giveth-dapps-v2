@@ -1,10 +1,10 @@
 import { GLink } from '@giveth/ui-design-system';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import styled from 'styled-components';
 
 const ExternalLink = (props: {
 	href: string;
-	children?: ReactElement[] | ReactElement;
+	children?: ReactNode;
 	title?: string | ReactElement;
 	color?: string;
 	fullWidth?: boolean;

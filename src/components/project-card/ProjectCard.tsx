@@ -110,7 +110,9 @@ const ProjectCard = (props: IProjectCard) => {
 				<PaddedRow style={{ marginTop: '6px' }}>
 					{adminUser?.name && !isForeignOrg && (
 						<Link
-							href={addressToUserView(adminUser?.walletAddress)}
+							href={addressToUserView(
+								adminUser?.walletAddress?.toLowerCase(),
+							)}
 						>
 							<Author size='Big'>{name || '\u200C'}</Author>
 						</Link>

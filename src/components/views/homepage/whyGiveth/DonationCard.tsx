@@ -33,7 +33,7 @@ const DonationCard: FC<IDonationCard> = props => {
 			>
 				<CardContainer>
 					<Section>
-						<B>{'@' + shortenAddress(address)}</B>
+						<B>{'@' + shortenAddress(address?.toLowerCase())}</B>
 						<div>donated</div>
 						<Amount>{'~$' + amount.toFixed(1)}</Amount>
 					</Section>

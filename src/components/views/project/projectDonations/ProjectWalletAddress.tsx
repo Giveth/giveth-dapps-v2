@@ -45,7 +45,7 @@ const WalletAddress = (props: {
 	return (
 		<AddressContainer>
 			<Image src={WalletIcon} alt='wallet icon' />
-			<Subline>{address}</Subline>
+			<Subline>{address?.toLowerCase()}</Subline>
 			<Flex gap='8px'>
 				{networkIds?.map(networkId => (
 					<NetworkLogo
