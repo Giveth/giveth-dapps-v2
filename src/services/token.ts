@@ -7,9 +7,6 @@ import { LOGIN_USER } from '@/apollo/gql/gqlAuth';
 import { showToastError } from '@/lib/helpers';
 import config from '@/configuration';
 
-const POLYGON_NETWORK = config.POLYGON_NETWORK;
-const SECONDARY_NETWORK = config.SECONDARY_NETWORK;
-
 const apolloClient = initializeApollo();
 
 export async function __oldWay_getToken(
@@ -50,9 +47,11 @@ export async function __oldWay_getToken(
 export const fetchPrice = async (chainId: number, tokenAddress?: string) => {
 	try {
 		const chain =
-			chainId === POLYGON_NETWORK.id
+			chainId === config.OPTIMISM_NETWORK_NUMBER
+				? 'optimism-pos'
+				: chainId === config.POLYGON_NETWORK_NUMBER
 				? 'polygon-pos'
-				: chainId === SECONDARY_NETWORK.id
+				: chainId === config.XDAI_NETWORK_NUMBER
 				? 'xdai'
 				: 'ethereum';
 		const fetchCall = await fetch(

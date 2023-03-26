@@ -11,17 +11,14 @@ import {
 } from '@/components/views/donate/common.styled';
 import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
 
-const ethereumChain = config.PRIMARY_NETWORK;
-const gnosisChain = config.SECONDARY_NETWORK;
-
 const SaveGasFees: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
 	const { chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 
 	if (
 		!chainId ||
-		!acceptedChains?.includes(gnosisChain.id) ||
-		chainId !== ethereumChain.id
+		!acceptedChains?.includes(config.XDAI_NETWORK_NUMBER) ||
+		chainId !== config.MAINNET_NETWORK_NUMBER
 	) {
 		return null;
 	}
@@ -36,7 +33,9 @@ const SaveGasFees: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
 					})}
 				</Caption>
 			</Flex>
-			<SwitchCaption onClick={() => switchNetwork(gnosisChain.id)}>
+			<SwitchCaption
+				onClick={() => switchNetwork(config.XDAI_NETWORK_NUMBER)}
+			>
 				{formatMessage({ id: 'label.switch_network' })}
 			</SwitchCaption>
 		</NetworkToast>
