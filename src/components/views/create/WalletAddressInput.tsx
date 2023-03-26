@@ -185,7 +185,18 @@ const WalletAddressInput: FC<IProps> = ({
 				<H6>
 					{sameAddress
 						? formatMessage({ id: 'label.receiving_address' })
-						: formatMessage({ id: 'label.mainnet_address' })}
+						: formatMessage(
+								{ id: 'label.address' },
+								{
+									chainName: isGnosis
+										? 'Gnosis Chain'
+										: isPolygon
+										? 'Polygon Mainnet'
+										: isCelo
+										? 'Celo Mainnet'
+										: 'Mainnet',
+								},
+						  )}
 				</H6>
 				<Flex gap='10px'>
 					{sameAddress ? (
