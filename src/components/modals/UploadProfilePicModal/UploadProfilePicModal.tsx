@@ -1,5 +1,5 @@
 import { Button, H5, mediaQueries } from '@giveth/ui-design-system';
-import React from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import useUpload from '@/hooks/useUpload';
@@ -31,10 +31,13 @@ const UploadProfilePicModal = ({
 	const useUploadProps = useUpload();
 	const { formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const [activeTab, setActiveTab] = React.useState(1);
+	const [activeTab, setActiveTab] = useState(1);
+	const [selectedPFP, setSelectedPFP] = useState<IUserNFT>();
+
 	const { url, onDelete } = useUploadProps;
 
 	console.log('user', user);
+	console.log('data', pfpData);
 
 	return (
 		<Modal
