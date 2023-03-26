@@ -1,6 +1,6 @@
 import { promisify } from 'util';
 // eslint-disable-next-line import/named
-import { unescape } from 'lodash';
+import unescape from 'lodash/unescape';
 import moment from 'moment';
 
 import { parseEther, parseUnits } from '@ethersproject/units';
