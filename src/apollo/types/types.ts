@@ -177,6 +177,7 @@ export interface IDonation {
 		email?: string;
 		name?: string;
 		firstName?: string;
+		walletAddress: string;
 	};
 	amount: number;
 	currency: string;

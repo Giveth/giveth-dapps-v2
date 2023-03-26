@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { IconSearch, IconX } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
@@ -10,6 +10,7 @@ const ProjectsSearchTablet = () => {
 	const { variables, setVariables } = useProjectsContext();
 	const [searchValue, setSearchValue] = useState(variables.searchTerm);
 	const router = useRouter();
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const handleSearch = (searchTerm?: string) =>
 		setVariables(prevVariables => ({ ...prevVariables, searchTerm }));
@@ -21,8 +22,11 @@ const ProjectsSearchTablet = () => {
 	};
 
 	useEffect(() => {
+		if (inputRef.current) {
+			inputRef.current.focus();
+		}
 		setSearchValue(variables.searchTerm);
-	}, [variables.searchTerm]);
+	}, [variables.searchTerm, inputRef.current]);
 
 	return (
 		<SearchContainer className='fadeIn'>
@@ -36,6 +40,7 @@ const ProjectsSearchTablet = () => {
 					placeholder='SEARCH...'
 					value={searchValue}
 					onChange={e => setSearchValue(e.target.value)}
+					ref={inputRef}
 				/>
 			</form>
 			{variables.searchTerm ? (
