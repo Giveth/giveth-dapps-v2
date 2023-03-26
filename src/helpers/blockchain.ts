@@ -89,4 +89,15 @@ export const networksParams: {
 		blockExplorerUrls: ['https://polygonscan.com'],
 		rpcUrls: ['https://polygon-rpc.com'],
 	},
+	42220: {
+		chainId: '0xa4ec',
+		chainName: 'Celo Mainnet',
+		nativeCurrency: {
+			name: 'Celo',
+			symbol: 'CELO',
+			decimals: 18,
+		},
+		blockExplorerUrls: ['https://celoscan.io'],
+		rpcUrls: ['https://forno.celo.org'],
+	},
 };
