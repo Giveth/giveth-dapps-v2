@@ -555,7 +555,7 @@
 	"label.optimism_mainnet_address": "Optimism Mainnet address",
 	"label.receiving_address_on_mainnet": "Receiving address on Mainnet",
 	"label.receiving_address_on_gnosis": "Receiving address on Gnosis Chain",
-	"label.": "Receiving address on Polygon Mainnet",
+	"label.receiving_address_on_polygon": "Receiving address on Polygon Mainnet",
 	"label.receiving_address_on_optimism": "Receiving address on Optimism Mainnet",
 	"label.my_wallet_address": "My Wallet Address",
 	"label.resolved_as": "Resolves as ",
