@@ -83,14 +83,15 @@ const UploadProfilePicModal = ({
 				{activeTab === 2 && (
 					<Flex flexDirection='column' gap='36px'>
 						<CustomH5>Your Unique Giveth’s PFP Artwork</CustomH5>
-						<div>
+						<Flex gap='25px'>
 							{pfpData?.map(pfp => (
 								<PfpItem
 									image={pfp.imageIpfs}
 									key={pfp.tokenId}
+									isSelected={true}
 								/>
 							))}
-						</div>
+						</Flex>
 						<Flex
 							flexDirection='row'
 							justifyContent='space-between'
