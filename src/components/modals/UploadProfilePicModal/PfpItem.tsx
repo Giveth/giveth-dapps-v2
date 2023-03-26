@@ -1,15 +1,17 @@
 import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
+import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 
 interface IPfpItemProps {
 	image: string;
 }
 
 const PfpItem = ({ image }: IPfpItemProps) => {
+	const convertedImage = convertIPFSToHTTPS(image);
 	return (
 		<Container>
-			<Image src={image} alt='pfp' width={330} height={330} />
+			<Image src={convertedImage} alt='pfp' width={330} height={330} />
 		</Container>
 	);
 };
