@@ -54,7 +54,7 @@ import { useModalCallback } from '@/hooks/useModalCallback';
 const ethereumChain = config.MAINNET_CONFIG;
 const gnosisChain = config.XDAI_CONFIG;
 const polygonChain = config.POLYGON_CONFIG;
-const optimismChain = config.OPTIMISM_CONFIG;
+// TODO:Optimism const optimismChain = config.OPTIMISM_CONFIG;
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
 interface IInputBox {
@@ -195,8 +195,8 @@ const CryptoDonation: FC = () => {
 		if (
 			selectedToken.symbol === ethereumChain.nativeCurrency.symbol ||
 			selectedToken.symbol === gnosisChain.nativeCurrency.symbol ||
-			selectedToken.symbol === polygonChain.nativeCurrency.symbol ||
-			selectedToken.symbol === optimismChain.nativeCurrency.symbol
+			selectedToken.symbol === polygonChain.nativeCurrency.symbol
+			// TODO:Optimism || selectedToken.symbol === optimismChain.nativeCurrency.symbol
 		) {
 			return setSelectedTokenBalance(balance);
 		}
