@@ -1,7 +1,11 @@
 import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
-import { neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	IconCheck16,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import { Shadow } from '@/components/styled-components/Shadow';
 
@@ -20,6 +24,9 @@ const PfpItem = ({ image, isSelected }: IPfpItemProps) => {
 				width={210}
 				height={210}
 			/>
+			<SmallCircleWithCheckIconInIt>
+				<IconCheck16 color={neutralColors.gray[100]} />
+			</SmallCircleWithCheckIconInIt>
 		</Container>
 	);
 };
@@ -31,10 +38,28 @@ const Container = styled.div`
 	width: 250px;
 	height: 300px;
 	box-shadow: ${Shadow.Neutral[500]};
+	border-radius: 8px;
+	border: 3px solid ${brandColors.pinky[400]};
+	position: relative;
 `;
 
 const ImageContainer = styled(Image)`
 	box-shadow: 0px 1px 21px 1px rgba(225, 69, 141, 0.63);
 	border-radius: 8px;
 	margin-top: 24px;
+`;
+
+const SmallCircleWithCheckIconInIt = styled.div`
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background-color: ${brandColors.pinky[400]};
+	position: absolute;
+	top: 0;
+	right: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transform: translate(50%, -50%);
+	border: 3px solid ${brandColors.pinky[200]};
 `;
