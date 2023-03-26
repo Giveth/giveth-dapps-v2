@@ -95,3 +95,7 @@ export const networksParams: {
 
 export const gwei2wei = (gweiAmount: string): string =>
 	ethers.utils.parseUnits(gweiAmount, 'gwei').toString();
+
+export const convertIPFSToHTTPS = (url: string) => {
+	return url.replace('ipfs://', 'https://ipfs.io/ipfs/');
+};
