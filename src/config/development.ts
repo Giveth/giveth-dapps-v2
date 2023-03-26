@@ -16,6 +16,7 @@ const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const XDAI_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
+const CELO_NETWORK_NUMBER = 42220;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -31,6 +32,7 @@ const config: EnvConfig = {
 	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
+	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
@@ -313,6 +315,16 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		blockExplorerName: ['OptimismScan'],
+		subgraphAddress: '',
+	},
+
+	CELO_CONFIG: {
+		nodeUrl: 'https://forno.celo.org',
+		...networksParams[42220],
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		blockExplorerName: ['CeloScan'],
 		subgraphAddress: '',
 	},
 };
