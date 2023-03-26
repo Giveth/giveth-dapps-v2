@@ -26,6 +26,7 @@ const moduleExports = withBundleAnalyzer({
 			'tgb-preproduction-formio.s3.amazonaws.com',
 			'dashboard.tgb-preprod.com',
 			'cdn-images-1.medium.com',
+			'ipfs.io',
 		],
 	},
 	compiler: {
