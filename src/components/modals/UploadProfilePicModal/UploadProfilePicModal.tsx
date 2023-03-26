@@ -89,9 +89,12 @@ const UploadProfilePicModal = ({
 						<Flex gap='25px'>
 							{pfpData?.map(pfp => (
 								<PfpItem
+									onClick={() => setSelectedPFP(pfp)}
 									image={pfp.imageIpfs}
 									key={pfp.tokenId}
-									isSelected={true}
+									isSelected={
+										pfp.tokenId === selectedPFP?.tokenId
+									}
 									id={pfp.tokenId}
 								/>
 							))}

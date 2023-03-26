@@ -15,21 +15,24 @@ interface IPfpItemProps {
 	image: string;
 	isSelected: boolean;
 	id: number;
+	onClick: () => void;
 }
 
-const PfpItem = ({ image, isSelected, id }: IPfpItemProps) => {
+const PfpItem = ({ image, isSelected, id, onClick }: IPfpItemProps) => {
 	const convertedImage = convertIPFSToHTTPS(image);
 	return (
-		<Container>
+		<Container onClick={onClick} isSelected={isSelected}>
 			<ImageContainer
 				src={convertedImage}
 				alt='pfp'
 				width={210}
 				height={210}
 			/>
-			<SmallCircleWithCheckIconInIt>
-				<IconCheck16 color={neutralColors.gray[100]} />
-			</SmallCircleWithCheckIconInIt>
+			{isSelected && (
+				<SmallCircleWithCheckIconInIt>
+					<IconCheck16 color={neutralColors.gray[100]} />
+				</SmallCircleWithCheckIconInIt>
+			)}
 			<br />
 			<P>The Givers Collection #{id}</P>
 		</Container>
@@ -38,13 +41,14 @@ const PfpItem = ({ image, isSelected, id }: IPfpItemProps) => {
 
 export default PfpItem;
 
-const Container = styled.div`
+const Container = styled.div<{ isSelected: boolean }>`
 	background-color: ${neutralColors.gray[100]};
 	width: 250px;
 	height: 300px;
 	box-shadow: ${Shadow.Neutral[500]};
 	border-radius: 8px;
-	border: 3px solid ${brandColors.pinky[400]};
+	border: ${props =>
+		props.isSelected ? `3px solid ${brandColors.pinky[400]}` : 'none'};
 	position: relative;
 `;
 
