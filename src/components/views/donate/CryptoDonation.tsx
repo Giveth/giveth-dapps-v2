@@ -55,6 +55,7 @@ const ethereumChain = config.MAINNET_CONFIG;
 const gnosisChain = config.XDAI_CONFIG;
 const polygonChain = config.POLYGON_CONFIG;
 // TODO:Optimism const optimismChain = config.OPTIMISM_CONFIG;
+const celoChain = config.CELO_CONFIG;
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
 interface IInputBox {
@@ -195,7 +196,8 @@ const CryptoDonation: FC = () => {
 		if (
 			selectedToken.symbol === ethereumChain.nativeCurrency.symbol ||
 			selectedToken.symbol === gnosisChain.nativeCurrency.symbol ||
-			selectedToken.symbol === polygonChain.nativeCurrency.symbol
+			selectedToken.symbol === polygonChain.nativeCurrency.symbol ||
+			selectedToken.symbol === celoChain.nativeCurrency.symbol
 			// TODO:Optimism || selectedToken.symbol === optimismChain.nativeCurrency.symbol
 		) {
 			return setSelectedTokenBalance(balance);
