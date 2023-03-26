@@ -58,7 +58,7 @@ const {
 	MAINNET_NETWORK_NUMBER,
 	XDAI_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER,
-	OPTIMISM_NETWORK_NUMBER,
+	// TODO:Optimism OPTIMISM_NETWORK_NUMBER,
 } = config;
 interface ICreateProjectProps {
 	project?: IProjectEdition;
@@ -74,7 +74,7 @@ export enum EInputs {
 	mainAddress = 'mainAddress',
 	secondaryAddress = 'secondaryAddress',
 	polygonAddress = 'polygonAddress',
-	optimismAddress = 'optimismAddress',
+	// TODO:Optimism optimismAddress = 'optimismAddress',
 }
 
 export type TInputs = {
@@ -87,7 +87,7 @@ export type TInputs = {
 	[EInputs.mainAddress]: string;
 	[EInputs.secondaryAddress]: string;
 	[EInputs.polygonAddress]: string;
-	[EInputs.optimismAddress]: string;
+	// TODO:Optimism [EInputs.optimismAddress]: string;
 };
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
@@ -112,14 +112,15 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const prevPolygonAddress = addresses?.find(
 		a => a.isRecipient && a.networkId === POLYGON_NETWORK_NUMBER,
 	)?.address;
-	const prevOptimismAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === OPTIMISM_NETWORK_NUMBER,
-	)?.address;
+	// TODO:Optimism
+	// const prevOptimismAddress = addresses?.find(
+	// 	a => a.isRecipient && a.networkId === OPTIMISM_NETWORK_NUMBER,
+	// )?.address;
 	const isSamePrevAddresses = compareAddressesArray([
 		prevMainAddress,
 		prevSecondaryAddress,
 		prevPolygonAddress,
-		prevOptimismAddress,
+		// TODO:Optimism prevOptimismAddress,
 	]);
 	const userAddresses: string[] = [];
 	if (isSamePrevAddresses) userAddresses.push(prevMainAddress!);
@@ -127,7 +128,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		if (prevMainAddress) userAddresses.push(prevMainAddress);
 		if (prevSecondaryAddress) userAddresses.push(prevSecondaryAddress);
 		if (prevPolygonAddress) userAddresses.push(prevPolygonAddress);
-		if (prevOptimismAddress) userAddresses.push(prevOptimismAddress);
+		// TODO:Optimism if (prevOptimismAddress) userAddresses.push(prevOptimismAddress);
 	}
 
 	const formMethods = useForm<TInputs>({
@@ -142,7 +143,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.mainAddress]: prevMainAddress || '',
 			[EInputs.secondaryAddress]: prevSecondaryAddress || '',
 			[EInputs.polygonAddress]: prevPolygonAddress || '',
-			[EInputs.optimismAddress]: prevOptimismAddress || '',
+			// TODO:Optimism [EInputs.optimismAddress]: prevOptimismAddress || '',
 		},
 	});
 
@@ -158,9 +159,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [polygonAddressActive, setPolygonAddressActive] = useState(
 		isEditMode ? !!prevPolygonAddress : true,
 	);
-	const [optimismAddressActive, setOptimismAddressActive] = useState(
-		isEditMode ? !!prevOptimismAddress : true,
-	);
+	// TODO:Optimism
+	// const [optimismAddressActive, setOptimismAddressActive] = useState(
+	// 	isEditMode ? !!prevOptimismAddress : true,
+	// );
 	const [isSameAddress, setIsSameAddress] = useState(
 		isEditMode ? isSamePrevAddresses : true,
 	);
@@ -177,7 +179,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				mainAddress,
 				secondaryAddress,
 				polygonAddress,
-				optimismAddress,
+				// TODO:Optimism optimismAddress,
 				name,
 				description,
 				categories,
@@ -204,10 +206,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						address: checksumAddress,
 						networkId: POLYGON_NETWORK_NUMBER,
 					},
-					{
-						address: checksumAddress,
-						networkId: OPTIMISM_NETWORK_NUMBER,
-					},
+					// TODO:Optimism
+					// {
+					// 	address: checksumAddress,
+					// 	networkId: OPTIMISM_NETWORK_NUMBER,
+					// },
 				);
 			} else {
 				if (mainnetAddressActive) {
@@ -234,13 +237,14 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						networkId: POLYGON_NETWORK_NUMBER,
 					});
 				}
-				if (optimismAddressActive) {
-					const checksumAddress = utils.getAddress(optimismAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: OPTIMISM_NETWORK_NUMBER,
-					});
-				}
+				// TODO:Optimism
+				// if (optimismAddressActive) {
+				// 	const checksumAddress = utils.getAddress(optimismAddress);
+				// 	addresses.push({
+				// 		address: checksumAddress,
+				// 		networkId: OPTIMISM_NETWORK_NUMBER,
+				// 	});
+				// }
 			}
 
 			const projectData: IProjectCreation = {
@@ -364,8 +368,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (
 									!e &&
 									!gnosisAddressActive &&
-									!polygonAddressActive &&
-									!optimismAddressActive
+									!polygonAddressActive
+									// TODO:Optimism && !optimismAddressActive
 								)
 									return showToastError(
 										formatMessage({
@@ -386,8 +390,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (
 									!e &&
 									!mainnetAddressActive &&
-									!polygonAddressActive &&
-									!optimismAddressActive
+									!polygonAddressActive
+									// TODO:Optimism && !optimismAddressActive
 								)
 									return showToastError(
 										formatMessage({
@@ -408,8 +412,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (
 									!e &&
 									!mainnetAddressActive &&
-									!gnosisAddressActive &&
-									!optimismAddressActive
+									!gnosisAddressActive
+									// TODO:Optimism && !optimismAddressActive
 								)
 									return showToastError(
 										formatMessage({
@@ -420,7 +424,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								setPolygonAddressActive(e);
 							}}
 						/>
-						<WalletAddressInput
+						{/* // TODO:Optimism <WalletAddressInput
 							networkId={OPTIMISM_NETWORK_NUMBER}
 							sameAddress={isSameAddress}
 							isActive={optimismAddressActive}
@@ -441,7 +445,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (!e) unregister(EInputs.optimismAddress);
 								setOptimismAddressActive(e);
 							}}
-						/>
+						/> */}
 						<PublishTitle>
 							{isEditMode
 								? formatMessage({
