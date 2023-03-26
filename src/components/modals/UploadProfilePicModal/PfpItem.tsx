@@ -7,9 +7,10 @@ import { Shadow } from '@/components/styled-components/Shadow';
 
 interface IPfpItemProps {
 	image: string;
+	isSelected: boolean;
 }
 
-const PfpItem = ({ image }: IPfpItemProps) => {
+const PfpItem = ({ image, isSelected }: IPfpItemProps) => {
 	const convertedImage = convertIPFSToHTTPS(image);
 	return (
 		<Container>
