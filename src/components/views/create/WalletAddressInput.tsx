@@ -62,11 +62,14 @@ const WalletAddressInput: FC<IProps> = ({
 	const user = useAppSelector(state => state.user?.userData);
 	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
 	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
+	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
 	// TODO:Optimism const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
 	const inputName = isGnosis
 		? EInputs.secondaryAddress
 		: isPolygon
 		? EInputs.polygonAddress
+		: isCelo
+		? EInputs.celoAddress
 		: // TODO:Optimism : isOptimism
 		  //? EInputs.optimismAddress
 		  EInputs.mainAddress;
@@ -101,6 +104,8 @@ const WalletAddressInput: FC<IProps> = ({
 				? 'Gnosis Chain'
 				: isPolygon
 				? 'Polygon Mainnet'
+				: isCelo
+				? 'Celo Mainnet'
 				: // TODO:Optimism : isOptimism
 				  // ? 'Optimism'
 				  'Mainnet'
@@ -170,24 +175,15 @@ const WalletAddressInput: FC<IProps> = ({
 		}
 	}, [sameAddress]);
 
-	// TODO:Optimism if (isHidden && (isGnosis || isPolygon || isOptimism)) return null;
-	if (isHidden && (isGnosis || isPolygon)) return null;
+	// TODO:Optimism if (isHidden && (isGnosis || isPolygon || isCelo || isOptimism)) return null;
+	if (isHidden && (isGnosis || isPolygon || isCelo)) return null;
 
 	return (
-		// TODO:Optimism <Container hide={sameAddress && (isGnosis || isPolygon || isOptimism)}>
-		<Container hide={sameAddress && (isGnosis || isPolygon)}>
+		// TODO:Optimism <Container hide={sameAddress && (isGnosis || isPolygon || isCelo || isOptimism)}>
+		<Container hide={sameAddress && (isGnosis || isPolygon || isCelo)}>
 			<Header>
 				<H6>
-					{isGnosis
-						? formatMessage({ id: 'label.gnosis_chain_address' })
-						: isPolygon
-						? formatMessage({ id: 'label.polygon_mainnet_address' })
-						: // TODO:Optimism
-						// : isOptimism
-						// ? formatMessage({
-						// 		id: 'label.optimism_mainnet_address',
-						//   })
-						sameAddress
+					{sameAddress
 						? formatMessage({ id: 'label.receiving_address' })
 						: formatMessage({ id: 'label.mainnet_address' })}
 				</H6>
@@ -197,12 +193,15 @@ const WalletAddressInput: FC<IProps> = ({
 							<MainnetIcon />
 							<GnosisIcon />
 							<PolygonIcon />
+							<CeloIcon />
 							{/* TODO:Optimism <OptimismIcon /> */}
 						</>
 					) : isGnosis ? (
 						<GnosisIcon />
 					) : isPolygon ? (
 						<PolygonIcon />
+					) : isCelo ? (
+						<CeloIcon />
 					) : (
 						// TODO:Optimism: isOptimism ? (
 						// <OptimismIcon />
@@ -213,24 +212,25 @@ const WalletAddressInput: FC<IProps> = ({
 			</Header>
 			<Input
 				label={
-					isGnosis
-						? formatMessage({
-								id: 'label.receiving_address_on_gnosis',
-						  })
-						: isPolygon
-						? formatMessage({
-								id: 'label.receiving_address_on_polygon',
-						  })
-						: // TODO:Optimism
-						// : isOptimism
-						// ? formatMessage({
-						// 		id: 'label.receiving_address_on_optimism',
-						//   })
-						sameAddress
+					sameAddress
 						? formatMessage({ id: 'label.receiving_address' })
-						: formatMessage({
-								id: 'label.receiving_address_on_mainnet',
-						  })
+						: formatMessage(
+								{
+									id: 'label.receiving_address_on',
+								},
+								{
+									chainName: isGnosis
+										? 'Gnosis Chain'
+										: isPolygon
+										? 'Polygon Mainnet'
+										: isCelo
+										? 'Celo Mainnet'
+										: // TODO:Optimism
+										  // : isOptimism
+										  // ? 'Optimism Mainnet'
+										  'Mainnet',
+								},
+						  )
 				}
 				placeholder={formatMessage({ id: 'label.my_wallet_address' })}
 				caption={caption}
@@ -288,6 +288,12 @@ const WalletAddressInput: FC<IProps> = ({
 const OptimismIcon = () => (
 	<ChainIconShadow>
 		<NetworkLogo logoSize={24} chainId={config.OPTIMISM_NETWORK_NUMBER} />
+	</ChainIconShadow>
+);
+
+const CeloIcon = () => (
+	<ChainIconShadow>
+		<NetworkLogo logoSize={24} chainId={config.CELO_NETWORK_NUMBER} />
 	</ChainIconShadow>
 );
 
