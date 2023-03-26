@@ -89,6 +89,7 @@ const UploadProfilePicModal = ({
 									image={pfp.imageIpfs}
 									key={pfp.tokenId}
 									isSelected={true}
+									id={pfp.tokenId}
 								/>
 							))}
 						</Flex>
