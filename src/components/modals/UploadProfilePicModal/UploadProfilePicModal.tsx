@@ -2,6 +2,9 @@ import { Button, H5, mediaQueries } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useMutation } from '@apollo/client';
+import { captureException } from '@sentry/nextjs';
+import { useWeb3React } from '@web3-react/core';
 import useUpload from '@/hooks/useUpload';
 import ImageUploader from '../../ImageUploader';
 import { Flex } from '../../styled-components/Flex';
@@ -12,6 +15,11 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { TabItem } from '../../styled-components/Tabs';
 import { IUserNFT } from '../../views/userProfile/UserProfile.view';
 import PfpItem from './PfpItem';
+import { UPDATE_USER } from '@/apollo/gql/gqlUser';
+import { gToast, ToastType } from '@/components/toasts';
+import { fetchUserByAddress } from '@/features/user/user.thunks';
+import { useAppDispatch } from '@/features/hooks';
+import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 
 interface IUploadProfilePicModal extends IModal {
 	user: IUser;
@@ -34,10 +42,51 @@ const UploadProfilePicModal = ({
 	const [activeTab, setActiveTab] = useState(1);
 	const [selectedPFP, setSelectedPFP] = useState<IUserNFT>();
 
+	const dispatch = useAppDispatch();
+	const { account } = useWeb3React();
+	const [updateUser] = useMutation(UPDATE_USER);
+
 	const { url, onDelete } = useUploadProps;
 
 	console.log('user', user);
 	console.log('data', pfpData);
+
+	const nftUrl = selectedPFP?.imageIpfs
+		? convertIPFSToHTTPS(selectedPFP?.imageIpfs)
+		: undefined;
+	console.log('nftUrl', nftUrl);
+	const onSaveAvatar = async () => {
+		try {
+			console.log('Saving');
+			const { data: response } = await updateUser({
+				variables: {
+					avatar: nftUrl ? nftUrl : url,
+				},
+			});
+			console.log('Res', response);
+			if (response.updateUser) {
+				account && dispatch(fetchUserByAddress(account));
+				gToast('Profile Photo updated.', {
+					type: ToastType.SUCCESS,
+					title: 'Success',
+				});
+				onDelete();
+			} else {
+				throw 'updateUser false';
+			}
+		} catch (error: any) {
+			gToast('Failed to update your information. Please try again.', {
+				type: ToastType.DANGER,
+				title: error.message,
+			});
+			console.log(error);
+			captureException(error, {
+				tags: {
+					section: 'onSaveAvatar',
+				},
+			});
+		}
+	};
 
 	return (
 		<Modal
@@ -70,6 +119,7 @@ const UploadProfilePicModal = ({
 								buttonType='secondary'
 								label='SAVE'
 								disabled={!url}
+								onClick={onSaveAvatar}
 							/>
 							<TextButton
 								buttonType='texty'
@@ -106,7 +156,8 @@ const UploadProfilePicModal = ({
 							<Button
 								buttonType='secondary'
 								label='SAVE'
-								disabled={!url}
+								disabled={!nftUrl}
+								onClick={onSaveAvatar}
 							/>
 							<TextButton
 								buttonType='texty'
