@@ -171,10 +171,12 @@ export interface EnvConfig {
 	XDAI_NETWORK_NUMBER: number;
 	POLYGON_NETWORK_NUMBER: number;
 	OPTIMISM_NETWORK_NUMBER: number;
+	CELO_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	XDAI_CONFIG: XDaiNetworkConfig;
 	POLYGON_CONFIG: BasicNetworkConfig;
 	OPTIMISM_CONFIG: BasicNetworkConfig;
+	CELO_CONFIG: BasicNetworkConfig;
 	GARDEN_LINK: string;
 	BASE_ROUTE: string;
 	BACKEND_LINK: string;
