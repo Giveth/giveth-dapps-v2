@@ -357,7 +357,8 @@ export interface IRecentDonation {
 	valueUsd: number | null;
 }
 
-export interface IGiversPFPToken {
+export interface IGiverPFPToken {
+	id: string;
 	user: {
 		id: string;
 	};
@@ -365,6 +366,6 @@ export interface IGiversPFPToken {
 	imageIpfs: string;
 }
 
-export interface IUserPFPTokens {
-	[key: string]: IGiversPFPToken;
+export interface IUsersPFPTokens {
+	[key: string]: IGiverPFPToken[];
 }
