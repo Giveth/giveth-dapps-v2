@@ -7,6 +7,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -18,15 +19,17 @@ interface IEligibilityModal extends IModal {
 
 const EligibilityModal = ({ isSuccess, setShowModal }: IEligibilityModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
+
 	return (
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerTitle={
-				isSuccess
-					? 'Congratulations'
-					: 'Address not eligible for early minting!'
-			}
+			headerTitle={formatMessage({
+				id: isSuccess
+					? 'label.congratulations'
+					: 'component.pfp_eligibility_modal.title.not_eligible',
+			})}
 			headerTitlePosition='left'
 			headerIcon={
 				isSuccess ? (
@@ -37,17 +40,18 @@ const EligibilityModal = ({ isSuccess, setShowModal }: IEligibilityModal) => {
 			}
 		>
 			<ModalContentContainer>
-				{isSuccess === true
-					? 'You are eligible to mint your Giver early! Thanks for supporting Giveth'
-					: 'The wallet address input is not eligible for early minting. If you think this is a mistake, please contact the team. Check out our documentation for full details on eligibility.'}
+				{formatMessage({
+					id: isSuccess
+						? 'component.pfp_eligibility_modal.content.success'
+						: 'component.pfp_eligibility_modal.content.not_eligible',
+				})}
 			</ModalContentContainer>
 			{isSuccess ? (
 				<CustomizedLink href={Routes.NFTMint} passHref>
-					{/* uncomment this when the minting is live */}
-					{/* <CustomizedButtonLink
+					<CustomizedButtonLink
 						linkType='texty-secondary'
 						label='GO TO MINTING PAGE'
-					/> */}
+					/>
 				</CustomizedLink>
 			) : (
 				// if it is not successful we should link to the documentation article - mitch needs to publish this!!

@@ -6,12 +6,12 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import React, {
+	forwardRef,
 	InputHTMLAttributes,
 	ReactElement,
 	useCallback,
 	useId,
 	useRef,
-	forwardRef,
 } from 'react';
 import styled, { css } from 'styled-components';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
@@ -111,6 +111,7 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 	} = props;
 	const id = useId();
 	const canvasRef = useRef<HTMLCanvasElement>();
+	// const inputRef = useRef<HTMLInputElement | null>(null);
 	const validationStatus =
 		!error || isValidating
 			? EInputValidation.NORMAL
@@ -130,6 +131,9 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 		}
 		return 0;
 	}, [size, value, LeftIcon]);
+
+	const { ref = undefined, ...restRegProps } =
+		registerName && register ? register(registerName, registerOptions) : {};
 
 	return (
 		<InputContainer className={className}>
@@ -158,12 +162,13 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 					maxLength={maxLength}
 					value={value}
 					id={id}
-					{...(registerName && register
-						? register(registerName, registerOptions)
-						: {})}
+					{...restRegProps}
 					{...rest}
+					ref={e => {
+						ref !== undefined && ref(e);
+						if (inputRef) (inputRef as any).current = e;
+					}}
 					data-testid='styled-input'
-					ref={inputRef}
 				/>
 				<SuffixWrapper
 					style={{

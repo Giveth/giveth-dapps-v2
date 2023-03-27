@@ -34,6 +34,7 @@ const networks = [
 	config.MAINNET_CONFIG,
 	config.XDAI_CONFIG,
 	config.POLYGON_CONFIG,
+	// TODO:Optimism config.OPTIMISM_CONFIG,
 ];
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {

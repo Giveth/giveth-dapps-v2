@@ -14,8 +14,8 @@ import {
 	KeyboardEvent,
 	ChangeEvent,
 	useState,
-	useRef,
 	useEffect,
+	useRef,
 } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -30,9 +30,9 @@ interface ISearchInputProps {
 
 export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 	const [value, setValue] = useState<string>('');
+	const inputRef = useRef<HTMLInputElement>(null);
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
-	const inputRef = useRef<HTMLInputElement>(null);
 
 	function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
 		if (event.code === 'Enter' && value.length > 2) {
