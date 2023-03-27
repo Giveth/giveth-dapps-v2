@@ -11,9 +11,6 @@
 		"test": "jest --watch",
 		"cypress": "cypress open"
 	},
-	"engines": {
-		"node": ">=18"
-	},
 	"resolutions": {
 		"styled-components": "^5",
 		"@types/react": "^18.0.15",
