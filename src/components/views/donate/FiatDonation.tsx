@@ -31,7 +31,7 @@ const FiatDonation = () => {
 	const [openOnramper, setOpenOnramper] = useState(false);
 	const [openDonorBox, setOpenDonorBox] = useState(false);
 	const mainnetAddress = project.addresses?.find(
-		i => i.networkId === config.PRIMARY_NETWORK.id,
+		i => i.networkId === config.MAINNET_NETWORK_NUMBER,
 	)?.address;
 	const partnerContext = {
 		userId: userData?.id,
