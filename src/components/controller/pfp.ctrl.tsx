@@ -15,11 +15,10 @@ const PfpController = () => {
 	const { pendingList } = useAppSelector(state => state.pfp);
 
 	useEffect(() => {
-		let interval: NodeJS.Timer;
 		const _pendingList = Object.keys(pendingList);
-		if (_pendingList && _pendingList.length > 0) {
-			interval = setInterval(async () => {
-				try {
+		const interval: NodeJS.Timer = setInterval(async () => {
+			try {
+				if (_pendingList && _pendingList.length > 0) {
 					const query = buildUsersPfpInfoQuery(_pendingList);
 					const res = await gqlRequest(
 						config.MAINNET_CONFIG.subgraphAddress,
@@ -52,11 +51,11 @@ const PfpController = () => {
 					}
 					dispatch(updatePfpList(pfpList));
 					dispatch(clearPfpPendingList());
-				} catch (error) {
-					console.error('error', error);
 				}
-			}, config.PFP_POLLING_INTERVAL);
-		}
+			} catch (error) {
+				console.error('error', error);
+			}
+		}, config.PFP_POLLING_INTERVAL);
 		return () => {
 			if (interval) clearInterval(interval);
 		};
