@@ -4,6 +4,7 @@ import {
 	H5,
 	H6,
 	IconExternalLink16,
+	IconImage32,
 	mediaQueries,
 	neutralColors,
 	P,
@@ -14,6 +15,7 @@ import { useIntl } from 'react-intl';
 import { useMutation } from '@apollo/client';
 import { captureException } from '@sentry/nextjs';
 import { useWeb3React } from '@web3-react/core';
+import Link from 'next/link';
 import useUpload from '@/hooks/useUpload';
 import ImageUploader from '../../ImageUploader';
 import { Flex, FlexCenter } from '../../styled-components/Flex';
@@ -30,6 +32,7 @@ import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { useAppDispatch } from '@/features/hooks';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import config from '@/configuration';
+import Routes from '@/lib/constants/Routes';
 
 interface IUploadProfilePicModal extends IModal {
 	user: IUser;
@@ -225,7 +228,45 @@ const UploadProfilePicModal = ({
 								</Flex>
 							</Flex>
 						) : (
-							<NoNFTContainer>Test</NoNFTContainer>
+							<Flex flexDirection='column'>
+								<CustomH5>
+									Your Unique Giveth’s PFP Artwork
+								</CustomH5>
+								<NoNFTContainer>
+									<FlexCenter direction='column'>
+										<IconImage32
+											color={neutralColors.gray[500]}
+										/>
+										<br />
+										<P>Sorry!!</P>
+										<P>
+											This wallet address does not have a
+											unique Giveth’s NFT Yet.
+										</P>
+										<P>
+											<MintLink href={Routes.NFT}>
+												Mint{' '}
+											</MintLink>
+											yours now on the NFT minter page.
+										</P>
+									</FlexCenter>
+								</NoNFTContainer>
+								<br />
+								<Flex justifyContent='space-between'>
+									<Link href={Routes.NFT}>
+										<Button
+											buttonType='secondary'
+											label='MINT NOW'
+											type='submit'
+										/>
+									</Link>
+									<TextButton
+										buttonType='texty'
+										label='DO IT LATER'
+										onClick={closeModal}
+									/>
+								</Flex>
+							</Flex>
 						)}
 					</>
 				)}
@@ -288,4 +329,9 @@ const CustomLink = styled.a`
 	align-items: center;
 	gap: 8px;
 	max-width: fit-content;
+`;
+
+const MintLink = styled(Link)`
+	max-width: fit-content;
+	color: ${brandColors.pinky[500]};
 `;
