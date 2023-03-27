@@ -18,6 +18,7 @@ export interface IAdminUser {
 	email?: string;
 	name?: string;
 	walletAddress?: string;
+	avatar?: string;
 }
 
 export interface IProject {

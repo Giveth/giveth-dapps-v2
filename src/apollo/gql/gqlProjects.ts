@@ -25,6 +25,7 @@ export const PROJECT_CARD_FIELDS = gql`
 		adminUser {
 			name
 			walletAddress
+			avatar
 		}
 		updatedAt
 		organization {
