@@ -13,6 +13,13 @@ export interface IProjectPower {
 	round: number;
 }
 
+export interface IAdminUser {
+	id?: string;
+	email?: string;
+	name?: string;
+	walletAddress?: string;
+}
+
 export interface IProject {
 	id?: string;
 	title?: string;
@@ -32,12 +39,7 @@ export interface IProject {
 	categories: ICategory[];
 	reaction?: IReaction;
 	totalReactions: number;
-	adminUser: {
-		id?: string;
-		email?: string;
-		name?: string;
-		walletAddress?: string;
-	};
+	adminUser: IAdminUser;
 	donations: {
 		id?: string;
 	}[];
