@@ -1,17 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { IGiverPFPToken } from '@/apollo/types/types';
 
-interface IPfpInfo {}
+export interface IPfpList {
+	[key: string]: IGiverPFPToken | false;
+}
 
-interface IPfpState {
-	[key: string]: IPfpInfo | undefined;
+interface IPfpPending {
+	[key: string]: string;
 }
 
 const initialState: {
-	pendingList: string[];
-	List: IPfpState[];
+	pendingList: IPfpPending;
+	List: IPfpList;
 } = {
-	pendingList: [],
-	List: [],
+	pendingList: {},
+	List: {},
 };
 
 export const pfpSlice = createSlice({
@@ -19,13 +22,14 @@ export const pfpSlice = createSlice({
 	initialState,
 	reducers: {
 		addAccountToPfpPending: (state, action) => {
-			state.pendingList.push(action.payload.toLowerCase());
+			state.pendingList[action.payload.address.toLowerCase()] =
+				action.payload.avatar;
 		},
 		clearPfpPendingList: state => {
-			state.pendingList = [];
+			state.pendingList = {};
 		},
 		updatePfpList: (state, action) => {
-			state.List.push(action.payload);
+			state.List = { ...state.List, ...action.payload };
 		},
 	},
 });
