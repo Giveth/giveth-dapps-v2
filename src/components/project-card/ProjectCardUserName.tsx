@@ -25,13 +25,20 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		const pfp = List.find(
-			p => p.walletAddress === adminUser?.walletAddress,
+		if (!adminUser || !adminUser.walletAddress || !adminUser.avatar) return;
+		console.log(
+			'List[adminUser.walletAddress.toLowerCase()]',
+			List[adminUser.walletAddress.toLowerCase()],
 		);
-		if (pfp) {
-			console.log(pfp);
+		if (List[adminUser.walletAddress.toLowerCase()] !== undefined) {
+			console.log();
 		} else {
-			dispatch(addAccountToPfpPending(adminUser?.walletAddress));
+			dispatch(
+				addAccountToPfpPending({
+					address: adminUser.walletAddress,
+					avatar: adminUser.avatar,
+				}),
+			);
 		}
 	}, [List, adminUser?.walletAddress, dispatch]);
 
