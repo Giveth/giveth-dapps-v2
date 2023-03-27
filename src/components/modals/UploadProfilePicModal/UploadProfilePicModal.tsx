@@ -1,4 +1,10 @@
-import { Button, H5, mediaQueries } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Button,
+	H5,
+	mediaQueries,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -7,7 +13,7 @@ import { captureException } from '@sentry/nextjs';
 import { useWeb3React } from '@web3-react/core';
 import useUpload from '@/hooks/useUpload';
 import ImageUploader from '../../ImageUploader';
-import { Flex } from '../../styled-components/Flex';
+import { Flex, FlexCenter } from '../../styled-components/Flex';
 import { Modal } from '../Modal';
 import { IUser } from '@/apollo/types/types';
 import { IModal } from '@/types/common';
@@ -49,7 +55,7 @@ const UploadProfilePicModal = ({
 	const { url, onDelete } = useUploadProps;
 
 	console.log('user', user);
-	console.log('data', pfpData);
+	console.log('dataaaaa', pfpData);
 
 	const nftUrl = selectedPFP?.imageIpfs
 		? convertIPFSToHTTPS(selectedPFP?.imageIpfs)
@@ -143,42 +149,51 @@ const UploadProfilePicModal = ({
 					</Flex>
 				)}
 				{activeTab === 2 && (
-					<Flex flexDirection='column' gap='36px'>
-						<CustomH5>Your Unique Giveth’s PFP Artwork</CustomH5>
-						<Flex gap='25px'>
-							{pfpData?.map(pfp => (
-								<PfpItem
-									onClick={() => setSelectedPFP(pfp)}
-									image={pfp.imageIpfs}
-									key={pfp.tokenId}
-									isSelected={
-										pfp.tokenId === selectedPFP?.tokenId
-									}
-									id={pfp.tokenId}
-								/>
-							))}
-						</Flex>
-						<Flex
-							flexDirection='row'
-							justifyContent='space-between'
-						>
-							<Button
-								buttonType='secondary'
-								label='SAVE'
-								disabled={!nftUrl}
-								onClick={onSaveAvatar}
-							/>
-							<TextButton
-								buttonType='texty'
-								label={formatMessage({
-									id: 'label.cancel',
-								})}
-								onClick={() => {
-									setSelectedPFP(undefined);
-								}}
-							/>
-						</Flex>
-					</Flex>
+					<>
+						{pfpData && pfpData.length > 0 ? (
+							<Flex flexDirection='column' gap='36px'>
+								<CustomH5>
+									Your Unique Giveth’s PFP Artwork
+								</CustomH5>
+								<Flex gap='25px'>
+									{pfpData?.map(pfp => (
+										<PfpItem
+											onClick={() => setSelectedPFP(pfp)}
+											image={pfp.imageIpfs}
+											key={pfp.tokenId}
+											isSelected={
+												pfp.tokenId ===
+												selectedPFP?.tokenId
+											}
+											id={pfp.tokenId}
+										/>
+									))}
+								</Flex>
+								<Flex
+									flexDirection='row'
+									justifyContent='space-between'
+								>
+									<Button
+										buttonType='secondary'
+										label='SAVE'
+										disabled={!nftUrl}
+										onClick={onSaveAvatar}
+									/>
+									<TextButton
+										buttonType='texty'
+										label={formatMessage({
+											id: 'label.cancel',
+										})}
+										onClick={() => {
+											setSelectedPFP(undefined);
+										}}
+									/>
+								</Flex>
+							</Flex>
+						) : (
+							<NoNFTContainer>Test</NoNFTContainer>
+						)}
+					</>
 				)}
 			</Wrapper>
 		</Modal>
@@ -207,4 +222,19 @@ const TextButton = styled(Button)<{ color?: string }>`
 const CustomH5 = styled(H5)`
 	text-align: left;
 	margin-top: 40px;
+`;
+
+const NoNFTContainer = styled(FlexCenter)`
+	flex-direction: column;
+	border: 1px dotted ${neutralColors.gray[400]};
+	margin: 24px 0 16px 0;
+	padding: 64px 20px;
+	color: ${brandColors.deep[500]};
+	img {
+		margin: 0 0 30px 0;
+	}
+	span {
+		cursor: pointer;
+		color: ${brandColors.pinky[500]};
+	}
 `;
