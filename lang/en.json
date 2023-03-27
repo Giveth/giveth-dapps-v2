@@ -1230,5 +1230,6 @@
 	"label.you_can_wait_on_this_page_until_the_payment_goes_through": "You can wait on this page until the payment goes through, or you can close it. If the payment is successful, the funds will automatically appear in your chosen wallet after some time. Note: If you click 'Close', you will be redirected back to the start and will not get to the next page.",
 	"component.pfp_eligibility_modal.title.not_eligible": "Address is not eligible for early minting!",
 	"component.pfp_eligibility_modal.content.not_eligible": "The wallet address you connected with is not on our allowlist for early minting. If you think this is a mistake, contact our team. Check out our documentation for full details on eligibility, or come back when public minting opens on Mar 24, 2023, 16:00 UTC.",
-	"component.pfp_eligibility_modal.content.success": "You are eligible to mint your Giver early! Thanks for supporting Giveth"
+	"component.pfp_eligibility_modal.content.success": "You are eligible to mint your Giver early! Thanks for supporting Giveth",
+	"label.duration_ago": "{duration} ago"
 }
