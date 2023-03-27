@@ -11,8 +11,7 @@ import { Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
-import { FlexCenter, Flex } from '@/components/styled-components/Flex';
-import ImageUploader from '../ImageUploader';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import { gToast, ToastType } from '../toasts';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
@@ -23,13 +22,9 @@ import { requiredOptions, validators } from '@/lib/constants/regex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import useUpload from '@/hooks/useUpload';
 
-enum EditStatusType {
-	INFO,
-	PHOTO,
-}
-
 interface IEditUserModal extends IModal {
 	user: IUser;
+	setShowProfilePicModal: (showModal: boolean) => void;
 }
 
 type Inputs = {
@@ -40,13 +35,13 @@ type Inputs = {
 	url: string;
 };
 
-const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
+const EditUserModal = ({
+	setShowModal,
+	user,
+	setShowProfilePicModal,
+}: IEditUserModal) => {
 	const { formatMessage } = useIntl();
 	const [isLoading, setIsLoading] = useState(false);
-	const [editStatus, setEditStatus] = useState<EditStatusType>(
-		EditStatusType.INFO,
-	);
-
 	const useUploadProps = useUpload();
 	const { url, onDelete } = useUploadProps;
 
@@ -69,7 +64,6 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 			});
 			if (response.updateUser) {
 				account && dispatch(fetchUserByAddress(account));
-				setEditStatus(EditStatusType.INFO);
 				gToast('Profile Photo updated.', {
 					type: ToastType.SUCCESS,
 					title: 'Success',
@@ -135,101 +129,78 @@ const EditUserModal = ({ setShowModal, user }: IEditUserModal) => {
 			headerTitlePosition='left'
 		>
 			<Wrapper>
-				{editStatus === EditStatusType.PHOTO ? (
-					<Flex flexDirection='column' gap='36px'>
-						<ImageUploader {...useUploadProps} />
-						<Button
-							buttonType='secondary'
-							label='SAVE'
-							onClick={onSaveAvatar}
-							disabled={!url}
+				<>
+					<FlexCenter direction='column' gap='8px'>
+						<ProfilePicture
+							src={
+								user.avatar ? user.avatar : '/images/avatar.svg'
+							}
+							alt={user.name || ''}
+							height={80}
+							width={80}
 						/>
-						<TextButton
-							buttonType='texty'
-							label={formatMessage({
-								id: 'label.cancel',
-							})}
-							onClick={() => {
-								onDelete();
-								setEditStatus(EditStatusType.INFO);
-							}}
-						/>
-					</Flex>
-				) : (
-					<>
-						<FlexCenter direction='column' gap='8px'>
-							<ProfilePicture
-								src={
-									user.avatar
-										? user.avatar
-										: '/images/avatar.svg'
-								}
-								alt={user.name || ''}
-								height={80}
-								width={80}
+						<FlexCenter direction='column'>
+							<TextButton
+								buttonType='texty'
+								color={brandColors.pinky[500]}
+								label={formatMessage({
+									id: 'label.upload_new_pic',
+								})}
+								onClick={() => {
+									setShowProfilePicModal(true);
+									closeModal();
+								}}
 							/>
-							<FlexCenter direction='column'>
-								<TextButton
-									buttonType='texty'
-									color={brandColors.pinky[500]}
-									label={formatMessage({
-										id: 'label.upload_new_pic',
-									})}
-									onClick={() =>
-										setEditStatus(EditStatusType.PHOTO)
-									}
-								/>
-								<TextButton
-									buttonType='texty'
-									label={formatMessage({
-										id: 'label.delete_pic',
-									})}
-									onClick={onSaveAvatar}
-								/>
-							</FlexCenter>
+							<TextButton
+								buttonType='texty'
+								label={formatMessage({
+									id: 'label.delete_pic',
+								})}
+								onClick={onSaveAvatar}
+							/>
 						</FlexCenter>
-						<form onSubmit={handleSubmit(onSubmit)}>
-							<InputWrapper>
-								{inputFields.map(field => (
-									<Input
-										defaultValue={(user as any)[field.name]}
-										key={field.name}
-										registerName={field.name}
-										label={formatMessage({
-											id: field.label,
-										})}
-										placeholder={field.placeholder}
-										caption={
-											field.caption &&
-											formatMessage({
-												id: field.caption,
-											})
-										}
-										size={InputSize.SMALL}
-										register={register}
-										error={(errors as any)[field.name]}
-										registerOptions={field.registerOptions}
-									/>
-								))}
-								<Button
-									buttonType='secondary'
+					</FlexCenter>
+					<form onSubmit={handleSubmit(onSubmit)}>
+						<InputWrapper>
+							{inputFields.map(field => (
+								<Input
+									defaultValue={(user as any)[field.name]}
+									key={field.name}
+									registerName={field.name}
 									label={formatMessage({
-										id: 'label.save',
+										id: field.label,
 									})}
-									disabled={isLoading}
-									type='submit'
+									placeholder={field.placeholder}
+									caption={
+										field.caption &&
+										formatMessage({
+											id: field.caption,
+										})
+									}
+									size={InputSize.SMALL}
+									register={register}
+									error={(errors as any)[field.name]}
+									registerOptions={field.registerOptions}
 								/>
-								<TextButton
-									buttonType='texty'
-									label={formatMessage({
-										id: 'label.cancel',
-									})}
-									onClick={closeModal}
-								/>
-							</InputWrapper>
-						</form>
-					</>
-				)}
+							))}
+							<Button
+								buttonType='secondary'
+								label={formatMessage({
+									id: 'label.save',
+								})}
+								disabled={isLoading}
+								type='submit'
+							/>
+							<TextButton
+								buttonType='texty'
+								label={formatMessage({
+									id: 'label.cancel',
+								})}
+								onClick={closeModal}
+							/>
+						</InputWrapper>
+					</form>
+				</>
 			</Wrapper>
 		</Modal>
 	);
