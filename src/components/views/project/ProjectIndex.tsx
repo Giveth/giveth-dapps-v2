@@ -53,7 +53,6 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	const [donations, setDonations] = useState<IDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
-
 	const user = useAppSelector(state => state.user.userData);
 	const { fetchProjectBoosters, projectData, isActive, isDraft } =
 		useProjectContext();
