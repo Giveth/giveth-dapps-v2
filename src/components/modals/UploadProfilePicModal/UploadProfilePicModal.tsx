@@ -174,7 +174,7 @@ const UploadProfilePicModal = ({
 									id: 'label.cancel',
 								})}
 								onClick={() => {
-									onDelete();
+									setSelectedPFP(undefined);
 								}}
 							/>
 						</Flex>
