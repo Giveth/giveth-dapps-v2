@@ -3,7 +3,12 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { gqlRequest } from '@/helpers/requests';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
-import { clearPfpPendingList } from '@/features/pfp/pfp.slice';
+import {
+	clearPfpPendingList,
+	IPfpList,
+	updatePfpList,
+} from '@/features/pfp/pfp.slice';
+import { IUsersPFPTokens } from '@/apollo/types/types';
 
 const PfpController = () => {
 	const dispatch = useAppDispatch();
@@ -11,26 +16,42 @@ const PfpController = () => {
 
 	useEffect(() => {
 		let interval: NodeJS.Timer;
-		if (pendingList && pendingList.length > 0) {
+		const _pendingList = Object.keys(pendingList);
+		if (_pendingList && _pendingList.length > 0) {
 			interval = setInterval(async () => {
-				console.log('pendingList', pendingList);
 				try {
-					const query = buildUsersPfpInfoQuery(pendingList);
-					console.log('query', query);
-					const { data } = await gqlRequest(
+					const query = buildUsersPfpInfoQuery(_pendingList);
+					const res = await gqlRequest(
 						config.MAINNET_CONFIG.subgraphAddress,
 						false,
 						query,
 					);
-					console.log('data', data);
+					const data: IUsersPFPTokens = res.data;
+					const pfpList: IPfpList = {};
+					for (const key in data) {
+						if (Object.prototype.hasOwnProperty.call(data, key)) {
+							const userPFPTokens = data[key];
+							const address = key.slice(5);
+							if (userPFPTokens && userPFPTokens.length > 0) {
+								const userPFPToken = userPFPTokens.find(
+									_userPFPTokens => {
+										const avatarHash =
+											pendingList[address].slice(21);
+										const imageIpfsHash =
+											_userPFPTokens.imageIpfs.slice(7);
+										return avatarHash === imageIpfsHash;
+									},
+								);
+								if (userPFPToken) {
+									pfpList[address] = userPFPToken;
+									continue;
+								}
+							}
+							pfpList[address] = false;
+						}
+					}
+					dispatch(updatePfpList(pfpList));
 					dispatch(clearPfpPendingList());
-					// if (data[`user_${walletAddress}`]) {
-					// 	console.log(
-					// 		'data[`user_${walletAddress}`]',
-					// 		data[`user_${walletAddress}`],
-					// 		user,
-					// 	);
-					// }
 				} catch (error) {
 					console.error('error', error);
 				}
@@ -39,7 +60,7 @@ const PfpController = () => {
 		return () => {
 			if (interval) clearInterval(interval);
 		};
-	}, [pendingList]);
+	}, [dispatch, pendingList]);
 	return null;
 };
 
