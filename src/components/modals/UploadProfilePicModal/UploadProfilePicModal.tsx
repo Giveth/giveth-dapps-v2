@@ -55,12 +55,21 @@ const UploadProfilePicModal = ({
 		? convertIPFSToHTTPS(selectedPFP?.imageIpfs)
 		: undefined;
 	console.log('nftUrl', nftUrl);
+
+	const handleAvatar = () => {
+		if (activeTab === 1) {
+			return url;
+		} else {
+			return nftUrl;
+		}
+	};
+
 	const onSaveAvatar = async () => {
 		try {
 			console.log('Saving');
 			const { data: response } = await updateUser({
 				variables: {
-					avatar: nftUrl ? nftUrl : url,
+					avatar: handleAvatar(),
 				},
 			});
 			console.log('Res', response);
