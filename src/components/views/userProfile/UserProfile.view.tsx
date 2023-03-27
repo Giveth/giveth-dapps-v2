@@ -141,15 +141,17 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 								)}
 								<AddressContainer>
 									<AddressTextNonMobile size='Big'>
-										{user?.walletAddress}
+										{user?.walletAddress?.toLowerCase()}
 									</AddressTextNonMobile>
 									<AddressTextMobile size='Big'>
-										{shortenAddress(user?.walletAddress)}
+										{shortenAddress(
+											user?.walletAddress?.toLowerCase(),
+										)}
 									</AddressTextMobile>
 									<ExternalLink
 										href={formatWalletLink(
 											chainId,
-											user?.walletAddress,
+											user?.walletAddress?.toLowerCase(),
 										)}
 										color={brandColors.pinky[500]}
 									>

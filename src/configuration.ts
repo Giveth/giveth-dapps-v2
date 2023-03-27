@@ -12,24 +12,6 @@ const config: GlobalConfig = {
 	SUBGRAPH_POLLING_INTERVAL: 5000,
 	NOTIFICATION_POLLING_INTERVAL: 5000,
 	TOKEN_PRECISION: 2,
-	PRIMARY_NETWORK: {
-		name: isProduction ? 'Ethereum Mainnet' : 'Goerli',
-		id: isProduction ? 1 : 5,
-		chain: isProduction ? '0x1' : '0x5',
-		mainToken: 'ETH',
-	},
-	SECONDARY_NETWORK: {
-		name: 'Gnosis Chain',
-		id: 100,
-		chain: '0x64',
-		mainToken: 'XDAI',
-	},
-	POLYGON_NETWORK: {
-		name: 'Polygon Mainnet',
-		id: 137,
-		chain: '0x89',
-		mainToken: 'MATIC',
-	},
 	...envConfig,
 	NETWORKS_CONFIG: {
 		[envConfig.MAINNET_NETWORK_NUMBER]: envConfig.MAINNET_CONFIG,

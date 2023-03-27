@@ -7,9 +7,10 @@ import {
 	convertRawDataToHTML,
 	convertBackendIconsToComponents,
 } from '@/helpers/html';
-import { getTimeAgo } from '@/lib/helpers';
 import { INotification } from '@/features/notification/notification.types';
 import { setNotificationRead } from '@/features/notification/notification.services';
+import { getNowUnixMS } from '@/helpers/time';
+import { durationToString } from '@/lib/helpers';
 
 interface INotificationBox {
 	notification: INotification;
@@ -23,7 +24,7 @@ export const NotificationBox: FC<INotificationBox> = ({
 	markOneNotificationRead,
 }) => {
 	const NotifRef = useRef(null);
-	const { locale } = useIntl();
+	const { formatMessage, locale } = useIntl();
 
 	useEffect(() => {
 		if (notification.isRead) return;
@@ -68,9 +69,17 @@ export const NotificationBox: FC<INotificationBox> = ({
 					{convertRawDataToHTML(notification)}
 				</ConvertedTextContainer>
 				<NotificationTime medium>
-					{getTimeAgo(
-						new Date(notification.createdAt).getTime(),
-						locale,
+					{formatMessage(
+						{ id: 'label.duration_ago' },
+						{
+							duration: durationToString(
+								getNowUnixMS() -
+									new Date(notification.createdAt).getTime(),
+								1,
+								true,
+								locale,
+							),
+						},
 					)}
 				</NotificationTime>
 			</NotificationContent>
