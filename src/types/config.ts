@@ -188,6 +188,7 @@ export interface GlobalConfig extends EnvConfig {
 	WEB3_POLLING_INTERVAL: number;
 	SUBGRAPH_POLLING_INTERVAL: number;
 	NOTIFICATION_POLLING_INTERVAL: number;
+	PFP_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
 	NETWORKS_CONFIG: {
 		[key: number]: MainnetNetworkConfig | XDaiNetworkConfig;

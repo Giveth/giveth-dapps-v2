@@ -23,9 +23,10 @@ import UserController from '@/components/controller/user.ctrl';
 import ModalController from '@/components/controller/modal.ctrl';
 import PriceController from '@/components/controller/price.ctrl';
 import GeneralController from '@/components/controller/general.ctrl';
+import NotificationController from '@/components/controller/pfp.ctrl';
+import PfpController from '@/components/controller/notification.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import StorageLabel from '@/lib/localStorage';
-import NotificationController from '@/components/controller/notification.ctrl';
 
 import { isGIVeconomyRoute } from '@/lib/helpers';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
@@ -141,6 +142,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 							<FooterWrapper />
 							<ModalController />
+							<PfpController />
 						</Web3ReactProvider>
 					</ApolloProvider>
 				</IntlProvider>

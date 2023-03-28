@@ -8,6 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import { RowWrapper } from '@/components/styled-components/Table';
 import { formatWeiHelper } from '@/helpers/number';
+import { UserWithPFPInCell } from '@/components/UserWithPFPInCell';
 import { IPowerBoostingWithUserGIVpower } from '.';
 
 interface IGIVPowerTableProps {
@@ -28,7 +29,9 @@ const GIVPowerTable: FC<IGIVPowerTableProps> = ({
 			</TableHeader>
 			{powerBoostings?.map(({ id, user }) => (
 				<GIVpowerRowWrapper key={id}>
-					<TableCell>{user.name || 'Anonymous'}</TableCell>
+					<TableCell>
+						<UserWithPFPInCell user={user} />
+					</TableCell>
 					<TableCell>{formatWeiHelper(user.allocated)}</TableCell>
 				</GIVpowerRowWrapper>
 			))}
@@ -56,6 +59,10 @@ const TableHeader = styled(B)`
 const GIVpowerRowWrapper = styled(RowWrapper)`
 	&:hover > div {
 		background-color: ${neutralColors.gray[300]};
+	}
+
+	&:hover #pfp-avatar {
+		box-shadow: 0px 0.762881px 4.57729px 1.14432px rgba(225, 69, 141, 0.5);
 	}
 `;
 
