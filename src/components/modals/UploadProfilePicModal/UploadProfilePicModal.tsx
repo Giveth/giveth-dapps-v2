@@ -33,7 +33,6 @@ import { useAppDispatch } from '@/features/hooks';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
-import useDetectDevice from '@/hooks/useDetectDevice';
 
 interface IUploadProfilePicModal extends IModal {
 	user: IUser;
@@ -59,7 +58,7 @@ const UploadProfilePicModal = ({
 	const dispatch = useAppDispatch();
 	const { account } = useWeb3React();
 	const [updateUser] = useMutation(UPDATE_USER);
-	const { isMobile } = useDetectDevice();
+
 	const { url, onDelete } = useUploadProps;
 
 	console.log('user', user);
@@ -226,7 +225,7 @@ const UploadProfilePicModal = ({
 										</Flex>
 									</SelectedPFPContainer>
 								)}
-								<Flex
+								<NFTsButtonsContainer
 									flexDirection='row'
 									justifyContent='space-between'
 								>
@@ -245,8 +244,7 @@ const UploadProfilePicModal = ({
 											setSelectedPFP(undefined);
 										}}
 									/>
-								</Flex>
-								{isMobile && <br />}
+								</NFTsButtonsContainer>
 							</Flex>
 						) : (
 							<Flex flexDirection='column'>
@@ -355,4 +353,12 @@ const CustomLink = styled.a`
 const MintLink = styled(Link)`
 	max-width: fit-content;
 	color: ${brandColors.pinky[500]};
+`;
+
+const NFTsButtonsContainer = styled(Flex)`
+	margin-bottom: 60px;
+
+	${mediaQueries.tablet} {
+		margin-bottom: 0;
+	}
 `;
