@@ -1,6 +1,8 @@
 :root {
 	--bgColor: #F7F7F9;
 	--color: #1D1E1F;
+	--scrollColor: #d6dee1;
+	--scrollHoverColor: #a8bbbf;
 }
 
 html,
@@ -34,14 +36,14 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-	background-color: #d6dee1;
+	background-color: var(--scrollColor);
 	border-radius: 20px;
 	border: 6px solid transparent;
 	background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background-color: #a8bbbf;
+	background-color: var(--scrollHoverColor);
 }
 
 a {
