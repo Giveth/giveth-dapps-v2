@@ -1241,5 +1241,7 @@
 	"component.pfp_eligibility_modal.title.not_eligible": "Address is not eligible for early minting!",
 	"component.pfp_eligibility_modal.content.not_eligible": "The wallet address you connected with is not on our allowlist for early minting. If you think this is a mistake, contact our team. Check out our documentation for full details on eligibility, or come back when public minting opens on Mar 24, 2023, 16:00 UTC.",
 	"component.pfp_eligibility_modal.content.success": "You are eligible to mint your Giver early! Thanks for supporting Giveth",
-	"label.duration_ago": "{duration} ago"
+	"label.duration_ago": "{duration} ago",
+	"label.an_equivalent_of_up_to_40%": "An equivalent of up to 40% of the donation amount in GIV tokens!",
+	"label.read_more_on_our_docs": "Read more on our docs"
 }
