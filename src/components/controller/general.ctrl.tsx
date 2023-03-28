@@ -41,13 +41,13 @@ const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
 			? css`
 					--bgColor: ${brandColors.giv[900]} !important;
 					--color: white !important;
-					--scrollColor: ${brandColors.giv[400]}!important;
-					--scrollHoverColor: ${brandColors.giv[700]}!important;
+					--scrollColor: ${brandColors.giv[400]} !important;
+					--scrollHoverColor: ${brandColors.giv[700]} !important;
 			  `
 			: props.theme === ETheme.Light
 			? css`
-					--bgColor: ${neutralColors.gray[200]}!important;
-					--color: ${neutralColors.gray[900]}!important;
+					--bgColor: ${neutralColors.gray[200]} !important;
+					--color: ${neutralColors.gray[900]} !important;
 					--scrollColor: #d6dee1 !important;
 					--scrollHoverColor: #a8bbbf !important;
 			  `
