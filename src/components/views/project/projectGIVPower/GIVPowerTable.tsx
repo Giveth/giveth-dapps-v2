@@ -8,6 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import { RowWrapper } from '@/components/styled-components/Table';
 import { formatWeiHelper } from '@/helpers/number';
+import { UserWithPFPInCell } from '@/components/UserWithPFPInCell';
 import { IPowerBoostingWithUserGIVpower } from '.';
 
 interface IGIVPowerTableProps {
@@ -28,7 +29,9 @@ const GIVPowerTable: FC<IGIVPowerTableProps> = ({
 			</TableHeader>
 			{powerBoostings?.map(({ id, user }) => (
 				<GIVpowerRowWrapper key={id}>
-					<TableCell>{user.name || 'Anonymous'}</TableCell>
+					<TableCell>
+						<UserWithPFPInCell user={user} />
+					</TableCell>
 					<TableCell>{formatWeiHelper(user.allocated)}</TableCell>
 				</GIVpowerRowWrapper>
 			))}
