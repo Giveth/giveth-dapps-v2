@@ -61,33 +61,26 @@ const UploadProfilePicModal = ({
 
 	const { url, onDelete } = useUploadProps;
 
-	console.log('user', user);
-	console.log('dataaaaa', pfpData);
-	console.log('dataaaaa Selected', selectedPFP);
-
 	const nftUrl = selectedPFP?.imageIpfs
 		? convertIPFSToHTTPS(selectedPFP?.imageIpfs)
 		: undefined;
-	console.log('nftUrl', nftUrl);
 
 	const handleAvatar = () => {
 		if (activeTab === 1) {
 			return url;
 		} else {
-			console.log('Nft URL', nftUrl);
 			return nftUrl;
 		}
 	};
 
 	const onSaveAvatar = async () => {
 		try {
-			console.log('Saving');
 			const { data: response } = await updateUser({
 				variables: {
 					avatar: handleAvatar(),
 				},
 			});
-			console.log('Res', response);
+
 			if (response.updateUser) {
 				account && dispatch(fetchUserByAddress(account));
 				gToast('Profile Photo updated.', {
@@ -103,7 +96,6 @@ const UploadProfilePicModal = ({
 				type: ToastType.DANGER,
 				title: error.message,
 			});
-			console.log(error);
 			captureException(error, {
 				tags: {
 					section: 'onSaveAvatar',
