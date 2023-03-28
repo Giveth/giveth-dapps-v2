@@ -6,7 +6,6 @@ import {
 	P,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { BigNumber } from 'ethers';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
@@ -19,12 +18,12 @@ import {
 	CancelButton,
 	StyledButton,
 	SectionTitle,
-	StakeInnerModal,
+	StakeInnerModalContainer,
 	StakeModalContainer,
 } from './StakeLock.sc';
 import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
-import LockInfo, { LockInfotooltip } from './LockInfo';
+import LockInfo, { LockInfoTooltip } from './LockInfo';
 import LockingBrief from './LockingBrief';
 import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
@@ -35,11 +34,13 @@ import { Flex } from '@/components/styled-components/Flex';
 import links from '@/lib/constants/links';
 import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
+import { useStakingPool } from '@/hooks/useStakingPool';
+import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import type { PoolStakingConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
-	maxAmount: BigNumber;
+	isGIVpower: boolean;
 }
 
 export enum ELockState {
@@ -52,7 +53,7 @@ export enum ELockState {
 
 const LockModal: FC<ILockModalProps> = ({
 	poolStakingConfig,
-	maxAmount,
+	isGIVpower,
 	setShowModal,
 }) => {
 	const { formatMessage } = useIntl();
@@ -61,6 +62,17 @@ const LockModal: FC<ILockModalProps> = ({
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
 	const { library } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { stakedAmount: stakedLpAmount } = useStakingPool(poolStakingConfig);
+
+	const { network: poolNetwork } = poolStakingConfig;
+
+	const { sdh } = useTokenDistroHelper(poolNetwork);
+
+	const userGIVLocked = sdh.getUserGIVLockedBalance();
+
+	const maxAmount = isGIVpower
+		? stakedLpAmount.sub(userGIVLocked.balance)
+		: stakedLpAmount;
 
 	const onLock = async () => {
 		const contractAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
@@ -101,7 +113,7 @@ const LockModal: FC<ILockModalProps> = ({
 			headerIcon={<IconRocketInSpace32 />}
 		>
 			<StakeModalContainer>
-				<StakeInnerModal>
+				<StakeInnerModalContainer>
 					{lockState === ELockState.LOCK && (
 						<>
 							<SectionTitle weight={700}>
@@ -123,11 +135,11 @@ const LockModal: FC<ILockModalProps> = ({
 									direction='right'
 									align='top'
 								>
-									<LockInfotooltip>
+									<LockInfoTooltip>
 										{formatMessage({
 											id: 'label.rounds_are_two_weeks_periods',
 										})}
-									</LockInfotooltip>
+									</LockInfoTooltip>
 								</IconWithTooltip>
 							</Flex>
 							<LockSlider setRound={setRound} round={round} />
@@ -206,7 +218,7 @@ const LockModal: FC<ILockModalProps> = ({
 							</ExternalLink>
 						</>
 					)}
-				</StakeInnerModal>
+				</StakeInnerModalContainer>
 			</StakeModalContainer>
 		</Modal>
 	);

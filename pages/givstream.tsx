@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import GIVstreamView from '@/components/views/Stream.view';
+import GIVstreamView from '@/components/views/GIVstream.view';
 import { givstreamMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { setDarkTheme, setLightTheme } from '@/features/general/general.slice';

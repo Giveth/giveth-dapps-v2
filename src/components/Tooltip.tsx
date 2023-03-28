@@ -126,14 +126,12 @@ const tooltipStyleCalc = (
 		style = {
 			top: parentRect.top - ARROW_SIZE - 50,
 			left: 10,
-			transform: `translate(${translateX}, -100%)`,
 			width: '95vw',
 		};
 	} else if (isMobile && direction === 'bottom') {
 		style = {
 			top: parentRect.bottom + ARROW_SIZE,
 			left: 10,
-			transform: `translate(${translateX}, 0)`,
 			width: '95vw',
 		};
 	} else {

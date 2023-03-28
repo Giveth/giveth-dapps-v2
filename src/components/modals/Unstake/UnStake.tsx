@@ -8,7 +8,6 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { BigNumber } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { Modal } from '../Modal';
 import { Flex } from '../../styled-components/Flex';
@@ -24,7 +23,7 @@ import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
 import {
 	PoolStakingConfig,
-	RegenFarmConfig,
+	RegenStreamConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 } from '@/types/config';
@@ -32,19 +31,38 @@ import { formatWeiHelper } from '@/helpers/number';
 import { LockupDetailsModal } from '../LockupDetailsModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { useGIVpower } from '@/context/givpower.context';
 import config from '@/configuration';
+import { getGivStakingConfig } from '@/helpers/networkProvider';
+import { useStakingPool } from '@/hooks/useStakingPool';
 
-interface IUnStakeModalProps extends IModal {
+interface IUnStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
-	regenStreamConfig?: RegenFarmConfig;
-	maxAmount: BigNumber;
+	regenStreamConfig?: RegenStreamConfig;
 }
+
+interface IUnStakeModalProps extends IModal, IUnStakeInnerModalProps {}
 
 export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	poolStakingConfig,
 	regenStreamConfig,
-	maxAmount,
+	setShowModal,
+}) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
+	return (
+		<Modal closeModal={closeModal} isAnimating={isAnimating}>
+			<UnStakeInnerModal
+				poolStakingConfig={poolStakingConfig}
+				regenStreamConfig={regenStreamConfig}
+				setShowModal={setShowModal}
+			/>
+		</Modal>
+	);
+};
+
+const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
+	poolStakingConfig,
+	regenStreamConfig,
 	setShowModal,
 }) => {
 	const [txHash, setTxHash] = useState('');
@@ -53,9 +71,10 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 	const [unStakeState, setUnstakeState] = useState<StakeState>(
 		StakeState.UNSTAKE,
 	);
-	const { stakedAmount } = useGIVpower();
+	const { stakedAmount, notStakedAmount: maxAmount } = useStakingPool(
+		getGivStakingConfig(config.XDAI_CONFIG),
+	);
 	const { library, chainId } = useWeb3React();
-	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { title, type, LM_ADDRESS, GARDEN_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
@@ -82,9 +101,8 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 			setUnstakeState(StakeState.ERROR);
 		}
 	};
-
 	return (
-		<Modal closeModal={closeModal} isAnimating={isAnimating}>
+		<>
 			<UnStakeModalContainer>
 				{(unStakeState === StakeState.UNSTAKE ||
 					unStakeState === StakeState.UNSTAKING) && (
@@ -167,14 +185,12 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 				{chainId && unStakeState === StakeState.REJECT && (
 					<ErrorInnerModal
 						title='You rejected the transaction.'
-						walletNetwork={chainId}
 						txHash={txHash}
 					/>
 				)}
 				{chainId && unStakeState === StakeState.SUBMITTING && (
 					<SubmittedInnerModal
 						title={title}
-						walletNetwork={chainId}
 						txHash={txHash}
 						rewardTokenAddress={
 							regenStreamConfig?.rewardTokenAddress
@@ -185,7 +201,6 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 				{chainId && unStakeState === StakeState.CONFIRMED && (
 					<ConfirmedInnerModal
 						title={title}
-						walletNetwork={chainId}
 						txHash={txHash}
 						rewardTokenAddress={
 							regenStreamConfig?.rewardTokenAddress
@@ -196,7 +211,6 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 				{chainId && unStakeState === StakeState.ERROR && (
 					<ErrorInnerModal
 						title='Something went wrong!'
-						walletNetwork={chainId}
 						txHash={txHash}
 						rewardTokenAddress={
 							regenStreamConfig?.rewardTokenAddress
@@ -211,7 +225,7 @@ export const UnStakeModal: FC<IUnStakeModalProps> = ({
 					unstakeable={maxAmount}
 				/>
 			)}
-		</Modal>
+		</>
 	);
 };
 

@@ -22,6 +22,7 @@ export interface IStakeInfo {
 
 export const useStakingPool = (
 	poolStakingConfig: SimplePoolStakingConfig,
+	hold: boolean = false,
 ): IStakeInfo => {
 	const [apr, setApr] = useState<APR | null>(null);
 	const [userStakeInfo, setUserStakeInfo] = useState<UserStakeInfo>({
@@ -32,17 +33,17 @@ export const useStakingPool = (
 	const stakePoolInfoPoll = useRef<NodeJS.Timer | null>(null);
 
 	const { library, chainId } = useWeb3React();
-	const { mainnetValues, xDaiValues } = useAppSelector(
-		state => state.subgraph,
+	const currentValues = useAppSelector(
+		state =>
+			poolStakingConfig.network === config.XDAI_NETWORK_NUMBER
+				? state.subgraph.xDaiValues
+				: state.subgraph.mainnetValues,
+		() => (hold ? true : false),
 	);
 
 	const { network } = poolStakingConfig;
-	const currentValues =
-		poolStakingConfig.network === config.XDAI_NETWORK_NUMBER
-			? xDaiValues
-			: mainnetValues;
 	const { isLoaded } = currentValues;
-	const { type, LM_ADDRESS } = poolStakingConfig;
+	const { type } = poolStakingConfig;
 	const providerNetwork = library?.network?.chainId;
 	const _library = chainId === network ? library : undefined;
 

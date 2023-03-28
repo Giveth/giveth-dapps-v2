@@ -82,7 +82,7 @@ export class SubgraphQueryBuilder {
 	): string => {
 		return [
 			networkConfig.TOKEN_DISTRO_ADDRESS,
-			...networkConfig.regenFarms.map(c => {
+			...networkConfig.regenStreams.map(c => {
 				return c.tokenDistroAddress;
 			}),
 		]
@@ -275,9 +275,7 @@ export class SubgraphQueryBuilder {
 					...(config.MAINNET_CONFIG.pools.filter(
 						c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
 					) as Array<SimplePoolStakingConfig>),
-					...config.MAINNET_CONFIG.regenFarms
-						.map(regenFarm => regenFarm.pools)
-						.flat(),
+					...config.MAINNET_CONFIG.regenPools,
 				],
 				userAddress,
 			)}
@@ -300,9 +298,7 @@ export class SubgraphQueryBuilder {
 					getGivStakingConfig(config.XDAI_CONFIG),
 					...(config.XDAI_CONFIG
 						.pools as Array<SimplePoolStakingConfig>),
-					...config.XDAI_CONFIG.regenFarms
-						.map(regenFarm => regenFarm.pools)
-						.flat(),
+					...config.XDAI_CONFIG.regenPools,
 				],
 				userAddress,
 			)}

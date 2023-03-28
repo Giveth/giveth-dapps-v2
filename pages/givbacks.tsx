@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import GIVbackView from '@/components/views/Back.view';
+import GIVbacksView from '@/components/views/GIVbacks.view';
 import { givbacksMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { useAppDispatch } from '@/features/hooks';
@@ -18,7 +18,7 @@ export default function GIVbacksRoute() {
 	return (
 		<>
 			<GeneralMetatags info={givbacksMetatags} />
-			<GIVbackView />
+			<GIVbacksView />
 		</>
 	);
 }
