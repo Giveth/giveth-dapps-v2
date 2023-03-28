@@ -65,11 +65,6 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	);
 	const { chainId } = useWeb3React();
 
-	const currentValues = useAppSelector(
-		state => state.subgraph.currentValues,
-		() => (showModal ? true : false),
-	);
-
 	const {
 		title,
 		tokenDistroAddress,
@@ -79,6 +74,14 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		network: streamNetwork,
 		archived,
 	} = streamConfig;
+
+	const currentValues = useAppSelector(
+		state =>
+			streamNetwork === config.XDAI_NETWORK_NUMBER
+				? state.subgraph.xDaiValues
+				: state.subgraph.mainnetValues,
+		() => (showModal ? true : false),
+	);
 
 	const { regenTokenDistroHelper, tokenDistroBalance } = useMemo(() => {
 		const sdh = new SubgraphDataHelper(currentValues);
@@ -122,14 +125,12 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 
 	useEffect(() => {
 		setRewardLiquidPart(
-			regenTokenDistroHelper
-				.getLiquidPart(lockedAmount)
-				.sub(claimedAmount),
+			regenTokenDistroHelper.getUserClaimableNow(tokenDistroBalance),
 		);
 		setRewardStream(
 			regenTokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
 		);
-	}, [claimedAmount, lockedAmount, regenTokenDistroHelper]);
+	}, [lockedAmount, regenTokenDistroHelper, tokenDistroBalance]);
 
 	const percentage = regenTokenDistroHelper?.GlobalReleasePercentage || 0;
 	const remainTime = durationToString(regenTokenDistroHelper?.remain || 0);
@@ -224,8 +225,9 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 						<HarvestButtonDesc gap='8px'>
 							<IconInfoOutline16 />
 							<Caption>
-								Use the Harvest button harvest this liquid
-								stream alone.
+								{formatMessage({
+									id: 'component.regenstream_card.harvest_caption',
+								})}
 							</Caption>
 						</HarvestButtonDesc>
 					</HarvestButtonWrapper>

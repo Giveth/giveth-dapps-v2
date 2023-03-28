@@ -945,7 +945,7 @@
 	"label.your_donations_and_participation_in_the_giveconomy": "Your donations, and participation in the GIVeconomy, enables us to build a new future where real world impact projects benefit from their own community-driven regenerative economies.",
 	"label.discover_our_roadmap": "discover our roadmap",
 	"label.more_about_us": "More about us",
-	"component.archive_cover.archived": "ARCHIVED!!",
+	"component.archive_cover.archived": "ARCHIVED",
 	"modal.news_letter": "Newsletter sign up",
 	"section.we_wont_send_it": "We won’t send it every 5 second! Promise :)",
 	"section.subscribe_to_our_newsletter": "Subscribe to our newsletter and get all updates straight to your mailbox!",
@@ -1227,5 +1227,6 @@
 	"label.coming_soon": "Coming soon...",
 	"label.getting_started": "Getting Started",
 	"label.the_mt_pelerin_onramp_allows_you_to_use_a_credit_card_or_bank_transfer": "The Mt Pelerin 'onramp' allows you to use a credit card or bank transfer to get crypto in your web3 wallet to donate. First, select the method of payment (bank transfer or credit card), and then select the currency you want to use to purchase crypto. Then, select the crypto currency you wish to purchase. The currency xDAI and network Gnosis Chain will be selected by default. Finally, click 'Buy'.",
-	"label.you_can_wait_on_this_page_until_the_payment_goes_through": "You can wait on this page until the payment goes through, or you can close it. If the payment is successful, the funds will automatically appear in your chosen wallet after some time. Note: If you click 'Close', you will be redirected back to the start and will not get to the next page."
+	"label.you_can_wait_on_this_page_until_the_payment_goes_through": "You can wait on this page until the payment goes through, or you can close it. If the payment is successful, the funds will automatically appear in your chosen wallet after some time. Note: If you click 'Close', you will be redirected back to the start and will not get to the next page.",
+	"component.regenstream_card.harvest_caption": "Use the Harvest button to claim liquid rewards from this RegenStream"
 }

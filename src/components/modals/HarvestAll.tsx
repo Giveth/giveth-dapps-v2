@@ -27,7 +27,6 @@ import {
 	PoolStakingConfig,
 	RegenStreamConfig,
 	SimplePoolStakingConfig,
-	StreamType,
 } from '@/types/config';
 import { BN, formatWeiHelper, Zero } from '@/helpers/number';
 import { harvestTokens } from '@/lib/stakingPool';
@@ -81,7 +80,6 @@ interface IHarvestAllInnerModalProps {
 	title: string;
 	poolStakingConfig?: PoolStakingConfig;
 	regenStreamConfig?: RegenStreamConfig;
-	regenStreamType?: StreamType;
 	stakedPositions?: LiquidityPosition[];
 	currentIncentive?: {
 		key?: (string | number)[] | null | undefined;
@@ -103,7 +101,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	setShowModal,
 	poolStakingConfig,
 	regenStreamConfig,
-	regenStreamType,
 	stakedPositions,
 	currentIncentive,
 }) => {
@@ -136,7 +133,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const { chainId } = useWeb3React();
 	const { tokenDistroHelper, sdh } = useTokenDistroHelper(
 		chainId!,
-		regenStreamType,
 		regenStreamConfig,
 	);
 
