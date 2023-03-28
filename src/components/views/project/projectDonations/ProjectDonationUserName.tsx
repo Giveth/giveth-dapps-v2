@@ -19,11 +19,12 @@ export const ProjectDonationUserName: FC<IProjectDonationUserName> = ({
 		donor?.name || shortenAddress(donor.walletAddress?.toLowerCase());
 	return pfpToken ? (
 		<Flex gap='8px'>
-			<Image
+			<StyledImage
 				src={convertIPFSToHTTPS(pfpToken.imageIpfs)}
 				width={24}
 				height={24}
 				alt=''
+				id='pfp-avatar'
 			/>
 			<Bold>{name || '\u200C'}</Bold>
 		</Flex>
@@ -32,10 +33,15 @@ export const ProjectDonationUserName: FC<IProjectDonationUserName> = ({
 	);
 };
 
+const StyledImage = styled(Image)`
+	margin-left: 8px;
+	transition: box-shadow 0.2s ease;
+`;
+
 const Bold = styled.span`
-	font-weight: 400;
+	font-weight: 500;
 `;
 
 const NoAvatar = styled.span`
-	padding-left: 32px;
+	padding-left: 40px;
 `;
