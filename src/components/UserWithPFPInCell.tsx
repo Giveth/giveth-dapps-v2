@@ -7,16 +7,14 @@ import { Flex } from '@/components/styled-components/Flex';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import { shortenAddress } from '@/lib/helpers';
 
-interface IProjectDonationUserName {
-	donor: IAdminUser;
+interface IUserWithPFPInCell {
+	user: IAdminUser;
 }
 
-export const ProjectDonationUserName: FC<IProjectDonationUserName> = ({
-	donor,
-}) => {
-	const pfpToken = useGiverPFPToken(donor?.walletAddress, donor?.avatar);
+export const UserWithPFPInCell: FC<IUserWithPFPInCell> = ({ user }) => {
+	const pfpToken = useGiverPFPToken(user?.walletAddress, user?.avatar);
 	const name =
-		donor?.name || shortenAddress(donor.walletAddress?.toLowerCase());
+		user?.name || shortenAddress(user.walletAddress?.toLowerCase());
 	return pfpToken ? (
 		<Flex gap='8px'>
 			<StyledImage

@@ -36,7 +36,7 @@ import {
 import { useProjectContext } from '@/context/project.context';
 import NetworkLogo from '@/components/NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
-import { ProjectDonationUserName } from './ProjectDonationUserName';
+import { UserWithPFPInCell } from '../../../UserWithPFPInCell';
 
 const itemPerPage = 10;
 
@@ -185,9 +185,7 @@ const ProjectDonationTable = ({
 								) : donation.anonymous ? (
 									'Anonymous'
 								) : (
-									<ProjectDonationUserName
-										donor={donation.user}
-									/>
+									<UserWithPFPInCell user={donation.user} />
 								)}
 							</DonationTableCell>
 							{isAdmin && (
