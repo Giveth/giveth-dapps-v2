@@ -9,7 +9,7 @@ import {
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useMutation } from '@apollo/client';
@@ -63,6 +63,7 @@ const UploadProfilePicModal = ({
 
 	console.log('user', user);
 	console.log('dataaaaa', pfpData);
+	console.log('dataaaaa Selected', selectedPFP);
 
 	const nftUrl = selectedPFP?.imageIpfs
 		? convertIPFSToHTTPS(selectedPFP?.imageIpfs)
@@ -73,6 +74,7 @@ const UploadProfilePicModal = ({
 		if (activeTab === 1) {
 			return url;
 		} else {
+			console.log('Nft URL', nftUrl);
 			return nftUrl;
 		}
 	};
@@ -109,6 +111,23 @@ const UploadProfilePicModal = ({
 			});
 		}
 	};
+
+	useEffect(() => {
+		const compareHashes = () => {
+			const regex = /(\d+)\.\w+$/;
+			const selectedAvatarHash = user.avatar?.match(regex)?.[0] ?? null;
+			if (pfpData && pfpData.length > 0) {
+				pfpData.find(pfp => {
+					const pfpHash =
+						pfp.imageIpfs.match(regex)?.[0] ?? undefined;
+					if (pfpHash === selectedAvatarHash) {
+						setSelectedPFP(pfp);
+					}
+				});
+			}
+		};
+		compareHashes();
+	}, []);
 
 	return (
 		<Modal
