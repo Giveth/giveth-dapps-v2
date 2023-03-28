@@ -186,12 +186,6 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
-	console.log(
-		'gnosisChain.nativeCurrency.symbol',
-		gnosisChain.nativeCurrency.symbol,
-		selectedToken?.symbol,
-	);
-
 	const pollToken = useCallback(() => {
 		clearPoll();
 		if (!selectedToken) {
