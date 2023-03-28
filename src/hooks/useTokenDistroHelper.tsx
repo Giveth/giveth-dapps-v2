@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import config from '@/configuration';
-import { StreamType, RegenStreamConfig } from '@/types/config';
+import { RegenStreamConfig } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 
 export const useTokenDistroHelper = (
 	poolNetwork: number,
-	regenStreamType?: StreamType,
 	regenStreamConfig?: RegenStreamConfig,
 	hold: boolean = false,
 ) => {
@@ -24,7 +23,7 @@ export const useTokenDistroHelper = (
 	const sdh = new SubgraphDataHelper(currentValues);
 
 	useEffect(() => {
-		if (regenStreamType) {
+		if (regenStreamConfig) {
 			setTokenDistroHelper(
 				new TokenDistroHelper(
 					sdh.getTokenDistro(
@@ -37,6 +36,6 @@ export const useTokenDistroHelper = (
 				new TokenDistroHelper(sdh.getGIVTokenDistro()),
 			);
 		}
-	}, [currentValues, regenStreamConfig, regenStreamType]);
+	}, [currentValues, regenStreamConfig]);
 	return { tokenDistroHelper, sdh };
 };

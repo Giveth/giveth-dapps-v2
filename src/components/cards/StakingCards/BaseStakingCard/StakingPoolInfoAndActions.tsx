@@ -124,7 +124,6 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 
 	const { tokenDistroHelper, sdh } = useTokenDistroHelper(
 		poolNetwork,
-		regenStreamType,
 		regenStreamConfig,
 		hold,
 	);

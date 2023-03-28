@@ -77,7 +77,6 @@ const Content: FC<IAPRInnerModalProps> = ({
 }) => {
 	const { tokenDistroHelper } = useTokenDistroHelper(
 		poolNetwork,
-		regenStreamType,
 		regenStreamConfig,
 	);
 	const streamName = regenStreamConfig ? 'RegenStream' : 'GIVstream';
