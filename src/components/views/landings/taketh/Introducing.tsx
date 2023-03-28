@@ -33,9 +33,9 @@ const InnerWrapper = styled.div`
 const Arc = styled.div`
 	position: absolute;
 	right: 0;
-	top: 40px;
+	top: -40px;
 	${mediaQueries.mobileL} {
-		top: 80px;
+		top: 0;
 	}
 `;
 
