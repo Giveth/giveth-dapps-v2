@@ -17,7 +17,6 @@ import {
 	formatTxLink,
 	compareAddresses,
 	formatUSD,
-	shortenAddress,
 } from '@/lib/helpers';
 import {
 	EDirection,
@@ -37,6 +36,7 @@ import {
 import { useProjectContext } from '@/context/project.context';
 import NetworkLogo from '@/components/NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
+import { ProjectDonationUserName } from './ProjectDonationUserName';
 
 const itemPerPage = 10;
 
@@ -129,6 +129,8 @@ const ProjectDonationTable = ({
 		if (page !== 0) setPage(0);
 	}, [searchTerm]);
 
+	console.log('donation.user', donations);
+
 	return (
 		<Wrapper>
 			<SearchBox
@@ -178,15 +180,15 @@ const ProjectDonationTable = ({
 							</DonationTableCell>
 							<DonationTableCell>
 								{donation.donationType ===
-								EDonationType.POIGNART
-									? 'PoignART'
-									: donation.anonymous
-									? 'Anonymous'
-									: donation.user?.name ||
-									  donation.user?.firstName ||
-									  shortenAddress(
-											donation.user.walletAddress?.toLowerCase(),
-									  )}
+								EDonationType.POIGNART ? (
+									'PoignART'
+								) : donation.anonymous ? (
+									'Anonymous'
+								) : (
+									<ProjectDonationUserName
+										donor={donation.user}
+									/>
+								)}
 							</DonationTableCell>
 							{isAdmin && (
 								<DonationTableCell>
