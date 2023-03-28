@@ -1,15 +1,14 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { addressToUserView, slugToProjectView } from '@/lib/routeCreators';
 import { PaddedRow } from './ProjectCard';
-import { IAdminUser, IGiverPFPToken } from '@/apollo/types/types';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { addAccountToPfpPending } from '@/features/pfp/pfp.slice';
+import { IAdminUser } from '@/apollo/types/types';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import { Flex } from '../styled-components/Flex';
+import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
 
 interface IProjectCardUserName {
 	adminUser: IAdminUser;
@@ -24,26 +23,10 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 	isForeignOrg,
 	name,
 }) => {
-	const [pfpToken, setPfpToken] = useState<IGiverPFPToken | null>(null);
-	const { List } = useAppSelector(state => state.pfp);
-	const dispatch = useAppDispatch();
-
-	useEffect(() => {
-		if (!adminUser.walletAddress || !adminUser.avatar) return;
-		const _pfpToken = List[adminUser.walletAddress.toLowerCase()];
-		if (_pfpToken === undefined) {
-			dispatch(
-				addAccountToPfpPending({
-					address: adminUser.walletAddress,
-					avatar: adminUser.avatar,
-				}),
-			);
-		} else {
-			if (_pfpToken !== false) {
-				setPfpToken(_pfpToken);
-			}
-		}
-	}, [List, adminUser, adminUser.walletAddress, dispatch]);
+	const pfpToken = useGiverPFPToken(
+		adminUser?.walletAddress,
+		adminUser?.avatar,
+	);
 
 	return (
 		<PaddedRow style={{ marginTop: '6px' }}>
