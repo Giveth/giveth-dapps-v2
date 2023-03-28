@@ -1,21 +1,4 @@
-<<<<<<< HEAD
-import { parseUnits } from '@ethersproject/units';
-
-export interface INetworkParam {
-	chainId: string;
-	chainName: string;
-	blockExplorerUrls: Array<string>;
-	rpcUrls?: Array<string>;
-	iconUrls?: Array<string>;
-	nativeCurrency: {
-		name: string;
-		symbol: string;
-		decimals: number;
-	};
-}
-=======
 import { INetworkParam } from '@/types/config';
->>>>>>> main
 
 export const networksParams: {
 	[key: number]: INetworkParam;
@@ -107,9 +90,3 @@ export const networksParams: {
 		rpcUrls: ['https://polygon-rpc.com'],
 	},
 };
-<<<<<<< HEAD
-
-export const gwei2wei = (gweiAmount: string): string =>
-	parseUnits(gweiAmount, 'gwei').toString();
-=======
->>>>>>> main
