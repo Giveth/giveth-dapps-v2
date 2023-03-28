@@ -225,8 +225,9 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 						<HarvestButtonDesc gap='8px'>
 							<IconInfoOutline16 />
 							<Caption>
-								Use the Harvest button harvest this liquid
-								stream alone.
+								{formatMessage({
+									id: 'component.regenstream_card.harvest_caption',
+								})}
 							</Caption>
 						</HarvestButtonDesc>
 					</HarvestButtonWrapper>
