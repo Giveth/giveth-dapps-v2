@@ -33,6 +33,7 @@ import { useAppDispatch } from '@/features/hooks';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 interface IUploadProfilePicModal extends IModal {
 	user: IUser;
@@ -58,7 +59,7 @@ const UploadProfilePicModal = ({
 	const dispatch = useAppDispatch();
 	const { account } = useWeb3React();
 	const [updateUser] = useMutation(UPDATE_USER);
-
+	const { isMobile } = useDetectDevice();
 	const { url, onDelete } = useUploadProps;
 
 	console.log('user', user);
@@ -181,7 +182,7 @@ const UploadProfilePicModal = ({
 								<CustomH5>
 									Your Unique Giveth’s PFP Artwork
 								</CustomH5>
-								<Flex gap='25px'>
+								<Flex gap='25px' wrap={1}>
 									{pfpData?.map(pfp => (
 										<PfpItem
 											onClick={() => setSelectedPFP(pfp)}
@@ -245,6 +246,7 @@ const UploadProfilePicModal = ({
 										}}
 									/>
 								</Flex>
+								{isMobile && <br />}
 							</Flex>
 						) : (
 							<Flex flexDirection='column'>
