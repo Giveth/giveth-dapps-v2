@@ -86,13 +86,13 @@ const NumberedItemWrapper = styled.div`
 const WavePink = styled.div`
 	position: absolute;
 	left: -50px;
-	top: 70px;
+	top: 0;
 `;
 
 const WavePurple = styled.div`
 	position: absolute;
 	right: -80px;
-	bottom: 100px;
+	bottom: 0;
 `;
 
 const QuarterCircleWrapper = styled.div`
