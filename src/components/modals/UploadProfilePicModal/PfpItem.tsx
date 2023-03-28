@@ -50,6 +50,7 @@ const Container = styled.div<{ isSelected: boolean }>`
 	border: ${props =>
 		props.isSelected ? `3px solid ${brandColors.pinky[400]}` : 'none'};
 	position: relative;
+	cursor: pointer;
 `;
 
 const ImageContainer = styled(Image)`

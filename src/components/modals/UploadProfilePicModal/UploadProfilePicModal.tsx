@@ -9,7 +9,7 @@ import {
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useMutation } from '@apollo/client';
@@ -61,13 +61,9 @@ const UploadProfilePicModal = ({
 
 	const { url, onDelete } = useUploadProps;
 
-	console.log('user', user);
-	console.log('dataaaaa', pfpData);
-
 	const nftUrl = selectedPFP?.imageIpfs
 		? convertIPFSToHTTPS(selectedPFP?.imageIpfs)
 		: undefined;
-	console.log('nftUrl', nftUrl);
 
 	const handleAvatar = () => {
 		if (activeTab === 1) {
@@ -79,13 +75,12 @@ const UploadProfilePicModal = ({
 
 	const onSaveAvatar = async () => {
 		try {
-			console.log('Saving');
 			const { data: response } = await updateUser({
 				variables: {
 					avatar: handleAvatar(),
 				},
 			});
-			console.log('Res', response);
+
 			if (response.updateUser) {
 				account && dispatch(fetchUserByAddress(account));
 				gToast('Profile Photo updated.', {
@@ -101,7 +96,6 @@ const UploadProfilePicModal = ({
 				type: ToastType.DANGER,
 				title: error.message,
 			});
-			console.log(error);
 			captureException(error, {
 				tags: {
 					section: 'onSaveAvatar',
@@ -109,6 +103,23 @@ const UploadProfilePicModal = ({
 			});
 		}
 	};
+
+	useEffect(() => {
+		const compareHashes = () => {
+			const regex = /(\d+)\.\w+$/;
+			const selectedAvatarHash = user.avatar?.match(regex)?.[0] ?? null;
+			if (pfpData && pfpData.length > 0) {
+				pfpData.find(pfp => {
+					const pfpHash =
+						pfp.imageIpfs.match(regex)?.[0] ?? undefined;
+					if (pfpHash === selectedAvatarHash) {
+						setSelectedPFP(pfp);
+					}
+				});
+			}
+		};
+		compareHashes();
+	}, []);
 
 	return (
 		<Modal
@@ -162,7 +173,7 @@ const UploadProfilePicModal = ({
 								<CustomH5>
 									Your Unique Giveth’s PFP Artwork
 								</CustomH5>
-								<Flex gap='25px'>
+								<Flex gap='25px' wrap={1}>
 									{pfpData?.map(pfp => (
 										<PfpItem
 											onClick={() => setSelectedPFP(pfp)}
@@ -206,7 +217,7 @@ const UploadProfilePicModal = ({
 										</Flex>
 									</SelectedPFPContainer>
 								)}
-								<Flex
+								<NFTsButtonsContainer
 									flexDirection='row'
 									justifyContent='space-between'
 								>
@@ -225,7 +236,7 @@ const UploadProfilePicModal = ({
 											setSelectedPFP(undefined);
 										}}
 									/>
-								</Flex>
+								</NFTsButtonsContainer>
 							</Flex>
 						) : (
 							<Flex flexDirection='column'>
@@ -334,4 +345,12 @@ const CustomLink = styled.a`
 const MintLink = styled(Link)`
 	max-width: fit-content;
 	color: ${brandColors.pinky[500]};
+`;
+
+const NFTsButtonsContainer = styled(Flex)`
+	margin-bottom: 60px;
+
+	${mediaQueries.tablet} {
+		margin-bottom: 0;
+	}
 `;
