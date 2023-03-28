@@ -122,14 +122,12 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 
 	useEffect(() => {
 		setRewardLiquidPart(
-			regenTokenDistroHelper
-				.getLiquidPart(lockedAmount)
-				.sub(claimedAmount),
+			regenTokenDistroHelper.getUserClaimableNow(tokenDistroBalance),
 		);
 		setRewardStream(
 			regenTokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
 		);
-	}, [claimedAmount, lockedAmount, regenTokenDistroHelper]);
+	}, [lockedAmount, regenTokenDistroHelper, tokenDistroBalance]);
 
 	const percentage = regenTokenDistroHelper?.GlobalReleasePercentage || 0;
 	const remainTime = durationToString(regenTokenDistroHelper?.remain || 0);
