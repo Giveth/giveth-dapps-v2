@@ -14,22 +14,20 @@ import CircleArc from '@/components/particles/CircleArc';
 
 const HowDoesItWork = () => {
 	return (
-		<Relative>
-			<Wrapper>
-				<InnerWrapper>
-					<H3 weight={700}>How Does it Work?</H3>
-					{numberedList.map(item => (
-						<NumberedItem key={item.number} {...item} />
-					))}
-				</InnerWrapper>
-			</Wrapper>
+		<OuterWrapper>
+			<WrapperStyled>
+				<H3 weight={700}>How Does it Work?</H3>
+				{numberedList.map(item => (
+					<NumberedItem key={item.number} {...item} />
+				))}
+			</WrapperStyled>
 			<WavePink>
 				<Wave color={brandColors.pinky[200]} />
 			</WavePink>
 			<WavePurple>
 				<Wave color={brandColors.giv[500]} />
 			</WavePurple>
-		</Relative>
+		</OuterWrapper>
 	);
 };
 
@@ -117,13 +115,14 @@ const ArcWrapper = styled.div`
 	}
 `;
 
-const InnerWrapper = styled.div`
-	padding: 40px 0;
+const WrapperStyled = styled(Wrapper)`
+	margin: 40px auto 0;
 `;
 
-const Relative = styled.div`
+const OuterWrapper = styled.div`
 	overflow: hidden;
 	position: relative;
+	margin: 80px 0;
 `;
 
 export default HowDoesItWork;
