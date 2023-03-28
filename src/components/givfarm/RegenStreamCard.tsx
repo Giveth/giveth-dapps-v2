@@ -65,11 +65,6 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	);
 	const { chainId } = useWeb3React();
 
-	const currentValues = useAppSelector(
-		state => state.subgraph.currentValues,
-		() => (showModal ? true : false),
-	);
-
 	const {
 		title,
 		tokenDistroAddress,
@@ -79,6 +74,14 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		network: streamNetwork,
 		archived,
 	} = streamConfig;
+
+	const currentValues = useAppSelector(
+		state =>
+			streamNetwork === config.XDAI_NETWORK_NUMBER
+				? state.subgraph.xDaiValues
+				: state.subgraph.mainnetValues,
+		() => (showModal ? true : false),
+	);
 
 	const { regenTokenDistroHelper, tokenDistroBalance } = useMemo(() => {
 		const sdh = new SubgraphDataHelper(currentValues);
