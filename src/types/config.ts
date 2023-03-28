@@ -106,19 +106,23 @@ export interface RegenStreamConfig {
 	tokenAddressOnUniswapV2: string;
 }
 
-export interface BasicNetworkConfig {
-	nodeUrl: string;
-	chainId: string; // A 0x-prefixed hexadecimal string
+export interface INetworkParam {
+	chainId: string;
 	chainName: string;
 	nativeCurrency: {
 		name: string;
-		symbol: string; // 2-6 characters long
-		decimals: 18;
+		symbol: string;
+		decimals: number;
 	};
-	gasPreference: GasPreference;
-	blockExplorerUrls?: string[];
-	iconUrls?: string[]; // Currently ignored.
+	blockExplorerUrls: Array<string>;
+	rpcUrls?: Array<string>;
+	iconUrls?: Array<string>;
+}
+
+export interface BasicNetworkConfig extends INetworkParam {
+	nodeUrl: string;
 	blockExplorerName: string[];
+	gasPreference: GasPreference;
 	subgraphAddress: string;
 }
 
@@ -157,9 +161,12 @@ export interface EnvConfig {
 	GIVETH_PROJECT_ID: number;
 	MAINNET_NETWORK_NUMBER: number;
 	XDAI_NETWORK_NUMBER: number;
+	POLYGON_NETWORK_NUMBER: number;
+	OPTIMISM_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	XDAI_CONFIG: XDaiNetworkConfig;
 	POLYGON_CONFIG: BasicNetworkConfig;
+	OPTIMISM_CONFIG: BasicNetworkConfig;
 	GARDEN_LINK: string;
 	BASE_ROUTE: string;
 	BACKEND_LINK: string;
@@ -168,22 +175,12 @@ export interface EnvConfig {
 	OPENSEA_ADDRESS: string;
 }
 
-interface INetworkConfig {
-	name: string;
-	id: number;
-	chain: string;
-	mainToken: string;
-}
-
 export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
 	SUBGRAPH_POLLING_INTERVAL: number;
 	NOTIFICATION_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
-	PRIMARY_NETWORK: INetworkConfig;
-	SECONDARY_NETWORK: INetworkConfig;
-	POLYGON_NETWORK: INetworkConfig;
 	NETWORKS_CONFIG: {
 		[key: number]: MainnetNetworkConfig | XDaiNetworkConfig;
 	};

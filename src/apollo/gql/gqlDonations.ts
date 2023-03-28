@@ -13,6 +13,7 @@ export const DONATION_CORE_FIELDS = gql`
 		createdAt
 		donationType
 		status
+		onramperId
 	}
 `;
 
@@ -40,6 +41,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 				...DonationCoreFields
 				user {
 					name
+					walletAddress
 				}
 			}
 			totalCount

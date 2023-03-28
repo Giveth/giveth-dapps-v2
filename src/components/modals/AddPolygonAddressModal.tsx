@@ -48,7 +48,7 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 				mutation: ADD_RECIPIENT_ADDRESS_TO_PROJECT,
 				variables: {
 					projectId: Number(project.id),
-					networkId: config.POLYGON_NETWORK.id,
+					networkId: config.POLYGON_NETWORK_NUMBER,
 					address: _address,
 				},
 			});
@@ -63,7 +63,7 @@ export const AddPolygonAddressModal: FC<IAddPolygonAddressModal> = ({
 							{
 								address: _address,
 								isRecipient: true,
-								networkId: config.POLYGON_NETWORK.id,
+								networkId: config.POLYGON_NETWORK_NUMBER,
 							},
 						];
 					}

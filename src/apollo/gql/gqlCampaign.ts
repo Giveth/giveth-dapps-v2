@@ -7,6 +7,7 @@ export const CAMPAIGN_CORE_FIELDS = gql`
 		__typename
 		id
 		title
+		hashtags
 		slug
 		isFeatured
 		isNew

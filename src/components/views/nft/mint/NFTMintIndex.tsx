@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -11,55 +11,51 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
-import { Contract } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
-import { JsonRpcProvider } from '@ethersproject/providers';
 import { Col, Container, Row } from '@giveth/ui-design-system';
 import { OvalVerticalGradient, OvalHorizontalGradient } from '../common.styles';
 import { MintCard } from '@/components/cards/MintCard';
 import config from '@/configuration';
-import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
-import { GiversPFP } from '@/types/contracts';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
-import EligibilityModal from '../overview/EligibilityModal';
 import { Flex } from '@/components/styled-components/Flex';
 
 export const NFTMintIndex = () => {
-	const [showEligibilityModal, setShowEligibilityModal] = useState(false);
+	// const [showEligibilityModal, setShowEligibilityModal] = useState(false);
 	const { formatMessage } = useIntl();
 	const { account, library, chainId } = useWeb3React();
 	const { step, setStep, qty, tx: txHash, setIsEligible } = usePFPMintData();
 
-	useEffect(() => {
-		const checkAddress = async () => {
-			if (!library || !account) return;
-			try {
-				const _provider =
-					chainId === config.MAINNET_NETWORK_NUMBER
-						? library
-						: new JsonRpcProvider(config.MAINNET_CONFIG.nodeUrl);
-				const PFPContract = new Contract(
-					config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
-					PFP_ABI,
-					_provider,
-				) as GiversPFP;
-				const _allowListOnly = await PFPContract.allowListOnly();
-				if (_allowListOnly) {
-					const res = await PFPContract.allowList(account);
-					if (!res) {
-						setShowEligibilityModal(true);
-					} else {
-						setIsEligible(true);
-					}
-				} else {
-					setIsEligible(true);
-				}
-			} catch (error) {
-				console.log('Error on check allow List', error);
-			}
-		};
-		checkAddress();
-	}, [account, chainId, library]);
+	// useEffect(() => {
+	// 	const checkAddress = async () => {
+	// 		if (!library || !account) return;
+	// 		try {
+	// 			const _provider =
+	// 				chainId === config.MAINNET_NETWORK_NUMBER
+	// 					? library
+	// 					: new JsonRpcProvider(config.MAINNET_CONFIG.nodeUrl);
+	// 			const PFPContract = new Contract(
+	// 				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
+	// 				PFP_ABI,
+	// 				_provider,
+	// 			) as GiversPFP;
+	// 			const _allowListOnly = await PFPContract.allowListOnly();
+	// 			if (_allowListOnly) {
+	// 				const res = await PFPContract.allowList(account);
+	// 				if (!res) {
+	// 					setShowEligibilityModal(true);
+	// 				} else {
+	// 					setIsEligible(true);
+	// 				}
+	// 			} else {
+	// 				setIsEligible(true);
+	// 			}
+	// 			setIsEligible(true);
+	// 		} catch (error) {
+	// 			console.log('Error on check allow List', error);
+	// 		}
+	// 	};
+	// 	checkAddress();
+	// }, [account, chainId, library]);
 
 	return (
 		<MintViewContainer>
@@ -108,7 +104,7 @@ export const NFTMintIndex = () => {
 										rel='noreferrer'
 									>
 										<OpenSeaLink>
-											View on OPENSEA
+											View on Rarible
 										</OpenSeaLink>
 									</a>
 									<Image
@@ -181,12 +177,12 @@ export const NFTMintIndex = () => {
 					</Col>
 				</Row>
 			</MintContainer>
-			{showEligibilityModal && (
+			{/* {showEligibilityModal && (
 				<EligibilityModal
 					isSuccess={false}
 					setShowModal={setShowEligibilityModal}
 				/>
-			)}
+			)} */}
 		</MintViewContainer>
 	);
 };

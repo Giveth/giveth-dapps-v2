@@ -177,6 +177,7 @@ export interface IDonation {
 		email?: string;
 		name?: string;
 		firstName?: string;
+		walletAddress: string;
 	};
 	amount: number;
 	currency: string;
@@ -187,6 +188,7 @@ export interface IDonation {
 	donationType?: EDonationType;
 	anonymous?: boolean;
 	status: EDonationStatus;
+	onramperId?: string;
 }
 
 export interface IWalletDonation extends IDonation {

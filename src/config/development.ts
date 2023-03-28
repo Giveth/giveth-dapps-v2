@@ -1,10 +1,11 @@
+import { parseUnits } from '@ethersproject/units';
 import {
 	EnvConfig,
 	StakingPlatform,
 	StakingType,
 	StreamType,
 } from '@/types/config';
-import { gwei2wei } from '@/helpers/blockchain';
+import { networksParams } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://serve.giveth.io';
@@ -12,6 +13,8 @@ const NOTIFICATION_BASE_ROUTE = 'https://staging.notification.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const XDAI_NETWORK_NUMBER = 100; // xDAI
+const POLYGON_NETWORK_NUMBER = 137;
+const OPTIMISM_NETWORK_NUMBER = 10;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -25,19 +28,15 @@ const config: EnvConfig = {
 	},
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
+	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
+	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
 
 	OPENSEA_ADDRESS: 'https://testnets.opensea.io/',
 	MAINNET_CONFIG: {
-		chainId: '0x5', // A 0x-prefixed hexadecimal string
-		chainName: 'Goerli',
-		nativeCurrency: {
-			name: 'ETH',
-			symbol: 'ETH', // 2-6 characters long
-			decimals: 18,
-		},
+		...networksParams[5],
 		DAI_CONTRACT_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',
 		PFP_CONTRACT_ADDRESS: '0x9F8c0e0353234F6f644fc7AF84Ac006f02cecE77',
 
@@ -45,7 +44,6 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		blockExplorerName: ['Etherscan'],
-		blockExplorerUrls: ['https://goerli.etherscan.io'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-goerli-staging',
 
@@ -100,21 +98,13 @@ const config: EnvConfig = {
 	},
 
 	XDAI_CONFIG: {
-		chainId: '0x64',
-		chainName: 'Gnosis Chain',
-		nativeCurrency: {
-			name: 'XDAI',
-			symbol: 'XDAI',
-			decimals: 18,
-		},
-
+		...networksParams[100],
 		gasPreference: {
-			maxFeePerGas: gwei2wei('2'),
-			maxPriorityFeePerGas: gwei2wei('1'),
+			maxFeePerGas: parseUnits('2', 'gwei').toString(),
+			maxPriorityFeePerGas: parseUnits('1', 'gwei').toString(),
 		},
 
 		blockExplorerName: ['Blockscout'],
-		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai-staging',
 
@@ -256,19 +246,21 @@ const config: EnvConfig = {
 
 	POLYGON_CONFIG: {
 		nodeUrl: '',
-		chainId: '0x89', // A 0x-prefixed hexadecimal string
-		chainName: 'Polygon',
-		nativeCurrency: {
-			name: 'MATIK',
-			symbol: 'MATIK',
-			decimals: 18,
-		},
+		...networksParams[137],
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerUrls: ['https://polygonscan.com/'],
-		iconUrls: ['https://icons.llamao.fi/icons/chains/rsz_polygon.jpg'], // Currently ignored.
 		blockExplorerName: ['PolygonScan'],
+		subgraphAddress: '',
+	},
+
+	OPTIMISM_CONFIG: {
+		nodeUrl: 'mainnet.optimism.io',
+		...networksParams[10],
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		blockExplorerName: ['OptimismScan'],
 		subgraphAddress: '',
 	},
 };

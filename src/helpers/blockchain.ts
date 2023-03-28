@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { parseUnits } from '@ethersproject/units';
 
 export interface INetworkParam {
@@ -12,6 +13,9 @@ export interface INetworkParam {
 		decimals: number;
 	};
 }
+=======
+import { INetworkParam } from '@/types/config';
+>>>>>>> main
 
 export const networksParams: {
 	[key: number]: INetworkParam;
@@ -34,7 +38,7 @@ export const networksParams: {
 		],
 		nativeCurrency: {
 			name: 'xDAI',
-			symbol: 'xDAI',
+			symbol: 'XDAI',
 			decimals: 18,
 		},
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
@@ -70,6 +74,17 @@ export const networksParams: {
 		},
 		blockExplorerUrls: ['https://goerli.etherscan.io'],
 	},
+	10: {
+		chainId: '0xA',
+		chainName: 'Optimism',
+		nativeCurrency: {
+			name: 'ETH',
+			symbol: 'ETH',
+			decimals: 18,
+		},
+		blockExplorerUrls: ['https://optimistic.etherscan.io/'],
+		rpcUrls: ['https://mainnet.optimism.io'],
+	},
 	42: {
 		chainId: '0x2A',
 		chainName: 'Kovan',
@@ -92,6 +107,9 @@ export const networksParams: {
 		rpcUrls: ['https://polygon-rpc.com'],
 	},
 };
+<<<<<<< HEAD
 
 export const gwei2wei = (gweiAmount: string): string =>
 	parseUnits(gweiAmount, 'gwei').toString();
+=======
+>>>>>>> main
