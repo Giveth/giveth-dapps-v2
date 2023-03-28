@@ -1254,5 +1254,7 @@
 	"component.pfp_eligibility_modal.title.not_eligible": "Esta dirección no es elegible para hacer minting adelantado!",
 	"component.pfp_eligibility_modal.content.success": "Eres elegible para hacer mint de tu Giver adelantado! Gracias por tu apoyo a Giveth",
 	"component.pfp_eligibility_modal.content.not_eligible": "La billetera que conectaste no esta en nuestra lista para hacer minting adelantado. Si piensas que fue un error, contacta a nuestro equipo. Revisa nuestra documentación para más detalle en elegibilidad, o regresa cuando el mint público inicie el dia 24 de Marzo, 2023 a las 16:00 UTC.",
-	"label.duration_ago": "hace {duration}"
+	"label.duration_ago": "hace {duration}",
+	"label.an_equivalent_of_up_to_40%": "Un equivalente de hasta 40% del monto de la donación en GIV tokens!",
+	"label.read_more_on_our_docs": "Aprende más en nuestra doc"
 }
