@@ -188,6 +188,7 @@ export interface IDonation {
 	donationType?: EDonationType;
 	anonymous?: boolean;
 	status: EDonationStatus;
+	onramperId?: string;
 }
 
 export interface IWalletDonation extends IDonation {

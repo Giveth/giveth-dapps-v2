@@ -75,7 +75,8 @@ const ProjectsTable: FC<IProjectsTable> = ({
 				const status = project.status.name;
 				const isCancelled = status === EProjectStatus.CANCEL;
 				const hasPolyGonAddress = project.addresses?.find(
-					address => address.networkId === config.POLYGON_NETWORK.id,
+					address =>
+						address.networkId === config.POLYGON_NETWORK_NUMBER,
 				);
 				const verStatus = project.verified
 					? EVerificationStatus.VERIFIED

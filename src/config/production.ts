@@ -1,3 +1,4 @@
+import { parseUnits } from '@ethersproject/units';
 import {
 	EnvConfig,
 	RegenFarmType,
@@ -5,39 +6,40 @@ import {
 	StakingType,
 	StreamType,
 } from '@/types/config';
-import { gwei2wei } from '@/helpers/blockchain';
+import { networksParams } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE = 'https://mainnet.serve.giveth.io';
+const NOTIFICATION_BASE_ROUTE = 'https://notification.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
 const XDAI_NETWORK_NUMBER = 100; // xDAI
-const NOTIFICATION_BASE_ROUTE = 'https://notification.giveth.io';
+const POLYGON_NETWORK_NUMBER = 137;
+const OPTIMISM_NETWORK_NUMBER = 10;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
 	BASE_ROUTE: BASE_ROUTE,
 	BACKEND_LINK: 'https://mainnet.serve.giveth.io/graphql',
 	FRONTEND_LINK: 'https://giveth.io',
-	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
-	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
 	MICROSERVICES: {
 		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
+
+	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
+	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
+	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
+	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
+
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
 
 	OPENSEA_ADDRESS: 'https://rarible.com/user/',
 	MAINNET_CONFIG: {
-		chainId: '0x1', // A 0x-prefixed hexadecimal string
-		chainName: 'Ethereum Mainnet',
-		nativeCurrency: {
-			name: 'ETH',
-			symbol: 'ETH', // 2-6 characters long
-			decimals: 18,
-		},
+		...networksParams[1],
+
 		DAI_CONTRACT_ADDRESS: '0x6b175474e89094c44da98b954eedeac495271d0f',
 		PFP_CONTRACT_ADDRESS: '0x78fde77737d5b9ab32fc718c9535c7f1b8ce84db',
 
@@ -46,7 +48,6 @@ const config: EnvConfig = {
 		},
 
 		blockExplorerName: ['etherscan'],
-		blockExplorerUrls: ['https://etherscan.io/'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
 
@@ -214,21 +215,13 @@ const config: EnvConfig = {
 	},
 
 	XDAI_CONFIG: {
-		chainId: '0x64',
-		chainName: 'Gnosis Chain',
-		nativeCurrency: {
-			name: 'XDAI',
-			symbol: 'XDAI',
-			decimals: 18,
-		},
-
+		...networksParams[100],
 		gasPreference: {
-			maxFeePerGas: gwei2wei('2'),
-			maxPriorityFeePerGas: gwei2wei('1'),
+			maxFeePerGas: parseUnits('2', 'gwei').toString(),
+			maxPriorityFeePerGas: parseUnits('1', 'gwei').toString(),
 		},
 
 		blockExplorerName: ['Blockscout'],
-		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
 
@@ -360,19 +353,21 @@ const config: EnvConfig = {
 
 	POLYGON_CONFIG: {
 		nodeUrl: '',
-		chainId: '0x89', // A 0x-prefixed hexadecimal string
-		chainName: 'Polygon',
-		nativeCurrency: {
-			name: 'MATIC',
-			symbol: 'MATIC',
-			decimals: 18,
-		},
+		...networksParams[137],
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerUrls: ['https://polygonscan.com/'],
-		iconUrls: ['https://icons.llamao.fi/icons/chains/rsz_polygon.jpg'], // Currently ignored.
 		blockExplorerName: ['PolygonScan'],
+		subgraphAddress: '',
+	},
+
+	OPTIMISM_CONFIG: {
+		nodeUrl: 'mainnet.optimism.io',
+		...networksParams[10],
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		blockExplorerName: ['OptimismScan'],
 		subgraphAddress: '',
 	},
 };
