@@ -2,8 +2,12 @@ import {
 	brandColors,
 	Button,
 	H5,
+	H6,
+	IconExternalLink16,
+	IconImage32,
 	mediaQueries,
 	neutralColors,
+	P,
 } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -11,6 +15,7 @@ import { useIntl } from 'react-intl';
 import { useMutation } from '@apollo/client';
 import { captureException } from '@sentry/nextjs';
 import { useWeb3React } from '@web3-react/core';
+import Link from 'next/link';
 import useUpload from '@/hooks/useUpload';
 import ImageUploader from '../../ImageUploader';
 import { Flex, FlexCenter } from '../../styled-components/Flex';
@@ -26,6 +31,8 @@ import { gToast, ToastType } from '@/components/toasts';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { useAppDispatch } from '@/features/hooks';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
+import config from '@/configuration';
+import Routes from '@/lib/constants/Routes';
 
 interface IUploadProfilePicModal extends IModal {
 	user: IUser;
@@ -169,6 +176,36 @@ const UploadProfilePicModal = ({
 										/>
 									))}
 								</Flex>
+								{selectedPFP && (
+									<SelectedPFPContainer>
+										<Flex flexDirection='column' gap='8px'>
+											<H6>
+												The The Givers Collection #
+												{selectedPFP.tokenId}
+											</H6>
+											<P>
+												Short information/summary about
+												the selected PFP
+											</P>
+											<CustomLink
+												href={
+													config.OPENSEA_ADDRESS +
+													'assets/' +
+													config.MAINNET_CONFIG.chainName.toLowerCase() +
+													'/' +
+													selectedPFP.id.replace(
+														'-',
+														'/',
+													)
+												}
+												target='_blank'
+											>
+												View on OpenSea{' '}
+												<IconExternalLink16 />
+											</CustomLink>
+										</Flex>
+									</SelectedPFPContainer>
+								)}
 								<Flex
 									flexDirection='row'
 									justifyContent='space-between'
@@ -191,7 +228,45 @@ const UploadProfilePicModal = ({
 								</Flex>
 							</Flex>
 						) : (
-							<NoNFTContainer>Test</NoNFTContainer>
+							<Flex flexDirection='column'>
+								<CustomH5>
+									Your Unique Giveth’s PFP Artwork
+								</CustomH5>
+								<NoNFTContainer>
+									<FlexCenter direction='column'>
+										<IconImage32
+											color={neutralColors.gray[500]}
+										/>
+										<br />
+										<P>Sorry!!</P>
+										<P>
+											This wallet address does not have a
+											unique Giveth’s NFT Yet.
+										</P>
+										<P>
+											<MintLink href={Routes.NFT}>
+												Mint{' '}
+											</MintLink>
+											yours now on the NFT minter page.
+										</P>
+									</FlexCenter>
+								</NoNFTContainer>
+								<br />
+								<Flex justifyContent='space-between'>
+									<Link href={Routes.NFT}>
+										<Button
+											buttonType='secondary'
+											label='MINT NOW'
+											type='submit'
+										/>
+									</Link>
+									<TextButton
+										buttonType='texty'
+										label='DO IT LATER'
+										onClick={closeModal}
+									/>
+								</Flex>
+							</Flex>
 						)}
 					</>
 				)}
@@ -221,7 +296,7 @@ const TextButton = styled(Button)<{ color?: string }>`
 
 const CustomH5 = styled(H5)`
 	text-align: left;
-	margin-top: 40px;
+	margin-top: 16px;
 `;
 
 const NoNFTContainer = styled(FlexCenter)`
@@ -237,4 +312,26 @@ const NoNFTContainer = styled(FlexCenter)`
 		cursor: pointer;
 		color: ${brandColors.pinky[500]};
 	}
+`;
+
+const SelectedPFPContainer = styled.div`
+	background-color: ${neutralColors.gray[200]};
+	border-left: 6px solid ${brandColors.pinky[500]};
+	margin-top: 8px;
+	padding: 16px 24px;
+	border-radius: 8px;
+	text-align: left;
+`;
+
+const CustomLink = styled.a`
+	color: ${brandColors.pinky[500]};
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	max-width: fit-content;
+`;
+
+const MintLink = styled(Link)`
+	max-width: fit-content;
+	color: ${brandColors.pinky[500]};
 `;
