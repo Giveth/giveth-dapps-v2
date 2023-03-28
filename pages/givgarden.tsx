@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import GIVgardenView from '@/components/views/Garden.view';
+import GIVgardenView from '@/components/views/GIVgarden.view';
 import { givgardenMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { setDarkTheme, setLightTheme } from '@/features/general/general.slice';
