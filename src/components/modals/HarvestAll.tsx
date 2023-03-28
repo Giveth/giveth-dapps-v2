@@ -324,11 +324,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										<AmountBoxWithPrice
 											amount={sumLiquid}
 											price={calcUSD(
-												formatWeiHelper(
-													sumLiquid,
-													config.TOKEN_PRECISION,
-													false,
-												),
+												formatWeiHelper(sumLiquid),
 											)}
 											tokenSymbol={
 												regenStreamConfig?.rewardTokenSymbol
@@ -406,8 +402,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												earnedLiquid.sub(
 													givbackLiquidPart,
 												),
-												config.TOKEN_PRECISION,
-												false,
 											)}
 										</BreakdownAmount>
 										<BreakdownUnit>
@@ -418,8 +412,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												rewardStream.minus(
 													givBackStream,
 												),
-												config.TOKEN_PRECISION,
-												false,
 											)}
 										</BreakdownRate>
 										<BreakdownUnit>
@@ -438,8 +430,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 												<BreakdownRate>
 													{formatWeiHelper(
 														givBackStream,
-														config.TOKEN_PRECISION,
-														false,
 													)}
 												</BreakdownRate>
 												<BreakdownUnit>
@@ -481,8 +471,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 											<BreakdownAmount>
 												{formatWeiHelper(
 													givbackLiquidPart,
-													config.TOKEN_PRECISION,
-													false,
 												)}
 											</BreakdownAmount>
 											<BreakdownUnit>
@@ -516,24 +504,14 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 									<BreakdownSumRow>
 										<div></div>
 										<BreakdownLiquidSum>
-											{formatWeiHelper(
-												sumLiquid,
-												config.TOKEN_PRECISION,
-												false,
-											)}
+											{formatWeiHelper(sumLiquid)}
 										</BreakdownLiquidSum>
 										<BreakdownUnit>
 											{tokenSymbol}
 										</BreakdownUnit>
 										<BreakdownStreamSum>
 											<IconGIVStream size={24} />
-											<P>
-												{formatWeiHelper(
-													sumStream,
-													config.TOKEN_PRECISION,
-													false,
-												)}
-											</P>
+											<P>{formatWeiHelper(sumStream)}</P>
 										</BreakdownStreamSum>
 										<BreakdownUnit>
 											{tokenSymbol}
@@ -658,16 +636,10 @@ const EarnedBreakDown: FC<IEarnedBreakDownProps> = ({
 				</PoolIcon>
 			</BreakdownTitle>
 			<BreakdownAmount>
-				{formatWeiHelper(
-					rewardLiquidPart,
-					config.TOKEN_PRECISION,
-					false,
-				)}
+				{formatWeiHelper(rewardLiquidPart)}
 			</BreakdownAmount>
 			<BreakdownUnit>{tokenSymbol}</BreakdownUnit>
-			<BreakdownRate>
-				+{formatWeiHelper(earnedStream, config.TOKEN_PRECISION, false)}
-			</BreakdownRate>
+			<BreakdownRate>+{formatWeiHelper(earnedStream)}</BreakdownRate>
 			<BreakdownUnit>
 				{tokenSymbol}
 				{formatMessage({
