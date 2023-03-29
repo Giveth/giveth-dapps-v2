@@ -30,26 +30,49 @@ const GeneralController = () => {
 			}
 		}
 	}, [router, account, isWalletActive, chainId]);
+	console.log('theme', theme);
 	return <GlobalStyle theme={theme} />;
 };
 
 const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
-  body {
+  :root {
 	${props =>
 		props.theme === ETheme.Dark
 			? css`
-					background-color: ${brandColors.giv[900]};
-					color: ${'white'};
+					--bgColor: ${brandColors.giv[900]} !important;
+					--color: white !important;
+					--scrollColor: ${brandColors.giv[400]} !important;
+					--scrollHoverColor: ${brandColors.giv[700]} !important;
 			  `
 			: props.theme === ETheme.Light
 			? css`
-					background-color: ${neutralColors.gray[200]};
-					color: ${neutralColors.gray[900]};
+					--bgColor: ${neutralColors.gray[200]} !important;
+					--color: ${neutralColors.gray[900]} !important;
+					--scrollColor: #d6dee1 !important;
+					--scrollHoverColor: #a8bbbf !important;
 			  `
 			: ''}
     
 	
   }
 `;
+
+// const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
+//   body {
+// 	${props =>
+// 		props.theme === ETheme.Dark
+// 			? css`
+// 					background-color: ${brandColors.giv[900]};
+// 					color: ${'white'};
+// 			  `
+// 			: props.theme === ETheme.Light
+// 			? css`
+// 					background-color: ${neutralColors.gray[200]};
+// 					color: ${neutralColors.gray[900]};
+// 			  `
+// 			: ''}
+
+//   }
+// `;
 
 export default GeneralController;

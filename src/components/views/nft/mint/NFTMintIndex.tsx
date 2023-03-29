@@ -104,7 +104,7 @@ export const NFTMintIndex = () => {
 										rel='noreferrer'
 									>
 										<OpenSeaLink>
-											View on OPENSEA
+											View on Rarible
 										</OpenSeaLink>
 									</a>
 									<Image

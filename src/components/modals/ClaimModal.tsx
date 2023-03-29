@@ -35,28 +35,24 @@ export const ClaimModal: FC<IClaimModal> = ({
 			{claimState === ClaimState.WAITING && (
 				<SubmittedInnerModal
 					title='Waiting confirmation.'
-					walletNetwork={network}
 					txHash={txStatus?.hash}
 				/>
 			)}
 			{claimState === ClaimState.SUBMITTING && (
 				<SubmittedInnerModal
 					title='Submitting transaction.'
-					walletNetwork={network}
 					txHash={txStatus?.hash}
 				/>
 			)}
 			{claimState === ClaimState.CLAIMED && (
 				<ConfirmedInnerModal
 					title='Successful transaction.'
-					walletNetwork={network}
 					txHash={txStatus?.hash}
 				/>
 			)}
 			{claimState === ClaimState.ERROR && (
 				<ErrorInnerModal
 					title='Something went wrong.'
-					walletNetwork={network}
 					txHash={txStatus?.hash}
 				/>
 			)}

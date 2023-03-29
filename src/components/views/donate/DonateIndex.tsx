@@ -8,6 +8,7 @@ import SuccessView from '@/components/views/donate/SuccessView';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import DonationTypes from '@/components/views/donate/DonationTypes';
 import NiceBanner from './NiceBanner';
+import PurchaseXDAI from './PurchaseXDAIBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useDonateData } from '@/context/donate.context';
 
@@ -19,10 +20,11 @@ const DonateIndex: FC = () => {
 		<>
 			<BigArc />
 			<Wrapper>
+				<PurchaseXDAI />
 				<NiceBanner />
 				<Sections>
 					<ProjectCardSelector />
-					<Right isMobile={isMobile}>
+					<Right>
 						{isSuccessDonation ? (
 							<SuccessView />
 						) : (
@@ -59,13 +61,16 @@ const Sections = styled.div`
 	}
 `;
 
-const Right = styled.div<{ isMobile: boolean | null }>`
+const Right = styled.div`
 	z-index: 1;
 	background: white;
 	text-align: left;
 	padding: 32px;
-	border-radius: ${props => (props.isMobile ? '16px' : '0 16px 16px 0')};
 	min-height: 620px;
+	border-radius: 16px;
+	${mediaQueries.tablet} {
+		border-radius: 0 16px 16px 0;
+	}
 `;
 
 export default DonateIndex;

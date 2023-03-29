@@ -3,6 +3,7 @@ import {
 	Caption,
 	GLink,
 	IconHelpFilled16,
+	mediaQueries,
 	neutralColors,
 	Subline,
 } from '@giveth/ui-design-system';
@@ -85,7 +86,9 @@ const DonateToGiveth: FC<IDonateToGiveth> = props => {
 };
 
 const TooltipContainer = styled(Subline)`
-	width: 274px;
+	${mediaQueries.tablet} {
+		width: 274px;
+	}
 	padding: 0 10px;
 `;
 

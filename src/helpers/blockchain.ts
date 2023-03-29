@@ -21,7 +21,7 @@ export const networksParams: {
 		],
 		nativeCurrency: {
 			name: 'xDAI',
-			symbol: 'xDAI',
+			symbol: 'XDAI',
 			decimals: 18,
 		},
 		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
