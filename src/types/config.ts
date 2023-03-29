@@ -123,7 +123,7 @@ export interface INetworkParam {
 		decimals: number;
 	};
 	blockExplorerUrls: Array<string>;
-	rpcUrls?: Array<string>;
+	rpcUrls: Array<string>;
 	iconUrls?: Array<string>;
 }
 

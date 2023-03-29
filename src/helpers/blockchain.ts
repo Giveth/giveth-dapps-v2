@@ -12,6 +12,7 @@ export const networksParams: {
 			decimals: 18,
 		},
 		blockExplorerUrls: ['https://etherscan.io'],
+		rpcUrls: ['https://eth.llamarpc.com', 'https://mainnet.infura.io/v3/'],
 	},
 	100: {
 		chainId: '0x64',
@@ -36,6 +37,7 @@ export const networksParams: {
 			decimals: 18,
 		},
 		blockExplorerUrls: ['https://ropsten.etherscan.io'],
+		rpcUrls: ['https://ropsten.infura.io/v3/'],
 	},
 	4: {
 		chainId: '0x4',
@@ -46,6 +48,7 @@ export const networksParams: {
 			decimals: 18,
 		},
 		blockExplorerUrls: ['https://rinkeby.etherscan.io'],
+		rpcUrls: ['https://rinkeby.infura.io/v3/'],
 	},
 	5: {
 		chainId: '0x5',
@@ -56,6 +59,7 @@ export const networksParams: {
 			decimals: 18,
 		},
 		blockExplorerUrls: ['https://goerli.etherscan.io'],
+		rpcUrls: ['https://goerli.infura.io/v3/'],
 	},
 	10: {
 		chainId: '0xA',
@@ -77,6 +81,7 @@ export const networksParams: {
 			decimals: 18,
 		},
 		blockExplorerUrls: ['https://kovan.etherscan.io'],
+		rpcUrls: ['https://kovan.infura.io/v3/'],
 	},
 	137: {
 		chainId: '0x89',
@@ -99,5 +104,17 @@ export const networksParams: {
 		},
 		blockExplorerUrls: ['https://celoscan.io'],
 		rpcUrls: ['https://forno.celo.org'],
+	},
+	44787: {
+		chainId: '0xaef3',
+		chainName: 'Alfajores Testnet',
+		nativeCurrency: {
+			name: 'Alfajores Celo',
+			symbol: 'A-CELO',
+			decimals: 18,
+		},
+		rpcUrls: ['https://alfajores-forno.celo-testnet.org'],
+		blockExplorerUrls: ['https://alfajores-blockscout.celo-testnet.org/'],
+		iconUrls: ['future'],
 	},
 };

@@ -161,6 +161,7 @@ const config: EnvConfig = {
 	},
 
 	XDAI_CONFIG: {
+		nodeUrl: networksParams[100]?.rpcUrls[0],
 		...networksParams[100],
 		gasPreference: {
 			maxFeePerGas: parseUnits('2', 'gwei').toString(),
@@ -176,8 +177,6 @@ const config: EnvConfig = {
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xc87403C70c9FBfb594d98d3B5E695BBE4C694188',
 		TOKEN_DISTRO_ADDRESS: '0x18a46865AAbAf416a970eaA8625CFC430D2364A1',
-
-		nodeUrl: 'https://rpc.gnosischain.com/',
 
 		GIV: {
 			network: XDAI_NETWORK_NUMBER,
@@ -299,7 +298,7 @@ const config: EnvConfig = {
 	},
 
 	POLYGON_CONFIG: {
-		nodeUrl: '',
+		nodeUrl: networksParams[137]?.rpcUrls[0],
 		...networksParams[137],
 		gasPreference: {
 			// Keep it empty for automatic configuration
@@ -309,7 +308,7 @@ const config: EnvConfig = {
 	},
 
 	OPTIMISM_CONFIG: {
-		nodeUrl: 'mainnet.optimism.io',
+		nodeUrl: networksParams[10]?.rpcUrls[0],
 		...networksParams[10],
 		gasPreference: {
 			// Keep it empty for automatic configuration
@@ -319,8 +318,8 @@ const config: EnvConfig = {
 	},
 
 	CELO_CONFIG: {
-		nodeUrl: 'https://forno.celo.org',
-		...networksParams[42220],
+		nodeUrl: networksParams[44787]?.rpcUrls[0],
+		...networksParams[44787],
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
