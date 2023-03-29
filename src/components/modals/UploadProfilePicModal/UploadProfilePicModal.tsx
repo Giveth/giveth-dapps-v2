@@ -173,7 +173,7 @@ const UploadProfilePicModal = ({
 								<CustomH5>
 									Your Unique Giveth’s PFP Artwork
 								</CustomH5>
-								<Flex gap='25px' wrap={1}>
+								<Flex gap='25px' flexWrap>
 									{pfpData?.map(pfp => (
 										<PfpItem
 											onClick={() => setSelectedPFP(pfp)}
