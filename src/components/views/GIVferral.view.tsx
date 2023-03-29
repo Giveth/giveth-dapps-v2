@@ -96,7 +96,7 @@ const GIVferralView = () => {
 								<CaptionBox>
 									<Caption>
 										{formatMessage({
-											id: 'label.up_to_10_percent_of_the_total_donation',
+											id: 'label.an_equivalent_of_up_to_40%',
 										})}
 									</Caption>
 								</CaptionBox>
@@ -145,8 +145,25 @@ const GIVferralView = () => {
 								id: 'label.learn_how_to_become_an_active_part',
 							})}
 						</H4Text>
+						<GoTo
+							label={formatMessage({
+								id: 'label.read_more_on_our_docs',
+							})}
+							linkType='texty-primary'
+							isExternal
+							href={'https://docs.giveth.io/giveconomy/referral'}
+							icon={
+								<Image
+									alt='outlink'
+									src='/images/icons/outlink.svg'
+									width={16}
+									height={16}
+								/>
+							}
+							target='_blank'
+						/>
 					</LargeBox>
-					<VideoBlock src='/video/giveth-referral-program-v1.mp4' />
+					<VideoBlock src='/video/giveth-referral program-v2.mp4' />
 				</VideoBox>
 				<FloatingFigure1 />
 				<FloatingFigure2 />

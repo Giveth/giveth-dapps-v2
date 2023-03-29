@@ -49,6 +49,8 @@ export default class MyDocument extends Document {
 								const r = document.querySelector(':root');
 								r.style.setProperty('--bgColor', '#090446');
 								r.style.setProperty('--color', '#FFFFFF');
+								r.style.setProperty('--scrollColor', '#754CFF');
+								r.style.setProperty('--scrollHoverColor', '#211985');
 							}`,
 						}}
 					></script>

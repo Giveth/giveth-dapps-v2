@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import GIVfarmView from '@/components/views/Farm.view';
+import GIVfarmView from '@/components/views/givfarm/GIVfarm.view';
 import { givfarmMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
 import { setDarkTheme, setLightTheme } from '@/features/general/general.slice';

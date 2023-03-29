@@ -35,6 +35,7 @@ import { DeletePowerBoostModal } from '@/components/modals/Boost/DeletePowerBoos
 import { slugToProjectView } from '@/lib/routeCreators';
 import { ApprovePowerBoostModal } from '@/components/modals/Boost/ApprovePowerBoostModal';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { mediaQueries } from '@/lib/constants/constants';
 
 interface IBoostsTable {
 	boosts: IPowerBoosting[];
@@ -201,7 +202,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 
 	return (
 		<>
-			<Header justifyContent='space-between' wrap={1} gap='16px'>
+			<Header justifyContent='space-between' flexWrap gap='16px'>
 				<H5 weight={700}>GIVpower Summary</H5>
 				{myAccount && (
 					<Actions gap='8px'>
@@ -514,7 +515,9 @@ const Percentage = styled(InputSuffix)`
 
 const BoostTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
-	width: 240px;
+	${mediaQueries.tablet} {
+		width: 240px;
+	}
 `;
 
 export default BoostsTable;

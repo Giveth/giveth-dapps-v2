@@ -2,13 +2,13 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import config from '@/configuration';
-import { CongratulationsCard } from '@/components/cards/Congratulations';
-import ClaimCard from '@/components/cards/Claim';
-import { ConnectCard } from '@/components/cards/Connect';
-import { DonateCard } from '@/components/cards/Donate';
-import { StreamCard } from '@/components/cards/Stream';
-import GovernCard from '@/components/cards/Govern';
-import InvestCard from '@/components/cards/Stake';
+import ClaimCard from '@/components/views/claim/cards/Claim';
+import { CongratulationsCard } from '@/components/views/claim/cards/Congratulations';
+import { ConnectCard } from '@/components/views/claim/cards/Connect';
+import { DonateCard } from '@/components/views/claim/cards/Donate';
+import { StreamCard } from '@/components/views/claim/cards/Stream';
+import GovernCard from '@/components/views/claim/cards/Govern';
+import InvestCard from '@/components/views/claim/cards/Stake';
 import { Flex } from '@/components/styled-components/Flex';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
 
@@ -117,25 +117,6 @@ const ClaimView = () => {
 
 	return (
 		<>
-			{/* <SwitchNetwork
-				hidden={
-					(isReady && network === config.XDAI_NETWORK_NUMBER) ||
-					network === 0
-				}
-			>
-				<Image
-					src='/images/icons/warning.svg'
-					height='24'
-					width='24'
-					alt='Warning icon'
-				/>
-				<span>Please switch to xDAI network!</span>
-				<ButtonSwitchNetwork
-					onClick={() => switchNetwork(config.XDAI_NETWORK_NUMBER)}
-				>
-					Switch
-				</ButtonSwitchNetwork>
-			</SwitchNetwork> */}
 			{step < 6 ? (
 				<ClaimViewContainer
 					switchNetwork={

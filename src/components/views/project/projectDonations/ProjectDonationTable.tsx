@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import Image from 'next/image';
 import {
 	B,
 	brandColors,
@@ -156,6 +157,9 @@ const ProjectDonationTable = ({
 					<TableHeader>
 						{formatMessage({ id: 'label.network' })}
 					</TableHeader>
+					<TableHeader>
+						{formatMessage({ id: 'label.source' })}
+					</TableHeader>
 					<TableHeader
 						onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
 					>
@@ -205,6 +209,18 @@ const ProjectDonationTable = ({
 										].chainName
 									}
 								</NetworkName>
+							</DonationTableCell>
+							<DonationTableCell>
+								{donation?.onramperId ? (
+									<Image
+										src='/images/powered_by_onramper.png'
+										width='95'
+										height='30'
+										alt={'Powered by OnRamper'}
+									/>
+								) : (
+									'Wallet'
+								)}
 							</DonationTableCell>
 							<DonationTableCell>
 								<B>{donation.amount}</B>
@@ -271,8 +287,8 @@ const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
 	width: 100%;
 	grid-template-columns: ${props =>
 		props.isAdmin
-			? '1.25fr 2fr 1fr 1.25fr 1fr 1fr'
-			: '1.25fr 2fr 1.25fr 1fr 1fr'};
+			? '1.25fr 1.25fr 1fr 1.25fr 1fr 1fr 1fr'
+			: '1.25fr 1.25fr 1.25fr 1fr 1fr 1fr'};
 	min-width: 800px;
 `;
 

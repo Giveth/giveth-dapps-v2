@@ -16,7 +16,7 @@ import Link from 'next/link';
 
 import LottieControl from '@/components/LottieControl';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { LockInfotooltip } from '../StakeLock/LockInfo';
+import { LockInfoTooltip } from '../StakeLock/LockInfo';
 import { Flex } from '@/components/styled-components/Flex';
 import 'rc-slider/assets/index.css';
 import { formatWeiHelper } from '@/helpers/number';
@@ -251,11 +251,11 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 								icon={<IconHelpFilled16 />}
 								direction={'bottom'}
 							>
-								<LockInfotooltip>
+								<LockInfoTooltip>
 									{formatMessage({
 										id: 'label.get_more_givpower_by_staking',
 									})}
-								</LockInfotooltip>
+								</LockInfoTooltip>
 							</IconWithTooltip>
 						</GIVpowerHelp>
 					</GIVpowerValue>
@@ -267,11 +267,11 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 							icon={<IconHelpFilled16 />}
 							direction={'bottom'}
 						>
-							<LockInfotooltip>
+							<LockInfoTooltip>
 								{formatMessage({
 									id: 'label.this_is_the_number_of_projects_you_have_boosted',
 								})}
-							</LockInfotooltip>
+							</LockInfoTooltip>
 						</IconWithTooltip>
 					</Flex>
 					<Flex gap='4px'>

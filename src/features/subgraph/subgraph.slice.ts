@@ -25,6 +25,14 @@ export const defaultSubgraphValues: ISubgraphState = {
 	isLoaded: false,
 };
 
+export const defaultXdaiSubgraphValues: ISubgraphState = {
+	userNotStakedPositions: [],
+	userStakedPositions: [],
+	allPositions: [],
+	networkNumber: config.XDAI_NETWORK_NUMBER,
+	isLoaded: false,
+};
+
 const initialState: {
 	currentValues: ISubgraphState;
 	mainnetValues: ISubgraphState;
@@ -32,7 +40,7 @@ const initialState: {
 } = {
 	currentValues: defaultSubgraphValues,
 	mainnetValues: defaultSubgraphValues,
-	xDaiValues: defaultSubgraphValues,
+	xDaiValues: defaultXdaiSubgraphValues,
 };
 
 export const subgraphSlice = createSlice({

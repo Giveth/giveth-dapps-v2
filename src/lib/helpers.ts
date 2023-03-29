@@ -1,7 +1,6 @@
 import { promisify } from 'util';
 // eslint-disable-next-line import/named
-import { unescape } from 'lodash';
-import moment from 'moment';
+import unescape from 'lodash/unescape';
 
 import { parseEther, parseUnits } from '@ethersproject/units';
 import { keccak256 } from '@ethersproject/keccak256';
@@ -22,8 +21,6 @@ import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
 import config from '@/configuration';
 import { ERC20 } from '@/types/contracts';
-
-import 'moment/locale/es';
 
 declare let window: any;
 
@@ -62,7 +59,11 @@ export function formatWalletLink(chainId?: number, address?: string) {
 	return `${networksParams[chainId]?.blockExplorerUrls[0]}/address/${address}`;
 }
 
-export const durationToYMDh = (ms: number, full: boolean = false) => {
+export const durationToYMDh = (
+	ms: number,
+	full: boolean = false,
+	locale: string = 'en',
+) => {
 	const baseTime = new Date(0);
 	const duration = new Date(ms);
 
@@ -77,26 +78,34 @@ export const durationToYMDh = (ms: number, full: boolean = false) => {
 	const shortRes = { y, m, d, h, min, sec };
 	if (full) {
 		let fullRes: any = {};
-		if (y) fullRes[`year${y > 1 ? 's' : ''}`] = y;
-		if (m) fullRes[`month${m > 1 ? 's' : ''}`] = m;
-		if (d) fullRes[`day${d > 1 ? 's' : ''}`] = d;
-		if (h) fullRes[`hour${h > 1 ? 's' : ''}`] = h;
-		if (min) fullRes[`minute${min > 1 ? 's' : ''}`] = min;
-		if (sec) fullRes[`second${sec > 1 ? 's' : ''}`] = sec;
+		if (locale === 'en') {
+			if (y) fullRes[`year${y > 1 ? 's' : ''}`] = y;
+			if (m) fullRes[`month${m > 1 ? 's' : ''}`] = m;
+			if (d) fullRes[`day${d > 1 ? 's' : ''}`] = d;
+			if (h) fullRes[`hour${h > 1 ? 's' : ''}`] = h;
+			if (min) fullRes[`minute${min > 1 ? 's' : ''}`] = min;
+			if (sec) fullRes[`second${sec > 1 ? 's' : ''}`] = sec;
+		}
+		if (locale === 'es') {
+			if (y) fullRes[`año${y > 1 ? 's' : ''}`] = y;
+			if (m) fullRes[`mes${m > 1 ? 'es' : ''}`] = m;
+			if (d) fullRes[`día${d > 1 ? 's' : ''}`] = d;
+			if (h) fullRes[`hora${h > 1 ? 's' : ''}`] = h;
+			if (min) fullRes[`minuto${min > 1 ? 's' : ''}`] = min;
+			if (sec) fullRes[`segundo${sec > 1 ? 's' : ''}`] = sec;
+		}
 		return fullRes;
 	}
 	return shortRes;
 };
 
-export const getTimeAgo = (date: number, locale?: string) => {
-	const m = moment(date)
-		.locale(locale || 'en')
-		.fromNow();
-	return m;
-};
-
-export const durationToString = (ms: number, length = 3, full = false) => {
-	const temp: { [key: string]: number } = durationToYMDh(ms, full);
+export const durationToString = (
+	ms: number,
+	length = 3,
+	full = false,
+	locale: string = 'en',
+) => {
+	const temp: { [key: string]: number } = durationToYMDh(ms, full, locale);
 	const res: string[] = [];
 	for (const key in temp) {
 		if (Object.prototype.hasOwnProperty.call(temp, key)) {

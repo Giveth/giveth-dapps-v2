@@ -13,6 +13,7 @@ import Routes from '@/lib/constants/Routes';
 const projectsItems = {
 	explore: [
 		// { name: 'Trending', query: '?q=?q=trending' },
+		{ name: 'All Projects', query: '', label: 'label.all_projects' },
 		{
 			name: 'Recently Updated',
 			query: '?sort=' + EProjectsSortBy.RECENTLY_UPDATED,
@@ -24,7 +25,6 @@ const projectsItems = {
 			label: 'label.just_launched',
 		},
 		// { name: 'Popular', query: '?q=popular' },
-		{ name: 'All Projects', query: '', label: 'label.all_projects' },
 	],
 };
 
@@ -59,9 +59,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				</ExploreByRow>
 			</HighlightSection>
 			<NormalSection inSidebar={inSidebar}>
-				<Label medium>
-					{formatMessage({ id: 'label.by_category' })}
-				</Label>
+				<Label medium>{formatMessage({ id: 'label.category' })}</Label>
 				<CategoriesGrid inSidebar={inSidebar}>
 					{mainCategories.map((category, idx) => (
 						<Link

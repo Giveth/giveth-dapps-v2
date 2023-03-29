@@ -193,12 +193,17 @@ const CryptoDonation: FC = () => {
 			return setSelectedTokenBalance(undefined);
 		}
 		// Native token balance is provided by the Web3Provider
+		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
 		if (
-			selectedToken.symbol === ethereumChain.nativeCurrency.symbol ||
-			selectedToken.symbol === gnosisChain.nativeCurrency.symbol ||
-			selectedToken.symbol === polygonChain.nativeCurrency.symbol ||
-			selectedToken.symbol === celoChain.nativeCurrency.symbol
-			// TODO:Optimism || selectedToken.symbol === optimismChain.nativeCurrency.symbol
+			_selectedTokenSymbol ===
+				ethereumChain.nativeCurrency.symbol.toUpperCase() ||
+			_selectedTokenSymbol ===
+				gnosisChain.nativeCurrency.symbol.toUpperCase() ||
+			_selectedTokenSymbol ===
+				polygonChain.nativeCurrency.symbol.toUpperCase() ||
+			_selectedTokenSymbol ===
+				celoChain.nativeCurrency.symbol.toUpperCase()
+			// TODO:Optimism || _selectedTokenSymbol === optimismChain.nativeCurrency.symbol
 		) {
 			return setSelectedTokenBalance(balance);
 		}

@@ -26,7 +26,6 @@ const AddTokenRow = styled(Flex)`
 
 interface IConfirmSubmitProps {
 	title: string;
-	walletNetwork: number;
 	txHash?: string;
 	rewardTokenSymbol?: string;
 	rewardTokenAddress?: string;
@@ -34,12 +33,11 @@ interface IConfirmSubmitProps {
 
 export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 	title,
-	walletNetwork,
 	txHash,
 	rewardTokenSymbol,
 	rewardTokenAddress,
 }) => {
-	const { library } = useWeb3React();
+	const { chainId, library } = useWeb3React();
 	return (
 		<>
 			<Title>{title}</Title>
@@ -55,13 +53,15 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 			{txHash && (
 				<BlockExplorerLink
 					as='a'
-					href={`${config.NETWORKS_CONFIG[walletNetwork]?.blockExplorerUrls}
+					href={`${
+						config.NETWORKS_CONFIG[chainId!]?.blockExplorerUrls
+					}
 			/tx/${txHash}`}
 					target='_blank'
 					size='Big'
 				>
 					View on{' '}
-					{config.NETWORKS_CONFIG[walletNetwork]?.blockExplorerName}
+					{config.NETWORKS_CONFIG[chainId!]?.blockExplorerName}
 					&nbsp;
 					<IconExternalLink size={16} color={'currentColor'} />
 				</BlockExplorerLink>
@@ -72,13 +72,11 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 
 export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 	title,
-	walletNetwork,
 	txHash,
 	rewardTokenSymbol,
 	rewardTokenAddress,
 }) => {
-	const { library } = useWeb3React();
-
+	const { chainId, library } = useWeb3React();
 	return (
 		<>
 			<Title>{title}</Title>
@@ -98,13 +96,12 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 			</AddTokenRow>
 			<BlockExplorerLink
 				as='a'
-				href={`${config.NETWORKS_CONFIG[walletNetwork]?.blockExplorerUrls}
+				href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorerUrls}
 							/tx/${txHash}`}
 				target='_blank'
 				size='Big'
 			>
-				View on{' '}
-				{config.NETWORKS_CONFIG[walletNetwork]?.blockExplorerName}
+				View on {config.NETWORKS_CONFIG[chainId!]?.blockExplorerName}
 				&nbsp;
 				<IconExternalLink size={16} color={'currentColor'} />
 			</BlockExplorerLink>
@@ -118,10 +115,11 @@ interface IErrorProps extends IConfirmSubmitProps {
 
 export const ErrorInnerModal: FC<IErrorProps> = ({
 	title,
-	walletNetwork,
 	txHash,
 	message,
 }) => {
+	const { chainId } = useWeb3React();
+
 	return (
 		<>
 			<Title>{title}</Title>
@@ -135,13 +133,15 @@ export const ErrorInnerModal: FC<IErrorProps> = ({
 			{txHash && (
 				<BlockExplorerLink
 					as='a'
-					href={`${config.NETWORKS_CONFIG[walletNetwork]?.blockExplorerUrls}
+					href={`${
+						config.NETWORKS_CONFIG[chainId!]?.blockExplorerUrls
+					}
 			/tx/${txHash}`}
 					target='_blank'
 					size='Big'
 				>
 					View on{' '}
-					{config.NETWORKS_CONFIG[walletNetwork]?.blockExplorerName}
+					{config.NETWORKS_CONFIG[chainId!]?.blockExplorerName}
 					&nbsp;
 					<IconExternalLink size={16} color={'currentColor'} />
 				</BlockExplorerLink>
