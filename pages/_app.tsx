@@ -16,7 +16,7 @@ import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 
 import '../styles/globals.css';
-import { en, es } from '../lang';
+import { ca, en, es } from '../lang';
 import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';
 import UserController from '@/components/controller/user.ctrl';
@@ -40,6 +40,7 @@ declare global {
 const DEFAULT_WRITE_KEY = 'MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB';
 
 export const IntlMessages = {
+	ca,
 	en,
 	es,
 };
