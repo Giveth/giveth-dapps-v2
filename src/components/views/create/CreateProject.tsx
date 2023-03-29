@@ -471,7 +471,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 										}),
 									);
 								if (!e) unregister(EInputs.celoAddress);
-								setPolygonAddressActive(e);
+								setCeloAddressActive(e);
 							}}
 						/>
 						{/* // TODO:Optimism <WalletAddressInput
