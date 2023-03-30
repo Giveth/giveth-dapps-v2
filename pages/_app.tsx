@@ -9,13 +9,11 @@ import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
-
 import Script from 'next/script';
+
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
-
-import '../styles/globals.css';
 import { en, es } from '../lang';
 import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';
@@ -26,10 +24,11 @@ import GeneralController from '@/components/controller/general.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import StorageLabel from '@/lib/localStorage';
 import NotificationController from '@/components/controller/notification.ctrl';
-
 import { isGIVeconomyRoute } from '@/lib/helpers';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
+import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import type { AppProps } from 'next/app';
+import '../styles/globals.css';
 
 declare global {
 	interface Window {
@@ -68,6 +67,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
 	const locale = router ? router.locale : 'en';
 	const apolloClient = useApollo(pageProps);
+	const isMaintenanceMode = process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true';
 
 	useEffect(() => {
 		const handleStart = (url: string) => {
@@ -113,34 +113,43 @@ function MyApp({ Component, pageProps }: AppProps) {
 				>
 					<ApolloProvider client={apolloClient}>
 						<Web3ReactProvider getLibrary={getLibrary}>
-							<NotificationController />
-							<GeneralController />
-							<PriceController />
-							<SubgraphController />
-							<UserController />
-							<HeaderWrapper />
-							{isGIVeconomyRoute(router.route) && (
-								<GIVeconomyTab />
-							)}
-							{(pageProps as any).errorStatus ? (
-								<ErrorsIndex
-									statusCode={(pageProps as any).errorStatus}
-								/>
+							{isMaintenanceMode ? (
+								<MaintenanceIndex />
 							) : (
-								<Component {...pageProps} />
-							)}
-							{process.env.NEXT_PUBLIC_ENV === 'production' && (
-								<Script
-									id='segment-script'
-									strategy='afterInteractive'
-									dangerouslySetInnerHTML={{
-										__html: renderSnippet(),
-									}}
-								/>
-							)}
+								<>
+									<NotificationController />
+									<GeneralController />
+									<PriceController />
+									<SubgraphController />
+									<UserController />
+									<HeaderWrapper />
+									{isGIVeconomyRoute(router.route) && (
+										<GIVeconomyTab />
+									)}
+									{(pageProps as any).errorStatus ? (
+										<ErrorsIndex
+											statusCode={
+												(pageProps as any).errorStatus
+											}
+										/>
+									) : (
+										<Component {...pageProps} />
+									)}
+									{process.env.NEXT_PUBLIC_ENV ===
+										'production' && (
+										<Script
+											id='segment-script'
+											strategy='afterInteractive'
+											dangerouslySetInnerHTML={{
+												__html: renderSnippet(),
+											}}
+										/>
+									)}
 
-							<FooterWrapper />
-							<ModalController />
+									<FooterWrapper />
+									<ModalController />
+								</>
+							)}
 						</Web3ReactProvider>
 					</ApolloProvider>
 				</IntlProvider>

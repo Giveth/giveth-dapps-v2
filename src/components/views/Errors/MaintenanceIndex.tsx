@@ -3,12 +3,12 @@ import Image from 'next/image';
 import { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import Head from 'next/head';
 import links from '@/lib/constants/links';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import twitter from '/public/images/icons/twitter.svg';
 import discord from '/public/images/icons/discord.svg';
 import medium from '/public/images/icons/medium.svg';
-
 import {
 	ErrorContainer,
 	ArcMustardBottom,
@@ -46,6 +46,9 @@ const MaintenanceIndex = () => {
 
 	return (
 		<ErrorContainer>
+			<Head>
+				<title>Maintenance Mode | Giveth</title>
+			</Head>
 			<ArcMustardTop />
 			<ArcMustardBottom />
 			<CustomGearImage src='/images/icons/gear.svg' loading='lazy' />
