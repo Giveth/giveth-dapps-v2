@@ -195,15 +195,11 @@ const CryptoDonation: FC = () => {
 		// Native token balance is provided by the Web3Provider
 		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
 		if (
+			networkId &&
 			_selectedTokenSymbol ===
-				ethereumChain.nativeCurrency.symbol.toUpperCase() ||
-			_selectedTokenSymbol ===
-				gnosisChain.nativeCurrency.symbol.toUpperCase() ||
-			_selectedTokenSymbol ===
-				polygonChain.nativeCurrency.symbol.toUpperCase() ||
-			_selectedTokenSymbol ===
-				celoChain.nativeCurrency.symbol.toUpperCase()
-			// TODO:Optimism || _selectedTokenSymbol === optimismChain.nativeCurrency.symbol
+				config.NETWORKS_CONFIG[
+					networkId
+				]?.nativeCurrency.symbol.toUpperCase()
 		) {
 			return setSelectedTokenBalance(balance);
 		}
