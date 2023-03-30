@@ -34,7 +34,7 @@ const HowDoesItWork = () => {
 const numberedList = [
 	{
 		number: 1,
-		text: 'Taketh will allow private goods projects to list themselves on our platform (for a small fee of $10,000), and 99% of all fees will go to the Taketh treasury (audited in the Bahamas fully off-chain).',
+		text: 'Taketh will allow private goods projects to list themselves on our platform (for a small fee of $10,000), and 99% of all fees will go to the Taketh treasury (audited in the Bahamas, fully off-chain).',
 	},
 	{
 		number: 2,
