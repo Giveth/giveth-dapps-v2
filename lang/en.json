@@ -1115,6 +1115,8 @@
 	"ngo_desc": "Support non profit projects by giving directly.",
 	"technology": "Technology",
 	"technology_desc": "Support technology projects with a focus on tech, research and desci.",
+	"all_projects": "All Projects",
+	"all_projects_desc": "Support changemakers from around the world",
 	"label.just_launched": "Just Launched",
 	"label.all_projects": "All Projects",
 	"all": "All",
