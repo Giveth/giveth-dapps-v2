@@ -110,7 +110,7 @@ export const networksParams: {
 		chainName: 'Alfajores Testnet',
 		nativeCurrency: {
 			name: 'Alfajores Celo',
-			symbol: 'A-CELO',
+			symbol: 'CELO',
 			decimals: 18,
 		},
 		rpcUrls: ['https://alfajores-forno.celo-testnet.org'],
