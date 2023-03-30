@@ -51,11 +51,6 @@ import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedCha
 import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
 
-const ethereumChain = config.MAINNET_CONFIG;
-const gnosisChain = config.XDAI_CONFIG;
-const polygonChain = config.POLYGON_CONFIG;
-// TODO:Optimism const optimismChain = config.OPTIMISM_CONFIG;
-const celoChain = config.CELO_CONFIG;
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
 interface IInputBox {
