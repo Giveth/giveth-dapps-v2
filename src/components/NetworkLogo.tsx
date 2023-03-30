@@ -4,6 +4,7 @@ import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconPolygon } from '@/components/Icons/Polygon';
 import config from '@/configuration';
 import { IconOptimism } from './Icons/Optimism';
+import { IconCelo } from './Icons/Celo';
 
 const NetworkLogo = (props: { chainId?: number; logoSize?: number }) => {
 	const { chainId, logoSize } = props;
@@ -15,6 +16,8 @@ const NetworkLogo = (props: { chainId?: number; logoSize?: number }) => {
 		return <IconPolygon size={logoSize} />;
 	} else if (chainId === config.OPTIMISM_NETWORK_NUMBER) {
 		return <IconOptimism size={logoSize} />;
+	} else if (chainId === config.CELO_NETWORK_NUMBER) {
+		return <IconCelo size={logoSize} />;
 	} else return null;
 };
 

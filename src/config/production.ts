@@ -15,6 +15,7 @@ const MAINNET_NETWORK_NUMBER = 1; // Mainnet
 const XDAI_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
+const CELO_NETWORK_NUMBER = 42220;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -31,6 +32,7 @@ const config: EnvConfig = {
 	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
+	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
@@ -208,6 +210,7 @@ const config: EnvConfig = {
 	},
 
 	XDAI_CONFIG: {
+		nodeUrl: networksParams[100]?.rpcUrls[0],
 		...networksParams[100],
 		gasPreference: {
 			maxFeePerGas: parseUnits('2', 'gwei').toString(),
@@ -224,7 +227,6 @@ const config: EnvConfig = {
 		MERKLE_ADDRESS: '0xFad63adEFb8203F7605F25f6a921c8bf45604A5e',
 		TOKEN_DISTRO_ADDRESS: '0xc0dbDcA66a0636236fAbe1B3C16B1bD4C84bB1E1',
 
-		nodeUrl: 'https://rpc.gnosischain.com/',
 		GIV: {
 			network: XDAI_NETWORK_NUMBER,
 			LM_ADDRESS: '0xD93d3bDBa18ebcB3317a57119ea44ed2Cf41C2F2',
@@ -340,7 +342,7 @@ const config: EnvConfig = {
 	},
 
 	POLYGON_CONFIG: {
-		nodeUrl: '',
+		nodeUrl: networksParams[137]?.rpcUrls[0],
 		...networksParams[137],
 		gasPreference: {
 			// Keep it empty for automatic configuration
@@ -350,12 +352,22 @@ const config: EnvConfig = {
 	},
 
 	OPTIMISM_CONFIG: {
-		nodeUrl: 'mainnet.optimism.io',
+		nodeUrl: networksParams[10]?.rpcUrls[0],
 		...networksParams[10],
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
 		blockExplorerName: ['OptimismScan'],
+		subgraphAddress: '',
+	},
+
+	CELO_CONFIG: {
+		nodeUrl: networksParams[42220]?.rpcUrls[0],
+		...networksParams[42220],
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		blockExplorerName: ['CeloScan'],
 		subgraphAddress: '',
 	},
 };
