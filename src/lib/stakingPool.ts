@@ -10,6 +10,7 @@ import {
 	BalancerPoolStakingConfig,
 	ICHIPoolStakingConfig,
 	RegenPoolStakingConfig,
+	SimpleNetworkConfig,
 	SimplePoolStakingConfig,
 	StakingPlatform,
 	StakingType,
@@ -81,7 +82,8 @@ export const getGivStakingAPR = async (
 	subgraphValue: ISubgraphState,
 	provider: JsonRpcProvider | null,
 ): Promise<APR> => {
-	const lmAddress = config.NETWORKS_CONFIG[network].GIV.LM_ADDRESS;
+	const lmAddress = (config.NETWORKS_CONFIG[network] as SimpleNetworkConfig)
+		.GIV.LM_ADDRESS;
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
 	let givStakingAPR: BigNumber = Zero;
@@ -193,7 +195,9 @@ const getBalancerPoolStakingAPR = async (
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
-	const tokenAddress = config.NETWORKS_CONFIG[network].TOKEN_ADDRESS;
+	const tokenAddress = (
+		config.NETWORKS_CONFIG[network] as SimpleNetworkConfig
+	).TOKEN_ADDRESS;
 
 	const weightedPoolContract = new Contract(
 		POOL_ADDRESS,
@@ -267,13 +271,15 @@ const getSimplePoolStakingAPR = async (
 	unipoolHelper: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
-	const givTokenAddress = config.NETWORKS_CONFIG[network].TOKEN_ADDRESS;
+	const givTokenAddress = (
+		config.NETWORKS_CONFIG[network] as SimpleNetworkConfig
+	).TOKEN_ADDRESS;
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 	const streamConfig =
 		regenStreamType &&
-		config.NETWORKS_CONFIG[network].regenStreams.find(
-			s => s.type === regenStreamType,
-		);
+		(
+			config.NETWORKS_CONFIG[network] as SimpleNetworkConfig
+		).regenStreams.find(s => s.type === regenStreamType);
 	const tokenAddress = streamConfig
 		? streamConfig.rewardTokenAddress
 		: givTokenAddress;
