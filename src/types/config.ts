@@ -184,7 +184,10 @@ export interface GlobalConfig extends EnvConfig {
 	NOTIFICATION_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
 	NETWORKS_CONFIG: {
-		[key: number]: MainnetNetworkConfig | XDaiNetworkConfig;
+		[key: number]:
+			| MainnetNetworkConfig
+			| XDaiNetworkConfig
+			| BasicNetworkConfig;
 	};
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
