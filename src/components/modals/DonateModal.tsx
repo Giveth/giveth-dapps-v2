@@ -46,7 +46,7 @@ interface IDonateModalProps extends IModal {
 
 const ethereumChain = config.MAINNET_CONFIG;
 const gnosisChain = config.XDAI_CONFIG;
-const stableCoins = [gnosisChain.nativeCurrency, 'DAI', 'USDT'];
+const stableCoins = [gnosisChain.nativeCurrency.symbol, 'DAI', 'USDT'];
 
 const DonateModal: FC<IDonateModalProps> = props => {
 	const {
