@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Banner from '@/components/views/landings/taketh/Banner';
 import Introducing from '@/components/views/landings/taketh/Introducing';
 import HowDoesItWork from '@/components/views/landings/taketh/HowDoesItWork';
-import WantIn from '@/components/views/landings/taketh/WantIn';
+import SoundGood from '@/components/views/landings/taketh/SoundGood';
 import WhatIsTaketh from '@/components/views/landings/taketh/WhatIsTaketh';
 
 const Taketh = () => {
@@ -12,7 +12,7 @@ const Taketh = () => {
 			<Introducing />
 			<WhatIsTaketh />
 			<HowDoesItWork />
-			<WantIn />
+			<SoundGood />
 		</Wrapper>
 	);
 };
