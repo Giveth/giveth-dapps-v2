@@ -129,6 +129,9 @@ export const TextContainer = styled.div`
 	* {
 		z-index: 2;
 	}
+	img {
+		margin: 0 auto;
+	}
 `;
 
 export const ErrorContainer = styled.div`
@@ -139,7 +142,6 @@ export const ErrorContainer = styled.div`
 	overflow: hidden;
 	position: relative;
 	padding: 18px;
-
 	${mediaQueries.tablet} {
 		padding: 150px 130px;
 	}
