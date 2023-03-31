@@ -17,7 +17,7 @@ const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 	const allCategory = {
 		title: formatMessage({ id: 'label.giveth_projects' }),
 		banner: '/images/banners/categories/all.png',
-		slug: 'Explore awesome projects on Giveth and support',
+		slug: 'all_projects',
 		description: '',
 		categories: [],
 	};

@@ -19,6 +19,7 @@ import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
 	PoolStakingConfig,
 	RegenPoolStakingConfig,
+	SimpleNetworkConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 } from '@/types/config';
@@ -117,7 +118,9 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		provideLiquidityLink,
 	} = poolStakingConfig;
 	const regenStreamConfig = regenStreamType
-		? config.NETWORKS_CONFIG[poolNetwork].regenStreams.find(
+		? (
+				config.NETWORKS_CONFIG[poolNetwork] as SimpleNetworkConfig
+		  ).regenStreams.find(
 				regenStream => regenStream.type === regenStreamType,
 		  )
 		: undefined;

@@ -51,10 +51,6 @@ import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedCha
 import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
 
-const ethereumChain = config.MAINNET_CONFIG;
-const gnosisChain = config.XDAI_CONFIG;
-const polygonChain = config.POLYGON_CONFIG;
-// TODO:Optimism const optimismChain = config.OPTIMISM_CONFIG;
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
 interface IInputBox {
@@ -194,13 +190,11 @@ const CryptoDonation: FC = () => {
 		// Native token balance is provided by the Web3Provider
 		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
 		if (
+			networkId &&
 			_selectedTokenSymbol ===
-				ethereumChain.nativeCurrency.symbol.toUpperCase() ||
-			_selectedTokenSymbol ===
-				gnosisChain.nativeCurrency.symbol.toUpperCase() ||
-			_selectedTokenSymbol ===
-				polygonChain.nativeCurrency.symbol.toUpperCase()
-			// TODO:Optimism || _selectedTokenSymbol === optimismChain.nativeCurrency.symbol
+				config.NETWORKS_CONFIG[
+					networkId
+				]?.nativeCurrency.symbol.toUpperCase()
 		) {
 			return setSelectedTokenBalance(balance);
 		}
