@@ -78,6 +78,14 @@ export const durationToYMDh = (
 	const shortRes = { y, m, d, h, min, sec };
 	if (full) {
 		let fullRes: any = {};
+		if (locale === 'ca') {
+			if (y) fullRes[`any${y > 1 ? 's' : ''}`] = y;
+			if (m) fullRes[`${m > 1 ? 'mesos' : 'mes'}`] = m;
+			if (d) fullRes[`${d > 1 ? 'dies' : 'dia'}`] = d;
+			if (h) fullRes[`hora${h > 1 ? 's' : ''}`] = h;
+			if (min) fullRes[`minut${min > 1 ? 's' : ''}`] = min;
+			if (sec) fullRes[`segon${sec > 1 ? 's' : ''}`] = sec;
+		}
 		if (locale === 'en') {
 			if (y) fullRes[`year${y > 1 ? 's' : ''}`] = y;
 			if (m) fullRes[`month${m > 1 ? 's' : ''}`] = m;

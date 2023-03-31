@@ -10,7 +10,7 @@ import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 
-const availableLanguages = ['en', 'es'];
+const availableLanguages = ['ca', 'en', 'es'];
 
 export const LanguageModal: FC<IModal> = ({ setShowModal }) => {
 	const router = useRouter();
