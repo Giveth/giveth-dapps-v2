@@ -60,7 +60,7 @@ const SayHelloSection = () => {
 };
 
 const OverviewContainer = styled.div`
-	padding-top: 200px;
+	padding-top: 100px;
 	position: relative;
 	::before {
 		content: ' ';
