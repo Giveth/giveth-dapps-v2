@@ -11,7 +11,6 @@ interface IUploadProfilePicModal extends IModal, IUploadSelectProfilePic {}
 const UploadProfilePicModal = ({
 	setShowModal,
 	user,
-	pfpData,
 }: IUploadProfilePicModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -22,7 +21,7 @@ const UploadProfilePicModal = ({
 			headerTitle='Upload Your Images or NFTs'
 			headerTitlePosition='left'
 		>
-			<UploadSelectProfilePic user={user} pfpData={pfpData} />
+			<UploadSelectProfilePic user={user} />
 		</Modal>
 	);
 };

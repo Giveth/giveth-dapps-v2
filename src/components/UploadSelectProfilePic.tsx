@@ -28,33 +28,66 @@ import ImageUploader from './ImageUploader';
 import PfpItem from './modals/UploadProfilePicModal/PfpItem';
 import { Flex, FlexCenter } from './styled-components/Flex';
 import { TabItem } from './styled-components/Tabs';
-import { IUserNFT } from './views/userProfile/UserProfile.view';
-import { IUser } from '@/apollo/types/types';
+import { IGiverPFPToken, IUser } from '@/apollo/types/types';
+import { gqlRequest } from '@/helpers/requests';
+import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
+
+enum EProfilePicTab {
+	LOADING,
+	UPLOAD,
+	PFP,
+}
 
 const tabs = [
-	{ id: 1, title: 'Upload Image' },
-	{ id: 2, title: 'My NFTs' },
+	{ id: EProfilePicTab.LOADING, title: 'Upload Image' },
+	{ id: EProfilePicTab.PFP, title: 'My NFTs' },
 ];
 
 export interface IUploadSelectProfilePic {
 	user: IUser;
-	pfpData?: IUserNFT[];
 }
 
 export const UploadSelectProfilePic: FC<IUploadSelectProfilePic> = ({
 	user,
-	pfpData,
 }) => {
 	const useUploadProps = useUpload();
 	const { formatMessage } = useIntl();
-	const [activeTab, setActiveTab] = useState(1);
-	const [selectedPFP, setSelectedPFP] = useState<IUserNFT>();
+	const [activeTab, setActiveTab] = useState(EProfilePicTab.LOADING);
+	const [selectedPFP, setSelectedPFP] = useState<IGiverPFPToken>();
+	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
 
 	const dispatch = useAppDispatch();
 	const { account } = useWeb3React();
 	const [updateUser] = useMutation(UPDATE_USER);
-
 	const { url, onDelete } = useUploadProps;
+
+	useEffect(() => {
+		const fetchPFPInfo = async (walletAddress: string) => {
+			try {
+				const query = buildUsersPfpInfoQuery([walletAddress]);
+				const { data } = await gqlRequest(
+					config.MAINNET_CONFIG.subgraphAddress,
+					false,
+					query,
+				);
+				if (data[`user_${walletAddress}`]) {
+					console.log(
+						'data[`user_${walletAddress}`]',
+						data[`user_${walletAddress}`],
+						user,
+					);
+					setPfpData(data[`user_${walletAddress}`]);
+				}
+				console.log('data', data);
+			} catch (error) {
+				console.error('error', error);
+			}
+		};
+		if (user?.walletAddress) {
+			fetchPFPInfo(user.walletAddress);
+		}
+	}, [user, dispatch]);
+	console.log('pfpData', pfpData);
 
 	const nftUrl = selectedPFP?.imageIpfs
 		? convertIPFSToHTTPS(selectedPFP?.imageIpfs)
@@ -115,6 +148,7 @@ export const UploadSelectProfilePic: FC<IUploadSelectProfilePic> = ({
 		};
 		compareHashes();
 	}, []);
+
 	return (
 		<Wrapper>
 			<Flex gap='16px'>
@@ -129,7 +163,7 @@ export const UploadSelectProfilePic: FC<IUploadSelectProfilePic> = ({
 					</TabItem>
 				))}
 			</Flex>
-			{activeTab === 1 && (
+			{activeTab === EProfilePicTab.UPLOAD && (
 				<Flex flexDirection='column' gap='36px'>
 					<ImageUploader {...useUploadProps} />
 					<Flex flexDirection='row' justifyContent='space-between'>
@@ -151,7 +185,7 @@ export const UploadSelectProfilePic: FC<IUploadSelectProfilePic> = ({
 					</Flex>
 				</Flex>
 			)}
-			{activeTab === 2 && (
+			{activeTab === EProfilePicTab.PFP && (
 				<>
 					{pfpData && pfpData.length > 0 ? (
 						<Flex flexDirection='column' gap='36px'>
