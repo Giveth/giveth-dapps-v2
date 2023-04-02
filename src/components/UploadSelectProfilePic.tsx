@@ -39,7 +39,7 @@ enum EProfilePicTab {
 }
 
 const tabs = [
-	{ id: EProfilePicTab.LOADING, title: 'Upload Image' },
+	{ id: EProfilePicTab.UPLOAD, title: 'Upload Image' },
 	{ id: EProfilePicTab.PFP, title: 'My NFTs' },
 ];
 
@@ -70,17 +70,23 @@ export const UploadSelectProfilePic: FC<IUploadSelectProfilePic> = ({
 					false,
 					query,
 				);
-				if (data[`user_${walletAddress}`]) {
+				if (
+					data[`user_${walletAddress}`] &&
+					data[`user_${walletAddress}`].length > 0
+				) {
 					console.log(
 						'data[`user_${walletAddress}`]',
 						data[`user_${walletAddress}`],
 						user,
 					);
 					setPfpData(data[`user_${walletAddress}`]);
+					setActiveTab(EProfilePicTab.PFP);
+				} else {
+					setActiveTab(EProfilePicTab.UPLOAD);
 				}
-				console.log('data', data);
 			} catch (error) {
 				console.error('error', error);
+				setActiveTab(EProfilePicTab.UPLOAD);
 			}
 		};
 		if (user?.walletAddress) {
@@ -163,6 +169,7 @@ export const UploadSelectProfilePic: FC<IUploadSelectProfilePic> = ({
 					</TabItem>
 				))}
 			</Flex>
+			{activeTab === EProfilePicTab.LOADING && <div></div>}
 			{activeTab === EProfilePicTab.UPLOAD && (
 				<Flex flexDirection='column' gap='36px'>
 					<ImageUploader {...useUploadProps} />
