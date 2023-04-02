@@ -174,7 +174,7 @@ export interface EnvConfig {
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
-	OPENSEA_ADDRESS: string;
+	RARIBLE_ADDRESS: string;
 }
 
 export interface GlobalConfig extends EnvConfig {
