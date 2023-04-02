@@ -363,7 +363,7 @@ export interface IGiverPFPToken {
 	user: {
 		id: string;
 	};
-	tokenId: string;
+	tokenId: number;
 	imageIpfs: string;
 }
 
