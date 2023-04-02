@@ -5,7 +5,7 @@ import {
 	Button,
 	ButtonLink,
 	ButtonText,
-	H1,
+	D3,
 	Lead,
 	mediaQueries,
 } from '@giveth/ui-design-system';
@@ -22,8 +22,8 @@ import { Flex } from '@/components/styled-components/Flex';
 export const NFTMintIndex = () => {
 	// const [showEligibilityModal, setShowEligibilityModal] = useState(false);
 	const { formatMessage } = useIntl();
-	const { account, library, chainId } = useWeb3React();
-	const { step, setStep, qty, tx: txHash, setIsEligible } = usePFPMintData();
+	const { account } = useWeb3React();
+	const { step, setStep, qty, tx: txHash } = usePFPMintData();
 
 	// useEffect(() => {
 	// 	const checkAddress = async () => {
@@ -198,7 +198,7 @@ const MintContainer = styled(Container)`
 	position: relative;
 `;
 
-const Title = styled(H1)`
+const Title = styled(D3)`
 	font-weight: 700;
 	color: ${brandColors.deep[100]};
 	margin-bottom: 22px;
