@@ -115,7 +115,7 @@ export interface INetworkParam {
 		decimals: number;
 	};
 	blockExplorerUrls: Array<string>;
-	rpcUrls?: Array<string>;
+	rpcUrls: Array<string>;
 	iconUrls?: Array<string>;
 }
 
@@ -163,10 +163,12 @@ export interface EnvConfig {
 	XDAI_NETWORK_NUMBER: number;
 	POLYGON_NETWORK_NUMBER: number;
 	OPTIMISM_NETWORK_NUMBER: number;
+	CELO_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	XDAI_CONFIG: XDaiNetworkConfig;
 	POLYGON_CONFIG: BasicNetworkConfig;
 	OPTIMISM_CONFIG: BasicNetworkConfig;
+	CELO_CONFIG: BasicNetworkConfig;
 	GARDEN_LINK: string;
 	BASE_ROUTE: string;
 	BACKEND_LINK: string;
@@ -183,7 +185,10 @@ export interface GlobalConfig extends EnvConfig {
 	PFP_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
 	NETWORKS_CONFIG: {
-		[key: number]: MainnetNetworkConfig | XDaiNetworkConfig;
+		[key: number]:
+			| MainnetNetworkConfig
+			| XDaiNetworkConfig
+			| BasicNetworkConfig;
 	};
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;

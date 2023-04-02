@@ -30,7 +30,6 @@ const GeneralController = () => {
 			}
 		}
 	}, [router, account, isWalletActive, chainId]);
-	console.log('theme', theme);
 	return <GlobalStyle theme={theme} />;
 };
 

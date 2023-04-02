@@ -58,7 +58,7 @@ const moduleExports = withBundleAnalyzer({
 		return config;
 	},
 	i18n: {
-		locales: ['en', 'es'],
+		locales: ['ca', 'en', 'es'],
 		defaultLocale: 'en',
 		localeDetection: false,
 	},

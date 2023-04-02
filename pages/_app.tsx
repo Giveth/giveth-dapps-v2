@@ -9,14 +9,14 @@ import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
-
 import Script from 'next/script';
+
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 
 import '../styles/globals.css';
-import { en, es } from '../lang';
+import { ca, en, es } from '../lang';
 import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';
 import UserController from '@/components/controller/user.ctrl';
@@ -27,10 +27,11 @@ import NotificationController from '@/components/controller/pfp.ctrl';
 import PfpController from '@/components/controller/notification.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import StorageLabel from '@/lib/localStorage';
-
 import { isGIVeconomyRoute } from '@/lib/helpers';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
+import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import type { AppProps } from 'next/app';
+import '../styles/globals.css';
 
 declare global {
 	interface Window {
@@ -41,6 +42,7 @@ declare global {
 const DEFAULT_WRITE_KEY = 'MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB';
 
 export const IntlMessages = {
+	ca,
 	en,
 	es,
 };
@@ -69,6 +71,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
 	const locale = router ? router.locale : 'en';
 	const apolloClient = useApollo(pageProps);
+	const isMaintenanceMode = process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true';
 
 	useEffect(() => {
 		const handleStart = (url: string) => {
@@ -114,35 +117,44 @@ function MyApp({ Component, pageProps }: AppProps) {
 				>
 					<ApolloProvider client={apolloClient}>
 						<Web3ReactProvider getLibrary={getLibrary}>
-							<NotificationController />
-							<GeneralController />
-							<PriceController />
-							<SubgraphController />
-							<UserController />
-							<HeaderWrapper />
-							{isGIVeconomyRoute(router.route) && (
-								<GIVeconomyTab />
-							)}
-							{(pageProps as any).errorStatus ? (
-								<ErrorsIndex
-									statusCode={(pageProps as any).errorStatus}
-								/>
+							{isMaintenanceMode ? (
+								<MaintenanceIndex />
 							) : (
-								<Component {...pageProps} />
-							)}
-							{process.env.NEXT_PUBLIC_ENV === 'production' && (
-								<Script
-									id='segment-script'
-									strategy='afterInteractive'
-									dangerouslySetInnerHTML={{
-										__html: renderSnippet(),
-									}}
-								/>
-							)}
+								<>
+									<NotificationController />
+									<GeneralController />
+									<PriceController />
+									<SubgraphController />
+									<UserController />
+									<HeaderWrapper />
+									{isGIVeconomyRoute(router.route) && (
+										<GIVeconomyTab />
+									)}
+									{(pageProps as any).errorStatus ? (
+										<ErrorsIndex
+											statusCode={
+												(pageProps as any).errorStatus
+											}
+										/>
+									) : (
+										<Component {...pageProps} />
+									)}
+									{process.env.NEXT_PUBLIC_ENV ===
+										'production' && (
+										<Script
+											id='segment-script'
+											strategy='afterInteractive'
+											dangerouslySetInnerHTML={{
+												__html: renderSnippet(),
+											}}
+										/>
+									)}
 
-							<FooterWrapper />
-							<ModalController />
-							<PfpController />
+									<FooterWrapper />
+									<ModalController />
+									<PfpController />
+								</>
+							)}
 						</Web3ReactProvider>
 					</ApolloProvider>
 				</IntlProvider>
