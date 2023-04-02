@@ -194,7 +194,7 @@ const MintViewContainer = styled.div`
 `;
 
 const MintContainer = styled(Container)`
-	padding-top: 200px;
+	padding-top: 100px;
 	position: relative;
 `;
 
