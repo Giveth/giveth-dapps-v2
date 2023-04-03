@@ -224,15 +224,13 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 										</P>
 										<CustomLink
 											href={
-												config.OPENSEA_ADDRESS +
-												'assets/' +
-												config.MAINNET_CONFIG.chainName.toLowerCase() +
-												'/' +
-												selectedPFP.id.replace('-', '/')
+												config.RARIBLE_ADDRESS +
+												'token/' +
+												selectedPFP.id.replace('-', ':')
 											}
 											target='_blank'
 										>
-											View on OpenSea{' '}
+											View on Rarible{' '}
 											<IconExternalLink16 />
 										</CustomLink>
 									</Flex>
