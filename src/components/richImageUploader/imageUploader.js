@@ -5,14 +5,17 @@ class ImageUploader {
 		this.quill = quill;
 		this.options = options;
 		this.range = null;
+		this.placeholderDelta = null;
 
 		if (typeof this.options.upload !== 'function')
 			console.warn(
 				'[Missing config] upload function that returns a promise is required',
 			);
 
-		const toolbar = this.quill.getModule('toolbar');
-		toolbar.addHandler('image', this.selectLocalImage.bind(this));
+		var toolbar = this.quill.getModule('toolbar');
+		if (toolbar) {
+			toolbar.addHandler('image', this.selectLocalImage.bind(this));
+		}
 
 		this.handleDrop = this.handleDrop.bind(this);
 		this.handlePaste = this.handlePaste.bind(this);
@@ -22,6 +25,7 @@ class ImageUploader {
 	}
 
 	selectLocalImage() {
+		this.quill.focus();
 		this.range = this.quill.getSelection();
 		this.fileHolder = document.createElement('input');
 		this.fileHolder.setAttribute('type', 'file');
@@ -40,13 +44,13 @@ class ImageUploader {
 	}
 
 	handleDrop(evt) {
-		evt.stopPropagation();
-		evt.preventDefault();
 		if (
 			evt.dataTransfer &&
 			evt.dataTransfer.files &&
 			evt.dataTransfer.files.length
 		) {
+			evt.stopPropagation();
+			evt.preventDefault();
 			if (document.caretRangeFromPoint) {
 				const selection = document.getSelection();
 				const range = document.caretRangeFromPoint(
@@ -77,10 +81,12 @@ class ImageUploader {
 				}
 			}
 
+			this.quill.focus();
 			this.range = this.quill.getSelection();
 			let file = evt.dataTransfer.files[0];
 
 			setTimeout(() => {
+				this.quill.focus();
 				this.range = this.quill.getSelection();
 				this.readAndUploadFile(file);
 			}, 0);
@@ -102,9 +108,11 @@ class ImageUploader {
 						: items[i];
 
 					if (file) {
+						this.quill.focus();
 						this.range = this.quill.getSelection();
 						evt.preventDefault();
 						setTimeout(() => {
+							this.quill.focus();
 							this.range = this.quill.getSelection();
 							this.readAndUploadFile(file);
 						}, 0);
@@ -153,7 +161,8 @@ class ImageUploader {
 
 	insertBase64Image(url) {
 		const range = this.range;
-		this.quill.insertEmbed(
+
+		this.placeholderDelta = this.quill.insertEmbed(
 			range.index,
 			LoadingImage.blotName,
 			`${url}`,
@@ -163,8 +172,11 @@ class ImageUploader {
 
 	insertToEditor(url) {
 		const range = this.range;
+
+		const lengthToDelete = this.calculatePlaceholderInsertLength();
+
 		// Delete the placeholder image
-		this.quill.deleteText(range.index, 3, 'user');
+		this.quill.deleteText(range.index, lengthToDelete, 'user');
 		// Insert the server saved image
 		this.quill.insertEmbed(range.index, 'image', `${url}`, 'user');
 
@@ -172,9 +184,23 @@ class ImageUploader {
 		this.quill.setSelection(range, 'user');
 	}
 
+	// The length of the insert delta from insertBase64Image can vary depending on what part of the line the insert occurs
+	calculatePlaceholderInsertLength() {
+		return this.placeholderDelta.ops.reduce(
+			(accumulator, deltaOperation) => {
+				if (deltaOperation.hasOwnProperty('insert')) accumulator++;
+
+				return accumulator;
+			},
+			0,
+		);
+	}
+
 	removeBase64Image() {
 		const range = this.range;
-		this.quill.deleteText(range.index, 3, 'user');
+		const lengthToDelete = this.calculatePlaceholderInsertLength();
+
+		this.quill.deleteText(range.index, lengthToDelete, 'user');
 	}
 }
 
