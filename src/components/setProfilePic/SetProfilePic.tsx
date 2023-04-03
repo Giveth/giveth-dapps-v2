@@ -4,7 +4,6 @@ import {
 	H5,
 	H6,
 	IconExternalLink16,
-	IconImage32,
 	mediaQueries,
 	neutralColors,
 	P,
@@ -26,12 +25,13 @@ import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import ImageUploader from '../ImageUploader';
 import PfpItem from '../modals/UploadProfilePicModal/PfpItem';
-import { Flex, FlexCenter } from '../styled-components/Flex';
+import { Flex } from '../styled-components/Flex';
 import { TabItem } from '../styled-components/Tabs';
 import { IGiverPFPToken, IUser } from '@/apollo/types/types';
 import { gqlRequest } from '@/helpers/requests';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import Spinner from '../Spinner';
+import { NoPFP } from './NoPFP';
 
 enum EProfilePicTab {
 	LOADING,
@@ -259,28 +259,7 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 						</Flex>
 					) : (
 						<Flex flexDirection='column'>
-							<CustomH5>
-								Your Unique Giveth’s PFP Artwork
-							</CustomH5>
-							<NoNFTContainer>
-								<FlexCenter direction='column'>
-									<IconImage32
-										color={neutralColors.gray[500]}
-									/>
-									<br />
-									<P>Sorry!!</P>
-									<P>
-										This wallet address does not have a
-										unique Giveth’s NFT Yet.
-									</P>
-									<P>
-										<MintLink href={Routes.NFT}>
-											Mint{' '}
-										</MintLink>
-										yours now on the NFT minter page.
-									</P>
-								</FlexCenter>
-							</NoNFTContainer>
+							<NoPFP />
 							<br />
 							<Flex justifyContent='space-between'>
 								<Link href={Routes.NFT}>
@@ -321,24 +300,9 @@ const TextButton = styled(Button)<{ color?: string }>`
 	}
 `;
 
-const CustomH5 = styled(H5)`
+export const CustomH5 = styled(H5)`
 	text-align: left;
 	margin-top: 16px;
-`;
-
-const NoNFTContainer = styled(FlexCenter)`
-	flex-direction: column;
-	border: 1px dotted ${neutralColors.gray[400]};
-	margin: 24px 0 16px 0;
-	padding: 64px 20px;
-	color: ${brandColors.deep[500]};
-	img {
-		margin: 0 0 30px 0;
-	}
-	span {
-		cursor: pointer;
-		color: ${brandColors.pinky[500]};
-	}
 `;
 
 const SelectedPFPContainer = styled.div`
@@ -356,11 +320,6 @@ const CustomLink = styled.a`
 	align-items: center;
 	gap: 8px;
 	max-width: fit-content;
-`;
-
-const MintLink = styled(Link)`
-	max-width: fit-content;
-	color: ${brandColors.pinky[500]};
 `;
 
 const NFTsButtonsContainer = styled(Flex)`
