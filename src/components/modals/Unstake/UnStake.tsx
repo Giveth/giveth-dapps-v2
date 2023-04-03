@@ -32,8 +32,8 @@ import { LockupDetailsModal } from '../LockupDetailsModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { useStakingPool } from '@/hooks/useStakingPool';
+import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 
 interface IUnStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
@@ -71,15 +71,21 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 	const [unStakeState, setUnstakeState] = useState<StakeState>(
 		StakeState.UNSTAKE,
 	);
-	const { stakedAmount, notStakedAmount: maxAmount } = useStakingPool(
-		getGivStakingConfig(config.XDAI_CONFIG),
+	const { sdh } = useTokenDistroHelper(
+		poolStakingConfig.network,
+		regenStreamConfig,
 	);
+	const userGIVLocked = sdh.getUserGIVLockedBalance();
+	const { stakedAmount } = useStakingPool(poolStakingConfig);
 	const { library, chainId } = useWeb3React();
 	const { title, type, LM_ADDRESS, GARDEN_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
 	const isGIVStaking = type === StakingType.GIV_LM;
 	const isGIVpower = isGIVStaking && chainId === config.XDAI_NETWORK_NUMBER;
+	const maxAmount = isGIVpower
+		? stakedAmount.sub(userGIVLocked.balance)
+		: stakedAmount;
 
 	const onWithdraw = async () => {
 		setUnstakeState(StakeState.UNSTAKING);
