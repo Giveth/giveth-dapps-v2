@@ -9,8 +9,7 @@ export const regexList = {
 	instagram:
 		/(?:(?:http|https):\/\/)?(?:www.)?(?:instagram.com|instagr.am|instagr.com)\/(\w+)/,
 	linkedin: /^(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile)/,
-	youtube:
-		/^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube(-nocookie)?\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/,
+	youtube: /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/,
 	tooShort: /^.{3,}$/,
 };
 
