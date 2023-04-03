@@ -160,6 +160,7 @@ const formats = [
 	'image',
 	'video',
 	'emoji',
+	'imageBlot',
 ];
 interface ITextRichWithQuillProps {
 	value: string;
