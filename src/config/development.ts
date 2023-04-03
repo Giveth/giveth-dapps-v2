@@ -36,7 +36,7 @@ const config: EnvConfig = {
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
 
-	OPENSEA_ADDRESS: 'https://testnets.opensea.io/',
+	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
 		...networksParams[5],
 		DAI_CONTRACT_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',

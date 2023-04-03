@@ -99,13 +99,18 @@ export const NFTMintIndex = () => {
 										)}
 									</DescCenter>
 									<a
-										href={config.OPENSEA_ADDRESS + account}
+										href={
+											config.RARIBLE_ADDRESS +
+											'user/' +
+											account +
+											'/owned'
+										}
 										target='_blank'
 										rel='noreferrer'
 									>
-										<OpenSeaLink>
+										<RaribleLink>
 											View on Rarible
-										</OpenSeaLink>
+										</RaribleLink>
 									</a>
 									<Image
 										src='/images/yellow_flower_full.svg'
@@ -237,7 +242,7 @@ const DescCenter = styled(Desc)`
 	text-align: center;
 `;
 
-const OpenSeaLink = styled(ButtonText)`
+const RaribleLink = styled(ButtonText)`
 	color: ${brandColors.deep[100]};
 	margin-bottom: 32px;
 	display: block;
