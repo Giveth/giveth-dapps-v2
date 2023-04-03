@@ -11,6 +11,7 @@ import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import { useAppSelector } from '@/features/hooks';
 import { isUserRegistered } from '@/lib/helpers';
+import AlreadyRegistered from '@/components/views/onboarding/AlreadyRegistered';
 
 const StatesLabel = [
 	'Register on Giveth',
@@ -31,7 +32,7 @@ export interface IOnboard {
 }
 
 const OnboardView = () => {
-	const [step, setStep] = useState(OnboardSteps.PHOTO);
+	const [step, setStep] = useState(OnboardSteps.INFO);
 	const [isFirstRegistration, setFirstRegistration] = useState(true);
 	const [firstLoading, setFirstLoading] = useState(true); // To prevent first flickering
 
@@ -45,7 +46,7 @@ const OnboardView = () => {
 		if (userData?.isSignedIn) {
 			// Do not show "Already completed profile" message when user completes first step
 			setFirstRegistration(!isRegistered);
-			setStep(OnboardSteps.PHOTO);
+			setStep(OnboardSteps.INFO);
 			setFirstLoading(false);
 		}
 	}, [userData?.isSignedIn]);
@@ -56,8 +57,8 @@ const OnboardView = () => {
 		return <WalletNotConnected />;
 	} else if (!isSignedIn) {
 		return <UserNotSignedIn />;
-		// } else if (isRegistered && !isFirstRegistration) {
-		// 	return <AlreadyRegistered />;
+	} else if (isRegistered && !isFirstRegistration) {
+		return <AlreadyRegistered />;
 	}
 
 	return (
