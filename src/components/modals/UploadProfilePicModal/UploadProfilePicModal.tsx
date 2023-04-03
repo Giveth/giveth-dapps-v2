@@ -200,18 +200,17 @@ const UploadProfilePicModal = ({
 											</P>
 											<CustomLink
 												href={
-													config.OPENSEA_ADDRESS +
-													'assets/' +
-													config.MAINNET_CONFIG.chainName.toLowerCase() +
-													'/' +
+													config.RARIBLE_ADDRESS +
+													'token/' +
 													selectedPFP.id.replace(
 														'-',
-														'/',
+														':',
 													)
 												}
 												target='_blank'
+												rel='noopener noreferrer'
 											>
-												View on OpenSea{' '}
+												View on Rarible{' '}
 												<IconExternalLink16 />
 											</CustomLink>
 										</Flex>
