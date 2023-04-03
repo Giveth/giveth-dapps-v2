@@ -24,13 +24,14 @@ import { useAppDispatch } from '@/features/hooks';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
-import ImageUploader from './ImageUploader';
-import PfpItem from './modals/UploadProfilePicModal/PfpItem';
-import { Flex, FlexCenter } from './styled-components/Flex';
-import { TabItem } from './styled-components/Tabs';
+import ImageUploader from '../ImageUploader';
+import PfpItem from '../modals/UploadProfilePicModal/PfpItem';
+import { Flex, FlexCenter } from '../styled-components/Flex';
+import { TabItem } from '../styled-components/Tabs';
 import { IGiverPFPToken, IUser } from '@/apollo/types/types';
 import { gqlRequest } from '@/helpers/requests';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
+import Spinner from '../Spinner';
 
 enum EProfilePicTab {
 	LOADING,
@@ -43,13 +44,11 @@ const tabs = [
 	{ id: EProfilePicTab.PFP, title: 'My NFTs' },
 ];
 
-export interface IUploadSelectProfilePic {
+export interface ISetProfilePic {
 	user: IUser;
 }
 
-export const UploadSelectProfilePic: FC<IUploadSelectProfilePic> = ({
-	user,
-}) => {
+export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 	const useUploadProps = useUpload();
 	const { formatMessage } = useIntl();
 	const [activeTab, setActiveTab] = useState(EProfilePicTab.LOADING);
@@ -169,7 +168,7 @@ export const UploadSelectProfilePic: FC<IUploadSelectProfilePic> = ({
 					</TabItem>
 				))}
 			</Flex>
-			{activeTab === EProfilePicTab.LOADING && <div></div>}
+			{activeTab === EProfilePicTab.LOADING && <Spinner />}
 			{activeTab === EProfilePicTab.UPLOAD && (
 				<Flex flexDirection='column' gap='36px'>
 					<ImageUploader {...useUploadProps} />
