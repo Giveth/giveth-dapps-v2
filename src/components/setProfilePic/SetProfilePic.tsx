@@ -152,7 +152,7 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 			}
 		};
 		compareHashes();
-	}, []);
+	}, [pfpData, user.avatar]);
 
 	return (
 		<Wrapper>
