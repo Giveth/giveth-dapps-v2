@@ -26,6 +26,7 @@ import Spinner from '../Spinner';
 import { NoPFP } from './NoPFP';
 import { useAvatar } from '@/hooks/useAvatar';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
+import NFTButtons from '../modals/UploadProfilePicModal/NFTButtons';
 
 enum EProfilePicTab {
 	LOADING,
@@ -87,7 +88,6 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 			fetchPFPInfo(user.walletAddress);
 		}
 	}, [user]);
-	console.log('pfpData', pfpData);
 
 	useEffect(() => {
 		const compareHashes = () => {
@@ -190,28 +190,13 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 									</Flex>
 								</SelectedPFPContainer>
 							)}
-							<NFTsButtonsContainer
-								flexDirection='row'
-								justifyContent='space-between'
-							>
-								<Button
-									buttonType='secondary'
-									label='SAVE'
-									disabled={!nftUrl()}
-									onClick={() =>
-										onSaveAvatar(onDelete, nftUrl(), url)
-									}
-								/>
-								<TextButton
-									buttonType='texty'
-									label={formatMessage({
-										id: 'label.cancel',
-									})}
-									onClick={() => {
-										setSelectedPFP(undefined);
-									}}
-								/>
-							</NFTsButtonsContainer>
+							<NFTButtons
+								saveAvatar={() =>
+									onSaveAvatar(onDelete, nftUrl(), url)
+								}
+								setSelectedPFP={setSelectedPFP}
+								nftUrl={nftUrl}
+							/>
 						</Flex>
 					) : (
 						<Flex flexDirection='column'>
@@ -276,12 +261,4 @@ const CustomLink = styled.a`
 	align-items: center;
 	gap: 8px;
 	max-width: fit-content;
-`;
-
-const NFTsButtonsContainer = styled(Flex)`
-	margin-bottom: 60px;
-
-	${mediaQueries.tablet} {
-		margin-bottom: 0;
-	}
 `;
