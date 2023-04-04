@@ -19,7 +19,7 @@ const SayHelloSection = () => {
 		<OverviewContainer>
 			<Container>
 				<FlexContainer>
-					<Flex flexDirection='column' gap='24px'>
+					<TextsContainer flexDirection='column' gap='24px'>
 						<ColoredD3>Say Hello to...</ColoredD3>
 						<D3>The Givers </D3>
 						<QuoteText>
@@ -44,7 +44,7 @@ const SayHelloSection = () => {
 								linkType='primary'
 							/>
 						</CustomLink> */}
-					</Flex>
+					</TextsContainer>
 					<CustomImage
 						src={'/images/nft/pfp-o-5.png'}
 						width={450}
@@ -78,6 +78,11 @@ const OverviewContainer = styled.div`
 const FlexContainer = styled(Flex)`
 	position: relative;
 	z-index: 1;
+	justify-content: space-between;
+`;
+
+const TextsContainer = styled(Flex)`
+	max-width: 580px;
 `;
 
 const MintNowButton = styled(ButtonLink)`
