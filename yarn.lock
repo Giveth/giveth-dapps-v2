@@ -7512,11 +7512,6 @@ quill-emoji@^0.2.0:
     emoji-data-css "^1.0.1"
     fuse.js "^3.3.0"
 
-quill-image-drop-and-paste@^1.2.11:
-  version "1.2.14"
-  resolved "https://registry.yarnpkg.com/quill-image-drop-and-paste/-/quill-image-drop-and-paste-1.2.14.tgz#1fbde3adc344f1c68604654472ea99c77a409e8e"
-  integrity sha512-64AULO5Ei41u1oXkNOeU2+h7QmYBH1/bmHgtU9wh2IVjNfHPMEd3/P4O4X/+m0R78zH3KrX1PqYcl8gNG3Ld2A==
-
 quill-image-resize-module@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/quill-image-resize-module/-/quill-image-resize-module-3.0.0.tgz#0fd93746a837336d95b2f536140416a623c71771"
