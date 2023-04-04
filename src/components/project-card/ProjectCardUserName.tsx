@@ -1,14 +1,13 @@
 import { FC } from 'react';
-import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
+import { GLink, neutralColors } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
-import Image from 'next/image';
 import { addressToUserView, slugToProjectView } from '@/lib/routeCreators';
-import { PaddedRow } from './ProjectCard';
 import { IAdminUser } from '@/apollo/types/types';
-import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import { Flex } from '../styled-components/Flex';
 import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
+import { PFP } from '../PFP';
+import { StyledPaddedRow } from './ProjectCard';
 
 interface IProjectCardUserName {
 	adminUser: IAdminUser;
@@ -29,7 +28,7 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 	);
 
 	return (
-		<PaddedRow style={{ marginTop: '6px' }}>
+		<StyledPaddedRow style={{ marginTop: '6px' }}>
 			{adminUser?.name && !isForeignOrg && (
 				<Link
 					href={addressToUserView(
@@ -38,12 +37,7 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 				>
 					{pfpToken ? (
 						<Flex gap='8px'>
-							<Image
-								src={convertIPFSToHTTPS(pfpToken.imageIpfs)}
-								width={24}
-								height={24}
-								alt=''
-							/>
+							<PFP imageIpfs={pfpToken.imageIpfs} />
 							<Author bold size='Big'>
 								{name || '\u200C'}
 							</Author>
@@ -58,7 +52,7 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 					<br />
 				</Author>
 			</Link>
-		</PaddedRow>
+		</StyledPaddedRow>
 	);
 };
 
@@ -70,8 +64,5 @@ const Author = styled(GLink)<IAuthor>`
 	color: ${neutralColors.gray[700]};
 	margin-bottom: 16px;
 	display: block;
-	&:hover {
-		color: ${brandColors.pinky[500]};
-	}
 	font-weight: ${props => (props.bold ? 500 : 400)};
 `;
