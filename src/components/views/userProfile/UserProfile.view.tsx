@@ -27,9 +27,6 @@ import ExternalLink from '@/components/ExternalLink';
 import IncompleteProfileToast from '@/components/views/userProfile/IncompleteProfileToast';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
-import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
-import { gqlRequest } from '@/helpers/requests';
-import config from '@/configuration';
 import UploadProfilePicModal from '@/components/modals/UploadProfilePicModal/UploadProfilePicModal';
 
 export enum EOrderBy {
@@ -49,12 +46,6 @@ export interface IUserProfileView {
 	myAccount?: boolean;
 }
 
-export interface IUserNFT {
-	id: string;
-	imageIpfs: string;
-	tokenId: number;
-}
-
 const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const dispatch = useAppDispatch();
 	const { isSignedIn } = useAppSelector(state => state.user);
@@ -64,41 +55,16 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showUploadProfileModal, setShowUploadProfileModal] = useState(false);
-	const [pfpData, setPfpData] = useState<IUserNFT[]>();
 
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
 	const showCompleteProfile =
 		!isUserRegistered(user) && showIncompleteWarning && myAccount;
 
 	useEffect(() => {
-		const fetchPFPInfo = async (walletAddress: string) => {
-			try {
-				const query = buildUsersPfpInfoQuery([walletAddress]);
-				const { data } = await gqlRequest(
-					config.MAINNET_CONFIG.subgraphAddress,
-					false,
-					query,
-				);
-				if (data[`user_${walletAddress}`]) {
-					console.log(
-						'data[`user_${walletAddress}`]',
-						data[`user_${walletAddress}`],
-						user,
-					);
-				}
-				console.log('data', data);
-				setPfpData(data[`user_${walletAddress}`]);
-			} catch (error) {
-				console.error('error', error);
-			}
-		};
 		if (myAccount && !isSignedIn) {
 			dispatch(setShowSignWithWallet(true));
 		}
-		if (user?.walletAddress) {
-			fetchPFPInfo(user.walletAddress);
-		}
-	}, [user, isSignedIn, myAccount, dispatch]);
+	}, [dispatch, isSignedIn, myAccount]);
 
 	if (myAccount && !isSignedIn)
 		return (
@@ -175,7 +141,6 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 				<UploadProfilePicModal
 					setShowModal={setShowUploadProfileModal}
 					user={user}
-					pfpData={pfpData}
 				/>
 			)}
 		</>
