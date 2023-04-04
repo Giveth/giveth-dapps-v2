@@ -137,7 +137,7 @@ const modules = (projectId?: any) => {
 		imageUploader: {
 			upload: async (file: any) => {
 				const url = await uploadImage(file, projectId);
-				console.log('url', url);
+				console.log('Image uploaded Url:', url);
 				return url;
 			},
 		},
