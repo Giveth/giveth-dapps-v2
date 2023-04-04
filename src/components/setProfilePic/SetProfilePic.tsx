@@ -11,16 +11,8 @@ import {
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useMutation } from '@apollo/client';
-import { captureException } from '@sentry/nextjs';
-import { useWeb3React } from '@web3-react/core';
 import Link from 'next/link';
 import useUpload from '@/hooks/useUpload';
-import { UPDATE_USER } from '@/apollo/gql/gqlUser';
-import { gToast, ToastType } from '@/components/toasts';
-import { fetchUserByAddress } from '@/features/user/user.thunks';
-import { useAppDispatch } from '@/features/hooks';
-import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import ImageUploader from '../ImageUploader';
@@ -32,6 +24,8 @@ import { gqlRequest } from '@/helpers/requests';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import Spinner from '../Spinner';
 import { NoPFP } from './NoPFP';
+import { useAvatar } from '@/hooks/useAvatar';
+import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 
 enum EProfilePicTab {
 	LOADING,
@@ -49,17 +43,18 @@ export interface ISetProfilePic {
 }
 
 export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
+	const { activeTab, setActiveTab, onSaveAvatar } = useAvatar();
 	const useUploadProps = useUpload();
+	const { url, onDelete } = useUploadProps;
+
 	const { formatMessage } = useIntl();
-	const [activeTab, setActiveTab] = useState(EProfilePicTab.LOADING);
 	const [selectedPFP, setSelectedPFP] = useState<IGiverPFPToken>();
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
 
-	const dispatch = useAppDispatch();
-	const { account } = useWeb3React();
-	const [updateUser] = useMutation(UPDATE_USER);
-	const { url, onDelete } = useUploadProps;
-
+	const nftUrl = () => {
+		if (!selectedPFP) return undefined;
+		return convertIPFSToHTTPS(selectedPFP?.imageIpfs);
+	};
 	useEffect(() => {
 		const fetchPFPInfo = async (walletAddress: string) => {
 			try {
@@ -91,51 +86,8 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 		if (user?.walletAddress) {
 			fetchPFPInfo(user.walletAddress);
 		}
-	}, [user, dispatch]);
+	}, [user]);
 	console.log('pfpData', pfpData);
-
-	const nftUrl = selectedPFP?.imageIpfs
-		? convertIPFSToHTTPS(selectedPFP?.imageIpfs)
-		: undefined;
-
-	const handleAvatar = () => {
-		if (activeTab === 1) {
-			return url;
-		} else {
-			return nftUrl;
-		}
-	};
-
-	const onSaveAvatar = async () => {
-		try {
-			const { data: response } = await updateUser({
-				variables: {
-					avatar: handleAvatar(),
-				},
-			});
-
-			if (response.updateUser) {
-				account && dispatch(fetchUserByAddress(account));
-				gToast('Profile Photo updated.', {
-					type: ToastType.SUCCESS,
-					title: 'Success',
-				});
-				onDelete();
-			} else {
-				throw 'updateUser false';
-			}
-		} catch (error: any) {
-			gToast('Failed to update your information. Please try again.', {
-				type: ToastType.DANGER,
-				title: error.message,
-			});
-			captureException(error, {
-				tags: {
-					section: 'onSaveAvatar',
-				},
-			});
-		}
-	};
 
 	useEffect(() => {
 		const compareHashes = () => {
@@ -177,7 +129,9 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 							buttonType='secondary'
 							label='SAVE'
 							disabled={!url}
-							onClick={onSaveAvatar}
+							onClick={() =>
+								onSaveAvatar(onDelete, nftUrl(), url)
+							}
 						/>
 						<TextButton
 							buttonType='texty'
@@ -243,8 +197,10 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 								<Button
 									buttonType='secondary'
 									label='SAVE'
-									disabled={!nftUrl}
-									onClick={onSaveAvatar}
+									disabled={!nftUrl()}
+									onClick={() =>
+										onSaveAvatar(onDelete, nftUrl(), url)
+									}
 								/>
 								<TextButton
 									buttonType='texty'
