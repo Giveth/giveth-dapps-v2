@@ -16,7 +16,7 @@ export const UserWithPFPInCell: FC<IUserWithPFPInCell> = ({ user }) => {
 		user?.name || shortenAddress(user.walletAddress?.toLowerCase());
 	return pfpToken ? (
 		<Flex gap='8px'>
-			<StyledPFP imageIpfs={pfpToken.imageIpfs} />
+			<StyledPFP pfpToken={pfpToken} />
 			<Bold>{name || '\u200C'}</Bold>
 		</Flex>
 	) : (

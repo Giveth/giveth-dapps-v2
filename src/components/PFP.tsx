@@ -3,21 +3,30 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { brandColors } from '@giveth/ui-design-system';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
+import { IconWithTooltip } from './IconWithToolTip';
+import { IGiverPFPToken } from '@/apollo/types/types';
 interface IPFPProps {
-	imageIpfs: string;
+	pfpToken: IGiverPFPToken;
 	className?: string;
 }
 
-export const PFP: FC<IPFPProps> = ({ imageIpfs, className }) => {
+export const PFP: FC<IPFPProps> = ({ pfpToken, className }) => {
 	return (
-		<StyledImage
-			className={className}
-			src={convertIPFSToHTTPS(imageIpfs)}
-			width={24}
-			height={24}
-			alt=''
-			id='pfp-avatar'
-		/>
+		<IconWithTooltip
+			icon={
+				<StyledImage
+					className={className}
+					src={convertIPFSToHTTPS(pfpToken.imageIpfs)}
+					width={24}
+					height={24}
+					alt=''
+					id='pfp-avatar'
+				/>
+			}
+			direction='bottom'
+		>
+			<div></div>
+		</IconWithTooltip>
 	);
 };
 
