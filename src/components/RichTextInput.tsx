@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 // eslint-disable-next-line import/named
 import ReactQuill, { Quill } from 'react-quill';
-import QuillImageDropAndPaste from 'quill-image-drop-and-paste';
 import styled from 'styled-components';
 import 'react-quill/dist/quill.snow.css';
 import 'quill-emoji/dist/quill-emoji.css';
@@ -31,7 +30,6 @@ const ImageResize = require('quill-image-resize-module').default;
 Quill.register('modules/imageUploader', ImageUploader);
 Quill.register('modules/emoji', Emoji);
 Quill.register('modules/ImageResize', ImageResize);
-Quill.register('modules/imageDropAndPaste', QuillImageDropAndPaste);
 Quill.register('modules/magicUrl', MagicUrl);
 
 const QuillVideo = Quill.import('formats/video');
@@ -87,6 +85,30 @@ Video.tagName = 'DIV';
 
 Quill.register(Video, true);
 
+const uploadImage = async (file: any, projectId: string) => {
+	try {
+		console.log('Uploading image, please wait...');
+		const { data: imageUploaded } = await client.mutate({
+			mutation: UPLOAD_IMAGE,
+			variables: {
+				imageUpload: {
+					image: file,
+					projectId: projectId ? parseFloat(projectId) : null,
+				},
+			},
+		});
+
+		return imageUploaded?.uploadImage?.url;
+	} catch (error) {
+		showToastError(error);
+		captureException(error, {
+			tags: {
+				section: 'QuillRichTextInput',
+			},
+		});
+	}
+};
+
 const modules = (projectId?: any) => {
 	return {
 		toolbar: [
@@ -111,33 +133,12 @@ const modules = (projectId?: any) => {
 			// toggle to add extra line breaks when pasting HTML:
 			matchVisual: false,
 		},
-		imageDropAndPaste: {},
 		ImageResize: {},
 		imageUploader: {
 			upload: async (file: any) => {
-				try {
-					console.log('Uploading image, please wait...');
-					const { data: imageUploaded } = await client.mutate({
-						mutation: UPLOAD_IMAGE,
-						variables: {
-							imageUpload: {
-								image: file,
-								projectId: projectId
-									? parseFloat(projectId)
-									: null,
-							},
-						},
-					});
-
-					return imageUploaded?.uploadImage?.url;
-				} catch (error) {
-					showToastError(error);
-					captureException(error, {
-						tags: {
-							section: 'QuillRichTextInput',
-						},
-					});
-				}
+				const url = await uploadImage(file, projectId);
+				console.log('Image uploaded Url:', url);
+				return url;
 			},
 		},
 	};
@@ -159,6 +160,7 @@ const formats = [
 	'image',
 	'video',
 	'emoji',
+	'imageBlot',
 ];
 interface ITextRichWithQuillProps {
 	value: string;
@@ -257,10 +259,13 @@ const ReactQuillStyled = styled(ReactQuill)<{ noShadow?: boolean }>`
 			word-break: break-word;
 			font-family: 'Red Hat Text', sans-serif;
 			font-size: 16px;
-			p, li, blockquote {
+			p,
+			li,
+			blockquote {
 				line-height: 24px;
 			}
-			h1, h2 {
+			h1,
+			h2 {
 				font-family: 'TeX Gyre Adventor', serif;
 			}
 			.ql-size-small {
@@ -277,7 +282,7 @@ const ReactQuillStyled = styled(ReactQuill)<{ noShadow?: boolean }>`
 	> div:first-of-type {
 		border-width: 2px;
 		border-radius: 8px 8px 0 0;
-		border-color: ${neutralColors.gray[300]}};
+		border-color: ${neutralColors.gray[300]};
 	}
 	> div:last-of-type {
 		border-radius: 0 0 8px 8px;
