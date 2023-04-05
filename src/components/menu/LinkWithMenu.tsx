@@ -2,6 +2,7 @@ import { GLink, IconChevronDown24 } from '@giveth/ui-design-system';
 import { FC, ReactNode, RefObject, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
+import Link from 'next/link';
 import { zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 import { HeaderLink } from '../Header/Header.sc';
@@ -12,12 +13,14 @@ interface ILinkWithMenu {
 	title: string;
 	children: ReactNode;
 	isHeaderShowing: boolean;
+	href: string;
 }
 
 export const LinkWithMenu: FC<ILinkWithMenu> = ({
 	title,
 	isHeaderShowing,
 	children,
+	href,
 }) => {
 	const elRef = useRef<HTMLDivElement>(null);
 	const theme = useAppSelector(state => state.general.theme);
@@ -30,24 +33,26 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({
 	}, [isHeaderShowing]);
 
 	return (
-		<LinkWithMenuContainer
-			onMouseEnter={openMenu}
-			onMouseLeave={closeMenu}
-			ref={elRef}
-			theme={theme}
-		>
-			<GLink size='Big'>{title}</GLink>
-			<ArrowContainer up={showMenu}>
-				<IconChevronDown24 />
-			</ArrowContainer>
-			{menuCondition && (
-				<ItemsProvider close={closeMenu}>
-					<Menu isAnimating={showMenu} parentRef={elRef}>
-						{children}
-					</Menu>
-				</ItemsProvider>
-			)}
-		</LinkWithMenuContainer>
+		<Link href={href}>
+			<LinkWithMenuContainer
+				onMouseEnter={openMenu}
+				onMouseLeave={closeMenu}
+				ref={elRef}
+				theme={theme}
+			>
+				<GLink size='Big'>{title}</GLink>
+				<ArrowContainer up={showMenu}>
+					<IconChevronDown24 />
+				</ArrowContainer>
+				{menuCondition && (
+					<ItemsProvider close={closeMenu}>
+						<Menu isAnimating={showMenu} parentRef={elRef}>
+							{children}
+						</Menu>
+					</ItemsProvider>
+				)}
+			</LinkWithMenuContainer>
+		</Link>
 	);
 };
 

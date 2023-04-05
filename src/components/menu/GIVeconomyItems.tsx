@@ -23,7 +23,7 @@ export const GIVeconomyItems = () => {
 		{
 			title: formatMessage({ id: 'label.an_economy_of_giving' }),
 			label: 'Giveconomy',
-			href: Routes.GIVECONOMY,
+			href: Routes.GIVeconomy,
 		},
 		{
 			title: formatMessage({ id: 'label.governance' }),

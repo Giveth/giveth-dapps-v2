@@ -12,7 +12,7 @@ export const menuRoutes = [
 	{
 		title: 'label.giveconomy',
 		href: [
-			Routes.GIVECONOMY,
+			Routes.GIVeconomy,
 			Routes.GIVbacks,
 			Routes.GIVfarm,
 			Routes.GIVgarden,
