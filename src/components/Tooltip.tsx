@@ -174,6 +174,18 @@ const tooltipStyleCalc = (
 	return style;
 };
 
+const TriangleBase = styled.div`
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-style: solid;
+`;
+
+const Triangle = styled(TriangleBase)`
+	border-width: 0 ${ARROW_SIZE}px ${ARROW_SIZE}px ${ARROW_SIZE}px;
+	border-color: transparent transparent red transparent;
+`;
+
 const TooltipContainer = styled.div<ITooltipDirection>`
 	position: fixed;
 	background-color: black;
