@@ -9,6 +9,7 @@ import { INFTButtons } from './NFTButtons';
 
 interface OnboardButtonsProps extends INFTButtons {
 	callback: () => void;
+	isSaveDisabled: boolean;
 }
 
 const OnboardButtons = ({
@@ -16,6 +17,7 @@ const OnboardButtons = ({
 	setSelectedPFP,
 	nftUrl,
 	callback,
+	isSaveDisabled = true,
 }: OnboardButtonsProps) => {
 	return (
 		<OnboardActionsContainer>
@@ -23,7 +25,7 @@ const OnboardButtons = ({
 				<SaveButton
 					label='SAVE'
 					onClick={saveAvatar}
-					disabled={!nftUrl}
+					disabled={isSaveDisabled}
 					size='medium'
 				/>
 			</Col>
