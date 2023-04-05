@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { IGiverPFPToken } from '@/apollo/types/types';
 
-interface INFTButtons {
+export interface INFTButtons {
 	saveAvatar: () => void;
 	setSelectedPFP: (pfp?: IGiverPFPToken) => void;
 	nftUrl: () => string | undefined;
