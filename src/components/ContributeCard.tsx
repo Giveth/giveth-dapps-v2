@@ -51,7 +51,7 @@ export const ProjectsContributeCard: FC<IUserProfileView> = ({ user }) => {
 				value: user.projectsCount || 0,
 			}}
 			data2={{
-				label: formatMessage({ id: 'label.donantion_received' }),
+				label: formatMessage({ id: 'label.donation_received' }),
 				value: `$${formatUSD(user.totalReceived)}`,
 			}}
 		/>
