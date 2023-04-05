@@ -22,7 +22,7 @@ interface ITooltipProps extends ITooltipDirection {
 	children: ReactNode;
 }
 
-const ARROW_SIZE = 8;
+const ARROW_SIZE = 0;
 
 export const Tooltip: FC<ITooltipProps> = ({
 	parentRef,
