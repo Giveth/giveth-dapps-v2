@@ -28,6 +28,7 @@ import { useAvatar } from '@/hooks/useAvatar';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import NFTButtons from '../modals/UploadProfilePicModal/NFTButtons';
 import { useAppSelector } from '@/features/hooks';
+import OnboardButtons from '../modals/UploadProfilePicModal/OnboardButtons';
 
 enum EProfilePicTab {
 	LOADING,
@@ -40,7 +41,15 @@ const tabs = [
 	{ id: EProfilePicTab.PFP, title: 'My NFTs' },
 ];
 
-export const SetProfilePic = () => {
+interface ISetProfilePic {
+	isOnboarding?: boolean;
+	callback?: () => void;
+}
+
+export const SetProfilePic = ({
+	isOnboarding = false,
+	callback = () => {},
+}: ISetProfilePic) => {
 	const { activeTab, setActiveTab, onSaveAvatar } = useAvatar();
 	const useUploadProps = useUpload();
 	const { url, onDelete } = useUploadProps;
@@ -123,25 +132,44 @@ export const SetProfilePic = () => {
 			{activeTab === EProfilePicTab.UPLOAD && (
 				<Flex flexDirection='column' gap='36px'>
 					<ImageUploader {...useUploadProps} />
-					<Flex flexDirection='row' justifyContent='space-between'>
-						<Button
-							buttonType='secondary'
-							label='SAVE'
-							disabled={!url}
-							onClick={() =>
-								onSaveAvatar(onDelete, nftUrl(), url)
+					{!isOnboarding ? (
+						<Flex
+							flexDirection='row'
+							justifyContent='space-between'
+						>
+							<Button
+								buttonType='secondary'
+								label='SAVE'
+								disabled={!url}
+								onClick={() =>
+									onSaveAvatar(onDelete, nftUrl(), url)
+								}
+							/>
+							<TextButton
+								buttonType='texty'
+								label={formatMessage({
+									id: 'label.cancel',
+								})}
+								onClick={() => {
+									onDelete();
+								}}
+							/>
+						</Flex>
+					) : (
+						<OnboardButtons
+							nftUrl={nftUrl}
+							saveAvatar={() =>
+								onSaveAvatar(onDelete, nftUrl(), url).then(
+									() => {
+										callback && callback();
+									},
+								)
 							}
+							setSelectedPFP={setSelectedPFP}
+							callback={callback}
+							isSaveDisabled={!url}
 						/>
-						<TextButton
-							buttonType='texty'
-							label={formatMessage({
-								id: 'label.cancel',
-							})}
-							onClick={() => {
-								onDelete();
-							}}
-						/>
-					</Flex>
+					)}
 				</Flex>
 			)}
 			{activeTab === EProfilePicTab.PFP && (
@@ -189,13 +217,31 @@ export const SetProfilePic = () => {
 									</Flex>
 								</SelectedPFPContainer>
 							)}
-							<NFTButtons
-								saveAvatar={() =>
-									onSaveAvatar(onDelete, nftUrl(), url)
-								}
-								setSelectedPFP={setSelectedPFP}
-								nftUrl={nftUrl}
-							/>
+							{!isOnboarding ? (
+								<NFTButtons
+									saveAvatar={() =>
+										onSaveAvatar(onDelete, nftUrl(), url)
+									}
+									setSelectedPFP={setSelectedPFP}
+									nftUrl={nftUrl}
+								/>
+							) : (
+								<OnboardButtons
+									nftUrl={nftUrl}
+									saveAvatar={() =>
+										onSaveAvatar(
+											onDelete,
+											nftUrl(),
+											url,
+										).then(() => {
+											callback && callback();
+										})
+									}
+									setSelectedPFP={setSelectedPFP}
+									callback={callback}
+									isSaveDisabled={!nftUrl()}
+								/>
+							)}
 						</Flex>
 					) : (
 						<Flex flexDirection='column'>
