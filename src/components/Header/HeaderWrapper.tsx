@@ -36,7 +36,7 @@ const HeaderLoading = () => {
 					<Link href={Routes.Projects}>
 						<HeaderLink>Projects</HeaderLink>
 					</Link>
-					<Link href={Routes.GIVECONOMY}>
+					<Link href={Routes.GIVeconomy}>
 						<HeaderLink>GIVeconomy</HeaderLink>
 					</Link>
 				</HeaderLinks>
