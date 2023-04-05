@@ -324,7 +324,11 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										<AmountBoxWithPrice
 											amount={sumLiquid}
 											price={calcUSD(
-												formatWeiHelper(sumLiquid),
+												formatWeiHelper(
+													sumLiquid,
+													2,
+													false,
+												),
 											)}
 											tokenSymbol={
 												regenStreamConfig?.rewardTokenSymbol
