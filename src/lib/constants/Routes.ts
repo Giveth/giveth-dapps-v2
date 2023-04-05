@@ -33,7 +33,7 @@ const Routes = {
 	Verification: '/verification',
 	Notifications,
 	NotificationsSettings: Notifications + '/settings',
-	GIVECONOMY: '/giveconomy',
+	GIVeconomy: '/giveconomy',
 	GIVgarden: '/givgarden',
 	GIVfarm: '/givfarm',
 	GIVstream,
