@@ -10,6 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface IPfpItemProps {
 	image: string;
@@ -21,7 +22,7 @@ interface IPfpItemProps {
 const PfpItem = ({ image, isSelected, id, onClick }: IPfpItemProps) => {
 	const convertedImage = convertIPFSToHTTPS(image);
 	return (
-		<Container onClick={onClick} isSelected={isSelected}>
+		<Container direction='column' onClick={onClick} isSelected={isSelected}>
 			<ImageContainer
 				src={convertedImage}
 				alt='pfp'
@@ -34,17 +35,18 @@ const PfpItem = ({ image, isSelected, id, onClick }: IPfpItemProps) => {
 				</SmallCircleWithCheckIconInIt>
 			)}
 			<br />
-			<P>The Givers Collection #{id}</P>
+			<P style={{ marginBottom: '24px' }}>The Givers Collection #{id}</P>
 		</Container>
 	);
 };
 
 export default PfpItem;
 
-const Container = styled.div<{ isSelected: boolean }>`
+const Container = styled(FlexCenter)<{ isSelected: boolean }>`
+	flex-direction: column;
 	background-color: ${neutralColors.gray[100]};
 	width: 250px;
-	height: 300px;
+	height: 324px;
 	box-shadow: ${Shadow.Neutral[500]};
 	border-radius: 8px;
 	border: ${props =>
