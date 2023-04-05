@@ -29,6 +29,7 @@ export const useAvatar = () => {
 		onDelete: () => void,
 		nftUrl?: string,
 		url?: string,
+		callback?: () => void,
 	) => {
 		try {
 			const { data: response } = await updateUser({
@@ -44,6 +45,7 @@ export const useAvatar = () => {
 					title: 'Success',
 				});
 				onDelete();
+				callback && callback();
 			} else {
 				throw 'updateUser false';
 			}
