@@ -8,7 +8,7 @@ import {
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
@@ -19,7 +19,7 @@ import ImageUploader from '../ImageUploader';
 import PfpItem from '../modals/UploadProfilePicModal/PfpItem';
 import { Flex } from '../styled-components/Flex';
 import { TabItem } from '../styled-components/Tabs';
-import { IGiverPFPToken, IUser } from '@/apollo/types/types';
+import { IGiverPFPToken } from '@/apollo/types/types';
 import { gqlRequest } from '@/helpers/requests';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import Spinner from '../Spinner';
@@ -27,6 +27,7 @@ import { NoPFP } from './NoPFP';
 import { useAvatar } from '@/hooks/useAvatar';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import NFTButtons from '../modals/UploadProfilePicModal/NFTButtons';
+import { useAppSelector } from '@/features/hooks';
 
 enum EProfilePicTab {
 	LOADING,
@@ -39,15 +40,11 @@ const tabs = [
 	{ id: EProfilePicTab.PFP, title: 'My NFTs' },
 ];
 
-export interface ISetProfilePic {
-	user: IUser;
-}
-
-export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
+export const SetProfilePic = () => {
 	const { activeTab, setActiveTab, onSaveAvatar } = useAvatar();
 	const useUploadProps = useUpload();
 	const { url, onDelete } = useUploadProps;
-
+	const { userData: user, isLoading } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	const [selectedPFP, setSelectedPFP] = useState<IGiverPFPToken>();
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
@@ -92,7 +89,7 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 	useEffect(() => {
 		const compareHashes = () => {
 			const regex = /(\d+)\.\w+$/;
-			const selectedAvatarHash = user.avatar?.match(regex)?.[0] ?? null;
+			const selectedAvatarHash = user?.avatar?.match(regex)?.[0] ?? null;
 			if (pfpData && pfpData.length > 0) {
 				pfpData.find(pfp => {
 					const pfpHash =
@@ -104,7 +101,7 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 			}
 		};
 		compareHashes();
-	}, [pfpData, user.avatar]);
+	}, [pfpData, user?.avatar]);
 
 	return (
 		<Wrapper>
@@ -120,7 +117,9 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 					</TabItem>
 				))}
 			</Flex>
-			{activeTab === EProfilePicTab.LOADING && <Spinner />}
+			{(activeTab === EProfilePicTab.LOADING || isLoading === true) && (
+				<Spinner />
+			)}
 			{activeTab === EProfilePicTab.UPLOAD && (
 				<Flex flexDirection='column' gap='36px'>
 					<ImageUploader {...useUploadProps} />

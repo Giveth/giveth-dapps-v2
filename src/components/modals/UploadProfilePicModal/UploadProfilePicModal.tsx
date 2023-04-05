@@ -1,17 +1,11 @@
 import { Modal } from '../Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import {
-	ISetProfilePic,
-	SetProfilePic,
-} from '@/components/setProfilePic/SetProfilePic';
+import { SetProfilePic } from '@/components/setProfilePic/SetProfilePic';
 
-interface IUploadProfilePicModal extends IModal, ISetProfilePic {}
+interface IUploadProfilePicModal extends IModal {}
 
-const UploadProfilePicModal = ({
-	setShowModal,
-	user,
-}: IUploadProfilePicModal) => {
+const UploadProfilePicModal = ({ setShowModal }: IUploadProfilePicModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	return (
@@ -21,7 +15,7 @@ const UploadProfilePicModal = ({
 			headerTitle='Upload Your Images or NFTs'
 			headerTitlePosition='left'
 		>
-			<SetProfilePic user={user} />
+			<SetProfilePic />
 		</Modal>
 	);
 };
