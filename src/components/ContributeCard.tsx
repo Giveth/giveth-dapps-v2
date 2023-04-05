@@ -36,7 +36,7 @@ export const DonateContributeCard: FC<IUserProfileView> = ({ user }) => {
 			}}
 			data2={{
 				label: formatMessage({ id: 'label.total_amount_donated' }),
-				value: `${formatUSD(user.totalDonated)}`,
+				value: `$${formatUSD(user.totalDonated)}`,
 			}}
 		/>
 	);
@@ -52,7 +52,7 @@ export const ProjectsContributeCard: FC<IUserProfileView> = ({ user }) => {
 			}}
 			data2={{
 				label: formatMessage({ id: 'label.donantion_received' }),
-				value: `${formatUSD(user.totalReceived)}`,
+				value: `$${formatUSD(user.totalReceived)}`,
 			}}
 		/>
 	);
