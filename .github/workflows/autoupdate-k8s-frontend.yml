@@ -1,0 +1,14 @@
+name: autoupdate-k8s-frontend
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  autoupdate:
+    name: autoupdate
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: chinthakagodawita/autoupdate@v1.7.0
+        env:
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          MERGE_MSG: "Kube Staging branch was auto-updated from develop branch.."
