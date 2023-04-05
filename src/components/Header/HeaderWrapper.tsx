@@ -32,15 +32,15 @@ const HeaderLoading = () => {
 						/>
 					</Logo>
 				</Link>
-				<HeaderLinks theme={theme}>
-					<Link href={Routes.Projects}>
-						<HeaderLink>Projects</HeaderLink>
-					</Link>
-					<Link href={Routes.GIVeconomy}>
-						<HeaderLink>GIVeconomy</HeaderLink>
-					</Link>
-				</HeaderLinks>
 			</Flex>
+			<HeaderLinks theme={theme}>
+				<Link href={Routes.Projects}>
+					<HeaderLink>Projects</HeaderLink>
+				</Link>
+				<Link href={Routes.GIVeconomy}>
+					<HeaderLink>GIVeconomy</HeaderLink>
+				</Link>
+			</HeaderLinks>
 		</StyledHeader>
 	);
 };
