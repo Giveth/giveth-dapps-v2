@@ -32,6 +32,9 @@ export const IconWithTooltip: FC<IIconWithTooltipProps> = ({
 		<IconWithTooltipContainer
 			onMouseEnter={() => setShow(true)}
 			onMouseLeave={() => setShow(false)}
+			onClick={e => {
+				e.stopPropagation(); // make tooltip content clickable without affecting parent
+			}}
 			ref={elRef}
 		>
 			{icon}

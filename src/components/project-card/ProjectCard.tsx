@@ -326,6 +326,15 @@ export const PaddedRow = styled(Flex)`
 	padding: 0 ${SIDE_PADDING};
 `;
 
+export const StyledPaddedRow = styled(PaddedRow)`
+	& > a span:hover {
+		color: ${brandColors.pinky[500]} !important;
+	}
+	&:hover #pfp-avatar {
+		box-shadow: 0px 0.762881px 4.57729px 1.14432px rgba(225, 69, 141, 0.5);
+	}
+`;
+
 const ActionButtons = styled(PaddedRow)`
 	margin: 25px 0;
 	gap: 16px;
