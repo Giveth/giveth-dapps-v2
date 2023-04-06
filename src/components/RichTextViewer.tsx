@@ -1,13 +1,50 @@
 import ReactQuill from 'react-quill';
 import styled from 'styled-components';
+import { neutralColors } from '@giveth/ui-design-system';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { Shadow } from '@/components/styled-components/Shadow';
+import { getRequest } from '@/helpers/requests';
 
 const RichTextViewer = (props: { content?: string }) => {
+	const [translated, setTranslated] = useState(props.content);
+
+	const router = useRouter();
+	const locale = router ? router.locale : 'en';
+
+	const translate = async () => {
+		const res = await getRequest(
+			'https://translate.googleapis.com/translate_a/t',
+			false,
+			{
+				client: 'dict-chrome-ex',
+				sl: 'auto',
+				tl: locale,
+				q: props.content,
+			},
+		);
+		setTranslated(res[0][0]);
+	};
+
 	return (
 		<Wrapper>
-			<ReactQuill value={props.content} readOnly theme='bubble' />
+			<TranslateBox onClick={translate}>Translate this</TranslateBox>
+			<ReactQuill value={translated} readOnly theme='bubble' />
 		</Wrapper>
 	);
 };
+
+const TranslateBox = styled.div`
+	margin: 0 auto;
+	width: fit-content;
+	background-color: white;
+	border-radius: 20px;
+	border: 2px solid ${neutralColors.gray[300]};
+	color: ${neutralColors.gray[700]};
+	cursor: pointer;
+	padding: 8px 16px;
+	box-shadow: ${Shadow.Giv[400]};
+`;
 
 const Wrapper = styled.div`
 	img {
