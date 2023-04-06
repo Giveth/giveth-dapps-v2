@@ -132,7 +132,21 @@ export const SetProfilePic = ({
 			{activeTab === EProfilePicTab.UPLOAD && (
 				<Flex flexDirection='column' gap='36px'>
 					<ImageUploader {...useUploadProps} />
-					{!isOnboarding ? (
+					{isOnboarding ? (
+						<OnboardButtons
+							nftUrl={nftUrl}
+							saveAvatar={() =>
+								onSaveAvatar(onDelete, nftUrl(), url).then(
+									() => {
+										callback && callback();
+									},
+								)
+							}
+							setSelectedPFP={setSelectedPFP}
+							callback={callback}
+							isSaveDisabled={!url}
+						/>
+					) : (
 						<Flex
 							flexDirection='row'
 							justifyContent='space-between'
@@ -155,20 +169,6 @@ export const SetProfilePic = ({
 								}}
 							/>
 						</Flex>
-					) : (
-						<OnboardButtons
-							nftUrl={nftUrl}
-							saveAvatar={() =>
-								onSaveAvatar(onDelete, nftUrl(), url).then(
-									() => {
-										callback && callback();
-									},
-								)
-							}
-							setSelectedPFP={setSelectedPFP}
-							callback={callback}
-							isSaveDisabled={!url}
-						/>
 					)}
 				</Flex>
 			)}
@@ -217,15 +217,7 @@ export const SetProfilePic = ({
 									</Flex>
 								</SelectedPFPContainer>
 							)}
-							{!isOnboarding ? (
-								<NFTButtons
-									saveAvatar={() =>
-										onSaveAvatar(onDelete, nftUrl(), url)
-									}
-									setSelectedPFP={setSelectedPFP}
-									nftUrl={nftUrl}
-								/>
-							) : (
+							{isOnboarding ? (
 								<OnboardButtons
 									nftUrl={nftUrl}
 									saveAvatar={() =>
@@ -240,6 +232,14 @@ export const SetProfilePic = ({
 									setSelectedPFP={setSelectedPFP}
 									callback={callback}
 									isSaveDisabled={!nftUrl()}
+								/>
+							) : (
+								<NFTButtons
+									saveAvatar={() =>
+										onSaveAvatar(onDelete, nftUrl(), url)
+									}
+									setSelectedPFP={setSelectedPFP}
+									nftUrl={nftUrl}
 								/>
 							)}
 						</Flex>
