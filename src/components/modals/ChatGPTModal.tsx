@@ -16,6 +16,7 @@ import type { IModal } from '@/types/common';
 import type { FC } from 'react';
 
 const accessKey = process.env.NEXT_PUBLIC_UNSPLASH_API!;
+const openAIKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY!;
 const unsplash = createApi({ accessKey });
 const perPage = 4;
 const orientation = 'landscape';
@@ -69,8 +70,7 @@ export const ChatGPTModal: FC<IChatGPTModal> = props => {
 					temperature: 0.7,
 				},
 				{
-					Authorization:
-						'Bearer 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',
+					Authorization: `Bearer ${openAIKey}`,
 				},
 			);
 			const resContent = res?.choices[0]?.message?.content;
