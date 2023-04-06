@@ -1,14 +1,17 @@
-name: autoupdate-k8s-frontend
+name: autoupdate
 on:
-  push:
+  pull_request:
     branches:
       - develop
+    types:
+      - closed
 jobs:
   autoupdate:
     name: autoupdate
-    runs-on: ubuntu-22.04
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
     steps:
       - uses: chinthakagodawita/autoupdate@v1.7.0
         env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          GITHUB_TOKEN: '${{ secrets.TOKEN_K8S }}'
           MERGE_MSG: "Kube Staging branch was auto-updated from develop branch.."
