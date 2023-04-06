@@ -140,7 +140,6 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 			{showUploadProfileModal && (
 				<UploadProfilePicModal
 					setShowModal={setShowUploadProfileModal}
-					user={user}
 				/>
 			)}
 		</>

@@ -8,30 +8,27 @@ import {
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useMutation } from '@apollo/client';
-import { captureException } from '@sentry/nextjs';
-import { useWeb3React } from '@web3-react/core';
 import Link from 'next/link';
 import useUpload from '@/hooks/useUpload';
-import { UPDATE_USER } from '@/apollo/gql/gqlUser';
-import { gToast, ToastType } from '@/components/toasts';
-import { fetchUserByAddress } from '@/features/user/user.thunks';
-import { useAppDispatch } from '@/features/hooks';
-import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import ImageUploader from '../ImageUploader';
 import PfpItem from '../modals/UploadProfilePicModal/PfpItem';
 import { Flex } from '../styled-components/Flex';
 import { TabItem } from '../styled-components/Tabs';
-import { IGiverPFPToken, IUser } from '@/apollo/types/types';
+import { IGiverPFPToken } from '@/apollo/types/types';
 import { gqlRequest } from '@/helpers/requests';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import Spinner from '../Spinner';
 import { NoPFP } from './NoPFP';
+import { useAvatar } from '@/hooks/useAvatar';
+import { convertIPFSToHTTPS } from '@/helpers/blockchain';
+import NFTButtons from '../modals/UploadProfilePicModal/NFTButtons';
+import { useAppSelector } from '@/features/hooks';
+import OnboardButtons from '../modals/UploadProfilePicModal/OnboardButtons';
 
 enum EProfilePicTab {
 	LOADING,
@@ -44,22 +41,27 @@ const tabs = [
 	{ id: EProfilePicTab.PFP, title: 'My NFTs' },
 ];
 
-export interface ISetProfilePic {
-	user: IUser;
+interface ISetProfilePic {
+	isOnboarding?: boolean;
+	callback?: () => void;
 }
 
-export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
+export const SetProfilePic = ({
+	isOnboarding = false,
+	callback = () => {},
+}: ISetProfilePic) => {
+	const { activeTab, setActiveTab, onSaveAvatar } = useAvatar();
 	const useUploadProps = useUpload();
+	const { url, onDelete } = useUploadProps;
+	const { userData: user, isLoading } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
-	const [activeTab, setActiveTab] = useState(EProfilePicTab.LOADING);
 	const [selectedPFP, setSelectedPFP] = useState<IGiverPFPToken>();
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
 
-	const dispatch = useAppDispatch();
-	const { account } = useWeb3React();
-	const [updateUser] = useMutation(UPDATE_USER);
-	const { url, onDelete } = useUploadProps;
-
+	const nftUrl = () => {
+		if (!selectedPFP) return undefined;
+		return convertIPFSToHTTPS(selectedPFP?.imageIpfs);
+	};
 	useEffect(() => {
 		const fetchPFPInfo = async (walletAddress: string) => {
 			try {
@@ -91,56 +93,12 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 		if (user?.walletAddress) {
 			fetchPFPInfo(user.walletAddress);
 		}
-	}, [user, dispatch]);
-	console.log('pfpData', pfpData);
-
-	const nftUrl = selectedPFP?.imageIpfs
-		? convertIPFSToHTTPS(selectedPFP?.imageIpfs)
-		: undefined;
-
-	const handleAvatar = () => {
-		if (activeTab === 1) {
-			return url;
-		} else {
-			return nftUrl;
-		}
-	};
-
-	const onSaveAvatar = async () => {
-		try {
-			const { data: response } = await updateUser({
-				variables: {
-					avatar: handleAvatar(),
-				},
-			});
-
-			if (response.updateUser) {
-				account && dispatch(fetchUserByAddress(account));
-				gToast('Profile Photo updated.', {
-					type: ToastType.SUCCESS,
-					title: 'Success',
-				});
-				onDelete();
-			} else {
-				throw 'updateUser false';
-			}
-		} catch (error: any) {
-			gToast('Failed to update your information. Please try again.', {
-				type: ToastType.DANGER,
-				title: error.message,
-			});
-			captureException(error, {
-				tags: {
-					section: 'onSaveAvatar',
-				},
-			});
-		}
-	};
+	}, [user]);
 
 	useEffect(() => {
 		const compareHashes = () => {
 			const regex = /(\d+)\.\w+$/;
-			const selectedAvatarHash = user.avatar?.match(regex)?.[0] ?? null;
+			const selectedAvatarHash = user?.avatar?.match(regex)?.[0] ?? null;
 			if (pfpData && pfpData.length > 0) {
 				pfpData.find(pfp => {
 					const pfpHash =
@@ -152,7 +110,7 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 			}
 		};
 		compareHashes();
-	}, [pfpData, user.avatar]);
+	}, [pfpData, user?.avatar]);
 
 	return (
 		<Wrapper>
@@ -168,27 +126,50 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 					</TabItem>
 				))}
 			</Flex>
-			{activeTab === EProfilePicTab.LOADING && <Spinner />}
+			{(activeTab === EProfilePicTab.LOADING || isLoading === true) && (
+				<Spinner />
+			)}
 			{activeTab === EProfilePicTab.UPLOAD && (
 				<Flex flexDirection='column' gap='36px'>
 					<ImageUploader {...useUploadProps} />
-					<Flex flexDirection='row' justifyContent='space-between'>
-						<Button
-							buttonType='secondary'
-							label='SAVE'
-							disabled={!url}
-							onClick={onSaveAvatar}
+					{isOnboarding ? (
+						<OnboardButtons
+							nftUrl={nftUrl}
+							saveAvatar={() =>
+								onSaveAvatar(onDelete, nftUrl(), url).then(
+									() => {
+										callback && callback();
+									},
+								)
+							}
+							setSelectedPFP={setSelectedPFP}
+							callback={callback}
+							isSaveDisabled={!url}
 						/>
-						<TextButton
-							buttonType='texty'
-							label={formatMessage({
-								id: 'label.cancel',
-							})}
-							onClick={() => {
-								onDelete();
-							}}
-						/>
-					</Flex>
+					) : (
+						<Flex
+							flexDirection='row'
+							justifyContent='space-between'
+						>
+							<Button
+								buttonType='secondary'
+								label='SAVE'
+								disabled={!url}
+								onClick={() =>
+									onSaveAvatar(onDelete, nftUrl(), url)
+								}
+							/>
+							<TextButton
+								buttonType='texty'
+								label={formatMessage({
+									id: 'label.cancel',
+								})}
+								onClick={() => {
+									onDelete();
+								}}
+							/>
+						</Flex>
+					)}
 				</Flex>
 			)}
 			{activeTab === EProfilePicTab.PFP && (
@@ -236,26 +217,31 @@ export const SetProfilePic: FC<ISetProfilePic> = ({ user }) => {
 									</Flex>
 								</SelectedPFPContainer>
 							)}
-							<NFTsButtonsContainer
-								flexDirection='row'
-								justifyContent='space-between'
-							>
-								<Button
-									buttonType='secondary'
-									label='SAVE'
-									disabled={!nftUrl}
-									onClick={onSaveAvatar}
+							{isOnboarding ? (
+								<OnboardButtons
+									nftUrl={nftUrl}
+									saveAvatar={() =>
+										onSaveAvatar(
+											onDelete,
+											nftUrl(),
+											url,
+										).then(() => {
+											callback && callback();
+										})
+									}
+									setSelectedPFP={setSelectedPFP}
+									callback={callback}
+									isSaveDisabled={!nftUrl()}
 								/>
-								<TextButton
-									buttonType='texty'
-									label={formatMessage({
-										id: 'label.cancel',
-									})}
-									onClick={() => {
-										setSelectedPFP(undefined);
-									}}
+							) : (
+								<NFTButtons
+									saveAvatar={() =>
+										onSaveAvatar(onDelete, nftUrl(), url)
+									}
+									setSelectedPFP={setSelectedPFP}
+									nftUrl={nftUrl}
 								/>
-							</NFTsButtonsContainer>
+							)}
 						</Flex>
 					) : (
 						<Flex flexDirection='column'>
@@ -320,12 +306,4 @@ const CustomLink = styled.a`
 	align-items: center;
 	gap: 8px;
 	max-width: fit-content;
-`;
-
-const NFTsButtonsContainer = styled(Flex)`
-	margin-bottom: 60px;
-
-	${mediaQueries.tablet} {
-		margin-bottom: 0;
-	}
 `;
