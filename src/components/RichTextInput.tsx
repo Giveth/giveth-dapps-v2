@@ -14,7 +14,7 @@ import 'quill-emoji/dist/quill-emoji.css';
 import MagicUrl from 'quill-magic-url';
 // @ts-ignore
 import * as Emoji from 'quill-emoji';
-import { neutralColors, SublineBold } from '@giveth/ui-design-system';
+import { H5, neutralColors, SublineBold } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import ImageUploader from './richImageUploader/imageUploader';
 import { UPLOAD_IMAGE } from '@/apollo/gql/gqlProjects';
@@ -22,6 +22,7 @@ import { client } from '@/apollo/apolloClient';
 import { isSSRMode, showToastError } from '@/lib/helpers';
 import { Relative } from '@/components/styled-components/Position';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { ChatGPTModal } from '@/components/modals/ChatGPTModal';
 
 (window as any).Quill = Quill;
 
@@ -173,6 +174,12 @@ interface ITextRichWithQuillProps {
 	noShadow?: boolean;
 }
 
+export interface IHelpItem {
+	title: string;
+	question: string;
+	type: string;
+}
+
 const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 	value,
 	setValue,
@@ -184,6 +191,8 @@ const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 	noShadow,
 }) => {
 	const [mod, setMod] = useState<any>();
+	const [showGPTModal, setShowGPTModal] = useState(false);
+	const [helpItem, setHelpItem] = useState<IHelpItem>();
 
 	useEffect(() => {
 		setMod(modules(projectId));
@@ -210,9 +219,89 @@ const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 					setIsLimitExceeded={setIsLimitExceeded}
 				/>
 			)}
+			{showGPTModal && (
+				<ChatGPTModal
+					helpItem={helpItem!}
+					userInput={value}
+					setShowModal={setShowGPTModal}
+				/>
+			)}
+			{value && (
+				<>
+					<AskGPT>Ask ChatGPT for help</AskGPT>
+					<ChatGPTBoxWrapper>
+						{chatGPTQuestions.map(i => (
+							<ChatGPTBox
+								onClick={() => {
+									setHelpItem(i);
+									setShowGPTModal(true);
+								}}
+								key={i.title}
+							>
+								{i.title}
+							</ChatGPTBox>
+						))}
+					</ChatGPTBoxWrapper>
+				</>
+			)}
 		</Relative>
 	);
 };
+
+const chatGPTQuestions: IHelpItem[] = [
+	{
+		title: 'create a context for this',
+		question:
+			'I want to collect donations for this project. Create a context for this',
+		type: 'description',
+	},
+	{
+		title: 'summarize this',
+		question: 'Summarize this context for me',
+		type: 'description',
+	},
+	{
+		title: 'choose best title for this',
+		question: 'Choose best title for this',
+		type: 'title',
+	},
+	{
+		title: 'make this attractive for donors',
+		question:
+			'I want to collect donations. Make this attractive for donors',
+		type: 'description',
+	},
+	{
+		title: 'check for grammatical and spelling mistakes',
+		question: 'Check for grammatical and spelling mistakes',
+		type: 'description',
+	},
+	{
+		title: 'Suggest some pictures for this',
+		question:
+			'what is the best keyword to search for pictures related to this context in Unsplash app? just send me the keyword only',
+		type: 'image',
+	},
+];
+
+const ChatGPTBoxWrapper = styled.div`
+	display: flex;
+	gap: 5px;
+	flex-wrap: wrap;
+`;
+
+const AskGPT = styled(H5)`
+	margin: 20px 0 10px;
+`;
+
+const ChatGPTBox = styled.div`
+	background-color: white;
+	border-radius: 20px;
+	border: 2px solid ${neutralColors.gray[300]};
+	color: ${neutralColors.gray[700]};
+	cursor: pointer;
+	padding: 8px 16px;
+`;
 
 const calcLengthOfHTML = (html: string) => {
 	const plainString = html.replace(/<[^>]+>/g, '');
