@@ -8,7 +8,6 @@ import { getRequest } from '@/helpers/requests';
 
 const RichTextViewer = (props: { content?: string }) => {
 	const [translated, setTranslated] = useState(props.content);
-
 	const router = useRouter();
 	const locale = router ? router.locale : 'en';
 
