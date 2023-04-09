@@ -192,31 +192,36 @@ export const SetProfilePic = ({
 									/>
 								))}
 							</Flex>
-							{selectedPFP && (
-								<SelectedPFPContainer>
-									<Flex flexDirection='column' gap='8px'>
-										<H6>
-											The The Givers Collection #
-											{selectedPFP.tokenId}
-										</H6>
-										<P>
-											Short information/summary about the
-											selected PFP
-										</P>
-										<CustomLink
-											href={
-												config.RARIBLE_ADDRESS +
-												'token/' +
-												selectedPFP.id.replace('-', ':')
-											}
-											target='_blank'
-										>
-											View on Rarible{' '}
-											<IconExternalLink16 />
-										</CustomLink>
-									</Flex>
-								</SelectedPFPContainer>
-							)}
+							<SelectedPFPContainerWrapper isOpen={!!selectedPFP}>
+								{selectedPFP && (
+									<SelectedPFPContainer>
+										<Flex flexDirection='column' gap='8px'>
+											<H6>
+												The Givers Collection #
+												{selectedPFP.tokenId}
+											</H6>
+											<P>
+												Short information/summary about
+												the selected PFP
+											</P>
+											<CustomLink
+												href={
+													config.RARIBLE_ADDRESS +
+													'token/' +
+													selectedPFP.id.replace(
+														'-',
+														':',
+													)
+												}
+												target='_blank'
+											>
+												View on Rarible{' '}
+												<IconExternalLink16 />
+											</CustomLink>
+										</Flex>
+									</SelectedPFPContainer>
+								)}
+							</SelectedPFPContainerWrapper>
 							{isOnboarding ? (
 								<OnboardButtons
 									nftUrl={nftUrl}
@@ -298,6 +303,11 @@ const SelectedPFPContainer = styled.div`
 	padding: 16px 24px;
 	border-radius: 8px;
 	text-align: left;
+`;
+
+const SelectedPFPContainerWrapper = styled.div<{ isOpen: boolean }>`
+	height: ${props => (props.isOpen ? '120px' : '0px')};
+	transition: height 0.3s ease-in-out;
 `;
 
 const CustomLink = styled.a`
