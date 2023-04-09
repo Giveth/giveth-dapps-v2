@@ -5,8 +5,6 @@ import {
 	H6,
 	IconExternalLink16,
 	mediaQueries,
-	neutralColors,
-	P,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -193,16 +191,16 @@ export const SetProfilePic = ({
 								))}
 							</Flex>
 							{selectedPFP && (
-								<SelectedPFPContainer>
+								<AttributesWrapper
+									flexDirection='column'
+									gap='16px'
+								>
+									<H6>
+										The The Givers Collection #
+										{selectedPFP.tokenId}
+									</H6>
+									<SelectedPFPContainer></SelectedPFPContainer>
 									<Flex flexDirection='column' gap='8px'>
-										<H6>
-											The The Givers Collection #
-											{selectedPFP.tokenId}
-										</H6>
-										<P>
-											Short information/summary about the
-											selected PFP
-										</P>
 										<CustomLink
 											href={
 												config.RARIBLE_ADDRESS +
@@ -215,7 +213,7 @@ export const SetProfilePic = ({
 											<IconExternalLink16 />
 										</CustomLink>
 									</Flex>
-								</SelectedPFPContainer>
+								</AttributesWrapper>
 							)}
 							{isOnboarding ? (
 								<OnboardButtons
@@ -292,11 +290,9 @@ export const CustomH5 = styled(H5)`
 `;
 
 const SelectedPFPContainer = styled.div`
-	background-color: ${neutralColors.gray[200]};
 	border-left: 6px solid ${brandColors.pinky[500]};
 	margin-top: 8px;
 	padding: 16px 24px;
-	border-radius: 8px;
 	text-align: left;
 `;
 
@@ -306,4 +302,8 @@ const CustomLink = styled.a`
 	align-items: center;
 	gap: 8px;
 	max-width: fit-content;
+`;
+
+const AttributesWrapper = styled(Flex)`
+	text-align: left;
 `;
