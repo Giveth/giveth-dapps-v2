@@ -78,10 +78,10 @@ export const SetProfilePic = ({
 					setPfpData(data[`user_${walletAddress}`]);
 					setActiveTab(EProfilePicTab.PFP);
 				} else {
-					setActiveTab(EProfilePicTab.UPLOAD);
+					setActiveTab(EProfilePicTab.PFP);
 				}
 			} catch (error) {
-				setActiveTab(EProfilePicTab.UPLOAD);
+				setActiveTab(EProfilePicTab.PFP);
 			}
 		};
 		if (user?.walletAddress) {
