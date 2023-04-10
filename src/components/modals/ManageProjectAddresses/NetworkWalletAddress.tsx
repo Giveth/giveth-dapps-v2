@@ -1,6 +1,12 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { Button, Caption, IconChevronRight16 } from '@giveth/ui-design-system';
+import {
+	Button,
+	Caption,
+	IconChevronRight16,
+	neutralColors,
+	Subline,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { IWalletAddress } from '@/apollo/types/types';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
@@ -44,6 +50,9 @@ export const NetworkWalletAddress: FC<INetworkWalletAddress> = ({
 					/>
 				)}
 			</Flex>
+			<Address>
+				{networkWallet.address ? networkWallet.address : '---'}
+			</Address>
 		</Wrapper>
 	);
 };
@@ -55,4 +64,11 @@ const Wrapper = styled(Flex)`
 
 const StyledBadge = styled(Badge)`
 	width: fit-content;
+`;
+
+const Address = styled(Subline)`
+	background-color: ${neutralColors.gray[200]};
+	color: ${neutralColors.gray[700]};
+	border-radius: 16px;
+	padding: 4px 8px;
 `;
