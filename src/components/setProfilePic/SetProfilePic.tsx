@@ -106,7 +106,11 @@ export const SetProfilePic = ({
 		compareHashes();
 	}, [pfpData, user?.avatar]);
 
-	return (
+	return activeTab === EProfilePicTab.LOADING || isLoading === true ? (
+		<Wrapper>
+			<Spinner />
+		</Wrapper>
+	) : (
 		<Wrapper>
 			<Flex gap='16px'>
 				{tabs.map(i => (
@@ -120,9 +124,6 @@ export const SetProfilePic = ({
 					</TabItem>
 				))}
 			</Flex>
-			{(activeTab === EProfilePicTab.LOADING || isLoading === true) && (
-				<Spinner />
-			)}
 			{activeTab === EProfilePicTab.UPLOAD && (
 				<Flex flexDirection='column' gap='36px'>
 					<ImageUploader {...useUploadProps} />
