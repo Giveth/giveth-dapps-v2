@@ -13,9 +13,9 @@ interface OnboardButtonsProps extends INFTButtons {
 }
 
 const OnboardButtons = ({
+	loading,
 	saveAvatar,
 	setSelectedPFP,
-	nftUrl,
 	callback,
 	isSaveDisabled = true,
 }: OnboardButtonsProps) => {
@@ -27,6 +27,7 @@ const OnboardButtons = ({
 					onClick={saveAvatar}
 					disabled={isSaveDisabled}
 					size='medium'
+					loading={loading}
 				/>
 			</Col>
 			<Col xs={12} md={2}>

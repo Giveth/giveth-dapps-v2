@@ -49,7 +49,7 @@ export const SetProfilePic = ({
 	isOnboarding = false,
 	callback = () => {},
 }: ISetProfilePic) => {
-	const { activeTab, setActiveTab, onSaveAvatar } = useAvatar();
+	const { loading, activeTab, setActiveTab, onSaveAvatar } = useAvatar();
 	const useUploadProps = useUpload();
 	const { url, onDelete } = useUploadProps;
 	const { userData: user, isLoading } = useAppSelector(state => state.user);
@@ -140,6 +140,7 @@ export const SetProfilePic = ({
 							setSelectedPFP={setSelectedPFP}
 							callback={callback}
 							isSaveDisabled={!url}
+							loading={loading}
 						/>
 					) : (
 						<Flex
@@ -150,6 +151,7 @@ export const SetProfilePic = ({
 								buttonType='secondary'
 								label='SAVE'
 								disabled={!url}
+								loading={loading}
 								onClick={() =>
 									onSaveAvatar(onDelete, nftUrl(), url)
 								}
@@ -231,6 +233,7 @@ export const SetProfilePic = ({
 									setSelectedPFP={setSelectedPFP}
 									callback={callback}
 									isSaveDisabled={!nftUrl()}
+									loading={loading}
 								/>
 							) : (
 								<NFTButtons
@@ -239,6 +242,7 @@ export const SetProfilePic = ({
 									}
 									setSelectedPFP={setSelectedPFP}
 									nftUrl={nftUrl}
+									loading={loading}
 								/>
 							)}
 						</Flex>
