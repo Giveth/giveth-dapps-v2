@@ -71,6 +71,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 	const locale = router ? router.locale : 'en';
 	const apolloClient = useApollo(pageProps);
 	const isMaintenanceMode = process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true';
+	console.log(
+		'isMaintenanceMode',
+		process.env.NEXT_PUBLIC_IS_MAINTENANCE,
+		isMaintenanceMode,
+	);
 
 	useEffect(() => {
 		const handleStart = (url: string) => {
