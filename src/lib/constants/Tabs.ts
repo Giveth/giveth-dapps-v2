@@ -3,7 +3,7 @@ import Routes from '@/lib/constants/Routes';
 export const giveconomyTabs = [
 	{
 		label: 'Overview',
-		href: Routes.GIVECONOMY,
+		href: Routes.GIVeconomy,
 	},
 	{
 		label: 'GIVgarden',

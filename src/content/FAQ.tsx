@@ -454,7 +454,7 @@ const faqContent = (formatMessage: any) => {
 					<>
 						<FormattedMessage id='page.faq.what_can_i_do_with_giv.content' />{' '}
 						<ExternalLink
-							href={Routes.GIVECONOMY}
+							href={Routes.GIVeconomy}
 							title={<FormattedMessage id='label.here' />}
 						/>
 						.
@@ -516,7 +516,7 @@ const faqContent = (formatMessage: any) => {
 					<>
 						<FormattedMessage id='page.faq.who_is_eligible_to_receive_givdrop.content.one' />{' '}
 						<ExternalLink
-							href={Routes.GIVECONOMY}
+							href={Routes.GIVeconomy}
 							title='GIVdrop'
 						/>
 						{', '}
@@ -550,7 +550,7 @@ const faqContent = (formatMessage: any) => {
 					<>
 						<FormattedMessage id='page.faq.how_do_i_claim_my_givdrop.content.one' />{' '}
 						<ExternalLink
-							href={Routes.GIVECONOMY}
+							href={Routes.GIVeconomy}
 							title={<FormattedMessage id='label.here' />}
 						/>
 						{', '}
