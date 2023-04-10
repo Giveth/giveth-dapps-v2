@@ -144,7 +144,7 @@
 	"label.boosted_projects": "Proyectos con Boost",
 	"label.donations_and_projects": "Donaciones & Proyectos",
 	"label.total_amount_donated": "Cantidad Total Donada",
-	"label.donantion_received": "Donaciones Recibidas",
+	"label.donation_received": "Donaciones Recibidas",
 	"label.dont_be_a_stranger": "No seas un extraño!",
 	"component.button.complete_profile": "COMPLETAR PERFIL",
 	"label.complete_profile.desc": "Completa tu perfil para administrar mejor tus donaciones y proyectos",
