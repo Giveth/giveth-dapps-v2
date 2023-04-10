@@ -11,14 +11,13 @@ interface IAttributeItems {
 
 const AttributeItems = ({ id }: IAttributeItems) => {
 	const [attributes, setAttributes] = useState<IAttributeItem[]>([]);
-	const getPFPAttributes = async () => {
-		const data = await fetch(`/json/pfp-metadata/${id}.json`);
-		const JSONData = await data.json();
-		setAttributes(JSONData.attributes ?? []);
-		console.log(attributes);
-	};
 
 	useEffect(() => {
+		const getPFPAttributes = async () => {
+			const data = await fetch(`/json/pfp-metadata/${id}.json`);
+			const JSONData = await data.json();
+			setAttributes(JSONData.attributes ?? []);
+		};
 		getPFPAttributes();
 	}, [id]);
 
