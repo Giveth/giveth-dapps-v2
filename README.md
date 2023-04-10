@@ -1,10 +1,8 @@
 # The Giveth DApp
---------------
-**Build status**
 
-*develop branch*[![build-develop](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml/badge.svg?branch=develop)](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml)
-
-*main branch*[![build-main](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml/badge.svg?branch=main)](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml)
+### Build status:
+- Develop - [![build-develop](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml/badge.svg?branch=develop)](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml)
+- Main - [![build-main](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml/badge.svg?branch=main)](https://github.com/Giveth/giveth-dapps-v2/actions/workflows/Build.yml)
 --------------
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
