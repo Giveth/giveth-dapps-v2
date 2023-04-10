@@ -27,6 +27,7 @@ import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import NFTButtons from '../modals/UploadProfilePicModal/NFTButtons';
 import { useAppSelector } from '@/features/hooks';
 import OnboardButtons from '../modals/UploadProfilePicModal/OnboardButtons';
+import AttributeItem from './AttributeItem';
 
 enum EProfilePicTab {
 	LOADING,
@@ -199,7 +200,80 @@ export const SetProfilePic = ({
 										The The Givers Collection #
 										{selectedPFP.tokenId}
 									</H6>
-									<SelectedPFPContainer></SelectedPFPContainer>
+									<SelectedPFPContainer gap='16px' flexWrap>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+										<AttributeItem
+											heading='Head'
+											subtitle='Blond Maverick'
+										/>
+									</SelectedPFPContainer>
 									<Flex flexDirection='column' gap='8px'>
 										<CustomLink
 											href={
@@ -289,7 +363,7 @@ export const CustomH5 = styled(H5)`
 	margin-top: 16px;
 `;
 
-const SelectedPFPContainer = styled.div`
+const SelectedPFPContainer = styled(Flex)`
 	border-left: 6px solid ${brandColors.pinky[500]};
 	margin-top: 8px;
 	padding: 16px 24px;
