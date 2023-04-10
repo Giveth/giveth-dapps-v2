@@ -9,8 +9,14 @@ interface IAttributeItem {
 }
 
 const AttributeItem = ({ heading, subtitle }: IAttributeItem) => {
+	const isOnboardingPage = window.location.pathname.includes('onboard');
+
 	return (
-		<Container flexDirection='column' gap='8px'>
+		<Container
+			isOnboard={isOnboardingPage}
+			flexDirection='column'
+			gap='8px'
+		>
 			<Heading>{heading}</Heading>
 			<Subtitle>{subtitle}</Subtitle>
 		</Container>
@@ -19,9 +25,10 @@ const AttributeItem = ({ heading, subtitle }: IAttributeItem) => {
 
 export default AttributeItem;
 
-const Container = styled(Flex)`
+const Container = styled(Flex)<{ isOnboard: boolean }>`
 	width: 240px;
-	background-color: ${neutralColors.gray[200]};
+	background-color: ${props =>
+		props.isOnboard ? neutralColors.gray[100] : neutralColors.gray[200]};
 	border-radius: 8px;
 	padding: 8px 16px;
 	box-shadow: 0px 10px 15px -12px rgba(0, 0, 0, 0.1);
