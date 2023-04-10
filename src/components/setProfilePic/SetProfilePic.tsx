@@ -5,8 +5,6 @@ import {
 	H6,
 	IconExternalLink16,
 	mediaQueries,
-	neutralColors,
-	P,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -29,6 +27,7 @@ import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import NFTButtons from '../modals/UploadProfilePicModal/NFTButtons';
 import { useAppSelector } from '@/features/hooks';
 import OnboardButtons from '../modals/UploadProfilePicModal/OnboardButtons';
+import AttributeItems from './AttributeItems';
 
 enum EProfilePicTab {
 	LOADING,
@@ -62,6 +61,7 @@ export const SetProfilePic = ({
 		if (!selectedPFP) return undefined;
 		return convertIPFSToHTTPS(selectedPFP?.imageIpfs);
 	};
+
 	useEffect(() => {
 		const fetchPFPInfo = async (walletAddress: string) => {
 			try {
@@ -75,18 +75,12 @@ export const SetProfilePic = ({
 					data[`user_${walletAddress}`] &&
 					data[`user_${walletAddress}`].length > 0
 				) {
-					console.log(
-						'data[`user_${walletAddress}`]',
-						data[`user_${walletAddress}`],
-						user,
-					);
 					setPfpData(data[`user_${walletAddress}`]);
 					setActiveTab(EProfilePicTab.PFP);
 				} else {
 					setActiveTab(EProfilePicTab.UPLOAD);
 				}
 			} catch (error) {
-				console.error('error', error);
 				setActiveTab(EProfilePicTab.UPLOAD);
 			}
 		};
@@ -193,16 +187,20 @@ export const SetProfilePic = ({
 								))}
 							</Flex>
 							{selectedPFP && (
-								<SelectedPFPContainer>
+								<AttributesWrapper
+									flexDirection='column'
+									gap='16px'
+								>
+									<H6>
+										The The Givers Collection #
+										{selectedPFP.tokenId}
+									</H6>
+									<SelectedPFPContainer gap='16px' flexWrap>
+										<AttributeItems
+											id={selectedPFP.tokenId}
+										/>
+									</SelectedPFPContainer>
 									<Flex flexDirection='column' gap='8px'>
-										<H6>
-											The The Givers Collection #
-											{selectedPFP.tokenId}
-										</H6>
-										<P>
-											Short information/summary about the
-											selected PFP
-										</P>
 										<CustomLink
 											href={
 												config.RARIBLE_ADDRESS +
@@ -215,7 +213,7 @@ export const SetProfilePic = ({
 											<IconExternalLink16 />
 										</CustomLink>
 									</Flex>
-								</SelectedPFPContainer>
+								</AttributesWrapper>
 							)}
 							{isOnboarding ? (
 								<OnboardButtons
@@ -291,12 +289,10 @@ export const CustomH5 = styled(H5)`
 	margin-top: 16px;
 `;
 
-const SelectedPFPContainer = styled.div`
-	background-color: ${neutralColors.gray[200]};
+const SelectedPFPContainer = styled(Flex)`
 	border-left: 6px solid ${brandColors.pinky[500]};
 	margin-top: 8px;
 	padding: 16px 24px;
-	border-radius: 8px;
 	text-align: left;
 `;
 
@@ -306,4 +302,8 @@ const CustomLink = styled.a`
 	align-items: center;
 	gap: 8px;
 	max-width: fit-content;
+`;
+
+const AttributesWrapper = styled(Flex)`
+	text-align: left;
 `;
