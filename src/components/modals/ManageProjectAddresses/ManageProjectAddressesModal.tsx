@@ -86,6 +86,6 @@ const ModalContainer = styled.div`
 
 const Content = styled(Flex)`
 	gap: 4px;
-	padding-bottom: 24px;
+	padding-bottom: 10px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;

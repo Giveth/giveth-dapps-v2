@@ -17,6 +17,7 @@ interface IBadge {
 	label: string;
 	status: EBadgeStatus;
 	showBullet?: boolean;
+	className?: string;
 }
 
 const badgeStatusToColor = (status: EBadgeStatus) => {
@@ -34,9 +35,12 @@ const badgeStatusToColor = (status: EBadgeStatus) => {
 	}
 };
 
-export const Badge: FC<IBadge> = ({ label, status, showBullet }) => {
+export const Badge: FC<IBadge> = ({ label, status, showBullet, className }) => {
 	return (
-		<BadgeContainer mainColor={badgeStatusToColor(status)}>
+		<BadgeContainer
+			className={className}
+			mainColor={badgeStatusToColor(status)}
+		>
 			{showBullet && <BulletPoint>&bull;</BulletPoint>}
 			<SublineBold>{label}</SublineBold>
 		</BadgeContainer>
