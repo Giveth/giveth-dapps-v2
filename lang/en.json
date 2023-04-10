@@ -1244,5 +1244,6 @@
 	"component.pfp_eligibility_modal.content.success": "You are eligible to mint your Giver early! Thanks for supporting Giveth",
 	"label.duration_ago": "{duration} ago",
 	"label.an_equivalent_of_up_to_40%": "An equivalent of up to 40% of the donation amount in GIV tokens!",
-	"label.read_more_on_our_docs": "Read more on our docs"
+	"label.read_more_on_our_docs": "Read more on our docs",
+	"label.recipient_addresses": "recipient addresses"
 }

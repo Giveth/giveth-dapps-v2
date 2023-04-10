@@ -1,11 +1,17 @@
-import { B, IconWalletOutline32, P } from '@giveth/ui-design-system';
+import {
+	IconWalletOutline32,
+	neutralColors,
+	Subline,
+	SublineBold,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '../Modal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IProject } from '@/apollo/types/types';
-import InlineToast from '../../toasts/InlineToast';
+import { Flex } from '@/components/styled-components/Flex';
 import type { IModal } from '@/types/common';
 
 interface IManageProjectAddressesModal extends IModal {
@@ -17,21 +23,24 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 	setShowModal,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	console.log('project.address', project.addresses);
 
 	return (
 		<Modal
 			headerIcon={<IconWalletOutline32 />}
-			headerTitle='Add polygon address'
+			headerTitle='Manage addresses'
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
 		>
 			<ModalContainer>
 				<Content>
-					<P>Adding Polygon address for</P>
-					<B>{project.title}</B>
+					<SublineBold>{project.title}</SublineBold>
+					<Subline>
+						{formatMessage({ id: 'label.recipient_addresses' })}
+					</Subline>
 				</Content>
 			</ModalContainer>
 		</Modal>
@@ -40,20 +49,14 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 
 const ModalContainer = styled.div`
 	text-align: left;
-	padding: 32px 24px 24px;
+	padding: 24px;
 	${mediaQueries.tablet} {
 		width: 556px;
 	}
 `;
 
-const Content = styled.div`
-	margin-bottom: 32px;
-	& > div {
-		display: inline-block;
-		padding-right: 4px;
-	}
-`;
-
-const StyledInlineToast = styled(InlineToast)`
-	margin-top: 0;
+const Content = styled(Flex)`
+	gap: 4px;
+	padding-bottom: 24px;
+	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
