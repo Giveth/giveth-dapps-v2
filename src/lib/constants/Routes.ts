@@ -12,6 +12,10 @@ export const profileTabs = {
 	boosted: '?tab=givpower',
 };
 
+export enum ProfileModal {
+	PFPModal = 'pfp',
+}
+
 const Routes = {
 	Home: '/',
 	CreateProject: '/create',
@@ -29,6 +33,7 @@ const Routes = {
 	MyProjects: MyAccount + profileTabs.projects,
 	MyDonations: MyAccount + profileTabs.donations,
 	MyBoostedProjects: MyAccount + profileTabs.boosted,
+	MyAccountSetPfp: MyAccount + `?modal=${ProfileModal.PFPModal}`,
 	Onboard: '/onboard',
 	Verification: '/verification',
 	Notifications,
