@@ -11,7 +11,7 @@ import { EOrderBy, IOrder } from '../UserProfile.view';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { formatUSD, smallFormatDate } from '@/lib/helpers';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
 import ListingBadge from '@/components/views/userProfile/projectsTab/ListingBadge';
 import StatusBadge from '@/components/views/userProfile/projectsTab/StatusBadge';
@@ -56,8 +56,10 @@ const ProjectsTable: FC<IProjectsTable> = ({
 				{formatMessage({ id: 'label.project' })}
 			</ProjectsTableHeader>
 			<ProjectsTableHeader>
-				{formatMessage({ id: 'label.likes' })}
-				<IconHeartFilled />
+				<FlexCenter gap='8px'>
+					{formatMessage({ id: 'label.likes' })}
+					<IconHeartFilled />
+				</FlexCenter>
 			</ProjectsTableHeader>
 			<ProjectsTableHeader
 				onClick={() => changeOrder(EOrderBy.Donations)}
