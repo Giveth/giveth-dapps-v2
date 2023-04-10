@@ -43,7 +43,6 @@ import {
 	HarvestAllModalContainer,
 	HarvestButton,
 	HelpRow,
-	NothingToHarvest,
 	TooltipContent,
 	HarvestBoxes,
 	HarvestAllPending,
@@ -303,263 +302,219 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		>
 			<HarvestAllModalContainer>
 				{(state === HarvestStates.HARVEST ||
-					state === HarvestStates.HARVESTING) &&
-					(sumLiquid.isZero() ? (
-						<>
-							<NothingToHarvest>
-								You have nothing to claim
-							</NothingToHarvest>
-							<CancelButton
-								disabled={state !== HarvestStates.HARVEST}
-								label='OK'
-								size='large'
-								onClick={closeModal}
-							/>
-						</>
-					) : (
-						<>
-							<HarvestBoxes>
-								{sumLiquid && sumLiquid.gt(0) && (
-									<>
-										<AmountBoxWithPrice
-											amount={sumLiquid}
-											price={calcUSD(
-												formatWeiHelper(
-													sumLiquid,
-													2,
-													false,
-												),
-											)}
-											tokenSymbol={
-												regenStreamConfig?.rewardTokenSymbol
-											}
-										/>
-										<HelpRow alignItems='baseline' flexWrap>
-											<Caption>
-												{formatMessage({
-													id: 'label.your_new',
-												})}{' '}
-												{tokenSymbol}{' '}
-												{formatMessage({
-													id: 'label.stream_flowrate',
-												})}
-											</Caption>
-											<IconWithTooltip
-												icon={
-													<IconHelpFilled16
-														color={
-															brandColors
-																.deep[100]
-														}
-													/>
-												}
-												direction={'top'}
-											>
-												<TooltipContent>
-													{formatMessage({
-														id: 'label.increase_your',
-													})}{' '}
-													{tokenSymbol}
-													{formatMessage({
-														id: 'label.stream_flowrate_when_you_claim',
-													})}
-												</TooltipContent>
-											</IconWithTooltip>
-											<Flex gap='8px'>
-												<IconGIVStream size={24} />
-												<GIVRate>
-													{formatWeiHelper(sumStream)}
-												</GIVRate>
-												<Lead>
-													{tokenSymbol}
-													{formatMessage({
-														id: 'label./week',
-													})}
-												</Lead>
-											</Flex>
-										</HelpRow>
-									</>
-								)}
-								<HarvestAllDesc>
-									{formatMessage(
-										{
-											id: 'label.when_you_harvest',
-										},
-										{ tokenSymbol },
+					state === HarvestStates.HARVESTING) && (
+					<HarvestBoxes>
+						{sumLiquid && sumLiquid.gt(0) && (
+							<>
+								<AmountBoxWithPrice
+									amount={sumLiquid}
+									price={calcUSD(
+										formatWeiHelper(sumLiquid, 2, false),
 									)}
-								</HarvestAllDesc>
-								<BreakdownTableTitle>
-									{formatMessage({
-										id: 'label.rewards_breakdown',
-									})}
-								</BreakdownTableTitle>
-								<BreakdownTableBody>
-									<BreakdownRow>
-										<BreakdownTitle>
-											<BreakdownIcon>
-												<IconGIVStream size={24} />
-											</BreakdownIcon>
-											<P>{tokenSymbol}stream</P>
-										</BreakdownTitle>
-										<BreakdownAmount>
-											{formatWeiHelper(
-												earnedLiquid.sub(
-													givbackLiquidPart,
-												),
-											)}
-										</BreakdownAmount>
-										<BreakdownUnit>
+									tokenSymbol={
+										regenStreamConfig?.rewardTokenSymbol
+									}
+								/>
+								<HelpRow alignItems='baseline' flexWrap>
+									<Caption>
+										{formatMessage({
+											id: 'label.your_new',
+										})}{' '}
+										{tokenSymbol}{' '}
+										{formatMessage({
+											id: 'label.stream_flowrate',
+										})}
+									</Caption>
+									<IconWithTooltip
+										icon={
+											<IconHelpFilled16
+												color={brandColors.deep[100]}
+											/>
+										}
+										direction={'top'}
+									>
+										<TooltipContent>
+											{formatMessage({
+												id: 'label.increase_your',
+											})}{' '}
 											{tokenSymbol}
-										</BreakdownUnit>
+											{formatMessage({
+												id: 'label.stream_flowrate_when_you_claim',
+											})}
+										</TooltipContent>
+									</IconWithTooltip>
+									<Flex gap='8px'>
+										<IconGIVStream size={24} />
+										<GIVRate>
+											{formatWeiHelper(sumStream)}
+										</GIVRate>
+										<Lead>
+											{tokenSymbol}
+											{formatMessage({
+												id: 'label./week',
+											})}
+										</Lead>
+									</Flex>
+								</HelpRow>
+							</>
+						)}
+						<HarvestAllDesc>
+							{formatMessage(
+								{
+									id: 'label.when_you_harvest',
+								},
+								{ tokenSymbol },
+							)}
+						</HarvestAllDesc>
+						<BreakdownTableTitle>
+							{formatMessage({
+								id: 'label.rewards_breakdown',
+							})}
+						</BreakdownTableTitle>
+						<BreakdownTableBody>
+							<BreakdownRow>
+								<BreakdownTitle>
+									<BreakdownIcon>
+										<IconGIVStream size={24} />
+									</BreakdownIcon>
+									<P>{tokenSymbol}stream</P>
+								</BreakdownTitle>
+								<BreakdownAmount>
+									{formatWeiHelper(
+										earnedLiquid.sub(givbackLiquidPart),
+									)}
+								</BreakdownAmount>
+								<BreakdownUnit>{tokenSymbol}</BreakdownUnit>
+								<BreakdownRate>
+									{formatWeiHelper(
+										rewardStream.minus(givBackStream),
+									)}
+								</BreakdownRate>
+								<BreakdownUnit>
+									{tokenSymbol}
+									{formatMessage({
+										id: 'label./week',
+									})}
+								</BreakdownUnit>
+								{givBackStream != 0 && (
+									<>
+										<GIVbackStreamDesc>
+											{formatMessage({
+												id: 'label.received_from_givbacks',
+											})}
+										</GIVbackStreamDesc>
 										<BreakdownRate>
-											{formatWeiHelper(
-												rewardStream.minus(
-													givBackStream,
-												),
-											)}
+											{formatWeiHelper(givBackStream)}
 										</BreakdownRate>
 										<BreakdownUnit>
 											{tokenSymbol}
 											{formatMessage({
 												id: 'label./week',
 											})}
-										</BreakdownUnit>
-										{givBackStream != 0 && (
-											<>
-												<GIVbackStreamDesc>
+											<IconWithTooltip
+												icon={
+													<Flex gap='4px'>
+														<IconHelpFilled16
+															color={
+																brandColors
+																	.deep[100]
+															}
+														/>
+													</Flex>
+												}
+												direction={'left'}
+											>
+												<TooltipContent>
 													{formatMessage({
-														id: 'label.received_from_givbacks',
+														id: 'label.your_givstream_flowrate_was_automatically_increased',
 													})}
-												</GIVbackStreamDesc>
-												<BreakdownRate>
-													{formatWeiHelper(
-														givBackStream,
-													)}
-												</BreakdownRate>
-												<BreakdownUnit>
-													{tokenSymbol}
-													{formatMessage({
-														id: 'label./week',
-													})}
-													<IconWithTooltip
-														icon={
-															<Flex gap='4px'>
-																<IconHelpFilled16
-																	color={
-																		brandColors
-																			.deep[100]
-																	}
-																/>
-															</Flex>
-														}
-														direction={'left'}
-													>
-														<TooltipContent>
-															{formatMessage({
-																id: 'label.your_givstream_flowrate_was_automatically_increased',
-															})}
-														</TooltipContent>
-													</IconWithTooltip>
-												</BreakdownUnit>
-											</>
-										)}
-									</BreakdownRow>
-									{!regenStreamConfig && givback.gt(0) && (
-										<BreakdownRow>
-											<BreakdownTitle>
-												<BreakdownIcon>
-													<IconGIVBack size={24} />
-												</BreakdownIcon>
-												<P>GIVbacks</P>
-											</BreakdownTitle>
-											<BreakdownAmount>
-												{formatWeiHelper(
-													givbackLiquidPart,
-												)}
-											</BreakdownAmount>
-											<BreakdownUnit>
-												{tokenSymbol}
-											</BreakdownUnit>
-											<BreakdownRate></BreakdownRate>
-											<BreakdownUnit></BreakdownUnit>
-										</BreakdownRow>
-									)}
-									{poolStakingConfig && tokenDistroHelper && (
-										<EarnedBreakDown
-											poolStakingConfig={
-												poolStakingConfig
-											}
-											regenStreamConfig={
-												regenStreamConfig
-											}
-											tokenDistroHelper={
-												tokenDistroHelper
-											}
-											setRewardLiquidPart={
-												setRewardLiquidPart
-											}
-											setEarnedStream={setEarnedStream}
-											rewardLiquidPart={rewardLiquidPart}
-											tokenSymbol={tokenSymbol}
-											earnedStream={earnedStream}
-										/>
-									)}
-
-									<BreakdownSumRow>
-										<div></div>
-										<BreakdownLiquidSum>
-											{formatWeiHelper(sumLiquid)}
-										</BreakdownLiquidSum>
-										<BreakdownUnit>
-											{tokenSymbol}
+												</TooltipContent>
+											</IconWithTooltip>
 										</BreakdownUnit>
-										<BreakdownStreamSum>
-											<IconGIVStream size={24} />
-											<P>{formatWeiHelper(sumStream)}</P>
-										</BreakdownStreamSum>
-										<BreakdownUnit>
-											{tokenSymbol}
-											{formatMessage({
-												id: 'label./week',
-											})}
-										</BreakdownUnit>
-									</BreakdownSumRow>
-								</BreakdownTableBody>
-
-								{state === HarvestStates.HARVEST && (
-									<HarvestButton
-										label={formatMessage({
-											id: 'label.harvest',
-										})}
-										size='medium'
-										buttonType='primary'
-										onClick={onHarvest}
-									/>
+									</>
 								)}
-								{state === HarvestStates.HARVESTING && (
-									<HarvestAllPending>
-										<LottieControl
-											animationData={LoadingAnimation}
-											size={40}
-										/>
-										&nbsp;
-										{formatMessage({
-											id: 'label.harvest_pending',
-										})}
-									</HarvestAllPending>
-								)}
-								<CancelButton
-									disabled={state !== HarvestStates.HARVEST}
-									label={formatMessage({
-										id: 'label.cancel',
-									})}
-									size='medium'
-									buttonType='texty'
-									onClick={closeModal}
+							</BreakdownRow>
+							{!regenStreamConfig && givback.gt(0) && (
+								<BreakdownRow>
+									<BreakdownTitle>
+										<BreakdownIcon>
+											<IconGIVBack size={24} />
+										</BreakdownIcon>
+										<P>GIVbacks</P>
+									</BreakdownTitle>
+									<BreakdownAmount>
+										{formatWeiHelper(givbackLiquidPart)}
+									</BreakdownAmount>
+									<BreakdownUnit>{tokenSymbol}</BreakdownUnit>
+									<BreakdownRate></BreakdownRate>
+									<BreakdownUnit></BreakdownUnit>
+								</BreakdownRow>
+							)}
+							{poolStakingConfig && tokenDistroHelper && (
+								<EarnedBreakDown
+									poolStakingConfig={poolStakingConfig}
+									regenStreamConfig={regenStreamConfig}
+									tokenDistroHelper={tokenDistroHelper}
+									setRewardLiquidPart={setRewardLiquidPart}
+									setEarnedStream={setEarnedStream}
+									rewardLiquidPart={rewardLiquidPart}
+									tokenSymbol={tokenSymbol}
+									earnedStream={earnedStream}
 								/>
-							</HarvestBoxes>
-						</>
-					))}
+							)}
+
+							<BreakdownSumRow>
+								<div></div>
+								<BreakdownLiquidSum>
+									{formatWeiHelper(sumLiquid)}
+								</BreakdownLiquidSum>
+								<BreakdownUnit>{tokenSymbol}</BreakdownUnit>
+								<BreakdownStreamSum>
+									<IconGIVStream size={24} />
+									<P>{formatWeiHelper(sumStream)}</P>
+								</BreakdownStreamSum>
+								<BreakdownUnit>
+									{tokenSymbol}
+									{formatMessage({
+										id: 'label./week',
+									})}
+								</BreakdownUnit>
+							</BreakdownSumRow>
+						</BreakdownTableBody>
+
+						{state === HarvestStates.HARVEST && (
+							<HarvestButton
+								label={formatMessage({
+									id: 'label.harvest',
+								})}
+								size='medium'
+								buttonType='primary'
+								onClick={onHarvest}
+							/>
+						)}
+						{state === HarvestStates.HARVESTING && (
+							<HarvestAllPending>
+								<LottieControl
+									animationData={LoadingAnimation}
+									size={40}
+								/>
+								&nbsp;
+								{formatMessage({
+									id: 'label.harvest_pending',
+								})}
+							</HarvestAllPending>
+						)}
+						<CancelButton
+							disabled={state !== HarvestStates.HARVEST}
+							label={formatMessage({
+								id: 'label.cancel',
+							})}
+							size='medium'
+							buttonType='texty'
+							onClick={closeModal}
+						/>
+					</HarvestBoxes>
+				)}
 				{state === HarvestStates.SUBMITTED && (
 					<SubmittedInnerModal
 						title={title}
