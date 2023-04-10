@@ -64,7 +64,7 @@ export const NFTMintIndex = () => {
 	// }, [account, chainId, library]);
 
 	const redirectAndOpenPFPModal = () => {
-		router.push(Routes.MyAccount);
+		router.push(Routes.MyAccountSetPfp);
 	};
 
 	const { modalCallback: signInThenRedirect } = useModalCallback(
