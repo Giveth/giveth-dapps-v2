@@ -23,7 +23,7 @@ export const networksParams: {
 			decimals: 18,
 		},
 		rpcUrls: ['https://rpc.gnosischain.com/'],
-		blockExplorerUrls: ['https://gnosisscan.io/'],
+		blockExplorerUrls: ['https://gnosisscan.io'],
 	},
 	3: {
 		chainId: '0x3',
