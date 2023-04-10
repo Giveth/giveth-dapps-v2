@@ -9,9 +9,15 @@ export interface INFTButtons {
 	saveAvatar: () => void;
 	setSelectedPFP: (pfp?: IGiverPFPToken) => void;
 	nftUrl: () => string | undefined;
+	loading: boolean;
 }
 
-const NFTButtons = ({ saveAvatar, setSelectedPFP, nftUrl }: INFTButtons) => {
+const NFTButtons = ({
+	loading,
+	saveAvatar,
+	setSelectedPFP,
+	nftUrl,
+}: INFTButtons) => {
 	const { formatMessage } = useIntl();
 
 	return (
@@ -24,6 +30,7 @@ const NFTButtons = ({ saveAvatar, setSelectedPFP, nftUrl }: INFTButtons) => {
 				label='SAVE'
 				disabled={!nftUrl()}
 				onClick={() => saveAvatar()}
+				loading={loading}
 			/>
 			<TextButton
 				buttonType='texty'

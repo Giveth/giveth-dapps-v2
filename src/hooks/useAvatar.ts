@@ -13,8 +13,9 @@ enum EProfilePicTab {
 	PFP,
 }
 export const useAvatar = () => {
-	const [updateUser] = useMutation(UPDATE_USER);
 	const [activeTab, setActiveTab] = useState(EProfilePicTab.LOADING);
+	const [loading, setLoading] = useState(false);
+	const [updateUser] = useMutation(UPDATE_USER);
 	const dispatch = useAppDispatch();
 	const { account } = useWeb3React();
 
@@ -31,13 +32,13 @@ export const useAvatar = () => {
 		url?: string,
 		callback?: () => void,
 	) => {
+		setLoading(true);
 		try {
 			const { data: response } = await updateUser({
 				variables: {
 					avatar: handleAvatar(nftUrl, url),
 				},
 			});
-			console.log('Response', response);
 			if (response.updateUser) {
 				account && dispatch(fetchUserByAddress(account));
 				gToast('Profile Photo updated.', {
@@ -60,6 +61,7 @@ export const useAvatar = () => {
 				},
 			});
 		}
+		setLoading(false);
 	};
-	return { onSaveAvatar, activeTab, setActiveTab };
+	return { loading, onSaveAvatar, activeTab, setActiveTab };
 };
