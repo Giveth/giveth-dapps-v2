@@ -13,17 +13,23 @@ import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 import { Col, Container, Row } from '@giveth/ui-design-system';
+import { useRouter } from 'next/router';
 import { OvalVerticalGradient, OvalHorizontalGradient } from '../common.styles';
 import { MintCard } from '@/components/cards/MintCard';
 import config from '@/configuration';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
 import { Flex } from '@/components/styled-components/Flex';
+import { useAppSelector } from '@/features/hooks';
+import Routes from '@/lib/constants/Routes';
+import { useModalCallback } from '@/hooks/useModalCallback';
 
 export const NFTMintIndex = () => {
 	// const [showEligibilityModal, setShowEligibilityModal] = useState(false);
 	const { formatMessage } = useIntl();
 	const { account } = useWeb3React();
 	const { step, setStep, qty, tx: txHash } = usePFPMintData();
+	const { isSignedIn } = useAppSelector(state => state.user);
+	const router = useRouter();
 
 	// useEffect(() => {
 	// 	const checkAddress = async () => {
@@ -56,6 +62,22 @@ export const NFTMintIndex = () => {
 	// 	};
 	// 	checkAddress();
 	// }, [account, chainId, library]);
+
+	const redirectAndOpenPFPModal = () => {
+		router.push(Routes.MyAccountSetPfp);
+	};
+
+	const { modalCallback: signInThenRedirect } = useModalCallback(
+		redirectAndOpenPFPModal,
+	);
+
+	const handleSetPFP = () => {
+		if (isSignedIn) {
+			redirectAndOpenPFPModal();
+		} else {
+			signInThenRedirect();
+		}
+	};
 
 	return (
 		<MintViewContainer>
@@ -98,6 +120,13 @@ export const NFTMintIndex = () => {
 											},
 										)}
 									</DescCenter>
+									<Button
+										label={formatMessage({
+											id: 'label.use_as_profile_picture',
+										})}
+										buttonType='primary'
+										onClick={handleSetPFP}
+									/>
 									<a
 										href={
 											config.RARIBLE_ADDRESS +

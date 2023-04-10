@@ -1239,5 +1239,6 @@
 	"label.or_go_back_to_main_categories": "O torna a les categories principals",
 	"label.clear": "Netejar",
 	"label.search_for_a_project_or_a_cause": "Cerca un projecte o una causa a totes les categories",
-	"art": "Art"
+	"art": "Art",
+	"label.use_as_profile_picture": ""
 }

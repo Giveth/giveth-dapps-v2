@@ -12,6 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 
 import { Container } from '@giveth/ui-design-system';
+import { useRouter } from 'next/router';
 import { mediaQueries } from '@/lib/constants/constants';
 import ProfileContributes from './ProfileContributes';
 import { IUser } from '@/apollo/types/types';
@@ -28,6 +29,8 @@ import IncompleteProfileToast from '@/components/views/userProfile/IncompletePro
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import UploadProfilePicModal from '@/components/modals/UploadProfilePicModal/UploadProfilePicModal';
+import { ProfileModal } from '@/lib/constants/Routes';
+import { removeQueryParamAndRedirect } from '@/helpers/url';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -57,6 +60,9 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const [showUploadProfileModal, setShowUploadProfileModal] = useState(false);
 
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
+
+	const router = useRouter();
+
 	const showCompleteProfile =
 		!isUserRegistered(user) && showIncompleteWarning && myAccount;
 
@@ -65,6 +71,13 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 			dispatch(setShowSignWithWallet(true));
 		}
 	}, [dispatch, isSignedIn, myAccount]);
+
+	useEffect(() => {
+		if (router.query.modal === ProfileModal.PFPModal) {
+			setShowUploadProfileModal(true);
+			removeQueryParamAndRedirect(router, ['modal']);
+		}
+	}, [router.query.modal]);
 
 	if (myAccount && !isSignedIn)
 		return (

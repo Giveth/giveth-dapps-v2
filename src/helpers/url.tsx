@@ -81,7 +81,7 @@ export function removeQueryParamAndRedirect(
 ) {
 	const newParams = removeQueryParam(router.asPath, params);
 	if (router.isReady)
-		router.push(
+		router.replace(
 			{
 				query: newParams,
 			},
