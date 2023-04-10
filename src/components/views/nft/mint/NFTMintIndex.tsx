@@ -98,6 +98,12 @@ export const NFTMintIndex = () => {
 											},
 										)}
 									</DescCenter>
+									<Button
+										label={formatMessage({
+											id: 'label.use_as_profile_picture',
+										})}
+										buttonType='primary'
+									/>
 									<a
 										href={
 											config.RARIBLE_ADDRESS +
