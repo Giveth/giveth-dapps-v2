@@ -2,8 +2,9 @@ import {
 	brandColors,
 	neutralColors,
 	IconHeartFilled,
+	GLink,
 } from '@giveth/ui-design-system';
-import { Dispatch, FC, SetStateAction } from 'react';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
@@ -26,6 +27,7 @@ import {
 } from '@/components/styled-components/Table';
 import config from '@/configuration';
 import { AddPolygonToast } from './AddPolygonToast';
+import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
 
 interface IProjectsTable {
 	projects: IProject[];
@@ -40,105 +42,127 @@ const ProjectsTable: FC<IProjectsTable> = ({
 	order,
 	setProjects,
 }) => {
+	const [showAddressModal, setShowAddressModal] = useState(false);
+	const [selectedProject, setSelectedProject] = useState<IProject>();
 	const { formatMessage, locale } = useIntl();
 	return (
-		<Table>
-			<ProjectsTableHeader
-				onClick={() => changeOrder(EOrderBy.CreationDate)}
-			>
-				{formatMessage({ id: 'label.created_at' })}
-				<SortIcon order={order} title={EOrderBy.CreationDate} />
-			</ProjectsTableHeader>
-			<ProjectsTableHeader>
-				{formatMessage({ id: 'label.status' })}
-			</ProjectsTableHeader>
-			<ProjectsTableHeader>
-				{formatMessage({ id: 'label.project' })}
-			</ProjectsTableHeader>
-			<ProjectsTableHeader>
-				<FlexCenter gap='8px'>
-					{formatMessage({ id: 'label.likes' })}
-					<IconHeartFilled />
-				</FlexCenter>
-			</ProjectsTableHeader>
-			<ProjectsTableHeader
-				onClick={() => changeOrder(EOrderBy.Donations)}
-			>
-				{formatMessage({ id: 'label.total_raised' })}
-				<SortIcon order={order} title={EOrderBy.Donations} />
-			</ProjectsTableHeader>
-			<ProjectsTableHeader>
-				{formatMessage({ id: 'label.listing' })}
-			</ProjectsTableHeader>
-			<ProjectsTableHeader>
-				{formatMessage({ id: 'label.actions' })}
-			</ProjectsTableHeader>
-			{projects?.map(project => {
-				const status = project.status.name;
-				const isCancelled = status === EProjectStatus.CANCEL;
-				const hasPolyGonAddress = project.addresses?.find(
-					address =>
-						address.networkId === config.POLYGON_NETWORK_NUMBER,
-				);
-				const verStatus = project.verified
-					? EVerificationStatus.VERIFIED
-					: project.projectVerificationForm?.status;
-				return (
-					<ProjectsRowWrapper key={project.id}>
-						<ProjectTableCell>
-							{smallFormatDate(
-								new Date(project.creationDate!),
-								locale,
-							)}
-						</ProjectTableCell>
-						<ProjectTableCell>
-							<StatusBadge status={status!} />
-						</ProjectTableCell>
-						<ProjectTableCell bold>
-							<ProjectTitle>
-								{project.title}
-								<VerificationBadge status={verStatus} />
-								{!hasPolyGonAddress && (
-									<AddPolygonToast
-										project={project}
-										setProjects={setProjects}
-									/>
+		<>
+			<Table>
+				<ProjectsTableHeader
+					onClick={() => changeOrder(EOrderBy.CreationDate)}
+				>
+					{formatMessage({ id: 'label.created_at' })}
+					<SortIcon order={order} title={EOrderBy.CreationDate} />
+				</ProjectsTableHeader>
+				<ProjectsTableHeader>
+					{formatMessage({ id: 'label.status' })}
+				</ProjectsTableHeader>
+				<ProjectsTableHeader>
+					{formatMessage({ id: 'label.project' })}
+				</ProjectsTableHeader>
+				<ProjectsTableHeader>
+					<FlexCenter gap='8px'>
+						{formatMessage({ id: 'label.likes' })}
+						<IconHeartFilled />
+					</FlexCenter>
+				</ProjectsTableHeader>
+				<ProjectsTableHeader
+					onClick={() => changeOrder(EOrderBy.Donations)}
+				>
+					{formatMessage({ id: 'label.total_raised' })}
+					<SortIcon order={order} title={EOrderBy.Donations} />
+				</ProjectsTableHeader>
+				<ProjectsTableHeader>
+					{formatMessage({ id: 'label.listing' })}
+				</ProjectsTableHeader>
+				<ProjectsTableHeader>
+					{formatMessage({ id: 'label.actions' })}
+				</ProjectsTableHeader>
+				{projects?.map(project => {
+					const status = project.status.name;
+					const isCancelled = status === EProjectStatus.CANCEL;
+					const hasPolyGonAddress = project.addresses?.find(
+						address =>
+							address.networkId === config.POLYGON_NETWORK_NUMBER,
+					);
+					const verStatus = project.verified
+						? EVerificationStatus.VERIFIED
+						: project.projectVerificationForm?.status;
+					return (
+						<ProjectsRowWrapper key={project.id}>
+							<ProjectTableCell>
+								{smallFormatDate(
+									new Date(project.creationDate!),
+									locale,
 								)}
-							</ProjectTitle>
-						</ProjectTableCell>
-						<ProjectTableCell>
-							{project.totalReactions}
-						</ProjectTableCell>
-						<ProjectTableCell bold>
-							{formatUSD(project.totalDonations)} USD
-						</ProjectTableCell>
-						<ProjectTableCell>
-							<ListingBadge listed={project.listed!} />
-						</ProjectTableCell>
-						<ProjectTableCell>
-							<Actions isCancelled={isCancelled}>
-								<InternalLink
-									href={idToProjectEdit(project.id)}
-									title={formatMessage({ id: 'label.edit' })}
-									disabled={isCancelled}
-								/>
-								<InternalLink
-									href={slugToProjectView(project.slug)}
-									title={formatMessage({ id: 'label.view' })}
-									disabled={isCancelled}
-								/>
-							</Actions>
-						</ProjectTableCell>
-					</ProjectsRowWrapper>
-				);
-			})}
-		</Table>
+							</ProjectTableCell>
+							<ProjectTableCell>
+								<StatusBadge status={status!} />
+							</ProjectTableCell>
+							<ProjectTableCell bold>
+								<ProjectTitle>
+									{project.title}
+									<VerificationBadge status={verStatus} />
+									{!hasPolyGonAddress && (
+										<AddPolygonToast
+											project={project}
+											setProjects={setProjects}
+										/>
+									)}
+								</ProjectTitle>
+							</ProjectTableCell>
+							<ProjectTableCell>
+								{project.totalReactions}
+							</ProjectTableCell>
+							<ProjectTableCell bold>
+								{formatUSD(project.totalDonations)} USD
+							</ProjectTableCell>
+							<ProjectTableCell>
+								<ListingBadge listed={project.listed!} />
+							</ProjectTableCell>
+							<ProjectTableCell>
+								<Actions isCancelled={isCancelled}>
+									<InternalLink
+										href={idToProjectEdit(project.id)}
+										title={formatMessage({
+											id: 'label.edit',
+										})}
+										disabled={isCancelled}
+									/>
+									<InternalLink
+										href={slugToProjectView(project.slug)}
+										title={formatMessage({
+											id: 'label.view',
+										})}
+										disabled={isCancelled}
+									/>
+									<GLink
+										onClick={() => {
+											setSelectedProject(project);
+											setShowAddressModal(true);
+										}}
+									>
+										Manage addresses
+									</GLink>
+								</Actions>
+							</ProjectTableCell>
+						</ProjectsRowWrapper>
+					);
+				})}
+			</Table>
+			{showAddressModal && selectedProject && (
+				<ManageProjectAddressesModal
+					project={selectedProject}
+					setShowModal={setShowAddressModal}
+				/>
+			)}
+		</>
 	);
 };
 
 const Table = styled.div`
 	display: grid;
-	grid-template-columns: 1.5fr 1.1fr 4fr 1.1fr 1.5fr 2fr 1fr;
+	grid-template-columns: 1.5fr 1.1fr 4fr 1.1fr 1.5fr 2fr 200px;
 	overflow: auto;
 	min-width: 900px;
 
