@@ -27,7 +27,7 @@ import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import NFTButtons from '../modals/UploadProfilePicModal/NFTButtons';
 import { useAppSelector } from '@/features/hooks';
 import OnboardButtons from '../modals/UploadProfilePicModal/OnboardButtons';
-import AttributeItem from './AttributeItem';
+import AttributeItems from './AttributeItems';
 
 enum EProfilePicTab {
 	LOADING,
@@ -61,6 +61,7 @@ export const SetProfilePic = ({
 		if (!selectedPFP) return undefined;
 		return convertIPFSToHTTPS(selectedPFP?.imageIpfs);
 	};
+
 	useEffect(() => {
 		const fetchPFPInfo = async (walletAddress: string) => {
 			try {
@@ -201,77 +202,8 @@ export const SetProfilePic = ({
 										{selectedPFP.tokenId}
 									</H6>
 									<SelectedPFPContainer gap='16px' flexWrap>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
-										/>
-										<AttributeItem
-											heading='Head'
-											subtitle='Blond Maverick'
+										<AttributeItems
+											id={selectedPFP.tokenId}
 										/>
 									</SelectedPFPContainer>
 									<Flex flexDirection='column' gap='8px'>
