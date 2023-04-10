@@ -5,13 +5,15 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '../Modal';
 import { mediaQueries } from '@/lib/constants/constants';
-import { IProject } from '@/apollo/types/types';
+import { IProject, IWalletAddress } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
+import config from '@/configuration';
+import { NetworkWalletAddress } from './NetworkWalletAddress';
 import type { IModal } from '@/types/common';
 
 interface IManageProjectAddressesModal extends IModal {
@@ -22,10 +24,34 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 	project,
 	setShowModal,
 }) => {
+	const [address, setAddress] = useState<IWalletAddress[]>([]);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
-	console.log('project.address', project.addresses);
+	useEffect(() => {
+		let WalletAddr: { [key: number]: IWalletAddress } = {};
+		WalletAddr[config.MAINNET_NETWORK_NUMBER] = {
+			networkId: config.MAINNET_NETWORK_NUMBER,
+		};
+		WalletAddr[config.XDAI_NETWORK_NUMBER] = {
+			networkId: config.XDAI_NETWORK_NUMBER,
+		};
+		WalletAddr[config.POLYGON_NETWORK_NUMBER] = {
+			networkId: config.POLYGON_NETWORK_NUMBER,
+		};
+		WalletAddr[config.CELO_NETWORK_NUMBER] = {
+			networkId: config.CELO_NETWORK_NUMBER,
+		};
+		const { addresses } = project;
+		if (!addresses) return;
+		for (let i = 0; i < addresses.length; i++) {
+			const address = addresses[i];
+			if (address.networkId) {
+				WalletAddr[address.networkId] = address;
+			}
+		}
+		setAddress(Object.values(WalletAddr));
+	}, [project]);
 
 	return (
 		<Modal
@@ -42,6 +68,9 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 						{formatMessage({ id: 'label.recipient_addresses' })}
 					</Subline>
 				</Content>
+				{address.map((addr, index) => (
+					<NetworkWalletAddress key={index} networkWallet={addr} />
+				))}
 			</ModalContainer>
 		</Modal>
 	);
