@@ -30,6 +30,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import UploadProfilePicModal from '@/components/modals/UploadProfilePicModal/UploadProfilePicModal';
 import { ProfileModal } from '@/lib/constants/Routes';
+import { removeQueryParamAndRedirect } from '@/helpers/url';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -74,6 +75,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	useEffect(() => {
 		if (router.query.modal === ProfileModal.PFPModal) {
 			setShowUploadProfileModal(true);
+			removeQueryParamAndRedirect(router, ['modal']);
 		}
 	}, [router.query.modal]);
 
