@@ -75,18 +75,12 @@ export const SetProfilePic = ({
 					data[`user_${walletAddress}`] &&
 					data[`user_${walletAddress}`].length > 0
 				) {
-					console.log(
-						'data[`user_${walletAddress}`]',
-						data[`user_${walletAddress}`],
-						user,
-					);
 					setPfpData(data[`user_${walletAddress}`]);
 					setActiveTab(EProfilePicTab.PFP);
 				} else {
 					setActiveTab(EProfilePicTab.UPLOAD);
 				}
 			} catch (error) {
-				console.error('error', error);
 				setActiveTab(EProfilePicTab.UPLOAD);
 			}
 		};
