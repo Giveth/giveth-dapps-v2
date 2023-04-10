@@ -17,16 +17,13 @@ export const networksParams: {
 	100: {
 		chainId: '0x64',
 		chainName: 'Gnosis',
-		iconUrls: [
-			'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
-		],
 		nativeCurrency: {
-			name: 'xDAI',
-			symbol: 'XDAI',
+			name: 'xDai',
+			symbol: 'xDai',
 			decimals: 18,
 		},
-		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		rpcUrls: ['https://rpc.gnosischain.com/'],
+		blockExplorerUrls: ['https://gnosisscan.io/'],
 	},
 	3: {
 		chainId: '0x3',
