@@ -16,7 +16,7 @@ const ListingBadge = (props: { listed: boolean | null }) => {
 		label = 'Not Listed';
 	}
 
-	return <Badge status={status} label={label} />;
+	return <Badge status={status} label={label} showBullet />;
 };
 
 export default ListingBadge;

@@ -1,4 +1,8 @@
-import { neutralColors, semanticColors } from '@giveth/ui-design-system';
+import {
+	neutralColors,
+	semanticColors,
+	SublineBold,
+} from '@giveth/ui-design-system';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
@@ -34,7 +38,7 @@ export const Badge: FC<IBadge> = ({ label, status, showBullet }) => {
 	return (
 		<BadgeContainer mainColor={badgeStatusToColor(status)}>
 			{showBullet && <BulletPoint>&bull;</BulletPoint>}
-			{label}
+			<SublineBold>{label}</SublineBold>
 		</BadgeContainer>
 	);
 };
@@ -46,11 +50,9 @@ interface IBadgeContainer {
 export const BadgeContainer = styled.span<IBadgeContainer>`
 	display: flex;
 	align-items: center;
-	font-size: 12px;
 	color: ${props => props.mainColor[700]} !important;
 	background: ${props => props.mainColor[100]};
 	border: 2px solid ${props => props.mainColor[300]};
-	box-sizing: border-box;
 	border-radius: 50px;
 	padding: 2px 8px;
 	height: 24px;
