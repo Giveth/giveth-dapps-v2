@@ -10,7 +10,7 @@ import {
 import { useIntl } from 'react-intl';
 import { IWalletAddress } from '@/apollo/types/types';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import { Badge, EBadgeStatus } from '@/components/Badge';
+import { Badge } from '@/components/Badge';
 import NetworkLogo from '@/components/NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
 
@@ -24,7 +24,7 @@ export const NetworkWalletAddress: FC<INetworkWalletAddress> = ({
 
 	return (
 		<Wrapper flexDirection='column'>
-			<StyledBadge label='wow' status={EBadgeStatus.SUCCESS} />
+			{/* <StyledBadge label='wow' status={EBadgeStatus.SUCCESS} /> */}
 			<Flex justifyContent='space-between'>
 				<FlexCenter gap='8px'>
 					<NetworkLogo
