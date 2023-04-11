@@ -6,7 +6,7 @@ import {
 	IconExternalLink16,
 	mediaQueries,
 } from '@giveth/ui-design-system';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
@@ -56,6 +56,8 @@ export const SetProfilePic = ({
 	const { formatMessage } = useIntl();
 	const [selectedPFP, setSelectedPFP] = useState<IGiverPFPToken>();
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
+	const attributeSectionRef = useRef<HTMLDivElement>(null);
+	const [sectionHeight, setSectionHeight] = useState<number>(0);
 
 	const nftUrl = () => {
 		if (!selectedPFP) return undefined;
@@ -105,6 +107,25 @@ export const SetProfilePic = ({
 		};
 		compareHashes();
 	}, [pfpData, user?.avatar]);
+
+	useEffect(() => {
+		const handleResize = () => {
+			if (attributeSectionRef.current) {
+				const element =
+					attributeSectionRef.current.querySelector('div');
+				if (element) setSectionHeight(element.offsetHeight);
+			}
+		};
+
+		window.addEventListener('resize', handleResize);
+		handleResize();
+
+		setTimeout(() => {
+			window.dispatchEvent(new Event('resize'));
+		}, 500);
+
+		return () => window.removeEventListener('resize', handleResize);
+	}, [selectedPFP]);
 
 	return activeTab === EProfilePicTab.LOADING || isLoading === true ? (
 		<Wrapper>
@@ -174,7 +195,8 @@ export const SetProfilePic = ({
 					{pfpData && pfpData.length > 0 ? (
 						<Flex flexDirection='column' gap='36px'>
 							<CustomH5>
-								Your Unique Giveth’s PFP Artwork
+								Your Unique Giveth’s PFP Artwork --{' '}
+								{sectionHeight} ----
 							</CustomH5>
 							<Flex gap='25px' flexWrap>
 								{pfpData?.map(pfp => (
@@ -189,35 +211,48 @@ export const SetProfilePic = ({
 									/>
 								))}
 							</Flex>
-							{selectedPFP && (
-								<AttributesWrapper
-									flexDirection='column'
-									gap='16px'
-								>
-									<H6>
-										The The Givers Collection #
-										{selectedPFP.tokenId}
-									</H6>
-									<SelectedPFPContainer gap='16px' flexWrap>
-										<AttributeItems
-											id={selectedPFP.tokenId}
-										/>
-									</SelectedPFPContainer>
-									<Flex flexDirection='column' gap='8px'>
-										<CustomLink
-											href={
-												config.RARIBLE_ADDRESS +
-												'token/' +
-												selectedPFP.id.replace('-', ':')
-											}
-											target='_blank'
+							<SelectedPFPContainerWrapper
+								isOpen={!!selectedPFP}
+								divheight={sectionHeight}
+								ref={attributeSectionRef}
+							>
+								{selectedPFP && (
+									<AttributesWrapper
+										flexDirection='column'
+										gap='16px'
+									>
+										<H6>
+											The The Givers Collection #{' '}
+											{sectionHeight}
+											{selectedPFP.tokenId}
+										</H6>
+										<SelectedPFPContainer
+											gap='16px'
+											flexWrap
 										>
-											View on Rarible{' '}
-											<IconExternalLink16 />
-										</CustomLink>
-									</Flex>
-								</AttributesWrapper>
-							)}
+											<AttributeItems
+												id={selectedPFP.tokenId}
+											/>
+										</SelectedPFPContainer>
+										<Flex flexDirection='column' gap='8px'>
+											<CustomLink
+												href={
+													config.RARIBLE_ADDRESS +
+													'token/' +
+													selectedPFP.id.replace(
+														'-',
+														':',
+													)
+												}
+												target='_blank'
+											>
+												View on Rarible{' '}
+												<IconExternalLink16 />
+											</CustomLink>
+										</Flex>
+									</AttributesWrapper>
+								)}
+							</SelectedPFPContainerWrapper>
 							{isOnboarding ? (
 								<OnboardButtons
 									nftUrl={nftUrl}
@@ -311,4 +346,12 @@ const CustomLink = styled.a`
 
 const AttributesWrapper = styled(Flex)`
 	text-align: left;
+`;
+
+const SelectedPFPContainerWrapper = styled.div<{
+	isOpen: boolean;
+	divheight: number;
+}>`
+	height: ${props => (props.isOpen ? props.divheight + 'px' : '0px')};
+	transition: height 0.3s ease-in-out;
 `;
