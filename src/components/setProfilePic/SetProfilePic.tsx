@@ -122,7 +122,7 @@ export const SetProfilePic = ({
 
 		setTimeout(() => {
 			window.dispatchEvent(new Event('resize'));
-		}, 500);
+		}, 100);
 
 		return () => window.removeEventListener('resize', handleResize);
 	}, [selectedPFP]);
@@ -282,16 +282,29 @@ export const SetProfilePic = ({
 							)}
 						</Flex>
 					) : (
-						<Flex flexDirection='column'>
+						<Flex flexDirection='column' alignItems='stretch'>
 							<NoPFP />
 							<br />
 							<Flex justifyContent='space-between'>
-								<Link href={Routes.NFT}>
-									<Button
-										buttonType='secondary'
-										label='MINT NOW'
-										type='submit'
-									/>
+								<Link
+									href={Routes.NFT}
+									style={{
+										width: isOnboarding ? '100%' : '',
+									}}
+								>
+									{isOnboarding ? (
+										<OnboardingMintNowButton
+											buttonType='secondary'
+											label='MINT NOW'
+											type='submit'
+										/>
+									) : (
+										<Button
+											buttonType='secondary'
+											label='MINT NOW'
+											type='submit'
+										/>
+									)}
 								</Link>
 								<TextButton
 									buttonType='texty'
@@ -354,4 +367,8 @@ const SelectedPFPContainerWrapper = styled.div<{
 }>`
 	height: ${props => (props.isOpen ? props.divheight + 'px' : '0px')};
 	transition: height 0.3s ease-in-out;
+`;
+
+const OnboardingMintNowButton = styled(Button)`
+	width: 70%;
 `;
