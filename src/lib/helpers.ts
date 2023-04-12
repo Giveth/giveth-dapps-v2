@@ -51,7 +51,7 @@ export const thousandsSeparator = (x?: string | number): string | undefined => {
 
 export const formatTxLink = (networkId?: number, txHash?: string) => {
 	if (!networkId || !txHash || !networksParams[networkId]) return '';
-	return `${networksParams[networkId].blockExplorerUrls[0]}/tx/${txHash}`;
+	return `${networksParams[networkId].blockExplorerUrls[0]}tx/${txHash}`;
 };
 
 export function formatWalletLink(chainId?: number, address?: string) {

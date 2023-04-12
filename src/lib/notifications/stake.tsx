@@ -6,7 +6,7 @@ export function showPendingStake(
 	network: number,
 	txHash: string,
 ): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.success(
 		<span>
@@ -26,7 +26,7 @@ export function showPendingStake(
 }
 
 export function showPendingApproval(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.success(
 		<span>
@@ -45,7 +45,7 @@ export function showPendingApproval(network: number, txHash: string): void {
 }
 
 export function showFailedStake(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.error(
 		<span>
@@ -64,7 +64,7 @@ export function showFailedStake(network: number, txHash: string): void {
 }
 
 export function showConfirmedStake(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.success(
 		<span>
@@ -83,7 +83,7 @@ export function showConfirmedStake(network: number, txHash: string): void {
 }
 
 export function showFailedApproval(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.error(
 		<span>
@@ -102,7 +102,7 @@ export function showFailedApproval(network: number, txHash: string): void {
 }
 
 export function showConfirmedApproval(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.success(
 		<span>
