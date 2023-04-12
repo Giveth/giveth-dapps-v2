@@ -57,7 +57,9 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 	return (
 		<Modal
 			headerIcon={<IconWalletOutline32 />}
-			headerTitle='Manage addresses'
+			headerTitle={
+				selectedWallet ? 'Add new address' : 'Manage addresses'
+			}
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
