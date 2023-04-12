@@ -4,7 +4,7 @@ import {
 	IconHeartFilled,
 	GLink,
 } from '@giveth/ui-design-system';
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
@@ -32,14 +32,12 @@ interface IProjectsTable {
 	projects: IProject[];
 	order: IOrder;
 	changeOrder: (orderBy: EOrderBy) => void;
-	setProjects: Dispatch<SetStateAction<IProject[]>>;
 }
 
 const ProjectsTable: FC<IProjectsTable> = ({
 	projects,
 	changeOrder,
 	order,
-	setProjects,
 }) => {
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const [selectedProject, setSelectedProject] = useState<IProject>();
