@@ -195,12 +195,12 @@ export const SetProfilePic = ({
 			{activeTab === EProfilePicTab.PFP && (
 				<>
 					{pfpData && pfpData.length > 0 ? (
-						<Flex flexDirection='column' gap='36px'>
+						<Flex flexDirection='column' gap='30px'>
 							<CustomH5>
 								Your Unique Giveth’s PFP Artwork --{' '}
 								{sectionHeight} ----
 							</CustomH5>
-							<Flex gap='25px' flexWrap>
+							<PFPItemsContainer gap='25px'>
 								{pfpData?.map(pfp => (
 									<PfpItem
 										onClick={() => setSelectedPFP(pfp)}
@@ -212,7 +212,7 @@ export const SetProfilePic = ({
 										id={pfp.tokenId}
 									/>
 								))}
-							</Flex>
+							</PFPItemsContainer>
 							<SelectedPFPContainerWrapper
 								isOpen={!!selectedPFP}
 								divheight={sectionHeight}
@@ -379,4 +379,9 @@ const SelectedPFPContainerWrapper = styled.div<{
 
 const OnboardingMintNowButton = styled(Button)`
 	width: 70%;
+`;
+
+const PFPItemsContainer = styled(Flex)`
+	overflow-x: scroll;
+	padding: 16px 0;
 `;
