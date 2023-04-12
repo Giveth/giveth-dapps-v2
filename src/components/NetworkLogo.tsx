@@ -1,8 +1,8 @@
 import React from 'react';
+import config from '@/configuration';
 import { IconEthereum } from '@/components/Icons/Eth';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconPolygon } from '@/components/Icons/Polygon';
-import config from '@/configuration';
 import { IconOptimism } from './Icons/Optimism';
 import { IconCelo } from './Icons/Celo';
 
