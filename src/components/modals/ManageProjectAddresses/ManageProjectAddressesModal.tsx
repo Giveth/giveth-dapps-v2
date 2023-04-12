@@ -24,7 +24,8 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 	project,
 	setShowModal,
 }) => {
-	const [address, setAddress] = useState<IWalletAddress[]>([]);
+	const [selectedWallet, setSelectedWallet] = useState<IWalletAddress>();
+	const [addresses, setAddresses] = useState<IWalletAddress[]>([]);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
@@ -50,7 +51,7 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 				WalletAddr[address.networkId] = address;
 			}
 		}
-		setAddress(Object.values(WalletAddr));
+		setAddresses(Object.values(WalletAddr));
 	}, [project]);
 
 	return (
@@ -60,6 +61,9 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
+			backButtonCallback={
+				selectedWallet ? () => setSelectedWallet(undefined) : undefined
+			}
 		>
 			<ModalContainer>
 				<Content>
@@ -68,8 +72,12 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 						{formatMessage({ id: 'label.recipient_addresses' })}
 					</Subline>
 				</Content>
-				{address.map((addr, index) => (
-					<NetworkWalletAddress key={index} networkWallet={addr} />
+				{addresses.map((addr, index) => (
+					<NetworkWalletAddress
+						key={index}
+						networkWallet={addr}
+						setSelectedWallet={setSelectedWallet}
+					/>
 				))}
 			</ModalContainer>
 		</Modal>

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 import {
 	Button,
@@ -16,9 +16,11 @@ import { networksParams } from '@/helpers/blockchain';
 
 interface INetworkWalletAddress {
 	networkWallet: IWalletAddress;
+	setSelectedWallet: Dispatch<SetStateAction<IWalletAddress | undefined>>;
 }
 export const NetworkWalletAddress: FC<INetworkWalletAddress> = ({
 	networkWallet,
+	setSelectedWallet,
 }) => {
 	const { formatMessage } = useIntl();
 
@@ -47,6 +49,7 @@ export const NetworkWalletAddress: FC<INetworkWalletAddress> = ({
 								<IconChevronRight16 />
 							</div>
 						}
+						onClick={() => setSelectedWallet(networkWallet)}
 					/>
 				)}
 			</Flex>
