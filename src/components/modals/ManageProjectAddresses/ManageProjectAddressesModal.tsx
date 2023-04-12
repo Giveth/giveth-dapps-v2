@@ -15,6 +15,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { NetworkWalletAddress } from './NetworkWalletAddress';
 import { networksParams } from '@/helpers/blockchain';
+import { AddNewAddress } from './AddNewAddress';
 import type { IModal } from '@/types/common';
 
 interface IManageProjectAddressesModal extends IModal {
@@ -90,7 +91,10 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 					)}
 				</Content>
 				{selectedWallet ? (
-					<div></div>
+					<AddNewAddress
+						project={project}
+						selectedWallet={selectedWallet}
+					/>
 				) : (
 					addresses.map((addr, index) => (
 						<NetworkWalletAddress

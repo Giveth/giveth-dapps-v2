@@ -1,26 +1,29 @@
-import { B, Button, P } from '@giveth/ui-design-system';
+import { Button } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { getAddress, isAddress } from 'ethers/lib/utils';
 import { FC, useState } from 'react';
-import { IProject } from '@/apollo/types/types';
+import { IProject, IWalletAddress } from '@/apollo/types/types';
 import Input from '../../Input';
 import { requiredOptions } from '@/lib/constants/regex';
 import { client } from '@/apollo/apolloClient';
 import { ADD_RECIPIENT_ADDRESS_TO_PROJECT } from '@/apollo/gql/gqlProjects';
-import config from '@/configuration';
 import InlineToast, { EToastType } from '../../toasts/InlineToast';
-import { generatePolygonAddress } from '@/lib/helpers';
+import { networksParams } from '@/helpers/blockchain';
 
 interface IAddNewAddress {
 	project: IProject;
+	selectedWallet: IWalletAddress;
 }
 
 interface IAddressForm {
 	address: string;
 }
 
-export const AddNewAddress: FC<IAddNewAddress> = ({ project }) => {
+export const AddNewAddress: FC<IAddNewAddress> = ({
+	project,
+	selectedWallet,
+}) => {
 	const [loading, setLoading] = useState(false);
 	const {
 		register,
@@ -38,7 +41,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({ project }) => {
 				mutation: ADD_RECIPIENT_ADDRESS_TO_PROJECT,
 				variables: {
 					projectId: Number(project.id),
-					networkId: config.POLYGON_NETWORK_NUMBER,
+					networkId: selectedWallet.networkId,
 					address: _address,
 				},
 			});
@@ -64,22 +67,23 @@ export const AddNewAddress: FC<IAddNewAddress> = ({ project }) => {
 		return true;
 	};
 
+	const chainName = selectedWallet.networkId
+		? networksParams[selectedWallet.networkId].chainName
+		: 'Unknown';
+
 	return (
 		<>
-			<Content>
-				<P>Adding Polygon address for</P>
-				<B>{project.title}</B>
-			</Content>
 			<form onSubmit={handleSubmit(handleAdd)}>
-				<Input
+				<StyledInput
 					register={register}
 					registerName='address'
-					label='Enter a Polygon address'
+					label={`Receiving address on 
+						${chainName}`}
 					registerOptions={{
 						...requiredOptions.walletAddress,
 						validate: validateAddress,
 					}}
-					defaultValue={generatePolygonAddress(project.addresses)}
+					caption={`You can enter a new address to receive funds on ${chainName} network.`}
 				/>
 				{errors.address && (
 					<StyledInlineToast
@@ -87,7 +91,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({ project }) => {
 						message={errors.address?.message as string}
 					/>
 				)}
-				<Button
+				<StyledButton
 					size='small'
 					label='SAVE ADDRESS'
 					buttonType='secondary'
@@ -99,14 +103,13 @@ export const AddNewAddress: FC<IAddNewAddress> = ({ project }) => {
 	);
 };
 
-const Content = styled.div`
-	margin-bottom: 32px;
-	& > div {
-		display: inline-block;
-		padding-right: 4px;
-	}
+const StyledInlineToast = styled(InlineToast)``;
+
+const StyledInput = styled(Input)`
+	margin-top: 24px;
 `;
 
-const StyledInlineToast = styled(InlineToast)`
-	margin-top: 0;
+const StyledButton = styled(Button)`
+	margin-top: 24px;
+	margin-left: auto;
 `;
