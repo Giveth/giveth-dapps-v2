@@ -123,6 +123,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 							projects={projects}
 							changeOrder={changeOrder}
 							order={order}
+							setProjects={setProjects}
 						/>
 					</ProjectsTableWrapper>
 				) : (

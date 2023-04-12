@@ -5,7 +5,7 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { useIntl } from 'react-intl';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '../Modal';
@@ -20,11 +20,13 @@ import type { IModal } from '@/types/common';
 
 interface IManageProjectAddressesModal extends IModal {
 	project: IProject;
+	setProjects: Dispatch<SetStateAction<IProject[]>>;
 }
 
 export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 	project,
 	setShowModal,
+	setProjects,
 }) => {
 	const [selectedWallet, setSelectedWallet] = useState<IWalletAddress>();
 	const [addresses, setAddresses] = useState<IWalletAddress[]>([]);
@@ -94,6 +96,8 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 					<AddNewAddress
 						project={project}
 						selectedWallet={selectedWallet}
+						setProjects={setProjects}
+						setSelectedWallet={setSelectedWallet}
 					/>
 				) : (
 					addresses.map((addr, index) => (

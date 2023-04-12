@@ -2,7 +2,7 @@ import { Button } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { getAddress, isAddress } from 'ethers/lib/utils';
-import { FC, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { IProject, IWalletAddress } from '@/apollo/types/types';
 import Input from '../../Input';
 import { requiredOptions } from '@/lib/constants/regex';
@@ -14,6 +14,8 @@ import { networksParams } from '@/helpers/blockchain';
 interface IAddNewAddress {
 	project: IProject;
 	selectedWallet: IWalletAddress;
+	setProjects: Dispatch<SetStateAction<IProject[]>>;
+	setSelectedWallet: Dispatch<SetStateAction<IWalletAddress | undefined>>;
 }
 
 interface IAddressForm {
@@ -23,6 +25,8 @@ interface IAddressForm {
 export const AddNewAddress: FC<IAddNewAddress> = ({
 	project,
 	selectedWallet,
+	setProjects,
+	setSelectedWallet,
 }) => {
 	const [loading, setLoading] = useState(false);
 	const {
@@ -44,6 +48,29 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 					networkId: selectedWallet.networkId,
 					address: _address,
 				},
+			});
+			setProjects((projects: IProject[]) => {
+				const _projects = structuredClone(projects);
+				const newProjects = [];
+				for (let i = 0; i < _projects.length; i++) {
+					const _project = _projects[i];
+					if (_project.id === project.id) {
+						_project.addresses = [
+							...(_project.addresses || []),
+							{
+								address: _address,
+								isRecipient: true,
+								networkId: selectedWallet.networkId,
+							},
+						];
+						newProjects.push(structuredClone(_project));
+					} else {
+						newProjects.push(_project);
+					}
+				}
+				console.log('newProjects', newProjects);
+				setSelectedWallet(undefined);
+				return newProjects;
 			});
 		} catch (error: any) {
 			if (error.message) {
