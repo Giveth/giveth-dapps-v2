@@ -43,11 +43,13 @@ const tabs = [
 interface ISetProfilePic {
 	isOnboarding?: boolean;
 	callback?: () => void;
+	closeModal?: () => void;
 }
 
 export const SetProfilePic = ({
 	isOnboarding = false,
 	callback = () => {},
+	closeModal = () => {},
 }: ISetProfilePic) => {
 	const { loading, activeTab, setActiveTab, onSaveAvatar } = useAvatar();
 	const useUploadProps = useUpload();
@@ -261,7 +263,13 @@ export const SetProfilePic = ({
 								<TextButton
 									buttonType='texty'
 									label='DO IT LATER'
-									// onClick={closeModal}
+									onClick={() => {
+										if (isOnboarding) {
+											callback && callback();
+										} else {
+											closeModal();
+										}
+									}}
 								/>
 							</Flex>
 						</Flex>

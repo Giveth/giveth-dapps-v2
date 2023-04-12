@@ -15,7 +15,7 @@ const UploadProfilePicModal = ({ setShowModal }: IUploadProfilePicModal) => {
 			headerTitle='Upload Your Images or NFTs'
 			headerTitlePosition='left'
 		>
-			<SetProfilePic />
+			<SetProfilePic closeModal={closeModal} />
 		</Modal>
 	);
 };
