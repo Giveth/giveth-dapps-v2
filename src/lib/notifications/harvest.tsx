@@ -2,7 +2,7 @@ import toast from 'react-hot-toast';
 import { networksParams } from '@/helpers/blockchain';
 
 export function showPendingHarvest(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.success(
 		<span>
@@ -21,7 +21,7 @@ export function showPendingHarvest(network: number, txHash: string): void {
 }
 
 export function showFailedHarvest(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.error(
 		<span>
@@ -40,7 +40,7 @@ export function showFailedHarvest(network: number, txHash: string): void {
 }
 
 export function showConfirmedHarvest(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.success(
 		<span>

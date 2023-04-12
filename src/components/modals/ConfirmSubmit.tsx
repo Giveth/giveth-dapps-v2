@@ -56,7 +56,7 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 					href={`${
 						config.NETWORKS_CONFIG[chainId!]?.blockExplorerUrls
 					}
-			/tx/${txHash}`}
+			tx/${txHash}`}
 					target='_blank'
 					size='Big'
 				>
@@ -97,7 +97,7 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 			<BlockExplorerLink
 				as='a'
 				href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorerUrls}
-							/tx/${txHash}`}
+							tx/${txHash}`}
 				target='_blank'
 				size='Big'
 			>
@@ -136,7 +136,7 @@ export const ErrorInnerModal: FC<IErrorProps> = ({
 					href={`${
 						config.NETWORKS_CONFIG[chainId!]?.blockExplorerUrls
 					}
-			/tx/${txHash}`}
+			tx/${txHash}`}
 					target='_blank'
 					size='Big'
 				>
