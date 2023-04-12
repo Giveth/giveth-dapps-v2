@@ -14,6 +14,7 @@ import { IProject, IWalletAddress } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { NetworkWalletAddress } from './NetworkWalletAddress';
+import { networksParams } from '@/helpers/blockchain';
 import type { IModal } from '@/types/common';
 
 interface IManageProjectAddressesModal extends IModal {
@@ -69,18 +70,36 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 		>
 			<ModalContainer>
 				<Content>
-					<SublineBold>{project.title}</SublineBold>
-					<Subline>
-						{formatMessage({ id: 'label.recipient_addresses' })}
-					</Subline>
+					{selectedWallet ? (
+						<SublineBold>
+							{selectedWallet.networkId
+								? networksParams[selectedWallet.networkId]
+										.chainName
+								: ''}
+							&nbsp;address
+						</SublineBold>
+					) : (
+						<>
+							<SublineBold>{project.title}</SublineBold>
+							<Subline>
+								{formatMessage({
+									id: 'label.recipient_addresses',
+								})}
+							</Subline>
+						</>
+					)}
 				</Content>
-				{addresses.map((addr, index) => (
-					<NetworkWalletAddress
-						key={index}
-						networkWallet={addr}
-						setSelectedWallet={setSelectedWallet}
-					/>
-				))}
+				{selectedWallet ? (
+					<div></div>
+				) : (
+					addresses.map((addr, index) => (
+						<NetworkWalletAddress
+							key={index}
+							networkWallet={addr}
+							setSelectedWallet={setSelectedWallet}
+						/>
+					))
+				)}
 			</ModalContainer>
 		</Modal>
 	);
