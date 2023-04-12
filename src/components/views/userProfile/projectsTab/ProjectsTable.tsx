@@ -26,7 +26,6 @@ import {
 	TableHeader,
 } from '@/components/styled-components/Table';
 import config from '@/configuration';
-import { AddPolygonToast } from './AddPolygonToast';
 import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
 
 interface IProjectsTable {
@@ -103,12 +102,6 @@ const ProjectsTable: FC<IProjectsTable> = ({
 								<ProjectTitle>
 									{project.title}
 									<VerificationBadge status={verStatus} />
-									{!hasPolyGonAddress && (
-										<AddPolygonToast
-											project={project}
-											setProjects={setProjects}
-										/>
-									)}
 								</ProjectTitle>
 							</ProjectTableCell>
 							<ProjectTableCell>
