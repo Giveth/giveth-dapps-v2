@@ -10,6 +10,7 @@ import { client } from '@/apollo/apolloClient';
 import { ADD_RECIPIENT_ADDRESS_TO_PROJECT } from '@/apollo/gql/gqlProjects';
 import InlineToast, { EToastType } from '../../toasts/InlineToast';
 import { networksParams } from '@/helpers/blockchain';
+import { suggestNewAddress } from '@/lib/helpers';
 
 interface IAddNewAddress {
 	project: IProject;
@@ -110,6 +111,8 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 						...requiredOptions.walletAddress,
 						validate: validateAddress,
 					}}
+					placeholder='0x...'
+					defaultValue={suggestNewAddress(project.addresses)}
 					caption={`You can enter a new address to receive funds on ${chainName} network.`}
 				/>
 				{errors.address && (

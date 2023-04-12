@@ -15,7 +15,7 @@ import { captureException } from '@sentry/nextjs';
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
-import { IUser } from '@/apollo/types/types';
+import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
@@ -162,6 +162,16 @@ export const getGasPreference = (
 };
 
 export const isSSRMode = typeof window === 'undefined';
+
+export const suggestNewAddress = (addresses?: IWalletAddress[]) => {
+	if (!addresses || addresses.length < 1) return '';
+	const isSame = compareAddressesArray(addresses.map(a => a.address));
+	if (isSame) {
+		return addresses[0].address;
+	} else {
+		return '';
+	}
+};
 
 export const compareAddresses = (
 	add1: string | undefined | null,
