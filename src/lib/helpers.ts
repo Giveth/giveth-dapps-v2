@@ -15,7 +15,7 @@ import { captureException } from '@sentry/nextjs';
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
-import { IUser, IWalletAddress } from '@/apollo/types/types';
+import { IUser } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
@@ -162,25 +162,6 @@ export const getGasPreference = (
 };
 
 export const isSSRMode = typeof window === 'undefined';
-
-export const generatePolygonAddress = (addresses?: IWalletAddress[]) => {
-	if (!addresses || addresses.length !== 2) return '';
-	const mainnetAddress = addresses.find(
-		address => address.networkId === config.MAINNET_NETWORK_NUMBER,
-	);
-	const gnosisAddress = addresses.find(
-		address => address.networkId === config.XDAI_NETWORK_NUMBER,
-	);
-	const isSame = compareAddressesArray([
-		mainnetAddress?.address,
-		gnosisAddress?.address,
-	]);
-	if (isSame) {
-		return mainnetAddress?.address;
-	} else {
-		return '';
-	}
-};
 
 export const compareAddresses = (
 	add1: string | undefined | null,
