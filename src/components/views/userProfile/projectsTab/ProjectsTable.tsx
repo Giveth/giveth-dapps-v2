@@ -25,7 +25,6 @@ import {
 	TableCell,
 	TableHeader,
 } from '@/components/styled-components/Table';
-import config from '@/configuration';
 import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
 
 interface IProjectsTable {
@@ -80,10 +79,6 @@ const ProjectsTable: FC<IProjectsTable> = ({
 				{projects?.map(project => {
 					const status = project.status.name;
 					const isCancelled = status === EProjectStatus.CANCEL;
-					const hasPolyGonAddress = project.addresses?.find(
-						address =>
-							address.networkId === config.POLYGON_NETWORK_NUMBER,
-					);
 					const verStatus = project.verified
 						? EVerificationStatus.VERIFIED
 						: project.projectVerificationForm?.status;
