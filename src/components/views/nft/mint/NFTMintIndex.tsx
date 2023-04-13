@@ -22,49 +22,22 @@ import { Flex } from '@/components/styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 import Routes from '@/lib/constants/Routes';
 import { useModalCallback } from '@/hooks/useModalCallback';
+import { isUserRegistered } from '@/lib/helpers';
 
 export const NFTMintIndex = () => {
 	// const [showEligibilityModal, setShowEligibilityModal] = useState(false);
 	const { formatMessage } = useIntl();
 	const { account } = useWeb3React();
 	const { step, setStep, qty, tx: txHash } = usePFPMintData();
-	const { isSignedIn } = useAppSelector(state => state.user);
+	const { isSignedIn, userData } = useAppSelector(state => state.user);
 	const router = useRouter();
 
-	// useEffect(() => {
-	// 	const checkAddress = async () => {
-	// 		if (!library || !account) return;
-	// 		try {
-	// 			const _provider =
-	// 				chainId === config.MAINNET_NETWORK_NUMBER
-	// 					? library
-	// 					: new JsonRpcProvider(config.MAINNET_CONFIG.nodeUrl);
-	// 			const PFPContract = new Contract(
-	// 				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
-	// 				PFP_ABI,
-	// 				_provider,
-	// 			) as GiversPFP;
-	// 			const _allowListOnly = await PFPContract.allowListOnly();
-	// 			if (_allowListOnly) {
-	// 				const res = await PFPContract.allowList(account);
-	// 				if (!res) {
-	// 					setShowEligibilityModal(true);
-	// 				} else {
-	// 					setIsEligible(true);
-	// 				}
-	// 			} else {
-	// 				setIsEligible(true);
-	// 			}
-	// 			setIsEligible(true);
-	// 		} catch (error) {
-	// 			console.log('Error on check allow List', error);
-	// 		}
-	// 	};
-	// 	checkAddress();
-	// }, [account, chainId, library]);
-
 	const redirectAndOpenPFPModal = () => {
-		router.push(Routes.MyAccountSetPfp);
+		if (isUserRegistered(userData)) {
+			router.push(Routes.MyAccountSetPfp);
+		} else {
+			router.push(Routes.Onboard);
+		}
 	};
 
 	const { modalCallback: signInThenRedirect } = useModalCallback(
