@@ -60,6 +60,7 @@ export const SetProfilePic = ({
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
 	const attributeSectionRef = useRef<HTMLDivElement>(null);
 	const [sectionHeight, setSectionHeight] = useState<number>(0);
+	const [counter, setCounter] = useState(1);
 
 	const nftUrl = () => {
 		if (!selectedPFP) return undefined;
@@ -124,10 +125,11 @@ export const SetProfilePic = ({
 
 		setTimeout(() => {
 			window.dispatchEvent(new Event('resize'));
+			setCounter(counter + 1);
 		}, 100);
 
 		return () => window.removeEventListener('resize', handleResize);
-	}, [selectedPFP]);
+	}, [selectedPFP, counter]);
 
 	return activeTab === EProfilePicTab.LOADING || isLoading === true ? (
 		<Wrapper>
@@ -197,8 +199,7 @@ export const SetProfilePic = ({
 					{pfpData && pfpData.length > 0 ? (
 						<Flex flexDirection='column' gap='30px'>
 							<CustomH5>
-								Your Unique Giveth’s PFP Artwork --{' '}
-								{sectionHeight} ----
+								Your Unique Giveth’s PFP Artwork
 							</CustomH5>
 							<PFPItemsContainer gap='25px'>
 								{pfpData?.map(pfp => (
@@ -224,8 +225,7 @@ export const SetProfilePic = ({
 										gap='16px'
 									>
 										<H6>
-											The The Givers Collection #{' '}
-											{sectionHeight}
+											The The Givers Collection #
 											{selectedPFP.tokenId}
 										</H6>
 										<SelectedPFPContainer
@@ -330,8 +330,9 @@ export const SetProfilePic = ({
 
 const Wrapper = styled.div`
 	padding: 24px;
+	width: 100%;
 	${mediaQueries.laptopL} {
-		width: 1100px;
+		width: 1400px;
 	}
 `;
 
@@ -382,6 +383,6 @@ const OnboardingMintNowButton = styled(Button)`
 `;
 
 const PFPItemsContainer = styled(Flex)`
-	overflow-x: scroll;
+	overflow-x: auto;
 	padding: 16px 0;
 `;

@@ -46,6 +46,7 @@ const Container = styled(FlexCenter)<{ isSelected: boolean }>`
 	flex-direction: column;
 	background-color: ${neutralColors.gray[100]};
 	width: 250px;
+	padding: 0 20px;
 	height: 324px;
 	box-shadow: ${Shadow.Neutral[500]};
 	border-radius: 8px;
