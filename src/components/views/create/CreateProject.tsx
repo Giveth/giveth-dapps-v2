@@ -73,7 +73,7 @@ export enum EInputs {
 	image = 'image',
 	draft = 'draft',
 	mainAddress = 'mainAddress',
-	secondaryAddress = 'secondaryAddress',
+	gnosisAddress = 'gnosisAddress',
 	polygonAddress = 'polygonAddress',
 	celoAddress = 'celoAddress',
 	optimismAddress = 'optimismAddress',
@@ -87,7 +87,7 @@ export type TInputs = {
 	[EInputs.image]?: string;
 	[EInputs.draft]?: boolean;
 	[EInputs.mainAddress]: string;
-	[EInputs.secondaryAddress]: string;
+	[EInputs.gnosisAddress]: string;
 	[EInputs.polygonAddress]: string;
 	[EInputs.celoAddress]: string;
 	[EInputs.optimismAddress]: string;
@@ -109,7 +109,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const prevMainAddress = addresses?.find(
 		a => a.isRecipient && a.networkId === MAINNET_NETWORK_NUMBER,
 	)?.address;
-	const prevSecondaryAddress = addresses?.find(
+	const prevGnosisAddress = addresses?.find(
 		a => a.isRecipient && a.networkId === XDAI_NETWORK_NUMBER,
 	)?.address;
 	const prevPolygonAddress = addresses?.find(
@@ -123,7 +123,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	)?.address;
 	const isSamePrevAddresses = compareAddressesArray([
 		prevMainAddress,
-		prevSecondaryAddress,
+		prevGnosisAddress,
 		prevPolygonAddress,
 		prevCeloAddress,
 		prevOptimismAddress,
@@ -132,7 +132,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	if (isSamePrevAddresses) userAddresses.push(prevMainAddress!);
 	else {
 		if (prevMainAddress) userAddresses.push(prevMainAddress);
-		if (prevSecondaryAddress) userAddresses.push(prevSecondaryAddress);
+		if (prevGnosisAddress) userAddresses.push(prevGnosisAddress);
 		if (prevPolygonAddress) userAddresses.push(prevPolygonAddress);
 		if (prevCeloAddress) userAddresses.push(prevCeloAddress);
 		if (prevOptimismAddress) userAddresses.push(prevOptimismAddress);
@@ -148,7 +148,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.impactLocation]: defaultImpactLocation,
 			[EInputs.image]: image || '',
 			[EInputs.mainAddress]: prevMainAddress || '',
-			[EInputs.secondaryAddress]: prevSecondaryAddress || '',
+			[EInputs.gnosisAddress]: prevGnosisAddress || '',
 			[EInputs.polygonAddress]: prevPolygonAddress || '',
 			[EInputs.celoAddress]: prevCeloAddress || '',
 			[EInputs.optimismAddress]: prevOptimismAddress || '',
@@ -162,7 +162,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		isEditMode ? !!prevMainAddress : true,
 	);
 	const [gnosisAddressActive, setGnosisAddressActive] = useState(
-		isEditMode ? !!prevSecondaryAddress : true,
+		isEditMode ? !!prevGnosisAddress : true,
 	);
 	const [polygonAddressActive, setPolygonAddressActive] = useState(
 		isEditMode ? !!prevPolygonAddress : true,
@@ -187,7 +187,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			const addresses = [];
 			const {
 				mainAddress,
-				secondaryAddress,
+				gnosisAddress,
 				polygonAddress,
 				celoAddress,
 				optimismAddress,
@@ -238,7 +238,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					});
 				}
 				if (gnosisAddressActive) {
-					const checksumAddress = utils.getAddress(secondaryAddress);
+					const checksumAddress = utils.getAddress(gnosisAddress);
 					addresses.push({
 						address: checksumAddress,
 						networkId: XDAI_NETWORK_NUMBER,
@@ -420,7 +420,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 											id: 'label.you_must_select_at_least_one_address',
 										}),
 									);
-								if (!e) unregister(EInputs.secondaryAddress);
+								if (!e) unregister(EInputs.gnosisAddress);
 								setGnosisAddressActive(e);
 							}}
 						/>

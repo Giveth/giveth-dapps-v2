@@ -66,7 +66,7 @@ const WalletAddressInput: FC<IProps> = ({
 	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
 	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
 	const inputName = isGnosis
-		? EInputs.secondaryAddress
+		? EInputs.gnosisAddress
 		: isPolygon
 		? EInputs.polygonAddress
 		: isCelo
