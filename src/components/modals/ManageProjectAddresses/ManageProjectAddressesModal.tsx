@@ -61,9 +61,11 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 	return (
 		<Modal
 			headerIcon={<IconWalletOutline32 />}
-			headerTitle={
-				selectedWallet ? 'Add new address' : 'Manage addresses'
-			}
+			headerTitle={formatMessage({
+				id: selectedWallet
+					? 'label.add_new_address'
+					: 'label.manage_addresses',
+			})}
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
@@ -75,11 +77,18 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 				<Content>
 					{selectedWallet ? (
 						<SublineBold>
-							{selectedWallet.networkId
-								? networksParams[selectedWallet.networkId]
-										.chainName
-								: ''}
-							&nbsp;address
+							{formatMessage(
+								{
+									id: 'label.chain_address',
+								},
+								{
+									chainName: selectedWallet.networkId
+										? networksParams[
+												selectedWallet.networkId
+										  ].chainName
+										: '',
+								},
+							)}
 						</SublineBold>
 					) : (
 						<>
