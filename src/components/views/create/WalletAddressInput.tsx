@@ -61,6 +61,7 @@ const WalletAddressInput: FC<IProps> = ({
 	const { chainId, library } = useWeb3React();
 
 	const user = useAppSelector(state => state.user?.userData);
+	const isMainnet = networkId === config.MAINNET_NETWORK_NUMBER;
 	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
 	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
 	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
@@ -176,15 +177,10 @@ const WalletAddressInput: FC<IProps> = ({
 		}
 	}, [sameAddress]);
 
-	if (isHidden && (isGnosis || isPolygon || isCelo || isOptimism))
-		return null;
+	if (isHidden && !isMainnet) return null;
 
 	return (
-		<Container
-			hide={
-				sameAddress && (isGnosis || isPolygon || isCelo || isOptimism)
-			}
-		>
+		<Container hide={sameAddress && !isMainnet}>
 			<Header>
 				<H6>
 					{sameAddress

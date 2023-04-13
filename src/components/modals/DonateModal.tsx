@@ -193,10 +193,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			} else if (token?.address) {
 				let tokenAddress = token.address;
 				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
-				if (
-					(isGnosis || isPolygon || isCelo || isOptimism) &&
-					token.mainnetAddress
-				) {
+				if (!isMainnet && token.mainnetAddress) {
 					tokenAddress = token.mainnetAddress || '';
 				}
 				const coingeckoChainId =
