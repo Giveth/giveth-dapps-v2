@@ -199,8 +199,7 @@ export const SetProfilePic = ({
 					{pfpData && pfpData.length > 0 ? (
 						<Flex flexDirection='column' gap='30px'>
 							<CustomH5>
-								Your Unique Giveth’s PFP Artwork --{' '}
-								{sectionHeight} ----
+								Your Unique Giveth’s PFP Artwork
 							</CustomH5>
 							<PFPItemsContainer gap='25px'>
 								{pfpData?.map(pfp => (
@@ -227,7 +226,6 @@ export const SetProfilePic = ({
 									>
 										<H6>
 											The The Givers Collection #{' '}
-											{sectionHeight}
 											{selectedPFP.tokenId}
 										</H6>
 										<SelectedPFPContainer
