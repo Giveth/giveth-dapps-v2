@@ -330,6 +330,7 @@ export const SetProfilePic = ({
 
 const Wrapper = styled.div`
 	padding: 24px;
+	width: 100%;
 	${mediaQueries.laptopL} {
 		width: 1400px;
 	}
@@ -382,6 +383,6 @@ const OnboardingMintNowButton = styled(Button)`
 `;
 
 const PFPItemsContainer = styled(Flex)`
-	overflow-x: scroll;
+	overflow-x: auto;
 	padding: 16px 0;
 `;
