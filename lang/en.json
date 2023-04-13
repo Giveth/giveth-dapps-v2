@@ -549,7 +549,7 @@
 	"label.select_an_image_from_our_gallery": "Select an image from our gallery.",
 	"label.remove": "Remove",
 	"label.receiving_address": "Receiving address",
-	"label.address": "{chainName} address",
+	"label.chain_address": "{chainName} address",
 	"label.receiving_address_on": "Receiving address on {chainName}",
 	"label.my_wallet_address": "My Wallet Address",
 	"label.resolved_as": "Resolves as ",
@@ -1244,5 +1244,8 @@
 	"component.pfp_eligibility_modal.content.success": "You are eligible to mint your Giver early! Thanks for supporting Giveth",
 	"label.duration_ago": "{duration} ago",
 	"label.an_equivalent_of_up_to_40%": "An equivalent of up to 40% of the donation amount in GIV tokens!",
-	"label.read_more_on_our_docs": "Read more on our docs"
+	"label.read_more_on_our_docs": "Read more on our docs",
+	"label.recipient_addresses": "recipient addresses",
+	"label.add_new_address": "Add new address",
+	"label.manage_addresses": "Manage addresses"
 }
