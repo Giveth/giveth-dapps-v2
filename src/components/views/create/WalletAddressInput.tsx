@@ -26,6 +26,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
 import { IconEthereum } from '@/components/Icons/Eth';
 import NetworkLogo from '@/components/NetworkLogo';
+import { networksParams } from '@/helpers/blockchain';
 
 interface IProps {
 	networkId: number;
@@ -191,13 +192,8 @@ const WalletAddressInput: FC<IProps> = ({
 						: formatMessage(
 								{ id: 'label.address' },
 								{
-									chainName: isGnosis
-										? 'Gnosis Chain'
-										: isPolygon
-										? 'Polygon Mainnet'
-										: isCelo
-										? 'Celo Mainnet'
-										: 'Mainnet',
+									chainName:
+										networksParams[networkId].chainName,
 								},
 						  )}
 				</H6>
