@@ -42,12 +42,11 @@ const networkOptions = [
 		label: 'Celo Mainnet',
 		id: config.CELO_NETWORK_NUMBER,
 	},
-	// TODO:Optimism
-	// {
-	// 	value: config.OPTIMISM_NETWORK_NUMBER,
-	// 	label: 'Optimism',
-	// 	id: config.OPTIMISM_NETWORK_NUMBER,
-	// },
+	{
+		value: config.OPTIMISM_NETWORK_NUMBER,
+		label: 'Optimism',
+		id: config.OPTIMISM_NETWORK_NUMBER,
+	},
 ];
 
 export interface IAddressForm {

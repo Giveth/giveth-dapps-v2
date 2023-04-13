@@ -63,16 +63,16 @@ const WalletAddressInput: FC<IProps> = ({
 	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
 	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
 	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
-	// TODO:Optimism const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
+	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
 	const inputName = isGnosis
 		? EInputs.secondaryAddress
 		: isPolygon
 		? EInputs.polygonAddress
 		: isCelo
 		? EInputs.celoAddress
-		: // TODO:Optimism : isOptimism
-		  //? EInputs.optimismAddress
-		  EInputs.mainAddress;
+		: isOptimism
+		? EInputs.optimismAddress
+		: EInputs.mainAddress;
 	const value = getValues(inputName);
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
 	const error = errors[inputName];
@@ -106,9 +106,9 @@ const WalletAddressInput: FC<IProps> = ({
 				? 'Polygon Mainnet'
 				: isCelo
 				? 'Celo Mainnet'
-				: // TODO:Optimism : isOptimism
-				  // ? 'Optimism'
-				  'Mainnet'
+				: isOptimism
+				? 'Optimism'
+				: 'Mainnet'
 		}.`;
 	}
 
@@ -175,12 +175,15 @@ const WalletAddressInput: FC<IProps> = ({
 		}
 	}, [sameAddress]);
 
-	// TODO:Optimism if (isHidden && (isGnosis || isPolygon || isCelo || isOptimism)) return null;
-	if (isHidden && (isGnosis || isPolygon || isCelo)) return null;
+	if (isHidden && (isGnosis || isPolygon || isCelo || isOptimism))
+		return null;
 
 	return (
-		// TODO:Optimism <Container hide={sameAddress && (isGnosis || isPolygon || isCelo || isOptimism)}>
-		<Container hide={sameAddress && (isGnosis || isPolygon || isCelo)}>
+		<Container
+			hide={
+				sameAddress && (isGnosis || isPolygon || isCelo || isOptimism)
+			}
+		>
 			<Header>
 				<H6>
 					{sameAddress
@@ -205,7 +208,7 @@ const WalletAddressInput: FC<IProps> = ({
 							<GnosisIcon />
 							<PolygonIcon />
 							<CeloIcon />
-							{/* TODO:Optimism <OptimismIcon /> */}
+							<OptimismIcon />
 						</>
 					) : isGnosis ? (
 						<GnosisIcon />
@@ -213,10 +216,9 @@ const WalletAddressInput: FC<IProps> = ({
 						<PolygonIcon />
 					) : isCelo ? (
 						<CeloIcon />
+					) : isOptimism ? (
+						<OptimismIcon />
 					) : (
-						// TODO:Optimism: isOptimism ? (
-						// <OptimismIcon />
-						// )
 						<MainnetIcon />
 					)}
 				</Flex>
@@ -236,10 +238,9 @@ const WalletAddressInput: FC<IProps> = ({
 										? 'Polygon Mainnet'
 										: isCelo
 										? 'Celo Mainnet'
-										: // TODO:Optimism
-										  // : isOptimism
-										  // ? 'Optimism Mainnet'
-										  'Mainnet',
+										: isOptimism
+										? 'Optimism Mainnet'
+										: 'Mainnet',
 								},
 						  )
 				}
