@@ -225,7 +225,7 @@ export const SetProfilePic = ({
 										gap='16px'
 									>
 										<H6>
-											The The Givers Collection #{' '}
+											The The Givers Collection #
 											{selectedPFP.tokenId}
 										</H6>
 										<SelectedPFPContainer
