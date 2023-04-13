@@ -17,6 +17,7 @@ interface IAddNewAddress {
 	selectedWallet: IWalletAddress;
 	setProjects: Dispatch<SetStateAction<IProject[]>>;
 	setSelectedWallet: Dispatch<SetStateAction<IWalletAddress | undefined>>;
+	setAddresses: Dispatch<SetStateAction<IWalletAddress[]>>;
 }
 
 interface IAddressForm {
@@ -28,6 +29,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 	selectedWallet,
 	setProjects,
 	setSelectedWallet,
+	setAddresses,
 }) => {
 	const [loading, setLoading] = useState(false);
 	const {
@@ -72,6 +74,17 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 				console.log('newProjects', newProjects);
 				setSelectedWallet(undefined);
 				return newProjects;
+			});
+			setAddresses(_addresses => {
+				const _adds = structuredClone(_addresses);
+				for (let i = 0; i < _adds.length; i++) {
+					const _add = _adds[i];
+					if (_add.networkId === selectedWallet.networkId) {
+						_add.isRecipient = true;
+						_add.address = _address;
+					}
+				}
+				return _adds;
 			});
 		} catch (error: any) {
 			if (error.message) {

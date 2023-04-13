@@ -98,6 +98,7 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 						selectedWallet={selectedWallet}
 						setProjects={setProjects}
 						setSelectedWallet={setSelectedWallet}
+						setAddresses={setAddresses}
 					/>
 				) : (
 					addresses.map((addr, index) => (
