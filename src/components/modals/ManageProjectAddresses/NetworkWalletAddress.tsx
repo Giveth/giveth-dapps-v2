@@ -10,7 +10,6 @@ import {
 import { useIntl } from 'react-intl';
 import { IWalletAddress } from '@/apollo/types/types';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import { Badge } from '@/components/Badge';
 import NetworkLogo from '@/components/NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
 
@@ -63,10 +62,6 @@ export const NetworkWalletAddress: FC<INetworkWalletAddress> = ({
 const Wrapper = styled(Flex)`
 	margin: 24px 0;
 	gap: 8px;
-`;
-
-const StyledBadge = styled(Badge)`
-	width: fit-content;
 `;
 
 const Address = styled(Subline)`
