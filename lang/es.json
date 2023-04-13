@@ -547,7 +547,7 @@
 	"label.select_an_image_from_our_gallery": "Escoge una imagen de nuestra galería.",
 	"label.remove": "Eliminar",
 	"label.receiving_address": "Dirección receptora",
-	"label.address": "Dirección de {chainName}",
+	"label.chain_address": "Dirección de {chainName}",
 	"label.receiving_address_on": "Dirección receptora en {chainName}",
 	"label.my_wallet_address": "Mi dirección de la billetera",
 	"label.resolved_as": "Resuelto como ",
@@ -1255,5 +1255,7 @@
 	"label.duration_ago": "hace {duration}",
 	"label.an_equivalent_of_up_to_40%": "Un equivalente de hasta 40% del monto de la donación en GIV tokens!",
 	"label.read_more_on_our_docs": "Aprende más en nuestra doc",
-	"label.recipient_addresses": ""
+	"label.recipient_addresses": "",
+	"label.add_new_address": "",
+	"label.manage_addresses": ""
 }

@@ -186,7 +186,7 @@ const WalletAddressInput: FC<IProps> = ({
 					{sameAddress
 						? formatMessage({ id: 'label.receiving_address' })
 						: formatMessage(
-								{ id: 'label.address' },
+								{ id: 'label.chain_address' },
 								{
 									chainName: isGnosis
 										? 'Gnosis Chain'
