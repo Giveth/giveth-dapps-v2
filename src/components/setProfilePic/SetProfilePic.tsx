@@ -60,6 +60,7 @@ export const SetProfilePic = ({
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
 	const attributeSectionRef = useRef<HTMLDivElement>(null);
 	const [sectionHeight, setSectionHeight] = useState<number>(0);
+	const [counter, setCounter] = useState(1);
 
 	const nftUrl = () => {
 		if (!selectedPFP) return undefined;
@@ -124,10 +125,11 @@ export const SetProfilePic = ({
 
 		setTimeout(() => {
 			window.dispatchEvent(new Event('resize'));
+			setCounter(counter + 1);
 		}, 100);
 
 		return () => window.removeEventListener('resize', handleResize);
-	}, [selectedPFP]);
+	}, [selectedPFP, counter]);
 
 	return activeTab === EProfilePicTab.LOADING || isLoading === true ? (
 		<Wrapper>
