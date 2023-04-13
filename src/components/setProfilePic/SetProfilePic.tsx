@@ -331,7 +331,7 @@ export const SetProfilePic = ({
 const Wrapper = styled.div`
 	padding: 24px;
 	${mediaQueries.laptopL} {
-		width: 1100px;
+		width: 1400px;
 	}
 `;
 
