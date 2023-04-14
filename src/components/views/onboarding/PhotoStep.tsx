@@ -28,8 +28,9 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 				width={128}
 			/>
 			<Desc>
-				This is how you look like right now, not cool! right? <br />
-				Upload something better can help with getting more funds!
+				This is what your profile looks like right now. A little boring,
+				right? <br /> Upload something better to personalize your
+				profile.
 			</Desc>
 			<SetProfilePic
 				isOnboarding={true}

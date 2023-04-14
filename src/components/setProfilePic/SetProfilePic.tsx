@@ -37,7 +37,7 @@ enum EProfilePicTab {
 
 const tabs = [
 	{ id: EProfilePicTab.UPLOAD, title: 'Upload Image' },
-	{ id: EProfilePicTab.PFP, title: 'My NFTs' },
+	{ id: EProfilePicTab.PFP, title: 'My Givers' },
 ];
 
 interface ISetProfilePic {
@@ -198,9 +198,7 @@ export const SetProfilePic = ({
 				<>
 					{pfpData && pfpData.length > 0 ? (
 						<Flex flexDirection='column' gap='30px'>
-							<CustomH5>
-								Your Unique Giveth’s PFP Artwork
-							</CustomH5>
+							<CustomH5>Your Givers PFP NFTs</CustomH5>
 							<PFPItemsContainer gap='25px'>
 								{pfpData?.map(pfp => (
 									<PfpItem
@@ -225,7 +223,7 @@ export const SetProfilePic = ({
 										gap='16px'
 									>
 										<H6>
-											The The Givers Collection #
+											The Givers Collection #
 											{selectedPFP.tokenId}
 										</H6>
 										<SelectedPFPContainer

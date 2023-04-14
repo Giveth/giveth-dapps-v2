@@ -98,8 +98,8 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 					<UserInfo>
 						<img
 							src={user?.avatar || '/images/avatar.svg'}
-							width={128}
-							height={128}
+							width={180}
+							height={180}
 							alt={user?.name}
 						/>
 						<UserInfoRow>
