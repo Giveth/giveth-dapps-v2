@@ -47,6 +47,9 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 		WalletAddr[config.CELO_NETWORK_NUMBER] = {
 			networkId: config.CELO_NETWORK_NUMBER,
 		};
+		WalletAddr[config.OPTIMISM_NETWORK_NUMBER] = {
+			networkId: config.OPTIMISM_NETWORK_NUMBER,
+		};
 		const { addresses } = project;
 		if (!addresses) return;
 		for (let i = 0; i < addresses.length; i++) {
