@@ -49,7 +49,7 @@ export const fetchPrice = async (chainId: number, tokenAddress?: string) => {
 		const chain =
 			chainId === config.OPTIMISM_NETWORK_NUMBER
 				? 'celo'
-				: config.OPTIMISM_NETWORK_NUMBER
+				: chainId === config.OPTIMISM_NETWORK_NUMBER
 				? 'optimistic-ethereum'
 				: chainId === config.POLYGON_NETWORK_NUMBER
 				? 'polygon-pos'
