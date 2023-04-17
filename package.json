@@ -1,6 +1,6 @@
 {
 	"name": "givethdapp",
-	"version": "2.14.3",
+	"version": "2.14.7",
 	"private": true,
 	"scripts": {
 		"build": "next build",

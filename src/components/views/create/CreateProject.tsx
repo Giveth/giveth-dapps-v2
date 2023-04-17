@@ -58,7 +58,7 @@ const {
 	MAINNET_NETWORK_NUMBER,
 	XDAI_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER,
-	CELO_NETWORK_NUMBER,
+	// TODO:Celo CELO_NETWORK_NUMBER,
 	// TODO:Optimism OPTIMISM_NETWORK_NUMBER,
 } = config;
 interface ICreateProjectProps {
@@ -75,7 +75,7 @@ export enum EInputs {
 	mainAddress = 'mainAddress',
 	secondaryAddress = 'secondaryAddress',
 	polygonAddress = 'polygonAddress',
-	celoAddress = 'celoAddress',
+	// TODO:Celo celoAddress = 'celoAddress',
 	// TODO:Optimism optimismAddress = 'optimismAddress',
 }
 
@@ -89,7 +89,7 @@ export type TInputs = {
 	[EInputs.mainAddress]: string;
 	[EInputs.secondaryAddress]: string;
 	[EInputs.polygonAddress]: string;
-	[EInputs.celoAddress]: string;
+	// TODO:Celo [EInputs.celoAddress]: string;
 	// TODO:Optimism [EInputs.optimismAddress]: string;
 };
 
@@ -115,9 +115,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const prevPolygonAddress = addresses?.find(
 		a => a.isRecipient && a.networkId === POLYGON_NETWORK_NUMBER,
 	)?.address;
-	const prevCeloAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === CELO_NETWORK_NUMBER,
-	)?.address;
+	//TODO:Celo const prevCeloAddress = addresses?.find(
+	// 	a => a.isRecipient && a.networkId === CELO_NETWORK_NUMBER,
+	// )?.address;
 	// TODO:Optimism
 	// const prevOptimismAddress = addresses?.find(
 	// 	a => a.isRecipient && a.networkId === OPTIMISM_NETWORK_NUMBER,
@@ -126,7 +126,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		prevMainAddress,
 		prevSecondaryAddress,
 		prevPolygonAddress,
-		prevCeloAddress,
+		// TODO:Celo prevCeloAddress,
 		// TODO:Optimism prevOptimismAddress,
 	]);
 	const userAddresses: string[] = [];
@@ -135,7 +135,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		if (prevMainAddress) userAddresses.push(prevMainAddress);
 		if (prevSecondaryAddress) userAddresses.push(prevSecondaryAddress);
 		if (prevPolygonAddress) userAddresses.push(prevPolygonAddress);
-		if (prevCeloAddress) userAddresses.push(prevCeloAddress);
+		//TODO:Celo if (prevCeloAddress) userAddresses.push(prevCeloAddress);
 		// TODO:Optimism if (prevOptimismAddress) userAddresses.push(prevOptimismAddress);
 	}
 
@@ -151,7 +151,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.mainAddress]: prevMainAddress || '',
 			[EInputs.secondaryAddress]: prevSecondaryAddress || '',
 			[EInputs.polygonAddress]: prevPolygonAddress || '',
-			[EInputs.celoAddress]: prevCeloAddress || '',
+			// TODO:Celo [EInputs.celoAddress]: prevCeloAddress || '',
 			// TODO:Optimism [EInputs.optimismAddress]: prevOptimismAddress || '',
 		},
 	});
@@ -168,9 +168,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [polygonAddressActive, setPolygonAddressActive] = useState(
 		isEditMode ? !!prevPolygonAddress : true,
 	);
-	const [celoAddressActive, setCeloAddressActive] = useState(
-		isEditMode ? !!prevCeloAddress : true,
-	);
+	//TODO:Celo const [celoAddressActive, setCeloAddressActive] = useState(
+	// 	isEditMode ? !!prevCeloAddress : true,
+	// );
 	// TODO:Optimism
 	// const [optimismAddressActive, setOptimismAddressActive] = useState(
 	// 	isEditMode ? !!prevOptimismAddress : true,
@@ -191,7 +191,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				mainAddress,
 				secondaryAddress,
 				polygonAddress,
-				celoAddress,
+				//TODO:Celo celoAddress,
 				// TODO:Optimism optimismAddress,
 				name,
 				description,
@@ -219,10 +219,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						address: checksumAddress,
 						networkId: POLYGON_NETWORK_NUMBER,
 					},
-					{
-						address: checksumAddress,
-						networkId: CELO_NETWORK_NUMBER,
-					},
+					//TODO:Celo {
+					// 	address: checksumAddress,
+					// 	networkId: CELO_NETWORK_NUMBER,
+					// },
 					// TODO:Optimism
 					// {
 					// 	address: checksumAddress,
@@ -254,13 +254,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						networkId: POLYGON_NETWORK_NUMBER,
 					});
 				}
-				if (celoAddressActive) {
-					const checksumAddress = utils.getAddress(celoAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: CELO_NETWORK_NUMBER,
-					});
-				}
+				//TODO:Celo if (celoAddressActive) {
+				// 	const checksumAddress = utils.getAddress(celoAddress);
+				// 	addresses.push({
+				// 		address: checksumAddress,
+				// 		networkId: CELO_NETWORK_NUMBER,
+				// 	});
+				// }
 				// TODO:Optimism
 				// if (optimismAddressActive) {
 				// 	const checksumAddress = utils.getAddress(optimismAddress);
@@ -392,8 +392,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (
 									!e &&
 									!gnosisAddressActive &&
-									!polygonAddressActive &&
-									!celoAddressActive
+									!polygonAddressActive
+									//TODO:Celo !celoAddressActive
 									// TODO:Optimism && !optimismAddressActive
 								)
 									return showToastError(
@@ -415,8 +415,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (
 									!e &&
 									!mainnetAddressActive &&
-									!polygonAddressActive &&
-									!celoAddressActive
+									!polygonAddressActive
+									//TODO:Celo !celoAddressActive
 									// TODO:Optimism && !optimismAddressActive
 								)
 									return showToastError(
@@ -438,8 +438,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (
 									!e &&
 									!mainnetAddressActive &&
-									!gnosisAddressActive &&
-									!celoAddressActive
+									!gnosisAddressActive
+									//TODO:Celo !celoAddressActive
 									// TODO:Optimism && !optimismAddressActive
 								)
 									return showToastError(
@@ -451,7 +451,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								setPolygonAddressActive(e);
 							}}
 						/>
-						<WalletAddressInput
+						{/*TODO:Celo <WalletAddressInput
 							networkId={CELO_NETWORK_NUMBER}
 							sameAddress={isSameAddress}
 							isActive={celoAddressActive}
@@ -473,7 +473,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (!e) unregister(EInputs.celoAddress);
 								setCeloAddressActive(e);
 							}}
-						/>
+						/> */}
 						{/* // TODO:Optimism <WalletAddressInput
 							networkId={OPTIMISM_NETWORK_NUMBER}
 							sameAddress={isSameAddress}

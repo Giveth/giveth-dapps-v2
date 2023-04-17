@@ -7,7 +7,7 @@ export function showCorrectAnswer(): void {
 }
 
 export function showPendingRequest(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.success(
 		<span>
@@ -26,7 +26,7 @@ export function showPendingRequest(network: number, txHash: string): void {
 }
 
 export function showFailedRequest(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.error(
 		<span>
@@ -45,7 +45,7 @@ export function showFailedRequest(network: number, txHash: string): void {
 }
 
 export function showConfirmedRequest(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	if (network === config.MAINNET_NETWORK_NUMBER) {
 		toast.success(

@@ -2,7 +2,7 @@ import toast from 'react-hot-toast';
 import { networksParams } from '@/helpers/blockchain';
 
 export function showPendingClaim(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.success(
 		<span>
@@ -40,7 +40,7 @@ export function wrongWallet(address: string): void {
 }
 
 export function showFailedClaim(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.error(
 		<span>
@@ -59,7 +59,7 @@ export function showFailedClaim(network: number, txHash: string): void {
 }
 
 export function showConfirmedClaim(network: number, txHash: string): void {
-	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}/tx/${txHash}`;
+	const transactionExplorer = `${networksParams[network].blockExplorerUrls[0]}tx/${txHash}`;
 
 	toast.success(
 		<span>

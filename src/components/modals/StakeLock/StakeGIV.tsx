@@ -304,7 +304,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 							linkType='texty'
 							size='small'
 							icon={<IconExternalLink size={16} />}
-							href={`${config.XDAI_CONFIG.blockExplorerUrls}/tx/${txHash}`}
+							href={`${config.XDAI_CONFIG.blockExplorerUrls}tx/${txHash}`}
 							target='_blank'
 						/>
 					</BriefContainer>
