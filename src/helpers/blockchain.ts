@@ -11,22 +11,19 @@ export const networksParams: {
 			symbol: 'ETH', // 2-6 characters long
 			decimals: 18,
 		},
-		blockExplorerUrls: ['https://etherscan.io'],
-		rpcUrls: ['https://eth.llamarpc.com', 'https://mainnet.infura.io/v3/'],
+		blockExplorerUrls: ['https://etherscan.io/'],
+		rpcUrls: ['https://eth.llamarpc.com/', 'https://mainnet.infura.io/v3/'],
 	},
 	100: {
 		chainId: '0x64',
 		chainName: 'Gnosis',
-		iconUrls: [
-			'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
-		],
 		nativeCurrency: {
-			name: 'xDAI',
-			symbol: 'XDAI',
+			name: 'xDai',
+			symbol: 'xDai',
 			decimals: 18,
 		},
-		blockExplorerUrls: ['https://blockscout.com/xdai/mainnet'],
 		rpcUrls: ['https://rpc.gnosischain.com/'],
+		blockExplorerUrls: ['https://gnosisscan.io/'],
 	},
 	3: {
 		chainId: '0x3',
@@ -36,7 +33,7 @@ export const networksParams: {
 			symbol: 'ETH',
 			decimals: 18,
 		},
-		blockExplorerUrls: ['https://ropsten.etherscan.io'],
+		blockExplorerUrls: ['https://ropsten.etherscan.io/'],
 		rpcUrls: ['https://ropsten.infura.io/v3/'],
 	},
 	4: {
@@ -47,7 +44,7 @@ export const networksParams: {
 			symbol: 'ETH',
 			decimals: 18,
 		},
-		blockExplorerUrls: ['https://rinkeby.etherscan.io'],
+		blockExplorerUrls: ['https://rinkeby.etherscan.io/'],
 		rpcUrls: ['https://rinkeby.infura.io/v3/'],
 	},
 	5: {
@@ -58,7 +55,7 @@ export const networksParams: {
 			symbol: 'ETH',
 			decimals: 18,
 		},
-		blockExplorerUrls: ['https://goerli.etherscan.io'],
+		blockExplorerUrls: ['https://goerli.etherscan.io/'],
 		rpcUrls: ['https://goerli.infura.io/v3/'],
 	},
 	10: {
@@ -70,7 +67,7 @@ export const networksParams: {
 			decimals: 18,
 		},
 		blockExplorerUrls: ['https://optimistic.etherscan.io/'],
-		rpcUrls: ['https://mainnet.optimism.io'],
+		rpcUrls: ['https://mainnet.optimism.io/'],
 	},
 	42: {
 		chainId: '0x2A',
@@ -80,19 +77,19 @@ export const networksParams: {
 			symbol: 'ETH',
 			decimals: 18,
 		},
-		blockExplorerUrls: ['https://kovan.etherscan.io'],
+		blockExplorerUrls: ['https://kovan.etherscan.io/'],
 		rpcUrls: ['https://kovan.infura.io/v3/'],
 	},
 	137: {
 		chainId: '0x89',
 		chainName: 'Polygon Mainnet',
 		nativeCurrency: {
-			name: 'Matic',
+			name: 'MATIC',
 			symbol: 'MATIC',
 			decimals: 18,
 		},
-		blockExplorerUrls: ['https://polygonscan.com'],
-		rpcUrls: ['https://polygon-rpc.com'],
+		blockExplorerUrls: ['https://polygonscan.com/'],
+		rpcUrls: ['https://polygon-rpc.com/'],
 	},
 	42220: {
 		chainId: '0xa4ec',
@@ -102,8 +99,8 @@ export const networksParams: {
 			symbol: 'CELO',
 			decimals: 18,
 		},
-		blockExplorerUrls: ['https://celoscan.io'],
-		rpcUrls: ['https://forno.celo.org'],
+		blockExplorerUrls: ['https://celoscan.io/'],
+		rpcUrls: ['https://forno.celo.org/'],
 	},
 	44787: {
 		chainId: '0xaef3',
@@ -113,7 +110,7 @@ export const networksParams: {
 			symbol: 'CELO',
 			decimals: 18,
 		},
-		rpcUrls: ['https://alfajores-forno.celo-testnet.org'],
+		rpcUrls: ['https://alfajores-forno.celo-testnet.org/'],
 		blockExplorerUrls: ['https://alfajores-blockscout.celo-testnet.org/'],
 		iconUrls: ['future'],
 	},

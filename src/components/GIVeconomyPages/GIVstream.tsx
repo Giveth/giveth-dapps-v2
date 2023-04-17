@@ -449,7 +449,7 @@ export const GIVstreamHistory: FC = () => {
 											<TxHash
 												as='a'
 												size='Big'
-												href={`${config.NETWORKS_CONFIG[chainId]?.blockExplorerUrls}/tx/${tokenAllocation.txHash}`}
+												href={`${config.NETWORKS_CONFIG[chainId]?.blockExplorerUrls}tx/${tokenAllocation.txHash}`}
 												target='_blank'
 											>
 												{shortenAddress(

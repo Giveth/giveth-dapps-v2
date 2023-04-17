@@ -41,9 +41,8 @@ export const useStakingPool = (
 		() => (hold ? true : false),
 	);
 
-	const { network } = poolStakingConfig;
+	const { network, type } = poolStakingConfig;
 	const { isLoaded } = currentValues;
-	const { type } = poolStakingConfig;
 	const providerNetwork = library?.network?.chainId;
 	const _library = chainId === network ? library : undefined;
 
