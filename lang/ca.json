@@ -519,6 +519,7 @@
 	"label.select_an_image_from_our_gallery": "Selecciona una imatge de la nostra galeria.",
 	"label.remove": "Eliminar",
 	"label.receiving_address": "Adreça receptora",
+	"label.chain_address": "Adreça en {chainName}",
 	"label.mainnet_address": "Adreça en Mainnet",
 	"label.gnosis_chain_address": "Adreça en Gnosis Chain",
 	"label.receiving_address_on_mainnet": "Adreça receptora en Mainnet",
@@ -1239,5 +1240,8 @@
 	"label.or_go_back_to_main_categories": "O torna a les categories principals",
 	"label.clear": "Netejar",
 	"label.search_for_a_project_or_a_cause": "Cerca un projecte o una causa a totes les categories",
-	"art": "Art"
+	"art": "Art",
+	"label.recipient_addresses": "",
+	"label.add_new_address": "",
+	"label.manage_addresses": ""
 }

@@ -26,6 +26,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
 import { IconEthereum } from '@/components/Icons/Eth';
 import NetworkLogo from '@/components/NetworkLogo';
+import { networksParams } from '@/helpers/blockchain';
 
 interface IProps {
 	networkId: number;
@@ -60,19 +61,20 @@ const WalletAddressInput: FC<IProps> = ({
 	const { chainId, library } = useWeb3React();
 
 	const user = useAppSelector(state => state.user?.userData);
+	const isMainnet = networkId === config.MAINNET_NETWORK_NUMBER;
 	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
 	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
-	// TODO:Celo const isCelo = networkId === config.CELO_NETWORK_NUMBER;
-	// TODO:Optimism const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
+	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
+	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
 	const inputName = isGnosis
-		? EInputs.secondaryAddress
+		? EInputs.gnosisAddress
 		: isPolygon
 		? EInputs.polygonAddress
-		: // TODO:Celo: isCelo
-		  // ? EInputs.celoAddress
-		  // TODO:Optimism : isOptimism
-		  //? EInputs.optimismAddress
-		  EInputs.mainAddress;
+		: isCelo
+		? EInputs.celoAddress
+		: isOptimism
+		? EInputs.optimismAddress
+		: EInputs.mainAddress;
 	const value = getValues(inputName);
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
 	const error = errors[inputName];
@@ -104,11 +106,11 @@ const WalletAddressInput: FC<IProps> = ({
 				? 'Gnosis Chain'
 				: isPolygon
 				? 'Polygon Mainnet'
-				: // TODO:Celo: isCelo
-				  // ? 'Celo Mainnet'
-				  // TODO:Optimism : isOptimism
-				  // ? 'Optimism'
-				  'Mainnet'
+				: isCelo
+				? 'Celo Mainnet'
+				: isOptimism
+				? 'Optimism'
+				: 'Mainnet'
 		}.`;
 	}
 
@@ -175,28 +177,19 @@ const WalletAddressInput: FC<IProps> = ({
 		}
 	}, [sameAddress]);
 
-	// TODO:Optimism if (isHidden && (isGnosis || isPolygon || isCelo || isOptimism)) return null;
-	// TODO:Celo if (isHidden && (isGnosis || isPolygon || isCelo)) return null;
-	if (isHidden && (isGnosis || isPolygon)) return null;
+	if (isHidden && !isMainnet) return null;
 
 	return (
-		// TODO:Optimism <Container hide={sameAddress && (isGnosis || isPolygon || isCelo || isOptimism)}>
-		// TODO:Celo <Container hide={sameAddress && (isGnosis || isPolygon || isCelo)}>
-		<Container hide={sameAddress && (isGnosis || isPolygon)}>
+		<Container hide={sameAddress && !isMainnet}>
 			<Header>
 				<H6>
 					{sameAddress
 						? formatMessage({ id: 'label.receiving_address' })
 						: formatMessage(
-								{ id: 'label.address' },
+								{ id: 'label.chain_address' },
 								{
-									chainName: isGnosis
-										? 'Gnosis Chain'
-										: isPolygon
-										? 'Polygon Mainnet'
-										: // : isCelo
-										  // ? 'Celo Mainnet'
-										  'Mainnet',
+									chainName:
+										networksParams[networkId].chainName,
 								},
 						  )}
 				</H6>
@@ -206,19 +199,18 @@ const WalletAddressInput: FC<IProps> = ({
 							<MainnetIcon />
 							<GnosisIcon />
 							<PolygonIcon />
-							{/* TODO:Celo <CeloIcon /> */}
-							{/* TODO:Optimism <OptimismIcon /> */}
+							<CeloIcon />
+							<OptimismIcon />
 						</>
 					) : isGnosis ? (
 						<GnosisIcon />
 					) : isPolygon ? (
 						<PolygonIcon />
+					) : isCelo ? (
+						<CeloIcon />
+					) : isOptimism ? (
+						<OptimismIcon />
 					) : (
-						// ) TODO:Celo: isCelo ? (
-						// 	<CeloIcon />
-						// TODO:Optimism: isOptimism ? (
-						// <OptimismIcon />
-						// )
 						<MainnetIcon />
 					)}
 				</Flex>
@@ -236,12 +228,11 @@ const WalletAddressInput: FC<IProps> = ({
 										? 'Gnosis Chain'
 										: isPolygon
 										? 'Polygon Mainnet'
-										: // TODO:Celo: isCelo
-										  // ? 'Celo Mainnet'
-										  // TODO:Optimism
-										  // : isOptimism
-										  // ? 'Optimism Mainnet'
-										  'Mainnet',
+										: isCelo
+										? 'Celo Mainnet'
+										: isOptimism
+										? 'Optimism Mainnet'
+										: 'Mainnet',
 								},
 						  )
 				}
