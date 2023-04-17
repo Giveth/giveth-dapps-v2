@@ -36,9 +36,8 @@ export const PFP: FC<IPFPProps> = ({
 				<StyledImage
 					className={className}
 					src={convertIPFSToHTTPS(pfpToken.imageIpfs)}
-
-					width={size === EPFPSize.LARGE ? 135 : 28}
-					height={size === EPFPSize.LARGE ? 135 : 28}
+					width={size === EPFPSize.LARGE ? 180 : 28}
+					height={size === EPFPSize.LARGE ? 180 : 28}
 					PFPsize={size}
 					alt=''
 					id='pfp-avatar'
@@ -66,7 +65,6 @@ export const PFP: FC<IPFPProps> = ({
 		</IconWithTooltip>
 	);
 };
-
 
 interface IStyledImageProps {
 	PFPsize?: EPFPSize;
