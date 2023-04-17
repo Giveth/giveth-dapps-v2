@@ -77,7 +77,6 @@ const StyledImage = styled(Image)<IStyledImageProps>`
 	border-radius: 4px;
 	&:hover {
 		transform: scale(1.2); // Adjust the scale value as desired
-		box-shadow: 0px 2px 8px 2px rgba(225, 69, 141, 0.3);
 	}
 
 	${props =>
