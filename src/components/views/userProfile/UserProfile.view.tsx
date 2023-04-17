@@ -9,9 +9,9 @@ import {
 	H5,
 	IconExternalLink,
 	neutralColors,
+	Container,
 } from '@giveth/ui-design-system';
 
-import { Container } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 import { mediaQueries } from '@/lib/constants/constants';
 import ProfileContributes from './ProfileContributes';
@@ -31,7 +31,8 @@ import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import UploadProfilePicModal from '@/components/modals/UploadProfilePicModal/UploadProfilePicModal';
 import { ProfileModal } from '@/lib/constants/Routes';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
-
+import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
+import { EPFPSize, PFP } from '@/components/PFP';
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
 	UsdAmount = 'UsdAmount',
@@ -62,6 +63,8 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
 
 	const router = useRouter();
+
+	const pfpToken = useGiverPFPToken(user?.walletAddress, user?.avatar);
 
 	const showCompleteProfile =
 		!isUserRegistered(user) && showIncompleteWarning && myAccount;
@@ -95,13 +98,18 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 							close={() => setShowIncompleteWarning(false)}
 						/>
 					)}
+
 					<UserInfo>
-						<img
-							src={user?.avatar || '/images/avatar.svg'}
-							width={128}
-							height={128}
-							alt={user?.name}
-						/>
+						{pfpToken ? (
+							<PFP pfpToken={pfpToken} size={EPFPSize.LARGE} />
+						) : (
+							<StyledImage
+								src={user?.avatar || '/images/avatar.svg'}
+								width={128}
+								height={128}
+								alt={user?.name}
+							/>
+						)}
 						<UserInfoRow>
 							<H3 weight={700}>{user?.name}</H3>
 							{user?.email && (
@@ -163,13 +171,15 @@ const UserInfo = styled(FlexCenter)`
 	gap: 24px;
 	margin-top: 32px;
 	flex-direction: column;
-	> :first-child {
-		border-radius: 32px;
-	}
 	${mediaQueries.tablet} {
 		justify-content: flex-start;
 		flex-direction: row;
 	}
+`;
+
+const StyledImage = styled.img`
+	box-shadow: 0px 1.15778px 6.9467px 1.73668px #e1458d;
+	border-radius: 16px;
 `;
 
 const ProfileHeader = styled.div`
