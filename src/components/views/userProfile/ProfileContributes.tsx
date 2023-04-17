@@ -59,7 +59,7 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 	const pathname = removeQueryParam(router.asPath, ['tab'], true);
 
 	return (
-		<ProfileContainer>
+		<Container>
 			<ProfileTabsContainer>
 				<Link href={pathname + profileTabs.overview}>
 					<ProfileTab active={tab === EProfile.OVERVIEW}>
@@ -139,13 +139,9 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 			{tab === EProfile.LIKED && (
 				<ProfileLikedTab user={user} myAccount={myAccount} />
 			)}
-		</ProfileContainer>
+		</Container>
 	);
 };
-
-const ProfileContainer = styled(Container)`
-	padding: 0 10px !important;
-`;
 
 const ProfileTabsContainer = styled(Flex)`
 	padding: 37px 0;
