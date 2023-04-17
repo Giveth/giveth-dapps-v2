@@ -178,7 +178,6 @@ const UserInfo = styled(FlexCenter)`
 `;
 
 const StyledImage = styled.img`
-	box-shadow: 0px 1.15778px 6.9467px 1.73668px #e1458d;
 	border-radius: 16px;
 `;
 
