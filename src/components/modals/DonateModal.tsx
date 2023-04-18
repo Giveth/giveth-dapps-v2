@@ -197,7 +197,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 					tokenAddress = token.mainnetAddress || '';
 				}
 				const coingeckoChainId =
-					isMainnet || token.mainnetAddress
+					isMainnet ||
+					(token.mainnetAddress && token.symbol !== 'CELO')
 						? config.MAINNET_NETWORK_NUMBER
 						: isGnosis
 						? config.XDAI_NETWORK_NUMBER
