@@ -65,16 +65,16 @@ const WalletAddressInput: FC<IProps> = ({
 	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
 	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
 	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
-	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
+	//TODO: Uncomment Optimism const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
 	const inputName = isGnosis
 		? EInputs.gnosisAddress
 		: isPolygon
 		? EInputs.polygonAddress
 		: isCelo
 		? EInputs.celoAddress
-		: isOptimism
-		? EInputs.optimismAddress
-		: EInputs.mainAddress;
+		: //TODO: Uncomment Optimism : isOptimism
+		  // ? EInputs.optimismAddress
+		  EInputs.mainAddress;
 	const value = getValues(inputName);
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
 	const error = errors[inputName];
@@ -108,9 +108,9 @@ const WalletAddressInput: FC<IProps> = ({
 				? 'Polygon Mainnet'
 				: isCelo
 				? 'Celo Mainnet'
-				: isOptimism
-				? 'Optimism'
-				: 'Mainnet'
+				: //TODO: Uncomment Optimism : isOptimism
+				  // ? 'Optimism'
+				  'Mainnet'
 		}.`;
 	}
 
@@ -200,7 +200,7 @@ const WalletAddressInput: FC<IProps> = ({
 							<GnosisIcon />
 							<PolygonIcon />
 							<CeloIcon />
-							<OptimismIcon />
+							{/*TODO: Uncomment Optimism <OptimismIcon /> */}
 						</>
 					) : isGnosis ? (
 						<GnosisIcon />
@@ -208,9 +208,9 @@ const WalletAddressInput: FC<IProps> = ({
 						<PolygonIcon />
 					) : isCelo ? (
 						<CeloIcon />
-					) : isOptimism ? (
-						<OptimismIcon />
 					) : (
+						//TODO: Uncomment Optimism ) : isOptimism ? (
+						// 	<OptimismIcon />
 						<MainnetIcon />
 					)}
 				</Flex>
@@ -230,9 +230,9 @@ const WalletAddressInput: FC<IProps> = ({
 										? 'Polygon Mainnet'
 										: isCelo
 										? 'Celo Mainnet'
-										: isOptimism
-										? 'Optimism Mainnet'
-										: 'Mainnet',
+										: //TODO: Uncomment Optimism : isOptimism
+										  // ? 'Optimism Mainnet'
+										  'Mainnet',
 								},
 						  )
 				}

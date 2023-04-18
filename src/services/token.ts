@@ -51,9 +51,9 @@ export const fetchPrice = async (chainId: number, tokenAddress?: string) => {
 			case config.CELO_NETWORK_NUMBER:
 				chain = 'celo';
 				break;
-			case config.OPTIMISM_NETWORK_NUMBER:
-				chain = 'optimistic-ethereum';
-				break;
+			//TODO: Uncomment Optimism case config.OPTIMISM_NETWORK_NUMBER:
+			// 	chain = 'optimistic-ethereum';
+			// 	break;
 			case config.POLYGON_NETWORK_NUMBER:
 				chain = 'polygon-pos';
 				break;
