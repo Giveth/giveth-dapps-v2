@@ -17,7 +17,7 @@ const UserAddress: FC<IProps> = ({ address, remove }) => {
 		<Container>
 			<Input
 				disabled
-				value={walletAddress}
+				value={walletAddress.toLowerCase()}
 				label={title + ' - ' + networkInfo(networkId).networkName}
 				name='walletAddress'
 			/>
