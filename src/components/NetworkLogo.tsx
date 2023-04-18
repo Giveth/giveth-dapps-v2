@@ -3,7 +3,6 @@ import config from '@/configuration';
 import { IconEthereum } from '@/components/Icons/Eth';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconPolygon } from '@/components/Icons/Polygon';
-import { IconOptimism } from './Icons/Optimism';
 import { IconCelo } from './Icons/Celo';
 
 const NetworkLogo = (props: { chainId?: number; logoSize?: number }) => {
@@ -14,8 +13,8 @@ const NetworkLogo = (props: { chainId?: number; logoSize?: number }) => {
 		return <IconGnosisChain size={logoSize} />;
 	} else if (chainId === config.POLYGON_NETWORK_NUMBER) {
 		return <IconPolygon size={logoSize} />;
-	} else if (chainId === config.OPTIMISM_NETWORK_NUMBER) {
-		return <IconOptimism size={logoSize} />;
+		//TODO: Uncomment Optimism } else if (chainId === config.OPTIMISM_NETWORK_NUMBER) {
+		// 	return <IconOptimism size={logoSize} />;
 	} else if (chainId === config.CELO_NETWORK_NUMBER) {
 		return <IconCelo size={logoSize} />;
 	} else return null;

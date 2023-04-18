@@ -70,7 +70,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const isMainnet = chainId === config.MAINNET_NETWORK_NUMBER;
 	const isGnosis = chainId === config.XDAI_NETWORK_NUMBER;
 	const isPolygon = chainId === config.POLYGON_NETWORK_NUMBER;
-	const isOptimism = chainId === config.OPTIMISM_NETWORK_NUMBER;
+	//TODO: Uncomment Optimism const isOptimism = chainId === config.OPTIMISM_NETWORK_NUMBER;
 	const isCelo = chainId === config.CELO_NETWORK_NUMBER;
 
 	const [donating, setDonating] = useState(false);
@@ -203,9 +203,9 @@ const DonateModal: FC<IDonateModalProps> = props => {
 						? config.XDAI_NETWORK_NUMBER
 						: isCelo
 						? config.CELO_NETWORK_NUMBER
-						: isPolygon
-						? config.POLYGON_NETWORK_NUMBER
-						: config.OPTIMISM_NETWORK_NUMBER;
+						: config.POLYGON_NETWORK_NUMBER;
+				//TODO: Uncomment Optimism ? config.POLYGON_NETWORK_NUMBER
+				// : config.OPTIMISM_NETWORK_NUMBER;
 				const fetchedPrice = await fetchPrice(
 					coingeckoChainId,
 					tokenAddress,
