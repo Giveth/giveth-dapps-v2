@@ -49,6 +49,7 @@ export default NFTButtons;
 
 const NFTsButtonsContainer = styled(Flex)`
 	margin-bottom: 60px;
+	margin-top: 8px;
 	width: 100%;
 	${mediaQueries.tablet} {
 		margin-bottom: 20px;
