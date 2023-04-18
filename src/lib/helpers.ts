@@ -163,20 +163,11 @@ export const getGasPreference = (
 
 export const isSSRMode = typeof window === 'undefined';
 
-export const generatePolygonAddress = (addresses?: IWalletAddress[]) => {
-	if (!addresses || addresses.length !== 2) return '';
-	const mainnetAddress = addresses.find(
-		address => address.networkId === config.MAINNET_NETWORK_NUMBER,
-	);
-	const gnosisAddress = addresses.find(
-		address => address.networkId === config.XDAI_NETWORK_NUMBER,
-	);
-	const isSame = compareAddressesArray([
-		mainnetAddress?.address,
-		gnosisAddress?.address,
-	]);
+export const suggestNewAddress = (addresses?: IWalletAddress[]) => {
+	if (!addresses || addresses.length < 1) return '';
+	const isSame = compareAddressesArray(addresses.map(a => a.address));
 	if (isSame) {
-		return mainnetAddress?.address;
+		return addresses[0].address;
 	} else {
 		return '';
 	}

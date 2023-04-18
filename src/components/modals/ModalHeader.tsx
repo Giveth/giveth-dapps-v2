@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { H6, IconX } from '@giveth/ui-design-system';
+import { H6, IconChevronLeft32, IconX } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 
 export type ModalHeaderTitlePosition = 'center' | 'left';
@@ -10,9 +10,11 @@ export interface IModalHeader {
 	hiddenHeader?: boolean;
 	title?: string;
 	icon?: ReactNode;
+	iconClick?: () => void;
 	closeModal: () => void;
 	position?: ModalHeaderTitlePosition;
 	color?: string;
+	backButtonCallback?: () => void;
 }
 
 export const ModalHeader: React.FC<IModalHeader> = ({
@@ -20,6 +22,7 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 	hiddenHeader = false,
 	title = '',
 	icon,
+	backButtonCallback,
 	closeModal,
 	position = 'center',
 	color,
@@ -30,7 +33,16 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 			hasContent={!!icon || !!title}
 			color={color}
 		>
-			{icon}
+			{!!backButtonCallback ? (
+				<IconWrapper
+					onClick={backButtonCallback}
+					clickable={!!backButtonCallback}
+				>
+					<IconChevronLeft32 />
+				</IconWrapper>
+			) : (
+				icon && <IconWrapper>{icon}</IconWrapper>
+			)}
 			<H6 weight={700}>{title}</H6>
 			{!hiddenClose && (
 				<CloseModalButton onClick={closeModal}>
@@ -69,4 +81,13 @@ const CloseModalButton = styled.div`
 const CloseModalPlaceHolder = styled.div`
 	width: 24px;
 	height: 24px;
+`;
+
+interface IIconWrapper {
+	clickable?: boolean;
+}
+
+const IconWrapper = styled.div<IIconWrapper>`
+	height: 32px;
+	${props => props.clickable && 'cursor: pointer;'}
 `;

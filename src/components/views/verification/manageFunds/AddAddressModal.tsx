@@ -37,13 +37,12 @@ const networkOptions = [
 		label: 'Polygon Mainnet',
 		id: config.POLYGON_NETWORK_NUMBER,
 	},
-	//TODO:Celo {
-	// 	value: config.CELO_NETWORK_NUMBER,
-	// 	label: 'Celo Mainnet',
-	// 	id: config.CELO_NETWORK_NUMBER,
-	// },
-	// TODO:Optimism
-	// {
+	{
+		value: config.CELO_NETWORK_NUMBER,
+		label: 'Celo Mainnet',
+		id: config.CELO_NETWORK_NUMBER,
+	},
+	// TODO: Uncomment Optimism {
 	// 	value: config.OPTIMISM_NETWORK_NUMBER,
 	// 	label: 'Optimism',
 	// 	id: config.OPTIMISM_NETWORK_NUMBER,

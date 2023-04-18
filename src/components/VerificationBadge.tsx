@@ -1,7 +1,6 @@
 import { FC } from 'react';
-import { semanticColors } from '@giveth/ui-design-system';
 import { EVerificationStatus } from '@/apollo/types/types';
-import { Badge } from './styled-components/Badge';
+import { Badge, EBadgeStatus } from './Badge';
 
 interface IProps {
 	status?: EVerificationStatus;
@@ -10,23 +9,23 @@ interface IProps {
 
 const VerificationBadge: FC<IProps> = ({ status, simplified }) => {
 	if (!status || status === EVerificationStatus.DRAFT) return null;
-	let title, color;
+	let label, badgeStatus;
 	switch (status) {
 		case EVerificationStatus.REJECTED:
-			title = simplified ? 'Rejected' : 'Verification rejected';
-			color = semanticColors.punch;
+			label = simplified ? 'Rejected' : 'Verification rejected';
+			badgeStatus = EBadgeStatus.ERROR;
 			break;
 		case EVerificationStatus.SUBMITTED:
-			title = simplified ? 'Request sent' : 'Verification request sent';
-			color = semanticColors.golden;
+			label = simplified ? 'Request sent' : 'Verification request sent';
+			badgeStatus = EBadgeStatus.WARNING;
 			break;
 		case EVerificationStatus.VERIFIED:
-			title = 'Verified';
-			color = semanticColors.jade;
+			label = 'Verified';
+			badgeStatus = EBadgeStatus.SUCCESS;
 			break;
 	}
 
-	return <Badge mainColor={color}>{title}</Badge>;
+	return <Badge status={badgeStatus} label={label} />;
 };
 
 export default VerificationBadge;

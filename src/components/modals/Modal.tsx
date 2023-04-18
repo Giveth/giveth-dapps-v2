@@ -28,6 +28,7 @@ interface IModal {
 	headerTitlePosition?: ModalHeaderTitlePosition;
 	headerTitle?: string;
 	headerIcon?: ReactNode;
+	backButtonCallback?: () => void;
 	customTheme?: ETheme;
 	headerColor?: string;
 	children: ReactNode;
@@ -44,6 +45,7 @@ export const Modal: FC<IModal> = ({
 	headerTitlePosition,
 	headerTitle,
 	headerIcon,
+	backButtonCallback,
 	customTheme,
 	fullScreen = false,
 	headerColor,
@@ -98,6 +100,7 @@ export const Modal: FC<IModal> = ({
 					hiddenHeader={hiddenHeader}
 					title={headerTitle}
 					icon={headerIcon}
+					backButtonCallback={backButtonCallback}
 					closeModal={closeModal}
 					position={headerTitlePosition}
 					color={headerColor}
