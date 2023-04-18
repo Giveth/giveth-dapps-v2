@@ -124,14 +124,14 @@ const ProjectsTable: FC<IProjectsTable> = ({
 										})}
 										disabled={isCancelled}
 									/>
-									<GLink
+									<CustomGlink
 										onClick={() => {
 											setSelectedProject(project);
 											setShowAddressModal(true);
 										}}
 									>
 										Manage addresses
-									</GLink>
+									</CustomGlink>
 								</Actions>
 							</ProjectTableCell>
 						</ProjectsRowWrapper>
@@ -196,6 +196,10 @@ const ProjectTitle = styled(Flex)`
 	padding-top: 8px;
 	flex-wrap: wrap;
 	gap: 0 10px;
+`;
+
+const CustomGlink = styled(GLink)`
+	padding-top: 2px;
 `;
 
 export default ProjectsTable;
