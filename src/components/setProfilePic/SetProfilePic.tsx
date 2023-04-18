@@ -136,193 +136,215 @@ export const SetProfilePic = ({
 			<Spinner />
 		</Wrapper>
 	) : (
-		<Wrapper>
-			<Flex gap='16px'>
-				{tabs.map(i => (
-					<TabItem
-						onClick={() => setActiveTab(i.id)}
-						className={activeTab === i.id ? 'active' : ''}
-						key={i.id}
-						active={activeTab === i.id}
-					>
-						{i.title}
-					</TabItem>
-				))}
-			</Flex>
-			{activeTab === EProfilePicTab.UPLOAD && (
-				<Flex flexDirection='column' gap='36px'>
-					<ImageUploader {...useUploadProps} />
-					{isOnboarding ? (
-						<OnboardButtons
-							nftUrl={nftUrl}
-							saveAvatar={() =>
-								onSaveAvatar(onDelete, nftUrl(), url).then(
-									() => {
-										callback && callback();
-									},
-								)
-							}
-							setSelectedPFP={setSelectedPFP}
-							callback={callback}
-							isSaveDisabled={!url}
-							loading={loading}
-						/>
-					) : (
-						<Flex
-							flexDirection='row'
-							justifyContent='space-between'
+		<>
+			<CustomWrapper isOnboarding={isOnboarding}>
+				<Flex gap='16px'>
+					{tabs.map(i => (
+						<TabItem
+							onClick={() => setActiveTab(i.id)}
+							className={activeTab === i.id ? 'active' : ''}
+							key={i.id}
+							active={activeTab === i.id}
 						>
-							<Button
-								buttonType='secondary'
-								label='SAVE'
-								disabled={!url}
-								loading={loading}
-								onClick={() =>
-									onSaveAvatar(onDelete, nftUrl(), url)
-								}
-							/>
-							<TextButton
-								buttonType='texty'
-								label={formatMessage({
-									id: 'label.cancel',
-								})}
-								onClick={() => {
-									onDelete();
-								}}
-							/>
-						</Flex>
-					)}
+							{i.title}
+						</TabItem>
+					))}
 				</Flex>
-			)}
-			{activeTab === EProfilePicTab.PFP && (
-				<>
-					{pfpData && pfpData.length > 0 ? (
-						<Flex flexDirection='column' gap='30px'>
-							<CustomH5>Your Givers PFP NFTs</CustomH5>
-							<PFPItemsContainer gap='25px'>
-								{pfpData?.map(pfp => (
-									<PfpItem
-										onClick={() => setSelectedPFP(pfp)}
-										image={pfp.imageIpfs}
-										key={pfp.tokenId}
-										isSelected={
-											pfp.tokenId === selectedPFP?.tokenId
-										}
-										id={pfp.tokenId}
-									/>
-								))}
-							</PFPItemsContainer>
-							<SelectedPFPContainerWrapper
-								isOpen={!!selectedPFP}
-								divheight={sectionHeight}
-								ref={attributeSectionRef}
-							>
-								{selectedPFP && (
-									<AttributesWrapper
-										flexDirection='column'
-										gap='16px'
-									>
-										<H6>
-											The Givers Collection #
-											{selectedPFP.tokenId}
-										</H6>
-										<SelectedPFPContainer
-											gap='16px'
-											flexWrap
-										>
-											<AttributeItems
-												id={selectedPFP.tokenId}
-											/>
-										</SelectedPFPContainer>
-										<Flex flexDirection='column' gap='8px'>
-											<CustomLink
-												href={
-													config.RARIBLE_ADDRESS +
-													'token/' +
-													selectedPFP.id.replace(
-														'-',
-														':',
-													)
-												}
-												target='_blank'
-											>
-												View on Rarible{' '}
-												<IconExternalLink16 />
-											</CustomLink>
-										</Flex>
-									</AttributesWrapper>
-								)}
-							</SelectedPFPContainerWrapper>
-							{isOnboarding ? (
-								<OnboardButtons
-									nftUrl={nftUrl}
-									saveAvatar={() =>
-										onSaveAvatar(
-											onDelete,
-											nftUrl(),
-											url,
-										).then(() => {
+				{activeTab === EProfilePicTab.UPLOAD && (
+					<Flex flexDirection='column' gap='36px'>
+						<ImageUploader {...useUploadProps} />
+						{isOnboarding ? (
+							<OnboardButtons
+								nftUrl={nftUrl}
+								saveAvatar={() =>
+									onSaveAvatar(onDelete, nftUrl(), url).then(
+										() => {
 											callback && callback();
-										})
-									}
-									setSelectedPFP={setSelectedPFP}
-									callback={callback}
-									isSaveDisabled={!nftUrl()}
+										},
+									)
+								}
+								setSelectedPFP={setSelectedPFP}
+								callback={callback}
+								isSaveDisabled={!url}
+								loading={loading}
+							/>
+						) : (
+							<Flex
+								flexDirection='row'
+								justifyContent='space-between'
+							>
+								<Button
+									buttonType='secondary'
+									label='SAVE'
+									disabled={!url}
 									loading={loading}
-								/>
-							) : (
-								<NFTButtons
-									saveAvatar={() =>
+									onClick={() =>
 										onSaveAvatar(onDelete, nftUrl(), url)
 									}
-									setSelectedPFP={setSelectedPFP}
-									nftUrl={nftUrl}
-									loading={loading}
 								/>
-							)}
-						</Flex>
-					) : (
-						<Flex flexDirection='column' alignItems='stretch'>
-							<NoPFP />
-							<br />
-							<Flex justifyContent='space-between'>
-								<Link
-									href={Routes.NFT}
-									style={{
-										width: isOnboarding ? '100%' : '',
-									}}
-								>
-									{isOnboarding ? (
-										<OnboardingMintNowButton
-											buttonType='secondary'
-											label='MINT NOW'
-											type='submit'
-										/>
-									) : (
-										<Button
-											buttonType='secondary'
-											label='MINT NOW'
-											type='submit'
-										/>
-									)}
-								</Link>
 								<TextButton
 									buttonType='texty'
-									label='DO IT LATER'
+									label={formatMessage({
+										id: 'label.cancel',
+									})}
 									onClick={() => {
-										if (isOnboarding) {
-											callback && callback();
-										} else {
-											closeModal();
-										}
+										onDelete();
 									}}
 								/>
 							</Flex>
-						</Flex>
-					)}
-				</>
+						)}
+					</Flex>
+				)}
+				{activeTab === EProfilePicTab.PFP && (
+					<>
+						{pfpData && pfpData.length > 0 ? (
+							<Flex flexDirection='column' gap='30px'>
+								<CustomH5>Your Givers PFP NFTs</CustomH5>
+								<PFPItemsContainer gap='25px'>
+									{pfpData?.map(pfp => (
+										<PfpItem
+											onClick={() => setSelectedPFP(pfp)}
+											image={pfp.imageIpfs}
+											key={pfp.tokenId}
+											isSelected={
+												pfp.tokenId ===
+												selectedPFP?.tokenId
+											}
+											id={pfp.tokenId}
+										/>
+									))}
+								</PFPItemsContainer>
+								<SelectedPFPContainerWrapper
+									isOpen={!!selectedPFP}
+									divheight={sectionHeight}
+									ref={attributeSectionRef}
+								>
+									{selectedPFP && (
+										<AttributesWrapper
+											flexDirection='column'
+											gap='16px'
+										>
+											<H6>
+												The Givers Collection #
+												{selectedPFP.tokenId}
+											</H6>
+											<SelectedPFPContainer
+												gap='16px'
+												flexWrap
+											>
+												<AttributeItems
+													id={selectedPFP.tokenId}
+												/>
+											</SelectedPFPContainer>
+											<Flex
+												flexDirection='column'
+												gap='8px'
+											>
+												<CustomLink
+													href={
+														config.RARIBLE_ADDRESS +
+														'token/' +
+														selectedPFP.id.replace(
+															'-',
+															':',
+														)
+													}
+													target='_blank'
+												>
+													View on Rarible{' '}
+													<IconExternalLink16 />
+												</CustomLink>
+											</Flex>
+										</AttributesWrapper>
+									)}
+								</SelectedPFPContainerWrapper>
+								{isOnboarding ? (
+									<OnboardButtons
+										nftUrl={nftUrl}
+										saveAvatar={() =>
+											onSaveAvatar(
+												onDelete,
+												nftUrl(),
+												url,
+											).then(() => {
+												callback && callback();
+											})
+										}
+										setSelectedPFP={setSelectedPFP}
+										callback={callback}
+										isSaveDisabled={!nftUrl()}
+										loading={loading}
+									/>
+								) : (
+									<HideInDesktop>
+										<NFTButtons
+											saveAvatar={() =>
+												onSaveAvatar(
+													onDelete,
+													nftUrl(),
+													url,
+												)
+											}
+											setSelectedPFP={setSelectedPFP}
+											nftUrl={nftUrl}
+											loading={loading}
+										/>
+									</HideInDesktop>
+								)}
+							</Flex>
+						) : (
+							<Flex flexDirection='column' alignItems='stretch'>
+								<NoPFP />
+								<br />
+								<Flex justifyContent='space-between'>
+									<Link
+										href={Routes.NFT}
+										style={{
+											width: isOnboarding ? '100%' : '',
+										}}
+									>
+										{isOnboarding ? (
+											<OnboardingMintNowButton
+												buttonType='secondary'
+												label='MINT NOW'
+												type='submit'
+											/>
+										) : (
+											<Button
+												buttonType='secondary'
+												label='MINT NOW'
+												type='submit'
+											/>
+										)}
+									</Link>
+									<TextButton
+										buttonType='texty'
+										label='DO IT LATER'
+										onClick={() => {
+											if (isOnboarding) {
+												callback && callback();
+											} else {
+												closeModal();
+											}
+										}}
+									/>
+								</Flex>
+							</Flex>
+						)}
+					</>
+				)}
+			</CustomWrapper>
+			{activeTab === EProfilePicTab.PFP && !isOnboarding && (
+				<HideInMobile>
+					<NFTButtons
+						saveAvatar={() => onSaveAvatar(onDelete, nftUrl(), url)}
+						setSelectedPFP={setSelectedPFP}
+						nftUrl={nftUrl}
+						loading={loading}
+					/>
+				</HideInMobile>
 			)}
-		</Wrapper>
+		</>
 	);
 };
 
@@ -383,4 +405,27 @@ const OnboardingMintNowButton = styled(Button)`
 const PFPItemsContainer = styled(Flex)`
 	overflow-x: auto;
 	padding: 16px 0;
+`;
+
+const HideInMobile = styled.div`
+	display: none;
+	${mediaQueries.tablet} {
+		display: inline-block;
+		width: 100%;
+	}
+`;
+
+const HideInDesktop = styled.div`
+	display: block;
+	width: 100%;
+	${mediaQueries.tablet} {
+		display: none;
+	}
+`;
+
+const CustomWrapper = styled(Wrapper)<{ isOnboarding: boolean }>`
+	${mediaQueries.tablet} {
+		max-height: ${props => (props.isOnboarding ? '' : '640px')};
+		overflow-y: auto;
+	}
 `;

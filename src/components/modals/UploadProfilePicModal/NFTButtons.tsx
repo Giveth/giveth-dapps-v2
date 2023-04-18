@@ -48,10 +48,10 @@ const NFTButtons = ({
 export default NFTButtons;
 
 const NFTsButtonsContainer = styled(Flex)`
-	margin-bottom: 60px;
-
+	width: 100%;
 	${mediaQueries.tablet} {
-		margin-bottom: 0;
+		margin-bottom: 20px;
+		padding: 0 20px;
 	}
 `;
 
