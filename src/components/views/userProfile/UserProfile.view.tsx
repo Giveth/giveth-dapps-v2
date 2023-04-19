@@ -11,8 +11,9 @@ import {
 	neutralColors,
 	Container,
 } from '@giveth/ui-design-system';
-
 import { useRouter } from 'next/router';
+import config from '@/configuration';
+
 import { mediaQueries } from '@/lib/constants/constants';
 import ProfileContributes from './ProfileContributes';
 import { IUser } from '@/apollo/types/types';
@@ -55,7 +56,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 
-	const { chainId } = useWeb3React();
+	const { chainId, account } = useWeb3React();
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showUploadProfileModal, setShowUploadProfileModal] = useState(false);
@@ -98,7 +99,6 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 							close={() => setShowIncompleteWarning(false)}
 						/>
 					)}
-
 					<UserInfo>
 						{pfpToken ? (
 							<PFP pfpToken={pfpToken} size={EPFPSize.LARGE} />
@@ -146,6 +146,20 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 									</ExternalLink>
 								</AddressContainer>
 							</WalletContainer>
+							<RaribleLinkContainer>
+								<a
+									href={
+										config.RARIBLE_ADDRESS +
+										'user/' +
+										account +
+										'/owned'
+									}
+									target='_blank'
+									rel='noreferrer'
+								>
+									<GLink>View user's NFTs on Rarible</GLink>
+								</a>
+							</RaribleLinkContainer>
 						</UserInfoRow>
 					</UserInfo>
 				</Container>
@@ -234,6 +248,12 @@ const AddressContainer = styled(FlexCenter)`
 
 const NoUserContainer = styled.div`
 	padding: 200px;
+`;
+
+const RaribleLinkContainer = styled.div`
+	margin-top: 16px;
+	margin-left: 8px;
+	color: ${brandColors.pinky[500]};
 `;
 
 export default UserProfileView;
