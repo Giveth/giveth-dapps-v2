@@ -334,16 +334,21 @@ export const SetProfilePic = ({
 					</>
 				)}
 			</CustomWrapper>
-			{activeTab === EProfilePicTab.PFP && !isOnboarding && (
-				<HideInMobile>
-					<NFTButtons
-						saveAvatar={() => onSaveAvatar(onDelete, nftUrl(), url)}
-						setSelectedPFP={setSelectedPFP}
-						nftUrl={nftUrl}
-						loading={loading}
-					/>
-				</HideInMobile>
-			)}
+			{activeTab === EProfilePicTab.PFP &&
+				!isOnboarding &&
+				pfpData &&
+				pfpData?.length > 0 && (
+					<HideInMobile>
+						<NFTButtons
+							saveAvatar={() =>
+								onSaveAvatar(onDelete, nftUrl(), url)
+							}
+							setSelectedPFP={setSelectedPFP}
+							nftUrl={nftUrl}
+							loading={loading}
+						/>
+					</HideInMobile>
+				)}
 		</>
 	);
 };
