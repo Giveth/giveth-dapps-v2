@@ -201,7 +201,9 @@ export const MintCard = () => {
 					<Flex justifyContent='space-between'>
 						<InfoBoxTitle>Max Mint Amount</InfoBoxTitle>
 						<InfoBoxValue>
-							{pfpData ? pfpData.maxMintAmount : '-'}
+							{pfpData
+								? pfpData.maxMintAmount - (balance || 0)
+								: '-'}
 						</InfoBoxValue>
 					</Flex>
 					<Flex justifyContent='space-between'>
