@@ -151,15 +151,12 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 									<a
 										href={
 											config.RARIBLE_ADDRESS +
-											'user/' +
-											account +
-											'/owned'
+											'token/' +
+											pfpToken.id.replace('-', ':')
 										}
-										target='_blank'
-										rel='noreferrer'
 									>
 										<GLink>
-											View user's NFTs on Rarible
+											View this Givers PFP on Rarible
 										</GLink>
 									</a>
 								</RaribleLinkContainer>
