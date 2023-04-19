@@ -146,20 +146,24 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 									</ExternalLink>
 								</AddressContainer>
 							</WalletContainer>
-							<RaribleLinkContainer>
-								<a
-									href={
-										config.RARIBLE_ADDRESS +
-										'user/' +
-										account +
-										'/owned'
-									}
-									target='_blank'
-									rel='noreferrer'
-								>
-									<GLink>View user's NFTs on Rarible</GLink>
-								</a>
-							</RaribleLinkContainer>
+							{pfpToken && (
+								<RaribleLinkContainer>
+									<a
+										href={
+											config.RARIBLE_ADDRESS +
+											'user/' +
+											account +
+											'/owned'
+										}
+										target='_blank'
+										rel='noreferrer'
+									>
+										<GLink>
+											View user's NFTs on Rarible
+										</GLink>
+									</a>
+								</RaribleLinkContainer>
+							)}
 						</UserInfoRow>
 					</UserInfo>
 				</Container>
@@ -252,7 +256,6 @@ const NoUserContainer = styled.div`
 
 const RaribleLinkContainer = styled.div`
 	margin-top: 16px;
-	margin-left: 8px;
 	color: ${brandColors.pinky[500]};
 `;
 
