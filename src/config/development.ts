@@ -164,7 +164,7 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x83a8eea6427985C523a0c4d9d3E62C051B6580d3/0x97c4dD5cE204b8c1F2f3B8fBfBBDC771d867d18c',
 				unit: 'LP',
 				farmStartTimeMS: 1655997000000,
-				farmEndTimeMS: 1681850831420,
+				farmEndTimeMS: SEPT_8TH_2022,
 			},
 		],
 
@@ -203,6 +203,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
 				farmStartTimeMS: 1646306818206,
+				farmEndTimeMS: 1681850831420,
 				introCard: {
 					title: 'ShapeShift DAO',
 					description:
