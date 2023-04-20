@@ -11,8 +11,9 @@ import {
 	neutralColors,
 	Container,
 } from '@giveth/ui-design-system';
-
 import { useRouter } from 'next/router';
+import config from '@/configuration';
+
 import { mediaQueries } from '@/lib/constants/constants';
 import ProfileContributes from './ProfileContributes';
 import { IUser } from '@/apollo/types/types';
@@ -98,7 +99,6 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 							close={() => setShowIncompleteWarning(false)}
 						/>
 					)}
-
 					<UserInfo>
 						{pfpToken ? (
 							<PFP pfpToken={pfpToken} size={EPFPSize.LARGE} />
@@ -146,6 +146,23 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 									</ExternalLink>
 								</AddressContainer>
 							</WalletContainer>
+							{pfpToken && (
+								<RaribleLinkContainer>
+									<a
+										href={
+											config.RARIBLE_ADDRESS +
+											'token/' +
+											pfpToken.id.replace('-', ':')
+										}
+										target='_blank'
+										rel='noreferrer'
+									>
+										<GLink>
+											View this Givers PFP on Rarible
+										</GLink>
+									</a>
+								</RaribleLinkContainer>
+							)}
 						</UserInfoRow>
 					</UserInfo>
 				</Container>
@@ -234,6 +251,11 @@ const AddressContainer = styled(FlexCenter)`
 
 const NoUserContainer = styled.div`
 	padding: 200px;
+`;
+
+const RaribleLinkContainer = styled.div`
+	margin-top: 16px;
+	color: ${brandColors.pinky[500]};
 `;
 
 export default UserProfileView;
