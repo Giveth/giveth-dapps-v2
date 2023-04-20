@@ -684,7 +684,7 @@
 	"label.an_exploit_has_removed_available_rewards": "Una vulnerabilitat ha eliminat les recompenses disponibles d'aquesta pool. Si us plau, consulta",
 	"label.this_forum_post": "aquest post del fòrum",
 	"label.for_details": "per a més detalls.",
-	"label.harvest_your_rewards_and_remove_your_funds": "",
+	"label.harvest_your_rewards_and_remove_your_funds": "Encara pots recollir les teves recompenses i desapostar les teves tokens.",
 	"label.staking_giv_in_this_pool_allows_to_support_verified_projects": "Posar GIV en staking dins d'aquesta piscina us permet suportar projectes verificats amb GIVpower i us atorga poder de vot en Giveth DAO (gGIV), a més del APR.",
 	"label.your_cummulative_apr_including_both_rewards": "El vostre APR acumulat, incloent totes les recompenses obtingudes a través de les taxes i les afegides automàticament a la vostra posició,",
 	"label.and_rewards_earned_in_giv": "i les recompenses obtingudes en GIV del staking de la vostra LP,",

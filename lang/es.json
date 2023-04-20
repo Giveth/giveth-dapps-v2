@@ -729,7 +729,7 @@
 	"label.an_exploit_has_removed_available_rewards": "Un explot ha removido las recompensas disponibles de este pool. Por favor refiérase a",
 	"label.this_forum_post": "este post del foro",
 	"label.for_details": "para detalles.",
-	"label.harvest_your_rewards_and_remove_your_funds": "",
+	"label.harvest_your_rewards_and_remove_your_funds": "Aun puedes recibir tus recompensas y hacer unstake de tus tokens",
 	"label.got_it": "Entendido",
 	"label.staking_giv_in_this_pool_allows_to_support_verified_projects": "Poner GIV en staking dentro de este pool te permite apoyar proyectos verificados con GIVpower y te otorga poder de voto en Giveth DAO (gGIV), además del APR.",
 	"label.your_cummulative_apr_including_both_rewards": "Tu APR acumulado incluyendo recompensas obtenidas de los fees y aquellos añadidos automáticamente a tu posición",
