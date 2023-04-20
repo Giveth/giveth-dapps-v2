@@ -10,6 +10,7 @@ import {
 	IconExternalLink,
 	neutralColors,
 	Container,
+	IconExternalLink16,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 import config from '@/configuration';
@@ -158,7 +159,8 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 										rel='noreferrer'
 									>
 										<GLink>
-											View this Givers PFP on Rarible
+											View this Givers PFP on Rarible{' '}
+											<IconExternalLink16 />
 										</GLink>
 									</a>
 								</RaribleLinkContainer>
