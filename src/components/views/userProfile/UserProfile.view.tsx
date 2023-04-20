@@ -154,6 +154,8 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 											'token/' +
 											pfpToken.id.replace('-', ':')
 										}
+										target='_blank'
+										rel='noreferrer'
 									>
 										<GLink>
 											View this Givers PFP on Rarible
