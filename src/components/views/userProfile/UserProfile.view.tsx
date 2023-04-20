@@ -56,7 +56,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 
-	const { chainId, account } = useWeb3React();
+	const { chainId } = useWeb3React();
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showUploadProfileModal, setShowUploadProfileModal] = useState(false);
