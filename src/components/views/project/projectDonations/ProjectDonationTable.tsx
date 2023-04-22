@@ -18,7 +18,6 @@ import {
 	formatTxLink,
 	compareAddresses,
 	formatUSD,
-	shortenAddress,
 } from '@/lib/helpers';
 import {
 	EDirection,
@@ -38,6 +37,7 @@ import {
 import { useProjectContext } from '@/context/project.context';
 import NetworkLogo from '@/components/NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
+import { UserWithPFPInCell } from '../../../UserWithPFPInCell';
 
 const itemPerPage = 10;
 
@@ -130,6 +130,8 @@ const ProjectDonationTable = ({
 		if (page !== 0) setPage(0);
 	}, [searchTerm]);
 
+	console.log('donation.user', donations);
+
 	return (
 		<Wrapper>
 			<SearchBox
@@ -182,15 +184,13 @@ const ProjectDonationTable = ({
 							</DonationTableCell>
 							<DonationTableCell>
 								{donation.donationType ===
-								EDonationType.POIGNART
-									? 'PoignART'
-									: donation.anonymous
-									? 'Anonymous'
-									: donation.user?.name ||
-									  donation.user?.firstName ||
-									  shortenAddress(
-											donation.user.walletAddress?.toLowerCase(),
-									  )}
+								EDonationType.POIGNART ? (
+									'PoignART'
+								) : donation.anonymous ? (
+									'Anonymous'
+								) : (
+									<UserWithPFPInCell user={donation.user} />
+								)}
 							</DonationTableCell>
 							{isAdmin && (
 								<DonationTableCell>
@@ -296,6 +296,9 @@ const DonationRowWrapper = styled(RowWrapper)`
 	&:hover > div {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
+	}
+	&:hover #pfp-avatar {
+		box-shadow: 0px 0.762881px 4.57729px 1.14432px rgba(225, 69, 141, 0.5);
 	}
 `;
 

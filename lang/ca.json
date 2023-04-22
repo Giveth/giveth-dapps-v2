@@ -1243,6 +1243,7 @@
 	"label.clear": "Netejar",
 	"label.search_for_a_project_or_a_cause": "Cerca un projecte o una causa a totes les categories",
 	"art": "Art",
+	"label.use_as_profile_picture": "",
 	"label.recipient_addresses": "",
 	"label.add_new_address": "",
 	"label.manage_addresses": ""

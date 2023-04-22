@@ -11,6 +11,7 @@ import userReducer from './user/user.slice';
 import priceReducer from './price/price.slice';
 import generalReducer from './general/general.slice';
 import notificationReducer from './notification/notification.slice';
+import pfpReducer from './pfp/pfp.slice';
 
 const rootReducer = combineReducers({
 	subgraph: subgraphReducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
 	price: priceReducer,
 	general: generalReducer,
 	notification: notificationReducer,
+	pfp: pfpReducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {

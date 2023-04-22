@@ -42,6 +42,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 				user {
 					name
 					walletAddress
+					avatar
 				}
 			}
 			totalCount

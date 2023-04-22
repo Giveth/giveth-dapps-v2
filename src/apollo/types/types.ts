@@ -13,6 +13,14 @@ export interface IProjectPower {
 	round: number;
 }
 
+export interface IAdminUser {
+	id?: string;
+	email?: string;
+	name?: string;
+	walletAddress?: string;
+	avatar?: string;
+}
+
 export interface IProject {
 	id?: string;
 	title?: string;
@@ -32,12 +40,7 @@ export interface IProject {
 	categories: ICategory[];
 	reaction?: IReaction;
 	totalReactions: number;
-	adminUser: {
-		id?: string;
-		email?: string;
-		name?: string;
-		walletAddress?: string;
-	};
+	adminUser: IAdminUser;
 	donations: {
 		id?: string;
 	}[];
@@ -353,4 +356,17 @@ export interface IRecentDonation {
 	project: { title: string; slug: string };
 	user: { walletAddress: string };
 	valueUsd: number | null;
+}
+
+export interface IGiverPFPToken {
+	id: string;
+	user: {
+		id: string;
+	};
+	tokenId: number;
+	imageIpfs: string;
+}
+
+export interface IUsersPFPTokens {
+	[key: string]: IGiverPFPToken[];
 }

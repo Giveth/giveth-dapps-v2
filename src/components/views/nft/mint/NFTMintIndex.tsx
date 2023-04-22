@@ -5,7 +5,7 @@ import {
 	Button,
 	ButtonLink,
 	ButtonText,
-	H1,
+	D3,
 	Lead,
 	mediaQueries,
 } from '@giveth/ui-design-system';
@@ -13,49 +13,44 @@ import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 import { Col, Container, Row } from '@giveth/ui-design-system';
+import { useRouter } from 'next/router';
 import { OvalVerticalGradient, OvalHorizontalGradient } from '../common.styles';
 import { MintCard } from '@/components/cards/MintCard';
 import config from '@/configuration';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
 import { Flex } from '@/components/styled-components/Flex';
+import { useAppSelector } from '@/features/hooks';
+import Routes from '@/lib/constants/Routes';
+import { useModalCallback } from '@/hooks/useModalCallback';
+import { isUserRegistered } from '@/lib/helpers';
 
 export const NFTMintIndex = () => {
 	// const [showEligibilityModal, setShowEligibilityModal] = useState(false);
 	const { formatMessage } = useIntl();
-	const { account, library, chainId } = useWeb3React();
-	const { step, setStep, qty, tx: txHash, setIsEligible } = usePFPMintData();
+	const { account } = useWeb3React();
+	const { step, setStep, qty, tx: txHash } = usePFPMintData();
+	const { isSignedIn, userData } = useAppSelector(state => state.user);
+	const router = useRouter();
 
-	// useEffect(() => {
-	// 	const checkAddress = async () => {
-	// 		if (!library || !account) return;
-	// 		try {
-	// 			const _provider =
-	// 				chainId === config.MAINNET_NETWORK_NUMBER
-	// 					? library
-	// 					: new JsonRpcProvider(config.MAINNET_CONFIG.nodeUrl);
-	// 			const PFPContract = new Contract(
-	// 				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
-	// 				PFP_ABI,
-	// 				_provider,
-	// 			) as GiversPFP;
-	// 			const _allowListOnly = await PFPContract.allowListOnly();
-	// 			if (_allowListOnly) {
-	// 				const res = await PFPContract.allowList(account);
-	// 				if (!res) {
-	// 					setShowEligibilityModal(true);
-	// 				} else {
-	// 					setIsEligible(true);
-	// 				}
-	// 			} else {
-	// 				setIsEligible(true);
-	// 			}
-	// 			setIsEligible(true);
-	// 		} catch (error) {
-	// 			console.log('Error on check allow List', error);
-	// 		}
-	// 	};
-	// 	checkAddress();
-	// }, [account, chainId, library]);
+	const redirectAndOpenPFPModal = () => {
+		if (isUserRegistered(userData)) {
+			router.push(Routes.MyAccountSetPfp);
+		} else {
+			router.push(Routes.Onboard);
+		}
+	};
+
+	const { modalCallback: signInThenRedirect } = useModalCallback(
+		redirectAndOpenPFPModal,
+	);
+
+	const handleSetPFP = () => {
+		if (isSignedIn) {
+			redirectAndOpenPFPModal();
+		} else {
+			signInThenRedirect();
+		}
+	};
 
 	return (
 		<MintViewContainer>
@@ -98,14 +93,26 @@ export const NFTMintIndex = () => {
 											},
 										)}
 									</DescCenter>
+									<Button
+										label={formatMessage({
+											id: 'label.use_as_profile_picture',
+										})}
+										buttonType='primary'
+										onClick={handleSetPFP}
+									/>
 									<a
-										href={config.OPENSEA_ADDRESS + account}
+										href={
+											config.RARIBLE_ADDRESS +
+											'user/' +
+											account +
+											'/owned'
+										}
 										target='_blank'
 										rel='noreferrer'
 									>
-										<OpenSeaLink>
+										<RaribleLink>
 											View on Rarible
-										</OpenSeaLink>
+										</RaribleLink>
 									</a>
 									<Image
 										src='/images/yellow_flower_full.svg'
@@ -194,11 +201,11 @@ const MintViewContainer = styled.div`
 `;
 
 const MintContainer = styled(Container)`
-	padding-top: 200px;
+	padding-top: 100px;
 	position: relative;
 `;
 
-const Title = styled(H1)`
+const Title = styled(D3)`
 	font-weight: 700;
 	color: ${brandColors.deep[100]};
 	margin-bottom: 22px;
@@ -237,7 +244,7 @@ const DescCenter = styled(Desc)`
 	text-align: center;
 `;
 
-const OpenSeaLink = styled(ButtonText)`
+const RaribleLink = styled(ButtonText)`
 	color: ${brandColors.deep[100]};
 	margin-bottom: 32px;
 	display: block;

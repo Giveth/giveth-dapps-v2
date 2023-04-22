@@ -7,7 +7,7 @@ import {
 	IconRocketInSpace32,
 	IconRocketInSpace16,
 } from '@giveth/ui-design-system';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styled, { css } from 'styled-components';
 import { IProjectPower } from '@/apollo/types/types';
 import { Flex } from './styled-components/Flex';

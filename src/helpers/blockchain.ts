@@ -115,3 +115,7 @@ export const networksParams: {
 		iconUrls: ['future'],
 	},
 };
+
+export const convertIPFSToHTTPS = (url: string) => {
+	return url.replace('ipfs://', 'https://ipfs.io/ipfs/');
+};
