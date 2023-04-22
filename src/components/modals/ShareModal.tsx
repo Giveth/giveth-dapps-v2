@@ -53,7 +53,7 @@ const ShareModal = ({ projectHref, setShowModal }: IShareModal) => {
 							hashtags={['giveth']}
 							title={`${formatMessage({
 								id: 'label.check_out_on',
-							})} @Givethio`}
+							})} @giveth`}
 							url={url}
 						>
 							<Image src={TwitterIcon} alt='twitter icon' />

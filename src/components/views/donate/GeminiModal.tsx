@@ -37,7 +37,7 @@ const GeminiModal = ({ setShowModal }: any) => {
 					<TwitterShareButton
 						beforeOnClick={closeModal}
 						title={
-							'Hey @gemini - I want to donate $GIV to this @thegivingblock project on @givethio! Help me support them by listing $GIV on gemini.com @tyler @cameron'
+							'Hey @gemini - I want to donate $GIV to this @thegivingblock project on @giveth! Help me support them by listing $GIV on gemini.com @tyler @cameron'
 						}
 						url={url!}
 						hashtags={['gemini', 'giveth', 'giv', 'donation']}
