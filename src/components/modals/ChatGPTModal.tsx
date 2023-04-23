@@ -122,7 +122,6 @@ const ImageContainer = styled.div`
 	overflow: hidden;
 	position: relative;
 	cursor: pointer;
-
 	img {
 		object-fit: cover;
 	}
