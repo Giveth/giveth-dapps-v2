@@ -352,6 +352,14 @@ const convetSourceTypeToIcon = (distributor: string) => {
 					<P>{` GIVdrop`}</P>
 				</Flex>
 			);
+		case 'praise':
+			return (
+				<Flex gap='16px'>
+					<IconGIV size={24} />
+					<P>{` Praise`}</P>
+				</Flex>
+			);
+
 		default:
 			// 'Unknown' we show givfarm instead of unknown for exploit farms
 			// https://github.com/Giveth/giveth-dapps-v2/issues/1796
