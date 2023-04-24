@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { IGiverPFPToken } from '@/apollo/types/types';
 
 export interface IPfpList {
-	[key: string]: IGiverPFPToken | false;
+	[key: string]: IGiverPFPToken | false | undefined;
 }
 
 interface IPfpPending {
@@ -31,10 +31,22 @@ export const pfpSlice = createSlice({
 		updatePfpList: (state, action) => {
 			state.List = { ...state.List, ...action.payload };
 		},
+		removeUserFromList: (state, action) => {
+			state.List[action.payload.address.toLowerCase()] = undefined;
+		},
+		updateUserFromList: (state, action) => {
+			state.List[action.payload.address.toLowerCase()] =
+				action.payload.avatar;
+		},
 	},
 });
 
-export const { addAccountToPfpPending, clearPfpPendingList, updatePfpList } =
-	pfpSlice.actions;
+export const {
+	addAccountToPfpPending,
+	clearPfpPendingList,
+	updatePfpList,
+	removeUserFromList,
+	updateUserFromList,
+} = pfpSlice.actions;
 
 export default pfpSlice.reducer;
