@@ -35,7 +35,8 @@ export const pfpSlice = createSlice({
 			state.List[action.payload.address.toLowerCase()] = undefined;
 		},
 		updateUserFromList: (state, action) => {
-			state.List[action.payload.address.toLowerCase()] =
+			state.List[action.payload.address.toLowerCase()] = undefined;
+			state.pendingList[action.payload.address.toLowerCase()] =
 				action.payload.avatar;
 		},
 	},
