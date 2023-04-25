@@ -6,6 +6,7 @@ import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { gToast, ToastType } from '@/components/toasts';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { useAppDispatch } from '@/features/hooks';
+import { updateUserFromList } from '@/features/pfp/pfp.slice';
 
 enum EProfilePicTab {
 	LOADING,
@@ -40,7 +41,10 @@ export const useAvatar = () => {
 				},
 			});
 			if (response.updateUser) {
-				account && dispatch(fetchUserByAddress(account));
+				if (account) {
+					dispatch(fetchUserByAddress(account));
+					dispatch(updateUserFromList({ address: account }));
+				}
 				gToast('Profile Photo updated.', {
 					type: ToastType.SUCCESS,
 					title: 'Success',
