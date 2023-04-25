@@ -17,6 +17,9 @@ import { mediaQueries } from '@/lib/constants/constants';
 import InternalLink from '@/components/InternalLink';
 import { addressToUserView, slugToProjectView } from '@/lib/routeCreators';
 import VerificationBadge from '@/components/badges/VerificationBadge';
+import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
+import { PFP } from '../PFP';
+import { Flex } from '../styled-components/Flex';
 
 interface IProjectCard {
 	project: IProject;
@@ -39,6 +42,10 @@ const ProjectCard = (props: IProjectCard) => {
 	const { name, walletAddress } = adminUser || {};
 	const orgLabel = organization?.label;
 	const { formatMessage } = useIntl();
+	const pfpToken = useGiverPFPToken(
+		adminUser?.walletAddress,
+		adminUser?.avatar,
+	);
 
 	return (
 		<Wrapper isNew={isNew}>
@@ -68,7 +75,14 @@ const ProjectCard = (props: IProjectCard) => {
 								walletAddress?.toLowerCase(),
 							)}
 						>
-							<Author>{name}</Author>
+							{pfpToken ? (
+								<Flex gap='8px'>
+									<PFP pfpToken={pfpToken} />
+									<Author>{name || '\u200C'}</Author>
+								</Flex>
+							) : (
+								<Author>{name || '\u200C'}</Author>
+							)}
 						</InternalLink>
 					</div>
 				)}
