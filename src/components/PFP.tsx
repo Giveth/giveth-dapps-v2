@@ -18,7 +18,7 @@ export enum EPFPSize {
 	SMALL,
 	LARGE,
 }
-//test pfp on mainnet
+
 interface IPFPProps {
 	pfpToken: IGiverPFPToken;
 	size?: EPFPSize;
