@@ -181,7 +181,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 							{/* check pfp data, if truthy we check if user is looking at their account, 
 							based on this we show two different messages and links relating to pfp use on profile page  */}
 							{pfpData &&
-								(myAccount && pfpData !== undefined ? (
+								(myAccount && !pfpToken ? (
 									<RaribleLinkContainer>
 										<GLink>
 											<a href={Routes.MyAccountSetPfp}>
