@@ -14,7 +14,7 @@ import { useWeb3React } from '@web3-react/core';
 
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
-import SocialBox from '@/components/views/donate/SocialBox';
+import SocialBox from '@/components/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { formatTxLink } from '@/lib/helpers';
@@ -26,6 +26,7 @@ import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
 import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
+import { EContentType } from '@/lib/constants/shareContent';
 
 const SuccessView: FC = () => {
 	const { isSuccessDonation } = useDonateData();
@@ -77,7 +78,10 @@ const SuccessView: FC = () => {
 					</ExternalLink>
 				</GivBackContainer>
 			)}
-			<SocialBox project={project} isSuccess />
+			<SocialBox
+				project={project}
+				contentType={EContentType.justDonated}
+			/>
 			<Options>
 				{hasMultipleTxs ? (
 					<>

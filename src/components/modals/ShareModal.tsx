@@ -12,8 +12,9 @@ import {
 	neutralColors,
 	OutlineButton,
 } from '@giveth/ui-design-system';
-
 import { useIntl } from 'react-intl';
+import { FC } from 'react';
+
 import { Modal } from './Modal';
 import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
@@ -25,15 +26,31 @@ import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
 import { fullPath } from '@/lib/helpers';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import {
+	EContentType,
+	ESocialType,
+	shareContentCreator,
+} from '@/lib/constants/shareContent';
 
 interface IShareModal extends IModal {
 	projectHref: string;
+	contentType: EContentType;
 }
 
-const ShareModal = ({ projectHref, setShowModal }: IShareModal) => {
+const ShareModal: FC<IShareModal> = props => {
+	const { projectHref, setShowModal, contentType } = props;
 	const url = fullPath(slugToProjectView(projectHref));
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
+
+	const shareTitleTwitter = shareContentCreator(
+		contentType,
+		ESocialType.twitter,
+	);
+	const shareTitleFacebookAndLinkedin = shareContentCreator(
+		contentType,
+		ESocialType.facebook,
+	);
 
 	return (
 		<Modal
@@ -51,9 +68,7 @@ const ShareModal = ({ projectHref, setShowModal }: IShareModal) => {
 					<SocialButtonContainer>
 						<TwitterShareButton
 							hashtags={['giveth']}
-							title={`${formatMessage({
-								id: 'label.check_out_on',
-							})} @giveth`}
+							title={shareTitleTwitter}
 							url={url}
 						>
 							<Image src={TwitterIcon} alt='twitter icon' />
@@ -61,9 +76,7 @@ const ShareModal = ({ projectHref, setShowModal }: IShareModal) => {
 					</SocialButtonContainer>
 					<SocialButtonContainer>
 						<LinkedinShareButton
-							title={`${formatMessage({
-								id: 'label.check_out_on',
-							})} @Givethio`}
+							title={shareTitleFacebookAndLinkedin}
 							url={url}
 						>
 							<Image src={LinkedinIcon} alt='twitter icon' />
@@ -72,9 +85,7 @@ const ShareModal = ({ projectHref, setShowModal }: IShareModal) => {
 					<SocialButtonContainer>
 						<FacebookShareButton
 							hashtag='#giveth'
-							quote={`${formatMessage({
-								id: 'label.check_out_on',
-							})} @Givethio`}
+							quote={shareTitleFacebookAndLinkedin}
 							url={url}
 						>
 							<Image src={FacebookIcon} alt='facebook icon' />
