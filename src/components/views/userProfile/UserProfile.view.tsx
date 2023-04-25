@@ -110,8 +110,6 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 		};
 		if (user?.walletAddress) {
 			fetchPFPInfo(user.walletAddress);
-			console.log(user.walletAddress);
-			console.log(pfpData);
 		}
 	}, [user]);
 
