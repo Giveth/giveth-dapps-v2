@@ -43,7 +43,7 @@ export const PFP: FC<IPFPProps> = ({
 					id='pfp-avatar'
 				/>
 			}
-			direction='bottom'
+			direction='right'
 		>
 			<ExternalLink
 				href={Routes.NFT}
