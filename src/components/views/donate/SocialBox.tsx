@@ -22,7 +22,7 @@ const SocialBox: FC<ISocialBox> = ({ project, isSuccess }) => {
 	const { formatMessage } = useIntl();
 	const shareTitleTwitter = `${
 		isSuccess ? 'This' : 'Our'
-	} project is raising funds in crypto on @givethio! 🙌
+	} project is raising funds in crypto on @giveth! 🙌
 Donate directly on Ethereum Mainnet or @gnosischain w/ no fees or intermediaries.👇`;
 
 	const shareTitleFacebookAndLinkedin = `${

@@ -174,7 +174,7 @@ export interface EnvConfig {
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
-	OPENSEA_ADDRESS: string;
+	RARIBLE_ADDRESS: string;
 }
 
 export interface GlobalConfig extends EnvConfig {
@@ -182,6 +182,7 @@ export interface GlobalConfig extends EnvConfig {
 	WEB3_POLLING_INTERVAL: number;
 	SUBGRAPH_POLLING_INTERVAL: number;
 	NOTIFICATION_POLLING_INTERVAL: number;
+	PFP_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
 	NETWORKS_CONFIG: {
 		[key: number]:

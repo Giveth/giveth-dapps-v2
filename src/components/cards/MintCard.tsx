@@ -48,6 +48,16 @@ export const MintCard = () => {
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
 	const { setQty, isEligible, setIsEligible } = usePFPMintData();
+	let mintLeft = '-';
+	if (pfpData && balance !== undefined) {
+		let mintAmount = pfpData.maxMintAmount - balance;
+		console.log(mintAmount);
+		if (mintAmount < 0) {
+			mintLeft = '0';
+		} else {
+			mintLeft = mintAmount.toString();
+		}
+	}
 
 	useEffect(() => {
 		async function fetchData() {
@@ -174,9 +184,7 @@ export const MintCard = () => {
 							onClick={() =>
 								setQtyNFT(
 									pfpData && balance !== undefined
-										? (
-												pfpData.maxMintAmount - balance
-										  ).toString()
+										? mintLeft
 										: '',
 								)
 							}
@@ -201,7 +209,7 @@ export const MintCard = () => {
 					<Flex justifyContent='space-between'>
 						<InfoBoxTitle>Max Mint Amount</InfoBoxTitle>
 						<InfoBoxValue>
-							{pfpData ? pfpData.maxMintAmount : '-'}
+							{pfpData && balance !== undefined ? mintLeft : '-'}
 						</InfoBoxValue>
 					</Flex>
 					<Flex justifyContent='space-between'>

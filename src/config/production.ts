@@ -37,7 +37,7 @@ const config: EnvConfig = {
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
 
-	OPENSEA_ADDRESS: 'https://rarible.com/user/',
+	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
 		...networksParams[1],
 

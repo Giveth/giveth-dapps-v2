@@ -15,7 +15,7 @@ import AlreadyRegistered from '@/components/views/onboarding/AlreadyRegistered';
 
 const StatesLabel = [
 	'Register on Giveth',
-	'Who you are?',
+	'Who are you?',
 	'Fancy profile photo',
 	'Done',
 ];

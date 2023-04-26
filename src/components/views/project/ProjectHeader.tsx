@@ -1,21 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import { P, brandColors, H3, neutralColors } from '@giveth/ui-design-system';
+import { brandColors, H3, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import VerificationBadge from '@/components/badges/VerificationBadge';
 import { isNoImg, noImgColor, noImgIcon } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
-import { addressToUserView } from '@/lib/routeCreators';
 import { useProjectContext } from '@/context/project.context';
+import { ProjectOwnerWithPfp } from './ProjectOwnerWithPfp';
 
 const ProjectHeader = () => {
 	const { projectData } = useProjectContext();
 	const { title, verified, image, adminUser } = projectData || {};
 	const [adjustTitle, setAdjustTitle] = useState<boolean>(false);
 	const containerRef = useRef(null);
-
-	const name = adminUser?.name;
 
 	useEffect(() => {
 		const observerHandler = (entries: IntersectionObserverEntry[]) => {
@@ -45,13 +42,7 @@ const ProjectHeader = () => {
 					<Title fixSize={adjustTitle} weight={700}>
 						{title}
 					</Title>
-					<Link
-						href={addressToUserView(
-							adminUser?.walletAddress?.toLowerCase(),
-						)}
-					>
-						<Author>{name}</Author>
-					</Link>
+					<ProjectOwnerWithPfp user={adminUser} />
 				</TitleContainer>
 			</TitleSection>
 		</Wrapper>
@@ -119,11 +110,6 @@ const Title = styled(H3)<{ fixSize: boolean }>`
 	max-width: 770px;
 	font-size: ${props => (props.fixSize ? '18px' : '')};
 	margin: ${props => (props.fixSize ? '8px 0' : '16px 0')};
-`;
-
-const Author = styled(P)`
-	color: ${brandColors.pinky[500]};
-	cursor: pointer;
 `;
 
 export default ProjectHeader;

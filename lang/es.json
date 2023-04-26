@@ -1189,7 +1189,7 @@
 	"health-and-wellness_desc": "Apoyar proyectos de salud y bienestar centrados en la atención sanitaria, la salud mental, la nutrición y la salud infantil.",
 	"technology_desc": "Apoyo a proyectos tecnológicos centrados en la tecnología, la investigación y el diseño.",
 	"all_projects": "Todos los proyectos",
-	"all_projects_desc": "Apoya agentes de cambio de todo el mundo",
+	"all_projects_desc": "APOYE PROYECTOS GLOBALES EN BIENES PÚBLICOS, SOSTENIBILIDAD Y REGENERACIÓN CON CRIPTODONACIONES",
 	"label.sorry_this_projet_doesnt_support_your_current_net": "Lo sentimos, este proyecto no admite tu red actual.",
 	"label.please_switch_your_network": "Por favor cambia de red.",
 	"label.go_back_to_project_details": "Vuelve a Detalles del Proyecto",
@@ -1255,6 +1255,7 @@
 	"label.duration_ago": "hace {duration}",
 	"label.an_equivalent_of_up_to_40%": "Un equivalente de hasta 40% del monto de la donación en GIV tokens!",
 	"label.read_more_on_our_docs": "Aprende más en nuestra doc",
+	"label.use_as_profile_picture": "",
 	"label.recipient_addresses": "",
 	"label.add_new_address": "",
 	"label.manage_addresses": ""

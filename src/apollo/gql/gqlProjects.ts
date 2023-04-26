@@ -25,6 +25,7 @@ export const PROJECT_CARD_FIELDS = gql`
 		adminUser {
 			name
 			walletAddress
+			avatar
 		}
 		updatedAt
 		organization {
@@ -105,6 +106,7 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				id
 				name
 				walletAddress
+				avatar
 			}
 			status {
 				id
@@ -334,6 +336,7 @@ export const CREATE_PROJECT = gql`
 			adminUser {
 				name
 				walletAddress
+				avatar
 			}
 			image
 			impactLocation
@@ -363,6 +366,7 @@ export const UPDATE_PROJECT = gql`
 			adminUser {
 				name
 				walletAddress
+				avatar
 			}
 			addresses {
 				address

@@ -97,6 +97,7 @@ export const FETCH_PROJECT_BOOSTERS = gql`
 				user {
 					name
 					walletAddress
+					avatar
 				}
 				percentage
 			}
