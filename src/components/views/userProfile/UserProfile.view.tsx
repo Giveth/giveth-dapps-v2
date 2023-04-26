@@ -32,9 +32,14 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import UploadProfilePicModal from '@/components/modals/UploadProfilePicModal/UploadProfilePicModal';
 import { ProfileModal } from '@/lib/constants/Routes';
+import Routes from '@/lib/constants/Routes';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
 import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
 import { EPFPSize, PFP } from '@/components/PFP';
+import { gqlRequest } from '@/helpers/requests';
+import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
+import { IGiverPFPToken } from '@/apollo/types/types';
+
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
 	UsdAmount = 'UsdAmount',
@@ -56,7 +61,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 	const dispatch = useAppDispatch();
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
-
+	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
 	const { chainId } = useWeb3React();
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
@@ -83,6 +88,30 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 			removeQueryParamAndRedirect(router, ['modal']);
 		}
 	}, [router.query.modal]);
+
+	useEffect(() => {
+		const fetchPFPInfo = async (walletAddress: string) => {
+			try {
+				const query = buildUsersPfpInfoQuery([walletAddress]);
+				const { data } = await gqlRequest(
+					config.MAINNET_CONFIG.subgraphAddress,
+					false,
+					query,
+				);
+				if (
+					data[`user_${walletAddress}`] &&
+					data[`user_${walletAddress}`].length > 0
+				) {
+					setPfpData(data[`user_${walletAddress}`]);
+				}
+			} catch (e) {
+				console.error(e);
+			}
+		};
+		if (user?.walletAddress) {
+			fetchPFPInfo(user.walletAddress);
+		}
+	}, [user]);
 
 	if (myAccount && !isSignedIn)
 		return (
@@ -147,24 +176,36 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 									</ExternalLink>
 								</AddressContainer>
 							</WalletContainer>
-							{pfpToken && (
-								<RaribleLinkContainer>
-									<a
-										href={
-											config.RARIBLE_ADDRESS +
-											'token/' +
-											pfpToken.id.replace('-', ':')
-										}
-										target='_blank'
-										rel='noreferrer'
-									>
+							{/* check pfp data, if truthy we check if user is looking at their account, 
+							based on this we show two different messages and links relating to pfp use on profile page  */}
+							{pfpData &&
+								(myAccount && !pfpToken ? (
+									<RaribleLinkContainer>
 										<GLink>
-											View this Givers PFP on Rarible{' '}
-											<IconExternalLink16 />
+											<a href={Routes.MyAccountSetPfp}>
+												{' '}
+												Set your Givers PFP NFT{' '}
+											</a>
 										</GLink>
-									</a>
-								</RaribleLinkContainer>
-							)}
+									</RaribleLinkContainer>
+								) : (
+									<RaribleLinkContainer>
+										<a
+											href={
+												config.RARIBLE_ADDRESS +
+												'token/' +
+												pfpToken?.id.replace('-', ':')
+											}
+											target='_blank'
+											rel='noreferrer'
+										>
+											<GLink>
+												View this Givers PFP on Rarible{' '}
+												<IconExternalLink16 />
+											</GLink>
+										</a>
+									</RaribleLinkContainer>
+								))}
 						</UserInfoRow>
 					</UserInfo>
 				</Container>
