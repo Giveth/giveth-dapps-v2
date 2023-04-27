@@ -149,7 +149,9 @@ const ProjectDonationTable = ({
 						<SortIcon order={order} title={EOrderBy.CreationDate} />
 					</TableHeader>
 					<TableHeader>
-						{formatMessage({ id: 'label.donor' })}
+						<LeftPadding>
+							{formatMessage({ id: 'label.donor' })}
+						</LeftPadding>
 					</TableHeader>
 					{isAdmin && (
 						<TableHeader>
@@ -187,7 +189,7 @@ const ProjectDonationTable = ({
 								EDonationType.POIGNART ? (
 									'PoignART'
 								) : donation.anonymous ? (
-									'Anonymous'
+									<LeftPadding>Anonymous</LeftPadding>
 								) : (
 									<UserWithPFPInCell user={donation.user} />
 								)}
@@ -261,6 +263,10 @@ const Currency = styled.div`
 	color: ${neutralColors.gray[600]};
 `;
 
+const LeftPadding = styled.div`
+	padding-left: 44px;
+`;
+
 const Wrapper = styled.div`
 	margin: 50px 0 32px;
 	display: flex;
@@ -287,8 +293,8 @@ const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
 	width: 100%;
 	grid-template-columns: ${props =>
 		props.isAdmin
-			? '1.25fr 1.25fr 1fr 1.25fr 1fr 1fr 1fr'
-			: '1.25fr 1.25fr 1.25fr 1fr 1fr 1fr'};
+			? '0.9fr 1.5fr 1fr 1.25fr 0.8fr 1.1fr 1fr'
+			: '0.9fr 1.5fr 1.1fr 0.8fr 1.1fr 1fr'};
 	min-width: 800px;
 `;
 
