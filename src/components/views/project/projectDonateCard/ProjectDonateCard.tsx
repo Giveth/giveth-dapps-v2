@@ -68,6 +68,7 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
 import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
 import { useProjectContext } from '@/context/project.context';
+import { EContentType } from '@/lib/constants/shareContent';
 
 interface IProjectDonateCard {
 	setCreationSuccessful: Dispatch<SetStateAction<boolean>>;
@@ -301,7 +302,11 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 				/>
 			)}
 			{showModal && slug && (
-				<ShareModal setShowModal={setShowModal} projectHref={slug} />
+				<ShareModal
+					contentType={EContentType.thisProject}
+					setShowModal={setShowModal}
+					projectHref={slug}
+				/>
 			)}
 			{deactivateModal && (
 				<DeactivateProjectModal
