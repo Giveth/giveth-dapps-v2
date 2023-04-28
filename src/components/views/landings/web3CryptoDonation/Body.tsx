@@ -37,25 +37,25 @@ const Body = () => {
 const numberedList = [
 	{
 		number: 1,
-		title: 'Web3 donations made easy:',
+		title: 'Web3 donations made easy',
 		description:
 			'We make it super easy to donate to any project completely peer to peer! When you donate to a crypto project, we don’t take any of the fees. We never even hold the donation. 100% of what you donate goes DIRECTLY to the project.',
 	},
 	{
 		number: 2,
-		title: 'Ethereum donations (along with Gnosis chain):',
+		title: 'Ethereum donations (along with Gnosis chain)',
 		description:
 			'We’re active for donations on Ethereum mainnet and Gnosis chain, making it super easy for you to connect your wallet of choice (MetaMask etc.) and make Ethereum donations directly to any project.',
 	},
 	{
 		number: 3,
-		title: 'Official projects donations with cryptocurrency:',
+		title: 'Official projects donations with cryptocurrency',
 		description:
 			'All projects on Giveth are verified by our team to make sure any funds donated are being used for what they say. You can be sure when you donate to any project on Giveth, that any cryptocurrency donated will go directly to the projects you donate to.',
 	},
 	{
 		number: 4,
-		title: 'Crypto airdrop rewards through donations:',
+		title: 'Crypto airdrop rewards through donations',
 		description: (
 			<>
 				Another cool feature that sets Giveth apart is that we
