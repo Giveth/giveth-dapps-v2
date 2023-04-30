@@ -3,11 +3,12 @@ import styled from 'styled-components';
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { motion } from 'framer-motion';
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
-import SocialBox from '@/components/views/donate/SocialBox';
+import SocialBox from '@/components/SocialBox';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useDonateData } from '@/context/donate.context';
+import { EContentType } from '@/lib/constants/shareContent';
 
 const ProjectCardSelector: FC = () => {
 	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
@@ -42,7 +43,11 @@ const ProjectCardSelector: FC = () => {
 				<MobileCardContainer>
 					<ProjectCard project={project} />
 					<MobileGrayBar />
-					<SocialBox project={project} />
+					<SocialBox
+						contentType={EContentType.thisProject}
+						project={project}
+						isDonateFooter
+					/>
 				</MobileCardContainer>
 			</MobileCardWrapper>
 		);

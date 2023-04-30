@@ -24,6 +24,7 @@ import {
 } from '@/features/user/user.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
+import { EContentType } from '@/lib/constants/shareContent';
 
 interface IProjectCardLikeAndShareButtons {
 	project: IProject;
@@ -123,7 +124,11 @@ const ProjectCardLikeAndShareButtons = (
 	return (
 		<>
 			{showModal && (
-				<ShareModal setShowModal={setShowModal} projectHref={slug} />
+				<ShareModal
+					contentType={EContentType.thisProject}
+					setShowModal={setShowModal}
+					projectHref={slug}
+				/>
 			)}
 			<BadgeWrapper>
 				<Flex gap='6px'>

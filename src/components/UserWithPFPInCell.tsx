@@ -15,7 +15,7 @@ export const UserWithPFPInCell: FC<IUserWithPFPInCell> = ({ user }) => {
 	const name =
 		user?.name || shortenAddress(user.walletAddress?.toLowerCase());
 	return pfpToken ? (
-		<Flex gap='8px'>
+		<Flex gap='12px' alignItems='center'>
 			<StyledPFP pfpToken={pfpToken} />
 			<Bold>{name || '\u200C'}</Bold>
 		</Flex>
@@ -24,7 +24,8 @@ export const UserWithPFPInCell: FC<IUserWithPFPInCell> = ({ user }) => {
 	);
 };
 const StyledPFP = styled(PFP)`
-	margin-left: 8px;
+	margin-top: 5px;
+	margin-left: 5px;
 `;
 
 const Bold = styled.span`
@@ -32,5 +33,5 @@ const Bold = styled.span`
 `;
 
 const NoAvatar = styled.span`
-	padding-left: 40px;
+	padding-left: 44px;
 `;

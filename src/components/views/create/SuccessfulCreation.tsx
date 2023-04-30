@@ -1,14 +1,21 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
-import { brandColors, Button, H2, Lead, P } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Button,
+	Col,
+	Container,
+	H2,
+	Lead,
+	P,
+	Row,
+} from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-
-import { Col, Row, Container } from '@giveth/ui-design-system';
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
 import { IProject } from '@/apollo/types/types';
 import { slugToProjectView } from '@/lib/routeCreators';
-import SocialBox from '@/components/views/donate/SocialBox';
+import SocialBox from '@/components/SocialBox';
 import CopyLink from '@/components/CopyLink';
 import { mediaQueries } from '@/lib/constants/constants';
 import { fullPath } from '@/lib/helpers';
@@ -16,6 +23,7 @@ import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
+import { EContentType } from '@/lib/constants/shareContent';
 
 const SuccessfulCreation = (props: {
 	project: IProject;
@@ -63,7 +71,10 @@ const SuccessfulCreation = (props: {
 						<br />
 						<br />
 						<br />
-						<SocialBox project={project} isSuccess />
+						<SocialBox
+							project={project}
+							contentType={EContentType.ourProject}
+						/>
 						<br />
 						<P>
 							{formatMessage({

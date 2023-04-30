@@ -72,9 +72,9 @@ interface IStyledImageProps {
 
 const StyledImage = styled(Image)<IStyledImageProps>`
 	transition: box-shadow 0.2s ease, transform 0.2s ease;
-	border: 0.2754px solid ${brandColors.mustard[500]};
-	box-shadow: 0px 0.76px 4.6px 1.14px rgba(225, 69, 141, 0.3);
+	border: 0.18 solid ${brandColors.mustard[500]};
 	border-radius: 4px;
+	box-shadow: 0px 0.76px 4.6px 1.14px rgba(225, 69, 141, 0.3);
 	&:hover {
 		transform: scale(1.2); // Adjust the scale value as desired
 	}
@@ -82,6 +82,7 @@ const StyledImage = styled(Image)<IStyledImageProps>`
 	${props =>
 		props.PFPsize === EPFPSize.LARGE &&
 		css`
+			border: 0.2754px solid ${brandColors.mustard[500]};
 			box-shadow: 0px 1.15778px 6.9467px 1.73668px #e1458d;
 			border-radius: 16px;
 		`}
