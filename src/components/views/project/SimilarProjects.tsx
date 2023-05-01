@@ -1,6 +1,13 @@
 import styled from 'styled-components';
 import React, { useEffect, useState } from 'react';
-import { Container, H5 } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Button,
+	Container,
+	H5,
+	IconChevronRight32,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { captureException } from '@sentry/nextjs';
@@ -13,12 +20,14 @@ import { client } from '@/apollo/apolloClient';
 import { SIMILAR_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { showToastError } from '@/lib/helpers';
 import { ISuggestedProjectsGQL } from '@/apollo/types/gqlTypes';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import CaretRightIcon from '/public/images/caret_right.svg';
+import ExternalLink from '@/components/ExternalLink';
+import Routes from '@/lib/constants/Routes';
 
 const projectsToFetch = 12;
 
@@ -70,9 +79,19 @@ const SimilarProjects = (props: { slug: string }) => {
 	if (!suggestedProjects || suggestedProjects.length === 0) return null;
 	return (
 		<ContainerStyled id='similar-projects'>
-			<H5 weight={700}>
-				{formatMessage({ id: 'label.similar_projects' })}
-			</H5>
+			<Title>
+				<H5 weight={700}>
+					{formatMessage({ id: 'label.similar_projects' })}
+				</H5>
+				<ExternalLink href={Routes.Projects}>
+					<Button
+						size='large'
+						buttonType='texty'
+						label={formatMessage({ id: 'label.view_more' })}
+						icon={<IconChevronRight32 />}
+					/>
+				</ExternalLink>
+			</Title>
 			<SwiperContainer>
 				<CaretLeft id='prevIcon'>
 					<Image src={CaretRightIcon} alt='caret right' />
@@ -101,6 +120,15 @@ const SimilarProjects = (props: { slug: string }) => {
 	);
 };
 
+const Title = styled(Flex)`
+	justify-content: space-between;
+	margin-bottom: 50px;
+	color: ${neutralColors.gray[600]};
+	button {
+		color: ${brandColors.giv[500]};
+	}
+`;
+
 const SwiperContainer = styled.div`
 	overflow: unset;
 	position: relative;
@@ -110,9 +138,6 @@ const ContainerStyled = styled(Container)`
 	position: relative;
 	margin-top: 60px;
 	margin-bottom: 120px;
-	> h5 {
-		margin-bottom: 21px;
-	}
 `;
 
 const CaretRight = styled(FlexCenter)`
