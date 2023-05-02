@@ -23,7 +23,7 @@ const networks = [
 	config.XDAI_CONFIG,
 	config.POLYGON_CONFIG,
 	config.CELO_CONFIG,
-	//TODO: Uncomment Optimism config.OPTIMISM_CONFIG,
+	config.OPTIMISM_CONFIG,
 ];
 
 const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
