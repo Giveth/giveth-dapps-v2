@@ -2,14 +2,13 @@ import React, { FC, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Caption, semanticColors } from '@giveth/ui-design-system';
+import { Caption, Container, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 
 import { Col, Row } from '@giveth/ui-design-system';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
-import ProjectDonateCard from './projectDonateCard/ProjectDonateCard';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { client } from '@/apollo/apolloClient';
 import { IDonation } from '@/apollo/types/types';
@@ -145,16 +144,24 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					<title>{title && `${title} |`} Giveth</title>
 					<ProjectMeta project={projectData} />
 				</Head>
-
-				<ProjectHeader />
-				{isDraft && (
-					<DraftIndicator>
-						<InfoBadge />
-						<Caption medium>
-							This is a preview of your project.
-						</Caption>
-					</DraftIndicator>
-				)}
+				<HeadingContainer>
+					<Row>
+						<Col lg={9}>
+							<ProjectHeader />
+						</Col>
+						<Col lg={3}>
+							<div>New Component</div>
+						</Col>
+						{isDraft && (
+							<DraftIndicator>
+								<InfoBadge />
+								<Caption medium>
+									This is a preview of your project.
+								</Caption>
+							</DraftIndicator>
+						)}
+					</Row>
+				</HeadingContainer>
 				<BodyWrapper>
 					<Col sm={8}>
 						{projectData && !isDraft && (
@@ -190,13 +197,13 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							/>
 						)}
 					</Col>
-					{projectData && (
+					{/* {projectData && (
 						<Col sm={4}>
 							<ProjectDonateCard
 								setCreationSuccessful={setCreationSuccessful}
 							/>
 						</Col>
-					)}
+					)} */}
 				</BodyWrapper>
 			</Wrapper>
 			<SimilarProjects slug={slug} />
@@ -231,5 +238,7 @@ const BodyWrapper = styled(Row)`
 		padding: 0 40px;
 	}
 `;
+
+const HeadingContainer = styled(Container)``;
 
 export default ProjectIndex;
