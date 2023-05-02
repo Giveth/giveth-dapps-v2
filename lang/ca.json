@@ -324,6 +324,7 @@
 	"label.support_giveth_with": "Doni suport a Giveth amb una donació a la Giveth DAO. El percentatge de donació seleccionat s'afegirà al seu import de donació en el mateix token que està donant.",
 	"label.your_donation_is_being_processed": "La seva donació s'està processant",
 	"label.your_total_donation": "La seva donació total",
+	"label.view_more": "Veure més",
 	"page.faq.is_giveth_recognized_as_an_official_charity": "Està Giveth reconegut com a beneficiència oficial?",
 	"page.faq.is_giveth_recognized_as_an_official_charity.content": "Amb l'ajuda de ",
 	"page.faq.is_giveth_recognized_as_an_official_charity.content.two": ", la DAO i l'estructura organitzativa de la comunitat de Giveth estan representades com a organització sense ànim de lucre 501c3 als Estats Units. Som un projecte liderat per la comunitat i no obtindrem cap benefici directe de la plataforma. Garantim que tots els fons seran reciclats de nou a la comunitat que està assegurant que la plataforma de Giveth esdevingui àmpliament adoptada.",
