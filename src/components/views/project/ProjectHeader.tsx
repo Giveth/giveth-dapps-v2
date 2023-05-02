@@ -60,8 +60,8 @@ const ProjectImage = styled.img`
 
 const Title = styled(H3)`
 	position: absolute;
-	bottom: 8%;
-	left: 5%;
+	bottom: 40px;
+	left: 40px;
 	color: #fff;
 	font-size: 24px;
 	font-weight: bold;
