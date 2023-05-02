@@ -49,7 +49,6 @@ const ImageWrapper = styled.div`
 	position: relative;
 	display: inline-block;
 	overflow: hidden;
-	max-width: 800px;
 `;
 
 const ProjectImage = styled.img`
