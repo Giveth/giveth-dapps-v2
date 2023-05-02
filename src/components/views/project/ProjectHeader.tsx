@@ -31,12 +31,7 @@ const ProjectHeader = () => {
 
 	return (
 		<ImageWrapper>
-			<ProjectImage
-				src={image || ''}
-				alt='test'
-				width={800}
-				height={500}
-			/>
+			<ProjectImage src={image || ''} alt='test' />
 			<Title>
 				{title}
 				<ProjectOwnerWithPfp user={adminUser} />
