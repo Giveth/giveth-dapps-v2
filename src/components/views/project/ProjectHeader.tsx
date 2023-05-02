@@ -31,7 +31,7 @@ const ProjectHeader = () => {
 
 	return (
 		<ImageWrapper>
-			<ProjectImage src={image || ''} alt='test' />
+			<ProjectImage src={image || ''} alt='test' loading='lazy' />
 			<Title>
 				{title}
 				<ProjectOwnerWithPfp user={adminUser} />
