@@ -3,13 +3,15 @@ import {
 	neutralColors,
 	H4,
 	H3,
-	Button,
+	ButtonLink,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import Link from 'next/link';
 import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
+import { slugToProjectDonate } from '@/lib/routeCreators';
 
 export const ProjectActionCard = () => {
 	return (
@@ -21,8 +23,8 @@ export const ProjectActionCard = () => {
 
 const DonateSection = () => {
 	const { formatMessage, locale } = useIntl();
-	const { projectData } = useProjectContext();
-	const { totalDonations } = projectData || {};
+	const { projectData, isActive } = useProjectContext();
+	const { slug, totalDonations } = projectData || {};
 	return (
 		<DonationSectionWrapper flexDirection='column'>
 			{totalDonations && totalDonations !== 0 ? (
@@ -41,7 +43,12 @@ const DonateSection = () => {
 					{formatMessage({ id: 'label.donate_first_lead_the_way' })}
 				</NoFund>
 			)}
-			<Button label={formatMessage({ id: 'label.donate' })} />
+			<Link href={slugToProjectDonate(slug || '')}>
+				<ButtonLink
+					label={formatMessage({ id: 'label.donate' })}
+					disabled={!isActive}
+				/>
+			</Link>
 		</DonationSectionWrapper>
 	);
 };
