@@ -374,7 +374,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							onChange={setIsSameAddress}
 							checked={isSameAddress}
 							label={formatMessage({
-								id: 'label.ill_raise_and_receive_funds_on_mainnet_and_gnosis',
+								id: 'label.ill_raise_and_receive_funds_on_all_chains',
 							})}
 						/>
 						<WalletAddressInput
