@@ -25,7 +25,7 @@ export const LikeAndShareSection = () => {
 				<Button
 					label='Share'
 					onClick={() => setShowModal(true)}
-					buttonType='texty-secondary'
+					buttonType='texty-gray'
 				/>
 			</BadgeWrapper>
 			{showModal && slug && (
