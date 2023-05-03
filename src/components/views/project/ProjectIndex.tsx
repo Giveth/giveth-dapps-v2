@@ -27,6 +27,7 @@ import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
+import { ProjectActionCard } from './projectActionCard/ProjectActionCard';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -150,7 +151,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							<ProjectHeader />
 						</Col>
 						<Col lg={3}>
-							<div>New Component</div>
+							<ProjectActionCard />
 						</Col>
 						{isDraft && (
 							<DraftIndicator>
