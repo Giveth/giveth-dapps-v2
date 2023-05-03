@@ -27,6 +27,7 @@ import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
+import ProjectBadges from './ProjectBadges';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -145,6 +146,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					<ProjectMeta project={projectData} />
 				</Head>
 				<HeadingContainer>
+					<ProjectBadges />
 					<Row>
 						<Col lg={9}>
 							<ProjectHeader />
