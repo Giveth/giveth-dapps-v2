@@ -506,7 +506,7 @@
 	"label.project_details": "Project Details",
 	"label.receiving_funds": "Receiving funds",
 	"label.you_can_set_a_custom_ethereum_address": "You can set a custom Ethereum address or ENS to receive donations.",
-	"label.ill_raise_and_receive_funds_on_mainnet_and_gnosis": "I’ll raise & receive funds on Mainnet, Gnosis Chain and Polygon networks with the same address.",
+	"label.ill_raise_and_receive_funds_on_all_chains": "I’ll raise & receive funds on Mainnet, Gnosis Chain, Polygon, Celo and Optimism networks with the same address.",
 	"label.you_must_select_at_least_one_address": "You must select at least one address",
 	"label.lets_publish": "Let's Publish!",
 	"label.publish_edited_project": "Publish edited project",

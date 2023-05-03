@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { GetServerSideProps } from 'next/types';
 import Head from 'next/head';
 import { captureException } from '@sentry/nextjs';
-import dynamic from 'next/dynamic';
 
 import { IDonationProject } from '@/apollo/types/types';
 import {
@@ -14,15 +13,11 @@ import { ProjectMeta } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import config from '@/configuration';
 import { DonateProvider } from '@/context/donate.context';
+import DonateIndex from '@/components/views/donate/DonateIndex';
 
 export interface IDonateRouteProps {
 	project: IDonationProject;
 }
-
-const DonateIndex = dynamic(
-	() => import('@/components/views/donate/DonateIndex'),
-	{ ssr: false },
-);
 
 const DonateRoute: FC<IDonateRouteProps> = ({ project }) => {
 	return (

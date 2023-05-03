@@ -48,7 +48,7 @@ const DonateIndex: FC = () => {
 const Wrapper = styled.div`
 	max-width: 1052px;
 	text-align: center;
-	padding: 137px 0;
+	padding: 64px 0;
 	margin: 0 auto;
 	position: relative;
 `;

@@ -118,7 +118,7 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 			: EInputValidation.ERROR;
 
 	const calcLeft = useCallback(() => {
-		if (suffix && !canvasRef.current) {
+		if (suffix && !canvasRef.current && typeof document !== 'undefined') {
 			canvasRef.current = document.createElement('canvas');
 		}
 		if (canvasRef.current) {
@@ -130,7 +130,7 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 			return inputSizeToPaddingLeft(size, !!LeftIcon) + width;
 		}
 		return 0;
-	}, [size, value, LeftIcon]);
+	}, [suffix, value, size, LeftIcon]);
 
 	const { ref = undefined, ...restRegProps } =
 		registerName && register ? register(registerName, registerOptions) : {};
