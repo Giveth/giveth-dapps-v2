@@ -3,13 +3,11 @@ import {
 	brandColors,
 	P,
 	neutralColors,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { mediaQueries } from '@/lib/constants/constants';
-import { Shadow } from '@/components/styled-components/Shadow';
 import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
@@ -55,26 +53,47 @@ const ProjectTabs = (props: IProjectTabs) => {
 
 	return (
 		<Wrapper>
-			{tabsArray.map((i, index) => (
-				<Link
-					key={i.title}
-					href={`${Routes.Project}/${slug}${
-						i.query ? `?tab=${i.query}` : ''
-					}`}
-					scroll={false}
-				>
-					<Tab className={activeTab === index ? 'active' : ''}>
-						{formatMessage({ id: i.title })}
-						{badgeCount(i.badge) && <Badge>{i.badge}</Badge>}
-					</Tab>
-				</Link>
-			))}
+			<InnerWrapper>
+				{tabsArray.map((i, index) => (
+					<Link
+						key={i.title}
+						href={`${Routes.Project}/${slug}${
+							i.query ? `?tab=${i.query}` : ''
+						}`}
+						scroll={false}
+					>
+						<Tab className={activeTab === index ? 'active' : ''}>
+							{formatMessage({ id: i.title })}
+							{badgeCount(i.badge) && (
+								<Badge
+									className={
+										activeTab === index ? 'active' : ''
+									}
+								>
+									{i.badge}
+								</Badge>
+							)}
+						</Tab>
+					</Link>
+				))}
+			</InnerWrapper>
 		</Wrapper>
 	);
 };
 
+const InnerWrapper = styled(Flex)`
+	margin: 0 auto;
+	max-width: 1200px;
+	align-items: center;
+	gap: 24px;
+	padding: 0 24px;
+	${mediaQueries.desktop} {
+		padding: 0;
+	}
+`;
+
 const Badge = styled(Subline)`
-	background: ${brandColors.pinky[500]};
+	background: ${neutralColors.gray[800]};
 	color: white;
 	border-radius: 40px;
 	height: 22px;
@@ -82,38 +101,31 @@ const Badge = styled(Subline)`
 	display: flex;
 	align-items: center;
 	margin-left: 6px;
+	&.active {
+		background: ${brandColors.pinky[500]};
+	}
 `;
 
 const Tab = styled(P)`
 	display: flex;
-	padding: 10px 35px;
-	color: ${brandColors.pinky[500]};
+	padding: 9px 24px;
 	border-radius: 48px;
 	cursor: pointer;
-
 	&.active {
-		color: ${brandColors.deep[600]};
-		background: white;
-		box-shadow: ${Shadow.Neutral[400]};
+		font-weight: 500;
+		color: ${brandColors.pinky[500]};
+		background: ${neutralColors.gray[200]};
 	}
 `;
 
-const Wrapper = styled(Flex)`
-	padding: 24px 0 24px;
-	margin-bottom: 14px;
-	color: ${brandColors.deep[600]};
-	align-items: center;
-	z-index: 1;
-	background-color: ${neutralColors.gray[200]};
-	flex-wrap: nowrap;
+const Wrapper = styled.div`
+	padding: 16px 0;
+	color: ${neutralColors.gray[800]};
+	height: min-content;
+	margin: 24px 0 40px;
+	background-color: white;
 	overflow-x: auto;
-	max-width: calc(100vw - 32px);
-
-	${mediaQueries.tablet} {
-		padding: 16px 0 24px;
-		position: sticky;
-		top: 200px;
-	}
+	box-shadow: ${neutralColors.gray[400]};
 `;
 
 export default ProjectTabs;

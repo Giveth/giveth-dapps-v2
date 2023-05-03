@@ -170,6 +170,8 @@
 	"label.search": "Search",
 	"label.all_time_funding": "All time funding received",
 	"label.be_the_first_to_donate": "Be the first to donate!",
+	"label.associated_wallet_address": "Associated wallet address",
+	"label.accept_donations_on": "Accept donations on",
 	"label.funding_from_traces": "Funding from Traces",
 	"label.project_launched": "Project Launched!",
 	"label.share": "Share",

@@ -1162,6 +1162,8 @@
 	"label.donating": "Donant",
 	"label.overview": "Resum",
 	"label.be_the_first_to_donate": "Sigues el primer en donar!",
+	"label.associated_wallet_address": "Adreça de cartera associada",
+	"label.accept_donations_on": "Accepta donacions a",
 	"label.funding_from_traces": "Finançament de Traces",
 	"label.project_launched": "Projecte llançat!",
 	"label.share": "Compartir",

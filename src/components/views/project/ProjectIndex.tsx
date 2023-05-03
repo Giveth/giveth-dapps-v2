@@ -163,14 +163,14 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					</Row>
 				</HeadingContainer>
 				<BodyWrapper>
-					<Col sm={8}>
-						{projectData && !isDraft && (
-							<ProjectTabs
-								activeTab={activeTab}
-								slug={slug}
-								totalDonations={totalDonations}
-							/>
-						)}
+					{projectData && !isDraft && (
+						<ProjectTabs
+							activeTab={activeTab}
+							slug={slug}
+							totalDonations={totalDonations}
+						/>
+					)}
+					<InnerWrapper>
 						{!isActive && !isDraft && (
 							<InlineToast
 								type={EToastType.Warning}
@@ -196,20 +196,26 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 								isAdmin={isAdmin}
 							/>
 						)}
-					</Col>
-					{/* {projectData && (
-						<Col sm={4}>
-							<ProjectDonateCard
-								setCreationSuccessful={setCreationSuccessful}
-							/>
-						</Col>
-					)} */}
+					</InnerWrapper>
 				</BodyWrapper>
 			</Wrapper>
 			<SimilarProjects slug={slug} />
 		</>
 	);
 };
+
+const InnerWrapper = styled.div`
+	padding: 0 16px;
+	margin: 0 auto;
+	max-width: 1280px;
+	${mediaQueries.mobileL} {
+		padding: 0 22px;
+	}
+
+	${mediaQueries.laptopS} {
+		padding: 0 40px;
+	}
+`;
 
 const DraftIndicator = styled.div`
 	color: ${semanticColors.blueSky[600]};
@@ -225,18 +231,7 @@ const Wrapper = styled.div`
 `;
 
 const BodyWrapper = styled(Row)`
-	margin: 0 auto;
 	min-height: calc(100vh - 312px);
-	max-width: 1280px;
-	padding: 0 16px;
-
-	${mediaQueries.mobileL} {
-		padding: 0 22px;
-	}
-
-	${mediaQueries.laptopS} {
-		padding: 0 40px;
-	}
 `;
 
 const HeadingContainer = styled(Container)``;
