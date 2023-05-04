@@ -2,8 +2,10 @@ import {
 	IconRocketInSpace24,
 	IconHelpFilled16,
 	Subline,
+	neutralColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import styled from 'styled-components';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Flex } from '@/components/styled-components/Flex';
 import { BoostTooltip } from '../projectDonateCard/ProjectDonateCard';
@@ -16,7 +18,7 @@ export const GIVPowerSection = () => {
 	const { projectPower, projectFuturePower } = projectData!;
 
 	return (
-		<div>
+		<GIVPowerSectionWrapper>
 			<Flex gap='8px' alignItems='center'>
 				<IconRocketInSpace24 />
 				<Subline>
@@ -47,6 +49,11 @@ export const GIVPowerSection = () => {
 					projectFuturePower={projectFuturePower}
 				/>
 			</Flex>
-		</div>
+		</GIVPowerSectionWrapper>
 	);
 };
+
+const GIVPowerSectionWrapper = styled.div`
+	border-top: 1px solid ${neutralColors.gray[500]};
+	padding-top: 16px;
+`;
