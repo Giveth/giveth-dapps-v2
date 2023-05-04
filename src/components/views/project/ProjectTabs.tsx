@@ -104,15 +104,14 @@ const Wrapper = styled(Flex)`
 	color: ${brandColors.deep[600]};
 	align-items: center;
 	z-index: 1;
-	background-color: ${neutralColors.gray[200]};
+	background-color: ${neutralColors.gray[100]};
 	flex-wrap: nowrap;
 	overflow-x: auto;
-	max-width: calc(100vw - 32px);
 
 	${mediaQueries.tablet} {
 		padding: 16px 0 24px;
 		position: sticky;
-		top: 200px;
+		top: 220px;
 	}
 `;
 
