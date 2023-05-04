@@ -125,7 +125,7 @@ const CryptoDonation: FC = () => {
 			if (filteredTokens.length < 1) {
 				setShowChangeNetworkModal(true);
 			}
-			const tokens = prepareTokenList(filteredTokens);
+			const tokens = prepareTokenList(filteredTokens, networkId);
 			setErc20OriginalList(tokens);
 			setErc20List(tokens);
 			setSelectedToken(tokens[0]);
