@@ -149,6 +149,8 @@ export const LikeAndShareSection = () => {
 							<IconHeartOutline16 />
 						)
 					}
+					loading={likeLoading}
+					disabled={likeLoading}
 					size='small'
 				/>
 			</BadgeWrapper>
@@ -173,4 +175,7 @@ const StyledButton = styled(Button)`
 	flex-direction: row-reverse;
 	gap: 8px;
 	padding: 16px 24px;
+	& > div[loading='1'] > div {
+		left: 0;
+	}
 `;
