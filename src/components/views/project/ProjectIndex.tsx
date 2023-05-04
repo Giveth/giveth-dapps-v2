@@ -242,6 +242,8 @@ const BodyWrapper = styled(Row)`
 	}
 `;
 
-const HeadingContainer = styled(Container)``;
+const HeadingContainer = styled(Container)`
+	margin-top: 24px;
+`;
 
 export default ProjectIndex;
