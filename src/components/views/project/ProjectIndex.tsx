@@ -190,7 +190,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 								<RichTextViewer content={description} />
 								<Separator />
 								<ProjectCategoriesBadges
-									categories={categories}
+									categories={categories || []}
 								/>
 							</AboutContainer>
 						)}
@@ -245,7 +245,6 @@ const BodyWrapper = styled.div`
 
 	max-width: 1280px;
 	justify-content: center;
-
 	${mediaQueries.mobileL} {
 		padding: 0 22px;
 	}

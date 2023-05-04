@@ -106,6 +106,7 @@ const Wrapper = styled(Flex)`
 	width: 100%;
 	padding: 24px 16px !important;
 	box-shadow: 0px 5px 5px rgba(212, 218, 238, 0.4);
+	overflow: scroll;
 	${mediaQueries.tablet} {
 		padding: 16px 0 24px;
 		position: sticky;
