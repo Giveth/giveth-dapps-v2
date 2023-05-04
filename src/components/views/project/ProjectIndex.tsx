@@ -165,15 +165,15 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						)}
 					</Row>
 				</HeadingContainer>
+				{projectData && !isDraft && (
+					<ProjectTabs
+						activeTab={activeTab}
+						slug={slug}
+						totalDonations={totalDonations}
+					/>
+				)}
 				<BodyWrapper>
 					<Col sm={8}>
-						{projectData && !isDraft && (
-							<ProjectTabs
-								activeTab={activeTab}
-								slug={slug}
-								totalDonations={totalDonations}
-							/>
-						)}
 						{!isActive && !isDraft && (
 							<InlineToast
 								type={EToastType.Warning}
