@@ -2,7 +2,12 @@ import React, { FC, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Caption, Container, semanticColors } from '@giveth/ui-design-system';
+import {
+	Caption,
+	Container,
+	semanticColors,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 
@@ -28,6 +33,7 @@ import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
 import ProjectBadges from './ProjectBadges';
+import ProjectCategoriesBadges from './ProjectCategoriesBadges';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -56,9 +62,9 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	const user = useAppSelector(state => state.user.userData);
 	const { fetchProjectBoosters, projectData, isActive, isDraft } =
 		useProjectContext();
-
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
+	const categories = projectData?.categories;
 
 	useEffect(() => {
 		if (!isSSRMode) {
@@ -165,7 +171,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					</Row>
 				</HeadingContainer>
 				<BodyWrapper>
-					<Col sm={8}>
+					<Col>
 						{projectData && !isDraft && (
 							<ProjectTabs
 								activeTab={activeTab}
@@ -180,7 +186,13 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							/>
 						)}
 						{activeTab === 0 && (
-							<RichTextViewer content={description} />
+							<AboutContainer>
+								<RichTextViewer content={description} />
+								<Separator />
+								<ProjectCategoriesBadges
+									categories={categories}
+								/>
+							</AboutContainer>
 						)}
 						{activeTab === 1 && <ProjectUpdates />}
 						{activeTab === 2 && (
@@ -226,11 +238,13 @@ const Wrapper = styled.div`
 	position: relative;
 `;
 
-const BodyWrapper = styled(Row)`
+const BodyWrapper = styled.div`
 	margin: 0 auto;
 	min-height: calc(100vh - 312px);
+	padding: 0 16px !important;
+
 	max-width: 1280px;
-	padding: 0 16px;
+	justify-content: center;
 
 	${mediaQueries.mobileL} {
 		padding: 0 22px;
@@ -241,6 +255,16 @@ const BodyWrapper = styled(Row)`
 	}
 `;
 
-const HeadingContainer = styled(Container)``;
+const HeadingContainer = styled(Container)`
+	width: 100%;
+	max-width 1280px;
+`;
+
+const AboutContainer = styled(Container)``;
+
+const Separator = styled.hr`
+	border: 1px solid ${neutralColors.gray[400]};
+	margin: 40px 0;
+`;
 
 export default ProjectIndex;

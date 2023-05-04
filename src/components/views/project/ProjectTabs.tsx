@@ -99,16 +99,13 @@ const Tab = styled(P)`
 `;
 
 const Wrapper = styled(Flex)`
-	padding: 24px 0 24px;
-	margin-bottom: 14px;
+	margin: 14px 0;
 	color: ${brandColors.deep[600]};
-	align-items: center;
 	z-index: 1;
 	background-color: ${neutralColors.gray[200]};
-	flex-wrap: nowrap;
-	overflow-x: auto;
-	max-width: calc(100vw - 32px);
-
+	width: 100%;
+	padding: 24px 16px !important;
+	box-shadow: 0px 5px 5px rgba(212, 218, 238, 0.4);
 	${mediaQueries.tablet} {
 		padding: 16px 0 24px;
 		position: sticky;
