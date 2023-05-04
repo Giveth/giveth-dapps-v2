@@ -20,10 +20,7 @@ interface INetworkIds {
 	[key: number]: boolean;
 }
 
-export const prepareTokenList = (
-	tokens: IProjectAcceptedToken[],
-	networkId: number,
-) => {
+export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 	const _tokens: ISelectedToken[] = [...tokens];
 	_tokens.sort((t1, t2) => {
 		const t1Order = t1.order || MAX_TOKEN_ORDER;
@@ -35,7 +32,6 @@ export const prepareTokenList = (
 		}
 		return t2Order > t1Order ? -1 : 1;
 	});
-	const targetSymbol = networksParams[networkId]?.nativeCurrency?.symbol;
 	_tokens.forEach((token: IProjectAcceptedToken, index: number) => {
 		_tokens[index] = {
 			...token,
@@ -43,17 +39,6 @@ export const prepareTokenList = (
 			label: token.symbol,
 		};
 	});
-	// Find the index of the token with the desired symbol (e.g., 'MATIC')
-	const targetIndex = _tokens.findIndex(
-		token => token.symbol === targetSymbol,
-	);
-
-	// If the token is found and it's not already at the first position, move it to the beginning of the array
-	if (targetIndex > 0) {
-		const targetToken = _tokens[targetIndex];
-		_tokens.splice(targetIndex, 1);
-		_tokens.unshift(targetToken);
-	}
 	return _tokens;
 };
 
