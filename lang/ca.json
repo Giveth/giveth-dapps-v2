@@ -1246,5 +1246,6 @@
 	"label.use_as_profile_picture": "",
 	"label.recipient_addresses": "",
 	"label.add_new_address": "",
-	"label.manage_addresses": ""
+	"label.manage_addresses": "",
+	"label.donate_first_lead_the_way": ""
 }
