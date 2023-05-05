@@ -51,7 +51,10 @@ export const GIVPowerSection = () => {
 	};
 
 	return (
-		<GIVPowerSectionWrapper>
+		<GIVPowerSectionWrapper
+			flexDirection='column'
+			justifyContent='space-between'
+		>
 			<Flex gap='8px' alignItems='center'>
 				<IconRocketInSpace24 />
 				<Subline>
@@ -70,18 +73,31 @@ export const GIVPowerSection = () => {
 					</BoostTooltip>
 				</IconWithTooltip>
 			</Flex>
-			<CurrentRank projectPower={projectPower} />
-			<NextRankRow justifyContent='space-between' alignItems='center'>
-				<Subline>
+			{projectPower?.totalPower === 0 ? (
+				<NoBoost>
 					{formatMessage({
-						id: 'label.projected_rank',
+						id: 'label.be_the_first_booster',
 					})}
-				</Subline>
-				<NextRank
-					projectPower={projectPower}
-					projectFuturePower={projectFuturePower}
-				/>
-			</NextRankRow>
+				</NoBoost>
+			) : (
+				<div>
+					<StyledCurrenRank projectPower={projectPower} />
+					<NextRankRow
+						justifyContent='space-between'
+						alignItems='center'
+					>
+						<Subline>
+							{formatMessage({
+								id: 'label.projected_rank',
+							})}
+						</Subline>
+						<NextRank
+							projectPower={projectPower}
+							projectFuturePower={projectFuturePower}
+						/>
+					</NextRankRow>
+				</div>
+			)}
 			<BoostButton
 				label={formatMessage({
 					id: 'label.boost',
@@ -100,9 +116,16 @@ export const GIVPowerSection = () => {
 	);
 };
 
-const GIVPowerSectionWrapper = styled.div`
+const GIVPowerSectionWrapper = styled(Flex)`
 	border-top: 1px solid ${neutralColors.gray[500]};
 	padding-top: 16px;
+	height: 210px;
+`;
+
+const NoBoost = styled.div``;
+
+const StyledCurrenRank = styled(CurrentRank)`
+	margin: 8px 0;
 `;
 
 const NextRankRow = styled(Flex)`
