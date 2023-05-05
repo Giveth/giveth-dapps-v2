@@ -16,6 +16,7 @@ import { useProjectContext } from '@/context/project.context';
 
 interface IGIVpowerRank {
 	projectPower?: IProjectPower;
+	className?: string;
 }
 
 interface IGIVpowerNextRank extends IGIVpowerRank {
