@@ -3,13 +3,13 @@ import {
 	brandColors,
 	P,
 	neutralColors,
+	Container,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Shadow } from '@/components/styled-components/Shadow';
 import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
@@ -55,27 +55,35 @@ const ProjectTabs = (props: IProjectTabs) => {
 
 	return (
 		<Wrapper>
-			{tabsArray.map((i, index) => (
-				<Link
-					key={i.title}
-					href={`${Routes.Project}/${slug}${
-						i.query ? `?tab=${i.query}` : ''
-					}`}
-					scroll={false}
-				>
-					<Tab className={activeTab === index ? 'active' : ''}>
-						{formatMessage({ id: i.title })}
-						{badgeCount(i.badge) && <Badge>{i.badge}</Badge>}
-					</Tab>
-				</Link>
-			))}
+			<Container>
+				<TabsFlex>
+					{tabsArray.map((i, index) => (
+						<Link
+							key={i.title}
+							href={`${Routes.Project}/${slug}${
+								i.query ? `?tab=${i.query}` : ''
+							}`}
+							scroll={false}
+						>
+							<Tab
+								className={activeTab === index ? 'active' : ''}
+							>
+								{formatMessage({ id: i.title })}
+								{badgeCount(i.badge) && (
+									<Badge>{i.badge}</Badge>
+								)}
+							</Tab>
+						</Link>
+					))}
+				</TabsFlex>
+			</Container>
 		</Wrapper>
 	);
 };
 
 const Badge = styled(Subline)`
-	background: ${brandColors.pinky[500]};
-	color: white;
+	background: ${neutralColors.gray[800]};
+	color: ${neutralColors.gray[100]};
 	border-radius: 40px;
 	height: 22px;
 	padding: 0 9px;
@@ -87,14 +95,13 @@ const Badge = styled(Subline)`
 const Tab = styled(P)`
 	display: flex;
 	padding: 10px 35px;
-	color: ${brandColors.pinky[500]};
+	color: ${neutralColors.gray[800]};
 	border-radius: 48px;
 	cursor: pointer;
 
 	&.active {
-		color: ${brandColors.deep[600]};
-		background: white;
-		box-shadow: ${Shadow.Neutral[400]};
+		color: ${brandColors.pinky[500]};
+		background: ${neutralColors.gray[200]};
 	}
 `;
 
@@ -104,16 +111,19 @@ const Wrapper = styled(Flex)`
 	color: ${brandColors.deep[600]};
 	align-items: center;
 	z-index: 1;
-	background-color: ${neutralColors.gray[200]};
+	background-color: ${neutralColors.gray[100]};
 	flex-wrap: nowrap;
 	overflow-x: auto;
-	max-width: calc(100vw - 32px);
 
 	${mediaQueries.tablet} {
 		padding: 16px 0 24px;
 		position: sticky;
-		top: 200px;
+		top: 600px;
 	}
+`;
+
+const TabsFlex = styled(Flex)`
+	flex-wrap: nowrap;
 `;
 
 export default ProjectTabs;
