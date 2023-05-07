@@ -51,7 +51,7 @@ const ProjectImage = styled.img`
 	border-radius: 16px;
 	width: 100%;
 	object-fit: cover; // Ensures the image covers the entire container
-	height: 402px;
+	height: 546px;
 `;
 
 const Title = styled(H3)`
