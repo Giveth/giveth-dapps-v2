@@ -7,7 +7,7 @@ import { ProjectOwnerWithPfp } from './ProjectOwnerWithPfp';
 
 const ProjectHeader = () => {
 	const { projectData } = useProjectContext();
-	const { title, verified, image, adminUser } = projectData || {};
+	const { title, image, adminUser } = projectData || {};
 	const [adjustTitle, setAdjustTitle] = useState<boolean>(false);
 	const containerRef = useRef(null);
 
@@ -44,13 +44,14 @@ const ImageWrapper = styled.div`
 	position: relative;
 	display: inline-block;
 	overflow: hidden;
+	width: 100%;
 `;
 
 const ProjectImage = styled.img`
 	border-radius: 16px;
 	width: 100%;
-	height: auto;
-	object-fit: cover; // This will maintain the aspect ratio and crop the image if it exceeds max-height
+	object-fit: cover; // Ensures the image covers the entire container
+	height: 402px;
 `;
 
 const Title = styled(H3)`

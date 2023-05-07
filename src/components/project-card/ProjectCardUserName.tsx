@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { GLink, neutralColors } from '@giveth/ui-design-system';
+import { brandColors, GLink } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { addressToUserView, slugToProjectView } from '@/lib/routeCreators';
@@ -28,7 +28,7 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 	);
 
 	return (
-		<StyledPaddedRow style={{ marginTop: '6px' }}>
+		<StyledPaddedRow>
 			{adminUser?.name && !isForeignOrg && (
 				<Link
 					href={addressToUserView(
@@ -61,8 +61,7 @@ interface IAuthor {
 }
 
 const Author = styled(GLink)<IAuthor>`
-	color: ${neutralColors.gray[700]};
-	margin-bottom: 9px;
+	color: ${brandColors.pinky[500]};
 	display: block;
 	font-weight: ${props => (props.bold ? 500 : 400)};
 `;

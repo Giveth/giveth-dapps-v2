@@ -27,6 +27,7 @@ import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
+import { ProjectActionCard } from './projectActionCard/ProjectActionCard';
 import ProjectBadges from './ProjectBadges';
 
 const ProjectDonations = dynamic(
@@ -152,7 +153,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							<ProjectHeader />
 						</Col>
 						<Col lg={3}>
-							<div>New Component</div>
+							<ProjectActionCard />
 						</Col>
 						{isDraft && (
 							<DraftIndicator>
@@ -236,6 +237,8 @@ const BodyWrapper = styled(Row)`
 	min-height: calc(100vh - 312px);
 `;
 
-const HeadingContainer = styled(Container)``;
+const HeadingContainer = styled(Container)`
+	margin-top: 24px;
+`;
 
 export default ProjectIndex;
