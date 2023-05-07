@@ -847,7 +847,7 @@
 	"label.save_changes": "Guardar cambios",
 	"label.project_boosted": "Proyecto boosteado!",
 	"label.you_boosted_this_project_with_percentage": "Genial, Has impulsado este proyecto con el {percentage}% de tu GIVpower.",
-	"label.this_project_rank_will_only_change": "Nota: El ranking de este proyecto solo cambiará hasta el inicio de la próxima ronda de GIVbacks.",
+	"label.keep_an_eye_on_the_projects_page": "",
 	"label.get_more_givpower": "Obtén más GIVpower",
 	"label.see_your_givpower_allocation": "mira tu distribución de GIVpower",
 	"label.since_this_is_your_first_time_boosting": "Como es la primera vez boosteando un proyecto, 100% de tu GIVpower sera ubicado a este.",

@@ -846,7 +846,7 @@
 	"label.save_changes": "Save Changes",
 	"label.project_boosted": "Project boosted!",
 	"label.you_boosted_this_project_with_percentage": "Nice, You boosted this project with {percentage}% of your GIVpower.",
-	"label.this_project_rank_will_only_change": "Note: This project’s rank will only change at the start of the next GIVbacks round.",
+	"lable.keep_an_eye_on_the_projects_page": "Keep an eye on the projects page, as it'll move up the list and become more visible to others within 5 minutes or less!",
 	"label.get_more_givpower": "Get more GIVpower",
 	"label.see_your_givpower_allocation": "see your GIVpower allocations",
 	"label.since_this_is_your_first_time_boosting": "Since this is your first time boosting a project, 100% of your GIVpower will be allocated to it.",
