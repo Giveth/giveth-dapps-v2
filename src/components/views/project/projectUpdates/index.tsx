@@ -18,13 +18,14 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import { showToastError } from '@/lib/helpers';
 import { gToast, ToastType } from '@/components/toasts';
-import ProjectTimeline, { TimelineSection } from './ProjectTimeline';
 import { IProjectUpdate } from '@/apollo/types/types';
 import { RemoveUpdateModal } from '@/components/modals/RemoveUpdateModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useProjectContext } from '@/context/project.context';
+import ProjectTimeline from '@/components/views/project/projectUpdates/ProjectTimeline';
+import TimelineSection from '@/components/views/project/projectUpdates/TimelineSection';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,

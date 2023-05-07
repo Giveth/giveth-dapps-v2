@@ -1,22 +1,23 @@
-import { useState } from 'react';
-import dynamic from 'next/dynamic';
-import { useIntl } from 'react-intl';
+import { FC, useState } from 'react';
 import {
-	Button,
 	brandColors,
+	Button,
+	IconEdit,
+	IconTrash,
 	neutralColors,
 	P,
-	Lead,
-	SublineBold,
-	IconTrash,
-	IconEdit,
-	mediaQueries,
 	semanticColors,
-	B,
 } from '@giveth/ui-design-system';
+import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import { IProjectUpdate } from '@/apollo/types/types';
-import { HorizontalBorder } from '@/components/views/project/projectUpdates/common.styled';
+import {
+	Content,
+	HorizontalBorder,
+	Title,
+	Wrapper,
+} from '@/components/views/project/projectUpdates/common.styled';
+import TimelineSection from '@/components/views/project/projectUpdates/TimelineSection';
 
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 	ssr: false,
@@ -28,53 +29,14 @@ const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 
 const UPDATE_LIMIT = 2000;
 
-const ProjectTimeline = (props: {
-	projectUpdate?: IProjectUpdate;
-	creationDate?: string;
-	removeUpdate?: Function;
-	editUpdate?: Function;
-	isOwner?: boolean;
-}) => {
-	const { projectUpdate, creationDate, removeUpdate, editUpdate, isOwner } =
-		props;
-	if (creationDate) return <LaunchSection creationDate={creationDate} />;
-	else if (projectUpdate)
-		return (
-			<UpdatesSection
-				projectUpdate={projectUpdate}
-				removeUpdate={removeUpdate}
-				editUpdate={editUpdate}
-				isOwner={isOwner}
-			/>
-		);
-	else return null;
-};
-
-const LaunchSection = (props: { creationDate: string }) => {
-	const { formatMessage } = useIntl();
-	return (
-		<Wrapper>
-			<TimelineSection date={props.creationDate} launch />
-			<div>
-				<Content>
-					<Title size='large'>
-						{formatMessage({ id: 'label.project_launched' })} 🎉
-					</Title>
-					{/*TODO share in twitter?*/}
-					{/* <Button label='Share this'></Button> */}
-				</Content>
-				<HorizontalBorder />
-			</div>
-		</Wrapper>
-	);
-};
-
-const UpdatesSection = (props: {
+interface IProps {
 	projectUpdate: IProjectUpdate;
 	removeUpdate?: Function;
 	editUpdate?: Function;
 	isOwner?: boolean;
-}) => {
+}
+
+const UpdatesSection: FC<IProps> = props => {
 	const { isOwner, removeUpdate, editUpdate, projectUpdate } = props;
 	const { content, createdAt, title, projectId, id } = projectUpdate;
 	const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -152,95 +114,8 @@ const UpdatesSection = (props: {
 	);
 };
 
-export const TimelineSection = (props: {
-	date: string;
-	launch?: boolean;
-	newUpdate?: boolean;
-}) => {
-	const date = new Date(props?.date);
-	const year = date.getFullYear();
-	const month = date.toLocaleString('default', { month: 'short' });
-	const day = date.getDate();
-	return (
-		<TimelineStyled>
-			{props.newUpdate ? (
-				<>
-					<NewUpdate>
-						<SublineBold>NEW UPDATE</SublineBold>
-					</NewUpdate>
-					<VerticalBorder />
-				</>
-			) : (
-				<>
-					<DayAndYear>{day}</DayAndYear>
-					<Month>{month}</Month>
-					<DayAndYear>{year}</DayAndYear>
-					{!props.launch && <VerticalBorder />}
-				</>
-			)}
-		</TimelineStyled>
-	);
-};
-
-const VerticalBorder = styled.div`
-	height: 100%;
-	border-right: 1px solid ${neutralColors.gray[300]};
-	margin-top: 24px;
-`;
-
-const Month = styled(B)`
-	color: ${neutralColors.gray[800]};
-	text-transform: uppercase;
-`;
-
-const DayAndYear = styled(SublineBold)`
-	color: ${neutralColors.gray[600]};
-`;
-
-const TimelineStyled = styled.div`
-	width: 50px;
-	display: flex;
-	flex-shrink: 0;
-	flex-direction: column;
-	align-items: center;
-`;
-
 const Description = styled(P)`
 	color: ${neutralColors.gray[900]};
-`;
-
-const Title = styled(Lead)`
-	color: ${neutralColors.gray[700]};
-	margin-bottom: 24px;
-	word-break: break-word;
-`;
-
-const Content = styled.div`
-	display: flex;
-	width: 100%;
-	justify-content: space-between;
-	margin-bottom: 42px;
-	flex-direction: column;
-	gap: 25px 0;
-	${mediaQueries.laptopS} {
-		flex-direction: row;
-	}
-`;
-
-const Wrapper = styled.div`
-	display: flex;
-	margin-bottom: 40px;
-	> *:last-child {
-		width: 100%;
-	}
-	${mediaQueries.tablet} {
-		gap: 50px;
-	}
-`;
-
-const NewUpdate = styled.div`
-	text-align: center;
-	color: ${neutralColors.gray[600]};
 `;
 
 const Buttons = styled.div`
@@ -285,4 +160,4 @@ const TextInputStyle = {
 	backgroundColor: 'white',
 };
 
-export default ProjectTimeline;
+export default UpdatesSection;
