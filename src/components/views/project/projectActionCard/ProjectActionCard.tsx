@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { DonateSection } from './DonationSection';
 import { LikeAndShareSection } from './LikeAndShareSection';
 import { GIVPowerSection } from './GIVPowerSection';
+import { ProjectStats } from './ProjectStats';
 
 interface IProjectActionCardProps {
 	isAdmin?: boolean;
@@ -15,7 +16,9 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({
 	return (
 		<ProjectActionCardWrapper>
 			{isAdmin ? (
-				<div>Admin</div>
+				<>
+					<ProjectStats />
+				</>
 			) : (
 				<>
 					<DonateSection />
