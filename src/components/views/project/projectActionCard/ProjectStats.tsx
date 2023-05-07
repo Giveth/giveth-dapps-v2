@@ -10,13 +10,16 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { useProjectContext } from '@/context/project.context';
+import StatusBadge from './StatusBadge';
 
 export const ProjectStats = () => {
 	const { formatMessage } = useIntl();
+	const { projectData } = useProjectContext();
 	return (
 		<div>
 			<Title>{formatMessage({ id: 'label.project_stats' })}</Title>
-			<StatRow>
+			<StatRow justifyContent='space-between'>
 				<Flex alignItems='center' gap='4px'>
 					<P>Project status</P>
 					<IconWithTooltip
@@ -26,6 +29,7 @@ export const ProjectStats = () => {
 						<StatTooltip>Project status</StatTooltip>
 					</IconWithTooltip>
 				</Flex>
+				<StatusBadge status={projectData?.status.name} />
 			</StatRow>
 		</div>
 	);
