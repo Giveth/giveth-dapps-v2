@@ -153,7 +153,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							<ProjectHeader />
 						</Col>
 						<Col lg={3}>
-							<ProjectActionCard />
+							<ProjectActionCard isAdmin={isAdmin} />
 						</Col>
 						{isDraft && (
 							<DraftIndicator>

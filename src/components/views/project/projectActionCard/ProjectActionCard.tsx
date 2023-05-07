@@ -1,16 +1,28 @@
 import { neutralColors } from '@giveth/ui-design-system';
-import React from 'react';
+import { FC } from 'react';
 import styled from 'styled-components';
 import { DonateSection } from './DonationSection';
 import { LikeAndShareSection } from './LikeAndShareSection';
 import { GIVPowerSection } from './GIVPowerSection';
 
-export const ProjectActionCard = () => {
+interface IProjectActionCardProps {
+	isAdmin?: boolean;
+}
+
+export const ProjectActionCard: FC<IProjectActionCardProps> = ({
+	isAdmin = false,
+}) => {
 	return (
 		<ProjectActionCardWrapper>
-			<DonateSection />
-			<LikeAndShareSection />
-			<GIVPowerSection />
+			{isAdmin ? (
+				<div>Admin</div>
+			) : (
+				<>
+					<DonateSection />
+					<LikeAndShareSection />
+					<GIVPowerSection />
+				</>
+			)}
 		</ProjectActionCardWrapper>
 	);
 };
