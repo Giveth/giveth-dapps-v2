@@ -3,12 +3,14 @@ import React from 'react';
 import styled from 'styled-components';
 import { DonateSection } from './DonationSection';
 import { LikeAndShareSection } from './LikeAndShareSection';
+import { GIVPowerSection } from './GIVPowerSection';
 
 export const ProjectActionCard = () => {
 	return (
 		<ProjectActionCardWrapper>
 			<DonateSection />
 			<LikeAndShareSection />
+			<GIVPowerSection />
 		</ProjectActionCardWrapper>
 	);
 };

@@ -1249,5 +1249,6 @@
 	"label.recipient_addresses": "recipient addresses",
 	"label.add_new_address": "Add new address",
 	"label.manage_addresses": "Manage addresses",
-	"label.donate_first_lead_the_way": "Donate first & lead the way!"
+	"label.donate_first_lead_the_way": "Donate first & lead the way!",
+	"label.be_the_first_booster": "Be the first one to boost this project with GIVpower."
 }
