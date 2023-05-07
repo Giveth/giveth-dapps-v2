@@ -45,7 +45,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 				)}
 				<br />
 				{formatMessage({
-					id: 'label.this_project_rank_will_only_change',
+					id: 'label.keep_an_eye_on_the_projects_page',
 				})}
 			</Desc>
 			<ActionsSection>
