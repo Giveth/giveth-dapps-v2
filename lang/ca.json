@@ -790,7 +790,7 @@
 	"label.this_project_rank_will_only_change": "Nota: El rang d'aquest projecte només canviarà a l'inici de la següent ronda de GIVbacks.",
 	"label.save_changes": "Desa els canvis",
 	"label.project_boosted": "Projecte impulsat!",
-	"label.you_boosted_this_project_with_percentage": "Has impulsat aquest projecte amb el {percentage}% del teu GIVpower.",
+	"label.you_boosted_this_project_with_percentage": "Bé, Has impulsat aquest projecte amb el {percentage}% del teu GIVpower.",
 	"label.get_more_givpower": "Obtén més GIVpower",
 	"label.see_your_givpower_allocation": "mira la teva distribució de GIVpower",
 	"label.since_this_is_your_first_time_boosting": "Com que és la teva primera vegada impulsant un projecte, el 100% del teu GIVpower s'assignarà a aquest projecte.",

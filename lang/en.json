@@ -845,7 +845,7 @@
 	"label.you_are_about_to_save_the_changes_you_made": "You are about to save the changes you made to your GIVpower allocations. This cannot be undone.",
 	"label.save_changes": "Save Changes",
 	"label.project_boosted": "Project boosted!",
-	"label.you_boosted_this_project_with_percentage": "You boosted this project with {percentage}% of your GIVpower.",
+	"label.you_boosted_this_project_with_percentage": "Nice, You boosted this project with {percentage}% of your GIVpower.",
 	"label.this_project_rank_will_only_change": "Note: This project’s rank will only change at the start of the next GIVbacks round.",
 	"label.get_more_givpower": "Get more GIVpower",
 	"label.see_your_givpower_allocation": "see your GIVpower allocations",
