@@ -44,6 +44,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 					{ percentage },
 				)}
 				<br />
+				<br />
 				{formatMessage({
 					id: 'label.keep_an_eye_on_the_projects_page',
 				})}
