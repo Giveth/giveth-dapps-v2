@@ -5,8 +5,8 @@ import { useRouter } from 'next/router';
 import { Caption, Container, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
-
 import { Col, Row } from '@giveth/ui-design-system';
+
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';

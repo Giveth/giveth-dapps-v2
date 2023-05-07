@@ -239,7 +239,7 @@ const ProjectUpdates = () => {
 								setValue={setNewUpdate}
 								setIsLimitExceeded={setIsLimitExceeded}
 								limit={UPDATE_LIMIT}
-								placeholder='Clear project description explaining who your are and what you want to do with the funds...'
+								placeholder='Clear project description explaining who you are and what you want to do with the funds...'
 							/>
 						</div>
 						<Button
@@ -302,6 +302,7 @@ const Title = styled(H5)`
 `;
 
 const InputContainer = styled.div`
+	margin-bottom: 40px;
 	display: flex;
 	flex-direction: row;
 `;
