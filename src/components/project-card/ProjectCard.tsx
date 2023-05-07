@@ -327,6 +327,8 @@ export const PaddedRow = styled(Flex)`
 `;
 
 export const StyledPaddedRow = styled(PaddedRow)`
+	margin-bottom: 16px;
+	margin-top: 2px;
 	& > a span:hover {
 		color: ${brandColors.pinky[500]} !important;
 	}
