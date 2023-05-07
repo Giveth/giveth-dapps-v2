@@ -118,7 +118,7 @@ const Wrapper = styled(Flex)`
 	${mediaQueries.tablet} {
 		padding: 16px 0 24px;
 		position: sticky;
-		top: 600px;
+		top: 750px;
 	}
 `;
 
