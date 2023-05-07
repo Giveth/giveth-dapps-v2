@@ -5,18 +5,18 @@ import {
 	Button,
 	brandColors,
 	neutralColors,
-	Subline,
 	P,
-	H5,
 	Lead,
 	SublineBold,
 	IconTrash,
 	IconEdit,
 	mediaQueries,
 	semanticColors,
+	B,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { IProjectUpdate } from '@/apollo/types/types';
+import { HorizontalBorder } from '@/components/views/project/projectUpdates/common.styled';
 
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 	ssr: false,
@@ -55,13 +55,16 @@ const LaunchSection = (props: { creationDate: string }) => {
 	return (
 		<Wrapper>
 			<TimelineSection date={props.creationDate} launch />
-			<Content>
-				<Title>
-					{formatMessage({ id: 'label.project_launched' })} 🎉
-				</Title>
-				{/*TODO share in twitter?*/}
-				{/* <Button label='Share this'></Button> */}
-			</Content>
+			<div>
+				<Content>
+					<Title size='large'>
+						{formatMessage({ id: 'label.project_launched' })} 🎉
+					</Title>
+					{/*TODO share in twitter?*/}
+					{/* <Button label='Share this'></Button> */}
+				</Content>
+				<HorizontalBorder />
+			</div>
 		</Wrapper>
 	);
 };
@@ -81,67 +84,70 @@ const UpdatesSection = (props: {
 	return (
 		<Wrapper id={id}>
 			<TimelineSection date={createdAt} />
-			<Content>
-				<ContentSection>
-					{isEditing ? (
-						<Input
-							value={newTitle}
-							onChange={e => setNewTitle(e.target.value)}
-							placeholder='Type a title...'
-						/>
-					) : (
-						<Title>{title}</Title>
-					)}
-					<Description>
+			<div>
+				<Content>
+					<ContentSection>
 						{isEditing ? (
-							<RichTextInput
-								projectId={projectId}
-								value={updateContent}
-								style={TextInputStyle}
-								setValue={setUpdateContent}
-								limit={UPDATE_LIMIT}
-								placeholder='Edit your project'
+							<Input
+								value={newTitle}
+								onChange={e => setNewTitle(e.target.value)}
+								placeholder='Type a title...'
 							/>
 						) : (
-							<RichTextViewer content={content} />
+							<Title size='large'>{title}</Title>
 						)}
-					</Description>
-				</ContentSection>
-				{isOwner && (
-					<Buttons>
-						<Button
-							label={isEditing ? 'SAVE' : 'REMOVE'}
-							buttonType='texty-primary'
-							icon={isEditing ? null : <IconTrash />}
-							onClick={async () => {
-								if (isEditing) {
-									editUpdate &&
-										(await editUpdate(
-											newTitle,
-											updateContent,
-											id,
-										));
-									setIsEditing(false);
-								} else {
-									removeUpdate && removeUpdate();
-								}
-							}}
-						/>
-						<Button
-							label={isEditing ? 'CANCEL' : 'EDIT'}
-							buttonType='texty-secondary'
-							icon={isEditing ? null : <IconEdit />}
-							onClick={() => {
-								setIsEditing(!isEditing);
-								if (isEditing) {
-									setUpdateContent(content);
-									setNewTitle(title);
-								}
-							}}
-						/>
-					</Buttons>
-				)}
-			</Content>
+						<Description>
+							{isEditing ? (
+								<RichTextInput
+									projectId={projectId}
+									value={updateContent}
+									style={TextInputStyle}
+									setValue={setUpdateContent}
+									limit={UPDATE_LIMIT}
+									placeholder='Edit your project'
+								/>
+							) : (
+								<RichTextViewer content={content} />
+							)}
+						</Description>
+					</ContentSection>
+					{isOwner && (
+						<Buttons>
+							<Button
+								label={isEditing ? 'SAVE' : 'REMOVE'}
+								buttonType='texty-primary'
+								icon={isEditing ? null : <IconTrash />}
+								onClick={async () => {
+									if (isEditing) {
+										editUpdate &&
+											(await editUpdate(
+												newTitle,
+												updateContent,
+												id,
+											));
+										setIsEditing(false);
+									} else {
+										removeUpdate && removeUpdate();
+									}
+								}}
+							/>
+							<Button
+								label={isEditing ? 'CANCEL' : 'EDIT'}
+								buttonType='texty-secondary'
+								icon={isEditing ? null : <IconEdit />}
+								onClick={() => {
+									setIsEditing(!isEditing);
+									if (isEditing) {
+										setUpdateContent(content);
+										setNewTitle(title);
+									}
+								}}
+							/>
+						</Buttons>
+					)}
+				</Content>
+				<HorizontalBorder />
+			</div>
 		</Wrapper>
 	);
 };
@@ -162,33 +168,33 @@ export const TimelineSection = (props: {
 					<NewUpdate>
 						<SublineBold>NEW UPDATE</SublineBold>
 					</NewUpdate>
-					<Border />
+					<VerticalBorder />
 				</>
 			) : (
 				<>
-					<MonthYear>{month}</MonthYear>
-					<Day>{day}</Day>
-					<MonthYear>{year}</MonthYear>
-					{!props.launch && <Border />}
+					<DayAndYear>{day}</DayAndYear>
+					<Month>{month}</Month>
+					<DayAndYear>{year}</DayAndYear>
+					{!props.launch && <VerticalBorder />}
 				</>
 			)}
 		</TimelineStyled>
 	);
 };
 
-const Border = styled.div`
-	margin: 16px 0;
+const VerticalBorder = styled.div`
 	height: 100%;
-	border-right: 1px solid ${neutralColors.gray[400]};
+	border-right: 1px solid ${neutralColors.gray[300]};
+	margin-top: 24px;
 `;
 
-const MonthYear = styled(Subline)`
-	color: ${neutralColors.gray[600]};
+const Month = styled(B)`
+	color: ${neutralColors.gray[800]};
 	text-transform: uppercase;
 `;
 
-const Day = styled(Lead)`
-	color: ${brandColors.deep[600]};
+const DayAndYear = styled(SublineBold)`
+	color: ${neutralColors.gray[600]};
 `;
 
 const TimelineStyled = styled.div`
@@ -203,10 +209,9 @@ const Description = styled(P)`
 	color: ${neutralColors.gray[900]};
 `;
 
-const Title = styled(H5)`
-	color: ${brandColors.deep[600]};
-	font-weight: 400;
-	margin-bottom: 16px;
+const Title = styled(Lead)`
+	color: ${neutralColors.gray[700]};
+	margin-bottom: 24px;
 	word-break: break-word;
 `;
 
@@ -214,7 +219,6 @@ const Content = styled.div`
 	display: flex;
 	width: 100%;
 	justify-content: space-between;
-	margin-top: 15px;
 	margin-bottom: 42px;
 	flex-direction: column;
 	gap: 25px 0;
@@ -225,6 +229,10 @@ const Content = styled.div`
 
 const Wrapper = styled.div`
 	display: flex;
+	margin-bottom: 40px;
+	> *:last-child {
+		width: 100%;
+	}
 	${mediaQueries.tablet} {
 		gap: 50px;
 	}
