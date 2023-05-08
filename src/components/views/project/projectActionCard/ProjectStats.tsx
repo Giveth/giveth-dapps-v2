@@ -12,6 +12,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { useProjectContext } from '@/context/project.context';
 import StatusBadge from './StatusBadge';
+import ListingBadge from '@/components/ListingBadge';
 
 export const ProjectStats = () => {
 	const { formatMessage } = useIntl();
@@ -30,6 +31,18 @@ export const ProjectStats = () => {
 					</IconWithTooltip>
 				</Flex>
 				<StatusBadge status={projectData?.status.name} />
+			</StatRow>
+			<StatRow justifyContent='space-between'>
+				<Flex alignItems='center' gap='4px'>
+					<P>Listing</P>
+					<IconWithTooltip
+						icon={<IconHelpFilled16 />}
+						direction='bottom'
+					>
+						<StatTooltip>Listing</StatTooltip>
+					</IconWithTooltip>
+				</Flex>
+				<ListingBadge listed={projectData?.listed} />
 			</StatRow>
 		</div>
 	);
