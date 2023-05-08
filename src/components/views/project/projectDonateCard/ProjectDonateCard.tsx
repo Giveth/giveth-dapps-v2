@@ -507,7 +507,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 											id: 'label.deactivate_project',
 									  })
 									: formatMessage({
-											id: 'component.button.activate_project',
+											id: 'label.activate_project',
 									  })
 							}`}
 							icon={<IconArchiving size={16} />}

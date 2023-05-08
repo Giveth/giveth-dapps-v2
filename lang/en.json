@@ -98,7 +98,7 @@
 	"component.givback_toast.desc": "You get GIVbacks by donating to this project.",
 	"label.report_an_issue": "Report an Issue",
 	"label.view_similar_projects": "View similar projects",
-	"component.button.activate_project": "ACTIVATE PROJECT",
+	"label.activate_project": "ACTIVATE PROJECT",
 	"component.button.de": "DE",
 	"label.publish_project": "PUBLISH PROJECT",
 	"label.edit": "Edit",
