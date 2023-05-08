@@ -9,6 +9,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import LottieControl from '@/components/LottieControl';
 import { useProjectContext } from '@/context/project.context';
+import GIVPowerGetReward from './GIVPowerGetReward';
 
 export interface IPowerBoostingWithUserGIVpower
 	extends Omit<IPowerBoosting, 'user'> {
@@ -34,8 +35,9 @@ const ProjectGIVPowerIndex = ({
 }: ProjectGIVPowerIndexProps) => {
 	const [page, setPage] = useState(0);
 
-	const { isBoostingsLoading, boostersData } = useProjectContext();
-
+	const { isBoostingsLoading, boostersData, projectData } =
+		useProjectContext();
+	const { verified } = projectData || {};
 	const hasGivPower = boostersData ? boostersData.totalCount > 0 : false;
 	const totalCount = boostersData?.totalCount ?? 0;
 
@@ -48,6 +50,7 @@ const ProjectGIVPowerIndex = ({
 				projectPower={projectPower}
 				projectFuturePower={projectFuturePower}
 			/>
+			{verified && <GIVPowerGetReward />}
 			<GIVPowerTable
 				powerBoostings={
 					boostersData?.powerBoostings.slice(
