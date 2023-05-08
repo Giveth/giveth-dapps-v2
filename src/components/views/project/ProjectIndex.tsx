@@ -5,13 +5,13 @@ import { useRouter } from 'next/router';
 import {
 	Caption,
 	Container,
-	semanticColors,
 	neutralColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
-
 import { Col, Row } from '@giveth/ui-design-system';
+
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
@@ -24,7 +24,6 @@ import {
 	IProjectBySlug,
 } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
-import { mediaQueries } from '@/lib/constants/constants';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { compareAddresses, isSSRMode, showToastError } from '@/lib/helpers';
@@ -32,6 +31,7 @@ import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
+import { ProjectActionCard } from './projectActionCard/ProjectActionCard';
 import ProjectBadges from './ProjectBadges';
 import ProjectCategoriesBadges from './ProjectCategoriesBadges';
 
@@ -62,6 +62,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	const user = useAppSelector(state => state.user.userData);
 	const { fetchProjectBoosters, projectData, isActive, isDraft } =
 		useProjectContext();
+
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
 	const categories = projectData?.categories;
@@ -145,83 +146,74 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	}
 
 	return (
-		<>
-			<Wrapper>
-				<Head>
-					<title>{title && `${title} |`} Giveth</title>
-					<ProjectMeta project={projectData} />
-				</Head>
-				<HeadingContainer>
-					<ProjectBadges />
-					<Row>
-						<Col lg={9}>
-							<ProjectHeader />
-						</Col>
-						<Col lg={3}>
-							<div>New Component</div>
-						</Col>
-						{isDraft && (
-							<DraftIndicator>
-								<InfoBadge />
-								<Caption medium>
-									This is a preview of your project.
-								</Caption>
-							</DraftIndicator>
-						)}
-					</Row>
-				</HeadingContainer>
-				<BodyWrapper>
-					<Col>
-						{projectData && !isDraft && (
-							<ProjectTabs
-								activeTab={activeTab}
-								slug={slug}
-								totalDonations={totalDonations}
-							/>
-						)}
-						{!isActive && !isDraft && (
-							<InlineToast
-								type={EToastType.Warning}
-								message='This project is not active.'
-							/>
-						)}
-						{activeTab === 0 && (
-							<AboutContainer>
-								<RichTextViewer content={description} />
-								<Separator />
-								<ProjectCategoriesBadges
-									categories={categories || []}
-								/>
-							</AboutContainer>
-						)}
-						{activeTab === 1 && <ProjectUpdates />}
-						{activeTab === 2 && (
-							<ProjectDonations
-								donationsByProjectId={{
-									donations,
-									totalCount: totalDonations,
-								}}
-							/>
-						)}
-						{activeTab === 3 && (
-							<ProjectGIVPowerIndex
-								projectPower={projectPower}
-								projectFuturePower={projectFuturePower}
-								isAdmin={isAdmin}
-							/>
-						)}
+		<Wrapper>
+			<Head>
+				<title>{title && `${title} |`} Giveth</title>
+				<ProjectMeta project={projectData} />
+			</Head>
+			<HeadContainer>
+				<ProjectBadges />
+				<Row>
+					<Col lg={9}>
+						<ProjectHeader />
 					</Col>
-					{/* {projectData && (
-						<Col sm={4}>
-							<ProjectDonateCard
-								setCreationSuccessful={setCreationSuccessful}
+					<Col lg={3}>
+						<ProjectActionCard isAdmin={isAdmin} />
+					</Col>
+					{isDraft && (
+						<DraftIndicator>
+							<InfoBadge />
+							<Caption medium>
+								This is a preview of your project.
+							</Caption>
+						</DraftIndicator>
+					)}
+				</Row>
+			</HeadContainer>
+			{projectData && !isDraft && (
+				<ProjectTabs
+					activeTab={activeTab}
+					slug={slug}
+					totalDonations={totalDonations}
+				/>
+			)}
+			<BodyWrapper>
+				<Container>
+					{!isActive && !isDraft && (
+						<InlineToast
+							type={EToastType.Warning}
+							message='This project is not active.'
+						/>
+					)}
+					{activeTab === 0 && (
+						<>
+							<RichTextViewer content={description} />
+							<Separator />
+							<ProjectCategoriesBadges
+								categories={categories || []}
 							/>
-						</Col>
-					)} */}
-				</BodyWrapper>
-			</Wrapper>
-			<SimilarProjects slug={slug} />
-		</>
+						</>
+					)}
+					{activeTab === 1 && <ProjectUpdates />}
+					{activeTab === 2 && (
+						<ProjectDonations
+							donationsByProjectId={{
+								donations,
+								totalCount: totalDonations,
+							}}
+						/>
+					)}
+					{activeTab === 3 && (
+						<ProjectGIVPowerIndex
+							projectPower={projectPower}
+							projectFuturePower={projectFuturePower}
+							isAdmin={isAdmin}
+						/>
+					)}
+				</Container>
+				<SimilarProjects slug={slug} />
+			</BodyWrapper>
+		</Wrapper>
 	);
 };
 
@@ -239,27 +231,14 @@ const Wrapper = styled.div`
 `;
 
 const BodyWrapper = styled.div`
-	margin: 0 auto;
 	min-height: calc(100vh - 312px);
-	padding: 0 16px !important;
-
-	max-width: 1280px;
-	justify-content: center;
-	${mediaQueries.mobileL} {
-		padding: 0 22px;
-	}
-
-	${mediaQueries.laptopS} {
-		padding: 0 40px;
-	}
+	background-color: ${neutralColors.gray[100]};
+	padding: 32px 0 40px;
 `;
 
-const HeadingContainer = styled(Container)`
-	width: 100%;
-	max-width 1280px;
+const HeadContainer = styled(Container)`
+	margin-top: 24px;
 `;
-
-const AboutContainer = styled(Container)``;
 
 const Separator = styled.hr`
 	border: 1px solid ${neutralColors.gray[400]};
