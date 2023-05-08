@@ -1260,5 +1260,7 @@
 	"label.name": "name",
 	"label.unlock_your": "Unlock your Giveth Flair.",
 	"label.if_you_hold_a_giver": "If you hold a Giver, you will soon be able to set it as your profile picture on the Giveth.io DApp. With your Giver equipped, whatever you do on on Giveth, boosting with GIVpower, donating or founding a project, you will be shown prominently on the platform along with your unique Giver NFT badge.",
-	"label.learn_more_about": "Learn more about the benefits."
+	"label.learn_more_about": "Learn more about the benefits.",
+	"label.get_rewarded_with": "Get rewarded with up to 80% of your donation value!",
+	"label.donors_to_verified": "Donors to verified projects are rewarded with GIV. Boost this project to increase its rewards % and make it more visible on the projects page!"
 }

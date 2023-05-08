@@ -1258,5 +1258,7 @@
 	"label.name": "",
 	"label.unlock_your": "",
 	"label.if_you_hold_a_giver": "",
-	"label.learn_more_about": ""
+	"label.learn_more_about": "",
+	"label.get_rewarded_with": "",
+	"label.donors_to_verified": ""
 }
