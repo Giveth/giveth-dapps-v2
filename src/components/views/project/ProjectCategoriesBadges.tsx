@@ -71,6 +71,7 @@ const Container = styled(Flex)`
 
 const SubCategories = styled(Flex)`
 	gap: 12px;
+	flex-wrap: wrap;
 `;
 
 const Badge = styled(Flex)`
