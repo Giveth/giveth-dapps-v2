@@ -13,10 +13,18 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { useProjectContext } from '@/context/project.context';
 import StatusBadge from './StatusBadge';
 import ListingBadge from '@/components/ListingBadge';
+import VerificationBadge from '@/components/VerificationBadge';
+import { Badge, EBadgeStatus } from '@/components/Badge';
 
 export const ProjectStats = () => {
 	const { formatMessage } = useIntl();
 	const { projectData } = useProjectContext();
+
+	console.log(
+		'projectData?.verificationFormStatus',
+		projectData?.verificationFormStatus,
+		projectData?.verified,
+	);
 	return (
 		<div>
 			<Title>{formatMessage({ id: 'label.project_stats' })}</Title>
@@ -43,6 +51,26 @@ export const ProjectStats = () => {
 					</IconWithTooltip>
 				</Flex>
 				<ListingBadge listed={projectData?.listed} />
+			</StatRow>
+			<StatRow justifyContent='space-between'>
+				<Flex alignItems='center' gap='4px'>
+					<P>{formatMessage({ id: 'label.verification_status' })}</P>
+					<IconWithTooltip
+						icon={<IconHelpFilled16 />}
+						direction='bottom'
+					>
+						<StatTooltip>Verification status</StatTooltip>
+					</IconWithTooltip>
+				</Flex>
+				{projectData?.verified ? (
+					<Badge label='Verified' status={EBadgeStatus.SUCCESS} />
+				) : projectData?.verificationFormStatus ? (
+					<VerificationBadge
+						status={projectData?.verificationFormStatus}
+					/>
+				) : (
+					<Badge label='Not verified' status={EBadgeStatus.DEFAULT} />
+				)}
 			</StatRow>
 		</div>
 	);
