@@ -28,50 +28,57 @@ export const ProjectStats = () => {
 	return (
 		<div>
 			<Title>{formatMessage({ id: 'label.project_stats' })}</Title>
-			<StatRow justifyContent='space-between'>
-				<Flex alignItems='center' gap='4px'>
-					<P>Project status</P>
-					<IconWithTooltip
-						icon={<IconHelpFilled16 />}
-						direction='bottom'
-					>
-						<StatTooltip>Project status</StatTooltip>
-					</IconWithTooltip>
-				</Flex>
-				<StatusBadge status={projectData?.status.name} />
-			</StatRow>
-			<StatRow justifyContent='space-between'>
-				<Flex alignItems='center' gap='4px'>
-					<P>Listing</P>
-					<IconWithTooltip
-						icon={<IconHelpFilled16 />}
-						direction='bottom'
-					>
-						<StatTooltip>Listing</StatTooltip>
-					</IconWithTooltip>
-				</Flex>
-				<ListingBadge listed={projectData?.listed} />
-			</StatRow>
-			<StatRow justifyContent='space-between'>
-				<Flex alignItems='center' gap='4px'>
-					<P>{formatMessage({ id: 'label.verification_status' })}</P>
-					<IconWithTooltip
-						icon={<IconHelpFilled16 />}
-						direction='bottom'
-					>
-						<StatTooltip>Verification status</StatTooltip>
-					</IconWithTooltip>
-				</Flex>
-				{projectData?.verified ? (
-					<Badge label='Verified' status={EBadgeStatus.SUCCESS} />
-				) : projectData?.verificationFormStatus ? (
-					<VerificationBadge
-						status={projectData?.verificationFormStatus}
-					/>
-				) : (
-					<Badge label='Not verified' status={EBadgeStatus.DEFAULT} />
-				)}
-			</StatRow>
+			<Flex flexDirection='column' gap='24px'>
+				<StatRow justifyContent='space-between'>
+					<Flex alignItems='center' gap='4px'>
+						<P>Project status</P>
+						<IconWithTooltip
+							icon={<IconHelpFilled16 />}
+							direction='bottom'
+						>
+							<StatTooltip>Project status</StatTooltip>
+						</IconWithTooltip>
+					</Flex>
+					<StatusBadge status={projectData?.status.name} />
+				</StatRow>
+				<StatRow justifyContent='space-between'>
+					<Flex alignItems='center' gap='4px'>
+						<P>Listing</P>
+						<IconWithTooltip
+							icon={<IconHelpFilled16 />}
+							direction='bottom'
+						>
+							<StatTooltip>Listing</StatTooltip>
+						</IconWithTooltip>
+					</Flex>
+					<ListingBadge listed={projectData?.listed} />
+				</StatRow>
+				<StatRow justifyContent='space-between'>
+					<Flex alignItems='center' gap='4px'>
+						<P>
+							{formatMessage({ id: 'label.verification_status' })}
+						</P>
+						<IconWithTooltip
+							icon={<IconHelpFilled16 />}
+							direction='bottom'
+						>
+							<StatTooltip>Verification status</StatTooltip>
+						</IconWithTooltip>
+					</Flex>
+					{projectData?.verified ? (
+						<Badge label='Verified' status={EBadgeStatus.SUCCESS} />
+					) : projectData?.verificationFormStatus ? (
+						<VerificationBadge
+							status={projectData?.verificationFormStatus}
+						/>
+					) : (
+						<Badge
+							label='Not verified'
+							status={EBadgeStatus.DEFAULT}
+						/>
+					)}
+				</StatRow>
+			</Flex>
 		</div>
 	);
 };
