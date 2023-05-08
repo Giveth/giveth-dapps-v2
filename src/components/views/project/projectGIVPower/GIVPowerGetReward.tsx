@@ -22,11 +22,15 @@ const GIVPowerGetReward = () => {
 					<IconGIVBack size={24} color='black' />
 				</div>
 				<Flex flexDirection='column' gap='4px'>
-					<B>Get rewarded with up to 80% of your donation value!</B>
+					<B>
+						{formatMessage({
+							id: 'label.get_rewarded_with',
+						})}
+					</B>
 					<P>
-						Donors to verified projects are rewarded with GIV. Boost
-						this project to increase its rewards % and make it more
-						visible on the projects page!
+						{formatMessage({
+							id: 'label.donors_to_verified',
+						})}
 					</P>
 					<CustomizedExternalLink href=''>
 						<LearnMoreButton
