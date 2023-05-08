@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import BigNumber from 'bignumber.js';
-import GIVPowerHeader from './GIVPowerHeader';
+import { Col, Row } from '@giveth/ui-design-system';
 import GIVPowerTable from './GIVPowerTable';
 import NoBoost from '@/components/views/project/projectGIVPower/NoBoost';
 import { IPowerBoosting, IProjectPower } from '@/apollo/types/types';
@@ -9,6 +9,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import LottieControl from '@/components/LottieControl';
 import { useProjectContext } from '@/context/project.context';
+import { GIVpowerCard } from './GIVpowerCard';
 
 export interface IPowerBoostingWithUserGIVpower
 	extends Omit<IPowerBoosting, 'user'> {
@@ -44,27 +45,32 @@ const ProjectGIVPowerIndex = ({
 
 	return hasGivPower ? (
 		<>
-			<GIVPowerHeader
-				projectPower={projectPower}
-				projectFuturePower={projectFuturePower}
-			/>
-			<GIVPowerTable
-				powerBoostings={
-					boostersData?.powerBoostings.slice(
-						page * itemPerPage,
-						(page + 1) * itemPerPage,
-					) || []
-				}
-				totalPowerBoosting={boostersData?.totalPowerBoosting || '0'}
-			/>
-			<Flex justifyContent='flex-end'>
-				<Pagination
-					totalCount={totalCount}
-					currentPage={page}
-					setPage={setPage}
-					itemPerPage={itemPerPage}
-				/>
-			</Flex>
+			<Row>
+				<Col lg={8}>
+					<GIVPowerTable
+						powerBoostings={
+							boostersData?.powerBoostings.slice(
+								page * itemPerPage,
+								(page + 1) * itemPerPage,
+							) || []
+						}
+						totalPowerBoosting={
+							boostersData?.totalPowerBoosting || '0'
+						}
+					/>
+					<Flex justifyContent='flex-end'>
+						<Pagination
+							totalCount={totalCount}
+							currentPage={page}
+							setPage={setPage}
+							itemPerPage={itemPerPage}
+						/>
+					</Flex>
+				</Col>
+				<Col lg={4}>
+					<GIVpowerCard />
+				</Col>
+			</Row>
 		</>
 	) : (
 		<NoBoost isAdmin={isAdmin} />
