@@ -1,4 +1,5 @@
 import {
+	B,
 	Caption,
 	IconHelpFilled16,
 	IconInfoOutline16,
@@ -46,18 +47,18 @@ export const GIVpowerCard = () => {
 			<CurrentRankSection>
 				<Lead>{formatMessage({ id: 'label.current_rank' })}</Lead>
 				<CurrentRank projectPower={projectPower} />
-				<Flex>
+				<Flex gap='8px'>
 					<IconInfoOutline16 />
 					<div>
 						<Caption>
-							The rank will update at the start of the next
-							GIVbacks round.
+							The rank will update at the start of the
+							<b> next GIVbacks round</b> .
 						</Caption>
 					</div>
 				</Flex>
 			</CurrentRankSection>
 			<NextRankSection>
-				<Flex>
+				<Flex alignItems='center' justifyContent='space-between'>
 					<P>
 						{formatMessage({
 							id: 'label.projected_rank',
@@ -68,7 +69,19 @@ export const GIVpowerCard = () => {
 						projectFuturePower={projectFuturePower}
 					/>
 				</Flex>
+				<Separator />
+				<Flex gap='8px'>
+					<IconInfoOutline16 />
+					<div>
+						<Caption>
+							This is the expected rank for the next round based
+							on <b>current GIVpower</b>.
+						</Caption>
+					</div>
+				</Flex>
 			</NextRankSection>
+			<Separator />
+			<Desc>Boost this project with GIVpower to improve its rank!</Desc>
 		</GIVpowerCardWrapper>
 	);
 };
@@ -80,9 +93,22 @@ const GIVpowerCardWrapper = styled.div`
 	border-radius: 16px;
 `;
 
-const CurrentRankSection = styled.div``;
+const CurrentRankSection = styled.div`
+	margin: 32px 0 40px;
+`;
 
 const NextRankSection = styled.div`
+	padding: 16px;
 	border: 1px solid ${neutralColors.gray[300]};
 	border-radius: 16px;
+	margin-bottom: 40px;
+`;
+
+const Separator = styled.div`
+	margin: 16px 0;
+	border-bottom: 1px solid ${neutralColors.gray[300]};
+`;
+
+const Desc = styled(B)`
+	text-align: center;
 `;
