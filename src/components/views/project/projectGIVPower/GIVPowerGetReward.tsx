@@ -32,7 +32,7 @@ const GIVPowerGetReward = () => {
 							id: 'label.donors_to_verified',
 						})}
 					</P>
-					<CustomizedExternalLink href=''>
+					<CustomizedExternalLink href='https://docs.giveth.io/giveconomy/givbacks/'>
 						<LearnMoreButton
 							linkType='texty-secondary'
 							label={formatMessage({
