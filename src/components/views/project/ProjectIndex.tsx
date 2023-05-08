@@ -33,6 +33,7 @@ import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
 import { ProjectActionCard } from './projectActionCard/ProjectActionCard';
 import ProjectBadges from './ProjectBadges';
+import ProjectCategoriesBadges from './ProjectCategoriesBadges';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -64,6 +65,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
+	const categories = projectData?.categories;
 
 	useEffect(() => {
 		if (!isSSRMode) {
@@ -184,7 +186,13 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						/>
 					)}
 					{activeTab === 0 && (
-						<RichTextViewer content={description} />
+						<>
+							<RichTextViewer content={description} />
+							<Separator />
+							<ProjectCategoriesBadges
+								categories={categories || []}
+							/>
+						</>
 					)}
 					{activeTab === 1 && <ProjectUpdates />}
 					{activeTab === 2 && (
@@ -230,6 +238,11 @@ const BodyWrapper = styled.div`
 
 const HeadContainer = styled(Container)`
 	margin-top: 24px;
+`;
+
+const Separator = styled.hr`
+	border: 1px solid ${neutralColors.gray[400]};
+	margin: 40px 0;
 `;
 
 export default ProjectIndex;

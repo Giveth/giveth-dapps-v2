@@ -119,13 +119,14 @@ const Tab = styled(P)`
 `;
 
 const Wrapper = styled.div`
+	width: 100%;
 	padding: 16px 0;
 	color: ${neutralColors.gray[800]};
 	height: min-content;
 	margin: 24px 0 40px;
 	background-color: white;
 	overflow-x: auto;
-	box-shadow: ${neutralColors.gray[400]};
+	box-shadow: 0px 5px 5px rgba(212, 218, 238, 0.4);
 `;
 
 export default ProjectTabs;
