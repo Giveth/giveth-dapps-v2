@@ -44,7 +44,7 @@ const ProjectsSortSelect = () => {
 	const sortByOptions = [
 		{
 			label: formatMessage({ id: 'label.rank' }),
-			value: EProjectsSortBy.GIVPOWER,
+			value: EProjectsSortBy.INSTANT_BOOSTING,
 			icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
 		},
 		{
