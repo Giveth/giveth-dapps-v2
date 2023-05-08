@@ -141,7 +141,7 @@ const BoostButton = styled(Button)`
 	color: ${neutralColors.gray[900]};
 `;
 
-const BoostTooltip = styled(Subline)`
+export const BoostTooltip = styled(Subline)`
 	color: ${neutralColors.gray[100]};
 	${mediaQueries.tablet} {
 		width: 260px;
