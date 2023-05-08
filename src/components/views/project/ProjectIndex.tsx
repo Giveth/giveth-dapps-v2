@@ -2,7 +2,12 @@ import React, { FC, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Caption, Container, semanticColors } from '@giveth/ui-design-system';
+import {
+	Caption,
+	Container,
+	neutralColors,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { Col, Row } from '@giveth/ui-design-system';
@@ -19,7 +24,6 @@ import {
 	IProjectBySlug,
 } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
-import { mediaQueries } from '@/lib/constants/constants';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { compareAddresses, isSSRMode, showToastError } from '@/lib/helpers';
@@ -140,85 +144,70 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	}
 
 	return (
-		<>
-			<Wrapper>
-				<Head>
-					<title>{title && `${title} |`} Giveth</title>
-					<ProjectMeta project={projectData} />
-				</Head>
-				<HeadingContainer>
-					<ProjectBadges />
-					<Row>
-						<Col lg={9}>
-							<ProjectHeader />
-						</Col>
-						<Col lg={3}>
-							<ProjectActionCard />
-						</Col>
-						{isDraft && (
-							<DraftIndicator>
-								<InfoBadge />
-								<Caption medium>
-									This is a preview of your project.
-								</Caption>
-							</DraftIndicator>
-						)}
-					</Row>
-				</HeadingContainer>
-				<BodyWrapper>
-					{projectData && !isDraft && (
-						<ProjectTabs
-							activeTab={activeTab}
-							slug={slug}
-							totalDonations={totalDonations}
+		<Wrapper>
+			<Head>
+				<title>{title && `${title} |`} Giveth</title>
+				<ProjectMeta project={projectData} />
+			</Head>
+			<HeadContainer>
+				<ProjectBadges />
+				<Row>
+					<Col lg={9}>
+						<ProjectHeader />
+					</Col>
+					<Col lg={3}>
+						<ProjectActionCard />
+					</Col>
+					{isDraft && (
+						<DraftIndicator>
+							<InfoBadge />
+							<Caption medium>
+								This is a preview of your project.
+							</Caption>
+						</DraftIndicator>
+					)}
+				</Row>
+			</HeadContainer>
+			{projectData && !isDraft && (
+				<ProjectTabs
+					activeTab={activeTab}
+					slug={slug}
+					totalDonations={totalDonations}
+				/>
+			)}
+			<BodyWrapper>
+				<Container>
+					{!isActive && !isDraft && (
+						<InlineToast
+							type={EToastType.Warning}
+							message='This project is not active.'
 						/>
 					)}
-					<InnerWrapper>
-						{!isActive && !isDraft && (
-							<InlineToast
-								type={EToastType.Warning}
-								message='This project is not active.'
-							/>
-						)}
-						{activeTab === 0 && (
-							<RichTextViewer content={description} />
-						)}
-						{activeTab === 1 && <ProjectUpdates />}
-						{activeTab === 2 && (
-							<ProjectDonations
-								donationsByProjectId={{
-									donations,
-									totalCount: totalDonations,
-								}}
-							/>
-						)}
-						{activeTab === 3 && (
-							<ProjectGIVPowerIndex
-								projectPower={projectPower}
-								projectFuturePower={projectFuturePower}
-								isAdmin={isAdmin}
-							/>
-						)}
-					</InnerWrapper>
-				</BodyWrapper>
-			</Wrapper>
-			<SimilarProjects slug={slug} />
-		</>
+					{activeTab === 0 && (
+						<RichTextViewer content={description} />
+					)}
+					{activeTab === 1 && <ProjectUpdates />}
+					{activeTab === 2 && (
+						<ProjectDonations
+							donationsByProjectId={{
+								donations,
+								totalCount: totalDonations,
+							}}
+						/>
+					)}
+					{activeTab === 3 && (
+						<ProjectGIVPowerIndex
+							projectPower={projectPower}
+							projectFuturePower={projectFuturePower}
+							isAdmin={isAdmin}
+						/>
+					)}
+				</Container>
+				<SimilarProjects slug={slug} />
+			</BodyWrapper>
+		</Wrapper>
 	);
 };
-
-const InnerWrapper = styled.div`
-	padding: 0 16px;
-	margin: 0 auto;
-	max-width: 1280px;
-	${mediaQueries.mobileL} {
-		padding: 0 22px;
-	}
-
-	${mediaQueries.laptopS} {
-		padding: 0 40px;
-	}
-`;
 
 const DraftIndicator = styled.div`
 	color: ${semanticColors.blueSky[600]};
@@ -233,11 +222,13 @@ const Wrapper = styled.div`
 	position: relative;
 `;
 
-const BodyWrapper = styled(Row)`
+const BodyWrapper = styled.div`
 	min-height: calc(100vh - 312px);
+	background-color: ${neutralColors.gray[100]};
+	padding: 32px 0 40px;
 `;
 
-const HeadingContainer = styled(Container)`
+const HeadContainer = styled(Container)`
 	margin-top: 24px;
 `;
 
