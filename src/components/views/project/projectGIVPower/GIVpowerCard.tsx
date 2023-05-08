@@ -14,10 +14,10 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { BoostTooltip } from '../projectDonateCard/ProjectDonateCard';
 import { CurrentRank } from '@/components/GIVpowerRank';
 import { useProjectContext } from '@/context/project.context';
 import { NextRank } from '@/components/GIVpowerRank';
+import { BoostTooltip } from '../projectActionCard/GIVPowerSection';
 
 export const GIVpowerCard = () => {
 	const { formatMessage } = useIntl();
