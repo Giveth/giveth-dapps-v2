@@ -5,13 +5,13 @@ import {
 	neutralColors,
 	Button,
 	IconRocketInSpace16,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Flex } from '@/components/styled-components/Flex';
-import { BoostTooltip } from '../projectDonateCard/ProjectDonateCard';
 import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
 import { useProjectContext } from '@/context/project.context';
 import { useAppSelector } from '@/features/hooks';
@@ -139,4 +139,11 @@ const BoostButton = styled(Button)`
 	width: 100%;
 	padding: 16px;
 	color: ${neutralColors.gray[900]};
+`;
+
+const BoostTooltip = styled(Subline)`
+	color: ${neutralColors.gray[100]};
+	${mediaQueries.tablet} {
+		width: 260px;
+	}
 `;
