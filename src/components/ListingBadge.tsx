@@ -1,8 +1,12 @@
+import { FC } from 'react';
 import { Badge, EBadgeStatus } from '@/components/Badge';
 
-const ListingBadge = (props: { listed: boolean | null }) => {
-	const { listed } = props;
+interface IListingBadge {
+	listed?: boolean | null;
+	showBullet?: boolean;
+}
 
+const ListingBadge: FC<IListingBadge> = ({ listed, showBullet = false }) => {
 	let status, label;
 
 	if (listed) {
@@ -16,7 +20,7 @@ const ListingBadge = (props: { listed: boolean | null }) => {
 		label = 'Not Listed';
 	}
 
-	return <Badge status={status} label={label} showBullet />;
+	return <Badge status={status} label={label} showBullet={showBullet} />;
 };
 
 export default ListingBadge;

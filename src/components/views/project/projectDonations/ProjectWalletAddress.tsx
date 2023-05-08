@@ -1,11 +1,12 @@
-import Image from 'next/image';
-import { neutralColors, Subline } from '@giveth/ui-design-system';
+import { neutralColors, P, Subline } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
-import WalletIcon from '/public/images/wallet_donate_tab.svg';
+import { useIntl } from 'react-intl';
+import { utils } from 'ethers';
 import { IWalletAddress } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 interface IProjectWalletAddress {
 	addresses: IWalletAddress[];
@@ -42,31 +43,65 @@ const WalletAddress = (props: {
 	networkIds?: Array<number | undefined>;
 }) => {
 	const { address, networkIds } = props;
+	const { formatMessage } = useIntl();
+	const checksumAddress = utils.getAddress(address);
+
 	return (
 		<AddressContainer>
-			<Image src={WalletIcon} alt='wallet icon' />
-			<Subline>{address?.toLowerCase()}</Subline>
-			<Flex gap='8px'>
-				{networkIds?.map(networkId => (
-					<NetworkLogo
-						logoSize={16}
-						chainId={networkId}
-						key={networkId}
-					/>
-				))}
+			<P>
+				{formatMessage({
+					id: 'label.associated_wallet_address',
+				})}
+			</P>
+			<Wallet>{checksumAddress}</Wallet>
+			<Line />
+			<Flex gap='16px' alignItems='center'>
+				<P>
+					{formatMessage({
+						id: 'label.accept_donations_on',
+					})}
+				</P>
+				<Logos>
+					{networkIds?.map(networkId => (
+						<NetworkLogo
+							logoSize={24}
+							chainId={networkId}
+							key={networkId}
+						/>
+					))}
+				</Logos>
 			</Flex>
 		</AddressContainer>
 	);
 };
 
-const AddressContainer = styled(Flex)`
-	gap: 10px;
+const Logos = styled(Flex)`
+	gap: 8px;
+	> * {
+		box-shadow: ${Shadow.Neutral[500]};
+		border-radius: 50%;
+	}
+`;
+
+const Line = styled.div`
+	margin: 40px 0 16px;
+	border: 1px solid ${neutralColors.gray[300]};
+`;
+
+const Wallet = styled(Subline)`
+	background: ${neutralColors.gray[200]};
+	border-radius: 16px;
+	padding: 4px 8px;
+	margin-top: 8px;
+	width: fit-content;
+`;
+
+const AddressContainer = styled.div`
+	margin-top: 40px;
 `;
 
 const BottomSection = styled(Flex)`
-	background: ${neutralColors.gray[200]};
-	padding: 8px 25px;
-	color: ${neutralColors.gray[500]};
+	color: ${neutralColors.gray[700]};
 	flex-direction: column;
 	gap: 10px;
 `;

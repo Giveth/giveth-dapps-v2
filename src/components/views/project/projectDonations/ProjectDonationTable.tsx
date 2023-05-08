@@ -130,8 +130,6 @@ const ProjectDonationTable = ({
 		if (page !== 0) setPage(0);
 	}, [searchTerm]);
 
-	console.log('donation.user', donations);
-
 	return (
 		<Wrapper>
 			<SearchBox
@@ -268,7 +266,6 @@ const LeftPadding = styled.div`
 `;
 
 const Wrapper = styled.div`
-	margin: 50px 0 32px;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
