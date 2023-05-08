@@ -14,7 +14,7 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { formatUSD, smallFormatDate } from '@/lib/helpers';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
-import ListingBadge from '@/components/views/userProfile/projectsTab/ListingBadge';
+import ListingBadge from '@/components/ListingBadge';
 import StatusBadge from '@/components/views/userProfile/projectsTab/StatusBadge';
 import SortIcon from '@/components/SortIcon';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
@@ -106,7 +106,10 @@ const ProjectsTable: FC<IProjectsTable> = ({
 								{formatUSD(project.totalDonations)} USD
 							</ProjectTableCell>
 							<ProjectTableCell>
-								<ListingBadge listed={project.listed!} />
+								<ListingBadge
+									listed={project.listed!}
+									showBullet
+								/>
 							</ProjectTableCell>
 							<ProjectTableCell>
 								<Actions isCancelled={isCancelled}>
