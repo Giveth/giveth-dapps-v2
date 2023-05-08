@@ -5,6 +5,8 @@ import { DonateSection } from './DonationSection';
 import { LikeAndShareSection } from './LikeAndShareSection';
 import { GIVPowerSection } from './GIVPowerSection';
 import { ProjectStats } from './ProjectStats';
+import { AdminActions } from './AdminActions';
+import { Flex } from '@/components/styled-components/Flex';
 
 interface IProjectActionCardProps {
 	isAdmin?: boolean;
@@ -14,10 +16,14 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({
 	isAdmin = false,
 }) => {
 	return (
-		<ProjectActionCardWrapper>
+		<ProjectActionCardWrapper
+			flexDirection='column'
+			justifyContent='space-between'
+		>
 			{isAdmin ? (
 				<>
 					<ProjectStats />
+					<AdminActions />
 				</>
 			) : (
 				<>
@@ -30,7 +36,7 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({
 	);
 };
 
-const ProjectActionCardWrapper = styled.div`
+const ProjectActionCardWrapper = styled(Flex)`
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 16px;
 	height: 100%;
