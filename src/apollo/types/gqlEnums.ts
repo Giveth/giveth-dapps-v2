@@ -18,6 +18,7 @@ export enum EProjectsSortBy {
 	RECENTLY_UPDATED = 'RecentlyUpdated',
 	QUALITY_SCORE = 'QualityScore',
 	GIVPOWER = 'GIVPower',
+	INSTANT_BOOSTING = 'InstantBoosting',
 }
 
 export enum EProjectStatus {
