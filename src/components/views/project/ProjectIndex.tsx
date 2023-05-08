@@ -33,7 +33,7 @@ import ProjectBadges from './ProjectBadges';
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
 );
-const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
+const ProjectUpdates = dynamic(() => import('./projectUpdates'));
 const NotAvailableProject = dynamic(() => import('../../NotAvailableProject'), {
 	ssr: false,
 });
