@@ -59,7 +59,7 @@ const {
 	XDAI_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER,
-	//TODO: Uncomment Optimism OPTIMISM_NETWORK_NUMBER,
+	OPTIMISM_NETWORK_NUMBER,
 } = config;
 interface ICreateProjectProps {
 	project?: IProjectEdition;
@@ -76,7 +76,7 @@ export enum EInputs {
 	gnosisAddress = 'gnosisAddress',
 	polygonAddress = 'polygonAddress',
 	celoAddress = 'celoAddress',
-	//TODO: Uncomment Optimism optimismAddress = 'optimismAddress',
+	optimismAddress = 'optimismAddress',
 }
 
 export type TInputs = {
@@ -90,7 +90,7 @@ export type TInputs = {
 	[EInputs.gnosisAddress]: string;
 	[EInputs.polygonAddress]: string;
 	[EInputs.celoAddress]: string;
-	//TODO: Uncomment Optimism [EInputs.optimismAddress]: string;
+	[EInputs.optimismAddress]: string;
 };
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
@@ -118,15 +118,15 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const prevCeloAddress = addresses?.find(
 		a => a.isRecipient && a.networkId === CELO_NETWORK_NUMBER,
 	)?.address;
-	//TODO: Uncomment Optimism const prevOptimismAddress = addresses?.find(
-	// 	a => a.isRecipient && a.networkId === OPTIMISM_NETWORK_NUMBER,
-	// )?.address;
+	const prevOptimismAddress = addresses?.find(
+		a => a.isRecipient && a.networkId === OPTIMISM_NETWORK_NUMBER,
+	)?.address;
 	const isSamePrevAddresses = compareAddressesArray([
 		prevMainAddress,
 		prevGnosisAddress,
 		prevPolygonAddress,
 		prevCeloAddress,
-		//TODO: Uncomment Optimism prevOptimismAddress,
+		prevOptimismAddress,
 	]);
 	const userAddresses: string[] = [];
 	if (isSamePrevAddresses) userAddresses.push(prevMainAddress!);
@@ -135,7 +135,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		if (prevGnosisAddress) userAddresses.push(prevGnosisAddress);
 		if (prevPolygonAddress) userAddresses.push(prevPolygonAddress);
 		if (prevCeloAddress) userAddresses.push(prevCeloAddress);
-		//TODO: Uncomment Optimism if (prevOptimismAddress) userAddresses.push(prevOptimismAddress);
+		if (prevOptimismAddress) userAddresses.push(prevOptimismAddress);
 	}
 
 	const formMethods = useForm<TInputs>({
@@ -151,7 +151,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.gnosisAddress]: prevGnosisAddress || '',
 			[EInputs.polygonAddress]: prevPolygonAddress || '',
 			[EInputs.celoAddress]: prevCeloAddress || '',
-			//TODO: Uncomment Optimism [EInputs.optimismAddress]: prevOptimismAddress || '',
+			[EInputs.optimismAddress]: prevOptimismAddress || '',
 		},
 	});
 
@@ -170,9 +170,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [celoAddressActive, setCeloAddressActive] = useState(
 		isEditMode ? !!prevCeloAddress : true,
 	);
-	//TODO: Uncomment Optimism const [optimismAddressActive, setOptimismAddressActive] = useState(
-	// 	isEditMode ? !!prevOptimismAddress : true,
-	// );
+	const [optimismAddressActive, setOptimismAddressActive] = useState(
+		isEditMode ? !!prevOptimismAddress : true,
+	);
 	const [isSameAddress, setIsSameAddress] = useState(
 		isEditMode ? isSamePrevAddresses : true,
 	);
@@ -190,7 +190,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				gnosisAddress,
 				polygonAddress,
 				celoAddress,
-				//TODO: Uncomment Optimism optimismAddress,
+				optimismAddress,
 				name,
 				description,
 				categories,
@@ -221,10 +221,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						address: checksumAddress,
 						networkId: CELO_NETWORK_NUMBER,
 					},
-					//TODO: Uncomment Optimism {
-					// 	address: checksumAddress,
-					// 	networkId: OPTIMISM_NETWORK_NUMBER,
-					// },
+					{
+						address: checksumAddress,
+						networkId: OPTIMISM_NETWORK_NUMBER,
+					},
 				);
 			} else {
 				if (mainnetAddressActive) {
@@ -258,13 +258,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						networkId: CELO_NETWORK_NUMBER,
 					});
 				}
-				//TODO: Uncomment Optimism if (optimismAddressActive) {
-				// 	const checksumAddress = utils.getAddress(optimismAddress);
-				// 	addresses.push({
-				// 		address: checksumAddress,
-				// 		networkId: OPTIMISM_NETWORK_NUMBER,
-				// 	});
-				// }
+				if (optimismAddressActive) {
+					const checksumAddress = utils.getAddress(optimismAddress);
+					addresses.push({
+						address: checksumAddress,
+						networkId: OPTIMISM_NETWORK_NUMBER,
+					});
+				}
 			}
 
 			const projectData: IProjectCreation = {
@@ -374,7 +374,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							onChange={setIsSameAddress}
 							checked={isSameAddress}
 							label={formatMessage({
-								id: 'label.ill_raise_and_receive_funds_on_mainnet_and_gnosis',
+								id: 'label.ill_raise_and_receive_funds_on_all_chains',
 							})}
 						/>
 						<WalletAddressInput
@@ -389,8 +389,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									!e &&
 									!gnosisAddressActive &&
 									!polygonAddressActive &&
-									!celoAddressActive
-									//TODO: Uncomment Optimism !optimismAddressActive
+									!celoAddressActive &&
+									!optimismAddressActive
 								)
 									return showToastError(
 										formatMessage({
@@ -412,8 +412,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									!e &&
 									!mainnetAddressActive &&
 									!polygonAddressActive &&
-									!celoAddressActive
-									//TODO: Uncomment Optimism !optimismAddressActive
+									!celoAddressActive &&
+									!optimismAddressActive
 								)
 									return showToastError(
 										formatMessage({
@@ -435,8 +435,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									!e &&
 									!mainnetAddressActive &&
 									!gnosisAddressActive &&
-									!celoAddressActive
-									//TODO: Uncomment Optimism !optimismAddressActive
+									!celoAddressActive &&
+									!optimismAddressActive
 								)
 									return showToastError(
 										formatMessage({
@@ -458,8 +458,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									!e &&
 									!mainnetAddressActive &&
 									!gnosisAddressActive &&
-									!polygonAddressActive
-									//TODO: Uncomment Optimism !optimismAddressActive
+									!polygonAddressActive &&
+									!optimismAddressActive
 								)
 									return showToastError(
 										formatMessage({
@@ -470,7 +470,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								setCeloAddressActive(e);
 							}}
 						/>
-						{/*TODO: Uncomment Optimism <WalletAddressInput
+						<WalletAddressInput
 							networkId={OPTIMISM_NETWORK_NUMBER}
 							sameAddress={isSameAddress}
 							isActive={optimismAddressActive}
@@ -492,7 +492,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								if (!e) unregister(EInputs.optimismAddress);
 								setOptimismAddressActive(e);
 							}}
-						/> */}
+						/>
 						<PublishTitle>
 							{isEditMode
 								? formatMessage({

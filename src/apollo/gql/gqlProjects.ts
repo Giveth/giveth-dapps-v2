@@ -336,6 +336,7 @@ export const CREATE_PROJECT = gql`
 			adminUser {
 				name
 				walletAddress
+				avatar
 			}
 			image
 			impactLocation
@@ -365,6 +366,7 @@ export const UPDATE_PROJECT = gql`
 			adminUser {
 				name
 				walletAddress
+				avatar
 			}
 			addresses {
 				address

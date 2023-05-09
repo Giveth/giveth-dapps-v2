@@ -22,8 +22,8 @@ export const ProjectOwnerWithPfp: FC<IProjectOwnerWithPfpProps> = ({
 	return (
 		<Link href={addressToUserView(user?.walletAddress?.toLowerCase())}>
 			{pfpToken ? (
-				<Flex gap='8px'>
-					<PFP pfpToken={pfpToken} />
+				<Flex gap='8px' alignItems='center'>
+					<StyledPFP pfpToken={pfpToken} />
 					<Author>{name || '\u200C'}</Author>
 				</Flex>
 			) : (
@@ -36,4 +36,8 @@ export const ProjectOwnerWithPfp: FC<IProjectOwnerWithPfpProps> = ({
 const Author = styled(P)`
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
+`;
+
+const StyledPFP = styled(PFP)`
+	margin-top: 5px;
 `;

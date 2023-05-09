@@ -36,7 +36,7 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 					)}
 				>
 					{pfpToken ? (
-						<Flex gap='8px'>
+						<Flex gap='8px' alignItems='center'>
 							<PFP pfpToken={pfpToken} />
 							<Author bold size='Big'>
 								{name || '\u200C'}
@@ -62,7 +62,7 @@ interface IAuthor {
 
 const Author = styled(GLink)<IAuthor>`
 	color: ${neutralColors.gray[700]};
-	margin-bottom: 16px;
+	margin-bottom: 9px;
 	display: block;
 	font-weight: ${props => (props.bold ? 500 : 400)};
 `;

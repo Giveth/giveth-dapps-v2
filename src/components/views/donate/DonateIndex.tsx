@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
-import SocialBox from './SocialBox';
+import SocialBox from '../../SocialBox';
 import SuccessView from '@/components/views/donate/SuccessView';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import DonationTypes from '@/components/views/donate/DonationTypes';
@@ -11,6 +11,7 @@ import NiceBanner from './NiceBanner';
 // import PurchaseXDAI from './PurchaseXDAIBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useDonateData } from '@/context/donate.context';
+import { EContentType } from '@/lib/constants/shareContent';
 
 const DonateIndex: FC = () => {
 	const { isMobile } = useDetectDevice();
@@ -33,7 +34,11 @@ const DonateIndex: FC = () => {
 					</Right>
 				</Sections>
 				{!isSuccessDonation && !isMobile && (
-					<SocialBox project={project} />
+					<SocialBox
+						contentType={EContentType.thisProject}
+						project={project}
+						isDonateFooter
+					/>
 				)}
 			</Wrapper>
 		</>
@@ -43,7 +48,7 @@ const DonateIndex: FC = () => {
 const Wrapper = styled.div`
 	max-width: 1052px;
 	text-align: center;
-	padding: 137px 0;
+	padding: 64px 0;
 	margin: 0 auto;
 	position: relative;
 `;
