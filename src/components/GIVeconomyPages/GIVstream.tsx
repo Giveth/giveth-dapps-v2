@@ -356,7 +356,7 @@ const convertSourceTypeToIcon = (distributor: string) => {
 		case 'praise':
 			return (
 				<Flex gap='16px'>
-					<IconPraise24 />
+					<IconPraise24 color={brandColors.mustard[500]} />
 					<P>{` Praise`}</P>
 				</Flex>
 			);
