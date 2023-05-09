@@ -1248,6 +1248,7 @@
 	"label.recipient_addresses": "recipient addresses",
 	"label.add_new_address": "Add new address",
 	"label.manage_addresses": "Manage addresses",
-	"label.get_rewarded_with": "Get rewarded with up to 80% of your donation value!",
+	"label.get_rewarded_with": "Get rewarded with up to ",
+	"label.ofـyourـdonationـvalue": " of your donation value!",
 	"label.donors_to_verified": "Donors to verified projects are rewarded with GIV. Boost this project to increase its rewards % and make it more visible on the projects page!"
 }

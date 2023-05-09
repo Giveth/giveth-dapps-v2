@@ -11,9 +11,12 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
+import { useProjectContext } from '@/context/project.context';
 
 const GIVPowerGetReward = () => {
 	const { formatMessage } = useIntl();
+	const { projectData } = useProjectContext();
+	const { givbackFactor } = projectData || {};
 
 	return (
 		<Wrapper>
@@ -25,6 +28,10 @@ const GIVPowerGetReward = () => {
 					<B>
 						{formatMessage({
 							id: 'label.get_rewarded_with',
+						})}
+						{+(givbackFactor || 0) * 100}%
+						{formatMessage({
+							id: 'label.ofـyourـdonationـvalue',
 						})}
 					</B>
 					<P>
