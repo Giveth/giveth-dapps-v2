@@ -471,7 +471,7 @@
 	"label.raised_two": "Recaptat",
 	"label.submission_guidelines": "Directrius per a l'enviament",
 	"label.optional": "Opcional",
-	"label.ill_raise_and_receive_funds_on_mainnet_and_gnosis": "Aixecaré i rebré fons a Mainnet, Gnosis Chain i les xarxes Polygon amb la mateixa adreça.",
+	"label.ill_raise_and_receive_funds_on_all_chains": "Aixecaré i rebré fons a Mainnet, Gnosis Chain, Polygon, Celo i les xarxes Optimism amb la mateixa adreça.",
 	"label.you_must_select_at_least_one_address": "Heu de seleccionar almenys una adreça",
 	"label.lets_publish": "Anem a publicar!",
 	"label.submission_guidelines.one": "Descripció clara del projecte que explica qui és l'organització i què farà amb els fons.",
