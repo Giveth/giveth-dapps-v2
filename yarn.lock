@@ -923,10 +923,10 @@
     intl-messageformat "10.3.1"
     tslib "^2.4.0"
 
-"@giveth/ui-design-system@^1.11.6":
-  version "1.11.6"
-  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.6.tgz#1ccc6a8467d5afe2da962eda0b0b82575064d8db"
-  integrity sha512-HWBHitRo9sNmuTUqsy6o2ygoypvrGLXb1qL9IaeC7l1fm0+dRJ3wZEgYdGL7KG+mI0D3Nlu7yO6Ns0h79j6H5A==
+"@giveth/ui-design-system@^1.11.8":
+  version "1.11.8"
+  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.8.tgz#524663cbd80c5c01a9280236b24a067c97da13e1"
+  integrity sha512-+VGp1puNnS2rIQD/IuJ4Pdgj0/6OOdwUJnAv6+onZMt3vQhplm0W04aXAmPWc8uMApe+/gjHI4d/n1dVUtL+4w==
   dependencies:
     next "13.1.6"
     react "18.2.0"
@@ -7748,7 +7748,7 @@ react-select@^5.2.1:
     react-transition-group "^4.3.0"
     use-isomorphic-layout-effect "^1.1.2"
 
-react-share@^5.1.1:
+react-share@^4.4.1:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/react-share/-/react-share-4.4.1.tgz#4bfb0b512e26afedfea2fb66eb13c95c28fb216a"
   integrity sha512-AJ9m9RiJssqvYg7MoJUc9J0D7b/liWrsfQ99ndKc5vJ4oVHHd4Fy87jBlKEQPibT40oYA3AQ/a9/oQY6/yaigw==

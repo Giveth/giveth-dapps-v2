@@ -11,6 +11,7 @@ import {
 	IconGIVGarden,
 	IconGIVStream,
 	IconHelpFilled16,
+	IconPraise24,
 	IconSpark,
 	P,
 } from '@giveth/ui-design-system';
@@ -321,7 +322,7 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 	);
 };
 
-const convetSourceTypeToIcon = (distributor: string) => {
+const convertSourceTypeToIcon = (distributor: string) => {
 	switch (distributor.toLowerCase()) {
 		case 'givback':
 			return (
@@ -352,6 +353,14 @@ const convetSourceTypeToIcon = (distributor: string) => {
 					<P>{` GIVdrop`}</P>
 				</Flex>
 			);
+		case 'praise':
+			return (
+				<Flex gap='16px'>
+					<IconPraise24 color={brandColors.mustard[500]} />
+					<P>{` Praise`}</P>
+				</Flex>
+			);
+
 		default:
 			// 'Unknown' we show givfarm instead of unknown for exploit farms
 			// https://github.com/Giveth/giveth-dapps-v2/issues/1796
@@ -424,7 +433,7 @@ export const GIVstreamHistory: FC = () => {
 								// <span key={idx}>1</span>
 								<Fragment key={idx}>
 									<P as='span'>
-										{convetSourceTypeToIcon(
+										{convertSourceTypeToIcon(
 											tokenAllocation.distributor ||
 												'Unknown',
 										)}
