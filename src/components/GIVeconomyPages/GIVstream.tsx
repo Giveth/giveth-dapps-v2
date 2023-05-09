@@ -11,6 +11,7 @@ import {
 	IconGIVGarden,
 	IconGIVStream,
 	IconHelpFilled16,
+	IconPraise24,
 	IconSpark,
 	P,
 } from '@giveth/ui-design-system';
@@ -321,7 +322,7 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 	);
 };
 
-const convetSourceTypeToIcon = (distributor: string) => {
+const convertSourceTypeToIcon = (distributor: string) => {
 	switch (distributor.toLowerCase()) {
 		case 'givback':
 			return (
@@ -355,7 +356,7 @@ const convetSourceTypeToIcon = (distributor: string) => {
 		case 'praise':
 			return (
 				<Flex gap='16px'>
-					<IconGIV size={24} />
+					<IconPraise24 />
 					<P>{` Praise`}</P>
 				</Flex>
 			);
@@ -432,7 +433,7 @@ export const GIVstreamHistory: FC = () => {
 								// <span key={idx}>1</span>
 								<Fragment key={idx}>
 									<P as='span'>
-										{convetSourceTypeToIcon(
+										{convertSourceTypeToIcon(
 											tokenAllocation.distributor ||
 												'Unknown',
 										)}
