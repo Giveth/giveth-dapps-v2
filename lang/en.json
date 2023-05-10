@@ -1250,5 +1250,15 @@
 	"label.manage_addresses": "Manage addresses",
 	"label.say_hello_to": "Say Hello to...",
 	"label.show_your_support": "Show your support for the Future of Giving and unlock your unique Giveth flair by minting one of the first NFT PFP artworks inspired by Giveth.",
-	"label.the_givers_are": "The Givers are a limited collection of 1,250 artworks inspired by the Giveth Galaxy. Each NFT tells a unique story of Giveth, in its own fun and vibrant style."
+	"label.the_givers_are": "The Givers are a limited collection of 1,250 artworks inspired by the Giveth Galaxy. Each NFT tells a unique story of Giveth, in its own fun and vibrant style.",
+	"label.get_your_giveth_name": "Get your Giveth Name.",
+	"label.givers_pfp_holders": "Givers PFP Holders will be able to claim their own unique ",
+	"label.domain_name_at": "domain name at a 50% discount, thanks to Punk Domains. Reserve your name (e.g.",
+	"label.on_gnosis_and": "on Gnosis Chain and on top of that, 80% of the registration fees go to the Giveth Matching Pool!",
+	"label.already_a_giver": "Already own a Giver?",
+	"label.register_your": "Register your",
+	"label.name": "name",
+	"label.unlock_your": "Unlock your Giveth Flair.",
+	"label.if_you_hold_a_giver": "If you hold a Giver, you will soon be able to set it as your profile picture on the Giveth.io DApp. With your Giver equipped, whatever you do on on Giveth, boosting with GIVpower, donating or founding a project, you will be shown prominently on the platform along with your unique Giver NFT badge.",
+	"label.learn_more_about": "Learn more about the benefits."
 }
