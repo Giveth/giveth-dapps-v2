@@ -1247,5 +1247,7 @@
 	"label.use_as_profile_picture": "Use as profile picture",
 	"label.recipient_addresses": "recipient addresses",
 	"label.add_new_address": "Add new address",
-	"label.manage_addresses": "Manage addresses"
+	"label.manage_addresses": "Manage addresses",
+	"label.say_hello_to": "Say Hello to...",
+	"label.show_your_support": "Show your support for the Future of Giving and unlock your unique Giveth flair by minting one of the first NFT PFP artworks inspired by Giveth."
 }
