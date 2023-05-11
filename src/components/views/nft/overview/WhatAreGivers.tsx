@@ -1,6 +1,7 @@
 import { Container, QuoteText } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { OvalVerticalGradient } from '../common.styles';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -77,6 +78,8 @@ const MobileImages = () => {
 };
 
 const WhatAreGivers = () => {
+	const { formatMessage } = useIntl();
+
 	return (
 		<SectionContainer
 			justifyContent='center'
@@ -88,10 +91,7 @@ const WhatAreGivers = () => {
 				<TextContainer>
 					<QuoteContainer>
 						<QuoteText size='small'>
-							The Givers are a limited collection of 1,250
-							artworks inspired by the Giveth Galaxy. Each NFT
-							tells a unique story of Giveth, in its own fun and
-							vibrant style.
+							{formatMessage({ id: 'label.the_givers_are' })}
 						</QuoteText>
 					</QuoteContainer>
 				</TextContainer>

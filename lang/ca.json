@@ -1245,5 +1245,18 @@
 	"label.use_as_profile_picture": "",
 	"label.recipient_addresses": "",
 	"label.add_new_address": "",
-	"label.manage_addresses": ""
+	"label.manage_addresses": "",
+	"label.say_hello_to": "",
+	"label.show_your_support": "",
+	"label.the_givers_are": "",
+	"label.get_your_giveth_name": "",
+	"label.givers_pfp_holders": "",
+	"label.domain_name_at": "",
+	"label.on_gnosis_and": "",
+	"label.already_a_giver": "",
+	"label.register_your": "",
+	"label.name": "",
+	"label.unlock_your": "",
+	"label.if_you_hold_a_giver": "",
+	"label.learn_more_about": ""
 }
