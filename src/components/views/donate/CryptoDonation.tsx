@@ -13,7 +13,9 @@ import {
 // @ts-ignore
 import tokenAbi from 'human-standard-token-abi';
 import { captureException } from '@sentry/nextjs';
-
+import { BigNumber } from '@ethersproject/bignumber';
+import { BigNumberish, utils } from 'ethers';
+import { formatUnits, parseUnits } from '@ethersproject/units';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
@@ -83,7 +85,8 @@ const CryptoDonation: FC = () => {
 	const noDonationSplit = Number(projectId!) === config.GIVETH_PROJECT_ID;
 
 	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
-	const [selectedTokenBalance, setSelectedTokenBalance] = useState<any>();
+	const [selectedTokenBalance, setSelectedTokenBalance] =
+		useState<BigNumberish>(BigNumber.from(0));
 	const [customInput, setCustomInput] = useState<any>();
 	const [amountTyped, setAmountTyped] = useState<number>();
 	const [inputBoxFocused, setInputBoxFocused] = useState(false);
@@ -110,6 +113,7 @@ const CryptoDonation: FC = () => {
 
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
+	const tokenDecimals = selectedToken?.decimals || 18;
 	const projectIsGivBackEligible = !!verified;
 	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
 
@@ -185,18 +189,16 @@ const CryptoDonation: FC = () => {
 	const pollToken = useCallback(() => {
 		clearPoll();
 		if (!selectedToken) {
-			return setSelectedTokenBalance(undefined);
+			return setSelectedTokenBalance(BigNumber.from(0));
 		}
 		// Native token balance is provided by the Web3Provider
 		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
-		if (
-			networkId &&
-			_selectedTokenSymbol ===
-				config.NETWORKS_CONFIG[
-					networkId
-				]?.nativeCurrency.symbol.toUpperCase()
-		) {
-			return setSelectedTokenBalance(balance);
+		const nativeCurrency =
+			config.NETWORKS_CONFIG[networkId!]?.nativeCurrency;
+		if (_selectedTokenSymbol === nativeCurrency.symbol.toUpperCase()) {
+			return setSelectedTokenBalance(
+				utils.parseUnits(balance || '0', nativeCurrency.decimals),
+			);
 		}
 		stopPolling.current = pollEvery(
 			() => ({
@@ -207,10 +209,10 @@ const CryptoDonation: FC = () => {
 							tokenAbi,
 							library,
 						);
-						return (
-							(await instance.balanceOf(account)) /
-							10 ** selectedToken.decimals!
+						const balance: BigNumber = await instance.balanceOf(
+							account,
 						);
+						return balance;
 					} catch (e) {
 						captureException(e, {
 							tags: {
@@ -220,12 +222,8 @@ const CryptoDonation: FC = () => {
 						return 0;
 					}
 				},
-				onResult: (_balance: number) => {
-					if (
-						_balance !== undefined &&
-						(!selectedTokenBalance ||
-							selectedTokenBalance !== _balance)
-					) {
+				onResult: (_balance: BigNumber) => {
+					if (_balance && !_balance.eq(selectedTokenBalance)) {
 						setSelectedTokenBalance(_balance);
 					}
 				},
@@ -273,7 +271,11 @@ const CryptoDonation: FC = () => {
 	};
 
 	const handleDonate = () => {
-		if (selectedTokenBalance < totalDonation) {
+		if (
+			parseUnits(String(totalDonation), tokenDecimals).gt(
+				selectedTokenBalance,
+			)
+		) {
 			return setShowInsufficientModal(true);
 		}
 		if (!isSignedIn) {
@@ -362,7 +364,10 @@ const CryptoDonation: FC = () => {
 				{selectedToken && (
 					<AvText>
 						{formatMessage({ id: 'label.available' })}:{' '}
-						{formatBalance(selectedTokenBalance)} {tokenSymbol}
+						{formatBalance(
+							formatUnits(selectedTokenBalance, tokenDecimals),
+						)}{' '}
+						{tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
