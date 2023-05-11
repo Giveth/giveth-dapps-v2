@@ -7,7 +7,7 @@ import { useWeb3React } from '@web3-react/core';
 
 import { captureException } from '@sentry/nextjs';
 import { Shadow } from '@/components/styled-components/Shadow';
-import ethIcon from '/public/images/tokens/eth.png';
+import ethIcon from '/public/images/tokens/eth.svg';
 import googleIcon from '/public/images/google_icon.svg';
 import twitterIcon from '/public/images/social-tt.svg';
 import facebookIcon from '/public/images/social-fb2.svg';

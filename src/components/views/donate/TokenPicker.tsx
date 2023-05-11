@@ -45,10 +45,10 @@ const ImageIcon = (props: { symbol: string }) => {
 	const { symbol } = props;
 	let image_path = '';
 	try {
-		require(`../../../../public/images/tokens/${symbol?.toLowerCase()}.png`);
-		image_path = `/images/tokens/${symbol?.toLowerCase()}.png`;
+		require(`../../../../public/images/tokens/${symbol?.toLowerCase()}.svg`);
+		image_path = `/images/tokens/${symbol?.toUpperCase()}.svg`;
 	} catch (err) {
-		image_path = '/images/tokens/eth.png'; //set default image path
+		image_path = '/images/tokens/eth.svg'; //set default image path
 	}
 	return <Image alt={symbol} src={image_path} width='24' height='24' />;
 };
