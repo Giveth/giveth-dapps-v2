@@ -1,6 +1,7 @@
 import { captureException } from '@sentry/nextjs';
 import config from '@/configuration';
 import { ITokenAllocation } from '@/types/subgraph';
+import type { SimpleNetworkConfig } from '@/types/config';
 
 export const fetchSubgraph = async (
 	query: string,
@@ -30,15 +31,11 @@ export const getHistory = async (
 	from?: number,
 	count?: number,
 ): Promise<ITokenAllocation[]> => {
-	let tokenDistroAddress = '';
-	let uri;
-	if (network === config.MAINNET_NETWORK_NUMBER) {
-		uri = config.MAINNET_CONFIG.subgraphAddress;
-		tokenDistroAddress = config.MAINNET_CONFIG.TOKEN_DISTRO_ADDRESS;
-	} else if (network === config.XDAI_NETWORK_NUMBER) {
-		uri = config.XDAI_CONFIG.subgraphAddress;
-		tokenDistroAddress = config.XDAI_CONFIG.TOKEN_DISTRO_ADDRESS;
-	} else {
+	let tokenDistroAddress = (
+		config.NETWORKS_CONFIG[network] as SimpleNetworkConfig
+	).TOKEN_DISTRO_ADDRESS;
+	let uri = config.NETWORKS_CONFIG[network].subgraphAddress;
+	if (!tokenDistroAddress || !uri) {
 		console.error('Network is not Defined!');
 		return [];
 	}
