@@ -140,7 +140,7 @@ const CryptoDonation: FC = () => {
 	useEffect(() => {
 		if (isEnabled) pollToken();
 		return () => clearPoll();
-	}, [selectedToken, isEnabled, account, networkId, balance]);
+	}, [selectedToken, isEnabled, account, balance]);
 
 	useEffect(() => {
 		if (!active) {
