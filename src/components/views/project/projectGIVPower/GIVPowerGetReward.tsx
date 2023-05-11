@@ -29,7 +29,7 @@ const GIVPowerGetReward = () => {
 						{formatMessage({
 							id: 'label.get_rewarded_with',
 						})}
-						{+(givbackFactor || 0) * 100}%
+						{(+(givbackFactor || 0) * 100).toFixed(2)}%
 						{formatMessage({
 							id: 'label.ofـyourـdonationـvalue',
 						})}
