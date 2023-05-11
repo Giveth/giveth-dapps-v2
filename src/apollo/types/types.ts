@@ -61,7 +61,6 @@ export interface IProject {
 	projectPower: IProjectPower;
 	verificationFormStatus?: EVerificationStatus;
 	projectFuturePower: IProjectPower;
-	givbackFactor?: number;
 }
 
 export interface IDonationProject extends IProject {
