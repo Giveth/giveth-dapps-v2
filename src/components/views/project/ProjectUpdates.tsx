@@ -175,6 +175,8 @@ const ProjectUpdates = () => {
 					},
 				);
 			}
+			setTitle('');
+			setNewUpdate(' ');
 			await addUpdateMutation({
 				variables: {
 					projectId: parseFloat(id!),
@@ -192,8 +194,6 @@ const ProjectUpdates = () => {
 					},
 				],
 			});
-			setTitle('');
-			setNewUpdate(' ');
 			fetchProjectBySlug();
 			return gToast(`Your update was created`, {
 				type: ToastType.SUCCESS,
