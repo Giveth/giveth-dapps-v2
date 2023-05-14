@@ -8,42 +8,62 @@ import {
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import ExternalLink from '@/components/ExternalLink';
 import { OvalHorizontalGradient, OvalVerticalGradient } from '../common.styles';
 
 const WhatElse = () => {
+	const { formatMessage } = useIntl();
 	return (
 		<WhatElseContainer>
 			<StyledContainer>
 				<Row>
 					<Col sm={12} lg={6}>
-						<HeaderTitle>Get your Giveth Name.</HeaderTitle>
+						<HeaderTitle>
+							{formatMessage({
+								id: 'label.get_your_giveth_name',
+							})}
+						</HeaderTitle>
 						<Lead>
-							Givers PFP Holders will be able to claim their own
-							unique <code>.giveth</code> domain name at a 50%
-							discount, thanks to Punk Domains. Reserve your name
-							(e.g. <code>griff.giveth</code>) on Gnosis Chain and
-							on top of that, 80% of the registration fees go to
-							the Giveth Matching Pool!
+							{formatMessage({
+								id: 'label.givers_pfp_holders',
+							})}
+							<code>.giveth</code>{' '}
+							{formatMessage({
+								id: 'label.domain_name_at',
+							})}{' '}
+							<code>griff.giveth</code>){' '}
+							{formatMessage({
+								id: 'label.on_gnosis_and',
+							})}
 							<p>
-								Already own a Giver?{' '}
+								{formatMessage({
+									id: 'label.already_a_giver',
+								})}{' '}
 								<DocLink href='https://giveth.punk.domains/#/'>
-									Register your <code>.giveth</code> name.
+									{formatMessage({
+										id: 'label.register_your',
+									})}{' '}
+									<code>.giveth</code>{' '}
+									{formatMessage({ id: 'label.name' })}
 								</DocLink>
 							</p>
 						</Lead>
 					</Col>
 					<Col sm={12} lg={6}>
-						<HeaderTitle>Unlock your Giveth Flair.</HeaderTitle>
+						<HeaderTitle>
+							{formatMessage({
+								id: 'label.unlock_your',
+							})}
+						</HeaderTitle>
 						<Lead>
-							If you hold a Giver, you will soon be able to set it
-							as your profile picture on the Giveth.io DApp. With
-							your Giver equipped, whatever you do on on Giveth,
-							boosting with GIVpower, donating or founding a
-							project, you will be shown prominently on the
-							platform along with your unique Giver NFT badge.{' '}
+							{formatMessage({
+								id: 'label.if_you_hold_a_giver',
+							})}{' '}
 							<DocLink href='https://docs.giveth.io/dapps/giverspfp/#benefits'>
-								Learn more about the benefits.
+								{formatMessage({
+									id: 'label.learn_more_about',
+								})}
 							</DocLink>
 						</Lead>
 					</Col>
