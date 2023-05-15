@@ -1056,7 +1056,7 @@
 	"label.accepts_giv": "Aceptan GIV",
 	"label.boosted_with_giv_power": "Boosted con GIVpower",
 	"label.from_giving_block": "De Giving Block",
-	"label.accepts_funds_on_gnosis": "Aceptan financiación en Gnosis",
+	"label.accepts_funds_on_chain": "Aceptan financiación en {chainName}",
 	"label.rank": "Clasificación",
 	"label.newest": "Más nuevo",
 	"label.oldest": "Más viejo",
