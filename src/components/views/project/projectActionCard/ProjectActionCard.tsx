@@ -2,7 +2,7 @@ import { neutralColors } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { DonateSection } from './DonationSection';
-import { LikeAndShareSection } from './LikeAndShareSection';
+import { ProjectPublicActions } from './ProjectPublicActions';
 import { ProjectStats } from './ProjectStats';
 import { AdminActions } from './AdminActions';
 import { Flex } from '@/components/styled-components/Flex';
@@ -34,7 +34,7 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({
 			) : (
 				<>
 					<DonateSection />
-					<LikeAndShareSection />
+					<ProjectPublicActions />
 				</>
 			)}
 		</ProjectActionCardWrapper>

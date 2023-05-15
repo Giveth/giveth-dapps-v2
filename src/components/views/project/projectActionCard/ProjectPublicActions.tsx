@@ -26,7 +26,7 @@ import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { slugToProjectDonate } from '@/lib/routeCreators';
 
-export const LikeAndShareSection = () => {
+export const ProjectPublicActions = () => {
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const { projectData, isActive } = useProjectContext();
 	const project = projectData!;
