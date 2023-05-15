@@ -1,7 +1,6 @@
 import {
 	Subline,
 	H3,
-	ButtonLink,
 	H4,
 	neutralColors,
 	Caption,
@@ -10,17 +9,15 @@ import {
 	IconChevronRight16,
 	brandColors,
 } from '@giveth/ui-design-system';
-import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { slugToProjectDonate } from '@/lib/routeCreators';
 import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
 
 export const DonateSection = () => {
 	const { formatMessage, locale } = useIntl();
-	const { projectData, isActive, totalDonationsCount } = useProjectContext();
-	const { slug, totalDonations } = projectData || {};
+	const { projectData, totalDonationsCount } = useProjectContext();
+	const { totalDonations } = projectData || {};
 	return (
 		<DonationSectionWrapper flexDirection='column'>
 			{totalDonations && totalDonations !== 0 ? (
@@ -70,12 +67,6 @@ export const DonateSection = () => {
 					</LearnLink>
 				</a>
 			</DonateDescription>
-			<Link href={slugToProjectDonate(slug || '')}>
-				<ButtonLink
-					label={formatMessage({ id: 'label.donate' })}
-					disabled={!isActive}
-				/>
-			</Link>
 		</DonationSectionWrapper>
 	);
 };
@@ -98,7 +89,6 @@ const Description = styled(Caption)`
 `;
 
 const DonationSectionWrapper = styled(Flex)`
-	height: 206px;
 	justify-content: space-between;
 `;
 

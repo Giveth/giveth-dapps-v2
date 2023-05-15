@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
 	Button,
+	ButtonLink,
 	IconHeartFilled16,
 	IconHeartOutline16,
 	IconShare16,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
+import Link from 'next/link';
 import ShareModal from '@/components/modals/ShareModal';
 import { EContentType } from '@/lib/constants/shareContent';
 import { useProjectContext } from '@/context/project.context';
@@ -22,6 +24,7 @@ import {
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
+import { slugToProjectDonate } from '@/lib/routeCreators';
 
 export const LikeAndShareSection = () => {
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -129,7 +132,14 @@ export const LikeAndShareSection = () => {
 	};
 
 	return (
-		<>
+		<Flex flexDirection='column' gap='16px'>
+			<Link href={slugToProjectDonate(slug || '')}>
+				<ButtonLink
+					label={formatMessage({ id: 'label.donate' })}
+					disabled={!isActive}
+					linkType='primary'
+				/>
+			</Link>
 			<BadgeWrapper gap='8px'>
 				<StyledButton
 					label={formatMessage({ id: 'label.share' })}
@@ -161,12 +171,11 @@ export const LikeAndShareSection = () => {
 					projectHref={slug}
 				/>
 			)}
-		</>
+		</Flex>
 	);
 };
 
 const BadgeWrapper = styled(Flex)`
-	margin: 16px 0;
 	justify-content: space-between;
 `;
 
