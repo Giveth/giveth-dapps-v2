@@ -3,7 +3,6 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { DonateSection } from './DonationSection';
 import { LikeAndShareSection } from './LikeAndShareSection';
-import { GIVPowerSection } from './GIVPowerSection';
 import { ProjectStats } from './ProjectStats';
 import { AdminActions } from './AdminActions';
 import { Flex } from '@/components/styled-components/Flex';
@@ -36,7 +35,6 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({
 				<>
 					<DonateSection />
 					<LikeAndShareSection />
-					<GIVPowerSection />
 				</>
 			)}
 		</ProjectActionCardWrapper>
