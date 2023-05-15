@@ -4,6 +4,7 @@ import {
 	ButtonLink,
 	H4,
 	neutralColors,
+	Caption,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
@@ -29,9 +30,14 @@ export const DonateSection = () => {
 						${totalDonations.toLocaleString(locale)}
 					</Amount>
 					<Description>
-						{formatMessage({
-							id: 'label.amount_raised',
-						})}
+						{formatMessage(
+							{
+								id: 'label.raised_from_contributors',
+							},
+							{
+								count: 1,
+							},
+						)}
 					</Description>
 				</Flex>
 			) : (
@@ -57,7 +63,9 @@ const Amount = styled(H3)`
 	margin-bottom: 4px;
 `;
 
-const Description = styled(H4)``;
+const Description = styled(Caption)`
+	margin-bottom: 24px;
+`;
 
 const DonationSectionWrapper = styled(Flex)`
 	height: 206px;
