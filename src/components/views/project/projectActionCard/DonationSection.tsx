@@ -20,14 +20,19 @@ export const DonateSection = () => {
 		<DonationSectionWrapper flexDirection='column'>
 			{totalDonations && totalDonations !== 0 ? (
 				<Flex gap='8px' flexDirection='column'>
-					<Subline>
+					<Title>
 						{formatMessage({
-							id: 'label.all_time_funding',
+							id: 'label.amount_raised',
 						})}
-					</Subline>
-					<H3 weight={700}>
+					</Title>
+					<Amount weight={700}>
 						${totalDonations.toLocaleString(locale)}
-					</H3>
+					</Amount>
+					<Description>
+						{formatMessage({
+							id: 'label.amount_raised',
+						})}
+					</Description>
 				</Flex>
 			) : (
 				<NoFund weight={700}>
@@ -43,6 +48,16 @@ export const DonateSection = () => {
 		</DonationSectionWrapper>
 	);
 };
+
+const Title = styled(Subline)`
+	margin-bottom: 8px;
+`;
+
+const Amount = styled(H3)`
+	margin-bottom: 4px;
+`;
+
+const Description = styled(H4)``;
 
 const DonationSectionWrapper = styled(Flex)`
 	height: 206px;
