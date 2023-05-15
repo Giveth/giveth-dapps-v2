@@ -50,8 +50,32 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 				value: EProjectsFilter.GIVING_BLOCK,
 			},
 			{
-				label: formatMessage({ id: 'label.accepts_funds_on_gnosis' }),
+				label: formatMessage(
+					{ id: 'label.accepts_funds_on_chain' },
+					{ chainName: 'Gnosis' },
+				),
 				value: EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
+			},
+			{
+				label: formatMessage(
+					{ id: 'label.accepts_funds_on_chain' },
+					{ chainName: 'Polygon' },
+				),
+				value: EProjectsFilter.ACCEPT_FUND_ON_POLYGON,
+			},
+			{
+				label: formatMessage(
+					{ id: 'label.accepts_funds_on_chain' },
+					{ chainName: 'Celo' },
+				),
+				value: EProjectsFilter.ACCEPT_FUND_ON_CELO,
+			},
+			{
+				label: formatMessage(
+					{ id: 'label.accepts_funds_on_chain' },
+					{ chainName: 'Optimism' },
+				),
+				value: EProjectsFilter.ACCEPT_FUND_ON_OPTIMISM,
 			},
 		];
 

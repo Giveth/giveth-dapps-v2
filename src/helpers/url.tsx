@@ -30,22 +30,34 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 				case ECampaignFilterField.GivingBlock:
 					params.append('filter', EProjectsFilter.GIVING_BLOCK);
 					break;
-				case ECampaignFilterField.AcceptFundOnGnosis:
-					params.append(
-						'filter',
-						EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
-					);
-					break;
-				case ECampaignFilterField.AcceptFundOnGnosis:
-					params.append(
-						'filter',
-						EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
-					);
-					break;
 				case ECampaignFilterField.BoostedWithGivPower:
 					params.append(
 						'filter',
 						EProjectsFilter.BOOSTED_WITH_GIVPOWER,
+					);
+					break;
+				case ECampaignFilterField.AcceptFundOnGnosis:
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
+					);
+					break;
+				case ECampaignFilterField.AcceptFundOnPolygon:
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_POLYGON,
+					);
+					break;
+				case ECampaignFilterField.AcceptFundOnCelo:
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_CELO,
+					);
+					break;
+				case ECampaignFilterField.AcceptFundOnOptimism:
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_OPTIMISM,
 					);
 					break;
 				default:

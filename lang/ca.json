@@ -976,7 +976,7 @@
 	"label.if_you_already_bridged_your_giv_please_switch_network": "Si ja heu transferit el vostre GIV, si us plau canvieu de xarxa per fer staking del GIVpower!",
 	"label.boosted_with_giv_power": "Boostejat amb GIVpower",
 	"label.from_giving_block": "De Giving Block",
-	"label.accepts_funds_on_gnosis": "Aceptan finançament en Gnosis",
+	"label.accepts_funds_on_chain": "Aceptan finançament en {chainName}",
 	"label.rank": "Classificació",
 	"label.newest": "Més nou",
 	"label.oldest": "Més vell",

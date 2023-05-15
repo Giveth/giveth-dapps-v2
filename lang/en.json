@@ -1048,7 +1048,7 @@
 	"label.accepts_giv": "Accepts GIV",
 	"label.boosted_with_giv_power": "Boosted with GIVpower",
 	"label.from_giving_block": "From Giving Block",
-	"label.accepts_funds_on_gnosis": "Accepts Funds on Gnosis",
+	"label.accepts_funds_on_chain": "Accepts Funds on {chainName}",
 	"label.rank": "Rank",
 	"label.newest": "Newest",
 	"label.oldest": "Oldest",
