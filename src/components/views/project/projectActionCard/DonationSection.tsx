@@ -5,6 +5,10 @@ import {
 	H4,
 	neutralColors,
 	Caption,
+	B,
+	P,
+	IconChevronRight16,
+	brandColors,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
@@ -45,10 +49,27 @@ export const DonateSection = () => {
 					</Description>
 				</DonateInfo>
 			) : (
-				<NoFund weight={700}>
-					{formatMessage({ id: 'label.donate_first_lead_the_way' })}
-				</NoFund>
+				<DonateInfo>
+					<NoFund weight={700}>
+						{formatMessage({
+							id: 'label.donate_first_lead_the_way',
+						})}
+					</NoFund>
+				</DonateInfo>
 			)}
+			<DonateDescription flexDirection='column' gap='8px'>
+				<B>100% to the project. Always.</B>
+				<P>
+					Every donation is peer-to-peer, with no fees and no
+					middlemen.
+				</P>
+				<a href='/' target='_blank' referrerPolicy='no-referrer'>
+					<LearnLink alignItems='center' gap='2px'>
+						<Subline>Learn about our zero-fee policy</Subline>
+						<IconChevronRight16 />
+					</LearnLink>
+				</a>
+			</DonateDescription>
 			<Link href={slugToProjectDonate(slug || '')}>
 				<ButtonLink
 					label={formatMessage({ id: 'label.donate' })}
@@ -87,4 +108,18 @@ const DonateInfo = styled.div`
 
 const NoFund = styled(H4)`
 	color: ${neutralColors.gray[800]};
+	margin-top: 16px;
+`;
+
+const DonateDescription = styled(Flex)`
+	padding: 8px 16px;
+	border: 1px solid ${neutralColors.gray[300]};
+	border-radius: 16px;
+`;
+
+const LearnLink = styled(Flex)`
+	color: ${brandColors.pinky[500]};
+	&:hover {
+		color: ${brandColors.pinky[700]};
+	}
 `;
