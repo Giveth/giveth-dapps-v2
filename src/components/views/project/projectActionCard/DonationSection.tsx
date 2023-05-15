@@ -15,7 +15,7 @@ import { Flex } from '@/components/styled-components/Flex';
 
 export const DonateSection = () => {
 	const { formatMessage, locale } = useIntl();
-	const { projectData, isActive } = useProjectContext();
+	const { projectData, isActive, totalDonationsCount } = useProjectContext();
 	const { slug, totalDonations } = projectData || {};
 	return (
 		<DonationSectionWrapper flexDirection='column'>
@@ -33,13 +33,13 @@ export const DonateSection = () => {
 						{formatMessage({
 							id: 'label.raised_from',
 						})}
-						<Caption medium>{totalDonations}</Caption>
+						<Caption medium>{totalDonationsCount}</Caption>
 						{formatMessage(
 							{
 								id: 'label.contributors',
 							},
 							{
-								count: totalDonations,
+								count: totalDonationsCount,
 							},
 						)}
 					</Description>
