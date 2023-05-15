@@ -73,6 +73,9 @@ export enum EProjectsFilter {
 	BOOSTED_WITH_GIVPOWER = 'BoostedWithGivPower',
 	GIVING_BLOCK = 'GivingBlock',
 	ACCEPT_FUND_ON_GNOSIS = 'AcceptFundOnGnosis',
+	ACCEPT_FUND_ON_POLYGON = 'AcceptFundOnPolygon',
+	ACCEPT_FUND_ON_CELO = 'AcceptFundOnCelo',
+	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
 }
 
 export enum ECampaignType {
@@ -85,9 +88,12 @@ export enum ECampaignType {
 export enum ECampaignFilterField {
 	Verified = 'verified',
 	AcceptGiv = 'givingBlocksId',
-	AcceptFundOnGnosis = 'acceptFundOnGnosis',
 	GivingBlock = 'fromGivingBlock',
 	BoostedWithGivPower = 'boostedWithGivPower',
+	AcceptFundOnGnosis = 'acceptFundOnGnosis',
+	AcceptFundOnPolygon = 'acceptFundOnPolygon',
+	AcceptFundOnCelo = 'acceptFundOnCelo',
+	AcceptFundOnOptimism = 'acceptFundOnOptimism',
 }
 
 export interface ICampaign {
