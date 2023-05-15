@@ -12,6 +12,7 @@ import {
 	IconGIVBack,
 	IconRocketInSpace16,
 	IconVerifiedBadge16,
+	H5,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 
@@ -111,15 +112,23 @@ const ProjectCard = (props: IProjectCard) => {
 				/>
 				<Link href={slugToProjectView(slug)}>
 					<Description>{descriptionSummary}</Description>
-					<PaddedRow alignItems='center' gap='4px'>
-						<PriceText>
-							${Math.round(totalDonations as number)}
-						</PriceText>
-						<LightSubline>
-							{' '}
-							{formatMessage({ id: 'label.raised_two' })}
-						</LightSubline>
-					</PaddedRow>
+					<Flex justifyContent='space-between' alignItems='center'>
+						<PaddedRow flexDirection='column' gap='4px'>
+							<PriceText>
+								${Math.round(totalDonations as number)}
+							</PriceText>
+							<LightSubline>
+								{' '}
+								{formatMessage({ id: 'label.raised_two' })}
+							</LightSubline>
+						</PaddedRow>
+						<PaddedRow flexDirection='column' gap='4px'>
+							<EstimatedMatchingPrice>
+								+ $7,200
+							</EstimatedMatchingPrice>
+							<LightSubline> Estimated matching</LightSubline>
+						</PaddedRow>
+					</Flex>
 				</Link>
 				{verified && (
 					<Link href={slugToProjectView(slug)}>
@@ -194,9 +203,10 @@ const CustomizedDonateButton = styled(DonateButton)<{ isHover: boolean }>`
 	}
 `;
 
-const PriceText = styled(B)`
+const PriceText = styled(H5)`
 	display: inline;
-	color: ${neutralColors.gray[800]};
+	color: ${neutralColors.gray[900]};
+	font-weight: 700;
 `;
 
 const LightSubline = styled(Subline)`
@@ -263,7 +273,7 @@ const CardBody = styled.div<ICardBody>`
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: 192px;
+	top: 146px;
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
 	border-radius: ${props =>
@@ -271,10 +281,10 @@ const CardBody = styled.div<ICardBody>`
 	${mediaQueries.laptopS} {
 		top: ${props =>
 			props.isHover == ECardBodyHover.FULL
-				? '109px'
+				? '80px'
 				: props.isHover == ECardBodyHover.HALF
-				? '150px'
-				: '186px'};
+				? '124px'
+				: '158px'};
 	}
 `;
 
@@ -341,6 +351,10 @@ const ActionButtons = styled(PaddedRow)`
 	margin: 25px 0;
 	gap: 16px;
 	flex-direction: column;
+`;
+
+const EstimatedMatchingPrice = styled(H5)`
+	color: ${semanticColors.jade[500]};
 `;
 
 export default ProjectCard;
