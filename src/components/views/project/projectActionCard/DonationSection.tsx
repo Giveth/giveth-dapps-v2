@@ -20,7 +20,7 @@ export const DonateSection = () => {
 	return (
 		<DonationSectionWrapper flexDirection='column'>
 			{totalDonations && totalDonations !== 0 ? (
-				<Flex gap='8px' flexDirection='column'>
+				<DonateInfo>
 					<Title>
 						{formatMessage({
 							id: 'label.amount_raised',
@@ -43,7 +43,7 @@ export const DonateSection = () => {
 							},
 						)}
 					</Description>
-				</Flex>
+				</DonateInfo>
 			) : (
 				<NoFund weight={700}>
 					{formatMessage({ id: 'label.donate_first_lead_the_way' })}
@@ -79,6 +79,10 @@ const Description = styled(Caption)`
 const DonationSectionWrapper = styled(Flex)`
 	height: 206px;
 	justify-content: space-between;
+`;
+
+const DonateInfo = styled.div`
+	height: 130px;
 `;
 
 const NoFund = styled(H4)`
