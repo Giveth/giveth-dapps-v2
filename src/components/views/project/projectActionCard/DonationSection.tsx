@@ -30,12 +30,16 @@ export const DonateSection = () => {
 						${totalDonations.toLocaleString(locale)}
 					</Amount>
 					<Description>
+						{formatMessage({
+							id: 'label.raised_from',
+						})}
+						<Caption medium>{totalDonations}</Caption>
 						{formatMessage(
 							{
-								id: 'label.raised_from_contributors',
+								id: 'label.contributors',
 							},
 							{
-								count: 1,
+								count: totalDonations,
 							},
 						)}
 					</Description>
@@ -64,7 +68,12 @@ const Amount = styled(H3)`
 `;
 
 const Description = styled(Caption)`
+	color: ${neutralColors.gray[700]};
 	margin-bottom: 24px;
+	& > div {
+		color: ${neutralColors.gray[900]};
+		display: inline;
+	}
 `;
 
 const DonationSectionWrapper = styled(Flex)`

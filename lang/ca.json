@@ -1266,5 +1266,6 @@
 	"label.if_you_hold_a_giver": "",
 	"label.learn_more_about": "",
 	"label.amount_raised": "",
-	"label.raised_from_contributors": ""
+	"label.raised_from": "",
+	"label.contributors": ""
 }

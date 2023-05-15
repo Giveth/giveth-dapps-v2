@@ -1268,5 +1268,6 @@
 	"label.if_you_hold_a_giver": "If you hold a Giver, you will soon be able to set it as your profile picture on the Giveth.io DApp. With your Giver equipped, whatever you do on on Giveth, boosting with GIVpower, donating or founding a project, you will be shown prominently on the platform along with your unique Giver NFT badge.",
 	"label.learn_more_about": "Learn more about the benefits.",
 	"label.amount_raised": "Amount raised",
-	"label.raised_from_contributors": "Raised from {count, plural, one {{count} contributor} other {{count} contributors} }"
+	"label.raised_from": "Raised from ",
+	"label.contributors": "{count, plural, one { contributor} other { contributors} }"
 }
