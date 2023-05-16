@@ -17,6 +17,30 @@ export const DONATION_CORE_FIELDS = gql`
 	}
 `;
 
+export const FETCH_PROJECT_DONATIONS_COUNT = gql`
+	query DonationsByProjectId(
+		$take: Int
+		$skip: Int
+		$traceable: Boolean
+		$projectId: Int!
+		$searchTerm: String
+		$orderBy: SortBy
+		$status: String
+	) {
+		donationsByProjectId(
+			take: $take
+			skip: $skip
+			traceable: $traceable
+			projectId: $projectId
+			searchTerm: $searchTerm
+			orderBy: $orderBy
+			status: $status
+		) {
+			totalCount
+		}
+	}
+`;
+
 export const FETCH_PROJECT_DONATIONS = gql`
 	${DONATION_CORE_FIELDS}
 	query DonationsByProjectId(

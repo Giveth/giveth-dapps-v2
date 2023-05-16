@@ -16,7 +16,6 @@ import { EProjectPageTabs } from './ProjectIndex';
 interface IProjectTabs {
 	activeTab: number;
 	slug: string;
-	totalDonations?: number;
 }
 
 const badgeCount = (count?: number) => {
@@ -24,8 +23,8 @@ const badgeCount = (count?: number) => {
 };
 
 const ProjectTabs = (props: IProjectTabs) => {
-	const { activeTab, slug, totalDonations } = props;
-	const { projectData } = useProjectContext();
+	const { activeTab, slug } = props;
+	const { projectData, totalDonationsCount } = useProjectContext();
 	const { totalProjectUpdates } = projectData || {};
 	const { formatMessage } = useIntl();
 	const { boostersData } = useProjectContext();
@@ -39,7 +38,7 @@ const ProjectTabs = (props: IProjectTabs) => {
 		},
 		{
 			title: 'label.donations',
-			badge: totalDonations,
+			badge: totalDonationsCount,
 			query: EProjectPageTabs.DONATIONS,
 		},
 	];

@@ -20,10 +20,17 @@ import { FETCH_USERS_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { IPowerBoosting, IProject } from '@/apollo/types/types';
 import { formatWeiHelper } from '@/helpers/number';
 import { backendGQLRequest, gqlRequest } from '@/helpers/requests';
-import { showToastError } from '@/lib/helpers';
-import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { compareAddresses, showToastError } from '@/lib/helpers';
+import {
+	EDirection,
+	EDonationStatus,
+	EProjectStatus,
+	ESortby,
+} from '@/apollo/types/gqlEnums';
 import { useAppSelector } from '@/features/hooks';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
+import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
+import { FETCH_PROJECT_DONATIONS_COUNT } from '@/apollo/gql/gqlDonations';
 
 interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
@@ -43,6 +50,8 @@ interface IProjectContext {
 	projectData?: IProject;
 	isActive: boolean;
 	isDraft: boolean;
+	isAdmin: boolean;
+	totalDonationsCount: number;
 }
 
 const ProjectContext = createContext<IProjectContext>({
@@ -54,6 +63,8 @@ const ProjectContext = createContext<IProjectContext>({
 	projectData: undefined,
 	isActive: true,
 	isDraft: false,
+	isAdmin: false,
+	totalDonationsCount: 0,
 });
 ProjectContext.displayName = 'ProjectContext';
 
@@ -64,6 +75,7 @@ export const ProjectProvider = ({
 	children: ReactNode;
 	project?: IProject;
 }) => {
+	const [totalDonationsCount, setTotalDonationsCount] = useState(0);
 	const [boostersData, setBoostersData] = useState<IBoostersData>();
 	const [isBoostingsLoading, setIsBoostingsLoading] = useState(false);
 	const [projectedRank, setProjectedRank] = useState<
@@ -75,6 +87,41 @@ export const ProjectProvider = ({
 	const user = useAppSelector(state => state.user.userData);
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
+
+	const isAdmin = compareAddresses(
+		projectData?.adminUser?.walletAddress,
+		user?.walletAddress,
+	);
+
+	useEffect(() => {
+		if (!projectData?.id) return;
+		client
+			.query({
+				query: FETCH_PROJECT_DONATIONS_COUNT,
+				variables: {
+					projectId: parseInt(projectData.id),
+					skip: 0,
+					take: 1,
+					status: isAdmin ? null : EDonationStatus.VERIFIED,
+					orderBy: {
+						field: ESortby.CREATIONDATE,
+						direction: EDirection.DESC,
+					},
+				},
+			})
+			.then((res: IDonationsByProjectIdGQL) => {
+				const donationsByProjectId = res.data.donationsByProjectId;
+				setTotalDonationsCount(donationsByProjectId.totalCount);
+			})
+			.catch((error: unknown) => {
+				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'fetchProjectDonationsCount',
+					},
+				});
+			});
+	}, [projectData?.id]);
 
 	const fetchProjectBoosters = useCallback(
 		async (projectId: number, status?: EProjectStatus) => {
@@ -238,6 +285,8 @@ export const ProjectProvider = ({
 				projectData,
 				isActive,
 				isDraft,
+				isAdmin,
+				totalDonationsCount,
 			}}
 		>
 			{children}
