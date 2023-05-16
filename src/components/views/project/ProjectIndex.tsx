@@ -9,24 +9,16 @@ import {
 	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { captureException } from '@sentry/nextjs';
 import { Col, Row } from '@giveth/ui-design-system';
 
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
-import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
-import { client } from '@/apollo/apolloClient';
-import { IDonation } from '@/apollo/types/types';
-import { EDirection, EDonationStatus, ESortby } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
-import {
-	IDonationsByProjectIdGQL,
-	IProjectBySlug,
-} from '@/apollo/types/gqlTypes';
+import { IProjectBySlug } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
-import { compareAddresses, isSSRMode, showToastError } from '@/lib/helpers';
+import { isSSRMode } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
@@ -52,12 +44,8 @@ export enum EProjectPageTabs {
 	GIVPOWER = 'givpower',
 }
 
-const donationsPerPage = 10;
-
 const ProjectIndex: FC<IProjectBySlug> = () => {
 	const [activeTab, setActiveTab] = useState(0);
-	const [donations, setDonations] = useState<IDonation[]>([]);
-	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
 	const user = useAppSelector(state => state.user.userData);
 	const { fetchProjectBoosters, projectData, isActive, isDraft } =
@@ -86,49 +74,10 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		}
 	}, [router.query.tab]);
 
-	const {
-		adminUser,
-		description = '',
-		title,
-		id = '',
-		projectPower,
-		projectFuturePower,
-	} = projectData || {};
-
-	const isAdmin = compareAddresses(
-		adminUser?.walletAddress,
-		user?.walletAddress,
-	);
+	const { description = '', title, id = '' } = projectData || {};
 
 	useEffect(() => {
 		if (!id) return;
-		client
-			.query({
-				query: FETCH_PROJECT_DONATIONS,
-				variables: {
-					projectId: parseInt(id),
-					skip: 0,
-					take: donationsPerPage,
-					status: isAdmin ? null : EDonationStatus.VERIFIED,
-					orderBy: {
-						field: ESortby.CREATIONDATE,
-						direction: EDirection.DESC,
-					},
-				},
-			})
-			.then((res: IDonationsByProjectIdGQL) => {
-				const donationsByProjectId = res.data.donationsByProjectId;
-				setDonations(donationsByProjectId.donations);
-				setTotalDonations(donationsByProjectId.totalCount);
-			})
-			.catch((error: unknown) => {
-				showToastError(error);
-				captureException(error, {
-					tags: {
-						section: 'fetchProjectDonation',
-					},
-				});
-			});
 		fetchProjectBoosters(+id, projectData?.status.name);
 	}, [id]);
 
@@ -158,7 +107,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						<ProjectHeader />
 					</Col>
 					<Col lg={3}>
-						<ProjectActionCard isAdmin={isAdmin} />
+						<ProjectActionCard />
 					</Col>
 					{isDraft && (
 						<DraftIndicator>
@@ -171,11 +120,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 				</Row>
 			</HeadContainer>
 			{projectData && !isDraft && (
-				<ProjectTabs
-					activeTab={activeTab}
-					slug={slug}
-					totalDonations={totalDonations}
-				/>
+				<ProjectTabs activeTab={activeTab} slug={slug} />
 			)}
 			<BodyWrapper>
 				<Container>
@@ -195,21 +140,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						</>
 					)}
 					{activeTab === 1 && <ProjectUpdates />}
-					{activeTab === 2 && (
-						<ProjectDonations
-							donationsByProjectId={{
-								donations,
-								totalCount: totalDonations,
-							}}
-						/>
-					)}
-					{activeTab === 3 && (
-						<ProjectGIVPowerIndex
-							projectPower={projectPower}
-							projectFuturePower={projectFuturePower}
-							isAdmin={isAdmin}
-						/>
-					)}
+					{activeTab === 2 && <ProjectDonations />}
+					{activeTab === 3 && <ProjectGIVPowerIndex />}
 				</Container>
 				<SimilarProjects slug={slug} />
 			</BodyWrapper>
