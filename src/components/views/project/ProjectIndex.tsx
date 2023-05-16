@@ -103,10 +103,10 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 			<HeadContainer>
 				<ProjectBadges />
 				<Row>
-					<Col lg={9}>
+					<Col xs={12} md={8} lg={9}>
 						<ProjectHeader />
 					</Col>
-					<Col lg={3}>
+					<Col xs={12} md={4} lg={3}>
 						<ProjectActionCard />
 					</Col>
 					{isDraft && (

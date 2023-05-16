@@ -6,6 +6,7 @@ import {
 	IconHeartFilled16,
 	IconHeartOutline16,
 	IconShare16,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
@@ -132,9 +133,9 @@ export const ProjectPublicActions = () => {
 	};
 
 	return (
-		<Flex flexDirection='column' gap='16px'>
+		<ProjectPublicActionsWrapper gap='16px'>
 			<Link href={slugToProjectDonate(slug || '')}>
-				<ButtonLink
+				<DonateButton
 					label={formatMessage({ id: 'label.donate' })}
 					disabled={!isActive}
 					linkType='primary'
@@ -171,9 +172,24 @@ export const ProjectPublicActions = () => {
 					projectHref={slug}
 				/>
 			)}
-		</Flex>
+		</ProjectPublicActionsWrapper>
 	);
 };
+
+const ProjectPublicActionsWrapper = styled(Flex)`
+	flex-direction: column;
+	${mediaQueries.tablet} {
+		flex-direction: row-reverse;
+		justify-content: space-between;
+	}
+	${mediaQueries.laptopS} {
+		flex-direction: column;
+	}
+`;
+
+const DonateButton = styled(ButtonLink)`
+	min-width: 220px;
+`;
 
 const BadgeWrapper = styled(Flex)`
 	justify-content: space-between;
