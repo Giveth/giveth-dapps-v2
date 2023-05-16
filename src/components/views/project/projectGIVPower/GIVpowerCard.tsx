@@ -7,6 +7,7 @@ import {
 	Lead,
 	P,
 	Subline,
+	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import React from 'react';
@@ -17,7 +18,6 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { CurrentRank } from '@/components/GIVpowerRank';
 import { useProjectContext } from '@/context/project.context';
 import { NextRank } from '@/components/GIVpowerRank';
-import { BoostTooltip } from '../projectActionCard/GIVPowerSection';
 
 export const GIVpowerCard = () => {
 	const { formatMessage } = useIntl();
@@ -111,4 +111,11 @@ const Separator = styled.div`
 
 const Desc = styled(B)`
 	text-align: center;
+`;
+
+const BoostTooltip = styled(Subline)`
+	color: ${neutralColors.gray[100]};
+	${mediaQueries.tablet} {
+		width: 260px;
+	}
 `;

@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { Col, Row } from '@giveth/ui-design-system';
 import GIVPowerTable from './GIVPowerTable';
 import NoBoost from '@/components/views/project/projectGIVPower/NoBoost';
-import { IPowerBoosting, IProjectPower } from '@/apollo/types/types';
+import { IPowerBoosting } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import { Flex } from '@/components/styled-components/Flex';
 import LoadingAnimation from '@/animations/loading_giv.json';
@@ -20,19 +20,11 @@ export interface IPowerBoostingWithUserGIVpower
 		givpowerBalance: string;
 	};
 }
-interface ProjectGIVPowerIndexProps {
-	projectPower?: IProjectPower;
-	projectFuturePower?: IProjectPower;
-	isAdmin: boolean;
-}
+interface IProjectGIVPowerIndexProps {}
 
 const itemPerPage = 10;
 
-const ProjectGIVPowerIndex = ({
-	projectPower,
-	projectFuturePower,
-	isAdmin,
-}: ProjectGIVPowerIndexProps) => {
+const ProjectGIVPowerIndex: FC<IProjectGIVPowerIndexProps> = () => {
 	const [page, setPage] = useState(0);
 
 	const { isBoostingsLoading, boostersData } = useProjectContext();
@@ -73,7 +65,7 @@ const ProjectGIVPowerIndex = ({
 			</Row>
 		</>
 	) : (
-		<NoBoost isAdmin={isAdmin} />
+		<NoBoost />
 	);
 };
 

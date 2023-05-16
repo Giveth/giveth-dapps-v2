@@ -1,21 +1,64 @@
 import styled from 'styled-components';
 import { mediaQueries } from '@giveth/ui-design-system';
-import { IDonationsByProjectId } from '@/apollo/types/gqlTypes';
+import { captureException } from '@sentry/nextjs';
+import { useEffect, useState } from 'react';
 import ProjectTotalFundCard from './ProjectTotalFundCard';
 import ProjectDonationTable from './ProjectDonationTable';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
+import { EDonationStatus, ESortby, EDirection } from '@/apollo/types/gqlEnums';
+import {
+	IDonationsByProjectId,
+	IDonationsByProjectIdGQL,
+} from '@/apollo/types/gqlTypes';
+import { showToastError } from '@/lib/helpers';
+import { useProjectContext } from '@/context/project.context';
 
-const ProjectDonationsIndex = (props: {
-	donationsByProjectId: IDonationsByProjectId;
-}) => {
-	const { donationsByProjectId } = props;
-	const { totalCount } = donationsByProjectId || 0;
+const donationsPerPage = 10;
+
+const ProjectDonationsIndex = () => {
+	const [donationInfo, setDonationInfo] = useState<IDonationsByProjectId>();
+
+	const { projectData, isAdmin } = useProjectContext();
+	const { id = '' } = projectData || {};
+
+	useEffect(() => {
+		if (!id) return;
+		client
+			.query({
+				query: FETCH_PROJECT_DONATIONS,
+				variables: {
+					projectId: parseInt(id),
+					skip: 0,
+					take: donationsPerPage,
+					status: isAdmin ? null : EDonationStatus.VERIFIED,
+					orderBy: {
+						field: ESortby.CREATIONDATE,
+						direction: EDirection.DESC,
+					},
+				},
+			})
+			.then((res: IDonationsByProjectIdGQL) => {
+				const donationsByProjectId = res.data.donationsByProjectId;
+				setDonationInfo(donationsByProjectId);
+			})
+			.catch((error: unknown) => {
+				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'fetchProjectDonation',
+					},
+				});
+			});
+	}, [id]);
+
 	return (
 		<Wrapper>
 			<ProjectTotalFundCard />
-			{totalCount > 0 && (
+			{donationInfo?.totalCount && donationInfo?.donations && (
 				<ProjectDonationTable
-					donations={donationsByProjectId.donations}
-					totalDonations={donationsByProjectId.totalCount}
+					donations={donationInfo?.donations}
+					totalDonations={donationInfo?.totalCount || 0}
 				/>
 			)}
 		</Wrapper>
