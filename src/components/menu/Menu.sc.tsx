@@ -33,3 +33,8 @@ export const MenuContainer = styled(Flex)<IMenuContainerProps>`
 	opacity: ${props => (props.isAnimating ? 1 : 0)};
 	transition: opacity 0.3s ease;
 `;
+
+export const NotificationMenuWrapper = styled.div`
+	position: relative;
+	max-height: 85vh;
+`;
