@@ -27,8 +27,9 @@ const itemPerPage = 10;
 const ProjectGIVPowerIndex: FC<IProjectGIVPowerIndexProps> = () => {
 	const [page, setPage] = useState(0);
 
-	const { isBoostingsLoading, boostersData } = useProjectContext();
-
+	const { isBoostingsLoading, boostersData, projectData } =
+		useProjectContext();
+	const { verified } = projectData || {};
 	const hasGivPower = boostersData ? boostersData.totalCount > 0 : false;
 	const totalCount = boostersData?.totalCount ?? 0;
 
