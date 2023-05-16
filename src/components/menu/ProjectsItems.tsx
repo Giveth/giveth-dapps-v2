@@ -117,11 +117,12 @@ const CategoriesGrid = styled.div<{ inSidebar?: boolean }>`
 	display: grid;
 	grid-template: ${props =>
 		props.inSidebar ? 'auto' : 'auto auto auto auto / auto auto auto'};
-	column-gap: 16px;
-	row-gap: 16px;
-	margin: 16px 0 0 8px;
+	margin-top: 8px;
 	.menu-category-item {
-		padding: 0;
+		padding: 8px;
+		:hover {
+			background: transparent;
+		}
 	}
 `;
 
