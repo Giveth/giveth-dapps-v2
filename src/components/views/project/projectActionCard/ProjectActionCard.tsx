@@ -10,14 +10,36 @@ import { useAppSelector } from '@/features/hooks';
 import LoadingAnimation from '@/animations/loading_giv.json';
 import LottieControl from '@/components/LottieControl';
 import { useProjectContext } from '@/context/project.context';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import { device } from '@/lib/constants/constants';
 
 interface IProjectActionCardProps {}
 
 export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 	const { isLoading } = useAppSelector(state => state.user);
 	const { isAdmin } = useProjectContext();
+	const isMobile = !useMediaQuery(device.tablet);
 
-	return (
+	return isMobile ? (
+		<ProjectActionCardWrapper
+			flexDirection='column-reverse'
+			justifyContent='space-between'
+		>
+			{isLoading ? (
+				<LottieControl animationData={LoadingAnimation} size={300} />
+			) : isAdmin ? (
+				<>
+					<ProjectStats />
+					<AdminActions />
+				</>
+			) : (
+				<>
+					<DonateSection />
+					<ProjectPublicActions />
+				</>
+			)}
+		</ProjectActionCardWrapper>
+	) : (
 		<ProjectActionCardWrapper
 			flexDirection='column'
 			justifyContent='space-between'
