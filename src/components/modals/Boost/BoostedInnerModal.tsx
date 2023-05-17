@@ -1,4 +1,4 @@
-import { Lead } from '@giveth/ui-design-system';
+import { Lead, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
@@ -61,7 +61,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 					/>
 				</Link>
 				<Link href={Routes.MyBoostedProjects}>
-					<CustomButtonLink
+					<SeeGivPowerAllocationsButton
 						linkType='texty-primary'
 						size='small'
 						label={formatMessage({
@@ -83,6 +83,12 @@ const Desc = styled(Lead)`
 	margin: auto;
 	${mediaQueries.tablet} {
 		width: 480px;
+	}
+`;
+
+const SeeGivPowerAllocationsButton = styled(CustomButtonLink)`
+	:hover {
+		color: ${brandColors.pinky[600]};
 	}
 `;
 
