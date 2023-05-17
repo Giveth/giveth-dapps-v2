@@ -15,6 +15,7 @@ import { HighlightSection } from './common';
 import { Item } from './Item';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
+import { ETheme } from '@/features/general/general.slice';
 
 const projectsItems = {
 	explore: [
@@ -76,7 +77,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 			</HighlightSection>
 			<NormalSection inSidebar={inSidebar}>
 				<Label medium>{formatMessage({ id: 'label.category' })}</Label>
-				<CategoriesGrid inSidebar={inSidebar}>
+				<CategoriesGrid inSidebar={inSidebar} theme={theme}>
 					{mainCategories.map((category, idx) => (
 						<Link
 							key={idx}
@@ -113,7 +114,7 @@ const NormalSection = styled.div<{ inSidebar?: boolean }>`
 	border-radius: 16px;
 `;
 
-const CategoriesGrid = styled.div<{ inSidebar?: boolean }>`
+const CategoriesGrid = styled.div<{ inSidebar?: boolean; theme: ETheme }>`
 	display: grid;
 	grid-template: ${props =>
 		props.inSidebar ? 'auto' : 'auto auto auto auto / auto auto auto'};
@@ -122,7 +123,10 @@ const CategoriesGrid = styled.div<{ inSidebar?: boolean }>`
 		padding: 8px;
 		:hover {
 			background: transparent;
-			color: ${brandColors.giv[500]};
+			color: ${({ theme }) =>
+				theme === ETheme.Dark
+					? brandColors.giv[200]
+					: brandColors.giv[500]};
 		}
 	}
 `;
