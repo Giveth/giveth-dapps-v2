@@ -116,7 +116,6 @@ export const countReferralClick = createAsyncThunk(
 				REGISTER_CLICK_ON_REFERRAL,
 				{ referrerId, walletAddress },
 			);
-			console.log({ response });
 			return response?.payload;
 		} catch (error) {
 			console.log({ error });
