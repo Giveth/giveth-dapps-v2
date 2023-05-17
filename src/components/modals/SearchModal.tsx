@@ -30,7 +30,7 @@ import { Shadow } from '../styled-components/Shadow';
 const quickLinks = [
 	{
 		title: 'Top ranking projects',
-		query: '?sort=' + EProjectsSortBy.GIVPOWER,
+		query: '?sort=' + EProjectsSortBy.INSTANT_BOOSTING,
 	},
 	{
 		title: 'Most funded projects',

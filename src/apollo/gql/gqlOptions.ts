@@ -4,7 +4,7 @@ export const OPTIONS_HOME_PROJECTS = {
 	variables: {
 		limit: 15,
 		skip: 0,
-		sortingBy: EProjectsSortBy.GIVPOWER,
+		sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
 	},
 	notifyOnNetworkStatusChange: true,
 };
