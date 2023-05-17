@@ -172,6 +172,9 @@ export interface IUser {
 	likedProjectsCount?: number;
 	boostedProjectsCount?: number;
 	isSignedIn: boolean;
+	wasReferred?: boolean;
+	isReferrer?: boolean;
+	chainvineId?: string;
 }
 
 export interface IReaction {

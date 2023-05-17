@@ -9,7 +9,6 @@ const UserRoute = () => {
 	const { isSignedIn, isEnabled, userData, isLoading } = useAppSelector(
 		state => state.user,
 	);
-
 	if (isLoading) {
 		return <Spinner />;
 	} else if (!isEnabled) {

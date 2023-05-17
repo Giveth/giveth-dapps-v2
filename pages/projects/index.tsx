@@ -6,11 +6,14 @@ import {
 	FETCH_ALL_PROJECTS,
 	FETCH_MAIN_CATEGORIES,
 } from '@/apollo/gql/gqlProjects';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import StorageLabel, { setWithExpiry } from '@/lib/localStorage';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { projectsMetatags } from '@/content/metatags';
 import { GeneralMetatags } from '@/components/Metatag';
+import { countReferralClick } from '@/features/user/user.thunks';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { ICategory, IMainCategory, IProject } from '@/apollo/types/types';
 import { ProjectsProvider } from '@/context/projects.context';
@@ -23,22 +26,39 @@ export interface IProjectsRouteProps {
 }
 
 const ProjectsRoute = (props: IProjectsRouteProps) => {
+	const dispatch = useAppDispatch();
+	const { userData, isEnabled, isSignedIn } = useAppSelector(
+		state => state.user,
+	);
 	const { projects, mainCategories, totalCount, categories } = props;
 
 	const router = useRouter();
 	const referrerId = router?.query?.referrer_id;
-
 	useEffect(() => {
 		if (referrerId) {
-			// this sets the cookie saying this session comes from a referal
-			setWithExpiry(
-				StorageLabel.CHAINVINEREFERRED,
-				referrerId,
-				1 * 24 * 60 * 60,
-			);
+			if (!isSignedIn) {
+				// forces user to login grab the wallet
+				dispatch(setShowSignWithWallet(true));
+			} else {
+				if (!userData?.wasReferred && !userData?.isReferrer) {
+					// this sets the cookie saying this session comes from a referal
+					setWithExpiry(
+						StorageLabel.CHAINVINEREFERRED,
+						referrerId,
+						1 * 24 * 60 * 60,
+					);
+					// sends click counter for chainvine only if I am not a referrer
+					// or haven't being referre
+					dispatch(
+						countReferralClick({
+							referrerId: referrerId.toString(),
+							walletAddress: userData?.walletAddress!,
+						}),
+					);
+				}
+			}
 		}
-	}, [referrerId]);
-
+	}, [referrerId, isSignedIn]);
 	return (
 		<ProjectsProvider mainCategories={mainCategories}>
 			<GeneralMetatags info={projectsMetatags} />

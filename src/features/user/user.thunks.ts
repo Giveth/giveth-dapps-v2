@@ -1,7 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { backendGQLRequest } from '@/helpers/requests';
-import { GET_USER_BY_ADDRESS } from './user.queries';
-import { ISignToGetToken } from './user.types';
+import {
+	GET_USER_BY_ADDRESS,
+	REGISTER_ON_CHAINVINE,
+	REGISTER_CLICK_ON_REFERRAL,
+} from './user.queries';
+import {
+	ISignToGetToken,
+	IChainvineSetReferral,
+	IChainvineClickCount,
+} from './user.types';
 import { createSiweMessage } from '@/lib/helpers';
 import { RootState } from '../store';
 import { postRequest } from '@/helpers/requests';
@@ -81,5 +89,38 @@ export const signOut = createAsyncThunk(
 				jwt: token,
 			},
 		);
+	},
+);
+
+export const startChainvineReferral = createAsyncThunk(
+	'user/startChainvineReferral',
+	async ({ address }: IChainvineSetReferral, { dispatch }) => {
+		try {
+			console.log('AAA');
+			const res = await backendGQLRequest(REGISTER_ON_CHAINVINE);
+			console.log({ res });
+			dispatch(fetchUserByAddress(address));
+			return res?.payload;
+		} catch (error) {
+			console.log({ error });
+			return Promise.reject('Referral start failed');
+		}
+	},
+);
+
+export const countReferralClick = createAsyncThunk(
+	'user/countReferralClick',
+	async ({ referrerId, walletAddress }: IChainvineClickCount) => {
+		try {
+			const response = await backendGQLRequest(
+				REGISTER_CLICK_ON_REFERRAL,
+				{ referrerId, walletAddress },
+			);
+			console.log({ response });
+			return response?.payload;
+		} catch (error) {
+			console.log({ error });
+			return Promise.reject('Referral start failed');
+		}
 	},
 );

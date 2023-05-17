@@ -11,6 +11,7 @@ import {
 	neutralColors,
 	Container,
 	IconExternalLink16,
+	Button,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 import config from '@/configuration';
@@ -30,6 +31,7 @@ import ExternalLink from '@/components/ExternalLink';
 import IncompleteProfileToast from '@/components/views/userProfile/IncompleteProfileToast';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
+import { startChainvineReferral } from '@/features/user/user.thunks';
 import UploadProfilePicModal from '@/components/modals/UploadProfilePicModal/UploadProfilePicModal';
 import { ProfileModal } from '@/lib/constants/Routes';
 import Routes from '@/lib/constants/Routes';
@@ -119,7 +121,6 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 				<H5>{formatMessage({ id: 'label.please_sign_in' })}</H5>
 			</NoUserContainer>
 		);
-
 	return (
 		<>
 			<ProfileHeader>
@@ -176,6 +177,33 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 									</ExternalLink>
 								</AddressContainer>
 							</WalletContainer>
+							<Flex>
+								{user?.chainvineId ? (
+									<ReferralLink
+										onClick={() =>
+											router.push(
+												`/projects?referrer_id=${user.chainvineId}`,
+											)
+										}
+										color={brandColors.pinky[500]}
+									>
+										<b>Referrer ID:</b> {user.chainvineId}
+									</ReferralLink>
+								) : (
+									<ReferralButton
+										buttonType='primary'
+										onClick={async () => {
+											await dispatch(
+												startChainvineReferral({
+													address:
+														user?.walletAddress!,
+												}),
+											);
+										}}
+										label='set referral'
+									/>
+								)}
+							</Flex>
 							{/* check pfp data, if truthy we check if user is looking at their account, 
 							based on this we show two different messages and links relating to pfp use on profile page  */}
 							{pfpData &&
@@ -298,6 +326,16 @@ const NoUserContainer = styled.div`
 
 const RaribleLinkContainer = styled.div`
 	margin-top: 16px;
+	color: ${brandColors.pinky[500]};
+`;
+
+const ReferralButton = styled(Button)`
+	margin-top: 16px;
+`;
+
+const ReferralLink = styled.a`
+	cursor: pointer;
+	margin: 16px 0 0 2px;
 	color: ${brandColors.pinky[500]};
 `;
 
