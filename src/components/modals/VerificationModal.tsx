@@ -54,6 +54,18 @@ export const VerificationModal = (props: { onClose: () => void }) => {
 					{formatMessage({
 						id: 'label.verify_your_project.modal.two',
 					})}
+					<TextLink
+						href='https://docs.giveth.io/dapps/projectVerification/'
+						target='_blank'
+						rel='noreferrer'
+					>
+						{formatMessage({
+							id: 'label.verify_your_project.modal.three',
+						})}
+					</TextLink>
+					{formatMessage({
+						id: 'label.verify_your_project.modal.four',
+					})}
 				</Description>
 
 				<OkButton
@@ -104,6 +116,10 @@ const SkipButton = styled(Button)`
 
 const Title = styled(H5)`
 	font-weight: 700;
+`;
+
+const TextLink = styled.a`
+	color: ${brandColors.pinky[500]};
 `;
 
 const Description = styled(Lead)`
