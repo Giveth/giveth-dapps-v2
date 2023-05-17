@@ -122,6 +122,7 @@ const CategoriesGrid = styled.div<{ inSidebar?: boolean }>`
 		padding: 8px;
 		:hover {
 			background: transparent;
+			color: ${brandColors.giv[500]};
 		}
 	}
 `;
