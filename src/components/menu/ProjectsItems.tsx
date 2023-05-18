@@ -1,4 +1,10 @@
-import { B, Caption, GLink } from '@giveth/ui-design-system';
+import {
+	B,
+	brandColors,
+	Caption,
+	GLink,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -9,20 +15,26 @@ import { HighlightSection } from './common';
 import { Item } from './Item';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
+import { ETheme } from '@/features/general/general.slice';
 
 const projectsItems = {
 	explore: [
 		// { name: 'Trending', query: '?q=?q=trending' },
-		{ name: 'All Projects', query: '', label: 'label.all_projects' },
+		{ name: 'All Projects', url: '', label: 'label.all_projects' },
 		{
 			name: 'Recently Updated',
-			query: '?sort=' + EProjectsSortBy.RECENTLY_UPDATED,
+			url: Routes.Projects + '?sort=' + EProjectsSortBy.RECENTLY_UPDATED,
 			label: 'label.recently_updated',
 		},
 		{
 			name: 'Just Launched',
-			query: '?sort=' + EProjectsSortBy.NEWEST,
+			url: Routes.Projects + '?sort=' + EProjectsSortBy.NEWEST,
 			label: 'label.just_launched',
+		},
+		{
+			name: 'Quadratic Funding',
+			url: Routes.QuadraticFunding,
+			label: 'label.quadratic_funding',
 		},
 		// { name: 'Popular', query: '?q=popular' },
 	],
@@ -43,15 +55,20 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 					{formatMessage({ id: 'label.explore_by' })}
 				</Label>
 				<ExploreByRow
-					gap='6px'
+					gap='16px'
 					flexDirection={inSidebar ? 'column' : undefined}
 				>
 					{projectsItems.explore.map((explore, idx) => (
-						<Link
-							key={idx}
-							href={`${Routes.Projects}${explore.query}`}
-						>
-							<Item theme={theme} isHighlighted>
+						<Link key={idx} href={explore.url}>
+							<Item
+								className={`${
+									explore.url === Routes.QuadraticFunding
+										? 'quadratic-menu-item'
+										: ''
+								} projects-menu-items`}
+								theme={theme}
+								isHighlighted
+							>
 								<B>{formatMessage({ id: explore.label })}</B>
 							</Item>
 						</Link>
@@ -60,13 +77,13 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 			</HighlightSection>
 			<NormalSection inSidebar={inSidebar}>
 				<Label medium>{formatMessage({ id: 'label.category' })}</Label>
-				<CategoriesGrid inSidebar={inSidebar}>
+				<CategoriesGrid inSidebar={inSidebar} theme={theme}>
 					{mainCategories.map((category, idx) => (
 						<Link
 							key={idx}
 							href={`${Routes.Projects}/${category.slug}`}
 						>
-							<Item theme={theme}>
+							<Item className='menu-category-item' theme={theme}>
 								<GLink size='Big'>
 									{formatMessage({ id: category.slug })}
 								</GLink>
@@ -81,25 +98,41 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 
 const ExploreByRow = styled(Flex)`
 	margin-top: 16px;
+	.quadratic-menu-item {
+		background: ${brandColors.cyan[600]};
+		border-radius: 16px;
+		color: white;
+	}
+	.projects-menu-items {
+		padding: 2px 8px;
+	}
 `;
 
 const NormalSection = styled.div<{ inSidebar?: boolean }>`
 	margin-top: 16px;
-	padding: 8px;
+	padding: 8px 8px 0;
 	border-radius: 16px;
 `;
 
-const CategoriesGrid = styled.div<{ inSidebar?: boolean }>`
+const CategoriesGrid = styled.div<{ inSidebar?: boolean; theme: ETheme }>`
 	display: grid;
 	grid-template: ${props =>
 		props.inSidebar ? 'auto' : 'auto auto auto auto / auto auto auto'};
-	column-gap: 24px;
-	row-gap: 16px;
-	margin-top: 16px;
-	margin-bottom: 8px;
+	margin-top: 8px;
+	.menu-category-item {
+		padding: 8px;
+		:hover {
+			background: transparent;
+			color: ${({ theme }) =>
+				theme === ETheme.Dark
+					? brandColors.giv[200]
+					: brandColors.giv[500]};
+		}
+	}
 `;
 
 const Label = styled(Caption)`
-	padding-left: 16px;
+	padding-left: 8px;
 	text-transform: uppercase;
+	color: ${neutralColors.gray[600]};
 `;
