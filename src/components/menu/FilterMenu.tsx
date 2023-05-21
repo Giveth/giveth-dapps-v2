@@ -40,6 +40,13 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 			{
 				label: formatMessage(
 					{ id: 'label.accepts_funds_on_chain' },
+					{ chainName: 'Mainnet' },
+				),
+				value: EProjectsFilter.ACCEPT_FUND_ON_MAINNET,
+			},
+			{
+				label: formatMessage(
+					{ id: 'label.accepts_funds_on_chain' },
 					{ chainName: 'Gnosis' },
 				),
 				value: EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
