@@ -11,6 +11,7 @@ import {
 	P,
 	IconRocketInSpace16,
 	IconFast16,
+	IconFlash16,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -45,6 +46,11 @@ const ProjectsSortSelect = () => {
 		{
 			label: formatMessage({ id: 'label.rank' }),
 			value: EProjectsSortBy.INSTANT_BOOSTING,
+			icon: <IconFlash16 color={brandColors.deep[900]} />,
+		},
+		{
+			label: formatMessage({ id: 'label.givpower' }),
+			value: EProjectsSortBy.GIVPOWER,
 			icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
 		},
 		{
