@@ -6,6 +6,7 @@ import {
 	Overline,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
+import styled from 'styled-components';
 import {
 	MenuAndButtonContainer,
 	CoverLine,
@@ -21,7 +22,7 @@ import { device } from '@/lib/constants/constants';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
 import { FlexSpacer } from '../styled-components/Flex';
-import { MenuContainer } from './Menu.sc';
+import { MenuContainer, NotificationMenuWrapper } from './Menu.sc';
 import { ItemsProvider } from '@/context/Items.context';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppSelector } from '@/features/hooks';
@@ -91,14 +92,18 @@ export const NotificationButtonWithMenu: FC<
 				<CoverLine theme={theme} className='cover-line' />
 			</NotificationsButton>
 			{menuCondition && (
-				<MenuContainer isAnimating={showMenu} theme={theme}>
-					<ItemsProvider close={closeMenu}>
-						<NotificationItems
-							notifications={notifications}
-							markOneNotificationRead={markOneNotificationRead}
-						/>
-					</ItemsProvider>
-				</MenuContainer>
+				<NotificationMenuContainer isAnimating={showMenu} theme={theme}>
+					<NotificationMenuWrapper>
+						<ItemsProvider close={closeMenu}>
+							<NotificationItems
+								notifications={notifications}
+								markOneNotificationRead={
+									markOneNotificationRead
+								}
+							/>
+						</ItemsProvider>
+					</NotificationMenuWrapper>
+				</NotificationMenuContainer>
 			)}
 			{sidebarCondition && (
 				<SideBar
@@ -160,3 +165,7 @@ const HeaderNotificationButton: FC<IHeaderNotificationButtonProps> = ({
 		</NotificationsIconContainer>
 	);
 };
+
+const NotificationMenuContainer = styled(MenuContainer)`
+	padding-bottom: 0;
+`;
