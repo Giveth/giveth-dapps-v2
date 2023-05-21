@@ -36,6 +36,12 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 						EProjectsFilter.BOOSTED_WITH_GIVPOWER,
 					);
 					break;
+				case ECampaignFilterField.AcceptFundOnMainnet:
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_MAINNET,
+					);
+					break;
 				case ECampaignFilterField.AcceptFundOnGnosis:
 					params.append(
 						'filter',
