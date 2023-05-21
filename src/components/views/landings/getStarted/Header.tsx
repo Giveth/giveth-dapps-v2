@@ -9,6 +9,9 @@ const Header = () => {
 		<>
 			<HeadWrapper>
 				<H1 weight={700}>Get started with Giveth</H1>
+				<Lead>
+					A step-by-step beginner’s guide to the Future of Giving
+				</Lead>
 			</HeadWrapper>
 			<Body>
 				<LeadStyled size='large'>
@@ -73,12 +76,14 @@ const Body = styled.div`
 
 const HeadWrapper = styled(FlexCenter)`
 	border-radius: 16px;
+	flex-direction: column;
+	gap: 20px;
 	background-image: url('/images/banners/categories/all.png');
 	background-size: cover;
 	height: 530px;
 	width: 100%;
 	color: white;
-	> h1 {
+	> * {
 		margin: 0 50px;
 	}
 `;

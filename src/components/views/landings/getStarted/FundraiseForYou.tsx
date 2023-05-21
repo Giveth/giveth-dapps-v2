@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Button, H3, Lead } from '@giveth/ui-design-system';
 import { Bullets } from '@/components/styled-components/Bullets';
 import ExternalLink from '@/components/ExternalLink';
+import { VideoContainer } from './common.styled';
 
 const Header = () => {
 	return (
@@ -30,6 +31,18 @@ const Header = () => {
 					</li>
 				</BulletsStyled>
 			</LeadStyled>
+			<VideoContainer>
+				<iframe
+					width='100%'
+					height='315'
+					src='https://www.youtube.com/embed/u5nUpYIbABE'
+					title='YouTube video player'
+					frameBorder='0'
+					allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+					allowFullScreen
+				/>
+			</VideoContainer>
+			<br />
 			<br />
 			<ExternalLink href='https://youtube.com/playlist?list=PL4Artm1rmCWFi-qEkOtjl9nL4tojSIIKm'>
 				<Button label='View Our Entire Project Onboarding Series' />

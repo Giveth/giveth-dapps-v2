@@ -6,6 +6,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { VideoContainer } from '@/components/views/landings/getStarted/common.styled';
 
 const ReadyToGive = () => {
 	return (
@@ -29,6 +30,7 @@ const numberedList = [
 		title: 'Create a wallet',
 		description:
 			'This will be how you interact with the Giveth platform and transfer funds.',
+		video: 'https://www.youtube.com/embed/TLlebSlRDyo',
 	},
 	{
 		number: 2,
@@ -41,6 +43,7 @@ const numberedList = [
 		title: 'Fund your wallet with crypto',
 		description:
 			'Once you create an account on Giveth and sign in with your browser wallet, the next step is to fund your wallet with some crypto currency.',
+		video: 'https://www.youtube.com/embed/O-Vq7i4FqOw',
 	},
 ];
 
@@ -48,16 +51,32 @@ const NumberedItem = (props: {
 	number: number;
 	title: string;
 	description: string | JSX.Element;
+	video?: string;
 }) => {
-	const { number, title, description } = props;
+	const { number, title, description, video } = props;
 	return (
-		<NumberedItemWrapper>
-			<Number>{number}</Number>
-			<Text size='large'>
-				<div>{title}</div>
-				{description}
-			</Text>
-		</NumberedItemWrapper>
+		<>
+			<NumberedItemWrapper>
+				<Number>{number}</Number>
+				<Text size='large'>
+					<div>{title}</div>
+					{description}
+				</Text>
+			</NumberedItemWrapper>
+			{video && (
+				<VideoContainer>
+					<iframe
+						width='100%'
+						height='315'
+						src={video}
+						title='YouTube video player'
+						frameBorder='0'
+						allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+						allowFullScreen
+					/>
+				</VideoContainer>
+			)}
+		</>
 	);
 };
 
