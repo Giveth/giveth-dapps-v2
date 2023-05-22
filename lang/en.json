@@ -1279,6 +1279,6 @@
 	"label.passport.invalid_passport": "Passport Profile not detected. Please open Passport to troubleshoot.",
 	"label.passport.error": "An error occurred while loading your Gitcoin Passport. Please try again later.",
 	"label.passport.invalid_response": "Passport Profile not detected. Please open Passport to troubleshoot.",
-	"label.passport.link.update_scoer": "Update score",
+	"label.passport.link.update_score": "Update score",
 	"label.passport.link.go_to_passport": "Go to Passport"
 }
