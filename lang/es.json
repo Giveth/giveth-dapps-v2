@@ -1280,5 +1280,15 @@
 	"label.learn_more_about": "",
 	"label.amount_raised": "",
 	"label.raised_from": "",
-	"label.contributors": ""
+	"label.contributors": "",
+	"label.passport.loading": "",
+	"label.passport.connect_wallet": "",
+	"label.passport.not_eligible": "",
+	"label.passport.eligible": "",
+	"label.passport.round_ended": "",
+	"label.passport.invalid_passport": "",
+	"label.passport.error": "",
+	"label.passport.invalid_response": "",
+	"label.passport.link.update_scoer": "",
+	"label.passport.link.go_to_passport": ""
 }
