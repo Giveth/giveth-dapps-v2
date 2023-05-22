@@ -55,7 +55,7 @@ const ProjectDonationsIndex = () => {
 	return (
 		<Wrapper>
 			<ProjectTotalFundCard />
-			{donationInfo?.totalCount && donationInfo?.donations && (
+			{donationInfo?.donations && donationInfo.donations.length > 0 && (
 				<ProjectDonationTable
 					donations={donationInfo?.donations}
 					totalDonations={donationInfo?.totalCount || 0}
