@@ -14,15 +14,20 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import { device } from '@/lib/constants/constants';
 
 export const DonateSection = () => {
 	const { formatMessage, locale } = useIntl();
 	const { projectData, totalDonationsCount } = useProjectContext();
 	const { totalDonations } = projectData || {};
+	const isMobile = !useMediaQuery(device.tablet);
+
 	return (
 		<DonationSectionWrapper gap='24px'>
 			{totalDonations && totalDonations !== 0 ? (
 				<DonateInfo>
+					{isMobile && <br />}
 					<Title>
 						{formatMessage({
 							id: 'label.amount_raised',
