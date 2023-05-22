@@ -5,14 +5,17 @@ import {
 	IconInfoOutline24,
 	IconPassport24,
 	IconVerifiedBadge24,
+	IconWalletOutline16,
 	P,
 	brandColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Flex } from './styled-components/Flex';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 
 enum EPBGState {
 	SUCCESS,
@@ -103,8 +106,9 @@ const data: IData = {
 };
 
 export const PassportBanner = () => {
+	const [state, setState] = useState(EPassportBannerState.CONNECT);
 	const { formatMessage } = useIntl();
-	const state = EPassportBannerState.ELIGIBLE;
+	const dispatch = useAppDispatch();
 
 	return (
 		<PassportBannerWrapper state={data[state].bg}>
@@ -115,20 +119,33 @@ export const PassportBanner = () => {
 				})}
 			</P>
 			{data[state]?.link && (
-				<StyledLink>
-					<a
-						href={data[state].link.url}
-						target='_blank'
-						referrerPolicy='no-referrer'
-						rel='noreferrer'
-					>
-						<GLink>
-							{formatMessage({
-								id: data[state].link.label,
-							})}
-						</GLink>
-					</a>
+				<StyledLink
+					as='a'
+					href={data[state].link?.url}
+					target='_blank'
+					referrerPolicy='no-referrer'
+					rel='noreferrer'
+				>
+					<GLink>
+						{formatMessage({
+							id: data[state].link?.label,
+						})}
+					</GLink>
 					<IconExternalLink16 />
+				</StyledLink>
+			)}
+			{state === EPassportBannerState.CONNECT && (
+				<StyledLink
+					onClick={() => {
+						dispatch(setShowWelcomeModal(true));
+					}}
+				>
+					<GLink>
+						{formatMessage({
+							id: 'component.button.connect_wallet',
+						})}
+					</GLink>
+					<IconWalletOutline16 />
 				</StyledLink>
 			)}
 		</PassportBannerWrapper>
@@ -148,4 +165,5 @@ const StyledLink = styled(Flex)`
 	color: ${brandColors.giv[500]};
 	align-items: center;
 	gap: 4px;
+	cursor: pointer;
 `;
