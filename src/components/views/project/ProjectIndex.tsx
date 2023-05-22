@@ -163,7 +163,7 @@ const Wrapper = styled.div`
 const BodyWrapper = styled.div`
 	min-height: calc(100vh - 312px);
 	background-color: ${neutralColors.gray[100]};
-	padding: 32px 0 40px;
+	padding: 40px 0;
 `;
 
 const HeadContainer = styled(Container)`
