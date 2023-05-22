@@ -883,7 +883,6 @@
 	"label.this_token_is_not_eligible.desc": "Este token no es elegible para GIVbacks. Para crear una solicitud para añadir este token a nuestra lista de tokens elegibles para GIVbacks, por favor haga un comentario en",
 	"label.be_the_first_to_donate": "¡Sé el primero en donar!",
 	"label.associated_wallet_address": "Dirección de billetera asociada",
-	"label.accept_donations_on": "Aceptar donaciones en",
 	"label.faq_by.two": "por",
 	"label.the.two": "El",
 	"label.givbacks": "devoluciones",

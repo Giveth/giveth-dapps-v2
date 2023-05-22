@@ -6,6 +6,7 @@ import {
 	Lead,
 	mediaQueries,
 	neutralColors,
+	P,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
@@ -17,6 +18,7 @@ const ProjectTotalFundCard: FC = () => {
 	const { projectData } = useProjectContext();
 	const { totalDonations, addresses } = projectData || {};
 	const { formatMessage } = useIntl();
+	const recipientAddresses = addresses?.filter(a => a.isRecipient);
 
 	return (
 		<Wrapper>
@@ -34,10 +36,28 @@ const ProjectTotalFundCard: FC = () => {
 					</NoDonation>
 				)}
 			</UpperSection>
-			{addresses && <ProjectWalletAddress addresses={addresses} />}
+			<BottomSection>
+				<P>
+					{formatMessage({
+						id: 'label.associated_wallet_address',
+					})}
+				</P>
+				{recipientAddresses?.map(addObj => (
+					<ProjectWalletAddress
+						key={addObj.address}
+						address={addObj.address!}
+						networkId={addObj.networkId!}
+					/>
+				))}
+			</BottomSection>
 		</Wrapper>
 	);
 };
+
+const BottomSection = styled.div`
+	color: ${neutralColors.gray[700]};
+	margin-top: 40px;
+`;
 
 const LeadStyled = styled(Lead)`
 	margin-bottom: 8px;
