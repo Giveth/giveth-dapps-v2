@@ -44,55 +44,56 @@ const bgColor = {
 const data = {
 	[EPassportBannerState.LOADING]: {
 		content: 'label.passport.loading',
-		bg: bgColor[EPBGState.WARNING],
+		bg: EPBGState.WARNING,
 		icon: <IconPassport24 />,
 	},
 	[EPassportBannerState.CONNECT]: {
 		content: 'label.passport.connect_wallet',
-		bg: bgColor[EPBGState.INFO],
-		icon: <IconInfoOutline24 />,
+		bg: EPBGState.INFO,
+		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
 	},
 	[EPassportBannerState.NOT_ELIGIBLE]: {
 		content: 'label.passport.not_eligible',
-		bg: bgColor[EPBGState.WARNING],
-		icon: <IconAlertTriangleFilled24 />,
+		bg: EPBGState.WARNING,
+		icon: <IconAlertTriangleFilled24 color={brandColors.giv[500]} />,
 	},
 	[EPassportBannerState.ELIGIBLE]: {
 		content: 'label.passport.eligible',
-		bg: bgColor[EPBGState.SUCCESS],
-		icon: <IconVerifiedBadge24 />,
+		bg: EPBGState.SUCCESS,
+		icon: <IconVerifiedBadge24 color={semanticColors.jade[600]} />,
 	},
 	[EPassportBannerState.ENDED]: {
 		content: 'label.passport.round_ended',
-		bg: bgColor[EPBGState.ERROR],
-		icon: <IconAlertTriangleFilled24 />,
+		bg: EPBGState.ERROR,
+		icon: <IconAlertTriangleFilled24 color={semanticColors.punch[500]} />,
 	},
 	[EPassportBannerState.INVALID_PASSPORT]: {
 		content: 'label.passport.invalid_passport',
-		bg: bgColor[EPBGState.ERROR],
-		icon: <IconInfoOutline24 />,
+		bg: EPBGState.ERROR,
+		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 	},
 	[EPassportBannerState.ERROR]: {
 		content: 'label.passport.error',
 		bg: bgColor[EPBGState.ERROR],
-		icon: <IconInfoOutline24 />,
+		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 	},
 	[EPassportBannerState.INVALID_RESPONSE]: {
 		content: 'label.passport.invalid_response',
 		bg: bgColor[EPBGState.ERROR],
-		icon: <IconInfoOutline24 />,
+		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 	},
 };
 
 export const PassportBanner = () => {
 	const { formatMessage } = useIntl();
+	const state = EPassportBannerState.ENDED;
 
 	return (
-		<PassportBannerWrapper state={EPBGState.ERROR}>
-			{data[EPassportBannerState.ERROR].icon}
+		<PassportBannerWrapper state={data[state].bg}>
+			{data[state].icon}
 			<P>
 				{formatMessage({
-					id: data[EPassportBannerState.ERROR].content,
+					id: data[state].content,
 				})}
 			</P>
 		</PassportBannerWrapper>
