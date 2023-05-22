@@ -26,6 +26,7 @@ import { useProjectContext } from '@/context/project.context';
 import { ProjectActionCard } from './projectActionCard/ProjectActionCard';
 import ProjectBadges from './ProjectBadges';
 import ProjectCategoriesBadges from './ProjectCategoriesBadges';
+import { PassportBanner } from '@/components/PassportBanner';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -96,6 +97,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 
 	return (
 		<Wrapper>
+			<PassportBanner />
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<ProjectMeta project={projectData} />

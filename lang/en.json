@@ -1270,5 +1270,15 @@
 	"label.learn_more_about": "Learn more about the benefits.",
 	"label.amount_raised": "Amount raised",
 	"label.raised_from": "Raised from ",
-	"label.contributors": "{count, plural, one { contributor} other { contributors} }"
+	"label.contributors": "{count, plural, one { contributor} other { contributors} }",
+	"label.passport.loading": "Loading Passport...",
+	"label.passport.connect_wallet": "Connect your wallet to verify your eligibility for donation matching.",
+	"label.passport.not_eligible": "Your Gitcoin Passport is not currently eligible for donation matching.",
+	"label.passport.eligible": "Your Gitcoin Passport is eligible for donation matching.",
+	"label.passport.round_ended": "This round has ended. Thank you for your support.",
+	"label.passport.invalid_passport": "Passport Profile not detected. Please open Passport to troubleshoot.",
+	"label.passport.error": "An error occurred while loading your Gitcoin Passport. Please try again later.",
+	"label.passport.invalid_response": "Passport Profile not detected. Please open Passport to troubleshoot.",
+	"label.passport.link.update_score": "Update score",
+	"label.passport.link.go_to_passport": "Go to Passport"
 }
