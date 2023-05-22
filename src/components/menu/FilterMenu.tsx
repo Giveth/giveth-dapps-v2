@@ -34,20 +34,15 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 
 		const projectFeatures = [
 			{
-				label: formatMessage({ id: 'label.accepts_giv' }),
-				value: EProjectsFilter.ACCEPT_GIV,
-			},
-			{
 				label: formatMessage({ id: 'label.verified' }),
 				value: EProjectsFilter.VERIFIED,
 			},
 			{
-				label: formatMessage({ id: 'label.boosted_with_giv_power' }),
-				value: EProjectsFilter.BOOSTED_WITH_GIVPOWER,
-			},
-			{
-				label: formatMessage({ id: 'label.from_giving_block' }),
-				value: EProjectsFilter.GIVING_BLOCK,
+				label: formatMessage(
+					{ id: 'label.accepts_funds_on_chain' },
+					{ chainName: 'Mainnet' },
+				),
+				value: EProjectsFilter.ACCEPT_FUND_ON_MAINNET,
 			},
 			{
 				label: formatMessage(
