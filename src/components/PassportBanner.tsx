@@ -1,5 +1,7 @@
 import {
+	GLink,
 	IconAlertTriangleFilled24,
+	IconExternalLink16,
 	IconInfoOutline24,
 	IconPassport24,
 	IconVerifiedBadge24,
@@ -7,7 +9,7 @@ import {
 	brandColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Flex } from './styled-components/Flex';
@@ -41,7 +43,19 @@ const bgColor = {
 	[EPBGState.ERROR]: semanticColors.punch[100],
 };
 
-const data = {
+interface IData {
+	[key: string]: {
+		content: string;
+		bg: EPBGState;
+		icon: ReactNode;
+		link?: {
+			label: string;
+			url: string;
+		};
+	};
+}
+
+const data: IData = {
 	[EPassportBannerState.LOADING]: {
 		content: 'label.passport.loading',
 		bg: EPBGState.WARNING,
@@ -56,11 +70,13 @@ const data = {
 		content: 'label.passport.not_eligible',
 		bg: EPBGState.WARNING,
 		icon: <IconAlertTriangleFilled24 color={brandColors.giv[500]} />,
+		link: { label: 'label.passport.link.update_score', url: '/' },
 	},
 	[EPassportBannerState.ELIGIBLE]: {
 		content: 'label.passport.eligible',
 		bg: EPBGState.SUCCESS,
 		icon: <IconVerifiedBadge24 color={semanticColors.jade[600]} />,
+		link: { label: 'label.passport.link.update_score', url: '/' },
 	},
 	[EPassportBannerState.ENDED]: {
 		content: 'label.passport.round_ended',
@@ -71,22 +87,24 @@ const data = {
 		content: 'label.passport.invalid_passport',
 		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
+		link: { label: 'label.passport.link.go_to_passport', url: '/' },
 	},
 	[EPassportBannerState.ERROR]: {
 		content: 'label.passport.error',
-		bg: bgColor[EPBGState.ERROR],
+		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 	},
 	[EPassportBannerState.INVALID_RESPONSE]: {
 		content: 'label.passport.invalid_response',
-		bg: bgColor[EPBGState.ERROR],
+		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
+		link: { label: 'label.passport.link.go_to_passport', url: '/' },
 	},
 };
 
 export const PassportBanner = () => {
 	const { formatMessage } = useIntl();
-	const state = EPassportBannerState.ENDED;
+	const state = EPassportBannerState.ELIGIBLE;
 
 	return (
 		<PassportBannerWrapper state={data[state].bg}>
@@ -96,6 +114,23 @@ export const PassportBanner = () => {
 					id: data[state].content,
 				})}
 			</P>
+			{data[state]?.link && (
+				<StyledLink>
+					<a
+						href={data[state].link.url}
+						target='_blank'
+						referrerPolicy='no-referrer'
+						rel='noreferrer'
+					>
+						<GLink>
+							{formatMessage({
+								id: data[state].link.label,
+							})}
+						</GLink>
+					</a>
+					<IconExternalLink16 />
+				</StyledLink>
+			)}
 		</PassportBannerWrapper>
 	);
 };
@@ -107,4 +142,10 @@ const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
+`;
+
+const StyledLink = styled(Flex)`
+	color: ${brandColors.giv[500]};
+	align-items: center;
+	gap: 4px;
 `;
