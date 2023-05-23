@@ -1,5 +1,5 @@
 const QFRoute = () => {
-	return <div>QF Projects Pagge</div>;
+	return <div>QF Projects Page</div>;
 };
 
 export default QFRoute;
