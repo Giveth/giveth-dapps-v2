@@ -18,6 +18,7 @@ import Select, {
 	OptionProps,
 	DropdownIndicatorProps,
 	StylesConfig,
+	ControlProps,
 } from 'react-select';
 
 import styled from 'styled-components';
@@ -45,12 +46,12 @@ const ProjectsSortSelect = () => {
 	const sortByOptions = [
 		{
 			label: formatMessage({ id: 'label.rank' }),
-			value: EProjectsSortBy.INSTANT_BOOSTING,
+			value: EProjectsSortBy.GIVPOWER,
 			icon: <IconFlash16 color={brandColors.deep[900]} />,
 		},
 		{
 			label: formatMessage({ id: 'label.givpower' }),
-			value: EProjectsSortBy.GIVPOWER,
+			value: EProjectsSortBy.INSTANT_BOOSTING,
 			icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
 		},
 		{
@@ -109,6 +110,7 @@ const ProjectsSortSelect = () => {
 				components={{
 					DropdownIndicator,
 					Option: (props: any) => <Option {...props} />,
+					Control: (props: any) => <Control {...props} />,
 				}}
 				onChange={(e: any) => {
 					setVariables({
@@ -122,6 +124,9 @@ const ProjectsSortSelect = () => {
 				styles={selectStyles}
 				id='sorting'
 				name='sorting'
+				isClearable={false}
+				isSearchable={false}
+				isMulti={false}
 			/>
 		</Flex>
 	);
@@ -144,6 +149,24 @@ const Option: ComponentType<OptionProps<ISelectedSort>> = props => {
 	);
 };
 
+const Control: ComponentType<ControlProps<ISelectedSort>> = ({
+	children,
+	...props
+}) => {
+	return (
+		<components.Control {...props}>
+			{props.selectProps.value ? (
+				<>
+					{(props.selectProps.value as ISelectedSort).icon}
+					{children}
+				</>
+			) : (
+				children
+			)}
+		</components.Control>
+	);
+};
+
 const selectStyles: StylesConfig = {
 	...selectCustomStyles,
 	container: styles => ({
@@ -151,7 +174,7 @@ const selectStyles: StylesConfig = {
 		zIndex: 3,
 		border: 'none',
 		borderRadius: '8px',
-		minWidth: '200px',
+		minWidth: '220px',
 		'&:hover': {
 			borderColor: 'transparent',
 		},
