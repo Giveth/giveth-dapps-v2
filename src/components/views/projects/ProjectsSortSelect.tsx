@@ -122,6 +122,8 @@ const ProjectsSortSelect = () => {
 				styles={selectStyles}
 				id='sorting'
 				name='sorting'
+				isClearable={false}
+				isSearchable={false}
 			/>
 		</Flex>
 	);
