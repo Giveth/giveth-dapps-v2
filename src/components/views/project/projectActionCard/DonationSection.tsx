@@ -8,20 +8,26 @@ import {
 	P,
 	IconChevronRight16,
 	brandColors,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import { device } from '@/lib/constants/constants';
 
 export const DonateSection = () => {
 	const { formatMessage, locale } = useIntl();
 	const { projectData, totalDonationsCount } = useProjectContext();
 	const { totalDonations } = projectData || {};
+	const isMobile = !useMediaQuery(device.tablet);
+
 	return (
-		<DonationSectionWrapper flexDirection='column'>
+		<DonationSectionWrapper gap='24px'>
 			{totalDonations && totalDonations !== 0 ? (
 				<DonateInfo>
+					{isMobile && <br />}
 					<Title>
 						{formatMessage({
 							id: 'label.amount_raised',
@@ -90,6 +96,13 @@ const Description = styled(Caption)`
 
 const DonationSectionWrapper = styled(Flex)`
 	justify-content: space-between;
+	flex-direction: column;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
+	${mediaQueries.laptopS} {
+		flex-direction: column;
+	}
 `;
 
 const DonateInfo = styled.div`
@@ -105,6 +118,7 @@ const DonateDescription = styled(Flex)`
 	padding: 8px 16px;
 	border: 1px solid ${neutralColors.gray[300]};
 	border-radius: 16px;
+	margin-bottom: 24px;
 `;
 
 const LearnLink = styled(Flex)`

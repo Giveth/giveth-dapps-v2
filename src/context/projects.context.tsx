@@ -28,7 +28,7 @@ interface IProjectsContext {
 }
 
 const variablesDefaultValue = {
-	sortingBy: EProjectsSortBy.GIVPOWER,
+	sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
 	filters: undefined,
 };
 
@@ -53,7 +53,7 @@ export const ProjectsProvider = (props: {
 	const router = useRouter();
 
 	useEffect(() => {
-		let sort = EProjectsSortBy.GIVPOWER;
+		let sort = EProjectsSortBy.INSTANT_BOOSTING;
 		if (router.query.sort) {
 			switch ((router.query.sort as string).toLowerCase()) {
 				case EProjectsSortBy.MOST_FUNDED.toLowerCase():
@@ -71,8 +71,8 @@ export const ProjectsProvider = (props: {
 				case EProjectsSortBy.QUALITY_SCORE.toLowerCase():
 					sort = EProjectsSortBy.QUALITY_SCORE;
 					break;
-				case EProjectsSortBy.GIVPOWER.toLowerCase():
-					sort = EProjectsSortBy.GIVPOWER;
+				case EProjectsSortBy.INSTANT_BOOSTING.toLowerCase():
+					sort = EProjectsSortBy.INSTANT_BOOSTING;
 					break;
 				case EProjectsSortBy.RECENTLY_UPDATED.toLowerCase():
 					sort = EProjectsSortBy.RECENTLY_UPDATED;

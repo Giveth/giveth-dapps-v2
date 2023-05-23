@@ -12,6 +12,7 @@ import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { EProjectPageTabs } from './ProjectIndex';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 interface IProjectTabs {
 	activeTab: number;
@@ -122,10 +123,11 @@ const Wrapper = styled.div`
 	padding: 16px 0;
 	color: ${neutralColors.gray[800]};
 	height: min-content;
-	margin: 24px 0 40px;
+	margin-top: 24px;
+	position: relative;
 	background-color: white;
 	overflow-x: auto;
-	box-shadow: 0px 5px 5px rgba(212, 218, 238, 0.4);
+	box-shadow: ${Shadow.Neutral[400]};
 `;
 
 export default ProjectTabs;

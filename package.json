@@ -35,7 +35,7 @@
 		"axios": "^0.25.0",
 		"bignumber.js": "^9.0.1",
 		"deepmerge": "^4.2.2",
-		"framer-motion": "^6.2.8",
+		"framer-motion": "^10.12.12",
 		"graphql": "^16.0.1",
 		"human-standard-token-abi": "^2.0.0",
 		"lodash.isequal": "^4.5.0",
