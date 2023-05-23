@@ -6,7 +6,6 @@ import {
 import { FC, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { motion } from 'framer-motion';
-import { DonateSection } from './DonationSection';
 import { ProjectPublicActions } from './ProjectPublicActions';
 import { ProjectStats } from './ProjectStats';
 import { AdminActions } from './AdminActions';
@@ -18,6 +17,7 @@ import { useProjectContext } from '@/context/project.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device, zIndex } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
+import QFSection from './QFSection';
 
 interface IProjectActionCardProps {}
 
@@ -74,7 +74,8 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 					</>
 				) : (
 					<>
-						<DonateSection />
+						{/* <DonateSection /> */}
+						<QFSection />
 						<ProjectPublicActions />
 					</>
 				)}
@@ -94,7 +95,8 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 				</>
 			) : (
 				<>
-					<DonateSection />
+					{/* <DonateSection /> */}
+					<QFSection />
 					<ProjectPublicActions />
 				</>
 			)}
