@@ -50,7 +50,7 @@ const config: EnvConfig = {
 
 		blockExplorerName: ['etherscan'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
+			'https://gateway.thegraph.com/api/4404c555dda23fe8080ed3cecd8e48cd/subgraphs/id/8Fh5uZkm44L7ma6Jh7JjveV87zvmDkJPuuMZuyvUW9S6',
 
 		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
@@ -219,7 +219,7 @@ const config: EnvConfig = {
 
 		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
+			'https://gateway.thegraph.com/api/4404c555dda23fe8080ed3cecd8e48cd/subgraphs/id/ATN3hzfMwQqYMcyrAxqMSrr7Bxf5jKQytWZJpwLigt2p',
 
 		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		gGIV_ADDRESS: '0xfFBAbEb49be77E5254333d5fdfF72920B989425f',
