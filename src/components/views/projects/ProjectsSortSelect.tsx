@@ -18,6 +18,7 @@ import Select, {
 	OptionProps,
 	DropdownIndicatorProps,
 	StylesConfig,
+	ControlProps,
 } from 'react-select';
 
 import styled from 'styled-components';
@@ -109,6 +110,7 @@ const ProjectsSortSelect = () => {
 				components={{
 					DropdownIndicator,
 					Option: (props: any) => <Option {...props} />,
+					Control: (props: any) => <Control {...props} />,
 				}}
 				onChange={(e: any) => {
 					setVariables({
@@ -124,6 +126,7 @@ const ProjectsSortSelect = () => {
 				name='sorting'
 				isClearable={false}
 				isSearchable={false}
+				isMulti={false}
 			/>
 		</Flex>
 	);
@@ -143,6 +146,24 @@ const Option: ComponentType<OptionProps<ISelectedSort>> = props => {
 				</RowContainer>
 			</OptionContainer>
 		</components.Option>
+	);
+};
+
+const Control: ComponentType<ControlProps<ISelectedSort>> = ({
+	children,
+	...props
+}) => {
+	return (
+		<components.Control {...props}>
+			{props.selectProps.value ? (
+				<>
+					{(props.selectProps.value as ISelectedSort).icon}
+					{children}
+				</>
+			) : (
+				children
+			)}
+		</components.Control>
 	);
 };
 
