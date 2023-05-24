@@ -1,8 +1,6 @@
 import { useIntl } from 'react-intl';
-import { brandColors, Button, H6, Lead } from '@giveth/ui-design-system';
+import { Button, H6, Lead } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
-import ExternalLink from '@/components/ExternalLink';
-import links from '@/lib/constants/links';
 import { ContentSeparator, BtnContainer } from './Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
@@ -42,26 +40,6 @@ const BeforeStart = () => {
 					<br />
 					{formatMessage({
 						id: 'page.verification.before_you_start.one',
-					})}
-					<br />
-					<br />
-					{formatMessage({
-						id: 'page.verification.before_you_start.one',
-					})}
-					<br />
-					<br />
-					{formatMessage({
-						id: 'page.verification.before_you_start.three',
-					})}{' '}
-					<ExternalLink
-						href={links.VERIFICATION_DOCS}
-						color={brandColors.pinky[500]}
-						title={formatMessage({
-							id: 'label.verification_process',
-						})}
-					/>{' '}
-					{formatMessage({
-						id: 'page.verification.before_you_start.four',
 					})}
 					<br />
 					<br />

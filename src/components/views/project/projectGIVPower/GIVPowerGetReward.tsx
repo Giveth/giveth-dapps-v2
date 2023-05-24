@@ -12,6 +12,7 @@ import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 import { useProjectContext } from '@/context/project.context';
+import { formatUSD } from '@/lib/helpers';
 
 const GIVPowerGetReward = () => {
 	const { formatMessage } = useIntl();
@@ -29,7 +30,7 @@ const GIVPowerGetReward = () => {
 						{formatMessage({
 							id: 'label.get_rewarded_with',
 						})}
-						{(+(givbackFactor || 0) * 100).toFixed(2)}%
+						{formatUSD(+(givbackFactor || 0) * 100)}%
 						{formatMessage({
 							id: 'label.ofـyourـdonationـvalue',
 						})}
