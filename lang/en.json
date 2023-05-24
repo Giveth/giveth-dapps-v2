@@ -1047,7 +1047,7 @@
 	"label.giv_staking_is_available_on_gnosis_chain": "GIV staking is available on Gnosis Chain. Please bridge your GIV to Gnosis Chain, then switch network and stake to earn rewards.",
 	"label.please_note_it_will_take_few_minutes_for_your_giv_to_bridge": "Please note, it will take a few minutes for your GIV to bridge.",
 	"label.if_you_already_bridged_your_giv_please_switch_network": "If you already bridged your GIV, please switch network to stake for GIVpower!",
-	"label.accepts_funds_on": "Accepts Funds on",
+	"label.accepts_funds_on": "Accepts funds on",
 	"label.rank": "Rank",
 	"label.newest": "Newest",
 	"label.oldest": "Oldest",
