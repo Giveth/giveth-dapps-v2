@@ -55,7 +55,7 @@ const QFProjectsRoute = (props: IQFProjectsRouteProps) => {
 	}, [referrerId]);
 
 	return (
-		<ProjectsProvider mainCategories={mainCategories}>
+		<ProjectsProvider mainCategories={mainCategories} isQF={true}>
 			<GeneralMetatags info={projectsMetatags} />
 			<ProjectsIndex
 				projects={projects}

@@ -33,6 +33,11 @@ const variablesDefaultValue = {
 	filters: undefined,
 };
 
+const variablesDefaultValueWithQF = {
+	sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
+	filters: [EProjectsFilter.ACTIVE_QF_ROUND],
+};
+
 const ProjectsContext = createContext<IProjectsContext>({
 	variables: variablesDefaultValue,
 	setVariables: () => console.log('setVariables not initialed yet!'),
@@ -51,7 +56,7 @@ export const ProjectsProvider = (props: {
 	const { children, mainCategories, selectedMainCategory, isQF } = props;
 
 	const [variables, setVariables] = useState<IVariables>(
-		variablesDefaultValue,
+		isQF ? variablesDefaultValueWithQF : variablesDefaultValue,
 	);
 	const router = useRouter();
 
@@ -97,7 +102,9 @@ export const ProjectsProvider = (props: {
 		}
 
 		if (isQF) {
-			filters?.push(EProjectsFilter.ACTIVE_QF_ROUND);
+			filters
+				? filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
+				: (filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
 		}
 
 		let term = router.query.term as string;
