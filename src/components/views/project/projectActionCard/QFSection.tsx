@@ -8,6 +8,7 @@ import {
 	mediaQueries,
 	semanticColors,
 	IconArrowRight16,
+	IconChevronRight16,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -69,22 +70,37 @@ const QFSection = () => {
 					<LightSubline>Matching</LightSubline>
 				</Flex>
 				<ContributionsContainer>
-					<Flex flexDirection='column' gap='8px'>
+					<Flex flexDirection='column' gap='4px'>
 						<FlexSameSize justifyContent='space-between'>
 							<Subline>1 DAI</Subline>
-							<IconArrowRight16 />
+							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>1 DAI</EndAlignedSubline>
 						</FlexSameSize>
 						<FlexSameSize justifyContent='space-between'>
 							<Subline>12312 DAI</Subline>
-							<IconArrowRight16 />
+							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>1 DAI </EndAlignedSubline>
 						</FlexSameSize>
 						<FlexSameSize justifyContent='space-between'>
 							<Subline>1 DAI</Subline>
-							<IconArrowRight16 />
+							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>1 DAI </EndAlignedSubline>
 						</FlexSameSize>
+						<Flex justifyContent='space-between'>
+							<LightSubline>Last updated: 3h ago</LightSubline>
+							<LightSubline>|</LightSubline>
+							<LightSubline>Next update in: 3 min</LightSubline>
+						</Flex>
+						<a
+							href='/'
+							target='_blank'
+							referrerPolicy='no-referrer'
+						>
+							<LearnLink alignItems='center' gap='2px'>
+								<Subline>How it works?</Subline>
+								<IconChevronRight16 />
+							</LearnLink>
+						</a>
 					</Flex>
 				</ContributionsContainer>
 			</div>
@@ -141,7 +157,7 @@ const LightCaption = styled(Caption)`
 `;
 
 const LightSubline = styled(Subline)`
-	color: ${neutralColors.gray[800]};
+	color: ${neutralColors.gray[700]};
 `;
 
 const EndAlignedSubline = styled(Subline)`
@@ -158,13 +174,6 @@ const FlexSameSize = styled(Flex)`
 	> * {
 		flex: 1 1 0px;
 	}
-`;
-
-const DonateDescription = styled(Flex)`
-	padding: 8px 16px;
-	border: 1px solid ${neutralColors.gray[300]};
-	border-radius: 16px;
-	margin-bottom: 24px;
 `;
 
 const LearnLink = styled(Flex)`
