@@ -25,6 +25,7 @@ interface IProjectsContext {
 	setVariables: Dispatch<SetStateAction<IVariables>>;
 	mainCategories: IMainCategory[];
 	selectedMainCategory?: IMainCategory;
+	isQF: boolean;
 }
 
 const variablesDefaultValue = {
@@ -36,6 +37,7 @@ const ProjectsContext = createContext<IProjectsContext>({
 	variables: variablesDefaultValue,
 	setVariables: () => console.log('setVariables not initialed yet!'),
 	mainCategories: [],
+	isQF: false,
 });
 
 ProjectsContext.displayName = 'ProjectsContext';
@@ -44,8 +46,9 @@ export const ProjectsProvider = (props: {
 	children: ReactNode;
 	mainCategories: IMainCategory[];
 	selectedMainCategory?: IMainCategory;
+	isQF?: boolean;
 }) => {
-	const { children, mainCategories, selectedMainCategory } = props;
+	const { children, mainCategories, selectedMainCategory, isQF } = props;
 
 	const [variables, setVariables] = useState<IVariables>(
 		variablesDefaultValue,
@@ -90,6 +93,10 @@ export const ProjectsProvider = (props: {
 			) as EProjectsFilter[];
 		}
 
+		if (isQF) {
+			filters?.push(EProjectsFilter.ACTIVE_QF_ROUND);
+		}
+
 		let term = router.query.term as string;
 		let campaignSlug = router.query.campaign as string;
 		let category =
@@ -120,6 +127,7 @@ export const ProjectsProvider = (props: {
 		router.query.filter,
 		router.query.campaign,
 		router.query?.slug,
+		isQF,
 	]);
 
 	return (
@@ -129,6 +137,7 @@ export const ProjectsProvider = (props: {
 				setVariables,
 				mainCategories,
 				selectedMainCategory,
+				isQF: isQF || false,
 			}}
 		>
 			{children}
