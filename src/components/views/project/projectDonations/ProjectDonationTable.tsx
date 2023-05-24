@@ -11,7 +11,6 @@ import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation } from '@/apollo/types/types';
-import SearchBox from '@/components/SearchBox';
 import Pagination from '@/components/Pagination';
 import {
 	smallFormatDate,
@@ -28,7 +27,6 @@ import ExternalLink from '@/components/ExternalLink';
 import SortIcon from '@/components/SortIcon';
 import { useAppSelector } from '@/features/hooks';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
-import useDebounce from '@/hooks/useDebounce';
 import {
 	RowWrapper,
 	TableCell,
@@ -75,7 +73,6 @@ const ProjectDonationTable = ({
 		by: EOrderBy.CreationDate,
 		direction: EDirection.DESC,
 	});
-	const [searchTerm, setSearchTerm] = useState<string>('');
 	const { projectData } = useProjectContext();
 	const user = useAppSelector(state => state.user.userData);
 	const { formatMessage, locale } = useIntl();
@@ -84,8 +81,6 @@ const ProjectDonationTable = ({
 		adminUser?.walletAddress,
 		user?.walletAddress,
 	);
-
-	const debouncedSearch = useDebounce(searchTerm, 500);
 
 	const orderChangeHandler = (orderBy: EOrderBy) => {
 		if (orderBy === order.by) {
@@ -114,7 +109,6 @@ const ProjectDonationTable = ({
 					take: itemPerPage,
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },
-					searchTerm,
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
 				},
 			});
@@ -124,18 +118,10 @@ const ProjectDonationTable = ({
 			}
 		};
 		fetchProjectDonations();
-	}, [page, order.by, order.direction, id, debouncedSearch]);
-
-	useEffect(() => {
-		if (page !== 0) setPage(0);
-	}, [searchTerm]);
+	}, [page, order.by, order.direction, id]);
 
 	return (
 		<Wrapper>
-			<SearchBox
-				onChange={event => setSearchTerm(event)}
-				value={searchTerm}
-			/>
 			<DonationTableWrapper>
 				<DonationTableContainer isAdmin={isAdmin}>
 					<TableHeader

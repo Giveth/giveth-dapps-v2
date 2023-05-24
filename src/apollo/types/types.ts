@@ -73,7 +73,11 @@ export enum EProjectsFilter {
 	VERIFIED = 'Verified',
 	BOOSTED_WITH_GIVPOWER = 'BoostedWithGivPower',
 	GIVING_BLOCK = 'GivingBlock',
+	ACCEPT_FUND_ON_MAINNET = 'AcceptFundOnMainnet',
 	ACCEPT_FUND_ON_GNOSIS = 'AcceptFundOnGnosis',
+	ACCEPT_FUND_ON_POLYGON = 'AcceptFundOnPolygon',
+	ACCEPT_FUND_ON_CELO = 'AcceptFundOnCelo',
+	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
 	ACTIVE_QF_ROUND = 'ActiveQfRound',
 }
 
@@ -87,9 +91,13 @@ export enum ECampaignType {
 export enum ECampaignFilterField {
 	Verified = 'verified',
 	AcceptGiv = 'givingBlocksId',
-	AcceptFundOnGnosis = 'acceptFundOnGnosis',
 	GivingBlock = 'fromGivingBlock',
 	BoostedWithGivPower = 'boostedWithGivPower',
+	AcceptFundOnMainnet = 'acceptFundOnMainnet',
+	AcceptFundOnGnosis = 'acceptFundOnGnosis',
+	AcceptFundOnPolygon = 'acceptFundOnPolygon',
+	AcceptFundOnCelo = 'acceptFundOnCelo',
+	AcceptFundOnOptimism = 'acceptFundOnOptimism',
 }
 
 export interface ICampaign {

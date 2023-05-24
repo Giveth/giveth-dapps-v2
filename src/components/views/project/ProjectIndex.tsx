@@ -19,7 +19,6 @@ import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { isSSRMode } from '@/lib/helpers';
-import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
@@ -48,7 +47,6 @@ export enum EProjectPageTabs {
 const ProjectIndex: FC<IProjectBySlug> = () => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
-	const user = useAppSelector(state => state.user.userData);
 	const { fetchProjectBoosters, projectData, isActive, isDraft } =
 		useProjectContext();
 
@@ -105,10 +103,10 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 			<HeadContainer>
 				<ProjectBadges />
 				<Row>
-					<Col lg={9}>
+					<Col xs={12} md={8} lg={9}>
 						<ProjectHeader />
 					</Col>
-					<Col lg={3}>
+					<Col xs={12} md={4} lg={3}>
 						<ProjectActionCard />
 					</Col>
 					{isDraft && (
@@ -167,7 +165,7 @@ const Wrapper = styled.div`
 const BodyWrapper = styled.div`
 	min-height: calc(100vh - 312px);
 	background-color: ${neutralColors.gray[100]};
-	padding: 32px 0 40px;
+	padding: 40px 0;
 `;
 
 const HeadContainer = styled(Container)`
