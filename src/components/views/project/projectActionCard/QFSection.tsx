@@ -61,27 +61,33 @@ const QFSection = () => {
 			)}
 			<Flex flexDirection='column' gap='4px'>
 				<EstimatedMatchingPrice>+ $7,200</EstimatedMatchingPrice>
-				<LightSubline> Estimated matching</LightSubline>
+				<LightCaption> Estimated matching</LightCaption>
 			</Flex>
-			<ContributionsContainer>
-				<Flex flexDirection='column' gap='8px'>
-					<FlexSameSize justifyContent='space-between'>
-						<Subline>1 DAI</Subline>
-						<IconArrowRight16 />
-						<EndAlignedSubline>1 DAI</EndAlignedSubline>
-					</FlexSameSize>
-					<FlexSameSize justifyContent='space-between'>
-						<Subline>12312 DAI</Subline>
-						<IconArrowRight16 />
-						<EndAlignedSubline>1 DAI </EndAlignedSubline>
-					</FlexSameSize>
-					<FlexSameSize justifyContent='space-between'>
-						<Subline>1 DAI</Subline>
-						<IconArrowRight16 />
-						<EndAlignedSubline>1 DAI </EndAlignedSubline>
-					</FlexSameSize>
+			<div>
+				<Flex justifyContent='space-between'>
+					<LightSubline>Contribution</LightSubline>
+					<LightSubline>Matching</LightSubline>
 				</Flex>
-			</ContributionsContainer>
+				<ContributionsContainer>
+					<Flex flexDirection='column' gap='8px'>
+						<FlexSameSize justifyContent='space-between'>
+							<Subline>1 DAI</Subline>
+							<IconArrowRight16 />
+							<EndAlignedSubline>1 DAI</EndAlignedSubline>
+						</FlexSameSize>
+						<FlexSameSize justifyContent='space-between'>
+							<Subline>12312 DAI</Subline>
+							<IconArrowRight16 />
+							<EndAlignedSubline>1 DAI </EndAlignedSubline>
+						</FlexSameSize>
+						<FlexSameSize justifyContent='space-between'>
+							<Subline>1 DAI</Subline>
+							<IconArrowRight16 />
+							<EndAlignedSubline>1 DAI </EndAlignedSubline>
+						</FlexSameSize>
+					</Flex>
+				</ContributionsContainer>
+			</div>
 		</DonationSectionWrapper>
 	);
 };
@@ -129,9 +135,13 @@ const EstimatedMatchingPrice = styled(H4)`
 	color: ${semanticColors.jade[500]};
 `;
 
-const LightSubline = styled(Caption)`
+const LightCaption = styled(Caption)`
 	display: inline;
 	color: ${neutralColors.gray[700]};
+`;
+
+const LightSubline = styled(Subline)`
+	color: ${neutralColors.gray[800]};
 `;
 
 const EndAlignedSubline = styled(Subline)`
