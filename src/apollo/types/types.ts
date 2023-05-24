@@ -74,6 +74,7 @@ export enum EProjectsFilter {
 	BOOSTED_WITH_GIVPOWER = 'BoostedWithGivPower',
 	GIVING_BLOCK = 'GivingBlock',
 	ACCEPT_FUND_ON_GNOSIS = 'AcceptFundOnGnosis',
+	ACTIVE_QF_ROUND = 'ActiveQfRound',
 }
 
 export enum ECampaignType {
