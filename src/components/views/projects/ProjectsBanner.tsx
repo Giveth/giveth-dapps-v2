@@ -1,6 +1,11 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { H1, neutralColors, SemiTitle } from '@giveth/ui-design-system';
+import {
+	H1,
+	neutralColors,
+	semanticColors,
+	SemiTitle,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { IMainCategory } from '@/apollo/types/types';
@@ -34,10 +39,12 @@ export const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 				fill
 				alt={_mainCategory.title}
 			/>
-			<Title weight={700}>
+			<Title weight={700} color={neutralColors.gray[100]}>
 				{formatMessage({ id: _mainCategory.slug })}
 			</Title>
-			<Desc>{formatMessage({ id: `${_mainCategory.slug}_desc` })}</Desc>
+			<Desc color={neutralColors.gray[100]}>
+				{formatMessage({ id: `${_mainCategory.slug}_desc` })}
+			</Desc>
 		</BannerContainer>
 	);
 };
@@ -54,11 +61,11 @@ export const QFProjectsBanner: FC<IProjectsBanner> = () => {
 				fill
 				alt='QF Banner'
 			/>
-			<Title weight={700}>
+			<Title weight={700} color={semanticColors.golden[500]}>
 				{/* {formatMessage({ id: _mainCategory.slug })} */}
 				hi
 			</Title>
-			<Desc>Babe</Desc>
+			<Desc color={semanticColors.jade[100]}>Babe</Desc>
 		</BannerContainer>
 	);
 };
@@ -75,14 +82,18 @@ const BannerContainer = styled(FlexCenter)`
 	}
 `;
 
-const Title = styled(H1)`
+interface IColor {
+	color: string;
+}
+
+const Title = styled(H1)<IColor>`
 	z-index: 1;
-	color: ${neutralColors.gray[100]};
+	color: ${props => props.color};
 	margin-bottom: 32px;
 `;
 
-const Desc = styled(SemiTitle)`
+const Desc = styled(SemiTitle)<IColor>`
 	z-index: 1;
-	color: ${neutralColors.gray[100]};
+	color: ${props => props.color};
 	text-transform: uppercase;
 `;
