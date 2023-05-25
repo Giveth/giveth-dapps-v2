@@ -1055,7 +1055,7 @@
 	"label.giv_staking_is_available_on_gnosis_chain": "Staking de GIV esta disponible en Gnosis Chain. Por favor transfiere tu GIV a Gnosis Chain, luego cambia tu red y haz stake para recibir recompensas.",
 	"label.please_note_it_will_take_few_minutes_for_your_giv_to_bridge": "Por favor ten en cuenta que tomará unos minutos para que tu GIV se transfiera.",
 	"label.if_you_already_bridged_your_giv_please_switch_network": "Si ya transferiste tu GIV, por favor cambia la red para hacer stake del GIVpower!",
-	"label.accepts_funds_on_chain": "Aceptan financiación en {chainName}",
+	"label.accepts_funds_on": "Aceptan financiación en",
 	"label.rank": "Clasificación",
 	"label.newest": "Más nuevo",
 	"label.oldest": "Más viejo",

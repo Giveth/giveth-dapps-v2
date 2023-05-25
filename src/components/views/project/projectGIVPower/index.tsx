@@ -70,7 +70,10 @@ const ProjectGIVPowerIndex = ({
 			</Flex>
 		</>
 	) : (
-		<NoBoost isAdmin={isAdmin} />
+		<>
+			{verified && <GIVPowerGetReward />}
+			<NoBoost isAdmin={isAdmin} />
+		</>
 	);
 };
 
