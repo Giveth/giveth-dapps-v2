@@ -45,14 +45,14 @@ const ProjectsSortSelect = () => {
 
 	const sortByOptions = [
 		{
-			label: formatMessage({ id: 'label.rank' }),
-			value: EProjectsSortBy.GIVPOWER,
-			icon: <IconFlash16 color={brandColors.deep[900]} />,
-		},
-		{
 			label: formatMessage({ id: 'label.givpower' }),
 			value: EProjectsSortBy.INSTANT_BOOSTING,
 			icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
+		},
+		{
+			label: formatMessage({ id: 'label.rank' }),
+			value: EProjectsSortBy.GIVPOWER,
+			icon: <IconFlash16 color={brandColors.deep[900]} />,
 		},
 		{
 			label: formatMessage({ id: 'label.newest' }),
