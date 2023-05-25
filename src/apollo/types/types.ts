@@ -380,3 +380,11 @@ export interface IGiverPFPToken {
 export interface IUsersPFPTokens {
 	[key: string]: IGiverPFPToken[];
 }
+
+export interface IQFRound {
+	id: string;
+	name: string;
+	isActive: boolean;
+	beginDate: string;
+	endDate: string;
+}
