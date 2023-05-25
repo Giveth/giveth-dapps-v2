@@ -25,7 +25,7 @@ import {
 } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-import ProjectsBanner from './ProjectsBanner';
+import { ProjectsBanner, QFProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
@@ -63,9 +63,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const {
 		variables: contextVariables,
-		setVariables,
 		mainCategories,
 		selectedMainCategory,
+		isQF,
 	} = useProjectsContext();
 
 	const router = useRouter();
@@ -236,7 +236,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 				</Loading>
 			)}
 
-			<ProjectsBanner mainCategory={selectedMainCategory} />
+			{isQF ? (
+				<QFProjectsBanner />
+			) : (
+				<ProjectsBanner mainCategory={selectedMainCategory} />
+			)}
 			<Wrapper>
 				<FiltersContainer>
 					{!isTablet && !isMobile && <ProjectsFiltersDesktop />}
