@@ -44,7 +44,7 @@ const ProjectTotalFundCard: FC = () => {
 				</P>
 				{recipientAddresses?.map(addObj => (
 					<ProjectWalletAddress
-						key={addObj.address}
+						key={addObj.networkId}
 						address={addObj.address!}
 						networkId={addObj.networkId!}
 					/>
