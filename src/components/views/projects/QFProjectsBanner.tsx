@@ -36,7 +36,8 @@ export const QFProjectsBanner = () => {
 				alt='QF Banner'
 			/>
 			<Title weight={700}>
-				{formatMessage({ id: 'label.quadratic_funding_round' })}
+				{formatMessage({ id: 'label.quadratic_funding_round' })}{' '}
+				{activeRound?.id}
 			</Title>
 			<Desc>
 				<Lead>{formatMessage({ id: 'label.round_ends_in' })}</Lead>
