@@ -6,12 +6,13 @@ import Image from 'next/image';
 import { IMainCategory } from '@/apollo/types/types';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
+import { useProjectsContext } from '@/context/projects.context';
 
 interface IProjectsBanner {
 	mainCategory?: IMainCategory;
 }
 
-const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
+export const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 	const { formatMessage } = useIntl();
 
 	const allCategory = {
@@ -32,13 +33,32 @@ const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 				}
 				fill
 				alt={_mainCategory.title}
-				objectFit='cover'
-				objectPosition='left'
 			/>
 			<Title weight={700}>
 				{formatMessage({ id: _mainCategory.slug })}
 			</Title>
 			<Desc>{formatMessage({ id: `${_mainCategory.slug}_desc` })}</Desc>
+		</BannerContainer>
+	);
+};
+
+export const QFProjectsBanner: FC<IProjectsBanner> = () => {
+	const { formatMessage } = useIntl();
+	const { qfRounds } = useProjectsContext();
+
+	return (
+		<BannerContainer direction='column'>
+			<Image
+				src={'/images/banners/qfBanner.png'}
+				style={{ objectFit: 'cover' }}
+				fill
+				alt='QF Banner'
+			/>
+			<Title weight={700}>
+				{/* {formatMessage({ id: _mainCategory.slug })} */}
+				hi
+			</Title>
+			<Desc>Babe</Desc>
 		</BannerContainer>
 	);
 };
@@ -66,5 +86,3 @@ const Desc = styled(SemiTitle)`
 	color: ${neutralColors.gray[100]};
 	text-transform: uppercase;
 `;
-
-export default ProjectsBanner;
