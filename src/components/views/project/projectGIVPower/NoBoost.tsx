@@ -32,7 +32,7 @@ const NoBoost = () => {
 };
 
 const Wrapper = styled(QuoteText)`
-	margin-top: 200px;
+	margin-top: 100px;
 	margin-bottom: 500px;
 	text-align: center;
 `;
