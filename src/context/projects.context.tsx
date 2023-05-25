@@ -8,7 +8,7 @@ import {
 	useState,
 } from 'react';
 import { useRouter } from 'next/router';
-import { EProjectsFilter, IMainCategory } from '@/apollo/types/types';
+import { EProjectsFilter, IMainCategory, IQFRound } from '@/apollo/types/types';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 interface IVariables {
@@ -26,6 +26,7 @@ interface IProjectsContext {
 	mainCategories: IMainCategory[];
 	selectedMainCategory?: IMainCategory;
 	isQF: boolean;
+	qfRounds: IQFRound[];
 }
 
 const variablesDefaultValue = {
@@ -43,6 +44,7 @@ const ProjectsContext = createContext<IProjectsContext>({
 	setVariables: () => console.log('setVariables not initialed yet!'),
 	mainCategories: [],
 	isQF: false,
+	qfRounds: [],
 });
 
 ProjectsContext.displayName = 'ProjectsContext';
@@ -52,8 +54,10 @@ export const ProjectsProvider = (props: {
 	mainCategories: IMainCategory[];
 	selectedMainCategory?: IMainCategory;
 	isQF?: boolean;
+	qfRounds?: IQFRound[];
 }) => {
-	const { children, mainCategories, selectedMainCategory, isQF } = props;
+	const { children, mainCategories, selectedMainCategory, isQF, qfRounds } =
+		props;
 
 	const [variables, setVariables] = useState<IVariables>(
 		isQF ? variablesDefaultValueWithQF : variablesDefaultValue,
@@ -148,6 +152,7 @@ export const ProjectsProvider = (props: {
 				mainCategories,
 				selectedMainCategory,
 				isQF: isQF || false,
+				qfRounds: qfRounds || [],
 			}}
 		>
 			{children}
