@@ -1285,5 +1285,6 @@
 	"label.passport.link.go_to_passport": "Go to Passport",
 	"testfilter": "testfilter",
 	"component.qf_middle_banner.title": "Giveth quadratic funding",
-	"component.qf_middle_banner.desc": "Donate crypto directly to Economics and Infrastructure projects on Giveth! Support projects and get rewarded for giving with zero added fees."
+	"component.qf_middle_banner.desc": "Donate crypto directly to Economics and Infrastructure projects on Giveth! Support projects and get rewarded for giving with zero added fees.",
+	"label.qf_round_projects": "QF round's projects"
 }
