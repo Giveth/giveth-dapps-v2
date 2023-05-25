@@ -25,7 +25,7 @@ import {
 } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-import ProjectsBanner from './ProjectsBanner';
+import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
@@ -35,7 +35,11 @@ import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
-import ProjectsMiddleBanner from './ProjectsMiddleBanner';
+import {
+	QFProjectsMiddleBanner,
+	ProjectsMiddleBanner,
+} from './ProjectsMiddleBanner';
+import { QFProjectsBanner } from './QFProjectsBanner';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -63,9 +67,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const {
 		variables: contextVariables,
-		setVariables,
 		mainCategories,
 		selectedMainCategory,
+		isQF,
 	} = useProjectsContext();
 
 	const router = useRouter();
@@ -189,7 +193,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 							<ProjectCard key={project.id} project={project} />
 						))}
 					</ProjectsContainer>
-					<ProjectsMiddleBanner />
+					{isQF ? (
+						<QFProjectsMiddleBanner />
+					) : (
+						<ProjectsMiddleBanner />
+					)}
 					<ProjectsContainer>
 						{secondSlice.map(project => (
 							<ProjectCard key={project.id} project={project} />
@@ -236,7 +244,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 				</Loading>
 			)}
 
-			<ProjectsBanner mainCategory={selectedMainCategory} />
+			{isQF ? (
+				<QFProjectsBanner />
+			) : (
+				<ProjectsBanner mainCategory={selectedMainCategory} />
+			)}
 			<Wrapper>
 				<FiltersContainer>
 					{!isTablet && !isMobile && <ProjectsFiltersDesktop />}

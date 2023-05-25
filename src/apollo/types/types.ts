@@ -78,6 +78,7 @@ export enum EProjectsFilter {
 	ACCEPT_FUND_ON_POLYGON = 'AcceptFundOnPolygon',
 	ACCEPT_FUND_ON_CELO = 'AcceptFundOnCelo',
 	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
+	ACTIVE_QF_ROUND = 'ActiveQfRound',
 }
 
 export enum ECampaignType {
@@ -378,4 +379,12 @@ export interface IGiverPFPToken {
 
 export interface IUsersPFPTokens {
 	[key: string]: IGiverPFPToken[];
+}
+
+export interface IQFRound {
+	id: string;
+	name: string;
+	isActive: boolean;
+	beginDate: string;
+	endDate: string;
 }

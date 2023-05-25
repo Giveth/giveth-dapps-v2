@@ -1282,5 +1282,11 @@
 	"label.passport.error": "An error occurred while loading your Gitcoin Passport. Please try again later.",
 	"label.passport.invalid_response": "Passport Profile not detected. Please open Passport to troubleshoot.",
 	"label.passport.link.update_score": "Update score",
-	"label.passport.link.go_to_passport": "Go to Passport"
+	"label.passport.link.go_to_passport": "Go to Passport",
+	"testfilter": "testfilter",
+	"component.qf_middle_banner.title": "Giveth quadratic funding",
+	"component.qf_middle_banner.desc": "Donate crypto directly to Economics and Infrastructure projects on Giveth! Support projects and get rewarded for giving with zero added fees.",
+	"label.qf_round_projects": "QF round's projects",
+	"label.quadratic_funding_round": "Quadratic funding - Round",
+	"label.round_ends_in": "Round ends in"
 }
