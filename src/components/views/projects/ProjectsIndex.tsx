@@ -25,7 +25,7 @@ import {
 } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-import { ProjectsBanner, QFProjectsBanner } from './ProjectsBanner';
+import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
@@ -39,6 +39,7 @@ import {
 	QFProjectsMiddleBanner,
 	ProjectsMiddleBanner,
 } from './ProjectsMiddleBanner';
+import { QFProjectsBanner } from './QFProjectsBanner';
 
 export interface IProjectsView {
 	projects: IProject[];

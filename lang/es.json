@@ -1295,5 +1295,7 @@
 	"label.donors_to_verified": "",
 	"component.qf_middle_banner.title": "",
 	"component.qf_middle_banner.desc": "",
-	"label.qf_round_projects": ""
+	"label.qf_round_projects": "",
+	"label.quadratic_funding_round": "",
+	"label.round_ends_in": ""
 }

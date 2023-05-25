@@ -1286,5 +1286,7 @@
 	"testfilter": "testfilter",
 	"component.qf_middle_banner.title": "Giveth quadratic funding",
 	"component.qf_middle_banner.desc": "Donate crypto directly to Economics and Infrastructure projects on Giveth! Support projects and get rewarded for giving with zero added fees.",
-	"label.qf_round_projects": "QF round's projects"
+	"label.qf_round_projects": "QF round's projects",
+	"label.quadratic_funding_round": "Quadratic funding - Round",
+	"label.round_ends_in": "Round ends in"
 }

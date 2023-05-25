@@ -1,17 +1,11 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import {
-	H1,
-	neutralColors,
-	semanticColors,
-	SemiTitle,
-} from '@giveth/ui-design-system';
+import { H1, neutralColors, SemiTitle } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { IMainCategory } from '@/apollo/types/types';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
-import { useProjectsContext } from '@/context/projects.context';
 
 interface IProjectsBanner {
 	mainCategory?: IMainCategory;
@@ -39,38 +33,15 @@ export const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 				fill
 				alt={_mainCategory.title}
 			/>
-			<Title weight={700} color={neutralColors.gray[100]}>
+			<Title weight={700}>
 				{formatMessage({ id: _mainCategory.slug })}
 			</Title>
-			<Desc color={neutralColors.gray[100]}>
-				{formatMessage({ id: `${_mainCategory.slug}_desc` })}
-			</Desc>
+			<Desc>{formatMessage({ id: `${_mainCategory.slug}_desc` })}</Desc>
 		</BannerContainer>
 	);
 };
 
-export const QFProjectsBanner: FC<IProjectsBanner> = () => {
-	const { formatMessage } = useIntl();
-	const { qfRounds } = useProjectsContext();
-
-	return (
-		<BannerContainer direction='column'>
-			<Image
-				src={'/images/banners/qfBanner.png'}
-				style={{ objectFit: 'cover' }}
-				fill
-				alt='QF Banner'
-			/>
-			<Title weight={700} color={semanticColors.golden[500]}>
-				{/* {formatMessage({ id: _mainCategory.slug })} */}
-				hi
-			</Title>
-			<Desc color={semanticColors.jade[100]}>Babe</Desc>
-		</BannerContainer>
-	);
-};
-
-const BannerContainer = styled(FlexCenter)`
+export const BannerContainer = styled(FlexCenter)`
 	height: 0;
 	position: relative;
 	margin-top: 32px;
@@ -82,18 +53,14 @@ const BannerContainer = styled(FlexCenter)`
 	}
 `;
 
-interface IColor {
-	color: string;
-}
-
-const Title = styled(H1)<IColor>`
+const Title = styled(H1)`
 	z-index: 1;
-	color: ${props => props.color};
+	color: ${neutralColors.gray[100]};
 	margin-bottom: 32px;
 `;
 
-const Desc = styled(SemiTitle)<IColor>`
+const Desc = styled(SemiTitle)`
 	z-index: 1;
-	color: ${props => props.color};
+	color: ${neutralColors.gray[100]};
 	text-transform: uppercase;
 `;
