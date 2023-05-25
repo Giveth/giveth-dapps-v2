@@ -16,15 +16,18 @@ import {
 	ICategory,
 	IMainCategory,
 	IProject,
+	IQFRound,
 } from '@/apollo/types/types';
 import { ProjectsProvider } from '@/context/projects.context';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
+import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 
 export interface IQFProjectsRouteProps {
 	projects: IProject[];
 	totalCount: number;
 	categories: ICategory[];
 	mainCategories: IMainCategory[];
+	qfRounds: IQFRound[];
 }
 
 export const QF_PROJECTS = {
@@ -38,7 +41,8 @@ export const QF_PROJECTS = {
 };
 
 const QFProjectsRoute = (props: IQFProjectsRouteProps) => {
-	const { projects, mainCategories, totalCount, categories } = props;
+	const { projects, mainCategories, totalCount, categories, qfRounds } =
+		props;
 
 	const router = useRouter();
 	const referrerId = router?.query?.referrer_id;
@@ -55,7 +59,11 @@ const QFProjectsRoute = (props: IQFProjectsRouteProps) => {
 	}, [referrerId]);
 
 	return (
-		<ProjectsProvider mainCategories={mainCategories} isQF={true}>
+		<ProjectsProvider
+			mainCategories={mainCategories}
+			isQF={true}
+			qfRounds={qfRounds}
+		>
 			<GeneralMetatags info={projectsMetatags} />
 			<ProjectsIndex
 				projects={projects}
@@ -94,12 +102,19 @@ export const getServerSideProps: GetServerSideProps = async context => {
 		const updatedMainCategory = [allCategoriesItem, ...mainCategories];
 
 		const { projects, totalCount, categories } = data.allProjects;
+		const {
+			data: { qfRounds },
+		} = await apolloClient.query({
+			query: FETCH_QF_ROUNDS,
+			fetchPolicy: 'network-only',
+		});
 		return addApolloState(apolloClient, {
 			props: {
 				projects,
 				mainCategories: updatedMainCategory,
 				totalCount,
 				categories,
+				qfRounds,
 			},
 		});
 	} catch (error: any) {
