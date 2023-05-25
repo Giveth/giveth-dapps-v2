@@ -1,15 +1,20 @@
-import { brandColors, H3, Lead } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	H3,
+	Lead,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { Arc } from '@/components/styled-components/Arc';
 
-const ProjectsMiddleBanner = () => {
+export const ProjectsMiddleBanner = () => {
 	const { formatMessage } = useIntl();
 	return (
 		<Container flexDirection='column' gap='23px'>
-			<BigArc />
-			<Title weight={700}>
+			<BigArc color={brandColors.giv[100]} />
+			<Title weight={700} color={brandColors.giv[500]}>
 				{formatMessage({
 					id: 'page.projects.middle.donate_directly',
 				})}
@@ -23,7 +28,24 @@ const ProjectsMiddleBanner = () => {
 	);
 };
 
-export default ProjectsMiddleBanner;
+export const QFProjectsMiddleBanner = () => {
+	const { formatMessage } = useIntl();
+	return (
+		<Container flexDirection='column' gap='23px'>
+			<BigArc color={semanticColors.jade[200]} />
+			<Title weight={700} color={semanticColors.jade[700]}>
+				{formatMessage({
+					id: 'component.qf_middle_banner.title',
+				})}
+			</Title>
+			<Caption>
+				{formatMessage({
+					id: 'component.qf_middle_banner.desc',
+				})}
+			</Caption>
+		</Container>
+	);
+};
 
 const Container = styled(Flex)`
 	position: relative;
@@ -35,14 +57,18 @@ const Container = styled(Flex)`
 	z-index: 1;
 `;
 
-const Title = styled(H3)`
-	color: ${brandColors.giv[500]};
+interface IColor {
+	color: string;
+}
+
+const Title = styled(H3)<IColor>`
+	color: ${props => props.color};
 	z-index: 1;
 `;
 
-const BigArc = styled(Arc)`
+const BigArc = styled(Arc)<IColor>`
 	border-width: 180px;
-	border-color: ${brandColors.giv[100]};
+	border-color: ${props => props.color};
 	opacity: 40%;
 	top: -550%;
 	left: -190%;

@@ -1281,5 +1281,7 @@
 	"label.passport.error": "",
 	"label.passport.invalid_response": "",
 	"label.passport.link.update_score": "",
-	"label.passport.link.go_to_passport": ""
+	"label.passport.link.go_to_passport": "",
+	"component.qf_middle_banner.title": "",
+	"component.qf_middle_banner.desc": ""
 }

@@ -35,7 +35,10 @@ import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
-import ProjectsMiddleBanner from './ProjectsMiddleBanner';
+import {
+	QFProjectsMiddleBanner,
+	ProjectsMiddleBanner,
+} from './ProjectsMiddleBanner';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -189,7 +192,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 							<ProjectCard key={project.id} project={project} />
 						))}
 					</ProjectsContainer>
-					<ProjectsMiddleBanner />
+					{isQF ? (
+						<QFProjectsMiddleBanner />
+					) : (
+						<ProjectsMiddleBanner />
+					)}
 					<ProjectsContainer>
 						{secondSlice.map(project => (
 							<ProjectCard key={project.id} project={project} />
