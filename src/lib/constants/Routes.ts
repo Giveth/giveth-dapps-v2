@@ -20,6 +20,7 @@ const Routes = {
 	Home: '/',
 	CreateProject: '/create',
 	Projects: '/projects',
+	QFProjects: '/qf',
 	QuadraticFunding: '/qf',
 	Project: '/project',
 	Donate: `/donate`,
