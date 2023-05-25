@@ -260,8 +260,8 @@ const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
 	width: 100%;
 	grid-template-columns: ${props =>
 		props.isAdmin
-			? '0.9fr 2.2fr 1fr 1.25fr 1.1fr 1fr'
-			: '0.9fr 2.2fr 1.1fr 1.1fr 1fr'};
+			? '0.9fr 2.2fr 0.8fr 1.25fr 1.4fr 1fr'
+			: '0.8fr 2.2fr 1.1fr 1.1fr 1fr'};
 	min-width: 800px;
 `;
 
