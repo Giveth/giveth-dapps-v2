@@ -2,13 +2,30 @@ import { semanticColors, H1, B, Lead } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
 import { useProjectsContext } from '@/context/projects.context';
 import { BannerContainer } from './ProjectsBanner';
 import { Flex } from '@/components/styled-components/Flex';
+import { getNowUnixMS } from '@/helpers/time';
+import { durationToString } from '@/lib/helpers';
 
 export const QFProjectsBanner = () => {
+	const [timer, setTimer] = useState(-1000000);
 	const { formatMessage } = useIntl();
 	const { qfRounds } = useProjectsContext();
+	const activeRound = qfRounds.find(round => round.isActive);
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			if (!activeRound?.endDate) return;
+			const _endDate = new Date(activeRound?.endDate).getTime();
+			const diff = _endDate - getNowUnixMS();
+			setTimer(diff);
+		}, 1000);
+		return () => {
+			clearInterval(interval);
+		};
+	}, [activeRound?.endDate]);
 
 	return (
 		<BannerContainer direction='column'>
@@ -23,7 +40,7 @@ export const QFProjectsBanner = () => {
 			</Title>
 			<Desc>
 				<Lead>{formatMessage({ id: 'label.round_ends_in' })}</Lead>
-				<B>Ye Vaghti</B>
+				<B>{durationToString(timer, 3)}</B>
 			</Desc>
 		</BannerContainer>
 	);
