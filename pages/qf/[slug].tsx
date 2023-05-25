@@ -13,11 +13,11 @@ import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import type { IQFProjectsRouteProps } from '.';
 
-interface IProjectsCategoriesRouteProps extends IQFProjectsRouteProps {
+interface IQFProjectsCategoriesRouteProps extends IQFProjectsRouteProps {
 	selectedMainCategory: IMainCategory;
 }
 
-const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
+const QFProjectsCategoriesRoute = (props: IQFProjectsCategoriesRouteProps) => {
 	const {
 		projects,
 		mainCategories,
@@ -121,4 +121,4 @@ export const getServerSideProps: GetServerSideProps = async context => {
 	}
 };
 
-export default ProjectsCategoriesRoute;
+export default QFProjectsCategoriesRoute;
