@@ -37,11 +37,11 @@ export const QFProjectsBanner = () => {
 			/>
 			<Title weight={700}>
 				{formatMessage({ id: 'label.quadratic_funding_round' })}{' '}
-				{activeRound?.id}
+				{activeRound ? activeRound.id : '--'}
 			</Title>
 			<Desc>
 				<Lead>{formatMessage({ id: 'label.round_ends_in' })}</Lead>
-				<B>{durationToString(timer, 3)}</B>
+				<B>{activeRound ? durationToString(timer, 3) : '--'}</B>
 			</Desc>
 		</BannerContainer>
 	);
