@@ -20,7 +20,11 @@ import { ETheme } from '@/features/general/general.slice';
 const projectsItems = {
 	explore: [
 		// { name: 'Trending', query: '?q=?q=trending' },
-		{ name: 'All Projects', url: '', label: 'label.all_projects' },
+		{
+			name: 'All Projects',
+			url: Routes.Projects,
+			label: 'label.all_projects',
+		},
 		{
 			name: 'Recently Updated',
 			url: Routes.Projects + '?sort=' + EProjectsSortBy.RECENTLY_UPDATED,
