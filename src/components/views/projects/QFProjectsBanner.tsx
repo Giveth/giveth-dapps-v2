@@ -41,7 +41,11 @@ export const QFProjectsBanner = () => {
 			</Title>
 			<Desc>
 				<Lead>{formatMessage({ id: 'label.round_ends_in' })}</Lead>
-				<B>{activeRound ? durationToString(timer, 3) : '--'}</B>
+				<B>
+					{activeRound && timer > 0
+						? durationToString(timer, 3)
+						: '--'}
+				</B>
 			</Desc>
 		</BannerContainer>
 	);
