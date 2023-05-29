@@ -312,8 +312,7 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x21a42669643f45bc0e086b8fc2ed70c23d67509d/XDAI?chainId=100',
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
-				farmStartTimeMS: 1666026660000,
-				farmEndTimeMS: 1681850831420,
+				farmStartTimeMS: 1685460000000,
 				introCard: {
 					title: 'ShapeShift DAO',
 					description:
