@@ -11,6 +11,7 @@ import { GeneralMetatags } from '@/components/Metatag';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
+import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import type { IQFProjectsRouteProps } from '.';
 
 interface IQFProjectsCategoriesRouteProps extends IQFProjectsRouteProps {
@@ -96,6 +97,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				fetchPolicy: 'network-only',
 			});
 			const { projects, totalCount, categories } = data.allProjects;
+			const {
+				data: { qfRounds },
+			} = await apolloClient.query({
+				query: FETCH_QF_ROUNDS,
+				fetchPolicy: 'network-only',
+			});
 			return {
 				props: {
 					projects,
@@ -103,6 +110,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 					selectedMainCategory: updatedSelectedMainCategory,
 					totalCount,
 					categories,
+					qfRounds,
 				},
 			};
 		}
