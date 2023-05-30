@@ -1271,5 +1271,6 @@
 	"label.learn_more_about": "Learn more about the benefits.",
 	"label.amount_raised": "Amount raised",
 	"label.raised_from": "Raised from ",
-	"label.contributors": "{count, plural, one { contributor} other { contributors} }"
+	"label.contributors": "{count, plural, one { contributor} other { contributors} }",
+	"page.givsavings.desc": "Put your idle funds to work! Deposit crypto assets into an eligible GIVsavings account to earn interest and help reach your funding goals faster."
 }
