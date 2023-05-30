@@ -1270,5 +1270,6 @@
 	"label.amount_raised": "",
 	"label.raised_from": "",
 	"label.contributors": "",
-	"page.givsavings.desc": ""
+	"page.givsavings.desc": "",
+	"component.givsavings_balance.title": ""
 }

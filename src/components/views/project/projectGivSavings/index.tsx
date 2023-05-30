@@ -3,6 +3,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import ExternalLink from '@/components/ExternalLink';
+import { GIVSavingsBalance } from './GIVSavingsBalance';
 
 const ProjectGivSavingsIndex = () => {
 	const { formatMessage } = useIntl();
@@ -18,6 +19,7 @@ const ProjectGivSavingsIndex = () => {
 					color={brandColors.pinky[500]}
 				/>
 			</Desc>
+			<GIVSavingsBalance />
 		</div>
 	);
 };

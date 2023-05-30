@@ -1282,5 +1282,6 @@
 	"label.get_rewarded_with": "",
 	"label.ofـyourـdonationـvalue": "",
 	"label.donors_to_verified": "",
-	"page.givsavings.desc": ""
+	"page.givsavings.desc": "",
+	"component.givsavings_balance.title": ""
 }
