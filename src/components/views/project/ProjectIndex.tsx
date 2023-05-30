@@ -41,6 +41,7 @@ export enum EProjectPageTabs {
 	DONATIONS = 'donations',
 	UPDATES = 'updates',
 	GIVPOWER = 'givpower',
+	GIVSAVING = 'givsaving',
 }
 
 const ProjectIndex: FC<IProjectBySlug> = () => {
