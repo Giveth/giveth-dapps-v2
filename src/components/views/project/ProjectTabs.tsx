@@ -84,7 +84,6 @@ const ProjectTabs = (props: IProjectTabs) => {
 						</Tab>
 					</Link>
 				))}
-				<div>{activeTab}</div>
 			</InnerWrapper>
 		</Wrapper>
 	);
