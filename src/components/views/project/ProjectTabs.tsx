@@ -47,8 +47,8 @@ const ProjectTabs = (props: IProjectTabs) => {
 	if (projectData?.verified) {
 		tabsArray.push(
 			{
-				title: 'GIVSavings',
-				badge: 1,
+				title: 'label.givsavings',
+				badge: undefined,
 				query: EProjectPageTabs.GIVSAVINGS,
 			},
 			{
