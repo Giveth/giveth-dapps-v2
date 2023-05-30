@@ -42,15 +42,22 @@ const ProjectTabs = (props: IProjectTabs) => {
 			badge: totalDonationsCount,
 			query: EProjectPageTabs.DONATIONS,
 		},
-		{ title: 'GIVSavings', query: EProjectPageTabs.GIVSAVINGS },
 	];
 
-	if (projectData?.verified)
-		tabsArray.push({
-			title: 'label.givpower',
-			badge: boostersData?.powerBoostings.length,
-			query: EProjectPageTabs.GIVPOWER,
-		});
+	if (projectData?.verified) {
+		tabsArray.push(
+			{
+				title: 'GIVSavings',
+				badge: 1,
+				query: EProjectPageTabs.GIVSAVINGS,
+			},
+			{
+				title: 'label.givpower',
+				badge: boostersData?.powerBoostings.length,
+				query: EProjectPageTabs.GIVPOWER,
+			},
+		);
+	}
 
 	return (
 		<Wrapper>
@@ -77,6 +84,7 @@ const ProjectTabs = (props: IProjectTabs) => {
 						</Tab>
 					</Link>
 				))}
+				<div>{activeTab}</div>
 			</InnerWrapper>
 		</Wrapper>
 	);
