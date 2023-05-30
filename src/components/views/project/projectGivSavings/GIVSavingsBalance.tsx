@@ -41,12 +41,16 @@ const Wrapper = styled.div`
 	box-shadow: ${Shadow.Neutral[400]};
 	border-radius: 8px;
 	padding: 24px;
-	width: fit-content;
 `;
 
-const Title = styled(Subline)``;
+const Title = styled(Subline)`
+	text-transform: uppercase;
+	margin-bottom: 12px;
+`;
 
-const Balance = styled(H5)``;
+const Balance = styled(H5)`
+	margin-bottom: 16px;
+`;
 
 const USD = styled(P)`
 	color: ${neutralColors.gray[700]};

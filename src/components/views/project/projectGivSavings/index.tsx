@@ -1,4 +1,4 @@
-import { H4, Lead, brandColors } from '@giveth/ui-design-system';
+import { Col, H4, Lead, Row, brandColors } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -19,7 +19,11 @@ const ProjectGivSavingsIndex = () => {
 					color={brandColors.pinky[500]}
 				/>
 			</Desc>
-			<GIVSavingsBalance />
+			<Row>
+				<Col md={6} lg={4}>
+					<GIVSavingsBalance />
+				</Col>
+			</Row>
 		</div>
 	);
 };
