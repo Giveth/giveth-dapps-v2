@@ -12,7 +12,7 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Flex } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 
-export const GIVSavingsBalance = () => {
+export const GIVsavingsBalance = () => {
 	const { formatMessage } = useIntl();
 
 	return (

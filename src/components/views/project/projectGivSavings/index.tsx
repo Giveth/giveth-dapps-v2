@@ -3,7 +3,7 @@ import React from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import ExternalLink from '@/components/ExternalLink';
-import { GIVSavingsBalance } from './GIVSavingsBalance';
+import { GIVsavingsBalance } from './GIVsavingsBalance';
 
 const ProjectGivSavingsIndex = () => {
 	const { formatMessage } = useIntl();
@@ -21,7 +21,7 @@ const ProjectGivSavingsIndex = () => {
 			</Desc>
 			<Row>
 				<Col md={6} lg={4}>
-					<GIVSavingsBalance />
+					<GIVsavingsBalance />
 				</Col>
 			</Row>
 		</div>
