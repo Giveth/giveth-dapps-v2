@@ -25,6 +25,7 @@ import { useProjectContext } from '@/context/project.context';
 import { ProjectActionCard } from './projectActionCard/ProjectActionCard';
 import ProjectBadges from './ProjectBadges';
 import ProjectCategoriesBadges from './ProjectCategoriesBadges';
+import ProjectGivSavingsIndex from './projectGivSavings';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -63,11 +64,13 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 				case EProjectPageTabs.DONATIONS:
 					setActiveTab(2);
 					break;
-				case EProjectPageTabs.GIVPOWER:
+				case EProjectPageTabs.GIVSAVINGS:
 					setActiveTab(3);
 					break;
-				case EProjectPageTabs.GIVSAVINGS:
+				case EProjectPageTabs.GIVPOWER:
 					setActiveTab(4);
+					break;
+
 				default:
 					setActiveTab(0);
 					break;
@@ -142,7 +145,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					)}
 					{activeTab === 1 && <ProjectUpdates />}
 					{activeTab === 2 && <ProjectDonations />}
-					{activeTab === 3 && <ProjectGIVPowerIndex />}
+					{activeTab === 3 && <ProjectGivSavingsIndex />}
+					{activeTab === 4 && <ProjectGIVPowerIndex />}
 				</Container>
 				<SimilarProjects slug={slug} />
 			</BodyWrapper>
