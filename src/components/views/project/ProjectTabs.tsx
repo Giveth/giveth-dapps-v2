@@ -42,6 +42,7 @@ const ProjectTabs = (props: IProjectTabs) => {
 			badge: totalDonationsCount,
 			query: EProjectPageTabs.DONATIONS,
 		},
+		{ title: 'GIVSavings', query: EProjectPageTabs.GIVSAVINGS },
 	];
 
 	if (projectData?.verified)

@@ -41,7 +41,7 @@ export enum EProjectPageTabs {
 	DONATIONS = 'donations',
 	UPDATES = 'updates',
 	GIVPOWER = 'givpower',
-	GIVSAVING = 'givsaving',
+	GIVSAVINGS = 'givsavings',
 }
 
 const ProjectIndex: FC<IProjectBySlug> = () => {
@@ -66,6 +66,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 				case EProjectPageTabs.GIVPOWER:
 					setActiveTab(3);
 					break;
+				case EProjectPageTabs.GIVSAVINGS:
+					setActiveTab(4);
 				default:
 					setActiveTab(0);
 					break;
