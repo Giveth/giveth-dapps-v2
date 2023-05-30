@@ -1146,6 +1146,7 @@
 	"label.updates": "Actualitzacions",
 	"label.donations": "Donacions",
 	"label.givpower": "GIVpower",
+	"label.givsavings": "GIVsavings",
 	"component.givback_eligible.desc": "Quan doneu a projectes verificats, qualifiqueu per rebre tokens GIV. A través dels GIVbacks, GIV capacita els donants amb drets de governança a través del GIVgarden.",
 	"component.givback_toast.desc": "Obteniu GIVbacks fent una donació a aquest projecte.",
 	"label.report_an_issue": "Informe d'un problema",

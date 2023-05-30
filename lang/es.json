@@ -94,6 +94,7 @@
 	"label.updates": "Actualizaciones",
 	"label.donations": "Donaciones",
 	"label.givpower": "GIVpower",
+	"label.givsavings": "GIVsavings",
 	"component.givback_elibible.desc": "Cuando donas a proyectos verificados calificas para recibir GIV tokens. Por medio de GIVbacks, GIV empodera donantes con derechos de governanza a traves del GIVgarden.",
 	"component.givback_toast.desc": "Obtienes GIVbacks al donar a este proyecto.",
 	"label.report_an_issue": "Reporta un problema",
