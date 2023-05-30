@@ -1,29 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { GLink } from '@giveth/ui-design-system';
+import { GLink, neutralColors } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import NetworkLogo from '@/components/NetworkLogo';
 
-const networks = [config.MAINNET_CONFIG, config.OPTIMISM_CONFIG];
+const networks = [config.OPTIMISM_CONFIG];
+
+enum EGIVsavingsTabs {
+	ALL = 0,
+	MAINNET = parseInt(config.MAINNET_CONFIG.chainId),
+	OPTIMISM = parseInt(config.OPTIMISM_CONFIG.chainId),
+}
 
 export const GIVsavingsTabs = () => {
+	const [activeTab, setActiveTab] = useState(EGIVsavingsTabs.OPTIMISM);
 	const { formatMessage } = useIntl();
 
 	return (
-		<Wrapper>
-			<Tab>{formatMessage({ id: 'label.all' })}</Tab>
-			{networks.map(network => (
-				<Tab key={network.chainId} gap='8px' alignItems='center'>
-					<NetworkLogo
-						chainId={parseInt(network.chainId)}
-						logoSize={24}
-					/>
-					<GLink>{network.chainName}</GLink>
-				</Tab>
-			))}
-		</Wrapper>
+		<>
+			<Wrapper>
+				{/* Disable it for lunch <Tab>{formatMessage({ id: 'label.all' })}</Tab> */}
+				{networks.map(network => (
+					<Tab
+						isActive={activeTab === parseInt(network.chainId)}
+						key={network.chainId}
+						gap='8px'
+						alignItems='center'
+					>
+						<NetworkLogo
+							chainId={parseInt(network.chainId)}
+							logoSize={24}
+						/>
+						<GLink>{network.chainName}</GLink>
+					</Tab>
+				))}
+			</Wrapper>
+		</>
 	);
 };
 
@@ -31,6 +45,12 @@ const Wrapper = styled(Flex)`
 	padding: 8px 24px;
 `;
 
-const Tab = styled(Flex)`
+interface ITab {
+	isActive: boolean;
+}
+
+const Tab = styled(Flex)<ITab>`
 	padding: 10px 16px;
+	border-bottom: ${props =>
+		props.isActive && `2px solid ${neutralColors.gray[900]}`};
 `;
