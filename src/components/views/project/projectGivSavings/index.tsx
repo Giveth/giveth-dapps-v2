@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import ExternalLink from '@/components/ExternalLink';
 import { GIVsavingsBalance } from './GIVsavingsBalance';
+import { GIVsavingsTabs } from './GIVsavingsTabs';
 
 const ProjectGivSavingsIndex = () => {
 	const { formatMessage } = useIntl();
@@ -24,6 +25,7 @@ const ProjectGivSavingsIndex = () => {
 					<GIVsavingsBalance />
 				</Col>
 			</Row>
+			<GIVsavingsTabs />
 		</div>
 	);
 };

@@ -1271,5 +1271,6 @@
 	"label.raised_from": "",
 	"label.contributors": "",
 	"page.givsavings.desc": "",
-	"component.givsavings_balance.title": ""
+	"component.givsavings_balance.title": "",
+	"label.all": ""
 }
