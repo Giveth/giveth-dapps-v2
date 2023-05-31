@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
 import { OptimismNetworkConfig } from '@/types/config';
+import { DepositCard } from './DepositCard';
 
 interface IGIVsavingsAccountCard {
 	network: OptimismNetworkConfig;
@@ -50,6 +51,7 @@ export const GIVsavingsAccountCard: FC<IGIVsavingsAccountCard> = ({
 						</Tab>
 					))}
 				</Flex>
+				<DepositCard />
 			</ActionCard>
 		</Wrapper>
 	);
