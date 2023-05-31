@@ -1,5 +1,6 @@
 import {
 	B,
+	Button,
 	Caption,
 	GLink,
 	IconRefresh16,
@@ -74,7 +75,7 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 
 	return (
 		<Wrapper>
-			<Caption>From Wallet</Caption>
+			<Caption medium>From Wallet</Caption>
 			<InputWrapper>
 				<TokenInfo alignItems='center'>
 					{/* TODO: Change to Token Icon */}
@@ -102,6 +103,7 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 					Max
 				</MaxButton>
 			</BalanceRow>
+			<StyledButton label='Deposit' />
 		</Wrapper>
 	);
 };
@@ -146,4 +148,9 @@ const IconWrapper = styled.div`
 
 const MaxButton = styled(GLink)`
 	cursor: pointer;
+`;
+
+const StyledButton = styled(Button)`
+	margin-top: 24px;
+	width: 100%;
 `;
