@@ -164,7 +164,9 @@ interface XDaiNetworkConfig extends SimpleNetworkConfig {
 	MERKLE_ADDRESS: string;
 }
 
-interface OptimismNetworkConfig extends BasicNetworkConfig, GIVSavingConfig {}
+export interface OptimismNetworkConfig
+	extends BasicNetworkConfig,
+		GIVSavingConfig {}
 
 interface MicroservicesConfig {
 	authentication: string;

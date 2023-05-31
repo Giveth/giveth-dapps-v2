@@ -5,6 +5,7 @@ import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import NetworkLogo from '@/components/NetworkLogo';
+import { GIVsavingsAccountCard } from './GIVsavingsAccountCard';
 
 const networks = [config.OPTIMISM_CONFIG];
 
@@ -18,10 +19,13 @@ export const GIVsavingsTabs = () => {
 	const [activeTab, setActiveTab] = useState(EGIVsavingsTabs.OPTIMISM);
 	const { formatMessage } = useIntl();
 
+	const activeNetwork = networks.find(
+		network => parseInt(network.chainId) === activeTab,
+	);
 	return (
 		<>
 			<Wrapper>
-				{/* Disable it for lunch <Tab>{formatMessage({ id: 'label.all' })}</Tab> */}
+				{/* Disable it for MVP <Tab>{formatMessage({ id: 'label.all' })}</Tab> */}
 				{networks.map(network => (
 					<Tab
 						isActive={activeTab === parseInt(network.chainId)}
@@ -37,6 +41,7 @@ export const GIVsavingsTabs = () => {
 					</Tab>
 				))}
 			</Wrapper>
+			{activeNetwork && <GIVsavingsAccountCard network={activeNetwork} />}
 		</>
 	);
 };
