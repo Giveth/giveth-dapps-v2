@@ -1,7 +1,12 @@
 import React from 'react';
+import GivSavingsAccountDetailsTabs from './GivSavingsAccountDetailsTabs';
 
 const ProjectGivSavingsIndex = () => {
-	return <div>ProjectGivSavingsIndex</div>;
+	return (
+		<div>
+			<GivSavingsAccountDetailsTabs />
+		</div>
+	);
 };
 
 export default ProjectGivSavingsIndex;
