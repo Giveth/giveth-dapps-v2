@@ -106,14 +106,16 @@ export interface RegenStreamConfig {
 	tokenAddressOnUniswapV2: string;
 }
 
+export interface IToken {
+	name: string;
+	symbol: string;
+	decimals: number;
+}
+
 export interface INetworkParam {
 	chainId: string;
 	chainName: string;
-	nativeCurrency: {
-		name: string;
-		symbol: string;
-		decimals: number;
-	};
+	nativeCurrency: IToken;
 	blockExplorerUrls: Array<string>;
 	rpcUrls: Array<string>;
 	iconUrls?: Array<string>;
@@ -145,12 +147,25 @@ export interface SimpleNetworkConfig extends BasicNetworkConfig {
 	regenStreams: RegenStreamConfig[];
 }
 
+interface GIVSavingAccount {
+	CONTRACT_ADDRESS: string;
+	token: IToken;
+}
+
+interface GIVSavingConfig {
+	givsavingsAccounts: GIVSavingAccount[];
+}
+
 interface MainnetNetworkConfig extends SimpleNetworkConfig {
 	WETH_TOKEN_ADDRESS: string;
 }
+
 interface XDaiNetworkConfig extends SimpleNetworkConfig {
 	MERKLE_ADDRESS: string;
 }
+
+interface OptimismNetworkConfig extends BasicNetworkConfig, GIVSavingConfig {}
+
 interface MicroservicesConfig {
 	authentication: string;
 	notification: string;
@@ -167,7 +182,7 @@ export interface EnvConfig {
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	XDAI_CONFIG: XDaiNetworkConfig;
 	POLYGON_CONFIG: BasicNetworkConfig;
-	OPTIMISM_CONFIG: BasicNetworkConfig;
+	OPTIMISM_CONFIG: OptimismNetworkConfig;
 	CELO_CONFIG: BasicNetworkConfig;
 	GARDEN_LINK: string;
 	BASE_ROUTE: string;
