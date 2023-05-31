@@ -256,14 +256,24 @@ const config: EnvConfig = {
 	},
 
 	OPTIMISM_CONFIG: {
-		nodeUrl: networksParams[10]?.rpcUrls[0],
-		...networksParams[10],
+		nodeUrl: networksParams[420]?.rpcUrls[0],
+		...networksParams[420],
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
 		blockExplorerName: ['OptimismScan'],
 		subgraphAddress: '',
-		givsavingsAccounts: [],
+		givsavingsAccounts: [
+			{
+				CONTRACT_ADDRESS: '0x799E7D9776c4A0392F6829DCB6BDc593d598F7AA',
+				token: {
+					name: 'Mock USDC',
+					symbol: 'MockUSDC',
+					decimals: 18,
+					address: '0x54fc7C432E1498843db63Fb4BdAe6F849e5fAD0C',
+				},
+			},
+		],
 	},
 
 	CELO_CONFIG: {
