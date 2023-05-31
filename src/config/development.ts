@@ -263,6 +263,7 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['OptimismScan'],
 		subgraphAddress: '',
+		givsavingsAccounts: [],
 	},
 
 	CELO_CONFIG: {
