@@ -1,4 +1,11 @@
-import { H4, H6, brandColors, neutralColors } from '@giveth/ui-design-system';
+import {
+	Col,
+	H4,
+	H6,
+	Row,
+	brandColors,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
@@ -51,9 +58,13 @@ export const GIVsavingsAccountCard: FC<IGIVsavingsAccountCard> = ({
 						</Tab>
 					))}
 				</Flex>
-				<DepositCard
-					givsavingsAccount={network.givsavingsAccounts[0]}
-				/>
+				<Row>
+					<Col lg={6}>
+						<DepositCard
+							givsavingsAccount={network.givsavingsAccounts[0]}
+						/>
+					</Col>
+				</Row>
 			</ActionCard>
 		</Wrapper>
 	);
