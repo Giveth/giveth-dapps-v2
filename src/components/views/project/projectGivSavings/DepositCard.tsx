@@ -1,12 +1,18 @@
-import { Caption, neutralColors } from '@giveth/ui-design-system';
-import React, { useCallback, useState } from 'react';
+import { B, Caption, neutralColors } from '@giveth/ui-design-system';
+import { FC, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { BigNumber, utils } from 'ethers';
 import { captureException } from '@sentry/nextjs';
 import { NumericalInput } from '@/components/input';
 import { Flex } from '@/components/styled-components/Flex';
+import NetworkLogo from '@/components/NetworkLogo';
+import { GIVSavingsAccount } from '@/types/config';
 
-export const DepositCard = () => {
+interface IDepositCard {
+	givsavingsAccount: GIVSavingsAccount;
+}
+
+export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 	const [displayAmount, setDisplayAmount] = useState('');
 	const [amount, setAmount] = useState('0');
 
@@ -32,7 +38,11 @@ export const DepositCard = () => {
 		<Wrapper>
 			<Caption>From Wallet</Caption>
 			<InputWrapper>
-				<Flex></Flex>
+				<TokenInfo alignItems='center'>
+					{/* TODO: Change to Token Icon */}
+					<NetworkLogo chainId={5} logoSize={24} />
+					<B>{givsavingsAccount.token.name}</B>
+				</TokenInfo>
 				<StyledNumericalInput
 					value={displayAmount}
 					onUserInput={onUserInput}
@@ -50,6 +60,11 @@ const Wrapper = styled.div`
 const InputWrapper = styled(Flex)`
 	border: 2px solid ${neutralColors.gray[400]};
 	border-radius: 8px;
+`;
+
+const TokenInfo = styled(Flex)`
+	min-width: 140px;
+	padding: 15px;
 `;
 
 const StyledNumericalInput = styled(NumericalInput)`

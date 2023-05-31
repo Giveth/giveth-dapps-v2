@@ -51,7 +51,9 @@ export const GIVsavingsAccountCard: FC<IGIVsavingsAccountCard> = ({
 						</Tab>
 					))}
 				</Flex>
-				<DepositCard />
+				<DepositCard
+					givsavingsAccount={network.givsavingsAccounts[0]}
+				/>
 			</ActionCard>
 		</Wrapper>
 	);
