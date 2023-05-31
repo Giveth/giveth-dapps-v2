@@ -91,6 +91,17 @@ export const networksParams: {
 		blockExplorerUrls: ['https://polygonscan.com/'],
 		rpcUrls: ['https://polygon-rpc.com/'],
 	},
+	420: {
+		chainId: '0x1A4',
+		chainName: 'Optimism Goerli Testnet',
+		nativeCurrency: {
+			name: 'ETH',
+			symbol: 'ETH',
+			decimals: 18,
+		},
+		blockExplorerUrls: ['https://optimistic.etherscan.io/'],
+		rpcUrls: ['https://goerli-optimism.etherscan.io/'],
+	},
 	42220: {
 		chainId: '0xa4ec',
 		chainName: 'Celo Mainnet',
