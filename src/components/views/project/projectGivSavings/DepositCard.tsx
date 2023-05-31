@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { BigNumber, utils } from 'ethers';
 import { captureException } from '@sentry/nextjs';
 import { NumericalInput } from '@/components/input';
+import { Flex } from '@/components/styled-components/Flex';
 
 export const DepositCard = () => {
 	const [displayAmount, setDisplayAmount] = useState('');
@@ -30,11 +31,14 @@ export const DepositCard = () => {
 	return (
 		<Wrapper>
 			<Caption>From Wallet</Caption>
-			<StyledNumericalInput
-				value={displayAmount}
-				onUserInput={onUserInput}
-				disabled={false}
-			/>
+			<InputWrapper>
+				<Flex></Flex>
+				<StyledNumericalInput
+					value={displayAmount}
+					onUserInput={onUserInput}
+					disabled={false}
+				/>
+			</InputWrapper>
 		</Wrapper>
 	);
 };
@@ -43,12 +47,19 @@ const Wrapper = styled.div`
 	padding: 24px;
 `;
 
+const InputWrapper = styled(Flex)`
+	border: 2px solid ${neutralColors.gray[400]};
+	border-radius: 8px;
+`;
+
 const StyledNumericalInput = styled(NumericalInput)`
 	background-color: ${neutralColors.gray[100]};
 	color: ${neutralColors.gray[800]};
 	border: none;
 	border-radius: 0;
 	border-left: 2px solid ${neutralColors.gray[400]};
+	padding: 15px;
+	margin: 0;
 	::placeholder {
 		color: ${neutralColors.gray[800]};
 	}
