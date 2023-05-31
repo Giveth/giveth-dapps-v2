@@ -151,13 +151,13 @@ export interface SimpleNetworkConfig extends BasicNetworkConfig {
 	regenStreams: RegenStreamConfig[];
 }
 
-interface GIVSavingAccount {
+export interface GIVSavingsAccount {
 	CONTRACT_ADDRESS: string;
 	token: IToken;
 }
 
 interface GIVSavingConfig {
-	givsavingsAccounts: GIVSavingAccount[];
+	givsavingsAccounts: GIVSavingsAccount[];
 }
 
 interface MainnetNetworkConfig extends SimpleNetworkConfig {
