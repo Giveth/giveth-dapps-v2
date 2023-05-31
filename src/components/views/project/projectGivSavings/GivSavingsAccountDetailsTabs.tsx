@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { B, P, brandColors, neutralColors } from '@giveth/ui-design-system';
 
@@ -6,17 +6,24 @@ import { Flex } from '@/components/styled-components/Flex';
 
 const TabsText = ['GIVsavings Balance', 'Total Volume Locked', 'APY Variation'];
 
-const GivSavingsAccountDetailsTabs = () => {
-	const [selectedTab, setSelectedTab] = useState(0);
+interface IGivSavingsAccountDetailsTabsProps {
+	selectedChartTab: number;
+	setSelectedChartTab: (index: number) => void;
+}
+
+const GivSavingsAccountDetailsTabs = ({
+	selectedChartTab,
+	setSelectedChartTab,
+}: IGivSavingsAccountDetailsTabsProps) => {
 	return (
 		<TabsContainer gap='8px'>
 			{TabsText.map((text, index) => (
 				<TabItem
-					isActive={selectedTab === index}
-					onClick={() => setSelectedTab(index)}
+					isActive={selectedChartTab === index}
+					onClick={() => setSelectedChartTab(index)}
 					key={index}
 				>
-					{selectedTab === index ? <B>{text}</B> : <P>{text}</P>}
+					{selectedChartTab === index ? <B>{text}</B> : <P>{text}</P>}
 				</TabItem>
 			))}
 		</TabsContainer>
