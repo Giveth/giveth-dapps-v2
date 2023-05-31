@@ -26,7 +26,7 @@ interface IDepositCard {
 
 export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 	const [displayAmount, setDisplayAmount] = useState('');
-	const [amount, setAmount] = useState('0');
+	// const [amount, setAmount] = useState('0');
 	const [balance, setBalance] = useState('0');
 
 	const { chainId: networkId, account, library, active } = useWeb3React();
@@ -45,7 +45,7 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 				},
 			});
 		}
-		setAmount(valueBn.toString());
+		// setAmount(valueBn.toString());
 	}, []);
 
 	const fetchBalance = useCallback(async () => {
@@ -87,14 +87,21 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 					disabled={false}
 				/>
 			</InputWrapper>
-			<Flex justifyContent='space-between'>
+			<BalanceRow justifyContent='space-between'>
 				<Flex alignItems='center' gap='6px'>
 					<GLink>Available: ${balance}</GLink>
 					<IconWrapper onClick={() => fetchBalance()}>
 						<IconRefresh16 color={brandColors.giv[500]} />
 					</IconWrapper>
 				</Flex>
-			</Flex>
+				<MaxButton
+					onClick={() => {
+						setDisplayAmount(balance);
+					}}
+				>
+					Max
+				</MaxButton>
+			</BalanceRow>
 		</Wrapper>
 	);
 };
@@ -106,6 +113,7 @@ const Wrapper = styled.div`
 const InputWrapper = styled(Flex)`
 	border: 2px solid ${neutralColors.gray[400]};
 	border-radius: 8px;
+	overflow: hidden;
 `;
 
 const TokenInfo = styled(Flex)`
@@ -126,6 +134,16 @@ const StyledNumericalInput = styled(NumericalInput)`
 	}
 `;
 
+const BalanceRow = styled(Flex)`
+	margin-top: 4px;
+	color: ${neutralColors.gray[700]};
+`;
+
 const IconWrapper = styled.div`
+	cursor: pointer;
+	height: 16px;
+`;
+
+const MaxButton = styled(GLink)`
 	cursor: pointer;
 `;
