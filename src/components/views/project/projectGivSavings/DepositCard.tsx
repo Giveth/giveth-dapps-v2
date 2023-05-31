@@ -25,7 +25,15 @@ interface IDepositCard {
 	givsavingsAccount: GIVSavingsAccount;
 }
 
+enum EDepositCardState {
+	DEPOSIT,
+	APPROVE,
+	DEPOSITING,
+	SUCCESS,
+}
+
 export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
+	const [state, setState] = useState(EDepositCardState.DEPOSIT);
 	const [displayAmount, setDisplayAmount] = useState('');
 	// const [amount, setAmount] = useState('0');
 	const [balance, setBalance] = useState('0');
