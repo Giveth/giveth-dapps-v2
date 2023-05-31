@@ -106,16 +106,20 @@ export interface RegenStreamConfig {
 	tokenAddressOnUniswapV2: string;
 }
 
-export interface IToken {
+interface INativeToken {
 	name: string;
 	symbol: string;
 	decimals: number;
 }
 
+export interface IToken extends INativeToken {
+	address: string;
+}
+
 export interface INetworkParam {
 	chainId: string;
 	chainName: string;
-	nativeCurrency: IToken;
+	nativeCurrency: INativeToken;
 	blockExplorerUrls: Array<string>;
 	rpcUrls: Array<string>;
 	iconUrls?: Array<string>;
