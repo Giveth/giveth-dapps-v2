@@ -12,6 +12,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
 import { OptimismNetworkConfig } from '@/types/config';
 import { DepositCard } from './DepositCard';
+import { APYCard } from './APYCard';
 
 interface IGIVsavingsAccountCard {
 	network: OptimismNetworkConfig;
@@ -63,6 +64,9 @@ export const GIVsavingsAccountCard: FC<IGIVsavingsAccountCard> = ({
 						<DepositCard
 							givsavingsAccount={network.givsavingsAccounts[0]}
 						/>
+					</Col>
+					<Col lg={6}>
+						<APYCard />
 					</Col>
 				</Row>
 			</ActionCard>
