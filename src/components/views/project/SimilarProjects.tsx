@@ -1,33 +1,34 @@
 import styled from 'styled-components';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-	brandColors,
-	Button,
 	Container,
-	H5,
-	IconChevronRight32,
+	deviceSize,
+	H4,
+	IconPointerLeft,
+	IconPointerRight,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { captureException } from '@sentry/nextjs';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper';
-import Image from 'next/image';
+import { Navigation, Pagination } from 'swiper';
 import { Swiper as SwiperClass } from 'swiper/types';
 import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
 import { SIMILAR_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import { Shadow } from '@/components/styled-components/Shadow';
+import { Flex } from '@/components/styled-components/Flex';
 import { showToastError } from '@/lib/helpers';
 import { ISuggestedProjectsGQL } from '@/apollo/types/gqlTypes';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import CaretRightIcon from '/public/images/caret_right.svg';
-import ExternalLink from '@/components/ExternalLink';
-import Routes from '@/lib/constants/Routes';
+import {
+	NavigationWrapper,
+	PaginationWrapper,
+	SwiperPaginationWrapper,
+} from '@/components/styled-components/SwiperPagination';
+import useMediaQuery from '@/hooks/useMediaQuery';
 
 const projectsToFetch = 12;
 
@@ -46,6 +47,10 @@ const SimilarProjects = (props: { slug: string }) => {
 	} else {
 		projectsToShow = 3;
 	}
+
+	const pagElRef = useRef<HTMLDivElement>(null);
+	const nextElRef = useRef<HTMLDivElement>(null);
+	const prevElRef = useRef<HTMLDivElement>(null);
 
 	const { formatMessage } = useIntl();
 	const [suggestedProjects, setSuggestedProjects] = useState<IProject[]>([]);
@@ -76,45 +81,68 @@ const SimilarProjects = (props: { slug: string }) => {
 			});
 	}, [slug]);
 
+	const isBigScreen = useMediaQuery(`(min-width: ${deviceSize.tablet}px)`);
+
+	if (!isBigScreen) suggestedProjects.slice(0, 5);
+
 	if (!suggestedProjects || suggestedProjects.length === 0) return null;
 	return (
 		<ContainerStyled id='similar-projects'>
 			<Title>
-				<H5 weight={700}>
+				<H4 weight={700}>
 					{formatMessage({ id: 'label.similar_projects' })}
-				</H5>
-				<ExternalLink href={Routes.Projects}>
-					<Button
-						size='large'
-						buttonType='texty'
-						label={formatMessage({ id: 'label.view_more' })}
-						icon={<IconChevronRight32 />}
-					/>
-				</ExternalLink>
+				</H4>
+				<SwiperPaginationWrapper>
+					<NavigationWrapper ref={prevElRef}>
+						<IconPointerLeft
+							color={neutralColors.gray[900]}
+							size={24}
+						/>
+					</NavigationWrapper>
+					<PaginationWrapper ref={pagElRef} />
+					<NavigationWrapper ref={nextElRef}>
+						<IconPointerRight
+							color={neutralColors.gray[900]}
+							size={24}
+						/>
+					</NavigationWrapper>
+				</SwiperPaginationWrapper>
 			</Title>
 			<SwiperContainer>
-				<CaretLeft id='prevIcon'>
-					<Image src={CaretRightIcon} alt='caret right' />
-				</CaretLeft>
 				<Swiper
 					onSwiper={setSwiperInstance}
-					modules={[Navigation]}
+					modules={[Navigation, Pagination]}
 					navigation={{
-						nextEl: '#nextIcon',
-						prevEl: '#prevIcon',
+						nextEl: nextElRef.current,
+						prevEl: prevElRef.current,
 					}}
 					slidesPerView={projectsToShow}
+					slidesPerGroup={projectsToShow}
 					spaceBetween={24}
+					pagination={{
+						el: pagElRef.current,
+						clickable: true,
+						type: 'bullets',
+						renderBullet: function (index, className) {
+							return (
+								'<span class="' +
+								className +
+								'">' +
+								(index + 1) +
+								'</span>'
+							);
+						},
+					}}
 				>
-					{suggestedProjects?.map(project => (
+					{(isBigScreen
+						? suggestedProjects
+						: suggestedProjects.slice(0, 5)
+					)?.map(project => (
 						<SwiperSlide key={project.id}>
 							<ProjectCard project={project} />
 						</SwiperSlide>
 					))}
 				</Swiper>
-				<CaretRight id='nextIcon'>
-					<Image src={CaretRightIcon} alt='caret right' />
-				</CaretRight>
 			</SwiperContainer>
 		</ContainerStyled>
 	);
@@ -122,47 +150,22 @@ const SimilarProjects = (props: { slug: string }) => {
 
 const Title = styled(Flex)`
 	justify-content: space-between;
-	margin-bottom: 50px;
+	margin-bottom: 20px;
+	flex-wrap: wrap;
 	color: ${neutralColors.gray[600]};
-	button {
-		color: ${brandColors.giv[500]};
-	}
 `;
 
 const SwiperContainer = styled.div`
-	overflow: unset;
-	position: relative;
+	margin-left: -30px;
+	.swiper {
+		padding: 30px;
+	}
 `;
 
 const ContainerStyled = styled(Container)`
 	position: relative;
 	margin-top: 60px;
 	margin-bottom: 120px;
-`;
-
-const CaretRight = styled(FlexCenter)`
-	width: 48px;
-	height: 48px;
-	border-radius: 50%;
-	background: white;
-	box-shadow: ${Shadow.Neutral[500]};
-	cursor: pointer;
-	position: absolute;
-	top: calc(50% - 24px);
-	right: -24px;
-	z-index: 10;
-	user-select: none;
-	&.swiper-button-disabled {
-		opacity: 0.4;
-		cursor: default;
-	}
-	transition: opacity 0.3s ease-in-out;
-`;
-
-const CaretLeft = styled(CaretRight)`
-	-ms-transform: rotate(180deg);
-	transform: rotate(180deg);
-	left: -24px;
 `;
 
 export default SimilarProjects;
