@@ -155,7 +155,7 @@ export const getGasPreference = (
 	const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
 	// MetaMask works with gas preference config
 	if (selectedWallet === EWallets.METAMASK)
-		return networkConfig.gasPreference || {};
+		return networkConfig?.gasPreference || {};
 
 	// For torus, it should be empty to work!
 	return {};

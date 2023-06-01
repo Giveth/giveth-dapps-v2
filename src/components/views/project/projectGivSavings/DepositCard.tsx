@@ -26,6 +26,7 @@ import { ERC20 } from '@/types/contracts';
 import InlineToast from '@/components/toasts/InlineToast';
 import { EToastType } from '@/components/toasts/InlineToast';
 import ExternalLink from '@/components/ExternalLink';
+import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 
 interface IDepositCard {
 	givsavingsAccount: GIVSavingsAccount;
@@ -34,6 +35,7 @@ interface IDepositCard {
 enum EDepositCardState {
 	DEPOSIT,
 	APPROVE,
+	APPROVING,
 	DEPOSITING,
 	SUCCESS,
 }
@@ -86,6 +88,50 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 	useEffect(() => {
 		fetchBalance();
 	}, [fetchBalance]);
+
+	const onApprove = async () => {
+		if (displayAmount === '0') return;
+		if (!library) {
+			console.error('library is null');
+			return;
+		}
+
+		let valueBn = BigNumber.from(0);
+
+		try {
+			valueBn = parseUnits(displayAmount);
+		} catch (error) {
+			console.debug(
+				`Failed to parse input amount: "${displayAmount}"`,
+				error,
+			);
+			captureException(error, {
+				tags: {
+					section: 'AmountInput',
+				},
+			});
+		}
+
+		setState(EDepositCardState.APPROVING);
+
+		const signer = library.getSigner();
+
+		const userAddress = await signer.getAddress();
+
+		const isApproved = await approveERC20tokenTransfer(
+			valueBn.toString(),
+			userAddress,
+			givsavingsAccount.CONTRACT_ADDRESS,
+			givsavingsAccount.token.address,
+			library,
+		);
+
+		if (isApproved) {
+			setState(EDepositCardState.DEPOSITING);
+		} else {
+			setState(EDepositCardState.DEPOSIT);
+		}
+	};
 
 	return state === EDepositCardState.DEPOSIT ? (
 		<Wrapper>
@@ -140,11 +186,13 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 					to your {givsavingsAccount.token.symbol} GIVsavings account
 				</Lead>
 			</Flex>
-			{state === EDepositCardState.APPROVE && (
+			{(state === EDepositCardState.APPROVE ||
+				state === EDepositCardState.APPROVING) && (
 				<Flex gap='8px' flexDirection='column' alignItems='center'>
 					<StyledButton
 						label='Approve'
-						onClick={() => setState(EDepositCardState.DEPOSITING)}
+						onClick={() => onApprove()}
+						loading={state === EDepositCardState.APPROVING}
 					/>
 					<StyledButton
 						label='Cancel'
@@ -159,7 +207,14 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 						message='Processing your deposit, please wait...'
 						type={EToastType.Info}
 					/>
-					<StyledButton label='Depositing' loading disabled />
+					<Flex gap='8px' flexDirection='column' alignItems='center'>
+						<StyledButton label='Depositing' loading disabled />
+						<StyledButton
+							label='Cancel'
+							buttonType='texty-gray'
+							onClick={() => setState(EDepositCardState.DEPOSIT)}
+						/>
+					</Flex>
 				</Flex>
 			)}
 			{state === EDepositCardState.SUCCESS && (
