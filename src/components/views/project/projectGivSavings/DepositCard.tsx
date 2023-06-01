@@ -89,34 +89,36 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 
 	return state === EDepositCardState.DEPOSIT ? (
 		<Wrapper>
-			<Caption medium>From Wallet</Caption>
-			<InputWrapper>
-				<TokenInfo alignItems='center'>
-					{/* TODO: Change to Token Icon */}
-					<NetworkLogo chainId={5} logoSize={24} />
-					<B>{givsavingsAccount.token.name}</B>
-				</TokenInfo>
-				<StyledNumericalInput
-					value={displayAmount}
-					onUserInput={onUserInput}
-					disabled={false}
-				/>
-			</InputWrapper>
-			<BalanceRow justifyContent='space-between'>
-				<Flex alignItems='center' gap='6px'>
-					<GLink>Available: ${balance}</GLink>
-					<IconWrapper onClick={() => fetchBalance()}>
-						<IconRefresh16 color={brandColors.giv[500]} />
-					</IconWrapper>
-				</Flex>
-				<MaxButton
-					onClick={() => {
-						setDisplayAmount(balance);
-					}}
-				>
-					Max
-				</MaxButton>
-			</BalanceRow>
+			<Flex flexDirection='column' gap='8px'>
+				<Caption medium>From Wallet</Caption>
+				<InputWrapper>
+					<TokenInfo alignItems='center'>
+						{/* TODO: Change to Token Icon */}
+						<NetworkLogo chainId={5} logoSize={24} />
+						<B>{givsavingsAccount.token.name}</B>
+					</TokenInfo>
+					<StyledNumericalInput
+						value={displayAmount}
+						onUserInput={onUserInput}
+						disabled={false}
+					/>
+				</InputWrapper>
+				<BalanceRow justifyContent='space-between'>
+					<Flex alignItems='center' gap='6px'>
+						<GLink>Available: ${balance}</GLink>
+						<IconWrapper onClick={() => fetchBalance()}>
+							<IconRefresh16 color={brandColors.giv[500]} />
+						</IconWrapper>
+					</Flex>
+					<MaxButton
+						onClick={() => {
+							setDisplayAmount(balance);
+						}}
+					>
+						Max
+					</MaxButton>
+				</BalanceRow>
+			</Flex>
 			<StyledButton
 				label='Deposit'
 				onClick={() => setState(EDepositCardState.APPROVE)}
@@ -124,7 +126,7 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 		</Wrapper>
 	) : (
 		<Wrapper>
-			<Flex flexDirection='column' gap='8px'>
+			<Flex flexDirection='column' gap='8px' alignItems='center'>
 				{state === EDepositCardState.SUCCESS ? (
 					<>
 						<SuccessTitle>Successful!</SuccessTitle>
@@ -139,28 +141,29 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 				</Lead>
 			</Flex>
 			{state === EDepositCardState.APPROVE && (
-				<>
+				<Flex gap='8px' flexDirection='column' alignItems='center'>
 					<StyledButton
 						label='Approve'
 						onClick={() => setState(EDepositCardState.DEPOSITING)}
 					/>
 					<StyledButton
 						label='Cancel'
+						buttonType='texty-gray'
 						onClick={() => setState(EDepositCardState.DEPOSIT)}
 					/>
-				</>
+				</Flex>
 			)}
 			{state === EDepositCardState.DEPOSITING && (
-				<>
+				<Flex gap='24px' flexDirection='column'>
 					<InlineToast
 						message='Processing your deposit, please wait...'
 						type={EToastType.Info}
 					/>
 					<StyledButton label='Depositing' loading disabled />
-				</>
+				</Flex>
 			)}
 			{state === EDepositCardState.SUCCESS && (
-				<>
+				<Flex gap='24px' flexDirection='column'>
 					<InlineToast
 						message={`Deposit to your ${givsavingsAccount.token.symbol} GIVSavings account successful`}
 						type={EToastType.Success}
@@ -170,14 +173,16 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 						label='Done'
 						onClick={() => setState(EDepositCardState.DEPOSIT)}
 					/>
-				</>
+				</Flex>
 			)}
 		</Wrapper>
 	);
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled(Flex)`
 	padding: 24px;
+	gap: 24px;
+	flex-direction: column;
 `;
 
 const InputWrapper = styled(Flex)`
@@ -219,7 +224,6 @@ const MaxButton = styled(GLink)`
 `;
 
 const StyledButton = styled(Button)`
-	margin-top: 24px;
 	width: 100%;
 `;
 
