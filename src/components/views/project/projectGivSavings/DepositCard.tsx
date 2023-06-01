@@ -8,6 +8,7 @@ import {
 	Lead,
 	brandColors,
 	neutralColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { FC, useCallback, useState, useEffect } from 'react';
 import styled from 'styled-components';
@@ -22,6 +23,9 @@ import NetworkLogo from '@/components/NetworkLogo';
 import { GIVSavingsAccount } from '@/types/config';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { ERC20 } from '@/types/contracts';
+import InlineToast from '@/components/toasts/InlineToast';
+import { EToastType } from '@/components/toasts/InlineToast';
+import ExternalLink from '@/components/ExternalLink';
 
 interface IDepositCard {
 	givsavingsAccount: GIVSavingsAccount;
@@ -113,23 +117,63 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 					Max
 				</MaxButton>
 			</BalanceRow>
-			<StyledButton label='Deposit' />
+			<StyledButton
+				label='Deposit'
+				onClick={() => setState(EDepositCardState.APPROVE)}
+			/>
 		</Wrapper>
-	) : state === EDepositCardState.APPROVE ? (
+	) : (
 		<Wrapper>
-			<Lead>You are depositing </Lead>
-			<H5>{`${displayAmount} ${givsavingsAccount.token.symbol}`}</H5>
-			<Lead>
-				to your {givsavingsAccount.token.symbol} GIVsavings account
-			</Lead>
-			<StyledButton label='Approve' />
-			<StyledButton label='Cancel' />
+			<Flex flexDirection='column' gap='8px'>
+				{state === EDepositCardState.SUCCESS ? (
+					<>
+						<SuccessTitle>Successful!</SuccessTitle>
+						<Lead>You have deposited</Lead>
+					</>
+				) : (
+					<DepositingTitle>You are depositing </DepositingTitle>
+				)}
+				<H5>{`${displayAmount} ${givsavingsAccount.token.symbol}`}</H5>
+				<Lead>
+					to your {givsavingsAccount.token.symbol} GIVsavings account
+				</Lead>
+			</Flex>
+			{state === EDepositCardState.APPROVE && (
+				<>
+					<StyledButton
+						label='Approve'
+						onClick={() => setState(EDepositCardState.DEPOSITING)}
+					/>
+					<StyledButton
+						label='Cancel'
+						onClick={() => setState(EDepositCardState.DEPOSIT)}
+					/>
+				</>
+			)}
+			{state === EDepositCardState.DEPOSITING && (
+				<>
+					<InlineToast
+						message='Processing your deposit, please wait...'
+						type={EToastType.Info}
+					/>
+					<StyledButton label='Depositing' loading disabled />
+				</>
+			)}
+			{state === EDepositCardState.SUCCESS && (
+				<>
+					<InlineToast
+						message={`Deposit to your ${givsavingsAccount.token.symbol} GIVSavings account successful`}
+						type={EToastType.Success}
+					/>
+					<ExternalLink href='/' title='View on Etherscan' />
+					<StyledButton
+						label='Done'
+						onClick={() => setState(EDepositCardState.DEPOSIT)}
+					/>
+				</>
+			)}
 		</Wrapper>
-	) : state === EDepositCardState.DEPOSITING ? (
-		<Wrapper></Wrapper>
-	) : state === EDepositCardState.SUCCESS ? (
-		<Wrapper></Wrapper>
-	) : null;
+	);
 };
 
 const Wrapper = styled.div`
@@ -177,4 +221,12 @@ const MaxButton = styled(GLink)`
 const StyledButton = styled(Button)`
 	margin-top: 24px;
 	width: 100%;
+`;
+
+const SuccessTitle = styled(H5)`
+	color: ${semanticColors.jade[700]};
+`;
+
+const DepositingTitle = styled(Lead)`
+	color: ${brandColors.giv[300]};
 `;
