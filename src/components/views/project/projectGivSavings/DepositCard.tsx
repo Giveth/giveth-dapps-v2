@@ -3,7 +3,9 @@ import {
 	Button,
 	Caption,
 	GLink,
+	H5,
 	IconRefresh16,
+	Lead,
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -81,7 +83,7 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 		fetchBalance();
 	}, [fetchBalance]);
 
-	return (
+	return state === EDepositCardState.DEPOSIT ? (
 		<Wrapper>
 			<Caption medium>From Wallet</Caption>
 			<InputWrapper>
@@ -113,7 +115,21 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 			</BalanceRow>
 			<StyledButton label='Deposit' />
 		</Wrapper>
-	);
+	) : state === EDepositCardState.APPROVE ? (
+		<Wrapper>
+			<Lead>You are depositing </Lead>
+			<H5>{`${displayAmount} ${givsavingsAccount.token.symbol}`}</H5>
+			<Lead>
+				to your {givsavingsAccount.token.symbol} GIVsavings account
+			</Lead>
+			<StyledButton label='Approve' />
+			<StyledButton label='Cancel' />
+		</Wrapper>
+	) : state === EDepositCardState.DEPOSITING ? (
+		<Wrapper></Wrapper>
+	) : state === EDepositCardState.SUCCESS ? (
+		<Wrapper></Wrapper>
+	) : null;
 };
 
 const Wrapper = styled.div`
