@@ -51,6 +51,7 @@ const ProjectCard = (props: IProjectCard) => {
 		organization,
 		verified,
 		projectPower,
+		countUniqueDonors,
 	} = project;
 
 	const [isHover, setIsHover] = useState(false);
@@ -117,10 +118,13 @@ const ProjectCard = (props: IProjectCard) => {
 							<PriceText>
 								${Math.round(totalDonations as number)}
 							</PriceText>
-							<LightSubline>
-								{' '}
-								{formatMessage({ id: 'label.raised_two' })}
-							</LightSubline>
+							<div>
+								<LightSubline> Raised from </LightSubline>
+								<Subline style={{ display: 'inline-block' }}>
+									&nbsp;{countUniqueDonors}&nbsp;
+								</Subline>
+								<LightSubline>contributors</LightSubline>
+							</div>
 						</PaddedRow>
 						<PaddedRow flexDirection='column' gap='4px'>
 							<EstimatedMatchingPrice>
@@ -210,7 +214,7 @@ const PriceText = styled(H5)`
 `;
 
 const LightSubline = styled(Subline)`
-	display: inline;
+	display: inline-block;
 	color: ${neutralColors.gray[700]};
 `;
 
