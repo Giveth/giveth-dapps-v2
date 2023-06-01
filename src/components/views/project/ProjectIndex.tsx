@@ -25,6 +25,7 @@ import { useProjectContext } from '@/context/project.context';
 import { ProjectActionCard } from './projectActionCard/ProjectActionCard';
 import ProjectBadges from './ProjectBadges';
 import ProjectCategoriesBadges from './ProjectCategoriesBadges';
+import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -103,6 +104,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 				<Row>
 					<Col xs={12} md={8} lg={9}>
 						<ProjectHeader />
+						<ProjectGIVbackToast />
 					</Col>
 					<Col xs={12} md={4} lg={3}>
 						<ProjectActionCard />
