@@ -62,6 +62,8 @@ export interface IProject {
 	verificationFormStatus?: EVerificationStatus;
 	projectFuturePower: IProjectPower;
 	givbackFactor?: number;
+	countUniqueDonors?: number;
+	countUniqueDonorsForActiveQfRound?: number;
 }
 
 export interface IDonationProject extends IProject {
