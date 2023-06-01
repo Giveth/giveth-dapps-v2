@@ -36,6 +36,11 @@ export const PROJECT_CARD_FIELDS = gql`
 			totalPower
 			round
 		}
+		sumDonationValueUsdForActiveQfRound
+		sumDonationValueUsd
+		countUniqueDonorsForActiveQfRound
+		countUniqueDonors
+		# estimatedMatching
 	}
 `;
 
