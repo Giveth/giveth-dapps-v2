@@ -22,6 +22,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
 import { GIVSavingsAccount } from '@/types/config';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
+import GIVSAVINGS_ABI from '@/artifacts/GIVsavings.json';
 import { ERC20 } from '@/types/contracts';
 import InlineToast from '@/components/toasts/InlineToast';
 import { EToastType } from '@/components/toasts/InlineToast';
@@ -38,13 +39,14 @@ enum EDepositCardState {
 	APPROVING,
 	DEPOSITING,
 	SUCCESS,
+	FAIL,
 }
 
 export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 	const [state, setState] = useState(EDepositCardState.DEPOSIT);
 	const [displayAmount, setDisplayAmount] = useState('');
-	// const [amount, setAmount] = useState('0');
 	const [balance, setBalance] = useState('0');
+	const [tx, setTx] = useState();
 
 	const { chainId: networkId, account, library, active } = useWeb3React();
 
@@ -127,10 +129,55 @@ export const DepositCard: FC<IDepositCard> = ({ givsavingsAccount }) => {
 		);
 
 		if (isApproved) {
-			setState(EDepositCardState.DEPOSITING);
+			onDeposit();
 		} else {
 			setState(EDepositCardState.DEPOSIT);
 		}
+	};
+
+	const onDeposit = async () => {
+		if (displayAmount === '0') return;
+		if (!library) {
+			console.error('library is null');
+			return;
+		}
+
+		let valueBn = BigNumber.from(0);
+		try {
+			valueBn = parseUnits(displayAmount);
+		} catch (error) {
+			console.debug(
+				`Failed to parse input amount: "${displayAmount}"`,
+				error,
+			);
+			captureException(error, {
+				tags: {
+					section: 'AmountInput',
+				},
+			});
+		}
+		setState(EDepositCardState.DEPOSITING);
+		try {
+			const signer = library.getSigner();
+
+			const givsavingsContract = new Contract(
+				givsavingsAccount.CONTRACT_ADDRESS,
+				GIVSAVINGS_ABI,
+				signer,
+			);
+			const txResponse = await givsavingsContract
+				.connect(signer.connectUnchecked())
+				.deposit(account, valueBn.toString());
+			if (txResponse) {
+				setTx(txResponse.hash);
+				const { status } = await txResponse.wait();
+				setState(
+					status ? EDepositCardState.SUCCESS : EDepositCardState.FAIL,
+				);
+			} else {
+				setState(EDepositCardState.DEPOSIT);
+			}
+		} catch (error) {}
 	};
 
 	return state === EDepositCardState.DEPOSIT ? (
