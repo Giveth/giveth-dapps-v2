@@ -15,7 +15,8 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Flex } from './styled-components/Flex';
 import { useAppDispatch } from '@/features/hooks';
-import { setShowWelcomeModal } from '@/features/modal/modal.slice';
+import config from '@/configuration';
+import { getRequest } from '@/helpers/requests';
 
 enum EPBGState {
 	SUCCESS,
@@ -110,6 +111,15 @@ export const PassportBanner = () => {
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
 
+	const handleConnect = async () => {
+		const res = await getRequest(
+			`${config.MICROSERVICES.authentication}/passportNonce`,
+			true,
+			{},
+		);
+		console.log('res', res);
+	};
+
 	return (
 		<PassportBannerWrapper state={data[state].bg}>
 			{data[state].icon}
@@ -137,7 +147,7 @@ export const PassportBanner = () => {
 			{state === EPassportBannerState.CONNECT && (
 				<StyledLink
 					onClick={() => {
-						dispatch(setShowWelcomeModal(true));
+						handleConnect();
 					}}
 				>
 					<GLink>
