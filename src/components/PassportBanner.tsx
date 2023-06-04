@@ -111,12 +111,16 @@ export const PassportBanner = () => {
 	const [state, setState] = useState(EPassportBannerState.LOADING);
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
-	const { account, library, chainId } = useWeb3React();
+	const { account, library } = useWeb3React();
 
 	const handleConnect = async () => {
 		if (!library || !account) return;
 
 		const res = await connectPassport(account, library);
+		if (res) {
+			const res1 = await fetchPassportScore(account);
+			console.log('res', res);
+		}
 	};
 
 	useEffect(() => {
@@ -125,9 +129,10 @@ export const PassportBanner = () => {
 		const fetchData = async () => {
 			const passports = getPassports();
 			if (passports[account]) {
-				await fetchPassportScore(account);
+				const res = await fetchPassportScore(account);
+				console.log('res', res);
 			} else {
-				await connectPassport(account, library);
+				setState(EPassportBannerState.CONNECT);
 			}
 		};
 
