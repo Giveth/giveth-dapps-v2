@@ -40,7 +40,7 @@ export const PROJECT_CARD_FIELDS = gql`
 		sumDonationValueUsd
 		countUniqueDonorsForActiveQfRound
 		countUniqueDonors
-		# estimatedMatching
+		estimatedMatching
 	}
 `;
 
