@@ -9,6 +9,11 @@ export const PROJECT_CORE_FIELDS = gql`
 		slug
 		verified
 		totalDonations
+		qfRounds {
+			id
+			name
+			isActive
+		}
 	}
 `;
 
