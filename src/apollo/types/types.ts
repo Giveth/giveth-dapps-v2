@@ -66,6 +66,11 @@ export interface IProject {
 	countUniqueDonorsForActiveQfRound?: number;
 	estimatedMatching?: number;
 	sumDonationValueUsd?: number;
+	qfRounds?: {
+		id: string;
+		name: string;
+		isActive: boolean;
+	};
 }
 
 export interface IDonationProject extends IProject {
