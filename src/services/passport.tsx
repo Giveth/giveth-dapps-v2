@@ -15,42 +15,47 @@ export const fetchPassportScore = async (account: string) => {
 			fetchPolicy: 'no-cache',
 		});
 	} catch (error) {
+		console.log('error', error);
 		//remove user's info from local storage
 		const passports = getPassports();
-		delete passports[account!];
+		delete passports[account.toLowerCase()];
 		localStorage.setItem(StorageLabel.PASSPORT, JSON.stringify(passports));
 	}
 };
 
 export const connectPassport = async (account: string, library: any) => {
 	//Get Nonce and Message
-	const { nonce, message } = await getRequest(
-		`${config.MICROSERVICES.authentication}/passportNonce`,
-		true,
-		{},
-	);
-	const signer = library.getSigner();
+	try {
+		const { nonce, message } = await getRequest(
+			`${config.MICROSERVICES.authentication}/passportNonce`,
+			true,
+			{},
+		);
+		const signer = library.getSigner();
 
-	//sign message
-	const signature = await signer.signMessage(message);
+		//sign message
+		const signature = await signer.signMessage(message);
 
-	//auth
-	const { expiration, jwt, publicAddress } = await postRequest(
-		`${config.MICROSERVICES.authentication}/passportAuthentication`,
-		true,
-		{ message, signature, nonce },
-	);
+		//auth
+		const { expiration, jwt, publicAddress } = await postRequest(
+			`${config.MICROSERVICES.authentication}/passportAuthentication`,
+			true,
+			{ message, signature, nonce },
+		);
 
-	//save the res to local storage
-	const passports = getPassports();
+		//save the res to local storage
+		const passports = getPassports();
 
-	passports[account] = {
-		jwt,
-		expiration,
-		publicAddress,
-	};
+		passports[account.toLowerCase()] = {
+			jwt,
+			expiration,
+			publicAddress,
+		};
+		console.log('passports', passports);
 
-	localStorage.setItem(StorageLabel.PASSPORT, JSON.stringify(passports));
-
-	fetchPassportScore(account);
+		localStorage.setItem(StorageLabel.PASSPORT, JSON.stringify(passports));
+		return true;
+	} catch (error) {
+		return false;
+	}
 };
