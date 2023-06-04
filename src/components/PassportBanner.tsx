@@ -10,16 +10,14 @@ import {
 	brandColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import { Flex } from './styled-components/Flex';
 import { useAppDispatch } from '@/features/hooks';
-import config from '@/configuration';
-import { getRequest, postRequest } from '@/helpers/requests';
-import { client } from '@/apollo/apolloClient';
-import { REFRESH_USER_SCORES } from '@/apollo/gql/gqlPassport';
+import { getPassports } from '@/helpers/passport';
+import { connectPassport, fetchPassportScore } from '@/services/passport';
 
 enum EPBGState {
 	SUCCESS,
@@ -110,47 +108,31 @@ const data: IData = {
 };
 
 export const PassportBanner = () => {
-	const [state, setState] = useState(EPassportBannerState.CONNECT);
+	const [state, setState] = useState(EPassportBannerState.LOADING);
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
 	const { account, library, chainId } = useWeb3React();
 
 	const handleConnect = async () => {
-		console.log(1, library);
+		if (!library || !account) return;
 
-		if (!library) return;
-		console.log(2);
-
-		//Get Nounce and Message
-		const { nonce, message } = await getRequest(
-			`${config.MICROSERVICES.authentication}/passportNonce`,
-			true,
-			{},
-		);
-		console.log(3);
-
-		const signer = library.getSigner();
-		console.log(4);
-
-		const signature = await signer.signMessage(message);
-
-		console.log('signature', signature);
-		const { expiration, jwt, publicAddress } = await postRequest(
-			`${config.MICROSERVICES.authentication}/passportAuthentication`,
-			true,
-			{ message, signature, nonce },
-		);
-
-		const { data } = await client.query({
-			query: REFRESH_USER_SCORES,
-			variables: {
-				address: account?.toLowerCase(),
-			},
-			fetchPolicy: 'no-cache',
-		});
-
-		console.log('data', data);
+		const res = await connectPassport(account, library);
 	};
+
+	useEffect(() => {
+		if (!library || !account) return;
+
+		const fetchData = async () => {
+			const passports = getPassports();
+			if (passports[account]) {
+				await fetchPassportScore(account);
+			} else {
+				await connectPassport(account, library);
+			}
+		};
+
+		fetchData();
+	}, [account, library]);
 
 	return (
 		<PassportBannerWrapper state={data[state].bg}>
