@@ -10,7 +10,7 @@ import {
 	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
@@ -18,11 +18,37 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { CurrentRank } from '@/components/GIVpowerRank';
 import { useProjectContext } from '@/context/project.context';
 import { NextRank } from '@/components/GIVpowerRank';
+import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
+import { getNowUnixMS } from '@/helpers/time';
+import { smallFormatDate } from '@/lib/helpers';
 
 export const GIVpowerCard = () => {
-	const { formatMessage } = useIntl();
+	const [roundEndTime, setRoundEndTime] = useState(new Date());
+	const { formatMessage, locale } = useIntl();
+	const { givTokenDistroHelper, isLoaded } = useGIVTokenDistroHelper();
 	const { projectData } = useProjectContext();
 	const { projectPower, projectFuturePower } = projectData!;
+
+	useEffect(() => {
+		if (
+			givTokenDistroHelper &&
+			isLoaded &&
+			givTokenDistroHelper.startTime.getTime() !== 0
+		) {
+			const now = getNowUnixMS();
+			const ROUND_20_OFFSET = 4; // At round 20 we changed the rounds from Fridays to Tuesdays
+			const startTime = new Date(givTokenDistroHelper.startTime);
+			startTime.setDate(startTime.getDate() + ROUND_20_OFFSET);
+			const deltaT = now - startTime.getTime();
+			const TwoWeek = 1_209_600_000;
+			const _round = Math.floor(deltaT / TwoWeek) + 1;
+			const _roundEndTime = new Date(startTime);
+			_roundEndTime.setDate(startTime.getDate() + _round * 14);
+			_roundEndTime.setHours(startTime.getHours());
+			_roundEndTime.setMinutes(startTime.getMinutes());
+			setRoundEndTime(_roundEndTime);
+		}
+	}, [givTokenDistroHelper, isLoaded]);
 
 	return (
 		<GIVpowerCardWrapper>
@@ -54,6 +80,13 @@ export const GIVpowerCard = () => {
 							The rank will update at the start of the
 							<b> next GIVbacks round</b> .
 						</Caption>
+						<NextRoundDate>
+							The rank will be updated on{' '}
+							{isLoaded
+								? smallFormatDate(roundEndTime, locale)
+								: '--'}
+							.
+						</NextRoundDate>
 					</div>
 				</Flex>
 			</CurrentRankSection>
@@ -118,4 +151,12 @@ const BoostTooltip = styled(Subline)`
 	${mediaQueries.tablet} {
 		width: 260px;
 	}
+`;
+
+const NextRoundDate = styled(Subline)`
+	margin-top: 8px;
+	padding: 4px;
+	text-align: center;
+	background: ${neutralColors.gray[400]};
+	border-radius: 4px;
 `;
