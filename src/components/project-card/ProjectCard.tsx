@@ -130,7 +130,7 @@ const ProjectCard = (props: IProjectCard) => {
 						{qfRounds && qfRounds.isActive ? (
 							<PaddedRow flexDirection='column' gap='4px'>
 								<EstimatedMatchingPrice>
-									+ $7,200
+									+ ${EstimatedMatchingPrice}
 								</EstimatedMatchingPrice>
 								<LightSubline> Estimated matching</LightSubline>
 							</PaddedRow>
