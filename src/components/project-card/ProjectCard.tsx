@@ -52,6 +52,7 @@ const ProjectCard = (props: IProjectCard) => {
 		verified,
 		projectPower,
 		countUniqueDonors,
+		qfRounds,
 	} = project;
 
 	const [isHover, setIsHover] = useState(false);
@@ -126,12 +127,14 @@ const ProjectCard = (props: IProjectCard) => {
 								<LightSubline>contributors</LightSubline>
 							</div>
 						</PaddedRow>
-						<PaddedRow flexDirection='column' gap='4px'>
-							<EstimatedMatchingPrice>
-								+ $7,200
-							</EstimatedMatchingPrice>
-							<LightSubline> Estimated matching</LightSubline>
-						</PaddedRow>
+						{qfRounds && qfRounds.isActive ? (
+							<PaddedRow flexDirection='column' gap='4px'>
+								<EstimatedMatchingPrice>
+									+ $7,200
+								</EstimatedMatchingPrice>
+								<LightSubline> Estimated matching</LightSubline>
+							</PaddedRow>
+						) : null}
 					</Flex>
 				</Link>
 				{verified && (
