@@ -17,7 +17,7 @@ import { useProjectContext } from '@/context/project.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device, zIndex } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { DonateSection } from './DonationSection';
+import QFSection from './QFSection';
 
 interface IProjectActionCardProps {}
 
@@ -74,8 +74,8 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 					</>
 				) : (
 					<>
-						<DonateSection />
-						{/* <QFSection />  should add condition*/}
+						{/* <DonateSection /> */}
+						<QFSection />
 						<ProjectPublicActions />
 					</>
 				)}
@@ -95,8 +95,8 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 				</>
 			) : (
 				<>
-					<DonateSection />
-					{/* <QFSection /> should add condition*/}
+					{/* <DonateSection /> */}
+					<QFSection />
 					<ProjectPublicActions />
 				</>
 			)}
