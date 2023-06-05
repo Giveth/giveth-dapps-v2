@@ -52,7 +52,6 @@ export const connectPassport = async (account: string, library: any) => {
 			expiration,
 			publicAddress,
 		};
-		console.log('passports', passports);
 
 		localStorage.setItem(StorageLabel.PASSPORT, JSON.stringify(passports));
 		return true;

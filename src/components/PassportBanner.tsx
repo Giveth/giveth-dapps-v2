@@ -52,8 +52,13 @@ const data: IData = {
 		bg: EPBGState.WARNING,
 		icon: <IconPassport24 />,
 	},
-	[EPassportState.CONNECT]: {
-		content: 'label.passport.connect_wallet',
+	[EPassportState.NOT_CONNECTED]: {
+		content: 'label.passport.not_connected',
+		bg: EPBGState.INFO,
+		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
+	},
+	[EPassportState.NOT_CREATED]: {
+		content: 'label.passport.not_created',
 		bg: EPBGState.INFO,
 		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
 	},
@@ -70,12 +75,12 @@ const data: IData = {
 		link: { label: 'label.passport.link.update_score', url: '/' },
 	},
 	[EPassportState.ENDED]: {
-		content: 'label.passport.round_ended',
+		content: 'label.passport.ended',
 		bg: EPBGState.ERROR,
 		icon: <IconAlertTriangleFilled24 color={semanticColors.punch[500]} />,
 	},
-	[EPassportState.INVALID_PASSPORT]: {
-		content: 'label.passport.invalid_passport',
+	[EPassportState.INVALID]: {
+		content: 'label.passport.invalid',
 		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 		link: { label: 'label.passport.link.go_to_passport', url: '/' },
@@ -84,12 +89,6 @@ const data: IData = {
 		content: 'label.passport.error',
 		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
-	},
-	[EPassportState.INVALID_RESPONSE]: {
-		content: 'label.passport.invalid_response',
-		bg: EPBGState.ERROR,
-		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
-		link: { label: 'label.passport.link.go_to_passport', url: '/' },
 	},
 };
 
@@ -121,7 +120,7 @@ export const PassportBanner = () => {
 					<IconExternalLink16 />
 				</StyledLink>
 			)}
-			{state === EPassportState.CONNECT && (
+			{state === EPassportState.NOT_CONNECTED && (
 				<StyledLink
 					onClick={() => {
 						handleConnect();
