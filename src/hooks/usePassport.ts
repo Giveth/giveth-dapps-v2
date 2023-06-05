@@ -71,7 +71,9 @@ export const usePassport = () => {
 	};
 
 	useEffect(() => {
-		if (!library || !account) return;
+		if (!library || !account) {
+			return setState(EPassportState.NOT_CONNECTED);
+		}
 
 		const fetchData = async () => {
 			const passports = getPassports();
