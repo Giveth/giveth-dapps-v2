@@ -1,14 +1,18 @@
 import {
+	ButtonText,
 	Container,
 	H2,
 	IconExternalLink16,
+	IconPassport16,
 	Lead,
 	brandColors,
+	neutralColors,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import ExternalLink from '@/components/ExternalLink';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 export const PassportView = () => {
 	return (
@@ -26,6 +30,12 @@ export const PassportView = () => {
 					<ExternalLink href='/' title='Learn more' />
 					<IconExternalLink16 />
 				</PassportLink>
+				<Button>
+					<FlexCenter gap='8px'>
+						<IconPassport16 />
+						<ButtonText>Connect passport</ButtonText>
+					</FlexCenter>
+				</Button>
 			</Wrapper>
 		</Container>
 	);
@@ -45,4 +55,17 @@ const PassportLink = styled(FlexCenter)`
 	margin-bottom: 60px;
 	color: ${brandColors.giv[500]};
 	gap: 4px;
+`;
+
+const Button = styled.button`
+	padding: 16px 32px;
+	background-color: ${neutralColors.gray[100]};
+	border: none;
+	border-radius: 48px;
+	box-shadow: ${Shadow.Giv[400]};
+	transition: color 0.2s ease-in-out;
+	cursor: pointer;
+	&:hover {
+		color: ${neutralColors.gray[800]};
+	}
 `;
