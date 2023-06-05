@@ -57,6 +57,7 @@ export const connectPassport = async (account: string, library: any) => {
 		localStorage.setItem(StorageLabel.PASSPORT, JSON.stringify(passports));
 		return true;
 	} catch (error) {
+		console.log('error', error);
 		return false;
 	}
 };

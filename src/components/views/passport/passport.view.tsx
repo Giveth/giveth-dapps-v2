@@ -13,8 +13,11 @@ import styled from 'styled-components';
 import ExternalLink from '@/components/ExternalLink';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { EPassportState, usePassport } from '@/hooks/usePassport';
 
 export const PassportView = () => {
+	const { state, score, handleConnect } = usePassport();
+
 	return (
 		<Container>
 			<Wrapper>
@@ -30,12 +33,15 @@ export const PassportView = () => {
 					<ExternalLink href='/' title='Learn more' />
 					<IconExternalLink16 />
 				</PassportLink>
-				<Button>
-					<FlexCenter gap='8px'>
-						<IconPassport16 />
-						<ButtonText>Connect passport</ButtonText>
-					</FlexCenter>
-				</Button>
+				<div>{state}</div>
+				{state === EPassportState.CONNECT && (
+					<Button onClick={() => handleConnect()}>
+						<FlexCenter gap='8px'>
+							<IconPassport16 />
+							<ButtonText>Connect passport</ButtonText>
+						</FlexCenter>
+					</Button>
+				)}
 			</Wrapper>
 		</Container>
 	);
