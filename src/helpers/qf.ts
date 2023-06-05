@@ -1,6 +1,6 @@
-import { QFRound } from '@/apollo/types/types';
+import { IQFRound } from '@/apollo/types/types';
 
-export const hasActiveRound = (qfRounds: QFRound[] | undefined) => {
+export const hasActiveRound = (qfRounds: IQFRound[] | undefined) => {
 	if (!qfRounds) return false;
 	return qfRounds.some(round => round.isActive);
 };
