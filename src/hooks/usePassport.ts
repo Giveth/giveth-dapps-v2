@@ -2,36 +2,73 @@ import { useWeb3React } from '@web3-react/core';
 import { useEffect, useState } from 'react';
 import { getPassports } from '@/helpers/passport';
 import { connectPassport, fetchPassportScore } from '@/services/passport';
+import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
+import { client } from '@/apollo/apolloClient';
+import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 
 export enum EPassportState {
 	LOADING,
-	CONNECT,
+	NOT_CONNECTED,
+	NOT_CREATED,
 	NOT_ELIGIBLE,
 	ELIGIBLE,
 	ENDED,
-	INVALID_PASSPORT,
+	INVALID,
 	ERROR,
-	INVALID_RESPONSE,
 }
 
 export const usePassport = () => {
 	const { account, library } = useWeb3React();
 	const [state, setState] = useState(EPassportState.LOADING);
-	const [score, setScore] = useState();
+	const [score, setScore] = useState<IPassportInfo>();
+	const [qfRounds, setQfRounds] = useState<IQFRound[]>();
 
 	const refreshScore = async () => {
 		if (!account) return;
-		const res1 = await fetchPassportScore(account);
-		setScore(res1);
-		console.log('res1', res1);
+		try {
+			const {
+				data: { qfRounds },
+			} = await client.query({
+				query: FETCH_QF_ROUNDS,
+				fetchPolicy: 'network-only',
+			});
+			setQfRounds(qfRounds);
+			const { refreshUserScores } = await fetchPassportScore(account);
+
+			setScore(refreshUserScores);
+			if (!qfRounds && !refreshUserScores) {
+				setState(EPassportState.INVALID);
+				return;
+			}
+			const currentRound = (qfRounds as IQFRound[]).find(
+				round => round.isActive,
+			);
+			if (!currentRound) {
+				setState(EPassportState.ENDED);
+				return;
+			}
+			if (
+				refreshUserScores.passportScore <
+				currentRound.minimumPassportScore
+			) {
+				setState(EPassportState.NOT_ELIGIBLE);
+				return;
+			} else {
+				setState(EPassportState.ELIGIBLE);
+			}
+		} catch (error) {
+			setState(EPassportState.ERROR);
+		}
 	};
 
 	const handleConnect = async () => {
 		if (!library || !account) return;
-
+		setState(EPassportState.LOADING);
 		const res = await connectPassport(account, library);
 		if (res) {
 			refreshScore();
+		} else {
+			setState(EPassportState.NOT_CONNECTED);
 		}
 	};
 
@@ -44,7 +81,7 @@ export const usePassport = () => {
 				const res = await fetchPassportScore(account);
 				console.log('res', res);
 			} else {
-				setState(EPassportState.CONNECT);
+				setState(EPassportState.NOT_CONNECTED);
 			}
 		};
 
