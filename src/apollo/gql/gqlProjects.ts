@@ -148,6 +148,16 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				round
 			}
 			givbackFactor
+			sumDonationValueUsdForActiveQfRound
+			sumDonationValueUsd
+			countUniqueDonorsForActiveQfRound
+			countUniqueDonors
+			estimatedMatching
+			qfRounds {
+				id
+				name
+				isActive
+			}
 		}
 	}
 `;
