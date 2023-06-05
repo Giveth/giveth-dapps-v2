@@ -14,6 +14,7 @@ export const fetchPassportScore = async (account: string) => {
 			},
 			fetchPolicy: 'no-cache',
 		});
+		return data;
 	} catch (error) {
 		console.log('error', error);
 		//remove user's info from local storage
