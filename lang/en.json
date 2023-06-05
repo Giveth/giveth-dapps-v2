@@ -1274,6 +1274,7 @@
 	"label.contributors": "{count, plural, one { contributor} other { contributors} }",
 	"label.passport.loading": "Loading Passport...",
 	"label.passport.not_connected": "Connect your wallet to verify your eligibility for donation matching.",
+	"label.passport.not_signed": "Sign the message with your wallet to connect to Passport",
 	"label.passport.not_created": "Get your donation matched with quadratic funding! Verify your Gitcoin Passport before ",
 	"label.passport.not_eligible": "Get your donation matched with quadratic funding! Increase your Gitcoin Passport score before June 15",
 	"label.passport.eligible": "You donations are eligible to be matched!.",

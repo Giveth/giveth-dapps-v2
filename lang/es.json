@@ -1281,6 +1281,7 @@
 	"label.contributors": "",
 	"label.passport.loading": "",
 	"label.passport.not_connected": "",
+	"label.passport.not_signed": "",
 	"label.passport.not_created": "",
 	"label.passport.not_eligible": "",
 	"label.passport.eligible": "",
