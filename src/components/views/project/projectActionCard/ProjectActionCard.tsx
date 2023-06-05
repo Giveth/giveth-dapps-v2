@@ -19,6 +19,7 @@ import { device, zIndex } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import QFSection from './QFSection';
 import { DonateSection } from './DonationSection';
+import { hasActiveRound } from '@/helpers/qf';
 
 interface IProjectActionCardProps {}
 
@@ -37,7 +38,8 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 	const isMobile = !useMediaQuery(device.tablet);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
-	console.log('qfRounds', qfRounds);
+	const isRoundActive = hasActiveRound(qfRounds);
+
 	useEffect(() => {
 		const handleResize = () =>
 			setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
@@ -76,11 +78,7 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 					</>
 				) : (
 					<>
-						{qfRounds && qfRounds.isActive ? (
-							<QFSection />
-						) : (
-							<DonateSection />
-						)}
+						{isRoundActive ? <QFSection /> : <DonateSection />}
 
 						<ProjectPublicActions />
 					</>
@@ -101,11 +99,7 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 				</>
 			) : (
 				<>
-					{qfRounds && qfRounds.isActive ? (
-						<QFSection />
-					) : (
-						<DonateSection />
-					)}
+					{isRoundActive ? <QFSection /> : <DonateSection />}
 					<ProjectPublicActions />
 				</>
 			)}
