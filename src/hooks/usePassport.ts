@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getPassports } from '@/helpers/passport';
 import { connectPassport, fetchPassportScore } from '@/services/passport';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
@@ -21,9 +21,8 @@ export const usePassport = () => {
 	const { account, library } = useWeb3React();
 	const [state, setState] = useState(EPassportState.LOADING);
 	const [score, setScore] = useState<IPassportInfo>();
-	const [qfRounds, setQfRounds] = useState<IQFRound[]>();
 
-	const refreshScore = async () => {
+	const refreshScore = useCallback(async () => {
 		if (!account) return;
 		try {
 			const {
@@ -32,7 +31,6 @@ export const usePassport = () => {
 				query: FETCH_QF_ROUNDS,
 				fetchPolicy: 'network-only',
 			});
-			setQfRounds(qfRounds);
 			const { refreshUserScores } = await fetchPassportScore(account);
 
 			setScore(refreshUserScores);
@@ -59,7 +57,7 @@ export const usePassport = () => {
 		} catch (error) {
 			setState(EPassportState.ERROR);
 		}
-	};
+	}, [account]);
 
 	const handleConnect = async () => {
 		if (!library || !account) return;
@@ -77,15 +75,14 @@ export const usePassport = () => {
 
 		const fetchData = async () => {
 			const passports = getPassports();
-			if (passports[account]) {
-				const res = await fetchPassportScore(account);
-				console.log('res', res);
+			if (passports[account.toLowerCase()]) {
+				await refreshScore();
 			} else {
 				setState(EPassportState.NOT_CONNECTED);
 			}
 		};
 
 		fetchData();
-	}, [account, library]);
+	}, [account, library, refreshScore]);
 	return { state, score, handleConnect, refreshScore };
 };
