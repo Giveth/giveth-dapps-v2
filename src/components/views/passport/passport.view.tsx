@@ -34,13 +34,27 @@ export const PassportView = () => {
 					<IconExternalLink16 />
 				</PassportLink>
 				<div>{state}</div>
-				{state === EPassportState.CONNECT && (
+				{state === EPassportState.NOT_CONNECTED ? (
 					<Button onClick={() => handleConnect()}>
 						<FlexCenter gap='8px'>
 							<IconPassport16 />
 							<ButtonText>Connect passport</ButtonText>
 						</FlexCenter>
 					</Button>
+				) : state === EPassportState.LOADING ? (
+					<BaseButton>
+						<FlexCenter gap='8px'>
+							<IconPassport16 />
+							<ButtonText>Loading</ButtonText>
+						</FlexCenter>
+					</BaseButton>
+				) : (
+					<BaseButton>
+						<FlexCenter gap='8px'>
+							<IconPassport16 />
+							<ButtonText>Refresh</ButtonText>
+						</FlexCenter>
+					</BaseButton>
 				)}
 			</Wrapper>
 		</Container>
@@ -63,7 +77,7 @@ const PassportLink = styled(FlexCenter)`
 	gap: 4px;
 `;
 
-const Button = styled.button`
+const BaseButton = styled.button`
 	padding: 16px 32px;
 	background-color: ${neutralColors.gray[100]};
 	border: none;
@@ -71,6 +85,9 @@ const Button = styled.button`
 	box-shadow: ${Shadow.Giv[400]};
 	transition: color 0.2s ease-in-out;
 	cursor: pointer;
+`;
+
+const Button = styled(BaseButton)`
 	&:hover {
 		color: ${neutralColors.gray[800]};
 	}
