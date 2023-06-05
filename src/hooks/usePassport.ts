@@ -21,6 +21,7 @@ export const usePassport = () => {
 	const { account, library } = useWeb3React();
 	const [state, setState] = useState(EPassportState.LOADING);
 	const [score, setScore] = useState<IPassportInfo>();
+	const [currentRound, setCurrentRound] = useState<IQFRound | null>(null);
 
 	const refreshScore = useCallback(async () => {
 		if (!account) return;
@@ -45,6 +46,7 @@ export const usePassport = () => {
 				setState(EPassportState.ENDED);
 				return;
 			}
+			setCurrentRound(currentRound);
 			if (
 				refreshUserScores.passportScore <
 				currentRound.minimumPassportScore
@@ -86,5 +88,5 @@ export const usePassport = () => {
 
 		fetchData();
 	}, [account, library, refreshScore]);
-	return { state, score, handleConnect, refreshScore };
+	return { state, score, currentRound, handleConnect, refreshScore };
 };

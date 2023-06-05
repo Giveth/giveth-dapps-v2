@@ -1,22 +1,28 @@
 import {
+	B,
 	ButtonText,
+	Col,
 	Container,
 	H2,
+	H3,
 	IconExternalLink16,
 	IconPassport16,
 	Lead,
+	P,
+	Row,
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import ExternalLink from '@/components/ExternalLink';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 
 export const PassportView = () => {
-	const { state, score, handleConnect, refreshScore } = usePassport();
+	const { state, score, currentRound, handleConnect, refreshScore } =
+		usePassport();
 
 	return (
 		<Container>
@@ -59,6 +65,22 @@ export const PassportView = () => {
 						</FlexCenter>
 					</Button>
 				)}
+				<Row>
+					<StyledCol md={9}>
+						<InfoBox>
+							<InfoRow>
+								<B>Your Passport score</B>
+								<H3>{score?.passportScore || '--'}</H3>
+							</InfoRow>
+							<InfoRow>
+								<P>Required score</P>
+								<H3>
+									{currentRound?.minimumPassportScore || '--'}
+								</H3>
+							</InfoRow>
+						</InfoBox>
+					</StyledCol>
+				</Row>
 			</Wrapper>
 		</Container>
 	);
@@ -94,4 +116,19 @@ const Button = styled(BaseButton)`
 	&:hover {
 		color: ${neutralColors.gray[800]};
 	}
+`;
+
+const StyledCol = styled(Col)`
+	margin: auto;
+`;
+
+const InfoBox = styled(Flex)`
+	flex-direction: column;
+	gap: 11px;
+	margin-top: 60px;
+`;
+
+const InfoRow = styled(Flex)`
+	justify-content: space-between;
+	align-items: center;
 `;
