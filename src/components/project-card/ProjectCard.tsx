@@ -28,6 +28,7 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ProjectCardUserName } from './ProjectCardUserName';
+import { hasActiveRound } from '@/helpers/qf';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -62,6 +63,8 @@ const ProjectCard = (props: IProjectCard) => {
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
 	const { formatMessage, formatRelativeTime } = useIntl();
+
+	const isRoundActive = hasActiveRound(qfRounds);
 
 	return (
 		<Wrapper
@@ -127,7 +130,7 @@ const ProjectCard = (props: IProjectCard) => {
 								<LightSubline>contributors</LightSubline>
 							</div>
 						</PaddedRow>
-						{qfRounds && qfRounds.isActive ? (
+						{isRoundActive ? (
 							<PaddedRow flexDirection='column' gap='4px'>
 								<EstimatedMatchingPrice>
 									+ ${EstimatedMatchingPrice}
