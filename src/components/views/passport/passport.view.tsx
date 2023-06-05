@@ -16,7 +16,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 
 export const PassportView = () => {
-	const { state, score, handleConnect } = usePassport();
+	const { state, score, handleConnect, refreshScore } = usePassport();
 
 	return (
 		<Container>
@@ -33,7 +33,6 @@ export const PassportView = () => {
 					<ExternalLink href='/' title='Learn more' />
 					<IconExternalLink16 />
 				</PassportLink>
-				<div>{state}</div>
 				{state === EPassportState.NOT_CONNECTED ? (
 					<Button onClick={() => handleConnect()}>
 						<FlexCenter gap='8px'>
@@ -49,12 +48,16 @@ export const PassportView = () => {
 						</FlexCenter>
 					</BaseButton>
 				) : (
-					<BaseButton>
+					<Button
+						onClick={() => {
+							refreshScore();
+						}}
+					>
 						<FlexCenter gap='8px'>
 							<IconPassport16 />
-							<ButtonText>Refresh</ButtonText>
+							<ButtonText>Refresh score</ButtonText>
 						</FlexCenter>
-					</BaseButton>
+					</Button>
 				)}
 			</Wrapper>
 		</Container>
