@@ -17,7 +17,9 @@ import { useProjectContext } from '@/context/project.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device, zIndex } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
+import QFSection from './QFSection';
 import { DonateSection } from './DonationSection';
+import { hasActiveRound } from '@/helpers/qf';
 
 interface IProjectActionCardProps {}
 
@@ -31,10 +33,12 @@ interface IWrapper {
 
 export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 	const { isLoading } = useAppSelector(state => state.user);
-	const { isAdmin } = useProjectContext();
+	const { isAdmin, projectData } = useProjectContext();
+	const { qfRounds } = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
+	const isRoundActive = hasActiveRound(qfRounds);
 
 	useEffect(() => {
 		const handleResize = () =>
@@ -74,8 +78,8 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 					</>
 				) : (
 					<>
-						<DonateSection />
-						{/* <QFSection />  should add condition*/}
+						{isRoundActive ? <QFSection /> : <DonateSection />}
+
 						<ProjectPublicActions />
 					</>
 				)}
@@ -95,8 +99,7 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 				</>
 			) : (
 				<>
-					<DonateSection />
-					{/* <QFSection /> should add condition*/}
+					{isRoundActive ? <QFSection /> : <DonateSection />}
 					<ProjectPublicActions />
 				</>
 			)}

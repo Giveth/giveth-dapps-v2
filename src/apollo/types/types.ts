@@ -62,6 +62,11 @@ export interface IProject {
 	verificationFormStatus?: EVerificationStatus;
 	projectFuturePower: IProjectPower;
 	givbackFactor?: number;
+	countUniqueDonors?: number;
+	countUniqueDonorsForActiveQfRound?: number;
+	estimatedMatching?: number;
+	sumDonationValueUsd?: number;
+	qfRounds?: IQFRound[];
 }
 
 export interface IDonationProject extends IProject {
