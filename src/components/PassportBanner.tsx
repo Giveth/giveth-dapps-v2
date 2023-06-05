@@ -10,31 +10,17 @@ import {
 	brandColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import { Flex } from './styled-components/Flex';
-import { useAppDispatch } from '@/features/hooks';
-import { getPassports } from '@/helpers/passport';
-import { connectPassport, fetchPassportScore } from '@/services/passport';
+import { EPassportState, usePassport } from '@/hooks/usePassport';
 
 enum EPBGState {
 	SUCCESS,
 	INFO,
 	WARNING,
 	ERROR,
-}
-
-enum EPassportBannerState {
-	LOADING,
-	CONNECT,
-	NOT_ELIGIBLE,
-	ELIGIBLE,
-	ENDED,
-	INVALID_PASSPORT,
-	ERROR,
-	INVALID_RESPONSE,
 }
 
 interface IPassportBannerWrapperProps {
@@ -61,45 +47,45 @@ interface IData {
 }
 
 const data: IData = {
-	[EPassportBannerState.LOADING]: {
+	[EPassportState.LOADING]: {
 		content: 'label.passport.loading',
 		bg: EPBGState.WARNING,
 		icon: <IconPassport24 />,
 	},
-	[EPassportBannerState.CONNECT]: {
+	[EPassportState.CONNECT]: {
 		content: 'label.passport.connect_wallet',
 		bg: EPBGState.INFO,
 		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
 	},
-	[EPassportBannerState.NOT_ELIGIBLE]: {
+	[EPassportState.NOT_ELIGIBLE]: {
 		content: 'label.passport.not_eligible',
 		bg: EPBGState.WARNING,
 		icon: <IconAlertTriangleFilled24 color={brandColors.giv[500]} />,
 		link: { label: 'label.passport.link.update_score', url: '/' },
 	},
-	[EPassportBannerState.ELIGIBLE]: {
+	[EPassportState.ELIGIBLE]: {
 		content: 'label.passport.eligible',
 		bg: EPBGState.SUCCESS,
 		icon: <IconVerifiedBadge24 color={semanticColors.jade[600]} />,
 		link: { label: 'label.passport.link.update_score', url: '/' },
 	},
-	[EPassportBannerState.ENDED]: {
+	[EPassportState.ENDED]: {
 		content: 'label.passport.round_ended',
 		bg: EPBGState.ERROR,
 		icon: <IconAlertTriangleFilled24 color={semanticColors.punch[500]} />,
 	},
-	[EPassportBannerState.INVALID_PASSPORT]: {
+	[EPassportState.INVALID_PASSPORT]: {
 		content: 'label.passport.invalid_passport',
 		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 		link: { label: 'label.passport.link.go_to_passport', url: '/' },
 	},
-	[EPassportBannerState.ERROR]: {
+	[EPassportState.ERROR]: {
 		content: 'label.passport.error',
 		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 	},
-	[EPassportBannerState.INVALID_RESPONSE]: {
+	[EPassportState.INVALID_RESPONSE]: {
 		content: 'label.passport.invalid_response',
 		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
@@ -108,36 +94,8 @@ const data: IData = {
 };
 
 export const PassportBanner = () => {
-	const [state, setState] = useState(EPassportBannerState.LOADING);
+	const { state, score, handleConnect } = usePassport();
 	const { formatMessage } = useIntl();
-	const dispatch = useAppDispatch();
-	const { account, library } = useWeb3React();
-
-	const handleConnect = async () => {
-		if (!library || !account) return;
-
-		const res = await connectPassport(account, library);
-		if (res) {
-			const res1 = await fetchPassportScore(account);
-			console.log('res', res);
-		}
-	};
-
-	useEffect(() => {
-		if (!library || !account) return;
-
-		const fetchData = async () => {
-			const passports = getPassports();
-			if (passports[account]) {
-				const res = await fetchPassportScore(account);
-				console.log('res', res);
-			} else {
-				setState(EPassportBannerState.CONNECT);
-			}
-		};
-
-		fetchData();
-	}, [account, library]);
 
 	return (
 		<PassportBannerWrapper state={data[state].bg}>
@@ -163,7 +121,7 @@ export const PassportBanner = () => {
 					<IconExternalLink16 />
 				</StyledLink>
 			)}
-			{state === EPassportBannerState.CONNECT && (
+			{state === EPassportState.CONNECT && (
 				<StyledLink
 					onClick={() => {
 						handleConnect();
