@@ -54,6 +54,7 @@ const ProjectCard = (props: IProjectCard) => {
 		projectPower,
 		countUniqueDonors,
 		qfRounds,
+		estimatedMatching,
 	} = project;
 
 	const [isHover, setIsHover] = useState(false);
@@ -133,7 +134,7 @@ const ProjectCard = (props: IProjectCard) => {
 						{isRoundActive ? (
 							<PaddedRow flexDirection='column' gap='4px'>
 								<EstimatedMatchingPrice>
-									+ ${EstimatedMatchingPrice}
+									+ ${estimatedMatching}
 								</EstimatedMatchingPrice>
 								<LightSubline> Estimated matching</LightSubline>
 							</PaddedRow>
