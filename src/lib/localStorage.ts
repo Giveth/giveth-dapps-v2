@@ -18,6 +18,7 @@ const StorageLabel = {
 	FIRSTMODALSHOWED: 'FIRSTMODALSHOWED',
 	LOCALE: 'locale',
 	CHAINVINEREFERRED: 'chainvineReferred',
+	PASSPORT: 'passport',
 };
 
 export const setWithExpiry = (key: string, value: any, ttl: number) => {

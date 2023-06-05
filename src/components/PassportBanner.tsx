@@ -10,12 +10,14 @@ import {
 	brandColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useWeb3React } from '@web3-react/core';
 import { Flex } from './styled-components/Flex';
 import { useAppDispatch } from '@/features/hooks';
-import { setShowWelcomeModal } from '@/features/modal/modal.slice';
+import { getPassports } from '@/helpers/passport';
+import { connectPassport, fetchPassportScore } from '@/services/passport';
 
 enum EPBGState {
 	SUCCESS,
@@ -106,9 +108,36 @@ const data: IData = {
 };
 
 export const PassportBanner = () => {
-	const [state, setState] = useState(EPassportBannerState.CONNECT);
+	const [state, setState] = useState(EPassportBannerState.LOADING);
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
+	const { account, library } = useWeb3React();
+
+	const handleConnect = async () => {
+		if (!library || !account) return;
+
+		const res = await connectPassport(account, library);
+		if (res) {
+			const res1 = await fetchPassportScore(account);
+			console.log('res', res);
+		}
+	};
+
+	useEffect(() => {
+		if (!library || !account) return;
+
+		const fetchData = async () => {
+			const passports = getPassports();
+			if (passports[account]) {
+				const res = await fetchPassportScore(account);
+				console.log('res', res);
+			} else {
+				setState(EPassportBannerState.CONNECT);
+			}
+		};
+
+		fetchData();
+	}, [account, library]);
 
 	return (
 		<PassportBannerWrapper state={data[state].bg}>
@@ -137,7 +166,7 @@ export const PassportBanner = () => {
 			{state === EPassportBannerState.CONNECT && (
 				<StyledLink
 					onClick={() => {
-						dispatch(setShowWelcomeModal(true));
+						handleConnect();
 					}}
 				>
 					<GLink>
