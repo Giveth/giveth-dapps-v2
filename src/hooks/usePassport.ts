@@ -9,6 +9,7 @@ import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 export enum EPassportState {
 	LOADING,
 	NOT_CONNECTED,
+	NOT_SIGNED,
 	NOT_CREATED,
 	NOT_ELIGIBLE,
 	ELIGIBLE,

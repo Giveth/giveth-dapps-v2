@@ -57,6 +57,11 @@ const data: IData = {
 		bg: EPBGState.INFO,
 		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
 	},
+	[EPassportState.NOT_SIGNED]: {
+		content: 'label.passport.not_signed',
+		bg: EPBGState.INFO,
+		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
+	},
 	[EPassportState.NOT_CREATED]: {
 		content: 'label.passport.not_created',
 		bg: EPBGState.INFO,
