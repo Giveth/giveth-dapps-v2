@@ -58,8 +58,12 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 						// if (!isGIVeconomyRoute && !isModalShowedBefor) {
 						// 	dispatch(setShowFirstWelcomeModal(true));
 						// }
-						const event = new Event(EModalEvents.CONNECTED);
-						window.dispatchEvent(event);
+
+						//Add a small delay to make sure the wallet is connected
+						setTimeout(() => {
+							const event = new Event(EModalEvents.CONNECTED);
+							window.dispatchEvent(event);
+						}, 100);
 					})
 					.catch(error => {
 						showToastError(error);
