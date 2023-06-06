@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { mediaQueries } from '@giveth/ui-design-system';
+import { Col, Row, mediaQueries } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useEffect, useState } from 'react';
 import ProjectTotalFundCard from './ProjectTotalFundCard';
@@ -53,23 +53,24 @@ const ProjectDonationsIndex = () => {
 	}, [id]);
 
 	return (
-		<Wrapper>
-			<ProjectTotalFundCard />
+		<StyledRow>
+			<Col lg={4}>
+				<ProjectTotalFundCard />
+			</Col>
 			{donationInfo?.donations && donationInfo.donations.length > 0 && (
-				<ProjectDonationTable
-					donations={donationInfo?.donations}
-					totalDonations={donationInfo?.totalCount || 0}
-				/>
+				<Col lg={8}>
+					<ProjectDonationTable
+						donations={donationInfo?.donations}
+						totalDonations={donationInfo?.totalCount || 0}
+					/>
+				</Col>
 			)}
-		</Wrapper>
+		</StyledRow>
 	);
 };
 
-const Wrapper = styled.div`
-	display: flex;
-	flex-direction: column;
+const StyledRow = styled(Row)`
 	margin-bottom: 100px;
-	gap: 40px;
 	${mediaQueries.desktop} {
 		align-items: flex-start;
 		flex-direction: row-reverse;
