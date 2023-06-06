@@ -149,17 +149,21 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 					)}
 				</Col>
 			</Row>
-			<Row>
-				<Col lg={6}>
-					<SectionTitle weight={700}>Gitcoin Passport</SectionTitle>
-					<SectionDesc>
-						Taking control of your online identity and your
-						decentralized credentials.
-						<PassportLink href={''}>Learn more.</PassportLink>
-					</SectionDesc>
-					<PassportCard />
-				</Col>
-			</Row>
+			{myAccount && (
+				<Row>
+					<Col lg={6}>
+						<SectionTitle weight={700}>
+							Gitcoin Passport
+						</SectionTitle>
+						<SectionDesc>
+							Taking control of your online identity and your
+							decentralized credentials.
+							<PassportLink href={''}>Learn more.</PassportLink>
+						</SectionDesc>
+						<PassportCard />
+					</Col>
+				</Row>
+			)}
 			{myAccount && (
 				<AccountHero leftAlign={title === _sections.donate.title}>
 					<H1>{title}</H1>
