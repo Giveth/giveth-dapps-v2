@@ -64,6 +64,8 @@
 	"component.title.we_hiring": "¡Estamos contratando!",
 	"component.title.support_us": "Apóyanos",
 	"component.title.with_your_donation": "con tu Donación",
+	"component.join_discord.title": "",
+	"component.join_discord.body": "",
 	"label.home": "Inicio",
 	"label.projects": "Proyectos",
 	"label.community": "Comunidad",

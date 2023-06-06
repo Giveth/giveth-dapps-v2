@@ -134,6 +134,8 @@
 	"component.title.we_hiring": "Estem contractant!",
 	"component.title.support_us": "Donar suport",
 	"component.title.with_your_donation": "amb la teva donació",
+	"component.join_discord.title": "",
+	"component.join_discord.body": "",
 	"label.home": "Inici",
 	"label.projects": "Projectes",
 	"label.community": "Comunitat",
