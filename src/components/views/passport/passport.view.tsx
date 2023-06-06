@@ -97,7 +97,7 @@ export const PassportView = () => {
 												: '--'}
 										</H3>
 									</InfoRow>
-									<InfoRow>
+									<InfoRow gray>
 										<P>Required score</P>
 										<H3>
 											{currentRound?.minimumPassportScore !==
@@ -108,7 +108,7 @@ export const PassportView = () => {
 									</InfoRow>
 								</>
 							)}
-							<PassportBannerWrapper
+							<StyledPassportBannerWrapper
 								bgColor={PassportBannerData[state].bg}
 							>
 								{PassportBannerData[state].icon}
@@ -117,7 +117,7 @@ export const PassportView = () => {
 										id: PassportBannerData[state].content,
 									})}
 								</P>
-							</PassportBannerWrapper>
+							</StyledPassportBannerWrapper>
 						</InfoBox>
 					</StyledCol>
 				</Row>
@@ -182,9 +182,14 @@ const InfoBox = styled(Flex)`
 	margin-top: 60px;
 `;
 
-const InfoRow = styled(Flex)`
+interface IInfoRowProps {
+	gray?: boolean;
+}
+
+const InfoRow = styled(Flex)<IInfoRowProps>`
 	justify-content: space-between;
 	align-items: center;
+	color: ${props => props.gray && neutralColors.gray[700]};
 `;
 
 const HowBox = styled(Flex)`
@@ -197,4 +202,8 @@ const HowBox = styled(Flex)`
 const HowTitle = styled(H5)`
 	padding-bottom: 24px;
 	border-bottom: 1px solid ${neutralColors.gray[400]};
+`;
+
+const StyledPassportBannerWrapper = styled(PassportBannerWrapper)`
+	border-radius: 16px;
 `;
