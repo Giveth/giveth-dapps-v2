@@ -81,23 +81,27 @@ export const PassportView = () => {
 				<Row>
 					<StyledCol md={9}>
 						<InfoBox>
-							<InfoRow>
-								<B>Your Passport score</B>
-								<H3>
-									{score?.passportScore !== undefined
-										? score.passportScore
-										: '--'}
-								</H3>
-							</InfoRow>
-							<InfoRow>
-								<P>Required score</P>
-								<H3>
-									{currentRound?.minimumPassportScore !==
-									undefined
-										? currentRound.minimumPassportScore
-										: '--'}
-								</H3>
-							</InfoRow>
+							{isScoreReady && (
+								<>
+									<InfoRow>
+										<B>Your Passport score</B>
+										<H3>
+											{score?.passportScore !== undefined
+												? score.passportScore
+												: '--'}
+										</H3>
+									</InfoRow>
+									<InfoRow>
+										<P>Required score</P>
+										<H3>
+											{currentRound?.minimumPassportScore !==
+											undefined
+												? currentRound.minimumPassportScore
+												: '--'}
+										</H3>
+									</InfoRow>
+								</>
+							)}
 						</InfoBox>
 					</StyledCol>
 				</Row>
