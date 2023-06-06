@@ -5,6 +5,7 @@ import {
 	Container,
 	H2,
 	H3,
+	H5,
 	IconExternalLink16,
 	IconPassport16,
 	Lead,
@@ -100,6 +101,20 @@ export const PassportView = () => {
 						</InfoBox>
 					</StyledCol>
 				</Row>
+				<HowBox>
+					<HowTitle weight={700}>How it works?</HowTitle>
+					<Lead>
+						1. Create a Gitcoin Passport if you don’t have one
+						already. You will be taken to a new window to begin
+						verifying your identity.
+					</Lead>
+					<Lead>
+						2. Verify your identity by collecting various stamps.
+					</Lead>
+					<Lead>
+						3. Return back to this screen and Refresh your score.
+					</Lead>
+				</HowBox>
 			</Wrapper>
 		</Container>
 	);
@@ -150,4 +165,16 @@ const InfoBox = styled(Flex)`
 const InfoRow = styled(Flex)`
 	justify-content: space-between;
 	align-items: center;
+`;
+
+const HowBox = styled(Flex)`
+	margin-top: 60px;
+	flex-direction: column;
+	gap: 24px;
+	text-align: left;
+`;
+
+const HowTitle = styled(H5)`
+	padding-bottom: 24px;
+	border-bottom: 1px solid ${neutralColors.gray[400]};
 `;
