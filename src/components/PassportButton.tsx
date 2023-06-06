@@ -3,17 +3,24 @@ import {
 	ButtonText,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
-import { usePassport, EPassportState } from '@/hooks/usePassport';
+import { EPassportState } from '@/hooks/usePassport';
 import { FlexCenter } from './styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
 import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
 
-export const PassportButton = () => {
-	const { state, score, currentRound, handleSign, refreshScore } =
-		usePassport();
+interface IButtonProps {
+	state: EPassportState;
+	handleSign: () => Promise<void>;
+	refreshScore: () => Promise<void>;
+}
 
+export const PassportButton: FC<IButtonProps> = ({
+	state,
+	handleSign,
+	refreshScore,
+}) => {
 	const { modalCallback: connectThenSignIn } = useModalCallback(
 		handleSign,
 		EModalEvents.CONNECTED,

@@ -7,7 +7,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { PassportButton } from '@/components/PassportButton';
 
 export const PassportCard = () => {
-	const { score, state } = usePassport();
+	const { score, state, handleSign, refreshScore } = usePassport();
 	return (
 		<StyledContributeCardBox>
 			{state === EPassportState.NOT_SIGNED ? (
@@ -28,7 +28,11 @@ export const PassportCard = () => {
 				ensure your donations get matched in quadratic funding rounds.
 			</P>
 			<Hr></Hr>
-			<PassportButton />
+			<PassportButton
+				state={state}
+				handleSign={handleSign}
+				refreshScore={refreshScore}
+			/>
 		</StyledContributeCardBox>
 	);
 };

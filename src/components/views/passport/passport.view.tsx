@@ -26,7 +26,8 @@ import { PassportButton } from '@/components/PassportButton';
 
 export const PassportView = () => {
 	const { formatMessage } = useIntl();
-	const { state, score, currentRound } = usePassport();
+	const { score, state, handleSign, refreshScore, currentRound } =
+		usePassport();
 
 	const isScoreReady =
 		state !== EPassportState.NOT_CONNECTED &&
@@ -48,7 +49,11 @@ export const PassportView = () => {
 					<ExternalLink href='/' title='Learn more' />
 					<IconExternalLink16 />
 				</PassportLink>
-				<PassportButton />
+				<PassportButton
+					state={state}
+					handleSign={handleSign}
+					refreshScore={refreshScore}
+				/>
 				<Row>
 					<StyledCol md={9}>
 						<InfoBox>
