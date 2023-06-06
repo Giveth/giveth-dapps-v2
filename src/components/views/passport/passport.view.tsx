@@ -16,12 +16,18 @@ import {
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import ExternalLink from '@/components/ExternalLink';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
+import {
+	PassportBannerData,
+	PassportBannerWrapper,
+} from '@/components/PassportBanner';
 
 export const PassportView = () => {
+	const { formatMessage } = useIntl();
 	const { state, score, currentRound, handleSign, refreshScore } =
 		usePassport();
 
@@ -102,6 +108,16 @@ export const PassportView = () => {
 									</InfoRow>
 								</>
 							)}
+							<PassportBannerWrapper
+								bgColor={PassportBannerData[state].bg}
+							>
+								{PassportBannerData[state].icon}
+								<P>
+									{formatMessage({
+										id: PassportBannerData[state].content,
+									})}
+								</P>
+							</PassportBannerWrapper>
 						</InfoBox>
 					</StyledCol>
 				</Row>

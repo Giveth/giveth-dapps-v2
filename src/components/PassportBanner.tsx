@@ -24,10 +24,6 @@ enum EPBGState {
 	ERROR,
 }
 
-interface IPassportBannerWrapperProps {
-	state: EPBGState;
-}
-
 const bgColor = {
 	[EPBGState.SUCCESS]: semanticColors.jade[100],
 	[EPBGState.INFO]: semanticColors.golden[200],
@@ -47,7 +43,7 @@ interface IData {
 	};
 }
 
-const data: IData = {
+export const PassportBannerData: IData = {
 	[EPassportState.LOADING]: {
 		content: 'label.passport.loading',
 		bg: EPBGState.WARNING,
@@ -108,24 +104,24 @@ export const PassportBanner = () => {
 	);
 
 	return (
-		<PassportBannerWrapper state={data[state].bg}>
-			{data[state].icon}
+		<PassportBannerWrapper bgColor={PassportBannerData[state].bg}>
+			{PassportBannerData[state].icon}
 			<P>
 				{formatMessage({
-					id: data[state].content,
+					id: PassportBannerData[state].content,
 				})}
 			</P>
-			{data[state]?.link && (
+			{PassportBannerData[state]?.link && (
 				<StyledLink
 					as='a'
-					href={data[state].link?.url}
+					href={PassportBannerData[state].link?.url}
 					target='_blank'
 					referrerPolicy='no-referrer'
 					rel='noreferrer'
 				>
 					<GLink>
 						{formatMessage({
-							id: data[state].link?.label,
+							id: PassportBannerData[state].link?.label,
 						})}
 					</GLink>
 					<IconExternalLink16 />
@@ -151,9 +147,13 @@ export const PassportBanner = () => {
 	);
 };
 
-const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
+interface IPassportBannerWrapperProps {
+	bgColor: EPBGState;
+}
+
+export const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
 	height: 56px;
-	background-color: ${props => bgColor[props.state]};
+	background-color: ${props => bgColor[props.bgColor]};
 	padding: 16px;
 	align-items: center;
 	justify-content: center;
