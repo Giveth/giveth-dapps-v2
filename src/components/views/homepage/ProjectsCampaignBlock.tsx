@@ -10,7 +10,8 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { FC, useRef } from 'react';
+import { FC, useRef, useState } from 'react';
+import { Swiper as SwiperClass } from 'swiper/types';
 import Link from 'next/link';
 import { Container, OneSideContainer } from '@giveth/ui-design-system';
 import { ICampaign } from '@/apollo/types/types';
@@ -35,7 +36,8 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 	const pagElRef = useRef<HTMLDivElement>(null);
 	const nextElRef = useRef<HTMLDivElement>(null);
 	const prevElRef = useRef<HTMLDivElement>(null);
-
+	//Please don't remove this
+	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
 	const { formatMessage } = useIntl();
 
 	return (
@@ -74,6 +76,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 					</Title>
 					<SwiperWrapper>
 						<Swiper
+							onSwiper={setSwiperInstance}
 							modules={[Navigation, Pagination]}
 							navigation={{
 								nextEl: nextElRef.current,
