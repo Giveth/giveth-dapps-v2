@@ -73,7 +73,7 @@ export const usePassport = () => {
 		if (res) {
 			refreshScore();
 		} else {
-			setState(EPassportState.NOT_CONNECTED);
+			return setState(EPassportState.NOT_SIGNED);
 		}
 	};
 
