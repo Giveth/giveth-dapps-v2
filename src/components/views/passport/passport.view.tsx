@@ -1,13 +1,11 @@
 import {
 	B,
-	ButtonText,
 	Col,
 	Container,
 	H2,
 	H3,
 	H5,
 	IconExternalLink16,
-	IconPassport16,
 	Lead,
 	P,
 	Row,
@@ -19,23 +17,17 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import ExternalLink from '@/components/ExternalLink';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import { Shadow } from '@/components/styled-components/Shadow';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import {
 	PassportBannerData,
 	PassportBannerWrapper,
 } from '@/components/PassportBanner';
-import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
+import { PassportButton } from '@/components/PassportButton';
 
 export const PassportView = () => {
 	const { formatMessage } = useIntl();
-	const { state, score, currentRound, handleSign, refreshScore } =
+	const { score, state, handleSign, refreshScore, currentRound } =
 		usePassport();
-
-	const { modalCallback: connectThenSignIn } = useModalCallback(
-		handleSign,
-		EModalEvents.CONNECTED,
-	);
 
 	const isScoreReady =
 		state !== EPassportState.NOT_CONNECTED &&
@@ -57,39 +49,11 @@ export const PassportView = () => {
 					<ExternalLink href='/' title='Learn more' />
 					<IconExternalLink16 />
 				</PassportLink>
-				{state === EPassportState.NOT_CONNECTED ? (
-					<Button onClick={() => connectThenSignIn()}>
-						<FlexCenter gap='8px'>
-							<IconPassport16 />
-							<ButtonText>Connect passport</ButtonText>
-						</FlexCenter>
-					</Button>
-				) : state === EPassportState.NOT_SIGNED ? (
-					<Button onClick={() => handleSign()}>
-						<FlexCenter gap='8px'>
-							<IconPassport16 />
-							<ButtonText>Sign Message</ButtonText>
-						</FlexCenter>
-					</Button>
-				) : state === EPassportState.LOADING ? (
-					<BaseButton>
-						<FlexCenter gap='8px'>
-							<IconPassport16 />
-							<ButtonText>Loading</ButtonText>
-						</FlexCenter>
-					</BaseButton>
-				) : (
-					<Button
-						onClick={() => {
-							refreshScore();
-						}}
-					>
-						<FlexCenter gap='8px'>
-							<IconPassport16 />
-							<ButtonText>Refresh score</ButtonText>
-						</FlexCenter>
-					</Button>
-				)}
+				<PassportButton
+					state={state}
+					handleSign={handleSign}
+					refreshScore={refreshScore}
+				/>
 				<Row>
 					<StyledCol md={9}>
 						<InfoBox>
@@ -160,22 +124,6 @@ const PassportLink = styled(FlexCenter)`
 	margin-bottom: 60px;
 	color: ${brandColors.giv[500]};
 	gap: 4px;
-`;
-
-const BaseButton = styled.button`
-	padding: 16px 32px;
-	background-color: ${neutralColors.gray[100]};
-	border: none;
-	border-radius: 48px;
-	box-shadow: ${Shadow.Giv[400]};
-	transition: color 0.2s ease-in-out;
-	cursor: pointer;
-`;
-
-const Button = styled(BaseButton)`
-	&:hover {
-		color: ${neutralColors.gray[800]};
-	}
 `;
 
 const StyledCol = styled(Col)`
