@@ -2,28 +2,33 @@ import React from 'react';
 import styled from 'styled-components';
 import { B, H3, P, neutralColors } from '@giveth/ui-design-system';
 import { ContributeCardBox } from '@/components/ContributeCard.sc';
-import { usePassport } from '@/hooks/usePassport';
+import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { Flex } from '@/components/styled-components/Flex';
+import { PassportButton } from '@/components/PassportButton';
 
 export const PassportCard = () => {
-	const { score } = usePassport();
+	const { score, state } = usePassport();
 	return (
 		<StyledContributeCardBox>
-			<Flex alignItems='center' justifyContent='space-between'>
-				<B>Your Passport score</B>
-				<Score weight={700}>
-					{score?.passportScore === undefined ||
-					score?.passportScore === null
-						? '--'
-						: score?.passportScore}
-				</Score>
-			</Flex>
+			{state === EPassportState.NOT_SIGNED ? (
+				<B>Gitcoin Passport</B>
+			) : (
+				<Flex alignItems='center' justifyContent='space-between'>
+					<B>Your Passport score</B>
+					<Score weight={700}>
+						{score?.passportScore === undefined ||
+						score?.passportScore === null
+							? '--'
+							: score?.passportScore}
+					</Score>
+				</Flex>
+			)}
 			<P>
 				Verify your Gitcoin Passport to prove your donor uniqueness and
 				ensure your donations get matched in quadratic funding rounds.
 			</P>
 			<Hr></Hr>
-			<div>salam</div>
+			<PassportButton />
 		</StyledContributeCardBox>
 	);
 };
