@@ -21,8 +21,13 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 
 export const PassportView = () => {
-	const { state, score, currentRound, handleConnect, refreshScore } =
+	const { state, score, currentRound, handleSign, refreshScore } =
 		usePassport();
+
+	const isScoreReady =
+		state !== EPassportState.NOT_CONNECTED &&
+		state !== EPassportState.NOT_SIGNED &&
+		state !== EPassportState.LOADING;
 
 	return (
 		<Container>
@@ -40,7 +45,14 @@ export const PassportView = () => {
 					<IconExternalLink16 />
 				</PassportLink>
 				{state === EPassportState.NOT_CONNECTED ? (
-					<Button onClick={() => handleConnect()}>
+					<Button onClick={() => {}}>
+						<FlexCenter gap='8px'>
+							<IconPassport16 />
+							<ButtonText>Connect passport</ButtonText>
+						</FlexCenter>
+					</Button>
+				) : state === EPassportState.NOT_SIGNED ? (
+					<Button onClick={() => handleSign()}>
 						<FlexCenter gap='8px'>
 							<IconPassport16 />
 							<ButtonText>Connect passport</ButtonText>

@@ -15,6 +15,8 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Flex } from './styled-components/Flex';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
+import { useAppDispatch } from '@/features/hooks';
+import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
 
 enum EPBGState {
 	SUCCESS,
@@ -98,8 +100,14 @@ const data: IData = {
 };
 
 export const PassportBanner = () => {
-	const { state, score, handleConnect } = usePassport();
+	const { state, score, handleSign } = usePassport();
+	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
+
+	const { modalCallback: connectThenSignIn } = useModalCallback(
+		handleSign,
+		EModalEvents.CONNECTED,
+	);
 
 	return (
 		<PassportBannerWrapper state={data[state].bg}>
@@ -126,16 +134,18 @@ export const PassportBanner = () => {
 				</StyledLink>
 			)}
 			{state === EPassportState.NOT_CONNECTED && (
-				<StyledLink
-					onClick={() => {
-						handleConnect();
-					}}
-				>
+				<StyledLink onClick={() => connectThenSignIn()}>
 					<GLink>
 						{formatMessage({
 							id: 'component.button.connect_wallet',
 						})}
 					</GLink>
+					<IconWalletOutline16 />
+				</StyledLink>
+			)}
+			{state === EPassportState.NOT_SIGNED && (
+				<StyledLink onClick={() => handleSign()}>
+					<GLink>Sign Message</GLink>
 					<IconWalletOutline16 />
 				</StyledLink>
 			)}

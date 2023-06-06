@@ -62,7 +62,7 @@ export const usePassport = () => {
 		}
 	}, [account]);
 
-	const handleConnect = async () => {
+	const handleSign = async () => {
 		if (!library || !account) return;
 		setState(EPassportState.LOADING);
 		const res = await connectPassport(account, library);
@@ -83,11 +83,11 @@ export const usePassport = () => {
 			if (passports[account.toLowerCase()]) {
 				await refreshScore();
 			} else {
-				setState(EPassportState.NOT_CONNECTED);
+				setState(EPassportState.NOT_SIGNED);
 			}
 		};
 
 		fetchData();
 	}, [account, library, refreshScore]);
-	return { state, score, currentRound, handleConnect, refreshScore };
+	return { state, score, currentRound, handleSign, refreshScore };
 };
