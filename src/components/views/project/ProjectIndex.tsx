@@ -47,8 +47,13 @@ export enum EProjectPageTabs {
 const ProjectIndex: FC<IProjectBySlug> = () => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
-	const { fetchProjectBoosters, projectData, isActive, isDraft } =
-		useProjectContext();
+	const {
+		fetchProjectBoosters,
+		projectData,
+		isActive,
+		isDraft,
+		hasActiveQFRound,
+	} = useProjectContext();
 
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
@@ -95,7 +100,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 
 	return (
 		<Wrapper>
-			<PassportBanner />
+			{hasActiveQFRound && <PassportBanner />}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<ProjectMeta project={projectData} />
