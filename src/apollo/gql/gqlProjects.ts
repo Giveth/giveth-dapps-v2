@@ -41,6 +41,11 @@ export const PROJECT_CARD_FIELDS = gql`
 			totalPower
 			round
 		}
+		sumDonationValueUsdForActiveQfRound
+		sumDonationValueUsd
+		countUniqueDonorsForActiveQfRound
+		countUniqueDonors
+		estimatedMatching
 	}
 `;
 
@@ -143,6 +148,16 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				round
 			}
 			givbackFactor
+			sumDonationValueUsdForActiveQfRound
+			sumDonationValueUsd
+			countUniqueDonorsForActiveQfRound
+			countUniqueDonors
+			estimatedMatching
+			qfRounds {
+				id
+				name
+				isActive
+			}
 		}
 	}
 `;

@@ -20,7 +20,8 @@ import { device } from '@/lib/constants/constants';
 const QFSection = () => {
 	const { formatMessage, locale } = useIntl();
 	const { projectData, totalDonationsCount } = useProjectContext();
-	const { totalDonations } = projectData || {};
+	const { totalDonations, estimatedMatching, sumDonationValueUsd } =
+		projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 
 	return (
@@ -61,7 +62,9 @@ const QFSection = () => {
 				</DonateInfo>
 			)}
 			<Flex flexDirection='column' gap='4px'>
-				<EstimatedMatchingPrice>+ $7,200</EstimatedMatchingPrice>
+				<EstimatedMatchingPrice>
+					+ {estimatedMatching}
+				</EstimatedMatchingPrice>
 				<LightCaption> Estimated matching</LightCaption>
 			</Flex>
 			<div>

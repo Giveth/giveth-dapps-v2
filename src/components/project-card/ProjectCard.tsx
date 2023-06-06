@@ -28,6 +28,7 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ProjectCardUserName } from './ProjectCardUserName';
+import { hasActiveRound } from '@/helpers/qf';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -51,6 +52,9 @@ const ProjectCard = (props: IProjectCard) => {
 		organization,
 		verified,
 		projectPower,
+		countUniqueDonors,
+		qfRounds,
+		estimatedMatching,
 	} = project;
 
 	const [isHover, setIsHover] = useState(false);
@@ -60,6 +64,8 @@ const ProjectCard = (props: IProjectCard) => {
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
 	const { formatMessage, formatRelativeTime } = useIntl();
+
+	const isRoundActive = hasActiveRound(qfRounds);
 
 	return (
 		<Wrapper
@@ -117,17 +123,22 @@ const ProjectCard = (props: IProjectCard) => {
 							<PriceText>
 								${Math.round(totalDonations as number)}
 							</PriceText>
-							<LightSubline>
-								{' '}
-								{formatMessage({ id: 'label.raised_two' })}
-							</LightSubline>
+							<div>
+								<LightSubline> Raised from </LightSubline>
+								<Subline style={{ display: 'inline-block' }}>
+									&nbsp;{countUniqueDonors}&nbsp;
+								</Subline>
+								<LightSubline>contributors</LightSubline>
+							</div>
 						</PaddedRow>
-						<PaddedRow flexDirection='column' gap='4px'>
-							<EstimatedMatchingPrice>
-								+ $7,200
-							</EstimatedMatchingPrice>
-							<LightSubline> Estimated matching</LightSubline>
-						</PaddedRow>
+						{isRoundActive ? (
+							<PaddedRow flexDirection='column' gap='4px'>
+								<EstimatedMatchingPrice>
+									+ ${estimatedMatching}
+								</EstimatedMatchingPrice>
+								<LightSubline> Estimated matching</LightSubline>
+							</PaddedRow>
+						) : null}
 					</Flex>
 				</Link>
 				{verified && (
@@ -210,7 +221,7 @@ const PriceText = styled(H5)`
 `;
 
 const LightSubline = styled(Subline)`
-	display: inline;
+	display: inline-block;
 	color: ${neutralColors.gray[700]};
 `;
 
