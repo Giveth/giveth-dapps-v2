@@ -48,6 +48,10 @@ export const usePassport = () => {
 				return;
 			}
 			setCurrentRound(currentRound);
+			if (refreshUserScores === null) {
+				setState(EPassportState.NOT_CREATED);
+				return;
+			}
 			if (
 				refreshUserScores.passportScore <
 				currentRound.minimumPassportScore
