@@ -2,9 +2,10 @@ import {
 	IconPassport16,
 	ButtonText,
 	neutralColors,
+	brandColors,
 } from '@giveth/ui-design-system';
 import React, { FC } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { EPassportState } from '@/hooks/usePassport';
 import { FlexCenter } from './styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
@@ -45,6 +46,9 @@ export const PassportButton: FC<IButtonProps> = ({
 			<FlexCenter gap='8px'>
 				<IconPassport16 />
 				<ButtonText>Loading</ButtonText>
+				<LoadingContainer>
+					<Loader />
+				</LoadingContainer>
 			</FlexCenter>
 		</BaseButton>
 	) : (
@@ -75,4 +79,33 @@ const Button = styled(BaseButton)`
 	&:hover {
 		color: ${neutralColors.gray[800]};
 	}
+`;
+
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const LoadingContainer = styled.div`
+	position: relative;
+	transition: width 0.3s ease;
+	width: 16px;
+	height: 16px;
+`;
+
+const Loader = styled.div`
+	border: 3px solid ${brandColors.giv[500]};
+	border-radius: 50%;
+	border-top: 3px solid white;
+	width: 12px;
+	height: 12px;
+	animation: ${rotate} 1s ease infinite;
+	position: absolute;
+	top: 1px;
+	left: 0;
 `;
