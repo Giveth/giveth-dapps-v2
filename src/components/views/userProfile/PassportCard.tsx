@@ -10,7 +10,8 @@ export const PassportCard = () => {
 	const { score, state, handleSign, refreshScore } = usePassport();
 	return (
 		<StyledContributeCardBox>
-			{state === EPassportState.NOT_SIGNED ? (
+			{state === EPassportState.NOT_SIGNED ||
+			state === EPassportState.LOADING ? (
 				<B>Gitcoin Passport</B>
 			) : (
 				<Flex alignItems='center' justifyContent='space-between'>
