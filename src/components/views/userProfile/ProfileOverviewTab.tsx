@@ -224,6 +224,7 @@ const Buttons = styled(Flex)`
 `;
 
 const SectionTitle = styled(H5)`
+	margin-top: 40px;
 	margin-bottom: 16px;
 `;
 
