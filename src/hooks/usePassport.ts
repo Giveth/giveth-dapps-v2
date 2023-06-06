@@ -26,6 +26,7 @@ export const usePassport = () => {
 
 	const refreshScore = useCallback(async () => {
 		if (!account) return;
+		setState(EPassportState.LOADING);
 		try {
 			const {
 				data: { qfRounds },
