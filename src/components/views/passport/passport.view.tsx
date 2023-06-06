@@ -25,11 +25,17 @@ import {
 	PassportBannerData,
 	PassportBannerWrapper,
 } from '@/components/PassportBanner';
+import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
 
 export const PassportView = () => {
 	const { formatMessage } = useIntl();
 	const { state, score, currentRound, handleSign, refreshScore } =
 		usePassport();
+
+	const { modalCallback: connectThenSignIn } = useModalCallback(
+		handleSign,
+		EModalEvents.CONNECTED,
+	);
 
 	const isScoreReady =
 		state !== EPassportState.NOT_CONNECTED &&
@@ -52,7 +58,7 @@ export const PassportView = () => {
 					<IconExternalLink16 />
 				</PassportLink>
 				{state === EPassportState.NOT_CONNECTED ? (
-					<Button onClick={() => {}}>
+					<Button onClick={() => connectThenSignIn()}>
 						<FlexCenter gap='8px'>
 							<IconPassport16 />
 							<ButtonText>Connect passport</ButtonText>
@@ -62,7 +68,7 @@ export const PassportView = () => {
 					<Button onClick={() => handleSign()}>
 						<FlexCenter gap='8px'>
 							<IconPassport16 />
-							<ButtonText>Connect passport</ButtonText>
+							<ButtonText>Sign Message</ButtonText>
 						</FlexCenter>
 					</Button>
 				) : state === EPassportState.LOADING ? (
