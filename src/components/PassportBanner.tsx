@@ -15,7 +15,6 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Flex } from './styled-components/Flex';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
-import { useAppDispatch } from '@/features/hooks';
 import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
 
 enum EPBGState {
@@ -100,8 +99,7 @@ const data: IData = {
 };
 
 export const PassportBanner = () => {
-	const { state, score, handleSign } = usePassport();
-	const dispatch = useAppDispatch();
+	const { state, handleSign } = usePassport();
 	const { formatMessage } = useIntl();
 
 	const { modalCallback: connectThenSignIn } = useModalCallback(
