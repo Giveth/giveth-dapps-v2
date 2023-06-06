@@ -183,6 +183,13 @@ export interface IUser {
 	isSignedIn: boolean;
 }
 
+export interface IPassportInfo {
+	passportScore: number;
+	passportStamps: any;
+}
+
+export interface IUserWithPassport extends IUser, IPassportInfo {}
+
 export interface IReaction {
 	id: string;
 	userId: string;
@@ -392,4 +399,5 @@ export interface IQFRound {
 	isActive: boolean;
 	beginDate: string;
 	endDate: string;
+	minimumPassportScore: number;
 }

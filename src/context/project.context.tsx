@@ -31,6 +31,7 @@ import { useAppSelector } from '@/features/hooks';
 import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import { FETCH_PROJECT_DONATIONS_COUNT } from '@/apollo/gql/gqlDonations';
+import { hasActiveRound } from '@/helpers/qf';
 
 interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
@@ -51,6 +52,7 @@ interface IProjectContext {
 	isActive: boolean;
 	isDraft: boolean;
 	isAdmin: boolean;
+	hasActiveQFRound: boolean;
 	totalDonationsCount: number;
 }
 
@@ -64,6 +66,7 @@ const ProjectContext = createContext<IProjectContext>({
 	isActive: true,
 	isDraft: false,
 	isAdmin: false,
+	hasActiveQFRound: false,
 	totalDonationsCount: 0,
 });
 ProjectContext.displayName = 'ProjectContext';
@@ -92,6 +95,8 @@ export const ProjectProvider = ({
 		projectData?.adminUser?.walletAddress,
 		user?.walletAddress,
 	);
+
+	const hasActiveQFRound = hasActiveRound(projectData?.qfRounds);
 
 	useEffect(() => {
 		if (!projectData?.id) return;
@@ -286,6 +291,7 @@ export const ProjectProvider = ({
 				isActive,
 				isDraft,
 				isAdmin,
+				hasActiveQFRound,
 				totalDonationsCount,
 			}}
 		>

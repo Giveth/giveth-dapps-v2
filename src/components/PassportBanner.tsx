@@ -10,35 +10,18 @@ import {
 	brandColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import { Flex } from './styled-components/Flex';
-import { useAppDispatch } from '@/features/hooks';
-import { getPassports } from '@/helpers/passport';
-import { connectPassport, fetchPassportScore } from '@/services/passport';
+import { EPassportState, usePassport } from '@/hooks/usePassport';
+import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
 
 enum EPBGState {
 	SUCCESS,
 	INFO,
 	WARNING,
 	ERROR,
-}
-
-enum EPassportBannerState {
-	LOADING,
-	CONNECT,
-	NOT_ELIGIBLE,
-	ELIGIBLE,
-	ENDED,
-	INVALID_PASSPORT,
-	ERROR,
-	INVALID_RESPONSE,
-}
-
-interface IPassportBannerWrapperProps {
-	state: EPBGState;
 }
 
 const bgColor = {
@@ -60,115 +43,92 @@ interface IData {
 	};
 }
 
-const data: IData = {
-	[EPassportBannerState.LOADING]: {
+export const PassportBannerData: IData = {
+	[EPassportState.LOADING]: {
 		content: 'label.passport.loading',
 		bg: EPBGState.WARNING,
 		icon: <IconPassport24 />,
 	},
-	[EPassportBannerState.CONNECT]: {
-		content: 'label.passport.connect_wallet',
+	[EPassportState.NOT_CONNECTED]: {
+		content: 'label.passport.not_connected',
 		bg: EPBGState.INFO,
 		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
 	},
-	[EPassportBannerState.NOT_ELIGIBLE]: {
+	[EPassportState.NOT_SIGNED]: {
+		content: 'label.passport.not_signed',
+		bg: EPBGState.INFO,
+		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
+	},
+	[EPassportState.NOT_CREATED]: {
+		content: 'label.passport.not_created',
+		bg: EPBGState.INFO,
+		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
+	},
+	[EPassportState.NOT_ELIGIBLE]: {
 		content: 'label.passport.not_eligible',
 		bg: EPBGState.WARNING,
 		icon: <IconAlertTriangleFilled24 color={brandColors.giv[500]} />,
 		link: { label: 'label.passport.link.update_score', url: '/' },
 	},
-	[EPassportBannerState.ELIGIBLE]: {
+	[EPassportState.ELIGIBLE]: {
 		content: 'label.passport.eligible',
 		bg: EPBGState.SUCCESS,
 		icon: <IconVerifiedBadge24 color={semanticColors.jade[600]} />,
 		link: { label: 'label.passport.link.update_score', url: '/' },
 	},
-	[EPassportBannerState.ENDED]: {
-		content: 'label.passport.round_ended',
+	[EPassportState.ENDED]: {
+		content: 'label.passport.ended',
 		bg: EPBGState.ERROR,
 		icon: <IconAlertTriangleFilled24 color={semanticColors.punch[500]} />,
 	},
-	[EPassportBannerState.INVALID_PASSPORT]: {
-		content: 'label.passport.invalid_passport',
+	[EPassportState.INVALID]: {
+		content: 'label.passport.invalid',
 		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 		link: { label: 'label.passport.link.go_to_passport', url: '/' },
 	},
-	[EPassportBannerState.ERROR]: {
+	[EPassportState.ERROR]: {
 		content: 'label.passport.error',
 		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 	},
-	[EPassportBannerState.INVALID_RESPONSE]: {
-		content: 'label.passport.invalid_response',
-		bg: EPBGState.ERROR,
-		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
-		link: { label: 'label.passport.link.go_to_passport', url: '/' },
-	},
 };
 
 export const PassportBanner = () => {
-	const [state, setState] = useState(EPassportBannerState.LOADING);
+	const { state, handleSign } = usePassport();
 	const { formatMessage } = useIntl();
-	const dispatch = useAppDispatch();
-	const { account, library } = useWeb3React();
 
-	const handleConnect = async () => {
-		if (!library || !account) return;
-
-		const res = await connectPassport(account, library);
-		if (res) {
-			const res1 = await fetchPassportScore(account);
-			console.log('res', res);
-		}
-	};
-
-	useEffect(() => {
-		if (!library || !account) return;
-
-		const fetchData = async () => {
-			const passports = getPassports();
-			if (passports[account]) {
-				const res = await fetchPassportScore(account);
-				console.log('res', res);
-			} else {
-				setState(EPassportBannerState.CONNECT);
-			}
-		};
-
-		fetchData();
-	}, [account, library]);
+	const { modalCallback: connectThenSignIn } = useModalCallback(
+		handleSign,
+		EModalEvents.CONNECTED,
+	);
 
 	return (
-		<PassportBannerWrapper state={data[state].bg}>
-			{data[state].icon}
+		<PassportBannerWrapper bgColor={PassportBannerData[state].bg}>
+			{PassportBannerData[state].icon}
 			<P>
 				{formatMessage({
-					id: data[state].content,
+					id: PassportBannerData[state].content,
 				})}
 			</P>
-			{data[state]?.link && (
+			{PassportBannerData[state]?.link && (
 				<StyledLink
 					as='a'
-					href={data[state].link?.url}
+					href={PassportBannerData[state].link?.url}
 					target='_blank'
 					referrerPolicy='no-referrer'
 					rel='noreferrer'
 				>
 					<GLink>
 						{formatMessage({
-							id: data[state].link?.label,
+							id: PassportBannerData[state].link?.label,
 						})}
 					</GLink>
 					<IconExternalLink16 />
 				</StyledLink>
 			)}
-			{state === EPassportBannerState.CONNECT && (
-				<StyledLink
-					onClick={() => {
-						handleConnect();
-					}}
-				>
+			{state === EPassportState.NOT_CONNECTED && (
+				<StyledLink onClick={() => connectThenSignIn()}>
 					<GLink>
 						{formatMessage({
 							id: 'component.button.connect_wallet',
@@ -177,13 +137,23 @@ export const PassportBanner = () => {
 					<IconWalletOutline16 />
 				</StyledLink>
 			)}
+			{state === EPassportState.NOT_SIGNED && (
+				<StyledLink onClick={() => handleSign()}>
+					<GLink>Sign Message</GLink>
+					<IconWalletOutline16 />
+				</StyledLink>
+			)}
 		</PassportBannerWrapper>
 	);
 };
 
-const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
+interface IPassportBannerWrapperProps {
+	bgColor: EPBGState;
+}
+
+export const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
 	height: 56px;
-	background-color: ${props => bgColor[props.state]};
+	background-color: ${props => bgColor[props.bgColor]};
 	padding: 16px;
 	align-items: center;
 	justify-content: center;
