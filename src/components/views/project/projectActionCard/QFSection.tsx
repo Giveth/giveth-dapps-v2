@@ -20,17 +20,22 @@ import { device } from '@/lib/constants/constants';
 const QFSection = () => {
 	const { formatMessage, locale } = useIntl();
 	const { projectData, totalDonationsCount } = useProjectContext();
-	const { estimatedMatching, sumDonationValueUsd } = projectData || {};
+	const { estimatedMatching, sumDonationValueUsdForActiveQfRound } =
+		projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 
 	return (
 		<DonationSectionWrapper gap='24px'>
-			{sumDonationValueUsd && sumDonationValueUsd !== 0 ? (
+			{sumDonationValueUsdForActiveQfRound &&
+			sumDonationValueUsdForActiveQfRound !== 0 ? (
 				<DonateInfo>
 					{isMobile && <br />}
 					<Title>Amount raised in this round</Title>
 					<Amount weight={700}>
-						${(sumDonationValueUsd || 0).toLocaleString(locale)}
+						$
+						{(
+							sumDonationValueUsdForActiveQfRound || 0
+						).toLocaleString(locale)}
 					</Amount>
 					<Description>
 						{formatMessage({
