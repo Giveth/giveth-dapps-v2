@@ -20,8 +20,7 @@ import { device } from '@/lib/constants/constants';
 const QFSection = () => {
 	const { formatMessage, locale } = useIntl();
 	const { projectData, totalDonationsCount } = useProjectContext();
-	const { totalDonations, estimatedMatching, sumDonationValueUsd } =
-		projectData || {};
+	const { totalDonations, estimatedMatching } = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 
 	return (
@@ -29,11 +28,7 @@ const QFSection = () => {
 			{totalDonations && totalDonations !== 0 ? (
 				<DonateInfo>
 					{isMobile && <br />}
-					<Title>
-						{formatMessage({
-							id: 'label.amount_raised',
-						})}
-					</Title>
+					<Title>Amount raised in this round</Title>
 					<Amount weight={700}>
 						${totalDonations.toLocaleString(locale)}
 					</Amount>
@@ -114,7 +109,12 @@ const QFSection = () => {
 export default QFSection;
 
 const Title = styled(Subline)`
+	display: inline-block;
 	margin-bottom: 8px;
+	color: ${neutralColors.gray[700]};
+	background-color: ${neutralColors.gray[200]};
+	border-radius: 4px;
+	padding: 2px 4px;
 `;
 
 const Amount = styled(H3)`
