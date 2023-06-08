@@ -82,11 +82,11 @@ const HomeViewContainer = styled(FlexCenter)<{ isHover: boolean }>`
 	gap: 8px;
 	padding: 0 24px;
 	position: absolute;
-	bottom: 76px;
+	bottom: 112px;
 	transition: bottom 0.3s ease;
 	border-top-right-radius: 12px;
 	${mediaQueries.laptopS} {
-		bottom: ${props => (props.isHover ? '144px' : '66px')};
+		bottom: ${props => (props.isHover ? '167px' : '89px')};
 	}
 `;
 

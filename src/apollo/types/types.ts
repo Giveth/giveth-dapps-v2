@@ -66,6 +66,7 @@ export interface IProject {
 	countUniqueDonorsForActiveQfRound?: number;
 	estimatedMatching?: number;
 	sumDonationValueUsd?: number;
+	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
 }
 
