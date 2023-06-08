@@ -119,10 +119,20 @@ const ProjectCard = (props: IProjectCard) => {
 				<Link href={slugToProjectView(slug)}>
 					<Description>{descriptionSummary}</Description>
 					<Flex justifyContent='space-between' alignItems='center'>
-						<PaddedRow flexDirection='column' gap='4px'>
+						<PaddedRow flexDirection='column' gap='2px'>
 							<PriceText>
 								${Math.round(totalDonations as number)}
 							</PriceText>
+							{isRoundActive ? (
+								<AmountRaisedText>
+									Amount raised in this round
+								</AmountRaisedText>
+							) : (
+								<AmountRaisedText>
+									Total amount raised
+								</AmountRaisedText>
+							)}
+
 							<div>
 								<LightSubline> Raised from </LightSubline>
 								<Subline style={{ display: 'inline-block' }}>
@@ -366,6 +376,13 @@ const ActionButtons = styled(PaddedRow)`
 
 const EstimatedMatchingPrice = styled(H5)`
 	color: ${semanticColors.jade[500]};
+`;
+
+const AmountRaisedText = styled(Subline)`
+	color: ${neutralColors.gray[700]};
+	background-color: ${neutralColors.gray[300]};
+	padding: 2px 8px;
+	border-radius: 4px;
 `;
 
 export default ProjectCard;
