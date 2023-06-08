@@ -47,7 +47,8 @@ const ProjectCard = (props: IProjectCard) => {
 		image,
 		slug,
 		adminUser,
-		totalDonations,
+		sumDonationValueUsd,
+		sumDonationValueUsdForActiveQfRound,
 		updatedAt,
 		organization,
 		verified,
@@ -66,7 +67,6 @@ const ProjectCard = (props: IProjectCard) => {
 	const { formatMessage, formatRelativeTime } = useIntl();
 
 	const isRoundActive = hasActiveRound(qfRounds);
-
 	return (
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
@@ -118,11 +118,21 @@ const ProjectCard = (props: IProjectCard) => {
 				/>
 				<Link href={slugToProjectView(slug)}>
 					<Description>{descriptionSummary}</Description>
-					<Flex justifyContent='space-between' alignItems='center'>
+					<Flex justifyContent='space-between'>
 						<PaddedRow flexDirection='column' gap='2px'>
-							<PriceText>
-								${Math.round(totalDonations as number)}
-							</PriceText>
+							{isRoundActive ? (
+								<PriceText>
+									$
+									{Math.round(
+										sumDonationValueUsdForActiveQfRound as number,
+									)}
+								</PriceText>
+							) : (
+								<PriceText>
+									${Math.round(sumDonationValueUsd as number)}
+								</PriceText>
+							)}
+
 							{isRoundActive ? (
 								<AmountRaisedText>
 									Amount raised in this round
@@ -142,7 +152,7 @@ const ProjectCard = (props: IProjectCard) => {
 							</div>
 						</PaddedRow>
 						{isRoundActive ? (
-							<PaddedRow flexDirection='column' gap='4px'>
+							<PaddedRow flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
 									+ ${estimatedMatching}
 								</EstimatedMatchingPrice>
