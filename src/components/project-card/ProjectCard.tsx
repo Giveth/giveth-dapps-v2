@@ -304,7 +304,7 @@ const CardBody = styled.div<ICardBody>`
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: 146px;
+	top: 112px;
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
 	border-radius: ${props =>
@@ -312,10 +312,10 @@ const CardBody = styled.div<ICardBody>`
 	${mediaQueries.laptopS} {
 		top: ${props =>
 			props.isHover == ECardBodyHover.FULL
-				? '80px'
+				? '59px'
 				: props.isHover == ECardBodyHover.HALF
-				? '124px'
-				: '158px'};
+				? '104px'
+				: '137px'};
 	}
 `;
 
