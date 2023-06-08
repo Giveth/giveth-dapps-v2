@@ -20,17 +20,17 @@ import { device } from '@/lib/constants/constants';
 export const DonateSection = () => {
 	const { formatMessage, locale } = useIntl();
 	const { projectData, totalDonationsCount } = useProjectContext();
-	const { totalDonations } = projectData || {};
+	const { sumDonationValueUsd } = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 
 	return (
 		<DonationSectionWrapper gap='24px'>
-			{totalDonations && totalDonations !== 0 ? (
+			{sumDonationValueUsd && sumDonationValueUsd !== 0 ? (
 				<DonateInfo>
 					{isMobile && <br />}
 					<Title>Total amount raised</Title>
 					<Amount weight={700}>
-						${totalDonations.toLocaleString(locale)}
+						${(sumDonationValueUsd || 0).toLocaleString(locale)}
 					</Amount>
 					<Description>
 						{formatMessage({
