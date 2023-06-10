@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Image from 'next/image';
 import {
 	B,
 	brandColors,
@@ -11,7 +10,6 @@ import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation } from '@/apollo/types/types';
-import SearchBox from '@/components/SearchBox';
 import Pagination from '@/components/Pagination';
 import {
 	smallFormatDate,
@@ -28,7 +26,6 @@ import ExternalLink from '@/components/ExternalLink';
 import SortIcon from '@/components/SortIcon';
 import { useAppSelector } from '@/features/hooks';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
-import useDebounce from '@/hooks/useDebounce';
 import {
 	RowWrapper,
 	TableCell,
@@ -75,7 +72,6 @@ const ProjectDonationTable = ({
 		by: EOrderBy.CreationDate,
 		direction: EDirection.DESC,
 	});
-	const [searchTerm, setSearchTerm] = useState<string>('');
 	const { projectData } = useProjectContext();
 	const user = useAppSelector(state => state.user.userData);
 	const { formatMessage, locale } = useIntl();
@@ -84,8 +80,6 @@ const ProjectDonationTable = ({
 		adminUser?.walletAddress,
 		user?.walletAddress,
 	);
-
-	const debouncedSearch = useDebounce(searchTerm, 500);
 
 	const orderChangeHandler = (orderBy: EOrderBy) => {
 		if (orderBy === order.by) {
@@ -114,7 +108,6 @@ const ProjectDonationTable = ({
 					take: itemPerPage,
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },
-					searchTerm,
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
 				},
 			});
@@ -124,20 +117,10 @@ const ProjectDonationTable = ({
 			}
 		};
 		fetchProjectDonations();
-	}, [page, order.by, order.direction, id, debouncedSearch]);
-
-	useEffect(() => {
-		if (page !== 0) setPage(0);
-	}, [searchTerm]);
-
-	console.log('donation.user', donations);
+	}, [page, order.by, order.direction, id]);
 
 	return (
 		<Wrapper>
-			<SearchBox
-				onChange={event => setSearchTerm(event)}
-				value={searchTerm}
-			/>
 			<DonationTableWrapper>
 				<DonationTableContainer isAdmin={isAdmin}>
 					<TableHeader
@@ -160,9 +143,6 @@ const ProjectDonationTable = ({
 					)}
 					<TableHeader>
 						{formatMessage({ id: 'label.network' })}
-					</TableHeader>
-					<TableHeader>
-						{formatMessage({ id: 'label.source' })}
 					</TableHeader>
 					<TableHeader
 						onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
@@ -213,18 +193,6 @@ const ProjectDonationTable = ({
 								</NetworkName>
 							</DonationTableCell>
 							<DonationTableCell>
-								{donation?.onramperId ? (
-									<Image
-										src='/images/powered_by_onramper.png'
-										width='95'
-										height='30'
-										alt={'Powered by OnRamper'}
-									/>
-								) : (
-									'Wallet'
-								)}
-							</DonationTableCell>
-							<DonationTableCell>
 								<B>{donation.amount}</B>
 								<Currency>{donation.currency}</Currency>
 								{!donation.anonymous && (
@@ -268,7 +236,6 @@ const LeftPadding = styled.div`
 `;
 
 const Wrapper = styled.div`
-	margin: 50px 0 32px;
 	display: flex;
 	flex-direction: column;
 	gap: 16px;
@@ -293,8 +260,8 @@ const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
 	width: 100%;
 	grid-template-columns: ${props =>
 		props.isAdmin
-			? '0.9fr 1.5fr 1fr 1.25fr 0.8fr 1.1fr 1fr'
-			: '0.9fr 1.5fr 1.1fr 0.8fr 1.1fr 1fr'};
+			? '1fr 2.2fr 0.8fr 1.25fr 1.4fr 1fr'
+			: '1fr 2.2fr 1.1fr 1.1fr 1fr'};
 	min-width: 800px;
 `;
 

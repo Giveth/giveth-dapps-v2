@@ -1,6 +1,13 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { Subline, H2, brandColors, H4 } from '@giveth/ui-design-system';
+import {
+	H2,
+	H4,
+	Lead,
+	mediaQueries,
+	neutralColors,
+	P,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -11,15 +18,16 @@ const ProjectTotalFundCard: FC = () => {
 	const { projectData } = useProjectContext();
 	const { totalDonations, addresses } = projectData || {};
 	const { formatMessage } = useIntl();
+	const recipientAddresses = addresses?.filter(a => a.isRecipient);
 
 	return (
 		<Wrapper>
 			<UpperSection>
-				<Subline>
+				<LeadStyled>
 					{formatMessage({ id: 'label.all_time_funding' })}
-				</Subline>
+				</LeadStyled>
 				{totalDonations && totalDonations > 0 ? (
-					<TotalFund>{'$' + totalDonations}</TotalFund>
+					<TotalFund>{'$' + totalDonations.toFixed(2)}</TotalFund>
 				) : (
 					<NoDonation>
 						{formatMessage({
@@ -28,25 +36,51 @@ const ProjectTotalFundCard: FC = () => {
 					</NoDonation>
 				)}
 			</UpperSection>
-			{addresses && <ProjectWalletAddress addresses={addresses} />}
+			<BottomSection>
+				<P>
+					{formatMessage({
+						id: 'label.associated_wallet_address',
+					})}
+				</P>
+				{recipientAddresses?.map(addObj => (
+					<ProjectWalletAddress
+						key={addObj.networkId}
+						address={addObj.address!}
+						networkId={addObj.networkId!}
+					/>
+				))}
+			</BottomSection>
 		</Wrapper>
 	);
 };
+
+const BottomSection = styled.div`
+	color: ${neutralColors.gray[700]};
+	margin-top: 40px;
+`;
+
+const LeadStyled = styled(Lead)`
+	margin-bottom: 8px;
+`;
 
 const NoDonation = styled(H4)`
 	margin-top: 20px;
 `;
 
 const Wrapper = styled.div`
+	padding: 24px;
 	background: white;
-	border-radius: 12px;
+	border-radius: 16px;
 	box-shadow: ${Shadow.Neutral[400]};
 	overflow: hidden;
+	flex-shrink: 0;
+	${mediaQueries.mobileL} {
+		width: 390px;
+	}
 `;
 
 const UpperSection = styled.div`
-	padding: 24px 21px 16px 21px;
-	color: ${brandColors.deep[800]};
+	color: ${neutralColors.gray[900]};
 	text-transform: uppercase;
 `;
 
