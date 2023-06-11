@@ -29,7 +29,7 @@ export const PassportCard = () => {
 				ensure your donations get matched in quadratic funding rounds.
 			</P>
 			<Hr></Hr>
-			<PassportButton
+			<StyledPassportButton
 				state={state}
 				handleSign={handleSign}
 				refreshScore={refreshScore}
@@ -52,4 +52,8 @@ const Hr = styled.div`
 	height: 1px;
 	background-color: ${neutralColors.gray[300]};
 	width: 100%;
+`;
+
+const StyledPassportButton = styled(PassportButton)`
+	width: fit-content;
 `;

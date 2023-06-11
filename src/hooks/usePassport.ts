@@ -5,6 +5,7 @@ import { connectPassport, fetchPassportScore } from '@/services/passport';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { client } from '@/apollo/apolloClient';
 import { IPassportInfo, IQFRound } from '@/apollo/types/types';
+import { getNowUnixMS } from '@/helpers/time';
 
 export enum EPassportState {
 	LOADING,
@@ -47,9 +48,17 @@ export const usePassport = () => {
 			if (!currentRound) {
 				setState(EPassportState.ENDED);
 				return;
+			} else if (
+				getNowUnixMS() > new Date(currentRound.endDate).getTime()
+			) {
+				setState(EPassportState.ENDED);
+				return;
 			}
 			setCurrentRound(currentRound);
-			if (refreshUserScores === null) {
+			if (
+				refreshUserScores === null ||
+				refreshUserScores.passportScore === null
+			) {
 				setState(EPassportState.NOT_CREATED);
 				return;
 			}

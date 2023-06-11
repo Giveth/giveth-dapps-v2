@@ -25,7 +25,7 @@ import {
 import { PassportButton } from '@/components/PassportButton';
 
 export const PassportView = () => {
-	const { formatMessage } = useIntl();
+	const { formatMessage, locale } = useIntl();
 	const { score, state, handleSign, refreshScore, currentRound } =
 		usePassport();
 
@@ -86,6 +86,22 @@ export const PassportView = () => {
 									{formatMessage({
 										id: PassportBannerData[state].content,
 									})}
+									{currentRound &&
+										(state === EPassportState.NOT_CREATED ||
+											state ===
+												EPassportState.NOT_ELIGIBLE) && (
+											<strong>
+												{new Date(currentRound.endDate)
+													.toLocaleString(
+														locale || 'en-US',
+														{
+															day: 'numeric',
+															month: 'short',
+														},
+													)
+													.replace(/,/g, '')}
+											</strong>
+										)}
 								</P>
 							</StyledPassportBannerWrapper>
 						</InfoBox>
@@ -160,4 +176,5 @@ const HowTitle = styled(H5)`
 
 const StyledPassportBannerWrapper = styled(PassportBannerWrapper)`
 	border-radius: 16px;
+	height: auto;
 `;
