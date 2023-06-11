@@ -53,7 +53,9 @@ const ProjectGIVPowerIndex: FC<IProjectGIVPowerIndexProps> = () => {
 					/>
 					<Flex justifyContent='flex-end'>
 						<Pagination
-							totalCount={totalCount}
+							totalCount={
+								boostersData?.powerBoostings.length || 0
+							}
 							currentPage={page}
 							setPage={setPage}
 							itemPerPage={itemPerPage}
