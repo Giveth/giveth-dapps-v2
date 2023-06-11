@@ -24,6 +24,8 @@ const links = {
 	TWITTER: 'https://twitter.com/giveth',
 	YOUTUBE: 'https://www.youtube.com/givethio',
 	REDDIT: 'https://reddit.com/r/giveth',
+	INSTAGRAM: 'https://www.instagram.com/giveth.io/',
+	LINKEDIN: 'https://www.linkedin.com/company/givethio/',
 	DOCS,
 	GIVFARM_DOCS: DOCS + 'giveconomy/givfarm',
 	GIVSTREAM_DOCS: DOCS + 'giveconomy/givstream',
