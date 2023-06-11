@@ -49,7 +49,7 @@ export const usePassport = () => {
 				return;
 			}
 			setCurrentRound(currentRound);
-			if (refreshUserScores === null) {
+			if (refreshUserScores.passportScore === null) {
 				setState(EPassportState.NOT_CREATED);
 				return;
 			}
