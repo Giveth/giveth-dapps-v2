@@ -15,11 +15,12 @@ import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
+import { useProjectContext } from '@/context/project.context';
 
-const ProjectGIVbackToast = (props: any) => {
-	const verified = true;
-	const isOwner = true;
-	const isOwnerVerified = verified && isOwner;
+const ProjectGIVbackToast = () => {
+	const { projectData, isAdmin } = useProjectContext();
+	const verified = projectData?.verified;
+	const isOwnerVerified = verified && isAdmin;
 	const color = isOwnerVerified
 		? semanticColors.golden[600]
 		: neutralColors.gray[900];
@@ -29,7 +30,7 @@ const ProjectGIVbackToast = (props: any) => {
 		<Wrapper>
 			<Content>
 				<IconGIVBack color={color} size={24} />
-				<Body>
+				<div>
 					<Title color={color}>
 						Get rewarded with up to 80% of your donation value!
 					</Title>
@@ -44,7 +45,7 @@ const ProjectGIVbackToast = (props: any) => {
 							<IconChevronRight size={24} />
 						</LearnMore>
 					</ExternalLink>
-				</Body>
+				</div>
 			</Content>
 			{verified && (
 				<ButtonWrapper>
@@ -72,8 +73,6 @@ const Description = styled(P)`
 const Title = styled(B)<{ color: string }>`
 	color: ${({ color }) => color};
 `;
-
-const Body = styled.div``;
 
 const ButtonWrapper = styled.div`
 	button {
