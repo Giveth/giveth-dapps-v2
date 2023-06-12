@@ -77,8 +77,9 @@ const DashedWrapper = styled(FlexCenter)`
 const ProjectLink = styled(GLink)`
 	display: flex;
 	align-items: center;
+	text-align: left;
 	justify-content: center;
-	padding: 0 24px;
+	padding: 17px 24px;
 	color: ${neutralColors.gray[700]};
 	word-break: break-word;
 `;

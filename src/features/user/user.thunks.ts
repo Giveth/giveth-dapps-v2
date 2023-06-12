@@ -96,9 +96,7 @@ export const startChainvineReferral = createAsyncThunk(
 	'user/startChainvineReferral',
 	async ({ address }: IChainvineSetReferral, { dispatch }) => {
 		try {
-			console.log('AAA');
 			const res = await backendGQLRequest(REGISTER_ON_CHAINVINE);
-			console.log({ res });
 			dispatch(fetchUserByAddress(address));
 			return res?.payload;
 		} catch (error) {

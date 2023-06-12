@@ -48,6 +48,21 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 		};
 	}, [isMobile, isLoading]);
 
+	const RenderComponents =
+		isLoading && isAdmin ? (
+			<LottieControl animationData={LoadingAnimation} size={300} />
+		) : isAdmin ? (
+			<>
+				<ProjectStats />
+				<AdminActions />
+			</>
+		) : (
+			<>
+				<DonateSection />
+				<ProjectPublicActions />
+			</>
+		);
+
 	return isMobile ? (
 		<Wrapper
 			ref={wrapperRef}
@@ -62,22 +77,7 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 				flexDirection='column-reverse'
 				justifyContent='space-between'
 			>
-				{isLoading ? (
-					<LottieControl
-						animationData={LoadingAnimation}
-						size={300}
-					/>
-				) : isAdmin ? (
-					<>
-						<ProjectStats />
-						<AdminActions />
-					</>
-				) : (
-					<>
-						<DonateSection />
-						<ProjectPublicActions />
-					</>
-				)}
+				{RenderComponents}
 			</ProjectActionCardWrapper>
 		</Wrapper>
 	) : (
@@ -85,19 +85,7 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 			flexDirection='column'
 			justifyContent='space-between'
 		>
-			{isLoading ? (
-				<LottieControl animationData={LoadingAnimation} size={300} />
-			) : isAdmin ? (
-				<>
-					<ProjectStats />
-					<AdminActions />
-				</>
-			) : (
-				<>
-					<DonateSection />
-					<ProjectPublicActions />
-				</>
-			)}
+			{RenderComponents}
 		</ProjectActionCardWrapper>
 	);
 };

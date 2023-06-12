@@ -12,16 +12,24 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
+import LottieControl from '@/components/LottieControl';
+import LoadingAnimation from '@/animations/loading_giv.json';
 import { useProjectContext } from '@/context/project.context';
+import { useAppSelector } from '@/features/hooks';
 import { Flex } from '@/components/styled-components/Flex';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 
 export const DonateSection = () => {
+	const { isLoading } = useAppSelector(state => state.user);
 	const { formatMessage, locale } = useIntl();
 	const { projectData, totalDonationsCount } = useProjectContext();
 	const { totalDonations } = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
+
+	if (isLoading) {
+		return <LottieControl animationData={LoadingAnimation} size={300} />;
+	}
 
 	return (
 		<DonationSectionWrapper gap='24px'>

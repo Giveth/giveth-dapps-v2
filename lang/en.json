@@ -1270,5 +1270,7 @@
 	"label.donors_to_verified": "Donors to verified projects are rewarded with GIV. Boost this project to increase its rewards % and make it more visible on the projects page!",
 	"label.amount_raised": "Amount raised",
 	"label.raised_from": "Raised from ",
-	"label.contributors": "{count, plural, one { contributor} other { contributors} }"
+	"label.contributors": "{count, plural, one { contributor} other { contributors} }",
+	"label.share_and_get_rewarded": "Share & get rewarded",
+	"label.share_and_earn_rewards": "Share and earn rewards"
 }

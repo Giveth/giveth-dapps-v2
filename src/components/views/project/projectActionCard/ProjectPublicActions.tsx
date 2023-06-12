@@ -11,7 +11,7 @@ import {
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import ShareModal from '@/components/modals/ShareModal';
+import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 import { EContentType } from '@/lib/constants/shareContent';
 import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
@@ -22,13 +22,14 @@ import {
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
 } from '@/features/user/user.slice';
+import { startChainvineReferral } from '@/features/user/user.thunks';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { slugToProjectDonate } from '@/lib/routeCreators';
 
 export const ProjectPublicActions = () => {
-	const [showModal, setShowModal] = useState<boolean>(false);
+	const [showModal, setShowShareModal] = useState<boolean>(false);
 	const { projectData, isActive } = useProjectContext();
 	const project = projectData!;
 	const { slug, id: projectId } = project;
@@ -121,6 +122,14 @@ export const ProjectPublicActions = () => {
 		EModalEvents.CONNECTED,
 	);
 
+	const setReferral = async () => {
+		await dispatch(
+			startChainvineReferral({
+				address: user?.walletAddress!,
+			}),
+		);
+	};
+
 	const checkSignInThenLike = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
@@ -141,14 +150,22 @@ export const ProjectPublicActions = () => {
 					linkType='primary'
 				/>
 			</Link>
-			<BadgeWrapper gap='8px'>
-				<StyledButton
-					label={formatMessage({ id: 'label.share' })}
-					onClick={() => setShowModal(true)}
+			<BadgeWrapper gap='4px'>
+				<StyledShareButton
+					label={formatMessage({
+						id: 'label.share_and_get_rewarded',
+					})}
+					onClick={async () => {
+						if (isSignedIn && !user?.chainvineId) {
+							await setReferral();
+						}
+						setShowShareModal(true);
+					}}
 					buttonType='texty-gray'
 					icon={<IconShare16 />}
 					size='small'
 				/>
+
 				<StyledButton
 					label={totalReactions.toString()}
 					onClick={() => isActive && checkSignInThenLike()}
@@ -166,10 +183,12 @@ export const ProjectPublicActions = () => {
 				/>
 			</BadgeWrapper>
 			{showModal && slug && (
-				<ShareModal
+				<ShareRewardedModal
 					contentType={EContentType.thisProject}
-					setShowModal={setShowModal}
+					setShowModal={setShowShareModal}
+					setReferral={setReferral}
 					projectHref={slug}
+					projectTitle={project.title}
 				/>
 			)}
 		</ProjectPublicActionsWrapper>
@@ -199,8 +218,16 @@ const StyledButton = styled(Button)`
 	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
 	flex-direction: row-reverse;
 	gap: 8px;
-	padding: 16px 24px;
+	padding: 16px 10px;
 	& > div[loading='1'] > div {
 		left: 0;
+	}
+`;
+
+const StyledShareButton = styled(StyledButton)`
+	padding: 16px 8px;
+	* {
+		font-size: 12px;
+		text-transform: capitalize;
 	}
 `;
