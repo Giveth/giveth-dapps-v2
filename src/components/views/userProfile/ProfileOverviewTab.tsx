@@ -157,8 +157,8 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 						</SectionTitle>
 						<SectionDesc>
 							Taking control of your online identity and your
-							decentralized credentials.
-							<PassportLink href={''}>Learn more.</PassportLink>
+							decentralized credentials &nbsp;
+							<PassportLink href={''}> Learn more.</PassportLink>
 						</SectionDesc>
 						<PassportCard />
 					</Col>

@@ -95,8 +95,8 @@ export const PassportBannerData: IData = {
 };
 
 export const PassportBanner = () => {
-	const { state, handleSign } = usePassport();
-	const { formatMessage } = useIntl();
+	const { state, handleSign, currentRound } = usePassport();
+	const { formatMessage, locale } = useIntl();
 
 	const { modalCallback: connectThenSignIn } = useModalCallback(
 		handleSign,
@@ -110,6 +110,18 @@ export const PassportBanner = () => {
 				{formatMessage({
 					id: PassportBannerData[state].content,
 				})}
+				{currentRound &&
+					(state === EPassportState.NOT_CREATED ||
+						state === EPassportState.NOT_ELIGIBLE) && (
+						<strong>
+							{new Date(currentRound.endDate)
+								.toLocaleString(locale || 'en-US', {
+									day: 'numeric',
+									month: 'short',
+								})
+								.replace(/,/g, '')}
+						</strong>
+					)}
 			</P>
 			{PassportBannerData[state]?.link && (
 				<StyledLink

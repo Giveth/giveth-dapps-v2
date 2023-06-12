@@ -15,12 +15,14 @@ interface IButtonProps {
 	state: EPassportState;
 	handleSign: () => Promise<void>;
 	refreshScore: () => Promise<void>;
+	className?: string;
 }
 
 export const PassportButton: FC<IButtonProps> = ({
 	state,
 	handleSign,
 	refreshScore,
+	className,
 }) => {
 	const { modalCallback: connectThenSignIn } = useModalCallback(
 		handleSign,
@@ -28,21 +30,21 @@ export const PassportButton: FC<IButtonProps> = ({
 	);
 
 	return state === EPassportState.NOT_CONNECTED ? (
-		<Button onClick={() => connectThenSignIn()}>
+		<Button onClick={() => connectThenSignIn()} className={className}>
 			<FlexCenter gap='8px'>
 				<IconPassport16 />
 				<ButtonText>Connect passport</ButtonText>
 			</FlexCenter>
 		</Button>
 	) : state === EPassportState.NOT_SIGNED ? (
-		<Button onClick={() => handleSign()}>
+		<Button onClick={() => handleSign()} className={className}>
 			<FlexCenter gap='8px'>
 				<IconPassport16 />
 				<ButtonText>Sign Message</ButtonText>
 			</FlexCenter>
 		</Button>
 	) : state === EPassportState.LOADING ? (
-		<BaseButton>
+		<BaseButton className={className}>
 			<FlexCenter gap='8px'>
 				<IconPassport16 />
 				<ButtonText>Loading</ButtonText>
@@ -56,6 +58,7 @@ export const PassportButton: FC<IButtonProps> = ({
 			onClick={() => {
 				refreshScore();
 			}}
+			className={className}
 		>
 			<FlexCenter gap='8px'>
 				<IconPassport16 />

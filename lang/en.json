@@ -1276,8 +1276,8 @@
 	"label.passport.not_connected": "Connect your wallet to verify your eligibility for donation matching.",
 	"label.passport.not_signed": "Sign the message with your wallet to connect to Passport",
 	"label.passport.not_created": "Get your donation matched with quadratic funding! Verify your Gitcoin Passport before ",
-	"label.passport.not_eligible": "Get your donation matched with quadratic funding! Increase your Gitcoin Passport score before June 15",
-	"label.passport.eligible": "You donations are eligible to be matched!.",
+	"label.passport.not_eligible": "Get your donation matched with quadratic funding! Increase your Gitcoin Passport score before ",
+	"label.passport.eligible": "You donations are eligible to be matched!",
 	"label.passport.ended": "This round has ended. Thank you for your support.",
 	"label.passport.invalid": "Passport Profile not detected. Please open Passport to troubleshoot.",
 	"label.passport.error": "An error occurred while loading your Gitcoin Passport. Please try again later.",
@@ -1288,5 +1288,6 @@
 	"component.qf_middle_banner.desc": "Donate crypto directly to Economics and Infrastructure projects on Giveth! Support projects and get rewarded for giving with zero added fees.",
 	"label.qf_round_projects": "QF round's projects",
 	"label.quadratic_funding_round": "Quadratic funding - Round",
-	"label.round_ends_in": "Round ends in"
+	"label.round_ends_in": "Round ends in",
+	"label.round_starts_in": "Round starts in"
 }

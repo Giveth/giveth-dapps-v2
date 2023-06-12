@@ -47,7 +47,8 @@ const ProjectCard = (props: IProjectCard) => {
 		image,
 		slug,
 		adminUser,
-		totalDonations,
+		sumDonationValueUsd,
+		sumDonationValueUsdForActiveQfRound,
 		updatedAt,
 		organization,
 		verified,
@@ -66,7 +67,6 @@ const ProjectCard = (props: IProjectCard) => {
 	const { formatMessage, formatRelativeTime } = useIntl();
 
 	const isRoundActive = hasActiveRound(qfRounds);
-
 	return (
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
@@ -118,11 +118,31 @@ const ProjectCard = (props: IProjectCard) => {
 				/>
 				<Link href={slugToProjectView(slug)}>
 					<Description>{descriptionSummary}</Description>
-					<Flex justifyContent='space-between' alignItems='center'>
-						<PaddedRow flexDirection='column' gap='4px'>
-							<PriceText>
-								${Math.round(totalDonations as number)}
-							</PriceText>
+					<Flex justifyContent='space-between'>
+						<PaddedRow flexDirection='column' gap='2px'>
+							{isRoundActive ? (
+								<PriceText>
+									$
+									{Math.round(
+										sumDonationValueUsdForActiveQfRound as number,
+									)}
+								</PriceText>
+							) : (
+								<PriceText>
+									${Math.round(sumDonationValueUsd as number)}
+								</PriceText>
+							)}
+
+							{isRoundActive ? (
+								<AmountRaisedText>
+									Amount raised in this round
+								</AmountRaisedText>
+							) : (
+								<AmountRaisedText>
+									Total amount raised
+								</AmountRaisedText>
+							)}
+
 							<div>
 								<LightSubline> Raised from </LightSubline>
 								<Subline style={{ display: 'inline-block' }}>
@@ -132,7 +152,7 @@ const ProjectCard = (props: IProjectCard) => {
 							</div>
 						</PaddedRow>
 						{isRoundActive ? (
-							<PaddedRow flexDirection='column' gap='4px'>
+							<PaddedRow flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
 									+ ${estimatedMatching}
 								</EstimatedMatchingPrice>
@@ -284,7 +304,7 @@ const CardBody = styled.div<ICardBody>`
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: 146px;
+	top: 112px;
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
 	border-radius: ${props =>
@@ -292,10 +312,10 @@ const CardBody = styled.div<ICardBody>`
 	${mediaQueries.laptopS} {
 		top: ${props =>
 			props.isHover == ECardBodyHover.FULL
-				? '80px'
+				? '59px'
 				: props.isHover == ECardBodyHover.HALF
-				? '124px'
-				: '158px'};
+				? '104px'
+				: '137px'};
 	}
 `;
 
@@ -366,6 +386,13 @@ const ActionButtons = styled(PaddedRow)`
 
 const EstimatedMatchingPrice = styled(H5)`
 	color: ${semanticColors.jade[500]};
+`;
+
+const AmountRaisedText = styled(Subline)`
+	color: ${neutralColors.gray[700]};
+	background-color: ${neutralColors.gray[300]};
+	padding: 2px 8px;
+	border-radius: 4px;
 `;
 
 export default ProjectCard;
