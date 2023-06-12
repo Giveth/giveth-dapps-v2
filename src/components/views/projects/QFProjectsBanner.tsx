@@ -9,23 +9,53 @@ import { Flex } from '@/components/styled-components/Flex';
 import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
 
+enum ERoundStatus {
+	LOADING,
+	NOT_STARTED,
+	RUNNING,
+	ENDED,
+}
+
 export const QFProjectsBanner = () => {
-	const [timer, setTimer] = useState(-1000000);
+	const [state, setState] = useState(ERoundStatus.LOADING);
+	const [timer, setTimer] = useState<number | null>(null);
 	const { formatMessage } = useIntl();
 	const { qfRounds } = useProjectsContext();
 	const activeRound = qfRounds.find(round => round.isActive);
 
 	useEffect(() => {
+		if (!activeRound) return;
+		const _startDate = new Date(activeRound?.beginDate).getTime();
+		const _endDate = new Date(activeRound?.endDate).getTime();
+		const isRoundStarted = getNowUnixMS() > _startDate;
+		const isRoundEnded = getNowUnixMS() > _endDate;
+		if (!isRoundStarted) {
+			setState(ERoundStatus.NOT_STARTED);
+		} else if (!isRoundEnded) {
+			setState(ERoundStatus.RUNNING);
+		} else {
+			setState(ERoundStatus.ENDED);
+		}
+	}, [activeRound]);
+
+	useEffect(() => {
+		let _date: number;
+		if (!activeRound) return;
+		if (state === ERoundStatus.NOT_STARTED) {
+			_date = new Date(activeRound.beginDate).getTime();
+		} else if (state === ERoundStatus.RUNNING) {
+			_date = new Date(activeRound.endDate).getTime();
+		} else {
+			return;
+		}
 		const interval = setInterval(() => {
-			if (!activeRound?.endDate) return;
-			const _endDate = new Date(activeRound?.endDate).getTime();
-			const diff = _endDate - getNowUnixMS();
+			const diff = _date - getNowUnixMS();
 			setTimer(diff);
 		}, 1000);
 		return () => {
 			clearInterval(interval);
 		};
-	}, [activeRound?.endDate]);
+	}, [state, activeRound]);
 
 	return (
 		<BannerContainer direction='column'>
@@ -40,13 +70,26 @@ export const QFProjectsBanner = () => {
 				{activeRound ? activeRound.id : '--'}
 			</Title>
 			<Desc>
-				<Lead>{formatMessage({ id: 'label.round_ends_in' })}</Lead>
-				<B>
-					{activeRound && timer > 0
-						? durationToString(timer, 3)
-						: '--'}
-				</B>
+				<Lead>state: {state}</Lead>
 			</Desc>
+			{(state === ERoundStatus.NOT_STARTED ||
+				state === ERoundStatus.RUNNING) && (
+				<Desc>
+					<Lead>
+						{formatMessage({
+							id:
+								state === ERoundStatus.NOT_STARTED
+									? 'label.round_starts_in'
+									: 'label.round_ends_in',
+						})}
+					</Lead>
+					<B>
+						{activeRound && timer
+							? durationToString(timer, 3)
+							: '--'}
+					</B>
+				</Desc>
+			)}
 		</BannerContainer>
 	);
 };
