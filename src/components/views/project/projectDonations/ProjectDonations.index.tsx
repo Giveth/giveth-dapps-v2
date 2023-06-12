@@ -13,6 +13,7 @@ import {
 } from '@/apollo/types/gqlTypes';
 import { showToastError } from '@/lib/helpers';
 import { useProjectContext } from '@/context/project.context';
+import { QfRoundSelector } from './QfRoundSelector';
 
 const donationsPerPage = 10;
 
@@ -21,6 +22,7 @@ const ProjectDonationsIndex = () => {
 
 	const { projectData, isAdmin } = useProjectContext();
 	const { id = '' } = projectData || {};
+	console.log('projectData', projectData?.qfRounds);
 
 	useEffect(() => {
 		if (!id) return;
@@ -50,22 +52,26 @@ const ProjectDonationsIndex = () => {
 					},
 				});
 			});
-	}, [id]);
+	}, [id, isAdmin]);
 
 	return (
-		<StyledRow>
-			<Col lg={4}>
-				<ProjectTotalFundCard />
-			</Col>
-			{donationInfo?.donations && donationInfo.donations.length > 0 && (
-				<Col lg={8}>
-					<ProjectDonationTable
-						donations={donationInfo?.donations}
-						totalDonations={donationInfo?.totalCount || 0}
-					/>
+		<>
+			<QfRoundSelector />
+			<StyledRow>
+				<Col lg={4}>
+					<ProjectTotalFundCard />
 				</Col>
-			)}
-		</StyledRow>
+				{donationInfo?.donations &&
+					donationInfo.donations.length > 0 && (
+						<Col lg={8}>
+							<ProjectDonationTable
+								donations={donationInfo?.donations}
+								totalDonations={donationInfo?.totalCount || 0}
+							/>
+						</Col>
+					)}
+			</StyledRow>
+		</>
 	);
 };
 
