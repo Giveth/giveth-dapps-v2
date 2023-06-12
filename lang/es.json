@@ -53,6 +53,8 @@
 	"project.givback_toast.title.verified_public": "",
 	"project.givback_toast.title.non_verified_public": "",
 	"project.givback_toast.description.verified_owner": "",
+	"project.givback_toast.description.verified_owner.note": "",
+	"label.note": "",
 	"project.givback_toast.description.non_verified_owner": "",
 	"project.givback_toast.description.verified_public": "",
 	"project.givback_toast.description.non_verified_public": "",
