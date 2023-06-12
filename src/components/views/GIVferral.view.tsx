@@ -1,21 +1,20 @@
-import Image from 'next/image';
+// import Image from 'next/image';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import {
 	H3,
 	H4,
-	D2,
+	H5,
 	Lead,
-	Caption,
 	neutralColors,
 	brandColors,
 	ButtonLink,
 	Button,
+	B,
 	IconChevronRight16,
 } from '@giveth/ui-design-system';
-import { Col, Container, Row } from '@giveth/ui-design-system';
+import { Col, Container } from '@giveth/ui-design-system';
 import { isProduction } from '@/configuration';
-import VideoBlock from '@/components/VideoBlock';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 
@@ -25,7 +24,7 @@ const GIVferralView = () => {
 		? 'https://app.chainvine.xyz/giveth'
 		: 'https://staging.chainvine.xyz/giveth-staging';
 	return (
-		<Container>
+		<>
 			<Wrapper>
 				<Banner>
 					<Hands />
@@ -39,152 +38,111 @@ const GIVferralView = () => {
 							{formatMessage({ id: 'label.refer_a_friend' })}
 						</Bold>
 					</BannerContent>
-					<Bee />
 					<Flower1 />
 					<Flower2 />
 				</Banner>
 			</Wrapper>
-			<Section>
-				<H3>
-					{formatMessage({ id: 'label.how_to_refer_your_friends' })}
-				</H3>
-				<Container>
-					<Boxes>
-						<Box>
-							<BigNum>1</BigNum>
-							<BoxCol>
-								<LeadText>
-									{formatMessage({
-										id: 'label.go_to_chainvine_and_connect_your_wallet',
-									})}
-								</LeadText>
-								<GoTo
-									label={formatMessage({
-										id: 'label.go_to_chainvine',
-									})}
-									linkType='texty-primary'
-									isExternal
-									href={chainvineURL}
-									icon={
-										<Image
-											alt='outlink'
-											src='/images/icons/outlink.svg'
-											width={16}
-											height={16}
-										/>
-									}
-									target='_blank'
-								/>
-							</BoxCol>
-						</Box>
-						<Box>
-							<BigNum>2</BigNum>
-							<LeadText>
-								{formatMessage({
-									id: 'label.generate_your_unique_url',
-								})}
-							</LeadText>
-						</Box>
-						<Box>
-							<BigNum>3</BigNum>
-							<LastBox>
-								<LeadText>
-									{formatMessage({
-										id: 'label.earn_giv_tokens_for_each_donation_made_through_your_link',
-									})}
-								</LeadText>
-								<CaptionBox>
-									<Caption>
-										{formatMessage({
-											id: 'label.an_equivalent_of_up_to_40%',
-										})}
-									</Caption>
-								</CaptionBox>
-							</LastBox>
-						</Box>
-					</Boxes>
-				</Container>
-			</Section>
-			<Section>
-				<CompleteBox>
-					<LargeBox>
-						<H3>
-							{formatMessage({
-								id: 'label.when_others_give_you_earn',
-							})}
-						</H3>
+			<Container>
+				<Section>
+					<FloatingFigure3 />
+					<H3>
+						{' '}
+						{formatMessage({
+							id: 'label.when_others_give_you_earn',
+						})}
+					</H3>
+					<Container>
 						<LeadText>
-							{formatMessage({
-								id: 'label.share_your_link_on_your_social_media',
-							})}
+							By encouraging your network to give to good causes,
+							you’re not only making a positive impact but also
+							earning rewards for your efforts!
 						</LeadText>
-						<LeadText>
-							{formatMessage({
-								id: 'label.by_encouraging_your_network',
-							})}
-						</LeadText>
-					</LargeBox>
-					<Button
-						label={formatMessage({ id: 'label.get_started' })}
-						buttonType='primary'
-						icon={<IconChevronRight16 />}
-						onClick={() => window?.open(chainvineURL, '_ blank')}
-					/>
-				</CompleteBox>
-			</Section>
-			<Section>
-				<FloatingFigure3 />
-
-				<VideoBox>
-					<LargeBox>
-						<H3>
-							{formatMessage({ id: 'label.see_it_in_action' })}
-						</H3>
-						<H4Text>
-							{formatMessage({
-								id: 'label.learn_how_to_become_an_active_part',
-							})}
-						</H4Text>
-						<GoTo
-							label={formatMessage({
-								id: 'label.read_more_on_our_docs',
-							})}
-							linkType='texty-primary'
-							isExternal
-							href={'https://docs.giveth.io/giveconomy/referral'}
-							icon={
-								<Image
-									alt='outlink'
-									src='/images/icons/outlink.svg'
-									width={16}
-									height={16}
-								/>
+					</Container>
+				</Section>
+				<Section>
+					<H3>How referrals work</H3>
+					<CompleteBox>
+						<SectionTitle>
+							<Dot>
+								<B>1</B>
+							</Dot>
+						</SectionTitle>
+						<BoxCol>
+							<H5>
+								Connect your wallet and generate your unique
+								referral link.
+							</H5>
+							<B>
+								Look for the "Share & get rewarded" button to
+								generate links to specific pages across the
+								Giveth site.
+							</B>
+						</BoxCol>
+						<Button
+							label={formatMessage({ id: 'label.get_started' })}
+							buttonType='primary'
+							icon={<IconChevronRight16 />}
+							onClick={() =>
+								window?.open(chainvineURL, '_ blank')
 							}
-							target='_blank'
 						/>
-					</LargeBox>
-					<VideoBlock src='/video/giveth-referral program-v2.mp4' />
-				</VideoBox>
-				<FloatingFigure1 />
-				<FloatingFigure2 />
-			</Section>
-		</Container>
+					</CompleteBox>
+				</Section>
+				<ReverseSection>
+					<BoxCol> - </BoxCol>
+					<CompleteBox>
+						<SectionTitle>
+							<Dot>
+								<B>2</B>
+							</Dot>
+						</SectionTitle>
+						<BoxCol>
+							<H5>
+								Share your referral link with your friends,
+								family, and community.
+							</H5>
+							<B>
+								Share on Twitter, LinkedIn or Facebook, or copy
+								your link to share anywhere!
+							</B>
+						</BoxCol>
+					</CompleteBox>
+				</ReverseSection>
+				<Section>
+					<CompleteBox>
+						<SectionTitle>
+							<Dot>
+								<B>3</B>
+							</Dot>
+						</SectionTitle>
+						<BoxCol>
+							<H5>
+								When someone donates to a verified project via
+								your link, you’ll earn GIV!
+							</H5>
+							<B>
+								Your GIV rewards become claimable within two
+								weeks from our GIVbacks page.
+							</B>
+						</BoxCol>
+					</CompleteBox>
+					<FloatingFigure1 />
+					<FloatingFigure2 />
+				</Section>
+			</Container>
+		</>
 	);
 };
 
 const Section = styled(Col)`
+	position: relative;
 	margin: 100px 0;
-	h3 {
-		margin: 0 0 30px 0;
-		font-weight: 700;
-		font-size: 41px;
-		line-height: 56px;
-	}
-	${mediaQueries.desktop} {
-		h3 {
-			margin: 0 0 10px 0;
-		}
-	}
+`;
+
+const ReverseSection = styled(Section)`
+	display: flex;
+	flex-direction: row !important;
+	justify-content: space-between;
 `;
 
 const LeadText = styled(Lead)`
@@ -219,7 +177,6 @@ const CompleteBox = styled(Box)`
 	max-width: 100%;
 	align-items: flex-start;
 	${mediaQueries.tablet} {
-		align-items: center;
 		flex-direction: row;
 	}
 `;
@@ -234,24 +191,6 @@ const BoxCol = styled(Flex)`
 
 const LargeBox = styled(BoxCol)`
 	max-width: 913px;
-`;
-
-const LastBox = styled(BoxCol)`
-	padding: 40px 0 0 0;
-`;
-
-const Boxes = styled(Row)`
-	width: 100%;
-	margin: 100px 0 0 0;
-	grid-gap: 30px;
-	justify-content: space-between;
-	${mediaQueries.tablet} {
-		margin: 0;
-	}
-`;
-
-const BigNum = styled(D2)`
-	color: ${brandColors.giv[500]};
 `;
 
 const Wrapper = styled.div`
@@ -275,7 +214,7 @@ const Hands = styled.div`
 	width: 477px;
 	height: 100%;
 	z-index: 1;
-	margin-top: 0;
+	margin: 0 0 0 -20px;
 	${mediaQueries.laptopS} {
 		display: unset;
 	}
@@ -283,33 +222,21 @@ const Hands = styled.div`
 
 const Banner = styled.div`
 	display: flex;
-	justify-content: flex-end;
+	justify-content: center;
 	align-items: center;
 	width: 100%;
-	max-width: 1220px;
 	position: relative;
 	height: 385px;
-	border-radius: 20px;
 	background: url(/images/givferral/giv-bg.png),
 		linear-gradient(252.18deg, #211985 21.35%, #5326ec 67.37%);
 	z-index: 0;
-	padding-right: 0;
-
-	${mediaQueries.desktop} {
-		padding-right: 12%;
-	}
 `;
 
 const BannerContent = styled(Col)`
-	width: 100%;
 	padding: 20px;
 	z-index: 2;
-	${mediaQueries.tablet} {
-		max-width: 527px;
-	}
-	${mediaQueries.desktop} {
-		max-width: 627px;
-	}
+	text-align: left;
+	width: 627px;
 `;
 
 const Bold = styled(H3)`
@@ -320,14 +247,15 @@ const Flower1 = styled.div`
 	display: none;
 	position: absolute;
 	right: 5%;
-	bottom: 0;
+	top: 0;
+	rotate: 180deg;
 	background-image: url(/images/givferral/flowers.svg);
 	background-repeat: no-repeat;
 	object-fit: contain;
 	width: 83px;
 	height: 180px;
 	z-index: 1;
-	${mediaQueries.desktop} {
+	${mediaQueries.tablet} {
 		display: unset;
 	}
 `;
@@ -335,33 +263,20 @@ const Flower1 = styled.div`
 const Flower2 = styled.div`
 	display: none;
 	position: absolute;
-	right: 10%;
-	bottom: 0;
+	top: 0;
+	rotate: 180deg;
 	background-image: url(/images/givferral/flowers-tiny.svg);
 	background-repeat: no-repeat;
 	object-fit: contain;
 	width: 83px;
 	height: 100px;
 	z-index: 1;
-	${mediaQueries.laptopL} {
+	${mediaQueries.tablet} {
 		display: unset;
+		right: 15%;
 	}
-`;
-
-const Bee = styled.div`
-	display: none;
-	position: absolute;
-	transform: rotate(60deg);
-	top: 5%;
-	right: 40%;
-	bottom: 0;
-	background-image: url(/images/bee1.svg);
-	background-repeat: no-repeat;
-	object-fit: contain;
-	width: 83px;
-	height: 180px;
-	${mediaQueries.desktop} {
-		display: unset;
+	${mediaQueries.laptopS} {
+		right: 11%;
 	}
 `;
 
@@ -372,14 +287,6 @@ const GoTo = styled(ButtonLink)`
 		background: transparent;
 		color: ${brandColors.pinky[500]};
 	}
-`;
-
-const CaptionBox = styled.div`
-	background: ${neutralColors.gray[300]};
-	border-radius: 8px;
-	padding: 8px 16px;
-	gap: 10px;
-	margin: 16px 0;
 `;
 
 const FloatingFigure1 = styled.div`
@@ -413,11 +320,48 @@ const FloatingFigure3 = styled(FloatingFigure1)`
 	height: 39px;
 	background-image: url(/images/givferral/purple-curve.svg);
 	margin: auto;
-	margin-top: 20px;
-	left: 45%;
+	margin: -50px 0 0 -50px;
+	left: 0;
 	${mediaQueries.laptopS} {
 		display: unset;
 	}
+`;
+
+const Bee = styled.div`
+	display: none;
+	position: absolute;
+	transform: rotate(60deg);
+	top: 5%;
+	right: 40%;
+	bottom: 0;
+	background-image: url(/images/bee1.svg);
+	background-repeat: no-repeat;
+	object-fit: contain;
+	width: 83px;
+	height: 180px;
+	${mediaQueries.desktop} {
+		display: unset;
+	}
+`;
+
+const SectionTitle = styled(Flex)`
+	align-items: center;
+	gap: 4px;
+`;
+
+const Dot = styled.div`
+	width: 24px;
+	height: 24px;
+	padding: 12px;
+	background-color: ${brandColors.giv[500]};
+	border: 4px solid ${brandColors.giv[100]}};
+	border-radius: 50%;
+	color: white;
+	font-size: 16px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 20px 0 0 0;
 `;
 
 export default GIVferralView;
