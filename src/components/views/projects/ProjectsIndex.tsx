@@ -40,6 +40,7 @@ import {
 	ProjectsMiddleBanner,
 } from './ProjectsMiddleBanner';
 import { QFProjectsBanner } from './QFProjectsBanner';
+import { PassportBanner } from '@/components/PassportBanner';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -245,7 +246,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 			)}
 
 			{isQF ? (
-				<QFProjectsBanner />
+				<>
+					<PassportBanner />
+					<QFProjectsBanner />
+				</>
 			) : (
 				<ProjectsBanner mainCategory={selectedMainCategory} />
 			)}
