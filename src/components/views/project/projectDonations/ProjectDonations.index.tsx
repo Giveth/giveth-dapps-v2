@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { mediaQueries } from '@giveth/ui-design-system';
+import { Col, Row, mediaQueries } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useEffect, useState } from 'react';
 import ProjectTotalFundCard from './ProjectTotalFundCard';
@@ -13,14 +13,17 @@ import {
 } from '@/apollo/types/gqlTypes';
 import { showToastError } from '@/lib/helpers';
 import { useProjectContext } from '@/context/project.context';
+import { QfRoundSelector } from './QfRoundSelector';
 
 const donationsPerPage = 10;
 
 const ProjectDonationsIndex = () => {
 	const [donationInfo, setDonationInfo] = useState<IDonationsByProjectId>();
+	const [selectedQF, setSelectedQF] = useState<string | null>(null);
 
 	const { projectData, isAdmin } = useProjectContext();
 	const { id = '' } = projectData || {};
+	console.log('projectData', projectData?.qfRounds);
 
 	useEffect(() => {
 		if (!id) return;
@@ -50,26 +53,34 @@ const ProjectDonationsIndex = () => {
 					},
 				});
 			});
-	}, [id]);
+	}, [id, isAdmin]);
 
 	return (
-		<Wrapper>
-			<ProjectTotalFundCard />
-			{donationInfo?.donations && donationInfo.donations.length > 0 && (
-				<ProjectDonationTable
-					donations={donationInfo?.donations}
-					totalDonations={donationInfo?.totalCount || 0}
-				/>
-			)}
-		</Wrapper>
+		<>
+			<QfRoundSelector
+				selectedQF={selectedQF}
+				setSelectedQF={setSelectedQF}
+			/>
+			<StyledRow>
+				<Col lg={4}>
+					<ProjectTotalFundCard />
+				</Col>
+				{donationInfo?.donations &&
+					donationInfo.donations.length > 0 && (
+						<Col lg={8}>
+							<ProjectDonationTable
+								donations={donationInfo?.donations}
+								totalDonations={donationInfo?.totalCount || 0}
+							/>
+						</Col>
+					)}
+			</StyledRow>
+		</>
 	);
 };
 
-const Wrapper = styled.div`
-	display: flex;
-	flex-direction: column;
+const StyledRow = styled(Row)`
 	margin-bottom: 100px;
-	gap: 40px;
 	${mediaQueries.desktop} {
 		align-items: flex-start;
 		flex-direction: row-reverse;

@@ -1,13 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import {
-	H2,
-	H4,
-	Lead,
-	mediaQueries,
-	neutralColors,
-	P,
-} from '@giveth/ui-design-system';
+import { H2, H4, Lead, neutralColors, P } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -73,10 +66,6 @@ const Wrapper = styled.div`
 	border-radius: 16px;
 	box-shadow: ${Shadow.Neutral[400]};
 	overflow: hidden;
-	flex-shrink: 0;
-	${mediaQueries.mobileL} {
-		width: 390px;
-	}
 `;
 
 const UpperSection = styled.div`
