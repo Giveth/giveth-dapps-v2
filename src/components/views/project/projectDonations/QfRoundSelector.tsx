@@ -1,19 +1,28 @@
-import React from 'react';
+import React, { Dispatch, FC, SetStateAction } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {
+	B,
 	P,
 	SublineBold,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Navigation } from 'swiper';
 import { useProjectContext } from '@/context/project.context';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Flex } from '@/components/styled-components/Flex';
 
-export const QfRoundSelector = () => {
+interface IQfRoundSelectorProps {
+	selectedQF: string | null;
+	setSelectedQF: Dispatch<SetStateAction<string | null>>;
+}
+
+export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
+	selectedQF,
+	setSelectedQF,
+}) => {
 	const { projectData } = useProjectContext();
 
 	console.log('projectData', projectData?.qfRounds);
@@ -28,14 +37,36 @@ export const QfRoundSelector = () => {
 			slidesPerView='auto'
 			spaceBetween={21}
 		>
-			{projectData?.qfRounds?.map((round, index) => (
-				<SwiperSlide key={index} style={{ width: 'auto' }}>
-					<TabItem alignItems='center' gap='4px'>
-						<P>{round.id}</P>
-						{round.isActive && <OpenLabel>Open</OpenLabel>}
-					</TabItem>
-				</SwiperSlide>
-			))}
+			<SwiperSlide style={{ width: 'auto' }}>
+				<TabItem
+					alignItems='center'
+					gap='4px'
+					onClick={() => setSelectedQF(null)}
+					isSelected={selectedQF === null}
+				>
+					{selectedQF === null ? (
+						<B>All Donations</B>
+					) : (
+						<P>All Donations</P>
+					)}
+				</TabItem>
+			</SwiperSlide>
+			{projectData?.qfRounds?.map((round, index) => {
+				const isSelected = selectedQF === round.id;
+				return (
+					<SwiperSlide key={index} style={{ width: 'auto' }}>
+						<TabItem
+							alignItems='center'
+							gap='4px'
+							onClick={() => setSelectedQF(round.id)}
+							isSelected={isSelected}
+						>
+							{isSelected ? <B>{round.id}</B> : <P>{round.id}</P>}
+							{round.isActive && <OpenLabel>Open</OpenLabel>}
+						</TabItem>
+					</SwiperSlide>
+				);
+			})}
 		</Swiper>
 	);
 };
@@ -51,8 +82,13 @@ const TabItem = styled(Flex)<ITabItemProps>`
 	cursor: pointer;
 	transition: background-color 300ms ease;
 	&:hover {
-		background: ${neutralColors.gray[300]};
+		background: ${neutralColors.gray[200]};
 	}
+	${props =>
+		props.isSelected &&
+		css`
+			background: ${neutralColors.gray[300]};
+		`}
 `;
 
 const OpenLabel = styled(SublineBold)`

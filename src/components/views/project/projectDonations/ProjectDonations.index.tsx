@@ -19,6 +19,7 @@ const donationsPerPage = 10;
 
 const ProjectDonationsIndex = () => {
 	const [donationInfo, setDonationInfo] = useState<IDonationsByProjectId>();
+	const [selectedQF, setSelectedQF] = useState<string | null>(null);
 
 	const { projectData, isAdmin } = useProjectContext();
 	const { id = '' } = projectData || {};
@@ -56,7 +57,10 @@ const ProjectDonationsIndex = () => {
 
 	return (
 		<>
-			<QfRoundSelector />
+			<QfRoundSelector
+				selectedQF={selectedQF}
+				setSelectedQF={setSelectedQF}
+			/>
 			<StyledRow>
 				<Col lg={4}>
 					<ProjectTotalFundCard />
