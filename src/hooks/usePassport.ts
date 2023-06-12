@@ -79,11 +79,16 @@ export const usePassport = () => {
 	const handleSign = async () => {
 		if (!library || !account) return;
 		setState(EPassportState.LOADING);
-		const res = await connectPassport(account, library);
-		if (res) {
-			refreshScore();
+		const passports = getPassports();
+		if (passports[account.toLowerCase()]) {
+			await refreshScore();
 		} else {
-			return setState(EPassportState.NOT_SIGNED);
+			const res = await connectPassport(account, library);
+			if (res) {
+				await refreshScore();
+			} else {
+				return setState(EPassportState.NOT_SIGNED);
+			}
 		}
 	};
 
