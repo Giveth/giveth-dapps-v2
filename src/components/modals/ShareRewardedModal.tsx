@@ -9,20 +9,18 @@ import {
 	B,
 	Button,
 	brandColors,
-	H5,
 	neutralColors,
 	IconExternalLink,
 } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
-import { useIntl } from 'react-intl';
 import { FC, useEffect } from 'react';
+import { useIntl } from 'react-intl';
 
 import { Modal } from './Modal';
 import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
 import TwitterIcon from '../../../public/images/social-tw.svg';
 import GiftIcon from '../../../public/images/icons/gift.svg';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
