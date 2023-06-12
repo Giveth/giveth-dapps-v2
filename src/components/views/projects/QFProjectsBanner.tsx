@@ -69,9 +69,6 @@ export const QFProjectsBanner = () => {
 				{formatMessage({ id: 'label.quadratic_funding_round' })}{' '}
 				{activeRound ? activeRound.id : '--'}
 			</Title>
-			<Desc>
-				<Lead>state: {state}</Lead>
-			</Desc>
 			{(state === ERoundStatus.NOT_STARTED ||
 				state === ERoundStatus.RUNNING) && (
 				<Desc>
