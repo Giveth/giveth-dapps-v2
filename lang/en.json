@@ -1272,5 +1272,10 @@
 	"label.raised_from": "Raised from ",
 	"label.contributors": "{count, plural, one { contributor} other { contributors} }",
 	"label.share_and_get_rewarded": "Share & get rewarded",
-	"label.share_and_earn_rewards": "Share and earn rewards"
+	"label.share_and_earn_rewards": "Share and earn rewards",
+	"label.connet_your_wallet_and_sign_in_to_get_your_referral": "Connect your wallet and sign in to get your referral link and start earning.",
+	"label.heres_your_referral": "Here’s your unique referral link to {projectTitle}",
+	"label.share_on_linkedin": "Share on LinkedIn",
+	"label.share_on_facebook": "Share on Facebook",
+	"label.how_does_this_work": "How does this work?"
 }

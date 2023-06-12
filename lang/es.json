@@ -1281,5 +1281,10 @@
 	"label.get_rewarded_with": "",
 	"label.ofـyourـdonationـvalue": "",
 	"label.donors_to_verified": "",
-	"label.share_and_get_rewarded": "Comparte & obtén recompensas"
+	"label.share_and_get_rewarded": "Comparte & obtén recompensas",
+	"label.connet_your_wallet_and_sign_in_to_get_your_referral": "Conecta tu billetera y regístrate para obtener tu enlace de referencia",
+	"label.heres_your_referral": "Aqui esta tu link de referencia para  {projectTitle}",
+	"label.share_on_linkedin": "Comparte en LinkedIn",
+	"label.share_on_facebook": "Comparte en Facebook",
+	"label.how_does_this_work": "¿Cómo funciona?"
 }

@@ -15,6 +15,7 @@ import {
 	IconTwitter,
 	IconLinkedin,
 	IconFacebook,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import { FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
@@ -96,9 +97,16 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 		>
 			<Content>
 				{notSigned
-					? 'Connect your wallet and sign in to get your referral link and start earning.'
+					? formatMessage({
+							id: 'label.connet_your_wallet_and_sign_in_to_get_your_referral',
+					  })
 					: chainvineId &&
-					  `Here’s your unique referral link to ${projectTitle}`}
+					  `${formatMessage(
+							{
+								id: 'label.heres_your_referral',
+							},
+							{ projectTitle },
+					  )}`}
 			</Content>
 			<Container>
 				{notSigned ? (
@@ -129,7 +137,9 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 								>
 									<IconTwitter />
 								</TwitterShareButton>
-								Share on Twitter
+								{formatMessage({
+									id: 'label.share_on_twitter',
+								})}
 							</SocialButtonContainer>
 							<SocialButtonContainer>
 								<LinkedinShareButton
@@ -138,7 +148,9 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 								>
 									<IconLinkedin />
 								</LinkedinShareButton>
-								Share on LinkedIn
+								{formatMessage({
+									id: 'label.share_on_linkedin',
+								})}
 							</SocialButtonContainer>
 							<SocialButtonContainer>
 								<FacebookShareButton
@@ -148,16 +160,19 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 								>
 									<IconFacebook />
 								</FacebookShareButton>
-								Share on Facebook
+								{formatMessage({
+									id: 'label.share_on_facebook',
+								})}
 							</SocialButtonContainer>
 						</SocialDiv>
 					)}
 					<B>
-						How does this work?{'  '}
+						{formatMessage({ id: 'label.how_does_this_work' })}
+						{'  '}
 						<span>
 							<a>
 								<Link target='_blank' href={Routes.Referral}>
-									Learn more
+									{formatMessage({ id: 'label.learn_more' })}
 								</Link>{' '}
 							</a>
 							<IconExternalLink color={brandColors.pinky[500]} />
@@ -226,6 +241,10 @@ const LinkContainer = styled(Flex)`
 
 const SocialDiv = styled(FlexCenter)`
 	margin: 0 0 25px 0;
+	flex-direction: column;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
 `;
 
 export default ShareRewardedModal;

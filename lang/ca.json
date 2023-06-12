@@ -1269,5 +1269,10 @@
 	"label.amount_raised": "",
 	"label.raised_from": "",
 	"label.contributors": "",
-	"label.share_and_get_rewarded": ""
+	"label.share_and_get_rewarded": "",
+	"label.connet_your_wallet_and_sign_in_to_get_your_referral": "",
+	"label.heres_your_referral": "",
+	"label.share_on_linkedin": "",
+	"label.share_on_facebook": "",
+	"label.how_does_this_work": ""
 }
