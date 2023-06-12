@@ -3,9 +3,8 @@ import {
 	TwitterShareButton,
 	LinkedinShareButton,
 } from 'react-share';
-import { useAppSelector } from '@/features/hooks';
-import Image from 'next/image';
 import styled from 'styled-components';
+import Image from 'next/image';
 import {
 	B,
 	Button,
@@ -28,6 +27,7 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
 import { fullPath } from '@/lib/helpers';
+import { useAppSelector } from '@/features/hooks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
 	EContentType,
