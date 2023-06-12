@@ -186,7 +186,6 @@ export const ProjectPublicActions = () => {
 				<ShareRewardedModal
 					contentType={EContentType.thisProject}
 					setShowModal={setShowShareModal}
-					setReferral={setReferral}
 					projectHref={slug}
 					projectTitle={project.title}
 				/>

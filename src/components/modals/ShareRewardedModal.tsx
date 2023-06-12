@@ -28,6 +28,7 @@ import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
 import { fullPath } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
+import { startChainvineReferral } from '@/features/user/user.thunks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
 	EContentType,
@@ -42,7 +43,6 @@ interface IShareRewardedModal extends IModal {
 	projectHref: string;
 	contentType: EContentType;
 	projectTitle?: string;
-	setReferral: () => void;
 }
 
 const ShareRewardedModal: FC<IShareRewardedModal> = props => {
@@ -52,13 +52,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 		userData: user,
 	} = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
-	const {
-		projectHref,
-		setShowModal,
-		contentType,
-		projectTitle,
-		setReferral,
-	} = props;
+	const { projectHref, setShowModal, contentType, projectTitle } = props;
 	const url = fullPath(
 		slugToProjectView(projectHref + `?referrer_id=${user?.chainvineId}`),
 	);
@@ -81,12 +75,19 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 		dispatch(setShowSignWithWallet(true));
 	};
 
+	const setReferral = async () => {
+		await dispatch(
+			startChainvineReferral({
+				address: user?.walletAddress!,
+			}),
+		);
+	};
+
 	useEffect(() => {
 		if (isSignedIn && !user?.chainvineId) {
 			setReferral();
 		}
 	}, [isSignedIn]);
-
 	return (
 		<Modal
 			closeModal={closeModal}
@@ -127,7 +128,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 					)
 				)}
 				<HowItWorksDiv>
-					{chainvineId && (
+					{isSignedIn && chainvineId && (
 						<SocialDiv gap={'16px'}>
 							<SocialButtonContainer>
 								<TwitterShareButton
