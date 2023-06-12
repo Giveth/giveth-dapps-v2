@@ -4,6 +4,7 @@ import {
 	LinkedinShareButton,
 } from 'react-share';
 import styled from 'styled-components';
+import Link from 'next/link';
 import Image from 'next/image';
 import {
 	B,
@@ -34,7 +35,6 @@ import {
 } from '@/lib/constants/shareContent';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
-import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
 
 interface IShareRewardedModal extends IModal {
