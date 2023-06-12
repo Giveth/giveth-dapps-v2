@@ -80,12 +80,12 @@ const QFSection = () => {
 							<EndAlignedSubline>1 DAI</EndAlignedSubline>
 						</FlexSameSize>
 						<FlexSameSize justifyContent='space-between'>
-							<Subline>12312 DAI</Subline>
+							<Subline>10 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>1 DAI </EndAlignedSubline>
 						</FlexSameSize>
 						<FlexSameSize justifyContent='space-between'>
-							<Subline>1 DAI</Subline>
+							<Subline>100 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>1 DAI </EndAlignedSubline>
 						</FlexSameSize>
