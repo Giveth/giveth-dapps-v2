@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { Dispatch, FC, SetStateAction, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {
 	B,
@@ -24,19 +24,13 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 	setSelectedQF,
 }) => {
 	const { projectData } = useProjectContext();
+	const navigationPrevRef = useRef(null);
+	const navigationNextRef = useRef(null);
 
 	console.log('projectData', projectData?.qfRounds);
 
 	return (
-		<Swiper
-			modules={[Navigation]}
-			navigation={{
-				nextEl: '#nextIcon',
-				prevEl: '#prevIcon',
-			}}
-			slidesPerView='auto'
-			spaceBetween={21}
-		>
+		<Swiper modules={[Navigation]} slidesPerView='auto' spaceBetween={21}>
 			<SwiperSlide style={{ width: 'auto' }}>
 				<TabItem
 					alignItems='center'
