@@ -9,6 +9,7 @@ import {
 	neutralColors,
 	P,
 	semanticColors,
+	Subline,
 	SublineBold,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
@@ -21,7 +22,12 @@ import { Flex } from '@/components/styled-components/Flex';
 
 const ProjectTotalFundCard: FC = () => {
 	const { projectData } = useProjectContext();
-	const { totalDonations, addresses, qfRounds } = projectData || {};
+	const {
+		totalDonations,
+		addresses,
+		qfRounds,
+		countUniqueDonorsForActiveQfRound,
+	} = projectData || {};
 	const { formatMessage } = useIntl();
 	const recipientAddresses = addresses?.filter(a => a.isRecipient);
 	const isQFActive = hasActiveRound(qfRounds);
@@ -64,6 +70,14 @@ const ProjectTotalFundCard: FC = () => {
 									Estimated Matching
 								</EstematedMatchingText>
 							</EstimatedMatchingSection>
+							<div>
+								<LightSubline> Raised from </LightSubline>
+								<Subline style={{ display: 'inline-block' }}>
+									&nbsp;{countUniqueDonorsForActiveQfRound}
+									&nbsp;
+								</Subline>
+								<LightSubline>contributors</LightSubline>
+							</div>
 						</div>
 					) : (
 						<NoDonation>
@@ -145,6 +159,11 @@ const EstematedMatchingText = styled(SublineBold)`
 	color: ${semanticColors.jade[600]};
 	font-weight: 600;
 	max-width: 60px;
+`;
+
+const LightSubline = styled(Subline)`
+	display: inline-block;
+	color: ${neutralColors.gray[700]};
 `;
 
 export default ProjectTotalFundCard;
