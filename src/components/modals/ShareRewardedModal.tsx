@@ -12,14 +12,14 @@ import {
 	brandColors,
 	neutralColors,
 	IconExternalLink,
+	IconTwitter,
+	IconLinkedin,
+	IconFacebook,
 } from '@giveth/ui-design-system';
 import { FC, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
 import { Modal } from './Modal';
-import FacebookIcon from '../../../public/images/social-fb.svg';
-import LinkedinIcon from '../../../public/images/social-linkedin.svg';
-import TwitterIcon from '../../../public/images/social-tw.svg';
 import GiftIcon from '../../../public/images/icons/gift.svg';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { slugToProjectView } from '@/lib/routeCreators';
@@ -120,29 +120,25 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 				)}
 				<HowItWorksDiv>
 					{chainvineId && (
-						<FlexCenter gap={'16px'}>
+						<SocialDiv gap={'16px'}>
 							<SocialButtonContainer>
 								<TwitterShareButton
 									hashtags={['giveth']}
 									title={shareTitleTwitter}
 									url={url}
 								>
-									<Image
-										src={TwitterIcon}
-										alt='twitter icon'
-									/>
+									<IconTwitter />
 								</TwitterShareButton>
+								Share on Twitter
 							</SocialButtonContainer>
 							<SocialButtonContainer>
 								<LinkedinShareButton
 									title={shareTitleFacebookAndLinkedin}
 									url={url}
 								>
-									<Image
-										src={LinkedinIcon}
-										alt='twitter icon'
-									/>
+									<IconLinkedin />
 								</LinkedinShareButton>
+								Share on LinkedIn
 							</SocialButtonContainer>
 							<SocialButtonContainer>
 								<FacebookShareButton
@@ -150,13 +146,11 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 									quote={shareTitleFacebookAndLinkedin}
 									url={url}
 								>
-									<Image
-										src={FacebookIcon}
-										alt='facebook icon'
-									/>
+									<IconFacebook />
 								</FacebookShareButton>
+								Share on Facebook
 							</SocialButtonContainer>
-						</FlexCenter>
+						</SocialDiv>
 					)}
 					<B>
 						How does this work?{'  '}
@@ -192,15 +186,17 @@ const Content = styled(B)`
 
 const SocialButtonContainer = styled(FlexCenter)`
 	height: 45px;
-	width: 45px;
-	border: 1px solid ${neutralColors.gray[400]} !important;
-	border-radius: 8px;
+	width: 100%;
+	min-width: 175px;
 	cursor: pointer;
+	color: ${brandColors.pinky[500]};
+	gap: 12px;
+	font-weight: 500;
+	font-size: 12px;
+	line-height: 16px;
 
-	> * {
-		height: 40px;
-		width: 40px;
-	}
+	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
+	border-radius: 48px;
 `;
 
 const HowItWorksDiv = styled(Flex)`
@@ -226,6 +222,10 @@ const HowItWorksDiv = styled(Flex)`
 
 const LinkContainer = styled(Flex)`
 	max-width: 500px;
+`;
+
+const SocialDiv = styled(FlexCenter)`
+	margin: 0 0 25px 0;
 `;
 
 export default ShareRewardedModal;
