@@ -27,15 +27,16 @@ export interface IProjectsRouteProps {
 
 const ProjectsRoute = (props: IProjectsRouteProps) => {
 	const dispatch = useAppDispatch();
-	const { userData, isEnabled, isSignedIn } = useAppSelector(
+	const { userData, isLoading, isSignedIn } = useAppSelector(
 		state => state.user,
 	);
 	const { projects, mainCategories, totalCount, categories } = props;
 
 	const router = useRouter();
 	const referrerId = router?.query?.referrer_id;
+
 	useEffect(() => {
-		if (referrerId) {
+		if (referrerId && !isLoading) {
 			if (!isSignedIn) {
 				// forces user to login grab the wallet
 				dispatch(setShowSignWithWallet(true));
@@ -59,6 +60,7 @@ const ProjectsRoute = (props: IProjectsRouteProps) => {
 			}
 		}
 	}, [referrerId, isSignedIn]);
+
 	return (
 		<ProjectsProvider mainCategories={mainCategories}>
 			<GeneralMetatags info={projectsMetatags} />
