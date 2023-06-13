@@ -244,6 +244,7 @@ const Title = styled(Flex)`
 	color: ${brandColors.deep[100]};
 	background-color: ${brandColors.giv[900]};
 	border-radius: 24px 0 0 24px;
+	gap: 8px;
 `;
 
 const SelectedTitle = styled(GLink)`
