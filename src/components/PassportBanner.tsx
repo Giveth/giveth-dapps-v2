@@ -170,6 +170,7 @@ export const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
+	position: relative;
 `;
 
 const StyledLink = styled(Flex)`
