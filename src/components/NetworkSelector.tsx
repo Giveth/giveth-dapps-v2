@@ -56,15 +56,27 @@ const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 };
 
 const Option: ComponentType<OptionProps<ISelected>> = props => {
-	const { data } = props;
+	const { data, isSelected, isDisabled } = props;
 	const { value, label } = data;
 
 	return (
 		<components.Option {...props}>
-			<OptionContainer>
-				<NetworkLogo chainId={value} logoSize={16} />
-				<GLink size='Big'>{label}</GLink>
-			</OptionContainer>
+			{isSelected || isDisabled ? (
+				<Flex gap='4px' flexDirection='column'>
+					<SelectedTitle>
+						{isSelected ? 'Selected' : 'Coming soon'}
+					</SelectedTitle>
+					<Flex gap='8px'>
+						<NetworkLogo chainId={value} logoSize={16} />
+						<GLink size='Big'>{label}</GLink>
+					</Flex>
+				</Flex>
+			) : (
+				<Flex gap='8px'>
+					<NetworkLogo chainId={value} logoSize={16} />
+					<GLink size='Big'>{label}</GLink>
+				</Flex>
+			)}
 		</components.Option>
 	);
 };
@@ -109,9 +121,11 @@ const selectStyles: StylesConfig = {
 		backgroundColor: brandColors.giv[600],
 		color: neutralColors.gray[100],
 		padding: '12px 16px',
+		fontWeight: 500,
 		border: 'none',
 		boxShadow: 'none',
 		borderRadius: '0 24px 24px 0 ',
+		cursor: 'pointer',
 	}),
 	indicatorSeparator: styles => ({
 		...styles,
@@ -132,7 +146,7 @@ const selectStyles: StylesConfig = {
 		backgroundColor: brandColors.giv[600],
 		boxShadow: Shadow.Dark[500],
 	}),
-	option: (styles, { isFocused, isSelected }) => ({
+	option: (styles, { isFocused, isSelected, isDisabled }) => ({
 		padding: '8px 16px',
 		margin: '8px',
 		borderRadius: '8px',
@@ -142,6 +156,8 @@ const selectStyles: StylesConfig = {
 			? brandColors.giv[500]
 			: brandColors.giv[600],
 		color: neutralColors.gray[100],
+		opacity: isDisabled ? 0.5 : 1,
+		cursor: isDisabled ? 'default' : 'pointer',
 	}),
 };
 
@@ -199,6 +215,7 @@ export const NetworkSelector = () => {
 						isClearable={false}
 						isSearchable={false}
 						isMulti={false}
+						isOptionDisabled={(option: any) => !option.active}
 					/>
 					{/* <Selector
 						isSelected={chainId === config.XDAI_NETWORK_NUMBER}
@@ -250,9 +267,6 @@ const Title = styled(Flex)`
 	border-radius: 24px 0 0 24px;
 `;
 
-const OptionContainer = styled.div`
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	gap: 8px;
+const SelectedTitle = styled(GLink)`
+	color: ${brandColors.giv[200]};
 `;
