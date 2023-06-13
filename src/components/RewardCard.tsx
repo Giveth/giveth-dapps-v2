@@ -25,7 +25,7 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { WrongNetworkInnerModal } from '@/components//modals/WrongNetworkInnerModal';
 interface IRewardCardProps {
-	title?: string;
+	title: string;
 	liquidAmount: ethers.BigNumber;
 	stream: BigNumber.Value;
 	actionLabel?: string;
@@ -41,7 +41,7 @@ interface IRewardCardProps {
 }
 
 export const RewardCard: FC<IRewardCardProps> = ({
-	title = 'Your GIVstream Rewards',
+	title,
 	liquidAmount = ethers.constants.Zero,
 	stream = Zero,
 	actionLabel,

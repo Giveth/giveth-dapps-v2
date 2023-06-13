@@ -137,6 +137,7 @@ export const TabGIVstreamTop = () => {
 									config.MAINNET_NETWORK_NUMBER,
 									config.XDAI_NETWORK_NUMBER,
 								]}
+								title='Your GIVstream Rewards'
 							/>
 						</Col>
 					</Row>
