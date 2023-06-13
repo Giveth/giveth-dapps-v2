@@ -6,10 +6,12 @@ export const hasActiveRound = (qfRounds: IQFRound[] | undefined) => {
 };
 
 export const calculateTotalEstimatedMatching = (
-	projectDonationsSqrtRootSum: number,
-	allProjectsSum: number,
-	matchingPool: number,
+	projectDonationsSqrtRootSum?: number,
+	allProjectsSum?: number,
+	matchingPool?: number,
 ) => {
+	if (!projectDonationsSqrtRootSum || !allProjectsSum || !matchingPool)
+		return 0;
 	return (
 		(Math.pow(projectDonationsSqrtRootSum, 2) / allProjectsSum) *
 		matchingPool
@@ -17,11 +19,13 @@ export const calculateTotalEstimatedMatching = (
 };
 
 export const calculateEstimatedMatchingWithDonationAmount = (
-	projectDonationsSqrtRootSum: number,
-	allProjectsSum: number,
-	matchingPool: number,
 	donationAmount: number,
+	projectDonationsSqrtRootSum?: number,
+	allProjectsSum?: number,
+	matchingPool?: number,
 ) => {
+	if (!projectDonationsSqrtRootSum || !allProjectsSum || !matchingPool)
+		return 0;
 	const beforeNewDonationPow = Math.pow(projectDonationsSqrtRootSum, 2);
 	const afterNewDonationPow = Math.pow(
 		projectDonationsSqrtRootSum + Math.sqrt(donationAmount),
