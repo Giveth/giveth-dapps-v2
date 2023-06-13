@@ -121,9 +121,7 @@ export const TabGIVstreamTop = () => {
 						</TitleCol>
 						<Col xs={12} sm={5} xl={4}>
 							<GIVstreamRewardCard
-								wrongNetworkText={formatMessage({
-									id: 'label.givstream_is_only_available_on_gnosis',
-								})}
+								cardName='GIVstream'
 								liquidAmount={rewardLiquidPart}
 								stream={rewardStream}
 								actionLabel={formatMessage({

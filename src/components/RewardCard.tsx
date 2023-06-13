@@ -34,7 +34,6 @@ interface IRewardCardProps {
 	subButtonCb?: Function;
 	network?: number;
 	className?: string;
-	wrongNetworkText: string;
 	targetNetworks: number[];
 	rewardTokenSymbol?: string;
 	tokenPrice?: BigNumber;

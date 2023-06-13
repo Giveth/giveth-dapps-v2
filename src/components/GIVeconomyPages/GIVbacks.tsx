@@ -86,11 +86,9 @@ export const TabGIVbacksTop = () => {
 						</Col>
 						<Col xs={12} sm={5} xl={4}>
 							<GIVbackRewardCard
+								cardName='GIVbacks'
 								title={formatMessage({
 									id: 'label.your_givbacks_rewards',
-								})}
-								wrongNetworkText={formatMessage({
-									id: 'label.givbacks_is_only_available_on_gnosis',
 								})}
 								liquidAmount={BN(
 									givTokenDistroBalance.givbackLiquidPart,

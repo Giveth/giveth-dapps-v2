@@ -53,9 +53,6 @@ export const GIVfarmTop = () => {
 							title={formatMessage({
 								id: 'label.your_givfarm_rewards',
 							})}
-							wrongNetworkText={formatMessage({
-								id: 'component.reward_card.wrong_network',
-							})}
 							liquidAmount={rewardLiquidPart}
 							stream={rewardStream}
 							network={chainId}
