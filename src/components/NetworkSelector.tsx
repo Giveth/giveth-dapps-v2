@@ -217,27 +217,6 @@ export const NetworkSelector = () => {
 						isMulti={false}
 						isOptionDisabled={(option: any) => !option.active}
 					/>
-					{/* <Selector
-						isSelected={chainId === config.XDAI_NETWORK_NUMBER}
-						onClick={() =>
-							handleChangeNetwork(config.XDAI_NETWORK_NUMBER)
-						}
-					>
-						<IconGnosisChain size={24} />
-						<B>Gnosis Chain</B>
-					</Selector>
-					<Selector
-						isSelected={
-							chainId === config.MAINNET_NETWORK_NUMBER ||
-							!givEconomySupportedNetworks.includes(chainId)
-						}
-						onClick={() =>
-							handleChangeNetwork(config.MAINNET_NETWORK_NUMBER)
-						}
-					>
-						<IconEthereum size={24} />
-						<B>Ethereum</B>
-					</Selector> */}
 				</NetworkSelectorContainer>
 			) : (
 				'' // TODO: show connect your wallet
