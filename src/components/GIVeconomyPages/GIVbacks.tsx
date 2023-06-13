@@ -111,7 +111,10 @@ export const TabGIVbacksTop = () => {
 								}
 								subButtonCb={() => setShowGivBackExplain(true)}
 								network={chainId}
-								targetNetworks={[config.XDAI_NETWORK_NUMBER]}
+								targetNetworks={[
+									config.XDAI_NETWORK_NUMBER,
+									config.OPTIMISM_NETWORK_NUMBER,
+								]}
 							/>
 						</Col>
 					</Row>
