@@ -107,7 +107,7 @@ const TxLink = styled(Lead)`
 const Options = styled(FlexCenter)`
 	flex-direction: column;
 	width: 100%;
-	margin-top: 40px;
+	padding: 40px 20px 0;
 `;
 
 const ProjectsButton = styled(ButtonLink)`

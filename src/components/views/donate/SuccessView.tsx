@@ -20,6 +20,7 @@ import { useDonateData } from '@/context/donate.context';
 import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
 import { EContentType } from '@/lib/constants/shareContent';
+import QFToast from '@/components/views/donate/QFToast';
 
 const SuccessView: FC = () => {
 	const { isSuccessDonation } = useDonateData();
@@ -70,13 +71,20 @@ const SuccessView: FC = () => {
 					</ExternalLink>
 				</GivBackContainer>
 			)}
-			<SocialBox
-				project={project}
-				contentType={EContentType.justDonated}
-			/>
+			<QFToast />
+			<SocialBoxWrapper>
+				<SocialBox
+					project={project}
+					contentType={EContentType.justDonated}
+				/>
+			</SocialBoxWrapper>
 		</SuccessContainer>
 	);
 };
+
+const SocialBoxWrapper = styled.div`
+	margin: -50px 0;
+`;
 
 const ConfettiContainer = styled.div`
 	position: absolute;
