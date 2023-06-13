@@ -19,3 +19,9 @@ export function getTextWidth(
 	}
 	return 0;
 }
+
+export const jointItems = (items: string[]) => {
+	const _item = [...items];
+	const last = _item.pop();
+	return _item.join(', ') + ' and ' + last;
+};
