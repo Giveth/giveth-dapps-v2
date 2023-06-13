@@ -64,7 +64,9 @@ export interface IProject {
 	givbackFactor?: number;
 	countUniqueDonors?: number;
 	countUniqueDonorsForActiveQfRound?: number;
-	estimatedMatching?: number;
+	estimatedMatching?: {
+		allProjectsSum: number;
+	};
 	sumDonationValueUsd?: number;
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
