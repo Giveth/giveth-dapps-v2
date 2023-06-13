@@ -24,6 +24,7 @@ import { WrongNetworkInnerModal } from '@/components//modals/WrongNetworkInnerMo
 import NetworkLogo from './NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
 interface IRewardCardProps {
+	cardName: string;
 	title: string;
 	liquidAmount: ethers.BigNumber;
 	stream: BigNumber.Value;
@@ -40,6 +41,7 @@ interface IRewardCardProps {
 }
 
 export const RewardCard: FC<IRewardCardProps> = ({
+	cardName,
 	title,
 	liquidAmount = ethers.constants.Zero,
 	stream = Zero,
@@ -49,7 +51,6 @@ export const RewardCard: FC<IRewardCardProps> = ({
 	subButtonCb,
 	network,
 	className,
-	wrongNetworkText,
 	targetNetworks,
 	rewardTokenSymbol = 'GIV',
 	tokenPrice,
@@ -76,7 +77,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 				{!network || !targetNetworks.includes(network) ? (
 					<WrongNetworkInnerModal
 						targetNetworks={targetNetworks}
-						text={wrongNetworkText}
+						cardName={cardName}
 					/>
 				) : (
 					<>

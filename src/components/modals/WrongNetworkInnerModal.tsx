@@ -11,12 +11,12 @@ import { useAppDispatch } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 
 export interface IWrongNetworkInnerModal {
-	text?: string;
+	cardName: string;
 	targetNetworks: number[];
 }
 
 export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
-	text,
+	cardName,
 	targetNetworks,
 }) => {
 	const { account } = useWeb3React();
@@ -36,8 +36,17 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 			{account ? (
 				<>
 					<Description>
-						<P>{text}</P>
-						<P>Please switch the network.</P>
+						<P>
+							{formatMessage(
+								{
+									id: 'component.reward_card.wrong_network',
+								},
+								{
+									name: cardName,
+									chains: '',
+								},
+							)}
+						</P>
 					</Description>
 					<ButtonsContainer>
 						{targetNetworks.map(network => (
@@ -57,7 +66,17 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 			) : (
 				<>
 					<Description>
-						<P>{text}</P>
+						<P>
+							{formatMessage(
+								{
+									id: 'component.reward_card.connect_wallet',
+								},
+								{
+									name: cardName,
+									chains: '',
+								},
+							)}
+						</P>
 					</Description>
 					<ButtonsContainer>
 						<Button
