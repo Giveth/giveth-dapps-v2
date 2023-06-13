@@ -4,9 +4,8 @@ import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
-import { switchNetwork } from '@/lib/wallet';
 
-import { chainName, mediaQueries } from '@/lib/constants/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { networksParams } from '@/helpers/blockchain';
@@ -27,10 +26,6 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 
 	const connectWallet = () => {
 		dispatch(setShowWalletModal(true));
-	};
-
-	const checkWalletAndSwitchNetwork = async (network: number) => {
-		await switchNetwork(network);
 	};
 
 	const chainNames = targetNetworks.map(
@@ -57,18 +52,12 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 						</P>
 					</Description>
 					<ButtonsContainer>
-						{targetNetworks.map(network => (
-							<Button
-								label={`${formatMessage({
-									id: 'label.switch_to',
-								})} ${chainName(network)}`}
-								onClick={() =>
-									checkWalletAndSwitchNetwork(network)
-								}
-								buttonType='primary'
-								key={network}
-							/>
-						))}
+						<Button
+							label={formatMessage({
+								id: 'label.switch_network',
+							})}
+							buttonType='primary'
+						/>
 					</ButtonsContainer>
 				</>
 			) : (
