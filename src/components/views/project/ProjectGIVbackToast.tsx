@@ -92,6 +92,18 @@ const ProjectGIVbackToast = () => {
 					<div>
 						<Title color={color}>{title}</Title>
 						<Description>{description}</Description>
+						{isOwnerVerified && (
+							<Note>
+								<span>
+									{formatMessage({
+										id: 'label.note',
+									}) + ' '}
+								</span>
+								{formatMessage({
+									id: 'project.givback_toast.description.verified_owner.note',
+								})}
+							</Note>
+						)}
 						<ExternalLink href={links.GIVBACK_DOC}>
 							<LearnMore>
 								{formatMessage({ id: 'label.learn_more' })}
@@ -119,6 +131,13 @@ const ProjectGIVbackToast = () => {
 		</>
 	);
 };
+
+const Note = styled(P)`
+	color: ${neutralColors.gray[800]};
+	> span {
+		font-weight: 500;
+	}
+`;
 
 const LearnMore = styled(Caption)`
 	display: flex;
