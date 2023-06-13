@@ -21,6 +21,7 @@ export function getTextWidth(
 }
 
 export const jointItems = (items: string[]) => {
+	if (items.length === 1) return items[0];
 	const _item = [...items];
 	const last = _item.pop();
 	return _item.join(', ') + ' and ' + last;
