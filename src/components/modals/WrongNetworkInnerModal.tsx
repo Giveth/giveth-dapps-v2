@@ -1,6 +1,6 @@
 import { P, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
@@ -10,6 +10,7 @@ import { useAppDispatch } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { networksParams } from '@/helpers/blockchain';
 import { jointItems } from '@/helpers/text';
+import SwitchNetwork from './SwitchNetwork';
 
 export interface IWrongNetworkInnerModal {
 	cardName: string;
@@ -20,6 +21,8 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 	cardName,
 	targetNetworks,
 }) => {
+	const [showSwitchNetwork, setShowSwitchNetwork] = useState(false);
+
 	const { account } = useWeb3React();
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
@@ -57,6 +60,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 								id: 'label.switch_network',
 							})}
 							buttonType='primary'
+							onClick={() => setShowSwitchNetwork(true)}
 						/>
 					</ButtonsContainer>
 				</>
@@ -85,6 +89,12 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 						/>
 					</ButtonsContainer>
 				</>
+			)}
+			{showSwitchNetwork && (
+				<SwitchNetwork
+					setShowModal={setShowSwitchNetwork}
+					customNetworks={targetNetworks}
+				/>
 			)}
 		</WrongNetworkInnerModalContainer>
 	);
