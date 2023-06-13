@@ -1,26 +1,169 @@
-import { useState } from 'react';
+import { ComponentType, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { B, brandColors, mediaQueries } from '@giveth/ui-design-system';
+import {
+	B,
+	GLink,
+	IconChevronDown24,
+	IconChevronUp24,
+	IconNetwork24,
+	brandColors,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 
+import Select, {
+	ControlProps,
+	DropdownIndicatorProps,
+	OptionProps,
+	StylesConfig,
+	components,
+} from 'react-select';
 import { switchNetwork } from '@/lib/wallet';
-import { givEconomySupportedNetworks } from '@/lib/constants/constants';
 import { Flex } from './styled-components/Flex';
-import { IconGnosisChain } from './Icons/GnosisChain';
-import { IconEthereum } from './Icons/Eth';
 import { ChangeNetworkModal } from './modals/ChangeNetwork';
 import config from '../configuration';
+import { BasicNetworkConfig } from '@/types/config';
+import NetworkLogo from './NetworkLogo';
+import { Shadow } from './styled-components/Shadow';
 
-interface NetworkSelectorProps {
-	disabled?: boolean;
+export interface ISelected {
+	label: string;
+	value: number;
+	network: BasicNetworkConfig;
+	active: boolean;
 }
 
-interface ISelector {
-	isSelected: boolean;
-}
+const _options = [
+	{ network: config.MAINNET_CONFIG, active: true },
+	{ network: config.XDAI_CONFIG, active: true },
+	{ network: config.OPTIMISM_CONFIG, active: true },
+	{ network: config.CELO_CONFIG, active: false },
+];
+
+const options = _options.map(o => ({
+	label: o.network.chainName,
+	value: parseInt(o.network.chainId),
+	network: o.network,
+	active: o.active,
+}));
+
+const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
+	return props.selectProps.menuIsOpen ? (
+		<IconChevronUp24 color={brandColors.deep[100]} />
+	) : (
+		<IconChevronDown24 color={brandColors.deep[100]} />
+	);
+};
+
+const Option: ComponentType<OptionProps<ISelected>> = props => {
+	const { data, isSelected, isDisabled } = props;
+	const { value, label } = data;
+
+	return (
+		<components.Option {...props}>
+			{isSelected || isDisabled ? (
+				<Flex gap='4px' flexDirection='column'>
+					<SelectedTitle>
+						{isSelected ? 'Selected' : 'Coming soon'}
+					</SelectedTitle>
+					<Flex gap='8px'>
+						<NetworkLogo chainId={value} logoSize={16} />
+						<GLink size='Big'>{label}</GLink>
+					</Flex>
+				</Flex>
+			) : (
+				<Flex gap='8px'>
+					<NetworkLogo chainId={value} logoSize={16} />
+					<GLink size='Big'>{label}</GLink>
+				</Flex>
+			)}
+		</components.Option>
+	);
+};
+
+const Control: ComponentType<ControlProps<ISelected>> = ({
+	children,
+	...props
+}) => {
+	const value = props.selectProps.value;
+	return (
+		<components.Control {...props}>
+			{value ? (
+				<>
+					<NetworkLogo
+						chainId={(value as ISelected).value}
+						logoSize={24}
+					/>
+					{children}
+				</>
+			) : (
+				children
+			)}
+		</components.Control>
+	);
+};
+
+const selectStyles: StylesConfig = {
+	container: styles => ({
+		...styles,
+		backgroundColor: brandColors.giv[600],
+		color: neutralColors.gray[100],
+		zIndex: 3,
+		border: 'none',
+		borderRadius: '32px',
+		minWidth: '220px',
+		'&:hover': {
+			borderColor: 'transparent',
+		},
+	}),
+	control: styles => ({
+		...styles,
+		backgroundColor: brandColors.giv[600],
+		color: neutralColors.gray[100],
+		padding: '12px 16px',
+		fontWeight: 500,
+		border: 'none',
+		boxShadow: 'none',
+		borderRadius: '0 24px 24px 0 ',
+		cursor: 'pointer',
+	}),
+	indicatorSeparator: styles => ({
+		...styles,
+		display: 'none',
+	}),
+	placeholder: styles => ({
+		...styles,
+	}),
+	singleValue: styles => ({
+		...styles,
+		color: neutralColors.gray[100],
+	}),
+	menu: styles => ({
+		...styles,
+		marginTop: '8px',
+		borderRadius: '8px',
+		padding: '8px',
+		backgroundColor: brandColors.giv[600],
+		boxShadow: Shadow.Dark[500],
+	}),
+	option: (styles, { isFocused, isSelected, isDisabled }) => ({
+		padding: '8px 16px',
+		margin: '8px',
+		borderRadius: '8px',
+		backgroundColor: isSelected
+			? brandColors.giv[700]
+			: isFocused
+			? brandColors.giv[500]
+			: brandColors.giv[600],
+		color: neutralColors.gray[100],
+		opacity: isDisabled ? 0.5 : 1,
+		cursor: isDisabled ? 'default' : 'pointer',
+	}),
+};
 
 export const NetworkSelector = () => {
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
+	const [value, setValue] = useState(options[1]);
 	const [targetNetwork, setTargetNetwork] = useState(
 		config.MAINNET_NETWORK_NUMBER,
 	);
@@ -38,33 +181,42 @@ export const NetworkSelector = () => {
 		}
 	};
 
+	useEffect(() => {
+		if (chainId) {
+			const selected = options.find(o => o.value === chainId);
+			if (selected) {
+				setValue(selected);
+			}
+		}
+	}, [chainId]);
+
 	return (
 		<>
 			{chainId ? (
-				<NetworkSelectorContainer
-					disabled={!givEconomySupportedNetworks.includes(chainId)}
-				>
-					<Selector
-						isSelected={chainId === config.XDAI_NETWORK_NUMBER}
-						onClick={() =>
-							handleChangeNetwork(config.XDAI_NETWORK_NUMBER)
-						}
-					>
-						<IconGnosisChain size={24} />
-						<B>Gnosis Chain</B>
-					</Selector>
-					<Selector
-						isSelected={
-							chainId === config.MAINNET_NETWORK_NUMBER ||
-							!givEconomySupportedNetworks.includes(chainId)
-						}
-						onClick={() =>
-							handleChangeNetwork(config.MAINNET_NETWORK_NUMBER)
-						}
-					>
-						<IconEthereum size={24} />
-						<B>Ethereum</B>
-					</Selector>
+				<NetworkSelectorContainer>
+					<Title>
+						<IconNetwork24 />
+						<B>Network</B>
+					</Title>
+					<Select
+						components={{
+							DropdownIndicator,
+							Option: (props: any) => <Option {...props} />,
+							Control: (props: any) => <Control {...props} />,
+						}}
+						onChange={(e: any) => {
+							handleChangeNetwork(e.value);
+						}}
+						value={value}
+						options={options}
+						styles={selectStyles}
+						id='network-selector'
+						name='network-selector'
+						isClearable={false}
+						isSearchable={false}
+						isMulti={false}
+						isOptionDisabled={(option: any) => !option.active}
+					/>
 				</NetworkSelectorContainer>
 			) : (
 				'' // TODO: show connect your wallet
@@ -79,32 +231,22 @@ export const NetworkSelector = () => {
 	);
 };
 
-const NetworkSelectorContainer = styled(Flex)<NetworkSelectorProps>`
+interface INetworkSelectorProps {}
+
+const NetworkSelectorContainer = styled(Flex)<INetworkSelectorProps>`
 	height: 48px;
-	border-radius: 88px;
+	border-radius: 24px;
 	border: 1px solid ${brandColors.giv[600]};
-	overflow: hidden;
-	cursor: pointer;
-	opacity: ${props => (props.disabled ? '0.2' : '1')};
-	pointer-events: ${props => (props.disabled ? 'none' : 'auto')};
-	${mediaQueries.mobileL} {
-		width: 360px;
-	}
 `;
 
-const Selector = styled(Flex)<ISelector>`
-	align-items: center;
-	justify-content: center;
-	padding: 12px 24px;
+const Title = styled(Flex)`
+	padding: 12px 16px;
+	color: ${brandColors.deep[100]};
+	background-color: ${brandColors.giv[900]};
+	border-radius: 24px 0 0 24px;
 	gap: 8px;
-	width: 50%;
-	background: ${props => (props.isSelected ? brandColors.giv[600] : '')};
-	& > div {
-		display: none;
-	}
-	${mediaQueries.mobileL} {
-		& > div {
-			display: block;
-		}
-	}
+`;
+
+const SelectedTitle = styled(GLink)`
+	color: ${brandColors.giv[200]};
 `;
