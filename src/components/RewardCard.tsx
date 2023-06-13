@@ -73,7 +73,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 
 	return (
 		<>
-			<RewadCardContainer className={className}>
+			<RewardCardContainer className={className}>
 				{!network || !targetNetworks.includes(network) ? (
 					<WrongNetworkInnerModal
 						targetNetworks={targetNetworks}
@@ -141,7 +141,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 						)}
 					</>
 				)}
-			</RewadCardContainer>
+			</RewardCardContainer>
 			{showWhatIsGIVstreamModal && (
 				<WhatIsStreamModal
 					setShowModal={setShowWhatIsGIVstreamModal}
@@ -152,7 +152,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 	);
 };
 
-const RewadCardContainer = styled.div`
+const RewardCardContainer = styled.div`
 	position: relative;
 	background-color: ${brandColors.giv[700]};
 	padding: 24px 24px;
