@@ -63,7 +63,7 @@ const QFSection = () => {
 			)}
 			<Flex flexDirection='column' gap='4px'>
 				<EstimatedMatchingPrice>
-					+ {estimatedMatching}
+					+ {estimatedMatching?.allProjectsSum}
 				</EstimatedMatchingPrice>
 				<LightCaption> Estimated matching</LightCaption>
 			</Flex>
