@@ -2,10 +2,10 @@ import { ComponentType, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
 	B,
+	GLink,
 	IconChevronDown24,
 	IconChevronUp24,
 	IconNetwork24,
-	P,
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -24,6 +24,7 @@ import { ChangeNetworkModal } from './modals/ChangeNetwork';
 import config from '../configuration';
 import { BasicNetworkConfig } from '@/types/config';
 import NetworkLogo from './NetworkLogo';
+import { Shadow } from './styled-components/Shadow';
 
 export interface ISelected {
 	label: string;
@@ -61,10 +62,8 @@ const Option: ComponentType<OptionProps<ISelected>> = props => {
 	return (
 		<components.Option {...props}>
 			<OptionContainer>
-				<RowContainer>
-					<NetworkLogo chainId={value} logoSize={24} />
-					<P>{label}</P>
-				</RowContainer>
+				<NetworkLogo chainId={value} logoSize={16} />
+				<GLink size='Big'>{label}</GLink>
 			</OptionContainer>
 		</components.Option>
 	);
@@ -100,7 +99,7 @@ const selectStyles: StylesConfig = {
 		zIndex: 3,
 		border: 'none',
 		borderRadius: '32px',
-		minWidth: '200px',
+		minWidth: '220px',
 		'&:hover': {
 			borderColor: 'transparent',
 		},
@@ -120,10 +119,28 @@ const selectStyles: StylesConfig = {
 	}),
 	placeholder: styles => ({
 		...styles,
+	}),
+	singleValue: styles => ({
+		...styles,
 		color: neutralColors.gray[100],
 	}),
-	singleValue: (styles, { data }) => ({
+	menu: styles => ({
 		...styles,
+		marginTop: '8px',
+		borderRadius: '8px',
+		padding: '8px',
+		backgroundColor: brandColors.giv[600],
+		boxShadow: Shadow.Dark[500],
+	}),
+	option: (styles, { isFocused, isSelected }) => ({
+		padding: '8px 16px',
+		margin: '8px',
+		borderRadius: '8px',
+		backgroundColor: isSelected
+			? brandColors.giv[700]
+			: isFocused
+			? brandColors.giv[500]
+			: brandColors.giv[600],
 		color: neutralColors.gray[100],
 	}),
 };
@@ -237,18 +254,5 @@ const OptionContainer = styled.div`
 	cursor: pointer;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-`;
-
-const RowContainer = styled.div`
-	display: flex;
-	align-items: center;
 	gap: 8px;
-	> :first-child {
-		flex-shrink: 0;
-	}
-	> :last-child {
-		width: 100%;
-		color: ${neutralColors.gray[900]};
-	}
 `;
