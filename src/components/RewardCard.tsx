@@ -17,13 +17,12 @@ import BigNumber from 'bignumber.js';
 import { IconGIV } from './Icons/GIV';
 import { Flex } from './styled-components/Flex';
 import { formatWeiHelper, Zero } from '@/helpers/number';
-import config from '@/configuration';
-import { IconEthereum } from './Icons/Eth';
-import { IconGnosisChain } from './Icons/GnosisChain';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { WrongNetworkInnerModal } from '@/components//modals/WrongNetworkInnerModal';
+import NetworkLogo from './NetworkLogo';
+import { networksParams } from '@/helpers/blockchain';
 interface IRewardCardProps {
 	title: string;
 	liquidAmount: ethers.BigNumber;
@@ -81,19 +80,12 @@ export const RewardCard: FC<IRewardCardProps> = ({
 					/>
 				) : (
 					<>
-						<CardHeader justifyContent='space-between'>
+						<CardHeader justifyContent='space-between' gap='4px'>
 							<CardTitle>{title}</CardTitle>
 							<ChainInfo alignItems='center'>
-								{network === config.MAINNET_NETWORK_NUMBER && (
-									<IconEthereum size={16} />
-								)}
-								{network === config.XDAI_NETWORK_NUMBER && (
-									<IconGnosisChain size={16} />
-								)}
+								<NetworkLogo chainId={network} logoSize={16} />
 								<ChainName styleType='Small'>
-									{network === config.MAINNET_NETWORK_NUMBER
-										? 'ETH'
-										: 'GNO'}
+									{networksParams[network].chainName}
 								</ChainName>
 							</ChainInfo>
 						</CardHeader>
