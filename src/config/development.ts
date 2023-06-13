@@ -28,7 +28,9 @@ const config: EnvConfig = {
 	FRONTEND_LINK:
 		process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://staging.giveth.io',
 	MICROSERVICES: {
-		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
+		authentication:
+			process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
+			`${BASE_ROUTE}/siweauthmicroservice/v1`,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
