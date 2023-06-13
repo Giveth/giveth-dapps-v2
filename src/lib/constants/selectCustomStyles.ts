@@ -47,7 +47,7 @@ const selectCustomStyles: StylesConfig = {
 	}),
 	placeholder: styles => ({
 		...styles,
-		color: `${neutralColors.gray[500]}`,
+		color: neutralColors.gray[500],
 	}),
 };
 
