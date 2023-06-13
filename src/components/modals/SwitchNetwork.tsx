@@ -5,6 +5,7 @@ import {
 	IconNetwork32,
 	neutralColors,
 	Overline,
+	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -28,10 +29,12 @@ const _networks = [
 ];
 
 interface ISwitchNetworkModal extends IModal {
+	desc?: string;
 	customNetworks?: number[];
 }
 
 const SwitchNetwork: FC<ISwitchNetworkModal> = ({
+	desc,
 	customNetworks,
 	setShowModal,
 }) => {
@@ -50,6 +53,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 			headerTitlePosition='left'
 		>
 			<Wrapper>
+				{desc && <P>{desc}</P>}
 				{networks.map(networkId => (
 					<NetworkItem
 						onClick={() => {
