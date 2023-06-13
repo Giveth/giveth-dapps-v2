@@ -9,6 +9,8 @@ import { switchNetwork } from '@/lib/wallet';
 import { chainName, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
+import { networksParams } from '@/helpers/blockchain';
+import { jointItems } from '@/helpers/text';
 
 export interface IWrongNetworkInnerModal {
 	cardName: string;
@@ -31,6 +33,12 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 		await switchNetwork(network);
 	};
 
+	const chainNames = targetNetworks.map(
+		network => networksParams[network].chainName,
+	);
+
+	const chainsStr = jointItems(chainNames);
+
 	return (
 		<WrongNetworkInnerModalContainer>
 			{account ? (
@@ -43,7 +51,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 								},
 								{
 									name: cardName,
-									chains: '',
+									chains: chainsStr,
 								},
 							)}
 						</P>
@@ -73,7 +81,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 								},
 								{
 									name: cardName,
-									chains: '',
+									chains: chainsStr,
 								},
 							)}
 						</P>
