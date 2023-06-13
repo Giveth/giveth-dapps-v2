@@ -8,9 +8,9 @@ import {
 import { networksParams } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
-const BASE_ROUTE = 'https://impact-graph.staging.k8s.giveth.io';
+const BASE_ROUTE = 'https://impact-graph.cloud.giveth.io';
 const NOTIFICATION_BASE_ROUTE =
-	'https://notification-center.staging.k8s.giveth.io';
+	'https://notification.cloud.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const XDAI_NETWORK_NUMBER = 100; // xDAI
@@ -24,7 +24,7 @@ const config: EnvConfig = {
 	BACKEND_LINK: `${BASE_ROUTE}/graphql`,
 	FRONTEND_LINK: 'https://staging.k8s.giveth.io',
 	MICROSERVICES: {
-		authentication: `https://auth.staging.k8s.giveth.io/v1`,
+		authentication: `https://auth.cloud.giveth.io/v1`,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
