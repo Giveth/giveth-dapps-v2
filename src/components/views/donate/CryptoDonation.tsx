@@ -373,7 +373,11 @@ const CryptoDonation: FC = () => {
 				)}
 			</InputContainer>
 
-			<EstimatedMatchingToast projectData={project} tokenPriceUsdt={10} />
+			<EstimatedMatchingToast
+				projectData={project}
+				token={selectedToken}
+				amountTyped={amountTyped}
+			/>
 
 			{!noDonationSplit ? (
 				<DonateToGiveth
