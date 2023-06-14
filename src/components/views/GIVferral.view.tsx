@@ -17,7 +17,6 @@ import {
 	IconFacebook,
 	IconShare,
 } from '@giveth/ui-design-system';
-import { isProduction } from '@/configuration';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex, FlexCenter } from '../styled-components/Flex';
 import { EContentType } from '@/lib/constants/shareContent';
@@ -26,9 +25,6 @@ import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 const GIVferralView = () => {
 	const { formatMessage } = useIntl();
 	const [showModal, setShowModal] = useState(false);
-	const chainvineURL = isProduction
-		? 'https://app.chainvine.xyz/giveth'
-		: 'https://staging.chainvine.xyz/giveth-staging';
 
 	return (
 		<Main>

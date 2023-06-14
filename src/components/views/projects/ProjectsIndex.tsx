@@ -18,6 +18,7 @@ import { client } from '@/apollo/apolloClient';
 import { ICategory, IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
+import FloatingButtonReferral from '@/components/FloatingReferral';
 import {
 	BACKEND_QUERY_LIMIT,
 	deviceSize,
@@ -299,6 +300,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					</>
 				)}
 			</Wrapper>
+			<FloatingButtonReferral />
 		</>
 	);
 };
