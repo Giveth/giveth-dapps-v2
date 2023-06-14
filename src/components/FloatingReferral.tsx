@@ -89,6 +89,7 @@ const FloatingContainer = styled.div`
 	bottom: 2rem;
 	left: 2rem;
 	width: 271px;
+	z-index: 2;
 	${mediaQueries.tablet} {
 		display: block;
 	}
