@@ -1,11 +1,6 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next/types';
 import { IMainCategory } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import StorageLabel, { setWithExpiry } from '@/lib/localStorage';
-import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 import {
@@ -13,8 +8,8 @@ import {
 	FETCH_MAIN_CATEGORIES,
 } from '@/apollo/gql/gqlProjects';
 import { GeneralMetatags } from '@/components/Metatag';
-import { countReferralClick } from '@/features/user/user.thunks';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
+import { useReferral } from '@/hooks/useReferral';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import type { IProjectsRouteProps } from '.';
@@ -24,10 +19,6 @@ interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
 }
 
 const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
-	const dispatch = useAppDispatch();
-	const { userData, isLoading, isSignedIn } = useAppSelector(
-		state => state.user,
-	);
 	const {
 		projects,
 		mainCategories,
@@ -36,34 +27,7 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		categories,
 	} = props;
 
-	const router = useRouter();
-	const referrerId = router?.query?.referrer_id;
-
-	useEffect(() => {
-		if (referrerId && !isLoading) {
-			if (!isSignedIn) {
-				// forces user to login grab the wallet
-				dispatch(setShowSignWithWallet(true));
-			} else {
-				if (!userData?.wasReferred && !userData?.isReferrer) {
-					// this sets the cookie saying this session comes from a referal
-					setWithExpiry(
-						StorageLabel.CHAINVINEREFERRED,
-						referrerId,
-						1 * 24 * 60 * 60,
-					);
-					// sends click counter for chainvine only if I am not a referrer
-					// or haven't being referre
-					dispatch(
-						countReferralClick({
-							referrerId: referrerId.toString(),
-							walletAddress: userData?.walletAddress!,
-						}),
-					);
-				}
-			}
-		}
-	}, [referrerId, isSignedIn]);
+	useReferral();
 
 	return (
 		<ProjectsProvider
