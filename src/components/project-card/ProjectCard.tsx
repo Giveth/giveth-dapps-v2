@@ -28,7 +28,7 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ProjectCardUserName } from './ProjectCardUserName';
-import { hasActiveRound } from '@/helpers/qf';
+import { calculateTotalEstimatedMatching, hasActiveRound } from '@/helpers/qf';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -57,7 +57,6 @@ const ProjectCard = (props: IProjectCard) => {
 		qfRounds,
 		estimatedMatching,
 	} = project;
-
 	const [isHover, setIsHover] = useState(false);
 
 	const orgLabel = organization?.label;
@@ -67,6 +66,8 @@ const ProjectCard = (props: IProjectCard) => {
 	const { formatMessage, formatRelativeTime } = useIntl();
 
 	const isRoundActive = hasActiveRound(qfRounds);
+	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
+		estimatedMatching || {};
 	return (
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
@@ -154,7 +155,12 @@ const ProjectCard = (props: IProjectCard) => {
 						{isRoundActive ? (
 							<PaddedRow flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
-									+ ${estimatedMatching?.allProjectsSum}
+									+ $
+									{calculateTotalEstimatedMatching(
+										projectDonationsSqrtRootSum,
+										allProjectsSum,
+										matchingPool,
+									)}
 								</EstimatedMatchingPrice>
 								<LightSubline> Estimated matching</LightSubline>
 							</PaddedRow>
