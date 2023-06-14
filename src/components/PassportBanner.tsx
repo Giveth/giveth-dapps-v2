@@ -16,6 +16,8 @@ import { useIntl } from 'react-intl';
 import { Flex } from './styled-components/Flex';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
+import links from '@/lib/constants/links';
+import Routes from '@/lib/constants/Routes';
 
 enum EPBGState {
 	SUCCESS,
@@ -63,18 +65,28 @@ export const PassportBannerData: IData = {
 		content: 'label.passport.not_created',
 		bg: EPBGState.INFO,
 		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
+		link: {
+			label: 'label.passport.link.update_score',
+			url: links.PASSPORT,
+		},
 	},
 	[EPassportState.NOT_ELIGIBLE]: {
 		content: 'label.passport.not_eligible',
 		bg: EPBGState.WARNING,
 		icon: <IconAlertTriangleFilled24 color={brandColors.giv[500]} />,
-		link: { label: 'label.passport.link.update_score', url: '/' },
+		link: {
+			label: 'label.passport.link.update_score',
+			url: links.PASSPORT,
+		},
 	},
 	[EPassportState.ELIGIBLE]: {
 		content: 'label.passport.eligible',
 		bg: EPBGState.SUCCESS,
 		icon: <IconVerifiedBadge24 color={semanticColors.jade[600]} />,
-		link: { label: 'label.passport.link.update_score', url: '/' },
+		link: {
+			label: 'label.passport.link.update_score',
+			url: Routes.Passport,
+		},
 	},
 	[EPassportState.ENDED]: {
 		content: 'label.passport.ended',
@@ -85,7 +97,10 @@ export const PassportBannerData: IData = {
 		content: 'label.passport.invalid',
 		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
-		link: { label: 'label.passport.link.go_to_passport', url: '/' },
+		link: {
+			label: 'label.passport.link.go_to_passport',
+			url: links.PASSPORT,
+		},
 	},
 	[EPassportState.ERROR]: {
 		content: 'label.passport.error',
