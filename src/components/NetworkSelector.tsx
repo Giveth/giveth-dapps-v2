@@ -66,14 +66,18 @@ const Option: ComponentType<OptionProps<ISelected>> = props => {
 					<SelectedTitle>
 						{isSelected ? 'Selected' : 'Coming soon'}
 					</SelectedTitle>
-					<Flex gap='8px'>
-						<NetworkLogo chainId={value} logoSize={16} />
+					<Flex gap='8px' alignItems='center'>
+						<IconWrapper>
+							<NetworkLogo chainId={value} logoSize={16} />
+						</IconWrapper>
 						<GLink size='Big'>{label}</GLink>
 					</Flex>
 				</Flex>
 			) : (
-				<Flex gap='8px'>
-					<NetworkLogo chainId={value} logoSize={16} />
+				<Flex gap='8px' alignItems='center'>
+					<IconWrapper>
+						<NetworkLogo chainId={value} logoSize={16} />
+					</IconWrapper>
 					<GLink size='Big'>{label}</GLink>
 				</Flex>
 			)}
@@ -237,6 +241,7 @@ const NetworkSelectorContainer = styled(Flex)<INetworkSelectorProps>`
 	height: 48px;
 	border-radius: 24px;
 	border: 1px solid ${brandColors.giv[600]};
+	width: fit-content;
 `;
 
 const Title = styled(Flex)`
@@ -249,4 +254,9 @@ const Title = styled(Flex)`
 
 const SelectedTitle = styled(GLink)`
 	color: ${brandColors.giv[200]};
+`;
+
+const IconWrapper = styled.div`
+	width: 16px;
+	height: 16px;
 `;

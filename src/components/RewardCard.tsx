@@ -17,15 +17,15 @@ import BigNumber from 'bignumber.js';
 import { IconGIV } from './Icons/GIV';
 import { Flex } from './styled-components/Flex';
 import { formatWeiHelper, Zero } from '@/helpers/number';
-import config from '@/configuration';
-import { IconEthereum } from './Icons/Eth';
-import { IconGnosisChain } from './Icons/GnosisChain';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { WrongNetworkInnerModal } from '@/components//modals/WrongNetworkInnerModal';
+import NetworkLogo from './NetworkLogo';
+import { networksParams } from '@/helpers/blockchain';
 interface IRewardCardProps {
-	title?: string;
+	cardName: string;
+	title: string;
 	liquidAmount: ethers.BigNumber;
 	stream: BigNumber.Value;
 	actionLabel?: string;
@@ -34,14 +34,14 @@ interface IRewardCardProps {
 	subButtonCb?: Function;
 	network?: number;
 	className?: string;
-	wrongNetworkText: string;
 	targetNetworks: number[];
 	rewardTokenSymbol?: string;
 	tokenPrice?: BigNumber;
 }
 
 export const RewardCard: FC<IRewardCardProps> = ({
-	title = 'Your GIVstream Rewards',
+	cardName,
+	title,
 	liquidAmount = ethers.constants.Zero,
 	stream = Zero,
 	actionLabel,
@@ -50,7 +50,6 @@ export const RewardCard: FC<IRewardCardProps> = ({
 	subButtonCb,
 	network,
 	className,
-	wrongNetworkText,
 	targetNetworks,
 	rewardTokenSymbol = 'GIV',
 	tokenPrice,
@@ -73,27 +72,20 @@ export const RewardCard: FC<IRewardCardProps> = ({
 
 	return (
 		<>
-			<RewadCardContainer className={className}>
+			<RewardCardContainer className={className}>
 				{!network || !targetNetworks.includes(network) ? (
 					<WrongNetworkInnerModal
 						targetNetworks={targetNetworks}
-						text={wrongNetworkText}
+						cardName={cardName}
 					/>
 				) : (
 					<>
-						<CardHeader justifyContent='space-between'>
+						<CardHeader justifyContent='space-between' gap='4px'>
 							<CardTitle>{title}</CardTitle>
 							<ChainInfo alignItems='center'>
-								{network === config.MAINNET_NETWORK_NUMBER && (
-									<IconEthereum size={16} />
-								)}
-								{network === config.XDAI_NETWORK_NUMBER && (
-									<IconGnosisChain size={16} />
-								)}
+								<NetworkLogo chainId={network} logoSize={16} />
 								<ChainName styleType='Small'>
-									{network === config.MAINNET_NETWORK_NUMBER
-										? 'ETH'
-										: 'GNO'}
+									{networksParams[network].chainName}
 								</ChainName>
 							</ChainInfo>
 						</CardHeader>
@@ -141,7 +133,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 						)}
 					</>
 				)}
-			</RewadCardContainer>
+			</RewardCardContainer>
 			{showWhatIsGIVstreamModal && (
 				<WhatIsStreamModal
 					setShowModal={setShowWhatIsGIVstreamModal}
@@ -152,7 +144,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 	);
 };
 
-const RewadCardContainer = styled.div`
+const RewardCardContainer = styled.div`
 	position: relative;
 	background-color: ${brandColors.giv[700]};
 	padding: 24px 24px;
