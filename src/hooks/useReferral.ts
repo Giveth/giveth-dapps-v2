@@ -34,5 +34,5 @@ export const useReferral = () => {
 				}
 			}
 		}
-	}, [referrerId, isSignedIn]);
+	}, [referrerId, isSignedIn, isLoading]);
 };
