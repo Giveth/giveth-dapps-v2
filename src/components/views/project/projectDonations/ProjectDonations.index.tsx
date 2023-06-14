@@ -35,6 +35,8 @@ const ProjectDonationsIndex = () => {
 					skip: 0,
 					take: donationsPerPage,
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
+					qfRoundId:
+						selectedQF !== null ? parseInt(selectedQF) : undefined,
 					orderBy: {
 						field: ESortby.CREATIONDATE,
 						direction: EDirection.DESC,
@@ -53,7 +55,7 @@ const ProjectDonationsIndex = () => {
 					},
 				});
 			});
-	}, [id, isAdmin]);
+	}, [id, isAdmin, selectedQF]);
 
 	return (
 		<>
