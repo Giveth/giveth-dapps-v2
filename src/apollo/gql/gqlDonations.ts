@@ -72,6 +72,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 				}
 			}
 			totalCount
+			totalUsdBalance
 		}
 	}
 `;

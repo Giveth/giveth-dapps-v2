@@ -65,7 +65,10 @@ const ProjectDonationsIndex = () => {
 			/>
 			<StyledRow>
 				<Col lg={4}>
-					<ProjectTotalFundCard />
+					<ProjectTotalFundCard
+						selectedQF={selectedQF}
+						totalDonationsUsd={donationInfo?.totalUsdBalance || 0}
+					/>
 				</Col>
 				{donationInfo?.donations &&
 					donationInfo.donations.length > 0 && (
