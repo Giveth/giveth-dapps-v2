@@ -12,6 +12,7 @@ import NiceBanner from './NiceBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useDonateData } from '@/context/donate.context';
 import { EContentType } from '@/lib/constants/shareContent';
+import { PassportBanner } from '@/components/PassportBanner';
 
 const DonateIndex: FC = () => {
 	const { isMobile } = useDetectDevice();
@@ -20,6 +21,7 @@ const DonateIndex: FC = () => {
 	return (
 		<>
 			<BigArc />
+			<PassportBanner />
 			<Wrapper>
 				{/* <PurchaseXDAI /> */}
 				<NiceBanner />
