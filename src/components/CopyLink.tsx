@@ -3,6 +3,8 @@ import {
 	Button,
 	GLink,
 	neutralColors,
+	semanticColors,
+	IconLink,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -32,10 +34,10 @@ const CopyLink: FC<ICopyLink> = ({ url }) => {
 	return (
 		<DashedWrapper>
 			<ProjectLink size='Small'>{url}</ProjectLink>
-			<VerticalLine />
 			<CustomButton
-				buttonType='texty'
+				buttonType='texty-gray'
 				size='small'
+				icon={<IconLink />}
 				label={
 					isCopied
 						? `${formatMessage({ id: 'label.copied' })}`
@@ -49,12 +51,13 @@ const CopyLink: FC<ICopyLink> = ({ url }) => {
 };
 
 const CustomButton = styled(Button)<{ isCopied: boolean }>`
-	text-transform: uppercase;
 	font-weight: 700;
 	margin: 3px auto;
-	width: 113px;
+	margin-right: 16px;
+	width: 123px;
 	flex-shrink: 0;
 	flex-grow: 0;
+	box-shadow: ${Shadow.Giv[400]};
 	color: ${props =>
 		props.isCopied ? brandColors.pinky[300] : brandColors.pinky[500]};
 
@@ -63,13 +66,15 @@ const CustomButton = styled(Button)<{ isCopied: boolean }>`
 		color: ${props =>
 			props.isCopied ? brandColors.pinky[300] : brandColors.pinky[500]};
 	}
+	* {
+		text-transform: capitalize !important;
+	}
 `;
 
 const DashedWrapper = styled(FlexCenter)`
-	border: 1px dashed ${neutralColors.gray[400]};
+	border: 1px solid ${neutralColors.gray[300]};
 	border-radius: 8px;
 	margin: 0 auto;
-	box-shadow: ${Shadow.Giv[400]};
 	background: white;
 	width: fit-content;
 `;
@@ -80,7 +85,7 @@ const ProjectLink = styled(GLink)`
 	text-align: left;
 	justify-content: center;
 	padding: 17px 24px;
-	color: ${neutralColors.gray[700]};
+	color: ${semanticColors.blueSky[700]};
 	word-break: break-word;
 `;
 

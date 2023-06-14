@@ -1295,5 +1295,7 @@
 	"label.your_giv_rewards_become_claimable": "Tus recompensas GIV se podrán reclamar dentro de dos semanas desde nuestra página de GIVbacks.",
 	"label.start_referring!": "¡Comienza a referir!",
 	"label.connect_your_wallet_and_get_your_link": "Conecta tu billetera y obtén tu enlace único para compartir en redes sociales y canales de comunidad favoritos.",
-	"label.connect_your_wallet_and_generate_your_link": "Conecta tu billetera y genera tu enlace único de referencia."
+	"label.connect_your_wallet_and_generate_your_link": "Conecta tu billetera y genera tu enlace único de referencia.",
+	"label.heres_your_unique_referral": "Aquí está tu enlace de referencia",
+	"label.share_on_social_media": "Comparte en redes sociales"
 }

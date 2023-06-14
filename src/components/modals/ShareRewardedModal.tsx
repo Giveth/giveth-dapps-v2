@@ -112,7 +112,8 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 							},
 							{ projectTitle },
 					  )}`
-					: chainvineId && "here's your referal link"}
+					: chainvineId &&
+					  formatMessage({ id: 'label.heres_your_unique_referral' })}
 			</Content>
 			<Container>
 				{notSigned ? (
@@ -132,47 +133,56 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 						</LinkContainer>
 					)
 				)}
-				<HowItWorksDiv>
+				<HowItWorksDiv
+					topBorder={isSignedIn && chainvineId ? false : true}
+				>
 					{isSignedIn && chainvineId && (
-						<SocialDiv gap={'16px'}>
-							<SocialButtonContainer>
-								<TwitterShareButton
-									hashtags={['giveth']}
-									title={shareTitleTwitter}
-									url={url}
-								>
-									<IconTwitter />
-								</TwitterShareButton>
+						<div>
+							<SocialTitle>
 								{formatMessage({
-									id: 'label.share_on_twitter',
+									id: 'label.share_on_social_media',
 								})}
-							</SocialButtonContainer>
-							<SocialButtonContainer>
-								<LinkedinShareButton
-									title={shareTitleFacebookAndLinkedin}
-									url={url}
-								>
-									<IconLinkedin />
-								</LinkedinShareButton>
-								{formatMessage({
-									id: 'label.share_on_linkedin',
-								})}
-							</SocialButtonContainer>
-							<SocialButtonContainer>
-								<FacebookShareButton
-									hashtag='#giveth'
-									quote={shareTitleFacebookAndLinkedin}
-									url={url}
-								>
-									<IconFacebook />
-								</FacebookShareButton>
-								{formatMessage({
-									id: 'label.share_on_facebook',
-								})}
-							</SocialButtonContainer>
-						</SocialDiv>
+							</SocialTitle>
+							<SocialDiv gap={'16px'}>
+								<SocialButtonContainer>
+									<TwitterShareButton
+										hashtags={['giveth']}
+										title={shareTitleTwitter}
+										url={url}
+									>
+										<IconTwitter />
+									</TwitterShareButton>
+									{formatMessage({
+										id: 'label.share_on_twitter',
+									})}
+								</SocialButtonContainer>
+								<SocialButtonContainer>
+									<LinkedinShareButton
+										title={shareTitleFacebookAndLinkedin}
+										url={url}
+									>
+										<IconLinkedin />
+									</LinkedinShareButton>
+									{formatMessage({
+										id: 'label.share_on_linkedin',
+									})}
+								</SocialButtonContainer>
+								<SocialButtonContainer>
+									<FacebookShareButton
+										hashtag='#giveth'
+										quote={shareTitleFacebookAndLinkedin}
+										url={url}
+									>
+										<IconFacebook />
+									</FacebookShareButton>
+									{formatMessage({
+										id: 'label.share_on_facebook',
+									})}
+								</SocialButtonContainer>
+							</SocialDiv>
+						</div>
 					)}
-					<B>
+					<Body>
 						{formatMessage({ id: 'label.how_does_this_work' })}
 						{'  '}
 						<span>
@@ -183,7 +193,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 							</a>
 							<IconExternalLink color={brandColors.pinky[500]} />
 						</span>
-					</B>
+					</Body>
 				</HowItWorksDiv>
 			</Container>
 		</Modal>
@@ -198,11 +208,21 @@ const Container = styled(Flex)`
 
 const Content = styled(B)`
 	font-weight: 400;
-	font-size: 16px;
+	font-size: 14px;
 	line-height: 150%;
 	padding: 0 24px;
 	margin: 26px 0 0 0;
 	color: ${neutralColors.gray[800]};
+	text-align: left;
+`;
+
+const SocialTitle = styled(B)`
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 150%;
+	color: ${neutralColors.gray[700]};
+	text-align: left;
+	margin: 0 0 20px 0;
 `;
 
 const SocialButtonContainer = styled(FlexCenter)`
@@ -220,16 +240,14 @@ const SocialButtonContainer = styled(FlexCenter)`
 	border-radius: 48px;
 `;
 
-const HowItWorksDiv = styled(Flex)`
+const HowItWorksDiv = styled(Flex)<{ topBorder: boolean }>`
 	width: 100%;
 	flex-direction: column;
 	padding: 24px 0 0 0;
-	margin: 24px 0 12px 0;
-	align-items: center;
-	justify-content: center;
-	border-top: 1px solid ${neutralColors.gray[300]};
+	margin: ${props => (props.topBorder ? '24px 0 12px 0' : '0')};
+	border-top: ${props =>
+		props.topBorder ? `1px solid ${neutralColors.gray[300]}` : null};
 	color: ${neutralColors.gray[800]};
-	text-align: center;
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 150%;
@@ -242,7 +260,7 @@ const HowItWorksDiv = styled(Flex)`
 `;
 
 const LinkContainer = styled(Flex)`
-	max-width: 500px;
+	width: 100%;
 `;
 
 const SocialDiv = styled(FlexCenter)`
@@ -251,6 +269,11 @@ const SocialDiv = styled(FlexCenter)`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
+`;
+
+const Body = styled(B)`
+	color: ${neutralColors.gray[800]};
+	font-weight: 400;
 `;
 
 export default ShareRewardedModal;
