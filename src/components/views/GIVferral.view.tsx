@@ -200,7 +200,6 @@ const GIVferralView = () => {
 						</LeadText>
 					</BoxCol>
 					<LastBoxCol>
-						{' '}
 						<ShareButton
 							size='small'
 							label={formatMessage({

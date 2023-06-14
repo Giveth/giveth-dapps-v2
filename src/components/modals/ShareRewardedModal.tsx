@@ -45,6 +45,31 @@ interface IShareRewardedModal extends IModal {
 	projectTitle?: string;
 }
 
+function getMessageWithBoldText(
+	_message: string,
+	targetString?: string,
+): React.ReactNode {
+	let message = _message;
+	if (targetString) {
+		message = message.replaceAll(
+			targetString,
+			`<strong>${targetString}</strong>`,
+		);
+	}
+	const parts = message.split(/(<strong>.*?<\/strong>)/g);
+	return parts.map((part, index) => {
+		if (part.startsWith('<strong>') && part.endsWith('</strong>')) {
+			const text = part.replace(/<\/?strong>/g, '');
+			console.log({ text });
+
+			return <strong key={index}>{text}</strong>;
+		}
+		console.log({ part });
+
+		return part;
+	});
+}
+
 const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 	const {
 		isSignedIn,
@@ -102,22 +127,27 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 		>
 			<Content>
 				{notSigned
-					? formatMessage({
-							id: 'label.connet_your_wallet_and_sign_in_to_get_your_referral',
-					  })
+					? getMessageWithBoldText(
+							formatMessage({
+								id: 'label.connet_your_wallet_and_sign_in_to_get_your_referral',
+							}),
+					  )
 					: chainvineId && projectTitle
-					? `${formatMessage(
-							{
-								id: 'label.heres_your_referral',
-							},
-							{ projectTitle },
-					  )}`
+					? getMessageWithBoldText(
+							formatMessage(
+								{
+									id: 'label.heres_your_referral',
+								},
+								{ projectTitle },
+							),
+							projectTitle,
+					  )
 					: chainvineId &&
 					  formatMessage({ id: 'label.heres_your_unique_referral' })}
 			</Content>
 			<Container>
 				{notSigned ? (
-					<Button
+					<ConnectButton
 						label={formatMessage({
 							id: !isEnabled
 								? 'component.button.connect_wallet'
@@ -182,9 +212,10 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 							</SocialDiv>
 						</div>
 					)}
-					<Body>
-						{formatMessage({ id: 'label.how_does_this_work' })}
-						{'  '}
+					<HowItWorksContent>
+						<Body>
+							{formatMessage({ id: 'label.how_does_this_work' })}
+						</Body>
 						<span>
 							<a>
 								<Link target='_blank' href={Routes.Referral}>
@@ -193,7 +224,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 							</a>
 							<IconExternalLink color={brandColors.pinky[500]} />
 						</span>
-					</Body>
+					</HowItWorksContent>
 				</HowItWorksDiv>
 			</Container>
 		</Modal>
@@ -201,9 +232,13 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 };
 
 const Container = styled(Flex)`
+	width: 100%;
 	padding: 24px;
 	flex-direction: column;
 	align-items: center;
+	${mediaQueries.tablet} {
+		width: 606px;
+	}
 `;
 
 const Content = styled(B)`
@@ -216,13 +251,18 @@ const Content = styled(B)`
 	text-align: left;
 `;
 
+const ConnectButton = styled(Button)`
+	width: 250px;
+`;
+
 const SocialTitle = styled(B)`
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 150%;
 	color: ${neutralColors.gray[700]};
 	text-align: left;
-	margin: 0 0 20px 0;
+	margin: 0 0 16px 0;
+	text-transform: capitalize;
 `;
 
 const SocialButtonContainer = styled(FlexCenter)`
@@ -243,8 +283,8 @@ const SocialButtonContainer = styled(FlexCenter)`
 const HowItWorksDiv = styled(Flex)<{ topBorder: boolean }>`
 	width: 100%;
 	flex-direction: column;
-	padding: 24px 0 0 0;
-	margin: ${props => (props.topBorder ? '24px 0 12px 0' : '0')};
+	padding: ${props => (props.topBorder ? '24px 0 0 0' : '0')};
+	margin: ${props => (props.topBorder ? '24px 0 0 0' : '0')};
 	border-top: ${props =>
 		props.topBorder ? `1px solid ${neutralColors.gray[300]}` : null};
 	color: ${neutralColors.gray[800]};
@@ -261,6 +301,11 @@ const HowItWorksDiv = styled(Flex)<{ topBorder: boolean }>`
 
 const LinkContainer = styled(Flex)`
 	width: 100%;
+	margin: 0 0 24px 0;
+	min-height: 130px;
+	${mediaQueries.tablet} {
+		min-height: 80px;
+	}
 `;
 
 const SocialDiv = styled(FlexCenter)`
@@ -274,6 +319,17 @@ const SocialDiv = styled(FlexCenter)`
 const Body = styled(B)`
 	color: ${neutralColors.gray[800]};
 	font-weight: 400;
+`;
+
+const HowItWorksContent = styled(Flex)`
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+	span {
+		display: flex;
+		gap: 2px;
+		align-items: center;
+	}
 `;
 
 export default ShareRewardedModal;

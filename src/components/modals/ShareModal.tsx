@@ -3,43 +3,50 @@ import {
 	TwitterShareButton,
 	LinkedinShareButton,
 } from 'react-share';
-import Image from 'next/image';
 import styled from 'styled-components';
+import Link from 'next/link';
+import Image from 'next/image';
 import {
+	B,
 	brandColors,
-	H5,
-	Lead,
 	neutralColors,
-	OutlineButton,
+	IconExternalLink,
+	IconTwitter,
+	IconLinkedin,
+	IconFacebook,
+	mediaQueries,
 } from '@giveth/ui-design-system';
-import { useIntl } from 'react-intl';
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 
 import { Modal } from './Modal';
-import FacebookIcon from '../../../public/images/social-fb.svg';
-import LinkedinIcon from '../../../public/images/social-linkedin.svg';
-import TwitterIcon from '../../../public/images/social-tw.svg';
-import ShareIcon from '../../../public/images/icons/share_dots.svg';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import GiftIcon from '../../../public/images/icons/gift.svg';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
 import { fullPath } from '@/lib/helpers';
+import { useAppSelector } from '@/features/hooks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
 	EContentType,
 	ESocialType,
 	shareContentCreator,
 } from '@/lib/constants/shareContent';
+import Routes from '@/lib/constants/Routes';
 
-interface IShareModal extends IModal {
-	projectHref: string;
+interface IShareRewardedModal extends IModal {
+	projectHref?: string;
 	contentType: EContentType;
+	projectTitle?: string;
 }
 
-const ShareModal: FC<IShareModal> = props => {
+const ShareModal: FC<IShareRewardedModal> = props => {
+	const { userData: user } = useAppSelector(state => state.user);
 	const { projectHref, setShowModal, contentType } = props;
-	const url = fullPath(slugToProjectView(projectHref));
+	const url = projectHref
+		? fullPath(slugToProjectView(projectHref))
+		: fullPath(Routes.Projects);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
@@ -56,90 +63,165 @@ const ShareModal: FC<IShareModal> = props => {
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerIcon={<Image src={ShareIcon} alt='share icon' />}
-			headerTitle={formatMessage({ id: 'label.share' })}
+			headerIcon={<Image src={GiftIcon} alt='gift icon' />}
+			headerTitle={formatMessage({ id: 'label.share_and_earn_rewards' })}
 			headerTitlePosition='left'
 		>
 			<Container>
-				<Subtitle weight={700}>
-					{formatMessage({ id: 'label.share_this' })}!
-				</Subtitle>
-				<FlexCenter gap={'16px'}>
-					<SocialButtonContainer>
-						<TwitterShareButton
-							hashtags={['giveth']}
-							title={shareTitleTwitter}
-							url={url}
-						>
-							<Image src={TwitterIcon} alt='twitter icon' />
-						</TwitterShareButton>
-					</SocialButtonContainer>
-					<SocialButtonContainer>
-						<LinkedinShareButton
-							title={shareTitleFacebookAndLinkedin}
-							url={url}
-						>
-							<Image src={LinkedinIcon} alt='twitter icon' />
-						</LinkedinShareButton>
-					</SocialButtonContainer>
-					<SocialButtonContainer>
-						<FacebookShareButton
-							hashtag='#giveth'
-							quote={shareTitleFacebookAndLinkedin}
-							url={url}
-						>
-							<Image src={FacebookIcon} alt='facebook icon' />
-						</FacebookShareButton>
-					</SocialButtonContainer>
-				</FlexCenter>
-				<LeadText>
-					{formatMessage({ id: 'label.or_copy_the_link' })}
-				</LeadText>
-				<CopyLink url={url} />
-				<CustomOutlineButton
-					buttonType='texty'
-					size='small'
-					label={formatMessage({ id: 'label.dismiss' })}
-					onClick={closeModal}
-				/>
+				<HowItWorksDiv topBorder={false}>
+					<SocialTitle>
+						{formatMessage({
+							id: 'label.here_is_your_link',
+						})}
+					</SocialTitle>
+					<LinkContainer>
+						<CopyLink url={url} />
+					</LinkContainer>
+					<div>
+						<SocialTitle>
+							{formatMessage({
+								id: 'label.share_on_social_media',
+							})}
+						</SocialTitle>
+						<SocialDiv gap={'16px'}>
+							<SocialButtonContainer>
+								<TwitterShareButton
+									hashtags={['giveth']}
+									title={shareTitleTwitter}
+									url={url}
+								>
+									<IconTwitter />
+								</TwitterShareButton>
+								{formatMessage({
+									id: 'label.share_on_twitter',
+								})}
+							</SocialButtonContainer>
+							<SocialButtonContainer>
+								<LinkedinShareButton
+									title={shareTitleFacebookAndLinkedin}
+									url={url}
+								>
+									<IconLinkedin />
+								</LinkedinShareButton>
+								{formatMessage({
+									id: 'label.share_on_linkedin',
+								})}
+							</SocialButtonContainer>
+							<SocialButtonContainer>
+								<FacebookShareButton
+									hashtag='#giveth'
+									quote={shareTitleFacebookAndLinkedin}
+									url={url}
+								>
+									<IconFacebook />
+								</FacebookShareButton>
+								{formatMessage({
+									id: 'label.share_on_facebook',
+								})}
+							</SocialButtonContainer>
+						</SocialDiv>
+					</div>
+					<HowItWorksContent>
+						<Body>
+							{formatMessage({ id: 'label.how_does_this_work' })}
+						</Body>
+						<span>
+							<a>
+								<Link target='_blank' href={Routes.Referral}>
+									{formatMessage({ id: 'label.learn_more' })}
+								</Link>{' '}
+							</a>
+							<IconExternalLink color={brandColors.pinky[500]} />
+						</span>
+					</HowItWorksContent>
+				</HowItWorksDiv>
 			</Container>
 		</Modal>
 	);
 };
 
-const Container = styled.div`
+const Container = styled(Flex)`
+	width: 606px;
 	padding: 24px;
+	flex-direction: column;
+	align-items: center;
 `;
 
-const Subtitle = styled(H5)`
-	color: ${brandColors.deep[900]};
-	margin-bottom: 32px;
+const SocialTitle = styled(B)`
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 150%;
+	color: ${neutralColors.gray[700]};
+	text-align: left;
+	margin: 0 0 16px 0;
+	text-transform: capitalize;
 `;
 
 const SocialButtonContainer = styled(FlexCenter)`
 	height: 45px;
-	width: 45px;
-	border: 1px solid ${neutralColors.gray[400]} !important;
-	border-radius: 8px;
+	width: 100%;
+	min-width: 175px;
 	cursor: pointer;
+	color: ${brandColors.pinky[500]};
+	gap: 12px;
+	font-weight: 500;
+	font-size: 12px;
+	line-height: 16px;
 
-	> * {
-		height: 40px;
-		width: 40px;
+	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.4);
+	border-radius: 48px;
+`;
+
+const HowItWorksDiv = styled(Flex)<{ topBorder: boolean }>`
+	width: 100%;
+	flex-direction: column;
+	padding: ${props => (props.topBorder ? '24px 0 0 0' : '0')};
+	margin: ${props => (props.topBorder ? '24px 0 0 0' : '0')};
+	border-top: ${props =>
+		props.topBorder ? `1px solid ${neutralColors.gray[300]}` : null};
+	color: ${neutralColors.gray[800]};
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 150%;
+	span {
+		cursor: pointer;
+	}
+	a {
+		color: ${brandColors.pinky[500]};
 	}
 `;
 
-const LeadText = styled(Lead)`
-	margin: 16px 0;
-	color: ${brandColors.deep[900]};
+const LinkContainer = styled(Flex)`
+	width: 100%;
+	height: 80px;
+	margin: 0 0 24px 0;
+	div {
+		width: 100%;
+	}
 `;
 
-const CustomOutlineButton = styled(OutlineButton)`
-	text-transform: uppercase;
-	font-weight: 700;
-	border: none;
-	color: ${brandColors.deep[100]};
-	margin: 24px auto 0;
+const SocialDiv = styled(FlexCenter)`
+	margin: 0 0 25px 0;
+	flex-direction: column;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
+`;
+
+const Body = styled(B)`
+	color: ${neutralColors.gray[800]};
+	font-weight: 400;
+`;
+
+const HowItWorksContent = styled(Flex)`
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+	span {
+		display: flex;
+		gap: 2px;
+		align-items: center;
+	}
 `;
 
 export default ShareModal;

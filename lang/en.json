@@ -883,7 +883,7 @@
 	"label.you_have_successfuly_claimed": "You have successfully claimed",
 	"label.plus_you_are_getting_an_additional": "Plus you're getting an additional",
 	"label.per_week": "per week",
-	"label.share_on_twitter": "share on twitter",
+	"label.share_on_twitter": "Share on twitter",
 	"label.claim_your_free_swag": "claim your free swag",
 	"label.join_our_discord": "join our discord",
 	"label.explore_the_giveconomy": "explore the giveconomy",
@@ -1273,7 +1273,7 @@
 	"label.contributors": "{count, plural, one { contributor} other { contributors} }",
 	"label.share_and_get_rewarded": "Share & get rewarded",
 	"label.share_and_earn_rewards": "Share and earn rewards",
-	"label.connet_your_wallet_and_sign_in_to_get_your_referral": "Connect your wallet and sign in to get your referral link and start earning.",
+	"label.connet_your_wallet_and_sign_in_to_get_your_referral": "Connect your wallet and sign in to get your <strong>referral link</strong> and start earning.",
 	"label.heres_your_referral": "Here’s your unique referral link to {projectTitle}",
 	"label.share_on_linkedin": "Share on LinkedIn",
 	"label.share_on_facebook": "Share on Facebook",
@@ -1289,5 +1289,6 @@
 	"label.connect_your_wallet_and_generate_your_link": "Connect your wallet and generate your unique referral link.",
 	"label.heres_your_unique_referral": "Here's your unique referral link",
 	"label.share_on_social_media": "Share on social media",
-	"label.refer_your_friends_and_earn_giv": "Refer your friends and earn GIV when they donate"
+	"label.refer_your_friends_and_earn_giv": "Refer your friends and earn GIV when they donate",
+	"label.here_is_your_link": "Here's your link"
 }
