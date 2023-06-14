@@ -23,6 +23,7 @@ import {
 	PassportBannerWrapper,
 } from '@/components/PassportBanner';
 import { PassportButton } from '@/components/PassportButton';
+import links from '@/lib/constants/links';
 
 export const PassportView = () => {
 	const { formatMessage, locale } = useIntl();
@@ -46,7 +47,7 @@ export const PassportView = () => {
 					to protect against Sybil attacks.
 				</Lead>
 				<PassportLink>
-					<ExternalLink href='/' title='Learn more' />
+					<ExternalLink href={links.PASSPORT} title='Learn more' />
 					<IconExternalLink16 />
 				</PassportLink>
 				<PassportButton
