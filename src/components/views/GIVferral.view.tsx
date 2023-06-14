@@ -207,7 +207,7 @@ const GIVferralView = () => {
 							buttonType='primary'
 							icon={
 								<Image
-									src='/images/icons/gift_White.svg'
+									src='/images/icons/gift_white.svg'
 									width={16}
 									height={16}
 									alt='gift'
@@ -477,8 +477,8 @@ const FloatingFigure5 = styled(FloatingFigure1)`
 	width: 180px;
 	height: 39px;
 	background-image: url(/images/givferral/pink-curve.svg);
-	right: -100px;
-	top: -20px;
+	right: 0;
+	top: -40px;
 	${mediaQueries.desktop} {
 		display: unset;
 	}
