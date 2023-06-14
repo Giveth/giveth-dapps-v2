@@ -44,7 +44,9 @@ const GIVferralView = () => {
 							})}
 						</H3>
 						<Bold>
-							{formatMessage({ id: 'label.refer_a_friend' })}
+							{formatMessage({
+								id: 'label.refer_your_friends_and_earn_giv',
+							})}
 						</Bold>
 					</BannerContent>
 					<Flower1 />
@@ -374,6 +376,7 @@ const BannerContent = styled(Col)`
 
 const Bold = styled(H3)`
 	font-weight: 700;
+	min-width: 627px;
 `;
 
 const Flower1 = styled.div`
