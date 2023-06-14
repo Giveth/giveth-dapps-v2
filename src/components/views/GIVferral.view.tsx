@@ -477,8 +477,8 @@ const FloatingFigure5 = styled(FloatingFigure1)`
 	width: 180px;
 	height: 39px;
 	background-image: url(/images/givferral/pink-curve.svg);
-	right: 0;
-	margin: 0 -300px 200px 0;
+	right: -100px;
+	top: -20px;
 	${mediaQueries.desktop} {
 		display: unset;
 	}
