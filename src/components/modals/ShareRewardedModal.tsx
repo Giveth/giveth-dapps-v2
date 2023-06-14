@@ -40,7 +40,7 @@ import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import Routes from '@/lib/constants/Routes';
 
 interface IShareRewardedModal extends IModal {
-	projectHref: string;
+	projectHref?: string;
 	contentType: EContentType;
 	projectTitle?: string;
 }
@@ -53,9 +53,13 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 	} = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 	const { projectHref, setShowModal, contentType, projectTitle } = props;
-	const url = fullPath(
-		slugToProjectView(projectHref + `?referrer_id=${user?.chainvineId}`),
-	);
+	const url = projectHref
+		? fullPath(
+				slugToProjectView(
+					projectHref + `?referrer_id=${user?.chainvineId}`,
+				),
+		  )
+		: fullPath(Routes.Projects + `?referrer_id=${user?.chainvineId}`);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
@@ -101,13 +105,14 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 					? formatMessage({
 							id: 'label.connet_your_wallet_and_sign_in_to_get_your_referral',
 					  })
-					: chainvineId &&
-					  `${formatMessage(
+					: chainvineId && projectTitle
+					? `${formatMessage(
 							{
 								id: 'label.heres_your_referral',
 							},
 							{ projectTitle },
-					  )}`}
+					  )}`
+					: chainvineId && "here's your referal link"}
 			</Content>
 			<Container>
 				{notSigned ? (

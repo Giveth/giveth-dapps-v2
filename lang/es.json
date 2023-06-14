@@ -1286,5 +1286,14 @@
 	"label.heres_your_referral": "Aqui esta tu link de referencia para  {projectTitle}",
 	"label.share_on_linkedin": "Comparte en LinkedIn",
 	"label.share_on_facebook": "Comparte en Facebook",
-	"label.how_does_this_work": "¿Cómo funciona?"
+	"label.how_does_this_work": "¿Cómo funciona?",
+	"label.how_referrals_work": "Cómo funcionan las referencias",
+	"label.look_for_the_share_and_get_rewarded": "Busca el botón 'Compartir y obtener recompensas' para generar enlaces a páginas específicas en todo el sitio de Giveth.",
+	"label.share_your_referral_link_with_your_friends": "Comparte tu enlace de referencia con tus amigos, familia y comunidad.",
+	"label.share_on_twitter_linkedin_or_facebook": "Comparte en Twitter, LinkedIn o Facebook, o copia tu enlace para compartirlo en cualquier lugar!",
+	"label.when_someone_donates_using_your_link": "Cuando alguien dona a un proyecto verificado a través de tu enlace, ¡ganarás GIV!",
+	"label.your_giv_rewards_become_claimable": "Tus recompensas GIV se podrán reclamar dentro de dos semanas desde nuestra página de GIVbacks.",
+	"label.start_referring!": "¡Comienza a referir!",
+	"label.connect_your_wallet_and_get_your_link": "Conecta tu billetera y obtén tu enlace único para compartir en redes sociales y canales de comunidad favoritos.",
+	"label.connect_your_wallet_and_generate_your_link": "Conecta tu billetera y genera tu enlace único de referencia."
 }

@@ -1,30 +1,43 @@
-// import Image from 'next/image';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import Image from 'next/image';
 import {
 	H3,
-	H4,
 	H5,
+	Button,
 	Lead,
 	neutralColors,
 	brandColors,
-	ButtonLink,
-	Button,
 	B,
-	IconChevronRight16,
+	Col,
+	Container,
+	IconLinkedin,
+	IconTwitter,
+	IconFacebook,
+	IconShare,
 } from '@giveth/ui-design-system';
-import { Col, Container } from '@giveth/ui-design-system';
 import { isProduction } from '@/configuration';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Flex } from '../styled-components/Flex';
+import { Flex, FlexCenter } from '../styled-components/Flex';
+import { EContentType } from '@/lib/constants/shareContent';
+import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 
 const GIVferralView = () => {
 	const { formatMessage } = useIntl();
+	const [showModal, setShowModal] = useState(false);
 	const chainvineURL = isProduction
 		? 'https://app.chainvine.xyz/giveth'
 		: 'https://staging.chainvine.xyz/giveth-staging';
+
 	return (
-		<>
+		<Main>
+			{showModal && (
+				<ShareRewardedModal
+					contentType={EContentType.thisProject}
+					setShowModal={setShowModal}
+				/>
+			)}
 			<Wrapper>
 				<Banner>
 					<Hands />
@@ -45,22 +58,25 @@ const GIVferralView = () => {
 			<Container>
 				<Section>
 					<FloatingFigure3 />
-					<H3>
-						{' '}
-						{formatMessage({
-							id: 'label.when_others_give_you_earn',
-						})}
-					</H3>
-					<Container>
+					<BoxCol>
+						<Title>
+							{formatMessage({
+								id: 'label.when_others_give_you_earn',
+							})}
+						</Title>
 						<LeadText>
-							By encouraging your network to give to good causes,
-							you’re not only making a positive impact but also
-							earning rewards for your efforts!
+							{formatMessage({
+								id: 'label.by_encouraging_your_network',
+							})}
 						</LeadText>
-					</Container>
+					</BoxCol>
 				</Section>
+
+				<ReferralTitle>
+					{formatMessage({ id: 'label.how_referrals_work' })}
+				</ReferralTitle>
+
 				<Section>
-					<H3>How referrals work</H3>
 					<CompleteBox>
 						<SectionTitle>
 							<Dot>
@@ -68,28 +84,62 @@ const GIVferralView = () => {
 							</Dot>
 						</SectionTitle>
 						<BoxCol>
-							<H5>
-								Connect your wallet and generate your unique
-								referral link.
-							</H5>
-							<B>
-								Look for the "Share & get rewarded" button to
-								generate links to specific pages across the
-								Giveth site.
-							</B>
+							<Subtitle>
+								{formatMessage({
+									id: 'label.connect_your_wallet_and_generate_your_link',
+								})}
+							</Subtitle>
+							<Content>
+								{formatMessage({
+									id: 'label.look_for_the_share_and_get_rewarded',
+								})}
+							</Content>
 						</BoxCol>
-						<Button
-							label={formatMessage({ id: 'label.get_started' })}
-							buttonType='primary'
-							icon={<IconChevronRight16 />}
-							onClick={() =>
-								window?.open(chainvineURL, '_ blank')
-							}
-						/>
 					</CompleteBox>
+					<Bee />
+					<Screenshots>
+						<Screenshot
+							src='/images/givferral/screenshot1.png'
+							alt='screenshot1'
+						/>
+						<Screenshot2
+							src='/images/givferral/screenshot2.png'
+							alt='screenshot1'
+						/>
+					</Screenshots>
 				</Section>
+				{/* <FloatingFigure2 /> */}
 				<ReverseSection>
-					<BoxCol> - </BoxCol>
+					<SocialItems>
+						<SocialCol>
+							<SocialButtonContainer>
+								<IconTwitter />
+								{formatMessage({
+									id: 'label.share_on_twitter',
+								})}
+							</SocialButtonContainer>
+							<SocialButtonContainer>
+								<IconFacebook />
+								{formatMessage({
+									id: 'label.share_on_facebook',
+								})}
+							</SocialButtonContainer>
+						</SocialCol>
+						<SocialCol>
+							<SocialButtonContainer>
+								<IconLinkedin />
+								{formatMessage({
+									id: 'label.share_on_linkedin',
+								})}
+							</SocialButtonContainer>
+							<SocialButtonContainer>
+								<IconShare />
+								{formatMessage({
+									id: 'label.copy_link',
+								})}
+							</SocialButtonContainer>
+						</SocialCol>
+					</SocialItems>
 					<CompleteBox>
 						<SectionTitle>
 							<Dot>
@@ -97,14 +147,16 @@ const GIVferralView = () => {
 							</Dot>
 						</SectionTitle>
 						<BoxCol>
-							<H5>
-								Share your referral link with your friends,
-								family, and community.
-							</H5>
-							<B>
-								Share on Twitter, LinkedIn or Facebook, or copy
-								your link to share anywhere!
-							</B>
+							<Subtitle>
+								{formatMessage({
+									id: 'label.share_your_referral_link_with_your_friends',
+								})}
+							</Subtitle>
+							<Content>
+								{formatMessage({
+									id: 'label.share_on_twitter_linkedin_or_facebook',
+								})}
+							</Content>
 						</BoxCol>
 					</CompleteBox>
 				</ReverseSection>
@@ -116,33 +168,110 @@ const GIVferralView = () => {
 							</Dot>
 						</SectionTitle>
 						<BoxCol>
-							<H5>
-								When someone donates to a verified project via
-								your link, you’ll earn GIV!
-							</H5>
-							<B>
-								Your GIV rewards become claimable within two
-								weeks from our GIVbacks page.
-							</B>
+							<Subtitle>
+								{formatMessage({
+									id: 'label.when_someone_donates_using_your_link',
+								})}
+							</Subtitle>
+							<Content>
+								{formatMessage({
+									id: 'label.your_giv_rewards_become_claimable',
+								})}
+							</Content>
 						</BoxCol>
 					</CompleteBox>
-					<FloatingFigure1 />
-					<FloatingFigure2 />
+					<Image
+						src='/images/givferral/share-and-get-giv.svg'
+						width={489}
+						height={384}
+						alt='gift'
+						style={{
+							marginLeft: '8px',
+						}}
+					/>
+				</Section>
+				<Section>
+					<BoxCol>
+						<Title>
+							{formatMessage({ id: 'label.start_referring!' })}
+						</Title>
+						<LeadText>
+							{formatMessage({
+								id: 'label.connect_your_wallet_and_get_your_link',
+							})}
+						</LeadText>
+					</BoxCol>
+					<LastBoxCol>
+						{' '}
+						<ShareButton
+							size='small'
+							label={formatMessage({
+								id: 'label.share_and_get_rewarded',
+							})}
+							buttonType='primary'
+							icon={
+								<Image
+									src='/images/icons/gift_White.svg'
+									width={16}
+									height={16}
+									alt='gift'
+									style={{
+										marginLeft: '8px',
+									}}
+								/>
+							}
+							onClick={() => setShowModal(true)}
+						/>
+					</LastBoxCol>
+					<FloatingFigure4 />
+					<FloatingFigure5 />
 				</Section>
 			</Container>
-		</>
+		</Main>
 	);
 };
 
-const Section = styled(Col)`
+const Main = styled.div`
+	background: white;
+	padding: 0 0 100px 0;
+`;
+
+const Section = styled(Flex)`
+	flex-direction: column;
 	position: relative;
-	margin: 100px 0;
+	margin: 80px 0;
+	justify-content: space-between;
+	align-items: center;
+	${mediaQueries.desktop} {
+		flex-direction: row;
+	}
+`;
+
+const Title = styled(H3)`
+	margin: 20px 0 0 0;
+	font-weight: 700;
+	font-size: 41px;
+	line-height: 56px;
+`;
+
+const ReferralTitle = styled(Title)`
+	margin: 150px 0 0 0;
+`;
+
+const Subtitle = styled(H5)`
+	font-weight: 700;
+	font-size: 25px;
+	line-height: 38px;
+	margin: 0 0 32px 0;
 `;
 
 const ReverseSection = styled(Section)`
 	display: flex;
-	flex-direction: row !important;
+	flex-direction: column-reverse;
 	justify-content: space-between;
+	${mediaQueries.desktop} {
+		flex-direction: row;
+	}
 `;
 
 const LeadText = styled(Lead)`
@@ -150,14 +279,12 @@ const LeadText = styled(Lead)`
 	font-size: 24px;
 	line-height: 150%;
 	color: ${neutralColors.gray[900]};
+	margin: 16px 0 0 0;
 `;
 
-const H4Text = styled(H4)`
-	line-height: -0.01em;
-	max-width: 467px;
-	color: ${neutralColors.gray[800]};
+const Content = styled(B)`
 	font-weight: 400;
-	font-size: 32px;
+	font-size: 24px;
 `;
 
 const Box = styled.div`
@@ -166,31 +293,41 @@ const Box = styled.div`
 	justify-content: center;
 	align-items: center;
 	text-align: left;
-	max-width: 360px;
+	width: 100%;
 	grid-gap: 32px;
 	overflow-wrap: break-word;
+	${mediaQueries.laptopS} {
+		max-width: 360px;
+	}
 `;
 
 const CompleteBox = styled(Box)`
-	flex-direction: column;
-	justify-content: space-between;
-	max-width: 100%;
+	justify-content: flex-start;
 	align-items: flex-start;
-	${mediaQueries.tablet} {
+	max-width: 100% !important;
+	${mediaQueries.laptopL} {
+		max-width: 570px !important;
 		flex-direction: row;
 	}
 `;
 
-const VideoBox = styled(CompleteBox)``;
-
 const BoxCol = styled(Flex)`
-	width: 100%;
 	text-align: left;
 	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	${mediaQueries.desktop} {
+		justify-content: flex-start;
+	}
 `;
 
-const LargeBox = styled(BoxCol)`
-	max-width: 913px;
+const LastBoxCol = styled(BoxCol)`
+	width: 100%;
+	margin: 50px 0 0 0;
+	justify-content: flex-start;
+	${mediaQueries.desktop} {
+		max-width: 280px;
+	}
 `;
 
 const Wrapper = styled.div`
@@ -199,8 +336,8 @@ const Wrapper = styled.div`
 	justify-content: center;
 	position: relative;
 	width: 100%;
-	margin: 40px 0 0 0;
 	color: ${neutralColors.gray[100]};
+	margin: 0 0 100px 0;
 `;
 
 const Hands = styled.div`
@@ -280,13 +417,18 @@ const Flower2 = styled.div`
 	}
 `;
 
-const GoTo = styled(ButtonLink)`
-	justify-content: flex-start;
-	padding: 15px 0;
-	:hover {
-		background: transparent;
-		color: ${brandColors.pinky[500]};
-	}
+const SocialButtonContainer = styled(FlexCenter)`
+	height: 48px;
+	width: 176px;
+	min-width: 176px;
+	color: ${neutralColors.gray[800]};
+	gap: 12px;
+	font-weight: 500;
+	font-size: 12px;
+	line-height: 16px;
+
+	box-shadow: 0px 3px 20px rgba(212, 218, 238, 0.7);
+	border-radius: 48px;
 `;
 
 const FloatingFigure1 = styled.div`
@@ -306,12 +448,10 @@ const FloatingFigure1 = styled.div`
 `;
 
 const FloatingFigure2 = styled(FloatingFigure1)`
-	margin-top: 10px;
-	left: 70%;
-	background-image: url(/images/givferral/purple-figure.svg);
-	${mediaQueries.desktop} {
-		margin-top: 50px;
-	}
+	width: 70px;
+	height: 40px;
+	background-image: url(/images/givferral/yellow-arc.svg);
+	left: 0;
 `;
 
 const FloatingFigure3 = styled(FloatingFigure1)`
@@ -320,9 +460,30 @@ const FloatingFigure3 = styled(FloatingFigure1)`
 	height: 39px;
 	background-image: url(/images/givferral/purple-curve.svg);
 	margin: auto;
-	margin: -50px 0 0 -50px;
+	margin: -200px 0 0 -120px;
 	left: 0;
 	${mediaQueries.laptopS} {
+		display: unset;
+	}
+`;
+
+const FloatingFigure4 = styled(FloatingFigure1)`
+	display: none;
+	${mediaQueries.laptopS} {
+		margin: 0 50%;
+		top: 0;
+		display: unset;
+	}
+`;
+
+const FloatingFigure5 = styled(FloatingFigure1)`
+	display: none;
+	width: 180px;
+	height: 39px;
+	background-image: url(/images/givferral/pink-curve.svg);
+	right: 0;
+	margin: 0 -300px 200px 0;
+	${mediaQueries.desktop} {
 		display: unset;
 	}
 `;
@@ -332,7 +493,7 @@ const Bee = styled.div`
 	position: absolute;
 	transform: rotate(60deg);
 	top: 5%;
-	right: 40%;
+	right: 32%;
 	bottom: 0;
 	background-image: url(/images/bee1.svg);
 	background-repeat: no-repeat;
@@ -362,6 +523,56 @@ const Dot = styled.div`
 	justify-content: center;
 	align-items: center;
 	margin: 20px 0 0 0;
+`;
+
+const SocialItems = styled(Flex)`
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	gap: 21px;
+	margin: 40px 0 0 0;
+	div:nth-child(1) {
+		margin: 20px 0 0 0;
+	}
+	${mediaQueries.desktop} {
+		margin: 120px 0 0 0;
+		justify-content: flex-start;
+		div:nth-child(1) {
+			margin: -40px 0 0 0;
+		}
+	}
+`;
+
+const SocialCol = styled(Col)`
+	div:nth-child(2) {
+		margin: 50px 0 0 60px;
+	}
+`;
+
+const Screenshots = styled(Flex)`
+	width: 100%;
+	position: relative;
+	flex-direction: column;
+	align-items: center;
+	margin: 100px 0 0 0;
+	${mediaQueries.desktop} {
+		margin: 0;
+		align-items: flex-end;
+	}
+`;
+
+const Screenshot = styled.img`
+	object-fit: cover;
+	max-width: 300px;
+`;
+
+const Screenshot2 = styled(Screenshot)`
+	max-width: 350px;
+	margin: 20px 200px 0 0;
+`;
+
+const ShareButton = styled(Button)`
+	margin: 0 0 0 50px;
 `;
 
 export default GIVferralView;

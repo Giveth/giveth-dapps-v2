@@ -1277,5 +1277,14 @@
 	"label.heres_your_referral": "Here’s your unique referral link to {projectTitle}",
 	"label.share_on_linkedin": "Share on LinkedIn",
 	"label.share_on_facebook": "Share on Facebook",
-	"label.how_does_this_work": "How does this work?"
+	"label.how_does_this_work": "How does this work?",
+	"label.how_referrals_work": "How referrals work",
+	"label.look_for_the_share_and_get_rewarded": "Look for the 'Share & get rewarded' button to generate links to specific pages across the Giveth site.",
+	"label.share_your_referral_link_with_your_friends": "Share your referral link with your friends, family, and community.",
+	"label.share_on_twitter_linkedin_or_facebook": "Share on Twitter, LinkedIn or Facebook, or copy your link to share anywhere!",
+	"label.when_someone_donates_using_your_link": "When someone donates to a verified project via your link, you’ll earn GIV!",
+	"label.your_giv_rewards_become_claimable": "Your GIV rewards become claimable within two weeks from our GIVbacks page.",
+	"label.start_referring!": "Start Referring!",
+	"label.connect_your_wallet_and_get_your_link": "Connect your wallet and get your unique link to share on social media and favourite community channels.",
+	"label.connect_your_wallet_and_generate_your_link": "Connect your wallet and generate your unique referral link."
 }

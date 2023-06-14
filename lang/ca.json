@@ -1274,5 +1274,14 @@
 	"label.heres_your_referral": "",
 	"label.share_on_linkedin": "",
 	"label.share_on_facebook": "",
-	"label.how_does_this_work": ""
+	"label.how_does_this_work": "",
+	"label.how_referrals_work": "",
+	"label.look_for_the_share_and_get_rewarded": "",
+	"label.share_your_referral_link_with_your_friends": "",
+	"label.share_on_twitter_linkedin_or_facebook": "",
+	"label.when_someone_donates_using_your_link": "",
+	"label.your_giv_rewards_become_claimable": "",
+	"label.start_referring!": "",
+	"label.connect_your_wallet_and_get_your_link": "",
+	"label.connect_your_wallet_and_generate_your_link": ""
 }
