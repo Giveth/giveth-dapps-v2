@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import styled, { keyframes } from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Shadow } from '@/components/styled-components/Shadow';
 import {
 	B,
 	brandColors,
@@ -11,6 +10,7 @@ import {
 	neutralColors,
 	mediaQueries,
 } from '@giveth/ui-design-system';
+import { Shadow } from '@/components/styled-components/Shadow';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 
