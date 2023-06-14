@@ -13,9 +13,22 @@ import Divider from '@/components/Divider';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import { IDonationProject } from '@/apollo/types/types';
+import { calculateEstimatedMatchingWithDonationAmount } from '@/helpers/qf';
 
-const EstimatedMatchingToast = () => {
+interface IEstimatedMatchingToast {
+	projectData: IDonationProject;
+	tokenPriceUsdt: number;
+}
+
+const EstimatedMatchingToast = ({
+	projectData,
+	tokenPriceUsdt,
+}: IEstimatedMatchingToast) => {
 	const { formatMessage } = useIntl();
+	const { estimatedMatching } = projectData || {};
+	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
+		estimatedMatching || {};
 	return (
 		<Wrapper>
 			<Upper>
@@ -40,7 +53,14 @@ const EstimatedMatchingToast = () => {
 						</TooltipContent>
 					</IconWithTooltip>
 				</FlexCenter>
-				<B>2400 DAI</B>
+				<B>
+					{calculateEstimatedMatchingWithDonationAmount(
+						tokenPriceUsdt,
+						projectDonationsSqrtRootSum,
+						allProjectsSum,
+						matchingPool,
+					)}
+				</B>
 			</Upper>
 			<Divider />
 			<Bottom>
