@@ -46,7 +46,9 @@ export const PROJECT_CARD_FIELDS = gql`
 		countUniqueDonorsForActiveQfRound
 		countUniqueDonors
 		estimatedMatching {
+			projectDonationsSqrtRootSum
 			allProjectsSum
+			matchingPool
 		}
 	}
 `;
@@ -155,7 +157,9 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			countUniqueDonorsForActiveQfRound
 			countUniqueDonors
 			estimatedMatching {
+				projectDonationsSqrtRootSum
 				allProjectsSum
+				matchingPool
 			}
 			qfRounds {
 				id

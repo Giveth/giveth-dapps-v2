@@ -20,6 +20,7 @@ import NiceBanner from './NiceBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useDonateData } from '@/context/donate.context';
 import { EContentType } from '@/lib/constants/shareContent';
+import { PassportBanner } from '@/components/PassportBanner';
 import ExternalLink from '@/components/ExternalLink';
 import { formatTxLink } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
@@ -34,6 +35,7 @@ const DonateIndex: FC = () => {
 	return (
 		<>
 			<BigArc />
+			<PassportBanner />
 			<Wrapper>
 				{/* <PurchaseXDAI /> */}
 				<NiceBanner />

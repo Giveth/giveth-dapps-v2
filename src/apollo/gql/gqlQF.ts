@@ -8,6 +8,7 @@ export const FETCH_QF_ROUNDS = gql`
 			isActive
 			beginDate
 			endDate
+			minimumPassportScore
 		}
 	}
 `;

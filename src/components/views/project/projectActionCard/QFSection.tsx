@@ -16,6 +16,10 @@ import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
+import {
+	calculateEstimatedMatchingWithDonationAmount,
+	calculateTotalEstimatedMatching,
+} from '@/helpers/qf';
 
 const QFSection = () => {
 	const { formatMessage, locale } = useIntl();
@@ -23,6 +27,8 @@ const QFSection = () => {
 	const { estimatedMatching, sumDonationValueUsdForActiveQfRound } =
 		projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
+	const { projectDonationsSqrtRootSum, matchingPool, allProjectsSum } =
+		estimatedMatching ?? {};
 
 	return (
 		<DonationSectionWrapper gap='24px'>
@@ -63,7 +69,12 @@ const QFSection = () => {
 			)}
 			<Flex flexDirection='column' gap='4px'>
 				<EstimatedMatchingPrice>
-					+ {estimatedMatching?.allProjectsSum}
+					+{' '}
+					{calculateTotalEstimatedMatching(
+						projectDonationsSqrtRootSum,
+						allProjectsSum,
+						matchingPool,
+					)}
 				</EstimatedMatchingPrice>
 				<LightCaption> Estimated matching</LightCaption>
 			</Flex>
@@ -77,17 +88,41 @@ const QFSection = () => {
 						<FlexSameSize justifyContent='space-between'>
 							<Subline>1 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
-							<EndAlignedSubline>1 DAI</EndAlignedSubline>
+							<EndAlignedSubline>
+								{calculateEstimatedMatchingWithDonationAmount(
+									1,
+									projectDonationsSqrtRootSum,
+									allProjectsSum,
+									matchingPool,
+								)}
+								&nbsp; DAI
+							</EndAlignedSubline>
 						</FlexSameSize>
 						<FlexSameSize justifyContent='space-between'>
 							<Subline>10 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
-							<EndAlignedSubline>1 DAI </EndAlignedSubline>
+							<EndAlignedSubline>
+								{calculateEstimatedMatchingWithDonationAmount(
+									10,
+									projectDonationsSqrtRootSum,
+									allProjectsSum,
+									matchingPool,
+								)}
+								&nbsp; DAI
+							</EndAlignedSubline>
 						</FlexSameSize>
 						<FlexSameSize justifyContent='space-between'>
 							<Subline>100 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
-							<EndAlignedSubline>1 DAI </EndAlignedSubline>
+							<EndAlignedSubline>
+								{calculateEstimatedMatchingWithDonationAmount(
+									100,
+									projectDonationsSqrtRootSum,
+									allProjectsSum,
+									matchingPool,
+								)}
+								&nbsp; DAI
+							</EndAlignedSubline>
 						</FlexSameSize>
 						<Flex justifyContent='space-between'>
 							<LightSubline>Last updated: 3h ago</LightSubline>

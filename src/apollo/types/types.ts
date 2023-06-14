@@ -64,8 +64,10 @@ export interface IProject {
 	givbackFactor?: number;
 	countUniqueDonors?: number;
 	countUniqueDonorsForActiveQfRound?: number;
-	estimatedMatching?: {
+	estimatedMatching: {
 		allProjectsSum: number;
+		matchingPool: number;
+		projectDonationsSqrtRootSum: number;
 	};
 	sumDonationValueUsd?: number;
 	sumDonationValueUsdForActiveQfRound?: number;
