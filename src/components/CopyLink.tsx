@@ -10,7 +10,7 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { FC, useState } from 'react';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { Flex } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { isSSRMode } from '@/lib/helpers';
 
