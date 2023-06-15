@@ -38,7 +38,11 @@ const CopyLink: FC<ICopyLink> = ({ url }) => {
 			<CustomButton
 				buttonType='texty-gray'
 				size='small'
-				icon={<IconLink />}
+				leftIcon={
+					<div style={{ padding: '3px 0 0 0' }}>
+						<IconLink />
+					</div>
+				}
 				label={
 					isCopied
 						? `${formatMessage({ id: 'label.copied' })}`

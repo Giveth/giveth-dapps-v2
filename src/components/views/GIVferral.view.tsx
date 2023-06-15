@@ -206,7 +206,7 @@ const GIVferralView = () => {
 								id: 'label.share_and_get_rewarded',
 							})}
 							buttonType='primary'
-							icon={
+							leftIcon={
 								<Image
 									src='/images/icons/gift_white.svg'
 									width={16}

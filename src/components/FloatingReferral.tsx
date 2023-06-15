@@ -6,10 +6,12 @@ import {
 	B,
 	brandColors,
 	IconChevronUp,
+	IconChevronDown,
 	Button,
 	neutralColors,
 	mediaQueries,
 } from '@giveth/ui-design-system';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
@@ -31,9 +33,6 @@ const FloatingButtonReferral: React.FC = () => {
 					setShowModal={setShowModal}
 				/>
 			)}
-			<FloatingButton onClick={handleClick}>
-				Refer your friends <IconChevronUp />
-			</FloatingButton>
 			{isOpen && (
 				<Message>
 					<Body>
@@ -61,6 +60,16 @@ const FloatingButtonReferral: React.FC = () => {
 					/>
 				</Message>
 			)}
+			<ButtonContainer isOpen={isOpen}>
+				<FloatingButton onClick={handleClick} isOpen={isOpen}>
+					Refer your friends{' '}
+					{isOpen ? (
+						<IconChevronDown color={brandColors.pinky[500]} />
+					) : (
+						<IconChevronUp color={brandColors.pinky[500]} />
+					)}
+				</FloatingButton>
+			</ButtonContainer>
 		</FloatingContainer>
 	);
 };
@@ -83,30 +92,31 @@ const slideIn = keyframes`
   }
 `;
 
-const FloatingContainer = styled.div`
+const FloatingContainer = styled(FlexCenter)`
 	display: none;
 	position: fixed;
 	bottom: 2rem;
 	left: 2rem;
 	width: 271px;
 	z-index: 2;
+	box-shadow: ${Shadow.Giv[400]} !important;
+	justify-content: center;
 	${mediaQueries.tablet} {
 		display: block;
 	}
 `;
 
-const FloatingButton = styled.button`
+const FloatingButton = styled.button<{ isOpen: boolean }>`
 	background-color: white;
 	border: none;
-	border-radius: 12px;
 	width: 271px;
 	height: 56px;
-	display: flex;
 	align-items: center;
 	padding: 18px 24px;
 	cursor: pointer;
 	box-shadow: ${Shadow.Neutral[400]};
-	color: ${brandColors.pinky[500]};
+	color: ${props =>
+		props.isOpen ? neutralColors.gray[800] : brandColors.pinky[500]};
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 150%;
@@ -114,15 +124,30 @@ const FloatingButton = styled.button`
 	justify-content: space-between;
 	z-index: 2;
 	position: relative;
+	border-radius: ${props => (!props.isOpen ? '12px' : '0')};
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
 `;
 
-const Message = styled.div`
+const ButtonContainer = styled.div<{ isOpen: boolean }>`
+	display: flex;
+	flex-direction: column-reverse;
+	transform: ${props =>
+		props.isOpen ? 'translateY(-283%)' : 'translateY(0)'};
+	transition: transform 0.3s ease-in-out;
+`;
+
+const Message = styled(FlexCenter)`
+	flex-direction: column;
+	position: absolute;
 	background-color: white;
 	padding: 1rem;
 	width: 100%;
 	animation: ${fadeIn} 0.3s ease-in-out, ${slideIn} 0.3s ease-in-out;
 	position: absolute;
-	bottom: 56px;
+	bottom: 0;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
 	z-index: 1;
 `;
 
@@ -132,6 +157,7 @@ const StyledShareButton = styled(Button)`
 	gap: 8px;
 	padding: 16px 10px;
 	color: ${brandColors.pinky[500]};
+	margin: 18px 0 0 0;
 	&:hover {
 		color: ${brandColors.pinky[500]};
 	}
@@ -151,6 +177,8 @@ const Body = styled(B)`
 	font-size: 14px;
 	line-height: 150%;
 	color: ${neutralColors.gray[800]};
+	padding: 16px 0 0 0;
+	border-top: 1px solid ${neutralColors.gray[300]};
 `;
 
 export default FloatingButtonReferral;

@@ -5,11 +5,11 @@ import {
 	ButtonLink,
 	IconHeartFilled16,
 	IconHeartOutline16,
-	IconShare16,
 	mediaQueries,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
+import Image from 'next/image';
 import Link from 'next/link';
 import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 import { EContentType } from '@/lib/constants/shareContent';
@@ -162,7 +162,17 @@ export const ProjectPublicActions = () => {
 						setShowShareModal(true);
 					}}
 					buttonType='texty-gray'
-					icon={<IconShare16 />}
+					icon={
+						<Image
+							src='/images/icons/gift_gray.svg'
+							width={16}
+							height={16}
+							alt='gift'
+							style={{
+								marginLeft: '8px',
+							}}
+						/>
+					}
 					size='small'
 				/>
 
