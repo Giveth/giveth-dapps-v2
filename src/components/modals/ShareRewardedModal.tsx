@@ -174,41 +174,41 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 								})}
 							</SocialTitle>
 							<SocialDiv gap={'16px'}>
-								<SocialButtonContainer>
-									<TwitterShareButton
-										hashtags={['giveth']}
-										title={shareTitleTwitter}
-										url={url}
-									>
+								<TwitterShareButton
+									hashtags={['giveth']}
+									title={shareTitleTwitter}
+									url={url}
+								>
+									<SocialButtonContainer>
 										<IconTwitter />
-									</TwitterShareButton>
-									{formatMessage({
-										id: 'label.share_on_twitter',
-									})}
-								</SocialButtonContainer>
-								<SocialButtonContainer>
-									<LinkedinShareButton
-										title={shareTitleFacebookAndLinkedin}
-										url={url}
-									>
+										{formatMessage({
+											id: 'label.share_on_twitter',
+										})}
+									</SocialButtonContainer>
+								</TwitterShareButton>
+								<LinkedinShareButton
+									title={shareTitleFacebookAndLinkedin}
+									url={url}
+								>
+									<SocialButtonContainer>
 										<IconLinkedin />
-									</LinkedinShareButton>
-									{formatMessage({
-										id: 'label.share_on_linkedin',
-									})}
-								</SocialButtonContainer>
-								<SocialButtonContainer>
-									<FacebookShareButton
-										hashtag='#giveth'
-										quote={shareTitleFacebookAndLinkedin}
-										url={url}
-									>
+										{formatMessage({
+											id: 'label.share_on_linkedin',
+										})}
+									</SocialButtonContainer>
+								</LinkedinShareButton>
+								<FacebookShareButton
+									hashtag='#giveth'
+									quote={shareTitleFacebookAndLinkedin}
+									url={url}
+								>
+									<SocialButtonContainer>
 										<IconFacebook />
-									</FacebookShareButton>
-									{formatMessage({
-										id: 'label.share_on_facebook',
-									})}
-								</SocialButtonContainer>
+										{formatMessage({
+											id: 'label.share_on_facebook',
+										})}
+									</SocialButtonContainer>
+								</FacebookShareButton>
 							</SocialDiv>
 						</div>
 					)}
