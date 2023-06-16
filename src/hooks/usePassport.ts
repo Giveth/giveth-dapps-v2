@@ -6,6 +6,7 @@ import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { client } from '@/apollo/apolloClient';
 import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
+import { useAppSelector } from '@/features/hooks';
 
 export enum EPassportState {
 	LOADING,
@@ -24,57 +25,65 @@ export const usePassport = () => {
 	const [state, setState] = useState(EPassportState.LOADING);
 	const [score, setScore] = useState<IPassportInfo>();
 	const [currentRound, setCurrentRound] = useState<IQFRound | null>(null);
+	const user = useAppSelector(state => state.user.userData);
+
+	const updateState = useCallback(
+		async (refreshUserScores: IPassportInfo) => {
+			setState(EPassportState.LOADING);
+			try {
+				const {
+					data: { qfRounds },
+				} = await client.query({
+					query: FETCH_QF_ROUNDS,
+					fetchPolicy: 'network-only',
+				});
+
+				setScore(refreshUserScores);
+				if (!qfRounds && !refreshUserScores) {
+					setState(EPassportState.INVALID);
+					return;
+				}
+				const currentRound = (qfRounds as IQFRound[]).find(
+					round => round.isActive,
+				);
+				if (!currentRound) {
+					setState(EPassportState.ENDED);
+					return;
+				} else if (
+					getNowUnixMS() > new Date(currentRound.endDate).getTime()
+				) {
+					setState(EPassportState.ENDED);
+					return;
+				}
+				setCurrentRound(currentRound);
+				if (
+					refreshUserScores === null ||
+					refreshUserScores.passportScore === null
+				) {
+					setState(EPassportState.NOT_CREATED);
+					return;
+				}
+				if (
+					refreshUserScores.passportScore <
+					currentRound.minimumPassportScore
+				) {
+					setState(EPassportState.NOT_ELIGIBLE);
+					return;
+				} else {
+					setState(EPassportState.ELIGIBLE);
+				}
+			} catch (error) {
+				setState(EPassportState.ERROR);
+			}
+		},
+		[],
+	);
 
 	const refreshScore = useCallback(async () => {
 		if (!account) return;
-		setState(EPassportState.LOADING);
-		try {
-			const {
-				data: { qfRounds },
-			} = await client.query({
-				query: FETCH_QF_ROUNDS,
-				fetchPolicy: 'network-only',
-			});
-			const { refreshUserScores } = await fetchPassportScore(account);
-
-			setScore(refreshUserScores);
-			if (!qfRounds && !refreshUserScores) {
-				setState(EPassportState.INVALID);
-				return;
-			}
-			const currentRound = (qfRounds as IQFRound[]).find(
-				round => round.isActive,
-			);
-			if (!currentRound) {
-				setState(EPassportState.ENDED);
-				return;
-			} else if (
-				getNowUnixMS() > new Date(currentRound.endDate).getTime()
-			) {
-				setState(EPassportState.ENDED);
-				return;
-			}
-			setCurrentRound(currentRound);
-			if (
-				refreshUserScores === null ||
-				refreshUserScores.passportScore === null
-			) {
-				setState(EPassportState.NOT_CREATED);
-				return;
-			}
-			if (
-				refreshUserScores.passportScore <
-				currentRound.minimumPassportScore
-			) {
-				setState(EPassportState.NOT_ELIGIBLE);
-				return;
-			} else {
-				setState(EPassportState.ELIGIBLE);
-			}
-		} catch (error) {
-			setState(EPassportState.ERROR);
-		}
-	}, [account]);
+		const { refreshUserScores } = await fetchPassportScore(account);
+		await updateState(refreshUserScores);
+	}, [account, updateState]);
 
 	const handleSign = async () => {
 		if (!library || !account) return;
@@ -93,20 +102,22 @@ export const usePassport = () => {
 	};
 
 	useEffect(() => {
-		if (!library || !account) {
+		if (!user || !account) {
 			return setState(EPassportState.NOT_CONNECTED);
 		}
-
-		const fetchData = async () => {
+		console.log('user', user);
+		if (user.passportScore === null) {
+			console.log('Passport score is null in our database');
 			const passports = getPassports();
 			if (passports[account.toLowerCase()]) {
-				await refreshScore();
+				setState(EPassportState.NOT_CREATED);
 			} else {
 				setState(EPassportState.NOT_SIGNED);
 			}
-		};
+		} else {
+			updateState(user);
+		}
+	}, [account, updateState, user]);
 
-		fetchData();
-	}, [account, library, refreshScore]);
 	return { state, score, currentRound, handleSign, refreshScore };
 };
