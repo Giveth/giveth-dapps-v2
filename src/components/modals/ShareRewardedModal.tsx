@@ -262,7 +262,6 @@ const SocialTitle = styled(B)`
 	color: ${neutralColors.gray[700]};
 	text-align: left;
 	margin: 0 0 16px 0;
-	text-transform: capitalize;
 `;
 
 const SocialButtonContainer = styled(FlexCenter)`

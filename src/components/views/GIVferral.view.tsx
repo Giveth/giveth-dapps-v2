@@ -239,6 +239,7 @@ const Section = styled(Flex)`
 	margin: 80px 0;
 	justify-content: space-between;
 	align-items: center;
+
 	${mediaQueries.desktop} {
 		flex-direction: row;
 	}
@@ -282,6 +283,8 @@ const LeadText = styled(Lead)`
 const Content = styled(B)`
 	font-weight: 400;
 	font-size: 24px;
+	border-top: 1px solid ${neutralColors.gray[300]};
+	padding: 16px 0 0 0;
 `;
 
 const Box = styled.div`

@@ -16,9 +16,9 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 
-const FloatingButtonReferral: React.FC = () => {
-	const [showModal, setShowModal] = useState<boolean>(false);
-	const [isOpen, setIsOpen] = useState<boolean>(false);
+const FloatingButtonReferral = () => {
+	const [showModal, setShowModal] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
 	const { formatMessage } = useIntl();
 
 	const handleClick = () => {
@@ -26,7 +26,7 @@ const FloatingButtonReferral: React.FC = () => {
 	};
 
 	return (
-		<FloatingContainer>
+		<FloatingContainer isOpen={isOpen}>
 			{showModal && (
 				<ShareRewardedModal
 					contentType={EContentType.thisProject}
@@ -36,8 +36,9 @@ const FloatingButtonReferral: React.FC = () => {
 			{isOpen && (
 				<Message>
 					<Body>
-						Share this page with your friends, and get rewarded when
-						they donate to verified projects!
+						{formatMessage({
+							id: 'label.share_this_page_with_your_friends',
+						})}
 					</Body>
 					<StyledShareButton
 						label={formatMessage({
@@ -61,12 +62,24 @@ const FloatingButtonReferral: React.FC = () => {
 				</Message>
 			)}
 			<ButtonContainer isOpen={isOpen}>
-				<FloatingButton onClick={handleClick} isOpen={isOpen}>
-					Refer your friends{' '}
+				<FloatingButton
+					onClick={handleClick}
+					isOpen={isOpen}
+					// label={formatMessage({ id: 'label.refer_your_friends' })}
+				>
+					{formatMessage({
+						id: 'label.share_and_get_rewarded',
+					})}{' '}
 					{isOpen ? (
-						<IconChevronDown color={brandColors.pinky[500]} />
+						<IconChevronDown
+							color={brandColors.pinky[500]}
+							size={24}
+						/>
 					) : (
-						<IconChevronUp color={brandColors.pinky[500]} />
+						<IconChevronUp
+							color={brandColors.pinky[500]}
+							size={24}
+						/>
 					)}
 				</FloatingButton>
 			</ButtonContainer>
@@ -83,48 +96,44 @@ const fadeIn = keyframes`
   }
 `;
 
-const slideIn = keyframes`
-  from {
-    transform: translateY(2rem);
-  }
-  to {
-    transform: translateY(0);
-  }
-`;
-
-const FloatingContainer = styled(FlexCenter)`
+const FloatingContainer = styled(FlexCenter)<{ isOpen: boolean }>`
 	display: none;
 	position: fixed;
 	bottom: 2rem;
 	left: 2rem;
-	width: 271px;
+	padding: ${({ isOpen }) => (isOpen ? ' 6px 0' : '0')};
+	width: ${({ isOpen }) => (isOpen ? '331px' : '271px')};
 	z-index: 2;
-	box-shadow: ${Shadow.Giv[400]} !important;
 	justify-content: center;
+	border-radius: 12px;
+	background: white;
 	${mediaQueries.tablet} {
 		display: block;
 	}
+	box-shadow: ${props =>
+		props.isOpen ? ` ${Shadow.Giv[400]} !important` : 'none'};
+	transition: width 0.3s ease-in-out;
 `;
 
 const FloatingButton = styled.button<{ isOpen: boolean }>`
 	background-color: white;
+	text-transform: capitalize;
 	border: none;
-	width: 271px;
+	width: ${({ isOpen }) => (isOpen ? '331px' : '271px')};
 	height: 56px;
 	align-items: center;
 	padding: 18px 24px;
 	cursor: pointer;
-	box-shadow: ${Shadow.Neutral[400]};
-	color: ${props =>
-		props.isOpen ? neutralColors.gray[800] : brandColors.pinky[500]};
+	color: ${({ isOpen }) =>
+		isOpen ? neutralColors.gray[800] : brandColors.pinky[500]};
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 150%;
 	display: flex;
 	justify-content: space-between;
-	z-index: 2;
+	z-index: 4 !important;
 	position: relative;
-	border-radius: ${props => (!props.isOpen ? '12px' : '0')};
+	border-radius: ${({ isOpen }) => (!isOpen ? '12px' : '0')};
 	border-top-left-radius: 12px;
 	border-top-right-radius: 12px;
 `;
@@ -132,23 +141,30 @@ const FloatingButton = styled.button<{ isOpen: boolean }>`
 const ButtonContainer = styled.div<{ isOpen: boolean }>`
 	display: flex;
 	flex-direction: column-reverse;
-	transform: ${props =>
-		props.isOpen ? 'translateY(-283%)' : 'translateY(0)'};
+	transform: ${({ isOpen }) =>
+		isOpen ? 'translateY(-290%)' : 'translateY(0)'};
 	transition: transform 0.3s ease-in-out;
+	* {
+		background: white !important;
+		box-shadow: none !important;
+	}
+	box-shadow: ${({ isOpen }) =>
+		isOpen ? 'none' : `${Shadow.Giv[400]} !important`};
+
+	border-radius: 12px;
 `;
 
 const Message = styled(FlexCenter)`
 	flex-direction: column;
-	position: absolute;
-	background-color: white;
-	padding: 1rem;
+	padding: 0 1rem 1rem 1rem;
 	width: 100%;
-	animation: ${fadeIn} 0.3s ease-in-out, ${slideIn} 0.3s ease-in-out;
-	position: absolute;
+	animation: ${fadeIn} 0.6s ease-in-out;
 	bottom: 0;
 	border-bottom-left-radius: 12px;
 	border-bottom-right-radius: 12px;
 	z-index: 1;
+	background: white;
+	transform: translateY(3.5rem);
 `;
 
 const StyledShareButton = styled(Button)`
@@ -158,6 +174,7 @@ const StyledShareButton = styled(Button)`
 	padding: 16px 10px;
 	color: ${brandColors.pinky[500]};
 	margin: 18px 0 0 0;
+	width: 100%;
 	&:hover {
 		color: ${brandColors.pinky[500]};
 	}
@@ -177,7 +194,7 @@ const Body = styled(B)`
 	font-size: 14px;
 	line-height: 150%;
 	color: ${neutralColors.gray[800]};
-	padding: 16px 0 0 0;
+	padding: 16px 12px 0 12px;
 	border-top: 1px solid ${neutralColors.gray[300]};
 `;
 

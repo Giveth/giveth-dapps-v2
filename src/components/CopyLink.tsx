@@ -110,8 +110,6 @@ const ProjectLink = styled(GLink)`
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 150%;
-	${mediaQueries.tablet} {
-	}
 `;
 
 export default CopyLink;

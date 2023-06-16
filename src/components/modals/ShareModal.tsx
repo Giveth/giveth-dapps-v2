@@ -44,9 +44,12 @@ interface IShareRewardedModal extends IModal {
 const ShareModal: FC<IShareRewardedModal> = props => {
 	const { userData: user } = useAppSelector(state => state.user);
 	const { projectHref, setShowModal, contentType } = props;
+	const chainvineId = user?.chainvineId!;
+	const referral = chainvineId ? `?referrer_id=${chainvineId}` : '';
 	const url = projectHref
-		? fullPath(slugToProjectView(projectHref))
-		: fullPath(Routes.Projects);
+		? fullPath(slugToProjectView(projectHref + referral))
+		: fullPath(Routes.Projects + referral);
+
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
@@ -154,7 +157,6 @@ const SocialTitle = styled(B)`
 	color: ${neutralColors.gray[700]};
 	text-align: left;
 	margin: 0 0 16px 0;
-	text-transform: capitalize;
 `;
 
 const SocialButtonContainer = styled(FlexCenter)`
@@ -193,10 +195,10 @@ const HowItWorksDiv = styled(Flex)<{ topBorder: boolean }>`
 
 const LinkContainer = styled(Flex)`
 	width: 100%;
-	height: 80px;
 	margin: 0 0 24px 0;
-	div {
-		width: 100%;
+	min-height: 130px;
+	${mediaQueries.tablet} {
+		min-height: 80px;
 	}
 `;
 
