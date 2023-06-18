@@ -15,9 +15,10 @@ import {
 	IconTwitter,
 	IconLinkedin,
 	IconFacebook,
+	IconAlertTriangleOutline,
 	mediaQueries,
 } from '@giveth/ui-design-system';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { Modal } from './Modal';
@@ -87,7 +88,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 		: fullPath(Routes.Projects + `?referrer_id=${user?.chainvineId}`);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-
+	const [error, setError] = useState(false);
 	const chainvineId = user?.chainvineId;
 	const notSigned = !isEnabled || !isSignedIn;
 
@@ -105,11 +106,16 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 	};
 
 	const setReferral = async () => {
-		await dispatch(
-			startChainvineReferral({
-				address: user?.walletAddress!,
-			}),
-		);
+		try {
+			await dispatch(
+				startChainvineReferral({
+					address: user?.walletAddress!,
+				}),
+			);
+			setError(false);
+		} catch (error) {
+			setError(true);
+		}
 	};
 
 	useEffect(() => {
@@ -121,12 +127,26 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerIcon={<Image src={GiftIcon} alt='gift icon' />}
-			headerTitle={formatMessage({ id: 'label.share_and_earn_rewards' })}
+			headerIcon={
+				error ? (
+					<IconAlertTriangleOutline size={32} />
+				) : (
+					<Image src={GiftIcon} alt='gift icon' />
+				)
+			}
+			headerTitle={
+				error
+					? 'Oops'
+					: formatMessage({ id: 'label.share_and_earn_rewards' })
+			}
 			headerTitlePosition='left'
 		>
 			<Content>
-				{notSigned
+				{error
+					? formatMessage({
+							id: 'label.we_ran_into_an_issue_and_couldnt_generate_your_referral',
+					  })
+					: notSigned
 					? getMessageWithBoldText(
 							formatMessage({
 								id: 'label.connet_your_wallet_and_sign_in_to_get_your_referral',
@@ -146,7 +166,15 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 					  formatMessage({ id: 'label.heres_your_unique_referral' })}
 			</Content>
 			<Container>
-				{notSigned ? (
+				{error ? (
+					<ConnectButton
+						label={formatMessage({
+							id: 'label.create_referrral_id_again',
+						})}
+						onClick={() => setReferral()}
+						buttonType='primary'
+					/>
+				) : notSigned ? (
 					<ConnectButton
 						label={formatMessage({
 							id: !isEnabled
@@ -164,7 +192,9 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 					)
 				)}
 				<HowItWorksDiv
-					topBorder={isSignedIn && chainvineId ? false : true}
+					topBorder={
+						error ? false : isSignedIn && chainvineId ? false : true
+					}
 				>
 					{isSignedIn && chainvineId && (
 						<div>
@@ -212,19 +242,30 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 							</SocialDiv>
 						</div>
 					)}
-					<HowItWorksContent>
-						<Body>
-							{formatMessage({ id: 'label.how_does_this_work' })}
-						</Body>
-						<span>
-							<a>
-								<Link target='_blank' href={Routes.Referral}>
-									{formatMessage({ id: 'label.learn_more' })}
-								</Link>{' '}
-							</a>
-							<IconExternalLink color={brandColors.pinky[500]} />
-						</span>
-					</HowItWorksContent>
+					{!error && (
+						<HowItWorksContent>
+							<Body>
+								{formatMessage({
+									id: 'label.how_does_this_work',
+								})}
+							</Body>
+							<span>
+								<a>
+									<Link
+										target='_blank'
+										href={Routes.Referral}
+									>
+										{formatMessage({
+											id: 'label.learn_more',
+										})}
+									</Link>{' '}
+								</a>
+								<IconExternalLink
+									color={brandColors.pinky[500]}
+								/>
+							</span>
+						</HowItWorksContent>
+					)}
 				</HowItWorksDiv>
 			</Container>
 		</Modal>

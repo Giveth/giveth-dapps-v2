@@ -1292,5 +1292,7 @@
 	"label.refer_your_friends_and_earn_giv": "Refer your friends and earn GIV when they donate",
 	"label.here_is_your_link": "Here's your link",
 	"label.refer_your_friends": "Refer your friends",
-	"label.share_this_page_with_your_friends": "Share this page with your friends, and get rewarded when they donate to verified projects!"
+	"label.share_this_page_with_your_friends": "Share this page with your friends, and get rewarded when they donate to verified projects!",
+	"label.we_ran_into_an_issue_and_couldnt_generate_your_referral": "We ran into an issue and couldn’t generate your referral ID. Please try again.",
+	"label.create_referrral_id_again": "Create referral Id again"
 }
