@@ -13,23 +13,33 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
+import { captureException } from '@sentry/nextjs';
+import { useEffect, useState } from 'react';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectWalletAddress from '@/components/views/project/projectDonations/ProjectWalletAddress';
 import { useProjectContext } from '@/context/project.context';
-import { calculateTotalEstimatedMatching, hasActiveRound } from '@/helpers/qf';
+import { calculateTotalEstimatedMatching } from '@/helpers/qf';
 import { Flex } from '@/components/styled-components/Flex';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
+import { EDonationStatus, ESortby, EDirection } from '@/apollo/types/gqlEnums';
+import {
+	IDonationsByProjectId,
+	IDonationsByProjectIdGQL,
+} from '@/apollo/types/gqlTypes';
+import { showToastError } from '@/lib/helpers';
+
+const donationsPerPage = 10;
 
 interface IProjectTotalFundCardProps {
 	selectedQF: string | null;
-	totalDonationsUsd: number;
 }
 
-const ProjectTotalFundCard = ({
-	selectedQF,
-	totalDonationsUsd,
-}: IProjectTotalFundCardProps) => {
-	const { projectData } = useProjectContext();
+const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
+	const [donationInfo, setDonationInfo] = useState<IDonationsByProjectId>();
+	const { projectData, isAdmin } = useProjectContext();
 	const {
+		id,
 		totalDonations,
 		addresses,
 		qfRounds,
@@ -38,13 +48,43 @@ const ProjectTotalFundCard = ({
 	} = projectData || {};
 	const { formatMessage } = useIntl();
 	const recipientAddresses = addresses?.filter(a => a.isRecipient);
-	const isQFActive = hasActiveRound(qfRounds);
-	console.log('Selected', selectedQF);
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
 	const selectedQFData = qfRounds?.find(round => round.id === selectedQF);
-	console.log('selectedQFData', selectedQFData);
+
+	useEffect(() => {
+		if (!id) return;
+		client
+			.query({
+				query: FETCH_PROJECT_DONATIONS,
+				variables: {
+					projectId: parseInt(id),
+					skip: 0,
+					take: donationsPerPage,
+					status: isAdmin ? null : EDonationStatus.VERIFIED,
+					qfRoundId:
+						selectedQF !== null ? parseInt(selectedQF) : undefined,
+					orderBy: {
+						field: ESortby.CREATIONDATE,
+						direction: EDirection.DESC,
+					},
+				},
+			})
+			.then((res: IDonationsByProjectIdGQL) => {
+				const donationsByProjectId = res.data.donationsByProjectId;
+				setDonationInfo(donationsByProjectId);
+			})
+			.catch((error: unknown) => {
+				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'fetchProjectDonation',
+					},
+				});
+			});
+	}, [id, isAdmin, selectedQF]);
+
 	return (
 		<Wrapper>
 			{selectedQF === null ? (
@@ -69,7 +109,9 @@ const ProjectTotalFundCard = ({
 					{totalDonations && totalDonations > 0 ? (
 						<div>
 							<TotalFund>
-								{'$' + totalDonationsUsd.toFixed(2)}
+								{'$' +
+									donationInfo?.totalUsdBalance.toFixed(2) ||
+									'0'}
 							</TotalFund>
 							<EstimatedMatchingSection
 								justifyContent='space-between'

@@ -50,8 +50,7 @@ interface IOrder {
 }
 
 interface IProjectDonationTable {
-	donations: IDonation[];
-	totalDonations?: number;
+	selectedQF: string | null;
 }
 
 interface PageDonations {
@@ -59,14 +58,8 @@ interface PageDonations {
 	totalCount?: number;
 }
 
-const ProjectDonationTable = ({
-	donations,
-	totalDonations,
-}: IProjectDonationTable) => {
-	const [pageDonations, setPageDonations] = useState<PageDonations>({
-		donations: donations,
-		totalCount: totalDonations,
-	});
+const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
+	const [pageDonations, setPageDonations] = useState<PageDonations>();
 	const [page, setPage] = useState<number>(0);
 	const [order, setOrder] = useState<IOrder>({
 		by: EOrderBy.CreationDate,
@@ -105,6 +98,8 @@ const ProjectDonationTable = ({
 				query: FETCH_PROJECT_DONATIONS,
 				variables: {
 					projectId: parseInt(id),
+					qfRoundId:
+						selectedQF !== null ? parseInt(selectedQF) : undefined,
 					take: itemPerPage,
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },
@@ -117,7 +112,7 @@ const ProjectDonationTable = ({
 			}
 		};
 		fetchProjectDonations();
-	}, [page, order.by, order.direction, id]);
+	}, [page, order.by, order.direction, id, isAdmin, selectedQF]);
 
 	return (
 		<Wrapper>
