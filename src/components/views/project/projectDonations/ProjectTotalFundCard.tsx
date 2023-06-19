@@ -55,6 +55,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 
 	useEffect(() => {
 		if (!id) return;
+		//TODO: should change to new endpoint for fetching donations amount
 		client
 			.query({
 				query: FETCH_PROJECT_DONATIONS,
