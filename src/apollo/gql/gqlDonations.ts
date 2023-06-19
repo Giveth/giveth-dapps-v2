@@ -47,6 +47,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 		$take: Int
 		$skip: Int
 		$traceable: Boolean
+		$qfRoundId: Int
 		$projectId: Int!
 		$searchTerm: String
 		$orderBy: SortBy
@@ -56,6 +57,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 			take: $take
 			skip: $skip
 			traceable: $traceable
+			qfRoundId: $qfRoundId
 			projectId: $projectId
 			searchTerm: $searchTerm
 			orderBy: $orderBy
@@ -70,6 +72,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 				}
 			}
 			totalCount
+			totalUsdBalance
 		}
 	}
 `;

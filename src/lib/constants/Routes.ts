@@ -54,6 +54,7 @@ const Routes = {
 	Landing: '/landings',
 	HowToBuyXdai: '/how-to-buy-xdai',
 	PurchaseXdai: '/purchase-xdai',
+	Passport: '/passport',
 };
 
 export default Routes;

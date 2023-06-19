@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { GetServerSideProps } from 'next/types';
 import Head from 'next/head';
 import { captureException } from '@sentry/nextjs';
@@ -14,12 +14,23 @@ import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import config from '@/configuration';
 import { DonateProvider } from '@/context/donate.context';
 import DonateIndex from '@/components/views/donate/DonateIndex';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowFooter } from '@/features/general/general.slice';
 
 export interface IDonateRouteProps {
 	project: IDonationProject;
 }
 
 const DonateRoute: FC<IDonateRouteProps> = ({ project }) => {
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		dispatch(setShowFooter(false));
+		return () => {
+			dispatch(setShowFooter(true));
+		};
+	}, []);
+
 	return (
 		<DonateProvider project={project}>
 			<Head>

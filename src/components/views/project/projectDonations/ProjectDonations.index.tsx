@@ -35,6 +35,8 @@ const ProjectDonationsIndex = () => {
 					skip: 0,
 					take: donationsPerPage,
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
+					qfRoundId:
+						selectedQF !== null ? parseInt(selectedQF) : undefined,
 					orderBy: {
 						field: ESortby.CREATIONDATE,
 						direction: EDirection.DESC,
@@ -53,7 +55,7 @@ const ProjectDonationsIndex = () => {
 					},
 				});
 			});
-	}, [id, isAdmin]);
+	}, [id, isAdmin, selectedQF]);
 
 	return (
 		<>
@@ -63,7 +65,10 @@ const ProjectDonationsIndex = () => {
 			/>
 			<StyledRow>
 				<Col lg={4}>
-					<ProjectTotalFundCard />
+					<ProjectTotalFundCard
+						selectedQF={selectedQF}
+						totalDonationsUsd={donationInfo?.totalUsdBalance || 0}
+					/>
 				</Col>
 				{donationInfo?.donations &&
 					donationInfo.donations.length > 0 && (

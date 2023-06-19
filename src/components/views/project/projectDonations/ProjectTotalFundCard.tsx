@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import styled from 'styled-components';
 import {
 	B,
@@ -17,27 +16,40 @@ import { useIntl } from 'react-intl';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectWalletAddress from '@/components/views/project/projectDonations/ProjectWalletAddress';
 import { useProjectContext } from '@/context/project.context';
-import { hasActiveRound } from '@/helpers/qf';
+import { calculateTotalEstimatedMatching, hasActiveRound } from '@/helpers/qf';
 import { Flex } from '@/components/styled-components/Flex';
 
-const ProjectTotalFundCard: FC = () => {
+interface IProjectTotalFundCardProps {
+	selectedQF: string | null;
+	totalDonationsUsd: number;
+}
+
+const ProjectTotalFundCard = ({
+	selectedQF,
+	totalDonationsUsd,
+}: IProjectTotalFundCardProps) => {
 	const { projectData } = useProjectContext();
 	const {
 		totalDonations,
 		addresses,
 		qfRounds,
 		countUniqueDonorsForActiveQfRound,
+		estimatedMatching,
 	} = projectData || {};
 	const { formatMessage } = useIntl();
 	const recipientAddresses = addresses?.filter(a => a.isRecipient);
 	const isQFActive = hasActiveRound(qfRounds);
+	console.log('Selected', selectedQF);
+	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
+		estimatedMatching || {};
+
+	const selectedQFData = qfRounds?.find(round => round.id === selectedQF);
+	console.log('selectedQFData', selectedQFData);
 	return (
 		<Wrapper>
-			{!isQFActive ? (
+			{selectedQF === null ? (
 				<UpperSection>
-					<LeadStyled>
-						{formatMessage({ id: 'label.all_time_funding' })}
-					</LeadStyled>
+					<B>All time donations received</B>
 					{totalDonations && totalDonations > 0 ? (
 						<TotalFund>{'$' + totalDonations.toFixed(2)}</TotalFund>
 					) : (
@@ -52,22 +64,29 @@ const ProjectTotalFundCard: FC = () => {
 				<div>
 					<BorderedFlex>
 						<P>Round: &nbsp;</P>
-						<B>QF round 1 donations</B>
+						<B>QF round {selectedQF} donations</B>
 					</BorderedFlex>
 					{totalDonations && totalDonations > 0 ? (
 						<div>
 							<TotalFund>
-								{'$' + totalDonations.toFixed(2)}
+								{'$' + totalDonationsUsd.toFixed(2)}
 							</TotalFund>
 							<EstimatedMatchingSection
 								justifyContent='space-between'
 								alignItems='center'
 							>
 								<EstimatedMatchingPrice>
-									+ $2000.00
+									+ $
+									{calculateTotalEstimatedMatching(
+										projectDonationsSqrtRootSum,
+										allProjectsSum,
+										matchingPool,
+									).toFixed(2)}
 								</EstimatedMatchingPrice>
 								<EstematedMatchingText>
-									Estimated Matching
+									{selectedQFData?.isActive
+										? 'Estimated Matching'
+										: 'Matching Funds'}
 								</EstematedMatchingText>
 							</EstimatedMatchingSection>
 							<div>
@@ -90,11 +109,7 @@ const ProjectTotalFundCard: FC = () => {
 			)}
 
 			<BottomSection>
-				<P>
-					{formatMessage({
-						id: 'label.associated_wallet_address',
-					})}
-				</P>
+				<CustomP>Project recipient address</CustomP>
 				{recipientAddresses?.map(addObj => (
 					<ProjectWalletAddress
 						key={addObj.networkId}
@@ -164,6 +179,11 @@ const EstematedMatchingText = styled(SublineBold)`
 const LightSubline = styled(Subline)`
 	display: inline-block;
 	color: ${neutralColors.gray[700]};
+`;
+
+const CustomP = styled(P)`
+	padding-bottom: 8px;
+	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
 
 export default ProjectTotalFundCard;

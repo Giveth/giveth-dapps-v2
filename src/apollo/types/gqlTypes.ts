@@ -30,6 +30,7 @@ export interface IDonationsByProjectIdGQL {
 export interface IDonationsByProjectId {
 	donations: IDonation[];
 	totalCount: number;
+	totalUsdBalance: number;
 }
 
 export interface IUserProjects {
