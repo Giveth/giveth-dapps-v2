@@ -114,6 +114,9 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 		fetchProjectDonations();
 	}, [page, order.by, order.direction, id, isAdmin, selectedQF]);
 
+	//TODO: Show meaningful message when there is no donation
+	if (pageDonations?.totalCount === 0) return null;
+
 	return (
 		<Wrapper>
 			<DonationTableWrapper>
