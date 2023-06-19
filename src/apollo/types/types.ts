@@ -219,6 +219,7 @@ export interface IDonation {
 	anonymous?: boolean;
 	status: EDonationStatus;
 	onramperId?: string;
+	qfRound?: IQFRound;
 }
 
 export interface IWalletDonation extends IDonation {
