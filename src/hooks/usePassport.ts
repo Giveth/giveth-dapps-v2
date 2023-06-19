@@ -107,6 +107,7 @@ export const usePassport = () => {
 		}
 		console.log('user', user);
 		if (user.passportScore === null) {
+			setScore(user);
 			console.log('Passport score is null in our database');
 			const passports = getPassports();
 			if (passports[account.toLowerCase()]) {
