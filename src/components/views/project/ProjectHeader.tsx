@@ -33,7 +33,7 @@ const ProjectHeader = () => {
 		<ImageWrapper>
 			<ProjectImage src={image || ''} alt='test' loading='lazy' />
 			<Title>
-				{title}
+				<div>{title}</div>
 				<ProjectOwnerWithPfp user={adminUser} />
 			</Title>
 		</ImageWrapper>
@@ -59,12 +59,14 @@ const Title = styled(H3)`
 	bottom: 40px;
 	left: 40px;
 	color: #fff;
-	font-size: 24px;
 	font-weight: bold;
 	text-align: left;
 	z-index: 1;
 	max-width: 90%; // Set max-width to a suitable percentage value based on your preference
 	white-space: pre-wrap; // Allows the text to wrap to the next line
+	> div:first-child {
+		margin-bottom: 4px;
+	}
 `;
 
 export default ProjectHeader;

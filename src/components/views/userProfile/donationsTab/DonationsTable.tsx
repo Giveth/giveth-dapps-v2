@@ -118,7 +118,8 @@ const Currency = styled.div`
 `;
 
 const DonationRowWrapper = styled(RowWrapper)`
-	&:hover > div {
+	&:hover > div,
+	&:hover > a {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
 	}
