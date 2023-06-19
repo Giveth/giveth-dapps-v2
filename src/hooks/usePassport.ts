@@ -150,23 +150,25 @@ export const usePassport = () => {
 				currentRound: null,
 			});
 		}
-		if (user.passportScore === null) {
-			console.log('Passport score is null in our database');
-			const passports = getPassports();
-			let _state;
-			if (passports[account.toLowerCase()]) {
-				_state = EPassportState.NOT_CREATED;
+
+		const fetchData = async () => {
+			if (user.passportScore === null) {
+				console.log('Passport score is null in our database');
+				const passports = getPassports();
+				if (passports[account.toLowerCase()]) {
+					await updateState(user);
+				} else {
+					setInfo({
+						passportState: EPassportState.NOT_SIGNED,
+						passportScore: null,
+						currentRound: null,
+					});
+				}
 			} else {
-				_state = EPassportState.NOT_SIGNED;
+				await updateState(user);
 			}
-			setInfo({
-				passportState: _state,
-				passportScore: null,
-				currentRound: null,
-			});
-		} else {
-			updateState(user);
-		}
+		};
+		fetchData();
 	}, [account, updateState, user]);
 
 	return { info, handleSign, refreshScore };
