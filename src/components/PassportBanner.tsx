@@ -13,10 +13,10 @@ import {
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import Link from 'next/link';
 import { Flex } from './styled-components/Flex';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
-import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 
 enum EPBGState {
@@ -67,7 +67,7 @@ export const PassportBannerData: IData = {
 		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
 		link: {
 			label: 'label.passport.link.update_score',
-			url: links.PASSPORT,
+			url: Routes.Passport,
 		},
 	},
 	[EPassportState.NOT_ELIGIBLE]: {
@@ -76,7 +76,7 @@ export const PassportBannerData: IData = {
 		icon: <IconAlertTriangleFilled24 color={brandColors.giv[500]} />,
 		link: {
 			label: 'label.passport.link.update_score',
-			url: links.PASSPORT,
+			url: Routes.Passport,
 		},
 	},
 	[EPassportState.ELIGIBLE]: {
@@ -99,7 +99,7 @@ export const PassportBannerData: IData = {
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 		link: {
 			label: 'label.passport.link.go_to_passport',
-			url: links.PASSPORT,
+			url: Routes.Passport,
 		},
 	},
 	[EPassportState.ERROR]: {
@@ -140,22 +140,36 @@ export const PassportBanner = () => {
 						</strong>
 					)}
 			</P>
-			{PassportBannerData[passportState]?.link && (
-				<StyledLink
-					as='a'
-					href={PassportBannerData[passportState].link?.url}
-					target='_blank'
-					referrerPolicy='no-referrer'
-					rel='noreferrer'
-				>
-					<GLink>
-						{formatMessage({
-							id: PassportBannerData[passportState].link?.label,
-						})}
-					</GLink>
-					<IconExternalLink16 />
-				</StyledLink>
-			)}
+			{PassportBannerData[passportState].link &&
+				(PassportBannerData[passportState].link!.url.startsWith('/') ? (
+					<Link href={PassportBannerData[passportState].link!.url}>
+						<StyledLink>
+							<GLink>
+								{formatMessage({
+									id: PassportBannerData[passportState].link
+										?.label,
+								})}
+							</GLink>
+							<IconExternalLink16 />
+						</StyledLink>
+					</Link>
+				) : (
+					<StyledLink
+						as='a'
+						href={PassportBannerData[passportState].link?.url}
+						target='_blank'
+						referrerPolicy='no-referrer'
+						rel='noreferrer'
+					>
+						<GLink>
+							{formatMessage({
+								id: PassportBannerData[passportState].link
+									?.label,
+							})}
+						</GLink>
+						<IconExternalLink16 />
+					</StyledLink>
+				))}
 			{passportState === EPassportState.NOT_CONNECTED && (
 				<StyledLink onClick={() => connectThenSignIn()}>
 					<GLink>
