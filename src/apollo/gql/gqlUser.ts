@@ -70,7 +70,7 @@ export const FETCH_USER_PROJECTS = gql`
 
 export const FETCH_USER_DONATIONS = gql`
 	${DONATION_CORE_FIELDS}
-	query FetchUserProjects(
+	query FetchUserDonations(
 		$take: Int
 		$skip: Int
 		$userId: Int!
@@ -94,6 +94,11 @@ export const FETCH_USER_DONATIONS = gql`
 					id
 					title
 					slug
+				}
+				qfRound {
+					id
+					name
+					isActive
 				}
 				createdAt
 				status
