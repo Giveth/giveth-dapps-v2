@@ -20,16 +20,30 @@ export enum EPassportState {
 	ERROR,
 }
 
+export interface IPassportAndStateInfo {
+	passportState: EPassportState;
+	passportScore: number | null;
+	currentRound: IQFRound | null;
+}
+
+const initialInfo = {
+	passportState: EPassportState.LOADING,
+	passportScore: null,
+	currentRound: null,
+};
+
 export const usePassport = () => {
 	const { account, library } = useWeb3React();
-	const [state, setState] = useState(EPassportState.LOADING);
-	const [score, setScore] = useState<IPassportInfo>();
-	const [currentRound, setCurrentRound] = useState<IQFRound | null>(null);
+	const [info, setInfo] = useState<IPassportAndStateInfo>(initialInfo);
 	const user = useAppSelector(state => state.user.userData);
 
 	const updateState = useCallback(
 		async (refreshUserScores: IPassportInfo) => {
-			setState(EPassportState.LOADING);
+			setInfo({
+				passportState: EPassportState.LOADING,
+				passportScore: null,
+				currentRound: null,
+			});
 			try {
 				const {
 					data: { qfRounds },
@@ -38,42 +52,61 @@ export const usePassport = () => {
 					fetchPolicy: 'network-only',
 				});
 
-				setScore(refreshUserScores);
+				// setScore(refreshUserScores);
 				if (!qfRounds && !refreshUserScores) {
-					setState(EPassportState.INVALID);
-					return;
+					return setInfo({
+						passportState: EPassportState.INVALID,
+						passportScore: null,
+						currentRound: null,
+					});
 				}
 				const currentRound = (qfRounds as IQFRound[]).find(
 					round => round.isActive,
 				);
 				if (!currentRound) {
-					setState(EPassportState.ENDED);
-					return;
+					return setInfo({
+						passportState: EPassportState.ENDED,
+						passportScore: refreshUserScores.passportScore,
+						currentRound: null,
+					});
 				} else if (
 					getNowUnixMS() > new Date(currentRound.endDate).getTime()
 				) {
-					setState(EPassportState.ENDED);
-					return;
+					return setInfo({
+						passportState: EPassportState.ENDED,
+						passportScore: refreshUserScores.passportScore,
+						currentRound: currentRound,
+					});
 				}
-				setCurrentRound(currentRound);
-				if (
-					refreshUserScores === null ||
-					refreshUserScores.passportScore === null
-				) {
-					setState(EPassportState.NOT_CREATED);
-					return;
+				if (refreshUserScores.passportScore === null) {
+					return setInfo({
+						passportState: EPassportState.NOT_CREATED,
+						passportScore: null,
+						currentRound: currentRound,
+					});
 				}
 				if (
 					refreshUserScores.passportScore <
 					currentRound.minimumPassportScore
 				) {
-					setState(EPassportState.NOT_ELIGIBLE);
-					return;
+					return setInfo({
+						passportState: EPassportState.NOT_ELIGIBLE,
+						passportScore: refreshUserScores.passportScore,
+						currentRound: currentRound,
+					});
 				} else {
-					setState(EPassportState.ELIGIBLE);
+					return setInfo({
+						passportState: EPassportState.ELIGIBLE,
+						passportScore: refreshUserScores.passportScore,
+						currentRound: currentRound,
+					});
 				}
 			} catch (error) {
-				setState(EPassportState.ERROR);
+				return setInfo({
+					passportState: EPassportState.ERROR,
+					passportScore: null,
+					currentRound: null,
+				});
 			}
 		},
 		[],
@@ -87,7 +120,11 @@ export const usePassport = () => {
 
 	const handleSign = async () => {
 		if (!library || !account) return;
-		setState(EPassportState.LOADING);
+		setInfo({
+			passportState: EPassportState.LOADING,
+			passportScore: null,
+			currentRound: null,
+		});
 		const passports = getPassports();
 		if (passports[account.toLowerCase()]) {
 			await refreshScore();
@@ -96,29 +133,41 @@ export const usePassport = () => {
 			if (res) {
 				await refreshScore();
 			} else {
-				return setState(EPassportState.NOT_SIGNED);
+				setInfo({
+					passportState: EPassportState.NOT_SIGNED,
+					passportScore: null,
+					currentRound: null,
+				});
 			}
 		}
 	};
 
 	useEffect(() => {
 		if (!user || !account) {
-			return setState(EPassportState.NOT_CONNECTED);
+			return setInfo({
+				passportState: EPassportState.NOT_CONNECTED,
+				passportScore: null,
+				currentRound: null,
+			});
 		}
-		console.log('user', user);
 		if (user.passportScore === null) {
-			setScore(user);
 			console.log('Passport score is null in our database');
 			const passports = getPassports();
+			let _state;
 			if (passports[account.toLowerCase()]) {
-				setState(EPassportState.NOT_CREATED);
+				_state = EPassportState.NOT_CREATED;
 			} else {
-				setState(EPassportState.NOT_SIGNED);
+				_state = EPassportState.NOT_SIGNED;
 			}
+			setInfo({
+				passportState: _state,
+				passportScore: null,
+				currentRound: null,
+			});
 		} else {
 			updateState(user);
 		}
 	}, [account, updateState, user]);
 
-	return { state, score, currentRound, handleSign, refreshScore };
+	return { info, handleSign, refreshScore };
 };

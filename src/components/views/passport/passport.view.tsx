@@ -26,13 +26,14 @@ import { PassportButton } from '@/components/PassportButton';
 
 export const PassportView = () => {
 	const { formatMessage, locale } = useIntl();
-	const { score, state, handleSign, refreshScore, currentRound } =
-		usePassport();
+	const { info, handleSign, refreshScore } = usePassport();
+
+	const { passportScore, passportState, currentRound } = info;
 
 	const isScoreReady =
-		state !== EPassportState.NOT_CONNECTED &&
-		state !== EPassportState.NOT_SIGNED &&
-		state !== EPassportState.LOADING;
+		passportState !== EPassportState.NOT_CONNECTED &&
+		passportState !== EPassportState.NOT_SIGNED &&
+		passportState !== EPassportState.LOADING;
 
 	return (
 		<Container>
@@ -50,7 +51,7 @@ export const PassportView = () => {
 					<IconExternalLink16 />
 				</PassportLink>
 				<PassportButton
-					state={state}
+					state={passportState}
 					handleSign={handleSign}
 					refreshScore={refreshScore}
 				/>
@@ -62,8 +63,8 @@ export const PassportView = () => {
 									<InfoRow>
 										<B>Your Passport score</B>
 										<H3>
-											{score?.passportScore !== undefined
-												? score.passportScore
+											{passportScore !== null
+												? passportScore
 												: '--'}
 										</H3>
 									</InfoRow>
@@ -79,16 +80,18 @@ export const PassportView = () => {
 								</>
 							)}
 							<StyledPassportBannerWrapper
-								bgColor={PassportBannerData[state].bg}
+								bgColor={PassportBannerData[passportState].bg}
 							>
-								{PassportBannerData[state].icon}
+								{PassportBannerData[passportState].icon}
 								<P>
 									{formatMessage({
-										id: PassportBannerData[state].content,
+										id: PassportBannerData[passportState]
+											.content,
 									})}
 									{currentRound &&
-										(state === EPassportState.NOT_CREATED ||
-											state ===
+										(passportState ===
+											EPassportState.NOT_CREATED ||
+											passportState ===
 												EPassportState.NOT_ELIGIBLE) && (
 											<strong>
 												{new Date(currentRound.endDate)
