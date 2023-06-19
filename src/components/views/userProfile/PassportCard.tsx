@@ -7,20 +7,18 @@ import { Flex } from '@/components/styled-components/Flex';
 import { PassportButton } from '@/components/PassportButton';
 
 export const PassportCard = () => {
-	const { score, state, handleSign, refreshScore } = usePassport();
+	const { info, handleSign, refreshScore } = usePassport();
+	const { passportState, passportScore } = info;
 	return (
 		<StyledContributeCardBox>
-			{state === EPassportState.NOT_SIGNED ||
-			state === EPassportState.LOADING ? (
+			{passportState === EPassportState.NOT_SIGNED ||
+			passportState === EPassportState.LOADING ? (
 				<B>Gitcoin Passport</B>
 			) : (
 				<Flex alignItems='center' justifyContent='space-between'>
 					<B>Your Passport score</B>
 					<Score weight={700}>
-						{score?.passportScore === undefined ||
-						score?.passportScore === null
-							? '--'
-							: score?.passportScore}
+						{passportScore === null ? '--' : passportScore}
 					</Score>
 				</Flex>
 			)}
@@ -30,7 +28,7 @@ export const PassportCard = () => {
 			</P>
 			<Hr></Hr>
 			<StyledPassportButton
-				state={state}
+				state={passportState}
 				handleSign={handleSign}
 				refreshScore={refreshScore}
 			/>

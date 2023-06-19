@@ -110,7 +110,9 @@ export const PassportBannerData: IData = {
 };
 
 export const PassportBanner = () => {
-	const { state, handleSign, currentRound } = usePassport();
+	const { info, handleSign } = usePassport();
+	const { passportState, currentRound } = info;
+
 	const { formatMessage, locale } = useIntl();
 
 	const { modalCallback: connectThenSignIn } = useModalCallback(
@@ -119,15 +121,15 @@ export const PassportBanner = () => {
 	);
 
 	return (
-		<PassportBannerWrapper bgColor={PassportBannerData[state].bg}>
-			{PassportBannerData[state].icon}
+		<PassportBannerWrapper bgColor={PassportBannerData[passportState].bg}>
+			{PassportBannerData[passportState].icon}
 			<P>
 				{formatMessage({
-					id: PassportBannerData[state].content,
+					id: PassportBannerData[passportState].content,
 				})}
 				{currentRound &&
-					(state === EPassportState.NOT_CREATED ||
-						state === EPassportState.NOT_ELIGIBLE) && (
+					(passportState === EPassportState.NOT_CREATED ||
+						passportState === EPassportState.NOT_ELIGIBLE) && (
 						<strong>
 							{new Date(currentRound.endDate)
 								.toLocaleString(locale || 'en-US', {
@@ -138,23 +140,23 @@ export const PassportBanner = () => {
 						</strong>
 					)}
 			</P>
-			{PassportBannerData[state]?.link && (
+			{PassportBannerData[passportState]?.link && (
 				<StyledLink
 					as='a'
-					href={PassportBannerData[state].link?.url}
+					href={PassportBannerData[passportState].link?.url}
 					target='_blank'
 					referrerPolicy='no-referrer'
 					rel='noreferrer'
 				>
 					<GLink>
 						{formatMessage({
-							id: PassportBannerData[state].link?.label,
+							id: PassportBannerData[passportState].link?.label,
 						})}
 					</GLink>
 					<IconExternalLink16 />
 				</StyledLink>
 			)}
-			{state === EPassportState.NOT_CONNECTED && (
+			{passportState === EPassportState.NOT_CONNECTED && (
 				<StyledLink onClick={() => connectThenSignIn()}>
 					<GLink>
 						{formatMessage({
@@ -164,7 +166,7 @@ export const PassportBanner = () => {
 					<IconWalletOutline16 />
 				</StyledLink>
 			)}
-			{state === EPassportState.NOT_SIGNED && (
+			{passportState === EPassportState.NOT_SIGNED && (
 				<StyledLink onClick={() => handleSign()}>
 					<GLink>Sign Message</GLink>
 					<IconWalletOutline16 />

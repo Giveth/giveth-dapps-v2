@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IUser } from '@/apollo/types/types';
+import { IUserWithPassport } from '@/apollo/types/types';
 import { fetchUserByAddress, signToGetToken, signOut } from './user.thunks';
 import StorageLabel from '@/lib/localStorage';
 import { compareAddresses } from '@/lib/helpers';
@@ -7,7 +7,7 @@ import { RootState } from '../store';
 import { getTokens } from '@/helpers/user';
 
 const initialState: {
-	userData?: IUser;
+	userData?: IUserWithPassport;
 	token?: string;
 	isEnabled: boolean;
 	isSignedIn: boolean;
@@ -84,7 +84,7 @@ export const userSlice = createSlice({
 					state,
 					action: PayloadAction<{
 						data: {
-							userByAddress: IUser;
+							userByAddress: IUserWithPassport;
 						};
 					}>,
 				) => {

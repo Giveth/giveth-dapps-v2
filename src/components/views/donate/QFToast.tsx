@@ -14,9 +14,10 @@ import ExternalLink from '@/components/ExternalLink';
 import { FlexCenter } from '@/components/styled-components/Flex';
 
 const QFToast = () => {
-	const { state } = usePassport();
-	const isEligible = state === EPassportState.ELIGIBLE;
-	const isNotEligible = state === EPassportState.NOT_ELIGIBLE;
+	const { info } = usePassport();
+	const { passportState } = info;
+	const isEligible = passportState === EPassportState.ELIGIBLE;
+	const isNotEligible = passportState === EPassportState.NOT_ELIGIBLE;
 	const { formatMessage } = useIntl();
 
 	const color = isEligible

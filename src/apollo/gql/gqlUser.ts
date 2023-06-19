@@ -28,6 +28,8 @@ export const GET_USER_BY_ADDRESS = gql`
 			projectsCount
 			donationsCount
 			boostedProjectsCount
+			passportScore
+			passportStamps
 		}
 	}
 `;
