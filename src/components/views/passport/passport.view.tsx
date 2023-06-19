@@ -6,6 +6,7 @@ import {
 	H3,
 	H5,
 	IconExternalLink16,
+	IconPassport32,
 	Lead,
 	P,
 	Row,
@@ -40,6 +41,10 @@ export const PassportView = () => {
 		<Container>
 			<Wrapper>
 				<Title>Amplify your donation</Title>
+				<PassportRow>
+					<IconPassport32 />
+					<H5 weight={700}>Gitcoin Passport</H5>
+				</PassportRow>
 				<Lead>
 					Unlock matching for your donation by verifying your
 					identity! Connect your wallet to Gitcoin Passport to check
@@ -137,6 +142,12 @@ const Wrapper = styled.div`
 
 const Title = styled(H2)`
 	margin-bottom: 40px;
+`;
+
+const PassportRow = styled(FlexCenter)`
+	margin-top: 24px;
+	margin-bottom: 24px;
+	gap: 24px;
 `;
 
 const PassportLink = styled(FlexCenter)`
