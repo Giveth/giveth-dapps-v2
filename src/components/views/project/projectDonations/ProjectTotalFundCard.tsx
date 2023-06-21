@@ -126,11 +126,11 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 										matchingPool,
 									).toFixed(2)}
 								</EstimatedMatchingPrice>
-								<EstematedMatchingText>
+								<EstimatedMatchingText>
 									{selectedQFData?.isActive
 										? 'Estimated Matching'
 										: 'Matching Funds'}
-								</EstematedMatchingText>
+								</EstimatedMatchingText>
 							</EstimatedMatchingSection>
 							<div>
 								<LightSubline> Raised from </LightSubline>
@@ -213,7 +213,7 @@ const EstimatedMatchingPrice = styled(H5)`
 	font-weight: 700;
 `;
 
-const EstematedMatchingText = styled(SublineBold)`
+const EstimatedMatchingText = styled(SublineBold)`
 	color: ${semanticColors.jade[600]};
 	font-weight: 600;
 	max-width: 60px;
