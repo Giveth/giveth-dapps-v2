@@ -54,6 +54,7 @@ const ProjectCard = (props: IProjectCard) => {
 		verified,
 		projectPower,
 		countUniqueDonors,
+		countUniqueDonorsForActiveQfRound,
 		qfRounds,
 		estimatedMatching,
 	} = project;
@@ -147,7 +148,11 @@ const ProjectCard = (props: IProjectCard) => {
 							<div>
 								<LightSubline> Raised from </LightSubline>
 								<Subline style={{ display: 'inline-block' }}>
-									&nbsp;{countUniqueDonors}&nbsp;
+									&nbsp;
+									{isRoundActive
+										? countUniqueDonorsForActiveQfRound
+										: countUniqueDonors}
+									&nbsp;
 								</Subline>
 								<LightSubline>contributors</LightSubline>
 							</div>
