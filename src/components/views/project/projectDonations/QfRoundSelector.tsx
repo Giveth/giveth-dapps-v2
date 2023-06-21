@@ -13,10 +13,11 @@ import { useProjectContext } from '@/context/project.context';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Flex } from '@/components/styled-components/Flex';
+import { IQFRound } from '@/apollo/types/types';
 
 interface IQfRoundSelectorProps {
-	selectedQF: string | null;
-	setSelectedQF: Dispatch<SetStateAction<string | null>>;
+	selectedQF: IQFRound | null;
+	setSelectedQF: Dispatch<SetStateAction<IQFRound | null>>;
 }
 
 export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
@@ -46,13 +47,13 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 				</TabItem>
 			</SwiperSlide>
 			{projectData?.qfRounds?.map((round, index) => {
-				const isSelected = selectedQF === round.id;
+				const isSelected = selectedQF?.id === round.id;
 				return (
 					<SwiperSlide key={index} style={{ width: 'auto' }}>
 						<TabItem
 							alignItems='center'
 							gap='4px'
-							onClick={() => setSelectedQF(round.id)}
+							onClick={() => setSelectedQF(round)}
 							isSelected={isSelected}
 						>
 							{isSelected ? <B>{round.id}</B> : <P>{round.id}</P>}

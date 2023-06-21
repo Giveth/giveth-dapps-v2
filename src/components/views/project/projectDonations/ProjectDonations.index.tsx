@@ -4,9 +4,10 @@ import { useState } from 'react';
 import ProjectTotalFundCard from './ProjectTotalFundCard';
 import ProjectDonationTable from './ProjectDonationTable';
 import { QfRoundSelector } from './QfRoundSelector';
+import { IQFRound } from '@/apollo/types/types';
 
 const ProjectDonationsIndex = () => {
-	const [selectedQF, setSelectedQF] = useState<string | null>(null);
+	const [selectedQF, setSelectedQF] = useState<IQFRound | null>(null);
 
 	return (
 		<>

@@ -28,11 +28,12 @@ import {
 	IDonationsByProjectIdGQL,
 } from '@/apollo/types/gqlTypes';
 import { showToastError } from '@/lib/helpers';
+import { IQFRound } from '@/apollo/types/types';
 
 const donationsPerPage = 10;
 
 interface IProjectTotalFundCardProps {
-	selectedQF: string | null;
+	selectedQF: IQFRound | null;
 }
 
 const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
@@ -51,7 +52,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
-	const selectedQFData = qfRounds?.find(round => round.id === selectedQF);
+	const selectedQFData = qfRounds?.find(round => round.id === selectedQF?.id);
 
 	useEffect(() => {
 		if (!id) return;
@@ -65,9 +66,11 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 					take: donationsPerPage,
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
 					qfRoundId:
-						selectedQF !== null ? parseInt(selectedQF) : undefined,
+						selectedQF !== null
+							? parseInt(selectedQF.id)
+							: undefined,
 					orderBy: {
-						field: ESortby.CREATIONDATE,
+						field: ESortby.CREATION_DATE,
 						direction: EDirection.DESC,
 					},
 				},
@@ -105,7 +108,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 				<div>
 					<BorderedFlex>
 						<P>Round: &nbsp;</P>
-						<B>QF round {selectedQF} donations</B>
+						<B>QF round {selectedQF.id} donations</B>
 					</BorderedFlex>
 					{totalDonations && totalDonations > 0 ? (
 						<div>
