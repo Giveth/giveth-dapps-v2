@@ -13,7 +13,6 @@ import {
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import Link from 'next/link';
 import { Flex } from './styled-components/Flex';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
@@ -140,36 +139,22 @@ export const PassportBanner = () => {
 						</strong>
 					)}
 			</P>
-			{PassportBannerData[passportState].link &&
-				(PassportBannerData[passportState].link!.url.startsWith('/') ? (
-					<Link href={PassportBannerData[passportState].link!.url}>
-						<StyledLink>
-							<GLink>
-								{formatMessage({
-									id: PassportBannerData[passportState].link
-										?.label,
-								})}
-							</GLink>
-							<IconExternalLink16 />
-						</StyledLink>
-					</Link>
-				) : (
-					<StyledLink
-						as='a'
-						href={PassportBannerData[passportState].link?.url}
-						target='_blank'
-						referrerPolicy='no-referrer'
-						rel='noreferrer'
-					>
-						<GLink>
-							{formatMessage({
-								id: PassportBannerData[passportState].link
-									?.label,
-							})}
-						</GLink>
-						<IconExternalLink16 />
-					</StyledLink>
-				))}
+			{PassportBannerData[passportState].link && (
+				<StyledLink
+					as='a'
+					href={PassportBannerData[passportState].link?.url}
+					target='_blank'
+					referrerPolicy='no-referrer'
+					rel='noreferrer'
+				>
+					<GLink>
+						{formatMessage({
+							id: PassportBannerData[passportState].link?.label,
+						})}
+					</GLink>
+					<IconExternalLink16 />
+				</StyledLink>
+			)}
 			{passportState === EPassportState.NOT_CONNECTED && (
 				<StyledLink onClick={() => connectThenSignIn()}>
 					<GLink>
