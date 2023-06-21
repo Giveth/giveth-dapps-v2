@@ -146,3 +146,16 @@ export const UPDATE_DONATION_STATUS = gql`
 		}
 	}
 `;
+
+export const FETCH_QF_ROUND_HISTORY = gql`
+	query ($projectId: Int!, $qfRoundId: Int!) {
+		getQfRoundHistory(projectId: $projectId, qfRoundId: $qfRoundId) {
+			uniqueDonors
+			raisedFundInUsd
+			donationsCount
+			matchingFund
+			distributedFundNetwork
+			distributedFundTxHash
+		}
+	}
+`;
