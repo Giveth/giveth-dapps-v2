@@ -122,19 +122,14 @@ const ProjectCard = (props: IProjectCard) => {
 					<Description>{descriptionSummary}</Description>
 					<Flex justifyContent='space-between'>
 						<PaddedRow flexDirection='column' gap='2px'>
-							{isRoundActive ? (
-								<PriceText>
-									$
-									{Math.round(
-										sumDonationValueUsdForActiveQfRound as number,
-									)}
-								</PriceText>
-							) : (
-								<PriceText>
-									${Math.round(sumDonationValueUsd as number)}
-								</PriceText>
-							)}
-
+							<PriceText>
+								$
+								{Math.round(
+									(isRoundActive
+										? sumDonationValueUsdForActiveQfRound
+										: sumDonationValueUsd) as number,
+								)}
+							</PriceText>
 							{isRoundActive ? (
 								<AmountRaisedText>
 									Amount raised in this round
