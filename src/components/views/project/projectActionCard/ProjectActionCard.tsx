@@ -110,7 +110,7 @@ const ProjectActionCardWrapper = styled(Flex)`
 	height: 100%;
 	padding-top: 12px;
 	${mediaQueries.tablet} {
-		padding: 32px 24px 24px;
+		padding: 16px 24px;
 	}
 `;
 
