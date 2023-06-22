@@ -10,18 +10,10 @@ export const calculateTotalEstimatedMatching = (
 	allProjectsSum?: number,
 	matchingPool?: number,
 ) => {
-	if (!matchingPool) return 0;
-	const _allProjectsSum = allProjectsSum || 1;
-	const _projectDonationsSqrtRootSum = projectDonationsSqrtRootSum || 0;
-	console.log(
-		'res',
-		projectDonationsSqrtRootSum,
-		allProjectsSum,
-		matchingPool,
-	);
-
+	if (!matchingPool || !projectDonationsSqrtRootSum || !allProjectsSum)
+		return 0;
 	return (
-		(Math.pow(_projectDonationsSqrtRootSum, 2) / _allProjectsSum) *
+		(Math.pow(projectDonationsSqrtRootSum, 2) / allProjectsSum) *
 		matchingPool
 	);
 };
@@ -32,10 +24,9 @@ export const calculateEstimatedMatchingWithDonationAmount = (
 	allProjectsSum?: number,
 	matchingPool?: number,
 ) => {
-	if (!matchingPool) return 0;
-	const _allProjectsSum = allProjectsSum || 1;
-	const _projectDonationsSqrtRootSum =
-		projectDonationsSqrtRootSum || _allProjectsSum;
+	if (!matchingPool || !donationAmount) return 0;
+	const _projectDonationsSqrtRootSum = projectDonationsSqrtRootSum || 0;
+	const _allProjectsSum = allProjectsSum || 0;
 	const beforeNewDonationPow = Math.pow(_projectDonationsSqrtRootSum, 2);
 	const afterNewDonationPow = Math.pow(
 		_projectDonationsSqrtRootSum + Math.sqrt(donationAmount),
