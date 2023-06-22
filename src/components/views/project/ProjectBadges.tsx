@@ -1,5 +1,6 @@
 import React from 'react';
 import { IconVerifiedBadge16, semanticColors } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { useProjectContext } from '@/context/project.context';
 import ProjectBadge from './ProjectBadge';
@@ -10,7 +11,7 @@ const ProjectBadges = () => {
 	const { verified } = projectData || {};
 
 	return (
-		<Flex gap='16px'>
+		<CustomFlex gap='16px'>
 			{verified && (
 				<ProjectBadge
 					badgeText='Verified'
@@ -18,8 +19,12 @@ const ProjectBadges = () => {
 					BadgeIcon={<IconVerifiedBadge16 />}
 				/>
 			)}
-		</Flex>
+		</CustomFlex>
 	);
 };
+
+const CustomFlex = styled(Flex)`
+	margin-bottom: 12px;
+`;
 
 export default ProjectBadges;
