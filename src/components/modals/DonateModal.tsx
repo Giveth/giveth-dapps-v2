@@ -46,7 +46,11 @@ interface IDonateModalProps extends IModal {
 
 const ethereumChain = config.MAINNET_CONFIG;
 const gnosisChain = config.XDAI_CONFIG;
-const stableCoins = [gnosisChain.nativeCurrency.symbol, 'DAI', 'USDT'];
+const stableCoins = [
+	gnosisChain.nativeCurrency.symbol.toUpperCase(),
+	'DAI',
+	'USDT',
+];
 
 const DonateModal: FC<IDonateModalProps> = props => {
 	const {
@@ -70,7 +74,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const isMainnet = chainId === config.MAINNET_NETWORK_NUMBER;
 	const isGnosis = chainId === config.XDAI_NETWORK_NUMBER;
 	const isPolygon = chainId === config.POLYGON_NETWORK_NUMBER;
-	const isOptimism = chainId === config.OPTIMISM_NETWORK_NUMBER;
 	const isCelo = chainId === config.CELO_NETWORK_NUMBER;
 
 	const [donating, setDonating] = useState(false);
@@ -183,7 +186,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 	useEffect(() => {
 		const setPrice = async () => {
-			if (token?.symbol && stableCoins.includes(token.symbol)) {
+			if (
+				token?.symbol &&
+				stableCoins.includes(token.symbol.toUpperCase())
+			) {
 				setTokenPrice(1);
 			} else if (token?.symbol === 'GIV') {
 				setTokenPrice(givTokenPrice || 0);
