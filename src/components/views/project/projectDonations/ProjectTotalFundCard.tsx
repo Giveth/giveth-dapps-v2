@@ -21,7 +21,10 @@ import { useProjectContext } from '@/context/project.context';
 import { calculateTotalEstimatedMatching } from '@/helpers/qf';
 import { Flex } from '@/components/styled-components/Flex';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
+import {
+	FETCH_PROJECT_DONATIONS,
+	FETCH_QF_ROUND_HISTORY,
+} from '@/apollo/gql/gqlDonations';
 import { EDonationStatus, ESortby, EDirection } from '@/apollo/types/gqlEnums';
 import {
 	IDonationsByProjectId,
@@ -57,36 +60,65 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	useEffect(() => {
 		if (!id) return;
 		//TODO: should change to new endpoint for fetching donations amount
-		client
-			.query({
-				query: FETCH_PROJECT_DONATIONS,
-				variables: {
-					projectId: parseInt(id),
-					skip: 0,
-					take: donationsPerPage,
-					status: isAdmin ? null : EDonationStatus.VERIFIED,
-					qfRoundId:
-						selectedQF !== null
-							? parseInt(selectedQF.id)
-							: undefined,
-					orderBy: {
-						field: ESortby.CREATION_DATE,
-						direction: EDirection.DESC,
+		const fetchAllDonationsInfo = async () => {
+			client
+				.query({
+					query: FETCH_PROJECT_DONATIONS,
+					variables: {
+						projectId: parseInt(id),
+						skip: 0,
+						take: donationsPerPage,
+						status: isAdmin ? null : EDonationStatus.VERIFIED,
+						qfRoundId:
+							selectedQF !== null
+								? parseInt(selectedQF.id)
+								: undefined,
+						orderBy: {
+							field: ESortby.CREATION_DATE,
+							direction: EDirection.DESC,
+						},
 					},
-				},
-			})
-			.then((res: IDonationsByProjectIdGQL) => {
-				const donationsByProjectId = res.data.donationsByProjectId;
-				setDonationInfo(donationsByProjectId);
-			})
-			.catch((error: unknown) => {
-				showToastError(error);
-				captureException(error, {
-					tags: {
-						section: 'fetchProjectDonation',
-					},
+				})
+				.then((res: IDonationsByProjectIdGQL) => {
+					const donationsByProjectId = res.data.donationsByProjectId;
+					setDonationInfo(donationsByProjectId);
+				})
+				.catch((error: unknown) => {
+					showToastError(error);
+					captureException(error, {
+						tags: {
+							section: 'fetchProjectDonation',
+						},
+					});
 				});
-			});
+		};
+
+		const fetchCurrentQfDonationsInfo = async () => {};
+
+		const fetchFinishedQfDonationsInfo = async () => {
+			client
+				.query({
+					query: FETCH_QF_ROUND_HISTORY,
+					variables: {
+						projectId: parseInt(id),
+						qfRoundId:
+							selectedQF !== null
+								? parseInt(selectedQF.id)
+								: undefined,
+					},
+				})
+				.then((res: IDonationsByProjectIdGQL) => {
+					console.log('res', res);
+				});
+		};
+
+		if (selectedQF === null) {
+			fetchAllDonationsInfo();
+		} else if (selectedQF.isActive) {
+			fetchCurrentQfDonationsInfo();
+		} else {
+			fetchFinishedQfDonationsInfo();
+		}
 	}, [id, isAdmin, selectedQF]);
 
 	return (
