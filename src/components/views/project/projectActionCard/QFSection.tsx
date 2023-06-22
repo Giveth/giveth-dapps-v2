@@ -76,7 +76,7 @@ const QFSection = () => {
 						projectDonationsSqrtRootSum,
 						allProjectsSum,
 						matchingPool,
-					)}
+					).toFixed(2)}
 				</EstimatedMatchingPrice>
 				<LightCaption> Estimated matching</LightCaption>
 			</Flex>
@@ -96,7 +96,7 @@ const QFSection = () => {
 									projectDonationsSqrtRootSum,
 									allProjectsSum,
 									matchingPool,
-								)}
+								).toFixed(2)}
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
@@ -109,7 +109,7 @@ const QFSection = () => {
 									projectDonationsSqrtRootSum,
 									allProjectsSum,
 									matchingPool,
-								)}
+								).toFixed(2)}
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
@@ -122,7 +122,7 @@ const QFSection = () => {
 									projectDonationsSqrtRootSum,
 									allProjectsSum,
 									matchingPool,
-								)}
+								).toFixed(2)}
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
