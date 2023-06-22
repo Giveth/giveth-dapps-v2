@@ -12,8 +12,14 @@ export const calculateTotalEstimatedMatching = (
 ) => {
 	if (!matchingPool) return 0;
 	const _allProjectsSum = allProjectsSum || 1;
-	const _projectDonationsSqrtRootSum =
-		projectDonationsSqrtRootSum || _allProjectsSum;
+	const _projectDonationsSqrtRootSum = projectDonationsSqrtRootSum || 0;
+	console.log(
+		'res',
+		projectDonationsSqrtRootSum,
+		allProjectsSum,
+		matchingPool,
+	);
+
 	return (
 		(Math.pow(_projectDonationsSqrtRootSum, 2) / _allProjectsSum) *
 		matchingPool
