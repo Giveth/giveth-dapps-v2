@@ -98,8 +98,34 @@ export const ProjectProvider = ({
 
 	const hasActiveQFRound = hasActiveRound(projectData?.qfRounds);
 
+	const fetchProjectBySlug = useCallback(async () => {
+		client
+			.query({
+				query: FETCH_PROJECT_BY_SLUG,
+				variables: { slug, connectedWalletUserId: Number(user?.id) },
+				fetchPolicy: 'network-only',
+			})
+			.then((res: { data: { projectBySlug: IProject } }) => {
+				const _project = res.data.projectBySlug;
+				if (_project.status.name !== EProjectStatus.CANCEL) {
+					setProjectData(_project);
+				} else {
+					setProjectData(undefined);
+				}
+			})
+			.catch((error: unknown) => {
+				showToastError(error);
+				captureException(error, {
+					tags: {
+						section: 'fetchProject',
+					},
+				});
+			});
+	}, [slug, user?.id]);
+
 	useEffect(() => {
 		if (!projectData?.id) return;
+		fetchProjectBySlug();
 		client
 			.query({
 				query: FETCH_PROJECT_DONATIONS_COUNT,
@@ -126,7 +152,7 @@ export const ProjectProvider = ({
 					},
 				});
 			});
-	}, [projectData?.id]);
+	}, [fetchProjectBySlug, isAdmin, projectData?.id]);
 
 	const fetchProjectBoosters = useCallback(
 		async (projectId: number, status?: EProjectStatus) => {
@@ -245,39 +271,13 @@ export const ProjectProvider = ({
 	const isActive = projectData?.status.name === EProjectStatus.ACTIVE;
 	const isDraft = projectData?.status.name === EProjectStatus.DRAFT;
 
-	const fetchProjectBySlug = async () => {
-		client
-			.query({
-				query: FETCH_PROJECT_BY_SLUG,
-				variables: { slug, connectedWalletUserId: Number(user?.id) },
-				fetchPolicy: 'network-only',
-			})
-			.then((res: { data: { projectBySlug: IProject } }) => {
-				const _project = res.data.projectBySlug;
-				if (_project.status.name !== EProjectStatus.CANCEL) {
-					setProjectData(_project);
-				} else {
-					//Todo: why?!
-					projectData && setProjectData(undefined);
-				}
-			})
-			.catch((error: unknown) => {
-				showToastError(error);
-				captureException(error, {
-					tags: {
-						section: 'fetchProject',
-					},
-				});
-			});
-	};
-
 	useEffect(() => {
 		if (user?.isSignedIn && !project) {
 			fetchProjectBySlug();
 		} else {
 			setProjectData(project);
 		}
-	}, [project, user?.isSignedIn]);
+	}, [fetchProjectBySlug, project, user?.isSignedIn]);
 
 	return (
 		<ProjectContext.Provider
