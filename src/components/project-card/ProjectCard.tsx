@@ -124,11 +124,11 @@ const ProjectCard = (props: IProjectCard) => {
 						<PaddedRow flexDirection='column' gap='2px'>
 							<PriceText>
 								$
-								{Math.round(
-									(isRoundActive
-										? sumDonationValueUsdForActiveQfRound
-										: sumDonationValueUsd) as number,
-								)}
+								{isRoundActive
+									? sumDonationValueUsdForActiveQfRound?.toFixed(
+											2,
+									  )
+									: sumDonationValueUsd?.toFixed(2)}
 							</PriceText>
 							{isRoundActive ? (
 								<AmountRaisedText>
@@ -160,7 +160,7 @@ const ProjectCard = (props: IProjectCard) => {
 										projectDonationsSqrtRootSum,
 										allProjectsSum,
 										matchingPool,
-									)}
+									).toFixed(2)}
 								</EstimatedMatchingPrice>
 								<LightSubline> Estimated matching</LightSubline>
 							</PaddedRow>
