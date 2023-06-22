@@ -83,7 +83,7 @@ const QFSection = () => {
 			<div>
 				<Flex justifyContent='space-between'>
 					<LightSubline>Contribution</LightSubline>
-					<LightSubline>Matching</LightSubline>
+					<GreenSubline>Matching</GreenSubline>
 				</Flex>
 				<ContributionsContainer>
 					<Flex flexDirection='column' gap='4px'>
@@ -91,6 +91,7 @@ const QFSection = () => {
 							<Subline>1 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
+								+{' '}
 								{calculateEstimatedMatchingWithDonationAmount(
 									1,
 									projectDonationsSqrtRootSum,
@@ -104,6 +105,7 @@ const QFSection = () => {
 							<Subline>10 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
+								+{' '}
 								{calculateEstimatedMatchingWithDonationAmount(
 									10,
 									projectDonationsSqrtRootSum,
@@ -117,6 +119,7 @@ const QFSection = () => {
 							<Subline>100 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
+								+{' '}
 								{calculateEstimatedMatchingWithDonationAmount(
 									100,
 									projectDonationsSqrtRootSum,
@@ -205,8 +208,13 @@ const LightSubline = styled(Subline)`
 	color: ${neutralColors.gray[700]};
 `;
 
+const GreenSubline = styled(Subline)`
+	color: ${semanticColors.jade[500]};
+`;
+
 const EndAlignedSubline = styled(Subline)`
 	text-align: end;
+	color: ${semanticColors.jade[500]};
 `;
 
 const ContributionsContainer = styled.div`
