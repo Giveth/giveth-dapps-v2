@@ -33,7 +33,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { compareAddresses, isSSRMode, showToastError } from '@/lib/helpers';
 import { EVerificationStatus, IReaction } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
-import ShareModal from '@/components/modals/ShareModal';
+import ShareModal from '@/components/modals/ShareRewardedModal';
 import { client } from '@/apollo/apolloClient';
 import {
 	ACTIVATE_PROJECT,

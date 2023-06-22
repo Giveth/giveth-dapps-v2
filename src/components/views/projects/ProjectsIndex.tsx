@@ -36,6 +36,7 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
 import ProjectsMiddleBanner from './ProjectsMiddleBanner';
+import FloatingButtonReferral from '@/components/FloatingReferral';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -195,6 +196,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							<ProjectCard key={project.id} project={project} />
 						))}
 					</ProjectsContainer>
+					<FloatingButtonReferral />
 				</ProjectsWrapper>
 			);
 		} else {

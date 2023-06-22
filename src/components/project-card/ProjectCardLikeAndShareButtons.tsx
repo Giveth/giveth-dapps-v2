@@ -12,7 +12,7 @@ import styled, { css } from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useRouter } from 'next/router';
 
-import ShareModal from '../modals/ShareModal';
+import ShareModal from '../modals/ShareRewardedModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { isSSRMode, showToastError } from '@/lib/helpers';
 import { Flex } from '../styled-components/Flex';
