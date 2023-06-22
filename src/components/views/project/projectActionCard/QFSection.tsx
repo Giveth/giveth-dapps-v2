@@ -210,7 +210,7 @@ const EndAlignedSubline = styled(Subline)`
 `;
 
 const ContributionsContainer = styled.div`
-	padding: 16px 0;
+	padding: 4px 0;
 	border-top: 1px solid ${neutralColors.gray[300]};
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
