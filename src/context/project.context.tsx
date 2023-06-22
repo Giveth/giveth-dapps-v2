@@ -125,7 +125,6 @@ export const ProjectProvider = ({
 
 	useEffect(() => {
 		if (!projectData?.id) return;
-		fetchProjectBySlug();
 		client
 			.query({
 				query: FETCH_PROJECT_DONATIONS_COUNT,
@@ -152,7 +151,7 @@ export const ProjectProvider = ({
 					},
 				});
 			});
-	}, [fetchProjectBySlug, isAdmin, projectData?.id]);
+	}, [isAdmin, projectData?.id]);
 
 	const fetchProjectBoosters = useCallback(
 		async (projectId: number, status?: EProjectStatus) => {
