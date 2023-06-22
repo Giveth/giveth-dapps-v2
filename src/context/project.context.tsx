@@ -109,7 +109,7 @@ export const ProjectProvider = ({
 					take: 1,
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
 					orderBy: {
-						field: ESortby.CREATIONDATE,
+						field: ESortby.CREATION_DATE,
 						direction: EDirection.DESC,
 					},
 				},

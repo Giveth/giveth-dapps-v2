@@ -10,10 +10,11 @@ export const calculateTotalEstimatedMatching = (
 	allProjectsSum?: number,
 	matchingPool?: number,
 ) => {
-	if (!projectDonationsSqrtRootSum || !allProjectsSum || !matchingPool)
-		return 0;
+	if (!matchingPool) return 0;
+	const _allProjectsSum = allProjectsSum || 1;
+	const _projectDonationsSqrtRootSum = _allProjectsSum || 1;
 	return (
-		(Math.pow(projectDonationsSqrtRootSum, 2) / allProjectsSum) *
+		(Math.pow(_projectDonationsSqrtRootSum, 2) / _allProjectsSum) *
 		matchingPool
 	);
 };
@@ -24,16 +25,17 @@ export const calculateEstimatedMatchingWithDonationAmount = (
 	allProjectsSum?: number,
 	matchingPool?: number,
 ) => {
-	if (!projectDonationsSqrtRootSum || !allProjectsSum || !matchingPool)
-		return 0;
-	const beforeNewDonationPow = Math.pow(projectDonationsSqrtRootSum, 2);
+	if (!matchingPool) return 0;
+	const _allProjectsSum = allProjectsSum || 1;
+	const _projectDonationsSqrtRootSum = _allProjectsSum || 1;
+	const beforeNewDonationPow = Math.pow(_projectDonationsSqrtRootSum, 2);
 	const afterNewDonationPow = Math.pow(
-		projectDonationsSqrtRootSum + Math.sqrt(donationAmount),
+		_projectDonationsSqrtRootSum + Math.sqrt(donationAmount),
 		2,
 	);
 	return (
 		(afterNewDonationPow /
-			(allProjectsSum + afterNewDonationPow - beforeNewDonationPow)) *
+			(_allProjectsSum + afterNewDonationPow - beforeNewDonationPow)) *
 		matchingPool
 	);
 };

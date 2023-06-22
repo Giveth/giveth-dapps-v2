@@ -21,18 +21,22 @@ import { useProjectContext } from '@/context/project.context';
 import { calculateTotalEstimatedMatching } from '@/helpers/qf';
 import { Flex } from '@/components/styled-components/Flex';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
+import {
+	FETCH_PROJECT_DONATIONS,
+	FETCH_QF_ROUND_HISTORY,
+} from '@/apollo/gql/gqlDonations';
 import { EDonationStatus, ESortby, EDirection } from '@/apollo/types/gqlEnums';
 import {
 	IDonationsByProjectId,
 	IDonationsByProjectIdGQL,
 } from '@/apollo/types/gqlTypes';
 import { showToastError } from '@/lib/helpers';
+import { IQFRound } from '@/apollo/types/types';
 
 const donationsPerPage = 10;
 
 interface IProjectTotalFundCardProps {
-	selectedQF: string | null;
+	selectedQF: IQFRound | null;
 }
 
 const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
@@ -51,39 +55,70 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
-	const selectedQFData = qfRounds?.find(round => round.id === selectedQF);
+	const selectedQFData = qfRounds?.find(round => round.id === selectedQF?.id);
 
 	useEffect(() => {
 		if (!id) return;
 		//TODO: should change to new endpoint for fetching donations amount
-		client
-			.query({
-				query: FETCH_PROJECT_DONATIONS,
-				variables: {
-					projectId: parseInt(id),
-					skip: 0,
-					take: donationsPerPage,
-					status: isAdmin ? null : EDonationStatus.VERIFIED,
-					qfRoundId:
-						selectedQF !== null ? parseInt(selectedQF) : undefined,
-					orderBy: {
-						field: ESortby.CREATIONDATE,
-						direction: EDirection.DESC,
+		const fetchAllDonationsInfo = async () => {
+			client
+				.query({
+					query: FETCH_PROJECT_DONATIONS,
+					variables: {
+						projectId: parseInt(id),
+						skip: 0,
+						take: donationsPerPage,
+						status: isAdmin ? null : EDonationStatus.VERIFIED,
+						qfRoundId:
+							selectedQF !== null
+								? parseInt(selectedQF.id)
+								: undefined,
+						orderBy: {
+							field: ESortby.CREATION_DATE,
+							direction: EDirection.DESC,
+						},
 					},
-				},
-			})
-			.then((res: IDonationsByProjectIdGQL) => {
-				const donationsByProjectId = res.data.donationsByProjectId;
-				setDonationInfo(donationsByProjectId);
-			})
-			.catch((error: unknown) => {
-				showToastError(error);
-				captureException(error, {
-					tags: {
-						section: 'fetchProjectDonation',
-					},
+				})
+				.then((res: IDonationsByProjectIdGQL) => {
+					const donationsByProjectId = res.data.donationsByProjectId;
+					setDonationInfo(donationsByProjectId);
+				})
+				.catch((error: unknown) => {
+					showToastError(error);
+					captureException(error, {
+						tags: {
+							section: 'fetchProjectDonation',
+						},
+					});
 				});
-			});
+		};
+
+		const fetchCurrentQfDonationsInfo = async () => {};
+
+		const fetchFinishedQfDonationsInfo = async () => {
+			client
+				.query({
+					query: FETCH_QF_ROUND_HISTORY,
+					variables: {
+						projectId: parseInt(id),
+						qfRoundId:
+							selectedQF !== null
+								? parseInt(selectedQF.id)
+								: undefined,
+					},
+				})
+				.then((res: IDonationsByProjectIdGQL) => {
+					console.log('res', res);
+				});
+		};
+
+		if (selectedQF === null) {
+			fetchAllDonationsInfo();
+		} else if (selectedQF.isActive) {
+			fetchCurrentQfDonationsInfo();
+		} else {
+			fetchFinishedQfDonationsInfo();
+		}
 	}, [id, isAdmin, selectedQF]);
 
 	return (
@@ -105,7 +140,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 				<div>
 					<BorderedFlex>
 						<P>Round: &nbsp;</P>
-						<B>QF round {selectedQF} donations</B>
+						<B>QF round {selectedQF.id} donations</B>
 					</BorderedFlex>
 					{totalDonations && totalDonations > 0 ? (
 						<div>
@@ -126,11 +161,11 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 										matchingPool,
 									).toFixed(2)}
 								</EstimatedMatchingPrice>
-								<EstematedMatchingText>
+								<EstimatedMatchingText>
 									{selectedQFData?.isActive
 										? 'Estimated Matching'
 										: 'Matching Funds'}
-								</EstematedMatchingText>
+								</EstimatedMatchingText>
 							</EstimatedMatchingSection>
 							<div>
 								<LightSubline> Raised from </LightSubline>
@@ -213,7 +248,7 @@ const EstimatedMatchingPrice = styled(H5)`
 	font-weight: 700;
 `;
 
-const EstematedMatchingText = styled(SublineBold)`
+const EstimatedMatchingText = styled(SublineBold)`
 	color: ${semanticColors.jade[600]};
 	font-weight: 600;
 	max-width: 60px;

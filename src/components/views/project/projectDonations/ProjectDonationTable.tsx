@@ -9,7 +9,7 @@ import {
 import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
-import { IDonation } from '@/apollo/types/types';
+import { IDonation, IQFRound } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import {
 	smallFormatDate,
@@ -50,7 +50,7 @@ interface IOrder {
 }
 
 interface IProjectDonationTable {
-	selectedQF: string | null;
+	selectedQF: IQFRound | null;
 }
 
 interface PageDonations {
@@ -99,7 +99,9 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 				variables: {
 					projectId: parseInt(id),
 					qfRoundId:
-						selectedQF !== null ? parseInt(selectedQF) : undefined,
+						selectedQF !== null
+							? parseInt(selectedQF.id)
+							: undefined,
 					take: itemPerPage,
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },

@@ -23,7 +23,7 @@ import {
 
 const QFSection = () => {
 	const { formatMessage, locale } = useIntl();
-	const { projectData, totalDonationsCount } = useProjectContext();
+	const { projectData } = useProjectContext();
 	const { estimatedMatching, sumDonationValueUsdForActiveQfRound } =
 		projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
@@ -47,13 +47,15 @@ const QFSection = () => {
 						{formatMessage({
 							id: 'label.raised_from',
 						})}
-						<Caption medium>{totalDonationsCount}</Caption>
+						<Caption medium>
+							{projectData?.countUniqueDonorsForActiveQfRound}
+						</Caption>
 						{formatMessage(
 							{
 								id: 'label.contributors',
 							},
 							{
-								count: totalDonationsCount,
+								count: projectData?.countUniqueDonorsForActiveQfRound,
 							},
 						)}
 					</Description>

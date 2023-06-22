@@ -26,10 +26,6 @@ import { likeProject, unlikeProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { slugToProjectDonate } from '@/lib/routeCreators';
-import {
-	calculateEstimatedMatchingWithDonationAmount,
-	calculateTotalEstimatedMatching,
-} from '@/helpers/qf';
 
 export const ProjectPublicActions = () => {
 	const [showModal, setShowModal] = useState<boolean>(false);
@@ -49,11 +45,6 @@ export const ProjectPublicActions = () => {
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
 
-	const test1 = calculateEstimatedMatchingWithDonationAmount(5, 100, 3000, 2);
-	const test2 = calculateEstimatedMatchingWithDonationAmount(5, 100, 3000, 3);
-	const test = calculateTotalEstimatedMatching(5, 100, 3000);
-	console.log('Teest', test, test1, test2);
-	console.log('Final', test2 - test);
 	useEffect(() => {
 		const fetchProjectReaction = async () => {
 			if (user?.id && project.id) {
