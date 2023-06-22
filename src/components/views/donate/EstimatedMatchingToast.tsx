@@ -22,6 +22,7 @@ import config from '@/configuration';
 import { useAppSelector } from '@/features/hooks';
 import { fetchEthPrice } from '@/features/price/price.services';
 import { fetchPrice } from '@/services/token';
+import { formatUSD } from '@/lib/helpers';
 
 interface IEstimatedMatchingToast {
 	projectData: IDonationProject;
@@ -93,7 +94,12 @@ const EstimatedMatchingToast = ({
 		}
 	}, [token]);
 
-	console.log('TokenPrice', tokenPrice);
+	const esMatching = calculateEstimatedMatchingWithDonationAmount(
+		(tokenPrice || 0) * (amountTyped || 0),
+		projectDonationsSqrtRootSum,
+		allProjectsSum,
+		matchingPool,
+	);
 
 	return (
 		<Wrapper>
@@ -119,14 +125,7 @@ const EstimatedMatchingToast = ({
 						</TooltipContent>
 					</IconWithTooltip>
 				</FlexCenter>
-				<B>
-					{calculateEstimatedMatchingWithDonationAmount(
-						(tokenPrice || 0) * (amountTyped || 0),
-						projectDonationsSqrtRootSum,
-						allProjectsSum,
-						matchingPool,
-					)}
-				</B>
+				<B>{formatUSD(esMatching)}</B>
 			</Upper>
 			<Divider />
 			<Bottom>
