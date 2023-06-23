@@ -1,4 +1,3 @@
-// import Head from 'next/head';
 import { useEffect } from 'react';
 import { setDarkTheme, setLightTheme } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
