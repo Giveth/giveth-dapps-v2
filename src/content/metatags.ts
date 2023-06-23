@@ -102,3 +102,10 @@ export const claimMetatags = {
 	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
 	url: 'https://giveth.io/claim',
 };
+
+export const nftMetatags = {
+	title: 'Givers PFP Collection',
+	desc: 'Mint a Giver and show off your support for the Future of Giving!',
+	image: 'https://giveth.mypinata.cloud/ipfs/QmULaTJR5KHZeaDQ26p1ALcwAKgMcZGqVqGejPwbcmRwYc',
+	url: 'https://giveth.io/nft',
+};
