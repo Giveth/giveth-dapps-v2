@@ -28,8 +28,6 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 	const navigationPrevRef = useRef(null);
 	const navigationNextRef = useRef(null);
 
-	console.log('projectData', projectData?.qfRounds);
-
 	return (
 		<Swiper modules={[Navigation]} slidesPerView='auto' spaceBetween={21}>
 			<SwiperSlide style={{ width: 'auto' }}>

@@ -4,7 +4,6 @@ import {
 	H2,
 	H4,
 	H5,
-	Lead,
 	neutralColors,
 	P,
 	semanticColors,
@@ -31,7 +30,7 @@ import {
 	IDonationsByProjectIdGQL,
 } from '@/apollo/types/gqlTypes';
 import { showToastError } from '@/lib/helpers';
-import { IQFRound } from '@/apollo/types/types';
+import { IGetQfRoundHistory, IQFRound } from '@/apollo/types/types';
 
 const donationsPerPage = 10;
 
@@ -41,6 +40,7 @@ interface IProjectTotalFundCardProps {
 
 const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const [donationInfo, setDonationInfo] = useState<IDonationsByProjectId>();
+	const [qfRoundHistory, setQfRoundHistory] = useState<IGetQfRoundHistory>();
 	const { projectData, isAdmin } = useProjectContext();
 	const {
 		id,
@@ -107,8 +107,10 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 								: undefined,
 					},
 				})
-				.then((res: IDonationsByProjectIdGQL) => {
-					console.log('res', res);
+				.then((res: any) => {
+					const getQfRoundHistory: IGetQfRoundHistory =
+						res.data.getQfRoundHistory;
+					setQfRoundHistory(getQfRoundHistory);
 				});
 		};
 
@@ -120,6 +122,16 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 			fetchFinishedQfDonationsInfo();
 		}
 	}, [id, isAdmin, selectedQF]);
+
+	const roundTotalDonation =
+		selectedQF && selectedQF.isActive
+			? projectData?.sumDonationValueUsdForActiveQfRound
+			: qfRoundHistory?.raisedFundInUsd;
+
+	const roundDonationCount =
+		selectedQF && selectedQF.isActive
+			? projectData?.countUniqueDonorsForActiveQfRound
+			: qfRoundHistory?.uniqueDonors;
 
 	return (
 		<Wrapper>
@@ -142,12 +154,10 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						<P>Round: &nbsp;</P>
 						<B>QF round {selectedQF.id} donations</B>
 					</BorderedFlex>
-					{totalDonations && totalDonations > 0 ? (
+					{roundDonationCount && roundDonationCount > 0 ? (
 						<div>
 							<TotalFund>
-								{'$' +
-									donationInfo?.totalUsdBalance.toFixed(2) ||
-									'0'}
+								{'$' + roundTotalDonation?.toFixed(2) || '0'}
 							</TotalFund>
 							<EstimatedMatchingSection
 								justifyContent='space-between'
@@ -203,10 +213,6 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 const BottomSection = styled.div`
 	color: ${neutralColors.gray[700]};
 	margin-top: 40px;
-`;
-
-const LeadStyled = styled(Lead)`
-	margin-bottom: 8px;
 `;
 
 const NoDonation = styled(H4)`
