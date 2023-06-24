@@ -407,3 +407,12 @@ export interface IQFRound {
 	endDate: string;
 	minimumPassportScore: number;
 }
+
+export interface IGetQfRoundHistory {
+	distributedFundNetwork: string;
+	distributedFundTxHash: string;
+	donationsCount: number;
+	matchingFund: number;
+	raisedFundInUsd: number;
+	uniqueDonors: number;
+}
