@@ -15,10 +15,10 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 
 const QFToast = () => {
 	const { info } = usePassport();
-	const { passportState } = info;
+	const { passportState, currentRound } = info;
 	const isEligible = passportState === EPassportState.ELIGIBLE;
 	const isNotEligible = passportState === EPassportState.NOT_ELIGIBLE;
-	const { formatMessage } = useIntl();
+	const { formatMessage, locale } = useIntl();
 
 	const color = isEligible
 		? semanticColors.jade['500']
@@ -30,15 +30,43 @@ const QFToast = () => {
 		}`,
 	});
 
-	const description = formatMessage({
-		id: `page.donate.passport_toast.description.${
-			isEligible
-				? 'eligible'
-				: isNotEligible
-				? 'non_eligible'
-				: 'not_connected'
-		}`,
-	});
+	let description;
+	const roundNumber = currentRound?.id;
+	const endDate = new Date(currentRound?.endDate || '')
+		.toLocaleString(locale || 'en-US', {
+			day: 'numeric',
+			month: 'short',
+		})
+		.replace(/,/g, '');
+
+	if (isEligible) {
+		description =
+			formatMessage({
+				id: 'page.donate.passport_toast.description.eligible',
+			}) +
+			' ' +
+			roundNumber +
+			' ' +
+			formatMessage({
+				id: 'label.ends_on',
+			}) +
+			' ' +
+			endDate +
+			formatMessage({
+				id: 'page.donate.passport_toast.description.eligible_2',
+			});
+	} else {
+		description = (
+			<>
+				{formatMessage({
+					id: `page.donate.passport_toast.description.${
+						isNotEligible ? 'non_eligible' : 'not_connected'
+					}`,
+				})}{' '}
+				<span>{endDate}</span>
+			</>
+		);
+	}
 
 	return (
 		<Wrapper color={color}>
@@ -46,10 +74,7 @@ const QFToast = () => {
 				{!isEligible && <IconPassport24 />}
 				{title}
 			</Title>
-			<Description>
-				{description}
-				{!isEligible && <span> June 15</span>}
-			</Description>
+			<Description>{description}</Description>
 			<FlexCenter>
 				<ExternalLink href={'/'}>
 					<Button
