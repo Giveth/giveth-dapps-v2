@@ -1309,5 +1309,6 @@
 	"label.qf_round_projects": "QF round's projects",
 	"label.quadratic_funding_round": "Quadratic funding - Round",
 	"label.round_ends_in": "Round ends in",
-	"label.round_starts_in": "Round starts in"
+	"label.round_starts_in": "Round starts in",
+	"label.qf_no_donations": "There have been no donations in this round."
 }

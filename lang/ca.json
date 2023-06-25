@@ -1308,5 +1308,6 @@
 	"label.qf_round_projects": "",
 	"label.quadratic_funding_round": "",
 	"label.round_ends_in": "",
-	"label.round_starts_in": ""
+	"label.round_starts_in": "",
+	"label.qf_no_donations": ""
 }
