@@ -36,6 +36,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		qfRounds,
 		countUniqueDonorsForActiveQfRound,
 		estimatedMatching,
+		countUniqueDonors,
 	} = projectData || {};
 	const { formatMessage } = useIntl();
 	const recipientAddresses = addresses?.filter(a => a.isRecipient);
@@ -98,18 +99,30 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	return (
 		<Wrapper>
 			{selectedQF === null ? (
-				<UpperSection>
-					<B>All time donations received</B>
-					{totalDonations && totalDonations > 0 ? (
-						<TotalFund>{'$' + totalDonations.toFixed(2)}</TotalFund>
-					) : (
-						<NoDonation>
-							{formatMessage({
-								id: 'label.be_the_first_to_donate',
-							})}
-						</NoDonation>
-					)}
-				</UpperSection>
+				<>
+					<UpperSection>
+						<B>All time donations received</B>
+						{totalDonations && totalDonations > 0 ? (
+							<TotalFund>
+								{'$' + totalDonations.toFixed(2)}
+							</TotalFund>
+						) : (
+							<NoDonation>
+								{formatMessage({
+									id: 'label.be_the_first_to_donate',
+								})}
+							</NoDonation>
+						)}
+					</UpperSection>
+					<div>
+						<LightSubline> Raised from </LightSubline>
+						<Subline style={{ display: 'inline-block' }}>
+							&nbsp;{countUniqueDonors}
+							&nbsp;
+						</Subline>
+						<LightSubline>contributors</LightSubline>
+					</div>
+				</>
 			) : (
 				<div>
 					<BorderedFlex>
