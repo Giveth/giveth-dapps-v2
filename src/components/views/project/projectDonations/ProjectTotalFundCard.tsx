@@ -126,7 +126,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const roundTotalDonation =
 		selectedQF && selectedQF.isActive
 			? projectData?.sumDonationValueUsdForActiveQfRound
-			: qfRoundHistory?.raisedFundInUsd;
+			: qfRoundHistory?.raisedFundInUsd || 0;
 
 	const roundDonationCount =
 		selectedQF && selectedQF.isActive
