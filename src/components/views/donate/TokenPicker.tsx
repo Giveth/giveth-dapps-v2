@@ -45,7 +45,6 @@ const ImageIcon = (props: { symbol: string }) => {
 	const { symbol } = props;
 	let image_path = '';
 	try {
-		require(`../../../../public/images/tokens/${symbol?.toLowerCase()}.svg`);
 		image_path = `/images/tokens/${symbol?.toUpperCase()}.svg`;
 	} catch (err) {
 		image_path = '/images/tokens/ETH.svg'; //set default image path
