@@ -12,7 +12,6 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
-import { captureException } from '@sentry/nextjs';
 import { useEffect, useState } from 'react';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectWalletAddress from '@/components/views/project/projectDonations/ProjectWalletAddress';
@@ -20,26 +19,14 @@ import { useProjectContext } from '@/context/project.context';
 import { calculateTotalEstimatedMatching } from '@/helpers/qf';
 import { Flex } from '@/components/styled-components/Flex';
 import { client } from '@/apollo/apolloClient';
-import {
-	FETCH_PROJECT_DONATIONS,
-	FETCH_QF_ROUND_HISTORY,
-} from '@/apollo/gql/gqlDonations';
-import { EDonationStatus, ESortby, EDirection } from '@/apollo/types/gqlEnums';
-import {
-	IDonationsByProjectId,
-	IDonationsByProjectIdGQL,
-} from '@/apollo/types/gqlTypes';
-import { showToastError } from '@/lib/helpers';
+import { FETCH_QF_ROUND_HISTORY } from '@/apollo/gql/gqlDonations';
 import { IGetQfRoundHistory, IQFRound } from '@/apollo/types/types';
-
-const donationsPerPage = 10;
 
 interface IProjectTotalFundCardProps {
 	selectedQF: IQFRound | null;
 }
 
 const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
-	const [donationInfo, setDonationInfo] = useState<IDonationsByProjectId>();
 	const [qfRoundHistory, setQfRoundHistory] = useState<IGetQfRoundHistory>();
 	const { projectData, isAdmin } = useProjectContext();
 	const {
@@ -61,39 +48,14 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		if (!id) return;
 		//TODO: should change to new endpoint for fetching donations amount
 		const fetchAllDonationsInfo = async () => {
-			client
-				.query({
-					query: FETCH_PROJECT_DONATIONS,
-					variables: {
-						projectId: parseInt(id),
-						skip: 0,
-						take: donationsPerPage,
-						status: isAdmin ? null : EDonationStatus.VERIFIED,
-						qfRoundId:
-							selectedQF !== null
-								? parseInt(selectedQF.id)
-								: undefined,
-						orderBy: {
-							field: ESortby.CREATION_DATE,
-							direction: EDirection.DESC,
-						},
-					},
-				})
-				.then((res: IDonationsByProjectIdGQL) => {
-					const donationsByProjectId = res.data.donationsByProjectId;
-					setDonationInfo(donationsByProjectId);
-				})
-				.catch((error: unknown) => {
-					showToastError(error);
-					captureException(error, {
-						tags: {
-							section: 'fetchProjectDonation',
-						},
-					});
-				});
+			// We can fetch project to show the latest donations info but i think it's not necessary
+			// fetchProjectBySlug();
 		};
 
-		const fetchCurrentQfDonationsInfo = async () => {};
+		const fetchCurrentQfDonationsInfo = async () => {
+			// We can fetch project to show the latest donations info but i think it's not necessary
+			// fetchProjectBySlug();
+		};
 
 		const fetchFinishedQfDonationsInfo = async () => {
 			client
