@@ -23,6 +23,37 @@ interface IFilterMenuProps {
 	isOpen?: boolean;
 }
 
+const projectsFeatures = [
+	{
+		label: { id: 'label.verified' },
+		value: EProjectsFilter.VERIFIED,
+	},
+];
+
+const fundsFilter = [
+	{
+		label: 'Mainnet',
+
+		value: EProjectsFilter.ACCEPT_FUND_ON_MAINNET,
+	},
+	{
+		label: 'Gnosis',
+		value: EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
+	},
+	{
+		label: 'Polygon',
+		value: EProjectsFilter.ACCEPT_FUND_ON_POLYGON,
+	},
+	{
+		label: 'Celo',
+		value: EProjectsFilter.ACCEPT_FUND_ON_CELO,
+	},
+	{
+		label: 'Optimism',
+		value: EProjectsFilter.ACCEPT_FUND_ON_OPTIMISM,
+	},
+];
+
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {
 		const { formatMessage } = useIntl();
@@ -31,29 +62,6 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const campaignCount = variables?.campaignSlug ? 1 : 0;
 		const count = filtersCount + campaignCount;
 		const router = useRouter();
-
-		const projectFeatures = [
-			{
-				label: formatMessage({ id: 'label.accepts_giv' }),
-				value: EProjectsFilter.ACCEPT_GIV,
-			},
-			{
-				label: formatMessage({ id: 'label.verified' }),
-				value: EProjectsFilter.VERIFIED,
-			},
-			{
-				label: formatMessage({ id: 'label.boosted_with_giv_power' }),
-				value: EProjectsFilter.BOOSTED_WITH_GIVPOWER,
-			},
-			{
-				label: formatMessage({ id: 'label.from_giving_block' }),
-				value: EProjectsFilter.GIVING_BLOCK,
-			},
-			{
-				label: formatMessage({ id: 'label.accepts_funds_on_gnosis' }),
-				value: EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
-			},
-		];
 
 		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
 			if (e) {
@@ -101,7 +109,27 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 				</Header>
 				<Section>
 					<B>{formatMessage({ id: 'label.project_features' })}</B>
-					{projectFeatures.map((projectFeature, idx) => (
+					{projectsFeatures.map((projectFeature, idx) => (
+						<FeatureItem key={idx}>
+							<CheckBox
+								label={formatMessage(
+									{ id: projectFeature.label.id },
+									projectFeature.label,
+								)}
+								onChange={e => {
+									handleSelectFilter(e, projectFeature.value);
+								}}
+								checked={
+									variables?.filters?.includes(
+										projectFeature.value,
+									) ?? false
+								}
+								size={14}
+							/>
+						</FeatureItem>
+					))}
+					<B>{formatMessage({ id: 'label.accepts_funds_on' })}</B>
+					{fundsFilter.map((projectFeature, idx) => (
 						<FeatureItem key={idx}>
 							<CheckBox
 								label={projectFeature.label}

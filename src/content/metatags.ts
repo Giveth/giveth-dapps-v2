@@ -1,6 +1,6 @@
 export const homeMetatags = {
 	title: 'Giveth: Welcome to the Future of Giving',
-	desc: 'Get rewarded for giving to for-good projects with zero added fees. Donate crypto directly to over 1,000 for-good projects, non profits & charities!',
+	desc: 'Get rewarded for giving to for-good projects with zero added fees. Donate crypto directly to thousands of for-good projects, nonprofits & charities!',
 	image: 'https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c',
 	url: 'https://giveth.io/',
 };
@@ -101,4 +101,11 @@ export const claimMetatags = {
 	desc: `If you were an early supporter of Giveth before our public launch, enter your address to check if you are eligible for our GIVdrop!`,
 	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
 	url: 'https://giveth.io/claim',
+};
+
+export const nftMetatags = {
+	title: 'Givers PFP Collection',
+	desc: 'Mint a Giver and show off your support for the Future of Giving!',
+	image: 'https://giveth.mypinata.cloud/ipfs/QmULaTJR5KHZeaDQ26p1ALcwAKgMcZGqVqGejPwbcmRwYc',
+	url: 'https://giveth.io/nft',
 };

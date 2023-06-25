@@ -13,6 +13,8 @@ import Routes from '@/lib/constants/Routes';
 import { NotificationBox } from '../notification/NotificationBox';
 import { useItemsContext } from '@/context/Items.context';
 import { INotification } from '@/features/notification/notification.types';
+import { useAppSelector } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.slice';
 
 interface INotificationMenuProps {
 	notifications: INotification[] | [];
@@ -25,6 +27,7 @@ export const NotificationItems: FC<INotificationMenuProps> = ({
 }) => {
 	const { close } = useItemsContext();
 	const { formatMessage } = useIntl();
+	const theme = useAppSelector(state => state.general.theme);
 
 	return (
 		<>
@@ -46,14 +49,14 @@ export const NotificationItems: FC<INotificationMenuProps> = ({
 				</P>
 			)}
 			<br />
-			<Link href={Routes.Notifications} passHref>
+			<AllNotifsLink href={Routes.Notifications} passHref theme={theme}>
 				<AllNotificationsLink
 					onClick={close}
 					color={brandColors.pinky[500]}
 				>
 					{formatMessage({ id: 'label.all_notifications' })}
 				</AllNotificationsLink>
-			</Link>
+			</AllNotifsLink>
 		</>
 	);
 };
@@ -67,4 +70,14 @@ const AllNotificationsLink = styled(GLink)`
 	display: flex;
 	justify-content: center;
 	color: ${brandColors.pinky[500]};
+`;
+
+const AllNotifsLink = styled(Link)`
+	position: sticky;
+	bottom: 0;
+	width: 100%;
+	background-color: ${props =>
+		props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
+	display: inline-block;
+	padding: 8px 0;
 `;

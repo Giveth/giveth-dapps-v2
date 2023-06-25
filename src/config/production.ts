@@ -8,8 +8,11 @@ import {
 import { networksParams } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
-const BASE_ROUTE = 'https://mainnet.serve.giveth.io';
-const NOTIFICATION_BASE_ROUTE = 'https://notification.giveth.io';
+const BASE_ROUTE =
+	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
+const NOTIFICATION_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
+	'https://notification.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
 const XDAI_NETWORK_NUMBER = 100; // xDAI
@@ -20,10 +23,13 @@ const CELO_NETWORK_NUMBER = 42220;
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
 	BASE_ROUTE: BASE_ROUTE,
-	BACKEND_LINK: 'https://mainnet.serve.giveth.io/graphql',
-	FRONTEND_LINK: 'https://giveth.io',
+	BACKEND_LINK:
+		process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`,
+	FRONTEND_LINK: process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://giveth.io',
 	MICROSERVICES: {
-		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
+		authentication:
+			process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
+			`${BASE_ROUTE}/siweauthmicroservice/v1`,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
@@ -50,7 +56,7 @@ const config: EnvConfig = {
 
 		blockExplorerName: ['etherscan'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
+			'https://gateway.thegraph.com/api/4404c555dda23fe8080ed3cecd8e48cd/subgraphs/id/8Fh5uZkm44L7ma6Jh7JjveV87zvmDkJPuuMZuyvUW9S6',
 
 		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
@@ -219,7 +225,7 @@ const config: EnvConfig = {
 
 		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
+			'https://gateway.thegraph.com/api/4404c555dda23fe8080ed3cecd8e48cd/subgraphs/id/ATN3hzfMwQqYMcyrAxqMSrr7Bxf5jKQytWZJpwLigt2p',
 
 		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		gGIV_ADDRESS: '0xfFBAbEb49be77E5254333d5fdfF72920B989425f',
@@ -312,8 +318,7 @@ const config: EnvConfig = {
 					'https://app.honeyswap.org/#/add/0x21a42669643f45bc0e086b8fc2ed70c23d67509d/XDAI?chainId=100',
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
-				farmStartTimeMS: 1666026660000,
-				farmEndTimeMS: 1681850831420,
+				farmStartTimeMS: 1685460000000,
 				introCard: {
 					title: 'ShapeShift DAO',
 					description:
