@@ -262,7 +262,8 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		blockExplorerName: ['GoerliOptimismScan'],
-		subgraphAddress: '',
+		subgraphAddress:
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-staging',
 		TOKEN_ADDRESS: '0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		TOKEN_DISTRO_ADDRESS: '0x8D2cBce8ea0256bFFBa6fa4bf7CEC46a1d9b43f6',
