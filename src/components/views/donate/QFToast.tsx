@@ -10,9 +10,9 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
-import ExternalLink from '@/components/ExternalLink';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
+import InternalLink from '@/components/InternalLink';
 
 const QFToast = () => {
 	const { info } = usePassport();
@@ -77,7 +77,7 @@ const QFToast = () => {
 			</Title>
 			<Description>{description}</Description>
 			<FlexCenter>
-				<ExternalLink href={Routes.Passport}>
+				<InternalLink href={Routes.Passport}>
 					<Button
 						label={formatMessage({
 							id: 'label.passport.link.go_to_passport',
@@ -86,7 +86,7 @@ const QFToast = () => {
 						size='small'
 						icon={<IconExternalLink16 />}
 					/>
-				</ExternalLink>
+				</InternalLink>
 			</FlexCenter>
 		</Wrapper>
 	);
