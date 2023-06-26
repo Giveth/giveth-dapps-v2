@@ -167,7 +167,7 @@ export interface EnvConfig {
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	XDAI_CONFIG: XDaiNetworkConfig;
 	POLYGON_CONFIG: BasicNetworkConfig;
-	OPTIMISM_CONFIG: BasicNetworkConfig;
+	OPTIMISM_CONFIG: SimpleNetworkConfig;
 	CELO_CONFIG: BasicNetworkConfig;
 	GARDEN_LINK: string;
 	BASE_ROUTE: string;

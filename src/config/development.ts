@@ -263,6 +263,18 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['GoerliOptimismScan'],
 		subgraphAddress: '',
+		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
+		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+		TOKEN_DISTRO_ADDRESS: '0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
+		pools: [],
+		regenPools: [],
+		regenStreams: [],
+		GIV: {
+			network: OPTIMISM_NETWORK_NUMBER,
+			LM_ADDRESS: '',
+			BUY_LINK: 'https://',
+		},
+		uniswapV2Subgraph: '',
 	},
 
 	CELO_CONFIG: {
