@@ -68,7 +68,7 @@ export function TabPowerTop() {
 	const { formatMessage } = useIntl();
 	const { account } = useWeb3React();
 	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.xDaiValues),
+		useAppSelector(state => state.subgraph.gnosisValues),
 	);
 	const givPower = sdh.getUserGIVPowerBalance();
 	const givPowerFormatted = formatWeiHelper(givPower.balance);

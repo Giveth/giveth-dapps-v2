@@ -51,14 +51,14 @@ export const TabGIVbacksTop = () => {
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showHarvestModal);
-	const xDaiValues = useAppSelector(
-		state => state.subgraph.xDaiValues,
+	const gnosisValues = useAppSelector(
+		state => state.subgraph.gnosisValues,
 		() => (showHarvestModal ? true : false),
 	);
 	const givTokenDistroBalance = useMemo(() => {
-		const sdh = new SubgraphDataHelper(xDaiValues);
+		const sdh = new SubgraphDataHelper(gnosisValues);
 		return sdh.getGIVTokenDistroBalance();
-	}, [xDaiValues]);
+	}, [gnosisValues]);
 	const { chainId } = useWeb3React();
 
 	useEffect(() => {

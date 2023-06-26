@@ -7,16 +7,6 @@ import {
 } from './subgraph.thunks';
 import type { ISubgraphState } from './subgraph.types';
 
-const defaultGIVpowerInfo = {
-	id: '',
-	initialDate: '0',
-	locksCreated: 0,
-	roundDuration: 1,
-	totalGIVLocked: '0',
-	currentRound: 0,
-	nextRoundDate: '0',
-};
-
 export const defaultSubgraphValues: ISubgraphState = {
 	userNotStakedPositions: [],
 	userStakedPositions: [],
@@ -36,11 +26,11 @@ export const defaultXdaiSubgraphValues: ISubgraphState = {
 const initialState: {
 	currentValues: ISubgraphState;
 	mainnetValues: ISubgraphState;
-	xDaiValues: ISubgraphState;
+	gnosisValues: ISubgraphState;
 } = {
 	currentValues: defaultSubgraphValues,
 	mainnetValues: defaultSubgraphValues,
-	xDaiValues: defaultXdaiSubgraphValues,
+	gnosisValues: defaultXdaiSubgraphValues,
 };
 
 export const subgraphSlice = createSlice({
@@ -55,11 +45,11 @@ export const subgraphSlice = createSlice({
 					state.mainnetValues = action.payload.response;
 				}
 				if (action.payload.chainId === config.XDAI_NETWORK_NUMBER) {
-					state.xDaiValues = action.payload.response;
+					state.gnosisValues = action.payload.response;
 				}
 			})
 			.addCase(fetchXDaiInfoAsync.fulfilled, (state, action) => {
-				state.xDaiValues = action.payload;
+				state.gnosisValues = action.payload;
 			})
 			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
 				state.mainnetValues = action.payload;

@@ -35,8 +35,8 @@ const TestRoute = () => {
 //This comment is for testing1
 
 const TestIndex = () => {
-	// const xDaiValues = useSelector(
-	// 	(state: RootState) => state.subgraph.xDaiValues,
+	// const gnosisValues = useSelector(
+	// 	(state: RootState) => state.subgraph.gnosisValues,
 	// );
 	const [showModal, setShowModal] = useState(false);
 	const { account } = useWeb3React();
@@ -80,7 +80,7 @@ const TestIndex = () => {
 		console.log('res', res);
 	};
 
-	// console.log('xDaiValues', xDaiValues);
+	// console.log('gnosisValues', gnosisValues);
 	// useEffect(() => {
 	// 	if (!library) return;
 	// 	library.on('block', (evt: any) => {

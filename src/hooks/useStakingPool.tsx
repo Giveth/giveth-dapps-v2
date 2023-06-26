@@ -36,7 +36,7 @@ export const useStakingPool = (
 	const currentValues = useAppSelector(
 		state =>
 			poolStakingConfig.network === config.XDAI_NETWORK_NUMBER
-				? state.subgraph.xDaiValues
+				? state.subgraph.gnosisValues
 				: state.subgraph.mainnetValues,
 		() => (hold ? true : false),
 	);

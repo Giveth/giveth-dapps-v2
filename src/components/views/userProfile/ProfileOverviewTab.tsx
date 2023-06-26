@@ -97,7 +97,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 
 	const [section, setSection] = useState<ISection>(_sections.getGiv);
 	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.xDaiValues),
+		useAppSelector(state => state.subgraph.gnosisValues),
 	);
 	const { userData } = useAppSelector(state => state.user);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;

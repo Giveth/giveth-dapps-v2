@@ -16,7 +16,7 @@ export const useTokenDistroHelper = (
 	const currentValues = useAppSelector(
 		state =>
 			poolNetwork === config.XDAI_NETWORK_NUMBER
-				? state.subgraph.xDaiValues
+				? state.subgraph.gnosisValues
 				: state.subgraph.mainnetValues,
 		() => (hold ? true : false),
 	);
