@@ -37,7 +37,7 @@ export const fetchCurrentInfoAsync = createAsyncThunk(
 		const response =
 			chainId === config.MAINNET_NETWORK_NUMBER
 				? await fetchMainnetInfo(userAddress)
-				: config.OPTIMISM_NETWORK_NUMBER
+				: chainId === config.OPTIMISM_NETWORK_NUMBER
 				? await fetchOptimismInfo(userAddress)
 				: await fetchGnosisInfo(userAddress);
 		return {
