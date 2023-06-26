@@ -14,7 +14,7 @@ const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const XDAI_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
-const OPTIMISM_NETWORK_NUMBER = 10;
+const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
 
 const config: EnvConfig = {
@@ -256,12 +256,12 @@ const config: EnvConfig = {
 	},
 
 	OPTIMISM_CONFIG: {
-		nodeUrl: networksParams[10]?.rpcUrls[0],
-		...networksParams[10],
+		nodeUrl: networksParams[420]?.rpcUrls[0],
+		...networksParams[420],
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['OptimismScan'],
+		blockExplorerName: ['GoerliOptimismScan'],
 		subgraphAddress: '',
 	},
 
