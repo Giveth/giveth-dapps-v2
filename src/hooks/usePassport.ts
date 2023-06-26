@@ -143,7 +143,7 @@ export const usePassport = () => {
 	};
 
 	useEffect(() => {
-		if (!user || !account) {
+		if (!account) {
 			return setInfo({
 				passportState: EPassportState.NOT_CONNECTED,
 				passportScore: null,
@@ -152,10 +152,11 @@ export const usePassport = () => {
 		}
 
 		const fetchData = async () => {
-			if (user.passportScore === null) {
+			if (!user || user.passportScore === null) {
 				console.log('Passport score is null in our database');
 				const passports = getPassports();
-				if (passports[account.toLowerCase()]) {
+				//user has not passport account
+				if (passports[account.toLowerCase()] && user) {
 					await updateState(user);
 				} else {
 					setInfo({
