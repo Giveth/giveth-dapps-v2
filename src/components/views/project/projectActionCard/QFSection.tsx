@@ -9,6 +9,7 @@ import {
 	semanticColors,
 	IconArrowRight16,
 	IconChevronRight16,
+	IconHelpFilled16,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -20,6 +21,8 @@ import {
 	calculateEstimatedMatchingWithDonationAmount,
 	calculateTotalEstimatedMatching,
 } from '@/helpers/qf';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 
 const QFSection = () => {
 	const { formatMessage, locale } = useIntl();
@@ -78,7 +81,19 @@ const QFSection = () => {
 						matchingPool,
 					).toFixed(2)}
 				</EstimatedMatchingPrice>
-				<LightCaption> Estimated matching</LightCaption>
+				<Flex alignItems='center' gap='4px'>
+					<LightCaption> Estimated matching </LightCaption>
+					<IconWithTooltip
+						icon={<IconHelpFilled16 />}
+						direction='top'
+					>
+						<TooltipContent>
+							{formatMessage({
+								id: 'tooltip.donation.matching',
+							})}
+						</TooltipContent>
+					</IconWithTooltip>
+				</Flex>
 			</Flex>
 			<div>
 				<Flex justifyContent='space-between'>
@@ -129,11 +144,11 @@ const QFSection = () => {
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
-						<Flex justifyContent='space-between'>
+						{/* <Flex justifyContent='space-between'>
 							<LightSubline>Last updated: 3h ago</LightSubline>
 							<LightSubline>|</LightSubline>
 							<LightSubline>Next update in: 3 min</LightSubline>
-						</Flex>
+						</Flex> */}
 						<a
 							href='/'
 							target='_blank'
