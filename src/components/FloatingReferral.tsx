@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, FC } from 'react';
 import Image from 'next/image';
 import styled, { keyframes } from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -16,10 +16,15 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 
-const FloatingButtonReferral = () => {
+interface IFloatingReferral {
+	projectHref?: string;
+}
+
+const FloatingButtonReferral: FC<IFloatingReferral> = props => {
 	const [showModal, setShowModal] = useState(false);
 	const [isOpen, setIsOpen] = useState(false);
 	const { formatMessage } = useIntl();
+	const { projectHref } = props;
 
 	const handleClick = () => {
 		setIsOpen(!isOpen);
@@ -31,6 +36,7 @@ const FloatingButtonReferral = () => {
 				<ShareRewardedModal
 					contentType={EContentType.thisProject}
 					setShowModal={setShowModal}
+					projectHref={projectHref}
 				/>
 			)}
 			{isOpen && (

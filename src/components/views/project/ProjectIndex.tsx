@@ -26,6 +26,7 @@ import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { compareAddresses, isSSRMode, showToastError } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { ProjectMeta } from '@/components/Metatag';
+import FloatingButtonReferral from '@/components/FloatingReferral';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
 
@@ -198,6 +199,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						</Col>
 					)}
 				</BodyWrapper>
+				<FloatingButtonReferral projectHref={slug} />
 			</Wrapper>
 			<SimilarProjects slug={slug} />
 		</>
