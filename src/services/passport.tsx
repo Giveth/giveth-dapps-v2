@@ -3,6 +3,7 @@ import { REFRESH_USER_SCORES } from '@/apollo/gql/gqlPassport';
 import config from '@/configuration';
 import { getPassports } from '@/helpers/passport';
 import { getRequest, postRequest } from '@/helpers/requests';
+import { showToastError } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 
 export const fetchPassportScore = async (account: string) => {
@@ -57,6 +58,7 @@ export const connectPassport = async (account: string, library: any) => {
 		return true;
 	} catch (error) {
 		console.log('error', error);
+		showToastError(error);
 		return false;
 	}
 };
