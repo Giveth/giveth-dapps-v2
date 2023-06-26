@@ -12,6 +12,7 @@ import { useIntl } from 'react-intl';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import ExternalLink from '@/components/ExternalLink';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import Routes from '@/lib/constants/Routes';
 
 const QFToast = () => {
 	const { info } = usePassport();
@@ -76,7 +77,7 @@ const QFToast = () => {
 			</Title>
 			<Description>{description}</Description>
 			<FlexCenter>
-				<ExternalLink href={'/'}>
+				<ExternalLink href={Routes.Passport}>
 					<Button
 						label={formatMessage({
 							id: 'label.passport.link.go_to_passport',
