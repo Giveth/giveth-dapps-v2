@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import { Container } from '@giveth/ui-design-system';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch } from '@/features/hooks';
-import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
+import { fetchGnosisInfoAsync } from '@/features/subgraph/subgraph.thunks';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
@@ -114,7 +114,7 @@ const TestIndex = () => {
 				<button
 					onClick={() => {
 						if (account) {
-							dispatch(fetchXDaiInfoAsync(account));
+							dispatch(fetchGnosisInfoAsync(account));
 						}
 					}}
 				>
