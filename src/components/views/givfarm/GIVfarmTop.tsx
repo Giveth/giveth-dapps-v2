@@ -59,6 +59,7 @@ export const GIVfarmTop = () => {
 							targetNetworks={[
 								config.MAINNET_NETWORK_NUMBER,
 								config.XDAI_NETWORK_NUMBER,
+								config.OPTIMISM_NETWORK_NUMBER,
 							]}
 						/>
 					</Col>
