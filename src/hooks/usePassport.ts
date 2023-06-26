@@ -114,8 +114,22 @@ export const usePassport = () => {
 
 	const refreshScore = useCallback(async () => {
 		if (!account) return;
-		const { refreshUserScores } = await fetchPassportScore(account);
-		await updateState(refreshUserScores);
+		setInfo({
+			passportState: EPassportState.LOADING,
+			passportScore: null,
+			currentRound: null,
+		});
+		try {
+			const { refreshUserScores } = await fetchPassportScore(account);
+			await updateState(refreshUserScores);
+		} catch (error) {
+			console.log(error);
+			setInfo({
+				passportState: EPassportState.ERROR,
+				passportScore: null,
+				currentRound: null,
+			});
+		}
 	}, [account, updateState]);
 
 	const handleSign = async () => {
