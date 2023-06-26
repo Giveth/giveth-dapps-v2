@@ -33,16 +33,16 @@ export const fetchMainnetInfoAsync = createAsyncThunk(
 
 export const fetchCurrentInfoAsync = createAsyncThunk(
 	'subgraph/fetchCurrentInfo',
-	async (props: ICurrentInfo) => {
+	async ({ userAddress, chainId }: ICurrentInfo) => {
 		const response =
-			props.chainId === config.MAINNET_NETWORK_NUMBER
-				? await fetchMainnetInfo(props.userAddress)
+			chainId === config.MAINNET_NETWORK_NUMBER
+				? await fetchMainnetInfo(userAddress)
 				: config.OPTIMISM_NETWORK_NUMBER
-				? fetchOptimismInfo(props.userAddress)
-				: await fetchGnosisInfo(props.userAddress);
+				? await fetchOptimismInfo(userAddress)
+				: await fetchGnosisInfo(userAddress);
 		return {
 			response: { ...response, isLoaded: true },
-			chainId: props.chainId,
+			chainId: chainId,
 		};
 	},
 );

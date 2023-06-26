@@ -2,8 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import config from '@/configuration';
 import {
 	fetchCurrentInfoAsync,
-	fetchXDaiInfoAsync,
 	fetchMainnetInfoAsync,
+	fetchGnosisInfoAsync,
+	fetchOptimismInfoAsync,
 } from './subgraph.thunks';
 import type { ISubgraphState } from './subgraph.types';
 
@@ -27,10 +28,12 @@ const initialState: {
 	currentValues: ISubgraphState;
 	mainnetValues: ISubgraphState;
 	gnosisValues: ISubgraphState;
+	optimismValues: ISubgraphState;
 } = {
 	currentValues: defaultSubgraphValues,
 	mainnetValues: defaultSubgraphValues,
 	gnosisValues: defaultXdaiSubgraphValues,
+	optimismValues: defaultSubgraphValues,
 };
 
 export const subgraphSlice = createSlice({
@@ -43,16 +46,24 @@ export const subgraphSlice = createSlice({
 				state.currentValues = action.payload.response;
 				if (action.payload.chainId === config.MAINNET_NETWORK_NUMBER) {
 					state.mainnetValues = action.payload.response;
-				}
-				if (action.payload.chainId === config.XDAI_NETWORK_NUMBER) {
+				} else if (
+					action.payload.chainId === config.XDAI_NETWORK_NUMBER
+				) {
 					state.gnosisValues = action.payload.response;
+				} else if (
+					action.payload.chainId === config.OPTIMISM_NETWORK_NUMBER
+				) {
+					state.optimismValues = action.payload.response;
 				}
-			})
-			.addCase(fetchXDaiInfoAsync.fulfilled, (state, action) => {
-				state.gnosisValues = action.payload;
 			})
 			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
 				state.mainnetValues = action.payload;
+			})
+			.addCase(fetchGnosisInfoAsync.fulfilled, (state, action) => {
+				state.gnosisValues = action.payload;
+			})
+			.addCase(fetchOptimismInfoAsync.fulfilled, (state, action) => {
+				state.optimismValues = action.payload;
 			});
 	},
 });
