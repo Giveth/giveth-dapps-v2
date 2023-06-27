@@ -21,9 +21,11 @@ import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
 import { EContentType } from '@/lib/constants/shareContent';
 import QFToast from '@/components/views/donate/QFToast';
+import { useAppSelector } from '@/features/hooks';
 
 const SuccessView: FC = () => {
-	const { isSuccessDonation } = useDonateData();
+	const { isLoading } = useAppSelector(state => state.user);
+	const { isSuccessDonation, setSuccessDonation } = useDonateData();
 	const { givBackEligible, txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 
@@ -51,6 +53,13 @@ const SuccessView: FC = () => {
 				setGivethSlug(res.data.projectById.slug),
 			);
 	}, []);
+
+	useEffect(() => {
+		//Switch to donate view if user is changed
+		if (isLoading) {
+			setSuccessDonation(undefined);
+		}
+	}, [isLoading]);
 
 	return (
 		<SuccessContainer>
