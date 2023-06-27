@@ -1288,12 +1288,13 @@
 	"label.start_referring!": "Start Referring!",
 	"label.connect_your_wallet_and_get_your_link": "Connect your wallet and get your unique link to share on social media and favourite community channels.",
 	"label.connect_your_wallet_and_generate_your_link": "Connect your wallet and generate your unique referral link.",
-	"label.heres_your_unique_referral": "Here's your unique referral link",
+	"label.heres_your_unique_referral": "Earn GIV when someone donates to any verified project through your referral.",
 	"label.share_on_social_media": "Share on social media",
 	"label.refer_your_friends_and_earn_giv": "Refer your friends and earn GIV when they donate",
 	"label.here_is_your_link": "Here's your link",
 	"label.refer_your_friends": "Refer your friends",
 	"label.share_this_page_with_your_friends": "Share this page with your friends, and get rewarded when they donate to verified projects!",
 	"label.we_ran_into_an_issue_and_couldnt_generate_your_referral": "We ran into an issue and couldn’t generate your referral ID. Please try again.",
-	"label.create_referrral_id_again": "Create referral Id again"
+	"label.create_referrral_id_again": "Create referral Id again",
+	"label.share_your_unique_link_to_get_started": " Share your unique link to get started:"
 }

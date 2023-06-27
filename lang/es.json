@@ -1303,5 +1303,6 @@
 	"label.refer_your_friends": "Refiere a tus amigos",
 	"label.share_this_page_with_your_friends": "Comparte esta página con tus amigos",
 	"label.we_ran_into_an_issue_and_couldnt_generate_your_referral": "Nos encontramos con un problema y no pudimos generar tu enlace de referencia. Por favor, inténtalo de nuevo.",
-	"label.create_referrral_id_again": "Crea un ID de referencia de nuevo"
+	"label.create_referrral_id_again": "Crea un ID de referencia de nuevo",
+	"label.share_your_unique_link_to_get_started": ""
 }
