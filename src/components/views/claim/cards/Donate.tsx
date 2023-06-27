@@ -34,7 +34,7 @@ import { IClaimViewCardProps } from '@/components/views/claim/Claim.view';
 import useClaim from '@/context/claim.context';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { InputWithUnit } from '@/components/input';
+import { InputWithUnit } from '@/components/input/index';
 import { Flex } from '@/components/styled-components/Flex';
 import { Zero, formatWeiHelper } from '@/helpers/number';
 
