@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
-import StorageLabel, { setWithExpiry, getWithExpiry } from '@/lib/localStorage';
+import StorageLabel, { setWithExpiry } from '@/lib/localStorage';
 import { countReferralClick } from '@/features/user/user.thunks';
 
 export const useReferral = () => {
@@ -15,19 +15,16 @@ export const useReferral = () => {
 	const referrerId = router?.query?.referrer_id;
 
 	useEffect(() => {
-		const ref = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 		if (referrerId && !isLoading) {
 			if (!isSignedIn) {
 				dispatch(setShowSignWithWallet(true));
 			} else {
+				setWithExpiry(
+					StorageLabel.CHAINVINEREFERRED,
+					referrerId,
+					1 * 24 * 60 * 60,
+				);
 				if (!userData?.wasReferred && !userData?.isReferrer) {
-					if (!ref || ref !== referrerId) {
-						setWithExpiry(
-							StorageLabel.CHAINVINEREFERRED,
-							referrerId,
-							1 * 24 * 60 * 60,
-						);
-					}
 					dispatch(
 						countReferralClick({
 							referrerId: referrerId.toString(),
