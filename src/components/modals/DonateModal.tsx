@@ -87,7 +87,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses, givethAddresses } = project || {};
-	console.log({ chainvineReferred });
 	const projectWalletAddress =
 		addresses?.find(a => a.isRecipient && a.networkId === chainId)
 			?.address || '';
