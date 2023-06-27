@@ -109,7 +109,7 @@ const FloatingContainer = styled(FlexCenter)<{ isOpen: boolean }>`
 	left: 2rem;
 	padding: ${({ isOpen }) => (isOpen ? ' 6px 0' : '0')};
 	width: ${({ isOpen }) => (isOpen ? '331px' : '271px')};
-	z-index: 2;
+	z-index: 20;
 	justify-content: center;
 	border-radius: 12px;
 	background: white;
