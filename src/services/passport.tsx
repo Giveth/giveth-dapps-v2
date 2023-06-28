@@ -25,7 +25,11 @@ export const fetchPassportScore = async (account: string) => {
 	}
 };
 
-export const connectPassport = async (account: string, library: any) => {
+export const connectPassport = async (
+	account: string,
+	library: any,
+	singin: boolean,
+) => {
 	//Get Nonce and Message
 	try {
 		const { nonce, message } = await getRequest(
@@ -55,6 +59,13 @@ export const connectPassport = async (account: string, library: any) => {
 		};
 
 		localStorage.setItem(StorageLabel.PASSPORT, JSON.stringify(passports));
+
+		if (singin) {
+			//use passport jwt to sign in to the giveth and create user
+			console.log('Use Passport token to sign in to the giveth');
+			localStorage.setItem(StorageLabel.USER, account.toLowerCase());
+			localStorage.setItem(StorageLabel.TOKEN, jwt);
+		}
 		return true;
 	} catch (error) {
 		console.log('error', error);
