@@ -16,9 +16,10 @@ const ShareLikeBadge = (props: {
 	active?: boolean;
 	onClick: () => void;
 	isSimple?: boolean | null;
+	fromDonate?: boolean | null;
 }) => {
 	const { formatMessage } = useIntl();
-	const { type, active, onClick, isSimple } = props;
+	const { type, active, onClick, isSimple, fromDonate } = props;
 	const isShare = type === 'share' || type === 'reward';
 	const text =
 		type === 'share'
@@ -27,7 +28,11 @@ const ShareLikeBadge = (props: {
 			? formatMessage({ id: 'label.share_and_get_rewarded' })
 			: formatMessage({ id: 'label.like' });
 	const icon = isShare ? (
-		<IconShare color={neutralColors.gray[500]} />
+		<IconShare
+			color={
+				fromDonate ? brandColors.pinky[500] : neutralColors.gray[500]
+			}
+		/>
 	) : active ? (
 		<IconHeartFilled color={brandColors.pinky[500]} />
 	) : (
@@ -37,7 +42,11 @@ const ShareLikeBadge = (props: {
 	return (
 		<Wrapper isSimple={isSimple} onClick={onClick}>
 			{icon}
-			{!isSimple && <BadgeText size='small'>{text}</BadgeText>}
+			{!isSimple && (
+				<BadgeText size='small' fromDonate={fromDonate}>
+					{text}
+				</BadgeText>
+			)}
 		</Wrapper>
 	);
 };
@@ -56,8 +65,10 @@ const Wrapper = styled(FlexCenter)<{ isSimple?: boolean | null }>`
 	min-width: fit-content;
 `;
 
-const BadgeText = styled(ButtonText)`
-	color: ${neutralColors.gray[500]};
+const BadgeText = styled(ButtonText)<{ fromDonate?: boolean | null }>`
+	color: ${props =>
+		props.fromDonate ? brandColors.pinky[500] : neutralColors.gray[500]};
+	text-transform: ${props => (props.fromDonate ? 'none' : 'uppercase')};
 	margin: 0 auto;
 `;
 
