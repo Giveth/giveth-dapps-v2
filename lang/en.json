@@ -1294,5 +1294,6 @@
 	"label.refer_your_friends": "Refer your friends",
 	"label.share_this_page_with_your_friends": "Share this page with your friends, and get rewarded when they donate to verified projects!",
 	"label.we_ran_into_an_issue_and_couldnt_generate_your_referral": "We ran into an issue and couldn’t generate your referral ID. Please try again.",
-	"label.create_referrral_id_again": "Create referral Id again"
+	"label.create_referrral_id_again": "Create referral Id again",
+	"label.share_your_unique_link_to_get_started": "Share your unique link to get started:"
 }

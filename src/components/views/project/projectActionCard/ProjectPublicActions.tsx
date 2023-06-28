@@ -9,8 +9,10 @@ import {
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
-import Image from 'next/image';
 import Link from 'next/link';
+import useDetectDevice from '@/hooks/useDetectDevice';
+import ShareModal from '@/components/modals/ShareModal';
+import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 import { EContentType } from '@/lib/constants/shareContent';
 import { useProjectContext } from '@/context/project.context';
@@ -32,11 +34,12 @@ export const ProjectPublicActions = () => {
 	const [showModal, setShowShareModal] = useState<boolean>(false);
 	const { projectData, isActive } = useProjectContext();
 	const project = projectData!;
-	const { slug, id: projectId } = project;
+	const { slug, id: projectId, verified } = project;
 	const [reaction, setReaction] = useState(project.reaction);
 	const [totalReactions, setTotalReactions] = useState(
 		project.totalReactions,
 	);
+	const { isMobile } = useDetectDevice();
 	const [likeLoading, setLikeLoading] = useState(false);
 	const {
 		isSignedIn,
@@ -151,29 +154,10 @@ export const ProjectPublicActions = () => {
 				/>
 			</Link>
 			<BadgeWrapper gap='4px'>
-				<StyledShareButton
-					label={formatMessage({
-						id: 'label.share_and_get_rewarded',
-					})}
-					onClick={async () => {
-						if (isSignedIn && !user?.chainvineId) {
-							await setReferral();
-						}
-						setShowShareModal(true);
-					}}
-					buttonType='texty-gray'
-					icon={
-						<Image
-							src='/images/icons/gift_gray.svg'
-							width={16}
-							height={16}
-							alt='gift'
-							style={{
-								marginLeft: '8px',
-							}}
-						/>
-					}
-					size='small'
+				<ShareLikeBadge
+					type={verified ? 'reward' : 'share'}
+					onClick={() => isActive && setShowShareModal(true)}
+					isSimple={isMobile}
 				/>
 
 				<StyledButton
@@ -192,14 +176,22 @@ export const ProjectPublicActions = () => {
 					size='small'
 				/>
 			</BadgeWrapper>
-			{showModal && slug && (
-				<ShareRewardedModal
-					contentType={EContentType.thisProject}
-					setShowModal={setShowShareModal}
-					projectHref={slug}
-					projectTitle={project.title}
-				/>
-			)}
+			{showModal &&
+				slug &&
+				(verified ? (
+					<ShareRewardedModal
+						contentType={EContentType.thisProject}
+						setShowModal={setShowShareModal}
+						projectHref={slug}
+						projectTitle={project.title}
+					/>
+				) : (
+					<ShareModal
+						contentType={EContentType.thisProject}
+						setShowModal={setShowShareModal}
+						projectHref={slug}
+					/>
+				))}
 		</ProjectPublicActionsWrapper>
 	);
 };

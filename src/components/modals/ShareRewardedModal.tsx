@@ -162,8 +162,17 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 							),
 							projectTitle,
 					  )
-					: chainvineId &&
-					  formatMessage({ id: 'label.heres_your_unique_referral' })}
+					: chainvineId && (
+							<>
+								{formatMessage({
+									id: 'label.heres_your_unique_referral',
+								})}
+								<br />
+								{formatMessage({
+									id: 'label.share_your_unique_link_to_get_started',
+								})}
+							</>
+					  )}
 			</Content>
 			<Container>
 				{error ? (

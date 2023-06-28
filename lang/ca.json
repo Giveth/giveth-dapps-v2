@@ -1291,5 +1291,6 @@
 	"label.refer_your_friends": "",
 	"label.share_this_page_with_your_friends": "",
 	"label.we_ran_into_an_issue_and_couldnt_generate_your_referral": "",
-	"label.create_referrral_id_again": ""
+	"label.create_referrral_id_again": "",
+	"label.share_your_unique_link_to_get_started": ""
 }
