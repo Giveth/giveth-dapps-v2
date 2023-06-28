@@ -152,17 +152,8 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 								id: 'label.connet_your_wallet_and_sign_in_to_get_your_referral',
 							}),
 					  )
-					: chainvineId && projectTitle
-					? getMessageWithBoldText(
-							formatMessage(
-								{
-									id: 'label.heres_your_referral',
-								},
-								{ projectTitle },
-							),
-							projectTitle,
-					  )
-					: chainvineId && (
+					: chainvineId &&
+					  projectTitle && (
 							<>
 								{formatMessage({
 									id: 'label.heres_your_unique_referral',
