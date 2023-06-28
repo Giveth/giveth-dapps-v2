@@ -12,17 +12,20 @@ import { Shadow } from '../styled-components/Shadow';
 import { FlexCenter } from '@/components/styled-components/Flex';
 
 const ShareLikeBadge = (props: {
-	type: 'share' | 'like';
+	type: 'share' | 'like' | 'reward';
 	active?: boolean;
 	onClick: () => void;
 	isSimple?: boolean | null;
 }) => {
 	const { formatMessage } = useIntl();
 	const { type, active, onClick, isSimple } = props;
-	const isShare = type === 'share';
-	const text = isShare
-		? formatMessage({ id: 'label.share' })
-		: formatMessage({ id: 'label.like' });
+	const isShare = type === 'share' || type === 'reward';
+	const text =
+		type === 'share'
+			? formatMessage({ id: 'label.share' })
+			: type === 'reward'
+			? formatMessage({ id: 'label.share_and_get_rewarded' })
+			: formatMessage({ id: 'label.like' });
 	const icon = isShare ? (
 		<IconShare color={neutralColors.gray[500]} />
 	) : active ? (
@@ -41,8 +44,6 @@ const ShareLikeBadge = (props: {
 
 const Wrapper = styled(FlexCenter)<{ isSimple?: boolean | null }>`
 	height: 48px;
-	max-width: 130px;
-	width: 100%;
 	gap: 10px;
 	display: flex;
 	align-items: center;
@@ -51,6 +52,8 @@ const Wrapper = styled(FlexCenter)<{ isSimple?: boolean | null }>`
 	border-radius: 48px;
 	box-shadow: ${Shadow.Neutral[500]};
 	cursor: pointer;
+	flex: 1;
+	min-width: fit-content;
 `;
 
 const BadgeText = styled(ButtonText)`
