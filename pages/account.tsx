@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import { useAppSelector } from '@/features/hooks';
+import { useReferral } from '@/hooks/useReferral';
 import Spinner from '@/components/Spinner';
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
@@ -9,6 +10,7 @@ const UserRoute = () => {
 	const { isSignedIn, isEnabled, userData, isLoading } = useAppSelector(
 		state => state.user,
 	);
+	useReferral();
 
 	if (isLoading) {
 		return <Spinner />;

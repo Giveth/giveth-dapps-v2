@@ -8,8 +8,11 @@ import {
 import { networksParams } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
-const BASE_ROUTE = 'https://serve.giveth.io';
-const NOTIFICATION_BASE_ROUTE = 'https://staging.notification.giveth.io';
+const BASE_ROUTE =
+	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://serve.giveth.io';
+const NOTIFICATION_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
+	'https://staging.notification.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const XDAI_NETWORK_NUMBER = 100; // xDAI
@@ -20,10 +23,14 @@ const CELO_NETWORK_NUMBER = 44787;
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
 	BASE_ROUTE: BASE_ROUTE,
-	BACKEND_LINK: `${BASE_ROUTE}/graphql`,
-	FRONTEND_LINK: 'https://staging.giveth.io',
+	BACKEND_LINK:
+		process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`,
+	FRONTEND_LINK:
+		process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://staging.giveth.io',
 	MICROSERVICES: {
-		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
+		authentication:
+			process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
+			`${BASE_ROUTE}/siweauthmicroservice/v1`,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
@@ -47,7 +54,7 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['Etherscan'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-goerli-staging',
+			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-goerli/1.5.0',
 
 		TOKEN_ADDRESS: '0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0', // TODO: GOERLI ?
@@ -109,7 +116,7 @@ const config: EnvConfig = {
 
 		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-xdai-staging',
+			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-gnosischain/1.5.1',
 
 		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
 		gGIV_ADDRESS: '0x4Bee761229AD815Cc64461783580F629dA0f0350',

@@ -49,8 +49,7 @@ export class SubgraphQueryBuilder {
 		tokenDistroAddress: string,
 		userAddress?: string,
 	): string => {
-		return `
-		tokenDistro_${tokenDistroAddress.toLowerCase()}: tokenDistro(id: "${tokenDistroAddress.toLowerCase()}") {
+		return `tokenDistro_${tokenDistroAddress.toLowerCase()}: tokenDistro(id: "${tokenDistroAddress.toLowerCase()}") {
 		  id
 		  initialAmount
 		  duration
@@ -92,7 +91,7 @@ export class SubgraphQueryBuilder {
 					userAddress,
 				),
 			)
-			.join();
+			.join('');
 	};
 
 	private static getUniswapV3PoolQuery = (address: string): string => {
@@ -210,7 +209,7 @@ export class SubgraphQueryBuilder {
 					)
 				);
 			})
-			.join();
+			.join('');
 	};
 
 	private static getGIVPowersInfoQuery = (lmAddress: string): string => {
@@ -262,8 +261,7 @@ export class SubgraphQueryBuilder {
 			`;
 		}
 
-		return `
-		{
+		return `query {
 			${SubgraphQueryBuilder.getBalanceQuery(config.MAINNET_CONFIG, userAddress)}
 			${SubgraphQueryBuilder.generateTokenDistroQueries(
 				config.MAINNET_CONFIG,
