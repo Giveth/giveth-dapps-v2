@@ -33,7 +33,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { compareAddresses, isSSRMode, showToastError } from '@/lib/helpers';
 import { EVerificationStatus, IReaction } from '@/apollo/types/types';
 import links from '@/lib/constants/links';
-import ShareModal from '@/components/modals/ShareModal';
+import ShareRewardModal from '@/components/modals/ShareRewardedModal';
 import { client } from '@/apollo/apolloClient';
 import {
 	ACTIVATE_PROJECT,
@@ -69,6 +69,7 @@ import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
 import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
 import { useProjectContext } from '@/context/project.context';
 import { EContentType } from '@/lib/constants/shareContent';
+import ShareModal from '@/components/modals/ShareModal';
 
 interface IProjectDonateCard {
 	setCreationSuccessful: Dispatch<SetStateAction<boolean>>;
@@ -301,13 +302,21 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					onClose={() => setShowVerificationModal(false)}
 				/>
 			)}
-			{showModal && slug && (
-				<ShareModal
-					contentType={EContentType.thisProject}
-					setShowModal={setShowModal}
-					projectHref={slug}
-				/>
-			)}
+			{showModal &&
+				slug &&
+				(verified ? (
+					<ShareRewardModal
+						contentType={EContentType.thisProject}
+						setShowModal={setShowModal}
+						projectHref={slug}
+					/>
+				) : (
+					<ShareModal
+						contentType={EContentType.thisProject}
+						setShowModal={setShowModal}
+						projectHref={slug}
+					/>
+				))}
 			{deactivateModal && (
 				<DeactivateProjectModal
 					setShowModal={setDeactivateModal}
@@ -448,7 +457,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 					)}
 					<BadgeWrapper>
 						<ShareLikeBadge
-							type='share'
+							type={verified ? 'reward' : 'share'}
 							onClick={() => isActive && setShowModal(true)}
 							isSimple={isMobile}
 						/>
@@ -456,7 +465,7 @@ const ProjectDonateCard: FC<IProjectDonateCard> = ({
 							type='like'
 							active={heartedByUser}
 							onClick={() => isActive && checkSignInThenLike()}
-							isSimple={isMobile}
+							isSimple
 						/>
 					</BadgeWrapper>
 					{!isAdmin && verified && <GIVbackToast />}
@@ -580,8 +589,7 @@ const MainCategory = styled(Caption)`
 	color: ${neutralColors.gray[600]};
 `;
 
-const BadgeWrapper = styled.div`
-	display: flex;
+const BadgeWrapper = styled(Flex)`
 	margin-top: 16px;
 	justify-content: space-between;
 	gap: 8px;

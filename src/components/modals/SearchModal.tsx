@@ -228,7 +228,7 @@ const StyledModal = styled(Modal)`
 
 const CloseModal = styled(FlexCenter)`
 	position: absolute;
-	top: 0;
+	top: 16px;
 	left: 32px;
 	gap: 8px;
 	padding: 12px 16px;

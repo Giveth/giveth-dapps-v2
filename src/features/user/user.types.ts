@@ -4,3 +4,12 @@ export interface ISignToGetToken {
 	signer: any;
 	pathname?: string;
 }
+
+export interface IChainvineSetReferral {
+	address: string;
+}
+
+export interface IChainvineClickCount {
+	referrerId: string;
+	walletAddress: string;
+}
