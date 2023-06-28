@@ -52,6 +52,7 @@ const Routes = {
 	Landing: '/landings',
 	HowToBuyXdai: '/how-to-buy-xdai',
 	PurchaseXdai: '/purchase-xdai',
+	Referral: '/referral',
 };
 
 export default Routes;

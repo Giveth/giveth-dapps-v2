@@ -12,7 +12,7 @@ import styled, { css } from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useRouter } from 'next/router';
 
-import ShareModal from '../modals/ShareModal';
+import ShareModalAndGetReward from '../modals/ShareRewardedModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { isSSRMode, showToastError } from '@/lib/helpers';
 import { Flex } from '../styled-components/Flex';
@@ -25,6 +25,7 @@ import {
 import { slugToProjectView } from '@/lib/routeCreators';
 import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
 import { EContentType } from '@/lib/constants/shareContent';
+import ShareModal from '../modals/ShareModal';
 
 interface IProjectCardLikeAndShareButtons {
 	project: IProject;
@@ -123,13 +124,20 @@ const ProjectCardLikeAndShareButtons = (
 
 	return (
 		<>
-			{showModal && (
-				<ShareModal
-					contentType={EContentType.thisProject}
-					setShowModal={setShowModal}
-					projectHref={slug}
-				/>
-			)}
+			{showModal &&
+				(verified ? (
+					<ShareModalAndGetReward
+						contentType={EContentType.thisProject}
+						setShowModal={setShowModal}
+						projectHref={slug}
+					/>
+				) : (
+					<ShareModal
+						setShowModal={setShowModal}
+						projectHref={slug}
+						contentType={EContentType.thisProject}
+					/>
+				))}
 			<BadgeWrapper>
 				<Flex gap='6px'>
 					{verified && (
