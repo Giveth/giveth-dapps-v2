@@ -31,6 +31,7 @@ import { formatWeiHelper } from '@/helpers/number';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { PassportCard } from './PassportCard';
 import ExternalLink from '@/components/ExternalLink';
+import links from '@/lib/constants/links';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
@@ -157,8 +158,11 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 						</SectionTitle>
 						<SectionDesc>
 							Taking control of your online identity and your
-							decentralized credentials &nbsp;
-							<PassportLink href={''}> Learn more.</PassportLink>
+							decentralized credentials
+							<br />
+							<PassportLink href={links.PASSPORT}>
+								Learn more.
+							</PassportLink>
 						</SectionDesc>
 						<PassportCard />
 					</Col>
