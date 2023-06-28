@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useWeb3React } from '@web3-react/core';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
-import SocialBox from '../../SocialBox';
+import SocialBox from '../../DonateSocialBox';
 import SuccessView from '@/components/views/donate/SuccessView';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import DonationTypes from '@/components/views/donate/DonationTypes';

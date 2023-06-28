@@ -1,6 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUserWithPassport } from '@/apollo/types/types';
-import { fetchUserByAddress, signToGetToken, signOut } from './user.thunks';
+import {
+	fetchUserByAddress,
+	signToGetToken,
+	signOut,
+	startChainvineReferral,
+	countReferralClick,
+} from './user.thunks';
 import StorageLabel from '@/lib/localStorage';
 import { compareAddresses } from '@/lib/helpers';
 import { RootState } from '../store';
@@ -123,6 +129,18 @@ export const userSlice = createSlice({
 			.addCase(signToGetToken.fulfilled, (state, action) => {
 				state.token = action.payload;
 				state.isSignedIn = true;
+			})
+			.addCase(startChainvineReferral.pending, state => {
+				state.isLoading = true;
+			})
+			.addCase(startChainvineReferral.fulfilled, state => {
+				state.isLoading = false;
+			})
+			.addCase(countReferralClick.pending, state => {
+				state.isLoading = true;
+			})
+			.addCase(countReferralClick.fulfilled, state => {
+				state.isLoading = false;
 			})
 			//We want it to call when fullfilled and rejected
 			.addCase(signOut.pending, state => {

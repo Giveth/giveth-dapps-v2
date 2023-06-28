@@ -3,11 +3,14 @@ import {
 	Button,
 	GLink,
 	neutralColors,
+	semanticColors,
+	IconLink,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { FC, useState } from 'react';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { Flex } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { isSSRMode } from '@/lib/helpers';
 
@@ -32,10 +35,14 @@ const CopyLink: FC<ICopyLink> = ({ url }) => {
 	return (
 		<DashedWrapper>
 			<ProjectLink size='Small'>{url}</ProjectLink>
-			<VerticalLine />
 			<CustomButton
-				buttonType='texty'
+				buttonType='texty-gray'
 				size='small'
+				leftIcon={
+					<div style={{ padding: '3px 0 0 0' }}>
+						<IconLink />
+					</div>
+				}
 				label={
 					isCopied
 						? `${formatMessage({ id: 'label.copied' })}`
@@ -49,12 +56,13 @@ const CopyLink: FC<ICopyLink> = ({ url }) => {
 };
 
 const CustomButton = styled(Button)<{ isCopied: boolean }>`
-	text-transform: uppercase;
 	font-weight: 700;
-	margin: 3px auto;
-	width: 113px;
+	margin-left: 16px;
+	width: 123px;
+	height: 48px;
 	flex-shrink: 0;
 	flex-grow: 0;
+	box-shadow: ${Shadow.Giv[400]};
 	color: ${props =>
 		props.isCopied ? brandColors.pinky[300] : brandColors.pinky[500]};
 
@@ -63,29 +71,45 @@ const CustomButton = styled(Button)<{ isCopied: boolean }>`
 		color: ${props =>
 			props.isCopied ? brandColors.pinky[300] : brandColors.pinky[500]};
 	}
+	* {
+		text-transform: capitalize !important;
+	}
+	${mediaQueries.tablet} {
+		margin: 3px auto;
+		margin-right: 16px;
+	}
 `;
 
-const DashedWrapper = styled(FlexCenter)`
-	border: 1px dashed ${neutralColors.gray[400]};
+const DashedWrapper = styled(Flex)`
+	border: 1px solid ${neutralColors.gray[300]};
 	border-radius: 8px;
-	margin: 0 auto;
-	box-shadow: ${Shadow.Giv[400]};
+	margin: 0;
 	background: white;
-	width: fit-content;
+	padding: 16px 0;
+	width: 100%;
+	height: 100%;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+		align-items: center;
+		padding: 0;
+	}
 `;
 
 const ProjectLink = styled(GLink)`
 	display: flex;
 	align-items: center;
+	text-align: left;
 	justify-content: center;
-	padding: 0 24px;
-	color: ${neutralColors.gray[700]};
+	padding: 16px;
+	color: ${semanticColors.blueSky[700]};
 	word-break: break-word;
-`;
 
-const VerticalLine = styled.div`
-	border-left: 1px solid ${neutralColors.gray[400]};
-	height: 16px;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 150%;
 `;
 
 export default CopyLink;

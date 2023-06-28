@@ -39,6 +39,7 @@ import {
 	QFProjectsMiddleBanner,
 	ProjectsMiddleBanner,
 } from './ProjectsMiddleBanner';
+import FloatingButtonReferral from '@/components/FloatingReferral';
 import { QFProjectsBanner } from './QFProjectsBanner';
 import { PassportBanner } from '@/components/PassportBanner';
 
@@ -204,6 +205,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							<ProjectCard key={project.id} project={project} />
 						))}
 					</ProjectsContainer>
+					<FloatingButtonReferral />
 				</ProjectsWrapper>
 			);
 		} else {
