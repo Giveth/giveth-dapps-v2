@@ -1,8 +1,9 @@
-import Head from 'next/head';
 import { useEffect } from 'react';
 import { setDarkTheme, setLightTheme } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import OverviewIndex from '@/components/views/nft/overview';
+import { GeneralMetatags } from '@/components/Metatag';
+import { nftMetatags } from '@/content/metatags';
 
 const NFTRoute = () => {
 	const dispatch = useAppDispatch();
@@ -16,9 +17,7 @@ const NFTRoute = () => {
 
 	return (
 		<>
-			<Head>
-				<title>Givers PFP</title>
-			</Head>
+			<GeneralMetatags info={nftMetatags} />
 			<OverviewIndex />
 		</>
 	);
