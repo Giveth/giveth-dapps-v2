@@ -9,7 +9,7 @@ interface ISuccessDonation {
 interface IDonateContext {
 	project: IDonationProject;
 	isSuccessDonation?: ISuccessDonation;
-	setSuccessDonation: (successDonation: ISuccessDonation) => void;
+	setSuccessDonation: (successDonation?: ISuccessDonation) => void;
 }
 
 interface IProviderProps {
