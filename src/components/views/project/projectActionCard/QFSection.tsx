@@ -21,6 +21,7 @@ import {
 	calculateEstimatedMatchingWithDonationAmount,
 	calculateTotalEstimatedMatching,
 } from '@/helpers/qf';
+import links from '@/lib/constants/links';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 
@@ -150,9 +151,10 @@ const QFSection = () => {
 							<LightSubline>Next update in: 3 min</LightSubline>
 						</Flex> */}
 						<a
-							href='/'
+							href={links.QF_DOC}
 							target='_blank'
 							referrerPolicy='no-referrer'
+							rel='noreferrer'
 						>
 							<LearnLink alignItems='center' gap='2px'>
 								<Subline>How it works?</Subline>
