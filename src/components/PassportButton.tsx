@@ -9,7 +9,8 @@ import styled, { keyframes } from 'styled-components';
 import { EPassportState } from '@/hooks/usePassport';
 import { FlexCenter } from './styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
-import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowWalletModal } from '@/features/modal/modal.slice';
 
 interface IButtonProps {
 	state: EPassportState;
@@ -24,13 +25,13 @@ export const PassportButton: FC<IButtonProps> = ({
 	refreshScore,
 	className,
 }) => {
-	const { modalCallback: connectThenSignIn } = useModalCallback(
-		handleSign,
-		EModalEvents.CONNECTED,
-	);
+	const dispatch = useAppDispatch();
 
 	return state === EPassportState.NOT_CONNECTED ? (
-		<Button onClick={() => connectThenSignIn()} className={className}>
+		<Button
+			onClick={() => dispatch(setShowWalletModal(true))}
+			className={className}
+		>
 			<FlexCenter gap='8px'>
 				<IconPassport16 />
 				<ButtonText>Connect passport</ButtonText>

@@ -143,7 +143,7 @@ export const usePassport = () => {
 		if (passports[account.toLowerCase()]) {
 			await refreshScore();
 		} else {
-			const res = await connectPassport(account, library);
+			const res = await connectPassport(account, library, !user);
 			if (res) {
 				await refreshScore();
 			} else {
