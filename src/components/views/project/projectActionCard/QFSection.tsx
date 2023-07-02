@@ -24,6 +24,7 @@ import {
 import links from '@/lib/constants/links';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
+import useDetectDevice from '@/hooks/useDetectDevice';
 
 const QFSection = () => {
 	const { formatMessage, locale } = useIntl();
@@ -33,6 +34,7 @@ const QFSection = () => {
 	const isMobile = !useMediaQuery(device.tablet);
 	const { projectDonationsSqrtRootSum, matchingPool, allProjectsSum } =
 		estimatedMatching ?? {};
+	const { isTablet } = useDetectDevice();
 
 	return (
 		<DonationSectionWrapper gap='24px'>
@@ -63,6 +65,34 @@ const QFSection = () => {
 							},
 						)}
 					</Description>
+					{isTablet && (
+						<Flex flexDirection='column' gap='4px'>
+							<EstimatedMatchingPrice>
+								+{' '}
+								{calculateTotalEstimatedMatching(
+									projectDonationsSqrtRootSum,
+									allProjectsSum,
+									matchingPool,
+								).toFixed(2)}
+							</EstimatedMatchingPrice>
+							<Flex alignItems='center' gap='4px'>
+								<LightCaption>
+									{' '}
+									Estimated matching{' '}
+								</LightCaption>
+								<IconWithTooltip
+									icon={<IconHelpFilled16 />}
+									direction='top'
+								>
+									<TooltipContent>
+										{formatMessage({
+											id: 'tooltip.donation.matching',
+										})}
+									</TooltipContent>
+								</IconWithTooltip>
+							</Flex>
+						</Flex>
+					)}
 				</DonateInfo>
 			) : (
 				<DonateInfo>
@@ -73,29 +103,32 @@ const QFSection = () => {
 					</NoFund>
 				</DonateInfo>
 			)}
-			<Flex flexDirection='column' gap='4px'>
-				<EstimatedMatchingPrice>
-					+{' '}
-					{calculateTotalEstimatedMatching(
-						projectDonationsSqrtRootSum,
-						allProjectsSum,
-						matchingPool,
-					).toFixed(2)}
-				</EstimatedMatchingPrice>
-				<Flex alignItems='center' gap='4px'>
-					<LightCaption> Estimated matching </LightCaption>
-					<IconWithTooltip
-						icon={<IconHelpFilled16 />}
-						direction='top'
-					>
-						<TooltipContent>
-							{formatMessage({
-								id: 'tooltip.donation.matching',
-							})}
-						</TooltipContent>
-					</IconWithTooltip>
+			{!isTablet && (
+				<Flex flexDirection='column' gap='4px'>
+					<EstimatedMatchingPrice>
+						+{' '}
+						{calculateTotalEstimatedMatching(
+							projectDonationsSqrtRootSum,
+							allProjectsSum,
+							matchingPool,
+						).toFixed(2)}
+					</EstimatedMatchingPrice>
+					<Flex alignItems='center' gap='4px'>
+						<LightCaption> Estimated matching </LightCaption>
+						<IconWithTooltip
+							icon={<IconHelpFilled16 />}
+							direction='top'
+						>
+							<TooltipContent>
+								{formatMessage({
+									id: 'tooltip.donation.matching',
+								})}
+							</TooltipContent>
+						</IconWithTooltip>
+					</Flex>
 				</Flex>
-			</Flex>
+			)}
+
 			<div>
 				<Flex justifyContent='space-between'>
 					<LightSubline>Contribution</LightSubline>
