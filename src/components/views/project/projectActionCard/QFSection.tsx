@@ -10,6 +10,7 @@ import {
 	IconArrowRight16,
 	IconChevronRight16,
 	IconHelpFilled16,
+	deviceSize,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -129,7 +130,7 @@ const QFSection = () => {
 				</Flex>
 			)}
 
-			<div>
+			<ChartContainer>
 				<Flex justifyContent='space-between'>
 					<LightSubline>Contribution</LightSubline>
 					<GreenSubline>Matching</GreenSubline>
@@ -196,7 +197,7 @@ const QFSection = () => {
 						</a>
 					</Flex>
 				</ContributionsContainer>
-			</div>
+			</ChartContainer>
 		</DonationSectionWrapper>
 	);
 };
@@ -271,6 +272,13 @@ const ContributionsContainer = styled.div`
 	padding: 4px 0;
 	border-top: 1px solid ${neutralColors.gray[300]};
 	border-bottom: 1px solid ${neutralColors.gray[300]};
+`;
+
+const ChartContainer = styled.div`
+	@media (min-width: ${deviceSize.tablet}px) and (max-width: ${deviceSize.laptopS}px) {
+		flex-grow: 0.5;
+		min-height: 240px;
+	}
 `;
 
 const FlexSameSize = styled(Flex)`
