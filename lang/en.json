@@ -1318,6 +1318,7 @@
 	"label.passport.not_eligible": "Get your donation matched with quadratic funding! Increase your Gitcoin Passport score before ",
 	"label.passport.eligible": "You donations are eligible to be matched!",
 	"label.passport.ended": "This round has ended. Thank you for your support.",
+	"label.passport.no_active_round": "There is no active round!",
 	"label.passport.invalid": "Passport Profile not detected. Please open Passport to troubleshoot.",
 	"label.passport.error": "An error occurred while loading your Gitcoin Passport. Please try again later.",
 	"label.passport.link.update_score": "Update score",

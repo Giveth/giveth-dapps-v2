@@ -1315,6 +1315,7 @@
 	"label.passport.not_eligible": "",
 	"label.passport.eligible": "",
 	"label.passport.ended": "",
+	"label.passport.no_active_round": "",
 	"label.passport.invalid": "",
 	"label.passport.error": "",
 	"label.passport.invalid_response": "",
