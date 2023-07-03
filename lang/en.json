@@ -1336,5 +1336,7 @@
 	"label.quadratic_funding_round": "Quadratic funding - Round",
 	"label.round_ends_in": "Round ends in",
 	"label.round_starts_in": "Round starts in",
-	"label.qf_no_donations": "There have been no donations in this round."
+	"label.qf_no_donations": "There have been no donations in this round.",
+	"label.no_active_qf_round": "There is no active round!",
+	"label.support_upcoming_qf_round": "Support upcoming rounds and donate the matching pool."
 }
