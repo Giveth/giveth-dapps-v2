@@ -53,10 +53,10 @@ const ShareLikeBadge = (props: {
 
 const Wrapper = styled(FlexCenter)<{ isSimple?: boolean | null }>`
 	height: 48px;
-	gap: 10px;
+	gap: 6px;
 	display: flex;
 	align-items: center;
-	padding: 0 15px;
+	padding: 0 12px;
 	background: white;
 	border-radius: 48px;
 	box-shadow: ${Shadow.Neutral[500]};
