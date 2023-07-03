@@ -31,6 +31,7 @@ export const BigArc = styled(Arc)<IColor>`
 	width: 3600px;
 	height: 3600px;
 	z-index: 0;
+	pointer-events: none;
 `;
 
 export const Caption = styled(Lead)`
