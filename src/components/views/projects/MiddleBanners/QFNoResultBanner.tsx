@@ -1,11 +1,12 @@
 import { semanticColors } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import styled from 'styled-components';
 import { Box, BigArc, Title, Caption } from './common.sc';
 
 export const QFNoResultBanner = () => {
 	const { formatMessage } = useIntl();
 	return (
-		<Box flexDirection='column' gap='24px'>
+		<StyledBox flexDirection='column' gap='24px'>
 			<BigArc color={semanticColors.jade[200]} />
 			<Title weight={700} color={semanticColors.jade[700]}>
 				{formatMessage({
@@ -17,6 +18,11 @@ export const QFNoResultBanner = () => {
 					id: 'label.support_upcoming_qf_round',
 				})}
 			</Caption>
-		</Box>
+		</StyledBox>
 	);
 };
+
+const StyledBox = styled(Box)`
+	margin-top: 96px;
+	margin-bottom: 96px;
+`;
