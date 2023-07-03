@@ -1,7 +1,9 @@
-import { semanticColors } from '@giveth/ui-design-system';
+import { ButtonLink, semanticColors } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
+import Link from 'next/link';
 import { Box, BigArc, Title, Caption } from './common.sc';
+import links from '@/lib/constants/links';
 
 export const QFNoResultBanner = () => {
 	const { formatMessage } = useIntl();
@@ -18,6 +20,15 @@ export const QFNoResultBanner = () => {
 					id: 'label.support_upcoming_qf_round',
 				})}
 			</Caption>
+			<Link href={links.GIVETH_MATCHING}>
+				<DonateButton
+					label={formatMessage({
+						id: 'label.donate',
+					})}
+					size='large'
+					linkType='primary'
+				/>
+			</Link>
 		</StyledBox>
 	);
 };
@@ -25,4 +36,8 @@ export const QFNoResultBanner = () => {
 const StyledBox = styled(Box)`
 	margin-top: 96px;
 	margin-bottom: 96px;
+`;
+
+const DonateButton = styled(ButtonLink)`
+	max-width: 300px;
 `;
