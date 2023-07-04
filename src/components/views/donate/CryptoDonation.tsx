@@ -70,7 +70,7 @@ const CryptoDonation: FC = () => {
 	);
 	const isPurpleListed = usePurpleList();
 
-	const { project } = useDonateData();
+	const { project, hasActiveQFRound } = useDonateData();
 
 	const {
 		organization,
@@ -79,7 +79,6 @@ const CryptoDonation: FC = () => {
 		status,
 		addresses,
 		title: projectTitle,
-		qfRounds,
 	} = project;
 
 	const { supportCustomTokens, label: orgLabel } = organization || {};
@@ -118,7 +117,6 @@ const CryptoDonation: FC = () => {
 	const tokenDecimals = selectedToken?.decimals || 18;
 	const projectIsGivBackEligible = !!verified;
 	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
-	const hasActiveQFRound = qfRounds?.find(r => r.isActive)?.isActive;
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
