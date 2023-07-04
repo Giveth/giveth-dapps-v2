@@ -14,6 +14,7 @@ export enum EPassportState {
 	NOT_SIGNED,
 	NOT_CREATED,
 	NOT_ELIGIBLE,
+	NOT_ACTIVE_ROUND,
 	ELIGIBLE,
 	ENDED,
 	INVALID,
@@ -65,7 +66,7 @@ export const usePassport = () => {
 				);
 				if (!currentRound) {
 					return setInfo({
-						passportState: EPassportState.ENDED,
+						passportState: EPassportState.NOT_ACTIVE_ROUND,
 						passportScore: refreshUserScores.passportScore,
 						currentRound: null,
 					});

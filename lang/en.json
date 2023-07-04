@@ -1318,6 +1318,7 @@
 	"label.passport.not_eligible": "Get your donation matched with quadratic funding! Increase your Gitcoin Passport score before ",
 	"label.passport.eligible": "You donations are eligible to be matched!",
 	"label.passport.ended": "This round has ended. Thank you for your support.",
+	"label.passport.no_active_round": "There is no active round!",
 	"label.passport.invalid": "Passport Profile not detected. Please open Passport to troubleshoot.",
 	"label.passport.error": "An error occurred while loading your Gitcoin Passport. Please try again later.",
 	"label.passport.link.update_score": "Update score",
@@ -1336,5 +1337,7 @@
 	"label.quadratic_funding_round": "Quadratic funding - Round",
 	"label.round_ends_in": "Round ends in",
 	"label.round_starts_in": "Round starts in",
-	"label.qf_no_donations": "There have been no donations in this round."
+	"label.qf_no_donations": "There have been no donations in this round.",
+	"label.no_active_qf_round": "There is no active round!",
+	"label.support_upcoming_qf_round": "Support upcoming rounds and donate the matching pool."
 }
