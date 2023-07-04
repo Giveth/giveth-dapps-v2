@@ -34,8 +34,7 @@ export const DonateProvider: FC<IProviderProps> = props => {
 	const now = new Date().toISOString();
 	const hasRoundBegun = qfBeginDate ? qfBeginDate < now : false;
 	// It's impossible that a round is active and end date is passed, bc backend has a cron job. So, we only check the beginDate
-	const hasActiveQFRound =
-		qfRounds?.find(r => r.isActive)?.isActive && hasRoundBegun;
+	const hasActiveQFRound = activeQFRound && hasRoundBegun;
 
 	const [isSuccessDonation, setSuccessDonation] =
 		useState<ISuccessDonation>();
