@@ -165,6 +165,8 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				id
 				name
 				isActive
+				beginDate
+				endDate
 			}
 		}
 	}

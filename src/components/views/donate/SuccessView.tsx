@@ -25,7 +25,8 @@ import { useAppSelector } from '@/features/hooks';
 
 const SuccessView: FC = () => {
 	const { isLoading } = useAppSelector(state => state.user);
-	const { isSuccessDonation, setSuccessDonation } = useDonateData();
+	const { isSuccessDonation, setSuccessDonation, hasActiveQFRound } =
+		useDonateData();
 	const { givBackEligible, txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 
@@ -80,7 +81,7 @@ const SuccessView: FC = () => {
 					</ExternalLink>
 				</GivBackContainer>
 			)}
-			<QFToast />
+			{hasActiveQFRound && <QFToast />}
 			<SocialBoxWrapper>
 				<SocialBox
 					project={project}
