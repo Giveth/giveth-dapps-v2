@@ -10,6 +10,7 @@ import {
 	IconArrowRight16,
 	IconChevronRight16,
 	IconHelpFilled16,
+	deviceSize,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -33,6 +34,29 @@ const QFSection = () => {
 	const isMobile = !useMediaQuery(device.tablet);
 	const { projectDonationsSqrtRootSum, matchingPool, allProjectsSum } =
 		estimatedMatching ?? {};
+
+	const EstimatedMatchingSection = () => (
+		<Flex flexDirection='column' gap='4px'>
+			<EstimatedMatchingPrice>
+				+{' '}
+				{calculateTotalEstimatedMatching(
+					projectDonationsSqrtRootSum,
+					allProjectsSum,
+					matchingPool,
+				).toFixed(2)}
+			</EstimatedMatchingPrice>
+			<Flex alignItems='center' gap='4px'>
+				<LightCaption> Estimated matching </LightCaption>
+				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
+					<TooltipContent>
+						{formatMessage({
+							id: 'tooltip.donation.matching',
+						})}
+					</TooltipContent>
+				</IconWithTooltip>
+			</Flex>
+		</Flex>
+	);
 
 	return (
 		<DonationSectionWrapper gap='24px'>
@@ -63,6 +87,9 @@ const QFSection = () => {
 							},
 						)}
 					</Description>
+					<TabletEstimatedMatchingContainer>
+						<EstimatedMatchingSection />
+					</TabletEstimatedMatchingContainer>
 				</DonateInfo>
 			) : (
 				<DonateInfo>
@@ -71,32 +98,17 @@ const QFSection = () => {
 							id: 'label.donate_first_lead_the_way',
 						})}
 					</NoFund>
+
+					<TabletEstimatedMatchingContainer>
+						<EstimatedMatchingSection />
+					</TabletEstimatedMatchingContainer>
 				</DonateInfo>
 			)}
-			<Flex flexDirection='column' gap='4px'>
-				<EstimatedMatchingPrice>
-					+{' '}
-					{calculateTotalEstimatedMatching(
-						projectDonationsSqrtRootSum,
-						allProjectsSum,
-						matchingPool,
-					).toFixed(2)}
-				</EstimatedMatchingPrice>
-				<Flex alignItems='center' gap='4px'>
-					<LightCaption> Estimated matching </LightCaption>
-					<IconWithTooltip
-						icon={<IconHelpFilled16 />}
-						direction='top'
-					>
-						<TooltipContent>
-							{formatMessage({
-								id: 'tooltip.donation.matching',
-							})}
-						</TooltipContent>
-					</IconWithTooltip>
-				</Flex>
-			</Flex>
-			<div>
+			<DefaultEstimatedMatchingContainer>
+				<EstimatedMatchingSection />
+			</DefaultEstimatedMatchingContainer>
+
+			<ChartContainer>
 				<Flex justifyContent='space-between'>
 					<LightSubline>Contribution</LightSubline>
 					<GreenSubline>Matching</GreenSubline>
@@ -163,7 +175,7 @@ const QFSection = () => {
 						</a>
 					</Flex>
 				</ContributionsContainer>
-			</div>
+			</ChartContainer>
 		</DonationSectionWrapper>
 	);
 };
@@ -240,6 +252,13 @@ const ContributionsContainer = styled.div`
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
 
+const ChartContainer = styled.div`
+	@media (min-width: ${deviceSize.tablet}px) and (max-width: ${deviceSize.laptopS}px) {
+		flex-grow: 0.5;
+		min-height: 240px;
+	}
+`;
+
 const FlexSameSize = styled(Flex)`
 	> * {
 		flex: 1 1 0px;
@@ -250,5 +269,19 @@ const LearnLink = styled(Flex)`
 	color: ${brandColors.pinky[500]};
 	&:hover {
 		color: ${brandColors.pinky[700]};
+	}
+`;
+
+const TabletEstimatedMatchingContainer = styled.div`
+	display: none;
+	@media (min-width: ${deviceSize.tablet}px) and (max-width: ${deviceSize.laptopS}px) {
+		display: inline-block;
+	}
+`;
+
+const DefaultEstimatedMatchingContainer = styled.div`
+	display: inline-block;
+	@media (min-width: ${deviceSize.tablet}px) and (max-width: ${deviceSize.laptopS}px) {
+		display: none;
 	}
 `;
