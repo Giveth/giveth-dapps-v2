@@ -91,7 +91,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 			? projectData?.sumDonationValueUsdForActiveQfRound
 			: qfRoundHistory?.raisedFundInUsd || 0;
 
-	const roundDonationCount =
+	const roundDonorsCount =
 		selectedQF && selectedQF.isActive
 			? projectData?.countUniqueDonorsForActiveQfRound
 			: qfRoundHistory?.uniqueDonors;
@@ -129,7 +129,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						<P>Round: &nbsp;</P>
 						<B>QF round {selectedQF.id} donations</B>
 					</BorderedFlex>
-					{roundDonationCount && roundDonationCount > 0 ? (
+					{roundDonorsCount && roundDonorsCount > 0 ? (
 						<div>
 							<TotalFund>
 								{'$' + roundTotalDonation?.toFixed(2) || '0'}
@@ -140,11 +140,16 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 							>
 								<EstimatedMatchingPrice>
 									+ $
-									{calculateTotalEstimatedMatching(
-										projectDonationsSqrtRootSum,
-										allProjectsSum,
-										matchingPool,
-									).toFixed(2)}
+									{selectedQF.isActive
+										? calculateTotalEstimatedMatching(
+												projectDonationsSqrtRootSum,
+												allProjectsSum,
+												matchingPool,
+										  ).toFixed(2)
+										: (
+												qfRoundHistory?.matchingFund ||
+												0
+										  ).toFixed(2)}
 								</EstimatedMatchingPrice>
 								<EstimatedMatchingText>
 									{selectedQFData?.isActive
@@ -155,7 +160,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 							<div>
 								<LightSubline> Raised from </LightSubline>
 								<Subline style={{ display: 'inline-block' }}>
-									&nbsp;{countUniqueDonorsForActiveQfRound}
+									&nbsp;{roundDonorsCount}
 									&nbsp;
 								</Subline>
 								<LightSubline>contributors</LightSubline>
