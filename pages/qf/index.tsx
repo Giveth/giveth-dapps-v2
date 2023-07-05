@@ -35,7 +35,7 @@ export const QF_PROJECTS = {
 		limit: 15,
 		skip: 0,
 		sortingBy: EProjectsSortBy.GIVPOWER,
-		filters: [EProjectsFilter.ACTIVE_QF_ROUND, EProjectsFilter.VERIFIED],
+		filters: [EProjectsFilter.ACTIVE_QF_ROUND],
 	},
 	notifyOnNetworkStatusChange: true,
 };

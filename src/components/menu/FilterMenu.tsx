@@ -89,12 +89,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const clearFilters = () => {
 			setVariables({
 				...variables,
-				filters: isQF
-					? [
-							EProjectsFilter.ACTIVE_QF_ROUND,
-							EProjectsFilter.VERIFIED,
-					  ]
-					: [],
+				filters: isQF ? [EProjectsFilter.ACTIVE_QF_ROUND] : [],
 				campaignSlug: undefined,
 			});
 			removeQueryParamAndRedirect(router, ['filter', 'campaign']);

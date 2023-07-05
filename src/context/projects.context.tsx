@@ -36,7 +36,7 @@ const variablesDefaultValue = {
 
 const variablesDefaultValueWithQF = {
 	sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
-	filters: [EProjectsFilter.ACTIVE_QF_ROUND, EProjectsFilter.VERIFIED],
+	filters: [EProjectsFilter.ACTIVE_QF_ROUND],
 };
 
 const ProjectsContext = createContext<IProjectsContext>({
@@ -107,14 +107,8 @@ export const ProjectsProvider = (props: {
 
 		if (isQF) {
 			filters
-				? filters.push(
-						EProjectsFilter.ACTIVE_QF_ROUND,
-						EProjectsFilter.VERIFIED,
-				  )
-				: (filters = [
-						EProjectsFilter.ACTIVE_QF_ROUND,
-						EProjectsFilter.VERIFIED,
-				  ]);
+				? filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
+				: (filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
 		}
 
 		let term = router.query.term as string;
