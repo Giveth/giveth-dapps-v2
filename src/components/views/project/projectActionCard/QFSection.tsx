@@ -25,7 +25,6 @@ import {
 import links from '@/lib/constants/links';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
-import useDetectDevice from '@/hooks/useDetectDevice';
 
 const QFSection = () => {
 	const { formatMessage, locale } = useIntl();
@@ -35,7 +34,29 @@ const QFSection = () => {
 	const isMobile = !useMediaQuery(device.tablet);
 	const { projectDonationsSqrtRootSum, matchingPool, allProjectsSum } =
 		estimatedMatching ?? {};
-	const { isTablet } = useDetectDevice();
+
+	const EstimatedMatchingSection = () => (
+		<Flex flexDirection='column' gap='4px'>
+			<EstimatedMatchingPrice>
+				+{' '}
+				{calculateTotalEstimatedMatching(
+					projectDonationsSqrtRootSum,
+					allProjectsSum,
+					matchingPool,
+				).toFixed(2)}
+			</EstimatedMatchingPrice>
+			<Flex alignItems='center' gap='4px'>
+				<LightCaption> Estimated matching </LightCaption>
+				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
+					<TooltipContent>
+						{formatMessage({
+							id: 'tooltip.donation.matching',
+						})}
+					</TooltipContent>
+				</IconWithTooltip>
+			</Flex>
+		</Flex>
+	);
 
 	return (
 		<DonationSectionWrapper gap='24px'>
@@ -66,34 +87,9 @@ const QFSection = () => {
 							},
 						)}
 					</Description>
-					{isTablet && (
-						<Flex flexDirection='column' gap='4px'>
-							<EstimatedMatchingPrice>
-								+{' '}
-								{calculateTotalEstimatedMatching(
-									projectDonationsSqrtRootSum,
-									allProjectsSum,
-									matchingPool,
-								).toFixed(2)}
-							</EstimatedMatchingPrice>
-							<Flex alignItems='center' gap='4px'>
-								<LightCaption>
-									{' '}
-									Estimated matching{' '}
-								</LightCaption>
-								<IconWithTooltip
-									icon={<IconHelpFilled16 />}
-									direction='top'
-								>
-									<TooltipContent>
-										{formatMessage({
-											id: 'tooltip.donation.matching',
-										})}
-									</TooltipContent>
-								</IconWithTooltip>
-							</Flex>
-						</Flex>
-					)}
+					<TabletEstimatedMatchingContainer>
+						<EstimatedMatchingSection />
+					</TabletEstimatedMatchingContainer>
 				</DonateInfo>
 			) : (
 				<DonateInfo>
@@ -102,33 +98,15 @@ const QFSection = () => {
 							id: 'label.donate_first_lead_the_way',
 						})}
 					</NoFund>
+
+					<TabletEstimatedMatchingContainer>
+						<EstimatedMatchingSection />
+					</TabletEstimatedMatchingContainer>
 				</DonateInfo>
 			)}
-			{!isTablet && (
-				<Flex flexDirection='column' gap='4px'>
-					<EstimatedMatchingPrice>
-						+{' '}
-						{calculateTotalEstimatedMatching(
-							projectDonationsSqrtRootSum,
-							allProjectsSum,
-							matchingPool,
-						).toFixed(2)}
-					</EstimatedMatchingPrice>
-					<Flex alignItems='center' gap='4px'>
-						<LightCaption> Estimated matching </LightCaption>
-						<IconWithTooltip
-							icon={<IconHelpFilled16 />}
-							direction='top'
-						>
-							<TooltipContent>
-								{formatMessage({
-									id: 'tooltip.donation.matching',
-								})}
-							</TooltipContent>
-						</IconWithTooltip>
-					</Flex>
-				</Flex>
-			)}
+			<DefaultEstimatedMatchingContainer>
+				<EstimatedMatchingSection />
+			</DefaultEstimatedMatchingContainer>
 
 			<ChartContainer>
 				<Flex justifyContent='space-between'>
@@ -291,5 +269,19 @@ const LearnLink = styled(Flex)`
 	color: ${brandColors.pinky[500]};
 	&:hover {
 		color: ${brandColors.pinky[700]};
+	}
+`;
+
+const TabletEstimatedMatchingContainer = styled.div`
+	display: none;
+	@media (min-width: ${deviceSize.tablet}px) and (max-width: ${deviceSize.laptopS}px) {
+		display: inline-block;
+	}
+`;
+
+const DefaultEstimatedMatchingContainer = styled.div`
+	display: inline-block;
+	@media (min-width: ${deviceSize.tablet}px) and (max-width: ${deviceSize.laptopS}px) {
+		display: none;
 	}
 `;
