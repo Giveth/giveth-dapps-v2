@@ -88,7 +88,7 @@ export function removeQueryParam(
 	});
 	const newQuery = urlParams.toString();
 	if (fullURl) {
-		return newQuery ? `url?${newQuery}` : url;
+		return newQuery ? `${url}?${newQuery}` : url;
 	}
 	return newQuery ? `?${newQuery}` : '';
 }
