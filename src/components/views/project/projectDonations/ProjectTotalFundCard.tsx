@@ -96,6 +96,25 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 			? projectData?.countUniqueDonorsForActiveQfRound
 			: qfRoundHistory?.uniqueDonors;
 
+	const matchFund = selectedQF
+		? selectedQF.isActive
+			? calculateTotalEstimatedMatching(
+					projectDonationsSqrtRootSum,
+					allProjectsSum,
+					matchingPool,
+			  )
+			: qfRoundHistory
+			? qfRoundHistory.matchingFund !== null
+				? qfRoundHistory.matchingFund
+				: calculateTotalEstimatedMatching(
+						qfRoundHistory.estimatedMatching
+							.projectDonationsSqrtRootSum,
+						qfRoundHistory.estimatedMatching.allProjectsSum,
+						qfRoundHistory.estimatedMatching.matchingPool,
+				  )
+			: 0
+		: 0;
+
 	return (
 		<Wrapper>
 			{selectedQF === null ? (
@@ -139,17 +158,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 								alignItems='center'
 							>
 								<EstimatedMatchingPrice>
-									+ $
-									{selectedQF.isActive
-										? calculateTotalEstimatedMatching(
-												projectDonationsSqrtRootSum,
-												allProjectsSum,
-												matchingPool,
-										  ).toFixed(2)
-										: (
-												qfRoundHistory?.matchingFund ||
-												0
-										  ).toFixed(2)}
+									+ ${matchFund.toFixed(2)}
 								</EstimatedMatchingPrice>
 								<EstimatedMatchingText>
 									{selectedQFData?.isActive

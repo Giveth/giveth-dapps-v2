@@ -21,6 +21,12 @@ export interface IAdminUser {
 	avatar?: string;
 }
 
+export interface IEstimatedMatching {
+	allProjectsSum: number;
+	matchingPool: number;
+	projectDonationsSqrtRootSum: number;
+}
+
 export interface IProject {
 	id?: string;
 	title?: string;
@@ -64,11 +70,7 @@ export interface IProject {
 	givbackFactor?: number;
 	countUniqueDonors?: number;
 	countUniqueDonorsForActiveQfRound?: number;
-	estimatedMatching: {
-		allProjectsSum: number;
-		matchingPool: number;
-		projectDonationsSqrtRootSum: number;
-	};
+	estimatedMatching: IEstimatedMatching;
 	sumDonationValueUsd?: number;
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
@@ -418,4 +420,5 @@ export interface IGetQfRoundHistory {
 	matchingFund: number;
 	raisedFundInUsd: number;
 	uniqueDonors: number;
+	estimatedMatching: IEstimatedMatching;
 }
