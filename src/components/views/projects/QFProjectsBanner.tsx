@@ -14,6 +14,7 @@ enum ERoundStatus {
 	NOT_STARTED,
 	RUNNING,
 	ENDED,
+	NO_ACTIVE,
 }
 
 export const QFProjectsBanner = () => {
@@ -24,7 +25,7 @@ export const QFProjectsBanner = () => {
 	const activeRound = qfRounds.find(round => round.isActive);
 
 	useEffect(() => {
-		if (!activeRound) return;
+		if (!activeRound) return setState(ERoundStatus.NO_ACTIVE);
 		const _startDate = new Date(activeRound?.beginDate).getTime();
 		const _endDate = new Date(activeRound?.endDate).getTime();
 		const isRoundStarted = getNowUnixMS() > _startDate;
@@ -66,8 +67,13 @@ export const QFProjectsBanner = () => {
 				alt='QF Banner'
 			/>
 			<Title weight={700}>
-				{formatMessage({ id: 'label.quadratic_funding_round' })}{' '}
-				{activeRound ? activeRound.id : '--'}
+				{formatMessage({ id: 'label.quadratic_funding' })}
+				{activeRound
+					? ' - ' +
+					  formatMessage({ id: 'label.round' }) +
+					  ' ' +
+					  activeRound.id
+					: null}
 			</Title>
 			{(state === ERoundStatus.NOT_STARTED ||
 				state === ERoundStatus.RUNNING) && (
