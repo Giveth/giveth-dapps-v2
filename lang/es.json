@@ -713,6 +713,7 @@
 	"label.send_me_an_email": "Envíame un email",
 	"label.set_valid_ammount": "Establece un monto válido",
 	"label.share": "Compartir",
+	"label.share_and_earn_rewards": "",
 	"label.share_and_get_rewarded": "Comparte & obtén recompensas",
 	"label.share_on_facebook": "Comparte en Facebook",
 	"label.share_on_linkedin": "Comparte en LinkedIn",
@@ -1345,6 +1346,7 @@
 	"tech": "Tecnología",
 	"technology": "Tecnología",
 	"technology_desc": "Apoyo a proyectos tecnológicos centrados en la tecnología, la investigación y el diseño.",
+	"testfilter": "",
 	"tooltip.donation.matching": "",
 	"ubi": "UBI",
 	"water-and-sanitation": "Agua & Saneamiento"
