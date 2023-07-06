@@ -5,22 +5,28 @@ function sort(name) {
 	const jsonData = fs.readFileSync(name);
 	const data = JSON.parse(jsonData);
 
-	// Sort the data based on a property (e.g., 'name')
-	data.sort((a, b) => {
-		const nameA = a.name.toUpperCase();
-		const nameB = b.name.toUpperCase();
+	// Convert object to array of key-value pairs
+	const dataArray = Object.entries(data);
 
-		if (nameA < nameB) {
+	// Sort the array based on the key
+	dataArray.sort((a, b) => {
+		const keyA = a[0].toUpperCase();
+		const keyB = b[0].toUpperCase();
+
+		if (keyA < keyB) {
 			return -1;
 		}
-		if (nameA > nameB) {
+		if (keyA > keyB) {
 			return 1;
 		}
 		return 0;
 	});
 
+	// Convert the sorted array back to an object
+	const sortedData = Object.fromEntries(dataArray);
+
 	// Write the sorted data back to the JSON file
-	fs.writeFileSync(name, JSON.stringify(data, null, 2));
+	fs.writeFileSync(name, JSON.stringify(sortedData, null, 2));
 
 	console.log('Sorting completed!');
 }
