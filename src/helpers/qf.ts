@@ -1,8 +1,13 @@
 import { IQFRound } from '@/apollo/types/types';
+import { getNowUnixMS } from './time';
 
 export const hasActiveRound = (qfRounds: IQFRound[] | undefined) => {
 	if (!qfRounds) return false;
-	return qfRounds.some(round => round.isActive);
+	return qfRounds.some(
+		round =>
+			round.isActive &&
+			new Date(round.beginDate).getTime() < getNowUnixMS(),
+	);
 };
 
 export const calculateTotalEstimatedMatching = (
