@@ -13,6 +13,8 @@ export const PROJECT_CORE_FIELDS = gql`
 			id
 			name
 			isActive
+			beginDate
+			endDate
 		}
 	}
 `;
