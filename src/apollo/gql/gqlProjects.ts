@@ -9,6 +9,13 @@ export const PROJECT_CORE_FIELDS = gql`
 		slug
 		verified
 		totalDonations
+		qfRounds {
+			id
+			name
+			isActive
+			beginDate
+			endDate
+		}
 	}
 `;
 
@@ -35,6 +42,15 @@ export const PROJECT_CARD_FIELDS = gql`
 			powerRank
 			totalPower
 			round
+		}
+		sumDonationValueUsdForActiveQfRound
+		sumDonationValueUsd
+		countUniqueDonorsForActiveQfRound
+		countUniqueDonors
+		estimatedMatching {
+			projectDonationsSqrtRootSum
+			allProjectsSum
+			matchingPool
 		}
 	}
 `;
@@ -138,6 +154,22 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				round
 			}
 			givbackFactor
+			sumDonationValueUsdForActiveQfRound
+			sumDonationValueUsd
+			countUniqueDonorsForActiveQfRound
+			countUniqueDonors
+			estimatedMatching {
+				projectDonationsSqrtRootSum
+				allProjectsSum
+				matchingPool
+			}
+			qfRounds {
+				id
+				name
+				isActive
+				beginDate
+				endDate
+			}
 		}
 	}
 `;

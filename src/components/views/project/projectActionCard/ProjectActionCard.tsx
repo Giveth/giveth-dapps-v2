@@ -6,7 +6,6 @@ import {
 import { FC, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { motion } from 'framer-motion';
-import { DonateSection } from './DonationSection';
 import { ProjectPublicActions } from './ProjectPublicActions';
 import { ProjectStats } from './ProjectStats';
 import { AdminActions } from './AdminActions';
@@ -18,6 +17,8 @@ import { useProjectContext } from '@/context/project.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device, zIndex } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
+import QFSection from './QFSection';
+import { DonateSection } from './DonationSection';
 
 interface IProjectActionCardProps {}
 
@@ -31,7 +32,7 @@ interface IWrapper {
 
 export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 	const { isLoading } = useAppSelector(state => state.user);
-	const { isAdmin } = useProjectContext();
+	const { isAdmin, hasActiveQFRound } = useProjectContext();
 	const isMobile = !useMediaQuery(device.tablet);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
@@ -74,7 +75,8 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 					</>
 				) : (
 					<>
-						<DonateSection />
+						{hasActiveQFRound ? <QFSection /> : <DonateSection />}
+
 						<ProjectPublicActions />
 					</>
 				)}
@@ -94,7 +96,7 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 				</>
 			) : (
 				<>
-					<DonateSection />
+					{hasActiveQFRound ? <QFSection /> : <DonateSection />}
 					<ProjectPublicActions />
 				</>
 			)}
@@ -108,7 +110,7 @@ const ProjectActionCardWrapper = styled(Flex)`
 	height: 100%;
 	padding-top: 12px;
 	${mediaQueries.tablet} {
-		padding: 32px 24px 24px;
+		padding: 16px 24px;
 	}
 `;
 

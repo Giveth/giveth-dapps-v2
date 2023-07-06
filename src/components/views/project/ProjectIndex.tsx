@@ -25,6 +25,7 @@ import { useProjectContext } from '@/context/project.context';
 import { ProjectActionCard } from './projectActionCard/ProjectActionCard';
 import ProjectBadges from './ProjectBadges';
 import ProjectCategoriesBadges from './ProjectCategoriesBadges';
+import { PassportBanner } from '@/components/PassportBanner';
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 
 const ProjectDonations = dynamic(
@@ -47,8 +48,13 @@ export enum EProjectPageTabs {
 const ProjectIndex: FC<IProjectBySlug> = () => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
-	const { fetchProjectBoosters, projectData, isActive, isDraft } =
-		useProjectContext();
+	const {
+		fetchProjectBoosters,
+		projectData,
+		isActive,
+		isDraft,
+		hasActiveQFRound,
+	} = useProjectContext();
 
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
@@ -95,6 +101,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 
 	return (
 		<Wrapper>
+			{hasActiveQFRound && <PassportBanner />}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<ProjectMeta project={projectData} />

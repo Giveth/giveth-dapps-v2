@@ -47,6 +47,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 		$take: Int
 		$skip: Int
 		$traceable: Boolean
+		$qfRoundId: Int
 		$projectId: Int!
 		$searchTerm: String
 		$orderBy: SortBy
@@ -56,6 +57,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 			take: $take
 			skip: $skip
 			traceable: $traceable
+			qfRoundId: $qfRoundId
 			projectId: $projectId
 			searchTerm: $searchTerm
 			orderBy: $orderBy
@@ -70,6 +72,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 				}
 			}
 			totalCount
+			totalUsdBalance
 		}
 	}
 `;
@@ -140,6 +143,24 @@ export const UPDATE_DONATION_STATUS = gql`
 			id
 			status
 			verifyErrorMessage
+		}
+	}
+`;
+
+export const FETCH_QF_ROUND_HISTORY = gql`
+	query ($projectId: Int!, $qfRoundId: Int!) {
+		getQfRoundHistory(projectId: $projectId, qfRoundId: $qfRoundId) {
+			uniqueDonors
+			raisedFundInUsd
+			donationsCount
+			matchingFund
+			distributedFundNetwork
+			distributedFundTxHash
+			estimatedMatching {
+				projectDonationsSqrtRootSum
+				allProjectsSum
+				matchingPool
+			}
 		}
 	}
 `;

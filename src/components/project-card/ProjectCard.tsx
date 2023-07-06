@@ -12,6 +12,7 @@ import {
 	IconGIVBack,
 	IconRocketInSpace16,
 	IconVerifiedBadge16,
+	H5,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 
@@ -27,6 +28,7 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ProjectCardUserName } from './ProjectCardUserName';
+import { calculateTotalEstimatedMatching, hasActiveRound } from '@/helpers/qf';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -45,13 +47,17 @@ const ProjectCard = (props: IProjectCard) => {
 		image,
 		slug,
 		adminUser,
-		totalDonations,
+		sumDonationValueUsd,
+		sumDonationValueUsdForActiveQfRound,
 		updatedAt,
 		organization,
 		verified,
 		projectPower,
+		countUniqueDonors,
+		countUniqueDonorsForActiveQfRound,
+		qfRounds,
+		estimatedMatching,
 	} = project;
-
 	const [isHover, setIsHover] = useState(false);
 
 	const orgLabel = organization?.label;
@@ -60,6 +66,9 @@ const ProjectCard = (props: IProjectCard) => {
 	const name = adminUser?.name;
 	const { formatMessage, formatRelativeTime } = useIntl();
 
+	const isRoundActive = hasActiveRound(qfRounds);
+	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
+		estimatedMatching || {};
 	return (
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
@@ -111,15 +120,52 @@ const ProjectCard = (props: IProjectCard) => {
 				/>
 				<Link href={slugToProjectView(slug)}>
 					<Description>{descriptionSummary}</Description>
-					<PaddedRow alignItems='center' gap='4px'>
-						<PriceText>
-							${Math.round(totalDonations as number)}
-						</PriceText>
-						<LightSubline>
-							{' '}
-							{formatMessage({ id: 'label.raised_two' })}
-						</LightSubline>
-					</PaddedRow>
+					<Flex justifyContent='space-between'>
+						<PaddedRow flexDirection='column' gap='2px'>
+							<PriceText>
+								$
+								{isRoundActive
+									? sumDonationValueUsdForActiveQfRound?.toFixed(
+											2,
+									  )
+									: sumDonationValueUsd?.toFixed(2)}
+							</PriceText>
+							{isRoundActive ? (
+								<AmountRaisedText>
+									Amount raised in this round
+								</AmountRaisedText>
+							) : (
+								<AmountRaisedText>
+									Total amount raised
+								</AmountRaisedText>
+							)}
+
+							<div>
+								<LightSubline> Raised from </LightSubline>
+								<Subline style={{ display: 'inline-block' }}>
+									&nbsp;
+									{isRoundActive
+										? countUniqueDonorsForActiveQfRound
+										: countUniqueDonors}
+									&nbsp;
+								</Subline>
+								<LightSubline>contributors</LightSubline>
+							</div>
+						</PaddedRow>
+						{isRoundActive ? (
+							<PaddedRow flexDirection='column' gap='6px'>
+								<EstimatedMatchingPrice>
+									+ $
+									{calculateTotalEstimatedMatching(
+										projectDonationsSqrtRootSum,
+										allProjectsSum,
+										matchingPool,
+									).toFixed(2)}
+								</EstimatedMatchingPrice>
+								<LightSubline> Estimated matching</LightSubline>
+							</PaddedRow>
+						) : null}
+					</Flex>
 				</Link>
 				{verified && (
 					<Link href={slugToProjectView(slug)}>
@@ -194,13 +240,14 @@ const CustomizedDonateButton = styled(DonateButton)<{ isHover: boolean }>`
 	}
 `;
 
-const PriceText = styled(B)`
+const PriceText = styled(H5)`
 	display: inline;
-	color: ${neutralColors.gray[800]};
+	color: ${neutralColors.gray[900]};
+	font-weight: 700;
 `;
 
 const LightSubline = styled(Subline)`
-	display: inline;
+	display: inline-block;
 	color: ${neutralColors.gray[700]};
 `;
 
@@ -263,7 +310,7 @@ const CardBody = styled.div<ICardBody>`
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: 192px;
+	top: 112px;
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
 	border-radius: ${props =>
@@ -271,10 +318,10 @@ const CardBody = styled.div<ICardBody>`
 	${mediaQueries.laptopS} {
 		top: ${props =>
 			props.isHover == ECardBodyHover.FULL
-				? '109px'
+				? '59px'
 				: props.isHover == ECardBodyHover.HALF
-				? '150px'
-				: '186px'};
+				? '104px'
+				: '137px'};
 	}
 `;
 
@@ -341,6 +388,17 @@ const ActionButtons = styled(PaddedRow)`
 	margin: 25px 0;
 	gap: 16px;
 	flex-direction: column;
+`;
+
+const EstimatedMatchingPrice = styled(H5)`
+	color: ${semanticColors.jade[500]};
+`;
+
+const AmountRaisedText = styled(Subline)`
+	color: ${neutralColors.gray[700]};
+	background-color: ${neutralColors.gray[300]};
+	padding: 2px 8px;
+	border-radius: 4px;
 `;
 
 export default ProjectCard;

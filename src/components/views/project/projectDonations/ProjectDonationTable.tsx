@@ -9,7 +9,7 @@ import {
 import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
-import { IDonation } from '@/apollo/types/types';
+import { IDonation, IQFRound } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import {
 	smallFormatDate,
@@ -50,8 +50,7 @@ interface IOrder {
 }
 
 interface IProjectDonationTable {
-	donations: IDonation[];
-	totalDonations?: number;
+	selectedQF: IQFRound | null;
 }
 
 interface PageDonations {
@@ -59,14 +58,8 @@ interface PageDonations {
 	totalCount?: number;
 }
 
-const ProjectDonationTable = ({
-	donations,
-	totalDonations,
-}: IProjectDonationTable) => {
-	const [pageDonations, setPageDonations] = useState<PageDonations>({
-		donations: donations,
-		totalCount: totalDonations,
-	});
+const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
+	const [pageDonations, setPageDonations] = useState<PageDonations>();
 	const [page, setPage] = useState<number>(0);
 	const [order, setOrder] = useState<IOrder>({
 		by: EOrderBy.CreationDate,
@@ -105,6 +98,10 @@ const ProjectDonationTable = ({
 				query: FETCH_PROJECT_DONATIONS,
 				variables: {
 					projectId: parseInt(id),
+					qfRoundId:
+						selectedQF !== null
+							? parseInt(selectedQF.id)
+							: undefined,
 					take: itemPerPage,
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },
@@ -117,7 +114,10 @@ const ProjectDonationTable = ({
 			}
 		};
 		fetchProjectDonations();
-	}, [page, order.by, order.direction, id]);
+	}, [page, order.by, order.direction, id, isAdmin, selectedQF]);
+
+	//TODO: Show meaningful message when there is no donation
+	if (pageDonations?.totalCount === 0) return null;
 
 	return (
 		<Wrapper>
