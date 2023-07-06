@@ -74,7 +74,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const isMainnet = chainId === config.MAINNET_NETWORK_NUMBER;
 	const isGnosis = chainId === config.XDAI_NETWORK_NUMBER;
 	const isPolygon = chainId === config.POLYGON_NETWORK_NUMBER;
-	const isOptimism = chainId === config.OPTIMISM_NETWORK_NUMBER;
 	const isCelo = chainId === config.CELO_NETWORK_NUMBER;
 
 	const [donating, setDonating] = useState(false);

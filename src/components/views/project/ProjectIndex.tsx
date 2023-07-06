@@ -2,37 +2,36 @@ import React, { FC, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Caption, semanticColors } from '@giveth/ui-design-system';
+import {
+	Caption,
+	Container,
+	neutralColors,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { captureException } from '@sentry/nextjs';
-
 import { Col, Row } from '@giveth/ui-design-system';
+
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
-import ProjectDonateCard from './projectDonateCard/ProjectDonateCard';
-import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
-import { client } from '@/apollo/apolloClient';
-import { IDonation } from '@/apollo/types/types';
-import { EDirection, EDonationStatus, ESortby } from '@/apollo/types/gqlEnums';
 import InfoBadge from '@/components/badges/InfoBadge';
-import {
-	IDonationsByProjectIdGQL,
-	IProjectBySlug,
-} from '@/apollo/types/gqlTypes';
+import { IProjectBySlug } from '@/apollo/types/gqlTypes';
 import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
-import { mediaQueries } from '@/lib/constants/constants';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
-import { compareAddresses, isSSRMode, showToastError } from '@/lib/helpers';
-import { useAppSelector } from '@/features/hooks';
+import { isSSRMode } from '@/lib/helpers';
 import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
+import { ProjectActionCard } from './projectActionCard/ProjectActionCard';
+import ProjectBadges from './ProjectBadges';
+import ProjectCategoriesBadges from './ProjectCategoriesBadges';
+import { PassportBanner } from '@/components/PassportBanner';
+import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
 );
-const ProjectUpdates = dynamic(() => import('./ProjectUpdates'));
+const ProjectUpdates = dynamic(() => import('./projectUpdates'));
 const NotAvailableProject = dynamic(() => import('../../NotAvailableProject'), {
 	ssr: false,
 });
@@ -46,19 +45,20 @@ export enum EProjectPageTabs {
 	GIVPOWER = 'givpower',
 }
 
-const donationsPerPage = 10;
-
 const ProjectIndex: FC<IProjectBySlug> = () => {
 	const [activeTab, setActiveTab] = useState(0);
-	const [donations, setDonations] = useState<IDonation[]>([]);
-	const [totalDonations, setTotalDonations] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
-	const user = useAppSelector(state => state.user.userData);
-	const { fetchProjectBoosters, projectData, isActive, isDraft } =
-		useProjectContext();
+	const {
+		fetchProjectBoosters,
+		projectData,
+		isActive,
+		isDraft,
+		hasActiveQFRound,
+	} = useProjectContext();
 
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
+	const categories = projectData?.categories;
 
 	useEffect(() => {
 		if (!isSSRMode) {
@@ -79,49 +79,10 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		}
 	}, [router.query.tab]);
 
-	const {
-		adminUser,
-		description = '',
-		title,
-		id = '',
-		projectPower,
-		projectFuturePower,
-	} = projectData || {};
-
-	const isAdmin = compareAddresses(
-		adminUser?.walletAddress,
-		user?.walletAddress,
-	);
+	const { description = '', title, id = '' } = projectData || {};
 
 	useEffect(() => {
 		if (!id) return;
-		client
-			.query({
-				query: FETCH_PROJECT_DONATIONS,
-				variables: {
-					projectId: parseInt(id),
-					skip: 0,
-					take: donationsPerPage,
-					status: isAdmin ? null : EDonationStatus.VERIFIED,
-					orderBy: {
-						field: ESortby.CREATIONDATE,
-						direction: EDirection.DESC,
-					},
-				},
-			})
-			.then((res: IDonationsByProjectIdGQL) => {
-				const donationsByProjectId = res.data.donationsByProjectId;
-				setDonations(donationsByProjectId.donations);
-				setTotalDonations(donationsByProjectId.totalCount);
-			})
-			.catch((error: unknown) => {
-				showToastError(error);
-				captureException(error, {
-					tags: {
-						section: 'fetchProjectDonation',
-					},
-				});
-			});
 		fetchProjectBoosters(+id, projectData?.status.name);
 	}, [id]);
 
@@ -139,68 +100,59 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	}
 
 	return (
-		<>
-			<Wrapper>
-				<Head>
-					<title>{title && `${title} |`} Giveth</title>
-					<ProjectMeta project={projectData} />
-				</Head>
-
-				<ProjectHeader />
-				{isDraft && (
-					<DraftIndicator>
-						<InfoBadge />
-						<Caption medium>
-							This is a preview of your project.
-						</Caption>
-					</DraftIndicator>
-				)}
-				<BodyWrapper>
-					<Col sm={8}>
-						{projectData && !isDraft && (
-							<ProjectTabs
-								activeTab={activeTab}
-								slug={slug}
-								totalDonations={totalDonations}
-							/>
-						)}
-						{!isActive && !isDraft && (
-							<InlineToast
-								type={EToastType.Warning}
-								message='This project is not active.'
-							/>
-						)}
-						{activeTab === 0 && (
-							<RichTextViewer content={description} />
-						)}
-						{activeTab === 1 && <ProjectUpdates />}
-						{activeTab === 2 && (
-							<ProjectDonations
-								donationsByProjectId={{
-									donations,
-									totalCount: totalDonations,
-								}}
-							/>
-						)}
-						{activeTab === 3 && (
-							<ProjectGIVPowerIndex
-								projectPower={projectPower}
-								projectFuturePower={projectFuturePower}
-								isAdmin={isAdmin}
-							/>
-						)}
+		<Wrapper>
+			{hasActiveQFRound && <PassportBanner />}
+			<Head>
+				<title>{title && `${title} |`} Giveth</title>
+				<ProjectMeta project={projectData} />
+			</Head>
+			<HeadContainer>
+				<ProjectBadges />
+				<Row>
+					<Col xs={12} md={8} lg={9}>
+						<ProjectHeader />
+						<ProjectGIVbackToast />
 					</Col>
-					{projectData && (
-						<Col sm={4}>
-							<ProjectDonateCard
-								setCreationSuccessful={setCreationSuccessful}
-							/>
-						</Col>
+					<Col xs={12} md={4} lg={3}>
+						<ProjectActionCard />
+					</Col>
+					{isDraft && (
+						<DraftIndicator>
+							<InfoBadge />
+							<Caption medium>
+								This is a preview of your project.
+							</Caption>
+						</DraftIndicator>
 					)}
-				</BodyWrapper>
-			</Wrapper>
-			<SimilarProjects slug={slug} />
-		</>
+				</Row>
+			</HeadContainer>
+			{projectData && !isDraft && (
+				<ProjectTabs activeTab={activeTab} slug={slug} />
+			)}
+			<BodyWrapper>
+				<Container>
+					{!isActive && !isDraft && (
+						<InlineToast
+							type={EToastType.Warning}
+							message='This project is not active.'
+						/>
+					)}
+					{activeTab === 0 && (
+						<>
+							<RichTextViewer content={description} />
+							<Separator />
+							<ProjectCategoriesBadges
+								categories={categories || []}
+							/>
+						</>
+					)}
+					{activeTab === 1 && <ProjectUpdates />}
+					{activeTab === 2 && <ProjectDonations />}
+					{activeTab === 3 && <ProjectGIVPowerIndex />}
+				</Container>
+				<SimilarProjects slug={slug} />
+			</BodyWrapper>
+		</Wrapper>
 	);
 };
 
@@ -217,19 +169,19 @@ const Wrapper = styled.div`
 	position: relative;
 `;
 
-const BodyWrapper = styled(Row)`
-	margin: 0 auto;
+const BodyWrapper = styled.div`
 	min-height: calc(100vh - 312px);
-	max-width: 1280px;
-	padding: 0 16px;
+	background-color: ${neutralColors.gray[100]};
+	padding: 40px 0;
+`;
 
-	${mediaQueries.mobileL} {
-		padding: 0 22px;
-	}
+const HeadContainer = styled(Container)`
+	margin-top: 24px;
+`;
 
-	${mediaQueries.laptopS} {
-		padding: 0 40px;
-	}
+const Separator = styled.hr`
+	border: 1px solid ${neutralColors.gray[400]};
+	margin: 40px 0;
 `;
 
 export default ProjectIndex;

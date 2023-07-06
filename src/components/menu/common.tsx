@@ -25,7 +25,7 @@ export const BaseMenuContainer = styled.div`
 `;
 
 export const HighlightSection = styled.div`
-	padding: 16px;
+	padding: 16px 8px;
 	background-color: ${props =>
 		props.theme === ETheme.Dark
 			? brandColors.giv[500]
