@@ -156,6 +156,11 @@ export const FETCH_QF_ROUND_HISTORY = gql`
 			matchingFund
 			distributedFundNetwork
 			distributedFundTxHash
+			estimatedMatching {
+				projectDonationsSqrtRootSum
+				allProjectsSum
+				matchingPool
+			}
 		}
 	}
 `;
