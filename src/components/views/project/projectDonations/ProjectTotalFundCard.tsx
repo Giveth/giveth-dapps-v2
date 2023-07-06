@@ -34,7 +34,6 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		totalDonations,
 		addresses,
 		qfRounds,
-		countUniqueDonorsForActiveQfRound,
 		estimatedMatching,
 		countUniqueDonors,
 	} = projectData || {};
