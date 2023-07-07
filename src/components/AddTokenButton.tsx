@@ -9,7 +9,7 @@ import { Flex } from './styled-components/Flex';
 import StorageLabel from '@/lib/localStorage';
 
 interface IAddGIVTokenButton {
-	provider: Web3Provider | null;
+	provider: Web3Provider | null | undefined;
 	showText?: boolean;
 	tokenSymbol?: string;
 	tokenAddress?: string;

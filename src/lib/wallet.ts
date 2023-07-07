@@ -2,7 +2,7 @@ import { captureException } from '@sentry/nextjs';
 import {
 	EWallets,
 	torusConnector,
-	walletconnectConnector,
+	// walletconnectConnector,
 } from '@/lib/wallet/walletTypes';
 import { switchNetwork as metamaskSwitchNetwork } from '@/lib/metamask';
 import config from '@/configuration';
@@ -12,12 +12,12 @@ import { showToastError } from './helpers';
 // @DEV it's not tested yet! didn't have a multi-chain wallet to test
 const switchWalletConnectNetwork = async (chainId: number) => {
 	try {
-		await walletconnectConnector?.walletConnectProvider?.connector?.updateSession(
-			{
-				chainId,
-				accounts: [],
-			},
-		);
+		// await walletconnectConnector?.walletConnectProvider?.connector?.updateSession(
+		// 	{
+		// 		chainId,
+		// 		accounts: [],
+		// 	},
+		// );
 	} catch (switchError: any) {
 		console.error(switchError);
 		captureException(switchError, {

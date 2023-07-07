@@ -135,7 +135,7 @@ export const CongratulationsCard = () => {
 	const { formatMessage } = useIntl();
 	const [streamValue, setStreamValue] = useState<string>('0');
 	const { totalAmount, resetWallet } = useClaim();
-	const { library } = useWeb3React();
+	const { provider: library } = useWeb3React();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
 	useEffect(() => {

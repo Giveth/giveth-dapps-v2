@@ -105,7 +105,7 @@ export const claimAirDrop = async (
 
 export const claimReward = async (
 	tokenDistroAddress: string,
-	provider: Web3Provider | null,
+	provider: Web3Provider | null | undefined,
 ): Promise<TransactionResponse | undefined> => {
 	if (!isAddress(tokenDistroAddress)) return;
 	if (!provider) return;

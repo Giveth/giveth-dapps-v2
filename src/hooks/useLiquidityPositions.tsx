@@ -26,7 +26,7 @@ ERC721NftContext.displayName = 'ERC721NftContext';
 
 export const useLiquidityPositions = () => {
 	const mainnetValues = useAppSelector(state => state.subgraph.mainnetValues);
-	const { chainId, library } = useWeb3React();
+	const { chainId, provider: library } = useWeb3React();
 
 	const network = config.MAINNET_NETWORK_NUMBER;
 	const userStakedPositions =

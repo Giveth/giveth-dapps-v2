@@ -106,7 +106,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		stakedAmount: stakedLpAmount,
 		earned,
 	} = useStakingPool(poolStakingConfig, hold);
-	const { chainId, account, active: isWalletActive } = useWeb3React();
+	const { chainId, account, isActive: isWalletActive } = useWeb3React();
 
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 	const {

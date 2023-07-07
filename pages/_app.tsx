@@ -2,7 +2,19 @@ import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { IntlProvider } from 'react-intl';
 import { Toaster } from 'react-hot-toast';
-import { Web3ReactProvider } from '@web3-react/core';
+import { Web3ReactHooks, Web3ReactProvider } from '@web3-react/core';
+import type { MetaMask } from '@web3-react/metamask';
+import type { GnosisSafe } from '@web3-react/gnosis-safe';
+import type { Network } from '@web3-react/network';
+import type { WalletConnect as WalletConnectV2 } from '@web3-react/walletconnect-v2';
+import { hooks as metaMaskHooks, metaMask } from '@/connectors/metaMask';
+import {
+	hooks as walletConnectV2Hooks,
+	walletConnectV2,
+} from '@/connectors/walletConnectV2';
+import { hooks as gnosisSafeHooks, gnosisSafe } from '@/connectors/gnosisSafe';
+import { hooks as networkHooks, network } from '@/connectors/network';
+
 import { ApolloProvider } from '@apollo/client';
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
 import NProgress from 'nprogress';
@@ -40,6 +52,16 @@ declare global {
 }
 
 const DEFAULT_WRITE_KEY = 'MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB';
+
+const connectors: [
+	MetaMask | WalletConnectV2 | GnosisSafe | Network,
+	Web3ReactHooks,
+][] = [
+	[metaMask, metaMaskHooks],
+	[walletConnectV2, walletConnectV2Hooks],
+	[gnosisSafe, gnosisSafeHooks],
+	[network, networkHooks],
+];
 
 export const IntlMessages = {
 	ca,
@@ -116,7 +138,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 					defaultLocale='en'
 				>
 					<ApolloProvider client={apolloClient}>
-						<Web3ReactProvider getLibrary={getLibrary}>
+						<Web3ReactProvider connectors={connectors}>
 							{isMaintenanceMode ? (
 								<MaintenanceIndex />
 							) : (

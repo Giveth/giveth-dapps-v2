@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Button, B, neutralColors, H4 } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
 import { InputSize } from '@/components/Input';
 import InputStyled from '@/components/styled-components/Input';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -15,7 +14,6 @@ import config from '@/configuration';
 const FiatDonation = () => {
 	const { formatMessage } = useIntl();
 	const { project } = useDonateData();
-	const { account } = useWeb3React();
 	const dispatch = useAppDispatch();
 	const [onramperConfirmationModal, setOnramperConfirmationModal] =
 		useState(false);

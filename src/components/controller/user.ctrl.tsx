@@ -2,7 +2,7 @@ import { useWeb3React } from '@web3-react/core';
 import { useEffect, useRef, useState } from 'react';
 import { formatEther } from '@ethersproject/units';
 import { captureException } from '@sentry/nextjs';
-import { InjectedConnector } from '@web3-react/injected-connector';
+import { MetaMask } from '@web3-react/metamask';
 import { useAppDispatch } from '@/features/hooks';
 import {
 	setBalance,
@@ -17,7 +17,7 @@ import { walletsArray } from '@/lib/wallet/walletTypes';
 import { getTokens } from '@/helpers/user';
 
 const UserController = () => {
-	const { account, library, chainId, activate } = useWeb3React();
+	const { account, provider: library, chainId } = useWeb3React();
 	const dispatch = useAppDispatch();
 	const [isActivatedCalled, setIsActivatedCalled] = useState(false);
 	const token = !isSSRMode ? localStorage.getItem(StorageLabel.TOKEN) : null;
@@ -29,33 +29,44 @@ const UserController = () => {
 		const wallet = walletsArray.find(w => w.value === selectedWalletName);
 		// try to connect to safe. this is only for the gnosis safe environment, it won't stop the flow if it fails
 		const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
-		if (safeWallet) {
-			activate(safeWallet.connector, console.log)
-				.then(() => setIsActivatedCalled(true))
+		dispatch(setIsLoading(false));
+
+		// if (safeWallet) {
+		// 	activate(safeWallet.connector, console.log)
+		// 		.then(() => setIsActivatedCalled(true))
+		// 		.finally(() => {
+		// 			if (!token) dispatch(setIsLoading(false));
+		// 		});
+		// }
+		console.log({ wallet, chainId });
+		if (wallet && chainId && wallet.connector instanceof MetaMask) {
+			console.log('b');
+			void wallet.connector
+				.activate(chainId)
+				.then(a => {
+					setIsActivatedCalled(true);
+				})
 				.finally(() => {
 					if (!token) dispatch(setIsLoading(false));
 				});
-		}
-
-		if (wallet && wallet.connector instanceof InjectedConnector) {
-			wallet.connector
-				.isAuthorized()
-				.then(isAuthorized => {
-					if (isAuthorized) {
-						activate(wallet.connector, console.log)
-							.then(() => setIsActivatedCalled(true))
-							.finally(() => {
-								if (!token) dispatch(setIsLoading(false));
-							});
-					} else {
-						dispatch(setIsLoading(false));
-					}
-				})
-				.catch(() => dispatch(setIsLoading(false)));
+			// wallet.connector
+			// 	.isAuthorized()
+			// 	.then(isAuthorized => {
+			// 		if (isAuthorized) {
+			// 			activate(wallet.connector, console.log)
+			// 				.then(() => setIsActivatedCalled(true))
+			// 				.finally(() => {
+			// 					if (!token) dispatch(setIsLoading(false));
+			// 				});
+			// 		} else {
+			// 			dispatch(setIsLoading(false));
+			// 		}
+			// 	})
+			// 	.catch(() => dispatch(setIsLoading(false)));
 		} else {
 			dispatch(setIsLoading(false));
 		}
-	}, [activate, isActivatedCalled]);
+	}, [isActivatedCalled]);
 
 	useEffect(() => {
 		if (isMounted.current) {
@@ -83,15 +94,16 @@ const UserController = () => {
 
 	useEffect(() => {
 		if (account && library) {
-			library?.on('block', () => {
+			library?.on('block', async () => {
 				//Getting balance on every block
 				if (account && library) {
-					library
-						.getBalance(account)
-						.then((_balance: string) => {
+					void library
+						.getBalance(account) // TODO: FIX THIS TYPE
+						.then((_balance: any) => {
 							const balance = parseFloat(
 								formatEther(_balance),
 							).toFixed(3);
+
 							dispatch(setBalance(balance));
 						})
 						.catch((error: unknown) => {

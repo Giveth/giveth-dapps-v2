@@ -64,7 +64,7 @@ const Header: FC<IHeader> = () => {
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 
-	const { chainId, active, account } = useWeb3React();
+	const { chainId, isActive: active, account } = useWeb3React();
 
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, userData } = useAppSelector(

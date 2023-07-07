@@ -93,7 +93,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const givPrice = useAppSelector(state => state.price.givPrice);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { account, library } = useWeb3React();
+	const { account, provider: library } = useWeb3React();
 
 	useEffect(() => {
 		const bnGIVback = BN(givTokenDistroBalance.givback);

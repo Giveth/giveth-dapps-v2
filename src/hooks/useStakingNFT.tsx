@@ -9,7 +9,7 @@ import { getReward } from '@/lib/stakingNFT';
 import { LiquidityPosition } from '@/types/nfts';
 
 export const useStakingNFT = (stakedPositions: LiquidityPosition[]) => {
-	const { account, chainId, library } = useWeb3React();
+	const { account, chainId, provider: library } = useWeb3React();
 
 	const [rewardBalance, setRewardBalance] = useState<BigNumber>(
 		BigNumber.from(0),

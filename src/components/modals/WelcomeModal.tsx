@@ -28,7 +28,7 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 	const { formatMessage } = useIntl();
 
-	const { activate } = useWeb3React();
+	const { connector } = useWeb3React();
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -42,7 +42,8 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	};
 
 	const connectTorus = (): void => {
-		activate(torusConnector)
+		connector
+			.activate(torusConnector)
 			.then(() => {
 				localStorage.setItem(StorageLabel.WALLET, EWallets.TORUS);
 				closeModal();

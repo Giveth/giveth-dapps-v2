@@ -47,7 +47,7 @@ export const MintModal: FC<IMintModalProps> = ({
 	const [step, setStep] = useState(MintStep.APPROVE);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-	const { library } = useWeb3React();
+	const { provider: library } = useWeb3React();
 	const { setStep: setMintStep, setTx } = usePFPMintData();
 
 	const price = nftPrice ? nftPrice.multipliedBy(qty) : new BigNumber(0);

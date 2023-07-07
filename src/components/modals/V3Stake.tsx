@@ -57,7 +57,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 		useAppSelector(state => state.subgraph.currentValues),
 	);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { chainId, library, account } = useWeb3React();
+	const { chainId, provider: library, account } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const positions = isUnstakingModal ? stakedPositions : unstakedPositions;

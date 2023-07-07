@@ -58,7 +58,7 @@ const WalletAddressInput: FC<IProps> = ({
 	const [isValidating, setIsValidating] = useState(false);
 	const { formatMessage } = useIntl();
 
-	const { chainId, library } = useWeb3React();
+	const { chainId, provider: library } = useWeb3React();
 
 	const user = useAppSelector(state => state.user?.userData);
 	const isMainnet = networkId === config.MAINNET_NETWORK_NUMBER;

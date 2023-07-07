@@ -21,7 +21,7 @@ import EligibilityModal from './EligibilityModal';
 import { GiversPFP } from '@/types/contracts';
 
 const CheckEligibility = () => {
-	const { library, chainId } = useWeb3React();
+	const { provider: library, chainId } = useWeb3React();
 	const [walletAddress, setWalletAddress] = useState('');
 	const [error, setError] = useState('');
 	const [showModal, setShowModal] = useState(false);

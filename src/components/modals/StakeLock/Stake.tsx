@@ -77,7 +77,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
-	const { chainId, library } = useWeb3React();
+	const { chainId, provider: library } = useWeb3React();
 	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
 
 	const { title, LM_ADDRESS, POOL_ADDRESS, platform } =

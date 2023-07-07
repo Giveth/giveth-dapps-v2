@@ -446,7 +446,7 @@ export const approveERC20tokenTransfer = async (
 	ownerAddress: string,
 	spenderAddress: string,
 	poolAddress: string,
-	provider: Web3Provider | null,
+	provider: Web3Provider | null | undefined,
 ): Promise<boolean> => {
 	if (amount === '0') return false;
 	if (!provider) {
@@ -511,7 +511,7 @@ export const approveERC20tokenTransfer = async (
 export const wrapToken = async (
 	amount: string,
 	gardenAddress: string,
-	provider: Web3Provider | null,
+	provider: Web3Provider | null | undefined,
 ): Promise<TransactionResponse | undefined> => {
 	if (amount === '0') return;
 	if (!provider) {
@@ -548,7 +548,7 @@ export const wrapToken = async (
 export const unwrapToken = async (
 	amount: string,
 	gardenAddress: string,
-	provider: Web3Provider | null,
+	provider: Web3Provider | null | undefined,
 ): Promise<TransactionResponse | undefined> => {
 	if (amount === '0') return;
 	if (!provider) {
@@ -587,7 +587,7 @@ export const stakeTokens = async (
 	amount: string,
 	poolAddress: string,
 	lmAddress: string,
-	provider: Web3Provider | null,
+	provider: Web3Provider | null | undefined,
 	permit: boolean,
 ): Promise<TransactionResponse | undefined> => {
 	if (amount === '0') return;
@@ -647,7 +647,7 @@ export const stakeTokens = async (
 
 export const harvestTokens = async (
 	lmAddress: string,
-	provider: Web3Provider | null,
+	provider: Web3Provider | null | undefined,
 ): Promise<TransactionResponse | undefined> => {
 	if (!provider) {
 		console.error('Provider is null');
@@ -678,7 +678,7 @@ export const harvestTokens = async (
 export const withdrawTokens = async (
 	amount: string,
 	lmAddress: string,
-	provider: Web3Provider | null,
+	provider: Web3Provider | null | undefined,
 ): Promise<TransactionResponse | undefined> => {
 	if (!provider) {
 		console.error('Provider is null');
@@ -712,7 +712,7 @@ export const lockToken = async (
 	amount: string,
 	round: number,
 	contractAddress: string,
-	provider: Web3Provider | null,
+	provider: Web3Provider | null | undefined,
 ): Promise<TransactionResponse | undefined> => {
 	if (amount === '0') return;
 	if (!provider) {
@@ -746,7 +746,7 @@ export const lockToken = async (
 export const getTotalGIVpower = async (
 	account: string,
 	contractAddress: string,
-	provider: Web3Provider | null,
+	provider: Web3Provider | null | undefined,
 ): Promise<BigNumber | undefined> => {
 	if (!provider) {
 		console.error('Provider is null');

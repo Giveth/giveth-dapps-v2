@@ -27,7 +27,7 @@ const { NFT_POSITIONS_MANAGER_ADDRESS, UNISWAP_V3_STAKER, UNISWAP_V3_LP_POOL } =
 	uniswapV3Config;
 
 export const getNftManagerPositionsContract = (
-	provider: Web3Provider | null,
+	provider: Web3Provider | null | undefined,
 ): INonfungiblePositionManager | undefined => {
 	const signer = provider?.getSigner();
 
@@ -43,7 +43,7 @@ export const getNftManagerPositionsContract = (
 };
 
 export const getUniswapV3StakerContract = (
-	provider: Web3Provider | null,
+	provider: Web3Provider | null | undefined,
 	isUnchecked?: boolean,
 ) => {
 	let signer;

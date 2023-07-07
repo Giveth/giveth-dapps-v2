@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
 
 import { captureException } from '@sentry/nextjs';
-import { useRouter } from 'next/router';
 import {
 	EWallets,
 	IWallet,
@@ -28,47 +27,51 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 	const { formatMessage } = useIntl();
 
-	const router = useRouter();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const context = useWeb3React();
-	const { activate, deactivate } = context;
-	const selectedWallet = useWalletName(context);
+	const { connector, chainId } = useWeb3React();
+
+	const selectedWallet = useWalletName(connector);
 	const dispatch = useAppDispatch();
 
-	const handleSelect = (selected: IWallet) => {
-		if (selectedWallet !== selected.value) {
+	const handleSelect = async (selected: IWallet) => {
+		console.log({ selected, selectedWallet });
+		// if (selectedWallet !== selected.value) {
+		if (true) {
 			localStorage.removeItem(StorageLabel.WALLET);
-			deactivate();
+			// if (connector?.deactivate) {
+			// 	void connector.deactivate();
+			// } else {
+			// 	void connector.resetState();
+			// }
 			let timeOut = 0;
 			if (selectedWallet === EWallets.METAMASK) {
 				timeOut = 500;
 			}
-			setTimeout(() => {
+			setTimeout(async () => {
 				localStorage.setItem(StorageLabel.WALLET, selected.value);
-				activate(selected.connector, showToastError, true)
-					.then(() => {
-						//Temporary Disable FirstWelcomeModal
-						// const isGIVeconomyRoute = isGIVeconomyRoute(
-						// 	router.route,
-						// );
-						// const isModalShowedBefor =
-						// 	localStorage.getItem(
-						// 		StorageLabel.FIRSTMODALSHOWED,
-						// 	) === '1';
-						// if (!isGIVeconomyRoute && !isModalShowedBefor) {
-						// 	dispatch(setShowFirstWelcomeModal(true));
-						// }
-						const event = new Event(EModalEvents.CONNECTED);
-						window.dispatchEvent(event);
-					})
-					.catch(error => {
-						showToastError(error);
-						captureException(error, {
-							tags: {
-								section: 'activateWallet',
-							},
-						});
-					});
+				console.log({ connector });
+				await connector.activate(chainId);
+				//Temporary Disable FirstWelcomeModal
+				// const isGIVeconomyRoute = isGIVeconomyRoute(
+				// 	router.route,
+				// );
+				// const isModalShowedBefor =
+				// 	localStorage.getItem(
+				// 		StorageLabel.FIRSTMODALSHOWED,
+				// 	) === '1';
+				// if (!isGIVeconomyRoute && !isModalShowedBefor) {
+				// 	dispatch(setShowFirstWelcomeModal(true));
+				// }
+				const event = new Event(EModalEvents.CONNECTED);
+				window.dispatchEvent(event);
+				// .catch(error => {
+				// 	showToastError(error);
+				// 	captureException(error, {
+				// 		tags: {
+				// 			section: 'activateWallet',
+				// 		},
+				// 	});
+				// });
 			}, timeOut);
 		}
 		closeModal();

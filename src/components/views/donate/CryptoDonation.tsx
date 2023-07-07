@@ -61,7 +61,12 @@ interface IInputBox {
 }
 
 const CryptoDonation: FC = () => {
-	const { chainId: networkId, account, library, active } = useWeb3React();
+	const {
+		chainId: networkId,
+		account,
+		provider: library,
+		isActive: active,
+	} = useWeb3React();
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
 	const { isEnabled, isSignedIn, balance } = useAppSelector(

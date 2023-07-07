@@ -111,7 +111,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		xDaiThirdPartyTokensPrice,
 		givPrice,
 	} = useAppSelector(state => state.price);
-	const { account, library } = useWeb3React();
+	const { account, provider: library } = useWeb3React();
 	const [txHash, setTxHash] = useState('');
 	//GIVdrop TODO: Should we show Givdrop in new  design?
 	const [givDrop, setGIVdrop] = useState(constants.Zero);

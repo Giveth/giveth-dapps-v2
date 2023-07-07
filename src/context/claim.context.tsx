@@ -62,7 +62,7 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 		GiveDropStateType.notConnected,
 	);
 
-	const { account, chainId, active } = useWeb3React();
+	const { account, chainId, isActive: active } = useWeb3React();
 
 	useEffect(() => {
 		setShowModal(active && chainId !== config.XDAI_NETWORK_NUMBER);

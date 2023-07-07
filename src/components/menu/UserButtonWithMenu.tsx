@@ -125,7 +125,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 };
 
 const HeaderUserButton = ({}) => {
-	const { chainId, account, library } = useWeb3React();
+	const { chainId, account, provider: library } = useWeb3React();
 	const { userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	return (

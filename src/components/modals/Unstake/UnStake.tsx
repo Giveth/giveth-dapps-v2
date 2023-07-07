@@ -77,7 +77,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 	);
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 	const { stakedAmount } = useStakingPool(poolStakingConfig);
-	const { library, chainId } = useWeb3React();
+	const { provider: library, chainId } = useWeb3React();
 	const { title, type, LM_ADDRESS, GARDEN_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
 

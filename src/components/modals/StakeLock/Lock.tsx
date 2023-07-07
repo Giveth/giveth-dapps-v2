@@ -60,7 +60,7 @@ const LockModal: FC<ILockModalProps> = ({
 	const [amount, setAmount] = useState('0');
 	const [round, setRound] = useState(0);
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
-	const { library } = useWeb3React();
+	const { provider: library } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { stakedAmount: stakedLpAmount } = useStakingPool(poolStakingConfig);
 

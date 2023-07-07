@@ -37,7 +37,7 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 	rewardTokenSymbol,
 	rewardTokenAddress,
 }) => {
-	const { chainId, library } = useWeb3React();
+	const { chainId, provider: library } = useWeb3React();
 	return (
 		<>
 			<Title>{title}</Title>
@@ -76,7 +76,7 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 	rewardTokenSymbol,
 	rewardTokenAddress,
 }) => {
-	const { chainId, library } = useWeb3React();
+	const { chainId, provider: library } = useWeb3React();
 	return (
 		<>
 			<Title>{title}</Title>

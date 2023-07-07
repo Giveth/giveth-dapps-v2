@@ -35,7 +35,7 @@ const ModalController = () => {
 
 	const dispatch = useAppDispatch();
 
-	const { active } = useWeb3React();
+	const { isActive: active } = useWeb3React();
 
 	useEffect(() => {
 		if (isRegistered && showCompleteProfile) {

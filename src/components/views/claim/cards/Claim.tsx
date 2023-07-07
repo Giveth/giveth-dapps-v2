@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { H2, Lead } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
-import { InjectedConnector } from '@web3-react/injected-connector';
+import { metaMask } from '@/connectors/metaMask';
 import { Button } from '../../../styled-components/Button';
 import { Flex } from '../../../styled-components/Flex';
 import { Card, Header, PreviousArrowButton } from './common';
@@ -54,7 +54,7 @@ const AddTokenRow = styled(Flex)`
 
 const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const { totalAmount, step, goPreviousStep, goNextStep } = useClaim();
-	const { active, activate, chainId, library } = useWeb3React();
+	const { isActive: active, chainId, provider: library } = useWeb3React();
 
 	const [txStatus, setTxStatus] = useState<TransactionResponse | undefined>();
 	const [showClaimModal, setShowClaimModal] = useState<boolean>(false);
@@ -62,7 +62,9 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const checkNetworkAndWallet = async () => {
 		if (!active) {
 			console.log('Wallet is not connected');
-			await activate(new InjectedConnector({}));
+			void metaMask.connectEagerly().catch(() => {
+				console.debug('Failed to connect eagerly to metamask');
+			});
 			return false;
 		}
 

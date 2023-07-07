@@ -29,7 +29,7 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 	const [loading, setLoading] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
-	const { account, library, chainId } = useWeb3React();
+	const { account, provider: library, chainId } = useWeb3React();
 	const router = useRouter();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();

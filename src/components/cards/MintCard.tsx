@@ -44,7 +44,7 @@ export const MintCard = () => {
 		useState(false);
 	const [pfpData, setPfpData] = useState<IPFPContractData>();
 	const [balance, setBalance] = useState<number>();
-	const { account, library, chainId } = useWeb3React();
+	const { account, provider: library, chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
 	const { setQty, isEligible, setIsEligible } = usePFPMintData();
@@ -155,14 +155,14 @@ export const MintCard = () => {
 		if (!pfpData?.price) return;
 
 		//handle balance
-		const signer = library.getSigner();
-		const userAddress = await signer.getAddress();
+		const signer = library?.getSigner();
+		const userAddress = await signer?.getAddress();
 		const DAIContract = new Contract(
 			config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS,
 			ERC20_ABI,
 			library,
 		) as ERC20;
-		const balance = await DAIContract.balanceOf(userAddress);
+		const balance = await DAIContract.balanceOf(userAddress!);
 
 		const total = pfpData?.price.multipliedBy(qtyNFT);
 		if (total.lte(balance.toString())) {

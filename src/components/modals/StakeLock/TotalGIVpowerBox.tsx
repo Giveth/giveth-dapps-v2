@@ -19,7 +19,7 @@ import LottieControl from '@/components/LottieControl';
 
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
-	const { account, library, chainId } = useWeb3React();
+	const { account, provider: library, chainId } = useWeb3React();
 	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
 
 	useEffect(() => {

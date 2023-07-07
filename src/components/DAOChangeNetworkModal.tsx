@@ -6,7 +6,7 @@ import {
 	IconInfoFilled16,
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
-import { InjectedConnector } from '@web3-react/injected-connector';
+import { metaMask } from '@/connectors/metaMask';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { switchNetwork } from '@/lib/metamask';
@@ -18,7 +18,7 @@ interface IChangeNetworkModal {
 }
 
 export const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
-	const { account, activate } = useWeb3React();
+	const { account } = useWeb3React();
 	const networkLabel =
 		network === config.XDAI_NETWORK_NUMBER ? 'Gnosis chain' : 'Mainnet';
 
@@ -26,7 +26,9 @@ export const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
 
 	const checkWalletAndSwitchNetwork = async (network: number) => {
 		if (!account) {
-			await activate(new InjectedConnector({}));
+			void metaMask.connectEagerly().catch(() => {
+				console.debug('Failed to connect eagerly to metamask');
+			});
 			await switchNetwork(network);
 		}
 		if (account) {

@@ -11,7 +11,7 @@ import { switchNetwork } from '@/lib/wallet';
 
 const GeneralController = () => {
 	const dispatch = useAppDispatch();
-	const { chainId, account, active: isWalletActive } = useWeb3React();
+	const { chainId, account, isActive: isWalletActive } = useWeb3React();
 	const router = useRouter();
 	const theme = useAppSelector(state => state.general.theme);
 	useEffect(() => {
