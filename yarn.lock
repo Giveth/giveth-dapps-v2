@@ -851,10 +851,10 @@
     intl-messageformat "10.3.1"
     tslib "^2.4.0"
 
-"@giveth/ui-design-system@^1.11.10":
-  version "1.11.10"
-  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.10.tgz#3c517635edc50bf8f90e0a95e578a29254ebb01f"
-  integrity sha512-Y7MxArnUx2+36V/bm+nR/cbfH26/ZXlpPVbz3o8UICk8YOmdirlz3t/+G1lcbFM+SLX12OX5yM23cdRLzQwG2g==
+"@giveth/ui-design-system@^1.11.12":
+  version "1.11.12"
+  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.12.tgz#12ec40b1b4737dcbe3e5ee1d668ccc851f93f0bc"
+  integrity sha512-Sr2ILZ2E4FzG/a2ID3K8ty3dXwaum0PRN1/T+kVViR52GnxwwamWIi2ko9agcc4vnOpkWCAxl/AhVLTkSDbyng==
   dependencies:
     next "13.1.6"
     react "18.2.0"
@@ -6974,7 +6974,7 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==
 
-next@^13.1.2:
+next@13.1.6, next@^13.1.2:
   version "13.1.6"
   resolved "https://registry.yarnpkg.com/next/-/next-13.1.6.tgz#054babe20b601f21f682f197063c9b0b32f1a27c"
   integrity sha512-hHlbhKPj9pW+Cymvfzc15lvhaOZ54l+8sXDXJWm3OBNBzgrVj6hwGPmqqsXg40xO1Leq+kXpllzRPuncpC0Phw==
@@ -7748,7 +7748,7 @@ react-datepicker@^4.8.0:
     react-onclickoutside "^6.12.2"
     react-popper "^2.3.0"
 
-react-dom@^18.2.0:
+react-dom@18.2.0, react-dom@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
   integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
@@ -7905,7 +7905,7 @@ react-transition-group@^4.3.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
-react@^18.2.0:
+react@18.2.0, react@^18.2.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
