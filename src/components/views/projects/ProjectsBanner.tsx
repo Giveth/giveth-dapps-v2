@@ -11,7 +11,7 @@ interface IProjectsBanner {
 	mainCategory?: IMainCategory;
 }
 
-const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
+export const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 	const { formatMessage } = useIntl();
 
 	const allCategory = {
@@ -32,8 +32,6 @@ const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 				}
 				fill
 				alt={_mainCategory.title}
-				objectFit='cover'
-				objectPosition='left'
 			/>
 			<Title weight={700}>
 				{formatMessage({ id: _mainCategory.slug })}
@@ -43,7 +41,7 @@ const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 	);
 };
 
-const BannerContainer = styled(FlexCenter)`
+export const BannerContainer = styled(FlexCenter)`
 	height: 0;
 	position: relative;
 	margin-top: 32px;
@@ -66,5 +64,3 @@ const Desc = styled(SemiTitle)`
 	color: ${neutralColors.gray[100]};
 	text-transform: uppercase;
 `;
-
-export default ProjectsBanner;

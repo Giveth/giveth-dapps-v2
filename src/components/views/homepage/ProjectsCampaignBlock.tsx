@@ -36,7 +36,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 	const pagElRef = useRef<HTMLDivElement>(null);
 	const nextElRef = useRef<HTMLDivElement>(null);
 	const prevElRef = useRef<HTMLDivElement>(null);
-
+	//Please don't remove this
 	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
 	const { formatMessage } = useIntl();
 

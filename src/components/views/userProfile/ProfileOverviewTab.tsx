@@ -4,10 +4,12 @@ import styled from 'styled-components';
 import {
 	brandColors,
 	H1,
+	H5,
 	QuoteText,
 	Button,
 	OutlineButton,
 	IButtonProps,
+	P,
 } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
@@ -27,6 +29,9 @@ import {
 } from '@/components/ContributeCard';
 import { formatWeiHelper } from '@/helpers/number';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { PassportCard } from './PassportCard';
+import ExternalLink from '@/components/ExternalLink';
+import links from '@/lib/constants/links';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
@@ -146,6 +151,24 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 				</Col>
 			</Row>
 			{myAccount && (
+				<Row>
+					<Col lg={6}>
+						<SectionTitle weight={700}>
+							Gitcoin Passport
+						</SectionTitle>
+						<SectionDesc>
+							Taking control of your online identity and your
+							decentralized credentials
+							<br />
+							<PassportLink href={links.PASSPORT}>
+								Learn more.
+							</PassportLink>
+						</SectionDesc>
+						<PassportCard />
+					</Col>
+				</Row>
+			)}
+			{myAccount && (
 				<AccountHero leftAlign={title === _sections.donate.title}>
 					<H1>{title}</H1>
 					<QuoteText>{subtitle}</QuoteText>
@@ -202,6 +225,19 @@ const Buttons = styled(Flex)`
 	margin: 40px 0 0 0;
 	gap: 12px;
 	flex-wrap: wrap;
+`;
+
+const SectionTitle = styled(H5)`
+	margin-top: 40px;
+	margin-bottom: 16px;
+`;
+
+const SectionDesc = styled(P)`
+	margin-bottom: 24px;
+`;
+
+const PassportLink = styled(ExternalLink)`
+	color: ${brandColors.pinky[500]};
 `;
 
 export default ProfileOverviewTab;
