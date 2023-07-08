@@ -21,6 +21,12 @@ export interface IAdminUser {
 	avatar?: string;
 }
 
+export interface IEstimatedMatching {
+	allProjectsSum: number;
+	matchingPool: number;
+	projectDonationsSqrtRootSum: number;
+}
+
 export interface IProject {
 	id?: string;
 	title?: string;
@@ -62,6 +68,12 @@ export interface IProject {
 	verificationFormStatus?: EVerificationStatus;
 	projectFuturePower: IProjectPower;
 	givbackFactor?: number;
+	countUniqueDonors?: number;
+	countUniqueDonorsForActiveQfRound?: number;
+	estimatedMatching: IEstimatedMatching;
+	sumDonationValueUsd?: number;
+	sumDonationValueUsdForActiveQfRound?: number;
+	qfRounds?: IQFRound[];
 }
 
 export interface IDonationProject extends IProject {
@@ -78,6 +90,7 @@ export enum EProjectsFilter {
 	ACCEPT_FUND_ON_POLYGON = 'AcceptFundOnPolygon',
 	ACCEPT_FUND_ON_CELO = 'AcceptFundOnCelo',
 	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
+	ACTIVE_QF_ROUND = 'ActiveQfRound',
 }
 
 export enum ECampaignType {
@@ -175,7 +188,17 @@ export interface IUser {
 	likedProjectsCount?: number;
 	boostedProjectsCount?: number;
 	isSignedIn: boolean;
+	wasReferred?: boolean;
+	isReferrer?: boolean;
+	chainvineId?: string;
 }
+
+export interface IPassportInfo {
+	passportScore: number;
+	passportStamps: any;
+}
+
+export interface IUserWithPassport extends IUser, IPassportInfo {}
 
 export interface IReaction {
 	id: string;
@@ -201,6 +224,7 @@ export interface IDonation {
 	anonymous?: boolean;
 	status: EDonationStatus;
 	onramperId?: string;
+	qfRound?: IQFRound;
 }
 
 export interface IWalletDonation extends IDonation {
@@ -378,4 +402,23 @@ export interface IGiverPFPToken {
 
 export interface IUsersPFPTokens {
 	[key: string]: IGiverPFPToken[];
+}
+
+export interface IQFRound {
+	id: string;
+	name: string;
+	isActive: boolean;
+	beginDate: string;
+	endDate: string;
+	minimumPassportScore: number;
+}
+
+export interface IGetQfRoundHistory {
+	distributedFundNetwork: string;
+	distributedFundTxHash: string;
+	donationsCount: number;
+	matchingFund: number;
+	raisedFundInUsd: number;
+	uniqueDonors: number;
+	estimatedMatching: IEstimatedMatching;
 }

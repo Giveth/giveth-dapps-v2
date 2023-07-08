@@ -46,7 +46,7 @@ const Wrapper = styled(Flex)<{
 	disabled?: boolean;
 	checked?: boolean;
 }>`
-	cursor: pointer;
+	cursor: ${props => (props.disabled ? '' : 'pointer')};
 	user-select: none;
 	color: ${props =>
 		props.disabled ? neutralColors.gray[600] : neutralColors.gray[800]};

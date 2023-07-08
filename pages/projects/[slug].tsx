@@ -9,6 +9,7 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import { GeneralMetatags } from '@/components/Metatag';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
+import { useReferral } from '@/hooks/useReferral';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import type { IProjectsRouteProps } from '.';
@@ -25,6 +26,7 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		totalCount,
 		categories,
 	} = props;
+	useReferral();
 
 	return (
 		<ProjectsProvider

@@ -38,7 +38,7 @@ export const PFP: FC<IPFPProps> = ({
 					src={convertIPFSToHTTPS(pfpToken.imageIpfs)}
 					width={size === EPFPSize.LARGE ? 180 : 28}
 					height={size === EPFPSize.LARGE ? 180 : 28}
-					PFPsize={size}
+					pfpsize={size}
 					alt=''
 					id='pfp-avatar'
 				/>
@@ -67,7 +67,7 @@ export const PFP: FC<IPFPProps> = ({
 };
 
 interface IStyledImageProps {
-	PFPsize?: EPFPSize;
+	pfpsize?: EPFPSize;
 }
 
 const StyledImage = styled(Image)<IStyledImageProps>`
@@ -80,7 +80,7 @@ const StyledImage = styled(Image)<IStyledImageProps>`
 	}
 
 	${props =>
-		props.PFPsize === EPFPSize.LARGE &&
+		props.pfpsize === EPFPSize.LARGE &&
 		css`
 			border: 0.2754px solid ${brandColors.mustard[500]};
 			box-shadow: 0px 1.15778px 6.9467px 1.73668px #e1458d;

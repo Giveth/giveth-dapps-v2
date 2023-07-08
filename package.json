@@ -1,6 +1,6 @@
 {
 	"name": "givethdapp",
-	"version": "2.15.10",
+	"version": "2.16.2",
 	"private": true,
 	"scripts": {
 		"build": "next build",
@@ -21,7 +21,7 @@
 		"@ethersproject/contracts": "^5.5.0",
 		"@ethersproject/providers": "^5.5.0",
 		"@ethersproject/units": "^5.5.0",
-		"@giveth/ui-design-system": "^1.11.10",
+		"@giveth/ui-design-system": "^1.11.12",
 		"@gnosis.pm/safe-apps-web3-react": "^1.5.0",
 		"@reduxjs/toolkit": "^1.8.1",
 		"@segment/snippet": "^4.15.3",
@@ -35,7 +35,7 @@
 		"axios": "^0.25.0",
 		"bignumber.js": "^9.0.1",
 		"deepmerge": "^4.2.2",
-		"framer-motion": "^6.2.8",
+		"framer-motion": "^10.12.12",
 		"graphql": "^16.0.1",
 		"human-standard-token-abi": "^2.0.0",
 		"lodash.isequal": "^4.5.0",
