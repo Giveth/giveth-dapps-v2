@@ -24,7 +24,7 @@ const NameInput: FC<IProps> = ({ preTitle }) => {
 
 	const [isTitleValidating, setIsTitleValidating] = useState(false);
 
-	const watchName = watch(EInputs.name);
+	const watchName = watch(EInputs.title);
 
 	const noTitleValidation = (i: string) => preTitle && preTitle === i;
 
@@ -46,12 +46,12 @@ const NameInput: FC<IProps> = ({ preTitle }) => {
 				value={watchName}
 				isValidating={isTitleValidating}
 				register={register}
-				registerName={EInputs.name}
+				registerName={EInputs.title}
 				registerOptions={{
 					...requiredOptions.name,
 					validate: titleValidation,
 				}}
-				error={formErrors[EInputs.name]}
+				error={formErrors[EInputs.title]}
 			/>
 			<br />
 		</>

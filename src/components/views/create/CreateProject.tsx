@@ -30,6 +30,7 @@ import {
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
+	IWalletAddress,
 } from '@/apollo/types/types';
 import {
 	CategoryInput,
@@ -66,7 +67,7 @@ interface ICreateProjectProps {
 }
 
 export enum EInputs {
-	name = 'name',
+	title = 'title',
 	description = 'description',
 	categories = 'categories',
 	impactLocation = 'impactLocation',
@@ -80,7 +81,7 @@ export enum EInputs {
 }
 
 export type TInputs = {
-	[EInputs.name]: string;
+	[EInputs.title]: string;
 	[EInputs.description]?: string;
 	[EInputs.categories]?: ICategory[];
 	[EInputs.impactLocation]?: string;
@@ -93,6 +94,18 @@ export type TInputs = {
 	[EInputs.optimismAddress]: string;
 };
 
+interface projectData {
+	title?: string;
+	image?: string;
+	description?: string;
+	impactLocation?: string;
+	categories: ICategory[];
+	adminUser?: {
+		walletAddress?: string;
+	};
+	addresses?: IWalletAddress[];
+}
+
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const { formatMessage } = useIntl();
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
@@ -101,8 +114,22 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const dispatch = useAppDispatch();
 
 	const isEditMode = !!project;
-	const { title, description, categories, impactLocation, image, addresses } =
-		project || {};
+
+	let pastProjectData: projectData | undefined;
+
+	if (!isEditMode) {
+		try	{
+			const storedProject = window.sessionStorage.getItem("create_project_data");
+			if (storedProject) {
+				pastProjectData = JSON.parse(storedProject);
+			}
+		} catch {
+			pastProjectData = undefined;
+		}
+	}
+
+	const { title, description, categories, impactLocation, image, addresses } = project || pastProjectData || {};
+
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = impactLocation || '';
 
@@ -142,7 +169,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		mode: 'onBlur',
 		reValidateMode: 'onBlur',
 		defaultValues: {
-			[EInputs.name]: title,
+			[EInputs.title]: title,
 			[EInputs.description]: description || '',
 			[EInputs.categories]: categories || [],
 			[EInputs.impactLocation]: defaultImpactLocation,
@@ -191,7 +218,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				polygonAddress,
 				celoAddress,
 				optimismAddress,
-				name,
+				title,
 				description,
 				categories,
 				impactLocation,
@@ -268,7 +295,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			}
 
 			const projectData: IProjectCreation = {
-				title: name,
+				title: title,
 				description: description!,
 				impactLocation,
 				categories: categories?.map(category => category.name),
@@ -339,6 +366,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		return <SuccessfulCreation project={creationSuccessful} />;
 	}
 
+	const data = formMethods.watch();
+	useEffect(() => {
+		window.sessionStorage.setItem("create_project_data", JSON.stringify(data));
+	}, [data]);
+
 	return (
 		<Wrapper>
 			<CreateContainer>
@@ -354,7 +386,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						</GuidelinesStyleTablet>
 					)}
 				</div>
-
+				
 				<FormProvider {...formMethods}>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<NameInput preTitle={title} />
