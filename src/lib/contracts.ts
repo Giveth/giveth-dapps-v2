@@ -93,7 +93,7 @@ export async function getERC20Info({
 		const instance = new Contract(
 			contractAddress,
 			tokenAbi,
-			library,
+			library!,
 		) as ERC20;
 		const name = await instance.name();
 		const symbol = await instance.symbol();
