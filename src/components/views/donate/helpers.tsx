@@ -1,4 +1,3 @@
-import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
 import { captureException } from '@sentry/nextjs';
 
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
@@ -83,7 +82,7 @@ export const getNetworkNames = (networks: number[], text: string) => {
 
 export interface ICreateDonation {
 	setDonationSaved?: (value: boolean) => void;
-	web3Context: Web3ReactContextInterface;
+	web3Context: any; // TODO: FIX THIS TYPE
 	setDonating: (value: boolean) => void;
 	walletAddress: string;
 	projectId: number;
@@ -114,7 +113,7 @@ export const createDonation: TCreateDonation = async props => {
 		setTxHash,
 	} = props;
 
-	const { library } = web3Context;
+	const { provider: library } = web3Context;
 	const { address } = token;
 
 	let donationId = 0,
