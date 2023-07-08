@@ -1,19 +1,8 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { IntlProvider } from 'react-intl';
+import Script from 'next/script';
 import { Toaster } from 'react-hot-toast';
-import { Web3ReactHooks, Web3ReactProvider } from '@web3-react/core';
-import type { MetaMask } from '@web3-react/metamask';
-import type { GnosisSafe } from '@web3-react/gnosis-safe';
-import type { Network } from '@web3-react/network';
-import type { WalletConnect as WalletConnectV2 } from '@web3-react/walletconnect-v2';
-import { hooks as metaMaskHooks, metaMask } from '@/connectors/metaMask';
-import {
-	hooks as walletConnectV2Hooks,
-	walletConnectV2,
-} from '@/connectors/walletConnectV2';
-import { hooks as gnosisSafeHooks, gnosisSafe } from '@/connectors/gnosisSafe';
-import { hooks as networkHooks, network } from '@/connectors/network';
 
 import { ApolloProvider } from '@apollo/client';
 import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
@@ -21,7 +10,15 @@ import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
-import Script from 'next/script';
+import { Web3ReactHooks, Web3ReactProvider } from '@web3-react/core';
+
+import { hooks as metaMaskHooks, metaMask } from '@/connectors/metaMask';
+import {
+	hooks as walletConnectV2Hooks,
+	walletConnectV2,
+} from '@/connectors/walletConnectV2';
+import { hooks as gnosisSafeHooks, gnosisSafe } from '@/connectors/gnosisSafe';
+import { hooks as networkHooks, network } from '@/connectors/network';
 
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
@@ -43,6 +40,12 @@ import { isGIVeconomyRoute } from '@/lib/helpers';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import type { AppProps } from 'next/app';
+
+import type { MetaMask } from '@web3-react/metamask';
+import type { GnosisSafe } from '@web3-react/gnosis-safe';
+import type { Network } from '@web3-react/network';
+import type { WalletConnect as WalletConnectV2 } from '@web3-react/walletconnect-v2';
+
 import '../styles/globals.css';
 
 declare global {

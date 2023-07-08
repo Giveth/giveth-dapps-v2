@@ -6,9 +6,9 @@ import {
 	IconInfoFilled16,
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
-import { metaMask } from '@/connectors/metaMask';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { metaMask } from '@/connectors/metaMask';
 import { switchNetwork } from '@/lib/metamask';
 import { Flex } from './styled-components/Flex';
 import config from '@/configuration';
