@@ -111,7 +111,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 			}
 		});
 		return () => {
-			library.removeAllListeners('block');
+			library?.removeAllListeners('block');
 		};
 	}, [library, amount, stakeState]);
 
