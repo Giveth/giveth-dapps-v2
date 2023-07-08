@@ -34,7 +34,7 @@ const initialInfo = {
 };
 
 export const usePassport = () => {
-	const { account, library } = useWeb3React();
+	const { account, provider: library } = useWeb3React();
 	const [info, setInfo] = useState<IPassportAndStateInfo>(initialInfo);
 	const user = useAppSelector(state => state.user.userData);
 
