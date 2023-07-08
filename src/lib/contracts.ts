@@ -60,7 +60,9 @@ export const getUniswapV3StakerContract = (
 	return new Contract(UNISWAP_V3_STAKER, UNISWAP_V3_STAKER_ABI, signer); // as IUniswapV3Staker;
 };
 
-export const getGivethV3PoolContract = (provider: Web3Provider | null) => {
+export const getGivethV3PoolContract = (
+	provider: Web3Provider | null | undefined,
+) => {
 	const signer = provider?.getSigner();
 
 	if (!signer) {
@@ -75,7 +77,7 @@ export const getGivethV3PoolContract = (provider: Web3Provider | null) => {
 };
 
 interface IERC20Info {
-	library: Web3Provider;
+	library: Web3Provider | null | undefined;
 	tokenAbi: string;
 	contractAddress: string;
 	networkId: number;
