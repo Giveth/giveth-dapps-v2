@@ -9,7 +9,7 @@ import {
 	EWallets,
 	IWallet,
 	torusWallet,
-	useWalletName,
+	useWallet,
 	walletsArray,
 } from '@/lib/wallet/walletTypes';
 import { Modal } from '@/components/modals/Modal';
@@ -27,29 +27,28 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 	const { formatMessage } = useIntl();
 
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { connector, chainId } = useWeb3React();
+	const { connector: currentConnector, chainId } = useWeb3React();
 
-	const selectedWallet = useWalletName(connector);
+	const selectedWallet = useWallet(currentConnector);
 	const dispatch = useAppDispatch();
 
 	const handleSelect = async (selected: IWallet) => {
-		console.log({ selected, selectedWallet });
-		// if (selectedWallet !== selected.value) {
-		if (true) {
+		if (selectedWallet.name !== selected.value) {
+			const { connector } = selected;
 			localStorage.removeItem(StorageLabel.WALLET);
-			// if (connector?.deactivate) {
-			// 	void connector.deactivate();
-			// } else {
-			// 	void connector.resetState();
-			// }
+			if (connector?.deactivate) {
+				void connector.deactivate()!;
+			}
 			let timeOut = 0;
-			if (selectedWallet === EWallets.METAMASK) {
+			if (selected.name === EWallets.METAMASK) {
 				timeOut = 500;
 			}
 			setTimeout(async () => {
 				localStorage.setItem(StorageLabel.WALLET, selected.value);
-				console.log({ connector });
 				await connector.activate(chainId);
+				const event = new Event(EModalEvents.CONNECTED);
+				window.dispatchEvent(event);
+
 				//Temporary Disable FirstWelcomeModal
 				// const isGIVeconomyRoute = isGIVeconomyRoute(
 				// 	router.route,
@@ -61,8 +60,6 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 				// if (!isGIVeconomyRoute && !isModalShowedBefor) {
 				// 	dispatch(setShowFirstWelcomeModal(true));
 				// }
-				const event = new Event(EModalEvents.CONNECTED);
-				window.dispatchEvent(event);
 				// .catch(error => {
 				// 	showToastError(error);
 				// 	captureException(error, {
@@ -103,7 +100,7 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 						<WalletItem
 							onClick={() => checkLowerShields(i)}
 							key={i.value}
-							selected={selectedWallet === i.value}
+							selected={selectedWallet.name === i.value}
 						>
 							<Image
 								src={i.image}

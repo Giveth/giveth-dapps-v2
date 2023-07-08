@@ -80,7 +80,7 @@ const getUnipoolInfo = async (
 export const getGivStakingAPR = async (
 	network: number,
 	subgraphValue: ISubgraphState,
-	provider: JsonRpcProvider | null,
+	provider: JsonRpcProvider | undefined | null,
 ): Promise<APR> => {
 	const lmAddress = (config.NETWORKS_CONFIG[network] as SimpleNetworkConfig)
 		.GIV.LM_ADDRESS;
@@ -106,7 +106,7 @@ export const getGivStakingAPR = async (
 
 export const getLPStakingAPR = async (
 	poolStakingConfig: SimplePoolStakingConfig,
-	provider: JsonRpcProvider | null,
+	provider: JsonRpcProvider | undefined | null,
 	subgraphValue: ISubgraphState,
 ): Promise<APR> => {
 	const { network } = poolStakingConfig;

@@ -67,15 +67,15 @@ type ChainConfig = {
 export const MAINNET_CHAINS: ChainConfig = {
 	1: {
 		urls: [
-			getInfuraUrlFor('mainnet'),
-			getAlchemyUrlFor('eth-mainnet'),
+			getInfuraUrlFor('mainnet')!,
+			getAlchemyUrlFor('eth-mainnet')!,
 			'https://cloudflare-eth.com',
 		].filter(Boolean),
 		name: 'Mainnet',
 	},
 	10: {
 		urls: [
-			getInfuraUrlFor('optimism-mainnet'),
+			getInfuraUrlFor('optimism-mainnet')!,
 			'https://mainnet.optimism.io',
 		].filter(Boolean),
 		name: 'Optimism',
@@ -84,7 +84,7 @@ export const MAINNET_CHAINS: ChainConfig = {
 	},
 	42161: {
 		urls: [
-			getInfuraUrlFor('arbitrum-mainnet'),
+			getInfuraUrlFor('arbitrum-mainnet')!,
 			'https://arb1.arbitrum.io/rpc',
 		].filter(Boolean),
 		name: 'Arbitrum One',
@@ -93,7 +93,7 @@ export const MAINNET_CHAINS: ChainConfig = {
 	},
 	137: {
 		urls: [
-			getInfuraUrlFor('polygon-mainnet'),
+			getInfuraUrlFor('polygon-mainnet')!,
 			'https://polygon-rpc.com',
 		].filter(Boolean),
 		name: 'Polygon Mainnet',
@@ -110,12 +110,12 @@ export const MAINNET_CHAINS: ChainConfig = {
 
 export const TESTNET_CHAINS: ChainConfig = {
 	5: {
-		urls: [getInfuraUrlFor('goerli')].filter(Boolean),
+		urls: [getInfuraUrlFor('goerli')!].filter(Boolean),
 		name: 'Görli',
 	},
 	420: {
 		urls: [
-			getInfuraUrlFor('optimism-goerli'),
+			getInfuraUrlFor('optimism-goerli')!,
 			'https://goerli.optimism.io',
 		].filter(Boolean),
 		name: 'Optimism Goerli',
@@ -124,7 +124,7 @@ export const TESTNET_CHAINS: ChainConfig = {
 	},
 	421613: {
 		urls: [
-			getInfuraUrlFor('arbitrum-goerli'),
+			getInfuraUrlFor('arbitrum-goerli')!,
 			'https://goerli-rollup.arbitrum.io/rpc',
 		].filter(Boolean),
 		name: 'Arbitrum Goerli',
@@ -132,7 +132,7 @@ export const TESTNET_CHAINS: ChainConfig = {
 		blockExplorerUrls: ['https://testnet.arbiscan.io'],
 	},
 	80001: {
-		urls: [getInfuraUrlFor('polygon-mumbai')].filter(Boolean),
+		urls: [getInfuraUrlFor('polygon-mumbai')!].filter(Boolean),
 		name: 'Polygon Mumbai',
 		nativeCurrency: MATIC,
 		blockExplorerUrls: ['https://mumbai.polygonscan.com'],

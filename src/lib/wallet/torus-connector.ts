@@ -1,5 +1,4 @@
 import { AbstractConnector } from '@web3-react/abstract-connector';
-import { ConnectorUpdate } from '@web3-react/types';
 import TorusInpageProvider from '@toruslabs/torus-embed/dist/types/inpage-provider';
 import { Maybe } from '@toruslabs/torus-embed';
 import config from '@/configuration';
@@ -37,7 +36,7 @@ export class TorusConnector extends AbstractConnector {
 		this.loginOptions = loginOptions;
 	}
 
-	public async activate(): Promise<ConnectorUpdate> {
+	public async activate(): Promise<{}> {
 		if (!this.torus) {
 			const TorusEmbed = await import('@toruslabs/torus-embed').then(
 				m => m?.default ?? m,

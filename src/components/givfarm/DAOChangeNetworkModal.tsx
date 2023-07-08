@@ -16,7 +16,7 @@ import config from '@/configuration';
 import { mediaQueries } from '@/lib/constants/constants';
 
 const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
-	const { account, activate } = useWeb3React();
+	const { account, connector } = useWeb3React();
 	const networkLabel =
 		network === config.XDAI_NETWORK_NUMBER ? 'Gnosis chain' : 'Mainnet';
 
@@ -24,8 +24,7 @@ const DAOChangeNetworkModal = ({ network }: IChangeNetworkModal) => {
 
 	const checkWalletAndSwitchNetwork = async (network: number) => {
 		if (!account) {
-			// TODO: CHANGE THIS, MAKE SURE IT WORKS
-			await activate(new InjectedConnector({}));
+			await connector.activate(new InjectedConnector({}));
 			await switchNetwork(network);
 		}
 		if (account) {

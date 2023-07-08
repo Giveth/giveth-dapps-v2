@@ -27,42 +27,26 @@ const UserController = () => {
 	useEffect(() => {
 		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
 		const wallet = walletsArray.find(w => w.value === selectedWalletName);
-		// try to connect to safe. this is only for the gnosis safe environment, it won't stop the flow if it fails
-		const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
 		dispatch(setIsLoading(false));
 
-		// if (safeWallet) {
-		// 	activate(safeWallet.connector, console.log)
-		// 		.then(() => setIsActivatedCalled(true))
-		// 		.finally(() => {
-		// 			if (!token) dispatch(setIsLoading(false));
-		// 		});
-		// }
 		console.log({ wallet, chainId });
 		if (wallet && chainId && wallet.connector instanceof MetaMask) {
-			console.log('b');
-			void wallet.connector
-				.activate(chainId)
-				.then(a => {
-					setIsActivatedCalled(true);
-				})
-				.finally(() => {
-					if (!token) dispatch(setIsLoading(false));
-				});
-			// wallet.connector
-			// 	.isAuthorized()
-			// 	.then(isAuthorized => {
-			// 		if (isAuthorized) {
-			// 			activate(wallet.connector, console.log)
-			// 				.then(() => setIsActivatedCalled(true))
-			// 				.finally(() => {
-			// 					if (!token) dispatch(setIsLoading(false));
-			// 				});
-			// 		} else {
-			// 			dispatch(setIsLoading(false));
-			// 		}
-			// 	})
-			// 	.catch(() => dispatch(setIsLoading(false)));
+			try {
+				if (wallet.connector) {
+					void wallet.connector
+						.activate(chainId)
+						.then(a => {
+							setIsActivatedCalled(true);
+						})
+						.finally(() => {
+							if (!token) dispatch(setIsLoading(false));
+						});
+				} else {
+					dispatch(setIsLoading(false));
+				}
+			} catch (error) {
+				dispatch(setIsLoading(false));
+			}
 		} else {
 			dispatch(setIsLoading(false));
 		}

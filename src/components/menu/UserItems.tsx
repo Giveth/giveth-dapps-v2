@@ -36,7 +36,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 	setQueueRoute,
 }) => {
 	const { formatMessage } = useIntl();
-	const { chainId, account, deactivate } = useWeb3React();
+	const { chainId, account, connector } = useWeb3React();
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
@@ -107,7 +107,11 @@ export const UserItems: FC<IUserItemsProps> = ({
 			<Item
 				onClick={() => {
 					isSignedIn && dispatch(signOut(token!));
-					deactivate();
+					if (connector?.deactivate) {
+						void connector.deactivate();
+					} else {
+						void connector.resetState();
+					}
 					localStorage.removeItem(StorageLabel.WALLET);
 				}}
 				theme={theme}

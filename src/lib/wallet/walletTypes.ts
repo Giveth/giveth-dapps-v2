@@ -72,10 +72,15 @@ export const walletsArray: IWallet[] = [
 	},
 ];
 
-export const useWalletName = (connector: Connector) => {
-	if (connector instanceof TorusConnector) return EWallets.TORUS;
-	if (connector instanceof MetaMask) return EWallets.METAMASK;
-	if (connector instanceof WalletConnectV2) return EWallets.WALLETCONNECT;
-	if (connector instanceof GnosisSafe) return EWallets.GNOSISSAFE;
-	return 'Unknown';
+export const useWallet = (connector: Connector): IWallet => {
+	if (connector instanceof MetaMask) return walletsArray[0];
+	if (connector instanceof WalletConnectV2) return walletsArray[1];
+	if (connector instanceof TorusConnector) return walletsArray[2];
+	if (connector instanceof GnosisSafe) return walletsArray[3];
+	return {
+		name: 'Unknown',
+		value: EWallets.METAMASK,
+		image: metamaskIcon,
+		connector: injectedConnector,
+	};
 };

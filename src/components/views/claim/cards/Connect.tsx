@@ -154,7 +154,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 		getClaimData,
 	} = useClaim();
 
-	const { account, deactivate } = useWeb3React();
+	const { account, connector } = useWeb3React();
 
 	useEffect(() => {
 		// Auto get claim data on wallet change
@@ -261,7 +261,11 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 									<ConnectButton
 										buttonType='secondary'
 										onClick={() => {
-											deactivate();
+											if (connector?.deactivate) {
+												void connector.deactivate();
+											} else {
+												void connector.resetState();
+											}
 											setWalletIsChanged(true);
 											dispatch(setShowWalletModal(true));
 										}}

@@ -41,21 +41,19 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 		}
 	};
 
-	const connectTorus = (): void => {
-		connector
-			.activate(torusConnector)
-			.then(() => {
-				localStorage.setItem(StorageLabel.WALLET, EWallets.TORUS);
-				closeModal();
-			})
-			.catch(error => {
-				showToastError(error);
-				captureException(error, {
-					tags: {
-						section: 'connectTorus',
-					},
-				});
+	const connectTorus = async () => {
+		try {
+			await connector.activate(torusConnector);
+			localStorage.setItem(StorageLabel.WALLET, EWallets.TORUS);
+			closeModal();
+		} catch (error) {
+			showToastError(error);
+			captureException(error, {
+				tags: {
+					section: 'connectTorus',
+				},
 			});
+		}
 	};
 
 	const onCloseLowerShields = () => {
