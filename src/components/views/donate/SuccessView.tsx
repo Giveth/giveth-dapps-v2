@@ -8,6 +8,7 @@ import {
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import { useIntl } from 'react-intl';
 import links from '@/lib/constants/links';
 import SocialBox from '@/components/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
@@ -24,6 +25,7 @@ import QFToast from '@/components/views/donate/QFToast';
 import { useAppSelector } from '@/features/hooks';
 
 const SuccessView: FC = () => {
+	const { formatMessage } = useIntl();
 	const { isLoading } = useAppSelector(state => state.user);
 	const { isSuccessDonation, setSuccessDonation, hasActiveQFRound } =
 		useDonateData();
@@ -35,12 +37,17 @@ const SuccessView: FC = () => {
 
 	const message = hasMultipleTxs ? (
 		<>
-			Thank you for supporting {project?.title} and thanks for your
-			donation to the Giveth DAO! You can check out the Giveth DAO project{' '}
+			{formatMessage(
+				{ id: 'label.thank_you_for_supporting_project_and_giveth' },
+				{ title: project.title },
+			)}{' '}
 			<ExternalLink href={slugToProjectView(givethSlug)} title='here' />.
 		</>
 	) : (
-		`Thank you for supporting ${project?.title}. Your contribution goes a long way!`
+		formatMessage(
+			{ id: 'label.thank_you_for_supporting_project' },
+			{ title: project.title },
+		)
 	);
 
 	useEffect(() => {
@@ -67,14 +74,21 @@ const SuccessView: FC = () => {
 			<ConfettiContainer>
 				<LottieControl size={400} animationData={CongratsAnimation} />
 			</ConfettiContainer>
-			<GiverH4 weight={700}>You&#39;re a giver now!</GiverH4>
+			<GiverH4 weight={700}>
+				{formatMessage({ id: 'label.youre_giver_now' })}
+			</GiverH4>
 			<SuccessMessage>{message}</SuccessMessage>
 			{givBackEligible && (
 				<GivBackContainer>
-					<H6>You&#39;re eligible for GIVbacks!</H6>
+					<H6>
+						{formatMessage({
+							id: 'label.youre_eligible_for_givbacks',
+						})}
+					</H6>
 					<P>
-						GIV rewards from the GIVbacks program will be
-						distributed after the end of the current round.
+						{formatMessage({
+							id: 'label.givback_distributed_afer_round',
+						})}
 					</P>
 					<ExternalLink href={links.GIVBACK_DOC}>
 						<LearnButton size='small' label='LEARN MORE' />
