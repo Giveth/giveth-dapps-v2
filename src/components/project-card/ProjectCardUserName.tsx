@@ -28,31 +28,33 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 	);
 
 	return (
-		<StyledPaddedRow>
-			{adminUser?.name && !isForeignOrg && (
-				<Link
-					href={addressToUserView(
-						adminUser?.walletAddress?.toLowerCase(),
-					)}
-				>
-					{pfpToken ? (
-						<Flex gap='8px' alignItems='center'>
-							<PFP pfpToken={pfpToken} />
-							<Author bold size='Big'>
-								{name || '\u200C'}
-							</Author>
-						</Flex>
-					) : (
-						<Author size='Big'>{name || '\u200C'}</Author>
-					)}
+		<UserNameContainer>
+			<StyledPaddedRow>
+				{adminUser?.name && !isForeignOrg && (
+					<Link
+						href={addressToUserView(
+							adminUser?.walletAddress?.toLowerCase(),
+						)}
+					>
+						{pfpToken ? (
+							<Flex gap='8px' alignItems='center'>
+								<PFP pfpToken={pfpToken} />
+								<Author bold size='Big'>
+									{name || '\u200C'}
+								</Author>
+							</Flex>
+						) : (
+							<Author size='Big'>{name || '\u200C'}</Author>
+						)}
+					</Link>
+				)}
+				<Link href={slugToProjectView(slug)} style={{ flex: 1 }}>
+					<Author size='Big'>
+						<br />
+					</Author>
 				</Link>
-			)}
-			<Link href={slugToProjectView(slug)} style={{ flex: 1 }}>
-				<Author size='Big'>
-					<br />
-				</Author>
-			</Link>
-		</StyledPaddedRow>
+			</StyledPaddedRow>
+		</UserNameContainer>
 	);
 };
 
@@ -64,4 +66,8 @@ const Author = styled(GLink)<IAuthor>`
 	color: ${brandColors.pinky[500]};
 	display: block;
 	font-weight: ${props => (props.bold ? 500 : 400)};
+`;
+
+const UserNameContainer = styled.div`
+	height: 40px;
 `;
