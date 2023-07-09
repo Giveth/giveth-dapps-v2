@@ -133,7 +133,9 @@ const ProjectsTable: FC<IProjectsTable> = ({
 											setShowAddressModal(true);
 										}}
 									>
-										Manage addresses
+										{formatMessage({
+											id: 'label.manage_addresses',
+										})}
 									</CustomGlink>
 								</Actions>
 							</ProjectTableCell>
