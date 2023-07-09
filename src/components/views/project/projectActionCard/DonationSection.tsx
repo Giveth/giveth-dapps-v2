@@ -19,7 +19,7 @@ import { device } from '@/lib/constants/constants';
 
 export const DonateSection = () => {
 	const { formatMessage, locale } = useIntl();
-	const { projectData, totalDonationsCount } = useProjectContext();
+	const { projectData } = useProjectContext();
 	const { sumDonationValueUsd } = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 
@@ -36,13 +36,15 @@ export const DonateSection = () => {
 						{formatMessage({
 							id: 'label.raised_from',
 						})}
-						<Caption medium>{totalDonationsCount}</Caption>
+						<Caption medium>
+							{projectData?.countUniqueDonors}
+						</Caption>
 						{formatMessage(
 							{
 								id: 'label.contributors',
 							},
 							{
-								count: totalDonationsCount,
+								count: projectData?.countUniqueDonors,
 							},
 						)}
 					</Description>
