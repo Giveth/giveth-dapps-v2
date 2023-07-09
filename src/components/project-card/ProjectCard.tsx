@@ -132,11 +132,17 @@ const ProjectCard = (props: IProjectCard) => {
 							</PriceText>
 							{isRoundActive ? (
 								<AmountRaisedText>
-									Amount raised in this round
+									{formatMessage({
+										id: 'label.amount_raised_in_this_round',
+									})}
+									:
 								</AmountRaisedText>
 							) : (
 								<AmountRaisedText>
-									Total amount raised
+									{formatMessage({
+										id: 'label.total_amount_raised',
+									})}
+									:
 								</AmountRaisedText>
 							)}
 
@@ -149,7 +155,19 @@ const ProjectCard = (props: IProjectCard) => {
 										: countUniqueDonors}
 									&nbsp;
 								</Subline>
-								<LightSubline>contributors</LightSubline>
+								<LightSubline>
+									{formatMessage(
+										{
+											id: 'label.contributors',
+										},
+										{
+											count: isRoundActive
+												? countUniqueDonorsForActiveQfRound
+												: countUniqueDonors,
+										},
+									)}
+									:
+								</LightSubline>
 							</div>
 						</PaddedRow>
 						{isRoundActive ? (
@@ -162,7 +180,12 @@ const ProjectCard = (props: IProjectCard) => {
 										matchingPool,
 									).toFixed(2)}
 								</EstimatedMatchingPrice>
-								<LightSubline> Estimated matching</LightSubline>
+								<LightSubline>
+									{formatMessage({
+										id: 'label.estimated_matching',
+									})}
+									:
+								</LightSubline>
 							</PaddedRow>
 						) : null}
 					</Flex>
