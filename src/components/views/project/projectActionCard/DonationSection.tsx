@@ -57,14 +57,29 @@ export const DonateSection = () => {
 				</DonateInfo>
 			)}
 			<DonateDescription flexDirection='column' gap='8px'>
-				<B>100% to the project. Always.</B>
+				<B>
+					{formatMessage({
+						id: 'component.donation_section.100_to_the_project',
+					})}
+				</B>
+				<B>
+					{formatMessage({
+						id: 'label.always',
+					})}
+					.
+				</B>
 				<P>
-					Every donation is peer-to-peer, with no fees and no
-					middlemen.
+					{formatMessage({
+						id: 'component.donation_section.desc',
+					})}
 				</P>
 				<a href='/' target='_blank' referrerPolicy='no-referrer'>
 					<LearnLink alignItems='center' gap='2px'>
-						<Subline>Learn about our zero-fee policy</Subline>
+						<Subline>
+							{formatMessage({
+								id: 'component.donation_section.learn_zero_fee',
+							})}
+						</Subline>
 						<IconChevronRight16 />
 					</LearnLink>
 				</a>
