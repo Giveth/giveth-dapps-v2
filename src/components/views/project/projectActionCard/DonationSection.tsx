@@ -16,6 +16,7 @@ import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
+import { formatDonations } from '@/helpers/number';
 
 export const DonateSection = () => {
 	const { formatMessage, locale } = useIntl();
@@ -30,7 +31,7 @@ export const DonateSection = () => {
 					{isMobile && <br />}
 					<Title>Total amount raised</Title>
 					<Amount weight={700}>
-						${(sumDonationValueUsd || 0).toLocaleString(locale)}
+						{formatDonations(sumDonationValueUsd || 0, '$')}
 					</Amount>
 					<Description>
 						{formatMessage({
