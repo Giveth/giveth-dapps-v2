@@ -28,10 +28,14 @@ const ProjectHeader = () => {
 			if (observer) observer.disconnect();
 		};
 	}, [containerRef, adjustTitle]);
-
+	console.log('image', image);
 	return (
 		<ImageWrapper>
-			<ProjectImage src={image || ''} alt='test' loading='lazy' />
+			<ProjectImage
+				src={image || '/images/backgrounds/project-bg.png'}
+				alt='test'
+				loading='lazy'
+			/>
 			<Title>
 				<div>{title}</div>
 				<ProjectOwnerWithPfp user={adminUser} />
