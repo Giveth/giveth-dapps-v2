@@ -40,20 +40,27 @@ export const PassportView = () => {
 	return (
 		<Container>
 			<Wrapper>
-				<Title>Amplify your donation</Title>
+				<Title>
+					{formatMessage({
+						id: 'label.amplify_your_donation',
+					})}
+				</Title>
 				<PassportRow>
 					<IconPassport32 />
 					<H5 weight={700}>Gitcoin Passport</H5>
 				</PassportRow>
 				<Lead>
-					Unlock matching for your donation by verifying your
-					identity! Connect your wallet to Gitcoin Passport to check
-					your identity score and maximize your donation power.
-					Passport is designed to proactively verify users’ identities
-					to protect against Sybil attacks.
+					{formatMessage({
+						id: 'label.amplify_your_donation_desc',
+					})}
 				</Lead>
 				<PassportLink>
-					<ExternalLink href={links.PASSPORT} title='Learn more' />
+					<ExternalLink
+						href={links.PASSPORT}
+						title={formatMessage({
+							id: 'label.learn_more',
+						})}
+					/>
 					<IconExternalLink16 />
 				</PassportLink>
 				<PassportButton
@@ -67,7 +74,11 @@ export const PassportView = () => {
 							{isScoreReady && (
 								<>
 									<InfoRow>
-										<B>Your Passport score</B>
+										<B>
+											{formatMessage({
+												id: 'label.your_passport_score',
+											})}
+										</B>
 										<H3>
 											{passportScore !== null
 												? passportScore
@@ -75,7 +86,11 @@ export const PassportView = () => {
 										</H3>
 									</InfoRow>
 									<InfoRow gray>
-										<P>Required score</P>
+										<P>
+											{formatMessage({
+												id: 'label.required_score',
+											})}
+										</P>
 										<H3>
 											{currentRound?.minimumPassportScore !==
 											undefined
@@ -117,17 +132,25 @@ export const PassportView = () => {
 					</StyledCol>
 				</Row>
 				<HowBox>
-					<HowTitle weight={700}>How it works?</HowTitle>
+					<HowTitle weight={700}>
+						{formatMessage({
+							id: 'label.how_it_works?',
+						})}
+					</HowTitle>
 					<Lead>
-						1. Create a Gitcoin Passport if you don’t have one
-						already. You will be taken to a new window to begin
-						verifying your identity.
+						{formatMessage({
+							id: 'page.passport.step1',
+						})}
 					</Lead>
 					<Lead>
-						2. Verify your identity by collecting various stamps.
+						{formatMessage({
+							id: 'page.passport.step2',
+						})}
 					</Lead>
 					<Lead>
-						3. Return back to this screen and Refresh your score.
+						{formatMessage({
+							id: 'page.passport.step3',
+						})}
 					</Lead>
 				</HowBox>
 			</Wrapper>
