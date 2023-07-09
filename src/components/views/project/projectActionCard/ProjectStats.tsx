@@ -31,7 +31,7 @@ export const ProjectStats = () => {
 			<Flex flexDirection='column' gap='24px'>
 				<StatRow justifyContent='space-between'>
 					<Flex alignItems='center' gap='4px'>
-						<P>Project status</P>
+						<P>{formatMessage({ id: 'label.project_status' })}</P>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
 							direction='bottom'
@@ -43,7 +43,7 @@ export const ProjectStats = () => {
 				</StatRow>
 				<StatRow justifyContent='space-between'>
 					<Flex alignItems='center' gap='4px'>
-						<P>Listing</P>
+						<P>{formatMessage({ id: 'label.listing' })}</P>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
 							direction='bottom'
