@@ -29,6 +29,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ProjectCardUserName } from './ProjectCardUserName';
 import { calculateTotalEstimatedMatching, hasActiveRound } from '@/helpers/qf';
+import { formatDonations } from '@/helpers/number';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -123,12 +124,12 @@ const ProjectCard = (props: IProjectCard) => {
 					<Flex justifyContent='space-between'>
 						<PaddedRow flexDirection='column' gap='2px'>
 							<PriceText>
-								$
-								{isRoundActive
-									? sumDonationValueUsdForActiveQfRound?.toFixed(
-											2,
-									  )
-									: sumDonationValueUsd?.toFixed(2)}
+								{formatDonations(
+									(isRoundActive
+										? sumDonationValueUsdForActiveQfRound
+										: sumDonationValueUsd) || 0,
+									'$',
+								)}
 							</PriceText>
 							{isRoundActive ? (
 								<AmountRaisedText>
@@ -173,12 +174,15 @@ const ProjectCard = (props: IProjectCard) => {
 						{isRoundActive ? (
 							<PaddedRow flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
-									+ $
-									{calculateTotalEstimatedMatching(
-										projectDonationsSqrtRootSum,
-										allProjectsSum,
-										matchingPool,
-									).toFixed(2)}
+									+
+									{formatDonations(
+										calculateTotalEstimatedMatching(
+											projectDonationsSqrtRootSum,
+											allProjectsSum,
+											matchingPool,
+										),
+										'$',
+									)}
 								</EstimatedMatchingPrice>
 								<LightSubline>
 									{formatMessage({
