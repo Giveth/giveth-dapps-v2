@@ -21,6 +21,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_QF_ROUND_HISTORY } from '@/apollo/gql/gqlDonations';
 import { IGetQfRoundHistory, IQFRound } from '@/apollo/types/types';
+import { formatDonations } from '@/helpers/number';
 
 interface IProjectTotalFundCardProps {
 	selectedQF: IQFRound | null;
@@ -126,7 +127,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						</B>
 						{totalDonations && totalDonations > 0 ? (
 							<TotalFund>
-								{'$' + totalDonations.toFixed(2)}
+								{formatDonations(totalDonations, '$')}
 							</TotalFund>
 						) : (
 							<NoDonation>
@@ -167,14 +168,14 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 					{roundDonorsCount && roundDonorsCount > 0 ? (
 						<div>
 							<TotalFund>
-								{'$' + roundTotalDonation?.toFixed(2) || '0'}
+								{formatDonations(roundTotalDonation || 0, '$')}
 							</TotalFund>
 							<EstimatedMatchingSection
 								justifyContent='space-between'
 								alignItems='center'
 							>
 								<EstimatedMatchingPrice>
-									+ ${matchFund.toFixed(2)}
+									+ {formatDonations(matchFund, '$')}
 								</EstimatedMatchingPrice>
 								<EstimatedMatchingText>
 									{selectedQFData?.isActive
