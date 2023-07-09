@@ -46,7 +46,9 @@ const QFSection = () => {
 				).toFixed(2)}
 			</EstimatedMatchingPrice>
 			<Flex alignItems='center' gap='4px'>
-				<LightCaption> Estimated matching </LightCaption>
+				<LightCaption>
+					{formatMessage({ id: 'label.estimated_matching' })}
+				</LightCaption>
 				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
 					<TooltipContent>
 						{formatMessage({
@@ -64,7 +66,11 @@ const QFSection = () => {
 			sumDonationValueUsdForActiveQfRound !== 0 ? (
 				<DonateInfo>
 					{isMobile && <br />}
-					<Title>Amount raised in this round</Title>
+					<Title>
+						{formatMessage({
+							id: 'label.amount_raised_in_this_round',
+						})}
+					</Title>
 					<Amount weight={700}>
 						$
 						{(
@@ -110,8 +116,16 @@ const QFSection = () => {
 
 			<ChartContainer>
 				<Flex justifyContent='space-between'>
-					<LightSubline>Contribution</LightSubline>
-					<GreenSubline>Matching</GreenSubline>
+					<LightSubline>
+						{formatMessage({
+							id: 'label.contribution',
+						})}
+					</LightSubline>
+					<GreenSubline>
+						{formatMessage({
+							id: 'label.matching',
+						})}
+					</GreenSubline>
 				</Flex>
 				<ContributionsContainer>
 					<Flex flexDirection='column' gap='4px'>
@@ -169,7 +183,11 @@ const QFSection = () => {
 							rel='noreferrer'
 						>
 							<LearnLink alignItems='center' gap='2px'>
-								<Subline>How it works?</Subline>
+								<Subline>
+									{formatMessage({
+										id: 'label.how_it_works?',
+									})}
+								</Subline>
 								<IconChevronRight16 />
 							</LearnLink>
 						</a>

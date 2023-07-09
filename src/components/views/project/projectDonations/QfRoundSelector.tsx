@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
 import { Navigation } from 'swiper';
+import { useIntl } from 'react-intl';
 import { useProjectContext } from '@/context/project.context';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -24,6 +25,7 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 	selectedQF,
 	setSelectedQF,
 }) => {
+	const { formatMessage } = useIntl();
 	const { projectData } = useProjectContext();
 	const navigationPrevRef = useRef(null);
 	const navigationNextRef = useRef(null);
@@ -38,9 +40,9 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 					isSelected={selectedQF === null}
 				>
 					{selectedQF === null ? (
-						<B>All Donations</B>
+						<B>{formatMessage({ id: 'label.all_donations' })}</B>
 					) : (
-						<P>All Donations</P>
+						<P>{formatMessage({ id: 'label.all_donations' })}</P>
 					)}
 				</TabItem>
 			</SwiperSlide>

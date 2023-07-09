@@ -172,7 +172,11 @@ export const PassportBanner = () => {
 			)}
 			{passportState === EPassportState.NOT_SIGNED && (
 				<StyledLink onClick={() => handleSign()}>
-					<GLink>Sign Message</GLink>
+					<GLink>
+						{formatMessage({
+							id: 'label.sign_message',
+						})}
+					</GLink>
 					<IconWalletOutline16 />
 				</StyledLink>
 			)}

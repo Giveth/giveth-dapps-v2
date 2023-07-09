@@ -169,7 +169,11 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 								EDonationType.POIGNART ? (
 									'PoignART'
 								) : donation.anonymous ? (
-									<LeftPadding>Anonymous</LeftPadding>
+									<LeftPadding>
+										{formatMessage({
+											id: 'label.anonymous',
+										})}
+									</LeftPadding>
 								) : (
 									<UserWithPFPInCell user={donation.user} />
 								)}

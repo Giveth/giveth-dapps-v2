@@ -11,6 +11,7 @@ import {
 import styled from 'styled-components';
 import { Col, Row } from '@giveth/ui-design-system';
 
+import { useIntl } from 'react-intl';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import InfoBadge from '@/components/badges/InfoBadge';
@@ -46,6 +47,7 @@ export enum EProjectPageTabs {
 }
 
 const ProjectIndex: FC<IProjectBySlug> = () => {
+	const { formatMessage } = useIntl();
 	const [activeTab, setActiveTab] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
 	const {
@@ -120,7 +122,9 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						<DraftIndicator>
 							<InfoBadge />
 							<Caption medium>
-								This is a preview of your project.
+								{formatMessage({
+									id: 'page.project.preview_hint',
+								})}
 							</Caption>
 						</DraftIndicator>
 					)}

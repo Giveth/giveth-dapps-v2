@@ -77,14 +77,26 @@ export const GIVpowerCard = () => {
 					<IconInfoOutline16 />
 					<div>
 						<Caption>
-							The rank will update at the start of the
-							<b> next GIVbacks round</b> .
+							{formatMessage({
+								id: 'label.the_rank_will_update_at_the_start',
+							})}
+							<b>
+								{' '}
+								{formatMessage({
+									id: 'label.next_givbacks_round',
+								})}
+							</b>
+							.
 						</Caption>
 						<NextRoundDate>
-							The rank will be updated on{' '}
-							{isLoaded
-								? smallFormatDate(roundEndTime, locale)
-								: '--'}
+							{formatMessage({
+								id: 'label.the_rank_will_be_updated_on',
+							})}{' '}
+							<b>
+								{isLoaded
+									? smallFormatDate(roundEndTime, locale)
+									: '--'}
+							</b>
 							.
 						</NextRoundDate>
 					</div>
@@ -107,14 +119,25 @@ export const GIVpowerCard = () => {
 					<IconInfoOutline16 />
 					<div>
 						<Caption>
-							This is the expected rank for the next round based
-							on <b>current GIVpower</b>.
+							{formatMessage({
+								id: 'label.expected_rank_for_next_round',
+							})}{' '}
+							<b>
+								{formatMessage({
+									id: 'label.current_givpower',
+								})}
+							</b>
+							.
 						</Caption>
 					</div>
 				</Flex>
 			</NextRankSection>
 			<Separator />
-			<Desc>Boost this project with GIVpower to improve its rank!</Desc>
+			<Desc>
+				{formatMessage({
+					id: 'label.boost_this_project_with_givpower',
+				})}
+			</Desc>
 		</GIVpowerCardWrapper>
 	);
 };
