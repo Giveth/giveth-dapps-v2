@@ -42,3 +42,12 @@ export const formatWeiHelper = (
 	}
 	return formatEthHelper(amountEth, decimals, format);
 };
+
+export const formatDonations = (
+	amount: number,
+	symbol: string = '',
+): string => {
+	if (amount === 0) return '0.00';
+	if (amount < 0.01) return `<${symbol}0.01`;
+	return symbol + amount.toFixed(2);
+};
