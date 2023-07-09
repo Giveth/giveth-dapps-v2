@@ -25,6 +25,7 @@ import {
 import links from '@/lib/constants/links';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
+import { formatDonations } from '@/helpers/number';
 
 const QFSection = () => {
 	const { formatMessage, locale } = useIntl();
@@ -38,12 +39,14 @@ const QFSection = () => {
 	const EstimatedMatchingSection = () => (
 		<Flex flexDirection='column' gap='4px'>
 			<EstimatedMatchingPrice>
-				+{' '}
-				{calculateTotalEstimatedMatching(
-					projectDonationsSqrtRootSum,
-					allProjectsSum,
-					matchingPool,
-				).toFixed(2)}
+				{formatDonations(
+					calculateTotalEstimatedMatching(
+						projectDonationsSqrtRootSum,
+						allProjectsSum,
+						matchingPool,
+					),
+					'$',
+				)}
 			</EstimatedMatchingPrice>
 			<Flex alignItems='center' gap='4px'>
 				<LightCaption>
@@ -134,12 +137,14 @@ const QFSection = () => {
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
 								+{' '}
-								{calculateEstimatedMatchingWithDonationAmount(
-									1,
-									projectDonationsSqrtRootSum,
-									allProjectsSum,
-									matchingPool,
-								).toFixed(2)}
+								{formatDonations(
+									calculateEstimatedMatchingWithDonationAmount(
+										1,
+										projectDonationsSqrtRootSum,
+										allProjectsSum,
+										matchingPool,
+									),
+								)}
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
@@ -148,12 +153,14 @@ const QFSection = () => {
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
 								+{' '}
-								{calculateEstimatedMatchingWithDonationAmount(
-									10,
-									projectDonationsSqrtRootSum,
-									allProjectsSum,
-									matchingPool,
-								).toFixed(2)}
+								{formatDonations(
+									calculateEstimatedMatchingWithDonationAmount(
+										10,
+										projectDonationsSqrtRootSum,
+										allProjectsSum,
+										matchingPool,
+									),
+								)}
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
@@ -162,12 +169,14 @@ const QFSection = () => {
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
 								+{' '}
-								{calculateEstimatedMatchingWithDonationAmount(
-									100,
-									projectDonationsSqrtRootSum,
-									allProjectsSum,
-									matchingPool,
-								).toFixed(2)}
+								{formatDonations(
+									calculateEstimatedMatchingWithDonationAmount(
+										100,
+										projectDonationsSqrtRootSum,
+										allProjectsSum,
+										matchingPool,
+									),
+								)}
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
