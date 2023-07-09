@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useWeb3React } from '@web3-react/core';
+import { useIntl } from 'react-intl';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from '../../DonateSocialBox';
@@ -27,6 +28,7 @@ import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
 
 const DonateIndex: FC = () => {
+	const { formatMessage } = useIntl();
 	const { isMobile } = useDetectDevice();
 	const { project, isSuccessDonation } = useDonateData();
 	const { txHash = [] } = isSuccessDonation || {};
@@ -52,9 +54,13 @@ const DonateIndex: FC = () => {
 				{isSuccessDonation && (
 					<Options>
 						<Lead style={{ color: neutralColors.gray[900] }}>
-							Your transactions have been submitted.
+							{formatMessage({
+								id: 'label.your_transactions_have_been_submitted',
+							})}
 							<br />
-							You can view them on a blockchain explorer here:
+							{formatMessage({
+								id: 'label.you_can_view_them_on_a_blockchain_explorer_here',
+							})}
 						</Lead>
 						<TxRow txHash={txHash[0]} title={project.title} />
 						{hasMultipleTxs && (
