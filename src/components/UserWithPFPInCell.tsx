@@ -13,7 +13,7 @@ interface IUserWithPFPInCell {
 export const UserWithPFPInCell: FC<IUserWithPFPInCell> = ({ user }) => {
 	const pfpToken = useGiverPFPToken(user?.walletAddress, user?.avatar);
 	const name =
-		user?.name || shortenAddress(user.walletAddress?.toLowerCase());
+		user?.name || shortenAddress(user?.walletAddress?.toLowerCase());
 	return pfpToken ? (
 		<Flex gap='12px' alignItems='center'>
 			<StyledPFP pfpToken={pfpToken} />
