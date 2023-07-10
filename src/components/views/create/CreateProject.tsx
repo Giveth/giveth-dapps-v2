@@ -118,8 +118,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	let pastProjectData: projectData | undefined;
 
 	if (!isEditMode) {
-		try	{
-			const storedProject = window.sessionStorage.getItem("create_project_data");
+		try {
+			const storedProject = window.sessionStorage.getItem(
+				'create_project_data',
+			);
 			if (storedProject) {
 				pastProjectData = JSON.parse(storedProject);
 			}
@@ -128,7 +130,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		}
 	}
 
-	const { title, description, categories, impactLocation, image, addresses } = project || pastProjectData || {};
+	const { title, description, categories, impactLocation, image, addresses } =
+		project || pastProjectData || {};
 
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = impactLocation || '';
@@ -205,6 +208,14 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	);
 	const [isLoading, setIsLoading] = useState(false);
 	const [resolvedENS, setResolvedENS] = useState('');
+
+	const data = formMethods.watch();
+	useEffect(() => {
+		window.sessionStorage.setItem(
+			'create_project_data',
+			JSON.stringify(data),
+		);
+	}, [data]);
 
 	// useLeaveConfirm({ shouldConfirm: formChange });
 
@@ -328,6 +339,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			if (addedProject) {
 				// Success
 				setIsLoading(false);
+				window.sessionStorage.removeItem('create_project_data');
 				const _project = isEditMode
 					? addedProject.data?.updateProject
 					: addedProject.data?.createProject;
@@ -366,11 +378,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		return <SuccessfulCreation project={creationSuccessful} />;
 	}
 
-	const data = formMethods.watch();
-	useEffect(() => {
-		window.sessionStorage.setItem("create_project_data", JSON.stringify(data));
-	}, [data]);
-
 	return (
 		<Wrapper>
 			<CreateContainer>
@@ -386,7 +393,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						</GuidelinesStyleTablet>
 					)}
 				</div>
-				
+
 				<FormProvider {...formMethods}>
 					<form onSubmit={handleSubmit(onSubmit)}>
 						<NameInput preTitle={title} />
