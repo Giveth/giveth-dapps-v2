@@ -119,7 +119,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	if (!isEditMode) {
 		try {
-			const storedProject = window.sessionStorage.getItem(
+			const storedProject = window.localStorage.getItem(
 				'create_project_data',
 			);
 			if (storedProject) {
@@ -211,7 +211,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const data = formMethods.watch();
 	useEffect(() => {
-		window.sessionStorage.setItem(
+		window.localStorage.setItem(
 			'create_project_data',
 			JSON.stringify(data),
 		);
@@ -339,7 +339,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			if (addedProject) {
 				// Success
 				setIsLoading(false);
-				window.sessionStorage.removeItem('create_project_data');
+				window.localStorage.removeItem('create_project_data');
 				const _project = isEditMode
 					? addedProject.data?.updateProject
 					: addedProject.data?.createProject;
