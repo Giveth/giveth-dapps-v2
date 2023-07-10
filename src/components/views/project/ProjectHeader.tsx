@@ -28,7 +28,7 @@ const ProjectHeader = () => {
 			if (observer) observer.disconnect();
 		};
 	}, [containerRef, adjustTitle]);
-	console.log('image', image);
+
 	return (
 		<ImageWrapper>
 			<ProjectImage
