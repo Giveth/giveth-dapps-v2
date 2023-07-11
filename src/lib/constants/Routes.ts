@@ -4,12 +4,12 @@ const Notifications = '/notifications';
 
 // Public profile and my account
 export const profileTabs = {
-	overview: '?tab=overview',
-	givpower: '?tab=givpower',
-	likedProjects: '?tab=liked',
-	projects: '?tab=projects',
-	donations: '?tab=donations',
-	boosted: '?tab=givpower',
+	overview: 'tab=overview',
+	givpower: 'tab=givpower',
+	likedProjects: 'tab=liked',
+	projects: 'tab=projects',
+	donations: 'tab=donations',
+	boosted: 'tab=givpower',
 };
 
 export enum ProfileModal {
