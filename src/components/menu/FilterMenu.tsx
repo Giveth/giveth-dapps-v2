@@ -28,11 +28,6 @@ const projectsFeatures = [
 		label: { id: 'label.verified' },
 		value: EProjectsFilter.VERIFIED,
 	},
-	{
-		label: { id: 'label.qf_round_projects' },
-		value: EProjectsFilter.ACTIVE_QF_ROUND,
-		disabled: true,
-	},
 ];
 
 const fundsFilter = [
@@ -139,7 +134,6 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 											) ?? false
 										}
 										size={14}
-										disabled={projectFeature.disabled}
 									/>
 								</FeatureItem>
 							))}
