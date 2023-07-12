@@ -74,20 +74,7 @@ export const GIVpowerCard = () => {
 				<Lead>{formatMessage({ id: 'label.current_rank' })}</Lead>
 				<CurrentRank projectPower={projectPower} />
 				<Flex gap='8px'>
-					<IconInfoOutline16 />
 					<div>
-						<Caption>
-							{formatMessage({
-								id: 'label.the_rank_will_update_at_the_start',
-							})}
-							<b>
-								{' '}
-								{formatMessage({
-									id: 'label.next_givbacks_round',
-								})}
-							</b>
-							.
-						</Caption>
 						<NextRoundDate>
 							{formatMessage({
 								id: 'label.the_rank_will_be_updated_on',
