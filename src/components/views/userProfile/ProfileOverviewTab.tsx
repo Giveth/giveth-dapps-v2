@@ -164,7 +164,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 							})}
 							<br />
 							<PassportLink href={links.PASSPORT}>
-								{formatMessage({ id: 'label.learn_more' })}.
+								{formatMessage({ id: 'label.go_to_passport' })}.
 							</PassportLink>
 						</SectionDesc>
 						<PassportCard />

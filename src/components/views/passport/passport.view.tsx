@@ -58,7 +58,7 @@ export const PassportView = () => {
 					<ExternalLink
 						href={links.PASSPORT}
 						title={formatMessage({
-							id: 'label.learn_more',
+							id: 'label.go_to_passport',
 						})}
 					/>
 					<IconExternalLink16 />
