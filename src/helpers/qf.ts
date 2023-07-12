@@ -39,10 +39,19 @@ export const calculateEstimatedMatchingWithDonationAmount = (
 		_projectDonationsSqrtRootSum + Math.sqrt(donationAmount),
 		2,
 	);
-	return Math.min(
-		(afterNewDonationPow /
-			(_allProjectsSum + afterNewDonationPow - beforeNewDonationPow)) *
-			matchingPool,
-		(matchingPool * 20) / 100,
+	const calculatedEstimatedMatchingUntilNow = calculateTotalEstimatedMatching(
+		projectDonationsSqrtRootSum,
+		allProjectsSum,
+		matchingPool,
 	);
+	const result =
+		Math.min(
+			(afterNewDonationPow /
+				(_allProjectsSum +
+					afterNewDonationPow -
+					beforeNewDonationPow)) *
+				matchingPool,
+			(matchingPool * 20) / 100,
+		) - calculatedEstimatedMatchingUntilNow;
+	return result > 0 ? result : 0;
 };
