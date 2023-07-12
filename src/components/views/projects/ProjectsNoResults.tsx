@@ -27,7 +27,7 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 					id: 'label.try_removing_some_filters_keyword',
 				})}
 			</LeadMedium>
-			{isQF && (
+			{!isQF && (
 				<>
 					<GrayLead>
 						{formatMessage({ id: 'label.try_these' })}
