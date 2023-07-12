@@ -55,10 +55,8 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 				setTab(EProfile.OVERVIEW);
 		}
 	}, [router?.query?.tab]);
-
-
 	let pathname = removeQueryParam(router.asPath, ['tab'], true);
-	pathname += (pathname.includes('?') ? "&" : '?');
+	pathname += pathname.includes('?') ? '&' : '?';
 
 	return (
 		<Container>
