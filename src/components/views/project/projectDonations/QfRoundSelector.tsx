@@ -56,7 +56,11 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 							onClick={() => setSelectedQF(round)}
 							isSelected={isSelected}
 						>
-							{isSelected ? <B>{round.id}</B> : <P>{round.id}</P>}
+							{isSelected ? (
+								<B>{round.name}</B>
+							) : (
+								<P>{round.name}</P>
+							)}
 							{round.isActive && <OpenLabel>Open</OpenLabel>}
 						</TabItem>
 					</SwiperSlide>
