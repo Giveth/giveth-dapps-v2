@@ -9,7 +9,7 @@ import Routes from '@/lib/constants/Routes';
 import { useProjectsContext } from '@/context/projects.context';
 
 const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
-	const { setVariables } = useProjectsContext();
+	const { setVariables, isQF } = useProjectsContext();
 
 	const handleSearch = (searchTerm?: string) =>
 		setVariables(prevVariables => ({ ...prevVariables, searchTerm }));
@@ -19,58 +19,66 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 		<Wrapper>
 			<Content>
 				{formatMessage({
-					id: 'label.it_seems_we_couldnt_find_any_result',
+					id: 'label.there_is_no_projects_matching_your_search',
 				})}
 			</Content>
 			<LeadMedium>
 				{formatMessage({
-					id: 'label.try_another_keyword_or_broaden_your_search',
+					id: 'label.try_removing_some_filters_keyword',
 				})}
 			</LeadMedium>
-			<GrayLead>{formatMessage({ id: 'label.try_these' })}</GrayLead>
-			<Categories>
-				{searchSuggestions.map((suggestion, index) => {
-					return (
-						<SuggestionItem
-							key={index}
-							onClick={() => {
-								handleSearch(suggestion);
-							}}
-						>
-							{suggestion}
-						</SuggestionItem>
-					);
-				})}
-			</Categories>
-			<GrayLead>
-				{formatMessage({ id: 'label.or_go_back_to_main_categories' })}
-			</GrayLead>
-			<Categories>
-				{props.mainCategories.map((category, index) => {
-					return (
-						<Link
-							key={`category-${index}`}
-							href={
-								category.slug === 'all'
-									? Routes.Projects
-									: `/projects/${category.slug}`
-							}
-						>
-							<MainCategoryItem
-								onClick={() => {
-									setVariables(prevVariables => ({
-										...prevVariables,
-										sortingBy: undefined,
-										filters: undefined,
-									}));
-								}}
-							>
-								{formatMessage({ id: category.slug })}
-							</MainCategoryItem>
-						</Link>
-					);
-				})}
-			</Categories>
+			{isQF && (
+				<>
+					<GrayLead>
+						{formatMessage({ id: 'label.try_these' })}
+					</GrayLead>
+					<Categories>
+						{searchSuggestions.map((suggestion, index) => {
+							return (
+								<SuggestionItem
+									key={index}
+									onClick={() => {
+										handleSearch(suggestion);
+									}}
+								>
+									{suggestion}
+								</SuggestionItem>
+							);
+						})}
+					</Categories>
+					<GrayLead>
+						{formatMessage({
+							id: 'label.or_go_back_to_main_categories',
+						})}
+					</GrayLead>
+					<Categories>
+						{props.mainCategories.map((category, index) => {
+							return (
+								<Link
+									key={`category-${index}`}
+									href={
+										category.slug === 'all'
+											? Routes.Projects
+											: `/projects/${category.slug}`
+									}
+								>
+									<MainCategoryItem
+										onClick={() => {
+											setVariables(prevVariables => ({
+												...prevVariables,
+												sortingBy: undefined,
+												filters: undefined,
+											}));
+										}}
+									>
+										{formatMessage({ id: category.slug })}
+									</MainCategoryItem>
+								</Link>
+							);
+						})}
+					</Categories>
+				</>
+			)}
 		</Wrapper>
 	);
 };
