@@ -5,7 +5,7 @@ import { SafeAppConnector } from '@gnosis.pm/safe-apps-web3-react';
 // import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 // import { AuthereumConnector } from '@web3-react/authereum-connector';
 import metamaskIcon from '/public//images/wallets/metamask.svg';
-import walletConnectIcon from '/public//images/wallets/walletconnect.svg';
+// import walletConnectIcon from '/public//images/wallets/walletconnect.svg';
 import torusIcon from '/public//images/wallets/torus.svg';
 import gnosisIcon from '/public//images/wallets/gnosis.svg';
 // import authereumIcon from '/public//images/wallets/authereum.svg';
@@ -84,12 +84,13 @@ export const walletsArray: IWallet[] = [
 		image: metamaskIcon,
 		connector: injectedConnector,
 	},
-	{
-		name: 'WallectConnect',
-		value: EWallets.WALLETCONNECT,
-		image: walletConnectIcon,
-		connector: walletconnectConnector,
-	},
+	// WalletConnect V1 is shutdown. Disabling WalletConnect v1 until v2 is ready
+	// {
+	// 	name: 'WallectConnect',
+	// 	value: EWallets.WALLETCONNECT,
+	// 	image: walletConnectIcon,
+	// 	connector: walletconnectConnector,
+	// },
 	torusWallet,
 	{
 		name: 'GnosisSafe',
