@@ -923,7 +923,7 @@
     intl-messageformat "10.3.1"
     tslib "^2.4.0"
 
-"@giveth/ui-design-system@^1.11.11":
+"@giveth/ui-design-system@^1.11.12":
   version "1.11.12"
   resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.12.tgz#12ec40b1b4737dcbe3e5ee1d668ccc851f93f0bc"
   integrity sha512-Sr2ILZ2E4FzG/a2ID3K8ty3dXwaum0PRN1/T+kVViR52GnxwwamWIi2ko9agcc4vnOpkWCAxl/AhVLTkSDbyng==
