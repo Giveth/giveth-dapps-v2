@@ -19,8 +19,8 @@ const SaveGasFees: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
 
 	if (
 		!chainId ||
-		!acceptedChains?.includes(config.XDAI_NETWORK_NUMBER) ||
-		chainId !== config.MAINNET_NETWORK_NUMBER
+		chainId !== config.MAINNET_NETWORK_NUMBER ||
+		acceptedChains?.length === 1
 	) {
 		return null;
 	}
@@ -38,7 +38,12 @@ const SaveGasFees: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
 			<StyledSwitchCaption onClick={() => setShowModal(true)}>
 				{formatMessage({ id: 'label.switch_network' })}
 			</StyledSwitchCaption>
-			{showModal && <SwitchNetwork setShowModal={setShowModal} />}
+			{showModal && (
+				<SwitchNetwork
+					setShowModal={setShowModal}
+					customNetworks={acceptedChains}
+				/>
+			)}
 		</NetworkToast>
 	);
 };
