@@ -97,13 +97,6 @@ export function removeQueryParamAndRedirect(
 	router: NextRouter,
 	params: string[],
 ) {
-	const newParams = removeQueryParam(router.asPath, params);
-	if (router.isReady)
-		router.replace(
-			{
-				query: newParams,
-			},
-			undefined,
-			{ shallow: true },
-		);
+	const newPath = removeQueryParam(router.asPath, params, true); // Get full URL
+	if (router.isReady) router.replace(newPath, undefined, { shallow: true });
 }
