@@ -13,7 +13,8 @@ import {
 	semanticColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Flex } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
@@ -60,7 +61,12 @@ const ProjectGIVbackToast = () => {
 
 	const [showBoost, setShowBoost] = useState(false);
 
-	const { isEnabled, isSignedIn } = useAppSelector(state => state.user);
+	const {
+		isEnabled,
+		isSignedIn,
+		isLoading: isUserLoading,
+	} = useAppSelector(state => state.user);
+	const router = useRouter();
 
 	const showBoostModal = () => {
 		setShowBoost(true);
@@ -83,6 +89,15 @@ const ProjectGIVbackToast = () => {
 			showBoostModal();
 		}
 	};
+
+	useEffect(() => {
+		if (isUserLoading) return;
+		const { open } = router.query;
+		const _open = Array.isArray(open) ? open[0] : open;
+		if (_open === 'boost') {
+			handleBoostClick();
+		}
+	}, [isUserLoading, router]);
 
 	return (
 		<>
