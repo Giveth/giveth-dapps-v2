@@ -48,19 +48,16 @@ export const calculateEstimatedMatchingWithDonationAmount = (
 		_projectDonationsSqrtRootSum + Math.sqrt(donationAmount),
 		2,
 	);
-	const calculatedEstimatedMatchingUntilNow = calculateTotalEstimatedMatching(
-		projectDonationsSqrtRootSum,
-		allProjectsSum,
-		matchingPool,
+
+	// To address https://github.com/Giveth/giveth-dapps-v2/issues/2886#issuecomment-1634650868
+	const newEstimateMatching = Math.min(
+		(afterNewDonationPow /
+			(_allProjectsSum + afterNewDonationPow - beforeNewDonationPow)) *
+			matchingPool,
+		(matchingPool * 20) / 100,
 	);
-	const result =
-		Math.min(
-			(afterNewDonationPow /
-				(_allProjectsSum +
-					afterNewDonationPow -
-					beforeNewDonationPow)) *
-				matchingPool,
-			(matchingPool * 20) / 100,
-		) - calculatedEstimatedMatchingUntilNow;
-	return result > 0 ? result : 0;
+	return (
+		newEstimateMatching *
+		((afterNewDonationPow - beforeNewDonationPow) / afterNewDonationPow)
+	);
 };
