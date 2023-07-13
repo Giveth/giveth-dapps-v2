@@ -9,7 +9,6 @@ import {
 	B,
 	Subline,
 	semanticColors,
-	IconGIVBack,
 	IconRocketInSpace16,
 	IconVerifiedBadge16,
 	H5,
@@ -215,19 +214,6 @@ const ProjectCard = (props: IProjectCard) => {
 											id: 'label.verified',
 										})}
 									</VerifiedText>
-								</Flex>
-								<Flex alignItems='center' gap='2px'>
-									<GivBackIconContainer>
-										<IconGIVBack
-											size={24}
-											color={brandColors.giv[500]}
-										/>
-									</GivBackIconContainer>
-									<GivBackText>
-										{formatMessage({
-											id: 'label.givbacks',
-										})}
-									</GivBackText>
 								</Flex>
 								{isRoundActive && (
 									<QFBadge>{activeRound?.name}</QFBadge>
