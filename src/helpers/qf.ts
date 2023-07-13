@@ -26,12 +26,12 @@ export const calculateTotalEstimatedMatching = (
 ) => {
 	if (!matchingPool || !projectDonationsSqrtRootSum || !allProjectsSum)
 		return 0;
-
-	return Math.min(
+	const result = Math.min(
 		(Math.pow(projectDonationsSqrtRootSum, 2) / allProjectsSum) *
 			matchingPool,
 		(matchingPool * 20) / 100,
 	);
+	return result > 0 && result < 1 ? 1 : result;
 };
 
 export const calculateEstimatedMatchingWithDonationAmount = (
