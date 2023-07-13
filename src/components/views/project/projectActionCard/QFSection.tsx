@@ -46,6 +46,7 @@ const QFSection = () => {
 						matchingPool,
 					),
 					'$',
+					true,
 				)}
 			</EstimatedMatchingPrice>
 			<Flex alignItems='center' gap='4px'>
@@ -144,6 +145,8 @@ const QFSection = () => {
 										allProjectsSum,
 										matchingPool,
 									),
+									'',
+									true,
 								)}
 								&nbsp; DAI
 							</EndAlignedSubline>
@@ -160,6 +163,8 @@ const QFSection = () => {
 										allProjectsSum,
 										matchingPool,
 									),
+									'',
+									true,
 								)}
 								&nbsp; DAI
 							</EndAlignedSubline>
@@ -176,6 +181,8 @@ const QFSection = () => {
 										allProjectsSum,
 										matchingPool,
 									),
+									'',
+									true,
 								)}
 								&nbsp; DAI
 							</EndAlignedSubline>
