@@ -46,8 +46,9 @@ export const formatWeiHelper = (
 export const formatDonations = (
 	amount: number,
 	symbol: string = '',
+	rounded: boolean = false,
 ): string => {
 	if (amount === 0) return '0.00';
 	if (amount < 0.01) return `<${symbol}0.01`;
-	return symbol + amount.toFixed(2);
+	return !rounded ? symbol + amount.toFixed(2) : symbol + Math.round(amount);
 };

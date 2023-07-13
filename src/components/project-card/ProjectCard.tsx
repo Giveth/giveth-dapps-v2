@@ -9,7 +9,6 @@ import {
 	B,
 	Subline,
 	semanticColors,
-	IconGIVBack,
 	IconRocketInSpace16,
 	IconVerifiedBadge16,
 	H5,
@@ -28,7 +27,11 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ProjectCardUserName } from './ProjectCardUserName';
-import { calculateTotalEstimatedMatching, hasActiveRound } from '@/helpers/qf';
+import {
+	calculateTotalEstimatedMatching,
+	getActiveRound,
+	hasActiveRound,
+} from '@/helpers/qf';
 import { formatDonations } from '@/helpers/number';
 
 const cardRadius = '12px';
@@ -70,6 +73,9 @@ const ProjectCard = (props: IProjectCard) => {
 	const isRoundActive = hasActiveRound(qfRounds);
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
+
+	const activeRound = getActiveRound(qfRounds);
+
 	return (
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
@@ -182,6 +188,7 @@ const ProjectCard = (props: IProjectCard) => {
 											matchingPool,
 										),
 										'$',
+										true,
 									)}
 								</EstimatedMatchingPrice>
 								<LightSubline>
@@ -209,19 +216,9 @@ const ProjectCard = (props: IProjectCard) => {
 										})}
 									</VerifiedText>
 								</Flex>
-								<Flex alignItems='center' gap='2px'>
-									<GivBackIconContainer>
-										<IconGIVBack
-											size={24}
-											color={brandColors.giv[500]}
-										/>
-									</GivBackIconContainer>
-									<GivBackText>
-										{formatMessage({
-											id: 'label.givbacks',
-										})}
-									</GivBackText>
-								</Flex>
+								{isRoundActive && (
+									<QFBadge>{activeRound?.name}</QFBadge>
+								)}
 							</Flex>
 							<GivpowerRankContainer
 								gap='8px'
@@ -426,6 +423,15 @@ const AmountRaisedText = styled(Subline)`
 	background-color: ${neutralColors.gray[300]};
 	padding: 2px 8px;
 	border-radius: 4px;
+`;
+
+const QFBadge = styled(Subline)`
+	background-color: ${brandColors.cyan[600]};
+	color: ${neutralColors.gray[100]};
+	padding: 0px 8px;
+	border-radius: 16px;
+	display: flex;
+	align-items: center;
 `;
 
 export default ProjectCard;

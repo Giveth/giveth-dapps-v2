@@ -38,7 +38,7 @@ const projectsItems = {
 		{
 			name: 'Quadratic Funding',
 			url: Routes.QuadraticFunding,
-			label: 'label.quadratic_funding',
+			label: 'label.eligible_for_matching',
 		},
 		// { name: 'Popular', query: '?q=popular' },
 	],

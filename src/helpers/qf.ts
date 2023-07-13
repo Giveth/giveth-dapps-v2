@@ -10,6 +10,15 @@ export const hasActiveRound = (qfRounds: IQFRound[] | undefined) => {
 	);
 };
 
+export const getActiveRound = (qfRounds: IQFRound[] | undefined) => {
+	if (!qfRounds) return undefined;
+	return qfRounds.find(
+		round =>
+			round.isActive &&
+			new Date(round.beginDate).getTime() < getNowUnixMS(),
+	);
+};
+
 export const calculateTotalEstimatedMatching = (
 	projectDonationsSqrtRootSum?: number,
 	allProjectsSum?: number,
