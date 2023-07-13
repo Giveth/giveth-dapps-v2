@@ -598,7 +598,6 @@
 	"label.passport.error": "An error occurred while loading your Gitcoin Passport. Please try again later.",
 	"label.passport.invalid": "Passport Profile not detected. Please open Passport to troubleshoot.",
 	"label.passport.link.go_to_passport": "Go to Passport",
-	"label.passport.link.update_score": "Update score",
 	"label.passport.loading": "Loading Passport...",
 	"label.passport.not_connected": "Connect your wallet to verify your eligibility for donation matching.",
 	"label.passport.not_created": "Get your donation matched with quadratic funding! Verify your Gitcoin Passport before ",

@@ -65,7 +65,7 @@ export const PassportBannerData: IData = {
 		bg: EPBGState.INFO,
 		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
 		link: {
-			label: 'label.passport.link.update_score',
+			label: 'label.passport.link.go_to_passport',
 			url: Routes.Passport,
 		},
 	},
@@ -74,7 +74,7 @@ export const PassportBannerData: IData = {
 		bg: EPBGState.WARNING,
 		icon: <IconAlertTriangleFilled24 color={brandColors.giv[500]} />,
 		link: {
-			label: 'label.passport.link.update_score',
+			label: 'label.passport.link.go_to_passport',
 			url: Routes.Passport,
 		},
 	},
@@ -83,7 +83,7 @@ export const PassportBannerData: IData = {
 		bg: EPBGState.SUCCESS,
 		icon: <IconVerifiedBadge24 color={semanticColors.jade[600]} />,
 		link: {
-			label: 'label.passport.link.update_score',
+			label: 'label.passport.link.go_to_passport',
 			url: Routes.Passport,
 		},
 	},
