@@ -188,6 +188,7 @@ const ProjectCard = (props: IProjectCard) => {
 											matchingPool,
 										),
 										'$',
+										true,
 									)}
 								</EstimatedMatchingPrice>
 								<LightSubline>
