@@ -83,24 +83,19 @@ export const ProjectPublicActions = () => {
 	const likeUnlikeProject = async () => {
 		if (projectId) {
 			setLikeLoading(true);
-
 			try {
 				if (!reaction) {
 					const newReaction = await likeProject(projectId);
 					setReaction(newReaction);
 					if (newReaction) {
-						setTotalReactions(
-							_totalReactions => (_totalReactions || 0) + 1,
-						);
+						setTotalReactions((totalReactions || 0) + 1);
 						dispatch(incrementLikedProjectsCount());
 					}
 				} else if (reaction?.userId === user?.id) {
 					const successful = await unlikeProject(reaction.id);
 					if (successful) {
 						setReaction(undefined);
-						setTotalReactions(
-							_totalReactions => (_totalReactions || 1) - 1,
-						);
+						setTotalReactions((totalReactions || 1) - 1);
 						dispatch(decrementLikedProjectsCount());
 					}
 				}
