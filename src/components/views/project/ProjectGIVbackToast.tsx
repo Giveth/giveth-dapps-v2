@@ -59,7 +59,7 @@ const ProjectGIVbackToast = () => {
 				formatMessage({
 					id: `project.givback_toast.title.verified_public_1`,
 				}) +
-				(givbackFactor || 0) * 100 +
+				Math.round(+(givbackFactor || 0) * 100) +
 				'%' +
 				formatMessage({
 					id: `project.givback_toast.title.verified_public_2`,
