@@ -152,7 +152,7 @@ const ProjectCard = (props: IProjectCard) => {
 							)}
 
 							<div>
-								<LightSubline> Raised from </LightSubline>
+								<LightSubline> {formatMessage({id: 'label.raised_from'}) } </LightSubline>
 								<Subline style={{ display: 'inline-block' }}>
 									&nbsp;
 									{isRoundActive
@@ -171,7 +171,6 @@ const ProjectCard = (props: IProjectCard) => {
 												: countUniqueDonors,
 										},
 									)}
-									:
 								</LightSubline>
 							</div>
 						</PaddedRow>
