@@ -1,10 +1,4 @@
-import {
-	IconHelpFilled16,
-	P,
-	SemiTitle,
-	Subline,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { IconHelpFilled16, P, Subline } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -27,7 +21,6 @@ export const ProjectStats = () => {
 	);
 	return (
 		<div>
-			<Title>{formatMessage({ id: 'label.project_stats' })}</Title>
 			<Flex flexDirection='column' gap='24px'>
 				<StatRow justifyContent='space-between'>
 					<Flex alignItems='center' gap='4px'>
@@ -82,13 +75,6 @@ export const ProjectStats = () => {
 		</div>
 	);
 };
-
-const Title = styled(SemiTitle)`
-	font-weight: 500;
-	padding-bottom: 16px;
-	border-bottom: 1px solid ${neutralColors.gray[300]};
-	margin-bottom: 16px;
-`;
 
 const StatRow = styled(Flex)``;
 
