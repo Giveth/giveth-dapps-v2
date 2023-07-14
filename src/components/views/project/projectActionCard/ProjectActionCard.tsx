@@ -80,15 +80,12 @@ const ProjectActionInnerCard = () => {
 
 	return isLoading ? (
 		<LottieControl animationData={LoadingAnimation} size={300} />
-	) : isAdmin ? (
-		<>
-			<ProjectStats />
-			<AdminActions />
-		</>
 	) : (
 		<>
+			{isAdmin && <AdminActions />}
 			{hasActiveQFRound ? <QFSection /> : <DonateSection />}
-			<ProjectPublicActions />
+			{!isAdmin && <ProjectPublicActions />}
+			{isAdmin && <ProjectStats />}
 		</>
 	);
 };
