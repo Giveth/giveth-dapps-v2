@@ -28,7 +28,7 @@
 	"component.button.subscribe": "SUBSCRIBE",
 	"component.button.tweet_this": "Tweet this",
 	"component.button.your_email_address": "Your email address",
-	"component.donation_section.100_to_the_project": "100% to the project.",
+	"component.donation_section.100_to_the_project": "100% goes to the project.",
 	"component.donation_section.desc": "Every donation is peer-to-peer, with no fees and no middlemen.",
 	"component.donation_section.learn_zero_fee": "Learn about our zero-fee policy",
 	"component.givback_eligible.desc": "When you donate to verified projects you qualify to receive GIV tokens. Through GIVbacks, GIV empowers donors with governance rights via the GIVgarden.",
