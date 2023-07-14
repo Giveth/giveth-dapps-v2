@@ -27,6 +27,7 @@ import { useAppSelector } from '@/features/hooks';
 const ProjectGIVbackToast = () => {
 	const { projectData, isAdmin } = useProjectContext();
 	const verified = projectData?.verified;
+	const { givbackFactor } = projectData || {};
 	const isOwnerVerified = verified && isAdmin;
 	const isOwnerNotVerified = !verified && isAdmin;
 	const isPublicVerified = verified && !isAdmin;
@@ -35,17 +36,43 @@ const ProjectGIVbackToast = () => {
 		: neutralColors.gray[900];
 	const { formatMessage } = useIntl();
 
-	const title = formatMessage({
-		id: `project.givback_toast.title.${
-			isOwnerVerified
-				? 'verified_owner'
-				: isOwnerNotVerified
-				? 'non_verified_owner'
-				: isPublicVerified
-				? 'verified_public'
-				: 'non_verified_public'
-		}`,
-	});
+	const handleTitle = () => {
+		if (isOwnerVerified) {
+			if (givbackFactor === 0) return;
+			return (
+				formatMessage({
+					id: `project.givback_toast.title.verified_owner_1`,
+				}) +
+				(givbackFactor || 0) * 100 +
+				'%' +
+				formatMessage({
+					id: `project.givback_toast.title.verified_owner_2`,
+				})
+			);
+		} else if (isOwnerNotVerified) {
+			return formatMessage({
+				id: `project.givback_toast.title.non_verified_owner`,
+			});
+		} else if (isPublicVerified) {
+			if (givbackFactor === 0) return;
+			return (
+				formatMessage({
+					id: `project.givback_toast.title.verified_public_1`,
+				}) +
+				(givbackFactor || 0) * 100 +
+				'%' +
+				formatMessage({
+					id: `project.givback_toast.title.verified_public_2`,
+				})
+			);
+		} else {
+			return formatMessage({
+				id: `project.givback_toast.title.non_verified_public`,
+			});
+		}
+	};
+
+	const title = handleTitle();
 
 	const description = formatMessage({
 		id: `project.givback_toast.description.${

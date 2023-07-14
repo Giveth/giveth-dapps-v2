@@ -142,14 +142,12 @@ const ProjectCard = (props: IProjectCard) => {
 									{formatMessage({
 										id: 'label.amount_raised_in_this_round',
 									})}
-									:
 								</AmountRaisedText>
 							) : (
 								<AmountRaisedText>
 									{formatMessage({
 										id: 'label.total_amount_raised',
 									})}
-									:
 								</AmountRaisedText>
 							)}
 
@@ -195,7 +193,6 @@ const ProjectCard = (props: IProjectCard) => {
 									{formatMessage({
 										id: 'label.estimated_matching',
 									})}
-									:
 								</LightSubline>
 							</PaddedRow>
 						) : null}
