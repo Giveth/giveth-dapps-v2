@@ -3,12 +3,13 @@ import {
 	FC,
 	ReactNode,
 	SetStateAction,
-	useEffect,
+	useRef,
 	useState,
 } from 'react';
 import styled from 'styled-components';
 import { GLink, neutralColors } from '@giveth/ui-design-system';
 import { Flex } from './styled-components/Flex';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 
 interface IDropdownProps {
 	label: string;
@@ -44,18 +45,10 @@ interface IOptionsProps {
 }
 
 const Options: FC<IOptionsProps> = ({ options, setOpen }) => {
-	useEffect(() => {
-		const handleClose = (e: MouseEvent) => {
-			setOpen(false);
-		};
-
-		document.addEventListener('mousedown', handleClose);
-		return () => {
-			document.removeEventListener('mousedown', handleClose);
-		};
-	}, [setOpen]);
+	const ddRef = useRef<HTMLDivElement>(null);
+	useOnClickOutside(ddRef, () => setOpen(false));
 	return (
-		<OptionsWrapper>
+		<OptionsWrapper ref={ddRef}>
 			{options.map((option, idx) => (
 				<Option key={idx} option={option} />
 			))}
@@ -68,7 +61,11 @@ interface IOptionProps {
 }
 
 const Option: FC<IOptionProps> = ({ option }) => {
-	return <OptionWrapper>{option.label}</OptionWrapper>;
+	return (
+		<OptionWrapper onClick={() => console.log('Hi babe')}>
+			{option.label}
+		</OptionWrapper>
+	);
 };
 
 const Wrapper = styled.div`
