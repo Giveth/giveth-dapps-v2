@@ -22,6 +22,25 @@ import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { showToastError } from '@/lib/helpers';
+import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
+
+const options: IOption[] = [
+	{
+		label: 'label.verify_your_project',
+		type: OptionType.NORMAL,
+		icon: <IconVerifiedBadge16 />,
+	},
+	{
+		label: 'label.deactivate_project',
+		type: OptionType.NORMAL,
+		icon: <IconArchiving size={16} />,
+	},
+	{
+		label: 'label.edit',
+		type: OptionType.NORMAL,
+		icon: <IconEdit16 />,
+	},
+];
 
 export const AdminActions = () => {
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
@@ -58,6 +77,7 @@ export const AdminActions = () => {
 	};
 	return (
 		<>
+			<Dropdown label='Project Actions' options={options} />
 			<Flex flexDirection='column' gap='16px'>
 				<EditButton
 					isExternal
