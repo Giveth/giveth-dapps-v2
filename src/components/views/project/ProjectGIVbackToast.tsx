@@ -43,7 +43,7 @@ const ProjectGIVbackToast = () => {
 				formatMessage({
 					id: `project.givback_toast.title.verified_owner_1`,
 				}) +
-				(givbackFactor || 0) * 100 +
+				((givbackFactor || 0) * 100).toFixed(2) +
 				'%' +
 				formatMessage({
 					id: `project.givback_toast.title.verified_owner_2`,

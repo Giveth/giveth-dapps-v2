@@ -162,8 +162,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 			) : (
 				<div>
 					<BorderedFlex>
-						<P>Round: &nbsp;</P>
-						<B>QF round {selectedQF.id} donations</B>
+						<B>{selectedQF.name} donations</B>
 					</BorderedFlex>
 					{roundDonorsCount && roundDonorsCount > 0 ? (
 						<div>
