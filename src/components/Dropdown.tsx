@@ -1,4 +1,11 @@
-import { FC, ReactNode, useState } from 'react';
+import {
+	Dispatch,
+	FC,
+	ReactNode,
+	SetStateAction,
+	useEffect,
+	useState,
+} from 'react';
 import styled from 'styled-components';
 import { GLink, neutralColors } from '@giveth/ui-design-system';
 import { Flex } from './styled-components/Flex';
@@ -26,16 +33,27 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
 			<Controller onClick={() => setOpen(_open => !_open)}>
 				<GLink size='Big'>{label}</GLink>
 			</Controller>
-			{open && <Options options={options} />}
+			{open && <Options options={options} setOpen={setOpen} />}
 		</Wrapper>
 	);
 };
 
 interface IOptionsProps {
 	options: IOption[];
+	setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const Options: FC<IOptionsProps> = ({ options }) => {
+const Options: FC<IOptionsProps> = ({ options, setOpen }) => {
+	useEffect(() => {
+		const handleClose = (e: MouseEvent) => {
+			setOpen(false);
+		};
+
+		document.addEventListener('mousedown', handleClose);
+		return () => {
+			document.removeEventListener('mousedown', handleClose);
+		};
+	}, [setOpen]);
 	return (
 		<OptionsWrapper>
 			{options.map((option, idx) => (
