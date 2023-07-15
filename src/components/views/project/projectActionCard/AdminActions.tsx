@@ -27,17 +27,17 @@ import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
 const options: IOption[] = [
 	{
 		label: 'label.verify_your_project',
-		type: OptionType.NORMAL,
+		type: OptionType.ITEM,
 		icon: <IconVerifiedBadge16 />,
 	},
 	{
 		label: 'label.deactivate_project',
-		type: OptionType.NORMAL,
+		type: OptionType.ITEM,
 		icon: <IconArchiving size={16} />,
 	},
 	{
 		label: 'label.edit',
-		type: OptionType.NORMAL,
+		type: OptionType.ITEM,
 		icon: <IconEdit16 />,
 	},
 ];
