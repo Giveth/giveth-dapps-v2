@@ -77,9 +77,9 @@ const QFSection = () => {
 					</Title>
 					<Amount weight={700}>
 						$
-						{(
-							sumDonationValueUsdForActiveQfRound || 0
-						).toLocaleString(locale)}
+						{formatDonations(
+							sumDonationValueUsdForActiveQfRound || 0,
+						)}
 					</Amount>
 					<Description>
 						{formatMessage({
