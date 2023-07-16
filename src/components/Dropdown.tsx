@@ -110,10 +110,10 @@ const ControllerWrapper = styled(Flex)<IControllerWrapperProps>`
 	// prevent pointer events when dropdown is open
 	pointer-events: ${props => (props.isActive ? 'auto' : 'none')};
 	width: 100%;
+	padding: 10px 16px;
 `;
 
 const Controller = styled(Flex)`
-	padding: 10px 16px;
 	border-radius: 8px;
 	background-color: ${neutralColors.gray[300]};
 	cursor: pointer;
