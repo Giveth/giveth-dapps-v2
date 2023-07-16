@@ -31,8 +31,6 @@ interface IWrapper {
 }
 
 export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
-	const { isLoading } = useAppSelector(state => state.user);
-	const { isAdmin, hasActiveQFRound } = useProjectContext();
 	const isMobile = !useMediaQuery(device.tablet);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
@@ -47,7 +45,7 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [isMobile, isLoading]);
+	}, [isMobile]);
 
 	return isMobile ? (
 		<Wrapper
@@ -63,23 +61,7 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 				flexDirection='column-reverse'
 				justifyContent='space-between'
 			>
-				{isLoading ? (
-					<LottieControl
-						animationData={LoadingAnimation}
-						size={300}
-					/>
-				) : isAdmin ? (
-					<>
-						<ProjectStats />
-						<AdminActions />
-					</>
-				) : (
-					<>
-						{hasActiveQFRound ? <QFSection /> : <DonateSection />}
-
-						<ProjectPublicActions />
-					</>
-				)}
+				<ProjectActionInnerCard />
 			</ProjectActionCardWrapper>
 		</Wrapper>
 	) : (
@@ -87,20 +69,24 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 			flexDirection='column'
 			justifyContent='space-between'
 		>
-			{isLoading ? (
-				<LottieControl animationData={LoadingAnimation} size={300} />
-			) : isAdmin ? (
-				<>
-					<ProjectStats />
-					<AdminActions />
-				</>
-			) : (
-				<>
-					{hasActiveQFRound ? <QFSection /> : <DonateSection />}
-					<ProjectPublicActions />
-				</>
-			)}
+			<ProjectActionInnerCard />
 		</ProjectActionCardWrapper>
+	);
+};
+
+const ProjectActionInnerCard = () => {
+	const { isLoading } = useAppSelector(state => state.user);
+	const { isAdmin, hasActiveQFRound } = useProjectContext();
+
+	return isLoading ? (
+		<LottieControl animationData={LoadingAnimation} size={300} />
+	) : (
+		<>
+			{isAdmin && <AdminActions />}
+			{hasActiveQFRound ? <QFSection /> : <DonateSection />}
+			{!isAdmin && <ProjectPublicActions />}
+			{isAdmin && <ProjectStats />}
+		</>
 	);
 };
 
