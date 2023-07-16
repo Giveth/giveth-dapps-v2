@@ -12,10 +12,9 @@ import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
-import { Flex } from '@/components/styled-components/Flex';
+import { useRouter } from 'next/router';
 import { useProjectContext } from '@/context/project.context';
 import { VerificationModal } from '@/components/modals/VerificationModal';
-import { idToProjectEdit } from '@/lib/routeCreators';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
 import { client } from '@/apollo/apolloClient';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
@@ -23,24 +22,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { showToastError } from '@/lib/helpers';
 import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
-
-const options: IOption[] = [
-	{
-		label: 'label.verify_your_project',
-		type: OptionType.ITEM,
-		icon: <IconVerifiedBadge16 />,
-	},
-	{
-		label: 'label.deactivate_project',
-		type: OptionType.ITEM,
-		icon: <IconArchiving size={16} />,
-	},
-	{
-		label: 'label.edit',
-		type: OptionType.ITEM,
-		icon: <IconEdit16 />,
-	},
-];
+import { idToProjectEdit } from '@/lib/routeCreators';
 
 export const AdminActions = () => {
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
@@ -51,6 +33,7 @@ export const AdminActions = () => {
 	const { formatMessage } = useIntl();
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
+	const router = useRouter();
 
 	const activeProject = async () => {
 		setActivateLoading(true);
@@ -75,40 +58,42 @@ export const AdminActions = () => {
 			setActivateLoading(false);
 		}
 	};
+
+	const options: IOption[] = [
+		{
+			label: formatMessage({
+				id: 'label.edit',
+			}),
+			type: OptionType.ITEM,
+			icon: <IconEdit16 />,
+			cb: () => router.push(idToProjectEdit(projectData?.id || '')),
+		},
+		{
+			label: formatMessage({
+				id: 'label.verify_your_project',
+			}),
+			type: OptionType.ITEM,
+			icon: <IconVerifiedBadge16 />,
+			cb: () => setShowVerificationModal(true),
+		},
+		{
+			label: formatMessage({
+				id: isActive
+					? 'label.deactivate_project'
+					: 'label.activate_project',
+			}),
+			type: OptionType.ITEM,
+			icon: <IconArchiving size={16} />,
+			cb: () => {
+				console.log('verify');
+				isActive ? setDeactivateModal(true) : activeProject();
+			},
+		},
+	];
+
 	return (
 		<>
 			<Dropdown label='Project Actions' options={options} />
-			<Flex flexDirection='column' gap='16px'>
-				<EditButton
-					isExternal
-					linkType='texty-secondary'
-					label={formatMessage({ id: 'label.edit' })}
-					icon={<IconEdit16 />}
-					href={idToProjectEdit(projectData?.id || '')}
-				/>
-				<VerifyButton
-					label={formatMessage({
-						id: 'label.verify_your_project',
-					})}
-					icon={<IconVerifiedBadge16 />}
-					disabled={!isActive}
-					onClick={() => setShowVerificationModal(true)}
-				/>
-				<ActiveButton
-					label={formatMessage({
-						id: isActive
-							? 'label.deactivate_project'
-							: 'label.activate_project',
-					})}
-					buttonType='texty-gray'
-					icon={<IconArchiving size={16} />}
-					size='small'
-					onClick={() =>
-						isActive ? setDeactivateModal(true) : activeProject()
-					}
-					loading={activateLoading}
-				/>
-			</Flex>
 			{showVerificationModal && (
 				<VerificationModal
 					onClose={() => setShowVerificationModal(false)}
