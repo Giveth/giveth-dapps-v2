@@ -6,6 +6,7 @@ import {
 	IconHeartFilled16,
 	IconHeartOutline16,
 	mediaQueries,
+	neutralColors,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
@@ -159,7 +160,6 @@ export const ProjectPublicActions = () => {
 					onClick={() => isActive && setShowShareModal(true)}
 					isSimple={isMobile}
 				/>
-
 				<StyledButton
 					label={totalReactions.toString()}
 					onClick={() => isActive && checkSignInThenLike()}
@@ -223,12 +223,8 @@ const StyledButton = styled(Button)`
 	& > div[loading='1'] > div {
 		left: 0;
 	}
-`;
-
-const StyledShareButton = styled(StyledButton)`
-	padding: 16px 8px;
-	* {
-		font-size: 12px;
-		text-transform: capitalize;
+	color: ${neutralColors.gray[700]};
+	&:hover {
+		color: ${neutralColors.gray[800]};
 	}
 `;
