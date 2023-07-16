@@ -23,20 +23,23 @@ import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { showToastError } from '@/lib/helpers';
 import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
 import { idToProjectEdit } from '@/lib/routeCreators';
+import ShareModal from '@/components/modals/ShareModal';
+import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
+import { EContentType } from '@/lib/constants/shareContent';
 
 export const AdminActions = () => {
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
 	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
-	const [activateLoading, setActivateLoading] = useState(false);
-
+	const [showShareModal, setShowShareModal] = useState<boolean>(false);
 	const { projectData, isActive, fetchProjectBySlug } = useProjectContext();
+	const project = projectData!;
+	const { slug, id: projectId, verified } = project;
 	const { formatMessage } = useIntl();
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 
 	const activeProject = async () => {
-		setActivateLoading(true);
 		try {
 			if (!isSignedIn) {
 				dispatch(setShowSignWithWallet(true));
@@ -44,7 +47,7 @@ export const AdminActions = () => {
 			}
 			await client.mutate({
 				mutation: ACTIVATE_PROJECT,
-				variables: { projectId: Number(projectData?.id || '') },
+				variables: { projectId: Number(projectId || '') },
 			});
 			await fetchProjectBySlug();
 		} catch (e) {
@@ -54,8 +57,6 @@ export const AdminActions = () => {
 					section: 'handleProjectStatus',
 				},
 			});
-		} finally {
-			setActivateLoading(false);
 		}
 	};
 
@@ -89,6 +90,14 @@ export const AdminActions = () => {
 				isActive ? setDeactivateModal(true) : activeProject();
 			},
 		},
+		{
+			label: formatMessage({
+				id: verified ? 'label.share_and_get_rewarded' : 'label.share',
+			}),
+			type: OptionType.ITEM,
+			icon: <IconVerifiedBadge16 />,
+			cb: () => setShowShareModal(true),
+		},
 	];
 
 	return (
@@ -105,6 +114,21 @@ export const AdminActions = () => {
 					projectId={projectData?.id}
 				/>
 			)}
+			{showShareModal &&
+				(verified ? (
+					<ShareRewardedModal
+						contentType={EContentType.thisProject}
+						setShowModal={setShowShareModal}
+						projectHref={slug}
+						projectTitle={project.title}
+					/>
+				) : (
+					<ShareModal
+						contentType={EContentType.thisProject}
+						setShowModal={setShowShareModal}
+						projectHref={slug}
+					/>
+				))}
 		</>
 	);
 };
