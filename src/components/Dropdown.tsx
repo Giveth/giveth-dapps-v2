@@ -72,9 +72,11 @@ const Options: FC<IOptionsProps> = ({ options, setOpen }) => {
 	useOnClickOutside(ddRef, () => setOpen(false));
 	return (
 		<OptionsWrapper ref={ddRef}>
-			{options.map((option, idx) => (
-				<Option key={idx} option={option} setOpen={setOpen} />
-			))}
+			{options.map((option, idx) =>
+				option.disabled ? null : (
+					<Option key={idx} option={option} setOpen={setOpen} />
+				),
+			)}
 		</OptionsWrapper>
 	);
 };
