@@ -76,6 +76,7 @@ export const AdminActions = () => {
 			type: OptionType.ITEM,
 			icon: <IconVerifiedBadge16 />,
 			cb: () => setShowVerificationModal(true),
+			disabled: verified,
 		},
 		{
 			label: formatMessage({
