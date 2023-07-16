@@ -201,39 +201,43 @@ const ProjectCard = (props: IProjectCard) => {
 						) : null}
 					</Flex>
 				</Link>
-				{verified && (
+				{(isRoundActive || verified) && (
 					<Link href={slugToProjectView(slug)}>
 						<Hr />
 						<PaddedRow justifyContent='space-between'>
 							<Flex gap='16px'>
-								<Flex alignItems='center' gap='4px'>
-									<IconVerifiedBadge16
-										color={semanticColors.jade[500]}
-									/>
-									<VerifiedText>
-										{formatMessage({
-											id: 'label.verified',
-										})}
-									</VerifiedText>
-								</Flex>
+								{verified && (
+									<Flex alignItems='center' gap='4px'>
+										<IconVerifiedBadge16
+											color={semanticColors.jade[500]}
+										/>
+										<VerifiedText>
+											{formatMessage({
+												id: 'label.verified',
+											})}
+										</VerifiedText>
+									</Flex>
+								)}
 								{isRoundActive && (
 									<QFBadge>{activeRound?.name}</QFBadge>
 								)}
 							</Flex>
-							<GivpowerRankContainer
-								gap='8px'
-								alignItems='center'
-							>
-								<IconRocketInSpace16
-									color={neutralColors.gray[700]}
-								/>
-								<B>
-									{projectPower?.powerRank &&
-									projectPower?.totalPower !== 0
-										? `#${projectPower.powerRank}`
-										: '--'}
-								</B>
-							</GivpowerRankContainer>
+							{verified && (
+								<GivpowerRankContainer
+									gap='8px'
+									alignItems='center'
+								>
+									<IconRocketInSpace16
+										color={neutralColors.gray[700]}
+									/>
+									<B>
+										{projectPower?.powerRank &&
+										projectPower?.totalPower !== 0
+											? `#${projectPower.powerRank}`
+											: '--'}
+									</B>
+								</GivpowerRankContainer>
+							)}
 						</PaddedRow>
 					</Link>
 				)}
@@ -278,17 +282,6 @@ const LightSubline = styled(Subline)`
 const VerifiedText = styled(Subline)`
 	text-transform: uppercase;
 	color: ${semanticColors.jade[500]};
-`;
-
-const GivBackText = styled(Subline)`
-	text-transform: uppercase;
-	color: ${brandColors.giv[500]};
-`;
-
-const GivBackIconContainer = styled.div`
-	display: flex;
-	align-items: center;
-	transform: scale(0.8);
 `;
 
 const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
@@ -428,7 +421,7 @@ const AmountRaisedText = styled(Subline)`
 const QFBadge = styled(Subline)`
 	background-color: ${brandColors.cyan[600]};
 	color: ${neutralColors.gray[100]};
-	padding: 0px 8px;
+	padding: 4px 8px;
 	border-radius: 16px;
 	display: flex;
 	align-items: center;
