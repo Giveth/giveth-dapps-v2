@@ -1,16 +1,10 @@
 import {
-	Button,
-	ButtonLink,
 	IconArchiving,
 	IconEdit16,
 	IconVerifiedBadge16,
-	OutlineButton,
-	brandColors,
-	semanticColors,
 } from '@giveth/ui-design-system';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
-import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useRouter } from 'next/router';
 import { useProjectContext } from '@/context/project.context';
@@ -133,41 +127,3 @@ export const AdminActions = () => {
 		</>
 	);
 };
-
-const EditButton = styled(ButtonLink)`
-	width: 100%;
-	flex-direction: row-reverse;
-	gap: 8px;
-	box-shadow: 0px 3px 20px rgba(83, 38, 236, 0.13);
-	padding: 16px 24px;
-	&:hover {
-		color: ${brandColors.giv[300]};
-	}
-	transition: color 0.3s ease;
-`;
-
-const VerifyButton = styled(OutlineButton)`
-	width: 100%;
-	flex-direction: row-reverse;
-	gap: 8px;
-	padding: 16px 24px;
-	color: ${brandColors.giv[500]};
-	border: 2px solid ${brandColors.giv[500]};
-	&:hover {
-		border: 2px solid ${brandColors.giv[300]};
-		color: ${brandColors.giv[300]};
-	}
-`;
-
-const ActiveButton = styled(Button)`
-	width: 100%;
-	flex-direction: row-reverse;
-	gap: 8px;
-	color: ${semanticColors.golden[700]};
-	&:hover {
-		color: ${semanticColors.golden[500]};
-	}
-	& > div[loading='1'] > div {
-		left: 0;
-	}
-`;
