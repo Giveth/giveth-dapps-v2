@@ -152,7 +152,11 @@ const ProjectCard = (props: IProjectCard) => {
 							)}
 
 							<div>
-								<LightSubline> {formatMessage({id: 'label.raised_from'}) } </LightSubline>
+								<LightSubline>
+									{formatMessage({
+										id: 'label.raised_from',
+									})}{' '}
+								</LightSubline>
 								<Subline style={{ display: 'inline-block' }}>
 									&nbsp;
 									{isRoundActive
