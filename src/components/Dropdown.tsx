@@ -38,13 +38,14 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
 	const [open, setOpen] = useState(false);
 	return (
 		<Wrapper>
-			<ControllerWrapper
-				onClick={e => {
-					setOpen(true);
-				}}
-				isActive={!open}
-			>
-				<Controller justifyContent='space-between'>
+			<Controller>
+				<ControllerWrapper
+					justifyContent='space-between'
+					onClick={e => {
+						setOpen(true);
+					}}
+					isActive={!open}
+				>
 					<GLink size='Big'>{label}</GLink>
 					<IconWrapper>
 						{open ? (
@@ -53,8 +54,8 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
 							<IconChevronDown size={24} />
 						)}
 					</IconWrapper>
-				</Controller>
-			</ControllerWrapper>
+				</ControllerWrapper>
+			</Controller>
 			{open && <Options options={options} setOpen={setOpen} />}
 		</Wrapper>
 	);
@@ -108,14 +109,15 @@ interface IControllerWrapperProps {
 const ControllerWrapper = styled(Flex)<IControllerWrapperProps>`
 	// prevent pointer events when dropdown is open
 	pointer-events: ${props => (props.isActive ? 'auto' : 'none')};
+	width: 100%;
 `;
 
 const Controller = styled(Flex)`
-	width: 100%;
 	padding: 10px 16px;
 	border-radius: 8px;
 	background-color: ${neutralColors.gray[300]};
 	cursor: pointer;
+	pointer-events: auto;
 `;
 
 const IconWrapper = styled.div`
@@ -138,6 +140,8 @@ const OptionsWrapper = styled.div`
 const OptionWrapper = styled(Flex)`
 	padding: 8px 16px;
 	border-radius: 8px;
+	margin-bottom: 8px;
+	align-items: center;
 	cursor: pointer;
 	&:hover {
 		background-color: ${neutralColors.gray[200]};
