@@ -28,7 +28,7 @@ import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { formatDonations } from '@/helpers/number';
 
 const QFSection = () => {
-	const { formatMessage, locale } = useIntl();
+	const { formatMessage } = useIntl();
 	const { projectData } = useProjectContext();
 	const { estimatedMatching, sumDonationValueUsdForActiveQfRound } =
 		projectData || {};
