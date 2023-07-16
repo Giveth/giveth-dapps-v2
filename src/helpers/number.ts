@@ -51,6 +51,7 @@ export const formatDonations = (
 	if (amount === 0) {
 		return rounded ? '0' : '0.00';
 	}
-	if (amount < 0.01) return `<${symbol}0.01`;
+	if (rounded && amount < 0.01) return '<${symbol}0.01';
+	if (amount < 0.01) return `<${symbol}1`;
 	return !rounded ? symbol + amount.toFixed(2) : symbol + Math.round(amount);
 };
