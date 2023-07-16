@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import { GLink, neutralColors } from '@giveth/ui-design-system';
 import { Flex } from './styled-components/Flex';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
+import { Shadow } from './styled-components/Shadow';
 
 interface IDropdownProps {
 	label: string;
@@ -82,9 +83,10 @@ const Wrapper = styled.div`
 `;
 
 const Controller = styled(Flex)`
-	padding: 8px 16px;
-	cursor: pointer;
+	padding: 10px 16px;
+	border-radius: 8px;
 	background-color: ${neutralColors.gray[300]};
+	cursor: pointer;
 `;
 
 const OptionsWrapper = styled.div`
@@ -96,10 +98,12 @@ const OptionsWrapper = styled.div`
 	border-radius: 16px;
 	padding: 8px;
 	margin-top: 8px;
+	box-shadow: ${Shadow.Neutral[400]};
 `;
 
 const OptionWrapper = styled(Flex)`
 	padding: 8px 16px;
+	border-radius: 8px;
 	cursor: pointer;
 	&:hover {
 		background-color: ${neutralColors.gray[200]};
