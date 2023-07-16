@@ -32,6 +32,7 @@ export interface IOption {
 	label: string;
 	icon?: ReactNode;
 	cb?: any;
+	disabled?: boolean;
 }
 
 export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
