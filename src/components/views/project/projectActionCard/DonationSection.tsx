@@ -76,7 +76,12 @@ export const DonateSection = () => {
 						id: 'component.donation_section.desc',
 					})}
 				</P>
-				<a href='https://docs.giveth.io/whatisgiveth/zero-fees' target='_blank' referrerPolicy='no-referrer'>
+				<a
+					href='https://docs.giveth.io/whatisgiveth/zero-fees'
+					target='_blank'
+					referrerPolicy='no-referrer'
+					rel='noreferrer'
+				>
 					<LearnLink alignItems='center' gap='2px'>
 						<Subline>
 							{formatMessage({
