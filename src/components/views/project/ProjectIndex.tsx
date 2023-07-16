@@ -111,11 +111,11 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 			<HeadContainer>
 				<ProjectBadges />
 				<Row>
-					<Col xs={12} md={8} lg={9}>
+					<Col xs={12} md={8} lg={8.5}>
 						<ProjectHeader />
 						<ProjectGIVbackToast />
 					</Col>
-					<Col xs={12} md={4} lg={3}>
+					<Col xs={12} md={4} lg={3.5}>
 						<ProjectActionCard />
 					</Col>
 					{isDraft && (
