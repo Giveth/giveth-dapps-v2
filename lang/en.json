@@ -1379,5 +1379,6 @@
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"ubi": "UBI",
+	"component.qf-section.tooltip": "This estimation is the matching funds that this project would get if the round ended now, disregarding fraud analysis.",
 	"water-and-sanitation": "Water & Sanitation"
 }

@@ -56,7 +56,7 @@ const QFSection = () => {
 				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
 					<TooltipContent>
 						{formatMessage({
-							id: 'tooltip.donation.matching',
+							id: 'component.qf-section.tooltip',
 						})}
 					</TooltipContent>
 				</IconWithTooltip>
