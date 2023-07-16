@@ -7,7 +7,12 @@ import {
 	useState,
 } from 'react';
 import styled from 'styled-components';
-import { GLink, neutralColors } from '@giveth/ui-design-system';
+import {
+	GLink,
+	IconChevronDown,
+	IconChevronUp,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import { Flex } from './styled-components/Flex';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import { Shadow } from './styled-components/Shadow';
@@ -33,14 +38,23 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
 	const [open, setOpen] = useState(false);
 	return (
 		<Wrapper>
-			<Controller
+			<ControllerWrapper
 				onClick={e => {
 					setOpen(true);
 				}}
 				isActive={!open}
 			>
-				<GLink size='Big'>{label}</GLink>
-			</Controller>
+				<Controller justifyContent='space-between'>
+					<GLink size='Big'>{label}</GLink>
+					<IconWrapper>
+						{open ? (
+							<IconChevronUp size={24} />
+						) : (
+							<IconChevronDown size={24} />
+						)}
+					</IconWrapper>
+				</Controller>
+			</ControllerWrapper>
 			{open && <Options options={options} setOpen={setOpen} />}
 		</Wrapper>
 	);
@@ -85,18 +99,28 @@ const Option: FC<IOptionProps> = ({ option, setOpen }) => {
 
 const Wrapper = styled.div`
 	position: relative;
+	user-select: none;
 `;
-
-interface IControllerProps {
+interface IControllerWrapperProps {
 	isActive: boolean;
 }
 
-const Controller = styled(Flex)<IControllerProps>`
+const ControllerWrapper = styled(Flex)<IControllerWrapperProps>`
+	// prevent pointer events when dropdown is open
+	pointer-events: ${props => (props.isActive ? 'auto' : 'none')};
+`;
+
+const Controller = styled(Flex)`
+	width: 100%;
 	padding: 10px 16px;
 	border-radius: 8px;
 	background-color: ${neutralColors.gray[300]};
 	cursor: pointer;
-	pointer-events: ${props => (props.isActive ? 'auto' : 'none')};
+`;
+
+const IconWrapper = styled.div`
+	width: 24px;
+	height: 24px;
 `;
 
 const OptionsWrapper = styled.div`
