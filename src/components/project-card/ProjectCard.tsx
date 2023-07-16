@@ -201,39 +201,43 @@ const ProjectCard = (props: IProjectCard) => {
 						) : null}
 					</Flex>
 				</Link>
-				{verified && (
+				{(isRoundActive || verified) && (
 					<Link href={slugToProjectView(slug)}>
 						<Hr />
 						<PaddedRow justifyContent='space-between'>
 							<Flex gap='16px'>
-								<Flex alignItems='center' gap='4px'>
-									<IconVerifiedBadge16
-										color={semanticColors.jade[500]}
-									/>
-									<VerifiedText>
-										{formatMessage({
-											id: 'label.verified',
-										})}
-									</VerifiedText>
-								</Flex>
+								{verified && (
+									<Flex alignItems='center' gap='4px'>
+										<IconVerifiedBadge16
+											color={semanticColors.jade[500]}
+										/>
+										<VerifiedText>
+											{formatMessage({
+												id: 'label.verified',
+											})}
+										</VerifiedText>
+									</Flex>
+								)}
 								{isRoundActive && (
 									<QFBadge>{activeRound?.name}</QFBadge>
 								)}
 							</Flex>
-							<GivpowerRankContainer
-								gap='8px'
-								alignItems='center'
-							>
-								<IconRocketInSpace16
-									color={neutralColors.gray[700]}
-								/>
-								<B>
-									{projectPower?.powerRank &&
-									projectPower?.totalPower !== 0
-										? `#${projectPower.powerRank}`
-										: '--'}
-								</B>
-							</GivpowerRankContainer>
+							{verified && (
+								<GivpowerRankContainer
+									gap='8px'
+									alignItems='center'
+								>
+									<IconRocketInSpace16
+										color={neutralColors.gray[700]}
+									/>
+									<B>
+										{projectPower?.powerRank &&
+										projectPower?.totalPower !== 0
+											? `#${projectPower.powerRank}`
+											: '--'}
+									</B>
+								</GivpowerRankContainer>
+							)}
 						</PaddedRow>
 					</Link>
 				)}
@@ -428,7 +432,7 @@ const AmountRaisedText = styled(Subline)`
 const QFBadge = styled(Subline)`
 	background-color: ${brandColors.cyan[600]};
 	color: ${neutralColors.gray[100]};
-	padding: 0px 8px;
+	padding: 4px 8px;
 	border-radius: 16px;
 	display: flex;
 	align-items: center;
