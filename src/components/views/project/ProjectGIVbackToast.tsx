@@ -23,6 +23,7 @@ import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
 import { isSSRMode } from '@/lib/helpers';
 import BoostModal from '@/components/modals/Boost/BoostModal';
 import { useAppSelector } from '@/features/hooks';
+import { formatDonations } from '@/helpers/number';
 
 const ProjectGIVbackToast = () => {
 	const { projectData, isAdmin } = useProjectContext();
@@ -43,7 +44,7 @@ const ProjectGIVbackToast = () => {
 				formatMessage({
 					id: `project.givback_toast.title.verified_owner_1`,
 				}) +
-				((givbackFactor || 0) * 100).toFixed(2) +
+				formatDonations((givbackFactor || 0) * 100, '', true) +
 				'%' +
 				formatMessage({
 					id: `project.givback_toast.title.verified_owner_2`,
