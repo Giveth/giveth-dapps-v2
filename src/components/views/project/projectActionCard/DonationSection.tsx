@@ -29,7 +29,9 @@ export const DonateSection = () => {
 			{sumDonationValueUsd && sumDonationValueUsd !== 0 ? (
 				<DonateInfo>
 					{isMobile && <br />}
-					<Title>Total amount raised</Title>
+					<Title>
+						{formatMessage({ id: 'label.total_amount_raised' })}
+					</Title>
 					<Amount weight={700}>
 						{formatDonations(sumDonationValueUsd || 0, '$')}
 					</Amount>
