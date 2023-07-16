@@ -61,12 +61,8 @@ function getMessageWithBoldText(
 	return parts.map((part, index) => {
 		if (part.startsWith('<strong>') && part.endsWith('</strong>')) {
 			const text = part.replace(/<\/?strong>/g, '');
-			console.log({ text });
-
 			return <strong key={index}>{text}</strong>;
 		}
-		console.log({ part });
-
 		return part;
 	});
 }
