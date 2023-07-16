@@ -284,17 +284,6 @@ const VerifiedText = styled(Subline)`
 	color: ${semanticColors.jade[500]};
 `;
 
-const GivBackText = styled(Subline)`
-	text-transform: uppercase;
-	color: ${brandColors.giv[500]};
-`;
-
-const GivBackIconContainer = styled.div`
-	display: flex;
-	align-items: center;
-	transform: scale(0.8);
-`;
-
 const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
 	position: absolute;
 	bottom: 30px;
