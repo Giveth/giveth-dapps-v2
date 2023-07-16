@@ -37,7 +37,7 @@ const projectsItems = {
 		},
 		{
 			name: 'Quadratic Funding',
-			url: Routes.QuadraticFunding,
+			url: Routes.QFProjects,
 			label: 'label.eligible_for_matching',
 		},
 		// { name: 'Popular', query: '?q=popular' },
@@ -66,7 +66,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 						<Link key={idx} href={explore.url}>
 							<Item
 								className={`${
-									explore.url === Routes.QuadraticFunding
+									explore.url === Routes.QFProjects
 										? 'quadratic-menu-item'
 										: ''
 								} projects-menu-items`}

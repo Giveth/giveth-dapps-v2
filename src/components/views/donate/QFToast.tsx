@@ -77,10 +77,14 @@ const QFToast = () => {
 			</Title>
 			<Description>{description}</Description>
 			<FlexCenter>
-				<InternalLink href={Routes.Passport}>
+				<InternalLink
+					href={isEligible ? Routes.QFProjects : Routes.Passport}
+				>
 					<Button
 						label={formatMessage({
-							id: 'label.passport.link.go_to_passport',
+							id: isEligible
+								? 'label.go_to_projects'
+								: 'label.passport.link.go_to_passport',
 						})}
 						buttonType='primary'
 						size='small'
