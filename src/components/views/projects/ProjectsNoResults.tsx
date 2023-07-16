@@ -19,7 +19,7 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 		<Wrapper>
 			<Content>
 				{formatMessage({
-					id: 'label.there_is_no_projects_matching_your_search',
+					id: 'label.there_are_no_projects_matching_your_search',
 				})}
 			</Content>
 			<LeadMedium>
