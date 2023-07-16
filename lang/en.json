@@ -1380,5 +1380,8 @@
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"ubi": "UBI",
 	"component.qf-section.tooltip": "This estimation is the matching funds that this project would get if the round ended now, disregarding fraud analysis.",
+	"component.project-stats.status.tooltip": "Projects status refers to if the project is active and raising funds, deactivated, canceled or in draft phase.",
+	"component.project-stats.listing.tooltip": "If a project is listed, it is included on the Projects page, and can be found using our search and filter functions. Unlisted projects can only be found via direct link.",
+	"component.project-stats.verification.tooltip": "Verified projects have been reviewed by our team and found to be providing a public good, with a history of impact and reputation at stake.",
 	"water-and-sanitation": "Water & Sanitation"
 }
