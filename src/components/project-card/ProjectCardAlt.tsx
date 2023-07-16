@@ -16,7 +16,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
 import InternalLink from '@/components/InternalLink';
 import { addressToUserView, slugToProjectView } from '@/lib/routeCreators';
-import VerificationBadge from '@/components/badges/VerificationBadge';
+import { VerifiedBadge } from '@/components/badges/VerifiedBadge';
 import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
 import { PFP } from '../PFP';
 import { Flex } from '../styled-components/Flex';
@@ -60,9 +60,7 @@ const ProjectCard = (props: IProjectCard) => {
 				isAbsolute={true}
 			/>
 			{!isNew && (
-				<BadgeContainer>
-					{verified && <VerificationBadge />}
-				</BadgeContainer>
+				<BadgeContainer>{verified && <VerifiedBadge />}</BadgeContainer>
 			)}
 			<CardBody isNew={isNew}>
 				<InternalLink href={slugToProjectView(slug)}>

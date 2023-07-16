@@ -29,7 +29,11 @@ export const ProjectStats = () => {
 							icon={<IconHelpFilled16 />}
 							direction='bottom'
 						>
-							<StatTooltip>Project status</StatTooltip>
+							<StatTooltip>
+								{formatMessage({
+									id: 'component.project-stats.status.tooltip',
+								})}
+							</StatTooltip>
 						</IconWithTooltip>
 					</Flex>
 					<StatusBadge status={projectData?.status.name} />
@@ -41,7 +45,11 @@ export const ProjectStats = () => {
 							icon={<IconHelpFilled16 />}
 							direction='bottom'
 						>
-							<StatTooltip>Listing</StatTooltip>
+							<StatTooltip>
+								{formatMessage({
+									id: 'component.project-stats.listing.tooltip',
+								})}
+							</StatTooltip>
 						</IconWithTooltip>
 					</Flex>
 					<ListingBadge listed={projectData?.listed} />
@@ -55,14 +63,21 @@ export const ProjectStats = () => {
 							icon={<IconHelpFilled16 />}
 							direction='bottom'
 						>
-							<StatTooltip>Verification status</StatTooltip>
+							<StatTooltip>
+								{formatMessage({
+									id: 'component.project-stats.verification.tooltip',
+								})}
+							</StatTooltip>
 						</IconWithTooltip>
 					</Flex>
 					{projectData?.verified ? (
 						<Badge label='Verified' status={EBadgeStatus.SUCCESS} />
 					) : projectData?.verificationFormStatus ? (
 						<VerificationBadge
-							status={projectData?.verificationFormStatus}
+							isVerified={projectData?.verified}
+							verificationStatus={
+								projectData?.verificationFormStatus
+							}
 						/>
 					) : (
 						<Badge
