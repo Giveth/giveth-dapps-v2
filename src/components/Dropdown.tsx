@@ -33,7 +33,12 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
 	const [open, setOpen] = useState(false);
 	return (
 		<Wrapper>
-			<Controller onClick={() => setOpen(_open => !_open)}>
+			<Controller
+				onClick={e => {
+					setOpen(true);
+				}}
+				isActive={!open}
+			>
 				<GLink size='Big'>{label}</GLink>
 			</Controller>
 			{open && <Options options={options} setOpen={setOpen} />}
@@ -82,11 +87,16 @@ const Wrapper = styled.div`
 	position: relative;
 `;
 
-const Controller = styled(Flex)`
+interface IControllerProps {
+	isActive: boolean;
+}
+
+const Controller = styled(Flex)<IControllerProps>`
 	padding: 10px 16px;
 	border-radius: 8px;
 	background-color: ${neutralColors.gray[300]};
 	cursor: pointer;
+	pointer-events: ${props => (props.isActive ? 'auto' : 'none')};
 `;
 
 const OptionsWrapper = styled.div`
