@@ -25,6 +25,7 @@ export interface IOption {
 	type: OptionType;
 	label: string;
 	icon?: ReactNode;
+	cb?: any;
 }
 
 export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
@@ -50,7 +51,7 @@ const Options: FC<IOptionsProps> = ({ options, setOpen }) => {
 	return (
 		<OptionsWrapper ref={ddRef}>
 			{options.map((option, idx) => (
-				<Option key={idx} option={option} />
+				<Option key={idx} option={option} setOpen={setOpen} />
 			))}
 		</OptionsWrapper>
 	);
@@ -58,11 +59,19 @@ const Options: FC<IOptionsProps> = ({ options, setOpen }) => {
 
 interface IOptionProps {
 	option: IOption;
+	setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const Option: FC<IOptionProps> = ({ option }) => {
+const Option: FC<IOptionProps> = ({ option, setOpen }) => {
 	return (
-		<OptionWrapper onClick={() => console.log('Hi babe')}>
+		<OptionWrapper
+			onClick={() => {
+				option.cb && option.cb();
+				setOpen(false);
+			}}
+			gap='8px'
+		>
+			{option.icon && option.icon}
 			{option.label}
 		</OptionWrapper>
 	);
@@ -83,11 +92,16 @@ const OptionsWrapper = styled.div`
 	top: 100%;
 	left: 0;
 	width: 100%;
-	/* background-color: ${neutralColors.gray[100]}; */
-	background-color: red;
+	background-color: ${neutralColors.gray[100]};
 	border-radius: 16px;
 	padding: 8px;
 	margin-top: 8px;
 `;
 
-const OptionWrapper = styled(Flex)``;
+const OptionWrapper = styled(Flex)`
+	padding: 8px 16px;
+	cursor: pointer;
+	&:hover {
+		background-color: ${neutralColors.gray[200]};
+	}
+`;
