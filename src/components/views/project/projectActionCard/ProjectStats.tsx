@@ -74,7 +74,10 @@ export const ProjectStats = () => {
 						<Badge label='Verified' status={EBadgeStatus.SUCCESS} />
 					) : projectData?.verificationFormStatus ? (
 						<VerificationBadge
-							status={projectData?.verificationFormStatus}
+							isVerified={projectData?.verified}
+							verificationStatus={
+								projectData?.verificationFormStatus
+							}
 						/>
 					) : (
 						<Badge
