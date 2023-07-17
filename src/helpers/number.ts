@@ -49,7 +49,7 @@ export const formatDonations = (
 	rounded: boolean = false,
 ): string => {
 	if (amount === 0) {
-		return rounded ? '0' : '0.00';
+		return rounded ? `${symbol}0` : `${symbol}0.00`;
 	}
 	if (rounded && amount < 1) return `<${symbol}1`;
 	if (amount < 0.01) return `<${symbol}0.01`;
