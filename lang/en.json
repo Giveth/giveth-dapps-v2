@@ -39,6 +39,10 @@
 	"component.pfp_eligibility_modal.content.not_eligible": "The wallet address you connected with is not on our allowlist for early minting. If you think this is a mistake, contact our team. Check out our documentation for full details on eligibility, or come back when public minting opens on Mar 24, 2023, 16:00 UTC.",
 	"component.pfp_eligibility_modal.content.success": "You are eligible to mint your Giver early! Thanks for supporting Giveth",
 	"component.pfp_eligibility_modal.title.not_eligible": "Address is not eligible for early minting!",
+	"component.project-stats.listing.tooltip": "If a project is listed, it is included on the Projects page, and can be found using our search and filter functions. Unlisted projects can only be found via direct link.",
+	"component.project-stats.status.tooltip": "Projects status refers to if the project is active and raising funds, deactivated, canceled or in draft phase.",
+	"component.project-stats.verification.tooltip": "Verified projects have been reviewed by our team and found to be providing a public good, with a history of impact and reputation at stake.",
+	"component.qf-section.tooltip": "This estimation is the matching funds that this project would get if the round ended now, disregarding fraud analysis.",
 	"component.qf_middle_banner.desc": "Amplify your impact on verified projects! Donate on any of our 5 supported networks, earn rewards, and get your donations matched with the power of quadratic funding.",
 	"component.qf_middle_banner.title": "Giveth Alpha Round",
 	"component.regenstream_card.harvest_caption": "Use the Harvest button to claim liquid rewards from this RegenStream",
@@ -1379,9 +1383,5 @@
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"ubi": "UBI",
-	"component.qf-section.tooltip": "This estimation is the matching funds that this project would get if the round ended now, disregarding fraud analysis.",
-	"component.project-stats.status.tooltip": "Projects status refers to if the project is active and raising funds, deactivated, canceled or in draft phase.",
-	"component.project-stats.listing.tooltip": "If a project is listed, it is included on the Projects page, and can be found using our search and filter functions. Unlisted projects can only be found via direct link.",
-	"component.project-stats.verification.tooltip": "Verified projects have been reviewed by our team and found to be providing a public good, with a history of impact and reputation at stake.",
 	"water-and-sanitation": "Water & Sanitation"
 }
