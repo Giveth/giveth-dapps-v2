@@ -69,7 +69,7 @@ export const QFProjectsBanner = () => {
 	return (
 		<BannerContainer direction='column'>
 			<Image
-				src={'/images/banners/qfBanner.png'}
+				src={'/images/banners/qfBanner.webp'}
 				style={{ objectFit: 'cover' }}
 				fill
 				alt='QF Banner'
