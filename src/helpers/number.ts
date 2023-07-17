@@ -47,11 +47,17 @@ export const formatDonations = (
 	amount: number,
 	symbol: string = '',
 	rounded: boolean = false,
+	local: string = 'en-US',
 ): string => {
 	if (amount === 0) {
 		return rounded ? '0' : '0.00';
 	}
 	if (rounded && amount < 1) return `<${symbol}1`;
 	if (amount < 0.01) return `<${symbol}0.01`;
-	return !rounded ? symbol + amount.toFixed(2) : symbol + Math.round(amount);
+	return !rounded
+		? symbol +
+				Intl.NumberFormat(local, {
+					maximumFractionDigits: 2,
+				}).format(amount)
+		: symbol + Math.round(amount);
 };
