@@ -105,6 +105,28 @@ export const FETCH_PROJECT_BOOSTERS = gql`
 	}
 `;
 
+export const FETCH_PROJECT_INSTANT_BOOSTERS = gql`
+	query ($projectId: Int!, $take: Int, $skip: Int) {
+		getProjectUserInstantPower(
+			projectId: $projectId
+			take: $take
+			skip: $skip
+		) {
+			projectUserInstantPowers {
+				id
+				user {
+					name
+					walletAddress
+					avatar
+				}
+				projectId
+				boostedPower
+			}
+			total
+		}
+	}
+`;
+
 export const FETCH_PROJECT_BOOSTINGS = gql`
 	query userProjectPowers(
 		$take: Int
