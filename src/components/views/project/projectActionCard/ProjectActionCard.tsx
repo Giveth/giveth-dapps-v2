@@ -10,9 +10,6 @@ import { ProjectPublicActions } from './ProjectPublicActions';
 import { ProjectStats } from './ProjectStats';
 import { AdminActions } from './AdminActions';
 import { Flex } from '@/components/styled-components/Flex';
-import { useAppSelector } from '@/features/hooks';
-import LoadingAnimation from '@/animations/loading_giv.json';
-import LottieControl from '@/components/LottieControl';
 import { useProjectContext } from '@/context/project.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device, zIndex } from '@/lib/constants/constants';
@@ -75,12 +72,9 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 };
 
 const ProjectActionInnerCard = () => {
-	const { isLoading } = useAppSelector(state => state.user);
 	const { isAdmin, hasActiveQFRound } = useProjectContext();
 
-	return isLoading ? (
-		<LottieControl animationData={LoadingAnimation} size={300} />
-	) : (
+	return (
 		<>
 			{isAdmin && <AdminActions />}
 			{hasActiveQFRound ? <QFSection /> : <DonateSection />}
