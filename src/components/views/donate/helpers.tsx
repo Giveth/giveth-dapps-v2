@@ -145,7 +145,13 @@ export const createDonation: TCreateDonation = async props => {
 					});
 			},
 			onReceipt: () => {
-				updateDonation(donationId, EDonationStatus.VERIFIED);
+				if (donationId === 0) {
+					console.log('waiting for donationId');
+					setTimeout(donationId => {
+						console.log('setTimeout donationId', donationId);
+						updateDonation(donationId, EDonationStatus.VERIFIED);
+					}, 10000);
+				} else updateDonation(donationId, EDonationStatus.VERIFIED);
 			},
 		};
 
