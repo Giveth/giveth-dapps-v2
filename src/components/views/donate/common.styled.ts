@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { brandColors, Caption, neutralColors } from '@giveth/ui-design-system';
+import { Flex } from '@/components/styled-components/Flex';
 
-export const NetworkToast = styled.div`
-	display: flex;
+export const NetworkToast = styled(Flex)`
 	gap: 10px;
 	width: 100%;
 	margin-bottom: 9px;

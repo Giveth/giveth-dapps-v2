@@ -1,4 +1,5 @@
 import {
+	brandColors,
 	neutralColors,
 	semanticColors,
 	SublineBold,
@@ -11,6 +12,7 @@ export enum EBadgeStatus {
 	WARNING,
 	ERROR,
 	SUCCESS,
+	GIVETH,
 }
 
 interface IBadge {
@@ -30,6 +32,8 @@ const badgeStatusToColor = (status: EBadgeStatus) => {
 			return semanticColors.punch;
 		case EBadgeStatus.SUCCESS:
 			return semanticColors.jade;
+		case EBadgeStatus.GIVETH:
+			return brandColors.giv;
 		default:
 			return neutralColors.gray;
 	}

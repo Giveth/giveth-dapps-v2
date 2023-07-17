@@ -1,6 +1,6 @@
 import StorageLabel from '@/lib/localStorage';
+import { getLocalStorageData } from './localstorage';
 
 export function getTokens() {
-	const _tokens = localStorage.getItem(StorageLabel.TOKENS);
-	return _tokens ? JSON.parse(_tokens) : {};
+	return getLocalStorageData(StorageLabel.TOKENS);
 }

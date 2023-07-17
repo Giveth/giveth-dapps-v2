@@ -8,7 +8,7 @@ import {
 	useState,
 } from 'react';
 import { useRouter } from 'next/router';
-import { EProjectsFilter, IMainCategory } from '@/apollo/types/types';
+import { EProjectsFilter, IMainCategory, IQFRound } from '@/apollo/types/types';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 interface IVariables {
@@ -25,17 +25,26 @@ interface IProjectsContext {
 	setVariables: Dispatch<SetStateAction<IVariables>>;
 	mainCategories: IMainCategory[];
 	selectedMainCategory?: IMainCategory;
+	isQF: boolean;
+	qfRounds: IQFRound[];
 }
 
 const variablesDefaultValue = {
-	sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
+	sortingBy: EProjectsSortBy.GIVPOWER,
 	filters: undefined,
+};
+
+const variablesDefaultValueWithQF = {
+	sortingBy: EProjectsSortBy.GIVPOWER,
+	filters: [EProjectsFilter.ACTIVE_QF_ROUND],
 };
 
 const ProjectsContext = createContext<IProjectsContext>({
 	variables: variablesDefaultValue,
 	setVariables: () => console.log('setVariables not initialed yet!'),
 	mainCategories: [],
+	isQF: false,
+	qfRounds: [],
 });
 
 ProjectsContext.displayName = 'ProjectsContext';
@@ -44,16 +53,19 @@ export const ProjectsProvider = (props: {
 	children: ReactNode;
 	mainCategories: IMainCategory[];
 	selectedMainCategory?: IMainCategory;
+	isQF?: boolean;
+	qfRounds?: IQFRound[];
 }) => {
-	const { children, mainCategories, selectedMainCategory } = props;
+	const { children, mainCategories, selectedMainCategory, isQF, qfRounds } =
+		props;
 
 	const [variables, setVariables] = useState<IVariables>(
-		variablesDefaultValue,
+		isQF ? variablesDefaultValueWithQF : variablesDefaultValue,
 	);
 	const router = useRouter();
 
 	useEffect(() => {
-		let sort = EProjectsSortBy.INSTANT_BOOSTING;
+		let sort = EProjectsSortBy.GIVPOWER;
 		if (router.query.sort) {
 			switch ((router.query.sort as string).toLowerCase()) {
 				case EProjectsSortBy.MOST_FUNDED.toLowerCase():
@@ -93,6 +105,12 @@ export const ProjectsProvider = (props: {
 			) as EProjectsFilter[];
 		}
 
+		if (isQF) {
+			filters
+				? filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
+				: (filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
+		}
+
 		let term = router.query.term as string;
 		let campaignSlug = router.query.campaign as string;
 		let category =
@@ -123,6 +141,7 @@ export const ProjectsProvider = (props: {
 		router.query.filter,
 		router.query.campaign,
 		router.query?.slug,
+		isQF,
 	]);
 
 	return (
@@ -132,6 +151,8 @@ export const ProjectsProvider = (props: {
 				setVariables,
 				mainCategories,
 				selectedMainCategory,
+				isQF: isQF || false,
+				qfRounds: qfRounds || [],
 			}}
 		>
 			{children}

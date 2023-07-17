@@ -18,13 +18,14 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import { showToastError } from '@/lib/helpers';
 import { gToast, ToastType } from '@/components/toasts';
-import ProjectTimeline, { TimelineSection } from './ProjectTimeline';
 import { IProjectUpdate } from '@/apollo/types/types';
 import { RemoveUpdateModal } from '@/components/modals/RemoveUpdateModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useProjectContext } from '@/context/project.context';
+import ProjectTimeline from '@/components/views/project/projectUpdates/ProjectTimeline';
+import TimelineSection from '@/components/views/project/projectUpdates/TimelineSection';
 
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
@@ -239,7 +240,7 @@ const ProjectUpdates = () => {
 								setValue={setNewUpdate}
 								setIsLimitExceeded={setIsLimitExceeded}
 								limit={UPDATE_LIMIT}
-								placeholder='Clear project description explaining who your are and what you want to do with the funds...'
+								placeholder='Clear project description explaining who you are and what you want to do with the funds...'
 							/>
 						</div>
 						<Button
@@ -302,6 +303,7 @@ const Title = styled(H5)`
 `;
 
 const InputContainer = styled.div`
+	margin-bottom: 40px;
 	display: flex;
 	flex-direction: row;
 `;

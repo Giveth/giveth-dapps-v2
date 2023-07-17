@@ -516,7 +516,7 @@ const Dot = styled.div`
 	height: 24px;
 	padding: 12px;
 	background-color: ${brandColors.giv[500]};
-	border: 4px solid ${brandColors.giv[100]}};
+	border: 4px solid ${brandColors.giv[100]};
 	border-radius: 50%;
 	color: white;
 	font-size: 16px;

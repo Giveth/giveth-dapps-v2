@@ -20,6 +20,7 @@ const Routes = {
 	Home: '/',
 	CreateProject: '/create',
 	Projects: '/projects',
+	QFProjects: '/qf',
 	Project: '/project',
 	Donate: `/donate`,
 	User: `/user`,
@@ -53,6 +54,7 @@ const Routes = {
 	HowToBuyXdai: '/how-to-buy-xdai',
 	PurchaseXdai: '/purchase-xdai',
 	Referral: '/referral',
+	Passport: '/passport',
 };
 
 export default Routes;

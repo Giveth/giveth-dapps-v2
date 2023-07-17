@@ -9,7 +9,6 @@ import {
 	IconDonation16,
 	neutralColors,
 	P,
-	IconRocketInSpace16,
 	IconFast16,
 	IconFlash16,
 } from '@giveth/ui-design-system';
@@ -44,11 +43,11 @@ const ProjectsSortSelect = () => {
 	const { formatMessage } = useIntl();
 
 	const sortByOptions = [
-		{
-			label: formatMessage({ id: 'label.givpower' }),
-			value: EProjectsSortBy.INSTANT_BOOSTING,
-			icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
-		},
+		// {
+		// 	label: formatMessage({ id: 'label.givpower' }),
+		// 	value: EProjectsSortBy.INSTANT_BOOSTING,
+		// 	icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
+		// },
 		{
 			label: formatMessage({ id: 'label.rank' }),
 			value: EProjectsSortBy.GIVPOWER,
@@ -65,12 +64,12 @@ const ProjectsSortSelect = () => {
 			icon: <IconArrowBottom size={16} color={brandColors.deep[900]} />,
 		},
 		{
-			label: formatMessage({ id: 'label.most_liked' }),
+			label: formatMessage({ id: 'label.likes' }),
 			value: EProjectsSortBy.MOST_LIKED,
 			icon: <IconHeartOutline16 color={brandColors.deep[900]} />,
 		},
 		{
-			label: formatMessage({ id: 'label.most_funded' }),
+			label: formatMessage({ id: 'label.amount_raised' }),
 			value: EProjectsSortBy.MOST_FUNDED,
 			icon: <IconDonation16 color={brandColors.deep[900]} />,
 		},

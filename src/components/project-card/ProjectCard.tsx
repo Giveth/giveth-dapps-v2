@@ -9,12 +9,11 @@ import {
 	B,
 	Subline,
 	semanticColors,
-	IconGIVBack,
 	IconRocketInSpace16,
 	IconVerifiedBadge16,
+	H5,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
-
 import { useIntl } from 'react-intl';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
@@ -27,6 +26,12 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ProjectCardUserName } from './ProjectCardUserName';
+import {
+	calculateTotalEstimatedMatching,
+	getActiveRound,
+	hasActiveRound,
+} from '@/helpers/qf';
+import { formatDonations } from '@/helpers/number';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -45,13 +50,17 @@ const ProjectCard = (props: IProjectCard) => {
 		image,
 		slug,
 		adminUser,
-		totalDonations,
+		sumDonationValueUsd,
+		sumDonationValueUsdForActiveQfRound,
 		updatedAt,
 		organization,
 		verified,
 		projectPower,
+		countUniqueDonors,
+		countUniqueDonorsForActiveQfRound,
+		qfRounds,
+		estimatedMatching,
 	} = project;
-
 	const [isHover, setIsHover] = useState(false);
 
 	const orgLabel = organization?.label;
@@ -59,6 +68,13 @@ const ProjectCard = (props: IProjectCard) => {
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
 	const { formatMessage, formatRelativeTime } = useIntl();
+
+	const isRoundActive = hasActiveRound(qfRounds);
+	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
+		estimatedMatching || {};
+
+	const activeRound = getActiveRound(qfRounds);
+	const hasFooter = isRoundActive || verified;
 
 	return (
 		<Wrapper
@@ -79,7 +95,7 @@ const ProjectCard = (props: IProjectCard) => {
 			<CardBody
 				isHover={
 					isHover
-						? verified
+						? hasFooter
 							? ECardBodyHover.FULL
 							: ECardBodyHover.HALF
 						: ECardBodyHover.NONE
@@ -111,59 +127,117 @@ const ProjectCard = (props: IProjectCard) => {
 				/>
 				<Link href={slugToProjectView(slug)}>
 					<Description>{descriptionSummary}</Description>
-					<PaddedRow alignItems='center' gap='4px'>
-						<PriceText>
-							${Math.round(totalDonations as number)}
-						</PriceText>
-						<LightSubline>
-							{' '}
-							{formatMessage({ id: 'label.raised_two' })}
-						</LightSubline>
-					</PaddedRow>
+					<Flex justifyContent='space-between'>
+						<PaddedRow flexDirection='column' gap='2px'>
+							<PriceText>
+								{formatDonations(
+									(isRoundActive
+										? sumDonationValueUsdForActiveQfRound
+										: sumDonationValueUsd) || 0,
+									'$',
+								)}
+							</PriceText>
+							{isRoundActive ? (
+								<AmountRaisedText>
+									{formatMessage({
+										id: 'label.amount_raised_in_this_round',
+									})}
+								</AmountRaisedText>
+							) : (
+								<AmountRaisedText>
+									{formatMessage({
+										id: 'label.total_amount_raised',
+									})}
+								</AmountRaisedText>
+							)}
+
+							<div>
+								<LightSubline>
+									{formatMessage({
+										id: 'label.raised_from',
+									})}{' '}
+								</LightSubline>
+								<Subline style={{ display: 'inline-block' }}>
+									&nbsp;
+									{isRoundActive
+										? countUniqueDonorsForActiveQfRound
+										: countUniqueDonors}
+									&nbsp;
+								</Subline>
+								<LightSubline>
+									{formatMessage(
+										{
+											id: 'label.contributors',
+										},
+										{
+											count: isRoundActive
+												? countUniqueDonorsForActiveQfRound
+												: countUniqueDonors,
+										},
+									)}
+								</LightSubline>
+							</div>
+						</PaddedRow>
+						{isRoundActive ? (
+							<PaddedRow flexDirection='column' gap='6px'>
+								<EstimatedMatchingPrice>
+									+
+									{formatDonations(
+										calculateTotalEstimatedMatching(
+											projectDonationsSqrtRootSum,
+											allProjectsSum,
+											matchingPool,
+										),
+										'$',
+										true,
+									)}
+								</EstimatedMatchingPrice>
+								<LightSubline>
+									{formatMessage({
+										id: 'label.estimated_matching',
+									})}
+								</LightSubline>
+							</PaddedRow>
+						) : null}
+					</Flex>
 				</Link>
-				{verified && (
+				{hasFooter && (
 					<Link href={slugToProjectView(slug)}>
 						<Hr />
 						<PaddedRow justifyContent='space-between'>
 							<Flex gap='16px'>
-								<Flex alignItems='center' gap='4px'>
-									<IconVerifiedBadge16
-										color={semanticColors.jade[500]}
-									/>
-									<VerifiedText>
-										{formatMessage({
-											id: 'label.verified',
-										})}
-									</VerifiedText>
-								</Flex>
-								<Flex alignItems='center' gap='2px'>
-									<GivBackIconContainer>
-										<IconGIVBack
-											size={24}
-											color={brandColors.giv[500]}
+								{verified && (
+									<Flex alignItems='center' gap='4px'>
+										<IconVerifiedBadge16
+											color={semanticColors.jade[500]}
 										/>
-									</GivBackIconContainer>
-									<GivBackText>
-										{formatMessage({
-											id: 'label.givbacks',
-										})}
-									</GivBackText>
-								</Flex>
+										<VerifiedText>
+											{formatMessage({
+												id: 'label.verified',
+											})}
+										</VerifiedText>
+									</Flex>
+								)}
+								{isRoundActive && (
+									<QFBadge>{activeRound?.name}</QFBadge>
+								)}
 							</Flex>
-							<GivpowerRankContainer
-								gap='8px'
-								alignItems='center'
-							>
-								<IconRocketInSpace16
-									color={neutralColors.gray[700]}
-								/>
-								<B>
-									{projectPower?.powerRank &&
-									projectPower?.totalPower !== 0
-										? `#${projectPower.powerRank}`
-										: '--'}
-								</B>
-							</GivpowerRankContainer>
+							{verified && (
+								<GivpowerRankContainer
+									gap='8px'
+									alignItems='center'
+								>
+									<IconRocketInSpace16
+										color={neutralColors.gray[700]}
+									/>
+									<B>
+										{projectPower?.powerRank &&
+										projectPower?.totalPower !== 0
+											? `#${projectPower.powerRank}`
+											: '--'}
+									</B>
+								</GivpowerRankContainer>
+							)}
 						</PaddedRow>
 					</Link>
 				)}
@@ -194,30 +268,20 @@ const CustomizedDonateButton = styled(DonateButton)<{ isHover: boolean }>`
 	}
 `;
 
-const PriceText = styled(B)`
+const PriceText = styled(H5)`
 	display: inline;
-	color: ${neutralColors.gray[800]};
+	color: ${neutralColors.gray[900]};
+	font-weight: 700;
 `;
 
 const LightSubline = styled(Subline)`
-	display: inline;
+	display: inline-block;
 	color: ${neutralColors.gray[700]};
 `;
 
 const VerifiedText = styled(Subline)`
 	text-transform: uppercase;
 	color: ${semanticColors.jade[500]};
-`;
-
-const GivBackText = styled(Subline)`
-	text-transform: uppercase;
-	color: ${brandColors.giv[500]};
-`;
-
-const GivBackIconContainer = styled.div`
-	display: flex;
-	align-items: center;
-	transform: scale(0.8);
 `;
 
 const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
@@ -263,7 +327,7 @@ const CardBody = styled.div<ICardBody>`
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: 192px;
+	top: 112px;
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
 	border-radius: ${props =>
@@ -271,10 +335,10 @@ const CardBody = styled.div<ICardBody>`
 	${mediaQueries.laptopS} {
 		top: ${props =>
 			props.isHover == ECardBodyHover.FULL
-				? '109px'
+				? '59px'
 				: props.isHover == ECardBodyHover.HALF
-				? '150px'
-				: '186px'};
+				? '104px'
+				: '137px'};
 	}
 `;
 
@@ -327,6 +391,8 @@ export const PaddedRow = styled(Flex)`
 `;
 
 export const StyledPaddedRow = styled(PaddedRow)`
+	margin-bottom: 16px;
+	margin-top: 2px;
 	& > a span:hover {
 		color: ${brandColors.pinky[500]} !important;
 	}
@@ -339,6 +405,26 @@ const ActionButtons = styled(PaddedRow)`
 	margin: 25px 0;
 	gap: 16px;
 	flex-direction: column;
+`;
+
+const EstimatedMatchingPrice = styled(H5)`
+	color: ${semanticColors.jade[500]};
+`;
+
+const AmountRaisedText = styled(Subline)`
+	color: ${neutralColors.gray[700]};
+	background-color: ${neutralColors.gray[300]};
+	padding: 2px 8px;
+	border-radius: 4px;
+`;
+
+const QFBadge = styled(Subline)`
+	background-color: ${brandColors.cyan[600]};
+	color: ${neutralColors.gray[100]};
+	padding: 4px 8px;
+	border-radius: 16px;
+	display: flex;
+	align-items: center;
 `;
 
 export default ProjectCard;
