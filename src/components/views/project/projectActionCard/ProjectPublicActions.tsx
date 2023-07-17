@@ -29,6 +29,7 @@ import { likeProject, unlikeProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { slugToProjectDonate } from '@/lib/routeCreators';
+import { IUser } from '@/apollo/types/types';
 
 export const ProjectPublicActions = () => {
 	const [showModal, setShowShareModal] = useState<boolean>(false);
@@ -49,36 +50,38 @@ export const ProjectPublicActions = () => {
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
 
-	useEffect(() => {
-		const fetchProjectReaction = async () => {
-			if (user?.id && project.id && !likeLoading) {
-				try {
-					const { data } = await client.query({
-						query: FETCH_PROJECT_REACTION_BY_ID,
-						variables: {
-							id: Number(project.id),
-							connectedWalletUserId: Number(user?.id),
-						},
-						fetchPolicy: 'no-cache',
-					});
-					const _totalReactions = data?.projectById?.totalReactions;
-					const _reaction = data?.projectById?.reaction;
-					setTotalReactions(_totalReactions);
-					setReaction(_reaction);
-				} catch (e) {
-					showToastError(e);
-					captureException(e, {
-						tags: {
-							section: 'fetchProjectReaction',
-						},
-					});
-				}
-			} else {
-				setReaction(undefined);
+	const fetchProjectReaction = async (_user?: IUser) => {
+		const currentUser = _user || user;
+		if (currentUser?.id && project.id) {
+			try {
+				const { data } = await client.query({
+					query: FETCH_PROJECT_REACTION_BY_ID,
+					variables: {
+						id: Number(project.id),
+						connectedWalletUserId: Number(currentUser?.id),
+					},
+					fetchPolicy: 'no-cache',
+				});
+				const _totalReactions = data?.projectById?.totalReactions;
+				const _reaction = data?.projectById?.reaction;
+				setTotalReactions(_totalReactions);
+				setReaction(_reaction);
+			} catch (e) {
+				showToastError(e);
+				captureException(e, {
+					tags: {
+						section: 'fetchProjectReaction',
+					},
+				});
 			}
-		};
+		} else {
+			setReaction(undefined);
+		}
+	};
+
+	useEffect(() => {
 		fetchProjectReaction();
-	}, [project.id, user?.id, likeLoading]);
+	}, [project.id, user?.id]);
 
 	const likeUnlikeProject = async () => {
 		if (projectId) {
@@ -107,6 +110,7 @@ export const ProjectPublicActions = () => {
 					},
 				});
 			} finally {
+				fetchProjectReaction(user);
 				setLikeLoading(false);
 			}
 		}
@@ -119,14 +123,6 @@ export const ProjectPublicActions = () => {
 		signInThenLike,
 		EModalEvents.CONNECTED,
 	);
-
-	const setReferral = async () => {
-		await dispatch(
-			startChainvineReferral({
-				address: user?.walletAddress!,
-			}),
-		);
-	};
 
 	const checkSignInThenLike = () => {
 		if (isSSRMode) return;
