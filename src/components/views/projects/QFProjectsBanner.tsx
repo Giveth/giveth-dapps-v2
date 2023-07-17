@@ -1,10 +1,19 @@
-import { semanticColors, H1, B, Lead } from '@giveth/ui-design-system';
+import {
+	semanticColors,
+	H1,
+	B,
+	Lead,
+	Container,
+	Row,
+	H2,
+	Col,
+	mediaQueries,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useProjectsContext } from '@/context/projects.context';
-import { BannerContainer } from './ProjectsBanner';
 import { Flex } from '@/components/styled-components/Flex';
 import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
@@ -67,48 +76,85 @@ export const QFProjectsBanner = () => {
 	}, [state, activeRound]);
 
 	return (
-		<BannerContainer direction='column'>
+		<BannerContainer>
 			<Image
 				src={'/images/banners/qfBanner.webp'}
 				style={{ objectFit: 'cover' }}
 				fill
 				alt='QF Banner'
 			/>
-			<Title weight={700}>
-				{formatMessage({ id: 'label.quadratic_funding' })}
-				{activeRound ? ' - ' + activeRound.name : null}
-			</Title>
-			{(state === ERoundStatus.NOT_STARTED ||
-				state === ERoundStatus.RUNNING) && (
-				<Desc>
-					<Lead>
-						{formatMessage({
-							id:
-								state === ERoundStatus.NOT_STARTED
-									? 'label.round_starts_in'
-									: 'label.round_ends_in',
-						})}
-					</Lead>
-					<B>
-						{activeRound && timer && timer > 0
-							? durationToString(timer, 3)
-							: '--'}
-					</B>
-				</Desc>
-			)}
+			<Container>
+				<Row>
+					<StyledCol xs={12} md={6}>
+						<Title weight={700}>
+							{formatMessage({ id: 'label.quadratic_funding' })}
+						</Title>
+						<Name>{activeRound ? activeRound.name : null}</Name>
+						{(state === ERoundStatus.NOT_STARTED ||
+							state === ERoundStatus.RUNNING) && (
+							<Desc>
+								<Lead>
+									{formatMessage({
+										id:
+											state === ERoundStatus.NOT_STARTED
+												? 'label.round_starts_in'
+												: 'label.round_ends_in',
+									})}
+								</Lead>
+								<B>
+									{activeRound && timer && timer > 0
+										? durationToString(timer, 3)
+										: '--'}
+								</B>
+							</Desc>
+						)}
+					</StyledCol>
+					<StyledCol xs={12} md={6}>
+						<Image
+							src={'/images/banners/qfSponsors.png'}
+							style={{ objectFit: 'contain' }}
+							fill
+							alt='QF Banner'
+						/>
+					</StyledCol>
+				</Row>
+			</Container>
 		</BannerContainer>
 	);
 };
 
-const Title = styled(H1)`
+const BannerContainer = styled.div`
+	position: relative;
+	padding-top: 100px;
+	padding-bottom: 100px;
+`;
+
+const StyledCol = styled(Col)`
+	position: relative;
 	z-index: 1;
+	min-height: 300px;
+	text-align: center;
+	${mediaQueries.laptopS} {
+		text-align: left;
+	}
+`;
+
+const Title = styled(H1)`
+	margin-top: 32px;
 	color: ${semanticColors.golden[500]};
-	margin-bottom: 32px;
+`;
+
+const Name = styled(H2)`
+	color: ${semanticColors.golden[500]};
 `;
 
 const Desc = styled(Flex)`
-	z-index: 1;
 	color: ${semanticColors.jade[100]};
 	align-items: center;
+	justify-content: center;
 	gap: 8px;
+	margin-bottom: 32px;
+	${mediaQueries.laptopS} {
+		justify-content: left;
+	}
 `;
