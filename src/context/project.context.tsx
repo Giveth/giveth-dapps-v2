@@ -7,19 +7,13 @@ import {
 	useState,
 } from 'react';
 import { captureException } from '@sentry/nextjs';
-import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
-import config from '@/configuration';
-import { IPowerBoostingWithUserGIVpower } from '@/components/views/project/projectGIVPower';
 import { client } from '@/apollo/apolloClient';
 import {
+	FETCH_PROJECT_INSTANT_BOOSTERS,
 	FETCH_PROJECTED_RANK,
-	FETCH_PROJECT_BOOSTERS,
 } from '@/apollo/gql/gqlPowerBoosting';
-import { FETCH_USERS_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
-import { IPowerBoosting, IProject } from '@/apollo/types/types';
-import { formatWeiHelper } from '@/helpers/number';
-import { backendGQLRequest, gqlRequest } from '@/helpers/requests';
+import { IInstantPowerBoosting, IProject } from '@/apollo/types/types';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import {
 	EDirection,
@@ -32,10 +26,11 @@ import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import { FETCH_PROJECT_DONATIONS_COUNT } from '@/apollo/gql/gqlDonations';
 import { hasActiveRound } from '@/helpers/qf';
+import { backendGQLRequest } from '@/helpers/requests';
 
 interface IBoostersData {
-	powerBoostings: IPowerBoostingWithUserGIVpower[];
-	totalPowerBoosting: string;
+	powerBoostings: IInstantPowerBoosting[];
+	totalPowerBoosting: number;
 	totalCount: number;
 }
 
@@ -158,10 +153,8 @@ export const ProjectProvider = ({
 			setIsBoostingsLoading(true);
 			if (projectId) {
 				try {
-					//get users with percentage
-					// we have to handle pagination in the frontend because we need to calculate sum in here and we need all data together.
 					const boostingResp = await client.query({
-						query: FETCH_PROJECT_BOOSTERS,
+						query: FETCH_PROJECT_INSTANT_BOOSTERS,
 						variables: {
 							projectId: +projectId,
 						},
@@ -171,80 +164,26 @@ export const ProjectProvider = ({
 						setIsBoostingsLoading(false);
 						return;
 					}
+					const _boostersData: IInstantPowerBoosting[] =
+						boostingResp.data.getProjectUserInstantPower
+							.projectUserInstantPowers;
 
-					const _users =
-						boostingResp.data.getPowerBoosting.powerBoostings.map(
-							(boosting: IPowerBoosting) =>
-								boosting.user.walletAddress?.toLocaleLowerCase(),
-						);
-
-					if (!_users || _users.length === 0) {
-						setIsBoostingsLoading(false);
-						return;
-					}
-
-					//get users balance
-					const balancesResp = await gqlRequest(
-						config.XDAI_CONFIG.subgraphAddress,
-						false,
-						FETCH_USERS_GIVPOWER_BY_ADDRESS,
-						{
-							addresses: _users,
-							contract:
-								config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase(),
-							length: _users.length,
-						},
+					const _totalPowerBoosting = _boostersData.reduce(
+						(acc, curr) => acc + curr.boostedPower,
+						0,
 					);
 
-					const unipoolBalances = balancesResp.data.unipoolBalances;
+					setBoostersData({
+						powerBoostings: _boostersData,
+						totalPowerBoosting: _totalPowerBoosting,
+						totalCount: boostingResp.data.total,
+					});
 
-					const unipoolBalancesObj: { [key: string]: string } = {};
-
-					for (let i = 0; i < unipoolBalances.length; i++) {
-						const unipoolBalance = unipoolBalances[i];
-						unipoolBalancesObj[unipoolBalance.user.id] =
-							unipoolBalance.balance;
-					}
-
-					const _boostersData: IBoostersData = structuredClone(
-						boostingResp.data.getPowerBoosting,
-					);
-
-					let _total = new BigNumber(0);
-
-					for (
-						let i = 0;
-						i < _boostersData.powerBoostings.length;
-						i++
-					) {
-						const powerBoosting = _boostersData.powerBoostings[i];
-						powerBoosting.user.givpowerBalance =
-							unipoolBalancesObj[
-								powerBoosting.user.walletAddress
-							];
-						const _allocated = new BigNumber(
-							powerBoosting.user.givpowerBalance,
-						)
-							.multipliedBy(powerBoosting.percentage)
-							.div(100);
-						powerBoosting.user.allocated = _allocated;
-						_total = _total.plus(_allocated);
-					}
-					_boostersData.powerBoostings.sort((pb1, pb2) =>
-						pb1.user.allocated.gt(pb2.user.allocated) ? -1 : 1,
-					);
-					_boostersData.powerBoostings =
-						_boostersData.powerBoostings.filter(pb =>
-							pb.user.allocated.isZero() ? false : true,
-						);
-					_boostersData.totalPowerBoosting = formatWeiHelper(_total);
 					if (status === EProjectStatus.ACTIVE) {
 						const _projectedRank = await backendGQLRequest(
 							FETCH_PROJECTED_RANK,
 							{
-								powerAmount: +_total
-									.div(10 ** 18)
-									.toFixed(2, BigNumber.ROUND_UP),
+								powerAmount: _totalPowerBoosting,
 								projectId: projectId,
 							},
 						);
@@ -254,7 +193,6 @@ export const ProjectProvider = ({
 							);
 						} else setProjectedRank(null);
 					}
-					setBoostersData(_boostersData);
 				} catch (err) {
 					showToastError(err);
 					captureException(err, {
