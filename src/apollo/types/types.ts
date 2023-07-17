@@ -376,6 +376,13 @@ export enum EVerificationSteps {
 	SUBMIT = 'submit',
 }
 
+export interface IInstantPowerBoosting {
+	id: number;
+	user: { name: string; walletAddress: string; avatar: string };
+	projectId: number;
+	boostedPower: number;
+}
+
 export interface IPowerBoosting {
 	id: string;
 	user: IUser;
