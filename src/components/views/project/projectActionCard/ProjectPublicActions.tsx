@@ -24,7 +24,6 @@ import {
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
 } from '@/features/user/user.slice';
-import { startChainvineReferral } from '@/features/user/user.thunks';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
