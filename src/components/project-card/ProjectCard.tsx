@@ -75,6 +75,7 @@ const ProjectCard = (props: IProjectCard) => {
 		estimatedMatching || {};
 
 	const activeRound = getActiveRound(qfRounds);
+	const hasFooter = isRoundActive || verified;
 
 	return (
 		<Wrapper
@@ -95,7 +96,7 @@ const ProjectCard = (props: IProjectCard) => {
 			<CardBody
 				isHover={
 					isHover
-						? verified
+						? hasFooter
 							? ECardBodyHover.FULL
 							: ECardBodyHover.HALF
 						: ECardBodyHover.NONE
@@ -201,7 +202,7 @@ const ProjectCard = (props: IProjectCard) => {
 						) : null}
 					</Flex>
 				</Link>
-				{(isRoundActive || verified) && (
+				{hasFooter && (
 					<Link href={slugToProjectView(slug)}>
 						<Hr />
 						<PaddedRow justifyContent='space-between'>
