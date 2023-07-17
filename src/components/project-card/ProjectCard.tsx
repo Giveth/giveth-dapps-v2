@@ -14,7 +14,6 @@ import {
 	H5,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
-
 import { useIntl } from 'react-intl';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
