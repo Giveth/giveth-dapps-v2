@@ -29,7 +29,7 @@ export const HOME_QUERY_VARIABLES = {
 	skipLatestUpdates: 0,
 	fromDate: '2021-01-01',
 	limit: 12,
-	sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
+	sortingBy: EProjectsSortBy.GIVPOWER,
 };
 
 const HomeRoute = (props: IHomeRoute) => {
