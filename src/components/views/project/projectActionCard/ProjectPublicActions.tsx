@@ -51,7 +51,7 @@ export const ProjectPublicActions = () => {
 
 	useEffect(() => {
 		const fetchProjectReaction = async () => {
-			if (user?.id && project.id) {
+			if (user?.id && project.id && !likeLoading) {
 				try {
 					const { data } = await client.query({
 						query: FETCH_PROJECT_REACTION_BY_ID,
@@ -78,7 +78,7 @@ export const ProjectPublicActions = () => {
 			}
 		};
 		fetchProjectReaction();
-	}, [project.id, user?.id]);
+	}, [project.id, user?.id, likeLoading]);
 
 	const likeUnlikeProject = async () => {
 		if (projectId) {
@@ -138,7 +138,6 @@ export const ProjectPublicActions = () => {
 			likeUnlikeProject();
 		}
 	};
-
 	return (
 		<ProjectPublicActionsWrapper gap='16px'>
 			<Link href={slugToProjectDonate(slug || '')}>
