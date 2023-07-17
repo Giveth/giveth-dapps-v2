@@ -923,10 +923,10 @@
     intl-messageformat "10.3.1"
     tslib "^2.4.0"
 
-"@giveth/ui-design-system@^1.11.12":
-  version "1.11.12"
-  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.12.tgz#12ec40b1b4737dcbe3e5ee1d668ccc851f93f0bc"
-  integrity sha512-Sr2ILZ2E4FzG/a2ID3K8ty3dXwaum0PRN1/T+kVViR52GnxwwamWIi2ko9agcc4vnOpkWCAxl/AhVLTkSDbyng==
+"@giveth/ui-design-system@^1.11.13":
+  version "1.11.13"
+  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.13.tgz#8b243af0331c0ba17c1d706ac21e05175b6a5d47"
+  integrity sha512-Ou5XAt3GDr068yOjohcMSmdW4xJGRQxtiXiC1qjwSTVuJIahbJ6C+B0HydmGC/3kzwWFhgAyJ+rYXacLeD09fg==
   dependencies:
     next "13.1.6"
     react "18.2.0"
