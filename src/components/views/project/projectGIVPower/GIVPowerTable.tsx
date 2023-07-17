@@ -7,13 +7,13 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import { RowWrapper } from '@/components/styled-components/Table';
-import { formatWeiHelper } from '@/helpers/number';
 import { UserWithPFPInCell } from '@/components/UserWithPFPInCell';
-import { IPowerBoostingWithUserGIVpower } from '.';
+import { IInstantPowerBoosting } from '@/apollo/types/types';
+import { formatDonations } from '@/helpers/number';
 
 interface IGIVPowerTableProps {
-	powerBoostings?: IPowerBoostingWithUserGIVpower[];
-	totalPowerBoosting: string;
+	powerBoostings?: IInstantPowerBoosting[];
+	totalPowerBoosting: number;
 }
 
 const GIVPowerTable: FC<IGIVPowerTableProps> = ({
@@ -27,16 +27,16 @@ const GIVPowerTable: FC<IGIVPowerTableProps> = ({
 				<IconRocketInSpace size={20} />
 				Amount
 			</TableHeader>
-			{powerBoostings?.map(({ id, user }) => (
+			{powerBoostings?.map(({ id, boostedPower, user }) => (
 				<GIVpowerRowWrapper key={id}>
 					<TableCell>
 						<UserWithPFPInCell user={user} />
 					</TableCell>
-					<TableCell>{formatWeiHelper(user.allocated)}</TableCell>
+					<TableCell>{formatDonations(boostedPower)}</TableCell>
 				</GIVpowerRowWrapper>
 			))}
 			<TableHeader>TOTAL GIVPOWER</TableHeader>
-			<TableHeader>{totalPowerBoosting || 0}</TableHeader>
+			<TableHeader>{formatDonations(totalPowerBoosting)}</TableHeader>
 		</Container>
 	);
 };
