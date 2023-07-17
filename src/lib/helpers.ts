@@ -450,7 +450,8 @@ export const timeFromNow = (
 	if (diff.h > 0)
 		return ` ${formatter(Math.trunc(diff.h * -1), 'hour', options)}`;
 	if (diff.min > 0)
-		return ` ${formatter(Math.trunc(diff.m * -1), 'min', options)}`;
+		return ` ${formatter(Math.trunc(diff.min * -1), 'minute', options)}`;
+
 	return ` ${defaultMessage}`;
 };
 
