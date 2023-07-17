@@ -51,6 +51,14 @@ export const QFProjectsBanner = () => {
 		}
 		const interval = setInterval(() => {
 			const diff = _date - getNowUnixMS();
+			if (diff <= 0) {
+				if (state === ERoundStatus.NOT_STARTED) {
+					setState(ERoundStatus.RUNNING);
+				} else if (state === ERoundStatus.RUNNING) {
+					setState(ERoundStatus.ENDED);
+				}
+				return;
+			}
 			setTimer(diff);
 		}, 1000);
 		return () => {
@@ -82,7 +90,7 @@ export const QFProjectsBanner = () => {
 						})}
 					</Lead>
 					<B>
-						{activeRound && timer
+						{activeRound && timer && timer > 0
 							? durationToString(timer, 3)
 							: '--'}
 					</B>
