@@ -222,6 +222,7 @@
 	"label.connect_your_wallet_or_check_an_eth_address": "Connecta la teva cartera o comprova una adreça d'Ethereum per veure les teves recompenses. Finalitza el 24 de desembre del 2022.",
 	"label.connet_your_wallet_and_sign_in_to_get_your_referral": "",
 	"label.continue": "Continua",
+	"label.continue_creation": "Continua la creació",
 	"label.continue_verification": "Continua la verificació",
 	"label.continue_with_donorbox": "Continua amb Donorbox",
 	"label.contract": "Contracte",
@@ -1397,6 +1398,5 @@
 	"testfilter": "",
 	"tooltip.donation.matching": "",
 	"ubi": "Renta bàsica",
-	"water-and-sanitation": "Aigua i Sanejament",
-	"label.continue_creation": "Continua la creació"
+	"water-and-sanitation": "Aigua i Sanejament"
 }

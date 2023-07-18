@@ -220,6 +220,7 @@
 	"label.connect_your_wallet_or_check_an_eth_address": "Connect your wallet or check an ethereum address to see your rewards. Ends December 24, 2022.",
 	"label.connet_your_wallet_and_sign_in_to_get_your_referral": "Connect your wallet and sign in to get your <strong>referral link</strong> and start earning.",
 	"label.continue": "Continue",
+	"label.continue_creation": "Continue Creation",
 	"label.continue_verification": "Continue verification",
 	"label.continue_with_donorbox": "Continue with Donorbox",
 	"label.contract": "Contract",
@@ -1382,6 +1383,5 @@
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Water & Sanitation",
-	"label.continue_creation": "Continue Creation"
+	"water-and-sanitation": "Water & Sanitation"
 }

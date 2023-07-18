@@ -222,6 +222,7 @@
 	"label.connect_your_wallet_or_check_an_eth_address": "Conecte su billetera o verifique una dirección de Ethereum para ver sus recompensas. Finaliza el 24 de diciembre de 2022.",
 	"label.connet_your_wallet_and_sign_in_to_get_your_referral": "Conecta tu billetera y regístrate para obtener tu enlace de referencia",
 	"label.continue": "Continuar",
+	"label.continue_creation": "Continuar Creación",
 	"label.continue_verification": "Continuar verificación",
 	"label.continue_with_donorbox": "Continúa con Donorbox",
 	"label.contract": "Contrato",
@@ -1396,6 +1397,5 @@
 	"testfilter": "",
 	"tooltip.donation.matching": "",
 	"ubi": "UBI",
-	"water-and-sanitation": "Agua & Saneamiento",
-	"label.continue_creation": "Continuar Creación"
+	"water-and-sanitation": "Agua & Saneamiento"
 }
