@@ -37,7 +37,9 @@ const initialInfo = {
 export const usePassport = () => {
 	const { account, library } = useWeb3React();
 	const [info, setInfo] = useState<IPassportAndStateInfo>(initialInfo);
-	const user = useAppSelector(state => state.user.userData);
+	const { userData: user, isUserFullFilled } = useAppSelector(
+		state => state.user,
+	);
 
 	const updateState = useCallback(
 		async (refreshUserScores: IPassportInfo) => {
@@ -167,22 +169,29 @@ export const usePassport = () => {
 	};
 
 	useEffect(() => {
+		console.log('******0', account, isUserFullFilled, user);
 		if (!account) {
+			console.log('******1', account, isUserFullFilled, user);
 			return setInfo({
 				passportState: EPassportState.NOT_CONNECTED,
 				passportScore: null,
 				currentRound: null,
 			});
 		}
-
+		console.log('******2', account, isUserFullFilled, user);
+		if (!isUserFullFilled) return;
+		console.log('******3', account, isUserFullFilled, user);
 		const fetchData = async () => {
 			if (!user || user.passportScore === null) {
+				console.log('******4', account, isUserFullFilled, user);
 				console.log('Passport score is null in our database');
 				const passports = getPassports();
 				//user has not passport account
 				if (passports[account.toLowerCase()] && user) {
+					console.log('******5', account, isUserFullFilled, user);
 					await updateState(user);
 				} else {
+					console.log('******6', account, isUserFullFilled, user);
 					setInfo({
 						passportState: EPassportState.NOT_SIGNED,
 						passportScore: null,
@@ -190,11 +199,12 @@ export const usePassport = () => {
 					});
 				}
 			} else {
+				console.log('******7', account, isUserFullFilled, user);
 				await updateState(user);
 			}
 		};
 		fetchData();
-	}, [account, updateState, user]);
+	}, [account, isUserFullFilled, updateState, user]);
 
 	return { info, handleSign, refreshScore };
 };
