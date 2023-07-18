@@ -111,7 +111,7 @@ export const QFProjectsBanner = () => {
 					</StyledCol>
 					<StyledCol xs={12} md={6}>
 						<Image
-							src={'/images/banners/qfSponsors.png'}
+							src={'/images/banners/qfSponsors.webp'}
 							style={{ objectFit: 'contain' }}
 							fill
 							alt='QF Banner'
