@@ -1072,7 +1072,7 @@
 	"page.donate.bank_fees": "Bank Fees",
 	"page.donate.matching_toast.bottom": "Matching funds will be sent to the selected project after the round ends.",
 	"page.donate.matching_toast.upper": "Estimated matching",
-	"page.donate.passport_toast.description.eligible": "Your donation is eligible to be matched! After QF Round",
+	"page.donate.passport_toast.description.eligible": "Your donation is eligible to be matched! After the",
 	"page.donate.passport_toast.description.eligible_2": ", all donations will be reviewed for fraud protection and matching funds will be sent to the projects.  Stay tuned for notifications :)",
 	"page.donate.passport_toast.description.non_eligible": "Get your donation matched with quadratic funding!\nIncrease your Gitcoin Passport score before",
 	"page.donate.passport_toast.description.not_connected": "Get your donation matched with quadratic funding!\nVerify your Gitcoin Passport before",
