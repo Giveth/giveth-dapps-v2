@@ -37,11 +37,21 @@ function addMissingKeys(obj1, obj2) {
 
 	for (let key in obj1) {
 		if (obj1.hasOwnProperty(key) && !obj2.hasOwnProperty(key)) {
-			newObj[key] = '';
+			newObj[key] = obj1[key];
 		}
 	}
 
 	return newObj;
+}
+
+function fillEmptyValues(obj) {
+	for (let key in obj) {
+		if (obj.hasOwnProperty(key) && obj[key] === '') {
+			obj[key] = en[key];
+		}
+	}
+
+	return obj;
 }
 
 function save(obj, name) {
@@ -58,6 +68,9 @@ const sortedEn = sort(en);
 const sortedEs = sort(updatedEs);
 const sortedCa = sort(updatedCa);
 
+const filledEs = fillEmptyValues(sortedEs);
+const filledCa = fillEmptyValues(sortedCa);
+
 save(sortedEn, 'en.json');
-save(sortedEs, 'es.json');
-save(sortedCa, 'ca.json');
+save(filledEs, 'es.json');
+save(filledCa, 'ca.json');
