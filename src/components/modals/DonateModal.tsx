@@ -283,7 +283,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 											firstTxHash,
 										)}
 										title={formatMessage({
-											id: 'label.view_on_etherscan',
+											id: 'label.view_on_block_explorer',
 										})}
 										color={brandColors.pinky[500]}
 									/>
@@ -338,7 +338,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 													secondTxHash,
 												)}
 												title={formatMessage({
-													id: 'label.view_on_etherscan',
+													id: 'label.view_on_block_explorer',
 												})}
 												color={brandColors.pinky[500]}
 											/>
