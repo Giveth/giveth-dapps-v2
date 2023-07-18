@@ -30,14 +30,14 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isMobile } = useDetectDevice();
-	const { project, isSuccessDonation } = useDonateData();
+	const { project, isSuccessDonation, hasActiveQFRound } = useDonateData();
 	const { txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 
 	return (
 		<>
 			<BigArc />
-			<PassportBanner />
+			{hasActiveQFRound && <PassportBanner />}
 			<Wrapper>
 				{/* <PurchaseXDAI /> */}
 				<NiceBanner />

@@ -1,5 +1,6 @@
 import { createContext, FC, ReactNode, useContext, useState } from 'react';
 import { IDonationProject } from '@/apollo/types/types';
+import { hasActiveRound } from '@/helpers/qf';
 
 interface ISuccessDonation {
 	txHash: string[];
@@ -25,19 +26,11 @@ const DonateContext = createContext<IDonateContext>({
 
 DonateContext.displayName = 'DonateContext';
 
-export const DonateProvider: FC<IProviderProps> = props => {
-	const { children, project } = props;
-
-	const { qfRounds } = project;
-	const activeQFRound = qfRounds?.find(r => r.isActive);
-	const qfBeginDate = activeQFRound?.beginDate;
-	const now = new Date().toISOString();
-	const hasRoundBegun = qfBeginDate ? qfBeginDate < now : false;
-	// It's impossible that a round is active and end date is passed, bc backend has a cron job. So, we only check the beginDate
-	const hasActiveQFRound = activeQFRound && hasRoundBegun;
-
+export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 	const [isSuccessDonation, setSuccessDonation] =
 		useState<ISuccessDonation>();
+
+	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
 
 	return (
 		<DonateContext.Provider
