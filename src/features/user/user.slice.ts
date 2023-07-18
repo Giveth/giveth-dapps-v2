@@ -19,6 +19,7 @@ const initialState: {
 	isSignedIn: boolean;
 	balance: string | null;
 	isLoading: boolean;
+	isUserFullFilled: boolean;
 } = {
 	userData: undefined,
 	token: undefined,
@@ -26,6 +27,7 @@ const initialState: {
 	isSignedIn: false,
 	balance: null,
 	isLoading: true,
+	isUserFullFilled: false,
 };
 
 type UserStateType = RootState['user'];
@@ -121,10 +123,12 @@ export const userSlice = createSlice({
 						signOutUser(state);
 					}
 					state.isLoading = false;
+					state.isUserFullFilled = true;
 				},
 			)
 			.addCase(fetchUserByAddress.rejected, state => {
 				state.isLoading = false;
+				state.isUserFullFilled = true;
 			})
 			.addCase(signToGetToken.fulfilled, (state, action) => {
 				state.token = action.payload;

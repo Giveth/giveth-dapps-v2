@@ -92,6 +92,11 @@ export const PassportBannerData: IData = {
 		bg: EPBGState.ERROR,
 		icon: <IconAlertTriangleFilled24 color={semanticColors.punch[500]} />,
 	},
+	[EPassportState.NOT_STARTED]: {
+		content: 'label.passport.no_active_round',
+		bg: EPBGState.INFO,
+		icon: <IconAlertTriangleFilled24 color={semanticColors.golden[500]} />,
+	},
 	[EPassportState.NOT_ACTIVE_ROUND]: {
 		content: 'label.passport.no_active_round',
 		bg: EPBGState.INFO,
