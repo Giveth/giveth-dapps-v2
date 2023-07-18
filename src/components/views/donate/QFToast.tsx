@@ -17,9 +17,12 @@ import InternalLink from '@/components/InternalLink';
 const QFToast = () => {
 	const { info } = usePassport();
 	const { passportState, currentRound } = info;
+
 	const isEligible = passportState === EPassportState.ELIGIBLE;
 	const isNotEligible = passportState === EPassportState.NOT_ELIGIBLE;
 	const { formatMessage, locale } = useIntl();
+
+	if (passportState === EPassportState.LOADING) return null;
 
 	const color = isEligible
 		? semanticColors.jade['500']
