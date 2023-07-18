@@ -23,6 +23,7 @@ import LottieControl from '@/components/LottieControl';
 import { EContentType } from '@/lib/constants/shareContent';
 import QFToast from '@/components/views/donate/QFToast';
 import { useAppSelector } from '@/features/hooks';
+import { EPassportState, usePassport } from '@/hooks/usePassport';
 
 const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
@@ -34,6 +35,9 @@ const SuccessView: FC = () => {
 
 	const [givethSlug, setGivethSlug] = useState<string>('');
 	const { project } = useDonateData();
+	const {
+		info: { passportState },
+	} = usePassport();
 
 	const message = hasMultipleTxs ? (
 		<>
@@ -95,7 +99,9 @@ const SuccessView: FC = () => {
 					</ExternalLink>
 				</GivBackContainer>
 			)}
-			{hasActiveQFRound && <QFToast />}
+			{hasActiveQFRound && passportState !== EPassportState.LOADING && (
+				<QFToast />
+			)}
 			<SocialBoxWrapper>
 				<SocialBox
 					project={project}
