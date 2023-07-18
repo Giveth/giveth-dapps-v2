@@ -35,7 +35,6 @@ const QFToast = () => {
 	});
 
 	let description;
-	const roundNumber = currentRound?.id;
 	const endDate = new Date(currentRound?.endDate || '')
 		.toLocaleString(locale || 'en-US', {
 			day: 'numeric',
@@ -49,7 +48,7 @@ const QFToast = () => {
 				id: 'page.donate.passport_toast.description.eligible',
 			}) +
 			' ' +
-			roundNumber +
+			currentRound?.name +
 			' ' +
 			formatMessage({
 				id: 'label.ends_on',
