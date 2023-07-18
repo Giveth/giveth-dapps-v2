@@ -32,12 +32,12 @@ function sort(data) {
 	return Object.fromEntries(dataArray);
 }
 
-function addMissingKeys(obj1, obj2) {
-	const newObj = { ...obj2 }; // Create a new object to avoid modifying obj2 directly
+function addMissingKeys(obj) {
+	const newObj = { ...obj }; // Create a new object to avoid modifying obj directly
 
-	for (let key in obj1) {
-		if (obj1.hasOwnProperty(key) && !obj2.hasOwnProperty(key)) {
-			newObj[key] = obj1[key];
+	for (let key in en) {
+		if (en.hasOwnProperty(key) && !obj.hasOwnProperty(key)) {
+			newObj[key] = en[key];
 		}
 	}
 
@@ -61,8 +61,21 @@ function save(obj, name) {
 	console.log('Saving completed!');
 }
 
-const updatedEs = addMissingKeys(en, es);
-const updatedCa = addMissingKeys(en, ca);
+function removeExtraKeys(obj) {
+	const newObj = {}; // Create a new object to avoid modifying obj directly
+	for (let key in obj) {
+		if (obj.hasOwnProperty(key) && en[key]) {
+			newObj[key] = obj[key];
+		}
+	}
+	return newObj;
+}
+
+const filteredEs = removeExtraKeys(es);
+const filteredCa = removeExtraKeys(ca);
+
+const updatedEs = addMissingKeys(filteredEs);
+const updatedCa = addMissingKeys(filteredCa);
 
 const sortedEn = sort(en);
 const sortedEs = sort(updatedEs);
