@@ -69,7 +69,7 @@ interface IOptionsProps {
 
 const Options: FC<IOptionsProps> = ({ options, setOpen }) => {
 	const ddRef = useRef<HTMLDivElement>(null);
-	useOnClickOutside(ddRef, () => setOpen(false));
+	useOnClickOutside(ddRef, () => setOpen(false), 100);
 	return (
 		<OptionsWrapper ref={ddRef}>
 			{options.map((option, idx) =>
