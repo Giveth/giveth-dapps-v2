@@ -3,6 +3,7 @@ import { useEffect, RefObject } from 'react';
 export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
 	ref: RefObject<T>,
 	handler: (e: MouseEvent | TouchEvent) => void,
+	delay?: number,
 ) {
 	useEffect(() => {
 		const listener = (event: MouseEvent | TouchEvent) => {
@@ -10,7 +11,13 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
 			if (!ref.current || ref.current.contains(event.target as Node)) {
 				return;
 			}
-			handler(event);
+			if (delay) {
+				setTimeout(() => {
+					handler(event);
+				}, delay);
+			} else {
+				handler(event);
+			}
 		};
 		document.addEventListener('mousedown', listener);
 		document.addEventListener('touchstart', listener);
