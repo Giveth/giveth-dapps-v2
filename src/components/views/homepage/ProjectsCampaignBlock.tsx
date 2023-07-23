@@ -113,8 +113,11 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 };
 
 const StyledProjectCard = styled(ProjectCard)`
-	width: 360px;
+	width: 340px;
 	margin: 0;
+	${mediaQueries.tablet} {
+		width: 360px !important;
+	}
 	${mediaQueries.laptopS} {
 		width: 384px !important;
 	}
