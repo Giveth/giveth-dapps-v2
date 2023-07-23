@@ -121,7 +121,7 @@ const StyledProjectCard = styled(ProjectCard)`
 `;
 
 const SwiperWrapper = styled.div`
-	padding: 24px 32px 20px;
+	padding: 24px 16px 20px;
 	width: 100%;
 	overflow: hidden;
 	.swiper {
