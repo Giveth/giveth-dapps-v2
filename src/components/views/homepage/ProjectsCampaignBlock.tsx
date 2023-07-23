@@ -37,7 +37,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 	const nextElRef = useRef<HTMLDivElement>(null);
 	const prevElRef = useRef<HTMLDivElement>(null);
 	//Please don't remove this
-	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
+	const [_, setSwiperInstance] = useState<SwiperClass>();
 	const { formatMessage } = useIntl();
 
 	return (
@@ -159,6 +159,8 @@ const Title = styled(FlexCenter)`
 	margin: 0 32px;
 	user-select: none;
 	padding-right: 24px;
+	padding-top: 24px;
+	padding-bottom: 24px;
 	gap: 24px;
 	z-index: 10;
 	${mediaQueries.tablet} {
