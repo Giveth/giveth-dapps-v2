@@ -2,11 +2,13 @@ import {
 	IconArchiving,
 	IconEdit16,
 	IconVerifiedBadge16,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import { useRouter } from 'next/router';
+import styled from 'styled-components';
 import { useProjectContext } from '@/context/project.context';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
@@ -96,7 +98,7 @@ export const AdminActions = () => {
 	];
 
 	return (
-		<>
+		<Wrapper>
 			<Dropdown label='Project Actions' options={options} />
 			{showVerificationModal && (
 				<VerificationModal
@@ -124,6 +126,15 @@ export const AdminActions = () => {
 						projectHref={slug}
 					/>
 				))}
-		</>
+		</Wrapper>
 	);
 };
+
+const Wrapper = styled.div`
+	order: 1;
+	margin-bottom: 16px;
+	${mediaQueries.tablet} {
+		margin-bottom: unset;
+		order: unset;
+	}
+`;
