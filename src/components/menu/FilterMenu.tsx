@@ -60,7 +60,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const { setVariables, variables, isQF, setIsQF } = useProjectsContext();
 		const filtersCount = variables?.filters?.length ?? 0;
 		const campaignCount = variables?.campaignSlug ? 1 : 0;
-		const count = filtersCount + campaignCount - (isQF ? 1 : 0);
+		const count = filtersCount + campaignCount;
 		const router = useRouter();
 
 		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {

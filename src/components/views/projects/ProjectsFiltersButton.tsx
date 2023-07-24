@@ -13,7 +13,7 @@ const ProjectsFiltersButton = () => {
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
 	const filtersCount = variables?.filters?.length ?? 0;
 	const campaignCount = variables?.campaignSlug ? 1 : 0;
-	const count = filtersCount + campaignCount - (isQF ? 1 : 0);
+	const count = filtersCount + campaignCount;
 
 	const delayedIsFilterOpen = useDelay(isFilterOpen, 280);
 
