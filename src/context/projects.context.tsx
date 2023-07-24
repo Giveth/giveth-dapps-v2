@@ -25,8 +25,9 @@ interface IProjectsContext {
 	setVariables: Dispatch<SetStateAction<IVariables>>;
 	mainCategories: IMainCategory[];
 	selectedMainCategory?: IMainCategory;
-	isQF: boolean;
 	qfRounds: IQFRound[];
+	isQF: boolean;
+	setIsQF: Dispatch<SetStateAction<boolean>>;
 }
 
 const variablesDefaultValue = {
@@ -43,8 +44,9 @@ const ProjectsContext = createContext<IProjectsContext>({
 	variables: variablesDefaultValue,
 	setVariables: () => console.log('setVariables not initialed yet!'),
 	mainCategories: [],
-	isQF: false,
 	qfRounds: [],
+	isQF: false,
+	setIsQF: () => console.log('setIsQF not initialed yet!'),
 });
 
 ProjectsContext.displayName = 'ProjectsContext';
@@ -53,11 +55,13 @@ export const ProjectsProvider = (props: {
 	children: ReactNode;
 	mainCategories: IMainCategory[];
 	selectedMainCategory?: IMainCategory;
-	isQF?: boolean;
-	qfRounds?: IQFRound[];
+	qfRounds: IQFRound[];
+	isQF: boolean;
 }) => {
 	const { children, mainCategories, selectedMainCategory, isQF, qfRounds } =
 		props;
+
+	const [_isQF, setIsQF] = useState(isQF);
 
 	const [variables, setVariables] = useState<IVariables>(
 		isQF ? variablesDefaultValueWithQF : variablesDefaultValue,
@@ -105,7 +109,7 @@ export const ProjectsProvider = (props: {
 			) as EProjectsFilter[];
 		}
 
-		if (isQF) {
+		if (_isQF) {
 			filters
 				? filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
 				: (filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
@@ -141,7 +145,7 @@ export const ProjectsProvider = (props: {
 		router.query.filter,
 		router.query.campaign,
 		router.query?.slug,
-		isQF,
+		_isQF,
 	]);
 
 	return (
@@ -151,8 +155,9 @@ export const ProjectsProvider = (props: {
 				setVariables,
 				mainCategories,
 				selectedMainCategory,
-				isQF: isQF || false,
 				qfRounds: qfRounds || [],
+				isQF: _isQF || false,
+				setIsQF,
 			}}
 		>
 			{children}
