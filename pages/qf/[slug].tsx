@@ -12,13 +12,14 @@ import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
-import type { IQFProjectsRouteProps } from '.';
+import { useReferral } from '@/hooks/useReferral';
+import { IProjectsRouteProps } from 'pages/projects';
 
-interface IQFProjectsCategoriesRouteProps extends IQFProjectsRouteProps {
+interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
 	selectedMainCategory: IMainCategory;
 }
 
-const QFProjectsCategoriesRoute = (props: IQFProjectsCategoriesRouteProps) => {
+const QFProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 	const {
 		projects,
 		mainCategories,
@@ -27,6 +28,8 @@ const QFProjectsCategoriesRoute = (props: IQFProjectsCategoriesRouteProps) => {
 		categories,
 		qfRounds,
 	} = props;
+
+	useReferral();
 
 	return (
 		<ProjectsProvider
