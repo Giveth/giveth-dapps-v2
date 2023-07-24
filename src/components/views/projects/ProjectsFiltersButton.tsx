@@ -22,7 +22,7 @@ const ProjectsFiltersButton = () => {
 	useOnClickOutside(filterMenuRef, () => setIsFilterOpen(false));
 
 	const handleFilterClose = (e: MouseEvent<HTMLElement>) => {
-		e.stopPropagation();
+		e.stopPropagation && e.stopPropagation();
 		setIsFilterOpen(false);
 	};
 
