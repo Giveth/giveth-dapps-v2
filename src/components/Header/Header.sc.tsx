@@ -294,6 +294,7 @@ export const HomeButton = styled(Flex)`
 
 export const HeaderSidebarButtonWrapper = styled.div`
 	padding: 12px;
+	position: relative;
 `;
 
 export const SidebarInnerContainer = styled(Flex)`

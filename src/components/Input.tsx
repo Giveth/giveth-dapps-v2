@@ -129,7 +129,7 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 			);
 			return inputSizeToPaddingLeft(size, !!LeftIcon) + width;
 		}
-		return 0;
+		return 15;
 	}, [suffix, value, size, LeftIcon]);
 
 	const { ref = undefined, ...restRegProps } =
