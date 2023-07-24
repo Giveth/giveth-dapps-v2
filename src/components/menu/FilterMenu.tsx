@@ -141,6 +141,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 								handleClose(e);
 								setIsQF(isQF => !isQF);
 							}}
+							disabled={router.pathname === '/qf'}
 							checked={isQF}
 							size={14}
 						/>
