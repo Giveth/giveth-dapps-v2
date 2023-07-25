@@ -47,7 +47,6 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 // import useLeaveConfirm from '@/hooks/useLeaveConfirm';
 import config from '@/configuration';
-import CheckBox from '@/components/Checkbox';
 import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { setShowFooter } from '@/features/general/general.slice';
@@ -173,9 +172,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [optimismAddressActive, setOptimismAddressActive] = useState(
 		isEditMode ? !!prevOptimismAddress : true,
 	);
-	const [isSameAddress, setIsSameAddress] = useState(
-		isEditMode ? isSamePrevAddresses : true,
-	);
+
 	const [isLoading, setIsLoading] = useState(false);
 	const [resolvedENS, setResolvedENS] = useState('');
 
@@ -199,34 +196,33 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				draft,
 			} = formData;
 
-			if (isSameAddress) {
-				const address = isAddressENS(mainAddress)
-					? resolvedENS
-					: mainAddress;
-				const checksumAddress = utils.getAddress(address);
-				addresses.push(
-					{
-						address: checksumAddress,
-						networkId: MAINNET_NETWORK_NUMBER,
-					},
-					{
-						address: checksumAddress,
-						networkId: XDAI_NETWORK_NUMBER,
-					},
-					{
-						address: checksumAddress,
-						networkId: POLYGON_NETWORK_NUMBER,
-					},
-					{
-						address: checksumAddress,
-						networkId: CELO_NETWORK_NUMBER,
-					},
-					{
-						address: checksumAddress,
-						networkId: OPTIMISM_NETWORK_NUMBER,
-					},
-				);
-			} else {
+			const address = isAddressENS(mainAddress)
+				? resolvedENS
+				: mainAddress;
+			const checksumAddress = utils.getAddress(address);
+			addresses.push(
+				{
+					address: checksumAddress,
+					networkId: MAINNET_NETWORK_NUMBER,
+				},
+				{
+					address: checksumAddress,
+					networkId: XDAI_NETWORK_NUMBER,
+				},
+				{
+					address: checksumAddress,
+					networkId: POLYGON_NETWORK_NUMBER,
+				},
+				{
+					address: checksumAddress,
+					networkId: CELO_NETWORK_NUMBER,
+				},
+				{
+					address: checksumAddress,
+					networkId: OPTIMISM_NETWORK_NUMBER,
+				},
+			);
+			{
 				if (mainnetAddressActive) {
 					const address = isAddressENS(mainAddress)
 						? resolvedENS
@@ -370,16 +366,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								id: 'label.you_can_set_a_custom_ethereum_address',
 							})}
 						</CaptionContainer>
-						<CheckBox
-							onChange={setIsSameAddress}
-							checked={isSameAddress}
-							label={formatMessage({
-								id: 'label.ill_raise_and_receive_funds_on_all_chains',
-							})}
-						/>
 						<WalletAddressInput
 							networkId={MAINNET_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
 							isActive={mainnetAddressActive}
 							userAddresses={userAddresses}
 							resolvedENS={resolvedENS}
@@ -403,7 +391,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						/>
 						<WalletAddressInput
 							networkId={XDAI_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
 							isActive={gnosisAddressActive}
 							userAddresses={userAddresses}
 							setResolvedENS={() => {}}
@@ -426,7 +413,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						/>
 						<WalletAddressInput
 							networkId={POLYGON_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
 							isActive={polygonAddressActive}
 							userAddresses={userAddresses}
 							setResolvedENS={() => {}}
@@ -449,7 +435,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						/>
 						<WalletAddressInput
 							networkId={CELO_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
 							isActive={celoAddressActive}
 							userAddresses={userAddresses}
 							setResolvedENS={() => {}}
@@ -472,7 +457,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						/>
 						<WalletAddressInput
 							networkId={OPTIMISM_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
 							isActive={optimismAddressActive}
 							userAddresses={userAddresses}
 							setResolvedENS={() => {}}
