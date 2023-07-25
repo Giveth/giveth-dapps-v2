@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import {
 	neutralColors,
 	P,
@@ -41,16 +41,23 @@ declare module 'react-select/dist/declarations/src/Select' {
 	}
 }
 
-const ImageIcon = (props: { symbol: string }) => {
-	const { symbol } = props;
-	let image_path = '';
-	try {
-		require(`../../../../public/images/tokens/${symbol?.toUpperCase()}.svg`);
-		image_path = `/images/tokens/${symbol?.toUpperCase()}.svg`;
-	} catch (err) {
-		image_path = '/images/tokens/UNKOWN.svg'; //set default image path
-	}
-	return <Image alt={symbol} src={image_path} width='24' height='24' />;
+interface IImageIconProps {
+	symbol: string;
+}
+
+const ImageIcon: FC<IImageIconProps> = ({ symbol }) => {
+	const [src, setSrc] = useState(
+		`/images/tokens/${symbol?.toUpperCase()}.svg`,
+	);
+	return (
+		<Image
+			alt={symbol}
+			src={src}
+			width='24'
+			height='24'
+			onError={() => setSrc('/images/tokens/UNKOWN.svg')}
+		/>
+	);
 };
 
 const MenuList = (props: MenuListProps<IProjectAcceptedToken, false>) => {
