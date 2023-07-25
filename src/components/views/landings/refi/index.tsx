@@ -4,28 +4,26 @@ import GetUpdates from '@/components/GetUpdates';
 import JoinUsOnDiscord from '@/components/JoinUsOnDiscord';
 import QuoteSection from '@/components/views/landings/refi/QuoteSection';
 import ReFiHeader from '@/components/views/landings/refi/ReFiHeader';
-import ReFiBody from '@/components/views/landings/refi/body';
+import Divider from '@/components/Divider';
+import GivethTheRevolutionary from '@/components/views/landings/refi/GivethTheRevolutionary';
+import FirstOfAll from '@/components/views/landings/refi/FirstOfAll';
 
 const ReFiLandingPage = () => {
 	return (
 		<Wrapper>
 			<ReFiHeader />
-			<ReFiBody />
-			<Separator />
+			<GivethTheRevolutionary />
+			<Divider color={neutralColors.gray[200]} height='40px' />
+			<FirstOfAll />
+			<Divider color={neutralColors.gray[200]} height='40px' />
 			<JoinUsOnDiscord />
-			<Separator />
+			<Divider color={neutralColors.gray[200]} height='40px' />
 			<QuoteSection />
-			<Separator />
+			<Divider color={neutralColors.gray[200]} height='40px' />
 			<GetUpdates />
 		</Wrapper>
 	);
 };
-
-const Separator = styled.div`
-	background: ${neutralColors.gray[200]};
-	width: 100%;
-	height: 40px;
-`;
 
 const Wrapper = styled.div`
 	width: 100%;
