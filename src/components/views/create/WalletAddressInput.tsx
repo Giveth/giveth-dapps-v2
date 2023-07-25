@@ -31,7 +31,7 @@ import { networksParams } from '@/helpers/blockchain';
 interface IProps {
 	networkId: number;
 	userAddresses: string[];
-	sameAddress: boolean;
+	sameAddress?: boolean;
 	isActive: boolean;
 	setIsActive: (active: boolean) => void;
 	resolvedENS?: string;
@@ -41,7 +41,7 @@ interface IProps {
 const WalletAddressInput: FC<IProps> = ({
 	networkId,
 	userAddresses,
-	sameAddress,
+	sameAddress = false,
 	isActive,
 	setIsActive,
 	resolvedENS,
