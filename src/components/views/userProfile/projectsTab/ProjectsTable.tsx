@@ -14,10 +14,10 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { formatUSD, smallFormatDate } from '@/lib/helpers';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
-import ListingBadge from '@/components/views/userProfile/projectsTab/ListingBadge';
+import ListingBadge from '@/components/ListingBadge';
 import StatusBadge from '@/components/views/userProfile/projectsTab/StatusBadge';
 import SortIcon from '@/components/SortIcon';
-import { EVerificationStatus, IProject } from '@/apollo/types/types';
+import { IProject } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
 import VerificationBadge from '@/components/VerificationBadge';
 import {
@@ -79,9 +79,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 				{projects?.map(project => {
 					const status = project.status.name;
 					const isCancelled = status === EProjectStatus.CANCEL;
-					const verStatus = project.verified
-						? EVerificationStatus.VERIFIED
-						: project.projectVerificationForm?.status;
+
 					return (
 						<ProjectsRowWrapper key={project.id}>
 							<ProjectTableCell>
@@ -96,7 +94,13 @@ const ProjectsTable: FC<IProjectsTable> = ({
 							<ProjectTableCell bold>
 								<ProjectTitle>
 									{project.title}
-									<VerificationBadge status={verStatus} />
+									<VerificationBadge
+										isVerified={project.verified}
+										verificationStatus={
+											project.projectVerificationForm
+												?.status
+										}
+									/>
 								</ProjectTitle>
 							</ProjectTableCell>
 							<ProjectTableCell>
@@ -106,7 +110,10 @@ const ProjectsTable: FC<IProjectsTable> = ({
 								{formatUSD(project.totalDonations)} USD
 							</ProjectTableCell>
 							<ProjectTableCell>
-								<ListingBadge listed={project.listed!} />
+								<ListingBadge
+									listed={project.listed!}
+									showBullet
+								/>
 							</ProjectTableCell>
 							<ProjectTableCell>
 								<Actions isCancelled={isCancelled}>
@@ -130,7 +137,9 @@ const ProjectsTable: FC<IProjectsTable> = ({
 											setShowAddressModal(true);
 										}}
 									>
-										Manage addresses
+										{formatMessage({
+											id: 'label.manage_addresses',
+										})}
 									</CustomGlink>
 								</Actions>
 							</ProjectTableCell>

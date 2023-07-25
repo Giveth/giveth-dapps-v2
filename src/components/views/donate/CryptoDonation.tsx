@@ -52,6 +52,7 @@ import SaveGasFees from '@/components/views/donate/SaveGasFees';
 import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedChain';
 import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
+import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingToast';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -69,7 +70,7 @@ const CryptoDonation: FC = () => {
 	);
 	const isPurpleListed = usePurpleList();
 
-	const { project } = useDonateData();
+	const { project, hasActiveQFRound } = useDonateData();
 
 	const {
 		organization,
@@ -371,6 +372,14 @@ const CryptoDonation: FC = () => {
 					</AvText>
 				)}
 			</InputContainer>
+
+			{hasActiveQFRound && (
+				<EstimatedMatchingToast
+					projectData={project}
+					token={selectedToken}
+					amountTyped={amountTyped}
+				/>
+			)}
 
 			{!noDonationSplit ? (
 				<DonateToGiveth

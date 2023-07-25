@@ -25,7 +25,7 @@ import {
 } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
-import ProjectsBanner from './ProjectsBanner';
+import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
@@ -35,7 +35,12 @@ import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
-import ProjectsMiddleBanner from './ProjectsMiddleBanner';
+import { ProjectsMiddleBanner } from './MiddleBanners/ProjectsMiddleBanner';
+import FloatingButtonReferral from '@/components/FloatingReferral';
+import { QFProjectsBanner } from './QFProjectsBanner';
+import { PassportBanner } from '@/components/PassportBanner';
+import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
+import { QFNoResultBanner } from './MiddleBanners/QFNoResultBanner';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -63,9 +68,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const {
 		variables: contextVariables,
-		setVariables,
 		mainCategories,
 		selectedMainCategory,
+		isQF,
+		qfRounds,
 	} = useProjectsContext();
 
 	const router = useRouter();
@@ -179,6 +185,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 		return [firstSlice, secondSlice];
 	};
 
+	const activeRound = qfRounds.find(round => round.isActive);
+
 	const renderProjects = () => {
 		const [firstSlice, secondSlice] = handleArraySlice();
 		if (filteredProjects?.length > 0) {
@@ -189,16 +197,25 @@ const ProjectsIndex = (props: IProjectsView) => {
 							<ProjectCard key={project.id} project={project} />
 						))}
 					</ProjectsContainer>
-					<ProjectsMiddleBanner />
+					{isQF ? (
+						<QFProjectsMiddleBanner />
+					) : (
+						<ProjectsMiddleBanner />
+					)}
 					<ProjectsContainer>
 						{secondSlice.map(project => (
 							<ProjectCard key={project.id} project={project} />
 						))}
 					</ProjectsContainer>
+					<FloatingButtonReferral />
 				</ProjectsWrapper>
 			);
 		} else {
-			return <ProjectsNoResults mainCategories={mainCategories} />;
+			return isQF && !activeRound ? (
+				<QFNoResultBanner />
+			) : (
+				<ProjectsNoResults mainCategories={mainCategories} />
+			);
 		}
 	};
 
@@ -236,7 +253,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 				</Loading>
 			)}
 
-			<ProjectsBanner mainCategory={selectedMainCategory} />
+			{isQF ? (
+				<>
+					<PassportBanner />
+					<QFProjectsBanner />
+				</>
+			) : (
+				<ProjectsBanner mainCategory={selectedMainCategory} />
+			)}
 			<Wrapper>
 				<FiltersContainer>
 					{!isTablet && !isMobile && <ProjectsFiltersDesktop />}

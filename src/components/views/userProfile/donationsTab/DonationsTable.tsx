@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
-import Image from 'next/image';
 import {
 	B,
 	brandColors,
@@ -26,6 +25,7 @@ import {
 	TableCell,
 	TableHeader,
 } from '@/components/styled-components/Table';
+import { Badge, EBadgeStatus } from '@/components/Badge';
 
 interface DonationTable {
 	donations: IWalletDonation[];
@@ -53,7 +53,6 @@ const DonationTable: FC<DonationTable> = ({
 					{formatMessage({ id: 'label.status' })}
 				</TableHeader>
 			)}
-			<TableHeader>Source</TableHeader>
 			<TableHeader onClick={() => changeOrder(EOrderBy.TokenAmount)}>
 				{formatMessage({ id: 'label.amount' })}
 				<SortIcon order={order} title={EOrderBy.TokenAmount} />
@@ -62,6 +61,7 @@ const DonationTable: FC<DonationTable> = ({
 				{formatMessage({ id: 'label.usd_value' })}
 				<SortIcon order={order} title={EOrderBy.UsdAmount} />
 			</TableHeader>
+			<TableHeader>QF Round</TableHeader>
 			{donations.map(donation => (
 				<DonationRowWrapper key={donation.id}>
 					<DonationTableCell>
@@ -78,18 +78,6 @@ const DonationTable: FC<DonationTable> = ({
 							<DonationStatus status={donation.status} />
 						</DonationTableCell>
 					)}
-					<DonationTableCell>
-						{donation?.onramperId ? (
-							<Image
-								src='/images/powered_by_onramper.png'
-								width='95'
-								height='30'
-								alt={'Powered by OnRamper'}
-							/>
-						) : (
-							'Wallet'
-						)}
-					</DonationTableCell>
 					<DonationTableCell>
 						<B>{donation.amount}</B>
 						<Currency>{donation.currency}</Currency>
@@ -109,6 +97,16 @@ const DonationTable: FC<DonationTable> = ({
 						{donation.valueUsd &&
 							'$' + formatUSD(donation.valueUsd)}
 					</DonationTableCell>
+					<DonationTableCell>
+						{donation.qfRound ? (
+							<Badge
+								status={EBadgeStatus.GIVETH}
+								label={donation.qfRound.name}
+							/>
+						) : (
+							<Badge status={EBadgeStatus.DEFAULT} label='--' />
+						)}
+					</DonationTableCell>
 				</DonationRowWrapper>
 			))}
 		</DonationTableContainer>
@@ -120,7 +118,8 @@ const Currency = styled.div`
 `;
 
 const DonationRowWrapper = styled(RowWrapper)`
-	&:hover > div {
+	&:hover > div,
+	&:hover > a {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
 	}

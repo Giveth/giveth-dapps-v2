@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 import { QuoteText, IconRocketInSpace24 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { useProjectContext } from '@/context/project.context';
 
-const NoBoost = ({ isAdmin }: { isAdmin: boolean }) => {
+const NoBoost = () => {
 	const { formatMessage } = useIntl();
+	const { isAdmin } = useProjectContext();
 
 	return (
 		<Wrapper size='small'>

@@ -8,8 +8,11 @@ import {
 import { networksParams } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
-const BASE_ROUTE = 'https://mainnet.serve.giveth.io';
-const NOTIFICATION_BASE_ROUTE = 'https://notification.giveth.io';
+const BASE_ROUTE =
+	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
+const NOTIFICATION_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
+	'https://notification.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
 const XDAI_NETWORK_NUMBER = 100; // xDAI
@@ -20,10 +23,13 @@ const CELO_NETWORK_NUMBER = 42220;
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
 	BASE_ROUTE: BASE_ROUTE,
-	BACKEND_LINK: 'https://mainnet.serve.giveth.io/graphql',
-	FRONTEND_LINK: 'https://giveth.io',
+	BACKEND_LINK:
+		process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`,
+	FRONTEND_LINK: process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://giveth.io',
 	MICROSERVICES: {
-		authentication: `${BASE_ROUTE}/siweauthmicroservice/v1`,
+		authentication:
+			process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
+			`${BASE_ROUTE}/siweauthmicroservice/v1`,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},

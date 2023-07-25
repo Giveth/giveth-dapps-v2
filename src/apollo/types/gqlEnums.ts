@@ -1,7 +1,7 @@
 export enum ESortby {
-	ACCEPTGIV = 'AcceptGiv',
-	QUALITYSCORE = 'QualityScore',
-	CREATIONDATE = 'CreationDate',
+	ACCEPT_GIV = 'AcceptGiv',
+	QUALITY_SCORE = 'QualityScore',
+	CREATION_DATE = 'CreationDate',
 	BALANCE = 'Balance',
 	VERIFIED = 'Verified',
 	TRACEABLE = 'Traceable',

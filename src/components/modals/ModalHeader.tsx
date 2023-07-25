@@ -72,8 +72,7 @@ export const ModalHeaderRow = styled(Flex)<{
 
 const CloseModalButton = styled.div`
 	position: absolute;
-	top: 16px;
-	right: 16px;
+	right: 24px;
 	cursor: pointer;
 	z-index: 1;
 `;

@@ -5,6 +5,7 @@ import {
 	IconNetwork32,
 	neutralColors,
 	Overline,
+	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -17,20 +18,31 @@ import { switchNetwork } from '@/lib/wallet';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { ETheme } from '@/features/general/general.slice';
+import { networksParams } from '@/helpers/blockchain';
 
-const networks = [
-	config.MAINNET_CONFIG,
-	config.XDAI_CONFIG,
-	config.POLYGON_CONFIG,
-	config.CELO_CONFIG,
-	config.OPTIMISM_CONFIG,
+const _networks = [
+	config.MAINNET_NETWORK_NUMBER,
+	config.XDAI_NETWORK_NUMBER,
+	config.POLYGON_NETWORK_NUMBER,
+	config.CELO_NETWORK_NUMBER,
+	config.OPTIMISM_NETWORK_NUMBER,
 ];
 
-const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
+interface ISwitchNetworkModal extends IModal {
+	desc?: string;
+	customNetworks?: number[];
+}
+
+const SwitchNetwork: FC<ISwitchNetworkModal> = ({
+	desc,
+	customNetworks,
+	setShowModal,
+}) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
+	const networks = customNetworks || _networks;
 
 	return (
 		<Modal
@@ -41,31 +53,26 @@ const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 			headerTitlePosition='left'
 		>
 			<Wrapper>
-				{networks.map(network => {
-					const _chainId = parseInt(network.chainId);
-					return (
-						<NetworkItem
-							onClick={() => {
-								switchNetwork(_chainId);
-								closeModal();
-							}}
-							isSelected={_chainId === chainId}
-							key={_chainId}
-							theme={theme}
-						>
-							<NetworkLogo chainId={_chainId} logoSize={32} />
-							<B>{network.chainName}</B>
-							{_chainId === chainId && (
-								<SelectedNetwork
-									styleType='Small'
-									theme={theme}
-								>
-									{formatMessage({ id: 'label.selected' })}
-								</SelectedNetwork>
-							)}
-						</NetworkItem>
-					);
-				})}
+				{desc && <P>{desc}</P>}
+				{networks.map(networkId => (
+					<NetworkItem
+						onClick={() => {
+							switchNetwork(networkId);
+							closeModal();
+						}}
+						isSelected={networkId === chainId}
+						key={networkId}
+						theme={theme}
+					>
+						<NetworkLogo chainId={networkId} logoSize={32} />
+						<B>{networksParams[networkId].chainName}</B>
+						{networkId === chainId && (
+							<SelectedNetwork styleType='Small' theme={theme}>
+								{formatMessage({ id: 'label.selected' })}
+							</SelectedNetwork>
+						)}
+					</NetworkItem>
+				))}
 			</Wrapper>
 		</Modal>
 	);

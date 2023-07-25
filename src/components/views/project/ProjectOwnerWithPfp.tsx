@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { P, brandColors } from '@giveth/ui-design-system';
+import { neutralColors, Lead } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { addressToUserView } from '@/lib/routeCreators';
@@ -33,8 +33,8 @@ export const ProjectOwnerWithPfp: FC<IProjectOwnerWithPfpProps> = ({
 	);
 };
 
-const Author = styled(P)`
-	color: ${brandColors.pinky[500]};
+const Author = styled(Lead)`
+	color: ${neutralColors.gray[300]};
 	cursor: pointer;
 `;
 
