@@ -1,9 +1,5 @@
 import styled from 'styled-components';
-import { H1 } from '@giveth/ui-design-system';
-import {
-	brandColors,
-	neutralColors,
-} from '@giveth/ui-design-system/lib/esm/common/colors';
+import { H1, brandColors, neutralColors } from '@giveth/ui-design-system';
 import Wave from '@/components/particles/Wave';
 import { mediaQueries } from '@/lib/constants/constants';
 
