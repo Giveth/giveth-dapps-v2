@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { mediaQueries } from '@/lib/constants/constants';
 
 const KeyAspectsSVG = () => (
 	<Wrapper>
@@ -178,8 +178,14 @@ const KeyAspectsSVG = () => (
 	</Wrapper>
 );
 
-const Wrapper = styled(FlexCenter)`
-	margin-bottom: 80px;
+const Wrapper = styled.div`
+	width: 325px;
+	height: 242px;
+	flex-shrink: 0;
+	margin: 0 auto;
+	${mediaQueries.tablet} {
+		margin-top: 40px;
+	}
 `;
 
 export default KeyAspectsSVG;
