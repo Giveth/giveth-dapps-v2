@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 	max-width: 1180px;
 	padding: 120px 30px 80px;
 	margin: 0 auto;
-  color: ${neutralColors.gray[900]}};
+    color: ${neutralColors.gray[900]}};
 `;
 
 export default GivethTheRevolutionary;
