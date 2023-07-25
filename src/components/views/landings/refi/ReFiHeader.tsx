@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import { H1 } from '@giveth/ui-design-system';
-import { brandColors } from '@giveth/ui-design-system/lib/esm/common/colors';
+import {
+	brandColors,
+	neutralColors,
+} from '@giveth/ui-design-system/lib/esm/common/colors';
 import Wave from '@/components/particles/Wave';
 import { mediaQueries } from '@/lib/constants/constants';
 
@@ -41,15 +44,16 @@ const Title = styled.div`
 `;
 
 const OuterWrapper = styled.div`
-	padding: 0 10px;
+	background: ${neutralColors.gray[200]};
+	padding: 40px 10px;
 	${mediaQueries.tablet} {
-		padding: 0 40px;
+		padding: 40px;
 	}
 `;
 
 const Wrapper = styled.div`
 	max-width: 1200px;
-	margin: 80px auto;
+	margin: 0 auto;
 	border-radius: 16px;
 	background-image: url('/images/banners/categories/all.png');
 	background-size: cover;
