@@ -17,6 +17,8 @@ export const useTokenDistroHelper = (
 		state =>
 			poolNetwork === config.XDAI_NETWORK_NUMBER
 				? state.subgraph.gnosisValues
+				: poolNetwork === config.OPTIMISM_NETWORK_NUMBER
+				? state.subgraph.optimismValues
 				: state.subgraph.mainnetValues,
 		() => (hold ? true : false),
 	);
