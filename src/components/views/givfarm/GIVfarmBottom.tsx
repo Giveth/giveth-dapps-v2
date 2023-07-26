@@ -49,12 +49,25 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 					...config.XDAI_CONFIG.regenPools,
 					...config.MAINNET_CONFIG.pools,
 					...config.MAINNET_CONFIG.regenPools,
+					...config.OPTIMISM_CONFIG.pools,
+					...config.OPTIMISM_CONFIG.regenPools,
+			  ]
+			: chainId === config.OPTIMISM_NETWORK_NUMBER
+			? [
+					...config.OPTIMISM_CONFIG.pools,
+					...config.OPTIMISM_CONFIG.regenPools,
+					...config.XDAI_CONFIG.pools,
+					...config.XDAI_CONFIG.regenPools,
+					...config.MAINNET_CONFIG.pools,
+					...config.MAINNET_CONFIG.regenPools,
 			  ]
 			: [
 					...config.MAINNET_CONFIG.pools,
 					...config.MAINNET_CONFIG.regenPools,
 					...config.XDAI_CONFIG.pools,
 					...config.XDAI_CONFIG.regenPools,
+					...config.OPTIMISM_CONFIG.pools,
+					...config.OPTIMISM_CONFIG.regenPools,
 			  ];
 
 	const now = getNowUnixMS();
@@ -153,13 +166,22 @@ export const GIVfarmBottom = () => {
 				</GIVfarmToolBoxRow>
 				<PoolRow>
 					{!showArchivedPools && (
-						<Col sm={6} lg={4} key={`givpower_card`}>
-							<StakingPoolCard
-								poolStakingConfig={getGivStakingConfig(
-									config.XDAI_CONFIG,
-								)}
-							/>
-						</Col>
+						<>
+							<Col sm={6} lg={4} key={`givpower_card`}>
+								<StakingPoolCard
+									poolStakingConfig={getGivStakingConfig(
+										config.XDAI_CONFIG,
+									)}
+								/>
+							</Col>
+							<Col sm={6} lg={4} key={`givpower_card`}>
+								<StakingPoolCard
+									poolStakingConfig={getGivStakingConfig(
+										config.OPTIMISM_CONFIG,
+									)}
+								/>
+							</Col>
+						</>
 					)}
 					{showArchivedPools && (
 						<Col sm={6} lg={4}>
