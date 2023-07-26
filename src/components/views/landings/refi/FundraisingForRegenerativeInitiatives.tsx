@@ -49,6 +49,9 @@ const items = [
 
 const ItemWrapper = styled.div`
 	padding: 60px 0;
+	> *:first-child {
+		margin-bottom: 16px;
+	}
 `;
 
 const Wrapper = styled(Lead)`
