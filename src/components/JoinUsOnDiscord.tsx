@@ -1,5 +1,10 @@
 import styled from 'styled-components';
-import { Button, H4, IconChevronRight32 } from '@giveth/ui-design-system';
+import {
+	Button,
+	H4,
+	IconChevronRight32,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
@@ -11,11 +16,11 @@ const JoinUsOnDiscord = () => {
 	return (
 		<Wrapper>
 			<InnerWrapper>
-				<H4 weight={700}>
-					{formatMessage({ id: 'component.join_discord.title' })}
-				</H4>
+				<b>{formatMessage({ id: 'component.join_discord.title' })}</b>
 				<Body>
 					{formatMessage({ id: 'component.join_discord.body' })}
+					<b> say-hi </b>
+					{formatMessage({ id: 'component.join_discord.body_2' })}
 				</Body>
 				<ExternalLink href={links.DISCORD}>
 					<Button
@@ -41,28 +46,29 @@ const JoinUsOnDiscord = () => {
 const PlusWrapper = styled.div`
 	position: absolute;
 	right: 50px;
-	bottom: 0;
+	bottom: 60px;
 `;
 
-const Wrapper = styled.div`
+const InnerWrapper = styled.div`
+	max-width: 1180px;
+	padding: 120px 30px;
+	margin: 0 auto;
+	color: ${neutralColors.gray[900]};
+`;
+
+const Wrapper = styled(H4)`
 	position: relative;
 `;
 
 const ArcWrapper = styled.div`
 	position: absolute;
-	top: -20px;
+	top: 50px;
 	left: -10px;
 	rotate: 190deg;
 `;
 
-const Body = styled(H4)`
+const Body = styled.div`
 	margin: 16px 0;
-`;
-
-const InnerWrapper = styled.div`
-	margin: 80px auto;
-	max-width: 1280px;
-	padding: 40px;
 `;
 
 export default JoinUsOnDiscord;
