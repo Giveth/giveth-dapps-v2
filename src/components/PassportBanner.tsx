@@ -132,7 +132,7 @@ export const PassportBanner = () => {
 
 	return (
 		<PassportBannerWrapper bgColor={PassportBannerData[passportState].bg}>
-			<Flex gap='8px'>
+			<Flex gap='8px' alignItems='center'>
 				<IconWrapper>
 					{PassportBannerData[passportState].icon}
 				</IconWrapper>
