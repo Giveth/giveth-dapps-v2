@@ -9,6 +9,7 @@ import GivethTheRevolutionary from '@/components/views/landings/refi/GivethTheRe
 import FirstOfAll from '@/components/views/landings/refi/FirstOfAll';
 import KeyAspects from '@/components/views/landings/refi/KeyAspects';
 import ReFiRepresents from '@/components/views/landings/refi/ReFiRepresents';
+import FundraisingForRegenerativeInitiatives from '@/components/views/landings/refi/FundraisingForRegenerativeInitiatives';
 
 const ReFiLandingPage = () => {
 	return (
@@ -21,6 +22,8 @@ const ReFiLandingPage = () => {
 			<KeyAspects />
 			<Divider color={neutralColors.gray[200]} height='40px' />
 			<ReFiRepresents />
+			<Divider color={neutralColors.gray[200]} height='40px' />
+			<FundraisingForRegenerativeInitiatives />
 			<Divider color={neutralColors.gray[200]} height='40px' />
 			<JoinUsOnDiscord />
 			<Divider color={neutralColors.gray[200]} height='40px' />
