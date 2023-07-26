@@ -1,5 +1,10 @@
 import styled from 'styled-components';
-import { brandColors, H4, neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	H4,
+	mediaQueries,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import Wave from '@/components/particles/Wave';
 import QuarterCircle from '@/components/particles/QuarterCircle';
 import Plus from '@/components/particles/Plus';
@@ -34,6 +39,9 @@ const PlusWrapper = styled.div`
 	left: 50px;
 	bottom: 60px;
 	display: none;
+	${mediaQueries.laptopL} {
+		display: block;
+	}
 `;
 
 const ArcWrapper = styled.div`
@@ -47,6 +55,9 @@ const WaveWrapper = styled.div`
 	right: 0;
 	bottom: 120px;
 	display: none;
+	${mediaQueries.laptopL} {
+		display: block;
+	}
 `;
 
 const OuterWrapper = styled.div`
