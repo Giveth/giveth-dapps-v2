@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { H4, neutralColors } from '@giveth/ui-design-system';
 
-const GivethTheRevolutionary = () => {
+const FirstOfAll = () => {
 	return (
 		<Wrapper>
 			<H4 weight={700}>First of all, what is ReFi?</H4>
@@ -28,4 +28,4 @@ const Wrapper = styled.div`
 	}
 `;
 
-export default GivethTheRevolutionary;
+export default FirstOfAll;
