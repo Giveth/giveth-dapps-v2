@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Lead, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { FlexCenter } from '@/components/styled-components/Flex';
@@ -25,6 +26,7 @@ interface IProps extends IModal {
 
 const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	const messageContent = () => {
 		switch (type) {
@@ -70,7 +72,12 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 			<Container>
 				<Content>{messageContent()}</Content>
 				{txUrl && (
-					<ExternalLink href={txUrl} title='View on Etherscan' />
+					<ExternalLink
+						href={txUrl}
+						title={formatMessage({
+							id: 'label.view_on_block_explorer',
+						})}
+					/>
 				)}
 			</Container>
 		</Modal>

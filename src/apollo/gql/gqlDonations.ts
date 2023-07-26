@@ -17,8 +17,7 @@ export const DONATION_CORE_FIELDS = gql`
 	}
 `;
 
-export const FETCH_PROJECT_DONATIONS = gql`
-	${DONATION_CORE_FIELDS}
+export const FETCH_PROJECT_DONATIONS_COUNT = gql`
 	query DonationsByProjectId(
 		$take: Int
 		$skip: Int
@@ -37,6 +36,33 @@ export const FETCH_PROJECT_DONATIONS = gql`
 			orderBy: $orderBy
 			status: $status
 		) {
+			totalCount
+		}
+	}
+`;
+
+export const FETCH_PROJECT_DONATIONS = gql`
+	${DONATION_CORE_FIELDS}
+	query DonationsByProjectId(
+		$take: Int
+		$skip: Int
+		$traceable: Boolean
+		$qfRoundId: Int
+		$projectId: Int!
+		$searchTerm: String
+		$orderBy: SortBy
+		$status: String
+	) {
+		donationsByProjectId(
+			take: $take
+			skip: $skip
+			traceable: $traceable
+			qfRoundId: $qfRoundId
+			projectId: $projectId
+			searchTerm: $searchTerm
+			orderBy: $orderBy
+			status: $status
+		) {
 			donations {
 				...DonationCoreFields
 				user {
@@ -46,6 +72,7 @@ export const FETCH_PROJECT_DONATIONS = gql`
 				}
 			}
 			totalCount
+			totalUsdBalance
 		}
 	}
 `;
@@ -116,6 +143,24 @@ export const UPDATE_DONATION_STATUS = gql`
 			id
 			status
 			verifyErrorMessage
+		}
+	}
+`;
+
+export const FETCH_QF_ROUND_HISTORY = gql`
+	query ($projectId: Int!, $qfRoundId: Int!) {
+		getQfRoundHistory(projectId: $projectId, qfRoundId: $qfRoundId) {
+			uniqueDonors
+			raisedFundInUsd
+			donationsCount
+			matchingFund
+			distributedFundNetwork
+			distributedFundTxHash
+			estimatedMatching {
+				projectDonationsSqrtRootSum
+				allProjectsSum
+				matchingPool
+			}
 		}
 	}
 `;

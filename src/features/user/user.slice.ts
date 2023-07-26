@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IUser } from '@/apollo/types/types';
+import { IUserWithPassport } from '@/apollo/types/types';
 import {
 	fetchUserByAddress,
 	signToGetToken,
@@ -13,12 +13,13 @@ import { RootState } from '../store';
 import { getTokens } from '@/helpers/user';
 
 const initialState: {
-	userData?: IUser;
+	userData?: IUserWithPassport;
 	token?: string;
 	isEnabled: boolean;
 	isSignedIn: boolean;
 	balance: string | null;
 	isLoading: boolean;
+	isUserFullFilled: boolean;
 } = {
 	userData: undefined,
 	token: undefined,
@@ -26,6 +27,7 @@ const initialState: {
 	isSignedIn: false,
 	balance: null,
 	isLoading: true,
+	isUserFullFilled: false,
 };
 
 type UserStateType = RootState['user'];
@@ -90,7 +92,7 @@ export const userSlice = createSlice({
 					state,
 					action: PayloadAction<{
 						data: {
-							userByAddress: IUser;
+							userByAddress: IUserWithPassport;
 						};
 					}>,
 				) => {
@@ -121,10 +123,12 @@ export const userSlice = createSlice({
 						signOutUser(state);
 					}
 					state.isLoading = false;
+					state.isUserFullFilled = true;
 				},
 			)
 			.addCase(fetchUserByAddress.rejected, state => {
 				state.isLoading = false;
+				state.isUserFullFilled = true;
 			})
 			.addCase(signToGetToken.fulfilled, (state, action) => {
 				state.token = action.payload;

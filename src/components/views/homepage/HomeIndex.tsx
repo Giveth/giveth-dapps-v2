@@ -81,7 +81,6 @@ const HomeIndex: FC<IHomeRoute> = props => {
 			<Separator />
 			<HomePartners />
 			<Separator />
-
 			<HomeFromBlog />
 			<GetUpdates />
 			{featuredProjects && featuredProjects.length > 0 ? (
