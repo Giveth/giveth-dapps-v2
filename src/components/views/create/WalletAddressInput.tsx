@@ -31,7 +31,7 @@ interface IProps {
 	networkId: number;
 	userAddresses: string[];
 	sameAddress?: boolean;
-	isActive: boolean;
+	isActive?: boolean;
 	resolvedENS?: string;
 	setResolvedENS: (resolvedENS: string) => void;
 }

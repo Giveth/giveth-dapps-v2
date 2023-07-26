@@ -359,41 +359,26 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							userAddresses={userAddresses}
 							resolvedENS={resolvedENS}
 							setResolvedENS={setResolvedENS}
-							setIsActive={e => {
-								if (!e) unregister(EInputs.mainAddress);
-							}}
 						/>
 						<WalletAddressInput
 							networkId={XDAI_NETWORK_NUMBER}
 							userAddresses={userAddresses}
 							setResolvedENS={() => {}}
-							setIsActive={e => {
-								if (!e) unregister(EInputs.gnosisAddress);
-							}}
 						/>
 						<WalletAddressInput
 							networkId={POLYGON_NETWORK_NUMBER}
 							userAddresses={userAddresses}
 							setResolvedENS={() => {}}
-							setIsActive={e => {
-								if (!e) unregister(EInputs.polygonAddress);
-							}}
 						/>
 						<WalletAddressInput
 							networkId={CELO_NETWORK_NUMBER}
 							userAddresses={userAddresses}
 							setResolvedENS={() => {}}
-							setIsActive={e => {
-								if (!e) unregister(EInputs.celoAddress);
-							}}
 						/>
 						<WalletAddressInput
 							networkId={OPTIMISM_NETWORK_NUMBER}
 							userAddresses={userAddresses}
 							setResolvedENS={() => {}}
-							setIsActive={e => {
-								if (!e) unregister(EInputs.optimismAddress);
-							}}
 						/>
 						<PublishTitle>
 							{isEditMode
