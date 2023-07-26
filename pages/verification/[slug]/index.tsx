@@ -4,7 +4,7 @@ import VerificationIndex from '@/components/views/verification/VerificationIndex
 import { setShowFooter } from '@/features/general/general.slice';
 import { VerificationProvider } from '@/context/verification.context';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import Spinner from '@/components/Spinner';
+import { WrappedSpinner } from '@/components/Spinner';
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import { isUserRegistered } from '@/lib/helpers';
@@ -25,7 +25,7 @@ const VerificationRoute = () => {
 	}, []);
 
 	if (isLoading) {
-		return <Spinner />;
+		return <WrappedSpinner />;
 	} else if (!isEnabled) {
 		return <WalletNotConnected />;
 	} else if (!isSignedIn) {
