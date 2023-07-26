@@ -36,6 +36,7 @@
 	"component.input.search_or_paste": "Busca un nombre o pega una dirección",
 	"component.join_discord.title": "",
 	"component.join_discord.body": "",
+	"component.join_discord.body_2": "",
 	"component.passport_card.desc": "Verify your Gitcoin Passport to prove your donor uniqueness and ensure your donations get matched in quadratic funding rounds.",
 	"component.pfp_eligibility_modal.content.not_eligible": "La billetera que conectaste no esta en nuestra lista para hacer minting adelantado. Si piensas que fue un error, contacta a nuestro equipo. Revisa nuestra documentación para más detalle en elegibilidad, o regresa cuando el mint público inicie el dia 24 de Marzo, 2023 a las 16:00 UTC.",
 	"component.pfp_eligibility_modal.content.success": "Eres elegible para hacer mint de tu Giver adelantado! Gracias por tu apoyo a Giveth",
