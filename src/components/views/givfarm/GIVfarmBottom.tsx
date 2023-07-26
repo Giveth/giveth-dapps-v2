@@ -167,14 +167,14 @@ export const GIVfarmBottom = () => {
 				<PoolRow>
 					{!showArchivedPools && (
 						<>
-							<Col sm={6} lg={4} key={`givpower_card`}>
+							<Col sm={6} lg={4} key={`givpower_card_gnosis`}>
 								<StakingPoolCard
 									poolStakingConfig={getGivStakingConfig(
 										config.XDAI_CONFIG,
 									)}
 								/>
 							</Col>
-							<Col sm={6} lg={4} key={`givpower_card`}>
+							<Col sm={6} lg={4} key={`givpower_card_optimism`}>
 								<StakingPoolCard
 									poolStakingConfig={getGivStakingConfig(
 										config.OPTIMISM_CONFIG,
