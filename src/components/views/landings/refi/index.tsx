@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 import GetUpdates from '@/components/GetUpdates';
 import JoinUsOnDiscord from '@/components/JoinUsOnDiscord';
-import QuoteSection from '@/components/views/landings/refi/QuoteSection';
 import ReFiHeader from '@/components/views/landings/refi/ReFiHeader';
 import Divider from '@/components/Divider';
 import GivethTheRevolutionary from '@/components/views/landings/refi/GivethTheRevolutionary';
@@ -26,8 +25,6 @@ const ReFiLandingPage = () => {
 			<FundraisingForRegenerativeInitiatives />
 			<Divider color={neutralColors.gray[200]} height='40px' />
 			<JoinUsOnDiscord />
-			<Divider color={neutralColors.gray[200]} height='40px' />
-			<QuoteSection />
 			<Divider color={neutralColors.gray[200]} height='40px' />
 			<GetUpdates />
 		</Wrapper>
