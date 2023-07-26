@@ -8,6 +8,7 @@ import Divider from '@/components/Divider';
 import GivethTheRevolutionary from '@/components/views/landings/refi/GivethTheRevolutionary';
 import FirstOfAll from '@/components/views/landings/refi/FirstOfAll';
 import KeyAspects from '@/components/views/landings/refi/KeyAspects';
+import ReFiRepresents from '@/components/views/landings/refi/ReFiRepresents';
 
 const ReFiLandingPage = () => {
 	return (
@@ -18,6 +19,8 @@ const ReFiLandingPage = () => {
 			<FirstOfAll />
 			<Divider color={neutralColors.gray[200]} height='40px' />
 			<KeyAspects />
+			<Divider color={neutralColors.gray[200]} height='40px' />
+			<ReFiRepresents />
 			<Divider color={neutralColors.gray[200]} height='40px' />
 			<JoinUsOnDiscord />
 			<Divider color={neutralColors.gray[200]} height='40px' />
