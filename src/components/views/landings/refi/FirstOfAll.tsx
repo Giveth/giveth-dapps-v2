@@ -39,6 +39,10 @@ const ArcWrapper = styled.div`
 	top: 122px;
 	left: -20px;
 	transform: rotate(200deg);
+	display: none;
+	${mediaQueries.laptopL} {
+		display: block;
+	}
 `;
 
 const OuterWrapper = styled.div`
