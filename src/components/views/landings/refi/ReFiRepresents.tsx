@@ -24,9 +24,6 @@ const Wrapper = styled(Lead)`
 	padding: 120px 30px;
 	margin: 0 auto;
     color: ${neutralColors.gray[900]}};
-	> *:first-child {
-		margin-bottom: 16px;
-	}
 `;
 
 export default ReFiRepresents;
