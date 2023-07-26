@@ -36,6 +36,7 @@
 	"component.input.search_or_paste": "Cerca per nom o enganxa una adreça",
 	"component.join_discord.title": "",
 	"component.join_discord.body": "",
+	"component.join_discord.body_2": "",
 	"component.passport_card.desc": "Verify your Gitcoin Passport to prove your donor uniqueness and ensure your donations get matched in quadratic funding rounds.",
 	"component.pfp_eligibility_modal.content.not_eligible": "La cartera que has connectat no està a la nostra llista per fer minting avançat. Si penses que és un error, contacta amb el nostre equip. Consulta la nostra documentació per a més detalls sobre elegibilitat, o torna quan s'obri el minting públic el 24 de març del 2023 a les 16:00 UTC.",
 	"component.pfp_eligibility_modal.content.success": "Ets elegible per fer mint del teu Giver avançat! Gràcies per donar suport a Giveth",
