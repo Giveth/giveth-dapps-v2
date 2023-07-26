@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { brandColors } from '@giveth/ui-design-system';
 import { FC } from 'react';
+import { FlexCenter } from './styled-components/Flex';
 
 interface IColor {
 	color?: string;
@@ -37,7 +38,7 @@ export const WrappedSpinner: FC<IWrappedSpinner> = ({
 	);
 };
 
-export const SpinnerContainer = styled.div<ISize>`
+export const SpinnerContainer = styled(FlexCenter)<ISize>`
 	min-height: ${({ size }) => size}px;
 	/* min-width: ${({ size }) => size}px; */
 `;
