@@ -1,5 +1,8 @@
 import styled from 'styled-components';
-import { Lead, neutralColors, H4 } from '@giveth/ui-design-system';
+import { Lead, neutralColors, H4, Button } from '@giveth/ui-design-system';
+import { TextCenter } from '@/components/styled-components/Text';
+import ExternalLink from '@/components/ExternalLink';
+import Routes from '@/lib/constants/Routes';
 
 const FundraisingForRegenerativeInitiatives = () => {
 	return (
@@ -10,6 +13,14 @@ const FundraisingForRegenerativeInitiatives = () => {
 					<div>{item.description}</div>
 				</ItemWrapper>
 			))}
+			<TextCenterStyled>
+				<ExternalLink href={Routes.ReFiProjects}>
+					<Button
+						buttonType='primary'
+						label='Explore ReFi projects on Giveth'
+					/>
+				</ExternalLink>
+			</TextCenterStyled>
 		</Wrapper>
 	);
 };
@@ -46,6 +57,10 @@ const items = [
 			"Giveth's platform provides an avenue for individuals to engage in real impact by supporting regenerative projects aligned with ReFi's goals. By leveraging blockchain-based mechanisms, Giveth enables transparent and efficient investment processes that direct capital towards sustainable initiatives, contributing to the growth and development of the ReFi ecosystem.",
 	},
 ];
+
+const TextCenterStyled = styled(TextCenter)`
+	margin-top: 20px;
+`;
 
 const ItemWrapper = styled.div`
 	padding: 60px 0;
