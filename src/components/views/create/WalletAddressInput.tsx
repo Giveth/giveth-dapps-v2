@@ -20,7 +20,6 @@ import { gqlAddressValidation } from '@/components/views/create/helpers';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import CheckBox from '@/components/Checkbox';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
@@ -33,7 +32,6 @@ interface IProps {
 	userAddresses: string[];
 	sameAddress?: boolean;
 	isActive: boolean;
-	setIsActive: (active: boolean) => void;
 	resolvedENS?: string;
 	setResolvedENS: (resolvedENS: string) => void;
 }
@@ -42,8 +40,7 @@ const WalletAddressInput: FC<IProps> = ({
 	networkId,
 	userAddresses,
 	sameAddress = false,
-	isActive,
-	setIsActive,
+	isActive = true,
 	resolvedENS,
 	setResolvedENS,
 }) => {
@@ -272,19 +269,6 @@ const WalletAddressInput: FC<IProps> = ({
 					})}
 				</Caption>
 			</ExchangeNotify>
-			{!isHidden && (
-				<CheckBoxContainer
-					className={sameAddress ? 'fadeOut' : 'fadeIn'}
-				>
-					<CheckBox
-						onChange={setIsActive}
-						label={formatMessage({
-							id: 'label.ill_receive_funds_on_this_address',
-						})}
-						checked={isActive}
-					/>
-				</CheckBoxContainer>
-			)}
 		</Container>
 	);
 };
