@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { GLink, neutralColors } from '@giveth/ui-design-system';
+import { brandColors, GLink } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { addressToUserView, slugToProjectView } from '@/lib/routeCreators';
@@ -28,31 +28,33 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 	);
 
 	return (
-		<StyledPaddedRow style={{ marginTop: '6px' }}>
-			{adminUser?.name && !isForeignOrg && (
-				<Link
-					href={addressToUserView(
-						adminUser?.walletAddress?.toLowerCase(),
-					)}
-				>
-					{pfpToken ? (
-						<Flex gap='8px' alignItems='center'>
-							<PFP pfpToken={pfpToken} />
-							<Author bold size='Big'>
-								{name || '\u200C'}
-							</Author>
-						</Flex>
-					) : (
-						<Author size='Big'>{name || '\u200C'}</Author>
-					)}
+		<UserNameContainer>
+			<StyledPaddedRow>
+				{adminUser?.name && !isForeignOrg && (
+					<Link
+						href={addressToUserView(
+							adminUser?.walletAddress?.toLowerCase(),
+						)}
+					>
+						{pfpToken ? (
+							<Flex gap='8px' alignItems='center'>
+								<PFP pfpToken={pfpToken} />
+								<Author bold size='Big'>
+									{name || '\u200C'}
+								</Author>
+							</Flex>
+						) : (
+							<Author size='Big'>{name || '\u200C'}</Author>
+						)}
+					</Link>
+				)}
+				<Link href={slugToProjectView(slug)} style={{ flex: 1 }}>
+					<Author size='Big'>
+						<br />
+					</Author>
 				</Link>
-			)}
-			<Link href={slugToProjectView(slug)} style={{ flex: 1 }}>
-				<Author size='Big'>
-					<br />
-				</Author>
-			</Link>
-		</StyledPaddedRow>
+			</StyledPaddedRow>
+		</UserNameContainer>
 	);
 };
 
@@ -61,8 +63,11 @@ interface IAuthor {
 }
 
 const Author = styled(GLink)<IAuthor>`
-	color: ${neutralColors.gray[700]};
-	margin-bottom: 9px;
+	color: ${brandColors.pinky[500]};
 	display: block;
 	font-weight: ${props => (props.bold ? 500 : 400)};
+`;
+
+const UserNameContainer = styled.div`
+	height: 40px;
 `;

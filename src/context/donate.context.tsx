@@ -1,5 +1,6 @@
 import { createContext, FC, ReactNode, useContext, useState } from 'react';
 import { IDonationProject } from '@/apollo/types/types';
+import { hasActiveRound } from '@/helpers/qf';
 
 interface ISuccessDonation {
 	txHash: string[];
@@ -7,9 +8,10 @@ interface ISuccessDonation {
 }
 
 interface IDonateContext {
+	hasActiveQFRound?: boolean;
 	project: IDonationProject;
 	isSuccessDonation?: ISuccessDonation;
-	setSuccessDonation: (successDonation: ISuccessDonation) => void;
+	setSuccessDonation: (successDonation?: ISuccessDonation) => void;
 }
 
 interface IProviderProps {
@@ -24,15 +26,20 @@ const DonateContext = createContext<IDonateContext>({
 
 DonateContext.displayName = 'DonateContext';
 
-export const DonateProvider: FC<IProviderProps> = props => {
-	const { children, project } = props;
-
+export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 	const [isSuccessDonation, setSuccessDonation] =
 		useState<ISuccessDonation>();
 
+	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
+
 	return (
 		<DonateContext.Provider
-			value={{ project, isSuccessDonation, setSuccessDonation }}
+			value={{
+				hasActiveQFRound,
+				project,
+				isSuccessDonation,
+				setSuccessDonation,
+			}}
 		>
 			{children}
 		</DonateContext.Provider>

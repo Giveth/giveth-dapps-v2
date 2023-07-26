@@ -21,6 +21,7 @@ export const NavigationWrapper = styled.div<{ disabled?: boolean }>`
 	width: 50px;
 	margin-right: 8px;
 	margin-left: 8px;
+	user-select: none;
 `;
 
 export const SwiperPaginationWrapper = styled(FlexCenter)`

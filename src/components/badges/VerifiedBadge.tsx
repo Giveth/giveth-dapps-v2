@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { FlexCenter } from '../styled-components/Flex';
 
-const VerificationBadge = () => {
+export const VerifiedBadge = () => {
 	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
@@ -29,5 +29,3 @@ const TextBadge = styled(Overline)`
 	margin-right: 5px;
 	text-transform: uppercase;
 `;
-
-export default VerificationBadge;

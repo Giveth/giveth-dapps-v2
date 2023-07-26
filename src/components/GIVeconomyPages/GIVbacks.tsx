@@ -162,7 +162,7 @@ export const TabGIVbacksBottom = () => {
 			_roundStartTime.setDate(_roundEndTime.getDate() - 14);
 			setRoundStarTime(_roundStartTime);
 		}
-	}, [givTokenDistroHelper]);
+	}, [givTokenDistroHelper, isLoaded]);
 
 	return (
 		<GIVbacksBottomContainer>

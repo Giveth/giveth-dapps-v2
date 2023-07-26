@@ -268,6 +268,10 @@ const OurMissionButton = styled(ButtonLink)`
 	display: flex;
 	align-items: center;
 	height: 100%;
+	transition: color 0.2s ease-in-out;
+	&:hover {
+		color: ${brandColors.giv[300]};
+	}
 `;
 
 export default IntroBlock;
