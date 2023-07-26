@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import {
+	brandColors,
 	H4,
 	mediaQueries,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import Plus from '@/components/particles/Plus';
+import ArcWithDot from '@/components/particles/ArcWithDot';
 
 const FirstOfAll = () => {
 	return (
@@ -25,9 +27,19 @@ const FirstOfAll = () => {
 			<PlusWrapper>
 				<Plus color={semanticColors.jade[400]} />
 			</PlusWrapper>
+			<ArcWrapper>
+				<ArcWithDot color={brandColors.mustard[500]} />
+			</ArcWrapper>
 		</OuterWrapper>
 	);
 };
+
+const ArcWrapper = styled.div`
+	position: absolute;
+	top: 122px;
+	left: -20px;
+	transform: rotate(200deg);
+`;
 
 const OuterWrapper = styled.div`
 	position: relative;
