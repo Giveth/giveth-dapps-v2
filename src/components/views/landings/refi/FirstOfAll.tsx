@@ -1,22 +1,47 @@
 import styled from 'styled-components';
-import { H4, neutralColors } from '@giveth/ui-design-system';
+import {
+	H4,
+	mediaQueries,
+	neutralColors,
+	semanticColors,
+} from '@giveth/ui-design-system';
+import Plus from '@/components/particles/Plus';
 
 const FirstOfAll = () => {
 	return (
-		<Wrapper>
-			<H4 weight={700}>First of all, what is ReFi?</H4>
-			<H4>
-				Regenerative Finance, or ReFi, is a movement that recognizes the
-				potential of blockchain, or crypto technology, and web3 to drive
-				positive change in addressing climate change, supporting
-				conservation efforts, promoting biodiversity and more. It aims
-				to leverage the transformative capabilities of decentralized
-				technologies to foster regenerative practices in the financial
-				sector.
-			</H4>
-		</Wrapper>
+		<OuterWrapper>
+			<Wrapper>
+				<H4 weight={700}>First of all, what is ReFi?</H4>
+				<H4>
+					Regenerative Finance, or ReFi, is a movement that recognizes
+					the potential of blockchain, or crypto technology, and web3
+					to drive positive change in addressing climate change,
+					supporting conservation efforts, promoting biodiversity and
+					more. It aims to leverage the transformative capabilities of
+					decentralized technologies to foster regenerative practices
+					in the financial sector.
+				</H4>
+			</Wrapper>
+			<PlusWrapper>
+				<Plus color={semanticColors.jade[400]} />
+			</PlusWrapper>
+		</OuterWrapper>
 	);
 };
+
+const OuterWrapper = styled.div`
+	position: relative;
+`;
+
+const PlusWrapper = styled.div`
+	position: absolute;
+	right: 53px;
+	bottom: 226px;
+	display: none;
+	${mediaQueries.laptopL} {
+		display: block;
+	}
+`;
 
 const Wrapper = styled.div`
 	max-width: 1180px;
