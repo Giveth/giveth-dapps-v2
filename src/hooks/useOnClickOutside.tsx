@@ -3,8 +3,11 @@ import { useEffect, RefObject } from 'react';
 export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
 	ref: RefObject<T>,
 	handler: (e: MouseEvent | TouchEvent) => void,
+	active: boolean = true,
 ) {
 	useEffect(() => {
+		if (!active) return;
+
 		const listener = (event: MouseEvent | TouchEvent) => {
 			event.stopPropagation();
 			event.preventDefault();
@@ -20,5 +23,5 @@ export function useOnClickOutside<T extends HTMLElement = HTMLElement>(
 			document.removeEventListener('mousedown', listener);
 			document.removeEventListener('touchstart', listener);
 		};
-	}, [ref, handler]);
+	}, [ref, handler, active]);
 }
