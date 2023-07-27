@@ -491,7 +491,10 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								size='medium'
 								buttonType='primary'
 								onClick={onHarvest}
-								disabled={sumLiquid.eq(0)}
+								disabled={
+									sumLiquid.eq(0) ||
+									state === HarvestStates.HARVESTING
+								}
 								loading={state === HarvestStates.HARVESTING}
 							/>
 						)}
