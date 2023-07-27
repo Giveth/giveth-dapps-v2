@@ -12,12 +12,12 @@ import styled from 'styled-components';
 import { FC } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import config from '@/configuration';
-import LoadingAnimation from '@/animations/loading.json';
 import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
 import { AddTokenButton } from '../AddTokenButton';
 import { Flex } from '../styled-components/Flex';
 import LottieControl from '@/components/LottieControl';
+import { WrappedSpinner } from '../Spinner';
 
 const AddTokenRow = styled(Flex)`
 	margin-top: 16px;
@@ -41,7 +41,7 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 	return (
 		<>
 			<Title>{title}</Title>
-			<LottieControl animationData={LoadingAnimation} size={200} />
+			<WrappedSpinner size={200} />
 			<TxSubmit weight={700}>{txHash && 'Transaction pending'}</TxSubmit>
 			<AddTokenRow alignItems={'center'} justifyContent={'center'}>
 				<AddTokenButton

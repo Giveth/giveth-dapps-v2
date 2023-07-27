@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { useAppSelector } from '@/features/hooks';
 import { useReferral } from '@/hooks/useReferral';
-import Spinner from '@/components/Spinner';
+import { WrappedSpinner } from '@/components/Spinner';
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import UserProfileView from '@/components/views/userProfile/UserProfile.view';
@@ -13,7 +13,7 @@ const UserRoute = () => {
 	useReferral();
 
 	if (isLoading) {
-		return <Spinner />;
+		return <WrappedSpinner />;
 	} else if (!isEnabled) {
 		return <WalletNotConnected />;
 	} else if (!isSignedIn) {

@@ -8,7 +8,6 @@ import { Modal } from '../Modal';
 import { StakingPoolImages } from '../../StakingPoolImages';
 import { AmountInput } from '../../AmountInput';
 import { approveERC20tokenTransfer, stakeTokens } from '@/lib/stakingPool';
-import LoadingAnimation from '../../../animations/loading.json';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
@@ -21,7 +20,6 @@ import { IModal } from '@/types/common';
 import StakeSteps from './StakeSteps';
 import { ERC20 } from '@/types/contracts';
 import {
-	Pending,
 	CancelButton,
 	StakeModalContainer,
 	StakeModalTitle,
@@ -38,7 +36,6 @@ import {
 	SimplePoolStakingConfig,
 	StakingPlatform,
 } from '@/types/config';
-import LottieControl from '@/components/LottieControl';
 import { useStakingPool } from '@/hooks/useStakingPool';
 
 interface IStakeInnerModalProps {
@@ -235,42 +232,38 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 									<P>{permit ? 'Permit' : 'Approve'} mode</P>
 								</ToggleContainer>
 							)}
-							{stakeState === StakeState.APPROVE && (
+							{(stakeState === StakeState.APPROVE ||
+								stakeState === StakeState.APPROVING) && (
 								<StyledOutlineButton
-									label={'APPROVE'}
+									label={
+										stakeState === StakeState.APPROVING
+											? 'APPROVE PENDING'
+											: 'APPROVE'
+									}
 									onClick={onApprove}
+									loading={
+										stakeState === StakeState.APPROVING
+									}
 									disabled={
 										amount == '0' || maxAmount.lt(amount)
 									}
 								/>
 							)}
-							{stakeState === StakeState.APPROVING && (
-								<Pending>
-									<LottieControl
-										animationData={LoadingAnimation}
-										size={40}
-									/>
-									&nbsp;APPROVE PENDING
-								</Pending>
-							)}
-							{stakeState === StakeState.STAKE && (
+							{(stakeState === StakeState.STAKE ||
+								stakeState === StakeState.STAKING) && (
 								<StyledButton
-									label={'STAKE'}
+									label={
+										stakeState === StakeState.STAKE
+											? 'STAKE'
+											: 'STAKE PENDING'
+									}
 									onClick={onStake}
 									disabled={
 										amount == '0' || maxAmount.lt(amount)
 									}
 									buttonType='primary'
+									loading={stakeState === StakeState.STAKING}
 								/>
-							)}
-							{stakeState === StakeState.STAKING && (
-								<Pending>
-									<LottieControl
-										animationData={LoadingAnimation}
-										size={40}
-									/>
-									&nbsp;STAKE PENDING
-								</Pending>
 							)}
 							<CancelButton
 								buttonType='texty'
