@@ -19,7 +19,11 @@ const ProjectsFiltersButton = () => {
 
 	const filterMenuRef = useRef<HTMLDivElement>(null);
 
-	useOnClickOutside(filterMenuRef, () => setIsFilterOpen(false));
+	useOnClickOutside(
+		filterMenuRef,
+		() => setIsFilterOpen(false),
+		isFilterOpen,
+	);
 
 	const handleFilterClose = (e: MouseEvent<HTMLElement>) => {
 		e.stopPropagation && e.stopPropagation();

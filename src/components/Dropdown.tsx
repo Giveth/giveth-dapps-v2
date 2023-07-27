@@ -38,7 +38,7 @@ export interface IOption {
 export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
 	const [open, setOpen] = useState(false);
 	const ddRef = useRef<HTMLDivElement>(null);
-	useOnClickOutside(ddRef, () => setOpen(false));
+	useOnClickOutside(ddRef, () => setOpen(false), open);
 	return (
 		<Wrapper ref={ddRef}>
 			<Controller>
