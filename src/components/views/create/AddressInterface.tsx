@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import {
 	Button,
+	GLink,
 	IconArrowRight16,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -46,6 +47,8 @@ const AddressInterface = ({ networkId, address }: IAddressInterfaceProps) => {
 	console.log('Value', value);
 	console.log('inputName', inputName);
 	const { formatMessage } = useIntl();
+
+	const hasAddress = !!address;
 
 	let caption: string = '';
 	if (!value) {
@@ -91,12 +94,36 @@ const AddressInterface = ({ networkId, address }: IAddressInterfaceProps) => {
 					</Flex>
 					<Button
 						buttonType='texty-secondary'
-						label='Add Address'
+						label={hasAddress ? 'Edit Address' : 'Add Address'}
 						icon={<IconArrowRight16 />}
 					/>
 				</Flex>
 			</TopContainer>
-			<MiddleContainer></MiddleContainer>
+			<MiddleContainer>
+				{hasAddress && (
+					<GLink>
+						{formatMessage(
+							{
+								id: 'label.receiving_address_on',
+							},
+							{
+								chainName: isGnosis
+									? 'Gnosis Chain'
+									: isPolygon
+									? 'Polygon Mainnet'
+									: isCelo
+									? 'Celo Mainnet'
+									: isOptimism
+									? 'Optimism Mainnet'
+									: 'Mainnet',
+							},
+						)}
+					</GLink>
+				)}
+				<AddressContainer hasAddress={hasAddress}>
+					{address ? address : 'No address added yet!'}
+				</AddressContainer>
+			</MiddleContainer>
 		</Container>
 	);
 };
@@ -151,6 +178,17 @@ const TopContainer = styled.div`
 
 const MiddleContainer = styled.div`
 	border-bottom: 1px solid ${neutralColors.gray[300]};
+	padding: 24px 0;
+`;
+
+const AddressContainer = styled.div<{ hasAddress: boolean }>`
+	border: 2px solid ${neutralColors.gray[300]};
+	background-color: ${props =>
+		props.hasAddress ? neutralColors.gray[100] : neutralColors.gray[300]};
+	border-radius: 8px;
+	color: ${props =>
+		props.hasAddress ? neutralColors.gray[900] : neutralColors.gray[500]};
+	padding: 16px;
 `;
 
 export default AddressInterface;
