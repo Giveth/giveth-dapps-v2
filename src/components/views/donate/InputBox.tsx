@@ -42,6 +42,7 @@ const InputBox: FC<IInputBox> = ({
 					onBlur={() => onFocus(false)}
 					placeholder={formatMessage({ id: 'label.amount' })}
 					disabled={disabled}
+					onWheel={e => e.currentTarget.blur()}
 				/>
 			</Wrapper>
 			{error && (

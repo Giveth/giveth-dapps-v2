@@ -21,5 +21,4 @@ export const BlockHeader = styled(Flex)`
 	${mediaQueries.laptopS} {
 		flex-direction: row;
 	}
-	overflow-x: scroll;
 `;

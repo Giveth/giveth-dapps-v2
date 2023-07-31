@@ -8,7 +8,6 @@ import { useIntl } from 'react-intl';
 import { Modal } from '../Modal';
 import { AmountInput } from '../../AmountInput';
 import { approveERC20tokenTransfer, wrapToken } from '@/lib/stakingPool';
-import LoadingAnimation from '../../../animations/loading.json';
 import { ErrorInnerModal } from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
@@ -40,15 +39,6 @@ interface IStakeInnerModalProps {
 }
 
 interface IStakeModalProps extends IModal, IStakeInnerModalProps {}
-
-export const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
 
 export const StakeGIVModal: FC<IStakeModalProps> = ({
 	poolStakingConfig,

@@ -37,7 +37,7 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 	const nextElRef = useRef<HTMLDivElement>(null);
 	const prevElRef = useRef<HTMLDivElement>(null);
 	//Please don't remove this
-	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
+	const [_, setSwiperInstance] = useState<SwiperClass>();
 	const { formatMessage } = useIntl();
 
 	return (
@@ -113,15 +113,18 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 };
 
 const StyledProjectCard = styled(ProjectCard)`
-	width: 360px;
+	width: 340px;
 	margin: 0;
+	${mediaQueries.tablet} {
+		width: 360px !important;
+	}
 	${mediaQueries.laptopS} {
 		width: 384px !important;
 	}
 `;
 
 const SwiperWrapper = styled.div`
-	padding: 24px 32px 20px;
+	padding: 24px 16px 20px;
 	width: 100%;
 	overflow: hidden;
 	.swiper {
@@ -159,6 +162,8 @@ const Title = styled(FlexCenter)`
 	margin: 0 32px;
 	user-select: none;
 	padding-right: 24px;
+	padding-top: 24px;
+	padding-bottom: 24px;
 	gap: 24px;
 	z-index: 10;
 	${mediaQueries.tablet} {

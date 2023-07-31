@@ -30,8 +30,6 @@ import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
 import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
-import LottieControl from '@/components/LottieControl';
-import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
@@ -41,6 +39,7 @@ import { QFProjectsBanner } from './QFProjectsBanner';
 import { PassportBanner } from '@/components/PassportBanner';
 import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
 import { QFNoResultBanner } from './MiddleBanners/QFNoResultBanner';
+import { Spinner } from '@/components/Spinner';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -246,10 +245,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		<>
 			{isLoading && (
 				<Loading>
-					<LottieControl
-						animationData={LoadingAnimation}
-						size={250}
-					/>
+					<Spinner />
 				</Loading>
 			)}
 

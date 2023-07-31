@@ -17,7 +17,7 @@ import {
 	setShowSignWithWallet,
 	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
-import Spinner from '@/components/Spinner';
+import { WrappedSpinner } from '@/components/Spinner';
 import NotAvailableProject from '@/components/NotAvailableProject';
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
@@ -91,7 +91,7 @@ const EditIndex = () => {
 	}, [user, isSignedIn, isLoadingUser]);
 
 	if (isLoadingProject || isLoadingUser) {
-		return <Spinner />;
+		return <WrappedSpinner />;
 	} else if (!isEnabled) {
 		return <WalletNotConnected />;
 	} else if (!isSignedIn) {

@@ -16,8 +16,6 @@ import React, {
 import styled, { css } from 'styled-components';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 import InputStyled from './styled-components/Input';
-import LottieControl from '@/components/LottieControl';
-import LoadingAnimation from '@/animations/loading_giv_600.json';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { getTextWidth } from '@/helpers/text';
 import {
@@ -25,6 +23,7 @@ import {
 	inputSizeToPaddingLeft,
 	inputSizeToVerticalPadding,
 } from '@/helpers/styledComponents';
+import { Spinner } from './Spinner';
 import type {
 	DeepRequired,
 	FieldError,
@@ -129,7 +128,7 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 			);
 			return inputSizeToPaddingLeft(size, !!LeftIcon) + width;
 		}
-		return 0;
+		return 15;
 	}, [suffix, value, size, LeftIcon]);
 
 	const { ref = undefined, ...restRegProps } =
@@ -179,12 +178,7 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 					{suffix}
 				</SuffixWrapper>
 				<Absolute>
-					{isValidating && (
-						<LottieControl
-							animationData={LoadingAnimation}
-							size={40}
-						/>
-					)}
+					{isValidating && <Spinner size={40} />}
 					{maxLength && (
 						<CharLength>
 							{value ? String(value)?.length : 0}/{maxLength}

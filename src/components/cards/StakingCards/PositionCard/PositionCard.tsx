@@ -16,9 +16,7 @@ import { captureException } from '@sentry/nextjs';
 import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '../../../IconWithToolTip';
-import LoadingAnimation from '@/animations/loading.json';
 import { Pending } from '../../../modals/HarvestAll.sc';
-import LottieControl from '@/components/LottieControl';
 import { IconEthereum } from '../../../Icons/Eth';
 import { IconGIV } from '../../../Icons/GIV';
 interface IV3StakeCardProps {
@@ -142,21 +140,16 @@ const V3StakingCard: FC<IV3StakeCardProps> = ({
 				</TokenAmountRow>
 			</PositionInfo>
 			<PositionActions>
-				{isConfirming && selectedPosition ? (
-					<PendingStyled>
-						<LottieControl
-							animationData={LoadingAnimation}
-							size={40}
-						/>
-						&nbsp;PENDING
-					</PendingStyled>
-				) : (
-					<FullWidthButton
-						label={buttonLabel}
-						buttonType='primary'
-						onClick={() => handleAction(position.tokenId)}
-					/>
-				)}
+				<FullWidthButton
+					label={
+						isConfirming && selectedPosition
+							? 'PENDING'
+							: buttonLabel
+					}
+					buttonType='primary'
+					loading={isConfirming && selectedPosition}
+					onClick={() => handleAction(position.tokenId)}
+				/>
 				<FullWidthButton
 					label='VIEW POSITION'
 					onClick={() =>
