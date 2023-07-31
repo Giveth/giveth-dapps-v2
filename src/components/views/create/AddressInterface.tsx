@@ -18,10 +18,15 @@ import { Flex } from '@/components/styled-components/Flex';
 
 interface IAddressInterfaceProps {
 	networkId: number;
-	address: string;
+	address?: string;
+	onButtonClick?: () => void;
 }
 
-const AddressInterface = ({ networkId, address }: IAddressInterfaceProps) => {
+const AddressInterface = ({
+	networkId,
+	address,
+	onButtonClick,
+}: IAddressInterfaceProps) => {
 	const {
 		register,
 		formState: { errors },
@@ -44,8 +49,6 @@ const AddressInterface = ({ networkId, address }: IAddressInterfaceProps) => {
 		? EInputs.optimismAddress
 		: EInputs.mainAddress;
 	const value = getValues(inputName);
-	console.log('Value', value);
-	console.log('inputName', inputName);
 	const { formatMessage } = useIntl();
 
 	const hasAddress = !!address;
@@ -96,6 +99,7 @@ const AddressInterface = ({ networkId, address }: IAddressInterfaceProps) => {
 						buttonType='texty-secondary'
 						label={hasAddress ? 'Edit Address' : 'Add Address'}
 						icon={<IconArrowRight16 />}
+						onClick={onButtonClick}
 					/>
 				</Flex>
 			</TopContainer>
@@ -177,7 +181,6 @@ const TopContainer = styled.div`
 `;
 
 const MiddleContainer = styled.div`
-	border-bottom: 1px solid ${neutralColors.gray[300]};
 	padding: 24px 0;
 `;
 
