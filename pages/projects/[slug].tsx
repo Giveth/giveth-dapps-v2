@@ -35,7 +35,7 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		<ProjectsProvider
 			mainCategories={mainCategories}
 			selectedMainCategory={selectedMainCategory}
-			isQF={true}
+			isQF={false}
 			qfRounds={qfRounds}
 		>
 			<GeneralMetatags info={projectsMetatags} />
