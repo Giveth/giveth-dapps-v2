@@ -52,6 +52,8 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
+import { IAddress } from '../verification/manageFunds/ManageFundsIndex';
+import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 
 const {
 	MAINNET_NETWORK_NUMBER,
@@ -312,9 +314,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			dispatch(setShowFooter(true));
 		};
 	}, []);
-	// const addAddress = (addressObj: IAddress) => {
-	// 	setAddresses([...addresses, addressObj]);
-	// };
+	const addAddress = (addressObj: IAddress) => {
+		// setAddresses([...addresses, addressObj]);
+		console.log('AddressObj', addressObj);
+	};
 	const { isTablet, isMobile } = useDetectDevice();
 	const isSmallScreen = isTablet || isMobile;
 
@@ -448,14 +451,14 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								/>
 							)}
 						</Buttons>
+						{showAddressModal && (
+							<CreateProjectAddAddressModal
+								networkId={MAINNET_NETWORK_NUMBER}
+								setShowModal={setShowAddressModal}
+								userAddresses={userAddresses}
+							/>
+						)}
 					</form>
-					{/* {showAddressModal && (
-						<AddAddressModal
-							addAddress={addAddress}
-							setShowModal={setShowAddressModal}
-							addresses={addressess}
-						/>
-					)} */}
 				</FormProvider>
 				<button onClick={() => setShowAddressModal(true)}>
 					HELLLLLO
