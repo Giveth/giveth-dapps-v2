@@ -37,7 +37,6 @@ export const GIVRate = styled(Lead)`
 `;
 
 export const HarvestButton = styled(Button)`
-	display: block;
 	width: 316px;
 	margin: 0 auto 16px;
 `;

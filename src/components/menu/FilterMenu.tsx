@@ -57,10 +57,10 @@ const fundsFilter = [
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {
 		const { formatMessage } = useIntl();
-		const { setVariables, variables, isQF } = useProjectsContext();
+		const { setVariables, variables, isQF, setIsQF } = useProjectsContext();
 		const filtersCount = variables?.filters?.length ?? 0;
 		const campaignCount = variables?.campaignSlug ? 1 : 0;
-		const count = filtersCount + campaignCount - (isQF ? 1 : 0);
+		const count = filtersCount + campaignCount;
 		const router = useRouter();
 
 		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
@@ -108,37 +108,45 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					</FlexCenter>
 				</Header>
 				<Section>
-					{!isQF && (
-						<>
-							<B>
-								{formatMessage({
-									id: 'label.project_features',
-								})}
-							</B>
-							{projectsFeatures.map((projectFeature, idx) => (
-								<FeatureItem key={idx}>
-									<CheckBox
-										label={formatMessage(
-											{ id: projectFeature.label.id },
-											projectFeature.label,
-										)}
-										onChange={e => {
-											handleSelectFilter(
-												e,
-												projectFeature.value,
-											);
-										}}
-										checked={
-											variables?.filters?.includes(
-												projectFeature.value,
-											) ?? false
-										}
-										size={14}
-									/>
-								</FeatureItem>
-							))}
-						</>
-					)}
+					<B>
+						{formatMessage({
+							id: 'label.project_features',
+						})}
+					</B>
+					{projectsFeatures.map((projectFeature, idx) => (
+						<FeatureItem key={idx}>
+							<CheckBox
+								label={formatMessage(
+									{ id: projectFeature.label.id },
+									projectFeature.label,
+								)}
+								onChange={e => {
+									handleSelectFilter(e, projectFeature.value);
+								}}
+								checked={
+									variables?.filters?.includes(
+										projectFeature.value,
+									) ?? false
+								}
+								size={14}
+							/>
+						</FeatureItem>
+					))}
+					<FeatureItem>
+						<CheckBox
+							label={formatMessage({
+								id: 'label.eligible_for_matching',
+							})}
+							onChange={e => {
+								handleClose(e);
+								setIsQF(isQF => !isQF);
+							}}
+							disabled={router.pathname === '/qf'}
+							checked={isQF}
+							size={14}
+						/>
+					</FeatureItem>
+
 					<B>{formatMessage({ id: 'label.accepts_funds_on' })}</B>
 					{fundsFilter.map((projectFeature, idx) => (
 						<FeatureItem key={idx}>

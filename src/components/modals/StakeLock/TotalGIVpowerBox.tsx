@@ -12,10 +12,9 @@ import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { getTotalGIVpower } from '@/lib/stakingPool';
 import config from '@/configuration';
-import LoadingAnimation from '@/animations/loading.json';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import LottieControl from '@/components/LottieControl';
+import { WrappedSpinner } from '@/components/Spinner';
 
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
@@ -66,7 +65,7 @@ const TotalGIVpowerBox = () => {
 					</BoxRow>
 				</>
 			) : (
-				<LottieControl animationData={LoadingAnimation} size={90} />
+				<WrappedSpinner size={90} />
 			)}
 		</BoxContainer>
 	);

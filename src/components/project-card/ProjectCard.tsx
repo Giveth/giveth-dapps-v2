@@ -127,8 +127,8 @@ const ProjectCard = (props: IProjectCard) => {
 				/>
 				<Link href={slugToProjectView(slug)}>
 					<Description>{descriptionSummary}</Description>
-					<Flex justifyContent='space-between'>
-						<PaddedRow flexDirection='column' gap='2px'>
+					<PaddedRow justifyContent='space-between'>
+						<Flex flexDirection='column' gap='2px'>
 							<PriceText>
 								{formatDonations(
 									(isRoundActive
@@ -177,9 +177,9 @@ const ProjectCard = (props: IProjectCard) => {
 									)}
 								</LightSubline>
 							</div>
-						</PaddedRow>
+						</Flex>
 						{isRoundActive ? (
-							<PaddedRow flexDirection='column' gap='6px'>
+							<Flex flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
 									+
 									{formatDonations(
@@ -197,9 +197,9 @@ const ProjectCard = (props: IProjectCard) => {
 										id: 'label.estimated_matching',
 									})}
 								</LightSubline>
-							</PaddedRow>
+							</Flex>
 						) : null}
-					</Flex>
+					</PaddedRow>
 				</Link>
 				{hasFooter && (
 					<Link href={slugToProjectView(slug)}>

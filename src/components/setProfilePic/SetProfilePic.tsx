@@ -20,7 +20,7 @@ import { TabItem } from '../styled-components/Tabs';
 import { IGiverPFPToken } from '@/apollo/types/types';
 import { gqlRequest } from '@/helpers/requests';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
-import Spinner from '../Spinner';
+import { WrappedSpinner } from '../Spinner';
 import { NoPFP } from './NoPFP';
 import { useAvatar } from '@/hooks/useAvatar';
 import { convertIPFSToHTTPS } from '@/helpers/blockchain';
@@ -133,7 +133,7 @@ export const SetProfilePic = ({
 
 	return activeTab === EProfilePicTab.LOADING || isLoading === true ? (
 		<Wrapper>
-			<Spinner />
+			<WrappedSpinner />
 		</Wrapper>
 	) : (
 		<>
