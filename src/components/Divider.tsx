@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import { neutralColors } from '@giveth/ui-design-system';
 
-const Divider = ({ color }: { color?: string }) => {
-	return <Line color={color} />;
+const Divider = ({ color, height }: { color?: string; height?: string }) => {
+	return <Separator height={height} color={color} />;
 };
 
-const Line = styled.div<{ color?: string }>`
+const Separator = styled.div<{ color?: string; height?: string }>`
 	width: 100%;
-	height: 1px;
+	height: ${props => props.height || '1px'};
 	background-color: ${props => props.color || neutralColors.gray['400']};
 `;
 
