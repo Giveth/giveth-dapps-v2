@@ -36,7 +36,6 @@ import {
 	DescriptionInput,
 	ImageInput,
 	LocationIndex,
-	WalletAddressInput,
 } from './Inputs';
 import SuccessfulCreation from './SuccessfulCreation';
 import { compareAddressesArray, showToastError } from '@/lib/helpers';
@@ -54,6 +53,7 @@ import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
 import { IAddress } from '../verification/manageFunds/ManageFundsIndex';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
+import AddressInterface from './AddressInterface';
 
 const {
 	MAINNET_NETWORK_NUMBER,
@@ -100,7 +100,14 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const [showAddressModal, setShowAddressModal] = useState(false);
+	const [showMainnetAddressModal, setShowMainnetAddressModal] =
+		useState(false);
+	const [showGnosisAddressModal, setShowGnosisAddressModal] = useState(false);
+	const [showPolygonAddressModal, setShowPolygonAddressModal] =
+		useState(false);
+	const [showCeloAddressModal, setShowCeloAddressModal] = useState(false);
+	const [showOptimismAddressModal, setShowOptimismAddressModal] =
+		useState(false);
 
 	const isEditMode = !!project;
 	const { title, description, categories, impactLocation, image, addresses } =
@@ -156,7 +163,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.optimismAddress]: prevOptimismAddress || '',
 		},
 	});
-	console.log('Formmm', formMethods.getValues());
+
 	const { unregister, handleSubmit, setValue } = formMethods;
 
 	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
@@ -357,7 +364,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								id: 'label.you_can_set_a_custom_ethereum_address',
 							})}
 						</CaptionContainer>
-						<WalletAddressInput
+						{/* <WalletAddressInput
 							networkId={MAINNET_NETWORK_NUMBER}
 							userAddresses={userAddresses}
 							resolvedENS={resolvedENS}
@@ -382,6 +389,39 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							networkId={OPTIMISM_NETWORK_NUMBER}
 							userAddresses={userAddresses}
 							setResolvedENS={() => {}}
+						/> */}
+						<AddressInterface
+							networkId={MAINNET_NETWORK_NUMBER}
+							address={formMethods.getValues().mainAddress}
+							onButtonClick={() =>
+								setShowMainnetAddressModal(true)
+							}
+						/>
+						<AddressInterface
+							networkId={XDAI_NETWORK_NUMBER}
+							address={formMethods.getValues().gnosisAddress}
+							onButtonClick={() =>
+								setShowGnosisAddressModal(true)
+							}
+						/>
+						<AddressInterface
+							networkId={POLYGON_NETWORK_NUMBER}
+							address={formMethods.getValues().polygonAddress}
+							onButtonClick={() =>
+								setShowPolygonAddressModal(true)
+							}
+						/>
+						<AddressInterface
+							networkId={CELO_NETWORK_NUMBER}
+							address={formMethods.getValues().celoAddress}
+							onButtonClick={() => setShowCeloAddressModal(true)}
+						/>
+						<AddressInterface
+							networkId={OPTIMISM_NETWORK_NUMBER}
+							address={formMethods.getValues().optimismAddress}
+							onButtonClick={() =>
+								setShowOptimismAddressModal(true)
+							}
 						/>
 						<PublishTitle>
 							{isEditMode
@@ -451,18 +491,43 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								/>
 							)}
 						</Buttons>
-						{showAddressModal && (
+						{showMainnetAddressModal && (
 							<CreateProjectAddAddressModal
 								networkId={MAINNET_NETWORK_NUMBER}
-								setShowModal={setShowAddressModal}
+								setShowModal={setShowMainnetAddressModal}
+								userAddresses={userAddresses}
+							/>
+						)}
+						{showGnosisAddressModal && (
+							<CreateProjectAddAddressModal
+								networkId={XDAI_NETWORK_NUMBER}
+								setShowModal={setShowGnosisAddressModal}
+								userAddresses={userAddresses}
+							/>
+						)}
+						{showPolygonAddressModal && (
+							<CreateProjectAddAddressModal
+								networkId={POLYGON_NETWORK_NUMBER}
+								setShowModal={setShowPolygonAddressModal}
+								userAddresses={userAddresses}
+							/>
+						)}
+						{showCeloAddressModal && (
+							<CreateProjectAddAddressModal
+								networkId={CELO_NETWORK_NUMBER}
+								setShowModal={setShowCeloAddressModal}
+								userAddresses={userAddresses}
+							/>
+						)}
+						{showOptimismAddressModal && (
+							<CreateProjectAddAddressModal
+								networkId={OPTIMISM_NETWORK_NUMBER}
+								setShowModal={setShowOptimismAddressModal}
 								userAddresses={userAddresses}
 							/>
 						)}
 					</form>
 				</FormProvider>
-				<button onClick={() => setShowAddressModal(true)}>
-					HELLLLLO
-				</button>
 			</CreateContainer>
 			{!isSmallScreen && (
 				<GuidelinesStyleLaptop>
