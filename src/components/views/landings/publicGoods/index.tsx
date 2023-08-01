@@ -32,6 +32,7 @@ const JoinUsWrapper = styled.div`
 const Wrapper = styled.div`
 	background: ${neutralColors.gray[200]};
 	color: ${neutralColors.gray[900]};
+	margin-bottom: 60px;
 `;
 
 export default PublicGoods;
