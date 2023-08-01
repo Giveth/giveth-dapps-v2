@@ -24,9 +24,9 @@ const Title = styled(H1)`
 
 const OuterWrapper = styled.div`
 	background: ${neutralColors.gray[200]};
-	padding: 0 10px 40px;
+	padding: 0 10px;
 	${mediaQueries.tablet} {
-		padding: 0 40px 40px;
+		padding: 0 40px;
 	}
 `;
 
