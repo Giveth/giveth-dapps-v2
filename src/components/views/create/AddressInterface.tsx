@@ -28,10 +28,8 @@ const AddressInterface = ({
 	onButtonClick,
 }: IAddressInterfaceProps) => {
 	const {
-		register,
 		formState: { errors },
 		getValues,
-		clearErrors,
 	} = useFormContext();
 
 	const isMainnet = networkId === config.MAINNET_NETWORK_NUMBER;
@@ -51,7 +49,7 @@ const AddressInterface = ({
 	const value = getValues(inputName);
 	const { formatMessage } = useIntl();
 
-	const hasAddress = !!address;
+	const hasAddress = !!address && !errors[inputName]?.message;
 
 	let caption: string = '';
 	if (!value) {
@@ -125,7 +123,7 @@ const AddressInterface = ({
 					</GLink>
 				)}
 				<AddressContainer hasAddress={hasAddress}>
-					{address ? address : 'No address added yet!'}
+					{hasAddress ? address : 'No address added yet!'}
 				</AddressContainer>
 			</MiddleContainer>
 		</Container>
