@@ -496,6 +496,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								networkId={MAINNET_NETWORK_NUMBER}
 								setShowModal={setShowMainnetAddressModal}
 								userAddresses={userAddresses}
+								setResolvedENS={setResolvedENS}
+								resolvedENS={resolvedENS}
 							/>
 						)}
 						{showGnosisAddressModal && (
