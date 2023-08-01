@@ -1,8 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
+	Button,
 	Caption,
 	H6,
+	mediaQueries,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -34,6 +36,7 @@ interface IProps {
 	isActive?: boolean;
 	resolvedENS?: string;
 	setResolvedENS: (resolvedENS: string) => void;
+	onSubmit?: () => void;
 }
 
 const WalletAddressInput: FC<IProps> = ({
@@ -43,6 +46,7 @@ const WalletAddressInput: FC<IProps> = ({
 	isActive = true,
 	resolvedENS,
 	setResolvedENS,
+	onSubmit,
 }) => {
 	const {
 		register,
@@ -165,7 +169,6 @@ const WalletAddressInput: FC<IProps> = ({
 			return e;
 		}
 	};
-
 	useEffect(() => {
 		if (sameAddress) {
 			setTimeout(() => setIsHidden(true), 250);
@@ -269,6 +272,13 @@ const WalletAddressInput: FC<IProps> = ({
 					})}
 				</Caption>
 			</ExchangeNotify>
+			<ButtonWrapper>
+				<Button
+					label='SAVE ADDRESS'
+					disabled={!!error && !isValidating}
+					onClick={onSubmit}
+				/>
+			</ButtonWrapper>
 		</Container>
 	);
 };
@@ -320,12 +330,6 @@ const ExchangeNotify = styled(Flex)`
 	margin-top: 24px;
 `;
 
-const CheckBoxContainer = styled.div`
-	margin-top: 24px;
-	padding-top: 11px;
-	border-top: 1px solid ${neutralColors.gray[300]};
-`;
-
 const ChainIconShadow = styled.div`
 	height: 24px;
 	width: fit-content;
@@ -352,4 +356,12 @@ const Container = styled.div<{ hide?: boolean }>`
 	animation: fadeIn 0.3s ease-in-out;
 `;
 
+const ButtonWrapper = styled.div`
+	position: absolute;
+	right: 20px; // Adjust the distance from the right edge as per your need
+	bottom: 78px; // Adjust the distance from the bottom edge as per your need
+	${mediaQueries.tablet} {
+		bottom: 20px;
+	}
+`;
 export default WalletAddressInput;
