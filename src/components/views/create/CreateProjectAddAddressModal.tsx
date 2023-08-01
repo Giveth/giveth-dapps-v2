@@ -9,6 +9,8 @@ interface ICreateProjectAddAddressModal {
 	networkId: number;
 	isActive?: boolean;
 	userAddresses: string[];
+	setResolvedENS?: (resolvedENS: string) => void;
+	resolvedENS?: string;
 }
 
 const CreateProjectAddAddressModal = ({
@@ -16,6 +18,8 @@ const CreateProjectAddAddressModal = ({
 	networkId,
 	isActive = true,
 	userAddresses,
+	setResolvedENS = () => {},
+	resolvedENS,
 }: ICreateProjectAddAddressModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -31,7 +35,8 @@ const CreateProjectAddAddressModal = ({
 					networkId={networkId}
 					isActive={isActive}
 					userAddresses={userAddresses}
-					setResolvedENS={() => {}}
+					setResolvedENS={setResolvedENS}
+					resolvedENS={resolvedENS ?? undefined}
 				/>
 			</AddressContainer>
 		</Modal>
