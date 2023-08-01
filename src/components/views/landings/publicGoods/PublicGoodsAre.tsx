@@ -1,4 +1,9 @@
-import { H4, Lead } from '@giveth/ui-design-system';
+import {
+	H4,
+	Lead,
+	neutralColors,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import {
@@ -6,6 +11,8 @@ import {
 	PublicGoodsWrapper,
 } from '@/components/views/landings/publicGoods/common.styles';
 import publicGoodsImg from 'public/images/public-goods-in-crypto-and-web3/img.png';
+import Divider from '@/components/Divider';
+import ExternalLink from '@/components/ExternalLink';
 
 const PublicGoodsAre = () => {
 	return (
@@ -86,11 +93,50 @@ const PublicGoodsAre = () => {
 						in 1991 to “the tragedy of the (unmanaged) commons” in
 						light of such research developments.
 					</Lead>
+					<DividerWrapper>
+						<Divider color={neutralColors.gray[400]} height='1px' />
+					</DividerWrapper>
+					<PS>
+						* See for example the case of grasslands in Russia,
+						China and Mongolia.
+						<br />
+						Sneath, David (1998). "State Policy and Pasture
+						Degradation in Inner Asia". Science Magazine. 281
+						(5380): 1147–1148. Bibcode:1998Sci...281.1147S.
+						doi:10.1126/science.281.5380.1147. S2CID 128377756.
+						<br />
+						<br />
+						<ExternalLink
+							href='https://commonsstack.org/'
+							title='Common Stack'
+							color={semanticColors.blueSky[700]}
+						/>
+						, a close partner in the Giveth Galaxy, supports
+						projects in the development of commons-based
+						microeconomies for the support of public goods and
+						through collective governance.
+						<br />
+						<br />
+						They provide a library of open-source, interoperable
+						web3 components to enable commons-oriented projects to
+						raise and allocate shared funds and govern their commons
+						transparently and equitably while also developing into
+						self-sustaining, “regenerative”, micro-economies with
+						their own token system.
+					</PS>
 				</InnerWrapper>
 			</PublicGoodsWrapper>
 		</PublicGoodsOuterWrapper>
 	);
 };
+
+const PS = styled(Lead)`
+	color: ${neutralColors.gray[800]};
+`;
+
+const DividerWrapper = styled.div`
+	margin: 16px 0;
+`;
 
 const Space = styled.div`
 	height: 120px;
