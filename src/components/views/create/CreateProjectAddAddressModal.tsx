@@ -11,6 +11,7 @@ interface ICreateProjectAddAddressModal {
 	userAddresses: string[];
 	setResolvedENS?: (resolvedENS: string) => void;
 	resolvedENS?: string;
+	onSubmit?: () => void;
 }
 
 const CreateProjectAddAddressModal = ({
@@ -20,6 +21,7 @@ const CreateProjectAddAddressModal = ({
 	userAddresses,
 	setResolvedENS = () => {},
 	resolvedENS,
+	onSubmit,
 }: ICreateProjectAddAddressModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -37,6 +39,7 @@ const CreateProjectAddAddressModal = ({
 					userAddresses={userAddresses}
 					setResolvedENS={setResolvedENS}
 					resolvedENS={resolvedENS ?? undefined}
+					onSubmit={onSubmit}
 				/>
 			</AddressContainer>
 		</Modal>
