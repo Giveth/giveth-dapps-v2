@@ -1,11 +1,19 @@
+import { brandColors, H4, mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { H4 } from '@giveth/ui-design-system';
+import {
+	PublicGoodsOuterWrapper,
+	PublicGoodsWrapper,
+} from '@/components/views/landings/publicGoods/common.styles';
+import QuarterCircle from '@/components/particles/QuarterCircle';
+import Plus from '@/components/particles/Plus';
+import Wave from '@/components/particles/Wave';
+import { Absolute } from '@/components/styled-components/Position';
 
 const GivethIsTheOnly = () => {
 	return (
-		<OuterWrapper>
-			<Wrapper>
-				<H4>
+		<PublicGoodsOuterWrapper>
+			<PublicGoodsWrapper>
+				<InnerWrapper>
 					<b>Giveth</b>, is the only crypto fundraising platform that
 					makes it easy, free and rewarding to support public goods
 					and for-good projects.
@@ -16,21 +24,42 @@ const GivethIsTheOnly = () => {
 					software, or simply in relation to clear air and water,
 					schools, and even bus services – but what does it actually
 					mean?
-				</H4>
-			</Wrapper>
-		</OuterWrapper>
+				</InnerWrapper>
+			</PublicGoodsWrapper>
+			<PlusWrapper>
+				<Plus color={brandColors.mustard[500]} />
+			</PlusWrapper>
+			<CircleWrapper>
+				<QuarterCircle color={brandColors.ocean[600]} />
+			</CircleWrapper>
+			<WaveWrapper>
+				<Wave color={brandColors.pinky[400]} />
+			</WaveWrapper>
+		</PublicGoodsOuterWrapper>
 	);
 };
 
-const OuterWrapper = styled.div`
-	background: white;
-	position: relative;
+const WaveWrapper = styled(Absolute)`
+	right: 0;
+	top: 180px;
+	display: none;
+	${mediaQueries.laptopS} {
+		display: block;
+	}
 `;
 
-const Wrapper = styled.div`
-	max-width: 1200px;
-	padding: 40px;
-	margin: 0 auto;
+const CircleWrapper = styled(Absolute)`
+	left: 250px;
+	top: 45px;
+`;
+
+const PlusWrapper = styled(Absolute)`
+	left: 60px;
+	bottom: 75px;
+`;
+
+const InnerWrapper = styled(H4)`
+	padding: 80px 0;
 `;
 
 export default GivethIsTheOnly;
