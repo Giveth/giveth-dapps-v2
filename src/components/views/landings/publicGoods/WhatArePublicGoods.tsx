@@ -1,4 +1,9 @@
-import { brandColors, H4, semanticColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	H4,
+	mediaQueries,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import {
 	PublicGoodsOuterWrapper,
@@ -44,6 +49,9 @@ const PlusWrapper = styled(Absolute)`
 	right: 60px;
 	bottom: 180px;
 	display: none;
+	${mediaQueries.laptopL} {
+		display: block;
+	}
 `;
 
 const InnerWrapper = styled(H4)`
