@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import styled from 'styled-components';
-import { H4, Lead, semanticColors } from '@giveth/ui-design-system';
+import { Button, H4, Lead, semanticColors } from '@giveth/ui-design-system';
 import {
 	PublicGoodsOuterWrapper,
 	PublicGoodsWrapper,
@@ -8,6 +8,7 @@ import {
 import QFImg from 'public/images/public-goods-in-crypto-and-web3/QF.png';
 import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
+import { FlexCenter } from '@/components/styled-components/Flex';
 
 const PublicGoodsFunding = () => {
 	return (
@@ -201,10 +202,22 @@ const PublicGoodsFunding = () => {
 						the world, and help us Build the Future of Giving.
 					</Lead>
 				</Section>
+				<ButtonWrapper>
+					<ExternalLink href={Routes.ReFiProjects}>
+						<Button
+							buttonType='primary'
+							label='Explore ReFi projects on Giveth'
+						/>
+					</ExternalLink>
+				</ButtonWrapper>
 			</PublicGoodsWrapper>
 		</PublicGoodsOuterWrapper>
 	);
 };
+
+const ButtonWrapper = styled(FlexCenter)`
+	margin: 0 auto;
+`;
 
 const Section = styled.div`
 	margin: 120px 0;
