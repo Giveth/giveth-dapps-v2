@@ -3,6 +3,7 @@ import { neutralColors } from '@giveth/ui-design-system';
 import PublicGoodsHeader from '@/components/views/landings/publicGoods/header';
 import GivethIsTheOnly from '@/components/views/landings/publicGoods/GivethIsTheOnly';
 import WhatArePublicGoods from '@/components/views/landings/publicGoods/WhatArePublicGoods';
+import PublicGoodsAre from '@/components/views/landings/publicGoods/PublicGoodsAre';
 
 const PublicGoods = () => {
 	return (
@@ -10,6 +11,7 @@ const PublicGoods = () => {
 			<PublicGoodsHeader />
 			<GivethIsTheOnly />
 			<WhatArePublicGoods />
+			<PublicGoodsAre />
 		</Wrapper>
 	);
 };
