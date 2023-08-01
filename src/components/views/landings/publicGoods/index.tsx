@@ -16,11 +16,18 @@ const PublicGoods = () => {
 			<WhatArePublicGoods />
 			<PublicGoodsAre />
 			<PublicGoodsFunding />
-			<JoinUsOnDiscord />
+			<JoinUsWrapper>
+				<JoinUsOnDiscord />
+			</JoinUsWrapper>
 			<GetUpdates />
 		</Wrapper>
 	);
 };
+
+const JoinUsWrapper = styled.div`
+	background: white;
+	margin-bottom: 40px;
+`;
 
 const Wrapper = styled.div`
 	background: ${neutralColors.gray[200]};
