@@ -498,6 +498,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								userAddresses={userAddresses}
 								setResolvedENS={setResolvedENS}
 								resolvedENS={resolvedENS}
+								onSubmit={() =>
+									setShowMainnetAddressModal(false)
+								}
 							/>
 						)}
 						{showGnosisAddressModal && (
@@ -505,6 +508,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								networkId={XDAI_NETWORK_NUMBER}
 								setShowModal={setShowGnosisAddressModal}
 								userAddresses={userAddresses}
+								onSubmit={() =>
+									setShowGnosisAddressModal(false)
+								}
 							/>
 						)}
 						{showPolygonAddressModal && (
@@ -512,6 +518,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								networkId={POLYGON_NETWORK_NUMBER}
 								setShowModal={setShowPolygonAddressModal}
 								userAddresses={userAddresses}
+								onSubmit={() =>
+									setShowPolygonAddressModal(false)
+								}
 							/>
 						)}
 						{showCeloAddressModal && (
@@ -519,6 +528,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								networkId={CELO_NETWORK_NUMBER}
 								setShowModal={setShowCeloAddressModal}
 								userAddresses={userAddresses}
+								onSubmit={() => setShowCeloAddressModal(false)}
 							/>
 						)}
 						{showOptimismAddressModal && (
@@ -526,6 +536,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								networkId={OPTIMISM_NETWORK_NUMBER}
 								setShowModal={setShowOptimismAddressModal}
 								userAddresses={userAddresses}
+								onSubmit={() =>
+									setShowOptimismAddressModal(false)
+								}
 							/>
 						)}
 					</form>
