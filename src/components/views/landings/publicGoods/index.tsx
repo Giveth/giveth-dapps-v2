@@ -5,6 +5,7 @@ import GivethIsTheOnly from '@/components/views/landings/publicGoods/GivethIsThe
 import WhatArePublicGoods from '@/components/views/landings/publicGoods/WhatArePublicGoods';
 import PublicGoodsAre from '@/components/views/landings/publicGoods/PublicGoodsAre';
 import PublicGoodsFunding from '@/components/views/landings/publicGoods/PublicGoodsFunding';
+import JoinUsOnDiscord from '@/components/JoinUsOnDiscord';
 
 const PublicGoods = () => {
 	return (
@@ -14,6 +15,7 @@ const PublicGoods = () => {
 			<WhatArePublicGoods />
 			<PublicGoodsAre />
 			<PublicGoodsFunding />
+			<JoinUsOnDiscord />
 		</Wrapper>
 	);
 };
