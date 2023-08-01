@@ -10,9 +10,6 @@ import { ProjectPublicActions } from './ProjectPublicActions';
 import { ProjectStats } from './ProjectStats';
 import { AdminActions } from './AdminActions';
 import { Flex } from '@/components/styled-components/Flex';
-import { useAppSelector } from '@/features/hooks';
-import LoadingAnimation from '@/animations/loading_giv.json';
-import LottieControl from '@/components/LottieControl';
 import { useProjectContext } from '@/context/project.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device, zIndex } from '@/lib/constants/constants';
@@ -31,8 +28,6 @@ interface IWrapper {
 }
 
 export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
-	const { isLoading } = useAppSelector(state => state.user);
-	const { isAdmin, hasActiveQFRound } = useProjectContext();
 	const isMobile = !useMediaQuery(device.tablet);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
@@ -47,7 +42,7 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [isMobile, isLoading]);
+	}, [isMobile]);
 
 	return isMobile ? (
 		<Wrapper
@@ -63,23 +58,7 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 				flexDirection='column-reverse'
 				justifyContent='space-between'
 			>
-				{isLoading ? (
-					<LottieControl
-						animationData={LoadingAnimation}
-						size={300}
-					/>
-				) : isAdmin ? (
-					<>
-						<ProjectStats />
-						<AdminActions />
-					</>
-				) : (
-					<>
-						{hasActiveQFRound ? <QFSection /> : <DonateSection />}
-
-						<ProjectPublicActions />
-					</>
-				)}
+				<ProjectActionInnerCard />
 			</ProjectActionCardWrapper>
 		</Wrapper>
 	) : (
@@ -87,20 +66,21 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 			flexDirection='column'
 			justifyContent='space-between'
 		>
-			{isLoading ? (
-				<LottieControl animationData={LoadingAnimation} size={300} />
-			) : isAdmin ? (
-				<>
-					<ProjectStats />
-					<AdminActions />
-				</>
-			) : (
-				<>
-					{hasActiveQFRound ? <QFSection /> : <DonateSection />}
-					<ProjectPublicActions />
-				</>
-			)}
+			<ProjectActionInnerCard />
 		</ProjectActionCardWrapper>
+	);
+};
+
+const ProjectActionInnerCard = () => {
+	const { isAdmin, hasActiveQFRound } = useProjectContext();
+
+	return (
+		<>
+			{isAdmin && <AdminActions />}
+			{hasActiveQFRound ? <QFSection /> : <DonateSection />}
+			{!isAdmin && <ProjectPublicActions />}
+			{isAdmin && <ProjectStats />}
+		</>
 	);
 };
 

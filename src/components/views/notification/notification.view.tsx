@@ -19,8 +19,6 @@ import {
 	MarkAllNotifsButton,
 	Loading,
 } from './notification.sc';
-import LottieControl from '@/components/LottieControl';
-import LoadingAnimation from '@/animations/loading_giv.json';
 import {
 	TabsContainer,
 	TabItemCount,
@@ -38,6 +36,7 @@ import {
 import { useNotification } from '@/hooks/useNotification';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { fetchNotificationCountAsync } from '@/features/notification/notification.thunks';
+import { WrappedSpinner } from '@/components/Spinner';
 
 enum ENotificationTabs {
 	ALL,
@@ -126,10 +125,7 @@ function NotificationView() {
 		<NotificationContainer>
 			{loading && (
 				<Loading data-testid='loading'>
-					<LottieControl
-						animationData={LoadingAnimation}
-						size={250}
-					/>
+					<WrappedSpinner size={250} />
 				</Loading>
 			)}
 			<Flex gap='8px'>

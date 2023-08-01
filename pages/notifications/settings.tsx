@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import SettingsIndex from '@/components/views/notification/notificationSettings';
 import { NotificationSettingsProvider } from '@/context/notificationSettings.context';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import Spinner from '@/components/Spinner';
+import { WrappedSpinner } from '@/components/Spinner';
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import { setShowFooter } from '@/features/general/general.slice';
@@ -20,7 +20,7 @@ const NotificationSettingsRoute = () => {
 	}, []);
 
 	if (isLoading) {
-		return <Spinner />;
+		return <WrappedSpinner />;
 	} else if (!isEnabled) {
 		return <WalletNotConnected />;
 	} else if (!isSignedIn) {

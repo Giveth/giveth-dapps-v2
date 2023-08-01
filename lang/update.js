@@ -32,16 +32,26 @@ function sort(data) {
 	return Object.fromEntries(dataArray);
 }
 
-function addMissingKeys(obj1, obj2) {
-	const newObj = { ...obj2 }; // Create a new object to avoid modifying obj2 directly
+function addMissingKeys(obj) {
+	const newObj = { ...obj }; // Create a new object to avoid modifying obj directly
 
-	for (let key in obj1) {
-		if (obj1.hasOwnProperty(key) && !obj2.hasOwnProperty(key)) {
-			newObj[key] = '';
+	for (let key in en) {
+		if (en.hasOwnProperty(key) && !obj.hasOwnProperty(key)) {
+			newObj[key] = en[key];
 		}
 	}
 
 	return newObj;
+}
+
+function fillEmptyValues(obj) {
+	for (let key in obj) {
+		if (obj.hasOwnProperty(key) && obj[key] === '') {
+			obj[key] = en[key];
+		}
+	}
+
+	return obj;
 }
 
 function save(obj, name) {
@@ -51,13 +61,29 @@ function save(obj, name) {
 	console.log('Saving completed!');
 }
 
-const updatedEs = addMissingKeys(en, es);
-const updatedCa = addMissingKeys(en, ca);
+function removeExtraKeys(obj) {
+	const newObj = {}; // Create a new object to avoid modifying obj directly
+	for (let key in obj) {
+		if (obj.hasOwnProperty(key) && en[key]) {
+			newObj[key] = obj[key];
+		}
+	}
+	return newObj;
+}
+
+const filteredEs = removeExtraKeys(es);
+const filteredCa = removeExtraKeys(ca);
+
+const updatedEs = addMissingKeys(filteredEs);
+const updatedCa = addMissingKeys(filteredCa);
 
 const sortedEn = sort(en);
 const sortedEs = sort(updatedEs);
 const sortedCa = sort(updatedCa);
 
+const filledEs = fillEmptyValues(sortedEs);
+const filledCa = fillEmptyValues(sortedCa);
+
 save(sortedEn, 'en.json');
-save(sortedEs, 'es.json');
-save(sortedCa, 'ca.json');
+save(filledEs, 'es.json');
+save(filledCa, 'ca.json');

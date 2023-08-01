@@ -7,11 +7,13 @@ import {
 	Container,
 	neutralColors,
 	semanticColors,
+	Button,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Col, Row } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
+import { Flex } from '@/components/styled-components/Flex';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import InfoBadge from '@/components/badges/InfoBadge';
@@ -20,6 +22,7 @@ import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { isSSRMode } from '@/lib/helpers';
+import { idToProjectEdit } from '@/lib/routeCreators';
 import { ProjectMeta } from '@/components/Metatag';
 import ProjectGIVPowerIndex from '@/components/views/project/projectGIVPower';
 import { useProjectContext } from '@/context/project.context';
@@ -111,11 +114,11 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 			<HeadContainer>
 				<ProjectBadges />
 				<Row>
-					<Col xs={12} md={8} lg={9}>
+					<Col xs={12} md={8} lg={8.5}>
 						<ProjectHeader />
 						<ProjectGIVbackToast />
 					</Col>
-					<Col xs={12} md={4} lg={3}>
+					<Col xs={12} md={4} lg={3.5}>
 						<ProjectActionCard />
 					</Col>
 					{isDraft && (
@@ -153,7 +156,24 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					{activeTab === 1 && <ProjectUpdates />}
 					{activeTab === 2 && <ProjectDonations />}
 					{activeTab === 3 && <ProjectGIVPowerIndex />}
+					{isDraft && (
+						<Flex justifyContent='flex-end'>
+							<ContinueCreationButton
+								label={formatMessage({
+									id: 'label.continue_creation',
+								})}
+								buttonType='primary'
+								type='submit'
+								onClick={() =>
+									router.push(
+										idToProjectEdit(projectData?.id || ''),
+									)
+								}
+							/>
+						</Flex>
+					)}
 				</Container>
+
 				<SimilarProjects slug={slug} />
 			</BodyWrapper>
 		</Wrapper>
@@ -186,6 +206,10 @@ const HeadContainer = styled(Container)`
 const Separator = styled.hr`
 	border: 1px solid ${neutralColors.gray[400]};
 	margin: 40px 0;
+`;
+
+const ContinueCreationButton = styled(Button)`
+	align-self: flex-end;
 `;
 
 export default ProjectIndex;

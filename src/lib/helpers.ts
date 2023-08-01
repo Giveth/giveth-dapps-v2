@@ -5,7 +5,7 @@ import unescape from 'lodash/unescape';
 import { parseEther, parseUnits } from '@ethersproject/units';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
-import { Web3Provider } from '@ethersproject/providers';
+import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
 import { AddressZero } from '@ethersproject/constants';
 import { brandColors } from '@giveth/ui-design-system';
 // @ts-ignore
@@ -254,7 +254,7 @@ export async function sendTransaction(
 	contractAddress: string,
 ) {
 	try {
-		let tx;
+		let tx: TransactionResponse;
 		const txParams: any = {
 			to: params.to,
 		};
@@ -278,11 +278,13 @@ export async function sendTransaction(
 
 		txCallbacks.onTxHash(tx.hash, tx.nonce);
 		const receipt = await tx.wait();
-		if (receipt.status) {
-			txCallbacks.onReceipt(tx.hash);
-		}
 
-		console.log('Tx ---> : ', { tx, receipt });
+		setTimeout(() => {
+			if (receipt.status) {
+				txCallbacks.onReceipt(tx.hash);
+			}
+			console.log('Tx ---> : ', { tx, receipt });
+		}, 5000);
 	} catch (error: any) {
 		if (error.replacement && !error.cancelled) {
 			// Speed up the process by replacing the transaction
@@ -450,7 +452,8 @@ export const timeFromNow = (
 	if (diff.h > 0)
 		return ` ${formatter(Math.trunc(diff.h * -1), 'hour', options)}`;
 	if (diff.min > 0)
-		return ` ${formatter(Math.trunc(diff.m * -1), 'min', options)}`;
+		return ` ${formatter(Math.trunc(diff.min * -1), 'minute', options)}`;
+
 	return ` ${defaultMessage}`;
 };
 

@@ -29,7 +29,9 @@ export const DonateSection = () => {
 			{sumDonationValueUsd && sumDonationValueUsd !== 0 ? (
 				<DonateInfo>
 					{isMobile && <br />}
-					<Title>Total amount raised</Title>
+					<Title>
+						{formatMessage({ id: 'label.total_amount_raised' })}
+					</Title>
 					<Amount weight={700}>
 						{formatDonations(sumDonationValueUsd || 0, '$')}
 					</Amount>
@@ -76,7 +78,12 @@ export const DonateSection = () => {
 						id: 'component.donation_section.desc',
 					})}
 				</P>
-				<a href='/' target='_blank' referrerPolicy='no-referrer'>
+				<a
+					href='https://docs.giveth.io/whatisgiveth/zero-fees'
+					target='_blank'
+					referrerPolicy='no-referrer'
+					rel='noreferrer'
+				>
 					<LearnLink alignItems='center' gap='2px'>
 						<Subline>
 							{formatMessage({

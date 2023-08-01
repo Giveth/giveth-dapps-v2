@@ -22,7 +22,6 @@ import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { Modal } from './Modal';
-import LoadingAnimation from '@/animations/loading.json';
 import {
 	PoolStakingConfig,
 	RegenStreamConfig,
@@ -45,7 +44,6 @@ import {
 	HelpRow,
 	TooltipContent,
 	HarvestBoxes,
-	HarvestAllPending,
 	BreakdownTitle,
 	BreakdownAmount,
 	BreakdownIcon,
@@ -69,7 +67,6 @@ import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '../styled-components/Flex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import LottieControl from '@/components/LottieControl';
 import { getPoolIconWithName } from '@/helpers/platform';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import { useStakingPool } from '@/hooks/useStakingPool';
@@ -482,28 +479,24 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 							</BreakdownSumRow>
 						</BreakdownTableBody>
 
-						{state === HarvestStates.HARVEST && (
+						{(state === HarvestStates.HARVEST ||
+							state === HarvestStates.HARVESTING) && (
 							<HarvestButton
 								label={formatMessage({
-									id: 'label.harvest',
+									id:
+										state === HarvestStates.HARVEST
+											? 'label.harvest'
+											: 'label.harvest_pending',
 								})}
 								size='medium'
 								buttonType='primary'
 								onClick={onHarvest}
-								disabled={sumLiquid.eq(0)}
+								disabled={
+									sumLiquid.eq(0) ||
+									state === HarvestStates.HARVESTING
+								}
+								loading={state === HarvestStates.HARVESTING}
 							/>
-						)}
-						{state === HarvestStates.HARVESTING && (
-							<HarvestAllPending>
-								<LottieControl
-									animationData={LoadingAnimation}
-									size={40}
-								/>
-								&nbsp;
-								{formatMessage({
-									id: 'label.harvest_pending',
-								})}
-							</HarvestAllPending>
 						)}
 						<CancelButton
 							disabled={state !== HarvestStates.HARVEST}

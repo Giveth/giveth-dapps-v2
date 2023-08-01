@@ -1,12 +1,11 @@
 import styled from 'styled-components';
-import LottieControl from '@/components/LottieControl';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import LoadingAnimation from '@/animations/loading_giv.json';
+import { WrappedSpinner } from '@/components/Spinner';
 
 export default function LoadingVerification() {
 	return (
 		<Container>
-			<LottieControl animationData={LoadingAnimation} size={250} />
+			<WrappedSpinner size={250} />
 		</Container>
 	);
 }

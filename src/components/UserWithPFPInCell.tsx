@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import Link from 'next/link';
 import { IAdminUser } from '@/apollo/types/types';
 import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
 import { Flex } from '@/components/styled-components/Flex';
 import { shortenAddress } from '@/lib/helpers';
 import { PFP } from './PFP';
 import { addressToUserView } from '@/lib/routeCreators';
-import Link from 'next/link';
 
 interface IUserWithPFPInCell {
 	user: IAdminUser;
@@ -23,11 +23,15 @@ export const UserWithPFPInCell: FC<IUserWithPFPInCell> = ({ user }) => {
 	return pfpToken ? (
 		<Flex gap='12px' alignItems='center'>
 			<StyledPFP pfpToken={pfpToken} />
-			<Link href={userProfileLink}>{name} </Link>
+			<Link href={userProfileLink}>
+				{name}{' '}
+			</Link>
 		</Flex>
 	) : (
 		<NoAvatar>
-			<Link href={userProfileLink}>{name} </Link>
+			<Link href={userProfileLink}>
+				{name}{' '}
+			</Link>
 		</NoAvatar>
 	);
 };

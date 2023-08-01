@@ -28,7 +28,7 @@ import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { formatDonations } from '@/helpers/number';
 
 const QFSection = () => {
-	const { formatMessage, locale } = useIntl();
+	const { formatMessage } = useIntl();
 	const { projectData } = useProjectContext();
 	const { estimatedMatching, sumDonationValueUsdForActiveQfRound } =
 		projectData || {};
@@ -56,7 +56,7 @@ const QFSection = () => {
 				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
 					<TooltipContent>
 						{formatMessage({
-							id: 'tooltip.donation.matching',
+							id: 'component.qf-section.tooltip',
 						})}
 					</TooltipContent>
 				</IconWithTooltip>
@@ -77,9 +77,9 @@ const QFSection = () => {
 					</Title>
 					<Amount weight={700}>
 						$
-						{(
-							sumDonationValueUsdForActiveQfRound || 0
-						).toLocaleString(locale)}
+						{formatDonations(
+							sumDonationValueUsdForActiveQfRound || 0,
+						)}
 					</Amount>
 					<Description>
 						{formatMessage({
