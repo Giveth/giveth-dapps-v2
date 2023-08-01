@@ -65,7 +65,7 @@ const PublicGoodsFunding = () => {
 						</Lead>
 					</ImageWrapper>
 				</Funding>
-				<MicroEconomies>
+				<Section>
 					<H4 weight={700}>
 						Giveth: Micro-economies, circular economies, regen
 						economies
@@ -104,10 +104,21 @@ const PublicGoodsFunding = () => {
 						<br />
 						At Giveth, we believe that giving shouldn’t be about
 						sacrifice but rather rewarded participation in value
-						creation. One way we actualize that is through the
-						GIVbacks Program, where donors on Giveth are rewarded
-						for their contribution with GIV tokens. We have also
-						incorporated this into our Referral Program.
+						creation. One way we actualize that is through the{' '}
+						<ExternalLink
+							href={Routes.GIVbacks}
+							title='GIVbacks Program'
+							color={semanticColors.blueSky[600]}
+						/>
+						, where donors on Giveth are rewarded for their
+						contribution with GIV tokens. We have also incorporated
+						this into our{' '}
+						<ExternalLink
+							href={Routes.Referral}
+							title='Referral Program'
+							color={semanticColors.blueSky[600]}
+						/>
+						.
 						<br />
 						<br />
 						Giveth isn't just about donating and earning rewards.
@@ -134,13 +145,69 @@ const PublicGoodsFunding = () => {
 						current model of extraction and the taking advantage of
 						depleting resources.
 					</Lead>
-				</MicroEconomies>
+				</Section>
+				<Section>
+					<H4 weight={700}>
+						Giveth versus other crowdfunding platforms
+					</H4>
+					<Lead size='large'>
+						Giveth is different from other crowdfunding platforms,
+						like GoFundMe, Indiegogo, Bonfire, Classy, Kickstarter,
+						Patreon and more, in countless ways, not least of which
+						being the attributes described above. On a technical
+						level, because Giveth is built on blockchain technology,
+						it also means that every donation is secure,
+						transparent, and tamper-proof. There are no fees, no
+						intermediaries, and every transaction is direct:
+						wallet-to-wallet and instantaneous.
+						<br />
+						<br />
+						We support donations on multiple chains including
+						Ethereum Mainnet, Gnosis Chain, Optimism, Celo, and
+						Polygon. More are always being added. Donating to a
+						verified project on Giveth means receiving GIV tokens in
+						return, with the potential for up to 80% of the actual
+						donation. These tokens can be used for a variety of
+						purposes, including earning rewards through staking in
+						the GIVgarden and participating in governance. They can
+						also easily be converted to other cryptocurrencies or
+						fiat currencies.
+					</Lead>
+				</Section>
+				<Section>
+					<H4 weight={700}>Giveth projects</H4>
+					<Lead size='large'>
+						What kind of projects can you support on Giveth? Anyone
+						can create a project on Giveth and raise funds for their
+						cause, provided it does not violate our covenant. We
+						focus on public goods projects that benefit communities
+						collectively, such as arts and education centers, clean
+						air and water initiatives, reforestation, and so much
+						more. We also support for-good projects that are working
+						to create other types of positive change in the world,
+						such as environmental conservation, DeSci, social
+						justice, and humanitarian aid.
+						<br />
+						<br />
+						Giveth offers a unique and rewarding way to support
+						public goods and for-good projects while participating
+						in novel decentralized efforts in human coordination for
+						proactive change across networks and against the real
+						and diverse body of threats of the metacrisis of our
+						times.
+						<br />
+						<br />
+						Contribute today and start making a positive impact on
+						the world, and help us Build the Future of Giving.
+					</Lead>
+				</Section>
 			</PublicGoodsWrapper>
 		</PublicGoodsOuterWrapper>
 	);
 };
 
-const MicroEconomies = styled.div`
+const Section = styled.div`
+	margin: 120px 0;
 	> *:first-child {
 		margin-bottom: 16px;
 	}
@@ -148,7 +215,7 @@ const MicroEconomies = styled.div`
 
 const ImageWrapper = styled.div`
 	max-width: 900px;
-	margin: 80px auto;
+	margin: 80px auto -40px;
 	> img {
 		max-width: 900px;
 		max-height: 418px;
