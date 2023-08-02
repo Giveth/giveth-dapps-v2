@@ -8,6 +8,7 @@ import {
 	IconWalletOutline16,
 	P,
 	brandColors,
+	mediaQueries,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import React, { ReactNode } from 'react';
@@ -131,24 +132,28 @@ export const PassportBanner = () => {
 
 	return (
 		<PassportBannerWrapper bgColor={PassportBannerData[passportState].bg}>
-			{PassportBannerData[passportState].icon}
-			<P>
-				{formatMessage({
-					id: PassportBannerData[passportState].content,
-				})}
-				{currentRound &&
-					(passportState === EPassportState.NOT_CREATED ||
-						passportState === EPassportState.NOT_ELIGIBLE) && (
-						<strong>
-							{new Date(currentRound.endDate)
-								.toLocaleString(locale || 'en-US', {
-									day: 'numeric',
-									month: 'short',
-								})
-								.replace(/,/g, '')}
-						</strong>
-					)}
-			</P>
+			<Flex gap='8px' alignItems='center'>
+				<IconWrapper>
+					{PassportBannerData[passportState].icon}
+				</IconWrapper>
+				<P>
+					{formatMessage({
+						id: PassportBannerData[passportState].content,
+					})}
+					{currentRound &&
+						(passportState === EPassportState.NOT_CREATED ||
+							passportState === EPassportState.NOT_ELIGIBLE) && (
+							<strong>
+								{new Date(currentRound.endDate)
+									.toLocaleString(locale || 'en-US', {
+										day: 'numeric',
+										month: 'short',
+									})
+									.replace(/,/g, '')}
+							</strong>
+						)}
+				</P>
+			</Flex>
 			{PassportBannerData[passportState].link && (
 				<StyledLink
 					as='a'
@@ -194,13 +199,20 @@ interface IPassportBannerWrapperProps {
 }
 
 export const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
-	height: 56px;
+	flex-direction: column;
 	background-color: ${props => bgColor[props.bgColor]};
 	padding: 16px;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
 	position: relative;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
+`;
+
+const IconWrapper = styled.div`
+	width: 24px;
 `;
 
 const StyledLink = styled(Flex)`
