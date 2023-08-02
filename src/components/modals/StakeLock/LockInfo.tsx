@@ -12,6 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
+import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
@@ -25,8 +26,19 @@ interface ILockInfo {
 	amount: string;
 }
 
+const givStakingConfig = {
+	[config.XDAI_NETWORK_NUMBER]: getGivStakingConfig(config.XDAI_CONFIG),
+	[config.OPTIMISM_NETWORK_NUMBER]: getGivStakingConfig(
+		config.OPTIMISM_CONFIG,
+	),
+};
+
 const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
-	const { apr } = useStakingPool(getGivStakingConfig(config.XDAI_CONFIG));
+	const { chainId } = useWeb3React();
+	const { apr } = useStakingPool(
+		givStakingConfig[chainId || config.XDAI_NETWORK_NUMBER],
+	);
+
 	const multipler = Math.sqrt(1 + round);
 
 	return (
