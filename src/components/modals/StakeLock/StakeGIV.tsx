@@ -7,7 +7,11 @@ import { ButtonLink, H5, IconExternalLink } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Modal } from '../Modal';
 import { AmountInput } from '../../AmountInput';
-import { approveERC20tokenTransfer, wrapToken } from '@/lib/stakingPool';
+import {
+	approveERC20tokenTransfer,
+	stakeGIVonOp,
+	wrapToken,
+} from '@/lib/stakingPool';
 import { ErrorInnerModal } from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
@@ -77,7 +81,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	const { chainId, library } = useWeb3React();
 	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
 
-	const { POOL_ADDRESS, GARDEN_ADDRESS } =
+	const { POOL_ADDRESS, GARDEN_ADDRESS, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
 	useEffect(() => {
@@ -119,10 +123,6 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	}, [library, amount, stakeState]);
 
 	const onApprove = async () => {
-		if (!GARDEN_ADDRESS) {
-			console.error('GARDEN_ADDRESS is null');
-			return;
-		}
 		if (amount === '0') return;
 		if (!library) {
 			console.error('library is null');
@@ -138,7 +138,9 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 		const isApproved = await approveERC20tokenTransfer(
 			amount,
 			userAddress,
-			GARDEN_ADDRESS,
+			poolStakingConfig.network === config.XDAI_NETWORK_NUMBER
+				? GARDEN_ADDRESS!
+				: LM_ADDRESS!,
 			POOL_ADDRESS,
 			library,
 		);
@@ -180,6 +182,38 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			});
 		}
 	};
+
+	const onStake = async () => {
+		setStakeState(StakeState.WRAPPING);
+		try {
+			const txResponse = await stakeGIVonOp(
+				amount,
+				poolStakingConfig.LM_ADDRESS,
+				library,
+			);
+			if (txResponse) {
+				setTxHash(txResponse.hash);
+				if (txResponse) {
+					const { status } = await txResponse.wait();
+					setStakeState(
+						status ? StakeState.CONFIRMED : StakeState.ERROR,
+					);
+				}
+			} else {
+				setStakeState(StakeState.WRAP);
+			}
+		} catch (err: any) {
+			setStakeState(
+				err?.code === 4001 ? StakeState.WRAP : StakeState.ERROR,
+			);
+			captureException(err, {
+				tags: {
+					section: 'onWrap',
+				},
+			});
+		}
+	};
+
 	return (
 		<StakeModalContainer>
 			{stakeState !== StakeState.CONFIRMED &&
@@ -255,7 +289,12 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 													? 'label.stake'
 													: 'label.stake_pending',
 										})}
-										onClick={onWrap}
+										onClick={
+											poolStakingConfig.network ===
+											config.XDAI_NETWORK_NUMBER
+												? onWrap
+												: onStake
+										}
 										disabled={
 											amount == '0' ||
 											maxAmount.lt(amount) ||

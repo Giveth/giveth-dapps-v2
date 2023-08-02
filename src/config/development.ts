@@ -280,7 +280,6 @@ const config: EnvConfig = {
 		GIV: {
 			network: OPTIMISM_NETWORK_NUMBER,
 			LM_ADDRESS: '0x632AC305ed88817480d12155A7F1244cC182C298',
-			GARDEN_ADDRESS: '0x632AC305ed88817480d12155A7F1244cC182C298',
 			BUY_LINK: 'https://',
 		},
 		uniswapV2Subgraph: '',
