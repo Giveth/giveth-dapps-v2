@@ -28,6 +28,7 @@ import BAL_WEIGHTED_POOL_Json from '../artifacts/BalancerWeightedPool.json';
 import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
 import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
 import ERC20_Json from '../artifacts/ERC20.json';
+import OP_LM from '../artifacts/OpLM.json';
 import {
 	ERC20,
 	IUniswapV2Pair,
@@ -45,6 +46,7 @@ const { abi: BAL_WEIGHTED_POOL_ABI } = BAL_WEIGHTED_POOL_Json;
 const { abi: BAL_VAULT_ABI } = BAL_VAULT_Json;
 const { abi: TOKEN_MANAGER_ABI } = TOKEN_MANAGER_Json;
 const { abi: ERC20_ABI } = ERC20_Json;
+const { abi: OP_LM_ABI } = OP_LM;
 
 const toBigNumberJs = (eb: ethers.BigNumber | string | number): BigNumber =>
 	new BigNumber(eb.toString());
@@ -530,6 +532,39 @@ export const wrapToken = async (
 		return await gardenContract
 			.connect(signer.connectUnchecked())
 			.wrap(
+				amount,
+				getGasPreference(
+					config.NETWORKS_CONFIG[provider.network.chainId],
+				),
+			);
+	} catch (error) {
+		console.log('Error on wrapping token:', error);
+		captureException(error, {
+			tags: {
+				section: 'wrapToken',
+			},
+		});
+	}
+};
+
+export const stakeGIVonOp = async (
+	amount: string,
+	lmAddress: string,
+	provider: Web3Provider | null,
+): Promise<TransactionResponse | undefined> => {
+	if (amount === '0') return;
+	if (!provider) {
+		console.error('Provider is null');
+		return;
+	}
+
+	const signer = provider.getSigner();
+
+	const contract = new Contract(lmAddress, OP_LM_ABI, signer);
+	try {
+		return await contract
+			.connect(signer.connectUnchecked())
+			.stake(
 				amount,
 				getGasPreference(
 					config.NETWORKS_CONFIG[provider.network.chainId],
