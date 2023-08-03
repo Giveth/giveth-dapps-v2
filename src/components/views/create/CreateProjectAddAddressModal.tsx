@@ -48,9 +48,10 @@ const CreateProjectAddAddressModal = ({
 
 const AddressContainer = styled.div`
 	max-width: 558px;
-	min-height: 530px;
+	min-height: 400px;
 	padding: 0 8px;
 	text-align: left;
+	padding-bottom: 70px;
 `;
 
 export default CreateProjectAddAddressModal;
