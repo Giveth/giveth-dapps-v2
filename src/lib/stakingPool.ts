@@ -28,7 +28,7 @@ import BAL_WEIGHTED_POOL_Json from '../artifacts/BalancerWeightedPool.json';
 import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
 import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
 import ERC20_Json from '../artifacts/ERC20.json';
-import OP_LM from '../artifacts/OpLM.json';
+import UnipoolGIVpower from '../artifacts/UnipoolGIVpower.json';
 import {
 	ERC20,
 	IUniswapV2Pair,
@@ -46,7 +46,7 @@ const { abi: BAL_WEIGHTED_POOL_ABI } = BAL_WEIGHTED_POOL_Json;
 const { abi: BAL_VAULT_ABI } = BAL_VAULT_Json;
 const { abi: TOKEN_MANAGER_ABI } = TOKEN_MANAGER_Json;
 const { abi: ERC20_ABI } = ERC20_Json;
-const { abi: OP_LM_ABI } = OP_LM;
+const { abi: UNIPOOL_GIVPOWER_ABI } = UnipoolGIVpower;
 
 const toBigNumberJs = (eb: ethers.BigNumber | string | number): BigNumber =>
 	new BigNumber(eb.toString());
@@ -547,7 +547,7 @@ export const wrapToken = async (
 	}
 };
 
-export const stakeGIVonOp = async (
+export const stakeGIV = async (
 	amount: string,
 	lmAddress: string,
 	provider: Web3Provider | null,
@@ -560,7 +560,7 @@ export const stakeGIVonOp = async (
 
 	const signer = provider.getSigner();
 
-	const contract = new Contract(lmAddress, OP_LM_ABI, signer);
+	const contract = new Contract(lmAddress, UNIPOOL_GIVPOWER_ABI, signer);
 	try {
 		return await contract
 			.connect(signer.connectUnchecked())

@@ -9,7 +9,7 @@ import { Modal } from '../Modal';
 import { AmountInput } from '../../AmountInput';
 import {
 	approveERC20tokenTransfer,
-	stakeGIVonOp,
+	stakeGIV,
 	wrapToken,
 } from '@/lib/stakingPool';
 import { ErrorInnerModal } from '../ConfirmSubmit';
@@ -186,7 +186,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	const onStake = async () => {
 		setStakeState(StakeState.WRAPPING);
 		try {
-			const txResponse = await stakeGIVonOp(
+			const txResponse = await stakeGIV(
 				amount,
 				poolStakingConfig.LM_ADDRESS,
 				library,
