@@ -331,32 +331,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								id: 'label.you_can_set_a_custom_ethereum_address',
 							})}
 						</CaptionContainer>
-						{/* <WalletAddressInput
-							networkId={MAINNET_NETWORK_NUMBER}
-							userAddresses={userAddresses}
-							resolvedENS={resolvedENS}
-							setResolvedENS={setResolvedENS}
-						/>
-						<WalletAddressInput
-							networkId={XDAI_NETWORK_NUMBER}
-							userAddresses={userAddresses}
-							setResolvedENS={() => {}}
-						/>
-						<WalletAddressInput
-							networkId={POLYGON_NETWORK_NUMBER}
-							userAddresses={userAddresses}
-							setResolvedENS={() => {}}
-						/>
-						<WalletAddressInput
-							networkId={CELO_NETWORK_NUMBER}
-							userAddresses={userAddresses}
-							setResolvedENS={() => {}}
-						/>
-						<WalletAddressInput
-							networkId={OPTIMISM_NETWORK_NUMBER}
-							userAddresses={userAddresses}
-							setResolvedENS={() => {}}
-						/> */}
 						<AddressInterface
 							networkId={MAINNET_NETWORK_NUMBER}
 							address={formMethods.getValues().mainAddress}
