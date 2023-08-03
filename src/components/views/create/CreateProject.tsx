@@ -51,7 +51,6 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
-import { IAddress } from '../verification/manageFunds/ManageFundsIndex';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
 
@@ -164,7 +163,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		},
 	});
 
-	const { unregister, handleSubmit, setValue } = formMethods;
+	const { handleSubmit, setValue } = formMethods;
 
 	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
 
@@ -189,72 +188,44 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				image,
 				draft,
 			} = formData;
-			console.log('Formdataaddress', formData);
-			const address = isAddressENS(mainAddress)
-				? resolvedENS
-				: mainAddress;
-			const checksumAddress = utils.getAddress(address);
-			addresses.push(
-				{
+
+			if (mainAddress) {
+				const address = isAddressENS(mainAddress)
+					? resolvedENS
+					: mainAddress;
+				const checksumAddress = utils.getAddress(address);
+				addresses.push({
 					address: checksumAddress,
 					networkId: MAINNET_NETWORK_NUMBER,
-				},
-				{
+				});
+			}
+			if (gnosisAddress) {
+				const checksumAddress = utils.getAddress(gnosisAddress);
+				addresses.push({
 					address: checksumAddress,
 					networkId: XDAI_NETWORK_NUMBER,
-				},
-				{
+				});
+			}
+			if (polygonAddress) {
+				const checksumAddress = utils.getAddress(polygonAddress);
+				addresses.push({
 					address: checksumAddress,
 					networkId: POLYGON_NETWORK_NUMBER,
-				},
-				{
+				});
+			}
+			if (celoAddress) {
+				const checksumAddress = utils.getAddress(celoAddress);
+				addresses.push({
 					address: checksumAddress,
 					networkId: CELO_NETWORK_NUMBER,
-				},
-				{
+				});
+			}
+			if (optimismAddress) {
+				const checksumAddress = utils.getAddress(optimismAddress);
+				addresses.push({
 					address: checksumAddress,
 					networkId: OPTIMISM_NETWORK_NUMBER,
-				},
-			);
-			{
-				if (mainAddress) {
-					const address = isAddressENS(mainAddress)
-						? resolvedENS
-						: mainAddress;
-					const checksumAddress = utils.getAddress(address);
-					addresses.push({
-						address: checksumAddress,
-						networkId: MAINNET_NETWORK_NUMBER,
-					});
-				}
-				if (gnosisAddress) {
-					const checksumAddress = utils.getAddress(gnosisAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: XDAI_NETWORK_NUMBER,
-					});
-				}
-				if (polygonAddress) {
-					const checksumAddress = utils.getAddress(polygonAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: POLYGON_NETWORK_NUMBER,
-					});
-				}
-				if (celoAddress) {
-					const checksumAddress = utils.getAddress(celoAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: CELO_NETWORK_NUMBER,
-					});
-				}
-				if (optimismAddress) {
-					const checksumAddress = utils.getAddress(optimismAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: OPTIMISM_NETWORK_NUMBER,
-					});
-				}
+				});
 			}
 
 			const projectData: IProjectCreation = {
@@ -321,18 +292,14 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			dispatch(setShowFooter(true));
 		};
 	}, []);
-	const addAddress = (addressObj: IAddress) => {
-		// setAddresses([...addresses, addressObj]);
-		console.log('AddressObj', addressObj);
-	};
+
 	const { isTablet, isMobile } = useDetectDevice();
 	const isSmallScreen = isTablet || isMobile;
 
 	if (creationSuccessful) {
 		return <SuccessfulCreation project={creationSuccessful} />;
 	}
-	console.log('addresses', addresses);
-	console.log('userAddresses', userAddresses);
+
 	return (
 		<Wrapper>
 			<CreateContainer>
