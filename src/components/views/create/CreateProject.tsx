@@ -99,14 +99,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
 	const dispatch = useAppDispatch();
-	const [showMainnetAddressModal, setShowMainnetAddressModal] =
-		useState(false);
-	const [showGnosisAddressModal, setShowGnosisAddressModal] = useState(false);
-	const [showPolygonAddressModal, setShowPolygonAddressModal] =
-		useState(false);
-	const [showCeloAddressModal, setShowCeloAddressModal] = useState(false);
-	const [showOptimismAddressModal, setShowOptimismAddressModal] =
-		useState(false);
+
+	const [addressModalChainId, setAddressModalChainId] = useState<
+		number | undefined
+	>(undefined);
 
 	const isEditMode = !!project;
 	const { title, description, categories, impactLocation, image, addresses } =
@@ -335,33 +331,35 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							networkId={MAINNET_NETWORK_NUMBER}
 							address={formMethods.getValues().mainAddress}
 							onButtonClick={() =>
-								setShowMainnetAddressModal(true)
+								setAddressModalChainId(MAINNET_NETWORK_NUMBER)
 							}
 						/>
 						<AddressInterface
 							networkId={XDAI_NETWORK_NUMBER}
 							address={formMethods.getValues().gnosisAddress}
 							onButtonClick={() =>
-								setShowGnosisAddressModal(true)
+								setAddressModalChainId(XDAI_NETWORK_NUMBER)
 							}
 						/>
 						<AddressInterface
 							networkId={POLYGON_NETWORK_NUMBER}
 							address={formMethods.getValues().polygonAddress}
 							onButtonClick={() =>
-								setShowPolygonAddressModal(true)
+								setAddressModalChainId(POLYGON_NETWORK_NUMBER)
 							}
 						/>
 						<AddressInterface
 							networkId={CELO_NETWORK_NUMBER}
 							address={formMethods.getValues().celoAddress}
-							onButtonClick={() => setShowCeloAddressModal(true)}
+							onButtonClick={() =>
+								setAddressModalChainId(CELO_NETWORK_NUMBER)
+							}
 						/>
 						<AddressInterface
 							networkId={OPTIMISM_NETWORK_NUMBER}
 							address={formMethods.getValues().optimismAddress}
 							onButtonClick={() =>
-								setShowOptimismAddressModal(true)
+								setAddressModalChainId(OPTIMISM_NETWORK_NUMBER)
 							}
 						/>
 						<PublishTitle>
@@ -432,53 +430,25 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								/>
 							)}
 						</Buttons>
-						{showMainnetAddressModal && (
+						{addressModalChainId && (
 							<CreateProjectAddAddressModal
-								networkId={MAINNET_NETWORK_NUMBER}
-								setShowModal={setShowMainnetAddressModal}
+								networkId={addressModalChainId}
+								setShowModal={setAddressModalChainId}
 								userAddresses={userAddresses}
-								setResolvedENS={setResolvedENS}
-								resolvedENS={resolvedENS}
 								onSubmit={() =>
-									setShowMainnetAddressModal(false)
+									setAddressModalChainId(undefined)
 								}
-							/>
-						)}
-						{showGnosisAddressModal && (
-							<CreateProjectAddAddressModal
-								networkId={XDAI_NETWORK_NUMBER}
-								setShowModal={setShowGnosisAddressModal}
-								userAddresses={userAddresses}
-								onSubmit={() =>
-									setShowGnosisAddressModal(false)
+								resolvedENS={
+									addressModalChainId ===
+									MAINNET_NETWORK_NUMBER
+										? resolvedENS
+										: undefined
 								}
-							/>
-						)}
-						{showPolygonAddressModal && (
-							<CreateProjectAddAddressModal
-								networkId={POLYGON_NETWORK_NUMBER}
-								setShowModal={setShowPolygonAddressModal}
-								userAddresses={userAddresses}
-								onSubmit={() =>
-									setShowPolygonAddressModal(false)
-								}
-							/>
-						)}
-						{showCeloAddressModal && (
-							<CreateProjectAddAddressModal
-								networkId={CELO_NETWORK_NUMBER}
-								setShowModal={setShowCeloAddressModal}
-								userAddresses={userAddresses}
-								onSubmit={() => setShowCeloAddressModal(false)}
-							/>
-						)}
-						{showOptimismAddressModal && (
-							<CreateProjectAddAddressModal
-								networkId={OPTIMISM_NETWORK_NUMBER}
-								setShowModal={setShowOptimismAddressModal}
-								userAddresses={userAddresses}
-								onSubmit={() =>
-									setShowOptimismAddressModal(false)
+								setResolvedENS={
+									addressModalChainId ===
+									MAINNET_NETWORK_NUMBER
+										? setResolvedENS
+										: undefined
 								}
 							/>
 						)}
