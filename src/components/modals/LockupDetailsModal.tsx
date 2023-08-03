@@ -33,14 +33,21 @@ interface ILockupDetailsModal extends IModal {
 	unstakeable: BigNumber;
 }
 
+const givStakingConfig = {
+	[config.XDAI_NETWORK_NUMBER]: getGivStakingConfig(config.XDAI_CONFIG),
+	[config.OPTIMISM_NETWORK_NUMBER]: getGivStakingConfig(
+		config.OPTIMISM_CONFIG,
+	),
+};
+
 export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	unstakeable,
 	setShowModal,
 }) => {
+	const { account, chainId } = useWeb3React();
 	const { apr, stakedAmount } = useStakingPool(
-		getGivStakingConfig(config.XDAI_CONFIG),
+		givStakingConfig[chainId || config.XDAI_NETWORK_NUMBER],
 	);
-	const { account } = useWeb3React();
 	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
@@ -50,13 +57,13 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 			if (!account) return;
 			const LocksInfo = await fetchSubgraph(
 				SubgraphQueryBuilder.getTokenLocksInfoQuery(account),
-				config.XDAI_NETWORK_NUMBER,
+				chainId || config.XDAI_NETWORK_NUMBER,
 			);
 			setLocksInfo(LocksInfo.tokenLocks);
 		}
 
 		fetchGIVLockDetails();
-	}, [account]);
+	}, [account, chainId]);
 
 	return (
 		<Modal
