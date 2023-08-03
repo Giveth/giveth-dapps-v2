@@ -82,7 +82,11 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 		poolStakingConfig as SimplePoolStakingConfig;
 
 	const isGIVStaking = type === StakingType.GIV_LM;
-	const isGIVpower = isGIVStaking && chainId === config.XDAI_NETWORK_NUMBER;
+	const isGIVpower =
+		isGIVStaking &&
+		(chainId === config.XDAI_NETWORK_NUMBER ||
+			chainId === config.OPTIMISM_NETWORK_NUMBER);
+
 	const maxAmount = isGIVpower
 		? stakedAmount.sub(userGIVLocked.balance)
 		: stakedAmount;
