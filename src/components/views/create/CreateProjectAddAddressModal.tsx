@@ -5,7 +5,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import WalletAddressInput from './WalletAddressInput';
 
 interface ICreateProjectAddAddressModal {
-	setShowModal: (show: boolean) => void;
+	setShowModal: (show: number | undefined) => void;
 	networkId: number;
 	isActive?: boolean;
 	userAddresses: string[];
@@ -23,7 +23,9 @@ const CreateProjectAddAddressModal = ({
 	resolvedENS,
 	onSubmit,
 }: ICreateProjectAddAddressModal) => {
-	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { isAnimating, closeModal } = useModalAnimation(() =>
+		setShowModal(undefined),
+	);
 
 	return (
 		<Modal
