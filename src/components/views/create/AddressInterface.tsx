@@ -190,6 +190,7 @@ const AddressContainer = styled.div<{ hasAddress: boolean }>`
 	color: ${props =>
 		props.hasAddress ? neutralColors.gray[900] : neutralColors.gray[500]};
 	padding: 16px;
+	overflow-x: auto;
 `;
 
 export default AddressInterface;
