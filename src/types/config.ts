@@ -148,7 +148,7 @@ export interface SimpleNetworkConfig extends BasicNetworkConfig {
 interface MainnetNetworkConfig extends SimpleNetworkConfig {
 	WETH_TOKEN_ADDRESS: string;
 }
-interface XDaiNetworkConfig extends SimpleNetworkConfig {
+interface GnosisNetworkConfig extends SimpleNetworkConfig {
 	MERKLE_ADDRESS: string;
 }
 interface MicroservicesConfig {
@@ -165,7 +165,7 @@ export interface EnvConfig {
 	OPTIMISM_NETWORK_NUMBER: number;
 	CELO_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
-	GNOSIS_CONFIG: XDaiNetworkConfig;
+	GNOSIS_CONFIG: GnosisNetworkConfig;
 	POLYGON_CONFIG: BasicNetworkConfig;
 	OPTIMISM_CONFIG: SimpleNetworkConfig;
 	CELO_CONFIG: BasicNetworkConfig;
@@ -187,7 +187,7 @@ export interface GlobalConfig extends EnvConfig {
 	NETWORKS_CONFIG: {
 		[key: number]:
 			| MainnetNetworkConfig
-			| XDaiNetworkConfig
+			| GnosisNetworkConfig
 			| BasicNetworkConfig;
 	};
 	INFURA_API_KEY: string | undefined;
