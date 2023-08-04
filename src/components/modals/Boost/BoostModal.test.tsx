@@ -28,7 +28,7 @@ test('showing the ZeroGivpowerModal if the user GIVpower balance is zero', async
 	jest.spyOn(React, 'useState').mockImplementation(useStateMock);
 	const gnosisValues: ISubgraphState = {};
 	gnosisValues[
-		`unipoolBalance_${config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase()}`
+		`unipoolBalance_${config.GNOSIS_CONFIG.GIV.LM_ADDRESS.toLowerCase()}`
 	] = {
 		balance: '0',
 		rewards: '',
@@ -55,7 +55,7 @@ test('showing the BoostModal if the user GIVpower balance is not zero', async ()
 	jest.spyOn(React, 'useState').mockImplementation(useStateMock);
 	const gnosisValues: ISubgraphState = {};
 	gnosisValues[
-		`unipoolBalance_${config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase()}`
+		`unipoolBalance_${config.GNOSIS_CONFIG.GIV.LM_ADDRESS.toLowerCase()}`
 	] = {
 		balance: '1',
 		rewards: '',

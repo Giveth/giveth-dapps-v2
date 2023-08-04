@@ -72,9 +72,9 @@ export async function getAddressFromENS(ens: string | undefined, web3: any) {
 
 export const switchNetworkHandler = (chainId: number | undefined) => {
 	if (!chainId) return;
-	if (chainId === config.XDAI_NETWORK_NUMBER) {
+	if (chainId === config.GNOSIS_NETWORK_NUMBER) {
 		switchNetwork(config.MAINNET_NETWORK_NUMBER);
 	} else {
-		switchNetwork(config.XDAI_NETWORK_NUMBER);
+		switchNetwork(config.GNOSIS_NETWORK_NUMBER);
 	}
 };

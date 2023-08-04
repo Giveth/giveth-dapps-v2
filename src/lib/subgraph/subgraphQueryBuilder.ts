@@ -286,22 +286,22 @@ export class SubgraphQueryBuilder {
 	static getGnosisQuery = (userAddress?: string): string => {
 		return `
 		{
-			${SubgraphQueryBuilder.getBalanceQuery(config.XDAI_CONFIG, userAddress)}
+			${SubgraphQueryBuilder.getBalanceQuery(config.GNOSIS_CONFIG, userAddress)}
 			${SubgraphQueryBuilder.generateTokenDistroQueries(
-				config.XDAI_CONFIG,
+				config.GNOSIS_CONFIG,
 				userAddress,
 			)}
 			${SubgraphQueryBuilder.generateFarmingQueries(
 				[
-					getGivStakingConfig(config.XDAI_CONFIG),
-					...(config.XDAI_CONFIG
+					getGivStakingConfig(config.GNOSIS_CONFIG),
+					...(config.GNOSIS_CONFIG
 						.pools as Array<SimplePoolStakingConfig>),
-					...config.XDAI_CONFIG.regenPools,
+					...config.GNOSIS_CONFIG.regenPools,
 				],
 				userAddress,
 			)}
 			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery(
-				config.XDAI_CONFIG.GIV.LM_ADDRESS,
+				config.GNOSIS_CONFIG.GIV.LM_ADDRESS,
 			)},
 		}
 		`;

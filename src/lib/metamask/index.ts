@@ -10,7 +10,7 @@ const { abi: UNI_ABI } = UNI_Json;
 
 declare let window: any;
 
-const { MAINNET_CONFIG, XDAI_CONFIG } = config;
+const { MAINNET_CONFIG, GNOSIS_CONFIG } = config;
 
 const getTokenImage = (symbol: string): string | undefined => {
 	let _symbol = symbol.toLowerCase();
@@ -74,7 +74,7 @@ export async function addToken(
 		tokenAddress ||
 		(provider.network.chainId === config.MAINNET_NETWORK_NUMBER
 			? MAINNET_CONFIG.TOKEN_ADDRESS
-			: XDAI_CONFIG.TOKEN_ADDRESS);
+			: GNOSIS_CONFIG.TOKEN_ADDRESS);
 	const tokenOptions = await fetchTokenInfo(provider, address);
 	const { ethereum } = window;
 	if (tokenOptions) {

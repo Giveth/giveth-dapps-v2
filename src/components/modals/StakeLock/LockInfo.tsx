@@ -27,7 +27,7 @@ interface ILockInfo {
 }
 
 const givStakingConfig = {
-	[config.XDAI_NETWORK_NUMBER]: getGivStakingConfig(config.XDAI_CONFIG),
+	[config.GNOSIS_NETWORK_NUMBER]: getGivStakingConfig(config.GNOSIS_CONFIG),
 	[config.OPTIMISM_NETWORK_NUMBER]: getGivStakingConfig(
 		config.OPTIMISM_CONFIG,
 	),
@@ -36,7 +36,7 @@ const givStakingConfig = {
 const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 	const { chainId } = useWeb3React();
 	const { apr } = useStakingPool(
-		givStakingConfig[chainId || config.XDAI_NETWORK_NUMBER],
+		givStakingConfig[chainId || config.GNOSIS_NETWORK_NUMBER],
 	);
 
 	const multipler = Math.sqrt(1 + round);

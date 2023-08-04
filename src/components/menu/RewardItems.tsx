@@ -85,10 +85,10 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 
 	useEffect(() => {
 		let pools;
-		if (chainId === config.XDAI_NETWORK_NUMBER) {
+		if (chainId === config.GNOSIS_NETWORK_NUMBER) {
 			pools = [
-				...config.XDAI_CONFIG.pools,
-				getGivStakingConfig(config.XDAI_CONFIG),
+				...config.GNOSIS_CONFIG.pools,
+				getGivStakingConfig(config.GNOSIS_CONFIG),
 			];
 		} else if (chainId === config.MAINNET_NETWORK_NUMBER) {
 			pools = [
@@ -214,7 +214,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				label={formatMessage({ id: 'label.get_giv_token' })}
 				size='small'
 				linkType='primary'
-				href={config.XDAI_CONFIG.GIV.BUY_LINK}
+				href={config.GNOSIS_CONFIG.GIV.BUY_LINK}
 				target='_blank'
 			/>
 			{showWhatIsGIVstreamModal && (

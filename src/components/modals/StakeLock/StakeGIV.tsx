@@ -138,7 +138,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 		const isApproved = await approveERC20tokenTransfer(
 			amount,
 			userAddress,
-			poolStakingConfig.network === config.XDAI_NETWORK_NUMBER
+			poolStakingConfig.network === config.GNOSIS_NETWORK_NUMBER
 				? GARDEN_ADDRESS!
 				: LM_ADDRESS!,
 			POOL_ADDRESS,
@@ -291,7 +291,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 										})}
 										onClick={
 											poolStakingConfig.network ===
-											config.XDAI_NETWORK_NUMBER
+											config.GNOSIS_NETWORK_NUMBER
 												? onWrap
 												: onStake
 										}
@@ -333,7 +333,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 							linkType='texty'
 							size='small'
 							icon={<IconExternalLink size={16} />}
-							href={`${config.XDAI_CONFIG.blockExplorerUrls}tx/${txHash}`}
+							href={`${config.GNOSIS_CONFIG.blockExplorerUrls}tx/${txHash}`}
 							target='_blank'
 						/>
 					</BriefContainer>

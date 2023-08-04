@@ -62,7 +62,7 @@ export function showConfirmedRequest(network: number, txHash: string): void {
 				. Go stake your NODE in the dashboard!
 			</span>,
 		);
-	} else if (network === config.XDAI_NETWORK_NUMBER) {
+	} else if (network === config.GNOSIS_NETWORK_NUMBER) {
 		toast.success(
 			<span>
 				NODEdrop{' '}

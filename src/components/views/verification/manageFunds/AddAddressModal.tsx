@@ -28,9 +28,9 @@ const networkOptions = [
 		id: config.MAINNET_NETWORK_NUMBER,
 	},
 	{
-		value: config.XDAI_NETWORK_NUMBER,
+		value: config.GNOSIS_NETWORK_NUMBER,
 		label: 'Gnosis',
-		id: config.XDAI_NETWORK_NUMBER,
+		id: config.GNOSIS_NETWORK_NUMBER,
 	},
 	{
 		value: config.POLYGON_NETWORK_NUMBER,

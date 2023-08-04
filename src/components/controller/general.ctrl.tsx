@@ -23,7 +23,7 @@ const GeneralController = () => {
 
 			const _chainId =
 				_chain === 'gnosis'
-					? config.XDAI_NETWORK_NUMBER
+					? config.GNOSIS_NETWORK_NUMBER
 					: config.MAINNET_NETWORK_NUMBER;
 			if (isWalletActive && chainId !== _chainId) {
 				switchNetwork(_chainId);

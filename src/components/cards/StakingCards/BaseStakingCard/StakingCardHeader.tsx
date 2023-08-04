@@ -48,7 +48,7 @@ export const StakingCardHeader: FC<IStakingCardHeaderProps> = ({
 					? 'GIVPOWER'
 					: 'GIVFARM'}
 			</StakingPoolExchange>
-			{poolNetwork === config.XDAI_NETWORK_NUMBER &&
+			{poolNetwork === config.GNOSIS_NETWORK_NUMBER &&
 				type === StakingType.GIV_LM && (
 					<IconWithTooltip
 						direction={'top'}

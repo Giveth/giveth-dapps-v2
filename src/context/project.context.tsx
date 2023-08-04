@@ -185,13 +185,13 @@ export const ProjectProvider = ({
 
 					//get users balance
 					const balancesResp = await gqlRequest(
-						config.XDAI_CONFIG.subgraphAddress,
+						config.GNOSIS_CONFIG.subgraphAddress,
 						false,
 						FETCH_USERS_GIVPOWER_BY_ADDRESS,
 						{
 							addresses: _users,
 							contract:
-								config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase(),
+								config.GNOSIS_CONFIG.GIV.LM_ADDRESS.toLowerCase(),
 							length: _users.length,
 						},
 					);

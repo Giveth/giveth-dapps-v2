@@ -20,7 +20,7 @@ export const defaultXdaiSubgraphValues: ISubgraphState = {
 	userNotStakedPositions: [],
 	userStakedPositions: [],
 	allPositions: [],
-	networkNumber: config.XDAI_NETWORK_NUMBER,
+	networkNumber: config.GNOSIS_NETWORK_NUMBER,
 	isLoaded: false,
 };
 
@@ -47,7 +47,7 @@ export const subgraphSlice = createSlice({
 				if (action.payload.chainId === config.MAINNET_NETWORK_NUMBER) {
 					state.mainnetValues = action.payload.response;
 				} else if (
-					action.payload.chainId === config.XDAI_NETWORK_NUMBER
+					action.payload.chainId === config.GNOSIS_NETWORK_NUMBER
 				) {
 					state.gnosisValues = action.payload.response;
 				} else if (

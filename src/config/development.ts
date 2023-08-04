@@ -15,7 +15,7 @@ const NOTIFICATION_BASE_ROUTE =
 	'https://staging.notification.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
-const XDAI_NETWORK_NUMBER = 100; // xDAI
+const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
@@ -35,7 +35,7 @@ const config: EnvConfig = {
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
-	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
+	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
@@ -106,7 +106,7 @@ const config: EnvConfig = {
 		regenStreams: [],
 	},
 
-	XDAI_CONFIG: {
+	GNOSIS_CONFIG: {
 		nodeUrl: networksParams[100]?.rpcUrls[0],
 		...networksParams[100],
 		gasPreference: {
@@ -125,7 +125,7 @@ const config: EnvConfig = {
 		TOKEN_DISTRO_ADDRESS: '0x18a46865AAbAf416a970eaA8625CFC430D2364A1',
 
 		GIV: {
-			network: XDAI_NETWORK_NUMBER,
+			network: GNOSIS_NETWORK_NUMBER,
 			LM_ADDRESS: '0xDAEa66Adc97833781139373DF5B3bcEd3fdda5b1',
 			GARDEN_ADDRESS: '0x9ff80789b74d1d2b7cf5a568ea82409c2b327861',
 			BUY_LINK:
@@ -134,7 +134,7 @@ const config: EnvConfig = {
 
 		pools: [
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x31A5AeA76Af79F592a3A3F46a9f6Cb118990433b',
 				LM_ADDRESS: '0xC09147Ac0aC8B5271F03b511c3554e3238Ae3201',
 				type: StakingType.HONEYSWAP_GIV_HNY,
@@ -147,7 +147,7 @@ const config: EnvConfig = {
 				farmEndTimeMS: SEPT_8TH_2022,
 			},
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x437B0da7932b21F54488fD80Ee09b519a6f4d8AD',
 				LM_ADDRESS: '0x83535D6DeF8E881E647C00462315bae9A6E7BD09',
 				type: StakingType.SUSHISWAP_ETH_GIV,
@@ -160,7 +160,7 @@ const config: EnvConfig = {
 				farmEndTimeMS: SEPT_8TH_2022,
 			},
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0xB4E0fc187f0EEd740D93eF15Cd14750a2780fc2A',
 				LM_ADDRESS: '0xe2c436E177C39A5D18AF6923Fc2Fc673f4729C05',
 				type: StakingType.HONEYSWAP_GIV_DAI,
@@ -177,7 +177,7 @@ const config: EnvConfig = {
 
 		regenPools: [
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0xD28C07F802212F04AF41834ec0CC81d2d283124B',
 				LM_ADDRESS: '0x06851400866e065972ff21e1ECdE035b4772736d',
 				type: StakingType.HONEYSWAP_FOX_HNY,
@@ -198,7 +198,7 @@ const config: EnvConfig = {
 				},
 			},
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x0714A2fE9574F591a4ed3fD03b63714e8681fBb7',
 				LM_ADDRESS: '0x93c40bCA6a854B2190a054136a316C4Df7f89f10',
 				type: StakingType.HONEYSWAP_FOX_XDAI,
@@ -224,7 +224,7 @@ const config: EnvConfig = {
 
 		regenStreams: [
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				tokenDistroAddress:
 					'0xCA29ec6F4218E230294993E0d77d5ece5a6573D8',
 				type: StreamType.FOX,
@@ -238,7 +238,7 @@ const config: EnvConfig = {
 			{
 				/// Just for testing
 				archived: true,
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				tokenDistroAddress:
 					'0xCA29ec6F4218E230294993E0d77d5ece5a6573D8',
 				type: StreamType.FOX,

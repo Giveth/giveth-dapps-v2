@@ -358,12 +358,12 @@ export const getUserStakeInfo = (
 	const rewardPerTokenPaid = BN(unipoolBalance.rewardPerTokenPaid);
 	let stakedAmount = BN(unipoolBalance.balance);
 	if (
-		config.XDAI_CONFIG.gGIV_ADDRESS &&
-		currentValues.networkNumber === config.XDAI_NETWORK_NUMBER &&
+		config.GNOSIS_CONFIG.gGIV_ADDRESS &&
+		currentValues.networkNumber === config.GNOSIS_NETWORK_NUMBER &&
 		poolStakingConfig.type === StakingType.GIV_LM
 	) {
 		const gGIVBalance = sdh.getTokenBalance(
-			config.XDAI_CONFIG.gGIV_ADDRESS,
+			config.GNOSIS_CONFIG.gGIV_ADDRESS,
 		);
 		stakedAmount = BN(gGIVBalance.balance);
 	} else {

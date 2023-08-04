@@ -11,8 +11,8 @@ export const fetchSubgraph = async (
 	let uri;
 	if (network === config.MAINNET_NETWORK_NUMBER) {
 		uri = config.MAINNET_CONFIG.subgraphAddress;
-	} else if (network === config.XDAI_NETWORK_NUMBER) {
-		uri = config.XDAI_CONFIG.subgraphAddress;
+	} else if (network === config.GNOSIS_NETWORK_NUMBER) {
+		uri = config.GNOSIS_CONFIG.subgraphAddress;
 	} else if (network === config.OPTIMISM_NETWORK_NUMBER) {
 		uri = config.OPTIMISM_CONFIG.subgraphAddress;
 	} else {

@@ -16,7 +16,7 @@ const SubgraphController = () => {
 	useEffect(() => {
 		const _account = account ? account : undefined;
 		const _chainID = chainId || config.MAINNET_NETWORK_NUMBER;
-		if (chainId !== config.XDAI_NETWORK_NUMBER)
+		if (chainId !== config.GNOSIS_NETWORK_NUMBER)
 			dispatch(fetchGnosisInfoAsync(_account));
 		if (chainId !== config.MAINNET_NETWORK_NUMBER)
 			dispatch(fetchMainnetInfoAsync(_account));

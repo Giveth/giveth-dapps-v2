@@ -43,10 +43,10 @@ const renderPool = (
 
 const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 	const pools =
-		chainId === config.XDAI_NETWORK_NUMBER
+		chainId === config.GNOSIS_NETWORK_NUMBER
 			? [
-					...config.XDAI_CONFIG.pools,
-					...config.XDAI_CONFIG.regenPools,
+					...config.GNOSIS_CONFIG.pools,
+					...config.GNOSIS_CONFIG.regenPools,
 					...config.MAINNET_CONFIG.pools,
 					...config.MAINNET_CONFIG.regenPools,
 					...config.OPTIMISM_CONFIG.pools,
@@ -56,16 +56,16 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 			? [
 					...config.OPTIMISM_CONFIG.pools,
 					...config.OPTIMISM_CONFIG.regenPools,
-					...config.XDAI_CONFIG.pools,
-					...config.XDAI_CONFIG.regenPools,
+					...config.GNOSIS_CONFIG.pools,
+					...config.GNOSIS_CONFIG.regenPools,
 					...config.MAINNET_CONFIG.pools,
 					...config.MAINNET_CONFIG.regenPools,
 			  ]
 			: [
 					...config.MAINNET_CONFIG.pools,
 					...config.MAINNET_CONFIG.regenPools,
-					...config.XDAI_CONFIG.pools,
-					...config.XDAI_CONFIG.regenPools,
+					...config.GNOSIS_CONFIG.pools,
+					...config.GNOSIS_CONFIG.regenPools,
 					...config.OPTIMISM_CONFIG.pools,
 					...config.OPTIMISM_CONFIG.regenPools,
 			  ];
@@ -120,8 +120,8 @@ export const GIVfarmBottom = () => {
 							target='_blank'
 							rel='noreferrer'
 							href={
-								chainId === config.XDAI_NETWORK_NUMBER
-									? config.XDAI_CONFIG.GIV.BUY_LINK
+								chainId === config.GNOSIS_NETWORK_NUMBER
+									? config.GNOSIS_CONFIG.GIV.BUY_LINK
 									: config.MAINNET_CONFIG.GIV.BUY_LINK
 							}
 						>
@@ -133,22 +133,22 @@ export const GIVfarmBottom = () => {
 						<GLink>{`${formatMessage({
 							id: 'label.contract',
 						})} (${
-							chainId === config.XDAI_NETWORK_NUMBER
-								? config.XDAI_CONFIG.chainName
+							chainId === config.GNOSIS_NETWORK_NUMBER
+								? config.GNOSIS_CONFIG.chainName
 								: config.MAINNET_CONFIG.chainName
 						}):`}</GLink>
 						<GLink>
 							{shortenAddress(
-								chainId === config.XDAI_NETWORK_NUMBER
-									? config.XDAI_CONFIG.TOKEN_ADDRESS
+								chainId === config.GNOSIS_NETWORK_NUMBER
+									? config.GNOSIS_CONFIG.TOKEN_ADDRESS
 									: config.MAINNET_CONFIG.TOKEN_ADDRESS,
 							)}
 						</GLink>
 						<CopyWrapper
 							onClick={() => {
 								navigator.clipboard.writeText(
-									chainId === config.XDAI_NETWORK_NUMBER
-										? config.XDAI_CONFIG.TOKEN_ADDRESS
+									chainId === config.GNOSIS_NETWORK_NUMBER
+										? config.GNOSIS_CONFIG.TOKEN_ADDRESS
 										: config.MAINNET_CONFIG.TOKEN_ADDRESS,
 								);
 							}}
@@ -170,7 +170,7 @@ export const GIVfarmBottom = () => {
 							<Col sm={6} lg={4} key={`givpower_card_gnosis`}>
 								<StakingPoolCard
 									poolStakingConfig={getGivStakingConfig(
-										config.XDAI_CONFIG,
+										config.GNOSIS_CONFIG,
 									)}
 								/>
 							</Col>

@@ -48,7 +48,7 @@ export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
 		(network: number, key: string, value: ethers.BigNumber) => {
 			if (network === config.MAINNET_NETWORK_NUMBER) {
 				setMainnetInfos(prevInfos => ({ ...prevInfos, [key]: value }));
-			} else if (network === config.XDAI_NETWORK_NUMBER) {
+			} else if (network === config.GNOSIS_NETWORK_NUMBER) {
 				setxDaiInfos(prevInfos => ({ ...prevInfos, [key]: value }));
 			}
 		},
@@ -88,7 +88,7 @@ export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
 		if (chainId === config.MAINNET_NETWORK_NUMBER) {
 			setxDaiInfos({});
 			setxDaiTotalEarned(ethers.constants.Zero);
-		} else if (chainId === config.XDAI_NETWORK_NUMBER) {
+		} else if (chainId === config.GNOSIS_NETWORK_NUMBER) {
 			setMainnetInfos({});
 			setMainnetTotalEarned(ethers.constants.Zero);
 		}

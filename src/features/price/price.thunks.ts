@@ -14,7 +14,7 @@ export const fetchGIVPriceAsync = createAsyncThunk(
 			);
 		}
 		return await fetchGnosisTokenPrice(
-			config.XDAI_CONFIG.tokenAddressOnUniswapV2,
+			config.GNOSIS_CONFIG.tokenAddressOnUniswapV2,
 		);
 	},
 );
@@ -44,14 +44,14 @@ export const fetchGnosisThirdPartyTokensPriceAsync = createAsyncThunk(
 	'price/fetchGnosisThirdPartyTokensPric',
 	async () => {
 		const promises: Promise<string>[] = [];
-		config.XDAI_CONFIG.regenStreams.forEach(streamConfig => {
+		config.GNOSIS_CONFIG.regenStreams.forEach(streamConfig => {
 			const tokenAddress =
 				streamConfig.tokenAddressOnUniswapV2.toLowerCase();
 			promises.push(fetchGnosisTokenPrice(tokenAddress));
 		});
 		return Promise.all(promises).then(prices => {
 			let res: { [x: string]: string } = {};
-			config.XDAI_CONFIG.regenStreams.forEach((streamConfig, idx) => {
+			config.GNOSIS_CONFIG.regenStreams.forEach((streamConfig, idx) => {
 				const tokenAddress =
 					streamConfig.tokenAddressOnUniswapV2.toLowerCase();
 				res[tokenAddress] = prices[idx];

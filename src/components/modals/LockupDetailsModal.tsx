@@ -34,7 +34,7 @@ interface ILockupDetailsModal extends IModal {
 }
 
 const givStakingConfig = {
-	[config.XDAI_NETWORK_NUMBER]: getGivStakingConfig(config.XDAI_CONFIG),
+	[config.GNOSIS_NETWORK_NUMBER]: getGivStakingConfig(config.GNOSIS_CONFIG),
 	[config.OPTIMISM_NETWORK_NUMBER]: getGivStakingConfig(
 		config.OPTIMISM_CONFIG,
 	),
@@ -46,7 +46,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 }) => {
 	const { account, chainId } = useWeb3React();
 	const { apr, stakedAmount } = useStakingPool(
-		givStakingConfig[chainId || config.XDAI_NETWORK_NUMBER],
+		givStakingConfig[chainId || config.GNOSIS_NETWORK_NUMBER],
 	);
 	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -57,7 +57,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 			if (!account) return;
 			const LocksInfo = await fetchSubgraph(
 				SubgraphQueryBuilder.getTokenLocksInfoQuery(account),
-				chainId || config.XDAI_NETWORK_NUMBER,
+				chainId || config.GNOSIS_NETWORK_NUMBER,
 			);
 			setLocksInfo(LocksInfo.tokenLocks);
 		}

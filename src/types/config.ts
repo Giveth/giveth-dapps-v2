@@ -160,12 +160,12 @@ interface MicroservicesConfig {
 export interface EnvConfig {
 	GIVETH_PROJECT_ID: number;
 	MAINNET_NETWORK_NUMBER: number;
-	XDAI_NETWORK_NUMBER: number;
+	GNOSIS_NETWORK_NUMBER: number;
 	POLYGON_NETWORK_NUMBER: number;
 	OPTIMISM_NETWORK_NUMBER: number;
 	CELO_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
-	XDAI_CONFIG: XDaiNetworkConfig;
+	GNOSIS_CONFIG: XDaiNetworkConfig;
 	POLYGON_CONFIG: BasicNetworkConfig;
 	OPTIMISM_CONFIG: SimpleNetworkConfig;
 	CELO_CONFIG: BasicNetworkConfig;

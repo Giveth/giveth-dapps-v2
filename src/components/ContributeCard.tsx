@@ -67,11 +67,11 @@ export const PublicGIVpowerContributeCard: FC<IUserProfileView> = ({
 	useEffect(() => {
 		const fetchTotoal = async () => {
 			const { data } = await gqlRequest(
-				config.XDAI_CONFIG.subgraphAddress,
+				config.GNOSIS_CONFIG.subgraphAddress,
 				false,
 				FETCH_USER_GIVPOWER_BY_ADDRESS,
 				{
-					id: `${config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase()}-${user.walletAddress?.toLowerCase()}`,
+					id: `${config.GNOSIS_CONFIG.GIV.LM_ADDRESS.toLowerCase()}-${user.walletAddress?.toLowerCase()}`,
 				},
 			);
 			setTotal(data?.unipoolBalance?.balance || 0);

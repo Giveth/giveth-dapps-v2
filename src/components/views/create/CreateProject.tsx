@@ -56,7 +56,7 @@ import NameInput from '@/components/views/create/NameInput';
 
 const {
 	MAINNET_NETWORK_NUMBER,
-	XDAI_NETWORK_NUMBER,
+	GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER,
@@ -110,7 +110,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		a => a.isRecipient && a.networkId === MAINNET_NETWORK_NUMBER,
 	)?.address;
 	const prevGnosisAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === XDAI_NETWORK_NUMBER,
+		a => a.isRecipient && a.networkId === GNOSIS_NETWORK_NUMBER,
 	)?.address;
 	const prevPolygonAddress = addresses?.find(
 		a => a.isRecipient && a.networkId === POLYGON_NETWORK_NUMBER,
@@ -211,7 +211,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					},
 					{
 						address: checksumAddress,
-						networkId: XDAI_NETWORK_NUMBER,
+						networkId: GNOSIS_NETWORK_NUMBER,
 					},
 					{
 						address: checksumAddress,
@@ -241,7 +241,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					const checksumAddress = utils.getAddress(gnosisAddress);
 					addresses.push({
 						address: checksumAddress,
-						networkId: XDAI_NETWORK_NUMBER,
+						networkId: GNOSIS_NETWORK_NUMBER,
 					});
 				}
 				if (polygonAddressActive) {
@@ -402,7 +402,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							}}
 						/>
 						<WalletAddressInput
-							networkId={XDAI_NETWORK_NUMBER}
+							networkId={GNOSIS_NETWORK_NUMBER}
 							sameAddress={isSameAddress}
 							isActive={gnosisAddressActive}
 							userAddresses={userAddresses}

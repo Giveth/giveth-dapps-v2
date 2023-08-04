@@ -65,11 +65,11 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 	const { account, chainId, active } = useWeb3React();
 
 	useEffect(() => {
-		setShowModal(active && chainId !== config.XDAI_NETWORK_NUMBER);
+		setShowModal(active && chainId !== config.GNOSIS_NETWORK_NUMBER);
 	}, [chainId, step, active]);
 
 	const getClaimData = async () => {
-		if (!account || chainId !== config.XDAI_NETWORK_NUMBER) {
+		if (!account || chainId !== config.GNOSIS_NETWORK_NUMBER) {
 			return;
 		}
 		setTotalAmount(Zero);
@@ -127,7 +127,7 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 				<SwitchNetwork
 					setShowModal={setShowModal}
 					desc="You're connected to the wrong network! please switch to Gnosis Chain."
-					customNetworks={[config.XDAI_NETWORK_NUMBER]}
+					customNetworks={[config.GNOSIS_NETWORK_NUMBER]}
 				/>
 			)}
 		</ClaimContext.Provider>

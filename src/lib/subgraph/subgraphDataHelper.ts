@@ -68,7 +68,7 @@ export class SubgraphDataHelper {
 	}
 
 	getUserGIVPowerBalance(): IUnipoolBalance {
-		const givTokenAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
+		const givTokenAddress = config.GNOSIS_CONFIG.GIV.LM_ADDRESS;
 		return this.getUnipoolBalance(givTokenAddress);
 	}
 

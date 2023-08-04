@@ -84,7 +84,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 	const isGIVStaking = type === StakingType.GIV_LM;
 	const isGIVpower =
 		isGIVStaking &&
-		(chainId === config.XDAI_NETWORK_NUMBER ||
+		(chainId === config.GNOSIS_NETWORK_NUMBER ||
 			chainId === config.OPTIMISM_NETWORK_NUMBER);
 
 	const maxAmount = isGIVpower

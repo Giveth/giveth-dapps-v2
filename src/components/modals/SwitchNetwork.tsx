@@ -22,7 +22,7 @@ import { networksParams } from '@/helpers/blockchain';
 
 const _networks = [
 	config.MAINNET_NETWORK_NUMBER,
-	config.XDAI_NETWORK_NUMBER,
+	config.GNOSIS_NETWORK_NUMBER,
 	config.POLYGON_NETWORK_NUMBER,
 	config.CELO_NETWORK_NUMBER,
 	config.OPTIMISM_NETWORK_NUMBER,

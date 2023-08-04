@@ -17,7 +17,7 @@ export const fetchPrice = async (chainId: number, tokenAddress?: string) => {
 			case config.POLYGON_NETWORK_NUMBER:
 				chain = 'polygon-pos';
 				break;
-			case config.XDAI_NETWORK_NUMBER:
+			case config.GNOSIS_NETWORK_NUMBER:
 				chain = 'xdai';
 				break;
 			default:

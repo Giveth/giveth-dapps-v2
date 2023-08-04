@@ -164,7 +164,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		const _chain = Array.isArray(chain) ? chain[0] : chain;
 		const _chainId =
 			_chain === 'gnosis'
-				? config.XDAI_NETWORK_NUMBER
+				? config.GNOSIS_NETWORK_NUMBER
 				: config.MAINNET_NETWORK_NUMBER;
 		const checkNetworkAndShowStakeModal = async () => {
 			if (

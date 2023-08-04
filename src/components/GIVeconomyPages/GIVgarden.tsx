@@ -33,7 +33,7 @@ import { getGivStakingConfig } from '@/helpers/networkProvider';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { TopInnerContainer } from './commons';
 
-const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
+const poolStakingConfig = getGivStakingConfig(config.GNOSIS_CONFIG);
 
 export const TabGardenTop = () => {
 	const { chainId } = useWeb3React();
@@ -83,7 +83,7 @@ export const TabGardenTop = () => {
 								setShowModal(true);
 							}}
 							network={chainId}
-							targetNetworks={[config.XDAI_NETWORK_NUMBER]}
+							targetNetworks={[config.GNOSIS_NETWORK_NUMBER]}
 						/>
 					</Col>
 				</Row>

@@ -38,8 +38,8 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 		WalletAddr[config.MAINNET_NETWORK_NUMBER] = {
 			networkId: config.MAINNET_NETWORK_NUMBER,
 		};
-		WalletAddr[config.XDAI_NETWORK_NUMBER] = {
-			networkId: config.XDAI_NETWORK_NUMBER,
+		WalletAddr[config.GNOSIS_NETWORK_NUMBER] = {
+			networkId: config.GNOSIS_NETWORK_NUMBER,
 		};
 		WalletAddr[config.POLYGON_NETWORK_NUMBER] = {
 			networkId: config.POLYGON_NETWORK_NUMBER,

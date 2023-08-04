@@ -33,7 +33,7 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 	const { formatMessage } = useIntl();
 	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
 	const { stakedAmount } = useStakingPool(
-		getGivStakingConfig(config.XDAI_CONFIG),
+		getGivStakingConfig(config.GNOSIS_CONFIG),
 	);
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 
