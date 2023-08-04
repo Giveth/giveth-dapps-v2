@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import config from '@/configuration';
 import { RegenStreamConfig } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
 
@@ -14,12 +13,7 @@ export const useTokenDistroHelper = (
 		useState<TokenDistroHelper>();
 
 	const currentValues = useAppSelector(
-		state =>
-			poolNetwork === config.XDAI_NETWORK_NUMBER
-				? state.subgraph.gnosisValues
-				: poolNetwork === config.OPTIMISM_NETWORK_NUMBER
-				? state.subgraph.optimismValues
-				: state.subgraph.mainnetValues,
+		state => state.subgraph.currentValues,
 		() => (hold ? true : false),
 	);
 	const sdh = new SubgraphDataHelper(currentValues);
