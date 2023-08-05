@@ -1,7 +1,6 @@
 export interface BasicStakingConfig {
 	LM_ADDRESS: string;
 	network: number;
-	GARDEN_ADDRESS?: string;
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
 	farmEndTimeMS?: number;
@@ -126,31 +125,95 @@ export interface BasicNetworkConfig extends INetworkParam {
 	subgraphAddress: string;
 }
 
-export interface SimpleNetworkConfig extends BasicNetworkConfig {
-	TOKEN_ADDRESS: string;
-	gGIV_ADDRESS?: string;
-	tokenAddressOnUniswapV2: string; // For price purpose in test env, on production this must have the same value of `TOKEN_ADDRESS`
+interface StreamConfig {
 	TOKEN_DISTRO_ADDRESS: string;
-	GIV: BasicStakingConfig | SimplePoolStakingConfig;
-	DAI_CONTRACT_ADDRESS?: string;
-	PFP_CONTRACT_ADDRESS?: string;
+}
+
+interface FarmConfig {
 	pools: Array<
 		| SimplePoolStakingConfig
 		| BalancerPoolStakingConfig
 		| UniswapV3PoolStakingConfig
 		| ICHIPoolStakingConfig
 	>;
+}
+
+export interface RegenFarmConfig {
 	regenPools: RegenPoolStakingConfig[];
-	uniswapV2Subgraph: string;
 	regenStreams: RegenStreamConfig[];
 }
 
-interface MainnetNetworkConfig extends SimpleNetworkConfig {
+export interface GIVTokenConfig {
+	GIV_TOKEN_ADDRESS: string;
+	GIV_BUY_LINK: string;
+}
+
+interface DAITokenConfig {
+	DAI_TOKEN_ADDRESS: string;
+	DAI_BUY_LINK?: string;
+}
+
+interface GIVpowerStakingConfig extends SimplePoolStakingConfig {
+	LM_ADDRESS: string;
+}
+
+interface GIVpowerUniPoolConfig {
+	GIVPOWER: GIVpowerStakingConfig;
+}
+
+interface GIVpowerGIVgardenStakingConfig extends SimplePoolStakingConfig {
+	LM_ADDRESS: string;
+	GARDEN_ADDRESS: string;
+}
+
+interface GIVpowerGIVgardenConfig {
+	GIVPOWER: GIVpowerGIVgardenStakingConfig;
+}
+
+interface GIVgardenTokenConfig {
+	gGIV_TOKEN_ADDRESS: string;
+}
+
+interface PFPConfig {
+	PFP_CONTRACT_ADDRESS: string;
+}
+
+interface TokenPriceConfig {
+	tokenAddressOnUniswapV2: string; // For price purpose in test env, on production this must have the same value of `GIV_TOKEN_ADDRESS`
+	uniswapV2Subgraph: string;
+}
+
+export interface StreamNetworkConfig
+	extends BasicNetworkConfig,
+		StreamConfig,
+		TokenPriceConfig,
+		GIVTokenConfig {}
+
+export interface FarmNetworkConfig extends StreamNetworkConfig, FarmConfig {}
+
+export interface RegenNetworkConfig
+	extends FarmNetworkConfig,
+		RegenFarmConfig {}
+
+export type GIVpowerConfig = GIVpowerGIVgardenConfig | GIVpowerUniPoolConfig;
+
+export interface MainnetNetworkConfig
+	extends RegenNetworkConfig,
+		PFPConfig,
+		DAITokenConfig {
 	WETH_TOKEN_ADDRESS: string;
 }
-interface GnosisNetworkConfig extends SimpleNetworkConfig {
+export interface GnosisNetworkConfig
+	extends RegenNetworkConfig,
+		GIVgardenTokenConfig,
+		GIVpowerGIVgardenConfig {
 	MERKLE_ADDRESS: string;
 }
+
+export interface OptimismNetworkConfig
+	extends StreamNetworkConfig,
+		GIVpowerUniPoolConfig {}
+
 interface MicroservicesConfig {
 	authentication: string;
 	notification: string;
@@ -167,7 +230,7 @@ export interface EnvConfig {
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	GNOSIS_CONFIG: GnosisNetworkConfig;
 	POLYGON_CONFIG: BasicNetworkConfig;
-	OPTIMISM_CONFIG: SimpleNetworkConfig;
+	OPTIMISM_CONFIG: OptimismNetworkConfig;
 	CELO_CONFIG: BasicNetworkConfig;
 	GARDEN_LINK: string;
 	BASE_ROUTE: string;
@@ -177,6 +240,12 @@ export interface EnvConfig {
 	RARIBLE_ADDRESS: string;
 }
 
+export type NetworkConfig =
+	| MainnetNetworkConfig
+	| GnosisNetworkConfig
+	| OptimismNetworkConfig
+	| BasicNetworkConfig;
+
 export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
@@ -185,10 +254,7 @@ export interface GlobalConfig extends EnvConfig {
 	PFP_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
 	NETWORKS_CONFIG: {
-		[key: number]:
-			| MainnetNetworkConfig
-			| GnosisNetworkConfig
-			| BasicNetworkConfig;
+		[key: number]: NetworkConfig;
 	};
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
