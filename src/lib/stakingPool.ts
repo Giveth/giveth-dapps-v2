@@ -8,9 +8,12 @@ import {
 import { captureException } from '@sentry/nextjs';
 import {
 	BalancerPoolStakingConfig,
+	GIVTokenConfig,
+	GIVpowerConfig,
 	ICHIPoolStakingConfig,
+	MainnetNetworkConfig,
+	RegenFarmConfig,
 	RegenPoolStakingConfig,
-	SimpleNetworkConfig,
 	SimplePoolStakingConfig,
 	StakingPlatform,
 	StakingType,
@@ -84,8 +87,8 @@ export const getGivStakingAPR = async (
 	subgraphValue: ISubgraphState,
 	provider: JsonRpcProvider | null,
 ): Promise<APR> => {
-	const lmAddress = (config.NETWORKS_CONFIG[network] as SimpleNetworkConfig)
-		.GIV.LM_ADDRESS;
+	const lmAddress = (config.NETWORKS_CONFIG[network] as GIVpowerConfig)
+		.GIVPOWER.LM_ADDRESS;
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
 	let givStakingAPR: BigNumber = Zero;
@@ -197,9 +200,8 @@ const getBalancerPoolStakingAPR = async (
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
-	const tokenAddress = (
-		config.NETWORKS_CONFIG[network] as SimpleNetworkConfig
-	).TOKEN_ADDRESS;
+	const tokenAddress = (config.NETWORKS_CONFIG[network] as GIVTokenConfig)
+		.GIV_TOKEN_ADDRESS;
 
 	const weightedPoolContract = new Contract(
 		POOL_ADDRESS,
@@ -274,14 +276,14 @@ const getSimplePoolStakingAPR = async (
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
 	const givTokenAddress = (
-		config.NETWORKS_CONFIG[network] as SimpleNetworkConfig
-	).TOKEN_ADDRESS;
+		config.NETWORKS_CONFIG[network] as MainnetNetworkConfig
+	).GIV_TOKEN_ADDRESS;
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 	const streamConfig =
 		regenStreamType &&
-		(
-			config.NETWORKS_CONFIG[network] as SimpleNetworkConfig
-		).regenStreams.find(s => s.type === regenStreamType);
+		(config.NETWORKS_CONFIG[network] as RegenFarmConfig).regenStreams.find(
+			s => s.type === regenStreamType,
+		);
 	const tokenAddress = streamConfig
 		? streamConfig.rewardTokenAddress
 		: givTokenAddress;
@@ -358,12 +360,12 @@ export const getUserStakeInfo = (
 	const rewardPerTokenPaid = BN(unipoolBalance.rewardPerTokenPaid);
 	let stakedAmount = BN(unipoolBalance.balance);
 	if (
-		config.GNOSIS_CONFIG.gGIV_ADDRESS &&
+		config.GNOSIS_CONFIG.gGIV_TOKEN_ADDRESS &&
 		currentValues.networkNumber === config.GNOSIS_NETWORK_NUMBER &&
 		poolStakingConfig.type === StakingType.GIV_LM
 	) {
 		const gGIVBalance = sdh.getTokenBalance(
-			config.GNOSIS_CONFIG.gGIV_ADDRESS,
+			config.GNOSIS_CONFIG.gGIV_TOKEN_ADDRESS,
 		);
 		stakedAmount = BN(gGIVBalance.balance);
 	} else {
