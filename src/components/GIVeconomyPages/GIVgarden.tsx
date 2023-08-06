@@ -29,11 +29,8 @@ import {
 import { HarvestAllModal } from '../modals/HarvestAll';
 import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { TopInnerContainer } from './commons';
-
-const poolStakingConfig = getGivStakingConfig(config.GNOSIS_CONFIG);
 
 export const TabGardenTop = () => {
 	const { chainId } = useWeb3React();
@@ -46,7 +43,7 @@ export const TabGardenTop = () => {
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showModal);
 	const { formatMessage } = useIntl();
 
-	const { earned } = useStakingPool(poolStakingConfig);
+	const { earned } = useStakingPool(config.GNOSIS_CONFIG.GIVPOWER);
 
 	useEffect(() => {
 		setEarnedLiquidPart(givTokenDistroHelper.getLiquidPart(earned));
@@ -92,7 +89,7 @@ export const TabGardenTop = () => {
 				<HarvestAllModal
 					title={formatMessage({ id: 'label.givgarden_rewards' })}
 					setShowModal={setShowModal}
-					poolStakingConfig={poolStakingConfig}
+					poolStakingConfig={config.GNOSIS_CONFIG.GIVPOWER}
 				/>
 			)}
 		</GardenTopContainer>
