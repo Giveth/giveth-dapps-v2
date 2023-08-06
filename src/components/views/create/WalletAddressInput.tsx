@@ -244,7 +244,7 @@ const WalletAddressInput: FC<IProps> = ({
 				register={register}
 				registerName={inputName}
 				registerOptions={{ validate: addressValidation }}
-				error={isAddressUsed ? undefined : error}
+				error={isAddressUsed || !value ? undefined : error}
 			/>
 			{delayedResolvedENS && (
 				<InlineToast
