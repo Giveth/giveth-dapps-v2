@@ -23,8 +23,8 @@ import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { RowWrapper, TableCell, TableHeader } from '../styled-components/Table';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { useStakingPool } from '@/hooks/useStakingPool';
+import { GIVpowerConfig } from '@/types/config';
 import type { IGIVpowerPosition } from '@/types/subgraph';
 import type { BigNumber } from 'ethers';
 import type { IModal } from '@/types/common';
@@ -33,20 +33,17 @@ interface ILockupDetailsModal extends IModal {
 	unstakeable: BigNumber;
 }
 
-const givStakingConfig = {
-	[config.GNOSIS_NETWORK_NUMBER]: getGivStakingConfig(config.GNOSIS_CONFIG),
-	[config.OPTIMISM_NETWORK_NUMBER]: getGivStakingConfig(
-		config.OPTIMISM_CONFIG,
-	),
-};
-
 export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	unstakeable,
 	setShowModal,
 }) => {
 	const { account, chainId } = useWeb3React();
 	const { apr, stakedAmount } = useStakingPool(
-		givStakingConfig[chainId || config.GNOSIS_NETWORK_NUMBER],
+		(
+			config.NETWORKS_CONFIG[
+				chainId || config.GNOSIS_NETWORK_NUMBER
+			] as GIVpowerConfig
+		).GIVPOWER,
 	);
 	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
