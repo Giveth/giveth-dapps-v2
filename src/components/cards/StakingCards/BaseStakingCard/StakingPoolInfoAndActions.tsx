@@ -18,8 +18,8 @@ import { avgAPR } from '@/helpers/givpower';
 import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
 	PoolStakingConfig,
+	RegenNetworkConfig,
 	RegenPoolStakingConfig,
-	SimpleNetworkConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 } from '@/types/config';
@@ -119,7 +119,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	} = poolStakingConfig;
 	const regenStreamConfig = regenStreamType
 		? (
-				config.NETWORKS_CONFIG[poolNetwork] as SimpleNetworkConfig
+				config.NETWORKS_CONFIG[poolNetwork] as RegenNetworkConfig
 		  ).regenStreams.find(
 				regenStream => regenStream.type === regenStreamType,
 		  )
