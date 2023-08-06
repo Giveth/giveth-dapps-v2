@@ -21,7 +21,6 @@ import {
 	GIVfarmToolBoxRow,
 } from '../../GIVeconomyPages/GIVfarm.sc';
 import { NetworkSelector } from '@/components/NetworkSelector';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { ExtLinkRow } from '../../GIVeconomyPages/commons';
 import { shortenAddress } from '@/lib/helpers';
 
@@ -45,29 +44,29 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 	const pools =
 		chainId === config.GNOSIS_NETWORK_NUMBER
 			? [
+					config.GNOSIS_CONFIG.GIVPOWER,
+					config.OPTIMISM_CONFIG.GIVPOWER,
 					...config.GNOSIS_CONFIG.pools,
 					...config.GNOSIS_CONFIG.regenPools,
 					...config.MAINNET_CONFIG.pools,
 					...config.MAINNET_CONFIG.regenPools,
-					...config.OPTIMISM_CONFIG.pools,
-					...config.OPTIMISM_CONFIG.regenPools,
 			  ]
 			: chainId === config.OPTIMISM_NETWORK_NUMBER
 			? [
-					...config.OPTIMISM_CONFIG.pools,
-					...config.OPTIMISM_CONFIG.regenPools,
+					config.OPTIMISM_CONFIG.GIVPOWER,
+					config.GNOSIS_CONFIG.GIVPOWER,
 					...config.GNOSIS_CONFIG.pools,
 					...config.GNOSIS_CONFIG.regenPools,
 					...config.MAINNET_CONFIG.pools,
 					...config.MAINNET_CONFIG.regenPools,
 			  ]
 			: [
+					config.GNOSIS_CONFIG.GIVPOWER,
+					config.OPTIMISM_CONFIG.GIVPOWER,
 					...config.MAINNET_CONFIG.pools,
 					...config.MAINNET_CONFIG.regenPools,
 					...config.GNOSIS_CONFIG.pools,
 					...config.GNOSIS_CONFIG.regenPools,
-					...config.OPTIMISM_CONFIG.pools,
-					...config.OPTIMISM_CONFIG.regenPools,
 			  ];
 
 	const now = getNowUnixMS();
@@ -121,8 +120,8 @@ export const GIVfarmBottom = () => {
 							rel='noreferrer'
 							href={
 								chainId === config.GNOSIS_NETWORK_NUMBER
-									? config.GNOSIS_CONFIG.GIV.BUY_LINK
-									: config.MAINNET_CONFIG.GIV.BUY_LINK
+									? config.GNOSIS_CONFIG.GIV_BUY_LINK
+									: config.MAINNET_CONFIG.GIV_BUY_LINK
 							}
 						>
 							{formatMessage({ id: 'label.buy_giv_token' })}
@@ -140,16 +139,17 @@ export const GIVfarmBottom = () => {
 						<GLink>
 							{shortenAddress(
 								chainId === config.GNOSIS_NETWORK_NUMBER
-									? config.GNOSIS_CONFIG.TOKEN_ADDRESS
-									: config.MAINNET_CONFIG.TOKEN_ADDRESS,
+									? config.GNOSIS_CONFIG.GIV_TOKEN_ADDRESS
+									: config.MAINNET_CONFIG.GIV_TOKEN_ADDRESS,
 							)}
 						</GLink>
 						<CopyWrapper
 							onClick={() => {
 								navigator.clipboard.writeText(
 									chainId === config.GNOSIS_NETWORK_NUMBER
-										? config.GNOSIS_CONFIG.TOKEN_ADDRESS
-										: config.MAINNET_CONFIG.TOKEN_ADDRESS,
+										? config.GNOSIS_CONFIG.GIV_TOKEN_ADDRESS
+										: config.MAINNET_CONFIG
+												.GIV_TOKEN_ADDRESS,
 								);
 							}}
 						>
@@ -164,36 +164,7 @@ export const GIVfarmBottom = () => {
 						setStateChange={setShowArchivedPools}
 					/>
 				</GIVfarmToolBoxRow>
-				<PoolRow>
-					{!showArchivedPools && (
-						<>
-							<Col sm={6} lg={4} key={`givpower_card_gnosis`}>
-								<StakingPoolCard
-									poolStakingConfig={getGivStakingConfig(
-										config.GNOSIS_CONFIG,
-									)}
-								/>
-							</Col>
-							<Col sm={6} lg={4} key={`givpower_card_optimism`}>
-								<StakingPoolCard
-									poolStakingConfig={getGivStakingConfig(
-										config.OPTIMISM_CONFIG,
-									)}
-								/>
-							</Col>
-						</>
-					)}
-					{showArchivedPools && (
-						<Col sm={6} lg={4}>
-							<StakingPoolCard
-								poolStakingConfig={getGivStakingConfig(
-									config.MAINNET_CONFIG,
-								)}
-							/>
-						</Col>
-					)}
-					{renderPools(chainId, showArchivedPools)}
-				</PoolRow>
+				<PoolRow>{renderPools(chainId, showArchivedPools)}</PoolRow>
 				<RegenStreamSection showArchivedPools={showArchivedPools} />
 				<DaoCard />
 			</Container>
