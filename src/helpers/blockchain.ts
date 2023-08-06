@@ -18,8 +18,8 @@ export const networksParams: {
 		chainId: '0x64',
 		chainName: 'Gnosis',
 		nativeCurrency: {
-			name: 'xDai',
-			symbol: 'xDai',
+			name: 'xDAI',
+			symbol: 'xDAI',
 			decimals: 18,
 		},
 		rpcUrls: ['https://rpc.gnosischain.com/'],

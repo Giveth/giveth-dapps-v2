@@ -37,7 +37,7 @@ export const fetchXDaiInfo = async (userAddress?: string) => {
 			networkNumber: config.XDAI_NETWORK_NUMBER,
 		});
 	} catch (e) {
-		console.error('Error on query xDai subgraph:', e);
+		console.error('Error on query xDAI subgraph:', e);
 		captureException(e, {
 			tags: {
 				section: 'fetchxDaiSubgraph',
