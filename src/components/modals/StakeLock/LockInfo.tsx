@@ -16,9 +16,9 @@ import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import config from '@/configuration';
+import { GIVpowerConfig } from '@/types/config';
 import type { FC } from 'react';
 
 interface ILockInfo {
@@ -26,17 +26,14 @@ interface ILockInfo {
 	amount: string;
 }
 
-const givStakingConfig = {
-	[config.GNOSIS_NETWORK_NUMBER]: getGivStakingConfig(config.GNOSIS_CONFIG),
-	[config.OPTIMISM_NETWORK_NUMBER]: getGivStakingConfig(
-		config.OPTIMISM_CONFIG,
-	),
-};
-
 const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 	const { chainId } = useWeb3React();
 	const { apr } = useStakingPool(
-		givStakingConfig[chainId || config.GNOSIS_NETWORK_NUMBER],
+		(
+			config.NETWORKS_CONFIG[
+				chainId || config.GNOSIS_NETWORK_NUMBER
+			] as GIVpowerConfig
+		).GIVPOWER,
 	);
 
 	const multipler = Math.sqrt(1 + round);
