@@ -100,7 +100,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						/>
 					</>
 				) : state === StakeCardState.GIVPOWER_INTRO ? (
-					<GIVpowerCardIntro setState={setState} />
+					<GIVpowerCardIntro
+						poolNetwork={poolNetwork}
+						setState={setState}
+					/>
 				) : (
 					<StakingCardIntro
 						symbol={title}
