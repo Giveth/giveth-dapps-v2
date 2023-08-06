@@ -21,7 +21,7 @@ import { ETheme } from '@/features/general/general.slice';
 import { networksParams } from '@/helpers/blockchain';
 
 const networksConfig = config.NETWORKS_CONFIG;
-const _networks = Object.keys(networksConfig).map(Number);
+const defaultNetworkIds = Object.keys(networksConfig).map(Number);
 
 interface ISwitchNetworkModal extends IModal {
 	desc?: string;
@@ -37,7 +37,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 	const { chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
-	const networks = customNetworks || _networks;
+	const networkIds = customNetworks || defaultNetworkIds;
 
 	return (
 		<Modal
@@ -49,7 +49,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 		>
 			<Wrapper>
 				{desc && <P>{desc}</P>}
-				{networks.map(networkId => (
+				{networkIds.map(networkId => (
 					<NetworkItem
 						onClick={() => {
 							switchNetwork(networkId);
