@@ -20,13 +20,8 @@ import config from '@/configuration';
 import { ETheme } from '@/features/general/general.slice';
 import { networksParams } from '@/helpers/blockchain';
 
-const _networks = [
-	config.MAINNET_NETWORK_NUMBER,
-	config.XDAI_NETWORK_NUMBER,
-	config.POLYGON_NETWORK_NUMBER,
-	config.CELO_NETWORK_NUMBER,
-	config.OPTIMISM_NETWORK_NUMBER,
-];
+const networksConfig = config.NETWORKS_CONFIG;
+const _networks = Object.keys(networksConfig).map(Number);
 
 interface ISwitchNetworkModal extends IModal {
 	desc?: string;
