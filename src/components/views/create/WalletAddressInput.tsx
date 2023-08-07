@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
 	Button,
@@ -53,14 +53,12 @@ const WalletAddressInput: FC<IProps> = ({
 		clearErrors,
 	} = useFormContext();
 
-	const [isHidden, setIsHidden] = useState(false);
 	const [isValidating, setIsValidating] = useState(false);
 	const { formatMessage } = useIntl();
 
 	const { chainId, library } = useWeb3React();
 
 	const user = useAppSelector(state => state.user?.userData);
-	const isMainnet = networkId === config.MAINNET_NETWORK_NUMBER;
 	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
 	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
 	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
@@ -155,11 +153,6 @@ const WalletAddressInput: FC<IProps> = ({
 			return e;
 		}
 	};
-	useEffect(() => {
-		setIsHidden(false);
-	}, []);
-
-	if (isHidden && !isMainnet) return null;
 
 	return (
 		<Container>
