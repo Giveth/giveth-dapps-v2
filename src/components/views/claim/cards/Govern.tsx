@@ -109,7 +109,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
 	const [apr, setApr] = useState<APR>(null);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
+	const gnosisValues = useAppSelector(state => state.subgraph.gnosisValues);
 
 	useEffect(() => {
 		let _stacked = 0;
@@ -148,7 +148,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 	useEffect(() => {
 		const cb = () => {
-			getGivStakingAPR(config.XDAI_NETWORK_NUMBER, xDaiValues, null)
+			getGivStakingAPR(config.XDAI_NETWORK_NUMBER, gnosisValues, null)
 				.then(_apr => {
 					mounted.current && setApr(_apr);
 				})
@@ -166,7 +166,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 		const interval = setInterval(cb, 120 * 1000);
 
 		return () => clearInterval(interval);
-	}, [stacked, xDaiValues]);
+	}, [stacked, gnosisValues]);
 
 	return (
 		<GovernCardContainer activeIndex={step} index={index}>

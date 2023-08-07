@@ -98,7 +98,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
 	const [APR, setAPR] = useState<BigNumber>(Zero);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { xDaiValues, mainnetValues } = useAppSelector(
+	const { gnosisValues, mainnetValues } = useAppSelector(
 		state => state.subgraph,
 	);
 
@@ -153,7 +153,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 			const promise: Promise<APR> = getLPStakingAPR(
 				poolStakingConfig as SimplePoolStakingConfig,
 				networkProviders[config.XDAI_NETWORK_NUMBER],
-				xDaiValues,
+				gnosisValues,
 			);
 			promiseQueue.push(promise);
 		});
@@ -176,7 +176,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 			promiseQueue.push(promise);
 		});
 		getMaxAPR(promiseQueue);
-	}, [mainnetValues, xDaiValues]);
+	}, [mainnetValues, gnosisValues]);
 
 	return (
 		<InvestCardContainer activeIndex={step} index={index}>

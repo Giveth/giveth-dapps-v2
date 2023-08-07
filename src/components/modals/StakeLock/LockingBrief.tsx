@@ -19,7 +19,7 @@ const LockingBrief: FC<ILockingBrief> = ({
 	onLocking = false,
 }) => {
 	const givpowerInfo = useAppSelector(
-		state => state.subgraph.xDaiValues.givpowerInfo,
+		state => state.subgraph.gnosisValues.givpowerInfo,
 	) as IGIVpower;
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (
