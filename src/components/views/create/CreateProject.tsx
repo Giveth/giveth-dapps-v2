@@ -76,11 +76,7 @@ export enum EInputs {
 	impactLocation = 'impactLocation',
 	image = 'image',
 	draft = 'draft',
-	mainAddress = 'mainAddress',
-	gnosisAddress = 'gnosisAddress',
-	polygonAddress = 'polygonAddress',
-	celoAddress = 'celoAddress',
-	optimismAddress = 'optimismAddress',
+	addresses = 'addresses',
 }
 
 export type TInputs = {
@@ -90,11 +86,7 @@ export type TInputs = {
 	[EInputs.impactLocation]?: string;
 	[EInputs.image]?: string;
 	[EInputs.draft]?: boolean;
-	[EInputs.mainAddress]: string;
-	[EInputs.gnosisAddress]: string;
-	[EInputs.polygonAddress]: string;
-	[EInputs.celoAddress]: string;
-	[EInputs.optimismAddress]: string;
+	[EInputs.addresses]: { [key: number]: string };
 };
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
