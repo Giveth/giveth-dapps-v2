@@ -19,20 +19,19 @@ import config from '@/configuration';
 import Input, { InputSize } from '@/components/Input';
 import { EInputs } from '@/components/views/create/CreateProject';
 import { gqlAddressValidation } from '@/components/views/create/helpers';
-import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
-import { IconEthereum } from '@/components/Icons/Eth';
 import NetworkLogo from '@/components/NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
+
+const networksConfig = config.NETWORKS_CONFIG;
 
 interface IProps {
 	networkId: number;
 	userAddresses: string[];
-	sameAddress?: boolean;
 	isActive?: boolean;
 	resolvedENS?: string;
 	setResolvedENS: (resolvedENS: string) => void;
@@ -42,7 +41,6 @@ interface IProps {
 const WalletAddressInput: FC<IProps> = ({
 	networkId,
 	userAddresses,
-	sameAddress = false,
 	isActive = true,
 	resolvedENS,
 	setResolvedENS,
@@ -90,7 +88,7 @@ const WalletAddressInput: FC<IProps> = ({
 
 	let disabled: boolean;
 	if (isGnosis) disabled = !isActive;
-	else disabled = !isActive && !sameAddress;
+	else disabled = !isActive;
 
 	let caption: string = '';
 	if (isDefaultAddress) {
@@ -100,19 +98,7 @@ const WalletAddressInput: FC<IProps> = ({
 	} else if (errorMessage || !value) {
 		caption = `${formatMessage({
 			id: 'label.you_can_enter_a_new_address',
-		})} ${
-			sameAddress
-				? formatMessage({ id: 'label.all_supported_networks' })
-				: isGnosis
-				? 'Gnosis Chain'
-				: isPolygon
-				? 'Polygon Mainnet'
-				: isCelo
-				? 'Celo Mainnet'
-				: isOptimism
-				? 'Optimism'
-				: 'Mainnet'
-		}.`;
+		})} ${networksConfig[networkId].chainName}.`;
 	}
 
 	const isProjectPrevAddress = (newAddress: string) => {
@@ -170,72 +156,37 @@ const WalletAddressInput: FC<IProps> = ({
 		}
 	};
 	useEffect(() => {
-		if (sameAddress) {
-			setTimeout(() => setIsHidden(true), 250);
-		} else {
-			setIsHidden(false);
-		}
-	}, [sameAddress]);
+		setIsHidden(false);
+	}, []);
 
 	if (isHidden && !isMainnet) return null;
 
 	return (
-		<Container hide={sameAddress && !isMainnet}>
+		<Container>
 			<Header>
 				<H6>
-					{sameAddress
-						? formatMessage({ id: 'label.receiving_address' })
-						: formatMessage(
-								{ id: 'label.chain_address' },
-								{
-									chainName:
-										networksParams[networkId].chainName,
-								},
-						  )}
+					{formatMessage(
+						{ id: 'label.chain_address' },
+						{
+							chainName: networksParams[networkId].chainName,
+						},
+					)}
 				</H6>
 				<Flex gap='10px'>
-					{sameAddress ? (
-						<>
-							<MainnetIcon />
-							<GnosisIcon />
-							<PolygonIcon />
-							<CeloIcon />
-							<OptimismIcon />
-						</>
-					) : isGnosis ? (
-						<GnosisIcon />
-					) : isPolygon ? (
-						<PolygonIcon />
-					) : isCelo ? (
-						<CeloIcon />
-					) : isOptimism ? (
-						<OptimismIcon />
-					) : (
-						<MainnetIcon />
-					)}
+					<ChainIconShadow>
+						<NetworkLogo chainId={networkId} logoSize={24} />
+					</ChainIconShadow>
 				</Flex>
 			</Header>
 			<Input
-				label={
-					sameAddress
-						? formatMessage({ id: 'label.receiving_address' })
-						: formatMessage(
-								{
-									id: 'label.receiving_address_on',
-								},
-								{
-									chainName: isGnosis
-										? 'Gnosis Chain'
-										: isPolygon
-										? 'Polygon Mainnet'
-										: isCelo
-										? 'Celo Mainnet'
-										: isOptimism
-										? 'Optimism Mainnet'
-										: 'Mainnet',
-								},
-						  )
-				}
+				label={formatMessage(
+					{
+						id: 'label.receiving_address_on',
+					},
+					{
+						chainName: networksConfig[networkId].chainName,
+					},
+				)}
 				placeholder={formatMessage({ id: 'label.my_wallet_address' })}
 				caption={caption}
 				size={InputSize.LARGE}
@@ -283,36 +234,6 @@ const WalletAddressInput: FC<IProps> = ({
 	);
 };
 
-const OptimismIcon = () => (
-	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.OPTIMISM_NETWORK_NUMBER} />
-	</ChainIconShadow>
-);
-
-const CeloIcon = () => (
-	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.CELO_NETWORK_NUMBER} />
-	</ChainIconShadow>
-);
-
-const PolygonIcon = () => (
-	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.POLYGON_NETWORK_NUMBER} />
-	</ChainIconShadow>
-);
-
-const GnosisIcon = () => (
-	<ChainIconShadow>
-		<IconGnosisChain size={24} />
-	</ChainIconShadow>
-);
-
-const MainnetIcon = () => (
-	<ChainIconShadow>
-		<IconEthereum size={24} />
-	</ChainIconShadow>
-);
-
 const Warning = styled(FlexCenter)`
 	flex-shrink: 0;
 	border-radius: 50%;
@@ -345,15 +266,11 @@ const Header = styled.div`
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
 
-const Container = styled.div<{ hide?: boolean }>`
+const Container = styled.div`
 	margin-top: 25px;
 	background: ${neutralColors.gray[100]};
 	border-radius: 12px;
 	padding: 16px;
-	opacity: ${props => (props.hide ? 0 : 1)};
-	visibility: ${props => (props.hide ? 'hidden' : 'visible')};
-	transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-	animation: fadeIn 0.3s ease-in-out;
 `;
 
 const ButtonWrapper = styled.div`
