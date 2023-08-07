@@ -54,6 +54,9 @@ import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
 
+const networksConfig = config.NETWORKS_CONFIG;
+const networksIds = Object.keys(networksConfig).map(Number);
+
 const {
 	MAINNET_NETWORK_NUMBER,
 	XDAI_NETWORK_NUMBER,
@@ -61,6 +64,7 @@ const {
 	CELO_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER,
 } = config;
+
 interface ICreateProjectProps {
 	project?: IProjectEdition;
 }
@@ -327,36 +331,15 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								id: 'label.you_can_set_a_custom_ethereum_address',
 							})}
 						</CaptionContainer>
-						<AddressInterface
-							networkId={MAINNET_NETWORK_NUMBER}
-							onButtonClick={() =>
-								setAddressModalChainId(MAINNET_NETWORK_NUMBER)
-							}
-						/>
-						<AddressInterface
-							networkId={XDAI_NETWORK_NUMBER}
-							onButtonClick={() =>
-								setAddressModalChainId(XDAI_NETWORK_NUMBER)
-							}
-						/>
-						<AddressInterface
-							networkId={POLYGON_NETWORK_NUMBER}
-							onButtonClick={() =>
-								setAddressModalChainId(POLYGON_NETWORK_NUMBER)
-							}
-						/>
-						<AddressInterface
-							networkId={CELO_NETWORK_NUMBER}
-							onButtonClick={() =>
-								setAddressModalChainId(CELO_NETWORK_NUMBER)
-							}
-						/>
-						<AddressInterface
-							networkId={OPTIMISM_NETWORK_NUMBER}
-							onButtonClick={() =>
-								setAddressModalChainId(OPTIMISM_NETWORK_NUMBER)
-							}
-						/>
+						{networksIds.map(networkId => (
+							<AddressInterface
+								key={networkId}
+								networkId={networkId}
+								onButtonClick={() =>
+									setAddressModalChainId(networkId)
+								}
+							/>
+						))}
 						<PublishTitle>
 							{isEditMode
 								? formatMessage({
