@@ -32,7 +32,6 @@ const networksConfig = config.NETWORKS_CONFIG;
 interface IProps {
 	networkId: number;
 	userAddresses: string[];
-	isActive?: boolean;
 	resolvedENS?: string;
 	setResolvedENS: (resolvedENS: string) => void;
 	onSubmit?: () => void;
@@ -41,7 +40,6 @@ interface IProps {
 const WalletAddressInput: FC<IProps> = ({
 	networkId,
 	userAddresses,
-	isActive = true,
 	resolvedENS,
 	setResolvedENS,
 	onSubmit,
@@ -84,10 +82,6 @@ const WalletAddressInput: FC<IProps> = ({
 	const delayedResolvedENS = useDelay(!!resolvedENS);
 	const delayedIsAddressUsed = useDelay(isAddressUsed);
 
-	let disabled: boolean;
-	if (isGnosis) disabled = !isActive;
-	else disabled = !isActive;
-
 	let caption: string = '';
 	if (isDefaultAddress) {
 		caption = formatMessage({
@@ -127,7 +121,6 @@ const WalletAddressInput: FC<IProps> = ({
 		try {
 			clearErrors(inputName);
 			setResolvedENS('');
-			if (disabled) return true;
 			if (address.length === 0) {
 				return formatMessage({ id: 'label.this_field_is_required' });
 			}
@@ -183,7 +176,6 @@ const WalletAddressInput: FC<IProps> = ({
 				placeholder={formatMessage({ id: 'label.my_wallet_address' })}
 				caption={caption}
 				size={InputSize.LARGE}
-				disabled={disabled}
 				isValidating={isValidating}
 				register={register}
 				registerName={inputName}
