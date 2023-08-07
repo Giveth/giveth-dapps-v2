@@ -10,7 +10,6 @@ import { EInputs } from './CreateProject';
 interface ICreateProjectAddAddressModal {
 	setShowModal: (show: number | undefined) => void;
 	networkId: number;
-	isActive?: boolean;
 	userAddresses: string[];
 	setResolvedENS?: (resolvedENS: string) => void;
 	resolvedENS?: string;
@@ -20,7 +19,6 @@ interface ICreateProjectAddAddressModal {
 const CreateProjectAddAddressModal = ({
 	setShowModal,
 	networkId,
-	isActive = true,
 	userAddresses,
 	setResolvedENS = () => {},
 	resolvedENS,
@@ -63,7 +61,6 @@ const CreateProjectAddAddressModal = ({
 			<AddressContainer>
 				<WalletAddressInput
 					networkId={networkId}
-					isActive={isActive}
 					userAddresses={userAddresses}
 					setResolvedENS={setResolvedENS}
 					resolvedENS={resolvedENS ?? undefined}
