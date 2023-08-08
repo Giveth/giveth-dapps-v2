@@ -20,7 +20,6 @@ import {
 	Logo,
 	SmallCreateProjectParent,
 	LargeCreateProject,
-	HeaderLink,
 	HomeButton,
 	SearchButton,
 	GLinkNoWrap,
@@ -51,6 +50,7 @@ import { HomeSidebar } from '../sidebar/HomeSidebar';
 import { fetchMainCategories } from '@/features/general/general.thunk';
 import { ItemsProvider } from '@/context/Items.context';
 import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
+import { CommunityMenu } from '../menu/CommunityMenu';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -230,13 +230,13 @@ const Header: FC<IHeader> = () => {
 					>
 						<GIVeconomyMenu />
 					</LinkWithMenu>
-					<HeaderLink theme={theme}>
-						<Link href={Routes.Join}>
-							<GLink size='Big'>
-								{formatMessage({ id: 'label.community' })}
-							</GLink>
-						</Link>
-					</HeaderLink>
+					<LinkWithMenu
+						title={formatMessage({ id: 'label.community' })}
+						isHeaderShowing={showHeader}
+						href={Routes.GIVeconomy}
+					>
+						<CommunityMenu />
+					</LinkWithMenu>
 					<SearchButton
 						theme={theme}
 						onClick={() => dispatch(setShowSearchModal(true))}
