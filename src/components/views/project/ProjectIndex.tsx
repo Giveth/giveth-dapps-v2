@@ -11,7 +11,6 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Col, Row } from '@giveth/ui-design-system';
-
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import ProjectHeader from './ProjectHeader';
