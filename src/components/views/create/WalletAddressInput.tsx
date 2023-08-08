@@ -287,7 +287,7 @@ const WalletAddressInput: FC<IProps> = ({
 			</ExchangeNotify>
 			<ButtonWrapper>
 				<Button
-					label='SAVE ADDRESS'
+					label='Add ADDRESS'
 					disabled={
 						error.message !== '' ||
 						inputValue === '' ||
