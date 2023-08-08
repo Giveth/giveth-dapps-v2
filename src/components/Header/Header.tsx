@@ -233,7 +233,7 @@ const Header: FC<IHeader> = () => {
 					<LinkWithMenu
 						title={formatMessage({ id: 'label.community' })}
 						isHeaderShowing={showHeader}
-						href={Routes.GIVeconomy}
+						href={Routes.Join}
 					>
 						<CommunityMenu />
 					</LinkWithMenu>
