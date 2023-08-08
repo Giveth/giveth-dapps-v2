@@ -65,8 +65,7 @@ const config: EnvConfig = {
 		GIV: {
 			network: MAINNET_NETWORK_NUMBER,
 			LM_ADDRESS: '0x4B9EfAE862a1755F7CEcb021856D467E86976755',
-			BUY_LINK:
-				'https://app.uniswap.org/#/swap?outputCurrency=0x900db999074d9277c5da2a43f252d74366230da0',
+			BUY_LINK: 'https://swap.giveth.io/#/1/swap/ETH/GIV',
 			platformTitle: 'GIV staking',
 			exploited: true,
 			farmEndTimeMS: SEPT_8TH_2022,
@@ -237,8 +236,7 @@ const config: EnvConfig = {
 			network: XDAI_NETWORK_NUMBER,
 			LM_ADDRESS: '0xD93d3bDBa18ebcB3317a57119ea44ed2Cf41C2F2',
 			GARDEN_ADDRESS: '0x24f2d06446af8d6e89febc205e7936a602a87b60',
-			BUY_LINK:
-				'https://app.honeyswap.org/#/swap?outputCurrency=0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+			BUY_LINK: 'https://swap.giveth.io/#/100/swap/XDAI/GIV',
 			platformTitle: 'GIVPOWER',
 		},
 
