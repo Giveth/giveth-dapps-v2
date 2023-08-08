@@ -72,21 +72,26 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 	};
 
 	const handleConfirmButton = async () => {
-		if (!!tab && !!selectedReason) {
-			if (!isSignedIn) {
-				dispatch(setShowSignWithWallet(true));
-				return;
+		try {
+			if (!!tab && !!selectedReason) {
+				console.log('BOII');
+				if (!isSignedIn) {
+					dispatch(setShowSignWithWallet(true));
+					return;
+				}
+				await client.mutate({
+					mutation: DEACTIVATE_PROJECT,
+					variables: {
+						projectId: Number(projectId),
+						reasonId: Number(selectedReason.value),
+					},
+				});
+				await fetchProjectBySlug();
 			}
-			await client.mutate({
-				mutation: DEACTIVATE_PROJECT,
-				variables: {
-					projectId: Number(projectId),
-					reasonId: Number(selectedReason.value),
-				},
-			});
-			await fetchProjectBySlug();
+			setTab(previousTab => previousTab + 1);
+		} catch (error) {
+			console.log('deactivation error', { error });
 		}
-		setTab(previousTab => previousTab + 1);
 	};
 
 	useEffect(() => {
