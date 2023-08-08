@@ -17,7 +17,6 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
 import { FormProvider, useForm } from 'react-hook-form';
-
 import { Container } from '@giveth/ui-design-system';
 import {
 	ACTIVATE_PROJECT,
@@ -38,7 +37,7 @@ import {
 	LocationIndex,
 } from './Inputs';
 import SuccessfulCreation from './SuccessfulCreation';
-import { compareAddressesArray, showToastError } from '@/lib/helpers';
+import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
@@ -54,16 +53,8 @@ import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
 
-const networksConfig = config.NETWORKS_CONFIG;
-const networksIds = Object.keys(networksConfig).map(Number);
-
-const {
-	MAINNET_NETWORK_NUMBER,
-	XDAI_NETWORK_NUMBER,
-	POLYGON_NETWORK_NUMBER,
-	CELO_NETWORK_NUMBER,
-	OPTIMISM_NETWORK_NUMBER,
-} = config;
+const { MAINNET_NETWORK_NUMBER, NETWORKS_CONFIG } = config;
+const networksIds = Object.keys(NETWORKS_CONFIG).map(Number);
 
 interface ICreateProjectProps {
 	project?: IProjectEdition;
@@ -105,38 +96,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		project || {};
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = impactLocation || '';
+	const activeAddresses = addresses?.filter(a => a.isRecipient) || [];
 
-	const prevMainAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === MAINNET_NETWORK_NUMBER,
-	)?.address;
-	const prevGnosisAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === XDAI_NETWORK_NUMBER,
-	)?.address;
-	const prevPolygonAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === POLYGON_NETWORK_NUMBER,
-	)?.address;
-	const prevCeloAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === CELO_NETWORK_NUMBER,
-	)?.address;
-	const prevOptimismAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === OPTIMISM_NETWORK_NUMBER,
-	)?.address;
-	const isSamePrevAddresses = compareAddressesArray([
-		prevMainAddress,
-		prevGnosisAddress,
-		prevPolygonAddress,
-		prevCeloAddress,
-		prevOptimismAddress,
-	]);
-	const userAddresses: string[] = [];
-	if (isSamePrevAddresses) userAddresses.push(prevMainAddress!);
-	else {
-		if (prevMainAddress) userAddresses.push(prevMainAddress);
-		if (prevGnosisAddress) userAddresses.push(prevGnosisAddress);
-		if (prevPolygonAddress) userAddresses.push(prevPolygonAddress);
-		if (prevCeloAddress) userAddresses.push(prevCeloAddress);
-		if (prevOptimismAddress) userAddresses.push(prevOptimismAddress);
-	}
+	const userAddresses = [...new Set(activeAddresses.map(a => a.address!))];
 
 	const formMethods = useForm<TInputs>({
 		mode: 'onBlur',
@@ -147,11 +109,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.categories]: categories || [],
 			[EInputs.impactLocation]: defaultImpactLocation,
 			[EInputs.image]: image || '',
-			[EInputs.mainAddress]: prevMainAddress || '',
-			[EInputs.gnosisAddress]: prevGnosisAddress || '',
-			[EInputs.polygonAddress]: prevPolygonAddress || '',
-			[EInputs.celoAddress]: prevCeloAddress || '',
-			[EInputs.optimismAddress]: prevOptimismAddress || '',
+			...activeAddresses.map(i => ({
+				[EInputs.addresses]: {
+					[i.networkId!]: i.address,
+				},
+			})),
 		},
 	});
 
@@ -166,13 +128,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const onSubmit = async (formData: TInputs) => {
 		try {
 			setIsLoading(true);
-			const addresses = [];
 			const {
-				mainAddress,
-				gnosisAddress,
-				polygonAddress,
-				celoAddress,
-				optimismAddress,
+				addresses,
 				name,
 				description,
 				categories,
@@ -181,44 +138,18 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				draft,
 			} = formData;
 
-			if (mainAddress) {
-				const address = isAddressENS(mainAddress)
-					? resolvedENS
-					: mainAddress;
-				const checksumAddress = utils.getAddress(address);
-				addresses.push({
-					address: checksumAddress,
-					networkId: MAINNET_NETWORK_NUMBER,
+			const addressesIds = Object.keys(addresses).map(Number);
+			const _addresses: { address: string; networkId: number }[] = [];
+			addressesIds.forEach(id => {
+				let address = addresses[id];
+				if (id === MAINNET_NETWORK_NUMBER) {
+					address = isAddressENS(address) ? resolvedENS : address;
+				}
+				_addresses.push({
+					address: utils.getAddress(address),
+					networkId: id,
 				});
-			}
-			if (gnosisAddress) {
-				const checksumAddress = utils.getAddress(gnosisAddress);
-				addresses.push({
-					address: checksumAddress,
-					networkId: XDAI_NETWORK_NUMBER,
-				});
-			}
-			if (polygonAddress) {
-				const checksumAddress = utils.getAddress(polygonAddress);
-				addresses.push({
-					address: checksumAddress,
-					networkId: POLYGON_NETWORK_NUMBER,
-				});
-			}
-			if (celoAddress) {
-				const checksumAddress = utils.getAddress(celoAddress);
-				addresses.push({
-					address: checksumAddress,
-					networkId: CELO_NETWORK_NUMBER,
-				});
-			}
-			if (optimismAddress) {
-				const checksumAddress = utils.getAddress(optimismAddress);
-				addresses.push({
-					address: checksumAddress,
-					networkId: OPTIMISM_NETWORK_NUMBER,
-				});
-			}
+			});
 
 			const projectData: IProjectCreation = {
 				title: name,
@@ -226,7 +157,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				impactLocation,
 				categories: categories?.map(category => category.name),
 				organisationId: 1,
-				addresses,
+				addresses: _addresses,
 				image,
 				isDraft: draft,
 			};
