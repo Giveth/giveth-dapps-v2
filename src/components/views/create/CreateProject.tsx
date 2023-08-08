@@ -329,35 +329,30 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						</CaptionContainer>
 						<AddressInterface
 							networkId={MAINNET_NETWORK_NUMBER}
-							address={formMethods.getValues().mainAddress}
 							onButtonClick={() =>
 								setAddressModalChainId(MAINNET_NETWORK_NUMBER)
 							}
 						/>
 						<AddressInterface
 							networkId={XDAI_NETWORK_NUMBER}
-							address={formMethods.getValues().gnosisAddress}
 							onButtonClick={() =>
 								setAddressModalChainId(XDAI_NETWORK_NUMBER)
 							}
 						/>
 						<AddressInterface
 							networkId={POLYGON_NETWORK_NUMBER}
-							address={formMethods.getValues().polygonAddress}
 							onButtonClick={() =>
 								setAddressModalChainId(POLYGON_NETWORK_NUMBER)
 							}
 						/>
 						<AddressInterface
 							networkId={CELO_NETWORK_NUMBER}
-							address={formMethods.getValues().celoAddress}
 							onButtonClick={() =>
 								setAddressModalChainId(CELO_NETWORK_NUMBER)
 							}
 						/>
 						<AddressInterface
 							networkId={OPTIMISM_NETWORK_NUMBER}
-							address={formMethods.getValues().optimismAddress}
 							onButtonClick={() =>
 								setAddressModalChainId(OPTIMISM_NETWORK_NUMBER)
 							}
