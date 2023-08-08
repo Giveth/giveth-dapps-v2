@@ -73,6 +73,8 @@ const Header: FC<IHeader> = () => {
 	const theme = useAppSelector(state => state.general.theme);
 
 	const router = useRouter();
+	const isProjectPage = router.route.startsWith(Routes.Project + '/');
+
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const isMobile = useMediaQuery(device.mobileL);
@@ -250,13 +252,13 @@ const Header: FC<IHeader> = () => {
 			)}
 			<FlexSpacer />
 			<Flex gap='8px'>
-				<LargeCreateProject>
+				<LargeCreateProject isTexty={isProjectPage}>
 					<Button
 						label={formatMessage({
 							id: 'component.button.create_project',
 						})}
 						size='small'
-						buttonType='primary'
+						buttonType={isProjectPage ? 'texty-primary' : 'primary'}
 						onClick={handleCreateButton}
 					/>
 				</LargeCreateProject>
