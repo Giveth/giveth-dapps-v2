@@ -44,9 +44,7 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
 			<Controller>
 				<ControllerWrapper
 					justifyContent='space-between'
-					onMouseDown={e => {
-						setOpen(_open => !_open);
-					}}
+					onMouseDown={() => setOpen(_open => !_open)}
 				>
 					<GLink size='Big'>{label}</GLink>
 					<IconWrapper>
