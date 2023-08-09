@@ -3,6 +3,7 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 
 import { Col, Row } from '@giveth/ui-design-system';
+import { useWeb3React } from '@web3-react/core';
 import { IUserProfileView } from '../UserProfile.view';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import BoostsTable from './BoostsTable';
@@ -18,7 +19,7 @@ import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { sortBoosts } from '@/helpers/givpower';
+import { getGIVpowerLink, sortBoosts } from '@/helpers/givpower';
 import { setBoostedProjectsCount } from '@/features/user/user.slice';
 import { UserProfileTab } from '../common.sc';
 import {
@@ -27,8 +28,6 @@ import {
 } from '@/components/ContributeCard';
 import { formatWeiHelper } from '@/helpers/number';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import Routes from '@/lib/constants/Routes';
-import { StakingType } from '@/types/config';
 
 export enum EPowerBoostingOrder {
 	CreationAt = 'createdAt',
@@ -52,6 +51,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 		direction: EDirection.DESC,
 	});
 
+	const { chainId } = useWeb3React();
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph.gnosisValues),
 	);
@@ -227,7 +227,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 						title='Your GIVpower balance is zero!'
 						message='Stake GIV to boost these projects again.'
 						type={EToastType.Warning}
-						link={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
+						link={getGIVpowerLink(chainId)}
 						linkText='Stake GIV'
 					/>
 				</ZeroGivPowerContainer>

@@ -7,6 +7,9 @@ import {
 	IBoostedOrder,
 } from '@/components/views/userProfile/boostedTab/ProfileBoostedTab';
 import { EDirection } from '@/apollo/types/gqlEnums';
+import Routes from '@/lib/constants/Routes';
+import { GIVpowerUniPoolConfig, StakingType } from '@/types/config';
+import config from '@/configuration';
 
 export const getGIVpowerRoundsInfo = (
 	initialDate: string,
@@ -65,4 +68,16 @@ export const sortBoosts = (
 	} else {
 		return boosts;
 	}
+};
+
+export const getGIVpowerLink = (chainId?: number) => {
+	const [stakeType, chain] =
+		chainId && 'GIVPOWER' in config.NETWORKS_CONFIG[chainId]
+			? [
+					(config.NETWORKS_CONFIG[chainId] as GIVpowerUniPoolConfig)
+						.GIVPOWER.type,
+					chainId,
+			  ]
+			: [StakingType.GIV_GARDEN_LM, config.GNOSIS_NETWORK_NUMBER];
+	return `${Routes.GIVfarm}/?open=${stakeType}&chain=${chain}`;
 };

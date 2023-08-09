@@ -3,14 +3,15 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import React from 'react';
+import { useWeb3React } from '@web3-react/core';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { ConfettiContainer, BoostedTitle } from './BoostModal.sc';
 import Routes from '@/lib/constants/Routes';
-import { StakingType } from '@/types/config';
 import { GetButton, CustomButtonLink } from './ZeroGivpowerModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
+import { getGIVpowerLink } from '@/helpers/givpower';
 import type { FC } from 'react';
 
 interface IBoostedModalProps {
@@ -24,6 +25,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 }) => {
 	const { isMobile } = useDetectDevice();
 	const { formatMessage } = useIntl();
+	const { chainId } = useWeb3React();
 
 	return (
 		<div>
@@ -50,9 +52,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 				})}
 			</Desc>
 			<ActionsSection>
-				<Link
-					href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
-				>
+				<Link href={getGIVpowerLink(chainId)}>
 					<GetButton
 						label={formatMessage({
 							id: 'label.get_more_givpower',

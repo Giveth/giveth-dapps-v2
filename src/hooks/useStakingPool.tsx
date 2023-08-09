@@ -45,7 +45,8 @@ export const useStakingPool = (
 			if (isLoaded) {
 				const _library = chainId === network ? library : undefined;
 				const promise: Promise<APR> =
-					type === StakingType.GIV_LM
+					type === StakingType.GIV_GARDEN_LM ||
+					type === StakingType.GIV_UNIPOOL_LM
 						? getGivStakingAPR(network, currentValues, _library)
 						: getLPStakingAPR(
 								poolStakingConfig,

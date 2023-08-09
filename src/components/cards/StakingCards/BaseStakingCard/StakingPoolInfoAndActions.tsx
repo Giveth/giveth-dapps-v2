@@ -162,10 +162,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		const { open, chain } = router.query;
 		const _open = Array.isArray(open) ? open[0] : open;
 		const _chain = Array.isArray(chain) ? chain[0] : chain;
-		const _chainId =
-			_chain === 'gnosis'
-				? config.GNOSIS_NETWORK_NUMBER
-				: config.MAINNET_NETWORK_NUMBER;
+		const _chainId = parseInt(_chain || '');
 		const checkNetworkAndShowStakeModal = async () => {
 			if (
 				_chainId === chainId &&

@@ -32,7 +32,6 @@ import { formatWeiHelper } from '@/helpers/number';
 import { LockupDetailsModal } from '../LockupDetailsModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 
@@ -82,11 +81,9 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 	const { title, type, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
-	const isGIVStaking = type === StakingType.GIV_LM;
 	const isGIVpower =
-		isGIVStaking &&
-		(chainId === config.GNOSIS_NETWORK_NUMBER ||
-			chainId === config.OPTIMISM_NETWORK_NUMBER);
+		type === StakingType.GIV_GARDEN_LM ||
+		type === StakingType.GIV_UNIPOOL_LM;
 
 	const maxAmount = isGIVpower
 		? stakedAmount.sub(userGIVLocked.balance)

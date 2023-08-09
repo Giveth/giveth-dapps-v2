@@ -362,7 +362,7 @@ export const getUserStakeInfo = (
 	if (
 		config.GNOSIS_CONFIG.gGIV_TOKEN_ADDRESS &&
 		currentValues.networkNumber === config.GNOSIS_NETWORK_NUMBER &&
-		poolStakingConfig.type === StakingType.GIV_LM
+		poolStakingConfig.type === StakingType.GIV_GARDEN_LM
 	) {
 		const gGIVBalance = sdh.getTokenBalance(
 			config.GNOSIS_CONFIG.gGIV_TOKEN_ADDRESS,

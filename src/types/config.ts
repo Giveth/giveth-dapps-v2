@@ -22,7 +22,8 @@ export enum StakingType {
 	SUSHISWAP_ETH_GIV = 'Sushiswap', // ETH-GIV
 	HONEYSWAP_GIV_HNY = 'Honeyswap_GIV_HNY',
 	HONEYSWAP_GIV_DAI = 'Honeyswap_GIV_DAI',
-	GIV_LM = 'GIV_LM',
+	GIV_GARDEN_LM = 'GIV_GARDEN_LM',
+	GIV_UNIPOOL_LM = 'GIV_UNIPOOL_LM',
 	ICHI_GIV_ONEGIV = 'Ichi_GIV_oneGIV',
 
 	HONEYSWAP_FOX_HNY = 'Honeyswap_FOX_HNY',
@@ -157,13 +158,11 @@ interface GIVpowerStakingConfig extends SimplePoolStakingConfig {
 	LM_ADDRESS: string;
 }
 
-interface GIVpowerUniPoolConfig {
+export interface GIVpowerUniPoolConfig {
 	GIVPOWER: GIVpowerStakingConfig;
 }
 
-export interface GIVpowerGIVgardenStakingConfig
-	extends SimplePoolStakingConfig {
-	LM_ADDRESS: string;
+export interface GIVpowerGIVgardenStakingConfig extends GIVpowerStakingConfig {
 	GARDEN_ADDRESS: string;
 }
 
