@@ -161,7 +161,8 @@ interface GIVpowerUniPoolConfig {
 	GIVPOWER: GIVpowerStakingConfig;
 }
 
-interface GIVpowerGIVgardenStakingConfig extends SimplePoolStakingConfig {
+export interface GIVpowerGIVgardenStakingConfig
+	extends SimplePoolStakingConfig {
 	LM_ADDRESS: string;
 	GARDEN_ADDRESS: string;
 }

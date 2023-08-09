@@ -199,7 +199,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				const checksumAddress = utils.getAddress(gnosisAddress);
 				addresses.push({
 					address: checksumAddress,
-					networkId: XDAI_NETWORK_NUMBER,
+					networkId: GNOSIS_NETWORK_NUMBER,
 				});
 			}
 			if (polygonAddress) {
@@ -334,9 +334,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							}
 						/>
 						<AddressInterface
-							networkId={XDAI_NETWORK_NUMBER}
+							networkId={GNOSIS_NETWORK_NUMBER}
 							onButtonClick={() =>
-								setAddressModalChainId(XDAI_NETWORK_NUMBER)
+								setAddressModalChainId(GNOSIS_NETWORK_NUMBER)
 							}
 						/>
 						<AddressInterface

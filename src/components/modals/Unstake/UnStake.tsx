@@ -22,6 +22,7 @@ import {
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
 import {
+	GIVpowerGIVgardenStakingConfig,
 	PoolStakingConfig,
 	RegenStreamConfig,
 	SimplePoolStakingConfig,
@@ -78,7 +79,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 	const { stakedAmount } = useStakingPool(poolStakingConfig);
 	const { library, chainId } = useWeb3React();
-	const { title, type, LM_ADDRESS, GARDEN_ADDRESS } =
+	const { title, type, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
 	const isGIVStaking = type === StakingType.GIV_LM;
@@ -93,6 +94,10 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 
 	const onWithdraw = async () => {
 		setUnstakeState(StakeState.UNSTAKING);
+
+		const GARDEN_ADDRESS = (
+			poolStakingConfig as GIVpowerGIVgardenStakingConfig
+		).GARDEN_ADDRESS;
 
 		const tx = GARDEN_ADDRESS
 			? await unwrapToken(amount, GARDEN_ADDRESS, library)

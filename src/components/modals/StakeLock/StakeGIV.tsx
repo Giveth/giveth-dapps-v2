@@ -33,6 +33,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import type {
+	GIVpowerGIVgardenStakingConfig,
 	PoolStakingConfig,
 	SimplePoolStakingConfig,
 } from '@/types/config';
@@ -81,7 +82,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	const { chainId, library } = useWeb3React();
 	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
 
-	const { POOL_ADDRESS, GARDEN_ADDRESS, LM_ADDRESS } =
+	const { POOL_ADDRESS, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
 	useEffect(() => {
@@ -106,7 +107,8 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 				) as ERC20;
 				const allowance: BigNumber = await tokenContract.allowance(
 					userAddress,
-					GARDEN_ADDRESS!,
+					(poolStakingConfig as GIVpowerGIVgardenStakingConfig)
+						.GARDEN_ADDRESS!,
 				);
 				const amountNumber = ethers.BigNumber.from(amount);
 				const allowanceNumber = ethers.BigNumber.from(
@@ -139,7 +141,8 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			amount,
 			userAddress,
 			poolStakingConfig.network === config.GNOSIS_NETWORK_NUMBER
-				? GARDEN_ADDRESS!
+				? (poolStakingConfig as GIVpowerGIVgardenStakingConfig)
+						.GARDEN_ADDRESS
 				: LM_ADDRESS!,
 			POOL_ADDRESS,
 			library,
@@ -153,13 +156,14 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	};
 
 	const onWrap = async () => {
-		if (!GARDEN_ADDRESS) {
-			console.error('GARDEN_ADDRESS is null');
-			return;
-		}
 		setStakeState(StakeState.WRAPPING);
 		try {
-			const txResponse = await wrapToken(amount, GARDEN_ADDRESS, library);
+			const txResponse = await wrapToken(
+				amount,
+				(poolStakingConfig as GIVpowerGIVgardenStakingConfig)
+					.GARDEN_ADDRESS,
+				library,
+			);
 			if (txResponse) {
 				setTxHash(txResponse.hash);
 				if (txResponse) {
