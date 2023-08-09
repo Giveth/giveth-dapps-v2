@@ -20,7 +20,6 @@ import {
 	Logo,
 	SmallCreateProjectParent,
 	LargeCreateProject,
-	HeaderLink,
 	HomeButton,
 	SearchButton,
 	GLinkNoWrap,
@@ -51,6 +50,7 @@ import { HomeSidebar } from '../sidebar/HomeSidebar';
 import { fetchMainCategories } from '@/features/general/general.thunk';
 import { ItemsProvider } from '@/context/Items.context';
 import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
+import { CommunityMenu } from '../menu/CommunityMenu';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -73,6 +73,8 @@ const Header: FC<IHeader> = () => {
 	const theme = useAppSelector(state => state.general.theme);
 
 	const router = useRouter();
+	const isProjectPage = router.route.startsWith(Routes.Project + '/');
+
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const isMobile = useMediaQuery(device.mobileL);
@@ -228,13 +230,13 @@ const Header: FC<IHeader> = () => {
 					>
 						<GIVeconomyMenu />
 					</LinkWithMenu>
-					<HeaderLink theme={theme}>
-						<Link href={Routes.Join}>
-							<GLink size='Big'>
-								{formatMessage({ id: 'label.community' })}
-							</GLink>
-						</Link>
-					</HeaderLink>
+					<LinkWithMenu
+						title={formatMessage({ id: 'label.community' })}
+						isHeaderShowing={showHeader}
+						href={Routes.Join}
+					>
+						<CommunityMenu />
+					</LinkWithMenu>
 					<SearchButton
 						theme={theme}
 						onClick={() => dispatch(setShowSearchModal(true))}
@@ -250,13 +252,13 @@ const Header: FC<IHeader> = () => {
 			)}
 			<FlexSpacer />
 			<Flex gap='8px'>
-				<LargeCreateProject>
+				<LargeCreateProject isTexty={isProjectPage}>
 					<Button
 						label={formatMessage({
 							id: 'component.button.create_project',
 						})}
 						size='small'
-						buttonType='primary'
+						buttonType={isProjectPage ? 'texty-primary' : 'primary'}
 						onClick={handleCreateButton}
 					/>
 				</LargeCreateProject>

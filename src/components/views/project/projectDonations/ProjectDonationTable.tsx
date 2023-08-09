@@ -62,7 +62,7 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 	const [pageDonations, setPageDonations] = useState<PageDonations>();
 	const [page, setPage] = useState<number>(0);
 	const [order, setOrder] = useState<IOrder>({
-		by: EOrderBy.CreationDate,
+		by: EOrderBy.UsdAmount,
 		direction: EDirection.DESC,
 	});
 	const { projectData } = useProjectContext();

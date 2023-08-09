@@ -63,8 +63,7 @@ const config: EnvConfig = {
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
 
 		GIV_TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
-		GIV_BUY_LINK:
-			'https://app.uniswap.org/#/swap?outputCurrency=0x900db999074d9277c5da2a43f252d74366230da0',
+		GIV_BUY_LINK: 'https://swap.giveth.io/#/1/swap/ETH/GIV',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
 		WETH_TOKEN_ADDRESS: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
 		TOKEN_DISTRO_ADDRESS: '0x87dE995F6744B75bBe0255A973081142aDb61f4d',
@@ -233,8 +232,7 @@ const config: EnvConfig = {
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
 
 		GIV_TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
-		GIV_BUY_LINK:
-			'https://app.honeyswap.org/#/swap?outputCurrency=0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+		GIV_BUY_LINK: 'https://swap.giveth.io/#/100/swap/XDAI/GIV',
 		gGIV_TOKEN_ADDRESS: '0xfFBAbEb49be77E5254333d5fdfF72920B989425f',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xFad63adEFb8203F7605F25f6a921c8bf45604A5e',

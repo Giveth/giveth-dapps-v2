@@ -15,39 +15,22 @@ import config from '@/configuration';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
+import { networksParams } from '@/helpers/blockchain';
 
 interface IProps extends IModal {
 	addAddress: (address: IAddress) => void;
 	addresses: IAddress[];
 }
 
-const networkOptions = [
-	{
-		value: config.MAINNET_NETWORK_NUMBER,
-		label: 'Ethereum Mainnet',
-		id: config.MAINNET_NETWORK_NUMBER,
-	},
-	{
-		value: config.GNOSIS_NETWORK_NUMBER,
-		label: 'Gnosis',
-		id: config.GNOSIS_NETWORK_NUMBER,
-	},
-	{
-		value: config.POLYGON_NETWORK_NUMBER,
-		label: 'Polygon Mainnet',
-		id: config.POLYGON_NETWORK_NUMBER,
-	},
-	{
-		value: config.CELO_NETWORK_NUMBER,
-		label: 'Celo Mainnet',
-		id: config.CELO_NETWORK_NUMBER,
-	},
-	{
-		value: config.OPTIMISM_NETWORK_NUMBER,
-		label: 'Optimism',
-		id: config.OPTIMISM_NETWORK_NUMBER,
-	},
-];
+const networksConfig = config.NETWORKS_CONFIG;
+const networkOptions = Object.keys(networksConfig).map(networkId => {
+	const networkIdNumber = Number(networkId);
+	return {
+		value: networkIdNumber,
+		label: networksParams[networkIdNumber].chainName,
+		id: networkIdNumber,
+	};
+});
 
 export interface IAddressForm {
 	address: string;

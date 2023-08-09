@@ -20,13 +20,8 @@ import config from '@/configuration';
 import { ETheme } from '@/features/general/general.slice';
 import { networksParams } from '@/helpers/blockchain';
 
-const _networks = [
-	config.MAINNET_NETWORK_NUMBER,
-	config.GNOSIS_NETWORK_NUMBER,
-	config.POLYGON_NETWORK_NUMBER,
-	config.CELO_NETWORK_NUMBER,
-	config.OPTIMISM_NETWORK_NUMBER,
-];
+const networksConfig = config.NETWORKS_CONFIG;
+const defaultNetworkIds = Object.keys(networksConfig).map(Number);
 
 interface ISwitchNetworkModal extends IModal {
 	desc?: string;
@@ -42,7 +37,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 	const { chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
-	const networks = customNetworks || _networks;
+	const networkIds = customNetworks || defaultNetworkIds;
 
 	return (
 		<Modal
@@ -54,7 +49,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 		>
 			<Wrapper>
 				{desc && <P>{desc}</P>}
-				{networks.map(networkId => (
+				{networkIds.map(networkId => (
 					<NetworkItem
 						onClick={() => {
 							switchNetwork(networkId);

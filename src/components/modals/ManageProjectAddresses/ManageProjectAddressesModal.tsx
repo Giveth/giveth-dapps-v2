@@ -18,6 +18,9 @@ import { networksParams } from '@/helpers/blockchain';
 import { AddNewAddress } from './AddNewAddress';
 import type { IModal } from '@/types/common';
 
+const networksConfig = config.NETWORKS_CONFIG;
+const networkIds = Object.keys(networksConfig).map(Number);
+
 interface IManageProjectAddressesModal extends IModal {
 	project: IProject;
 	setProjects: Dispatch<SetStateAction<IProject[]>>;
@@ -35,21 +38,9 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 
 	useEffect(() => {
 		let WalletAddr: { [key: number]: IWalletAddress } = {};
-		WalletAddr[config.MAINNET_NETWORK_NUMBER] = {
-			networkId: config.MAINNET_NETWORK_NUMBER,
-		};
-		WalletAddr[config.GNOSIS_NETWORK_NUMBER] = {
-			networkId: config.GNOSIS_NETWORK_NUMBER,
-		};
-		WalletAddr[config.POLYGON_NETWORK_NUMBER] = {
-			networkId: config.POLYGON_NETWORK_NUMBER,
-		};
-		WalletAddr[config.CELO_NETWORK_NUMBER] = {
-			networkId: config.CELO_NETWORK_NUMBER,
-		};
-		WalletAddr[config.OPTIMISM_NETWORK_NUMBER] = {
-			networkId: config.OPTIMISM_NETWORK_NUMBER,
-		};
+		networkIds.forEach(networkId => {
+			WalletAddr[networkId] = { networkId };
+		});
 		const { addresses } = project;
 		if (!addresses) return;
 		for (let i = 0; i < addresses.length; i++) {
