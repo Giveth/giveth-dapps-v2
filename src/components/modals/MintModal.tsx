@@ -59,7 +59,7 @@ export const MintModal: FC<IMintModalProps> = ({
 			return;
 		}
 		if (!config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS) return;
-		if (!config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS) return;
+		if (!config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS) return;
 
 		setStep(MintStep.APPROVING);
 		try {
@@ -71,7 +71,7 @@ export const MintModal: FC<IMintModalProps> = ({
 				price.toString(),
 				userAddress,
 				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
-				config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS,
+				config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS,
 				library,
 			);
 
