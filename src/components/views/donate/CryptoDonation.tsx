@@ -286,6 +286,13 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
+	const userBalance = formatBalance(
+		formatUnits(selectedTokenBalance, tokenDecimals),
+	);
+
+	const calcMaxDonation = () =>
+		(Number(userBalance) * 100) / (100 + donationToGiveth);
+
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
 
@@ -363,12 +370,9 @@ const CryptoDonation: FC = () => {
 					/>
 				</SearchContainer>
 				{selectedToken && (
-					<AvText>
+					<AvText onClick={() => setAmountTyped(calcMaxDonation())}>
 						{formatMessage({ id: 'label.available' })}:{' '}
-						{formatBalance(
-							formatUnits(selectedTokenBalance, tokenDecimals),
-						)}{' '}
-						{tokenSymbol}
+						{userBalance} {tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
@@ -473,6 +477,10 @@ const InputContainer = styled.div`
 const AvText = styled(GLink)`
 	color: ${brandColors.deep[500]};
 	padding: 4px 0 0 5px;
+	:hover {
+		cursor: pointer;
+		text-decoration: underline;
+	}
 `;
 
 const SearchContainer = styled.div<IInputBox>`
