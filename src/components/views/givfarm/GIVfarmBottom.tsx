@@ -49,13 +49,13 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 					...config.XDAI_CONFIG.regenPools,
 					...config.MAINNET_CONFIG.pools,
 					...config.MAINNET_CONFIG.regenPools,
-					...config.OPTIMISM_CONFIG.pools,
-					...config.OPTIMISM_CONFIG.regenPools,
+					// ...config.OPTIMISM_CONFIG.pools,
+					// ...config.OPTIMISM_CONFIG.regenPools,
 			  ]
 			: chainId === config.OPTIMISM_NETWORK_NUMBER
 			? [
-					...config.OPTIMISM_CONFIG.pools,
-					...config.OPTIMISM_CONFIG.regenPools,
+					// ...config.OPTIMISM_CONFIG.pools,
+					// ...config.OPTIMISM_CONFIG.regenPools,
 					...config.XDAI_CONFIG.pools,
 					...config.XDAI_CONFIG.regenPools,
 					...config.MAINNET_CONFIG.pools,
@@ -66,8 +66,8 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 					...config.MAINNET_CONFIG.regenPools,
 					...config.XDAI_CONFIG.pools,
 					...config.XDAI_CONFIG.regenPools,
-					...config.OPTIMISM_CONFIG.pools,
-					...config.OPTIMISM_CONFIG.regenPools,
+					// ...config.OPTIMISM_CONFIG.pools,
+					// ...config.OPTIMISM_CONFIG.regenPools,
 			  ];
 
 	const now = getNowUnixMS();
@@ -174,13 +174,13 @@ export const GIVfarmBottom = () => {
 									)}
 								/>
 							</Col>
-							<Col sm={6} lg={4} key={`givpower_card_optimism`}>
+							{/* <Col sm={6} lg={4} key={`givpower_card_optimism`}>
 								<StakingPoolCard
 									poolStakingConfig={getGivStakingConfig(
 										config.OPTIMISM_CONFIG,
 									)}
 								/>
-							</Col>
+							</Col> */}
 						</>
 					)}
 					{showArchivedPools && (
