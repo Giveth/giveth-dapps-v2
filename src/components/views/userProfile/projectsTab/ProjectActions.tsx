@@ -1,21 +1,60 @@
 import {
 	brandColors,
 	GLink,
-	IconChevronDown24,
-	IconChevronUp24,
+	IconArchiving,
+	IconEdit16,
+	IconVerifiedBadge16,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useIntl } from 'react-intl';
 import { IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
 
 const ProjectActions = (props: { project: IProject }) => {
 	const { project } = props;
 	const status = project.status.name;
 	const isCancelled = status === EProjectStatus.CANCEL;
 
+	const { formatMessage } = useIntl();
+
 	const [isOpen, setIsOpen] = useState(false);
+
+	const options: IOption[] = [
+		{
+			label: formatMessage({
+				id: 'label.edit',
+			}),
+			type: OptionType.ITEM,
+			icon: <IconEdit16 />,
+			// cb: () => router.push(idToProjectEdit(projectData?.id || '')),
+		},
+		{
+			label: formatMessage({
+				id: 'label.verify_your_project',
+			}),
+			type: OptionType.ITEM,
+			icon: <IconVerifiedBadge16 />,
+			// cb: () => setShowVerificationModal(true),
+		},
+		{
+			label: formatMessage({ id: 'label.share_and_get_rewarded' }),
+			type: OptionType.ITEM,
+			icon: <IconArchiving size={16} />,
+			// cb: () => {
+			// 	console.log('verify');
+			// 	isActive ? setDeactivateModal(true) : activeProject();
+			// },
+		},
+		{
+			label: formatMessage({ id: 'label.share_and_get_rewarded' }),
+			type: OptionType.ITEM,
+			icon: <IconVerifiedBadge16 />,
+			// cb: () => setShowShareModal(true),
+		},
+	];
 
 	return (
 		<Actions
@@ -25,8 +64,9 @@ const ProjectActions = (props: { project: IProject }) => {
 			size='Big'
 			isCancelled={isCancelled}
 		>
-			<div>Actions</div>
-			{isOpen ? <IconChevronUp24 /> : <IconChevronDown24 />}
+			{/*<div>Actions</div>*/}
+			{/*{isOpen ? <IconChevronUp24 /> : <IconChevronDown24 />}*/}
+			<Dropdown label='Project Actions' options={options} />
 			{/*<InternalLink*/}
 			{/*	href={idToProjectEdit(project.id)}*/}
 			{/*	title={formatMessage({*/}
