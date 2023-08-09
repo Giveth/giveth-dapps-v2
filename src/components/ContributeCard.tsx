@@ -71,7 +71,7 @@ export const PublicGIVpowerContributeCard: FC<IUserProfileView> = ({
 				false,
 				FETCH_USER_GIVPOWER_BY_ADDRESS,
 				{
-					id: `${config.GNOSIS_CONFIG.GIV.LM_ADDRESS.toLowerCase()}-${user.walletAddress?.toLowerCase()}`,
+					id: `${config.GNOSIS_CONFIG.GIVPOWER.LM_ADDRESS.toLowerCase()}-${user.walletAddress?.toLowerCase()}`,
 				},
 			);
 			setTotal(data?.unipoolBalance?.balance || 0);

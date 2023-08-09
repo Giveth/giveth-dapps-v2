@@ -75,7 +75,7 @@ const LockModal: FC<ILockModalProps> = ({
 		: stakedLpAmount;
 
 	const onLock = async () => {
-		const contractAddress = config.GNOSIS_CONFIG.GIV.LM_ADDRESS;
+		const contractAddress = config.GNOSIS_CONFIG.GIVPOWER.LM_ADDRESS;
 		setLockState(ELockState.LOCKING);
 		try {
 			const txResponse = await lockToken(

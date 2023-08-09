@@ -27,7 +27,8 @@ const TotalGIVpowerBox = () => {
 				if (!account) return;
 				if (chainId !== config.GNOSIS_NETWORK_NUMBER)
 					throw new Error('Change Netowrk to fetchTotalGIVpower');
-				const contractAddress = config.GNOSIS_CONFIG.GIV.LM_ADDRESS;
+				const contractAddress =
+					config.GNOSIS_CONFIG.GIVPOWER.LM_ADDRESS;
 				const _totalGIVpower = await getTotalGIVpower(
 					account,
 					contractAddress,

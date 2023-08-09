@@ -50,7 +50,7 @@ export const TabOverview = () => {
 								})}
 								button={
 									<DataBlockButton
-										href={config.GNOSIS_CONFIG.GIV.BUY_LINK}
+										href={config.GNOSIS_CONFIG.GIV_BUY_LINK}
 										isExternal
 										label={formatMessage({
 											id: 'label.get_giv',

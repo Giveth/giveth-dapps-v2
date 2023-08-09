@@ -176,7 +176,7 @@ export function TabPowerTop() {
 }
 
 export function TabPowerBottom() {
-	const getGivLink = config.GNOSIS_CONFIG.GIV.BUY_LINK;
+	const getGivLink = config.GNOSIS_CONFIG.GIV_BUY_LINK;
 	const { formatMessage } = useIntl();
 
 	return (

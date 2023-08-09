@@ -191,7 +191,7 @@ export const ProjectProvider = ({
 						{
 							addresses: _users,
 							contract:
-								config.GNOSIS_CONFIG.GIV.LM_ADDRESS.toLowerCase(),
+								config.GNOSIS_CONFIG.GIVPOWER.LM_ADDRESS.toLowerCase(),
 							length: _users.length,
 						},
 					);

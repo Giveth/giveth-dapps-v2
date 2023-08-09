@@ -44,7 +44,7 @@ const GetMoreGIVpowerBanner = () => {
 					label={formatMessage({ id: 'label.get_giv' })}
 					size='small'
 					linkType='primary'
-					href={config.GNOSIS_CONFIG.GIV.BUY_LINK}
+					href={config.GNOSIS_CONFIG.GIV_BUY_LINK}
 					target='_blank'
 				/>
 			</Actions>
