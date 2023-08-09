@@ -6,8 +6,8 @@ import {
 } from '@giveth/ui-design-system';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
-
 import { useIntl } from 'react-intl';
+import Link from 'next/link';
 import { EOrderBy, IOrder } from '../UserProfile.view';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
@@ -93,7 +93,11 @@ const ProjectsTable: FC<IProjectsTable> = ({
 							</ProjectTableCell>
 							<ProjectTableCell bold>
 								<ProjectTitle>
-									{project.title}
+									<Link
+										href={slugToProjectView(project.slug)}
+									>
+										{project.title}
+									</Link>
 									<VerificationBadge
 										isVerified={project.verified}
 										verificationStatus={
