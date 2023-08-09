@@ -41,6 +41,7 @@ import {
 } from '@/types/contracts';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { GIVpowerUniPoolConfig } from '@/types/config';
 
 const { abi: LM_ABI } = LM_Json;
 const { abi: GP_ABI } = GP_Json;
@@ -359,13 +360,18 @@ export const getUserStakeInfo = (
 	const rewards = BN(unipoolBalance.rewards);
 	const rewardPerTokenPaid = BN(unipoolBalance.rewardPerTokenPaid);
 	let stakedAmount = BN(unipoolBalance.balance);
-	if (
-		config.GNOSIS_CONFIG.gGIV_TOKEN_ADDRESS &&
-		currentValues.networkNumber === config.GNOSIS_NETWORK_NUMBER &&
-		poolStakingConfig.type === StakingType.GIV_GARDEN_LM
-	) {
+	if (poolStakingConfig.type === StakingType.GIV_GARDEN_LM) {
 		const gGIVBalance = sdh.getTokenBalance(
 			config.GNOSIS_CONFIG.gGIV_TOKEN_ADDRESS,
+		);
+		stakedAmount = BN(gGIVBalance.balance);
+	} else if (poolStakingConfig.type === StakingType.GIV_UNIPOOL_LM) {
+		const gGIVBalance = sdh.getTokenBalance(
+			(
+				config.NETWORKS_CONFIG[
+					poolStakingConfig.network
+				] as GIVpowerUniPoolConfig
+			).GIVPOWER.LM_ADDRESS,
 		);
 		stakedAmount = BN(gGIVBalance.balance);
 	} else {

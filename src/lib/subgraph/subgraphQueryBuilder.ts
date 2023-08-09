@@ -29,11 +29,21 @@ export class SubgraphQueryBuilder {
 		userAddress?: string,
 	): string => {
 		if (!userAddress) return '';
-		if (!('GIV_TOKEN_ADDRESS' in networkConfig)) return '';
-		let query = SubgraphQueryBuilder.getTokenBalanceQuery(
-			networkConfig.GIV_TOKEN_ADDRESS,
-			userAddress,
-		);
+		let query = '';
+
+		if ('GIV_TOKEN_ADDRESS' in networkConfig) {
+			query += SubgraphQueryBuilder.getTokenBalanceQuery(
+				networkConfig.GIV_TOKEN_ADDRESS,
+				userAddress,
+			);
+		}
+
+		if ('GIVPOWER' in networkConfig) {
+			query += SubgraphQueryBuilder.getTokenBalanceQuery(
+				networkConfig.GIVPOWER.LM_ADDRESS,
+				userAddress,
+			);
+		}
 
 		if ('gGIV_TOKEN_ADDRESS' in networkConfig) {
 			query += SubgraphQueryBuilder.getTokenBalanceQuery(
