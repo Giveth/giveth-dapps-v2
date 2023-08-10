@@ -2,10 +2,12 @@ import {
 	Dispatch,
 	FC,
 	ReactNode,
+	RefObject,
 	SetStateAction,
 	useRef,
 	useState,
 } from 'react';
+import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import {
 	GLink,
@@ -37,10 +39,28 @@ export interface IOption {
 
 export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
 	const [open, setOpen] = useState(false);
-	const ddRef = useRef<HTMLDivElement>(null);
-	useOnClickOutside(ddRef, () => setOpen(false), open);
+
+	const containerRef = useRef<HTMLDivElement>(null);
+	const dropdownRef = useRef<HTMLDivElement>(null);
+
+	const dropdownStyle = open
+		? {
+				position: 'absolute',
+				top:
+					containerRef.current.getBoundingClientRect().bottom +
+					window.scrollY +
+					'px',
+				left:
+					containerRef.current.getBoundingClientRect().left +
+					window.scrollX +
+					'px',
+				zIndex: 1000, // Ensure it's above other elements
+		  }
+		: {};
+
+	useOnClickOutside(containerRef, () => setOpen(false), open);
 	return (
-		<Wrapper ref={ddRef}>
+		<Wrapper ref={containerRef}>
 			<Controller>
 				<ControllerWrapper
 					justifyContent='space-between'
@@ -56,7 +76,16 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
 					</IconWrapper>
 				</ControllerWrapper>
 			</Controller>
-			{open && <Options options={options} setOpen={setOpen} />}
+			{open &&
+				createPortal(
+					<Options
+						style={dropdownStyle}
+						ref={dropdownRef}
+						options={options}
+						setOpen={setOpen}
+					/>,
+					document.body,
+				)}
 		</Wrapper>
 	);
 };
@@ -64,11 +93,13 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
 interface IOptionsProps {
 	options: IOption[];
 	setOpen: Dispatch<SetStateAction<boolean>>;
+	ref: RefObject<HTMLDivElement>;
+	style: any;
 }
 
-const Options: FC<IOptionsProps> = ({ options, setOpen }) => {
+const Options: FC<IOptionsProps> = ({ options, setOpen, ref, style }) => {
 	return (
-		<OptionsWrapper>
+		<OptionsWrapper style={style} ref={ref}>
 			{options.map((option, idx) =>
 				option.disabled ? null : (
 					<Option key={idx} option={option} setOpen={setOpen} />
