@@ -16,6 +16,39 @@ import { ETheme } from '@/features/general/general.slice';
 import { Item } from './Item';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 
+export const giveconomyItems = [
+	{
+		title: 'label.an_economy_of_giving',
+		label: 'Giveconomy',
+		href: Routes.GIVeconomy,
+	},
+	{
+		title: 'label.governance',
+		label: 'GIVgarden',
+		href: Routes.GIVgarden,
+	},
+	{
+		title: 'label.earn_with_liquidity',
+		label: 'GIVfarm',
+		href: Routes.GIVfarm,
+	},
+	{
+		title: 'label.donor_rewards',
+		label: 'GIVbacks',
+		href: Routes.GIVbacks,
+	},
+	{
+		title: 'label.curate_projects',
+		label: 'GIVpower',
+		href: Routes.GIVpower,
+	},
+	{
+		title: 'label.streamed_rewards',
+		label: 'GIVstream',
+		href: Routes.GIVstream,
+	},
+];
+
 export const GIVeconomyItems = () => {
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
@@ -47,9 +80,11 @@ export const GIVeconomyItems = () => {
 			{giveconomyItems.map((item, idx) => (
 				<Link key={idx} href={item.href}>
 					<Item theme={theme}>
-						<ItemTitle theme={theme}>{item.title}</ItemTitle>
+						<ItemTitle theme={theme}>
+							{formatMessage({ id: item.title })}
+						</ItemTitle>
 						<ItemRow>
-							<GLink>{item.label}</GLink>
+							<GLink> {formatMessage({ id: item.label })}</GLink>
 						</ItemRow>
 					</Item>
 				</Link>

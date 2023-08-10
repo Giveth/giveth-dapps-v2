@@ -16,10 +16,38 @@ import { Item } from './Item';
 import Routes from '@/lib/constants/Routes';
 import { ETheme } from '@/features/general/general.slice';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 interface IProjectsItems {
 	inSidebar?: boolean;
 }
+
+export const projectsItems = {
+	explore: [
+		// { name: 'Trending', query: '?q=?q=trending' },
+		{
+			name: 'All Projects',
+			url: Routes.Projects,
+			label: 'label.all_projects',
+		},
+		{
+			name: 'Recently Updated',
+			url: Routes.Projects + '?sort=' + EProjectsSortBy.RECENTLY_UPDATED,
+			label: 'label.recently_updated',
+		},
+		{
+			name: 'Just Launched',
+			url: Routes.Projects + '?sort=' + EProjectsSortBy.NEWEST,
+			label: 'label.just_launched',
+		},
+		{
+			name: 'Quadratic Funding',
+			url: Routes.QFProjects,
+			label: 'label.eligible_for_matching',
+		},
+		// { name: 'Popular', query: '?q=popular' },
+	],
+};
 
 export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 	const { theme, mainCategories } = useAppSelector(state => state.general);
