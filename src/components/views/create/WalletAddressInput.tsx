@@ -48,20 +48,6 @@ const WalletAddressInput: FC<IProps> = ({
 	setResolvedENS,
 	onSubmit,
 }) => {
-	const {
-		register,
-		formState: { errors },
-		getValues,
-		clearErrors,
-	} = useFormContext();
-
-	const [isHidden, setIsHidden] = useState(false);
-	const [isValidating, setIsValidating] = useState(false);
-	const { formatMessage } = useIntl();
-
-	const { chainId, library } = useWeb3React();
-
-	const user = useAppSelector(state => state.user?.userData);
 	const isMainnet = networkId === config.MAINNET_NETWORK_NUMBER;
 	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
 	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
@@ -76,10 +62,26 @@ const WalletAddressInput: FC<IProps> = ({
 		: isOptimism
 		? EInputs.optimismAddress
 		: EInputs.mainAddress;
+
+	const { getValues, clearErrors, setValue } = useFormContext();
+
 	const value = getValues(inputName);
+	const [isHidden, setIsHidden] = useState(false);
+	const [isValidating, setIsValidating] = useState(false);
+	const { formatMessage } = useIntl();
+	const [inputValue, setInputValue] = useState(value);
+	const [error, setError] = useState({
+		message: '',
+		ref: undefined,
+		type: undefined,
+	});
+	const { chainId, library } = useWeb3React();
+
+	const user = useAppSelector(state => state.user?.userData);
+
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
-	const error = errors[inputName];
-	const errorMessage = (error?.message || '') as string;
+	const errorMessage = error.message;
+
 	const isAddressUsed =
 		errorMessage.indexOf(
 			formatMessage({ id: 'label.is_already_being_used_for_a_project' }),
@@ -177,6 +179,17 @@ const WalletAddressInput: FC<IProps> = ({
 		}
 	}, [sameAddress]);
 
+	useEffect(() => {
+		//We had an issue with onBlur so when the user clicks on submit exactly after filling the address, then process of address validation began, so i changed it to this.
+		addressValidation(inputValue).then(res => {
+			if (res === true) {
+				setError({ ...error, message: '' });
+				return;
+			}
+			setError({ ...error, message: res });
+		});
+	}, [inputValue]);
+
 	if (isHidden && !isMainnet) return null;
 
 	return (
@@ -241,10 +254,11 @@ const WalletAddressInput: FC<IProps> = ({
 				size={InputSize.LARGE}
 				disabled={disabled}
 				isValidating={isValidating}
-				register={register}
-				registerName={inputName}
-				registerOptions={{ validate: addressValidation }}
-				error={isAddressUsed || !value ? undefined : error}
+				value={inputValue}
+				onChange={e => {
+					setInputValue(e.target.value);
+				}}
+				error={!error.message || !inputValue ? undefined : error}
 			/>
 			{delayedResolvedENS && (
 				<InlineToast
@@ -274,9 +288,16 @@ const WalletAddressInput: FC<IProps> = ({
 			</ExchangeNotify>
 			<ButtonWrapper>
 				<Button
-					label='SAVE ADDRESS'
-					disabled={!!error && !isValidating}
-					onClick={onSubmit}
+					label='Add ADDRESS'
+					disabled={
+						error.message !== '' ||
+						inputValue === '' ||
+						isValidating === true
+					}
+					onClick={() => {
+						setValue(inputName, inputValue);
+						onSubmit && onSubmit();
+					}}
 				/>
 			</ButtonWrapper>
 		</Container>

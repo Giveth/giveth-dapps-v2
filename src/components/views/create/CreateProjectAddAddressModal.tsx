@@ -1,11 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { useFormContext } from 'react-hook-form';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import WalletAddressInput from './WalletAddressInput';
-import config from '@/configuration';
-import { EInputs } from './CreateProject';
 
 interface ICreateProjectAddAddressModal {
 	setShowModal: (show: number | undefined) => void;
@@ -30,32 +27,9 @@ const CreateProjectAddAddressModal = ({
 		setShowModal(undefined),
 	);
 
-	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
-	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
-	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
-	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
-
-	const inputName = isGnosis
-		? EInputs.gnosisAddress
-		: isPolygon
-		? EInputs.polygonAddress
-		: isCelo
-		? EInputs.celoAddress
-		: isOptimism
-		? EInputs.optimismAddress
-		: EInputs.mainAddress;
-
-	const { clearErrors, setValue } = useFormContext();
-
-	const closeModalAndClearErrorsAndResetValue = useCallback(() => {
-		clearErrors(inputName);
-		setValue(inputName, '');
-		closeModal();
-	}, []);
-
 	return (
 		<Modal
-			closeModal={closeModalAndClearErrorsAndResetValue}
+			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
 			headerTitle='Add new Address'

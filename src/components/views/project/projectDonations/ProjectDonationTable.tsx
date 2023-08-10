@@ -197,7 +197,7 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 								</NetworkName>
 							</DonationTableCell>
 							<DonationTableCell>
-								<B>{donation.amount}</B>
+								<B>{formatUSD(donation.amount, 3)}</B>
 								<Currency>{donation.currency}</Currency>
 								{!donation.anonymous && (
 									<ExternalLink

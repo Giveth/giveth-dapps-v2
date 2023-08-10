@@ -31,9 +31,9 @@ export const formatBalance = (balance?: string | number) => {
 	});
 };
 
-export const formatUSD = (balance?: string | number) => {
+export const formatUSD = (balance?: string | number, decimals = 2) => {
 	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
-		maximumFractionDigits: 2,
+		maximumFractionDigits: decimals,
 	});
 };
 
