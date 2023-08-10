@@ -286,12 +286,11 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
-	const userBalance = formatBalance(
-		formatUnits(selectedTokenBalance, tokenDecimals),
-	);
+	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
 
 	const calcMaxDonation = () =>
-		(Number(userBalance) * 100) / (100 + donationToGiveth);
+		(Number(userBalance.replace(/,/g, '')) * 100) /
+		(100 + donationToGiveth);
 
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
@@ -372,7 +371,7 @@ const CryptoDonation: FC = () => {
 				{selectedToken && (
 					<AvText onClick={() => setAmountTyped(calcMaxDonation())}>
 						{formatMessage({ id: 'label.available' })}:{' '}
-						{userBalance} {tokenSymbol}
+						{formatBalance(userBalance)} {tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
