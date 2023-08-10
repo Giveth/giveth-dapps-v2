@@ -13,36 +13,9 @@ import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
 import { HighlightSection } from './common';
 import { Item } from './Item';
-import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
 import { ETheme } from '@/features/general/general.slice';
-
-const projectsItems = {
-	explore: [
-		// { name: 'Trending', query: '?q=?q=trending' },
-		{
-			name: 'All Projects',
-			url: Routes.Projects,
-			label: 'label.all_projects',
-		},
-		{
-			name: 'Recently Updated',
-			url: Routes.Projects + '?sort=' + EProjectsSortBy.RECENTLY_UPDATED,
-			label: 'label.recently_updated',
-		},
-		{
-			name: 'Just Launched',
-			url: Routes.Projects + '?sort=' + EProjectsSortBy.NEWEST,
-			label: 'label.just_launched',
-		},
-		{
-			name: 'Quadratic Funding',
-			url: Routes.QFProjects,
-			label: 'label.eligible_for_matching',
-		},
-		// { name: 'Popular', query: '?q=popular' },
-	],
-};
+import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 
 interface IProjectsItems {
 	inSidebar?: boolean;
@@ -51,6 +24,7 @@ interface IProjectsItems {
 export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 	const { theme, mainCategories } = useAppSelector(state => state.general);
 	const { formatMessage } = useIntl();
+	const { projectsItems } = useNavigationInfo();
 
 	return (
 		<>

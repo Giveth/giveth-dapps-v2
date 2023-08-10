@@ -2,29 +2,14 @@ import React from 'react';
 import Link from 'next/link';
 import { Caption, GLink } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useIntl } from 'react-intl';
 import { useAppSelector } from '@/features/hooks';
 import { ItemRow, ItemTitle } from './common';
-import Routes from '@/lib/constants/Routes';
 import { Item } from './Item';
+import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 
 export const CommunityItems = () => {
 	const theme = useAppSelector(state => state.general.theme);
-	const { formatMessage } = useIntl();
-
-	const communityItems = [
-		{
-			title: formatMessage({ id: 'label.giver_nfts' }),
-			label: formatMessage({ id: 'label.collection_of' }),
-			href: Routes.NFT,
-		},
-		{
-			title: formatMessage({ id: 'label.join_and_keep_in_touch' }),
-			label: formatMessage({ id: 'label.community_of_makers' }),
-			href: Routes.Join,
-		},
-	];
-
+	const { communityItems } = useNavigationInfo();
 	return (
 		<>
 			{communityItems.map((item, idx) => (
