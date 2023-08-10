@@ -33,26 +33,26 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({
 	}, [isHeaderShowing]);
 
 	return (
-		<Link href={href}>
-			<LinkWithMenuContainer
-				onMouseEnter={openMenu}
-				onMouseLeave={closeMenu}
-				ref={elRef}
-				theme={theme}
-			>
+		<LinkWithMenuContainer
+			onMouseEnter={openMenu}
+			onMouseLeave={closeMenu}
+			ref={elRef}
+			theme={theme}
+		>
+			<Link href={href}>
 				<GLink size='Big'>{title}</GLink>
 				<ArrowContainer up={showMenu}>
 					<IconChevronDown24 />
 				</ArrowContainer>
-				{menuCondition && (
-					<ItemsProvider close={closeMenu}>
-						<Menu isAnimating={showMenu} parentRef={elRef}>
-							{children}
-						</Menu>
-					</ItemsProvider>
-				)}
-			</LinkWithMenuContainer>
-		</Link>
+			</Link>
+			{menuCondition && (
+				<ItemsProvider close={closeMenu}>
+					<Menu isAnimating={showMenu} parentRef={elRef}>
+						{children}
+					</Menu>
+				</ItemsProvider>
+			)}
+		</LinkWithMenuContainer>
 	);
 };
 
