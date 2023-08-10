@@ -29,7 +29,6 @@ const VerificationBadge: FC<IProps> = ({ isVerified, verificationStatus }) => {
 			label = 'Not Verified';
 			badgeStatus = EBadgeStatus.DEFAULT;
 	}
-
 	return <Badge status={badgeStatus} label={label} />;
 };
 
