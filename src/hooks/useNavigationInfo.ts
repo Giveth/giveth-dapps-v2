@@ -3,7 +3,7 @@ import { projectsItems } from '@/components/menu/ProjectsItems';
 import { giveconomyItems } from '@/components/menu/GIVeconomyItems';
 import { communityItems } from '@/components/menu/CommunityItems';
 
-type Section = 'Community' | 'Projects' | 'GIVEconomy' | 'Home';
+type Section = 'Community' | 'Projects' | 'GIVeconomy' | 'Home';
 
 export const useNavigationInfo = () => {
 	const router = useRouter();
@@ -26,7 +26,7 @@ export const useNavigationInfo = () => {
 			// Handle dynamic route
 			return 'Projects';
 		} else if (giveconomyRoutes.some(route => path.startsWith(route))) {
-			return 'GIVEconomy';
+			return 'GIVeconomy';
 		}
 		return 'Home'; // default
 	};
