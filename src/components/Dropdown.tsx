@@ -11,12 +11,11 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import {
 	GLink,
-	IconChevronDown,
-	IconChevronUp,
+	IconChevronDown24,
+	IconChevronUp24,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { Flex } from './styled-components/Flex';
-import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import { Shadow } from './styled-components/Shadow';
 
 interface IDropdownProps {
@@ -30,7 +29,7 @@ export enum OptionType {
 }
 
 export interface IOption {
-	type: OptionType;
+	type?: OptionType;
 	label: string;
 	icon?: ReactNode;
 	cb?: any;
@@ -59,23 +58,16 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
 			  }
 			: {};
 
-	useOnClickOutside(containerRef, () => setOpen(false), open);
 	return (
 		<Wrapper ref={containerRef}>
-			<Controller>
-				<ControllerWrapper
-					justifyContent='space-between'
-					onMouseDown={() => setOpen(_open => !_open)}
-				>
-					<GLink size='Big'>{label}</GLink>
-					<IconWrapper>
-						{open ? (
-							<IconChevronUp size={24} />
-						) : (
-							<IconChevronDown size={24} />
-						)}
-					</IconWrapper>
-				</ControllerWrapper>
+			<Controller
+				justifyContent='space-between'
+				onMouseDown={() => setOpen(_open => !_open)}
+			>
+				<GLink size='Big'>{label}</GLink>
+				<IconWrapper>
+					{open ? <IconChevronUp24 /> : <IconChevronDown24 />}
+				</IconWrapper>
 			</Controller>
 			{open &&
 				createPortal(
@@ -135,16 +127,9 @@ const Wrapper = styled.div`
 	user-select: none;
 `;
 
-const ControllerWrapper = styled(Flex)`
-	width: 100%;
-	padding: 10px 16px;
-`;
-
 const Controller = styled(Flex)`
-	border-radius: 8px;
-	background-color: ${neutralColors.gray[300]};
+	width: 100%;
 	cursor: pointer;
-	pointer-events: auto;
 `;
 
 const IconWrapper = styled.div`
