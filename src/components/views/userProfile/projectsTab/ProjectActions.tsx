@@ -3,6 +3,7 @@ import {
 	GLink,
 	IconArchiving,
 	IconEdit16,
+	IconEye16,
 	IconVerifiedBadge16,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -11,7 +12,7 @@ import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
 import { IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
-import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
+import { Dropdown, IOption } from '@/components/Dropdown';
 
 const ProjectActions = (props: { project: IProject }) => {
 	const { project } = props;
@@ -24,10 +25,14 @@ const ProjectActions = (props: { project: IProject }) => {
 
 	const options: IOption[] = [
 		{
+			label: formatMessage({ id: 'label.view_project' }),
+			icon: <IconEye16 />,
+			// cb: () => setShowShareModal(true),
+		},
+		{
 			label: formatMessage({
 				id: 'label.edit',
 			}),
-			type: OptionType.ITEM,
 			icon: <IconEdit16 />,
 			// cb: () => router.push(idToProjectEdit(projectData?.id || '')),
 		},
@@ -35,24 +40,16 @@ const ProjectActions = (props: { project: IProject }) => {
 			label: formatMessage({
 				id: 'label.verify_your_project',
 			}),
-			type: OptionType.ITEM,
 			icon: <IconVerifiedBadge16 />,
 			// cb: () => setShowVerificationModal(true),
 		},
 		{
 			label: formatMessage({ id: 'label.share_and_get_rewarded' }),
-			type: OptionType.ITEM,
 			icon: <IconArchiving size={16} />,
 			// cb: () => {
 			// 	console.log('verify');
 			// 	isActive ? setDeactivateModal(true) : activeProject();
 			// },
-		},
-		{
-			label: formatMessage({ id: 'label.share_and_get_rewarded' }),
-			type: OptionType.ITEM,
-			icon: <IconVerifiedBadge16 />,
-			// cb: () => setShowShareModal(true),
 		},
 	];
 
@@ -66,7 +63,7 @@ const ProjectActions = (props: { project: IProject }) => {
 		>
 			{/*<div>Actions</div>*/}
 			{/*{isOpen ? <IconChevronUp24 /> : <IconChevronDown24 />}*/}
-			<Dropdown label='Project Actions' options={options} />
+			<Dropdown label='Actions' options={options} />
 			{/*<InternalLink*/}
 			{/*	href={idToProjectEdit(project.id)}*/}
 			{/*	title={formatMessage({*/}
