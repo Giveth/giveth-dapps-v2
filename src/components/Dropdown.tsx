@@ -43,20 +43,21 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
-	const dropdownStyle = open
-		? {
-				position: 'absolute',
-				top:
-					containerRef.current.getBoundingClientRect().bottom +
-					window.scrollY +
-					'px',
-				left:
-					containerRef.current.getBoundingClientRect().left +
-					window.scrollX +
-					'px',
-				zIndex: 1000, // Ensure it's above other elements
-		  }
-		: {};
+	const dropdownStyle =
+		open && containerRef.current
+			? {
+					position: 'absolute',
+					top:
+						containerRef.current.getBoundingClientRect().bottom +
+						window.scrollY +
+						'px',
+					left:
+						containerRef.current.getBoundingClientRect().left +
+						window.scrollX +
+						'px',
+					zIndex: 1000,
+			  }
+			: {};
 
 	useOnClickOutside(containerRef, () => setOpen(false), open);
 	return (
@@ -154,9 +155,6 @@ const IconWrapper = styled.div`
 
 const OptionsWrapper = styled.div`
 	position: absolute;
-	top: 100%;
-	left: 0;
-	width: 100%;
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 16px;
 	padding: 8px;
