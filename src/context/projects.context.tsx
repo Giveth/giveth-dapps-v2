@@ -8,7 +8,6 @@ import {
 	useState,
 } from 'react';
 import { useRouter } from 'next/router';
-
 import { EProjectsFilter, IMainCategory, IQFRound } from '@/apollo/types/types';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
