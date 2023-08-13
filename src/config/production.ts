@@ -362,10 +362,11 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		blockExplorerName: ['OptimismScan'],
-		subgraphAddress: '',
-		TOKEN_ADDRESS: '0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
-		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
-		TOKEN_DISTRO_ADDRESS: '0x8D2cBce8ea0256bFFBa6fa4bf7CEC46a1d9b43f6',
+		subgraphAddress:
+			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet',
+		TOKEN_ADDRESS: '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98',
+		tokenAddressOnUniswapV2: '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98',
+		TOKEN_DISTRO_ADDRESS: '0xe3ac7b3e6b4065f4765d76fdc215606483bf3bd1',
 		pools: [],
 		regenPools: [],
 		regenStreams: [],
