@@ -48,6 +48,7 @@
 	"component.qf_middle_banner.desc": "Amplify your impact on verified projects! Donate on any of our 5 supported networks, earn rewards, and get your donations matched with the power of quadratic funding.",
 	"component.qf_middle_banner.title": "Giveth Alpha Round",
 	"component.regenstream_card.harvest_caption": "Use the Harvest button to claim liquid rewards from this RegenStream",
+	"component.reward_card.wrong_network": "{name} is available on {chains}. Please switch the network.",
 	"component.title.about_us": "Sobre Nosotros",
 	"component.title.commons_stack": "Commons Stack",
 	"component.title.dev_docs": "Documentación",
