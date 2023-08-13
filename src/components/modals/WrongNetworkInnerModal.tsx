@@ -70,7 +70,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 						<P>
 							{formatMessage(
 								{
-									id: 'component.reward_card.connect_wallet',
+									id: 'label.please_connect_your_wallet',
 								},
 								{
 									name: cardName,

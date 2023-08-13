@@ -1392,5 +1392,6 @@
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Water & Sanitation"
+	"water-and-sanitation": "Water & Sanitation",
+	"component.reward_card.wrong_network": "{name} is available on {chains}. Please switch the network."
 }
