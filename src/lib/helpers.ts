@@ -9,7 +9,6 @@ import { AddressZero } from '@ethersproject/constants';
 // @ts-ignore
 import abi from 'human-standard-token-abi';
 import { captureException } from '@sentry/nextjs';
-import { brandColors } from '@giveth/ui-design-system';
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
@@ -213,13 +212,6 @@ export const htmlToText = (text?: string) => {
 export const capitalizeFirstLetter = (string: string) => {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 };
-
-const noImgColors = [
-	brandColors.cyan[500],
-	brandColors.mustard[500],
-	brandColors.giv[500],
-];
-export const noImgColor = () => noImgColors[Math.floor(Math.random() * 3)];
 
 export const noImgIcon = '/images/GIV-icon-text.svg';
 
