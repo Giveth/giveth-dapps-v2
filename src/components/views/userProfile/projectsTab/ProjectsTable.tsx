@@ -71,9 +71,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 				<ProjectsTableHeader>
 					{formatMessage({ id: 'label.listing' })}
 				</ProjectsTableHeader>
-				<ProjectsTableHeader>
-					{formatMessage({ id: 'label.actions' })}
-				</ProjectsTableHeader>
+				<ProjectsTableHeader />
 				{projects?.map(project => {
 					const status = project.status.name;
 					return (
