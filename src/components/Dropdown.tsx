@@ -21,6 +21,7 @@ import { Shadow } from './styled-components/Shadow';
 interface IDropdownProps {
 	label: string;
 	options: IOption[];
+	style?: any;
 }
 
 export enum OptionType {
@@ -36,7 +37,7 @@ export interface IOption {
 	disabled?: boolean;
 }
 
-export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
+export const Dropdown: FC<IDropdownProps> = ({ label, options, style }) => {
 	const [open, setOpen] = useState(false);
 
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -59,7 +60,7 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
 			: {};
 
 	return (
-		<Wrapper ref={containerRef}>
+		<Wrapper style={style} ref={containerRef}>
 			<Controller
 				justifyContent='space-between'
 				onMouseDown={() => setOpen(_open => !_open)}
