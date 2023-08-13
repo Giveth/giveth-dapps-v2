@@ -3,6 +3,7 @@ import {
 	IconEdit16,
 	IconVerifiedBadge16,
 	mediaQueries,
+	neutralColors,
 } from '@giveth/ui-design-system';
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -97,9 +98,19 @@ export const AdminActions = () => {
 		},
 	];
 
+	const dropdownStyle = {
+		padding: '10px 16px',
+		background: neutralColors.gray[300],
+		borderRadius: '8px',
+	};
+
 	return (
 		<Wrapper>
-			<Dropdown label='Project Actions' options={options} />
+			<Dropdown
+				style={dropdownStyle}
+				label='Project Actions'
+				options={options}
+			/>
 			{showVerificationModal && (
 				<VerificationModal
 					onClose={() => setShowVerificationModal(false)}
