@@ -1,8 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
+	Button,
 	Caption,
 	H6,
+	mediaQueries,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -20,7 +22,6 @@ import { gqlAddressValidation } from '@/components/views/create/helpers';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import CheckBox from '@/components/Checkbox';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
@@ -31,36 +32,22 @@ import { networksParams } from '@/helpers/blockchain';
 interface IProps {
 	networkId: number;
 	userAddresses: string[];
-	sameAddress: boolean;
-	isActive: boolean;
-	setIsActive: (active: boolean) => void;
+	sameAddress?: boolean;
+	isActive?: boolean;
 	resolvedENS?: string;
 	setResolvedENS: (resolvedENS: string) => void;
+	onSubmit?: () => void;
 }
 
 const WalletAddressInput: FC<IProps> = ({
 	networkId,
 	userAddresses,
-	sameAddress,
-	isActive,
-	setIsActive,
+	sameAddress = false,
+	isActive = true,
 	resolvedENS,
 	setResolvedENS,
+	onSubmit,
 }) => {
-	const {
-		register,
-		formState: { errors },
-		getValues,
-		clearErrors,
-	} = useFormContext();
-
-	const [isHidden, setIsHidden] = useState(false);
-	const [isValidating, setIsValidating] = useState(false);
-	const { formatMessage } = useIntl();
-
-	const { chainId, library } = useWeb3React();
-
-	const user = useAppSelector(state => state.user?.userData);
 	const isMainnet = networkId === config.MAINNET_NETWORK_NUMBER;
 	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
 	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
@@ -75,10 +62,26 @@ const WalletAddressInput: FC<IProps> = ({
 		: isOptimism
 		? EInputs.optimismAddress
 		: EInputs.mainAddress;
+
+	const { getValues, clearErrors, setValue } = useFormContext();
+
 	const value = getValues(inputName);
+	const [isHidden, setIsHidden] = useState(false);
+	const [isValidating, setIsValidating] = useState(false);
+	const { formatMessage } = useIntl();
+	const [inputValue, setInputValue] = useState(value);
+	const [error, setError] = useState({
+		message: '',
+		ref: undefined,
+		type: undefined,
+	});
+	const { chainId, library } = useWeb3React();
+
+	const user = useAppSelector(state => state.user?.userData);
+
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
-	const error = errors[inputName];
-	const errorMessage = (error?.message || '') as string;
+	const errorMessage = error.message;
+
 	const isAddressUsed =
 		errorMessage.indexOf(
 			formatMessage({ id: 'label.is_already_being_used_for_a_project' }),
@@ -168,7 +171,6 @@ const WalletAddressInput: FC<IProps> = ({
 			return e;
 		}
 	};
-
 	useEffect(() => {
 		if (sameAddress) {
 			setTimeout(() => setIsHidden(true), 250);
@@ -176,6 +178,17 @@ const WalletAddressInput: FC<IProps> = ({
 			setIsHidden(false);
 		}
 	}, [sameAddress]);
+
+	useEffect(() => {
+		//We had an issue with onBlur so when the user clicks on submit exactly after filling the address, then process of address validation began, so i changed it to this.
+		addressValidation(inputValue).then(res => {
+			if (res === true) {
+				setError({ ...error, message: '' });
+				return;
+			}
+			setError({ ...error, message: res });
+		});
+	}, [inputValue]);
 
 	if (isHidden && !isMainnet) return null;
 
@@ -241,10 +254,11 @@ const WalletAddressInput: FC<IProps> = ({
 				size={InputSize.LARGE}
 				disabled={disabled}
 				isValidating={isValidating}
-				register={register}
-				registerName={inputName}
-				registerOptions={{ validate: addressValidation }}
-				error={isAddressUsed ? undefined : error}
+				value={inputValue}
+				onChange={e => {
+					setInputValue(e.target.value);
+				}}
+				error={!error.message || !inputValue ? undefined : error}
 			/>
 			{delayedResolvedENS && (
 				<InlineToast
@@ -272,19 +286,20 @@ const WalletAddressInput: FC<IProps> = ({
 					})}
 				</Caption>
 			</ExchangeNotify>
-			{!isHidden && (
-				<CheckBoxContainer
-					className={sameAddress ? 'fadeOut' : 'fadeIn'}
-				>
-					<CheckBox
-						onChange={setIsActive}
-						label={formatMessage({
-							id: 'label.ill_receive_funds_on_this_address',
-						})}
-						checked={isActive}
-					/>
-				</CheckBoxContainer>
-			)}
+			<ButtonWrapper>
+				<Button
+					label='Add ADDRESS'
+					disabled={
+						error.message !== '' ||
+						inputValue === '' ||
+						isValidating === true
+					}
+					onClick={() => {
+						setValue(inputName, inputValue);
+						onSubmit && onSubmit();
+					}}
+				/>
+			</ButtonWrapper>
 		</Container>
 	);
 };
@@ -336,12 +351,6 @@ const ExchangeNotify = styled(Flex)`
 	margin-top: 24px;
 `;
 
-const CheckBoxContainer = styled.div`
-	margin-top: 24px;
-	padding-top: 11px;
-	border-top: 1px solid ${neutralColors.gray[300]};
-`;
-
 const ChainIconShadow = styled.div`
 	height: 24px;
 	width: fit-content;
@@ -368,4 +377,12 @@ const Container = styled.div<{ hide?: boolean }>`
 	animation: fadeIn 0.3s ease-in-out;
 `;
 
+const ButtonWrapper = styled.div`
+	position: absolute;
+	right: 20px; // Adjust the distance from the right edge as per your need
+	bottom: 78px; // Adjust the distance from the bottom edge as per your need
+	${mediaQueries.tablet} {
+		bottom: 20px;
+	}
+`;
 export default WalletAddressInput;

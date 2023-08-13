@@ -80,6 +80,17 @@ export const networksParams: {
 		blockExplorerUrls: ['https://kovan.etherscan.io/'],
 		rpcUrls: ['https://kovan.infura.io/v3/'],
 	},
+	420: {
+		chainId: '0x1A4',
+		chainName: 'Optimism Goerli',
+		nativeCurrency: {
+			name: 'ETH',
+			symbol: 'ETH',
+			decimals: 18,
+		},
+		blockExplorerUrls: ['https://goerli-optimism.etherscan.io/'],
+		rpcUrls: ['https://goerli.optimism.io/'],
+	},
 	137: {
 		chainId: '0x89',
 		chainName: 'Polygon Mainnet',

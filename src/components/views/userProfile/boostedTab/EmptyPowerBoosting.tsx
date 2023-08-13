@@ -13,7 +13,7 @@ interface IEmptyPowerBoosting {
 
 export const EmptyPowerBoosting: FC<IEmptyPowerBoosting> = ({ myAccount }) => {
 	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.xDaiValues),
+		useAppSelector(state => state.subgraph.gnosisValues),
 	);
 	const givPower = sdh.getUserGIVPowerBalance();
 	const { formatMessage } = useIntl();

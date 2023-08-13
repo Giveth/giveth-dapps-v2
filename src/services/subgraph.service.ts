@@ -13,6 +13,8 @@ export const fetchSubgraph = async (
 		uri = config.MAINNET_CONFIG.subgraphAddress;
 	} else if (network === config.XDAI_NETWORK_NUMBER) {
 		uri = config.XDAI_CONFIG.subgraphAddress;
+	} else if (network === config.OPTIMISM_NETWORK_NUMBER) {
+		uri = config.OPTIMISM_CONFIG.subgraphAddress;
 	} else {
 		console.error('Network is not Defined!');
 		return {};

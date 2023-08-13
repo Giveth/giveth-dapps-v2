@@ -17,7 +17,7 @@ const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const XDAI_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
-const OPTIMISM_NETWORK_NUMBER = 10;
+const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
 
 const config: EnvConfig = {
@@ -263,13 +263,27 @@ const config: EnvConfig = {
 	},
 
 	OPTIMISM_CONFIG: {
-		nodeUrl: networksParams[10]?.rpcUrls[0],
-		...networksParams[10],
+		nodeUrl: networksParams[420]?.rpcUrls[0],
+		...networksParams[420],
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['OptimismScan'],
-		subgraphAddress: '',
+		blockExplorerName: ['GoerliOptimismScan'],
+		subgraphAddress:
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-staging',
+		TOKEN_ADDRESS: '0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
+		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+		TOKEN_DISTRO_ADDRESS: '0x8D2cBce8ea0256bFFBa6fa4bf7CEC46a1d9b43f6',
+		pools: [],
+		regenPools: [],
+		regenStreams: [],
+		GIV: {
+			network: OPTIMISM_NETWORK_NUMBER,
+			LM_ADDRESS: '0x632AC305ed88817480d12155A7F1244cC182C298',
+			GARDEN_ADDRESS: '0x632AC305ed88817480d12155A7F1244cC182C298',
+			BUY_LINK: 'https://',
+		},
+		uniswapV2Subgraph: '',
 	},
 
 	CELO_CONFIG: {

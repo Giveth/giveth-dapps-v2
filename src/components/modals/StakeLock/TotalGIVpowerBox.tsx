@@ -19,7 +19,7 @@ import { WrappedSpinner } from '@/components/Spinner';
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
 	const { account, library, chainId } = useWeb3React();
-	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
+	const gnosisValues = useAppSelector(state => state.subgraph.gnosisValues);
 
 	useEffect(() => {
 		async function fetchTotalGIVpower() {
@@ -38,7 +38,7 @@ const TotalGIVpowerBox = () => {
 				}
 			} catch (err) {
 				console.log({ err });
-				const sdh = new SubgraphDataHelper(xDaiValues);
+				const sdh = new SubgraphDataHelper(gnosisValues);
 				const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
 				setTotalGIVpower(new BigNumber(userGIVPowerBalance.balance));
 			}

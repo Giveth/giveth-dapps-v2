@@ -1,12 +1,24 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import config from '@/configuration';
-import { fetchMainnetInfo, fetchXDaiInfo } from './subgraph.services';
+import {
+	fetchMainnetInfo,
+	fetchGnosisInfo,
+	fetchOptimismInfo,
+} from './subgraph.services';
 import { ICurrentInfo } from './subgraph.types';
 
-export const fetchXDaiInfoAsync = createAsyncThunk(
-	'subgraph/fetchXDaiInfo',
+export const fetchOptimismInfoAsync = createAsyncThunk(
+	'subgraph/fetchOptimismInfo',
 	async (userAddress?: string) => {
-		const response = await fetchXDaiInfo(userAddress);
+		const response = await fetchOptimismInfo(userAddress);
+		return { ...response, isLoaded: true };
+	},
+);
+
+export const fetchGnosisInfoAsync = createAsyncThunk(
+	'subgraph/fetchGnosisInfo',
+	async (userAddress?: string) => {
+		const response = await fetchGnosisInfo(userAddress);
 		return { ...response, isLoaded: true };
 	},
 );
@@ -21,14 +33,16 @@ export const fetchMainnetInfoAsync = createAsyncThunk(
 
 export const fetchCurrentInfoAsync = createAsyncThunk(
 	'subgraph/fetchCurrentInfo',
-	async (props: ICurrentInfo) => {
+	async ({ userAddress, chainId }: ICurrentInfo) => {
 		const response =
-			props.chainId === config.MAINNET_NETWORK_NUMBER
-				? await fetchMainnetInfo(props.userAddress)
-				: await fetchXDaiInfo(props.userAddress);
+			chainId === config.MAINNET_NETWORK_NUMBER
+				? await fetchMainnetInfo(userAddress)
+				: chainId === config.OPTIMISM_NETWORK_NUMBER
+				? await fetchOptimismInfo(userAddress)
+				: await fetchGnosisInfo(userAddress);
 		return {
 			response: { ...response, isLoaded: true },
-			chainId: props.chainId,
+			chainId: chainId,
 		};
 	},
 );
