@@ -14,20 +14,23 @@ interface IUserWithPFPInCell {
 
 export const UserWithPFPInCell: FC<IUserWithPFPInCell> = ({ user }) => {
 	const pfpToken = useGiverPFPToken(user?.walletAddress, user?.avatar);
-	console.log(addressToUserView(user?.walletAddress?.toLowerCase()));
+	const userProfileLink =
+		addressToUserView(user?.walletAddress?.toLowerCase()) || '';
 	const name =
-		user?.name || shortenAddress(user?.walletAddress?.toLowerCase());
+		user?.name ||
+		shortenAddress(user?.walletAddress?.toLowerCase()) ||
+		'\u200C';
 	return pfpToken ? (
 		<Flex gap='12px' alignItems='center'>
 			<StyledPFP pfpToken={pfpToken} />
-			<Link href={addressToUserView(user?.walletAddress?.toLowerCase())}>
-				{name || '\u200C'}{' '}
+			<Link href={userProfileLink}>
+				{name}{' '}
 			</Link>
 		</Flex>
 	) : (
 		<NoAvatar>
-			<Link href={addressToUserView(user?.walletAddress?.toLowerCase())}>
-				{name || '\u200C'}{' '}
+			<Link href={userProfileLink}>
+				{name}{' '}
 			</Link>
 		</NoAvatar>
 	);
