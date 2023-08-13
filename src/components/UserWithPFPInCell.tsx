@@ -23,15 +23,11 @@ export const UserWithPFPInCell: FC<IUserWithPFPInCell> = ({ user }) => {
 	return pfpToken ? (
 		<Flex gap='12px' alignItems='center'>
 			<StyledPFP pfpToken={pfpToken} />
-			<Link href={userProfileLink}>
-				{name}{' '}
-			</Link>
+			<Link href={userProfileLink}>{name}</Link>
 		</Flex>
 	) : (
 		<NoAvatar>
-			<Link href={userProfileLink}>
-				{name}{' '}
-			</Link>
+			<Link href={userProfileLink}>{name}</Link>
 		</NoAvatar>
 	);
 };
