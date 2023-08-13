@@ -8,6 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import Link from 'next/link';
 import ProjectCardImage from './ProjectCardImage';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
@@ -50,9 +51,9 @@ const ProjectCard = (props: IProjectCard) => {
 	return (
 		<Wrapper isNew={isNew}>
 			<ImagePlaceholder>
-				<InternalLink href={slugToProjectView(slug)}>
+				<Link href={slugToProjectView(slug)}>
 					<ProjectCardImage image={image} />
-				</InternalLink>
+				</Link>
 			</ImagePlaceholder>
 			<ProjectCardOrgBadge
 				organization={orgLabel}
