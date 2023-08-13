@@ -15,7 +15,6 @@ import { HighlightSection } from './common';
 import { Item } from './Item';
 import Routes from '@/lib/constants/Routes';
 import { ETheme } from '@/features/general/general.slice';
-import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 interface IProjectsItems {
@@ -52,7 +51,6 @@ export const projectsItems = {
 export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 	const { theme, mainCategories } = useAppSelector(state => state.general);
 	const { formatMessage } = useIntl();
-	const { projectsItems } = useNavigationInfo();
 
 	return (
 		<>

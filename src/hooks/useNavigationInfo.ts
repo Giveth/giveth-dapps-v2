@@ -38,8 +38,5 @@ export const useNavigationInfo = () => {
 		projectsRoutes,
 		giveconomyRoutes,
 		currentLabel,
-		giveconomyItems,
-		communityItems,
-		projectsItems,
 	};
 };

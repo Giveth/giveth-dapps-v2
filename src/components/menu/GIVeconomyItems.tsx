@@ -14,7 +14,6 @@ import { ItemRow, ItemTitle } from './common';
 import Routes from '@/lib/constants/Routes';
 import { ETheme } from '@/features/general/general.slice';
 import { Item } from './Item';
-import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 
 export const giveconomyItems = [
 	{
@@ -52,7 +51,6 @@ export const giveconomyItems = [
 export const GIVeconomyItems = () => {
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
-	const { giveconomyItems } = useNavigationInfo();
 
 	return (
 		<>

@@ -16,13 +16,13 @@ export const communityItems = [
 		href: Routes.NFT,
 	},
 	{
-		title: 'label.learn_how_to',
+		title: 'label.community_connection',
 		label: 'label.join_us',
 		href: Routes.Join,
 	},
 	{
-		title: 'label.discover_our',
-		label: 'label.mission',
+		title: 'label.why_giveth',
+		label: 'label.our_mission',
 		href: links.OUR_MISSION,
 		isExternal: true,
 	},
