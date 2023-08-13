@@ -1,6 +1,7 @@
 import {
 	IconArchiving,
 	IconEdit16,
+	IconShare16,
 	IconVerifiedBadge16,
 	mediaQueries,
 	neutralColors,
@@ -17,7 +18,7 @@ import { client } from '@/apollo/apolloClient';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
-import { showToastError } from '@/lib/helpers';
+import { capitalizeAllWords, showToastError } from '@/lib/helpers';
 import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
 import { idToProjectEdit } from '@/lib/routeCreators';
 import ShareModal from '@/components/modals/ShareModal';
@@ -60,27 +61,31 @@ export const AdminActions = () => {
 	const options: IOption[] = [
 		{
 			label: formatMessage({
-				id: 'label.edit',
+				id: 'label.edit_project',
 			}),
 			type: OptionType.ITEM,
 			icon: <IconEdit16 />,
 			cb: () => router.push(idToProjectEdit(projectData?.id || '')),
 		},
 		{
-			label: formatMessage({
-				id: 'label.verify_your_project',
-			}),
+			label: capitalizeAllWords(
+				formatMessage({
+					id: 'label.verify_your_project',
+				}),
+			),
 			type: OptionType.ITEM,
 			icon: <IconVerifiedBadge16 />,
 			cb: () => setShowVerificationModal(true),
 			disabled: verified,
 		},
 		{
-			label: formatMessage({
-				id: isActive
-					? 'label.deactivate_project'
-					: 'label.activate_project',
-			}),
+			label: capitalizeAllWords(
+				formatMessage({
+					id: isActive
+						? 'label.deactivate_project'
+						: 'label.activate_project',
+				}),
+			),
 			type: OptionType.ITEM,
 			icon: <IconArchiving size={16} />,
 			cb: () => {
@@ -93,7 +98,7 @@ export const AdminActions = () => {
 				id: verified ? 'label.share_and_get_rewarded' : 'label.share',
 			}),
 			type: OptionType.ITEM,
-			icon: <IconVerifiedBadge16 />,
+			icon: <IconShare16 />,
 			cb: () => setShowShareModal(true),
 		},
 	];
