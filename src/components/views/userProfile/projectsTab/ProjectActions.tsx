@@ -30,7 +30,7 @@ const ProjectActions = (props: IProjectActions) => {
 
 	const { formatMessage } = useIntl();
 
-	const [isOpen, setIsOpen] = useState(false);
+	const [isHover, setIsHover] = useState(false);
 
 	const options: IOption[] = [
 		{
@@ -64,14 +64,14 @@ const ProjectActions = (props: IProjectActions) => {
 	const dropdownStyle = {
 		padding: '4px 16px',
 		borderRadius: '8px',
-		background: isOpen ? 'white' : '',
+		background: isHover ? 'white' : '',
 	};
 
 	return (
 		<Actions
-			onMouseEnter={() => setIsOpen(true)}
-			onMouseLeave={() => setIsOpen(false)}
-			isOpen={isOpen}
+			onMouseEnter={() => setIsHover(true)}
+			onMouseLeave={() => setIsHover(false)}
+			isOpen={isHover}
 			size='Big'
 			isCancelled={isCancelled}
 		>
