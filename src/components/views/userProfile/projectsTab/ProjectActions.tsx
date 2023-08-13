@@ -66,40 +66,10 @@ const ProjectActions = (props: IProjectActions) => {
 			size='Big'
 			isCancelled={isCancelled}
 		>
-			{/*<div>Actions</div>*/}
-			{/*{isOpen ? <IconChevronUp24 /> : <IconChevronDown24 />}*/}
 			<Dropdown label='Actions' options={options} />
-			{/*<InternalLink*/}
-			{/*	href={idToProjectEdit(project.id)}*/}
-			{/*	title={formatMessage({*/}
-			{/*		id: 'label.edit',*/}
-			{/*	})}*/}
-			{/*	disabled={isCancelled}*/}
-			{/*/>*/}
-			{/*<InternalLink*/}
-			{/*	href={slugToProjectView(project.slug)}*/}
-			{/*	title={formatMessage({*/}
-			{/*		id: 'label.view',*/}
-			{/*	})}*/}
-			{/*	disabled={isCancelled}*/}
-			{/*/>*/}
-			{/*<CustomGlink*/}
-			{/*	onClick={() => {*/}
-			{/*		setSelectedProject(project);*/}
-			{/*		setShowAddressModal(true);*/}
-			{/*	}}*/}
-			{/*>*/}
-			{/*	{formatMessage({*/}
-			{/*		id: 'label.manage_addresses',*/}
-			{/*	})}*/}
-			{/*</CustomGlink>*/}
 		</Actions>
 	);
 };
-
-const CustomGlink = styled(GLink)`
-	padding-top: 2px;
-`;
 
 const Actions = styled(GLink)<{ isCancelled: boolean; isOpen: boolean }>`
 	padding: 4px 16px;
