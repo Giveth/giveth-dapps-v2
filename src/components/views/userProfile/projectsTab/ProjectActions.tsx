@@ -75,7 +75,12 @@ const ProjectActions = (props: IProjectActions) => {
 			size='Big'
 			isCancelled={isCancelled}
 		>
-			<Dropdown style={dropdownStyle} label='Actions' options={options} />
+			<Dropdown
+				style={dropdownStyle}
+				label='Actions'
+				options={options}
+				stickToRight
+			/>
 		</Actions>
 	);
 };
