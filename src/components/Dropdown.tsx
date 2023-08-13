@@ -24,6 +24,7 @@ interface IDropdownProps {
 	label: string;
 	options: IOption[];
 	style?: any;
+	stickToRight?: boolean;
 }
 
 export enum OptionType {
@@ -39,7 +40,8 @@ export interface IOption {
 	disabled?: boolean;
 }
 
-export const Dropdown: FC<IDropdownProps> = ({ label, options, style }) => {
+export const Dropdown: FC<IDropdownProps> = props => {
+	const { label, options, style, stickToRight } = props;
 	const [isOpen, setIsOpen] = useState(false);
 
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -60,10 +62,17 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options, style }) => {
 						containerRef.current.getBoundingClientRect().bottom +
 						window.scrollY +
 						'px',
-					left:
-						containerRef.current.getBoundingClientRect().left +
-						window.scrollX +
-						'px',
+					right: stickToRight
+						? document.documentElement.clientWidth -
+						  containerRef.current.getBoundingClientRect().right +
+						  window.scrollX +
+						  'px'
+						: 'unset',
+					left: stickToRight
+						? 'unset'
+						: containerRef.current.getBoundingClientRect().left +
+						  window.scrollX +
+						  'px',
 					zIndex: zIndex.DROPDOWN,
 			  }
 			: {};
@@ -83,10 +92,10 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options, style }) => {
 			{isOpen &&
 				createPortal(
 					<OptionsWrapper style={dropdownStyle} ref={dropdownRef}>
-						{options.map((option, idx) =>
+						{options.map(option =>
 							option.disabled ? null : (
 								<Option
-									key={idx}
+									key={option.label}
 									option={option}
 									setIsOpen={setIsOpen}
 								/>
