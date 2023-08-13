@@ -1,5 +1,4 @@
 import {
-	brandColors,
 	GLink,
 	IconEdit16,
 	IconEye16,
@@ -75,19 +74,27 @@ const ProjectActions = (props: IProjectActions) => {
 			size='Big'
 			isCancelled={isCancelled}
 		>
-			<Dropdown
-				style={dropdownStyle}
-				label='Actions'
-				options={options}
-				stickToRight
-			/>
+			{isCancelled ? (
+				<CancelledWrapper>CANCELLED</CancelledWrapper>
+			) : (
+				<Dropdown
+					style={dropdownStyle}
+					label='Actions'
+					options={options}
+					stickToRight
+				/>
+			)}
 		</Actions>
 	);
 };
 
+const CancelledWrapper = styled.div`
+	padding: 4px 16px;
+`;
+
 const Actions = styled(GLink)<{ isCancelled: boolean; isOpen: boolean }>`
 	color: ${props =>
-		props.isCancelled ? brandColors.pinky[200] : neutralColors.gray[900]};
+		props.isCancelled ? neutralColors.gray[500] : neutralColors.gray[900]};
 	cursor: ${props => (props.isCancelled ? 'default' : 'pointer')};
 `;
 
