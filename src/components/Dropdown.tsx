@@ -17,6 +17,8 @@ import {
 } from '@giveth/ui-design-system';
 import { Flex } from './styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
+import { zIndex } from '@/lib/constants/constants';
 
 interface IDropdownProps {
 	label: string;
@@ -43,6 +45,8 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options, style }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
+	useOnClickOutside(dropdownRef, () => setOpen(false), open);
+
 	const dropdownStyle =
 		open && containerRef.current
 			? {
@@ -55,16 +59,17 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options, style }) => {
 						containerRef.current.getBoundingClientRect().left +
 						window.scrollX +
 						'px',
-					zIndex: 1000,
+					zIndex: zIndex.DROPDOWN,
 			  }
 			: {};
 
 	return (
-		<Wrapper style={style} ref={containerRef}>
-			<Controller
-				justifyContent='space-between'
-				onMouseDown={() => setOpen(_open => !_open)}
-			>
+		<Wrapper
+			style={style}
+			ref={containerRef}
+			onClick={() => !open && setOpen(true)}
+		>
+			<Controller justifyContent='space-between'>
 				<GLink size='Big'>{label}</GLink>
 				<IconWrapper>
 					{open ? <IconChevronUp24 /> : <IconChevronDown24 />}
