@@ -114,7 +114,11 @@ const ProjectsTable: FC<IProjectsTable> = ({
 								/>
 							</ProjectTableCell>
 							<ProjectTableCell>
-								<ProjectActions project={project} />
+								<ProjectActions
+									setSelectedProject={setSelectedProject}
+									setShowAddressModal={setShowAddressModal}
+									project={project}
+								/>
 							</ProjectTableCell>
 						</ProjectsRowWrapper>
 					);
