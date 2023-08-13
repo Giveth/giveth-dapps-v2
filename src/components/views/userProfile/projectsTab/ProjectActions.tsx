@@ -15,6 +15,7 @@ import { IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
+import { capitalizeAllWords } from '@/lib/helpers';
 
 interface IProjectActions {
 	project: IProject;
@@ -49,7 +50,9 @@ const ProjectActions = (props: IProjectActions) => {
 			cb: () => router.push(idToProjectEdit(project?.id)),
 		},
 		{
-			label: formatMessage({ id: 'label.manage_addresses' }),
+			label: capitalizeAllWords(
+				formatMessage({ id: 'label.manage_addresses' }),
+			),
 			icon: <IconWalletOutline16 />,
 			cb: () => {
 				setSelectedProject(project);
@@ -57,6 +60,12 @@ const ProjectActions = (props: IProjectActions) => {
 			},
 		},
 	];
+
+	const dropdownStyle = {
+		padding: '4px 16px',
+		borderRadius: '8px',
+		background: isOpen ? 'white' : '',
+	};
 
 	return (
 		<Actions
@@ -66,20 +75,15 @@ const ProjectActions = (props: IProjectActions) => {
 			size='Big'
 			isCancelled={isCancelled}
 		>
-			<Dropdown label='Actions' options={options} />
+			<Dropdown style={dropdownStyle} label='Actions' options={options} />
 		</Actions>
 	);
 };
 
 const Actions = styled(GLink)<{ isCancelled: boolean; isOpen: boolean }>`
-	padding: 4px 16px;
-	border-radius: 8px;
-	display: flex;
-	gap: 4px;
 	color: ${props =>
 		props.isCancelled ? brandColors.pinky[200] : neutralColors.gray[900]};
 	cursor: ${props => (props.isCancelled ? 'default' : 'pointer')};
-	${props => props.isOpen && 'background: white;'}
 `;
 
 export default ProjectActions;
