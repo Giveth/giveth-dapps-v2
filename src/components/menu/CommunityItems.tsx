@@ -1,27 +1,28 @@
 import React, { FC } from 'react';
 import Link from 'next/link';
 import { GLink } from '@giveth/ui-design-system';
+
 import { useIntl } from 'react-intl';
 import { useAppSelector } from '@/features/hooks';
 import { ItemRow, ItemTitle } from './common';
-import Routes from '@/lib/constants/Routes';
 import { Item } from './Item';
 import links from '@/lib/constants/links';
+import Routes from '@/lib/constants/Routes';
 
-const communityItems = [
+export const communityItems = [
 	{
 		title: 'label.get_a',
 		label: 'label.givers_nft',
 		href: Routes.NFT,
 	},
 	{
-		title: 'label.learn_how_to',
+		title: 'label.community_connection',
 		label: 'label.join_us',
 		href: Routes.Join,
 	},
 	{
-		title: 'label.discover_our',
-		label: 'label.mission',
+		title: 'label.why_giveth',
+		label: 'label.our_mission',
 		href: links.OUR_MISSION,
 		isExternal: true,
 	},
