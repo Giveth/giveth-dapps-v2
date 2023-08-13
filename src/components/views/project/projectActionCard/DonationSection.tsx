@@ -145,6 +145,7 @@ const DonateDescription = styled(Flex)`
 	border: 1px solid ${neutralColors.gray[300]};
 	border-radius: 16px;
 	margin-bottom: 24px;
+	margin-top: 10px;
 `;
 
 const LearnLink = styled(Flex)`
