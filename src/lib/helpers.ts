@@ -216,6 +216,10 @@ export const capitalizeFirstLetter = (string: string) => {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
+export const capitalizeAllWords = (string: string) => {
+	return string.split(' ').map(capitalizeFirstLetter).join(' ');
+};
+
 const noImgColors = [
 	brandColors.cyan[500],
 	brandColors.mustard[500],
