@@ -8,12 +8,13 @@ import {
 	H6,
 	Caption,
 	IconHelpFilled,
+	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import { smallFormatDate } from '@/lib/helpers';
-import { Flex } from '../styled-components/Flex';
+import { Flex, FlexCenter } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
@@ -25,6 +26,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { RowWrapper, TableCell, TableHeader } from '../styled-components/Table';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { GIVpowerConfig } from '@/types/config';
+import { Spinner } from '../Spinner';
 import type { IGIVpowerPosition } from '@/types/subgraph';
 import type { BigNumber } from 'ethers';
 import type { IModal } from '@/types/common';
@@ -45,6 +47,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 			] as GIVpowerConfig
 		).GIVPOWER,
 	);
+	const [loading, setLoading] = useState(true);
 	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
@@ -52,11 +55,13 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	useEffect(() => {
 		async function fetchGIVLockDetails() {
 			if (!account) return;
+			setLoading(true);
 			const LocksInfo = await fetchSubgraph(
 				SubgraphQueryBuilder.getTokenLocksInfoQuery(account),
 				chainId || config.GNOSIS_NETWORK_NUMBER,
 			);
 			setLocksInfo(LocksInfo.tokenLocks);
+			setLoading(false);
 		}
 
 		fetchGIVLockDetails();
@@ -112,7 +117,11 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					<Subtitle>
 						{formatMessage({ id: 'label.locekd_giv' })}
 					</Subtitle>
-					{locksInfo?.length > 0 ? (
+					{loading ? (
+						<FlexCenter>
+							<Spinner />
+						</FlexCenter>
+					) : locksInfo?.length > 0 ? (
 						<LockedTable>
 							<LockTableHeader>GIV</LockTableHeader>
 							<LockTableHeader>
@@ -181,7 +190,9 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 							)}
 						</LockedTable>
 					) : (
-						<Subtitle>0</Subtitle>
+						<FlexCenter>
+							<P>There is no data</P>
+						</FlexCenter>
 					)}
 				</LockedContainer>
 
