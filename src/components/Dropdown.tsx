@@ -1,8 +1,8 @@
 import {
+	CSSProperties,
 	Dispatch,
 	FC,
 	ReactNode,
-	RefObject,
 	SetStateAction,
 	useRef,
 	useState,
@@ -17,8 +17,8 @@ import {
 } from '@giveth/ui-design-system';
 import { Flex } from './styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
-import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import { zIndex } from '@/lib/constants/constants';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 
 interface IDropdownProps {
 	label: string;
@@ -40,15 +40,20 @@ export interface IOption {
 }
 
 export const Dropdown: FC<IDropdownProps> = ({ label, options, style }) => {
-	const [open, setOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const dropdownRef = useRef<HTMLDivElement>(null);
 
-	useOnClickOutside(dropdownRef, () => setOpen(false), open);
+	useOnClickOutside(
+		() => setIsOpen(false),
+		isOpen,
+		dropdownRef,
+		containerRef,
+	);
 
-	const dropdownStyle =
-		open && containerRef.current
+	const dropdownStyle: CSSProperties =
+		isOpen && containerRef.current
 			? {
 					position: 'absolute',
 					top:
@@ -67,58 +72,44 @@ export const Dropdown: FC<IDropdownProps> = ({ label, options, style }) => {
 		<Wrapper
 			style={style}
 			ref={containerRef}
-			onClick={() => !open && setOpen(true)}
+			onClick={() => setIsOpen(_open => !_open)}
 		>
 			<Controller justifyContent='space-between'>
 				<GLink size='Big'>{label}</GLink>
 				<IconWrapper>
-					{open ? <IconChevronUp24 /> : <IconChevronDown24 />}
+					{isOpen ? <IconChevronUp24 /> : <IconChevronDown24 />}
 				</IconWrapper>
 			</Controller>
-			{open &&
+			{isOpen &&
 				createPortal(
-					<Options
-						style={dropdownStyle}
-						ref={dropdownRef}
-						options={options}
-						setOpen={setOpen}
-					/>,
+					<OptionsWrapper style={dropdownStyle} ref={dropdownRef}>
+						{options.map((option, idx) =>
+							option.disabled ? null : (
+								<Option
+									key={idx}
+									option={option}
+									setIsOpen={setIsOpen}
+								/>
+							),
+						)}
+					</OptionsWrapper>,
 					document.body,
 				)}
 		</Wrapper>
 	);
 };
 
-interface IOptionsProps {
-	options: IOption[];
-	setOpen: Dispatch<SetStateAction<boolean>>;
-	ref: RefObject<HTMLDivElement>;
-	style: any;
-}
-
-const Options: FC<IOptionsProps> = ({ options, setOpen, ref, style }) => {
-	return (
-		<OptionsWrapper style={style} ref={ref}>
-			{options.map((option, idx) =>
-				option.disabled ? null : (
-					<Option key={idx} option={option} setOpen={setOpen} />
-				),
-			)}
-		</OptionsWrapper>
-	);
-};
-
 interface IOptionProps {
 	option: IOption;
-	setOpen: Dispatch<SetStateAction<boolean>>;
+	setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const Option: FC<IOptionProps> = ({ option, setOpen }) => {
+const Option: FC<IOptionProps> = ({ option, setIsOpen }) => {
 	return (
 		<OptionWrapper
 			onClick={() => {
 				option.cb && option.cb();
-				setOpen(false);
+				setIsOpen(false);
 			}}
 			gap='8px'
 		>
