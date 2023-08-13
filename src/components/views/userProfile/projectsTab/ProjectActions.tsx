@@ -1,21 +1,29 @@
 import {
 	brandColors,
 	GLink,
-	IconArchiving,
 	IconEdit16,
 	IconEye16,
-	IconVerifiedBadge16,
+	IconUpdate16,
+	IconWalletOutline16,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
+import router from 'next/router';
 import { IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
+import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 
-const ProjectActions = (props: { project: IProject }) => {
-	const { project } = props;
+interface IProjectActions {
+	project: IProject;
+	setSelectedProject: Dispatch<SetStateAction<IProject | undefined>>;
+	setShowAddressModal: Dispatch<SetStateAction<boolean>>;
+}
+
+const ProjectActions = (props: IProjectActions) => {
+	const { project, setSelectedProject, setShowAddressModal } = props;
 	const status = project.status.name;
 	const isCancelled = status === EProjectStatus.CANCEL;
 
@@ -27,29 +35,26 @@ const ProjectActions = (props: { project: IProject }) => {
 		{
 			label: formatMessage({ id: 'label.view_project' }),
 			icon: <IconEye16 />,
-			// cb: () => setShowShareModal(true),
+			cb: () => router.push(slugToProjectView(project.slug)),
 		},
 		{
-			label: formatMessage({
-				id: 'label.edit',
-			}),
+			label: formatMessage({ id: 'label.add_update' }),
+			icon: <IconUpdate16 />,
+			cb: () =>
+				router.push(slugToProjectView(project.slug) + '?tab=updates'),
+		},
+		{
+			label: formatMessage({ id: 'label.edit_project' }),
 			icon: <IconEdit16 />,
-			// cb: () => router.push(idToProjectEdit(projectData?.id || '')),
+			cb: () => router.push(idToProjectEdit(project?.id)),
 		},
 		{
-			label: formatMessage({
-				id: 'label.verify_your_project',
-			}),
-			icon: <IconVerifiedBadge16 />,
-			// cb: () => setShowVerificationModal(true),
-		},
-		{
-			label: formatMessage({ id: 'label.share_and_get_rewarded' }),
-			icon: <IconArchiving size={16} />,
-			// cb: () => {
-			// 	console.log('verify');
-			// 	isActive ? setDeactivateModal(true) : activeProject();
-			// },
+			label: formatMessage({ id: 'label.manage_addresses' }),
+			icon: <IconWalletOutline16 />,
+			cb: () => {
+				setSelectedProject(project);
+				setShowAddressModal(true);
+			},
 		},
 	];
 
