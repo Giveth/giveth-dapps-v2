@@ -10,6 +10,7 @@ import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import config from '@/configuration';
 import {
+	GIVTokenConfig,
 	SimplePoolStakingConfig,
 	UniswapV3PoolStakingConfig,
 } from '@/types/config';
@@ -90,6 +91,9 @@ export const GIVfarmBottom = () => {
 	const { chainId } = useWeb3React();
 	const [showArchivedPools, setShowArchivedPools] = useState(false);
 
+	const _config =
+		config.NETWORKS_CONFIG[chainId || config.GNOSIS_NETWORK_NUMBER];
+
 	return (
 		<GIVfarmBottomContainer>
 			<Container>
@@ -118,11 +122,7 @@ export const GIVfarmBottom = () => {
 							size='Big'
 							target='_blank'
 							rel='noreferrer'
-							href={
-								chainId === config.GNOSIS_NETWORK_NUMBER
-									? config.GNOSIS_CONFIG.GIV_BUY_LINK
-									: config.MAINNET_CONFIG.GIV_BUY_LINK
-							}
+							href={(_config as GIVTokenConfig).GIV_BUY_LINK}
 						>
 							{formatMessage({ id: 'label.buy_giv_token' })}
 						</GLink>
@@ -131,25 +131,17 @@ export const GIVfarmBottom = () => {
 					<ContractRow>
 						<GLink>{`${formatMessage({
 							id: 'label.contract',
-						})} (${
-							chainId === config.GNOSIS_NETWORK_NUMBER
-								? config.GNOSIS_CONFIG.chainName
-								: config.MAINNET_CONFIG.chainName
-						}):`}</GLink>
+						})} (${_config.chainName}):`}</GLink>
 						<GLink>
 							{shortenAddress(
-								chainId === config.GNOSIS_NETWORK_NUMBER
-									? config.GNOSIS_CONFIG.GIV_TOKEN_ADDRESS
-									: config.MAINNET_CONFIG.GIV_TOKEN_ADDRESS,
+								(_config as GIVTokenConfig).GIV_TOKEN_ADDRESS,
 							)}
 						</GLink>
 						<CopyWrapper
 							onClick={() => {
 								navigator.clipboard.writeText(
-									chainId === config.GNOSIS_NETWORK_NUMBER
-										? config.GNOSIS_CONFIG.GIV_TOKEN_ADDRESS
-										: config.MAINNET_CONFIG
-												.GIV_TOKEN_ADDRESS,
+									(_config as GIVTokenConfig)
+										.GIV_TOKEN_ADDRESS,
 								);
 							}}
 						>

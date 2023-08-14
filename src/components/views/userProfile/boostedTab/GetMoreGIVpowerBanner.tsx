@@ -13,6 +13,7 @@ import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { getGIVpowerLink } from '@/helpers/givpower';
+import { GIVTokenConfig } from '@/types/config';
 
 const GetMoreGIVpowerBanner = () => {
 	const { formatMessage } = useIntl();
@@ -43,7 +44,13 @@ const GetMoreGIVpowerBanner = () => {
 					label={formatMessage({ id: 'label.get_giv' })}
 					size='small'
 					linkType='primary'
-					href={config.GNOSIS_CONFIG.GIV_BUY_LINK}
+					href={
+						(
+							(config.NETWORKS_CONFIG[
+								chainId || config.GNOSIS_NETWORK_NUMBER
+							] as GIVTokenConfig) || config.GNOSIS_CONFIG
+						).GIV_BUY_LINK
+					}
 					target='_blank'
 				/>
 			</Actions>
