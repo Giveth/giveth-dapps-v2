@@ -476,6 +476,10 @@ const InputContainer = styled.div`
 const AvText = styled(GLink)`
 	color: ${brandColors.deep[500]};
 	padding: 4px 0 0 5px;
+	:hover {
+		cursor: pointer;
+		text-decoration: underline;
+	}
 `;
 
 const SearchContainer = styled.div<IInputBox>`
