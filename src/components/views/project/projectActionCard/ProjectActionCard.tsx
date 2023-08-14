@@ -16,6 +16,7 @@ import { device, zIndex } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import QFSection from './QFSection';
 import { DonateSection } from './DonationSection';
+import MobileDonateFooter from './MobileDonateFooter';
 
 interface IProjectActionCardProps {}
 
@@ -45,22 +46,23 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 	}, [isMobile]);
 
 	return isMobile ? (
-		<Wrapper
-			ref={wrapperRef}
-			height={wrapperHeight}
-			drag={isMobile ? 'y' : false}
-			dragElastic={0}
-			dragConstraints={{ top: -(wrapperHeight - 180), bottom: 132 }}
-			isMobile={isMobile}
-		>
-			<TopLine />
-			<ProjectActionCardWrapper
-				flexDirection='column-reverse'
-				justifyContent='space-between'
-			>
-				<ProjectActionInnerCard />
-			</ProjectActionCardWrapper>
-		</Wrapper>
+		// <Wrapper
+		// 	ref={wrapperRef}
+		// 	height={wrapperHeight}
+		// 	drag={isMobile ? 'y' : false}
+		// 	dragElastic={0}
+		// 	dragConstraints={{ top: -(wrapperHeight - 180), bottom: 132 }}
+		// 	isMobile={isMobile}
+		// >
+		// 	<TopLine />
+		// 	<ProjectActionCardWrapper
+		// 		flexDirection='column-reverse'
+		// 		justifyContent='space-between'
+		// 	>
+		// 		<ProjectActionInnerCard />
+		// 	</ProjectActionCardWrapper>
+		// </Wrapper>
+		<MobileDonateFooter />
 	) : (
 		<ProjectActionCardWrapper
 			flexDirection='column'
