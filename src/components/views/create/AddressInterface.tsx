@@ -14,7 +14,7 @@ import { EInputs } from '@/components/views/create/CreateProject';
 import { networksParams } from '@/helpers/blockchain';
 import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 
 interface IAddressInterfaceProps {
 	networkId: number;
@@ -136,13 +136,10 @@ const AddressContainer = styled.div<{ hasAddress: boolean }>`
 	overflow-x: auto;
 `;
 
-const IconContainer = styled.div`
+const IconContainer = styled(FlexCenter)`
 	height: 50px;
 	width: 50px;
 	border-radius: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	cursor: pointer;
 	transition: background-color 0.2s ease-in-out;
 	:hover {
