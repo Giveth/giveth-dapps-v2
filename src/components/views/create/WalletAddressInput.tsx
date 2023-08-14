@@ -50,8 +50,10 @@ const WalletAddressInput: FC<IProps> = ({
 
 	const user = useAppSelector(state => state.user?.userData);
 
-	const inputName = EInputs.addresses[chainId];
-	const value = getValues(inputName);
+	const inputName = EInputs.addresses;
+	const addresses = getValues(inputName);
+	const value = addresses[networkId];
+
 	const [isValidating, setIsValidating] = useState(false);
 	const { formatMessage } = useIntl();
 	const [inputValue, setInputValue] = useState(value);
@@ -60,6 +62,7 @@ const WalletAddressInput: FC<IProps> = ({
 		ref: undefined,
 		type: undefined,
 	});
+	console.log('error', error);
 
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
 	const errorMessage = error.message;
@@ -219,7 +222,9 @@ const WalletAddressInput: FC<IProps> = ({
 						isValidating === true
 					}
 					onClick={() => {
-						setValue(inputName, inputValue);
+						const _addresses = { ...addresses };
+						_addresses[networkId] = inputValue;
+						setValue(inputName, _addresses);
 						onSubmit && onSubmit();
 					}}
 				/>
