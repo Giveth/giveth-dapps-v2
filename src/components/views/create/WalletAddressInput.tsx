@@ -62,7 +62,6 @@ const WalletAddressInput: FC<IProps> = ({
 		ref: undefined,
 		type: undefined,
 	});
-	console.log('error', error);
 
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
 	const errorMessage = error.message;
@@ -142,6 +141,7 @@ const WalletAddressInput: FC<IProps> = ({
 
 	useEffect(() => {
 		//We had an issue with onBlur so when the user clicks on submit exactly after filling the address, then process of address validation began, so i changed it to this.
+		if (inputValue === value) return;
 		addressValidation(inputValue).then(res => {
 			if (res === true) {
 				setError({ ...error, message: '' });
