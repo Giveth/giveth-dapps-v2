@@ -100,6 +100,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const userAddresses = [...new Set(activeAddresses.map(a => a.address!))];
 
+	const addressesObj: { [key: number]: string } = {};
+	activeAddresses.forEach(a => {
+		addressesObj[a.networkId!] = a.address!;
+	});
+
 	const formMethods = useForm<TInputs>({
 		mode: 'onBlur',
 		reValidateMode: 'onBlur',
@@ -109,11 +114,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.categories]: categories || [],
 			[EInputs.impactLocation]: defaultImpactLocation,
 			[EInputs.image]: image || '',
-			...activeAddresses.map(i => ({
-				[EInputs.addresses]: {
-					[i.networkId!]: i.address,
-				},
-			})),
+			[EInputs.addresses]: addressesObj,
 		},
 	});
 
