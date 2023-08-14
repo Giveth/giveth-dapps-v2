@@ -13,11 +13,15 @@ import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
 import { HighlightSection } from './common';
 import { Item } from './Item';
-import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
 import { ETheme } from '@/features/general/general.slice';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
-const projectsItems = {
+interface IProjectsItems {
+	inSidebar?: boolean;
+}
+
+export const projectsItems = {
 	explore: [
 		// { name: 'Trending', query: '?q=?q=trending' },
 		{
@@ -43,10 +47,6 @@ const projectsItems = {
 		// { name: 'Popular', query: '?q=popular' },
 	],
 };
-
-interface IProjectsItems {
-	inSidebar?: boolean;
-}
 
 export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 	const { theme, mainCategories } = useAppSelector(state => state.general);

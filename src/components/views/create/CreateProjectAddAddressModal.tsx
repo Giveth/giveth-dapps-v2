@@ -1,11 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { useFormContext } from 'react-hook-form';
-import { useWeb3React } from '@web3-react/core';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import WalletAddressInput from './WalletAddressInput';
-import { EInputs } from './CreateProject';
 
 interface ICreateProjectAddAddressModal {
 	setShowModal: (show: number | undefined) => void;
@@ -28,19 +25,9 @@ const CreateProjectAddAddressModal = ({
 		setShowModal(undefined),
 	);
 
-	const { clearErrors, setValue } = useFormContext();
-	const { chainId = 1 } = useWeb3React();
-
-	const inputName = EInputs.addresses[chainId];
-	const closeModalAndClearErrorsAndResetValue = useCallback(() => {
-		clearErrors(inputName);
-		setValue(inputName, '');
-		closeModal();
-	}, []);
-
 	return (
 		<Modal
-			closeModal={closeModalAndClearErrorsAndResetValue}
+			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
 			headerTitle='Add new Address'

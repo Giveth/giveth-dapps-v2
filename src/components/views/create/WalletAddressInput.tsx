@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
 	Button,
@@ -44,15 +44,7 @@ const WalletAddressInput: FC<IProps> = ({
 	setResolvedENS,
 	onSubmit,
 }) => {
-	const {
-		register,
-		formState: { errors },
-		getValues,
-		clearErrors,
-	} = useFormContext();
-
-	const [isValidating, setIsValidating] = useState(false);
-	const { formatMessage } = useIntl();
+	const { getValues, clearErrors, setValue } = useFormContext();
 
 	const { chainId = 1, library } = useWeb3React();
 
@@ -60,9 +52,18 @@ const WalletAddressInput: FC<IProps> = ({
 
 	const inputName = EInputs.addresses[chainId];
 	const value = getValues(inputName);
+	const [isValidating, setIsValidating] = useState(false);
+	const { formatMessage } = useIntl();
+	const [inputValue, setInputValue] = useState(value);
+	const [error, setError] = useState({
+		message: '',
+		ref: undefined,
+		type: undefined,
+	});
+
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
-	const error = errors[inputName];
-	const errorMessage = (error?.message || '') as string;
+	const errorMessage = error.message;
+
 	const isAddressUsed =
 		errorMessage.indexOf(
 			formatMessage({ id: 'label.is_already_being_used_for_a_project' }),
@@ -136,6 +137,17 @@ const WalletAddressInput: FC<IProps> = ({
 		}
 	};
 
+	useEffect(() => {
+		//We had an issue with onBlur so when the user clicks on submit exactly after filling the address, then process of address validation began, so i changed it to this.
+		addressValidation(inputValue).then(res => {
+			if (res === true) {
+				setError({ ...error, message: '' });
+				return;
+			}
+			setError({ ...error, message: res });
+		});
+	}, [inputValue]);
+
 	return (
 		<Container>
 			<Header>
@@ -166,10 +178,11 @@ const WalletAddressInput: FC<IProps> = ({
 				caption={caption}
 				size={InputSize.LARGE}
 				isValidating={isValidating}
-				register={register}
-				registerName={inputName}
-				registerOptions={{ validate: addressValidation }}
-				error={isAddressUsed || !value ? undefined : error}
+				value={inputValue}
+				onChange={e => {
+					setInputValue(e.target.value);
+				}}
+				error={!error.message || !inputValue ? undefined : error}
 			/>
 			{delayedResolvedENS && (
 				<InlineToast
@@ -199,9 +212,16 @@ const WalletAddressInput: FC<IProps> = ({
 			</ExchangeNotify>
 			<ButtonWrapper>
 				<Button
-					label='SAVE ADDRESS'
-					disabled={!!error && !isValidating}
-					onClick={onSubmit}
+					label='Add ADDRESS'
+					disabled={
+						error.message !== '' ||
+						inputValue === '' ||
+						isValidating === true
+					}
+					onClick={() => {
+						setValue(inputName, inputValue);
+						onSubmit && onSubmit();
+					}}
 				/>
 			</ButtonWrapper>
 		</Container>

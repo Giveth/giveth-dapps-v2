@@ -5,6 +5,7 @@ import {
 	Button,
 	GLink,
 	IconArrowRight16,
+	IconTrash24,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
@@ -26,18 +27,19 @@ const AddressInterface = ({
 }: IAddressInterfaceProps) => {
 	const {
 		formState: { errors },
-		getValues,
+		setValue,
+		watch,
 	} = useFormContext();
 
 	const { chainId = 1 } = useWeb3React();
 
 	const inputName = EInputs.addresses[chainId];
 
-	const address = getValues(inputName);
+	const value = watch(inputName);
 
 	const { formatMessage } = useIntl();
 
-	const hasAddress = !!address && !errors[inputName]?.message;
+	const hasAddress = !!value && !errors[inputName]?.message;
 
 	return (
 		<Container>
@@ -76,9 +78,28 @@ const AddressInterface = ({
 						)}
 					</GLink>
 				)}
-				<AddressContainer hasAddress={hasAddress}>
-					{hasAddress ? address : 'No address added yet!'}
-				</AddressContainer>
+				<Flex
+					justifyContent='space-between'
+					alignItems='center'
+					gap='8px'
+				>
+					<AddressContainer
+						hasAddress={hasAddress}
+						style={{ width: '100%' }}
+					>
+						{hasAddress ? value : 'No address added yet!'}
+					</AddressContainer>
+					{hasAddress && (
+						<IconContainer
+							onClick={() => {
+								setValue(inputName, '');
+								console.log('clicked', inputName, value);
+							}}
+						>
+							<IconTrash24 />
+						</IconContainer>
+					)}
+				</Flex>
 			</MiddleContainer>
 		</Container>
 	);
@@ -115,6 +136,20 @@ const AddressContainer = styled.div<{ hasAddress: boolean }>`
 		props.hasAddress ? neutralColors.gray[900] : neutralColors.gray[500]};
 	padding: 16px;
 	overflow-x: auto;
+`;
+
+const IconContainer = styled.div`
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: background-color 0.2s ease-in-out;
+	:hover {
+		background-color: ${neutralColors.gray[300]};
+	}
 `;
 
 export default AddressInterface;
