@@ -7,6 +7,7 @@ import {
 	IconArrowRight16,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { useWeb3React } from '@web3-react/core';
 import config from '@/configuration';
 import { EInputs } from '@/components/views/create/CreateProject';
 import { networksParams } from '@/helpers/blockchain';
@@ -28,19 +29,9 @@ const AddressInterface = ({
 		getValues,
 	} = useFormContext();
 
-	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
-	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
-	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
-	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
-	const inputName = isGnosis
-		? EInputs.gnosisAddress
-		: isPolygon
-		? EInputs.polygonAddress
-		: isCelo
-		? EInputs.celoAddress
-		: isOptimism
-		? EInputs.optimismAddress
-		: EInputs.mainAddress;
+	const { chainId = 1 } = useWeb3React();
+
+	const inputName = EInputs.addresses[chainId];
 
 	const address = getValues(inputName);
 
