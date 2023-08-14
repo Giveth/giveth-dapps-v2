@@ -8,14 +8,8 @@ export const fetchSubgraph = async (
 	network: number,
 ): Promise<any> => {
 	const reqBody = { query };
-	let uri;
-	if (network === config.MAINNET_NETWORK_NUMBER) {
-		uri = config.MAINNET_CONFIG.subgraphAddress;
-	} else if (network === config.GNOSIS_NETWORK_NUMBER) {
-		uri = config.GNOSIS_CONFIG.subgraphAddress;
-	} else if (network === config.OPTIMISM_NETWORK_NUMBER) {
-		uri = config.OPTIMISM_CONFIG.subgraphAddress;
-	} else {
+	let uri = config.NETWORKS_CONFIG[network].subgraphAddress;
+	if (!uri) {
 		console.error('Network is not Defined!');
 		return {};
 	}
