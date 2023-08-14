@@ -18,8 +18,11 @@ import { Loading } from '../projectsTab/ProfileProjectsTab';
 import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { getGIVpowerLink, sortBoosts } from '@/helpers/givpower';
+import {
+	getGIVpowerLink,
+	getTotalGIVpower,
+	sortBoosts,
+} from '@/helpers/givpower';
 import { setBoostedProjectsCount } from '@/features/user/user.slice';
 import { UserProfileTab } from '../common.sc';
 import {
@@ -52,13 +55,11 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 	});
 
 	const { chainId } = useWeb3React();
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.gnosisValues),
-	);
 	const { userData } = useAppSelector(state => state.user);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
-	const givPower = sdh.getUserGIVPowerBalance();
-	const isZeroGivPower = givPower.balance === '0';
+	const values = useAppSelector(state => state.subgraph);
+	const givPower = getTotalGIVpower(values);
+	const isZeroGivPower = givPower.total === '0';
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
@@ -211,7 +212,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 							}}
 							data2={{
 								label: 'GIVpower',
-								value: `${formatWeiHelper(givPower.balance)}`,
+								value: `${formatWeiHelper(givPower.total)}`,
 							}}
 						/>
 					) : (
@@ -239,7 +240,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 				{boostedProjectsCount && boostedProjectsCount > 0 ? (
 					<BoostsTable
 						boosts={boosts}
-						totalAmountOfGIVpower={givPower.balance}
+						totalAmountOfGIVpower={givPower.total}
 						order={order}
 						changeOrder={changeOrder}
 						saveBoosts={saveBoosts}

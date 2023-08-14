@@ -59,19 +59,17 @@ import GivStake from '../../../public/images/giv_stake.svg';
 import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { formatWeiHelper } from '@/helpers/number';
 import links from '@/lib/constants/links';
+import { getTotalGIVpower } from '@/helpers/givpower';
 
 export function TabPowerTop() {
 	const { formatMessage } = useIntl();
 	const { account } = useWeb3React();
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.gnosisValues),
-	);
-	const givPower = sdh.getUserGIVPowerBalance();
-	const givPowerFormatted = formatWeiHelper(givPower.balance);
+	const values = useAppSelector(state => state.subgraph);
+	const givPower = getTotalGIVpower(values);
+	const givPowerFormatted = formatWeiHelper(givPower.total);
 	const hasZeroGivPower = givPowerFormatted === '0';
 	const dispatch = useAppDispatch();
 
