@@ -10,6 +10,28 @@ import { EDirection } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
 import { GIVpowerUniPoolConfig, StakingType } from '@/types/config';
 import config from '@/configuration';
+import { ISubgraphState } from '@/features/subgraph/subgraph.types';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { BN } from './number';
+
+export const getTotalGIVpower = (values: { [key: string]: ISubgraphState }) => {
+	const res = [];
+	let sum = BN('0');
+	for (const key in values) {
+		if (Object.prototype.hasOwnProperty.call(values, key)) {
+			if (key === 'currentValues') continue;
+			const value = values[key];
+			const sdh = new SubgraphDataHelper(value);
+			const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
+			sum = sum.add(userGIVPowerBalance.balance);
+			res.push({
+				chainId: value.networkNumber,
+				balance: userGIVPowerBalance.balance,
+			});
+		}
+	}
+	return { total: sum, byChain: res };
+};
 
 export const getGIVpowerRoundsInfo = (
 	initialDate: string,
