@@ -288,6 +288,10 @@ const CryptoDonation: FC = () => {
 
 	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
 
+	const calcMaxDonation = () =>
+		(Number(userBalance.replace(/,/g, '')) * 100) /
+		(100 + donationToGiveth);
+
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
 
