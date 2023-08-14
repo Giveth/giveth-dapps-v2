@@ -79,7 +79,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
-	const { chainId, library } = useWeb3React();
+	const { chainId, library, account } = useWeb3React();
 	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
 
 	const { POOL_ADDRESS, LM_ADDRESS } =
@@ -93,36 +93,38 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 
 	useEffect(() => {
 		library?.on('block', async () => {
-			const amountNumber = ethers.BigNumber.from(amount);
-			if (
-				amountNumber.gt(ethers.constants.Zero) &&
-				stakeState === StakeState.APPROVING
-			) {
-				const signer = library.getSigner();
-				const userAddress = await signer.getAddress();
-				const tokenContract = new Contract(
-					POOL_ADDRESS,
-					ERC20_ABI,
-					signer,
-				) as ERC20;
-				const allowance: BigNumber = await tokenContract.allowance(
-					userAddress,
-					(poolStakingConfig as GIVpowerGIVgardenStakingConfig)
-						.GARDEN_ADDRESS!,
-				);
+			try {
 				const amountNumber = ethers.BigNumber.from(amount);
-				const allowanceNumber = ethers.BigNumber.from(
-					allowance.toString(),
-				);
-				if (amountNumber.lte(allowanceNumber)) {
-					setStakeState(StakeState.WRAP);
+				if (
+					amountNumber.gt(ethers.constants.Zero) &&
+					stakeState === StakeState.APPROVING
+				) {
+					const tokenContract = new Contract(
+						POOL_ADDRESS,
+						ERC20_ABI,
+						library,
+					) as ERC20;
+					const allowance: BigNumber = await tokenContract.allowance(
+						account!,
+						(poolStakingConfig as GIVpowerGIVgardenStakingConfig)
+							.GARDEN_ADDRESS!,
+					);
+					const amountNumber = ethers.BigNumber.from(amount);
+					const allowanceNumber = ethers.BigNumber.from(
+						allowance.toString(),
+					);
+					if (amountNumber.lte(allowanceNumber)) {
+						setStakeState(StakeState.WRAP);
+					}
 				}
+			} catch (error) {
+				console.log('Error on Checking allowance', error);
 			}
 		});
 		return () => {
 			library.removeAllListeners('block');
 		};
-	}, [library, amount, stakeState]);
+	}, [library, amount, stakeState, POOL_ADDRESS, account, poolStakingConfig]);
 
 	const onApprove = async () => {
 		if (amount === '0') return;
@@ -133,13 +135,9 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 
 		setStakeState(StakeState.APPROVING);
 
-		const signer = library.getSigner();
-
-		const userAddress = await signer.getAddress();
-
 		const isApproved = await approveERC20tokenTransfer(
 			amount,
-			userAddress,
+			account!,
 			poolStakingConfig.network === config.GNOSIS_NETWORK_NUMBER
 				? (poolStakingConfig as GIVpowerGIVgardenStakingConfig)
 						.GARDEN_ADDRESS

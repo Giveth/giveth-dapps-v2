@@ -464,8 +464,11 @@ export const approveERC20tokenTransfer = async (
 		return false;
 	}
 
-	const signer = provider.getSigner();
-	const tokenContract = new Contract(poolAddress, ERC20_ABI, signer) as ERC20;
+	const tokenContract = new Contract(
+		poolAddress,
+		ERC20_ABI,
+		provider,
+	) as ERC20;
 	const allowance: ethers.BigNumber = await tokenContract.allowance(
 		ownerAddress,
 		spenderAddress,
@@ -474,6 +477,8 @@ export const approveERC20tokenTransfer = async (
 	const amountNumber = ethers.BigNumber.from(amount);
 
 	if (amountNumber.lte(allowance)) return true;
+
+	const signer = provider.getSigner();
 
 	const gasPreference = {
 		...getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),
@@ -503,7 +508,6 @@ export const approveERC20tokenTransfer = async (
 		const approve = await tokenContract
 			.connect(signer.connectUnchecked())
 			.approve(spenderAddress, amountNumber, gasPreference);
-
 		const { status } = await approve.wait();
 		if (!status) return false;
 	} catch (error) {
