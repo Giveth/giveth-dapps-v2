@@ -3,10 +3,8 @@ import { useEffect } from 'react';
 import { useAppDispatch } from '@/features/hooks';
 import config from '@/configuration';
 import {
-	fetchGnosisInfoAsync,
-	fetchMainnetInfoAsync,
 	fetchCurrentInfoAsync,
-	fetchOptimismInfoAsync,
+	fetchAllInfoAsync,
 } from '@/features/subgraph/subgraph.thunks';
 
 const SubgraphController = () => {
@@ -16,17 +14,8 @@ const SubgraphController = () => {
 	useEffect(() => {
 		const _account = account ? account : undefined;
 		const _chainID = chainId || config.MAINNET_NETWORK_NUMBER;
-		if (chainId !== config.GNOSIS_NETWORK_NUMBER)
-			dispatch(fetchGnosisInfoAsync(_account));
-		if (chainId !== config.MAINNET_NETWORK_NUMBER)
-			dispatch(fetchMainnetInfoAsync(_account));
-		if (chainId !== config.OPTIMISM_NETWORK_NUMBER)
-			dispatch(fetchOptimismInfoAsync(_account));
 		dispatch(
-			fetchCurrentInfoAsync({
-				userAddress: _account,
-				chainId: _chainID,
-			}),
+			fetchAllInfoAsync({ userAddress: _account, chainId: _chainID }),
 		);
 		const interval = setInterval(() => {
 			dispatch(
