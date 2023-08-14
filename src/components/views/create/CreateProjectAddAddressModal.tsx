@@ -1,8 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useFormContext } from 'react-hook-form';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import WalletAddressInput from './WalletAddressInput';
+import { EInputs } from '@/components/views/create/CreateProject';
+import config from '@/configuration';
 
 interface ICreateProjectAddAddressModal {
 	setShowModal: (show: number | undefined) => void;
@@ -25,9 +28,19 @@ const CreateProjectAddAddressModal = ({
 		setShowModal(undefined),
 	);
 
+	const { getValues } = useFormContext();
+	const addresses = getValues(EInputs.addresses);
+	const value = addresses[networkId];
+
 	return (
 		<Modal
-			closeModal={closeModal}
+			closeModal={() => {
+				// remove resolvedENS when user has set ENS but closes modal. ENS is only available for mainnet
+				!value &&
+					networkId === config.MAINNET_NETWORK_NUMBER &&
+					setResolvedENS('');
+				closeModal();
+			}}
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
 			headerTitle='Add new Address'
