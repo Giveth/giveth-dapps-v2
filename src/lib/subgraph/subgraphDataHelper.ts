@@ -14,7 +14,7 @@ import {
 	transformUnipoolBalance,
 } from '@/lib/subgraph/subgraphDataTransform';
 import config from '@/configuration';
-import { StreamNetworkConfig } from '@/types/config';
+import { GIVpowerConfig, StreamNetworkConfig } from '@/types/config';
 
 export class SubgraphDataHelper {
 	constructor(private readonly state: ISubgraphState) {}
@@ -68,8 +68,12 @@ export class SubgraphDataHelper {
 	}
 
 	getUserGIVPowerBalance(): IUnipoolBalance {
-		const givTokenAddress = config.GNOSIS_CONFIG.GIVPOWER.LM_ADDRESS;
-		return this.getUnipoolBalance(givTokenAddress);
+		const _config = config.NETWORKS_CONFIG[
+			this.state.networkNumber as number
+		] as GIVpowerConfig;
+		if (!_config || !_config.GIVPOWER) return transformUnipoolBalance();
+		const givpowerLMAddress = _config.GIVPOWER.LM_ADDRESS;
+		return this.getUnipoolBalance(givpowerLMAddress);
 	}
 
 	getUserGIVLockedBalance(): ITokenBalance {
