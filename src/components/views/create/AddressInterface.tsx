@@ -83,10 +83,7 @@ const AddressInterface = ({
 					alignItems='center'
 					gap='8px'
 				>
-					<AddressContainer
-						hasAddress={hasAddress}
-						style={{ width: '100%' }}
-					>
+					<AddressContainer hasAddress={hasAddress}>
 						{hasAddress ? value : 'No address added yet!'}
 					</AddressContainer>
 					{hasAddress && (
@@ -128,6 +125,7 @@ const MiddleContainer = styled.div`
 `;
 
 const AddressContainer = styled.div<{ hasAddress: boolean }>`
+	width: 100%;
 	border: 2px solid ${neutralColors.gray[300]};
 	background-color: ${props =>
 		props.hasAddress ? neutralColors.gray[100] : neutralColors.gray[300]};
