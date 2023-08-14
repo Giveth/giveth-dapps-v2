@@ -286,6 +286,8 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
+	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
+
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
 
