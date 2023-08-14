@@ -8,7 +8,6 @@ import {
 	IconTrash24,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
 import config from '@/configuration';
 import { EInputs } from '@/components/views/create/CreateProject';
 import { networksParams } from '@/helpers/blockchain';
@@ -31,15 +30,13 @@ const AddressInterface = ({
 		watch,
 	} = useFormContext();
 
-	const { chainId = 1 } = useWeb3React();
-
-	const inputName = EInputs.addresses[chainId];
+	const inputName = EInputs.addresses;
 
 	const value = watch(inputName);
 
 	const { formatMessage } = useIntl();
 
-	const hasAddress = !!value && !errors[inputName]?.message;
+	const hasAddress = !!value[networkId] && !errors[inputName]?.message;
 
 	return (
 		<Container>
@@ -84,7 +81,9 @@ const AddressInterface = ({
 					gap='8px'
 				>
 					<AddressContainer hasAddress={hasAddress}>
-						{hasAddress ? value : 'No address added yet!'}
+						{hasAddress
+							? value[networkId]
+							: 'No address added yet!'}
 					</AddressContainer>
 					{hasAddress && (
 						<IconContainer
