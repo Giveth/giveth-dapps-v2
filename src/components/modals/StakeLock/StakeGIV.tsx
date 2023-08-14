@@ -331,11 +331,11 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 						</H5White>
 						<ButtonLink
 							isExternal
-							label='View on blockscout'
+							label={`View on ${config.NETWORKS_CONFIG[chainId].blockExplorerName}`}
 							linkType='texty'
 							size='small'
 							icon={<IconExternalLink size={16} />}
-							href={`${config.GNOSIS_CONFIG.blockExplorerUrls}tx/${txHash}`}
+							href={`${config.NETWORKS_CONFIG[chainId].blockExplorerUrls}tx/${txHash}`}
 							target='_blank'
 						/>
 					</BriefContainer>
