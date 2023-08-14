@@ -135,7 +135,6 @@ const CryptoDonation: FC = () => {
 			setErc20OriginalList(tokens);
 			setErc20List(tokens);
 			setSelectedToken(tokens[0]);
-			setAmountTyped(undefined);
 			setTokenIsGivBackEligible(tokens[0]?.isGivbackEligible);
 		}
 	}, [networkId, acceptedTokens]);
@@ -145,7 +144,6 @@ const CryptoDonation: FC = () => {
 		if (isEnabled) pollToken();
 		else {
 			setSelectedToken(undefined);
-			setAmountTyped(undefined);
 		}
 		return () => clearPoll();
 	}, [selectedToken, isEnabled, account, balance]);
@@ -169,6 +167,10 @@ const CryptoDonation: FC = () => {
 				});
 			});
 	}, []);
+
+	useEffect(() => {
+		setAmountTyped(undefined);
+	}, [selectedToken, isEnabled, account, networkId]);
 
 	const checkGIVTokenAvailability = () => {
 		if (orgLabel !== ORGANIZATION.givingBlock) return true;
@@ -336,7 +338,6 @@ const CryptoDonation: FC = () => {
 							inputValue={customInput}
 							onChange={(i: IProjectAcceptedToken) => {
 								setSelectedToken(i);
-								setAmountTyped(undefined);
 								setCustomInput('');
 								setErc20List(erc20OriginalList);
 								setTokenIsGivBackEligible(i.isGivbackEligible);
