@@ -54,22 +54,11 @@ const WalletAddressInput: FC<IProps> = ({
 	const [isValidating, setIsValidating] = useState(false);
 	const { formatMessage } = useIntl();
 
-	const { chainId, library } = useWeb3React();
+	const { chainId = 1, library } = useWeb3React();
 
 	const user = useAppSelector(state => state.user?.userData);
-	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
-	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
-	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
-	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
-	const inputName = isGnosis
-		? EInputs.gnosisAddress
-		: isPolygon
-		? EInputs.polygonAddress
-		: isCelo
-		? EInputs.celoAddress
-		: isOptimism
-		? EInputs.optimismAddress
-		: EInputs.mainAddress;
+
+	const inputName = EInputs.addresses[chainId];
 	const value = getValues(inputName);
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
 	const error = errors[inputName];
