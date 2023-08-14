@@ -369,12 +369,9 @@ const CryptoDonation: FC = () => {
 					/>
 				</SearchContainer>
 				{selectedToken && (
-					<AvText>
+					<AvText onClick={() => setAmountTyped(calcMaxDonation())}>
 						{formatMessage({ id: 'label.available' })}:{' '}
-						{formatBalance(
-							formatUnits(selectedTokenBalance, tokenDecimals),
-						)}{' '}
-						{tokenSymbol}
+						{formatBalance(userBalance)} {tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
