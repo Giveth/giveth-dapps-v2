@@ -88,8 +88,9 @@ const AddressInterface = ({
 					{hasAddress && (
 						<IconContainer
 							onClick={() => {
-								setValue(inputName, '');
-								console.log('clicked', inputName, value);
+								const newValue = { ...value };
+								delete newValue[networkId];
+								setValue(inputName, newValue);
 							}}
 						>
 							<IconTrash24 />
