@@ -6,42 +6,24 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import BigNumber from 'bignumber.js';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
-import { getTotalGIVpower } from '@/lib/stakingPool';
-import config from '@/configuration';
 import { useAppSelector } from '@/features/hooks';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { WrappedSpinner } from '@/components/Spinner';
+import { getTotalGIVpower } from '@/helpers/givpower';
 
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
-	const { account, library, chainId } = useWeb3React();
-	const gnosisValues = useAppSelector(state => state.subgraph.gnosisValues);
+	const values = useAppSelector(state => state.subgraph);
 
 	useEffect(() => {
 		async function fetchTotalGIVpower() {
 			try {
-				if (!account) return;
-				if (chainId !== config.GNOSIS_NETWORK_NUMBER)
-					throw new Error('Change Netowrk to fetchTotalGIVpower');
-				const contractAddress =
-					config.GNOSIS_CONFIG.GIVPOWER.LM_ADDRESS;
-				const _totalGIVpower = await getTotalGIVpower(
-					account,
-					contractAddress,
-					library,
-				);
-				if (_totalGIVpower) {
-					setTotalGIVpower(_totalGIVpower);
-				}
+				const { total } = getTotalGIVpower(values);
+				setTotalGIVpower(new BigNumber(total));
 			} catch (err) {
 				console.log({ err });
-				const sdh = new SubgraphDataHelper(gnosisValues);
-				const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
-				setTotalGIVpower(new BigNumber(userGIVPowerBalance.balance));
 			}
 		}
 

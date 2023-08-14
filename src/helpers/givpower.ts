@@ -30,7 +30,7 @@ export const getTotalGIVpower = (values: { [key: string]: ISubgraphState }) => {
 			});
 		}
 	}
-	return { total: sum, byChain: res };
+	return { total: sum.toString(), byChain: res };
 };
 
 export const getGIVpowerRoundsInfo = (
