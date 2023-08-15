@@ -124,7 +124,7 @@ const FiatDonation = () => {
 							</ImageContainer>
 							<Info>
 								{formatMessage({
-									id: 'label.buy_crypto_with_your_credit_card_without_leaving_the_platform',
+									id: 'label.',
 								})}
 							</Info>
 							<Button
