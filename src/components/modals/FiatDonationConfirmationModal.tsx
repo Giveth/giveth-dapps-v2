@@ -37,7 +37,7 @@ export const FiatDonationConfirmationModal: FC<IFiatConfirmationModal> = ({
 							</li>
 							<li>
 								{formatMessage({
-									id: 'label.note_that_your_donations_history_will_be_updated_some_time_after',
+									id: 'label.',
 								})}
 							</li>
 							<li>
