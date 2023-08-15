@@ -168,7 +168,7 @@ const FiatDonation = () => {
 							hasLeftIcon={false}
 							value={temporaryEmail}
 							placeholder={formatMessage({
-								id: 'label.proceed_with_an_email',
+								id: 'label.',
 							})}
 							onChange={e => setTemporaryEmail(e.target.value)}
 						/>
