@@ -145,7 +145,7 @@ const FiatDonation = () => {
 									</ImageContainer>
 									<Info>
 										{formatMessage({
-											id: 'label.easily_connect_a_paypal_or_stripe_account',
+											id: 'label.',
 										})}
 									</Info>
 									<Button
