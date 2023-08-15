@@ -303,7 +303,9 @@ const CryptoDonation: FC = () => {
 
 	return (
 		<MainContainer>
-			<H4 weight={700}>{formatMessage({ id: 'page.donate.title' })}</H4>
+			<H4Styled weight={700}>
+				{formatMessage({ id: 'page.donate.title' })}
+			</H4Styled>
 			{geminiModal && <GeminiModal setShowModal={setGeminiModal} />}
 			{showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork
@@ -471,6 +473,10 @@ const CryptoDonation: FC = () => {
 		</MainContainer>
 	);
 };
+
+const H4Styled = styled(H4)`
+	margin-bottom: 30px;
+`;
 
 const EmptySpace = styled.div`
 	margin-top: 70px;
