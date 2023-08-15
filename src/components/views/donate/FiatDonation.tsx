@@ -174,7 +174,7 @@ const FiatDonation = () => {
 						/>
 						<StyledButton
 							label={formatMessage({
-								id: 'label.donate_with_email',
+								id: 'label.',
 							})}
 							buttonType='secondary'
 							size='medium'
