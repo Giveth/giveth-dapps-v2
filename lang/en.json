@@ -225,7 +225,6 @@
 	"label.continue": "Continue",
 	"label.continue_creation": "Continue Creation",
 	"label.continue_verification": "Continue verification",
-	"label.continue_with_donorbox": "Continue with Donorbox",
 	"label.contract": "Contract",
 	"label.contribution": "Contribution",
 	"label.contributors": "{count, plural, one { contributor} other { contributors} }",
