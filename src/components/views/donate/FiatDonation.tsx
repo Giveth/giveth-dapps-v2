@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Button, B, neutralColors, H4 } from '@giveth/ui-design-system';
+import { Button, B, neutralColors } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { InputSize } from '@/components/Input';
 import InputStyled from '@/components/styled-components/Input';
@@ -44,11 +44,7 @@ const FiatDonation = () => {
 		ETH: { address: mainnetAddress },
 	};
 
-	return (
-		<FiatContainer style={{ marginTop: 40 }}>
-			<H4>{formatMessage({ id: 'label.coming_soon' })}</H4>
-		</FiatContainer>
-	);
+	return <FiatContainer style={{ marginTop: 40 }}></FiatContainer>;
 
 	return (
 		<>
