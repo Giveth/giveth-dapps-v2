@@ -42,7 +42,7 @@ export const FiatDonationConfirmationModal: FC<IFiatConfirmationModal> = ({
 							</li>
 							<li>
 								{formatMessage({
-									id: 'label.donations_will_only_be_confirmed_after_a_while_of_being_sent',
+									id: 'label.',
 								})}
 							</li>
 						</>
