@@ -32,7 +32,7 @@ export const FiatDonationConfirmationModal: FC<IFiatConfirmationModal> = ({
 						<>
 							<li>
 								{formatMessage({
-									id: 'label.you_will_be_purchasing_crypto_on_behalf_of_the_project_account',
+									id: 'label.',
 								})}
 							</li>
 							<li>
