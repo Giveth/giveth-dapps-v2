@@ -150,7 +150,7 @@ const FiatDonation = () => {
 									</Info>
 									<Button
 										label={formatMessage({
-											id: 'label.continue_with_donorbox',
+											id: 'label.',
 										})}
 										onClick={() =>
 											setDonorboxConfirmationModal(true)
