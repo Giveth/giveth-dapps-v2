@@ -7,6 +7,7 @@ import {
 	brandColors,
 	Button,
 	GLink,
+	H4,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -302,6 +303,7 @@ const CryptoDonation: FC = () => {
 
 	return (
 		<MainContainer>
+			<H4 weight={700}>{formatMessage({ id: 'page.donate.title' })}</H4>
 			{geminiModal && <GeminiModal setShowModal={setGeminiModal} />}
 			{showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork
