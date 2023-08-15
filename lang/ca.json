@@ -225,7 +225,6 @@
 	"label.continue": "Continua",
 	"label.continue_creation": "Continua la creació",
 	"label.continue_verification": "Continua la verificació",
-	"label.continue_with_donorbox": "Continua amb Donorbox",
 	"label.contract": "Contracte",
 	"label.contribution": "Contribution",
 	"label.contributors": "{count, plural, one { contributor} other { contributors} }",
