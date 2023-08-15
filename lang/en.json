@@ -655,7 +655,6 @@
 	"label.publish_edited_project": "Publish edited project",
 	"label.publish_project": "PUBLISH PROJECT",
 	"label.purchase_with_credit_debit": "Purchase with Credit, Debit, Visa, or Mastercard",
-	"label.purchase_xdai_with_fiat_currency": "Purchase xDAI with fiat currency, deposit it directly into your web3 wallet and subsequently donate.",
 	"label.purchase_xdai_with_mtpelerin": "Purchase xDAI with fiat currency, deposit it directly into your web3 wallet with Mt Pelerin.",
 	"label.qf_no_donations": "There have been no donations in this round.",
 	"label.qf_round_projects": "QF round's projects",
