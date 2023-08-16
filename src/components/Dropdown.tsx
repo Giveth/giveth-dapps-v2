@@ -131,11 +131,11 @@ const Option: FC<IOptionProps> = ({ option, setIsOpen }) => {
 const Wrapper = styled.div`
 	position: relative;
 	user-select: none;
+	cursor: pointer;
 `;
 
 const Controller = styled(Flex)`
 	width: 100%;
-	cursor: pointer;
 `;
 
 const IconWrapper = styled.div`
