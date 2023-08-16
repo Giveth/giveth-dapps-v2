@@ -4,7 +4,7 @@ import { gqlRequest } from '@/helpers/requests';
 import { GIVpowerConfig, BasicNetworkConfig } from '@/types/config';
 import config from '@/configuration';
 
-export const getGIVpowerBalanceByAddress = async (users: number[]) => {
+export const getGIVpowerBalanceByAddress = async (users: string[]) => {
 	//get users balance
 	const _networkConfigs = config.NETWORKS_CONFIG;
 	const queries = [];
