@@ -40,7 +40,7 @@ export const getTotalGIVpower = (
 			}
 		}
 	}
-	return { total: sum.toString(), byChain: res };
+	return { total: sum, byChain: res };
 };
 
 export const getGIVpowerRoundsInfo = (

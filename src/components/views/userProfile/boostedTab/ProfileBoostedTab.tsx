@@ -59,7 +59,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
 	const values = useAppSelector(state => state.subgraph);
 	const givPower = getTotalGIVpower(values);
-	const isZeroGivPower = givPower.total === '0';
+	const isZeroGivPower = givPower.total.isZero();
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {

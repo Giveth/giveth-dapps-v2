@@ -39,7 +39,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 
 interface IBoostsTable {
 	boosts: IPowerBoosting[];
-	totalAmountOfGIVpower: string;
+	totalAmountOfGIVpower: BigNumber;
 	order: IBoostedOrder;
 	changeOrder: (orderBy: EPowerBoostingOrder) => void;
 	saveBoosts: (newBoosts: IPowerBoosting[]) => Promise<boolean>;
@@ -74,8 +74,6 @@ const BoostsTable: FC<IBoostsTable> = ({
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [showApproveModal, setShowApproveModal] = useState(false);
 	const [selectedBoost, setSelectedBoost] = useState('');
-
-	const _totalAmountOfGIVpower = new BigNumber(totalAmountOfGIVpower);
 
 	useEffect(() => {
 		if (mode === ETableNode.VIEWING) setEditBoosts(structuredClone(boosts));
@@ -282,7 +280,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 							</BoostsTableCell>
 							<BoostsTableCell>
 								{formatWeiHelper(
-									_totalAmountOfGIVpower
+									totalAmountOfGIVpower
 										.multipliedBy(boost.percentage || 0)
 										.dividedBy(100),
 								)}

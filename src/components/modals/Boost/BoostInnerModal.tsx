@@ -50,7 +50,7 @@ import { useProjectContext } from '@/context/project.context';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { WrappedSpinner } from '@/components/Spinner';
 import type { FC, Dispatch, SetStateAction } from 'react';
-import type { BigNumber } from 'ethers';
+import type { BigNumber } from 'bignumber.js';
 
 interface IInnerBoostModalProps {
 	totalGIVpower: BigNumber;
@@ -347,7 +347,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 									percentage > 0
 										? formatWeiHelper(
 												totalGIVpower
-													.mul(percentage)
+													.multipliedBy(percentage)
 													.div(100),
 										  )
 										: 0

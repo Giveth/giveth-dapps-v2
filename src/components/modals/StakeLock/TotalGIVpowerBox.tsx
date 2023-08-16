@@ -16,7 +16,7 @@ import { getTotalGIVpower } from '@/helpers/givpower';
 import { getGIVpowerOnChain } from '@/lib/stakingPool';
 
 const TotalGIVpowerBox = () => {
-	const [totalGIVpower, setTotalGIVpower] = useState<string>();
+	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
 	const values = useAppSelector(state => state.subgraph);
 	const { account, chainId, library } = useWeb3React();
 
