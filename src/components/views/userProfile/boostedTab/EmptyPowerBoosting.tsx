@@ -24,7 +24,7 @@ export const EmptyPowerBoosting: FC<IEmptyPowerBoosting> = ({ myAccount }) => {
 						id: 'label.this_user_hasnt_started_boosting_w_givpower_yet',
 					})}
 				</Title>
-			) : givPower.total === '0' ? (
+			) : givPower.total.isZero() ? (
 				<>
 					<Title size='small'>
 						{formatMessage({
