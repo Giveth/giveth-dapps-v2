@@ -32,20 +32,17 @@ const networksConfig = config.NETWORKS_CONFIG;
 interface IProps {
 	networkId: number;
 	userAddresses: string[];
-	resolvedENS?: string;
-	setResolvedENS: (resolvedENS: string) => void;
 	onSubmit?: () => void;
 }
 
 const WalletAddressInput: FC<IProps> = ({
 	networkId,
 	userAddresses,
-	resolvedENS,
-	setResolvedENS,
 	onSubmit,
 }) => {
-	const { getValues, clearErrors, setValue } = useFormContext();
+	const [resolvedENS, setResolvedENS] = useState('');
 
+	const { getValues, clearErrors, setValue } = useFormContext();
 	const { chainId = 1, library } = useWeb3React();
 
 	const user = useAppSelector(state => state.user?.userData);
@@ -182,9 +179,7 @@ const WalletAddressInput: FC<IProps> = ({
 				size={InputSize.LARGE}
 				isValidating={isValidating}
 				value={inputValue}
-				onChange={e => {
-					setInputValue(e.target.value);
-				}}
+				onChange={e => setInputValue(e.target.value)}
 				error={!error.message || !inputValue ? undefined : error}
 			/>
 			{delayedResolvedENS && (
@@ -223,7 +218,7 @@ const WalletAddressInput: FC<IProps> = ({
 					}
 					onClick={() => {
 						const _addresses = { ...addresses };
-						_addresses[networkId] = inputValue;
+						_addresses[networkId] = resolvedENS || inputValue;
 						setValue(inputName, _addresses);
 						onSubmit && onSubmit();
 					}}
@@ -280,4 +275,5 @@ const ButtonWrapper = styled.div`
 		bottom: 20px;
 	}
 `;
+
 export default WalletAddressInput;
