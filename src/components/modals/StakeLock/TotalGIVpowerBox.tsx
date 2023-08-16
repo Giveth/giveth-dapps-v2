@@ -6,29 +6,47 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import BigNumber from 'bignumber.js';
+import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
 import { WrappedSpinner } from '@/components/Spinner';
 import { getTotalGIVpower } from '@/helpers/givpower';
+import { getGIVpowerOnChain } from '@/lib/stakingPool';
 
 const TotalGIVpowerBox = () => {
-	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
+	const [totalGIVpower, setTotalGIVpower] = useState<string>();
 	const values = useAppSelector(state => state.subgraph);
+	const { account, chainId, library } = useWeb3React();
 
 	useEffect(() => {
 		async function fetchTotalGIVpower() {
 			try {
-				const { total } = getTotalGIVpower(values);
-				setTotalGIVpower(new BigNumber(total));
+				if (!account || !chainId) return;
+				// try to get the GIVpower from the contract
+				const _totalGIVpower = await getGIVpowerOnChain(
+					account,
+					chainId!,
+					library,
+				);
+				// if we can get the GIVpower from the contract, we use that
+				if (_totalGIVpower) {
+					const { total } = getTotalGIVpower(values, {
+						chainId,
+						balance: _totalGIVpower,
+					});
+					return setTotalGIVpower(total);
+				}
 			} catch (err) {
-				console.log({ err });
+				console.log('Error on getGIVpowerOnChain', { err });
 			}
+			// if we can't get the GIVpower from the contract, we calculate it from the subgraph
+			const { total } = getTotalGIVpower(values);
+			setTotalGIVpower(total);
 		}
 
 		fetchTotalGIVpower();
-	}, []);
+	}, [account, chainId, library, values]);
 
 	return (
 		<BoxContainer>
