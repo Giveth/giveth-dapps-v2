@@ -9,17 +9,15 @@ import {
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
-import config from '@/configuration';
 import { IPowerBoostingWithUserGIVpower } from '@/components/views/project/projectGIVPower';
 import { client } from '@/apollo/apolloClient';
 import {
 	FETCH_PROJECTED_RANK,
 	FETCH_PROJECT_BOOSTERS,
 } from '@/apollo/gql/gqlPowerBoosting';
-import { FETCH_USERS_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { IPowerBoosting, IProject } from '@/apollo/types/types';
 import { formatWeiHelper } from '@/helpers/number';
-import { backendGQLRequest, gqlRequest } from '@/helpers/requests';
+import { backendGQLRequest } from '@/helpers/requests';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import {
 	EDirection,
@@ -32,6 +30,7 @@ import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import { FETCH_PROJECT_DONATIONS_COUNT } from '@/apollo/gql/gqlDonations';
 import { hasActiveRound } from '@/helpers/qf';
+import { getGIVpowerBalanceByAddress } from '@/services/givpower';
 
 interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
@@ -183,28 +182,8 @@ export const ProjectProvider = ({
 						return;
 					}
 
-					//get users balance
-					const balancesResp = await gqlRequest(
-						config.GNOSIS_CONFIG.subgraphAddress,
-						false,
-						FETCH_USERS_GIVPOWER_BY_ADDRESS,
-						{
-							addresses: _users,
-							contract:
-								config.GNOSIS_CONFIG.GIVPOWER.LM_ADDRESS.toLowerCase(),
-							length: _users.length,
-						},
-					);
-
-					const unipoolBalances = balancesResp.data.unipoolBalances;
-
-					const unipoolBalancesObj: { [key: string]: string } = {};
-
-					for (let i = 0; i < unipoolBalances.length; i++) {
-						const unipoolBalance = unipoolBalances[i];
-						unipoolBalancesObj[unipoolBalance.user.id] =
-							unipoolBalance.balance;
-					}
+					const unipoolBalancesObj =
+						await getGIVpowerBalanceByAddress(_users);
 
 					const _boostersData: IBoostersData = structuredClone(
 						boostingResp.data.getPowerBoosting,
