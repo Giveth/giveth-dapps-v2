@@ -10,6 +10,7 @@ import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import config from '@/configuration';
 import {
+	GIVTokenConfig,
 	SimplePoolStakingConfig,
 	UniswapV3PoolStakingConfig,
 } from '@/types/config';
@@ -21,7 +22,6 @@ import {
 	GIVfarmToolBoxRow,
 } from '../../GIVeconomyPages/GIVfarm.sc';
 import { NetworkSelector } from '@/components/NetworkSelector';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { ExtLinkRow } from '../../GIVeconomyPages/commons';
 import { shortenAddress } from '@/lib/helpers';
 
@@ -43,31 +43,31 @@ const renderPool = (
 
 const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 	const pools =
-		chainId === config.XDAI_NETWORK_NUMBER
+		chainId === config.GNOSIS_NETWORK_NUMBER
 			? [
-					...config.XDAI_CONFIG.pools,
-					...config.XDAI_CONFIG.regenPools,
+					config.GNOSIS_CONFIG.GIVPOWER,
+					config.OPTIMISM_CONFIG.GIVPOWER,
+					...config.GNOSIS_CONFIG.pools,
+					...config.GNOSIS_CONFIG.regenPools,
 					...config.MAINNET_CONFIG.pools,
 					...config.MAINNET_CONFIG.regenPools,
-					// ...config.OPTIMISM_CONFIG.pools,
-					// ...config.OPTIMISM_CONFIG.regenPools,
 			  ]
 			: chainId === config.OPTIMISM_NETWORK_NUMBER
 			? [
-					// ...config.OPTIMISM_CONFIG.pools,
-					// ...config.OPTIMISM_CONFIG.regenPools,
-					...config.XDAI_CONFIG.pools,
-					...config.XDAI_CONFIG.regenPools,
+					config.OPTIMISM_CONFIG.GIVPOWER,
+					config.GNOSIS_CONFIG.GIVPOWER,
+					...config.GNOSIS_CONFIG.pools,
+					...config.GNOSIS_CONFIG.regenPools,
 					...config.MAINNET_CONFIG.pools,
 					...config.MAINNET_CONFIG.regenPools,
 			  ]
 			: [
+					config.GNOSIS_CONFIG.GIVPOWER,
+					config.OPTIMISM_CONFIG.GIVPOWER,
 					...config.MAINNET_CONFIG.pools,
 					...config.MAINNET_CONFIG.regenPools,
-					...config.XDAI_CONFIG.pools,
-					...config.XDAI_CONFIG.regenPools,
-					// ...config.OPTIMISM_CONFIG.pools,
-					// ...config.OPTIMISM_CONFIG.regenPools,
+					...config.GNOSIS_CONFIG.pools,
+					...config.GNOSIS_CONFIG.regenPools,
 			  ];
 
 	const now = getNowUnixMS();
@@ -90,6 +90,9 @@ export const GIVfarmBottom = () => {
 	const { formatMessage } = useIntl();
 	const { chainId } = useWeb3React();
 	const [showArchivedPools, setShowArchivedPools] = useState(false);
+
+	const _config =
+		config.NETWORKS_CONFIG[chainId || config.GNOSIS_NETWORK_NUMBER];
 
 	return (
 		<GIVfarmBottomContainer>
@@ -119,11 +122,7 @@ export const GIVfarmBottom = () => {
 							size='Big'
 							target='_blank'
 							rel='noreferrer'
-							href={
-								chainId === config.XDAI_NETWORK_NUMBER
-									? config.XDAI_CONFIG.GIV.BUY_LINK
-									: config.MAINNET_CONFIG.GIV.BUY_LINK
-							}
+							href={(_config as GIVTokenConfig).GIV_BUY_LINK}
 						>
 							{formatMessage({ id: 'label.buy_giv_token' })}
 						</GLink>
@@ -132,24 +131,17 @@ export const GIVfarmBottom = () => {
 					<ContractRow>
 						<GLink>{`${formatMessage({
 							id: 'label.contract',
-						})} (${
-							chainId === config.XDAI_NETWORK_NUMBER
-								? config.XDAI_CONFIG.chainName
-								: config.MAINNET_CONFIG.chainName
-						}):`}</GLink>
+						})} (${_config.chainName}):`}</GLink>
 						<GLink>
 							{shortenAddress(
-								chainId === config.XDAI_NETWORK_NUMBER
-									? config.XDAI_CONFIG.TOKEN_ADDRESS
-									: config.MAINNET_CONFIG.TOKEN_ADDRESS,
+								(_config as GIVTokenConfig).GIV_TOKEN_ADDRESS,
 							)}
 						</GLink>
 						<CopyWrapper
 							onClick={() => {
 								navigator.clipboard.writeText(
-									chainId === config.XDAI_NETWORK_NUMBER
-										? config.XDAI_CONFIG.TOKEN_ADDRESS
-										: config.MAINNET_CONFIG.TOKEN_ADDRESS,
+									(_config as GIVTokenConfig)
+										.GIV_TOKEN_ADDRESS,
 								);
 							}}
 						>
@@ -164,36 +156,7 @@ export const GIVfarmBottom = () => {
 						setStateChange={setShowArchivedPools}
 					/>
 				</GIVfarmToolBoxRow>
-				<PoolRow>
-					{!showArchivedPools && (
-						<>
-							<Col sm={6} lg={4} key={`givpower_card_gnosis`}>
-								<StakingPoolCard
-									poolStakingConfig={getGivStakingConfig(
-										config.XDAI_CONFIG,
-									)}
-								/>
-							</Col>
-							{/* <Col sm={6} lg={4} key={`givpower_card_optimism`}>
-								<StakingPoolCard
-									poolStakingConfig={getGivStakingConfig(
-										config.OPTIMISM_CONFIG,
-									)}
-								/>
-							</Col> */}
-						</>
-					)}
-					{showArchivedPools && (
-						<Col sm={6} lg={4}>
-							<StakingPoolCard
-								poolStakingConfig={getGivStakingConfig(
-									config.MAINNET_CONFIG,
-								)}
-							/>
-						</Col>
-					)}
-					{renderPools(chainId, showArchivedPools)}
-				</PoolRow>
+				<PoolRow>{renderPools(chainId, showArchivedPools)}</PoolRow>
 				<RegenStreamSection showArchivedPools={showArchivedPools} />
 				<DaoCard />
 			</Container>

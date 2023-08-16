@@ -17,7 +17,6 @@ import config from '@/configuration';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { BN, formatWeiHelper } from '@/helpers/number';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { getUserStakeInfo } from '@/lib/stakingPool';
 import Routes from '@/lib/constants/Routes';
 import { networkInfo } from '@/lib/helpers';
@@ -84,18 +83,17 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	}, [currentValues, givTokenDistroHelper]);
 
 	useEffect(() => {
-		let pools;
-		if (chainId === config.XDAI_NETWORK_NUMBER) {
-			pools = [
-				...config.XDAI_CONFIG.pools,
-				getGivStakingConfig(config.XDAI_CONFIG),
-			];
-		} else if (chainId === config.MAINNET_NETWORK_NUMBER) {
-			pools = [
-				...config.MAINNET_CONFIG.pools,
-				getGivStakingConfig(config.MAINNET_CONFIG),
-			];
+		if (!chainId) return;
+		const networkConfig = config.NETWORKS_CONFIG[chainId];
+
+		if (!networkConfig || !('pools' in networkConfig)) return;
+		let pools = [];
+		if ('GIVPOWER' in networkConfig) {
+			pools = [networkConfig.GIVPOWER, ...networkConfig.pools];
+		} else {
+			pools = networkConfig.pools;
 		}
+
 		if (pools) {
 			let _farmRewards = constants.Zero;
 			pools.forEach(pool => {
@@ -214,7 +212,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				label={formatMessage({ id: 'label.get_giv_token' })}
 				size='small'
 				linkType='primary'
-				href={config.XDAI_CONFIG.GIV.BUY_LINK}
+				href={config.GNOSIS_CONFIG.GIV_BUY_LINK}
 				target='_blank'
 			/>
 			{showWhatIsGIVstreamModal && (

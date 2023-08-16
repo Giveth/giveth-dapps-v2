@@ -45,7 +45,7 @@ export const fetchGnosisTokenPrice = async (
 		id: tokenId.toLowerCase(),
 	};
 	const { data } = await gqlRequest(
-		config.XDAI_CONFIG.uniswapV2Subgraph,
+		config.GNOSIS_CONFIG.uniswapV2Subgraph,
 		false,
 		query,
 		variables,

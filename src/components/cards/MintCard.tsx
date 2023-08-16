@@ -151,14 +151,14 @@ export const MintCard = () => {
 	}, [balance, pfpData, qtyNFT]);
 
 	async function handleMint() {
-		if (!config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS) return;
+		if (!config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS) return;
 		if (!pfpData?.price) return;
 
 		//handle balance
 		const signer = library.getSigner();
 		const userAddress = await signer.getAddress();
 		const DAIContract = new Contract(
-			config.MAINNET_CONFIG.DAI_CONTRACT_ADDRESS,
+			config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS,
 			ERC20_ABI,
 			library,
 		) as ERC20;

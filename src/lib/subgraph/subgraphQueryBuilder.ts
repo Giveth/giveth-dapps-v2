@@ -1,10 +1,11 @@
 import {
-	SimpleNetworkConfig,
+	NetworkConfig,
+	RegenNetworkConfig,
 	SimplePoolStakingConfig,
 	StakingType,
+	StreamNetworkConfig,
 	UniswapV3PoolStakingConfig,
 } from '@/types/config';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import config from '@/configuration';
 
 const uniswapConfig = config.MAINNET_CONFIG.pools.find(
@@ -24,18 +25,29 @@ export class SubgraphQueryBuilder {
 	};
 
 	static getBalanceQuery = (
-		{ TOKEN_ADDRESS, gGIV_ADDRESS }: SimpleNetworkConfig,
+		networkConfig: NetworkConfig,
 		userAddress?: string,
 	): string => {
 		if (!userAddress) return '';
-		let query = SubgraphQueryBuilder.getTokenBalanceQuery(
-			TOKEN_ADDRESS,
-			userAddress,
-		);
+		let query = '';
 
-		if (gGIV_ADDRESS) {
+		if ('GIV_TOKEN_ADDRESS' in networkConfig) {
 			query += SubgraphQueryBuilder.getTokenBalanceQuery(
-				gGIV_ADDRESS,
+				networkConfig.GIV_TOKEN_ADDRESS,
+				userAddress,
+			);
+		}
+
+		if ('GIVPOWER' in networkConfig) {
+			query += SubgraphQueryBuilder.getTokenBalanceQuery(
+				networkConfig.GIVPOWER.LM_ADDRESS,
+				userAddress,
+			);
+		}
+
+		if ('gGIV_TOKEN_ADDRESS' in networkConfig) {
+			query += SubgraphQueryBuilder.getTokenBalanceQuery(
+				networkConfig.gGIV_TOKEN_ADDRESS,
 				userAddress,
 			);
 		}
@@ -76,15 +88,16 @@ export class SubgraphQueryBuilder {
 	};
 
 	private static generateTokenDistroQueries = (
-		networkConfig: SimpleNetworkConfig,
+		networkConfig: StreamNetworkConfig | RegenNetworkConfig,
 		userAddress?: string,
 	): string => {
-		return [
-			networkConfig.TOKEN_DISTRO_ADDRESS,
-			...networkConfig.regenStreams.map(c => {
-				return c.tokenDistroAddress;
-			}),
-		]
+		const addresses = [networkConfig.TOKEN_DISTRO_ADDRESS];
+		if ('regenStreams' in networkConfig) {
+			addresses.push(
+				...networkConfig.regenStreams.map(c => c.tokenDistroAddress),
+			);
+		}
+		return addresses
 			.map(tokenDistroAddress =>
 				SubgraphQueryBuilder.getTokenDistroQueries(
 					tokenDistroAddress,
@@ -269,7 +282,6 @@ export class SubgraphQueryBuilder {
 			)}
 			${SubgraphQueryBuilder.generateFarmingQueries(
 				[
-					getGivStakingConfig(config.MAINNET_CONFIG),
 					...(config.MAINNET_CONFIG.pools.filter(
 						c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
 					) as Array<SimplePoolStakingConfig>),
@@ -286,22 +298,22 @@ export class SubgraphQueryBuilder {
 	static getGnosisQuery = (userAddress?: string): string => {
 		return `
 		{
-			${SubgraphQueryBuilder.getBalanceQuery(config.XDAI_CONFIG, userAddress)}
+			${SubgraphQueryBuilder.getBalanceQuery(config.GNOSIS_CONFIG, userAddress)}
 			${SubgraphQueryBuilder.generateTokenDistroQueries(
-				config.XDAI_CONFIG,
+				config.GNOSIS_CONFIG,
 				userAddress,
 			)}
 			${SubgraphQueryBuilder.generateFarmingQueries(
 				[
-					getGivStakingConfig(config.XDAI_CONFIG),
-					...(config.XDAI_CONFIG
+					config.GNOSIS_CONFIG.GIVPOWER,
+					...(config.GNOSIS_CONFIG
 						.pools as Array<SimplePoolStakingConfig>),
-					...config.XDAI_CONFIG.regenPools,
+					...config.GNOSIS_CONFIG.regenPools,
 				],
 				userAddress,
 			)}
 			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery(
-				config.XDAI_CONFIG.GIV.LM_ADDRESS,
+				config.GNOSIS_CONFIG.GIVPOWER.LM_ADDRESS,
 			)},
 		}
 		`;
@@ -316,16 +328,11 @@ export class SubgraphQueryBuilder {
 				userAddress,
 			)}
 			${SubgraphQueryBuilder.generateFarmingQueries(
-				[
-					getGivStakingConfig(config.OPTIMISM_CONFIG),
-					...(config.OPTIMISM_CONFIG
-						.pools as Array<SimplePoolStakingConfig>),
-					...config.OPTIMISM_CONFIG.regenPools,
-				],
+				[config.OPTIMISM_CONFIG.GIVPOWER],
 				userAddress,
 			)}
 			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery(
-				config.OPTIMISM_CONFIG.GIV.LM_ADDRESS,
+				config.OPTIMISM_CONFIG.GIVPOWER.LM_ADDRESS,
 			)},
 		}
 		`;

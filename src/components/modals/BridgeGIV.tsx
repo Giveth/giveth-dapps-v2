@@ -62,7 +62,7 @@ export const BridgeGIVModal: FC<IBridgeGIVModal> = ({ setShowModal }) => {
 					buttonType='texty'
 					size='medium'
 					label={formatMessage({ id: 'label.switch_network' })}
-					onClick={() => switchNetwork(config.XDAI_NETWORK_NUMBER)}
+					onClick={() => switchNetwork(config.GNOSIS_NETWORK_NUMBER)}
 				/>
 			</ModalContainer>
 		</Modal>

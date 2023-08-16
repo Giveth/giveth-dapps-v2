@@ -13,9 +13,13 @@ const BASE_ROUTE =
 const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
 	'https://notification.giveth.io';
+
+const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
+const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
+
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
-const XDAI_NETWORK_NUMBER = 100; // xDAI
+const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
@@ -35,7 +39,7 @@ const config: EnvConfig = {
 	},
 
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
-	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
+	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
@@ -47,7 +51,7 @@ const config: EnvConfig = {
 	MAINNET_CONFIG: {
 		...networksParams[1],
 
-		DAI_CONTRACT_ADDRESS: '0x6b175474e89094c44da98b954eedeac495271d0f',
+		DAI_TOKEN_ADDRESS: '0x6b175474e89094c44da98b954eedeac495271d0f',
 		PFP_CONTRACT_ADDRESS: '0x78fde77737d5b9ab32fc718c9535c7f1b8ce84db',
 
 		gasPreference: {
@@ -58,18 +62,19 @@ const config: EnvConfig = {
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
 
-		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
+		GIV_TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
+		GIV_BUY_LINK: 'https://swap.giveth.io/#/1/swap/ETH/GIV',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
 		WETH_TOKEN_ADDRESS: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
 		TOKEN_DISTRO_ADDRESS: '0x87dE995F6744B75bBe0255A973081142aDb61f4d',
-		GIV: {
-			network: MAINNET_NETWORK_NUMBER,
-			LM_ADDRESS: '0x4B9EfAE862a1755F7CEcb021856D467E86976755',
-			BUY_LINK: 'https://swap.giveth.io/#/1/swap/ETH/GIV',
-			platformTitle: 'GIV staking',
-			exploited: true,
-			farmEndTimeMS: SEPT_8TH_2022,
-		},
+		// GIV: {
+		// 	network: MAINNET_NETWORK_NUMBER,
+		// 	LM_ADDRESS: '0x4B9EfAE862a1755F7CEcb021856D467E86976755',
+		//
+		// 	platformTitle: 'GIV staking',
+		// 	exploited: true,
+		// 	farmEndTimeMS: SEPT_8TH_2022,
+		// },
 
 		nodeUrl: 'https://mainnet.infura.io/v3/' + INFURA_API_KEY,
 
@@ -214,7 +219,7 @@ const config: EnvConfig = {
 		],
 	},
 
-	XDAI_CONFIG: {
+	GNOSIS_CONFIG: {
 		nodeUrl: networksParams[100]?.rpcUrls[0],
 		...networksParams[100],
 		gasPreference: {
@@ -226,23 +231,36 @@ const config: EnvConfig = {
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
 
-		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
-		gGIV_ADDRESS: '0xfFBAbEb49be77E5254333d5fdfF72920B989425f',
+		GIV_TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+		GIV_BUY_LINK: 'https://swap.giveth.io/#/100/swap/XDAI/GIV',
+		gGIV_TOKEN_ADDRESS: '0xfFBAbEb49be77E5254333d5fdfF72920B989425f',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xFad63adEFb8203F7605F25f6a921c8bf45604A5e',
 		TOKEN_DISTRO_ADDRESS: '0xc0dbDcA66a0636236fAbe1B3C16B1bD4C84bB1E1',
-
-		GIV: {
-			network: XDAI_NETWORK_NUMBER,
+		GIVPOWER: {
+			network: GNOSIS_NETWORK_NUMBER,
 			LM_ADDRESS: '0xD93d3bDBa18ebcB3317a57119ea44ed2Cf41C2F2',
 			GARDEN_ADDRESS: '0x24f2d06446af8d6e89febc205e7936a602a87b60',
-			BUY_LINK: 'https://swap.giveth.io/#/100/swap/XDAI/GIV',
-			platformTitle: 'GIVPOWER',
+			POOL_ADDRESS: GNOSIS_GIV_TOKEN_ADDRESS,
+			type: StakingType.GIV_GARDEN_LM,
+			platform: StakingPlatform.GIVETH,
+			title: 'GIV',
+			description: '100% GIV',
+			unit: 'GIV',
 		},
+
+		// GIV: {
+		// 	network: GNOSIS_NETWORK_NUMBER,
+		// 	LM_ADDRESS: '0xD93d3bDBa18ebcB3317a57119ea44ed2Cf41C2F2',
+		// 	GARDEN_ADDRESS: '0x24f2d06446af8d6e89febc205e7936a602a87b60',
+		// 	BUY_LINK:
+		// 		'https://app.honeyswap.org/#/swap?outputCurrency=0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+		// 	platformTitle: 'GIVPOWER',
+		// },
 
 		pools: [
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x08ea9f608656A4a775EF73f5B187a2F1AE2ae10e',
 				LM_ADDRESS: '0x4B9EfAE862a1755F7CEcb021856D467E86976755',
 				type: StakingType.HONEYSWAP_GIV_HNY,
@@ -255,7 +273,7 @@ const config: EnvConfig = {
 				farmEndTimeMS: 1656108000000,
 			},
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x55FF0cef43F0DF88226E9D87D09fA036017F5586',
 				LM_ADDRESS: '0xfB429010C1e9D08B7347F968a7d88f0207807EF0',
 				type: StakingType.SUSHISWAP_ETH_GIV,
@@ -268,7 +286,7 @@ const config: EnvConfig = {
 				farmEndTimeMS: 1656108000,
 			},
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0xB7189A7Ea38FA31210A79fe282AEC5736Ad5fA57',
 				LM_ADDRESS: '0x24A6067fEd46dc8663794c4d39Ec91b074cf85D4',
 				type: StakingType.HONEYSWAP_GIV_DAI,
@@ -284,7 +302,7 @@ const config: EnvConfig = {
 		],
 		regenPools: [
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x8a0bee989c591142414ad67fb604539d917889df',
 				LM_ADDRESS: '0x502EC7a040F486EE6Cb7d634D94764874B29dE68',
 				type: StakingType.HONEYSWAP_FOX_HNY,
@@ -305,7 +323,7 @@ const config: EnvConfig = {
 				},
 			},
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0xc22313fd39f7d4d73a89558f9e8e444c86464bac',
 				LM_ADDRESS: '0x9A333AD00868472c0314F76DB8dA305B83890129',
 				type: StakingType.HONEYSWAP_FOX_XDAI,
@@ -331,7 +349,7 @@ const config: EnvConfig = {
 
 		regenStreams: [
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				tokenDistroAddress:
 					'0xA9a37a14E562D0E1d335B4714E3455483ede7A9a',
 				type: StreamType.FOX,
@@ -364,18 +382,21 @@ const config: EnvConfig = {
 		blockExplorerName: ['OptimismScan'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet',
-		TOKEN_ADDRESS: '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98',
-		tokenAddressOnUniswapV2: '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98',
+		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
+		GIV_BUY_LINK: '',
+		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		TOKEN_DISTRO_ADDRESS: '0xe3ac7b3e6b4065f4765d76fdc215606483bf3bd1',
-		pools: [],
-		regenPools: [],
-		regenStreams: [],
-		GIV: {
-			network: OPTIMISM_NETWORK_NUMBER,
-			LM_ADDRESS: '',
-			BUY_LINK: 'https://',
-		},
 		uniswapV2Subgraph: '',
+		GIVPOWER: {
+			network: OPTIMISM_NETWORK_NUMBER,
+			LM_ADDRESS: '0x...',
+			POOL_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
+			type: StakingType.GIV_UNIPOOL_LM,
+			platform: StakingPlatform.GIVETH,
+			title: 'GIV',
+			description: '100% GIV',
+			unit: 'GIV',
+		},
 	},
 
 	CELO_CONFIG: {

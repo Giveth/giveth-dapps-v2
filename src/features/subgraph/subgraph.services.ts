@@ -30,11 +30,11 @@ export const fetchGnosisInfo = async (userAddress?: string) => {
 	try {
 		const response = await fetchSubgraph(
 			SubgraphQueryBuilder.getGnosisQuery(userAddress),
-			config.XDAI_NETWORK_NUMBER,
+			config.GNOSIS_NETWORK_NUMBER,
 		);
 		return transformSubgraphData({
 			...response,
-			networkNumber: config.XDAI_NETWORK_NUMBER,
+			networkNumber: config.GNOSIS_NETWORK_NUMBER,
 		});
 	} catch (e) {
 		console.error('Error on query Gnosis subgraph:', e);

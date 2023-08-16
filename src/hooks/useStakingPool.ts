@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 
 import { useWeb3React } from '@web3-react/core';
@@ -11,7 +11,6 @@ import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { Zero } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
-import config from '@/configuration';
 
 export interface IStakeInfo {
 	apr: APR;
@@ -30,29 +29,24 @@ export const useStakingPool = (
 		notStakedAmount: ethers.constants.Zero,
 		stakedAmount: ethers.constants.Zero,
 	});
-	const stakePoolInfoPoll = useRef<NodeJS.Timer | null>(null);
 
 	const { library, chainId } = useWeb3React();
 	const currentValues = useAppSelector(
-		state =>
-			poolStakingConfig.network === config.XDAI_NETWORK_NUMBER
-				? state.subgraph.gnosisValues
-				: poolStakingConfig.network === config.OPTIMISM_NETWORK_NUMBER
-				? state.subgraph.optimismValues
-				: state.subgraph.mainnetValues,
+		state => state.subgraph.currentValues,
 		() => (hold ? true : false),
 	);
 
 	const { network, type } = poolStakingConfig;
 	const { isLoaded } = currentValues;
-	const providerNetwork = library?.network?.chainId;
-	const _library = chainId === network ? library : undefined;
 
 	useEffect(() => {
 		const cb = () => {
+			console.log('Calculating APR');
 			if (isLoaded) {
+				const _library = chainId === network ? library : undefined;
 				const promise: Promise<APR> =
-					type === StakingType.GIV_LM
+					type === StakingType.GIV_GARDEN_LM ||
+					type === StakingType.GIV_UNIPOOL_LM
 						? getGivStakingAPR(network, currentValues, _library)
 						: getLPStakingAPR(
 								poolStakingConfig,
@@ -69,19 +63,20 @@ export const useStakingPool = (
 
 		cb();
 
-		stakePoolInfoPoll.current = setInterval(cb, 60000); // Every one minutes
+		const interval = setInterval(cb, 60000); // Every one minutes
 
 		return () => {
-			if (stakePoolInfoPoll.current) {
-				clearInterval(stakePoolInfoPoll.current);
-				stakePoolInfoPoll.current = null;
+			if (interval) {
+				clearInterval(interval);
 			}
 		};
-	}, [library, chainId, isLoaded, providerNetwork]);
+	}, [library, chainId, isLoaded]);
 
 	useEffect(() => {
+		console.log('Calculating user stake info');
 		setUserStakeInfo(getUserStakeInfo(currentValues, poolStakingConfig));
 	}, [currentValues, poolStakingConfig]);
+
 	return {
 		apr,
 		...userStakeInfo,

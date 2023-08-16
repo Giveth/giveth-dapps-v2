@@ -69,7 +69,7 @@ export const claimAirDrop = async (
 	address: string,
 	provider: Web3Provider,
 ): Promise<TransactionResponse | undefined> => {
-	const merkleAddress = config.XDAI_CONFIG.MERKLE_ADDRESS;
+	const merkleAddress = config.GNOSIS_CONFIG.MERKLE_ADDRESS;
 	if (!isAddress(merkleAddress)) throw new Error('No MerkleAddress');
 	if (!provider) throw new Error('No Provider');
 
@@ -91,7 +91,7 @@ export const claimAirDrop = async (
 				claimData.index,
 				claimData.amount,
 				claimData.proof,
-				getGasPreference(config.XDAI_CONFIG),
+				getGasPreference(config.GNOSIS_CONFIG),
 			);
 	} catch (error) {
 		console.error('Error on claiming GIVdrop:', error);

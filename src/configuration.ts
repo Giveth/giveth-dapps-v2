@@ -16,7 +16,7 @@ const config: GlobalConfig = {
 	...envConfig,
 	NETWORKS_CONFIG: {
 		[envConfig.MAINNET_NETWORK_NUMBER]: envConfig.MAINNET_CONFIG,
-		[envConfig.XDAI_NETWORK_NUMBER]: envConfig.XDAI_CONFIG,
+		[envConfig.GNOSIS_NETWORK_NUMBER]: envConfig.GNOSIS_CONFIG,
 		[envConfig.POLYGON_NETWORK_NUMBER]: envConfig.POLYGON_CONFIG,
 		[envConfig.OPTIMISM_NETWORK_NUMBER]: envConfig.OPTIMISM_CONFIG,
 		[envConfig.CELO_NETWORK_NUMBER]: envConfig.CELO_CONFIG,
@@ -29,6 +29,6 @@ const config: GlobalConfig = {
 };
 
 config.MAINNET_CONFIG.nodeUrl = process.env.NEXT_PUBLIC_NODE_URL || '';
-config.XDAI_CONFIG.nodeUrl = process.env.NEXT_PUBLIC_XDAI_NODE_URL || '';
+config.GNOSIS_CONFIG.nodeUrl = process.env.NEXT_PUBLIC_XDAI_NODE_URL || '';
 
 export default config;

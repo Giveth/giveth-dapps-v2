@@ -32,7 +32,7 @@ interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
 
 const networks = [
 	config.MAINNET_CONFIG,
-	config.XDAI_CONFIG,
+	config.GNOSIS_CONFIG,
 	config.POLYGON_CONFIG,
 	config.CELO_CONFIG,
 	config.OPTIMISM_CONFIG,

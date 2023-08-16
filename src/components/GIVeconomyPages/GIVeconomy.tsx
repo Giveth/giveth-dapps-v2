@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { Col, Container, Row } from '@giveth/ui-design-system';
+import { useWeb3React } from '@web3-react/core';
 import {
 	OverviewBottomContainer,
 	VoteCard,
@@ -16,11 +17,12 @@ import {
 import { IconGIV } from '../Icons/GIV';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
-import { StakingType } from '@/types/config';
 import VideoBlock from '@/components/VideoBlock';
+import { getGIVpowerLink } from '@/helpers/givpower';
 
 export const TabOverview = () => {
 	const { formatMessage } = useIntl();
+	const { chainId } = useWeb3React();
 
 	return (
 		<>
@@ -50,7 +52,7 @@ export const TabOverview = () => {
 								})}
 								button={
 									<DataBlockButton
-										href={config.XDAI_CONFIG.GIV.BUY_LINK}
+										href={config.GNOSIS_CONFIG.GIV_BUY_LINK}
 										isExternal
 										label={formatMessage({
 											id: 'label.get_giv',
@@ -93,9 +95,7 @@ export const TabOverview = () => {
 									id: 'label.boost_projects',
 								})}
 								button={
-									<Link
-										href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
-									>
+									<Link href={getGIVpowerLink(chainId)}>
 										<DataBlockButton
 											label={formatMessage({
 												id: 'label.stake_for_givpower',

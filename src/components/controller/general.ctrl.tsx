@@ -5,7 +5,6 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import config from '@/configuration';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { switchNetwork } from '@/lib/wallet';
 
@@ -21,10 +20,8 @@ const GeneralController = () => {
 		if (_chain) {
 			dispatch(setShowWalletModal(!isWalletActive));
 
-			const _chainId =
-				_chain === 'gnosis'
-					? config.XDAI_NETWORK_NUMBER
-					: config.MAINNET_NETWORK_NUMBER;
+			const _chainId = parseInt(_chain);
+
 			if (isWalletActive && chainId !== _chainId) {
 				switchNetwork(_chainId);
 			}

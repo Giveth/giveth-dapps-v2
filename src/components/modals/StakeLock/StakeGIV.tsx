@@ -7,7 +7,11 @@ import { ButtonLink, H5, IconExternalLink } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Modal } from '../Modal';
 import { AmountInput } from '../../AmountInput';
-import { approveERC20tokenTransfer, wrapToken } from '@/lib/stakingPool';
+import {
+	approveERC20tokenTransfer,
+	stakeGIV,
+	wrapToken,
+} from '@/lib/stakingPool';
 import { ErrorInnerModal } from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
@@ -29,6 +33,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import type {
+	GIVpowerGIVgardenStakingConfig,
 	PoolStakingConfig,
 	SimplePoolStakingConfig,
 } from '@/types/config';
@@ -74,10 +79,10 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
-	const { chainId, library } = useWeb3React();
+	const { chainId, library, account } = useWeb3React();
 	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
 
-	const { POOL_ADDRESS, GARDEN_ADDRESS } =
+	const { POOL_ADDRESS, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
 	useEffect(() => {
@@ -88,41 +93,40 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 
 	useEffect(() => {
 		library?.on('block', async () => {
-			const amountNumber = ethers.BigNumber.from(amount);
-			if (
-				amountNumber.gt(ethers.constants.Zero) &&
-				stakeState === StakeState.APPROVING
-			) {
-				const signer = library.getSigner();
-				const userAddress = await signer.getAddress();
-				const tokenContract = new Contract(
-					POOL_ADDRESS,
-					ERC20_ABI,
-					signer,
-				) as ERC20;
-				const allowance: BigNumber = await tokenContract.allowance(
-					userAddress,
-					GARDEN_ADDRESS!,
-				);
+			try {
 				const amountNumber = ethers.BigNumber.from(amount);
-				const allowanceNumber = ethers.BigNumber.from(
-					allowance.toString(),
-				);
-				if (amountNumber.lte(allowanceNumber)) {
-					setStakeState(StakeState.WRAP);
+				if (
+					amountNumber.gt(ethers.constants.Zero) &&
+					stakeState === StakeState.APPROVING
+				) {
+					const tokenContract = new Contract(
+						POOL_ADDRESS,
+						ERC20_ABI,
+						library,
+					) as ERC20;
+					const allowance: BigNumber = await tokenContract.allowance(
+						account!,
+						(poolStakingConfig as GIVpowerGIVgardenStakingConfig)
+							.GARDEN_ADDRESS!,
+					);
+					const amountNumber = ethers.BigNumber.from(amount);
+					const allowanceNumber = ethers.BigNumber.from(
+						allowance.toString(),
+					);
+					if (amountNumber.lte(allowanceNumber)) {
+						setStakeState(StakeState.WRAP);
+					}
 				}
+			} catch (error) {
+				console.log('Error on Checking allowance', error);
 			}
 		});
 		return () => {
 			library.removeAllListeners('block');
 		};
-	}, [library, amount, stakeState]);
+	}, [library, amount, stakeState, POOL_ADDRESS, account, poolStakingConfig]);
 
 	const onApprove = async () => {
-		if (!GARDEN_ADDRESS) {
-			console.error('GARDEN_ADDRESS is null');
-			return;
-		}
 		if (amount === '0') return;
 		if (!library) {
 			console.error('library is null');
@@ -131,14 +135,13 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 
 		setStakeState(StakeState.APPROVING);
 
-		const signer = library.getSigner();
-
-		const userAddress = await signer.getAddress();
-
 		const isApproved = await approveERC20tokenTransfer(
 			amount,
-			userAddress,
-			GARDEN_ADDRESS,
+			account!,
+			poolStakingConfig.network === config.GNOSIS_NETWORK_NUMBER
+				? (poolStakingConfig as GIVpowerGIVgardenStakingConfig)
+						.GARDEN_ADDRESS
+				: LM_ADDRESS!,
 			POOL_ADDRESS,
 			library,
 		);
@@ -151,13 +154,14 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	};
 
 	const onWrap = async () => {
-		if (!GARDEN_ADDRESS) {
-			console.error('GARDEN_ADDRESS is null');
-			return;
-		}
 		setStakeState(StakeState.WRAPPING);
 		try {
-			const txResponse = await wrapToken(amount, GARDEN_ADDRESS, library);
+			const txResponse = await wrapToken(
+				amount,
+				(poolStakingConfig as GIVpowerGIVgardenStakingConfig)
+					.GARDEN_ADDRESS,
+				library,
+			);
 			if (txResponse) {
 				setTxHash(txResponse.hash);
 				if (txResponse) {
@@ -180,6 +184,38 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			});
 		}
 	};
+
+	const onStake = async () => {
+		setStakeState(StakeState.WRAPPING);
+		try {
+			const txResponse = await stakeGIV(
+				amount,
+				poolStakingConfig.LM_ADDRESS,
+				library,
+			);
+			if (txResponse) {
+				setTxHash(txResponse.hash);
+				if (txResponse) {
+					const { status } = await txResponse.wait();
+					setStakeState(
+						status ? StakeState.CONFIRMED : StakeState.ERROR,
+					);
+				}
+			} else {
+				setStakeState(StakeState.WRAP);
+			}
+		} catch (err: any) {
+			setStakeState(
+				err?.code === 4001 ? StakeState.WRAP : StakeState.ERROR,
+			);
+			captureException(err, {
+				tags: {
+					section: 'onWrap',
+				},
+			});
+		}
+	};
+
 	return (
 		<StakeModalContainer>
 			{stakeState !== StakeState.CONFIRMED &&
@@ -255,7 +291,12 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 													? 'label.stake'
 													: 'label.stake_pending',
 										})}
-										onClick={onWrap}
+										onClick={
+											poolStakingConfig.network ===
+											config.GNOSIS_NETWORK_NUMBER
+												? onWrap
+												: onStake
+										}
 										disabled={
 											amount == '0' ||
 											maxAmount.lt(amount) ||
@@ -290,11 +331,11 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 						</H5White>
 						<ButtonLink
 							isExternal
-							label='View on blockscout'
+							label={`View on ${config.NETWORKS_CONFIG[chainId].blockExplorerName}`}
 							linkType='texty'
 							size='small'
 							icon={<IconExternalLink size={16} />}
-							href={`${config.XDAI_CONFIG.blockExplorerUrls}tx/${txHash}`}
+							href={`${config.NETWORKS_CONFIG[chainId].blockExplorerUrls}tx/${txHash}`}
 							target='_blank'
 						/>
 					</BriefContainer>

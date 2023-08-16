@@ -28,10 +28,10 @@ import {
 	PublicGIVpowerContributeCard,
 } from '@/components/ContributeCard';
 import { formatWeiHelper } from '@/helpers/number';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { PassportCard } from './PassportCard';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
+import { getTotalGIVpower } from '@/helpers/givpower';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
@@ -101,12 +101,10 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 	};
 
 	const [section, setSection] = useState<ISection>(_sections.getGiv);
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.gnosisValues),
-	);
 	const { userData } = useAppSelector(state => state.user);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
-	const givPower = sdh.getUserGIVPowerBalance();
+	const values = useAppSelector(state => state.subgraph);
+	const givPower = getTotalGIVpower(values);
 	const { title, subtitle, buttons } = section;
 
 	useEffect(() => {
@@ -142,7 +140,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 							}}
 							data2={{
 								label: 'GIVpower',
-								value: `${formatWeiHelper(givPower.balance)}`,
+								value: `${formatWeiHelper(givPower.total)}`,
 							}}
 						/>
 					) : (

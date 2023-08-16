@@ -138,12 +138,12 @@ export const useLiquidityPositions = () => {
 
 				setLoadingNftPositions(true);
 
-				const { TOKEN_ADDRESS, WETH_TOKEN_ADDRESS } =
+				const { GIV_TOKEN_ADDRESS, WETH_TOKEN_ADDRESS } =
 					config.MAINNET_CONFIG;
 
 				const givToken = new Token(
 					network,
-					TOKEN_ADDRESS,
+					GIV_TOKEN_ADDRESS,
 					18,
 					'GIV',
 					'GIV',
@@ -158,7 +158,7 @@ export const useLiquidityPositions = () => {
 
 				const givIsToken0 =
 					uniswapV3Pool.token0.toLowerCase() ===
-					TOKEN_ADDRESS.toLowerCase();
+					GIV_TOKEN_ADDRESS.toLowerCase();
 
 				const _token0: Token = givIsToken0 ? givToken : wethToken;
 				const _token1: Token = givIsToken0 ? wethToken : givToken;

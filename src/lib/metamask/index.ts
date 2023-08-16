@@ -5,12 +5,11 @@ import config from '@/configuration';
 import UNI_Json from '@/artifacts/UNI.json';
 import { networksParams } from '@/helpers/blockchain';
 import { ERC20 } from '@/types/contracts';
+import { GIVTokenConfig } from '@/types/config';
 
 const { abi: UNI_ABI } = UNI_Json;
 
 declare let window: any;
-
-const { MAINNET_CONFIG, XDAI_CONFIG } = config;
 
 const getTokenImage = (symbol: string): string | undefined => {
 	let _symbol = symbol.toLowerCase();
@@ -72,9 +71,9 @@ export async function addToken(
 ): Promise<void> {
 	const address =
 		tokenAddress ||
-		(provider.network.chainId === config.MAINNET_NETWORK_NUMBER
-			? MAINNET_CONFIG.TOKEN_ADDRESS
-			: XDAI_CONFIG.TOKEN_ADDRESS);
+		(config.NETWORKS_CONFIG[provider.network.chainId] as GIVTokenConfig)
+			?.GIV_TOKEN_ADDRESS;
+
 	const tokenOptions = await fetchTokenInfo(provider, address);
 	const { ethereum } = window;
 	if (tokenOptions) {

@@ -14,8 +14,12 @@ const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
 	'https://staging.notification.giveth.io';
 const SEPT_8TH_2022 = 1662595200000;
+
+const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
+const OPTIMISM_GIV_TOKEN_ADDRESS = '0xc916Ce4025Cb479d9BA9D798A80094a449667F5D';
+
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
-const XDAI_NETWORK_NUMBER = 100; // xDAI
+const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
@@ -35,7 +39,7 @@ const config: EnvConfig = {
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
-	XDAI_NETWORK_NUMBER: XDAI_NETWORK_NUMBER,
+	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
@@ -46,7 +50,7 @@ const config: EnvConfig = {
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
 		...networksParams[5],
-		DAI_CONTRACT_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',
+		DAI_TOKEN_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',
 		PFP_CONTRACT_ADDRESS: '0x9F8c0e0353234F6f644fc7AF84Ac006f02cecE77',
 
 		gasPreference: {
@@ -56,17 +60,17 @@ const config: EnvConfig = {
 		subgraphAddress:
 			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-goerli/1.5.0',
 
-		TOKEN_ADDRESS: '0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be',
+		GIV_TOKEN_ADDRESS: '0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be',
+		GIV_BUY_LINK:
+			'https://app.uniswap.org/#/swap?outputCurrency=0x29434A25abd94AE882aA883eea81585Aaa5b078D',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0', // TODO: GOERLI ?
 		WETH_TOKEN_ADDRESS: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
 		TOKEN_DISTRO_ADDRESS: '0x4358c99abFe7A9983B6c96785b8870b5412C5B4B',
-		GIV: {
-			network: MAINNET_NETWORK_NUMBER,
-			LM_ADDRESS: '0x929C9353D67af21411d4475B30D960F23C209abd',
-			BUY_LINK:
-				'https://app.uniswap.org/#/swap?outputCurrency=0x29434A25abd94AE882aA883eea81585Aaa5b078D',
-			farmEndTimeMS: SEPT_8TH_2022,
-		},
+		// GIV: {
+		// 	network: MAINNET_NETWORK_NUMBER,
+		// 	LM_ADDRESS: '0x929C9353D67af21411d4475B30D960F23C209abd',
+		// 	farmEndTimeMS: SEPT_8TH_2022,
+		// },
 
 		nodeUrl: 'https://goerli.infura.io/v3/' + INFURA_API_KEY,
 
@@ -106,7 +110,7 @@ const config: EnvConfig = {
 		regenStreams: [],
 	},
 
-	XDAI_CONFIG: {
+	GNOSIS_CONFIG: {
 		nodeUrl: networksParams[100]?.rpcUrls[0],
 		...networksParams[100],
 		gasPreference: {
@@ -118,23 +122,34 @@ const config: EnvConfig = {
 		subgraphAddress:
 			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-gnosischain/1.5.1',
 
-		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
-		gGIV_ADDRESS: '0x4Bee761229AD815Cc64461783580F629dA0f0350',
+		GIV_TOKEN_ADDRESS: GNOSIS_GIV_TOKEN_ADDRESS,
+		GIV_BUY_LINK:
+			'https://app.honeyswap.org/#/swap?outputCurrency=0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
+		gGIV_TOKEN_ADDRESS: '0x4Bee761229AD815Cc64461783580F629dA0f0350',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xc87403C70c9FBfb594d98d3B5E695BBE4C694188',
 		TOKEN_DISTRO_ADDRESS: '0x18a46865AAbAf416a970eaA8625CFC430D2364A1',
-
-		GIV: {
-			network: XDAI_NETWORK_NUMBER,
+		GIVPOWER: {
+			network: GNOSIS_NETWORK_NUMBER,
 			LM_ADDRESS: '0xDAEa66Adc97833781139373DF5B3bcEd3fdda5b1',
 			GARDEN_ADDRESS: '0x9ff80789b74d1d2b7cf5a568ea82409c2b327861',
-			BUY_LINK:
-				'https://app.honeyswap.org/#/swap?outputCurrency=0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
+			POOL_ADDRESS: GNOSIS_GIV_TOKEN_ADDRESS,
+			type: StakingType.GIV_GARDEN_LM,
+			platform: StakingPlatform.GIVETH,
+			title: 'GIV',
+			description: '100% GIV',
+			unit: 'GIV',
 		},
+
+		// GIV: {
+		// 	network: GNOSIS_NETWORK_NUMBER,
+		// 	LM_ADDRESS: '0xDAEa66Adc97833781139373DF5B3bcEd3fdda5b1',
+		// 	GARDEN_ADDRESS: '0x9ff80789b74d1d2b7cf5a568ea82409c2b327861',
+		// },
 
 		pools: [
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x31A5AeA76Af79F592a3A3F46a9f6Cb118990433b',
 				LM_ADDRESS: '0xC09147Ac0aC8B5271F03b511c3554e3238Ae3201',
 				type: StakingType.HONEYSWAP_GIV_HNY,
@@ -147,7 +162,7 @@ const config: EnvConfig = {
 				farmEndTimeMS: SEPT_8TH_2022,
 			},
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x437B0da7932b21F54488fD80Ee09b519a6f4d8AD',
 				LM_ADDRESS: '0x83535D6DeF8E881E647C00462315bae9A6E7BD09',
 				type: StakingType.SUSHISWAP_ETH_GIV,
@@ -160,7 +175,7 @@ const config: EnvConfig = {
 				farmEndTimeMS: SEPT_8TH_2022,
 			},
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0xB4E0fc187f0EEd740D93eF15Cd14750a2780fc2A',
 				LM_ADDRESS: '0xe2c436E177C39A5D18AF6923Fc2Fc673f4729C05',
 				type: StakingType.HONEYSWAP_GIV_DAI,
@@ -177,7 +192,7 @@ const config: EnvConfig = {
 
 		regenPools: [
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0xD28C07F802212F04AF41834ec0CC81d2d283124B',
 				LM_ADDRESS: '0x06851400866e065972ff21e1ECdE035b4772736d',
 				type: StakingType.HONEYSWAP_FOX_HNY,
@@ -198,7 +213,7 @@ const config: EnvConfig = {
 				},
 			},
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				POOL_ADDRESS: '0x0714A2fE9574F591a4ed3fD03b63714e8681fBb7',
 				LM_ADDRESS: '0x93c40bCA6a854B2190a054136a316C4Df7f89f10',
 				type: StakingType.HONEYSWAP_FOX_XDAI,
@@ -224,7 +239,7 @@ const config: EnvConfig = {
 
 		regenStreams: [
 			{
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				tokenDistroAddress:
 					'0xCA29ec6F4218E230294993E0d77d5ece5a6573D8',
 				type: StreamType.FOX,
@@ -238,7 +253,7 @@ const config: EnvConfig = {
 			{
 				/// Just for testing
 				archived: true,
-				network: XDAI_NETWORK_NUMBER,
+				network: GNOSIS_NETWORK_NUMBER,
 				tokenDistroAddress:
 					'0xCA29ec6F4218E230294993E0d77d5ece5a6573D8',
 				type: StreamType.FOX,
@@ -271,17 +286,19 @@ const config: EnvConfig = {
 		blockExplorerName: ['GoerliOptimismScan'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-staging',
-		TOKEN_ADDRESS: '0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
+		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
+		GIV_BUY_LINK: 'https://',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		TOKEN_DISTRO_ADDRESS: '0x8D2cBce8ea0256bFFBa6fa4bf7CEC46a1d9b43f6',
-		pools: [],
-		regenPools: [],
-		regenStreams: [],
-		GIV: {
+		GIVPOWER: {
 			network: OPTIMISM_NETWORK_NUMBER,
 			LM_ADDRESS: '0x632AC305ed88817480d12155A7F1244cC182C298',
-			GARDEN_ADDRESS: '0x632AC305ed88817480d12155A7F1244cC182C298',
-			BUY_LINK: 'https://',
+			POOL_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
+			type: StakingType.GIV_UNIPOOL_LM,
+			platform: StakingPlatform.GIVETH,
+			title: 'GIV',
+			description: '100% GIV',
+			unit: 'GIV',
 		},
 		uniswapV2Subgraph: '',
 	},

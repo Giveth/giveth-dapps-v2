@@ -16,14 +16,14 @@ export const RegenStreamSection: FC<IRegenStreamSectionProps> = ({
 	const { chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 	const _regenStreams =
-		chainId === config.XDAI_NETWORK_NUMBER
+		chainId === config.GNOSIS_NETWORK_NUMBER
 			? [
-					...config.XDAI_CONFIG.regenStreams,
+					...config.GNOSIS_CONFIG.regenStreams,
 					...config.MAINNET_CONFIG.regenStreams,
 			  ]
 			: [
 					...config.MAINNET_CONFIG.regenStreams,
-					...config.XDAI_CONFIG.regenStreams,
+					...config.GNOSIS_CONFIG.regenStreams,
 			  ];
 	const regenStreams = showArchivedPools
 		? _regenStreams.filter(regenStream => regenStream.archived)

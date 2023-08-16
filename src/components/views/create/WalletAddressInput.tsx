@@ -49,7 +49,7 @@ const WalletAddressInput: FC<IProps> = ({
 	onSubmit,
 }) => {
 	const isMainnet = networkId === config.MAINNET_NETWORK_NUMBER;
-	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
+	const isGnosis = networkId === config.GNOSIS_NETWORK_NUMBER;
 	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
 	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
 	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;

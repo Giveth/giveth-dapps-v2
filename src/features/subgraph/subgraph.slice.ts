@@ -5,6 +5,7 @@ import {
 	fetchMainnetInfoAsync,
 	fetchGnosisInfoAsync,
 	fetchOptimismInfoAsync,
+	fetchAllInfoAsync,
 } from './subgraph.thunks';
 import type { ISubgraphState } from './subgraph.types';
 
@@ -20,7 +21,7 @@ export const defaultXdaiSubgraphValues: ISubgraphState = {
 	userNotStakedPositions: [],
 	userStakedPositions: [],
 	allPositions: [],
-	networkNumber: config.XDAI_NETWORK_NUMBER,
+	networkNumber: config.GNOSIS_NETWORK_NUMBER,
 	isLoaded: false,
 };
 
@@ -47,7 +48,7 @@ export const subgraphSlice = createSlice({
 				if (action.payload.chainId === config.MAINNET_NETWORK_NUMBER) {
 					state.mainnetValues = action.payload.response;
 				} else if (
-					action.payload.chainId === config.XDAI_NETWORK_NUMBER
+					action.payload.chainId === config.GNOSIS_NETWORK_NUMBER
 				) {
 					state.gnosisValues = action.payload.response;
 				} else if (
@@ -55,6 +56,18 @@ export const subgraphSlice = createSlice({
 				) {
 					state.optimismValues = action.payload.response;
 				}
+			})
+			.addCase(fetchAllInfoAsync.fulfilled, (state, action) => {
+				const { chainId, response } = action.payload;
+				state.mainnetValues = response.mainnetValues;
+				state.gnosisValues = response.gnosisValues;
+				state.optimismValues = response.optimismValues;
+				state.currentValues =
+					chainId === config.GNOSIS_NETWORK_NUMBER
+						? response.gnosisValues
+						: chainId === config.OPTIMISM_NETWORK_NUMBER
+						? response.optimismValues
+						: response.mainnetValues;
 			})
 			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
 				state.mainnetValues = action.payload;

@@ -18,8 +18,8 @@ import { avgAPR } from '@/helpers/givpower';
 import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
 	PoolStakingConfig,
+	RegenNetworkConfig,
 	RegenPoolStakingConfig,
-	SimpleNetworkConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 } from '@/types/config';
@@ -119,7 +119,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	} = poolStakingConfig;
 	const regenStreamConfig = regenStreamType
 		? (
-				config.NETWORKS_CONFIG[poolNetwork] as SimpleNetworkConfig
+				config.NETWORKS_CONFIG[poolNetwork] as RegenNetworkConfig
 		  ).regenStreams.find(
 				regenStream => regenStream.type === regenStreamType,
 		  )
@@ -162,10 +162,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		const { open, chain } = router.query;
 		const _open = Array.isArray(open) ? open[0] : open;
 		const _chain = Array.isArray(chain) ? chain[0] : chain;
-		const _chainId =
-			_chain === 'gnosis'
-				? config.XDAI_NETWORK_NUMBER
-				: config.MAINNET_NETWORK_NUMBER;
+		const _chainId = parseInt(_chain || '');
 		const checkNetworkAndShowStakeModal = async () => {
 			if (
 				_chainId === chainId &&

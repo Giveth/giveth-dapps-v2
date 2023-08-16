@@ -3,6 +3,7 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 
 import { Col, Row } from '@giveth/ui-design-system';
+import { useWeb3React } from '@web3-react/core';
 import { IUserProfileView } from '../UserProfile.view';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import BoostsTable from './BoostsTable';
@@ -17,8 +18,11 @@ import { Loading } from '../projectsTab/ProfileProjectsTab';
 import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { sortBoosts } from '@/helpers/givpower';
+import {
+	getGIVpowerLink,
+	getTotalGIVpower,
+	sortBoosts,
+} from '@/helpers/givpower';
 import { setBoostedProjectsCount } from '@/features/user/user.slice';
 import { UserProfileTab } from '../common.sc';
 import {
@@ -27,8 +31,6 @@ import {
 } from '@/components/ContributeCard';
 import { formatWeiHelper } from '@/helpers/number';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import Routes from '@/lib/constants/Routes';
-import { StakingType } from '@/types/config';
 
 export enum EPowerBoostingOrder {
 	CreationAt = 'createdAt',
@@ -52,13 +54,12 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 		direction: EDirection.DESC,
 	});
 
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.gnosisValues),
-	);
+	const { chainId } = useWeb3React();
 	const { userData } = useAppSelector(state => state.user);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
-	const givPower = sdh.getUserGIVPowerBalance();
-	const isZeroGivPower = givPower.balance === '0';
+	const values = useAppSelector(state => state.subgraph);
+	const givPower = getTotalGIVpower(values);
+	const isZeroGivPower = givPower.total === '0';
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
@@ -211,7 +212,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 							}}
 							data2={{
 								label: 'GIVpower',
-								value: `${formatWeiHelper(givPower.balance)}`,
+								value: `${formatWeiHelper(givPower.total)}`,
 							}}
 						/>
 					) : (
@@ -227,7 +228,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 						title='Your GIVpower balance is zero!'
 						message='Stake GIV to boost these projects again.'
 						type={EToastType.Warning}
-						link={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
+						link={getGIVpowerLink(chainId)}
 						linkText='Stake GIV'
 					/>
 				</ZeroGivPowerContainer>
@@ -239,7 +240,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 				{boostedProjectsCount && boostedProjectsCount > 0 ? (
 					<BoostsTable
 						boosts={boosts}
-						totalAmountOfGIVpower={givPower.balance}
+						totalAmountOfGIVpower={givPower.total}
 						order={order}
 						changeOrder={changeOrder}
 						saveBoosts={saveBoosts}

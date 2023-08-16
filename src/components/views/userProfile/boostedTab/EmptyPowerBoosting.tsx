@@ -6,16 +6,14 @@ import { FC } from 'react';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { useAppSelector } from '@/features/hooks';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { getTotalGIVpower } from '@/helpers/givpower';
 interface IEmptyPowerBoosting {
 	myAccount?: boolean;
 }
 
 export const EmptyPowerBoosting: FC<IEmptyPowerBoosting> = ({ myAccount }) => {
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.gnosisValues),
-	);
-	const givPower = sdh.getUserGIVPowerBalance();
+	const values = useAppSelector(state => state.subgraph);
+	const givPower = getTotalGIVpower(values);
 	const { formatMessage } = useIntl();
 
 	return (
@@ -26,7 +24,7 @@ export const EmptyPowerBoosting: FC<IEmptyPowerBoosting> = ({ myAccount }) => {
 						id: 'label.this_user_hasnt_started_boosting_w_givpower_yet',
 					})}
 				</Title>
-			) : givPower.balance === '0' ? (
+			) : givPower.total === '0' ? (
 				<>
 					<Title size='small'>
 						{formatMessage({

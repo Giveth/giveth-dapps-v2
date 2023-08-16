@@ -7,6 +7,41 @@ import {
 	IBoostedOrder,
 } from '@/components/views/userProfile/boostedTab/ProfileBoostedTab';
 import { EDirection } from '@/apollo/types/gqlEnums';
+import Routes from '@/lib/constants/Routes';
+import { GIVpowerUniPoolConfig, StakingType } from '@/types/config';
+import config from '@/configuration';
+import { ISubgraphState } from '@/features/subgraph/subgraph.types';
+import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+
+export const getTotalGIVpower = (
+	values: { [key: string]: ISubgraphState },
+	onChain?: {
+		chainId: number;
+		balance: BigNumber;
+	},
+) => {
+	const res = [];
+	let sum = new BigNumber('0');
+	for (const key in values) {
+		if (Object.prototype.hasOwnProperty.call(values, key)) {
+			if (key === 'currentValues') continue;
+			if (onChain && onChain.chainId === values[key].networkNumber) {
+				sum = sum.plus(onChain.balance);
+				res.push(onChain);
+			} else {
+				const value = values[key];
+				const sdh = new SubgraphDataHelper(value);
+				const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
+				sum = sum.plus(userGIVPowerBalance.balance);
+				res.push({
+					chainId: value.networkNumber,
+					balance: userGIVPowerBalance.balance,
+				});
+			}
+		}
+	}
+	return { total: sum.toString(), byChain: res };
+};
 
 export const getGIVpowerRoundsInfo = (
 	initialDate: string,
@@ -65,4 +100,16 @@ export const sortBoosts = (
 	} else {
 		return boosts;
 	}
+};
+
+export const getGIVpowerLink = (chainId?: number) => {
+	const [stakeType, chain] =
+		chainId && 'GIVPOWER' in config.NETWORKS_CONFIG[chainId]
+			? [
+					(config.NETWORKS_CONFIG[chainId] as GIVpowerUniPoolConfig)
+						.GIVPOWER.type,
+					chainId,
+			  ]
+			: [StakingType.GIV_GARDEN_LM, config.GNOSIS_NETWORK_NUMBER];
+	return `${Routes.GIVfarm}/?open=${stakeType}&chain=${chain}`;
 };

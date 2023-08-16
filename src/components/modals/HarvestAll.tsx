@@ -183,7 +183,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		if (!tokenDistroHelper) return;
 		if (
 			!regenStreamConfig &&
-			chainId === config.XDAI_NETWORK_NUMBER &&
+			chainId === config.GNOSIS_NETWORK_NUMBER &&
 			!tokenDistroBalance.givDropClaimed &&
 			account
 		) {

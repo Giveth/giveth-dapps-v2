@@ -8,12 +8,13 @@ import {
 	H6,
 	Caption,
 	IconHelpFilled,
+	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import { smallFormatDate } from '@/lib/helpers';
-import { Flex } from '../styled-components/Flex';
+import { Flex, FlexCenter } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
@@ -23,8 +24,9 @@ import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { RowWrapper, TableCell, TableHeader } from '../styled-components/Table';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { useStakingPool } from '@/hooks/useStakingPool';
+import { GIVpowerConfig } from '@/types/config';
+import { Spinner } from '../Spinner';
 import type { IGIVpowerPosition } from '@/types/subgraph';
 import type { BigNumber } from 'ethers';
 import type { IModal } from '@/types/common';
@@ -37,10 +39,15 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	unstakeable,
 	setShowModal,
 }) => {
+	const { account, chainId } = useWeb3React();
 	const { apr, stakedAmount } = useStakingPool(
-		getGivStakingConfig(config.XDAI_CONFIG),
+		(
+			config.NETWORKS_CONFIG[
+				chainId || config.GNOSIS_NETWORK_NUMBER
+			] as GIVpowerConfig
+		).GIVPOWER,
 	);
-	const { account } = useWeb3React();
+	const [loading, setLoading] = useState(true);
 	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
@@ -48,15 +55,17 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	useEffect(() => {
 		async function fetchGIVLockDetails() {
 			if (!account) return;
+			setLoading(true);
 			const LocksInfo = await fetchSubgraph(
 				SubgraphQueryBuilder.getTokenLocksInfoQuery(account),
-				config.XDAI_NETWORK_NUMBER,
+				chainId || config.GNOSIS_NETWORK_NUMBER,
 			);
 			setLocksInfo(LocksInfo.tokenLocks);
+			setLoading(false);
 		}
 
 		fetchGIVLockDetails();
-	}, [account]);
+	}, [account, chainId]);
 
 	return (
 		<Modal
@@ -108,7 +117,11 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					<Subtitle>
 						{formatMessage({ id: 'label.locekd_giv' })}
 					</Subtitle>
-					{locksInfo?.length > 0 ? (
+					{loading ? (
+						<FlexCenter>
+							<Spinner />
+						</FlexCenter>
+					) : locksInfo?.length > 0 ? (
 						<LockedTable>
 							<LockTableHeader>GIV</LockTableHeader>
 							<LockTableHeader>
@@ -177,7 +190,9 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 							)}
 						</LockedTable>
 					) : (
-						<Subtitle>0</Subtitle>
+						<FlexCenter>
+							<P>There is no data</P>
+						</FlexCenter>
 					)}
 				</LockedContainer>
 

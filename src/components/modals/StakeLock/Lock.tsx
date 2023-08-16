@@ -36,7 +36,7 @@ import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
-import type { PoolStakingConfig } from '@/types/config';
+import type { GIVpowerConfig, PoolStakingConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -75,7 +75,9 @@ const LockModal: FC<ILockModalProps> = ({
 		: stakedLpAmount;
 
 	const onLock = async () => {
-		const contractAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
+		const contractAddress = (
+			config.NETWORKS_CONFIG[poolNetwork] as GIVpowerConfig
+		).GIVPOWER.LM_ADDRESS;
 		setLockState(ELockState.LOCKING);
 		try {
 			const txResponse = await lockToken(

@@ -20,20 +20,24 @@ import { LockupDetailsModal } from '@/components/modals/LockupDetailsModal';
 import TotalGIVpowerBox from '@/components/modals/StakeLock/TotalGIVpowerBox';
 import { FlexSpacer, Flex } from '@/components/styled-components/Flex';
 import { StakeCardState } from '../BaseStakingCard/BaseStakingCard';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import config from '@/configuration';
+import { GIVpowerConfig } from '@/types/config';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
 interface IGIVpowerCardIntro {
+	poolNetwork: number;
 	setState: Dispatch<SetStateAction<StakeCardState>>;
 }
 
-const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
+const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({
+	poolNetwork,
+	setState,
+}) => {
 	const { formatMessage } = useIntl();
 	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
 	const { stakedAmount } = useStakingPool(
-		getGivStakingConfig(config.XDAI_CONFIG),
+		(config.NETWORKS_CONFIG[poolNetwork] as GIVpowerConfig).GIVPOWER,
 	);
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 

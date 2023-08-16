@@ -10,7 +10,7 @@ const NetworkLogo = (props: { chainId?: number; logoSize?: number }) => {
 	const { chainId, logoSize } = props;
 	if (chainId === config.MAINNET_NETWORK_NUMBER) {
 		return <IconEthereum size={logoSize} />;
-	} else if (chainId === config.XDAI_NETWORK_NUMBER) {
+	} else if (chainId === config.GNOSIS_NETWORK_NUMBER) {
 		return <IconGnosisChain size={logoSize} />;
 	} else if (chainId === config.POLYGON_NETWORK_NUMBER) {
 		return <IconPolygon size={logoSize} />;

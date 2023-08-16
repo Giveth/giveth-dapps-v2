@@ -46,3 +46,25 @@ export const fetchCurrentInfoAsync = createAsyncThunk(
 		};
 	},
 );
+
+export const fetchAllInfoAsync = createAsyncThunk(
+	'subgraph/fetchAllInfo',
+	async ({ userAddress, chainId }: ICurrentInfo) => {
+		const res = await Promise.all([
+			fetchMainnetInfo(userAddress),
+			fetchGnosisInfo(userAddress),
+			fetchOptimismInfo(userAddress),
+		]);
+
+		const response = {
+			mainnetValues: res[0],
+			gnosisValues: res[1],
+			optimismValues: res[2],
+		};
+
+		return {
+			response: { ...response, isLoaded: true },
+			chainId: chainId,
+		};
+	},
+);
