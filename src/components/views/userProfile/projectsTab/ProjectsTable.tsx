@@ -2,18 +2,15 @@ import {
 	brandColors,
 	neutralColors,
 	IconHeartFilled,
-	GLink,
 } from '@giveth/ui-design-system';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { EOrderBy, IOrder } from '../UserProfile.view';
-import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
-import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { slugToProjectView } from '@/lib/routeCreators';
 import { formatUSD, smallFormatDate } from '@/lib/helpers';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import InternalLink from '@/components/InternalLink';
 import ListingBadge from '@/components/ListingBadge';
 import StatusBadge from '@/components/views/userProfile/projectsTab/StatusBadge';
 import SortIcon from '@/components/SortIcon';
@@ -26,6 +23,7 @@ import {
 	TableHeader,
 } from '@/components/styled-components/Table';
 import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
+import ProjectActions from '@/components/views/userProfile/projectsTab/ProjectActions';
 
 interface IProjectsTable {
 	projects: IProject[];
@@ -73,13 +71,9 @@ const ProjectsTable: FC<IProjectsTable> = ({
 				<ProjectsTableHeader>
 					{formatMessage({ id: 'label.listing' })}
 				</ProjectsTableHeader>
-				<ProjectsTableHeader>
-					{formatMessage({ id: 'label.actions' })}
-				</ProjectsTableHeader>
+				<ProjectsTableHeader />
 				{projects?.map(project => {
 					const status = project.status.name;
-					const isCancelled = status === EProjectStatus.CANCEL;
-
 					return (
 						<ProjectsRowWrapper key={project.id}>
 							<ProjectTableCell>
@@ -120,32 +114,11 @@ const ProjectsTable: FC<IProjectsTable> = ({
 								/>
 							</ProjectTableCell>
 							<ProjectTableCell>
-								<Actions isCancelled={isCancelled}>
-									<InternalLink
-										href={idToProjectEdit(project.id)}
-										title={formatMessage({
-											id: 'label.edit',
-										})}
-										disabled={isCancelled}
-									/>
-									<InternalLink
-										href={slugToProjectView(project.slug)}
-										title={formatMessage({
-											id: 'label.view',
-										})}
-										disabled={isCancelled}
-									/>
-									<CustomGlink
-										onClick={() => {
-											setSelectedProject(project);
-											setShowAddressModal(true);
-										}}
-									>
-										{formatMessage({
-											id: 'label.manage_addresses',
-										})}
-									</CustomGlink>
-								</Actions>
+								<ProjectActions
+									setSelectedProject={setSelectedProject}
+									setShowAddressModal={setShowAddressModal}
+									project={project}
+								/>
 							</ProjectTableCell>
 						</ProjectsRowWrapper>
 					);
@@ -164,7 +137,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 
 const Table = styled.div`
 	display: grid;
-	grid-template-columns: 1.5fr 1.1fr 4fr 1.1fr 1.5fr 2fr 200px;
+	grid-template-columns: 1.5fr 1.3fr 4fr 1.1fr 1.5fr 2fr 130px;
 	overflow: auto;
 	min-width: 900px;
 
@@ -193,26 +166,10 @@ const ProjectsRowWrapper = styled(RowWrapper)`
 	}
 `;
 
-const Actions = styled(Flex)<{ isCancelled: boolean }>`
-	gap: 10px;
-	> * {
-		color: ${props =>
-			props.isCancelled
-				? brandColors.pinky[200]
-				: brandColors.pinky[500]};
-		cursor: ${props => (props.isCancelled ? 'default' : 'pointer')};
-		font-size: 14px;
-	}
-`;
-
 const ProjectTitle = styled(Flex)`
 	padding-top: 8px;
 	flex-wrap: wrap;
 	gap: 0 10px;
-`;
-
-const CustomGlink = styled(GLink)`
-	padding-top: 2px;
 `;
 
 export default ProjectsTable;

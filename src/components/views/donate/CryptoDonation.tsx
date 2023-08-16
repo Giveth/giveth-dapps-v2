@@ -105,6 +105,7 @@ const CryptoDonation: FC = () => {
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();
 	const [acceptedChains, setAcceptedChains] = useState<number[]>();
+	const [maxDonationEnabled, setMaxDonationEnabled] = useState(false);
 	const [donationToGiveth, setDonationToGiveth] = useState(
 		noDonationSplit ? 0 : 5,
 	);
@@ -139,16 +140,13 @@ const CryptoDonation: FC = () => {
 	}, [networkId, acceptedTokens]);
 
 	useEffect(() => {
+		setMaxDonationEnabled(false);
 		if (isEnabled) pollToken();
+		else {
+			setSelectedToken(undefined);
+		}
 		return () => clearPoll();
 	}, [selectedToken, isEnabled, account, balance]);
-
-	useEffect(() => {
-		if (!active) {
-			setSelectedToken(undefined);
-			setAmountTyped(undefined);
-		}
-	}, [active]);
 
 	useEffect(() => {
 		client
@@ -169,6 +167,10 @@ const CryptoDonation: FC = () => {
 				});
 			});
 	}, []);
+
+	useEffect(() => {
+		setAmountTyped(undefined);
+	}, [selectedToken, isEnabled, account, networkId]);
 
 	const checkGIVTokenAvailability = () => {
 		if (orgLabel !== ORGANIZATION.givingBlock) return true;
@@ -196,7 +198,7 @@ const CryptoDonation: FC = () => {
 		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
 		const nativeCurrency =
 			config.NETWORKS_CONFIG[networkId!]?.nativeCurrency;
-		if (_selectedTokenSymbol === nativeCurrency.symbol.toUpperCase()) {
+		if (_selectedTokenSymbol === nativeCurrency?.symbol?.toUpperCase()) {
 			return setSelectedTokenBalance(
 				utils.parseUnits(balance || '0', nativeCurrency.decimals),
 			);
@@ -286,6 +288,15 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
+	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
+
+	const calcMaxDonation = (givethDonation?: number) =>
+		(Number(userBalance.replace(/,/g, '')) * 100) /
+		(100 + (givethDonation ?? donationToGiveth));
+
+	const setMaxDonation = (givethDonation?: number) =>
+		setAmountTyped(calcMaxDonation(givethDonation ?? donationToGiveth));
+
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
 
@@ -349,6 +360,7 @@ const CryptoDonation: FC = () => {
 						value={amountTyped}
 						error={amountError}
 						onChange={val => {
+							setMaxDonationEnabled(false);
 							const checkGIV = checkGIVTokenAvailability();
 							if (/^0+(?=\d)/.test(String(val))) return;
 							setAmountError(
@@ -363,12 +375,14 @@ const CryptoDonation: FC = () => {
 					/>
 				</SearchContainer>
 				{selectedToken && (
-					<AvText>
+					<AvText
+						onClick={() => {
+							setMaxDonationEnabled(true);
+							setMaxDonation();
+						}}
+					>
 						{formatMessage({ id: 'label.available' })}:{' '}
-						{formatBalance(
-							formatUnits(selectedTokenBalance, tokenDecimals),
-						)}{' '}
-						{tokenSymbol}
+						{formatBalance(userBalance)} {tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
@@ -383,7 +397,10 @@ const CryptoDonation: FC = () => {
 
 			{!noDonationSplit ? (
 				<DonateToGiveth
-					setDonationToGiveth={setDonationToGiveth}
+					setDonationToGiveth={e => {
+						maxDonationEnabled && setMaxDonation(e);
+						setDonationToGiveth(e);
+					}}
 					donationToGiveth={donationToGiveth}
 				/>
 			) : (
@@ -473,6 +490,10 @@ const InputContainer = styled.div`
 const AvText = styled(GLink)`
 	color: ${brandColors.deep[500]};
 	padding: 4px 0 0 5px;
+	:hover {
+		cursor: pointer;
+		text-decoration: underline;
+	}
 `;
 
 const SearchContainer = styled.div<IInputBox>`
