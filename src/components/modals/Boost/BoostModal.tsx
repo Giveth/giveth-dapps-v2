@@ -10,7 +10,6 @@ import { ZeroGivpowerModal } from './ZeroGivpowerModal';
 import { BoostModalContainer } from './BoostModal.sc';
 import BoostedInnerModal from './BoostedInnerModal';
 import BoostInnerModal from './BoostInnerModal';
-import { BN } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
 import { getTotalGIVpower } from '@/helpers/givpower';
 
@@ -32,7 +31,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 	const values = useAppSelector(state => state.subgraph);
 	const givPower = getTotalGIVpower(values);
 
-	if (givPower.total == '0') {
+	if (givPower.total.isZero()) {
 		return <ZeroGivpowerModal setShowModal={setShowModal} />;
 	}
 
@@ -61,7 +60,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 				{state === EBoostModalState.BOOSTING ||
 				state === EBoostModalState.LIMIT_EXCEEDED ? (
 					<BoostInnerModal
-						totalGIVpower={BN(givPower.total)}
+						totalGIVpower={givPower.total}
 						setPercentage={setPercentage}
 						state={state}
 						setState={setState}
