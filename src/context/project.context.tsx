@@ -9,17 +9,15 @@ import {
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
-import config from '@/configuration';
 import { IPowerBoostingWithUserGIVpower } from '@/components/views/project/projectGIVPower';
 import { client } from '@/apollo/apolloClient';
 import {
 	FETCH_PROJECTED_RANK,
 	FETCH_PROJECT_BOOSTERS,
 } from '@/apollo/gql/gqlPowerBoosting';
-import { FETCH_USERS_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { IPowerBoosting, IProject } from '@/apollo/types/types';
 import { formatWeiHelper } from '@/helpers/number';
-import { backendGQLRequest, gqlRequest } from '@/helpers/requests';
+import { backendGQLRequest } from '@/helpers/requests';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import {
 	EDirection,
@@ -32,7 +30,7 @@ import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import { FETCH_PROJECT_DONATIONS_COUNT } from '@/apollo/gql/gqlDonations';
 import { hasActiveRound } from '@/helpers/qf';
-import { BasicNetworkConfig, GIVpowerConfig } from '@/types/config';
+import { getGIVpowerBalanceByAddress } from '@/services/givpower';
 
 interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
@@ -184,55 +182,8 @@ export const ProjectProvider = ({
 						return;
 					}
 
-					//get users balance
-					const _networkConfigs = config.NETWORKS_CONFIG;
-					const queries = [];
-					for (const key in _networkConfigs) {
-						if (
-							Object.prototype.hasOwnProperty.call(
-								_networkConfigs,
-								key,
-							)
-						) {
-							const networkConfig = _networkConfigs[key];
-							if (
-								(networkConfig as GIVpowerConfig).GIVPOWER
-									?.LM_ADDRESS
-							)
-								queries.push(
-									gqlRequest(
-										(networkConfig as BasicNetworkConfig)
-											.subgraphAddress,
-										false,
-										FETCH_USERS_GIVPOWER_BY_ADDRESS,
-										{
-											addresses: _users,
-											contract: (
-												networkConfig as GIVpowerConfig
-											).GIVPOWER.LM_ADDRESS.toLowerCase(),
-											length: _users.length,
-										},
-									),
-								);
-						}
-					}
-					const res = await Promise.all(queries);
-
-					const unipoolBalancesObj: { [key: string]: string } = {};
-					for (let i = 0; i < res.length; i++) {
-						const unipoolBalances = res[i].data.unipoolBalances;
-						for (let i = 0; i < unipoolBalances.length; i++) {
-							const unipoolBalance = unipoolBalances[i];
-							let currentBalance =
-								unipoolBalancesObj[unipoolBalance.user.id];
-							unipoolBalancesObj[unipoolBalance.user.id] =
-								!currentBalance
-									? unipoolBalance.balance
-									: new BigNumber(currentBalance)
-											.plus(unipoolBalance.balance)
-											.toString();
-						}
-					}
+					const unipoolBalancesObj =
+						await getGIVpowerBalanceByAddress(_users);
 
 					const _boostersData: IBoostersData = structuredClone(
 						boostingResp.data.getPowerBoosting,
