@@ -207,9 +207,7 @@ const WalletAddressInput: FC<IProps> = ({
 				<Button
 					label='Add ADDRESS'
 					disabled={
-						error.message !== '' ||
-						inputValue === '' ||
-						isValidating === true
+						error.message !== '' || !inputValue || isValidating
 					}
 					onClick={() => {
 						const _addresses = { ...addresses };
