@@ -42,7 +42,7 @@ const WalletAddressInput: FC<IProps> = ({
 }) => {
 	const [resolvedENS, setResolvedENS] = useState('');
 
-	const { getValues, clearErrors, setValue } = useFormContext();
+	const { getValues, setValue } = useFormContext();
 	const { chainId = 1, library } = useWeb3React();
 
 	const user = useAppSelector(state => state.user?.userData);
@@ -91,11 +91,6 @@ const WalletAddressInput: FC<IProps> = ({
 	};
 
 	const ENSHandler = async (ens: string) => {
-		if (networkId !== config.MAINNET_NETWORK_NUMBER) {
-			throw formatMessage({
-				id: 'label.ens_is_only_supported_on_mainnet',
-			});
-		}
 		if (chainId !== 1) {
 			throw formatMessage({
 				id: 'label.please_switcth_to_mainnet_to_handle_ens',
@@ -108,7 +103,7 @@ const WalletAddressInput: FC<IProps> = ({
 
 	const addressValidation = async (address: string) => {
 		try {
-			clearErrors(inputName);
+			setError({ ...error, message: '' });
 			setResolvedENS('');
 			if (address.length === 0) {
 				return formatMessage({ id: 'label.this_field_is_required' });
