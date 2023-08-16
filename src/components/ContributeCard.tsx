@@ -4,10 +4,8 @@ import { useIntl } from 'react-intl';
 import { formatUSD } from '@/lib/helpers';
 import { ContributeCardBox, ContributeCardTitles } from './ContributeCard.sc';
 import { IUserProfileView } from './views/userProfile/UserProfile.view';
-import { FETCH_USER_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
-import { gqlRequest } from '@/helpers/requests';
-import config from '@/configuration';
 import { formatWeiHelper } from '@/helpers/number';
+import { getGIVpowerBalanceByAddress } from '@/services/givpower';
 
 interface IContributeCard {
 	data1: { label: string; value: string | number };
@@ -61,20 +59,19 @@ export const ProjectsContributeCard: FC<IUserProfileView> = ({ user }) => {
 export const PublicGIVpowerContributeCard: FC<IUserProfileView> = ({
 	user,
 }) => {
-	const [total, setTotal] = useState();
+	const [total, setTotal] = useState('0');
 	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		const fetchTotoal = async () => {
-			const { data } = await gqlRequest(
-				config.GNOSIS_CONFIG.subgraphAddress,
-				false,
-				FETCH_USER_GIVPOWER_BY_ADDRESS,
-				{
-					id: `${config.GNOSIS_CONFIG.GIVPOWER.LM_ADDRESS.toLowerCase()}-${user.walletAddress?.toLowerCase()}`,
-				},
-			);
-			setTotal(data?.unipoolBalance?.balance || 0);
+			try {
+				const res = await getGIVpowerBalanceByAddress([
+					user.walletAddress!,
+				]);
+				setTotal(res[user.walletAddress!]);
+			} catch (error) {
+				console.log('error on getGIVpowerBalanceByAddress', { error });
+			}
 		};
 		fetchTotoal();
 	}, [user]);
