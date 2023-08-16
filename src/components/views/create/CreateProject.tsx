@@ -23,7 +23,6 @@ import {
 	CREATE_PROJECT,
 	UPDATE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
-import { isAddressENS } from '@/lib/wallet';
 import {
 	ICategory,
 	IProject,
@@ -53,7 +52,7 @@ import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
 
-const { MAINNET_NETWORK_NUMBER, NETWORKS_CONFIG } = config;
+const { NETWORKS_CONFIG } = config;
 const networksIds = Object.keys(NETWORKS_CONFIG).map(Number);
 
 interface ICreateProjectProps {
@@ -123,7 +122,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
 
 	const [isLoading, setIsLoading] = useState(false);
-	const [resolvedENS, setResolvedENS] = useState('');
 
 	// useLeaveConfirm({ shouldConfirm: formChange });
 	const onSubmit = async (formData: TInputs) => {
@@ -139,18 +137,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				draft,
 			} = formData;
 
-			const addressesIds = Object.keys(addresses).map(Number);
-			const _addresses: { address: string; networkId: number }[] = [];
-			addressesIds.forEach(id => {
-				let address = addresses[id];
-				if (id === MAINNET_NETWORK_NUMBER) {
-					address = isAddressENS(address) ? resolvedENS : address;
-				}
-				_addresses.push({
+			const _addresses = Object.entries(addresses).map(
+				([id, address]) => ({
 					address: utils.getAddress(address),
-					networkId: id,
-				});
-			});
+					networkId: Number(id),
+				}),
+			);
 
 			const projectData: IProjectCreation = {
 				title: name,
@@ -339,18 +331,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								userAddresses={userAddresses}
 								onSubmit={() =>
 									setAddressModalChainId(undefined)
-								}
-								resolvedENS={
-									addressModalChainId ===
-									MAINNET_NETWORK_NUMBER
-										? resolvedENS
-										: undefined
-								}
-								setResolvedENS={
-									addressModalChainId ===
-									MAINNET_NETWORK_NUMBER
-										? setResolvedENS
-										: undefined
 								}
 							/>
 						)}
