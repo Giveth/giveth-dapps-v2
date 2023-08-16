@@ -16,6 +16,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import MobileDonateFooter from './MobileDonateFooter';
 import QFSection from './QFSection';
 import { DonateSection } from './DonationSection';
+import { ProjectPublicActions } from './ProjectPublicActions';
 
 interface IProjectActionCardProps {}
 
@@ -89,6 +90,7 @@ const ProjectActionInnerCard = () => {
 		<>
 			{isAdmin && <AdminActions />}
 			{!isMobile && hasActiveQFRound ? <QFSection /> : <DonateSection />}
+			{!isMobile && !isAdmin && <ProjectPublicActions />}
 			{isAdmin && <ProjectStats />}
 		</>
 	);
