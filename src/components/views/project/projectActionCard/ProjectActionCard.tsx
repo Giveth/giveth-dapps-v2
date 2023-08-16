@@ -6,7 +6,6 @@ import {
 import { FC, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { motion } from 'framer-motion';
-import { ProjectPublicActions } from './ProjectPublicActions';
 import { ProjectStats } from './ProjectStats';
 import { AdminActions } from './AdminActions';
 import { Flex } from '@/components/styled-components/Flex';
@@ -14,9 +13,9 @@ import { useProjectContext } from '@/context/project.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device, zIndex } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
+import MobileDonateFooter from './MobileDonateFooter';
 import QFSection from './QFSection';
 import { DonateSection } from './DonationSection';
-import MobileDonateFooter from './MobileDonateFooter';
 
 interface IProjectActionCardProps {}
 
@@ -32,6 +31,7 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 	const isMobile = !useMediaQuery(device.tablet);
 	const wrapperRef = useRef<HTMLDivElement>(null);
 	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
+	const { isAdmin } = useProjectContext();
 
 	useEffect(() => {
 		const handleResize = () =>
@@ -43,26 +43,34 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 		return () => {
 			window.removeEventListener('resize', handleResize);
 		};
-	}, [isMobile]);
+	}, [isMobile, isAdmin]);
 
 	return isMobile ? (
-		// <Wrapper
-		// 	ref={wrapperRef}
-		// 	height={wrapperHeight}
-		// 	drag={isMobile ? 'y' : false}
-		// 	dragElastic={0}
-		// 	dragConstraints={{ top: -(wrapperHeight - 180), bottom: 132 }}
-		// 	isMobile={isMobile}
-		// >
-		// 	<TopLine />
-		// 	<ProjectActionCardWrapper
-		// 		flexDirection='column-reverse'
-		// 		justifyContent='space-between'
-		// 	>
-		// 		<ProjectActionInnerCard />
-		// 	</ProjectActionCardWrapper>
-		// </Wrapper>
-		<MobileDonateFooter />
+		<>
+			{isAdmin ? (
+				<Wrapper
+					ref={wrapperRef}
+					height={wrapperHeight}
+					drag={isMobile ? 'y' : false}
+					dragElastic={0}
+					dragConstraints={{
+						top: -(wrapperHeight - 180),
+						bottom: 132,
+					}}
+					isMobile={isMobile}
+				>
+					<TopLine />
+					<ProjectActionCardWrapper
+						flexDirection='column-reverse'
+						justifyContent='space-between'
+					>
+						<ProjectActionInnerCard />
+					</ProjectActionCardWrapper>
+				</Wrapper>
+			) : (
+				<MobileDonateFooter />
+			)}
+		</>
 	) : (
 		<ProjectActionCardWrapper
 			flexDirection='column'
@@ -75,12 +83,12 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 
 const ProjectActionInnerCard = () => {
 	const { isAdmin, hasActiveQFRound } = useProjectContext();
+	const isMobile = !useMediaQuery(device.tablet);
 
 	return (
 		<>
 			{isAdmin && <AdminActions />}
-			{hasActiveQFRound ? <QFSection /> : <DonateSection />}
-			{!isAdmin && <ProjectPublicActions />}
+			{!isMobile && hasActiveQFRound ? <QFSection /> : <DonateSection />}
 			{isAdmin && <ProjectStats />}
 		</>
 	);
