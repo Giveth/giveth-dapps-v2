@@ -32,6 +32,7 @@ import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import { FETCH_PROJECT_DONATIONS_COUNT } from '@/apollo/gql/gqlDonations';
 import { hasActiveRound } from '@/helpers/qf';
+import { BasicNetworkConfig, GIVpowerConfig } from '@/types/config';
 
 interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
@@ -184,26 +185,53 @@ export const ProjectProvider = ({
 					}
 
 					//get users balance
-					const balancesResp = await gqlRequest(
-						config.GNOSIS_CONFIG.subgraphAddress,
-						false,
-						FETCH_USERS_GIVPOWER_BY_ADDRESS,
-						{
-							addresses: _users,
-							contract:
-								config.GNOSIS_CONFIG.GIVPOWER.LM_ADDRESS.toLowerCase(),
-							length: _users.length,
-						},
-					);
-
-					const unipoolBalances = balancesResp.data.unipoolBalances;
+					const _networkConfigs = config.NETWORKS_CONFIG;
+					const queries = [];
+					for (const key in _networkConfigs) {
+						if (
+							Object.prototype.hasOwnProperty.call(
+								_networkConfigs,
+								key,
+							)
+						) {
+							const networkConfig = _networkConfigs[key];
+							if (
+								(networkConfig as GIVpowerConfig).GIVPOWER
+									?.LM_ADDRESS
+							)
+								queries.push(
+									gqlRequest(
+										(networkConfig as BasicNetworkConfig)
+											.subgraphAddress,
+										false,
+										FETCH_USERS_GIVPOWER_BY_ADDRESS,
+										{
+											addresses: _users,
+											contract: (
+												networkConfig as GIVpowerConfig
+											).GIVPOWER.LM_ADDRESS.toLowerCase(),
+											length: _users.length,
+										},
+									),
+								);
+						}
+					}
+					const res = await Promise.all(queries);
 
 					const unipoolBalancesObj: { [key: string]: string } = {};
-
-					for (let i = 0; i < unipoolBalances.length; i++) {
-						const unipoolBalance = unipoolBalances[i];
-						unipoolBalancesObj[unipoolBalance.user.id] =
-							unipoolBalance.balance;
+					for (let i = 0; i < res.length; i++) {
+						const unipoolBalances = res[i].data.unipoolBalances;
+						for (let i = 0; i < unipoolBalances.length; i++) {
+							const unipoolBalance = unipoolBalances[i];
+							let currentBalance =
+								unipoolBalancesObj[unipoolBalance.user.id];
+							unipoolBalancesObj[unipoolBalance.user.id] =
+								!currentBalance
+									? unipoolBalance.balance
+									: new BigNumber(currentBalance)
+											.plus(unipoolBalance.balance)
+											.toString();
+						}
 					}
 
 					const _boostersData: IBoostersData = structuredClone(
