@@ -1,3 +1,4 @@
+import { Contract, ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import {
 	JsonRpcProvider,
@@ -5,10 +6,6 @@ import {
 	Web3Provider,
 } from '@ethersproject/providers';
 import { captureException } from '@sentry/nextjs';
-import { BigNumber as EthBigNumber } from '@ethersproject/bignumber';
-import { Contract } from '@ethersproject/contracts';
-import ethConstants from '@ethersproject/constants';
-import { splitSignature } from '@ethersproject/bytes';
 import {
 	BalancerPoolStakingConfig,
 	GIVTokenConfig,
@@ -55,7 +52,7 @@ const { abi: TOKEN_MANAGER_ABI } = TOKEN_MANAGER_Json;
 const { abi: ERC20_ABI } = ERC20_Json;
 const { abi: UNIPOOL_GIVPOWER_ABI } = UnipoolGIVpower;
 
-const toBigNumberJs = (eb: EthBigNumber | string | number): BigNumber =>
+const toBigNumberJs = (eb: ethers.BigNumber | string | number): BigNumber =>
 	new BigNumber(eb.toString());
 
 const getUnipoolInfo = async (
@@ -79,8 +76,8 @@ const getUnipoolInfo = async (
 			lmContract.totalSupply(),
 			lmContract.rewardRate(),
 		]).then(([_totalSupply, _rewardRate]) => [
-			toBigNumberJs(_totalSupply as EthBigNumber),
-			toBigNumberJs(_rewardRate as EthBigNumber),
+			toBigNumberJs(_totalSupply as ethers.BigNumber),
+			toBigNumberJs(_rewardRate as ethers.BigNumber),
 		]);
 	}
 	return { totalSupply, rewardRate };
@@ -219,7 +216,7 @@ const getBalancerPoolStakingAPR = async (
 	) as IVault;
 
 	interface PoolTokens {
-		balances: Array<EthBigNumber>;
+		balances: Array<ethers.BigNumber>;
 		tokens: Array<string>;
 	}
 	let farmAPR = null;
@@ -227,8 +224,8 @@ const getBalancerPoolStakingAPR = async (
 	try {
 		const [_poolTokens, _poolTotalSupply, _poolNormalizedWeights]: [
 			PoolTokens,
-			EthBigNumber,
-			Array<EthBigNumber>,
+			ethers.BigNumber,
+			Array<ethers.BigNumber>,
 		] = await Promise.all([
 			vaultContract.getPoolTokens(POOL_ID),
 			weightedPoolContract.totalSupply(),
@@ -300,9 +297,9 @@ const getSimplePoolStakingAPR = async (
 	let farmAPR = null;
 	try {
 		const [_reserves, _token0, _poolTotalSupply]: [
-			[EthBigNumber, EthBigNumber, number],
+			[ethers.BigNumber, ethers.BigNumber, number],
 			string,
-			EthBigNumber,
+			ethers.BigNumber,
 		] = await Promise.all([
 			poolContract.getReserves(),
 			poolContract.token0(),
@@ -349,11 +346,11 @@ export const getUserStakeInfo = (
 	currentValues: ISubgraphState,
 	poolStakingConfig: SimplePoolStakingConfig,
 ): {
-	stakedAmount: EthBigNumber;
-	notStakedAmount: EthBigNumber;
-	earned: EthBigNumber;
+	stakedAmount: ethers.BigNumber;
+	notStakedAmount: ethers.BigNumber;
+	earned: ethers.BigNumber;
 } => {
-	let earned = ethConstants.Zero;
+	let earned = ethers.constants.Zero;
 	const sdh = new SubgraphDataHelper(currentValues);
 	const unipoolBalance = sdh.getUnipoolBalance(poolStakingConfig.LM_ADDRESS);
 	const lpTokenBalance = sdh.getTokenBalance(poolStakingConfig.POOL_ADDRESS);
@@ -436,18 +433,18 @@ const permitTokens = async (
 		spender: lmAddress,
 		value: amount,
 		nonce: await poolContract.nonces(signerAddress),
-		deadline: ethConstants.MaxUint256,
+		deadline: ethers.constants.MaxUint256,
 	};
 
 	// eslint-disable-next-line no-underscore-dangle
 	const rawSignature = await signer._signTypedData(domain, types, value);
-	const signature = splitSignature(rawSignature);
+	const signature = ethers.utils.splitSignature(rawSignature);
 
 	return await poolContract.populateTransaction.permit(
 		signerAddress,
 		lmAddress,
 		amount,
-		ethConstants.MaxUint256,
+		ethers.constants.MaxUint256,
 		signature.v,
 		signature.r,
 		signature.s,
@@ -472,12 +469,12 @@ export const approveERC20tokenTransfer = async (
 		ERC20_ABI,
 		provider,
 	) as ERC20;
-	const allowance: EthBigNumber = await tokenContract.allowance(
+	const allowance: ethers.BigNumber = await tokenContract.allowance(
 		ownerAddress,
 		spenderAddress,
 	);
 
-	const amountNumber = EthBigNumber.from(amount);
+	const amountNumber = ethers.BigNumber.from(amount);
 
 	if (amountNumber.lte(allowance)) return true;
 
@@ -492,7 +489,7 @@ export const approveERC20tokenTransfer = async (
 		try {
 			const approveZero: TransactionResponse = await tokenContract
 				.connect(signer.connectUnchecked())
-				.approve(spenderAddress, ethConstants.Zero, gasPreference);
+				.approve(spenderAddress, ethers.constants.Zero, gasPreference);
 
 			const { status } = await approveZero.wait();
 			if (!status) return false;
@@ -669,7 +666,7 @@ export const stakeTokens = async (
 			return await lmContract
 				.connect(signer.connectUnchecked())
 				.stakeWithPermit(
-					EthBigNumber.from(amount),
+					ethers.BigNumber.from(amount),
 					rawPermitCall.data as string,
 					{
 						gasLimit: 300_000,
@@ -679,7 +676,7 @@ export const stakeTokens = async (
 		} else {
 			return await lmContract
 				.connect(signer.connectUnchecked())
-				.stake(EthBigNumber.from(amount), {
+				.stake(ethers.BigNumber.from(amount), {
 					gasLimit: 300_000,
 					...gasPreference,
 				});
@@ -745,7 +742,7 @@ export const withdrawTokens = async (
 
 	try {
 		return await lmContract.withdraw(
-			EthBigNumber.from(amount),
+			ethers.BigNumber.from(amount),
 			getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),
 		);
 	} catch (e) {
