@@ -794,7 +794,7 @@ export const getGIVpowerOnChain = async (
 	account: string,
 	chainId: number,
 	provider: Web3Provider | null,
-): Promise<BigNumber | undefined> => {
+): Promise<ethers.BigNumber | undefined> => {
 	if (!provider) {
 		console.error('Provider is null');
 		return;

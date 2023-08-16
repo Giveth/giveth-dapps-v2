@@ -7,6 +7,7 @@ import {
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
+import BigNumber from 'bignumber.js';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
@@ -33,7 +34,7 @@ const TotalGIVpowerBox = () => {
 				if (_totalGIVpower) {
 					const { total } = getTotalGIVpower(values, {
 						chainId,
-						balance: _totalGIVpower,
+						balance: new BigNumber(_totalGIVpower.toString()),
 					});
 					return setTotalGIVpower(total);
 				}
