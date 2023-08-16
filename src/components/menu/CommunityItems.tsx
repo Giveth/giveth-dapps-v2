@@ -1,46 +1,63 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Link from 'next/link';
-import { Caption, GLink } from '@giveth/ui-design-system';
-import styled from 'styled-components';
+import { GLink } from '@giveth/ui-design-system';
+
 import { useIntl } from 'react-intl';
 import { useAppSelector } from '@/features/hooks';
 import { ItemRow, ItemTitle } from './common';
-import Routes from '@/lib/constants/Routes';
 import { Item } from './Item';
+import Routes from '@/lib/constants/Routes';
+
+export const communityItems = [
+	{
+		title: 'label.get_a',
+		label: 'label.givers_nft',
+		href: Routes.NFT,
+	},
+	{
+		title: 'label.community_connection',
+		label: 'label.join_us',
+		href: Routes.Join,
+	},
+	{
+		title: 'label.why_giveth',
+		label: 'label.our_mission',
+		href: Routes.AboutUs + '#mission',
+	},
+];
 
 export const CommunityItems = () => {
-	const theme = useAppSelector(state => state.general.theme);
-	const { formatMessage } = useIntl();
-
-	const communityItems = [
-		{
-			title: formatMessage({ id: 'label.giver_nfts' }),
-			label: formatMessage({ id: 'label.collection_of' }),
-			href: Routes.NFT,
-		},
-		{
-			title: formatMessage({ id: 'label.join_and_keep_in_touch' }),
-			label: formatMessage({ id: 'label.community_of_makers' }),
-			href: Routes.Join,
-		},
-	];
-
 	return (
 		<>
 			{communityItems.map((item, idx) => (
 				<Link key={idx} href={item.href}>
-					<Item theme={theme}>
-						<ItemTitle theme={theme}>{item.title}</ItemTitle>
-						<ItemRow>
-							<GLink>{item.label}</GLink>
-						</ItemRow>
-					</Item>
+					<CommunityItem item={item} />
 				</Link>
 			))}
 		</>
 	);
 };
 
-const LabelStyle = styled(Caption)`
-	margin: 24px 16px 16px;
-`;
+interface ICommunityItemProps {
+	item: {
+		title: string;
+		label: string;
+		href: string;
+	};
+}
+
+export const CommunityItem: FC<ICommunityItemProps> = ({ item }) => {
+	const theme = useAppSelector(state => state.general.theme);
+	const { formatMessage } = useIntl();
+
+	return (
+		<Item theme={theme}>
+			<ItemTitle theme={theme}>
+				{formatMessage({ id: item.title })}
+			</ItemTitle>
+			<ItemRow>
+				<GLink>{formatMessage({ id: item.label })}</GLink>
+			</ItemRow>
+		</Item>
+	);
+};

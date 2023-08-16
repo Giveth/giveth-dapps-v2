@@ -51,6 +51,7 @@ import { fetchMainCategories } from '@/features/general/general.thunk';
 import { ItemsProvider } from '@/context/Items.context';
 import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import { CommunityMenu } from '../menu/CommunityMenu';
+import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -73,6 +74,7 @@ const Header: FC<IHeader> = () => {
 	const theme = useAppSelector(state => state.general.theme);
 
 	const router = useRouter();
+	const { currentLabel } = useNavigationInfo();
 	const isProjectPage = router.route.startsWith(Routes.Project + '/');
 
 	const { formatMessage } = useIntl();
@@ -206,9 +208,7 @@ const Header: FC<IHeader> = () => {
 						{!isDesktop && (
 							<HomeButton gap='4px' onClick={openSidebar}>
 								<IconMenu24 />
-								<GLink size='Big'>
-									{formatMessage({ id: 'label.home' })}
-								</GLink>
+								<GLink size='Big'>{currentLabel} </GLink>
 							</HomeButton>
 						)}
 					</Flex>

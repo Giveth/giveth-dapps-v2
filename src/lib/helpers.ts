@@ -1,16 +1,13 @@
 import { promisify } from 'util';
 // eslint-disable-next-line import/named
 import unescape from 'lodash/unescape';
-
 import { parseEther, parseUnits } from '@ethersproject/units';
 import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
 import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
 import { AddressZero } from '@ethersproject/constants';
-import { brandColors } from '@giveth/ui-design-system';
 // @ts-ignore
 import abi from 'human-standard-token-abi';
-
 import { captureException } from '@sentry/nextjs';
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
@@ -33,9 +30,9 @@ export const formatBalance = (balance?: string | number) => {
 	});
 };
 
-export const formatUSD = (balance?: string | number) => {
+export const formatUSD = (balance?: string | number, decimals = 2) => {
 	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
-		maximumFractionDigits: 2,
+		maximumFractionDigits: decimals,
 	});
 };
 
@@ -216,17 +213,13 @@ export const capitalizeFirstLetter = (string: string) => {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const noImgColors = [
-	brandColors.cyan[500],
-	brandColors.mustard[500],
-	brandColors.giv[500],
-];
-export const noImgColor = () => noImgColors[Math.floor(Math.random() * 3)];
+export const capitalizeAllWords = (string: string) => {
+	return string.split(' ').map(capitalizeFirstLetter).join(' ');
+};
 
 export const noImgIcon = '/images/GIV-icon-text.svg';
 
-export const isNoImg = (image: string | undefined) =>
-	!(image && !Number(image));
+export const isNoImg = (image: string | undefined) => !image || image === '';
 
 export const shortenAddress = (
 	address: string | null | undefined,
