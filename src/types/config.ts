@@ -124,6 +124,7 @@ export interface BasicNetworkConfig extends INetworkParam {
 	blockExplorerName: string[];
 	gasPreference: GasPreference;
 	subgraphAddress: string;
+	coingeckoChainName: string;
 }
 
 export interface SimpleNetworkConfig extends BasicNetworkConfig {
