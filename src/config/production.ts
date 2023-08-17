@@ -57,6 +57,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['etherscan'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
+		coingeckoChainName: 'ethereum',
 
 		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
@@ -225,6 +226,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
+		coingeckoChainName: 'xdai',
 
 		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		gGIV_ADDRESS: '0xfFBAbEb49be77E5254333d5fdfF72920B989425f',
@@ -353,6 +355,7 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['PolygonScan'],
 		subgraphAddress: '',
+		coingeckoChainName: 'polygon-pos',
 	},
 
 	OPTIMISM_CONFIG: {
@@ -364,6 +367,7 @@ const config: EnvConfig = {
 		blockExplorerName: ['OptimismScan'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet',
+		coingeckoChainName: 'optimistic-ethereum',
 		TOKEN_ADDRESS: '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98',
 		tokenAddressOnUniswapV2: '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98',
 		TOKEN_DISTRO_ADDRESS: '0xe3ac7b3e6b4065f4765d76fdc215606483bf3bd1',
@@ -386,6 +390,7 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['CeloScan'],
 		subgraphAddress: '',
+		coingeckoChainName: 'celo',
 	},
 };
 
