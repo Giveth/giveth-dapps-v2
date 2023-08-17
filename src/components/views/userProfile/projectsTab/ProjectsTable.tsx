@@ -24,6 +24,7 @@ import {
 } from '@/components/styled-components/Table';
 import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
 import ProjectActions from '@/components/views/userProfile/projectsTab/ProjectActions';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 
 interface IProjectsTable {
 	projects: IProject[];
@@ -74,6 +75,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 				<ProjectsTableHeader />
 				{projects?.map(project => {
 					const status = project.status.name;
+					const isCancelled = status === EProjectStatus.CANCEL;
 					return (
 						<ProjectsRowWrapper key={project.id}>
 							<ProjectTableCell>
@@ -87,11 +89,17 @@ const ProjectsTable: FC<IProjectsTable> = ({
 							</ProjectTableCell>
 							<ProjectTableCell bold>
 								<ProjectTitle>
-									<Link
-										href={slugToProjectView(project.slug)}
-									>
-										{project.title}
-									</Link>
+									{isCancelled ? (
+										<div>{project.title}</div>
+									) : (
+										<Link
+											href={slugToProjectView(
+												project.slug,
+											)}
+										>
+											{project.title}
+										</Link>
+									)}
 									<VerificationBadge
 										isVerified={project.verified}
 										verificationStatus={
