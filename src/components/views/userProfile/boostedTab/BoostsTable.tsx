@@ -24,7 +24,6 @@ import {
 	TableFooter,
 	TableHeader,
 } from '@/components/styled-components/Table';
-import { EPowerBoostingOrder, IBoostedOrder } from './ProfileBoostedTab';
 import { formatWeiHelper } from '@/helpers/number';
 import { Flex } from '@/components/styled-components/Flex';
 import Input, { InputSize } from '@/components/Input';
@@ -36,6 +35,10 @@ import { slugToProjectView } from '@/lib/routeCreators';
 import { ApprovePowerBoostModal } from '@/components/modals/Boost/ApprovePowerBoostModal';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { mediaQueries } from '@/lib/constants/constants';
+import {
+	IBoostedOrder,
+	EPowerBoostingOrder,
+} from './useFetchPowerBoostingInfo';
 
 interface IBoostsTable {
 	boosts: IPowerBoosting[];
