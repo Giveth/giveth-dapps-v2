@@ -64,13 +64,6 @@ export const PublicProfileBoostedTab: FC<IUserProfileView> = () => {
 	);
 };
 
-// const CustomContributeCard = styled(ContributeCard)`
-// 	width: 100%;
-// 	${mediaQueries.tablet} {
-// 		width: 614px;
-// 	}
-// `;
-
 const Margin = styled.div`
 	height: 70px;
 `;
