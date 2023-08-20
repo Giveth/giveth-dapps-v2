@@ -20,20 +20,21 @@ import {
 	DonateContributeCard,
 	ProjectsContributeCard,
 } from '@/components/ContributeCard';
+import { useProfileContext } from '@/context/profile.context';
 
 const itemPerPage = 10;
 
-const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
+const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	const [loading, setLoading] = useState(false);
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [page, setPage] = useState(0);
-	const { formatMessage } = useIntl();
-
 	const [order, setOrder] = useState<IOrder>({
 		by: EOrderBy.CreationDate,
 		direction: EDirection.DESC,
 	});
+	const { user, myAccount } = useProfileContext();
+	const { formatMessage } = useIntl();
 	const userName = user?.name || 'Unknown';
 
 	const changeOrder = (orderBy: EOrderBy) => {
@@ -83,10 +84,10 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 			{!myAccount && (
 				<Row>
 					<Col lg={6}>
-						<DonateContributeCard user={user} />
+						<DonateContributeCard />
 					</Col>
 					<Col lg={6}>
-						<ProjectsContributeCard user={user} />
+						<ProjectsContributeCard />
 					</Col>
 				</Row>
 			)}
