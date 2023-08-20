@@ -5,8 +5,9 @@ import { WrappedSpinner } from '@/components/Spinner';
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import UserProfileView from '@/components/views/userProfile/UserProfile.view';
+import { ProfileProvider } from '@/context/profile.context';
 
-const UserRoute = () => {
+const AccountRoute = () => {
 	const { isSignedIn, isEnabled, userData, isLoading } = useAppSelector(
 		state => state.user,
 	);
@@ -25,9 +26,11 @@ const UserRoute = () => {
 			<Head>
 				<title>{userData?.name} | Giveth</title>
 			</Head>
-			<UserProfileView user={userData!} myAccount />
+			<ProfileProvider user={userData!} myAccount>
+				<UserProfileView />
+			</ProfileProvider>
 		</>
 	);
 };
 
-export default UserRoute;
+export default AccountRoute;
