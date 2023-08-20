@@ -125,6 +125,7 @@ export interface BasicNetworkConfig extends INetworkParam {
 	gasPreference: GasPreference;
 	subgraphAddress: string;
 	coingeckoChainName: string;
+	chainLogo: (logoSize?: number) => JSX.Element;
 }
 
 export interface SimpleNetworkConfig extends BasicNetworkConfig {
