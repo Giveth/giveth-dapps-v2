@@ -3,36 +3,36 @@ import { FC } from 'react';
 
 import { Col, Row } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
+import BigNumber from 'bignumber.js';
 import { IUserProfileView } from '../UserProfile.view';
 import BoostsTable from './BoostsTable';
 import { Loading } from '../projectsTab/ProfileProjectsTab';
 import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
-import { useAppSelector } from '@/features/hooks';
-import { getGIVpowerLink, getTotalGIVpower } from '@/helpers/givpower';
+import { getGIVpowerLink } from '@/helpers/givpower';
 import { UserProfileTab } from '../common.sc';
-import { PublicGIVpowerContributeCard } from '@/components/ContributeCard';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useFetchPowerBoostingInfo } from './useFetchPowerBoostingInfo';
+import { useProfileContext } from '@/context/profile.context';
+import { PublicGIVpowerContributeCard } from '@/components/ContributeCard';
 
-export const PublicProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
-	const { loading, boosts, order, changeOrder } =
+export const PublicProfileBoostedTab: FC<IUserProfileView> = () => {
+	const { user, givpowerBalance } = useProfileContext();
+
+	const { loading, boosts, order, totalCount, changeOrder } =
 		useFetchPowerBoostingInfo(user);
 	const { chainId } = useWeb3React();
-	const values = useAppSelector(state => state.subgraph);
-	const givPower = getTotalGIVpower(values);
-	const isZeroGivPower = givPower.total.isZero();
+	const givpower = new BigNumber(givpowerBalance);
+	const isZeroGivPower = givpower.isZero();
 
 	return (
 		<UserProfileTab>
 			<Row>
 				<Col lg={6}>
-					<PublicGIVpowerContributeCard user={user} />
+					<PublicGIVpowerContributeCard />
 				</Col>
 			</Row>
-			{boostedProjectsCount &&
-			boostedProjectsCount > 0 &&
-			isZeroGivPower ? (
+			{totalCount && totalCount > 0 && isZeroGivPower ? (
 				<ZeroGivPowerContainer>
 					<InlineToast
 						title='Your GIVpower balance is zero!'
@@ -47,14 +47,12 @@ export const PublicProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
 			)}
 			<PowerBoostingContainer>
 				{loading && <Loading />}
-				{boostedProjectsCount && boostedProjectsCount > 0 ? (
+				{totalCount && totalCount > 0 ? (
 					<BoostsTable
 						boosts={boosts}
-						totalAmountOfGIVpower={givPower.total}
+						totalAmountOfGIVpower={givpower}
 						order={order}
 						changeOrder={changeOrder}
-						saveBoosts={saveBoosts}
-						deleteBoost={deleteBoost}
 						myAccount={false}
 					/>
 				) : (
