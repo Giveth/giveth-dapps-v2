@@ -4,8 +4,9 @@ import { useIntl } from 'react-intl';
 import { formatUSD } from '@/lib/helpers';
 import { ContributeCardBox, ContributeCardTitles } from './ContributeCard.sc';
 import { IUserProfileView } from './views/userProfile/UserProfile.view';
-import { formatWeiHelper } from '@/helpers/number';
+import { useProfileContext } from '@/context/profile.context';
 import { getGIVpowerBalanceByAddress } from '@/services/givpower';
+import { formatWeiHelper } from '@/helpers/number';
 
 interface IContributeCard {
 	data1: { label: string; value: string | number };
@@ -23,7 +24,8 @@ export const ContributeCard: FC<IContributeCard> = ({ data1, data2 }) => {
 	);
 };
 
-export const DonateContributeCard: FC<IUserProfileView> = ({ user }) => {
+export const DonateContributeCard: FC<IUserProfileView> = () => {
+	const { user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
 	return (
@@ -40,7 +42,8 @@ export const DonateContributeCard: FC<IUserProfileView> = ({ user }) => {
 	);
 };
 
-export const ProjectsContributeCard: FC<IUserProfileView> = ({ user }) => {
+export const ProjectsContributeCard: FC<IUserProfileView> = () => {
+	const { user } = useProfileContext();
 	const { formatMessage } = useIntl();
 	return (
 		<ContributeCard
@@ -56,9 +59,8 @@ export const ProjectsContributeCard: FC<IUserProfileView> = ({ user }) => {
 	);
 };
 
-export const PublicGIVpowerContributeCard: FC<IUserProfileView> = ({
-	user,
-}) => {
+export const PublicGIVpowerContributeCard: FC<IUserProfileView> = () => {
+	const { user, myAccount } = useProfileContext();
 	const [total, setTotal] = useState('0');
 	const { formatMessage } = useIntl();
 
