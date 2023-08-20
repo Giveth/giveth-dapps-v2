@@ -32,6 +32,7 @@ import { PassportCard } from './PassportCard';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { getTotalGIVpower } from '@/helpers/givpower';
+import { useProfileContext } from '@/context/profile.context';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
@@ -43,7 +44,8 @@ interface ISection {
 	buttons: IBtnProps[];
 }
 
-const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
+const ProfileOverviewTab: FC<IUserProfileView> = () => {
+	const { user, myAccount } = useProfileContext();
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
@@ -124,10 +126,10 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 		<UserContributeInfo>
 			<Row>
 				<Col lg={6}>
-					<DonateContributeCard user={user} />
+					<DonateContributeCard />
 				</Col>
 				<Col lg={6}>
-					<ProjectsContributeCard user={user} />
+					<ProjectsContributeCard />
 				</Col>
 				<Col lg={6}>
 					{myAccount ? (
@@ -144,7 +146,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 							}}
 						/>
 					) : (
-						<PublicGIVpowerContributeCard user={user} />
+						<PublicGIVpowerContributeCard />
 					)}
 				</Col>
 			</Row>
