@@ -5,7 +5,6 @@ import { Col, Row } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import BigNumber from 'bignumber.js';
 import { IUserProfileView } from '../UserProfile.view';
-import BoostsTable from './BoostsTable';
 import { Loading } from '../projectsTab/ProfileProjectsTab';
 import { EmptyPowerBoosting } from './EmptyPowerBoosting';
 import GetMoreGIVpowerBanner from './GetMoreGIVpowerBanner';
@@ -15,6 +14,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useFetchPowerBoostingInfo } from './useFetchPowerBoostingInfo';
 import { useProfileContext } from '@/context/profile.context';
 import { PublicGIVpowerContributeCard } from '@/components/ContributeCard';
+import { PublicBoostsTable } from './PublicBoostsTable';
 
 export const PublicProfileBoostedTab: FC<IUserProfileView> = () => {
 	const { user, givpowerBalance } = useProfileContext();
@@ -48,12 +48,11 @@ export const PublicProfileBoostedTab: FC<IUserProfileView> = () => {
 			<PowerBoostingContainer>
 				{loading && <Loading />}
 				{totalCount && totalCount > 0 ? (
-					<BoostsTable
+					<PublicBoostsTable
 						boosts={boosts}
 						totalAmountOfGIVpower={givpower}
 						order={order}
 						changeOrder={changeOrder}
-						myAccount={false}
 					/>
 				) : (
 					<EmptyPowerBoosting myAccount={false} />
