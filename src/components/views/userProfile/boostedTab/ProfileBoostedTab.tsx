@@ -1,16 +1,14 @@
 import styled from 'styled-components';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback } from 'react';
 import { captureException } from '@sentry/nextjs';
 
 import { Col, Row } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
 import { IUserProfileView } from '../UserProfile.view';
-import { EDirection } from '@/apollo/types/gqlEnums';
 import BoostsTable from './BoostsTable';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import {
-	FETCH_POWER_BOOSTING_INFO,
 	SAVE_MULTIPLE_POWER_BOOSTING,
 	SAVE_POWER_BOOSTING,
 } from '@/apollo/gql/gqlPowerBoosting';
@@ -25,35 +23,14 @@ import {
 } from '@/helpers/givpower';
 import { setBoostedProjectsCount } from '@/features/user/user.slice';
 import { UserProfileTab } from '../common.sc';
-import {
-	ContributeCard,
-	PublicGIVpowerContributeCard,
-} from '@/components/ContributeCard';
+import { ContributeCard } from '@/components/ContributeCard';
 import { formatWeiHelper } from '@/helpers/number';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { useFetchPowerBoostingInfo } from './useFetchPowerBoostingInfo';
 
-export enum EPowerBoostingOrder {
-	CreationAt = 'createdAt',
-	UpdatedAt = 'updatedAt',
-	Percentage = 'Percentage',
-}
-
-export interface IBoostedOrder {
-	by: EPowerBoostingOrder;
-	direction: EDirection;
-}
-
-export const ProfileBoostedTab: FC<IUserProfileView> = ({
-	user,
-	myAccount,
-}) => {
-	const [loading, setLoading] = useState(false);
-	const [boosts, setBoosts] = useState<IPowerBoosting[]>([]);
-	const [order, setOrder] = useState<IBoostedOrder>({
-		by: EPowerBoostingOrder.Percentage,
-		direction: EDirection.DESC,
-	});
-
+export const ProfileBoostedTab: FC<IUserProfileView> = ({ user }) => {
+	const { loading, boosts, order, setBoosts, setLoading, changeOrder } =
+		useFetchPowerBoostingInfo(user);
 	const { chainId } = useWeb3React();
 	const { userData } = useAppSelector(state => state.user);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
@@ -61,51 +38,6 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 	const givPower = getTotalGIVpower(values);
 	const isZeroGivPower = givPower.total.isZero();
 	const dispatch = useAppDispatch();
-
-	useEffect(() => {
-		if (!user) return;
-
-		const fetchUserBoosts = async () => {
-			setLoading(true);
-			const { data } = await client.query({
-				query: FETCH_POWER_BOOSTING_INFO,
-				variables: {
-					take: 50,
-					skip: 0,
-					orderBy: { field: order.by, direction: order.direction },
-					userId: parseFloat(user.id || '') || -1,
-				},
-			});
-			setLoading(false);
-			if (data?.getPowerBoosting) {
-				const powerBoostings: IPowerBoosting[] =
-					data.getPowerBoosting.powerBoostings;
-				setBoosts(powerBoostings);
-				dispatch(setBoostedProjectsCount(powerBoostings.length));
-			}
-		};
-		fetchUserBoosts();
-	}, [user, order.by, order.direction]);
-
-	const changeOrder = useCallback(
-		(orderBy: EPowerBoostingOrder) => {
-			if (orderBy === order.by) {
-				setOrder({
-					by: orderBy,
-					direction:
-						order.direction === EDirection.ASC
-							? EDirection.DESC
-							: EDirection.ASC,
-				});
-			} else {
-				setOrder({
-					by: orderBy,
-					direction: EDirection.DESC,
-				});
-			}
-		},
-		[order.by, order.direction],
-	);
 
 	const saveBoosts = useCallback(
 		async (newBoosts: IPowerBoosting[]) => {
@@ -204,20 +136,16 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 		<UserProfileTab>
 			<Row>
 				<Col lg={6}>
-					{myAccount ? (
-						<ContributeCard
-							data1={{
-								label: 'Projects Boosted',
-								value: boostedProjectsCount,
-							}}
-							data2={{
-								label: 'GIVpower',
-								value: `${formatWeiHelper(givPower.total)}`,
-							}}
-						/>
-					) : (
-						<PublicGIVpowerContributeCard user={user} />
-					)}
+					<ContributeCard
+						data1={{
+							label: 'Projects Boosted',
+							value: boostedProjectsCount,
+						}}
+						data2={{
+							label: 'GIVpower',
+							value: `${formatWeiHelper(givPower.total)}`,
+						}}
+					/>
 				</Col>
 			</Row>
 			{boostedProjectsCount &&
@@ -245,10 +173,10 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 						changeOrder={changeOrder}
 						saveBoosts={saveBoosts}
 						deleteBoost={deleteBoost}
-						myAccount={myAccount}
+						myAccount={true}
 					/>
 				) : (
-					<EmptyPowerBoosting myAccount={myAccount} />
+					<EmptyPowerBoosting myAccount={true} />
 				)}
 			</PowerBoostingContainer>
 			<GetMoreGIVpowerBanner />
