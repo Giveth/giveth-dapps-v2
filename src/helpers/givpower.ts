@@ -2,16 +2,16 @@ import BigNumber from 'bignumber.js';
 import { getNowUnixMS } from './time';
 import { IGIVpower } from '@/types/subgraph';
 import { IPowerBoosting } from '@/apollo/types/types';
-import {
-	EPowerBoostingOrder,
-	IBoostedOrder,
-} from '@/components/views/userProfile/boostedTab/ProfileBoostedTab';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
 import { GIVpowerUniPoolConfig, StakingType } from '@/types/config';
 import config from '@/configuration';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import {
+	IBoostedOrder,
+	EPowerBoostingOrder,
+} from '@/components/views/userProfile/boostedTab/useFetchPowerBoostingInfo';
 
 export const getTotalGIVpower = (
 	values: { [key: string]: ISubgraphState },
