@@ -74,6 +74,7 @@ export const FETCH_POWER_BOOSTING_INFO = gql`
 				}
 				percentage
 			}
+			totalCount
 		}
 	}
 `;
