@@ -1,11 +1,11 @@
 import { H3, H5 } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { formatUSD } from '@/lib/helpers';
 import { ContributeCardBox, ContributeCardTitles } from './ContributeCard.sc';
 import { IUserProfileView } from './views/userProfile/UserProfile.view';
+import { useProfileContext } from '@/context/profile.context';
 import { formatWeiHelper } from '@/helpers/number';
-import { getGIVpowerBalanceByAddress } from '@/services/givpower';
 
 interface IContributeCard {
 	data1: { label: string; value: string | number };
@@ -23,7 +23,8 @@ export const ContributeCard: FC<IContributeCard> = ({ data1, data2 }) => {
 	);
 };
 
-export const DonateContributeCard: FC<IUserProfileView> = ({ user }) => {
+export const DonateContributeCard: FC<IUserProfileView> = () => {
+	const { user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
 	return (
@@ -40,7 +41,8 @@ export const DonateContributeCard: FC<IUserProfileView> = ({ user }) => {
 	);
 };
 
-export const ProjectsContributeCard: FC<IUserProfileView> = ({ user }) => {
+export const ProjectsContributeCard: FC<IUserProfileView> = () => {
+	const { user } = useProfileContext();
 	const { formatMessage } = useIntl();
 	return (
 		<ContributeCard
@@ -56,25 +58,9 @@ export const ProjectsContributeCard: FC<IUserProfileView> = ({ user }) => {
 	);
 };
 
-export const PublicGIVpowerContributeCard: FC<IUserProfileView> = ({
-	user,
-}) => {
-	const [total, setTotal] = useState('0');
+export const PublicGIVpowerContributeCard: FC<IUserProfileView> = () => {
+	const { user, givpowerBalance } = useProfileContext();
 	const { formatMessage } = useIntl();
-
-	useEffect(() => {
-		const fetchTotoal = async () => {
-			try {
-				const res = await getGIVpowerBalanceByAddress([
-					user.walletAddress!,
-				]);
-				setTotal(res[user.walletAddress!]);
-			} catch (error) {
-				console.log('error on getGIVpowerBalanceByAddress', { error });
-			}
-		};
-		fetchTotoal();
-	}, [user]);
 
 	return (
 		<ContributeCard
@@ -84,7 +70,10 @@ export const PublicGIVpowerContributeCard: FC<IUserProfileView> = ({
 			}}
 			data2={{
 				label: 'GIVpower',
-				value: total !== undefined ? formatWeiHelper(total) : '--',
+				value:
+					givpowerBalance !== undefined
+						? formatWeiHelper(givpowerBalance)
+						: '--',
 			}}
 		/>
 	);

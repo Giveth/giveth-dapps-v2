@@ -15,6 +15,8 @@ import { IUserProfileView } from './UserProfile.view';
 import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
 import { profileTabs } from '@/lib/constants/Routes';
 import { removeQueryParam } from '@/helpers/url';
+import { PublicProfileBoostedTab } from './boostedTab/PublicProfileBoostedTab';
+import { useProfileContext } from '@/context/profile.context';
 
 enum EProfile {
 	OVERVIEW,
@@ -28,9 +30,10 @@ interface ITab {
 	active: boolean;
 }
 
-const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
+const ProfileContributes: FC<IUserProfileView> = () => {
 	const router = useRouter();
 	const [tab, setTab] = useState(EProfile.OVERVIEW);
+	const { user, myAccount } = useProfileContext();
 	const { formatMessage } = useIntl();
 
 	useEffect(() => {
@@ -124,21 +127,16 @@ const ProfileContributes: FC<IUserProfileView> = ({ user, myAccount }) => {
 					</ProfileTab>
 				</Link>
 			</ProfileTabsContainer>
-			{tab === EProfile.OVERVIEW && (
-				<ProfileOverviewTab user={user} myAccount={myAccount} />
-			)}
-			{tab === EProfile.GIVPOWER && (
-				<ProfileBoostedTab user={user} myAccount={myAccount} />
-			)}
-			{tab === EProfile.PROJECTS && (
-				<ProfileProjectsTab user={user} myAccount={myAccount} />
-			)}
-			{tab === EProfile.DONATIONS && (
-				<ProfileDonationsTab user={user} myAccount={myAccount} />
-			)}
-			{tab === EProfile.LIKED && (
-				<ProfileLikedTab user={user} myAccount={myAccount} />
-			)}
+			{tab === EProfile.OVERVIEW && <ProfileOverviewTab />}
+			{tab === EProfile.GIVPOWER &&
+				(myAccount ? (
+					<ProfileBoostedTab />
+				) : (
+					<PublicProfileBoostedTab />
+				))}
+			{tab === EProfile.PROJECTS && <ProfileProjectsTab />}
+			{tab === EProfile.DONATIONS && <ProfileDonationsTab />}
+			{tab === EProfile.LIKED && <ProfileLikedTab />}
 		</Container>
 	);
 };
