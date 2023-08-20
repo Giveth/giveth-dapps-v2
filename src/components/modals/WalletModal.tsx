@@ -8,6 +8,7 @@ import {
 	H5,
 	IconWorld32,
 	Lead,
+	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
@@ -142,7 +143,10 @@ const IconsContainer = styled.div`
 	align-items: center;
 	flex-wrap: wrap;
 	background-color: ${neutralColors.gray[100]};
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr;
+	${mediaQueries.tablet} {
+		grid-template-columns: 1fr 1fr;
+	}
 `;
 
 const WalletItem = styled.div<{ selected: boolean }>`
