@@ -20,6 +20,7 @@ export interface IBoostedOrder {
 export const useFetchPowerBoostingInfo = (user: IUser) => {
 	const [loading, setLoading] = useState(false);
 	const [boosts, setBoosts] = useState<IPowerBoosting[]>([]);
+	const [totalCount, setTotalCount] = useState(0);
 	const [order, setOrder] = useState<IBoostedOrder>({
 		by: EPowerBoostingOrder.Percentage,
 		direction: EDirection.DESC,
@@ -40,6 +41,7 @@ export const useFetchPowerBoostingInfo = (user: IUser) => {
 					userId: parseFloat(user.id || '') || -1,
 				},
 			});
+			setTotalCount(data?.getPowerBoosting.totalCount || 0);
 			setLoading(false);
 			if (data?.getPowerBoosting) {
 				const powerBoostings: IPowerBoosting[] =
@@ -70,5 +72,13 @@ export const useFetchPowerBoostingInfo = (user: IUser) => {
 		},
 		[order.by, order.direction],
 	);
-	return { loading, boosts, order, setBoosts, setLoading, changeOrder };
+	return {
+		loading,
+		boosts,
+		totalCount,
+		order,
+		setBoosts,
+		setLoading,
+		changeOrder,
+	};
 };
