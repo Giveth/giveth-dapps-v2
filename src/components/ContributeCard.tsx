@@ -1,11 +1,10 @@
 import { H3, H5 } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { formatUSD } from '@/lib/helpers';
 import { ContributeCardBox, ContributeCardTitles } from './ContributeCard.sc';
 import { IUserProfileView } from './views/userProfile/UserProfile.view';
 import { useProfileContext } from '@/context/profile.context';
-import { getGIVpowerBalanceByAddress } from '@/services/givpower';
 import { formatWeiHelper } from '@/helpers/number';
 
 interface IContributeCard {
@@ -60,23 +59,8 @@ export const ProjectsContributeCard: FC<IUserProfileView> = () => {
 };
 
 export const PublicGIVpowerContributeCard: FC<IUserProfileView> = () => {
-	const { user, myAccount } = useProfileContext();
-	const [total, setTotal] = useState('0');
+	const { user, givpowerBalance } = useProfileContext();
 	const { formatMessage } = useIntl();
-
-	useEffect(() => {
-		const fetchTotoal = async () => {
-			try {
-				const res = await getGIVpowerBalanceByAddress([
-					user.walletAddress!,
-				]);
-				setTotal(res[user.walletAddress!]);
-			} catch (error) {
-				console.log('error on getGIVpowerBalanceByAddress', { error });
-			}
-		};
-		fetchTotoal();
-	}, [user]);
 
 	return (
 		<ContributeCard
@@ -86,7 +70,10 @@ export const PublicGIVpowerContributeCard: FC<IUserProfileView> = () => {
 			}}
 			data2={{
 				label: 'GIVpower',
-				value: total !== undefined ? formatWeiHelper(total) : '--',
+				value:
+					givpowerBalance !== undefined
+						? formatWeiHelper(givpowerBalance)
+						: '--',
 			}}
 		/>
 	);
