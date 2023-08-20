@@ -17,7 +17,6 @@ import config from '@/configuration';
 
 import { mediaQueries } from '@/lib/constants/constants';
 import ProfileContributes from './ProfileContributes';
-import { IUser } from '@/apollo/types/types';
 import EditUserModal from '@/components/modals/EditUserModal';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import {
@@ -39,6 +38,7 @@ import { EPFPSize, PFP } from '@/components/PFP';
 import { gqlRequest } from '@/helpers/requests';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import { IGiverPFPToken } from '@/apollo/types/types';
+import { useProfileContext } from '@/context/profile.context';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -52,17 +52,15 @@ export interface IOrder {
 	direction: EDirection;
 }
 
-export interface IUserProfileView {
-	user: IUser;
-	myAccount?: boolean;
-}
+export interface IUserProfileView {}
 
-const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
+const UserProfileView: FC<IUserProfileView> = () => {
 	const dispatch = useAppDispatch();
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
 	const { chainId } = useWeb3React();
+	const { user, myAccount } = useProfileContext();
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showUploadProfileModal, setShowUploadProfileModal] = useState(false);
@@ -210,7 +208,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 					</UserInfo>
 				</Container>
 			</ProfileHeader>
-			<ProfileContributes user={user} myAccount={myAccount} />
+			<ProfileContributes />
 			{showModal && (
 				<EditUserModal
 					setShowModal={setShowModal}
