@@ -103,13 +103,18 @@ export const sortBoosts = (
 };
 
 export const getGIVpowerLink = (chainId?: number) => {
+	const _networkConf = getGivConfig(chainId);
 	const [stakeType, chain] =
-		chainId && 'GIVPOWER' in config.NETWORKS_CONFIG[chainId]
-			? [
-					(config.NETWORKS_CONFIG[chainId] as GIVpowerUniPoolConfig)
-						.GIVPOWER.type,
-					chainId,
-			  ]
+		'GIVPOWER' in _networkConf
+			? [(_networkConf as GIVpowerUniPoolConfig).GIVPOWER.type, chainId]
 			: [StakingType.GIV_GARDEN_LM, config.GNOSIS_NETWORK_NUMBER];
 	return `${Routes.GIVfarm}/?open=${stakeType}&chain=${chain}`;
+};
+
+export const getGivConfig = (chainId?: number) => {
+	const _chainId = chainId || config.GNOSIS_NETWORK_NUMBER;
+	const _networkConf =
+		config.NETWORKS_CONFIG[_chainId] ||
+		config.NETWORKS_CONFIG[config.GNOSIS_NETWORK_NUMBER];
+	return _networkConf;
 };
