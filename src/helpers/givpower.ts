@@ -4,7 +4,11 @@ import { IGIVpower } from '@/types/subgraph';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
-import { GIVpowerUniPoolConfig, StakingType } from '@/types/config';
+import {
+	GIVTokenConfig,
+	GIVpowerUniPoolConfig,
+	StakingType,
+} from '@/types/config';
 import config from '@/configuration';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
@@ -103,13 +107,25 @@ export const sortBoosts = (
 };
 
 export const getGIVpowerLink = (chainId?: number) => {
+	const _networkConf = getGIVConfig(chainId);
 	const [stakeType, chain] =
-		chainId && 'GIVPOWER' in config.NETWORKS_CONFIG[chainId]
-			? [
-					(config.NETWORKS_CONFIG[chainId] as GIVpowerUniPoolConfig)
-						.GIVPOWER.type,
-					chainId,
-			  ]
+		'GIVPOWER' in _networkConf
+			? [(_networkConf as GIVpowerUniPoolConfig).GIVPOWER.type, chainId]
 			: [StakingType.GIV_GARDEN_LM, config.GNOSIS_NETWORK_NUMBER];
 	return `${Routes.GIVfarm}/?open=${stakeType}&chain=${chain}`;
+};
+
+export const getNetworkConfig = (defaultChianID: number, chainId?: number) => {
+	const _chainId = chainId || defaultChianID;
+	const _networkConf =
+		config.NETWORKS_CONFIG[_chainId] ||
+		config.NETWORKS_CONFIG[defaultChianID];
+	return _networkConf;
+};
+
+export const getGIVConfig = (chainId?: number) => {
+	return getNetworkConfig(
+		config.GNOSIS_NETWORK_NUMBER,
+		chainId,
+	) as GIVTokenConfig;
 };
