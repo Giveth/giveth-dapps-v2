@@ -22,10 +22,12 @@ import NotAvailableProject from '@/components/NotAvailableProject';
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import CompleteProfile from '@/components/CompleteProfile';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
 	const [isLoadingProject, setIsLoadingProject] = useState(true);
+	const [isCancelled, setIsCancelled] = useState(false);
 
 	const dispatch = useAppDispatch();
 	const {
@@ -40,6 +42,8 @@ const EditIndex = () => {
 	const isRegistered = isUserRegistered(user);
 
 	useEffect(() => {
+		setIsCancelled(false);
+		if (isLoadingUser) return;
 		if (isEnabled) {
 			if (project) setProject(undefined);
 			if (!isSignedIn) {
@@ -68,6 +72,9 @@ const EditIndex = () => {
 						showToastError(
 							'Only project owner can edit the project',
 						);
+					} else if (project.status.name === EProjectStatus.CANCEL) {
+						setIsCancelled(true);
+						setProject(undefined);
 					} else {
 						setProject(project);
 					}
@@ -99,7 +106,7 @@ const EditIndex = () => {
 	} else if (!isRegistered) {
 		return <CompleteProfile />;
 	} else if (!project) {
-		return <NotAvailableProject />;
+		return <NotAvailableProject isCancelled={isCancelled} />;
 	}
 	return <CreateProject project={project} />;
 };
