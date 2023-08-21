@@ -6,7 +6,8 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 
-const NotAvailableProject = () => {
+const NotAvailableProject = (props: { isCancelled?: boolean }) => {
+	const { isCancelled } = props;
 	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
@@ -18,12 +19,18 @@ const NotAvailableProject = () => {
 			/>
 			<TitleText>
 				{formatMessage({ id: 'label.project_not_available' })}{' '}
-				<ExternalLink
-					color={brandColors.pinky[500]}
-					href={links.DISCORD}
-					title='Discord'
-				/>
-				.
+				{isCancelled &&
+					formatMessage({ id: 'label.if_this_a_mistake' })}{' '}
+				{isCancelled && (
+					<>
+						<ExternalLink
+							color={brandColors.pinky[500]}
+							href={links.DISCORD}
+							title='Discord'
+						/>
+						.
+					</>
+				)}
 			</TitleText>
 		</Wrapper>
 	);
