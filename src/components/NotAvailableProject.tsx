@@ -39,6 +39,8 @@ const Wrapper = styled(FlexCenter)`
 const TitleText = styled(H4)`
 	color: ${brandColors.deep[800]};
 	text-align: center;
+	max-width: 1200px;
+	margin: 0 40px;
 `;
 
 export default NotAvailableProject;
