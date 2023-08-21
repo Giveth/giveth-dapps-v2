@@ -3,7 +3,7 @@ import config from '@/configuration';
 import { networksParams } from '@/helpers/blockchain';
 
 export const chainName = (chainId: number) => {
-	return networksParams[chainId].chainName || 'Unknown';
+	return networksParams[chainId]?.chainName || 'Unknown';
 };
 
 export const NFT_POSITIONS_MANAGER_ADDRESS: Record<string, string> = {
