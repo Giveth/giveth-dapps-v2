@@ -174,7 +174,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 								alignItems='center'
 							>
 								<EstimatedMatchingPrice>
-									+ {formatDonations(matchFund, '$', true)}
+									+ {formatDonations(matchFund, '$')}
 								</EstimatedMatchingPrice>
 								<EstimatedMatchingText>
 									{selectedQFData?.isActive
