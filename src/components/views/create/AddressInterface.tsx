@@ -11,11 +11,9 @@ import {
 import config from '@/configuration';
 import { EInputs } from '@/components/views/create/CreateProject';
 import { networksParams } from '@/helpers/blockchain';
-import { IconEthereum } from '@/components/Icons/Eth';
-import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 
 interface IAddressInterfaceProps {
 	networkId: number;
@@ -32,59 +30,22 @@ const AddressInterface = ({
 		watch,
 	} = useFormContext();
 
-	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
-	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
-	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
-	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
-	const inputName = isGnosis
-		? EInputs.gnosisAddress
-		: isPolygon
-		? EInputs.polygonAddress
-		: isCelo
-		? EInputs.celoAddress
-		: isOptimism
-		? EInputs.optimismAddress
-		: EInputs.mainAddress;
+	const inputName = EInputs.addresses;
+
 	const value = watch(inputName);
+
 	const { formatMessage } = useIntl();
 
-	const hasAddress = !!value && !errors[inputName]?.message;
-
-	let caption: string = '';
-	if (!value) {
-		caption = `${formatMessage({
-			id: 'label.you_can_enter_a_new_address',
-		})} ${
-			isGnosis
-				? 'Gnosis Chain'
-				: isPolygon
-				? 'Polygon Mainnet'
-				: isCelo
-				? 'Celo Mainnet'
-				: isOptimism
-				? 'Optimism'
-				: 'Mainnet'
-		}.`;
-	}
-
-	const NetworkIcon = isGnosis ? (
-		<GnosisIcon />
-	) : isPolygon ? (
-		<PolygonIcon />
-	) : isCelo ? (
-		<CeloIcon />
-	) : isOptimism ? (
-		<OptimismIcon />
-	) : (
-		<MainnetIcon />
-	);
+	const hasAddress = !!value[networkId] && !errors[inputName]?.message;
 
 	return (
 		<Container>
 			<TopContainer>
 				<Flex justifyContent='space-between'>
 					<Flex gap='8px'>
-						{NetworkIcon}
+						<ChainIconShadow>
+							<NetworkLogo chainId={networkId} logoSize={24} />
+						</ChainIconShadow>
 						{formatMessage(
 							{ id: 'label.chain_address' },
 							{
@@ -108,15 +69,8 @@ const AddressInterface = ({
 								id: 'label.receiving_address_on',
 							},
 							{
-								chainName: isGnosis
-									? 'Gnosis Chain'
-									: isPolygon
-									? 'Polygon Mainnet'
-									: isCelo
-									? 'Celo Mainnet'
-									: isOptimism
-									? 'Optimism Mainnet'
-									: 'Mainnet',
+								chainName:
+									config.NETWORKS_CONFIG[networkId].chainName,
 							},
 						)}
 					</GLink>
@@ -126,17 +80,17 @@ const AddressInterface = ({
 					alignItems='center'
 					gap='8px'
 				>
-					<AddressContainer
-						hasAddress={hasAddress}
-						style={{ width: '100%' }}
-					>
-						{hasAddress ? value : 'No address added yet!'}
+					<AddressContainer hasAddress={hasAddress}>
+						{hasAddress
+							? value[networkId]
+							: 'No address added yet!'}
 					</AddressContainer>
 					{hasAddress && (
 						<IconContainer
 							onClick={() => {
-								setValue(inputName, '');
-								console.log('clicked', inputName, value);
+								const newValue = { ...value };
+								delete newValue[networkId];
+								setValue(inputName, newValue);
 							}}
 						>
 							<IconTrash24 />
@@ -147,36 +101,6 @@ const AddressInterface = ({
 		</Container>
 	);
 };
-
-const OptimismIcon = () => (
-	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.OPTIMISM_NETWORK_NUMBER} />
-	</ChainIconShadow>
-);
-
-const CeloIcon = () => (
-	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.CELO_NETWORK_NUMBER} />
-	</ChainIconShadow>
-);
-
-const PolygonIcon = () => (
-	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.POLYGON_NETWORK_NUMBER} />
-	</ChainIconShadow>
-);
-
-const GnosisIcon = () => (
-	<ChainIconShadow>
-		<IconGnosisChain size={24} />
-	</ChainIconShadow>
-);
-
-const MainnetIcon = () => (
-	<ChainIconShadow>
-		<IconEthereum size={24} />
-	</ChainIconShadow>
-);
 
 const Container = styled.div`
 	margin-top: 25px;
@@ -201,6 +125,7 @@ const MiddleContainer = styled.div`
 `;
 
 const AddressContainer = styled.div<{ hasAddress: boolean }>`
+	width: 100%;
 	border: 2px solid ${neutralColors.gray[300]};
 	background-color: ${props =>
 		props.hasAddress ? neutralColors.gray[100] : neutralColors.gray[300]};
@@ -211,13 +136,10 @@ const AddressContainer = styled.div<{ hasAddress: boolean }>`
 	overflow-x: auto;
 `;
 
-const IconContainer = styled.div`
+const IconContainer = styled(FlexCenter)`
 	height: 50px;
 	width: 50px;
 	border-radius: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	cursor: pointer;
 	transition: background-color 0.2s ease-in-out;
 	:hover {

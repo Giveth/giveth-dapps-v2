@@ -7,7 +7,6 @@ import WalletAddressInput from './WalletAddressInput';
 interface ICreateProjectAddAddressModal {
 	setShowModal: (show: number | undefined) => void;
 	networkId: number;
-	isActive?: boolean;
 	userAddresses: string[];
 	setResolvedENS?: (resolvedENS: string) => void;
 	resolvedENS?: string;
@@ -17,10 +16,7 @@ interface ICreateProjectAddAddressModal {
 const CreateProjectAddAddressModal = ({
 	setShowModal,
 	networkId,
-	isActive = true,
 	userAddresses,
-	setResolvedENS = () => {},
-	resolvedENS,
 	onSubmit,
 }: ICreateProjectAddAddressModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(() =>
@@ -37,10 +33,7 @@ const CreateProjectAddAddressModal = ({
 			<AddressContainer>
 				<WalletAddressInput
 					networkId={networkId}
-					isActive={isActive}
 					userAddresses={userAddresses}
-					setResolvedENS={setResolvedENS}
-					resolvedENS={resolvedENS ?? undefined}
 					onSubmit={onSubmit}
 				/>
 			</AddressContainer>
@@ -51,9 +44,8 @@ const CreateProjectAddAddressModal = ({
 const AddressContainer = styled.div`
 	max-width: 558px;
 	min-height: 400px;
-	padding: 0 8px;
+	padding: 0 8px 70px;
 	text-align: left;
-	padding-bottom: 70px;
 `;
 
 export default CreateProjectAddAddressModal;
