@@ -66,6 +66,8 @@ export interface IWallet {
 	value: EWallets;
 	image: any;
 	connector: TWalletConnector;
+	customSubtitle?: string;
+	hasWorldIcon?: boolean;
 }
 
 export const torusWallet: IWallet = {
@@ -77,10 +79,12 @@ export const torusWallet: IWallet = {
 
 export const walletsArray: IWallet[] = [
 	{
-		name: 'MetaMask',
+		name: 'Wallet Extension | MetaMask',
 		value: EWallets.METAMASK,
 		image: metamaskIcon,
 		connector: injectedConnector,
+		customSubtitle: 'installed web wallet',
+		hasWorldIcon: true,
 	},
 	// WalletConnect V1 is shutdown. Disabling WalletConnect v1 until v2 is ready
 	// {
