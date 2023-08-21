@@ -31,7 +31,7 @@ import { TWO_WEEK } from '@/lib/constants/constants';
 import StakingPoolCard from '@/components/cards/StakingCards/BaseStakingCard/BaseStakingCard';
 import { RegenStreamSection } from '@/components/givfarm/RegenStreamSection';
 import ToggleSwitch from '@/components/styled-components/Switch';
-import { getGivConfig } from '@/helpers/givpower';
+import { getNetworkConfig } from '@/helpers/givpower';
 
 const renderPool = (
 	pool: SimplePoolStakingConfig | UniswapV3PoolStakingConfig,
@@ -92,7 +92,7 @@ export const GIVfarmBottom = () => {
 	const { chainId } = useWeb3React();
 	const [showArchivedPools, setShowArchivedPools] = useState(false);
 
-	const _config = getGivConfig(chainId);
+	const _config = getNetworkConfig(config.GNOSIS_NETWORK_NUMBER, chainId);
 
 	return (
 		<GIVfarmBottomContainer>
