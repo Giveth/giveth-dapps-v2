@@ -401,8 +401,11 @@ export const isGIVeconomyRoute = (route: string) => {
 };
 
 export const showToastError = (err: any) => {
-	const errorMessage =
+	let errorMessage =
 		typeof err === 'string' ? err : JSON.stringify(err.message || err);
+	if (errorMessage.startsWith('"') && errorMessage.endsWith('"')) {
+		errorMessage = errorMessage.slice(1, -1);
+	}
 	gToast(errorMessage, {
 		type: ToastType.DANGER,
 		position: 'top-center',
