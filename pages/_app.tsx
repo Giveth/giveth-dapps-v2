@@ -10,6 +10,12 @@ import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
 import Script from 'next/script';
+import { WagmiConfig, configureChains, createConfig } from 'wagmi';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { createPublicClient, http } from 'viem';
+import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
+import { mainnet, polygon, optimism, arbitrum, zora } from 'wagmi/chains';
+import { publicProvider } from 'wagmi/providers/public';
 
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
@@ -67,6 +73,24 @@ function getLibrary(provider: ExternalProvider) {
 	return new Web3Provider(provider);
 }
 
+const wagmiConfig = createConfig({
+	autoConnect: true,
+	publicClient: createPublicClient({
+		chain: mainnet,
+		transport: http(),
+	}),
+});
+const { chains, publicClient } = configureChains(
+	[mainnet, polygon, optimism, arbitrum, zora],
+	[alchemyProvider({ apiKey: process.env.ALCHEMY_ID! }), publicProvider()],
+);
+
+const { connectors } = getDefaultWallets({
+	appName: 'My RainbowKit App',
+	projectId: 'YOUR_PROJECT_ID',
+	chains,
+});
+
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
 	const locale = router ? router.locale : 'en';
@@ -116,46 +140,51 @@ function MyApp({ Component, pageProps }: AppProps) {
 					defaultLocale='en'
 				>
 					<ApolloProvider client={apolloClient}>
-						<Web3ReactProvider getLibrary={getLibrary}>
-							{isMaintenanceMode ? (
-								<MaintenanceIndex />
-							) : (
-								<>
-									<NotificationController />
-									<GeneralController />
-									<PriceController />
-									<SubgraphController />
-									<UserController />
-									<HeaderWrapper />
-									{isGIVeconomyRoute(router.route) && (
-										<GIVeconomyTab />
-									)}
-									{(pageProps as any).errorStatus ? (
-										<ErrorsIndex
-											statusCode={
-												(pageProps as any).errorStatus
-											}
-										/>
+						<WagmiConfig config={wagmiConfig}>
+							<RainbowKitProvider chains={chains}>
+								<Web3ReactProvider getLibrary={getLibrary}>
+									{isMaintenanceMode ? (
+										<MaintenanceIndex />
 									) : (
-										<Component {...pageProps} />
-									)}
-									{process.env.NEXT_PUBLIC_ENV ===
-										'production' && (
-										<Script
-											id='segment-script'
-											strategy='afterInteractive'
-											dangerouslySetInnerHTML={{
-												__html: renderSnippet(),
-											}}
-										/>
-									)}
+										<>
+											<NotificationController />
+											<GeneralController />
+											<PriceController />
+											<SubgraphController />
+											<UserController />
+											<HeaderWrapper />
+											{isGIVeconomyRoute(
+												router.route,
+											) && <GIVeconomyTab />}
+											{(pageProps as any).errorStatus ? (
+												<ErrorsIndex
+													statusCode={
+														(pageProps as any)
+															.errorStatus
+													}
+												/>
+											) : (
+												<Component {...pageProps} />
+											)}
+											{process.env.NEXT_PUBLIC_ENV ===
+												'production' && (
+												<Script
+													id='segment-script'
+													strategy='afterInteractive'
+													dangerouslySetInnerHTML={{
+														__html: renderSnippet(),
+													}}
+												/>
+											)}
 
-									<FooterWrapper />
-									<ModalController />
-									<PfpController />
-								</>
-							)}
-						</Web3ReactProvider>
+											<FooterWrapper />
+											<ModalController />
+											<PfpController />
+										</>
+									)}
+								</Web3ReactProvider>
+							</RainbowKitProvider>
+						</WagmiConfig>
 					</ApolloProvider>
 				</IntlProvider>
 			</Provider>
