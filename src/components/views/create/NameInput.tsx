@@ -46,12 +46,7 @@ const NameInput: FC<IProps> = ({ preTitle, showGuidelineModal }) => {
 	const isFirstRender = useRef(true);
 
 	useEffect(() => {
-		console.log(
-			!showGuidelineModal,
-			isCreateMode,
-			!firstGuideModalClosed.current,
-			!isFirstRender.current,
-		);
+		// For handling a case when the user clicks on Submission guidelines and close it - We shouldn't focus in this case
 		if (
 			!showGuidelineModal &&
 			isCreateMode &&
@@ -63,8 +58,6 @@ const NameInput: FC<IProps> = ({ preTitle, showGuidelineModal }) => {
 		}
 		isFirstRender.current = false;
 	}, [showGuidelineModal]);
-
-	console.log('showGuidelineModal', showGuidelineModal);
 
 	return (
 		<>
