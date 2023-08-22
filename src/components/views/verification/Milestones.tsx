@@ -95,6 +95,7 @@ export default function Milestones() {
 					registerName='problem'
 					error={errors.problem}
 					disabled={!isDraft}
+					autoFocus
 				/>
 				<Lead>
 					{formatMessage({
