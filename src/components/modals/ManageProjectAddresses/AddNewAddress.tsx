@@ -44,7 +44,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 		const { address } = formData;
 		try {
 			const _address = getAddress(address);
-			const { data } = await client.mutate({
+			await client.mutate({
 				mutation: ADD_RECIPIENT_ADDRESS_TO_PROJECT,
 				variables: {
 					projectId: Number(project.id),
@@ -71,7 +71,6 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 						newProjects.push(_project);
 					}
 				}
-				console.log('newProjects', newProjects);
 				setSelectedWallet(undefined);
 				return newProjects;
 			});
@@ -118,6 +117,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 				<StyledInput
 					register={register}
 					registerName='address'
+					autoFocus
 					label={`Receiving address on 
 						${chainName}`}
 					registerOptions={{
