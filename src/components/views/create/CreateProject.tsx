@@ -137,12 +137,23 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				draft,
 			} = formData;
 
-			const _addresses = Object.entries(addresses).map(
-				([id, address]) => ({
-					address: utils.getAddress(address),
-					networkId: Number(id),
-				}),
-			);
+			let _addresses: { address: string; networkId: number }[] = [];
+			Object.entries(addresses).forEach(([id, address]) => {
+				if (id && address) {
+					_addresses.push({
+						address: utils.getAddress(address),
+						networkId: Number(id),
+					});
+				}
+			});
+
+			if (_addresses.length === 0) {
+				showToastError(
+					formatMessage({ id: 'label.recipient_addresses_cant' }),
+				);
+				setIsLoading(false);
+				return;
+			}
 
 			const projectData: IProjectCreation = {
 				title: name,
