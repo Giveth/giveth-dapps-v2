@@ -115,7 +115,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 			);
 		}
 	}, [currentValues, chainId, givTokenDistroHelper]);
-	console.log({ farmsLiquidPart });
+
 	return (
 		<>
 			<Item theme={theme}>
