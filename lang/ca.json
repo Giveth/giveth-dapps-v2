@@ -671,6 +671,7 @@
 	"label.receiving_funds": "Rebre fons",
 	"label.recently_updated": "Actualitzats Recentment",
 	"label.recipient_addresses": "recipient addresses",
+	"label.recipient_addresses_cant": "Les adreces dels destinataris no poden estar buides",
 	"label.refer_a_friend": "Refereix a un amic, guanya $GIV tokens per cada donació.",
 	"label.refer_your_friends": "Refer your friends",
 	"label.refer_your_friends_and_earn_giv": "Refer your friends and earn GIV when they donate",
