@@ -4,6 +4,7 @@ import { Button, IconWalletOutline24 } from '@giveth/ui-design-system';
 import { Controller, useForm } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
 import { utils } from 'ethers';
+import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import Input from '@/components/Input';
@@ -52,6 +53,7 @@ const AddAddressModal: FC<IProps> = ({
 		getValues,
 	} = useForm<IAddressForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
 
+	const { formatMessage } = useIntl();
 	const { library, chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -149,7 +151,9 @@ const AddAddressModal: FC<IProps> = ({
 					<Buttons>
 						<Button
 							size='small'
-							label='ADD NEW ADDRESS'
+							label={formatMessage({
+								id: 'label.add_new_address',
+							})}
 							buttonType='secondary'
 							type='submit'
 						/>
