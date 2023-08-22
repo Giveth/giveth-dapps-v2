@@ -178,6 +178,7 @@ const PersonalInfo = () => {
 									register={register}
 									registerOptions={requiredOptions.email}
 									error={errors.email}
+									autoFocus
 								/>
 								{isDraft && (
 									<ButtonStyled
