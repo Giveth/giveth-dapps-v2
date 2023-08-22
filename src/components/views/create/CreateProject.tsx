@@ -40,7 +40,6 @@ import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
-import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 // import useLeaveConfirm from '@/hooks/useLeaveConfirm';
 import config from '@/configuration';
@@ -51,6 +50,7 @@ import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
+import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 
 const { NETWORKS_CONFIG } = config;
 const networksIds = Object.keys(NETWORKS_CONFIG).map(Number);
@@ -120,8 +120,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const { handleSubmit, setValue } = formMethods;
 
 	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
-
 	const [isLoading, setIsLoading] = useState(false);
+	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
 
 	// useLeaveConfirm({ shouldConfirm: formChange });
 	const onSubmit = async (formData: TInputs) => {
@@ -226,15 +226,18 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							: formatMessage({ id: 'label.create_a_project' })}
 					</Title>
 					{isSmallScreen && (
-						<GuidelinesStyleTablet>
-							<Guidelines />
-						</GuidelinesStyleTablet>
+						<Guidelines
+							setShowGuidelineModal={setShowGuidelineModal}
+						/>
 					)}
 				</div>
 
 				<FormProvider {...formMethods}>
 					<form onSubmit={handleSubmit(onSubmit)}>
-						<NameInput preTitle={title} />
+						<NameInput
+							showGuidelineModal={showGuidelineModal}
+							preTitle={title}
+						/>
 						<DescriptionInput />
 						<CategoryInput />
 						<LocationIndex />
@@ -338,9 +341,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				</FormProvider>
 			</CreateContainer>
 			{!isSmallScreen && (
-				<GuidelinesStyleLaptop>
-					<Guidelines />
-				</GuidelinesStyleLaptop>
+				<Guidelines
+					isLaptop
+					setShowGuidelineModal={setShowGuidelineModal}
+				/>
+			)}
+			{showGuidelineModal && (
+				<ProjectGuidelineModal setShowModal={setShowGuidelineModal} />
 			)}
 		</Wrapper>
 	);
@@ -356,36 +363,6 @@ const Wrapper = styled.div`
 	margin: 0 auto;
 	position: relative;
 	display: flex;
-`;
-
-const GuidelinesStyle = styled.div`
-	> div {
-		display: flex;
-		height: 87px;
-		align-items: center;
-		gap: 20px;
-		padding: 28px 30px 28px 28px;
-		border-radius: 8px;
-		box-shadow: ${Shadow.Dark[500]};
-		position: relative;
-		cursor: pointer;
-		margin-bottom: 20px;
-		> h6 {
-			font-weight: 700;
-		}
-	}
-`;
-
-const GuidelinesStyleTablet = styled(GuidelinesStyle)`
-	display: flex;
-`;
-
-const GuidelinesStyleLaptop = styled(GuidelinesStyle)`
-	display: flex;
-	> div {
-		position: sticky;
-		top: 104px;
-	}
 `;
 
 const CreateContainer = styled(Container)`
