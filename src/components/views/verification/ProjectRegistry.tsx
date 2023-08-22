@@ -209,6 +209,7 @@ export default function ProjectRegistry() {
 								}
 								defaultValue={organizationName || ''}
 								error={errors.organizationName}
+								autoFocus
 							/>
 						</InputContainer>
 						<Lead>
@@ -303,6 +304,7 @@ export default function ProjectRegistry() {
 							defaultValue={organizationDescription || ''}
 							error={errors.description}
 							disabled={!isDraft}
+							autoFocus
 						/>
 					</div>
 				)}
