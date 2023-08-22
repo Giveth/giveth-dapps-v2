@@ -32,7 +32,7 @@ import { networkProviders } from '@/helpers/networkProvider';
 import { useAppSelector } from '@/features/hooks';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { getNowUnixMS } from '@/helpers/time';
-import { InputWithUnit } from '@/components/input';
+import { InputWithUnit } from '@/components/input/index';
 import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
 
