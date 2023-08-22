@@ -121,7 +121,7 @@ function createApolloClient() {
 				if (message.toLowerCase().includes('authentication required')) {
 					console.log(Date.now(), 'sign out from graphQL');
 					//   removes token and user from store
-					store.dispatch(signOut()).finally(() => {
+					store.dispatch(signOut(null)).finally(() => {
 						//show signin modal
 						store.dispatch(setShowSignWithWallet(true));
 					});

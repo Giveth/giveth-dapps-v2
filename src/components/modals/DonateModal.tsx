@@ -125,7 +125,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	};
 
 	const handleFailedValidation = () => {
-		dispatch(signOut());
+		dispatch(signOut(null));
 		dispatch(setShowSignWithWallet(true));
 		closeModal();
 	};
