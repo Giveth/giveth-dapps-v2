@@ -100,12 +100,14 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 			let _farmRewards = constants.Zero;
 			pools.forEach(pool => {
 				if (pool.type !== StakingType.UNISWAPV3_ETH_GIV) {
-					_farmRewards = _farmRewards.add(
-						getUserStakeInfo(
-							currentValues,
-							pool as SimplePoolStakingConfig,
-						).earned,
-					);
+					if (!pool?.exploited) {
+						_farmRewards = _farmRewards.add(
+							getUserStakeInfo(
+								currentValues,
+								pool as SimplePoolStakingConfig,
+							).earned,
+						);
+					}
 				}
 			});
 			setFarmsLiquidPart(
@@ -113,6 +115,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 			);
 		}
 	}, [currentValues, chainId, givTokenDistroHelper]);
+	console.log({ farmsLiquidPart });
 	return (
 		<>
 			<Item theme={theme}>
