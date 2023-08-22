@@ -26,6 +26,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
 import NetworkLogo from '@/components/NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
+import useFocus from '@/hooks/useFocus';
 
 const networksConfig = config.NETWORKS_CONFIG;
 
@@ -143,6 +144,8 @@ const WalletAddressInput: FC<IProps> = ({
 		});
 	}, [inputValue]);
 
+	const [inputRef] = useFocus();
+
 	return (
 		<Container>
 			<Header>
@@ -169,6 +172,7 @@ const WalletAddressInput: FC<IProps> = ({
 						chainName: networksConfig[networkId].chainName,
 					},
 				)}
+				ref={inputRef}
 				placeholder={formatMessage({ id: 'label.my_wallet_address' })}
 				caption={caption}
 				size={InputSize.LARGE}
