@@ -117,6 +117,7 @@ const ManageFundsIndex = () => {
 								id: 'page.verification.managing_funds.two',
 							})}
 							disabled={!isDraft}
+							autoFocus
 						/>
 						<div>
 							{formatMessage({
