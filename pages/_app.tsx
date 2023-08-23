@@ -14,7 +14,14 @@ import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { infuraProvider } from 'wagmi/providers/infura';
 
 import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
-import { mainnet, polygon, optimism, arbitrum, zora } from 'wagmi/chains';
+import {
+	mainnet,
+	polygon,
+	optimism,
+	arbitrum,
+	zora,
+	gnosis,
+} from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 
 import { useApollo } from '@/apollo/apolloClient';
