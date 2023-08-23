@@ -17,6 +17,7 @@ import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
 import { networksParams } from '@/helpers/blockchain';
+import useFocus from '@/hooks/useFocus';
 
 interface IProps extends IModal {
 	addAddress: (address: IAddress) => void;
@@ -56,6 +57,7 @@ const AddAddressModal: FC<IProps> = ({
 	const { formatMessage } = useIntl();
 	const { library, chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const [inputRef] = useFocus();
 
 	const watchTitle = watch('title');
 
@@ -118,6 +120,7 @@ const AddAddressModal: FC<IProps> = ({
 								selectedNetwork={field.value}
 								onChange={network => field.onChange(network)}
 								error={error}
+								ref={inputRef}
 							/>
 						)}
 					/>
