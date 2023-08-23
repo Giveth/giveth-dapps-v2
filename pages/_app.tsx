@@ -45,6 +45,7 @@ import GIVeconomyTab from '@/components/GIVeconomyTab';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
+import '@rainbow-me/rainbowkit/styles.css';
 
 declare global {
 	interface Window {
