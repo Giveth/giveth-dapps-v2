@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import {
 	neutralColors,
 	semanticColors,
@@ -7,6 +7,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import useFocus from '@/hooks/useFocus';
 
 interface IInputBox {
 	value?: number;
@@ -24,6 +25,11 @@ const InputBox: FC<IInputBox> = ({
 	disabled,
 }) => {
 	const { formatMessage } = useIntl();
+	const [inputRef, setFocus] = useFocus();
+
+	useEffect(() => {
+		setTimeout(() => setFocus(), 1000);
+	}, []);
 
 	return (
 		<Box>
@@ -38,6 +44,7 @@ const InputBox: FC<IInputBox> = ({
 							_value === '' ? undefined : Number(e.target.value);
 						onChange(num);
 					}}
+					ref={inputRef}
 					onFocus={() => onFocus(true)}
 					onBlur={() => onFocus(false)}
 					placeholder={formatMessage({ id: 'label.amount' })}
