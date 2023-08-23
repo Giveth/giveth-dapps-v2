@@ -13,7 +13,6 @@ import Script from 'next/script';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { infuraProvider } from 'wagmi/providers/infura';
 
-import { createPublicClient, http } from 'viem';
 import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
 import { mainnet, polygon, optimism, arbitrum, zora } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
@@ -90,10 +89,7 @@ const { connectors } = getDefaultWallets({
 
 const wagmiConfig = createConfig({
 	autoConnect: true,
-	publicClient: createPublicClient({
-		chain: mainnet,
-		transport: http(),
-	}),
+	publicClient: publicClient,
 	connectors,
 });
 
