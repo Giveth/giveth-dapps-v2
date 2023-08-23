@@ -84,8 +84,8 @@ function getLibrary(provider: ExternalProvider) {
 const { chains, publicClient } = configureChains(
 	[mainnet, gnosis, polygon, optimism, arbitrum, zora],
 	[
-		infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY! }),
 		publicProvider(),
+		infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY! }),
 	],
 );
 
