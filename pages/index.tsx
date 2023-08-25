@@ -41,7 +41,7 @@ const HomeRoute = (props: IHomeRoute) => {
 	);
 };
 
-export const getStaticProps: GetStaticProps = async context => {
+export const getStaticProps: GetStaticProps = async () => {
 	const { data } = await client.query({
 		query: FETCH_HOMEPAGE_DATA,
 		variables: HOME_QUERY_VARIABLES,
