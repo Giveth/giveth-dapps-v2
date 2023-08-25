@@ -25,7 +25,7 @@ export const LatestUpdatesBlock: FC<ILatestUpdatesBlockProps> = ({
 			</Container>
 			<LatestUpdatesCardsWrapper>
 				<LatestUpdatesCardsContainer>
-					{updates.map((update, idx) => (
+					{updates.map(update => (
 						<LatestUpdateCard key={update.id} update={update} />
 					))}
 				</LatestUpdatesCardsContainer>
