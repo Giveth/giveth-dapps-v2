@@ -6,7 +6,10 @@ import {
 	Web3Provider,
 } from '@ethersproject/providers';
 import { captureException } from '@sentry/nextjs';
+import { getContract, getWalletClient } from 'wagmi/actions';
+import { erc20ABI } from 'wagmi';
 import {
+	Address,
 	BalancerPoolStakingConfig,
 	GIVTokenConfig,
 	GIVpowerConfig,
@@ -33,7 +36,6 @@ import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
 import ERC20_Json from '../artifacts/ERC20.json';
 import UnipoolGIVpower from '../artifacts/UnipoolGIVpower.json';
 import {
-	ERC20,
 	IUniswapV2Pair,
 	IVault,
 	UnipoolTokenDistributor,
@@ -452,74 +454,50 @@ const permitTokens = async (
 };
 
 export const approveERC20tokenTransfer = async (
-	amount: string,
-	ownerAddress: string,
-	spenderAddress: string,
-	poolAddress: string,
-	provider: Web3Provider | null,
+	amount: bigint,
+	ownerAddress: Address,
+	spenderAddress: Address,
+	tokenAddress: Address,
+	chainId: number,
 ): Promise<boolean> => {
-	if (amount === '0') return false;
-	if (!provider) {
-		console.error('Provider is null');
-		return false;
-	}
+	if (amount === 0n) return false;
 
-	const tokenContract = new Contract(
-		poolAddress,
-		ERC20_ABI,
-		provider,
-	) as ERC20;
-	const allowance: ethers.BigNumber = await tokenContract.allowance(
+	const tokenContract = getContract({
+		address: tokenAddress,
+		abi: erc20ABI,
+	});
+
+	const allowance = await tokenContract.read.allowance([
 		ownerAddress,
 		spenderAddress,
-	);
+	]);
 
-	const amountNumber = ethers.BigNumber.from(amount);
-
-	if (amountNumber.lte(allowance)) return true;
-
-	const signer = provider.getSigner();
-
-	const gasPreference = {
-		...getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),
-		gasLimit: 70000,
-	};
-
-	if (!allowance.isZero()) {
-		try {
-			const approveZero: TransactionResponse = await tokenContract
-				.connect(signer.connectUnchecked())
-				.approve(spenderAddress, ethers.constants.Zero, gasPreference);
-
-			const { status } = await approveZero.wait();
-			if (!status) return false;
-		} catch (error) {
-			console.log('Error on Zero Approve', error);
-			captureException(error, {
-				tags: {
-					section: 'approveERC20tokenTransfer',
-				},
-			});
-			return false;
-		}
-	}
+	if (amount <= allowance) return true;
 
 	try {
-		const approve = await tokenContract
-			.connect(signer.connectUnchecked())
-			.approve(spenderAddress, amountNumber, gasPreference);
-		const { status } = await approve.wait();
-		if (!status) return false;
-	} catch (error) {
-		console.log('Error on Amount Approve:', error);
-		captureException(error, {
-			tags: {
-				section: 'approveERC20tokenTransfer',
-			},
+		const walletClient = await getWalletClient({ chainId });
+
+		if (allowance > 0n) {
+			await walletClient?.writeContract({
+				address: tokenAddress,
+				abi: erc20ABI,
+				functionName: 'approve',
+				args: [spenderAddress, 0n],
+			});
+		}
+
+		await walletClient?.writeContract({
+			address: tokenAddress,
+			abi: erc20ABI,
+			functionName: 'approve',
+			args: [spenderAddress, amount],
 		});
+
+		return true;
+	} catch (error) {
+		console.log('Error on Approve', error);
 		return false;
 	}
-	return true;
 };
 
 export const wrapToken = async (
