@@ -64,7 +64,6 @@ interface IGIVdropHarvestModal extends IModal {
 
 export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	setShowModal,
-	network,
 	givdropAmount,
 	checkNetworkAndWallet,
 	onSuccess,
