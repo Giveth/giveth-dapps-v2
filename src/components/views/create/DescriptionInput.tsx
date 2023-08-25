@@ -79,14 +79,6 @@ const InputContainerStyled = styled(InputContainer)<{ error?: string }>`
 	}
 `;
 
-const ErrorStyled = styled.div`
-	margin-top: -10px;
-	margin-bottom: 20px;
-	color: ${semanticColors.punch[500]};
-	font-size: 12px;
-	word-break: break-word;
-`;
-
 const CaptionContainer = styled(Caption)`
 	margin: 8.5px 0 0 0;
 	span {
