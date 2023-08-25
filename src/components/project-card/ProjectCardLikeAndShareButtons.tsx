@@ -161,11 +161,7 @@ const ProjectCardLikeAndShareButtons = (
 							<IconHeartOutline16 />
 						)}
 					</BadgeButton>
-					<BadgeButton
-						onClick={e => {
-							setShowModal(true);
-						}}
-					>
+					<BadgeButton onClick={() => setShowModal(true)}>
 						<IconShare16 />
 					</BadgeButton>
 				</Flex>
