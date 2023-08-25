@@ -101,7 +101,7 @@ export interface RegenStreamConfig {
 	title: string;
 	tokenDistroAddress: Address;
 	type: StreamType;
-	rewardTokenAddress: string;
+	rewardTokenAddress: Address;
 	rewardTokenSymbol: string;
 	archived?: boolean;
 	// For price purpose
