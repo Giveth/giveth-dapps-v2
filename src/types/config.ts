@@ -175,7 +175,7 @@ interface GIVgardenTokenConfig {
 }
 
 interface PFPConfig {
-	PFP_CONTRACT_ADDRESS: string;
+	PFP_CONTRACT_ADDRESS: Address;
 }
 
 interface TokenPriceConfig {
