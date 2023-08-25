@@ -448,13 +448,6 @@ const FloatingFigure1 = styled.div`
 	}
 `;
 
-const FloatingFigure2 = styled(FloatingFigure1)`
-	width: 70px;
-	height: 40px;
-	background-image: url(/images/givferral/yellow-arc.svg);
-	left: 0;
-`;
-
 const FloatingFigure3 = styled(FloatingFigure1)`
 	display: none;
 	width: 180px;
