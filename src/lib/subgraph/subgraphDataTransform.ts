@@ -6,7 +6,6 @@ import {
 	ITokenDistro,
 	IUnipool,
 	IUnipoolBalance,
-	IUniswapV2Pair,
 	IUniswapV3Pool,
 	IUniswapV3Position,
 	IGIVpower,
@@ -132,22 +131,6 @@ const transformUniswapPositions = (info: any): any => {
 	}
 
 	return stakedInfo;
-};
-
-const transformUniswapV2Pair = (info: any): IUniswapV2Pair | undefined => {
-	if (!info) return undefined;
-	const token0 = info?.token0 || ethers.constants.AddressZero;
-	const token1 = info?.token1 || ethers.constants.AddressZero;
-
-	const reserve0 = info?.reserve0 || 1;
-	const reserve1 = info?.reserve1 || 1;
-
-	return {
-		token0,
-		token1,
-		reserve0,
-		reserve1,
-	};
 };
 
 export const transformTokenBalance = (info: any = {}): ITokenBalance => {
