@@ -66,31 +66,6 @@ const Step: FC<IStepProps> = ({ title, isActive, onClick, disabled }) => {
 	);
 };
 
-interface ISwitchNetwork {
-	hidden: boolean;
-}
-
-const SwitchNetwork = styled.div<ISwitchNetwork>`
-	height: 48px;
-	background-color: #e1458d;
-	display: ${props => (props.hidden ? 'hidden' : 'flex')};
-	justify-content: center;
-	align-items: center;
-	gap: 12px;
-	position: fixed;
-	width: 100%;
-`;
-
-const ButtonSwitchNetwork = styled.a`
-	background: black;
-	padding: 4px 8px;
-	border-radius: 4px;
-	font-size: 12px;
-	text-transform: uppercase;
-	font-weight: bold;
-	cursor: pointer;
-`;
-
 interface IClaimViewContainer {
 	switchNetwork: boolean;
 }
@@ -98,7 +73,7 @@ interface IClaimViewContainer {
 const ClaimViewContainer = styled.div<IClaimViewContainer>`
 	background-image: url('/images/cardsbg1.png'), url('/images/cardsbg.png');
 	background-repeat: repeat-x, no-repeat;
-	background-position-y: bottom, top;
+	background-position-y: bottom;
 `;
 
 const ClaimCarouselContainer = styled.div`
