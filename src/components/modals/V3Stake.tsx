@@ -1,14 +1,6 @@
 import { FC, useState } from 'react';
-import {
-	B,
-	brandColors,
-	Button,
-	H4,
-	neutralColors,
-	Overline,
-} from '@giveth/ui-design-system';
+import { H4, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { BigNumber, constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { Modal } from './Modal';
@@ -17,21 +9,16 @@ import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import V3StakingCard from '../cards/StakingCards/PositionCard/PositionCard';
-import { exit, getReward, transfer } from '@/lib/stakingNFT';
+import { exit, transfer } from '@/lib/stakingNFT';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
 	SubmittedInnerModal,
 } from './ConfirmSubmit';
-import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
-import { getUniswapV3StakerContract } from '@/lib/contracts';
 import { StakeState } from '@/lib/staking';
-import { BN } from '@/helpers/number';
 import { IModal } from '@/types/common';
-import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 interface IV3StakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -51,10 +38,6 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	currentIncentive,
 	setShowModal,
 }) => {
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.currentValues),
-	);
-	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainId, library, account } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -65,12 +48,6 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	);
 	const [txStatus, setTxStatus] = useState<any>();
 	const [tokenIdState, setTokenId] = useState<number>(0);
-	const [reward, setReward] = useState<BigNumber>(constants.Zero);
-	const [stream, setStream] = useState<BigNumber>(constants.Zero);
-	const [claimableNow, setClaimableNow] = useState<BigNumber>(constants.Zero);
-	const [givBackLiquidPart, setGivBackLiquidPart] = useState<BigNumber>(
-		constants.Zero,
-	);
 
 	const handleStakeUnstake = async (tokenId: number) => {
 		if (!account || !library) return;
@@ -108,31 +85,6 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 				},
 			});
 		}
-	};
-
-	const handleAction = async (tokenId: number) => {
-		const uniswapV3StakerContract = getUniswapV3StakerContract(library);
-		if (!library || !uniswapV3StakerContract) return;
-
-		const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
-		const bnGIVback = BN(givTokenDistroBalance.givback);
-		const _reward = await getReward(
-			tokenId,
-			uniswapV3StakerContract,
-			currentIncentive.key,
-		);
-
-		const liquidReward = givTokenDistroHelper.getLiquidPart(_reward);
-		const streamPerWeek =
-			givTokenDistroHelper.getStreamPartTokenPerWeek(_reward);
-		setTokenId(tokenId);
-		setReward(liquidReward);
-		setStream(BigNumber.from(streamPerWeek.toFixed(0)));
-		setClaimableNow(
-			givTokenDistroHelper.getUserClaimableNow(givTokenDistroBalance),
-		);
-		setGivBackLiquidPart(givTokenDistroHelper.getLiquidPart(bnGIVback));
-		// setStakeStatus(StakeState.UNSTAKING);
 	};
 
 	return (
@@ -252,56 +204,6 @@ const InnerModalPositions = styled.div`
 
 const InnerModalStates = styled.div`
 	width: 370px;
-`;
-
-export const PositionContainer = styled.div`
-	display: flex;
-	justify-content: space-between;
-	border-radius: 8px;
-	padding: 12px 24px;
-	background: ${brandColors.giv[400]};
-	color: ${neutralColors.gray[100]};
-`;
-
-export const PositionInfo = styled.div`
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	color: ${neutralColors.gray[100]};
-`;
-
-export const PositionInfoRow = styled(Flex)`
-	align-items: center;
-	gap: 8px;
-`;
-
-export const TokenAmountRow = styled(Flex)`
-	align-items: center;
-	gap: 4px;
-`;
-
-export const StyledOverline = styled(Overline)`
-	color: ${brandColors.deep[100]};
-`;
-
-const RoundedInfo = styled.div`
-	background: ${brandColors.giv[600]};
-	border-radius: 28px;
-	font-weight: bold;
-	padding: 4px 10px;
-`;
-
-export const TokenValue = styled(B)``;
-
-export const PositionActions = styled.div`
-	display: flex;
-	width: 180px;
-	flex-direction: column;
-	gap: 12px;
-`;
-
-export const FullWidthButton = styled(Button)`
-	width: 100%;
 `;
 
 export const HarvestContainer = styled.div`
