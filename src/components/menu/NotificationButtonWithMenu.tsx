@@ -55,18 +55,15 @@ export const NotificationButtonWithMenu: FC<
 		state => state.notification.notificationInfo,
 	);
 
-	const lastFetchedNotificationId = notifications[0]?.id ?? undefined;
-
 	useEffect(() => {
 		const fetchNotificationsAndSetState = async () => {
 			try {
-				const res = await fetchNotificationsData({ limit: 4 });
+				const res = await fetchNotificationsData({ limit: '4' });
 				if (res?.notifications) setNotifications(res.notifications);
 			} catch {
 				console.log('Error fetching notifications');
 			}
 		};
-
 		fetchNotificationsAndSetState();
 	}, [lastNotificationId, isSignedIn]);
 
