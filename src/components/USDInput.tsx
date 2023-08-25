@@ -33,9 +33,8 @@ export const USDInput: FC<IAmountInput> = ({
 	);
 
 	const onChange = (value: string) => {
-		let temp;
 		try {
-			temp = utils.parseUnits(value || '0').toString();
+			utils.parseUnits(value || '0').toString();
 		} catch (error) {
 			console.log('number is not acceptable');
 			captureException(error, {
