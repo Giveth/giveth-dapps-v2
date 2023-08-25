@@ -12,21 +12,16 @@ import {
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
-
 import { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Swiper as SwiperClass } from 'swiper/types';
 import {
 	NavigationWrapper,
 	PaginationWrapper,
 	SwiperPaginationWrapper,
 } from '@/components/styled-components/SwiperPagination';
 import 'swiper/css';
-
 import { Flex } from '@/components/styled-components/Flex';
 import { BigArc } from '@/components/styled-components/Arc';
-import useDetectDevice from '@/hooks/useDetectDevice';
-import { useDonateData } from '@/context/donate.context';
 import Routes from '@/lib/constants/Routes';
 import { MtPelerinTutorialSteps } from '@/lib/constants/MtPelerinTutorial';
 
@@ -35,15 +30,12 @@ const BuyXDAI: FC = () => {
 	const { query } = router;
 	const slug = query?.slug;
 
-	const { isMobile } = useDetectDevice();
-	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
 
 	const pagElRef = useRef<HTMLDivElement>(null);
 	const nextElRef = useRef<HTMLDivElement>(null);
 	const prevElRef = useRef<HTMLDivElement>(null);
 
-	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
 	const [currentSlide, setCurrentSlide] = useState(0);
 	const items = MtPelerinTutorialSteps;
 
@@ -67,13 +59,13 @@ const BuyXDAI: FC = () => {
 						</Info>
 
 						<PwdMtPelerin>
-							Powered By <img src='/images/mtpelerin.svg' />
+							Powered By{' '}
+							<img src='/images/mtpelerin.svg' alt='mtpelerin' />
 						</PwdMtPelerin>
 					</Content>
 					<Right>
 						<SwiperWrapper>
 							<Swiper
-								onSwiper={setSwiperInstance}
 								modules={[Navigation, Pagination]}
 								navigation={{
 									nextEl: nextElRef.current,
