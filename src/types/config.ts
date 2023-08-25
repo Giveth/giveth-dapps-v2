@@ -207,7 +207,7 @@ export interface GnosisNetworkConfig
 	extends RegenNetworkConfig,
 		GIVgardenTokenConfig,
 		GIVpowerGIVgardenConfig {
-	MERKLE_ADDRESS: string;
+	MERKLE_ADDRESS: Address;
 }
 
 export interface OptimismNetworkConfig
