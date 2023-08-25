@@ -152,7 +152,7 @@ export interface GIVTokenConfig {
 }
 
 interface DAITokenConfig {
-	DAI_TOKEN_ADDRESS: string;
+	DAI_TOKEN_ADDRESS: Address;
 	DAI_BUY_LINK?: string;
 }
 
