@@ -201,7 +201,7 @@ export interface MainnetNetworkConfig
 	extends RegenNetworkConfig,
 		PFPConfig,
 		DAITokenConfig {
-	WETH_TOKEN_ADDRESS: string;
+	WETH_TOKEN_ADDRESS: Address;
 }
 export interface GnosisNetworkConfig
 	extends RegenNetworkConfig,
