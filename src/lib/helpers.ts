@@ -1,14 +1,13 @@
-import { promisify } from 'util';
 // eslint-disable-next-line import/named
 import unescape from 'lodash/unescape';
 import { parseEther, parseUnits } from '@ethersproject/units';
-import { keccak256 } from '@ethersproject/keccak256';
 import { Contract } from '@ethersproject/contracts';
 import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
 import { AddressZero } from '@ethersproject/constants';
 // @ts-ignore
 import abi from 'human-standard-token-abi';
 import { captureException } from '@sentry/nextjs';
+import { BigNumber } from '@ethersproject/bignumber';
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
@@ -74,7 +73,7 @@ export const durationToYMDh = (
 	// { year: y, month: m, day: d, hour: h, minute: min, second: sec }
 	const shortRes = { y, m, d, h, min, sec };
 	if (full) {
-		let fullRes: any = {};
+		const fullRes: Record<string, number> = {};
 		if (locale === 'ca') {
 			if (y) fullRes[`any${y > 1 ? 's' : ''}`] = y;
 			if (m) fullRes[`${m > 1 ? 'mesos' : 'mes'}`] = m;
@@ -242,14 +241,15 @@ export async function sendTransaction(
 	params: { to: string; value: string },
 	txCallbacks: {
 		onTxHash: (hash: string, nonce: number) => void;
-		onReceipt: (receipt: any) => void;
+		onReceipt: () => void;
 	},
 	contractAddress: string,
 ) {
 	try {
 		let tx: TransactionResponse;
-		const txParams: any = {
+		const txParams = {
 			to: params.to,
+			value: BigNumber.from(0),
 		};
 
 		const fromSigner = web3.getSigner();
@@ -274,14 +274,15 @@ export async function sendTransaction(
 
 		setTimeout(() => {
 			if (receipt.status) {
-				txCallbacks.onReceipt(tx.hash);
+				txCallbacks.onReceipt();
 			}
 			console.log('Tx ---> : ', { tx, receipt });
 		}, 5000);
-	} catch (error: any) {
-		if (error.replacement && !error.cancelled) {
+	} catch (error: unknown) {
+		const e = error as Record<string, unknown>;
+		if (e.replacement && !e.cancelled) {
 			// Speed up the process by replacing the transaction
-			txCallbacks.onReceipt(error.replacement.hash);
+			txCallbacks.onReceipt();
 			return;
 		}
 		captureException(error, {
@@ -293,106 +294,6 @@ export async function sendTransaction(
 	}
 }
 
-export async function signMessage(
-	message: string,
-	address: string | undefined | null,
-	chainId?: number,
-	signer?: any,
-) {
-	try {
-		// COMMENTING THIS AS BACKEND NEEDS TO BE UPDATED TO THIS WAY
-
-		// const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
-		// const prefixWithLength = Buffer.from(`${customPrefix}${message.length.toString()}`, 'utf-8')
-		// const finalMessage = Buffer.concat([prefixWithLength, Buffer.from(message)])
-
-		// const hashedMsg = keccak256(finalMessage)
-
-		// const domain = {
-		//   name: 'Giveth Login',
-		//   version: '1',
-		//   chainId
-		// }
-
-		// const types = {
-		//   // EIP712Domain: [
-		//   //   { name: 'name', type: 'string' },
-		//   //   { name: 'chainId', type: 'uint256' },
-		//   //   { name: 'version', type: 'string' }
-		//   //   // { name: 'verifyingContract', type: 'address' }
-		//   // ],
-		//   User: [{ name: 'wallets', type: 'address[]' }],
-		//   Login: [
-		//     { name: 'user', type: 'User' },
-		//     { name: 'contents', type: 'string' }
-		//   ]
-		// }
-
-		// const value = {
-		//   user: {
-		//     wallets: [address]
-		//   },
-		//   contents: hashedMsg
-		// }
-
-		// return await signer._signTypedData(domain, types, value)
-
-		let signedMessage = null;
-		const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`;
-		const prefixWithLength = Buffer.from(
-			`${customPrefix}${message.length.toString()}`,
-			'utf-8',
-		);
-		const finalMessage = Buffer.concat([
-			prefixWithLength,
-			Buffer.from(message),
-		]);
-
-		const hashedMsg = keccak256(finalMessage);
-		const send = promisify(signer.provider.provider.sendAsync);
-		const msgParams = JSON.stringify({
-			primaryType: 'Login',
-			types: {
-				EIP712Domain: [
-					{ name: 'name', type: 'string' },
-					{ name: 'chainId', type: 'uint256' },
-					{ name: 'version', type: 'string' },
-					// { name: 'verifyingContract', type: 'address' }
-				],
-				Login: [{ name: 'user', type: 'User' }],
-				User: [{ name: 'wallets', type: 'address[]' }],
-			},
-			domain: {
-				name: 'Giveth Login',
-				chainId,
-				version: '1',
-			},
-			message: {
-				contents: hashedMsg,
-				user: {
-					wallets: [address],
-				},
-			},
-		});
-		const { result } = await send({
-			method: 'eth_signTypedData_v4',
-			params: [address, msgParams],
-			from: address,
-		});
-		signedMessage = result;
-
-		return signedMessage;
-	} catch (error) {
-		console.log('Signing Error!', { error });
-		captureException(error, {
-			tags: {
-				section: 'signError',
-			},
-		});
-		return false;
-	}
-}
-
 export const isGIVeconomyRoute = (route: string) => {
 	const givEconomyRoute = giveconomyTabs.find(
 		giveconomyTab => giveconomyTab.href === route,
@@ -400,7 +301,8 @@ export const isGIVeconomyRoute = (route: string) => {
 	return !!givEconomyRoute;
 };
 
-export const showToastError = (err: any) => {
+export const showToastError = (e: unknown) => {
+	const err = e as Record<string, unknown> | string;
 	const errorMessage =
 		typeof err === 'string' ? err : JSON.stringify(err.message || err);
 	gToast(errorMessage, {
@@ -408,20 +310,6 @@ export const showToastError = (err: any) => {
 		position: 'top-center',
 	});
 	console.log({ err });
-};
-
-export const calcBiggestUnitDifferenceTime = (_time: string) => {
-	const time = new Date(_time);
-	const diff: { [key: string]: number } = durationToYMDh(
-		Date.now() - time.getTime(),
-	);
-	if (diff.y > 0) return ` ${diff.y} year${diff.y > 1 ? 's' : ''} ago`;
-	if (diff.m > 0) return ` ${diff.m} month${diff.m > 1 ? 's' : ''} ago`;
-	if (diff.d > 0) return ` ${diff.d} day${diff.d > 1 ? 's' : ''} ago`;
-	if (diff.h > 0) return ` ${diff.h} hour${diff.h > 1 ? 's' : ''} ago`;
-	if (diff.min > 0)
-		return ` ${diff.min} minute${diff.min > 1 ? 's' : ''} ago`;
-	return ' Just now';
 };
 
 export const timeFromNow = (
@@ -455,11 +343,11 @@ export const detectBrave = async () => {
 	return (navigator.brave && (await navigator.brave.isBrave())) || false;
 };
 
-export function pollEvery(fn: Function, delay: any) {
+export function pollEvery(fn: any, delay: any) {
 	let timer: any = null;
 	// having trouble with this type
 	let stop = false;
-	const poll = async (request: any, onResult: Function) => {
+	const poll = async (request: any, onResult: (i: unknown) => void) => {
 		const result = await request();
 		if (!stop) {
 			onResult(result);
@@ -522,13 +410,13 @@ export const createSiweMessage = async (
 	}
 };
 
-export function isObjEmpty(obj: Object) {
+export function isObjEmpty(obj: Record<string, unknown>) {
 	return Object.keys(obj).length > 0;
 }
 
 export const ArrayFrom0ToN = (n: number) => {
-	let a = Array(n),
-		b = 0;
+	const a = Array(n);
+	let b = 0;
 	while (b < n) a[b] = b++;
 	return a;
 };
