@@ -1,8 +1,6 @@
 import { FC, useState, useEffect } from 'react';
-import { BigNumber } from 'ethers';
 import { SublineBold } from '@giveth/ui-design-system';
 import { PoolStakingConfig } from '@/types/config';
-import { useStakingNFT } from '@/hooks/useStakingNFT';
 import { useLiquidityPositions } from '@/hooks/useLiquidityPositions';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { YellowDot } from './PositionCard';
@@ -26,17 +24,10 @@ interface IStakingPositionCardProps {
 const StakingPositionCard: FC<IStakingPositionCardProps> = ({
 	poolStakingConfig,
 }) => {
-	const { apr, unstakedPositions, stakedPositions, currentIncentive } =
+	const { unstakedPositions, stakedPositions, currentIncentive } =
 		useLiquidityPositions();
-	const { rewardBalance } = useStakingNFT(stakedPositions);
 	const [oneOfPositionsOutOfRange, setOneOfPositionsOutOfRange] =
 		useState(false);
-	const stakeInfo = {
-		apr: apr,
-		notStakedAmount: BigNumber.from(unstakedPositions.length),
-		earned: rewardBalance,
-		stakedAmount: BigNumber.from(stakedPositions.length),
-	};
 
 	useEffect(() => {
 		const _oneOfPositionsOutOfRange = stakedPositions.some(
