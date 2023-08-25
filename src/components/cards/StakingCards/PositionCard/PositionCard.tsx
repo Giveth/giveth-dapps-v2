@@ -16,7 +16,6 @@ import { captureException } from '@sentry/nextjs';
 import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '../../../IconWithToolTip';
-import { Pending } from '../../../modals/HarvestAll.sc';
 import { IconEthereum } from '../../../Icons/Eth';
 import { IconGIV } from '../../../Icons/GIV';
 interface IV3StakeCardProps {
@@ -251,11 +250,6 @@ export const RangeTooltip = styled(Subline)`
 
 export const PositionLink = styled.a`
 	color: ${brandColors.cyan[500]};
-`;
-
-const PendingStyled = styled(Pending)`
-	margin: 0 auto;
-	max-width: 200px;
 `;
 
 export default V3StakingCard;
