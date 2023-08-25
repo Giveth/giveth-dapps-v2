@@ -1,23 +1,25 @@
 {
+  "parser": "@typescript-eslint/parser",
   "plugins": [
+    "@typescript-eslint",
     "import",
     "unused-imports"
   ],
   "extends": [
+    "plugin:@typescript-eslint/recommended",
     "next/core-web-vitals",
     "plugin:@next/next/recommended",
     "plugin:prettier/recommended"
   ],
   "rules": {
-    "react/no-unescaped-entities": "warn",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "react-hooks/exhaustive-deps": 0,
+    "react/no-unescaped-entities": 0,
     "import/order": ["error", {
       "groups": ["builtin", "external", ["internal", "parent", "sibling"], "index", "object", "type"]
     }],
     "unused-imports/no-unused-imports": "error",
-		"unused-imports/no-unused-vars": [
-			"warn",
-			{ "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
-		],
     "prettier/prettier": [
       "error",
       {
