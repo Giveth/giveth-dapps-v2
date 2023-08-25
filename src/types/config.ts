@@ -105,7 +105,7 @@ export interface RegenStreamConfig {
 	rewardTokenSymbol: string;
 	archived?: boolean;
 	// For price purpose
-	tokenAddressOnUniswapV2: string;
+	tokenAddressOnUniswapV2: Address;
 }
 
 export interface INetworkParam {
