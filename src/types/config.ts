@@ -147,7 +147,7 @@ export interface RegenFarmConfig {
 }
 
 export interface GIVTokenConfig {
-	GIV_TOKEN_ADDRESS: `0x${string}`;
+	GIV_TOKEN_ADDRESS: Address;
 	GIV_BUY_LINK: string;
 }
 
