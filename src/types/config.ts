@@ -129,7 +129,7 @@ export interface BasicNetworkConfig extends INetworkParam {
 }
 
 interface StreamConfig {
-	TOKEN_DISTRO_ADDRESS: string;
+	TOKEN_DISTRO_ADDRESS: Address;
 }
 
 interface FarmConfig {
