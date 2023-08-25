@@ -179,7 +179,7 @@ interface PFPConfig {
 }
 
 interface TokenPriceConfig {
-	tokenAddressOnUniswapV2: string; // For price purpose in test env, on production this must have the same value of `GIV_TOKEN_ADDRESS`
+	tokenAddressOnUniswapV2: Address; // For price purpose in test env, on production this must have the same value of `GIV_TOKEN_ADDRESS`
 	uniswapV2Subgraph: string;
 }
 
