@@ -13,11 +13,9 @@ import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import routes from '@/lib/constants/Routes';
-import { useDonateData } from '@/context/donate.context';
 import Routes from '@/lib/constants/Routes';
 
 const PurchaseXDAI: FC = () => {
-	const { project } = useDonateData();
 	const router = useRouter();
 	const { formatMessage } = useIntl();
 
