@@ -18,7 +18,7 @@ export interface FarmContext {
 
 export const FarmContext = createContext<FarmContext>({
 	totalEarned: ethers.constants.Zero,
-	setInfo: (network: number, key: string, value: ethers.BigNumber) => {
+	setInfo: () => {
 		console.log('Not implemented!');
 	},
 });
