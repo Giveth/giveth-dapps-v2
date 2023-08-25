@@ -44,7 +44,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 		const { address } = formData;
 		try {
 			const _address = getAddress(address);
-			const { data } = await client.mutate({
+			await client.mutate({
 				mutation: ADD_RECIPIENT_ADDRESS_TO_PROJECT,
 				variables: {
 					projectId: Number(project.id),
