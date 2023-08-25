@@ -1,5 +1,7 @@
+export type Address = `0x${string}`;
+
 export interface BasicStakingConfig {
-	LM_ADDRESS: string;
+	LM_ADDRESS: Address;
 	network: number;
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
@@ -42,8 +44,6 @@ export type PoolStakingConfig =
 	// | UniswapV3PoolStakingConfig
 	| RegenPoolStakingConfig
 	| ICHIPoolStakingConfig;
-
-export type ADDRESS = `0x${string}`;
 
 export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	POOL_ADDRESS: string;
@@ -156,9 +156,7 @@ interface DAITokenConfig {
 	DAI_BUY_LINK?: string;
 }
 
-interface GIVpowerStakingConfig extends SimplePoolStakingConfig {
-	LM_ADDRESS: string;
-}
+interface GIVpowerStakingConfig extends SimplePoolStakingConfig {}
 
 export interface GIVpowerUniPoolConfig {
 	GIVPOWER: GIVpowerStakingConfig;
