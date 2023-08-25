@@ -18,10 +18,7 @@ interface IBoostedModalProps {
 	closeModal: () => void;
 }
 
-const BoostedInnerModal: FC<IBoostedModalProps> = ({
-	percentage,
-	closeModal,
-}) => {
+const BoostedInnerModal: FC<IBoostedModalProps> = ({ percentage }) => {
 	const { isMobile } = useDetectDevice();
 	const { formatMessage } = useIntl();
 
