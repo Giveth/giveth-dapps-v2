@@ -2,7 +2,7 @@ import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import styled, { keyframes, css } from 'styled-components';
-import { DropEvent, FileRejection, useDropzone } from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
 import {
 	P,
 	Subline,
@@ -47,7 +47,6 @@ const FileUploader: FC<IFileUploader> = ({
 	setIsUploading,
 }) => {
 	const [files, setFiles] = useState<UploadFile[]>([]);
-	const [loading, setLoading] = useState(false);
 	const { formatMessage } = useIntl();
 
 	useEffect(() => {
@@ -55,9 +54,7 @@ const FileUploader: FC<IFileUploader> = ({
 			const _files = await convertUrlToUploadFile(urls);
 			setFiles(_files);
 		}
-		setLoading(true);
 		fetchUploadedFiles();
-		setLoading(false);
 	}, []);
 
 	const onDrop = async (acceptedFiles: UploadFile[]) => {
@@ -96,7 +93,7 @@ const FileUploader: FC<IFileUploader> = ({
 		multiple: false,
 		noClick: true,
 		noKeyboard: true,
-		onDropRejected: (fileRejections: FileRejection[], event: DropEvent) => {
+		onDropRejected: () => {
 			showToastError(
 				'Please import files with supported format one by one',
 			);
@@ -120,7 +117,7 @@ const FileUploader: FC<IFileUploader> = ({
 
 	const onDelete = (url?: string) => {
 		if (!url) return;
-		let _urls: string[] = [];
+		const _urls: string[] = [];
 		const _files = files.filter(file => {
 			if (!file.url) return true;
 			if (file.url !== url) {
