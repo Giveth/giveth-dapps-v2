@@ -12,7 +12,6 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
-import { useRouter } from 'next/router';
 import {
 	EWallets,
 	IWallet,
@@ -26,7 +25,6 @@ import { detectBrave, showToastError } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import LowerShields from '@/components/modals/LowerShields';
 import { IModal } from '@/types/common';
-import { useAppDispatch } from '@/features/hooks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { EModalEvents } from '@/hooks/useModalCallback';
 
@@ -34,12 +32,10 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 	const { formatMessage } = useIntl();
 
-	const router = useRouter();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const context = useWeb3React();
 	const { activate, deactivate } = context;
 	const selectedWallet = useWalletName(context);
-	const dispatch = useAppDispatch();
 
 	const handleSelect = (selected: IWallet) => {
 		if (selectedWallet !== selected.value) {
