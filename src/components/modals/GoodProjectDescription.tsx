@@ -79,12 +79,6 @@ const LeadStyled = styled(Lead)`
 	margin-top: 24px;
 `;
 
-const LinkStyled = styled.a`
-	color: ${brandColors.pinky[500]};
-	cursor: pointer;
-	font-size: 16px;
-`;
-
 const Container = styled.div`
 	max-width: 545px;
 	text-align: left;
