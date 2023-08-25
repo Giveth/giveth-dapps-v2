@@ -168,7 +168,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 						<FeatureItem>
 							<CheckBox
 								label='Campaign'
-								onChange={e => {
+								onChange={() => {
 									setVariables({
 										...variables,
 										campaignSlug: undefined,
