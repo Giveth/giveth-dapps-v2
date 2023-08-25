@@ -9,7 +9,7 @@ import {
 	IconDonation,
 } from '@giveth/ui-design-system';
 
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
@@ -25,7 +25,6 @@ interface IText {
 }
 
 export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
-	const intl = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
