@@ -15,23 +15,12 @@ import Select, {
 	OptionProps,
 	StylesConfig,
 	DropdownIndicatorProps,
-	GroupBase,
 } from 'react-select';
 import { FieldError } from 'react-hook-form';
 
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import NetworkLogo from '@/components/NetworkLogo';
-
-declare module 'react-select/dist/declarations/src/Select' {
-	export interface Props<
-		Option,
-		IsMulti extends boolean,
-		Group extends GroupBase<Option>,
-	> {
-		hasError?: boolean;
-	}
-}
 
 interface IProps {
 	networkOptions?: ISelectedNetwork[];
@@ -57,7 +46,6 @@ const SelectNetwork: FC<IProps> = ({
 				onChange={(e: any) => onChange(e)}
 				options={networkOptions}
 				styles={selectStyles}
-				hasError={!!error}
 				placeholder='Select chain'
 			/>
 			{error?.message && (
