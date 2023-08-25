@@ -1,4 +1,5 @@
 import { GetServerSideProps } from 'next/types';
+import { GraphQLErrors } from '@apollo/client/errors';
 import { addApolloState, initializeApollo } from '@/apollo/apolloClient';
 import {
 	FETCH_ALL_PROJECTS,
@@ -49,7 +50,7 @@ const ProjectsRoute = (props: IProjectsRouteProps) => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getServerSideProps: GetServerSideProps = async () => {
 	try {
 		const apolloClient = initializeApollo();
 		const { data } = await apolloClient.query({
@@ -92,10 +93,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				qfRounds,
 			},
 		});
-	} catch (error: any) {
-		const statusCode = transformGraphQLErrorsToStatusCode(
-			error?.graphQLErrors,
-		);
+	} catch (error: unknown) {
+		const e = error as Record<string, GraphQLErrors>;
+		const statusCode = transformGraphQLErrorsToStatusCode(e?.graphQLErrors);
 		return {
 			props: {
 				errorStatus: statusCode,
