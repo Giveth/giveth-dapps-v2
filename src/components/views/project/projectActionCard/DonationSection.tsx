@@ -19,7 +19,7 @@ import { device } from '@/lib/constants/constants';
 import { formatDonations } from '@/helpers/number';
 
 export const DonateSection = () => {
-	const { formatMessage, locale } = useIntl();
+	const { formatMessage } = useIntl();
 	const { projectData } = useProjectContext();
 	const { sumDonationValueUsd } = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
