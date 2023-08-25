@@ -31,14 +31,13 @@ export const NotificationBox: FC<INotificationBox> = ({
 		const read = (entries: IntersectionObserverEntry[]) => {
 			const [entry] = entries;
 			if (entry.isIntersecting) {
-				setNotificationRead(notification.id).then(
-					(notif: INotification) =>
-						markOneNotificationRead(notification.id),
+				setNotificationRead(notification.id).then(() =>
+					markOneNotificationRead(notification.id),
 				);
 			}
 		};
 		let observerRefValue: any = null;
-		let observer = new IntersectionObserver(read);
+		const observer = new IntersectionObserver(read);
 		if (NotifRef.current) {
 			observer.observe(NotifRef.current);
 			observerRefValue = NotifRef.current;
