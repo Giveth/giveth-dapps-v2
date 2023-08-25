@@ -74,7 +74,6 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	isDiscontinued,
 	isGIVpower,
 	stakedPositions,
-	unstakedPositions,
 	currentIncentive,
 }) => {
 	const [started, setStarted] = useState(true);
