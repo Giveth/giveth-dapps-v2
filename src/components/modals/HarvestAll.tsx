@@ -58,7 +58,7 @@ import {
 	BreakdownStreamSum,
 	PoolIcon,
 } from './HarvestAll.sc';
-import { claimReward, fetchAirDropClaimData } from '@/lib/claim';
+import { claimReward } from '@/lib/claim';
 import config from '@/configuration';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
@@ -110,9 +110,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	} = useAppSelector(state => state.price);
 	const { account, library } = useWeb3React();
 	const [txHash, setTxHash] = useState('');
-	//GIVdrop TODO: Should we show Givdrop in new  design?
-	const [givDrop, setGIVdrop] = useState(constants.Zero);
-	const [givDropStream, setGIVdropStream] = useState<BigNumber>(Zero);
+	//GIVdrop TODO: Should we show Givdrop in new design?
 	//GIVstream
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber>(Zero);
@@ -178,32 +176,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	useEffect(() => {
 		setSumStream(BigNumber.sum(rewardStream, earnedStream)); // earnedStream includes the givbacks stream part
 	}, [rewardStream, earnedStream]);
-
-	useEffect(() => {
-		if (!tokenDistroHelper) return;
-		if (
-			!regenStreamConfig &&
-			chainId === config.XDAI_NETWORK_NUMBER &&
-			!tokenDistroBalance.givDropClaimed &&
-			account
-		) {
-			fetchAirDropClaimData(account).then(claimData => {
-				if (claimData) {
-					const givDrop = EthBigNumber.from(claimData.amount);
-					setGIVdrop(givDrop.div(10));
-					setGIVdropStream(
-						tokenDistroHelper.getStreamPartTokenPerWeek(givDrop),
-					);
-				}
-			});
-		}
-	}, [
-		account,
-		chainId,
-		tokenDistroBalance?.givDropClaimed,
-		tokenDistroHelper,
-		regenStreamConfig,
-	]);
 
 	const onHarvest = async () => {
 		if (!library || !account || !tokenDistroHelper) return;
