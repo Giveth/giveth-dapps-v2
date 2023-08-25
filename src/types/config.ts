@@ -43,6 +43,8 @@ export type PoolStakingConfig =
 	| RegenPoolStakingConfig
 	| ICHIPoolStakingConfig;
 
+type ADDRESS = `0x${string}`;
+
 export interface SimplePoolStakingConfig extends BasicStakingConfig {
 	POOL_ADDRESS: string;
 	type: StakingType;
@@ -145,7 +147,7 @@ export interface RegenFarmConfig {
 }
 
 export interface GIVTokenConfig {
-	GIV_TOKEN_ADDRESS: string;
+	GIV_TOKEN_ADDRESS: `0x${string}`;
 	GIV_BUY_LINK: string;
 }
 
