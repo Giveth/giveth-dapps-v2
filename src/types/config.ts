@@ -46,7 +46,7 @@ export type PoolStakingConfig =
 	| ICHIPoolStakingConfig;
 
 export interface SimplePoolStakingConfig extends BasicStakingConfig {
-	POOL_ADDRESS: string;
+	POOL_ADDRESS: Address;
 	type: StakingType;
 	platform: StakingPlatform;
 	platformTitle?: string;
