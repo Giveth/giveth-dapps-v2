@@ -26,11 +26,8 @@ const itemPerPage = 10;
 const ProjectGIVPowerIndex: FC<IProjectGIVPowerIndexProps> = () => {
 	const [page, setPage] = useState(0);
 
-	const { isBoostingsLoading, boostersData, projectData } =
-		useProjectContext();
-	const { verified } = projectData || {};
+	const { isBoostingsLoading, boostersData } = useProjectContext();
 	const hasGivPower = boostersData ? boostersData.totalCount > 0 : false;
-	const totalCount = boostersData?.totalCount ?? 0;
 
 	if (isBoostingsLoading) return <WrappedSpinner size={250} />;
 
