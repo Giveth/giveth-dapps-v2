@@ -21,7 +21,7 @@ const EthDenverRoute: FC<IEthDenverProps> = ({ campaign }) => {
 	);
 };
 
-export const getStaticProps: GetStaticProps = async context => {
+export const getStaticProps: GetStaticProps = async () => {
 	try {
 		const { data } = await client.query({
 			query: FETCH_CAMPAIGN_BY_SLUG,
