@@ -163,7 +163,7 @@ export interface GIVpowerUniPoolConfig {
 }
 
 export interface GIVpowerGIVgardenStakingConfig extends GIVpowerStakingConfig {
-	GARDEN_ADDRESS: string;
+	GARDEN_ADDRESS: Address;
 }
 
 interface GIVpowerGIVgardenConfig {
