@@ -99,7 +99,7 @@ export interface GasPreference {
 export interface RegenStreamConfig {
 	network: number;
 	title: string;
-	tokenDistroAddress: string;
+	tokenDistroAddress: Address;
 	type: StreamType;
 	rewardTokenAddress: string;
 	rewardTokenSymbol: string;
