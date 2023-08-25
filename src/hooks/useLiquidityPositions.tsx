@@ -41,7 +41,7 @@ export const useLiquidityPositions = () => {
 	const [unstakedPositions, setUnstakedPositions] = useState<
 		LiquidityPosition[]
 	>([]);
-	const [apr, setApr] = useState<APR>({ effectiveAPR: Zero });
+	const apr = { effectiveAPR: Zero };
 	const [pool, setPool] = useState<Pool | null>(null);
 
 	const [loadingNftPositions, setLoadingNftPositions] = useState(false);
