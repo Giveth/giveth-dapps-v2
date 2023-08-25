@@ -73,7 +73,6 @@ export const APRModal: FC<IAPRModalProps> = ({
 const Content: FC<IAPRInnerModalProps> = ({
 	regenStreamConfig,
 	poolNetwork,
-	regenStreamType,
 }) => {
 	const { tokenDistroHelper } = useTokenDistroHelper(
 		poolNetwork,
