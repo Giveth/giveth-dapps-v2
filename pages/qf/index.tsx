@@ -47,7 +47,7 @@ const QFProjectsRoute = (props: IProjectsRouteProps) => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getServerSideProps: GetServerSideProps = async () => {
 	try {
 		const apolloClient = initializeApollo();
 		const { data } = await apolloClient.query({
