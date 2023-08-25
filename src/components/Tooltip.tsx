@@ -52,7 +52,6 @@ export const Tooltip: FC<ITooltipProps> = ({
 		// if (!childRef.current) return;
 		if (typeof window === 'undefined') return;
 		const parentRect = parentRef.current.getBoundingClientRect();
-		const childRect = childRef.current?.getBoundingClientRect();
 
 		const _style = tooltipStyleCalc(
 			{
@@ -61,7 +60,6 @@ export const Tooltip: FC<ITooltipProps> = ({
 			},
 			!!isMobile,
 			parentRect,
-			childRect,
 		);
 		setStyle(_style);
 	}, [align, direction, parentRef, childRef, isMobile]);
@@ -114,9 +112,8 @@ const translateYForRightLeft = (
 
 const tooltipStyleCalc = (
 	position: ITooltipDirection,
-	isMobile: Boolean | null,
+	isMobile: boolean | null,
 	parentRect: DOMRect,
-	childRect?: DOMRect, // left it here for future usage
 ): CSSProperties => {
 	const { align, direction } = position;
 	let style = {};
@@ -173,18 +170,6 @@ const tooltipStyleCalc = (
 	}
 	return style;
 };
-
-const TriangleBase = styled.div`
-	position: absolute;
-	width: 0;
-	height: 0;
-	border-style: solid;
-`;
-
-const Triangle = styled(TriangleBase)`
-	border-width: 0 ${ARROW_SIZE}px ${ARROW_SIZE}px ${ARROW_SIZE}px;
-	border-color: transparent transparent red transparent;
-`;
 
 const TooltipContainer = styled.div<ITooltipDirection>`
 	position: fixed;
