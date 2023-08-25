@@ -1,7 +1,6 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useRef } from 'react';
 import styled from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Swiper as SwiperType } from 'swiper/types';
 import {
 	IconPointerLeft,
 	IconPointerRight,
@@ -28,7 +27,6 @@ interface ICampaignsBlockProps {
 }
 
 export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
-	const [swiper, setSwiper] = useState<SwiperType>();
 	const pagElRef = useRef<HTMLDivElement>(null);
 	const nextElRef = useRef<HTMLDivElement>(null);
 	const prevElRef = useRef<HTMLDivElement>(null);
@@ -64,7 +62,6 @@ export const CampaignsBlock: FC<ICampaignsBlockProps> = ({ campaigns }) => {
 				<SwiperWrapper>
 					<Swiper
 						slidesPerView={1}
-						onSwiper={setSwiper}
 						modules={[Navigation, Pagination]}
 						navigation={{
 							nextEl: nextElRef.current,
