@@ -171,7 +171,7 @@ interface GIVpowerGIVgardenConfig {
 }
 
 interface GIVgardenTokenConfig {
-	gGIV_TOKEN_ADDRESS: string;
+	gGIV_TOKEN_ADDRESS: Address;
 }
 
 interface PFPConfig {
