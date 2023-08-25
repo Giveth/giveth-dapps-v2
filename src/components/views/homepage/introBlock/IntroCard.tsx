@@ -13,7 +13,7 @@ interface IntroCardProps {
 
 const IntroCard = ({
 	Icon,
-	LinkComponent,
+	// LinkComponent,
 	title,
 	description,
 }: IntroCardProps) => {
