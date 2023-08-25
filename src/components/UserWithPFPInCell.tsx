@@ -36,10 +36,6 @@ const StyledPFP = styled(PFP)`
 	margin-left: 5px;
 `;
 
-const Bold = styled.span`
-	font-weight: 500;
-`;
-
 const NoAvatar = styled.span`
 	padding-left: 44px;
 `;
