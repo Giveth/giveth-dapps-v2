@@ -3,6 +3,9 @@ import { useEffect } from 'react';
 import { erc20ABI, useAccount, useChainId, useContractRead } from 'wagmi';
 import { getContract } from 'wagmi/actions';
 import { formatWeiHelper } from '@/helpers/number';
+import { approveERC20tokenTransfer } from '@/lib/stakingPool';
+import config from '@/configuration';
+import { GIVTokenConfig, GIVpowerConfig } from '@/types/config';
 const abi = [
 	{
 		inputs: [],
@@ -734,8 +737,8 @@ const abi = [
 ];
 const YourApp = () => {
 	const { address, isConnected, status } = useAccount();
-	const chanId = useChainId();
-	// console.log('address', address, isConnected, status, chanId);
+	const chainId = useChainId();
+	// console.log('address', address, isConnected, status, chainId);
 	const { data } = useContractRead({
 		address: '0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
 		abi: erc20ABI,
@@ -757,7 +760,28 @@ const YourApp = () => {
 
 	console.log('contractRead', getContract);
 
-	return <ConnectButton />;
+	return (
+		<div>
+			<ConnectButton />
+			<div>
+				<button
+					onClick={() =>
+						approveERC20tokenTransfer(
+							1000000000000000000n,
+							address!,
+							(config.NETWORKS_CONFIG[chainId] as GIVpowerConfig)
+								.GIVPOWER.LM_ADDRESS!,
+							(config.NETWORKS_CONFIG[chainId] as GIVTokenConfig)
+								.GIV_TOKEN_ADDRESS!,
+							chainId,
+						)
+					}
+				>
+					FUck This Approval stuffs
+				</button>
+			</div>
+		</div>
+	);
 };
 
 export default YourApp;
