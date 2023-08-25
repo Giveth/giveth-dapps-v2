@@ -58,7 +58,7 @@ interface IProjectContext {
 
 const ProjectContext = createContext<IProjectContext>({
 	isBoostingsLoading: false,
-	fetchProjectBoosters: (a, b) =>
+	fetchProjectBoosters: () =>
 		Promise.reject('fetchProjectBoosters not initialed yet!'),
 	fetchProjectBySlug: () =>
 		Promise.reject('fetchProjectBySlug not initialed yet!'),
