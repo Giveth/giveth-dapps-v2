@@ -1,6 +1,5 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -23,7 +22,6 @@ interface IProjectUpdatesBlockProps {
 export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = ({
 	projects,
 }) => {
-	const [swiper, setSwiper] = useState<SwiperType>();
 	const pagElRef = useRef<HTMLDivElement>(null);
 	const nextElRef = useRef<HTMLDivElement>(null);
 	const prevElRef = useRef<HTMLDivElement>(null);
@@ -49,7 +47,6 @@ export const ProjectUpdatesBlock: FC<IProjectUpdatesBlockProps> = ({
 				<SwiperWrapper>
 					<Swiper
 						slidesPerView={1}
-						onSwiper={setSwiper}
 						modules={[Navigation, Pagination]}
 						navigation={{
 							nextEl: nextElRef.current,
