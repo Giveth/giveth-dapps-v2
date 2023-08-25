@@ -60,9 +60,6 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	const [lockedAmount, setLockedAmount] = useState<EthBignumber>(
 		constants.Zero,
 	);
-	const [claimedAmount, setClaimedAmount] = useState<EthBignumber>(
-		constants.Zero,
-	);
 	const { chainId } = useWeb3React();
 
 	const {
@@ -120,7 +117,6 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	]);
 	useEffect(() => {
 		setLockedAmount(BN(tokenDistroBalance.allocatedTokens));
-		setClaimedAmount(BN(tokenDistroBalance.claimed));
 	}, [tokenDistroBalance]);
 
 	useEffect(() => {
