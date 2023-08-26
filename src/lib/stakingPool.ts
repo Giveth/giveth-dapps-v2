@@ -538,28 +538,24 @@ export const wrapToken = async (
 };
 
 export const stakeGIV = async (
-	amount: string,
-	lmAddress: string,
-	provider: Web3Provider | null,
+	amount: bigint,
+	lmAddress: Address,
+	chainId: number,
 ): Promise<TransactionResponse | undefined> => {
-	if (amount === '0') return;
-	if (!provider) {
-		console.error('Provider is null');
+	if (amount === 0n) return;
+	const walletClient = await getWalletClient({ chainId });
+	if (!walletClient) {
+		console.error('Wallet client is null');
 		return;
 	}
 
-	const signer = provider.getSigner();
-
-	const contract = new Contract(lmAddress, UNIPOOL_GIVPOWER_ABI, signer);
 	try {
-		return await contract
-			.connect(signer.connectUnchecked())
-			.stake(
-				amount,
-				getGasPreference(
-					config.NETWORKS_CONFIG[provider.network.chainId],
-				),
-			);
+		await walletClient?.writeContract({
+			address: lmAddress,
+			abi: UNIPOOL_GIVPOWER_ABI,
+			functionName: 'stake',
+			args: [amount],
+		});
 	} catch (error) {
 		console.log('Error on wrapping token:', error);
 		captureException(error, {
