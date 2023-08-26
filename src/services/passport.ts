@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 import { client } from '@/apollo/apolloClient';
 import { REFRESH_USER_SCORES } from '@/apollo/gql/gqlPassport';
 import config from '@/configuration';
@@ -27,8 +28,8 @@ export const fetchPassportScore = async (account: string) => {
 
 export const connectPassport = async (
 	account: string,
-	library: any,
-	singin: boolean,
+	library: ethers.providers.Web3Provider,
+	signIn: boolean,
 ) => {
 	//Get Nonce and Message
 	try {
@@ -60,16 +61,16 @@ export const connectPassport = async (
 
 		localStorage.setItem(StorageLabel.PASSPORT, JSON.stringify(passports));
 
-		if (singin) {
+		if (signIn) {
 			//use passport jwt to sign in to the giveth and create user
 			console.log('Use Passport token to sign in to the giveth');
 			localStorage.setItem(StorageLabel.USER, account.toLowerCase());
 			localStorage.setItem(StorageLabel.TOKEN, jwt);
 		}
 		return true;
-	} catch (error: any) {
-		console.log('error', error);
-		if (error.code === 'ACTION_REJECTED') {
+	} catch (error: unknown) {
+		const e = error as Record<string, unknown>;
+		if (e?.code === 'ACTION_REJECTED') {
 			showToastError('Rejected By User');
 		} else {
 			showToastError(error);
