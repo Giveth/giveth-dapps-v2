@@ -32,7 +32,6 @@ import { networkProviders } from '@/helpers/networkProvider';
 import { useAppSelector } from '@/features/hooks';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { getNowUnixMS } from '@/helpers/time';
-import { InputWithUnit } from '@/components/input';
 import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
 
@@ -210,11 +209,10 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 							)} GIV`}</MaxStakeGIV>
 						</Flex>
 						<ImpactCardInput>
-							<InputWithUnit
+							<input
 								type='number'
 								value={deposit}
-								unit={'GIV'}
-								onChange={setDeposit}
+								onChange={e => setDeposit(e.target.value)}
 							/>
 						</ImpactCardInput>
 					</div>
