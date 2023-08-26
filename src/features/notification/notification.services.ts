@@ -35,7 +35,7 @@ export const fetchNotificationSettings =
 			return await getRequest(
 				`${config.MICROSERVICES.notificationSettings}`,
 				true,
-				{ limit: 100 },
+				{ limit: '100' },
 			);
 		} catch (e) {
 			showToastError(e);
@@ -48,11 +48,11 @@ export const fetchNotificationSettings =
 		}
 	};
 
-export interface INotificationSettingsPutInput {
+export type INotificationSettingsPutInput = {
 	id: number;
 	allowEmailNotification?: boolean;
 	allowDappPushNotification?: boolean;
-}
+};
 
 type TPutNotificationSettings = (
 	i: INotificationSettingsPutInput,
@@ -77,7 +77,7 @@ export const putNotificationSettings: TPutNotificationSettings = async body => {
 };
 
 export const fetchNotificationsData = async (
-	query: any = {},
+	query: Record<string, string> = {},
 	additionalOptions: RequestInit = {},
 ) => {
 	try {
