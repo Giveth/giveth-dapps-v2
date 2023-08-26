@@ -64,7 +64,7 @@ export enum EWallets {
 export interface IWallet {
 	name: string;
 	value: EWallets;
-	image: any;
+	image: string;
 	connector: TWalletConnector;
 	customSubtitle?: string;
 	hasWorldIcon?: boolean;
