@@ -307,7 +307,7 @@ const getSimplePoolStakingAPR = async (
 			provider,
 		);
 
-		let tokenReseve = toBigNumberJs(
+		const tokenReseve = toBigNumberJs(
 			_token0.toLowerCase() !== tokenAddress.toLowerCase()
 				? _reserves[1]
 				: _reserves[0],
