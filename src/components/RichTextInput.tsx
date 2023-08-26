@@ -10,7 +10,6 @@ import ReactQuill, { Quill } from 'react-quill';
 import styled from 'styled-components';
 import 'react-quill/dist/quill.snow.css';
 import 'quill-emoji/dist/quill-emoji.css';
-// @ts-ignore
 import MagicUrl from 'quill-magic-url';
 // @ts-ignore
 import * as Emoji from 'quill-emoji';
@@ -26,6 +25,7 @@ import { QuillWrapper } from '@/components/styled-components/Quill';
 
 (window as any).Quill = Quill;
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const ImageResize = require('quill-image-resize-module').default;
 
 Quill.register('modules/imageUploader', ImageUploader);
