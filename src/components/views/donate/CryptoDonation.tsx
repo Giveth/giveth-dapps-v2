@@ -356,7 +356,7 @@ const CryptoDonation: FC = () => {
 											id: 'component.input.search_name',
 									  })
 							}
-							projectVerified={project?.verified!}
+							projectVerified={project?.verified}
 							disabled={!active}
 						/>
 					</DropdownContainer>
