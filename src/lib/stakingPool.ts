@@ -534,7 +534,7 @@ export const stakeGIV = async (
 	amount: bigint,
 	lmAddress: Address,
 	chainId: number,
-): Promise<TransactionResponse | undefined> => {
+): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
 	const walletClient = await getWalletClient({ chainId });
 	if (!walletClient) {
@@ -543,7 +543,7 @@ export const stakeGIV = async (
 	}
 
 	try {
-		await walletClient?.writeContract({
+		return await walletClient?.writeContract({
 			address: lmAddress,
 			abi: UNIPOOL_GIVPOWER_ABI,
 			functionName: 'stake',
