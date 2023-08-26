@@ -3,12 +3,12 @@ import StorageLabel from '@/lib/localStorage';
 import config from '@/configuration';
 import type { GraphQLErrors } from '@apollo/client/errors';
 
-export function sendRequest(
+export async function sendRequest(
 	url: string,
 	method: 'POST' | 'GET' | 'PUT',
 	authorization: boolean = false,
-	body?: {},
-	query?: {},
+	body?: Record<string, unknown>,
+	query?: Record<string, string>,
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
@@ -27,22 +27,21 @@ export function sendRequest(
 		  }
 		: { ...defaultHeaders };
 	try {
-		return fetch(url + '?' + new URLSearchParams(query), {
+		const response = await fetch(url + '?' + new URLSearchParams(query), {
 			method,
 			headers,
 			body: JSON.stringify(body),
 			...additionalOptions,
-		}).then(async response => {
-			if (response.ok) {
-				return await response.json();
-			} else {
-				const errorObject = await response.json();
-				const errorMessage =
-					(errorObject.message || errorObject?.errors[0]?.message) ??
-					'An error occurred';
-				return Promise.reject(new Error(errorMessage));
-			}
 		});
+		if (response.ok) {
+			return await response.json();
+		} else {
+			const errorObject = await response.json();
+			const errorMessage =
+				(errorObject.message || errorObject?.errors[0]?.message) ??
+				'An error occurred';
+			return Promise.reject(new Error(errorMessage));
+		}
 	} catch (error) {
 		return Promise.reject(error);
 	}
@@ -51,7 +50,7 @@ export function sendRequest(
 export function getRequest(
 	url: string,
 	authorization: boolean = false,
-	query: {} = {},
+	query: Record<string, string> = {},
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
@@ -69,7 +68,7 @@ export function getRequest(
 export function postRequest(
 	url: string,
 	authorization: boolean = false,
-	body: {} = {},
+	body: Record<string, unknown> = {},
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
@@ -87,7 +86,7 @@ export function postRequest(
 export function putRequest(
 	url: string,
 	authorization: boolean = false,
-	body: {} = {},
+	body: Record<string, unknown> = {},
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
@@ -106,7 +105,7 @@ export function gqlRequest(
 	url: string,
 	authorization: boolean = false,
 	query: string,
-	variables: {} = {},
+	variables: Record<string, unknown> = {},
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
@@ -124,7 +123,7 @@ export function gqlRequest(
 
 export function backendGQLRequest(
 	query: string,
-	variables: {} = {},
+	variables: Record<string, unknown> = {},
 	additionalHeaders: HeadersInit = {},
 	additionalOptions: RequestInit = {},
 ) {
