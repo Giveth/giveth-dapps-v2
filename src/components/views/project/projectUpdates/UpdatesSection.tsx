@@ -30,8 +30,8 @@ const UPDATE_LIMIT = 2000;
 
 interface IProps {
 	projectUpdate: IProjectUpdate;
-	removeUpdate?: Function;
-	editUpdate?: Function;
+	removeUpdate?: () => void;
+	editUpdate?: (title: string, content: string, id: string) => Promise<void>;
 	isOwner?: boolean;
 }
 
@@ -80,12 +80,11 @@ const UpdatesSection: FC<IProps> = props => {
 								icon={isEditing ? null : <IconTrash />}
 								onClick={async () => {
 									if (isEditing) {
-										editUpdate &&
-											(await editUpdate(
-												newTitle,
-												updateContent,
-												id,
-											));
+										await editUpdate!(
+											newTitle,
+											updateContent,
+											id,
+										);
 										setIsEditing(false);
 									} else {
 										removeUpdate && removeUpdate();
