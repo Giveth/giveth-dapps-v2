@@ -1,5 +1,9 @@
 import { useMemo } from 'react';
-import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
+import {
+	ApolloClient,
+	InMemoryCache,
+	NormalizedCacheObject,
+} from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import gql from 'graphql-tag';
@@ -13,20 +17,20 @@ import { signOut } from '@/features/user/user.thunks';
 import config from '@/configuration';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
-let apolloClient: any;
+let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 const ssrMode = isSSRMode;
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
-const parseHeaders = (rawHeaders: any) => {
+const parseHeaders = (rawHeaders: string) => {
 	const headers = new Headers();
 	// Replace instances of \r\n and \n followed by at least one space or horizontal tab with a space
 	// https://tools.ietf.org/html/rfc7230#section-3.2
 	const preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, ' ');
-	preProcessedHeaders.split(/\r?\n/).forEach((line: any) => {
+	preProcessedHeaders.split(/\r?\n/).forEach(line => {
 		const parts = line.split(':');
-		const key = parts.shift().trim();
+		const key = parts.shift()?.trim();
 		if (key) {
 			const value = parts.join(':').trim();
 			headers.append(key, value);
@@ -35,11 +39,29 @@ const parseHeaders = (rawHeaders: any) => {
 	return headers;
 };
 
-const uploadFetch = (url: string, options: any) =>
+interface IOpts extends ResponseInit {
+	url?: string | null;
+	headers?: Headers;
+}
+
+interface IRequestWithUpload extends RequestInit {
+	useUpload?: boolean;
+	onAbortPossible: (abort: () => void) => void;
+	body: XMLHttpRequestBodyInit;
+	headers: Record<string, string>;
+	onProgress:
+		| ((this: XMLHttpRequest, ev: ProgressEvent<EventTarget>) => unknown)
+		| null;
+}
+
+const uploadFetch = (
+	url: string,
+	options: IRequestWithUpload,
+): Promise<Response> =>
 	new Promise((resolve, reject) => {
 		const xhr = new XMLHttpRequest();
 		xhr.onload = () => {
-			const opts: any = {
+			const opts: IOpts = {
 				status: xhr.status,
 				statusText: xhr.statusText,
 				headers: parseHeaders(xhr.getAllResponseHeaders() || ''),
@@ -47,9 +69,11 @@ const uploadFetch = (url: string, options: any) =>
 			opts.url =
 				'responseURL' in xhr
 					? xhr.responseURL
-					: opts.headers.get('X-Request-URL');
+					: opts.headers?.get('X-Request-URL');
 			const body =
-				'response' in xhr ? xhr.response : (xhr as any).responseText;
+				'response' in xhr
+					? xhr.response
+					: (xhr as XMLHttpRequest).responseText;
 			resolve(new Response(body, opts));
 		};
 		xhr.onerror = () => {
@@ -58,9 +82,9 @@ const uploadFetch = (url: string, options: any) =>
 		xhr.ontimeout = () => {
 			reject(new TypeError('Network request failed'));
 		};
-		xhr.open(options.method, url, true);
+		xhr.open(options.method || '', url, true);
 
-		Object.keys(options.headers).forEach(key => {
+		Object.keys(options.headers || {}).forEach(key => {
 			xhr.setRequestHeader(key, options.headers[key]);
 		});
 
@@ -75,7 +99,10 @@ const uploadFetch = (url: string, options: any) =>
 		xhr.send(options.body);
 	});
 
-const customFetch = (uri: any, options: any) => {
+const customFetch = (
+	uri: string,
+	options: IRequestWithUpload,
+): Promise<Response> => {
 	if (options.useUpload) {
 		return uploadFetch(uri, options);
 	}
@@ -90,17 +117,17 @@ function createApolloClient() {
 
 	const httpLink = createUploadLink({
 		uri: config.BACKEND_LINK,
-		fetch: customFetch as any,
-	}) as unknown as ApolloLink;
+		fetch: customFetch,
+	});
 
 	const authLink = setContext((_, { headers }) => {
-		let locale: string | null = !ssrMode
+		const locale: string | null = !ssrMode
 			? localStorage.getItem(StorageLabel.LOCALE)
 			: 'en';
 		const currentToken: string | null = !ssrMode
 			? localStorage.getItem(StorageLabel.TOKEN)
 			: null;
-		const mutation: any = {
+		const mutation: Record<string, unknown> = {
 			Authorization: currentToken ? `Bearer ${currentToken}` : '',
 			authVersion: '2',
 			'Accept-Language': locale,
@@ -182,7 +209,7 @@ function createApolloClient() {
 	});
 }
 
-export function initializeApollo(initialState = null) {
+export function initializeApollo(initialState: unknown = null) {
 	const _apolloClient = apolloClient ?? createApolloClient();
 
 	// If your page has Next.js data fetching methods that use Apollo Client, the initial state
@@ -213,17 +240,18 @@ export function initializeApollo(initialState = null) {
 	return _apolloClient;
 }
 
-export function addApolloState(client: any, pageProps: any) {
+export function addApolloState(
+	client: ApolloClient<NormalizedCacheObject>,
+	pageProps: { props: Record<string, unknown> },
+) {
 	if (pageProps?.props) {
 		pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
 	}
-
 	return pageProps;
 }
 
-export function useApollo(pageProps: any) {
+export function useApollo(pageProps: Record<string, unknown>) {
 	const state = pageProps[APOLLO_STATE_PROP_NAME];
-
 	return useMemo(() => initializeApollo(state), [state]);
 }
 
