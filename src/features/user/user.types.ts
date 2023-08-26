@@ -6,10 +6,10 @@ export interface ISignToGetToken {
 }
 
 export interface IChainvineSetReferral {
-	address: string;
+	address?: string;
 }
 
 export interface IChainvineClickCount {
 	referrerId: string;
-	walletAddress: string;
+	walletAddress?: string;
 }
