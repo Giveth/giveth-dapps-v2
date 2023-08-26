@@ -40,7 +40,10 @@ const ImageSearch = (props: {
 			.getPhotos({ query, orientation, perPage, page })
 			.then(res => {
 				if (loadMore && images) {
-					setImages([...images!, ...res.response?.results!]);
+					if (!res.response || res.response?.results.length === 0) {
+						return;
+					}
+					setImages([...images!, ...res.response.results]);
 				} else {
 					setImages(res.response?.results);
 				}
