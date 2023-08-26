@@ -31,7 +31,7 @@ interface IRewardCardProps {
 	actionLabel?: string;
 	actionCb?: MouseEventHandler<HTMLButtonElement>;
 	subButtonLabel?: string;
-	subButtonCb?: Function;
+	subButtonCb?: () => void;
 	network?: number;
 	className?: string;
 	targetNetworks: number[];
