@@ -109,7 +109,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 		try {
 			await dispatch(
 				startChainvineReferral({
-					address: user?.walletAddress!,
+					address: user?.walletAddress,
 				}),
 			);
 			setError(false);
