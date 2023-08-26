@@ -109,7 +109,7 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 				},
 			});
 			const { donationsByProjectId } = projectDonations;
-			if (!!donationsByProjectId?.donations) {
+			if (donationsByProjectId?.donations) {
 				setPageDonations(donationsByProjectId);
 			}
 		};
