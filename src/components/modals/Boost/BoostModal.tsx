@@ -15,7 +15,7 @@ import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 interface IBoostModalProps extends IModal {
-	projectId: string;
+	projectId?: string;
 }
 
 export enum EBoostModalState {
