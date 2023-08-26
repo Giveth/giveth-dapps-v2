@@ -186,7 +186,7 @@ export const usePassport = () => {
 				console.log('******4', account, isUserFullFilled, user);
 				console.log('Passport score is null in our database');
 				const passports = getPassports();
-				//user has not passport account
+				//user has no passport account
 				if (passports[account.toLowerCase()] && user) {
 					console.log('******5', account, isUserFullFilled, user);
 					await updateState(user);
