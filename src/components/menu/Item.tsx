@@ -8,7 +8,7 @@ import { Flex } from '../styled-components/Flex';
 interface IItem {
 	theme: ETheme;
 	isHighlighted?: boolean;
-	onClick?: Function;
+	onClick?: () => void;
 	children: ReactNode;
 	className?: string;
 }
