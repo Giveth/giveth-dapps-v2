@@ -115,9 +115,9 @@ export const ProjectsProvider = (props: {
 				: (filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
 		}
 
-		let term = router.query.term as string;
-		let campaignSlug = router.query.campaign as string;
-		let category =
+		const term = router.query.term as string;
+		const campaignSlug = router.query.campaign as string;
+		const category =
 			router.query?.slug === variables.mainCategory
 				? variables.category
 				: undefined;
