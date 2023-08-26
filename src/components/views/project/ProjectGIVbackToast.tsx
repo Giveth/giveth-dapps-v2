@@ -167,7 +167,7 @@ const ProjectGIVbackToast = () => {
 			</Wrapper>
 			{showBoost && (
 				<BoostModal
-					projectId={projectData?.id!}
+					projectId={projectData?.id}
 					setShowModal={setShowBoost}
 				/>
 			)}
