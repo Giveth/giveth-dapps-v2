@@ -33,7 +33,7 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 			hasContent={!!icon || !!title}
 			color={color}
 		>
-			{!!backButtonCallback ? (
+			{backButtonCallback ? (
 				<IconWrapper
 					onClick={backButtonCallback}
 					clickable={!!backButtonCallback}
