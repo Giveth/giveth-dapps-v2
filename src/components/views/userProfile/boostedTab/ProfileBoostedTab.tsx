@@ -164,7 +164,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = ({
 		async (id: string) => {
 			setLoading(true);
 			const tempBoosts = [...boosts];
-			let deletedBoost = tempBoosts.find(boost => boost.id === id);
+			const deletedBoost = tempBoosts.find(boost => boost.id === id);
 
 			try {
 				const res = await client.mutate({
