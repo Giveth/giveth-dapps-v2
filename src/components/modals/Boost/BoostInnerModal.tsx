@@ -57,7 +57,7 @@ interface IInnerBoostModalProps {
 	setPercentage: Dispatch<SetStateAction<number>>;
 	state: EBoostModalState;
 	setState: Dispatch<SetStateAction<EBoostModalState>>;
-	projectId: string;
+	projectId?: string;
 	setShowModal: (showModal: boolean) => void;
 }
 
@@ -66,7 +66,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	setPercentage: setFinalPercentage,
 	state,
 	setState,
-	projectId,
+	projectId = '',
 	setShowModal,
 }) => {
 	const { formatMessage } = useIntl();
