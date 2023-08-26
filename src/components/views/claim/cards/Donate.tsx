@@ -34,7 +34,6 @@ import { IClaimViewCardProps } from '@/components/views/claim/Claim.view';
 import useClaim from '@/context/claim.context';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { InputWithUnit } from '@/components/input';
 import { Flex } from '@/components/styled-components/Flex';
 import { Zero, formatWeiHelper } from '@/helpers/number';
 
@@ -176,11 +175,10 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 							)} GIV`}</MaxStakeGIV>
 						</Flex>
 						<ImpactCardInput>
-							<InputWithUnit
+							<input
 								type='number'
 								value={donation}
-								unit={'GIV'}
-								onChange={setDonation}
+								onChange={e => setDonation(e.target.value)}
 							/>
 						</ImpactCardInput>
 					</div>
