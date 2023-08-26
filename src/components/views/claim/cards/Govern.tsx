@@ -31,7 +31,6 @@ import { APR } from '@/types/poolInfo';
 import useClaim from '@/context/claim.context';
 import { useAppSelector } from '@/features/hooks';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
-import { InputWithUnit } from '@/components/input';
 import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
 
@@ -221,11 +220,10 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 							)} GIV`}</MaxStakeGIV>
 						</Flex>
 						<ImpactCardInput>
-							<InputWithUnit
+							<input
 								type='number'
 								value={stacked}
-								unit={'GIV'}
-								onChange={setStacked}
+								onChange={e => setStacked(e.target.value)}
 							/>
 						</ImpactCardInput>
 					</div>
