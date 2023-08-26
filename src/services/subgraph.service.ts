@@ -6,7 +6,7 @@ import type { SimpleNetworkConfig } from '@/types/config';
 export const fetchSubgraph = async (
 	query: string,
 	network: number,
-): Promise<any> => {
+): Promise<Record<string, unknown>> => {
 	const reqBody = { query };
 	let uri;
 	if (network === config.MAINNET_NETWORK_NUMBER) {
@@ -34,10 +34,10 @@ export const getHistory = async (
 	from?: number,
 	count?: number,
 ): Promise<ITokenAllocation[]> => {
-	let tokenDistroAddress = (
+	const tokenDistroAddress = (
 		config.NETWORKS_CONFIG[network] as SimpleNetworkConfig
 	).TOKEN_DISTRO_ADDRESS;
-	let uri = config.NETWORKS_CONFIG[network].subgraphAddress;
+	const uri = config.NETWORKS_CONFIG[network].subgraphAddress;
 	if (!tokenDistroAddress || !uri) {
 		console.error('Network is not Defined!');
 		return [];
