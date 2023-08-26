@@ -14,7 +14,7 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 	)
 		return campaign.landingLink;
 
-	let params = new URLSearchParams('');
+	const params = new URLSearchParams('');
 	if (campaign.type === ECampaignType.MANUALLY_SELECTED)
 		params.append('campaign', campaign.slug);
 
