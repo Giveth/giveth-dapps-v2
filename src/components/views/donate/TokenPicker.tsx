@@ -16,7 +16,6 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import Select, {
-	GroupBase,
 	components,
 	OptionProps,
 	OnChangeValue,
@@ -30,11 +29,8 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import useDetectDevice from '@/hooks/useDetectDevice';
 
 declare module 'react-select/dist/declarations/src/Select' {
-	export interface Props<
-		Option,
-		IsMulti extends boolean,
-		Group extends GroupBase<Option>,
-	> {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	export interface Props<Option, IsMulti, Group> {
 		isMobile?: boolean | null;
 		setIsOpen?: any;
 		projectVerified?: boolean;
@@ -118,7 +114,7 @@ const NotFound = ({ emptyField }: any) => {
 };
 
 const TokenPicker = (props: {
-	projectVerified: boolean;
+	projectVerified?: boolean;
 	tokenList: IProjectAcceptedToken[] | undefined;
 	onChange: any;
 	onInputChange?: any;
