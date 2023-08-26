@@ -41,7 +41,7 @@ const TestIndex = () => {
 	const [showModal, setShowModal] = useState(false);
 	const { account } = useWeb3React();
 	const dispatch = useAppDispatch();
-	const functionRef = useRef<Function>();
+	const functionRef = useRef<() => void>();
 	const [state, setState] = useState(0);
 	const [description, setDescription] = useState('');
 	const router = useRouter();
