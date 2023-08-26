@@ -50,7 +50,7 @@ export const MintCard = () => {
 	const { setQty, isEligible, setIsEligible } = usePFPMintData();
 	let mintLeft = '-';
 	if (pfpData && balance !== undefined) {
-		let mintAmount = pfpData.maxMintAmount - balance;
+		const mintAmount = pfpData.maxMintAmount - balance;
 		console.log(mintAmount);
 		if (mintAmount < 0) {
 			mintLeft = '0';
@@ -102,7 +102,7 @@ export const MintCard = () => {
 					PFP_ABI,
 					_provider,
 				) as GiversPFP;
-				let _balanceOf = await PFPContract.balanceOf(account);
+				const _balanceOf = await PFPContract.balanceOf(account);
 				setBalance(Number(_balanceOf?.toString() || '0'));
 			} catch (error) {
 				console.log('failed to fetch user balance data');
