@@ -29,7 +29,7 @@ export const fetchMainnetThirdPartyTokensPriceAsync = createAsyncThunk(
 			promises.push(fetchMainnetTokenPrice(tokenAddress));
 		});
 		return Promise.all(promises).then(prices => {
-			let res: { [x: string]: string } = {};
+			const res: { [x: string]: string } = {};
 			config.MAINNET_CONFIG.regenStreams.forEach((streamConfig, idx) => {
 				const tokenAddress =
 					streamConfig.tokenAddressOnUniswapV2.toLowerCase();
@@ -50,7 +50,7 @@ export const fetchGnosisThirdPartyTokensPriceAsync = createAsyncThunk(
 			promises.push(fetchGnosisTokenPrice(tokenAddress));
 		});
 		return Promise.all(promises).then(prices => {
-			let res: { [x: string]: string } = {};
+			const res: { [x: string]: string } = {};
 			config.XDAI_CONFIG.regenStreams.forEach((streamConfig, idx) => {
 				const tokenAddress =
 					streamConfig.tokenAddressOnUniswapV2.toLowerCase();
