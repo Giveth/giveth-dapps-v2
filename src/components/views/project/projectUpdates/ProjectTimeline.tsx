@@ -6,8 +6,8 @@ import UpdatesSection from '@/components/views/project/projectUpdates/UpdatesSec
 interface IProps {
 	projectUpdate?: IProjectUpdate;
 	creationDate?: string;
-	removeUpdate?: Function;
-	editUpdate?: Function;
+	removeUpdate?: () => void;
+	editUpdate?: (title: string, content: string, id: string) => Promise<void>;
 	isOwner?: boolean;
 }
 
