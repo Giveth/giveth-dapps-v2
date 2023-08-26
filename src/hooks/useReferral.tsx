@@ -28,7 +28,7 @@ export const useReferral = () => {
 					dispatch(
 						countReferralClick({
 							referrerId: referrerId.toString(),
-							walletAddress: userData?.walletAddress!,
+							walletAddress: userData?.walletAddress,
 						}),
 					);
 				}
