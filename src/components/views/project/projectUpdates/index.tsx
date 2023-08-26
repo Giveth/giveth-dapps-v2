@@ -91,7 +91,6 @@ const ProjectUpdates = () => {
 				title: 'Success!',
 				position: 'top-center',
 			});
-			return true;
 		} catch (error: any) {
 			console.log({ error });
 			captureException(error, {
@@ -99,7 +98,7 @@ const ProjectUpdates = () => {
 					section: 'editProjectUpdate',
 				},
 			});
-			return gToast(error?.message, {
+			gToast(error?.message, {
 				type: ToastType.DANGER,
 				// direction: ToastDirection.RIGHT,
 				title: 'Error',
@@ -262,13 +261,7 @@ const ProjectUpdates = () => {
 								setShowRemoveUpdateModal(true);
 								setCurrentUpdate(i.id);
 							}}
-							editUpdate={(
-								title: string,
-								content: string,
-								updateId: string,
-							) => {
-								editUpdate(title, content, updateId);
-							}}
+							editUpdate={editUpdate}
 							isOwner={isOwner}
 						/>
 					),
