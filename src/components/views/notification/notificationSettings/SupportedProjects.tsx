@@ -24,7 +24,7 @@ const SupportedProjects = () => {
 
 	useEffect(() => {
 		const resize_ob = new ResizeObserver(function (entries) {
-			let rect = entries[0].contentRect;
+			const rect = entries[0].contentRect;
 			setItemsHeight(rect.height);
 		});
 		resize_ob.observe(
