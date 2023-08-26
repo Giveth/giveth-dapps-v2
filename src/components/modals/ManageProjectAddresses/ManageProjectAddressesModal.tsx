@@ -37,7 +37,7 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 	const { formatMessage } = useIntl();
 
 	useEffect(() => {
-		let WalletAddr: { [key: number]: IWalletAddress } = {};
+		const WalletAddr: { [key: number]: IWalletAddress } = {};
 		networkIds.forEach(networkId => {
 			WalletAddr[networkId] = { networkId };
 		});
