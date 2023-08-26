@@ -76,7 +76,7 @@ export const signToGetToken = createAsyncThunk(
 
 export const signOut = createAsyncThunk(
 	'user/signOut',
-	async (token?: string | null) => {
+	async (token: string | null | undefined) => {
 		// this is in the case we fail to grab the token from local storage
 		//  but still want to remove the whole user
 		if (!token) return Promise.resolve(true);
@@ -97,7 +97,7 @@ export const startChainvineReferral = createAsyncThunk(
 	async ({ address }: IChainvineSetReferral, { dispatch }) => {
 		try {
 			const res = await backendGQLRequest(REGISTER_ON_CHAINVINE);
-			dispatch(fetchUserByAddress(address));
+			dispatch(fetchUserByAddress(address || ''));
 			return res?.payload;
 		} catch (error) {
 			console.log({ error });
