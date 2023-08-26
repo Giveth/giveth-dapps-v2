@@ -11,10 +11,10 @@ export function getTextWidth(
 	font: string,
 	canvas: HTMLCanvasElement,
 ) {
-	var context = canvas.getContext('2d');
+	const context = canvas.getContext('2d');
 	if (context) {
 		context.font = font;
-		var metrics = context.measureText(text);
+		const metrics = context.measureText(text);
 		return metrics.width;
 	}
 	return 0;
