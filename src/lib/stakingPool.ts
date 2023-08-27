@@ -60,28 +60,36 @@ const toBigNumberJs = (eb: ethers.BigNumber | string | number): BigNumber =>
 
 const getUnipoolInfo = async (
 	unipoolHelper: UnipoolHelper,
-	lmAddress: string,
-	provider: JsonRpcProvider,
-): Promise<{ totalSupply: BigNumber; rewardRate: BigNumber }> => {
-	let totalSupply: BigNumber;
-	let rewardRate: BigNumber;
+	lmAddress: Address,
+	chainId: number,
+): Promise<{ totalSupply: bigint; rewardRate: bigint }> => {
+	let totalSupply = 0n;
+	let rewardRate = 0n;
 	// Isn't initialized with default values
-	if (!unipoolHelper.totalSupply.isZero()) {
+	if (unipoolHelper.totalSupply !== 0n) {
 		totalSupply = unipoolHelper.totalSupply;
 		rewardRate = unipoolHelper.rewardRate;
 	} else {
-		const lmContract = new Contract(
-			lmAddress,
-			LM_ABI,
-			provider,
-		) as UnipoolTokenDistributor;
-		[totalSupply, rewardRate] = await Promise.all([
-			lmContract.totalSupply(),
-			lmContract.rewardRate(),
-		]).then(([_totalSupply, _rewardRate]) => [
-			toBigNumberJs(_totalSupply as ethers.BigNumber),
-			toBigNumberJs(_rewardRate as ethers.BigNumber),
-		]);
+		try {
+			const lmContract = getContract({
+				address: lmAddress,
+				abi: LM_ABI,
+				chainId,
+			});
+			const [_totalSupply, _rewardRate] = await Promise.all([
+				lmContract.read.totalSupply(),
+				lmContract.read.rewardRate(),
+			]);
+			totalSupply = _totalSupply as bigint;
+			rewardRate = _rewardRate as bigint;
+		} catch (error) {
+			console.log('Error on wrapping token:', error);
+			captureException(error, {
+				tags: {
+					section: 'wrapToken',
+				},
+			});
+		}
 	}
 	return { totalSupply, rewardRate };
 };
@@ -95,7 +103,7 @@ export const getGivStakingAPR = async (
 		.GIVPOWER.LM_ADDRESS;
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
-	let givStakingAPR: BigNumber = Zero;
+	let givStakingAPR: 0n;
 	const _provider =
 		provider && provider._network.chainId === network
 			? provider
@@ -106,9 +114,8 @@ export const getGivStakingAPR = async (
 		lmAddress,
 		_provider,
 	);
-	givStakingAPR = totalSupply.isZero()
-		? Zero
-		: rewardRate.div(totalSupply).times('31536000').times('100');
+	givStakingAPR =
+		totalSupply === 0n ? 0n : (rewardRate / totalSupply) * 3153600000n;
 
 	return { effectiveAPR: givStakingAPR };
 };
