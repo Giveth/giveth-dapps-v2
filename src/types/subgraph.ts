@@ -80,7 +80,7 @@ export interface IUniswapV2Pair {
 }
 
 export interface ITokenBalance {
-	balance: string;
+	balance: bigint;
 }
 
 export interface IUnipoolBalance {
