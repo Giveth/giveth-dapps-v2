@@ -25,9 +25,9 @@ export const useStakingPool = (
 ): IStakeInfo => {
 	const [apr, setApr] = useState<APR | null>(null);
 	const [userStakeInfo, setUserStakeInfo] = useState<UserStakeInfo>({
-		earned: ethers.constants.Zero,
-		notStakedAmount: ethers.constants.Zero,
-		stakedAmount: ethers.constants.Zero,
+		earned: 0n,
+		notStakedAmount: 0n,
+		stakedAmount: 0n,
 	});
 
 	const { library, chainId } = useWeb3React();
