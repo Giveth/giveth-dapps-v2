@@ -94,13 +94,13 @@ function NotificationView() {
 		let query;
 		tab === ENotificationTabs.ALL
 			? (query = {
-					limit,
-					offset: pageNumber * limit,
+					limit: String(limit),
+					offset: String(pageNumber * limit),
 			  })
 			: (query = {
 					category: tab,
-					limit,
-					offset: pageNumber * limit,
+					limit: String(limit),
+					offset: String(pageNumber * limit),
 			  });
 		fetchNotificationsData(query, { signal })
 			.then(res => {
