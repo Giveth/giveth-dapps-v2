@@ -164,7 +164,6 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 				const data = await waitForTransaction({
 					hash: txResponse,
 				});
-				console.log('data', data);
 				setStakeState(
 					data.status === 'success'
 						? StakeState.CONFIRMED
@@ -198,7 +197,6 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 				const data = await waitForTransaction({
 					hash: txResponse,
 				});
-				console.log('data', data);
 				setStakeState(
 					data.status === 'success'
 						? StakeState.CONFIRMED
