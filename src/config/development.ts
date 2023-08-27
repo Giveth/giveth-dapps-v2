@@ -13,7 +13,7 @@ const BASE_ROUTE =
 	'https://impact-graph.serve.giveth.io/';
 const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
-	'https://staging.notification.giveth.io';
+	'https://notification.serve.giveth.io/';
 const SEPT_8TH_2022 = 1662595200000;
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
