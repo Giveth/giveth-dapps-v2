@@ -14,6 +14,9 @@ const BASE_ROUTE =
 const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
 	'https://notification.serve.giveth.io/';
+const AUTH_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
+	'https://auth.serve.giveth.io/v1';
 const SEPT_8TH_2022 = 1662595200000;
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
@@ -32,9 +35,7 @@ const config: EnvConfig = {
 	FRONTEND_LINK:
 		process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://staging.giveth.io',
 	MICROSERVICES: {
-		authentication:
-			process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
-			`${BASE_ROUTE}/siweauthmicroservice/v1`,
+		authentication: AUTH_BASE_ROUTE,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
