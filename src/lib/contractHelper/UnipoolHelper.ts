@@ -15,10 +15,10 @@ export class UnipoolHelper {
 		rewardRate,
 		totalSupply,
 	}: IUnipool) {
-		this.totalSupply = totalSupply;
+		this.totalSupply = BigInt(totalSupply);
 		this.lastUpdateTime = lastUpdateTime;
-		this._rewardRate = rewardRate;
-		this.rewardPerTokenStored = rewardPerTokenStored;
+		this._rewardRate = BigInt(rewardRate);
+		this.rewardPerTokenStored = BigInt(rewardPerTokenStored);
 		this.periodFinish = periodFinish;
 	}
 
