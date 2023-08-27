@@ -40,11 +40,11 @@ export interface IGIVpowerPosition {
 }
 
 export interface IUnipool {
-	totalSupply: string;
+	totalSupply: bigint;
 	lastUpdateTime: number;
 	periodFinish: number;
-	rewardPerTokenStored: string;
-	rewardRate: string;
+	rewardPerTokenStored: bigint;
+	rewardRate: bigint;
 }
 
 export interface IUniswapV3Position {
