@@ -1,5 +1,6 @@
 import { getNowUnixMS } from '@/helpers/time';
 import { IUnipool } from '@/types/subgraph';
+import { E18 } from '../constants/constants';
 
 export class UnipoolHelper {
 	readonly totalSupply: bigint;
@@ -41,8 +42,7 @@ export class UnipoolHelper {
 		}
 		const value1 =
 			this.lastTimeRewardApplicable - BigInt(this.lastUpdateTime / 1000);
-		const value2 =
-			(this.rewardRate * 1000000000000000000n) / this.totalSupply;
+		const value2 = (this.rewardRate * E18) / this.totalSupply;
 		return this.rewardPerTokenStored + value1 * value2;
 	}
 
@@ -53,7 +53,7 @@ export class UnipoolHelper {
 	): bigint => {
 		const value1 =
 			stakedAmount * this.rewardPerToken - userRewardPerTokenPaid;
-		const value2 = (stakedAmount * value1) / 1000000000000000000n;
+		const value2 = (stakedAmount * value1) / E18;
 		return value2 + rewards;
 	};
 }
