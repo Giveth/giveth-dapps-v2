@@ -15,10 +15,14 @@ import { IconEthereum } from '@/components/Icons/Eth';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE =
-	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://serve.giveth.io';
+	process.env.NEXT_PUBLIC_BASE_ROUTE ||
+	'https://impact-graph.serve.giveth.io';
 const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
-	'https://staging.notification.giveth.io';
+	'https://notification.serve.giveth.io';
+const AUTH_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
+	'https://auth.serve.giveth.io/v1';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const XDAI_NETWORK_NUMBER = 100; // xDAI
@@ -28,15 +32,12 @@ const CELO_NETWORK_NUMBER = 44787;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
-	BASE_ROUTE: BASE_ROUTE,
 	BACKEND_LINK:
 		process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`,
 	FRONTEND_LINK:
 		process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://staging.giveth.io',
 	MICROSERVICES: {
-		authentication:
-			process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
-			`${BASE_ROUTE}/siweauthmicroservice/v1`,
+		authentication: AUTH_BASE_ROUTE,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
