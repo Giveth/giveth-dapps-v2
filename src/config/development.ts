@@ -69,11 +69,6 @@ const config: EnvConfig = {
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0', // TODO: GOERLI ?
 		WETH_TOKEN_ADDRESS: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
 		TOKEN_DISTRO_ADDRESS: '0x4358c99abFe7A9983B6c96785b8870b5412C5B4B',
-		// GIV: {
-		// 	network: MAINNET_NETWORK_NUMBER,
-		// 	LM_ADDRESS: '0x929C9353D67af21411d4475B30D960F23C209abd',
-		// 	farmEndTimeMS: SEPT_8TH_2022,
-		// },
 
 		nodeUrl: 'https://goerli.infura.io/v3/' + INFURA_API_KEY,
 
