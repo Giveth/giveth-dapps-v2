@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
-import { formatUSD, smallFormatDate, formatTxLink } from '@/lib/helpers';
+import { smallFormatDate, formatTxLink, formatDonation } from '@/lib/helpers';
 import { slugToProjectView } from '@/lib/routeCreators';
 import ExternalLink from '@/components/ExternalLink';
 import { IWalletDonation } from '@/apollo/types/types';
@@ -79,7 +79,7 @@ const DonationTable: FC<DonationTable> = ({
 						</DonationTableCell>
 					)}
 					<DonationTableCell>
-						<B>{donation.amount}</B>
+						<B>{formatDonation(donation.amount)}</B>
 						<Currency>{donation.currency}</Currency>
 						<ExternalLink
 							href={formatTxLink(
@@ -95,7 +95,7 @@ const DonationTable: FC<DonationTable> = ({
 					</DonationTableCell>
 					<DonationTableCell>
 						{donation.valueUsd &&
-							'$' + formatUSD(donation.valueUsd)}
+							formatDonation(donation.valueUsd, 2, true)}
 					</DonationTableCell>
 					<DonationTableCell>
 						{donation.qfRound ? (
