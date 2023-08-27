@@ -9,7 +9,8 @@ import { networksParams } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE =
-	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://serve.giveth.io';
+	process.env.NEXT_PUBLIC_BASE_ROUTE ||
+	'https://impact-graph.serve.giveth.io/';
 const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
 	'https://staging.notification.giveth.io';
