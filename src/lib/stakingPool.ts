@@ -25,7 +25,7 @@ import {
 import config from '../configuration';
 import { APR } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
-import { BN, Zero } from '@/helpers/number';
+import { Zero } from '@/helpers/number';
 import { getGasPreference } from '@/lib/helpers';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
@@ -353,21 +353,21 @@ export const getUserStakeInfo = (
 	notStakedAmount: bigint;
 	earned: bigint;
 } => {
-	let earned = ethers.constants.Zero;
+	let earned = 0n;
 	const sdh = new SubgraphDataHelper(currentValues);
 	const unipoolBalance = sdh.getUnipoolBalance(poolStakingConfig.LM_ADDRESS);
 	const lpTokenBalance = sdh.getTokenBalance(poolStakingConfig.POOL_ADDRESS);
 	const unipoolHelper = new UnipoolHelper(
 		sdh.getUnipool(poolStakingConfig.LM_ADDRESS),
 	);
-	const rewards = BN(unipoolBalance.rewards);
-	const rewardPerTokenPaid = BN(unipoolBalance.rewardPerTokenPaid);
-	let stakedAmount = BN(unipoolBalance.balance);
+	const rewards = BigInt(unipoolBalance.rewards);
+	const rewardPerTokenPaid = BigInt(unipoolBalance.rewardPerTokenPaid);
+	let stakedAmount = BigInt(unipoolBalance.balance);
 	if (poolStakingConfig.type === StakingType.GIV_GARDEN_LM) {
 		const gGIVBalance = sdh.getTokenBalance(
 			config.GNOSIS_CONFIG.gGIV_TOKEN_ADDRESS,
 		);
-		stakedAmount = BN(gGIVBalance.balance);
+		stakedAmount = BigInt(gGIVBalance.balance);
 	} else if (poolStakingConfig.type === StakingType.GIV_UNIPOOL_LM) {
 		const gGIVBalance = sdh.getTokenBalance(
 			(
@@ -376,11 +376,11 @@ export const getUserStakeInfo = (
 				] as GIVpowerUniPoolConfig
 			).GIVPOWER.LM_ADDRESS,
 		);
-		stakedAmount = BN(gGIVBalance.balance);
+		stakedAmount = BigInt(gGIVBalance.balance);
 	} else {
-		stakedAmount = BN(unipoolBalance.balance);
+		stakedAmount = BigInt(unipoolBalance.balance);
 	}
-	const notStakedAmount = BN(lpTokenBalance.balance);
+	const notStakedAmount = BigInt(lpTokenBalance.balance);
 
 	if (unipoolHelper) {
 		earned = unipoolHelper.earned(
