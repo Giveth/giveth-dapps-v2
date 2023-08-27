@@ -1,5 +1,4 @@
 import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
-import { BigNumber, utils } from 'ethers';
 import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -10,8 +9,8 @@ import { Flex } from './styled-components/Flex';
 import { NumericalInput } from '@/components/input/index';
 
 interface IAmountInput {
-	maxAmount: BigNumber;
-	setAmount: Dispatch<SetStateAction<string>>;
+	maxAmount: bigint;
+	setAmount: Dispatch<SetStateAction<bigint>>;
 	poolStakingConfig: PoolStakingConfig;
 	disabled?: boolean;
 }
@@ -28,34 +27,37 @@ export const AmountInput: FC<IAmountInput> = ({
 
 	const setAmountPercentage = useCallback(
 		(percentage: number): void => {
-			const newAmount = BigNumber.from(maxAmount)
-				.mul(percentage)
-				.div(100)
-				.toString();
+			const newAmount = (maxAmount * BigInt(percentage)) / 100n;
 			setAmount(newAmount);
-			setDisplayAmount(utils.formatEther(newAmount));
+			setDisplayAmount(formatWeiHelper(newAmount.toString()));
 		},
-		[maxAmount],
+		[maxAmount, setAmount],
 	);
 
-	const onUserInput = useCallback((value: string) => {
-		setDisplayAmount(value);
-		setActiveStep(0);
-		let valueBn = BigNumber.from(0);
+	const onUserInput = useCallback(
+		(value: string) => {
+			setDisplayAmount(value);
+			setActiveStep(0);
+			let valueBn = 0n;
 
-		try {
-			valueBn = utils.parseUnits(value);
-		} catch (error) {
-			console.debug(`Failed to parse input amount: "${value}"`, error);
-			captureException(error, {
-				tags: {
-					section: 'AmountInput',
-				},
-			});
-		}
+			try {
+				valueBn = BigInt(value) * 1000000000000000000n;
+			} catch (error) {
+				console.debug(
+					`Failed to parse input amount: "${value}"`,
+					error,
+				);
+				captureException(error, {
+					tags: {
+						section: 'AmountInput',
+					},
+				});
+			}
 
-		setAmount(valueBn.toString());
-	}, []);
+			setAmount(valueBn);
+		},
+		[setAmount],
+	);
 
 	return (
 		<>
@@ -66,7 +68,7 @@ export const AmountInput: FC<IAmountInput> = ({
 					</InputLabelText>
 					<InputLabelValue>
 						&nbsp;
-						{formatWeiHelper(maxAmount)}
+						{formatWeiHelper(maxAmount.toString())}
 						&nbsp;
 						{poolStakingConfig.title}
 						&nbsp;
