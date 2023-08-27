@@ -91,41 +91,6 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 		}
 	}, [amount]);
 
-	// useEffect(() => {
-	// 	library?.on('block', async () => {
-	// 		try {
-	// 			const amountNumber = ethers.BigNumber.from(amount);
-	// 			if (
-	// 				amountNumber.gt(ethers.constants.Zero) &&
-	// 				stakeState === StakeState.APPROVING
-	// 			) {
-	// 				const tokenContract = new Contract(
-	// 					POOL_ADDRESS,
-	// 					ERC20_ABI,
-	// 					library,
-	// 				) as ERC20;
-	// 				const allowance: BigNumber = await tokenContract.allowance(
-	// 					account!,
-	// 					(poolStakingConfig as GIVpowerGIVgardenStakingConfig)
-	// 						.GARDEN_ADDRESS!,
-	// 				);
-	// 				const amountNumber = ethers.BigNumber.from(amount);
-	// 				const allowanceNumber = ethers.BigNumber.from(
-	// 					allowance.toString(),
-	// 				);
-	// 				if (amountNumber.lte(allowanceNumber)) {
-	// 					setStakeState(StakeState.WRAP);
-	// 				}
-	// 			}
-	// 		} catch (error) {
-	// 			console.log('Error on Checking allowance', error);
-	// 		}
-	// 	});
-	// 	return () => {
-	// 		library.removeAllListeners('block');
-	// 	};
-	// }, [library, amount, stakeState, POOL_ADDRESS, account, poolStakingConfig]);
-
 	const onApprove = async () => {
 		console.log('here');
 
