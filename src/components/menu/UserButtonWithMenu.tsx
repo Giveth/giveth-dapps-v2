@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
+import { useAccount, useChainId, useNetwork } from 'wagmi';
 import { networksParams } from '@/helpers/blockchain';
 import { shortenAddress } from '@/lib/helpers';
 import {
@@ -44,7 +44,6 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 	const [signWithWallet, setSignWithWallet] = useState<boolean>(false);
 	const [queueRoute, setQueueRoute] = useState<string>('');
 	const [showSwitchNetwork, setShowSwitchNetwork] = useState(false);
-
 	const router = useRouter();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
@@ -125,9 +124,11 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 };
 
 const HeaderUserButton = ({}) => {
-	const { chainId, account, library } = useWeb3React();
+	const { address } = useAccount();
+	const chainId = useChainId();
 	const { userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
+	const { chain } = useNetwork();
 	return (
 		<HBContainer>
 			<HBPic
@@ -138,14 +139,14 @@ const HeaderUserButton = ({}) => {
 			/>
 			<WBInfo>
 				<UserName size='Medium'>
-					{userData?.name || shortenAddress(account)}
+					{userData?.name || shortenAddress(address)}
 				</UserName>
 				<WBNetwork size='Tiny'>
 					{formatMessage({
 						id: 'label.connected_to',
 					})}{' '}
 					{(chainId && networksParams[chainId]?.chainName) ||
-						library?._network?.name}
+						chain?.name}
 				</WBNetwork>
 			</WBInfo>
 		</HBContainer>
