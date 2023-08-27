@@ -9,7 +9,7 @@ import { ICurrentInfo } from './subgraph.types';
 
 export const fetchOptimismInfoAsync = createAsyncThunk(
 	'subgraph/fetchOptimismInfo',
-	async (userAddress?: string) => {
+	async (userAddress: string | undefined) => {
 		const response = await fetchOptimismInfo(userAddress);
 		return { ...response, isLoaded: true };
 	},
@@ -17,7 +17,7 @@ export const fetchOptimismInfoAsync = createAsyncThunk(
 
 export const fetchGnosisInfoAsync = createAsyncThunk(
 	'subgraph/fetchGnosisInfo',
-	async (userAddress?: string) => {
+	async (userAddress: string | undefined) => {
 		const response = await fetchGnosisInfo(userAddress);
 		return { ...response, isLoaded: true };
 	},
@@ -25,7 +25,7 @@ export const fetchGnosisInfoAsync = createAsyncThunk(
 
 export const fetchMainnetInfoAsync = createAsyncThunk(
 	'subgraph/fetchMainnetInfo',
-	async (userAddress?: string) => {
+	async (userAddress: string | undefined) => {
 		const response = await fetchMainnetInfo(userAddress);
 		return { ...response, isLoaded: true };
 	},
