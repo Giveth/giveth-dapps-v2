@@ -1,6 +1,5 @@
 import { getNowUnixMS } from '@/helpers/time';
 import { IUnipool } from '@/types/subgraph';
-import { Zero } from '@/helpers/number';
 
 export class UnipoolHelper {
 	readonly totalSupply: bigint;
@@ -32,22 +31,19 @@ export class UnipoolHelper {
 	}
 
 	get rewardRate(): bigint {
-		if (getNowUnixMS() > this.periodFinish) return Zero;
+		if (getNowUnixMS() > this.periodFinish) return 0n;
 		return this._rewardRate;
 	}
 
 	get rewardPerToken(): bigint {
-		if (this.totalSupply.isZero()) {
+		if (this.totalSupply === 0n) {
 			return this.rewardPerTokenStored;
 		}
-		return this.rewardPerTokenStored.plus(
-			this.lastTimeRewardApplicable
-				.minus(this.lastUpdateTime / 1000)
-				.times(this.rewardRate)
-				.times(1e18)
-				.div(this.totalSupply)
-				.toFixed(0),
-		);
+		const value1 =
+			this.lastTimeRewardApplicable - BigInt(this.lastUpdateTime / 1000);
+		const value2 =
+			(this.rewardRate * 1000000000000000000n) / this.totalSupply;
+		return this.rewardPerTokenStored + value1 * value2;
 	}
 
 	earned = (
