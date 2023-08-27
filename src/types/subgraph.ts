@@ -41,11 +41,11 @@ export interface IGIVpowerPosition {
 }
 
 export interface IUnipool {
-	totalSupply: bigint;
+	totalSupply: string;
 	lastUpdateTime: number;
 	periodFinish: number;
-	rewardPerTokenStored: bigint;
-	rewardRate: bigint;
+	rewardPerTokenStored: string;
+	rewardRate: string;
 }
 
 export interface IUniswapV3Position {
@@ -81,21 +81,21 @@ export interface IUniswapV2Pair {
 }
 
 export interface ITokenBalance {
-	balance: bigint;
+	balance: string;
 }
 
 export interface IUnipoolBalance {
-	balance: bigint;
-	rewards: bigint;
-	rewardPerTokenPaid: bigint;
+	balance: string;
+	rewards: string;
+	rewardPerTokenPaid: string;
 }
 
 export interface ITokenDistroBalance {
-	allocatedTokens: bigint;
-	allocationCount: number;
-	claimed: bigint;
-	givback: bigint;
+	allocatedTokens: string;
+	allocationCount: string;
+	claimed: string;
+	givback: string;
 	givDropClaimed: boolean;
-	givbackLiquidPart: bigint;
+	givbackLiquidPart: string;
 	tokenDistroAddress: Address;
 }
