@@ -10,14 +10,14 @@ import { networksParams } from '@/helpers/blockchain';
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
-	'https://impact-graph.serve.giveth.io/';
+	'https://impact-graph.serve.giveth.io';
 const BACKEND_LINK =
 	process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`;
 const FRONTEND_LINK =
 	process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://staging.giveth.io';
 const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
-	'https://notification.serve.giveth.io/';
+	'https://notification.serve.giveth.io';
 const AUTH_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
 	'https://auth.serve.giveth.io/v1';
