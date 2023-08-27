@@ -1,9 +1,9 @@
 import { Dispatch, FC, SetStateAction } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import { B, GLink } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
+import { useAccount, useChainId, useDisconnect } from 'wagmi';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 import { isUserRegistered, networkInfo, shortenAddress } from '@/lib/helpers';
@@ -36,7 +36,10 @@ export const UserItems: FC<IUserItemsProps> = ({
 	setQueueRoute,
 }) => {
 	const { formatMessage } = useIntl();
-	const { chainId, account, deactivate } = useWeb3React();
+
+	const { address } = useAccount();
+	const { disconnect } = useDisconnect();
+	const chainId = useChainId();
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
@@ -67,7 +70,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 					{formatMessage({ id: 'label.wallet' })}
 				</ItemTitle>
 				<ItemRow>
-					<B>{shortenAddress(account)}</B>
+					<B>{shortenAddress(address)}</B>
 					<ItemAction
 						size='Small'
 						onClick={() => {
@@ -107,7 +110,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 			<Item
 				onClick={() => {
 					isSignedIn && dispatch(signOut(token!));
-					deactivate();
+					disconnect();
 					localStorage.removeItem(StorageLabel.WALLET);
 				}}
 				theme={theme}
