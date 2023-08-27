@@ -134,7 +134,9 @@ const DonationTableCell = styled(TableCell)<{ bold?: boolean }>`
 const DonationTableContainer = styled.div<{ myAccount?: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
-		props.myAccount ? '1fr 4fr 1fr 1fr 1fr 1fr' : '1fr 4fr 1fr 1fr 1fr'};
+		props.myAccount
+			? '1fr 4fr 1fr 1.5fr 1fr 1fr'
+			: '1fr 4fr 1.5fr 1fr 1fr'};
 	overflow: auto;
 	min-width: 900px;
 	margin: 0 10px;
