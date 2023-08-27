@@ -349,9 +349,9 @@ export const getUserStakeInfo = (
 	currentValues: ISubgraphState,
 	poolStakingConfig: SimplePoolStakingConfig,
 ): {
-	stakedAmount: ethers.BigNumber;
-	notStakedAmount: ethers.BigNumber;
-	earned: ethers.BigNumber;
+	stakedAmount: bigint;
+	notStakedAmount: bigint;
+	earned: bigint;
 } => {
 	let earned = ethers.constants.Zero;
 	const sdh = new SubgraphDataHelper(currentValues);
