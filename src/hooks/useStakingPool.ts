@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
 
 import { useWeb3React } from '@web3-react/core';
 import {
@@ -14,9 +13,9 @@ import { useAppSelector } from '@/features/hooks';
 
 export interface IStakeInfo {
 	apr: APR;
-	earned: ethers.BigNumber;
-	stakedAmount: ethers.BigNumber;
-	notStakedAmount: ethers.BigNumber;
+	earned: bigint;
+	stakedAmount: bigint;
+	notStakedAmount: bigint;
 }
 
 export const useStakingPool = (
