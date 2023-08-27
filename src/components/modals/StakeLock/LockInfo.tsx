@@ -11,7 +11,6 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -23,7 +22,7 @@ import type { FC } from 'react';
 
 interface ILockInfo {
 	round: number;
-	amount: string;
+	amount: bigint;
 }
 
 const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
@@ -101,7 +100,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 				<LockInfoRowValue>
 					{amount
 						? formatWeiHelper(
-								new BigNumber(amount).multipliedBy(multipler),
+								(amount * BigInt(multipler)).toString(),
 						  )
 						: 0}
 				</LockInfoRowValue>
