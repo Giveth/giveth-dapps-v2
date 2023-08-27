@@ -4,10 +4,6 @@ import { getNowUnixMS } from '@/helpers/time';
 import { IUnipool } from '@/types/subgraph';
 import { Zero } from '@/helpers/number';
 
-const toBN = (value: ethers.BigNumberish): BigNumber => {
-	return new BigNumber(value.toString());
-};
-
 export class UnipoolHelper {
 	readonly totalSupply: BigNumber;
 	private readonly lastUpdateTime: number;
