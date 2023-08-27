@@ -111,3 +111,5 @@ export const TWO_WEEK = 1_209_600_000;
 export const minDonationAmount = 0.000001;
 
 export const BACKEND_QUERY_LIMIT = 50;
+
+export const E18 = 1_000_000_000_000_000_000n;
