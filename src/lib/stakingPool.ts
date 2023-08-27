@@ -25,7 +25,6 @@ import {
 import config from '../configuration';
 import { APR } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
-import { Zero } from '@/helpers/number';
 import { getGasPreference } from '@/lib/helpers';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
@@ -141,7 +140,6 @@ export const getLPStakingAPR = async (
 			return getIchiPoolStakingAPR(
 				poolStakingConfig as ICHIPoolStakingConfig,
 				network,
-				_provider,
 				unipoolHelper,
 			);
 		default:
@@ -156,8 +154,7 @@ export const getLPStakingAPR = async (
 
 const getIchiPoolStakingAPR = async (
 	ichiPoolStakingConfig: ICHIPoolStakingConfig,
-	network: number,
-	provider: JsonRpcProvider,
+	chainId: number,
 	unipoolHelper: UnipoolHelper,
 ): Promise<APR> => {
 	try {
@@ -168,35 +165,33 @@ const getIchiPoolStakingAPR = async (
 		const { totalSupply, rewardRate } = await getUnipoolInfo(
 			unipoolHelper,
 			LM_ADDRESS,
-			provider,
+			chainId,
 		);
 
 		const {
 			lpPrice = '0',
-			vaultIRR = 0,
+			_vaultIRR = 0,
 			tokens = [],
 		}: {
 			lpPrice: string;
-			vaultIRR: number;
+			_vaultIRR: number;
 			tokens: { name: string; price: number }[];
 		} = apiResult;
 
-		if (!lpPrice || lpPrice === '0') return { effectiveAPR: Zero };
+		if (!lpPrice || lpPrice === '0') return { effectiveAPR: 0n };
 
 		const givTokenPrice = tokens?.find(t => t.name === 'giv')?.price || 0;
-		const totalAPR = rewardRate
-			.div(totalSupply)
-			.times(givTokenPrice)
-			.div(lpPrice)
-			.times('31536000')
-			.times('100')
-			.plus(vaultIRR);
+		const vaultIRR = BigInt(_vaultIRR);
+		const totalAPR =
+			(rewardRate * BigInt(givTokenPrice) * 3153600000n) /
+				(totalSupply * BigInt(lpPrice)) +
+			vaultIRR;
 
-		return { effectiveAPR: totalAPR, vaultIRR: toBigNumberJs(vaultIRR) };
+		return { effectiveAPR: totalAPR, vaultIRR: vaultIRR };
 	} catch (e) {
 		console.error('Error in fetching ICHI info', e);
 	}
-	return { effectiveAPR: Zero };
+	return { effectiveAPR: 0n };
 };
 
 const getBalancerPoolStakingAPR = async (
