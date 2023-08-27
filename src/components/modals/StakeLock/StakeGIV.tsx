@@ -159,18 +159,20 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 					.GARDEN_ADDRESS,
 				chainId!,
 			);
-			console.log('txResponse', txResponse);
-			// if (txResponse) {
-			// 	setTxHash(txResponse);
-			// 	if (txResponse) {
-			// 		const { status } = await txResponse.wait();
-			// 		setStakeState(
-			// 			status ? StakeState.CONFIRMED : StakeState.ERROR,
-			// 		);
-			// 	}
-			// } else {
-			// 	setStakeState(StakeState.WRAP);
-			// }
+			if (txResponse) {
+				setTxHash(txResponse);
+				const data = await waitForTransaction({
+					hash: txResponse,
+				});
+				console.log('data', data);
+				setStakeState(
+					data.status === 'success'
+						? StakeState.CONFIRMED
+						: StakeState.ERROR,
+				);
+			} else {
+				setStakeState(StakeState.WRAP);
+			}
 		} catch (err: any) {
 			setStakeState(
 				err?.code === 4001 ? StakeState.WRAP : StakeState.ERROR,
