@@ -1,15 +1,11 @@
 import Image from 'next/image';
 import { FC, useState, useEffect } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import {
-	Button,
-	GLink,
-	IconMenu24,
-	IconSearch24,
-} from '@giveth/ui-design-system';
+import { Button, GLink, IconMenu24 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
+import { useChainId, useAccount } from 'wagmi';
 
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
@@ -21,8 +17,6 @@ import {
 	SmallCreateProjectParent,
 	LargeCreateProject,
 	HomeButton,
-	GLinkNoWrap,
-	SearchButton,
 } from './Header.sc';
 import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
@@ -32,7 +26,6 @@ import {
 	setShowWalletModal,
 	setShowWelcomeModal,
 	setShowCompleteProfile,
-	setShowSearchModal,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
@@ -65,8 +58,8 @@ const Header: FC<IHeader> = () => {
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 
-	const { chainId, active, account } = useWeb3React();
-
+	const { address } = useAccount();
+	const chainId = useChainId();
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
@@ -237,7 +230,7 @@ const Header: FC<IHeader> = () => {
 					>
 						<CommunityMenu />
 					</LinkWithMenu>
-					<SearchButton
+					{/* <SearchButton
 						theme={theme}
 						onClick={() => dispatch(setShowSearchModal(true))}
 					>
@@ -247,8 +240,8 @@ const Header: FC<IHeader> = () => {
 							</GLinkNoWrap>
 							<IconSearch24 />
 						</Flex>
-					</SearchButton>
-					{/* <WagmiConnectButton /> */}
+					</SearchButton> */}
+					<RainbowConnectButton />
 				</HeaderLinks>
 			)}
 			<FlexSpacer />
@@ -270,7 +263,7 @@ const Header: FC<IHeader> = () => {
 						label='+'
 					/>
 				</SmallCreateProjectParent>
-				{active && account && chainId ? (
+				{address && chainId ? (
 					<>
 						<NotificationButtonWithMenu
 							isHeaderShowing={showHeader}
