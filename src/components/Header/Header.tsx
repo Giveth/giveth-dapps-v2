@@ -21,8 +21,8 @@ import {
 	SmallCreateProjectParent,
 	LargeCreateProject,
 	HomeButton,
-	SearchButton,
 	GLinkNoWrap,
+	SearchButton,
 } from './Header.sc';
 import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
@@ -248,6 +248,7 @@ const Header: FC<IHeader> = () => {
 							<IconSearch24 />
 						</Flex>
 					</SearchButton>
+					{/* <WagmiConnectButton /> */}
 				</HeaderLinks>
 			)}
 			<FlexSpacer />
