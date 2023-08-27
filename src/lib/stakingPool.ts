@@ -723,30 +723,24 @@ export const withdrawTokens = async (
 };
 
 export const lockToken = async (
-	amount: string,
+	amount: bigint,
 	round: number,
-	contractAddress: string,
-	provider: Web3Provider | null,
-): Promise<TransactionResponse | undefined> => {
-	if (amount === '0') return;
-	if (!provider) {
-		console.error('Provider is null');
+	contractAddress: Address,
+	chainId: number,
+): Promise<WriteContractReturnType | undefined> => {
+	if (amount === 0n) return;
+	const walletClient = await getWalletClient({ chainId });
+	if (!walletClient) {
+		console.error('Wallet client is null');
 		return;
 	}
-
-	const signer = provider.getSigner();
-
-	const givpowerContract = new Contract(contractAddress, GP_ABI, signer);
 	try {
-		return await givpowerContract
-			.connect(signer.connectUnchecked())
-			.lock(
-				amount,
-				round,
-				getGasPreference(
-					config.NETWORKS_CONFIG[provider.network.chainId],
-				),
-			);
+		return await walletClient?.writeContract({
+			address: contractAddress,
+			abi: GP_ABI,
+			functionName: 'lock',
+			args: [amount, round],
+		});
 	} catch (error) {
 		console.log('Error on locking token:', error);
 		captureException(error, {
