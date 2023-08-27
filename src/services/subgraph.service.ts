@@ -1,12 +1,12 @@
 import { captureException } from '@sentry/nextjs';
 import config from '@/configuration';
-import { ITokenAllocation } from '@/types/subgraph';
+import { IGIVpowerPosition, ITokenAllocation } from '@/types/subgraph';
 import type { SimpleNetworkConfig } from '@/types/config';
 
 export const fetchSubgraph = async (
 	query: string,
 	network: number,
-): Promise<Record<string, unknown>> => {
+): Promise<Record<string, IGIVpowerPosition[]>> => {
 	const reqBody = { query };
 	let uri;
 	if (network === config.MAINNET_NETWORK_NUMBER) {
