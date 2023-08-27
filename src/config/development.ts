@@ -139,12 +139,6 @@ const config: EnvConfig = {
 			unit: 'GIV',
 		},
 
-		// GIV: {
-		// 	network: GNOSIS_NETWORK_NUMBER,
-		// 	LM_ADDRESS: '0xDAEa66Adc97833781139373DF5B3bcEd3fdda5b1',
-		// 	GARDEN_ADDRESS: '0x9ff80789b74d1d2b7cf5a568ea82409c2b327861',
-		// },
-
 		pools: [
 			{
 				network: GNOSIS_NETWORK_NUMBER,
