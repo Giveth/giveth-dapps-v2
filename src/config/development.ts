@@ -11,6 +11,8 @@ const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
 	'https://impact-graph.serve.giveth.io/';
+const BACKEND_LINK =
+	process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`;
 const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
 	'https://notification.serve.giveth.io/';
@@ -30,8 +32,7 @@ const CELO_NETWORK_NUMBER = 44787;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
-	BACKEND_LINK:
-		process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`,
+	BACKEND_LINK: BACKEND_LINK,
 	FRONTEND_LINK:
 		process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://staging.giveth.io',
 	MICROSERVICES: {
