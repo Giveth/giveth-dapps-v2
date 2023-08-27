@@ -1,15 +1,13 @@
-import { ethers } from 'ethers';
-import BigNumber from 'bignumber.js';
 import { getNowUnixMS } from '@/helpers/time';
 import { IUnipool } from '@/types/subgraph';
 import { Zero } from '@/helpers/number';
 
 export class UnipoolHelper {
-	readonly totalSupply: BigNumber;
+	readonly totalSupply: bigint;
 	private readonly lastUpdateTime: number;
 	private readonly periodFinish: number;
-	private readonly rewardPerTokenStored: BigNumber;
-	private readonly _rewardRate: BigNumber;
+	private readonly rewardPerTokenStored: bigint;
+	private readonly _rewardRate: bigint;
 
 	constructor({
 		lastUpdateTime,
@@ -18,27 +16,27 @@ export class UnipoolHelper {
 		rewardRate,
 		totalSupply,
 	}: IUnipool) {
-		this.totalSupply = toBN(totalSupply);
+		this.totalSupply = BigInt(totalSupply);
 		this.lastUpdateTime = lastUpdateTime;
-		this._rewardRate = toBN(rewardRate);
-		this.rewardPerTokenStored = toBN(rewardPerTokenStored);
+		this._rewardRate = BigInt(rewardRate);
+		this.rewardPerTokenStored = BigInt(rewardPerTokenStored);
 		this.periodFinish = periodFinish;
 	}
 
-	get lastTimeRewardApplicable(): BigNumber {
+	get lastTimeRewardApplicable(): bigint {
 		const lastTimeRewardApplicableMS: number = Math.min(
 			getNowUnixMS(),
 			this.periodFinish,
 		);
-		return toBN(Math.floor(lastTimeRewardApplicableMS / 1000));
+		return BigInt(Math.floor(lastTimeRewardApplicableMS / 1000));
 	}
 
-	get rewardRate(): BigNumber {
+	get rewardRate(): bigint {
 		if (getNowUnixMS() > this.periodFinish) return Zero;
 		return this._rewardRate;
 	}
 
-	get rewardPerToken(): BigNumber {
+	get rewardPerToken(): bigint {
 		if (this.totalSupply.isZero()) {
 			return this.rewardPerTokenStored;
 		}
@@ -53,15 +51,15 @@ export class UnipoolHelper {
 	}
 
 	earned = (
-		rewards: ethers.BigNumber,
-		userRewardPerTokenPaid: ethers.BigNumber,
-		stakedAmount: ethers.BigNumber,
-	): ethers.BigNumber => {
-		const earndBN = toBN(stakedAmount)
-			.times(this.rewardPerToken.minus(toBN(userRewardPerTokenPaid)))
+		rewards: bigint,
+		userRewardPerTokenPaid: bigint,
+		stakedAmount: bigint,
+	): bigint => {
+		const earndBN = BigInt(stakedAmount)
+			.times(this.rewardPerToken.minus(BigInt(userRewardPerTokenPaid)))
 			.div(1e18)
 			.plus(rewards.toString());
 		// console.log('earned:', earndBN.toFixed(0));
-		return ethers.BigNumber.from(earndBN.toFixed(0));
+		return bigint.from(earndBN.toFixed(0));
 	};
 }
