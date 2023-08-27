@@ -15,7 +15,7 @@ import {
 	smallFormatDate,
 	formatTxLink,
 	compareAddresses,
-	formatUSD,
+	formatDonation,
 } from '@/lib/helpers';
 import {
 	EDirection,
@@ -197,7 +197,7 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 								</NetworkName>
 							</DonationTableCell>
 							<DonationTableCell>
-								<B>{formatUSD(donation.amount, 3)}</B>
+								<B>{formatDonation(donation.amount)}</B>
 								<Currency>{donation.currency}</Currency>
 								{!donation.anonymous && (
 									<ExternalLink
@@ -215,7 +215,7 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 							</DonationTableCell>
 							<DonationTableCell>
 								{donation.valueUsd &&
-									'$' + formatUSD(donation.valueUsd)}
+									formatDonation(donation.valueUsd, 2, true)}
 							</DonationTableCell>
 						</DonationRowWrapper>
 					))}
