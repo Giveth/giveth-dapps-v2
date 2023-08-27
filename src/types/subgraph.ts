@@ -84,9 +84,9 @@ export interface ITokenBalance {
 }
 
 export interface IUnipoolBalance {
-	balance: string;
-	rewards: string;
-	rewardPerTokenPaid: string;
+	balance: bigint;
+	rewards: bigint;
+	rewardPerTokenPaid: bigint;
 }
 
 export interface ITokenDistroBalance {
