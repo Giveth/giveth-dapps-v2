@@ -7,6 +7,7 @@ import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig, StakingPlatform } from '@/types/config';
 import { Flex } from './styled-components/Flex';
 import { NumericalInput } from '@/components/input/index';
+import { E18 } from '@/lib/constants/constants';
 
 interface IAmountInput {
 	maxAmount: bigint;
@@ -41,7 +42,7 @@ export const AmountInput: FC<IAmountInput> = ({
 			let valueBn = 0n;
 
 			try {
-				valueBn = BigInt(value) * 1000000000000000000n;
+				valueBn = BigInt(value) * E18;
 			} catch (error) {
 				console.debug(
 					`Failed to parse input amount: "${value}"`,
