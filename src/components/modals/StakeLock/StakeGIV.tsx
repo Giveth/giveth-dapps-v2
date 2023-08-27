@@ -3,6 +3,7 @@ import { captureException } from '@sentry/nextjs';
 import { ButtonLink, H5, IconExternalLink } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount, useChainId } from 'wagmi';
+import { waitForTransaction } from '@wagmi/core';
 import { Modal } from '../Modal';
 import { AmountInput } from '../../AmountInput';
 import {
@@ -126,6 +127,8 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	// }, [library, amount, stakeState, POOL_ADDRESS, account, poolStakingConfig]);
 
 	const onApprove = async () => {
+		console.log('here');
+
 		if (amount === 0n) return;
 		setStakeState(StakeState.APPROVING);
 
@@ -188,25 +191,27 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 				poolStakingConfig.LM_ADDRESS,
 				chainId,
 			);
-			console.log('txResponse', txResponse);
-			// if (txResponse) {
-			// 	setTxHash(txResponse.hash);
-			// 	if (txResponse) {
-			// 		const { status } = await txResponse.wait();
-			// 		setStakeState(
-			// 			status ? StakeState.CONFIRMED : StakeState.ERROR,
-			// 		);
-			// 	}
-			// } else {
-			// 	setStakeState(StakeState.WRAP);
-			// }
+			if (txResponse) {
+				setTxHash(txResponse);
+				const data = await waitForTransaction({
+					hash: txResponse,
+				});
+				console.log('data', data);
+				setStakeState(
+					data.status === 'success'
+						? StakeState.CONFIRMED
+						: StakeState.ERROR,
+				);
+			} else {
+				setStakeState(StakeState.WRAP);
+			}
 		} catch (err: any) {
 			setStakeState(
 				err?.code === 4001 ? StakeState.WRAP : StakeState.ERROR,
 			);
 			captureException(err, {
 				tags: {
-					section: 'onWrap',
+					section: 'onStake',
 				},
 			});
 		}
