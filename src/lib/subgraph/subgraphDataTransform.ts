@@ -166,13 +166,13 @@ export const transformUnipoolBalance = (info: any = {}): IUnipoolBalance => {
 
 export const transformTokenDistroBalance = (info: any): ITokenDistroBalance => {
 	return {
-		allocatedTokens: info?.allocatedTokens || '0',
-		allocationCount: info?.allocationCount || '0',
-		claimed: info?.claimed || '0',
-		givback: info?.givback || '0',
+		allocatedTokens: info?.allocatedTokens || 0n,
+		allocationCount: info?.allocationCount || 0,
+		claimed: info?.claimed || 0n,
+		givback: info?.givback || 0n,
 		givDropClaimed: Boolean(info?.givDropClaimed),
-		givbackLiquidPart: info?.givbackLiquidPart || '0',
-		tokenDistroAddress: info?.tokenDistroAddress || '0',
+		givbackLiquidPart: info?.givbackLiquidPart || 0n,
+		tokenDistroAddress: info?.tokenDistroAddress || '',
 	};
 };
 
