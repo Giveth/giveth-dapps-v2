@@ -51,11 +51,9 @@ export class UnipoolHelper {
 		userRewardPerTokenPaid: bigint,
 		stakedAmount: bigint,
 	): bigint => {
-		const earndBN = BigInt(stakedAmount)
-			.times(this.rewardPerToken.minus(BigInt(userRewardPerTokenPaid)))
-			.div(1e18)
-			.plus(rewards.toString());
-		// console.log('earned:', earndBN.toFixed(0));
-		return bigint.from(earndBN.toFixed(0));
+		const value1 =
+			stakedAmount * this.rewardPerToken - userRewardPerTokenPaid;
+		const value2 = (stakedAmount * value1) / 1000000000000000000n;
+		return value2 + rewards;
 	};
 }
