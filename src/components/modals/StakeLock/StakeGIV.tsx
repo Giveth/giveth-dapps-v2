@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { ButtonLink, H5, IconExternalLink } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
@@ -84,12 +84,6 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 
 	const { POOL_ADDRESS, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
-
-	useEffect(() => {
-		if (stakeState == StakeState.WRAP) {
-			setStakeState(StakeState.APPROVE);
-		}
-	}, [amount]);
 
 	const onApprove = async () => {
 		console.log('here');
