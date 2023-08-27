@@ -9,10 +9,18 @@ import { networksParams } from '@/helpers/blockchain';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE =
-	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://serve.giveth.io';
+	process.env.NEXT_PUBLIC_BASE_ROUTE ||
+	'https://impact-graph.serve.giveth.io';
+const BACKEND_LINK =
+	process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`;
+const FRONTEND_LINK =
+	process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://staging.giveth.io';
 const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
-	'https://staging.notification.giveth.io';
+	'https://notification.serve.giveth.io';
+const AUTH_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
+	'https://auth.serve.giveth.io/v1';
 const SEPT_8TH_2022 = 1662595200000;
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
@@ -26,15 +34,10 @@ const CELO_NETWORK_NUMBER = 44787;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
-	BASE_ROUTE: BASE_ROUTE,
-	BACKEND_LINK:
-		process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`,
-	FRONTEND_LINK:
-		process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://staging.giveth.io',
+	BACKEND_LINK: BACKEND_LINK,
+	FRONTEND_LINK: FRONTEND_LINK,
 	MICROSERVICES: {
-		authentication:
-			process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
-			`${BASE_ROUTE}/siweauthmicroservice/v1`,
+		authentication: AUTH_BASE_ROUTE,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
@@ -66,11 +69,6 @@ const config: EnvConfig = {
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0', // TODO: GOERLI ?
 		WETH_TOKEN_ADDRESS: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
 		TOKEN_DISTRO_ADDRESS: '0x4358c99abFe7A9983B6c96785b8870b5412C5B4B',
-		// GIV: {
-		// 	network: MAINNET_NETWORK_NUMBER,
-		// 	LM_ADDRESS: '0x929C9353D67af21411d4475B30D960F23C209abd',
-		// 	farmEndTimeMS: SEPT_8TH_2022,
-		// },
 
 		nodeUrl: 'https://goerli.infura.io/v3/' + INFURA_API_KEY,
 
@@ -140,12 +138,6 @@ const config: EnvConfig = {
 			description: '100% GIV',
 			unit: 'GIV',
 		},
-
-		// GIV: {
-		// 	network: GNOSIS_NETWORK_NUMBER,
-		// 	LM_ADDRESS: '0xDAEa66Adc97833781139373DF5B3bcEd3fdda5b1',
-		// 	GARDEN_ADDRESS: '0x9ff80789b74d1d2b7cf5a568ea82409c2b327861',
-		// },
 
 		pools: [
 			{
