@@ -139,7 +139,6 @@ export const getLPStakingAPR = async (
 			return getSimplePoolStakingAPR(
 				poolStakingConfig,
 				network,
-				_provider,
 				unipoolHelper,
 			);
 	}
