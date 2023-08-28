@@ -6,7 +6,6 @@ import { useIntl } from 'react-intl';
 import { useAppSelector } from '@/features/hooks';
 import { ItemRow, ItemTitle } from './common';
 import { Item } from './Item';
-import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 
 export const communityItems = [
@@ -23,30 +22,18 @@ export const communityItems = [
 	{
 		title: 'label.why_giveth',
 		label: 'label.our_mission',
-		href: links.OUR_MISSION,
-		isExternal: true,
+		href: Routes.AboutUs + '#mission',
 	},
 ];
 
 export const CommunityItems = () => {
 	return (
 		<>
-			{communityItems.map((item, idx) =>
-				item.isExternal ? (
-					<a
-						key={idx}
-						href={item.href}
-						target='_blank'
-						rel='noopener noreferrer'
-					>
-						<CommunityItem item={item} />
-					</a>
-				) : (
-					<Link key={idx} href={item.href}>
-						<CommunityItem item={item} />
-					</Link>
-				),
-			)}
+			{communityItems.map((item, idx) => (
+				<Link key={idx} href={item.href}>
+					<CommunityItem item={item} />
+				</Link>
+			))}
 		</>
 	);
 };
@@ -56,7 +43,6 @@ interface ICommunityItemProps {
 		title: string;
 		label: string;
 		href: string;
-		isExternal?: boolean;
 	};
 }
 

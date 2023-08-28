@@ -49,6 +49,7 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 	const [selectedReason, setSelectedReason] = useState<ISelectObj | any>(
 		undefined,
 	);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const dispatch = useAppDispatch();
 	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -72,21 +73,29 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 	};
 
 	const handleConfirmButton = async () => {
-		if (!!tab && !!selectedReason) {
-			if (!isSignedIn) {
-				dispatch(setShowSignWithWallet(true));
-				return;
+		try {
+			if (isLoading) return;
+			if (!!tab && !!selectedReason) {
+				setIsLoading(true);
+				if (!isSignedIn) {
+					dispatch(setShowSignWithWallet(true));
+					return;
+				}
+				await client.mutate({
+					mutation: DEACTIVATE_PROJECT,
+					variables: {
+						projectId: Number(projectId),
+						reasonId: Number(selectedReason.value),
+					},
+				});
+				await fetchProjectBySlug();
 			}
-			await client.mutate({
-				mutation: DEACTIVATE_PROJECT,
-				variables: {
-					projectId: Number(projectId),
-					reasonId: Number(selectedReason.value),
-				},
-			});
-			await fetchProjectBySlug();
+			setTab(previousTab => previousTab + 1);
+			setIsLoading(false);
+		} catch (error) {
+			setIsLoading(false);
+			console.log('deactivation error', { error });
 		}
-		setTab(previousTab => previousTab + 1);
 	};
 
 	useEffect(() => {
@@ -136,7 +145,7 @@ const DeactivateProjectModal: FC<IDeactivateProjectModal> = ({
 				<CancelButton
 					buttonType='texty'
 					size='small'
-					label={buttonLabels[tab].cancel}
+					label={buttonLabels[tab]?.cancel}
 					onClick={closeModal}
 				/>
 			</Wrapper>

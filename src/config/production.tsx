@@ -6,6 +6,11 @@ import {
 	StreamType,
 } from '@/types/config';
 import { networksParams } from '@/helpers/blockchain';
+import { IconEthereum } from '@/components/Icons/Eth';
+import { IconGnosisChain } from '@/components/Icons/GnosisChain';
+import { IconPolygon } from '@/components/Icons/Polygon';
+import { IconOptimism } from '@/components/Icons/Optimism';
+import { IconCelo } from '@/components/Icons/Celo';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE =
@@ -60,6 +65,8 @@ const config: EnvConfig = {
 		blockExplorerName: ['etherscan'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
+		coingeckoChainName: 'ethereum',
+		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
 
 		GIV_TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		GIV_BUY_LINK: 'https://swap.giveth.io/#/1/swap/ETH/GIV',
@@ -229,6 +236,8 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
+		coingeckoChainName: 'xdai',
+		chainLogo: (logoSize = 24) => <IconGnosisChain size={logoSize} />,
 
 		GIV_TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		GIV_BUY_LINK: 'https://swap.giveth.io/#/100/swap/XDAI/GIV',
@@ -370,6 +379,8 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['PolygonScan'],
 		subgraphAddress: '',
+		coingeckoChainName: 'polygon-pos',
+		chainLogo: (logoSize = 24) => <IconPolygon size={logoSize} />,
 	},
 
 	OPTIMISM_CONFIG: {
@@ -386,6 +397,8 @@ const config: EnvConfig = {
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		TOKEN_DISTRO_ADDRESS: '0xe3ac7b3e6b4065f4765d76fdc215606483bf3bd1',
 		uniswapV2Subgraph: '',
+		coingeckoChainName: 'optimistic-ethereum',
+		chainLogo: (logoSize = 24) => <IconOptimism size={logoSize} />,
 		GIVPOWER: {
 			network: OPTIMISM_NETWORK_NUMBER,
 			LM_ADDRESS: '0x...',
@@ -406,6 +419,8 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['CeloScan'],
 		subgraphAddress: '',
+		coingeckoChainName: 'celo',
+		chainLogo: (logoSize = 24) => <IconCelo size={logoSize} />,
 	},
 };
 
