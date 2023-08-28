@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
-import { smallFormatDate, formatTxLink, formatDonation } from '@/lib/helpers';
+import { smallFormatDate, formatTxLink } from '@/lib/helpers';
 import { slugToProjectView } from '@/lib/routeCreators';
 import ExternalLink from '@/components/ExternalLink';
 import { IWalletDonation } from '@/apollo/types/types';
@@ -26,6 +26,7 @@ import {
 	TableHeader,
 } from '@/components/styled-components/Table';
 import { Badge, EBadgeStatus } from '@/components/Badge';
+import { formatDonation } from '@/helpers/number';
 
 interface DonationTable {
 	donations: IWalletDonation[];
@@ -95,7 +96,7 @@ const DonationTable: FC<DonationTable> = ({
 					</DonationTableCell>
 					<DonationTableCell>
 						{donation.valueUsd &&
-							formatDonation(donation.valueUsd, 2, true)}
+							formatDonation(donation.valueUsd, '$', locale)}
 					</DonationTableCell>
 					<DonationTableCell>
 						{donation.qfRound ? (

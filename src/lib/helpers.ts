@@ -36,21 +36,6 @@ export const formatUSD = (balance?: string | number, decimals = 2) => {
 	});
 };
 
-export const formatDonation = (
-	balance?: string | number,
-	maximumFractionDigits = 3,
-	isDollar = false,
-) => {
-	const num = parseFloat(String(balance || 0));
-	const threshold = Math.pow(10, -maximumFractionDigits);
-	if (num < threshold) return `< ${isDollar ? '$' : ''}${threshold}`;
-	else
-		return (
-			`${isDollar ? '$' : ''}` +
-			num.toLocaleString('en-US', { maximumFractionDigits })
-		);
-};
-
 export const formatPrice = (balance?: string | number) => {
 	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
 		maximumFractionDigits: 6,
