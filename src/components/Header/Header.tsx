@@ -4,7 +4,10 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Button, GLink, IconMenu24 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
+import {
+	ConnectButton as RainbowConnectButton,
+	useConnectModal,
+} from '@rainbow-me/rainbowkit';
 import { useChainId, useAccount } from 'wagmi';
 
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
@@ -23,7 +26,6 @@ import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import {
-	setShowWalletModal,
 	setShowWelcomeModal,
 	setShowCompleteProfile,
 } from '@/features/modal/modal.slice';
@@ -73,6 +75,8 @@ const Header: FC<IHeader> = () => {
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const isMobile = useMediaQuery(device.mobileL);
+	const { openConnectModal } = useConnectModal();
+
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
 	const handleBack = () => {
@@ -144,7 +148,7 @@ const Header: FC<IHeader> = () => {
 
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
-			dispatch(setShowWalletModal(true));
+			openConnectModal && openConnectModal();
 		} else {
 			dispatch(setShowWelcomeModal(true));
 		}
