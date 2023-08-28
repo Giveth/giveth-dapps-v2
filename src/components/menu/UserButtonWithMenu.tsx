@@ -20,7 +20,7 @@ import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { device } from '@/lib/constants/constants';
+import { PROFILE_PHOTO_PLACEHOLDER, device } from '@/lib/constants/constants';
 import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
 import { MenuContainer } from './Menu.sc';
 import { UserItems } from './UserItems';
@@ -131,7 +131,7 @@ const HeaderUserButton = ({}) => {
 	return (
 		<HBContainer>
 			<HBPic
-				src={userData?.avatar || '/images/placeholders/profile.svg'}
+				src={userData?.avatar || PROFILE_PHOTO_PLACEHOLDER}
 				alt='Profile Pic'
 				width={'24px'}
 				height={'24px'}
