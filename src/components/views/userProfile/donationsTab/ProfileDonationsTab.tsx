@@ -13,7 +13,7 @@ import Pagination from '@/components/Pagination';
 import { Flex } from '@/components/styled-components/Flex';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import DonationTable from '@/components/views/userProfile/donationsTab/DonationsTable';
-import { UserProfileTab } from '../common.sc';
+import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { DonateContributeCard } from '@/components/ContributeCard';
 
 const itemPerPage = 10;
@@ -72,6 +72,8 @@ const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 		fetchUserDonations().then();
 	}, [user, page, order.by, order.direction]);
 
+	const userName = user?.name || 'Unknown';
+
 	return (
 		<UserProfileTab>
 			{!myAccount && (
@@ -80,6 +82,18 @@ const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 						<DonateContributeCard user={user} />
 					</Col>
 				</Row>
+			)}
+			{!myAccount && (
+				<UserContributeTitle weight={700}>
+					{formatMessage(
+						{
+							id: 'label.user_donations',
+						},
+						{
+							userName,
+						},
+					)}
+				</UserContributeTitle>
 			)}
 			<DonationTableWrapper>
 				{!loading && totalDonations === 0 ? (
