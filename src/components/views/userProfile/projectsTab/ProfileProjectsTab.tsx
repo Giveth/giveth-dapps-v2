@@ -88,7 +88,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 				<UserContributeTitle weight={700}>
 					{formatMessage(
 						{
-							id: 'label.user_donations_and_projects',
+							id: 'label.user_projects',
 						},
 						{
 							userName,
