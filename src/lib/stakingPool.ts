@@ -38,6 +38,7 @@ import { IUniswapV2Pair, UnipoolTokenDistributor } from '@/types/contracts';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { GIVpowerUniPoolConfig } from '@/types/config';
+import { E18 } from './constants/constants';
 
 const { abi: LM_ABI } = LM_Json;
 const { abi: GP_ABI } = GP_Json;
@@ -275,22 +276,19 @@ const getSimplePoolStakingAPR = async (
 		? streamConfig.rewardTokenAddress
 		: givTokenAddress;
 
-	const poolContract = new Contract(
-		POOL_ADDRESS,
-		UNI_ABI,
-		provider,
-	) as IUniswapV2Pair;
+	const poolContract = getContract({
+		address: POOL_ADDRESS,
+		abi: UNI_ABI,
+		chainId,
+	});
+
 	let farmAPR = null;
 	try {
-		const [_reserves, _token0, _poolTotalSupply]: [
-			[ethers.BigNumber, ethers.BigNumber, number],
-			string,
-			ethers.BigNumber,
-		] = await Promise.all([
-			poolContract.getReserves(),
-			poolContract.token0(),
-			poolContract.totalSupply(),
-		]);
+		const [_reserves, _token0, _poolTotalSupply] = (await Promise.all([
+			poolContract.read.getReserves(),
+			poolContract.read.token0(),
+			poolContract.read.totalSupply(),
+		])) as [[bigint, bigint, number], Address, bigint];
 
 		const { totalSupply, rewardRate } = await getUnipoolInfo(
 			unipoolHelper,
@@ -298,24 +296,17 @@ const getSimplePoolStakingAPR = async (
 			chainId,
 		);
 
-		let tokenReseve = toBigNumberJs(
+		let tokenReseve =
 			_token0.toLowerCase() !== tokenAddress.toLowerCase()
 				? _reserves[1]
-				: _reserves[0],
-		);
+				: _reserves[0];
 
-		const lp = toBigNumberJs(_poolTotalSupply)
-			.times(10 ** 18)
-			.div(2)
-			.div(tokenReseve);
-		farmAPR = totalSupply.isZero()
-			? null
-			: rewardRate
-					.div(totalSupply)
-					.times('31536000')
-					.times('100')
-					.times(lp)
-					.div(10 ** 18);
+		const lp = (_poolTotalSupply * E18) / tokenReseve / 2n;
+
+		farmAPR =
+			totalSupply === 0n
+				? null
+				: (rewardRate * 3153600000n * lp) / totalSupply / E18;
 	} catch (e) {
 		console.error('error on fetching simple pool apr:', e);
 		captureException(e, {
