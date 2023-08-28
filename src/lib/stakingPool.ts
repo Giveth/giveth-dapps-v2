@@ -1,9 +1,5 @@
 import { Contract, ethers } from 'ethers';
-import {
-	JsonRpcProvider,
-	TransactionResponse,
-	Web3Provider,
-} from '@ethersproject/providers';
+import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
 import { captureException } from '@sentry/nextjs';
 import { getContract, getWalletClient } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
@@ -107,13 +103,9 @@ export const getGivStakingAPR = async (
 
 export const getLPStakingAPR = async (
 	poolStakingConfig: SimplePoolStakingConfig,
-	provider: JsonRpcProvider | null,
 	subgraphValue: ISubgraphState,
 ): Promise<APR> => {
 	const { network } = poolStakingConfig;
-	const _provider = provider
-		? provider
-		: new JsonRpcProvider(config.NETWORKS_CONFIG[network].nodeUrl);
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(
 		sdh.getUnipool(poolStakingConfig.LM_ADDRESS),
