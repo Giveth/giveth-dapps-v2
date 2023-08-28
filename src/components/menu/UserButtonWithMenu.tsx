@@ -131,7 +131,7 @@ const HeaderUserButton = ({}) => {
 	return (
 		<HBContainer>
 			<HBPic
-				src={userData?.avatar || '/images/placeholders/profile.png'}
+				src={userData?.avatar || '/images/placeholders/profile.svg'}
 				alt='Profile Pic'
 				width={'24px'}
 				height={'24px'}
