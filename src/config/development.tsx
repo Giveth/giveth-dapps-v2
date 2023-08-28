@@ -1,4 +1,5 @@
 import { parseUnits } from '@ethersproject/units';
+import React from 'react';
 import {
 	EnvConfig,
 	StakingPlatform,
@@ -6,6 +7,11 @@ import {
 	StreamType,
 } from '@/types/config';
 import { networksParams } from '@/helpers/blockchain';
+import { IconPolygon } from '@/components/Icons/Polygon';
+import { IconCelo } from '@/components/Icons/Celo';
+import { IconOptimism } from '@/components/Icons/Optimism';
+import { IconGnosisChain } from '@/components/Icons/GnosisChain';
+import { IconEthereum } from '@/components/Icons/Eth';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE =
@@ -62,6 +68,8 @@ const config: EnvConfig = {
 		blockExplorerName: ['Etherscan'],
 		subgraphAddress:
 			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-goerli/1.5.0',
+		coingeckoChainName: 'ethereum',
+		chainLogo: (logoSize?: number) => <IconEthereum size={logoSize} />,
 
 		GIV_TOKEN_ADDRESS: '0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be',
 		GIV_BUY_LINK:
@@ -119,6 +127,8 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
 			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-gnosischain/1.5.1',
+		coingeckoChainName: 'xdai',
+		chainLogo: (logoSize?: number) => <IconGnosisChain size={logoSize} />,
 
 		GIV_TOKEN_ADDRESS: GNOSIS_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
@@ -267,6 +277,8 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['PolygonScan'],
 		subgraphAddress: '',
+		coingeckoChainName: 'polygon-pos',
+		chainLogo: (logoSize?: number) => <IconPolygon size={logoSize} />,
 	},
 
 	OPTIMISM_CONFIG: {
@@ -282,6 +294,8 @@ const config: EnvConfig = {
 		GIV_BUY_LINK: 'https://',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		TOKEN_DISTRO_ADDRESS: '0x8D2cBce8ea0256bFFBa6fa4bf7CEC46a1d9b43f6',
+		coingeckoChainName: 'optimistic-ethereum',
+		chainLogo: (logoSize?: number) => <IconOptimism size={logoSize} />,
 		GIVPOWER: {
 			network: OPTIMISM_NETWORK_NUMBER,
 			LM_ADDRESS: '0x632AC305ed88817480d12155A7F1244cC182C298',
@@ -303,6 +317,8 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['CeloScan'],
 		subgraphAddress: '',
+		coingeckoChainName: 'celo',
+		chainLogo: (logoSize?: number) => <IconCelo size={logoSize} />,
 	},
 };
 

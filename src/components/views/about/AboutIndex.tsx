@@ -98,26 +98,28 @@ const AboutIndex = () => {
 					<EndMustardArc />
 					<EndPurpleArc />
 				</HideContainer>
-				<Tabs>
-					{tabTitles.map(i => (
-						<TabItem
-							onClick={() => setActiveTab(i)}
-							className={activeTab === i ? 'active' : ''}
-							key={i}
-						>
-							{i}
-						</TabItem>
-					))}
-				</Tabs>
-				<TabContent>
-					{activeTab === tabTitles[0] && <AboutMission />}
-				</TabContent>
-				<TabContent>
-					{activeTab === tabTitles[1] && <AboutHistory />}
-				</TabContent>
-				<TabContent>
-					{activeTab === tabTitles[2] && <AboutTeam />}
-				</TabContent>
+				<section id='mission'>
+					<Tabs>
+						{tabTitles.map(i => (
+							<TabItem
+								onClick={() => setActiveTab(i)}
+								className={activeTab === i ? 'active' : ''}
+								key={i}
+							>
+								{i}
+							</TabItem>
+						))}
+					</Tabs>
+					<TabContent>
+						{activeTab === tabTitles[0] && <AboutMission />}
+					</TabContent>
+					<TabContent>
+						{activeTab === tabTitles[1] && <AboutHistory />}
+					</TabContent>
+					<TabContent>
+						{activeTab === tabTitles[2] && <AboutTeam />}
+					</TabContent>
+				</section>
 			</End>
 		</>
 	);

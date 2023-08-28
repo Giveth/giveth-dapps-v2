@@ -124,6 +124,8 @@ export interface BasicNetworkConfig extends INetworkParam {
 	blockExplorerName: string[];
 	gasPreference: GasPreference;
 	subgraphAddress: string;
+	coingeckoChainName: string;
+	chainLogo: (logoSize?: number) => JSX.Element;
 }
 
 interface StreamConfig {
