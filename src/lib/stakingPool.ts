@@ -126,7 +126,6 @@ export const getLPStakingAPR = async (
 			return getBalancerPoolStakingAPR(
 				poolStakingConfig as BalancerPoolStakingConfig,
 				network,
-				_provider,
 				unipoolHelper,
 			);
 		case StakingPlatform.ICHI:
