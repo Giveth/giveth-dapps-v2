@@ -258,18 +258,17 @@ const getBalancerPoolStakingAPR = async (
 };
 const getSimplePoolStakingAPR = async (
 	poolStakingConfig: SimplePoolStakingConfig | RegenPoolStakingConfig,
-	network: number,
-	provider: JsonRpcProvider,
+	chainId: number,
 	unipoolHelper: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
 	const givTokenAddress = (
-		config.NETWORKS_CONFIG[network] as MainnetNetworkConfig
+		config.NETWORKS_CONFIG[chainId] as MainnetNetworkConfig
 	).GIV_TOKEN_ADDRESS;
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 	const streamConfig =
 		regenStreamType &&
-		(config.NETWORKS_CONFIG[network] as RegenFarmConfig).regenStreams.find(
+		(config.NETWORKS_CONFIG[chainId] as RegenFarmConfig).regenStreams.find(
 			s => s.type === regenStreamType,
 		);
 	const tokenAddress = streamConfig
@@ -296,7 +295,7 @@ const getSimplePoolStakingAPR = async (
 		const { totalSupply, rewardRate } = await getUnipoolInfo(
 			unipoolHelper,
 			LM_ADDRESS,
-			provider,
+			chainId,
 		);
 
 		let tokenReseve = toBigNumberJs(
