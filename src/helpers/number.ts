@@ -43,15 +43,23 @@ export const formatWeiHelper = (
 	return formatEthHelper(amountEth, decimals, format);
 };
 
-export const formatDonations = (
-	amount: number,
+export const formatDonation = (
+	amount: string | number,
 	symbol: string = '',
 	rounded: boolean = false,
+	local: Intl.LocalesArgument = 'en-US',
+	maximumFractionDigits: number = 2,
 ): string => {
-	if (amount === 0) {
-		return rounded ? `${symbol}0` : `${symbol}0.00`;
+	const num = parseFloat(String(amount || 0));
+	if (rounded) maximumFractionDigits = 0;
+	const threshold = Math.pow(10, -maximumFractionDigits);
+	if (num === 0) {
+		return rounded
+			? `${symbol}0`
+			: `${symbol}${threshold.toString().replace('1', '0')}`;
 	}
-	if (rounded && amount < 1) return `<${symbol}1`;
-	if (amount < 0.01) return `<${symbol}0.01`;
-	return !rounded ? symbol + amount.toFixed(2) : symbol + Math.round(amount);
+	if (num < threshold) return `< ${symbol}${threshold}`;
+	return !rounded
+		? symbol + num.toLocaleString(local, { maximumFractionDigits })
+		: symbol + Math.round(num);
 };
