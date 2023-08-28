@@ -76,7 +76,7 @@ export interface UniswapV3PoolStakingConfig
 	infinitePositionId?: number;
 }
 export interface BalancerPoolStakingConfig extends SimplePoolStakingConfig {
-	VAULT_ADDRESS: string;
+	VAULT_ADDRESS: Address;
 	POOL_ID: string;
 }
 
