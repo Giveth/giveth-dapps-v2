@@ -16,10 +16,7 @@ import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { Flex } from '@/components/styled-components/Flex';
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
-import {
-	DonateContributeCard,
-	ProjectsContributeCard,
-} from '@/components/ContributeCard';
+import { ProjectsContributeCard } from '@/components/ContributeCard';
 
 const itemPerPage = 10;
 
@@ -82,9 +79,6 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 		<UserProfileTab>
 			{!myAccount && (
 				<Row>
-					<Col lg={6}>
-						<DonateContributeCard user={user} />
-					</Col>
 					<Col lg={6}>
 						<ProjectsContributeCard user={user} />
 					</Col>
