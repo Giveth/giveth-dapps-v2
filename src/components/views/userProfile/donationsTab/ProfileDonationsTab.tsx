@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { neutralColors } from '@giveth/ui-design-system';
+import { Col, Row, neutralColors } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
 import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
@@ -14,6 +14,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import DonationTable from '@/components/views/userProfile/donationsTab/DonationsTable';
 import { UserProfileTab } from '../common.sc';
+import { DonateContributeCard } from '@/components/ContributeCard';
 
 const itemPerPage = 10;
 
@@ -73,6 +74,13 @@ const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 
 	return (
 		<UserProfileTab>
+			{!myAccount && (
+				<Row>
+					<Col lg={6}>
+						<DonateContributeCard user={user} />
+					</Col>
+				</Row>
+			)}
 			<DonationTableWrapper>
 				{!loading && totalDonations === 0 ? (
 					<NothingWrapper>
