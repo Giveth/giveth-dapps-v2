@@ -3,7 +3,14 @@ import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
-import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	H5,
+	IconWorld32,
+	Lead,
+	mediaQueries,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useRouter } from 'next/router';
 import {
@@ -106,6 +113,7 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 							key={i.value}
 							selected={selectedWallet === i.value}
 						>
+							{i.hasWorldIcon ? <IconWorld32 size={64} /> : null}
 							<Image
 								src={i.image}
 								alt={i.name}
@@ -117,7 +125,7 @@ const WalletModal: FC<IModal> = ({ setShowModal }) => {
 								{formatMessage({
 									id: 'label.connect_with_your',
 								})}{' '}
-								{i.name}
+								{i.customSubtitle ?? i.name}
 							</WalletDesc>
 						</WalletItem>
 					))}
@@ -135,7 +143,10 @@ const IconsContainer = styled.div`
 	align-items: center;
 	flex-wrap: wrap;
 	background-color: ${neutralColors.gray[100]};
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr;
+	${mediaQueries.tablet} {
+		grid-template-columns: 1fr 1fr;
+	}
 `;
 
 const WalletItem = styled.div<{ selected: boolean }>`
