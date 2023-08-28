@@ -673,6 +673,7 @@
 	"label.receiving_funds": "Receiving funds",
 	"label.recently_updated": "Recently Updated",
 	"label.recipient_addresses": "recipient addresses",
+	"label.recipient_addresses_cant": "Recipient addresses can't be empty",
 	"label.refer_a_friend": "Refer a friend, earn $GIV tokens for every donation.",
 	"label.refer_your_friends": "Refer your friends",
 	"label.refer_your_friends_and_earn_giv": "Refer your friends and earn GIV when they donate",
