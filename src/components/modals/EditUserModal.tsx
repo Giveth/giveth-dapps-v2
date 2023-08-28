@@ -13,7 +13,10 @@ import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { gToast, ToastType } from '../toasts';
-import { mediaQueries } from '@/lib/constants/constants';
+import {
+	PROFILE_PHOTO_PLACEHOLDER,
+	mediaQueries,
+} from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
@@ -133,7 +136,9 @@ const EditUserModal = ({
 					<FlexCenter direction='column' gap='8px'>
 						<ProfilePicture
 							src={
-								user.avatar ? user.avatar : '/images/avatar.svg'
+								user.avatar
+									? user.avatar
+									: PROFILE_PHOTO_PLACEHOLDER
 							}
 							alt={user.name || ''}
 							height={80}

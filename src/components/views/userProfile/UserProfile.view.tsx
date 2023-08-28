@@ -15,7 +15,10 @@ import {
 import { useRouter } from 'next/router';
 import config from '@/configuration';
 
-import { mediaQueries } from '@/lib/constants/constants';
+import {
+	PROFILE_PHOTO_PLACEHOLDER,
+	mediaQueries,
+} from '@/lib/constants/constants';
 import ProfileContributes from './ProfileContributes';
 import { IUser } from '@/apollo/types/types';
 import EditUserModal from '@/components/modals/EditUserModal';
@@ -134,7 +137,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 							<PFP pfpToken={pfpToken} size={EPFPSize.LARGE} />
 						) : (
 							<StyledImage
-								src={user?.avatar || '/images/avatar.svg'}
+								src={user?.avatar || PROFILE_PHOTO_PLACEHOLDER}
 								width={180}
 								height={180}
 								alt={user?.name}
