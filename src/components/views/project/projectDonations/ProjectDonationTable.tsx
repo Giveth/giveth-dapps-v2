@@ -11,12 +11,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation, IQFRound } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
-import {
-	smallFormatDate,
-	formatTxLink,
-	compareAddresses,
-	formatDonation,
-} from '@/lib/helpers';
+import { smallFormatDate, formatTxLink, compareAddresses } from '@/lib/helpers';
 import {
 	EDirection,
 	EDonationStatus,
@@ -35,6 +30,7 @@ import { useProjectContext } from '@/context/project.context';
 import NetworkLogo from '@/components/NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
 import { UserWithPFPInCell } from '../../../UserWithPFPInCell';
+import { formatDonation } from '@/helpers/number';
 
 const itemPerPage = 10;
 
@@ -215,7 +211,11 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 							</DonationTableCell>
 							<DonationTableCell>
 								{donation.valueUsd &&
-									formatDonation(donation.valueUsd, 2, true)}
+									formatDonation(
+										donation.valueUsd,
+										'$',
+										locale,
+									)}
 							</DonationTableCell>
 						</DonationRowWrapper>
 					))}
