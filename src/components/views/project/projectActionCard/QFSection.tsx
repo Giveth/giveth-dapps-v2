@@ -147,10 +147,11 @@ const QFSection = () => {
 										allProjectsSum,
 										matchingPool,
 									),
-									'DAI',
+									'',
 									locale,
 									true,
 								)}
+								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
 						<FlexSameSize justifyContent='space-between'>
@@ -165,10 +166,11 @@ const QFSection = () => {
 										allProjectsSum,
 										matchingPool,
 									),
-									'DAI',
+									'',
 									locale,
 									true,
 								)}
+								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
 						<FlexSameSize justifyContent='space-between'>
@@ -183,10 +185,11 @@ const QFSection = () => {
 										allProjectsSum,
 										matchingPool,
 									),
-									'DAI',
+									'',
 									locale,
 									true,
 								)}
+								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
 						{/* <Flex justifyContent='space-between'>
