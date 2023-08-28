@@ -1,5 +1,4 @@
 import { Contract, ethers } from 'ethers';
-import BigNumber from 'bignumber.js';
 import {
 	JsonRpcProvider,
 	TransactionResponse,
@@ -47,9 +46,6 @@ const { abi: BAL_WEIGHTED_POOL_ABI } = BAL_WEIGHTED_POOL_Json;
 const { abi: BAL_VAULT_ABI } = BAL_VAULT_Json;
 const { abi: TOKEN_MANAGER_ABI } = TOKEN_MANAGER_Json;
 const { abi: UNIPOOL_GIVPOWER_ABI } = UnipoolGIVpower;
-
-const toBigNumberJs = (eb: ethers.BigNumber | string | number): BigNumber =>
-	new BigNumber(eb.toString());
 
 const getUnipoolInfo = async (
 	unipoolHelper: UnipoolHelper,
