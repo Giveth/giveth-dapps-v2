@@ -4,16 +4,12 @@ import { B, GLink } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
 import { useAccount, useChainId, useDisconnect } from 'wagmi';
+import { useChainModal } from '@rainbow-me/rainbowkit';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 import { isUserRegistered, networkInfo, shortenAddress } from '@/lib/helpers';
-import StorageLabel from '@/lib/localStorage';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import {
-	setShowCompleteProfile,
-	setShowSwitchNetworkModal,
-	setShowWalletModal,
-} from '@/features/modal/modal.slice';
+import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
 import {
 	ItemRow,
@@ -25,6 +21,7 @@ import {
 import { Item } from './Item';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
+import StorageLabel from '@/lib/localStorage';
 
 interface IUserItemsProps {
 	setSignWithWallet: Dispatch<SetStateAction<boolean>>;
@@ -44,6 +41,9 @@ export const UserItems: FC<IUserItemsProps> = ({
 	const router = useRouter();
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
 	const theme = useAppSelector(state => state.general.theme);
+
+	const { openChainModal } = useChainModal();
+
 	const goRoute = (input: {
 		url: string;
 		requiresSign: boolean;
@@ -71,15 +71,6 @@ export const UserItems: FC<IUserItemsProps> = ({
 				</ItemTitle>
 				<ItemRow>
 					<B>{shortenAddress(address)}</B>
-					<ItemAction
-						size='Small'
-						onClick={() => {
-							window.localStorage.removeItem(StorageLabel.WALLET);
-							dispatch(setShowWalletModal(true));
-						}}
-					>
-						{formatMessage({ id: 'label.change_wallet' })}
-					</ItemAction>
 				</ItemRow>
 			</Item>
 			<Item theme={theme}>
@@ -93,9 +84,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 					</FlexCenter>
 					<ItemAction
 						size='Small'
-						onClick={() =>
-							dispatch(setShowSwitchNetworkModal(true))
-						}
+						onClick={() => openChainModal && openChainModal()}
 					>
 						{formatMessage({ id: 'label.switch_network' })}
 					</ItemAction>
@@ -110,8 +99,8 @@ export const UserItems: FC<IUserItemsProps> = ({
 			<Item
 				onClick={() => {
 					isSignedIn && dispatch(signOut(token!));
-					disconnect();
 					localStorage.removeItem(StorageLabel.WALLET);
+					disconnect();
 				}}
 				theme={theme}
 			>
