@@ -19,54 +19,38 @@ import config from '@/configuration';
 import Input, { InputSize } from '@/components/Input';
 import { EInputs } from '@/components/views/create/CreateProject';
 import { gqlAddressValidation } from '@/components/views/create/helpers';
-import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
-import { IconEthereum } from '@/components/Icons/Eth';
 import NetworkLogo from '@/components/NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
+
+const networksConfig = config.NETWORKS_CONFIG;
 
 interface IProps {
 	networkId: number;
 	userAddresses: string[];
-	sameAddress?: boolean;
-	isActive?: boolean;
-	resolvedENS?: string;
-	setResolvedENS: (resolvedENS: string) => void;
 	onSubmit?: () => void;
 }
 
 const WalletAddressInput: FC<IProps> = ({
 	networkId,
 	userAddresses,
-	sameAddress = false,
-	isActive = true,
-	resolvedENS,
-	setResolvedENS,
 	onSubmit,
 }) => {
-	const isMainnet = networkId === config.MAINNET_NETWORK_NUMBER;
-	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
-	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
-	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
-	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
-	const inputName = isGnosis
-		? EInputs.gnosisAddress
-		: isPolygon
-		? EInputs.polygonAddress
-		: isCelo
-		? EInputs.celoAddress
-		: isOptimism
-		? EInputs.optimismAddress
-		: EInputs.mainAddress;
+	const [resolvedENS, setResolvedENS] = useState('');
 
-	const { getValues, clearErrors, setValue } = useFormContext();
+	const { getValues, setValue } = useFormContext();
+	const { chainId = 1, library } = useWeb3React();
 
-	const value = getValues(inputName);
-	const [isHidden, setIsHidden] = useState(false);
+	const user = useAppSelector(state => state.user?.userData);
+
+	const inputName = EInputs.addresses;
+	const addresses = getValues(inputName);
+	const value = addresses[networkId];
+
 	const [isValidating, setIsValidating] = useState(false);
 	const { formatMessage } = useIntl();
 	const [inputValue, setInputValue] = useState(value);
@@ -75,9 +59,6 @@ const WalletAddressInput: FC<IProps> = ({
 		ref: undefined,
 		type: undefined,
 	});
-	const { chainId, library } = useWeb3React();
-
-	const user = useAppSelector(state => state.user?.userData);
 
 	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
 	const errorMessage = error.message;
@@ -90,10 +71,6 @@ const WalletAddressInput: FC<IProps> = ({
 	const delayedResolvedENS = useDelay(!!resolvedENS);
 	const delayedIsAddressUsed = useDelay(isAddressUsed);
 
-	let disabled: boolean;
-	if (isGnosis) disabled = !isActive;
-	else disabled = !isActive && !sameAddress;
-
 	let caption: string = '';
 	if (isDefaultAddress) {
 		caption = formatMessage({
@@ -102,19 +79,7 @@ const WalletAddressInput: FC<IProps> = ({
 	} else if (errorMessage || !value) {
 		caption = `${formatMessage({
 			id: 'label.you_can_enter_a_new_address',
-		})} ${
-			sameAddress
-				? formatMessage({ id: 'label.all_supported_networks' })
-				: isGnosis
-				? 'Gnosis Chain'
-				: isPolygon
-				? 'Polygon Mainnet'
-				: isCelo
-				? 'Celo Mainnet'
-				: isOptimism
-				? 'Optimism'
-				: 'Mainnet'
-		}.`;
+		})} ${networksConfig[networkId].chainName}.`;
 	}
 
 	const isProjectPrevAddress = (newAddress: string) => {
@@ -126,11 +91,6 @@ const WalletAddressInput: FC<IProps> = ({
 	};
 
 	const ENSHandler = async (ens: string) => {
-		if (networkId !== config.MAINNET_NETWORK_NUMBER) {
-			throw formatMessage({
-				id: 'label.ens_is_only_supported_on_mainnet',
-			});
-		}
 		if (chainId !== 1) {
 			throw formatMessage({
 				id: 'label.please_switcth_to_mainnet_to_handle_ens',
@@ -143,9 +103,8 @@ const WalletAddressInput: FC<IProps> = ({
 
 	const addressValidation = async (address: string) => {
 		try {
-			clearErrors(inputName);
+			setError({ ...error, message: '' });
 			setResolvedENS('');
-			if (disabled) return true;
 			if (address.length === 0) {
 				return formatMessage({ id: 'label.this_field_is_required' });
 			}
@@ -171,16 +130,10 @@ const WalletAddressInput: FC<IProps> = ({
 			return e;
 		}
 	};
-	useEffect(() => {
-		if (sameAddress) {
-			setTimeout(() => setIsHidden(true), 250);
-		} else {
-			setIsHidden(false);
-		}
-	}, [sameAddress]);
 
 	useEffect(() => {
 		//We had an issue with onBlur so when the user clicks on submit exactly after filling the address, then process of address validation began, so i changed it to this.
+		if (inputValue === value) return;
 		addressValidation(inputValue).then(res => {
 			if (res === true) {
 				setError({ ...error, message: '' });
@@ -190,74 +143,38 @@ const WalletAddressInput: FC<IProps> = ({
 		});
 	}, [inputValue]);
 
-	if (isHidden && !isMainnet) return null;
-
 	return (
-		<Container hide={sameAddress && !isMainnet}>
+		<Container>
 			<Header>
 				<H6>
-					{sameAddress
-						? formatMessage({ id: 'label.receiving_address' })
-						: formatMessage(
-								{ id: 'label.chain_address' },
-								{
-									chainName:
-										networksParams[networkId].chainName,
-								},
-						  )}
+					{formatMessage(
+						{ id: 'label.chain_address' },
+						{
+							chainName: networksParams[networkId].chainName,
+						},
+					)}
 				</H6>
 				<Flex gap='10px'>
-					{sameAddress ? (
-						<>
-							<MainnetIcon />
-							<GnosisIcon />
-							<PolygonIcon />
-							<CeloIcon />
-							<OptimismIcon />
-						</>
-					) : isGnosis ? (
-						<GnosisIcon />
-					) : isPolygon ? (
-						<PolygonIcon />
-					) : isCelo ? (
-						<CeloIcon />
-					) : isOptimism ? (
-						<OptimismIcon />
-					) : (
-						<MainnetIcon />
-					)}
+					<ChainIconShadow>
+						<NetworkLogo chainId={networkId} logoSize={24} />
+					</ChainIconShadow>
 				</Flex>
 			</Header>
 			<Input
-				label={
-					sameAddress
-						? formatMessage({ id: 'label.receiving_address' })
-						: formatMessage(
-								{
-									id: 'label.receiving_address_on',
-								},
-								{
-									chainName: isGnosis
-										? 'Gnosis Chain'
-										: isPolygon
-										? 'Polygon Mainnet'
-										: isCelo
-										? 'Celo Mainnet'
-										: isOptimism
-										? 'Optimism Mainnet'
-										: 'Mainnet',
-								},
-						  )
-				}
+				label={formatMessage(
+					{
+						id: 'label.receiving_address_on',
+					},
+					{
+						chainName: networksConfig[networkId].chainName,
+					},
+				)}
 				placeholder={formatMessage({ id: 'label.my_wallet_address' })}
 				caption={caption}
 				size={InputSize.LARGE}
-				disabled={disabled}
 				isValidating={isValidating}
 				value={inputValue}
-				onChange={e => {
-					setInputValue(e.target.value);
-				}}
+				onChange={e => setInputValue(e.target.value)}
 				error={!error.message || !inputValue ? undefined : error}
 			/>
 			{delayedResolvedENS && (
@@ -290,12 +207,12 @@ const WalletAddressInput: FC<IProps> = ({
 				<Button
 					label='Add ADDRESS'
 					disabled={
-						error.message !== '' ||
-						inputValue === '' ||
-						isValidating === true
+						error.message !== '' || !inputValue || isValidating
 					}
 					onClick={() => {
-						setValue(inputName, inputValue);
+						const _addresses = { ...addresses };
+						_addresses[networkId] = resolvedENS || inputValue;
+						setValue(inputName, _addresses);
 						onSubmit && onSubmit();
 					}}
 				/>
@@ -303,36 +220,6 @@ const WalletAddressInput: FC<IProps> = ({
 		</Container>
 	);
 };
-
-const OptimismIcon = () => (
-	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.OPTIMISM_NETWORK_NUMBER} />
-	</ChainIconShadow>
-);
-
-const CeloIcon = () => (
-	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.CELO_NETWORK_NUMBER} />
-	</ChainIconShadow>
-);
-
-const PolygonIcon = () => (
-	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.POLYGON_NETWORK_NUMBER} />
-	</ChainIconShadow>
-);
-
-const GnosisIcon = () => (
-	<ChainIconShadow>
-		<IconGnosisChain size={24} />
-	</ChainIconShadow>
-);
-
-const MainnetIcon = () => (
-	<ChainIconShadow>
-		<IconEthereum size={24} />
-	</ChainIconShadow>
-);
 
 const Warning = styled(FlexCenter)`
 	flex-shrink: 0;
@@ -366,15 +253,11 @@ const Header = styled.div`
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
 
-const Container = styled.div<{ hide?: boolean }>`
+const Container = styled.div`
 	margin-top: 25px;
 	background: ${neutralColors.gray[100]};
 	border-radius: 12px;
 	padding: 16px;
-	opacity: ${props => (props.hide ? 0 : 1)};
-	visibility: ${props => (props.hide ? 'hidden' : 'visible')};
-	transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-	animation: fadeIn 0.3s ease-in-out;
 `;
 
 const ButtonWrapper = styled.div`
@@ -385,4 +268,5 @@ const ButtonWrapper = styled.div`
 		bottom: 20px;
 	}
 `;
+
 export default WalletAddressInput;

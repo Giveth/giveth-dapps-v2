@@ -1,4 +1,5 @@
 import {
+	CSSProperties,
 	Dispatch,
 	FC,
 	ReactNode,
@@ -6,20 +7,24 @@ import {
 	useRef,
 	useState,
 } from 'react';
+import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import {
 	GLink,
-	IconChevronDown,
-	IconChevronUp,
+	IconChevronDown24,
+	IconChevronUp24,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { Flex } from './styled-components/Flex';
-import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import { Shadow } from './styled-components/Shadow';
+import { zIndex } from '@/lib/constants/constants';
+import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 
 interface IDropdownProps {
 	label: string;
 	options: IOption[];
+	style?: any;
+	stickToRight?: boolean;
 }
 
 export enum OptionType {
@@ -28,69 +33,92 @@ export enum OptionType {
 }
 
 export interface IOption {
-	type: OptionType;
+	type?: OptionType;
 	label: string;
 	icon?: ReactNode;
 	cb?: any;
 	disabled?: boolean;
 }
 
-export const Dropdown: FC<IDropdownProps> = ({ label, options }) => {
-	const [open, setOpen] = useState(false);
-	const ddRef = useRef<HTMLDivElement>(null);
-	useOnClickOutside(ddRef, () => setOpen(false), open);
-	return (
-		<Wrapper ref={ddRef}>
-			<Controller>
-				<ControllerWrapper
-					justifyContent='space-between'
-					onMouseDown={e => {
-						setOpen(_open => !_open);
-					}}
-				>
-					<GLink size='Big'>{label}</GLink>
-					<IconWrapper>
-						{open ? (
-							<IconChevronUp size={24} />
-						) : (
-							<IconChevronDown size={24} />
-						)}
-					</IconWrapper>
-				</ControllerWrapper>
-			</Controller>
-			{open && <Options options={options} setOpen={setOpen} />}
-		</Wrapper>
+export const Dropdown: FC<IDropdownProps> = props => {
+	const { label, options, style, stickToRight } = props;
+	const [isOpen, setIsOpen] = useState(false);
+
+	const containerRef = useRef<HTMLDivElement>(null);
+	const dropdownRef = useRef<HTMLDivElement>(null);
+
+	useOnClickOutside(
+		() => setIsOpen(false),
+		isOpen,
+		dropdownRef,
+		containerRef,
 	);
-};
 
-interface IOptionsProps {
-	options: IOption[];
-	setOpen: Dispatch<SetStateAction<boolean>>;
-}
+	const dropdownStyle: CSSProperties =
+		isOpen && containerRef.current
+			? {
+					position: 'absolute',
+					top:
+						containerRef.current.getBoundingClientRect().bottom +
+						window.scrollY +
+						'px',
+					right: stickToRight
+						? document.documentElement.clientWidth -
+						  containerRef.current.getBoundingClientRect().right +
+						  window.scrollX +
+						  'px'
+						: 'unset',
+					left: stickToRight
+						? 'unset'
+						: containerRef.current.getBoundingClientRect().left +
+						  window.scrollX +
+						  'px',
+					zIndex: zIndex.DROPDOWN,
+			  }
+			: {};
 
-const Options: FC<IOptionsProps> = ({ options, setOpen }) => {
 	return (
-		<OptionsWrapper>
-			{options.map((option, idx) =>
-				option.disabled ? null : (
-					<Option key={idx} option={option} setOpen={setOpen} />
-				),
-			)}
-		</OptionsWrapper>
+		<Wrapper
+			style={style}
+			ref={containerRef}
+			onClick={() => setIsOpen(_open => !_open)}
+		>
+			<Controller justifyContent='space-between'>
+				<GLink size='Big'>{label}</GLink>
+				<IconWrapper>
+					{isOpen ? <IconChevronUp24 /> : <IconChevronDown24 />}
+				</IconWrapper>
+			</Controller>
+			{isOpen &&
+				createPortal(
+					<OptionsWrapper style={dropdownStyle} ref={dropdownRef}>
+						{options.map(option =>
+							option.disabled ? null : (
+								<Option
+									key={option.label}
+									option={option}
+									setIsOpen={setIsOpen}
+								/>
+							),
+						)}
+					</OptionsWrapper>,
+					document.body,
+				)}
+		</Wrapper>
 	);
 };
 
 interface IOptionProps {
 	option: IOption;
-	setOpen: Dispatch<SetStateAction<boolean>>;
+	setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const Option: FC<IOptionProps> = ({ option, setOpen }) => {
+const Option: FC<IOptionProps> = ({ option, setIsOpen }) => {
 	return (
 		<OptionWrapper
 			onClick={() => {
 				option.cb && option.cb();
-				setOpen(false);
+				setIsOpen(false);
 			}}
 			gap='8px'
 		>
@@ -103,18 +131,11 @@ const Option: FC<IOptionProps> = ({ option, setOpen }) => {
 const Wrapper = styled.div`
 	position: relative;
 	user-select: none;
-`;
-
-const ControllerWrapper = styled(Flex)`
-	width: 100%;
-	padding: 10px 16px;
+	cursor: pointer;
 `;
 
 const Controller = styled(Flex)`
-	border-radius: 8px;
-	background-color: ${neutralColors.gray[300]};
-	cursor: pointer;
-	pointer-events: auto;
+	width: 100%;
 `;
 
 const IconWrapper = styled.div`
@@ -125,9 +146,6 @@ const IconWrapper = styled.div`
 
 const OptionsWrapper = styled.div`
 	position: absolute;
-	top: 100%;
-	left: 0;
-	width: 100%;
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 16px;
 	padding: 8px;

@@ -30,7 +30,7 @@ const InputBox: FC<IInputBox> = ({
 			<Wrapper>
 				<Input
 					id='input-box'
-					value={value}
+					value={value ?? ''}
 					type='number'
 					onChange={e => {
 						const _value = e.target.value;

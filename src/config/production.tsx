@@ -6,6 +6,11 @@ import {
 	StreamType,
 } from '@/types/config';
 import { networksParams } from '@/helpers/blockchain';
+import { IconEthereum } from '@/components/Icons/Eth';
+import { IconGnosisChain } from '@/components/Icons/GnosisChain';
+import { IconPolygon } from '@/components/Icons/Polygon';
+import { IconOptimism } from '@/components/Icons/Optimism';
+import { IconCelo } from '@/components/Icons/Celo';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE =
@@ -22,7 +27,6 @@ const CELO_NETWORK_NUMBER = 42220;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
-	BASE_ROUTE: BASE_ROUTE,
 	BACKEND_LINK:
 		process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`,
 	FRONTEND_LINK: process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://giveth.io',
@@ -57,6 +61,8 @@ const config: EnvConfig = {
 		blockExplorerName: ['etherscan'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
+		coingeckoChainName: 'ethereum',
+		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
 
 		TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
@@ -225,6 +231,8 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
+		coingeckoChainName: 'xdai',
+		chainLogo: (logoSize = 24) => <IconGnosisChain size={logoSize} />,
 
 		TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		gGIV_ADDRESS: '0xfFBAbEb49be77E5254333d5fdfF72920B989425f',
@@ -353,6 +361,8 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['PolygonScan'],
 		subgraphAddress: '',
+		coingeckoChainName: 'polygon-pos',
+		chainLogo: (logoSize = 24) => <IconPolygon size={logoSize} />,
 	},
 
 	OPTIMISM_CONFIG: {
@@ -364,6 +374,9 @@ const config: EnvConfig = {
 		blockExplorerName: ['OptimismScan'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet',
+		coingeckoChainName: 'optimistic-ethereum',
+		chainLogo: (logoSize = 24) => <IconOptimism size={logoSize} />,
+
 		TOKEN_ADDRESS: '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98',
 		tokenAddressOnUniswapV2: '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98',
 		TOKEN_DISTRO_ADDRESS: '0xe3ac7b3e6b4065f4765d76fdc215606483bf3bd1',
@@ -386,6 +399,8 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['CeloScan'],
 		subgraphAddress: '',
+		coingeckoChainName: 'celo',
+		chainLogo: (logoSize = 24) => <IconCelo size={logoSize} />,
 	},
 };
 
