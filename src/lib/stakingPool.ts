@@ -33,7 +33,6 @@ import UNI_Json from '../artifacts/UNI.json';
 import BAL_WEIGHTED_POOL_Json from '../artifacts/BalancerWeightedPool.json';
 import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
 import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
-import ERC20_Json from '../artifacts/ERC20.json';
 import UnipoolGIVpower from '../artifacts/UnipoolGIVpower.json';
 import { IUniswapV2Pair, UnipoolTokenDistributor } from '@/types/contracts';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
@@ -46,7 +45,6 @@ const { abi: UNI_ABI } = UNI_Json;
 const { abi: BAL_WEIGHTED_POOL_ABI } = BAL_WEIGHTED_POOL_Json;
 const { abi: BAL_VAULT_ABI } = BAL_VAULT_Json;
 const { abi: TOKEN_MANAGER_ABI } = TOKEN_MANAGER_Json;
-const { abi: ERC20_ABI } = ERC20_Json;
 const { abi: UNIPOOL_GIVPOWER_ABI } = UnipoolGIVpower;
 
 const toBigNumberJs = (eb: ethers.BigNumber | string | number): BigNumber =>
