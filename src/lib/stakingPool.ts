@@ -35,12 +35,7 @@ import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
 import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
 import ERC20_Json from '../artifacts/ERC20.json';
 import UnipoolGIVpower from '../artifacts/UnipoolGIVpower.json';
-import {
-	IUniswapV2Pair,
-	IVault,
-	UnipoolTokenDistributor,
-	WeightedPool,
-} from '@/types/contracts';
+import { IUniswapV2Pair, UnipoolTokenDistributor } from '@/types/contracts';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { GIVpowerUniPoolConfig } from '@/types/config';
@@ -196,51 +191,48 @@ const getIchiPoolStakingAPR = async (
 
 const getBalancerPoolStakingAPR = async (
 	balancerPoolStakingConfig: BalancerPoolStakingConfig,
-	network: number,
-	provider: JsonRpcProvider,
+	chainId: number,
 	unipool: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
-	const tokenAddress = (config.NETWORKS_CONFIG[network] as GIVTokenConfig)
+	const tokenAddress = (config.NETWORKS_CONFIG[chainId] as GIVTokenConfig)
 		.GIV_TOKEN_ADDRESS;
 
-	const weightedPoolContract = new Contract(
-		POOL_ADDRESS,
-		BAL_WEIGHTED_POOL_ABI,
-		provider,
-	) as WeightedPool;
-	const vaultContract = new Contract(
-		VAULT_ADDRESS,
-		BAL_VAULT_ABI,
-		provider,
-	) as IVault;
+	const weightedPoolContract = getContract({
+		address: POOL_ADDRESS,
+		abi: BAL_WEIGHTED_POOL_ABI,
+		chainId,
+	});
+
+	const vaultContract = getContract({
+		address: VAULT_ADDRESS,
+		abi: BAL_VAULT_ABI,
+		chainId,
+	});
 
 	interface PoolTokens {
-		balances: Array<ethers.BigNumber>;
+		balances: Array<bigint>;
 		tokens: Array<string>;
 	}
 	let farmAPR = null;
 
 	try {
-		const [_poolTokens, _poolTotalSupply, _poolNormalizedWeights]: [
-			PoolTokens,
-			ethers.BigNumber,
-			Array<ethers.BigNumber>,
-		] = await Promise.all([
-			vaultContract.getPoolTokens(POOL_ID),
-			weightedPoolContract.totalSupply(),
-			weightedPoolContract.getNormalizedWeights(),
-		]);
+		const [_poolTokens, _poolTotalSupply, _poolNormalizedWeights] =
+			(await Promise.all([
+				vaultContract.read.getPoolTokens([POOL_ID]),
+				weightedPoolContract.read.totalSupply(),
+				weightedPoolContract.read.getNormalizedWeights(),
+			])) as [PoolTokens, bigint, Array<bigint>];
 
 		const { totalSupply, rewardRate } = await getUnipoolInfo(
 			unipool,
 			LM_ADDRESS,
-			provider,
+			chainId,
 		);
 
-		const weights = _poolNormalizedWeights.map(toBigNumberJs);
-		const balances = _poolTokens.balances.map(toBigNumberJs);
+		const weights = _poolNormalizedWeights.map(BigInt);
+		const balances = _poolTokens.balances.map(BigInt);
 
 		if (
 			_poolTokens.tokens[0].toLowerCase() !== tokenAddress.toLowerCase()
@@ -249,17 +241,14 @@ const getBalancerPoolStakingAPR = async (
 			weights.reverse();
 		}
 
-		const lp = toBigNumberJs(_poolTotalSupply)
-			.div(BigNumber.sum(...weights).div(weights[0]))
-			.div(balances[0]);
+		const totalWeight = weights.reduce((a, b) => a + b, 0n);
 
-		farmAPR = totalSupply.isZero()
-			? null
-			: rewardRate
-					.div(totalSupply)
-					.times('31536000')
-					.times('100')
-					.times(lp);
+		const lp = _poolTotalSupply / (totalWeight / weights[0]) / balances[0];
+
+		farmAPR =
+			totalSupply === 0n
+				? null
+				: (rewardRate * 3153600000n * lp) / totalSupply;
 	} catch (e) {
 		console.error('error on fetching balancer apr:', e);
 		captureException(e, {
