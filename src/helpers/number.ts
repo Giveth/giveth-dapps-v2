@@ -46,8 +46,8 @@ export const formatWeiHelper = (
 export const formatDonation = (
 	amount: string | number,
 	symbol: string = '',
-	rounded: boolean = false,
 	local: Intl.LocalesArgument = 'en-US',
+	rounded: boolean = false,
 	maximumFractionDigits: number = 2,
 ): string => {
 	const num = parseFloat(String(amount || 0));
