@@ -1,13 +1,13 @@
 import { InjectedConnector } from '@web3-react/injected-connector';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
-// import { SafeAppConnector } from '@gnosis.pm/safe-apps-web3-react';
+import { SafeAppConnector } from '@gnosis.pm/safe-apps-web3-react';
 // import { PortisConnector } from '@web3-react/portis-connector';
 // import { FortmaticConnector } from '@web3-react/fortmatic-connector';
 // import { AuthereumConnector } from '@web3-react/authereum-connector';
 import metamaskIcon from '/public//images/wallets/metamask.svg';
 // import walletConnectIcon from '/public//images/wallets/walletconnect.svg';
 import torusIcon from '/public//images/wallets/torus.svg';
-// import gnosisIcon from '/public//images/wallets/gnosis.svg';
+import gnosisIcon from '/public//images/wallets/gnosis.svg';
 // import authereumIcon from '/public//images/wallets/authereum.svg';
 // import portisIcon from '/public//images/wallets/portis.svg';
 // import fortmaticIcon from '/public//images/wallets/fortmatic.svg';
@@ -29,7 +29,7 @@ export const walletconnectConnector = new WalletConnectConnector({
 		[config.XDAI_NETWORK_NUMBER]: config.XDAI_CONFIG.nodeUrl,
 	},
 });
-// export const gnosisSafeConnector = new SafeAppConnector();
+export const gnosisSafeConnector = new SafeAppConnector();
 // export const portisConnector = new PortisConnector({
 // 	dAppId: process.env.PORTIS_DAPP_ID as string,
 // 	networks: [1, 3, 100],
@@ -48,8 +48,10 @@ export type TWalletConnector =
 	// | PortisConnector
 	// | FortmaticConnector
 	// | AuthereumConnector,
-	// | SafeAppConnector
-	InjectedConnector | WalletConnectConnector | TorusConnector;
+	| SafeAppConnector
+	| InjectedConnector
+	| WalletConnectConnector
+	| TorusConnector;
 
 export enum EWallets {
 	METAMASK = 'metamask',
@@ -58,7 +60,7 @@ export enum EWallets {
 	// FORTMATIC = 'fortmatic',
 	TORUS = 'torus',
 	// AUTHEREUM = 'authereum',
-	// GNOSISSAFE = 'gnosis safe',
+	GNOSISSAFE = 'gnosis safe',
 }
 
 export interface IWallet {
@@ -94,12 +96,12 @@ export const walletsArray: IWallet[] = [
 	// 	connector: walletconnectConnector,
 	// },
 	torusWallet,
-	// {
-	// 	name: 'GnosisSafe',
-	// 	value: EWallets.GNOSISSAFE,
-	// 	image: gnosisIcon,
-	// 	connector: gnosisSafeConnector,
-	// },
+	{
+		name: 'GnosisSafe',
+		value: EWallets.GNOSISSAFE,
+		image: gnosisIcon,
+		connector: gnosisSafeConnector,
+	},
 	// {
 	// 	name: 'Portis',
 	// 	value: EWallets.PORTIS,
