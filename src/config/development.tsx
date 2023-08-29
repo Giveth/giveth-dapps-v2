@@ -297,7 +297,8 @@ const config: EnvConfig = {
 			network: OPTIMISM_NETWORK_NUMBER,
 			LM_ADDRESS: '0x632AC305ed88817480d12155A7F1244cC182C298',
 			GARDEN_ADDRESS: '0x632AC305ed88817480d12155A7F1244cC182C298',
-			BUY_LINK: 'https://',
+			BUY_LINK:
+				'https://app.uniswap.org/#/swap?chain=optimism&outputCurrency=0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
 		},
 		uniswapV2Subgraph: '',
 	},

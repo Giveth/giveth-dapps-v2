@@ -386,7 +386,8 @@ const config: EnvConfig = {
 		GIV: {
 			network: OPTIMISM_NETWORK_NUMBER,
 			LM_ADDRESS: '',
-			BUY_LINK: 'https://',
+			BUY_LINK:
+				'https://app.uniswap.org/#/swap?chain=optimism&outputCurrency=0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98',
 		},
 		uniswapV2Subgraph: '',
 	},

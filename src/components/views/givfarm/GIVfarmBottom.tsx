@@ -107,7 +107,11 @@ export const GIVfarmBottom = () => {
 							size='Big'
 							target='_blank'
 							rel='noreferrer'
-							href='https://omni.xdaichain.com/bridge'
+							href={
+								chainId === config.OPTIMISM_NETWORK_NUMBER
+									? 'https://jumper.exchange/?fromChain=100&toChain=10'
+									: 'https://jumper.exchange/?fromChain=1&toChain=100'
+							}
 						>
 							{formatMessage({ id: 'label.bridge_your_giv' })}
 						</GLink>
@@ -122,6 +126,8 @@ export const GIVfarmBottom = () => {
 							href={
 								chainId === config.XDAI_NETWORK_NUMBER
 									? config.XDAI_CONFIG.GIV.BUY_LINK
+									: chainId === config.OPTIMISM_NETWORK_NUMBER
+									? config.OPTIMISM_CONFIG.GIV.BUY_LINK
 									: config.MAINNET_CONFIG.GIV.BUY_LINK
 							}
 						>
