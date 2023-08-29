@@ -5,17 +5,16 @@ import { captureException } from '@sentry/nextjs';
 import { useAccount, useChainId } from 'wagmi';
 import { useAppDispatch } from '@/features/hooks';
 import { setBalance, setToken, setIsEnabled } from '@/features/user/user.slice';
-import { isSSRMode } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { getTokens } from '@/helpers/user';
 
 const UserController = () => {
-	const { library, activate } = useWeb3React();
+	const { library } = useWeb3React();
 	const { address, isConnected } = useAccount();
 	const chainId = useChainId();
 	const dispatch = useAppDispatch();
-	const token = !isSSRMode ? localStorage.getItem(StorageLabel.TOKEN) : null;
+
 	const isMounted = useRef(false);
 	console.log('Library', isConnected);
 
