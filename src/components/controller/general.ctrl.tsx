@@ -1,8 +1,8 @@
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { createGlobalStyle, css } from 'styled-components';
-import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useAccount, useChainId } from 'wagmi';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
@@ -10,7 +10,9 @@ import { switchNetwork } from '@/lib/wallet';
 
 const GeneralController = () => {
 	const dispatch = useAppDispatch();
-	const { chainId, account, active: isWalletActive } = useWeb3React();
+	const chainId = useChainId();
+	const { address, isConnected: isWalletActive } = useAccount();
+
 	const router = useRouter();
 	const theme = useAppSelector(state => state.general.theme);
 	useEffect(() => {
@@ -26,7 +28,7 @@ const GeneralController = () => {
 				switchNetwork(_chainId);
 			}
 		}
-	}, [router, account, isWalletActive, chainId]);
+	}, [router, address, isWalletActive, chainId]);
 	return <GlobalStyle theme={theme} />;
 };
 
