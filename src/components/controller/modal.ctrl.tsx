@@ -1,5 +1,5 @@
-import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
+import { useAccount } from 'wagmi';
 import WalletModal from '@/components/modals/WalletModal';
 import WelcomeModal from '@/components/modals/WelcomeModal';
 import { FirstWelcomeModal } from '@/components/modals/FirstWelcomeModal';
@@ -35,7 +35,7 @@ const ModalController = () => {
 
 	const dispatch = useAppDispatch();
 
-	const { active } = useWeb3React();
+	const { isConnected } = useAccount();
 
 	useEffect(() => {
 		if (isRegistered && showCompleteProfile) {
@@ -44,10 +44,10 @@ const ModalController = () => {
 	}, [isRegistered]);
 
 	useEffect(() => {
-		if (showWelcomeModal && active) {
+		if (showWelcomeModal && isConnected) {
 			dispatch(setShowWelcomeModal(false));
 		}
-	}, [active, showWelcomeModal]);
+	}, [isConnected, showWelcomeModal]);
 
 	//I think we need to handle it in better way
 	useEffect(() => {
