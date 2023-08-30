@@ -3,7 +3,6 @@ import config from '@/configuration';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { fetchSubgraph } from '@/services/subgraph.service';
-import { defaultSubgraphValues } from './subgraph.slice';
 
 export const fetchMainnetInfo = async (userAddress?: string) => {
 	try {
@@ -22,7 +21,7 @@ export const fetchMainnetInfo = async (userAddress?: string) => {
 				section: 'fetchMainnetSubgraph',
 			},
 		});
-		return defaultSubgraphValues;
+		return null;
 	}
 };
 
@@ -43,7 +42,7 @@ export const fetchGnosisInfo = async (userAddress?: string) => {
 				section: 'fetchGnosisSubgraph',
 			},
 		});
-		return defaultSubgraphValues;
+		return null;
 	}
 };
 
@@ -64,6 +63,6 @@ export const fetchOptimismInfo = async (userAddress?: string) => {
 				section: 'fetchOptimismSubgraph',
 			},
 		});
-		return defaultSubgraphValues;
+		return null;
 	}
 };
