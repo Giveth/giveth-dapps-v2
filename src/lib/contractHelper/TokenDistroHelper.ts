@@ -80,10 +80,7 @@ export class TokenDistroHelper {
 	}
 
 	public get GlobalReleasePercentage(): number {
-		if (this.totalTokens.isZero()) return 0;
-		return new BigNumber(this.globallyClaimableNow.toString())
-			.times(100)
-			.div(this.totalTokens.toString())
-			.toNumber();
+		if (this.totalTokens === 0n) return 0;
+		return Number((this.globallyClaimableNow * 100n) / this.totalTokens);
 	}
 }
