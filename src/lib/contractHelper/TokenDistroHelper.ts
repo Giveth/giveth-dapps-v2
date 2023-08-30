@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import { getNowUnixMS } from '@/helpers/time';
 import { ITokenDistro, ITokenDistroBalance } from '@/types/subgraph';
 
@@ -60,11 +59,11 @@ export class TokenDistroHelper {
 		return (this.globallyClaimableNow * amount) / this.totalTokens;
 	};
 
-	public getStreamPartTokenPerSecond = (amount: bigint): BigNumber => {
+	public getStreamPartTokenPerSecond = (amount: bigint): bigint => {
 		const toFinish = this.remain / 1000;
-		if (toFinish <= 0) return new BigNumber(0);
-		const lockAmount = amount.sub(this.getLiquidPart(amount));
-		return new BigNumber(lockAmount.toString()).div(toFinish);
+		if (toFinish <= 0) return 0n;
+		const lockAmount = amount - this.getLiquidPart(amount);
+		return lockAmount / BigInt(toFinish);
 	};
 
 	public getStreamPartTokenPerWeek = (amount: bigint): BigNumber => {
