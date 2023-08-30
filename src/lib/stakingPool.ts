@@ -1,9 +1,9 @@
 import { Contract, ethers } from 'ethers';
 import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
 import { captureException } from '@sentry/nextjs';
-import { getContract, getWalletClient } from 'wagmi/actions';
+import { getContract, getWalletClient, signTypedData } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
-import { WriteContractReturnType } from 'viem';
+import { WriteContractReturnType, hexToSignature } from 'viem';
 import {
 	Address,
 	BalancerPoolStakingConfig,
@@ -33,7 +33,7 @@ import { IUniswapV2Pair, UnipoolTokenDistributor } from '@/types/contracts';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { GIVpowerUniPoolConfig } from '@/types/config';
-import { E18 } from './constants/constants';
+import { E18, MaxUint256 } from './constants/constants';
 
 const { abi: LM_ABI } = LM_Json;
 const { abi: GP_ABI } = GP_Json;
@@ -359,6 +359,72 @@ export const getUserStakeInfo = (
 };
 
 const permitTokens = async (
+	chainId: number,
+	walletAddress: Address,
+	poolAddress: Address,
+	lmAddress: string,
+	amount: string,
+) => {
+	const poolContract = await getContract({
+		address: poolAddress,
+		abi: UNI_ABI,
+		chainId,
+	});
+
+	const domain = {
+		name: (await poolContract.read.name()) as string,
+		version: '1',
+		chainId: chainId,
+		verifyingContract: poolAddress,
+	} as const;
+
+	// The named list of all type definitions
+	const types = {
+		Permit: [
+			{ name: 'owner', type: 'address' },
+			{ name: 'spender', type: 'address' },
+			{ name: 'value', type: 'uint256' },
+			{ name: 'nonce', type: 'uint256' },
+			{ name: 'deadline', type: 'uint256' },
+		],
+	};
+
+	// The data to sign
+	const message = {
+		owner: walletAddress,
+		spender: lmAddress,
+		value: amount,
+		nonce: await poolContract.read.nonces([walletAddress]),
+		deadline: MaxUint256,
+	} as const;
+
+	const hexSignature = await signTypedData({
+		domain,
+		message,
+		primaryType: 'Permit',
+		types,
+	});
+
+	const signature = hexToSignature(hexSignature);
+
+	const walletClient = await getWalletClient({ chainId });
+	return await walletClient?.writeContract({
+		address: poolAddress,
+		abi: UNI_ABI,
+		functionName: 'permit',
+		args: [
+			walletAddress,
+			lmAddress,
+			amount,
+			MaxUint256,
+			signature.v,
+			signature.r,
+			signature.s,
+		],
+	});
+};
+
+const permitTokensOld = async (
 	provider: Web3Provider,
 	poolAddress: string,
 	lmAddress: string,
