@@ -70,7 +70,4 @@ export const subgraphSlice = createSlice({
 	},
 });
 
-// Action creators are generated for each case reducer function
-// export const {} = subgraphSlice.actions;
-
 export default subgraphSlice.reducer;
