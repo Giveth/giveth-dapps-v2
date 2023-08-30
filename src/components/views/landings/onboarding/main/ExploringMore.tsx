@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import {
 	H3,
 	IconBulbOutline32,
+	IconGift32,
 	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -33,7 +34,7 @@ const cardsArray = [
 		buttonLink: Routes.OnboardingProjects,
 	},
 	{
-		icon: <IconBulbOutline32 />,
+		icon: <IconGift32 />,
 		title: 'Donor',
 		description: 'See how Giveth works for donors and it’s benefits.',
 		buttonText: 'See how it works',
