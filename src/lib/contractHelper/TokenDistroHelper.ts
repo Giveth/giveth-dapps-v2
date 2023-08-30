@@ -45,16 +45,15 @@ export class TokenDistroHelper {
 	get globallyClaimableNow(): bigint {
 		const now = getNowUnixMS();
 
-		if (now < this.startTime.getTime()) return Zero;
+		if (now < this.startTime.getTime()) return 0n;
 		if (now <= this.cliffTime.getTime()) return this.initialAmount;
 		if (now > this.endTime.getTime()) return this.totalTokens;
 
 		const deltaTime = now - this.startTime.getTime();
 
-		const releasedAmount = this.lockedAmount
-			.mul(deltaTime)
-			.div(this.duration);
-		return this.initialAmount.add(releasedAmount);
+		const releasedAmount =
+			(this.lockedAmount * BigInt(deltaTime)) / BigInt(this.duration);
+		return this.initialAmount + releasedAmount;
 	}
 
 	public getLiquidPart = (amount: bigint): bigint => {
