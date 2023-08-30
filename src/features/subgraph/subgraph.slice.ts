@@ -7,23 +7,12 @@ import {
 	fetchOptimismInfoAsync,
 	fetchAllInfoAsync,
 } from './subgraph.thunks';
+import {
+	chainInfoNames,
+	getDefaultSubgraphValues,
+	isKeyValid,
+} from './subgraph.helper';
 import type { ISubgraphState } from './subgraph.types';
-
-export const defaultSubgraphValues: ISubgraphState = {
-	userNotStakedPositions: [],
-	userStakedPositions: [],
-	allPositions: [],
-	networkNumber: config.MAINNET_NETWORK_NUMBER,
-	isLoaded: false,
-};
-
-export const defaultXdaiSubgraphValues: ISubgraphState = {
-	userNotStakedPositions: [],
-	userStakedPositions: [],
-	allPositions: [],
-	networkNumber: config.GNOSIS_NETWORK_NUMBER,
-	isLoaded: false,
-};
 
 const initialState: {
 	currentValues: ISubgraphState;
@@ -31,10 +20,10 @@ const initialState: {
 	gnosisValues: ISubgraphState;
 	optimismValues: ISubgraphState;
 } = {
-	currentValues: defaultSubgraphValues,
-	mainnetValues: defaultSubgraphValues,
-	gnosisValues: defaultXdaiSubgraphValues,
-	optimismValues: defaultSubgraphValues,
+	currentValues: getDefaultSubgraphValues(config.MAINNET_NETWORK_NUMBER), // Mainnet by default
+	mainnetValues: getDefaultSubgraphValues(config.MAINNET_NETWORK_NUMBER),
+	gnosisValues: getDefaultSubgraphValues(config.GNOSIS_NETWORK_NUMBER),
+	optimismValues: getDefaultSubgraphValues(config.OPTIMISM_NETWORK_NUMBER),
 };
 
 export const subgraphSlice = createSlice({
@@ -45,29 +34,24 @@ export const subgraphSlice = createSlice({
 		builder
 			.addCase(fetchCurrentInfoAsync.fulfilled, (state, action) => {
 				state.currentValues = action.payload.response;
-				if (action.payload.chainId === config.MAINNET_NETWORK_NUMBER) {
-					state.mainnetValues = action.payload.response;
-				} else if (
-					action.payload.chainId === config.GNOSIS_NETWORK_NUMBER
-				) {
-					state.gnosisValues = action.payload.response;
-				} else if (
-					action.payload.chainId === config.OPTIMISM_NETWORK_NUMBER
-				) {
-					state.optimismValues = action.payload.response;
-				}
+				state[chainInfoNames[action.payload.chainId]] =
+					action.payload.response;
 			})
 			.addCase(fetchAllInfoAsync.fulfilled, (state, action) => {
 				const { chainId, response } = action.payload;
-				state.mainnetValues = response.mainnetValues;
-				state.gnosisValues = response.gnosisValues;
-				state.optimismValues = response.optimismValues;
-				state.currentValues =
-					chainId === config.GNOSIS_NETWORK_NUMBER
-						? response.gnosisValues
-						: chainId === config.OPTIMISM_NETWORK_NUMBER
-						? response.optimismValues
-						: response.mainnetValues;
+				for (const key in response) {
+					if (
+						Object.prototype.hasOwnProperty.call(state, key) &&
+						isKeyValid(key)
+					) {
+						const chainInfo = response[key];
+						if (chainInfo) {
+							state[key] = chainInfo;
+							if (chainInfo.networkNumber === chainId)
+								state.currentValues = chainInfo;
+						}
+					}
+				}
 			})
 			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
 				state.mainnetValues = action.payload;
@@ -80,8 +64,5 @@ export const subgraphSlice = createSlice({
 			});
 	},
 });
-
-// Action creators are generated for each case reducer function
-// export const {} = subgraphSlice.actions;
 
 export default subgraphSlice.reducer;

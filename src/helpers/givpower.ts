@@ -24,6 +24,8 @@ export const getTotalGIVpower = (
 		balance: BigNumber;
 	},
 ) => {
+	console.log('onChain', onChain);
+	console.log('values', values);
 	const res = [];
 	let sum = new BigNumber('0');
 	for (const key in values) {
@@ -36,6 +38,10 @@ export const getTotalGIVpower = (
 				const value = values[key];
 				const sdh = new SubgraphDataHelper(value);
 				const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
+				console.log(
+					values[key].networkNumber,
+					userGIVPowerBalance.balance,
+				);
 				sum = sum.plus(userGIVPowerBalance.balance);
 				res.push({
 					chainId: value.networkNumber,
@@ -44,6 +50,7 @@ export const getTotalGIVpower = (
 			}
 		}
 	}
+	console.log('res', res);
 	return { total: sum, byChain: res };
 };
 
