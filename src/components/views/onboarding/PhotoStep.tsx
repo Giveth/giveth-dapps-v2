@@ -8,6 +8,7 @@ import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { SetProfilePic } from '@/components/setProfilePic/SetProfilePic';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import { PROFILE_PHOTO_PLACEHOLDER } from '@/lib/constants/constants';
 
 const PhotoStep: FC<IStep> = ({ setStep }) => {
 	const dispatch = useAppDispatch();
@@ -22,7 +23,7 @@ const PhotoStep: FC<IStep> = ({ setStep }) => {
 	return (
 		<ProfilePicWrapper direction='column' gap='24px'>
 			<ProfilePicture
-				src='/images/avatar.svg'
+				src={PROFILE_PHOTO_PLACEHOLDER}
 				alt='Profile Picture'
 				height={128}
 				width={128}

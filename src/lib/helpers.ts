@@ -217,8 +217,6 @@ export const capitalizeAllWords = (string: string) => {
 	return string.split(' ').map(capitalizeFirstLetter).join(' ');
 };
 
-export const noImgIcon = '/images/GIV-icon-text.svg';
-
 export const isNoImg = (image: string | undefined) => !image || image === '';
 
 export const shortenAddress = (

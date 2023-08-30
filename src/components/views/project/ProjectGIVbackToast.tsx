@@ -23,7 +23,7 @@ import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
 import { isSSRMode } from '@/lib/helpers';
 import BoostModal from '@/components/modals/Boost/BoostModal';
 import { useAppSelector } from '@/features/hooks';
-import { formatDonations } from '@/helpers/number';
+import { formatDonation } from '@/helpers/number';
 
 const ProjectGIVbackToast = () => {
 	const { projectData, isAdmin } = useProjectContext();
@@ -35,7 +35,7 @@ const ProjectGIVbackToast = () => {
 	const color = isOwnerVerified
 		? semanticColors.golden[600]
 		: neutralColors.gray[900];
-	const { formatMessage } = useIntl();
+	const { formatMessage, locale } = useIntl();
 
 	const handleTitle = () => {
 		if (isOwnerVerified) {
@@ -44,7 +44,12 @@ const ProjectGIVbackToast = () => {
 				formatMessage({
 					id: `project.givback_toast.title.verified_owner_1`,
 				}) +
-				formatDonations((givbackFactor || 0) * 100, '', true) +
+				formatDonation(
+					(givbackFactor || 0) * 100,
+					undefined,
+					locale,
+					true,
+				) +
 				'%' +
 				formatMessage({
 					id: `project.givback_toast.title.verified_owner_2`,
