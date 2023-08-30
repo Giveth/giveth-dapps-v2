@@ -73,9 +73,10 @@ export class TokenDistroHelper {
 	public getUserClaimableNow(
 		tokenDistroBalance: ITokenDistroBalance,
 	): bigint {
-		return this.getLiquidPart(
-			BigInt(tokenDistroBalance.allocatedTokens),
-		).sub(tokenDistroBalance.claimed);
+		return (
+			this.getLiquidPart(BigInt(tokenDistroBalance.allocatedTokens)) -
+			BigInt(tokenDistroBalance.claimed)
+		);
 	}
 
 	public get GlobalReleasePercentage(): number {
