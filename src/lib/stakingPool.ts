@@ -1,5 +1,5 @@
 import { Contract, ethers } from 'ethers';
-import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
+import { Web3Provider } from '@ethersproject/providers';
 import { captureException } from '@sentry/nextjs';
 import { getContract, getWalletClient, signTypedData } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
@@ -20,7 +20,6 @@ import {
 import config from '../configuration';
 import { APR } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
-import { getGasPreference } from '@/lib/helpers';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
 import GP_Json from '../artifacts/GivPower.json';
@@ -633,28 +632,24 @@ export const harvestTokens = async (
 };
 
 export const withdrawTokens = async (
-	amount: string,
-	lmAddress: string,
-	provider: Web3Provider | null,
-): Promise<TransactionResponse | undefined> => {
-	if (!provider) {
-		console.error('Provider is null');
+	amount: bigint,
+	lmAddress: Address,
+	chainId: number,
+): Promise<WriteContractReturnType | undefined> => {
+	if (amount === 0n) return;
+	const walletClient = await getWalletClient({ chainId });
+	if (!walletClient) {
+		console.error('Wallet client is null');
 		return;
 	}
 
-	const signer = provider.getSigner();
-
-	const lmContract = new Contract(
-		lmAddress,
-		LM_ABI,
-		signer.connectUnchecked(),
-	);
-
 	try {
-		return await lmContract.withdraw(
-			ethers.BigNumber.from(amount),
-			getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),
-		);
+		return await walletClient.writeContract({
+			address: lmAddress,
+			abi: LM_ABI,
+			functionName: 'withdraw',
+			args: [amount],
+		});
 	} catch (e) {
 		console.error('Error on withdrawing:', e);
 		captureException(e, {
