@@ -10,22 +10,27 @@ import ExploringMore from '@/components/views/landings/onboarding/main/Exploring
 import GivethIsHelping from '@/components/views/landings/onboarding/main/GivethIsHelping';
 import WhatElse from '@/components/views/landings/onboarding/main/WhatElse';
 import JoinOurCommunity from '@/components/views/landings/onboarding/main/JoinOurCommunity';
+import Flower from '@/components/particles/Flower';
+import { Relative } from '@/components/styled-components/Position';
 
 const OnboardingMainIndex = () => {
 	return (
 		<Wrapper>
-			<OnboardingMainHeader />
-			<GetStarted />
-			<WhatIsGiveth />
-			<WhatIsGIV />
-			<StepByStep />
-			<Divider height='29px' color={neutralColors.gray[200]} />
-			<ExploringMore />
-			<Divider height='29px' color={neutralColors.gray[200]} />
-			<GivethIsHelping />
-			<Divider height='29px' color={neutralColors.gray[200]} />
-			<WhatElse />
-			<JoinOurCommunity />
+			<Relative>
+				<OnboardingMainHeader />
+				<GetStarted />
+				<WhatIsGiveth />
+				<WhatIsGIV />
+				<StepByStep />
+				<Divider height='29px' color={neutralColors.gray[200]} />
+				<ExploringMore />
+				<Divider height='29px' color={neutralColors.gray[200]} />
+				<GivethIsHelping />
+				<Divider height='29px' color={neutralColors.gray[200]} />
+				<WhatElse />
+				<JoinOurCommunity />
+			</Relative>
+			<Flower right='0' top='500px' />
 		</Wrapper>
 	);
 };
@@ -34,6 +39,9 @@ const Wrapper = styled.div`
 	background: white;
 	padding-top: 40px;
 	padding-bottom: 90px;
+	> div:first-child {
+		z-index: 1;
+	}
 `;
 
 export default OnboardingMainIndex;
