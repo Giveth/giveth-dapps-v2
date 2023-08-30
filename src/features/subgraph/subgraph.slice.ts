@@ -59,15 +59,18 @@ export const subgraphSlice = createSlice({
 			})
 			.addCase(fetchAllInfoAsync.fulfilled, (state, action) => {
 				const { chainId, response } = action.payload;
-				state.mainnetValues = response.mainnetValues;
-				state.gnosisValues = response.gnosisValues;
-				state.optimismValues = response.optimismValues;
+				if (response.mainnetValues)
+					state.mainnetValues = response.mainnetValues;
+				if (response.gnosisValues)
+					state.gnosisValues = response.gnosisValues;
+				if (response.optimismValues)
+					state.optimismValues = response.optimismValues;
 				state.currentValues =
 					chainId === config.GNOSIS_NETWORK_NUMBER
-						? response.gnosisValues
+						? response.gnosisValues || state.gnosisValues
 						: chainId === config.OPTIMISM_NETWORK_NUMBER
-						? response.optimismValues
-						: response.mainnetValues;
+						? response.optimismValues || state.optimismValues
+						: response.mainnetValues || state.mainnetValues;
 			})
 			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
 				state.mainnetValues = action.payload;
