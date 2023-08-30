@@ -66,8 +66,8 @@ export class TokenDistroHelper {
 		return lockAmount / BigInt(toFinish);
 	};
 
-	public getStreamPartTokenPerWeek = (amount: bigint): BigNumber => {
-		return this.getStreamPartTokenPerSecond(amount).times(604800);
+	public getStreamPartTokenPerWeek = (amount: bigint): bigint => {
+		return this.getStreamPartTokenPerSecond(amount) * 604800n;
 	};
 
 	public getUserClaimableNow(
