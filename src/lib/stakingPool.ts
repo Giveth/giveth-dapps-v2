@@ -607,25 +607,21 @@ export const stakeTokens = async (
 };
 
 export const harvestTokens = async (
-	lmAddress: string,
-	provider: Web3Provider | null,
-): Promise<TransactionResponse | undefined> => {
-	if (!provider) {
-		console.error('Provider is null');
+	lmAddress: Address,
+	chainId: number,
+): Promise<WriteContractReturnType | undefined> => {
+	const walletClient = await getWalletClient({ chainId });
+	if (!walletClient) {
+		console.error('Wallet client is null');
 		return;
 	}
 
-	const signer = provider.getSigner();
-	const lmContract = new Contract(
-		lmAddress,
-		LM_ABI,
-		signer.connectUnchecked(),
-	);
-
 	try {
-		return await lmContract.getReward(
-			getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),
-		);
+		return await walletClient.writeContract({
+			address: lmAddress,
+			abi: LM_ABI,
+			functionName: 'getReward',
+		});
 	} catch (error) {
 		console.error('Error on harvesting:', Error);
 		captureException(error, {
