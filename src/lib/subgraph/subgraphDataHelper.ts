@@ -37,7 +37,7 @@ export class SubgraphDataHelper {
 	getTokenBalance(tokenAddress: string): ITokenBalance {
 		return (
 			(this.state[
-				'tokenBalance_' + tokenAddress.toLowerCase()
+				'tokenBalance_' + tokenAddress?.toLowerCase()
 			] as ITokenBalance) || transformTokenBalance()
 		);
 	}
