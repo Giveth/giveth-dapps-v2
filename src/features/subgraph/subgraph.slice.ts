@@ -7,23 +7,8 @@ import {
 	fetchOptimismInfoAsync,
 	fetchAllInfoAsync,
 } from './subgraph.thunks';
+import { getDefaultSubgraphValues } from './subgraph.helper';
 import type { ISubgraphState } from './subgraph.types';
-
-export const defaultSubgraphValues: ISubgraphState = {
-	userNotStakedPositions: [],
-	userStakedPositions: [],
-	allPositions: [],
-	networkNumber: config.MAINNET_NETWORK_NUMBER,
-	isLoaded: false,
-};
-
-export const defaultXdaiSubgraphValues: ISubgraphState = {
-	userNotStakedPositions: [],
-	userStakedPositions: [],
-	allPositions: [],
-	networkNumber: config.GNOSIS_NETWORK_NUMBER,
-	isLoaded: false,
-};
 
 const initialState: {
 	currentValues: ISubgraphState;
@@ -31,10 +16,10 @@ const initialState: {
 	gnosisValues: ISubgraphState;
 	optimismValues: ISubgraphState;
 } = {
-	currentValues: defaultSubgraphValues,
-	mainnetValues: defaultSubgraphValues,
-	gnosisValues: defaultXdaiSubgraphValues,
-	optimismValues: defaultSubgraphValues,
+	currentValues: getDefaultSubgraphValues(config.MAINNET_NETWORK_NUMBER),
+	mainnetValues: getDefaultSubgraphValues(config.MAINNET_NETWORK_NUMBER),
+	gnosisValues: getDefaultSubgraphValues(config.GNOSIS_NETWORK_NUMBER),
+	optimismValues: getDefaultSubgraphValues(config.OPTIMISM_NETWORK_NUMBER),
 };
 
 export const subgraphSlice = createSlice({
