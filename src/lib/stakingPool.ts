@@ -29,7 +29,6 @@ import BAL_WEIGHTED_POOL_Json from '../artifacts/BalancerWeightedPool.json';
 import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
 import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
 import UnipoolGIVpower from '../artifacts/UnipoolGIVpower.json';
-import { UnipoolTokenDistributor } from '@/types/contracts';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { GIVpowerUniPoolConfig } from '@/types/config';
@@ -363,7 +362,7 @@ const permitTokens = async (
 	walletAddress: Address,
 	poolAddress: Address,
 	lmAddress: string,
-	amount: string,
+	amount: bigint,
 ) => {
 	const poolContract = await getContract({
 		address: poolAddress,
@@ -559,55 +558,42 @@ export const unwrapToken = async (
 };
 
 export const stakeTokens = async (
-	amount: string,
-	poolAddress: string,
-	lmAddress: string,
-	provider: Web3Provider | null,
+	amount: bigint,
+	poolAddress: Address,
+	lmAddress: Address,
+	chainId: number,
 	permit: boolean,
-): Promise<TransactionResponse | undefined> => {
-	if (amount === '0') return;
-	if (!provider) {
-		console.error('Provider is null');
+): Promise<WriteContractReturnType | undefined> => {
+	if (amount === 0n) return;
+	const walletClient = await getWalletClient({ chainId });
+	if (!walletClient) {
+		console.error('Wallet client is null');
 		return;
 	}
 
-	const signer = provider.getSigner();
-
-	const lmContract = new Contract(
-		lmAddress,
-		LM_ABI,
-		signer,
-	) as UnipoolTokenDistributor;
-
+	const walletAddress = walletClient.account.address;
 	try {
-		const gasPreference = getGasPreference(
-			config.NETWORKS_CONFIG[provider.network.chainId],
-		);
-
 		if (permit) {
 			const rawPermitCall = await permitTokens(
-				provider,
+				chainId,
+				walletAddress,
 				poolAddress,
 				lmAddress,
 				amount,
 			);
-			return await lmContract
-				.connect(signer.connectUnchecked())
-				.stakeWithPermit(
-					ethers.BigNumber.from(amount),
-					rawPermitCall.data as string,
-					{
-						gasLimit: 300_000,
-						...gasPreference,
-					},
-				);
+			return await walletClient.writeContract({
+				address: lmAddress,
+				abi: LM_ABI,
+				functionName: 'stakeWithPermit',
+				args: [amount, rawPermitCall],
+			});
 		} else {
-			return await lmContract
-				.connect(signer.connectUnchecked())
-				.stake(ethers.BigNumber.from(amount), {
-					gasLimit: 300_000,
-					...gasPreference,
-				});
+			return await walletClient.writeContract({
+				address: lmAddress,
+				abi: LM_ABI,
+				functionName: 'stake',
+				args: [amount],
+			});
 		}
 	} catch (e) {
 		console.error('Error on staking:', e);
