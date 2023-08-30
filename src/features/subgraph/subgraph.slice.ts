@@ -7,7 +7,7 @@ import {
 	fetchOptimismInfoAsync,
 	fetchAllInfoAsync,
 } from './subgraph.thunks';
-import { getDefaultSubgraphValues } from './subgraph.helper';
+import { getDefaultSubgraphValues, isKeyValid } from './subgraph.helper';
 import type { ISubgraphState } from './subgraph.types';
 
 const initialState: {
@@ -44,18 +44,19 @@ export const subgraphSlice = createSlice({
 			})
 			.addCase(fetchAllInfoAsync.fulfilled, (state, action) => {
 				const { chainId, response } = action.payload;
-				if (response.mainnetValues)
-					state.mainnetValues = response.mainnetValues;
-				if (response.gnosisValues)
-					state.gnosisValues = response.gnosisValues;
-				if (response.optimismValues)
-					state.optimismValues = response.optimismValues;
-				state.currentValues =
-					chainId === config.GNOSIS_NETWORK_NUMBER
-						? response.gnosisValues || state.gnosisValues
-						: chainId === config.OPTIMISM_NETWORK_NUMBER
-						? response.optimismValues || state.optimismValues
-						: response.mainnetValues || state.mainnetValues;
+				for (const key in response) {
+					if (
+						Object.prototype.hasOwnProperty.call(state, key) &&
+						isKeyValid(key)
+					) {
+						const chainInfo = response[key];
+						if (chainInfo) {
+							state[key] = chainInfo;
+							if (chainInfo.networkNumber === chainId)
+								state.currentValues = chainInfo;
+						}
+					}
+				}
 			})
 			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
 				state.mainnetValues = action.payload;
