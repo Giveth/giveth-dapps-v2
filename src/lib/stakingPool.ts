@@ -29,7 +29,7 @@ import BAL_WEIGHTED_POOL_Json from '../artifacts/BalancerWeightedPool.json';
 import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
 import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
 import UnipoolGIVpower from '../artifacts/UnipoolGIVpower.json';
-import { IUniswapV2Pair, UnipoolTokenDistributor } from '@/types/contracts';
+import { UnipoolTokenDistributor } from '@/types/contracts';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { GIVpowerUniPoolConfig } from '@/types/config';
@@ -422,63 +422,6 @@ const permitTokens = async (
 			signature.s,
 		],
 	});
-};
-
-const permitTokensOld = async (
-	provider: Web3Provider,
-	poolAddress: string,
-	lmAddress: string,
-	amount: string,
-) => {
-	const signer = provider.getSigner();
-	const signerAddress = await signer.getAddress();
-
-	const poolContract = new Contract(
-		poolAddress,
-		UNI_ABI,
-		signer,
-	) as IUniswapV2Pair;
-
-	const domain = {
-		name: await poolContract.name(),
-		version: '1',
-		chainId: provider.network.chainId,
-		verifyingContract: poolAddress,
-	};
-
-	// The named list of all type definitions
-	const types = {
-		Permit: [
-			{ name: 'owner', type: 'address' },
-			{ name: 'spender', type: 'address' },
-			{ name: 'value', type: 'uint256' },
-			{ name: 'nonce', type: 'uint256' },
-			{ name: 'deadline', type: 'uint256' },
-		],
-	};
-
-	// The data to sign
-	const value = {
-		owner: signerAddress,
-		spender: lmAddress,
-		value: amount,
-		nonce: await poolContract.nonces(signerAddress),
-		deadline: ethers.constants.MaxUint256,
-	};
-
-	// eslint-disable-next-line no-underscore-dangle
-	const rawSignature = await signer._signTypedData(domain, types, value);
-	const signature = ethers.utils.splitSignature(rawSignature);
-
-	return await poolContract.populateTransaction.permit(
-		signerAddress,
-		lmAddress,
-		amount,
-		ethers.constants.MaxUint256,
-		signature.v,
-		signature.r,
-		signature.s,
-	);
 };
 
 export const approveERC20tokenTransfer = async (
