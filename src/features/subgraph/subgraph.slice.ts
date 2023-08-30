@@ -16,7 +16,7 @@ const initialState: {
 	gnosisValues: ISubgraphState;
 	optimismValues: ISubgraphState;
 } = {
-	currentValues: getDefaultSubgraphValues(config.MAINNET_NETWORK_NUMBER),
+	currentValues: getDefaultSubgraphValues(config.MAINNET_NETWORK_NUMBER), // Mainnet by default
 	mainnetValues: getDefaultSubgraphValues(config.MAINNET_NETWORK_NUMBER),
 	gnosisValues: getDefaultSubgraphValues(config.GNOSIS_NETWORK_NUMBER),
 	optimismValues: getDefaultSubgraphValues(config.OPTIMISM_NETWORK_NUMBER),
