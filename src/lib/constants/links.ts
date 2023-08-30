@@ -17,6 +17,8 @@ const links = {
 	PROJECT_VERIFICATION: TYPEFORM + 'verification',
 	DISCORD: 'https://discord.giveth.io',
 	DISCOURSE,
+	BLOG: 'https://blog.giveth.io/',
+	NEWS: 'https://news.giveth.io/',
 	GIVBACK_TOKENS_FORUM: DISCOURSE + 't/givbacks-token-list/253',
 	GITHUB: 'https://github.com/Giveth/',
 	TELEGRAM: 'https://t.me/Givethio',
