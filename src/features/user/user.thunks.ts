@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { getWalletClient } from '@wagmi/core';
 import { backendGQLRequest } from '@/helpers/requests';
 import {
 	GET_USER_BY_ADDRESS,
@@ -26,18 +27,20 @@ export const fetchUserByAddress = createAsyncThunk(
 
 export const signToGetToken = createAsyncThunk(
 	'user/signToGetToken',
-	async (
-		{ address, chainId, signer }: ISignToGetToken,
-		{ getState, dispatch },
-	) => {
+	async ({ address, chainId }: ISignToGetToken, { getState, dispatch }) => {
 		try {
 			const siweMessage: any = await createSiweMessage(
 				address!,
 				chainId!,
 				'Login into Giveth services',
 			);
+
 			const { nonce, message } = siweMessage;
-			const signature = await signer.signMessage(message);
+
+			const walletClient = await getWalletClient();
+
+			const signature = await walletClient?.signMessage({ message });
+
 			if (signature) {
 				const state = getState() as RootState;
 				if (!state.user.userData) {

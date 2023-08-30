@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useWeb3React } from '@web3-react/core';
+import { useAccount } from 'wagmi';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 
@@ -8,20 +8,20 @@ import { fetchNotificationCountAsync } from '@/features/notification/notificatio
 const NotificationController = () => {
 	const dispatch = useAppDispatch();
 	const { isEnabled } = useAppSelector(state => state.user);
-	const { account } = useWeb3React();
+	const { address } = useAccount();
 
 	useEffect(() => {
 		let interval: NodeJS.Timer;
-		if (isEnabled && account) {
-			dispatch(fetchNotificationCountAsync(account));
+		if (isEnabled && address) {
+			dispatch(fetchNotificationCountAsync(address));
 			interval = setInterval(() => {
-				dispatch(fetchNotificationCountAsync(account));
+				dispatch(fetchNotificationCountAsync(address));
 			}, config.NOTIFICATION_POLLING_INTERVAL);
 		}
 		return () => {
 			if (interval) clearInterval(interval);
 		};
-	}, [dispatch, isEnabled, account]);
+	}, [dispatch, isEnabled, address]);
 	return null;
 };
 
