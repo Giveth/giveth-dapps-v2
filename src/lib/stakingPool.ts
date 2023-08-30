@@ -530,40 +530,31 @@ export const stakeGIV = async (
 };
 
 export const unwrapToken = async (
-	amount: string,
-	gardenAddress: string,
-	provider: Web3Provider | null,
-): Promise<TransactionResponse | undefined> => {
-	if (amount === '0') return;
-	if (!provider) {
-		console.error('Provider is null');
+	amount: bigint,
+	gardenAddress: Address,
+	chainId: number,
+): Promise<WriteContractReturnType | undefined> => {
+	if (amount === 0n) return;
+	const walletClient = await getWalletClient({ chainId });
+	if (!walletClient) {
+		console.error('Wallet client is null');
 		return;
 	}
 
-	const signer = provider.getSigner();
-
-	const gardenContract = new Contract(
-		gardenAddress,
-		TOKEN_MANAGER_ABI,
-		signer,
-	);
 	try {
-		return await gardenContract
-			.connect(signer.connectUnchecked())
-			.unwrap(
-				amount,
-				getGasPreference(
-					config.NETWORKS_CONFIG[provider.network.chainId],
-				),
-			);
+		return await walletClient?.writeContract({
+			address: gardenAddress,
+			abi: TOKEN_MANAGER_ABI,
+			functionName: 'unwrap',
+			args: [amount],
+		});
 	} catch (error) {
-		console.log('Error on unwrapping token:', error);
+		console.log('Error on wrapping token:', error);
 		captureException(error, {
 			tags: {
 				section: 'unwrapToken',
 			},
 		});
-		return;
 	}
 };
 
