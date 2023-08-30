@@ -20,7 +20,6 @@ const HeaderWrapper = styled(Flex)`
 	background-size: cover;
 	background-position: right;
 	height: 385px;
-	margin-top: 40px;
 	flex-direction: column;
 	justify-content: center;
 	color: ${neutralColors.gray[100]};
