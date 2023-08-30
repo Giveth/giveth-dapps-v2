@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js';
-import { Zero } from '@ethersproject/constants';
 import { getNowUnixMS } from '@/helpers/time';
 import { ITokenDistro, ITokenDistroBalance } from '@/types/subgraph';
 
@@ -57,8 +56,8 @@ export class TokenDistroHelper {
 	}
 
 	public getLiquidPart = (amount: bigint): bigint => {
-		if (this.totalTokens.isZero()) return Zero;
-		return this.globallyClaimableNow.mul(amount).div(this.totalTokens);
+		if (this.totalTokens === 0n) return 0n;
+		return (this.globallyClaimableNow * amount) / this.totalTokens;
 	};
 
 	public getStreamPartTokenPerSecond = (amount: bigint): BigNumber => {
