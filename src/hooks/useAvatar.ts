@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { captureException } from '@sentry/nextjs';
-import { useWeb3React } from '@web3-react/core';
+import { useAccount } from 'wagmi';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { gToast, ToastType } from '@/components/toasts';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
@@ -18,7 +18,7 @@ export const useAvatar = () => {
 	const [loading, setLoading] = useState(false);
 	const [updateUser] = useMutation(UPDATE_USER);
 	const dispatch = useAppDispatch();
-	const { account } = useWeb3React();
+	const { address } = useAccount();
 
 	const handleAvatar = (nftUrl?: string, url?: string) => {
 		if (activeTab === 1) {
@@ -41,9 +41,9 @@ export const useAvatar = () => {
 				},
 			});
 			if (response.updateUser) {
-				if (account) {
-					dispatch(fetchUserByAddress(account));
-					dispatch(updateUserFromList({ address: account }));
+				if (address) {
+					dispatch(fetchUserByAddress(address));
+					dispatch(updateUserFromList({ address }));
 				}
 				gToast('Profile Photo updated.', {
 					type: ToastType.SUCCESS,

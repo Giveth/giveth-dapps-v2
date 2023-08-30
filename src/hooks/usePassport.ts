@@ -1,5 +1,5 @@
-import { useWeb3React } from '@web3-react/core';
 import { useCallback, useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 import { getPassports } from '@/helpers/passport';
 import { connectPassport, fetchPassportScore } from '@/services/passport';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
@@ -35,7 +35,7 @@ const initialInfo = {
 };
 
 export const usePassport = () => {
-	const { account, library } = useWeb3React();
+	const { address } = useAccount();
 	const [info, setInfo] = useState<IPassportAndStateInfo>(initialInfo);
 	const { userData: user, isUserFullFilled } = useAppSelector(
 		state => state.user,
@@ -125,14 +125,14 @@ export const usePassport = () => {
 	);
 
 	const refreshScore = useCallback(async () => {
-		if (!account) return;
+		if (!address) return;
 		setInfo({
 			passportState: EPassportState.LOADING,
 			passportScore: null,
 			currentRound: null,
 		});
 		try {
-			const { refreshUserScores } = await fetchPassportScore(account);
+			const { refreshUserScores } = await fetchPassportScore(address);
 			await updateState(refreshUserScores);
 		} catch (error) {
 			console.log(error);
@@ -142,20 +142,20 @@ export const usePassport = () => {
 				currentRound: null,
 			});
 		}
-	}, [account, updateState]);
+	}, [address, updateState]);
 
 	const handleSign = async () => {
-		if (!library || !account) return;
+		if (!address) return;
 		setInfo({
 			passportState: EPassportState.LOADING,
 			passportScore: null,
 			currentRound: null,
 		});
 		const passports = getPassports();
-		if (passports[account.toLowerCase()]) {
+		if (passports[address.toLowerCase()]) {
 			await refreshScore();
 		} else {
-			const res = await connectPassport(account, library, !user);
+			const res = await connectPassport(address, !user);
 			if (res) {
 				await refreshScore();
 			} else {
@@ -169,29 +169,29 @@ export const usePassport = () => {
 	};
 
 	useEffect(() => {
-		console.log('******0', account, isUserFullFilled, user);
-		if (!account) {
-			console.log('******1', account, isUserFullFilled, user);
+		console.log('******0', address, isUserFullFilled, user);
+		if (!address) {
+			console.log('******1', address, isUserFullFilled, user);
 			return setInfo({
 				passportState: EPassportState.NOT_CONNECTED,
 				passportScore: null,
 				currentRound: null,
 			});
 		}
-		console.log('******2', account, isUserFullFilled, user);
+		console.log('******2', address, isUserFullFilled, user);
 		if (!isUserFullFilled) return;
-		console.log('******3', account, isUserFullFilled, user);
+		console.log('******3', address, isUserFullFilled, user);
 		const fetchData = async () => {
 			if (!user || user.passportScore === null) {
-				console.log('******4', account, isUserFullFilled, user);
+				console.log('******4', address, isUserFullFilled, user);
 				console.log('Passport score is null in our database');
 				const passports = getPassports();
-				//user has not passport account
-				if (passports[account.toLowerCase()] && user) {
-					console.log('******5', account, isUserFullFilled, user);
+				//user has not passport address
+				if (passports[address.toLowerCase()] && user) {
+					console.log('******5', address, isUserFullFilled, user);
 					await updateState(user);
 				} else {
-					console.log('******6', account, isUserFullFilled, user);
+					console.log('******6', address, isUserFullFilled, user);
 					setInfo({
 						passportState: EPassportState.NOT_SIGNED,
 						passportScore: null,
@@ -199,12 +199,12 @@ export const usePassport = () => {
 					});
 				}
 			} else {
-				console.log('******7', account, isUserFullFilled, user);
+				console.log('******7', address, isUserFullFilled, user);
 				await updateState(user);
 			}
 		};
 		fetchData();
-	}, [account, isUserFullFilled, updateState, user]);
+	}, [address, isUserFullFilled, updateState, user]);
 
 	return { info, handleSign, refreshScore };
 };

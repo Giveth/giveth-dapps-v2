@@ -7,11 +7,10 @@ import {
 import React, { FC } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { EPassportState } from '@/hooks/usePassport';
 import { FlexCenter } from './styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
-import { useAppDispatch } from '@/features/hooks';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
 
 interface IButtonProps {
 	state: EPassportState;
@@ -27,13 +26,10 @@ export const PassportButton: FC<IButtonProps> = ({
 	className,
 }) => {
 	const { formatMessage } = useIntl();
-	const dispatch = useAppDispatch();
 
+	const { openConnectModal } = useConnectModal();
 	return state === EPassportState.NOT_CONNECTED ? (
-		<Button
-			onClick={() => dispatch(setShowWalletModal(true))}
-			className={className}
-		>
+		<Button onClick={openConnectModal} className={className}>
 			<FlexCenter gap='8px'>
 				<IconPassport16 />
 				<ButtonText>

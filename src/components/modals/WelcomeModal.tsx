@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { useWeb3React } from '@web3-react/core';
 
 import { captureException } from '@sentry/nextjs';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ethIcon from '/public/images/tokens/ETH.svg';
 import googleIcon from '/public/images/google_icon.svg';
@@ -21,7 +23,6 @@ import LowerShields from '@/components/modals/LowerShields';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
@@ -29,6 +30,7 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const { formatMessage } = useIntl();
 
 	const { activate } = useWeb3React();
+	const { openConnectModal } = useConnectModal();
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -84,9 +86,10 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 						</ContentSubtitle>
 						<IconContentContainer>
 							<EthIconContainer
-								onClick={() =>
-									dispatch(setShowWalletModal(true))
-								}
+								onClick={() => {
+									openConnectModal && openConnectModal();
+									dispatch(setShowWelcomeModal(false));
+								}}
 							>
 								<Image src={ethIcon} alt='Ether icon' />
 								<B>

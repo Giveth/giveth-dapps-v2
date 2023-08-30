@@ -8,9 +8,9 @@ import {
 	Lead,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 
+import { useAccount, useChainId } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
 import { ETheme } from '@/features/general/general.slice';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -29,7 +29,9 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 	const [loading, setLoading] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
-	const { account, library, chainId } = useWeb3React();
+
+	const { address } = useAccount();
+	const chainId = useChainId();
 	const router = useRouter();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();
@@ -57,15 +59,14 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 					label={formatMessage({ id: 'component.button.sign_in' })}
 					loading={loading}
 					onClick={async () => {
-						if (!account) {
+						if (!address) {
 							return dispatch(setShowWelcomeModal(true));
 						}
 						setLoading(true);
 						const signature = await dispatch(
 							signToGetToken({
-								address: account,
+								address,
 								chainId,
-								signer: library?.getSigner(),
 								pathname: router.pathname,
 							}),
 						);

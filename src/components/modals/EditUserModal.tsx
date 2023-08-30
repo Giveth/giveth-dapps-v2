@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { useMutation } from '@apollo/client';
 import { Button, brandColors } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
-import { useWeb3React } from '@web3-react/core';
 import { useForm } from 'react-hook-form';
+import { useAccount } from 'wagmi';
 import { Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
@@ -51,7 +51,8 @@ const EditUserModal = ({
 		formState: { errors },
 	} = useForm<Inputs>();
 	const dispatch = useAppDispatch();
-	const { account } = useWeb3React();
+	const { address } = useAccount();
+
 	const [updateUser] = useMutation(UPDATE_USER);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -63,7 +64,7 @@ const EditUserModal = ({
 				},
 			});
 			if (response.updateUser) {
-				account && dispatch(fetchUserByAddress(account));
+				address && dispatch(fetchUserByAddress(address));
 				gToast('Profile Photo updated.', {
 					type: ToastType.SUCCESS,
 					title: 'Success',
@@ -96,7 +97,7 @@ const EditUserModal = ({
 				},
 			});
 			if (data.updateUser) {
-				account && dispatch(fetchUserByAddress(account));
+				address && dispatch(fetchUserByAddress(address));
 				gToast('Profile information updated.', {
 					type: ToastType.SUCCESS,
 					title: 'Success',
