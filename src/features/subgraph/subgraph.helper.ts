@@ -7,3 +7,9 @@ export const getDefaultSubgraphValues = (chainId: number): ISubgraphState => ({
 	networkNumber: chainId,
 	isLoaded: false,
 });
+
+type ValidKeys = 'mainnetValues' | 'gnosisValues' | 'optimismValues';
+
+export function isKeyValid(key: string): key is ValidKeys {
+	return ['mainnetValues', 'gnosisValues', 'optimismValues'].includes(key);
+}
