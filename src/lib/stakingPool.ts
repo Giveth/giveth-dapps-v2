@@ -1,5 +1,3 @@
-import { Contract, ethers } from 'ethers';
-import { Web3Provider } from '@ethersproject/providers';
 import { captureException } from '@sentry/nextjs';
 import { getContract, getWalletClient, signTypedData } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
@@ -690,23 +688,23 @@ export const lockToken = async (
 };
 
 export const getGIVpowerOnChain = async (
-	account: string,
+	account: Address,
 	chainId: number,
-	provider: Web3Provider | null,
-): Promise<ethers.BigNumber | undefined> => {
-	if (!provider) {
-		console.error('Provider is null');
-		return;
-	}
+): Promise<bigint | undefined> => {
 	if (!chainId) {
 		console.error('chainId is null');
 		return;
 	}
-	const contractAddress = (config.NETWORKS_CONFIG[chainId] as GIVpowerConfig)
-		.GIVPOWER.LM_ADDRESS;
-	const givpowerContract = new Contract(contractAddress, GP_ABI, provider);
 	try {
-		return await givpowerContract.balanceOf(account);
+		const contractAddress = (
+			config.NETWORKS_CONFIG[chainId] as GIVpowerConfig
+		).GIVPOWER.LM_ADDRESS;
+		const givpowerContract = getContract({
+			address: contractAddress,
+			abi: GP_ABI,
+			chainId,
+		});
+		return (await givpowerContract.read.balanceOf([account])) as bigint;
 	} catch (error) {
 		console.log('Error on get total GIVpower:', error);
 		captureException(error, {
