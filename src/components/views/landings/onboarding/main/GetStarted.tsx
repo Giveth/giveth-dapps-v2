@@ -7,11 +7,15 @@ const GetStarted = () => {
 	return (
 		<OnboardingHeaderWrapperStyled>
 			<H5 weight={700}>Get started with our Giveth onboarding guide</H5>
-			<Input />
+			<InputStyled placeholder='Your email address' />
 			<Button size='small' label='Discover the Future of Giving' />
 		</OnboardingHeaderWrapperStyled>
 	);
 };
+
+const InputStyled = styled(Input)`
+	max-width: 685px;
+`;
 
 const OnboardingHeaderWrapperStyled = styled(OnboardingHeaderWrapper)`
 	margin: 64px auto 74px;
