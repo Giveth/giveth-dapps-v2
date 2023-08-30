@@ -9,7 +9,7 @@ export const getDefaultSubgraphValues = (chainId: number): ISubgraphState => ({
 	isLoaded: false,
 });
 
-const chainInfoNames = {
+export const chainInfoNames = {
 	[config.MAINNET_NETWORK_NUMBER]: 'mainnetValues',
 	[config.GNOSIS_NETWORK_NUMBER]: 'gnosisValues',
 	[config.OPTIMISM_NETWORK_NUMBER]: 'optimismValues',
