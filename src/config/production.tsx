@@ -393,7 +393,8 @@ const config: EnvConfig = {
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
-		GIV_BUY_LINK: '',
+		GIV_BUY_LINK:
+			'https://app.uniswap.org/#/swap?chain=optimism&outputCurrency=0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		TOKEN_DISTRO_ADDRESS: '0xe3ac7b3e6b4065f4765d76fdc215606483bf3bd1',
 		uniswapV2Subgraph: '',
