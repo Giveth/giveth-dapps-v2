@@ -63,7 +63,7 @@ export class SubgraphDataHelper {
 			config.NETWORKS_CONFIG[
 				this.state.networkNumber as number
 			] as StreamNetworkConfig
-		).GIV_TOKEN_ADDRESS;
+		)?.GIV_TOKEN_ADDRESS;
 		return this.getTokenBalance(givTokenAddress);
 	}
 
