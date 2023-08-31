@@ -35,7 +35,7 @@ export const getHistory = async (
 		console.error('Network is not Defined!');
 		return [];
 	}
-	const query = `query {
+	const query = `{
 		tokenAllocations(
 			skip: ${from}, 
 			first:${count},
