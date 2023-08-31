@@ -1,6 +1,7 @@
 import { captureException } from '@sentry/nextjs';
 import config from '@/configuration';
 import { ITokenAllocation } from '@/types/subgraph';
+import { gqlRequest } from '@/helpers/requests';
 
 export const fetchSubgraph = async (
 	query: string,
@@ -34,7 +35,7 @@ export const getHistory = async (
 		console.error('Network is not Defined!');
 		return [];
 	}
-	const query = `{
+	const query = `query {
 		tokenAllocations(
 			skip: ${from}, 
 			first:${count},
@@ -49,14 +50,9 @@ export const getHistory = async (
 		distributor
 	  }
 	}`;
-	const body = { query };
 	try {
-		const res = await fetch(uri, {
-			method: 'POST',
-			body: JSON.stringify(body),
-		});
-		const data = await res.json();
-		const { tokenAllocations } = data.data;
+		const { data } = await gqlRequest(uri, false, query);
+		const { tokenAllocations } = data;
 		return tokenAllocations;
 	} catch (error) {
 		console.error('Error in getting History from Subgraph', error);
