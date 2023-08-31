@@ -196,6 +196,7 @@ export interface MainnetNetworkConfig extends NetworkConfig {
 	uniswapV2Subgraph: string;
 }
 export interface GnosisNetworkConfig extends NetworkConfig {
+	TOKEN_DISTRO_ADDRESS: string;
 	pools: Array<
 		| SimplePoolStakingConfig
 		| BalancerPoolStakingConfig
@@ -211,9 +212,12 @@ export interface GnosisNetworkConfig extends NetworkConfig {
 	MERKLE_ADDRESS: string;
 }
 
-export interface OptimismNetworkConfig
-	extends StreamNetworkConfig,
-		GIVpowerUniPoolConfig {}
+export interface OptimismNetworkConfig extends NetworkConfig {
+	TOKEN_DISTRO_ADDRESS: string;
+	GIVPOWER: GIVpowerStakingConfig;
+	GIV_TOKEN_ADDRESS: string;
+	GIV_BUY_LINK: string;
+}
 
 interface MicroservicesConfig {
 	authentication: string;
