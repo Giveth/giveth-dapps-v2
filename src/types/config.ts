@@ -142,6 +142,8 @@ export interface BasicNetworkConfig extends INetworkParam {
 	GIVPOWER?: GIVpowerStakingConfig;
 	gGIV_TOKEN_ADDRESS?: string;
 	PFP_CONTRACT_ADDRESS?: string;
+	tokenAddressOnUniswapV2?: string; // For price purpose in test env, on production this must have the same value of `GIV_TOKEN_ADDRESS`
+	uniswapV2Subgraph?: string;
 }
 
 interface GIVpowerStakingConfig extends SimplePoolStakingConfig {
@@ -159,11 +161,6 @@ interface GIVpowerGIVgardenConfig {
 }
 
 interface GIVgardenTokenConfig {}
-
-interface TokenPriceConfig {
-	tokenAddressOnUniswapV2: string; // For price purpose in test env, on production this must have the same value of `GIV_TOKEN_ADDRESS`
-	uniswapV2Subgraph: string;
-}
 
 export interface StreamNetworkConfig
 	extends BasicNetworkConfig,
