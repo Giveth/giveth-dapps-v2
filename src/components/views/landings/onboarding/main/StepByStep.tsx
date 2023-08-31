@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { brandColors, H3, H5, mediaQueries } from '@giveth/ui-design-system';
-import { OnboardingWrapper } from '@/components/views/landings/onboarding/common.styled';
+import { OnboardingWrapper } from '@/components/views/landings/onboarding/common/common.styled';
 import VerticalNumberedSteps from '@/components/VerticalNumberedSteps';
 import mainSteps from '@/components/views/landings/onboarding/main/steps';
 import { Relative } from '@/components/styled-components/Position';
