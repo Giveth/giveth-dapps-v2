@@ -135,11 +135,8 @@ export interface BasicNetworkConfig extends INetworkParam {
 	>;
 	regenPools?: RegenPoolStakingConfig[];
 	regenStreams?: RegenStreamConfig[];
-}
-
-export interface GIVTokenConfig {
-	GIV_TOKEN_ADDRESS: string;
-	GIV_BUY_LINK: string;
+	GIV_TOKEN_ADDRESS?: string;
+	GIV_BUY_LINK?: string;
 }
 
 interface DAITokenConfig {
