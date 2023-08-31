@@ -39,7 +39,7 @@ const HeaderWrapper = styled(Flex)`
 	${mediaQueries.laptopL} {
 		padding: 0 226px;
 	}
-	> div:first-child {
+	> h2:first-child {
 		margin-bottom: 16px;
 	}
 `;
