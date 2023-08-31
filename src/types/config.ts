@@ -137,9 +137,6 @@ export interface BasicNetworkConfig extends INetworkParam {
 	regenStreams?: RegenStreamConfig[];
 	GIV_TOKEN_ADDRESS?: string;
 	GIV_BUY_LINK?: string;
-}
-
-interface DAITokenConfig {
 	DAI_TOKEN_ADDRESS: string;
 	DAI_BUY_LINK?: string;
 }
