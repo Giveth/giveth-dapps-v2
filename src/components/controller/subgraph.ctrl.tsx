@@ -16,8 +16,16 @@ const SubgraphController = () => {
 	useEffect(() => {
 		const _address = address ? address : undefined;
 		const _chainID = chainId || config.MAINNET_NETWORK_NUMBER;
-		dispatch(
-			fetchAllInfoAsync({ userAddress: _address, chainId: _chainID }),
+		setTimeout(
+			() => {
+				dispatch(
+					fetchAllInfoAsync({
+						userAddress: _address,
+						chainId: _chainID,
+					}),
+				);
+			},
+			_address ? 1000 : 0, // Prevent set no account info after account connected
 		);
 		const interval = setInterval(() => {
 			dispatch(

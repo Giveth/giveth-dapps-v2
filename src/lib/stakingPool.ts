@@ -5,11 +5,7 @@ import { WriteContractReturnType, hexToSignature } from 'viem';
 import {
 	Address,
 	BalancerPoolStakingConfig,
-	GIVTokenConfig,
-	GIVpowerConfig,
 	ICHIPoolStakingConfig,
-	MainnetNetworkConfig,
-	RegenFarmConfig,
 	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
 	StakingPlatform,
@@ -28,7 +24,6 @@ import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
 import UnipoolGIVpower from '../artifacts/UnipoolGIVpower.json';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { GIVpowerUniPoolConfig } from '@/types/config';
 import { E18, MaxUint256 } from './constants/constants';
 
 const { abi: LM_ABI } = LM_Json;
@@ -80,12 +75,12 @@ export const getGivStakingAPR = async (
 	subgraphValue: ISubgraphState,
 	chainId: number,
 ): Promise<APR> => {
-	const lmAddress = (config.NETWORKS_CONFIG[network] as GIVpowerConfig)
-		.GIVPOWER.LM_ADDRESS;
+	const networkConfig = config.NETWORKS_CONFIG[network];
+	const lmAddress = networkConfig.GIVPOWER?.LM_ADDRESS;
+	if (!lmAddress) return { effectiveAPR: 0n };
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
 	let givStakingAPR = 0n;
-
 	const { totalSupply, rewardRate } = await getUnipoolInfo(
 		unipoolHelper,
 		lmAddress,
@@ -177,8 +172,8 @@ const getBalancerPoolStakingAPR = async (
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
-	const tokenAddress = (config.NETWORKS_CONFIG[chainId] as GIVTokenConfig)
-		.GIV_TOKEN_ADDRESS;
+	const tokenAddress = config.NETWORKS_CONFIG[chainId].GIV_TOKEN_ADDRESS;
+	if (!tokenAddress) return { effectiveAPR: 0n };
 
 	const weightedPoolContract = getContract({
 		address: POOL_ADDRESS,
@@ -246,15 +241,18 @@ const getSimplePoolStakingAPR = async (
 	unipoolHelper: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
-	const givTokenAddress = (
-		config.NETWORKS_CONFIG[chainId] as MainnetNetworkConfig
-	).GIV_TOKEN_ADDRESS;
+	const networkConfig = config.NETWORKS_CONFIG[chainId];
+
+	const givTokenAddress = networkConfig.GIV_TOKEN_ADDRESS;
+	if (!givTokenAddress) return { effectiveAPR: 0n };
+
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
+	const regenStreams = networkConfig.regenStreams;
+	if (!regenStreams) return { effectiveAPR: 0n };
 	const streamConfig =
 		regenStreamType &&
-		(config.NETWORKS_CONFIG[chainId] as RegenFarmConfig).regenStreams.find(
-			s => s.type === regenStreamType,
-		);
+		regenStreams &&
+		regenStreams.find(s => s.type === regenStreamType);
 	const tokenAddress = streamConfig
 		? streamConfig.rewardTokenAddress
 		: givTokenAddress;
@@ -320,18 +318,15 @@ export const getUserStakeInfo = (
 	const rewards = BigInt(unipoolBalance.rewards);
 	const rewardPerTokenPaid = BigInt(unipoolBalance.rewardPerTokenPaid);
 	let stakedAmount = BigInt(unipoolBalance.balance);
+	const networkConfig = config.NETWORKS_CONFIG[poolStakingConfig.network];
 	if (poolStakingConfig.type === StakingType.GIV_GARDEN_LM) {
 		const gGIVBalance = sdh.getTokenBalance(
-			config.GNOSIS_CONFIG.gGIV_TOKEN_ADDRESS,
+			networkConfig.gGIV_TOKEN_ADDRESS,
 		);
 		stakedAmount = BigInt(gGIVBalance.balance);
 	} else if (poolStakingConfig.type === StakingType.GIV_UNIPOOL_LM) {
 		const gGIVBalance = sdh.getTokenBalance(
-			(
-				config.NETWORKS_CONFIG[
-					poolStakingConfig.network
-				] as GIVpowerUniPoolConfig
-			).GIVPOWER.LM_ADDRESS,
+			networkConfig.GIVPOWER?.LM_ADDRESS,
 		);
 		stakedAmount = BigInt(gGIVBalance.balance);
 	} else {
@@ -696,9 +691,12 @@ export const getGIVpowerOnChain = async (
 		return;
 	}
 	try {
-		const contractAddress = (
-			config.NETWORKS_CONFIG[chainId] as GIVpowerConfig
-		).GIVPOWER.LM_ADDRESS;
+		const contractAddress =
+			config.NETWORKS_CONFIG[chainId].GIVPOWER?.LM_ADDRESS;
+		if (!contractAddress) {
+			console.error('GIVpower contract address is null');
+			return;
+		}
 		const givpowerContract = getContract({
 			address: contractAddress,
 			abi: GP_ABI,

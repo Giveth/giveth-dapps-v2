@@ -30,7 +30,6 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import type {
-	GIVpowerGIVgardenStakingConfig,
 	PoolStakingConfig,
 	SimplePoolStakingConfig,
 } from '@/types/config';
@@ -80,7 +79,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	const { address } = useAccount();
 	const chainId = useChainId();
 	const { notStakedAmount: _maxAmount } = useStakingPool(poolStakingConfig);
-	const maxAmount = _maxAmount.toBigInt() || 0n;
+	const maxAmount = _maxAmount || 0n;
 
 	const { POOL_ADDRESS, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
@@ -95,8 +94,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			amount,
 			address!,
 			poolStakingConfig.network === config.GNOSIS_NETWORK_NUMBER
-				? (poolStakingConfig as GIVpowerGIVgardenStakingConfig)
-						.GARDEN_ADDRESS
+				? poolStakingConfig.GARDEN_ADDRESS!
 				: LM_ADDRESS!,
 			POOL_ADDRESS,
 			chainId!,
@@ -114,8 +112,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 		try {
 			const txResponse = await wrapToken(
 				amount,
-				(poolStakingConfig as GIVpowerGIVgardenStakingConfig)
-					.GARDEN_ADDRESS,
+				poolStakingConfig.GARDEN_ADDRESS!,
 				chainId!,
 			);
 			if (txResponse) {
