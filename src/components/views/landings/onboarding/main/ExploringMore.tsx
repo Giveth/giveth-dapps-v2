@@ -1,46 +1,24 @@
 import styled from 'styled-components';
-import {
-	H3,
-	IconBulbOutline32,
-	IconGift32,
-	mediaQueries,
-	neutralColors,
-} from '@giveth/ui-design-system';
-import { OnboardingWrapper } from '@/components/views/landings/onboarding/common.styled';
-import Routes from '@/lib/constants/Routes';
+import { H3, mediaQueries, neutralColors } from '@giveth/ui-design-system';
+import { OnboardingWrapper } from '@/components/views/landings/onboarding/common/common.styled';
 import OnboardingCard from '@/components/OnboardingCard';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import {
+	donorCard,
+	projectOwnerCard,
+} from '@/components/views/landings/onboarding/common/cards';
 
 const ExploringMore = () => {
 	return (
 		<OnboardingWrapperStyled>
 			<H3 weight={700}>Exploring more as a</H3>
 			<Cards>
-				{cardsArray.map(i => (
-					<OnboardingCard key={i.title} {...i} />
-				))}
+				<OnboardingCard {...projectOwnerCard} />
+				<OnboardingCard {...donorCard} />
 			</Cards>
 		</OnboardingWrapperStyled>
 	);
 };
-
-const cardsArray = [
-	{
-		icon: <IconBulbOutline32 />,
-		title: 'Project Owner',
-		description:
-			'Learn how to create a project, promote it and raise donations.',
-		buttonText: 'Learn how you can start',
-		buttonLink: Routes.OnboardingProjects,
-	},
-	{
-		icon: <IconGift32 />,
-		title: 'Donor',
-		description: 'See how Giveth works for donors and it’s benefits.',
-		buttonText: 'See how it works',
-		buttonLink: Routes.OnboardingDonors,
-	},
-];
 
 const Cards = styled(FlexCenter)`
 	margin: 60px 0 0;
