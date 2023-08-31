@@ -16,6 +16,7 @@ import {
 	IBoostedOrder,
 	EPowerBoostingOrder,
 } from '@/components/views/userProfile/boostedTab/useFetchPowerBoostingInfo';
+import { isKeyValid } from '@/features/subgraph/subgraph.helper';
 
 export const getTotalGIVpower = (
 	values: { [key: string]: ISubgraphState },
@@ -30,7 +31,7 @@ export const getTotalGIVpower = (
 	let sum = new BigNumber('0');
 	for (const key in values) {
 		if (Object.prototype.hasOwnProperty.call(values, key)) {
-			if (key === 'currentValues') continue;
+			if (!isKeyValid(key)) continue;
 			if (onChain && onChain.chainId === values[key].networkNumber) {
 				sum = sum.plus(onChain.balance);
 				res.push(onChain);
@@ -39,6 +40,7 @@ export const getTotalGIVpower = (
 				const sdh = new SubgraphDataHelper(value);
 				const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
 				console.log(
+					key,
 					values[key].networkNumber,
 					userGIVPowerBalance.balance,
 				);
