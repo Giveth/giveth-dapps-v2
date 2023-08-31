@@ -137,17 +137,16 @@ export interface BasicNetworkConfig extends INetworkParam {
 	regenStreams?: RegenStreamConfig[];
 	GIV_TOKEN_ADDRESS?: string;
 	GIV_BUY_LINK?: string;
-	DAI_TOKEN_ADDRESS: string;
+	DAI_TOKEN_ADDRESS?: string;
 	DAI_BUY_LINK?: string;
+	GIVPOWER?: GIVpowerStakingConfig;
 }
 
 interface GIVpowerStakingConfig extends SimplePoolStakingConfig {
 	LM_ADDRESS: string;
 }
 
-export interface GIVpowerUniPoolConfig {
-	GIVPOWER: GIVpowerStakingConfig;
-}
+export interface GIVpowerUniPoolConfig {}
 
 export interface GIVpowerGIVgardenStakingConfig extends GIVpowerStakingConfig {
 	GARDEN_ADDRESS: string;
