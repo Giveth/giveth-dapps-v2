@@ -139,7 +139,7 @@ export interface NetworkConfig extends INetworkParam {
 	GIV_BUY_LINK?: string;
 	DAI_TOKEN_ADDRESS?: string;
 	DAI_BUY_LINK?: string;
-	GIVPOWER?: GIVpowerStakingConfig;
+	GIVPOWER?: GIVpowerStakingConfig | GIVpowerGgivStakingConfig;
 	gGIV_TOKEN_ADDRESS?: string;
 	PFP_CONTRACT_ADDRESS?: string;
 	tokenAddressOnUniswapV2?: string; // For price purpose in test env, on production this must have the same value of `GIV_TOKEN_ADDRESS`
@@ -152,14 +152,8 @@ interface GIVpowerStakingConfig extends SimplePoolStakingConfig {
 	LM_ADDRESS: string;
 }
 
-export interface GIVpowerUniPoolConfig {}
-
-export interface GIVpowerGIVgardenStakingConfig extends GIVpowerStakingConfig {
+export interface GIVpowerGgivStakingConfig extends GIVpowerStakingConfig {
 	GARDEN_ADDRESS: string;
-}
-
-interface GIVpowerGIVgardenConfig {
-	GIVPOWER: GIVpowerGIVgardenStakingConfig;
 }
 
 export interface MainnetNetworkConfig extends NetworkConfig {
@@ -194,7 +188,7 @@ export interface GnosisNetworkConfig extends NetworkConfig {
 	GIV_TOKEN_ADDRESS: string;
 	GIV_BUY_LINK: string;
 	gGIV_TOKEN_ADDRESS: string;
-	GIVPOWER: GIVpowerGIVgardenStakingConfig;
+	GIVPOWER: GIVpowerGgivStakingConfig;
 	MERKLE_ADDRESS: string;
 }
 
