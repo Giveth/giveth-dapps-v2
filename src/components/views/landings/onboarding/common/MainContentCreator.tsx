@@ -6,40 +6,52 @@ import {
 	mediaQueries,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { FC } from 'react';
 import { OnboardingWrapper } from '@/components/views/landings/onboarding/common/common.styled';
-import { Relative } from '@/components/styled-components/Position';
 import Plus from '@/components/particles/Plus';
 import Wave from '@/components/particles/Wave';
-import VerticalNumberedStepsAlt from '@/components/VerticalNumberedStepsAlt';
-import projectOwnerSteps from '@/components/views/landings/onboarding/project-owner/projectOwnerSteps';
+import VerticalNumberedStepsAlt, {
+	IStepsArray,
+} from '@/components/VerticalNumberedStepsAlt';
 import ExternalLink from '@/components/ExternalLink';
-import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import QuarterCircle from '@/components/particles/QuarterCircle';
 
-const BecomeProjectOwner = () => {
+interface IMainContentCreator {
+	title: string;
+	description: string;
+	steps: IStepsArray[];
+	buttonText: string;
+	buttonLink: string;
+	firstTitleOnRight?: boolean;
+}
+
+const MainContentCreator: FC<IMainContentCreator> = props => {
+	const {
+		title,
+		description,
+		steps,
+		buttonLink,
+		buttonText,
+		firstTitleOnRight,
+	} = props;
 	return (
-		<Relative>
+		<Wrapper>
 			<OnboardingWrapperStyled>
-				<H3 weight={700}>Become a project Owner on Giveth</H3>
-				<Lead size='large'>
-					We may be biased, but we really believe that Giveth is the
-					best donation platform in the world. When you raise funds
-					for your project on Giveth, you receive 100% of every cent
-					that was donated to you since Giveth takes zero fees. Not
-					only that, but you can also earn rewards when you refer
-					others to donate on Giveth! Check out our resources below to
-					learn how to quickly and easily launch your project on
-					Giveth and join us in the Future of Giving
-				</Lead>
+				<H3 weight={700}>{title}</H3>
+				<Lead size='large'>{description}</Lead>
 				<StepsWrapper>
-					<VerticalNumberedStepsAlt inputArray={projectOwnerSteps} />
+					<VerticalNumberedStepsAlt
+						firstTitleOnRight={firstTitleOnRight}
+						inputArray={steps}
+					/>
 				</StepsWrapper>
 				<ButtonWrapper>
-					<ExternalLink href={Routes.CreateProject}>
+					<ExternalLink href={buttonLink}>
 						<Button
 							size='large'
 							buttonType='primary'
-							label='CREATE PROJECT'
+							label={buttonText}
 						/>
 					</ExternalLink>
 				</ButtonWrapper>
@@ -50,9 +62,32 @@ const BecomeProjectOwner = () => {
 			<WaveWrapper>
 				<Wave color={brandColors.giv[100]} />
 			</WaveWrapper>
-		</Relative>
+			<Wave2Wrapper>
+				<Wave color={brandColors.giv[500]} />
+			</Wave2Wrapper>
+			<ArcWrapper>
+				<QuarterCircle color={brandColors.pinky[500]} />
+			</ArcWrapper>
+		</Wrapper>
 	);
 };
+
+const ArcWrapper = styled.div`
+	position: absolute;
+	right: 50px;
+	bottom: 200px;
+`;
+
+const Wrapper = styled.div`
+	position: relative;
+	overflow: hidden;
+`;
+
+const Wave2Wrapper = styled.div`
+	position: absolute;
+	bottom: 300px;
+	right: -70px;
+`;
 
 const ButtonWrapper = styled(FlexCenter)`
 	button {
@@ -94,4 +129,4 @@ const OnboardingWrapperStyled = styled(OnboardingWrapper)`
 	}
 `;
 
-export default BecomeProjectOwner;
+export default MainContentCreator;
