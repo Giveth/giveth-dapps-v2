@@ -133,9 +133,6 @@ export interface BasicNetworkConfig extends INetworkParam {
 		| UniswapV3PoolStakingConfig
 		| ICHIPoolStakingConfig
 	>;
-}
-
-export interface RegenFarmConfig {
 	regenPools: RegenPoolStakingConfig[];
 	regenStreams: RegenStreamConfig[];
 }
