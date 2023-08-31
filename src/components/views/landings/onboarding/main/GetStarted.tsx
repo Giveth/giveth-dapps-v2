@@ -1,6 +1,6 @@
 import { Button, H5 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { OnboardingHeaderWrapper } from '@/components/views/landings/onboarding/common.styled';
+import { OnboardingHeaderWrapper } from '@/components/views/landings/onboarding/common/common.styled';
 import Input from '@/components/styled-components/Input';
 
 const GetStarted = () => {
