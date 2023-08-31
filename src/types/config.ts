@@ -1,12 +1,4 @@
-export interface BasicStakingConfig {
-	LM_ADDRESS: string;
-	network: number;
-	BUY_LINK?: string;
-	farmStartTimeMS?: number;
-	farmEndTimeMS?: number;
-	icon?: string;
-	exploited?: boolean;
-}
+export interface BasicStakingConfig {}
 export enum StakingPlatform {
 	GIVETH = 'Staking',
 	UNISWAP = 'Uniswap',
@@ -43,9 +35,17 @@ export type PoolStakingConfig =
 	| RegenPoolStakingConfig
 	| ICHIPoolStakingConfig;
 
-export interface SimplePoolStakingConfig extends BasicStakingConfig {
-	POOL_ADDRESS: string;
+export interface SimplePoolStakingConfig {
+	network: number;
 	type: StakingType;
+	LM_ADDRESS: string;
+	POOL_ADDRESS: string;
+	GARDEN_ADDRESS?: string;
+	BUY_LINK?: string;
+	farmStartTimeMS?: number;
+	farmEndTimeMS?: number;
+	icon?: string;
+	exploited?: boolean;
 	platform: StakingPlatform;
 	platformTitle?: string;
 	title: string;
@@ -130,16 +130,16 @@ export interface NetworkConfig extends INetworkParam {
 	pools?: Array<
 		| SimplePoolStakingConfig
 		| BalancerPoolStakingConfig
-		| UniswapV3PoolStakingConfig
 		| ICHIPoolStakingConfig
 	>;
+	v3Pools?: Array<UniswapV3PoolStakingConfig>;
 	regenPools?: RegenPoolStakingConfig[];
 	regenStreams?: RegenStreamConfig[];
 	GIV_TOKEN_ADDRESS?: string;
 	GIV_BUY_LINK?: string;
 	DAI_TOKEN_ADDRESS?: string;
 	DAI_BUY_LINK?: string;
-	GIVPOWER?: GIVpowerStakingConfig | GIVpowerGgivStakingConfig;
+	GIVPOWER?: SimplePoolStakingConfig | GIVpowerGgivStakingConfig;
 	gGIV_TOKEN_ADDRESS?: string;
 	PFP_CONTRACT_ADDRESS?: string;
 	tokenAddressOnUniswapV2?: string; // For price purpose in test env, on production this must have the same value of `GIV_TOKEN_ADDRESS`
@@ -148,11 +148,7 @@ export interface NetworkConfig extends INetworkParam {
 	MERKLE_ADDRESS?: string;
 }
 
-interface GIVpowerStakingConfig extends SimplePoolStakingConfig {
-	LM_ADDRESS: string;
-}
-
-export interface GIVpowerGgivStakingConfig extends GIVpowerStakingConfig {
+export interface GIVpowerGgivStakingConfig extends SimplePoolStakingConfig {
 	GARDEN_ADDRESS: string;
 }
 
@@ -162,16 +158,15 @@ export interface MainnetNetworkConfig extends NetworkConfig {
 	pools: Array<
 		| SimplePoolStakingConfig
 		| BalancerPoolStakingConfig
-		| UniswapV3PoolStakingConfig
 		| ICHIPoolStakingConfig
 	>;
+	v3Pools: Array<UniswapV3PoolStakingConfig>;
 	regenPools: RegenPoolStakingConfig[];
 	regenStreams: RegenStreamConfig[];
 	GIV_TOKEN_ADDRESS: string;
 	GIV_BUY_LINK: string;
 	PFP_CONTRACT_ADDRESS: string;
 	DAI_TOKEN_ADDRESS: string;
-	DAI_BUY_LINK: string;
 	WETH_TOKEN_ADDRESS: string;
 	tokenAddressOnUniswapV2: string;
 	uniswapV2Subgraph: string;
@@ -179,12 +174,7 @@ export interface MainnetNetworkConfig extends NetworkConfig {
 export interface GnosisNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
 	TOKEN_DISTRO_ADDRESS: string;
-	pools: Array<
-		| SimplePoolStakingConfig
-		| BalancerPoolStakingConfig
-		| UniswapV3PoolStakingConfig
-		| ICHIPoolStakingConfig
-	>;
+	pools: Array<SimplePoolStakingConfig>;
 	regenPools: RegenPoolStakingConfig[];
 	regenStreams: RegenStreamConfig[];
 	GIV_TOKEN_ADDRESS: string;
@@ -197,7 +187,7 @@ export interface GnosisNetworkConfig extends NetworkConfig {
 export interface OptimismNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
 	TOKEN_DISTRO_ADDRESS: string;
-	GIVPOWER: GIVpowerStakingConfig;
+	GIVPOWER: SimplePoolStakingConfig;
 	GIV_TOKEN_ADDRESS: string;
 	GIV_BUY_LINK: string;
 }
