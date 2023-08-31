@@ -123,7 +123,7 @@ export interface NetworkConfig extends INetworkParam {
 	nodeUrl: string;
 	blockExplorerName: string[];
 	gasPreference: GasPreference;
-	subgraphAddress: string;
+	subgraphAddress?: string;
 	coingeckoChainName: string;
 	chainLogo: (logoSize?: number) => JSX.Element;
 	TOKEN_DISTRO_ADDRESS?: string;
@@ -157,6 +157,7 @@ export interface GIVpowerGgivStakingConfig extends GIVpowerStakingConfig {
 }
 
 export interface MainnetNetworkConfig extends NetworkConfig {
+	subgraphAddress: string;
 	TOKEN_DISTRO_ADDRESS: string;
 	pools: Array<
 		| SimplePoolStakingConfig
@@ -176,6 +177,7 @@ export interface MainnetNetworkConfig extends NetworkConfig {
 	uniswapV2Subgraph: string;
 }
 export interface GnosisNetworkConfig extends NetworkConfig {
+	subgraphAddress: string;
 	TOKEN_DISTRO_ADDRESS: string;
 	pools: Array<
 		| SimplePoolStakingConfig
@@ -193,6 +195,7 @@ export interface GnosisNetworkConfig extends NetworkConfig {
 }
 
 export interface OptimismNetworkConfig extends NetworkConfig {
+	subgraphAddress: string;
 	TOKEN_DISTRO_ADDRESS: string;
 	GIVPOWER: GIVpowerStakingConfig;
 	GIV_TOKEN_ADDRESS: string;
