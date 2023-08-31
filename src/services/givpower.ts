@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { FETCH_USERS_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { gqlRequest } from '@/helpers/requests';
-import { GIVpowerConfig, BasicNetworkConfig } from '@/types/config';
 import config from '@/configuration';
 
 export const getGIVpowerBalanceByAddress = async (users: string[]) => {
@@ -11,17 +10,19 @@ export const getGIVpowerBalanceByAddress = async (users: string[]) => {
 	for (const key in _networkConfigs) {
 		if (Object.prototype.hasOwnProperty.call(_networkConfigs, key)) {
 			const networkConfig = _networkConfigs[key];
-			if ((networkConfig as GIVpowerConfig).GIVPOWER?.LM_ADDRESS)
+			if (
+				networkConfig.GIVPOWER?.LM_ADDRESS &&
+				networkConfig.subgraphAddress
+			)
 				queries.push(
 					gqlRequest(
-						(networkConfig as BasicNetworkConfig).subgraphAddress,
+						networkConfig.subgraphAddress,
 						false,
 						FETCH_USERS_GIVPOWER_BY_ADDRESS,
 						{
 							addresses: users,
-							contract: (
-								networkConfig as GIVpowerConfig
-							).GIVPOWER.LM_ADDRESS.toLowerCase(),
+							contract:
+								networkConfig.GIVPOWER.LM_ADDRESS.toLowerCase(),
 							length: users.length,
 						},
 					),
