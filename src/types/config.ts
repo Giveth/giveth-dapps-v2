@@ -141,6 +141,7 @@ export interface BasicNetworkConfig extends INetworkParam {
 	DAI_BUY_LINK?: string;
 	GIVPOWER?: GIVpowerStakingConfig;
 	gGIV_TOKEN_ADDRESS?: string;
+	PFP_CONTRACT_ADDRESS?: string;
 }
 
 interface GIVpowerStakingConfig extends SimplePoolStakingConfig {
@@ -158,10 +159,6 @@ interface GIVpowerGIVgardenConfig {
 }
 
 interface GIVgardenTokenConfig {}
-
-interface PFPConfig {
-	PFP_CONTRACT_ADDRESS: string;
-}
 
 interface TokenPriceConfig {
 	tokenAddressOnUniswapV2: string; // For price purpose in test env, on production this must have the same value of `GIV_TOKEN_ADDRESS`
