@@ -66,3 +66,24 @@ export const fetchOptimismInfo = async (userAddress?: string) => {
 		return null;
 	}
 };
+
+export const fetchChainInfo = async (chainId: number, userAddress?: string) => {
+	try {
+		const response = await fetchSubgraph(
+			SubgraphQueryBuilder.getChainQuery(chainId, userAddress),
+			chainId,
+		);
+		return transformSubgraphData({
+			...response,
+			networkNumber: chainId,
+		});
+	} catch (e) {
+		console.error(`Error on query ${chainId} subgraph:`, e);
+		captureException(e, {
+			tags: {
+				section: 'fetch${chainId}Subgraph',
+			},
+		});
+		return null;
+	}
+};
