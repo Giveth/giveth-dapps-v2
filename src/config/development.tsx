@@ -60,6 +60,7 @@ const config: EnvConfig = {
 	MAINNET_CONFIG: {
 		...networksParams[5],
 		DAI_TOKEN_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',
+		DAI_BUY_LINK: '',
 		PFP_CONTRACT_ADDRESS: '0x9F8c0e0353234F6f644fc7AF84Ac006f02cecE77',
 
 		gasPreference: {
@@ -276,7 +277,6 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		blockExplorerName: ['PolygonScan'],
-		subgraphAddress: '',
 		coingeckoChainName: 'polygon-pos',
 		chainLogo: (logoSize?: number) => <IconPolygon size={logoSize} />,
 	},
@@ -317,7 +317,6 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		blockExplorerName: ['CeloScan'],
-		subgraphAddress: '',
 		coingeckoChainName: 'celo',
 		chainLogo: (logoSize?: number) => <IconCelo size={logoSize} />,
 	},
