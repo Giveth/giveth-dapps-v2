@@ -10,7 +10,7 @@ import {
 import {
 	chainInfoNames,
 	getDefaultSubgraphValues,
-	isKeyValid,
+	isSubgraphKeyValid,
 } from './subgraph.helper';
 import type { ISubgraphState } from './subgraph.types';
 
@@ -35,14 +35,15 @@ export const subgraphSlice = createSlice({
 			.addCase(fetchCurrentInfoAsync.fulfilled, (state, action) => {
 				state.currentValues = action.payload.response;
 				const key = chainInfoNames[action.payload.chainId];
-				if (isKeyValid(key)) state[key] = action.payload.response;
+				if (isSubgraphKeyValid(key))
+					state[key] = action.payload.response;
 			})
 			.addCase(fetchAllInfoAsync.fulfilled, (state, action) => {
 				const { chainId, response } = action.payload;
 				for (const key in response) {
 					if (
 						Object.prototype.hasOwnProperty.call(state, key) &&
-						isKeyValid(key)
+						isSubgraphKeyValid(key)
 					) {
 						const chainInfo = response[key];
 						if (chainInfo) {

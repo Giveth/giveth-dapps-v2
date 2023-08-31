@@ -17,6 +17,6 @@ export const chainInfoNames = {
 
 type ValidKeys = (typeof chainInfoNames)[keyof typeof chainInfoNames];
 
-export function isKeyValid(key: string): key is ValidKeys {
+export function isSubgraphKeyValid(key: string): key is ValidKeys {
 	return Object.values(chainInfoNames).includes(key as ValidKeys);
 }
