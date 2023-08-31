@@ -126,12 +126,8 @@ export interface BasicNetworkConfig extends INetworkParam {
 	subgraphAddress: string;
 	coingeckoChainName: string;
 	chainLogo: (logoSize?: number) => JSX.Element;
+	TOKEN_DISTRO_ADDRESS?: string;
 }
-
-interface StreamConfig {
-	TOKEN_DISTRO_ADDRESS: string;
-}
-
 interface FarmConfig {
 	pools: Array<
 		| SimplePoolStakingConfig
