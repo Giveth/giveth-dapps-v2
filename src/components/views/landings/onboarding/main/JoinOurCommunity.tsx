@@ -9,7 +9,7 @@ import {
 	IconYoutube,
 	Lead,
 } from '@giveth/ui-design-system';
-import { OnboardingWrapper } from '@/components/views/landings/onboarding/common.styled';
+import { OnboardingWrapper } from '@/components/views/landings/onboarding/common/common.styled';
 import { Bullets } from '@/components/styled-components/Bullets';
 import { Flex } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
