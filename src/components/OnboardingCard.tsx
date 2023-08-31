@@ -13,7 +13,7 @@ import Divider from '@/components/Divider';
 import ExternalLink from '@/components/ExternalLink';
 import { FlexCenter } from '@/components/styled-components/Flex';
 
-interface IOnboardingCard {
+export interface IOnboardingCard {
 	icon: JSX.Element;
 	title: string;
 	description: string;
