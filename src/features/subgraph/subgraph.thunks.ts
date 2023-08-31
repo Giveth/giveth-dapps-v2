@@ -6,6 +6,7 @@ import {
 	fetchChainInfo,
 } from './subgraph.services';
 import { ICurrentInfo } from './subgraph.types';
+import { chainInfoNames } from './subgraph.helper';
 
 export const fetchChainInfoAsync = createAsyncThunk(
 	'subgraph/fetchChainInfo',
@@ -17,7 +18,6 @@ export const fetchChainInfoAsync = createAsyncThunk(
 		};
 	},
 );
-
 export const fetchOptimismInfoAsync = createAsyncThunk(
 	'subgraph/fetchOptimismInfo',
 	async (userAddress?: string) => {
@@ -56,11 +56,10 @@ export const fetchCurrentInfoAsync = createAsyncThunk(
 export const fetchAllInfoAsync = createAsyncThunk(
 	'subgraph/fetchAllInfo',
 	async ({ userAddress, chainId }: ICurrentInfo) => {
-		const res = await Promise.all([
-			fetchMainnetInfo(userAddress),
-			fetchGnosisInfo(userAddress),
-			fetchOptimismInfo(userAddress),
-		]);
+		const chainIds = Object.keys(chainInfoNames).map(Number);
+		const res = await Promise.all(
+			chainIds.map(id => fetchChainInfo(id, userAddress)),
+		);
 
 		const response = {
 			mainnetValues: res[0],
