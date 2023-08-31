@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
+import dynamic from 'next/dynamic';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from '../../DonateSocialBox';
@@ -25,7 +26,14 @@ import ExternalLink from '@/components/ExternalLink';
 import { formatTxLink } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import CryptoDonation from '@/components/views/donate/CryptoDonation';
+
+const CryptoDonation = dynamic(
+	() => import('@/components/views/donate/CryptoDonation'),
+	{
+		loading: () => <p>Loading...</p>,
+		ssr: false,
+	},
+);
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
