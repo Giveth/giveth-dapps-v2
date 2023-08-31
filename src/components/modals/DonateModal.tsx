@@ -11,6 +11,7 @@ import {
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 
+import { useAccount, useChainId } from 'wagmi';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
@@ -62,7 +63,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		givBackEligible,
 	} = props;
 	const web3Context = useWeb3React();
-	const { account, chainId } = web3Context;
+	const { address } = useAccount();
+	const chainId = useChainId();
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const isDonatingToGiveth = donationToGiveth > 0;
@@ -111,8 +113,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				fetchPolicy: 'no-cache',
 			})
 			.then((res: IMeGQL) => {
-				const address = res.data?.me?.walletAddress;
-				if (compareAddresses(address, account)) {
+				const _address = res.data?.me?.walletAddress;
+				if (compareAddresses(_address, address)) {
 					handleDonate();
 				} else {
 					handleFailedValidation();
