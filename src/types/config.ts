@@ -133,8 +133,8 @@ export interface BasicNetworkConfig extends INetworkParam {
 		| UniswapV3PoolStakingConfig
 		| ICHIPoolStakingConfig
 	>;
-	regenPools: RegenPoolStakingConfig[];
-	regenStreams: RegenStreamConfig[];
+	regenPools?: RegenPoolStakingConfig[];
+	regenStreams?: RegenStreamConfig[];
 }
 
 export interface GIVTokenConfig {
