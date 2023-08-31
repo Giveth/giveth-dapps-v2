@@ -14,7 +14,7 @@ import { captureException } from '@sentry/nextjs';
 import { formatUnits, parseUnits } from 'viem';
 
 import { getContract } from 'wagmi/actions';
-import { erc20ABI, useAccount, useChainId } from 'wagmi';
+import { erc20ABI, useAccount, useBalance, useChainId } from 'wagmi';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
@@ -65,9 +65,9 @@ const CryptoDonation: FC = () => {
 	const networkId = useChainId();
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
-	const { isEnabled, isSignedIn, balance } = useAppSelector(
-		state => state.user,
-	);
+	const { isEnabled, isSignedIn } = useAppSelector(state => state.user);
+	const notFormattedBalance = useBalance({ address });
+	const balance = notFormattedBalance.data?.formatted;
 	const isPurpleListed = usePurpleList();
 
 	const { project, hasActiveQFRound } = useDonateData();
@@ -128,7 +128,6 @@ const CryptoDonation: FC = () => {
 				networkId,
 				networkIds,
 			);
-			console.log('FilteredTokens', filteredTokens);
 			setAcceptedChains(networkIds);
 			if (filteredTokens.length < 1) {
 				setShowChangeNetworkModal(true);
@@ -149,7 +148,6 @@ const CryptoDonation: FC = () => {
 		}
 		return () => clearPoll();
 	}, [selectedToken, isEnabled, address, balance]);
-	console.log('isConnected', isConnected);
 	useEffect(() => {
 		client
 			.query({
@@ -217,7 +215,7 @@ const CryptoDonation: FC = () => {
 						const balance = await contract.read.balanceOf([
 							address!,
 						]);
-						console.log('Balaaance', balance);
+
 						return balance;
 					} catch (e) {
 						captureException(e, {
@@ -299,7 +297,6 @@ const CryptoDonation: FC = () => {
 
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
-	console.log('isConnected', isConnected);
 	return (
 		<MainContainer>
 			<H4Styled weight={700}>
