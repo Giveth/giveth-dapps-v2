@@ -139,6 +139,8 @@ const config: EnvConfig = {
 				exploited: true,
 				farmEndTimeMS: 1660946400000,
 			},
+		],
+		v3Pools: [
 			// {
 			// 	network: MAINNET_NETWORK_NUMBER,
 			// 	INCENTIVE_START_TIME: 1640361600,

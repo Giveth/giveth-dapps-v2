@@ -14,7 +14,6 @@ import {
 	transformUnipoolBalance,
 } from '@/lib/subgraph/subgraphDataTransform';
 import config from '@/configuration';
-import { GIVpowerConfig, StreamNetworkConfig } from '@/types/config';
 
 export class SubgraphDataHelper {
 	constructor(private readonly state: ISubgraphState) {}
@@ -26,20 +25,20 @@ export class SubgraphDataHelper {
 		);
 	}
 
-	getTokenDistro(address: string): ITokenDistro {
-		return (
-			(this.state[
-				'tokenDistro_' + address.toLowerCase()
-			] as ITokenDistro) || transformTokenDistro()
-		);
+	getTokenDistro(address?: string): ITokenDistro {
+		return address
+			? (this.state[
+					'tokenDistro_' + address.toLowerCase()
+			  ] as ITokenDistro) || transformTokenDistro()
+			: transformTokenDistro();
 	}
 
-	getTokenBalance(tokenAddress: string): ITokenBalance {
-		return (
-			(this.state[
-				'tokenBalance_' + tokenAddress?.toLowerCase()
-			] as ITokenBalance) || transformTokenBalance()
-		);
+	getTokenBalance(tokenAddress?: string): ITokenBalance {
+		return tokenAddress
+			? (this.state[
+					'tokenBalance_' + tokenAddress?.toLowerCase()
+			  ] as ITokenBalance) || transformTokenBalance()
+			: transformTokenBalance();
 	}
 
 	getUnipoolBalance(address: string): IUnipoolBalance {
@@ -50,27 +49,24 @@ export class SubgraphDataHelper {
 		);
 	}
 
-	getTokenDistroBalance(address: string): ITokenDistroBalance {
-		return (
-			(this.state[
-				'tokenDistroBalance_' + address.toLowerCase()
-			] as ITokenDistroBalance) || transformTokenDistroBalance({})
-		);
+	getTokenDistroBalance(address?: string): ITokenDistroBalance {
+		return address
+			? (this.state[
+					'tokenDistroBalance_' + address.toLowerCase()
+			  ] as ITokenDistroBalance) || transformTokenDistroBalance({})
+			: transformTokenDistroBalance({});
 	}
 
 	getGIVTokenBalance(): ITokenBalance {
-		const givTokenAddress = (
-			config.NETWORKS_CONFIG[
-				this.state.networkNumber as number
-			] as StreamNetworkConfig
-		)?.GIV_TOKEN_ADDRESS;
+		const givTokenAddress =
+			config.NETWORKS_CONFIG[this.state.networkNumber as number]
+				?.GIV_TOKEN_ADDRESS;
 		return this.getTokenBalance(givTokenAddress);
 	}
 
 	getUserGIVPowerBalance(): IUnipoolBalance {
-		const _config = config.NETWORKS_CONFIG[
-			this.state.networkNumber as number
-		] as GIVpowerConfig;
+		const _config =
+			config.NETWORKS_CONFIG[this.state.networkNumber as number];
 		if (!_config || !_config.GIVPOWER) return transformUnipoolBalance();
 		const givpowerLMAddress = _config.GIVPOWER.LM_ADDRESS;
 		return this.getUnipoolBalance(givpowerLMAddress);
@@ -84,20 +80,16 @@ export class SubgraphDataHelper {
 	}
 
 	getGIVTokenDistro(): ITokenDistro {
-		const tokenDistroAddress = (
-			config.NETWORKS_CONFIG[
-				this.state.networkNumber as number
-			] as StreamNetworkConfig
-		).TOKEN_DISTRO_ADDRESS;
+		const tokenDistroAddress =
+			config.NETWORKS_CONFIG[this.state.networkNumber as number]
+				.TOKEN_DISTRO_ADDRESS;
 		return this.getTokenDistro(tokenDistroAddress);
 	}
 
 	getGIVTokenDistroBalance(): ITokenDistroBalance {
-		const tokenDistroAddress = (
-			config.NETWORKS_CONFIG[
-				this.state.networkNumber as number
-			] as StreamNetworkConfig
-		).TOKEN_DISTRO_ADDRESS;
+		const tokenDistroAddress =
+			config.NETWORKS_CONFIG[this.state.networkNumber as number]
+				.TOKEN_DISTRO_ADDRESS;
 		return this.getTokenDistroBalance(tokenDistroAddress);
 	}
 }

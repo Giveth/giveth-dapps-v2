@@ -1,16 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import config from '@/configuration';
 import {
-	fetchCurrentInfoAsync,
-	fetchMainnetInfoAsync,
-	fetchGnosisInfoAsync,
-	fetchOptimismInfoAsync,
 	fetchAllInfoAsync,
+	fetchChainInfoAsync,
+	fetchCurrentInfoAsync,
 } from './subgraph.thunks';
 import {
 	chainInfoNames,
 	getDefaultSubgraphValues,
-	isKeyValid,
+	isSubgraphKeyValid,
 } from './subgraph.helper';
 import type { ISubgraphState } from './subgraph.types';
 
@@ -33,16 +31,17 @@ export const subgraphSlice = createSlice({
 	extraReducers: builder => {
 		builder
 			.addCase(fetchCurrentInfoAsync.fulfilled, (state, action) => {
-				state.currentValues = action.payload.response;
-				state[chainInfoNames[action.payload.chainId]] =
-					action.payload.response;
+				const { chainId, response } = action.payload;
+				state.currentValues = response;
+				const key = chainInfoNames[chainId];
+				if (isSubgraphKeyValid(key)) state[key] = response;
 			})
 			.addCase(fetchAllInfoAsync.fulfilled, (state, action) => {
 				const { chainId, response } = action.payload;
 				for (const key in response) {
 					if (
 						Object.prototype.hasOwnProperty.call(state, key) &&
-						isKeyValid(key)
+						isSubgraphKeyValid(key)
 					) {
 						const chainInfo = response[key];
 						if (chainInfo) {
@@ -53,14 +52,10 @@ export const subgraphSlice = createSlice({
 					}
 				}
 			})
-			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
-				state.mainnetValues = action.payload;
-			})
-			.addCase(fetchGnosisInfoAsync.fulfilled, (state, action) => {
-				state.gnosisValues = action.payload;
-			})
-			.addCase(fetchOptimismInfoAsync.fulfilled, (state, action) => {
-				state.optimismValues = action.payload;
+			.addCase(fetchChainInfoAsync.fulfilled, (state, action) => {
+				const { chainId, response } = action.payload;
+				const key = chainInfoNames[chainId];
+				if (isSubgraphKeyValid(key)) state[key] = response;
 			});
 	},
 });

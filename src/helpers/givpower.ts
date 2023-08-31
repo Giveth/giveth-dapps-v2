@@ -4,11 +4,7 @@ import { IGIVpower } from '@/types/subgraph';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
-import {
-	GIVTokenConfig,
-	GIVpowerUniPoolConfig,
-	StakingType,
-} from '@/types/config';
+import { StakingType } from '@/types/config';
 import config from '@/configuration';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
@@ -16,6 +12,7 @@ import {
 	IBoostedOrder,
 	EPowerBoostingOrder,
 } from '@/components/views/userProfile/boostedTab/useFetchPowerBoostingInfo';
+import { isSubgraphKeyValid } from '@/features/subgraph/subgraph.helper';
 
 export const getTotalGIVpower = (
 	values: { [key: string]: ISubgraphState },
@@ -30,7 +27,7 @@ export const getTotalGIVpower = (
 	let sum = new BigNumber('0');
 	for (const key in values) {
 		if (Object.prototype.hasOwnProperty.call(values, key)) {
-			if (key === 'currentValues') continue;
+			if (!isSubgraphKeyValid(key)) continue;
 			if (onChain && onChain.chainId === values[key].networkNumber) {
 				sum = sum.plus(onChain.balance);
 				res.push(onChain);
@@ -39,6 +36,7 @@ export const getTotalGIVpower = (
 				const sdh = new SubgraphDataHelper(value);
 				const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
 				console.log(
+					key,
 					values[key].networkNumber,
 					userGIVPowerBalance.balance,
 				);
@@ -116,8 +114,8 @@ export const sortBoosts = (
 export const getGIVpowerLink = (chainId?: number) => {
 	const _networkConf = getGIVConfig(chainId);
 	const [stakeType, chain] =
-		'GIVPOWER' in _networkConf
-			? [(_networkConf as GIVpowerUniPoolConfig).GIVPOWER.type, chainId]
+		_networkConf.GIVPOWER?.type && chainId
+			? [_networkConf.GIVPOWER.type, chainId]
 			: [StakingType.GIV_GARDEN_LM, config.GNOSIS_NETWORK_NUMBER];
 	return `${Routes.GIVfarm}/?open=${stakeType}&chain=${chain}`;
 };
@@ -131,8 +129,5 @@ export const getNetworkConfig = (defaultChianID: number, chainId?: number) => {
 };
 
 export const getGIVConfig = (chainId?: number) => {
-	return getNetworkConfig(
-		config.GNOSIS_NETWORK_NUMBER,
-		chainId,
-	) as GIVTokenConfig;
+	return getNetworkConfig(config.GNOSIS_NETWORK_NUMBER, chainId);
 };

@@ -86,9 +86,9 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 		if (!chainId) return;
 		const networkConfig = config.NETWORKS_CONFIG[chainId];
 
-		if (!networkConfig || !('pools' in networkConfig)) return;
+		if (!networkConfig || !networkConfig.pools) return;
 		let pools = [];
-		if ('GIVPOWER' in networkConfig) {
+		if (networkConfig.GIVPOWER) {
 			pools = [networkConfig.GIVPOWER, ...networkConfig.pools];
 		} else {
 			pools = networkConfig.pools;
