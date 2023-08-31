@@ -4,14 +4,12 @@ import UniswapV3PoolJson from '@uniswap/v3-core/artifacts/contracts/UniswapV3Poo
 import NonfungiblePositionManagerJson from '@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json';
 
 import { captureException } from '@sentry/nextjs';
+import { getContract } from 'wagmi/actions';
+import { erc20ABI } from 'wagmi';
 import UNISWAP_V3_STAKER_ABI from '@/artifacts/uniswap_v3_staker.json';
 import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
 import config from '@/configuration';
-import {
-	ERC20,
-	INonfungiblePositionManager,
-	IUniswapV3Pool,
-} from '@/types/contracts';
+import { INonfungiblePositionManager, IUniswapV3Pool } from '@/types/contracts';
 import { MAX_TOKEN_ORDER } from './constants/tokens';
 
 const { abi: UniswapV3PoolABI } = UniswapV3PoolJson;
@@ -75,27 +73,19 @@ export const getGivethV3PoolContract = (provider: Web3Provider | null) => {
 };
 
 interface IERC20Info {
-	library: Web3Provider;
-	tokenAbi: string;
-	contractAddress: string;
+	contractAddress: `0x${string}`;
 	networkId: number;
 }
 
-export async function getERC20Info({
-	library,
-	tokenAbi,
-	contractAddress,
-	networkId,
-}: IERC20Info) {
+export async function getERC20Info({ contractAddress, networkId }: IERC20Info) {
 	try {
-		const instance = new Contract(
-			contractAddress,
-			tokenAbi,
-			library,
-		) as ERC20;
-		const name = await instance.name();
-		const symbol = await instance.symbol();
-		const decimals = await instance.decimals();
+		const contract = getContract({
+			address: contractAddress!,
+			abi: erc20ABI,
+		});
+		const name = await contract.read.name();
+		const symbol = await contract.read.symbol();
+		const decimals = await contract.read.decimals();
 		const ERC20Info = {
 			name,
 			symbol,
