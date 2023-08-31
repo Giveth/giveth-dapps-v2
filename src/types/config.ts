@@ -162,20 +162,6 @@ interface GIVpowerGIVgardenConfig {
 	GIVPOWER: GIVpowerGIVgardenStakingConfig;
 }
 
-export interface StreamNetworkConfig
-	extends NetworkConfig,
-		StreamConfig,
-		TokenPriceConfig,
-		GIVTokenConfig {}
-
-export interface FarmNetworkConfig extends StreamNetworkConfig, FarmConfig {}
-
-export interface RegenNetworkConfig
-	extends FarmNetworkConfig,
-		RegenFarmConfig {}
-
-export type GIVpowerConfig = GIVpowerGIVgardenConfig | GIVpowerUniPoolConfig;
-
 export interface MainnetNetworkConfig extends NetworkConfig {
 	TOKEN_DISTRO_ADDRESS: string;
 	pools: Array<
