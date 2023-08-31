@@ -10,7 +10,6 @@ import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
 import config from '@/configuration';
 import {
-	GIVTokenConfig,
 	SimplePoolStakingConfig,
 	UniswapV3PoolStakingConfig,
 } from '@/types/config';
@@ -122,7 +121,7 @@ export const GIVfarmBottom = () => {
 							size='Big'
 							target='_blank'
 							rel='noreferrer'
-							href={(_config as GIVTokenConfig).GIV_BUY_LINK}
+							href={_config.GIV_BUY_LINK}
 						>
 							{formatMessage({ id: 'label.buy_giv_token' })}
 						</GLink>
@@ -133,15 +132,12 @@ export const GIVfarmBottom = () => {
 							id: 'label.contract',
 						})} (${_config.chainName}):`}</GLink>
 						<GLink>
-							{shortenAddress(
-								(_config as GIVTokenConfig).GIV_TOKEN_ADDRESS,
-							)}
+							{shortenAddress(_config.GIV_TOKEN_ADDRESS)}
 						</GLink>
 						<CopyWrapper
 							onClick={() => {
 								navigator.clipboard.writeText(
-									(_config as GIVTokenConfig)
-										.GIV_TOKEN_ADDRESS,
+									_config.GIV_TOKEN_ADDRESS || '',
 								);
 							}}
 						>

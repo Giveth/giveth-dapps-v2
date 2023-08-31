@@ -6,7 +6,6 @@ import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { LiquidityPosition } from '@/types/nfts';
 import config from '@/configuration';
-import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
 import { getUniswapV3TokenURI } from '@/services/subgraph.service';
 import { Zero } from '@/helpers/number';
 import { IUniswapV3Pool, IUniswapV3Position } from '@/types/subgraph';
@@ -48,9 +47,7 @@ export const useLiquidityPositions = () => {
 
 	const mainnetConfig = config.MAINNET_CONFIG;
 
-	const uniswapConfig = mainnetConfig.pools.find(
-		c => c.type === StakingType.UNISWAPV3_ETH_GIV,
-	) as UniswapV3PoolStakingConfig;
+	const uniswapConfig = mainnetConfig.v3Pools[0];
 	const rewardToken = uniswapConfig.REWARD_TOKEN;
 	const poolAddress = uniswapConfig.UNISWAP_V3_LP_POOL;
 	const incentiveRefundeeAddress = uniswapConfig.INCENTIVE_REFUNDEE_ADDRESS;

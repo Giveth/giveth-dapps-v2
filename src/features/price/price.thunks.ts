@@ -8,14 +8,9 @@ import {
 export const fetchGIVPriceAsync = createAsyncThunk(
 	'price/fetchGIVPrice',
 	async (chainId: number) => {
-		if (chainId === config.MAINNET_NETWORK_NUMBER) {
-			return await fetchMainnetTokenPrice(
-				config.MAINNET_CONFIG.tokenAddressOnUniswapV2,
-			);
-		}
-		return await fetchGnosisTokenPrice(
-			config.GNOSIS_CONFIG.tokenAddressOnUniswapV2,
-		);
+		const tokenAddress =
+			config.NETWORKS_CONFIG[chainId]?.tokenAddressOnUniswapV2;
+		return tokenAddress ? await fetchGnosisTokenPrice(tokenAddress) : '0';
 	},
 );
 

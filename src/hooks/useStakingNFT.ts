@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
-import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
 import config from '@/configuration';
 import { getUniswapV3StakerContract } from '@/lib/contracts';
 import { getReward } from '@/lib/stakingNFT';
@@ -16,9 +15,7 @@ export const useStakingNFT = (stakedPositions: LiquidityPosition[]) => {
 	);
 
 	const mainnetConfig = config.MAINNET_CONFIG;
-	const uniswapV3Config = mainnetConfig.pools.find(
-		c => c.type === StakingType.UNISWAPV3_ETH_GIV,
-	) as UniswapV3PoolStakingConfig;
+	const uniswapV3Config = mainnetConfig.v3Pools[0];
 	const rewardToken = uniswapV3Config.REWARD_TOKEN;
 	const poolAddress = uniswapV3Config.UNISWAP_V3_LP_POOL;
 	const incentiveRefundeeAddress = uniswapV3Config.INCENTIVE_REFUNDEE_ADDRESS;

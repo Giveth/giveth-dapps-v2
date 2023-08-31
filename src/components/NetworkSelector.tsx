@@ -22,14 +22,14 @@ import { switchNetwork } from '@/lib/wallet';
 import { Flex } from './styled-components/Flex';
 import { ChangeNetworkModal } from './modals/ChangeNetwork';
 import config from '../configuration';
-import { BasicNetworkConfig } from '@/types/config';
+import { NetworkConfig } from '@/types/config';
 import NetworkLogo from './NetworkLogo';
 import { Shadow } from './styled-components/Shadow';
 
 export interface ISelected {
 	label: string;
 	value: number;
-	network: BasicNetworkConfig;
+	network: NetworkConfig;
 	active: boolean;
 }
 
