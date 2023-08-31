@@ -140,6 +140,7 @@ export interface BasicNetworkConfig extends INetworkParam {
 	DAI_TOKEN_ADDRESS?: string;
 	DAI_BUY_LINK?: string;
 	GIVPOWER?: GIVpowerStakingConfig;
+	gGIV_TOKEN_ADDRESS?: string;
 }
 
 interface GIVpowerStakingConfig extends SimplePoolStakingConfig {
@@ -156,9 +157,7 @@ interface GIVpowerGIVgardenConfig {
 	GIVPOWER: GIVpowerGIVgardenStakingConfig;
 }
 
-interface GIVgardenTokenConfig {
-	gGIV_TOKEN_ADDRESS: string;
-}
+interface GIVgardenTokenConfig {}
 
 interface PFPConfig {
 	PFP_CONTRACT_ADDRESS: string;
