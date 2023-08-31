@@ -145,6 +145,7 @@ export interface BasicNetworkConfig extends INetworkParam {
 	tokenAddressOnUniswapV2?: string; // For price purpose in test env, on production this must have the same value of `GIV_TOKEN_ADDRESS`
 	uniswapV2Subgraph?: string;
 	WETH_TOKEN_ADDRESS?: string;
+	MERKLE_ADDRESS?: string;
 }
 
 interface GIVpowerStakingConfig extends SimplePoolStakingConfig {
