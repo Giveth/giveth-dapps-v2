@@ -119,7 +119,7 @@ export interface INetworkParam {
 	iconUrls?: Array<string>;
 }
 
-export interface BasicNetworkConfig extends INetworkParam {
+export interface NetworkConfig extends INetworkParam {
 	nodeUrl: string;
 	blockExplorerName: string[];
 	gasPreference: GasPreference;
@@ -165,7 +165,7 @@ interface GIVpowerGIVgardenConfig {
 interface GIVgardenTokenConfig {}
 
 export interface StreamNetworkConfig
-	extends BasicNetworkConfig,
+	extends NetworkConfig,
 		StreamConfig,
 		TokenPriceConfig,
 		GIVTokenConfig {}
@@ -210,9 +210,9 @@ export interface EnvConfig {
 	CELO_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	GNOSIS_CONFIG: GnosisNetworkConfig;
-	POLYGON_CONFIG: BasicNetworkConfig;
+	POLYGON_CONFIG: NetworkConfig;
 	OPTIMISM_CONFIG: OptimismNetworkConfig;
-	CELO_CONFIG: BasicNetworkConfig;
+	CELO_CONFIG: NetworkConfig;
 	GARDEN_LINK: string;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
@@ -228,7 +228,7 @@ export interface GlobalConfig extends EnvConfig {
 	PFP_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
 	NETWORKS_CONFIG: {
-		[key: number]: BasicNetworkConfig;
+		[key: number]: NetworkConfig;
 	};
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
