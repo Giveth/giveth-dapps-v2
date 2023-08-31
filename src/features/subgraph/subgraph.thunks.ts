@@ -1,10 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import {
-	fetchMainnetInfo,
-	fetchGnosisInfo,
-	fetchOptimismInfo,
-	fetchChainInfo,
-} from './subgraph.services';
+import { fetchChainInfo } from './subgraph.services';
 import { ICurrentInfo } from './subgraph.types';
 import { chainInfoNames } from './subgraph.helper';
 
@@ -16,29 +11,6 @@ export const fetchChainInfoAsync = createAsyncThunk(
 			response: { ...response, isLoaded: true },
 			chainId: chainId,
 		};
-	},
-);
-export const fetchOptimismInfoAsync = createAsyncThunk(
-	'subgraph/fetchOptimismInfo',
-	async (userAddress?: string) => {
-		const response = await fetchOptimismInfo(userAddress);
-		return { ...response, isLoaded: true };
-	},
-);
-
-export const fetchGnosisInfoAsync = createAsyncThunk(
-	'subgraph/fetchGnosisInfo',
-	async (userAddress?: string) => {
-		const response = await fetchGnosisInfo(userAddress);
-		return { ...response, isLoaded: true };
-	},
-);
-
-export const fetchMainnetInfoAsync = createAsyncThunk(
-	'subgraph/fetchMainnetInfo',
-	async (userAddress?: string) => {
-		const response = await fetchMainnetInfo(userAddress);
-		return { ...response, isLoaded: true };
 	},
 );
 
