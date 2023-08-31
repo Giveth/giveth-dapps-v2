@@ -11,21 +11,29 @@ import styled from 'styled-components';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 
-interface IVerticalNumberedSteps {
-	inputArray: {
-		title: string;
-		description: string;
-		buttonText?: string;
-		buttonLink?: string;
-		element: JSX.Element;
-	}[];
+export interface IStepsArray {
+	title: string;
+	description: string;
+	buttonText?: string;
+	buttonLink?: string;
+	element: JSX.Element;
 }
 
-const VerticalNumberedStepsAlt = ({ inputArray }: IVerticalNumberedSteps) => {
+interface IVerticalNumberedSteps {
+	inputArray: IStepsArray[];
+	firstTitleOnRight?: boolean;
+}
+
+const VerticalNumberedStepsAlt = (props: IVerticalNumberedSteps) => {
+	const { inputArray, firstTitleOnRight } = props;
 	return (
 		<>
 			{inputArray.map((i, index) => (
-				<Row index={index} key={i.title}>
+				<Row
+					firstTitleOnRight={firstTitleOnRight}
+					index={index}
+					key={i.title}
+				>
 					<Desc>
 						<Flex gap='16px' alignItems='center'>
 							<Number>{index + 1}</Number>
@@ -92,7 +100,7 @@ const Element = styled.div`
 	}
 `;
 
-const Row = styled(Flex)<{ index: number }>`
+const Row = styled(Flex)<{ index: number; firstTitleOnRight?: boolean }>`
 	padding: 32px 0;
 	position: relative;
 	justify-content: space-between;
@@ -102,9 +110,12 @@ const Row = styled(Flex)<{ index: number }>`
 	gap: 40px;
 	flex-direction: column;
 	${mediaQueries.laptopS} {
-		flex-direction: ${({ index }) =>
-			index % 2 === 0 ? 'row' : 'row-reverse'};
-	}
+		flex-direction: ${({ index, firstTitleOnRight }) => {
+			if (firstTitleOnRight) {
+				return index % 2 === 0 ? 'row-reverse' : 'row';
+			}
+			return index % 2 === 0 ? 'row' : 'row-reverse';
+		}}
 `;
 
 export default VerticalNumberedStepsAlt;
