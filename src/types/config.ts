@@ -178,11 +178,24 @@ export interface RegenNetworkConfig
 
 export type GIVpowerConfig = GIVpowerGIVgardenConfig | GIVpowerUniPoolConfig;
 
-export interface MainnetNetworkConfig
-	extends RegenNetworkConfig,
-		PFPConfig,
-		DAITokenConfig {
+export interface MainnetNetworkConfig extends NetworkConfig {
+	TOKEN_DISTRO_ADDRESS: string;
+	pools: Array<
+		| SimplePoolStakingConfig
+		| BalancerPoolStakingConfig
+		| UniswapV3PoolStakingConfig
+		| ICHIPoolStakingConfig
+	>;
+	regenPools: RegenPoolStakingConfig[];
+	regenStreams: RegenStreamConfig[];
+	GIV_TOKEN_ADDRESS: string;
+	GIV_BUY_LINK: string;
+	PFP_CONTRACT_ADDRESS: string;
+	DAI_TOKEN_ADDRESS: string;
+	DAI_BUY_LINK: string;
 	WETH_TOKEN_ADDRESS: string;
+	tokenAddressOnUniswapV2: string;
+	uniswapV2Subgraph: string;
 }
 export interface GnosisNetworkConfig
 	extends RegenNetworkConfig,
