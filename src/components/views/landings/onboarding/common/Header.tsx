@@ -1,14 +1,20 @@
 import styled from 'styled-components';
 import { H2, H4, mediaQueries, neutralColors } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
-import { OnboardingHeaderWrapper } from '@/components/views/landings/onboarding/common.styled';
+import { OnboardingHeaderWrapper } from '@/components/views/landings/onboarding/common/common.styled';
 
-const OnboardingMainHeader = () => {
+interface IProps {
+	title: string;
+	subtitle: string;
+}
+
+const OnboardingHeader = (props: IProps) => {
+	const { title, subtitle } = props;
 	return (
 		<OnboardingHeaderWrapper>
 			<HeaderWrapper>
-				<H2 weight={700}>Get Started with Giveth</H2>
-				<H4>A step-by-step beginner’s guide to the Future of Giving</H4>
+				<H2 weight={700}>{title}</H2>
+				<H4>{subtitle}</H4>
 			</HeaderWrapper>
 		</OnboardingHeaderWrapper>
 	);
@@ -38,4 +44,4 @@ const HeaderWrapper = styled(Flex)`
 	}
 `;
 
-export default OnboardingMainHeader;
+export default OnboardingHeader;
