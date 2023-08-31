@@ -162,8 +162,6 @@ interface GIVpowerGIVgardenConfig {
 	GIVPOWER: GIVpowerGIVgardenStakingConfig;
 }
 
-interface GIVgardenTokenConfig {}
-
 export interface StreamNetworkConfig
 	extends NetworkConfig,
 		StreamConfig,
@@ -197,10 +195,19 @@ export interface MainnetNetworkConfig extends NetworkConfig {
 	tokenAddressOnUniswapV2: string;
 	uniswapV2Subgraph: string;
 }
-export interface GnosisNetworkConfig
-	extends RegenNetworkConfig,
-		GIVgardenTokenConfig,
-		GIVpowerGIVgardenConfig {
+export interface GnosisNetworkConfig extends NetworkConfig {
+	pools: Array<
+		| SimplePoolStakingConfig
+		| BalancerPoolStakingConfig
+		| UniswapV3PoolStakingConfig
+		| ICHIPoolStakingConfig
+	>;
+	regenPools: RegenPoolStakingConfig[];
+	regenStreams: RegenStreamConfig[];
+	GIV_TOKEN_ADDRESS: string;
+	GIV_BUY_LINK: string;
+	gGIV_TOKEN_ADDRESS: string;
+	GIVPOWER: GIVpowerGIVgardenStakingConfig;
 	MERKLE_ADDRESS: string;
 }
 
