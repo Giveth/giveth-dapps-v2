@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
-import { Contract } from '@ethersproject/contracts';
 import { useIntl } from 'react-intl';
 import {
 	brandColors,
@@ -12,11 +10,11 @@ import {
 	semanticColors,
 } from '@giveth/ui-design-system';
 // @ts-ignore
-import tokenAbi from 'human-standard-token-abi';
 import { captureException } from '@sentry/nextjs';
-import { BigNumber } from '@ethersproject/bignumber';
-import { BigNumberish, utils } from 'ethers';
-import { formatUnits, parseUnits } from '@ethersproject/units';
+import { formatUnits, parseUnits } from 'viem';
+
+import { getContract } from 'wagmi/actions';
+import { erc20ABI, useAccount, useChainId } from 'wagmi';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
@@ -63,7 +61,8 @@ interface IInputBox {
 }
 
 const CryptoDonation: FC = () => {
-	const { chainId: networkId, account, library, active } = useWeb3React();
+	const { address, isConnected } = useAccount();
+	const networkId = useChainId();
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
 	const { isEnabled, isSignedIn, balance } = useAppSelector(
@@ -85,10 +84,10 @@ const CryptoDonation: FC = () => {
 	const { supportCustomTokens, label: orgLabel } = organization || {};
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const noDonationSplit = Number(projectId!) === config.GIVETH_PROJECT_ID;
-
 	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
-	const [selectedTokenBalance, setSelectedTokenBalance] =
-		useState<BigNumberish>(BigNumber.from(0));
+	const [selectedTokenBalance, setSelectedTokenBalance] = useState<bigint>(
+		BigInt(0),
+	);
 	const [customInput, setCustomInput] = useState<any>();
 	const [amountTyped, setAmountTyped] = useState<number>();
 	const [inputBoxFocused, setInputBoxFocused] = useState(false);
@@ -113,6 +112,7 @@ const CryptoDonation: FC = () => {
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
+	// const {} = useChainModal();
 
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
@@ -128,6 +128,7 @@ const CryptoDonation: FC = () => {
 				networkId,
 				networkIds,
 			);
+			console.log('FilteredTokens', filteredTokens);
 			setAcceptedChains(networkIds);
 			if (filteredTokens.length < 1) {
 				setShowChangeNetworkModal(true);
@@ -147,8 +148,8 @@ const CryptoDonation: FC = () => {
 			setSelectedToken(undefined);
 		}
 		return () => clearPoll();
-	}, [selectedToken, isEnabled, account, balance]);
-
+	}, [selectedToken, isEnabled, address, balance]);
+	console.log('isConnected', isConnected);
 	useEffect(() => {
 		client
 			.query({
@@ -171,7 +172,7 @@ const CryptoDonation: FC = () => {
 
 	useEffect(() => {
 		setAmountTyped(undefined);
-	}, [selectedToken, isEnabled, account, networkId]);
+	}, [selectedToken, isEnabled, address, networkId]);
 
 	const checkGIVTokenAvailability = () => {
 		if (orgLabel !== ORGANIZATION.givingBlock) return true;
@@ -193,7 +194,7 @@ const CryptoDonation: FC = () => {
 	const pollToken = useCallback(() => {
 		clearPoll();
 		if (!selectedToken) {
-			return setSelectedTokenBalance(BigNumber.from(0));
+			return setSelectedTokenBalance(BigInt(0));
 		}
 		// Native token balance is provided by the Web3Provider
 		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
@@ -201,21 +202,22 @@ const CryptoDonation: FC = () => {
 			config.NETWORKS_CONFIG[networkId!]?.nativeCurrency;
 		if (_selectedTokenSymbol === nativeCurrency?.symbol?.toUpperCase()) {
 			return setSelectedTokenBalance(
-				utils.parseUnits(balance || '0', nativeCurrency.decimals),
+				parseUnits(balance || '0', nativeCurrency.decimals),
 			);
 		}
 		stopPolling.current = pollEvery(
 			() => ({
 				request: async () => {
 					try {
-						const instance = new Contract(
-							selectedToken.address!,
-							tokenAbi,
-							library,
-						);
-						const balance: BigNumber = await instance.balanceOf(
-							account,
-						);
+						const contract = getContract({
+							address: selectedToken.address! as `0x${string}`,
+							abi: erc20ABI,
+						});
+
+						const balance = await contract.read.balanceOf([
+							address!,
+						]);
+						console.log('Balaaance', balance);
 						return balance;
 					} catch (e) {
 						captureException(e, {
@@ -226,25 +228,23 @@ const CryptoDonation: FC = () => {
 						return 0;
 					}
 				},
-				onResult: (_balance: BigNumber) => {
-					if (_balance && !_balance.eq(selectedTokenBalance)) {
+				onResult: (_balance: bigint) => {
+					if (_balance && _balance !== selectedTokenBalance) {
 						setSelectedTokenBalance(_balance);
 					}
 				},
 			}),
 			POLL_DELAY_TOKENS,
 		)();
-	}, [account, networkId, tokenSymbol, balance]);
+	}, [address, networkId, tokenSymbol, balance]);
 
-	const handleCustomToken = (i: string) => {
+	const handleCustomToken = (i: `0x${string}`) => {
 		if (!supportCustomTokens) return;
 		// It's a contract
 		if (i?.length === 42) {
 			try {
 				// setSelectLoading(true);
 				getERC20Info({
-					library,
-					tokenAbi,
 					contractAddress: i,
 					networkId: networkId as number,
 				}).then(pastedToken => {
@@ -276,9 +276,8 @@ const CryptoDonation: FC = () => {
 
 	const handleDonate = () => {
 		if (
-			parseUnits(String(totalDonation), tokenDecimals).gt(
-				selectedTokenBalance,
-			)
+			parseUnits(String(totalDonation), tokenDecimals) >
+			selectedTokenBalance
 		) {
 			return setShowInsufficientModal(true);
 		}
@@ -300,7 +299,7 @@ const CryptoDonation: FC = () => {
 
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
-
+	console.log('isConnected', isConnected);
 	return (
 		<MainContainer>
 			<H4Styled weight={700}>
@@ -357,9 +356,10 @@ const CryptoDonation: FC = () => {
 									  })
 							}
 							projectVerified={project?.verified!}
-							disabled={!active}
+							disabled={!isConnected}
 						/>
 					</DropdownContainer>
+
 					<InputBox
 						value={amountTyped}
 						error={amountError}
@@ -375,7 +375,7 @@ const CryptoDonation: FC = () => {
 							if (checkGIV) setAmountTyped(val);
 						}}
 						onFocus={setInputBoxFocused}
-						disabled={!active}
+						disabled={!isConnected}
 					/>
 				</SearchContainer>
 				{selectedToken && (
