@@ -220,12 +220,6 @@ export interface EnvConfig {
 	RARIBLE_ADDRESS: string;
 }
 
-export type NetworkConfig =
-	| MainnetNetworkConfig
-	| GnosisNetworkConfig
-	| OptimismNetworkConfig
-	| BasicNetworkConfig;
-
 export interface GlobalConfig extends EnvConfig {
 	TOKEN_NAME: string;
 	WEB3_POLLING_INTERVAL: number;
@@ -234,7 +228,7 @@ export interface GlobalConfig extends EnvConfig {
 	PFP_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
 	NETWORKS_CONFIG: {
-		[key: number]: NetworkConfig;
+		[key: number]: BasicNetworkConfig;
 	};
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
