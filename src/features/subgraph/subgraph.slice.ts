@@ -6,6 +6,7 @@ import {
 	fetchGnosisInfoAsync,
 	fetchOptimismInfoAsync,
 	fetchAllInfoAsync,
+	fetchChainInfoAsync,
 } from './subgraph.thunks';
 import {
 	chainInfoNames,
@@ -33,10 +34,10 @@ export const subgraphSlice = createSlice({
 	extraReducers: builder => {
 		builder
 			.addCase(fetchCurrentInfoAsync.fulfilled, (state, action) => {
-				state.currentValues = action.payload.response;
-				const key = chainInfoNames[action.payload.chainId];
-				if (isSubgraphKeyValid(key))
-					state[key] = action.payload.response;
+				const { chainId, response } = action.payload;
+				state.currentValues = response;
+				const key = chainInfoNames[chainId];
+				if (isSubgraphKeyValid(key)) state[key] = response;
 			})
 			.addCase(fetchAllInfoAsync.fulfilled, (state, action) => {
 				const { chainId, response } = action.payload;
@@ -53,6 +54,11 @@ export const subgraphSlice = createSlice({
 						}
 					}
 				}
+			})
+			.addCase(fetchChainInfoAsync.fulfilled, (state, action) => {
+				const { chainId, response } = action.payload;
+				const key = chainInfoNames[chainId];
+				if (isSubgraphKeyValid(key)) state[key] = response;
 			})
 			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
 				state.mainnetValues = action.payload;
