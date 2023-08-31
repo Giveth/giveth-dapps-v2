@@ -1,12 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import config from '@/configuration';
 import {
-	fetchCurrentInfoAsync,
-	fetchMainnetInfoAsync,
-	fetchGnosisInfoAsync,
-	fetchOptimismInfoAsync,
 	fetchAllInfoAsync,
 	fetchChainInfoAsync,
+	fetchCurrentInfoAsync,
 } from './subgraph.thunks';
 import {
 	chainInfoNames,
@@ -59,15 +56,6 @@ export const subgraphSlice = createSlice({
 				const { chainId, response } = action.payload;
 				const key = chainInfoNames[chainId];
 				if (isSubgraphKeyValid(key)) state[key] = response;
-			})
-			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
-				state.mainnetValues = action.payload;
-			})
-			.addCase(fetchGnosisInfoAsync.fulfilled, (state, action) => {
-				state.gnosisValues = action.payload;
-			})
-			.addCase(fetchOptimismInfoAsync.fulfilled, (state, action) => {
-				state.optimismValues = action.payload;
 			});
 	},
 });
