@@ -34,8 +34,8 @@ export const subgraphSlice = createSlice({
 		builder
 			.addCase(fetchCurrentInfoAsync.fulfilled, (state, action) => {
 				state.currentValues = action.payload.response;
-				state[chainInfoNames[action.payload.chainId]] =
-					action.payload.response;
+				const key = chainInfoNames[action.payload.chainId];
+				if (isKeyValid(key)) state[key] = action.payload.response;
 			})
 			.addCase(fetchAllInfoAsync.fulfilled, (state, action) => {
 				const { chainId, response } = action.payload;
