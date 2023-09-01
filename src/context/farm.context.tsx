@@ -76,7 +76,7 @@ export function useFarms() {
 	const context = useContext(FarmContext);
 
 	if (!context) {
-		throw new Error('Token balance context not found!');
+		throw new Error('Farms context not found!');
 	}
 
 	return context;
