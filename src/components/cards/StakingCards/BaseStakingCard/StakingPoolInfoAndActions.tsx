@@ -7,7 +7,6 @@ import {
 } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import BigNumber from 'bignumber.js';
 import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
@@ -78,7 +77,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 }) => {
 	const [started, setStarted] = useState(true);
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
-	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
+	const [rewardStream, setRewardStream] = useState(0n);
 	const [isFirstStakeShown, setIsFirstStakeShown] = useState(false);
 	//Modals
 	const [showAPRModal, setShowAPRModal] = useState(false);
