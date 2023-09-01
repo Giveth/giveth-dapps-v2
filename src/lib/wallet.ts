@@ -5,7 +5,6 @@ import {
 	walletconnectConnector,
 } from '@/lib/wallet/walletTypes';
 import { switchNetwork as metamaskSwitchNetwork } from '@/lib/metamask';
-import config from '@/configuration';
 import StorageLabel from '@/lib/localStorage';
 import { showToastError } from './helpers';
 
@@ -69,12 +68,3 @@ export async function getAddressFromENS(ens: string | undefined, web3: any) {
 	if (!isEns) return new Error('Error addressNotENS');
 	return await web3.resolveName(ens);
 }
-
-export const switchNetworkHandler = (chainId: number | undefined) => {
-	if (!chainId) return;
-	if (chainId === config.GNOSIS_NETWORK_NUMBER) {
-		switchNetwork(config.MAINNET_NETWORK_NUMBER);
-	} else {
-		switchNetwork(config.GNOSIS_NETWORK_NUMBER);
-	}
-};
