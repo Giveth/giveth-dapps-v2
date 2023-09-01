@@ -335,7 +335,7 @@ export class SubgraphQueryBuilder {
 		const givpowerConfig = networkConfig.GIVPOWER;
 		return `
 		{
-			${SubgraphQueryBuilder.getBalanceQuery(config.OPTIMISM_CONFIG, userAddress)}
+			${SubgraphQueryBuilder.getBalanceQuery(networkConfig, userAddress)}
 			${SubgraphQueryBuilder.generateTokenDistroQueries(networkConfig, userAddress)}
 			${SubgraphQueryBuilder.generateFarmingQueries(
 				givpowerConfig
