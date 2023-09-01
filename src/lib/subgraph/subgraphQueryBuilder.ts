@@ -1,8 +1,4 @@
-import {
-	NetworkConfig,
-	SimplePoolStakingConfig,
-	StakingType,
-} from '@/types/config';
+import { NetworkConfig, SimplePoolStakingConfig } from '@/types/config';
 import config from '@/configuration';
 
 export class SubgraphQueryBuilder {
@@ -255,87 +251,12 @@ export class SubgraphQueryBuilder {
 		}}`;
 	};
 
-	static getMainnetQuery = (userAddress?: string): string => {
-		const uniswapConfig = config.MAINNET_CONFIG.v3Pools[0];
-		let uniswapV3PoolQuery = '';
-		if (uniswapConfig?.UNISWAP_V3_LP_POOL) {
-			uniswapV3PoolQuery = `
-			uniswapV3Pool: ${SubgraphQueryBuilder.getUniswapV3PoolQuery(
-				uniswapConfig.UNISWAP_V3_LP_POOL,
-			)}
-			`;
-		}
-
-		return `query {
-			${SubgraphQueryBuilder.getBalanceQuery(config.MAINNET_CONFIG, userAddress)}
-			${SubgraphQueryBuilder.generateTokenDistroQueries(
-				config.MAINNET_CONFIG,
-				userAddress,
-			)}
-			${SubgraphQueryBuilder.generateFarmingQueries(
-				[
-					...(config.MAINNET_CONFIG.pools.filter(
-						c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
-					) as Array<SimplePoolStakingConfig>),
-					...config.MAINNET_CONFIG.regenPools,
-				],
-				userAddress,
-			)}
-			${SubgraphQueryBuilder.getUniswapPositionsQuery(userAddress)}
-			${uniswapV3PoolQuery}
-		}
-		`;
-	};
-
-	static getGnosisQuery = (userAddress?: string): string => {
-		return `
-		{
-			${SubgraphQueryBuilder.getBalanceQuery(config.GNOSIS_CONFIG, userAddress)}
-			${SubgraphQueryBuilder.generateTokenDistroQueries(
-				config.GNOSIS_CONFIG,
-				userAddress,
-			)}
-			${SubgraphQueryBuilder.generateFarmingQueries(
-				[
-					config.GNOSIS_CONFIG.GIVPOWER,
-					...(config.GNOSIS_CONFIG
-						.pools as Array<SimplePoolStakingConfig>),
-					...config.GNOSIS_CONFIG.regenPools,
-				],
-				userAddress,
-			)}
-			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery(
-				config.GNOSIS_CONFIG.GIVPOWER.LM_ADDRESS,
-			)},
-		}
-		`;
-	};
-
-	static getOptimismQuery = (userAddress?: string): string => {
-		return `
-		{
-			${SubgraphQueryBuilder.getBalanceQuery(config.OPTIMISM_CONFIG, userAddress)}
-			${SubgraphQueryBuilder.generateTokenDistroQueries(
-				config.OPTIMISM_CONFIG,
-				userAddress,
-			)}
-			${SubgraphQueryBuilder.generateFarmingQueries(
-				[config.OPTIMISM_CONFIG.GIVPOWER],
-				userAddress,
-			)}
-			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery(
-				config.OPTIMISM_CONFIG.GIVPOWER.LM_ADDRESS,
-			)},
-		}
-		`;
-	};
-
 	static getChainQuery = (chainId: number, userAddress?: string): string => {
 		const networkConfig = config.NETWORKS_CONFIG[chainId];
 		const givpowerConfig = networkConfig.GIVPOWER;
 		return `
 		{
-			${SubgraphQueryBuilder.getBalanceQuery(config.OPTIMISM_CONFIG, userAddress)}
+			${SubgraphQueryBuilder.getBalanceQuery(networkConfig, userAddress)}
 			${SubgraphQueryBuilder.generateTokenDistroQueries(networkConfig, userAddress)}
 			${SubgraphQueryBuilder.generateFarmingQueries(
 				givpowerConfig

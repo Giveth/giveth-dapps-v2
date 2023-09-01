@@ -82,7 +82,7 @@ export class SubgraphDataHelper {
 	getGIVTokenDistro(): ITokenDistro {
 		const tokenDistroAddress =
 			config.NETWORKS_CONFIG[this.state.networkNumber as number]
-				.TOKEN_DISTRO_ADDRESS;
+				?.TOKEN_DISTRO_ADDRESS;
 		return this.getTokenDistro(tokenDistroAddress);
 	}
 
