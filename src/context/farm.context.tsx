@@ -48,7 +48,6 @@ export interface ITotalEarned {
 
 export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
 	const [chainsInfo, setChainsInfo] = useState<IChainsInfo>({});
-	// const [totalEarned, setTotalEarned] = useState<ITotalEarned>({});
 	const { account } = useWeb3React();
 
 	const setChainInfo = useCallback(
@@ -69,42 +68,13 @@ export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
 				...prevInfos,
 				[network]: newChainInfo,
 			}));
-			// if (network === config.MAINNET_NETWORK_NUMBER) {
-			// 	setMainnetInfos(prevInfos => ({ ...prevInfos, [key]: value }));
-			// } else if (network === config.GNOSIS_NETWORK_NUMBER) {
-			// 	setxDaiInfos(prevInfos => ({ ...prevInfos, [key]: value }));
-			// }
 		},
 		[],
 	);
 
-	console.log('chainsInfo', chainsInfo);
-
-	// useEffect(() => {
-	// 	let sum = ethers.constants.Zero;
-	// 	for (const key in xDaiInfos) {
-	// 		if (Object.prototype.hasOwnProperty.call(xDaiInfos, key)) {
-	// 			const value = xDaiInfos[key];
-	// 			sum = sum.add(value);
-	// 		}
-	// 	}
-	// 	setxDaiTotalEarned(sum);
-	// }, [chainsInfo]);
-
 	useEffect(() => {
 		setChainsInfo({});
-		// setTotalEarned({});
 	}, [account]);
-
-	// useEffect(() => {
-	// 	if (chainId === config.MAINNET_NETWORK_NUMBER) {
-	// 		setxDaiInfos({});
-	// 		setxDaiTotalEarned(ethers.constants.Zero);
-	// 	} else if (chainId === config.GNOSIS_NETWORK_NUMBER) {
-	// 		setMainnetInfos({});
-	// 		setMainnetTotalEarned(ethers.constants.Zero);
-	// 	}
-	// }, [chainId]);
 
 	return (
 		<FarmContext.Provider
