@@ -23,13 +23,13 @@ export const FarmContext = createContext<FarmContext>({
 
 FarmContext.displayName = 'FarmContext';
 
+interface IFarmProvider {
+	children: ReactNode;
+}
+
 interface IInfo {
 	[key: string]: bigint;
 	totalInfo: bigint;
-}
-
-interface IFarmProvider {
-	children: ReactNode;
 }
 
 export interface IChainsInfo {
