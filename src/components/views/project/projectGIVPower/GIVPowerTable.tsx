@@ -22,7 +22,7 @@ const GIVPowerTable: FC<IGIVPowerTableProps> = ({
 }) => {
 	return (
 		<Container>
-			<TableHeader></TableHeader>
+			<BoosterHeader>Booster</BoosterHeader>
 			<TableHeader>
 				<IconRocketInSpace size={20} />
 				Amount
@@ -71,6 +71,11 @@ const Container = styled.div`
 	margin-bottom: 10px;
 	display: grid;
 	grid-template-columns: 4fr 1fr;
+`;
+
+const BoosterHeader = styled(TableHeader)`
+	padding-left: 16px;
+	margin-left: 28px;
 `;
 
 export default GIVPowerTable;
