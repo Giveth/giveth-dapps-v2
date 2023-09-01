@@ -36,10 +36,6 @@ export interface IChainsInfo {
 	[key: number]: IInfo;
 }
 
-export interface ITotalEarned {
-	[key: string]: bigint;
-}
-
 export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
 	const [chainsInfo, setChainsInfo] = useState<IChainsInfo>({});
 	const { account } = useWeb3React();
