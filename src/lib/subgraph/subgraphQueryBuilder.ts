@@ -1,8 +1,4 @@
-import {
-	NetworkConfig,
-	SimplePoolStakingConfig,
-	StakingType,
-} from '@/types/config';
+import { NetworkConfig, SimplePoolStakingConfig } from '@/types/config';
 import config from '@/configuration';
 
 export class SubgraphQueryBuilder {
@@ -253,38 +249,6 @@ export class SubgraphQueryBuilder {
 			unlockedAt
 			unlocked
 		}}`;
-	};
-
-	static getMainnetQuery = (userAddress?: string): string => {
-		const uniswapConfig = config.MAINNET_CONFIG.v3Pools[0];
-		let uniswapV3PoolQuery = '';
-		if (uniswapConfig?.UNISWAP_V3_LP_POOL) {
-			uniswapV3PoolQuery = `
-			uniswapV3Pool: ${SubgraphQueryBuilder.getUniswapV3PoolQuery(
-				uniswapConfig.UNISWAP_V3_LP_POOL,
-			)}
-			`;
-		}
-
-		return `query {
-			${SubgraphQueryBuilder.getBalanceQuery(config.MAINNET_CONFIG, userAddress)}
-			${SubgraphQueryBuilder.generateTokenDistroQueries(
-				config.MAINNET_CONFIG,
-				userAddress,
-			)}
-			${SubgraphQueryBuilder.generateFarmingQueries(
-				[
-					...(config.MAINNET_CONFIG.pools.filter(
-						c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
-					) as Array<SimplePoolStakingConfig>),
-					...config.MAINNET_CONFIG.regenPools,
-				],
-				userAddress,
-			)}
-			${SubgraphQueryBuilder.getUniswapPositionsQuery(userAddress)}
-			${uniswapV3PoolQuery}
-		}
-		`;
 	};
 
 	static getChainQuery = (chainId: number, userAddress?: string): string => {
