@@ -287,30 +287,6 @@ export class SubgraphQueryBuilder {
 		`;
 	};
 
-	static getGnosisQuery = (userAddress?: string): string => {
-		return `
-		{
-			${SubgraphQueryBuilder.getBalanceQuery(config.GNOSIS_CONFIG, userAddress)}
-			${SubgraphQueryBuilder.generateTokenDistroQueries(
-				config.GNOSIS_CONFIG,
-				userAddress,
-			)}
-			${SubgraphQueryBuilder.generateFarmingQueries(
-				[
-					config.GNOSIS_CONFIG.GIVPOWER,
-					...(config.GNOSIS_CONFIG
-						.pools as Array<SimplePoolStakingConfig>),
-					...config.GNOSIS_CONFIG.regenPools,
-				],
-				userAddress,
-			)}
-			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery(
-				config.GNOSIS_CONFIG.GIVPOWER.LM_ADDRESS,
-			)},
-		}
-		`;
-	};
-
 	static getOptimismQuery = (userAddress?: string): string => {
 		return `
 		{
