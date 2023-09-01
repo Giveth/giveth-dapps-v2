@@ -287,25 +287,6 @@ export class SubgraphQueryBuilder {
 		`;
 	};
 
-	static getOptimismQuery = (userAddress?: string): string => {
-		return `
-		{
-			${SubgraphQueryBuilder.getBalanceQuery(config.OPTIMISM_CONFIG, userAddress)}
-			${SubgraphQueryBuilder.generateTokenDistroQueries(
-				config.OPTIMISM_CONFIG,
-				userAddress,
-			)}
-			${SubgraphQueryBuilder.generateFarmingQueries(
-				[config.OPTIMISM_CONFIG.GIVPOWER],
-				userAddress,
-			)}
-			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery(
-				config.OPTIMISM_CONFIG.GIVPOWER.LM_ADDRESS,
-			)},
-		}
-		`;
-	};
-
 	static getChainQuery = (chainId: number, userAddress?: string): string => {
 		const networkConfig = config.NETWORKS_CONFIG[chainId];
 		const givpowerConfig = networkConfig.GIVPOWER;
