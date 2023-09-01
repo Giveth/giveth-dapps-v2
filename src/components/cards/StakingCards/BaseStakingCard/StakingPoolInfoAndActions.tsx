@@ -97,7 +97,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		showHarvestModal ||
 		showLockModal;
 	const { formatMessage } = useIntl();
-	const { setInfo } = useFarms();
+	const { setChainInfo } = useFarms();
 	const router = useRouter();
 	const {
 		apr,
@@ -136,8 +136,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 
 	useEffect(() => {
 		if (!(exploited || regenStreamConfig))
-			setInfo(poolNetwork, type, earned);
-	}, [poolNetwork, earned, type, regenStreamConfig, setInfo]);
+			setChainInfo(poolNetwork, type, earned);
+	}, [poolNetwork, earned, type, regenStreamConfig, setChainInfo, exploited]);
 
 	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
 
