@@ -77,7 +77,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	currentIncentive,
 }) => {
 	const [started, setStarted] = useState(true);
-	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
+	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
 	const [isFirstStakeShown, setIsFirstStakeShown] = useState(false);
 	//Modals
