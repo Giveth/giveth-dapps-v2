@@ -142,7 +142,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
 
 	const availableStakedToken = isGIVpower
-		? stakedLpAmount.sub(userGIVLocked.balance)
+		? stakedLpAmount - BigInt(userGIVLocked.balance)
 		: stakedLpAmount;
 
 	useEffect(() => {
