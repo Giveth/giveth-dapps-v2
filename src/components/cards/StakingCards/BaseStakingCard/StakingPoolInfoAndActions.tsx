@@ -199,16 +199,15 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 											id: 'label.your_cummulative_apr_including_both_rewards',
 										})}{' '}
 										(
-										{apr?.vaultIRR &&
-											formatEthHelper(apr.vaultIRR)}
+										{apr?.vaultIRR
+											? apr?.vaultIRR?.toString()
+											: '0'}
 										% IRR),{' '}
 										{formatMessage({
 											id: 'label.and_rewards_earned_in_giv',
 										})}{' '}
-										(
-										{apr &&
-											formatEthHelper(apr.effectiveAPR)}
-										% APR).
+										({apr && apr.effectiveAPR.toString()}%
+										APR).
 									</AngelVaultTooltip>
 								</IconWithTooltip>
 							)}
