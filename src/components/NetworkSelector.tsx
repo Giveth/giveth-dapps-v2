@@ -38,11 +38,12 @@ const _options = [
 	{ network: config.GNOSIS_CONFIG, active: true },
 	{ network: config.OPTIMISM_CONFIG, active: true },
 	{ network: config.CELO_CONFIG, active: false },
+	{ network: {} as NetworkConfig, active: false },
 ];
 
 const options = _options.map(o => ({
-	label: o.network.chainName,
-	value: parseInt(o.network.chainId),
+	label: o.network?.chainName || 'select network',
+	value: parseInt(o.network?.chainId || '0'),
 	network: o.network,
 	active: o.active,
 }));
@@ -58,6 +59,10 @@ const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 const Option: ComponentType<OptionProps<ISelected>> = props => {
 	const { data, isSelected, isDisabled } = props;
 	const { value, label } = data;
+
+	if (!value) {
+		return null;
+	}
 
 	return (
 		<components.Option {...props}>
@@ -167,7 +172,7 @@ const selectStyles: StylesConfig = {
 
 export const NetworkSelector = () => {
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
-	const [value, setValue] = useState(options[1]);
+	const [value, setValue] = useState<ISelected>();
 	const [targetNetwork, setTargetNetwork] = useState(
 		config.MAINNET_NETWORK_NUMBER,
 	);
@@ -186,11 +191,11 @@ export const NetworkSelector = () => {
 	};
 
 	useEffect(() => {
-		if (chainId) {
-			const selected = options.find(o => o.value === chainId);
-			if (selected) {
-				setValue(selected);
-			}
+		const selected = options.find(o => o.value === chainId);
+		if (selected) {
+			setValue(selected);
+		} else {
+			setValue(options[options.length - 1]);
 		}
 	}, [chainId]);
 
@@ -220,6 +225,7 @@ export const NetworkSelector = () => {
 						isSearchable={false}
 						isMulti={false}
 						isOptionDisabled={(option: any) => !option.active}
+						defaultValue={value}
 					/>
 				</NetworkSelectorContainer>
 			) : (
