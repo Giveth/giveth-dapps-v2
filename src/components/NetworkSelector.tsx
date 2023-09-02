@@ -190,7 +190,6 @@ export const NetworkSelector = () => {
 		if (selected) {
 			setValue(selected);
 		} else {
-			// setValue(options[options.length - 1]);
 			setValue(null);
 		}
 	}, [chainId]);
