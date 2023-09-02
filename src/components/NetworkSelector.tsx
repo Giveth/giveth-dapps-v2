@@ -41,8 +41,8 @@ const _options = [
 ];
 
 const options = _options.map(o => ({
-	label: o.network?.chainName || 'select network',
-	value: parseInt(o.network?.chainId || '0'),
+	label: o.network?.chainName,
+	value: parseInt(o.network?.chainId),
 	network: o.network,
 	active: o.active,
 }));
