@@ -29,8 +29,8 @@ export const getHistory = async (
 	count?: number,
 ): Promise<ITokenAllocation[]> => {
 	const networkConfig = config.NETWORKS_CONFIG[network];
-	let tokenDistroAddress = networkConfig.TOKEN_DISTRO_ADDRESS;
-	let uri = networkConfig.subgraphAddress;
+	let tokenDistroAddress = networkConfig?.TOKEN_DISTRO_ADDRESS;
+	let uri = networkConfig?.subgraphAddress;
 	if (!tokenDistroAddress || !uri) {
 		console.error('Network is not Defined!');
 		return [];
