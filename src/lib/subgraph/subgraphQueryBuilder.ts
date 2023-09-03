@@ -271,12 +271,13 @@ export class SubgraphQueryBuilder {
 					  ],
 				userAddress,
 			)}
-			givpowerInfo: ${
+			${
 				givpowerConfig?.LM_ADDRESS
-					? SubgraphQueryBuilder.getGIVPowersInfoQuery(
+					? 'givpowerInfo:' +
+					  SubgraphQueryBuilder.getGIVPowersInfoQuery(
 							givpowerConfig.LM_ADDRESS,
 					  )
-					: undefined
+					: ''
 			},
 		}
 		`;
