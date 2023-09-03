@@ -404,7 +404,7 @@ const config: EnvConfig = {
 		chainLogo: (logoSize = 24) => <IconOptimism size={logoSize} />,
 		GIVPOWER: {
 			network: OPTIMISM_NETWORK_NUMBER,
-			LM_ADDRESS: '0x...',
+			LM_ADDRESS: '0x301C739CF6bfb6B47A74878BdEB13f92F13Ae5E7',
 			POOL_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 			type: StakingType.GIV_UNIPOOL_LM,
 			platform: StakingPlatform.GIVETH,
