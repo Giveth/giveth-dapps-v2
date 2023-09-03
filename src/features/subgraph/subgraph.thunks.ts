@@ -29,15 +29,16 @@ export const fetchAllInfoAsync = createAsyncThunk(
 	'subgraph/fetchAllInfo',
 	async ({ userAddress, chainId }: ICurrentInfo) => {
 		const chainIds = Object.keys(chainInfoNames).map(Number);
+		const chainValues = Object.values(chainInfoNames);
 		const res = await Promise.all(
 			chainIds.map(id => fetchChainInfo(id, userAddress)),
 		);
 
-		const response = {
-			mainnetValues: res[0],
-			gnosisValues: res[1],
-			optimismValues: res[2],
-		};
+		let response = {};
+		for (let i = 0; i < res.length; i++) {
+			const element = res[i];
+			response = { ...response, [chainValues[i]]: element };
+		}
 
 		return {
 			response: { ...response, isLoaded: true },
