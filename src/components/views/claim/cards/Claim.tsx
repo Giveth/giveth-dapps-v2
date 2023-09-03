@@ -66,7 +66,7 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 			return false;
 		}
 
-		return chainId === config.XDAI_NETWORK_NUMBER;
+		return chainId === config.GNOSIS_NETWORK_NUMBER;
 	};
 
 	const openHarvestModal = async () => {
@@ -120,7 +120,7 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 			{showClaimModal && (
 				<GIVdropHarvestModal
 					setShowModal={setShowClaimModal}
-					network={config.XDAI_NETWORK_NUMBER}
+					network={config.GNOSIS_NETWORK_NUMBER}
 					givdropAmount={totalAmount}
 					checkNetworkAndWallet={checkNetworkAndWallet}
 					onSuccess={onSuccess}

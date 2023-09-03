@@ -1,28 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import config from '@/configuration';
 import {
+	fetchAllInfoAsync,
+	fetchChainInfoAsync,
 	fetchCurrentInfoAsync,
-	fetchMainnetInfoAsync,
-	fetchGnosisInfoAsync,
-	fetchOptimismInfoAsync,
 } from './subgraph.thunks';
+import {
+	chainInfoNames,
+	getDefaultSubgraphValues,
+	isSubgraphKeyValid,
+} from './subgraph.helper';
 import type { ISubgraphState } from './subgraph.types';
-
-export const defaultSubgraphValues: ISubgraphState = {
-	userNotStakedPositions: [],
-	userStakedPositions: [],
-	allPositions: [],
-	networkNumber: config.MAINNET_NETWORK_NUMBER,
-	isLoaded: false,
-};
-
-export const defaultXdaiSubgraphValues: ISubgraphState = {
-	userNotStakedPositions: [],
-	userStakedPositions: [],
-	allPositions: [],
-	networkNumber: config.XDAI_NETWORK_NUMBER,
-	isLoaded: false,
-};
 
 const initialState: {
 	currentValues: ISubgraphState;
@@ -30,10 +18,10 @@ const initialState: {
 	gnosisValues: ISubgraphState;
 	optimismValues: ISubgraphState;
 } = {
-	currentValues: defaultSubgraphValues,
-	mainnetValues: defaultSubgraphValues,
-	gnosisValues: defaultXdaiSubgraphValues,
-	optimismValues: defaultSubgraphValues,
+	currentValues: getDefaultSubgraphValues(config.MAINNET_NETWORK_NUMBER), // Mainnet by default
+	mainnetValues: getDefaultSubgraphValues(config.MAINNET_NETWORK_NUMBER),
+	gnosisValues: getDefaultSubgraphValues(config.GNOSIS_NETWORK_NUMBER),
+	optimismValues: getDefaultSubgraphValues(config.OPTIMISM_NETWORK_NUMBER),
 };
 
 export const subgraphSlice = createSlice({
@@ -43,32 +31,33 @@ export const subgraphSlice = createSlice({
 	extraReducers: builder => {
 		builder
 			.addCase(fetchCurrentInfoAsync.fulfilled, (state, action) => {
-				state.currentValues = action.payload.response;
-				if (action.payload.chainId === config.MAINNET_NETWORK_NUMBER) {
-					state.mainnetValues = action.payload.response;
-				} else if (
-					action.payload.chainId === config.XDAI_NETWORK_NUMBER
-				) {
-					state.gnosisValues = action.payload.response;
-				} else if (
-					action.payload.chainId === config.OPTIMISM_NETWORK_NUMBER
-				) {
-					state.optimismValues = action.payload.response;
+				const { chainId, response } = action.payload;
+				state.currentValues = response;
+				const key = chainInfoNames[chainId];
+				if (isSubgraphKeyValid(key)) state[key] = response;
+			})
+			.addCase(fetchAllInfoAsync.fulfilled, (state, action) => {
+				const { chainId, response } = action.payload;
+				for (const key in response) {
+					if (
+						Object.prototype.hasOwnProperty.call(state, key) &&
+						isSubgraphKeyValid(key)
+					) {
+						const chainInfo = response[key];
+						if (chainInfo) {
+							state[key] = chainInfo;
+							if (chainInfo.networkNumber === chainId)
+								state.currentValues = chainInfo;
+						}
+					}
 				}
 			})
-			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
-				state.mainnetValues = action.payload;
-			})
-			.addCase(fetchGnosisInfoAsync.fulfilled, (state, action) => {
-				state.gnosisValues = action.payload;
-			})
-			.addCase(fetchOptimismInfoAsync.fulfilled, (state, action) => {
-				state.optimismValues = action.payload;
+			.addCase(fetchChainInfoAsync.fulfilled, (state, action) => {
+				const { chainId, response } = action.payload;
+				const key = chainInfoNames[chainId];
+				if (isSubgraphKeyValid(key)) state[key] = response;
 			});
 	},
 });
-
-// Action creators are generated for each case reducer function
-// export const {} = subgraphSlice.actions;
 
 export default subgraphSlice.reducer;

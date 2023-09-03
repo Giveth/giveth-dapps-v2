@@ -6,7 +6,6 @@ import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { LiquidityPosition } from '@/types/nfts';
 import config from '@/configuration';
-import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
 import { getUniswapV3TokenURI } from '@/services/subgraph.service';
 import { Zero } from '@/helpers/number';
 import { IUniswapV3Pool, IUniswapV3Position } from '@/types/subgraph';
@@ -48,9 +47,7 @@ export const useLiquidityPositions = () => {
 
 	const mainnetConfig = config.MAINNET_CONFIG;
 
-	const uniswapConfig = mainnetConfig.pools.find(
-		c => c.type === StakingType.UNISWAPV3_ETH_GIV,
-	) as UniswapV3PoolStakingConfig;
+	const uniswapConfig = mainnetConfig.v3Pools[0];
 	const rewardToken = uniswapConfig.REWARD_TOKEN;
 	const poolAddress = uniswapConfig.UNISWAP_V3_LP_POOL;
 	const incentiveRefundeeAddress = uniswapConfig.INCENTIVE_REFUNDEE_ADDRESS;
@@ -138,12 +135,12 @@ export const useLiquidityPositions = () => {
 
 				setLoadingNftPositions(true);
 
-				const { TOKEN_ADDRESS, WETH_TOKEN_ADDRESS } =
+				const { GIV_TOKEN_ADDRESS, WETH_TOKEN_ADDRESS } =
 					config.MAINNET_CONFIG;
 
 				const givToken = new Token(
 					network,
-					TOKEN_ADDRESS,
+					GIV_TOKEN_ADDRESS,
 					18,
 					'GIV',
 					'GIV',
@@ -158,7 +155,7 @@ export const useLiquidityPositions = () => {
 
 				const givIsToken0 =
 					uniswapV3Pool.token0.toLowerCase() ===
-					TOKEN_ADDRESS.toLowerCase();
+					GIV_TOKEN_ADDRESS.toLowerCase();
 
 				const _token0: Token = givIsToken0 ? givToken : wethToken;
 				const _token1: Token = givIsToken0 ? wethToken : givToken;
