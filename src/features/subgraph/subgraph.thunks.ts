@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchChainInfo } from './subgraph.services';
-import { ICurrentInfo } from './subgraph.types';
+import { ICurrentInfo, ISubgraphState } from './subgraph.types';
 import { chainInfoNames } from './subgraph.helper';
 
 export const fetchChainInfoAsync = createAsyncThunk(
@@ -34,10 +34,12 @@ export const fetchAllInfoAsync = createAsyncThunk(
 			chainIds.map(id => fetchChainInfo(id, userAddress)),
 		);
 
-		let response = {};
+		let response: {
+			[key: string]: ISubgraphState;
+		} = {};
 		for (let i = 0; i < res.length; i++) {
-			const element = res[i];
-			response = { ...response, [chainValues[i]]: element };
+			const element = res[i] as ISubgraphState;
+			response[chainValues[i]] = element;
 		}
 
 		return {
