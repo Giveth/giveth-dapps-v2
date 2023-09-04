@@ -41,7 +41,6 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
-// import useLeaveConfirm from '@/hooks/useLeaveConfirm';
 import config from '@/configuration';
 import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
@@ -51,6 +50,7 @@ import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
+import StorageLabel from '@/lib/localStorage';
 
 const { NETWORKS_CONFIG } = config;
 const networksIds = Object.keys(NETWORKS_CONFIG).map(Number);
@@ -91,8 +91,29 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	>(undefined);
 
 	const isEditMode = !!project;
+
+	let storageProjectData: TInputs | undefined;
+
+	if (!isEditMode) {
+		const storedProject = localStorage.getItem(
+			StorageLabel.CREATE_PROJECT_FORM,
+		);
+		if (storedProject) {
+			storageProjectData = JSON.parse(storedProject);
+		}
+	}
+
 	const { title, description, categories, impactLocation, image, addresses } =
 		project || {};
+	const {
+		name: storageTitle,
+		description: storageDescription,
+		categories: storageCategories,
+		impactLocation: storageImpactLocation,
+		image: storageImage,
+		addresses: storageAddresses = {},
+	} = storageProjectData || {};
+
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = impactLocation || '';
 	const activeAddresses = addresses?.filter(a => a.isRecipient) || [];
@@ -108,22 +129,47 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		mode: 'onBlur',
 		reValidateMode: 'onBlur',
 		defaultValues: {
-			[EInputs.name]: title,
-			[EInputs.description]: description || '',
-			[EInputs.categories]: categories || [],
-			[EInputs.impactLocation]: defaultImpactLocation,
-			[EInputs.image]: image || '',
-			[EInputs.addresses]: addressesObj,
+			[EInputs.name]: title || storageTitle,
+			[EInputs.description]: description || storageDescription || '',
+			[EInputs.categories]: categories || storageCategories || [],
+			[EInputs.impactLocation]:
+				defaultImpactLocation || storageImpactLocation,
+			[EInputs.image]: image || storageImage || '',
+			[EInputs.addresses]: isEditMode ? addressesObj : storageAddresses,
 		},
 	});
 
-	const { handleSubmit, setValue } = formMethods;
+	const { handleSubmit, setValue, watch } = formMethods;
 
 	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
 	const [isLoading, setIsLoading] = useState(false);
 	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
 
-	// useLeaveConfirm({ shouldConfirm: formChange });
+	const data = watch();
+	const {
+		name: watchName,
+		description: watchDescription,
+		categories: watchCategories,
+		image: watchImage,
+		impactLocation: watchImpactLocation,
+		addresses: watchAddresses,
+	} = data;
+
+	useEffect(() => {
+		if (isEditMode) return;
+		localStorage.setItem(
+			StorageLabel.CREATE_PROJECT_FORM,
+			JSON.stringify(data),
+		);
+	}, [
+		watchName,
+		watchDescription,
+		watchCategories,
+		watchImage,
+		watchImpactLocation,
+		watchAddresses,
+	]);
+
 	const onSubmit = async (formData: TInputs) => {
 		try {
 			setIsLoading(true);
@@ -189,6 +235,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			if (addedProject) {
 				// Success
 				setIsLoading(false);
+				if (!isEditMode) {
+					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
+				}
 				const _project = isEditMode
 					? addedProject.data?.updateProject
 					: addedProject.data?.createProject;
