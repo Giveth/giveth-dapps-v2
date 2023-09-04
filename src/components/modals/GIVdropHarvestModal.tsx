@@ -186,16 +186,16 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 			if (tx) {
 				setTxResp(tx);
 				setClaimState(ClaimState.SUBMITTING);
-				showPendingClaim(config.XDAI_NETWORK_NUMBER, tx.hash);
+				showPendingClaim(config.GNOSIS_NETWORK_NUMBER, tx.hash);
 				const { status } = await tx.wait();
 
 				if (status) {
 					setClaimState(ClaimState.CLAIMED);
 					onSuccess(tx);
-					showConfirmedClaim(config.XDAI_NETWORK_NUMBER, tx.hash);
+					showConfirmedClaim(config.GNOSIS_NETWORK_NUMBER, tx.hash);
 				} else {
 					setClaimState(ClaimState.ERROR);
-					showFailedClaim(config.XDAI_NETWORK_NUMBER, tx.hash);
+					showFailedClaim(config.GNOSIS_NETWORK_NUMBER, tx.hash);
 				}
 			}
 		} catch (e) {

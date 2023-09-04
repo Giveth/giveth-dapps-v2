@@ -75,7 +75,12 @@ const LockModal: FC<ILockModalProps> = ({
 		: stakedLpAmount;
 
 	const onLock = async () => {
-		const contractAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
+		const contractAddress =
+			config.NETWORKS_CONFIG[poolNetwork].GIVPOWER?.LM_ADDRESS;
+		if (!contractAddress) {
+			console.error('No GIVPOWER LM address found');
+			return;
+		}
 		setLockState(ELockState.LOCKING);
 		try {
 			const txResponse = await lockToken(

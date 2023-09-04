@@ -18,7 +18,7 @@ import { DonateContributeCard } from '@/components/ContributeCard';
 
 const itemPerPage = 10;
 
-const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
+const ProfileDonationsTab: FC<IUserProfileView> = () => {
 	const [loading, setLoading] = useState(false);
 	const [donations, setDonations] = useState<IWalletDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState<number>(0);
@@ -27,6 +27,7 @@ const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 		by: EOrderBy.CreationDate,
 		direction: EDirection.DESC,
 	});
+	const { myAccount, user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
 	const changeOrder = (orderBy: EOrderBy) => {
@@ -79,7 +80,7 @@ const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 			{!myAccount && (
 				<Row>
 					<Col lg={6}>
-						<DonateContributeCard user={user} />
+						<DonateContributeCard />
 					</Col>
 				</Row>
 			)}
