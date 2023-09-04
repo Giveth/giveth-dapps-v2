@@ -148,7 +148,6 @@ const Table = styled.div`
 	grid-template-columns: 1.5fr 1.3fr 4fr 1.1fr 1.5fr 2fr 130px;
 	overflow: auto;
 	min-width: 900px;
-
 	${mediaQueries.laptopS} {
 		min-width: 1000px;
 	}

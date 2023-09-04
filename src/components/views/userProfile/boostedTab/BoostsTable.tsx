@@ -268,7 +268,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 				{myAccount && mode === ETableNode.VIEWING && (
 					<TableHeader></TableHeader>
 				)}
-				{editBoosts?.map(boost => {
+				{editBoosts?.map((boost, index) => {
 					return (
 						<BoostsRowWrapper
 							key={boost.project.id}
@@ -298,6 +298,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 												? boost.displayValue
 												: boost.percentage
 										}
+										autoFocus={index === 0}
 										onChange={e => {
 											onPercentageChange(
 												boost.id,
