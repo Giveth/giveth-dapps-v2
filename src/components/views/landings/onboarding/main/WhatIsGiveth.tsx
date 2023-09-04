@@ -1,6 +1,6 @@
 import { brandColors, H3, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { OnboardingWrapper } from '@/components/views/landings/onboarding/common.styled';
+import { OnboardingWrapper } from '@/components/views/landings/onboarding/common/common.styled';
 import { Bullets } from '@/components/styled-components/Bullets';
 import ExternalLink from '@/components/ExternalLink';
 

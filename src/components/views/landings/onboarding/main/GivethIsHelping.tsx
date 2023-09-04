@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Button, H4, IconChevronRight32 } from '@giveth/ui-design-system';
-import { OnboardingWrapper } from '@/components/views/landings/onboarding/common.styled';
+import { OnboardingWrapper } from '@/components/views/landings/onboarding/common/common.styled';
 import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
 import { Relative } from '@/components/styled-components/Position';

@@ -7,7 +7,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
-import { OnboardingWrapper } from '@/components/views/landings/onboarding/common.styled';
+import { OnboardingWrapper } from '@/components/views/landings/onboarding/common/common.styled';
 import Routes from '@/lib/constants/Routes';
 import InternalLink from '@/components/InternalLink';
 import GivPic from 'public/images/onboard/two-giv.svg';
