@@ -19,7 +19,6 @@ import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
 	PoolStakingConfig,
 	RegenPoolStakingConfig,
-	SimpleNetworkConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 } from '@/types/config';
@@ -98,7 +97,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		showHarvestModal ||
 		showLockModal;
 	const { formatMessage } = useIntl();
-	const { setInfo } = useFarms();
+	const { setChainInfo } = useFarms();
 	const router = useRouter();
 	const {
 		apr,
@@ -118,9 +117,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		provideLiquidityLink,
 	} = poolStakingConfig;
 	const regenStreamConfig = regenStreamType
-		? (
-				config.NETWORKS_CONFIG[poolNetwork] as SimpleNetworkConfig
-		  ).regenStreams.find(
+		? config.NETWORKS_CONFIG[poolNetwork].regenStreams?.find(
 				regenStream => regenStream.type === regenStreamType,
 		  )
 		: undefined;
@@ -139,8 +136,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 
 	useEffect(() => {
 		if (!(exploited || regenStreamConfig))
-			setInfo(poolNetwork, type, earned);
-	}, [poolNetwork, earned, type, regenStreamConfig, setInfo]);
+			setChainInfo(poolNetwork, type, earned);
+	}, [poolNetwork, earned, type, regenStreamConfig, setChainInfo, exploited]);
 
 	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
 
@@ -162,10 +159,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		const { open, chain } = router.query;
 		const _open = Array.isArray(open) ? open[0] : open;
 		const _chain = Array.isArray(chain) ? chain[0] : chain;
-		const _chainId =
-			_chain === 'gnosis'
-				? config.XDAI_NETWORK_NUMBER
-				: config.MAINNET_NETWORK_NUMBER;
+		const _chainId = parseInt(_chain || '');
 		const checkNetworkAndShowStakeModal = async () => {
 			if (
 				_chainId === chainId &&

@@ -8,6 +8,7 @@ import UserProfileView from '@/components/views/userProfile/UserProfile.view';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
+import { ProfileProvider } from '@/context/profile.context';
 
 interface IUserRouteProps {
 	user?: IUser;
@@ -32,7 +33,9 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 					url: `https://giveth.io/user/${user.walletAddress}`,
 				}}
 			/>
-			<UserProfileView user={user} />
+			<ProfileProvider user={user} myAccount={false}>
+				<UserProfileView />
+			</ProfileProvider>
 		</>
 	);
 };

@@ -149,10 +149,10 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 		};
 
 		const promiseQueue: Promise<APR>[] = [];
-		config.XDAI_CONFIG.pools.forEach(poolStakingConfig => {
+		config.GNOSIS_CONFIG.pools.forEach(poolStakingConfig => {
 			const promise: Promise<APR> = getLPStakingAPR(
 				poolStakingConfig as SimplePoolStakingConfig,
-				networkProviders[config.XDAI_NETWORK_NUMBER],
+				networkProviders[config.GNOSIS_NETWORK_NUMBER],
 				gnosisValues,
 			);
 			promiseQueue.push(promise);

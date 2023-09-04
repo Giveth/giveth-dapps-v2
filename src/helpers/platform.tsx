@@ -18,7 +18,7 @@ export const getPoolIconWithName = (
 	switch (poolNetwork) {
 		case config.MAINNET_NETWORK_NUMBER:
 			return <IconEthereum size={16} />;
-		case config.XDAI_NETWORK_NUMBER:
+		case config.GNOSIS_NETWORK_NUMBER:
 			return <IconGnosisChain size={16} />;
 	}
 	// if no number is set then it defaults to platform icon

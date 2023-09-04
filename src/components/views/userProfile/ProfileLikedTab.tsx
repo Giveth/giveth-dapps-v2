@@ -12,14 +12,16 @@ import { Loading } from './projectsTab/ProfileProjectsTab';
 import { IUserProfileView } from './UserProfile.view';
 import { mediaQueries } from '@/lib/constants/constants';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
+import { useProfileContext } from '@/context/profile.context';
 
 const itemPerPage = 6;
 
-const ProfileLikedTab: FC<IUserProfileView> = ({ myAccount, user }) => {
+const ProfileLikedTab: FC<IUserProfileView> = () => {
 	const [loading, setLoading] = useState(false);
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [page, setPage] = useState(0);
+	const { user, myAccount } = useProfileContext();
 	const { formatMessage } = useIntl();
 
 	useEffect(() => {
