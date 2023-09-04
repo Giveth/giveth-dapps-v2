@@ -148,7 +148,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 	useEffect(() => {
 		const cb = () => {
-			getGivStakingAPR(config.XDAI_NETWORK_NUMBER, gnosisValues, null)
+			getGivStakingAPR(config.GNOSIS_NETWORK_NUMBER, gnosisValues, null)
 				.then(_apr => {
 					mounted.current && setApr(_apr);
 				})

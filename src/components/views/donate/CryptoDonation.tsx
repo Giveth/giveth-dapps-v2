@@ -15,7 +15,7 @@ import {
 import tokenAbi from 'human-standard-token-abi';
 import { captureException } from '@sentry/nextjs';
 import { BigNumber } from '@ethersproject/bignumber';
-import { BigNumberish, utils } from 'ethers';
+import { BigNumberish } from 'ethers';
 import { formatUnits, parseUnits } from '@ethersproject/units';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
@@ -190,7 +190,7 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
-	const pollToken = useCallback(() => {
+	const pollToken = useCallback(async () => {
 		clearPoll();
 		if (!selectedToken) {
 			return setSelectedTokenBalance(BigNumber.from(0));
@@ -200,9 +200,8 @@ const CryptoDonation: FC = () => {
 		const nativeCurrency =
 			config.NETWORKS_CONFIG[networkId!]?.nativeCurrency;
 		if (_selectedTokenSymbol === nativeCurrency?.symbol?.toUpperCase()) {
-			return setSelectedTokenBalance(
-				utils.parseUnits(balance || '0', nativeCurrency.decimals),
-			);
+			const balance = await library.getBalance(account);
+			return setSelectedTokenBalance(balance);
 		}
 		stopPolling.current = pollEvery(
 			() => ({

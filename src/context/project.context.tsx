@@ -9,17 +9,15 @@ import {
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
-import config from '@/configuration';
 import { IPowerBoostingWithUserGIVpower } from '@/components/views/project/projectGIVPower';
 import { client } from '@/apollo/apolloClient';
 import {
 	FETCH_PROJECTED_RANK,
 	FETCH_PROJECT_BOOSTERS,
 } from '@/apollo/gql/gqlPowerBoosting';
-import { FETCH_USERS_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { IPowerBoosting, IProject } from '@/apollo/types/types';
 import { formatWeiHelper } from '@/helpers/number';
-import { backendGQLRequest, gqlRequest } from '@/helpers/requests';
+import { backendGQLRequest } from '@/helpers/requests';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import {
 	EDirection,
@@ -32,6 +30,7 @@ import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import { FETCH_PROJECT_DONATIONS_COUNT } from '@/apollo/gql/gqlDonations';
 import { hasActiveRound } from '@/helpers/qf';
+import { getGIVpowerBalanceByAddress } from '@/services/givpower';
 
 interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
@@ -54,6 +53,7 @@ interface IProjectContext {
 	isAdmin: boolean;
 	hasActiveQFRound: boolean;
 	totalDonationsCount: number;
+	isCancelled: boolean;
 }
 
 const ProjectContext = createContext<IProjectContext>({
@@ -68,6 +68,7 @@ const ProjectContext = createContext<IProjectContext>({
 	isAdmin: false,
 	hasActiveQFRound: false,
 	totalDonationsCount: 0,
+	isCancelled: false,
 });
 ProjectContext.displayName = 'ProjectContext';
 
@@ -86,6 +87,7 @@ export const ProjectProvider = ({
 	>(undefined);
 
 	const [projectData, setProjectData] = useState(project);
+	const [isCancelled, setIsCancelled] = useState(false);
 
 	const user = useAppSelector(state => state.user.userData);
 	const router = useRouter();
@@ -110,6 +112,7 @@ export const ProjectProvider = ({
 				if (_project.status.name !== EProjectStatus.CANCEL) {
 					setProjectData(_project);
 				} else {
+					setIsCancelled(true);
 					setProjectData(undefined);
 				}
 			})
@@ -183,28 +186,8 @@ export const ProjectProvider = ({
 						return;
 					}
 
-					//get users balance
-					const balancesResp = await gqlRequest(
-						config.XDAI_CONFIG.subgraphAddress,
-						false,
-						FETCH_USERS_GIVPOWER_BY_ADDRESS,
-						{
-							addresses: _users,
-							contract:
-								config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase(),
-							length: _users.length,
-						},
-					);
-
-					const unipoolBalances = balancesResp.data.unipoolBalances;
-
-					const unipoolBalancesObj: { [key: string]: string } = {};
-
-					for (let i = 0; i < unipoolBalances.length; i++) {
-						const unipoolBalance = unipoolBalances[i];
-						unipoolBalancesObj[unipoolBalance.user.id] =
-							unipoolBalance.balance;
-					}
+					const unipoolBalancesObj =
+						await getGIVpowerBalanceByAddress(_users);
 
 					const _boostersData: IBoostersData = structuredClone(
 						boostingResp.data.getPowerBoosting,
@@ -271,6 +254,7 @@ export const ProjectProvider = ({
 	const isDraft = projectData?.status.name === EProjectStatus.DRAFT;
 
 	useEffect(() => {
+		setIsCancelled(false);
 		if (user?.isSignedIn && !project) {
 			fetchProjectBySlug();
 		} else {
@@ -292,6 +276,7 @@ export const ProjectProvider = ({
 				isAdmin,
 				hasActiveQFRound,
 				totalDonationsCount,
+				isCancelled,
 			}}
 		>
 			{children}

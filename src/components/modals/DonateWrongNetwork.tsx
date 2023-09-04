@@ -20,7 +20,7 @@ import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
 import config from '@/configuration';
-import { BasicNetworkConfig } from '@/types/config';
+import { NetworkConfig } from '@/types/config';
 import { switchNetwork } from '@/lib/metamask';
 import NetworkLogo from '../NetworkLogo';
 import { NetworkItem, SelectedNetwork } from './SwitchNetwork';
@@ -32,7 +32,7 @@ interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
 
 const networks = [
 	config.MAINNET_CONFIG,
-	config.XDAI_CONFIG,
+	config.GNOSIS_CONFIG,
 	config.POLYGON_CONFIG,
 	config.CELO_CONFIG,
 	config.OPTIMISM_CONFIG,
@@ -48,7 +48,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 
 	const { slug } = router.query;
 
-	const eligibleNetworks: BasicNetworkConfig[] = networks.filter(network =>
+	const eligibleNetworks: NetworkConfig[] = networks.filter(network =>
 		acceptedChains?.includes(parseInt(network.chainId)),
 	);
 

@@ -8,16 +8,17 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { useWeb3React } from '@web3-react/core';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import { mediaQueries } from '@/lib/constants/constants';
-import Routes from '@/lib/constants/Routes';
-import { StakingType } from '@/types/config';
+import { getGIVpowerLink } from '@/helpers/givpower';
 
 export const ZeroGivpowerModal: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
+	const { chainId } = useWeb3React();
 
 	return (
 		<Modal
@@ -35,9 +36,7 @@ export const ZeroGivpowerModal: FC<IModal> = ({ setShowModal }) => {
 						id: 'label.stake_and_lock_your_giv_to_get_givpower',
 					})}
 				</Lead>
-				<Link
-					href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
-				>
+				<Link href={getGIVpowerLink(chainId)}>
 					<GetButton
 						label={formatMessage({ id: 'label.get_givpower' })}
 						size='small'

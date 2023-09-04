@@ -145,6 +145,7 @@ export default function ProjectContactIndex() {
 								]
 							}
 							disabled={!isDraft}
+							autoFocus={i.type === EMainSocials.Twitter}
 						/>
 					))}
 					{otherSocials.map(social => (

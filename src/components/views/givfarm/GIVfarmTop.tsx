@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl';
 import { BigNumber } from 'bignumber.js';
 import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
+import { Zero } from '@ethersproject/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 
@@ -22,15 +23,22 @@ export const GIVfarmTop = () => {
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
 	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { totalEarned } = useFarms();
+	const { chainsInfo } = useFarms();
 	const { chainId } = useWeb3React();
 
 	useEffect(() => {
-		setRewardLiquidPart(givTokenDistroHelper.getLiquidPart(totalEarned));
-		setRewardStream(
-			givTokenDistroHelper.getStreamPartTokenPerWeek(totalEarned),
+		if (!chainId) return;
+		setRewardLiquidPart(
+			givTokenDistroHelper.getLiquidPart(
+				chainsInfo[chainId]?.totalInfo || Zero,
+			),
 		);
-	}, [totalEarned, givTokenDistroHelper]);
+		setRewardStream(
+			givTokenDistroHelper.getStreamPartTokenPerWeek(
+				chainsInfo[chainId]?.totalInfo || Zero,
+			),
+		);
+	}, [chainsInfo, givTokenDistroHelper, chainId]);
 
 	return (
 		<GIVfarmTopContainer>
@@ -58,7 +66,7 @@ export const GIVfarmTop = () => {
 							network={chainId}
 							targetNetworks={[
 								config.MAINNET_NETWORK_NUMBER,
-								config.XDAI_NETWORK_NUMBER,
+								config.GNOSIS_NETWORK_NUMBER,
 								config.OPTIMISM_NETWORK_NUMBER,
 							]}
 						/>

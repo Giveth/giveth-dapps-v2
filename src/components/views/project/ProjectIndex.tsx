@@ -63,6 +63,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		isActive,
 		isDraft,
 		hasActiveQFRound,
+		isCancelled,
 	} = useProjectContext();
 
 	const router = useRouter();
@@ -105,7 +106,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	}
 
 	if (!projectData) {
-		return <NotAvailableProject />;
+		return <NotAvailableProject isCancelled={isCancelled} />;
 	}
 
 	return (
