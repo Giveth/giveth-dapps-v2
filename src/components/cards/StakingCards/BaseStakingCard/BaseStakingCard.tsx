@@ -11,7 +11,6 @@ import {
 	StakingPoolSubtitle,
 } from './BaseStakingCard.sc';
 
-import config from '@/configuration';
 import { GIVPowerExplainModal } from '@/components/modals/GIVPowerExplain';
 import { StakingPoolImages } from '@/components/StakingPoolImages';
 import GIVpowerCardIntro from '../GIVpowerCard/GIVpowerCardIntro';
@@ -58,11 +57,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 		network: poolNetwork,
 	} = poolStakingConfig;
 
-	const isGIVStaking = type === StakingType.GIV_LM;
 	const isGIVpower =
-		isGIVStaking &&
-		(poolNetwork === config.XDAI_NETWORK_NUMBER ||
-			poolNetwork === config.OPTIMISM_NETWORK_NUMBER);
+		type === StakingType.GIV_GARDEN_LM ||
+		type === StakingType.GIV_UNIPOOL_LM;
 
 	const isDiscontinued = farmEndTimeMS
 		? getNowUnixMS() > farmEndTimeMS
@@ -100,7 +97,10 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 						/>
 					</>
 				) : state === StakeCardState.GIVPOWER_INTRO ? (
-					<GIVpowerCardIntro setState={setState} />
+					<GIVpowerCardIntro
+						poolNetwork={poolNetwork}
+						setState={setState}
+					/>
 				) : (
 					<StakingCardIntro
 						symbol={title}

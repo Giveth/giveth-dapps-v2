@@ -1,45 +1,47 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import config from '@/configuration';
-import {
-	fetchMainnetInfo,
-	fetchGnosisInfo,
-	fetchOptimismInfo,
-} from './subgraph.services';
-import { ICurrentInfo } from './subgraph.types';
+import { fetchChainInfo } from './subgraph.services';
+import { ICurrentInfo, ISubgraphState } from './subgraph.types';
+import { chainInfoNames } from './subgraph.helper';
 
-export const fetchOptimismInfoAsync = createAsyncThunk(
-	'subgraph/fetchOptimismInfo',
-	async (userAddress?: string) => {
-		const response = await fetchOptimismInfo(userAddress);
-		return { ...response, isLoaded: true };
-	},
-);
-
-export const fetchGnosisInfoAsync = createAsyncThunk(
-	'subgraph/fetchGnosisInfo',
-	async (userAddress?: string) => {
-		const response = await fetchGnosisInfo(userAddress);
-		return { ...response, isLoaded: true };
-	},
-);
-
-export const fetchMainnetInfoAsync = createAsyncThunk(
-	'subgraph/fetchMainnetInfo',
-	async (userAddress?: string) => {
-		const response = await fetchMainnetInfo(userAddress);
-		return { ...response, isLoaded: true };
+export const fetchChainInfoAsync = createAsyncThunk(
+	'subgraph/fetchChainInfo',
+	async ({ userAddress, chainId }: ICurrentInfo) => {
+		const response = await fetchChainInfo(chainId, userAddress);
+		return {
+			response: { ...response, isLoaded: true },
+			chainId: chainId,
+		};
 	},
 );
 
 export const fetchCurrentInfoAsync = createAsyncThunk(
 	'subgraph/fetchCurrentInfo',
 	async ({ userAddress, chainId }: ICurrentInfo) => {
-		const response =
-			chainId === config.MAINNET_NETWORK_NUMBER
-				? await fetchMainnetInfo(userAddress)
-				: chainId === config.OPTIMISM_NETWORK_NUMBER
-				? await fetchOptimismInfo(userAddress)
-				: await fetchGnosisInfo(userAddress);
+		const response = await fetchChainInfo(chainId, userAddress);
+		return {
+			response: { ...response, isLoaded: true },
+			chainId: chainId,
+		};
+	},
+);
+
+export const fetchAllInfoAsync = createAsyncThunk(
+	'subgraph/fetchAllInfo',
+	async ({ userAddress, chainId }: ICurrentInfo) => {
+		const chainIds = Object.keys(chainInfoNames).map(Number);
+		const chainValues = Object.values(chainInfoNames);
+		const res = await Promise.all(
+			chainIds.map(id => fetchChainInfo(id, userAddress)),
+		);
+
+		let response: {
+			[key: string]: ISubgraphState;
+		} = {};
+		for (let i = 0; i < res.length; i++) {
+			const element = res[i] as ISubgraphState;
+			response[chainValues[i]] = element;
+		}
+
 		return {
 			response: { ...response, isLoaded: true },
 			chainId: chainId,

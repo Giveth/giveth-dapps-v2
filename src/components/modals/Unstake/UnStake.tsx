@@ -31,7 +31,6 @@ import { formatWeiHelper } from '@/helpers/number';
 import { LockupDetailsModal } from '../LockupDetailsModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 
@@ -78,17 +77,21 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 	const { stakedAmount } = useStakingPool(poolStakingConfig);
 	const { library, chainId } = useWeb3React();
-	const { title, type, LM_ADDRESS, GARDEN_ADDRESS } =
+	const { title, type, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
-	const isGIVStaking = type === StakingType.GIV_LM;
-	const isGIVpower = isGIVStaking && chainId === config.XDAI_NETWORK_NUMBER;
+	const isGIVpower =
+		type === StakingType.GIV_GARDEN_LM ||
+		type === StakingType.GIV_UNIPOOL_LM;
+
 	const maxAmount = isGIVpower
 		? stakedAmount.sub(userGIVLocked.balance)
 		: stakedAmount;
 
 	const onWithdraw = async () => {
 		setUnstakeState(StakeState.UNSTAKING);
+
+		const GARDEN_ADDRESS = poolStakingConfig.GARDEN_ADDRESS;
 
 		const tx = GARDEN_ADDRESS
 			? await unwrapToken(amount, GARDEN_ADDRESS, library)
