@@ -111,3 +111,5 @@ export const TWO_WEEK = 1_209_600_000;
 export const minDonationAmount = 0.000001;
 
 export const BACKEND_QUERY_LIMIT = 50;
+
+export const PROFILE_PHOTO_PLACEHOLDER = '/images/placeholders/profile.svg';

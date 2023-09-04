@@ -27,7 +27,6 @@ const CELO_NETWORK_NUMBER = 42220;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
-	BASE_ROUTE: BASE_ROUTE,
 	BACKEND_LINK:
 		process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`,
 	FRONTEND_LINK: process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://giveth.io',

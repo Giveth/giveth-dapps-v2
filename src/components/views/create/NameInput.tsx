@@ -26,8 +26,7 @@ const NameInput: FC<IProps> = ({ preTitle, showGuidelineModal }) => {
 	const { formatMessage } = useIntl();
 
 	const [isTitleValidating, setIsTitleValidating] = useState(false);
-
-	const watchName = watch(EInputs.name);
+	const titleValue = watch(EInputs.name);
 
 	const noTitleValidation = (i: string) => preTitle && preTitle === i;
 
@@ -65,15 +64,15 @@ const NameInput: FC<IProps> = ({ preTitle, showGuidelineModal }) => {
 				label={formatMessage({ id: 'label.project_name' })}
 				placeholder={formatMessage({ id: 'label.my_first_project' })}
 				maxLength={55}
+				value={titleValue}
 				autoFocus
 				size={InputSize.LARGE}
-				value={watchName}
 				ref={inputRef}
 				isValidating={isTitleValidating}
 				register={register}
 				registerName={EInputs.name}
 				registerOptions={{
-					...requiredOptions.name,
+					...requiredOptions.title,
 					validate: titleValidation,
 				}}
 				error={formErrors[EInputs.name]}

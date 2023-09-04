@@ -146,7 +146,7 @@ const AboutGiveconomy = () => {
 							</Description>
 							<Btn
 								label='label.discover_our_roadmap'
-								route='https://docs.giveth.io/whatisgiveth/'
+								route='https://docs.giveth.io/whatisgiveth/#our-roadmap'
 							/>
 						</Content>
 						<ImageBox>
