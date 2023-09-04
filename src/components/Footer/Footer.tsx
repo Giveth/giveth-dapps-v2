@@ -12,6 +12,7 @@ import {
 	IconTwitter,
 	Caption,
 	IconDiscord,
+	IconInstagram24,
 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,6 +27,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { LanguageModal } from '../modals/LanguageModal';
+import ExternalLink from '@/components/ExternalLink';
 
 const Footer = () => {
 	const { formatMessage } = useIntl();
@@ -142,27 +144,30 @@ const Footer = () => {
 				</LeftContainer>
 				<RightContainer color={textColor}>
 					<SocialContainer>
-						<a href={links.MEDIUM}>
+						<ExternalLink href={links.INSTAGRAM}>
+							<IconInstagram24 color={textColor} />
+						</ExternalLink>
+						<ExternalLink href={links.MEDIUM}>
 							<IconMedium size={24} color={textColor} />
-						</a>
-						<a href={links.GITHUB}>
+						</ExternalLink>
+						<ExternalLink href={links.GITHUB}>
 							<IconGithub size={24} color={textColor} />
-						</a>
-						<a href={links.REDDIT}>
+						</ExternalLink>
+						<ExternalLink href={links.REDDIT}>
 							<IconRedit size={24} color={textColor} />
-						</a>
-						<a href={links.TWITTER}>
+						</ExternalLink>
+						<ExternalLink href={links.TWITTER}>
 							<IconTwitter size={24} color={textColor} />
-						</a>
-						<a href={links.YOUTUBE}>
+						</ExternalLink>
+						<ExternalLink href={links.YOUTUBE}>
 							<IconYoutube size={24} color={textColor} />
-						</a>
-						<a href={links.DISCORD}>
+						</ExternalLink>
+						<ExternalLink href={links.DISCORD}>
 							<IconDiscord size={24} color={textColor} />
-						</a>
-						<a href={links.DOCS}>
+						</ExternalLink>
+						<ExternalLink href={links.DOCS}>
 							<IconDocs size={24} color={textColor} />
-						</a>
+						</ExternalLink>
 					</SocialContainer>
 					<SupportUs>
 						<Caption medium>
@@ -183,9 +188,7 @@ const Footer = () => {
 			</ContainerStyled>
 			<Language
 				isDark={isDark}
-				onClick={() => {
-					setShowLanguageModal(true);
-				}}
+				onClick={() => setShowLanguageModal(true)}
 			>
 				<Image
 					src={`/images/${isDark ? 'globe_white' : 'globe'}.svg`}
@@ -209,7 +212,7 @@ const ContainerStyled = styled(Container)`
 
 const FooterContainer = styled.div`
 	position: relative;
-	padding: 35px 0 12px;
+	padding: 80px 0 12px;
 	z-index: 2;
 `;
 
