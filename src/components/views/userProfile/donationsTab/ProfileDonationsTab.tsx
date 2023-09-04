@@ -15,6 +15,7 @@ import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import DonationTable from '@/components/views/userProfile/donationsTab/DonationsTable';
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { DonateContributeCard } from '@/components/ContributeCard';
+import { useProfileContext } from '@/context/profile.context';
 
 const itemPerPage = 10;
 
