@@ -19,6 +19,7 @@ const StorageLabel = {
 	LOCALE: 'locale',
 	CHAINVINEREFERRED: 'chainvineReferred',
 	PASSPORT: 'passport',
+	CREATE_PROJECT_FORM: 'createProjectForm',
 };
 
 export const setWithExpiry = (key: string, value: any, ttl: number) => {
