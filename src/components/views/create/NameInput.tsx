@@ -18,10 +18,12 @@ const NameInput: FC<IProps> = ({ preTitle }) => {
 	const {
 		register,
 		formState: { errors: formErrors },
+		watch,
 	} = useFormContext();
 	const { formatMessage } = useIntl();
 
 	const [isTitleValidating, setIsTitleValidating] = useState(false);
+	const titleValue = watch(EInputs.name);
 
 	const noTitleValidation = (i: string) => preTitle && preTitle === i;
 
@@ -39,6 +41,7 @@ const NameInput: FC<IProps> = ({ preTitle }) => {
 				label={formatMessage({ id: 'label.project_name' })}
 				placeholder={formatMessage({ id: 'label.my_first_project' })}
 				maxLength={55}
+				value={titleValue}
 				size={InputSize.LARGE}
 				isValidating={isTitleValidating}
 				register={register}
