@@ -98,7 +98,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		const storedProject = localStorage.getItem(
 			StorageLabel.CREATE_PROJECT_FORM,
 		);
-		console.log('storedProject', JSON.parse(storedProject || ''));
 		if (storedProject) {
 			storageProjectData = JSON.parse(storedProject);
 		}
@@ -112,7 +111,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		categories: storageCategories,
 		impactLocation: storageImpactLocation,
 		image: storageImage,
-		addresses: storageAddresses,
+		addresses: storageAddresses = {},
 	} = storageProjectData || {};
 
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
@@ -136,7 +135,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.impactLocation]:
 				defaultImpactLocation || storageImpactLocation,
 			[EInputs.image]: image || storageImage || '',
-			[EInputs.addresses]: addressesObj || storageAddresses,
+			[EInputs.addresses]: isEditMode ? addressesObj : storageAddresses,
 		},
 	});
 
@@ -147,14 +146,29 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const data = watch();
+	const {
+		name: watchName,
+		description: watchDescription,
+		categories: watchCategories,
+		image: watchImage,
+		impactLocation: watchImpactLocation,
+		addresses: watchAddresses,
+	} = data;
+
 	useEffect(() => {
-		console.log('data', data);
 		if (isEditMode) return;
 		localStorage.setItem(
 			StorageLabel.CREATE_PROJECT_FORM,
 			JSON.stringify(data),
 		);
-	}, [data]);
+	}, [
+		watchName,
+		watchDescription,
+		watchCategories,
+		watchImage,
+		watchImpactLocation,
+		watchAddresses,
+	]);
 
 	const onSubmit = async (formData: TInputs) => {
 		try {
@@ -221,7 +235,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			if (addedProject) {
 				// Success
 				setIsLoading(false);
-				localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
+				if (!isEditMode) {
+					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
+				}
 				const _project = isEditMode
 					? addedProject.data?.updateProject
 					: addedProject.data?.createProject;
