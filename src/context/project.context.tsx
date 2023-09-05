@@ -117,7 +117,7 @@ export const ProjectProvider = ({
 				}
 			})
 			.catch((error: unknown) => {
-				showToastError(error);
+				console.log('fetchProjectBySlug error: ', error);
 				captureException(error, {
 					tags: {
 						section: 'fetchProject',
