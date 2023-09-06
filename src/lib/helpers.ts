@@ -9,7 +9,7 @@ import { AddressZero } from '@ethersproject/constants';
 // @ts-ignore
 import abi from 'human-standard-token-abi';
 import { captureException } from '@sentry/nextjs';
-import { BasicNetworkConfig, GasPreference } from '@/types/config';
+import { NetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
@@ -147,7 +147,7 @@ export const smallFormatDate = (date: Date, locale?: string) => {
 };
 
 export const getGasPreference = (
-	networkConfig: BasicNetworkConfig,
+	networkConfig: NetworkConfig,
 ): GasPreference => {
 	const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
 	// MetaMask works with gas preference config
@@ -216,8 +216,6 @@ export const capitalizeFirstLetter = (string: string) => {
 export const capitalizeAllWords = (string: string) => {
 	return string.split(' ').map(capitalizeFirstLetter).join(' ');
 };
-
-export const noImgIcon = '/images/GIV-icon-text.svg';
 
 export const isNoImg = (image: string | undefined) => !image || image === '';
 
@@ -401,8 +399,11 @@ export const isGIVeconomyRoute = (route: string) => {
 };
 
 export const showToastError = (err: any) => {
-	const errorMessage =
+	let errorMessage =
 		typeof err === 'string' ? err : JSON.stringify(err.message || err);
+	if (errorMessage.startsWith('"') && errorMessage.endsWith('"')) {
+		errorMessage = errorMessage.slice(1, -1);
+	}
 	gToast(errorMessage, {
 		type: ToastType.DANGER,
 		position: 'top-center',

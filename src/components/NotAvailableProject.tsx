@@ -1,9 +1,14 @@
 import Image from 'next/image';
 import styled from 'styled-components';
 import { brandColors, H4 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import ExternalLink from '@/components/ExternalLink';
+import links from '@/lib/constants/links';
 
-const NotAvailableProject = () => {
+const NotAvailableProject = (props: { isCancelled?: boolean }) => {
+	const { isCancelled } = props;
+	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
 			<Image
@@ -13,7 +18,19 @@ const NotAvailableProject = () => {
 				alt='missing-project-image'
 			/>
 			<TitleText>
-				Oops! This project is no longer available or not found!
+				{formatMessage({ id: 'label.project_not_available' })}{' '}
+				{isCancelled &&
+					formatMessage({ id: 'label.if_this_a_mistake' })}{' '}
+				{isCancelled && (
+					<>
+						<ExternalLink
+							color={brandColors.pinky[500]}
+							href={links.DISCORD}
+							title='Discord'
+						/>
+						.
+					</>
+				)}
 			</TitleText>
 		</Wrapper>
 	);
@@ -29,6 +46,8 @@ const Wrapper = styled(FlexCenter)`
 const TitleText = styled(H4)`
 	color: ${brandColors.deep[800]};
 	text-align: center;
+	max-width: 1200px;
+	margin: 0 40px;
 `;
 
 export default NotAvailableProject;

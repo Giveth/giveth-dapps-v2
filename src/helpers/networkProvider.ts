@@ -1,10 +1,5 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
-import {
-	SimpleNetworkConfig,
-	SimplePoolStakingConfig,
-	StakingPlatform,
-	StakingType,
-} from '@/types/config';
+
 import config from '../configuration';
 
 const { NETWORKS_CONFIG } = config;
@@ -22,17 +17,3 @@ for (const network in NETWORKS_CONFIG) {
 }
 
 export const networkProviders = _networksProviders;
-
-export const getGivStakingConfig = (
-	networkConfig: SimpleNetworkConfig,
-): SimplePoolStakingConfig => {
-	return {
-		...networkConfig.GIV,
-		POOL_ADDRESS: networkConfig.TOKEN_ADDRESS,
-		type: StakingType.GIV_LM,
-		platform: StakingPlatform.GIVETH,
-		title: 'GIV',
-		description: '100% GIV',
-		unit: 'GIV',
-	};
-};

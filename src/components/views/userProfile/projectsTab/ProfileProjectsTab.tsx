@@ -16,24 +16,23 @@ import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { Flex } from '@/components/styled-components/Flex';
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
-import {
-	DonateContributeCard,
-	ProjectsContributeCard,
-} from '@/components/ContributeCard';
+import { ProjectsContributeCard } from '@/components/ContributeCard';
+
+import { useProfileContext } from '@/context/profile.context';
 
 const itemPerPage = 10;
 
-const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
+const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	const [loading, setLoading] = useState(false);
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [page, setPage] = useState(0);
-	const { formatMessage } = useIntl();
-
 	const [order, setOrder] = useState<IOrder>({
 		by: EOrderBy.CreationDate,
 		direction: EDirection.DESC,
 	});
+	const { user, myAccount } = useProfileContext();
+	const { formatMessage } = useIntl();
 	const userName = user?.name || 'Unknown';
 
 	const changeOrder = (orderBy: EOrderBy) => {
@@ -83,10 +82,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 			{!myAccount && (
 				<Row>
 					<Col lg={6}>
-						<DonateContributeCard user={user} />
-					</Col>
-					<Col lg={6}>
-						<ProjectsContributeCard user={user} />
+						<ProjectsContributeCard />
 					</Col>
 				</Row>
 			)}
@@ -94,7 +90,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 				<UserContributeTitle weight={700}>
 					{formatMessage(
 						{
-							id: 'label.user_donations_and_projects',
+							id: 'label.user_projects',
 						},
 						{
 							userName,

@@ -923,10 +923,10 @@
     intl-messageformat "10.3.1"
     tslib "^2.4.0"
 
-"@giveth/ui-design-system@^1.11.14":
-  version "1.11.14"
-  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.14.tgz#27df4a7e6239e0b27f88dacbda7da8fb6bc9c20b"
-  integrity sha512-PyQycCUz0dAI+xBZkOvensBa+yVuiBdxX04hqmIxD02VkbEPIoGtVbyJ4WRsC8bsXWkphgsN0blNvt8S2e+7fA==
+"@giveth/ui-design-system@^1.11.15":
+  version "1.11.15"
+  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.15.tgz#eb57bb0769ad5e8af3b7562492133c183c17af06"
+  integrity sha512-Mt1/zv/Stfg0lGN90VkJQYtya2LfWD0su7BWOtgxPwQVw1HDEkteZObX0a9GEEwCYa38cIfn3Ge3DqfQ4b47gA==
   dependencies:
     next "13.1.6"
     react "18.2.0"
@@ -3256,9 +3256,9 @@ can-use-dom@^0.1.0:
   integrity sha512-ceOhN1DL7Y4O6M0j9ICgmTYziV89WMd96SvSl0REd8PMgrY0B/WBOPoed5S1KUmJqXgUXh8gzSe6E3ae27upsQ==
 
 caniuse-lite@^1.0.30001406, caniuse-lite@^1.0.30001449:
-  version "1.0.30001457"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001457.tgz#6af34bb5d720074e2099432aa522c21555a18301"
-  integrity sha512-SDIV6bgE1aVbK6XyxdURbUE89zY7+k1BBBaOwYwkNCglXlel/E7mELiHC64HQ+W0xSKlqWhV9Wh7iHxUjMs4fA==
+  version "1.0.30001522"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001522.tgz"
+  integrity sha512-TKiyTVZxJGhsTszLuzb+6vUZSjVOAhClszBr2Ta2k9IwtNBT/4dzmL6aywt0HCgEZlmwJzXJd8yNiob6HgwTRg==
 
 caseless@~0.12.0:
   version "0.12.0"

@@ -31,7 +31,7 @@ import {
 	getActiveRound,
 	hasActiveRound,
 } from '@/helpers/qf';
-import { formatDonations } from '@/helpers/number';
+import { formatDonation } from '@/helpers/number';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -67,7 +67,7 @@ const ProjectCard = (props: IProjectCard) => {
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
-	const { formatMessage, formatRelativeTime } = useIntl();
+	const { formatMessage, formatRelativeTime, locale } = useIntl();
 
 	const isRoundActive = hasActiveRound(qfRounds);
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
@@ -130,11 +130,12 @@ const ProjectCard = (props: IProjectCard) => {
 					<PaddedRow justifyContent='space-between'>
 						<Flex flexDirection='column' gap='2px'>
 							<PriceText>
-								{formatDonations(
+								{formatDonation(
 									(isRoundActive
 										? sumDonationValueUsdForActiveQfRound
 										: sumDonationValueUsd) || 0,
 									'$',
+									locale,
 								)}
 							</PriceText>
 							{isRoundActive ? (
@@ -182,13 +183,14 @@ const ProjectCard = (props: IProjectCard) => {
 							<Flex flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
 									+
-									{formatDonations(
+									{formatDonation(
 										calculateTotalEstimatedMatching(
 											projectDonationsSqrtRootSum,
 											allProjectsSum,
 											matchingPool,
 										),
 										'$',
+										locale,
 										true,
 									)}
 								</EstimatedMatchingPrice>

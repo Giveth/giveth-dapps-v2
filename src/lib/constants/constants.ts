@@ -3,7 +3,7 @@ import config from '@/configuration';
 import { networksParams } from '@/helpers/blockchain';
 
 export const chainName = (chainId: number) => {
-	return networksParams[chainId].chainName || 'Unknown';
+	return networksParams[chainId]?.chainName || 'Unknown';
 };
 
 export const NFT_POSITIONS_MANAGER_ADDRESS: Record<string, string> = {
@@ -75,7 +75,7 @@ export const OurImages = [
 
 export const givEconomySupportedNetworks = [
 	config.MAINNET_NETWORK_NUMBER,
-	config.XDAI_NETWORK_NUMBER,
+	config.GNOSIS_NETWORK_NUMBER,
 ];
 
 export const zIndex = {
@@ -111,3 +111,5 @@ export const TWO_WEEK = 1_209_600_000;
 export const minDonationAmount = 0.000001;
 
 export const BACKEND_QUERY_LIMIT = 50;
+
+export const PROFILE_PHOTO_PLACEHOLDER = '/images/placeholders/profile.svg';

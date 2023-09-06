@@ -9,7 +9,6 @@ import { useRouter } from 'next/router';
 import { Container } from '@giveth/ui-design-system';
 import { gToast, ToastType } from '@/components/toasts';
 import { useAppDispatch } from '@/features/hooks';
-import { fetchGnosisInfoAsync } from '@/features/subgraph/subgraph.thunks';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
@@ -111,15 +110,7 @@ const TestIndex = () => {
 				{/* <Tooltip direction={direction} align={align} parentRef={elRef}>
 					<div>Test</div>
 				</Tooltip> */}
-				<button
-					onClick={() => {
-						if (account) {
-							dispatch(fetchGnosisInfoAsync(account));
-						}
-					}}
-				>
-					Dispatch
-				</button>
+				<button onClick={() => {}}>Dispatch</button>
 				<button onClick={notify}>Test</button>
 				<button
 					type='button'

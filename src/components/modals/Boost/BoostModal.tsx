@@ -10,9 +10,8 @@ import { ZeroGivpowerModal } from './ZeroGivpowerModal';
 import { BoostModalContainer } from './BoostModal.sc';
 import BoostedInnerModal from './BoostedInnerModal';
 import BoostInnerModal from './BoostInnerModal';
-import { BN } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { getTotalGIVpower } from '@/helpers/givpower';
 
 interface IBoostModalProps extends IModal {
 	projectId: string;
@@ -29,12 +28,10 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [percentage, setPercentage] = useState(0);
 	const [state, setState] = useState(EBoostModalState.BOOSTING);
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.gnosisValues),
-	);
-	const givPower = sdh.getUserGIVPowerBalance();
+	const values = useAppSelector(state => state.subgraph);
+	const givPower = getTotalGIVpower(values);
 
-	if (givPower.balance == '0') {
+	if (givPower.total.isZero()) {
 		return <ZeroGivpowerModal setShowModal={setShowModal} />;
 	}
 
@@ -63,7 +60,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 				{state === EBoostModalState.BOOSTING ||
 				state === EBoostModalState.LIMIT_EXCEEDED ? (
 					<BoostInnerModal
-						totalGIVpower={BN(givPower.balance)}
+						totalGIVpower={givPower.total}
 						setPercentage={setPercentage}
 						state={state}
 						setState={setState}
