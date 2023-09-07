@@ -262,6 +262,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		}
 	};
 
+	const handleCancel = () => {
+		router.back();
+		if (!isEditMode) {
+			localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
+		}
+	};
+
 	useEffect(() => {
 		dispatch(setShowFooter(false));
 		return () => {
@@ -376,16 +383,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								type='submit'
 								disabled={isLoading}
 							/>
-							{isEditMode && (
-								<OutlineButton
-									onClick={() => !isLoading && router.back()}
-									label={formatMessage({
-										id: 'label.cancel',
-									})}
-									buttonType='primary'
-									disabled={isLoading}
-								/>
-							)}
+							<OutlineButton
+								onClick={handleCancel}
+								label={formatMessage({ id: 'label.cancel' })}
+								buttonType='primary'
+								disabled={isLoading}
+							/>
 						</Buttons>
 						{addressModalChainId && (
 							<CreateProjectAddAddressModal
