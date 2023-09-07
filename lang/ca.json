@@ -1272,6 +1272,7 @@
 	"page.mint.welcome_giver.desc": "Has encunyat {itemCount, plural, one {{itemCount} Giver PFP} other {{itemCount} Giver PFPs} }. Gràcies per donar suport a Giveth!",
 	"page.partnerships.1hive": "Una DAO que crea eines de codi obert per a la governança de la comunitat i els béns públics.",
 	"page.partnerships.alibre": "Serveis financers per a tothom.",
+	"page.partnerships.gatewayfm": "Infraestructura Web3 irrompible que s'escala perfectament amb tu",
 	"page.partnerships.aragon": "Construeix organitzacions imparables a Ethereum.",
 	"page.partnerships.brightid": "Prova de singularitat. BrightID és el sant grial de la identitat digital.",
 	"page.partnerships.change": "Dona cripto a més de 2000 organitzacions sense ànim de lucre.",

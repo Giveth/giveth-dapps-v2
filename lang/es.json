@@ -1272,6 +1272,7 @@
 	"page.mint.welcome_giver.desc": "Has minteado {itemCount, plural, one {{itemCount} Giver PFP} other {{itemCount} Giver PFPs} }. Gracias por apoyar a Giveth!",
 	"page.partnerships.1hive": "Una DAO (Organización Autónomas Descentralizadas) que crea herramientas de código abierto para la gobernanza de la comunidad y los bienes públicos.",
 	"page.partnerships.alibre": "Servicios financieros para todos.",
+	"page.partnerships.gatewayfm": "Infraestructura Web3 irrompible que escala perfectamente contigo",
 	"page.partnerships.aragon": "Construye organizaciones imparables en Ethereum.",
 	"page.partnerships.brightid": "Prueba de singularidad. BrightID es el santo grial de la identidad digital.",
 	"page.partnerships.change": "Dona cripto a más de 2000 organizaciones sin fines de lucro.",

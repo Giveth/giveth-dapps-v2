@@ -1272,6 +1272,7 @@
 	"page.mint.welcome_giver.desc": "You have minted {itemCount, plural, one {{itemCount} Giver PFP} other {{itemCount} Giver PFPs} }. Thank you for supporting Giveth!",
 	"page.partnerships.1hive": "A DAO creating open-source tools for community governance and public goods.",
 	"page.partnerships.alibre": "Financial Services for All.",
+	"page.partnerships.gatewayfm": "Unbreakable Web3 infrastructure that seamlessly scales with you",
 	"page.partnerships.aragon": "Build unstoppable organizations on Ethereum.",
 	"page.partnerships.brightid": "Proof of Uniqueness. BrightID is the holy grail of digital identity.",
 	"page.partnerships.change": "Donate cryptocurrency to 200K+ nonprofits.",
