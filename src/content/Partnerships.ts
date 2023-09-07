@@ -4,7 +4,6 @@ import Aragon from '/public/images/partnerships/Aragon.svg';
 import MyEtherWallet from '/public/images/partnerships/MyEtherWallet.svg';
 import Status_im from '/public/images/partnerships/Status.im.svg';
 import The_Commons_Stack from '/public/images/partnerships/The_Commons_Stack.svg';
-import PrimeDAO from '/public/images/partnerships/PrimeDAO.svg';
 import Gitcoin from '/public/images/partnerships/Gitcoin.svg';
 import Polygon_Hermez from '/public/images/partnerships/Polygon_Hermez.svg';
 import iden3 from '/public/images/partnerships/iden3.svg';
@@ -167,12 +166,6 @@ export const PartnershipArray: IPartner[] = [
 		title: 'Polygon Hermez',
 		description: 'page.partnerships.polygonhermez',
 		link: 'https://hermez.io/',
-	},
-	{
-		icon: PrimeDAO,
-		title: 'PrimeDAO',
-		description: 'page.partnerships.primedao',
-		link: 'http://primedao.io',
 	},
 	{
 		icon: Rainbow_Rolls,
