@@ -80,7 +80,7 @@ export interface IProjectAcceptedToken {
 	id?: string;
 	symbol: string;
 	networkId: number;
-	address: string;
+	address: `0x${string}`;
 	mainnetAddress?: string;
 	name: string;
 	decimals: number;
