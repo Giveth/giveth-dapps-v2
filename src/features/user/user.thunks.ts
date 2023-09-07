@@ -16,6 +16,7 @@ import { postRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import StorageLabel from '@/lib/localStorage';
 import { getTokens } from '@/helpers/user';
+import { verifyGnosisSignature } from '@/helpers/safe';
 
 export const fetchUserByAddress = createAsyncThunk(
 	'user/fetchUser',
@@ -38,6 +39,13 @@ export const signToGetToken = createAsyncThunk(
 			);
 			const { nonce, message } = siweMessage;
 			const signature = await signer.signMessage(message);
+			console.log({ signature, message });
+			// TODO: VERIFY ITS A GNOSIS SAFE ADDRESS
+			const gnosisSignature = await verifyGnosisSignature(
+				address,
+				signer,
+			);
+			console.log({ gnosisSignature });
 			if (signature) {
 				const state = getState() as RootState;
 				if (!state.user.userData) {
