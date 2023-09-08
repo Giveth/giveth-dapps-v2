@@ -188,7 +188,9 @@ export const ProjectPublicActions = () => {
 };
 
 const ProjectPublicActionsWrapper = styled(Flex)`
-	flex-direction: column;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 100%;
 	${mediaQueries.tablet} {
 		flex-direction: row-reverse;
 		justify-content: space-between;

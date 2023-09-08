@@ -25,10 +25,10 @@ import {
 import links from '@/lib/constants/links';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
-import { formatDonations } from '@/helpers/number';
+import { formatDonation } from '@/helpers/number';
 
 const QFSection = () => {
-	const { formatMessage } = useIntl();
+	const { formatMessage, locale } = useIntl();
 	const { projectData } = useProjectContext();
 	const { estimatedMatching, sumDonationValueUsdForActiveQfRound } =
 		projectData || {};
@@ -39,13 +39,14 @@ const QFSection = () => {
 	const EstimatedMatchingSection = () => (
 		<Flex flexDirection='column' gap='4px'>
 			<EstimatedMatchingPrice>
-				{formatDonations(
+				{formatDonation(
 					calculateTotalEstimatedMatching(
 						projectDonationsSqrtRootSum,
 						allProjectsSum,
 						matchingPool,
 					),
 					'$',
+					locale,
 					true,
 				)}
 			</EstimatedMatchingPrice>
@@ -76,9 +77,10 @@ const QFSection = () => {
 						})}
 					</Title>
 					<Amount weight={700}>
-						$
-						{formatDonations(
+						{formatDonation(
 							sumDonationValueUsdForActiveQfRound || 0,
+							'$',
+							locale,
 						)}
 					</Amount>
 					<Description>
@@ -138,7 +140,7 @@ const QFSection = () => {
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
 								+{' '}
-								{formatDonations(
+								{formatDonation(
 									calculateEstimatedMatchingWithDonationAmount(
 										1,
 										projectDonationsSqrtRootSum,
@@ -146,6 +148,7 @@ const QFSection = () => {
 										matchingPool,
 									),
 									'',
+									locale,
 									true,
 								)}
 								&nbsp; DAI
@@ -156,7 +159,7 @@ const QFSection = () => {
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
 								+{' '}
-								{formatDonations(
+								{formatDonation(
 									calculateEstimatedMatchingWithDonationAmount(
 										10,
 										projectDonationsSqrtRootSum,
@@ -164,6 +167,7 @@ const QFSection = () => {
 										matchingPool,
 									),
 									'',
+									locale,
 									true,
 								)}
 								&nbsp; DAI
@@ -174,7 +178,7 @@ const QFSection = () => {
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
 								+{' '}
-								{formatDonations(
+								{formatDonation(
 									calculateEstimatedMatchingWithDonationAmount(
 										100,
 										projectDonationsSqrtRootSum,
@@ -182,6 +186,7 @@ const QFSection = () => {
 										matchingPool,
 									),
 									'',
+									locale,
 									true,
 								)}
 								&nbsp; DAI

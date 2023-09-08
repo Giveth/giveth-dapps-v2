@@ -1,23 +1,9 @@
 import { brandColors, semanticColors } from '@giveth/ui-design-system';
 import config from '@/configuration';
+import { networksParams } from '@/helpers/blockchain';
 
 export const chainName = (chainId: number) => {
-	switch (chainId) {
-		case 31337:
-			return 'Hardhat';
-		case 1:
-			return 'Mainnet';
-		case 42:
-			return 'Kovan';
-		case 5:
-			return 'Goerli';
-		case 4:
-			return 'Rinkeby';
-		case 100:
-			return 'Gnosis Chain';
-		default:
-			return 'Unknown';
-	}
+	return networksParams[chainId]?.chainName || 'Unknown';
 };
 
 export const CHAINS_WITH_GIVECONOMY = [100, 1, 10, 5, 420];
@@ -91,7 +77,7 @@ export const OurImages = [
 
 export const givEconomySupportedNetworks = [
 	config.MAINNET_NETWORK_NUMBER,
-	config.XDAI_NETWORK_NUMBER,
+	config.GNOSIS_NETWORK_NUMBER,
 ];
 
 export const zIndex = {
@@ -127,3 +113,5 @@ export const TWO_WEEK = 1_209_600_000;
 export const minDonationAmount = 0.000001;
 
 export const BACKEND_QUERY_LIMIT = 50;
+
+export const PROFILE_PHOTO_PLACEHOLDER = '/images/placeholders/profile.svg';

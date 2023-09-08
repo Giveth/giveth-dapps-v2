@@ -16,7 +16,7 @@ import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
-import { formatDonations } from '@/helpers/number';
+import { formatDonation } from '@/helpers/number';
 
 export const DonateSection = () => {
 	const { formatMessage, locale } = useIntl();
@@ -33,7 +33,7 @@ export const DonateSection = () => {
 						{formatMessage({ id: 'label.total_amount_raised' })}
 					</Title>
 					<Amount weight={700}>
-						{formatDonations(sumDonationValueUsd || 0, '$')}
+						{formatDonation(sumDonationValueUsd || 0, '$', locale)}
 					</Amount>
 					<Description>
 						{formatMessage({
@@ -145,6 +145,7 @@ const DonateDescription = styled(Flex)`
 	border: 1px solid ${neutralColors.gray[300]};
 	border-radius: 16px;
 	margin-bottom: 24px;
+	margin-top: 10px;
 `;
 
 const LearnLink = styled(Flex)`

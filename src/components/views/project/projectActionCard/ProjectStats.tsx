@@ -8,7 +8,6 @@ import { useProjectContext } from '@/context/project.context';
 import StatusBadge from './StatusBadge';
 import ListingBadge from '@/components/ListingBadge';
 import VerificationBadge from '@/components/VerificationBadge';
-import { Badge, EBadgeStatus } from '@/components/Badge';
 
 export const ProjectStats = () => {
 	const { formatMessage } = useIntl();
@@ -54,7 +53,11 @@ export const ProjectStats = () => {
 					</Flex>
 					<ListingBadge listed={projectData?.listed} />
 				</StatRow>
-				<StatRow justifyContent='space-between'>
+				<StatRow
+					gap='5px'
+					justifyContent='space-between'
+					alignItems='center'
+				>
 					<Flex alignItems='center' gap='4px'>
 						<P>
 							{formatMessage({ id: 'label.verification_status' })}
@@ -70,21 +73,10 @@ export const ProjectStats = () => {
 							</StatTooltip>
 						</IconWithTooltip>
 					</Flex>
-					{projectData?.verified ? (
-						<Badge label='Verified' status={EBadgeStatus.SUCCESS} />
-					) : projectData?.verificationFormStatus ? (
-						<VerificationBadge
-							isVerified={projectData?.verified}
-							verificationStatus={
-								projectData?.verificationFormStatus
-							}
-						/>
-					) : (
-						<Badge
-							label='Not verified'
-							status={EBadgeStatus.DEFAULT}
-						/>
-					)}
+					<VerificationBadge
+						isVerified={projectData?.verified}
+						verificationStatus={projectData?.verificationFormStatus}
+					/>
 				</StatRow>
 			</Flex>
 		</div>

@@ -248,11 +248,14 @@ export const SmallCreateProject = styled(Button)`
 	}
 `;
 
-export const LargeCreateProject = styled.div`
+export const LargeCreateProject = styled.div<{ isTexty?: boolean }>`
 	display: none;
 	> button {
+		${props => props.isTexty && `height: 50px;`}
 		box-shadow: ${props =>
-			props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+			props.theme === ETheme.Dark || props.isTexty
+				? ''
+				: Shadow.Dark[500]};
 	}
 
 	${mediaQueries.laptopS} {

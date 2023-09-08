@@ -1,15 +1,5 @@
-import {
-	SimpleNetworkConfig,
-	SimplePoolStakingConfig,
-	StakingType,
-	UniswapV3PoolStakingConfig,
-} from '@/types/config';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
+import { NetworkConfig, SimplePoolStakingConfig } from '@/types/config';
 import config from '@/configuration';
-
-const uniswapConfig = config.MAINNET_CONFIG.pools.find(
-	p => p.type === StakingType.UNISWAPV3_ETH_GIV,
-) as UniswapV3PoolStakingConfig;
 
 export class SubgraphQueryBuilder {
 	private static getTokenBalanceQuery = (
@@ -24,18 +14,29 @@ export class SubgraphQueryBuilder {
 	};
 
 	static getBalanceQuery = (
-		{ TOKEN_ADDRESS, gGIV_ADDRESS }: SimpleNetworkConfig,
+		networkConfig: NetworkConfig,
 		userAddress?: string,
 	): string => {
 		if (!userAddress) return '';
-		let query = SubgraphQueryBuilder.getTokenBalanceQuery(
-			TOKEN_ADDRESS,
-			userAddress,
-		);
+		let query = '';
 
-		if (gGIV_ADDRESS) {
+		if (networkConfig.GIV_TOKEN_ADDRESS) {
 			query += SubgraphQueryBuilder.getTokenBalanceQuery(
-				gGIV_ADDRESS,
+				networkConfig.GIV_TOKEN_ADDRESS,
+				userAddress,
+			);
+		}
+
+		if (networkConfig.GIVPOWER?.LM_ADDRESS) {
+			query += SubgraphQueryBuilder.getTokenBalanceQuery(
+				networkConfig.GIVPOWER.LM_ADDRESS,
+				userAddress,
+			);
+		}
+
+		if (networkConfig.gGIV_TOKEN_ADDRESS) {
+			query += SubgraphQueryBuilder.getTokenBalanceQuery(
+				networkConfig.gGIV_TOKEN_ADDRESS,
 				userAddress,
 			);
 		}
@@ -76,15 +77,17 @@ export class SubgraphQueryBuilder {
 	};
 
 	private static generateTokenDistroQueries = (
-		networkConfig: SimpleNetworkConfig,
+		networkConfig: NetworkConfig,
 		userAddress?: string,
 	): string => {
-		return [
-			networkConfig.TOKEN_DISTRO_ADDRESS,
-			...networkConfig.regenStreams.map(c => {
-				return c.tokenDistroAddress;
-			}),
-		]
+		if (!networkConfig.TOKEN_DISTRO_ADDRESS) return '';
+		const addresses = [networkConfig.TOKEN_DISTRO_ADDRESS];
+		if (networkConfig.regenStreams) {
+			addresses.push(
+				...networkConfig.regenStreams.map(c => c.tokenDistroAddress),
+			);
+		}
+		return addresses
 			.map(tokenDistroAddress =>
 				SubgraphQueryBuilder.getTokenDistroQueries(
 					tokenDistroAddress,
@@ -105,6 +108,7 @@ export class SubgraphQueryBuilder {
 	};
 
 	private static getUniswapPositionsQuery = (address?: string): string => {
+		const uniswapConfig = config.MAINNET_CONFIG.v3Pools[0];
 		const userPositionsQuery = `
 		${
 			address
@@ -212,8 +216,8 @@ export class SubgraphQueryBuilder {
 			.join('');
 	};
 
-	private static getGIVPowersInfoQuery = (): string => {
-		return `givpower(id: "${config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase()}"){
+	private static getGIVPowersInfoQuery = (lmAddress: string): string => {
+		return `givpower(id: "${lmAddress.toLowerCase()}"){
 			id
 			initialDate
 			locksCreated
@@ -247,59 +251,34 @@ export class SubgraphQueryBuilder {
 		}}`;
 	};
 
-	static getMainnetQuery = (userAddress?: string): string => {
-		const uniswapConfig = config.MAINNET_CONFIG.pools.find(
-			c => c.type === StakingType.UNISWAPV3_ETH_GIV,
-		) as UniswapV3PoolStakingConfig;
-
-		let uniswapV3PoolQuery = '';
-		if (uniswapConfig?.UNISWAP_V3_LP_POOL) {
-			uniswapV3PoolQuery = `
-			uniswapV3Pool: ${SubgraphQueryBuilder.getUniswapV3PoolQuery(
-				uniswapConfig.UNISWAP_V3_LP_POOL,
-			)}
-			`;
-		}
-
-		return `query {
-			${SubgraphQueryBuilder.getBalanceQuery(config.MAINNET_CONFIG, userAddress)}
-			${SubgraphQueryBuilder.generateTokenDistroQueries(
-				config.MAINNET_CONFIG,
-				userAddress,
-			)}
+	static getChainQuery = (chainId: number, userAddress?: string): string => {
+		const networkConfig = config.NETWORKS_CONFIG[chainId];
+		const givpowerConfig = networkConfig.GIVPOWER;
+		return `
+		{
+			${SubgraphQueryBuilder.getBalanceQuery(networkConfig, userAddress)}
+			${SubgraphQueryBuilder.generateTokenDistroQueries(networkConfig, userAddress)}
 			${SubgraphQueryBuilder.generateFarmingQueries(
-				[
-					getGivStakingConfig(config.MAINNET_CONFIG),
-					...(config.MAINNET_CONFIG.pools.filter(
-						c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
-					) as Array<SimplePoolStakingConfig>),
-					...config.MAINNET_CONFIG.regenPools,
-				],
+				givpowerConfig
+					? [
+							givpowerConfig,
+							...(networkConfig?.pools || []),
+							...(networkConfig?.regenPools || []),
+					  ]
+					: [
+							...(networkConfig?.pools || []),
+							...(networkConfig?.regenPools || []),
+					  ],
 				userAddress,
 			)}
-			${SubgraphQueryBuilder.getUniswapPositionsQuery(userAddress)}
-			${uniswapV3PoolQuery}
-		}
-		`;
-	};
-
-	static getXDaiQuery = (userAddress?: string): string => {
-		return `query {
-			${SubgraphQueryBuilder.getBalanceQuery(config.XDAI_CONFIG, userAddress)}
-			${SubgraphQueryBuilder.generateTokenDistroQueries(
-				config.XDAI_CONFIG,
-				userAddress,
-			)}
-			${SubgraphQueryBuilder.generateFarmingQueries(
-				[
-					getGivStakingConfig(config.XDAI_CONFIG),
-					...(config.XDAI_CONFIG
-						.pools as Array<SimplePoolStakingConfig>),
-					...config.XDAI_CONFIG.regenPools,
-				],
-				userAddress,
-			)}
-			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery()},
+			${
+				givpowerConfig?.LM_ADDRESS
+					? 'givpowerInfo:' +
+					  SubgraphQueryBuilder.getGIVPowersInfoQuery(
+							givpowerConfig.LM_ADDRESS,
+					  )
+					: ''
+			},
 		}
 		`;
 	};

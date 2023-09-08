@@ -21,7 +21,6 @@ import IntroCard from './IntroCard';
 import introBanner from '/public/images/banners/introBanner.svg';
 import { mediaQueries } from '@/lib/constants/constants';
 import Routes from '@/lib/constants/Routes';
-import links from '@/lib/constants/links';
 
 const SemiCircle = dynamic(() => import('@/components/particles/SemiCircle'));
 const Circle = dynamic(() => import('@/components/particles/Circle'));
@@ -58,7 +57,7 @@ const IntroBlock = () => {
 										icon={<IconChevronRight24 />}
 									/>
 								</Link>
-								<Link href={links.OUR_MISSION} target='_blank'>
+								<Link href={Routes.AboutUs + '#mission'}>
 									<OurMissionButton
 										linkType='texty-secondary'
 										label={formatMessage({

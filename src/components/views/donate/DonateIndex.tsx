@@ -15,7 +15,6 @@ import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from '../../DonateSocialBox';
 import SuccessView from '@/components/views/donate/SuccessView';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
-import DonationTypes from '@/components/views/donate/DonationTypes';
 import NiceBanner from './NiceBanner';
 // import PurchaseXDAI from './PurchaseXDAIBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
@@ -26,6 +25,7 @@ import ExternalLink from '@/components/ExternalLink';
 import { formatTxLink } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import CryptoDonation from '@/components/views/donate/CryptoDonation';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -47,7 +47,7 @@ const DonateIndex: FC = () => {
 						{isSuccessDonation ? (
 							<SuccessView />
 						) : (
-							<DonationTypes />
+							<CryptoDonation />
 						)}
 					</Right>
 				</Sections>

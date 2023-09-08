@@ -12,8 +12,8 @@ import { BigNumber } from 'ethers';
 import { Dispatch } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import config from '@/configuration';
-import { WrongNetworkModal } from '@/components/modals/WrongNetwork';
 import { fetchAirDropClaimData, hasClaimedAirDrop } from '@/lib/claim';
+import SwitchNetwork from '@/components/modals/SwitchNetwork';
 
 export enum GiveDropStateType {
 	notConnected,
@@ -65,11 +65,11 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 	const { account, chainId, active } = useWeb3React();
 
 	useEffect(() => {
-		setShowModal(active && chainId !== config.XDAI_NETWORK_NUMBER);
+		setShowModal(active && chainId !== config.GNOSIS_NETWORK_NUMBER);
 	}, [chainId, step, active]);
 
 	const getClaimData = async () => {
-		if (!account || chainId !== config.XDAI_NETWORK_NUMBER) {
+		if (!account || chainId !== config.GNOSIS_NETWORK_NUMBER) {
 			return;
 		}
 		setTotalAmount(Zero);
@@ -124,9 +124,10 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 		>
 			{children}
 			{showModal && (
-				<WrongNetworkModal
+				<SwitchNetwork
 					setShowModal={setShowModal}
-					targetNetworks={[config.XDAI_NETWORK_NUMBER]}
+					desc="You're connected to the wrong network! please switch to Gnosis Chain."
+					customNetworks={[config.GNOSIS_NETWORK_NUMBER]}
 				/>
 			)}
 		</ClaimContext.Provider>

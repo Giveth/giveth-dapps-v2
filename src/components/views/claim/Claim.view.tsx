@@ -120,7 +120,8 @@ const ClaimView = () => {
 			{step < 6 ? (
 				<ClaimViewContainer
 					switchNetwork={
-						chainId === config.XDAI_NETWORK_NUMBER || chainId === 0
+						chainId === config.GNOSIS_NETWORK_NUMBER ||
+						chainId === 0
 					}
 				>
 					<Steps justifyContent='center' alignItems='center'>

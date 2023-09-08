@@ -251,7 +251,10 @@ const TokenPicker = (props: {
 			>
 				<TokenContainer>
 					{selectedToken && (
-						<ImageIcon symbol={selectedToken.symbol} />
+						<ImageIcon
+							key={selectedToken.symbol}
+							symbol={selectedToken.symbol}
+						/>
 					)}
 					{selectedToken
 						? selectedToken.symbol

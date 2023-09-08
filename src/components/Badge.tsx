@@ -55,8 +55,9 @@ interface IBadgeContainer {
 	mainColor: any;
 }
 
-export const BadgeContainer = styled.span<IBadgeContainer>`
+const BadgeContainer = styled.span<IBadgeContainer>`
 	display: flex;
+	flex-shrink: 0;
 	align-items: center;
 	color: ${props => props.mainColor[700]} !important;
 	background: ${props => props.mainColor[100]};

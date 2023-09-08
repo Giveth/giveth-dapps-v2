@@ -7,11 +7,7 @@ import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useIntl } from 'react-intl';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { FlexSpacer } from '@/components/styled-components/Flex';
-import {
-	PoolStakingConfig,
-	RegenPoolStakingConfig,
-	StakingType,
-} from '@/types/config';
+import { PoolStakingConfig, RegenPoolStakingConfig } from '@/types/config';
 import { StakeCardState } from './BaseStakingCard';
 import {
 	StakingPoolExchangeRow,
@@ -19,7 +15,6 @@ import {
 	GIVgardenTooltip,
 	IntroIcon,
 } from './BaseStakingCard.sc';
-import config from '@/configuration';
 
 interface IStakingCardHeaderProps {
 	poolStakingConfig: PoolStakingConfig;
@@ -36,7 +31,7 @@ export const StakingCardHeader: FC<IStakingCardHeaderProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 
-	const { type, introCard, network: poolNetwork } = poolStakingConfig;
+	const { type, introCard } = poolStakingConfig;
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 
 	return (
@@ -48,24 +43,23 @@ export const StakingCardHeader: FC<IStakingCardHeaderProps> = ({
 					? 'GIVPOWER'
 					: 'GIVFARM'}
 			</StakingPoolExchange>
-			{poolNetwork === config.XDAI_NETWORK_NUMBER &&
-				type === StakingType.GIV_LM && (
-					<IconWithTooltip
-						direction={'top'}
-						icon={
-							<IconHelpFilled
-								color={brandColors.deep[100]}
-								size={12}
-							/>
-						}
-					>
-						<GIVgardenTooltip>
-							{formatMessage({
-								id: 'label.staking_giv_in_this_pool_allows_to_support_verified_projects',
-							})}
-						</GIVgardenTooltip>
-					</IconWithTooltip>
-				)}
+			{isGIVpower && (
+				<IconWithTooltip
+					direction={'top'}
+					icon={
+						<IconHelpFilled
+							color={brandColors.deep[100]}
+							size={12}
+						/>
+					}
+				>
+					<GIVgardenTooltip>
+						{formatMessage({
+							id: 'label.staking_giv_in_this_pool_allows_to_support_verified_projects',
+						})}
+					</GIVgardenTooltip>
+				</IconWithTooltip>
+			)}
 			<FlexSpacer />
 			{notif && notif}
 			{introCard && (

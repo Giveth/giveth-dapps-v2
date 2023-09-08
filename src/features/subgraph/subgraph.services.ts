@@ -1,48 +1,25 @@
 import { captureException } from '@sentry/nextjs';
-import config from '@/configuration';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { fetchSubgraph } from '@/services/subgraph.service';
-import { defaultSubgraphValues } from './subgraph.slice';
 
-export const fetchMainnetInfo = async (userAddress?: string) => {
+export const fetchChainInfo = async (chainId: number, userAddress?: string) => {
 	try {
 		const response = await fetchSubgraph(
-			SubgraphQueryBuilder.getMainnetQuery(userAddress),
-			config.MAINNET_NETWORK_NUMBER,
+			SubgraphQueryBuilder.getChainQuery(chainId, userAddress),
+			chainId,
 		);
 		return transformSubgraphData({
 			...response,
-			networkNumber: config.MAINNET_NETWORK_NUMBER,
+			networkNumber: chainId,
 		});
 	} catch (e) {
-		console.error('Error on query mainnet subgraph:', e);
+		console.error(`Error on query ${chainId} subgraph:`, e);
 		captureException(e, {
 			tags: {
-				section: 'fetchMainnetSubgraph',
+				section: 'fetch${chainId}Subgraph',
 			},
 		});
-		return defaultSubgraphValues;
-	}
-};
-
-export const fetchXDaiInfo = async (userAddress?: string) => {
-	try {
-		const response = await fetchSubgraph(
-			SubgraphQueryBuilder.getXDaiQuery(userAddress),
-			config.XDAI_NETWORK_NUMBER,
-		);
-		return transformSubgraphData({
-			...response,
-			networkNumber: config.XDAI_NETWORK_NUMBER,
-		});
-	} catch (e) {
-		console.error('Error on query xDai subgraph:', e);
-		captureException(e, {
-			tags: {
-				section: 'fetchxDaiSubgraph',
-			},
-		});
-		return defaultSubgraphValues;
+		return null;
 	}
 };

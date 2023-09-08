@@ -11,8 +11,8 @@ import { ProjectsItems } from '../menu/ProjectsItems';
 import { GIVeconomyItems } from '../menu/GIVeconomyItems';
 import { Item } from '../menu/Item';
 import { ItemSpacer } from '../menu/common';
-import Routes from '@/lib/constants/Routes';
 import { setShowSearchModal } from '@/features/modal/modal.slice';
+import { CommunityItems } from '../menu/CommunityItems';
 
 export const HomeSidebar = () => {
 	const { theme } = useAppSelector(state => state.general);
@@ -40,13 +40,12 @@ export const HomeSidebar = () => {
 				<GIVeconomyItems />
 			</SidebarParentItem>
 			<ItemSpacer />
-			<Link href={Routes.Join}>
-				<Item theme={theme}>
-					<GLink size='Big'>
-						{formatMessage({ id: 'label.community' })}
-					</GLink>
-				</Item>
-			</Link>
+			<SidebarParentItem
+				item={{ title: formatMessage({ id: 'label.community' }) }}
+			>
+				<CommunityItems />
+			</SidebarParentItem>
+
 			<SearchButton
 				theme={theme}
 				isHighlighted

@@ -9,7 +9,7 @@ import TOKEN_DISTRO_JSON from '../artifacts/TokenDistro.json';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { getGasPreference } from '@/lib/helpers';
 import { MerkleDistro } from '@/types/contracts';
-import { fetchXDaiInfo } from '@/features/subgraph/subgraph.services';
+import { fetchChainInfo } from '@/features/subgraph/subgraph.services';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 const { abi: MERKLE_ABI } = MerkleDropJson;
@@ -48,7 +48,10 @@ export const fetchAirDropClaimData = async (
 
 export const hasClaimedAirDrop = async (address: string): Promise<boolean> => {
 	try {
-		const response = await fetchXDaiInfo(address);
+		const response = await fetchChainInfo(
+			config.GNOSIS_NETWORK_NUMBER,
+			address,
+		);
 		const sdh = new SubgraphDataHelper(transformSubgraphData(response));
 
 		const balances = sdh.getGIVTokenDistroBalance();
@@ -69,7 +72,7 @@ export const claimAirDrop = async (
 	address: string,
 	provider: Web3Provider,
 ): Promise<TransactionResponse | undefined> => {
-	const merkleAddress = config.XDAI_CONFIG.MERKLE_ADDRESS;
+	const merkleAddress = config.GNOSIS_CONFIG.MERKLE_ADDRESS;
 	if (!isAddress(merkleAddress)) throw new Error('No MerkleAddress');
 	if (!provider) throw new Error('No Provider');
 
@@ -91,7 +94,7 @@ export const claimAirDrop = async (
 				claimData.index,
 				claimData.amount,
 				claimData.proof,
-				getGasPreference(config.XDAI_CONFIG),
+				getGasPreference(config.GNOSIS_CONFIG),
 			);
 	} catch (error) {
 		console.error('Error on claiming GIVdrop:', error);

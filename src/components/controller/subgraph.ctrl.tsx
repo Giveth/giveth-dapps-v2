@@ -3,9 +3,8 @@ import { useEffect } from 'react';
 import { useAppDispatch } from '@/features/hooks';
 import config from '@/configuration';
 import {
-	fetchXDaiInfoAsync,
-	fetchMainnetInfoAsync,
 	fetchCurrentInfoAsync,
+	fetchAllInfoAsync,
 } from '@/features/subgraph/subgraph.thunks';
 
 const SubgraphController = () => {
@@ -15,15 +14,16 @@ const SubgraphController = () => {
 	useEffect(() => {
 		const _account = account ? account : undefined;
 		const _chainID = chainId || config.MAINNET_NETWORK_NUMBER;
-		if (chainId !== config.XDAI_NETWORK_NUMBER)
-			dispatch(fetchXDaiInfoAsync(_account));
-		if (chainId !== config.MAINNET_NETWORK_NUMBER)
-			dispatch(fetchMainnetInfoAsync(_account));
-		dispatch(
-			fetchCurrentInfoAsync({
-				userAddress: _account,
-				chainId: _chainID,
-			}),
+		setTimeout(
+			() => {
+				dispatch(
+					fetchAllInfoAsync({
+						userAddress: _account,
+						chainId: _chainID,
+					}),
+				);
+			},
+			account ? 1000 : 0, // Prevent set no account info after account connected
 		);
 		const interval = setInterval(() => {
 			dispatch(

@@ -29,11 +29,8 @@ import {
 import { HarvestAllModal } from '../modals/HarvestAll';
 import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { TopInnerContainer } from './commons';
-
-const poolStakingConfig = getGivStakingConfig(config.XDAI_CONFIG);
 
 export const TabGardenTop = () => {
 	const { chainId } = useWeb3React();
@@ -46,7 +43,7 @@ export const TabGardenTop = () => {
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showModal);
 	const { formatMessage } = useIntl();
 
-	const { earned } = useStakingPool(poolStakingConfig);
+	const { earned } = useStakingPool(config.GNOSIS_CONFIG.GIVPOWER);
 
 	useEffect(() => {
 		setEarnedLiquidPart(givTokenDistroHelper.getLiquidPart(earned));
@@ -72,11 +69,9 @@ export const TabGardenTop = () => {
 					</Col>
 					<Col xs={12} sm={5} md={4}>
 						<GardenRewardCard
+							cardName='GIVgarden'
 							title={formatMessage({
 								id: 'label.your_giv_garden_rewards',
-							})}
-							wrongNetworkText={formatMessage({
-								id: 'label.givgarden_is_only_available_on_gnosis',
 							})}
 							liquidAmount={earnedLiquidPart}
 							stream={earnedStream}
@@ -85,7 +80,7 @@ export const TabGardenTop = () => {
 								setShowModal(true);
 							}}
 							network={chainId}
-							targetNetworks={[config.XDAI_NETWORK_NUMBER]}
+							targetNetworks={[config.GNOSIS_NETWORK_NUMBER]}
 						/>
 					</Col>
 				</Row>
@@ -94,7 +89,7 @@ export const TabGardenTop = () => {
 				<HarvestAllModal
 					title={formatMessage({ id: 'label.givgarden_rewards' })}
 					setShowModal={setShowModal}
-					poolStakingConfig={poolStakingConfig}
+					poolStakingConfig={config.GNOSIS_CONFIG.GIVPOWER}
 				/>
 			)}
 		</GardenTopContainer>

@@ -4,6 +4,7 @@ import { Button, IconWalletOutline24 } from '@giveth/ui-design-system';
 import { Controller, useForm } from 'react-hook-form';
 import { useWeb3React } from '@web3-react/core';
 import { utils } from 'ethers';
+import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import Input from '@/components/Input';
@@ -15,39 +16,23 @@ import config from '@/configuration';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
+import { networksParams } from '@/helpers/blockchain';
+import useFocus from '@/hooks/useFocus';
 
 interface IProps extends IModal {
 	addAddress: (address: IAddress) => void;
 	addresses: IAddress[];
 }
 
-const networkOptions = [
-	{
-		value: config.MAINNET_NETWORK_NUMBER,
-		label: 'Ethereum Mainnet',
-		id: config.MAINNET_NETWORK_NUMBER,
-	},
-	{
-		value: config.XDAI_NETWORK_NUMBER,
-		label: 'Gnosis',
-		id: config.XDAI_NETWORK_NUMBER,
-	},
-	{
-		value: config.POLYGON_NETWORK_NUMBER,
-		label: 'Polygon Mainnet',
-		id: config.POLYGON_NETWORK_NUMBER,
-	},
-	{
-		value: config.CELO_NETWORK_NUMBER,
-		label: 'Celo Mainnet',
-		id: config.CELO_NETWORK_NUMBER,
-	},
-	{
-		value: config.OPTIMISM_NETWORK_NUMBER,
-		label: 'Optimism',
-		id: config.OPTIMISM_NETWORK_NUMBER,
-	},
-];
+const networksConfig = config.NETWORKS_CONFIG;
+const networkOptions = Object.keys(networksConfig).map(networkId => {
+	const networkIdNumber = Number(networkId);
+	return {
+		value: networkIdNumber,
+		label: networksParams[networkIdNumber].chainName,
+		id: networkIdNumber,
+	};
+});
 
 export interface IAddressForm {
 	address: string;
@@ -69,8 +54,10 @@ const AddAddressModal: FC<IProps> = ({
 		getValues,
 	} = useForm<IAddressForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
 
+	const { formatMessage } = useIntl();
 	const { library, chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const [inputRef] = useFocus();
 
 	const watchTitle = watch('title');
 
@@ -133,6 +120,7 @@ const AddAddressModal: FC<IProps> = ({
 								selectedNetwork={field.value}
 								onChange={network => field.onChange(network)}
 								error={error}
+								ref={inputRef}
 							/>
 						)}
 					/>
@@ -166,7 +154,9 @@ const AddAddressModal: FC<IProps> = ({
 					<Buttons>
 						<Button
 							size='small'
-							label='ADD NEW ADDRESS'
+							label={formatMessage({
+								id: 'label.add_new_address',
+							})}
 							buttonType='secondary'
 							type='submit'
 						/>

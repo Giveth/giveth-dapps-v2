@@ -11,7 +11,6 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Col, Row } from '@giveth/ui-design-system';
-
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import ProjectHeader from './ProjectHeader';
@@ -31,6 +30,10 @@ import ProjectBadges from './ProjectBadges';
 import ProjectCategoriesBadges from './ProjectCategoriesBadges';
 import { PassportBanner } from '@/components/PassportBanner';
 import ProjectGIVbackToast from '@/components/views/project/ProjectGIVbackToast';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import { device } from '@/lib/constants/constants';
+import QFSection from './projectActionCard/QFSection';
+import { DonateSection } from './projectActionCard/DonationSection';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -53,12 +56,14 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	const { formatMessage } = useIntl();
 	const [activeTab, setActiveTab] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
+	const isMobile = !useMediaQuery(device.tablet);
 	const {
 		fetchProjectBoosters,
 		projectData,
 		isActive,
 		isDraft,
 		hasActiveQFRound,
+		isCancelled,
 	} = useProjectContext();
 
 	const router = useRouter();
@@ -101,7 +106,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	}
 
 	if (!projectData) {
-		return <NotAvailableProject />;
+		return <NotAvailableProject isCancelled={isCancelled} />;
 	}
 
 	return (
@@ -116,6 +121,15 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 				<Row>
 					<Col xs={12} md={8} lg={8.5}>
 						<ProjectHeader />
+						{isMobile && (
+							<MobileContainer hasActiveRound={hasActiveQFRound}>
+								{hasActiveQFRound ? (
+									<QFSection />
+								) : (
+									<DonateSection />
+								)}
+							</MobileContainer>
+						)}
 						<ProjectGIVbackToast />
 					</Col>
 					<Col xs={12} md={4} lg={3.5}>
@@ -210,6 +224,12 @@ const Separator = styled.hr`
 
 const ContinueCreationButton = styled(Button)`
 	align-self: flex-end;
+`;
+
+const MobileContainer = styled.div<{ hasActiveRound: boolean }>`
+	padding: ${props => (props.hasActiveRound ? '0 26px 26px 26px' : '0 26px')};
+	background-color: ${neutralColors.gray[100]};
+	border-radius: 16px;
 `;
 
 export default ProjectIndex;
