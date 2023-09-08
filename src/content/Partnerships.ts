@@ -25,7 +25,7 @@ import The_Giving_Block from '/public/images/partnerships/The_Giving_Block.svg';
 import Token_Engineering_Commons from '/public/images/partnerships/Token_Engineering_Commons.svg';
 import OneHive from '/public/images/partnerships/1Hive.svg';
 import SDG_Impact_Fund from '/public/images/partnerships/SDG_Impact_Fund.svg';
-import DappNode from '/public/images/partnerships/DappNode.svg';
+import Dappnode from '/public/images/partnerships/Dappnode.svg';
 import Datafund from '/public/images/partnerships/Datafund.svg';
 import BrightID from '/public/images/partnerships/BrightID.svg';
 import Gnosis_Chain from '/public/images/partnerships/Gnosis_Chain.svg';
@@ -77,8 +77,8 @@ export const PartnershipArray: IPartner[] = [
 		link: 'https://cryptocurrencyjobs.co',
 	},
 	{
-		icon: DappNode,
-		title: 'DappNode',
+		icon: Dappnode,
+		title: 'Dappnode',
 		description: 'page.partnerships.dappnode',
 		link: 'https://dappnode.io',
 	},
