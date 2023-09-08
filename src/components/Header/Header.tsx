@@ -41,7 +41,7 @@ import { LinkWithMenu } from '../menu/LinkWithMenu';
 import { ProjectsMenu } from '../menu/ProjectsMenu';
 import { GIVeconomyMenu } from '../menu/GIVeconomyMenu';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { device } from '@/lib/constants/constants';
+import { device, CHAINS_WITH_GIVECONOMY } from '@/lib/constants/constants';
 import { ESideBarDirection, SideBar } from '../sidebar/SideBar';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import { RewardButtonWithMenu } from '../menu/RewardButtonWithMenu';
@@ -272,11 +272,13 @@ const Header: FC<IHeader> = () => {
 						<NotificationButtonWithMenu
 							isHeaderShowing={showHeader}
 							theme={theme}
-						/>
-						<RewardButtonWithMenu
-							isHeaderShowing={showHeader}
-							theme={theme}
-						/>
+						/>{' '}
+						{CHAINS_WITH_GIVECONOMY.includes(chainId) && (
+							<RewardButtonWithMenu
+								isHeaderShowing={showHeader}
+								theme={theme}
+							/>
+						)}
 						<UserButtonWithMenu
 							isHeaderShowing={showHeader}
 							theme={theme}

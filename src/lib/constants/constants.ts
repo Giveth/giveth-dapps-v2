@@ -20,6 +20,8 @@ export const chainName = (chainId: number) => {
 	}
 };
 
+export const CHAINS_WITH_GIVECONOMY = [100, 1, 10, 5, 420];
+
 export const NFT_POSITIONS_MANAGER_ADDRESS: Record<string, string> = {
 	4: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
 	42: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
