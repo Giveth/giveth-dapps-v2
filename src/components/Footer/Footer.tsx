@@ -87,7 +87,11 @@ const Footer = () => {
 								})}
 							</LinkItem>
 						</Link>
-						<a href={links.GIVETH_DOCS}>
+						<a
+							href={links.DOCS}
+							target='_blank'
+							rel='noreferrer noopener'
+						>
 							<LinkItem color={textColor}>
 								{formatMessage({
 									id: 'component.title.docs',
