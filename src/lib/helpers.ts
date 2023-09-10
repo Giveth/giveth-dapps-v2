@@ -1,14 +1,20 @@
 import { promisify } from 'util';
 // eslint-disable-next-line import/named
 import unescape from 'lodash/unescape';
-import { parseEther, parseUnits } from '@ethersproject/units';
+
 import { keccak256 } from '@ethersproject/keccak256';
-import { Contract } from '@ethersproject/contracts';
-import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
+
+import { getContract } from 'wagmi/actions';
+import {
+	writeContract,
+	sendTransaction as wagmiSendTransaction,
+} from '@wagmi/core';
+
 import { AddressZero } from '@ethersproject/constants';
 // @ts-ignore
-import abi from 'human-standard-token-abi';
 import { captureException } from '@sentry/nextjs';
+import { erc20ABI } from 'wagmi';
+import { parseEther, parseUnits } from 'viem';
 import { BasicNetworkConfig, GasPreference } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
@@ -17,9 +23,12 @@ import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
 import config from '@/configuration';
-import { ERC20 } from '@/types/contracts';
 
 declare let window: any;
+interface TransactionParams {
+	to: `0x${string}`;
+	value: string;
+}
 
 export const fullPath = (path: string) => `${config.FRONTEND_LINK}${path}`;
 
@@ -237,51 +246,23 @@ export const shortenAddress = (
 	)}`;
 };
 
+// Sends a transaction, either as an ERC20 token transfer or a regular ETH transfer.
 export async function sendTransaction(
-	web3: Web3Provider,
-	params: { to: string; value: string },
-	txCallbacks: {
-		onTxHash: (hash: string, nonce: number) => void;
-		onReceipt: (receipt: any) => void;
-	},
-	contractAddress: string,
+	params: TransactionParams,
+	contractAddress?: `0x${string}`,
 ) {
 	try {
-		let tx: TransactionResponse;
-		const txParams: any = {
-			to: params.to,
-		};
+		let hash: `0x${string}`;
 
-		const fromSigner = web3.getSigner();
 		if (contractAddress && contractAddress !== AddressZero) {
-			// ERC20 TRANSFER
-			const contract = new Contract(
-				contractAddress,
-				abi,
-				fromSigner,
-			) as ERC20;
-			const decimals = await contract.decimals();
-			txParams.value = parseUnits(params.value, decimals);
-			tx = await contract.transfer(txParams.to, txParams.value);
+			hash = await handleErc20Transfer(params, contractAddress);
 		} else {
-			// REGULAR ETH TRANSFER
-			txParams.value = parseEther(params.value);
-			tx = await fromSigner.sendTransaction(txParams);
+			hash = await handleEthTransfer(params);
 		}
 
-		txCallbacks.onTxHash(tx.hash, tx.nonce);
-		const receipt = await tx.wait();
-
-		setTimeout(() => {
-			if (receipt.status) {
-				txCallbacks.onReceipt(tx.hash);
-			}
-			console.log('Tx ---> : ', { tx, receipt });
-		}, 5000);
+		return hash;
 	} catch (error: any) {
 		if (error.replacement && !error.cancelled) {
-			// Speed up the process by replacing the transaction
-			txCallbacks.onReceipt(error.replacement.hash);
 			return;
 		}
 		captureException(error, {
@@ -291,6 +272,44 @@ export async function sendTransaction(
 		});
 		throw error;
 	}
+}
+
+// Handles the transfer for ERC20 tokens, returning the transaction hash.
+async function handleErc20Transfer(
+	params: TransactionParams,
+	contractAddress: `0x${string}`,
+): Promise<`0x${string}`> {
+	console.log('contractAddress', contractAddress);
+	const contract = getContract({
+		address: contractAddress,
+		abi: erc20ABI,
+	});
+	const decimals = await contract.read.decimals();
+	const value = parseUnits(params.value, decimals);
+	const write = await writeContract({
+		address: contractAddress,
+		abi: erc20ABI,
+		functionName: 'transfer',
+		args: [params.to, value],
+	});
+	console.log('Write', write);
+	console.log('ERC20 transfer result', { hash: write.hash });
+	return write.hash;
+}
+
+// Handles the transfer for ETH, returning the transaction hash.
+async function handleEthTransfer(
+	params: TransactionParams,
+): Promise<`0x${string}`> {
+	const value = parseEther(params.value);
+
+	const { hash } = await wagmiSendTransaction({
+		to: params.to,
+		value: value,
+	});
+
+	console.log('ETH transfer result', { hash });
+	return hash;
 }
 
 export async function signMessage(
