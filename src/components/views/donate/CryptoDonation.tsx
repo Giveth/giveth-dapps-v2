@@ -189,7 +189,7 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
-	const pollToken = useCallback(() => {
+	const pollToken = useCallback(async () => {
 		clearPoll();
 		if (!selectedToken) {
 			return setSelectedTokenBalance(BigInt(0));
