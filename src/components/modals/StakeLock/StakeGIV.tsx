@@ -33,7 +33,6 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import type {
-	GIVpowerGIVgardenStakingConfig,
 	PoolStakingConfig,
 	SimplePoolStakingConfig,
 } from '@/types/config';
@@ -107,8 +106,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 					) as ERC20;
 					const allowance: BigNumber = await tokenContract.allowance(
 						account!,
-						(poolStakingConfig as GIVpowerGIVgardenStakingConfig)
-							.GARDEN_ADDRESS!,
+						poolStakingConfig.GARDEN_ADDRESS!,
 					);
 					const amountNumber = ethers.BigNumber.from(amount);
 					const allowanceNumber = ethers.BigNumber.from(
@@ -140,8 +138,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			amount,
 			account!,
 			poolStakingConfig.network === config.GNOSIS_NETWORK_NUMBER
-				? (poolStakingConfig as GIVpowerGIVgardenStakingConfig)
-						.GARDEN_ADDRESS
+				? poolStakingConfig.GARDEN_ADDRESS!
 				: LM_ADDRESS!,
 			POOL_ADDRESS,
 			library,
@@ -159,8 +156,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 		try {
 			const txResponse = await wrapToken(
 				amount,
-				(poolStakingConfig as GIVpowerGIVgardenStakingConfig)
-					.GARDEN_ADDRESS,
+				poolStakingConfig.GARDEN_ADDRESS!,
 				library,
 			);
 			if (txResponse) {

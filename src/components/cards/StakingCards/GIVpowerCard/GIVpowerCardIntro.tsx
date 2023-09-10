@@ -22,7 +22,6 @@ import { FlexSpacer, Flex } from '@/components/styled-components/Flex';
 import { StakeCardState } from '../BaseStakingCard/BaseStakingCard';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import config from '@/configuration';
-import { GIVpowerConfig } from '@/types/config';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
 interface IGIVpowerCardIntro {
@@ -37,7 +36,8 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({
 	const { formatMessage } = useIntl();
 	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
 	const { stakedAmount } = useStakingPool(
-		(config.NETWORKS_CONFIG[poolNetwork] as GIVpowerConfig).GIVPOWER,
+		config.NETWORKS_CONFIG[poolNetwork].GIVPOWER ||
+			config.GNOSIS_CONFIG.GIVPOWER,
 	);
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 

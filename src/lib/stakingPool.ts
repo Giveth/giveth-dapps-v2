@@ -8,11 +8,7 @@ import {
 import { captureException } from '@sentry/nextjs';
 import {
 	BalancerPoolStakingConfig,
-	GIVTokenConfig,
-	GIVpowerConfig,
 	ICHIPoolStakingConfig,
-	MainnetNetworkConfig,
-	RegenFarmConfig,
 	RegenPoolStakingConfig,
 	SimplePoolStakingConfig,
 	StakingPlatform,
@@ -41,7 +37,6 @@ import {
 } from '@/types/contracts';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { GIVpowerUniPoolConfig } from '@/types/config';
 
 const { abi: LM_ABI } = LM_Json;
 const { abi: GP_ABI } = GP_Json;
@@ -88,15 +83,16 @@ export const getGivStakingAPR = async (
 	subgraphValue: ISubgraphState,
 	provider: JsonRpcProvider | null,
 ): Promise<APR> => {
-	const lmAddress = (config.NETWORKS_CONFIG[network] as GIVpowerConfig)
-		.GIVPOWER.LM_ADDRESS;
+	const networkConfig = config.NETWORKS_CONFIG[network];
+	const lmAddress = networkConfig.GIVPOWER?.LM_ADDRESS;
+	if (!lmAddress) return { effectiveAPR: Zero };
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
 	let givStakingAPR: BigNumber = Zero;
 	const _provider =
 		provider && provider._network.chainId === network
 			? provider
-			: new JsonRpcProvider(config.NETWORKS_CONFIG[network].nodeUrl);
+			: new JsonRpcProvider(networkConfig.nodeUrl);
 
 	const { totalSupply, rewardRate } = await getUnipoolInfo(
 		unipoolHelper,
@@ -201,8 +197,8 @@ const getBalancerPoolStakingAPR = async (
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
-	const tokenAddress = (config.NETWORKS_CONFIG[network] as GIVTokenConfig)
-		.GIV_TOKEN_ADDRESS;
+	const tokenAddress = config.NETWORKS_CONFIG[network].GIV_TOKEN_ADDRESS;
+	if (!tokenAddress) return { effectiveAPR: Zero };
 
 	const weightedPoolContract = new Contract(
 		POOL_ADDRESS,
@@ -276,15 +272,18 @@ const getSimplePoolStakingAPR = async (
 	unipoolHelper: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
-	const givTokenAddress = (
-		config.NETWORKS_CONFIG[network] as MainnetNetworkConfig
-	).GIV_TOKEN_ADDRESS;
+	const networkConfig = config.NETWORKS_CONFIG[network];
+
+	const givTokenAddress = networkConfig.GIV_TOKEN_ADDRESS;
+	if (!givTokenAddress) return { effectiveAPR: Zero };
+
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
+	const regenStreams = networkConfig.regenStreams;
+	if (!regenStreams) return { effectiveAPR: Zero };
 	const streamConfig =
 		regenStreamType &&
-		(config.NETWORKS_CONFIG[network] as RegenFarmConfig).regenStreams.find(
-			s => s.type === regenStreamType,
-		);
+		regenStreams &&
+		regenStreams.find(s => s.type === regenStreamType);
 	const tokenAddress = streamConfig
 		? streamConfig.rewardTokenAddress
 		: givTokenAddress;
@@ -360,18 +359,15 @@ export const getUserStakeInfo = (
 	const rewards = BN(unipoolBalance.rewards);
 	const rewardPerTokenPaid = BN(unipoolBalance.rewardPerTokenPaid);
 	let stakedAmount = BN(unipoolBalance.balance);
+	const networkConfig = config.NETWORKS_CONFIG[poolStakingConfig.network];
 	if (poolStakingConfig.type === StakingType.GIV_GARDEN_LM) {
 		const gGIVBalance = sdh.getTokenBalance(
-			config.GNOSIS_CONFIG.gGIV_TOKEN_ADDRESS,
+			networkConfig.gGIV_TOKEN_ADDRESS,
 		);
 		stakedAmount = BN(gGIVBalance.balance);
 	} else if (poolStakingConfig.type === StakingType.GIV_UNIPOOL_LM) {
 		const gGIVBalance = sdh.getTokenBalance(
-			(
-				config.NETWORKS_CONFIG[
-					poolStakingConfig.network
-				] as GIVpowerUniPoolConfig
-			).GIVPOWER.LM_ADDRESS,
+			networkConfig.GIVPOWER?.LM_ADDRESS,
 		);
 		stakedAmount = BN(gGIVBalance.balance);
 	} else {
@@ -803,8 +799,12 @@ export const getGIVpowerOnChain = async (
 		console.error('chainId is null');
 		return;
 	}
-	const contractAddress = (config.NETWORKS_CONFIG[chainId] as GIVpowerConfig)
-		.GIVPOWER.LM_ADDRESS;
+	const contractAddress =
+		config.NETWORKS_CONFIG[chainId].GIVPOWER?.LM_ADDRESS;
+	if (!contractAddress) {
+		console.error('GIVpower contract address is null');
+		return;
+	}
 	const givpowerContract = new Contract(contractAddress, GP_ABI, provider);
 	try {
 		return await givpowerContract.balanceOf(account);

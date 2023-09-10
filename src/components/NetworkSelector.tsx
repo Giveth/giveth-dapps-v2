@@ -22,14 +22,14 @@ import { switchNetwork } from '@/lib/wallet';
 import { Flex } from './styled-components/Flex';
 import { ChangeNetworkModal } from './modals/ChangeNetwork';
 import config from '../configuration';
-import { BasicNetworkConfig } from '@/types/config';
+import { NetworkConfig } from '@/types/config';
 import NetworkLogo from './NetworkLogo';
 import { Shadow } from './styled-components/Shadow';
 
 export interface ISelected {
 	label: string;
 	value: number;
-	network: BasicNetworkConfig;
+	network: NetworkConfig;
 	active: boolean;
 }
 
@@ -41,8 +41,8 @@ const _options = [
 ];
 
 const options = _options.map(o => ({
-	label: o.network.chainName,
-	value: parseInt(o.network.chainId),
+	label: o.network?.chainName,
+	value: parseInt(o.network?.chainId),
 	network: o.network,
 	active: o.active,
 }));
@@ -167,7 +167,7 @@ const selectStyles: StylesConfig = {
 
 export const NetworkSelector = () => {
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
-	const [value, setValue] = useState(options[1]);
+	const [value, setValue] = useState<ISelected | null>();
 	const [targetNetwork, setTargetNetwork] = useState(
 		config.MAINNET_NETWORK_NUMBER,
 	);
@@ -186,11 +186,11 @@ export const NetworkSelector = () => {
 	};
 
 	useEffect(() => {
-		if (chainId) {
-			const selected = options.find(o => o.value === chainId);
-			if (selected) {
-				setValue(selected);
-			}
+		const selected = options.find(o => o.value === chainId);
+		if (selected) {
+			setValue(selected);
+		} else {
+			setValue(null);
 		}
 	}, [chainId]);
 

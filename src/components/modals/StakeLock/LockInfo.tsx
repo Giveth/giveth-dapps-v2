@@ -18,7 +18,6 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import config from '@/configuration';
-import { GIVpowerConfig } from '@/types/config';
 import type { FC } from 'react';
 
 interface ILockInfo {
@@ -29,11 +28,8 @@ interface ILockInfo {
 const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 	const { chainId } = useWeb3React();
 	const { apr } = useStakingPool(
-		(
-			config.NETWORKS_CONFIG[
-				chainId || config.GNOSIS_NETWORK_NUMBER
-			] as GIVpowerConfig
-		).GIVPOWER,
+		config.NETWORKS_CONFIG[chainId!].GIVPOWER ||
+			config.GNOSIS_CONFIG.GIVPOWER,
 	);
 
 	const multipler = Math.sqrt(1 + round);

@@ -60,6 +60,7 @@ const config: EnvConfig = {
 	MAINNET_CONFIG: {
 		...networksParams[5],
 		DAI_TOKEN_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',
+		DAI_BUY_LINK: '',
 		PFP_CONTRACT_ADDRESS: '0x9F8c0e0353234F6f644fc7AF84Ac006f02cecE77',
 
 		gasPreference: {
@@ -110,6 +111,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 			},
 		],
+		v3Pools: [],
 		regenPools: [],
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
@@ -276,7 +278,6 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		blockExplorerName: ['PolygonScan'],
-		subgraphAddress: '',
 		coingeckoChainName: 'polygon-pos',
 		chainLogo: (logoSize?: number) => <IconPolygon size={logoSize} />,
 	},
@@ -291,7 +292,8 @@ const config: EnvConfig = {
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-staging',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
-		GIV_BUY_LINK: 'https://',
+		GIV_BUY_LINK:
+			'https://app.uniswap.org/#/swap?chain=optimism&outputCurrency=0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		TOKEN_DISTRO_ADDRESS: '0x8D2cBce8ea0256bFFBa6fa4bf7CEC46a1d9b43f6',
 		coingeckoChainName: 'optimistic-ethereum',
@@ -316,7 +318,6 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		blockExplorerName: ['CeloScan'],
-		subgraphAddress: '',
 		coingeckoChainName: 'celo',
 		chainLogo: (logoSize?: number) => <IconCelo size={logoSize} />,
 	},

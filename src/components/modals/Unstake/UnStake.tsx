@@ -22,7 +22,6 @@ import {
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
 import {
-	GIVpowerGIVgardenStakingConfig,
 	PoolStakingConfig,
 	RegenStreamConfig,
 	SimplePoolStakingConfig,
@@ -92,9 +91,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 	const onWithdraw = async () => {
 		setUnstakeState(StakeState.UNSTAKING);
 
-		const GARDEN_ADDRESS = (
-			poolStakingConfig as GIVpowerGIVgardenStakingConfig
-		).GARDEN_ADDRESS;
+		const GARDEN_ADDRESS = poolStakingConfig.GARDEN_ADDRESS;
 
 		const tx = GARDEN_ADDRESS
 			? await unwrapToken(amount, GARDEN_ADDRESS, library)

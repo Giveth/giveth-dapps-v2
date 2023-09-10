@@ -44,11 +44,11 @@ export const fetchGnosisTokenPrice = async (
 	const variables = {
 		id: tokenId.toLowerCase(),
 	};
-	const { data } = await gqlRequest(
-		config.GNOSIS_CONFIG.uniswapV2Subgraph,
-		false,
-		query,
-		variables,
-	);
+	const subgraph = config.GNOSIS_CONFIG.uniswapV2Subgraph;
+	if (!subgraph) {
+		console.log('Subgraph is not defined');
+		return '0';
+	}
+	const { data } = await gqlRequest(subgraph, false, query, variables);
 	return data?.token?.derivedETH || '0';
 };

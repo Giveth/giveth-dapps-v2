@@ -25,7 +25,6 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { RowWrapper, TableCell, TableHeader } from '../styled-components/Table';
 import { useStakingPool } from '@/hooks/useStakingPool';
-import { GIVpowerConfig } from '@/types/config';
 import { Spinner } from '../Spinner';
 import type { IGIVpowerPosition } from '@/types/subgraph';
 import type { BigNumber } from 'ethers';
@@ -41,11 +40,8 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 }) => {
 	const { account, chainId } = useWeb3React();
 	const { apr, stakedAmount } = useStakingPool(
-		(
-			config.NETWORKS_CONFIG[
-				chainId || config.GNOSIS_NETWORK_NUMBER
-			] as GIVpowerConfig
-		).GIVPOWER,
+		config.NETWORKS_CONFIG[chainId!].GIVPOWER ||
+			config.GNOSIS_CONFIG.GIVPOWER,
 	);
 	const [loading, setLoading] = useState(true);
 	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);

@@ -15,7 +15,7 @@ import { AddressZero } from '@ethersproject/constants';
 import { captureException } from '@sentry/nextjs';
 import { erc20ABI } from 'wagmi';
 import { parseEther, parseUnits } from 'viem';
-import { BasicNetworkConfig, GasPreference } from '@/types/config';
+import { GasPreference, NetworkConfig } from '@/types/config';
 import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
@@ -156,7 +156,7 @@ export const smallFormatDate = (date: Date, locale?: string) => {
 };
 
 export const getGasPreference = (
-	networkConfig: BasicNetworkConfig,
+	networkConfig: NetworkConfig,
 ): GasPreference => {
 	const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
 	// MetaMask works with gas preference config

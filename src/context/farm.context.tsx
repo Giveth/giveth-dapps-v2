@@ -9,99 +9,78 @@ import {
 } from 'react';
 import { ethers } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
-import config from '@/configuration';
+import { formatWeiHelper } from '@/helpers/number';
 
 export interface FarmContext {
-	totalEarned: ethers.BigNumber;
-	setInfo: (network: number, key: string, value: ethers.BigNumber) => void;
+	chainsInfo: IChainsInfo;
+	setChainInfo: (
+		network: number,
+		key: string,
+		value: ethers.BigNumber,
+	) => void;
 }
 
 export const FarmContext = createContext<FarmContext>({
-	totalEarned: ethers.constants.Zero,
-	setInfo: (network: number, key: string, value: ethers.BigNumber) => {
-		console.log('Not implemented!');
+	chainsInfo: {},
+	setChainInfo: (network: number, key: string, value: ethers.BigNumber) => {
+		console.log('The setChainInfo function has not been implemented yet.');
 	},
 });
 
 FarmContext.displayName = 'FarmContext';
 
-interface IInfos {
+interface IInfo {
 	[key: string]: ethers.BigNumber;
+	totalInfo: ethers.BigNumber;
 }
 
 interface IFarmProvider {
 	children: ReactNode;
 }
 
-export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
-	const [xDaiInfos, setxDaiInfos] = useState<IInfos>({});
-	const [xDaiTotalEarned, setxDaiTotalEarned] = useState(
-		ethers.constants.Zero,
-	);
-	const [mainnetInfos, setMainnetInfos] = useState<IInfos>({});
-	const [mainnetTotalEarned, setMainnetTotalEarned] = useState(
-		ethers.constants.Zero,
-	);
-	const { account, chainId } = useWeb3React();
+export interface IChainsInfo {
+	[key: number]: IInfo;
+}
 
-	const setInfo = useCallback(
+export interface ITotalEarned {
+	[key: string]: ethers.BigNumber;
+}
+
+export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
+	const [chainsInfo, setChainsInfo] = useState<IChainsInfo>({});
+	const { account } = useWeb3React();
+
+	const setChainInfo = useCallback(
 		(network: number, key: string, value: ethers.BigNumber) => {
-			if (network === config.MAINNET_NETWORK_NUMBER) {
-				setMainnetInfos(prevInfos => ({ ...prevInfos, [key]: value }));
-			} else if (network === config.GNOSIS_NETWORK_NUMBER) {
-				setxDaiInfos(prevInfos => ({ ...prevInfos, [key]: value }));
-			}
+			console.log('network', network, key, value);
+			const chainInfo = chainsInfo[network] || {};
+			const totalInfo = (chainInfo.totalInfo || ethers.constants.Zero)
+				.sub(chainInfo[key] || ethers.constants.Zero)
+				.add(value);
+			console.log(
+				'totalInfo',
+				formatWeiHelper(chainInfo.totalInfo),
+				formatWeiHelper(value),
+				formatWeiHelper(totalInfo),
+			);
+			const newChainInfo = { ...chainInfo, [key]: value, totalInfo };
+			setChainsInfo(prevInfos => ({
+				...prevInfos,
+				[network]: newChainInfo,
+			}));
 		},
 		[],
 	);
 
 	useEffect(() => {
-		let sum = ethers.constants.Zero;
-		for (const key in xDaiInfos) {
-			if (Object.prototype.hasOwnProperty.call(xDaiInfos, key)) {
-				const value = xDaiInfos[key];
-				sum = sum.add(value);
-			}
-		}
-		setxDaiTotalEarned(sum);
-	}, [xDaiInfos]);
-
-	useEffect(() => {
-		let sum = ethers.constants.Zero;
-		for (const key in mainnetInfos) {
-			if (Object.prototype.hasOwnProperty.call(mainnetInfos, key)) {
-				const value = mainnetInfos[key];
-				sum = sum.add(value);
-			}
-		}
-		setMainnetTotalEarned(sum);
-	}, [mainnetInfos]);
-
-	useEffect(() => {
-		setxDaiInfos({});
-		setxDaiTotalEarned(ethers.constants.Zero);
-		setMainnetInfos({});
-		setMainnetTotalEarned(ethers.constants.Zero);
+		setChainsInfo({});
 	}, [account]);
-
-	useEffect(() => {
-		if (chainId === config.MAINNET_NETWORK_NUMBER) {
-			setxDaiInfos({});
-			setxDaiTotalEarned(ethers.constants.Zero);
-		} else if (chainId === config.GNOSIS_NETWORK_NUMBER) {
-			setMainnetInfos({});
-			setMainnetTotalEarned(ethers.constants.Zero);
-		}
-	}, [chainId]);
 
 	return (
 		<FarmContext.Provider
 			value={{
-				totalEarned:
-					chainId === config.MAINNET_NETWORK_NUMBER
-						? mainnetTotalEarned
-						: xDaiTotalEarned,
-				setInfo,
+				chainsInfo,
+				setChainInfo,
 			}}
 		>
 			{children}

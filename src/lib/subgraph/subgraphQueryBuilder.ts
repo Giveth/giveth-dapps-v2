@@ -1,16 +1,5 @@
-import {
-	NetworkConfig,
-	RegenNetworkConfig,
-	SimplePoolStakingConfig,
-	StakingType,
-	StreamNetworkConfig,
-	UniswapV3PoolStakingConfig,
-} from '@/types/config';
+import { NetworkConfig, SimplePoolStakingConfig } from '@/types/config';
 import config from '@/configuration';
-
-const uniswapConfig = config.MAINNET_CONFIG.pools.find(
-	p => p.type === StakingType.UNISWAPV3_ETH_GIV,
-) as UniswapV3PoolStakingConfig;
 
 export class SubgraphQueryBuilder {
 	private static getTokenBalanceQuery = (
@@ -31,21 +20,21 @@ export class SubgraphQueryBuilder {
 		if (!userAddress) return '';
 		let query = '';
 
-		if ('GIV_TOKEN_ADDRESS' in networkConfig) {
+		if (networkConfig.GIV_TOKEN_ADDRESS) {
 			query += SubgraphQueryBuilder.getTokenBalanceQuery(
 				networkConfig.GIV_TOKEN_ADDRESS,
 				userAddress,
 			);
 		}
 
-		if ('GIVPOWER' in networkConfig) {
+		if (networkConfig.GIVPOWER?.LM_ADDRESS) {
 			query += SubgraphQueryBuilder.getTokenBalanceQuery(
 				networkConfig.GIVPOWER.LM_ADDRESS,
 				userAddress,
 			);
 		}
 
-		if ('gGIV_TOKEN_ADDRESS' in networkConfig) {
+		if (networkConfig.gGIV_TOKEN_ADDRESS) {
 			query += SubgraphQueryBuilder.getTokenBalanceQuery(
 				networkConfig.gGIV_TOKEN_ADDRESS,
 				userAddress,
@@ -88,11 +77,12 @@ export class SubgraphQueryBuilder {
 	};
 
 	private static generateTokenDistroQueries = (
-		networkConfig: StreamNetworkConfig | RegenNetworkConfig,
+		networkConfig: NetworkConfig,
 		userAddress?: string,
 	): string => {
+		if (!networkConfig.TOKEN_DISTRO_ADDRESS) return '';
 		const addresses = [networkConfig.TOKEN_DISTRO_ADDRESS];
-		if ('regenStreams' in networkConfig) {
+		if (networkConfig.regenStreams) {
 			addresses.push(
 				...networkConfig.regenStreams.map(c => c.tokenDistroAddress),
 			);
@@ -118,6 +108,7 @@ export class SubgraphQueryBuilder {
 	};
 
 	private static getUniswapPositionsQuery = (address?: string): string => {
+		const uniswapConfig = config.MAINNET_CONFIG.v3Pools[0];
 		const userPositionsQuery = `
 		${
 			address
@@ -260,80 +251,33 @@ export class SubgraphQueryBuilder {
 		}}`;
 	};
 
-	static getMainnetQuery = (userAddress?: string): string => {
-		const uniswapConfig = config.MAINNET_CONFIG.pools.find(
-			c => c.type === StakingType.UNISWAPV3_ETH_GIV,
-		) as UniswapV3PoolStakingConfig;
-
-		let uniswapV3PoolQuery = '';
-		if (uniswapConfig?.UNISWAP_V3_LP_POOL) {
-			uniswapV3PoolQuery = `
-			uniswapV3Pool: ${SubgraphQueryBuilder.getUniswapV3PoolQuery(
-				uniswapConfig.UNISWAP_V3_LP_POOL,
-			)}
-			`;
-		}
-
-		return `query {
-			${SubgraphQueryBuilder.getBalanceQuery(config.MAINNET_CONFIG, userAddress)}
-			${SubgraphQueryBuilder.generateTokenDistroQueries(
-				config.MAINNET_CONFIG,
-				userAddress,
-			)}
-			${SubgraphQueryBuilder.generateFarmingQueries(
-				[
-					...(config.MAINNET_CONFIG.pools.filter(
-						c => c.type !== StakingType.UNISWAPV3_ETH_GIV,
-					) as Array<SimplePoolStakingConfig>),
-					...config.MAINNET_CONFIG.regenPools,
-				],
-				userAddress,
-			)}
-			${SubgraphQueryBuilder.getUniswapPositionsQuery(userAddress)}
-			${uniswapV3PoolQuery}
-		}
-		`;
-	};
-
-	static getGnosisQuery = (userAddress?: string): string => {
+	static getChainQuery = (chainId: number, userAddress?: string): string => {
+		const networkConfig = config.NETWORKS_CONFIG[chainId];
+		const givpowerConfig = networkConfig.GIVPOWER;
 		return `
 		{
-			${SubgraphQueryBuilder.getBalanceQuery(config.GNOSIS_CONFIG, userAddress)}
-			${SubgraphQueryBuilder.generateTokenDistroQueries(
-				config.GNOSIS_CONFIG,
-				userAddress,
-			)}
+			${SubgraphQueryBuilder.getBalanceQuery(networkConfig, userAddress)}
+			${SubgraphQueryBuilder.generateTokenDistroQueries(networkConfig, userAddress)}
 			${SubgraphQueryBuilder.generateFarmingQueries(
-				[
-					config.GNOSIS_CONFIG.GIVPOWER,
-					...(config.GNOSIS_CONFIG
-						.pools as Array<SimplePoolStakingConfig>),
-					...config.GNOSIS_CONFIG.regenPools,
-				],
+				givpowerConfig
+					? [
+							givpowerConfig,
+							...(networkConfig?.pools || []),
+							...(networkConfig?.regenPools || []),
+					  ]
+					: [
+							...(networkConfig?.pools || []),
+							...(networkConfig?.regenPools || []),
+					  ],
 				userAddress,
 			)}
-			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery(
-				config.GNOSIS_CONFIG.GIVPOWER.LM_ADDRESS,
-			)},
-		}
-		`;
-	};
-
-	static getOptimismQuery = (userAddress?: string): string => {
-		return `
-		{
-			${SubgraphQueryBuilder.getBalanceQuery(config.OPTIMISM_CONFIG, userAddress)}
-			${SubgraphQueryBuilder.generateTokenDistroQueries(
-				config.OPTIMISM_CONFIG,
-				userAddress,
-			)}
-			${SubgraphQueryBuilder.generateFarmingQueries(
-				[config.OPTIMISM_CONFIG.GIVPOWER],
-				userAddress,
-			)}
-			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery(
-				config.OPTIMISM_CONFIG.GIVPOWER.LM_ADDRESS,
-			)},
+			givpowerInfo: ${
+				givpowerConfig?.LM_ADDRESS
+					? SubgraphQueryBuilder.getGIVPowersInfoQuery(
+							givpowerConfig.LM_ADDRESS,
+					  )
+					: undefined
+			},
 		}
 		`;
 	};

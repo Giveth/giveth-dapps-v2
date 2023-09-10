@@ -9,7 +9,7 @@ import TOKEN_DISTRO_JSON from '../artifacts/TokenDistro.json';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { getGasPreference } from '@/lib/helpers';
 import { MerkleDistro } from '@/types/contracts';
-import { fetchGnosisInfo } from '@/features/subgraph/subgraph.services';
+import { fetchChainInfo } from '@/features/subgraph/subgraph.services';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
 const { abi: MERKLE_ABI } = MerkleDropJson;
@@ -48,7 +48,10 @@ export const fetchAirDropClaimData = async (
 
 export const hasClaimedAirDrop = async (address: string): Promise<boolean> => {
 	try {
-		const response = await fetchGnosisInfo(address);
+		const response = await fetchChainInfo(
+			config.GNOSIS_NETWORK_NUMBER,
+			address,
+		);
 		const sdh = new SubgraphDataHelper(transformSubgraphData(response));
 
 		const balances = sdh.getGIVTokenDistroBalance();

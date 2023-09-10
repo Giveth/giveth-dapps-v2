@@ -5,7 +5,6 @@ import config from '@/configuration';
 import UNI_Json from '@/artifacts/UNI.json';
 import { networksParams } from '@/helpers/blockchain';
 import { ERC20 } from '@/types/contracts';
-import { GIVTokenConfig } from '@/types/config';
 
 const { abi: UNI_ABI } = UNI_Json;
 
@@ -71,8 +70,8 @@ export async function addToken(
 ): Promise<void> {
 	const address =
 		tokenAddress ||
-		(config.NETWORKS_CONFIG[provider.network.chainId] as GIVTokenConfig)
-			?.GIV_TOKEN_ADDRESS;
+		config.NETWORKS_CONFIG[provider.network.chainId]?.GIV_TOKEN_ADDRESS;
+	if (!address) return;
 
 	const tokenOptions = await fetchTokenInfo(provider, address);
 	const { ethereum } = window;

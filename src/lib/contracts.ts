@@ -7,7 +7,6 @@ import { captureException } from '@sentry/nextjs';
 import { getContract } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
 import UNISWAP_V3_STAKER_ABI from '@/artifacts/uniswap_v3_staker.json';
-import { StakingType, UniswapV3PoolStakingConfig } from '@/types/config';
 import config from '@/configuration';
 import { INonfungiblePositionManager, IUniswapV3Pool } from '@/types/contracts';
 import { MAX_TOKEN_ORDER } from './constants/tokens';
@@ -16,13 +15,10 @@ const { abi: UniswapV3PoolABI } = UniswapV3PoolJson;
 const { abi: NonfungiblePositionManagerABI } = NonfungiblePositionManagerJson;
 
 const mainnetConfig = config.MAINNET_CONFIG;
-const uniswapV3Config =
-	(mainnetConfig.pools.find(
-		c => c.type === StakingType.UNISWAPV3_ETH_GIV,
-	) as UniswapV3PoolStakingConfig) || {};
+const uniswapV3Config = mainnetConfig.v3Pools[0];
 
 const { NFT_POSITIONS_MANAGER_ADDRESS, UNISWAP_V3_STAKER, UNISWAP_V3_LP_POOL } =
-	uniswapV3Config;
+	uniswapV3Config || {};
 
 export const getNftManagerPositionsContract = (
 	provider: Web3Provider | null,
