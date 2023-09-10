@@ -37,7 +37,7 @@ const retryFetchTransaction = async (
 		await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
 	}
 	// Return null if the transaction is still not found after all retries
-	return null;
+	throw new Error('Transaction not found');
 };
 
 export const useCreateDonation = () => {
@@ -54,6 +54,12 @@ export const useCreateDonation = () => {
 		onReplaced(data) {
 			console.log('Transaction Updated', data);
 			setTxHash(data.transaction.hash);
+			if (data.reason === 'cancelled') {
+				console.log('Canceled transaction');
+				createDonationProps?.setFailedModalType(
+					EDonationFailedType.CANCELLED,
+				);
+			}
 			createDonationProps &&
 				handleSaveDonation(data.transaction.hash, createDonationProps);
 		},
@@ -119,9 +125,7 @@ export const useCreateDonation = () => {
 		const localTxHash = error.replacement?.hash || error.transactionHash;
 		setTxHash(localTxHash);
 
-		if (error.replacement && error.cancelled) {
-			setFailedModalType(EDonationFailedType.CANCELLED);
-		} else if (error.name === 'TransactionExecutionError') {
+		if (error.name === 'TransactionExecutionError') {
 			setFailedModalType(EDonationFailedType.FAILED);
 		} else {
 			console.log('Rejected1', error);
