@@ -42,8 +42,10 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 	const handleAdd = async (formData: IAddressForm) => {
 		setLoading(true);
 		const { address } = formData;
+		console.log('ASD1', address);
 		try {
-			const _address = getAddress(address);
+			const _address = getAddress(address) as `0x${string}`;
+			console.log('ASD2', _address);
 			const { data } = await client.mutate({
 				mutation: ADD_RECIPIENT_ADDRESS_TO_PROJECT,
 				variables: {

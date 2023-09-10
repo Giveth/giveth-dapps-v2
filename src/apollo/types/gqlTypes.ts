@@ -81,7 +81,7 @@ export interface IProjectAcceptedToken {
 	symbol: string;
 	networkId: number;
 	address: `0x${string}`;
-	mainnetAddress?: string;
+	mainnetAddress?: `0x${string}`;
 	name: string;
 	decimals: number;
 	isGivbackEligible?: boolean;
