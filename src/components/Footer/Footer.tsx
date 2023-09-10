@@ -7,11 +7,11 @@ import {
 	IconDocs,
 	IconMedium,
 	IconGithub,
-	IconRedit,
 	IconYoutube,
 	IconTwitter,
 	Caption,
 	IconDiscord,
+	IconInstagram,
 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -87,24 +87,14 @@ const Footer = () => {
 								})}
 							</LinkItem>
 						</Link>
-						<a href={links.GIVETH_DOCS}>
+						<a
+							href={links.DOCS}
+							target='_blank'
+							rel='noreferrer noopener'
+						>
 							<LinkItem color={textColor}>
 								{formatMessage({
-									id: 'component.title.what_is_giveth',
-								})}
-							</LinkItem>
-						</a>
-						<a href={links.USER_DOCS}>
-							<LinkItem color={textColor}>
-								{formatMessage({
-									id: 'component.title.user_guides',
-								})}
-							</LinkItem>
-						</a>
-						<a href={links.DEVELOPER_DOCS}>
-							<LinkItem color={textColor}>
-								{formatMessage({
-									id: 'component.title.dev_docs',
+									id: 'component.title.docs',
 								})}
 							</LinkItem>
 						</a>
@@ -117,13 +107,6 @@ const Footer = () => {
 						</Link>
 					</LinkColumn>
 					<LinkColumn>
-						<a href={links.COMMONS_STACK}>
-							<LinkItem color={textColor}>
-								{formatMessage({
-									id: 'component.title.commons_stack',
-								})}
-							</LinkItem>
-						</a>
 						<Link href={Routes.Partnerships}>
 							<LinkItem color={textColor}>
 								{formatMessage({
@@ -148,8 +131,8 @@ const Footer = () => {
 						<a href={links.GITHUB}>
 							<IconGithub size={24} color={textColor} />
 						</a>
-						<a href={links.REDDIT}>
-							<IconRedit size={24} color={textColor} />
+						<a href={links.INSTAGRAM}>
+							<IconInstagram size={24} color={textColor} />
 						</a>
 						<a href={links.TWITTER}>
 							<IconTwitter size={24} color={textColor} />

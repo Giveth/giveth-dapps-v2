@@ -3,8 +3,7 @@ import Maker_DAO from '/public/images/partnerships/Maker_DAO.svg';
 import Aragon from '/public/images/partnerships/Aragon.svg';
 import MyEtherWallet from '/public/images/partnerships/MyEtherWallet.svg';
 import Status_im from '/public/images/partnerships/Status.im.svg';
-import The_Commons_Stack from '/public/images/partnerships/The_Commons_Stack.svg';
-import PrimeDAO from '/public/images/partnerships/PrimeDAO.svg';
+import The_Commons_Stack from '/public/images/partnerships/CSlogo.svg';
 import Gitcoin from '/public/images/partnerships/Gitcoin.svg';
 import Polygon_Hermez from '/public/images/partnerships/Polygon_Hermez.svg';
 import iden3 from '/public/images/partnerships/iden3.svg';
@@ -24,14 +23,14 @@ import Rainbow_Rolls from '/public/images/partnerships/Rainbow_Rolls.svg';
 import Panvala from '/public/images/partnerships/Panvala.svg';
 import The_Giving_Block from '/public/images/partnerships/The_Giving_Block.svg';
 import Token_Engineering_Commons from '/public/images/partnerships/Token_Engineering_Commons.svg';
-import Change from '/public/images/partnerships/Change.svg';
 import OneHive from '/public/images/partnerships/1Hive.svg';
 import SDG_Impact_Fund from '/public/images/partnerships/SDG_Impact_Fund.svg';
-import DappNode from '/public/images/partnerships/DappNode.svg';
+import Dappnode from '/public/images/partnerships/Dappnode.svg';
 import Datafund from '/public/images/partnerships/Datafund.svg';
 import BrightID from '/public/images/partnerships/BrightID.svg';
 import Gnosis_Chain from '/public/images/partnerships/Gnosis_Chain.svg';
 import Crypto_Currency from '/public/images/partnerships/cryptocurrency-jobs.svg';
+import GatewayFM from '/public/images/partnerships/gatewayfm_logo.svg';
 
 export interface IPartner {
 	icon: any;
@@ -78,8 +77,8 @@ export const PartnershipArray: IPartner[] = [
 		link: 'https://cryptocurrencyjobs.co',
 	},
 	{
-		icon: DappNode,
-		title: 'DappNode',
+		icon: Dappnode,
+		title: 'Dappnode',
 		description: 'page.partnerships.dappnode',
 		link: 'https://dappnode.io',
 	},
@@ -107,6 +106,12 @@ export const PartnershipArray: IPartner[] = [
 		title: 'Gitcoin',
 		description: 'page.partnerships.gitcoin',
 		link: 'https://gitcoin.co/',
+	},
+	{
+		icon: GatewayFM,
+		title: 'gateway.fm',
+		description: 'page.partnerships.gatewayfm',
+		link: 'https://gateway.fm/',
 	},
 	{
 		icon: Governauts,
@@ -161,12 +166,6 @@ export const PartnershipArray: IPartner[] = [
 		title: 'Polygon Hermez',
 		description: 'page.partnerships.polygonhermez',
 		link: 'https://hermez.io/',
-	},
-	{
-		icon: PrimeDAO,
-		title: 'PrimeDAO',
-		description: 'page.partnerships.primedao',
-		link: 'http://primedao.io',
 	},
 	{
 		icon: Rainbow_Rolls,
@@ -240,11 +239,5 @@ export const PartnershipArray: IPartner[] = [
 		title: 'Gnosis Chain',
 		description: 'page.partnerships.gnosischain',
 		link: 'https://xdaichain.com',
-	},
-	{
-		icon: Change,
-		title: 'Change',
-		description: 'page.partnerships.change',
-		link: 'https://getchange.io/',
 	},
 ];
