@@ -8,9 +8,10 @@ import { client } from '@/apollo/apolloClient';
 import { ICreateDonation } from '@/components/views/donate/helpers';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 
-interface IOnTxHash extends ICreateDonation {
+export interface IOnTxHash extends ICreateDonation {
 	txHash: string;
 	nonce: number;
+	chainId: number;
 }
 
 export const updateDonation = (donationId: number, status: EDonationStatus) => {
@@ -30,7 +31,7 @@ export const updateDonation = (donationId: number, status: EDonationStatus) => {
 
 export async function saveDonation(props: IOnTxHash) {
 	const {
-		web3Context,
+		chainId,
 		txHash,
 		amount,
 		token,
@@ -39,7 +40,7 @@ export async function saveDonation(props: IOnTxHash) {
 		nonce,
 		chainvineReferred,
 	} = props;
-	const { chainId } = web3Context;
+
 	const { address, symbol } = token;
 
 	let donationId = 0;
@@ -58,6 +59,7 @@ export async function saveDonation(props: IOnTxHash) {
 				referrerId: chainvineReferred,
 			},
 		});
+
 		donationId = data.createDonation;
 	} catch (error) {
 		captureException(error, {
