@@ -8,7 +8,7 @@ export const fetchSubgraph = async (
 	network: number,
 ): Promise<any> => {
 	const reqBody = { query };
-	let uri = config.NETWORKS_CONFIG[network].subgraphAddress;
+	let uri = config.NETWORKS_CONFIG[network]?.subgraphAddress;
 	if (!uri) {
 		console.error('Network is not Defined!');
 		return {};
