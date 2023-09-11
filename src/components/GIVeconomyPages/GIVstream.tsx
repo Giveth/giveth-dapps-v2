@@ -16,11 +16,9 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { constants, ethers } from 'ethers';
-import BigNumber from 'bignumber.js';
-import { Zero } from '@ethersproject/constants';
 import { useWeb3React } from '@web3-react/core';
 import { Container, Row, Col } from '@giveth/ui-design-system';
+import { useChainId } from 'wagmi';
 import {
 	Bar,
 	FlowRateRow,
@@ -56,7 +54,7 @@ import {
 } from './GIVstream.sc';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { getHistory } from '@/services/subgraph.service';
-import { BN, formatWeiHelper } from '@/helpers/number';
+import { formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
 import { durationToString, shortenAddress } from '@/lib/helpers';
 import { NetworkSelector } from '@/components/NetworkSelector';
@@ -74,8 +72,8 @@ import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 export const TabGIVstreamTop = () => {
 	const { formatMessage } = useIntl();
 	const [showModal, setShowModal] = useState(false);
-	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
-	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
+	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
+	const [rewardStream, setRewardStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showModal);
 	const currentValues = useAppSelector(
 		state => state.subgraph.currentValues,
@@ -84,21 +82,20 @@ export const TabGIVstreamTop = () => {
 	const sdh = new SubgraphDataHelper(currentValues);
 	const { allocatedTokens, claimed, givback } =
 		sdh.getGIVTokenDistroBalance();
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 
 	useEffect(() => {
-		const _allocatedTokens = BN(allocatedTokens);
-		const _givback = BN(givback);
-		const _claimed = BN(claimed);
+		const _allocatedTokens = BigInt(allocatedTokens);
+		const _givback = BigInt(givback);
+		const _claimed = BigInt(claimed);
 
 		setRewardLiquidPart(
-			givTokenDistroHelper
-				.getLiquidPart(_allocatedTokens.sub(_givback))
-				.sub(_claimed),
+			givTokenDistroHelper.getLiquidPart(_allocatedTokens - _givback) -
+				_claimed,
 		);
 		setRewardStream(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(
-				_allocatedTokens.sub(givback),
+				_allocatedTokens - _givback,
 			),
 		);
 	}, [allocatedTokens, claimed, givback, givTokenDistroHelper]);
@@ -159,10 +156,8 @@ export const TabGIVstreamBottom = () => {
 
 	const [percent, setPercent] = useState(0);
 	const [remain, setRemain] = useState('');
-	useState<ethers.BigNumber>(Zero);
-	const [streamAmount, setStreamAmount] = useState<BigNumber>(
-		new BigNumber(0),
-	);
+	useState(0n);
+	const [streamAmount, setStreamAmount] = useState(0n);
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph.currentValues),
 	);
@@ -170,12 +165,12 @@ export const TabGIVstreamBottom = () => {
 	const increaseSecRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		const _allocatedTokens = BN(givTokenDistroBalance.allocatedTokens);
-		const _givback = BN(givTokenDistroBalance.givback);
+		const _allocatedTokens = BigInt(givTokenDistroBalance.allocatedTokens);
+		const _givback = BigInt(givTokenDistroBalance.givback);
 
 		setStreamAmount(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(
-				_allocatedTokens.sub(_givback),
+				_allocatedTokens - _givback,
 			),
 		);
 	}, [
@@ -202,7 +197,7 @@ export const TabGIVstreamBottom = () => {
 					<H1>
 						{chainId &&
 						givEconomySupportedNetworks.includes(chainId)
-							? formatWeiHelper(streamAmount)
+							? formatWeiHelper(streamAmount.toString())
 							: '0'}
 					</H1>
 					<FlowRateUnit>
@@ -442,11 +437,13 @@ export const GIVstreamHistory: FC = () => {
 									<B as='span'>
 										+
 										{formatWeiHelper(
-											givTokenDistroHelper.getStreamPartTokenPerWeek(
-												ethers.BigNumber.from(
-													tokenAllocation.amount,
-												),
-											),
+											givTokenDistroHelper
+												.getStreamPartTokenPerWeek(
+													BigInt(
+														tokenAllocation.amount,
+													),
+												)
+												.toString(),
 										)}
 										<GsHFrUnit as='span'>{` GIV${formatMessage(
 											{ id: 'label./week' },
