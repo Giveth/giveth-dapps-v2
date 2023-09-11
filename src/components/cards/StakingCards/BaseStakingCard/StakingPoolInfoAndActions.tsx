@@ -305,7 +305,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						<DetailValue>
 							{!exploited ? (
 								`${formatWeiHelper(
-									rewardLiquidPart,
+									rewardLiquidPart.toString(),
 								)} ${rewardTokenSymbol}`
 							) : (
 								<div>
