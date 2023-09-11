@@ -63,7 +63,7 @@ export class TokenDistroHelper {
 		const toFinish = this.remain / 1000;
 		if (toFinish <= 0) return 0n;
 		const lockAmount = amount - this.getLiquidPart(amount);
-		return lockAmount / BigInt(toFinish);
+		return lockAmount / BigInt(toFinish.toFixed(0));
 	};
 
 	public getStreamPartTokenPerWeek = (amount: bigint): bigint => {
