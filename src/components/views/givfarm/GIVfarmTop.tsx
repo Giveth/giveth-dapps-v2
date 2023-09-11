@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Col, IconGIVFarm, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
+import { useChainId } from 'wagmi';
 import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 
@@ -21,7 +21,7 @@ export const GIVfarmTop = () => {
 	const [rewardStream, setRewardStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainsInfo } = useFarms();
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 
 	useEffect(() => {
 		if (!chainId) return;
