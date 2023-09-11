@@ -5,7 +5,6 @@ import { getContract } from 'wagmi/actions';
 import { formatWeiHelper } from '@/helpers/number';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
-import { GIVTokenConfig, GIVpowerConfig } from '@/types/config';
 
 const YourApp = () => {
 	const { address, isConnected, status } = useAccount();
@@ -41,10 +40,9 @@ const YourApp = () => {
 						approveERC20tokenTransfer(
 							1000000000000000000n,
 							address!,
-							(config.NETWORKS_CONFIG[chainId] as GIVpowerConfig)
-								.GIVPOWER.LM_ADDRESS!,
-							(config.NETWORKS_CONFIG[chainId] as GIVTokenConfig)
-								.GIV_TOKEN_ADDRESS!,
+							config.NETWORKS_CONFIG[chainId]?.GIVPOWER
+								?.LM_ADDRESS!,
+							config.NETWORKS_CONFIG[chainId].GIV_TOKEN_ADDRESS!,
 							chainId,
 						)
 					}
