@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Col, IconGIVFarm, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useWeb3React } from '@web3-react/core';
-import { Zero } from '@ethersproject/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 
@@ -28,12 +27,12 @@ export const GIVfarmTop = () => {
 		if (!chainId) return;
 		setRewardLiquidPart(
 			givTokenDistroHelper.getLiquidPart(
-				chainsInfo[chainId]?.totalInfo || Zero,
+				chainsInfo[chainId]?.totalInfo || 0n,
 			),
 		);
 		setRewardStream(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(
-				chainsInfo[chainId]?.totalInfo || Zero,
+				chainsInfo[chainId]?.totalInfo || 0n,
 			),
 		);
 	}, [chainsInfo, givTokenDistroHelper, chainId]);
