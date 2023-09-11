@@ -394,8 +394,10 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 					/>
 					<StakeAmount>
 						{type === StakingType.UNISWAPV3_ETH_GIV
-							? `${userNotStakedAmount.toNumber()} ${unit}`
-							: `${formatWeiHelper(userNotStakedAmount)} ${unit}`}
+							? `${userNotStakedAmount.toString()} ${unit}`
+							: `${formatWeiHelper(
+									userNotStakedAmount.toString(),
+							  )} ${unit}`}
 					</StakeAmount>
 				</StakeContainer>
 				<StakeContainer flexDirection='column'>
