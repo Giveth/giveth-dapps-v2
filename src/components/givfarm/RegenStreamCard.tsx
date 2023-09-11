@@ -15,7 +15,6 @@ import {
 	P,
 	Subline,
 } from '@giveth/ui-design-system';
-import { constants, BigNumber as EthBignumber } from 'ethers';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -58,9 +57,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
 	const [rewardStream, setRewardStream] = useState(0n);
 	const [lockedAmount, setLockedAmount] = useState(0n);
-	const [claimedAmount, setClaimedAmount] = useState<EthBignumber>(
-		constants.Zero,
-	);
+	const [claimedAmount, setClaimedAmount] = useState(0n);
 	const { chainId } = useWeb3React();
 
 	const {
