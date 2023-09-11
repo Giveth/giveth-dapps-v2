@@ -269,9 +269,11 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 												`-${
 													apr &&
 													formatEthHelper(
-														apr.effectiveAPR.multipliedBy(
-															5.2, // sqrt(1 + max rounds)
-														),
+														(
+															(apr.effectiveAPR *
+																52n) /
+															10n
+														).toString(),
 													)
 												}%`}
 										</DetailValue>
