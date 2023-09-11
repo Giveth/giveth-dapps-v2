@@ -412,8 +412,10 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 					<FlexCenter gap='5px'>
 						<StakeAmount>
 							{type === StakingType.UNISWAPV3_ETH_GIV
-								? `${stakedLpAmount.toNumber()} ${unit}`
-								: `${formatWeiHelper(stakedLpAmount)} ${unit}`}
+								? `${stakedLpAmount.toString()} ${unit}`
+								: `${formatWeiHelper(
+										stakedLpAmount.toString(),
+								  )} ${unit}`}
 						</StakeAmount>
 						{isLocked && (
 							<IconWithTooltip
