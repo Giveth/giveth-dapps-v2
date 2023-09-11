@@ -7,7 +7,6 @@ import {
 } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import FarmCountDown from '@/components/FarmCountDown';
@@ -226,14 +225,16 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 											  })} ${
 													apr &&
 													formatEthHelper(
-														apr.effectiveAPR,
+														apr.effectiveAPR.toString(),
 													)
 											  }%-${
 													apr &&
 													formatEthHelper(
-														apr.effectiveAPR.multipliedBy(
-															5.196152423, // sqrt(1 + max rounds)
-														),
+														(
+															(apr.effectiveAPR *
+																5196n) /
+															1000n
+														).toString(), // sqrt(1 + max rounds)
 													)
 											  }%. ${formatMessage({
 													id: 'label.lock_your_giv_for_longer',
@@ -364,7 +365,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 				/>
 				{isGIVpower && (
 					<ClaimButton
-						disabled={availableStakedToken.lte(constants.Zero)}
+						disabled={availableStakedToken <= 0n}
 						onClick={() => setShowLockModal(true)}
 						label={formatMessage({
 							id: 'label.increase_rewards',
