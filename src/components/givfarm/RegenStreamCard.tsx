@@ -57,9 +57,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	const [usdAmount, setUSDAmount] = useState('0');
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
 	const [rewardStream, setRewardStream] = useState(0n);
-	const [lockedAmount, setLockedAmount] = useState<EthBignumber>(
-		constants.Zero,
-	);
+	const [lockedAmount, setLockedAmount] = useState(0n);
 	const [claimedAmount, setClaimedAmount] = useState<EthBignumber>(
 		constants.Zero,
 	);
