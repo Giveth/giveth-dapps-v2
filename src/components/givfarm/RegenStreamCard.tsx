@@ -23,7 +23,7 @@ import { durationToString } from '@/lib/helpers';
 import { Bar, GsPTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { RegenStreamConfig, StreamType } from '@/types/config';
-import { BN, formatWeiHelper } from '@/helpers/number';
+import { formatWeiHelper } from '@/helpers/number';
 import { IconFox } from '@/components/Icons/Fox';
 import { IconCult } from '@/components/Icons/Cult';
 import { Flex } from '../styled-components/Flex';
@@ -114,8 +114,8 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		xDaiThirdPartyTokensPrice,
 	]);
 	useEffect(() => {
-		setLockedAmount(BN(tokenDistroBalance.allocatedTokens));
-		setClaimedAmount(BN(tokenDistroBalance.claimed));
+		setLockedAmount(BigInt(tokenDistroBalance.allocatedTokens));
+		setClaimedAmount(BigInt(tokenDistroBalance.claimed));
 	}, [tokenDistroBalance]);
 
 	useEffect(() => {
