@@ -83,13 +83,18 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					<div>
 						<IconUnlock32 />
 						<CloseText>
-							<Subtitle>{formatWeiHelper(unstakeable)}</Subtitle>
+							<Subtitle>
+								{formatWeiHelper(unstakeable.toString())}
+							</Subtitle>
 							<H6>GIV</H6>
 						</CloseText>
 					</div>
 					<div>
 						<H6>
-							{apr ? formatEthHelper(apr.effectiveAPR) : ' ? '}%
+							{apr
+								? formatEthHelper(apr.effectiveAPR.toString())
+								: ' ? '}
+							%
 						</H6>
 						<CloseText>
 							<H6>APR</H6>
