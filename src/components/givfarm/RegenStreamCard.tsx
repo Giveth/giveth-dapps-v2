@@ -202,7 +202,9 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 					<div>
 						<AmountInfo alignItems='flex-end' gap='4px'>
 							{getStreamIconWithType(type, 24)}
-							<Amount>{formatWeiHelper(rewardLiquidPart)}</Amount>
+							<Amount>
+								{formatWeiHelper(rewardLiquidPart.toString())}
+							</Amount>
 							<AmountUnit>{rewardTokenSymbol}</AmountUnit>
 						</AmountInfo>
 						<Converted>~${usdAmount}</Converted>
