@@ -165,7 +165,7 @@ const GivArc = styled.div`
 	width: 54px;
 	height: 54px;
 	top: 45px;
-	right: 10px;
+	right: 11px;
 	position: absolute;
 	${mediaQueries.tablet} {
 		top: 45px;
