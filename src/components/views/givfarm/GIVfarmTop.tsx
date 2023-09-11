@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Col, IconGIVFarm, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { Zero } from '@ethersproject/constants';
 import { Flex } from '@/components/styled-components/Flex';
@@ -19,7 +18,7 @@ import { TopInnerContainer } from '../../GIVeconomyPages/commons';
 
 export const GIVfarmTop = () => {
 	const { formatMessage } = useIntl();
-	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
+	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
 	const [rewardStream, setRewardStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainsInfo } = useFarms();
