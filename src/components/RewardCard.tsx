@@ -12,11 +12,9 @@ import {
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { ethers } from 'ethers';
-import BigNumber from 'bignumber.js';
 import { IconGIV } from './Icons/GIV';
 import { Flex } from './styled-components/Flex';
-import { formatWeiHelper, Zero } from '@/helpers/number';
+import { formatWeiHelper } from '@/helpers/number';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
@@ -26,8 +24,8 @@ import { networksParams } from '@/helpers/blockchain';
 interface IRewardCardProps {
 	cardName: string;
 	title: string;
-	liquidAmount: ethers.BigNumber;
-	stream: BigNumber.Value;
+	liquidAmount: bigint;
+	stream: bigint;
 	actionLabel?: string;
 	actionCb?: MouseEventHandler<HTMLButtonElement>;
 	subButtonLabel?: string;
@@ -36,14 +34,14 @@ interface IRewardCardProps {
 	className?: string;
 	targetNetworks: number[];
 	rewardTokenSymbol?: string;
-	tokenPrice?: BigNumber;
+	tokenPrice?: bigint;
 }
 
 export const RewardCard: FC<IRewardCardProps> = ({
 	cardName,
 	title,
-	liquidAmount = ethers.constants.Zero,
-	stream = Zero,
+	liquidAmount = 0n,
+	stream = 0n,
 	actionLabel,
 	actionCb,
 	subButtonLabel,
@@ -55,18 +53,16 @@ export const RewardCard: FC<IRewardCardProps> = ({
 	tokenPrice,
 }) => {
 	const { formatMessage } = useIntl();
-	const [usdAmount, setUSDAmount] = useState('0');
+	const [usdAmount, setUSDAmount] = useState(0n);
 	const [showWhatIsGIVstreamModal, setShowWhatIsGIVstreamModal] =
 		useState(false);
 	const givPrice = useAppSelector(state => state.price.givPrice);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	useEffect(() => {
-		const price = tokenPrice || new BigNumber(givPrice);
-		if (!price || price.isNaN()) return;
+		const price = tokenPrice || BigInt(givPrice);
+		if (!price) return;
 
-		const usd = (+ethers.utils.formatEther(
-			price.times(liquidAmount.toString()).toFixed(0),
-		)).toFixed(2);
+		const usd = price * liquidAmount;
 		setUSDAmount(usd);
 	}, [liquidAmount, givPrice, tokenPrice]);
 
@@ -91,13 +87,15 @@ export const RewardCard: FC<IRewardCardProps> = ({
 						</CardHeader>
 						<AmountInfo alignItems='center' gap='8px'>
 							<IconGIV size={32} />
-							<Title>{formatWeiHelper(liquidAmount)}</Title>
+							<Title>
+								{formatWeiHelper(liquidAmount.toString())}
+							</Title>
 							<AmountUnit>{rewardTokenSymbol}</AmountUnit>
 						</AmountInfo>
-						<Converted>~${usdAmount}</Converted>
+						<Converted>~${usdAmount.toString()}</Converted>
 						<RateInfo alignItems='center' gap='8px'>
 							<IconGIVStream size={24} />
-							<P>{formatWeiHelper(stream)}</P>
+							<P>{formatWeiHelper(stream.toString())}</P>
 							<RateUnit>
 								{rewardTokenSymbol}
 								{formatMessage({ id: 'label./week' })}
@@ -117,7 +115,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 								label={actionLabel}
 								onClick={actionCb}
 								buttonType='primary'
-								disabled={liquidAmount.isZero()}
+								disabled={liquidAmount === 0n}
 							/>
 						) : (
 							<PlaceHolderButton />
