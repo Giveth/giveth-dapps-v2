@@ -355,7 +355,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 			)}
 			<HarvestButtonsWrapper>
 				<ClaimButton
-					disabled={exploited || earned.isZero()}
+					disabled={exploited || earned === 0n}
 					onClick={() => setShowHarvestModal(true)}
 					label={formatMessage({
 						id: 'label.harvest_rewards',
