@@ -81,19 +81,19 @@ export const getUnlockDate = (givPowerInfo: IGIVpower, rounds: number) => {
 
 export const avgAPR = (
 	apr: bigint | null,
-	gGIV?: string,
-	unipoolBalance?: string,
+	gGIV?: bigint,
+	unipoolBalance?: bigint,
 ) => {
 	if (
 		!apr ||
 		apr === 0n ||
 		!gGIV ||
-		gGIV === '0' ||
+		gGIV === 0n ||
 		!unipoolBalance ||
-		unipoolBalance === '0'
+		unipoolBalance === 0n
 	)
 		return 0n;
-	const avg = BigInt(unipoolBalance) / BigInt(gGIV);
+	const avg = unipoolBalance / gGIV;
 	return apr * avg;
 };
 
