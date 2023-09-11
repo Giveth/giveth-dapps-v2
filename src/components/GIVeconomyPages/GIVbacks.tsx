@@ -5,7 +5,6 @@ import {
 	P,
 	brandColors,
 } from '@giveth/ui-design-system';
-import BigNumber from 'bignumber.js';
 import { useWeb3React } from '@web3-react/core';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
@@ -41,7 +40,6 @@ import { GIVBackExplainModal } from '../modals/GIVBackExplain';
 import { NoWrap, TopInnerContainer } from './commons';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
-import { BN } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
@@ -49,7 +47,7 @@ export const TabGIVbacksTop = () => {
 	const { formatMessage } = useIntl();
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
-	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
+	const [givBackStream, setGivBackStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showHarvestModal);
 	const { chainId } = useWeb3React();
 	const values = useAppSelector(
@@ -66,7 +64,7 @@ export const TabGIVbacksTop = () => {
 	}, [values]);
 
 	useEffect(() => {
-		const _givback = BN(givTokenDistroBalance.givback);
+		const _givback = BigInt(givTokenDistroBalance.givback);
 		setGivBackStream(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(_givback),
 		);
@@ -94,7 +92,7 @@ export const TabGIVbacksTop = () => {
 								title={formatMessage({
 									id: 'label.your_givbacks_rewards',
 								})}
-								liquidAmount={BN(
+								liquidAmount={BigInt(
 									givTokenDistroBalance.givbackLiquidPart,
 								)}
 								stream={givBackStream}
@@ -105,7 +103,7 @@ export const TabGIVbacksTop = () => {
 									setShowHarvestModal(true);
 								}}
 								subButtonLabel={
-									BN(
+									BigInt(
 										givTokenDistroBalance.givbackLiquidPart,
 									)?.isZero()
 										? formatMessage({
