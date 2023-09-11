@@ -168,9 +168,14 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 											<LockTableCell>
 												{apr
 													? formatEthHelper(
-															apr.effectiveAPR.multipliedBy(
-																multiplier,
-															),
+															(
+																(apr.effectiveAPR *
+																	BigInt(
+																		multiplier *
+																			100,
+																	)) /
+																100n
+															).toString(),
 													  )
 													: ' ? '}
 												%
