@@ -144,7 +144,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 						<RateRow>
 							<IconGIVStream size={16} />
 							<StreamRate>
-								{formatWeiHelper(rewardStream)}
+								{formatWeiHelper(rewardStream.toString())}
 							</StreamRate>
 							<StreamRateUnit>
 								{rewardTokenSymbol}
