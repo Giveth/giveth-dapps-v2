@@ -114,6 +114,12 @@ export const BACKEND_QUERY_LIMIT = 50;
 
 export const E18 = 1_000_000_000_000_000_000n;
 
+export const PRECISION = 5;
+
+export const ScaleRate = 10 ** PRECISION;
+
+export const ScaleRateBig = BigInt(ScaleRate);
+
 export const MaxUint256 = BigInt(
 	'115792089237316195423570985008687907853269984665640564039457584007913129639935',
 );
