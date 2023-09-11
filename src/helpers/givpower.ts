@@ -80,21 +80,21 @@ export const getUnlockDate = (givPowerInfo: IGIVpower, rounds: number) => {
 };
 
 export const avgAPR = (
-	apr: BigNumber | null,
+	apr: bigint | null,
 	gGIV?: string,
 	unipoolBalance?: string,
 ) => {
 	if (
 		!apr ||
-		apr.isZero() ||
+		apr === 0n ||
 		!gGIV ||
 		gGIV === '0' ||
 		!unipoolBalance ||
 		unipoolBalance === '0'
 	)
-		return new BigNumber(0);
-	const avg = new BigNumber(unipoolBalance).dividedBy(gGIV);
-	return apr.multipliedBy(avg);
+		return 0n;
+	const avg = BigInt(unipoolBalance) / BigInt(gGIV);
+	return apr * avg;
 };
 
 export const sortBoosts = (
