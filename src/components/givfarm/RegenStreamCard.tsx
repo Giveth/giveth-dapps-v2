@@ -214,7 +214,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 							})} ${rewardTokenSymbol}`}
 							onClick={() => setShowModal(true)}
 							buttonType='primary'
-							disabled={rewardLiquidPart.isZero()}
+							disabled={rewardLiquidPart === 0n}
 							size='large'
 						/>
 						<HarvestButtonDesc gap='8px'>
