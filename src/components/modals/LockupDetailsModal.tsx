@@ -27,11 +27,10 @@ import { RowWrapper, TableCell, TableHeader } from '../styled-components/Table';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { Spinner } from '../Spinner';
 import type { IGIVpowerPosition } from '@/types/subgraph';
-import type { BigNumber } from 'ethers';
 import type { IModal } from '@/types/common';
 
 interface ILockupDetailsModal extends IModal {
-	unstakeable: BigNumber;
+	unstakeable: bigint;
 }
 
 export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
