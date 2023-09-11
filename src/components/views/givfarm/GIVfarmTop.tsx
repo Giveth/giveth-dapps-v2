@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Col, IconGIVFarm, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { BigNumber } from 'bignumber.js';
 import { constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { Zero } from '@ethersproject/constants';
@@ -21,7 +20,7 @@ import { TopInnerContainer } from '../../GIVeconomyPages/commons';
 export const GIVfarmTop = () => {
 	const { formatMessage } = useIntl();
 	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
-	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
+	const [rewardStream, setRewardStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainsInfo } = useFarms();
 	const { chainId } = useWeb3React();
