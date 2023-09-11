@@ -257,10 +257,12 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 													isLocked
 														? avgAPR(
 																apr.effectiveAPR,
-																stakedLpAmount.toString(),
-																userGIVPowerBalance.balance,
-														  )
-														: apr.effectiveAPR,
+																stakedLpAmount,
+																BigInt(
+																	userGIVPowerBalance.balance,
+																),
+														  ).toString()
+														: apr.effectiveAPR.toString(),
 												)}
 											%
 											{isZeroGIVStacked &&
