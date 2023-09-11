@@ -334,7 +334,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						<Flex gap='4px' alignItems='center'>
 							<DetailValue>
 								{!exploited ? (
-									formatWeiHelper(rewardStream)
+									formatWeiHelper(rewardStream.toString())
 								) : (
 									<div>
 										{formatMessage({
