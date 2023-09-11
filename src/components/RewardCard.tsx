@@ -21,6 +21,7 @@ import { useAppSelector } from '@/features/hooks';
 import { WrongNetworkInnerModal } from '@/components//modals/WrongNetworkInnerModal';
 import NetworkLogo from './NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
+import { ScaleRate, ScaleRateBig } from '@/lib/constants/constants';
 interface IRewardCardProps {
 	cardName: string;
 	title: string;
@@ -59,10 +60,11 @@ export const RewardCard: FC<IRewardCardProps> = ({
 	const givPrice = useAppSelector(state => state.price.givPrice);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	useEffect(() => {
-		const price = tokenPrice || BigInt(givPrice);
+		const price =
+			tokenPrice || BigInt((Number(givPrice) * ScaleRate).toFixed(0));
 		if (!price) return;
 
-		const usd = price * liquidAmount;
+		const usd = (price * liquidAmount) / ScaleRateBig;
 		setUSDAmount(usd);
 	}, [liquidAmount, givPrice, tokenPrice]);
 
@@ -92,7 +94,9 @@ export const RewardCard: FC<IRewardCardProps> = ({
 							</Title>
 							<AmountUnit>{rewardTokenSymbol}</AmountUnit>
 						</AmountInfo>
-						<Converted>~${usdAmount.toString()}</Converted>
+						<Converted>
+							~${formatWeiHelper(usdAmount.toString())}
+						</Converted>
 						<RateInfo alignItems='center' gap='8px'>
 							<IconGIVStream size={24} />
 							<P>{formatWeiHelper(stream.toString())}</P>
