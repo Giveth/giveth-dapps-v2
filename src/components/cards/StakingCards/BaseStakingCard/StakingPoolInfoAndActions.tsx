@@ -406,7 +406,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 							id: 'label.unstake',
 						})}
 						size='small'
-						disabled={availableStakedToken.isZero()}
+						disabled={availableStakedToken === 0n}
 						onClick={() => setShowUnStakeModal(true)}
 					/>
 					<FlexCenter gap='5px'>
