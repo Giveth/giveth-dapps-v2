@@ -97,7 +97,7 @@ const { connectors } = getDefaultWallets({
 });
 
 const wagmiConfig = createConfig({
-	autoConnect: true,
+	autoConnect: false,
 	publicClient: publicClient,
 	connectors,
 });
