@@ -219,7 +219,9 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					</SubtitleWithTooltip>
 
 					<TotalContainer>
-						<SubtitleH5>{formatWeiHelper(stakedAmount)}</SubtitleH5>
+						<SubtitleH5>
+							{formatWeiHelper(stakedAmount.toString())}
+						</SubtitleH5>
 						<H6>GIV</H6>
 					</TotalContainer>
 				</StakedContainer>
