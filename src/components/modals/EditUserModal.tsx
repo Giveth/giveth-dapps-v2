@@ -45,8 +45,9 @@ const EditUserModal = ({
 }: IEditUserModal) => {
 	const { formatMessage } = useIntl();
 	const [isLoading, setIsLoading] = useState(false);
-	const useUploadProps = useUpload();
-	const { url, onDelete } = useUploadProps;
+	const { onDelete } = useUpload();
+
+	const { avatar, name } = user;
 
 	const {
 		register,
@@ -61,9 +62,7 @@ const EditUserModal = ({
 	const onSaveAvatar = async () => {
 		try {
 			const { data: response } = await updateUser({
-				variables: {
-					avatar: url,
-				},
+				variables: { avatar: '' },
 			});
 			if (response.updateUser) {
 				account && dispatch(fetchUserByAddress(account));
@@ -135,12 +134,8 @@ const EditUserModal = ({
 				<>
 					<FlexCenter direction='column' gap='8px'>
 						<ProfilePicture
-							src={
-								user.avatar
-									? user.avatar
-									: PROFILE_PHOTO_PLACEHOLDER
-							}
-							alt={user.name || ''}
+							src={avatar ? avatar : PROFILE_PHOTO_PLACEHOLDER}
+							alt={name || ''}
 							height={80}
 							width={80}
 						/>
@@ -156,13 +151,15 @@ const EditUserModal = ({
 									closeModal();
 								}}
 							/>
-							<TextButton
-								buttonType='texty'
-								label={formatMessage({
-									id: 'label.delete_pic',
-								})}
-								onClick={onSaveAvatar}
-							/>
+							{avatar && (
+								<TextButton
+									buttonType='texty'
+									label={formatMessage({
+										id: 'label.delete_pic',
+									})}
+									onClick={onSaveAvatar}
+								/>
+							)}
 						</FlexCenter>
 					</FlexCenter>
 					<form onSubmit={handleSubmit(onSubmit)}>
