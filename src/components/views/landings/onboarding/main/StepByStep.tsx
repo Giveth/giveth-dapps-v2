@@ -8,7 +8,7 @@ import Wave from '@/components/particles/Wave';
 
 const StepByStep = () => {
 	return (
-		<Relative>
+		<OuterWrapper>
 			<Wrapper>
 				<div>
 					<H5 weight={700}>A step-by-step approach</H5>
@@ -19,13 +19,17 @@ const StepByStep = () => {
 			<WaveWrapper>
 				<Wave color={brandColors.giv[500]} />
 			</WaveWrapper>
-		</Relative>
+		</OuterWrapper>
 	);
 };
 
+const OuterWrapper = styled(Relative)`
+	overflow: hidden;
+`;
+
 const WaveWrapper = styled.div`
 	position: absolute;
-	bottom: 250px;
+	bottom: 150px;
 	right: -40px;
 	display: none;
 	${mediaQueries.tablet} {
@@ -36,6 +40,7 @@ const WaveWrapper = styled.div`
 const Wrapper = styled(OnboardingWrapper)`
 	margin: 75px auto 130px;
 	text-align: center;
+	position: relative;
 	> div:first-child {
 		margin-bottom: 32px;
 	}
