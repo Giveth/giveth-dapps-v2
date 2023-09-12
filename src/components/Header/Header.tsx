@@ -40,7 +40,7 @@ import { LinkWithMenu } from '../menu/LinkWithMenu';
 import { ProjectsMenu } from '../menu/ProjectsMenu';
 import { GIVeconomyMenu } from '../menu/GIVeconomyMenu';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { device, CHAINS_WITH_GIVECONOMY } from '@/lib/constants/constants';
+import { device } from '@/lib/constants/constants';
 import { ESideBarDirection, SideBar } from '../sidebar/SideBar';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import { RewardButtonWithMenu } from '../menu/RewardButtonWithMenu';
@@ -52,6 +52,7 @@ import { ItemsProvider } from '@/context/Items.context';
 import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import { CommunityMenu } from '../menu/CommunityMenu';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
+import config from '@/configuration';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -67,6 +68,8 @@ const Header: FC<IHeader> = () => {
 
 	const { chainId, active, account } = useWeb3React();
 
+	const networkHasGIV =
+		(chainId && config.NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS) ?? null;
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
@@ -275,7 +278,7 @@ const Header: FC<IHeader> = () => {
 							isHeaderShowing={showHeader}
 							theme={theme}
 						/>{' '}
-						{CHAINS_WITH_GIVECONOMY.includes(chainId) && (
+						{networkHasGIV && (
 							<RewardButtonWithMenu
 								isHeaderShowing={showHeader}
 								theme={theme}
