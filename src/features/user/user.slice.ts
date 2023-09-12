@@ -17,7 +17,6 @@ const initialState: {
 	token?: string;
 	isEnabled: boolean;
 	isSignedIn: boolean;
-	balance: string | null;
 	isLoading: boolean;
 	isUserFullFilled: boolean;
 } = {
@@ -25,7 +24,6 @@ const initialState: {
 	token: undefined,
 	isEnabled: false,
 	isSignedIn: false,
-	balance: null,
 	isLoading: true,
 	isUserFullFilled: false,
 };
@@ -56,9 +54,6 @@ export const userSlice = createSlice({
 		},
 		setToken: (state, action: PayloadAction<string>) => {
 			state.token = action.payload;
-		},
-		setBalance: (state, action: PayloadAction<string | null>) => {
-			state.balance = action.payload;
 		},
 		incrementLikedProjectsCount: state => {
 			if (state.userData) {
@@ -156,7 +151,6 @@ export const {
 	setIsEnabled,
 	setIsSignedIn,
 	setToken,
-	setBalance,
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
 	setBoostedProjectsCount,
