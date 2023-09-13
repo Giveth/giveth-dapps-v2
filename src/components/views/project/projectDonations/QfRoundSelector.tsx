@@ -15,7 +15,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Flex } from '@/components/styled-components/Flex';
 import { IQFRound } from '@/apollo/types/types';
-
 interface IQfRoundSelectorProps {
 	selectedQF: IQFRound | null;
 	setSelectedQF: Dispatch<SetStateAction<IQFRound | null>>;
@@ -30,48 +29,70 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 	const navigationPrevRef = useRef(null);
 	const navigationNextRef = useRef(null);
 
+	const sortedRounds = projectData?.qfRounds
+		? projectData.qfRounds
+				.filter(round => round.isActive)
+				.concat(projectData.qfRounds.filter(round => !round.isActive))
+		: [];
+
 	return (
-		<Swiper modules={[Navigation]} slidesPerView='auto' spaceBetween={21}>
-			<SwiperSlide style={{ width: 'auto' }}>
-				<TabItem
-					alignItems='center'
-					gap='4px'
-					onClick={() => setSelectedQF(null)}
-					isSelected={selectedQF === null}
-				>
-					{selectedQF === null ? (
-						<B>{formatMessage({ id: 'label.all_donations' })}</B>
-					) : (
-						<P>{formatMessage({ id: 'label.all_donations' })}</P>
-					)}
-				</TabItem>
-			</SwiperSlide>
-			{projectData?.qfRounds?.map((round, index) => {
-				const isSelected = selectedQF?.id === round.id;
-				return (
-					<SwiperSlide key={index} style={{ width: 'auto' }}>
-						<TabItem
-							alignItems='center'
-							gap='4px'
-							onClick={() => setSelectedQF(round)}
-							isSelected={isSelected}
-						>
-							{isSelected ? (
-								<B>{round.name}</B>
-							) : (
-								<P>{round.name}</P>
-							)}
-							{round.isActive && <OpenLabel>Open</OpenLabel>}
-						</TabItem>
-					</SwiperSlide>
-				);
-			})}
-		</Swiper>
+		<>
+			<Swiper
+				modules={[Navigation]}
+				navigation={{
+					nextEl: '#nextIcon',
+					prevEl: '#prevIcon',
+				}}
+				slidesPerView='auto'
+				spaceBetween={21}
+			>
+				<SwiperSlide style={{ width: 'auto' }}>
+					<TabItem
+						alignItems='center'
+						gap='4px'
+						onClick={() => setSelectedQF(null)}
+						isSelected={selectedQF === null}
+					>
+						{selectedQF === null ? (
+							<B>
+								{formatMessage({ id: 'label.all_donations' })}
+							</B>
+						) : (
+							<P>
+								{formatMessage({ id: 'label.all_donations' })}
+							</P>
+						)}
+					</TabItem>
+				</SwiperSlide>
+				{sortedRounds.map((round, index) => {
+					const isSelected = selectedQF?.id === round.id;
+					return (
+						<SwiperSlide key={index} style={{ width: 'auto' }}>
+							<TabItem
+								alignItems='center'
+								gap='4px'
+								onClick={() => setSelectedQF(round)}
+								isSelected={isSelected}
+								isActive={round.isActive}
+							>
+								{isSelected ? (
+									<B>{round.name}</B>
+								) : (
+									<P>{round.name}</P>
+								)}
+								{round.isActive && <OpenLabel>Open</OpenLabel>}
+							</TabItem>
+						</SwiperSlide>
+					);
+				})}
+			</Swiper>
+		</>
 	);
 };
 
 interface ITabItemProps {
 	isSelected?: boolean;
+	isActive?: boolean;
 }
 
 const TabItem = styled(Flex)<ITabItemProps>`
