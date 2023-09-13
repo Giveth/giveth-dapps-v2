@@ -1,8 +1,8 @@
-class BigDecimal {
+export class BigDecimal {
 	private value: bigint;
 	private precision: bigint;
 
-	constructor(input: number | string, precision: number = 10) {
+	constructor(input: number | string, precision: number = 6) {
 		this.precision = BigInt(precision);
 		this.value = BigInt(
 			Math.round(
@@ -55,12 +55,19 @@ class BigDecimal {
 	public multiply(other: BigDecimal): BigDecimal;
 	public multiply(other: bigint): BigDecimal;
 	public multiply(other: BigDecimal | bigint): BigDecimal {
-		const otherValue = other instanceof BigDecimal ? other.value : other;
-		const result = (this.value * otherValue) / 10n ** this.precision;
-		return new BigDecimal(
-			parseFloat(this.fromBigInt(result)),
-			Number(this.precision),
-		);
+		if (other instanceof BigDecimal) {
+			const result = (this.value * other.value) / 10n ** this.precision;
+			return new BigDecimal(
+				parseFloat(this.fromBigInt(result)),
+				Number(this.precision),
+			);
+		} else {
+			const result = this.value * other;
+			return new BigDecimal(
+				parseFloat(this.fromBigInt(result)),
+				Number(this.precision),
+			);
+		}
 	}
 
 	public divide(other: BigDecimal): BigDecimal;
