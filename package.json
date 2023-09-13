@@ -34,7 +34,7 @@
 		"@web3-react/walletconnect-connector": "^6.2.13",
 		"apollo-upload-client": "^16.0.0",
 		"axios": "^0.25.0",
-		"bignumber.js": "^9.0.1",
+		"bignumber.js": "^9.1.2",
 		"deepmerge": "^4.2.2",
 		"framer-motion": "^10.12.12",
 		"graphql": "^16.0.1",
