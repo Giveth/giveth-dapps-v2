@@ -85,8 +85,6 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 		poolStakingConfig as SimplePoolStakingConfig;
 
 	const onApprove = async () => {
-		console.log('here');
-
 		if (amount === 0n) return;
 		setStakeState(StakeState.APPROVING);
 
