@@ -3,11 +3,11 @@ import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
+import BigNumber from 'bignumber.js';
 import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig, StakingPlatform } from '@/types/config';
 import { Flex } from './styled-components/Flex';
 import { NumericalInput } from '@/components/input/index';
-import { E18 } from '@/lib/constants/constants';
 
 interface IAmountInput {
 	maxAmount: bigint;
@@ -28,8 +28,11 @@ export const AmountInput: FC<IAmountInput> = ({
 
 	const setAmountPercentage = useCallback(
 		(percentage: number): void => {
-			const newAmount = (maxAmount * BigInt(percentage)) / 100n;
-			setAmount(newAmount);
+			const newAmount = new BigNumber(maxAmount.toString())
+				.multipliedBy(percentage)
+				.div(100)
+				.toString();
+			setAmount(BigInt(newAmount));
 			setDisplayAmount(formatWeiHelper(newAmount.toString()));
 		},
 		[maxAmount, setAmount],
@@ -39,10 +42,10 @@ export const AmountInput: FC<IAmountInput> = ({
 		(value: string) => {
 			setDisplayAmount(value);
 			setActiveStep(0);
-			let valueBn = 0n;
+			let valueBn = new BigNumber(0);
 
 			try {
-				valueBn = BigInt(value) * E18;
+				valueBn = new BigNumber(value).multipliedBy('1e18');
 			} catch (error) {
 				console.debug(
 					`Failed to parse input amount: "${value}"`,
@@ -55,7 +58,7 @@ export const AmountInput: FC<IAmountInput> = ({
 				});
 			}
 
-			setAmount(valueBn);
+			setAmount(BigInt(valueBn.toString()));
 		},
 		[setAmount],
 	);
