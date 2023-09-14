@@ -27,7 +27,7 @@ interface ILockInfo {
 const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 	const { chainId } = useWeb3React();
 	const { apr } = useStakingPool(
-		config.NETWORKS_CONFIG[chainId!].GIVPOWER ||
+		config.NETWORKS_CONFIG[chainId!]?.GIVPOWER ||
 			config.GNOSIS_CONFIG.GIVPOWER,
 	);
 
