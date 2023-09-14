@@ -9,6 +9,7 @@ import {
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { useAppSelector } from '@/features/hooks';
+import { Zero } from '@/helpers/number';
 
 export interface IStakeInfo {
 	apr: APR;
@@ -47,9 +48,11 @@ export const useStakingPool = (
 					type === StakingType.GIV_UNIPOOL_LM
 						? getGivStakingAPR(network, currentValues, _library)
 						: getLPStakingAPR(poolStakingConfig, currentValues);
-				promise.then(setApr).catch(() => setApr({ effectiveAPR: 0n }));
+				promise
+					.then(setApr)
+					.catch(() => setApr({ effectiveAPR: Zero }));
 			} else {
-				setApr({ effectiveAPR: 0n });
+				setApr({ effectiveAPR: Zero });
 			}
 		};
 
