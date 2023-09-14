@@ -13,6 +13,7 @@ import {
 	EPowerBoostingOrder,
 } from '@/components/views/userProfile/boostedTab/useFetchPowerBoostingInfo';
 import { isSubgraphKeyValid } from '@/features/subgraph/subgraph.helper';
+import { Zero } from './number';
 
 export const getTotalGIVpower = (
 	values: { [key: string]: ISubgraphState },
@@ -80,21 +81,21 @@ export const getUnlockDate = (givPowerInfo: IGIVpower, rounds: number) => {
 };
 
 export const avgAPR = (
-	apr: bigint | null,
+	apr: BigNumber | null,
 	gGIV?: bigint,
 	unipoolBalance?: bigint,
 ) => {
 	if (
 		!apr ||
-		apr === 0n ||
+		apr.isZero() ||
 		!gGIV ||
 		gGIV === 0n ||
 		!unipoolBalance ||
 		unipoolBalance === 0n
 	)
-		return 0n;
-	const avg = unipoolBalance / gGIV;
-	return apr * avg;
+		return Zero;
+	const avg = new BigNumber(unipoolBalance.toString()).div(gGIV.toString());
+	return apr.multipliedBy(avg);
 };
 
 export const sortBoosts = (

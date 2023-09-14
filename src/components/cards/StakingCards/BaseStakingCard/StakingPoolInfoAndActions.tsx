@@ -230,11 +230,9 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 											  }%-${
 													apr &&
 													formatEthHelper(
-														(
-															(apr.effectiveAPR *
-																5196n) /
-															1000n
-														).toString(), // sqrt(1 + max rounds)
+														apr.effectiveAPR.multipliedBy(
+															5.196,
+														), // sqrt(1 + max rounds)
 													)
 											  }%. ${formatMessage({
 													id: 'label.lock_your_giv_for_longer',
@@ -269,11 +267,9 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 												`-${
 													apr &&
 													formatEthHelper(
-														(
-															(apr.effectiveAPR *
-																52n) /
-															10n
-														).toString(),
+														apr.effectiveAPR.multipliedBy(
+															5.2,
+														),
 													)
 												}%`}
 										</DetailValue>
