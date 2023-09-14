@@ -72,7 +72,7 @@ const EstimatedMatchingToast = ({
 				const ethPrice = await fetchEthPrice();
 				setTokenPrice(ethPrice || 0);
 			} else if (token?.address) {
-				let tokenAddress = token.address;
+				let tokenAddress = token.address as `0x${string}`;
 				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
 				if (!isMainnet && token.mainnetAddress) {
 					tokenAddress = token.mainnetAddress || '';

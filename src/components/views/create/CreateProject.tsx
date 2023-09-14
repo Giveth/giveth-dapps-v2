@@ -139,7 +139,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 			const _addresses = Object.entries(addresses).map(
 				([id, address]) => ({
-					address: utils.getAddress(address),
+					address: utils.getAddress(address) as `0x${string}`,
 					networkId: Number(id),
 				}),
 			);
