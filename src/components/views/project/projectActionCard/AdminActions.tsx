@@ -127,7 +127,7 @@ export const AdminActions = () => {
 			<Dropdown
 				style={dropdownStyle}
 				label='Project Actions'
-				options={options}
+				options={isActive ? options : [options[0], options[2]]}
 			/>
 			{showVerificationModal && (
 				<VerificationModal

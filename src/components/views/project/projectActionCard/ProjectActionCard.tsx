@@ -32,13 +32,13 @@ export const ProjectActionCard = () => {
 	);
 };
 
-export const ProjectActionInnerCard = () => {
-	const { isAdmin, hasActiveQFRound } = useProjectContext();
+const ProjectActionInnerCard = () => {
+	const { isAdmin, hasActiveQFRound, isDraft } = useProjectContext();
 	const isMobile = !useMediaQuery(device.tablet);
 
 	return (
 		<>
-			{isAdmin && <AdminActions />}
+			{isAdmin && !isDraft && <AdminActions />}
 			{!isMobile && hasActiveQFRound ? <QFSection /> : <DonateSection />}
 			{!isMobile && !isAdmin && <ProjectPublicActions />}
 			{isAdmin && <ProjectStats />}
