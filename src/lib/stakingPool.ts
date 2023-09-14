@@ -555,7 +555,7 @@ export const unwrapToken = async (
 			args: [amount],
 		});
 	} catch (error) {
-		console.log('Error on wrapping token:', error);
+		console.log('Error on unwrapping token:', error);
 		captureException(error, {
 			tags: {
 				section: 'unwrapToken',
