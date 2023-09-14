@@ -526,10 +526,10 @@ export const stakeGIV = async (
 			args: [amount],
 		});
 	} catch (error) {
-		console.log('Error on wrapping token:', error);
+		console.log('Error on stake token:', error);
 		captureException(error, {
 			tags: {
-				section: 'wrapToken',
+				section: 'stakeToken',
 			},
 		});
 	}
