@@ -61,10 +61,10 @@ const getUnipoolInfo = async (
 			totalSupply = _totalSupply as bigint;
 			rewardRate = _rewardRate as bigint;
 		} catch (error) {
-			console.log('Error on wrapping token:', error);
+			console.log('Error on fetching totalSupply,rewardRate  :', error);
 			captureException(error, {
 				tags: {
-					section: 'wrapToken',
+					section: 'getUnipoolInfo',
 				},
 			});
 		}
