@@ -2,6 +2,7 @@ import { captureException } from '@sentry/nextjs';
 import { getContract, getWalletClient, signTypedData } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
 import { WriteContractReturnType, hexToSignature } from 'viem';
+import BigNumber from 'bignumber.js';
 import {
 	Address,
 	BalancerPoolStakingConfig,
@@ -25,6 +26,7 @@ import UnipoolGIVpower from '../artifacts/UnipoolGIVpower.json';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { E18, MaxUint256 } from './constants/constants';
+import { Zero } from '@/helpers/number';
 
 const { abi: LM_ABI } = LM_Json;
 const { abi: GP_ABI } = GP_Json;
@@ -77,17 +79,21 @@ export const getGivStakingAPR = async (
 ): Promise<APR> => {
 	const networkConfig = config.NETWORKS_CONFIG[network];
 	const lmAddress = networkConfig.GIVPOWER?.LM_ADDRESS;
-	if (!lmAddress) return { effectiveAPR: 0n };
+	if (!lmAddress) return { effectiveAPR: Zero };
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
-	let givStakingAPR = 0n;
+	let givStakingAPR = Zero;
 	const { totalSupply, rewardRate } = await getUnipoolInfo(
 		unipoolHelper,
 		lmAddress,
 		chainId,
 	);
 	givStakingAPR =
-		totalSupply === 0n ? 0n : (rewardRate / totalSupply) * 3153600000n;
+		totalSupply === 0n
+			? Zero
+			: new BigNumber(rewardRate.toString())
+					.div(totalSupply.toString())
+					.multipliedBy(3153600000);
 
 	return { effectiveAPR: givStakingAPR };
 };
@@ -149,20 +155,22 @@ const getIchiPoolStakingAPR = async (
 			tokens: { name: string; price: number }[];
 		} = apiResult;
 
-		if (!lpPrice || lpPrice === '0') return { effectiveAPR: 0n };
+		if (!lpPrice || lpPrice === '0') return { effectiveAPR: Zero };
 
 		const givTokenPrice = tokens?.find(t => t.name === 'giv')?.price || 0;
-		const vaultIRR = BigInt(_vaultIRR);
-		const totalAPR =
-			(rewardRate * BigInt(givTokenPrice) * 3153600000n) /
-				(totalSupply * BigInt(lpPrice)) +
-			vaultIRR;
+		const vaultIRR = new BigNumber(_vaultIRR);
+		const totalAPR = new BigNumber(rewardRate.toString())
+			.multipliedBy(givTokenPrice)
+			.multipliedBy(3153600000)
+			.div(totalSupply.toString())
+			.div(lpPrice)
+			.plus(vaultIRR);
 
 		return { effectiveAPR: totalAPR, vaultIRR: vaultIRR };
 	} catch (e) {
 		console.error('Error in fetching ICHI info', e);
 	}
-	return { effectiveAPR: 0n };
+	return { effectiveAPR: Zero };
 };
 
 const getBalancerPoolStakingAPR = async (
@@ -173,7 +181,7 @@ const getBalancerPoolStakingAPR = async (
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
 	const tokenAddress = config.NETWORKS_CONFIG[chainId].GIV_TOKEN_ADDRESS;
-	if (!tokenAddress) return { effectiveAPR: 0n };
+	if (!tokenAddress) return { effectiveAPR: Zero };
 
 	const weightedPoolContract = getContract({
 		address: POOL_ADDRESS,
@@ -224,7 +232,10 @@ const getBalancerPoolStakingAPR = async (
 		farmAPR =
 			totalSupply === 0n
 				? null
-				: (rewardRate * 3153600000n * lp) / totalSupply;
+				: new BigNumber(rewardRate.toString())
+						.multipliedBy(3153600000)
+						.multipliedBy(lp.toString())
+						.div(totalSupply.toString());
 	} catch (e) {
 		console.error('error on fetching balancer apr:', e);
 		captureException(e, {
@@ -244,11 +255,11 @@ const getSimplePoolStakingAPR = async (
 	const networkConfig = config.NETWORKS_CONFIG[chainId];
 
 	const givTokenAddress = networkConfig.GIV_TOKEN_ADDRESS;
-	if (!givTokenAddress) return { effectiveAPR: 0n };
+	if (!givTokenAddress) return { effectiveAPR: Zero };
 
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 	const regenStreams = networkConfig.regenStreams;
-	if (!regenStreams) return { effectiveAPR: 0n };
+	if (!regenStreams) return { effectiveAPR: Zero };
 	const streamConfig =
 		regenStreamType &&
 		regenStreams &&
@@ -287,7 +298,11 @@ const getSimplePoolStakingAPR = async (
 		farmAPR =
 			totalSupply === 0n
 				? null
-				: (rewardRate * 3153600000n * lp) / totalSupply / E18;
+				: new BigNumber(rewardRate.toString())
+						.multipliedBy(3153600000)
+						.multipliedBy(lp.toString())
+						.div(totalSupply.toString())
+						.div(1e18);
 	} catch (e) {
 		console.error('error on fetching simple pool apr:', e);
 		captureException(e, {
