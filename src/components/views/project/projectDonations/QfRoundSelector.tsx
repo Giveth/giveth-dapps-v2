@@ -32,11 +32,10 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 	const navigationPrevRef = useRef(null);
 	const navigationNextRef = useRef(null);
 
-	const sortedRounds = projectData?.qfRounds
-		? projectData.qfRounds
-				.filter(round => round.isActive)
-				.concat(projectData.qfRounds.filter(round => !round.isActive))
-		: [];
+	const sortedRounds =
+		projectData?.qfRounds?.sort(
+			(a, b) => Number(b.isActive) - Number(a.isActive),
+		) || [];
 
 	return (
 		<Flex gap='8px'>
