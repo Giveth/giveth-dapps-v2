@@ -12,18 +12,10 @@ const ProjectDonationsIndex = () => {
 
 	return (
 		<>
-			<Container className='fadeIn'>
-				<PrevIcon id='prevIcon'>
-					<img src={'/images/caret_right.svg'} alt='caret right' />
-				</PrevIcon>
-				<QfRoundSelector
-					selectedQF={selectedQF}
-					setSelectedQF={setSelectedQF}
-				/>
-				<NextIcon id='nextIcon'>
-					<img src={'/images/caret_right.svg'} alt='caret right' />
-				</NextIcon>
-			</Container>
+			<QfRoundSelector
+				selectedQF={selectedQF}
+				setSelectedQF={setSelectedQF}
+			/>
 			<StyledRow>
 				<Col lg={4}>
 					<ProjectTotalFundCard selectedQF={selectedQF} />
