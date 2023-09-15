@@ -2,6 +2,8 @@ import React, { Dispatch, FC, SetStateAction, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {
 	B,
+	IconChevronLeft24,
+	IconChevronRight24,
 	P,
 	SublineBold,
 	neutralColors,
@@ -15,6 +17,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Flex } from '@/components/styled-components/Flex';
 import { IQFRound } from '@/apollo/types/types';
+import { NavigationWrapper } from '@/components/styled-components/SwiperPagination';
 interface IQfRoundSelectorProps {
 	selectedQF: IQFRound | null;
 	setSelectedQF: Dispatch<SetStateAction<IQFRound | null>>;
@@ -29,19 +32,24 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 	const navigationPrevRef = useRef(null);
 	const navigationNextRef = useRef(null);
 
-	const sortedRounds = projectData?.qfRounds
-		? projectData.qfRounds
-				.filter(round => round.isActive)
-				.concat(projectData.qfRounds.filter(round => !round.isActive))
-		: [];
+	const sortedRounds =
+		projectData?.qfRounds?.sort(
+			(a, b) => Number(b.isActive) - Number(a.isActive),
+		) || [];
 
 	return (
-		<>
+		<Flex gap='8px'>
+			<QfNavigationWrapper
+				ref={navigationPrevRef}
+				className='swiper-button-disabled'
+			>
+				<IconChevronLeft24 />
+			</QfNavigationWrapper>
 			<Swiper
 				modules={[Navigation]}
 				navigation={{
-					nextEl: '#nextIcon',
-					prevEl: '#prevIcon',
+					nextEl: navigationNextRef.current,
+					prevEl: navigationPrevRef.current,
 				}}
 				slidesPerView='auto'
 				spaceBetween={21}
@@ -86,7 +94,10 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 					);
 				})}
 			</Swiper>
-		</>
+			<QfNavigationWrapper ref={navigationNextRef}>
+				<IconChevronRight24 />
+			</QfNavigationWrapper>
+		</Flex>
 	);
 };
 
@@ -94,6 +105,13 @@ interface ITabItemProps {
 	isSelected?: boolean;
 	isActive?: boolean;
 }
+
+const QfNavigationWrapper = styled(NavigationWrapper)`
+	&.swiper-button-disabled {
+		opacity: 0.2;
+		cursor: default;
+	}
+`;
 
 const TabItem = styled(Flex)<ITabItemProps>`
 	padding: 8px 16px;
