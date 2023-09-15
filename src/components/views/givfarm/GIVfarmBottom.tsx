@@ -7,7 +7,7 @@ import {
 	Container,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
+import { useChainId } from 'wagmi';
 import config from '@/configuration';
 import {
 	SimplePoolStakingConfig,
@@ -46,28 +46,28 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 		chainId === config.GNOSIS_NETWORK_NUMBER
 			? [
 					config.GNOSIS_CONFIG.GIVPOWER,
-					config.OPTIMISM_CONFIG.GIVPOWER,
-					...config.GNOSIS_CONFIG.pools,
-					...config.GNOSIS_CONFIG.regenPools,
-					...config.MAINNET_CONFIG.pools,
-					...config.MAINNET_CONFIG.regenPools,
+					// config.OPTIMISM_CONFIG.GIVPOWER,
+					// ...config.GNOSIS_CONFIG.pools,
+					// ...config.GNOSIS_CONFIG.regenPools,
+					// ...config.MAINNET_CONFIG.pools,
+					// ...config.MAINNET_CONFIG.regenPools,
 			  ]
 			: chainId === config.OPTIMISM_NETWORK_NUMBER
 			? [
 					config.OPTIMISM_CONFIG.GIVPOWER,
-					config.GNOSIS_CONFIG.GIVPOWER,
-					...config.GNOSIS_CONFIG.pools,
-					...config.GNOSIS_CONFIG.regenPools,
-					...config.MAINNET_CONFIG.pools,
-					...config.MAINNET_CONFIG.regenPools,
+					// config.GNOSIS_CONFIG.GIVPOWER,
+					// ...config.GNOSIS_CONFIG.pools,
+					// ...config.GNOSIS_CONFIG.regenPools,
+					// ...config.MAINNET_CONFIG.pools,
+					// ...config.MAINNET_CONFIG.regenPools,
 			  ]
 			: [
 					config.GNOSIS_CONFIG.GIVPOWER,
-					config.OPTIMISM_CONFIG.GIVPOWER,
-					...config.MAINNET_CONFIG.pools,
-					...config.MAINNET_CONFIG.regenPools,
-					...config.GNOSIS_CONFIG.pools,
-					...config.GNOSIS_CONFIG.regenPools,
+					// config.OPTIMISM_CONFIG.GIVPOWER,
+					// ...config.MAINNET_CONFIG.pools,
+					// ...config.MAINNET_CONFIG.regenPools,
+					// ...config.GNOSIS_CONFIG.pools,
+					// ...config.GNOSIS_CONFIG.regenPools,
 			  ];
 
 	const now = getNowUnixMS();
@@ -88,7 +88,7 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 
 export const GIVfarmBottom = () => {
 	const { formatMessage } = useIntl();
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const [showArchivedPools, setShowArchivedPools] = useState(false);
 
 	const _config = getNetworkConfig(config.GNOSIS_NETWORK_NUMBER, chainId);
