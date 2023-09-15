@@ -39,9 +39,12 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 
 	return (
 		<Flex gap='8px'>
-			<NavigationWrapper ref={navigationPrevRef}>
+			<QfNavigationWrapper
+				ref={navigationPrevRef}
+				className='swiper-button-disabled'
+			>
 				<IconChevronLeft24 />
-			</NavigationWrapper>
+			</QfNavigationWrapper>
 			<Swiper
 				modules={[Navigation]}
 				navigation={{
@@ -91,9 +94,9 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 					);
 				})}
 			</Swiper>
-			<NavigationWrapper ref={navigationNextRef}>
+			<QfNavigationWrapper ref={navigationNextRef}>
 				<IconChevronRight24 />
-			</NavigationWrapper>
+			</QfNavigationWrapper>
 		</Flex>
 	);
 };
@@ -102,6 +105,13 @@ interface ITabItemProps {
 	isSelected?: boolean;
 	isActive?: boolean;
 }
+
+const QfNavigationWrapper = styled(NavigationWrapper)`
+	&.swiper-button-disabled {
+		opacity: 0.2;
+		cursor: default;
+	}
+`;
 
 const TabItem = styled(Flex)<ITabItemProps>`
 	padding: 8px 16px;
