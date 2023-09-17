@@ -8,8 +8,9 @@ import {
 	mediaQueries,
 	P,
 } from '@giveth/ui-design-system';
-import { Contract } from 'ethers';
-import { useAddress } from 'wagmi';
+import { useAccount } from 'wagmi';
+import { getWalletClient } from '@wagmi/core';
+import { waitForTransaction } from '@wagmi/core';
 import { IModal } from '@/types/common';
 import { Modal } from './Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -22,7 +23,6 @@ import {
 import { formatWeiHelper } from '@/helpers/number';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
-import { GiversPFP } from '@/types/contracts';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
 export enum MintStep {
@@ -45,7 +45,7 @@ export const MintModal: FC<IMintModalProps> = ({
 	const [step, setStep] = useState(MintStep.APPROVE);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-	const { address } = useAddress();
+	const { address } = useAccount();
 	const { setStep: setMintStep, setTx } = usePFPMintData();
 
 	const price = nftPrice ? nftPrice * BigInt(qty) : 0n;
@@ -89,24 +89,30 @@ export const MintModal: FC<IMintModalProps> = ({
 
 		setStep(MintStep.MINTING);
 		try {
-			const signer = library.getSigner();
-			const PFPContract = new Contract(
-				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
-				PFP_ABI,
-				signer,
-			) as GiversPFP;
-			console.log('PFPContract', PFPContract, price.toString());
-			const tx = await PFPContract.mint(qty);
-			setTx(tx.hash);
-			console.log('tx', tx);
-			const res = await tx.wait();
-			console.log('res', res);
+			const walletClient = await getWalletClient({
+				chainId: config.MAINNET_NETWORK_NUMBER,
+			});
 
-			if (res.status) {
-				setMintStep(EPFPMinSteps.SUCCESS);
-				closeModal();
+			const txResponse = await walletClient?.writeContract({
+				address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
+				abi: PFP_ABI,
+				functionName: 'mint',
+				args: [qty],
+			});
+
+			if (txResponse) {
+				setTx(txResponse);
+				const { status } = await waitForTransaction({
+					hash: txResponse,
+				});
+				if (status) {
+					setMintStep(EPFPMinSteps.SUCCESS);
+					closeModal();
+				} else {
+					setMintStep(EPFPMinSteps.FAILURE);
+				}
 			} else {
-				setMintStep(EPFPMinSteps.FAILURE);
+				setMintStep(EPFPMinSteps.MINT);
 			}
 		} catch (error) {
 			setMintStep(EPFPMinSteps.FAILURE);
@@ -145,7 +151,7 @@ export const MintModal: FC<IMintModalProps> = ({
 				<Desc>
 					You are Minting {qty} Giver NFT {qty > 1 && 's'} for{' '}
 				</Desc>
-				<Price>{formatWeiHelper(price)} DAI</Price>
+				<Price>{formatWeiHelper(price.toString())} DAI</Price>
 				{isApproving ? (
 					<StyledButton
 						size='small'
