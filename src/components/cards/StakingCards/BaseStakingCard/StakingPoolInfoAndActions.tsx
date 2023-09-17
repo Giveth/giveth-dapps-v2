@@ -165,7 +165,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 				_chainId === poolNetwork &&
 				_open === type
 			) {
-				if (account) {
+				if (address) {
 					setShowStakeModal(true);
 					setIsFirstStakeShown(true);
 					router.replace(Routes.GIVfarm, undefined, {
@@ -175,12 +175,12 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 			}
 		};
 		checkNetworkAndShowStakeModal();
-	}, [router, account, isWalletActive]);
+	}, [router, address, isWalletActive]);
 
 	const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
 	const rewardTokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 	const isZeroGIVStacked =
-		isGIVpower && (!account || userGIVPowerBalance.balance === '0');
+		isGIVpower && (!address || userGIVPowerBalance.balance === '0');
 
 	return (
 		<StakePoolInfoContainer>
