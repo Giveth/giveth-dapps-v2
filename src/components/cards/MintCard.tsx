@@ -58,6 +58,8 @@ export const MintCard = () => {
 		}
 	}
 
+	console.log('pfpData', pfpData);
+
 	useEffect(() => {
 		async function fetchData() {
 			try {
@@ -192,8 +194,14 @@ export const MintCard = () => {
 						hasError={!!errorMsg}
 					/>
 					<InputHint>
-						{pfpData?.totalSupply ? pfpData.totalSupply : '-'}/
-						{pfpData?.maxSupply ? pfpData.maxSupply : '-'} Minted
+						{pfpData?.totalSupply
+							? pfpData.totalSupply.toString()
+							: '-'}
+						/
+						{pfpData?.maxSupply
+							? pfpData.maxSupply.toString()
+							: '-'}{' '}
+						Minted
 					</InputHint>
 					<ErrorPlaceHolder>{errorMsg}</ErrorPlaceHolder>
 				</InputWrapper>
@@ -208,13 +216,13 @@ export const MintCard = () => {
 						<InfoBoxTitle>Mint price per NFT</InfoBoxTitle>
 						<InfoBoxValue>
 							{pfpData?.price
-								? formatWeiHelper(pfpData.price)
+								? formatWeiHelper(pfpData.price.toString())
 								: '-'}{' '}
 							DAI
 						</InfoBoxValue>
 					</Flex>
 				</InfoBox>
-				{!account ? (
+				{!address ? (
 					<MintButton
 						size='small'
 						label={formatMessage({
