@@ -7,8 +7,8 @@ import {
 } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
+import { useAccount, useChainId } from 'wagmi';
 import FarmCountDown from '@/components/FarmCountDown';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { FlexCenter, Flex } from '@/components/styled-components/Flex';
@@ -103,7 +103,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		stakedAmount: stakedLpAmount,
 		earned,
 	} = useStakingPool(poolStakingConfig, hold);
-	const { chainId, account, active: isWalletActive } = useWeb3React();
+	const { address, isConnected: isWalletActive } = useAccount();
+	const chainId = useChainId();
 
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 	const {
