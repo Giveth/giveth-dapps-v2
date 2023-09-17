@@ -11,6 +11,8 @@ import { getGasPreference } from '@/lib/helpers';
 import { MerkleDistro } from '@/types/contracts';
 import { fetchChainInfo } from '@/features/subgraph/subgraph.services';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { getWalletClient } from 'wagmi/dist/actions';
+import { Address } from '@/types/config';
 
 const { abi: MERKLE_ABI } = MerkleDropJson;
 const { abi: TOKEN_DISTRO_ABI } = TOKEN_DISTRO_JSON;
@@ -107,24 +109,21 @@ export const claimAirDrop = async (
 };
 
 export const claimReward = async (
-	tokenDistroAddress: string,
-	provider: Web3Provider | null,
+	tokenDistroAddress: Address,
+	chainId: number | null,
 ): Promise<TransactionResponse | undefined> => {
 	if (!isAddress(tokenDistroAddress)) return;
-	if (!provider) return;
+	if (!chainId) return;
 
-	const signer = provider.getSigner();
-	const network = provider.network.chainId;
-
-	const tokenDistro = new Contract(
-		tokenDistroAddress,
-		TOKEN_DISTRO_ABI,
-		signer.connectUnchecked(),
-	);
-
-	const networkConfig = config.NETWORKS_CONFIG[network];
 	try {
-		return await tokenDistro.claim(getGasPreference(networkConfig));
+		const walletClient = await getWalletClient({
+			chainId,
+		});
+		return walletClient?.writeContract({
+			address: tokenDistroAddress,
+			functionName: 'claim',
+			abi: TOKEN_DISTRO_ABI
+		})
 	} catch (error) {
 		console.error('Error on claiming token distro reward:', error);
 		captureException(error, {
@@ -133,14 +132,4 @@ export const claimReward = async (
 			},
 		});
 	}
-
-	// showPendingClaim(network, tx.hash);
-
-	// const { status } = await tx.wait();
-
-	// if (status) {
-	// 	showConfirmedClaim(network, tx.hash);
-	// } else {
-	// 	showFailedClaim(network, tx.hash);
-	// }
 };
