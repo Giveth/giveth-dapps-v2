@@ -1,6 +1,5 @@
 import { Caption, IconGasStation } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import config from '@/configuration';
