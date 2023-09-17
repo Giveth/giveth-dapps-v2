@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
-import { useWeb3React } from '@web3-react/core';
 import { IconHelpFilled16 } from '@giveth/ui-design-system';
 import { FC, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -8,7 +7,6 @@ import { useRouter } from 'next/router';
 
 import { Container } from '@giveth/ui-design-system';
 import { gToast, ToastType } from '@/components/toasts';
-import { useAppDispatch } from '@/features/hooks';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
@@ -38,8 +36,6 @@ const TestIndex = () => {
 	// 	(state: RootState) => state.subgraph.gnosisValues,
 	// );
 	const [showModal, setShowModal] = useState(false);
-	const { account } = useWeb3React();
-	const dispatch = useAppDispatch();
 	const functionRef = useRef<Function>();
 	const [state, setState] = useState(0);
 	const [description, setDescription] = useState('');
