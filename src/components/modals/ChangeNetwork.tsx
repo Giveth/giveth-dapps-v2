@@ -2,7 +2,6 @@ import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { H4, B, brandColors, Caption } from '@giveth/ui-design-system';
 import { useWeb3React } from '@web3-react/core';
-
 import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import config from '@/configuration';
@@ -14,6 +13,7 @@ import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { useChainId } from 'wagmi';
 
 interface IChangeNetworkModalProps extends IModal {
 	targetNetwork: number;
@@ -23,7 +23,7 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 	setShowModal,
 	targetNetwork,
 }) => {
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const theme = useAppSelector(state => state.general.theme);
 
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
