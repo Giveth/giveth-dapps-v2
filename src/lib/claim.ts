@@ -10,6 +10,7 @@ import { fetchChainInfo } from '@/features/subgraph/subgraph.services';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { getWalletClient } from 'wagmi/dist/actions';
 import { Address } from '@/types/config';
+import { WriteContractReturnType } from 'viem';
 
 const { abi: MERKLE_ABI } = MerkleDropJson;
 const { abi: TOKEN_DISTRO_ABI } = TOKEN_DISTRO_JSON;
@@ -108,8 +109,7 @@ export const claimAirDrop = async (
 export const claimReward = async (
 	tokenDistroAddress: Address,
 	chainId: number | null,
-): Promise<TransactionResponse | undefined> => {
-	if (!isAddress(tokenDistroAddress)) return;
+): Promise<WriteContractReturnType | undefined> => {
 	if (!chainId) return;
 
 	try {
