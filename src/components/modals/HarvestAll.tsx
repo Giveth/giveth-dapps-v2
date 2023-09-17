@@ -71,6 +71,7 @@ import { getPoolIconWithName } from '@/helpers/platform';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
+import { useChainId } from 'wagmi';
 
 interface IHarvestAllInnerModalProps {
 	title: string;
@@ -126,7 +127,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const [sumStream, setSumStream] = useState<BigNumber>(Zero);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const { tokenDistroHelper, sdh } = useTokenDistroHelper(
 		chainId!,
 		regenStreamConfig,
