@@ -12,7 +12,6 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import { Col, Row } from '@giveth/ui-design-system';
 import { Flex } from '../styled-components/Flex';
 import {
