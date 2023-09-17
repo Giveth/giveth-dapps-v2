@@ -9,8 +9,6 @@ import {
 	neutralColors,
 	ButtonText,
 } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
-
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import Link from 'next/link';

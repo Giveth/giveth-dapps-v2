@@ -8,7 +8,6 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { useWeb3React } from '@web3-react/core';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';

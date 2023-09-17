@@ -1,7 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { H4, B, brandColors, Caption } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
 import config from '@/configuration';

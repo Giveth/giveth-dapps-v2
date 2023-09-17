@@ -11,7 +11,6 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';

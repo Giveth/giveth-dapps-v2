@@ -9,7 +9,6 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';

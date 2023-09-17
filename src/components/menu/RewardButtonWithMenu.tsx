@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import { formatWeiHelper } from '@/helpers/number';
 import {
 	MenuAndButtonContainer,
