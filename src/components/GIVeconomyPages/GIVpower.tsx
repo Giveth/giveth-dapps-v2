@@ -63,10 +63,11 @@ import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { formatWeiHelper } from '@/helpers/number';
 import links from '@/lib/constants/links';
 import { getTotalGIVpower } from '@/helpers/givpower';
+import { useAccount } from 'wagmi';
 
 export function TabPowerTop() {
 	const { formatMessage } = useIntl();
-	const { account } = useWeb3React();
+	const { address } = useAccount();
 	const values = useAppSelector(state => state.subgraph);
 	const givPower = getTotalGIVpower(values);
 	const givPowerFormatted = formatWeiHelper(givPower.total);
@@ -96,7 +97,7 @@ export function TabPowerTop() {
 					</Col>
 					<Col xs={12} sm={4}>
 						<GivPowerCardContainer>
-							{account ? (
+							{address ? (
 								<>
 									<Caption>
 										{formatMessage({
