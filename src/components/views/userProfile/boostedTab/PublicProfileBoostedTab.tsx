@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { FC } from 'react';
 
 import { Col, Row } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
 import BigNumber from 'bignumber.js';
 import { IUserProfileView } from '../UserProfile.view';
 import { Loading } from '../projectsTab/ProfileProjectsTab';
