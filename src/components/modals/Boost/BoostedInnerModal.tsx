@@ -13,6 +13,7 @@ import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
 import { getGIVpowerLink } from '@/helpers/givpower';
 import type { FC } from 'react';
+import { useChainId } from 'wagmi';
 
 interface IBoostedModalProps {
 	percentage: number;
@@ -25,7 +26,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 }) => {
 	const { isMobile } = useDetectDevice();
 	const { formatMessage } = useIntl();
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 
 	return (
 		<div>
