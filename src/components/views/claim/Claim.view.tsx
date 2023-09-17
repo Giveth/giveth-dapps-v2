@@ -11,6 +11,7 @@ import GovernCard from '@/components/views/claim/cards/Govern';
 import InvestCard from '@/components/views/claim/cards/Stake';
 import { Flex } from '@/components/styled-components/Flex';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
+import { useChainId } from 'wagmi';
 
 const stepsTitle = ['Connect', 'Donate', 'Govern', 'Stake', 'Stream', 'Claim'];
 
@@ -113,7 +114,7 @@ export interface IClaimViewCardProps {
 
 const ClaimView = () => {
 	const { giveDropState, step, setStep } = useClaim();
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 
 	return (
 		<>
