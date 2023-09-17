@@ -152,12 +152,11 @@ export const MintCard = () => {
 		if (!address) return;
 
 		const pfpContract = await getContract({
-			address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
+			address: config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS,
 			chainId: config.MAINNET_NETWORK_NUMBER,
 			abi: erc20ABI,
 		});
 		let userDaiBalance = await pfpContract.read.balanceOf([address]);
-
 		const total = pfpData.price * BigInt(qtyNFT);
 		if (total <= userDaiBalance) {
 			setQty(Number(qtyNFT));
