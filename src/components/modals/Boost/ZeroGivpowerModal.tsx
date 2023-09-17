@@ -14,11 +14,12 @@ import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { getGIVpowerLink } from '@/helpers/givpower';
+import { useChainId } from 'wagmi';
 
 export const ZeroGivpowerModal: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 
 	return (
 		<Modal
