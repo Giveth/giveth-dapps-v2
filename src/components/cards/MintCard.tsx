@@ -11,7 +11,6 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Contract } from 'ethers';
-import { JsonRpcProvider } from '@ethersproject/providers';
 import { useChainId, useAccount } from 'wagmi';
 import { getContract } from 'wagmi/actions';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
@@ -19,7 +18,7 @@ import { MintModal } from '../modals/MintModal';
 import { Flex } from '../styled-components/Flex';
 import { useAppDispatch } from '@/features/hooks';
 import { formatWeiHelper } from '@/helpers/number';
-import { ERC20, GiversPFP } from '@/types/contracts';
+import { ERC20 } from '@/types/contracts';
 import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { switchNetwork } from '@/lib/metamask';
 import config from '@/configuration';
@@ -92,25 +91,21 @@ export const MintCard = () => {
 
 	useEffect(() => {
 		async function fetchData() {
-			if (!account) return;
+			if (!address) return;
 			try {
-				const _provider =
-					chainId === config.MAINNET_NETWORK_NUMBER
-						? library
-						: new JsonRpcProvider(config.MAINNET_CONFIG.nodeUrl);
-				const pfpContract = new Contract(
-					config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
-					PFP_ABI,
-					_provider,
-				) as GiversPFP;
-				let _balanceOf = await pfpContract.balanceOf(account);
-				setBalance(Number(_balanceOf?.toString() || '0'));
+				const pfpContract = await getContract({
+					address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
+					chainId: config.MAINNET_NETWORK_NUMBER,
+					abi: PFP_ABI,
+				});
+				let _balanceOf = await pfpContract.read.balanceOf([address]);
+				setBalance(Number(_balanceOf || '0'));
 			} catch (error) {
 				console.log('failed to fetch user balance data');
 			}
 		}
 		fetchData();
-	}, [account, chainId, library]);
+	}, [address, chainId]);
 
 	function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
 		if (!pfpData?.maxMintAmount) return;
