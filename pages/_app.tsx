@@ -22,6 +22,7 @@ import {
 	zora,
 	gnosis,
 	optimismGoerli,
+	goerli,
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 
@@ -83,7 +84,16 @@ function getLibrary(provider: ExternalProvider) {
 }
 
 const { chains, publicClient } = configureChains(
-	[mainnet, gnosis, polygon, optimism, optimismGoerli, arbitrum, zora],
+	[
+		mainnet,
+		gnosis,
+		polygon,
+		optimism,
+		optimismGoerli,
+		arbitrum,
+		zora,
+		goerli,
+	],
 	[
 		publicProvider(),
 		infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY! }),
