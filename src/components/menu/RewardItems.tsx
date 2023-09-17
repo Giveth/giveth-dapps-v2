@@ -53,7 +53,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const dispatch = useAppDispatch();
 
 	const sdh = new SubgraphDataHelper(currentValues);
