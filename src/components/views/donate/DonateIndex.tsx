@@ -8,7 +8,6 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import dynamic from 'next/dynamic';
 import { BigArc } from '@/components/styled-components/Arc';
