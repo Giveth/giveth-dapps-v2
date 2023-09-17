@@ -26,6 +26,7 @@ import ExternalLink from '@/components/ExternalLink';
 import { formatTxLink } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import { useChainId } from 'wagmi';
 
 const CryptoDonation = dynamic(
 	() => import('@/components/views/donate/CryptoDonation'),
@@ -95,7 +96,7 @@ const DonateIndex: FC = () => {
 };
 
 const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	return (
 		<TxLink>
 			<span>Donation to {title + ' '}</span>
