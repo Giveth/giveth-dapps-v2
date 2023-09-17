@@ -27,6 +27,7 @@ import { NetworkItem, SelectedNetwork } from './SwitchNetwork';
 import { useAppSelector } from '@/features/hooks';
 import { Flex, FlexCenter } from '../styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
+import { useChainId } from 'wagmi';
 
 interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
 
@@ -40,7 +41,7 @@ const networks = [
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { setShowModal, acceptedChains } = props;
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
