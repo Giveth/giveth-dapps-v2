@@ -18,6 +18,7 @@ import { AddTokenButton } from '../AddTokenButton';
 import { Flex } from '../styled-components/Flex';
 import LottieControl from '@/components/LottieControl';
 import { WrappedSpinner } from '../Spinner';
+import { useChainId } from 'wagmi';
 
 const AddTokenRow = styled(Flex)`
 	margin-top: 16px;
@@ -118,7 +119,7 @@ export const ErrorInnerModal: FC<IErrorProps> = ({
 	txHash,
 	message,
 }) => {
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 
 	return (
 		<>
