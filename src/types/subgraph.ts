@@ -10,7 +10,7 @@ export interface ITokenAllocation {
 }
 
 export interface ITokenDistro {
-	contractAddress: string;
+	contractAddress: Address;
 	initialAmount: string;
 	lockedAmount: string;
 	totalTokens: string;
