@@ -16,10 +16,8 @@ import {
 	Lead,
 	P,
 } from '@giveth/ui-design-system';
-import { constants, BigNumber as EthBigNumber } from 'ethers';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
-import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { Modal } from './Modal';
 import {
@@ -71,7 +69,7 @@ import { getPoolIconWithName } from '@/helpers/platform';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
-import { useChainId } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 
 interface IHarvestAllInnerModalProps {
 	title: string;
@@ -109,24 +107,23 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		xDaiThirdPartyTokensPrice,
 		givPrice,
 	} = useAppSelector(state => state.price);
-	const { account, library } = useWeb3React();
 	const [txHash, setTxHash] = useState('');
 	//GIVdrop TODO: Should we show Givdrop in new  design?
-	const [givDrop, setGIVdrop] = useState(constants.Zero);
-	const [givDropStream, setGIVdropStream] = useState<BigNumber>(Zero);
+	const [givDrop, setGIVdrop] = useState(0n);
+	const [givDropStream, setGIVdropStream] = useState(0n);
 	//GIVstream
-	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
-	const [rewardStream, setRewardStream] = useState<BigNumber>(Zero);
+	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
+	const [rewardStream, setRewardStream] = useState(0n);
 	//GIVfarm
-	const [earnedLiquid, setEarnedLiquid] = useState(constants.Zero);
-	const [earnedStream, setEarnedStream] = useState<BigNumber>(Zero);
+	const [earnedLiquid, setEarnedLiquid] = useState(0n);
+	const [earnedStream, setEarnedStream] = useState(0n);
 	//GIVbacks
-	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
+	const [givBackStream, setGivBackStream] = useState(0n);
 	//Sum
-	const [sumLiquid, setSumLiquid] = useState(constants.Zero);
-	const [sumStream, setSumStream] = useState<BigNumber>(Zero);
+	const [sumLiquid, setSumLiquid] = useState(0n);
+	const [sumStream, setSumStream] = useState(0n);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-
+	const { address } = useAccount();
 	const chainId = useChainId();
 	const { tokenDistroHelper, sdh } = useTokenDistroHelper(
 		chainId!,
@@ -136,12 +133,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const tokenDistroBalance = regenStreamConfig
 		? sdh.getTokenDistroBalance(regenStreamConfig.tokenDistroAddress)
 		: sdh.getGIVTokenDistroBalance();
-	const givback = useMemo<EthBigNumber>(
-		() => BN(tokenDistroBalance.givback),
+	const givback = useMemo(
+		() => BigInt(tokenDistroBalance.givback),
 		[tokenDistroBalance],
 	);
-	const givbackLiquidPart = useMemo<EthBigNumber>(
-		() => BN(tokenDistroBalance.givbackLiquidPart),
+	const givbackLiquidPart = useMemo(
+		() => BigInt(tokenDistroBalance.givbackLiquidPart),
 		[tokenDistroBalance],
 	);
 
@@ -172,12 +169,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 
 	//calculate Liquid Sum
 	useEffect(() => {
-		setSumLiquid(rewardLiquidPart.add(earnedLiquid)); // earnedLiquid includes the givbacks liquid part
+		setSumLiquid(rewardLiquidPart + earnedLiquid); // earnedLiquid includes the givbacks liquid part
 	}, [rewardLiquidPart, earnedLiquid]);
 
 	//calculate Stream Sum
 	useEffect(() => {
-		setSumStream(BigNumber.sum(rewardStream, earnedStream)); // earnedStream includes the givbacks stream part
+		setSumStream(rewardStream + earnedStream); // earnedStream includes the givbacks stream part
 	}, [rewardStream, earnedStream]);
 
 	useEffect(() => {
@@ -186,12 +183,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			!regenStreamConfig &&
 			chainId === config.GNOSIS_NETWORK_NUMBER &&
 			!tokenDistroBalance.givDropClaimed &&
-			account
+			address
 		) {
-			fetchAirDropClaimData(account).then(claimData => {
+			fetchAirDropClaimData(address).then(claimData => {
 				if (claimData) {
-					const givDrop = EthBigNumber.from(claimData.amount);
-					setGIVdrop(givDrop.div(10));
+					const givDrop = BigInt(claimData.amount);
+					setGIVdrop(givDrop / 10n);
 					setGIVdropStream(
 						tokenDistroHelper.getStreamPartTokenPerWeek(givDrop),
 					);
@@ -199,7 +196,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			});
 		}
 	}, [
-		account,
+		address,
 		chainId,
 		tokenDistroBalance?.givDropClaimed,
 		tokenDistroHelper,
@@ -207,7 +204,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	]);
 
 	const onHarvest = async () => {
-		if (!library || !account || !tokenDistroHelper) return;
+		if (!address || !tokenDistroHelper) return;
 		setState(HarvestStates.HARVESTING);
 		try {
 			if (poolStakingConfig) {
@@ -219,7 +216,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 					if (!currentIncentive || !stakedPositions) return;
 					//NFT Harvest
 					const txResponse = await claimUnstakeStake(
-						account,
+						address,
 						library,
 						currentIncentive,
 						stakedPositions,

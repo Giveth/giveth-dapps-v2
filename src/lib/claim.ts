@@ -1,6 +1,3 @@
-import { isAddress } from 'ethers/lib/utils';
-import { Contract } from 'ethers';
-import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
 import { captureException } from '@sentry/nextjs';
 import { ClaimData } from '@/types/GIV';
 import config from '../configuration';
