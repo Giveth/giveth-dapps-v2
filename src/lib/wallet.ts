@@ -1,4 +1,5 @@
 import { captureException } from '@sentry/nextjs';
+import { fetchEnsAddress } from '@wagmi/core';
 import {
 	EWallets,
 	torusConnector,
@@ -63,8 +64,6 @@ export function isAddressENS(ens: string | undefined) {
 }
 
 // Before calling getAddressFromENS, check if user is on Mainnet
-export async function getAddressFromENS(ens: string | undefined, web3: any) {
-	const isEns = isAddressENS(ens);
-	if (!isEns) return new Error('Error addressNotENS');
-	return await web3.resolveName(ens);
+export async function getAddressFromENS(ens: string | undefined) {
+	return await fetchEnsAddress({ name: ens! });
 }

@@ -1,10 +1,8 @@
 import { useWeb3React } from '@web3-react/core';
 import { useEffect, useRef } from 'react';
-import { formatEther } from '@ethersproject/units';
-import { captureException } from '@sentry/nextjs';
 import { useAccount, useChainId } from 'wagmi';
 import { useAppDispatch } from '@/features/hooks';
-import { setBalance, setToken, setIsEnabled } from '@/features/user/user.slice';
+import { setToken, setIsEnabled } from '@/features/user/user.slice';
 import StorageLabel from '@/lib/localStorage';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { getTokens } from '@/helpers/user';
@@ -76,36 +74,6 @@ const UserController = () => {
 			dispatch(setIsEnabled(true));
 		}
 	}, [address]);
-
-	useEffect(() => {
-		if (address && library) {
-			library?.on('block', () => {
-				//Getting balance on every block
-				//TODO: Ask about balance and why we need it.
-				if (address && library) {
-					library
-						.getBalance(address)
-						.then((_balance: string) => {
-							const balance = parseFloat(
-								formatEther(_balance),
-							).toFixed(3);
-							dispatch(setBalance(balance));
-						})
-						.catch((error: unknown) => {
-							dispatch(setBalance(null));
-							captureException(error, {
-								tags: {
-									section: 'getBalance',
-								},
-							});
-						});
-				}
-			});
-		}
-		return () => {
-			library?.removeAllListeners('block');
-		};
-	}, [address, library, chainId]);
 
 	return null;
 };
