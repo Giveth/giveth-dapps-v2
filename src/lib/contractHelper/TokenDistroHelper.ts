@@ -1,8 +1,9 @@
 import { getNowUnixMS } from '@/helpers/time';
+import { Address } from '@/types/config';
 import { ITokenDistro, ITokenDistroBalance } from '@/types/subgraph';
 
 export class TokenDistroHelper {
-	public readonly contractAddress: string;
+	public readonly contractAddress: Address;
 	public readonly initialAmount: bigint;
 	public readonly lockedAmount: bigint;
 	public readonly totalTokens: bigint;
