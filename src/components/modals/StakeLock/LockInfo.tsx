@@ -18,6 +18,7 @@ import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import config from '@/configuration';
 import type { FC } from 'react';
+import { useChainId } from 'wagmi';
 
 interface ILockInfo {
 	round: number;
@@ -25,7 +26,7 @@ interface ILockInfo {
 }
 
 const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const { apr } = useStakingPool(
 		config.NETWORKS_CONFIG[chainId!]?.GIVPOWER ||
 			config.GNOSIS_CONFIG.GIVPOWER,
