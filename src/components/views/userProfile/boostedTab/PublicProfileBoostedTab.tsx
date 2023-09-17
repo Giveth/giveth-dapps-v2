@@ -15,13 +15,14 @@ import { useFetchPowerBoostingInfo } from './useFetchPowerBoostingInfo';
 import { useProfileContext } from '@/context/profile.context';
 import { PublicGIVpowerContributeCard } from '@/components/ContributeCard';
 import { PublicBoostsTable } from './PublicBoostsTable';
+import { useChainId } from 'wagmi';
 
 export const PublicProfileBoostedTab: FC<IUserProfileView> = () => {
 	const { user, givpowerBalance } = useProfileContext();
 
 	const { loading, boosts, order, totalCount, changeOrder } =
 		useFetchPowerBoostingInfo(user);
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const givpower = new BigNumber(givpowerBalance);
 	const isZeroGivPower = givpower.isZero();
 
