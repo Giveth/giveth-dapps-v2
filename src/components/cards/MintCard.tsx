@@ -10,16 +10,14 @@ import {
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Contract } from 'ethers';
 import { useChainId, useAccount } from 'wagmi';
 import { getContract } from 'wagmi/actions';
+import { erc20ABI } from 'wagmi';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { MintModal } from '../modals/MintModal';
 import { Flex } from '../styled-components/Flex';
 import { useAppDispatch } from '@/features/hooks';
 import { formatWeiHelper } from '@/helpers/number';
-import { ERC20 } from '@/types/contracts';
-import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { switchNetwork } from '@/lib/metamask';
 import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
@@ -149,19 +147,17 @@ export const MintCard = () => {
 	async function handleMint() {
 		if (!config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS) return;
 		if (!pfpData?.price) return;
+		if (!address) return;
 
-		//handle balance
-		const signer = library.getSigner();
-		const userAddress = await signer.getAddress();
-		const DAIContract = new Contract(
-			config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS,
-			ERC20_ABI,
-			library,
-		) as ERC20;
-		const balance = await DAIContract.balanceOf(userAddress);
+		const pfpContract = await getContract({
+			address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
+			chainId: config.MAINNET_NETWORK_NUMBER,
+			abi: erc20ABI,
+		});
+		let userDaiBalance = await pfpContract.read.balanceOf([address]);
 
-		const total = pfpData?.price.multipliedBy(qtyNFT);
-		if (total.lte(balance.toString())) {
+		const total = pfpData.price * BigInt(qtyNFT);
+		if (total <= userDaiBalance) {
 			setQty(Number(qtyNFT));
 			setShowMintModal(true);
 		} else {
