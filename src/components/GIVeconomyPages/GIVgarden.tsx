@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useChainId } from 'wagmi';
+import { useState, useEffect } from 'react';
 import { H1, IconGIVGarden } from '@giveth/ui-design-system';
-
-import BigNumber from 'bignumber.js';
-import { Zero } from '@ethersproject/constants';
-import { ethers } from 'ethers';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import { Col, Container, Row } from '@giveth/ui-design-system';
 import {
 	GardenTopContainer,
@@ -33,13 +29,10 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { TopInnerContainer } from './commons';
 
 export const TabGardenTop = () => {
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const [showModal, setShowModal] = useState(false);
-	const [earnedLiquidPart, setEarnedLiquidPart] =
-		useState<ethers.BigNumber>(Zero);
-	const [earnedStream, setEarnedStream] = useState<BigNumber>(
-		new BigNumber(0),
-	);
+	const [earnedLiquidPart, setEarnedLiquidPart] = useState(0n);
+	const [earnedStream, setEarnedStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showModal);
 	const { formatMessage } = useIntl();
 
