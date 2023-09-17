@@ -9,7 +9,7 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
+import { useChainId } from 'wagmi';
 
 import Select, {
 	ControlProps,
@@ -172,7 +172,7 @@ export const NetworkSelector = () => {
 		config.MAINNET_NETWORK_NUMBER,
 	);
 
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 
 	const handleChangeNetwork = async (networkNumber: number) => {
 		setTargetNetwork(networkNumber);
