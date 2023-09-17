@@ -19,6 +19,7 @@ import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { ETheme } from '@/features/general/general.slice';
 import { networksParams } from '@/helpers/blockchain';
+import { useChainId } from 'wagmi';
 
 const networksConfig = config.NETWORKS_CONFIG;
 const defaultNetworkIds = Object.keys(networksConfig).map(Number);
@@ -34,7 +35,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 	setShowModal,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
 	const networkIds = customNetworks || defaultNetworkIds;
