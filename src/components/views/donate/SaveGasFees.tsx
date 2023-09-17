@@ -11,10 +11,11 @@ import {
 } from '@/components/views/donate/common.styled';
 import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
+import { useChainId } from 'wagmi';
 
 const SaveGasFees: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
 	const [showModal, setShowModal] = useState(false);
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const { formatMessage } = useIntl();
 
 	if (
