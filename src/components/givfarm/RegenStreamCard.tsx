@@ -18,7 +18,6 @@ import {
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import { durationToString } from '@/lib/helpers';
 import { Bar, GsPTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -34,6 +33,7 @@ import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { Relative } from '../styled-components/Position';
 import { ArchiveAndNetworkCover } from '../ArchiveAndNetworkCover/ArchiveAndNetworkCover';
+import { useChainId } from 'wagmi';
 
 interface RegenStreamProps {
 	streamConfig: RegenStreamConfig;
@@ -58,7 +58,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	const [rewardStream, setRewardStream] = useState(0n);
 	const [lockedAmount, setLockedAmount] = useState(0n);
 	const [claimedAmount, setClaimedAmount] = useState(0n);
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 
 	const {
 		title,
