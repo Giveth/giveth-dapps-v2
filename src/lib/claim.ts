@@ -70,32 +70,30 @@ export const hasClaimedAirDrop = async (address: string): Promise<boolean> => {
 
 export const claimAirDrop = async (
 	address: string,
-	provider: Web3Provider,
-): Promise<TransactionResponse | undefined> => {
+	chainId: number,
+
+): Promise<WriteContractReturnType | undefined> => {
 	const merkleAddress = config.GNOSIS_CONFIG.MERKLE_ADDRESS;
-	if (!isAddress(merkleAddress)) throw new Error('No MerkleAddress');
-	if (!provider) throw new Error('No Provider');
-
-	const signer = provider.getSigner().connectUnchecked();
-	const merkleContract = new Contract(
-		merkleAddress,
-		MERKLE_ABI,
-		provider,
-	) as MerkleDistro;
-
+	
 	const claimData = await fetchAirDropClaimData(address);
-
 	if (!claimData) throw new Error('No claim data');
 
 	try {
-		return await merkleContract
-			.connect(signer.connectUnchecked())
-			.claim(
+		const walletClient = await getWalletClient({
+			chainId,
+		});
+		return await walletClient?.writeContract({
+			address: merkleAddress,
+			functionName: 'claim',
+			abi: MERKLE_ABI,
+			args: [
 				claimData.index,
 				claimData.amount,
 				claimData.proof,
 				getGasPreference(config.GNOSIS_CONFIG),
-			);
+			],
+		});
+			
 	} catch (error) {
 		console.error('Error on claiming GIVdrop:', error);
 		captureException(error, {
