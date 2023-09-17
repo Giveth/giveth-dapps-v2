@@ -7,13 +7,13 @@ import {
 	P,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import BigNumber from 'bignumber.js';
 import { Contract } from 'ethers';
 import { JsonRpcProvider } from '@ethersproject/providers';
+import { useChainId, useAccount } from 'wagmi';
+import { getContract } from 'wagmi/actions';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { MintModal } from '../modals/MintModal';
 import { Flex } from '../styled-components/Flex';
@@ -29,8 +29,8 @@ import { usePFPMintData } from '@/context/pfpmint.context';
 
 const MIN_NFT_QTY = 1;
 
-interface IPFPContractData {
-	price: BigNumber;
+interface IpfpContractData {
+	price: bigint;
 	maxMintAmount: number;
 	totalSupply: number;
 	maxSupply: number;
@@ -42,9 +42,11 @@ export const MintCard = () => {
 	const [showMintModal, setShowMintModal] = useState(false);
 	const [showInsufficientFundModal, setShowInsufficientFundModal] =
 		useState(false);
-	const [pfpData, setPfpData] = useState<IPFPContractData>();
+	const [pfpData, setPfpData] = useState<IpfpContractData>();
 	const [balance, setBalance] = useState<number>();
-	const { account, library, chainId } = useWeb3React();
+	const chainId = useChainId();
+	const { address } = useAccount();
+
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
 	const { setQty, isEligible, setIsEligible } = usePFPMintData();
@@ -62,32 +64,31 @@ export const MintCard = () => {
 	useEffect(() => {
 		async function fetchData() {
 			try {
-				const _provider =
-					chainId === config.MAINNET_NETWORK_NUMBER
-						? library
-						: new JsonRpcProvider(config.MAINNET_CONFIG.nodeUrl);
-				const PFPContract = new Contract(
-					config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
-					PFP_ABI,
-					_provider,
-				) as GiversPFP;
-				const _price = await PFPContract.price();
-				const _maxMintAmount = await PFPContract.maxMintAmount();
-				const _totalSupply = await PFPContract.totalSupply();
-				const _maxSupply = await PFPContract.maxSupply();
+				const pfpContract = await getContract({
+					address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
+					chainId: config.MAINNET_NETWORK_NUMBER,
+					abi: PFP_ABI,
+				});
+				const _price = (await pfpContract.read.price()) as bigint;
+				const _maxMintAmount =
+					(await pfpContract.read.maxMintAmount()) as number;
+				const _totalSupply =
+					(await pfpContract.read.totalSupply()) as number;
+				const _maxSupply =
+					(await pfpContract.read.maxSupply()) as number;
 				setIsEligible(true);
 				setPfpData({
-					price: new BigNumber(_price.toString()),
+					price: _price,
 					maxMintAmount: _maxMintAmount || 0,
-					totalSupply: _totalSupply.toNumber() || 0,
-					maxSupply: _maxSupply.toNumber() || 0,
+					totalSupply: _totalSupply || 0,
+					maxSupply: _maxSupply || 0,
 				});
 			} catch (error) {
 				console.log('failed to fetch GIversPFP data');
 			}
 		}
 		fetchData();
-	}, [chainId, library]);
+	}, []);
 
 	useEffect(() => {
 		async function fetchData() {
@@ -97,12 +98,12 @@ export const MintCard = () => {
 					chainId === config.MAINNET_NETWORK_NUMBER
 						? library
 						: new JsonRpcProvider(config.MAINNET_CONFIG.nodeUrl);
-				const PFPContract = new Contract(
+				const pfpContract = new Contract(
 					config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
 					PFP_ABI,
 					_provider,
 				) as GiversPFP;
-				let _balanceOf = await PFPContract.balanceOf(account);
+				let _balanceOf = await pfpContract.balanceOf(account);
 				setBalance(Number(_balanceOf?.toString() || '0'));
 			} catch (error) {
 				console.log('failed to fetch user balance data');
