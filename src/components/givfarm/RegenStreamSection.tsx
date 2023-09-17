@@ -5,6 +5,7 @@ import { useIntl } from 'react-intl';
 import { Subtitle, GIVfrensLink } from './RegenStreamSection.sc';
 import config from '@/configuration';
 import { RegenStreamCard } from './RegenStreamCard';
+import { useChainId } from 'wagmi';
 
 interface IRegenStreamSectionProps {
 	showArchivedPools: boolean;
@@ -13,7 +14,7 @@ interface IRegenStreamSectionProps {
 export const RegenStreamSection: FC<IRegenStreamSectionProps> = ({
 	showArchivedPools,
 }) => {
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const { formatMessage } = useIntl();
 	const _regenStreams =
 		chainId === config.GNOSIS_NETWORK_NUMBER
