@@ -16,9 +16,8 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import { Container, Row, Col } from '@giveth/ui-design-system';
-import { useChainId } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 import {
 	Bar,
 	FlowRateRow,
@@ -150,7 +149,7 @@ export const TabGIVstreamTop = () => {
 };
 
 export const TabGIVstreamBottom = () => {
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { formatMessage } = useIntl();
 
@@ -371,7 +370,8 @@ const convertSourceTypeToIcon = (distributor: string) => {
 const itemPerPage = 6;
 
 export const GIVstreamHistory: FC = () => {
-	const { chainId, account } = useWeb3React();
+	const chainId = useChainId();
+	const { address } = useAccount();
 	const [tokenAllocations, setTokenAllocations] = useState<
 		ITokenAllocation[]
 	>([]);
@@ -386,19 +386,19 @@ export const GIVstreamHistory: FC = () => {
 
 	useEffect(() => {
 		setPage(0);
-	}, [chainId, account]);
+	}, [chainId, address]);
 
 	useEffect(() => {
-		if (chainId && account) {
+		if (chainId && address) {
 			setLoading(true);
-			getHistory(chainId, account, page * itemPerPage, itemPerPage).then(
+			getHistory(chainId, address, page * itemPerPage, itemPerPage).then(
 				_tokenAllocations => {
 					setTokenAllocations(_tokenAllocations);
 					setLoading(false);
 				},
 			);
 		}
-	}, [chainId, account, page]);
+	}, [chainId, address, page]);
 
 	return (
 		<HistoryContainer>
