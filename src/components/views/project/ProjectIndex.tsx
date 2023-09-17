@@ -132,7 +132,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 								gap='24px'
 							>
 								<ProjectStats />
-								<AdminActions />
+								{!isDraft && <AdminActions />}
 							</MobileActionsContainer>
 						)}
 						{isMobile && (
@@ -213,8 +213,9 @@ const DraftIndicator = styled.div`
 	background: ${semanticColors.blueSky[100]};
 	display: flex;
 	gap: 18px;
-	padding: 25px 150px;
+	padding: 25px;
 	margin-bottom: 30px;
+	border-radius: 8px;
 `;
 
 const Wrapper = styled.div`
