@@ -1,4 +1,3 @@
-import { useWeb3React } from '@web3-react/core';
 import { useEffect, useRef } from 'react';
 import { useAccount, useChainId } from 'wagmi';
 import { useAppDispatch } from '@/features/hooks';
@@ -8,13 +7,10 @@ import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { getTokens } from '@/helpers/user';
 
 const UserController = () => {
-	const { library } = useWeb3React();
-	const { address, isConnected } = useAccount();
-	const chainId = useChainId();
+	const { address } = useAccount();
 	const dispatch = useAppDispatch();
 
 	const isMounted = useRef(false);
-	console.log('Library', isConnected);
 
 	// TODO: Check this section's functionality and remove it if it's not needed
 	// useEffect(() => {
