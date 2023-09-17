@@ -3,7 +3,6 @@ import { FC, useCallback } from 'react';
 import { captureException } from '@sentry/nextjs';
 
 import { Col, Row } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
 import { IUserProfileView } from '../UserProfile.view';
 import BoostsTable from './BoostsTable';
 import { IPowerBoosting } from '@/apollo/types/types';
