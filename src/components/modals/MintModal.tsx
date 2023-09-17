@@ -8,9 +8,8 @@ import {
 	mediaQueries,
 	P,
 } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
-import BigNumber from 'bignumber.js';
 import { Contract } from 'ethers';
+import { useAddress } from 'wagmi';
 import { IModal } from '@/types/common';
 import { Modal } from './Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -26,7 +25,6 @@ import config from '@/configuration';
 import { GiversPFP } from '@/types/contracts';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
-
 export enum MintStep {
 	APPROVE,
 	APPROVING,
@@ -36,7 +34,7 @@ export enum MintStep {
 
 interface IMintModalProps extends IModal {
 	qty: number;
-	nftPrice?: BigNumber;
+	nftPrice?: bigint;
 }
 
 export const MintModal: FC<IMintModalProps> = ({
@@ -47,15 +45,15 @@ export const MintModal: FC<IMintModalProps> = ({
 	const [step, setStep] = useState(MintStep.APPROVE);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-	const { library } = useWeb3React();
+	const { address } = useAddress();
 	const { setStep: setMintStep, setTx } = usePFPMintData();
 
-	const price = nftPrice ? nftPrice.multipliedBy(qty) : new BigNumber(0);
+	const price = nftPrice ? nftPrice * BigInt(qty) : 0n;
 
 	async function approveHandler() {
-		if (price.isZero()) return;
-		if (!library) {
-			console.error('library is null');
+		if (price === 0n) return;
+		if (!address) {
+			console.error('address is null');
 			return;
 		}
 		if (!config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS) return;
@@ -63,16 +61,12 @@ export const MintModal: FC<IMintModalProps> = ({
 
 		setStep(MintStep.APPROVING);
 		try {
-			const signer = library.getSigner();
-
-			const userAddress = await signer.getAddress();
-
 			const isApproved = await approveERC20tokenTransfer(
-				price.toString(),
-				userAddress,
+				price,
+				address,
 				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
 				config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS,
-				library,
+				config.MAINNET_NETWORK_NUMBER,
 			);
 
 			if (isApproved) {
@@ -87,8 +81,8 @@ export const MintModal: FC<IMintModalProps> = ({
 	}
 
 	async function mintHandle() {
-		if (!library) {
-			console.error('library is null');
+		if (!address) {
+			console.error('address is null');
 			return;
 		}
 		if (!config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS) return;
