@@ -122,12 +122,13 @@ export const AdminActions = () => {
 		borderRadius: '8px',
 	};
 
+	const activeOptions = isActive ? options : [options[0], options[2]];
 	return !isMobile ? (
 		<Wrapper>
 			<Dropdown
 				style={dropdownStyle}
 				label='Project Actions'
-				options={isActive ? options : [options[0], options[2]]}
+				options={activeOptions}
 			/>
 			{showVerificationModal && (
 				<VerificationModal
@@ -165,7 +166,7 @@ export const AdminActions = () => {
 			<IconChevronDown24 />
 			{showMobileActionsModal && (
 				<MobileActionsModal setShowModal={setShowMobileActionsModal}>
-					{options.map(option => (
+					{activeOptions.map(option => (
 						<MobileActionModalItem
 							key={option.label}
 							onClick={option.cb}
