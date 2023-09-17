@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useChainId } from 'wagmi';
 
-import { useWeb3React } from '@web3-react/core';
 import {
 	getGivStakingAPR,
 	getLPStakingAPR,
@@ -28,8 +28,8 @@ export const useStakingPool = (
 		notStakedAmount: 0n,
 		stakedAmount: 0n,
 	});
+	const chainId = useChainId();
 
-	const { library, chainId } = useWeb3React();
 	const currentValues = useAppSelector(
 		state => state.subgraph.currentValues,
 		() => (hold ? true : false),
@@ -42,11 +42,10 @@ export const useStakingPool = (
 		const cb = () => {
 			console.log('Calculating APR');
 			if (isLoaded) {
-				const _library = chainId === network ? library : undefined;
 				const promise: Promise<APR> =
 					type === StakingType.GIV_GARDEN_LM ||
 					type === StakingType.GIV_UNIPOOL_LM
-						? getGivStakingAPR(network, currentValues, _library)
+						? getGivStakingAPR(network, currentValues, network)
 						: getLPStakingAPR(poolStakingConfig, currentValues);
 				promise
 					.then(setApr)
@@ -65,7 +64,7 @@ export const useStakingPool = (
 				clearInterval(interval);
 			}
 		};
-	}, [library, chainId, isLoaded]);
+	}, [chainId, isLoaded]);
 
 	useEffect(() => {
 		console.log('Calculating user stake info');
