@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { useWeb3React } from '@web3-react/core';
 import config from '@/configuration';
 import ClaimCard from '@/components/views/claim/cards/Claim';
 import { CongratulationsCard } from '@/components/views/claim/cards/Congratulations';
