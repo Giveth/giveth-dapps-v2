@@ -23,6 +23,7 @@ import { RewardItems } from './RewardItems';
 import { MenuContainer } from './Menu.sc';
 import { ItemsProvider } from '@/context/Items.context';
 import SwitchNetwork from '../modals/SwitchNetwork';
+import { useChainId } from 'wagmi';
 
 interface IRewardButtonWithMenuProps extends IHeaderButtonProps {}
 
@@ -103,7 +104,7 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 };
 
 const HeaderRewardButton = () => {
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),
 	);
