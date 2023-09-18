@@ -13,6 +13,7 @@ import {
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { Col, Row } from '@giveth/ui-design-system';
+import { useAccount } from 'wagmi';
 import { Flex } from '../styled-components/Flex';
 import {
 	GIVpowerTopContainer,
@@ -62,7 +63,6 @@ import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { formatWeiHelper } from '@/helpers/number';
 import links from '@/lib/constants/links';
 import { getTotalGIVpower } from '@/helpers/givpower';
-import { useAccount } from 'wagmi';
 
 export function TabPowerTop() {
 	const { formatMessage } = useIntl();
