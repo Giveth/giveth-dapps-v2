@@ -11,7 +11,6 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import { smallFormatDate } from '@/lib/helpers';
 import { Flex, FlexCenter } from '../styled-components/Flex';
@@ -28,6 +27,7 @@ import { useStakingPool } from '@/hooks/useStakingPool';
 import { Spinner } from '../Spinner';
 import type { IGIVpowerPosition } from '@/types/subgraph';
 import type { IModal } from '@/types/common';
+import { useAccount, useChainId } from 'wagmi';
 
 interface ILockupDetailsModal extends IModal {
 	unstakeable: bigint;
@@ -37,7 +37,8 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	unstakeable,
 	setShowModal,
 }) => {
-	const { account, chainId } = useWeb3React();
+	const chainId = useChainId();
+	const { address } = useAccount();
 	const { apr, stakedAmount } = useStakingPool(
 		config.NETWORKS_CONFIG[chainId!].GIVPOWER ||
 			config.GNOSIS_CONFIG.GIVPOWER,
@@ -49,10 +50,10 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 
 	useEffect(() => {
 		async function fetchGIVLockDetails() {
-			if (!account) return;
+			if (!address) return;
 			setLoading(true);
 			const LocksInfo = await fetchSubgraph(
-				SubgraphQueryBuilder.getTokenLocksInfoQuery(account),
+				SubgraphQueryBuilder.getTokenLocksInfoQuery(address),
 				chainId || config.GNOSIS_NETWORK_NUMBER,
 			);
 			setLocksInfo(LocksInfo.tokenLocks);
@@ -60,7 +61,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 		}
 
 		fetchGIVLockDetails();
-	}, [account, chainId]);
+	}, [address, chainId]);
 
 	return (
 		<Modal
@@ -168,14 +169,9 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 											<LockTableCell>
 												{apr
 													? formatEthHelper(
-															(
-																(apr.effectiveAPR *
-																	BigInt(
-																		multiplier *
-																			100,
-																	)) /
-																100n
-															).toString(),
+															apr.effectiveAPR.multipliedBy(
+																multiplier,
+															),
 													  )
 													: ' ? '}
 												%
