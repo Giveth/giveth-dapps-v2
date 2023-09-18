@@ -8,10 +8,10 @@ import {
 	SetStateAction,
 } from 'react';
 import { Dispatch } from 'react';
+import { useAccount, useChainId } from 'wagmi';
 import config from '@/configuration';
 import { fetchAirDropClaimData, hasClaimedAirDrop } from '@/lib/claim';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
-import { useAccount, useChainId } from 'wagmi';
 
 export enum GiveDropStateType {
 	notConnected,
