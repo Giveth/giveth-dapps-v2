@@ -12,6 +12,7 @@ import { captureException } from '@sentry/nextjs';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { waitForTransaction } from '@wagmi/core';
+import { useChainId } from 'wagmi';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
@@ -37,7 +38,6 @@ import Routes from '@/lib/constants/Routes';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import type { PoolStakingConfig } from '@/types/config';
-import { useChainId } from 'wagmi';
 
 interface ILockModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
