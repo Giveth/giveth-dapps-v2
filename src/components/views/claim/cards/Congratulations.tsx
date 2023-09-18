@@ -4,6 +4,7 @@ import { H2, Lead } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { Container } from '@giveth/ui-design-system';
+import { useChainId } from 'wagmi';
 import useClaim from '@/context/claim.context';
 import { formatWeiHelper } from '@/helpers/number';
 import SparkleBurstAnimation from '@/animations/sparkle-burst.json';
@@ -16,7 +17,6 @@ import { Button } from '@/components/styled-components/Button';
 import LottieControl from '@/components/LottieControl';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
-import { useChainId } from 'wagmi';
 
 const SmileImage = styled.div`
 	position: absolute;
