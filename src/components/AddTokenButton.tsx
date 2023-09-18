@@ -2,11 +2,11 @@ import { brandColors, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { EWallets } from '@/lib/wallet/walletTypes';
 import { addToken } from '@/lib/metamask';
 import { Flex } from './styled-components/Flex';
 import StorageLabel from '@/lib/localStorage';
 import { Address } from '@/types/config';
+import { useAccount } from 'wagmi';
 
 interface IAddGIVTokenButton {
 	chainId: number;
@@ -23,9 +23,11 @@ export const AddTokenButton: FC<IAddGIVTokenButton> = ({
 }) => {
 	const [show, setShow] = useState(false);
 
+	const { connector: activeConnector, isConnected } = useAccount();
+
 	useEffect(() => {
 		const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
-		setShow(selectedWallet === EWallets.METAMASK);
+		setShow(activeConnector?.id.toLowerCase() === '"metamask"');
 	}, []);
 	return show ? (
 		<AddGivButton
