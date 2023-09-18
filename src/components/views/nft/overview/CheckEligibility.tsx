@@ -9,13 +9,13 @@ import {
 } from '@giveth/ui-design-system';
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
+import { Address, useChainId, useSwitchNetwork } from 'wagmi';
+import { getContract } from 'wagmi/dist/actions';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
-import { getAddressFromENS, isAddressENS, switchNetwork } from '@/lib/wallet';
+import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { Flex } from '@/components/styled-components/Flex';
 import EligibilityModal from './EligibilityModal';
-import { Address, useChainId } from 'wagmi';
-import { getContract } from 'wagmi/dist/actions';
 
 const CheckEligibility = () => {
 	const [walletAddress, setWalletAddress] = useState('');
@@ -24,6 +24,7 @@ const CheckEligibility = () => {
 	const [status, setStatus] = useState<boolean | undefined>();
 
 	const chainId = useChainId();
+	const { switchNetwork } = useSwitchNetwork();
 
 	const onAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setWalletAddress(event.target.value);
@@ -51,7 +52,7 @@ const CheckEligibility = () => {
 			if (walletAddress) {
 				let resolvedAddress;
 				if (chainId !== config.MAINNET_NETWORK_NUMBER) {
-					await switchNetwork(config.MAINNET_NETWORK_NUMBER);
+					await switchNetwork?.(config.MAINNET_NETWORK_NUMBER);
 				}
 				if (isAddressENS(walletAddress)) {
 					resolvedAddress = await getAddressFromENS(walletAddress);
