@@ -1,6 +1,8 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { H2, Lead } from '@giveth/ui-design-system';
+import { useAccount, useChainId, useConnect } from 'wagmi';
+import { WriteContractReturnType } from 'viem';
 import { Button } from '../../../styled-components/Button';
 import { Flex } from '../../../styled-components/Flex';
 import { Card, Header, PreviousArrowButton } from './common';
@@ -9,8 +11,6 @@ import useClaim from '@/context/claim.context';
 import config from '@/configuration';
 import { GIVdropHarvestModal } from '../../../modals/GIVdropHarvestModal';
 import { AddTokenButton } from '../../../AddTokenButton';
-import { useAccount, useChainId, useConnect } from 'wagmi';
-import { WriteContractReturnType } from 'viem';
 
 interface IClaimCardContainer {
 	claimed: any;
