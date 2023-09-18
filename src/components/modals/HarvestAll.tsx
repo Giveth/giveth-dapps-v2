@@ -25,7 +25,7 @@ import {
 	RegenStreamConfig,
 	SimplePoolStakingConfig,
 } from '@/types/config';
-import { BN, formatWeiHelper, Zero } from '@/helpers/number';
+import { formatWeiHelper, Zero } from '@/helpers/number';
 import { harvestTokens } from '@/lib/stakingPool';
 import { claimUnstakeStake } from '@/lib/stakingNFT';
 import {
@@ -159,9 +159,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		setEarnedLiquid(
 			tokenDistroHelper.getUserClaimableNow(tokenDistroBalance),
 		);
-		const lockedAmount = BN(tokenDistroBalance.allocatedTokens).sub(
-			givback,
-		);
+		const lockedAmount =
+			BigInt(tokenDistroBalance.allocatedTokens) - givback;
 		setRewardStream(
 			tokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
 		);
