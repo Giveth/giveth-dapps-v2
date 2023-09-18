@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from '@giveth/ui-design-system';
+import { useAccount } from 'wagmi';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { networksParams } from '@/helpers/blockchain';
 import { jointItems } from '@/helpers/text';
 import SwitchNetwork from './SwitchNetwork';
-import { useAccount } from 'wagmi';
 
 export interface IWrongNetworkInnerModal {
 	cardName: string;
