@@ -32,11 +32,6 @@ import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '../AmountBoxWithPrice';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { claimAirDrop } from '@/lib/claim';
-import {
-	showPendingClaim,
-	showConfirmedClaim,
-	showFailedClaim,
-} from '../toasts/claim';
 import config from '@/configuration';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
@@ -181,16 +176,13 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 			if (tx) {
 				setTxResp(tx);
 				setClaimState(ClaimState.SUBMITTING);
-				showPendingClaim(config.GNOSIS_NETWORK_NUMBER, tx);
 				const { status } = await waitForTransaction({ hash: tx });
 
 				if (status) {
 					setClaimState(ClaimState.CLAIMED);
 					onSuccess(tx);
-					showConfirmedClaim(config.GNOSIS_NETWORK_NUMBER, tx);
 				} else {
 					setClaimState(ClaimState.ERROR);
-					showFailedClaim(config.GNOSIS_NETWORK_NUMBER, tx);
 				}
 			}
 		} catch (e) {
