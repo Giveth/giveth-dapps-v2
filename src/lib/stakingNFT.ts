@@ -1,14 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
 import { captureException } from '@sentry/nextjs';
+import { getContract, getWalletClient } from 'wagmi/actions';
+import { WriteContractReturnType } from 'viem';
 import { LiquidityPosition } from '@/types/nfts';
-import {
-	uniswapV3Config,
-} from './contracts';
+import { uniswapV3Config } from './contracts';
 import { StakeState } from '@/lib/staking';
 import UNISWAP_V3_STAKER_ABI from '@/artifacts/uniswap_v3_staker.json';
-import { getContract, getWalletClient } from 'wagmi/dist/actions';
-import { multicall } from '@wagmi/core'
-import { WriteContractReturnType } from 'viem';
 
 export const transfer = async (
 	tokenId: number | undefined,
@@ -17,7 +14,6 @@ export const transfer = async (
 	currentIncentive: { key?: (string | number)[] | null },
 	handleStakeStatus: Dispatch<SetStateAction<StakeState>>,
 ): Promise<WriteContractReturnType | undefined> => {
-
 	// TODO: Handle this
 	// try {
 	// 	const nftManagerPositionsContract =
@@ -71,17 +67,12 @@ export const exit = async (
 ): Promise<WriteContractReturnType | undefined> => {
 	try {
 		console.log(tokenId);
-		if (
-			!tokenId ||
-			!walletAddress ||
-			!currentIncentive.key
-		)
-			return;
+		if (!tokenId || !walletAddress || !currentIncentive.key) return;
 
 		const v3Contract = {
 			address: uniswapV3Config.UNISWAP_V3_STAKER,
 			abi: UNISWAP_V3_STAKER_ABI,
-		}
+		};
 
 		// TODO: Handle this
 		// const tx = await multicall({
@@ -126,7 +117,6 @@ export const claimUnstakeStake = async (
 	currentIncentive: { key?: (string | number)[] | null },
 	stakedPositions: LiquidityPosition[],
 ): Promise<WriteContractReturnType | undefined> => {
-
 	if (
 		!stakedPositions?.length ||
 		!walletAddress ||
@@ -138,7 +128,7 @@ export const claimUnstakeStake = async (
 	const v3Contract = {
 		address: uniswapV3Config.UNISWAP_V3_STAKER,
 		abi: UNISWAP_V3_STAKER_ABI,
-	}
+	};
 
 	// TODO: Handle this
 	// const data = await multicall({
@@ -172,8 +162,6 @@ export const claimUnstakeStake = async (
 	// 	]
 	// });
 
-
-
 	// const unstakeCalldata = ({ tokenId: _tokenId }: LiquidityPosition) =>
 	// 	uniswapV3StakerContract.interface.encodeFunctionData('unstakeToken', [
 	// 		currentIncentive.key,
@@ -204,7 +192,7 @@ export const claimUnstakeStake = async (
 	// 	multicallData,
 	// 	getGasPreference(config.NETWORKS_CONFIG[chainId]),
 	// );
-	return undefined
+	return undefined;
 };
 
 export const claim = async (
@@ -212,8 +200,7 @@ export const claim = async (
 	chainId: number,
 	currentIncentive: { key?: (string | number)[] | null },
 ) => {
-	if (!walletAddress || !currentIncentive.key)
-		return;
+	if (!walletAddress || !currentIncentive.key) return;
 
 	try {
 		const walletClient = await getWalletClient({ chainId: chainId });
@@ -221,11 +208,7 @@ export const claim = async (
 			address: uniswapV3Config.UNISWAP_V3_STAKER,
 			abi: UNISWAP_V3_STAKER_ABI,
 			functionName: 'claimReward',
-			args: [
-				currentIncentive.key[0] as string,
-				walletAddress,
-				0,
-			]
+			args: [currentIncentive.key[0] as string, walletAddress, 0],
 		});
 	} catch (e) {
 		console.warn(e);
@@ -243,24 +226,14 @@ export const stake = async (
 	chainId: number,
 	currentIncentive: { key?: (string | number)[] | null },
 ) => {
-
-
-	if (
-		!tokenId ||
-		!walletAddress ||
-		!currentIncentive.key
-	)
-		return;
+	if (!tokenId || !walletAddress || !currentIncentive.key) return;
 	try {
 		const walletClient = await getWalletClient({ chainId: chainId });
 		const tx = walletClient?.writeContract({
 			address: uniswapV3Config.UNISWAP_V3_STAKER,
 			abi: UNISWAP_V3_STAKER_ABI,
 			functionName: 'stakeToken',
-			args: [
-				currentIncentive.key,
-				tokenId,
-			]
+			args: [currentIncentive.key, tokenId],
 		});
 	} catch (e) {
 		console.warn(e);
@@ -279,12 +252,12 @@ export const getReward = async (
 	const uniswapV3StakerContract = getContract({
 		address: uniswapV3Config.UNISWAP_V3_STAKER,
 		abi: UNISWAP_V3_STAKER_ABI,
-	})
+	});
 
 	const reward = await uniswapV3StakerContract.read.getRewardInfo([
 		currentIncentiveKey,
-		tokenId,]
-	);
+		tokenId,
+	]);
 
-	return reward as bigint || 0n;
+	return (reward as bigint) || 0n;
 };
