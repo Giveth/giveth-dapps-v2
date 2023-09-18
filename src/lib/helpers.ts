@@ -8,7 +8,6 @@ import {
 	writeContract,
 	sendTransaction as wagmiSendTransaction,
 } from '@wagmi/core';
-import { SiweMessage } from 'siwe';
 
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
@@ -507,6 +506,7 @@ export const createSiweMessage = async (
 			return n.json();
 		});
 		const nonce = nonceResponse.message;
+		const { SiweMessage } = await import('siwe');
 		const siweMessage = new SiweMessage({
 			domain,
 			address,
