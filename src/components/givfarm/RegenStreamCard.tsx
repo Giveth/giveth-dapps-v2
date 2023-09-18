@@ -18,6 +18,7 @@ import {
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useChainId } from 'wagmi';
 import { durationToString } from '@/lib/helpers';
 import { Bar, GsPTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -33,7 +34,6 @@ import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { Relative } from '../styled-components/Position';
 import { ArchiveAndNetworkCover } from '../ArchiveAndNetworkCover/ArchiveAndNetworkCover';
-import { useChainId } from 'wagmi';
 
 interface RegenStreamProps {
 	streamConfig: RegenStreamConfig;
