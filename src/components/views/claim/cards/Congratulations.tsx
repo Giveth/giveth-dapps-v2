@@ -165,9 +165,7 @@ export const CongratulationsCard = () => {
 								id: 'label.you_have_successfuly_claimed',
 							})}
 						</Lead>
-						<Lead>
-							{formatWeiHelper(totalAmount.div(10))} GIV.{' '}
-						</Lead>
+						<Lead>{formatWeiHelper(totalAmount / 10n)} GIV. </Lead>
 						<AddTokenButton chainId={chainId} showText={false} />
 						<SmileImage>
 							<SparkleBurstContainer>

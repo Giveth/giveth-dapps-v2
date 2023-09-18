@@ -194,7 +194,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 			break;
 		case GiveDropStateType.Success:
 			title = `You have ${formatWeiHelper(
-				totalAmount.div(10),
+				totalAmount / 10n,
 			)} GIV to claim.`;
 			desc = 'Congrats, your GIVdrop awaits. Go claim it!';
 			bg = {
