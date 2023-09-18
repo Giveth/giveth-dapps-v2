@@ -15,7 +15,6 @@ import { captureException } from '@sentry/nextjs';
 import { erc20ABI } from 'wagmi';
 import { parseEther, parseUnits } from 'viem';
 import { GasPreference, NetworkConfig } from '@/types/config';
-import { EWallets } from '@/lib/wallet/walletTypes';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
@@ -153,18 +152,6 @@ export const smallFormatDate = (date: Date, locale?: string) => {
 			month: 'short',
 		})
 		.replace(/,/g, '');
-};
-
-export const getGasPreference = (
-	networkConfig: NetworkConfig,
-): GasPreference => {
-	const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
-	// MetaMask works with gas preference config
-	if (selectedWallet === EWallets.METAMASK)
-		return networkConfig.gasPreference || {};
-
-	// For torus, it should be empty to work!
-	return {};
 };
 
 export const isSSRMode = typeof window === 'undefined';
