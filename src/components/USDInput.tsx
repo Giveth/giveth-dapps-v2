@@ -3,11 +3,11 @@ import { FC, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
+import BigNumber from 'bignumber.js';
+import { parseUnits } from 'viem';
 import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig } from '@/types/config';
 import { Flex } from './styled-components/Flex';
-import BigNumber from 'bignumber.js';
-import { parseUnits } from 'viem';
 
 interface IAmountInput {
 	maxAmount: bigint;
