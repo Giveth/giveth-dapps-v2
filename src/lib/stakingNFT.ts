@@ -4,8 +4,6 @@ import { LiquidityPosition } from '@/types/nfts';
 import {
 	uniswapV3Config,
 } from './contracts';
-import config from '@/configuration';
-import { getGasPreference } from '@/lib/helpers';
 import { StakeState } from '@/lib/staking';
 import UNISWAP_V3_STAKER_ABI from '@/artifacts/uniswap_v3_staker.json';
 import { getContract, getWalletClient } from 'wagmi/dist/actions';
