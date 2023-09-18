@@ -10,8 +10,6 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import { utils } from 'ethers';
-
 import { useChainId } from 'wagmi';
 import { compareAddresses } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
@@ -26,6 +24,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
 import NetworkLogo from '@/components/NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
+import { isAddress } from 'viem';
 
 const networksConfig = config.NETWORKS_CONFIG;
 
@@ -118,7 +117,7 @@ const WalletAddressInput: FC<IProps> = ({
 				setIsValidating(false);
 				return true;
 			}
-			if (!utils.isAddress(_address)) {
+			if (!isAddress(_address)) {
 				setIsValidating(false);
 				return formatMessage({ id: 'label.eth_addres_not_valid' });
 			}
