@@ -220,8 +220,14 @@ const BadgeButton = styled(Flex)<IBadgeButton>`
 						animation: rotate linear 1s infinite;
 						background-color: #399953;
 						background-repeat: no-repeat;
-						background-size: 50% 50%, 50% 50%;
-						background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+						background-size:
+							50% 50%,
+							50% 50%;
+						background-position:
+							0 0,
+							100% 0,
+							100% 100%,
+							0 100%;
 						background-image: linear-gradient(#ffffff, #ffffff),
 							linear-gradient(#ffffff, #ffffff),
 							linear-gradient(#ffffff, #ffffff),
