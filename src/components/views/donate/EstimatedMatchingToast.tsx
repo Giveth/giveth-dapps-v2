@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
+import { useChainId } from 'wagmi';
 import Divider from '@/components/Divider';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -22,7 +23,6 @@ import { useAppSelector } from '@/features/hooks';
 import { fetchEthPrice } from '@/features/price/price.services';
 import { fetchPrice } from '@/services/token';
 import { formatDonations } from '@/helpers/number';
-import { useChainId } from 'wagmi';
 
 interface IEstimatedMatchingToast {
 	projectData: IDonationProject;
