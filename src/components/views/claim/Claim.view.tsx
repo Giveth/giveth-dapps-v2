@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { useChainId } from 'wagmi';
 import config from '@/configuration';
 import ClaimCard from '@/components/views/claim/cards/Claim';
 import { CongratulationsCard } from '@/components/views/claim/cards/Congratulations';
@@ -10,7 +11,6 @@ import GovernCard from '@/components/views/claim/cards/Govern';
 import InvestCard from '@/components/views/claim/cards/Stake';
 import { Flex } from '@/components/styled-components/Flex';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
-import { useChainId } from 'wagmi';
 
 const stepsTitle = ['Connect', 'Donate', 'Govern', 'Stake', 'Stream', 'Claim'];
 
@@ -69,27 +69,6 @@ const Step: FC<IStepProps> = ({ title, isActive, onClick, disabled }) => {
 interface ISwitchNetwork {
 	hidden: boolean;
 }
-
-const SwitchNetwork = styled.div<ISwitchNetwork>`
-	height: 48px;
-	background-color: #e1458d;
-	display: ${props => (props.hidden ? 'hidden' : 'flex')};
-	justify-content: center;
-	align-items: center;
-	gap: 12px;
-	position: fixed;
-	width: 100%;
-`;
-
-const ButtonSwitchNetwork = styled.a`
-	background: black;
-	padding: 4px 8px;
-	border-radius: 4px;
-	font-size: 12px;
-	text-transform: uppercase;
-	font-weight: bold;
-	cursor: pointer;
-`;
 
 interface IClaimViewContainer {
 	switchNetwork: boolean;
