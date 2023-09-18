@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useForm } from 'react-hook-form';
 import { Col, Row } from '@giveth/ui-design-system';
+import { useAccount } from 'wagmi';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { SkipOnboardingModal } from '@/components/modals/SkipOnboardingModal';
 import { gToast, ToastType } from '@/components/toasts';
@@ -21,7 +22,6 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { requiredOptions, validators } from '@/lib/constants/regex';
-import { useAccount } from 'wagmi';
 
 export interface IUserInfo {
 	email: string;
