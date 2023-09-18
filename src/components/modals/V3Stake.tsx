@@ -9,6 +9,8 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
+import { useAccount, useChainId } from 'wagmi';
+import { waitForTransaction } from 'wagmi/actions';
 import { Modal } from './Modal';
 import { CancelButton, HarvestButton, HelpRow } from './HarvestAll.sc';
 import { Flex } from '../styled-components/Flex';
@@ -28,8 +30,6 @@ import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { useAccount, useChainId } from 'wagmi';
-import { waitForTransaction } from 'wagmi/dist/actions';
 
 interface IV3StakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
