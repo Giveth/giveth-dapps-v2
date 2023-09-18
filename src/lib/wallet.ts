@@ -28,36 +28,6 @@ const switchWalletConnectNetwork = async (chainId: number) => {
 	}
 };
 
-export const switchNetwork = async (chainId: number) => {
-	const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
-	switch (selectedWallet) {
-		case EWallets.METAMASK:
-			await metamaskSwitchNetwork(chainId);
-			break;
-
-		case EWallets.TORUS:
-			await torusConnector.changeChainId(chainId);
-			break;
-
-		case EWallets.WALLETCONNECT:
-			await switchWalletConnectNetwork(chainId);
-			break;
-
-		default:
-			const ethereum = (window as any)?.ethereum;
-			if (ethereum) {
-				ethereum
-					.request({
-						method: 'wallet_switchEthereumChain',
-						params: [{ chainId: '0x' + chainId.toString(16) }],
-					})
-					.then();
-			} else {
-				showToastError('Please connect your wallet');
-			}
-	}
-};
-
 export function isAddressENS(ens: string | undefined) {
 	if (!ens) return false;
 	return ens?.toLowerCase().indexOf('.eth') > -1;
