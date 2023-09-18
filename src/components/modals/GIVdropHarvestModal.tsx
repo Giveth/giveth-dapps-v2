@@ -27,7 +27,7 @@ import {
 	RateRow,
 	TooltipContent,
 } from './HarvestAll.sc';
-import { BN, formatWeiHelper } from '@/helpers/number';
+import { formatWeiHelper } from '@/helpers/number';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '../AmountBoxWithPrice';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
@@ -90,7 +90,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	const { address } = useAccount();
 
 	useEffect(() => {
-		const bnGIVback = BN(givTokenDistroBalance.givback);
+		const bnGIVback = BigInt(givTokenDistroBalance.givback);
 		setClaimableNow(
 			givTokenDistroHelper.getUserClaimableNow(givTokenDistroBalance),
 		);
@@ -246,7 +246,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 								</RateRow>
 							</>
 						)}
-						{!BN(givTokenDistroBalance.givback).isZero() && (
+						{BigInt(givTokenDistroBalance.givback) > 0 && (
 							<>
 								<HelpRow alignItems='center'>
 									<B>Claimable from GIVbacks</B>
