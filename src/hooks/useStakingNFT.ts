@@ -1,17 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { BigNumber } from '@ethersproject/bignumber';
-import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import config from '@/configuration';
-import { getUniswapV3StakerContract } from '@/lib/contracts';
 import { getReward } from '@/lib/stakingNFT';
 import { LiquidityPosition } from '@/types/nfts';
+import { useAccount, useChainId } from 'wagmi';
 
 export const useStakingNFT = (stakedPositions: LiquidityPosition[]) => {
-	const { account, chainId, library } = useWeb3React();
-
-	const [rewardBalance, setRewardBalance] = useState<BigNumber>(
-		BigNumber.from(0),
+	const chainId = useChainId();
+	const {address} = useAccount();
+	const [rewardBalance, setRewardBalance] = useState(
+		0n,
 	);
 
 	const mainnetConfig = config.MAINNET_CONFIG;
@@ -49,11 +47,8 @@ export const useStakingNFT = (stakedPositions: LiquidityPosition[]) => {
 	]);
 
 	const checkForRewards = useCallback(() => {
-		const uniswapV3StakerContract = getUniswapV3StakerContract(library);
-
 		if (
-			!account ||
-			!uniswapV3StakerContract ||
+			!address ||
 			!currentIncentive.key ||
 			chainId !== config.MAINNET_NETWORK_NUMBER
 		)
@@ -65,15 +60,14 @@ export const useStakingNFT = (stakedPositions: LiquidityPosition[]) => {
 					stakedPositions.map(({ tokenId }) =>
 						getReward(
 							tokenId,
-							uniswapV3StakerContract,
 							currentIncentive.key,
 						),
 					),
 				);
 
 				const allRewards = rewards.reduce(
-					(acc: BigNumber, reward: BigNumber) => acc.add(reward),
-					BigNumber.from(0),
+					(acc: bigint, reward: bigint) => acc+reward,
+					0n,
 				);
 				setRewardBalance(allRewards);
 			} catch (error) {
@@ -85,11 +79,11 @@ export const useStakingNFT = (stakedPositions: LiquidityPosition[]) => {
 			}
 		};
 		load();
-	}, [account, chainId, currentIncentive.key, stakedPositions, library]);
+	}, [address, chainId, currentIncentive.key, stakedPositions]);
 
 	useEffect(() => {
 		if (
-			!account ||
+			!address ||
 			!currentIncentive.key ||
 			chainId !== config.MAINNET_NETWORK_NUMBER
 		)
@@ -106,7 +100,7 @@ export const useStakingNFT = (stakedPositions: LiquidityPosition[]) => {
 			clearInterval(interval);
 		};
 	}, [
-		account,
+		address,
 		chainId,
 		checkForRewards,
 		currentIncentive.key,
