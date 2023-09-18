@@ -8,7 +8,6 @@ import {
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import {
 	NotificationContainer,
 	IconContainer,
@@ -37,6 +36,7 @@ import { useNotification } from '@/hooks/useNotification';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { fetchNotificationCountAsync } from '@/features/notification/notification.thunks';
 import { WrappedSpinner } from '@/components/Spinner';
+import { useAccount } from 'wagmi';
 
 enum ENotificationTabs {
 	ALL,
@@ -49,16 +49,18 @@ enum ENotificationTabs {
 const limit = 6;
 
 function NotificationView() {
-	const { notifications, setNotifications, markOneNotificationRead } =
-		useNotification();
-	const dispatch = useAppDispatch();
-	const { account } = useWeb3React();
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
 	const [loading, setLoading] = useState(false);
 	const [totalCount, setTotalCount] = useState(0);
 	const [pageNumber, setPageNumber] = useState(0);
 	const [markedAllNotificationsRead, setMarkedAllNotificationsRead] =
 		useState(false);
+
+	const { notifications, setNotifications, markOneNotificationRead } =
+		useNotification();
+	const dispatch = useAppDispatch();
+	const { address } = useAccount();
+
 	const showLoadMore = totalCount > notifications.length;
 	const {
 		total: totalUnreadNotifications,
@@ -238,8 +240,8 @@ function NotificationView() {
 							setMarkedAllNotificationsRead(
 								!markedAllNotificationsRead,
 							);
-							if (account)
-								dispatch(fetchNotificationCountAsync(account));
+							if (address)
+								dispatch(fetchNotificationCountAsync(address));
 						});
 					}}
 					buttonType='texty-primary'
