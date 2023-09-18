@@ -23,7 +23,6 @@ import {
 } from './ConfirmSubmit';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { StakeState } from '@/lib/staking';
-import { BN } from '@/helpers/number';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
@@ -115,7 +114,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 
 	const handleAction = async (tokenId: number) => {
 		const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
-		const bnGIVback = BN(givTokenDistroBalance.givback);
+		const bnGIVback = BigInt(givTokenDistroBalance.givback);
 		const _reward = await getReward(tokenId, currentIncentive.key);
 
 		const liquidReward = givTokenDistroHelper.getLiquidPart(_reward);
