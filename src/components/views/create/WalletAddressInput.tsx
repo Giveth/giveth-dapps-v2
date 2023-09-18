@@ -11,6 +11,7 @@ import {
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { useChainId } from 'wagmi';
+import { isAddress } from 'viem';
 import { compareAddresses } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
@@ -24,7 +25,6 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
 import NetworkLogo from '@/components/NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
-import { isAddress } from 'viem';
 
 const networksConfig = config.NETWORKS_CONFIG;
 
