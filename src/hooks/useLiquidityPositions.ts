@@ -2,6 +2,7 @@ import { createContext, useEffect, useMemo, useState } from 'react';
 import { Pool, Position } from '@uniswap/v3-sdk';
 import { Token } from '@uniswap/sdk-core';
 import { captureException } from '@sentry/nextjs';
+import { useChainId } from 'wagmi';
 import { LiquidityPosition } from '@/types/nfts';
 import config from '@/configuration';
 import { getUniswapV3TokenURI } from '@/services/subgraph.service';
@@ -9,7 +10,6 @@ import { Zero } from '@/helpers/number';
 import { IUniswapV3Pool, IUniswapV3Position } from '@/types/subgraph';
 import { useAppSelector } from '@/features/hooks';
 import { APR } from '@/types/poolInfo';
-import { useChainId } from 'wagmi';
 
 const ERC721NftContext = createContext<{
 	stakedPositions: LiquidityPosition[];
