@@ -1,8 +1,6 @@
 import { createContext, useEffect, useMemo, useState } from 'react';
 import { Pool, Position } from '@uniswap/v3-sdk';
 import { Token } from '@uniswap/sdk-core';
-
-import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { LiquidityPosition } from '@/types/nfts';
 import config from '@/configuration';
@@ -11,6 +9,7 @@ import { Zero } from '@/helpers/number';
 import { IUniswapV3Pool, IUniswapV3Position } from '@/types/subgraph';
 import { useAppSelector } from '@/features/hooks';
 import { APR } from '@/types/poolInfo';
+import { useChainId } from 'wagmi';
 
 const ERC721NftContext = createContext<{
 	stakedPositions: LiquidityPosition[];
@@ -25,7 +24,7 @@ ERC721NftContext.displayName = 'ERC721NftContext';
 
 export const useLiquidityPositions = () => {
 	const mainnetValues = useAppSelector(state => state.subgraph.mainnetValues);
-	const { chainId, library } = useWeb3React();
+	const chainId = useChainId();
 
 	const network = config.MAINNET_NETWORK_NUMBER;
 	const userStakedPositions =
@@ -244,7 +243,6 @@ export const useLiquidityPositions = () => {
 		userNotStakedPositions,
 		userStakedPositions,
 		uniswapV3Pool,
-		library,
 		chainId,
 		network,
 		poolAddress,
