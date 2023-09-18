@@ -13,7 +13,7 @@ import FarmCountDown from '@/components/FarmCountDown';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { FlexCenter, Flex } from '@/components/styled-components/Flex';
 import { avgAPR } from '@/helpers/givpower';
-import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
+import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
 	PoolStakingConfig,
 	RegenPoolStakingConfig,
@@ -385,7 +385,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						disabled={
 							isDiscontinued ||
 							exploited ||
-							BN(userNotStakedAmount).isZero()
+							userNotStakedAmount === 0n
 						}
 						onClick={() => setShowStakeModal(true)}
 					/>
