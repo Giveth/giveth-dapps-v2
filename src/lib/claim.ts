@@ -1,4 +1,6 @@
 import { captureException } from '@sentry/nextjs';
+import { getWalletClient } from 'wagmi/actions';
+import { WriteContractReturnType } from 'viem';
 import { ClaimData } from '@/types/GIV';
 import config from '../configuration';
 import MerkleDropJson from '../artifacts/MerkleDrop.json';
@@ -6,9 +8,7 @@ import TOKEN_DISTRO_JSON from '../artifacts/TokenDistro.json';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { fetchChainInfo } from '@/features/subgraph/subgraph.services';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { getWalletClient } from 'wagmi/dist/actions';
 import { Address } from '@/types/config';
-import { WriteContractReturnType } from 'viem';
 
 const { abi: MERKLE_ABI } = MerkleDropJson;
 const { abi: TOKEN_DISTRO_ABI } = TOKEN_DISTRO_JSON;
@@ -69,7 +69,6 @@ export const hasClaimedAirDrop = async (address: string): Promise<boolean> => {
 export const claimAirDrop = async (
 	address: string,
 	chainId: number,
-
 ): Promise<WriteContractReturnType | undefined> => {
 	const merkleAddress = config.GNOSIS_CONFIG.MERKLE_ADDRESS;
 
@@ -84,13 +83,8 @@ export const claimAirDrop = async (
 			address: merkleAddress,
 			functionName: 'claim',
 			abi: MERKLE_ABI,
-			args: [
-				claimData.index,
-				claimData.amount,
-				claimData.proof,
-			],
+			args: [claimData.index, claimData.amount, claimData.proof],
 		});
-
 	} catch (error) {
 		console.error('Error on claiming GIVdrop:', error);
 		captureException(error, {
@@ -114,8 +108,8 @@ export const claimReward = async (
 		return walletClient?.writeContract({
 			address: tokenDistroAddress,
 			functionName: 'claim',
-			abi: TOKEN_DISTRO_ABI
-		})
+			abi: TOKEN_DISTRO_ABI,
+		});
 	} catch (error) {
 		console.error('Error on claiming token distro reward:', error);
 		captureException(error, {
