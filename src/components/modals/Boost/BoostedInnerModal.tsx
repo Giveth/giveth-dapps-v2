@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import React from 'react';
+import { useChainId } from 'wagmi';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { ConfettiContainer, BoostedTitle } from './BoostModal.sc';
 import Routes from '@/lib/constants/Routes';
@@ -12,7 +13,6 @@ import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
 import { getGIVpowerLink } from '@/helpers/givpower';
 import type { FC } from 'react';
-import { useChainId } from 'wagmi';
 
 interface IBoostedModalProps {
 	percentage: number;
