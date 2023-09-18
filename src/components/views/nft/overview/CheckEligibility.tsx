@@ -14,8 +14,7 @@ import config from '@/configuration';
 import { getAddressFromENS, isAddressENS, switchNetwork } from '@/lib/wallet';
 import { Flex } from '@/components/styled-components/Flex';
 import EligibilityModal from './EligibilityModal';
-import { GiversPFP } from '@/types/contracts';
-import { useChainId } from 'wagmi';
+import { Address, useChainId } from 'wagmi';
 import { getContract } from 'wagmi/dist/actions';
 
 const CheckEligibility = () => {
@@ -30,7 +29,7 @@ const CheckEligibility = () => {
 		setWalletAddress(event.target.value);
 	};
 
-	const checkAddress = async (address: string) => {
+	const checkAddress = async (address: Address) => {
 		try {
 			const pfpContract = getContract({
 				address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
@@ -55,21 +54,14 @@ const CheckEligibility = () => {
 					await switchNetwork(config.MAINNET_NETWORK_NUMBER);
 				}
 				if (isAddressENS(walletAddress)) {
-					const _provider =
-						chainId === config.MAINNET_NETWORK_NUMBER
-							? library
-							: new JsonRpcProvider(
-									config.MAINNET_CONFIG.nodeUrl,
-							  );
-					console.log('1');
-					resolvedAddress = await getAddressFromENS(
-						walletAddress,
-						_provider,
-					);
+					resolvedAddress = await getAddressFromENS(walletAddress);
+					if (!resolvedAddress) {
+						setError('Cannot resolve ENS');
+						return;
+					}
 					checkAddress(resolvedAddress);
 				} else {
-					console.log('3');
-					checkAddress(walletAddress);
+					checkAddress(walletAddress as Address);
 				}
 			}
 		} catch (error) {
