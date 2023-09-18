@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import React, { FC } from 'react';
 import { Button, IconWalletOutline24 } from '@giveth/ui-design-system';
 import { Controller, useForm } from 'react-hook-form';
+import { useChainId } from 'wagmi';
+import { getAddress, isAddress } from 'viem';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import Input from '@/components/Input';
@@ -14,8 +16,6 @@ import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
 import { networksParams } from '@/helpers/blockchain';
-import { useChainId } from 'wagmi';
-import { getAddress, isAddress } from 'viem';
 
 interface IProps extends IModal {
 	addAddress: (address: IAddress) => void;
