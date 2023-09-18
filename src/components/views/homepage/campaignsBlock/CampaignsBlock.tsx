@@ -8,7 +8,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import Image from 'next/image';
-import { Navigation, Pagination } from 'swiper';
+import { Navigation, Pagination } from 'swiper/modules';
 import { useIntl } from 'react-intl';
 import { Container, Row } from '@giveth/ui-design-system';
 import { BlockHeader, BlockTitle } from '../common';
