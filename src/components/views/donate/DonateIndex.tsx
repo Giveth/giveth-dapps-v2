@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import dynamic from 'next/dynamic';
+import { useChainId } from 'wagmi';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from '../../DonateSocialBox';
@@ -25,7 +26,6 @@ import ExternalLink from '@/components/ExternalLink';
 import { formatTxLink } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import { useChainId } from 'wagmi';
 
 const CryptoDonation = dynamic(
 	() => import('@/components/views/donate/CryptoDonation'),
