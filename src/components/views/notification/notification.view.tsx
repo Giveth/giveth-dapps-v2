@@ -8,6 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useAccount } from 'wagmi';
 import {
 	NotificationContainer,
 	IconContainer,
@@ -36,7 +37,6 @@ import { useNotification } from '@/hooks/useNotification';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { fetchNotificationCountAsync } from '@/features/notification/notification.thunks';
 import { WrappedSpinner } from '@/components/Spinner';
-import { useAccount } from 'wagmi';
 
 enum ENotificationTabs {
 	ALL,
