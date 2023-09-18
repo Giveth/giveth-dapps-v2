@@ -10,7 +10,7 @@ import {
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { useChainId, useAccount } from 'wagmi';
+import { useChainId, useAccount, useSwitchNetwork } from 'wagmi';
 import { getContract } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
@@ -18,7 +18,6 @@ import { MintModal } from '../modals/MintModal';
 import { Flex } from '../styled-components/Flex';
 import { useAppDispatch } from '@/features/hooks';
 import { formatWeiHelper } from '@/helpers/number';
-import { switchNetwork } from '@/lib/metamask';
 import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { InsufficientFundModal } from '../modals/InsufficientFund';
@@ -41,9 +40,10 @@ export const MintCard = () => {
 		useState(false);
 	const [pfpData, setPfpData] = useState<IpfpContractData>();
 	const [balance, setBalance] = useState<number>();
+
 	const chainId = useChainId();
 	const { address } = useAccount();
-
+	const { switchNetwork } = useSwitchNetwork();
 	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
 	const { setQty, isEligible, setIsEligible } = usePFPMintData();
@@ -236,7 +236,7 @@ export const MintCard = () => {
 						label={formatMessage({ id: 'label.switch_network' })}
 						buttonType='primary'
 						onClick={() =>
-							switchNetwork(config.MAINNET_NETWORK_NUMBER)
+							switchNetwork?.(config.MAINNET_NETWORK_NUMBER)
 						}
 					/>
 				) : (
