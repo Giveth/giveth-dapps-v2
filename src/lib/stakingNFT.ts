@@ -19,6 +19,8 @@ export const transfer = async (
 	currentIncentive: { key?: (string | number)[] | null },
 	handleStakeStatus: Dispatch<SetStateAction<StakeState>>,
 ): Promise<WriteContractReturnType | undefined> => {
+
+	// TODO: Handle this
 	// try {
 	// 	const nftManagerPositionsContract =
 	// 		new Contract(
@@ -83,6 +85,7 @@ export const exit = async (
 			abi: UNISWAP_V3_STAKER_ABI,
 		}
 
+		// TODO: Handle this
 		// const tx = await multicall({
 		// 	contracts: [
 		// 		{
@@ -139,7 +142,7 @@ export const claimUnstakeStake = async (
 		abi: UNISWAP_V3_STAKER_ABI,
 	}
 
-
+	// TODO: Handle this
 	// const data = await multicall({
 	// 	contracts: [
 	// 		{
