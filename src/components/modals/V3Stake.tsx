@@ -8,8 +8,6 @@ import {
 	Overline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { BigNumber, constants } from 'ethers';
-import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { Modal } from './Modal';
 import { CancelButton, HarvestButton, HelpRow } from './HarvestAll.sc';
@@ -24,7 +22,6 @@ import {
 	SubmittedInnerModal,
 } from './ConfirmSubmit';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
-import { getUniswapV3StakerContract } from '@/lib/contracts';
 import { StakeState } from '@/lib/staking';
 import { BN } from '@/helpers/number';
 import { IModal } from '@/types/common';
@@ -32,6 +29,8 @@ import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { useAccount, useChainId } from 'wagmi';
+import { waitForTransaction } from 'wagmi/dist/actions';
 
 interface IV3StakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -55,7 +54,6 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 		useAppSelector(state => state.subgraph.currentValues),
 	);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { chainId, library, account } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const positions = isUnstakingModal ? stakedPositions : unstakedPositions;
@@ -65,40 +63,45 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	);
 	const [txStatus, setTxStatus] = useState<any>();
 	const [tokenIdState, setTokenId] = useState<number>(0);
-	const [reward, setReward] = useState<BigNumber>(constants.Zero);
-	const [stream, setStream] = useState<BigNumber>(constants.Zero);
-	const [claimableNow, setClaimableNow] = useState<BigNumber>(constants.Zero);
-	const [givBackLiquidPart, setGivBackLiquidPart] = useState<BigNumber>(
-		constants.Zero,
-	);
+	const [reward, setReward] = useState(0n);
+	const [stream, setStream] = useState(0n);
+	const [claimableNow, setClaimableNow] = useState(0n);
+	const [givBackLiquidPart, setGivBackLiquidPart] = useState(0n);
+
+	const chainId = useChainId();
+	const { address } = useAccount();
 
 	const handleStakeUnstake = async (tokenId: number) => {
-		if (!account || !library) return;
+		if (!address || !chainId) return;
 		setTokenId(tokenId);
 		setStakeStatus(StakeState.CONFIRMING);
-		// console.log(tokenId, account, library, currentIncentive);
+		// console.log(tokenId, address, library, currentIncentive);
 		const tx = isUnstakingModal
 			? await exit(
 					tokenId,
-					account,
-					library,
+					address,
+					chainId,
 					currentIncentive,
 					setStakeStatus,
 			  )
 			: await transfer(
 					tokenId,
-					account,
-					library,
+					address,
+					chainId,
 					currentIncentive,
 					setStakeStatus,
 			  );
-		setTxStatus(tx);
 		try {
-			const { status } = await tx.wait();
-			if (status) {
-				setStakeStatus(StakeState.CONFIRMED);
-			} else {
-				setStakeStatus(StakeState.ERROR);
+			if (tx) {
+				setTxStatus(tx);
+				const { status } = await waitForTransaction({
+					hash: tx,
+				});
+				if (status) {
+					setStakeStatus(StakeState.CONFIRMED);
+				} else {
+					setStakeStatus(StakeState.ERROR);
+				}
 			}
 		} catch (error) {
 			setStakeStatus(StakeState.UNKNOWN);
@@ -111,23 +114,16 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	};
 
 	const handleAction = async (tokenId: number) => {
-		const uniswapV3StakerContract = getUniswapV3StakerContract(library);
-		if (!library || !uniswapV3StakerContract) return;
-
 		const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
 		const bnGIVback = BN(givTokenDistroBalance.givback);
-		const _reward = await getReward(
-			tokenId,
-			uniswapV3StakerContract,
-			currentIncentive.key,
-		);
+		const _reward = await getReward(tokenId, currentIncentive.key);
 
 		const liquidReward = givTokenDistroHelper.getLiquidPart(_reward);
 		const streamPerWeek =
 			givTokenDistroHelper.getStreamPartTokenPerWeek(_reward);
 		setTokenId(tokenId);
 		setReward(liquidReward);
-		setStream(BigNumber.from(streamPerWeek.toFixed(0)));
+		setStream(streamPerWeek);
 		setClaimableNow(
 			givTokenDistroHelper.getUserClaimableNow(givTokenDistroBalance),
 		);
