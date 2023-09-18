@@ -12,6 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
+import { formatEther } from 'viem';
 import {
 	APRRow,
 	ArrowButton,
@@ -35,8 +36,7 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { InputWithUnit } from '@/components/input/index';
 import { Flex } from '@/components/styled-components/Flex';
-import { Zero, formatWeiHelper } from '@/helpers/number';
-import { formatEther } from 'viem';
+import { formatWeiHelper } from '@/helpers/number';
 import { WeiPerEther } from '@/lib/constants/constants';
 
 const DonatePoolCard = styled(PoolCard)`
