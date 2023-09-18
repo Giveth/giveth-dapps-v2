@@ -3,6 +3,7 @@ import { FC, useCallback } from 'react';
 import { captureException } from '@sentry/nextjs';
 
 import { Col, Row } from '@giveth/ui-design-system';
+import { useChainId } from 'wagmi';
 import { IUserProfileView } from '../UserProfile.view';
 import BoostsTable from './BoostsTable';
 import { IPowerBoosting } from '@/apollo/types/types';
@@ -27,7 +28,6 @@ import { formatWeiHelper } from '@/helpers/number';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useFetchPowerBoostingInfo } from './useFetchPowerBoostingInfo';
 import { useProfileContext } from '@/context/profile.context';
-import { useChainId } from 'wagmi';
 
 export const ProfileBoostedTab: FC<IUserProfileView> = () => {
 	const { user } = useProfileContext();
