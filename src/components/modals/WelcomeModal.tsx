@@ -4,7 +4,6 @@ import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 
-import { captureException } from '@sentry/nextjs';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -15,8 +14,7 @@ import facebookIcon from '/public/images/social-fb2.svg';
 import discordIcon from '/public/images/social-disc.svg';
 import torusBrand from '/public/images/torus_pwr.svg';
 import { mediaQueries } from '@/lib/constants/constants';
-import { detectBrave, showToastError } from '@/lib/helpers';
-import StorageLabel from '@/lib/localStorage';
+import { detectBrave } from '@/lib/helpers';
 import LowerShields from '@/components/modals/LowerShields';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
