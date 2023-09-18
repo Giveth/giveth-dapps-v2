@@ -7,13 +7,13 @@ import {
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
+import { useAccount, useChainId } from 'wagmi';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
 import { WrappedSpinner } from '@/components/Spinner';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { getGIVpowerOnChain } from '@/lib/stakingPool';
-import { useAccount, useChainId } from 'wagmi';
 
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
