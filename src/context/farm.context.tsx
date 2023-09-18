@@ -7,7 +7,7 @@ import {
 	useCallback,
 	ReactNode,
 } from 'react';
-import { useWeb3React } from '@web3-react/core';
+import { useAccount } from 'wagmi';
 
 export interface FarmContext {
 	chainsInfo: IChainsInfo;
@@ -38,7 +38,7 @@ export interface IChainsInfo {
 
 export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
 	const [chainsInfo, setChainsInfo] = useState<IChainsInfo>({});
-	const { account } = useWeb3React();
+	const { address } = useAccount();
 
 	const setChainInfo = useCallback(
 		(network: number, key: string, value: bigint) => {
@@ -58,7 +58,7 @@ export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
 
 	useEffect(() => {
 		setChainsInfo({});
-	}, [account]);
+	}, [address]);
 
 	return (
 		<FarmContext.Provider
