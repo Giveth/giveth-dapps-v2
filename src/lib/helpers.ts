@@ -10,7 +10,6 @@ import {
 	sendTransaction as wagmiSendTransaction,
 } from '@wagmi/core';
 
-import { AddressZero } from '@ethersproject/constants';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 import { erc20ABI } from 'wagmi';
@@ -23,6 +22,7 @@ import { gToast, ToastType } from '@/components/toasts';
 import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
 import config from '@/configuration';
+import { AddressZero } from './constants/constants';
 
 declare let window: any;
 interface TransactionParams {
