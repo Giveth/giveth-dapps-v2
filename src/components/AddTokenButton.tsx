@@ -2,11 +2,11 @@ import { brandColors, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useAccount } from 'wagmi';
 import { addToken } from '@/lib/metamask';
 import { Flex } from './styled-components/Flex';
 import StorageLabel from '@/lib/localStorage';
 import { Address } from '@/types/config';
-import { useAccount } from 'wagmi';
 
 interface IAddGIVTokenButton {
 	chainId: number;
