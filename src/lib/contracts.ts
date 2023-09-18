@@ -1,16 +1,8 @@
-import UniswapV3PoolJson from '@uniswap/v3-core/artifacts/contracts/UniswapV3Pool.sol/UniswapV3Pool.json';
-import NonfungiblePositionManagerJson from '@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json';
-
 import { captureException } from '@sentry/nextjs';
 import { getContract } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
-import UNISWAP_V3_STAKER_ABI from '@/artifacts/uniswap_v3_staker.json';
 import config from '@/configuration';
-import { INonfungiblePositionManager, IUniswapV3Pool } from '@/types/contracts';
 import { MAX_TOKEN_ORDER } from './constants/tokens';
-
-const { abi: UniswapV3PoolABI } = UniswapV3PoolJson;
-const { abi: NonfungiblePositionManagerABI } = NonfungiblePositionManagerJson;
 
 const mainnetConfig = config.MAINNET_CONFIG;
 export const uniswapV3Config = mainnetConfig.v3Pools[0];
