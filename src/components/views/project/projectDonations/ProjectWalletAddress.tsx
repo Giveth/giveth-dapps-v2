@@ -1,8 +1,8 @@
 import { mediaQueries, neutralColors, Subline } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { getAddress } from 'viem';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
-import { getAddress } from 'viem';
 
 const ProjectWalletAddress = (props: {
 	address: string;
