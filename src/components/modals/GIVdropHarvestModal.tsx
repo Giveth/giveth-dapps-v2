@@ -10,6 +10,9 @@ import {
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 import { captureException } from '@sentry/nextjs';
+import { useAccount, useChainId } from 'wagmi';
+import { WriteContractReturnType } from 'viem';
+import { waitForTransaction } from 'wagmi/actions';
 import { Modal } from './Modal';
 import {
 	ConfirmedInnerModal,
@@ -37,9 +40,6 @@ import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { useAccount, useChainId } from 'wagmi';
-import { WriteContractReturnType } from 'viem';
-import { waitForTransaction } from 'wagmi/dist/actions';
 
 enum ClaimState {
 	UNKNOWN,
