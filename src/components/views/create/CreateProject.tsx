@@ -12,7 +12,6 @@ import {
 	OutlineButton,
 } from '@giveth/ui-design-system';
 import { useMutation } from '@apollo/client';
-import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
@@ -51,6 +50,8 @@ import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
+import { getAddress } from 'viem';
+import { Address } from '@/types/config';
 
 const { NETWORKS_CONFIG } = config;
 const networksIds = Object.keys(NETWORKS_CONFIG).map(Number);
@@ -139,7 +140,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 			const _addresses = Object.entries(addresses).map(
 				([id, address]) => ({
-					address: utils.getAddress(address) as `0x${string}`,
+					address: getAddress(address) as Address,
 					networkId: Number(id),
 				}),
 			);
