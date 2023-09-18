@@ -10,7 +10,6 @@ export const uniswapV3Config = mainnetConfig.v3Pools[0];
 const { NFT_POSITIONS_MANAGER_ADDRESS, UNISWAP_V3_STAKER, UNISWAP_V3_LP_POOL } =
 	uniswapV3Config || {};
 
-
 interface IERC20Info {
 	contractAddress: `0x${string}`;
 	networkId: number;
