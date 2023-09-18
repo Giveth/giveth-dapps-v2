@@ -9,7 +9,6 @@ import {
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
-import { useWeb3React } from '@web3-react/core';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { waitForTransaction } from '@wagmi/core';
@@ -38,6 +37,7 @@ import Routes from '@/lib/constants/Routes';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import type { PoolStakingConfig } from '@/types/config';
+import { useChainId } from 'wagmi';
 
 interface ILockModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -61,8 +61,8 @@ const LockModal: FC<ILockModalProps> = ({
 	const [amount, setAmount] = useState(0n);
 	const [round, setRound] = useState(0);
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
-	const { library } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const chainId = useChainId();
 	const { stakedAmount: stakedLpAmount } = useStakingPool(poolStakingConfig);
 
 	const { network: poolNetwork } = poolStakingConfig;
@@ -72,7 +72,7 @@ const LockModal: FC<ILockModalProps> = ({
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 
 	const maxAmount = isGIVpower
-		? stakedLpAmount.sub(userGIVLocked.balance)
+		? stakedLpAmount - BigInt(userGIVLocked.balance)
 		: stakedLpAmount;
 
 	const onLock = async () => {
@@ -88,7 +88,7 @@ const LockModal: FC<ILockModalProps> = ({
 				amount,
 				round,
 				contractAddress,
-				library,
+				chainId,
 			);
 			if (txResponse) {
 				const data = await waitForTransaction({
@@ -165,8 +165,8 @@ const LockModal: FC<ILockModalProps> = ({
 								}}
 								disabled={
 									round === 0 ||
-									amount == '0' ||
-									maxAmount.lt(amount)
+									amount == 0n ||
+									maxAmount <= amount
 								}
 							/>
 							<CancelButton
@@ -195,8 +195,8 @@ const LockModal: FC<ILockModalProps> = ({
 								})}
 								onClick={onLock}
 								disabled={
-									amount == '0' ||
-									maxAmount.lt(amount) ||
+									amount === 0n ||
+									maxAmount < amount ||
 									lockState === ELockState.LOCKING
 								}
 								loading={lockState === ELockState.LOCKING}
