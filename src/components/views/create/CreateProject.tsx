@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Container } from '@giveth/ui-design-system';
+import { getAddress } from 'viem';
 import {
 	ACTIVATE_PROJECT,
 	CREATE_PROJECT,
@@ -50,7 +51,6 @@ import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
-import { getAddress } from 'viem';
 import { Address } from '@/types/config';
 
 const { NETWORKS_CONFIG } = config;
