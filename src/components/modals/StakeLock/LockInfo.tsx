@@ -11,13 +11,13 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useChainId } from 'wagmi';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import config from '@/configuration';
 import type { FC } from 'react';
-import { useChainId } from 'wagmi';
 
 interface ILockInfo {
 	round: number;
