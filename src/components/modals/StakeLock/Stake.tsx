@@ -1,6 +1,8 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { P } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
+import { useAccount, useChainId } from 'wagmi';
+import { waitForTransaction } from 'wagmi/actions';
 import { Modal } from '../Modal';
 import { StakingPoolImages } from '../../StakingPoolImages';
 import { AmountInput } from '../../AmountInput';
@@ -32,8 +34,6 @@ import {
 	StakingPlatform,
 } from '@/types/config';
 import { useStakingPool } from '@/hooks/useStakingPool';
-import { useAccount, useChainId } from 'wagmi';
-import { waitForTransaction } from 'wagmi/dist/actions';
 
 interface IStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
