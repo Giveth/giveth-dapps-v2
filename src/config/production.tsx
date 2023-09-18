@@ -1,4 +1,3 @@
-import { parseUnits } from '@ethersproject/units';
 import {
 	EnvConfig,
 	StakingPlatform,
@@ -231,8 +230,8 @@ const config: EnvConfig = {
 		nodeUrl: networksParams[100]?.rpcUrls[0],
 		...networksParams[100],
 		gasPreference: {
-			maxFeePerGas: parseUnits('2', 'gwei').toString(),
-			maxPriorityFeePerGas: parseUnits('1', 'gwei').toString(),
+			maxFeePerGas: (2e9).toString(),
+			maxPriorityFeePerGas: (1e9).toString(),
 		},
 
 		blockExplorerName: ['Blockscout'],
