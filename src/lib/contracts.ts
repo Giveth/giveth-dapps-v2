@@ -1,5 +1,3 @@
-import { Web3Provider } from '@ethersproject/providers';
-import { Contract } from 'ethers';
 import UniswapV3PoolJson from '@uniswap/v3-core/artifacts/contracts/UniswapV3Pool.sol/UniswapV3Pool.json';
 import NonfungiblePositionManagerJson from '@uniswap/v3-periphery/artifacts/contracts/NonfungiblePositionManager.sol/NonfungiblePositionManager.json';
 
@@ -19,22 +17,6 @@ export const uniswapV3Config = mainnetConfig.v3Pools[0];
 
 const { NFT_POSITIONS_MANAGER_ADDRESS, UNISWAP_V3_STAKER, UNISWAP_V3_LP_POOL } =
 	uniswapV3Config || {};
-
-export const getNftManagerPositionsContract = (
-	provider: Web3Provider | null,
-): INonfungiblePositionManager | undefined => {
-	const signer = provider?.getSigner();
-
-	if (!signer) {
-		return;
-	}
-
-	return new Contract(
-		NFT_POSITIONS_MANAGER_ADDRESS,
-		NonfungiblePositionManagerABI,
-		signer,
-	) as INonfungiblePositionManager;
-};
 
 
 export const getGivethV3PoolContract = (provider: Web3Provider | null) => {
