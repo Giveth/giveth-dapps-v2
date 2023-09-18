@@ -19,20 +19,6 @@ const { NFT_POSITIONS_MANAGER_ADDRESS, UNISWAP_V3_STAKER, UNISWAP_V3_LP_POOL } =
 	uniswapV3Config || {};
 
 
-export const getGivethV3PoolContract = (provider: Web3Provider | null) => {
-	const signer = provider?.getSigner();
-
-	if (!signer) {
-		return;
-	}
-
-	return new Contract(
-		UNISWAP_V3_LP_POOL,
-		UniswapV3PoolABI,
-		signer,
-	) as IUniswapV3Pool;
-};
-
 interface IERC20Info {
 	contractAddress: `0x${string}`;
 	networkId: number;
