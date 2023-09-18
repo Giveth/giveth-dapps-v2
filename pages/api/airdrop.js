@@ -1,5 +1,5 @@
-import airdrops from './merkle_distributor_xdai_result.json';
 import { getAddress } from 'viem';
+import airdrops from './merkle_distributor_xdai_result.json';
 
 const handler = (req, res) => {
 	const { body, method } = req;
