@@ -19,7 +19,7 @@ export const transfer = async (
 	chainId: number,
 	currentIncentive: { key?: (string | number)[] | null },
 	handleStakeStatus: Dispatch<SetStateAction<StakeState>>,
-) => {
+): Promise<WriteContractReturnType | undefined> => {
 	// try {
 	// 	const nftManagerPositionsContract =
 	// 		new Contract(
@@ -60,6 +60,7 @@ export const transfer = async (
 	// 		},
 	// 	});
 	// }
+	return undefined;
 };
 
 export const exit = async (
@@ -68,7 +69,7 @@ export const exit = async (
 	chainId: number,
 	currentIncentive: { key?: (string | number)[] | null },
 	handleStakeStatus: Dispatch<SetStateAction<StakeState>>,
-) => {
+): Promise<WriteContractReturnType | undefined> => {
 	try {
 		console.log(tokenId);
 		if (
