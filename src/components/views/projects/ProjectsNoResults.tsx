@@ -127,7 +127,9 @@ const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 	:hover {
 		color: white;
 		background: ${brandColors.giv[600]};
-		transition: background-color 300ms linear, color 150ms linear;
+		transition:
+			background-color 300ms linear,
+			color 150ms linear;
 	}
 	font-weight: 400;
 	text-align: center;
@@ -146,7 +148,9 @@ const SuggestionItem = styled.div`
 	padding: 0 15px;
 	:hover {
 		color: ${neutralColors.gray[700]};
-		transition: color 300ms linear, color 150ms linear;
+		transition:
+			color 300ms linear,
+			color 150ms linear;
 	}
 	${mediaQueries.tablet} {
 		font-size: 16px;
