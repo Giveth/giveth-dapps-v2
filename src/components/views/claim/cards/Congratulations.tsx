@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { H2, Lead } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
-import { useWeb3React } from '@web3-react/core';
 import { Container } from '@giveth/ui-design-system';
 import useClaim from '@/context/claim.context';
 import { formatWeiHelper } from '@/helpers/number';
@@ -17,6 +16,7 @@ import { Button } from '@/components/styled-components/Button';
 import LottieControl from '@/components/LottieControl';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
+import { useChainId } from 'wagmi';
 
 const SmileImage = styled.div`
 	position: absolute;
@@ -135,7 +135,7 @@ export const CongratulationsCard = () => {
 	const { formatMessage } = useIntl();
 	const [streamValue, setStreamValue] = useState<string>('0');
 	const { totalAmount, resetWallet } = useClaim();
-	const { library } = useWeb3React();
+	const chainId = useChainId();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
 	useEffect(() => {
@@ -168,7 +168,7 @@ export const CongratulationsCard = () => {
 						<Lead>
 							{formatWeiHelper(totalAmount.div(10))} GIV.{' '}
 						</Lead>
-						<AddTokenButton provider={library} showText={false} />
+						<AddTokenButton chainId={chainId} showText={false} />
 						<SmileImage>
 							<SparkleBurstContainer>
 								<LottieControl
