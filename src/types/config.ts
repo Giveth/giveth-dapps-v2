@@ -67,7 +67,7 @@ export interface UniswapV3PoolStakingConfig
 	INCENTIVE_END_TIME: number;
 	INCENTIVE_REWARD_AMOUNT: number;
 	NFT_POSITIONS_MANAGER_ADDRESS: string;
-	UNISWAP_V3_STAKER: string;
+	UNISWAP_V3_STAKER: Address;
 	STAKING_REWARDS_CONTRACT: string;
 	REWARD_TOKEN: string;
 	UNISWAP_V3_LP_POOL: string;
