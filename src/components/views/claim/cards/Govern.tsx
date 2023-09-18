@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
+import { formatEther } from 'viem';
+import { useChainId } from 'wagmi';
 import {
 	APRRow,
 	ArrowButton,
@@ -34,8 +36,6 @@ import { InputWithUnit } from '@/components/input/index';
 import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
 import { WeiPerEther } from '@/lib/constants/constants';
-import { formatEther } from 'viem';
-import { useChainId } from 'wagmi';
 
 const GovernCardContainer = styled(Card)`
 	padding-left: 254px;
