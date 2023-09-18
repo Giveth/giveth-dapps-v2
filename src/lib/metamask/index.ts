@@ -1,10 +1,10 @@
 import { captureException } from '@sentry/nextjs';
+import { erc20ABI } from 'wagmi';
+import { getContract } from 'wagmi/actions';
 import config from '@/configuration';
 import UNI_Json from '@/artifacts/UNI.json';
 import { networksParams } from '@/helpers/blockchain';
 import { Address } from '@/types/config';
-import { erc20ABI } from 'wagmi';
-import { getContract } from 'wagmi/actions';
 
 const { abi: UNI_ABI } = UNI_Json;
 
@@ -73,8 +73,7 @@ export async function addToken(
 	tokenAddress: Address | undefined, // Default is GIV
 ): Promise<void> {
 	const address =
-		tokenAddress ||
-		config.NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS;
+		tokenAddress || config.NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS;
 	if (!address) return;
 
 	const tokenOptions = await fetchTokenInfo(chainId, address);
