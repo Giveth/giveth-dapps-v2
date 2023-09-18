@@ -1,16 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
+import { useAccount, useChainId } from 'wagmi';
 import config from '@/configuration';
 import { getReward } from '@/lib/stakingNFT';
 import { LiquidityPosition } from '@/types/nfts';
-import { useAccount, useChainId } from 'wagmi';
 
 export const useStakingNFT = (stakedPositions: LiquidityPosition[]) => {
 	const chainId = useChainId();
-	const {address} = useAccount();
-	const [rewardBalance, setRewardBalance] = useState(
-		0n,
-	);
+	const { address } = useAccount();
+	const [rewardBalance, setRewardBalance] = useState(0n);
 
 	const mainnetConfig = config.MAINNET_CONFIG;
 	const uniswapV3Config = mainnetConfig.v3Pools[0];
@@ -58,15 +56,12 @@ export const useStakingNFT = (stakedPositions: LiquidityPosition[]) => {
 			try {
 				const rewards = await Promise.all(
 					stakedPositions.map(({ tokenId }) =>
-						getReward(
-							tokenId,
-							currentIncentive.key,
-						),
+						getReward(tokenId, currentIncentive.key),
 					),
 				);
 
 				const allRewards = rewards.reduce(
-					(acc: bigint, reward: bigint) => acc+reward,
+					(acc: bigint, reward: bigint) => acc + reward,
 					0n,
 				);
 				setRewardBalance(allRewards);
