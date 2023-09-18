@@ -15,7 +15,7 @@ const { abi: UniswapV3PoolABI } = UniswapV3PoolJson;
 const { abi: NonfungiblePositionManagerABI } = NonfungiblePositionManagerJson;
 
 const mainnetConfig = config.MAINNET_CONFIG;
-const uniswapV3Config = mainnetConfig.v3Pools[0];
+export const uniswapV3Config = mainnetConfig.v3Pools[0];
 
 const { NFT_POSITIONS_MANAGER_ADDRESS, UNISWAP_V3_STAKER, UNISWAP_V3_LP_POOL } =
 	uniswapV3Config || {};
@@ -36,23 +36,6 @@ export const getNftManagerPositionsContract = (
 	) as INonfungiblePositionManager;
 };
 
-export const getUniswapV3StakerContract = (
-	provider: Web3Provider | null,
-	isUnchecked?: boolean,
-) => {
-	let signer;
-
-	if (isUnchecked) {
-		signer = provider?.getSigner().connectUnchecked();
-	} else {
-		signer = provider?.getSigner();
-	}
-	if (!signer) {
-		return;
-	}
-
-	return new Contract(UNISWAP_V3_STAKER, UNISWAP_V3_STAKER_ABI, signer); // as IUniswapV3Staker;
-};
 
 export const getGivethV3PoolContract = (provider: Web3Provider | null) => {
 	const signer = provider?.getSigner();
