@@ -10,6 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
+import { useChainId } from 'wagmi';
 import config from '@/configuration';
 import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
@@ -17,7 +18,6 @@ import { AddTokenButton } from '../AddTokenButton';
 import { Flex } from '../styled-components/Flex';
 import LottieControl from '@/components/LottieControl';
 import { WrappedSpinner } from '../Spinner';
-import { useChainId } from 'wagmi';
 import { Address } from '@/types/config';
 
 const AddTokenRow = styled(Flex)`
@@ -55,9 +55,8 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 			{txHash && (
 				<BlockExplorerLink
 					as='a'
-					href={`${
-						config.NETWORKS_CONFIG[chainId!]?.blockExplorerUrls
-					}
+					href={`${config.NETWORKS_CONFIG[chainId!]
+						?.blockExplorerUrls}
 			tx/${txHash}`}
 					target='_blank'
 					size='Big'
@@ -135,9 +134,8 @@ export const ErrorInnerModal: FC<IErrorProps> = ({
 			{txHash && (
 				<BlockExplorerLink
 					as='a'
-					href={`${
-						config.NETWORKS_CONFIG[chainId!]?.blockExplorerUrls
-					}
+					href={`${config.NETWORKS_CONFIG[chainId!]
+						?.blockExplorerUrls}
 			tx/${txHash}`}
 					target='_blank'
 					size='Big'
