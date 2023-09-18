@@ -3,6 +3,7 @@ import { FC } from 'react';
 
 import { Col, Row } from '@giveth/ui-design-system';
 import BigNumber from 'bignumber.js';
+import { useChainId } from 'wagmi';
 import { IUserProfileView } from '../UserProfile.view';
 import { Loading } from '../projectsTab/ProfileProjectsTab';
 import { EmptyPowerBoosting } from './EmptyPowerBoosting';
@@ -14,7 +15,6 @@ import { useFetchPowerBoostingInfo } from './useFetchPowerBoostingInfo';
 import { useProfileContext } from '@/context/profile.context';
 import { PublicGIVpowerContributeCard } from '@/components/ContributeCard';
 import { PublicBoostsTable } from './PublicBoostsTable';
-import { useChainId } from 'wagmi';
 
 export const PublicProfileBoostedTab: FC<IUserProfileView> = () => {
 	const { user, givpowerBalance } = useProfileContext();
