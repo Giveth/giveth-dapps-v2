@@ -4,7 +4,6 @@ import config from '../configuration';
 import MerkleDropJson from '../artifacts/MerkleDrop.json';
 import TOKEN_DISTRO_JSON from '../artifacts/TokenDistro.json';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
-import { getGasPreference } from '@/lib/helpers';
 import { fetchChainInfo } from '@/features/subgraph/subgraph.services';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { getWalletClient } from 'wagmi/dist/actions';
@@ -89,7 +88,6 @@ export const claimAirDrop = async (
 				claimData.index,
 				claimData.amount,
 				claimData.proof,
-				getGasPreference(config.GNOSIS_CONFIG),
 			],
 		});
 
