@@ -1,9 +1,8 @@
 import BigNumber from 'bignumber.js';
-import { ethers } from 'ethers';
 import config from '@/configuration';
+import { formatEther } from 'viem';
 
 export const Zero = new BigNumber(0);
-export const BN = ethers.BigNumber.from;
 
 export const formatEthHelper = (
 	amount: BigNumber.Value,
@@ -22,21 +21,21 @@ export const formatEthHelper = (
 		? amt.lt(0.0001)
 			? '<0.0001'
 			: amt.toFormat({
-					groupSize: 3,
-					groupSeparator: ',',
-					decimalSeparator: '.',
-			  })
+				groupSize: 3,
+				groupSeparator: ',',
+				decimalSeparator: '.',
+			})
 		: amt.toFixed();
 };
 
 export const formatWeiHelper = (
-	amountWei: ethers.BigNumber | BigNumber.Value,
+	amountWei: bigint | BigNumber.Value,
 	decimals: number = config.TOKEN_PRECISION,
 	format = true,
 ): string => {
 	let amountEth: BigNumber.Value;
-	if (amountWei instanceof ethers.BigNumber)
-		amountEth = ethers.utils.formatEther(amountWei);
+	if (typeof amountWei === "bigint")
+		amountEth = formatEther(amountWei);
 	else {
 		amountEth = new BigNumber(amountWei).div(10 ** 18);
 	}
