@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
-import config from '@/configuration';
 import { formatEther } from 'viem';
+import config from '@/configuration';
 
 export const Zero = new BigNumber(0);
 
@@ -21,10 +21,10 @@ export const formatEthHelper = (
 		? amt.lt(0.0001)
 			? '<0.0001'
 			: amt.toFormat({
-				groupSize: 3,
-				groupSeparator: ',',
-				decimalSeparator: '.',
-			})
+					groupSize: 3,
+					groupSeparator: ',',
+					decimalSeparator: '.',
+			  })
 		: amt.toFixed();
 };
 
@@ -34,8 +34,7 @@ export const formatWeiHelper = (
 	format = true,
 ): string => {
 	let amountEth: BigNumber.Value;
-	if (typeof amountWei === "bigint")
-		amountEth = formatEther(amountWei);
+	if (typeof amountWei === 'bigint') amountEth = formatEther(amountWei);
 	else {
 		amountEth = new BigNumber(amountWei).div(10 ** 18);
 	}
