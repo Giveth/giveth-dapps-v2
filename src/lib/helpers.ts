@@ -1,4 +1,3 @@
-import { promisify } from 'util';
 // eslint-disable-next-line import/named
 import unescape from 'lodash/unescape';
 
@@ -10,7 +9,6 @@ import {
 	sendTransaction as wagmiSendTransaction,
 } from '@wagmi/core';
 import { SiweMessage } from 'siwe';
-
 
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
