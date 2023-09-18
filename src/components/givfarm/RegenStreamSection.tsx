@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { Col, H3, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { useChainId } from 'wagmi';
 import { Subtitle, GIVfrensLink } from './RegenStreamSection.sc';
 import config from '@/configuration';
 import { RegenStreamCard } from './RegenStreamCard';
-import { useChainId } from 'wagmi';
 
 interface IRegenStreamSectionProps {
 	showArchivedPools: boolean;
