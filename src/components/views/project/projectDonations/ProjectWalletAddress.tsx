@@ -1,15 +1,15 @@
 import { mediaQueries, neutralColors, Subline } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { utils } from 'ethers';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
+import { getAddress } from 'viem';
 
 const ProjectWalletAddress = (props: {
 	address: string;
 	networkId: number;
 }) => {
 	const { address, networkId } = props;
-	const checksumAddress = utils.getAddress(address);
+	const checksumAddress = getAddress(address);
 
 	return (
 		<AddressContainer>
