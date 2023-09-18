@@ -9,7 +9,6 @@ import {
 	setShowCompleteProfile,
 	setShowWelcomeModal,
 	setShowFirstWelcomeModal,
-	setShowWalletModal,
 	setShowSignWithWallet,
 	setShowSearchModal,
 	setShowSwitchNetworkModal,
