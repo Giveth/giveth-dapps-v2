@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useAppDispatch } from '@/features/hooks';
 import { setToken, setIsEnabled } from '@/features/user/user.slice';
 import StorageLabel from '@/lib/localStorage';
