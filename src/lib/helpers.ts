@@ -2,23 +2,23 @@ import { promisify } from 'util';
 // eslint-disable-next-line import/named
 import unescape from 'lodash/unescape';
 
-import { keccak256 } from '@ethersproject/keccak256';
+// import { keccak256 } from '@ethersproject/keccak256';
 
 import { getContract } from 'wagmi/actions';
 import {
 	writeContract,
 	sendTransaction as wagmiSendTransaction,
 } from '@wagmi/core';
+import { SiweMessage } from 'siwe';
+
 
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 import { erc20ABI } from 'wagmi';
 import { parseEther, parseUnits } from 'viem';
-import { GasPreference, NetworkConfig } from '@/types/config';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
-import StorageLabel from '@/lib/localStorage';
 import { networksParams } from '@/helpers/blockchain';
 import config from '@/configuration';
 import { AddressZero } from './constants/constants';
@@ -299,105 +299,106 @@ async function handleEthTransfer(
 	return hash;
 }
 
-export async function signMessage(
-	message: string,
-	address: string | undefined | null,
-	chainId?: number,
-	signer?: any,
-) {
-	try {
-		// COMMENTING THIS AS BACKEND NEEDS TO BE UPDATED TO THIS WAY
+//TODO: Handle this
+// export async function signMessage(
+// 	message: string,
+// 	address: string | undefined | null,
+// 	chainId?: number,
+// 	signer?: any,
+// ) {
+// 	try {
+// 		// COMMENTING THIS AS BACKEND NEEDS TO BE UPDATED TO THIS WAY
 
-		// const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
-		// const prefixWithLength = Buffer.from(`${customPrefix}${message.length.toString()}`, 'utf-8')
-		// const finalMessage = Buffer.concat([prefixWithLength, Buffer.from(message)])
+// 		// const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
+// 		// const prefixWithLength = Buffer.from(`${customPrefix}${message.length.toString()}`, 'utf-8')
+// 		// const finalMessage = Buffer.concat([prefixWithLength, Buffer.from(message)])
 
-		// const hashedMsg = keccak256(finalMessage)
+// 		// const hashedMsg = keccak256(finalMessage)
 
-		// const domain = {
-		//   name: 'Giveth Login',
-		//   version: '1',
-		//   chainId
-		// }
+// 		// const domain = {
+// 		//   name: 'Giveth Login',
+// 		//   version: '1',
+// 		//   chainId
+// 		// }
 
-		// const types = {
-		//   // EIP712Domain: [
-		//   //   { name: 'name', type: 'string' },
-		//   //   { name: 'chainId', type: 'uint256' },
-		//   //   { name: 'version', type: 'string' }
-		//   //   // { name: 'verifyingContract', type: 'address' }
-		//   // ],
-		//   User: [{ name: 'wallets', type: 'address[]' }],
-		//   Login: [
-		//     { name: 'user', type: 'User' },
-		//     { name: 'contents', type: 'string' }
-		//   ]
-		// }
+// 		// const types = {
+// 		//   // EIP712Domain: [
+// 		//   //   { name: 'name', type: 'string' },
+// 		//   //   { name: 'chainId', type: 'uint256' },
+// 		//   //   { name: 'version', type: 'string' }
+// 		//   //   // { name: 'verifyingContract', type: 'address' }
+// 		//   // ],
+// 		//   User: [{ name: 'wallets', type: 'address[]' }],
+// 		//   Login: [
+// 		//     { name: 'user', type: 'User' },
+// 		//     { name: 'contents', type: 'string' }
+// 		//   ]
+// 		// }
 
-		// const value = {
-		//   user: {
-		//     wallets: [address]
-		//   },
-		//   contents: hashedMsg
-		// }
+// 		// const value = {
+// 		//   user: {
+// 		//     wallets: [address]
+// 		//   },
+// 		//   contents: hashedMsg
+// 		// }
 
-		// return await signer._signTypedData(domain, types, value)
+// 		// return await signer._signTypedData(domain, types, value)
 
-		let signedMessage = null;
-		const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`;
-		const prefixWithLength = Buffer.from(
-			`${customPrefix}${message.length.toString()}`,
-			'utf-8',
-		);
-		const finalMessage = Buffer.concat([
-			prefixWithLength,
-			Buffer.from(message),
-		]);
+// 		let signedMessage = null;
+// 		const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`;
+// 		const prefixWithLength = Buffer.from(
+// 			`${customPrefix}${message.length.toString()}`,
+// 			'utf-8',
+// 		);
+// 		const finalMessage = Buffer.concat([
+// 			prefixWithLength,
+// 			Buffer.from(message),
+// 		]);
 
-		const hashedMsg = keccak256(finalMessage);
-		const send = promisify(signer.provider.provider.sendAsync);
-		const msgParams = JSON.stringify({
-			primaryType: 'Login',
-			types: {
-				EIP712Domain: [
-					{ name: 'name', type: 'string' },
-					{ name: 'chainId', type: 'uint256' },
-					{ name: 'version', type: 'string' },
-					// { name: 'verifyingContract', type: 'address' }
-				],
-				Login: [{ name: 'user', type: 'User' }],
-				User: [{ name: 'wallets', type: 'address[]' }],
-			},
-			domain: {
-				name: 'Giveth Login',
-				chainId,
-				version: '1',
-			},
-			message: {
-				contents: hashedMsg,
-				user: {
-					wallets: [address],
-				},
-			},
-		});
-		const { result } = await send({
-			method: 'eth_signTypedData_v4',
-			params: [address, msgParams],
-			from: address,
-		});
-		signedMessage = result;
+// 		const hashedMsg = keccak256(finalMessage);
+// 		const send = promisify(signer.provider.provider.sendAsync);
+// 		const msgParams = JSON.stringify({
+// 			primaryType: 'Login',
+// 			types: {
+// 				EIP712Domain: [
+// 					{ name: 'name', type: 'string' },
+// 					{ name: 'chainId', type: 'uint256' },
+// 					{ name: 'version', type: 'string' },
+// 					// { name: 'verifyingContract', type: 'address' }
+// 				],
+// 				Login: [{ name: 'user', type: 'User' }],
+// 				User: [{ name: 'wallets', type: 'address[]' }],
+// 			},
+// 			domain: {
+// 				name: 'Giveth Login',
+// 				chainId,
+// 				version: '1',
+// 			},
+// 			message: {
+// 				contents: hashedMsg,
+// 				user: {
+// 					wallets: [address],
+// 				},
+// 			},
+// 		});
+// 		const { result } = await send({
+// 			method: 'eth_signTypedData_v4',
+// 			params: [address, msgParams],
+// 			from: address,
+// 		});
+// 		signedMessage = result;
 
-		return signedMessage;
-	} catch (error) {
-		console.log('Signing Error!', { error });
-		captureException(error, {
-			tags: {
-				section: 'signError',
-			},
-		});
-		return false;
-	}
-}
+// 		return signedMessage;
+// 	} catch (error) {
+// 		console.log('Signing Error!', { error });
+// 		captureException(error, {
+// 			tags: {
+// 				section: 'signError',
+// 			},
+// 		});
+// 		return false;
+// 	}
+// }
 
 export const isGIVeconomyRoute = (route: string) => {
 	const givEconomyRoute = giveconomyTabs.find(
@@ -508,7 +509,6 @@ export const createSiweMessage = async (
 			return n.json();
 		});
 		const nonce = nonceResponse.message;
-		const { SiweMessage } = await import('siwe');
 		const siweMessage = new SiweMessage({
 			domain,
 			address,
