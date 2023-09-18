@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useChainId } from 'wagmi';
 import { formatWeiHelper } from '@/helpers/number';
 import {
 	MenuAndButtonContainer,
@@ -22,7 +23,6 @@ import { RewardItems } from './RewardItems';
 import { MenuContainer } from './Menu.sc';
 import { ItemsProvider } from '@/context/Items.context';
 import SwitchNetwork from '../modals/SwitchNetwork';
-import { useChainId } from 'wagmi';
 
 interface IRewardButtonWithMenuProps extends IHeaderButtonProps {}
 
