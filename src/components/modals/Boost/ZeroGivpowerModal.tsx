@@ -8,12 +8,12 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { useChainId } from 'wagmi';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { getGIVpowerLink } from '@/helpers/givpower';
-import { useChainId } from 'wagmi';
 
 export const ZeroGivpowerModal: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
