@@ -5,7 +5,6 @@ import MerkleDropJson from '../artifacts/MerkleDrop.json';
 import TOKEN_DISTRO_JSON from '../artifacts/TokenDistro.json';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { getGasPreference } from '@/lib/helpers';
-import { MerkleDistro } from '@/types/contracts';
 import { fetchChainInfo } from '@/features/subgraph/subgraph.services';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { getWalletClient } from 'wagmi/dist/actions';
@@ -74,7 +73,7 @@ export const claimAirDrop = async (
 
 ): Promise<WriteContractReturnType | undefined> => {
 	const merkleAddress = config.GNOSIS_CONFIG.MERKLE_ADDRESS;
-	
+
 	const claimData = await fetchAirDropClaimData(address);
 	if (!claimData) throw new Error('No claim data');
 
@@ -93,7 +92,7 @@ export const claimAirDrop = async (
 				getGasPreference(config.GNOSIS_CONFIG),
 			],
 		});
-			
+
 	} catch (error) {
 		console.error('Error on claiming GIVdrop:', error);
 		captureException(error, {

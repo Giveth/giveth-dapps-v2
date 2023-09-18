@@ -12,10 +12,8 @@ import {
 } from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../../styled-components/Switch';
-import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { IModal } from '@/types/common';
 import StakeSteps from './StakeSteps';
-import { ERC20 } from '@/types/contracts';
 import {
 	CancelButton,
 	StakeModalContainer,
