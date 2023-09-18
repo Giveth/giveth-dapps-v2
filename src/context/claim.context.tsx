@@ -7,7 +7,6 @@ import {
 	useContext,
 	SetStateAction,
 } from 'react';
-import { Zero } from '@ethersproject/constants';
 import { Dispatch } from 'react';
 import config from '@/configuration';
 import { fetchAirDropClaimData, hasClaimedAirDrop } from '@/lib/claim';
