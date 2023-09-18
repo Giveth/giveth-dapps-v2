@@ -12,6 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useAccount, useChainId } from 'wagmi';
 import { smallFormatDate } from '@/lib/helpers';
 import { Flex, FlexCenter } from '../styled-components/Flex';
 import { Modal } from './Modal';
@@ -27,7 +28,6 @@ import { useStakingPool } from '@/hooks/useStakingPool';
 import { Spinner } from '../Spinner';
 import type { IGIVpowerPosition } from '@/types/subgraph';
 import type { IModal } from '@/types/common';
-import { useAccount, useChainId } from 'wagmi';
 
 interface ILockupDetailsModal extends IModal {
 	unstakeable: bigint;
