@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { LiquidityPosition } from '@/types/nfts';
 import {
-	getNftManagerPositionsContract,
 	uniswapV3Config,
 } from './contracts';
 import config from '@/configuration';
