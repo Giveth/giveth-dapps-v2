@@ -8,6 +8,7 @@ import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useChainId } from 'wagmi';
 import { Flex } from '../styled-components/Flex';
 import config from '@/configuration';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
@@ -33,7 +34,6 @@ import { ItemAction, ItemRow, ItemTitle } from './common';
 import { Item } from './Item';
 import { useItemsContext } from '@/context/Items.context';
 import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
-import { useChainId } from 'wagmi';
 
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;
