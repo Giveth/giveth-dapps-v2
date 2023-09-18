@@ -2,17 +2,16 @@ import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { H4, B, brandColors, Caption } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { useChainId, useSwitchNetwork } from 'wagmi';
 import { mediaQueries } from '@/lib/constants/constants';
 import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
 import { IconGnosisChain } from '../Icons/GnosisChain';
 import { Modal } from './Modal';
-import { switchNetwork } from '@/lib/wallet';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { useChainId } from 'wagmi';
 
 interface IChangeNetworkModalProps extends IModal {
 	targetNetwork: number;
@@ -27,6 +26,7 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
+	const { switchNetwork } = useSwitchNetwork();
 
 	useEffect(() => {
 		if (chainId === targetNetwork) {
@@ -65,7 +65,9 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 					)}
 				</B>
 				<SwitchCaption
-					onClick={() => switchNetwork(config.MAINNET_NETWORK_NUMBER)}
+					onClick={() =>
+						switchNetwork?.(config.MAINNET_NETWORK_NUMBER)
+					}
 				>
 					{formatMessage({ id: 'label.switch_network' })}
 				</SwitchCaption>
