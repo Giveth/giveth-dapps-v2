@@ -70,6 +70,7 @@ import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { useAccount, useChainId } from 'wagmi';
+import { waitForTransaction } from '@wagmi/core';
 
 interface IHarvestAllInnerModalProps {
 	title: string;
@@ -217,12 +218,14 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 					//NFT Harvest
 					const txResponse = await claimUnstakeStake(
 						address,
-						library,
+						chainId,
 						currentIncentive,
 						stakedPositions,
 					);
 					if (txResponse) {
-						const { status } = await txResponse.wait();
+						const { status } = await waitForTransaction({
+							hash: txResponse,
+						});
 						setState(
 							status
 								? HarvestStates.CONFIRMED
@@ -234,14 +237,15 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				} else {
 					// LP Harvest
 					const txResponse = await harvestTokens(
-						(poolStakingConfig as SimplePoolStakingConfig)
-							.LM_ADDRESS,
-						library,
+						poolStakingConfig.LM_ADDRESS,
+						chainId,
 					);
 					if (txResponse) {
 						setState(HarvestStates.SUBMITTED);
-						setTxHash(txResponse.hash);
-						const { status } = await txResponse.wait();
+						setTxHash(txResponse);
+						const { status } = await waitForTransaction({
+							hash: txResponse,
+						});
 						setState(
 							status
 								? HarvestStates.CONFIRMED
@@ -254,12 +258,14 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			} else {
 				const txResponse = await claimReward(
 					tokenDistroHelper.contractAddress,
-					library,
+					chainId,
 				);
 				if (txResponse) {
 					setState(HarvestStates.SUBMITTED);
-					setTxHash(txResponse.hash);
-					const { status } = await txResponse.wait();
+					setTxHash(txResponse);
+					const { status } = await waitForTransaction({
+						hash: txResponse,
+					});
 					setState(
 						status ? HarvestStates.CONFIRMED : HarvestStates.ERROR,
 					);
@@ -299,7 +305,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				{(state === HarvestStates.HARVEST ||
 					state === HarvestStates.HARVESTING) && (
 					<HarvestBoxes>
-						{sumLiquid && sumLiquid.gt(0) && (
+						{sumLiquid > 0n && (
 							<>
 								<AmountBoxWithPrice
 									amount={sumLiquid}
@@ -376,13 +382,13 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								</BreakdownTitle>
 								<BreakdownAmount>
 									{formatWeiHelper(
-										earnedLiquid.sub(givbackLiquidPart),
+										earnedLiquid - givbackLiquidPart,
 									)}
 								</BreakdownAmount>
 								<BreakdownUnit>{tokenSymbol}</BreakdownUnit>
 								<BreakdownRate>
 									{formatWeiHelper(
-										rewardStream.minus(givBackStream),
+										rewardStream - givBackStream,
 									)}
 								</BreakdownRate>
 								<BreakdownUnit>
@@ -391,7 +397,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										id: 'label./week',
 									})}
 								</BreakdownUnit>
-								{givBackStream != 0 && (
+								{givBackStream != 0n && (
 									<>
 										<GIVbackStreamDesc>
 											{formatMessage({
@@ -429,7 +435,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 									</>
 								)}
 							</BreakdownRow>
-							{!regenStreamConfig && givback.gt(0) && (
+							{!regenStreamConfig && givback > 0n && (
 								<BreakdownRow>
 									<BreakdownTitle>
 										<BreakdownIcon>
@@ -490,7 +496,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								buttonType='primary'
 								onClick={onHarvest}
 								disabled={
-									sumLiquid.eq(0) ||
+									sumLiquid === 0n ||
 									state === HarvestStates.HARVESTING
 								}
 								loading={state === HarvestStates.HARVESTING}
@@ -543,12 +549,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 interface IEarnedBreakDownProps {
 	poolStakingConfig: PoolStakingConfig;
 	tokenDistroHelper: TokenDistroHelper;
-	setRewardLiquidPart: Dispatch<SetStateAction<EthBigNumber>>;
-	setEarnedStream: Dispatch<SetStateAction<BigNumber>>;
+	setRewardLiquidPart: Dispatch<SetStateAction<bigint>>;
+	setEarnedStream: Dispatch<SetStateAction<bigint>>;
 	regenStreamConfig?: RegenStreamConfig;
-	rewardLiquidPart: EthBigNumber;
+	rewardLiquidPart: bigint;
 	tokenSymbol: string;
-	earnedStream: BigNumber;
+	earnedStream: bigint;
 }
 
 const EarnedBreakDown: FC<IEarnedBreakDownProps> = ({
@@ -574,7 +580,7 @@ const EarnedBreakDown: FC<IEarnedBreakDownProps> = ({
 		}
 	}, [earned, tokenDistroHelper]);
 
-	return earned && earned.gt(0) ? (
+	return earned && earned > 0n ? (
 		<BreakdownRow>
 			<BreakdownTitle>
 				<BreakdownIcon>
