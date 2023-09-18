@@ -71,7 +71,9 @@ interface IStyledImageProps {
 }
 
 const StyledImage = styled(Image)<IStyledImageProps>`
-	transition: box-shadow 0.2s ease, transform 0.2s ease;
+	transition:
+		box-shadow 0.2s ease,
+		transform 0.2s ease;
 	border: 0.18 solid ${brandColors.mustard[500]};
 	border-radius: 4px;
 	box-shadow: 0px 0.76px 4.6px 1.14px rgba(225, 69, 141, 0.3);
