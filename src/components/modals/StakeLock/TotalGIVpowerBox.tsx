@@ -6,7 +6,6 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import BigNumber from 'bignumber.js';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
@@ -14,21 +13,22 @@ import { useAppSelector } from '@/features/hooks';
 import { WrappedSpinner } from '@/components/Spinner';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { getGIVpowerOnChain } from '@/lib/stakingPool';
+import { useAccount, useChainId } from 'wagmi';
 
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
 	const values = useAppSelector(state => state.subgraph);
-	const { account, chainId, library } = useWeb3React();
+	const chainId = useChainId();
+	const { address } = useAccount();
 
 	useEffect(() => {
 		async function fetchTotalGIVpower() {
 			try {
-				if (!account || !chainId) return;
+				if (!address || !chainId) return;
 				// try to get the GIVpower from the contract
 				const _totalGIVpower = await getGIVpowerOnChain(
-					account,
-					chainId!,
-					library,
+					address,
+					chainId,
 				);
 				// if we can get the GIVpower from the contract, we use that
 				if (_totalGIVpower) {
@@ -47,7 +47,7 @@ const TotalGIVpowerBox = () => {
 		}
 
 		fetchTotalGIVpower();
-	}, [account, chainId, library, values]);
+	}, [address, chainId, values]);
 
 	return (
 		<BoxContainer>
