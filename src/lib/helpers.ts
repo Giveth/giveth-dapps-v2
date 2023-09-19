@@ -16,7 +16,6 @@ import { parseEther, parseUnits } from 'viem';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
-import { networksParams } from '@/helpers/blockchain';
 import config from '@/configuration';
 import { AddressZero } from './constants/constants';
 
@@ -52,13 +51,13 @@ export const thousandsSeparator = (x?: string | number): string | undefined => {
 };
 
 export const formatTxLink = (networkId?: number, txHash?: string) => {
-	if (!networkId || !txHash || !networksParams[networkId]) return '';
-	return `${networksParams[networkId].blockExplorerUrls[0]}tx/${txHash}`;
+	if (!networkId || !txHash || !config.NETWORKS_CONFIG[networkId]) return '';
+	return `${config.NETWORKS_CONFIG[networkId].blockExplorers?.default}/tx/${txHash}`;
 };
 
 export function formatWalletLink(chainId?: number, address?: string) {
-	if (!address || !chainId || !networksParams[chainId]) return '';
-	return `${networksParams[chainId]?.blockExplorerUrls[0]}/address/${address}`;
+	if (!address || !chainId || !config.NETWORKS_CONFIG[chainId]) return '';
+	return `${config.NETWORKS_CONFIG[chainId]?.blockExplorers?.default}/address/${address}`;
 }
 
 export const durationToYMDh = (
@@ -481,10 +480,10 @@ export function pollEvery(fn: Function, delay: any) {
 }
 
 export const networkInfo = (networkId?: number) => {
-	if (!networkId || !networksParams[networkId]) return {};
-	const info = networksParams[networkId];
+	if (!networkId || !config.NETWORKS_CONFIG[networkId]) return {};
+	const info = config.NETWORKS_CONFIG[networkId];
 	return {
-		networkName: info.chainName,
+		networkName: info.name,
 		networkToken: info.nativeCurrency.symbol,
 	};
 };
