@@ -177,7 +177,7 @@ const SocialProfile = () => {
 							{twitterData?.socialNetworkId ??
 								`${formatMessage({
 									id: 'label.connect_to',
-								})} TWITTER`}
+								})} X (Twitter)`}
 						</ButtonSocial>
 						{twitterData?.socialNetworkId && (
 							<RemoveButton
