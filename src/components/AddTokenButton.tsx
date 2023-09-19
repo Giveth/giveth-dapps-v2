@@ -3,10 +3,9 @@ import Image from 'next/image';
 import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
-import { addToken } from '@/lib/metamask';
 import { Flex } from './styled-components/Flex';
-import StorageLabel from '@/lib/localStorage';
 import { Address } from '@/types/config';
+import { addToken } from '@/lib/metamask';
 
 interface IAddGIVTokenButton {
 	chainId: number;
@@ -23,10 +22,9 @@ export const AddTokenButton: FC<IAddGIVTokenButton> = ({
 }) => {
 	const [show, setShow] = useState(false);
 
-	const { connector: activeConnector, isConnected } = useAccount();
+	const { connector: activeConnector } = useAccount();
 
 	useEffect(() => {
-		const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
 		setShow(activeConnector?.id.toLowerCase() === '"metamask"');
 	}, []);
 	return show ? (
