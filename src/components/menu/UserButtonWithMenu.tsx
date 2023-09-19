@@ -2,7 +2,6 @@ import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount, useChainId, useNetwork } from 'wagmi';
-import { networksParams } from '@/helpers/blockchain';
 import { shortenAddress } from '@/lib/helpers';
 import {
 	MenuAndButtonContainer,
@@ -28,6 +27,7 @@ import { FlexSpacer } from '../styled-components/Flex';
 import { ItemsProvider } from '@/context/Items.context';
 import { SignWithWalletModal } from '../modals/SignWithWalletModal';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
+import config from '@/configuration';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -145,7 +145,7 @@ const HeaderUserButton = ({}) => {
 					{formatMessage({
 						id: 'label.connected_to',
 					})}{' '}
-					{(chainId && networksParams[chainId]?.chainName) ||
+					{(chainId && config.NETWORKS_CONFIG[chainId]?.name) ||
 						chain?.name}
 				</WBNetwork>
 			</WBInfo>
