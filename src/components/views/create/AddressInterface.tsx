@@ -10,7 +10,6 @@ import {
 } from '@giveth/ui-design-system';
 import config from '@/configuration';
 import { EInputs } from '@/components/views/create/CreateProject';
-import { networksParams } from '@/helpers/blockchain';
 import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
@@ -49,7 +48,8 @@ const AddressInterface = ({
 						{formatMessage(
 							{ id: 'label.chain_address' },
 							{
-								chainName: networksParams[networkId].chainName,
+								chainName:
+									config.NETWORKS_CONFIG[networkId].name,
 							},
 						)}
 					</Flex>
@@ -70,7 +70,7 @@ const AddressInterface = ({
 							},
 							{
 								chainName:
-									config.NETWORKS_CONFIG[networkId].chainName,
+									config.NETWORKS_CONFIG[networkId].name,
 							},
 						)}
 					</GLink>
