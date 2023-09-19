@@ -70,7 +70,6 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['Etherscan'],
 		subgraphAddress:
 			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-goerli/1.5.0',
 		coingeckoChainName: 'ethereum',
@@ -127,7 +126,6 @@ const config: EnvConfig = {
 			maxPriorityFeePerGas: (1e9).toString(),
 		},
 
-		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
 			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-gnosischain/1.5.1',
 		coingeckoChainName: 'xdai',
@@ -277,7 +275,6 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['PolygonScan'],
 		coingeckoChainName: 'polygon-pos',
 		chainLogo: (logoSize?: number) => <IconPolygon size={logoSize} />,
 	},
@@ -287,7 +284,6 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['GoerliOptimismScan'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-staging',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
@@ -315,7 +311,6 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['CeloScan'],
 		coingeckoChainName: 'celo',
 		chainLogo: (logoSize?: number) => <IconCelo size={logoSize} />,
 	},
