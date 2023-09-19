@@ -52,12 +52,12 @@ export const thousandsSeparator = (x?: string | number): string | undefined => {
 
 export const formatTxLink = (networkId?: number, txHash?: string) => {
 	if (!networkId || !txHash || !config.NETWORKS_CONFIG[networkId]) return '';
-	return `${config.NETWORKS_CONFIG[networkId].blockExplorers?.default}/tx/${txHash}`;
+	return `${config.NETWORKS_CONFIG[networkId].blockExplorers?.default.url}/tx/${txHash}`;
 };
 
 export function formatWalletLink(chainId?: number, address?: string) {
 	if (!address || !chainId || !config.NETWORKS_CONFIG[chainId]) return '';
-	return `${config.NETWORKS_CONFIG[chainId]?.blockExplorers?.default}/address/${address}`;
+	return `${config.NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/address/${address}`;
 }
 
 export const durationToYMDh = (
