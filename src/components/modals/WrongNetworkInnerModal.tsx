@@ -7,9 +7,9 @@ import { useAccount } from 'wagmi';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
-import { networksParams } from '@/helpers/blockchain';
 import { jointItems } from '@/helpers/text';
 import SwitchNetwork from './SwitchNetwork';
+import config from '@/configuration';
 
 export interface IWrongNetworkInnerModal {
 	cardName: string;
@@ -31,7 +31,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 	};
 
 	const chainNames = targetNetworks.map(
-		network => networksParams[network].chainName,
+		network => config.NETWORKS_CONFIG[network].name,
 	);
 
 	const chainsStr = jointItems(chainNames);
