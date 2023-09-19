@@ -3,7 +3,7 @@ export const regexList = {
 	website:
 		/^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
 	twitter:
-		/(?:https?:)?\/\/(?:www\.|m\.)?(twitter\.com\/(\w{2,15})|x\.com)\/?(?:\?\S+)?(?:\#\S+)?$/,
+		/(?:https?:)?\/\/(?:www\.|m\.)?(twitter\.com\/(\w{2,15})|x\.com(?:\/\w+)?)\/?(?:\?\S+)?(?:\#\S+)?$/,
 	facebook:
 		/(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w\-]*\/)?(?:profile.php\?id=(?=\d.*))?([\w\-]*)?/,
 	instagram:
