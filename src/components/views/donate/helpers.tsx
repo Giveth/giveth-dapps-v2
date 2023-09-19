@@ -1,8 +1,8 @@
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { networksParams } from '@/helpers/blockchain';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { IWalletAddress } from '@/apollo/types/types';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
+import config from '@/configuration';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -62,11 +62,11 @@ export const getNetworkIds = (
 };
 
 export const getNetworkNames = (networks: number[], text: string) => {
-	return networks.map((i, index) => {
-		const name = networksParams[i]?.chainName;
+	return networks.map((network, index) => {
+		const name = config.NETWORKS_CONFIG[network]?.name;
 		const lastLoop = networks.length === index + 1;
 		return (
-			<span key={i}>
+			<span key={network}>
 				{name}
 				{!lastLoop && ' ' + text + ' '}
 			</span>
