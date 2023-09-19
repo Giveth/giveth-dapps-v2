@@ -1,3 +1,4 @@
+import { celo, gnosis, mainnet, optimism, polygon } from 'viem/chains';
 import {
 	EnvConfig,
 	StakingPlatform,
@@ -52,7 +53,7 @@ const config: EnvConfig = {
 
 	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
-		...networksParams[1],
+		...mainnet,
 
 		DAI_TOKEN_ADDRESS: '0x6b175474e89094c44da98b954eedeac495271d0f',
 		PFP_CONTRACT_ADDRESS: '0x78fde77737d5b9ab32fc718c9535c7f1b8ce84db',
@@ -228,7 +229,7 @@ const config: EnvConfig = {
 
 	GNOSIS_CONFIG: {
 		nodeUrl: networksParams[100]?.rpcUrls[0],
-		...networksParams[100],
+		...gnosis,
 		gasPreference: {
 			maxFeePerGas: (2e9).toString(),
 			maxPriorityFeePerGas: (1e9).toString(),
@@ -374,7 +375,7 @@ const config: EnvConfig = {
 
 	POLYGON_CONFIG: {
 		nodeUrl: networksParams[137]?.rpcUrls[0],
-		...networksParams[137],
+		...polygon,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -386,7 +387,7 @@ const config: EnvConfig = {
 
 	OPTIMISM_CONFIG: {
 		nodeUrl: networksParams[10]?.rpcUrls[0],
-		...networksParams[10],
+		...optimism,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -415,7 +416,7 @@ const config: EnvConfig = {
 
 	CELO_CONFIG: {
 		nodeUrl: networksParams[42220]?.rpcUrls[0],
-		...networksParams[42220],
+		...celo,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
