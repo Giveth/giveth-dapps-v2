@@ -20,8 +20,9 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { WrongNetworkInnerModal } from '@/components//modals/WrongNetworkInnerModal';
 import NetworkLogo from './NetworkLogo';
-import { networksParams } from '@/helpers/blockchain';
 import { ScaleRate, ScaleRateBig } from '@/lib/constants/constants';
+import config from '@/configuration';
+
 interface IRewardCardProps {
 	cardName: string;
 	title: string;
@@ -83,7 +84,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 							<ChainInfo alignItems='center'>
 								<NetworkLogo chainId={network} logoSize={16} />
 								<ChainName styleType='Small'>
-									{networksParams[network].chainName}
+									{config.NETWORKS_CONFIG[network].name}
 								</ChainName>
 							</ChainInfo>
 						</CardHeader>
