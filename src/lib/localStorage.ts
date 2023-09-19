@@ -19,6 +19,8 @@ const StorageLabel = {
 	LOCALE: 'locale',
 	CHAINVINEREFERRED: 'chainvineReferred',
 	PASSPORT: 'passport',
+	WAGMI_WALLET: 'wagmi.wallet',
+	WAGMI_CONNECTED: 'wagmi.connected',
 };
 
 export const setWithExpiry = (key: string, value: any, ttl: number) => {
