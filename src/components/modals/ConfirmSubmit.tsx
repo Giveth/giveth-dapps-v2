@@ -56,13 +56,16 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 				<BlockExplorerLink
 					as='a'
 					href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorers
-						?.default}
+						?.default.url}
 			/tx/${txHash}`}
 					target='_blank'
 					size='Big'
 				>
 					View on{' '}
-					{config.NETWORKS_CONFIG[chainId!]?.blockExplorerName}
+					{
+						config.NETWORKS_CONFIG[chainId!]?.blockExplorers
+							?.default.name
+					}
 					&nbsp;
 					<IconExternalLink size={16} color={'currentColor'} />
 				</BlockExplorerLink>
@@ -98,12 +101,13 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 			<BlockExplorerLink
 				as='a'
 				href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorers
-					?.default}
+					?.default.url}
 							/tx/${txHash}`}
 				target='_blank'
 				size='Big'
 			>
-				View on {config.NETWORKS_CONFIG[chainId!]?.blockExplorerName}
+				View on{' '}
+				{config.NETWORKS_CONFIG[chainId!]?.blockExplorers?.default.name}
 				&nbsp;
 				<IconExternalLink size={16} color={'currentColor'} />
 			</BlockExplorerLink>
@@ -136,13 +140,16 @@ export const ErrorInnerModal: FC<IErrorProps> = ({
 				<BlockExplorerLink
 					as='a'
 					href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorers
-						?.default}
+						?.default.url}
 			/tx/${txHash}`}
 					target='_blank'
 					size='Big'
 				>
 					View on{' '}
-					{config.NETWORKS_CONFIG[chainId!]?.blockExplorerName}
+					{
+						config.NETWORKS_CONFIG[chainId!]?.blockExplorers
+							?.default.name
+					}
 					&nbsp;
 					<IconExternalLink size={16} color={'currentColor'} />
 				</BlockExplorerLink>
