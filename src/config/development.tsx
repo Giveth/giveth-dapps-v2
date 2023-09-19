@@ -1,5 +1,12 @@
 import React from 'react';
 import {
+	celoAlfajores,
+	gnosis,
+	goerli,
+	optimismGoerli,
+	polygon,
+} from 'viem/chains';
+import {
 	EnvConfig,
 	StakingPlatform,
 	StakingType,
@@ -57,7 +64,7 @@ const config: EnvConfig = {
 
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
-		...networksParams[5],
+		...goerli,
 		DAI_TOKEN_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',
 		DAI_BUY_LINK: '',
 		PFP_CONTRACT_ADDRESS: '0x9F8c0e0353234F6f644fc7AF84Ac006f02cecE77',
@@ -119,7 +126,7 @@ const config: EnvConfig = {
 
 	GNOSIS_CONFIG: {
 		nodeUrl: networksParams[100]?.rpcUrls[0],
-		...networksParams[100],
+		...gnosis,
 		gasPreference: {
 			maxFeePerGas: (2e9).toString(),
 			maxPriorityFeePerGas: (1e9).toString(),
@@ -272,7 +279,7 @@ const config: EnvConfig = {
 
 	POLYGON_CONFIG: {
 		nodeUrl: networksParams[137]?.rpcUrls[0],
-		...networksParams[137],
+		...polygon,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -283,7 +290,7 @@ const config: EnvConfig = {
 
 	OPTIMISM_CONFIG: {
 		nodeUrl: networksParams[420]?.rpcUrls[0],
-		...networksParams[420],
+		...optimismGoerli,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -312,7 +319,7 @@ const config: EnvConfig = {
 
 	CELO_CONFIG: {
 		nodeUrl: networksParams[44787]?.rpcUrls[0],
-		...networksParams[44787],
+		...celoAlfajores,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
