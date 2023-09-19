@@ -96,7 +96,7 @@ const { chains, publicClient } = configureChains(
 
 const { connectors } = getDefaultWallets({
 	appName: 'giveth-test',
-	projectId: '5f94a1e90e8e0c6ed61d1f311422609d',
+	projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!,
 	chains,
 });
 
