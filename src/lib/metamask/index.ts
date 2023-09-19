@@ -2,11 +2,7 @@ import { captureException } from '@sentry/nextjs';
 import { erc20ABI } from 'wagmi';
 import { getContract } from 'wagmi/actions';
 import config from '@/configuration';
-import UNI_Json from '@/artifacts/UNI.json';
-import { networksParams } from '@/helpers/blockchain';
 import { Address } from '@/types/config';
-
-const { abi: UNI_ABI } = UNI_Json;
 
 declare let window: any;
 
@@ -93,13 +89,13 @@ export async function addNetwork(network: number): Promise<void> {
 	const { ethereum } = window;
 	await ethereum.request({
 		method: 'wallet_addEthereumChain',
-		params: [networksParams[network]],
+		params: [config.NETWORKS_CONFIG[network]],
 	});
 }
 
 export async function switchNetwork(network: number): Promise<void> {
 	const { ethereum } = window;
-	const { chainId } = networksParams[network];
+	const { id: chainId } = config.NETWORKS_CONFIG[network];
 
 	try {
 		const res = await ethereum.request({
