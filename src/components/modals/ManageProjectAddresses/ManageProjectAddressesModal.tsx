@@ -14,7 +14,6 @@ import { IProject, IWalletAddress } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { NetworkWalletAddress } from './NetworkWalletAddress';
-import { networksParams } from '@/helpers/blockchain';
 import { AddNewAddress } from './AddNewAddress';
 import type { IModal } from '@/types/common';
 
@@ -77,9 +76,9 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 								},
 								{
 									chainName: selectedWallet.networkId
-										? networksParams[
+										? config.NETWORKS_CONFIG[
 												selectedWallet.networkId
-										  ].chainName
+										  ].name
 										: '',
 								},
 							)}
