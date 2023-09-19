@@ -291,7 +291,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 							linkType='texty'
 							size='small'
 							icon={<IconExternalLink size={16} />}
-							href={`${config.NETWORKS_CONFIG[chainId].blockExplorers?.default}/tx/${txHash}`}
+							href={`${config.NETWORKS_CONFIG[chainId].blockExplorers?.default.url}/tx/${txHash}`}
 							target='_blank'
 						/>
 					</BriefContainer>
