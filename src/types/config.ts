@@ -109,19 +109,6 @@ export interface RegenStreamConfig {
 	tokenAddressOnUniswapV2: Address;
 }
 
-export interface INetworkParam {
-	chainId: string;
-	chainName: string;
-	nativeCurrency: {
-		name: string;
-		symbol: string;
-		decimals: number;
-	};
-	blockExplorerUrls: Array<string>;
-	rpcUrls: Array<string>;
-	iconUrls?: Array<string>;
-}
-
 export interface NetworkConfig extends Chain {
 	nodeUrl: string;
 	blockExplorerName: string[];
