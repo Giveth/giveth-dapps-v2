@@ -138,7 +138,7 @@ export const NFTMintIndex = () => {
 									<ButtonLink
 										linkType='texty'
 										label='View transaction on etherscan'
-										href={`${config.MAINNET_CONFIG.blockExplorers?.default}/tx/${txHash}`}
+										href={`${config.MAINNET_CONFIG.blockExplorers?.default.url}/tx/${txHash}`}
 									/>
 									<MintAgainButton
 										label={formatMessage({
