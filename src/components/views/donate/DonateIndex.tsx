@@ -8,9 +8,9 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import dynamic from 'next/dynamic';
+import { useChainId } from 'wagmi';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from '../../DonateSocialBox';
@@ -95,7 +95,7 @@ const DonateIndex: FC = () => {
 };
 
 const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	return (
 		<TxLink>
 			<span>Donation to {title + ' '}</span>

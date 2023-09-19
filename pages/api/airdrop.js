@@ -1,11 +1,11 @@
-import { utils } from 'ethers';
-
+import { getAddress } from 'viem';
 import airdrops from './merkle_distributor_xdai_result.json';
+
 const handler = (req, res) => {
 	const { body, method } = req;
 	try {
 		if (method === 'POST') {
-			const address = utils.getAddress(body.address.toLowerCase());
+			const address = getAddress(body.address.toLowerCase());
 			const claim = airdrops.claims[address];
 			if (claim) {
 				res.status(200).json(claim);

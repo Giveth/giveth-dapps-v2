@@ -10,9 +10,8 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import { utils } from 'ethers';
-
 import { useChainId } from 'wagmi';
+import { isAddress } from 'viem';
 import { compareAddresses } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
@@ -118,7 +117,7 @@ const WalletAddressInput: FC<IProps> = ({
 				setIsValidating(false);
 				return true;
 			}
-			if (!utils.isAddress(_address)) {
+			if (!isAddress(_address)) {
 				setIsValidating(false);
 				return formatMessage({ id: 'label.eth_addres_not_valid' });
 			}

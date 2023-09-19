@@ -56,8 +56,8 @@ export const getNetworkIds = (
 		networkIds[i.networkId] = true;
 	});
 	const networkIdArrays = Object.keys(networkIds).map(i => Number(i));
-	return networkIdArrays.filter(networkId =>
-		recipientAddressesNetwork?.includes(networkId),
+	return networkIdArrays.filter(
+		networkId => recipientAddressesNetwork?.includes(networkId),
 	);
 };
 

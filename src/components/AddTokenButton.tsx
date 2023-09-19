@@ -1,37 +1,39 @@
-import { Web3Provider } from '@ethersproject/providers';
 import { brandColors, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { EWallets } from '@/lib/wallet/walletTypes';
+import { useAccount } from 'wagmi';
 import { addToken } from '@/lib/metamask';
 import { Flex } from './styled-components/Flex';
 import StorageLabel from '@/lib/localStorage';
+import { Address } from '@/types/config';
 
 interface IAddGIVTokenButton {
-	provider: Web3Provider | null;
+	chainId: number;
 	showText?: boolean;
 	tokenSymbol?: string;
-	tokenAddress?: string;
+	tokenAddress?: Address;
 }
 
 export const AddTokenButton: FC<IAddGIVTokenButton> = ({
-	provider,
+	chainId,
 	showText = true,
 	tokenSymbol = 'GIV',
 	tokenAddress,
 }) => {
 	const [show, setShow] = useState(false);
 
+	const { connector: activeConnector, isConnected } = useAccount();
+
 	useEffect(() => {
 		const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
-		setShow(selectedWallet === EWallets.METAMASK);
+		setShow(activeConnector?.id.toLowerCase() === '"metamask"');
 	}, []);
 	return show ? (
 		<AddGivButton
 			onClick={() => {
-				if (provider) {
-					addToken(provider, tokenAddress);
+				if (chainId) {
+					addToken(chainId, tokenAddress);
 				}
 			}}
 		>

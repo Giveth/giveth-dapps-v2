@@ -12,8 +12,8 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import { Col, Row } from '@giveth/ui-design-system';
+import { useAccount } from 'wagmi';
 import { Flex } from '../styled-components/Flex';
 import {
 	GIVpowerTopContainer,
@@ -66,7 +66,7 @@ import { getTotalGIVpower } from '@/helpers/givpower';
 
 export function TabPowerTop() {
 	const { formatMessage } = useIntl();
-	const { account } = useWeb3React();
+	const { address } = useAccount();
 	const values = useAppSelector(state => state.subgraph);
 	const givPower = getTotalGIVpower(values);
 	const givPowerFormatted = formatWeiHelper(givPower.total);
@@ -96,7 +96,7 @@ export function TabPowerTop() {
 					</Col>
 					<Col xs={12} sm={4}>
 						<GivPowerCardContainer>
-							{account ? (
+							{address ? (
 								<>
 									<Caption>
 										{formatMessage({

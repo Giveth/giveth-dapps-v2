@@ -2,9 +2,7 @@ import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { IntlProvider } from 'react-intl';
 import { Toaster } from 'react-hot-toast';
-import { Web3ReactProvider } from '@web3-react/core';
 import { ApolloProvider } from '@apollo/client';
-import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
 import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
@@ -79,10 +77,6 @@ function renderSnippet() {
 	return snippet.min(opts);
 }
 
-function getLibrary(provider: ExternalProvider) {
-	return new Web3Provider(provider);
-}
-
 const { chains, publicClient } = configureChains(
 	[
 		mainnet,
@@ -107,7 +101,7 @@ const { connectors } = getDefaultWallets({
 });
 
 const wagmiConfig = createConfig({
-	autoConnect: true,
+	autoConnect: false,
 	publicClient: publicClient,
 	connectors,
 });
@@ -163,47 +157,45 @@ function MyApp({ Component, pageProps }: AppProps) {
 					<ApolloProvider client={apolloClient}>
 						<WagmiConfig config={wagmiConfig}>
 							<RainbowKitProvider chains={chains}>
-								<Web3ReactProvider getLibrary={getLibrary}>
-									{isMaintenanceMode ? (
-										<MaintenanceIndex />
-									) : (
-										<>
-											<NotificationController />
-											<GeneralController />
-											<PriceController />
-											<SubgraphController />
-											<UserController />
-											<HeaderWrapper />
-											{isGIVeconomyRoute(
-												router.route,
-											) && <GIVeconomyTab />}
-											{(pageProps as any).errorStatus ? (
-												<ErrorsIndex
-													statusCode={
-														(pageProps as any)
-															.errorStatus
-													}
-												/>
-											) : (
-												<Component {...pageProps} />
-											)}
-											{process.env.NEXT_PUBLIC_ENV ===
-												'production' && (
-												<Script
-													id='segment-script'
-													strategy='afterInteractive'
-													dangerouslySetInnerHTML={{
-														__html: renderSnippet(),
-													}}
-												/>
-											)}
+								{isMaintenanceMode ? (
+									<MaintenanceIndex />
+								) : (
+									<>
+										<NotificationController />
+										<GeneralController />
+										<PriceController />
+										<SubgraphController />
+										<UserController />
+										<HeaderWrapper />
+										{isGIVeconomyRoute(router.route) && (
+											<GIVeconomyTab />
+										)}
+										{(pageProps as any).errorStatus ? (
+											<ErrorsIndex
+												statusCode={
+													(pageProps as any)
+														.errorStatus
+												}
+											/>
+										) : (
+											<Component {...pageProps} />
+										)}
+										{process.env.NEXT_PUBLIC_ENV ===
+											'production' && (
+											<Script
+												id='segment-script'
+												strategy='afterInteractive'
+												dangerouslySetInnerHTML={{
+													__html: renderSnippet(),
+												}}
+											/>
+										)}
 
-											<FooterWrapper />
-											<ModalController />
-											<PfpController />
-										</>
-									)}
-								</Web3ReactProvider>
+										<FooterWrapper />
+										<ModalController />
+										<PfpController />
+									</>
+								)}
 							</RainbowKitProvider>
 						</WagmiConfig>
 					</ApolloProvider>

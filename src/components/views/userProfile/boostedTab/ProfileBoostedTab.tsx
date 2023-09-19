@@ -3,7 +3,7 @@ import { FC, useCallback } from 'react';
 import { captureException } from '@sentry/nextjs';
 
 import { Col, Row } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
+import { useChainId } from 'wagmi';
 import { IUserProfileView } from '../UserProfile.view';
 import BoostsTable from './BoostsTable';
 import { IPowerBoosting } from '@/apollo/types/types';
@@ -33,7 +33,7 @@ export const ProfileBoostedTab: FC<IUserProfileView> = () => {
 	const { user } = useProfileContext();
 	const { loading, boosts, order, setBoosts, setLoading, changeOrder } =
 		useFetchPowerBoostingInfo(user);
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const { userData } = useAppSelector(state => state.user);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
 	const values = useAppSelector(state => state.subgraph);

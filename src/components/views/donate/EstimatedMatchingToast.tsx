@@ -9,8 +9,8 @@ import {
 } from '@giveth/ui-design-system';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import BigNumber from 'bignumber.js';
+import { useChainId } from 'wagmi';
 import Divider from '@/components/Divider';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -47,11 +47,9 @@ const EstimatedMatchingToast = ({
 	const { estimatedMatching } = projectData || {};
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
-
-	const web3Context = useWeb3React();
-	const { chainId } = web3Context;
 	const [tokenPrice, setTokenPrice] = useState<number>();
 
+	const chainId = useChainId();
 	const givPrice = useAppSelector(state => state.price.givPrice);
 	const givTokenPrice = new BigNumber(givPrice).toNumber();
 	const isMainnet = chainId === config.MAINNET_NETWORK_NUMBER;

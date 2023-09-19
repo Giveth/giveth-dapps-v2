@@ -3,8 +3,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { GLink, H2, Lead, brandColors, Button } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
-
+import { useAccount, useDisconnect } from 'wagmi';
 import { ArrowButton, Card } from './common';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
 import { formatWeiHelper } from '@/helpers/number';
@@ -154,15 +153,16 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 		getClaimData,
 	} = useClaim();
 
-	const { account, deactivate } = useWeb3React();
+	const { address } = useAccount();
+	const { disconnect } = useDisconnect();
 
 	useEffect(() => {
 		// Auto get claim data on wallet change
-		if (walletIsChanged && account) {
+		if (walletIsChanged && address) {
 			setWalletIsChanged(false);
 			getClaimData();
 		}
-	}, [walletIsChanged, account, getClaimData]);
+	}, [walletIsChanged, address, getClaimData]);
 
 	let title;
 	let desc;
@@ -194,7 +194,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 			break;
 		case GiveDropStateType.Success:
 			title = `You have ${formatWeiHelper(
-				totalAmount.div(10),
+				totalAmount / 10n,
 			)} GIV to claim.`;
 			desc = 'Congrats, your GIVdrop awaits. Go claim it!';
 			bg = {
@@ -261,7 +261,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 									<ConnectButton
 										buttonType='secondary'
 										onClick={() => {
-											deactivate();
+											disconnect();
 											setWalletIsChanged(true);
 											dispatch(setShowWalletModal(true));
 										}}
@@ -280,7 +280,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 									<WalletDisplayerInputContainer>
 										<WalletDisplayerInput
 											disabled
-											value={account || ''}
+											value={address || ''}
 											placeholder='Please connect your wallet'
 										/>
 										<WalletCheckButton

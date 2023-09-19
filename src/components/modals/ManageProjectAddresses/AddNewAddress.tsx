@@ -1,8 +1,8 @@
 import { Button } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { getAddress, isAddress } from 'ethers/lib/utils';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { getAddress, isAddress } from 'viem';
 import { IProject, IWalletAddress } from '@/apollo/types/types';
 import Input from '../../Input';
 import { requiredOptions } from '@/lib/constants/regex';
@@ -11,6 +11,7 @@ import { ADD_RECIPIENT_ADDRESS_TO_PROJECT } from '@/apollo/gql/gqlProjects';
 import InlineToast, { EToastType } from '../../toasts/InlineToast';
 import { networksParams } from '@/helpers/blockchain';
 import { suggestNewAddress } from '@/lib/helpers';
+import { Address } from '@/types/config';
 
 interface IAddNewAddress {
 	project: IProject;
@@ -44,7 +45,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 		const { address } = formData;
 		console.log('ASD1', address);
 		try {
-			const _address = getAddress(address) as `0x${string}`;
+			const _address = getAddress(address) as Address;
 			console.log('ASD2', _address);
 			const { data } = await client.mutate({
 				mutation: ADD_RECIPIENT_ADDRESS_TO_PROJECT,

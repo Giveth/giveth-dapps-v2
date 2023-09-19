@@ -1,8 +1,8 @@
 import { Caption, IconGasStation } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
+import { useChainId } from 'wagmi';
 import config from '@/configuration';
 import { Flex } from '@/components/styled-components/Flex';
 import {
@@ -14,7 +14,7 @@ import SwitchNetwork from '@/components/modals/SwitchNetwork';
 
 const SaveGasFees: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
 	const [showModal, setShowModal] = useState(false);
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const { formatMessage } = useIntl();
 
 	if (

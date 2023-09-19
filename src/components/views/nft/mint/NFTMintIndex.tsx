@@ -11,9 +11,9 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
-import { useWeb3React } from '@web3-react/core';
 import { Col, Container, Row } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
+import { useAccount } from 'wagmi';
 import { OvalVerticalGradient, OvalHorizontalGradient } from '../common.styles';
 import { MintCard } from '@/components/cards/MintCard';
 import config from '@/configuration';
@@ -27,7 +27,7 @@ import { isUserRegistered } from '@/lib/helpers';
 export const NFTMintIndex = () => {
 	// const [showEligibilityModal, setShowEligibilityModal] = useState(false);
 	const { formatMessage } = useIntl();
-	const { account } = useWeb3React();
+	const { address } = useAccount();
 	const { step, setStep, qty, tx: txHash } = usePFPMintData();
 	const { isSignedIn, userData } = useAppSelector(state => state.user);
 	const router = useRouter();
@@ -104,7 +104,7 @@ export const NFTMintIndex = () => {
 										href={
 											config.RARIBLE_ADDRESS +
 											'user/' +
-											account +
+											address +
 											'/owned'
 										}
 										target='_blank'

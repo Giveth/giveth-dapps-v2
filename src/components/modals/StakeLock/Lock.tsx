@@ -9,9 +9,10 @@ import {
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
-import { useWeb3React } from '@web3-react/core';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
+import { waitForTransaction } from '@wagmi/core';
+import { useChainId } from 'wagmi';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
@@ -57,11 +58,11 @@ const LockModal: FC<ILockModalProps> = ({
 	setShowModal,
 }) => {
 	const { formatMessage } = useIntl();
-	const [amount, setAmount] = useState('0');
+	const [amount, setAmount] = useState(0n);
 	const [round, setRound] = useState(0);
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
-	const { library } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const chainId = useChainId();
 	const { stakedAmount: stakedLpAmount } = useStakingPool(poolStakingConfig);
 
 	const { network: poolNetwork } = poolStakingConfig;
@@ -71,7 +72,7 @@ const LockModal: FC<ILockModalProps> = ({
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 
 	const maxAmount = isGIVpower
-		? stakedLpAmount.sub(userGIVLocked.balance)
+		? stakedLpAmount - BigInt(userGIVLocked.balance)
 		: stakedLpAmount;
 
 	const onLock = async () => {
@@ -87,13 +88,17 @@ const LockModal: FC<ILockModalProps> = ({
 				amount,
 				round,
 				contractAddress,
-				library,
+				chainId,
 			);
 			if (txResponse) {
-				if (txResponse) {
-					const { status } = await txResponse.wait();
-					setLockState(status ? ELockState.BOOST : ELockState.ERROR);
-				}
+				const data = await waitForTransaction({
+					hash: txResponse,
+				});
+				setLockState(
+					data.status === 'success'
+						? ELockState.BOOST
+						: ELockState.ERROR,
+				);
 			} else {
 				setLockState(ELockState.LOCK);
 			}
@@ -160,8 +165,8 @@ const LockModal: FC<ILockModalProps> = ({
 								}}
 								disabled={
 									round === 0 ||
-									amount == '0' ||
-									maxAmount.lt(amount)
+									amount == 0n ||
+									maxAmount <= amount
 								}
 							/>
 							<CancelButton
@@ -190,8 +195,8 @@ const LockModal: FC<ILockModalProps> = ({
 								})}
 								onClick={onLock}
 								disabled={
-									amount == '0' ||
-									maxAmount.lt(amount) ||
+									amount === 0n ||
+									maxAmount < amount ||
 									lockState === ELockState.LOCKING
 								}
 								loading={lockState === ELockState.LOCKING}

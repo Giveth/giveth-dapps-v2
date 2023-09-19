@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { H2, Lead } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
-import { useWeb3React } from '@web3-react/core';
 import { Container } from '@giveth/ui-design-system';
+import { useChainId } from 'wagmi';
 import useClaim from '@/context/claim.context';
 import { formatWeiHelper } from '@/helpers/number';
 import SparkleBurstAnimation from '@/animations/sparkle-burst.json';
@@ -135,7 +135,7 @@ export const CongratulationsCard = () => {
 	const { formatMessage } = useIntl();
 	const [streamValue, setStreamValue] = useState<string>('0');
 	const { totalAmount, resetWallet } = useClaim();
-	const { library } = useWeb3React();
+	const chainId = useChainId();
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
 	useEffect(() => {
@@ -165,10 +165,8 @@ export const CongratulationsCard = () => {
 								id: 'label.you_have_successfuly_claimed',
 							})}
 						</Lead>
-						<Lead>
-							{formatWeiHelper(totalAmount.div(10))} GIV.{' '}
-						</Lead>
-						<AddTokenButton provider={library} showText={false} />
+						<Lead>{formatWeiHelper(totalAmount / 10n)} GIV. </Lead>
+						<AddTokenButton chainId={chainId} showText={false} />
 						<SmileImage>
 							<SparkleBurstContainer>
 								<LottieControl

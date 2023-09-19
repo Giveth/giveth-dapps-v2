@@ -1,9 +1,8 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { P } from '@giveth/ui-design-system';
-import { BigNumber } from 'ethers';
-import { useWeb3React } from '@web3-react/core';
-import { Contract, ethers } from 'ethers';
 import { captureException } from '@sentry/nextjs';
+import { useAccount, useChainId } from 'wagmi';
+import { waitForTransaction } from 'wagmi/actions';
 import { Modal } from '../Modal';
 import { StakingPoolImages } from '../../StakingPoolImages';
 import { AmountInput } from '../../AmountInput';
@@ -15,10 +14,8 @@ import {
 } from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../../styled-components/Switch';
-import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
 import { IModal } from '@/types/common';
 import StakeSteps from './StakeSteps';
-import { ERC20 } from '@/types/contracts';
 import {
 	CancelButton,
 	StakeModalContainer,
@@ -68,49 +65,50 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	regenStreamConfig,
 	setShowModal,
 }) => {
-	const [amount, setAmount] = useState('0');
+	const [amount, setAmount] = useState(0n);
 	const [txHash, setTxHash] = useState('');
 	const [permit, setPermit] = useState<boolean>(false);
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
-	const { chainId, library } = useWeb3React();
+	const chainId = useChainId();
+	const { address } = useAccount();
 	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
 
 	const { title, LM_ADDRESS, POOL_ADDRESS, platform } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
-	useEffect(() => {
-		library?.on('block', async () => {
-			const amountNumber = ethers.BigNumber.from(amount);
-			if (
-				amountNumber.gt(ethers.constants.Zero) &&
-				stakeState === StakeState.APPROVING
-			) {
-				const signer = library.getSigner();
-				const userAddress = await signer.getAddress();
-				const tokenContract = new Contract(
-					POOL_ADDRESS,
-					ERC20_ABI,
-					signer,
-				) as ERC20;
-				const allowance: BigNumber = await tokenContract.allowance(
-					userAddress,
-					LM_ADDRESS,
-				);
-				const amountNumber = ethers.BigNumber.from(amount);
-				const allowanceNumber = ethers.BigNumber.from(
-					allowance.toString(),
-				);
-				if (amountNumber.lte(allowanceNumber)) {
-					setStakeState(StakeState.STAKE);
-				}
-			}
-		});
-		return () => {
-			library.removeAllListeners('block');
-		};
-	}, [library, amount, stakeState]);
+	// useEffect(() => {
+	// 	library?.on('block', async () => {
+	// 		const amountNumber = ethers.BigNumber.from(amount);
+	// 		if (
+	// 			amountNumber.gt(ethers.constants.Zero) &&
+	// 			stakeState === StakeState.APPROVING
+	// 		) {
+	// 			const signer = library.getSigner();
+	// 			const userAddress = await signer.getAddress();
+	// 			const tokenContract = new Contract(
+	// 				POOL_ADDRESS,
+	// 				ERC20_ABI,
+	// 				signer,
+	// 			) as ERC20;
+	// 			const allowance: BigNumber = await tokenContract.allowance(
+	// 				userAddress,
+	// 				LM_ADDRESS,
+	// 			);
+	// 			const amountNumber = ethers.BigNumber.from(amount);
+	// 			const allowanceNumber = ethers.BigNumber.from(
+	// 				allowance.toString(),
+	// 			);
+	// 			if (amountNumber.lte(allowanceNumber)) {
+	// 				setStakeState(StakeState.STAKE);
+	// 			}
+	// 		}
+	// 	});
+	// 	return () => {
+	// 		library.removeAllListeners('block');
+	// 	};
+	// }, [library, amount, stakeState]);
 
 	const onlyApproveMode = useMemo(
 		() => platform === StakingPlatform.ICHI,
@@ -125,24 +123,16 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	}, [onlyApproveMode]);
 
 	const onApprove = async () => {
-		if (amount === '0') return;
-		if (!library) {
-			console.error('library is null');
-			return;
-		}
+		if (amount === 0n || !chainId || !address) return;
 
 		setStakeState(StakeState.APPROVING);
 
-		const signer = library.getSigner();
-
-		const userAddress = await signer.getAddress();
-
 		const isApproved = await approveERC20tokenTransfer(
 			amount,
-			userAddress,
+			address,
 			LM_ADDRESS,
 			POOL_ADDRESS,
-			library,
+			chainId,
 		);
 
 		if (isApproved) {
@@ -159,13 +149,15 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 				amount,
 				POOL_ADDRESS,
 				LM_ADDRESS,
-				library,
+				chainId,
 				permit,
 			);
 			if (txResponse) {
-				setTxHash(txResponse.hash);
+				setTxHash(txResponse);
 				setStakeState(StakeState.CONFIRMING);
-				const { status } = await txResponse.wait();
+				const { status } = await waitForTransaction({
+					hash: txResponse,
+				});
 				setStakeState(status ? StakeState.CONFIRMED : StakeState.ERROR);
 			} else {
 				setStakeState(StakeState.STAKE);
@@ -245,7 +237,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 										stakeState === StakeState.APPROVING
 									}
 									disabled={
-										amount == '0' || maxAmount.lt(amount)
+										amount == 0n || maxAmount < amount
 									}
 								/>
 							)}
@@ -259,7 +251,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 									}
 									onClick={onStake}
 									disabled={
-										amount == '0' || maxAmount.lt(amount)
+										amount === 0n || maxAmount < amount
 									}
 									buttonType='primary'
 									loading={stakeState === StakeState.STAKING}

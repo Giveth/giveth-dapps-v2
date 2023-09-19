@@ -9,13 +9,13 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { useWeb3React } from '@web3-react/core';
+import { useChainId } from 'wagmi';
 import { Flex } from '@/components/styled-components/Flex';
 import { getGIVConfig, getGIVpowerLink } from '@/helpers/givpower';
 
 const GetMoreGIVpowerBanner = () => {
 	const { formatMessage } = useIntl();
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 
 	return (
 		<GetMoreGIVpowerContainer>

@@ -90,7 +90,7 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({
 			{showLockDetailModal && (
 				<LockupDetailsModal
 					setShowModal={setShowLockDetailModal}
-					unstakeable={stakedAmount.sub(userGIVLocked.balance)}
+					unstakeable={stakedAmount - BigInt(userGIVLocked.balance)}
 				/>
 			)}
 		</>

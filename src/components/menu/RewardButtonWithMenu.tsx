@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
+import { useChainId } from 'wagmi';
 import { formatWeiHelper } from '@/helpers/number';
 import {
 	MenuAndButtonContainer,
@@ -103,7 +103,7 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 };
 
 const HeaderRewardButton = () => {
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),
 	);

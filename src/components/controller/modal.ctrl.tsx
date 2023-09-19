@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useAccount } from 'wagmi';
-import WalletModal from '@/components/modals/WalletModal';
 import WelcomeModal from '@/components/modals/WelcomeModal';
 import { FirstWelcomeModal } from '@/components/modals/FirstWelcomeModal';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
@@ -10,7 +9,6 @@ import {
 	setShowCompleteProfile,
 	setShowWelcomeModal,
 	setShowFirstWelcomeModal,
-	setShowWalletModal,
 	setShowSignWithWallet,
 	setShowSearchModal,
 	setShowSwitchNetworkModal,
@@ -60,11 +58,6 @@ const ModalController = () => {
 
 	return (
 		<>
-			{showWalletModal && (
-				<WalletModal
-					setShowModal={state => dispatch(setShowWalletModal(state))}
-				/>
-			)}
 			{showSignWithWallet && (
 				<SignWithWalletModal
 					setShowModal={state =>

@@ -1,4 +1,3 @@
-import { ethers } from 'ethers';
 import { FC } from 'react';
 import { formatWeiHelper } from '@/helpers/number';
 import {
@@ -11,7 +10,7 @@ import { IconFox } from '@/components/Icons/Fox';
 import { IconCult } from '@/components/Icons/Cult';
 
 interface IGIVBoxWithPriceProps {
-	amount: ethers.BigNumber;
+	amount: bigint;
 	price?: string;
 	tokenSymbol?: string;
 }

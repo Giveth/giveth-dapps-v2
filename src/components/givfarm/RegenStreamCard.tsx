@@ -15,16 +15,15 @@ import {
 	P,
 	Subline,
 } from '@giveth/ui-design-system';
-import { constants, BigNumber as EthBignumber } from 'ethers';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
+import { useChainId } from 'wagmi';
 import { durationToString } from '@/lib/helpers';
 import { Bar, GsPTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { RegenStreamConfig, StreamType } from '@/types/config';
-import { BN, formatWeiHelper } from '@/helpers/number';
+import { formatWeiHelper } from '@/helpers/number';
 import { IconFox } from '@/components/Icons/Fox';
 import { IconCult } from '@/components/Icons/Cult';
 import { Flex } from '../styled-components/Flex';
@@ -55,15 +54,11 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	const { formatMessage } = useIntl();
 	const [showModal, setShowModal] = useState(false);
 	const [usdAmount, setUSDAmount] = useState('0');
-	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
-	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
-	const [lockedAmount, setLockedAmount] = useState<EthBignumber>(
-		constants.Zero,
-	);
-	const [claimedAmount, setClaimedAmount] = useState<EthBignumber>(
-		constants.Zero,
-	);
-	const { chainId } = useWeb3React();
+	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
+	const [rewardStream, setRewardStream] = useState(0n);
+	const [lockedAmount, setLockedAmount] = useState(0n);
+	const [claimedAmount, setClaimedAmount] = useState(0n);
+	const chainId = useChainId();
 
 	const {
 		title,
@@ -119,8 +114,8 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		xDaiThirdPartyTokensPrice,
 	]);
 	useEffect(() => {
-		setLockedAmount(BN(tokenDistroBalance.allocatedTokens));
-		setClaimedAmount(BN(tokenDistroBalance.claimed));
+		setLockedAmount(BigInt(tokenDistroBalance.allocatedTokens));
+		setClaimedAmount(BigInt(tokenDistroBalance.claimed));
 	}, [tokenDistroBalance]);
 
 	useEffect(() => {
@@ -149,7 +144,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 						<RateRow>
 							<IconGIVStream size={16} />
 							<StreamRate>
-								{formatWeiHelper(rewardStream)}
+								{formatWeiHelper(rewardStream.toString())}
 							</StreamRate>
 							<StreamRateUnit>
 								{rewardTokenSymbol}
@@ -207,7 +202,9 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 					<div>
 						<AmountInfo alignItems='flex-end' gap='4px'>
 							{getStreamIconWithType(type, 24)}
-							<Amount>{formatWeiHelper(rewardLiquidPart)}</Amount>
+							<Amount>
+								{formatWeiHelper(rewardLiquidPart.toString())}
+							</Amount>
 							<AmountUnit>{rewardTokenSymbol}</AmountUnit>
 						</AmountInfo>
 						<Converted>~${usdAmount}</Converted>
@@ -219,7 +216,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 							})} ${rewardTokenSymbol}`}
 							onClick={() => setShowModal(true)}
 							buttonType='primary'
-							disabled={rewardLiquidPart.isZero()}
+							disabled={rewardLiquidPart === 0n}
 							size='large'
 						/>
 						<HarvestButtonDesc gap='8px'>

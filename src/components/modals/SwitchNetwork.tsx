@@ -9,12 +9,11 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
+import { useChainId, useSwitchNetwork } from 'wagmi';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import NetworkLogo from '@/components/NetworkLogo';
-import { switchNetwork } from '@/lib/wallet';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { ETheme } from '@/features/general/general.slice';
@@ -34,7 +33,8 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 	setShowModal,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { chainId } = useWeb3React();
+	const chainId = useChainId();
+	const { switchNetwork } = useSwitchNetwork();
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
 	const networkIds = customNetworks || defaultNetworkIds;
@@ -52,7 +52,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 				{networkIds.map(networkId => (
 					<NetworkItem
 						onClick={() => {
-							switchNetwork(networkId);
+							switchNetwork?.(networkId);
 							closeModal();
 						}}
 						isSelected={networkId === chainId}

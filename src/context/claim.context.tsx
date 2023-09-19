@@ -7,10 +7,8 @@ import {
 	useContext,
 	SetStateAction,
 } from 'react';
-import { Zero } from '@ethersproject/constants';
-import { BigNumber } from 'ethers';
 import { Dispatch } from 'react';
-import { useWeb3React } from '@web3-react/core';
+import { useAccount, useChainId } from 'wagmi';
 import config from '@/configuration';
 import { fetchAirDropClaimData, hasClaimedAirDrop } from '@/lib/claim';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
@@ -23,7 +21,7 @@ export enum GiveDropStateType {
 }
 export interface IClaimContext {
 	isloading: boolean;
-	totalAmount: BigNumber;
+	totalAmount: bigint;
 	giveDropState: GiveDropStateType;
 	step: number;
 	setStep: Dispatch<SetStateAction<number>>;
@@ -34,7 +32,7 @@ export interface IClaimContext {
 }
 const initialValue = {
 	isloading: false,
-	totalAmount: Zero,
+	totalAmount: 0n,
 	giveDropState: GiveDropStateType.notConnected,
 	step: 0,
 	setStep: () => {},
@@ -54,7 +52,7 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 	const [step, setStep] = useState(0);
 	const [isloading, setIsLoading] = useState(false);
 	const [showModal, setShowModal] = useState<boolean>(false);
-	const [totalAmount, setTotalAmount] = useState<BigNumber>(
+	const [totalAmount, setTotalAmount] = useState<bigint>(
 		initialValue.totalAmount,
 	);
 
@@ -62,25 +60,26 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 		GiveDropStateType.notConnected,
 	);
 
-	const { account, chainId, active } = useWeb3React();
+	const chainId = useChainId();
+	const { address, isConnected } = useAccount();
 
 	useEffect(() => {
-		setShowModal(active && chainId !== config.GNOSIS_NETWORK_NUMBER);
-	}, [chainId, step, active]);
+		setShowModal(isConnected && chainId !== config.GNOSIS_NETWORK_NUMBER);
+	}, [chainId, step, isConnected]);
 
 	const getClaimData = async () => {
-		if (!account || chainId !== config.GNOSIS_NETWORK_NUMBER) {
+		if (!address || chainId !== config.GNOSIS_NETWORK_NUMBER) {
 			return;
 		}
-		setTotalAmount(Zero);
+		setTotalAmount(0n);
 		setStep(0);
 		setIsLoading(true);
-		const claimData = await fetchAirDropClaimData(account);
+		const claimData = await fetchAirDropClaimData(address);
 		if (claimData) {
-			const _hasClaimed = await hasClaimedAirDrop(account);
+			const _hasClaimed = await hasClaimedAirDrop(address);
 			// const _hasClaimed = false;
 			console.log(`_hasClaimed`, _hasClaimed);
-			setTotalAmount(BigNumber.from(claimData.amount));
+			setTotalAmount(BigInt(claimData.amount));
 			setIsLoading(false);
 			if (!_hasClaimed) {
 				setGiveDropState(GiveDropStateType.Success);
@@ -90,19 +89,19 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 			return;
 		}
 		setGiveDropState(GiveDropStateType.Missed);
-		setTotalAmount(Zero);
+		setTotalAmount(0n);
 		setIsLoading(false);
 	};
 
 	const resetWallet = () => {
 		setGiveDropState(GiveDropStateType.notConnected);
-		setTotalAmount(Zero);
+		setTotalAmount(0n);
 		setStep(0);
 	};
 
 	useEffect(() => {
 		resetWallet();
-	}, [account]);
+	}, [address]);
 
 	return (
 		<ClaimContext.Provider

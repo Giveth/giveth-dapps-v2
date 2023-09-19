@@ -43,7 +43,6 @@ export const subgraphSlice = createSlice({
 						Object.prototype.hasOwnProperty.call(state, key) &&
 						isSubgraphKeyValid(key)
 					) {
-						// @ts-ignore
 						const chainInfo = response[key];
 						if (chainInfo) {
 							state[key] = chainInfo;
