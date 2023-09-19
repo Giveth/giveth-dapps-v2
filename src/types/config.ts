@@ -1,3 +1,5 @@
+import type { Chain } from 'wagmi';
+
 export type Address = `0x${string}`;
 
 export enum StakingPlatform {
@@ -120,7 +122,7 @@ export interface INetworkParam {
 	iconUrls?: Array<string>;
 }
 
-export interface NetworkConfig extends INetworkParam {
+export interface NetworkConfig extends Chain {
 	nodeUrl: string;
 	blockExplorerName: string[];
 	gasPreference: GasPreference;
