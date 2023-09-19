@@ -60,7 +60,6 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 
-		blockExplorerName: ['etherscan'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
 		coingeckoChainName: 'ethereum',
@@ -230,7 +229,6 @@ const config: EnvConfig = {
 			maxPriorityFeePerGas: (1e9).toString(),
 		},
 
-		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
 		coingeckoChainName: 'xdai',
@@ -373,7 +371,6 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['PolygonScan'],
 		subgraphAddress: '',
 		coingeckoChainName: 'polygon-pos',
 		chainLogo: (logoSize = 24) => <IconPolygon size={logoSize} />,
@@ -384,7 +381,6 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['OptimismScan'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
@@ -412,7 +408,6 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['CeloScan'],
 		subgraphAddress: '',
 		coingeckoChainName: 'celo',
 		chainLogo: (logoSize = 24) => <IconCelo size={logoSize} />,
