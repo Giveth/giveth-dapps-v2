@@ -110,7 +110,6 @@ export interface RegenStreamConfig {
 }
 
 export interface NetworkConfig extends Chain {
-	nodeUrl: string;
 	blockExplorerName: string[];
 	gasPreference: GasPreference;
 	subgraphAddress?: string;

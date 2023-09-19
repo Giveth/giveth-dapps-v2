@@ -12,14 +12,12 @@ import {
 	StakingType,
 	StreamType,
 } from '@/types/config';
-import { networksParams } from '@/helpers/blockchain';
 import { IconPolygon } from '@/components/Icons/Polygon';
 import { IconCelo } from '@/components/Icons/Celo';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconEthereum } from '@/components/Icons/Eth';
 
-const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
 	'https://impact-graph.serve.giveth.io';
@@ -85,8 +83,6 @@ const config: EnvConfig = {
 		WETH_TOKEN_ADDRESS: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
 		TOKEN_DISTRO_ADDRESS: '0x4358c99abFe7A9983B6c96785b8870b5412C5B4B',
 
-		nodeUrl: 'https://goerli.infura.io/v3/' + INFURA_API_KEY,
-
 		pools: [
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -125,7 +121,6 @@ const config: EnvConfig = {
 	},
 
 	GNOSIS_CONFIG: {
-		nodeUrl: networksParams[100]?.rpcUrls[0],
 		...gnosis,
 		gasPreference: {
 			maxFeePerGas: (2e9).toString(),
@@ -278,7 +273,6 @@ const config: EnvConfig = {
 	},
 
 	POLYGON_CONFIG: {
-		nodeUrl: networksParams[137]?.rpcUrls[0],
 		...polygon,
 		gasPreference: {
 			// Keep it empty for automatic configuration
@@ -289,7 +283,6 @@ const config: EnvConfig = {
 	},
 
 	OPTIMISM_CONFIG: {
-		nodeUrl: networksParams[420]?.rpcUrls[0],
 		...optimismGoerli,
 		gasPreference: {
 			// Keep it empty for automatic configuration
@@ -318,7 +311,6 @@ const config: EnvConfig = {
 	},
 
 	CELO_CONFIG: {
-		nodeUrl: networksParams[44787]?.rpcUrls[0],
 		...celoAlfajores,
 		gasPreference: {
 			// Keep it empty for automatic configuration

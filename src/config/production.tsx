@@ -5,14 +5,12 @@ import {
 	StakingType,
 	StreamType,
 } from '@/types/config';
-import { networksParams } from '@/helpers/blockchain';
 import { IconEthereum } from '@/components/Icons/Eth';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconPolygon } from '@/components/Icons/Polygon';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconCelo } from '@/components/Icons/Celo';
 
-const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
 const NOTIFICATION_BASE_ROUTE =
@@ -81,8 +79,6 @@ const config: EnvConfig = {
 		// 	exploited: true,
 		// 	farmEndTimeMS: SEPT_8TH_2022,
 		// },
-
-		nodeUrl: 'https://mainnet.infura.io/v3/' + INFURA_API_KEY,
 
 		pools: [
 			{
@@ -228,7 +224,6 @@ const config: EnvConfig = {
 	},
 
 	GNOSIS_CONFIG: {
-		nodeUrl: networksParams[100]?.rpcUrls[0],
 		...gnosis,
 		gasPreference: {
 			maxFeePerGas: (2e9).toString(),
@@ -374,7 +369,6 @@ const config: EnvConfig = {
 	},
 
 	POLYGON_CONFIG: {
-		nodeUrl: networksParams[137]?.rpcUrls[0],
 		...polygon,
 		gasPreference: {
 			// Keep it empty for automatic configuration
@@ -386,7 +380,6 @@ const config: EnvConfig = {
 	},
 
 	OPTIMISM_CONFIG: {
-		nodeUrl: networksParams[10]?.rpcUrls[0],
 		...optimism,
 		gasPreference: {
 			// Keep it empty for automatic configuration
@@ -415,7 +408,6 @@ const config: EnvConfig = {
 	},
 
 	CELO_CONFIG: {
-		nodeUrl: networksParams[42220]?.rpcUrls[0],
 		...celo,
 		gasPreference: {
 			// Keep it empty for automatic configuration
