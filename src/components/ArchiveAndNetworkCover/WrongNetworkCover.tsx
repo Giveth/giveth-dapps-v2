@@ -3,9 +3,9 @@ import { Caption, IconAlertCircle16 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { useChainId } from 'wagmi';
-import { chainName } from '@/lib/constants/constants';
 import { Cover } from './common';
 import { Flex } from '../styled-components/Flex';
+import { chainNameById } from '@/lib/network';
 
 interface IWrongNetworkCoverProps {
 	targetNetwork: number;
@@ -31,8 +31,8 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 								id: 'label.wrong_network',
 							},
 							{
-								chainName: chainName(chainId || 0),
-								targetChain: chainName(targetNetwork || 0),
+								chainName: chainNameById(chainId || 0),
+								targetChain: chainNameById(targetNetwork || 0),
 							},
 						)}
 					</Content>
