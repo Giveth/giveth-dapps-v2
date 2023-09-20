@@ -32,6 +32,7 @@ import GIVeconomyTab from '@/components/GIVeconomyTab';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
+import '@/components/views/landings/onboarding/main/FormStyles.css';
 
 declare global {
 	interface Window {

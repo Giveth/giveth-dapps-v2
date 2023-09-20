@@ -1,0 +1,122 @@
+.ap3w-embeddable-form-646b4736a2882bf86587185d {
+	box-sizing: content-box;
+	width: 100%;
+	font-size: 16px;
+	max-width: 450px;
+	max-height: 100%;
+	overflow: auto;
+	background-color: #ffffff;
+	border: 2px solid transparent;
+	box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0);
+	z-index: unset;
+}
+
+.ap3w-embeddable-form-646b4736a2882bf86587185d:before {
+	content: ' ';
+	display: block;
+	position: absolute;
+	pointer-events: none;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 80%;
+	background-image: url();
+	background-position: center center;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+.ap3w-embeddable-form-content {
+	margin: auto;
+	padding: 32px;
+}
+
+.ap3w-embeddable-form-646b4736a2882bf86587185d .ap3w-text {
+	margin-bottom: 16px;
+}
+
+.ap3w-embeddable-form-646b4736a2882bf86587185d .ap3w-text * {
+	padding-bottom: 5px;
+}
+
+.ap3w-text-646b4736a2882bf86587185d {
+	position: relative;
+	margin: 0;
+	margin-bottom: 16px;
+	word-wrap: break-word;
+}
+
+.ap3w-text-646b4736a2882bf86587185d.ap3w-text--last {
+	margin-bottom: 0 !important;
+}
+
+.ap3w-text-646b4736a2882bf86587185d * {
+	margin: 0;
+	padding-bottom: 8px;
+}
+
+.ap3w-text-646b4736a2882bf86587185d p {
+	text-transform: unset;
+	text-decoration: unset;
+	text-indent: unset;
+}
+
+/* Styles for various text sizes */
+.ap3w-text-646b4736a2882bf86587185d p[data-size="h1"] {
+	font-family: Tahoma, sans-serif;
+	font-size: 30px;
+	line-height: 1.2;
+	color: #231f20;
+	font-weight: 700;
+	font-style: normal;
+}
+
+/* ... you can continue the patterns for h2, h3, h4, etc. */
+
+.ap3w-form-input-646b4736a2882bf86587185d {
+	position: relative;
+	margin-bottom: 20px;
+}
+
+.ap3w-form-input-646b4736a2882bf86587185d input {
+	margin-top: 8px;
+	box-sizing: border-box;
+	width: 100%;
+	background-color: #FFFFFF;
+	border: 1px solid #000000;
+	color: #000000;
+	outline: none;
+	font-family: Arial, sans-serif;
+	font-weight: 400;
+	font-style: normal;
+	font-size: 14px;
+	line-height: 1.2;
+	padding: 10px 16px;
+	resize: none;
+	border-radius: 4px;
+}
+
+.ap3w-form-input-646b4736a2882bf86587185d .ap3w-form-input-label {
+	font-weight: bold;
+	color: #000000;
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.2;
+}
+
+.ap3w-form-button-646b4736a2882bf86587185d button {
+	position: relative;
+	cursor: pointer;
+	padding: 10px;
+	font-weight: bold;
+	outline: none;
+	border: 2px solid #191d2a;
+	color: #404040;
+	background-color: #EAE9E7;
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	line-height: 1.2;
+	border-radius: 4px;
+	flex: 1;
+}
