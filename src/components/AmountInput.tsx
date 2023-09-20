@@ -33,7 +33,7 @@ export const AmountInput: FC<IAmountInput> = ({
 				.div(100)
 				.toFixed(0);
 			setAmount(BigInt(newAmount));
-			setDisplayAmount(formatWeiHelper(newAmount));
+			setDisplayAmount(formatWeiHelper(newAmount, undefined, false));
 		},
 		[maxAmount, setAmount],
 	);
