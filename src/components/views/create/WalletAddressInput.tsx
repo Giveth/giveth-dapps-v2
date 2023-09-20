@@ -14,7 +14,6 @@ import { useChainId } from 'wagmi';
 import { isAddress } from 'viem';
 import { compareAddresses } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
-import config from '@/configuration';
 import Input, { InputSize } from '@/components/Input';
 import { EInputs } from '@/components/views/create/CreateProject';
 import { gqlAddressValidation } from '@/components/views/create/helpers';
@@ -24,9 +23,7 @@ import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
 import NetworkLogo from '@/components/NetworkLogo';
-import { networksParams } from '@/helpers/blockchain';
-
-const networksConfig = config.NETWORKS_CONFIG;
+import { chainNameById } from '@/lib/network';
 
 interface IProps {
 	networkId: number;
@@ -78,7 +75,7 @@ const WalletAddressInput: FC<IProps> = ({
 	} else if (errorMessage || !value) {
 		caption = `${formatMessage({
 			id: 'label.you_can_enter_a_new_address',
-		})} ${networksConfig[networkId].chainName}.`;
+		})} ${chainNameById(networkId)}.`;
 	}
 
 	const isProjectPrevAddress = (newAddress: string) => {
@@ -149,7 +146,7 @@ const WalletAddressInput: FC<IProps> = ({
 					{formatMessage(
 						{ id: 'label.chain_address' },
 						{
-							chainName: networksParams[networkId].chainName,
+							chainName: chainNameById(networkId),
 						},
 					)}
 				</H6>
@@ -165,7 +162,7 @@ const WalletAddressInput: FC<IProps> = ({
 						id: 'label.receiving_address_on',
 					},
 					{
-						chainName: networksConfig[networkId].chainName,
+						chainName: chainNameById(networkId),
 					},
 				)}
 				placeholder={formatMessage({ id: 'label.my_wallet_address' })}
