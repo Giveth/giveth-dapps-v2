@@ -121,16 +121,17 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 		const stackedWithApr = apr
 			? apr.effectiveAPR.times(_stacked).div(1200)
 			: Zero;
-		const convertedStackedWithApr =
+		const _convertedStackedWithApr =
 			BigNumber(stackedWithApr).multipliedBy(WeiPerEther);
+		const convertedStackedWithApr = BigInt(
+			_convertedStackedWithApr.toFixed(0),
+		);
 		setPotentialClaim(
-			givTokenDistroHelper.getLiquidPart(
-				BigInt(convertedStackedWithApr.toFixed(0)),
-			),
+			givTokenDistroHelper.getLiquidPart(convertedStackedWithApr),
 		);
 		setEarnEstimate(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(
-				BigInt(convertedStackedWithApr.toFixed(0)),
+				convertedStackedWithApr,
 			),
 		);
 	}, [apr, stacked, totalAmount, givTokenDistroHelper]);
