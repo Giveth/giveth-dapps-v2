@@ -12,6 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useChainId } from 'wagmi';
+import BigNumber from 'bignumber.js';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
@@ -96,7 +97,9 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 				<LockInfoRowValue>
 					{amount
 						? formatWeiHelper(
-								(amount * BigInt(multipler)).toString(),
+								new BigNumber(amount.toString()).multipliedBy(
+									multipler,
+								),
 						  )
 						: 0}
 				</LockInfoRowValue>
