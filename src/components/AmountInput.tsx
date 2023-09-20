@@ -57,8 +57,7 @@ export const AmountInput: FC<IAmountInput> = ({
 					},
 				});
 			}
-
-			setAmount(BigInt(valueBn.toString()));
+			setAmount(BigInt(valueBn.toFixed(0)));
 		},
 		[setAmount],
 	);
