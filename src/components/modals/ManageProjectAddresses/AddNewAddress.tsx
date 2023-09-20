@@ -11,7 +11,7 @@ import { ADD_RECIPIENT_ADDRESS_TO_PROJECT } from '@/apollo/gql/gqlProjects';
 import InlineToast, { EToastType } from '../../toasts/InlineToast';
 import { suggestNewAddress } from '@/lib/helpers';
 import { Address } from '@/types/config';
-import config from '@/configuration';
+import { chainNameById } from '@/lib/network';
 
 interface IAddNewAddress {
 	project: IProject;
@@ -111,9 +111,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 		return true;
 	};
 
-	const chainName = selectedWallet.networkId
-		? config.NETWORKS_CONFIG[selectedWallet.networkId].name
-		: 'Unknown';
+	const chainName = chainNameById(selectedWallet.networkId);
 
 	return (
 		<>
