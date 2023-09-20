@@ -17,7 +17,7 @@ import NetworkLogo from '@/components/NetworkLogo';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { ETheme } from '@/features/general/general.slice';
-import { networksParams } from '@/helpers/blockchain';
+import { chainNameById } from '@/lib/network';
 
 const networksConfig = config.NETWORKS_CONFIG;
 const defaultNetworkIds = Object.keys(networksConfig).map(Number);
@@ -60,7 +60,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 						theme={theme}
 					>
 						<NetworkLogo chainId={networkId} logoSize={32} />
-						<B>{networksParams[networkId].chainName}</B>
+						<B>{chainNameById(networkId)}</B>
 						{networkId === chainId && (
 							<SelectedNetwork styleType='Small' theme={theme}>
 								{formatMessage({ id: 'label.selected' })}
