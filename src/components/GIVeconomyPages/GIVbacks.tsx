@@ -63,12 +63,13 @@ export const TabGIVbacksTop = () => {
 		return sdh.getGIVTokenDistroBalance();
 	}, [values]);
 
+	const givbackLiquidPart = BigInt(givTokenDistroBalance.givbackLiquidPart);
+
 	useEffect(() => {
-		const _givback = BigInt(givTokenDistroBalance.givback);
 		setGivBackStream(
-			givTokenDistroHelper.getStreamPartTokenPerWeek(_givback),
+			givTokenDistroHelper.getStreamPartTokenPerWeek(givbackLiquidPart),
 		);
-	}, [givTokenDistroBalance, givTokenDistroHelper]);
+	}, [givTokenDistroBalance, givTokenDistroHelper, givbackLiquidPart]);
 
 	return (
 		<>
@@ -92,9 +93,7 @@ export const TabGIVbacksTop = () => {
 								title={formatMessage({
 									id: 'label.your_givbacks_rewards',
 								})}
-								liquidAmount={BigInt(
-									givTokenDistroBalance.givbackLiquidPart,
-								)}
+								liquidAmount={givbackLiquidPart}
 								stream={givBackStream}
 								actionLabel={formatMessage({
 									id: 'label.harvest',
@@ -103,9 +102,7 @@ export const TabGIVbacksTop = () => {
 									setShowHarvestModal(true);
 								}}
 								subButtonLabel={
-									BigInt(
-										givTokenDistroBalance.givbackLiquidPart,
-									) === 0n
+									givbackLiquidPart === 0n
 										? formatMessage({
 												id: 'label.why_dont_i_have_givbacks',
 										  })
