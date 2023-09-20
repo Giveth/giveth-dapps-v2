@@ -99,9 +99,11 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 		setGivDropStream(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(givdropAmount),
 		);
-		const amount = (givdropAmount * 9n) / 10n;
+		const amount = new BigNumber(givdropAmount.toString()).multipliedBy(
+			0.9,
+		);
 		const percent = givTokenDistroHelper.percent / 100;
-		let givDropAcc = amount * BigInt(Math.round(percent));
+		let givDropAcc = BigInt(amount.multipliedBy(percent).toFixed(0));
 		if (claimableNow !== 0n) {
 			givDropAcc = givDropAcc + claimableNow - givBackLiquidPart;
 		}
