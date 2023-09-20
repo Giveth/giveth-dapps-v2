@@ -31,9 +31,9 @@ export const AmountInput: FC<IAmountInput> = ({
 			const newAmount = new BigNumber(maxAmount.toString())
 				.multipliedBy(percentage)
 				.div(100)
-				.toString();
+				.toFixed(0);
 			setAmount(BigInt(newAmount));
-			setDisplayAmount(formatWeiHelper(newAmount.toString()));
+			setDisplayAmount(formatWeiHelper(newAmount));
 		},
 		[maxAmount, setAmount],
 	);
