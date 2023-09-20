@@ -111,7 +111,6 @@ const CryptoDonation: FC = () => {
 		setShowDonateModal(true),
 	);
 	// const {} = useChainModal();
-
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
 	const tokenDecimals = selectedToken?.decimals || 18;
@@ -196,6 +195,7 @@ const CryptoDonation: FC = () => {
 		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
 		const nativeCurrency =
 			config.NETWORKS_CONFIG[networkId!]?.nativeCurrency;
+
 		if (_selectedTokenSymbol === nativeCurrency?.symbol?.toUpperCase()) {
 			return setSelectedTokenBalance(
 				parseUnits(balance || '0', nativeCurrency.decimals),
@@ -213,7 +213,7 @@ const CryptoDonation: FC = () => {
 						const balance = await contract.read.balanceOf([
 							address!,
 						]);
-
+						setSelectedTokenBalance(balance);
 						return balance;
 					} catch (e) {
 						captureException(e, {
@@ -285,7 +285,6 @@ const CryptoDonation: FC = () => {
 	};
 
 	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
-
 	const calcMaxDonation = (givethDonation?: number) =>
 		(Number(userBalance.replace(/,/g, '')) * 100) /
 		(100 + (givethDonation ?? donationToGiveth));
