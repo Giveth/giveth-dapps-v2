@@ -48,7 +48,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { slug } = router.query;
 
 	const eligibleNetworks: NetworkConfig[] = networks.filter(
-		network => acceptedChains?.includes(parseInt(network.chainId)),
+		network => acceptedChains?.includes(network.id),
 	);
 
 	useEffect(() => {
@@ -80,7 +80,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 				<br />
 				<CustomFlex>
 					{eligibleNetworks.map(network => {
-						const _chainId = parseInt(network.chainId);
+						const _chainId = network.id;
 						return (
 							<NetworkItem
 								onClick={() => {
@@ -92,7 +92,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 								theme={theme}
 							>
 								<NetworkLogo chainId={_chainId} logoSize={32} />
-								<B>{network.chainName}</B>
+								<B>{network.name}</B>
 								{_chainId === chainId && (
 									<SelectedNetwork
 										styleType='Small'
