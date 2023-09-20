@@ -9,10 +9,10 @@ import {
 	IconGithub,
 	IconRedit,
 	IconYoutube,
-	IconTwitter,
 	Caption,
 	IconDiscord,
 	IconInstagram24,
+	IconXSocial,
 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -157,7 +157,7 @@ const Footer = () => {
 							<IconRedit size={24} color={textColor} />
 						</ExternalLink>
 						<ExternalLink href={links.TWITTER}>
-							<IconTwitter size={24} color={textColor} />
+							<IconXSocial size={24} color={textColor} />
 						</ExternalLink>
 						<ExternalLink href={links.YOUTUBE}>
 							<IconYoutube size={24} color={textColor} />
