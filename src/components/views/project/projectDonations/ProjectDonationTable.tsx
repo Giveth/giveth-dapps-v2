@@ -34,7 +34,7 @@ import {
 import { useProjectContext } from '@/context/project.context';
 import NetworkLogo from '@/components/NetworkLogo';
 import { UserWithPFPInCell } from '../../../UserWithPFPInCell';
-import config from '@/configuration';
+import { chainNameById } from '@/lib/network';
 
 const itemPerPage = 10;
 
@@ -189,11 +189,9 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 									chainId={donation.transactionNetworkId}
 								/>
 								<NetworkName>
-									{
-										config.NETWORKS_CONFIG[
-											donation.transactionNetworkId
-										].name
-									}
+									{chainNameById(
+										donation.transactionNetworkId,
+									)}
 								</NetworkName>
 							</DonationTableCell>
 							<DonationTableCell>
