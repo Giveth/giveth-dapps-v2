@@ -6,10 +6,10 @@ import {
 	brandColors,
 	neutralColors,
 	ButtonLink,
-	B,
 	Subline,
 	semanticColors,
-	IconRocketInSpace16,
+	// B,
+	// IconRocketInSpace16,
 	IconVerifiedBadge16,
 	H5,
 } from '@giveth/ui-design-system';
@@ -55,7 +55,7 @@ const ProjectCard = (props: IProjectCard) => {
 		updatedAt,
 		organization,
 		verified,
-		projectPower,
+		// projectPower,
 		countUniqueDonors,
 		countUniqueDonorsForActiveQfRound,
 		qfRounds,
@@ -224,7 +224,7 @@ const ProjectCard = (props: IProjectCard) => {
 									<QFBadge>{activeRound?.name}</QFBadge>
 								)}
 							</Flex>
-							{verified && (
+							{/* {verified && (
 								<GivpowerRankContainer
 									gap='8px'
 									alignItems='center'
@@ -239,7 +239,7 @@ const ProjectCard = (props: IProjectCard) => {
 											: '--'}
 									</B>
 								</GivpowerRankContainer>
-							)}
+							)} */}
 						</PaddedRow>
 					</Link>
 				)}
