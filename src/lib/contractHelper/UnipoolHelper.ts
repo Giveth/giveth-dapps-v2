@@ -28,7 +28,7 @@ export class UnipoolHelper {
 			getNowUnixMS(),
 			this.periodFinish,
 		);
-		return BigInt(Math.floor(lastTimeRewardApplicableMS / 1000));
+		return BigInt((lastTimeRewardApplicableMS / 1000).toFixed(0));
 	}
 
 	get rewardRate(): bigint {
@@ -41,7 +41,8 @@ export class UnipoolHelper {
 			return this.rewardPerTokenStored;
 		}
 		const value1 =
-			this.lastTimeRewardApplicable - BigInt(this.lastUpdateTime / 1000);
+			this.lastTimeRewardApplicable -
+			BigInt((this.lastUpdateTime / 1000).toFixed(0));
 		const value2 = (this.rewardRate * E18) / this.totalSupply;
 		return this.rewardPerTokenStored + value1 * value2;
 	}

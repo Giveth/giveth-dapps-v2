@@ -112,16 +112,17 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 		}
 		const stackedWithApr = APR ? APR.times(_deposit).div(1200) : Zero;
 		if (stackedWithApr.isNaN()) return;
-		const convertedStackedWithApr =
+		const _convertedStackedWithApr =
 			BigNumber(stackedWithApr).multipliedBy(WeiPerEther);
+		const convertedStackedWithApr = BigInt(
+			_convertedStackedWithApr.toFixed(0),
+		);
 		setPotentialClaim(
-			givTokenDistroHelper.getLiquidPart(
-				BigInt(convertedStackedWithApr.toFixed(0)),
-			),
+			givTokenDistroHelper.getLiquidPart(convertedStackedWithApr),
 		);
 		setEarnEstimate(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(
-				BigInt(convertedStackedWithApr.toFixed(0)),
+				convertedStackedWithApr,
 			),
 		);
 		// setPotentialClaim(stackedWithApr.times(0.1));

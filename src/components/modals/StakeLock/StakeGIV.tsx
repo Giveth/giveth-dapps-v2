@@ -205,7 +205,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 										onClick={onApprove}
 										disabled={
 											amount === 0n ||
-											maxAmount <= amount ||
+											maxAmount < amount ||
 											stakeState === StakeState.APPROVING
 										}
 										loading={

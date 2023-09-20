@@ -122,17 +122,18 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 			_donation = parseFloat(donation);
 		}
 		const donationWithGivBacks = _donation * 0.75;
-		const convertedStackedWithApr = new BigNumber(
-			donationWithGivBacks.toFixed(0),
+		const _convertedStackedWithApr = new BigNumber(
+			donationWithGivBacks,
 		).multipliedBy(WeiPerEther);
+		const convertedStackedWithApr = BigInt(
+			_convertedStackedWithApr.toFixed(0),
+		);
 		setPotentialClaim(
-			givTokenDistroHelper.getLiquidPart(
-				BigInt(convertedStackedWithApr.toFixed(0)),
-			),
+			givTokenDistroHelper.getLiquidPart(convertedStackedWithApr),
 		);
 		setEarnEstimate(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(
-				BigInt(convertedStackedWithApr.toFixed(0)),
+				convertedStackedWithApr,
 			),
 		);
 	}, [donation, givTokenDistroHelper]);

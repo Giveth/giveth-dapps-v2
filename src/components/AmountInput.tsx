@@ -31,9 +31,9 @@ export const AmountInput: FC<IAmountInput> = ({
 			const newAmount = new BigNumber(maxAmount.toString())
 				.multipliedBy(percentage)
 				.div(100)
-				.toString();
+				.toFixed(0);
 			setAmount(BigInt(newAmount));
-			setDisplayAmount(formatWeiHelper(newAmount.toString()));
+			setDisplayAmount(formatWeiHelper(newAmount, undefined, false));
 		},
 		[maxAmount, setAmount],
 	);
@@ -167,4 +167,5 @@ const Step = styled(GLink)<{ active: boolean }>`
 		props.active ? brandColors.cyan[500] : brandColors.giv[700]};
 	border-radius: 54px;
 	cursor: pointer;
+	user-select: none;
 `;

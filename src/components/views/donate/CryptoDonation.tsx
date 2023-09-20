@@ -85,9 +85,7 @@ const CryptoDonation: FC = () => {
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const noDonationSplit = Number(projectId!) === config.GIVETH_PROJECT_ID;
 	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
-	const [selectedTokenBalance, setSelectedTokenBalance] = useState<bigint>(
-		BigInt(0),
-	);
+	const [selectedTokenBalance, setSelectedTokenBalance] = useState(0n);
 	const [customInput, setCustomInput] = useState<any>();
 	const [amountTyped, setAmountTyped] = useState<number>();
 	const [inputBoxFocused, setInputBoxFocused] = useState(false);
@@ -192,7 +190,7 @@ const CryptoDonation: FC = () => {
 	const pollToken = useCallback(async () => {
 		clearPoll();
 		if (!selectedToken) {
-			return setSelectedTokenBalance(BigInt(0));
+			return setSelectedTokenBalance(0n);
 		}
 		// Native token balance is provided by the Web3Provider
 		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
