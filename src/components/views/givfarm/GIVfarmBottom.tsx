@@ -134,7 +134,7 @@ export const GIVfarmBottom = () => {
 					<ContractRow>
 						<GLink>{`${formatMessage({
 							id: 'label.contract',
-						})} (${_config.chainName}):`}</GLink>
+						})} (${_config.name}):`}</GLink>
 						<GLink>
 							{shortenAddress(_config.GIV_TOKEN_ADDRESS)}
 						</GLink>
