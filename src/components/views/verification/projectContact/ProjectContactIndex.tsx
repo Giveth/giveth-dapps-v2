@@ -7,11 +7,11 @@ import {
 	IconInstagram,
 	IconLink,
 	IconLinkedin,
-	IconTwitter,
 	IconYoutube,
 	neutralColors,
 	P,
 	IconInfoFilled,
+	IconXSocial,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
@@ -216,7 +216,7 @@ export default function ProjectContactIndex() {
 const mainSocialsInputs = [
 	{
 		type: EMainSocials.Twitter,
-		icon: <IconTwitter color={neutralColors.gray[600]} />,
+		icon: <IconXSocial color={neutralColors.gray[600]} />,
 	},
 	{
 		type: EMainSocials.Facebook,
