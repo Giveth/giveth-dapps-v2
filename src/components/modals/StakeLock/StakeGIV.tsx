@@ -287,7 +287,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 						</H5White>
 						<ButtonLink
 							isExternal
-							label={`View on ${config.NETWORKS_CONFIG[chainId].blockExplorerName}`}
+							label={`View on ${config.NETWORKS_CONFIG[chainId].blockExplorers?.default.name}`}
 							linkType='texty'
 							size='small'
 							icon={<IconExternalLink size={16} />}
