@@ -167,4 +167,5 @@ const Step = styled(GLink)<{ active: boolean }>`
 		props.active ? brandColors.cyan[500] : brandColors.giv[700]};
 	border-radius: 54px;
 	cursor: pointer;
+	user-select: none;
 `;
