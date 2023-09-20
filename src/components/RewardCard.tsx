@@ -21,7 +21,7 @@ import { useAppSelector } from '@/features/hooks';
 import { WrongNetworkInnerModal } from '@/components//modals/WrongNetworkInnerModal';
 import NetworkLogo from './NetworkLogo';
 import { ScaleRate, ScaleRateBig } from '@/lib/constants/constants';
-import config from '@/configuration';
+import { chainNameById } from '@/lib/network';
 
 interface IRewardCardProps {
 	cardName: string;
@@ -84,7 +84,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 							<ChainInfo alignItems='center'>
 								<NetworkLogo chainId={network} logoSize={16} />
 								<ChainName styleType='Small'>
-									{config.NETWORKS_CONFIG[network].name}
+									{chainNameById(network)}
 								</ChainName>
 							</ChainInfo>
 						</CardHeader>
