@@ -9,7 +9,7 @@ import { useAppDispatch } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { jointItems } from '@/helpers/text';
 import SwitchNetwork from './SwitchNetwork';
-import config from '@/configuration';
+import { chainNameById } from '@/lib/network';
 
 export interface IWrongNetworkInnerModal {
 	cardName: string;
@@ -30,9 +30,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 		dispatch(setShowWalletModal(true));
 	};
 
-	const chainNames = targetNetworks.map(
-		network => config.NETWORKS_CONFIG[network].name,
-	);
+	const chainNames = targetNetworks.map(network => chainNameById(network));
 
 	const chainsStr = jointItems(chainNames);
 
