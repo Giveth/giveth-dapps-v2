@@ -6,8 +6,13 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 
-const NotAvailableProject = (props: { isCancelled?: boolean }) => {
-	const { isCancelled } = props;
+interface IProps {
+	isCancelled?: boolean;
+	notOwner?: boolean;
+}
+
+const NotAvailableProject = (props: IProps) => {
+	const { isCancelled, notOwner } = props;
 	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
@@ -18,17 +23,25 @@ const NotAvailableProject = (props: { isCancelled?: boolean }) => {
 				alt='missing-project-image'
 			/>
 			<TitleText>
-				{formatMessage({ id: 'label.project_not_available' })}{' '}
-				{isCancelled &&
-					formatMessage({ id: 'label.if_this_a_mistake' })}{' '}
-				{isCancelled && (
+				{notOwner ? (
+					formatMessage({ id: 'label.not_owner' })
+				) : (
 					<>
-						<ExternalLink
-							color={brandColors.pinky[500]}
-							href={links.DISCORD}
-							title='Discord'
-						/>
-						.
+						{formatMessage({ id: 'label.project_not_available' })}{' '}
+						{isCancelled &&
+							formatMessage({
+								id: 'label.if_this_a_mistake',
+							})}{' '}
+						{isCancelled && (
+							<>
+								<ExternalLink
+									color={brandColors.pinky[500]}
+									href={links.DISCORD}
+									title='Discord'
+								/>
+								.
+							</>
+						)}
 					</>
 				)}
 			</TitleText>
