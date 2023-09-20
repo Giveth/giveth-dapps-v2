@@ -39,8 +39,8 @@ const _options = [
 ];
 
 const options = _options.map(o => ({
-	label: o.network?.chainName,
-	value: parseInt(o.network?.chainId),
+	label: o.network?.name,
+	value: o.network?.id,
 	network: o.network,
 	active: o.active,
 }));
