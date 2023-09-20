@@ -74,6 +74,7 @@ export interface IProject {
 	sumDonationValueUsd?: number;
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
+	campaigns?: ICampaign[];
 }
 
 export interface IDonationProject extends IProject {

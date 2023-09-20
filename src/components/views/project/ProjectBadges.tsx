@@ -2,6 +2,7 @@ import React from 'react';
 import {
 	IconVerifiedBadge16,
 	brandColors,
+	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -14,7 +15,7 @@ import { hasActiveRound } from '@/helpers/qf';
 const ProjectBadges = () => {
 	const { projectData } = useProjectContext();
 
-	const { verified, qfRounds } = projectData || {};
+	const { verified, qfRounds, campaigns } = projectData || {};
 	const { formatMessage } = useIntl();
 
 	const isQF = hasActiveRound(qfRounds);
@@ -37,12 +38,24 @@ const ProjectBadges = () => {
 					wrapperColor={brandColors.cyan[600]}
 				/>
 			)}
+			{campaigns &&
+				campaigns?.length > 0 &&
+				campaigns.map(campaign => (
+					<ProjectBadge
+						key={campaign.id}
+						badgeText={campaign.title}
+						wrapperColor={neutralColors.gray[900]}
+					/>
+				))}
 		</CustomFlex>
 	);
 };
 
 const CustomFlex = styled(Flex)`
 	margin-bottom: 12px;
+	overflow-x: scroll;
+	overflow-y: hidden;
+	white-space: nowrap;
 `;
 
 export default ProjectBadges;

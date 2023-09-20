@@ -170,6 +170,23 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				beginDate
 				endDate
 			}
+			campaigns {
+				id
+				title
+				# description
+				# type
+				# photo
+				# video
+				# videoPreview
+				# slug
+				# isActive
+				# order
+				# landingLink
+				# filterFields
+				# sortingField
+				# createdAt
+				# updatedAt
+			}
 		}
 	}
 `;
