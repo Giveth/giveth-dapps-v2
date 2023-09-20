@@ -1,10 +1,5 @@
 import { brandColors, semanticColors } from '@giveth/ui-design-system';
 import config from '@/configuration';
-import { networksParams } from '@/helpers/blockchain';
-
-export const chainName = (chainId: number) => {
-	return networksParams[chainId]?.chainName || 'Unknown';
-};
 
 export const NFT_POSITIONS_MANAGER_ADDRESS: Record<string, string> = {
 	4: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
