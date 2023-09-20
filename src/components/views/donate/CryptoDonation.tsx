@@ -15,6 +15,7 @@ import { formatUnits, parseUnits } from 'viem';
 
 import { getContract } from 'wagmi/actions';
 import { erc20ABI, useAccount, useBalance, useChainId } from 'wagmi';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
@@ -43,7 +44,6 @@ import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
 import usePurpleList from '@/hooks/usePurpleList';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
 import TotalDonation from '@/components/views/donate/TotalDonation';
@@ -69,7 +69,7 @@ const CryptoDonation: FC = () => {
 	const notFormattedBalance = useBalance({ address });
 	const balance = notFormattedBalance.data?.formatted;
 	const isPurpleListed = usePurpleList();
-
+	const { openConnectModal } = useConnectModal();
 	const { project, hasActiveQFRound } = useDonateData();
 
 	const {
@@ -447,7 +447,7 @@ const CryptoDonation: FC = () => {
 					label={formatMessage({
 						id: 'component.button.connect_wallet',
 					})}
-					onClick={() => dispatch(setShowWalletModal(true))}
+					onClick={openConnectModal}
 				/>
 			)}
 
