@@ -141,6 +141,7 @@ export default function ProjectContactIndex() {
 								register={register}
 								registerName={i.type}
 								registerOptions={
+									//Twitter is the only one that has a space and () in the name and it can not be used as a key in the regex file
 									validators[
 										i.type.toLocaleLowerCase() ===
 										'x (twitter)'
