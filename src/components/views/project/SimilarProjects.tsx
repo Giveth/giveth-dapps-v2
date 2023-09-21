@@ -39,13 +39,13 @@ const SimilarProjects = (props: { slug: string }) => {
 
 	const [swiperInstance, setSwiperInstance] = useState<SwiperClass>();
 
-	let projectsToShow;
+	let projectsPerSlide;
 	if (isMobile) {
-		projectsToShow = 1;
+		projectsPerSlide = 1;
 	} else if (isTablet || isLaptopS) {
-		projectsToShow = 2;
+		projectsPerSlide = 2;
 	} else {
-		projectsToShow = 3;
+		projectsPerSlide = 3;
 	}
 
 	const pagElRef = useRef<HTMLDivElement>(null);
@@ -86,27 +86,36 @@ const SimilarProjects = (props: { slug: string }) => {
 	if (!isBigScreen) suggestedProjects.slice(0, 5);
 
 	if (!suggestedProjects || suggestedProjects.length === 0) return null;
+
+	const slicedSuggestedProjects = isBigScreen
+		? suggestedProjects
+		: suggestedProjects?.slice(0, 5);
+
+	const isOnePage = slicedSuggestedProjects?.length <= projectsPerSlide;
+
 	return (
 		<ContainerStyled id='similar-projects'>
 			<Title>
 				<H4 weight={700}>
 					{formatMessage({ id: 'label.similar_projects' })}
 				</H4>
-				<SwiperPaginationWrapper>
-					<NavigationWrapper ref={prevElRef}>
-						<IconPointerLeft
-							color={neutralColors.gray[900]}
-							size={24}
-						/>
-					</NavigationWrapper>
-					<PaginationWrapper ref={pagElRef} />
-					<NavigationWrapper ref={nextElRef}>
-						<IconPointerRight
-							color={neutralColors.gray[900]}
-							size={24}
-						/>
-					</NavigationWrapper>
-				</SwiperPaginationWrapper>
+				{!isOnePage && (
+					<SwiperPaginationWrapper>
+						<NavigationWrapper ref={prevElRef}>
+							<IconPointerLeft
+								color={neutralColors.gray[900]}
+								size={24}
+							/>
+						</NavigationWrapper>
+						<PaginationWrapper ref={pagElRef} />
+						<NavigationWrapper ref={nextElRef}>
+							<IconPointerRight
+								color={neutralColors.gray[900]}
+								size={24}
+							/>
+						</NavigationWrapper>
+					</SwiperPaginationWrapper>
+				)}
 			</Title>
 			<SwiperContainer>
 				<Swiper
@@ -116,8 +125,8 @@ const SimilarProjects = (props: { slug: string }) => {
 						nextEl: nextElRef.current,
 						prevEl: prevElRef.current,
 					}}
-					slidesPerView={projectsToShow}
-					slidesPerGroup={projectsToShow}
+					slidesPerView={projectsPerSlide}
+					slidesPerGroup={projectsPerSlide}
 					spaceBetween={24}
 					pagination={{
 						el: pagElRef.current,
@@ -134,10 +143,7 @@ const SimilarProjects = (props: { slug: string }) => {
 						},
 					}}
 				>
-					{(isBigScreen
-						? suggestedProjects
-						: suggestedProjects.slice(0, 5)
-					)?.map(project => (
+					{slicedSuggestedProjects?.map(project => (
 						<SwiperSlide key={project.id}>
 							<ProjectCard project={project} />
 						</SwiperSlide>

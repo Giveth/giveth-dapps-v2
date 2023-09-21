@@ -17,30 +17,26 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
 import { FormProvider, useForm } from 'react-hook-form';
-
 import { Container } from '@giveth/ui-design-system';
 import {
 	ACTIVATE_PROJECT,
 	CREATE_PROJECT,
 	UPDATE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
-import { isAddressENS } from '@/lib/wallet';
 import {
 	ICategory,
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
-	IWalletAddress,
 } from '@/apollo/types/types';
 import {
 	CategoryInput,
 	DescriptionInput,
 	ImageInput,
 	LocationIndex,
-	WalletAddressInput,
 } from './Inputs';
 import SuccessfulCreation from './SuccessfulCreation';
-import { compareAddressesArray, showToastError } from '@/lib/helpers';
+import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
@@ -48,20 +44,17 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 // import useLeaveConfirm from '@/hooks/useLeaveConfirm';
 import config from '@/configuration';
-import CheckBox from '@/components/Checkbox';
 import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
+import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
+import AddressInterface from './AddressInterface';
 
-const {
-	MAINNET_NETWORK_NUMBER,
-	XDAI_NETWORK_NUMBER,
-	POLYGON_NETWORK_NUMBER,
-	CELO_NETWORK_NUMBER,
-	OPTIMISM_NETWORK_NUMBER,
-} = config;
+const { NETWORKS_CONFIG } = config;
+const networksIds = Object.keys(NETWORKS_CONFIG).map(Number);
+
 interface ICreateProjectProps {
 	project?: IProjectEdition;
 }
@@ -73,11 +66,7 @@ export enum EInputs {
 	impactLocation = 'impactLocation',
 	image = 'image',
 	draft = 'draft',
-	mainAddress = 'mainAddress',
-	gnosisAddress = 'gnosisAddress',
-	polygonAddress = 'polygonAddress',
-	celoAddress = 'celoAddress',
-	optimismAddress = 'optimismAddress',
+	addresses = 'addresses',
 }
 
 export type TInputs = {
@@ -87,24 +76,8 @@ export type TInputs = {
 	[EInputs.impactLocation]?: string;
 	[EInputs.image]?: string;
 	[EInputs.draft]?: boolean;
-	[EInputs.mainAddress]: string;
-	[EInputs.gnosisAddress]: string;
-	[EInputs.polygonAddress]: string;
-	[EInputs.celoAddress]: string;
-	[EInputs.optimismAddress]: string;
+	[EInputs.addresses]: { [key: number]: string };
 };
-
-interface projectData {
-	title?: string;
-	image?: string;
-	description?: string;
-	impactLocation?: string;
-	categories: ICategory[];
-	adminUser?: {
-		walletAddress?: string;
-	};
-	addresses?: IWalletAddress[];
-}
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const { formatMessage } = useIntl();
@@ -113,9 +86,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 
+	const [addressModalChainId, setAddressModalChainId] = useState<
+		number | undefined
+	>(undefined);
+
 	const isEditMode = !!project;
 
-	let pastProjectData: projectData | undefined;
+	let pastProjectData: IProjectEdition | undefined;
 
 	if (!isEditMode) {
 		try {
@@ -132,41 +109,17 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const { title, description, categories, impactLocation, image, addresses } =
 		project || pastProjectData || {};
-
+	
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = impactLocation || '';
+	const activeAddresses = addresses?.filter(a => a.isRecipient) || [];
 
-	const prevMainAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === MAINNET_NETWORK_NUMBER,
-	)?.address;
-	const prevGnosisAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === XDAI_NETWORK_NUMBER,
-	)?.address;
-	const prevPolygonAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === POLYGON_NETWORK_NUMBER,
-	)?.address;
-	const prevCeloAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === CELO_NETWORK_NUMBER,
-	)?.address;
-	const prevOptimismAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === OPTIMISM_NETWORK_NUMBER,
-	)?.address;
-	const isSamePrevAddresses = compareAddressesArray([
-		prevMainAddress,
-		prevGnosisAddress,
-		prevPolygonAddress,
-		prevCeloAddress,
-		prevOptimismAddress,
-	]);
-	const userAddresses: string[] = [];
-	if (isSamePrevAddresses) userAddresses.push(prevMainAddress!);
-	else {
-		if (prevMainAddress) userAddresses.push(prevMainAddress);
-		if (prevGnosisAddress) userAddresses.push(prevGnosisAddress);
-		if (prevPolygonAddress) userAddresses.push(prevPolygonAddress);
-		if (prevCeloAddress) userAddresses.push(prevCeloAddress);
-		if (prevOptimismAddress) userAddresses.push(prevOptimismAddress);
-	}
+	const userAddresses = [...new Set(activeAddresses.map(a => a.address!))];
+
+	const addressesObj: { [key: number]: string } = {};
+	activeAddresses.forEach(a => {
+		addressesObj[a.networkId!] = a.address!;
+	});
 
 	const formMethods = useForm<TInputs>({
 		mode: 'onBlur',
@@ -177,37 +130,15 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.categories]: categories || [],
 			[EInputs.impactLocation]: defaultImpactLocation,
 			[EInputs.image]: image || '',
-			[EInputs.mainAddress]: prevMainAddress || '',
-			[EInputs.gnosisAddress]: prevGnosisAddress || '',
-			[EInputs.polygonAddress]: prevPolygonAddress || '',
-			[EInputs.celoAddress]: prevCeloAddress || '',
-			[EInputs.optimismAddress]: prevOptimismAddress || '',
+			[EInputs.addresses]: addressesObj,
 		},
 	});
 
-	const { unregister, handleSubmit, setValue } = formMethods;
+	const { handleSubmit, setValue } = formMethods;
 
 	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
-	const [mainnetAddressActive, setMainnetAddressActive] = useState(
-		isEditMode ? !!prevMainAddress : true,
-	);
-	const [gnosisAddressActive, setGnosisAddressActive] = useState(
-		isEditMode ? !!prevGnosisAddress : true,
-	);
-	const [polygonAddressActive, setPolygonAddressActive] = useState(
-		isEditMode ? !!prevPolygonAddress : true,
-	);
-	const [celoAddressActive, setCeloAddressActive] = useState(
-		isEditMode ? !!prevCeloAddress : true,
-	);
-	const [optimismAddressActive, setOptimismAddressActive] = useState(
-		isEditMode ? !!prevOptimismAddress : true,
-	);
-	const [isSameAddress, setIsSameAddress] = useState(
-		isEditMode ? isSamePrevAddresses : true,
-	);
+
 	const [isLoading, setIsLoading] = useState(false);
-	const [resolvedENS, setResolvedENS] = useState('');
 
 	const data = formMethods.watch();
 	useEffect(() => {
@@ -218,17 +149,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	}, [data]);
 
 	// useLeaveConfirm({ shouldConfirm: formChange });
-
 	const onSubmit = async (formData: TInputs) => {
 		try {
 			setIsLoading(true);
-			const addresses = [];
 			const {
-				mainAddress,
-				gnosisAddress,
-				polygonAddress,
-				celoAddress,
-				optimismAddress,
+				addresses,
 				title,
 				description,
 				categories,
@@ -237,73 +162,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				draft,
 			} = formData;
 
-			if (isSameAddress) {
-				const address = isAddressENS(mainAddress)
-					? resolvedENS
-					: mainAddress;
-				const checksumAddress = utils.getAddress(address);
-				addresses.push(
-					{
-						address: checksumAddress,
-						networkId: MAINNET_NETWORK_NUMBER,
-					},
-					{
-						address: checksumAddress,
-						networkId: XDAI_NETWORK_NUMBER,
-					},
-					{
-						address: checksumAddress,
-						networkId: POLYGON_NETWORK_NUMBER,
-					},
-					{
-						address: checksumAddress,
-						networkId: CELO_NETWORK_NUMBER,
-					},
-					{
-						address: checksumAddress,
-						networkId: OPTIMISM_NETWORK_NUMBER,
-					},
-				);
-			} else {
-				if (mainnetAddressActive) {
-					const address = isAddressENS(mainAddress)
-						? resolvedENS
-						: mainAddress;
-					const checksumAddress = utils.getAddress(address);
-					addresses.push({
-						address: checksumAddress,
-						networkId: MAINNET_NETWORK_NUMBER,
-					});
-				}
-				if (gnosisAddressActive) {
-					const checksumAddress = utils.getAddress(gnosisAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: XDAI_NETWORK_NUMBER,
-					});
-				}
-				if (polygonAddressActive) {
-					const checksumAddress = utils.getAddress(polygonAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: POLYGON_NETWORK_NUMBER,
-					});
-				}
-				if (celoAddressActive) {
-					const checksumAddress = utils.getAddress(celoAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: CELO_NETWORK_NUMBER,
-					});
-				}
-				if (optimismAddressActive) {
-					const checksumAddress = utils.getAddress(optimismAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: OPTIMISM_NETWORK_NUMBER,
-					});
-				}
-			}
+			const _addresses = Object.entries(addresses).map(
+				([id, address]) => ({
+					address: utils.getAddress(address),
+					networkId: Number(id),
+				}),
+			);
 
 			const projectData: IProjectCreation = {
 				title: title,
@@ -311,7 +175,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				impactLocation,
 				categories: categories?.map(category => category.name),
 				organisationId: 1,
-				addresses,
+				addresses: _addresses,
 				image,
 				isDraft: draft,
 			};
@@ -409,129 +273,15 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								id: 'label.you_can_set_a_custom_ethereum_address',
 							})}
 						</CaptionContainer>
-						<CheckBox
-							onChange={setIsSameAddress}
-							checked={isSameAddress}
-							label={formatMessage({
-								id: 'label.ill_raise_and_receive_funds_on_all_chains',
-							})}
-						/>
-						<WalletAddressInput
-							networkId={MAINNET_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
-							isActive={mainnetAddressActive}
-							userAddresses={userAddresses}
-							resolvedENS={resolvedENS}
-							setResolvedENS={setResolvedENS}
-							setIsActive={e => {
-								if (
-									!e &&
-									!gnosisAddressActive &&
-									!polygonAddressActive &&
-									!celoAddressActive &&
-									!optimismAddressActive
-								)
-									return showToastError(
-										formatMessage({
-											id: 'label.you_must_select_at_least_one_address',
-										}),
-									);
-								if (!e) unregister(EInputs.mainAddress);
-								setMainnetAddressActive(e);
-							}}
-						/>
-						<WalletAddressInput
-							networkId={XDAI_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
-							isActive={gnosisAddressActive}
-							userAddresses={userAddresses}
-							setResolvedENS={() => {}}
-							setIsActive={e => {
-								if (
-									!e &&
-									!mainnetAddressActive &&
-									!polygonAddressActive &&
-									!celoAddressActive &&
-									!optimismAddressActive
-								)
-									return showToastError(
-										formatMessage({
-											id: 'label.you_must_select_at_least_one_address',
-										}),
-									);
-								if (!e) unregister(EInputs.gnosisAddress);
-								setGnosisAddressActive(e);
-							}}
-						/>
-						<WalletAddressInput
-							networkId={POLYGON_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
-							isActive={polygonAddressActive}
-							userAddresses={userAddresses}
-							setResolvedENS={() => {}}
-							setIsActive={e => {
-								if (
-									!e &&
-									!mainnetAddressActive &&
-									!gnosisAddressActive &&
-									!celoAddressActive &&
-									!optimismAddressActive
-								)
-									return showToastError(
-										formatMessage({
-											id: 'label.you_must_select_at_least_one_address',
-										}),
-									);
-								if (!e) unregister(EInputs.polygonAddress);
-								setPolygonAddressActive(e);
-							}}
-						/>
-						<WalletAddressInput
-							networkId={CELO_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
-							isActive={celoAddressActive}
-							userAddresses={userAddresses}
-							setResolvedENS={() => {}}
-							setIsActive={e => {
-								if (
-									!e &&
-									!mainnetAddressActive &&
-									!gnosisAddressActive &&
-									!polygonAddressActive &&
-									!optimismAddressActive
-								)
-									return showToastError(
-										formatMessage({
-											id: 'label.you_must_select_at_least_one_address',
-										}),
-									);
-								if (!e) unregister(EInputs.celoAddress);
-								setCeloAddressActive(e);
-							}}
-						/>
-						<WalletAddressInput
-							networkId={OPTIMISM_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
-							isActive={optimismAddressActive}
-							userAddresses={userAddresses}
-							setResolvedENS={() => {}}
-							setIsActive={e => {
-								if (
-									!e &&
-									!mainnetAddressActive &&
-									!gnosisAddressActive &&
-									!polygonAddressActive &&
-									!celoAddressActive
-								)
-									return showToastError(
-										formatMessage({
-											id: 'label.you_must_select_at_least_one_address',
-										}),
-									);
-								if (!e) unregister(EInputs.optimismAddress);
-								setOptimismAddressActive(e);
-							}}
-						/>
+						{networksIds.map(networkId => (
+							<AddressInterface
+								key={networkId}
+								networkId={networkId}
+								onButtonClick={() =>
+									setAddressModalChainId(networkId)
+								}
+							/>
+						))}
 						<PublishTitle>
 							{isEditMode
 								? formatMessage({
@@ -600,6 +350,16 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								/>
 							)}
 						</Buttons>
+						{addressModalChainId && (
+							<CreateProjectAddAddressModal
+								networkId={addressModalChainId}
+								setShowModal={setAddressModalChainId}
+								userAddresses={userAddresses}
+								onSubmit={() =>
+									setAddressModalChainId(undefined)
+								}
+							/>
+						)}
 					</form>
 				</FormProvider>
 			</CreateContainer>

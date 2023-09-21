@@ -9,12 +9,12 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useWeb3React } from '@web3-react/core';
+import { useIntl } from 'react-intl';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from '../../DonateSocialBox';
 import SuccessView from '@/components/views/donate/SuccessView';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
-import DonationTypes from '@/components/views/donate/DonationTypes';
 import NiceBanner from './NiceBanner';
 // import PurchaseXDAI from './PurchaseXDAIBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
@@ -25,17 +25,19 @@ import ExternalLink from '@/components/ExternalLink';
 import { formatTxLink } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import CryptoDonation from '@/components/views/donate/CryptoDonation';
 
 const DonateIndex: FC = () => {
+	const { formatMessage } = useIntl();
 	const { isMobile } = useDetectDevice();
-	const { project, isSuccessDonation } = useDonateData();
+	const { project, isSuccessDonation, hasActiveQFRound } = useDonateData();
 	const { txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 
 	return (
 		<>
 			<BigArc />
-			<PassportBanner />
+			{hasActiveQFRound && <PassportBanner />}
 			<Wrapper>
 				{/* <PurchaseXDAI /> */}
 				<NiceBanner />
@@ -45,16 +47,20 @@ const DonateIndex: FC = () => {
 						{isSuccessDonation ? (
 							<SuccessView />
 						) : (
-							<DonationTypes />
+							<CryptoDonation />
 						)}
 					</Right>
 				</Sections>
 				{isSuccessDonation && (
 					<Options>
 						<Lead style={{ color: neutralColors.gray[900] }}>
-							Your transactions have been submitted.
+							{formatMessage({
+								id: 'label.your_transactions_have_been_submitted',
+							})}
 							<br />
-							You can view them on a blockchain explorer here:
+							{formatMessage({
+								id: 'label.you_can_view_them_on_a_blockchain_explorer_here',
+							})}
 						</Lead>
 						<TxRow txHash={txHash[0]} title={project.title} />
 						{hasMultipleTxs && (

@@ -124,6 +124,8 @@ export interface BasicNetworkConfig extends INetworkParam {
 	blockExplorerName: string[];
 	gasPreference: GasPreference;
 	subgraphAddress: string;
+	coingeckoChainName: string;
+	chainLogo: (logoSize?: number) => JSX.Element;
 }
 
 export interface SimpleNetworkConfig extends BasicNetworkConfig {
@@ -167,10 +169,9 @@ export interface EnvConfig {
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	XDAI_CONFIG: XDaiNetworkConfig;
 	POLYGON_CONFIG: BasicNetworkConfig;
-	OPTIMISM_CONFIG: BasicNetworkConfig;
+	OPTIMISM_CONFIG: SimpleNetworkConfig;
 	CELO_CONFIG: BasicNetworkConfig;
 	GARDEN_LINK: string;
-	BASE_ROUTE: string;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;

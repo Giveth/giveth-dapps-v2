@@ -13,11 +13,15 @@ import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
 import { HighlightSection } from './common';
 import { Item } from './Item';
-import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
 import { ETheme } from '@/features/general/general.slice';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
-const projectsItems = {
+interface IProjectsItems {
+	inSidebar?: boolean;
+}
+
+export const projectsItems = {
 	explore: [
 		// { name: 'Trending', query: '?q=?q=trending' },
 		{
@@ -37,16 +41,12 @@ const projectsItems = {
 		},
 		{
 			name: 'Quadratic Funding',
-			url: Routes.QuadraticFunding,
-			label: 'label.quadratic_funding',
+			url: Routes.QFProjects,
+			label: 'label.eligible_for_matching',
 		},
 		// { name: 'Popular', query: '?q=popular' },
 	],
 };
-
-interface IProjectsItems {
-	inSidebar?: boolean;
-}
 
 export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 	const { theme, mainCategories } = useAppSelector(state => state.general);
@@ -66,7 +66,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 						<Link key={idx} href={explore.url}>
 							<Item
 								className={`${
-									explore.url === Routes.QuadraticFunding
+									explore.url === Routes.QFProjects
 										? 'quadratic-menu-item'
 										: ''
 								} projects-menu-items`}

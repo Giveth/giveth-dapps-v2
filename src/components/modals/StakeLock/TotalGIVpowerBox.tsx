@@ -12,15 +12,14 @@ import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { getTotalGIVpower } from '@/lib/stakingPool';
 import config from '@/configuration';
-import LoadingAnimation from '@/animations/loading.json';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import LottieControl from '@/components/LottieControl';
+import { WrappedSpinner } from '@/components/Spinner';
 
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
 	const { account, library, chainId } = useWeb3React();
-	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
+	const gnosisValues = useAppSelector(state => state.subgraph.gnosisValues);
 
 	useEffect(() => {
 		async function fetchTotalGIVpower() {
@@ -39,7 +38,7 @@ const TotalGIVpowerBox = () => {
 				}
 			} catch (err) {
 				console.log({ err });
-				const sdh = new SubgraphDataHelper(xDaiValues);
+				const sdh = new SubgraphDataHelper(gnosisValues);
 				const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
 				setTotalGIVpower(new BigNumber(userGIVPowerBalance.balance));
 			}
@@ -66,7 +65,7 @@ const TotalGIVpowerBox = () => {
 					</BoxRow>
 				</>
 			) : (
-				<LottieControl animationData={LoadingAnimation} size={90} />
+				<WrappedSpinner size={90} />
 			)}
 		</BoxContainer>
 	);

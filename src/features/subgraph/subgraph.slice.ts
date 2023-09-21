@@ -2,20 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import config from '@/configuration';
 import {
 	fetchCurrentInfoAsync,
-	fetchXDaiInfoAsync,
 	fetchMainnetInfoAsync,
+	fetchGnosisInfoAsync,
+	fetchOptimismInfoAsync,
 } from './subgraph.thunks';
 import type { ISubgraphState } from './subgraph.types';
-
-const defaultGIVpowerInfo = {
-	id: '',
-	initialDate: '0',
-	locksCreated: 0,
-	roundDuration: 1,
-	totalGIVLocked: '0',
-	currentRound: 0,
-	nextRoundDate: '0',
-};
 
 export const defaultSubgraphValues: ISubgraphState = {
 	userNotStakedPositions: [],
@@ -36,11 +27,13 @@ export const defaultXdaiSubgraphValues: ISubgraphState = {
 const initialState: {
 	currentValues: ISubgraphState;
 	mainnetValues: ISubgraphState;
-	xDaiValues: ISubgraphState;
+	gnosisValues: ISubgraphState;
+	optimismValues: ISubgraphState;
 } = {
 	currentValues: defaultSubgraphValues,
 	mainnetValues: defaultSubgraphValues,
-	xDaiValues: defaultXdaiSubgraphValues,
+	gnosisValues: defaultXdaiSubgraphValues,
+	optimismValues: defaultSubgraphValues,
 };
 
 export const subgraphSlice = createSlice({
@@ -53,16 +46,24 @@ export const subgraphSlice = createSlice({
 				state.currentValues = action.payload.response;
 				if (action.payload.chainId === config.MAINNET_NETWORK_NUMBER) {
 					state.mainnetValues = action.payload.response;
+				} else if (
+					action.payload.chainId === config.XDAI_NETWORK_NUMBER
+				) {
+					state.gnosisValues = action.payload.response;
+				} else if (
+					action.payload.chainId === config.OPTIMISM_NETWORK_NUMBER
+				) {
+					state.optimismValues = action.payload.response;
 				}
-				if (action.payload.chainId === config.XDAI_NETWORK_NUMBER) {
-					state.xDaiValues = action.payload.response;
-				}
-			})
-			.addCase(fetchXDaiInfoAsync.fulfilled, (state, action) => {
-				state.xDaiValues = action.payload;
 			})
 			.addCase(fetchMainnetInfoAsync.fulfilled, (state, action) => {
 				state.mainnetValues = action.payload;
+			})
+			.addCase(fetchGnosisInfoAsync.fulfilled, (state, action) => {
+				state.gnosisValues = action.payload;
+			})
+			.addCase(fetchOptimismInfoAsync.fulfilled, (state, action) => {
+				state.optimismValues = action.payload;
 			});
 	},
 });

@@ -22,7 +22,6 @@ import TimelineSection from '@/components/views/project/projectUpdates/TimelineS
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
 	ssr: false,
 });
-
 const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
 	ssr: false,
 });

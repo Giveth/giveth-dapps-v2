@@ -1,4 +1,5 @@
 import { parseUnits } from '@ethersproject/units';
+import React from 'react';
 import {
 	EnvConfig,
 	StakingPlatform,
@@ -6,31 +7,37 @@ import {
 	StreamType,
 } from '@/types/config';
 import { networksParams } from '@/helpers/blockchain';
+import { IconPolygon } from '@/components/Icons/Polygon';
+import { IconCelo } from '@/components/Icons/Celo';
+import { IconOptimism } from '@/components/Icons/Optimism';
+import { IconGnosisChain } from '@/components/Icons/GnosisChain';
+import { IconEthereum } from '@/components/Icons/Eth';
 
 const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE =
-	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://serve.giveth.io';
+	process.env.NEXT_PUBLIC_BASE_ROUTE ||
+	'https://impact-graph.serve.giveth.io';
 const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
-	'https://staging.notification.giveth.io';
+	'https://notification.serve.giveth.io';
+const AUTH_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
+	'https://auth.serve.giveth.io/v1';
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const XDAI_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
-const OPTIMISM_NETWORK_NUMBER = 10;
+const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
-	BASE_ROUTE: BASE_ROUTE,
 	BACKEND_LINK:
 		process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`,
 	FRONTEND_LINK:
 		process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://staging.giveth.io',
 	MICROSERVICES: {
-		authentication:
-			process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
-			`${BASE_ROUTE}/siweauthmicroservice/v1`,
+		authentication: AUTH_BASE_ROUTE,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
@@ -55,6 +62,8 @@ const config: EnvConfig = {
 		blockExplorerName: ['Etherscan'],
 		subgraphAddress:
 			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-goerli/1.5.0',
+		coingeckoChainName: 'ethereum',
+		chainLogo: (logoSize?: number) => <IconEthereum size={logoSize} />,
 
 		TOKEN_ADDRESS: '0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be',
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0', // TODO: GOERLI ?
@@ -117,6 +126,8 @@ const config: EnvConfig = {
 		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
 			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-gnosischain/1.5.1',
+		coingeckoChainName: 'xdai',
+		chainLogo: (logoSize?: number) => <IconGnosisChain size={logoSize} />,
 
 		TOKEN_ADDRESS: '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3',
 		gGIV_ADDRESS: '0x4Bee761229AD815Cc64461783580F629dA0f0350',
@@ -260,16 +271,35 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['PolygonScan'],
 		subgraphAddress: '',
+		coingeckoChainName: 'polygon-pos',
+		chainLogo: (logoSize?: number) => <IconPolygon size={logoSize} />,
 	},
 
 	OPTIMISM_CONFIG: {
-		nodeUrl: networksParams[10]?.rpcUrls[0],
-		...networksParams[10],
+		nodeUrl: networksParams[420]?.rpcUrls[0],
+		...networksParams[420],
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['OptimismScan'],
-		subgraphAddress: '',
+		blockExplorerName: ['GoerliOptimismScan'],
+		subgraphAddress:
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-staging',
+		coingeckoChainName: 'optimistic-ethereum',
+		chainLogo: (logoSize?: number) => <IconOptimism size={logoSize} />,
+
+		TOKEN_ADDRESS: '0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
+		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
+		TOKEN_DISTRO_ADDRESS: '0x8D2cBce8ea0256bFFBa6fa4bf7CEC46a1d9b43f6',
+		pools: [],
+		regenPools: [],
+		regenStreams: [],
+		GIV: {
+			network: OPTIMISM_NETWORK_NUMBER,
+			LM_ADDRESS: '0x632AC305ed88817480d12155A7F1244cC182C298',
+			GARDEN_ADDRESS: '0x632AC305ed88817480d12155A7F1244cC182C298',
+			BUY_LINK: 'https://',
+		},
+		uniswapV2Subgraph: '',
 	},
 
 	CELO_CONFIG: {
@@ -280,6 +310,8 @@ const config: EnvConfig = {
 		},
 		blockExplorerName: ['CeloScan'],
 		subgraphAddress: '',
+		coingeckoChainName: 'celo',
+		chainLogo: (logoSize?: number) => <IconCelo size={logoSize} />,
 	},
 };
 

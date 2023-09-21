@@ -11,7 +11,6 @@ import { useIntl } from 'react-intl';
 import { ethers, constants } from 'ethers';
 import { Zero } from '@ethersproject/constants';
 import BigNumber from 'bignumber.js';
-import styled from 'styled-components';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { Modal } from './Modal';
@@ -28,7 +27,6 @@ import {
 	HarvestBoxes,
 	HarvestButton,
 	HelpRow,
-	Pending,
 	RateRow,
 	TooltipContent,
 } from './HarvestAll.sc';
@@ -36,7 +34,6 @@ import { BN, formatWeiHelper } from '@/helpers/number';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '../AmountBoxWithPrice';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
-import LoadingAnimation from '@/animations/loading.json';
 import { claimAirDrop } from '@/lib/claim';
 import {
 	showPendingClaim,
@@ -48,7 +45,6 @@ import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import LottieControl from '@/components/LottieControl';
 import type { TransactionResponse } from '@ethersproject/providers';
 
 enum ClaimState {
@@ -321,24 +317,19 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 							When you Claim GIV rewards, all liquid GIV allocated
 							to you is sent to your wallet.
 						</HarvestAllDesc>
-						{claimState === ClaimState.WAITING ? (
-							<ClaimPending>
-								<LottieControl
-									animationData={LoadingAnimation}
-									size={40}
-								/>
-								&nbsp;CLAIM PENDING
-							</ClaimPending>
-						) : (
-							<HarvestButton
-								label='CLAIM'
-								size='medium'
-								buttonType='primary'
-								onClick={() => {
-									onClaim();
-								}}
-							/>
-						)}
+						<HarvestButton
+							label={
+								claimState === ClaimState.WAITING
+									? 'CLAIM PENDING'
+									: 'CLAIM'
+							}
+							loading={claimState === ClaimState.WAITING}
+							size='medium'
+							buttonType='primary'
+							onClick={() => {
+								onClaim();
+							}}
+						/>
 						<CancelButton
 							label='CANCEL'
 							size='medium'
@@ -376,7 +367,3 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 		</Modal>
 	);
 };
-
-const ClaimPending = styled(Pending)`
-	width: 316px;
-`;

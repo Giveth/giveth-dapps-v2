@@ -72,9 +72,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const givPrice = useAppSelector(state => state.price.givPrice);
 	const givTokenPrice = new BigNumber(givPrice).toNumber();
 	const isMainnet = chainId === config.MAINNET_NETWORK_NUMBER;
-	const isGnosis = chainId === config.XDAI_NETWORK_NUMBER;
-	const isPolygon = chainId === config.POLYGON_NETWORK_NUMBER;
-	const isCelo = chainId === config.CELO_NETWORK_NUMBER;
 
 	const [donating, setDonating] = useState(false);
 	const [firstDonationSaved, setFirstDonationSaved] = useState(false);
@@ -205,13 +202,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 					isMainnet ||
 					(token.mainnetAddress && token.symbol !== 'CELO')
 						? config.MAINNET_NETWORK_NUMBER
-						: isGnosis
-						? config.XDAI_NETWORK_NUMBER
-						: isCelo
-						? config.CELO_NETWORK_NUMBER
-						: isPolygon
-						? config.POLYGON_NETWORK_NUMBER
-						: config.OPTIMISM_NETWORK_NUMBER;
+						: chainId!;
 				const fetchedPrice = await fetchPrice(
 					coingeckoChainId,
 					tokenAddress,
@@ -283,7 +274,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 											firstTxHash,
 										)}
 										title={formatMessage({
-											id: 'label.view_on_etherscan',
+											id: 'label.view_on_block_explorer',
 										})}
 										color={brandColors.pinky[500]}
 									/>
@@ -338,7 +329,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 													secondTxHash,
 												)}
 												title={formatMessage({
-													id: 'label.view_on_etherscan',
+													id: 'label.view_on_block_explorer',
 												})}
 												color={brandColors.pinky[500]}
 											/>

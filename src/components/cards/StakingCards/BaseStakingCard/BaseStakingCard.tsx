@@ -60,7 +60,9 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 
 	const isGIVStaking = type === StakingType.GIV_LM;
 	const isGIVpower =
-		isGIVStaking && poolNetwork === config.XDAI_NETWORK_NUMBER;
+		isGIVStaking &&
+		(poolNetwork === config.XDAI_NETWORK_NUMBER ||
+			poolNetwork === config.OPTIMISM_NETWORK_NUMBER);
 
 	const isDiscontinued = farmEndTimeMS
 		? getNowUnixMS() > farmEndTimeMS

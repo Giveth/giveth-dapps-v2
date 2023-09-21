@@ -49,11 +49,9 @@ export const GIVfarmTop = () => {
 					</Col>
 					<Col xs={12} sm={5} xl={4}>
 						<GIVfarmRewardCard
+							cardName='GIVfarm'
 							title={formatMessage({
 								id: 'label.your_givfarm_rewards',
-							})}
-							wrongNetworkText={formatMessage({
-								id: 'label.givfarm_is_only_available_on_main_and_gnosis',
 							})}
 							liquidAmount={rewardLiquidPart}
 							stream={rewardStream}
@@ -61,6 +59,7 @@ export const GIVfarmTop = () => {
 							targetNetworks={[
 								config.MAINNET_NETWORK_NUMBER,
 								config.XDAI_NETWORK_NUMBER,
+								config.OPTIMISM_NETWORK_NUMBER,
 							]}
 						/>
 					</Col>

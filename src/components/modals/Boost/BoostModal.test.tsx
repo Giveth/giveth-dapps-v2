@@ -26,8 +26,8 @@ test('showing the ZeroGivpowerModal if the user GIVpower balance is zero', async
 	const setStateMock = jest.fn();
 	const useStateMock: any = (state: any) => [state, setStateMock];
 	jest.spyOn(React, 'useState').mockImplementation(useStateMock);
-	const xDaiValues: ISubgraphState = {};
-	xDaiValues[
+	const gnosisValues: ISubgraphState = {};
+	gnosisValues[
 		`unipoolBalance_${config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase()}`
 	] = {
 		balance: '0',
@@ -39,7 +39,7 @@ test('showing the ZeroGivpowerModal if the user GIVpower balance is zero', async
 		{
 			preloadedState: {
 				subgraph: {
-					xDaiValues: xDaiValues,
+					gnosisValues: gnosisValues,
 					mainnetValues: {},
 					currentValues: {},
 				},
@@ -53,8 +53,8 @@ test('showing the BoostModal if the user GIVpower balance is not zero', async ()
 	const setStateMock = jest.fn();
 	const useStateMock: any = (state: any) => [state, setStateMock];
 	jest.spyOn(React, 'useState').mockImplementation(useStateMock);
-	const xDaiValues: ISubgraphState = {};
-	xDaiValues[
+	const gnosisValues: ISubgraphState = {};
+	gnosisValues[
 		`unipoolBalance_${config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase()}`
 	] = {
 		balance: '1',
@@ -66,7 +66,7 @@ test('showing the BoostModal if the user GIVpower balance is not zero', async ()
 		{
 			preloadedState: {
 				subgraph: {
-					xDaiValues: xDaiValues,
+					gnosisValues: gnosisValues,
 					mainnetValues: {},
 					currentValues: {},
 				},

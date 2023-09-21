@@ -102,7 +102,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 
 	const [section, setSection] = useState<ISection>(_sections.getGiv);
 	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.xDaiValues),
+		useAppSelector(state => state.subgraph.gnosisValues),
 	);
 	const { userData } = useAppSelector(state => state.user);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
@@ -154,14 +154,17 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 				<Row>
 					<Col lg={6}>
 						<SectionTitle weight={700}>
-							Gitcoin Passport
+							{formatMessage({
+								id: 'label.gitcoin_passport',
+							})}
 						</SectionTitle>
 						<SectionDesc>
-							Taking control of your online identity and your
-							decentralized credentials
+							{formatMessage({
+								id: 'label.take_control_online_identity',
+							})}
 							<br />
 							<PassportLink href={links.PASSPORT}>
-								Learn more.
+								{formatMessage({ id: 'label.go_to_passport' })}.
 							</PassportLink>
 						</SectionDesc>
 						<PassportCard />

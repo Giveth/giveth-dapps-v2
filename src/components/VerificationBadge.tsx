@@ -3,28 +3,32 @@ import { EVerificationStatus } from '@/apollo/types/types';
 import { Badge, EBadgeStatus } from './Badge';
 
 interface IProps {
-	status?: EVerificationStatus;
-	simplified?: boolean;
+	isVerified?: boolean;
+	verificationStatus?: EVerificationStatus;
 }
 
-const VerificationBadge: FC<IProps> = ({ status, simplified }) => {
-	if (!status || status === EVerificationStatus.DRAFT) return null;
+const VerificationBadge: FC<IProps> = ({ isVerified, verificationStatus }) => {
+	const verStatus = isVerified
+		? EVerificationStatus.VERIFIED
+		: verificationStatus;
 	let label, badgeStatus;
-	switch (status) {
+	switch (verStatus) {
 		case EVerificationStatus.REJECTED:
-			label = simplified ? 'Rejected' : 'Verification rejected';
-			badgeStatus = EBadgeStatus.ERROR;
+			label = 'Declined';
+			badgeStatus = EBadgeStatus.WARNING;
 			break;
 		case EVerificationStatus.SUBMITTED:
-			label = simplified ? 'Request sent' : 'Verification request sent';
-			badgeStatus = EBadgeStatus.WARNING;
+			label = 'Submitted';
+			badgeStatus = EBadgeStatus.GIVETH;
 			break;
 		case EVerificationStatus.VERIFIED:
 			label = 'Verified';
 			badgeStatus = EBadgeStatus.SUCCESS;
 			break;
+		default:
+			label = 'Not Verified';
+			badgeStatus = EBadgeStatus.DEFAULT;
 	}
-
 	return <Badge status={badgeStatus} label={label} />;
 };
 

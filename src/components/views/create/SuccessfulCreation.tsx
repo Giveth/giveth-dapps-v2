@@ -67,10 +67,9 @@ const SuccessfulCreation = (props: {
 								id: 'label.your_project_is_being_reviewed',
 							})}
 						</SuccessMessage>
-						<CopyLink url={fullPath(projectPath)} />
-						<br />
-						<br />
-						<br />
+						<CopyBox>
+							<CopyLink url={fullPath(projectPath)} />
+						</CopyBox>
 						<SocialBox
 							project={project}
 							contentType={EContentType.ourProject}
@@ -115,7 +114,7 @@ const Wrapper = styled.div`
 `;
 const ContainerStyled = styled(Container)`
 	text-align: center;
-	padding-top: 214px;
+	padding-top: 114px;
 	> img:first-child {
 		top: 0;
 		right: 20px;
@@ -151,6 +150,10 @@ const ProjectsButton = styled(Button)`
 	height: 48px;
 	font-size: 12px;
 	margin: 20px auto;
+`;
+
+const CopyBox = styled.div`
+	max-height: 100px;
 `;
 
 export default SuccessfulCreation;

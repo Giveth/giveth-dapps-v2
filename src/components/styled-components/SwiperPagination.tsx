@@ -1,11 +1,12 @@
-import { H5 } from '@giveth/ui-design-system';
+import { H5, mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FlexCenter } from './Flex';
+import { Flex } from './Flex';
 import { Shadow } from './Shadow';
 
 export const PaginationWrapper = styled(H5)`
 	display: flex;
 	align-items: center;
+	overflow-x: scroll;
 `;
 
 export const NavigationWrapper = styled.div<{ disabled?: boolean }>`
@@ -24,6 +25,11 @@ export const NavigationWrapper = styled.div<{ disabled?: boolean }>`
 	user-select: none;
 `;
 
-export const SwiperPaginationWrapper = styled(FlexCenter)`
+export const SwiperPaginationWrapper = styled(Flex)`
 	padding: 16px;
+	position: relative;
+	width: 100%;
+	${mediaQueries.tablet} {
+		width: unset;
+	}
 `;

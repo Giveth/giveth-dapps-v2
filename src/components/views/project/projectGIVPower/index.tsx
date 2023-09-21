@@ -6,10 +6,9 @@ import NoBoost from '@/components/views/project/projectGIVPower/NoBoost';
 import { IPowerBoosting } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import { Flex } from '@/components/styled-components/Flex';
-import LoadingAnimation from '@/animations/loading_giv.json';
-import LottieControl from '@/components/LottieControl';
 import { useProjectContext } from '@/context/project.context';
 import { GIVpowerCard } from './GIVpowerCard';
+import { WrappedSpinner } from '@/components/Spinner';
 
 export interface IPowerBoostingWithUserGIVpower
 	extends Omit<IPowerBoosting, 'user'> {
@@ -33,8 +32,7 @@ const ProjectGIVPowerIndex: FC<IProjectGIVPowerIndexProps> = () => {
 	const hasGivPower = boostersData ? boostersData.totalCount > 0 : false;
 	const totalCount = boostersData?.totalCount ?? 0;
 
-	if (isBoostingsLoading)
-		return <LottieControl animationData={LoadingAnimation} size={250} />;
+	if (isBoostingsLoading) return <WrappedSpinner size={250} />;
 
 	return hasGivPower ? (
 		<>

@@ -212,8 +212,8 @@ export class SubgraphQueryBuilder {
 			.join('');
 	};
 
-	private static getGIVPowersInfoQuery = (): string => {
-		return `givpower(id: "${config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase()}"){
+	private static getGIVPowersInfoQuery = (lmAddress: string): string => {
+		return `givpower(id: "${lmAddress.toLowerCase()}"){
 			id
 			initialDate
 			locksCreated
@@ -283,8 +283,9 @@ export class SubgraphQueryBuilder {
 		`;
 	};
 
-	static getXDaiQuery = (userAddress?: string): string => {
-		return `query {
+	static getGnosisQuery = (userAddress?: string): string => {
+		return `
+		{
 			${SubgraphQueryBuilder.getBalanceQuery(config.XDAI_CONFIG, userAddress)}
 			${SubgraphQueryBuilder.generateTokenDistroQueries(
 				config.XDAI_CONFIG,
@@ -299,7 +300,33 @@ export class SubgraphQueryBuilder {
 				],
 				userAddress,
 			)}
-			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery()},
+			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery(
+				config.XDAI_CONFIG.GIV.LM_ADDRESS,
+			)},
+		}
+		`;
+	};
+
+	static getOptimismQuery = (userAddress?: string): string => {
+		return `
+		{
+			${SubgraphQueryBuilder.getBalanceQuery(config.OPTIMISM_CONFIG, userAddress)}
+			${SubgraphQueryBuilder.generateTokenDistroQueries(
+				config.OPTIMISM_CONFIG,
+				userAddress,
+			)}
+			${SubgraphQueryBuilder.generateFarmingQueries(
+				[
+					getGivStakingConfig(config.OPTIMISM_CONFIG),
+					...(config.OPTIMISM_CONFIG
+						.pools as Array<SimplePoolStakingConfig>),
+					...config.OPTIMISM_CONFIG.regenPools,
+				],
+				userAddress,
+			)}
+			givpowerInfo: ${SubgraphQueryBuilder.getGIVPowersInfoQuery(
+				config.OPTIMISM_CONFIG.GIV.LM_ADDRESS,
+			)},
 		}
 		`;
 	};

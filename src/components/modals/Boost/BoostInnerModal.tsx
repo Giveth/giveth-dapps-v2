@@ -14,7 +14,6 @@ import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 
-import LottieControl from '@/components/LottieControl';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { LockInfoTooltip } from '../StakeLock/LockInfo';
 import { Flex } from '@/components/styled-components/Flex';
@@ -47,9 +46,9 @@ import {
 import { client } from '@/apollo/apolloClient';
 import { IPowerBoosting } from '@/apollo/types/types';
 import { useAppSelector } from '@/features/hooks';
-import LoadingAnimation from '@/animations/loading_giv.json';
 import { useProjectContext } from '@/context/project.context';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { WrappedSpinner } from '@/components/Spinner';
 import type { FC, Dispatch, SetStateAction } from 'react';
 import type { BigNumber } from 'ethers';
 
@@ -207,7 +206,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	};
 
 	if (loading) {
-		return <LottieControl animationData={LoadingAnimation} size={200} />;
+		return <WrappedSpinner size={200} />;
 	}
 
 	if (state === EBoostModalState.LIMIT_EXCEEDED) {

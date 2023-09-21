@@ -72,11 +72,9 @@ export const TabGardenTop = () => {
 					</Col>
 					<Col xs={12} sm={5} md={4}>
 						<GardenRewardCard
+							cardName='GIVgarden'
 							title={formatMessage({
 								id: 'label.your_giv_garden_rewards',
-							})}
-							wrongNetworkText={formatMessage({
-								id: 'label.givgarden_is_only_available_on_gnosis',
 							})}
 							liquidAmount={earnedLiquidPart}
 							stream={earnedStream}

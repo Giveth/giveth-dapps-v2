@@ -21,6 +21,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_QF_ROUND_HISTORY } from '@/apollo/gql/gqlDonations';
 import { IGetQfRoundHistory, IQFRound } from '@/apollo/types/types';
+import { formatDonations } from '@/helpers/number';
 
 interface IProjectTotalFundCardProps {
 	selectedQF: IQFRound | null;
@@ -119,10 +120,14 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 			{selectedQF === null ? (
 				<>
 					<UpperSection>
-						<B>All time donations received</B>
+						<B>
+							{formatMessage({
+								id: 'label.all_time_donations_received',
+							})}
+						</B>
 						{totalDonations && totalDonations > 0 ? (
 							<TotalFund>
-								{'$' + totalDonations.toFixed(2)}
+								{formatDonations(totalDonations, '$')}
 							</TotalFund>
 						) : (
 							<NoDonation>
@@ -133,31 +138,48 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						)}
 					</UpperSection>
 					<div>
-						<LightSubline> Raised from </LightSubline>
+						<LightSubline>
+							{formatMessage({
+								id: 'label.raised_from',
+							})}
+						</LightSubline>
 						<Subline style={{ display: 'inline-block' }}>
 							&nbsp;{countUniqueDonors}
 							&nbsp;
 						</Subline>
-						<LightSubline>contributors</LightSubline>
+						<LightSubline>
+							{formatMessage(
+								{
+									id: 'label.contributors',
+								},
+								{
+									count: countUniqueDonors,
+								},
+							)}
+						</LightSubline>
 					</div>
 				</>
 			) : (
 				<div>
 					<BorderedFlex>
-						<P>Round: &nbsp;</P>
-						<B>QF round {selectedQF.id} donations</B>
+						<B>{selectedQF.name} donations</B>
 					</BorderedFlex>
 					{roundDonorsCount && roundDonorsCount > 0 ? (
 						<div>
 							<TotalFund>
-								{'$' + roundTotalDonation?.toFixed(2) || '0'}
+								{formatDonations(roundTotalDonation || 0, '$')}
 							</TotalFund>
 							<EstimatedMatchingSection
 								justifyContent='space-between'
 								alignItems='center'
 							>
 								<EstimatedMatchingPrice>
-									+ ${matchFund.toFixed(2)}
+									+{' '}
+									{formatDonations(
+										matchFund,
+										'$',
+										selectedQFData?.isActive ? true : false,
+									)}
 								</EstimatedMatchingPrice>
 								<EstimatedMatchingText>
 									{selectedQFData?.isActive

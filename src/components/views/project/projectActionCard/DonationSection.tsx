@@ -16,10 +16,11 @@ import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
+import { formatDonations } from '@/helpers/number';
 
 export const DonateSection = () => {
 	const { formatMessage, locale } = useIntl();
-	const { projectData, totalDonationsCount } = useProjectContext();
+	const { projectData } = useProjectContext();
 	const { sumDonationValueUsd } = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 
@@ -28,21 +29,25 @@ export const DonateSection = () => {
 			{sumDonationValueUsd && sumDonationValueUsd !== 0 ? (
 				<DonateInfo>
 					{isMobile && <br />}
-					<Title>Total amount raised</Title>
+					<Title>
+						{formatMessage({ id: 'label.total_amount_raised' })}
+					</Title>
 					<Amount weight={700}>
-						${(sumDonationValueUsd || 0).toLocaleString(locale)}
+						{formatDonations(sumDonationValueUsd || 0, '$')}
 					</Amount>
 					<Description>
 						{formatMessage({
 							id: 'label.raised_from',
 						})}
-						<Caption medium>{totalDonationsCount}</Caption>
+						<Caption medium>
+							{projectData?.countUniqueDonors}
+						</Caption>
 						{formatMessage(
 							{
 								id: 'label.contributors',
 							},
 							{
-								count: totalDonationsCount,
+								count: projectData?.countUniqueDonors,
 							},
 						)}
 					</Description>
@@ -57,14 +62,34 @@ export const DonateSection = () => {
 				</DonateInfo>
 			)}
 			<DonateDescription flexDirection='column' gap='8px'>
-				<B>100% to the project. Always.</B>
+				<B>
+					{formatMessage({
+						id: 'component.donation_section.100_to_the_project',
+					})}
+				</B>
+				<B>
+					{formatMessage({
+						id: 'label.always',
+					})}
+					.
+				</B>
 				<P>
-					Every donation is peer-to-peer, with no fees and no
-					middlemen.
+					{formatMessage({
+						id: 'component.donation_section.desc',
+					})}
 				</P>
-				<a href='/' target='_blank' referrerPolicy='no-referrer'>
+				<a
+					href='https://docs.giveth.io/whatisgiveth/zero-fees'
+					target='_blank'
+					referrerPolicy='no-referrer'
+					rel='noreferrer'
+				>
 					<LearnLink alignItems='center' gap='2px'>
-						<Subline>Learn about our zero-fee policy</Subline>
+						<Subline>
+							{formatMessage({
+								id: 'component.donation_section.learn_zero_fee',
+							})}
+						</Subline>
 						<IconChevronRight16 />
 					</LearnLink>
 				</a>
@@ -120,6 +145,7 @@ const DonateDescription = styled(Flex)`
 	border: 1px solid ${neutralColors.gray[300]};
 	border-radius: 16px;
 	margin-bottom: 24px;
+	margin-top: 10px;
 `;
 
 const LearnLink = styled(Flex)`

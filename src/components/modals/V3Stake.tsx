@@ -12,12 +12,11 @@ import { BigNumber, constants } from 'ethers';
 import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
 import { Modal } from './Modal';
-import { CancelButton, HarvestButton, HelpRow, Pending } from './HarvestAll.sc';
+import { CancelButton, HarvestButton, HelpRow } from './HarvestAll.sc';
 import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import V3StakingCard from '../cards/StakingCards/PositionCard/PositionCard';
-import LoadingAnimation from '@/animations/loading.json';
 import { exit, getReward, transfer } from '@/lib/stakingNFT';
 import {
 	ConfirmedInnerModal,
@@ -33,7 +32,6 @@ import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import LottieControl from '@/components/LottieControl';
 
 interface IV3StakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -175,24 +173,21 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 					<HarvestContainer>
 						<HelpRow>Please, unstake your NFT!</HelpRow>
 						<HarvestButtonContainer>
-							{stakeStatus === StakeState.CONFIRM_UNSTAKE ? (
-								<Pending>
-									<LottieControl
-										animationData={LoadingAnimation}
-										size={40}
-									/>
-									&nbsp; PENDING
-								</Pending>
-							) : (
-								<HarvestButton
-									label='UNSTAKE'
-									size='medium'
-									buttonType='primary'
-									onClick={() => {
-										handleStakeUnstake(0);
-									}}
-								/>
-							)}
+							<HarvestButton
+								label={
+									stakeStatus === StakeState.CONFIRM_UNSTAKE
+										? 'PENDING'
+										: 'UNSTAKE'
+								}
+								size='medium'
+								buttonType='primary'
+								onClick={() => {
+									handleStakeUnstake(0);
+								}}
+								loading={
+									stakeStatus === StakeState.CONFIRM_UNSTAKE
+								}
+							/>
 							<CancelButton
 								label='CANCEL'
 								size='medium'

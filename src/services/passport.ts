@@ -67,9 +67,13 @@ export const connectPassport = async (
 			localStorage.setItem(StorageLabel.TOKEN, jwt);
 		}
 		return true;
-	} catch (error) {
+	} catch (error: any) {
 		console.log('error', error);
-		showToastError(error);
+		if (error.code === 'ACTION_REJECTED') {
+			showToastError('Rejected By User');
+		} else {
+			showToastError(error);
+		}
 		return false;
 	}
 };

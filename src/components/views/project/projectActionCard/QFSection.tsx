@@ -25,9 +25,10 @@ import {
 import links from '@/lib/constants/links';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
+import { formatDonations } from '@/helpers/number';
 
 const QFSection = () => {
-	const { formatMessage, locale } = useIntl();
+	const { formatMessage } = useIntl();
 	const { projectData } = useProjectContext();
 	const { estimatedMatching, sumDonationValueUsdForActiveQfRound } =
 		projectData || {};
@@ -38,19 +39,24 @@ const QFSection = () => {
 	const EstimatedMatchingSection = () => (
 		<Flex flexDirection='column' gap='4px'>
 			<EstimatedMatchingPrice>
-				+{' '}
-				{calculateTotalEstimatedMatching(
-					projectDonationsSqrtRootSum,
-					allProjectsSum,
-					matchingPool,
-				).toFixed(2)}
+				{formatDonations(
+					calculateTotalEstimatedMatching(
+						projectDonationsSqrtRootSum,
+						allProjectsSum,
+						matchingPool,
+					),
+					'$',
+					true,
+				)}
 			</EstimatedMatchingPrice>
 			<Flex alignItems='center' gap='4px'>
-				<LightCaption> Estimated matching </LightCaption>
+				<LightCaption>
+					{formatMessage({ id: 'label.estimated_matching' })}
+				</LightCaption>
 				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
 					<TooltipContent>
 						{formatMessage({
-							id: 'tooltip.donation.matching',
+							id: 'component.qf-section.tooltip',
 						})}
 					</TooltipContent>
 				</IconWithTooltip>
@@ -64,12 +70,16 @@ const QFSection = () => {
 			sumDonationValueUsdForActiveQfRound !== 0 ? (
 				<DonateInfo>
 					{isMobile && <br />}
-					<Title>Amount raised in this round</Title>
+					<Title>
+						{formatMessage({
+							id: 'label.amount_raised_in_this_round',
+						})}
+					</Title>
 					<Amount weight={700}>
 						$
-						{(
-							sumDonationValueUsdForActiveQfRound || 0
-						).toLocaleString(locale)}
+						{formatDonations(
+							sumDonationValueUsdForActiveQfRound || 0,
+						)}
 					</Amount>
 					<Description>
 						{formatMessage({
@@ -110,8 +120,16 @@ const QFSection = () => {
 
 			<ChartContainer>
 				<Flex justifyContent='space-between'>
-					<LightSubline>Contribution</LightSubline>
-					<GreenSubline>Matching</GreenSubline>
+					<LightSubline>
+						{formatMessage({
+							id: 'label.contribution',
+						})}
+					</LightSubline>
+					<GreenSubline>
+						{formatMessage({
+							id: 'label.matching',
+						})}
+					</GreenSubline>
 				</Flex>
 				<ContributionsContainer>
 					<Flex flexDirection='column' gap='4px'>
@@ -120,12 +138,16 @@ const QFSection = () => {
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
 								+{' '}
-								{calculateEstimatedMatchingWithDonationAmount(
-									1,
-									projectDonationsSqrtRootSum,
-									allProjectsSum,
-									matchingPool,
-								).toFixed(2)}
+								{formatDonations(
+									calculateEstimatedMatchingWithDonationAmount(
+										1,
+										projectDonationsSqrtRootSum,
+										allProjectsSum,
+										matchingPool,
+									),
+									'',
+									true,
+								)}
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
@@ -134,12 +156,16 @@ const QFSection = () => {
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
 								+{' '}
-								{calculateEstimatedMatchingWithDonationAmount(
-									10,
-									projectDonationsSqrtRootSum,
-									allProjectsSum,
-									matchingPool,
-								).toFixed(2)}
+								{formatDonations(
+									calculateEstimatedMatchingWithDonationAmount(
+										10,
+										projectDonationsSqrtRootSum,
+										allProjectsSum,
+										matchingPool,
+									),
+									'',
+									true,
+								)}
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
@@ -148,12 +174,16 @@ const QFSection = () => {
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
 								+{' '}
-								{calculateEstimatedMatchingWithDonationAmount(
-									100,
-									projectDonationsSqrtRootSum,
-									allProjectsSum,
-									matchingPool,
-								).toFixed(2)}
+								{formatDonations(
+									calculateEstimatedMatchingWithDonationAmount(
+										100,
+										projectDonationsSqrtRootSum,
+										allProjectsSum,
+										matchingPool,
+									),
+									'',
+									true,
+								)}
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
@@ -169,7 +199,11 @@ const QFSection = () => {
 							rel='noreferrer'
 						>
 							<LearnLink alignItems='center' gap='2px'>
-								<Subline>How it works?</Subline>
+								<Subline>
+									{formatMessage({
+										id: 'label.how_it_works?',
+									})}
+								</Subline>
 								<IconChevronRight16 />
 							</LearnLink>
 						</a>

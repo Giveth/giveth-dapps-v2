@@ -26,10 +26,10 @@ export const fetchMainnetInfo = async (userAddress?: string) => {
 	}
 };
 
-export const fetchXDaiInfo = async (userAddress?: string) => {
+export const fetchGnosisInfo = async (userAddress?: string) => {
 	try {
 		const response = await fetchSubgraph(
-			SubgraphQueryBuilder.getXDaiQuery(userAddress),
+			SubgraphQueryBuilder.getGnosisQuery(userAddress),
 			config.XDAI_NETWORK_NUMBER,
 		);
 		return transformSubgraphData({
@@ -37,10 +37,31 @@ export const fetchXDaiInfo = async (userAddress?: string) => {
 			networkNumber: config.XDAI_NETWORK_NUMBER,
 		});
 	} catch (e) {
-		console.error('Error on query xDai subgraph:', e);
+		console.error('Error on query Gnosis subgraph:', e);
 		captureException(e, {
 			tags: {
-				section: 'fetchxDaiSubgraph',
+				section: 'fetchGnosisSubgraph',
+			},
+		});
+		return defaultSubgraphValues;
+	}
+};
+
+export const fetchOptimismInfo = async (userAddress?: string) => {
+	try {
+		const response = await fetchSubgraph(
+			SubgraphQueryBuilder.getOptimismQuery(userAddress),
+			config.OPTIMISM_NETWORK_NUMBER,
+		);
+		return transformSubgraphData({
+			...response,
+			networkNumber: config.OPTIMISM_NETWORK_NUMBER,
+		});
+	} catch (e) {
+		console.error('Error on query Optimism subgraph:', e);
+		captureException(e, {
+			tags: {
+				section: 'fetchOptimismSubgraph',
 			},
 		});
 		return defaultSubgraphValues;

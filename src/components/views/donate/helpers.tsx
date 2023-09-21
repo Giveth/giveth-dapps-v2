@@ -144,9 +144,8 @@ export const createDonation: TCreateDonation = async props => {
 						setDonating(false);
 					});
 			},
-			onReceipt: () => {
-				updateDonation(donationId, EDonationStatus.VERIFIED);
-			},
+			onReceipt: () =>
+				updateDonation(donationId, EDonationStatus.VERIFIED),
 		};
 
 		await sendTransaction(library, transactionObj, txCallbacks, address);

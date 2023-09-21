@@ -8,9 +8,8 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import IconMail from '/public/images/icons/mail.svg';
 import { useIsIFrameLoaded } from '@/hooks/useIsIFrameLoaded';
-import LoadingAnimation from '@/animations/loading_giv.json';
-import LottieControl from '@/components/LottieControl';
 import { FlexCenter } from '@/components/styled-components/Flex';
+import { WrappedSpinner } from '../Spinner';
 
 const SubscribeNewsletter: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -36,10 +35,7 @@ const SubscribeNewsletter: FC<IModal> = ({ setShowModal }) => {
 				/>
 				{!isIFrameLoaded && (
 					<FlexCenter>
-						<LottieControl
-							animationData={LoadingAnimation}
-							size={300}
-						/>
+						<WrappedSpinner size={300} />
 					</FlexCenter>
 				)}
 			</Container>

@@ -1,6 +1,7 @@
 import { B, neutralColors, SublineBold } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
+import { useIntl } from 'react-intl';
 
 interface IProps {
 	date: string;
@@ -9,6 +10,7 @@ interface IProps {
 }
 
 const TimelineSection: FC<IProps> = props => {
+	const { formatMessage } = useIntl();
 	const date = new Date(props?.date);
 	const year = date.getFullYear();
 	const month = date.toLocaleString('default', { month: 'short' });
@@ -18,7 +20,9 @@ const TimelineSection: FC<IProps> = props => {
 			{props.newUpdate ? (
 				<>
 					<NewUpdate>
-						<SublineBold>NEW UPDATE</SublineBold>
+						<SublineBold>
+							{formatMessage({ id: 'label.new_update' })}
+						</SublineBold>
 					</NewUpdate>
 					<VerticalBorder />
 				</>

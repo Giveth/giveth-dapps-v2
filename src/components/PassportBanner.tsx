@@ -8,6 +8,7 @@ import {
 	IconWalletOutline16,
 	P,
 	brandColors,
+	mediaQueries,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import React, { ReactNode } from 'react';
@@ -65,7 +66,7 @@ export const PassportBannerData: IData = {
 		bg: EPBGState.INFO,
 		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
 		link: {
-			label: 'label.passport.link.update_score',
+			label: 'label.passport.link.go_to_passport',
 			url: Routes.Passport,
 		},
 	},
@@ -74,7 +75,7 @@ export const PassportBannerData: IData = {
 		bg: EPBGState.WARNING,
 		icon: <IconAlertTriangleFilled24 color={brandColors.giv[500]} />,
 		link: {
-			label: 'label.passport.link.update_score',
+			label: 'label.passport.link.go_to_passport',
 			url: Routes.Passport,
 		},
 	},
@@ -83,7 +84,7 @@ export const PassportBannerData: IData = {
 		bg: EPBGState.SUCCESS,
 		icon: <IconVerifiedBadge24 color={semanticColors.jade[600]} />,
 		link: {
-			label: 'label.passport.link.update_score',
+			label: 'label.passport.link.go_to_passport',
 			url: Routes.Passport,
 		},
 	},
@@ -91,6 +92,11 @@ export const PassportBannerData: IData = {
 		content: 'label.passport.ended',
 		bg: EPBGState.ERROR,
 		icon: <IconAlertTriangleFilled24 color={semanticColors.punch[500]} />,
+	},
+	[EPassportState.NOT_STARTED]: {
+		content: 'label.passport.no_active_round',
+		bg: EPBGState.INFO,
+		icon: <IconAlertTriangleFilled24 color={semanticColors.golden[500]} />,
 	},
 	[EPassportState.NOT_ACTIVE_ROUND]: {
 		content: 'label.passport.no_active_round',
@@ -126,24 +132,28 @@ export const PassportBanner = () => {
 
 	return (
 		<PassportBannerWrapper bgColor={PassportBannerData[passportState].bg}>
-			{PassportBannerData[passportState].icon}
-			<P>
-				{formatMessage({
-					id: PassportBannerData[passportState].content,
-				})}
-				{currentRound &&
-					(passportState === EPassportState.NOT_CREATED ||
-						passportState === EPassportState.NOT_ELIGIBLE) && (
-						<strong>
-							{new Date(currentRound.endDate)
-								.toLocaleString(locale || 'en-US', {
-									day: 'numeric',
-									month: 'short',
-								})
-								.replace(/,/g, '')}
-						</strong>
-					)}
-			</P>
+			<Flex gap='8px' alignItems='center'>
+				<IconWrapper>
+					{PassportBannerData[passportState].icon}
+				</IconWrapper>
+				<P>
+					{formatMessage({
+						id: PassportBannerData[passportState].content,
+					})}
+					{currentRound &&
+						(passportState === EPassportState.NOT_CREATED ||
+							passportState === EPassportState.NOT_ELIGIBLE) && (
+							<strong>
+								{new Date(currentRound.endDate)
+									.toLocaleString(locale || 'en-US', {
+										day: 'numeric',
+										month: 'short',
+									})
+									.replace(/,/g, '')}
+							</strong>
+						)}
+				</P>
+			</Flex>
 			{PassportBannerData[passportState].link && (
 				<StyledLink
 					as='a'
@@ -172,7 +182,11 @@ export const PassportBanner = () => {
 			)}
 			{passportState === EPassportState.NOT_SIGNED && (
 				<StyledLink onClick={() => handleSign()}>
-					<GLink>Sign Message</GLink>
+					<GLink>
+						{formatMessage({
+							id: 'label.sign_message',
+						})}
+					</GLink>
 					<IconWalletOutline16 />
 				</StyledLink>
 			)}
@@ -185,13 +199,20 @@ interface IPassportBannerWrapperProps {
 }
 
 export const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
-	height: 56px;
+	flex-direction: column;
 	background-color: ${props => bgColor[props.bgColor]};
 	padding: 16px;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
 	position: relative;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
+`;
+
+const IconWrapper = styled.div`
+	width: 24px;
 `;
 
 const StyledLink = styled(Flex)`

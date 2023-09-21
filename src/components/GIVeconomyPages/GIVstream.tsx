@@ -121,9 +121,7 @@ export const TabGIVstreamTop = () => {
 						</TitleCol>
 						<Col xs={12} sm={5} xl={4}>
 							<GIVstreamRewardCard
-								wrongNetworkText={formatMessage({
-									id: 'label.givstream_is_only_available_on_gnosis',
-								})}
+								cardName='GIVstream'
 								liquidAmount={rewardLiquidPart}
 								stream={rewardStream}
 								actionLabel={formatMessage({
@@ -136,7 +134,9 @@ export const TabGIVstreamTop = () => {
 								targetNetworks={[
 									config.MAINNET_NETWORK_NUMBER,
 									config.XDAI_NETWORK_NUMBER,
+									config.OPTIMISM_NETWORK_NUMBER,
 								]}
+								title='Your GIVstream Rewards'
 							/>
 						</Col>
 					</Row>

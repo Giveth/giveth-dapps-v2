@@ -9,9 +9,9 @@ import {
 	IconDonation16,
 	neutralColors,
 	P,
-	IconRocketInSpace16,
 	IconFast16,
 	IconFlash16,
+	IconRocketInSpace16,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -65,12 +65,12 @@ const ProjectsSortSelect = () => {
 			icon: <IconArrowBottom size={16} color={brandColors.deep[900]} />,
 		},
 		{
-			label: formatMessage({ id: 'label.most_liked' }),
+			label: formatMessage({ id: 'label.likes' }),
 			value: EProjectsSortBy.MOST_LIKED,
 			icon: <IconHeartOutline16 color={brandColors.deep[900]} />,
 		},
 		{
-			label: formatMessage({ id: 'label.most_funded' }),
+			label: formatMessage({ id: 'label.amount_raised' }),
 			value: EProjectsSortBy.MOST_FUNDED,
 			icon: <IconDonation16 color={brandColors.deep[900]} />,
 		},

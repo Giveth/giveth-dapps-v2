@@ -27,7 +27,7 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 	const { formatMessage, locale } = useIntl();
 	const [isChanged, setIsChanged] = useState(false);
 	const givpowerInfo = useAppSelector(
-		state => state.subgraph.xDaiValues.givpowerInfo,
+		state => state.subgraph.gnosisValues.givpowerInfo,
 	) as IGIVpower;
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (

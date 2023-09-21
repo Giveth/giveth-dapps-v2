@@ -10,7 +10,7 @@ import {
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import CompleteProfile from '@/components/CompleteProfile';
-import Spinner from '@/components/Spinner';
+import { WrappedSpinner } from '@/components/Spinner';
 
 const CreateIndex = () => {
 	const dispatch = useAppDispatch();
@@ -37,7 +37,7 @@ const CreateIndex = () => {
 	}, [user, isSignedIn, isLoading]);
 
 	if (isLoading) {
-		return <Spinner />;
+		return <WrappedSpinner />;
 	} else if (!isEnabled) {
 		return <WalletNotConnected />;
 	} else if (!isSignedIn) {

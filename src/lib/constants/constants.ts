@@ -1,23 +1,9 @@
 import { brandColors, semanticColors } from '@giveth/ui-design-system';
 import config from '@/configuration';
+import { networksParams } from '@/helpers/blockchain';
 
 export const chainName = (chainId: number) => {
-	switch (chainId) {
-		case 31337:
-			return 'Hardhat';
-		case 1:
-			return 'Mainnet';
-		case 42:
-			return 'Kovan';
-		case 5:
-			return 'Goerli';
-		case 4:
-			return 'Rinkeby';
-		case 100:
-			return 'Gnosis Chain';
-		default:
-			return 'Unknown';
-	}
+	return networksParams[chainId].chainName || 'Unknown';
 };
 
 export const NFT_POSITIONS_MANAGER_ADDRESS: Record<string, string> = {

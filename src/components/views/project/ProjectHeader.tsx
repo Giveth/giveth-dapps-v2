@@ -31,7 +31,12 @@ const ProjectHeader = () => {
 
 	return (
 		<ImageWrapper>
-			<ProjectImage src={image || ''} alt='test' loading='lazy' />
+			<ProjectImage
+				src={image || '/images/backgrounds/project-bg.png'}
+				alt='test'
+				loading='lazy'
+			/>
+			<GradientOverlay />
 			<Title>
 				<div>{title}</div>
 				<ProjectOwnerWithPfp user={adminUser} />
@@ -52,6 +57,21 @@ const ProjectImage = styled.img`
 	width: 100%;
 	object-fit: cover; // Ensures the image covers the entire container
 	height: 380px;
+	position: relative;
+`;
+
+const GradientOverlay = styled.div`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 380px;
+	background: linear-gradient(
+		to top,
+		rgba(1, 1, 27, 0.6),
+		transparent
+	); /* Dark navy to transparent gradient */
+	border-radius: 16px;
 `;
 
 const Title = styled(H3)`

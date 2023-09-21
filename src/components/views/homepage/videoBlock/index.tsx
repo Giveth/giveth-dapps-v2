@@ -118,6 +118,7 @@ const SectionContainer = styled.div`
 	background-color: ${neutralColors.gray[100]};
 	position: relative;
 	padding: 70px 0;
+	overflow: hidden;
 `;
 
 const CustomizedVideoContainer = styled(VideoContainer)`

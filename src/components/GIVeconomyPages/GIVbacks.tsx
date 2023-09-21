@@ -51,15 +51,19 @@ export const TabGIVbacksTop = () => {
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showHarvestModal);
-	const xDaiValues = useAppSelector(
-		state => state.subgraph.xDaiValues,
+	const { chainId } = useWeb3React();
+	const values = useAppSelector(
+		state =>
+			chainId === config.OPTIMISM_NETWORK_NUMBER
+				? state.subgraph.optimismValues
+				: state.subgraph.gnosisValues,
 		() => (showHarvestModal ? true : false),
 	);
+
 	const givTokenDistroBalance = useMemo(() => {
-		const sdh = new SubgraphDataHelper(xDaiValues);
+		const sdh = new SubgraphDataHelper(values);
 		return sdh.getGIVTokenDistroBalance();
-	}, [xDaiValues]);
-	const { chainId } = useWeb3React();
+	}, [values]);
 
 	useEffect(() => {
 		const _givback = BN(givTokenDistroBalance.givback);
@@ -86,11 +90,9 @@ export const TabGIVbacksTop = () => {
 						</Col>
 						<Col xs={12} sm={5} xl={4}>
 							<GIVbackRewardCard
+								cardName='GIVbacks'
 								title={formatMessage({
 									id: 'label.your_givbacks_rewards',
-								})}
-								wrongNetworkText={formatMessage({
-									id: 'label.givbacks_is_only_available_on_gnosis',
 								})}
 								liquidAmount={BN(
 									givTokenDistroBalance.givbackLiquidPart,
@@ -113,7 +115,10 @@ export const TabGIVbacksTop = () => {
 								}
 								subButtonCb={() => setShowGivBackExplain(true)}
 								network={chainId}
-								targetNetworks={[config.XDAI_NETWORK_NUMBER]}
+								targetNetworks={[
+									config.XDAI_NETWORK_NUMBER,
+									config.OPTIMISM_NETWORK_NUMBER,
+								]}
 							/>
 						</Col>
 					</Row>

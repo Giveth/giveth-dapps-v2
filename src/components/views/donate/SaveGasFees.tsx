@@ -1,30 +1,32 @@
 import { Caption, IconGasStation } from '@giveth/ui-design-system';
-import React, { FC } from 'react';
+import { FC, useState } from 'react';
 import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
+import styled from 'styled-components';
 import config from '@/configuration';
-import { switchNetwork } from '@/lib/wallet';
 import { Flex } from '@/components/styled-components/Flex';
 import {
 	NetworkToast,
 	SwitchCaption,
 } from '@/components/views/donate/common.styled';
 import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
+import SwitchNetwork from '@/components/modals/SwitchNetwork';
 
 const SaveGasFees: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
+	const [showModal, setShowModal] = useState(false);
 	const { chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
 
 	if (
 		!chainId ||
-		!acceptedChains?.includes(config.XDAI_NETWORK_NUMBER) ||
-		chainId !== config.MAINNET_NETWORK_NUMBER
+		chainId !== config.MAINNET_NETWORK_NUMBER ||
+		acceptedChains?.length === 1
 	) {
 		return null;
 	}
 
 	return (
-		<NetworkToast>
+		<NetworkToast justifyContent='space-between'>
 			<Flex alignItems='center' gap='9px'>
 				<IconGasStation />
 				<Caption medium>
@@ -33,13 +35,21 @@ const SaveGasFees: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
 					})}
 				</Caption>
 			</Flex>
-			<SwitchCaption
-				onClick={() => switchNetwork(config.XDAI_NETWORK_NUMBER)}
-			>
+			<StyledSwitchCaption onClick={() => setShowModal(true)}>
 				{formatMessage({ id: 'label.switch_network' })}
-			</SwitchCaption>
+			</StyledSwitchCaption>
+			{showModal && (
+				<SwitchNetwork
+					setShowModal={setShowModal}
+					customNetworks={acceptedChains}
+				/>
+			)}
 		</NetworkToast>
 	);
 };
+
+const StyledSwitchCaption = styled(SwitchCaption)`
+	margin: 0;
+`;
 
 export default SaveGasFees;

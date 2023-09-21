@@ -78,7 +78,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 	const currentValues = useAppSelector(
 		state =>
 			streamNetwork === config.XDAI_NETWORK_NUMBER
-				? state.subgraph.xDaiValues
+				? state.subgraph.gnosisValues
 				: state.subgraph.mainnetValues,
 		() => (showModal ? true : false),
 	);

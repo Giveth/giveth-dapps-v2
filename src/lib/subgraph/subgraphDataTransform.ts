@@ -177,11 +177,11 @@ export const transformTokenDistroBalance = (info: any): ITokenDistroBalance => {
 };
 
 const transformGIVpowerInfo = (info: any = {}): IGIVpower => {
-	const id = info.id || '';
-	const initialDate = info.initialDate || '0';
-	const locksCreated = Number(info.locksCreated || 0);
-	const totalGIVLocked = info.totalGIVLocked || '0';
-	const roundDuration = Number(info.roundDuration || 0);
+	const id = info?.id || '';
+	const initialDate = info?.initialDate || '0';
+	const locksCreated = Number(info?.locksCreated || 0);
+	const totalGIVLocked = info?.totalGIVLocked || '0';
+	const roundDuration = Number(info?.roundDuration || 0);
 	return {
 		id,
 		initialDate,
@@ -221,6 +221,7 @@ export const transformSubgraphData = (data: any = {}): ISubgraphState => {
 			case key.startsWith('tokenDistroBalance_'):
 				result[key] = transformTokenDistroBalance(value);
 				break;
+
 			case key === 'givpowerInfo':
 				result[key] = transformGIVpowerInfo(value);
 				break;

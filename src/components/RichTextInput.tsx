@@ -22,6 +22,7 @@ import { client } from '@/apollo/apolloClient';
 import { isSSRMode, showToastError } from '@/lib/helpers';
 import { Relative } from '@/components/styled-components/Position';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { QuillWrapper } from '@/components/styled-components/Quill';
 
 (window as any).Quill = Quill;
 
@@ -193,16 +194,18 @@ const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 
 	return (
 		<Relative>
-			<ReactQuillStyled
-				noShadow={noShadow}
-				modules={mod}
-				formats={formats}
-				theme='snow'
-				value={value}
-				onChange={setValue}
-				style={style}
-				placeholder={placeholder}
-			/>
+			<QuillWrapper>
+				<ReactQuillStyled
+					noShadow={noShadow}
+					modules={mod}
+					formats={formats}
+					theme='snow'
+					value={value}
+					onChange={setValue}
+					style={style}
+					placeholder={placeholder}
+				/>
+			</QuillWrapper>
 			{limit && (
 				<RichtextCounter
 					limit={limit}
@@ -255,29 +258,6 @@ const ReactQuillStyled = styled(ReactQuill)<{ noShadow?: boolean }>`
 	box-shadow: ${({ noShadow }) => !noShadow && Shadow.Neutral[400]};
 	> .ql-container {
 		height: 30rem;
-		> .ql-editor {
-			word-break: break-word;
-			font-family: 'Red Hat Text', sans-serif;
-			font-size: 16px;
-			p,
-			li,
-			blockquote {
-				line-height: 24px;
-			}
-			h1,
-			h2 {
-				font-family: 'TeX Gyre Adventor', serif;
-			}
-			.ql-size-small {
-				line-height: 18px;
-			}
-			.ql-size-large {
-				line-height: 36px;
-			}
-			.ql-size-huge {
-				line-height: 56px;
-			}
-		}
 	}
 	> div:first-of-type {
 		border-width: 2px;

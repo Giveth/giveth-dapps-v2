@@ -30,7 +30,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 	const [percentage, setPercentage] = useState(0);
 	const [state, setState] = useState(EBoostModalState.BOOSTING);
 	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.xDaiValues),
+		useAppSelector(state => state.subgraph.gnosisValues),
 	);
 	const givPower = sdh.getUserGIVPowerBalance();
 

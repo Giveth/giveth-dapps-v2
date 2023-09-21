@@ -6,6 +6,7 @@ import {
 } from '@giveth/ui-design-system';
 import React, { FC } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { useIntl } from 'react-intl';
 import { EPassportState } from '@/hooks/usePassport';
 import { FlexCenter } from './styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
@@ -25,6 +26,7 @@ export const PassportButton: FC<IButtonProps> = ({
 	refreshScore,
 	className,
 }) => {
+	const { formatMessage } = useIntl();
 	const dispatch = useAppDispatch();
 
 	return state === EPassportState.NOT_CONNECTED ? (
@@ -34,21 +36,27 @@ export const PassportButton: FC<IButtonProps> = ({
 		>
 			<FlexCenter gap='8px'>
 				<IconPassport16 />
-				<ButtonText>Connect passport</ButtonText>
+				<ButtonText>
+					{formatMessage({ id: 'label.connect_passport' })}
+				</ButtonText>
 			</FlexCenter>
 		</Button>
 	) : state === EPassportState.NOT_SIGNED ? (
 		<Button onClick={() => handleSign()} className={className}>
 			<FlexCenter gap='8px'>
 				<IconPassport16 />
-				<ButtonText>Sign Message</ButtonText>
+				<ButtonText>
+					{formatMessage({ id: 'label.sign_message' })}
+				</ButtonText>
 			</FlexCenter>
 		</Button>
 	) : state === EPassportState.LOADING ? (
 		<BaseButton className={className}>
 			<FlexCenter gap='8px'>
 				<IconPassport16 />
-				<ButtonText>Loading</ButtonText>
+				<ButtonText>
+					{formatMessage({ id: 'label.loading' })}
+				</ButtonText>
 				<LoadingContainer>
 					<Loader />
 				</LoadingContainer>
@@ -63,7 +71,9 @@ export const PassportButton: FC<IButtonProps> = ({
 		>
 			<FlexCenter gap='8px'>
 				<IconPassport16 />
-				<ButtonText>Refresh score</ButtonText>
+				<ButtonText>
+					{formatMessage({ id: 'label.refresh_score' })}
+				</ButtonText>
 			</FlexCenter>
 		</Button>
 	);
