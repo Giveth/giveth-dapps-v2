@@ -479,15 +479,6 @@ export function pollEvery(fn: Function, delay: any) {
 	};
 }
 
-export const networkInfo = (networkId?: number) => {
-	if (!networkId || !config.NETWORKS_CONFIG[networkId]) return {};
-	const info = config.NETWORKS_CONFIG[networkId];
-	return {
-		networkName: info.name,
-		networkToken: info.nativeCurrency.symbol,
-	};
-};
-
 export const createSiweMessage = async (
 	address: string,
 	chainId: number,
