@@ -7,7 +7,7 @@ import { useAccount, useChainId, useDisconnect } from 'wagmi';
 import { useChainModal } from '@rainbow-me/rainbowkit';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
-import { isUserRegistered, networkInfo, shortenAddress } from '@/lib/helpers';
+import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
@@ -22,6 +22,7 @@ import { Item } from './Item';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
 import StorageLabel from '@/lib/localStorage';
+import { chainNameById } from '@/lib/network';
 
 interface IUserItemsProps {
 	setSignWithWallet: Dispatch<SetStateAction<boolean>>;
@@ -61,7 +62,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 		router.push(url);
 	};
 
-	const { networkName } = networkInfo(chainId);
+	const networkName = chainNameById(chainId);
 
 	return (
 		<>
