@@ -23,4 +23,4 @@ jobs:
                   NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
                   NEXT_PUBLIC_SENTRY_ORG: ${{ secrets.NEXT_PUBLIC_SENTRY_ORG }}
                   NEXT_PUBLIC_SENTRY_PROJECT: ${{ secrets.NEXT_PUBLIC_SENTRY_PROJECT }}
-                  NEXT_PUBLIC_WALLET_CONNECT_ID: ${{ vars.NEXT_PUBLIC_WALLET_CONNECT_ID }}
+                  NEXT_PUBLIC_WALLET_CONNECT_ID: ${{ secrets.NEXT_PUBLIC_WALLET_CONNECT_ID }}
