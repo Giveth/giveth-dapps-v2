@@ -71,7 +71,7 @@ const GetStarted = () => {
 				>
 					<div
 						id='selected-_qihyqwtgi'
-						className=' ap3w-embeddable-form-646b4736a2882bf86587185d ap3w-embeddable-form-646b4736a2882bf86587185d-full ap3w-embeddable-form-646b4736a2882bf86587185d-solid '
+						className='ap3w-embeddable-form-646b4736a2882bf86587185d ap3w-embeddable-form-646b4736a2882bf86587185d-full ap3w-embeddable-form-646b4736a2882bf86587185d-solid'
 						data-select='true'
 					>
 						<form
