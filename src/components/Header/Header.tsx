@@ -35,7 +35,7 @@ import {
 	setShowSearchModal,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
-import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
+import { useModalCallback } from '@/hooks/useModalCallback';
 import { LinkWithMenu } from '../menu/LinkWithMenu';
 import { ProjectsMenu } from '../menu/ProjectsMenu';
 import { GIVeconomyMenu } from '../menu/GIVeconomyMenu';
@@ -153,7 +153,7 @@ const Header: FC<IHeader> = () => {
 
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
-			openConnectModal && openConnectModal();
+			openConnectModal?.();
 		} else {
 			dispatch(setShowWelcomeModal(true));
 		}
@@ -163,15 +163,10 @@ const Header: FC<IHeader> = () => {
 		router.push(Routes.CreateProject),
 	);
 
-	const { modalCallback: connectThenSignIn } = useModalCallback(
-		signInThenCreate,
-		EModalEvents.CONNECTED,
-	);
-
 	const handleCreateButton = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			connectThenSignIn();
+			openConnectModal?.();
 		} else if (!isSignedIn) {
 			signInThenCreate();
 		} else if (isUserRegistered(userData)) {
