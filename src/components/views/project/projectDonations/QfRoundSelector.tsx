@@ -53,6 +53,7 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 				}}
 				slidesPerView='auto'
 				spaceBetween={21}
+				style={{ marginLeft: '0' }}
 			>
 				<SwiperSlide style={{ width: 'auto' }}>
 					<TabItem
