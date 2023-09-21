@@ -22,7 +22,6 @@ const ModalController = () => {
 		showCompleteProfile,
 		showFirstWelcomeModal,
 		showSignWithWallet,
-		showWalletModal,
 		showWelcomeModal,
 		showSearchModal,
 		showSwitchNetwork,
