@@ -79,7 +79,7 @@ const ShareModal: FC<IShareModal> = props => {
 							title={shareTitleFacebookAndLinkedin}
 							url={url}
 						>
-							<Image src={LinkedinIcon} alt='twitter icon' />
+							<Image src={LinkedinIcon} alt='linkedin icon' />
 						</LinkedinShareButton>
 					</SocialButtonContainer>
 					<SocialButtonContainer>

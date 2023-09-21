@@ -55,7 +55,7 @@ const SocialBox: FC<ISocialBox> = props => {
 					>
 						<Image
 							src={'/images/social-tw.svg'}
-							alt='twitter'
+							alt='X (Twitter)'
 							width='44'
 							height='44'
 						/>

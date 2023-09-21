@@ -5,7 +5,7 @@ export enum EContentType {
 }
 
 export enum ESocialType {
-	twitter = 'twitter',
+	twitter = 'X (Twitter)',
 	facebook = 'facebook',
 	linkedin = 'linkedin',
 }
