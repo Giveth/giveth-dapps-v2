@@ -8,6 +8,7 @@ import {
 	SublineBold,
 	neutralColors,
 	semanticColors,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
 import { Navigation } from 'swiper';
@@ -108,10 +109,13 @@ interface ITabItemProps {
 }
 
 const QfNavigationWrapper = styled(NavigationWrapper)`
+	display: none;
 	&.swiper-button-disabled {
 		opacity: 0.2;
 		cursor: default;
 	}
+	${mediaQueries.laptopS} {
+		display: flex;
 `;
 
 const TabItem = styled(Flex)<ITabItemProps>`
