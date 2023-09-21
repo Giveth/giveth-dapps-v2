@@ -16,7 +16,6 @@ import { formatWeiHelper } from '@/helpers/number';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import { getUserStakeInfo } from '@/lib/stakingPool';
 import Routes from '@/lib/constants/Routes';
-import { networkInfo } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
@@ -34,6 +33,7 @@ import { ItemAction, ItemRow, ItemTitle } from './common';
 import { Item } from './Item';
 import { useItemsContext } from '@/context/Items.context';
 import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
+import { chainNameById } from '@/lib/network';
 
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;
@@ -60,7 +60,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 
 	const tokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const { givbackLiquidPart } = tokenDistroBalance;
-	const { networkName } = networkInfo(chainId);
+	const networkName = chainNameById(chainId);
 	const { close } = useItemsContext();
 
 	useEffect(() => {
