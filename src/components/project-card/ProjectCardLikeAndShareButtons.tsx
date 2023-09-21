@@ -12,6 +12,7 @@ import styled, { css } from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useRouter } from 'next/router';
 
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ShareModalAndGetReward from '../modals/ShareRewardedModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { isSSRMode, showToastError } from '@/lib/helpers';
@@ -23,7 +24,7 @@ import {
 	incrementLikedProjectsCount,
 } from '@/features/user/user.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
-import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
+import { useModalCallback } from '@/hooks/useModalCallback';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareModal from '../modals/ShareModal';
 
@@ -50,6 +51,7 @@ const ProjectCardLikeAndShareButtons = (
 	} = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 	const router = useRouter();
+	const { openConnectModal } = useConnectModal();
 
 	useEffect(() => {
 		setReaction(project.reaction);
@@ -106,15 +108,10 @@ const ProjectCardLikeAndShareButtons = (
 	const { modalCallback: signInThenLike } =
 		useModalCallback(likeUnlikeProject);
 
-	const { modalCallback: connectThenSignIn } = useModalCallback(
-		signInThenLike,
-		EModalEvents.CONNECTED,
-	);
-
 	const checkSignInThenLike = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			connectThenSignIn();
+			openConnectModal?.();
 		} else if (!isSignedIn) {
 			signInThenLike();
 		} else {
