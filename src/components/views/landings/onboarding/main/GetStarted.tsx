@@ -119,6 +119,7 @@ const StyledButton = styled.button`
 	text-transform: uppercase;
 	margin-top: 15px;
 	border: none;
+	cursor: pointer;
 `;
 
 const InputStyled = styled(Input)`
