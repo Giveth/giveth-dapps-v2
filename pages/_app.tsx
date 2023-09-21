@@ -97,6 +97,11 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 	],
 );
 
+console.log(
+	'process.env.NEXT_PUBLIC_WALLET_CONNECT_ID',
+	process.env.NEXT_PUBLIC_WALLET_CONNECT_ID,
+);
+
 const { wallets } = getDefaultWallets({
 	appName: 'giveth-test',
 	projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!,
