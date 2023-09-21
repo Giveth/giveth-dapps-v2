@@ -11,16 +11,20 @@ import Script from 'next/script';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { infuraProvider } from 'wagmi/providers/infura';
 
-import { RainbowKitProvider, getDefaultWallets } from '@rainbow-me/rainbowkit';
+import {
+	RainbowKitProvider,
+	getDefaultWallets,
+	connectorsForWallets,
+} from '@rainbow-me/rainbowkit';
 import {
 	mainnet,
 	polygon,
 	optimism,
-	arbitrum,
-	zora,
 	gnosis,
 	optimismGoerli,
 	goerli,
+	celoAlfajores,
+	celo,
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 
@@ -77,16 +81,15 @@ function renderSnippet() {
 	return snippet.min(opts);
 }
 
-const { chains, publicClient } = configureChains(
+const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+
+const { chains, publicClient, webSocketPublicClient } = configureChains(
 	[
-		mainnet,
 		gnosis,
 		polygon,
-		optimism,
-		optimismGoerli,
-		arbitrum,
-		zora,
-		goerli,
+		...(isProduction
+			? [mainnet, optimism, celo]
+			: [goerli, optimismGoerli, celoAlfajores]),
 	],
 	[
 		publicProvider(),
@@ -94,16 +97,19 @@ const { chains, publicClient } = configureChains(
 	],
 );
 
-const { connectors } = getDefaultWallets({
+const { wallets } = getDefaultWallets({
 	appName: 'giveth-test',
 	projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!,
 	chains,
 });
 
+const connectors = connectorsForWallets([...wallets]);
+
 const wagmiConfig = createConfig({
 	autoConnect: false,
-	publicClient: publicClient,
 	connectors,
+	publicClient,
+	webSocketPublicClient,
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -119,8 +125,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 		};
 		const handleChangeComplete = (url: string) => {
 			NProgress.done();
-			process.env.NEXT_PUBLIC_ENV === 'production' &&
-				window.analytics.page(url);
+			isProduction && window.analytics.page(url);
 		};
 		const handleChangeError = () => {
 			NProgress.done();
