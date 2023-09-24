@@ -27,6 +27,14 @@ import {
 	celo,
 } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
+import {
+	metaMaskWallet,
+	injectedWallet,
+	rainbowWallet,
+	coinbaseWallet,
+	walletConnectWallet,
+	safeWallet,
+} from '@rainbow-me/rainbowkit/wallets';
 
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
@@ -101,14 +109,25 @@ console.log(
 	'process.env.NEXT_PUBLIC_WALLET_CONNECT_ID',
 	process.env.NEXT_PUBLIC_WALLET_CONNECT_ID,
 );
-
-const { wallets } = getDefaultWallets({
-	appName: 'giveth-test',
-	projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!,
-	chains,
-});
-
-const connectors = connectorsForWallets([...wallets]);
+// const { wallets } = getDefaultWallets({
+// 	appName: 'giveth-test',
+// 	projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!,
+// 	chains,
+// });
+const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!;
+const connectors = connectorsForWallets([
+	{
+		groupName: 'Recommended',
+		wallets: [
+			injectedWallet({ chains }),
+			rainbowWallet({ projectId, chains }),
+			metaMaskWallet({ projectId, chains }),
+			walletConnectWallet({ projectId, chains }),
+			coinbaseWallet({ chains, appName: 'Giveth' }),
+			safeWallet({ chains }),
+		],
+	},
+]);
 
 const wagmiConfig = createConfig({
 	autoConnect: false,

@@ -17,6 +17,18 @@ import { postRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import StorageLabel from '@/lib/localStorage';
 import { getTokens } from '@/helpers/user';
+import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask';
+
+import { connect } from '@wagmi/core';
+
+const saveTokenToLocalstorage = (address: string, token: string) => {
+	const _address = address.toLowerCase();
+	localStorage.setItem(StorageLabel.USER, _address);
+	localStorage.setItem(StorageLabel.TOKEN, token);
+	const tokens = getTokens();
+	tokens[_address] = token;
+	localStorage.setItem(StorageLabel.TOKENS, JSON.stringify(tokens));
+};
 
 export const fetchUserByAddress = createAsyncThunk(
 	'user/fetchUser',
@@ -27,17 +39,40 @@ export const fetchUserByAddress = createAsyncThunk(
 
 export const signToGetToken = createAsyncThunk(
 	'user/signToGetToken',
-	async ({ address, chainId }: ISignToGetToken, { getState, dispatch }) => {
+	async (
+		{ address, chainId, connectors }: ISignToGetToken,
+		{ getState, dispatch },
+	) => {
 		try {
-			const siweMessage: any = await createSiweMessage(
-				address!,
-				chainId!,
-				'Login into Giveth services',
-			);
+			const isSAFE = true;
+			let safeAddress = '';
+			let siweMessage,
+				safeMessage: any = null;
 
-			const { nonce, message } = siweMessage;
+			if (isSAFE) {
+				safeAddress = address!;
+				await connect({ chainId, connector: new MetaMaskConnector() });
+				const metamaskClient = await getWalletClient({ chainId });
+				siweMessage = await createSiweMessage(
+					metamaskClient?.account?.address!,
+					chainId!,
+					'Login into Giveth services',
+				);
+				safeMessage = await createSiweMessage(
+					address!,
+					chainId!,
+					'Login into Giveth services',
+				);
+			} else {
+				siweMessage = await createSiweMessage(
+					address!,
+					chainId!,
+					'Login into Giveth services',
+				);
+			}
 
-			const walletClient = await getWalletClient();
+			const { nonce, message } = siweMessage as any;
+			const walletClient = await getWalletClient({ chainId });
 
 			const signature = await walletClient?.signMessage({ message });
 
@@ -55,18 +90,85 @@ export const signToGetToken = createAsyncThunk(
 						nonce,
 					},
 				);
-				const _address = address.toLowerCase();
-				localStorage.setItem(StorageLabel.USER, _address);
-				localStorage.setItem(StorageLabel.TOKEN, token.jwt);
-				const tokens = getTokens();
-				tokens[_address] = token.jwt;
-				localStorage.setItem(
-					StorageLabel.TOKENS,
-					JSON.stringify(tokens),
-				);
-				// When token is fetched, user should be fetched again to get email address
+				saveTokenToLocalstorage(address!, token.jwt);
 				await dispatch(fetchUserByAddress(address));
-				return token.jwt;
+
+				const currentUserToken = token.jwt;
+				if (isSAFE && !!safeMessage) {
+					let activeSafeToken,
+						sessionPending = false;
+
+					try {
+						const sessionCheck = await postRequest(
+							`${config.MICROSERVICES.authentication}/multisigAuthentication`,
+							false,
+							{
+								safeMessageTimestamp: null,
+								safeAddress,
+								network: chainId,
+								jwt: currentUserToken,
+							},
+						);
+						if (sessionCheck?.status === 'successful') {
+							activeSafeToken = sessionCheck?.jwt;
+						} else if (sessionCheck?.status === 'pending') {
+							sessionPending = true;
+						}
+					} catch (error) {
+						console.log({ error });
+					}
+
+					await connect({
+						chainId,
+						connector: connectors[4],
+					});
+					if (sessionPending)
+						return Promise.reject('Gnosis Safe Session pending');
+					if (!sessionPending && !!activeSafeToken) {
+						// returns active token
+						saveTokenToLocalstorage(safeAddress!, activeSafeToken);
+						return activeSafeToken;
+					}
+					const gnosisClient = await getWalletClient({ chainId });
+					let safeSignature;
+					const safeMessageTimestamp = new Date().getTime();
+					try {
+						safeSignature = await gnosisClient?.signMessage({
+							message: safeMessage.message,
+						});
+					} catch (error) {
+						// user will close the transaction but it will create anyway
+						console.log({ error });
+					}
+
+					console.log({
+						safeMessageTimestamp,
+						safeAddress,
+						network: chainId,
+						jwt: currentUserToken,
+					});
+					// calls the backend to create gnosis safe token
+					const safeToken = await postRequest(
+						`${config.MICROSERVICES.authentication}/multisigAuthentication`,
+						false,
+						{
+							safeMessageTimestamp,
+							safeAddress,
+							network: chainId,
+							jwt: currentUserToken,
+						},
+					);
+					console.log({ safeToken });
+
+					if (safeToken?.jwt) {
+						//save to localstorage if token is created
+						console.log('GOT IN YAY');
+						saveTokenToLocalstorage(safeAddress!, safeToken?.jwt);
+					}
+					return currentUserToken;
+				} else {
+					return currentUserToken;
+				}
 			} else {
 				return Promise.reject('Signing failed');
 			}
