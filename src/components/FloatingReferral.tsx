@@ -162,6 +162,17 @@ const FloatingButtonReferral: FC<IFloatingReferral> = props => {
 									{formatMessage({
 										id: 'label.refer_your_friends',
 									})}
+									{isOpen ? (
+										<IconChevronDown
+											color={brandColors.pinky[500]}
+											size={24}
+										/>
+									) : (
+										<IconChevronUp
+											color={brandColors.pinky[500]}
+											size={24}
+										/>
+									)}
 								</FloatingButton>
 							</ButtonContainer>
 						</>
@@ -170,6 +181,17 @@ const FloatingButtonReferral: FC<IFloatingReferral> = props => {
 							{formatMessage({
 								id: 'label.refer_your_friends',
 							})}
+							{isOpen ? (
+								<IconChevronDown
+									color={brandColors.pinky[500]}
+									size={24}
+								/>
+							) : (
+								<IconChevronUp
+									color={brandColors.pinky[500]}
+									size={24}
+								/>
+							)}
 						</FloatingButton>
 					)}
 				</FloatingMobileContainer>
@@ -250,6 +272,7 @@ const FloatingButton = styled.button<{ isOpen: boolean }>`
 
 	${mediaQueries.mobileS} {
 		height: 48px;
+		width: 100%;
 	}
 
 	${mediaQueries.mobileM} {
