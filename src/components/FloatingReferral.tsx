@@ -1,4 +1,4 @@
-import React, { useState, FC } from 'react';
+import React, { useState, FC, useEffect } from 'react';
 import Image from 'next/image';
 import styled, { keyframes } from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -27,12 +27,42 @@ const FloatingButtonReferral: FC<IFloatingReferral> = props => {
 	const [isOpen, setIsOpen] = useState(false);
 	const { formatMessage } = useIntl();
 	const { projectHref } = props;
-
+	const [showFloatingReferral, setShowFloatingReferral] = useState(true);
 	const isMobile = useMediaQuery(`(max-width: ${deviceSize.mobileL - 1}px)`);
 
 	const handleClick = () => {
 		setIsOpen(!isOpen);
 	};
+
+	useEffect(() => {
+		const threshold = 0;
+		let lastScrollY = window.pageYOffset;
+		let ticking = false;
+
+		const updateScrollDir = () => {
+			const scrollY = window.pageYOffset;
+
+			if (Math.abs(scrollY - lastScrollY) < threshold) {
+				ticking = false;
+				return;
+			}
+			const show = scrollY <= lastScrollY;
+			setShowFloatingReferral(show);
+			lastScrollY = scrollY > 0 ? scrollY : 0;
+			ticking = false;
+		};
+
+		const onScroll = () => {
+			if (!ticking) {
+				window.requestAnimationFrame(updateScrollDir);
+				ticking = true;
+			}
+		};
+
+		window.addEventListener('scroll', onScroll);
+
+		return () => window.removeEventListener('scroll', onScroll);
+	}, [showFloatingReferral]);
 
 	return (
 		<>
@@ -90,7 +120,11 @@ const FloatingButtonReferral: FC<IFloatingReferral> = props => {
 					</ButtonContainer>
 				</FloatingContainer>
 			) : (
-				<FloatingMobileContainer onClick={handleClick} isOpen={isOpen}>
+				<FloatingMobileContainer
+					onClick={handleClick}
+					isOpen={isOpen}
+					show={showFloatingReferral}
+				>
 					{isOpen ? (
 						<>
 							<Message>
@@ -179,7 +213,7 @@ const FloatingContainer = styled(FlexCenter)<{ isOpen: boolean }>`
 	transition: width 0.3s ease-in-out;
 `;
 
-const FloatingMobileContainer = styled.div<{ isOpen: boolean }>`
+const FloatingMobileContainer = styled.div<{ isOpen: boolean; show: boolean }>`
 	bottom: 0;
 	left: 0;
 	width: 100%;
@@ -188,7 +222,7 @@ const FloatingMobileContainer = styled.div<{ isOpen: boolean }>`
 	background-color: white;
 	transition: width 0.3s ease-in-out;
 	transition: height 0.3s ease-in-out;
-	height: ${({ isOpen }) => (isOpen ? '220px' : '56px')};
+	height: ${({ isOpen, show }) => (!show ? 0 : isOpen ? '220px' : '56px')};
 	overflow-y: auto;
 `;
 const FloatingButton = styled.button<{ isOpen: boolean }>`
