@@ -44,11 +44,8 @@ export const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 export const BannerContainer = styled(FlexCenter)`
 	height: 0;
 	position: relative;
-	margin-top: 32px;
 	overflow: hidden;
-
 	${mediaQueries.tablet} {
-		margin-top: 0;
 		height: 540px;
 	}
 `;
