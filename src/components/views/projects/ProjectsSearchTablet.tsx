@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import Input from '@/components/Input';
 import { useProjectsContext } from '@/context/projects.context';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
-import useFocus from '@/hooks/useFocus';
 
 const ProjectsSearchTablet = () => {
 	const { variables, setVariables } = useProjectsContext();
@@ -15,13 +14,10 @@ const ProjectsSearchTablet = () => {
 	const handleSearch = (searchTerm?: string) =>
 		setVariables(prevVariables => ({ ...prevVariables, searchTerm }));
 
-	const [inputRef, setFocus] = useFocus();
-
 	const removeSearch = () => {
 		setSearchValue('');
 		handleSearch();
 		removeQueryParamAndRedirect(router, ['term']);
-		setFocus();
 	};
 
 	useEffect(() => {
@@ -40,7 +36,6 @@ const ProjectsSearchTablet = () => {
 					placeholder='SEARCH...'
 					value={searchValue}
 					onChange={e => setSearchValue(e.target.value)}
-					ref={inputRef}
 				/>
 			</form>
 			{variables.searchTerm ? (
