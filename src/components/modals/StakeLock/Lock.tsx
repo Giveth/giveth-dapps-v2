@@ -166,7 +166,7 @@ const LockModal: FC<ILockModalProps> = ({
 								disabled={
 									round === 0 ||
 									amount == 0n ||
-									maxAmount <= amount
+									maxAmount < amount
 								}
 							/>
 							<CancelButton
