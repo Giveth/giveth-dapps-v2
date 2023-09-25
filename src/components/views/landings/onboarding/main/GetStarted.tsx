@@ -110,9 +110,7 @@ const StyledButton = styled.button`
 	background: ${brandColors.giv[500]};
 	color: ${neutralColors.gray[100]};
 	text-align: center;
-	font-family:
-		Red Hat Text,
-		sans-serif;
+	font-family: 'Red Hat Text', 'sans-serif';
 	font-size: 12px;
 	font-style: normal;
 	font-weight: 700;
