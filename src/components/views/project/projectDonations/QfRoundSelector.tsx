@@ -116,6 +116,7 @@ const QfNavigationWrapper = styled(NavigationWrapper)`
 	}
 	${mediaQueries.laptopS} {
 		display: flex;
+	}
 `;
 
 const TabItem = styled(Flex)<ITabItemProps>`
