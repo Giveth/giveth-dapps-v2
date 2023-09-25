@@ -4,10 +4,8 @@ const getLocalTokenLabel = (): string => {
 
 const getLocalUserLabel = (): string => {
 	return process.env.NEXT_PUBLIC_LOCAL_USER_LABEL
-		? process.env.NEXT_PUBLIC_LOCAL_USER_LABEL +
-		'_' +
-		process.env.NEXT_PUBLIC_ENV
-		: 'nextUser' + '_' + process.env.NEXT_PUBLIC_ENV;
+		? `${process.env.NEXT_PUBLIC_LOCAL_USER_LABEL}_${process.env.NEXT_PUBLIC_ENV}`
+		: `nextUser_${process.env.NEXT_PUBLIC_ENV}`;
 };
 
 const StorageLabel = {
