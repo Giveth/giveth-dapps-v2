@@ -27,7 +27,7 @@ const SocialBox: FC<ISocialBox> = props => {
 	const { project, contentType, isDonateFooter } = props;
 	const { description, slug } = project;
 	const { formatMessage } = useIntl();
-	console.log('Props', props);
+
 	const shareTitleTwitter = shareContentCreator(
 		contentType,
 		ESocialType.twitter,
