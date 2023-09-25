@@ -5,7 +5,7 @@ import {
 	IconDiscord24,
 	IconGithub,
 	IconInstagram24,
-	IconTwitter,
+	IconXSocial24,
 	IconYoutube,
 	Lead,
 } from '@giveth/ui-design-system';
@@ -65,7 +65,7 @@ const JoinOurCommunity = () => {
 					<IconDiscord24 />
 				</ExternalLink>
 				<ExternalLink href={links.TWITTER}>
-					<IconTwitter size={24} />
+					<IconXSocial24 />
 				</ExternalLink>
 				<ExternalLink href={links.YOUTUBE}>
 					<IconYoutube size={24} />

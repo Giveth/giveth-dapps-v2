@@ -22,7 +22,7 @@ import config from '@/configuration';
 import { useAppSelector } from '@/features/hooks';
 import { fetchEthPrice } from '@/features/price/price.services';
 import { fetchPrice } from '@/services/token';
-import { formatDonations } from '@/helpers/number';
+import { formatDonation } from '@/helpers/number';
 
 interface IEstimatedMatchingToast {
 	projectData: IDonationProject;
@@ -43,7 +43,7 @@ const EstimatedMatchingToast = ({
 	token,
 	amountTyped,
 }: IEstimatedMatchingToast) => {
-	const { formatMessage } = useIntl();
+	const { formatMessage, locale } = useIntl();
 	const { estimatedMatching } = projectData || {};
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
@@ -131,7 +131,7 @@ const EstimatedMatchingToast = ({
 						</TooltipContent>
 					</IconWithTooltip>
 				</FlexCenter>
-				<B>{formatDonations(esMatching, '', true)}</B>
+				<B>{formatDonation(esMatching, '', locale, true)}</B>
 			</Upper>
 			<Divider />
 			<Bottom>

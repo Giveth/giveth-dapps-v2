@@ -217,8 +217,6 @@ export const capitalizeAllWords = (string: string) => {
 	return string.split(' ').map(capitalizeFirstLetter).join(' ');
 };
 
-export const noImgIcon = '/images/GIV-icon-text.svg';
-
 export const isNoImg = (image: string | undefined) => !image || image === '';
 
 export const shortenAddress = (
@@ -401,8 +399,11 @@ export const isGIVeconomyRoute = (route: string) => {
 };
 
 export const showToastError = (err: any) => {
-	const errorMessage =
+	let errorMessage =
 		typeof err === 'string' ? err : JSON.stringify(err.message || err);
+	if (errorMessage.startsWith('"') && errorMessage.endsWith('"')) {
+		errorMessage = errorMessage.slice(1, -1);
+	}
 	gToast(errorMessage, {
 		type: ToastType.DANGER,
 		position: 'top-center',

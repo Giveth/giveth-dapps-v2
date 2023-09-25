@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import {
 	brandColors,
 	H5,
+	IconXSocial18,
 	Lead,
 	neutralColors,
 	OutlineButton,
@@ -18,7 +19,6 @@ import { FC } from 'react';
 import { Modal } from './Modal';
 import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
-import TwitterIcon from '../../../public/images/social-tw.svg';
 import ShareIcon from '../../../public/images/icons/share_dots.svg';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { slugToProjectView } from '@/lib/routeCreators';
@@ -71,7 +71,7 @@ const ShareModal: FC<IShareModal> = props => {
 							title={shareTitleTwitter}
 							url={url}
 						>
-							<Image src={TwitterIcon} alt='twitter icon' />
+							<IconXSocial18 />
 						</TwitterShareButton>
 					</SocialButtonContainer>
 					<SocialButtonContainer>
@@ -79,7 +79,7 @@ const ShareModal: FC<IShareModal> = props => {
 							title={shareTitleFacebookAndLinkedin}
 							url={url}
 						>
-							<Image src={LinkedinIcon} alt='twitter icon' />
+							<Image src={LinkedinIcon} alt='linkedin icon' />
 						</LinkedinShareButton>
 					</SocialButtonContainer>
 					<SocialButtonContainer>

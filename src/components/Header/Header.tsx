@@ -52,6 +52,7 @@ import { ItemsProvider } from '@/context/Items.context';
 import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import { CommunityMenu } from '../menu/CommunityMenu';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
+import config from '@/configuration';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -67,6 +68,8 @@ const Header: FC<IHeader> = () => {
 
 	const { chainId, active, account } = useWeb3React();
 
+	const networkHasGIV =
+		(chainId && config.NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS) ?? null;
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
@@ -274,11 +277,13 @@ const Header: FC<IHeader> = () => {
 						<NotificationButtonWithMenu
 							isHeaderShowing={showHeader}
 							theme={theme}
-						/>
-						<RewardButtonWithMenu
-							isHeaderShowing={showHeader}
-							theme={theme}
-						/>
+						/>{' '}
+						{networkHasGIV && (
+							<RewardButtonWithMenu
+								isHeaderShowing={showHeader}
+								theme={theme}
+							/>
+						)}
 						<UserButtonWithMenu
 							isHeaderShowing={showHeader}
 							theme={theme}

@@ -6,10 +6,10 @@ import {
 	brandColors,
 	neutralColors,
 	ButtonLink,
-	B,
 	Subline,
 	semanticColors,
-	IconRocketInSpace16,
+	// B,
+	// IconRocketInSpace16,
 	IconVerifiedBadge16,
 	H5,
 } from '@giveth/ui-design-system';
@@ -31,7 +31,7 @@ import {
 	getActiveRound,
 	hasActiveRound,
 } from '@/helpers/qf';
-import { formatDonations } from '@/helpers/number';
+import { formatDonation } from '@/helpers/number';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -55,7 +55,7 @@ const ProjectCard = (props: IProjectCard) => {
 		updatedAt,
 		organization,
 		verified,
-		projectPower,
+		// projectPower,
 		countUniqueDonors,
 		countUniqueDonorsForActiveQfRound,
 		qfRounds,
@@ -67,7 +67,7 @@ const ProjectCard = (props: IProjectCard) => {
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
-	const { formatMessage, formatRelativeTime } = useIntl();
+	const { formatMessage, formatRelativeTime, locale } = useIntl();
 
 	const isRoundActive = hasActiveRound(qfRounds);
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
@@ -130,11 +130,12 @@ const ProjectCard = (props: IProjectCard) => {
 					<PaddedRow justifyContent='space-between'>
 						<Flex flexDirection='column' gap='2px'>
 							<PriceText>
-								{formatDonations(
+								{formatDonation(
 									(isRoundActive
 										? sumDonationValueUsdForActiveQfRound
 										: sumDonationValueUsd) || 0,
 									'$',
+									locale,
 								)}
 							</PriceText>
 							{isRoundActive ? (
@@ -182,13 +183,14 @@ const ProjectCard = (props: IProjectCard) => {
 							<Flex flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
 									+
-									{formatDonations(
+									{formatDonation(
 										calculateTotalEstimatedMatching(
 											projectDonationsSqrtRootSum,
 											allProjectsSum,
 											matchingPool,
 										),
 										'$',
+										locale,
 										true,
 									)}
 								</EstimatedMatchingPrice>
@@ -222,7 +224,7 @@ const ProjectCard = (props: IProjectCard) => {
 									<QFBadge>{activeRound?.name}</QFBadge>
 								)}
 							</Flex>
-							{verified && (
+							{/* {verified && (
 								<GivpowerRankContainer
 									gap='8px'
 									alignItems='center'
@@ -237,7 +239,7 @@ const ProjectCard = (props: IProjectCard) => {
 											: '--'}
 									</B>
 								</GivpowerRankContainer>
-							)}
+							)} */}
 						</PaddedRow>
 					</Link>
 				)}

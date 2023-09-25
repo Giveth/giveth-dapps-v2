@@ -1,78 +1,28 @@
-import {
-	brandColors,
-	mediaQueries,
-	neutralColors,
-} from '@giveth/ui-design-system';
-import { FC, useEffect, useRef, useState } from 'react';
-import styled, { css } from 'styled-components';
-import { motion } from 'framer-motion';
+import { mediaQueries, neutralColors } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 import { ProjectStats } from './ProjectStats';
 import { AdminActions } from './AdminActions';
 import { Flex } from '@/components/styled-components/Flex';
 import { useProjectContext } from '@/context/project.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { device, zIndex } from '@/lib/constants/constants';
-import { Shadow } from '@/components/styled-components/Shadow';
+import { device } from '@/lib/constants/constants';
 import MobileDonateFooter from './MobileDonateFooter';
 import QFSection from './QFSection';
 import { DonateSection } from './DonationSection';
 import { ProjectPublicActions } from './ProjectPublicActions';
 
-interface IProjectActionCardProps {}
-
-interface IWrapperWithHeight extends IWrapper {
-	height: number;
-}
-
-interface IWrapper {
-	isMobile: boolean | null;
-}
-
-export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
+export const ProjectActionCard = () => {
 	const isMobile = !useMediaQuery(device.tablet);
-	const wrapperRef = useRef<HTMLDivElement>(null);
-	const [wrapperHeight, setWrapperHeight] = useState<number>(0);
 	const { isAdmin } = useProjectContext();
 
-	useEffect(() => {
-		const handleResize = () =>
-			setWrapperHeight(wrapperRef?.current?.clientHeight || 0);
-		if (isMobile) {
-			handleResize();
-			window.addEventListener('resize', handleResize);
+	if (isMobile) {
+		if (!isAdmin) {
+			return <MobileDonateFooter />;
 		}
-		return () => {
-			window.removeEventListener('resize', handleResize);
-		};
-	}, [isMobile, isAdmin]);
+		return null;
+	}
 
-	return isMobile ? (
-		<>
-			{isAdmin ? (
-				<Wrapper
-					ref={wrapperRef}
-					height={wrapperHeight}
-					drag={isMobile ? 'y' : false}
-					dragElastic={0}
-					dragConstraints={{
-						top: -(wrapperHeight - 180),
-						bottom: 132,
-					}}
-					isMobile={isMobile}
-				>
-					<TopLine />
-					<ProjectActionCardWrapper
-						flexDirection='column-reverse'
-						justifyContent='space-between'
-					>
-						<ProjectActionInnerCard />
-					</ProjectActionCardWrapper>
-				</Wrapper>
-			) : (
-				<MobileDonateFooter />
-			)}
-		</>
-	) : (
+	return (
 		<ProjectActionCardWrapper
 			flexDirection='column'
 			justifyContent='space-between'
@@ -83,12 +33,12 @@ export const ProjectActionCard: FC<IProjectActionCardProps> = ({}) => {
 };
 
 const ProjectActionInnerCard = () => {
-	const { isAdmin, hasActiveQFRound } = useProjectContext();
+	const { isAdmin, hasActiveQFRound, isDraft } = useProjectContext();
 	const isMobile = !useMediaQuery(device.tablet);
 
 	return (
 		<>
-			{isAdmin && <AdminActions />}
+			{isAdmin && !isDraft && <AdminActions />}
 			{!isMobile && hasActiveQFRound ? <QFSection /> : <DonateSection />}
 			{!isMobile && !isAdmin && <ProjectPublicActions />}
 			{isAdmin && <ProjectStats />}
@@ -104,54 +54,4 @@ const ProjectActionCardWrapper = styled(Flex)`
 	${mediaQueries.tablet} {
 		padding: 16px 24px;
 	}
-`;
-
-const wrapperMQs = css`
-	${mediaQueries.tablet} {
-		padding: 16px;
-		border-radius: 40px;
-	}
-
-	${mediaQueries.laptopS} {
-		max-width: 285px;
-	}
-
-	${mediaQueries.laptopL} {
-		padding: 32px;
-		max-width: 325px;
-	}
-`;
-
-const Wrapper = styled(motion.div)<IWrapperWithHeight>`
-	margin-top: -62px;
-	height: fit-content;
-	z-index: ${zIndex.BOTTOM_SHEET};
-	align-self: flex-start;
-	width: 100%;
-	position: fixed;
-	bottom: ${({ height }) => `calc(180px - ${height}px)`};
-	left: 0;
-	${mediaQueries.tablet} {
-		position: sticky;
-		top: 132px;
-	}
-	${props =>
-		props.isMobile
-			? css`
-					background: ${brandColors.giv['000']};
-					box-shadow: ${Shadow.Neutral[400]};
-					border-radius: 40px 40px 0 0;
-					padding: 32px;
-					${wrapperMQs}
-			  `
-			: css``}
-`;
-
-const TopLine = styled.div`
-	width: 80px;
-	height: 3px;
-	background-color: ${brandColors.giv['800']};
-	margin: 0 auto 8px;
-	position: relative;
-	top: -8px;
 `;

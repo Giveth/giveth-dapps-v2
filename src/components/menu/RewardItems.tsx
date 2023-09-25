@@ -37,6 +37,7 @@ import { ItemAction, ItemRow, ItemTitle } from './common';
 import { Item } from './Item';
 import { useItemsContext } from '@/context/Items.context';
 import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
+import { getNetworkConfig } from '@/helpers/givpower';
 
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;
@@ -65,6 +66,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	const { givbackLiquidPart } = tokenDistroBalance;
 	const { networkName } = networkInfo(chainId);
 	const { close } = useItemsContext();
+	const _config = getNetworkConfig(config.GNOSIS_NETWORK_NUMBER, chainId);
 
 	useEffect(() => {
 		const _allocatedTokens = BN(tokenDistroBalance.allocatedTokens);
@@ -215,7 +217,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				label={formatMessage({ id: 'label.get_giv_token' })}
 				size='small'
 				linkType='primary'
-				href={config.GNOSIS_CONFIG.GIV_BUY_LINK}
+				href={_config.GIV_BUY_LINK}
 				target='_blank'
 			/>
 			{showWhatIsGIVstreamModal && (

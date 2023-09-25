@@ -1,4 +1,4 @@
-import React, { ComponentType, FC } from 'react';
+import React, { ComponentType, forwardRef } from 'react';
 import {
 	neutralColors,
 	B,
@@ -40,12 +40,8 @@ interface IProps {
 	error?: FieldError;
 }
 
-const SelectNetwork: FC<IProps> = ({
-	networkOptions,
-	onChange,
-	selectedNetwork,
-	error,
-}) => {
+const SelectNetwork = forwardRef<HTMLElement, IProps>((props, ref) => {
+	const { networkOptions, onChange, selectedNetwork, error } = props;
 	return (
 		<>
 			<Select
@@ -57,6 +53,7 @@ const SelectNetwork: FC<IProps> = ({
 				onChange={(e: any) => onChange(e)}
 				options={networkOptions}
 				styles={selectStyles}
+				ref={ref as any}
 				hasError={!!error}
 				placeholder='Select chain'
 			/>
@@ -65,7 +62,8 @@ const SelectNetwork: FC<IProps> = ({
 			)}
 		</>
 	);
-};
+});
+SelectNetwork.displayName = 'SelectNetwork';
 
 const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 	return props.selectProps.menuIsOpen ? <IconCaretUp /> : <IconCaretDown />;

@@ -3,7 +3,7 @@ export const regexList = {
 	website:
 		/^(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/,
 	twitter:
-		/(?:https?:)?\/\/(?:www\.|m\.)?twitter\.com\/(\w{2,15})\/?(?:\?\S+)?(?:\#\S+)?$/,
+		/(?:https?:)?\/\/(?:www\.|m\.)?(twitter\.com|x\.com)\/(\w{2,15})\/?(?:\?\S+)?(?:\#\S+)?$/,
 	facebook:
 		/(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w\-]*\/)?(?:profile.php\?id=(?=\d.*))?([\w\-]*)?/,
 	instagram:
@@ -35,7 +35,7 @@ export const validators = {
 	twitter: {
 		pattern: {
 			value: regexList.twitter,
-			message: 'Invalid twitter URL',
+			message: 'Invalid X (Twitter) URL',
 		},
 	},
 	facebook: {
