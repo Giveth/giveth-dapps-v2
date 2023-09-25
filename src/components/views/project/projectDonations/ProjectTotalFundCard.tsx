@@ -174,12 +174,27 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 								{formatDonations(roundTotalDonation || 0, '$')}
 							</TotalFund>
 							{notDistributedFund ? (
-								<EstimatedMatchingSection>
-									<H6 weight={700}>
-										Matching funds coming soon...{' '}
-									</H6>
-									<CustomB>test</CustomB>
-								</EstimatedMatchingSection>
+								<NotDistributedFundContainer>
+									<EstimatedMatchingSection>
+										<Flex flexDirection='column' gap='8px'>
+											<H6 weight={700}>
+												{formatMessage({
+													id: 'label.matching_funds_coming_soon',
+												})}{' '}
+											</H6>
+											<NotDistributedContainer>
+												<NotDistributedProjectName>
+													{selectedQF.name}&nbsp;
+												</NotDistributedProjectName>
+												<NotDistributedDescription>
+													{formatMessage({
+														id: 'label.funds_have_not_yet_been_sent',
+													})}
+												</NotDistributedDescription>
+											</NotDistributedContainer>
+										</Flex>
+									</EstimatedMatchingSection>
+								</NotDistributedFundContainer>
 							) : (
 								<EstimatedMatchingSection
 									justifyContent='space-between'
@@ -297,8 +312,24 @@ const CustomP = styled(P)`
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
 
-const CustomB = styled(B)`
-	color: ${neutralColors.gray[800]};
+const NotDistributedContainer = styled.div`
+	border-top: 1px solid ${neutralColors.gray[300]};
+	padding-top: 8px;
+`;
+
+const NotDistributedProjectName = styled(B)`
+	display: inline-block;
+	color: ${neutralColors.gray[700]};
+	white-space: nowrap;
+`;
+
+const NotDistributedDescription = styled(P)`
+	display: inline;
+	color: ${neutralColors.gray[700]};
+`;
+
+const NotDistributedFundContainer = styled.div`
+	margin-bottom: 8px;
 `;
 
 export default ProjectTotalFundCard;
