@@ -22,10 +22,10 @@ import {
 	decrementLikedProjectsCount,
 	incrementLikedProjectsCount,
 } from '@/features/user/user.slice';
-import { slugToProjectView } from '@/lib/routeCreators';
 import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareModal from '../modals/ShareModal';
+import BoostModal from '../modals/Boost/BoostModal';
 
 interface IProjectCardLikeAndShareButtons {
 	project: IProject;
@@ -34,7 +34,8 @@ interface IProjectCardLikeAndShareButtons {
 const ProjectCardLikeAndShareButtons = (
 	props: IProjectCardLikeAndShareButtons,
 ) => {
-	const [showModal, setShowModal] = useState<boolean>(false);
+	const [showModal, setShowModal] = useState(false);
+	const [showBoost, setShowBoost] = useState(false);
 	const { project } = props;
 	const { slug, id: projectId, verified } = project;
 	const [reaction, setReaction] = useState(project.reaction);
@@ -96,17 +97,21 @@ const ProjectCardLikeAndShareButtons = (
 		}
 	};
 
-	const boostProject = () => {
-		if (!projectId) return;
-		if (boostLoading) return;
-		setBoostLoading(true);
-		router.push(`${slugToProjectView(slug)}?open=boost`);
+	const showBoostModal = () => {
+		setShowBoost(true);
 	};
+
+	const { modalCallback: signInThenBoost } = useModalCallback(showBoostModal);
 
 	const { modalCallback: signInThenLike } =
 		useModalCallback(likeUnlikeProject);
 
-	const { modalCallback: connectThenSignIn } = useModalCallback(
+	const { modalCallback: connectThenSignInToBoost } = useModalCallback(
+		signInThenBoost,
+		EModalEvents.CONNECTED,
+	);
+
+	const { modalCallback: connectThenSignInToLike } = useModalCallback(
 		signInThenLike,
 		EModalEvents.CONNECTED,
 	);
@@ -114,11 +119,21 @@ const ProjectCardLikeAndShareButtons = (
 	const checkSignInThenLike = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			connectThenSignIn();
+			connectThenSignInToLike();
 		} else if (!isSignedIn) {
 			signInThenLike();
 		} else {
 			likeUnlikeProject();
+		}
+	};
+
+	const checkSignInThenBoost = () => {
+		if (!isEnabled) {
+			connectThenSignInToBoost();
+		} else if (!isSignedIn) {
+			signInThenBoost();
+		} else {
+			setShowBoost(true);
 		}
 	};
 
@@ -143,7 +158,7 @@ const ProjectCardLikeAndShareButtons = (
 					{verified && (
 						<BadgeButton
 							isLoading={boostLoading}
-							onClick={boostProject}
+							onClick={checkSignInThenBoost}
 						>
 							<IconRocketInSpace />
 						</BadgeButton>
@@ -170,6 +185,12 @@ const ProjectCardLikeAndShareButtons = (
 					</BadgeButton>
 				</Flex>
 			</BadgeWrapper>
+			{showBoost && (
+				<BoostModal
+					projectId={project?.id!}
+					setShowModal={setShowBoost}
+				/>
+			)}
 		</>
 	);
 };
