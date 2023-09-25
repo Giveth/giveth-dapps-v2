@@ -52,7 +52,6 @@ const ProjectBadges = () => {
 };
 
 const CustomFlex = styled(Flex)`
-	margin-bottom: 12px;
 	overflow-x: scroll;
 	overflow-y: hidden;
 	white-space: nowrap;
