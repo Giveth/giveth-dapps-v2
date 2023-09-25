@@ -41,7 +41,6 @@ const ProjectCardLikeAndShareButtons = (
 	const [totalReactions, setTotalReactions] = useState(
 		project.totalReactions,
 	);
-	const [boostLoading, setBoostLoading] = useState(false);
 	const [likeLoading, setLikeLoading] = useState(false);
 	const {
 		isSignedIn,
@@ -154,10 +153,7 @@ const ProjectCardLikeAndShareButtons = (
 			<BadgeWrapper>
 				<Flex gap='6px'>
 					{verified && (
-						<BadgeButton
-							isLoading={boostLoading}
-							onClick={checkSignInThenBoost}
-						>
+						<BadgeButton onClick={checkSignInThenBoost}>
 							<IconRocketInSpace />
 						</BadgeButton>
 					)}
