@@ -33,7 +33,7 @@ interface IProjectCardLikeAndShareButtons {
 const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
 	project,
 }) => {
-	const [showModal, setShowModal] = useState(false);
+	const [showShare, setShowShare] = useState(false);
 	const [showBoost, setShowBoost] = useState(false);
 	const { slug, id: projectId, verified } = project;
 	const [reaction, setReaction] = useState(project.reaction);
@@ -135,16 +135,16 @@ const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
 
 	return (
 		<>
-			{showModal &&
+			{showShare &&
 				(verified ? (
 					<ShareModalAndGetReward
 						contentType={EContentType.thisProject}
-						setShowModal={setShowModal}
+						setShowModal={setShowShare}
 						projectHref={slug}
 					/>
 				) : (
 					<ShareModal
-						setShowModal={setShowModal}
+						setShowModal={setShowShare}
 						projectHref={slug}
 						contentType={EContentType.thisProject}
 					/>
@@ -171,7 +171,7 @@ const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
 					</BadgeButton>
 					<BadgeButton
 						onClick={e => {
-							setShowModal(true);
+							setShowShare(true);
 						}}
 					>
 						<IconShare16 />
