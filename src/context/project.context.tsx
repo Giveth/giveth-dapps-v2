@@ -53,6 +53,7 @@ interface IProjectContext {
 	isAdmin: boolean;
 	hasActiveQFRound: boolean;
 	totalDonationsCount: number;
+	isCancelled: boolean;
 }
 
 const ProjectContext = createContext<IProjectContext>({
@@ -67,6 +68,7 @@ const ProjectContext = createContext<IProjectContext>({
 	isAdmin: false,
 	hasActiveQFRound: false,
 	totalDonationsCount: 0,
+	isCancelled: false,
 });
 ProjectContext.displayName = 'ProjectContext';
 
@@ -85,6 +87,7 @@ export const ProjectProvider = ({
 	>(undefined);
 
 	const [projectData, setProjectData] = useState(project);
+	const [isCancelled, setIsCancelled] = useState(false);
 
 	const user = useAppSelector(state => state.user.userData);
 	const router = useRouter();
@@ -109,11 +112,12 @@ export const ProjectProvider = ({
 				if (_project.status.name !== EProjectStatus.CANCEL) {
 					setProjectData(_project);
 				} else {
+					setIsCancelled(true);
 					setProjectData(undefined);
 				}
 			})
 			.catch((error: unknown) => {
-				showToastError(error);
+				console.log('fetchProjectBySlug error: ', error);
 				captureException(error, {
 					tags: {
 						section: 'fetchProject',
@@ -250,6 +254,7 @@ export const ProjectProvider = ({
 	const isDraft = projectData?.status.name === EProjectStatus.DRAFT;
 
 	useEffect(() => {
+		setIsCancelled(false);
 		if (user?.isSignedIn && !project) {
 			fetchProjectBySlug();
 		} else {
@@ -271,6 +276,7 @@ export const ProjectProvider = ({
 				isAdmin,
 				hasActiveQFRound,
 				totalDonationsCount,
+				isCancelled,
 			}}
 		>
 			{children}

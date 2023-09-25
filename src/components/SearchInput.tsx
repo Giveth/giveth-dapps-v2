@@ -14,14 +14,13 @@ import {
 	KeyboardEvent,
 	ChangeEvent,
 	useState,
-	useEffect,
-	useRef,
 } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { ETheme } from '@/features/general/general.slice';
 import { Flex } from './styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
+import useFocus from '@/hooks/useFocus';
 
 interface ISearchInputProps {
 	setTerm: Dispatch<SetStateAction<string>>;
@@ -30,7 +29,6 @@ interface ISearchInputProps {
 
 export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 	const [value, setValue] = useState<string>('');
-	const inputRef = useRef<HTMLInputElement>(null);
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
 
@@ -44,11 +42,7 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 		setValue(event.target.value);
 	}
 
-	useEffect(() => {
-		if (inputRef.current) {
-			inputRef.current.focus();
-		}
-	}, [inputRef.current]);
+	const [inputRef] = useFocus();
 
 	return (
 		<SearchInputContainer className={className} theme={theme}>

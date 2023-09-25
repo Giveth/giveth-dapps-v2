@@ -34,6 +34,9 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import QFSection from './projectActionCard/QFSection';
 import { DonateSection } from './projectActionCard/DonationSection';
+import { ProjectStats } from './projectActionCard/ProjectStats';
+import { AdminActions } from './projectActionCard/AdminActions';
+import ProjectOwnerBanner from './ProjectOwnerBanner';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -63,6 +66,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		isActive,
 		isDraft,
 		hasActiveQFRound,
+		isCancelled,
+		isAdmin,
 	} = useProjectContext();
 
 	const router = useRouter();
@@ -105,7 +110,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	}
 
 	if (!projectData) {
-		return <NotAvailableProject />;
+		return <NotAvailableProject isCancelled={isCancelled} />;
 	}
 
 	return (
@@ -116,10 +121,20 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 				<ProjectMeta project={projectData} />
 			</Head>
 			<HeadContainer>
+				{isAdmin && <ProjectOwnerBanner />}
 				<ProjectBadges />
 				<Row>
 					<Col xs={12} md={8} lg={8.5}>
 						<ProjectHeader />
+						{isMobile && isAdmin && (
+							<MobileActionsContainer
+								flexDirection='column'
+								gap='24px'
+							>
+								<ProjectStats />
+								{!isDraft && <AdminActions />}
+							</MobileActionsContainer>
+						)}
 						{isMobile && (
 							<MobileContainer hasActiveRound={hasActiveQFRound}>
 								{hasActiveQFRound ? (
@@ -198,8 +213,9 @@ const DraftIndicator = styled.div`
 	background: ${semanticColors.blueSky[100]};
 	display: flex;
 	gap: 18px;
-	padding: 25px 150px;
+	padding: 25px;
 	margin-bottom: 30px;
+	border-radius: 8px;
 `;
 
 const Wrapper = styled.div`
@@ -229,6 +245,13 @@ const MobileContainer = styled.div<{ hasActiveRound: boolean }>`
 	padding: ${props => (props.hasActiveRound ? '0 26px 26px 26px' : '0 26px')};
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 16px;
+`;
+
+const MobileActionsContainer = styled(Flex)`
+	background-color: ${neutralColors.gray[100]};
+	border-radius: 16px;
+	padding: 16px 24px;
+	margin-bottom: 8px;
 `;
 
 export default ProjectIndex;

@@ -70,7 +70,7 @@ export const PublicBoostsTable: FC<IBoostsTable> = ({
 								)}
 							</BoostsTableCell>
 							<BoostsTableCell bold>
-								${boost.percentage}%
+								{boost.percentage}%
 							</BoostsTableCell>
 						</BoostsRowWrapper>
 					);
