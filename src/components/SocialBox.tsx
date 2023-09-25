@@ -6,7 +6,7 @@ import {
 	LinkedinShareButton,
 	TwitterShareButton,
 } from 'react-share';
-import { Lead, neutralColors } from '@giveth/ui-design-system';
+import { IconXSocial24, Lead, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { fullPath } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
@@ -53,12 +53,7 @@ const SocialBox: FC<ISocialBox> = props => {
 						url={projectUrl || ''}
 						hashtags={['Giveth']}
 					>
-						<Image
-							src={'/images/social-tw.svg'}
-							alt='X (Twitter)'
-							width='44'
-							height='44'
-						/>
+						<IconXSocial24 />
 					</TwitterShareButton>
 				</SocialItem>
 				<SocialItem isDonateFooter={isDonateFooter}>
@@ -113,6 +108,7 @@ const Social = styled.div<{ isDonateFooter?: boolean }>`
 const SocialItems = styled.div`
 	display: flex;
 	flex-direction: row;
+	align-items: center;
 	width: 100%;
 	justify-content: center;
 	margin: 8px 0 0 0;
