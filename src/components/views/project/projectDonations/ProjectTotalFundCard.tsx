@@ -4,6 +4,7 @@ import {
 	H2,
 	H4,
 	H5,
+	H6,
 	neutralColors,
 	P,
 	semanticColors,
@@ -44,6 +45,10 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		estimatedMatching || {};
 
 	const selectedQFData = qfRounds?.find(round => round.id === selectedQF?.id);
+	console.log('SelectedQfData', selectedQFData);
+	console.log('history', qfRoundHistory);
+
+	const notDistributedFund = !qfRoundHistory?.matchingFund;
 
 	useEffect(() => {
 		if (!id) return;
@@ -114,7 +119,6 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 				  )
 			: 0
 		: 0;
-
 	return (
 		<Wrapper>
 			{selectedQF === null ? (
@@ -169,24 +173,35 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 							<TotalFund>
 								{formatDonations(roundTotalDonation || 0, '$')}
 							</TotalFund>
-							<EstimatedMatchingSection
-								justifyContent='space-between'
-								alignItems='center'
-							>
-								<EstimatedMatchingPrice>
-									+{' '}
-									{formatDonations(
-										matchFund,
-										'$',
-										selectedQFData?.isActive ? true : false,
-									)}
-								</EstimatedMatchingPrice>
-								<EstimatedMatchingText>
-									{selectedQFData?.isActive
-										? 'Estimated Matching'
-										: 'Matching Funds'}
-								</EstimatedMatchingText>
-							</EstimatedMatchingSection>
+							{notDistributedFund ? (
+								<EstimatedMatchingSection>
+									<H6 weight={700}>
+										Matching funds coming soon...{' '}
+									</H6>
+									<CustomB>test</CustomB>
+								</EstimatedMatchingSection>
+							) : (
+								<EstimatedMatchingSection
+									justifyContent='space-between'
+									alignItems='center'
+								>
+									<EstimatedMatchingPrice>
+										+{' '}
+										{formatDonations(
+											matchFund,
+											'$',
+											selectedQFData?.isActive
+												? true
+												: false,
+										)}
+									</EstimatedMatchingPrice>
+									<EstimatedMatchingText>
+										{selectedQFData?.isActive
+											? 'Estimated Matching'
+											: 'Matching Funds'}
+									</EstimatedMatchingText>
+								</EstimatedMatchingSection>
+							)}
 							<div>
 								<LightSubline> Raised from </LightSubline>
 								<Subline style={{ display: 'inline-block' }}>
@@ -280,6 +295,10 @@ const LightSubline = styled(Subline)`
 const CustomP = styled(P)`
 	padding-bottom: 8px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
+`;
+
+const CustomB = styled(B)`
+	color: ${neutralColors.gray[800]};
 `;
 
 export default ProjectTotalFundCard;
