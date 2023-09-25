@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import {
 	brandColors,
 	IconHeartFilled16,
@@ -30,12 +30,11 @@ interface IProjectCardLikeAndShareButtons {
 	project: IProject;
 }
 
-const ProjectCardLikeAndShareButtons = (
-	props: IProjectCardLikeAndShareButtons,
-) => {
+const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
+	project,
+}) => {
 	const [showModal, setShowModal] = useState(false);
 	const [showBoost, setShowBoost] = useState(false);
-	const { project } = props;
 	const { slug, id: projectId, verified } = project;
 	const [reaction, setReaction] = useState(project.reaction);
 	const [totalReactions, setTotalReactions] = useState(
