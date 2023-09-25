@@ -14,7 +14,7 @@ import telegram_icon from '/public/images/telegram_icon.svg';
 import medium_icon from '/public/images/medium_icon.svg';
 import twitter_icon from '/public/images/twitter_icon.svg';
 import youtube_icon from '/public/images/youtube_icon.svg';
-import reddit_icon from '/public/images/reddit_icon.svg';
+import docs_icon from '/public/images/docsIconLarge.svg';
 import links from '@/lib/constants/links';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { ButtonStyled } from '@/components/GeneralCard.sc';
@@ -83,11 +83,13 @@ const JoinEngage = () => {
 			route: links.YOUTUBE,
 		},
 		{
-			icon: reddit_icon,
-			title: 'Reddit',
-			caption: formatMessage({ id: 'page.learn.reddit.desc' }),
-			buttonLabel: `${formatMessage({ id: 'label.join_us_on' })} reddit`,
-			route: links.REDDIT,
+			icon: docs_icon,
+			title: 'Giveth Docs',
+			caption: formatMessage({ id: 'page.learn.docs.desc' }),
+			buttonLabel: `${formatMessage({
+				id: 'label.read_more_on_our_docs',
+			})}`,
+			route: links.DOCS,
 		},
 	];
 

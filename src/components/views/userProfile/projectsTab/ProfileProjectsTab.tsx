@@ -17,7 +17,6 @@ import ProjectCard from '@/components/project-card/ProjectCard';
 import { Flex } from '@/components/styled-components/Flex';
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { ProjectsContributeCard } from '@/components/ContributeCard';
-
 import { useProfileContext } from '@/context/profile.context';
 
 const itemPerPage = 10;

@@ -4,16 +4,16 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
-import The_Commons_Stack from '/public/images/partnerships/The_Commons_Stack.svg';
+import The_Commons_Stack from '/public/images/partnerships/CSlogo.svg';
 import Gitcoin from '/public/images/partnerships/Gitcoin.svg';
 import ShapeShift_DAO from '/public/images/partnerships/ShapeShift_DAO.svg';
-import OneHive from '/public/images/partnerships/1Hive.svg';
 import Gnosis_Chain from '/public/images/partnerships/Gnosis_Chain.svg';
+import Dappnode from '/public/images/partnerships/Dappnode.svg';
 
 const PartnersArray = [
 	{
-		icon: OneHive,
-		title: '1Hive',
+		icon: Dappnode,
+		title: 'Dappnode',
 	},
 	{
 		icon: Gnosis_Chain,
