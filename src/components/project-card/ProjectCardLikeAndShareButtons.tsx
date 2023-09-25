@@ -10,7 +10,6 @@ import {
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
 import { captureException } from '@sentry/nextjs';
-import { useRouter } from 'next/router';
 
 import ShareModalAndGetReward from '../modals/ShareRewardedModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
@@ -50,7 +49,6 @@ const ProjectCardLikeAndShareButtons = (
 		isEnabled,
 	} = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
-	const router = useRouter();
 
 	useEffect(() => {
 		setReaction(project.reaction);
