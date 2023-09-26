@@ -13,7 +13,6 @@ import { infuraProvider } from 'wagmi/providers/infura';
 
 import {
 	RainbowKitProvider,
-	getDefaultWallets,
 	connectorsForWallets,
 } from '@rainbow-me/rainbowkit';
 import {

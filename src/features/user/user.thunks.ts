@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getWalletClient } from '@wagmi/core';
+import { connect, getWalletClient } from '@wagmi/core';
+import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask';
 import { backendGQLRequest } from '@/helpers/requests';
 import {
 	GET_USER_BY_ADDRESS,
@@ -17,9 +18,6 @@ import { postRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import StorageLabel from '@/lib/localStorage';
 import { getTokens } from '@/helpers/user';
-import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask';
-
-import { connect } from '@wagmi/core';
 
 const saveTokenToLocalstorage = (address: string, token: string) => {
 	const _address = address.toLowerCase();
