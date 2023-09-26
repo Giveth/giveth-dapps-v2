@@ -12,11 +12,11 @@ import {
 	brandColors,
 	neutralColors,
 	IconExternalLink,
-	IconTwitter,
 	IconLinkedin,
 	IconFacebook,
 	IconAlertTriangleOutline,
 	mediaQueries,
+	IconXSocial,
 } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -219,7 +219,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 									url={url}
 								>
 									<SocialButtonContainer>
-										<IconTwitter />
+										<IconXSocial />
 										{formatMessage({
 											id: 'label.share_on_twitter',
 										})}

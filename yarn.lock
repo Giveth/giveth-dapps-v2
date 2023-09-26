@@ -852,10 +852,10 @@
     intl-messageformat "10.5.3"
     tslib "^2.4.0"
 
-"@giveth/ui-design-system@^1.11.14":
-  version "1.11.15"
-  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.15.tgz#eb57bb0769ad5e8af3b7562492133c183c17af06"
-  integrity sha512-Mt1/zv/Stfg0lGN90VkJQYtya2LfWD0su7BWOtgxPwQVw1HDEkteZObX0a9GEEwCYa38cIfn3Ge3DqfQ4b47gA==
+"@giveth/ui-design-system@^1.11.16":
+  version "1.11.16"
+  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.16.tgz#b708f6bf07e292e46e33b6c36b27536611bae5ff"
+  integrity sha512-0CZnzsvsVHVB+NaUp679lU6oiukp04+wH5qmVXoxaWAUu4Futnk0eHTDUkIfy00B92s55di3jca2WPNUeihDRQ==
   dependencies:
     next "13.1.6"
     react "18.2.0"

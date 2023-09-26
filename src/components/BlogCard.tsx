@@ -41,7 +41,9 @@ const BlogCard: FC<IBlogCard> = props => {
 				<ImageWrapper>
 					<img width='100%' height={170} src={image} alt={title} />
 				</ImageWrapper>
-				<Title weight={700}>{htmlToText(title)}</Title>
+				<ExternalLink href={link}>
+					<Title weight={700}>{htmlToText(title)}</Title>
+				</ExternalLink>
 				<Description>{htmlToText(description)}</Description>
 			</div>
 			<div>

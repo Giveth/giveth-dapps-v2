@@ -268,7 +268,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 				{myAccount && mode === ETableNode.VIEWING && (
 					<TableHeader></TableHeader>
 				)}
-				{editBoosts?.map(boost => {
+				{editBoosts?.map((boost, index) => {
 					return (
 						<BoostsRowWrapper
 							key={boost.project.id}
@@ -298,6 +298,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 												? boost.displayValue
 												: boost.percentage
 										}
+										autoFocus={index === 0}
 										onChange={e => {
 											onPercentageChange(
 												boost.id,
@@ -450,7 +451,7 @@ const Actions = styled(Flex)`
 const Table = styled.div<{ hasLastCol: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
-		props.hasLastCol ? '4fr 1.2fr 1fr 0.3fr' : '4fr 1.5fr 0.6fr'};
+		props.hasLastCol ? '3.5fr 1.5fr 1fr 0.3fr' : '4fr 1.5fr 0.6fr'};
 	min-width: 700px;
 `;
 

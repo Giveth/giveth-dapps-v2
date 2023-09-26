@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import {
 	brandColors,
 	IconHeartFilled16,
@@ -10,7 +10,6 @@ import {
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
 import { captureException } from '@sentry/nextjs';
-import { useRouter } from 'next/router';
 
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import ShareModalAndGetReward from '../modals/ShareRewardedModal';
@@ -23,26 +22,25 @@ import {
 	decrementLikedProjectsCount,
 	incrementLikedProjectsCount,
 } from '@/features/user/user.slice';
-import { slugToProjectView } from '@/lib/routeCreators';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareModal from '../modals/ShareModal';
+import BoostModal from '../modals/Boost/BoostModal';
 
 interface IProjectCardLikeAndShareButtons {
 	project: IProject;
 }
 
-const ProjectCardLikeAndShareButtons = (
-	props: IProjectCardLikeAndShareButtons,
-) => {
-	const [showModal, setShowModal] = useState<boolean>(false);
-	const { project } = props;
+const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
+	project,
+}) => {
+	const [showShare, setShowShare] = useState(false);
+	const [showBoost, setShowBoost] = useState(false);
 	const { slug, id: projectId, verified } = project;
 	const [reaction, setReaction] = useState(project.reaction);
 	const [totalReactions, setTotalReactions] = useState(
 		project.totalReactions,
 	);
-	const [boostLoading, setBoostLoading] = useState(false);
 	const [likeLoading, setLikeLoading] = useState(false);
 	const {
 		isSignedIn,
@@ -50,7 +48,6 @@ const ProjectCardLikeAndShareButtons = (
 		isEnabled,
 	} = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
-	const router = useRouter();
 	const { openConnectModal } = useConnectModal();
 
 	useEffect(() => {
@@ -98,12 +95,11 @@ const ProjectCardLikeAndShareButtons = (
 		}
 	};
 
-	const boostProject = () => {
-		if (!projectId) return;
-		if (boostLoading) return;
-		setBoostLoading(true);
-		router.push(`${slugToProjectView(slug)}?open=boost`);
+	const showBoostModal = () => {
+		setShowBoost(true);
 	};
+
+	const { modalCallback: signInThenBoost } = useModalCallback(showBoostModal);
 
 	const { modalCallback: signInThenLike } =
 		useModalCallback(likeUnlikeProject);
@@ -119,18 +115,28 @@ const ProjectCardLikeAndShareButtons = (
 		}
 	};
 
+	const checkSignInThenBoost = () => {
+		if (!isEnabled) {
+			openConnectModal?.();
+		} else if (!isSignedIn) {
+			signInThenBoost();
+		} else {
+			setShowBoost(true);
+		}
+	};
+
 	return (
 		<>
-			{showModal &&
+			{showShare &&
 				(verified ? (
 					<ShareModalAndGetReward
 						contentType={EContentType.thisProject}
-						setShowModal={setShowModal}
+						setShowModal={setShowShare}
 						projectHref={slug}
 					/>
 				) : (
 					<ShareModal
-						setShowModal={setShowModal}
+						setShowModal={setShowShare}
 						projectHref={slug}
 						contentType={EContentType.thisProject}
 					/>
@@ -138,10 +144,7 @@ const ProjectCardLikeAndShareButtons = (
 			<BadgeWrapper>
 				<Flex gap='6px'>
 					{verified && (
-						<BadgeButton
-							isLoading={boostLoading}
-							onClick={boostProject}
-						>
+						<BadgeButton onClick={checkSignInThenBoost}>
 							<IconRocketInSpace />
 						</BadgeButton>
 					)}
@@ -160,13 +163,19 @@ const ProjectCardLikeAndShareButtons = (
 					</BadgeButton>
 					<BadgeButton
 						onClick={e => {
-							setShowModal(true);
+							setShowShare(true);
 						}}
 					>
 						<IconShare16 />
 					</BadgeButton>
 				</Flex>
 			</BadgeWrapper>
+			{showBoost && (
+				<BoostModal
+					projectId={project?.id!}
+					setShowModal={setShowBoost}
+				/>
+			)}
 		</>
 	);
 };

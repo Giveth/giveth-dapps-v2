@@ -11,12 +11,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation, IQFRound } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
-import {
-	smallFormatDate,
-	formatTxLink,
-	compareAddresses,
-	formatUSD,
-} from '@/lib/helpers';
+import { smallFormatDate, formatTxLink, compareAddresses } from '@/lib/helpers';
 import {
 	EDirection,
 	EDonationStatus,
@@ -35,6 +30,7 @@ import { useProjectContext } from '@/context/project.context';
 import NetworkLogo from '@/components/NetworkLogo';
 import { UserWithPFPInCell } from '../../../UserWithPFPInCell';
 import { chainNameById } from '@/lib/network';
+import { formatDonation } from '@/helpers/number';
 
 const itemPerPage = 10;
 
@@ -195,7 +191,7 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 								</NetworkName>
 							</DonationTableCell>
 							<DonationTableCell>
-								<B>{formatUSD(donation.amount, 3)}</B>
+								<B>{formatDonation(donation.amount)}</B>
 								<Currency>{donation.currency}</Currency>
 								{!donation.anonymous && (
 									<ExternalLink
@@ -213,7 +209,11 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 							</DonationTableCell>
 							<DonationTableCell>
 								{donation.valueUsd &&
-									'$' + formatUSD(donation.valueUsd)}
+									formatDonation(
+										donation.valueUsd,
+										'$',
+										locale,
+									)}
 							</DonationTableCell>
 						</DonationRowWrapper>
 					))}

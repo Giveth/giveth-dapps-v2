@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import WalletAddressInput from './WalletAddressInput';
@@ -23,12 +24,14 @@ const CreateProjectAddAddressModal = ({
 		setShowModal(undefined),
 	);
 
+	const { formatMessage } = useIntl();
+
 	return (
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
-			headerTitle='Add new Address'
+			headerTitle={formatMessage({ id: 'label.add_new_address' })}
 		>
 			<AddressContainer>
 				<WalletAddressInput

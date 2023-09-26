@@ -22,7 +22,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_QF_ROUND_HISTORY } from '@/apollo/gql/gqlDonations';
 import { IGetQfRoundHistory, IQFRound } from '@/apollo/types/types';
-import { formatDonations } from '@/helpers/number';
+import { formatDonation } from '@/helpers/number';
 
 interface IProjectTotalFundCardProps {
 	selectedQF: IQFRound | null;
@@ -39,7 +39,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		estimatedMatching,
 		countUniqueDonors,
 	} = projectData || {};
-	const { formatMessage } = useIntl();
+	const { formatMessage, locale } = useIntl();
 	const recipientAddresses = addresses?.filter(a => a.isRecipient);
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
@@ -131,7 +131,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						</B>
 						{totalDonations && totalDonations > 0 ? (
 							<TotalFund>
-								{formatDonations(totalDonations, '$')}
+								{formatDonation(totalDonations, '$')}
 							</TotalFund>
 						) : (
 							<NoDonation>
@@ -171,7 +171,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 					{roundDonorsCount && roundDonorsCount > 0 ? (
 						<div>
 							<TotalFund>
-								{formatDonations(roundTotalDonation || 0, '$')}
+								{formatDonation(roundTotalDonation || 0, '$')}
 							</TotalFund>
 							{notDistributedFund ? (
 								<NotDistributedFundContainer>
@@ -202,9 +202,10 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 								>
 									<EstimatedMatchingPrice>
 										+{' '}
-										{formatDonations(
+										{formatDonation(
 											matchFund,
 											'$',
+											locale,
 											selectedQFData?.isActive
 												? true
 												: false,

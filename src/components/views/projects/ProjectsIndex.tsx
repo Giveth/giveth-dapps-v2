@@ -352,9 +352,9 @@ const FiltersContainer = styled.div`
 	padding: 32px 21px;
 	border-radius: 0;
 	margin-bottom: 24px;
-	margin-top: 50px;
 	gap: 16px;
 	${mediaQueries.tablet} {
+		margin-top: 32px;
 		border-radius: 16px;
 	}
 `;
