@@ -1,4 +1,4 @@
-import { hashMessage, Interface, _TypedDataEncoder } from 'ethers/lib/utils';
+import { hashMessage, _TypedDataEncoder } from 'ethers/lib/utils';
 export type EIP712TypedData = ReturnType<typeof _TypedDataEncoder.getPayload>;
 
 export const hashTypedData = (typedData: EIP712TypedData): string => {
