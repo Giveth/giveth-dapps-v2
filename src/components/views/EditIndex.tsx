@@ -28,6 +28,7 @@ const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
 	const [isLoadingProject, setIsLoadingProject] = useState(true);
 	const [isCancelled, setIsCancelled] = useState(false);
+	const [isOwner, setIsOwner] = useState(true);
 
 	const dispatch = useAppDispatch();
 	const {
@@ -56,6 +57,7 @@ const EditIndex = () => {
 				dispatch(setShowCompleteProfile(true));
 				return;
 			}
+			!isLoadingProject && setIsLoadingProject(true);
 			client
 				.query({
 					query: FETCH_PROJECT_BY_ID,
@@ -69,13 +71,13 @@ const EditIndex = () => {
 							project.adminUser.walletAddress,
 						)
 					) {
-						showToastError(
-							'Only project owner can edit the project',
-						);
+						setIsOwner(false);
 					} else if (project.status.name === EProjectStatus.CANCEL) {
+						setIsOwner(true);
 						setIsCancelled(true);
 						setProject(undefined);
 					} else {
+						setIsOwner(true);
 						setProject(project);
 					}
 					setIsLoadingProject(false);
@@ -106,7 +108,12 @@ const EditIndex = () => {
 	} else if (!isRegistered) {
 		return <CompleteProfile />;
 	} else if (!project) {
-		return <NotAvailableProject isCancelled={isCancelled} />;
+		return (
+			<NotAvailableProject
+				notOwner={!isOwner}
+				isCancelled={isCancelled}
+			/>
+		);
 	}
 	return <CreateProject project={project} />;
 };
