@@ -1,7 +1,6 @@
 name: Dockerbuild
 
 on: workflow_dispatch
-
 #on:
 #  push:
 #    branches:
@@ -25,6 +24,11 @@ jobs:
         run: yarn
       - name: Build
         run: yarn build
+      - env:
+          NEXT_PUBLIC_SENTRY_AUTH_TOKEN: ${{ secrets.NEXT_PUBLIC_SENTRY_AUTH_TOKEN }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_PUBLIC_SENTRY_ORG: ${{ secrets.NEXT_PUBLIC_SENTRY_ORG }}
+          NEXT_PUBLIC_SENTRY_PROJECT: ${{ secrets.NEXT_PUBLIC_SENTRY_PROJECT }}
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -36,4 +40,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/giveth/giveth-dapp-v2:main
+          tags: ghcr.io/giveth/giveth-dapps-v2:main
