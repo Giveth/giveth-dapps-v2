@@ -2,13 +2,11 @@ version: '3.9'
 
 services:
   givethio-frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/giveth/giveth-dapp-v2:main
     container_name: givethio-frontend
     restart: always
-    networks:
-      - giveth
+    volumes:
+      - .env:/usr/src/app/.env.local
     ports:
       - "3000"
     env_file:
