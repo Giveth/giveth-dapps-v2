@@ -2,6 +2,7 @@ import {
 	Caption,
 	IconInfoFilled16,
 	brandColors,
+	neutralColors,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
@@ -25,6 +26,8 @@ const DonateQFEligibleNetworks = () => {
 		.filter(chain => activeRound?.eligibleNetworks?.includes(chain.id))
 		?.map(chain => chain.name);
 
+	const chainsString = eligibleChainNames.join(' & ');
+
 	console.log('activeRoundd', eligibleChainNames);
 
 	return (
@@ -33,13 +36,20 @@ const DonateQFEligibleNetworks = () => {
 				<MakeDonationTitle>
 					<Flex alignItems='center' gap='4px'>
 						<IconInfoFilled16 />
-						Make your donation eligible for matching
+						{formatMessage({
+							id: 'label.make_your_donation_eligible_for_matching',
+						})}
 					</Flex>
 				</MakeDonationTitle>
 				<CustomSwitchCaption onClick={() => setShowModal(true)}>
 					{formatMessage({ id: 'label.switch_network' })}
 				</CustomSwitchCaption>
 			</Flex>
+			<MakeDonationDescription>
+				{formatMessage({ id: 'label.donations_made_on' })}
+				&nbsp; <BoldCaption>{chainsString}</BoldCaption> &nbsp;
+				{formatMessage({ id: 'label.are_eligible_to_be_matched' })}
+			</MakeDonationDescription>
 			{showModal && (
 				<SwitchNetwork
 					setShowModal={setShowModal}
@@ -59,6 +69,20 @@ const Container = styled.div`
 
 const MakeDonationTitle = styled(Caption)`
 	color: ${brandColors.giv[500]};
+`;
+
+const MakeDonationDescription = styled(Caption)`
+	width: 100%;
+	display: inline-block;
+	margin-top: 8px;
+	padding-top: 8px;
+	border-top: 1px solid ${neutralColors.gray[400]};
+	color: ${neutralColors.gray[700]};
+`;
+
+const BoldCaption = styled(Caption)`
+	font-weight: 500;
+	display: inline;
 `;
 
 const CustomSwitchCaption = styled(SwitchCaption)`
