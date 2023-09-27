@@ -16,16 +16,7 @@ import {
 	getDefaultWallets,
 	connectorsForWallets,
 } from '@rainbow-me/rainbowkit';
-import {
-	mainnet,
-	polygon,
-	optimism,
-	gnosis,
-	optimismGoerli,
-	goerli,
-	celoAlfajores,
-	celo,
-} from 'wagmi/chains';
+
 import { publicProvider } from 'wagmi/providers/public';
 
 import { useApollo } from '@/apollo/apolloClient';
@@ -47,6 +38,7 @@ import StorageLabel from '@/lib/localStorage';
 import { isGIVeconomyRoute } from '@/lib/helpers';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
+import config from '@/configuration';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
@@ -84,27 +76,18 @@ function renderSnippet() {
 const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-	[
-		gnosis,
-		polygon,
-		...(isProduction
-			? [mainnet, optimism, celo]
-			: [goerli, optimismGoerli, celoAlfajores]),
-	],
+	config.CHAINS,
 	[
 		publicProvider(),
 		infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY! }),
 	],
 );
 
-console.log(
-	'process.env.NEXT_PUBLIC_WALLET_CONNECT_ID',
-	process.env.NEXT_PUBLIC_WALLET_CONNECT_ID,
-);
+const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!;
 
 const { wallets } = getDefaultWallets({
 	appName: 'giveth-test',
-	projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!,
+	projectId: projectId,
 	chains,
 });
 
