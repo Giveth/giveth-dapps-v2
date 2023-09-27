@@ -1,4 +1,4 @@
-import type { Chain } from 'wagmi';
+import type { Chain } from '@rainbow-me/rainbowkit';
 
 export type Address = `0x${string}`;
 
@@ -187,6 +187,7 @@ interface MicroservicesConfig {
 }
 
 export interface EnvConfig {
+	CHAINS: Chain[];
 	GIVETH_PROJECT_ID: number;
 	MAINNET_NETWORK_NUMBER: number;
 	GNOSIS_NETWORK_NUMBER: number;
