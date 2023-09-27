@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  givethio-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: givethio-frontend
+    restart: always
+    networks:
+      - giveth
+    ports:
+      - "3000"
+    env_file:
+      - .env
