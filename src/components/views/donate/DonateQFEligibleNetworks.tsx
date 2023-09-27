@@ -4,29 +4,28 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useNetwork } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
 import { useDonateData } from '@/context/donate.context';
 import { getActiveRound } from '@/helpers/qf';
 import { SwitchCaption } from './common.styled';
+import { chainNameById } from '@/lib/network';
 
 const DonateQFEligibleNetworks = () => {
-	const [showModal, setShowModal] = React.useState(false);
+	const [showModal, setShowModal] = useState(false);
 	const { project } = useDonateData();
-	const { chains } = useNetwork();
 	const { formatMessage } = useIntl();
 
 	const activeRound = getActiveRound(project.qfRounds);
 
-	const eligibleChainNames = chains
-		.filter(chain => activeRound?.eligibleNetworks?.includes(chain.id))
-		?.map(chain => chain.name);
+	const eligibleChainNames = activeRound?.eligibleNetworks.map(network =>
+		chainNameById(network),
+	);
 
-	const chainsString = eligibleChainNames.join(' & ');
+	const chainsString = eligibleChainNames?.join(' & ');
 
 	console.log('activeRoundd', eligibleChainNames);
 
