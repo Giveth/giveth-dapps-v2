@@ -4,6 +4,7 @@ import {
 	H2,
 	H4,
 	H5,
+	H6,
 	neutralColors,
 	P,
 	semanticColors,
@@ -44,6 +45,8 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		estimatedMatching || {};
 
 	const selectedQFData = qfRounds?.find(round => round.id === selectedQF?.id);
+
+	const notDistributedFund = !qfRoundHistory?.matchingFund;
 
 	useEffect(() => {
 		if (!id) return;
@@ -114,7 +117,6 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 				  )
 			: 0
 		: 0;
-
 	return (
 		<Wrapper>
 			{selectedQF === null ? (
@@ -169,25 +171,51 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 							<TotalFund>
 								{formatDonation(roundTotalDonation || 0, '$')}
 							</TotalFund>
-							<EstimatedMatchingSection
-								justifyContent='space-between'
-								alignItems='center'
-							>
-								<EstimatedMatchingPrice>
-									+{' '}
-									{formatDonation(
-										matchFund,
-										'$',
-										locale,
-										selectedQFData?.isActive ? true : false,
-									)}
-								</EstimatedMatchingPrice>
-								<EstimatedMatchingText>
-									{selectedQFData?.isActive
-										? 'Estimated Matching'
-										: 'Matching Funds'}
-								</EstimatedMatchingText>
-							</EstimatedMatchingSection>
+							{notDistributedFund ? (
+								<NotDistributedFundContainer>
+									<EstimatedMatchingSection>
+										<Flex flexDirection='column' gap='8px'>
+											<H6 weight={700}>
+												{formatMessage({
+													id: 'label.matching_funds_coming_soon',
+												})}{' '}
+											</H6>
+											<NotDistributedContainer>
+												<NotDistributedProjectName>
+													{selectedQF.name}&nbsp;
+												</NotDistributedProjectName>
+												<NotDistributedDescription>
+													{formatMessage({
+														id: 'label.funds_have_not_yet_been_sent',
+													})}
+												</NotDistributedDescription>
+											</NotDistributedContainer>
+										</Flex>
+									</EstimatedMatchingSection>
+								</NotDistributedFundContainer>
+							) : (
+								<EstimatedMatchingSection
+									justifyContent='space-between'
+									alignItems='center'
+								>
+									<EstimatedMatchingPrice>
+										+{' '}
+										{formatDonation(
+											matchFund,
+											'$',
+											locale,
+											selectedQFData?.isActive
+												? true
+												: false,
+										)}
+									</EstimatedMatchingPrice>
+									<EstimatedMatchingText>
+										{selectedQFData?.isActive
+											? 'Estimated Matching'
+											: 'Matching Funds'}
+									</EstimatedMatchingText>
+								</EstimatedMatchingSection>
+							)}
 							<div>
 								<LightSubline> Raised from </LightSubline>
 								<Subline style={{ display: 'inline-block' }}>
@@ -281,6 +309,26 @@ const LightSubline = styled(Subline)`
 const CustomP = styled(P)`
 	padding-bottom: 8px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
+`;
+
+const NotDistributedContainer = styled.div`
+	border-top: 1px solid ${neutralColors.gray[300]};
+	padding-top: 8px;
+`;
+
+const NotDistributedProjectName = styled(B)`
+	display: inline-block;
+	color: ${neutralColors.gray[700]};
+	white-space: nowrap;
+`;
+
+const NotDistributedDescription = styled(P)`
+	display: inline;
+	color: ${neutralColors.gray[700]};
+`;
+
+const NotDistributedFundContainer = styled.div`
+	margin-bottom: 8px;
 `;
 
 export default ProjectTotalFundCard;
