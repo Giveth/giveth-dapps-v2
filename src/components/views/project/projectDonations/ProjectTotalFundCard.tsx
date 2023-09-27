@@ -45,8 +45,6 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		estimatedMatching || {};
 
 	const selectedQFData = qfRounds?.find(round => round.id === selectedQF?.id);
-	console.log('SelectedQfData', selectedQFData);
-	console.log('history', qfRoundHistory);
 
 	const notDistributedFund = !qfRoundHistory?.matchingFund;
 
