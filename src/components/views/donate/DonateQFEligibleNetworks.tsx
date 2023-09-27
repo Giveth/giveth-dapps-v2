@@ -27,8 +27,6 @@ const DonateQFEligibleNetworks = () => {
 
 	const chainsString = eligibleChainNames?.join(' & ');
 
-	console.log('activeRoundd', eligibleChainNames);
-
 	return (
 		<Container>
 			<Flex justifyContent='space-between' alignItems='center'>
