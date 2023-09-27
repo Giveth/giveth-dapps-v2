@@ -39,7 +39,13 @@ const config: EnvConfig = {
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
-
+	CHAINS: [
+		mainnet,
+		{ ...gnosis, iconUrl: '/images/partnerships/Gnosis_Chain.svg' },
+		polygon,
+		optimism,
+		{ ...celo, iconUrl: '/images/currencies/celo/16.svg' },
+	],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
