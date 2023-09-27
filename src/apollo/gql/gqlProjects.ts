@@ -169,6 +169,7 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				isActive
 				beginDate
 				endDate
+				eligibleNetworks
 			}
 			# campaigns {
 			# 	id
