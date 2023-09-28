@@ -296,14 +296,6 @@ const CryptoDonation: FC = () => {
 		const t = BigNumber.from(selectedTokenBalance)
 			.mul(100)
 			.div(100 + s);
-		console.log(
-			't-result1',
-			t.toString(),
-			selectedTokenBalance.toString(),
-			s,
-		);
-		console.log('t-result2', formatWeiHelper(t, 6, false));
-		console.log('t-result3', Number(formatWeiHelper(t, 6, false)));
 		return Number(formatWeiHelper(t, 6, false));
 	};
 
