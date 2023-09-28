@@ -292,9 +292,11 @@ const CryptoDonation: FC = () => {
 	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
 
 	const calcMaxDonation = (givethDonation?: number) => {
-		const t = BigNumber.from(selectedTokenBalance).mul(100).div(100 + (givethDonation ?? donationToGiveth));
-		return Number(formatWeiHelper(t,6));
-	}
+		const t = BigNumber.from(selectedTokenBalance)
+			.mul(100)
+			.div(100 + (givethDonation ?? donationToGiveth));
+		return Number(formatWeiHelper(t, 6));
+	};
 
 	const setMaxDonation = (givethDonation?: number) =>
 		setAmountTyped(calcMaxDonation(givethDonation ?? donationToGiveth));
