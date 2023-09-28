@@ -16,7 +16,7 @@ import tokenAbi from 'human-standard-token-abi';
 import { captureException } from '@sentry/nextjs';
 import { BigNumber } from '@ethersproject/bignumber';
 import { BigNumberish } from 'ethers';
-import { formatUnits, parseUnits } from '@ethersproject/units';
+import { parseUnits } from '@ethersproject/units';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
@@ -288,8 +288,6 @@ const CryptoDonation: FC = () => {
 			setShowDonateModal(true);
 		}
 	};
-
-	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
 
 	const calcMaxDonation = (givethDonation?: number) => {
 		const s = givethDonation ?? donationToGiveth;
