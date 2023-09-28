@@ -54,6 +54,7 @@ import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedCha
 import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingToast';
+import { formatWeiHelper } from '@/helpers/number';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -290,9 +291,10 @@ const CryptoDonation: FC = () => {
 
 	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
 
-	const calcMaxDonation = (givethDonation?: number) =>
-		(Number(userBalance.replace(/,/g, '')) * 100) /
-		(100 + (givethDonation ?? donationToGiveth));
+	const calcMaxDonation = (givethDonation?: number) => {
+		const t = BigNumber.from(selectedTokenBalance).mul(100).div(100 + (givethDonation ?? donationToGiveth));
+		return Number(formatWeiHelper(t,6));
+	}
 
 	const setMaxDonation = (givethDonation?: number) =>
 		setAmountTyped(calcMaxDonation(givethDonation ?? donationToGiveth));
