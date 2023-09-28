@@ -30,7 +30,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import { formatBalance, pollEvery, showToastError } from '@/lib/helpers';
+import { pollEvery, showToastError } from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
@@ -398,7 +398,12 @@ const CryptoDonation: FC = () => {
 						}}
 					>
 						{formatMessage({ id: 'label.available' })}:{' '}
-						{formatBalance(userBalance)} {tokenSymbol}
+						{formatWeiHelper(
+							selectedTokenBalance.toString(),
+							6,
+							false,
+						)}{' '}
+						{tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
