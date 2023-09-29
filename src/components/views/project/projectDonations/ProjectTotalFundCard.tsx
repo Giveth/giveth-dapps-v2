@@ -132,7 +132,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						) : (
 							<NoDonation>
 								{formatMessage({
-									id: 'label.be_the_first_to_donate',
+									id: 'label.lead_the_way',
 								})}
 							</NoDonation>
 						)}
