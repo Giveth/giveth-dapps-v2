@@ -233,7 +233,6 @@ const BottomSection = styled.div`
 
 const NoDonation = styled(H4)`
 	margin-top: 20px;
-	text-transform: uppercase;
 `;
 
 const Wrapper = styled.div`
