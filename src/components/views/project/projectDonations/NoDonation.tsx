@@ -2,10 +2,12 @@ import { ButtonLink, H1, brandColors } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { slugToProjectDonate } from '@/lib/routeCreators';
 import { useProjectContext } from '@/context/project.context';
 
 export const NoDonation = () => {
+	const { formatMessage } = useIntl();
 	const { projectData, isActive } = useProjectContext();
 	const { slug } = projectData || {};
 	return (
@@ -16,10 +18,17 @@ export const NoDonation = () => {
 			<H1 weight={700}>Donate</H1>
 			{isActive ? (
 				<Link href={slugToProjectDonate(slug || '')}>
-					<DonateButton linkType='primary' label='donate' />
+					<DonateButton
+						linkType='primary'
+						label={formatMessage({ id: 'label.donate' })}
+					/>
 				</Link>
 			) : (
-				<DonateButton linkType='primary' label='donate' disabled />
+				<DonateButton
+					linkType='primary'
+					label={formatMessage({ id: 'label.donate' })}
+					disabled
+				/>
 			)}
 		</Wrapper>
 	);
