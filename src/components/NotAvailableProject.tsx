@@ -8,6 +8,7 @@ import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { compareAddresses } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
+import { Spinner } from './Spinner';
 
 interface IProps {
 	isCancelled?: boolean;
@@ -21,7 +22,9 @@ const NotAvailableProject: FC<IProps> = ({ ownerAddress, isCancelled }) => {
 	const isOwner = compareAddresses(userData?.walletAddress, ownerAddress);
 
 	return isLoading ? (
-		<Wrapper>Loading</Wrapper>
+		<Wrapper>
+			<Spinner />
+		</Wrapper>
 	) : (
 		<Wrapper>
 			<Image
