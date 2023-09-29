@@ -137,29 +137,30 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 							</NoDonation>
 						)}
 					</UpperSection>
-					{countUniqueDonors > 0 && (
-						<div>
-							<LightSubline>
-								{formatMessage({
-									id: 'label.raised_from',
-								})}
-							</LightSubline>
-							<Subline style={{ display: 'inline-block' }}>
-								&nbsp;{countUniqueDonors}
-								&nbsp;
-							</Subline>
-							<LightSubline>
-								{formatMessage(
-									{
-										id: 'label.contributors',
-									},
-									{
-										count: countUniqueDonors,
-									},
-								)}
-							</LightSubline>
-						</div>
-					)}
+					{countUniqueDonors !== undefined &&
+						countUniqueDonors > 0 && (
+							<div>
+								<LightSubline>
+									{formatMessage({
+										id: 'label.raised_from',
+									})}
+								</LightSubline>
+								<Subline style={{ display: 'inline-block' }}>
+									&nbsp;{countUniqueDonors}
+									&nbsp;
+								</Subline>
+								<LightSubline>
+									{formatMessage(
+										{
+											id: 'label.contributors',
+										},
+										{
+											count: countUniqueDonors,
+										},
+									)}
+								</LightSubline>
+							</div>
+						)}
 				</>
 			) : (
 				<div>
