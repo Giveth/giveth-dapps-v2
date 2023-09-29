@@ -466,14 +466,14 @@ const CryptoDonation: FC = () => {
 
 			<CheckBoxContainer>
 				<CheckBox
-					label={formatMessage({ id: 'label.make_it_anonymous' })}
+					label={formatMessage({ id: 'label.donate_privately' })}
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
 					size={14}
 				/>
 				<div>
 					{formatMessage({
-						id: 'component.tooltip.by_checking_this',
+						id: 'component.tooltip.donate_privately',
 					})}
 				</div>
 			</CheckBoxContainer>
