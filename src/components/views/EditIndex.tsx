@@ -5,11 +5,7 @@ import { captureException } from '@sentry/nextjs';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import { IProjectEdition } from '@/apollo/types/types';
-import {
-	compareAddresses,
-	isUserRegistered,
-	showToastError,
-} from '@/lib/helpers';
+import { isUserRegistered, showToastError } from '@/lib/helpers';
 import CreateProject from '@/components/views/create/CreateProject';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
@@ -28,7 +24,6 @@ const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
 	const [isLoadingProject, setIsLoadingProject] = useState(true);
 	const [isCancelled, setIsCancelled] = useState(false);
-	const [isOwner, setIsOwner] = useState(true);
 
 	const dispatch = useAppDispatch();
 	const {
@@ -65,19 +60,10 @@ const EditIndex = () => {
 				})
 				.then((res: { data: { projectById: IProjectEdition } }) => {
 					const project = res.data.projectById;
-					if (
-						!compareAddresses(
-							user?.walletAddress,
-							project.adminUser.walletAddress,
-						)
-					) {
-						setIsOwner(false);
-					} else if (project.status.name === EProjectStatus.CANCEL) {
-						setIsOwner(true);
+					if (project.status.name === EProjectStatus.CANCEL) {
 						setIsCancelled(true);
 						setProject(undefined);
 					} else {
-						setIsOwner(true);
 						setProject(project);
 					}
 					setIsLoadingProject(false);
@@ -108,9 +94,7 @@ const EditIndex = () => {
 	} else if (!isRegistered) {
 		return <CompleteProfile />;
 	} else if (!project) {
-		return (
-			<NotAvailableProject isOwner={!isOwner} isCancelled={isCancelled} />
-		);
+		return <NotAvailableProject isCancelled={isCancelled} />;
 	}
 	return <CreateProject project={project} />;
 };
