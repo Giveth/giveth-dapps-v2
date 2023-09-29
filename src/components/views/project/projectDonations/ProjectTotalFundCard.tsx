@@ -230,6 +230,7 @@ const BottomSection = styled.div`
 
 const NoDonation = styled(H4)`
 	margin-top: 20px;
+	text-transform: uppercase;
 `;
 
 const Wrapper = styled.div`
@@ -242,7 +243,6 @@ const Wrapper = styled.div`
 
 const UpperSection = styled.div`
 	color: ${neutralColors.gray[900]};
-	text-transform: uppercase;
 `;
 
 const TotalFund = styled(H2)`
