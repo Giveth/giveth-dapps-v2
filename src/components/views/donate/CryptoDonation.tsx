@@ -16,7 +16,7 @@ import tokenAbi from 'human-standard-token-abi';
 import { captureException } from '@sentry/nextjs';
 import { BigNumber } from '@ethersproject/bignumber';
 import { BigNumberish } from 'ethers';
-import { formatUnits, parseUnits } from '@ethersproject/units';
+import { parseUnits } from '@ethersproject/units';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
@@ -30,7 +30,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import { formatBalance, pollEvery, showToastError } from '@/lib/helpers';
+import { pollEvery, showToastError } from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
@@ -54,6 +54,7 @@ import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedCha
 import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingToast';
+import { formatWeiHelper } from '@/helpers/number';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -288,11 +289,13 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
-	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
-
-	const calcMaxDonation = (givethDonation?: number) =>
-		(Number(userBalance.replace(/,/g, '')) * 100) /
-		(100 + (givethDonation ?? donationToGiveth));
+	const calcMaxDonation = (givethDonation?: number) => {
+		const s = givethDonation ?? donationToGiveth;
+		const t = BigNumber.from(selectedTokenBalance)
+			.mul(100)
+			.div(100 + s);
+		return Number(formatWeiHelper(t, 6, false));
+	};
 
 	const setMaxDonation = (givethDonation?: number) =>
 		setAmountTyped(calcMaxDonation(givethDonation ?? donationToGiveth));
@@ -385,7 +388,12 @@ const CryptoDonation: FC = () => {
 						}}
 					>
 						{formatMessage({ id: 'label.available' })}:{' '}
-						{formatBalance(userBalance)} {tokenSymbol}
+						{formatWeiHelper(
+							selectedTokenBalance.toString(),
+							6,
+							false,
+						)}{' '}
+						{tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
