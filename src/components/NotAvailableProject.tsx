@@ -2,19 +2,27 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import { brandColors, H4 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { FC } from 'react';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
+import { compareAddresses } from '@/lib/helpers';
+import { useAppSelector } from '@/features/hooks';
 
 interface IProps {
 	isCancelled?: boolean;
-	isOwner?: boolean;
+	ownerAddress?: string;
 }
 
-const NotAvailableProject = (props: IProps) => {
-	const { isCancelled, isOwner } = props;
+const NotAvailableProject: FC<IProps> = ({ ownerAddress, isCancelled }) => {
+	const { isLoading, userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
-	return (
+
+	const isOwner = compareAddresses(userData?.walletAddress, ownerAddress);
+
+	return isLoading ? (
+		<Wrapper>Loading</Wrapper>
+	) : (
 		<Wrapper>
 			<Image
 				src='/images/missing-project.svg'
