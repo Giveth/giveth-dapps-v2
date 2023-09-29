@@ -8,11 +8,11 @@ import links from '@/lib/constants/links';
 
 interface IProps {
 	isCancelled?: boolean;
-	notOwner?: boolean;
+	isOwner?: boolean;
 }
 
 const NotAvailableProject = (props: IProps) => {
-	const { isCancelled, notOwner } = props;
+	const { isCancelled, isOwner } = props;
 	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
@@ -23,9 +23,7 @@ const NotAvailableProject = (props: IProps) => {
 				alt='missing-project-image'
 			/>
 			<TitleText>
-				{notOwner ? (
-					formatMessage({ id: 'label.not_owner' })
-				) : (
+				{isOwner ? (
 					<>
 						{formatMessage({ id: 'label.project_not_available' })}{' '}
 						{isCancelled &&
@@ -43,6 +41,8 @@ const NotAvailableProject = (props: IProps) => {
 							</>
 						)}
 					</>
+				) : (
+					formatMessage({ id: 'label.not_owner' })
 				)}
 			</TitleText>
 		</Wrapper>
