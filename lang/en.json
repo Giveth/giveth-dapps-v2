@@ -1385,5 +1385,6 @@
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"ubi": "UBI",
 	"water-and-sanitation": "Water & Sanitation",
-	"label.donate_privately": "Donate privately"
+	"label.donate_privately": "Donate privately",
+	"component.tooltip.donate_privately": "If you check this, we will hide your name and donation transaction link from the project page, and won't show this donation on your public profile page."
 }
