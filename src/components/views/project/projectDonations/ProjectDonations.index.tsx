@@ -6,6 +6,7 @@ import ProjectDonationTable from './ProjectDonationTable';
 import { QfRoundSelector } from './QfRoundSelector';
 import { IQFRound } from '@/apollo/types/types';
 import { useProjectContext } from '@/context/project.context';
+import { NoDonation } from './NoDonation';
 
 const ProjectDonationsIndex = () => {
 	const [selectedQF, setSelectedQF] = useState<IQFRound | null>(null);
@@ -26,7 +27,7 @@ const ProjectDonationsIndex = () => {
 					countUniqueDonors > 0 ? (
 						<ProjectDonationTable selectedQF={selectedQF} />
 					) : (
-						<div>nothing</div>
+						<NoDonation />
 					)}
 				</Col>
 			</StyledRow>
