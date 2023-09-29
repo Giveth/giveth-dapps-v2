@@ -6,7 +6,7 @@ import { slugToProjectDonate } from '@/lib/routeCreators';
 import { useProjectContext } from '@/context/project.context';
 
 export const NoDonation = () => {
-	const { projectData } = useProjectContext();
+	const { projectData, isActive } = useProjectContext();
 	const { slug } = projectData || {};
 	return (
 		<Wrapper>
@@ -14,9 +14,13 @@ export const NoDonation = () => {
 			<H1 weight={700}>First</H1>
 			<H1>to</H1>
 			<H1 weight={700}>Donate</H1>
-			<Link href={slugToProjectDonate(slug || '')}>
-				<DonateButton linkType='primary' label='donate' />
-			</Link>
+			{isActive ? (
+				<Link href={slugToProjectDonate(slug || '')}>
+					<DonateButton linkType='primary' label='donate' />
+				</Link>
+			) : (
+				<DonateButton linkType='primary' label='donate' disabled />
+			)}
 		</Wrapper>
 	);
 };
