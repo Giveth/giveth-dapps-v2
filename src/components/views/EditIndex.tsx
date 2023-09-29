@@ -109,10 +109,7 @@ const EditIndex = () => {
 		return <CompleteProfile />;
 	} else if (!project) {
 		return (
-			<NotAvailableProject
-				notOwner={!isOwner}
-				isCancelled={isCancelled}
-			/>
+			<NotAvailableProject isOwner={!isOwner} isCancelled={isCancelled} />
 		);
 	}
 	return <CreateProject project={project} />;
