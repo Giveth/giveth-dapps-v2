@@ -149,7 +149,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 				>
 					<ApolloProvider client={apolloClient}>
 						<WagmiConfig config={wagmiConfig}>
-							<RainbowKitProvider chains={chains}>
+							<RainbowKitProvider
+								chains={chains}
+								initialChain={config.POLYGON_NETWORK_NUMBER}
+							>
 								{isMaintenanceMode ? (
 									<MaintenanceIndex />
 								) : (
