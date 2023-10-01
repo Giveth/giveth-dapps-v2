@@ -26,9 +26,9 @@ const ProjectDonationsIndex = () => {
 					{countUniqueDonors !== undefined &&
 					countUniqueDonors > 0 ? (
 						<ProjectDonationTable selectedQF={selectedQF} />
-					) : (
+					) : !selectedQF || selectedQF.isActive ? (
 						<NoDonation />
-					)}
+					) : null}
 				</Col>
 			</StyledRow>
 		</>
