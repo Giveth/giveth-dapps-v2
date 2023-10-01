@@ -39,17 +39,19 @@ export const projectsItems = {
 			url: Routes.Projects + '?sort=' + EProjectsSortBy.NEWEST,
 			label: 'label.just_launched',
 		},
-		{
-			name: 'Quadratic Funding',
-			url: Routes.QFProjects,
-			label: 'label.eligible_for_matching',
-		},
-		// { name: 'Popular', query: '?q=popular' },
 	],
 };
 
+const QFItem = {
+	name: 'Quadratic Funding',
+	url: Routes.QFProjects,
+	label: 'label.eligible_for_matching',
+};
+
 export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
-	const { theme, mainCategories } = useAppSelector(state => state.general);
+	const { theme, mainCategories, activeQFRound } = useAppSelector(
+		state => state.general,
+	);
 	const { formatMessage } = useIntl();
 
 	return (
@@ -64,19 +66,22 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={explore.url}>
-							<Item
-								className={`${
-									explore.url === Routes.QFProjects
-										? 'quadratic-menu-item'
-										: ''
-								} projects-menu-items`}
+							<StyledItem theme={theme} isHighlighted>
+								<B>{formatMessage({ id: explore.label })}</B>
+							</StyledItem>
+						</Link>
+					))}
+					{activeQFRound && (
+						<Link href={QFItem.url}>
+							<StyledItem
+								className='qf-item'
 								theme={theme}
 								isHighlighted
 							>
-								<B>{formatMessage({ id: explore.label })}</B>
-							</Item>
+								<B>{formatMessage({ id: QFItem.label })}</B>
+							</StyledItem>
 						</Link>
-					))}
+					)}
 				</ExploreByRow>
 			</HighlightSection>
 			<NormalSection inSidebar={inSidebar}>
@@ -102,13 +107,14 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 
 const ExploreByRow = styled(Flex)`
 	margin-top: 16px;
-	.quadratic-menu-item {
+`;
+
+const StyledItem = styled(Item)`
+	padding: 2px 8px;
+	&.qf-item {
 		background: ${brandColors.cyan[600]};
 		border-radius: 16px;
 		color: white;
-	}
-	.projects-menu-items {
-		padding: 2px 8px;
 	}
 `;
 
