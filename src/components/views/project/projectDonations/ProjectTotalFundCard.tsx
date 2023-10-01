@@ -46,7 +46,8 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 
 	const selectedQFData = qfRounds?.find(round => round.id === selectedQF?.id);
 
-	const notDistributedFund = !qfRoundHistory?.matchingFund;
+	const notDistributedFund =
+		!qfRoundHistory?.matchingFund && !selectedQF?.isActive;
 
 	useEffect(() => {
 		if (!id) return;
