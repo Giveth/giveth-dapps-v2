@@ -9,6 +9,7 @@ import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
+import { useChainId } from 'wagmi';
 import links from '@/lib/constants/links';
 import SocialBox from '@/components/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
@@ -24,6 +25,7 @@ import { EContentType } from '@/lib/constants/shareContent';
 import QFToast from '@/components/views/donate/QFToast';
 import { useAppSelector } from '@/features/hooks';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
+import { getActiveRound } from '@/helpers/qf';
 
 const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
@@ -39,6 +41,8 @@ const SuccessView: FC = () => {
 		info: { passportState },
 	} = usePassport();
 
+	const networkId = useChainId();
+
 	const message = hasMultipleTxs ? (
 		<>
 			{formatMessage(
@@ -53,6 +57,11 @@ const SuccessView: FC = () => {
 			{ title: project.title },
 		)
 	);
+
+	const activeRound = getActiveRound(project.qfRounds);
+
+	const isOnEligibleNetworks =
+		activeRound?.eligibleNetworks?.includes(networkId);
 
 	useEffect(() => {
 		client
@@ -99,9 +108,9 @@ const SuccessView: FC = () => {
 					</ExternalLink>
 				</GivBackContainer>
 			)}
-			{hasActiveQFRound && passportState !== EPassportState.LOADING && (
-				<QFToast />
-			)}
+			{hasActiveQFRound &&
+				passportState !== EPassportState.LOADING &&
+				isOnEligibleNetworks && <QFToast />}
 			<SocialBoxWrapper>
 				<SocialBox
 					project={project}
