@@ -59,6 +59,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	const { formatMessage } = useIntl();
 	const [activeTab, setActiveTab] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
+
 	const isMobile = !useMediaQuery(device.tablet);
 	const {
 		fetchProjectBoosters,

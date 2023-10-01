@@ -2,19 +2,30 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import { brandColors, H4 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { FC } from 'react';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
+import { compareAddresses } from '@/lib/helpers';
+import { useAppSelector } from '@/features/hooks';
+import { Spinner } from './Spinner';
 
 interface IProps {
 	isCancelled?: boolean;
-	notOwner?: boolean;
+	ownerAddress?: string;
 }
 
-const NotAvailableProject = (props: IProps) => {
-	const { isCancelled, notOwner } = props;
+const NotAvailableProject: FC<IProps> = ({ ownerAddress, isCancelled }) => {
+	const { isLoading, userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
-	return (
+
+	const isOwner = compareAddresses(userData?.walletAddress, ownerAddress);
+
+	return isLoading ? (
+		<Wrapper>
+			<Spinner />
+		</Wrapper>
+	) : (
 		<Wrapper>
 			<Image
 				src='/images/missing-project.svg'
@@ -23,9 +34,7 @@ const NotAvailableProject = (props: IProps) => {
 				alt='missing-project-image'
 			/>
 			<TitleText>
-				{notOwner ? (
-					formatMessage({ id: 'label.not_owner' })
-				) : (
+				{isOwner ? (
 					<>
 						{formatMessage({ id: 'label.project_not_available' })}{' '}
 						{isCancelled &&
@@ -43,6 +52,8 @@ const NotAvailableProject = (props: IProps) => {
 							</>
 						)}
 					</>
+				) : (
+					formatMessage({ id: 'label.not_owner' })
 				)}
 			</TitleText>
 		</Wrapper>
