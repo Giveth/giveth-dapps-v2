@@ -92,11 +92,11 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 							key={idx}
 							href={`${Routes.Projects}/${category.slug}`}
 						>
-							<Item className='menu-category-item' theme={theme}>
+							<CategoryItem theme={theme}>
 								<GLink size='Big'>
 									{formatMessage({ id: category.slug })}
 								</GLink>
-							</Item>
+							</CategoryItem>
 						</Link>
 					))}
 				</CategoriesGrid>
@@ -129,15 +129,16 @@ const CategoriesGrid = styled.div<{ inSidebar?: boolean; theme: ETheme }>`
 	grid-template: ${props =>
 		props.inSidebar ? 'auto' : 'auto auto auto auto / auto auto auto'};
 	margin-top: 8px;
-	.menu-category-item {
-		padding: 8px;
-		:hover {
-			background: transparent;
-			color: ${({ theme }) =>
-				theme === ETheme.Dark
-					? brandColors.giv[200]
-					: brandColors.giv[500]};
-		}
+`;
+
+const CategoryItem = styled(Item)`
+	padding: 8px;
+	&:hover {
+		background: transparent;
+		color: ${({ theme }) =>
+			theme === ETheme.Dark
+				? brandColors.giv[200]
+				: brandColors.giv[500]};
 	}
 `;
 
