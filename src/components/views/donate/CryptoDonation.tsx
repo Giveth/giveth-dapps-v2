@@ -95,7 +95,6 @@ const CryptoDonation: FC = () => {
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
 	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
-	// const [selectLoading, setSelectLoading] = useState(false);
 	const [amountError, setAmountError] = useState<boolean>(false);
 	const [tokenIsGivBackEligible, setTokenIsGivBackEligible] =
 		useState<boolean>();
@@ -112,7 +111,6 @@ const CryptoDonation: FC = () => {
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
-	// const {} = useChainModal();
 	const stopPolling = useRef<any>(null);
 	const tokenSymbol = selectedToken?.symbol;
 	const tokenDecimals = selectedToken?.decimals || 18;
