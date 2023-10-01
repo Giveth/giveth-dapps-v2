@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchMainCategories } from './general.thunk';
-import { IMainCategory } from '@/apollo/types/types';
+import { IMainCategory, IQFRound } from '@/apollo/types/types';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export enum ETheme {
@@ -14,6 +14,7 @@ const initialState = {
 	showHeader: true,
 	showFooter: true,
 	mainCategories: [] as IMainCategory[],
+	qfRounds: [] as IQFRound[],
 };
 
 export const GeneralSlice = createSlice({
