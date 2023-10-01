@@ -1,4 +1,3 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useEffect } from 'react';
 import { erc20ABI, useAccount, useChainId, useContractRead } from 'wagmi';
 import { getContract } from 'wagmi/actions';
@@ -33,7 +32,7 @@ const YourApp = () => {
 
 	return (
 		<div>
-			<ConnectButton />
+			<w3m-button />
 			<div>
 				<button
 					onClick={() =>
