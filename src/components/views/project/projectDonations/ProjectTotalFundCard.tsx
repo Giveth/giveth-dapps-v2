@@ -132,32 +132,35 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						) : (
 							<NoDonation>
 								{formatMessage({
-									id: 'label.be_the_first_to_donate',
+									id: 'label.lead_the_way',
 								})}
 							</NoDonation>
 						)}
 					</UpperSection>
-					<div>
-						<LightSubline>
-							{formatMessage({
-								id: 'label.raised_from',
-							})}
-						</LightSubline>
-						<Subline style={{ display: 'inline-block' }}>
-							&nbsp;{countUniqueDonors}
-							&nbsp;
-						</Subline>
-						<LightSubline>
-							{formatMessage(
-								{
-									id: 'label.contributors',
-								},
-								{
-									count: countUniqueDonors,
-								},
-							)}
-						</LightSubline>
-					</div>
+					{countUniqueDonors !== undefined &&
+						countUniqueDonors > 0 && (
+							<div>
+								<LightSubline>
+									{formatMessage({
+										id: 'label.raised_from',
+									})}
+								</LightSubline>
+								<Subline style={{ display: 'inline-block' }}>
+									&nbsp;{countUniqueDonors}
+									&nbsp;
+								</Subline>
+								<LightSubline>
+									{formatMessage(
+										{
+											id: 'label.contributors',
+										},
+										{
+											count: countUniqueDonors,
+										},
+									)}
+								</LightSubline>
+							</div>
+						)}
 				</>
 			) : (
 				<div>
@@ -201,7 +204,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						<NoDonation>
 							{formatMessage({
 								id: selectedQF.isActive
-									? 'label.be_the_first_to_donate'
+									? 'label.lead_the_way'
 									: 'label.qf_no_donations',
 							})}
 						</NoDonation>
@@ -242,7 +245,6 @@ const Wrapper = styled.div`
 
 const UpperSection = styled.div`
 	color: ${neutralColors.gray[900]};
-	text-transform: uppercase;
 `;
 
 const TotalFund = styled(H2)`
