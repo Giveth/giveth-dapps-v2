@@ -14,5 +14,5 @@ export const FETCH_QF_ROUNDS_QUERY = `
 `;
 
 export const FETCH_QF_ROUNDS = gql`
-	FETCH_QF_ROUNDS_QUERY
+	${FETCH_QF_ROUNDS_QUERY}
 `;
