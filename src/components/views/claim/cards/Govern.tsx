@@ -31,7 +31,7 @@ import { APR } from '@/types/poolInfo';
 import useClaim from '@/context/claim.context';
 import { useAppSelector } from '@/features/hooks';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
-import { InputWithUnit } from '@/components/input';
+import { InputWithUnit } from '@/components/input/index';
 import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
 
