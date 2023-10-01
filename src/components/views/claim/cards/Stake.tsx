@@ -34,7 +34,7 @@ import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { getNowUnixMS } from '@/helpers/time';
 import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
-import { InputWithUnit } from '@/components/input/index/index';
+import { InputWithUnit } from '@/components/input/index';
 
 const InvestCardContainer = styled(Card)`
 	::before {
