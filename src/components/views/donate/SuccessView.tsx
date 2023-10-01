@@ -9,7 +9,8 @@ import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
-import { useChainId } from 'wagmi';
+
+import { useWeb3React } from '@web3-react/core';
 import links from '@/lib/constants/links';
 import SocialBox from '@/components/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
@@ -41,7 +42,7 @@ const SuccessView: FC = () => {
 		info: { passportState },
 	} = usePassport();
 
-	const networkId = useChainId();
+	const { chainId: networkId } = useWeb3React();
 
 	const message = hasMultipleTxs ? (
 		<>
@@ -60,8 +61,9 @@ const SuccessView: FC = () => {
 
 	const activeRound = getActiveRound(project.qfRounds);
 
-	const isOnEligibleNetworks =
-		activeRound?.eligibleNetworks?.includes(networkId);
+	const isOnEligibleNetworks = activeRound?.eligibleNetworks?.includes(
+		networkId!,
+	);
 
 	useEffect(() => {
 		client
