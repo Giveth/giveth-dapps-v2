@@ -66,20 +66,20 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={explore.url}>
-							<StyledItem theme={theme} isHighlighted>
+							<ExploreItem theme={theme} isHighlighted>
 								<B>{formatMessage({ id: explore.label })}</B>
-							</StyledItem>
+							</ExploreItem>
 						</Link>
 					))}
 					{activeQFRound && (
 						<Link href={QFItem.url}>
-							<StyledItem
+							<ExploreItem
 								className='qf-item'
 								theme={theme}
 								isHighlighted
 							>
 								<B>{formatMessage({ id: QFItem.label })}</B>
-							</StyledItem>
+							</ExploreItem>
 						</Link>
 					)}
 				</ExploreByRow>
@@ -109,7 +109,7 @@ const ExploreByRow = styled(Flex)`
 	margin-top: 16px;
 `;
 
-const StyledItem = styled(Item)`
+const ExploreItem = styled(Item)`
 	padding: 2px 8px;
 	&.qf-item {
 		background: ${brandColors.cyan[600]};
