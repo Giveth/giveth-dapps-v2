@@ -15,6 +15,7 @@ const initialState = {
 	showFooter: true,
 	mainCategories: [] as IMainCategory[],
 	qfRounds: [] as IQFRound[],
+	activeQFRound: null as IQFRound | null,
 };
 
 export const GeneralSlice = createSlice({
@@ -48,6 +49,8 @@ export const GeneralSlice = createSlice({
 		});
 		builder.addCase(fetchQFRounds.fulfilled, (state, action) => {
 			state.qfRounds = action.payload.data.qfRounds;
+			state.activeQFRound =
+				state.qfRounds.find(round => round.isActive) || null;
 		});
 	},
 });
