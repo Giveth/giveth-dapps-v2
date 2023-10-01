@@ -33,7 +33,6 @@ import type {
 	PoolStakingConfig,
 	SimplePoolStakingConfig,
 } from '@/types/config';
-import '@rainbow-me/rainbowkit/styles.css';
 
 interface IStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
