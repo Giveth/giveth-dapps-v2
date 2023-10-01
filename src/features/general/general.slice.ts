@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchMainCategories } from './general.thunk';
+import { fetchMainCategories, fetchQFRounds } from './general.thunk';
 import { IMainCategory, IQFRound } from '@/apollo/types/types';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
@@ -45,6 +45,9 @@ export const GeneralSlice = createSlice({
 	extraReducers: builder => {
 		builder.addCase(fetchMainCategories.fulfilled, (state, action) => {
 			state.mainCategories = action.payload.data.mainCategories;
+		});
+		builder.addCase(fetchQFRounds.fulfilled, (state, action) => {
+			state.qfRounds = action.payload.data.qfRounds;
 		});
 	},
 });
