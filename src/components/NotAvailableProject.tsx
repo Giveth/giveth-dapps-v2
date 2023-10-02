@@ -37,12 +37,11 @@ const NotAvailableProject: FC<IProps> = ({ ownerAddress, isCancelled }) => {
 				{isOwner ? (
 					<>
 						{formatMessage({ id: 'label.project_not_available' })}{' '}
-						{isCancelled &&
-							formatMessage({
-								id: 'label.if_this_a_mistake',
-							})}{' '}
 						{isCancelled && (
 							<>
+								{formatMessage({
+									id: 'label.if_this_a_mistake',
+								})}{' '}
 								<ExternalLink
 									color={brandColors.pinky[500]}
 									href={links.DISCORD}
