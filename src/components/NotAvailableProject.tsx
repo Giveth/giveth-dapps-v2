@@ -13,15 +13,20 @@ import { Spinner } from './Spinner';
 interface IProps {
 	isCancelled?: boolean;
 	ownerAddress?: string;
+	isProjectLoading?: boolean;
 }
 
-const NotAvailableProject: FC<IProps> = ({ ownerAddress, isCancelled }) => {
+const NotAvailableProject: FC<IProps> = ({
+	ownerAddress,
+	isCancelled,
+	isProjectLoading,
+}) => {
 	const { isLoading, userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 
 	const isOwner = compareAddresses(userData?.walletAddress, ownerAddress);
 
-	return isLoading ? (
+	return isLoading || isProjectLoading ? (
 		<Wrapper>
 			<Spinner />
 		</Wrapper>
@@ -37,12 +42,11 @@ const NotAvailableProject: FC<IProps> = ({ ownerAddress, isCancelled }) => {
 				{isOwner ? (
 					<>
 						{formatMessage({ id: 'label.project_not_available' })}{' '}
-						{isCancelled &&
-							formatMessage({
-								id: 'label.if_this_a_mistake',
-							})}{' '}
 						{isCancelled && (
 							<>
+								{formatMessage({
+									id: 'label.if_this_a_mistake',
+								})}{' '}
 								<ExternalLink
 									color={brandColors.pinky[500]}
 									href={links.DISCORD}
