@@ -17,8 +17,8 @@ const ProjectBadges = () => {
 
 	const { verified, qfRounds, campaigns } = projectData || {};
 	const { formatMessage } = useIntl();
-
 	const isQF = hasActiveRound(qfRounds);
+
 	return (
 		<CustomFlex gap='16px'>
 			{verified && (
