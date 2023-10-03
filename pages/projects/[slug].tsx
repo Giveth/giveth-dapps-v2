@@ -1,5 +1,10 @@
 import { GetServerSideProps } from 'next/types';
-import { IMainCategory } from '@/apollo/types/types';
+import {
+	ICategory,
+	IMainCategory,
+	IProject,
+	IQFRound,
+} from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
@@ -13,7 +18,14 @@ import { useReferral } from '@/hooks/useReferral';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
-import type { IProjectsRouteProps } from '.';
+
+export interface IProjectsRouteProps {
+	projects: IProject[];
+	totalCount: number;
+	categories: ICategory[];
+	mainCategories: IMainCategory[];
+	qfRounds: IQFRound[];
+}
 
 interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
 	selectedMainCategory: IMainCategory;
