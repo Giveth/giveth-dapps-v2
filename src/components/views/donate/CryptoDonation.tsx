@@ -16,7 +16,7 @@ import tokenAbi from 'human-standard-token-abi';
 import { captureException } from '@sentry/nextjs';
 import { BigNumber } from '@ethersproject/bignumber';
 import { BigNumberish } from 'ethers';
-import { formatUnits, parseUnits } from '@ethersproject/units';
+import { parseUnits } from '@ethersproject/units';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
@@ -30,7 +30,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import { formatBalance, pollEvery, showToastError } from '@/lib/helpers';
+import { pollEvery, showToastError } from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
@@ -54,6 +54,9 @@ import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedCha
 import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingToast';
+import { formatWeiHelper } from '@/helpers/number';
+import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
+import { getActiveRound } from '@/helpers/qf';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -96,7 +99,6 @@ const CryptoDonation: FC = () => {
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
 	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
-	// const [selectLoading, setSelectLoading] = useState(false);
 	const [amountError, setAmountError] = useState<boolean>(false);
 	const [tokenIsGivBackEligible, setTokenIsGivBackEligible] =
 		useState<boolean>();
@@ -119,6 +121,11 @@ const CryptoDonation: FC = () => {
 	const tokenDecimals = selectedToken?.decimals || 18;
 	const projectIsGivBackEligible = !!verified;
 	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
+	const activeRound = getActiveRound(project.qfRounds);
+
+	const isOnEligibleNetworks = activeRound?.eligibleNetworks?.includes(
+		networkId!,
+	);
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
@@ -288,11 +295,13 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
-	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
-
-	const calcMaxDonation = (givethDonation?: number) =>
-		(Number(userBalance.replace(/,/g, '')) * 100) /
-		(100 + (givethDonation ?? donationToGiveth));
+	const calcMaxDonation = (givethDonation?: number) => {
+		const s = givethDonation ?? donationToGiveth;
+		const t = BigNumber.from(selectedTokenBalance)
+			.mul(100)
+			.div(100 + s);
+		return Number(formatWeiHelper(t, 6, false));
+	};
 
 	const setMaxDonation = (givethDonation?: number) =>
 		setAmountTyped(calcMaxDonation(givethDonation ?? donationToGiveth));
@@ -329,7 +338,6 @@ const CryptoDonation: FC = () => {
 					}
 				/>
 			)}
-
 			<InputContainer>
 				<SwitchToAcceptedChain acceptedChains={acceptedChains} />
 				<SaveGasFees acceptedChains={acceptedChains} />
@@ -385,19 +393,25 @@ const CryptoDonation: FC = () => {
 						}}
 					>
 						{formatMessage({ id: 'label.available' })}:{' '}
-						{formatBalance(userBalance)} {tokenSymbol}
+						{formatWeiHelper(
+							selectedTokenBalance.toString(),
+							6,
+							false,
+						)}{' '}
+						{tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
-
-			{hasActiveQFRound && (
+			{hasActiveQFRound && !isOnEligibleNetworks && (
+				<DonateQFEligibleNetworks />
+			)}
+			{hasActiveQFRound && isOnEligibleNetworks && (
 				<EstimatedMatchingToast
 					projectData={project}
 					token={selectedToken}
 					amountTyped={amountTyped}
 				/>
 			)}
-
 			{!noDonationSplit ? (
 				<DonateToGiveth
 					setDonationToGiveth={e => {
@@ -409,7 +423,6 @@ const CryptoDonation: FC = () => {
 			) : (
 				<br />
 			)}
-
 			{selectedToken && (
 				<GIVBackToast
 					projectEligible={projectIsGivBackEligible}
@@ -417,7 +430,6 @@ const CryptoDonation: FC = () => {
 					userEligible={!isPurpleListed}
 				/>
 			)}
-
 			{!noDonationSplit ? (
 				<TotalDonation
 					donationToGiveth={donationToGiveth}
@@ -429,7 +441,6 @@ const CryptoDonation: FC = () => {
 			) : (
 				<EmptySpace />
 			)}
-
 			{!isActive && (
 				<InlineToast
 					type={EToastType.Warning}
@@ -438,7 +449,6 @@ const CryptoDonation: FC = () => {
 					})}
 				/>
 			)}
-
 			{isEnabled && (
 				<MainButton
 					label={formatMessage({ id: 'label.donate' })}
@@ -455,17 +465,16 @@ const CryptoDonation: FC = () => {
 					onClick={() => dispatch(setShowWalletModal(true))}
 				/>
 			)}
-
 			<CheckBoxContainer>
 				<CheckBox
-					label={formatMessage({ id: 'label.make_it_anonymous' })}
+					label={formatMessage({ id: 'label.donate_privately' })}
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
 					size={14}
 				/>
 				<div>
 					{formatMessage({
-						id: 'component.tooltip.by_checking_this',
+						id: 'component.tooltip.donate_privately',
 					})}
 				</div>
 			</CheckBoxContainer>

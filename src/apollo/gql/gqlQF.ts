@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 
-export const FETCH_QF_ROUNDS = gql`
+export const FETCH_QF_ROUNDS_QUERY = `
 	query FetchQFRounds {
 		qfRounds {
 			id
@@ -11,4 +11,8 @@ export const FETCH_QF_ROUNDS = gql`
 			minimumPassportScore
 		}
 	}
+`;
+
+export const FETCH_QF_ROUNDS = gql`
+	${FETCH_QF_ROUNDS_QUERY}
 `;
