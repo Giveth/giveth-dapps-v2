@@ -46,7 +46,7 @@ const DonateIndex: FC = () => {
 			{hasActiveQFRound && <PassportBanner />}
 			<Wrapper>
 				{/* <PurchaseXDAI /> */}
-				{!alreadyDonated && (
+				{alreadyDonated && (
 					<AlreadyDonatedWrapper>
 						<IconDonation24 />
 						<SublineBold>
