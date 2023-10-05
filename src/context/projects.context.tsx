@@ -36,7 +36,7 @@ const variablesDefaultValue = {
 };
 
 const variablesDefaultValueWithQF = {
-	sortingBy: EProjectsSortBy.ActiveQfRoundRaisedFunds,
+	sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
 	filters: [EProjectsFilter.ACTIVE_QF_ROUND],
 };
 
