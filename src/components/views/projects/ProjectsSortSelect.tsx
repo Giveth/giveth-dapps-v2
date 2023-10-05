@@ -42,8 +42,9 @@ const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 
 const ProjectsSortSelect = () => {
 	const { formatMessage } = useIntl();
+	const { isQF } = useProjectsContext();
 
-	const sortByOptions = [
+	let sortByOptions = [
 		{
 			label: formatMessage({ id: 'label.givpower' }),
 			value: EProjectsSortBy.INSTANT_BOOSTING,
@@ -80,6 +81,13 @@ const ProjectsSortSelect = () => {
 			icon: <IconFast16 color={brandColors.deep[900]} />,
 		},
 	];
+
+	isQF &&
+		sortByOptions.push({
+			label: formatMessage({ id: 'label.amount_raised_in_qf' }),
+			value: EProjectsSortBy.ActiveQfRoundRaisedFunds,
+			icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
+		});
 
 	const [value, setValue] = useState(sortByOptions[0]);
 	const { variables, setVariables } = useProjectsContext();
