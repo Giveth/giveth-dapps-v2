@@ -19,7 +19,7 @@ export const QF_PROJECTS = {
 	variables: {
 		limit: 15,
 		skip: 0,
-		sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
+		sortingBy: EProjectsSortBy.ActiveQfRoundRaisedFunds,
 		filters: [EProjectsFilter.ACTIVE_QF_ROUND],
 	},
 	notifyOnNetworkStatusChange: true,

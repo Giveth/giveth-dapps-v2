@@ -36,7 +36,7 @@ const variablesDefaultValue = {
 };
 
 const variablesDefaultValueWithQF = {
-	sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
+	sortingBy: EProjectsSortBy.ActiveQfRoundRaisedFunds,
 	filters: [EProjectsFilter.ACTIVE_QF_ROUND],
 };
 
@@ -69,7 +69,9 @@ export const ProjectsProvider = (props: {
 	const router = useRouter();
 
 	useEffect(() => {
-		let sort = EProjectsSortBy.INSTANT_BOOSTING;
+		let sort = isQF
+			? EProjectsSortBy.ActiveQfRoundRaisedFunds
+			: EProjectsSortBy.INSTANT_BOOSTING;
 		if (router.query.sort) {
 			switch ((router.query.sort as string).toLowerCase()) {
 				case EProjectsSortBy.MOST_FUNDED.toLowerCase():
