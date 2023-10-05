@@ -122,6 +122,7 @@
 	"label.all_time_funding": "All time funding received",
 	"label.all_your_staked_giv_including_the_locked": "All your staked GIV, including GIV that is locked.",
 	"label.already_a_giver": "Already own a Giver?",
+	"label.already_donated_donate_once_more": "Already Donated! Donate once more",
 	"label.always": "Always",
 	"label.amount": "Amount",
 	"label.amount_is_too_small": "Amount is too small",
@@ -488,6 +489,7 @@
 	"label.last_name": "Last name",
 	"label.last_updated": "Last Updated",
 	"label.latest_updates": "Latest Updates",
+	"label.lead_the_way": "Lead the way!",
 	"label.learn": "Learn",
 	"label.learn_how_to_become_an_active_part": "Learn how to become an active part of our giving network.",
 	"label.learn_more": "Learn more",
@@ -1390,7 +1392,5 @@
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Water & Sanitation",
-	"label.lead_the_way": "Lead the way!",
-	"label.already_donated_donate_once_more": "Already Donated! Donate once more"
+	"water-and-sanitation": "Water & Sanitation"
 }
