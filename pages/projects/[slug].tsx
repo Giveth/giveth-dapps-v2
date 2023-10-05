@@ -18,6 +18,7 @@ import { useReferral } from '@/hooks/useReferral';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
+import { getMainCategorySlug } from '@/helpers/projects';
 
 export interface IProjectsRouteProps {
 	projects: IProject[];
@@ -66,13 +67,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 	try {
 		const { query } = context;
 		const slug = query.slug;
-		if (!slug)
-			return {
-				redirect: {
-					destination: '/',
-					permanent: false,
-				},
-			};
+
 		const {
 			data: { mainCategories },
 		}: {
@@ -106,7 +101,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				query: FETCH_ALL_PROJECTS,
 				variables: {
 					...variables,
-					mainCategory: updatedSelectedMainCategory.slug,
+					mainCategory: getMainCategorySlug(
+						updatedSelectedMainCategory,
+					),
 					notifyOnNetworkStatusChange,
 				},
 				fetchPolicy: 'network-only',
