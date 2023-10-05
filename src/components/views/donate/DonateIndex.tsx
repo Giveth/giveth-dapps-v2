@@ -108,6 +108,7 @@ const AlreadyDonatedWrapper = styled(Flex)`
 	box-shadow: ${Shadow.Neutral[400]};
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 8px;
+	align-items: center;
 `;
 
 const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
