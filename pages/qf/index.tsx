@@ -13,7 +13,7 @@ import { ProjectsProvider } from '@/context/projects.context';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { useReferral } from '@/hooks/useReferral';
-import { IProjectsRouteProps } from 'pages/projects';
+import { IProjectsRouteProps } from 'pages/projects/[slug]';
 
 export const QF_PROJECTS = {
 	variables: {
