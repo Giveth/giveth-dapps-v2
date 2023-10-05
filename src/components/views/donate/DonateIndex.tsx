@@ -101,13 +101,13 @@ const DonateIndex: FC = () => {
 };
 
 const AlreadyDonatedWrapper = styled(Flex)`
+	margin: 0 40px 16px 40px;
 	padding: 12px 16px;
 	gap: 8px;
 	color: ${semanticColors.jade[500]};
 	box-shadow: ${Shadow.Neutral[400]};
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 8px;
-	margin: 24px 0;
 `;
 
 const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
