@@ -146,7 +146,11 @@ export const ProjectPublicActions = () => {
 			{alreadyDonated && (
 				<AlreadyDonatedWrapper>
 					<IconDonation16 />
-					<SublineBold>Already Donated! Donate once more</SublineBold>
+					<SublineBold>
+						{formatMessage({
+							id: 'label.already_donated_donate_once_more',
+						})}
+					</SublineBold>
 				</AlreadyDonatedWrapper>
 			)}
 			<Link href={slugToProjectDonate(slug || '')}>
