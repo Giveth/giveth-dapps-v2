@@ -55,6 +55,7 @@ const CustomFlex = styled(Flex)`
 	overflow-x: scroll;
 	overflow-y: hidden;
 	white-space: nowrap;
+	padding-bottom: 8px;
 `;
 
 export default ProjectBadges;
