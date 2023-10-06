@@ -26,6 +26,7 @@ import links from '@/lib/constants/links';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { formatDonation } from '@/helpers/number';
+import ProjectEligibleQFChains from './ProjectEligibleQFChains';
 
 const QFSection = () => {
 	const { formatMessage, locale } = useIntl();
@@ -214,6 +215,7 @@ const QFSection = () => {
 						</a>
 					</Flex>
 				</ContributionsContainer>
+				<ProjectEligibleQFChains />
 			</ChartContainer>
 		</DonationSectionWrapper>
 	);

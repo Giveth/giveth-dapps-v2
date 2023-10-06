@@ -70,6 +70,7 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 }
 
 const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
+	min-width: 57px;
 	cursor: pointer;
 	border-radius: 50px;
 	background: ${props =>
