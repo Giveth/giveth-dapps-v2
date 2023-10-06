@@ -78,7 +78,7 @@ export const QFProjectsBanner = () => {
 	return (
 		<BannerContainer>
 			<Image
-				src={'/images/banners/qfBanner.webp'}
+				src={'/images/banners/qfBannerOP.png'}
 				style={{ objectFit: 'cover' }}
 				fill
 				alt='QF Banner'
@@ -111,7 +111,7 @@ export const QFProjectsBanner = () => {
 					</StyledCol>
 					<StyledCol xs={12} md={6}>
 						<Image
-							src={'/images/banners/qfSponsors.webp'}
+							src={'/images/banners/qfSponsorsOP.png'}
 							style={{ objectFit: 'contain' }}
 							fill
 							alt='QF Banner'
@@ -131,11 +131,15 @@ const BannerContainer = styled.div`
 
 const StyledCol = styled(Col)`
 	position: relative;
+	display: flex;
+	flex-direction: column;
 	z-index: 1;
 	min-height: 300px;
 	text-align: center;
-	${mediaQueries.laptopS} {
+	
+	${mediaQueries.mobileS} {
 		text-align: left;
+		align-items: left;
 	}
 `;
 
@@ -160,7 +164,4 @@ const Desc = styled(Flex)`
 	background: #E11527;
 	margin-top: 12px;
 	margin-bottom: 32px;
-	${mediaQueries.laptopS} {
-		justify-content: left;
-	}
 `;
