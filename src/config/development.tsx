@@ -5,7 +5,7 @@ import {
 	goerli,
 	optimismGoerli,
 	polygon,
-} from 'viem/chains';
+} from 'wagmi/chains';
 import {
 	EnvConfig,
 	StakingPlatform,
@@ -51,6 +51,22 @@ const config: EnvConfig = {
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
+
+	CHAINS: [
+		goerli,
+		{
+			...gnosis,
+			iconUrl: 'https://giveth.io/images/partnerships/Gnosis_Chain.svg',
+			iconBackground: 'white',
+		},
+		polygon,
+		optimismGoerli,
+		{
+			...celoAlfajores,
+			iconUrl: '/images/currencies/celo/16.svg',
+			iconBackground: 'white',
+		},
+	],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,

@@ -68,9 +68,11 @@ const JoinEngage = () => {
 		},
 		{
 			icon: twitter_icon,
-			title: 'Twitter',
+			title: 'X (Twitter)',
 			caption: formatMessage({ id: 'page.learn.twitter.desc' }),
-			buttonLabel: `${formatMessage({ id: 'label.join_us_on' })} twitter`,
+			buttonLabel: `${formatMessage({
+				id: 'label.join_us_on',
+			})} X (Twitter)`,
 			route: links.TWITTER,
 		},
 		{

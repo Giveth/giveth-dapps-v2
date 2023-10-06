@@ -169,7 +169,25 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				isActive
 				beginDate
 				endDate
+				eligibleNetworks
 			}
+			# campaigns {
+			# 	id
+			# 	title
+			# 	# description
+			# 	# type
+			# 	# photo
+			# 	# video
+			# 	# videoPreview
+			# 	# slug
+			# 	# isActive
+			# 	# order
+			# 	# landingLink
+			# 	# filterFields
+			# 	# sortingField
+			# 	# createdAt
+			# 	# updatedAt
+			# }
 		}
 	}
 `;

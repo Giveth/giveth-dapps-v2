@@ -10,7 +10,7 @@ export const fetchSubgraph = async (
 	const reqBody = { query };
 	let uri = config.NETWORKS_CONFIG[network]?.subgraphAddress;
 	if (!uri) {
-		console.error('Network is not Defined!');
+		console.error('Network is not Defined in fetchSubgraph!');
 		return {};
 	}
 	const res = await fetch(uri, {
@@ -32,7 +32,7 @@ export const getHistory = async (
 	let tokenDistroAddress = networkConfig?.TOKEN_DISTRO_ADDRESS;
 	let uri = networkConfig?.subgraphAddress;
 	if (!tokenDistroAddress || !uri) {
-		console.error('Network is not Defined!');
+		console.error('Network is not Defined in getHistory!');
 		return [];
 	}
 	const query = `{

@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { EOrderBy, IOrder } from '../UserProfile.view';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { formatUSD, smallFormatDate } from '@/lib/helpers';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import ListingBadge from '@/components/ListingBadge';
 import StatusBadge from '@/components/views/userProfile/projectsTab/StatusBadge';
 import SortIcon from '@/components/SortIcon';
@@ -148,7 +148,6 @@ const Table = styled.div`
 	grid-template-columns: 1.5fr 1.3fr 4fr 1.1fr 1.5fr 2fr 130px;
 	overflow: auto;
 	min-width: 900px;
-
 	${mediaQueries.laptopS} {
 		min-width: 1000px;
 	}
@@ -174,10 +173,18 @@ const ProjectsRowWrapper = styled(RowWrapper)`
 	}
 `;
 
-const ProjectTitle = styled(Flex)`
-	padding-top: 8px;
-	flex-wrap: wrap;
-	gap: 0 10px;
+const ProjectTitle = styled(FlexCenter)`
+	justify-content: flex-start;
+	width: 100%;
+	gap: 0 5px;
+	> a:first-child {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+	> span:last-child {
+		margin-right: 20px;
+	}
 `;
 
 export default ProjectsTable;

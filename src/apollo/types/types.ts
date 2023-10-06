@@ -74,6 +74,7 @@ export interface IProject {
 	sumDonationValueUsd?: number;
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
+	campaigns?: ICampaign[];
 }
 
 export interface IDonationProject extends IProject {
@@ -411,6 +412,7 @@ export interface IQFRound {
 	beginDate: string;
 	endDate: string;
 	minimumPassportScore: number;
+	eligibleNetworks: number[];
 }
 
 export interface IGetQfRoundHistory {

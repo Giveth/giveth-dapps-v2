@@ -118,6 +118,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							registerName={EUserInfo.FIRST_NAME}
 							label='first name'
 							placeholder='John'
+							autoFocus
 							register={register}
 							registerOptions={requiredOptions.firstName}
 							error={errors.firstName}

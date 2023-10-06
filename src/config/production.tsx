@@ -1,4 +1,4 @@
-import { celo, gnosis, mainnet, optimism, polygon } from 'viem/chains';
+import { celo, gnosis, mainnet, optimism, polygon } from 'wagmi/chains';
 import {
 	EnvConfig,
 	StakingPlatform,
@@ -39,7 +39,21 @@ const config: EnvConfig = {
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
-
+	CHAINS: [
+		mainnet,
+		{
+			...gnosis,
+			iconUrl: 'https://giveth.io/images/partnerships/Gnosis_Chain.svg',
+			iconBackground: 'white',
+		},
+		polygon,
+		optimism,
+		{
+			...celo,
+			iconUrl: 'https://giveth.io/images/currencies/celo/16.svg',
+			iconBackground: 'white',
+		},
+	],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,

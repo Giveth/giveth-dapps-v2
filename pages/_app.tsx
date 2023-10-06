@@ -15,16 +15,7 @@ import {
 	RainbowKitProvider,
 	connectorsForWallets,
 } from '@rainbow-me/rainbowkit';
-import {
-	mainnet,
-	polygon,
-	optimism,
-	gnosis,
-	optimismGoerli,
-	goerli,
-	celoAlfajores,
-	celo,
-} from 'wagmi/chains';
+
 import { publicProvider } from 'wagmi/providers/public';
 import {
 	metaMaskWallet,
@@ -54,6 +45,7 @@ import StorageLabel from '@/lib/localStorage';
 import { isGIVeconomyRoute } from '@/lib/helpers';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
+import config from '@/configuration';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
@@ -91,13 +83,7 @@ function renderSnippet() {
 const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-	[
-		gnosis,
-		polygon,
-		...(isProduction
-			? [mainnet, optimism, celo]
-			: [goerli, optimismGoerli, celoAlfajores]),
-	],
+	config.CHAINS,
 	[
 		publicProvider(),
 		infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY! }),
@@ -184,7 +170,10 @@ function MyApp({ Component, pageProps }: AppProps) {
 				>
 					<ApolloProvider client={apolloClient}>
 						<WagmiConfig config={wagmiConfig}>
-							<RainbowKitProvider chains={chains}>
+							<RainbowKitProvider
+								chains={chains}
+								initialChain={config.POLYGON_NETWORK_NUMBER}
+							>
 								{isMaintenanceMode ? (
 									<MaintenanceIndex />
 								) : (

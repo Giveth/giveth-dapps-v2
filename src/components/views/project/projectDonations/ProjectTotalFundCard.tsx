@@ -4,6 +4,7 @@ import {
 	H2,
 	H4,
 	H5,
+	H6,
 	neutralColors,
 	P,
 	semanticColors,
@@ -21,7 +22,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_QF_ROUND_HISTORY } from '@/apollo/gql/gqlDonations';
 import { IGetQfRoundHistory, IQFRound } from '@/apollo/types/types';
-import { formatDonations } from '@/helpers/number';
+import { formatDonation } from '@/helpers/number';
 
 interface IProjectTotalFundCardProps {
 	selectedQF: IQFRound | null;
@@ -38,12 +39,15 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		estimatedMatching,
 		countUniqueDonors,
 	} = projectData || {};
-	const { formatMessage } = useIntl();
+	const { formatMessage, locale } = useIntl();
 	const recipientAddresses = addresses?.filter(a => a.isRecipient);
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
 	const selectedQFData = qfRounds?.find(round => round.id === selectedQF?.id);
+
+	const notDistributedFund =
+		!qfRoundHistory?.matchingFund && !selectedQF?.isActive;
 
 	useEffect(() => {
 		if (!id) return;
@@ -114,7 +118,6 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 				  )
 			: 0
 		: 0;
-
 	return (
 		<Wrapper>
 			{selectedQF === null ? (
@@ -127,7 +130,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						</B>
 						{totalDonations && totalDonations > 0 ? (
 							<TotalFund>
-								{formatDonations(totalDonations, '$')}
+								{formatDonation(totalDonations, '$')}
 							</TotalFund>
 						) : (
 							<NoDonation>
@@ -167,26 +170,53 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 					{roundDonorsCount && roundDonorsCount > 0 ? (
 						<div>
 							<TotalFund>
-								{formatDonations(roundTotalDonation || 0, '$')}
+								{formatDonation(roundTotalDonation || 0, '$')}
 							</TotalFund>
-							<EstimatedMatchingSection
-								justifyContent='space-between'
-								alignItems='center'
-							>
-								<EstimatedMatchingPrice>
-									+{' '}
-									{formatDonations(
-										matchFund,
-										'$',
-										selectedQFData?.isActive ? true : false,
-									)}
-								</EstimatedMatchingPrice>
-								<EstimatedMatchingText>
-									{selectedQFData?.isActive
-										? 'Estimated Matching'
-										: 'Matching Funds'}
-								</EstimatedMatchingText>
-							</EstimatedMatchingSection>
+							{notDistributedFund ? (
+								<NotDistributedFundContainer>
+									<EstimatedMatchingSection>
+										<Flex flexDirection='column' gap='8px'>
+											<H6 weight={700}>
+												{formatMessage({
+													id: 'label.matching_funds_coming_soon',
+												})}{' '}
+											</H6>
+											<NotDistributedContainer>
+												<NotDistributedProjectName>
+													{selectedQF.name}&nbsp;
+												</NotDistributedProjectName>
+												<NotDistributedDescription>
+													{formatMessage({
+														id: 'label.funds_have_not_yet_been_sent',
+													})}
+												</NotDistributedDescription>
+											</NotDistributedContainer>
+										</Flex>
+									</EstimatedMatchingSection>
+								</NotDistributedFundContainer>
+							) : (
+								<EstimatedMatchingSection
+									justifyContent='space-between'
+									alignItems='center'
+								>
+									<EstimatedMatchingPrice>
+										+{' '}
+										{formatDonation(
+											matchFund,
+											'$',
+											locale,
+											selectedQFData?.isActive
+												? true
+												: false,
+										)}
+									</EstimatedMatchingPrice>
+									<EstimatedMatchingText>
+										{selectedQFData?.isActive
+											? 'Estimated Matching'
+											: 'Matching Funds'}
+									</EstimatedMatchingText>
+								</EstimatedMatchingSection>
+							)}
 							<div>
 								<LightSubline> Raised from </LightSubline>
 								<Subline style={{ display: 'inline-block' }}>
@@ -280,6 +310,26 @@ const LightSubline = styled(Subline)`
 const CustomP = styled(P)`
 	padding-bottom: 8px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
+`;
+
+const NotDistributedContainer = styled.div`
+	border-top: 1px solid ${neutralColors.gray[300]};
+	padding-top: 8px;
+`;
+
+const NotDistributedProjectName = styled(B)`
+	display: inline-block;
+	color: ${neutralColors.gray[700]};
+	white-space: nowrap;
+`;
+
+const NotDistributedDescription = styled(P)`
+	display: inline;
+	color: ${neutralColors.gray[700]};
+`;
+
+const NotDistributedFundContainer = styled.div`
+	margin-bottom: 8px;
 `;
 
 export default ProjectTotalFundCard;

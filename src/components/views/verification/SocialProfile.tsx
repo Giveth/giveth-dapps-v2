@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 import {
 	Button,
 	H6,
-	IconTwitter,
+	IconXSocial,
 	Lead,
 	neutralColors,
 	P,
@@ -173,11 +173,11 @@ const SocialProfile = () => {
 								);
 							}}
 						>
-							<IconTwitter />
+							<IconXSocial />
 							{twitterData?.socialNetworkId ??
 								`${formatMessage({
 									id: 'label.connect_to',
-								})} TWITTER`}
+								})} X (Twitter)`}
 						</ButtonSocial>
 						{twitterData?.socialNetworkId && (
 							<RemoveButton

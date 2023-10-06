@@ -16,7 +16,6 @@ import Gravity_DAO from '/public/images/partnerships/Gravity_DAO.svg';
 import Ethereum_Colombia from '/public/images/partnerships/Ethereum_Colombia.svg';
 import Meta_Cartel from '/public/images/partnerships/Meta_Cartel.svg';
 import Vocdoni from '/public/images/partnerships/Vocdoni.svg';
-import Meta_Gamma_Delta from '/public/images/partnerships/Meta_Gamma_Delta.svg';
 import clrfund from '/public/images/partnerships/clrfund.svg';
 import The_DAOist from '/public/images/partnerships/The_DAOist.svg';
 import Rainbow_Rolls from '/public/images/partnerships/Rainbow_Rolls.svg';
@@ -31,6 +30,7 @@ import BrightID from '/public/images/partnerships/BrightID.svg';
 import Gnosis_Chain from '/public/images/partnerships/Gnosis_Chain.svg';
 import Crypto_Currency from '/public/images/partnerships/cryptocurrency-jobs.svg';
 import GatewayFM from '/public/images/partnerships/gatewayfm_logo.svg';
+import BlossomLabs from '/public/images/partnerships/BlossomLabsLogo.svg';
 
 export interface IPartner {
 	icon: any;
@@ -63,6 +63,12 @@ export const PartnershipArray: IPartner[] = [
 		title: 'BrightID',
 		description: 'page.partnerships.brightid',
 		link: 'https://brightid.org/',
+	},
+	{
+		icon: BlossomLabs,
+		title: 'Blossom Labs',
+		description: 'page.partnerships.blossomlabs',
+		link: 'https://blossom.software/',
 	},
 	{
 		icon: clrfund,
@@ -142,12 +148,6 @@ export const PartnershipArray: IPartner[] = [
 		title: 'Meta Cartel',
 		description: 'page.partnerships.metacartel',
 		link: 'https://metacartel.org/',
-	},
-	{
-		icon: Meta_Gamma_Delta,
-		title: 'Meta Gamma Delta',
-		description: 'page.partnerships.metagammadelta',
-		link: 'https://metagammadelta.com/',
 	},
 	{
 		icon: MyEtherWallet,
