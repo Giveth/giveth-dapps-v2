@@ -1,5 +1,4 @@
 import {
-	semanticColors,
 	H1,
 	B,
 	Lead,
@@ -136,7 +135,7 @@ const StyledCol = styled(Col)`
 	z-index: 1;
 	min-height: 300px;
 	text-align: center;
-	
+
 	${mediaQueries.mobileS} {
 		text-align: left;
 		align-items: left;
@@ -145,23 +144,23 @@ const StyledCol = styled(Col)`
 
 const Title = styled(H1)`
 	margin-top: 32px;
-	color: #FFF;
+	color: #fff;
 `;
 
 const Name = styled(H2)`
-	color: #FFF;
+	color: #fff;
 `;
 
 const Desc = styled(Flex)`
-    width: fit-content;
-	color: #FFF;
-	border: 2px solid #FFF;
+	width: fit-content;
+	color: #fff;
+	border: 2px solid #fff;
 	border-radius: 48.202px;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
 	padding: 9px 20px;
-	background: #E11527;
+	background: #e11527;
 	margin-top: 12px;
 	margin-bottom: 32px;
 `;
