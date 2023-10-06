@@ -108,6 +108,7 @@ const GrayLead = styled(LeadMedium)`
 
 const Categories = styled(FlexCenter)`
 	flex-direction: column;
+	flex-wrap: wrap;
 	gap: 8px;
 	margin: 16px;
 	${mediaQueries.tablet} {
