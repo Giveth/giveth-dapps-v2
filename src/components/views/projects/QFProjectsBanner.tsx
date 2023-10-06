@@ -141,18 +141,24 @@ const StyledCol = styled(Col)`
 
 const Title = styled(H1)`
 	margin-top: 32px;
-	color: ${semanticColors.golden[500]};
+	color: #FFF;
 `;
 
 const Name = styled(H2)`
-	color: ${semanticColors.golden[500]};
+	color: #FFF;
 `;
 
 const Desc = styled(Flex)`
-	color: ${semanticColors.jade[100]};
+    width: fit-content;
+	color: #FFF;
+	border: 2px solid #FFF;
+	border-radius: 48.202px;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
+	padding: 9px 20px;
+	background: #E11527;
+	margin-top: 12px;
 	margin-bottom: 32px;
 	${mediaQueries.laptopS} {
 		justify-content: left;
