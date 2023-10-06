@@ -7,6 +7,7 @@ import {
 	H2,
 	Col,
 	mediaQueries,
+	deviceSize,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -82,6 +83,21 @@ export const QFProjectsBanner = () => {
 				fill
 				alt='QF Banner'
 			/>
+			<OPItem1
+				src={'/images/banners/optimism/op_giv_1.png'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
+			<OPItem2
+				src={'/images/banners/optimism/op_giv_2.png'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
+			<OPItem3
+				src={'/images/banners/optimism/op_giv_3.png'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
 			<Container>
 				<Row>
 					<StyledCol xs={12} md={6}>
@@ -126,6 +142,13 @@ const BannerContainer = styled.div`
 	position: relative;
 	padding-top: 100px;
 	padding-bottom: 100px;
+	img {
+		-webkit-user-drag: none;
+		-khtml-user-drag: none;
+		-moz-user-drag: none;
+		-o-user-drag: none;
+		user-drag: none;
+	}
 `;
 
 const StyledCol = styled(Col)`
@@ -134,11 +157,12 @@ const StyledCol = styled(Col)`
 	flex-direction: column;
 	z-index: 1;
 	min-height: 300px;
-	text-align: center;
+	text-align: left;
+	align-items: flex-start;
 
-	${mediaQueries.mobileS} {
-		text-align: left;
-		align-items: left;
+	@media (max-width: ${deviceSize.laptopS}px) {
+		text-align: center;
+		align-items: center;
 	}
 `;
 
@@ -163,4 +187,28 @@ const Desc = styled(Flex)`
 	background: #e11527;
 	margin-top: 12px;
 	margin-bottom: 32px;
+`;
+
+const OPItem = styled.img`
+	z-index: 2;
+	position: absolute;
+	width: 177px;
+	@media (max-width: ${deviceSize.laptopS}px) {
+		display: none;
+	}
+`;
+const OPItem1 = styled(OPItem)`
+	top: 0;
+	left: 30%;
+`;
+const OPItem2 = styled(OPItem)`
+	left: 20%;
+	bottom: 0;
+`;
+const OPItem3 = styled(OPItem)`
+	width: 104px;
+	left: 0;
+	@media (max-width: ${deviceSize.desktop}px) {
+		display: none;
+	}
 `;
