@@ -7,6 +7,9 @@ import {
 	IconHeartOutline16,
 	mediaQueries,
 	neutralColors,
+	semanticColors,
+	IconDonation16,
+	SublineBold,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
@@ -29,6 +32,7 @@ import { likeProject, unlikeProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { slugToProjectDonate } from '@/lib/routeCreators';
+import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 
 export const ProjectPublicActions = () => {
 	const [showModal, setShowShareModal] = useState<boolean>(false);
@@ -48,6 +52,7 @@ export const ProjectPublicActions = () => {
 	} = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
+	const alreadyDonated = useAlreadyDonatedToProject(projectData);
 
 	useEffect(() => {
 		const fetchProjectReaction = async () => {
@@ -138,6 +143,16 @@ export const ProjectPublicActions = () => {
 
 	return (
 		<ProjectPublicActionsWrapper gap='16px'>
+			{alreadyDonated && (
+				<AlreadyDonatedWrapper>
+					<IconDonation16 />
+					<SublineBold>
+						{formatMessage({
+							id: 'label.already_donated_donate_once_more',
+						})}
+					</SublineBold>
+				</AlreadyDonatedWrapper>
+			)}
 			<Link href={slugToProjectDonate(slug || '')}>
 				<DonateButton
 					label={formatMessage({ id: 'label.donate' })}
@@ -198,6 +213,12 @@ const ProjectPublicActionsWrapper = styled(Flex)`
 	${mediaQueries.laptopS} {
 		flex-direction: column;
 	}
+`;
+
+const AlreadyDonatedWrapper = styled(Flex)`
+	margin: 4px 0;
+	gap: 8px;
+	color: ${semanticColors.jade[500]};
 `;
 
 const DonateButton = styled(ButtonLink)`

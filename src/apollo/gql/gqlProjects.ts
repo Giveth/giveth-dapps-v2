@@ -171,23 +171,23 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				endDate
 				# eligibleNetworks
 			}
-			# campaigns {
-			# 	id
-			# 	title
-			# 	# description
-			# 	# type
-			# 	# photo
-			# 	# video
-			# 	# videoPreview
-			# 	# slug
-			# 	# isActive
-			# 	# order
-			# 	# landingLink
-			# 	# filterFields
-			# 	# sortingField
-			# 	# createdAt
-			# 	# updatedAt
-			# }
+			campaigns {
+				id
+				title
+				# description
+				# type
+				# photo
+				# video
+				# videoPreview
+				# slug
+				# isActive
+				# order
+				# landingLink
+				# filterFields
+				# sortingField
+				# createdAt
+				# updatedAt
+			}
 		}
 	}
 `;
