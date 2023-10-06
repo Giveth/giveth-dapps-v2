@@ -6,7 +6,6 @@ import {
 	Row,
 	H2,
 	Col,
-	mediaQueries,
 	deviceSize,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
