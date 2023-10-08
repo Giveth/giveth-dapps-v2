@@ -16,7 +16,7 @@ import tokenAbi from 'human-standard-token-abi';
 import { captureException } from '@sentry/nextjs';
 import { BigNumber } from '@ethersproject/bignumber';
 import { BigNumberish } from 'ethers';
-import { parseUnits } from '@ethersproject/units';
+import { formatUnits, parseUnits } from '@ethersproject/units';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
@@ -30,7 +30,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import { pollEvery, showToastError } from '@/lib/helpers';
+import { formatBalance, pollEvery, showToastError } from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
@@ -54,7 +54,6 @@ import SwitchToAcceptedChain from '@/components/views/donate/SwitchToAcceptedCha
 import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingToast';
-import { formatWeiHelper } from '@/helpers/number';
 import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
 
@@ -304,11 +303,13 @@ const CryptoDonation: FC = () => {
 		const t = BigNumber.from(selectedTokenBalance)
 			.mul(100)
 			.div(100 + s);
-		return Number(formatWeiHelper(t, 6, false));
+		return Number(formatUnits(t, tokenDecimals));
 	};
 
 	const setMaxDonation = (givethDonation?: number) =>
 		setAmountTyped(calcMaxDonation(givethDonation ?? donationToGiveth));
+
+	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
 
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
@@ -397,12 +398,7 @@ const CryptoDonation: FC = () => {
 						}}
 					>
 						{formatMessage({ id: 'label.available' })}:{' '}
-						{formatWeiHelper(
-							selectedTokenBalance.toString(),
-							6,
-							false,
-						)}{' '}
-						{tokenSymbol}
+						{formatBalance(userBalance)} {tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
