@@ -96,6 +96,9 @@ export const ProjectsProvider = (props: {
 				case EProjectsSortBy.RECENTLY_UPDATED.toLowerCase():
 					sort = EProjectsSortBy.RECENTLY_UPDATED;
 					break;
+				case EProjectsSortBy.ActiveQfRoundRaisedFunds.toLowerCase():
+					sort = EProjectsSortBy.ActiveQfRoundRaisedFunds;
+					break;
 				default:
 					break;
 			}

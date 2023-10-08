@@ -13,11 +13,6 @@ export const ProjectStats = () => {
 	const { formatMessage } = useIntl();
 	const { projectData } = useProjectContext();
 
-	console.log(
-		'projectData?.verificationFormStatus',
-		projectData?.verificationFormStatus,
-		projectData?.verified,
-	);
 	return (
 		<div>
 			<Flex flexDirection='column' gap='24px'>

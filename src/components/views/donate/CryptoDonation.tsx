@@ -55,6 +55,8 @@ import { useDonateData } from '@/context/donate.context';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingToast';
 import { formatWeiHelper } from '@/helpers/number';
+import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
+import { getActiveRound } from '@/helpers/qf';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -97,7 +99,6 @@ const CryptoDonation: FC = () => {
 	const [erc20List, setErc20List] = useState<IProjectAcceptedToken[]>();
 	const [erc20OriginalList, setErc20OriginalList] = useState<any>();
 	const [anonymous, setAnonymous] = useState<boolean>(false);
-	// const [selectLoading, setSelectLoading] = useState(false);
 	const [amountError, setAmountError] = useState<boolean>(false);
 	const [tokenIsGivBackEligible, setTokenIsGivBackEligible] =
 		useState<boolean>();
@@ -120,6 +121,11 @@ const CryptoDonation: FC = () => {
 	const tokenDecimals = selectedToken?.decimals || 18;
 	const projectIsGivBackEligible = !!verified;
 	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
+	const activeRound = getActiveRound(project.qfRounds);
+
+	const isOnEligibleNetworks = activeRound?.eligibleNetworks?.includes(
+		networkId!,
+	);
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
@@ -332,7 +338,6 @@ const CryptoDonation: FC = () => {
 					}
 				/>
 			)}
-
 			<InputContainer>
 				<SwitchToAcceptedChain acceptedChains={acceptedChains} />
 				<SaveGasFees acceptedChains={acceptedChains} />
@@ -397,15 +402,16 @@ const CryptoDonation: FC = () => {
 					</AvText>
 				)}
 			</InputContainer>
-
-			{hasActiveQFRound && (
+			{hasActiveQFRound && !isOnEligibleNetworks && (
+				<DonateQFEligibleNetworks />
+			)}
+			{hasActiveQFRound && isOnEligibleNetworks && (
 				<EstimatedMatchingToast
 					projectData={project}
 					token={selectedToken}
 					amountTyped={amountTyped}
 				/>
 			)}
-
 			{!noDonationSplit ? (
 				<DonateToGiveth
 					setDonationToGiveth={e => {
@@ -417,7 +423,6 @@ const CryptoDonation: FC = () => {
 			) : (
 				<br />
 			)}
-
 			{selectedToken && (
 				<GIVBackToast
 					projectEligible={projectIsGivBackEligible}
@@ -425,7 +430,6 @@ const CryptoDonation: FC = () => {
 					userEligible={!isPurpleListed}
 				/>
 			)}
-
 			{!noDonationSplit ? (
 				<TotalDonation
 					donationToGiveth={donationToGiveth}
@@ -437,7 +441,6 @@ const CryptoDonation: FC = () => {
 			) : (
 				<EmptySpace />
 			)}
-
 			{!isActive && (
 				<InlineToast
 					type={EToastType.Warning}
@@ -446,7 +449,6 @@ const CryptoDonation: FC = () => {
 					})}
 				/>
 			)}
-
 			{isEnabled && (
 				<MainButton
 					label={formatMessage({ id: 'label.donate' })}
@@ -463,17 +465,16 @@ const CryptoDonation: FC = () => {
 					onClick={() => dispatch(setShowWalletModal(true))}
 				/>
 			)}
-
 			<CheckBoxContainer>
 				<CheckBox
-					label={formatMessage({ id: 'label.make_it_anonymous' })}
+					label={formatMessage({ id: 'label.donate_privately' })}
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
 					size={14}
 				/>
 				<div>
 					{formatMessage({
-						id: 'component.tooltip.by_checking_this',
+						id: 'component.tooltip.donate_privately',
 					})}
 				</div>
 			</CheckBoxContainer>

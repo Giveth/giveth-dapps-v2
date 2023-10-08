@@ -59,6 +59,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	const { formatMessage } = useIntl();
 	const [activeTab, setActiveTab] = useState(0);
 	const [creationSuccessful, setCreationSuccessful] = useState(false);
+
 	const isMobile = !useMediaQuery(device.tablet);
 	const {
 		fetchProjectBoosters,
@@ -68,6 +69,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		hasActiveQFRound,
 		isCancelled,
 		isAdmin,
+		isLoading,
 	} = useProjectContext();
 
 	const router = useRouter();
@@ -110,7 +112,12 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 	}
 
 	if (!projectData) {
-		return <NotAvailableProject isCancelled={isCancelled} />;
+		return (
+			<NotAvailableProject
+				isCancelled={isCancelled}
+				isProjectLoading={isLoading}
+			/>
+		);
 	}
 
 	return (
