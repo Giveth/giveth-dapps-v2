@@ -148,7 +148,7 @@ export const ProjectPublicActions = () => {
 					<IconDonation16 />
 					<SublineBold>
 						{formatMessage({
-							id: 'label.already_donated_donate_once_more',
+							id: 'component.already_donated.once_more',
 						})}
 					</SublineBold>
 				</AlreadyDonatedWrapper>
