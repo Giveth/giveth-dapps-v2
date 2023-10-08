@@ -122,7 +122,7 @@
 	"label.all_time_funding": "Financiación de todos los tiempos",
 	"label.all_your_staked_giv_including_the_locked": "Todo tu GIV en stake, incluido el GIV que está bloqueado.",
 	"label.already_a_giver": "Already own a Giver?",
-	"label.already_donated_donate_once_more": "Already Donated! Donate once more",
+	"component.already_donated.once_more": "Already Donated! Donate once more",
 	"label.always": "Always",
 	"label.amount": "Cantidad",
 	"label.amount_is_too_small": "El monto es demasiado pequeño",
