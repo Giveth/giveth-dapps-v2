@@ -13,6 +13,8 @@
 	"climate-action": "Climate Action",
 	"community": "Community",
 	"community_desc": "Support community projects with a focus on grassroots initiatives, housing, inclusion, social services, water & santitation, family & children and more.",
+	"component.already_donated.incorrect_estimate": "You have already donated to this project so the estimated matching will be incorrect.",
+	"component.already_donated.once_more": "Already Donated! Donate once more",
 	"component.archive_cover.archived": "ARCHIVED",
 	"component.button.complete_profile": "COMPLETE PROFILE",
 	"component.button.connect_wallet": "Connect Wallet",
@@ -165,6 +167,7 @@
 	"label.before_you_start": "Before you start",
 	"label.better_communicate_with_the_community": "Better communicate with the community.",
 	"label.be_the_first_booster": "Be the first one to boost this project with GIVpower.",
+	"label.be_the_first_to_give": "Be the first to give!",
 	"label.boost": "Boost",
 	"label.boosted_projects": "Boosted Projects",
 	"label.boost_project": "Boost project",
@@ -489,7 +492,6 @@
 	"label.last_name": "Last name",
 	"label.last_updated": "Last Updated",
 	"label.latest_updates": "Latest Updates",
-	"label.be_the_first_to_give": "Be the first to give!",
 	"label.learn": "Learn",
 	"label.learn_how_to_become_an_active_part": "Learn how to become an active part of our giving network.",
 	"label.learn_more": "Learn more",
@@ -1392,7 +1394,5 @@
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Water & Sanitation",
-	"component.already_donated.incorrect_estimate": "You have already donated to this project so the estimated matching will be incorrect.",
-	"component.already_donated.once_more": "Already Donated! Donate once more"
+	"water-and-sanitation": "Water & Sanitation"
 }
