@@ -31,6 +31,7 @@ const StyledRow = styled(Row)`
 	${mediaQueries.laptopL} {
 		align-items: flex-start;
 		flex-direction: row-reverse;
+		align-items: stretch !important;
 	}
 `;
 
