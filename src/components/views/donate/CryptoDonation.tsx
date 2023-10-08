@@ -213,6 +213,7 @@ const CryptoDonation: FC = () => {
 		stopPolling.current = pollEvery(
 			() => ({
 				request: async () => {
+					console.log('selectedToken', selectedToken);
 					try {
 						const instance = new Contract(
 							selectedToken.address!,
