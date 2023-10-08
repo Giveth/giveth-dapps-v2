@@ -27,7 +27,7 @@
 	"label.all_time_donations_received": "All time donations received",
 	"label.already_a_giver": "Already own a Giver?",
 	"label.always": "Always",
-	"label.amount_raised": "Amount raised",
+	"label.amount_raised_all_time": "Amount Raised All Time",
 	"label.amount_raised_in_this_round": "Amount raised in this round",
 	"label.amplify_your_donation": "Amplify your donation",
 	"label.amplify_your_donation_desc": "Unlock matching for your donation by verifying your identity! Connect your wallet to Gitcoin Passport to check your identity score and maximize your donation power. Passport is designed to proactively verify users' identities to protect against Sybil attacks.",
