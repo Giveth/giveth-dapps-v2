@@ -222,6 +222,7 @@ const CryptoDonation: FC = () => {
 						const balance: BigNumber = await instance.balanceOf(
 							account,
 						);
+						console.log('balance', balance.toString());
 						return balance;
 					} catch (e) {
 						captureException(e, {
@@ -233,6 +234,7 @@ const CryptoDonation: FC = () => {
 					}
 				},
 				onResult: (_balance: BigNumber) => {
+					console.log('_balance', _balance.toString());
 					if (_balance && !_balance.eq(selectedTokenBalance)) {
 						setSelectedTokenBalance(_balance);
 					}
