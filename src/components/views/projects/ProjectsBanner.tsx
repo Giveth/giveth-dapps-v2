@@ -17,7 +17,7 @@ export const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 	const allCategory = {
 		title: formatMessage({ id: 'label.giveth_projects' }),
 		banner: '/images/banners/categories/all.png',
-		slug: 'all_projects',
+		slug: 'all',
 		description: '',
 		categories: [],
 	};
