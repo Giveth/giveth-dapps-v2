@@ -31,6 +31,7 @@ import NetworkLogo from '@/components/NetworkLogo';
 import { networksParams } from '@/helpers/blockchain';
 import { UserWithPFPInCell } from '../../../UserWithPFPInCell';
 import { formatDonation } from '@/helpers/number';
+import { Spinner } from '@/components/Spinner';
 
 const itemPerPage = 10;
 
@@ -55,6 +56,7 @@ interface PageDonations {
 }
 
 const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
+	const [loading, setLoading] = useState(true);
 	const [pageDonations, setPageDonations] = useState<PageDonations>();
 	const [page, setPage] = useState<number>(0);
 	const [order, setOrder] = useState<IOrder>({
@@ -88,8 +90,13 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 	};
 
 	useEffect(() => {
+		setLoading(true);
+	}, [selectedQF]);
+
+	useEffect(() => {
 		if (!id) return;
 		const fetchProjectDonations = async () => {
+			console.log('fetching project donations');
 			const { data: projectDonations } = await client.query({
 				query: FETCH_PROJECT_DONATIONS,
 				variables: {
@@ -104,6 +111,7 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
 				},
 			});
+			setLoading(false);
 			const { donationsByProjectId } = projectDonations;
 			if (!!donationsByProjectId?.donations) {
 				setPageDonations(donationsByProjectId);
@@ -111,6 +119,13 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 		};
 		fetchProjectDonations();
 	}, [page, order.by, order.direction, id, isAdmin, selectedQF]);
+
+	if (loading)
+		return (
+			<LoadingWrapper>
+				<Spinner />
+			</LoadingWrapper>
+		);
 
 	//TODO: Show meaningful message when there is no donation
 	if (pageDonations?.totalCount === 0) return null;
@@ -282,6 +297,13 @@ const DonationRowWrapper = styled(RowWrapper)`
 const DonationTableCell = styled(TableCell)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
+`;
+
+const LoadingWrapper = styled.div`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 500px;
 `;
 
 export default ProjectDonationTable;
