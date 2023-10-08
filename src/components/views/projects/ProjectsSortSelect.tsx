@@ -8,12 +8,12 @@ import {
 	IconHeartOutline16,
 	IconDonation16,
 	neutralColors,
-	P,
 	IconFast16,
 	IconFlash16,
 	IconRocketInSpace16,
 	IconIncrease16,
 	semanticColors,
+	Caption,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -155,7 +155,7 @@ const Option: ComponentType<OptionProps<ISelectedSort>> = props => {
 			<OptionContainer>
 				<RowContainer textColor={color}>
 					{Icon}
-					<P>{label}</P>
+					<Caption>{label}</Caption>
 				</RowContainer>
 			</OptionContainer>
 		</components.Option>
