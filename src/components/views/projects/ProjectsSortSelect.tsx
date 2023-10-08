@@ -13,6 +13,7 @@ import {
 	IconFlash16,
 	IconRocketInSpace16,
 	IconIncrease16,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -89,7 +90,7 @@ const ProjectsSortSelect = () => {
 			label: formatMessage({ id: 'label.amount_raised_in_qf' }),
 			value: EProjectsSortBy.ActiveQfRoundRaisedFunds,
 			icon: <IconIncrease16 />,
-			color: 'red',
+			color: semanticColors.jade[700],
 		});
 
 	const [value, setValue] = useState(sortByOptions[0]);
