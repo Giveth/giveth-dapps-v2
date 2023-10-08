@@ -122,7 +122,6 @@
 	"label.all_time_funding": "All time funding received",
 	"label.all_your_staked_giv_including_the_locked": "All your staked GIV, including GIV that is locked.",
 	"label.already_a_giver": "Already own a Giver?",
-	"label.already_donated_donate_once_more": "Already Donated! Donate once more",
 	"label.always": "Always",
 	"label.amount": "Amount",
 	"label.amount_is_too_small": "Amount is too small",
@@ -1394,5 +1393,6 @@
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"ubi": "UBI",
 	"water-and-sanitation": "Water & Sanitation",
-	"component.already_donated.incorrect_estimate": "You have already donated to this project so the estimated matching will be incorrect."
+	"component.already_donated.incorrect_estimate": "You have already donated to this project so the estimated matching will be incorrect.",
+	"component.already_donated.once_more": "Already Donated! Donate once more"
 }
