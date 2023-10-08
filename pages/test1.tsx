@@ -104,7 +104,7 @@ const TestIndex = () => {
 				>
 					<FlowRateTooltip>
 						The rate at which you receive liquid GIV from your
-						GIVstream.1
+						GIVstream.
 					</FlowRateTooltip>
 				</IconWithTooltip>
 				{/* <Tooltip direction={direction} align={align} parentRef={elRef}>
