@@ -199,6 +199,7 @@ const CryptoDonation: FC = () => {
 
 	const pollToken = useCallback(async () => {
 		clearPoll();
+		console.log('selectedToken1', selectedToken);
 		if (!selectedToken) {
 			return setSelectedTokenBalance(BigNumber.from(0));
 		}
@@ -213,7 +214,7 @@ const CryptoDonation: FC = () => {
 		stopPolling.current = pollEvery(
 			() => ({
 				request: async () => {
-					console.log('selectedToken', selectedToken);
+					console.log('selectedToken2', selectedToken);
 					try {
 						const instance = new Contract(
 							selectedToken.address!,
