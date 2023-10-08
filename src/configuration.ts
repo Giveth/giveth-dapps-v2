@@ -3,6 +3,7 @@ import production from './config/production';
 import { GlobalConfig } from './types/config';
 
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+console.log('isProduction', isProduction);
 
 const envConfig = isProduction ? production : development;
 
