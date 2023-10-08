@@ -198,7 +198,6 @@ const CryptoDonation: FC = () => {
 
 	const pollToken = useCallback(async () => {
 		clearPoll();
-		console.log('selectedToken1', selectedToken);
 		if (!selectedToken) {
 			return setSelectedTokenBalance(BigNumber.from(0));
 		}
@@ -213,7 +212,6 @@ const CryptoDonation: FC = () => {
 		stopPolling.current = pollEvery(
 			() => ({
 				request: async () => {
-					console.log('selectedToken2', selectedToken);
 					try {
 						const instance = new Contract(
 							selectedToken.address!,
@@ -223,7 +221,6 @@ const CryptoDonation: FC = () => {
 						const balance: BigNumber = await instance.balanceOf(
 							account,
 						);
-						console.log('balance', balance.toString());
 						return balance;
 					} catch (e) {
 						captureException(e, {
@@ -235,7 +232,6 @@ const CryptoDonation: FC = () => {
 					}
 				},
 				onResult: (_balance: BigNumber) => {
-					console.log('_balance', _balance.toString());
 					if (_balance && !_balance.eq(selectedTokenBalance)) {
 						setSelectedTokenBalance(_balance);
 					}
