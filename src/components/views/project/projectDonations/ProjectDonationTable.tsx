@@ -33,6 +33,7 @@ import { UserWithPFPInCell } from '../../../UserWithPFPInCell';
 import { formatDonation } from '@/helpers/number';
 import { Spinner } from '@/components/Spinner';
 import { NoDonation } from './NoDonation';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 
 const itemPerPage = 10;
 
@@ -256,8 +257,7 @@ const LeftPadding = styled.div`
 	padding-left: 44px;
 `;
 
-const Wrapper = styled.div`
-	display: flex;
+const Wrapper = styled(Flex)`
 	flex-direction: column;
 	gap: 16px;
 `;
@@ -301,10 +301,7 @@ const DonationTableCell = styled(TableCell)`
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
 
-const LoadingWrapper = styled.div`
-	display: flex;
-	justify-content: center;
-	align-items: center;
+const LoadingWrapper = styled(FlexCenter)`
 	height: 500px;
 `;
 
