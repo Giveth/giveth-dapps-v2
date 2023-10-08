@@ -74,7 +74,7 @@ const ProjectsSortSelect = () => {
 			icon: <IconHeartOutline16 />,
 		},
 		{
-			label: formatMessage({ id: 'label.amount_raised' }),
+			label: formatMessage({ id: 'label.amount_raised_all_time' }),
 			value: EProjectsSortBy.MOST_FUNDED,
 			icon: <IconDonation16 />,
 		},
