@@ -32,6 +32,7 @@ import { networksParams } from '@/helpers/blockchain';
 import { UserWithPFPInCell } from '../../../UserWithPFPInCell';
 import { formatDonation } from '@/helpers/number';
 import { Spinner } from '@/components/Spinner';
+import { NoDonation } from './NoDonation';
 
 const itemPerPage = 10;
 
@@ -128,7 +129,8 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 		);
 
 	//TODO: Show meaningful message when there is no donation
-	if (pageDonations?.totalCount === 0) return null;
+	if (pageDonations?.totalCount === 0)
+		return <NoDonation selectedQF={selectedQF} />;
 
 	return (
 		<Wrapper>
