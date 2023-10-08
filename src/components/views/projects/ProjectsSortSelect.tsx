@@ -187,7 +187,7 @@ const selectStyles: StylesConfig = {
 		zIndex: 3,
 		border: 'none',
 		borderRadius: '8px',
-		minWidth: '220px',
+		minWidth: '230px',
 		'&:hover': {
 			borderColor: 'transparent',
 		},
