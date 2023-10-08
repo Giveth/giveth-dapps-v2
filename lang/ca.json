@@ -122,7 +122,7 @@
 	"label.all_time_funding": "Finançament total rebut",
 	"label.all_your_staked_giv_including_the_locked": "Tot el teu GIV en stake, incloent el GIV bloquejat.",
 	"label.already_a_giver": "Already own a Giver?",
-	"label.already_donated_donate_once_more": "Already Donated! Donate once more",
+	"component.already_donated.once_more": "Already Donated! Donate once more",
 	"label.always": "Always",
 	"label.amount": "Import",
 	"label.amount_is_too_small": "L'import és massa petit",
