@@ -13,7 +13,6 @@ import {
 	IconExternalLink16,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
-import { useChainId } from 'wagmi';
 import config from '@/configuration';
 
 import {
@@ -63,7 +62,8 @@ const UserProfileView: FC<IUserProfileView> = () => {
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { user, myAccount } = useProfileContext();
 
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
