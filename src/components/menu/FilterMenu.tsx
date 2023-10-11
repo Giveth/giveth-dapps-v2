@@ -63,31 +63,34 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const router = useRouter();
 
 		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
-			console.log('e', e);
-			console.log('filter', filter);
+			let updatedQuery;
 			if (e) {
-				// setVariables({
-				// 	...variables,
-				// 	filters: !variables.filters?.includes(filter)
-				// 		? [...(variables.filters || []), filter]
-				// 		: variables.filters,
-				// });
+				updatedQuery = {
+					...router.query,
+					filter: router.query.filter
+						? Array.isArray(router.query.filter)
+							? [...router.query.filter, filter]
+							: [router.query.filter, filter]
+						: [filter],
+				};
+				router.push({
+					pathname: router.pathname,
+					query: updatedQuery,
+				});
 			} else {
-				// setVariables({
-				// 	...variables,
-				// 	filters: variables.filters?.filter(
-				// 		(f: string) => f !== filter,
-				// 	),
-				// });
+				updatedQuery = {
+					...router.query,
+					filter: router.query.filter
+						? Array.isArray(router.query.filter)
+							? router.query.filter.filter(f => f !== filter)
+							: []
+						: [],
+				};
 			}
-			// const updatedQuery = {
-			// 	...router.query,
-			// 	filter: filter,
-			// };
-			// router.push({
-			// 	pathname: router.pathname,
-			// 	query: updatedQuery,
-			// });
+			router.push({
+				pathname: router.pathname,
+				query: updatedQuery,
+			});
 		};
 
 		const clearFilters = () => {
