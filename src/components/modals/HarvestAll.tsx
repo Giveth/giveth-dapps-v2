@@ -19,7 +19,7 @@ import {
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 import { captureException } from '@sentry/nextjs';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { waitForTransaction } from '@wagmi/core';
 import { Modal } from './Modal';
 import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
@@ -204,6 +204,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		if (!address || !tokenDistroHelper) return;
 		setState(HarvestStates.HARVESTING);
 		try {
+			if (!chainId) return;
 			if (poolStakingConfig) {
 				if (
 					poolStakingConfig.hasOwnProperty(
