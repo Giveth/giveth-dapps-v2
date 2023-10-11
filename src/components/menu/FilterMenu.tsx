@@ -16,7 +16,6 @@ import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
 import { zIndex } from '@/lib/constants/constants';
 import { EProjectsFilter } from '@/apollo/types/types';
-import { removeQueryParamAndRedirect } from '@/helpers/url';
 
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
@@ -57,38 +56,53 @@ const fundsFilter = [
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {
 		const { formatMessage } = useIntl();
-		const { setVariables, variables, isQF, setIsQF } = useProjectsContext();
+		const { variables, isQF, setIsQF } = useProjectsContext();
 		const filtersCount = variables?.filters?.length ?? 0;
 		const campaignCount = variables?.campaignSlug ? 1 : 0;
 		const count = filtersCount + campaignCount;
 		const router = useRouter();
 
 		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
+			console.log('e', e);
+			console.log('filter', filter);
 			if (e) {
-				setVariables({
-					...variables,
-					filters: !variables.filters?.includes(filter)
-						? [...(variables.filters || []), filter]
-						: variables.filters,
-				});
+				// setVariables({
+				// 	...variables,
+				// 	filters: !variables.filters?.includes(filter)
+				// 		? [...(variables.filters || []), filter]
+				// 		: variables.filters,
+				// });
 			} else {
-				setVariables({
-					...variables,
-					filters: variables.filters?.filter(
-						(f: string) => f !== filter,
-					),
-				});
+				// setVariables({
+				// 	...variables,
+				// 	filters: variables.filters?.filter(
+				// 		(f: string) => f !== filter,
+				// 	),
+				// });
 			}
+			// const updatedQuery = {
+			// 	...router.query,
+			// 	filter: filter,
+			// };
+			// router.push({
+			// 	pathname: router.pathname,
+			// 	query: updatedQuery,
+			// });
 		};
 
 		const clearFilters = () => {
-			setVariables({
-				...variables,
-				filters: isQF ? [EProjectsFilter.ACTIVE_QF_ROUND] : [],
-				campaignSlug: undefined,
+			const updatedQuery = {
+				...router.query,
+				campaign: undefined,
+				filter: undefined,
+			};
+			router.push({
+				pathname: router.pathname,
+				query: updatedQuery,
 			});
-			removeQueryParamAndRedirect(router, ['filter', 'campaign']);
 		};
+
+		console.log('variables', variables);
 
 		return (
 			<MenuContainer className={isOpen ? 'fadeIn' : 'fadeOut'} ref={ref}>
@@ -169,13 +183,14 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 							<CheckBox
 								label='Campaign'
 								onChange={e => {
-									setVariables({
-										...variables,
-										campaignSlug: undefined,
+									const updatedQuery = {
+										...router.query,
+										campaign: undefined,
+									};
+									router.push({
+										pathname: router.pathname,
+										query: updatedQuery,
 									});
-									removeQueryParamAndRedirect(router, [
-										'campaign',
-									]);
 								}}
 								checked={!!variables?.campaignSlug}
 								size={14}
