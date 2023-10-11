@@ -139,6 +139,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	};
 
 	const onStake = async () => {
+		if (!chainId) return;
 		setStakeState(StakeState.WRAPPING);
 		try {
 			const txResponse = await stakeGIV(
