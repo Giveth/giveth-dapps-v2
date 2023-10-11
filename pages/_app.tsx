@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
 import Script from 'next/script';
 import { WagmiConfig } from 'wagmi';
+import { polygon } from 'wagmi/chains';
 import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
@@ -67,16 +68,17 @@ const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!;
 
 const metadata = {
-	name: 'Web3Modal',
-	description: 'Web3Modal Example',
-	url: 'https://web3modal.com',
-	icons: ['https://avatars.githubusercontent.com/u/37784886'],
+	name: 'Giveth',
+	description:
+		'Get rewarded for giving to for-good projects with zero added fees. Donate crypto directly to thousands of for-good projects, nonprofits &amp; charities!',
+	url: 'https://giveth.io',
+	icons: ['https://giveth.io/images/currencies/giv/24.svg'],
 };
 
 const chains = config.CHAINS;
 const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 
-createWeb3Modal({ wagmiConfig, projectId, chains });
+createWeb3Modal({ wagmiConfig, projectId, chains, defaultChain: polygon });
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
