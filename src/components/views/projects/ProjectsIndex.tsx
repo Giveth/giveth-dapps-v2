@@ -79,6 +79,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const isInfiniteScrolling = useRef(true);
 	const { isTablet, isMobile } = useDetectDevice();
 
+	router?.events?.on('routeChangeStart', () => setIsLoading(true));
+
 	const fetchProjects = useCallback(
 		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
 			const variables: IQueries = {
