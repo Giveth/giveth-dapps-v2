@@ -61,6 +61,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const campaignCount = variables?.campaignSlug ? 1 : 0;
 		const count = filtersCount + campaignCount;
 		const router = useRouter();
+		console.log('variables', variables);
 
 		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
 			let updatedQuery;
@@ -73,10 +74,6 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 							: [router.query.filter, filter]
 						: [filter],
 				};
-				router.push({
-					pathname: router.pathname,
-					query: updatedQuery,
-				});
 			} else {
 				updatedQuery = {
 					...router.query,
@@ -105,8 +102,6 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 				query: updatedQuery,
 			});
 		};
-
-		console.log('variables', variables, router.query);
 
 		return (
 			<MenuContainer className={isOpen ? 'fadeIn' : 'fadeOut'} ref={ref}>
