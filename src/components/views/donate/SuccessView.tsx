@@ -9,7 +9,7 @@ import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
-import { useChainId } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import links from '@/lib/constants/links';
 import SocialBox from '@/components/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
@@ -41,7 +41,7 @@ const SuccessView: FC = () => {
 		info: { passportState },
 	} = usePassport();
 
-	const networkId = useChainId();
+	const networkId = useNetwork();
 
 	const message = hasMultipleTxs ? (
 		<>
