@@ -10,7 +10,6 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import { useChainId } from 'wagmi';
 import { isAddress } from 'viem';
 import { compareAddresses } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
@@ -40,7 +39,8 @@ const WalletAddressInput: FC<IProps> = ({
 	const [resolvedENS, setResolvedENS] = useState<`0x${string}` | undefined>();
 
 	const { getValues, setValue } = useFormContext();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	const user = useAppSelector(state => state.user?.userData);
 
