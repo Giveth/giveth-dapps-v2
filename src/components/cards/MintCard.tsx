@@ -13,7 +13,7 @@ import styled from 'styled-components';
 import { useChainId, useAccount, useSwitchNetwork } from 'wagmi';
 import { getContract } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { MintModal } from '../modals/MintModal';
 import { Flex } from '../styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
@@ -44,7 +44,7 @@ export const MintCard = () => {
 	const { address } = useAccount();
 	const { switchNetwork } = useSwitchNetwork();
 	const { formatMessage } = useIntl();
-	const { openConnectModal } = useConnectModal();
+	const { open: openConnectModal } = useWeb3Modal();
 	const { setQty, isEligible, setIsEligible } = usePFPMintData();
 	let mintLeft = '-';
 	if (pfpData && balance !== undefined) {
