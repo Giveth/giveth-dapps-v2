@@ -144,6 +144,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	};
 
 	const onStake = async () => {
+		if (!chainId) return;
 		setStakeState(StakeState.STAKING);
 		try {
 			const txResponse = await stakeTokens(
