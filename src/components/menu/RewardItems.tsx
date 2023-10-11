@@ -8,7 +8,7 @@ import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useChainId } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import { Flex } from '../styled-components/Flex';
 import config from '@/configuration';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
@@ -54,7 +54,8 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
 
 	const sdh = new SubgraphDataHelper(currentValues);
