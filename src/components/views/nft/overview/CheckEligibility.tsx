@@ -9,7 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
-import { Address, useChainId, useSwitchNetwork } from 'wagmi';
+import { Address, useSwitchNetwork } from 'wagmi';
 import { getContract } from 'wagmi/actions';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
@@ -23,7 +23,8 @@ const CheckEligibility = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [status, setStatus] = useState<boolean | undefined>();
 
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { switchNetwork } = useSwitchNetwork();
 
 	const onAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
