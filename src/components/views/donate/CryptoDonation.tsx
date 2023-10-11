@@ -14,7 +14,7 @@ import { captureException } from '@sentry/nextjs';
 import { formatUnits, parseUnits } from 'viem';
 
 import { getContract } from 'wagmi/actions';
-import { erc20ABI, useAccount, useBalance, useChainId } from 'wagmi';
+import { erc20ABI, useAccount, useBalance, useNetwork } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
@@ -64,7 +64,7 @@ interface IInputBox {
 
 const CryptoDonation: FC = () => {
 	const { address, isConnected } = useAccount();
-	const networkId = useChainId();
+	const { chain } = useNetwork();
 	const { formatMessage } = useIntl();
 	const { isEnabled, isSignedIn } = useAppSelector(state => state.user);
 	const notFormattedBalance = useBalance({ address });
@@ -116,9 +116,10 @@ const CryptoDonation: FC = () => {
 	const projectIsGivBackEligible = !!verified;
 	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
 	const activeRound = getActiveRound(project.qfRounds);
+	const networkId = chain?.id;
 
 	const isOnEligibleNetworks =
-		activeRound?.eligibleNetworks?.includes(networkId);
+		networkId && activeRound?.eligibleNetworks?.includes(networkId);
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {

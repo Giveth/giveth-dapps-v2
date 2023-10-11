@@ -10,7 +10,7 @@ import {
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import dynamic from 'next/dynamic';
-import { useChainId } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from '../../DonateSocialBox';
@@ -95,7 +95,8 @@ const DonateIndex: FC = () => {
 };
 
 const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	return (
 		<TxLink>
 			<span>Donation to {title + ' '}</span>

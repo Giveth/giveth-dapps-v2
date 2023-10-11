@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
-import { useChainId } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import Divider from '@/components/Divider';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -49,8 +49,10 @@ const EstimatedMatchingToast = ({
 		estimatedMatching || {};
 	const [tokenPrice, setTokenPrice] = useState<number>();
 
-	const chainId = useChainId();
+	const { chain } = useNetwork();
 	const givPrice = useAppSelector(state => state.price.givPrice);
+
+	const chainId = chain?.id;
 	const givTokenPrice = new BigNumber(givPrice).toNumber();
 	const isMainnet = chainId === config.MAINNET_NETWORK_NUMBER;
 	const isGnosis = chainId === config.GNOSIS_NETWORK_NUMBER;
