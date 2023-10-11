@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { useChainId } from 'wagmi';
 import config from '@/configuration';
 import ClaimCard from '@/components/views/claim/cards/Claim';
 import { CongratulationsCard } from '@/components/views/claim/cards/Congratulations';
@@ -92,7 +91,8 @@ export interface IClaimViewCardProps {
 
 const ClaimView = () => {
 	const { giveDropState, step, setStep } = useClaim();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	return (
 		<>
