@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import dynamic from 'next/dynamic';
+import { useNetwork } from 'wagmi';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from '../../DonateSocialBox';

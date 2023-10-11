@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { H2, Lead } from '@giveth/ui-design-system';
-import { useAccount, useConnect } from 'wagmi';
+import { useAccount, useConnect, useNetwork } from 'wagmi';
 import { WriteContractReturnType } from 'viem';
 import { Button } from '../../../styled-components/Button';
 import { Flex } from '../../../styled-components/Flex';

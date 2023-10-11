@@ -41,7 +41,8 @@ const SuccessView: FC = () => {
 		info: { passportState },
 	} = usePassport();
 
-	const networkId = useNetwork();
+	const { chain } = useNetwork();
+	const networkId = chain?.id;
 
 	const message = hasMultipleTxs ? (
 		<>
@@ -61,7 +62,7 @@ const SuccessView: FC = () => {
 	const activeRound = getActiveRound(project.qfRounds);
 
 	const isOnEligibleNetworks =
-		activeRound?.eligibleNetworks?.includes(networkId);
+		networkId && activeRound?.eligibleNetworks?.includes(networkId);
 
 	useEffect(() => {
 		client

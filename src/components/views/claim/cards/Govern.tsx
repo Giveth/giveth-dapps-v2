@@ -6,6 +6,7 @@ import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import { formatEther } from 'viem';
+import { useNetwork } from 'wagmi';
 import {
 	APRRow,
 	ArrowButton,
@@ -151,6 +152,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	);
 
 	useEffect(() => {
+		if (!chainId) return;
 		const cb = () => {
 			getGivStakingAPR(
 				config.GNOSIS_NETWORK_NUMBER,

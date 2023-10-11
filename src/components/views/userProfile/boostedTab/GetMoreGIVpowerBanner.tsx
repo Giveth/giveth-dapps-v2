@@ -9,6 +9,7 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { useNetwork } from 'wagmi';
 import { Flex } from '@/components/styled-components/Flex';
 import { getGIVConfig, getGIVpowerLink } from '@/helpers/givpower';
 

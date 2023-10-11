@@ -11,6 +11,7 @@ import {
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { isAddress } from 'viem';
+import { useNetwork } from 'wagmi';
 import { compareAddresses } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import Input, { InputSize } from '@/components/Input';

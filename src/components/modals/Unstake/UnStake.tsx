@@ -91,6 +91,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 		: stakedAmount;
 
 	const onWithdraw = async () => {
+		if (!chainId) return;
 		setUnstakeState(StakeState.UNSTAKING);
 
 		const GARDEN_ADDRESS = poolStakingConfig.GARDEN_ADDRESS;
