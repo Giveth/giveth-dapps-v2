@@ -25,8 +25,8 @@ const ProjectsFiltersButton = () => {
 		filterMenuRef,
 	);
 
-	const handleFilterClose = (e: MouseEvent<HTMLElement>) => {
-		e.stopPropagation && e.stopPropagation();
+	const handleFilterClose = (e?: MouseEvent<HTMLElement>) => {
+		e?.stopPropagation && e?.stopPropagation();
 		setIsFilterOpen(false);
 	};
 
