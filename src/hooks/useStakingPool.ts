@@ -45,7 +45,7 @@ export const useStakingPool = (
 			if (isLoaded) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_GARDEN_LM ||
-						type === StakingType.GIV_UNIPOOL_LM
+					type === StakingType.GIV_UNIPOOL_LM
 						? getGivStakingAPR(network, currentValues, network)
 						: getLPStakingAPR(poolStakingConfig, currentValues);
 				promise
