@@ -91,6 +91,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 				pathname: router.pathname,
 				query: updatedQuery,
 			});
+			handleClose();
 		};
 
 		const clearFilters = () => {
