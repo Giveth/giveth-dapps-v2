@@ -10,6 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
+import { useNetwork } from 'wagmi';
 import config from '@/configuration';
 import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
