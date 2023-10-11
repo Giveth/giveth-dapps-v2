@@ -51,7 +51,7 @@ const DonateIndex: FC = () => {
 						<IconDonation24 />
 						<SublineBold>
 							{formatMessage({
-								id: 'label.already_donated_donate_once_more',
+								id: 'component.already_donated.incorrect_estimate',
 							})}
 						</SublineBold>
 					</AlreadyDonatedWrapper>
