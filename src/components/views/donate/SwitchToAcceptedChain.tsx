@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { Caption } from '@giveth/ui-design-system';
-import { useChainId, useSwitchNetwork } from 'wagmi';
+import { useSwitchNetwork } from 'wagmi';
 import { getNetworkNames } from '@/components/views/donate/helpers';
 import {
 	NetworkToast,
@@ -11,7 +11,8 @@ import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
 
 const SwitchToAcceptedChain: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
 	const { formatMessage } = useIntl();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { switchNetwork } = useSwitchNetwork();
 
 	if (!chainId || !acceptedChains || acceptedChains?.includes(chainId)) {
