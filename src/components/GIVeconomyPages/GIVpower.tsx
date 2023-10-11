@@ -14,6 +14,7 @@ import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { Col, Row } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Flex } from '../styled-components/Flex';
 import {
 	GIVpowerTopContainer,
@@ -57,9 +58,8 @@ import RocketImage from '../../../public/images/rocket.svg';
 import Growth from '../../../public/images/growth.svg';
 import GivStake from '../../../public/images/giv_stake.svg';
 import Routes from '@/lib/constants/Routes';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { formatWeiHelper } from '@/helpers/number';
 import links from '@/lib/constants/links';
 import { getTotalGIVpower } from '@/helpers/givpower';
@@ -67,11 +67,11 @@ import { getTotalGIVpower } from '@/helpers/givpower';
 export function TabPowerTop() {
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
+	const { openConnectModal } = useConnectModal();
 	const values = useAppSelector(state => state.subgraph);
 	const givPower = getTotalGIVpower(values);
 	const givPowerFormatted = formatWeiHelper(givPower.total);
 	const hasZeroGivPower = givPowerFormatted === '0';
-	const dispatch = useAppDispatch();
 
 	return (
 		<GIVpowerTopContainer>
@@ -159,9 +159,7 @@ export function TabPowerTop() {
 										})}
 										buttonType='primary'
 										size='small'
-										onClick={() =>
-											dispatch(setShowWalletModal(true))
-										}
+										onClick={() => openConnectModal?.()}
 									/>
 								</ConnectWallet>
 							)}
