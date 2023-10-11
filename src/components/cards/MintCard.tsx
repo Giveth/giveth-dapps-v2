@@ -10,7 +10,7 @@ import {
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { useChainId, useAccount, useSwitchNetwork } from 'wagmi';
+import { useAccount, useSwitchNetwork, useNetwork } from 'wagmi';
 import { getContract } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
@@ -40,7 +40,8 @@ export const MintCard = () => {
 	const [pfpData, setPfpData] = useState<IpfpContractData>();
 	const [balance, setBalance] = useState<number>();
 
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { address } = useAccount();
 	const { switchNetwork } = useSwitchNetwork();
 	const { formatMessage } = useIntl();
