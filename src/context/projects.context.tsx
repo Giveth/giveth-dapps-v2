@@ -34,11 +34,6 @@ const variablesDefaultValue = {
 	filters: undefined,
 };
 
-const variablesDefaultValueWithQF = {
-	sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
-	filters: [EProjectsFilter.ACTIVE_QF_ROUND],
-};
-
 const ProjectsContext = createContext<IProjectsContext>({
 	variables: variablesDefaultValue,
 	mainCategories: [],
