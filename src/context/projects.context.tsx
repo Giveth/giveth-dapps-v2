@@ -63,11 +63,6 @@ export const ProjectsProvider = (props: {
 	const sortValue = router.query.sort as string;
 	if (sortValue) sort = sortMap[sortValue.toLowerCase()];
 
-	// if (_isQF) {
-	// 	filters
-	// 		? filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
-	// 		: (filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
-	// }
 	let filters: EProjectsFilter[] | undefined;
 	if (router.query.filter) {
 		filters = (
@@ -76,12 +71,15 @@ export const ProjectsProvider = (props: {
 				: [router.query.filter]
 		) as EProjectsFilter[];
 	}
+	if (_isQF) {
+		filters
+			? filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
+			: (filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
+	}
 
 	let searchTerm = router.query.searchTerm as string;
 	let campaignSlug = router.query.campaign as string;
 	let category = router.query.category as string;
-
-	console.log('router.query', router.query);
 
 	return (
 		<ProjectsContext.Provider
