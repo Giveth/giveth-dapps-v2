@@ -4,7 +4,7 @@ import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { jointItems } from '@/helpers/text';
 import SwitchNetwork from './SwitchNetwork';
@@ -23,7 +23,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 
 	const { address } = useAccount();
 	const { formatMessage } = useIntl();
-	const { openConnectModal } = useConnectModal();
+	const { open: openConnectModal } = useWeb3Modal();
 
 	const chainNames = targetNetworks.map(network => chainNameById(network));
 
