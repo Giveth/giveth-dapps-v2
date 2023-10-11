@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { useAppDispatch } from '@/features/hooks';
 import config from '@/configuration';
 import {
@@ -10,7 +10,8 @@ import {
 const SubgraphController = () => {
 	const dispatch = useAppDispatch();
 
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { address } = useAccount();
 
 	useEffect(() => {
