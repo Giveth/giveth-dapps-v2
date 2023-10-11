@@ -93,16 +93,16 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const clearFilters = () => {
 			const updatedQuery = {
 				...router.query,
-				campaign: undefined,
-				filter: undefined,
 			};
+			delete updatedQuery.filter;
+			delete updatedQuery.campaign;
 			router.push({
 				pathname: router.pathname,
 				query: updatedQuery,
 			});
 		};
 
-		console.log('variables', variables);
+		console.log('variables', variables, router.query);
 
 		return (
 			<MenuContainer className={isOpen ? 'fadeIn' : 'fadeOut'} ref={ref}>
