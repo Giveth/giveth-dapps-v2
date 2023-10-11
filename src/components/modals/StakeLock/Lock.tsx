@@ -77,6 +77,7 @@ const LockModal: FC<ILockModalProps> = ({
 		: stakedLpAmount;
 
 	const onLock = async () => {
+		if (!chainId) return;
 		const contractAddress =
 			config.NETWORKS_CONFIG[poolNetwork].GIVPOWER?.LM_ADDRESS;
 		if (!contractAddress) {
