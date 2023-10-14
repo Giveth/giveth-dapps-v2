@@ -35,6 +35,7 @@ const _options = [
 	{ network: config.MAINNET_CONFIG, active: true },
 	{ network: config.GNOSIS_CONFIG, active: true },
 	{ network: config.OPTIMISM_CONFIG, active: true },
+	{ network: config.CLASSIC_CONFIG, active: true },
 	{ network: config.CELO_CONFIG, active: false },
 ];
 
