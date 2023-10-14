@@ -41,7 +41,7 @@ const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
-const MORDOR_NETWORK_NUMBER = 63;
+const CLASSIC_NETWORK_NUMBER = 63;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -73,7 +73,7 @@ const config: EnvConfig = {
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
-	MORDOR_NETWORK_NUMBER: MORDOR_NETWORK_NUMBER,
+	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
 
@@ -332,7 +332,7 @@ const config: EnvConfig = {
 		chainLogo: (logoSize?: number) => <IconCelo size={logoSize} />,
 	},
 
-	MORDOR_CONFIG: {
+	CLASSIC_CONFIG: {
 		id: 63,
 		name: 'Ethereum Classic Mordor',
 		network: 'mordor',
