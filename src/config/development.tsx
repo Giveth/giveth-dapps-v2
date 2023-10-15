@@ -43,7 +43,7 @@ const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
 
-const CLASSIC_CONFIG = {
+const classic = {
 	id: 63,
 	name: 'Ethereum Classic Mordor',
 	network: 'mordor',
@@ -75,14 +75,7 @@ const config: EnvConfig = {
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
 
-	CHAINS: [
-		goerli,
-		gnosis,
-		polygon,
-		optimismGoerli,
-		celoAlfajores,
-		CLASSIC_CONFIG,
-	],
+	CHAINS: [goerli, gnosis, polygon, optimismGoerli, celoAlfajores, classic],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
@@ -348,7 +341,7 @@ const config: EnvConfig = {
 	},
 
 	CLASSIC_CONFIG: {
-		...CLASSIC_CONFIG,
+		...classic,
 		//TODO: should change the icon
 		chainLogo: (logoSize?: number) => <IconCelo size={logoSize} />,
 		coingeckoChainName: 'ethereum-classic',
