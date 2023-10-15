@@ -524,6 +524,11 @@ export const stakeGIV = async (
 			abi: UNIPOOL_GIVPOWER_ABI,
 			functionName: 'stake',
 			args: [amount],
+			maxFeePerGas:
+				config.NETWORKS_CONFIG[chainId].gasPreference.maxFeePerGas,
+			maxPriorityFeePerGas:
+				config.NETWORKS_CONFIG[chainId].gasPreference
+					.maxPriorityFeePerGas,
 		});
 	} catch (error) {
 		console.log('Error on stake token:', error);
