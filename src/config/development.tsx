@@ -43,6 +43,28 @@ const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
 
+const CLASSIC_CONFIG = {
+	id: 63,
+	name: 'Ethereum Classic Mordor',
+	network: 'mordor',
+	nativeCurrency: {
+		decimals: 18,
+		name: 'ETC',
+		symbol: 'ETC',
+	},
+	rpcUrls: {
+		default: { http: ['https://mordor-rpc.ethercluster.com'] },
+		public: { http: ['https://mordor-rpc.ethercluster.com'] },
+	},
+	blockExplorers: {
+		default: {
+			name: 'Blockscout',
+			url: 'https://etc-mordor.blockscout.com',
+		},
+	},
+	subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
+};
+
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
 	BACKEND_LINK: BACKEND_LINK,
@@ -66,6 +88,9 @@ const config: EnvConfig = {
 			...celoAlfajores,
 			iconUrl: '/images/currencies/celo/16.svg',
 			iconBackground: 'white',
+		},
+		{
+			...CLASSIC_CONFIG,
 		},
 	],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
@@ -333,25 +358,7 @@ const config: EnvConfig = {
 	},
 
 	CLASSIC_CONFIG: {
-		id: 63,
-		name: 'Ethereum Classic Mordor',
-		network: 'mordor',
-		nativeCurrency: {
-			decimals: 18,
-			name: 'ETC',
-			symbol: 'ETC',
-		},
-		rpcUrls: {
-			default: { http: ['https://mordor-rpc.ethercluster.com'] },
-			public: { http: ['https://mordor-rpc.ethercluster.com'] },
-		},
-		blockExplorers: {
-			default: {
-				name: 'Blockscout',
-				url: 'https://etc-mordor.blockscout.com',
-			},
-		},
-		subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
+		...CLASSIC_CONFIG,
 		//TODO: should change the icon
 		chainLogo: (logoSize?: number) => <IconCelo size={logoSize} />,
 		coingeckoChainName: 'ethereum-classic',
