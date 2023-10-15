@@ -124,8 +124,8 @@ const config: EnvConfig = {
 	GNOSIS_CONFIG: {
 		...gnosis,
 		gasPreference: {
-			maxFeePerGas: (2e9).toString(),
-			maxPriorityFeePerGas: (1e9).toString(),
+			maxFeePerGas: BigInt(2e9),
+			maxPriorityFeePerGas: BigInt(1e9),
 		},
 
 		subgraphAddress:
