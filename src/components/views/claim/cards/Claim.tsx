@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { H2, Lead } from '@giveth/ui-design-system';
-import { useAccount, useChainId, useConnect } from 'wagmi';
+import { useAccount, useConnect, useNetwork } from 'wagmi';
 import { WriteContractReturnType } from 'viem';
 import { Button } from '../../../styled-components/Button';
 import { Flex } from '../../../styled-components/Flex';
@@ -53,7 +53,8 @@ const AddTokenRow = styled(Flex)`
 
 const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const { totalAmount, step, goPreviousStep, goNextStep } = useClaim();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { isConnected } = useAccount();
 	const { connect } = useConnect();
 

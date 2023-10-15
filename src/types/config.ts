@@ -1,4 +1,4 @@
-import type { Chain } from '@rainbow-me/rainbowkit';
+import type { Chain } from 'wagmi';
 
 export type Address = `0x${string}`;
 

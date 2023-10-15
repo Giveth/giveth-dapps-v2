@@ -8,7 +8,7 @@ import {
 	SetStateAction,
 } from 'react';
 import { Dispatch } from 'react';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import config from '@/configuration';
 import { fetchAirDropClaimData, hasClaimedAirDrop } from '@/lib/claim';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
@@ -60,7 +60,8 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 		GiveDropStateType.notConnected,
 	);
 
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { address, isConnected } = useAccount();
 
 	useEffect(() => {

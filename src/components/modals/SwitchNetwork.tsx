@@ -9,7 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useChainId, useSwitchNetwork } from 'wagmi';
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
@@ -33,7 +33,8 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 	setShowModal,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { switchNetwork } = useSwitchNetwork();
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);

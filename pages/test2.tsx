@@ -1,6 +1,5 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useEffect } from 'react';
-import { erc20ABI, useAccount, useChainId, useContractRead } from 'wagmi';
+import { erc20ABI, useAccount, useContractRead, useNetwork } from 'wagmi';
 import { getContract } from 'wagmi/actions';
 import { formatWeiHelper } from '@/helpers/number';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
@@ -8,7 +7,8 @@ import config from '@/configuration';
 
 const YourApp = () => {
 	const { address, isConnected, status } = useAccount();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	// console.log('address', address, isConnected, status, chainId);
 	const { data } = useContractRead({
 		address: '0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
@@ -33,10 +33,11 @@ const YourApp = () => {
 
 	return (
 		<div>
-			<ConnectButton />
+			<w3m-button />
 			<div>
 				<button
-					onClick={() =>
+					onClick={() => {
+						if (!chainId) return;
 						approveERC20tokenTransfer(
 							1000000000000000000n,
 							address!,
@@ -44,8 +45,8 @@ const YourApp = () => {
 								?.LM_ADDRESS!,
 							config.NETWORKS_CONFIG[chainId].GIV_TOKEN_ADDRESS!,
 							chainId,
-						)
-					}
+						);
+					}}
 				>
 					FUck This Approval stuffs
 				</button>

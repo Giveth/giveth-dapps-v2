@@ -10,8 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
 import { captureException } from '@sentry/nextjs';
-
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import ShareModalAndGetReward from '../modals/ShareRewardedModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { isSSRMode, showToastError } from '@/lib/helpers';
@@ -48,7 +47,7 @@ const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
 		isEnabled,
 	} = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
-	const { openConnectModal } = useConnectModal();
+	const { open: openConnectModal } = useWeb3Modal();
 
 	useEffect(() => {
 		setReaction(project.reaction);

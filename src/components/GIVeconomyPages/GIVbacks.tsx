@@ -8,7 +8,7 @@ import {
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { Col, Container, Row } from '@giveth/ui-design-system';
-import { useChainId } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import { Flex } from '../styled-components/Flex';
 import {
 	GIVbacksTopContainer,
@@ -49,7 +49,8 @@ export const TabGIVbacksTop = () => {
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
 	const [givBackStream, setGivBackStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showHarvestModal);
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const values = useAppSelector(
 		state =>
 			chainId === config.OPTIMISM_NETWORK_NUMBER

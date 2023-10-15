@@ -8,7 +8,7 @@ import {
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import FarmCountDown from '@/components/FarmCountDown';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { FlexCenter, Flex } from '@/components/styled-components/Flex';
@@ -104,7 +104,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		earned,
 	} = useStakingPool(poolStakingConfig, hold);
 	const { address, isConnected: isWalletActive } = useAccount();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 	const {
