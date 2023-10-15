@@ -495,6 +495,11 @@ export const wrapToken = async (
 			abi: TOKEN_MANAGER_ABI,
 			functionName: 'wrap',
 			args: [amount],
+			maxFeePerGas:
+				config.NETWORKS_CONFIG[chainId].gasPreference.maxFeePerGas,
+			maxPriorityFeePerGas:
+				config.NETWORKS_CONFIG[chainId].gasPreference
+					.maxPriorityFeePerGas,
 		});
 	} catch (error) {
 		console.log('Error on wrapping token:', error);
