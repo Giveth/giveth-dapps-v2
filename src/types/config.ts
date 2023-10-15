@@ -93,8 +93,8 @@ export interface RegenPoolStakingConfig extends SimplePoolStakingConfig {
 }
 
 export interface GasPreference {
-	maxFeePerGas?: string;
-	maxPriorityFeePerGas?: string;
+	maxFeePerGas?: bigint;
+	maxPriorityFeePerGas?: bigint;
 }
 
 export interface RegenStreamConfig {
