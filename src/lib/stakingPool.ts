@@ -603,6 +603,11 @@ export const stakeTokens = async (
 				abi: LM_ABI,
 				functionName: 'stakeWithPermit',
 				args: [amount, rawPermitCall],
+				maxFeePerGas:
+					config.NETWORKS_CONFIG[chainId].gasPreference.maxFeePerGas,
+				maxPriorityFeePerGas:
+					config.NETWORKS_CONFIG[chainId].gasPreference
+						.maxPriorityFeePerGas,
 			});
 		} else {
 			return await walletClient.writeContract({
@@ -610,6 +615,11 @@ export const stakeTokens = async (
 				abi: LM_ABI,
 				functionName: 'stake',
 				args: [amount],
+				maxFeePerGas:
+					config.NETWORKS_CONFIG[chainId].gasPreference.maxFeePerGas,
+				maxPriorityFeePerGas:
+					config.NETWORKS_CONFIG[chainId].gasPreference
+						.maxPriorityFeePerGas,
 			});
 		}
 	} catch (e) {
