@@ -20,6 +20,7 @@ const config: GlobalConfig = {
 		[envConfig.POLYGON_NETWORK_NUMBER]: envConfig.POLYGON_CONFIG,
 		[envConfig.OPTIMISM_NETWORK_NUMBER]: envConfig.OPTIMISM_CONFIG,
 		[envConfig.CELO_NETWORK_NUMBER]: envConfig.CELO_CONFIG,
+		[envConfig.CLASSIC_NETWORK_NUMBER]: envConfig.CLASSIC_CONFIG,
 	},
 	// Used for adding networks to user wallet, useless since just xDAI is not
 	// included in metamask by default and its rpc endpoint is not infura
