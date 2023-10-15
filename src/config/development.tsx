@@ -77,21 +77,11 @@ const config: EnvConfig = {
 
 	CHAINS: [
 		goerli,
-		{
-			...gnosis,
-			iconUrl: 'https://giveth.io/images/partnerships/Gnosis_Chain.svg',
-			iconBackground: 'white',
-		},
+		gnosis,
 		polygon,
 		optimismGoerli,
-		{
-			...celoAlfajores,
-			iconUrl: '/images/currencies/celo/16.svg',
-			iconBackground: 'white',
-		},
-		{
-			...CLASSIC_CONFIG,
-		},
+		celoAlfajores,
+		CLASSIC_CONFIG,
 	],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,

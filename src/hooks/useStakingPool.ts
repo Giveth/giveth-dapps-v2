@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useChainId } from 'wagmi';
+import { useNetwork } from 'wagmi';
 
 import {
 	getGivStakingAPR,
@@ -28,7 +28,8 @@ export const useStakingPool = (
 		notStakedAmount: 0n,
 		stakedAmount: 0n,
 	});
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	const currentValues = useAppSelector(
 		state => state.subgraph.currentValues,

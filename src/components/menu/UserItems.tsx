@@ -3,8 +3,8 @@ import { useIntl } from 'react-intl';
 import { B, GLink } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
-import { useAccount, useChainId, useDisconnect } from 'wagmi';
-import { useChainModal } from '@rainbow-me/rainbowkit';
+import { useAccount, useDisconnect, useNetwork } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
@@ -37,13 +37,14 @@ export const UserItems: FC<IUserItemsProps> = ({
 
 	const { address } = useAccount();
 	const { disconnect } = useDisconnect();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
 	const theme = useAppSelector(state => state.general.theme);
 
-	const { openChainModal } = useChainModal();
+	const { open: openChainModal } = useWeb3Modal();
 
 	const goRoute = (input: {
 		url: string;

@@ -2,14 +2,15 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { createGlobalStyle, css } from 'styled-components';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useAccount, useChainId, useSwitchNetwork } from 'wagmi';
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 
 const GeneralController = () => {
 	const dispatch = useAppDispatch();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { address, isConnected: isWalletActive } = useAccount();
 	const { switchNetwork } = useSwitchNetwork();
 	const router = useRouter();

@@ -3,8 +3,7 @@ import { useIntl } from 'react-intl';
 import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
-
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ethIcon from '/public/images/tokens/ETH.svg';
@@ -25,7 +24,7 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 	const { formatMessage } = useIntl();
 
-	const { openConnectModal } = useConnectModal();
+	const { open: openConnectModal } = useWeb3Modal();
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 

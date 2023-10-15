@@ -8,23 +8,15 @@ import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
 import Script from 'next/script';
-import { WagmiConfig, configureChains, createConfig } from 'wagmi';
-import { infuraProvider } from 'wagmi/providers/infura';
-
-import {
-	RainbowKitProvider,
-	getDefaultWallets,
-	connectorsForWallets,
-} from '@rainbow-me/rainbowkit';
-
-import { publicProvider } from 'wagmi/providers/public';
-
+import { WagmiConfig } from 'wagmi';
+import { polygon } from 'wagmi/chains';
+import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
-
 import '../styles/globals.css';
 import { ca, en, es } from '../lang';
+import config from '@/configuration';
 import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';
 import UserController from '@/components/controller/user.ctrl';
@@ -38,10 +30,8 @@ import StorageLabel from '@/lib/localStorage';
 import { isGIVeconomyRoute } from '@/lib/helpers';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
-import config from '@/configuration';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
-import '@rainbow-me/rainbowkit/styles.css';
 
 declare global {
 	interface Window {
@@ -75,30 +65,20 @@ function renderSnippet() {
 
 const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
-const { chains, publicClient, webSocketPublicClient } = configureChains(
-	config.CHAINS,
-	[
-		publicProvider(),
-		infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY! }),
-	],
-);
-
 const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!;
 
-const { wallets } = getDefaultWallets({
-	appName: 'giveth-test',
-	projectId: projectId,
-	chains,
-});
+const metadata = {
+	name: 'Giveth',
+	description:
+		'Get rewarded for giving to for-good projects with zero added fees. Donate crypto directly to thousands of for-good projects, nonprofits &amp; charities!',
+	url: 'https://giveth.io',
+	icons: ['https://giveth.io/images/currencies/giv/24.svg'],
+};
 
-const connectors = connectorsForWallets([...wallets]);
+const chains = config.CHAINS;
+const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata });
 
-const wagmiConfig = createConfig({
-	autoConnect: false,
-	connectors,
-	publicClient,
-	webSocketPublicClient,
-});
+createWeb3Modal({ wagmiConfig, projectId, chains, defaultChain: polygon });
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
@@ -149,50 +129,44 @@ function MyApp({ Component, pageProps }: AppProps) {
 				>
 					<ApolloProvider client={apolloClient}>
 						<WagmiConfig config={wagmiConfig}>
-							<RainbowKitProvider
-								chains={chains}
-								initialChain={config.POLYGON_NETWORK_NUMBER}
-							>
-								{isMaintenanceMode ? (
-									<MaintenanceIndex />
-								) : (
-									<>
-										<NotificationController />
-										<GeneralController />
-										<PriceController />
-										<SubgraphController />
-										<UserController />
-										<HeaderWrapper />
-										{isGIVeconomyRoute(router.route) && (
-											<GIVeconomyTab />
-										)}
-										{(pageProps as any).errorStatus ? (
-											<ErrorsIndex
-												statusCode={
-													(pageProps as any)
-														.errorStatus
-												}
-											/>
-										) : (
-											<Component {...pageProps} />
-										)}
-										{process.env.NEXT_PUBLIC_ENV ===
-											'production' && (
-											<Script
-												id='segment-script'
-												strategy='afterInteractive'
-												dangerouslySetInnerHTML={{
-													__html: renderSnippet(),
-												}}
-											/>
-										)}
+							{isMaintenanceMode ? (
+								<MaintenanceIndex />
+							) : (
+								<>
+									<NotificationController />
+									<GeneralController />
+									<PriceController />
+									<SubgraphController />
+									<UserController />
+									<HeaderWrapper />
+									{isGIVeconomyRoute(router.route) && (
+										<GIVeconomyTab />
+									)}
+									{(pageProps as any).errorStatus ? (
+										<ErrorsIndex
+											statusCode={
+												(pageProps as any).errorStatus
+											}
+										/>
+									) : (
+										<Component {...pageProps} />
+									)}
+									{process.env.NEXT_PUBLIC_ENV ===
+										'production' && (
+										<Script
+											id='segment-script'
+											strategy='afterInteractive'
+											dangerouslySetInnerHTML={{
+												__html: renderSnippet(),
+											}}
+										/>
+									)}
 
-										<FooterWrapper />
-										<ModalController />
-										<PfpController />
-									</>
-								)}
-							</RainbowKitProvider>
+									<FooterWrapper />
+									<ModalController />
+									<PfpController />
+								</>
+							)}
 						</WagmiConfig>
 					</ApolloProvider>
 				</IntlProvider>

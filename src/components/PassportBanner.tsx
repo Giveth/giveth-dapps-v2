@@ -14,7 +14,7 @@ import {
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex } from './styled-components/Flex';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import Routes from '@/lib/constants/Routes';
@@ -124,7 +124,7 @@ export const PassportBanner = () => {
 	const { passportState, currentRound } = info;
 
 	const { formatMessage, locale } = useIntl();
-	const { openConnectModal } = useConnectModal();
+	const { open: openConnectModal } = useWeb3Modal();
 
 	return (
 		<PassportBannerWrapper bgColor={PassportBannerData[passportState].bg}>

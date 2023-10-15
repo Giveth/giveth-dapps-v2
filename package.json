@@ -19,11 +19,11 @@
 	"dependencies": {
 		"@apollo/client": "^3.8.3",
 		"@giveth/ui-design-system": "^1.11.16",
-		"@rainbow-me/rainbowkit": "^1.0.11",
 		"@reduxjs/toolkit": "^1.9.5",
 		"@segment/snippet": "^4.15.3",
 		"@sentry/nextjs": "^7.69.0",
 		"@uniswap/v3-sdk": "^3.10.0",
+		"@web3modal/wagmi": "^3.0.2",
 		"apollo-upload-client": "^17.0.0",
 		"bignumber.js": "^9.1.2",
 		"deepmerge": "^4.2.2",
@@ -58,7 +58,7 @@
 		"styled-components": "^5.3.6",
 		"swiper": "^10.2.0",
 		"unsplash-js": "^7.0.15",
-		"viem": "^1.10.14",
+		"viem": "^1.14.0",
 		"wagmi": "^1.4.2"
 	},
 	"devDependencies": {
@@ -92,7 +92,7 @@
 		"eslint-import-resolver-typescript": "^3.6.0",
 		"eslint-plugin-cypress": "^2.14.0",
 		"eslint-plugin-import": "^2.28.1",
-		"eslint-plugin-prettier": "^5.0.0",
+		"eslint-plugin-prettier": "^5.0.1",
 		"eslint-plugin-unused-imports": "^3.0.0",
 		"jest": "^28.1.2",
 		"jest-axe": "^6.0.0",

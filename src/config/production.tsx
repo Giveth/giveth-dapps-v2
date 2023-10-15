@@ -47,26 +47,7 @@ const config: EnvConfig = {
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
-	CHAINS: [
-		mainnet,
-		{
-			...gnosis,
-			iconUrl: 'https://giveth.io/images/partnerships/Gnosis_Chain.svg',
-			iconBackground: 'white',
-		},
-		polygon,
-		optimism,
-		{
-			...celo,
-			iconUrl: 'https://giveth.io/images/currencies/celo/16.svg',
-			iconBackground: 'white',
-		},
-		{
-			...classic,
-			iconUrl: 'https://giveth.io/images/currencies/classic/16.svg',
-			iconBackground: 'white',
-		},
-	],
+	CHAINS: [mainnet, gnosis, polygon, optimism, celo, classic],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,

@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { H4, B, brandColors, Caption } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useChainId, useSwitchNetwork } from 'wagmi';
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { mediaQueries } from '@/lib/constants/constants';
 import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
@@ -21,7 +21,8 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 	setShowModal,
 	targetNetwork,
 }) => {
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const theme = useAppSelector(state => state.general.theme);
 
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);

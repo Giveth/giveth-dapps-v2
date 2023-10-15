@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { P } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { waitForTransaction } from 'wagmi/actions';
 import { Modal } from '../Modal';
 import { StakingPoolImages } from '../../StakingPoolImages';
@@ -71,7 +71,8 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { address } = useAccount();
 	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
 
@@ -143,6 +144,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	};
 
 	const onStake = async () => {
+		if (!chainId) return;
 		setStakeState(StakeState.STAKING);
 		try {
 			const txResponse = await stakeTokens(

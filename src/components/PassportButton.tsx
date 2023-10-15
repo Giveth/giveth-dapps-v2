@@ -7,7 +7,7 @@ import {
 import React, { FC } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { EPassportState } from '@/hooks/usePassport';
 import { FlexCenter } from './styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
@@ -26,10 +26,10 @@ export const PassportButton: FC<IButtonProps> = ({
 	className,
 }) => {
 	const { formatMessage } = useIntl();
+	const { open: openConnectModal } = useWeb3Modal();
 
-	const { openConnectModal } = useConnectModal();
 	return state === EPassportState.NOT_CONNECTED ? (
-		<Button onClick={openConnectModal} className={className}>
+		<Button onClick={() => openConnectModal()} className={className}>
 			<FlexCenter gap='8px'>
 				<IconPassport16 />
 				<ButtonText>

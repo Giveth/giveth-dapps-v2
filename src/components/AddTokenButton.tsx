@@ -8,7 +8,7 @@ import { Address } from '@/types/config';
 import { addToken } from '@/lib/metamask';
 
 interface IAddGIVTokenButton {
-	chainId: number;
+	chainId?: number;
 	showText?: boolean;
 	tokenSymbol?: string;
 	tokenAddress?: Address;

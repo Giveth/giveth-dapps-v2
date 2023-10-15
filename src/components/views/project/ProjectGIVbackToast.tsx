@@ -15,7 +15,7 @@ import {
 import { useIntl } from 'react-intl';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
@@ -38,7 +38,7 @@ const ProjectGIVbackToast = () => {
 		? semanticColors.golden[600]
 		: neutralColors.gray[900];
 	const { formatMessage, locale } = useIntl();
-	const { openConnectModal } = useConnectModal();
+	const { open: openConnectModal } = useWeb3Modal();
 	const {
 		isEnabled,
 		isSignedIn,

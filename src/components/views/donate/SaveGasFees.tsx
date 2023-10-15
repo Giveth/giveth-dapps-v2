@@ -2,7 +2,7 @@ import { Caption, IconGasStation } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { useChainId } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import config from '@/configuration';
 import { Flex } from '@/components/styled-components/Flex';
 import {
@@ -14,7 +14,8 @@ import SwitchNetwork from '@/components/modals/SwitchNetwork';
 
 const SaveGasFees: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
 	const [showModal, setShowModal] = useState(false);
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { formatMessage } = useIntl();
 
 	if (

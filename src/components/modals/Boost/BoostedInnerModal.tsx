@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import React from 'react';
-import { useChainId } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { ConfettiContainer, BoostedTitle } from './BoostModal.sc';
 import Routes from '@/lib/constants/Routes';
@@ -25,7 +25,8 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 }) => {
 	const { isMobile } = useDetectDevice();
 	const { formatMessage } = useIntl();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	return (
 		<div>
