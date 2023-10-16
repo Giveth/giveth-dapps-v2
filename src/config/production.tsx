@@ -1,4 +1,5 @@
 import { celo, gnosis, mainnet, optimism, polygon } from 'wagmi/chains';
+import { parseGwei } from 'viem';
 import {
 	EnvConfig,
 	StakingPlatform,
@@ -225,8 +226,8 @@ const config: EnvConfig = {
 	GNOSIS_CONFIG: {
 		...gnosis,
 		gasPreference: {
-			maxFeePerGas: BigInt(2e9),
-			maxPriorityFeePerGas: BigInt(1e9),
+			maxFeePerGas: parseGwei('20'),
+			maxPriorityFeePerGas: parseGwei('2'),
 		},
 
 		subgraphAddress:
