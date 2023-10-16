@@ -256,7 +256,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 										}
 										disabled={
 											amount === 0n ||
-											maxAmount <= amount ||
+											maxAmount < amount ||
 											stakeState === StakeState.WRAPPING
 										}
 										loading={
