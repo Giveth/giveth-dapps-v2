@@ -52,7 +52,7 @@ const config: EnvConfig = {
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
 
-	CHAINS: [goerli, gnosis, polygon, optimismGoerli, celoAlfajores],
+	CHAINS: [polygon, goerli, gnosis, optimismGoerli, celoAlfajores],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
