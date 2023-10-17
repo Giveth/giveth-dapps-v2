@@ -53,8 +53,8 @@ const classic = {
 		symbol: 'ETC',
 	},
 	rpcUrls: {
-		default: { http: ['https://mordor-rpc.ethercluster.com'] },
-		public: { http: ['https://mordor-rpc.ethercluster.com'] },
+		default: { http: ['https://rpc.mordor.etccooperative.org'] },
+		public: { http: ['https://rpc.mordor.etccooperative.org'] },
 	},
 	blockExplorers: {
 		default: {
