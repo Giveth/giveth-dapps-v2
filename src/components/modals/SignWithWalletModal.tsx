@@ -11,6 +11,7 @@ import {
 import { useRouter } from 'next/router';
 
 import { useAccount, useConnect, useChainId } from 'wagmi';
+import { disconnect } from '@wagmi/core';
 import { Modal } from '@/components/modals/Modal';
 import { ETheme } from '@/features/general/general.slice';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -20,18 +21,25 @@ import { signToGetToken } from '@/features/user/user.thunks';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { EModalEvents } from '@/hooks/useModalCallback';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 interface IProps extends IModal {
 	callback?: () => void;
+	isGSafeConnector?: boolean;
 }
 
-export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
+export const SignWithWalletModal: FC<IProps> = ({
+	setShowModal,
+	isGSafeConnector,
+	callback,
+}) => {
 	const [loading, setLoading] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
 
 	const { address } = useAccount();
 	const { connectors } = useConnect();
+	const { openConnectModal } = useConnectModal();
 	const chainId = useChainId();
 	const router = useRouter();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -41,18 +49,24 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerIcon={<IconWalletApprove32 />}
-			headerTitle={formatMessage({ id: 'label.sign_wallet' })}
+			headerTitle={formatMessage({
+				id: isGSafeConnector ? 'Sign Gnosis Safe' : 'label.sign_wallet',
+			})}
 			headerTitlePosition='left'
 		>
 			<Container>
 				<Description>
 					{formatMessage({
-						id: 'label.you_need_to_authorize_your_wallet',
+						id: isGSafeConnector
+							? 'All wallet owners should sign the login message to continue.'
+							: 'label.you_need_to_authorize_your_wallet',
 					})}
 				</Description>
 				<NoteDescription color='red'>
 					{formatMessage({
-						id: 'label.note:this_is_necessary_to_donate_to_projects_or_receive_funding',
+						id: isGSafeConnector
+							? 'This is necessary to be able to donate to projects or receive funding.'
+							: 'label.note:this_is_necessary_to_donate_to_projects_or_receive_funding',
 					})}
 				</NoteDescription>
 				<OkButton
@@ -70,6 +84,7 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 								chainId,
 								pathname: router.pathname,
 								connectors,
+								isGSafeConnector,
 							}),
 						);
 						setLoading(false);

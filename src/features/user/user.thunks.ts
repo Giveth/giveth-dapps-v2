@@ -38,15 +38,14 @@ export const fetchUserByAddress = createAsyncThunk(
 export const signToGetToken = createAsyncThunk(
 	'user/signToGetToken',
 	async (
-		{ address, chainId, connectors }: ISignToGetToken,
+		{ address, chainId, connectors, isGSafeConnector }: ISignToGetToken,
 		{ getState, dispatch },
 	) => {
 		try {
-			const isSAFE = true;
+			const isSAFE = isGSafeConnector;
 			let safeAddress = '';
 			let siweMessage,
 				safeMessage: any = null;
-
 			if (isSAFE) {
 				safeAddress = address!;
 				await connect({ chainId, connector: new MetaMaskConnector() });

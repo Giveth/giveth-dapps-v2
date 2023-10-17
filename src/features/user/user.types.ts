@@ -3,6 +3,7 @@ export interface ISignToGetToken {
 	chainId?: number;
 	pathname?: string;
 	connectors?: any; // TODO: CHANGE THIS
+	isGSafeConnector?: boolean;
 }
 
 export interface IChainvineSetReferral {
