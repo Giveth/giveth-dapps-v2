@@ -448,6 +448,8 @@ export const approveERC20tokenTransfer = async (
 		ownerAddress,
 		spenderAddress,
 	]);
+	console.log('allowance', allowance);
+	console.log('amount', amount);
 
 	if (amount <= allowance) return true;
 
@@ -455,6 +457,7 @@ export const approveERC20tokenTransfer = async (
 		const walletClient = await getWalletClient({ chainId });
 
 		if (allowance > 0n) {
+			console.log('allowance is bigger than zero');
 			await walletClient?.writeContract({
 				address: tokenAddress,
 				abi: erc20ABI,
