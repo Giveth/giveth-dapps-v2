@@ -50,8 +50,8 @@ const classic = {
 	network: 'mordor',
 	nativeCurrency: {
 		decimals: 18,
-		name: 'ETC',
-		symbol: 'ETC',
+		name: 'mETC',
+		symbol: 'mETC',
 	},
 	rpcUrls: {
 		default: { http: ['https://rpc.mordor.etccooperative.org'] },
