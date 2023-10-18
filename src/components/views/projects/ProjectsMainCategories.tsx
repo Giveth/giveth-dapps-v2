@@ -6,9 +6,9 @@ import { Navigation } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
 import { IMainCategory } from '@/apollo/types/types';
-import InternalLink from '@/components/InternalLink';
 import { useProjectsContext } from '@/context/projects.context';
 
 interface IProjectsFilterProps {
@@ -27,6 +27,13 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 		}
 		return categorySlug === query.slug;
 	};
+
+	const newQuery = {
+		...query,
+	};
+
+	delete newQuery.slug;
+	delete newQuery.category;
 
 	return (
 		<Swiper
@@ -50,19 +57,21 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 		>
 			{mainCategories.map(category => (
 				<SwiperSlide key={category.slug} style={{ width: 'auto' }}>
-					<InternalLink
-						href={
-							category.slug === 'all'
-								? projectsRoute
-								: projectsRoute + category.slug
-						}
+					<Link
+						href={{
+							pathname:
+								category.slug === 'all'
+									? projectsRoute
+									: projectsRoute + category.slug,
+							query: newQuery,
+						}}
 					>
 						<MainCategoryItem
 							isSelected={handleIsSelected(category.slug)}
 						>
 							{formatMessage({ id: category.slug })}
 						</MainCategoryItem>
-					</InternalLink>
+					</Link>
 				</SwiperSlide>
 			))}
 		</Swiper>

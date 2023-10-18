@@ -91,6 +91,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			return mainCategory.slug === slug;
 		});
 
+		console.log('selectedMainCategory', selectedMainCategory);
+
 		if (selectedMainCategory) {
 			const updatedSelectedMainCategory = {
 				...selectedMainCategory,
