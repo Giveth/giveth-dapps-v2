@@ -17,6 +17,7 @@ import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconPolygon } from '@/components/Icons/Polygon';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconCelo } from '@/components/Icons/Celo';
+import { IconClassic } from '@/components/Icons/Classic';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
@@ -428,7 +429,7 @@ const config: EnvConfig = {
 		},
 		subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
 		coingeckoChainName: 'ethereum-classic',
-		chainLogo: (logoSize = 24) => <IconCelo size={logoSize} />,
+		chainLogo: (logoSize = 24) => <IconClassic size={logoSize} />,
 	},
 };
 

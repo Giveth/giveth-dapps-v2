@@ -17,6 +17,7 @@ import { IconCelo } from '@/components/Icons/Celo';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconEthereum } from '@/components/Icons/Eth';
+import { IconUnknown } from '@/components/Icons/Unknown';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -343,7 +344,7 @@ const config: EnvConfig = {
 	CLASSIC_CONFIG: {
 		...classic,
 		//TODO: should change the icon
-		chainLogo: (logoSize?: number) => <IconCelo size={logoSize} />,
+		chainLogo: (logoSize?: number) => <IconUnknown size={logoSize} />,
 		coingeckoChainName: 'ethereum-classic',
 		gasPreference: {
 			// Keep it empty for automatic configuration
