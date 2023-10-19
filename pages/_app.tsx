@@ -35,9 +35,9 @@ import { zIndex } from '@/lib/constants/constants';
 import { isGIVeconomyRoute } from '@/lib/helpers';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
+import { useSafeAutoConnect } from '@/hooks/useSafeAutoConnect';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
-import { useSafeAutoConnect } from '@/hooks/useSafeAutoConnect';
 
 declare global {
 	interface Window {

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { connect, disconnect, getWalletClient } from '@wagmi/core';
+import { connect, getWalletClient } from '@wagmi/core';
 import { backendGQLRequest } from '@/helpers/requests';
 import {
 	GET_USER_BY_ADDRESS,
