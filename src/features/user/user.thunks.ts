@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { connect, getWalletClient } from '@wagmi/core';
-import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask';
+import { connect, disconnect, getWalletClient } from '@wagmi/core';
 import { backendGQLRequest } from '@/helpers/requests';
 import {
 	GET_USER_BY_ADDRESS,
@@ -38,20 +37,34 @@ export const fetchUserByAddress = createAsyncThunk(
 export const signToGetToken = createAsyncThunk(
 	'user/signToGetToken',
 	async (
-		{ address, chainId, connectors, isGSafeConnector }: ISignToGetToken,
+		{
+			address,
+			chainId,
+			connector,
+			connectors,
+			isGSafeConnector,
+		}: ISignToGetToken,
 		{ getState, dispatch },
 	) => {
 		try {
+			console.log({
+				address,
+				chainId,
+				connector,
+				connectors,
+				isGSafeConnector,
+			});
 			const isSAFE = isGSafeConnector;
 			let safeAddress = '';
 			let siweMessage,
 				safeMessage: any = null;
 			if (isSAFE) {
 				safeAddress = address!;
-				await connect({ chainId, connector: new MetaMaskConnector() });
-				const metamaskClient = await getWalletClient({ chainId });
+				// disconnect();
+				// await connect({ chainId, connector });
+				const wallet = await getWalletClient({ chainId });
 				siweMessage = await createSiweMessage(
-					metamaskClient?.account?.address!,
+					wallet?.account?.address!,
 					chainId!,
 					'Login into Giveth services',
 				);
@@ -69,6 +82,7 @@ export const signToGetToken = createAsyncThunk(
 			}
 
 			const { nonce, message } = siweMessage as any;
+
 			const walletClient = await getWalletClient({ chainId });
 
 			const signature = await walletClient?.signMessage({ message });
@@ -106,6 +120,7 @@ export const signToGetToken = createAsyncThunk(
 								jwt: currentUserToken,
 							},
 						);
+						console.log({ sessionCheck });
 						if (sessionCheck?.status === 'successful') {
 							activeSafeToken = sessionCheck?.jwt;
 						} else if (sessionCheck?.status === 'pending') {
@@ -114,11 +129,18 @@ export const signToGetToken = createAsyncThunk(
 					} catch (error) {
 						console.log({ error });
 					}
-
-					await connect({
-						chainId,
-						connector: connectors[4],
+					console.log({
+						activeSafeToken,
+						sessionPending,
+						connectors,
 					});
+					// Connect to gnosis safe
+					const a = await connect({
+						chainId,
+						connector: connectors[3],
+					});
+
+					console.log({ a });
 					if (sessionPending)
 						return Promise.reject('Gnosis Safe Session pending');
 					if (!sessionPending && !!activeSafeToken) {

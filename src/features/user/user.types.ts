@@ -4,6 +4,7 @@ export interface ISignToGetToken {
 	pathname?: string;
 	connectors?: any; // TODO: CHANGE THIS
 	isGSafeConnector?: boolean;
+	connector?: any; // TODO: CHANGE THIS TYPE
 }
 
 export interface IChainvineSetReferral {

@@ -1,6 +1,9 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { disconnect } from '@wagmi/core';
+
 import {
 	brandColors,
 	Button,
@@ -10,7 +13,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount, useConnect, useNetwork } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
 import { ETheme } from '@/features/general/general.slice';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -20,7 +23,6 @@ import { signToGetToken } from '@/features/user/user.thunks';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { EModalEvents } from '@/hooks/useModalCallback';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 interface IProps extends IModal {
 	callback?: () => void;
@@ -33,15 +35,63 @@ export const SignWithWalletModal: FC<IProps> = ({
 	callback,
 }) => {
 	const [loading, setLoading] = useState(false);
+	const [safeSecondaryConnection, setSafeSecondaryConnection] =
+		useState(false);
+	const [secondaryConnector, setSecondaryConnnector] = useState<any>(null);
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
 
-	const { address } = useAccount();
+	const { address, connector } = useAccount();
+	const { connectors } = useConnect();
 	const { chain } = useNetwork();
+	const { open } = useWeb3Modal();
+
 	const chainId = chain?.id;
 	const router = useRouter();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		if (safeSecondaryConnection) {
+			setSecondaryConnnector(connector);
+			startSignature(connector, true);
+		}
+	}, [address]);
+
+	useEffect(() => {
+		const checkSecondaryConnection = async () => {
+			if (safeSecondaryConnection) {
+				disconnect();
+				open({ view: 'Connect' });
+			}
+		};
+		checkSecondaryConnection();
+	}, [safeSecondaryConnection]);
+
+	const startSignature = async (connector?: any, fromGnosis?: boolean) => {
+		if (!address) {
+			return dispatch(setShowWelcomeModal(true));
+		}
+		setLoading(true);
+		const signature = await dispatch(
+			signToGetToken({
+				address,
+				chainId,
+				connector,
+				connectors,
+				pathname: router.pathname,
+				isGSafeConnector: fromGnosis || isGSafeConnector,
+			}),
+		);
+		setLoading(false);
+		if (signature && signature.type === 'user/signToGetToken/fulfilled') {
+			const event = new Event(EModalEvents.SIGNEDIN);
+			window.dispatchEvent(event);
+			callback && callback();
+			closeModal();
+		}
+	};
+
 	return (
 		<Modal
 			closeModal={closeModal}
@@ -71,30 +121,10 @@ export const SignWithWalletModal: FC<IProps> = ({
 					label={formatMessage({ id: 'component.button.sign_in' })}
 					loading={loading}
 					onClick={async () => {
-						if (!address) {
-							return dispatch(setShowWelcomeModal(true));
+						if (isGSafeConnector) {
+							return setSafeSecondaryConnection(true);
 						}
-						setLoading(true);
-
-						const signature = await dispatch(
-							signToGetToken({
-								address,
-								chainId,
-								pathname: router.pathname,
-								connectors,
-								isGSafeConnector,
-							}),
-						);
-						setLoading(false);
-						if (
-							signature &&
-							signature.type === 'user/signToGetToken/fulfilled'
-						) {
-							const event = new Event(EModalEvents.SIGNEDIN);
-							window.dispatchEvent(event);
-							callback && callback();
-							closeModal();
-						}
+						await startSignature();
 					}}
 					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
 				/>
