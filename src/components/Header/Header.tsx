@@ -9,9 +9,8 @@ import {
 	IconSearch24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { useChainId, useAccount } from 'wagmi';
-
+import { useAccount, useNetwork } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
 	ConnectButton,
@@ -67,7 +66,8 @@ const Header: FC<IHeader> = () => {
 		useDelayedState();
 
 	const { address } = useAccount();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	const networkHasGIV =
 		(chainId && config.NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS) ?? null;
@@ -84,7 +84,7 @@ const Header: FC<IHeader> = () => {
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const isMobile = useMediaQuery(device.mobileL);
-	const { openConnectModal } = useConnectModal();
+	const { open: openConnectModal } = useWeb3Modal();
 
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 

@@ -12,7 +12,7 @@ import {
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useChainId, useSwitchNetwork } from 'wagmi';
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
@@ -38,7 +38,8 @@ const networks = [
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { setShowModal, acceptedChains } = props;
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);

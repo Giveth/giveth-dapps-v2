@@ -7,7 +7,7 @@ import {
 	Container,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useChainId } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import config from '@/configuration';
 import {
 	SimplePoolStakingConfig,
@@ -88,7 +88,8 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 
 export const GIVfarmBottom = () => {
 	const { formatMessage } = useIntl();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const [showArchivedPools, setShowArchivedPools] = useState(false);
 
 	const _config = getNetworkConfig(config.GNOSIS_NETWORK_NUMBER, chainId);

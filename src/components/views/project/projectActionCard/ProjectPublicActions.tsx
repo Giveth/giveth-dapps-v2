@@ -11,7 +11,7 @@ import {
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import ShareModal from '@/components/modals/ShareModal';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
@@ -49,7 +49,7 @@ export const ProjectPublicActions = () => {
 	} = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
-	const { openConnectModal } = useConnectModal();
+	const { open: openConnectModal } = useWeb3Modal();
 
 	useEffect(() => {
 		const fetchProjectReaction = async () => {

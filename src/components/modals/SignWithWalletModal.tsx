@@ -10,8 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
-import { useAccount, useConnect, useChainId } from 'wagmi';
-import { disconnect } from '@wagmi/core';
+import { useAccount, useNetwork } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
 import { ETheme } from '@/features/general/general.slice';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -38,9 +37,8 @@ export const SignWithWalletModal: FC<IProps> = ({
 	const { formatMessage } = useIntl();
 
 	const { address } = useAccount();
-	const { connectors } = useConnect();
-	const { openConnectModal } = useConnectModal();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const router = useRouter();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();

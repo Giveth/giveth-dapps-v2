@@ -4,9 +4,8 @@ import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { mediaQueries } from '@/lib/constants/constants';
-import { useAppDispatch } from '@/features/hooks';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { jointItems } from '@/helpers/text';
 import SwitchNetwork from './SwitchNetwork';
 import { chainNameById } from '@/lib/network';
@@ -23,12 +22,8 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 	const [showSwitchNetwork, setShowSwitchNetwork] = useState(false);
 
 	const { address } = useAccount();
-	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
-
-	const connectWallet = () => {
-		dispatch(setShowWalletModal(true));
-	};
+	const { open: openConnectModal } = useWeb3Modal();
 
 	const chainNames = targetNetworks.map(network => chainNameById(network));
 
@@ -81,7 +76,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 							label={formatMessage({
 								id: 'component.button.connect_wallet',
 							})}
-							onClick={connectWallet}
+							onClick={() => openConnectModal?.()}
 							buttonType='primary'
 						/>
 					</ButtonsContainer>
