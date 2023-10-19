@@ -174,6 +174,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 
 	return (
 		<StakeModalContainer>
+			<div>{amount.toString()}</div>
 			{stakeState !== StakeState.CONFIRMED &&
 				stakeState !== StakeState.ERROR && (
 					<>

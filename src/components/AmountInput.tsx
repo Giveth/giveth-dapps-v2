@@ -138,9 +138,7 @@ export const AmountInput: FC<IAmountInput> = ({
 					100%
 				</Step>
 			</FiltersRow>
-			<div>
-				{test.toString()}
-			</div>
+			<div>{test.toString()}</div>
 		</>
 	);
 };
