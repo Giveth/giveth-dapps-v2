@@ -23,11 +23,15 @@ import { signToGetToken } from '@/features/user/user.thunks';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { EModalEvents } from '@/hooks/useModalCallback';
+import { Dropdown } from './Dropdown';
+import { Flex } from '../styled-components/Flex';
 
 interface IProps extends IModal {
 	callback?: () => void;
 	isGSafeConnector?: boolean;
 }
+
+const expirations = [1, 2];
 
 export const SignWithWalletModal: FC<IProps> = ({
 	setShowModal,
@@ -35,6 +39,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 	callback,
 }) => {
 	const [loading, setLoading] = useState(false);
+	const [expiration, setExpiration] = useState(expirations[0]);
 	const [safeSecondaryConnection, setSafeSecondaryConnection] =
 		useState(false);
 	const [secondaryConnector, setSecondaryConnnector] = useState<any>(null);
@@ -117,6 +122,19 @@ export const SignWithWalletModal: FC<IProps> = ({
 							: 'label.note:this_is_necessary_to_donate_to_projects_or_receive_funding',
 					})}
 				</NoteDescription>
+				{isGSafeConnector && (
+					<ExpirationContainer>
+						How long do you want this section to be active?
+						<Dropdown
+							label='Expiration date'
+							items={expirations}
+							selection={expiration}
+							select={(item: number) =>
+								setExpiration(expirations[item])
+							}
+						/>
+					</ExpirationContainer>
+				)}
 				<OkButton
 					label={formatMessage({ id: 'component.button.sign_in' })}
 					loading={loading}
@@ -171,4 +189,16 @@ const NoteDescription = styled(Lead)`
 	margin-top: 24px;
 	color: ${neutralColors.gray[600]};
 	font-size: 18px;
+`;
+
+const ExpirationContainer = styled(Flex)`
+	position: relative;
+	background: ${brandColors.giv[50]};
+	border: 1px solid ${brandColors.giv[300]};
+	border-radius: 8px;
+	padding: 8px 16px;
+	margin: 10px 0 0 0;
+	text-align: left;
+	justify-content: space-between;
+	align-items: center;
 `;
