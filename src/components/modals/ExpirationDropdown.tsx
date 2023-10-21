@@ -39,6 +39,10 @@ const DropdownItem = styled.a`
 	padding: 12px 16px;
 	text-decoration: none;
 	display: block;
+	cursor: pointer;
+	:hover {
+		background: ${neutralColors.gray[300]};
+	}
 `;
 
 const IconWrapper = styled.div`
@@ -53,6 +57,8 @@ interface DropdownProps {
 	select: (item: number) => void;
 	selection: any;
 }
+
+const expirationLabels = ['3 Days', '1 Week', '1 Month'];
 
 export const Dropdown: FC<DropdownProps> = ({
 	items,
@@ -79,7 +85,7 @@ export const Dropdown: FC<DropdownProps> = ({
 	return (
 		<DropdownContainer ref={containerRef}>
 			<DropdownButton onClick={toggleDropdown}>
-				{selection || label}
+				{expirationLabels[selection] || label}
 				<IconWrapper>
 					{isOpen ? <IconChevronUp24 /> : <IconChevronDown24 />}
 				</IconWrapper>
@@ -93,7 +99,7 @@ export const Dropdown: FC<DropdownProps> = ({
 						}}
 						key={index}
 					>
-						{item}
+						{expirationLabels[index]}
 					</DropdownItem>
 				))}
 			</DropdownContent>

@@ -39,10 +39,12 @@ export const signToGetToken = createAsyncThunk(
 	async (
 		{
 			address,
+			safeAddress,
 			chainId,
 			connector,
 			connectors,
 			isGSafeConnector,
+			expiration,
 		}: ISignToGetToken,
 		{ getState, dispatch },
 	) => {
@@ -55,11 +57,9 @@ export const signToGetToken = createAsyncThunk(
 				isGSafeConnector,
 			});
 			const isSAFE = isGSafeConnector;
-			let safeAddress = '';
 			let siweMessage,
 				safeMessage: any = null;
 			if (isSAFE) {
-				safeAddress = address!;
 				// disconnect();
 				// await connect({ chainId, connector });
 				const wallet = await getWalletClient({ chainId });
@@ -135,12 +135,11 @@ export const signToGetToken = createAsyncThunk(
 						connectors,
 					});
 					// Connect to gnosis safe
-					const a = await connect({
+					await connect({
 						chainId,
 						connector: connectors[3],
 					});
 
-					console.log({ a });
 					if (sessionPending)
 						return Promise.reject('Gnosis Safe Session pending');
 					if (!sessionPending && !!activeSafeToken) {
@@ -159,14 +158,14 @@ export const signToGetToken = createAsyncThunk(
 						// user will close the transaction but it will create anyway
 						console.log({ error });
 					}
-
+					// calls the backend to create gnosis safe token
 					console.log({
 						safeMessageTimestamp,
 						safeAddress,
 						network: chainId,
 						jwt: currentUserToken,
+						approvalExpirationDays: expiration || 8,
 					});
-					// calls the backend to create gnosis safe token
 					const safeToken = await postRequest(
 						`${config.MICROSERVICES.authentication}/multisigAuthentication`,
 						false,
@@ -175,6 +174,7 @@ export const signToGetToken = createAsyncThunk(
 							safeAddress,
 							network: chainId,
 							jwt: currentUserToken,
+							approvalExpirationDays: expiration || 8, // defaults to 1 week
 						},
 					);
 					console.log({ safeToken });
@@ -183,8 +183,10 @@ export const signToGetToken = createAsyncThunk(
 						//save to localstorage if token is created
 						console.log('GOT IN YAY');
 						saveTokenToLocalstorage(safeAddress!, safeToken?.jwt);
+						return currentUserToken;
+					} else {
+						return Promise.reject('Signing pending');
 					}
-					return currentUserToken;
 				} else {
 					return currentUserToken;
 				}

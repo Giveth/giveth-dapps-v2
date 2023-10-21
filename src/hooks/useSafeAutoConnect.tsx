@@ -1,22 +1,36 @@
 import { useConnect } from 'wagmi';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const AUTOCONNECTED_CONNECTOR_IDS = ['safe'];
+
+function checkForSafeConnector(connectors: any) {
+	return AUTOCONNECTED_CONNECTOR_IDS.some(connector => {
+		return connectors.find((c: any) => c.id === connector && c.ready);
+	});
+}
 
 function useSafeAutoConnect() {
 	const { connect, connectors } = useConnect();
 
 	useEffect(() => {
-		AUTOCONNECTED_CONNECTOR_IDS.forEach(connector => {
+		if (checkForSafeConnector(connectors)) {
 			const connectorInstance = connectors.find(
-				c => c.id === connector && c.ready,
+				c => c.id === AUTOCONNECTED_CONNECTOR_IDS[0] && c.ready,
 			);
-
-			if (connectorInstance) {
-				connect({ connector: connectorInstance });
-			}
-		});
+			connect({ connector: connectorInstance });
+		}
 	}, [connect, connectors]);
 }
 
-export { useSafeAutoConnect };
+function useIsSafeEnvironment() {
+	const { connectors } = useConnect();
+	const [isSafe, setIsSafe] = useState(false);
+
+	useEffect(() => {
+		setIsSafe(checkForSafeConnector(connectors));
+	}, [connectors]);
+
+	return isSafe;
+}
+
+export { useSafeAutoConnect, useIsSafeEnvironment };

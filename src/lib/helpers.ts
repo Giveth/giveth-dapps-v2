@@ -14,6 +14,7 @@ import { captureException } from '@sentry/nextjs';
 import { erc20ABI } from 'wagmi';
 import { parseEther, parseUnits } from 'viem';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
+import { getRequest } from '@/helpers/requests';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
 import config from '@/configuration';
@@ -526,4 +527,24 @@ export const ArrayFrom0ToN = (n: number) => {
 		b = 0;
 	while (b < n) a[b] = b++;
 	return a;
+};
+
+export const checkMultisigSession = async ({ safeAddress, chainId }: any) => {
+	try {
+		let sessionPending = false;
+		console.log({ safeAddress, chainId });
+		const sessionCheck = await getRequest(
+			`${config.MICROSERVICES.authentication}/multisigAuthentication`,
+			false,
+			{
+				safeAddress,
+				network: chainId,
+			},
+		);
+		sessionPending = sessionCheck?.active;
+
+		return { sessionPending };
+	} catch (error) {
+		return { sessionPending: false };
+	}
 };

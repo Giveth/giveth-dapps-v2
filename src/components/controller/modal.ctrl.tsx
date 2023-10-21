@@ -51,9 +51,10 @@ const ModalController = () => {
 	//I think we need to handle it in better way
 	useEffect(() => {
 		if (isSignedIn && showSignWithWallet) {
-			setTimeout(() => {
-				dispatch(setShowSignWithWallet(false));
-			}, 300);
+			// Mateo: doing it on the wallet modal hook instead
+			// setTimeout(() => {
+			// 	dispatch(setShowSignWithWallet(false));
+			// }, 300);
 		}
 	}, [isSignedIn]);
 

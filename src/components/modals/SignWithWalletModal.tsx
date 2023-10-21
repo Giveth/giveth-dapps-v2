@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { disconnect } from '@wagmi/core';
+import { disconnect, Address } from '@wagmi/core';
 
 import {
 	brandColors,
@@ -19,11 +19,13 @@ import { ETheme } from '@/features/general/general.slice';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { checkMultisigSession } from '@/lib/helpers';
 import { signToGetToken } from '@/features/user/user.thunks';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { EModalEvents } from '@/hooks/useModalCallback';
-import { Dropdown } from './Dropdown';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import { Dropdown } from './ExpirationDropdown';
 import { Flex } from '../styled-components/Flex';
 
 interface IProps extends IModal {
@@ -31,7 +33,7 @@ interface IProps extends IModal {
 	isGSafeConnector?: boolean;
 }
 
-const expirations = [1, 2];
+const expirations = [3, 8, 30]; // days
 
 export const SignWithWalletModal: FC<IProps> = ({
 	setShowModal,
@@ -39,9 +41,12 @@ export const SignWithWalletModal: FC<IProps> = ({
 	callback,
 }) => {
 	const [loading, setLoading] = useState(false);
-	const [expiration, setExpiration] = useState(expirations[0]);
+	const [expiration, setExpiration] = useState(0);
+	const [multisigAddress, setMultisigAddress] = useState('');
+	const [currentMultisigSession, setCurrentMultisigSession] = useState(false);
 	const [safeSecondaryConnection, setSafeSecondaryConnection] =
 		useState(false);
+	const [multisigLastStep, setMultisigLastStep] = useState(false);
 	const [secondaryConnector, setSecondaryConnnector] = useState<any>(null);
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
@@ -50,6 +55,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 	const { connectors } = useConnect();
 	const { chain } = useNetwork();
 	const { open } = useWeb3Modal();
+	const isSafeEnv = useIsSafeEnvironment();
 
 	const chainId = chain?.id;
 	const router = useRouter();
@@ -57,15 +63,26 @@ export const SignWithWalletModal: FC<IProps> = ({
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		if (safeSecondaryConnection) {
-			setSecondaryConnnector(connector);
-			startSignature(connector, true);
-		}
+		const multisigConnection = async () => {
+			if (safeSecondaryConnection && address) {
+				setSecondaryConnnector(connector);
+				// Check session before calling a new one
+				const { sessionPending } = await checkMultisigSession({
+					safeAddress: multisigAddress,
+					chainId,
+				});
+				console.log({ sessionPending, multisigAddress });
+				setCurrentMultisigSession(sessionPending);
+				setMultisigLastStep(true);
+			}
+		};
+		multisigConnection();
 	}, [address]);
 
 	useEffect(() => {
 		const checkSecondaryConnection = async () => {
 			if (safeSecondaryConnection) {
+				setMultisigAddress(address as Address);
 				disconnect();
 				open({ view: 'Connect' });
 			}
@@ -81,11 +98,14 @@ export const SignWithWalletModal: FC<IProps> = ({
 		const signature = await dispatch(
 			signToGetToken({
 				address,
+				safeAddress: multisigAddress,
 				chainId,
 				connector,
 				connectors,
 				pathname: router.pathname,
-				isGSafeConnector: fromGnosis || isGSafeConnector,
+				// isGSafeConnector: fromGnosis || isGSafeConnector || isSafeEnv,
+				isGSafeConnector: fromGnosis,
+				expiration: fromGnosis ? expirations[expiration] : 0,
 			}),
 		);
 		setLoading(false);
@@ -93,6 +113,8 @@ export const SignWithWalletModal: FC<IProps> = ({
 			const event = new Event(EModalEvents.SIGNEDIN);
 			window.dispatchEvent(event);
 			callback && callback();
+			closeModal();
+		} else if (fromGnosis) {
 			closeModal();
 		}
 	};
@@ -103,54 +125,101 @@ export const SignWithWalletModal: FC<IProps> = ({
 			isAnimating={isAnimating}
 			headerIcon={<IconWalletApprove32 />}
 			headerTitle={formatMessage({
-				id: isGSafeConnector ? 'Sign Gnosis Safe' : 'label.sign_wallet',
+				id:
+					isGSafeConnector || isSafeEnv
+						? currentMultisigSession
+							? 'Uncompleted Multisig Tx'
+							: 'Sign Gnosis Safe'
+						: 'label.sign_wallet',
 			})}
 			headerTitlePosition='left'
 		>
 			<Container>
-				<Description>
-					{formatMessage({
-						id: isGSafeConnector
-							? 'All wallet owners should sign the login message to continue.'
-							: 'label.you_need_to_authorize_your_wallet',
-					})}
-				</Description>
-				<NoteDescription color='red'>
-					{formatMessage({
-						id: isGSafeConnector
-							? 'This is necessary to be able to donate to projects or receive funding.'
-							: 'label.note:this_is_necessary_to_donate_to_projects_or_receive_funding',
-					})}
-				</NoteDescription>
-				{isGSafeConnector && (
-					<ExpirationContainer>
-						How long do you want this section to be active?
-						<Dropdown
-							label='Expiration date'
-							items={expirations}
-							selection={expiration}
-							select={(item: number) =>
-								setExpiration(expirations[item])
-							}
-						/>
-					</ExpirationContainer>
+				{!multisigLastStep && (
+					<Description>
+						{formatMessage({
+							id: isGSafeConnector
+								? currentMultisigSession
+									? "You'll need to execute the pending Multisig transaction to complete your log-in to Giveth & proceed to this area"
+									: 'All wallet owners should sign the login message to continue.'
+								: 'label.you_need_to_authorize_your_wallet',
+						})}
+					</Description>
+				)}
+				{!multisigLastStep && (
+					<NoteDescription color='red'>
+						{formatMessage({
+							id: isGSafeConnector
+								? 'This is necessary to be able to donate to projects or receive funding.'
+								: 'label.note:this_is_necessary_to_donate_to_projects_or_receive_funding',
+						})}
+					</NoteDescription>
+				)}
+
+				{multisigLastStep && !currentMultisigSession ? (
+					<Flex flexDirection='column'>
+						<Description>
+							You will be redirected to the Multisig transaction
+							that requires signatures. You can safely close that
+							page.
+						</Description>
+						<ExpirationContainer>
+							How long do you want this session to be active?
+							<Dropdown
+								label='Expiration date'
+								items={expirations}
+								selection={expiration}
+								select={(item: number) => setExpiration(item)}
+							/>
+						</ExpirationContainer>
+						<NoteDescription>
+							While waiting for the required signatures you can
+							continue to browse Giveth
+						</NoteDescription>
+					</Flex>
+				) : (
+					multisigLastStep &&
+					currentMultisigSession && (
+						<Flex flexDirection='column'>
+							<Description>
+								You'll need to execute the pending Multisig tx
+								to complete your log-in to Giveth & proceed to
+								this area.
+							</Description>
+						</Flex>
+					)
 				)}
 				<OkButton
-					label={formatMessage({ id: 'component.button.sign_in' })}
+					label={formatMessage({
+						id: multisigLastStep
+							? currentMultisigSession
+								? 'Okay, got it'
+								: "okay let's go"
+							: 'component.button.sign_in',
+					})}
 					loading={loading}
 					onClick={async () => {
-						if (isGSafeConnector) {
+						if (multisigLastStep) {
+							if (currentMultisigSession) return;
+							return startSignature(connector, true);
+						} else if (isGSafeConnector) {
 							return setSafeSecondaryConnection(true);
 						}
 						await startSignature();
 					}}
-					buttonType={theme === ETheme.Dark ? 'secondary' : 'primary'}
+					buttonType={
+						theme === ETheme.Dark || multisigLastStep
+							? 'secondary'
+							: 'primary'
+					}
 				/>
-				<SkipButton
-					label={formatMessage({ id: 'label.skip_for_now' })}
-					onClick={closeModal}
-					buttonType='texty'
-				/>
+				{!multisigLastStep && (
+					<SkipButton
+						label={formatMessage({ id: 'label.skip_for_now' })}
+						onClick={closeModal}
+						buttonType='texty'
+					/>
+				)}
 			</Container>
 		</Modal>
 	);
@@ -202,3 +271,15 @@ const ExpirationContainer = styled(Flex)`
 	justify-content: space-between;
 	align-items: center;
 `;
+
+// const MultisigMsgContainer = styled(Flex)`
+// 	position: relative;
+// 	background: ${brandColors.giv[50]};
+// 	border: 1px solid ${brandColors.giv[300]};
+// 	border-radius: 8px;
+// 	padding: 16px;
+// 	margin: 10px 0 0 0;
+// 	text-align: center;
+// 	justify-content: space-between;
+// 	align-items: center;
+// `;
