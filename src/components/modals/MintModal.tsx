@@ -98,6 +98,8 @@ export const MintModal: FC<IMintModalProps> = ({
 				abi: PFP_ABI,
 				functionName: 'mint',
 				args: [qty],
+				// @ts-ignore -- needed for safe txs
+				value: 0n,
 			});
 
 			if (txResponse) {

@@ -68,13 +68,20 @@ export const SignWithWalletModal: FC<IProps> = ({
 			if (safeSecondaryConnection && address) {
 				setSecondaryConnnector(connector);
 				// Check session before calling a new one
-				const { sessionPending } = await checkMultisigSession({
+				const { status } = await checkMultisigSession({
 					safeAddress: multisigAddress,
 					chainId,
 				});
-				console.log({ sessionPending, multisigAddress });
-				setCurrentMultisigSession(sessionPending);
-				setMultisigLastStep(true);
+				console.log({ status });
+				if (status === 'successful') {
+					// close modal and move directly to fetch the token
+					startSignature(connector, true);
+				} else if (status === 'pending') {
+					setCurrentMultisigSession(true);
+					setMultisigLastStep(true);
+				} else {
+					setMultisigLastStep(true);
+				}
 			}
 		};
 		multisigConnection();
@@ -92,7 +99,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 	}, [safeSecondaryConnection]);
 
 	const closeModal = async () => {
-		if (safeSecondaryConnection) {
+		if (safeSecondaryConnection && connector?.id !== 'safe') {
 			await connect({
 				chainId,
 				connector: connectors[3],
@@ -123,9 +130,9 @@ export const SignWithWalletModal: FC<IProps> = ({
 		if (signature && signature.type === 'user/signToGetToken/fulfilled') {
 			const event = new Event(EModalEvents.SIGNEDIN);
 			window.dispatchEvent(event);
-			callback && callback();
-			closeModal();
-		} else if (fromGnosis) {
+			if (!fromGnosis) {
+				callback && callback();
+			}
 			closeModal();
 		}
 	};

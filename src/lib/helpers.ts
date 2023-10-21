@@ -273,6 +273,8 @@ async function handleErc20Transfer(
 		abi: erc20ABI,
 		functionName: 'transfer',
 		args: [params.to, value],
+		// @ts-ignore -- needed for safe txs
+		value: 0n,
 	});
 	console.log('Write', write);
 	console.log('ERC20 transfer result', { hash: write.hash });
@@ -531,7 +533,7 @@ export const ArrayFrom0ToN = (n: number) => {
 
 export const checkMultisigSession = async ({ safeAddress, chainId }: any) => {
 	try {
-		let sessionPending = false;
+		let status = 'not found';
 		const sessionCheck = await getRequest(
 			`${config.MICROSERVICES.authentication}/multisigAuthentication`,
 			false,
@@ -540,11 +542,10 @@ export const checkMultisigSession = async ({ safeAddress, chainId }: any) => {
 				network: chainId,
 			},
 		);
-		console.log({ sessionCheck });
-		sessionPending = sessionCheck?.active;
+		status = sessionCheck?.status;
 
-		return { sessionPending };
+		return { status };
 	} catch (error) {
-		return { sessionPending: false };
+		return { status: 'not found' };
 	}
 };

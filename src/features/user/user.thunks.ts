@@ -134,11 +134,6 @@ export const signToGetToken = createAsyncThunk(
 						sessionPending,
 						connectors,
 					});
-					// Connect to gnosis safe
-					await connect({
-						chainId,
-						connector: connectors[3],
-					});
 
 					if (sessionPending)
 						return Promise.reject('Gnosis Safe Session pending');
@@ -147,6 +142,13 @@ export const signToGetToken = createAsyncThunk(
 						saveTokenToLocalstorage(safeAddress!, activeSafeToken);
 						return activeSafeToken;
 					}
+
+					// Connect to gnosis safe
+					await connect({
+						chainId,
+						connector: connectors[3],
+					});
+
 					const gnosisClient = await getWalletClient({ chainId });
 					let safeSignature;
 					const safeMessageTimestamp = new Date().getTime();
@@ -181,7 +183,6 @@ export const signToGetToken = createAsyncThunk(
 
 					if (safeToken?.jwt) {
 						//save to localstorage if token is created
-						console.log('GOT IN YAY');
 						saveTokenToLocalstorage(safeAddress!, safeToken?.jwt);
 						return currentUserToken;
 					} else {
