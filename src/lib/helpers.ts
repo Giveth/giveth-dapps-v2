@@ -532,7 +532,6 @@ export const ArrayFrom0ToN = (n: number) => {
 export const checkMultisigSession = async ({ safeAddress, chainId }: any) => {
 	try {
 		let sessionPending = false;
-		console.log({ safeAddress, chainId });
 		const sessionCheck = await getRequest(
 			`${config.MICROSERVICES.authentication}/multisigAuthentication`,
 			false,
@@ -541,6 +540,7 @@ export const checkMultisigSession = async ({ safeAddress, chainId }: any) => {
 				network: chainId,
 			},
 		);
+		console.log({ sessionCheck });
 		sessionPending = sessionCheck?.active;
 
 		return { sessionPending };

@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { disconnect, Address } from '@wagmi/core';
+import { connect, disconnect, Address } from '@wagmi/core';
 
 import {
 	brandColors,
@@ -59,7 +59,8 @@ export const SignWithWalletModal: FC<IProps> = ({
 
 	const chainId = chain?.id;
 	const router = useRouter();
-	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { isAnimating, closeModal: _closeModal } =
+		useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
@@ -89,6 +90,16 @@ export const SignWithWalletModal: FC<IProps> = ({
 		};
 		checkSecondaryConnection();
 	}, [safeSecondaryConnection]);
+
+	const closeModal = async () => {
+		if (safeSecondaryConnection) {
+			await connect({
+				chainId,
+				connector: connectors[3],
+			});
+		}
+		_closeModal();
+	};
 
 	const startSignature = async (connector?: any, fromGnosis?: boolean) => {
 		if (!address) {
@@ -200,7 +211,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 					loading={loading}
 					onClick={async () => {
 						if (multisigLastStep) {
-							if (currentMultisigSession) return;
+							if (currentMultisigSession) return closeModal();
 							return startSignature(connector, true);
 						} else if (isGSafeConnector) {
 							return setSafeSecondaryConnection(true);
