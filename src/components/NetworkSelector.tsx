@@ -9,7 +9,7 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { useChainId, useSwitchNetwork } from 'wagmi';
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 import Select, {
 	ControlProps,
 	DropdownIndicatorProps,
@@ -170,7 +170,8 @@ export const NetworkSelector = () => {
 		config.MAINNET_NETWORK_NUMBER,
 	);
 
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { switchNetwork } = useSwitchNetwork();
 
 	const handleChangeNetwork = async (networkNumber: number) => {

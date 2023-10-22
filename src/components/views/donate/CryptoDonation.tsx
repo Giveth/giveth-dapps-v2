@@ -14,8 +14,8 @@ import { captureException } from '@sentry/nextjs';
 import { formatUnits, parseUnits } from 'viem';
 
 import { getContract } from 'wagmi/actions';
-import { erc20ABI, useAccount, useBalance, useChainId } from 'wagmi';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { erc20ABI, useAccount, useBalance, useNetwork } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
@@ -43,7 +43,7 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppSelector } from '@/features/hooks';
 import usePurpleList from '@/hooks/usePurpleList';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
 import TotalDonation from '@/components/views/donate/TotalDonation';
@@ -64,14 +64,13 @@ interface IInputBox {
 
 const CryptoDonation: FC = () => {
 	const { address, isConnected } = useAccount();
-	const networkId = useChainId();
-	const dispatch = useAppDispatch();
+	const { chain } = useNetwork();
 	const { formatMessage } = useIntl();
 	const { isEnabled, isSignedIn } = useAppSelector(state => state.user);
 	const notFormattedBalance = useBalance({ address });
 	const balance = notFormattedBalance.data?.formatted;
 	const isPurpleListed = usePurpleList();
-	const { openConnectModal } = useConnectModal();
+	const { open: openConnectModal } = useWeb3Modal();
 	const { project, hasActiveQFRound } = useDonateData();
 
 	const {
@@ -117,9 +116,10 @@ const CryptoDonation: FC = () => {
 	const projectIsGivBackEligible = !!verified;
 	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
 	const activeRound = getActiveRound(project.qfRounds);
+	const networkId = chain?.id;
 
 	const isOnEligibleNetworks =
-		activeRound?.eligibleNetworks?.includes(networkId);
+		networkId && activeRound?.eligibleNetworks?.includes(networkId);
 
 	useEffect(() => {
 		if (networkId && acceptedTokens) {
@@ -447,7 +447,7 @@ const CryptoDonation: FC = () => {
 					label={formatMessage({
 						id: 'component.button.connect_wallet',
 					})}
-					onClick={openConnectModal}
+					onClick={() => openConnectModal()}
 				/>
 			)}
 			<CheckBoxContainer>

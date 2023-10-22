@@ -9,7 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { waitForTransaction } from '@wagmi/core';
-import { useChainId } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import { Modal } from '../Modal';
 import { Flex } from '../../styled-components/Flex';
 import { StakingPoolImages } from '../../StakingPoolImages';
@@ -77,7 +77,8 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 	);
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 	const { stakedAmount } = useStakingPool(poolStakingConfig);
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { title, type, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
@@ -90,6 +91,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 		: stakedAmount;
 
 	const onWithdraw = async () => {
+		if (!chainId) return;
 		setUnstakeState(StakeState.UNSTAKING);
 
 		const GARDEN_ADDRESS = poolStakingConfig.GARDEN_ADDRESS;

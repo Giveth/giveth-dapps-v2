@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { GLink, H2, Lead, brandColors, Button } from '@giveth/ui-design-system';
 import { useAccount, useDisconnect } from 'wagmi';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { ArrowButton, Card } from './common';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
 import { formatWeiHelper } from '@/helpers/number';
@@ -140,8 +140,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [walletIsChanged, setWalletIsChanged] = useState(false);
 
 	const { formatMessage } = useIntl();
-	const { openConnectModal } = useConnectModal();
-
+	const { open: openConnectModal } = useWeb3Modal();
 	const {
 		totalAmount,
 		giveDropState,

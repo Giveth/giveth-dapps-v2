@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { Col, Row } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex } from '../styled-components/Flex';
 import {
 	GIVpowerTopContainer,
@@ -67,7 +67,7 @@ import { getTotalGIVpower } from '@/helpers/givpower';
 export function TabPowerTop() {
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
-	const { openConnectModal } = useConnectModal();
+	const { open: openConnectModal } = useWeb3Modal();
 	const values = useAppSelector(state => state.subgraph);
 	const givPower = getTotalGIVpower(values);
 	const givPowerFormatted = formatWeiHelper(givPower.total);

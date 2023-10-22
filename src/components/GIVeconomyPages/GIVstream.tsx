@@ -17,7 +17,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Container, Row, Col } from '@giveth/ui-design-system';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import {
 	Bar,
 	FlowRateRow,
@@ -81,7 +81,8 @@ export const TabGIVstreamTop = () => {
 	const sdh = new SubgraphDataHelper(currentValues);
 	const { allocatedTokens, claimed, givback } =
 		sdh.getGIVTokenDistroBalance();
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	useEffect(() => {
 		const _allocatedTokens = BigInt(allocatedTokens);
@@ -149,7 +150,8 @@ export const TabGIVstreamTop = () => {
 };
 
 export const TabGIVstreamBottom = () => {
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { formatMessage } = useIntl();
 
@@ -370,7 +372,8 @@ const convertSourceTypeToIcon = (distributor: string) => {
 const itemPerPage = 6;
 
 export const GIVstreamHistory: FC = () => {
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { address } = useAccount();
 	const [tokenAllocations, setTokenAllocations] = useState<
 		ITokenAllocation[]

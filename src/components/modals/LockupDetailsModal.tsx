@@ -12,7 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { smallFormatDate } from '@/lib/helpers';
 import { Flex, FlexCenter } from '../styled-components/Flex';
 import { Modal } from './Modal';
@@ -37,7 +37,8 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	unstakeable,
 	setShowModal,
 }) => {
-	const chainId = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { address } = useAccount();
 	const { apr, stakedAmount } = useStakingPool(
 		config.NETWORKS_CONFIG[chainId!].GIVPOWER ||
