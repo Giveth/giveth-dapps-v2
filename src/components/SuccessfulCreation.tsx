@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
 	brandColors,
 	Button,
@@ -24,14 +24,15 @@ import { useAppDispatch } from '@/features/hooks';
 import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
 import { EContentType } from '@/lib/constants/shareContent';
+import NotAvailableProject from '@/components/NotAvailableProject';
 
-const SuccessfulCreation = (props: {
-	project: IProject;
-	showSuccess?: Dispatch<SetStateAction<boolean>>;
-}) => {
-	const { project, showSuccess } = props;
-	const { slug } = project;
-	const projectPath = slugToProjectView(slug);
+interface IProps {
+	project?: IProject;
+}
+
+const SuccessfulCreation = (props: IProps) => {
+	const { project } = props;
+
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
 
@@ -42,6 +43,11 @@ const SuccessfulCreation = (props: {
 			dispatch(setShowFooter(true));
 		};
 	}, []);
+
+	if (!project) return <NotAvailableProject />;
+
+	const { slug } = project;
+	const projectPath = slugToProjectView(slug);
 
 	return (
 		<Wrapper>
@@ -82,9 +88,6 @@ const SuccessfulCreation = (props: {
 						</P>
 						<Link href={projectPath}>
 							<ProjectsButton
-								onClick={() =>
-									showSuccess && showSuccess(false)
-								}
 								label={formatMessage({
 									id: 'label.view_project',
 								})}
