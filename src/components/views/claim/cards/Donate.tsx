@@ -1,6 +1,5 @@
 import { useState, FC, useEffect } from 'react';
 import styled from 'styled-components';
-import { utils, BigNumber as EthersBigNumber, constants } from 'ethers';
 import BigNumber from 'bignumber.js';
 import {
 	Subline,
@@ -13,6 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
+import { formatEther } from 'viem';
 import {
 	APRRow,
 	ArrowButton,
@@ -34,9 +34,10 @@ import { IClaimViewCardProps } from '@/components/views/claim/Claim.view';
 import useClaim from '@/context/claim.context';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { InputWithUnit } from '@/components/input';
+import { InputWithUnit } from '@/components/input/index';
 import { Flex } from '@/components/styled-components/Flex';
-import { Zero, formatWeiHelper } from '@/helpers/number';
+import { formatWeiHelper } from '@/helpers/number';
+import { WeiPerEther } from '@/lib/constants/constants';
 
 const DonatePoolCard = styled(PoolCard)`
 	height: 127px;
@@ -105,15 +106,13 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const { totalAmount, step, goNextStep, goPreviousStep } = useClaim();
 
 	const [donation, setDonation] = useState<string>('0');
-	const [potentialClaim, setPotentialClaim] = useState<EthersBigNumber>(
-		constants.Zero,
-	);
-	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
+	const [potentialClaim, setPotentialClaim] = useState(0n);
+	const [earnEstimate, setEarnEstimate] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 
 	useEffect(() => {
 		if (totalAmount) {
-			setDonation(utils.formatEther(totalAmount.div(10)));
+			setDonation(formatEther(totalAmount / 10n));
 		}
 	}, [totalAmount]);
 
@@ -123,9 +122,12 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 			_donation = parseFloat(donation);
 		}
 		const donationWithGivBacks = _donation * 0.75;
-		const convertedStackedWithApr = EthersBigNumber.from(
-			donationWithGivBacks.toFixed(0),
-		).mul(constants.WeiPerEther);
+		const _convertedStackedWithApr = new BigNumber(
+			donationWithGivBacks,
+		).multipliedBy(WeiPerEther);
+		const convertedStackedWithApr = BigInt(
+			_convertedStackedWithApr.toFixed(0),
+		);
 		setPotentialClaim(
 			givTokenDistroHelper.getLiquidPart(convertedStackedWithApr),
 		);
@@ -167,12 +169,10 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 							</Flex>
 							<MaxStakeGIV
 								onClick={() =>
-									setDonation(
-										utils.formatEther(totalAmount.div(10)),
-									)
+									setDonation(formatEther(totalAmount / 10n))
 								}
-							>{`Max ${utils.formatEther(
-								totalAmount.div(10),
+							>{`Max ${formatEther(
+								totalAmount / 10n,
 							)} GIV`}</MaxStakeGIV>
 						</Flex>
 						<ImpactCardInput>

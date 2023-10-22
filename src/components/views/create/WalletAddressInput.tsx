@@ -10,12 +10,10 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import { useWeb3React } from '@web3-react/core';
-import { utils } from 'ethers';
-
+import { isAddress } from 'viem';
+import { useNetwork } from 'wagmi';
 import { compareAddresses } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
-import config from '@/configuration';
 import Input, { InputSize } from '@/components/Input';
 import { EInputs } from '@/components/views/create/CreateProject';
 import { gqlAddressValidation } from '@/components/views/create/helpers';
@@ -25,10 +23,8 @@ import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
 import NetworkLogo from '@/components/NetworkLogo';
-import { networksParams } from '@/helpers/blockchain';
+import { chainNameById } from '@/lib/network';
 import useFocus from '@/hooks/useFocus';
-
-const networksConfig = config.NETWORKS_CONFIG;
 
 interface IProps {
 	networkId: number;
@@ -41,10 +37,11 @@ const WalletAddressInput: FC<IProps> = ({
 	userAddresses,
 	onSubmit,
 }) => {
-	const [resolvedENS, setResolvedENS] = useState('');
+	const [resolvedENS, setResolvedENS] = useState<`0x${string}` | undefined>();
 
 	const { getValues, setValue } = useFormContext();
-	const { chainId = 1, library } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	const user = useAppSelector(state => state.user?.userData);
 
@@ -80,7 +77,7 @@ const WalletAddressInput: FC<IProps> = ({
 	} else if (errorMessage || !value) {
 		caption = `${formatMessage({
 			id: 'label.you_can_enter_a_new_address',
-		})} ${networksConfig[networkId].chainName}.`;
+		})} ${chainNameById(networkId)}.`;
 	}
 
 	const isProjectPrevAddress = (newAddress: string) => {
@@ -97,7 +94,7 @@ const WalletAddressInput: FC<IProps> = ({
 				id: 'label.please_switcth_to_mainnet_to_handle_ens',
 			});
 		}
-		const address = await getAddressFromENS(ens, library);
+		const address = await getAddressFromENS(ens);
 		if (address) return address;
 		else throw formatMessage({ id: 'label.invalid_ens_address' });
 	};
@@ -105,11 +102,11 @@ const WalletAddressInput: FC<IProps> = ({
 	const addressValidation = async (address: string) => {
 		try {
 			setError({ ...error, message: '' });
-			setResolvedENS('');
+			setResolvedENS(undefined);
 			if (address.length === 0) {
 				return formatMessage({ id: 'label.this_field_is_required' });
 			}
-			let _address = (' ' + address).slice(1);
+			let _address = (' ' + address).slice(1) as `0x${string}`;
 			setIsValidating(true);
 			if (isAddressENS(address)) {
 				_address = await ENSHandler(address);
@@ -119,7 +116,7 @@ const WalletAddressInput: FC<IProps> = ({
 				setIsValidating(false);
 				return true;
 			}
-			if (!utils.isAddress(_address)) {
+			if (!isAddress(_address)) {
 				setIsValidating(false);
 				return formatMessage({ id: 'label.eth_addres_not_valid' });
 			}
@@ -153,7 +150,7 @@ const WalletAddressInput: FC<IProps> = ({
 					{formatMessage(
 						{ id: 'label.chain_address' },
 						{
-							chainName: networksParams[networkId].chainName,
+							chainName: chainNameById(networkId),
 						},
 					)}
 				</H6>
@@ -169,7 +166,7 @@ const WalletAddressInput: FC<IProps> = ({
 						id: 'label.receiving_address_on',
 					},
 					{
-						chainName: networksConfig[networkId].chainName,
+						chainName: chainNameById(networkId),
 					},
 				)}
 				ref={inputRef}

@@ -7,62 +7,46 @@ import {
 	useCallback,
 	ReactNode,
 } from 'react';
-import { ethers } from 'ethers';
-import { useWeb3React } from '@web3-react/core';
-import { formatWeiHelper } from '@/helpers/number';
+import { useAccount } from 'wagmi';
 
 export interface FarmContext {
 	chainsInfo: IChainsInfo;
-	setChainInfo: (
-		network: number,
-		key: string,
-		value: ethers.BigNumber,
-	) => void;
+	setChainInfo: (network: number, key: string, value: bigint) => void;
 }
 
 export const FarmContext = createContext<FarmContext>({
 	chainsInfo: {},
-	setChainInfo: (network: number, key: string, value: ethers.BigNumber) => {
+	setChainInfo: (network: number, key: string, value: bigint) => {
 		console.log('The setChainInfo function has not been implemented yet.');
 	},
 });
 
 FarmContext.displayName = 'FarmContext';
 
-interface IInfo {
-	[key: string]: ethers.BigNumber;
-	totalInfo: ethers.BigNumber;
-}
-
 interface IFarmProvider {
 	children: ReactNode;
+}
+
+interface IInfo {
+	[key: string]: bigint;
+	totalInfo: bigint;
 }
 
 export interface IChainsInfo {
 	[key: number]: IInfo;
 }
 
-export interface ITotalEarned {
-	[key: string]: ethers.BigNumber;
-}
-
 export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
 	const [chainsInfo, setChainsInfo] = useState<IChainsInfo>({});
-	const { account } = useWeb3React();
+	const { address } = useAccount();
 
 	const setChainInfo = useCallback(
-		(network: number, key: string, value: ethers.BigNumber) => {
+		(network: number, key: string, value: bigint) => {
 			console.log('network', network, key, value);
 			const chainInfo = chainsInfo[network] || {};
-			const totalInfo = (chainInfo.totalInfo || ethers.constants.Zero)
-				.sub(chainInfo[key] || ethers.constants.Zero)
-				.add(value);
-			console.log(
-				'totalInfo',
-				formatWeiHelper(chainInfo.totalInfo),
-				formatWeiHelper(value),
-				formatWeiHelper(totalInfo),
-			);
+			const totalInfo =
+				(chainInfo.totalInfo || 0n) - (chainInfo[key] || 0n) + value;
+
 			const newChainInfo = { ...chainInfo, [key]: value, totalInfo };
 			setChainsInfo(prevInfos => ({
 				...prevInfos,
@@ -74,7 +58,7 @@ export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
 
 	useEffect(() => {
 		setChainsInfo({});
-	}, [account]);
+	}, [address]);
 
 	return (
 		<FarmContext.Provider
@@ -92,7 +76,7 @@ export function useFarms() {
 	const context = useContext(FarmContext);
 
 	if (!context) {
-		throw new Error('Token balance context not found!');
+		throw new Error('Farms context not found!');
 	}
 
 	return context;

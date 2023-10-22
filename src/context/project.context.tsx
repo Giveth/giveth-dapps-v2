@@ -203,7 +203,7 @@ export const ProjectProvider = ({
 						const powerBoosting = _boostersData.powerBoostings[i];
 						powerBoosting.user.givpowerBalance =
 							unipoolBalancesObj[
-								powerBoosting.user.walletAddress
+								powerBoosting.user.walletAddress.toLowerCase()
 							];
 						const _allocated = new BigNumber(
 							powerBoosting.user.givpowerBalance,

@@ -1,10 +1,9 @@
 import BigNumber from 'bignumber.js';
-import { ethers } from 'ethers';
 
 export interface UserStakeInfo {
-	stakedAmount: ethers.BigNumber;
-	notStakedAmount: ethers.BigNumber;
-	earned: ethers.BigNumber;
+	stakedAmount: bigint;
+	notStakedAmount: bigint;
+	earned: bigint;
 }
 
 export type APR = {

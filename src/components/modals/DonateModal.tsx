@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -11,12 +10,13 @@ import {
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 
+import { useAccount, useNetwork } from 'wagmi';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { createDonation } from '@/components/views/donate/helpers';
+
 import { IModal } from '@/types/common';
 import FailedDonation, {
 	EDonationFailedType,
@@ -34,6 +34,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useDonateData } from '@/context/donate.context';
 import { fetchPrice } from '@/services/token';
 import { fetchEthPrice } from '@/features/price/price.services';
+import { useCreateDonation } from '@/hooks/useCreateDonation';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -61,8 +62,20 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		anonymous,
 		givBackEligible,
 	} = props;
-	const web3Context = useWeb3React();
-	const { account, chainId } = web3Context;
+	const {
+		createDonation: createFirstDonation,
+		txHash: firstTxHash,
+		donationSaved: firstDonationSaved,
+		donationMinted: firstDonationMinted,
+	} = useCreateDonation();
+	const {
+		createDonation: createSecondDonation,
+		txHash: secondTxHash,
+		donationSaved: secondDonationSaved,
+	} = useCreateDonation();
+	const { address } = useAccount();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const isDonatingToGiveth = donationToGiveth > 0;
@@ -74,11 +87,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const isMainnet = chainId === config.MAINNET_NETWORK_NUMBER;
 
 	const [donating, setDonating] = useState(false);
-	const [firstDonationSaved, setFirstDonationSaved] = useState(false);
-	const [secondDonationSaved, setSecondDonationSaved] = useState(false);
-	const [firstTxHash, setFirstTxHash] = useState('');
-	const [secondTxHash, setSecondTxHash] = useState('');
-	const [isFirstTxSuccess, setIsFirstTxSuccess] = useState(false);
 	const [secondTxStatus, setSecondTxStatus] = useState<EToastType>();
 	const [processFinished, setProcessFinished] = useState(false);
 	const [tokenPrice, setTokenPrice] = useState<number>();
@@ -87,13 +95,13 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses, givethAddresses } = project || {};
-	const projectWalletAddress =
-		addresses?.find(a => a.isRecipient && a.networkId === chainId)
-			?.address || '';
+	const projectWalletAddress = addresses?.find(
+		a => a.isRecipient && a.networkId === chainId,
+	)?.address;
 
-	const givethWalletAddress =
-		givethAddresses?.find(a => a.isRecipient && a.networkId === chainId)
-			?.address || '';
+	const givethWalletAddress = givethAddresses?.find(
+		a => a.isRecipient && a.networkId === chainId,
+	)?.address;
 
 	const avgPrice = tokenPrice && tokenPrice * amount;
 	let donationToGivethAmount = (amount * donationToGiveth) / 100;
@@ -103,7 +111,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const donationToGivethPrice =
 		tokenPrice && donationToGivethAmount * tokenPrice;
 
-	const validateToken = async () => {
+	// this function is used to validate the token, if the token is valid, the user can donate, otherwise it will show a error message.
+	const validateTokenThenDonate = async () => {
 		setDonating(true);
 		client
 			.query({
@@ -111,8 +120,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				fetchPolicy: 'no-cache',
 			})
 			.then((res: IMeGQL) => {
-				const address = res.data?.me?.walletAddress;
-				if (compareAddresses(address, account)) {
+				const _address = res.data?.me?.walletAddress;
+				if (compareAddresses(_address, address)) {
 					handleDonate();
 				} else {
 					handleFailedValidation();
@@ -140,36 +149,50 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const handleDonate = () => {
 		const txProps = {
 			anonymous,
-			web3Context,
 			setDonating,
 			amount,
 			token,
 			setFailedModalType,
 		};
-		createDonation({
+		if (!projectWalletAddress || !givethWalletAddress) return;
+
+		createFirstDonation({
 			...txProps,
-			setTxHash: setFirstTxHash,
-			setDonationSaved: setFirstDonationSaved,
 			walletAddress: projectWalletAddress,
 			projectId: Number(project.id),
 			chainvineReferred,
+			setFailedModalType,
+			symbol: token.symbol,
 		})
 			.then(({ isSaved, txHash: firstHash }) => {
-				setIsFirstTxSuccess(true);
+				console.log('FirstTxHash', firstHash);
+				if (!firstHash) {
+					setDonating(false);
+					return;
+				}
+
 				if (isDonatingToGiveth) {
-					createDonation({
+					createSecondDonation({
 						...txProps,
-						setTxHash: setSecondTxHash,
-						setDonationSaved: setSecondDonationSaved,
 						walletAddress: givethWalletAddress,
 						amount: donationToGivethAmount,
 						projectId: config.GIVETH_PROJECT_ID,
+						setFailedModalType,
+						symbol: token.symbol,
 					})
 						.then(({ txHash: secondHash }) => {
+							if (!secondHash) {
+								setSecondTxStatus(EToastType.Error);
+								isSaved &&
+									delayedCloseModal(firstHash, secondHash);
+								return;
+							}
+							console.log('SecondDonation Success', secondHash);
 							setSecondTxStatus(EToastType.Success);
 							isSaved && delayedCloseModal(firstHash, secondHash);
 						})
 						.catch(({ txHash: secondHash }) => {
+							console.log('SecondDonation Error', secondHash);
 							setSecondTxStatus(EToastType.Error);
 							isSaved && delayedCloseModal(firstHash, secondHash);
 						});
@@ -196,7 +219,9 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				let tokenAddress = token.address;
 				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
 				if (!isMainnet && token.mainnetAddress) {
-					tokenAddress = token.mainnetAddress || '';
+					tokenAddress =
+						(token.mainnetAddress as `0x${string}`) ||
+						('' as `0x${string}`);
 				}
 				const coingeckoChainId =
 					isMainnet ||
@@ -237,7 +262,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				<DonateContainer>
 					<DonatingBox>
 						<Lead>
-							{isFirstTxSuccess
+							{firstDonationMinted
 								? formatMessage({
 										id: 'label.donation_submitted',
 								  })
@@ -251,7 +276,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 							usdValue={avgPrice}
 							title={title}
 						/>
-						{isFirstTxSuccess && (
+						{firstDonationMinted && (
 							<TxStatus>
 								<InlineToast
 									type={EToastType.Success}
@@ -288,7 +313,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 										? formatMessage({
 												id: 'label.donation_submitted',
 										  })
-										: isFirstTxSuccess
+										: firstDonationSaved
 										? formatMessage({
 												id: 'label.you_are_donating',
 										  })
@@ -357,7 +382,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 									? formatMessage({ id: 'label.donating' })
 									: formatMessage({ id: 'label.donate' })
 							}
-							onClick={validateToken}
+							onClick={validateTokenThenDonate}
 						/>
 					</Buttons>
 				</DonateContainer>

@@ -3,9 +3,8 @@ import { useIntl } from 'react-intl';
 import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
-import { useWeb3React } from '@web3-react/core';
-
-import { captureException } from '@sentry/nextjs';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ethIcon from '/public/images/tokens/ETH.svg';
 import googleIcon from '/public/images/google_icon.svg';
@@ -13,22 +12,19 @@ import twitterIcon from '/public/images/social-tt.svg';
 import facebookIcon from '/public/images/social-fb2.svg';
 import discordIcon from '/public/images/social-disc.svg';
 import torusBrand from '/public/images/torus_pwr.svg';
-import { EWallets, torusConnector } from '@/lib/wallet/walletTypes';
 import { mediaQueries } from '@/lib/constants/constants';
-import { detectBrave, showToastError } from '@/lib/helpers';
-import StorageLabel from '@/lib/localStorage';
+import { detectBrave } from '@/lib/helpers';
 import LowerShields from '@/components/modals/LowerShields';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 	const { formatMessage } = useIntl();
 
-	const { activate } = useWeb3React();
+	const { open: openConnectModal } = useWeb3Modal();
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -42,19 +38,20 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	};
 
 	const connectTorus = (): void => {
-		activate(torusConnector)
-			.then(() => {
-				localStorage.setItem(StorageLabel.WALLET, EWallets.TORUS);
-				closeModal();
-			})
-			.catch(error => {
-				showToastError(error);
-				captureException(error, {
-					tags: {
-						section: 'connectTorus',
-					},
-				});
-			});
+		// TODO: Handle this
+		// activate(torusConnector)
+		// 	.then(() => {
+		// 		localStorage.setItem(StorageLabel.WALLET, EWallets.TORUS);
+		// 		closeModal();
+		// 	})
+		// 	.catch(error => {
+		// 		showToastError(error);
+		// 		captureException(error, {
+		// 			tags: {
+		// 				section: 'connectTorus',
+		// 			},
+		// 		});
+		// 	});
 	};
 
 	const onCloseLowerShields = () => {
@@ -84,9 +81,10 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 						</ContentSubtitle>
 						<IconContentContainer>
 							<EthIconContainer
-								onClick={() =>
-									dispatch(setShowWalletModal(true))
-								}
+								onClick={() => {
+									openConnectModal && openConnectModal();
+									dispatch(setShowWelcomeModal(false));
+								}}
 							>
 								<Image src={ethIcon} alt='Ether icon' />
 								<B>

@@ -1,19 +1,15 @@
 import { Dispatch, FC, SetStateAction } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import { B, GLink } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
+import { useAccount, useDisconnect, useNetwork } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
-import { isUserRegistered, networkInfo, shortenAddress } from '@/lib/helpers';
-import StorageLabel from '@/lib/localStorage';
+import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import {
-	setShowCompleteProfile,
-	setShowSwitchNetworkModal,
-	setShowWalletModal,
-} from '@/features/modal/modal.slice';
+import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
 import {
 	ItemRow,
@@ -25,6 +21,8 @@ import {
 import { Item } from './Item';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
+import StorageLabel from '@/lib/localStorage';
+import { chainNameById } from '@/lib/network';
 
 interface IUserItemsProps {
 	setSignWithWallet: Dispatch<SetStateAction<boolean>>;
@@ -36,11 +34,18 @@ export const UserItems: FC<IUserItemsProps> = ({
 	setQueueRoute,
 }) => {
 	const { formatMessage } = useIntl();
-	const { chainId, account, deactivate } = useWeb3React();
+
+	const { address } = useAccount();
+	const { disconnect } = useDisconnect();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
 	const theme = useAppSelector(state => state.general.theme);
+
+	const { open: openChainModal } = useWeb3Modal();
+
 	const goRoute = (input: {
 		url: string;
 		requiresSign: boolean;
@@ -58,7 +63,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 		router.push(url);
 	};
 
-	const { networkName } = networkInfo(chainId);
+	const networkName = chainNameById(chainId);
 
 	return (
 		<>
@@ -67,16 +72,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 					{formatMessage({ id: 'label.wallet' })}
 				</ItemTitle>
 				<ItemRow>
-					<B>{shortenAddress(account)}</B>
-					<ItemAction
-						size='Small'
-						onClick={() => {
-							window.localStorage.removeItem(StorageLabel.WALLET);
-							dispatch(setShowWalletModal(true));
-						}}
-					>
-						{formatMessage({ id: 'label.change_wallet' })}
-					</ItemAction>
+					<B>{shortenAddress(address)}</B>
 				</ItemRow>
 			</Item>
 			<Item theme={theme}>
@@ -90,9 +86,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 					</FlexCenter>
 					<ItemAction
 						size='Small'
-						onClick={() =>
-							dispatch(setShowSwitchNetworkModal(true))
-						}
+						onClick={() => openChainModal && openChainModal()}
 					>
 						{formatMessage({ id: 'label.switch_network' })}
 					</ItemAction>
@@ -107,8 +101,8 @@ export const UserItems: FC<IUserItemsProps> = ({
 			<Item
 				onClick={() => {
 					isSignedIn && dispatch(signOut(token!));
-					deactivate();
 					localStorage.removeItem(StorageLabel.WALLET);
+					disconnect();
 				}}
 				theme={theme}
 			>

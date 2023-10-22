@@ -1,4 +1,7 @@
-export interface BasicStakingConfig {}
+import type { Chain } from 'wagmi';
+
+export type Address = `0x${string}`;
+
 export enum StakingPlatform {
 	GIVETH = 'Staking',
 	UNISWAP = 'Uniswap',
@@ -37,10 +40,10 @@ export type PoolStakingConfig =
 
 export interface SimplePoolStakingConfig {
 	network: number;
+	POOL_ADDRESS: Address;
 	type: StakingType;
-	LM_ADDRESS: string;
-	POOL_ADDRESS: string;
-	GARDEN_ADDRESS?: string;
+	LM_ADDRESS: Address;
+	GARDEN_ADDRESS?: Address;
 	BUY_LINK?: string;
 	farmStartTimeMS?: number;
 	farmEndTimeMS?: number;
@@ -66,7 +69,7 @@ export interface UniswapV3PoolStakingConfig
 	INCENTIVE_END_TIME: number;
 	INCENTIVE_REWARD_AMOUNT: number;
 	NFT_POSITIONS_MANAGER_ADDRESS: string;
-	UNISWAP_V3_STAKER: string;
+	UNISWAP_V3_STAKER: Address;
 	STAKING_REWARDS_CONTRACT: string;
 	REWARD_TOKEN: string;
 	UNISWAP_V3_LP_POOL: string;
@@ -74,7 +77,7 @@ export interface UniswapV3PoolStakingConfig
 	infinitePositionId?: number;
 }
 export interface BalancerPoolStakingConfig extends SimplePoolStakingConfig {
-	VAULT_ADDRESS: string;
+	VAULT_ADDRESS: Address;
 	POOL_ID: string;
 }
 
@@ -97,36 +100,21 @@ export interface GasPreference {
 export interface RegenStreamConfig {
 	network: number;
 	title: string;
-	tokenDistroAddress: string;
+	tokenDistroAddress: Address;
 	type: StreamType;
-	rewardTokenAddress: string;
+	rewardTokenAddress: Address;
 	rewardTokenSymbol: string;
 	archived?: boolean;
 	// For price purpose
-	tokenAddressOnUniswapV2: string;
+	tokenAddressOnUniswapV2: Address;
 }
 
-export interface INetworkParam {
-	chainId: string;
-	chainName: string;
-	nativeCurrency: {
-		name: string;
-		symbol: string;
-		decimals: number;
-	};
-	blockExplorerUrls: Array<string>;
-	rpcUrls: Array<string>;
-	iconUrls?: Array<string>;
-}
-
-export interface NetworkConfig extends INetworkParam {
-	nodeUrl: string;
-	blockExplorerName: string[];
+export interface NetworkConfig extends Chain {
 	gasPreference: GasPreference;
 	subgraphAddress?: string;
 	coingeckoChainName: string;
 	chainLogo: (logoSize?: number) => JSX.Element;
-	TOKEN_DISTRO_ADDRESS?: string;
+	TOKEN_DISTRO_ADDRESS?: Address;
 	pools?: Array<
 		| SimplePoolStakingConfig
 		| BalancerPoolStakingConfig
@@ -135,26 +123,26 @@ export interface NetworkConfig extends INetworkParam {
 	v3Pools?: Array<UniswapV3PoolStakingConfig>;
 	regenPools?: RegenPoolStakingConfig[];
 	regenStreams?: RegenStreamConfig[];
-	GIV_TOKEN_ADDRESS?: string;
+	GIV_TOKEN_ADDRESS?: Address;
 	GIV_BUY_LINK?: string;
-	DAI_TOKEN_ADDRESS?: string;
+	DAI_TOKEN_ADDRESS?: Address;
 	DAI_BUY_LINK?: string;
 	GIVPOWER?: SimplePoolStakingConfig | GIVpowerGgivStakingConfig;
-	gGIV_TOKEN_ADDRESS?: string;
-	PFP_CONTRACT_ADDRESS?: string;
-	tokenAddressOnUniswapV2?: string; // For price purpose in test env, on production this must have the same value of `GIV_TOKEN_ADDRESS`
+	gGIV_TOKEN_ADDRESS?: Address;
+	PFP_CONTRACT_ADDRESS?: Address;
+	tokenAddressOnUniswapV2?: Address; // For price purpose in test env, on production this must have the same value of `GIV_TOKEN_ADDRESS`
 	uniswapV2Subgraph?: string;
-	WETH_TOKEN_ADDRESS?: string;
-	MERKLE_ADDRESS?: string;
+	WETH_TOKEN_ADDRESS?: Address;
+	MERKLE_ADDRESS?: Address;
 }
 
 export interface GIVpowerGgivStakingConfig extends SimplePoolStakingConfig {
-	GARDEN_ADDRESS: string;
+	GARDEN_ADDRESS: Address;
 }
 
 export interface MainnetNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
-	TOKEN_DISTRO_ADDRESS: string;
+	TOKEN_DISTRO_ADDRESS: Address;
 	pools: Array<
 		| SimplePoolStakingConfig
 		| BalancerPoolStakingConfig
@@ -163,32 +151,32 @@ export interface MainnetNetworkConfig extends NetworkConfig {
 	v3Pools: Array<UniswapV3PoolStakingConfig>;
 	regenPools: RegenPoolStakingConfig[];
 	regenStreams: RegenStreamConfig[];
-	GIV_TOKEN_ADDRESS: string;
+	GIV_TOKEN_ADDRESS: Address;
 	GIV_BUY_LINK: string;
-	PFP_CONTRACT_ADDRESS: string;
-	DAI_TOKEN_ADDRESS: string;
-	WETH_TOKEN_ADDRESS: string;
-	tokenAddressOnUniswapV2: string;
+	PFP_CONTRACT_ADDRESS: Address;
+	DAI_TOKEN_ADDRESS: Address;
+	WETH_TOKEN_ADDRESS: Address;
+	tokenAddressOnUniswapV2: Address;
 	uniswapV2Subgraph: string;
 }
 export interface GnosisNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
-	TOKEN_DISTRO_ADDRESS: string;
+	TOKEN_DISTRO_ADDRESS: Address;
 	pools: Array<SimplePoolStakingConfig>;
 	regenPools: RegenPoolStakingConfig[];
 	regenStreams: RegenStreamConfig[];
-	GIV_TOKEN_ADDRESS: string;
+	GIV_TOKEN_ADDRESS: Address;
 	GIV_BUY_LINK: string;
-	gGIV_TOKEN_ADDRESS: string;
+	gGIV_TOKEN_ADDRESS: Address;
 	GIVPOWER: GIVpowerGgivStakingConfig;
-	MERKLE_ADDRESS: string;
+	MERKLE_ADDRESS: Address;
 }
 
 export interface OptimismNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
-	TOKEN_DISTRO_ADDRESS: string;
+	TOKEN_DISTRO_ADDRESS: Address;
 	GIVPOWER: SimplePoolStakingConfig;
-	GIV_TOKEN_ADDRESS: string;
+	GIV_TOKEN_ADDRESS: Address;
 	GIV_BUY_LINK: string;
 }
 
@@ -199,6 +187,7 @@ interface MicroservicesConfig {
 }
 
 export interface EnvConfig {
+	CHAINS: Chain[];
 	GIVETH_PROJECT_ID: number;
 	MAINNET_NETWORK_NUMBER: number;
 	GNOSIS_NETWORK_NUMBER: number;

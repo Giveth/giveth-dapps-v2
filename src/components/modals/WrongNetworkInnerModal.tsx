@@ -3,14 +3,12 @@ import styled from 'styled-components';
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
-
+import { useAccount } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { mediaQueries } from '@/lib/constants/constants';
-import { useAppDispatch } from '@/features/hooks';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
-import { networksParams } from '@/helpers/blockchain';
 import { jointItems } from '@/helpers/text';
 import SwitchNetwork from './SwitchNetwork';
+import { chainNameById } from '@/lib/network';
 
 export interface IWrongNetworkInnerModal {
 	cardName: string;
@@ -23,23 +21,17 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 }) => {
 	const [showSwitchNetwork, setShowSwitchNetwork] = useState(false);
 
-	const { account } = useWeb3React();
-	const dispatch = useAppDispatch();
+	const { address } = useAccount();
 	const { formatMessage } = useIntl();
+	const { open: openConnectModal } = useWeb3Modal();
 
-	const connectWallet = () => {
-		dispatch(setShowWalletModal(true));
-	};
-
-	const chainNames = targetNetworks.map(
-		network => networksParams[network].chainName,
-	);
+	const chainNames = targetNetworks.map(network => chainNameById(network));
 
 	const chainsStr = jointItems(chainNames);
 
 	return (
 		<WrongNetworkInnerModalContainer>
-			{account ? (
+			{address ? (
 				<>
 					<Description>
 						<P>
@@ -84,7 +76,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 							label={formatMessage({
 								id: 'component.button.connect_wallet',
 							})}
-							onClick={connectWallet}
+							onClick={() => openConnectModal?.()}
 							buttonType='primary'
 						/>
 					</ButtonsContainer>

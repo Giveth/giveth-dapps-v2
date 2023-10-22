@@ -1,7 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
-import { BigNumber as EthersBigNumber, constants, utils } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
@@ -28,13 +27,13 @@ import { formatEthHelper, formatWeiHelper, Zero } from '@/helpers/number';
 import { APR } from '@/types/poolInfo';
 import { getLPStakingAPR } from '@/lib/stakingPool';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
-import { networkProviders } from '@/helpers/networkProvider';
 import { useAppSelector } from '@/features/hooks';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { getNowUnixMS } from '@/helpers/time';
-import { InputWithUnit } from '@/components/input';
+import { InputWithUnit } from '@/components/input/index';
 import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
+import { WeiPerEther } from '@/lib/constants/constants';
 
 const InvestCardContainer = styled(Card)`
 	::before {
@@ -92,10 +91,8 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const { formatMessage } = useIntl();
 
 	const [deposit, setDeposit] = useState<string>('0');
-	const [potentialClaim, setPotentialClaim] = useState<EthersBigNumber>(
-		constants.Zero,
-	);
-	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
+	const [potentialClaim, setPotentialClaim] = useState(0n);
+	const [earnEstimate, setEarnEstimate] = useState(0n);
 	const [APR, setAPR] = useState<BigNumber>(Zero);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { gnosisValues, mainnetValues } = useAppSelector(
@@ -104,7 +101,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 	useEffect(() => {
 		if (totalAmount) {
-			setDeposit(utils.formatEther(totalAmount.div(10)));
+			setDeposit(formatWeiHelper(totalAmount / 10n));
 		}
 	}, [totalAmount]);
 
@@ -115,9 +112,11 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 		}
 		const stackedWithApr = APR ? APR.times(_deposit).div(1200) : Zero;
 		if (stackedWithApr.isNaN()) return;
-		const convertedStackedWithApr = EthersBigNumber.from(
-			stackedWithApr.toFixed(0),
-		).mul(constants.WeiPerEther);
+		const _convertedStackedWithApr =
+			BigNumber(stackedWithApr).multipliedBy(WeiPerEther);
+		const convertedStackedWithApr = BigInt(
+			_convertedStackedWithApr.toFixed(0),
+		);
 		setPotentialClaim(
 			givTokenDistroHelper.getLiquidPart(convertedStackedWithApr),
 		);
@@ -152,7 +151,6 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 		config.GNOSIS_CONFIG.pools.forEach(poolStakingConfig => {
 			const promise: Promise<APR> = getLPStakingAPR(
 				poolStakingConfig as SimplePoolStakingConfig,
-				networkProviders[config.GNOSIS_NETWORK_NUMBER],
 				gnosisValues,
 			);
 			promiseQueue.push(promise);
@@ -170,7 +168,6 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 			const promise: Promise<APR> = getLPStakingAPR(
 				poolStakingConfig as SimplePoolStakingConfig,
-				networkProviders[config.MAINNET_NETWORK_NUMBER],
 				mainnetValues,
 			);
 			promiseQueue.push(promise);
@@ -202,12 +199,14 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 							<MaxStakeGIV
 								onClick={() =>
 									setDeposit(
-										utils.formatEther(totalAmount.div(10)),
+										formatWeiHelper(
+											(totalAmount / 10n).toString(),
+										),
 									)
 								}
-							>{`Max ${utils.formatEther(
-								totalAmount.div(10),
-							)} GIV`}</MaxStakeGIV>
+							>{`Max ${(
+								totalAmount / 10n
+							).toString()} GIV`}</MaxStakeGIV>
 						</Flex>
 						<ImpactCardInput>
 							<InputWithUnit

@@ -1,16 +1,17 @@
 import { Button } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { getAddress, isAddress } from 'ethers/lib/utils';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { getAddress, isAddress } from 'viem';
 import { IProject, IWalletAddress } from '@/apollo/types/types';
 import Input from '../../Input';
 import { requiredOptions } from '@/lib/constants/regex';
 import { client } from '@/apollo/apolloClient';
 import { ADD_RECIPIENT_ADDRESS_TO_PROJECT } from '@/apollo/gql/gqlProjects';
 import InlineToast, { EToastType } from '../../toasts/InlineToast';
-import { networksParams } from '@/helpers/blockchain';
 import { suggestNewAddress } from '@/lib/helpers';
+import { Address } from '@/types/config';
+import { chainNameById } from '@/lib/network';
 
 interface IAddNewAddress {
 	project: IProject;
@@ -42,8 +43,9 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 	const handleAdd = async (formData: IAddressForm) => {
 		setLoading(true);
 		const { address } = formData;
+		console.log('ASD1', address);
 		try {
-			const _address = getAddress(address);
+			const _address = getAddress(address) as Address;
 			await client.mutate({
 				mutation: ADD_RECIPIENT_ADDRESS_TO_PROJECT,
 				variables: {
@@ -107,9 +109,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 		return true;
 	};
 
-	const chainName = selectedWallet.networkId
-		? networksParams[selectedWallet.networkId].chainName
-		: 'Unknown';
+	const chainName = chainNameById(selectedWallet.networkId);
 
 	return (
 		<>

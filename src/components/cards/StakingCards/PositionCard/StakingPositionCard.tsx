@@ -1,5 +1,4 @@
 import { FC, useState, useEffect } from 'react';
-import { BigNumber } from 'ethers';
 import { SublineBold } from '@giveth/ui-design-system';
 import { PoolStakingConfig } from '@/types/config';
 import { useStakingNFT } from '@/hooks/useStakingNFT';
@@ -31,12 +30,6 @@ const StakingPositionCard: FC<IStakingPositionCardProps> = ({
 	const { rewardBalance } = useStakingNFT(stakedPositions);
 	const [oneOfPositionsOutOfRange, setOneOfPositionsOutOfRange] =
 		useState(false);
-	const stakeInfo = {
-		apr: apr,
-		notStakedAmount: BigNumber.from(unstakedPositions.length),
-		earned: rewardBalance,
-		stakedAmount: BigNumber.from(stakedPositions.length),
-	};
 
 	useEffect(() => {
 		const _oneOfPositionsOutOfRange = stakedPositions.some(

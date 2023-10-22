@@ -9,8 +9,7 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
-
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 import Select, {
 	ControlProps,
 	DropdownIndicatorProps,
@@ -18,7 +17,6 @@ import Select, {
 	StylesConfig,
 	components,
 } from 'react-select';
-import { switchNetwork } from '@/lib/wallet';
 import { Flex } from './styled-components/Flex';
 import { ChangeNetworkModal } from './modals/ChangeNetwork';
 import config from '../configuration';
@@ -41,8 +39,8 @@ const _options = [
 ];
 
 const options = _options.map(o => ({
-	label: o.network?.chainName,
-	value: parseInt(o.network?.chainId),
+	label: o.network?.name,
+	value: o.network?.id,
 	network: o.network,
 	active: o.active,
 }));
@@ -172,12 +170,14 @@ export const NetworkSelector = () => {
 		config.MAINNET_NETWORK_NUMBER,
 	);
 
-	const { chainId } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const { switchNetwork } = useSwitchNetwork();
 
 	const handleChangeNetwork = async (networkNumber: number) => {
 		setTargetNetwork(networkNumber);
 		if (chainId !== networkNumber) {
-			if (typeof (window as any).ethereum !== 'undefined') {
+			if (switchNetwork) {
 				switchNetwork(networkNumber);
 			} else {
 				setShowChangeNetworkModal(true);

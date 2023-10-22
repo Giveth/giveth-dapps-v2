@@ -1,12 +1,8 @@
-import { Contract } from 'ethers';
-import { JsonRpcProvider } from '@ethersproject/providers';
 import { captureException } from '@sentry/nextjs';
+import { erc20ABI } from 'wagmi';
+import { getContract } from 'wagmi/actions';
 import config from '@/configuration';
-import UNI_Json from '@/artifacts/UNI.json';
-import { networksParams } from '@/helpers/blockchain';
-import { ERC20 } from '@/types/contracts';
-
-const { abi: UNI_ABI } = UNI_Json;
+import { Address } from '@/types/config';
 
 declare let window: any;
 
@@ -38,14 +34,18 @@ interface ITokenOptins {
 }
 
 const fetchTokenInfo = async (
-	provider: JsonRpcProvider,
-	address: string,
+	chainId: number,
+	address: Address,
 ): Promise<ITokenOptins | undefined> => {
-	const contract = new Contract(address, UNI_ABI, provider) as ERC20;
 	try {
+		const contract = getContract({
+			address: address,
+			abi: erc20ABI,
+			chainId,
+		});
 		const [_decimal, _symbol]: [number, string] = await Promise.all([
-			contract.decimals(),
-			contract.symbol(),
+			contract.read.decimals(),
+			contract.read.symbol(),
 		]);
 		return {
 			address: address,
@@ -65,15 +65,14 @@ const fetchTokenInfo = async (
 };
 
 export async function addToken(
-	provider: JsonRpcProvider,
-	tokenAddress: string | undefined, // Default is GIV
+	chainId: number,
+	tokenAddress: Address | undefined, // Default is GIV
 ): Promise<void> {
 	const address =
-		tokenAddress ||
-		config.NETWORKS_CONFIG[provider.network.chainId]?.GIV_TOKEN_ADDRESS;
+		tokenAddress || config.NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS;
 	if (!address) return;
 
-	const tokenOptions = await fetchTokenInfo(provider, address);
+	const tokenOptions = await fetchTokenInfo(chainId, address);
 	const { ethereum } = window;
 	if (tokenOptions) {
 		await ethereum.request({
@@ -90,13 +89,13 @@ export async function addNetwork(network: number): Promise<void> {
 	const { ethereum } = window;
 	await ethereum.request({
 		method: 'wallet_addEthereumChain',
-		params: [networksParams[network]],
+		params: [config.NETWORKS_CONFIG[network]],
 	});
 }
 
 export async function switchNetwork(network: number): Promise<void> {
 	const { ethereum } = window;
-	const { chainId } = networksParams[network];
+	const { id: chainId } = config.NETWORKS_CONFIG[network];
 
 	try {
 		const res = await ethereum.request({

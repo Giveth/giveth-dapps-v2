@@ -16,18 +16,14 @@ import {
 	Lead,
 	P,
 } from '@giveth/ui-design-system';
-import { constants, BigNumber as EthBigNumber } from 'ethers';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
-import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
+import { useAccount, useNetwork } from 'wagmi';
+import { waitForTransaction } from '@wagmi/core';
 import { Modal } from './Modal';
-import {
-	PoolStakingConfig,
-	RegenStreamConfig,
-	SimplePoolStakingConfig,
-} from '@/types/config';
-import { BN, formatWeiHelper, Zero } from '@/helpers/number';
+import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
+import { formatWeiHelper } from '@/helpers/number';
 import { harvestTokens } from '@/lib/stakingPool';
 import { claimUnstakeStake } from '@/lib/stakingNFT';
 import {
@@ -108,25 +104,25 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		xDaiThirdPartyTokensPrice,
 		givPrice,
 	} = useAppSelector(state => state.price);
-	const { account, library } = useWeb3React();
 	const [txHash, setTxHash] = useState('');
 	//GIVdrop TODO: Should we show Givdrop in new  design?
-	const [givDrop, setGIVdrop] = useState(constants.Zero);
-	const [givDropStream, setGIVdropStream] = useState<BigNumber>(Zero);
+	const [givDrop, setGIVdrop] = useState(0n);
+	const [givDropStream, setGIVdropStream] = useState(0n);
 	//GIVstream
-	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
-	const [rewardStream, setRewardStream] = useState<BigNumber>(Zero);
+	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
+	const [rewardStream, setRewardStream] = useState(0n);
 	//GIVfarm
-	const [earnedLiquid, setEarnedLiquid] = useState(constants.Zero);
-	const [earnedStream, setEarnedStream] = useState<BigNumber>(Zero);
+	const [earnedLiquid, setEarnedLiquid] = useState(0n);
+	const [earnedStream, setEarnedStream] = useState(0n);
 	//GIVbacks
-	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
+	const [givBackStream, setGivBackStream] = useState(0n);
 	//Sum
-	const [sumLiquid, setSumLiquid] = useState(constants.Zero);
-	const [sumStream, setSumStream] = useState<BigNumber>(Zero);
+	const [sumLiquid, setSumLiquid] = useState(0n);
+	const [sumStream, setSumStream] = useState(0n);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-
-	const { chainId } = useWeb3React();
+	const { address } = useAccount();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { tokenDistroHelper, sdh } = useTokenDistroHelper(
 		chainId!,
 		regenStreamConfig,
@@ -135,12 +131,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const tokenDistroBalance = regenStreamConfig
 		? sdh.getTokenDistroBalance(regenStreamConfig.tokenDistroAddress)
 		: sdh.getGIVTokenDistroBalance();
-	const givback = useMemo<EthBigNumber>(
-		() => BN(tokenDistroBalance.givback),
+	const givback = useMemo(
+		() => BigInt(tokenDistroBalance.givback),
 		[tokenDistroBalance],
 	);
-	const givbackLiquidPart = useMemo<EthBigNumber>(
-		() => BN(tokenDistroBalance.givbackLiquidPart),
+	const givbackLiquidPart = useMemo(
+		() => BigInt(tokenDistroBalance.givbackLiquidPart),
 		[tokenDistroBalance],
 	);
 
@@ -160,9 +156,8 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		setEarnedLiquid(
 			tokenDistroHelper.getUserClaimableNow(tokenDistroBalance),
 		);
-		const lockedAmount = BN(tokenDistroBalance.allocatedTokens).sub(
-			givback,
-		);
+		const lockedAmount =
+			BigInt(tokenDistroBalance.allocatedTokens) - givback;
 		setRewardStream(
 			tokenDistroHelper.getStreamPartTokenPerWeek(lockedAmount),
 		);
@@ -171,12 +166,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 
 	//calculate Liquid Sum
 	useEffect(() => {
-		setSumLiquid(rewardLiquidPart.add(earnedLiquid)); // earnedLiquid includes the givbacks liquid part
+		setSumLiquid(rewardLiquidPart + earnedLiquid); // earnedLiquid includes the givbacks liquid part
 	}, [rewardLiquidPart, earnedLiquid]);
 
 	//calculate Stream Sum
 	useEffect(() => {
-		setSumStream(BigNumber.sum(rewardStream, earnedStream)); // earnedStream includes the givbacks stream part
+		setSumStream(rewardStream + earnedStream); // earnedStream includes the givbacks stream part
 	}, [rewardStream, earnedStream]);
 
 	useEffect(() => {
@@ -185,12 +180,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			!regenStreamConfig &&
 			chainId === config.GNOSIS_NETWORK_NUMBER &&
 			!tokenDistroBalance.givDropClaimed &&
-			account
+			address
 		) {
-			fetchAirDropClaimData(account).then(claimData => {
+			fetchAirDropClaimData(address).then(claimData => {
 				if (claimData) {
-					const givDrop = EthBigNumber.from(claimData.amount);
-					setGIVdrop(givDrop.div(10));
+					const givDrop = BigInt(claimData.amount);
+					setGIVdrop(givDrop / 10n);
 					setGIVdropStream(
 						tokenDistroHelper.getStreamPartTokenPerWeek(givDrop),
 					);
@@ -198,7 +193,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			});
 		}
 	}, [
-		account,
+		address,
 		chainId,
 		tokenDistroBalance?.givDropClaimed,
 		tokenDistroHelper,
@@ -206,9 +201,10 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	]);
 
 	const onHarvest = async () => {
-		if (!library || !account || !tokenDistroHelper) return;
+		if (!address || !tokenDistroHelper) return;
 		setState(HarvestStates.HARVESTING);
 		try {
+			if (!chainId) return;
 			if (poolStakingConfig) {
 				if (
 					poolStakingConfig.hasOwnProperty(
@@ -218,13 +214,15 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 					if (!currentIncentive || !stakedPositions) return;
 					//NFT Harvest
 					const txResponse = await claimUnstakeStake(
-						account,
-						library,
+						address,
+						chainId,
 						currentIncentive,
 						stakedPositions,
 					);
 					if (txResponse) {
-						const { status } = await txResponse.wait();
+						const { status } = await waitForTransaction({
+							hash: txResponse,
+						});
 						setState(
 							status
 								? HarvestStates.CONFIRMED
@@ -236,14 +234,15 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				} else {
 					// LP Harvest
 					const txResponse = await harvestTokens(
-						(poolStakingConfig as SimplePoolStakingConfig)
-							.LM_ADDRESS,
-						library,
+						poolStakingConfig.LM_ADDRESS,
+						chainId,
 					);
 					if (txResponse) {
 						setState(HarvestStates.SUBMITTED);
-						setTxHash(txResponse.hash);
-						const { status } = await txResponse.wait();
+						setTxHash(txResponse);
+						const { status } = await waitForTransaction({
+							hash: txResponse,
+						});
 						setState(
 							status
 								? HarvestStates.CONFIRMED
@@ -256,12 +255,14 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			} else {
 				const txResponse = await claimReward(
 					tokenDistroHelper.contractAddress,
-					library,
+					chainId,
 				);
 				if (txResponse) {
 					setState(HarvestStates.SUBMITTED);
-					setTxHash(txResponse.hash);
-					const { status } = await txResponse.wait();
+					setTxHash(txResponse);
+					const { status } = await waitForTransaction({
+						hash: txResponse,
+					});
 					setState(
 						status ? HarvestStates.CONFIRMED : HarvestStates.ERROR,
 					);
@@ -301,7 +302,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				{(state === HarvestStates.HARVEST ||
 					state === HarvestStates.HARVESTING) && (
 					<HarvestBoxes>
-						{sumLiquid && sumLiquid.gt(0) && (
+						{sumLiquid > 0n && (
 							<>
 								<AmountBoxWithPrice
 									amount={sumLiquid}
@@ -378,13 +379,13 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								</BreakdownTitle>
 								<BreakdownAmount>
 									{formatWeiHelper(
-										earnedLiquid.sub(givbackLiquidPart),
+										earnedLiquid - givbackLiquidPart,
 									)}
 								</BreakdownAmount>
 								<BreakdownUnit>{tokenSymbol}</BreakdownUnit>
 								<BreakdownRate>
 									{formatWeiHelper(
-										rewardStream.minus(givBackStream),
+										rewardStream - givBackStream,
 									)}
 								</BreakdownRate>
 								<BreakdownUnit>
@@ -393,7 +394,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										id: 'label./week',
 									})}
 								</BreakdownUnit>
-								{givBackStream != 0 && (
+								{givBackStream != 0n && (
 									<>
 										<GIVbackStreamDesc>
 											{formatMessage({
@@ -431,7 +432,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 									</>
 								)}
 							</BreakdownRow>
-							{!regenStreamConfig && givback.gt(0) && (
+							{!regenStreamConfig && givback > 0n && (
 								<BreakdownRow>
 									<BreakdownTitle>
 										<BreakdownIcon>
@@ -492,7 +493,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								buttonType='primary'
 								onClick={onHarvest}
 								disabled={
-									sumLiquid.eq(0) ||
+									sumLiquid === 0n ||
 									state === HarvestStates.HARVESTING
 								}
 								loading={state === HarvestStates.HARVESTING}
@@ -545,12 +546,12 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 interface IEarnedBreakDownProps {
 	poolStakingConfig: PoolStakingConfig;
 	tokenDistroHelper: TokenDistroHelper;
-	setRewardLiquidPart: Dispatch<SetStateAction<EthBigNumber>>;
-	setEarnedStream: Dispatch<SetStateAction<BigNumber>>;
+	setRewardLiquidPart: Dispatch<SetStateAction<bigint>>;
+	setEarnedStream: Dispatch<SetStateAction<bigint>>;
 	regenStreamConfig?: RegenStreamConfig;
-	rewardLiquidPart: EthBigNumber;
+	rewardLiquidPart: bigint;
 	tokenSymbol: string;
-	earnedStream: BigNumber;
+	earnedStream: bigint;
 }
 
 const EarnedBreakDown: FC<IEarnedBreakDownProps> = ({
@@ -576,7 +577,7 @@ const EarnedBreakDown: FC<IEarnedBreakDownProps> = ({
 		}
 	}, [earned, tokenDistroHelper]);
 
-	return earned && earned.gt(0) ? (
+	return earned && earned > 0n ? (
 		<BreakdownRow>
 			<BreakdownTitle>
 				<BreakdownIcon>

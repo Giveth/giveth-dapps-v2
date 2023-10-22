@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
 import { captureException } from '@sentry/nextjs';
-
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import ShareModalAndGetReward from '../modals/ShareRewardedModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { isSSRMode, showToastError } from '@/lib/helpers';
@@ -21,7 +21,7 @@ import {
 	decrementLikedProjectsCount,
 	incrementLikedProjectsCount,
 } from '@/features/user/user.slice';
-import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
+import { useModalCallback } from '@/hooks/useModalCallback';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareModal from '../modals/ShareModal';
 import BoostModal from '../modals/Boost/BoostModal';
@@ -47,6 +47,7 @@ const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
 		isEnabled,
 	} = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
+	const { open: openConnectModal } = useWeb3Modal();
 
 	useEffect(() => {
 		setReaction(project.reaction);
@@ -102,20 +103,10 @@ const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
 	const { modalCallback: signInThenLike } =
 		useModalCallback(likeUnlikeProject);
 
-	const { modalCallback: connectThenSignInToBoost } = useModalCallback(
-		signInThenBoost,
-		EModalEvents.CONNECTED,
-	);
-
-	const { modalCallback: connectThenSignInToLike } = useModalCallback(
-		signInThenLike,
-		EModalEvents.CONNECTED,
-	);
-
 	const checkSignInThenLike = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			connectThenSignInToLike();
+			openConnectModal?.();
 		} else if (!isSignedIn) {
 			signInThenLike();
 		} else {
@@ -125,7 +116,7 @@ const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
 
 	const checkSignInThenBoost = () => {
 		if (!isEnabled) {
-			connectThenSignInToBoost();
+			openConnectModal?.();
 		} else if (!isSignedIn) {
 			signInThenBoost();
 		} else {
@@ -234,8 +225,14 @@ const BadgeButton = styled(Flex)<IBadgeButton>`
 						animation: rotate linear 1s infinite;
 						background-color: #399953;
 						background-repeat: no-repeat;
-						background-size: 50% 50%, 50% 50%;
-						background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+						background-size:
+							50% 50%,
+							50% 50%;
+						background-position:
+							0 0,
+							100% 0,
+							100% 100%,
+							0 100%;
 						background-image: linear-gradient(#ffffff, #ffffff),
 							linear-gradient(#ffffff, #ffffff),
 							linear-gradient(#ffffff, #ffffff),

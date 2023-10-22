@@ -1,18 +1,16 @@
-import { parseUnits } from '@ethersproject/units';
+import { celo, gnosis, mainnet, optimism, polygon } from 'wagmi/chains';
 import {
 	EnvConfig,
 	StakingPlatform,
 	StakingType,
 	StreamType,
 } from '@/types/config';
-import { networksParams } from '@/helpers/blockchain';
 import { IconEthereum } from '@/components/Icons/Eth';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconPolygon } from '@/components/Icons/Polygon';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconCelo } from '@/components/Icons/Celo';
 
-const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
 const NOTIFICATION_BASE_ROUTE =
@@ -41,7 +39,7 @@ const config: EnvConfig = {
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
-
+	CHAINS: [mainnet, gnosis, polygon, optimism, celo],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
@@ -53,7 +51,7 @@ const config: EnvConfig = {
 
 	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
-		...networksParams[1],
+		...mainnet,
 
 		DAI_TOKEN_ADDRESS: '0x6b175474e89094c44da98b954eedeac495271d0f',
 		PFP_CONTRACT_ADDRESS: '0x78fde77737d5b9ab32fc718c9535c7f1b8ce84db',
@@ -62,7 +60,6 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 
-		blockExplorerName: ['etherscan'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
 		coingeckoChainName: 'ethereum',
@@ -81,8 +78,6 @@ const config: EnvConfig = {
 		// 	exploited: true,
 		// 	farmEndTimeMS: SEPT_8TH_2022,
 		// },
-
-		nodeUrl: 'https://mainnet.infura.io/v3/' + INFURA_API_KEY,
 
 		pools: [
 			{
@@ -228,14 +223,12 @@ const config: EnvConfig = {
 	},
 
 	GNOSIS_CONFIG: {
-		nodeUrl: networksParams[100]?.rpcUrls[0],
-		...networksParams[100],
+		...gnosis,
 		gasPreference: {
-			maxFeePerGas: parseUnits('2', 'gwei').toString(),
-			maxPriorityFeePerGas: parseUnits('1', 'gwei').toString(),
+			maxFeePerGas: (2e9).toString(),
+			maxPriorityFeePerGas: (1e9).toString(),
 		},
 
-		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
 		coingeckoChainName: 'xdai',
@@ -374,24 +367,20 @@ const config: EnvConfig = {
 	},
 
 	POLYGON_CONFIG: {
-		nodeUrl: networksParams[137]?.rpcUrls[0],
-		...networksParams[137],
+		...polygon,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['PolygonScan'],
 		subgraphAddress: '',
 		coingeckoChainName: 'polygon-pos',
 		chainLogo: (logoSize = 24) => <IconPolygon size={logoSize} />,
 	},
 
 	OPTIMISM_CONFIG: {
-		nodeUrl: networksParams[10]?.rpcUrls[0],
-		...networksParams[10],
+		...optimism,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['OptimismScan'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
@@ -415,12 +404,10 @@ const config: EnvConfig = {
 	},
 
 	CELO_CONFIG: {
-		nodeUrl: networksParams[42220]?.rpcUrls[0],
-		...networksParams[42220],
+		...celo,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['CeloScan'],
 		subgraphAddress: '',
 		coingeckoChainName: 'celo',
 		chainLogo: (logoSize = 24) => <IconCelo size={logoSize} />,

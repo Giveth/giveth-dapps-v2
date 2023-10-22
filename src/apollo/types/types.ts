@@ -137,7 +137,7 @@ export interface ICampaign {
 }
 
 export interface IWalletAddress {
-	address?: string;
+	address?: `0x${string}`;
 	isRecipient?: boolean;
 	networkId?: number;
 }
@@ -412,6 +412,7 @@ export interface IQFRound {
 	beginDate: string;
 	endDate: string;
 	minimumPassportScore: number;
+	eligibleNetworks: number[];
 }
 
 export interface IGetQfRoundHistory {
