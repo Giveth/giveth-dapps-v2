@@ -5,7 +5,11 @@ import { captureException } from '@sentry/nextjs';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import { IProjectEdition } from '@/apollo/types/types';
-import { isUserRegistered, showToastError } from '@/lib/helpers';
+import {
+	compareAddresses,
+	isUserRegistered,
+	showToastError,
+} from '@/lib/helpers';
 import CreateProject from '@/components/views/create/CreateProject';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
@@ -62,6 +66,13 @@ const EditIndex = () => {
 					const project = res.data.projectById;
 					if (project.status.name === EProjectStatus.CANCEL) {
 						setIsCancelled(true);
+						setProject(undefined);
+					} else if (
+						!compareAddresses(
+							project.adminUser.walletAddress,
+							user?.walletAddress,
+						)
+					) {
 						setProject(undefined);
 					} else {
 						setProject(project);
