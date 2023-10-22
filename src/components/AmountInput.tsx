@@ -24,7 +24,6 @@ export const AmountInput: FC<IAmountInput> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const [displayAmount, setDisplayAmount] = useState('');
-	const [test, setTest] = useState(0n);
 	const [activeStep, setActiveStep] = useState(0);
 
 	const setAmountPercentage = useCallback(
@@ -34,7 +33,6 @@ export const AmountInput: FC<IAmountInput> = ({
 				.div(100)
 				.toFixed(0);
 			setAmount(BigInt(newAmount));
-			setTest(BigInt(newAmount));
 			setDisplayAmount(formatWeiHelper(newAmount, undefined, false));
 		},
 		[maxAmount, setAmount],
