@@ -471,6 +471,8 @@ export const approveERC20tokenTransfer = async (
 			});
 			if (tx) {
 				await waitForTransaction({ hash: tx });
+			} else {
+				return false;
 			}
 		}
 
