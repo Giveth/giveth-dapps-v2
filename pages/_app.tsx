@@ -189,6 +189,17 @@ function MyApp({ Component, pageProps }: AppProps) {
 											}}
 										/>
 									)}
+									{process.env.NEXT_PUBLIC_ENV ===
+										'development' && (
+										<Script
+											id='console-script'
+											strategy='afterInteractive'
+											src='node_modules/eruda/eruda.js'
+											dangerouslySetInnerHTML={{
+												__html: `eruda.init();`,
+											}}
+										/>
+									)}
 
 									<FooterWrapper />
 									<ModalController />
