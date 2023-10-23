@@ -189,8 +189,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 											}}
 										/>
 									)}
-									{process.env.NEXT_PUBLIC_ENV ===
-										'development' && (
+									{process.env.NEXT_PUBLIC_ENV !==
+										'production' && (
 										<Script
 											id='console-script'
 											strategy='afterInteractive'
