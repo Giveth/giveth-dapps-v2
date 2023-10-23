@@ -40,6 +40,10 @@ export const AmountInput: FC<IAmountInput> = ({
 
 	const onUserInput = useCallback(
 		(value: string) => {
+			const [, decimals] = value.split('.');
+			if (decimals?.length > 6) {
+				return;
+			}
 			setDisplayAmount(value);
 			setActiveStep(0);
 			let valueBn = new BigNumber(0);
