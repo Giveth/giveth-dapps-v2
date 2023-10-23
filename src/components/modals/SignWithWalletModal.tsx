@@ -51,7 +51,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
 
-	const { address, connector } = useAccount();
+	const { address, connector, isConnected } = useAccount();
 	const { connectors } = useConnect();
 	const { chain } = useNetwork();
 	const { open } = useWeb3Modal();
@@ -65,14 +65,13 @@ export const SignWithWalletModal: FC<IProps> = ({
 
 	useEffect(() => {
 		const multisigConnection = async () => {
-			if (safeSecondaryConnection && address) {
+			if (safeSecondaryConnection && address && isConnected) {
 				setSecondaryConnnector(connector);
 				// Check session before calling a new one
 				const { status } = await checkMultisigSession({
 					safeAddress: multisigAddress,
 					chainId,
 				});
-				console.log({ status });
 				if (status === 'successful') {
 					// close modal and move directly to fetch the token
 					startSignature(connector, true);
@@ -85,7 +84,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 			}
 		};
 		multisigConnection();
-	}, [address]);
+	}, [address, isConnected]);
 
 	useEffect(() => {
 		const checkSecondaryConnection = async () => {
