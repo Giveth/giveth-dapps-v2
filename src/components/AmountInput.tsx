@@ -46,7 +46,9 @@ export const AmountInput: FC<IAmountInput> = ({
 
 			try {
 				valueBn = new BigNumber(value).multipliedBy('1e18');
+				setAmount(BigInt(valueBn.toFixed(0)));
 			} catch (error) {
+				setAmount(0n);
 				console.debug(
 					`Failed to parse input amount: "${value}"`,
 					error,
@@ -57,7 +59,6 @@ export const AmountInput: FC<IAmountInput> = ({
 					},
 				});
 			}
-			setAmount(BigInt(valueBn.toFixed(0)));
 		},
 		[setAmount],
 	);
