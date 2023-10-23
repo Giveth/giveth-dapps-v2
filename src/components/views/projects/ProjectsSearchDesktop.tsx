@@ -19,7 +19,7 @@ const ProjectsSearchDesktop = () => {
 	const handleSearch = (searchTerm?: string) => {
 		const updatedQuery = {
 			...router.query,
-			searchTerm,
+			searchTerm: searchTerm,
 		};
 		router.push({
 			pathname: router.pathname,
