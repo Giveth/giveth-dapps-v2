@@ -74,7 +74,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 				});
 				if (status === 'successful') {
 					// close modal and move directly to fetch the token
-					startSignature(connector, true);
+					await startSignature(connector, true);
 				} else if (status === 'pending') {
 					setCurrentMultisigSession(true);
 					setMultisigLastStep(true);
@@ -158,7 +158,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 							id: isGSafeConnector
 								? currentMultisigSession
 									? "You'll need to execute the pending Multisig transaction to complete your log-in to Giveth & proceed to this area"
-									: 'All wallet owners should sign the login message to continue.'
+									: 'Sign a message with your Safe signer address to continue the log in process'
 								: 'label.you_need_to_authorize_your_wallet',
 						})}
 					</Description>
