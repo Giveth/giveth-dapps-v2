@@ -68,7 +68,6 @@ export const useStakingPool = (
 	}, [chainId, isLoaded]);
 
 	useEffect(() => {
-		console.log('Calculating user stake info');
 		setUserStakeInfo(getUserStakeInfo(currentValues, poolStakingConfig));
 	}, [currentValues, poolStakingConfig]);
 
