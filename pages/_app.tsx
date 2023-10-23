@@ -194,9 +194,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 										<Script
 											id='console-script'
 											strategy='afterInteractive'
-											src='node_modules/eruda/eruda.js'
 											dangerouslySetInnerHTML={{
-												__html: `eruda.init();`,
+												__html: `javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();`,
 											}}
 										/>
 									)}
