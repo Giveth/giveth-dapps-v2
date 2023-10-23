@@ -17,7 +17,7 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 	const handleSearch = (searchTerm?: string) => {
 		router.push({
 			pathname: router.pathname,
-			query: { term: searchTerm },
+			query: { searchTerm: searchTerm },
 		});
 	};
 
