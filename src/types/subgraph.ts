@@ -1,4 +1,5 @@
 import { IUser } from '@/apollo/types/types';
+import { Address } from './config';
 
 export interface ITokenAllocation {
 	amount: string;
@@ -9,7 +10,7 @@ export interface ITokenAllocation {
 }
 
 export interface ITokenDistro {
-	contractAddress: string;
+	contractAddress: Address;
 	initialAmount: string;
 	lockedAmount: string;
 	totalTokens: string;
@@ -96,5 +97,5 @@ export interface ITokenDistroBalance {
 	givback: string;
 	givDropClaimed: boolean;
 	givbackLiquidPart: string;
-	tokenDistroAddress: string;
+	tokenDistroAddress: Address;
 }

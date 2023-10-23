@@ -1,5 +1,5 @@
-import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
+import { useAccount, useNetwork } from 'wagmi';
 import { useAppDispatch } from '@/features/hooks';
 import config from '@/configuration';
 import {
@@ -9,26 +9,29 @@ import {
 
 const SubgraphController = () => {
 	const dispatch = useAppDispatch();
-	const { chainId, account } = useWeb3React();
+
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const { address } = useAccount();
 
 	useEffect(() => {
-		const _account = account ? account : undefined;
+		const _address = address ? address : undefined;
 		const _chainID = chainId || config.MAINNET_NETWORK_NUMBER;
 		setTimeout(
 			() => {
 				dispatch(
 					fetchAllInfoAsync({
-						userAddress: _account,
+						userAddress: _address,
 						chainId: _chainID,
 					}),
 				);
 			},
-			account ? 1000 : 0, // Prevent set no account info after account connected
+			_address ? 1000 : 0, // Prevent set no account info after account connected
 		);
 		const interval = setInterval(() => {
 			dispatch(
 				fetchCurrentInfoAsync({
-					userAddress: _account,
+					userAddress: _address,
 					chainId: _chainID,
 				}),
 			);
@@ -36,7 +39,7 @@ const SubgraphController = () => {
 		return () => {
 			clearInterval(interval);
 		};
-	}, [account, chainId, dispatch]);
+	}, [address, chainId, dispatch]);
 	return null;
 };
 

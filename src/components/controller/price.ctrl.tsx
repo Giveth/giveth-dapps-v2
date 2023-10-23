@@ -1,5 +1,5 @@
-import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
+import { useNetwork } from 'wagmi';
 import { useAppDispatch } from '@/features/hooks';
 import {
 	fetchGIVPriceAsync,
@@ -9,7 +9,8 @@ import {
 
 const PriceController = () => {
 	const dispatch = useAppDispatch();
-	const { chainId } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	useEffect(() => {
 		const _chainId = chainId ?? 0;

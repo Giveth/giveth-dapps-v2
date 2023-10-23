@@ -2,21 +2,24 @@ import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { IntlProvider } from 'react-intl';
 import { Toaster } from 'react-hot-toast';
-import { Web3ReactProvider } from '@web3-react/core';
 import { ApolloProvider } from '@apollo/client';
-import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
 import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
 import Script from 'next/script';
-
+import { WagmiConfig, configureChains, createConfig } from 'wagmi';
+import { EIP6963Connector, createWeb3Modal } from '@web3modal/wagmi/react';
+import { walletConnectProvider } from '@web3modal/wagmi';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { publicProvider } from 'wagmi/providers/public';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
-
 import '../styles/globals.css';
 import { ca, en, es } from '../lang';
+import config from '@/configuration';
 import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';
 import UserController from '@/components/controller/user.ctrl';
@@ -63,9 +66,47 @@ function renderSnippet() {
 	return snippet.min(opts);
 }
 
-function getLibrary(provider: ExternalProvider) {
-	return new Web3Provider(provider);
-}
+const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+
+const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!;
+
+const metadata = {
+	name: 'Giveth',
+	description:
+		'Get rewarded for giving to for-good projects with zero added fees. Donate crypto directly to thousands of for-good projects, nonprofits &amp; charities!',
+	url: 'https://giveth.io',
+	icons: ['https://giveth.io/images/currencies/giv/24.svg'],
+};
+
+const chains = config.CHAINS;
+const { publicClient } = configureChains(chains, [
+	walletConnectProvider({ projectId }),
+	publicProvider(),
+]);
+const wagmiConfig = createConfig({
+	autoConnect: false,
+	connectors: [
+		new WalletConnectConnector({
+			chains,
+			options: { projectId, showQrModal: false, metadata },
+		}),
+		new EIP6963Connector({ chains }),
+		new InjectedConnector({ chains, options: { shimDisconnect: true } }),
+	],
+	publicClient,
+});
+
+createWeb3Modal({
+	wagmiConfig,
+	projectId,
+	chains,
+	featuredWalletIds: [
+		'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
+	],
+	includeWalletIds: [
+		'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
+	],
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
@@ -80,8 +121,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 		};
 		const handleChangeComplete = (url: string) => {
 			NProgress.done();
-			process.env.NEXT_PUBLIC_ENV === 'production' &&
-				window.analytics.page(url);
+			isProduction && window.analytics.page(url);
 		};
 		const handleChangeError = () => {
 			NProgress.done();
@@ -116,7 +156,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 					defaultLocale='en'
 				>
 					<ApolloProvider client={apolloClient}>
-						<Web3ReactProvider getLibrary={getLibrary}>
+						<WagmiConfig config={wagmiConfig}>
 							{isMaintenanceMode ? (
 								<MaintenanceIndex />
 							) : (
@@ -149,13 +189,23 @@ function MyApp({ Component, pageProps }: AppProps) {
 											}}
 										/>
 									)}
+									{process.env.NEXT_PUBLIC_ENV !==
+										'production' && (
+										<Script
+											id='console-script'
+											strategy='afterInteractive'
+											dangerouslySetInnerHTML={{
+												__html: `javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();`,
+											}}
+										/>
+									)}
 
 									<FooterWrapper />
 									<ModalController />
 									<PfpController />
 								</>
 							)}
-						</Web3ReactProvider>
+						</WagmiConfig>
 					</ApolloProvider>
 				</IntlProvider>
 			</Provider>

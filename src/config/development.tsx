@@ -1,19 +1,24 @@
-import { parseUnits } from '@ethersproject/units';
 import React from 'react';
+import {
+	celoAlfajores,
+	gnosis,
+	goerli,
+	optimismGoerli,
+	polygon,
+} from 'wagmi/chains';
 import {
 	EnvConfig,
 	StakingPlatform,
 	StakingType,
 	StreamType,
 } from '@/types/config';
-import { networksParams } from '@/helpers/blockchain';
 import { IconPolygon } from '@/components/Icons/Polygon';
 import { IconCelo } from '@/components/Icons/Celo';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconEthereum } from '@/components/Icons/Eth';
+import { IconUnknown } from '@/components/Icons/Unknown';
 
-const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY;
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
 	'https://impact-graph.serve.giveth.io';
@@ -37,6 +42,29 @@ const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
+const CLASSIC_NETWORK_NUMBER = 63;
+
+const classic = {
+	id: 63,
+	name: 'Ethereum Classic Mordor',
+	network: 'mordor',
+	nativeCurrency: {
+		decimals: 18,
+		name: 'mETC',
+		symbol: 'mETC',
+	},
+	rpcUrls: {
+		default: { http: ['https://rpc.mordor.etccooperative.org'] },
+		public: { http: ['https://rpc.mordor.etccooperative.org'] },
+	},
+	blockExplorers: {
+		default: {
+			name: 'Blockscout',
+			url: 'https://etc-mordor.blockscout.com',
+		},
+	},
+	subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
+};
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -47,18 +75,20 @@ const config: EnvConfig = {
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
+
+	CHAINS: [polygon, goerli, gnosis, optimismGoerli, celoAlfajores, classic],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
-
+	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
 
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
-		...networksParams[5],
+		...goerli,
 		DAI_TOKEN_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',
 		DAI_BUY_LINK: '',
 		PFP_CONTRACT_ADDRESS: '0x9F8c0e0353234F6f644fc7AF84Ac006f02cecE77',
@@ -66,7 +96,6 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['Etherscan'],
 		subgraphAddress:
 			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-goerli/1.5.0',
 		coingeckoChainName: 'ethereum',
@@ -78,8 +107,6 @@ const config: EnvConfig = {
 		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0', // TODO: GOERLI ?
 		WETH_TOKEN_ADDRESS: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
 		TOKEN_DISTRO_ADDRESS: '0x4358c99abFe7A9983B6c96785b8870b5412C5B4B',
-
-		nodeUrl: 'https://goerli.infura.io/v3/' + INFURA_API_KEY,
 
 		pools: [
 			{
@@ -119,14 +146,12 @@ const config: EnvConfig = {
 	},
 
 	GNOSIS_CONFIG: {
-		nodeUrl: networksParams[100]?.rpcUrls[0],
-		...networksParams[100],
+		...gnosis,
 		gasPreference: {
-			maxFeePerGas: parseUnits('2', 'gwei').toString(),
-			maxPriorityFeePerGas: parseUnits('1', 'gwei').toString(),
+			maxFeePerGas: (2e9).toString(),
+			maxPriorityFeePerGas: (1e9).toString(),
 		},
 
-		blockExplorerName: ['Blockscout'],
 		subgraphAddress:
 			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-gnosischain/1.5.1',
 		coingeckoChainName: 'xdai',
@@ -272,23 +297,19 @@ const config: EnvConfig = {
 	},
 
 	POLYGON_CONFIG: {
-		nodeUrl: networksParams[137]?.rpcUrls[0],
-		...networksParams[137],
+		...polygon,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['PolygonScan'],
 		coingeckoChainName: 'polygon-pos',
 		chainLogo: (logoSize?: number) => <IconPolygon size={logoSize} />,
 	},
 
 	OPTIMISM_CONFIG: {
-		nodeUrl: networksParams[420]?.rpcUrls[0],
-		...networksParams[420],
+		...optimismGoerli,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['GoerliOptimismScan'],
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-staging',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
@@ -312,14 +333,22 @@ const config: EnvConfig = {
 	},
 
 	CELO_CONFIG: {
-		nodeUrl: networksParams[44787]?.rpcUrls[0],
-		...networksParams[44787],
+		...celoAlfajores,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		blockExplorerName: ['CeloScan'],
 		coingeckoChainName: 'celo',
 		chainLogo: (logoSize?: number) => <IconCelo size={logoSize} />,
+	},
+
+	CLASSIC_CONFIG: {
+		...classic,
+		//TODO: should change the icon
+		chainLogo: (logoSize?: number) => <IconUnknown size={logoSize} />,
+		coingeckoChainName: 'ethereum-classic',
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
 	},
 };
 
