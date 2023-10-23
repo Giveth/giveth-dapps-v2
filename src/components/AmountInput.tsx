@@ -32,8 +32,17 @@ export const AmountInput: FC<IAmountInput> = ({
 				.multipliedBy(percentage)
 				.div(100)
 				.toFixed(0);
-			setAmount(BigInt(newAmount));
-			setDisplayAmount(formatWeiHelper(newAmount, undefined, false));
+			const _displayAmount = formatWeiHelper(newAmount, 6, false);
+			setDisplayAmount(_displayAmount);
+			setAmount(
+				percentage === 100
+					? maxAmount
+					: BigInt(
+							new BigNumber(_displayAmount)
+								.multipliedBy(1e18)
+								.toFixed(0),
+					  ),
+			);
 		},
 		[maxAmount, setAmount],
 	);
