@@ -58,8 +58,8 @@
 		"styled-components": "^5.3.6",
 		"swiper": "^10.2.0",
 		"unsplash-js": "^7.0.15",
-		"viem": "^1.14.0",
-		"wagmi": "^1.4.2"
+		"viem": "^1.16.6",
+		"wagmi": "^1.4.5"
 	},
 	"devDependencies": {
 		"@next/bundle-analyzer": "^12.1.4",
