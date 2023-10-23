@@ -288,13 +288,16 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
-	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
-	const calcMaxDonation = (givethDonation?: number) =>
-		(Number(userBalance.replace(/,/g, '')) * 100) /
-		(100 + (givethDonation ?? donationToGiveth));
+	const calcMaxDonation = (givethDonation?: number) => {
+		const s = givethDonation ?? donationToGiveth;
+		const t = (selectedTokenBalance * 100n) / BigInt(100 + s);
+		return Number(formatUnits(t, tokenDecimals));
+	};
 
 	const setMaxDonation = (givethDonation?: number) =>
 		setAmountTyped(calcMaxDonation(givethDonation ?? donationToGiveth));
+
+	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
 
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
@@ -452,14 +455,14 @@ const CryptoDonation: FC = () => {
 			)}
 			<CheckBoxContainer>
 				<CheckBox
-					label={formatMessage({ id: 'label.make_it_anonymous' })}
+					label={formatMessage({ id: 'label.donate_privately' })}
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
 					size={14}
 				/>
 				<div>
 					{formatMessage({
-						id: 'component.tooltip.by_checking_this',
+						id: 'component.tooltip.donate_privately',
 					})}
 				</div>
 			</CheckBoxContainer>

@@ -1,6 +1,6 @@
 {
 	"name": "givethdapp",
-	"version": "2.19.6",
+	"version": "2.19.10",
 	"private": true,
 	"scripts": {
 		"build": "next build",
@@ -18,7 +18,7 @@
 	},
 	"dependencies": {
 		"@apollo/client": "^3.8.3",
-		"@giveth/ui-design-system": "^1.11.16",
+		"@giveth/ui-design-system": "^1.11.17",
 		"@reduxjs/toolkit": "^1.9.5",
 		"@segment/snippet": "^4.15.3",
 		"@sentry/nextjs": "^7.69.0",

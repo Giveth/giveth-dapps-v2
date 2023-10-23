@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 import {
 	B,
+	brandColors,
+	GLink,
 	H2,
 	H4,
 	H5,
 	H6,
+	IconExternalLink,
 	neutralColors,
 	P,
 	semanticColors,
@@ -14,6 +17,7 @@ import {
 import { useIntl } from 'react-intl';
 
 import { useEffect, useState } from 'react';
+import config from '@/configuration';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectWalletAddress from '@/components/views/project/projectDonations/ProjectWalletAddress';
 import { useProjectContext } from '@/context/project.context';
@@ -135,32 +139,35 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						) : (
 							<NoDonation>
 								{formatMessage({
-									id: 'label.be_the_first_to_donate',
+									id: 'label.be_the_first_to_give',
 								})}
 							</NoDonation>
 						)}
 					</UpperSection>
-					<div>
-						<LightSubline>
-							{formatMessage({
-								id: 'label.raised_from',
-							})}
-						</LightSubline>
-						<Subline style={{ display: 'inline-block' }}>
-							&nbsp;{countUniqueDonors}
-							&nbsp;
-						</Subline>
-						<LightSubline>
-							{formatMessage(
-								{
-									id: 'label.contributors',
-								},
-								{
-									count: countUniqueDonors,
-								},
-							)}
-						</LightSubline>
-					</div>
+					{countUniqueDonors !== undefined &&
+						countUniqueDonors > 0 && (
+							<div>
+								<LightSubline>
+									{formatMessage({
+										id: 'label.raised_from',
+									})}
+								</LightSubline>
+								<Subline style={{ display: 'inline-block' }}>
+									&nbsp;{countUniqueDonors}
+									&nbsp;
+								</Subline>
+								<LightSubline>
+									{formatMessage(
+										{
+											id: 'label.contributors',
+										},
+										{
+											count: countUniqueDonors,
+										},
+									)}
+								</LightSubline>
+							</div>
+						)}
 				</>
 			) : (
 				<div>
@@ -195,26 +202,46 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 									</EstimatedMatchingSection>
 								</NotDistributedFundContainer>
 							) : (
-								<EstimatedMatchingSection
-									justifyContent='space-between'
-									alignItems='center'
-								>
-									<EstimatedMatchingPrice>
-										+{' '}
-										{formatDonation(
-											matchFund,
-											'$',
-											locale,
-											selectedQFData?.isActive
-												? true
-												: false,
+								<EstimatedMatchingSection flexDirection='column'>
+									<Flex justifyContent='space-between'>
+										<EstimatedMatchingPrice>
+											+{' '}
+											{formatDonation(
+												matchFund,
+												'$',
+												locale,
+												selectedQFData?.isActive
+													? true
+													: false,
+											)}
+										</EstimatedMatchingPrice>
+										<EstimatedMatchingText>
+											{selectedQFData?.isActive
+												? 'Estimated Matching'
+												: 'Matching Funds'}
+										</EstimatedMatchingText>
+									</Flex>
+
+									{qfRoundHistory?.distributedFundTxHash &&
+										!selectedQF.isActive && (
+											<EstimatedMatchingTransaction>
+												<BlockExplorerLink
+													as='a'
+													href={`${config
+														.NETWORKS_CONFIG[
+														+qfRoundHistory.distributedFundNetwork!
+													]?.default.url}
+			tx/${qfRoundHistory?.distributedFundTxHash}`}
+													target='_blank'
+													size='Big'
+												>
+													View transaction &nbsp;
+													<IconExternalLink
+														size={16}
+													/>
+												</BlockExplorerLink>
+											</EstimatedMatchingTransaction>
 										)}
-									</EstimatedMatchingPrice>
-									<EstimatedMatchingText>
-										{selectedQFData?.isActive
-											? 'Estimated Matching'
-											: 'Matching Funds'}
-									</EstimatedMatchingText>
 								</EstimatedMatchingSection>
 							)}
 							<div>
@@ -230,7 +257,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						<NoDonation>
 							{formatMessage({
 								id: selectedQF.isActive
-									? 'label.be_the_first_to_donate'
+									? 'label.be_the_first_to_give'
 									: 'label.qf_no_donations',
 							})}
 						</NoDonation>
@@ -271,7 +298,6 @@ const Wrapper = styled.div`
 
 const UpperSection = styled.div`
 	color: ${neutralColors.gray[900]};
-	text-transform: uppercase;
 `;
 
 const TotalFund = styled(H2)`
@@ -289,6 +315,12 @@ const EstimatedMatchingSection = styled(Flex)`
 	padding: 16px 8px;
 	border-radius: 8px;
 	margin-top: 8px;
+`;
+
+const EstimatedMatchingTransaction = styled.div`
+	margin-top: 8px;
+	padding-top: 8px;
+	border-top: 1px solid ${neutralColors.gray[300]};
 `;
 
 const EstimatedMatchingPrice = styled(H5)`
@@ -330,6 +362,16 @@ const NotDistributedDescription = styled(P)`
 
 const NotDistributedFundContainer = styled.div`
 	margin-bottom: 8px;
+`;
+
+const BlockExplorerLink = styled(GLink)`
+	display: flex;
+	align-items: center;
+	width: 100%;
+	color: ${brandColors.pinky[400]};
+	&:hover {
+		color: ${brandColors.pinky[500]};
+	}
 `;
 
 export default ProjectTotalFundCard;

@@ -5,11 +5,7 @@ import { captureException } from '@sentry/nextjs';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import { IProjectEdition } from '@/apollo/types/types';
-import {
-	compareAddresses,
-	isUserRegistered,
-	showToastError,
-} from '@/lib/helpers';
+import { isUserRegistered, showToastError } from '@/lib/helpers';
 import CreateProject from '@/components/views/create/CreateProject';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
@@ -56,6 +52,7 @@ const EditIndex = () => {
 				dispatch(setShowCompleteProfile(true));
 				return;
 			}
+			!isLoadingProject && setIsLoadingProject(true);
 			client
 				.query({
 					query: FETCH_PROJECT_BY_ID,
@@ -63,16 +60,7 @@ const EditIndex = () => {
 				})
 				.then((res: { data: { projectById: IProjectEdition } }) => {
 					const project = res.data.projectById;
-					if (
-						!compareAddresses(
-							user?.walletAddress,
-							project.adminUser.walletAddress,
-						)
-					) {
-						showToastError(
-							'Only project owner can edit the project',
-						);
-					} else if (project.status.name === EProjectStatus.CANCEL) {
+					if (project.status.name === EProjectStatus.CANCEL) {
 						setIsCancelled(true);
 						setProject(undefined);
 					} else {
