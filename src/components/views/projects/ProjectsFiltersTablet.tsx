@@ -20,8 +20,8 @@ const ProjectsFiltersTablet = () => {
 	const router = useRouter();
 
 	useEffect(() => {
-		if (router.query.term) setShowSearchAndFilter(true);
-	}, [router.query.term]);
+		if (router.query.searchTerm) setShowSearchAndFilter(true);
+	}, [router.query.searchTerm]);
 
 	return (
 		<>
