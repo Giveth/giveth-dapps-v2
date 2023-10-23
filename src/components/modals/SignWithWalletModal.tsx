@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { connect, disconnect, Address } from '@wagmi/core';
+import { connect, Address } from '@wagmi/core';
 
 import {
 	brandColors,
@@ -89,7 +89,6 @@ export const SignWithWalletModal: FC<IProps> = ({
 		const checkSecondaryConnection = async () => {
 			if (safeSecondaryConnection) {
 				setMultisigAddress(address as Address);
-				disconnect();
 				open({ view: 'Connect' });
 			}
 		};
