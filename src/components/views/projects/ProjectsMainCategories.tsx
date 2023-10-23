@@ -69,7 +69,7 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 						<MainCategoryItem
 							isSelected={handleIsSelected(category.slug)}
 						>
-							{formatMessage({ id: category.slug })}
+							{formatMessage({ id: 'projects_' + category.slug })}
 						</MainCategoryItem>
 					</Link>
 				</SwiperSlide>
