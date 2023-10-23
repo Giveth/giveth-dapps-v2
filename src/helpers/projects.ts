@@ -1,8 +1,8 @@
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import { IMainCategory } from '@/apollo/types/types';
 
-export const getMainCategorySlug = (category: IMainCategory) =>
-	category.slug === 'all' ? undefined : category.slug;
+export const getMainCategorySlug = (category?: IMainCategory) =>
+	category?.slug === 'all' ? undefined : category?.slug;
 
 export const sortMap = {
 	[EProjectsSortBy.MOST_FUNDED.toLowerCase()]: EProjectsSortBy.MOST_FUNDED,
