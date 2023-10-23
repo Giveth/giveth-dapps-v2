@@ -105,7 +105,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 
 	useEffect(() => {
 		if (term) {
-			router.push(`${Routes.Projects}?term=${term}`);
+			router.push(`${Routes.Projects}?searchTerm=${term}`);
 			closeModal();
 		}
 	}, [closeModal, router, term]);
