@@ -103,6 +103,15 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				query: FETCH_ALL_PROJECTS,
 				variables: {
 					...variables,
+					sortingBy: query.sort,
+					searchTerm: query.searchTerm,
+					filters: query.filter
+						? Array.isArray(query.filter)
+							? query.filter
+							: [query.filter]
+						: null,
+					campaignSlug: query.campaignSlug,
+					category: query.category,
 					mainCategory: getMainCategorySlug(
 						updatedSelectedMainCategory,
 					),

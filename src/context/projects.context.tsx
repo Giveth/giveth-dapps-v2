@@ -86,7 +86,7 @@ export const ProjectsProvider = (props: {
 			value={{
 				variables: {
 					sortingBy: sort,
-					searchTerm: searchTerm,
+					searchTerm,
 					filters,
 					campaignSlug,
 					mainCategory: router.query?.slug?.toString(),
