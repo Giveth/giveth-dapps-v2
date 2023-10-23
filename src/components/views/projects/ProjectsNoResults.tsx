@@ -2,6 +2,7 @@ import { brandColors, neutralColors, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries, searchSuggestions } from '@/lib/constants/constants';
 import { IMainCategory } from '@/apollo/types/types';
@@ -9,11 +10,16 @@ import Routes from '@/lib/constants/Routes';
 import { useProjectsContext } from '@/context/projects.context';
 
 const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
-	const { setVariables, isQF } = useProjectsContext();
-
-	const handleSearch = (searchTerm?: string) =>
-		setVariables(prevVariables => ({ ...prevVariables, searchTerm }));
 	const { formatMessage } = useIntl();
+	const { isQF } = useProjectsContext();
+	const router = useRouter();
+
+	const handleSearch = (searchTerm?: string) => {
+		router.push({
+			pathname: router.pathname,
+			query: { term: searchTerm },
+		});
+	};
 
 	return (
 		<Wrapper>
@@ -64,11 +70,15 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 								>
 									<MainCategoryItem
 										onClick={() => {
-											setVariables(prevVariables => ({
-												...prevVariables,
-												sortingBy: undefined,
-												filters: undefined,
-											}));
+											const updatedQuery = {
+												...router.query,
+											};
+											delete updatedQuery.sortingBy;
+											delete updatedQuery.filters;
+											router.push({
+												pathname: router.pathname,
+												query: updatedQuery,
+											});
 										}}
 									>
 										{formatMessage({ id: category.slug })}
@@ -128,7 +138,9 @@ const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 	:hover {
 		color: white;
 		background: ${brandColors.giv[600]};
-		transition: background-color 300ms linear, color 150ms linear;
+		transition:
+			background-color 300ms linear,
+			color 150ms linear;
 	}
 	font-weight: 400;
 	text-align: center;
@@ -147,7 +159,9 @@ const SuggestionItem = styled.div`
 	padding: 0 15px;
 	:hover {
 		color: ${neutralColors.gray[700]};
-		transition: color 300ms linear, color 150ms linear;
+		transition:
+			color 300ms linear,
+			color 150ms linear;
 	}
 	${mediaQueries.tablet} {
 		font-size: 16px;
