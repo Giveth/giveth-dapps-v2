@@ -27,7 +27,7 @@ export const projectsItems = {
 		{
 			name: 'All Projects',
 			url: Routes.Projects,
-			label: 'label.all_projects',
+			label: 'label.projects_all',
 		},
 		{
 			name: 'Recently Updated',
