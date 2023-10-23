@@ -1,4 +1,11 @@
-import { celo, gnosis, mainnet, optimism, polygon } from 'wagmi/chains';
+import {
+	celo,
+	classic,
+	gnosis,
+	mainnet,
+	optimism,
+	polygon,
+} from 'wagmi/chains';
 import {
 	EnvConfig,
 	StakingPlatform,
@@ -10,6 +17,7 @@ import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconPolygon } from '@/components/Icons/Polygon';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconCelo } from '@/components/Icons/Celo';
+import { IconClassic } from '@/components/Icons/Classic';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
@@ -26,6 +34,7 @@ const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
+const CLASSIC_NETWORK_NUMBER = 61;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -39,12 +48,13 @@ const config: EnvConfig = {
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
-	CHAINS: [mainnet, gnosis, polygon, optimism, celo],
+	CHAINS: [mainnet, gnosis, polygon, optimism, celo, classic],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
+	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
@@ -411,6 +421,15 @@ const config: EnvConfig = {
 		subgraphAddress: '',
 		coingeckoChainName: 'celo',
 		chainLogo: (logoSize = 24) => <IconCelo size={logoSize} />,
+	},
+	CLASSIC_CONFIG: {
+		...classic,
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
+		coingeckoChainName: 'ethereum-classic',
+		chainLogo: (logoSize = 24) => <IconClassic size={logoSize} />,
 	},
 };
 
