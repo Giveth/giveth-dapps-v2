@@ -34,9 +34,11 @@ export const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 				alt={_mainCategory.title}
 			/>
 			<Title weight={700}>
-				{formatMessage({ id: _mainCategory.slug })}
+				{formatMessage({ id: `projects_${_mainCategory.slug}` })}
 			</Title>
-			<Desc>{formatMessage({ id: `${_mainCategory.slug}_desc` })}</Desc>
+			<Desc>
+				{formatMessage({ id: `projects_${_mainCategory.slug}_desc` })}
+			</Desc>
 		</BannerContainer>
 	);
 };
