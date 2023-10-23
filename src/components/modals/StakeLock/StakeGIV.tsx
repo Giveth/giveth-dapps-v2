@@ -174,6 +174,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 
 	return (
 		<StakeModalContainer>
+			<div>{amount.toString()}</div>
 			{stakeState !== StakeState.CONFIRMED &&
 				stakeState !== StakeState.ERROR && (
 					<>
@@ -256,7 +257,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 										}
 										disabled={
 											amount === 0n ||
-											maxAmount <= amount ||
+											maxAmount < amount ||
 											stakeState === StakeState.WRAPPING
 										}
 										loading={

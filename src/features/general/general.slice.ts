@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchMainCategories } from './general.thunk';
-import { IMainCategory } from '@/apollo/types/types';
+import { fetchMainCategories, fetchQFRounds } from './general.thunk';
+import { IMainCategory, IQFRound } from '@/apollo/types/types';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export enum ETheme {
@@ -14,6 +14,8 @@ const initialState = {
 	showHeader: true,
 	showFooter: true,
 	mainCategories: [] as IMainCategory[],
+	qfRounds: [] as IQFRound[],
+	activeQFRound: null as IQFRound | null,
 };
 
 export const GeneralSlice = createSlice({
@@ -44,6 +46,11 @@ export const GeneralSlice = createSlice({
 	extraReducers: builder => {
 		builder.addCase(fetchMainCategories.fulfilled, (state, action) => {
 			state.mainCategories = action.payload.data.mainCategories;
+		});
+		builder.addCase(fetchQFRounds.fulfilled, (state, action) => {
+			state.qfRounds = action.payload.data.qfRounds;
+			state.activeQFRound =
+				state.qfRounds.find(round => round.isActive) || null;
 		});
 	},
 });

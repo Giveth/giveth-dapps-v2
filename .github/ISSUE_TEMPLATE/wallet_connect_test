@@ -1,0 +1,25 @@
+---
+name: Wallet Connect Testing
+about: Test Cases for Wallet Connect
+title: 'WC Testing:'
+labels: 'Wallet Connect'
+assignees: ''
+
+---
+
+The following test cases should be completed and successful:
+
+- [ ] - Sign in
+- [ ] - Switch Network (from navbar dropdown menu)
+- [ ] - Switch Network (from givfarm)
+- [ ] - Connect Wallet(from GIVfarm/GIVback)
+- [ ] - Connect Wallet and sign in (from passport banner)
+- [ ] - Switch network (from donate page)
+- [ ] - Donate ERC20
+- [ ] - Donate native token
+- [ ] - Stake GIV
+- [ ] - Lock GIV
+- [ ] - Unstake GIV
+- [ ] - Harvest rewards (GIVfarm)
+- [ ] - claim GIVbacks 
+- [ ] - claim GIVstream
