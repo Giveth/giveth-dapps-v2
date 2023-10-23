@@ -47,6 +47,8 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 	const isDesktop = useMediaQuery(device.laptopL);
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
+	const { connector } = useAccount();
+	const isGSafeConnector = connector?.id === 'safe';
 
 	useEffect(() => {
 		if (!isHeaderShowing) {
@@ -103,6 +105,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 			)}
 			{signWithWallet && (
 				<SignWithWalletModal
+					isGSafeConnector={isGSafeConnector}
 					callback={() => {
 						router.push(queueRoute);
 						setQueueRoute('');

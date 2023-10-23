@@ -62,7 +62,6 @@ export const SignWithWalletModal: FC<IProps> = ({
 	const { isAnimating, closeModal: _closeModal } =
 		useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();
-
 	useEffect(() => {
 		const multisigConnection = async () => {
 			if (safeSecondaryConnection && address && isConnected) {
@@ -97,6 +96,12 @@ export const SignWithWalletModal: FC<IProps> = ({
 		checkSecondaryConnection();
 	}, [safeSecondaryConnection]);
 
+	const reset = () => {
+		setMultisigLastStep(false);
+		setCurrentMultisigSession(false);
+		setSafeSecondaryConnection(false);
+	};
+
 	const closeModal = async () => {
 		if (safeSecondaryConnection && connector?.id !== 'safe') {
 			await connect({
@@ -105,6 +110,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 			});
 		}
 		_closeModal();
+		reset();
 	};
 
 	const startSignature = async (connector?: any, fromGnosis?: boolean) => {
