@@ -541,9 +541,33 @@ export const getUserIPInfo = async () => {
 };
 
 export const matchLocaleToSystemLocals = (locale: string) => {
+	const spanishSpeakingCountryCodes = [
+		'es',
+		'mx',
+		'ar',
+		'pe',
+		'co',
+		'cl',
+		'gt',
+		'ec',
+		'bo',
+		'cu',
+		'hn',
+		'py',
+		'sv',
+		'ni',
+		'cr',
+		'pr',
+		'pa',
+		'uy',
+		've',
+		'do',
+	];
 	const lowercaseLocale = locale.toLowerCase();
-	const isValidLocale = locales?.includes(lowercaseLocale);
-	return isValidLocale ? lowercaseLocale : undefined;
+	const isSpanish = spanishSpeakingCountryCodes.includes(lowercaseLocale);
+	const _locale = isSpanish ? 'es' : lowercaseLocale;
+	const isValidLocale = locales?.includes(_locale);
+	return isValidLocale ? _locale : undefined;
 };
 
 export const getLocaleFromNavigator = () => {
