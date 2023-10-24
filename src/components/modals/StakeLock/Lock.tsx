@@ -63,11 +63,12 @@ const LockModal: FC<ILockModalProps> = ({
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
-	const { stakedAmount: stakedLpAmount } = useStakingPool(poolStakingConfig);
+	const { stakedAmount: stakedLpAmount } =
+		useStakingPool(poolStakingConfig) || {};
 
-	const { network: poolNetwork } = poolStakingConfig;
+	const { network: poolNetwork } = poolStakingConfig || {};
 
-	const { sdh } = useTokenDistroHelper(poolNetwork);
+	const { sdh } = useTokenDistroHelper(poolNetwork) || {};
 
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 
