@@ -73,7 +73,7 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 	}
 
 	const query = params.toString();
-	return `${Routes.Projects}${query ? `?${query}` : ''}`;
+	return `${Routes.AllProjects}${query ? `?${query}` : ''}`;
 }
 
 export function removeQueryParam(

@@ -17,7 +17,7 @@ interface IProjectsFilterProps {
 
 function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 	const { isQF } = useProjectsContext();
-	const projectsRoute = (isQF ? Routes.QFProjects : Routes.Projects) + '/';
+	const projectsRoute = (isQF ? Routes.QFProjects : Routes.AllProjects) + '/';
 	const { query } = useRouter();
 	const { formatMessage } = useIntl();
 
@@ -59,10 +59,7 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 				<SwiperSlide key={category.slug} style={{ width: 'auto' }}>
 					<Link
 						href={{
-							pathname:
-								category.slug === 'all'
-									? projectsRoute
-									: projectsRoute + category.slug,
+							pathname: projectsRoute + category.slug,
 							query: newQuery,
 						}}
 					>

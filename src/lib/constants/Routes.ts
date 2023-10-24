@@ -19,6 +19,7 @@ export enum ProfileModal {
 const Routes = {
 	Home: '/',
 	CreateProject: '/create',
+	AllProjects: '/projects/all',
 	Projects: '/projects',
 	QFProjects: '/qf',
 	Project: '/project',

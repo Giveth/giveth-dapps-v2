@@ -214,7 +214,7 @@ const LockModal: FC<ILockModalProps> = ({
 									id: 'label.user_your_givpower_to_support_verified_projects',
 								})}
 							</P>
-							<Link href={Routes.Projects}>
+							<Link href={Routes.AllProjects}>
 								<BoostButton
 									linkType='primary'
 									label={formatMessage({

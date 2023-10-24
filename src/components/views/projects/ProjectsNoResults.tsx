@@ -62,11 +62,7 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 							return (
 								<Link
 									key={`category-${index}`}
-									href={
-										category.slug === 'all'
-											? Routes.Projects
-											: `/projects/${category.slug}`
-									}
+									href={`${Routes.Projects}/${category.slug}`}
 								>
 									<MainCategoryItem
 										onClick={() => {

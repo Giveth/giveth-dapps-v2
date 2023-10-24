@@ -12,7 +12,7 @@ const DoneContent = () => {
 				Your project was successfully deactivated. Thank you for using
 				Giveth.
 			</Lead>
-			<RedirectLink onClick={() => router.push(Routes.Projects)}>
+			<RedirectLink onClick={() => router.push(Routes.AllProjects)}>
 				Go to projects
 			</RedirectLink>
 			<RedirectLink onClick={() => router.push(Routes.MyAccount)}>

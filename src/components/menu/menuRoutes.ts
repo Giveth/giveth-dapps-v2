@@ -7,7 +7,7 @@ export const menuRoutes = [
 	},
 	{
 		title: 'label.projects',
-		href: [Routes.Projects],
+		href: [Routes.AllProjects],
 	},
 	{
 		title: 'label.giveconomy',

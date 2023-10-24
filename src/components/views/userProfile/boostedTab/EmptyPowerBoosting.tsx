@@ -55,7 +55,7 @@ export const EmptyPowerBoosting: FC<IEmptyPowerBoosting> = ({ myAccount }) => {
 						})}
 					</Title>
 					<br />
-					<Link href={Routes.Projects}>
+					<Link href={Routes.AllProjects}>
 						<ButtonLink
 							label={formatMessage({
 								id: 'label.go_to_projects',

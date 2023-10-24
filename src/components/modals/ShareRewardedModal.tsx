@@ -85,7 +85,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 					projectHref + `?referrer_id=${user?.chainvineId}`,
 				),
 		  )
-		: fullPath(Routes.Projects + `?referrer_id=${user?.chainvineId}`);
+		: fullPath(Routes.AllProjects + `?referrer_id=${user?.chainvineId}`);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const [error, setError] = useState(false);

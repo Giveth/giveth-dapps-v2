@@ -30,7 +30,7 @@ const content = {
 	description:
 		"Whether you're brand new to crypto, or a seasoned pro, we made it easier than ever to directly support the projects you love on Giveth. Follow along below to learn how you can donate to projects with zero fees as well as earn rewards in GIV tokens!",
 	steps: donorSteps,
-	buttonLink: Routes.Projects,
+	buttonLink: Routes.AllProjects,
 	buttonText: 'EXPLORE PROJECTS',
 	firstTitleOnRight: true,
 };
