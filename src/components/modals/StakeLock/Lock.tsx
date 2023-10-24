@@ -28,7 +28,6 @@ import LockInfo, { LockInfoTooltip } from './LockInfo';
 import LockingBrief from './LockingBrief';
 import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
-import TotalGIVpowerBox from './TotalGIVpowerBox';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Flex } from '@/components/styled-components/Flex';
@@ -37,6 +36,7 @@ import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
+import TotalGIVpowerBox from './TotalGIVpowerBox';
 import type { PoolStakingConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -64,11 +64,12 @@ const LockModal: FC<ILockModalProps> = ({
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
-	const { stakedAmount: stakedLpAmount } = useStakingPool(poolStakingConfig);
+	const { stakedAmount: stakedLpAmount } =
+		useStakingPool(poolStakingConfig) || {};
 
-	const { network: poolNetwork } = poolStakingConfig;
+	const { network: poolNetwork } = poolStakingConfig || {};
 
-	const { sdh } = useTokenDistroHelper(poolNetwork);
+	const { sdh } = useTokenDistroHelper(poolNetwork) || {};
 
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 
