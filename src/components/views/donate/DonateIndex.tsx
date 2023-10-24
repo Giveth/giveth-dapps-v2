@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import {
 	brandColors,
 	ButtonLink,
+	Col,
 	Container,
 	IconDonation24,
 	IconExternalLink24,
 	Lead,
 	neutralColors,
+	Row,
 	semanticColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
@@ -18,7 +20,6 @@ import { useNetwork } from 'wagmi';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from '../../DonateSocialBox';
-import SuccessView from '@/components/views/donate/SuccessView';
 import NiceBanner from './NiceBanner';
 // import PurchaseXDAI from './PurchaseXDAIBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
@@ -34,6 +35,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
+import { DonationCard } from './DonationCard';
 
 const CryptoDonation = dynamic(
 	() => import('@/components/views/donate/CryptoDonation'),
@@ -77,8 +79,14 @@ const DonateIndex: FC = () => {
 					</AlreadyDonatedWrapper>
 				)}
 				<NiceBanner />
-				<Sections>
-					{/* <ProjectCardSelector /> */}
+				<Row>
+					<Col xs={12} lg={6}>
+						<DonationCard />
+					</Col>
+					<Col></Col>
+				</Row>
+				{/* <Sections>
+					<ProjectCardSelector />
 					<Right>
 						{isSuccessDonation ? (
 							<SuccessView />
@@ -86,7 +94,7 @@ const DonateIndex: FC = () => {
 							<CryptoDonation />
 						)}
 					</Right>
-				</Sections>
+				</Sections> */}
 				{isSuccessDonation && (
 					<Options>
 						<Lead style={{ color: neutralColors.gray[900] }}>
