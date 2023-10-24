@@ -21,6 +21,7 @@ const Routes = {
 	CreateProject: '/create',
 	AllProjects: '/projects/all',
 	Projects: '/projects',
+	AllQFProjects: '/qf/all',
 	QFProjects: '/qf',
 	Project: '/project',
 	ReFiProjects: '/projects/finance',
