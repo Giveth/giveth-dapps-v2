@@ -3,11 +3,17 @@ import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex } from '@/components/styled-components/Flex';
+import { RecurringDonationCard } from './RecurringDonationCard';
+
+enum ETabs {
+	ONE_TIME,
+	RECURRING,
+}
 
 const tabs = ['One-Time Donation', 'Recurring Donation'];
 
 export const DonationCard = () => {
-	const [tab, setTab] = useState(1);
+	const [tab, setTab] = useState(ETabs.RECURRING);
 	return (
 		<DonationCardWrapper>
 			<Title>How do you want to donate?</Title>
@@ -23,6 +29,7 @@ export const DonationCard = () => {
 				))}
 				<EmptyTab />
 			</Flex>
+			{tab === ETabs.RECURRING && <RecurringDonationCard />}
 		</DonationCardWrapper>
 	);
 };
@@ -32,6 +39,7 @@ const DonationCardWrapper = styled(Flex)`
 	gap: 16px;
 	padding: 24px;
 	border-radius: 16px;
+	align-items: flex-start;
 	background: ${neutralColors.gray[100]};
 	box-shadow: ${Shadow.Neutral[400]};
 `;
