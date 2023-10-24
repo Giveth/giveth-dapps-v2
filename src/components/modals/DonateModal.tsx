@@ -223,6 +223,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 						(token.mainnetAddress as `0x${string}`) ||
 						('' as `0x${string}`);
 				}
+				// ETC is not supported by coingecko with contract address, so we should use this function to fetch the price
 				if (token.symbol === 'ETC') {
 					const fetchedETCPrice = await fetchETCPrice();
 					setTokenPrice(fetchedETCPrice || 0);
