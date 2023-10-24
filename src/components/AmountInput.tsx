@@ -32,21 +32,36 @@ export const AmountInput: FC<IAmountInput> = ({
 				.multipliedBy(percentage)
 				.div(100)
 				.toFixed(0);
-			setAmount(BigInt(newAmount));
-			setDisplayAmount(formatWeiHelper(newAmount, undefined, false));
+			const _displayAmount = formatWeiHelper(newAmount, 6, false);
+			setDisplayAmount(_displayAmount);
+			setAmount(
+				percentage === 100
+					? maxAmount
+					: BigInt(
+							new BigNumber(_displayAmount)
+								.multipliedBy(1e18)
+								.toFixed(0),
+					  ),
+			);
 		},
 		[maxAmount, setAmount],
 	);
 
 	const onUserInput = useCallback(
 		(value: string) => {
+			const [, decimals] = value.split('.');
+			if (decimals?.length > 6) {
+				return;
+			}
 			setDisplayAmount(value);
 			setActiveStep(0);
 			let valueBn = new BigNumber(0);
 
 			try {
 				valueBn = new BigNumber(value).multipliedBy('1e18');
+				setAmount(BigInt(valueBn.toFixed(0)));
 			} catch (error) {
+				setAmount(0n);
 				console.debug(
 					`Failed to parse input amount: "${value}"`,
 					error,
@@ -57,7 +72,6 @@ export const AmountInput: FC<IAmountInput> = ({
 					},
 				});
 			}
-			setAmount(BigInt(valueBn.toFixed(0)));
 		},
 		[setAmount],
 	);

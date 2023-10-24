@@ -7,7 +7,6 @@ import The_Commons_Stack from '/public/images/partnerships/CSlogo.svg';
 import Gitcoin from '/public/images/partnerships/Gitcoin.svg';
 import Polygon_Hermez from '/public/images/partnerships/Polygon_Hermez.svg';
 import iden3 from '/public/images/partnerships/iden3.svg';
-import DoinGud from '/public/images/partnerships/DoinGud.svg';
 import Governauts from '/public/images/partnerships/Governauts.svg';
 import ShapeShift_DAO from '/public/images/partnerships/ShapeShift_DAO.svg';
 import White_Hat_Group from '/public/images/partnerships/White_Hat_Group.svg';
@@ -93,13 +92,6 @@ export const PartnershipArray: IPartner[] = [
 		title: 'Datafund',
 		description: 'page.partnerships.datafund',
 		link: 'https://datafund.io',
-	},
-
-	{
-		icon: DoinGud,
-		title: 'DoinGud',
-		description: 'page.partnerships.doingud',
-		link: 'https://doingud.com/',
 	},
 	{
 		icon: Ethereum_Colombia,

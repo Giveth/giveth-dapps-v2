@@ -3,7 +3,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { getActiveRound } from '@/helpers/qf';
-
 import { chainNameById } from '@/lib/network';
 import { useProjectContext } from '@/context/project.context';
 

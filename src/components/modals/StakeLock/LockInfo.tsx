@@ -28,10 +28,11 @@ interface ILockInfo {
 const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
-	const { apr } = useStakingPool(
-		config.NETWORKS_CONFIG[chainId!]?.GIVPOWER ||
-			config.GNOSIS_CONFIG.GIVPOWER,
-	);
+	const { apr } =
+		useStakingPool(
+			config.NETWORKS_CONFIG[chainId!]?.GIVPOWER ||
+				config.GNOSIS_CONFIG.GIVPOWER,
+		) || {};
 
 	const multipler = Math.sqrt(1 + round);
 

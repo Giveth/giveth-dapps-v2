@@ -1,6 +1,6 @@
 {
 	"name": "givethdapp",
-	"version": "2.19.6",
+	"version": "2.19.10",
 	"private": true,
 	"scripts": {
 		"build": "next build",
@@ -18,12 +18,12 @@
 	},
 	"dependencies": {
 		"@apollo/client": "^3.8.3",
-		"@giveth/ui-design-system": "^1.11.16",
+		"@giveth/ui-design-system": "^1.11.17",
 		"@reduxjs/toolkit": "^1.9.5",
 		"@segment/snippet": "^4.15.3",
 		"@sentry/nextjs": "^7.69.0",
 		"@uniswap/v3-sdk": "^3.10.0",
-		"@web3modal/wagmi": "^3.0.2",
+		"@web3modal/wagmi": "^3.1.0",
 		"apollo-upload-client": "^17.0.0",
 		"bignumber.js": "^9.1.2",
 		"deepmerge": "^4.2.2",
@@ -58,8 +58,8 @@
 		"styled-components": "^5.3.6",
 		"swiper": "^10.2.0",
 		"unsplash-js": "^7.0.15",
-		"viem": "^1.14.0",
-		"wagmi": "^1.4.2"
+		"viem": "^1.16.6",
+		"wagmi": "^1.4.5"
 	},
 	"devDependencies": {
 		"@next/bundle-analyzer": "^12.1.4",

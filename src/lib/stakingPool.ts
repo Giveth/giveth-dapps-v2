@@ -1,5 +1,10 @@
 import { captureException } from '@sentry/nextjs';
-import { getContract, getWalletClient, signTypedData } from 'wagmi/actions';
+import {
+	getContract,
+	getWalletClient,
+	signTypedData,
+	waitForTransaction,
+} from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
 import { WriteContractReturnType, hexToSignature } from 'viem';
 import BigNumber from 'bignumber.js';
@@ -448,6 +453,8 @@ export const approveERC20tokenTransfer = async (
 		ownerAddress,
 		spenderAddress,
 	]);
+	console.log('allowance', allowance);
+	console.log('amount', amount);
 
 	if (amount <= allowance) return true;
 
@@ -455,22 +462,33 @@ export const approveERC20tokenTransfer = async (
 		const walletClient = await getWalletClient({ chainId });
 
 		if (allowance > 0n) {
-			await walletClient?.writeContract({
+			console.log('allowance is bigger than zero');
+			const tx = await walletClient?.writeContract({
 				address: tokenAddress,
 				abi: erc20ABI,
 				functionName: 'approve',
 				args: [spenderAddress, 0n],
 			});
+			if (tx) {
+				await waitForTransaction({ hash: tx });
+			} else {
+				return false;
+			}
 		}
 
-		await walletClient?.writeContract({
+		const txResponse = await walletClient?.writeContract({
 			address: tokenAddress,
 			abi: erc20ABI,
 			functionName: 'approve',
 			args: [spenderAddress, amount],
 		});
 
-		return true;
+		if (txResponse) {
+			await waitForTransaction({ hash: txResponse });
+			return true;
+		} else {
+			return false;
+		}
 	} catch (error) {
 		console.log('Error on Approve', error);
 		return false;
