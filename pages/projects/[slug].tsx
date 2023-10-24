@@ -28,6 +28,15 @@ export interface IProjectsRouteProps {
 	qfRounds: IQFRound[];
 }
 
+export const allCategoriesItem = {
+	title: 'All',
+	description: '',
+	banner: '',
+	slug: 'all',
+	categories: [],
+	selected: false,
+};
+
 interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
 	selectedMainCategory: IMainCategory;
 }
@@ -76,15 +85,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			query: FETCH_MAIN_CATEGORIES,
 			fetchPolicy: 'network-only',
 		});
-
-		const allCategoriesItem = {
-			title: 'All',
-			description: '',
-			banner: '',
-			slug: 'all',
-			categories: [],
-			selected: false,
-		};
 
 		const updatedMainCategory = [allCategoriesItem, ...mainCategories];
 		const selectedMainCategory = updatedMainCategory.find(mainCategory => {
