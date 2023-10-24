@@ -83,9 +83,11 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			};
 			const apolloClient = initializeApollo();
 
-			let _filters = Array.isArray(query.filter)
-				? query.filter
-				: [query.filter];
+			let _filters = query.filter
+				? Array.isArray(query.filter)
+					? query.filter
+					: [query.filter]
+				: undefined;
 
 			_filters
 				? _filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
