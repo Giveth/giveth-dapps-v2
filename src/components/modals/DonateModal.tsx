@@ -32,7 +32,7 @@ import DonateSummary from '@/components/views/donate/DonateSummary';
 import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useDonateData } from '@/context/donate.context';
-import { fetchPrice } from '@/services/token';
+import { fetchETCPrice, fetchPrice } from '@/services/token';
 import { fetchEthPrice } from '@/features/price/price.services';
 import { useCreateDonation } from '@/hooks/useCreateDonation';
 
@@ -222,6 +222,11 @@ const DonateModal: FC<IDonateModalProps> = props => {
 					tokenAddress =
 						(token.mainnetAddress as `0x${string}`) ||
 						('' as `0x${string}`);
+				}
+				if (token.symbol === 'ETC') {
+					const fetchedETCPrice = await fetchETCPrice();
+					setTokenPrice(fetchedETCPrice || 0);
+					return;
 				}
 				const coingeckoChainId =
 					isMainnet ||
