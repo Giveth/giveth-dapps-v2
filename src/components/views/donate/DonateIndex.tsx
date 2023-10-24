@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {
 	brandColors,
 	ButtonLink,
+	Container,
 	IconDonation24,
 	IconExternalLink24,
 	Lead,
@@ -18,7 +19,6 @@ import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from '../../DonateSocialBox';
 import SuccessView from '@/components/views/donate/SuccessView';
-import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import NiceBanner from './NiceBanner';
 // import PurchaseXDAI from './PurchaseXDAIBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
@@ -64,7 +64,7 @@ const DonateIndex: FC = () => {
 			<DonateHeader />
 			<BigArc />
 			{hasActiveQFRound && <PassportBanner />}
-			<Wrapper>
+			<DonateContainer>
 				{/* <PurchaseXDAI /> */}
 				{alreadyDonated && (
 					<AlreadyDonatedWrapper>
@@ -78,7 +78,7 @@ const DonateIndex: FC = () => {
 				)}
 				<NiceBanner />
 				<Sections>
-					<ProjectCardSelector />
+					{/* <ProjectCardSelector /> */}
 					<Right>
 						{isSuccessDonation ? (
 							<SuccessView />
@@ -117,7 +117,7 @@ const DonateIndex: FC = () => {
 						isDonateFooter
 					/>
 				)}
-			</Wrapper>
+			</DonateContainer>
 		</>
 	);
 };
@@ -171,11 +171,10 @@ const ProjectsButton = styled(ButtonLink)`
 	margin-top: 40px;
 `;
 
-const Wrapper = styled.div`
-	max-width: 1052px;
+const DonateContainer = styled(Container)`
 	text-align: center;
-	padding: 64px 0;
-	margin: 0 auto;
+	padding-top: 64px;
+	padding-bottom: 64px;
 	position: relative;
 `;
 
