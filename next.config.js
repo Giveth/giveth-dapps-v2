@@ -54,6 +54,11 @@ const moduleExports = withBundleAnalyzer({
 				destination: '/projects/all',
 				permanent: true,
 			},
+			{
+				source: '/qf',
+				destination: '/qf/all',
+				permanent: true,
+			},
 		];
 	},
 	webpack: (config, { isServer, dev }) => {
