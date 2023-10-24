@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { fetchEnsAddress, fetchTransaction } from '@wagmi/core';
-import { useChainId, useWaitForTransaction } from 'wagmi';
+import { useNetwork, useWaitForTransaction } from 'wagmi';
 
 import { sendTransaction } from '@/lib/helpers';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
@@ -48,7 +48,8 @@ export const useCreateDonation = () => {
 	const [resolveState, setResolveState] = useState<(() => void) | null>(null);
 	const [createDonationProps, setCreateDonationProps] =
 		useState<ICreateDonation>();
-	const id = useChainId();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { status } = useWaitForTransaction({
 		hash: txHash,
 		onReplaced(data) {
@@ -89,7 +90,7 @@ export const useCreateDonation = () => {
 
 			if (!transaction) return;
 			const donationData: IOnTxHash = {
-				chainId: transaction.chainId! || id,
+				chainId: transaction.chainId! || chainId!,
 				txHash: transaction.hash,
 				amount: amount,
 				token,
