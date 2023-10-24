@@ -1,15 +1,16 @@
 import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
-import { BigNumber, utils } from 'ethers';
 import { FC, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
+import BigNumber from 'bignumber.js';
+import { parseUnits } from 'viem';
 import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig } from '@/types/config';
 import { Flex } from './styled-components/Flex';
 
 interface IAmountInput {
-	maxAmount: BigNumber;
+	maxAmount: bigint;
 	poolStakingConfig: PoolStakingConfig;
 	disabled?: boolean;
 }
@@ -23,8 +24,8 @@ export const USDInput: FC<IAmountInput> = ({
 	const { formatMessage } = useIntl();
 	const setAmountPercentage = useCallback(
 		(percentage: number): void => {
-			const newAmount = BigNumber.from(maxAmount)
-				.mul(percentage)
+			const newAmount = new BigNumber(maxAmount.toString())
+				.multipliedBy(percentage)
 				.div(100)
 				.toString();
 			setDisplayAmount(formatWeiHelper(newAmount, 6, false));
@@ -35,7 +36,7 @@ export const USDInput: FC<IAmountInput> = ({
 	const onChange = (value: string) => {
 		let temp;
 		try {
-			temp = utils.parseUnits(value || '0').toString();
+			temp = parseUnits(value || '0', 6).toString();
 		} catch (error) {
 			console.log('number is not acceptable');
 			captureException(error, {

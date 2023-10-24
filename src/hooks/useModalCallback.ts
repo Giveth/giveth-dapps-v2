@@ -8,21 +8,17 @@ import { useEvent } from './useEvent';
 
 export enum EModalEvents {
 	SIGNEDIN = 'signedin',
-	CONNECTED = 'connected',
 }
 
-const stateObj: Record<EModalEvents, 'showSignWithWallet' | 'showWalletModal'> =
-	{
-		[EModalEvents.SIGNEDIN]: 'showSignWithWallet',
-		[EModalEvents.CONNECTED]: 'showWalletModal',
-	};
+const stateObj: Record<EModalEvents, 'showSignWithWallet'> = {
+	[EModalEvents.SIGNEDIN]: 'showSignWithWallet',
+};
 
 const actionObj: Record<
 	EModalEvents,
 	typeof setShowSignWithWallet | typeof setShowWalletModal
 > = {
 	[EModalEvents.SIGNEDIN]: setShowSignWithWallet,
-	[EModalEvents.CONNECTED]: setShowWalletModal,
 };
 
 export const useModalCallback = (

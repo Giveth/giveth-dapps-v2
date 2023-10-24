@@ -14,6 +14,7 @@ import {
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import ShareModal from '@/components/modals/ShareModal';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
@@ -23,7 +24,7 @@ import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { isSSRMode, showToastError } from '@/lib/helpers';
-import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
+import { useModalCallback } from '@/hooks/useModalCallback';
 import {
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
@@ -52,6 +53,7 @@ export const ProjectPublicActions = () => {
 	} = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
+	const { open: openConnectModal } = useWeb3Modal();
 	const alreadyDonated = useAlreadyDonatedToProject(projectData);
 
 	useEffect(() => {
@@ -125,15 +127,10 @@ export const ProjectPublicActions = () => {
 	const { modalCallback: signInThenLike } =
 		useModalCallback(likeUnlikeProject);
 
-	const { modalCallback: connectThenSignIn } = useModalCallback(
-		signInThenLike,
-		EModalEvents.CONNECTED,
-	);
-
 	const checkSignInThenLike = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			connectThenSignIn();
+			openConnectModal?.();
 		} else if (!isSignedIn) {
 			signInThenLike();
 		} else {

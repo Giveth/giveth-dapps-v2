@@ -9,8 +9,8 @@ import {
 } from '@giveth/ui-design-system';
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import BigNumber from 'bignumber.js';
+import { useNetwork } from 'wagmi';
 import Divider from '@/components/Divider';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -47,12 +47,12 @@ const EstimatedMatchingToast = ({
 	const { estimatedMatching } = projectData || {};
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
-
-	const web3Context = useWeb3React();
-	const { chainId } = web3Context;
 	const [tokenPrice, setTokenPrice] = useState<number>();
 
+	const { chain } = useNetwork();
 	const givPrice = useAppSelector(state => state.price.givPrice);
+
+	const chainId = chain?.id;
 	const givTokenPrice = new BigNumber(givPrice).toNumber();
 	const isMainnet = chainId === config.MAINNET_NETWORK_NUMBER;
 	const isGnosis = chainId === config.GNOSIS_NETWORK_NUMBER;
@@ -72,7 +72,7 @@ const EstimatedMatchingToast = ({
 				const ethPrice = await fetchEthPrice();
 				setTokenPrice(ethPrice || 0);
 			} else if (token?.address) {
-				let tokenAddress = token.address;
+				let tokenAddress = token.address as `0x${string}`;
 				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
 				if (!isMainnet && token.mainnetAddress) {
 					tokenAddress = token.mainnetAddress || '';

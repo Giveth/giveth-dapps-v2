@@ -1,5 +1,5 @@
-import { useWeb3React } from '@web3-react/core';
 import { FC } from 'react';
+import { useNetwork } from 'wagmi';
 import { ArchiveCover } from './ArchiveCover';
 import { WrongNetworkCover } from './WrongNetworkCover';
 
@@ -16,7 +16,8 @@ export const ArchiveAndNetworkCover: FC<IArchiveAndNetworkCoverProps> = ({
 	isArchived,
 	isExploited,
 }) => {
-	const { chainId } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	return chainId === undefined || chainId !== targetNetwork ? (
 		<WrongNetworkCover targetNetwork={targetNetwork} />

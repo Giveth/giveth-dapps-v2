@@ -12,12 +12,12 @@ import {
 	OutlineButton,
 } from '@giveth/ui-design-system';
 import { useMutation } from '@apollo/client';
-import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Container } from '@giveth/ui-design-system';
+import { getAddress } from 'viem';
 import {
 	ACTIVATE_PROJECT,
 	CREATE_PROJECT,
@@ -47,6 +47,7 @@ import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
+import { Address } from '@/types/config';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
 
@@ -180,15 +181,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				draft,
 			} = formData;
 
-			let _addresses: { address: string; networkId: number }[] = [];
-			Object.entries(addresses).forEach(([id, address]) => {
-				if (id && address) {
-					_addresses.push({
-						address: utils.getAddress(address),
-						networkId: Number(id),
-					});
-				}
-			});
+			const _addresses = Object.entries(addresses).map(
+				([id, address]) => ({
+					address: getAddress(address) as Address,
+					networkId: Number(id),
+				}),
+			);
 
 			if (_addresses.length === 0) {
 				showToastError(

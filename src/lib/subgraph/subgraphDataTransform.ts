@@ -1,4 +1,3 @@
-import { ethers } from 'ethers';
 import {
 	IInfinitePositionReward,
 	ITokenBalance,
@@ -13,6 +12,7 @@ import {
 } from '@/types/subgraph';
 import config from '@/configuration';
 import { getGIVpowerRoundsInfo } from '@/helpers/givpower';
+import { AddressZero } from '../constants/constants';
 import type { ISubgraphState } from '@/features/subgraph/subgraph.types';
 
 export const transformTokenDistro = (info: any = {}): ITokenDistro => {
@@ -30,7 +30,7 @@ export const transformTokenDistro = (info: any = {}): ITokenDistro => {
 	const totalTokens = info?.totalTokens || '0';
 
 	return {
-		contractAddress: info?.id || ethers.constants.AddressZero,
+		contractAddress: info?.id || AddressZero,
 		initialAmount,
 		lockedAmount,
 		totalTokens,
@@ -136,8 +136,8 @@ const transformUniswapPositions = (info: any): any => {
 
 const transformUniswapV2Pair = (info: any): IUniswapV2Pair | undefined => {
 	if (!info) return undefined;
-	const token0 = info?.token0 || ethers.constants.AddressZero;
-	const token1 = info?.token1 || ethers.constants.AddressZero;
+	const token0 = info?.token0 || AddressZero;
+	const token1 = info?.token1 || AddressZero;
 
 	const reserve0 = info?.reserve0 || 1;
 	const reserve1 = info?.reserve1 || 1;

@@ -1,3 +1,4 @@
+import { getWalletClient } from '@wagmi/core';
 import { client } from '@/apollo/apolloClient';
 import { REFRESH_USER_SCORES } from '@/apollo/gql/gqlPassport';
 import config from '@/configuration';
@@ -25,11 +26,7 @@ export const fetchPassportScore = async (account: string) => {
 	}
 };
 
-export const connectPassport = async (
-	account: string,
-	library: any,
-	singin: boolean,
-) => {
+export const connectPassport = async (account: string, singin: boolean) => {
 	//Get Nonce and Message
 	try {
 		const { nonce, message } = await getRequest(
@@ -37,10 +34,12 @@ export const connectPassport = async (
 			true,
 			{},
 		);
-		const signer = library.getSigner();
 
 		//sign message
-		const signature = await signer.signMessage(message);
+
+		const walletClient = await getWalletClient();
+
+		const signature = await walletClient?.signMessage({ message });
 
 		//auth
 		const { expiration, jwt, publicAddress } = await postRequest(

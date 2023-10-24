@@ -1,17 +1,17 @@
 import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
-import { BigNumber, utils } from 'ethers';
 import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
+import BigNumber from 'bignumber.js';
 import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig, StakingPlatform } from '@/types/config';
 import { Flex } from './styled-components/Flex';
 import { NumericalInput } from '@/components/input/index';
 
 interface IAmountInput {
-	maxAmount: BigNumber;
-	setAmount: Dispatch<SetStateAction<string>>;
+	maxAmount: bigint;
+	setAmount: Dispatch<SetStateAction<bigint>>;
 	poolStakingConfig: PoolStakingConfig;
 	disabled?: boolean;
 }
@@ -28,34 +28,53 @@ export const AmountInput: FC<IAmountInput> = ({
 
 	const setAmountPercentage = useCallback(
 		(percentage: number): void => {
-			const newAmount = BigNumber.from(maxAmount)
-				.mul(percentage)
+			const newAmount = new BigNumber(maxAmount.toString())
+				.multipliedBy(percentage)
 				.div(100)
-				.toString();
-			setAmount(newAmount);
-			setDisplayAmount(utils.formatEther(newAmount));
+				.toFixed(0);
+			const _displayAmount = formatWeiHelper(newAmount, 6, false);
+			setDisplayAmount(_displayAmount);
+			setAmount(
+				percentage === 100
+					? maxAmount
+					: BigInt(
+							new BigNumber(_displayAmount)
+								.multipliedBy(1e18)
+								.toFixed(0),
+					  ),
+			);
 		},
-		[maxAmount],
+		[maxAmount, setAmount],
 	);
 
-	const onUserInput = useCallback((value: string) => {
-		setDisplayAmount(value);
-		setActiveStep(0);
-		let valueBn = BigNumber.from(0);
+	const onUserInput = useCallback(
+		(value: string) => {
+			const [, decimals] = value.split('.');
+			if (decimals?.length > 6) {
+				return;
+			}
+			setDisplayAmount(value);
+			setActiveStep(0);
+			let valueBn = new BigNumber(0);
 
-		try {
-			valueBn = utils.parseUnits(value);
-		} catch (error) {
-			console.debug(`Failed to parse input amount: "${value}"`, error);
-			captureException(error, {
-				tags: {
-					section: 'AmountInput',
-				},
-			});
-		}
-
-		setAmount(valueBn.toString());
-	}, []);
+			try {
+				valueBn = new BigNumber(value).multipliedBy('1e18');
+				setAmount(BigInt(valueBn.toFixed(0)));
+			} catch (error) {
+				setAmount(0n);
+				console.debug(
+					`Failed to parse input amount: "${value}"`,
+					error,
+				);
+				captureException(error, {
+					tags: {
+						section: 'AmountInput',
+					},
+				});
+			}
+		},
+		[setAmount],
+	);
 
 	return (
 		<>
@@ -66,7 +85,7 @@ export const AmountInput: FC<IAmountInput> = ({
 					</InputLabelText>
 					<InputLabelValue>
 						&nbsp;
-						{formatWeiHelper(maxAmount)}
+						{formatWeiHelper(maxAmount.toString())}
 						&nbsp;
 						{poolStakingConfig.title}
 						&nbsp;
@@ -162,4 +181,5 @@ const Step = styled(GLink)<{ active: boolean }>`
 		props.active ? brandColors.cyan[500] : brandColors.giv[700]};
 	border-radius: 54px;
 	cursor: pointer;
+	user-select: none;
 `;

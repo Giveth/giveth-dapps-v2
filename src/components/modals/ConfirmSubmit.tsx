@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
-import { useWeb3React } from '@web3-react/core';
+import { useNetwork } from 'wagmi';
 import config from '@/configuration';
 import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
@@ -18,6 +18,7 @@ import { AddTokenButton } from '../AddTokenButton';
 import { Flex } from '../styled-components/Flex';
 import LottieControl from '@/components/LottieControl';
 import { WrappedSpinner } from '../Spinner';
+import { Address } from '@/types/config';
 
 const AddTokenRow = styled(Flex)`
 	margin-top: 16px;
@@ -28,7 +29,7 @@ interface IConfirmSubmitProps {
 	title: string;
 	txHash?: string;
 	rewardTokenSymbol?: string;
-	rewardTokenAddress?: string;
+	rewardTokenAddress?: Address;
 }
 
 export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
@@ -37,7 +38,9 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 	rewardTokenSymbol,
 	rewardTokenAddress,
 }) => {
-	const { chainId, library } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+
 	return (
 		<>
 			<Title>{title}</Title>
@@ -45,7 +48,7 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 			<TxSubmit weight={700}>{txHash && 'Transaction pending'}</TxSubmit>
 			<AddTokenRow alignItems={'center'} justifyContent={'center'}>
 				<AddTokenButton
-					provider={library}
+					chainId={chainId}
 					tokenSymbol={rewardTokenSymbol}
 					tokenAddress={rewardTokenAddress}
 				/>
@@ -53,15 +56,17 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 			{txHash && (
 				<BlockExplorerLink
 					as='a'
-					href={`${
-						config.NETWORKS_CONFIG[chainId!]?.blockExplorerUrls
-					}
-			tx/${txHash}`}
+					href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorers
+						?.default.url}
+			/tx/${txHash}`}
 					target='_blank'
 					size='Big'
 				>
 					View on{' '}
-					{config.NETWORKS_CONFIG[chainId!]?.blockExplorerName}
+					{
+						config.NETWORKS_CONFIG[chainId!]?.blockExplorers
+							?.default.name
+					}
 					&nbsp;
 					<IconExternalLink size={16} color={'currentColor'} />
 				</BlockExplorerLink>
@@ -76,7 +81,8 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 	rewardTokenSymbol,
 	rewardTokenAddress,
 }) => {
-	const { chainId, library } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	return (
 		<>
 			<Title>{title}</Title>
@@ -89,19 +95,21 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 			<Info>It may take a few minutes for the UI to update</Info>
 			<AddTokenRow alignItems={'center'} justifyContent={'center'}>
 				<AddTokenButton
-					provider={library}
+					chainId={chainId}
 					tokenSymbol={rewardTokenSymbol}
 					tokenAddress={rewardTokenAddress}
 				/>
 			</AddTokenRow>
 			<BlockExplorerLink
 				as='a'
-				href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorerUrls}
-							tx/${txHash}`}
+				href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorers
+					?.default.url}
+							/tx/${txHash}`}
 				target='_blank'
 				size='Big'
 			>
-				View on {config.NETWORKS_CONFIG[chainId!]?.blockExplorerName}
+				View on{' '}
+				{config.NETWORKS_CONFIG[chainId!]?.blockExplorers?.default.name}
 				&nbsp;
 				<IconExternalLink size={16} color={'currentColor'} />
 			</BlockExplorerLink>
@@ -118,7 +126,8 @@ export const ErrorInnerModal: FC<IErrorProps> = ({
 	txHash,
 	message,
 }) => {
-	const { chainId } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	return (
 		<>
@@ -133,15 +142,17 @@ export const ErrorInnerModal: FC<IErrorProps> = ({
 			{txHash && (
 				<BlockExplorerLink
 					as='a'
-					href={`${
-						config.NETWORKS_CONFIG[chainId!]?.blockExplorerUrls
-					}
-			tx/${txHash}`}
+					href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorers
+						?.default.url}
+			/tx/${txHash}`}
 					target='_blank'
 					size='Big'
 				>
 					View on{' '}
-					{config.NETWORKS_CONFIG[chainId!]?.blockExplorerName}
+					{
+						config.NETWORKS_CONFIG[chainId!]?.blockExplorers
+							?.default.name
+					}
 					&nbsp;
 					<IconExternalLink size={16} color={'currentColor'} />
 				</BlockExplorerLink>

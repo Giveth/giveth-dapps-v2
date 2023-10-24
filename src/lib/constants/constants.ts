@@ -1,10 +1,5 @@
 import { brandColors, semanticColors } from '@giveth/ui-design-system';
 import config from '@/configuration';
-import { networksParams } from '@/helpers/blockchain';
-
-export const chainName = (chainId: number) => {
-	return networksParams[chainId]?.chainName || 'Unknown';
-};
 
 export const NFT_POSITIONS_MANAGER_ADDRESS: Record<string, string> = {
 	4: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
@@ -112,4 +107,19 @@ export const minDonationAmount = 0.000001;
 
 export const BACKEND_QUERY_LIMIT = 50;
 
+export const E18 = 1_000_000_000_000_000_000n;
+
+export const PRECISION = 5;
+
+export const ScaleRate = 10 ** PRECISION;
+
+export const ScaleRateBig = BigInt(ScaleRate);
+
+export const MaxUint256 = BigInt(
+	'115792089237316195423570985008687907853269984665640564039457584007913129639935',
+);
+
+export const AddressZero = '0x0000000000000000000000000000000000000000';
+
+export const WeiPerEther = 1e18;
 export const PROFILE_PHOTO_PLACEHOLDER = '/images/placeholders/profile.svg';

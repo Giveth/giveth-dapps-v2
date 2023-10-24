@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import { Caption } from '@giveth/ui-design-system';
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { getNetworkNames } from '@/components/views/donate/helpers';
-import { switchNetwork } from '@/lib/wallet';
 import {
 	NetworkToast,
 	SwitchCaption,
@@ -11,8 +10,10 @@ import {
 import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
 
 const SwitchToAcceptedChain: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
-	const { chainId } = useWeb3React();
 	const { formatMessage } = useIntl();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const { switchNetwork } = useSwitchNetwork();
 
 	if (!chainId || !acceptedChains || acceptedChains?.includes(chainId)) {
 		return null;
@@ -26,7 +27,7 @@ const SwitchToAcceptedChain: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
 				})}{' '}
 				{getNetworkNames(acceptedChains, 'and')}.
 			</Caption>
-			<SwitchCaption onClick={() => switchNetwork(acceptedChains[0])}>
+			<SwitchCaption onClick={() => switchNetwork?.(acceptedChains[0])}>
 				{formatMessage({ id: 'label.switch_network' })}
 			</SwitchCaption>
 		</NetworkToast>

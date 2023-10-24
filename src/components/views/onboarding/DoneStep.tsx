@@ -9,9 +9,9 @@ import {
 	OutlineButton,
 	P,
 } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
 import React from 'react';
 import { Col, Row } from '@giveth/ui-design-system';
+import { useAccount } from 'wagmi';
 import { OnboardStep } from './common';
 import { Flex } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
@@ -26,10 +26,10 @@ const DoneStep = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(state => state.user.userData);
-	const { account } = useWeb3React();
+	const { address } = useAccount();
 
 	const handleCreateButton = async () => {
-		if (account) await dispatch(fetchUserByAddress(account));
+		if (address) await dispatch(fetchUserByAddress(address));
 		if (isUserRegistered(user)) {
 			router.push(Routes.CreateProject);
 		} else {

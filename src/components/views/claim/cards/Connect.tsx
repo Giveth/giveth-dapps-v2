@@ -3,14 +3,12 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { GLink, H2, Lead, brandColors, Button } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
-
+import { useAccount, useDisconnect } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { ArrowButton, Card } from './common';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
 import { formatWeiHelper } from '@/helpers/number';
 import Routes from '@/lib/constants/Routes';
-import { useAppDispatch } from '@/features/hooks';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
 
@@ -141,9 +139,8 @@ const GoProjects = styled(Lead)`
 export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [walletIsChanged, setWalletIsChanged] = useState(false);
 
-	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
-
+	const { open: openConnectModal } = useWeb3Modal();
 	const {
 		totalAmount,
 		giveDropState,
@@ -154,15 +151,16 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 		getClaimData,
 	} = useClaim();
 
-	const { account, deactivate } = useWeb3React();
+	const { address } = useAccount();
+	const { disconnect } = useDisconnect();
 
 	useEffect(() => {
 		// Auto get claim data on wallet change
-		if (walletIsChanged && account) {
+		if (walletIsChanged && address) {
 			setWalletIsChanged(false);
 			getClaimData();
 		}
-	}, [walletIsChanged, account, getClaimData]);
+	}, [walletIsChanged, address, getClaimData]);
 
 	let title;
 	let desc;
@@ -194,7 +192,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 			break;
 		case GiveDropStateType.Success:
 			title = `You have ${formatWeiHelper(
-				totalAmount.div(10),
+				totalAmount / 10n,
 			)} GIV to claim.`;
 			desc = 'Congrats, your GIVdrop awaits. Go claim it!';
 			bg = {
@@ -261,9 +259,9 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 									<ConnectButton
 										buttonType='secondary'
 										onClick={() => {
-											deactivate();
+											disconnect();
 											setWalletIsChanged(true);
-											dispatch(setShowWalletModal(true));
+											openConnectModal?.();
 										}}
 										label={btnLabel || ''}
 									/>
@@ -280,7 +278,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 									<WalletDisplayerInputContainer>
 										<WalletDisplayerInput
 											disabled
-											value={account || ''}
+											value={address || ''}
 											placeholder='Please connect your wallet'
 										/>
 										<WalletCheckButton
