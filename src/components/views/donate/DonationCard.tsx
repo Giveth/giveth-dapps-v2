@@ -21,6 +21,7 @@ export const DonationCard = () => {
 						{_tab}
 					</Tab>
 				))}
+				<EmptyTab />
 			</Flex>
 		</DonationCardWrapper>
 	);
@@ -60,4 +61,9 @@ const Tab = styled(P)<ITab>`
 					color: ${neutralColors.gray[700]};
 					border-bottom-color: ${neutralColors.gray[300]};
 			  `}
+`;
+
+const EmptyTab = styled.div`
+	flex: 1;
+	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
