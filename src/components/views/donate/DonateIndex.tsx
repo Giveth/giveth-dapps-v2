@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -31,6 +31,8 @@ import Routes from '@/lib/constants/Routes';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowHeader } from '@/features/general/general.slice';
 
 const CryptoDonation = dynamic(
 	() => import('@/components/views/donate/CryptoDonation'),
@@ -47,6 +49,14 @@ const DonateIndex: FC = () => {
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const { txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		dispatch(setShowHeader(false));
+		return () => {
+			dispatch(setShowHeader(true));
+		};
+	}, [dispatch]);
 
 	return (
 		<>
