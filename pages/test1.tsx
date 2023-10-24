@@ -76,7 +76,7 @@ const TestIndex = () => {
 			query: FETCH_ALL_PROJECTS,
 			fetchPolicy: 'network-only',
 		});
-		console.log('res1', res);
+		console.log('res', res);
 	};
 
 	// console.log('gnosisValues', gnosisValues);
