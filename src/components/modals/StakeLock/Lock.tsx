@@ -36,6 +36,7 @@ import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
+import TotalGIVpowerBox from './TotalGIVpowerBox';
 import type { PoolStakingConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -207,8 +208,8 @@ const LockModal: FC<ILockModalProps> = ({
 					)}
 					{lockState === ELockState.BOOST && (
 						<>
-							{/* <LockingBrief round={round} amount={amount} /> */}
-							{/* <TotalGIVpowerBox /> */}
+							<LockingBrief round={round} amount={amount} />
+							<TotalGIVpowerBox />
 							<P>
 								{formatMessage({
 									id: 'label.user_your_givpower_to_support_verified_projects',
