@@ -28,7 +28,6 @@ import LockInfo, { LockInfoTooltip } from './LockInfo';
 import LockingBrief from './LockingBrief';
 import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
-import TotalGIVpowerBox from './TotalGIVpowerBox';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Flex } from '@/components/styled-components/Flex';
@@ -207,8 +206,8 @@ const LockModal: FC<ILockModalProps> = ({
 					)}
 					{lockState === ELockState.BOOST && (
 						<>
-							<LockingBrief round={round} amount={amount} />
-							<TotalGIVpowerBox />
+							{/* <LockingBrief round={round} amount={amount} /> */}
+							{/* <TotalGIVpowerBox /> */}
 							<P>
 								{formatMessage({
 									id: 'label.user_your_givpower_to_support_verified_projects',
