@@ -14,7 +14,7 @@ const StorageLabel = {
 	TOKEN: getLocalTokenLabel(),
 	TOKENS: 'tokens',
 	FIRSTMODALSHOWED: 'FIRSTMODALSHOWED',
-	LOCALE: 'locale',
+	LOCALE: 'appLocale',
 	CHAINVINEREFERRED: 'chainvineReferred',
 	PASSPORT: 'passport',
 	WAGMI_WALLET: 'wagmi.wallet',
