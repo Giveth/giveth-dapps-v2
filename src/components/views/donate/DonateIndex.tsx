@@ -33,6 +33,7 @@ import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
+import { DonateHeader } from './DonateHeader';
 
 const CryptoDonation = dynamic(
 	() => import('@/components/views/donate/CryptoDonation'),
@@ -60,6 +61,7 @@ const DonateIndex: FC = () => {
 
 	return (
 		<>
+			<DonateHeader />
 			<BigArc />
 			{hasActiveQFRound && <PassportBanner />}
 			<Wrapper>
