@@ -25,6 +25,9 @@ interface TransactionParams {
 	value: string;
 }
 
+const defaultLocale = process.env.defaultLocale;
+const locales = process.env.locales;
+
 export const fullPath = (path: string) => `${config.FRONTEND_LINK}${path}`;
 
 export const formatBalance = (balance?: string | number) => {
@@ -526,4 +529,34 @@ export const ArrayFrom0ToN = (n: number) => {
 		b = 0;
 	while (b < n) a[b] = b++;
 	return a;
+};
+
+export const getUserIPInfo = async () => {
+	return fetch('https://api.db-ip.com/v2/free/self')
+		.then(res => res.json())
+		.catch(err => {
+			console.log('getUserIp error: ', { err });
+			throw err;
+		});
+};
+
+export const matchLocaleToSystemLocals = (locale: string) => {
+	const lowercaseLocale = locale.toLowerCase();
+	const isValidLocale = locales?.includes(lowercaseLocale);
+	return isValidLocale ? lowercaseLocale : undefined;
+};
+
+export const getLocaleFromNavigator = () => {
+	if (typeof navigator === 'undefined') return defaultLocale!;
+	const navigatorLocale = navigator.language.split('-')[0];
+	return matchLocaleToSystemLocals(navigatorLocale);
+};
+
+export const getLocaleFromIP = async () => {
+	try {
+		const { countryCode } = await getUserIPInfo();
+		return matchLocaleToSystemLocals(countryCode);
+	} catch (e) {
+		return undefined;
+	}
 };
