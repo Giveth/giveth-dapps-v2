@@ -20,6 +20,6 @@ export const fetchChainInfo = async (chainId: number, userAddress?: string) => {
 				section: 'fetch${chainId}Subgraph',
 			},
 		});
-		return null;
+		return {};
 	}
 };
