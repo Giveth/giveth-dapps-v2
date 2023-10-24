@@ -33,4 +33,6 @@ const Title = styled(H6)`
 const Desc = styled(Caption)`
 	background-color: ${neutralColors.gray[200]};
 	padding: 8px;
+	width: 100%;
+	text-align: left;
 `;
