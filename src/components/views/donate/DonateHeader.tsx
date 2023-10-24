@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { FC, useState, useEffect } from 'react';
+import { FC } from 'react';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 import { useAccount, useNetwork } from 'wagmi';
@@ -21,6 +21,7 @@ import {
 import { UserButtonWithMenu } from '@/components/menu/UserButtonWithMenu';
 import Routes from '@/lib/constants/Routes';
 import { useDonateData } from '@/context/donate.context';
+import { useShowHiderByScroll } from '@/hooks/useShowHiderByScroll';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -28,8 +29,6 @@ export interface IHeader {
 }
 
 export const DonateHeader: FC<IHeader> = () => {
-	const [showHeader, setShowHeader] = useState(true);
-
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
@@ -38,39 +37,9 @@ export const DonateHeader: FC<IHeader> = () => {
 	const dispatch = useAppDispatch();
 	const { open: openConnectModal } = useWeb3Modal();
 	const { project } = useDonateData();
-
+	const showHeader = useShowHiderByScroll();
 	const chainId = chain?.id;
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
-
-	useEffect(() => {
-		const threshold = 0;
-		let lastScrollY = window.pageYOffset;
-		let ticking = false;
-
-		const updateScrollDir = () => {
-			const scrollY = window.pageYOffset;
-
-			if (Math.abs(scrollY - lastScrollY) < threshold) {
-				ticking = false;
-				return;
-			}
-			const show = scrollY <= lastScrollY;
-			setShowHeader(show);
-			lastScrollY = scrollY > 0 ? scrollY : 0;
-			ticking = false;
-		};
-
-		const onScroll = () => {
-			if (!ticking) {
-				window.requestAnimationFrame(updateScrollDir);
-				ticking = true;
-			}
-		};
-
-		window.addEventListener('scroll', onScroll);
-
-		return () => window.removeEventListener('scroll', onScroll);
-	}, [showHeader]);
 
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
