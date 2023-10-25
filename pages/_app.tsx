@@ -96,6 +96,8 @@ const wagmiConfig = createConfig({
 	publicClient,
 });
 
+const classicNetworkNumber = config.CLASSIC_NETWORK_NUMBER;
+
 createWeb3Modal({
 	wagmiConfig,
 	projectId,
@@ -106,6 +108,9 @@ createWeb3Modal({
 	includeWalletIds: [
 		'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
 	],
+	chainImages: {
+		[classicNetworkNumber]: '/images/currencies/classic/32.svg',
+	},
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
