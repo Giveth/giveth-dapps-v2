@@ -28,10 +28,11 @@ import NotAvailableProject from '@/components/NotAvailableProject';
 
 interface IProps {
 	project?: IProject;
+	isLoading?: boolean;
 }
 
 const SuccessfulCreation = (props: IProps) => {
-	const { project } = props;
+	const { project, isLoading } = props;
 
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
@@ -44,7 +45,7 @@ const SuccessfulCreation = (props: IProps) => {
 		};
 	}, []);
 
-	if (!project) return <NotAvailableProject />;
+	if (!project) return <NotAvailableProject isProjectLoading={isLoading} />;
 
 	const { slug } = project;
 	const projectPath = slugToProjectView(slug);
