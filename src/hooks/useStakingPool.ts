@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
+import { useNetwork } from 'wagmi';
 
-import { useWeb3React } from '@web3-react/core';
 import {
 	getGivStakingAPR,
 	getLPStakingAPR,
@@ -9,14 +8,14 @@ import {
 } from '@/lib/stakingPool';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
-import { Zero } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
+import { Zero } from '@/helpers/number';
 
 export interface IStakeInfo {
 	apr: APR;
-	earned: ethers.BigNumber;
-	stakedAmount: ethers.BigNumber;
-	notStakedAmount: ethers.BigNumber;
+	earned: bigint;
+	stakedAmount: bigint;
+	notStakedAmount: bigint;
 }
 
 export const useStakingPool = (
@@ -25,12 +24,13 @@ export const useStakingPool = (
 ): IStakeInfo => {
 	const [apr, setApr] = useState<APR | null>(null);
 	const [userStakeInfo, setUserStakeInfo] = useState<UserStakeInfo>({
-		earned: ethers.constants.Zero,
-		notStakedAmount: ethers.constants.Zero,
-		stakedAmount: ethers.constants.Zero,
+		earned: 0n,
+		notStakedAmount: 0n,
+		stakedAmount: 0n,
 	});
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
-	const { library, chainId } = useWeb3React();
 	const currentValues = useAppSelector(
 		state => state.subgraph.currentValues,
 		() => (hold ? true : false),
@@ -43,16 +43,11 @@ export const useStakingPool = (
 		const cb = () => {
 			console.log('Calculating APR');
 			if (isLoaded) {
-				const _library = chainId === network ? library : undefined;
 				const promise: Promise<APR> =
 					type === StakingType.GIV_GARDEN_LM ||
 					type === StakingType.GIV_UNIPOOL_LM
-						? getGivStakingAPR(network, currentValues, _library)
-						: getLPStakingAPR(
-								poolStakingConfig,
-								_library,
-								currentValues,
-						  );
+						? getGivStakingAPR(network, currentValues, network)
+						: getLPStakingAPR(poolStakingConfig, currentValues);
 				promise
 					.then(setApr)
 					.catch(() => setApr({ effectiveAPR: Zero }));
@@ -70,10 +65,9 @@ export const useStakingPool = (
 				clearInterval(interval);
 			}
 		};
-	}, [library, chainId, isLoaded]);
+	}, [chainId, isLoaded]);
 
 	useEffect(() => {
-		console.log('Calculating user stake info');
 		setUserStakeInfo(getUserStakeInfo(currentValues, poolStakingConfig));
 	}, [currentValues, poolStakingConfig]);
 

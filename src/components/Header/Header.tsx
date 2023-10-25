@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { FC, useState, useEffect } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import {
@@ -10,7 +9,8 @@ import {
 	IconSearch24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-
+import { useAccount, useNetwork } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
 	ConnectButton,
@@ -21,21 +21,20 @@ import {
 	SmallCreateProjectParent,
 	LargeCreateProject,
 	HomeButton,
-	SearchButton,
 	GLinkNoWrap,
+	SearchButton,
 } from './Header.sc';
 import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import {
-	setShowWalletModal,
 	setShowWelcomeModal,
 	setShowCompleteProfile,
 	setShowSearchModal,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
-import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
+import { useModalCallback } from '@/hooks/useModalCallback';
 import { LinkWithMenu } from '../menu/LinkWithMenu';
 import { ProjectsMenu } from '../menu/ProjectsMenu';
 import { GIVeconomyMenu } from '../menu/GIVeconomyMenu';
@@ -69,7 +68,9 @@ const Header: FC<IHeader> = () => {
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 
-	const { chainId, active, account } = useWeb3React();
+	const { address } = useAccount();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	const networkHasGIV =
 		(chainId && config.NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS) ?? null;
@@ -86,6 +87,8 @@ const Header: FC<IHeader> = () => {
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const isMobile = useMediaQuery(device.mobileL);
+	const { open: openConnectModal } = useWeb3Modal();
+
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
 	const handleBack = () => {
@@ -158,7 +161,7 @@ const Header: FC<IHeader> = () => {
 
 	const handleModals = () => {
 		if (isGIVeconomyRoute) {
-			dispatch(setShowWalletModal(true));
+			openConnectModal?.();
 		} else {
 			dispatch(setShowWelcomeModal(true));
 		}
@@ -168,15 +171,10 @@ const Header: FC<IHeader> = () => {
 		router.push(Routes.CreateProject),
 	);
 
-	const { modalCallback: connectThenSignIn } = useModalCallback(
-		signInThenCreate,
-		EModalEvents.CONNECTED,
-	);
-
 	const handleCreateButton = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			connectThenSignIn();
+			openConnectModal?.();
 		} else if (!isSignedIn) {
 			signInThenCreate();
 		} else if (isUserRegistered(userData)) {
@@ -276,7 +274,7 @@ const Header: FC<IHeader> = () => {
 						label='+'
 					/>
 				</SmallCreateProjectParent>
-				{active && account && chainId ? (
+				{address && chainId ? (
 					<>
 						<NotificationButtonWithMenu
 							isHeaderShowing={showHeader}

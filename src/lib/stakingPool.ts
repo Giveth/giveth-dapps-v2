@@ -1,12 +1,15 @@
-import { Contract, ethers } from 'ethers';
-import BigNumber from 'bignumber.js';
-import {
-	JsonRpcProvider,
-	TransactionResponse,
-	Web3Provider,
-} from '@ethersproject/providers';
 import { captureException } from '@sentry/nextjs';
 import {
+	getContract,
+	getWalletClient,
+	signTypedData,
+	waitForTransaction,
+} from 'wagmi/actions';
+import { erc20ABI } from 'wagmi';
+import { WriteContractReturnType, hexToSignature } from 'viem';
+import BigNumber from 'bignumber.js';
+import {
+	Address,
 	BalancerPoolStakingConfig,
 	ICHIPoolStakingConfig,
 	RegenPoolStakingConfig,
@@ -17,8 +20,6 @@ import {
 import config from '../configuration';
 import { APR } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
-import { BN, Zero } from '@/helpers/number';
-import { getGasPreference } from '@/lib/helpers';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
 import GP_Json from '../artifacts/GivPower.json';
@@ -26,17 +27,11 @@ import UNI_Json from '../artifacts/UNI.json';
 import BAL_WEIGHTED_POOL_Json from '../artifacts/BalancerWeightedPool.json';
 import BAL_VAULT_Json from '../artifacts/BalancerVault.json';
 import TOKEN_MANAGER_Json from '../artifacts/HookedTokenManager.json';
-import ERC20_Json from '../artifacts/ERC20.json';
 import UnipoolGIVpower from '../artifacts/UnipoolGIVpower.json';
-import {
-	ERC20,
-	IUniswapV2Pair,
-	IVault,
-	UnipoolTokenDistributor,
-	WeightedPool,
-} from '@/types/contracts';
 import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { E18, MaxUint256 } from './constants/constants';
+import { Zero } from '@/helpers/number';
 
 const { abi: LM_ABI } = LM_Json;
 const { abi: GP_ABI } = GP_Json;
@@ -44,36 +39,40 @@ const { abi: UNI_ABI } = UNI_Json;
 const { abi: BAL_WEIGHTED_POOL_ABI } = BAL_WEIGHTED_POOL_Json;
 const { abi: BAL_VAULT_ABI } = BAL_VAULT_Json;
 const { abi: TOKEN_MANAGER_ABI } = TOKEN_MANAGER_Json;
-const { abi: ERC20_ABI } = ERC20_Json;
 const { abi: UNIPOOL_GIVPOWER_ABI } = UnipoolGIVpower;
-
-const toBigNumberJs = (eb: ethers.BigNumber | string | number): BigNumber =>
-	new BigNumber(eb.toString());
 
 const getUnipoolInfo = async (
 	unipoolHelper: UnipoolHelper,
-	lmAddress: string,
-	provider: JsonRpcProvider,
-): Promise<{ totalSupply: BigNumber; rewardRate: BigNumber }> => {
-	let totalSupply: BigNumber;
-	let rewardRate: BigNumber;
+	lmAddress: Address,
+	chainId: number,
+): Promise<{ totalSupply: bigint; rewardRate: bigint }> => {
+	let totalSupply = 0n;
+	let rewardRate = 0n;
 	// Isn't initialized with default values
-	if (!unipoolHelper.totalSupply.isZero()) {
+	if (unipoolHelper.totalSupply !== 0n) {
 		totalSupply = unipoolHelper.totalSupply;
 		rewardRate = unipoolHelper.rewardRate;
 	} else {
-		const lmContract = new Contract(
-			lmAddress,
-			LM_ABI,
-			provider,
-		) as UnipoolTokenDistributor;
-		[totalSupply, rewardRate] = await Promise.all([
-			lmContract.totalSupply(),
-			lmContract.rewardRate(),
-		]).then(([_totalSupply, _rewardRate]) => [
-			toBigNumberJs(_totalSupply as ethers.BigNumber),
-			toBigNumberJs(_rewardRate as ethers.BigNumber),
-		]);
+		try {
+			const lmContract = getContract({
+				address: lmAddress,
+				abi: LM_ABI,
+				chainId,
+			});
+			const [_totalSupply, _rewardRate] = await Promise.all([
+				lmContract.read.totalSupply(),
+				lmContract.read.rewardRate(),
+			]);
+			totalSupply = _totalSupply as bigint;
+			rewardRate = _rewardRate as bigint;
+		} catch (error) {
+			console.log('Error on fetching totalSupply,rewardRate  :', error);
+			captureException(error, {
+				tags: {
+					section: 'getUnipoolInfo',
+				},
+			});
+		}
 	}
 	return { totalSupply, rewardRate };
 };
@@ -81,40 +80,34 @@ const getUnipoolInfo = async (
 export const getGivStakingAPR = async (
 	network: number,
 	subgraphValue: ISubgraphState,
-	provider: JsonRpcProvider | null,
+	chainId: number,
 ): Promise<APR> => {
 	const networkConfig = config.NETWORKS_CONFIG[network];
 	const lmAddress = networkConfig.GIVPOWER?.LM_ADDRESS;
 	if (!lmAddress) return { effectiveAPR: Zero };
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
-	let givStakingAPR: BigNumber = Zero;
-	const _provider =
-		provider && provider._network.chainId === network
-			? provider
-			: new JsonRpcProvider(networkConfig.nodeUrl);
-
+	let givStakingAPR = Zero;
 	const { totalSupply, rewardRate } = await getUnipoolInfo(
 		unipoolHelper,
 		lmAddress,
-		_provider,
+		chainId,
 	);
-	givStakingAPR = totalSupply.isZero()
-		? Zero
-		: rewardRate.div(totalSupply).times('31536000').times('100');
+	givStakingAPR =
+		totalSupply === 0n
+			? Zero
+			: new BigNumber(rewardRate.toString())
+					.div(totalSupply.toString())
+					.multipliedBy(3153600000);
 
 	return { effectiveAPR: givStakingAPR };
 };
 
 export const getLPStakingAPR = async (
 	poolStakingConfig: SimplePoolStakingConfig,
-	provider: JsonRpcProvider | null,
 	subgraphValue: ISubgraphState,
 ): Promise<APR> => {
 	const { network } = poolStakingConfig;
-	const _provider = provider
-		? provider
-		: new JsonRpcProvider(config.NETWORKS_CONFIG[network].nodeUrl);
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(
 		sdh.getUnipool(poolStakingConfig.LM_ADDRESS),
@@ -124,21 +117,18 @@ export const getLPStakingAPR = async (
 			return getBalancerPoolStakingAPR(
 				poolStakingConfig as BalancerPoolStakingConfig,
 				network,
-				_provider,
 				unipoolHelper,
 			);
 		case StakingPlatform.ICHI:
 			return getIchiPoolStakingAPR(
 				poolStakingConfig as ICHIPoolStakingConfig,
 				network,
-				_provider,
 				unipoolHelper,
 			);
 		default:
 			return getSimplePoolStakingAPR(
 				poolStakingConfig,
 				network,
-				_provider,
 				unipoolHelper,
 			);
 	}
@@ -146,8 +136,7 @@ export const getLPStakingAPR = async (
 
 const getIchiPoolStakingAPR = async (
 	ichiPoolStakingConfig: ICHIPoolStakingConfig,
-	network: number,
-	provider: JsonRpcProvider,
+	chainId: number,
 	unipoolHelper: UnipoolHelper,
 ): Promise<APR> => {
 	try {
@@ -158,31 +147,31 @@ const getIchiPoolStakingAPR = async (
 		const { totalSupply, rewardRate } = await getUnipoolInfo(
 			unipoolHelper,
 			LM_ADDRESS,
-			provider,
+			chainId,
 		);
 
 		const {
 			lpPrice = '0',
-			vaultIRR = 0,
+			_vaultIRR = 0,
 			tokens = [],
 		}: {
 			lpPrice: string;
-			vaultIRR: number;
+			_vaultIRR: number;
 			tokens: { name: string; price: number }[];
 		} = apiResult;
 
 		if (!lpPrice || lpPrice === '0') return { effectiveAPR: Zero };
 
 		const givTokenPrice = tokens?.find(t => t.name === 'giv')?.price || 0;
-		const totalAPR = rewardRate
-			.div(totalSupply)
-			.times(givTokenPrice)
+		const vaultIRR = new BigNumber(_vaultIRR);
+		const totalAPR = new BigNumber(rewardRate.toString())
+			.multipliedBy(givTokenPrice)
+			.multipliedBy(3153600000)
+			.div(totalSupply.toString())
 			.div(lpPrice)
-			.times('31536000')
-			.times('100')
 			.plus(vaultIRR);
 
-		return { effectiveAPR: totalAPR, vaultIRR: toBigNumberJs(vaultIRR) };
+		return { effectiveAPR: totalAPR, vaultIRR: vaultIRR };
 	} catch (e) {
 		console.error('Error in fetching ICHI info', e);
 	}
@@ -191,51 +180,48 @@ const getIchiPoolStakingAPR = async (
 
 const getBalancerPoolStakingAPR = async (
 	balancerPoolStakingConfig: BalancerPoolStakingConfig,
-	network: number,
-	provider: JsonRpcProvider,
+	chainId: number,
 	unipool: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
-	const tokenAddress = config.NETWORKS_CONFIG[network].GIV_TOKEN_ADDRESS;
+	const tokenAddress = config.NETWORKS_CONFIG[chainId].GIV_TOKEN_ADDRESS;
 	if (!tokenAddress) return { effectiveAPR: Zero };
 
-	const weightedPoolContract = new Contract(
-		POOL_ADDRESS,
-		BAL_WEIGHTED_POOL_ABI,
-		provider,
-	) as WeightedPool;
-	const vaultContract = new Contract(
-		VAULT_ADDRESS,
-		BAL_VAULT_ABI,
-		provider,
-	) as IVault;
+	const weightedPoolContract = getContract({
+		address: POOL_ADDRESS,
+		abi: BAL_WEIGHTED_POOL_ABI,
+		chainId,
+	});
+
+	const vaultContract = getContract({
+		address: VAULT_ADDRESS,
+		abi: BAL_VAULT_ABI,
+		chainId,
+	});
 
 	interface PoolTokens {
-		balances: Array<ethers.BigNumber>;
+		balances: Array<bigint>;
 		tokens: Array<string>;
 	}
 	let farmAPR = null;
 
 	try {
-		const [_poolTokens, _poolTotalSupply, _poolNormalizedWeights]: [
-			PoolTokens,
-			ethers.BigNumber,
-			Array<ethers.BigNumber>,
-		] = await Promise.all([
-			vaultContract.getPoolTokens(POOL_ID),
-			weightedPoolContract.totalSupply(),
-			weightedPoolContract.getNormalizedWeights(),
-		]);
+		const [_poolTokens, _poolTotalSupply, _poolNormalizedWeights] =
+			(await Promise.all([
+				vaultContract.read.getPoolTokens([POOL_ID]),
+				weightedPoolContract.read.totalSupply(),
+				weightedPoolContract.read.getNormalizedWeights(),
+			])) as [PoolTokens, bigint, Array<bigint>];
 
 		const { totalSupply, rewardRate } = await getUnipoolInfo(
 			unipool,
 			LM_ADDRESS,
-			provider,
+			chainId,
 		);
 
-		const weights = _poolNormalizedWeights.map(toBigNumberJs);
-		const balances = _poolTokens.balances.map(toBigNumberJs);
+		const weights = _poolNormalizedWeights.map(BigInt);
+		const balances = _poolTokens.balances.map(BigInt);
 
 		if (
 			_poolTokens.tokens[0].toLowerCase() !== tokenAddress.toLowerCase()
@@ -244,17 +230,17 @@ const getBalancerPoolStakingAPR = async (
 			weights.reverse();
 		}
 
-		const lp = toBigNumberJs(_poolTotalSupply)
-			.div(BigNumber.sum(...weights).div(weights[0]))
-			.div(balances[0]);
+		const totalWeight = weights.reduce((a, b) => a + b, 0n);
 
-		farmAPR = totalSupply.isZero()
-			? null
-			: rewardRate
-					.div(totalSupply)
-					.times('31536000')
-					.times('100')
-					.times(lp);
+		const lp = _poolTotalSupply / (totalWeight / weights[0]) / balances[0];
+
+		farmAPR =
+			totalSupply === 0n
+				? null
+				: new BigNumber(rewardRate.toString())
+						.multipliedBy(3153600000)
+						.multipliedBy(lp.toString())
+						.div(totalSupply.toString());
 	} catch (e) {
 		console.error('error on fetching balancer apr:', e);
 		captureException(e, {
@@ -267,12 +253,11 @@ const getBalancerPoolStakingAPR = async (
 };
 const getSimplePoolStakingAPR = async (
 	poolStakingConfig: SimplePoolStakingConfig | RegenPoolStakingConfig,
-	network: number,
-	provider: JsonRpcProvider,
+	chainId: number,
 	unipoolHelper: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
-	const networkConfig = config.NETWORKS_CONFIG[network];
+	const networkConfig = config.NETWORKS_CONFIG[chainId];
 
 	const givTokenAddress = networkConfig.GIV_TOKEN_ADDRESS;
 	if (!givTokenAddress) return { effectiveAPR: Zero };
@@ -288,47 +273,41 @@ const getSimplePoolStakingAPR = async (
 		? streamConfig.rewardTokenAddress
 		: givTokenAddress;
 
-	const poolContract = new Contract(
-		POOL_ADDRESS,
-		UNI_ABI,
-		provider,
-	) as IUniswapV2Pair;
+	const poolContract = getContract({
+		address: POOL_ADDRESS,
+		abi: UNI_ABI,
+		chainId,
+	});
+
 	let farmAPR = null;
 	try {
-		const [_reserves, _token0, _poolTotalSupply]: [
-			[ethers.BigNumber, ethers.BigNumber, number],
-			string,
-			ethers.BigNumber,
-		] = await Promise.all([
-			poolContract.getReserves(),
-			poolContract.token0(),
-			poolContract.totalSupply(),
-		]);
+		const [_reserves, _token0, _poolTotalSupply] = (await Promise.all([
+			poolContract.read.getReserves(),
+			poolContract.read.token0(),
+			poolContract.read.totalSupply(),
+		])) as [[bigint, bigint, number], Address, bigint];
 
 		const { totalSupply, rewardRate } = await getUnipoolInfo(
 			unipoolHelper,
 			LM_ADDRESS,
-			provider,
+			chainId,
 		);
 
-		let tokenReseve = toBigNumberJs(
+		let tokenReseve =
 			_token0.toLowerCase() !== tokenAddress.toLowerCase()
 				? _reserves[1]
-				: _reserves[0],
-		);
+				: _reserves[0];
 
-		const lp = toBigNumberJs(_poolTotalSupply)
-			.times(10 ** 18)
-			.div(2)
-			.div(tokenReseve);
-		farmAPR = totalSupply.isZero()
-			? null
-			: rewardRate
-					.div(totalSupply)
-					.times('31536000')
-					.times('100')
-					.times(lp)
-					.div(10 ** 18);
+		const lp = (_poolTotalSupply * E18) / tokenReseve / 2n;
+
+		farmAPR =
+			totalSupply === 0n
+				? null
+				: new BigNumber(rewardRate.toString())
+						.multipliedBy(3153600000)
+						.multipliedBy(lp.toString())
+						.div(totalSupply.toString())
+						.div(1e18);
 	} catch (e) {
 		console.error('error on fetching simple pool apr:', e);
 		captureException(e, {
@@ -345,35 +324,35 @@ export const getUserStakeInfo = (
 	currentValues: ISubgraphState,
 	poolStakingConfig: SimplePoolStakingConfig,
 ): {
-	stakedAmount: ethers.BigNumber;
-	notStakedAmount: ethers.BigNumber;
-	earned: ethers.BigNumber;
+	stakedAmount: bigint;
+	notStakedAmount: bigint;
+	earned: bigint;
 } => {
-	let earned = ethers.constants.Zero;
+	let earned = 0n;
 	const sdh = new SubgraphDataHelper(currentValues);
 	const unipoolBalance = sdh.getUnipoolBalance(poolStakingConfig.LM_ADDRESS);
 	const lpTokenBalance = sdh.getTokenBalance(poolStakingConfig.POOL_ADDRESS);
 	const unipoolHelper = new UnipoolHelper(
 		sdh.getUnipool(poolStakingConfig.LM_ADDRESS),
 	);
-	const rewards = BN(unipoolBalance.rewards);
-	const rewardPerTokenPaid = BN(unipoolBalance.rewardPerTokenPaid);
-	let stakedAmount = BN(unipoolBalance.balance);
+	const rewards = BigInt(unipoolBalance.rewards);
+	const rewardPerTokenPaid = BigInt(unipoolBalance.rewardPerTokenPaid);
+	let stakedAmount = BigInt(unipoolBalance.balance);
 	const networkConfig = config.NETWORKS_CONFIG[poolStakingConfig.network];
 	if (poolStakingConfig.type === StakingType.GIV_GARDEN_LM) {
 		const gGIVBalance = sdh.getTokenBalance(
 			networkConfig.gGIV_TOKEN_ADDRESS,
 		);
-		stakedAmount = BN(gGIVBalance.balance);
+		stakedAmount = BigInt(gGIVBalance.balance);
 	} else if (poolStakingConfig.type === StakingType.GIV_UNIPOOL_LM) {
 		const gGIVBalance = sdh.getTokenBalance(
 			networkConfig.GIVPOWER?.LM_ADDRESS,
 		);
-		stakedAmount = BN(gGIVBalance.balance);
+		stakedAmount = BigInt(gGIVBalance.balance);
 	} else {
-		stakedAmount = BN(unipoolBalance.balance);
+		stakedAmount = BigInt(unipoolBalance.balance);
 	}
-	const notStakedAmount = BN(lpTokenBalance.balance);
+	const notStakedAmount = BigInt(lpTokenBalance.balance);
 
 	if (unipoolHelper) {
 		earned = unipoolHelper.earned(
@@ -391,26 +370,24 @@ export const getUserStakeInfo = (
 };
 
 const permitTokens = async (
-	provider: Web3Provider,
-	poolAddress: string,
+	chainId: number,
+	walletAddress: Address,
+	poolAddress: Address,
 	lmAddress: string,
-	amount: string,
+	amount: bigint,
 ) => {
-	const signer = provider.getSigner();
-	const signerAddress = await signer.getAddress();
-
-	const poolContract = new Contract(
-		poolAddress,
-		UNI_ABI,
-		signer,
-	) as IUniswapV2Pair;
+	const poolContract = await getContract({
+		address: poolAddress,
+		abi: UNI_ABI,
+		chainId,
+	});
 
 	const domain = {
-		name: await poolContract.name(),
+		name: (await poolContract.read.name()) as string,
 		version: '1',
-		chainId: provider.network.chainId,
+		chainId: chainId,
 		verifyingContract: poolAddress,
-	};
+	} as const;
 
 	// The named list of all type definitions
 	const types = {
@@ -424,127 +401,119 @@ const permitTokens = async (
 	};
 
 	// The data to sign
-	const value = {
-		owner: signerAddress,
+	const message = {
+		owner: walletAddress,
 		spender: lmAddress,
 		value: amount,
-		nonce: await poolContract.nonces(signerAddress),
-		deadline: ethers.constants.MaxUint256,
-	};
+		nonce: await poolContract.read.nonces([walletAddress]),
+		deadline: MaxUint256,
+	} as const;
 
-	// eslint-disable-next-line no-underscore-dangle
-	const rawSignature = await signer._signTypedData(domain, types, value);
-	const signature = ethers.utils.splitSignature(rawSignature);
+	const hexSignature = await signTypedData({
+		domain,
+		message,
+		primaryType: 'Permit',
+		types,
+	});
 
-	return await poolContract.populateTransaction.permit(
-		signerAddress,
-		lmAddress,
-		amount,
-		ethers.constants.MaxUint256,
-		signature.v,
-		signature.r,
-		signature.s,
-	);
+	const signature = hexToSignature(hexSignature);
+
+	const walletClient = await getWalletClient({ chainId });
+	return await walletClient?.writeContract({
+		address: poolAddress,
+		abi: UNI_ABI,
+		functionName: 'permit',
+		args: [
+			walletAddress,
+			lmAddress,
+			amount,
+			MaxUint256,
+			signature.v,
+			signature.r,
+			signature.s,
+		],
+	});
 };
 
 export const approveERC20tokenTransfer = async (
-	amount: string,
-	ownerAddress: string,
-	spenderAddress: string,
-	poolAddress: string,
-	provider: Web3Provider | null,
+	amount: bigint,
+	ownerAddress: Address,
+	spenderAddress: Address,
+	tokenAddress: Address,
+	chainId: number,
 ): Promise<boolean> => {
-	if (amount === '0') return false;
-	if (!provider) {
-		console.error('Provider is null');
-		return false;
-	}
+	if (amount === 0n) return false;
 
-	const tokenContract = new Contract(
-		poolAddress,
-		ERC20_ABI,
-		provider,
-	) as ERC20;
-	const allowance: ethers.BigNumber = await tokenContract.allowance(
+	const tokenContract = getContract({
+		address: tokenAddress,
+		abi: erc20ABI,
+	});
+
+	const allowance = await tokenContract.read.allowance([
 		ownerAddress,
 		spenderAddress,
-	);
+	]);
+	console.log('allowance', allowance);
+	console.log('amount', amount);
 
-	const amountNumber = ethers.BigNumber.from(amount);
-
-	if (amountNumber.lte(allowance)) return true;
-
-	const signer = provider.getSigner();
-
-	const gasPreference = {
-		...getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),
-		gasLimit: 70000,
-	};
-
-	if (!allowance.isZero()) {
-		try {
-			const approveZero: TransactionResponse = await tokenContract
-				.connect(signer.connectUnchecked())
-				.approve(spenderAddress, ethers.constants.Zero, gasPreference);
-
-			const { status } = await approveZero.wait();
-			if (!status) return false;
-		} catch (error) {
-			console.log('Error on Zero Approve', error);
-			captureException(error, {
-				tags: {
-					section: 'approveERC20tokenTransfer',
-				},
-			});
-			return false;
-		}
-	}
+	if (amount <= allowance) return true;
 
 	try {
-		const approve = await tokenContract
-			.connect(signer.connectUnchecked())
-			.approve(spenderAddress, amountNumber, gasPreference);
-		const { status } = await approve.wait();
-		if (!status) return false;
-	} catch (error) {
-		console.log('Error on Amount Approve:', error);
-		captureException(error, {
-			tags: {
-				section: 'approveERC20tokenTransfer',
-			},
+		const walletClient = await getWalletClient({ chainId });
+
+		if (allowance > 0n) {
+			console.log('allowance is bigger than zero');
+			const tx = await walletClient?.writeContract({
+				address: tokenAddress,
+				abi: erc20ABI,
+				functionName: 'approve',
+				args: [spenderAddress, 0n],
+			});
+			if (tx) {
+				await waitForTransaction({ hash: tx });
+			} else {
+				return false;
+			}
+		}
+
+		const txResponse = await walletClient?.writeContract({
+			address: tokenAddress,
+			abi: erc20ABI,
+			functionName: 'approve',
+			args: [spenderAddress, amount],
 		});
+
+		if (txResponse) {
+			await waitForTransaction({ hash: txResponse });
+			return true;
+		} else {
+			return false;
+		}
+	} catch (error) {
+		console.log('Error on Approve', error);
 		return false;
 	}
-	return true;
 };
 
 export const wrapToken = async (
-	amount: string,
-	gardenAddress: string,
-	provider: Web3Provider | null,
-): Promise<TransactionResponse | undefined> => {
-	if (amount === '0') return;
-	if (!provider) {
-		console.error('Provider is null');
+	amount: bigint,
+	gardenAddress: Address,
+	chainId: number,
+): Promise<WriteContractReturnType | undefined> => {
+	if (amount === 0n) return;
+	const walletClient = await getWalletClient({ chainId });
+	if (!walletClient) {
+		console.error('Wallet client is null');
 		return;
 	}
 
-	const signer = provider.getSigner();
-
-	const gardenContract = new Contract(
-		gardenAddress,
-		TOKEN_MANAGER_ABI,
-		signer,
-	);
 	try {
-		return await gardenContract
-			.connect(signer.connectUnchecked())
-			.wrap(
-				amount,
-				getGasPreference(
-					config.NETWORKS_CONFIG[provider.network.chainId],
-				),
-			);
+		return await walletClient?.writeContract({
+			address: gardenAddress,
+			abi: TOKEN_MANAGER_ABI,
+			functionName: 'wrap',
+			args: [amount],
+		});
 	} catch (error) {
 		console.log('Error on wrapping token:', error);
 		captureException(error, {
@@ -556,65 +525,53 @@ export const wrapToken = async (
 };
 
 export const stakeGIV = async (
-	amount: string,
-	lmAddress: string,
-	provider: Web3Provider | null,
-): Promise<TransactionResponse | undefined> => {
-	if (amount === '0') return;
-	if (!provider) {
-		console.error('Provider is null');
+	amount: bigint,
+	lmAddress: Address,
+	chainId: number,
+): Promise<WriteContractReturnType | undefined> => {
+	if (amount === 0n) return;
+	const walletClient = await getWalletClient({ chainId });
+	if (!walletClient) {
+		console.error('Wallet client is null');
 		return;
 	}
 
-	const signer = provider.getSigner();
-
-	const contract = new Contract(lmAddress, UNIPOOL_GIVPOWER_ABI, signer);
 	try {
-		return await contract
-			.connect(signer.connectUnchecked())
-			.stake(
-				amount,
-				getGasPreference(
-					config.NETWORKS_CONFIG[provider.network.chainId],
-				),
-			);
+		return await walletClient?.writeContract({
+			address: lmAddress,
+			abi: UNIPOOL_GIVPOWER_ABI,
+			functionName: 'stake',
+			args: [amount],
+		});
 	} catch (error) {
-		console.log('Error on wrapping token:', error);
+		console.log('Error on stake token:', error);
 		captureException(error, {
 			tags: {
-				section: 'wrapToken',
+				section: 'stakeToken',
 			},
 		});
 	}
 };
 
 export const unwrapToken = async (
-	amount: string,
-	gardenAddress: string,
-	provider: Web3Provider | null,
-): Promise<TransactionResponse | undefined> => {
-	if (amount === '0') return;
-	if (!provider) {
-		console.error('Provider is null');
+	amount: bigint,
+	gardenAddress: Address,
+	chainId: number,
+): Promise<WriteContractReturnType | undefined> => {
+	if (amount === 0n) return;
+	const walletClient = await getWalletClient({ chainId });
+	if (!walletClient) {
+		console.error('Wallet client is null');
 		return;
 	}
 
-	const signer = provider.getSigner();
-
-	const gardenContract = new Contract(
-		gardenAddress,
-		TOKEN_MANAGER_ABI,
-		signer,
-	);
 	try {
-		return await gardenContract
-			.connect(signer.connectUnchecked())
-			.unwrap(
-				amount,
-				getGasPreference(
-					config.NETWORKS_CONFIG[provider.network.chainId],
-				),
-			);
+		return await walletClient?.writeContract({
+			address: gardenAddress,
+			abi: TOKEN_MANAGER_ABI,
+			functionName: 'unwrap',
+			args: [amount],
+		});
 	} catch (error) {
 		console.log('Error on unwrapping token:', error);
 		captureException(error, {
@@ -622,60 +579,46 @@ export const unwrapToken = async (
 				section: 'unwrapToken',
 			},
 		});
-		return;
 	}
 };
 
 export const stakeTokens = async (
-	amount: string,
-	poolAddress: string,
-	lmAddress: string,
-	provider: Web3Provider | null,
+	amount: bigint,
+	poolAddress: Address,
+	lmAddress: Address,
+	chainId: number,
 	permit: boolean,
-): Promise<TransactionResponse | undefined> => {
-	if (amount === '0') return;
-	if (!provider) {
-		console.error('Provider is null');
+): Promise<WriteContractReturnType | undefined> => {
+	if (amount === 0n) return;
+	const walletClient = await getWalletClient({ chainId });
+	if (!walletClient) {
+		console.error('Wallet client is null');
 		return;
 	}
 
-	const signer = provider.getSigner();
-
-	const lmContract = new Contract(
-		lmAddress,
-		LM_ABI,
-		signer,
-	) as UnipoolTokenDistributor;
-
+	const walletAddress = walletClient.account.address;
 	try {
-		const gasPreference = getGasPreference(
-			config.NETWORKS_CONFIG[provider.network.chainId],
-		);
-
 		if (permit) {
 			const rawPermitCall = await permitTokens(
-				provider,
+				chainId,
+				walletAddress,
 				poolAddress,
 				lmAddress,
 				amount,
 			);
-			return await lmContract
-				.connect(signer.connectUnchecked())
-				.stakeWithPermit(
-					ethers.BigNumber.from(amount),
-					rawPermitCall.data as string,
-					{
-						gasLimit: 300_000,
-						...gasPreference,
-					},
-				);
+			return await walletClient.writeContract({
+				address: lmAddress,
+				abi: LM_ABI,
+				functionName: 'stakeWithPermit',
+				args: [amount, rawPermitCall],
+			});
 		} else {
-			return await lmContract
-				.connect(signer.connectUnchecked())
-				.stake(ethers.BigNumber.from(amount), {
-					gasLimit: 300_000,
-					...gasPreference,
-				});
+			return await walletClient.writeContract({
+				address: lmAddress,
+				abi: LM_ABI,
+				functionName: 'stake',
+				args: [amount],
+			});
 		}
 	} catch (e) {
 		console.error('Error on staking:', e);
@@ -689,25 +632,21 @@ export const stakeTokens = async (
 };
 
 export const harvestTokens = async (
-	lmAddress: string,
-	provider: Web3Provider | null,
-): Promise<TransactionResponse | undefined> => {
-	if (!provider) {
-		console.error('Provider is null');
+	lmAddress: Address,
+	chainId: number,
+): Promise<WriteContractReturnType | undefined> => {
+	const walletClient = await getWalletClient({ chainId });
+	if (!walletClient) {
+		console.error('Wallet client is null');
 		return;
 	}
 
-	const signer = provider.getSigner();
-	const lmContract = new Contract(
-		lmAddress,
-		LM_ABI,
-		signer.connectUnchecked(),
-	);
-
 	try {
-		return await lmContract.getReward(
-			getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),
-		);
+		return await walletClient.writeContract({
+			address: lmAddress,
+			abi: LM_ABI,
+			functionName: 'getReward',
+		});
 	} catch (error) {
 		console.error('Error on harvesting:', Error);
 		captureException(error, {
@@ -719,28 +658,24 @@ export const harvestTokens = async (
 };
 
 export const withdrawTokens = async (
-	amount: string,
-	lmAddress: string,
-	provider: Web3Provider | null,
-): Promise<TransactionResponse | undefined> => {
-	if (!provider) {
-		console.error('Provider is null');
+	amount: bigint,
+	lmAddress: Address,
+	chainId: number,
+): Promise<WriteContractReturnType | undefined> => {
+	if (amount === 0n) return;
+	const walletClient = await getWalletClient({ chainId });
+	if (!walletClient) {
+		console.error('Wallet client is null');
 		return;
 	}
 
-	const signer = provider.getSigner();
-
-	const lmContract = new Contract(
-		lmAddress,
-		LM_ABI,
-		signer.connectUnchecked(),
-	);
-
 	try {
-		return await lmContract.withdraw(
-			ethers.BigNumber.from(amount),
-			getGasPreference(config.NETWORKS_CONFIG[provider.network.chainId]),
-		);
+		return await walletClient.writeContract({
+			address: lmAddress,
+			abi: LM_ABI,
+			functionName: 'withdraw',
+			args: [amount],
+		});
 	} catch (e) {
 		console.error('Error on withdrawing:', e);
 		captureException(e, {
@@ -752,30 +687,24 @@ export const withdrawTokens = async (
 };
 
 export const lockToken = async (
-	amount: string,
+	amount: bigint,
 	round: number,
-	contractAddress: string,
-	provider: Web3Provider | null,
-): Promise<TransactionResponse | undefined> => {
-	if (amount === '0') return;
-	if (!provider) {
-		console.error('Provider is null');
+	contractAddress: Address,
+	chainId: number,
+): Promise<WriteContractReturnType | undefined> => {
+	if (amount === 0n) return;
+	const walletClient = await getWalletClient({ chainId });
+	if (!walletClient) {
+		console.error('Wallet client is null');
 		return;
 	}
-
-	const signer = provider.getSigner();
-
-	const givpowerContract = new Contract(contractAddress, GP_ABI, signer);
 	try {
-		return await givpowerContract
-			.connect(signer.connectUnchecked())
-			.lock(
-				amount,
-				round,
-				getGasPreference(
-					config.NETWORKS_CONFIG[provider.network.chainId],
-				),
-			);
+		return await walletClient?.writeContract({
+			address: contractAddress,
+			abi: GP_ABI,
+			functionName: 'lock',
+			args: [amount, round],
+		});
 	} catch (error) {
 		console.log('Error on locking token:', error);
 		captureException(error, {
@@ -787,27 +716,26 @@ export const lockToken = async (
 };
 
 export const getGIVpowerOnChain = async (
-	account: string,
+	account: Address,
 	chainId: number,
-	provider: Web3Provider | null,
-): Promise<ethers.BigNumber | undefined> => {
-	if (!provider) {
-		console.error('Provider is null');
-		return;
-	}
+): Promise<bigint | undefined> => {
 	if (!chainId) {
 		console.error('chainId is null');
 		return;
 	}
-	const contractAddress =
-		config.NETWORKS_CONFIG[chainId].GIVPOWER?.LM_ADDRESS;
-	if (!contractAddress) {
-		console.error('GIVpower contract address is null');
-		return;
-	}
-	const givpowerContract = new Contract(contractAddress, GP_ABI, provider);
 	try {
-		return await givpowerContract.balanceOf(account);
+		const contractAddress =
+			config.NETWORKS_CONFIG[chainId].GIVPOWER?.LM_ADDRESS;
+		if (!contractAddress) {
+			console.error('GIVpower contract address is null');
+			return;
+		}
+		const givpowerContract = getContract({
+			address: contractAddress,
+			abi: GP_ABI,
+			chainId,
+		});
+		return (await givpowerContract.read.balanceOf([account])) as bigint;
 	} catch (error) {
 		console.log('Error on get total GIVpower:', error);
 		captureException(error, {

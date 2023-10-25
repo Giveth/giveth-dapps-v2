@@ -1,11 +1,12 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import BigNumber from 'bignumber.js';
-import { utils, BigNumber as EthersBigNumber, constants } from 'ethers';
 import styled from 'styled-components';
 import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
+import { formatEther } from 'viem';
+import { useNetwork } from 'wagmi';
 import {
 	APRRow,
 	ArrowButton,
@@ -34,6 +35,7 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { InputWithUnit } from '@/components/input/index';
 import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
+import { WeiPerEther } from '@/lib/constants/constants';
 
 const GovernCardContainer = styled(Card)`
 	padding-left: 254px;
@@ -103,11 +105,12 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const { formatMessage } = useIntl();
 
 	const [stacked, setStacked] = useState<string>('0');
-	const [potentialClaim, setPotentialClaim] = useState<EthersBigNumber>(
-		constants.Zero,
-	);
-	const [earnEstimate, setEarnEstimate] = useState<BigNumber>(Zero);
+	const [potentialClaim, setPotentialClaim] = useState(0n);
+	const [earnEstimate, setEarnEstimate] = useState(0n);
 	const [apr, setApr] = useState<APR>(null);
+
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const gnosisValues = useAppSelector(state => state.subgraph.gnosisValues);
 
@@ -119,9 +122,11 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 		const stackedWithApr = apr
 			? apr.effectiveAPR.times(_stacked).div(1200)
 			: Zero;
-		const convertedStackedWithApr = EthersBigNumber.from(
-			stackedWithApr.toFixed(0),
-		).mul(constants.WeiPerEther);
+		const _convertedStackedWithApr =
+			BigNumber(stackedWithApr).multipliedBy(WeiPerEther);
+		const convertedStackedWithApr = BigInt(
+			_convertedStackedWithApr.toFixed(0),
+		);
 		setPotentialClaim(
 			givTokenDistroHelper.getLiquidPart(convertedStackedWithApr),
 		);
@@ -134,7 +139,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 
 	useEffect(() => {
 		if (totalAmount) {
-			setStacked(utils.formatEther(totalAmount.div(10)));
+			setStacked(formatEther(totalAmount / 10n));
 		}
 	}, [totalAmount]);
 
@@ -147,8 +152,13 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	);
 
 	useEffect(() => {
+		if (!chainId) return;
 		const cb = () => {
-			getGivStakingAPR(config.GNOSIS_NETWORK_NUMBER, gnosisValues, null)
+			getGivStakingAPR(
+				config.GNOSIS_NETWORK_NUMBER,
+				gnosisValues,
+				chainId,
+			)
 				.then(_apr => {
 					mounted.current && setApr(_apr);
 				})
@@ -212,12 +222,10 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 							</ImpactCardLabel>
 							<MaxStakeGIV
 								onClick={() =>
-									setStacked(
-										utils.formatEther(totalAmount.div(10)),
-									)
+									setStacked(formatEther(totalAmount / 10n))
 								}
-							>{`Max ${utils.formatEther(
-								totalAmount.div(10),
+							>{`Max ${formatEther(
+								totalAmount / 10n,
 							)} GIV`}</MaxStakeGIV>
 						</Flex>
 						<ImpactCardInput>

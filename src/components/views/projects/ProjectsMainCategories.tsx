@@ -2,7 +2,7 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper';
+import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { useRouter } from 'next/router';
@@ -79,7 +79,9 @@ const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 	padding: 16px;
 	:hover {
 		background: ${neutralColors.gray[400]};
-		transition: background-color 300ms linear, color 150ms linear;
+		transition:
+			background-color 300ms linear,
+			color 150ms linear;
 	}
 	font-weight: 400;
 	text-align: center;

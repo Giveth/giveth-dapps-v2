@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import React, { FC } from 'react';
 import { Button, IconWalletOutline24 } from '@giveth/ui-design-system';
 import { Controller, useForm } from 'react-hook-form';
-import { useWeb3React } from '@web3-react/core';
-import { utils } from 'ethers';
+import { getAddress, isAddress } from 'viem';
 import { useIntl } from 'react-intl';
+import { useNetwork } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import Input from '@/components/Input';
@@ -16,7 +16,7 @@ import config from '@/configuration';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
-import { networksParams } from '@/helpers/blockchain';
+import { chainNameById } from '@/lib/network';
 import useFocus from '@/hooks/useFocus';
 
 interface IProps extends IModal {
@@ -29,7 +29,7 @@ const networkOptions = Object.keys(networksConfig).map(networkId => {
 	const networkIdNumber = Number(networkId);
 	return {
 		value: networkIdNumber,
-		label: networksParams[networkIdNumber].chainName,
+		label: chainNameById(networkIdNumber),
 		id: networkIdNumber,
 	};
 });
@@ -54,8 +54,9 @@ const AddAddressModal: FC<IProps> = ({
 		getValues,
 	} = useForm<IAddressForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
 
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { formatMessage } = useIntl();
-	const { library, chainId } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [inputRef] = useFocus();
 
@@ -65,13 +66,15 @@ const AddAddressModal: FC<IProps> = ({
 		const { address, title, network } = formData;
 		const isEns = isAddressENS(address);
 		const _address = isEns
-			? await getAddressFromENS(address, library)
-			: utils.getAddress(address);
-		addAddress({
-			address: _address,
-			title,
-			networkId: network.value,
-		});
+			? await getAddressFromENS(address)
+			: getAddress(address);
+		if (_address) {
+			addAddress({
+				address: _address,
+				title,
+				networkId: network.value,
+			});
+		}
 		closeModal();
 	};
 
@@ -82,15 +85,15 @@ const AddAddressModal: FC<IProps> = ({
 
 	const validateAddress = async (address: string) => {
 		let actualAddress = address;
-		if (!library) return 'Web3 is not initialized';
 		if (isAddressENS(address)) {
 			if (chainId !== 1) {
 				return 'Please switch to Mainnet to handle ENS addresses';
 			}
-			actualAddress = await getAddressFromENS(address, library);
-			if (!actualAddress) return 'Invalid ENS address';
-		} else {
-			if (!utils.isAddress(address)) return 'Invalid address';
+			const temp = await getAddressFromENS(address);
+			if (!temp) return 'Invalid ENS address';
+			actualAddress = temp;
+		} else if (!isAddress(address)) {
+			return 'Invalid address';
 		}
 		const isDuplicate = addresses.some(
 			item =>

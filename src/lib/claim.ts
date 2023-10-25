@@ -1,16 +1,14 @@
-import { isAddress } from 'ethers/lib/utils';
-import { Contract } from 'ethers';
-import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
 import { captureException } from '@sentry/nextjs';
+import { getWalletClient } from 'wagmi/actions';
+import { WriteContractReturnType } from 'viem';
 import { ClaimData } from '@/types/GIV';
 import config from '../configuration';
 import MerkleDropJson from '../artifacts/MerkleDrop.json';
 import TOKEN_DISTRO_JSON from '../artifacts/TokenDistro.json';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
-import { getGasPreference } from '@/lib/helpers';
-import { MerkleDistro } from '@/types/contracts';
 import { fetchChainInfo } from '@/features/subgraph/subgraph.services';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { Address } from '@/types/config';
 
 const { abi: MERKLE_ABI } = MerkleDropJson;
 const { abi: TOKEN_DISTRO_ABI } = TOKEN_DISTRO_JSON;
@@ -70,32 +68,23 @@ export const hasClaimedAirDrop = async (address: string): Promise<boolean> => {
 
 export const claimAirDrop = async (
 	address: string,
-	provider: Web3Provider,
-): Promise<TransactionResponse | undefined> => {
+	chainId: number,
+): Promise<WriteContractReturnType | undefined> => {
 	const merkleAddress = config.GNOSIS_CONFIG.MERKLE_ADDRESS;
-	if (!isAddress(merkleAddress)) throw new Error('No MerkleAddress');
-	if (!provider) throw new Error('No Provider');
-
-	const signer = provider.getSigner().connectUnchecked();
-	const merkleContract = new Contract(
-		merkleAddress,
-		MERKLE_ABI,
-		provider,
-	) as MerkleDistro;
 
 	const claimData = await fetchAirDropClaimData(address);
-
 	if (!claimData) throw new Error('No claim data');
 
 	try {
-		return await merkleContract
-			.connect(signer.connectUnchecked())
-			.claim(
-				claimData.index,
-				claimData.amount,
-				claimData.proof,
-				getGasPreference(config.GNOSIS_CONFIG),
-			);
+		const walletClient = await getWalletClient({
+			chainId,
+		});
+		return await walletClient?.writeContract({
+			address: merkleAddress,
+			functionName: 'claim',
+			abi: MERKLE_ABI,
+			args: [claimData.index, claimData.amount, claimData.proof],
+		});
 	} catch (error) {
 		console.error('Error on claiming GIVdrop:', error);
 		captureException(error, {
@@ -107,24 +96,20 @@ export const claimAirDrop = async (
 };
 
 export const claimReward = async (
-	tokenDistroAddress: string,
-	provider: Web3Provider | null,
-): Promise<TransactionResponse | undefined> => {
-	if (!isAddress(tokenDistroAddress)) return;
-	if (!provider) return;
+	tokenDistroAddress: Address,
+	chainId: number | null,
+): Promise<WriteContractReturnType | undefined> => {
+	if (!chainId) return;
 
-	const signer = provider.getSigner();
-	const network = provider.network.chainId;
-
-	const tokenDistro = new Contract(
-		tokenDistroAddress,
-		TOKEN_DISTRO_ABI,
-		signer.connectUnchecked(),
-	);
-
-	const networkConfig = config.NETWORKS_CONFIG[network];
 	try {
-		return await tokenDistro.claim(getGasPreference(networkConfig));
+		const walletClient = await getWalletClient({
+			chainId,
+		});
+		return walletClient?.writeContract({
+			address: tokenDistroAddress,
+			functionName: 'claim',
+			abi: TOKEN_DISTRO_ABI,
+		});
 	} catch (error) {
 		console.error('Error on claiming token distro reward:', error);
 		captureException(error, {
@@ -133,14 +118,4 @@ export const claimReward = async (
 			},
 		});
 	}
-
-	// showPendingClaim(network, tx.hash);
-
-	// const { status } = await tx.wait();
-
-	// if (status) {
-	// 	showConfirmedClaim(network, tx.hash);
-	// } else {
-	// 	showFailedClaim(network, tx.hash);
-	// }
 };

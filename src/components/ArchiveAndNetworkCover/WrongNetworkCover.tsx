@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { Caption, IconAlertCircle16 } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { chainName } from '@/lib/constants/constants';
+import { useNetwork } from 'wagmi';
 import { Cover } from './common';
 import { Flex } from '../styled-components/Flex';
+import { chainNameById } from '@/lib/network';
 
 interface IWrongNetworkCoverProps {
 	targetNetwork: number;
@@ -15,7 +15,9 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 	targetNetwork,
 }) => {
 	const { formatMessage } = useIntl();
-	const { chainId } = useWeb3React();
+
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	return targetNetwork !== chainId ? (
 		<StyledCover>
@@ -30,8 +32,8 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 								id: 'label.wrong_network',
 							},
 							{
-								chainName: chainName(chainId || 0),
-								targetChain: chainName(targetNetwork || 0),
+								chainName: chainNameById(chainId || 0),
+								targetChain: chainNameById(targetNetwork || 0),
 							},
 						)}
 					</Content>

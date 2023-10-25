@@ -9,10 +9,10 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useSwitchNetwork } from 'wagmi';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from './Modal';
 import { mediaQueries } from '@/lib/constants/constants';
-import { switchNetwork } from '@/lib/wallet';
 import config from '@/configuration';
 import links from '@/lib/constants/links';
 import type { IModal } from '@/types/common';
@@ -23,6 +23,7 @@ interface IBridgeGIVModal extends IModal {}
 export const BridgeGIVModal: FC<IBridgeGIVModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
+	const { switchNetwork } = useSwitchNetwork();
 
 	return (
 		<Modal
@@ -62,7 +63,9 @@ export const BridgeGIVModal: FC<IBridgeGIVModal> = ({ setShowModal }) => {
 					buttonType='texty'
 					size='medium'
 					label={formatMessage({ id: 'label.switch_network' })}
-					onClick={() => switchNetwork(config.GNOSIS_NETWORK_NUMBER)}
+					onClick={() =>
+						switchNetwork?.(config.GNOSIS_NETWORK_NUMBER)
+					}
 				/>
 			</ModalContainer>
 		</Modal>
