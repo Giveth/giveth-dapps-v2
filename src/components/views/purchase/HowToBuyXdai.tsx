@@ -13,7 +13,7 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 
-import { Navigation, Pagination } from 'swiper';
+import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
 import {

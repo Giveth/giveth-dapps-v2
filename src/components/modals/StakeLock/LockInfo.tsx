@@ -11,8 +11,8 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useNetwork } from 'wagmi';
 import BigNumber from 'bignumber.js';
-import { useWeb3React } from '@web3-react/core';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
@@ -22,15 +22,17 @@ import type { FC } from 'react';
 
 interface ILockInfo {
 	round: number;
-	amount: string;
+	amount: bigint;
 }
 
 const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
-	const { chainId } = useWeb3React();
-	const { apr } = useStakingPool(
-		config.NETWORKS_CONFIG[chainId!].GIVPOWER ||
-			config.GNOSIS_CONFIG.GIVPOWER,
-	);
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const { apr } =
+		useStakingPool(
+			config.NETWORKS_CONFIG[chainId!]?.GIVPOWER ||
+				config.GNOSIS_CONFIG.GIVPOWER,
+		) || {};
 
 	const multipler = Math.sqrt(1 + round);
 
@@ -97,7 +99,9 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 				<LockInfoRowValue>
 					{amount
 						? formatWeiHelper(
-								new BigNumber(amount).multipliedBy(multipler),
+								new BigNumber(amount.toString()).multipliedBy(
+									multipler,
+								),
 						  )
 						: 0}
 				</LockInfoRowValue>

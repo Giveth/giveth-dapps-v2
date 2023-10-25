@@ -16,11 +16,12 @@ import {
 import { useIntl } from 'react-intl';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { useProjectContext } from '@/context/project.context';
-import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
+import { useModalCallback } from '@/hooks/useModalCallback';
 import { isSSRMode } from '@/lib/helpers';
 import BoostModal from '@/components/modals/Boost/BoostModal';
 import { useAppSelector } from '@/features/hooks';
@@ -28,6 +29,8 @@ import { formatDonation } from '@/helpers/number';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 
 const ProjectGIVbackToast = () => {
+	const [showVerificationModal, setShowVerificationModal] = useState(false);
+	const [showBoost, setShowBoost] = useState(false);
 	const { projectData, isAdmin } = useProjectContext();
 	const verified = projectData?.verified;
 	const { givbackFactor } = projectData || {};
@@ -38,6 +41,13 @@ const ProjectGIVbackToast = () => {
 		? semanticColors.golden[600]
 		: neutralColors.gray[900];
 	const { formatMessage, locale } = useIntl();
+	const { open: openConnectModal } = useWeb3Modal();
+	const {
+		isEnabled,
+		isSignedIn,
+		isLoading: isUserLoading,
+	} = useAppSelector(state => state.user);
+	const router = useRouter();
 
 	const handleTitle = () => {
 		if (isOwnerVerified) {
@@ -94,31 +104,16 @@ const ProjectGIVbackToast = () => {
 		}`,
 	});
 
-	const [showBoost, setShowBoost] = useState(false);
-	const [showVerificationModal, setShowVerificationModal] = useState(false);
-
-	const {
-		isEnabled,
-		isSignedIn,
-		isLoading: isUserLoading,
-	} = useAppSelector(state => state.user);
-	const router = useRouter();
-
 	const showBoostModal = () => {
 		setShowBoost(true);
 	};
 
 	const { modalCallback: signInThenBoost } = useModalCallback(showBoostModal);
 
-	const { modalCallback: connectThenSign } = useModalCallback(
-		signInThenBoost,
-		EModalEvents.CONNECTED,
-	);
-
 	const handleBoostClick = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			connectThenSign();
+			openConnectModal?.();
 		} else if (!isSignedIn) {
 			signInThenBoost();
 		} else {

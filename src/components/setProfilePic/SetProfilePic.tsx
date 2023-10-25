@@ -23,11 +23,11 @@ import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import { WrappedSpinner } from '../Spinner';
 import { NoPFP } from './NoPFP';
 import { useAvatar } from '@/hooks/useAvatar';
-import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import NFTButtons from '../modals/UploadProfilePicModal/NFTButtons';
 import { useAppSelector } from '@/features/hooks';
 import OnboardButtons from '../modals/UploadProfilePicModal/OnboardButtons';
 import AttributeItems from './AttributeItems';
+import { convertIPFSToHTTPS } from '@/helpers/url';
 
 enum EProfilePicTab {
 	LOADING,

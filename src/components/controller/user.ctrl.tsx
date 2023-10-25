@@ -1,72 +1,50 @@
-import { useWeb3React } from '@web3-react/core';
-import { useEffect, useRef, useState } from 'react';
-import { formatEther } from '@ethersproject/units';
-import { captureException } from '@sentry/nextjs';
-import { InjectedConnector } from '@web3-react/injected-connector';
+import { useEffect, useRef } from 'react';
+import { useAccount, useConnect } from 'wagmi';
 import { useAppDispatch } from '@/features/hooks';
-import {
-	setBalance,
-	setIsLoading,
-	setToken,
-	setIsEnabled,
-} from '@/features/user/user.slice';
-import { isSSRMode } from '@/lib/helpers';
+import { setToken, setIsEnabled } from '@/features/user/user.slice';
 import StorageLabel from '@/lib/localStorage';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
-import { walletsArray } from '@/lib/wallet/walletTypes';
 import { getTokens } from '@/helpers/user';
 
 const UserController = () => {
-	const { account, library, chainId, activate } = useWeb3React();
+	const { address, isConnected } = useAccount();
 	const dispatch = useAppDispatch();
-	const [isActivatedCalled, setIsActivatedCalled] = useState(false);
-	const token = !isSSRMode ? localStorage.getItem(StorageLabel.TOKEN) : null;
+	const { connect, connectors } = useConnect();
 
 	const isMounted = useRef(false);
 
 	useEffect(() => {
-		const selectedWalletName = localStorage.getItem(StorageLabel.WALLET);
-		const wallet = walletsArray.find(w => w.value === selectedWalletName);
-		// try to connect to safe. this is only for the gnosis safe environment, it won't stop the flow if it fails
-		const safeWallet = walletsArray.find(w => w.name === 'GnosisSafe');
-		if (safeWallet) {
-			activate(safeWallet.connector, console.log)
-				.then(() => setIsActivatedCalled(true))
-				.finally(() => {
-					if (!token) dispatch(setIsLoading(false));
-				});
-		}
+		if (isConnected) return;
 
-		if (wallet && wallet.connector instanceof InjectedConnector) {
-			wallet.connector
-				.isAuthorized()
-				.then(isAuthorized => {
-					if (isAuthorized) {
-						activate(wallet.connector, console.log)
-							.then(() => setIsActivatedCalled(true))
-							.finally(() => {
-								if (!token) dispatch(setIsLoading(false));
-							});
-					} else {
-						dispatch(setIsLoading(false));
-					}
-				})
-				.catch(() => dispatch(setIsLoading(false)));
-		} else {
-			dispatch(setIsLoading(false));
+		const isPrevConnected = localStorage.getItem(
+			StorageLabel.WAGMI_CONNECTED,
+		);
+
+		if (isPrevConnected !== 'true') return;
+
+		const connectedWallet = localStorage
+			.getItem(StorageLabel.WAGMI_WALLET)
+			?.replaceAll('"', '');
+
+		const connector = connectors.find(
+			c => c.id.toLowerCase() === connectedWallet?.toLowerCase(),
+		);
+
+		if (connector) {
+			connect({ connector });
 		}
-	}, [activate, isActivatedCalled]);
+	}, []);
 
 	useEffect(() => {
 		if (isMounted.current) {
-			if (!account) {
+			if (!address) {
 				// Case when wallet is locked
 				dispatch(setIsEnabled(false));
 			}
 		}
-		if (account) {
+		if (address) {
 			const tokens = getTokens();
-			const _account = account.toLowerCase();
+			const _account = address.toLowerCase();
 			if (tokens[_account]) {
 				dispatch(setToken(tokens[_account]));
 				localStorage.setItem(StorageLabel.USER, _account);
@@ -76,39 +54,10 @@ const UserController = () => {
 				localStorage.removeItem(StorageLabel.USER);
 			}
 			isMounted.current = true;
-			dispatch(fetchUserByAddress(account));
+			dispatch(fetchUserByAddress(address));
 			dispatch(setIsEnabled(true));
 		}
-	}, [account]);
-
-	useEffect(() => {
-		if (account && library) {
-			library?.on('block', () => {
-				//Getting balance on every block
-				if (account && library) {
-					library
-						.getBalance(account)
-						.then((_balance: string) => {
-							const balance = parseFloat(
-								formatEther(_balance),
-							).toFixed(3);
-							dispatch(setBalance(balance));
-						})
-						.catch((error: unknown) => {
-							dispatch(setBalance(null));
-							captureException(error, {
-								tags: {
-									section: 'getBalance',
-								},
-							});
-						});
-				}
-			});
-		}
-		return () => {
-			library?.removeAllListeners('block');
-		};
-	}, [account, library, chainId]);
+	}, [address]);
 
 	return null;
 };

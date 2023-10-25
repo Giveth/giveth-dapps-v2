@@ -14,9 +14,9 @@ import {
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex } from './styled-components/Flex';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
-import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
 import Routes from '@/lib/constants/Routes';
 
 enum EPBGState {
@@ -124,11 +124,7 @@ export const PassportBanner = () => {
 	const { passportState, currentRound } = info;
 
 	const { formatMessage, locale } = useIntl();
-
-	const { modalCallback: connectThenSignIn } = useModalCallback(
-		handleSign,
-		EModalEvents.CONNECTED,
-	);
+	const { open: openConnectModal } = useWeb3Modal();
 
 	return (
 		<PassportBannerWrapper bgColor={PassportBannerData[passportState].bg}>
@@ -171,7 +167,7 @@ export const PassportBanner = () => {
 				</StyledLink>
 			)}
 			{passportState === EPassportState.NOT_CONNECTED && (
-				<StyledLink onClick={() => connectThenSignIn()}>
+				<StyledLink onClick={() => openConnectModal?.()}>
 					<GLink>
 						{formatMessage({
 							id: 'component.button.connect_wallet',

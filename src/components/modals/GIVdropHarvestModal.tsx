@@ -8,11 +8,11 @@ import {
 	IconHelpFilled16,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { ethers, constants } from 'ethers';
-import { Zero } from '@ethersproject/constants';
 import BigNumber from 'bignumber.js';
-import { useWeb3React } from '@web3-react/core';
 import { captureException } from '@sentry/nextjs';
+import { useAccount, useNetwork } from 'wagmi';
+import { WriteContractReturnType } from 'viem';
+import { waitForTransaction } from 'wagmi/actions';
 import { Modal } from './Modal';
 import {
 	ConfirmedInnerModal,
@@ -30,22 +30,16 @@ import {
 	RateRow,
 	TooltipContent,
 } from './HarvestAll.sc';
-import { BN, formatWeiHelper } from '@/helpers/number';
+import { formatWeiHelper } from '@/helpers/number';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '../AmountBoxWithPrice';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { claimAirDrop } from '@/lib/claim';
-import {
-	showPendingClaim,
-	showConfirmedClaim,
-	showFailedClaim,
-} from '../toasts/claim';
 import config from '@/configuration';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import type { TransactionResponse } from '@ethersproject/providers';
 
 enum ClaimState {
 	UNKNOWN,
@@ -57,9 +51,9 @@ enum ClaimState {
 
 interface IGIVdropHarvestModal extends IModal {
 	network: number;
-	givdropAmount: ethers.BigNumber;
+	givdropAmount: bigint;
 	checkNetworkAndWallet: () => Promise<boolean>;
-	onSuccess: (tx: TransactionResponse) => void;
+	onSuccess: (tx: WriteContractReturnType) => void;
 }
 
 export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
@@ -70,14 +64,12 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	onSuccess,
 }) => {
 	const { formatMessage } = useIntl();
-	const [givBackLiquidPart, setGivBackLiquidPart] = useState(Zero);
-	const [txResp, setTxResp] = useState<TransactionResponse | undefined>();
-	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
-	const [givDropStream, setGivDropStream] = useState<BigNumber.Value>(0);
-	const [givDropAccStream, setGivDropAccStream] = useState<ethers.BigNumber>(
-		constants.Zero,
-	);
-	const [claimableNow, setClaimableNow] = useState(Zero);
+	const [givBackLiquidPart, setGivBackLiquidPart] = useState(0n);
+	const [txResp, setTxResp] = useState<WriteContractReturnType | undefined>();
+	const [givBackStream, setGivBackStream] = useState(0n);
+	const [givDropStream, setGivDropStream] = useState(0n);
+	const [givDropAccStream, setGivDropAccStream] = useState(0n);
+	const [claimableNow, setClaimableNow] = useState(0n);
 	const [claimState, setClaimState] = useState<ClaimState>(
 		ClaimState.UNKNOWN,
 	);
@@ -89,10 +81,12 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const givPrice = useAppSelector(state => state.price.givPrice);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { account, library } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const { address } = useAccount();
 
 	useEffect(() => {
-		const bnGIVback = BN(givTokenDistroBalance.givback);
+		const bnGIVback = BigInt(givTokenDistroBalance.givback);
 		setClaimableNow(
 			givTokenDistroHelper.getUserClaimableNow(givTokenDistroBalance),
 		);
@@ -106,16 +100,15 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 		setGivDropStream(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(givdropAmount),
 		);
-		const amount = new BigNumber(givdropAmount.mul(9).div(10).toString());
-		const percent = new BigNumber(givTokenDistroHelper.percent / 100);
-		const givDropAcc = amount
-			.times(percent)
-			.toFixed(0, BigNumber.ROUND_DOWN);
-		let _givDropAcc = ethers.BigNumber.from(givDropAcc);
-		if (!claimableNow.isZero()) {
-			_givDropAcc = _givDropAcc.add(claimableNow).sub(givBackLiquidPart);
+		const amount = new BigNumber(givdropAmount.toString()).multipliedBy(
+			0.9,
+		);
+		const percent = givTokenDistroHelper.percent / 100;
+		let givDropAcc = BigInt(amount.multipliedBy(percent).toFixed(0));
+		if (claimableNow !== 0n) {
+			givDropAcc = givDropAcc + claimableNow - givBackLiquidPart;
 		}
-		setGivDropAccStream(_givDropAcc);
+		setGivDropAccStream(givDropAcc);
 	}, [givdropAmount, givTokenDistroHelper, claimableNow, givBackLiquidPart]);
 
 	const calcUSD = (amount: string) => {
@@ -126,12 +119,12 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	const onClaim = async () => {
 		const check = checkNetworkAndWallet();
 		if (!check) return;
-		if (!library) return;
-		if (!account) return;
+		if (!chainId) return;
+		if (!address) return;
 
 		try {
 			setClaimState(ClaimState.WAITING);
-			const tx = await claimAirDrop(account, library);
+			const tx = await claimAirDrop(address, chainId);
 			// This is for test;
 			// const tx: TransactionResponse = {
 			// 	hash: '0x8162815a31ba2ffc6a815ec76f79231fd7bc4a8c49f9e5ec7d923a6c069ef938',
@@ -186,16 +179,13 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 			if (tx) {
 				setTxResp(tx);
 				setClaimState(ClaimState.SUBMITTING);
-				showPendingClaim(config.GNOSIS_NETWORK_NUMBER, tx.hash);
-				const { status } = await tx.wait();
+				const { status } = await waitForTransaction({ hash: tx });
 
 				if (status) {
 					setClaimState(ClaimState.CLAIMED);
 					onSuccess(tx);
-					showConfirmedClaim(config.GNOSIS_NETWORK_NUMBER, tx.hash);
 				} else {
 					setClaimState(ClaimState.ERROR);
-					showFailedClaim(config.GNOSIS_NETWORK_NUMBER, tx.hash);
 				}
 			}
 		} catch (e) {
@@ -219,16 +209,16 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 				{(claimState === ClaimState.UNKNOWN ||
 					claimState === ClaimState.WAITING) && (
 					<HarvestBoxes>
-						{givdropAmount && givdropAmount.gt(0) && (
+						{givdropAmount > 0n && (
 							<>
 								{/* <HelpRow alignItems='center'>
 									<B>Claimable from GIVdrop</B>
 								</HelpRow> */}
 								<AmountBoxWithPrice
-									amount={givdropAmount.div(10)}
+									amount={givdropAmount / 10n}
 									price={calcUSD(
 										formatWeiHelper(
-											givdropAmount.div(10),
+											givdropAmount / 10n,
 											config.TOKEN_PRECISION,
 											false,
 										),
@@ -251,7 +241,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 								</RateRow>
 							</>
 						)}
-						{!BN(givTokenDistroBalance.givback).isZero() && (
+						{BigInt(givTokenDistroBalance.givback) > 0 && (
 							<>
 								<HelpRow alignItems='center'>
 									<B>Claimable from GIVbacks</B>
@@ -296,7 +286,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 								</RateRow>
 							</>
 						)}
-						{givdropAmount && givdropAmount.gt(0) && (
+						{givdropAmount > 0n && (
 							<>
 								<HelpRow alignItems='center'>
 									<B>Claimable from GIVstream</B>
@@ -340,16 +330,16 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 					</HarvestBoxes>
 				)}
 				{claimState === ClaimState.SUBMITTING && (
-					<SubmittedInnerModal title='GIV' txHash={txResp?.hash} />
+					<SubmittedInnerModal title='GIV' txHash={txResp} />
 				)}
 				{claimState === ClaimState.CLAIMED && (
-					<ConfirmedInnerModal title='GIV' txHash={txResp?.hash} />
+					<ConfirmedInnerModal title='GIV' txHash={txResp} />
 				)}
 				{claimState === ClaimState.ERROR && (
 					<>
 						<ErrorInnerModal
 							title='GIV'
-							txHash={txResp?.hash}
+							txHash={txResp}
 							message='Something went wrong.'
 						/>
 						<CancelButton

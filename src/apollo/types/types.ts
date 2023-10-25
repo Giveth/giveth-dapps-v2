@@ -137,7 +137,7 @@ export interface ICampaign {
 }
 
 export interface IWalletAddress {
-	address?: string;
+	address?: `0x${string}`;
 	isRecipient?: boolean;
 	networkId?: number;
 }

@@ -11,8 +11,9 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
+import dynamic from 'next/dynamic';
+import { useNetwork } from 'wagmi';
 import { BigArc } from '@/components/styled-components/Arc';
 import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from '../../DonateSocialBox';
@@ -28,9 +29,16 @@ import ExternalLink from '@/components/ExternalLink';
 import { formatTxLink } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import CryptoDonation from '@/components/views/donate/CryptoDonation';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
+
+const CryptoDonation = dynamic(
+	() => import('@/components/views/donate/CryptoDonation'),
+	{
+		loading: () => <p>Loading...</p>,
+		ssr: false,
+	},
+);
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -114,7 +122,8 @@ const AlreadyDonatedWrapper = styled(Flex)`
 `;
 
 const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
-	const { chainId } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	return (
 		<TxLink>
 			<span>Donation to {title + ' '}</span>

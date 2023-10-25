@@ -1,15 +1,8 @@
-import { Web3ReactContextInterface } from '@web3-react/core/dist/types';
-import { captureException } from '@sentry/nextjs';
-
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { networksParams } from '@/helpers/blockchain';
-import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
-import { sendTransaction } from '@/lib/helpers';
-import { saveDonation, updateDonation } from '@/services/donation';
-import { EDonationStatus } from '@/apollo/types/gqlEnums';
-import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { IWalletAddress } from '@/apollo/types/types';
+import { EDonationFailedType } from '@/components/modals/FailedDonation';
+import config from '@/configuration';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -63,17 +56,17 @@ export const getNetworkIds = (
 		networkIds[i.networkId] = true;
 	});
 	const networkIdArrays = Object.keys(networkIds).map(i => Number(i));
-	return networkIdArrays.filter(networkId =>
-		recipientAddressesNetwork?.includes(networkId),
+	return networkIdArrays.filter(
+		networkId => recipientAddressesNetwork?.includes(networkId),
 	);
 };
 
 export const getNetworkNames = (networks: number[], text: string) => {
-	return networks.map((i, index) => {
-		const name = networksParams[i]?.chainName;
+	return networks.map((network, index) => {
+		const name = config.NETWORKS_CONFIG[network]?.name;
 		const lastLoop = networks.length === index + 1;
 		return (
-			<span key={i}>
+			<span key={network}>
 				{name}
 				{!lastLoop && ' ' + text + ' '}
 			</span>
@@ -82,17 +75,14 @@ export const getNetworkNames = (networks: number[], text: string) => {
 };
 
 export interface ICreateDonation {
-	setDonationSaved?: (value: boolean) => void;
-	web3Context: Web3ReactContextInterface;
-	setDonating: (value: boolean) => void;
-	walletAddress: string;
+	walletAddress: `0x${string}`;
 	projectId: number;
 	amount: number;
 	token: IProjectAcceptedToken;
-	setFailedModalType: (i: EDonationFailedType) => void;
-	setTxHash: (i: string) => void;
 	anonymous?: boolean;
 	chainvineReferred?: string | null;
+	symbol: string;
+	setFailedModalType: (type: EDonationFailedType) => void;
 }
 
 export interface ICreateDonationResult {
@@ -101,81 +91,3 @@ export interface ICreateDonationResult {
 }
 
 type TCreateDonation = (i: ICreateDonation) => Promise<ICreateDonationResult>;
-
-export const createDonation: TCreateDonation = async props => {
-	const {
-		walletAddress,
-		amount,
-		token,
-		setFailedModalType,
-		web3Context,
-		setDonating,
-		setDonationSaved,
-		setTxHash,
-	} = props;
-
-	const { library } = web3Context;
-	const { address } = token;
-
-	let donationId = 0,
-		_txHash = '';
-
-	try {
-		const toAddress = isAddressENS(walletAddress!)
-			? await getAddressFromENS(walletAddress!, library)
-			: walletAddress;
-
-		const transactionObj = {
-			to: toAddress,
-			value: amount.toString(),
-		};
-
-		const txCallbacks = {
-			onTxHash: (txHash: string, nonce: number) => {
-				_txHash = txHash;
-				setTxHash(txHash);
-				saveDonation({ nonce, txHash, ...props })
-					.then(res => {
-						donationId = res;
-						setDonationSaved && setDonationSaved(true);
-					})
-					.catch(() => {
-						setFailedModalType(EDonationFailedType.NOT_SAVED);
-						setDonating(false);
-					});
-			},
-			onReceipt: () =>
-				updateDonation(donationId, EDonationStatus.VERIFIED),
-		};
-
-		await sendTransaction(library, transactionObj, txCallbacks, address);
-		return { isSaved: donationId > 0, txHash: _txHash };
-	} catch (error: any) {
-		_txHash = error.replacement?.hash || error.transactionHash;
-		console.log({ error });
-		if (
-			(error.replacement && error.cancelled === true) ||
-			error.reason === 'transaction failed'
-		) {
-			setTxHash(_txHash);
-			setFailedModalType(
-				error.cancelled
-					? EDonationFailedType.CANCELLED
-					: EDonationFailedType.FAILED,
-			);
-			updateDonation(donationId, EDonationStatus.FAILED);
-		} else if (error.code === 'ACTION_REJECTED') {
-			setFailedModalType(EDonationFailedType.REJECTED);
-		} else {
-			setFailedModalType(EDonationFailedType.FAILED);
-		}
-		setDonating(false);
-		setDonationSaved && setDonationSaved(false);
-		captureException(error, {
-			tags: {
-				section: 'confirmDonation',
-			},
-		});
-		throw { isSaved: donationId > 0, txHash: _txHash };
-	}
-};

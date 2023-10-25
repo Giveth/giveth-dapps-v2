@@ -9,11 +9,10 @@ import {
 	neutralColors,
 	ButtonText,
 } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
-
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
@@ -21,7 +20,6 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
 import config from '@/configuration';
 import { NetworkConfig } from '@/types/config';
-import { switchNetwork } from '@/lib/metamask';
 import NetworkLogo from '../NetworkLogo';
 import { NetworkItem, SelectedNetwork } from './SwitchNetwork';
 import { useAppSelector } from '@/features/hooks';
@@ -36,20 +34,23 @@ const networks = [
 	config.POLYGON_CONFIG,
 	config.CELO_CONFIG,
 	config.OPTIMISM_CONFIG,
+	config.CLASSIC_CONFIG,
 ];
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { setShowModal, acceptedChains } = props;
-	const { chainId } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
+	const { switchNetwork } = useSwitchNetwork();
 
 	const { slug } = router.query;
 
-	const eligibleNetworks: NetworkConfig[] = networks.filter(network =>
-		acceptedChains?.includes(parseInt(network.chainId)),
+	const eligibleNetworks: NetworkConfig[] = networks.filter(
+		network => acceptedChains?.includes(network.id),
 	);
 
 	useEffect(() => {
@@ -81,11 +82,11 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 				<br />
 				<CustomFlex>
 					{eligibleNetworks.map(network => {
-						const _chainId = parseInt(network.chainId);
+						const _chainId = network.id;
 						return (
 							<NetworkItem
 								onClick={() => {
-									switchNetwork(_chainId);
+									switchNetwork?.(_chainId);
 									closeModal();
 								}}
 								isSelected={_chainId === chainId}
@@ -93,7 +94,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 								theme={theme}
 							>
 								<NetworkLogo chainId={_chainId} logoSize={32} />
-								<B>{network.chainName}</B>
+								<B>{network.name}</B>
 								{_chainId === chainId && (
 									<SelectedNetwork
 										styleType='Small'

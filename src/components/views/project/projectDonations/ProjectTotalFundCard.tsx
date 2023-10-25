@@ -122,7 +122,6 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 				  )
 			: 0
 		: 0;
-
 	return (
 		<Wrapper>
 			{selectedQF === null ? (
@@ -228,11 +227,11 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 											<EstimatedMatchingTransaction>
 												<BlockExplorerLink
 													as='a'
-													href={`${
-														config.NETWORKS_CONFIG[
-															+qfRoundHistory.distributedFundNetwork!
-														]?.blockExplorerUrls
-													}
+													href={`${config
+														.NETWORKS_CONFIG[
+														+qfRoundHistory.distributedFundNetwork!
+													]?.blockExplorers?.default
+														.url}
 			tx/${qfRoundHistory?.distributedFundTxHash}`}
 													target='_blank'
 													size='Big'

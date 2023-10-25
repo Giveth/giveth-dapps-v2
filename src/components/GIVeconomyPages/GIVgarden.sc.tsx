@@ -155,7 +155,9 @@ export const VoteCard = styled.div`
 		background-image: url('/images/flower4.svg'),
 			url('/images/backgrounds/giv-outline.svg');
 		background-repeat: no-repeat, repeat;
-		background-position: bottom left, top;
+		background-position:
+			bottom left,
+			top;
 	}
 `;
 
