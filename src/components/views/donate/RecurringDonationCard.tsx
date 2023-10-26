@@ -13,9 +13,19 @@ import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
+import { IToken } from '@/types/config';
+import { TokenIcon } from './TokenIcon';
+
+export interface ISelectTokenWithBalance {
+	token: IToken;
+	balance: bigint;
+}
 
 export const RecurringDonationCard = () => {
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
+	const [selectedToken, setSelectedToken] = useState<
+		ISelectTokenWithBalance | undefined
+	>();
 
 	return (
 		<>
@@ -48,10 +58,22 @@ export const RecurringDonationCard = () => {
 						</IconWithTooltip>
 					</Flex>
 					<InputWrapper>
-						<SelectTokenWrapper alignItems='center'>
-							<B onClick={() => setShowSelectTokenModal(true)}>
-								Select Token
-							</B>
+						<SelectTokenWrapper
+							alignItems='center'
+							justifyContent='space-between'
+							onClick={() => setShowSelectTokenModal(true)}
+						>
+							{selectedToken ? (
+								<Flex gap='8px' alignItems='center'>
+									<TokenIcon
+										symbol={selectedToken.token.symbol}
+										size={24}
+									/>
+									<B>{selectedToken.token.symbol}</B>
+								</Flex>
+							) : (
+								<B>Select Token</B>
+							)}
 							<IconCaretDown16 />
 						</SelectTokenWrapper>
 						<Input type='text' />
@@ -59,7 +81,10 @@ export const RecurringDonationCard = () => {
 				</Flex>
 			</RecurringSection>
 			{showSelectTokenModal && (
-				<SelectTokenModal setShowModal={setShowSelectTokenModal} />
+				<SelectTokenModal
+					setShowModal={setShowSelectTokenModal}
+					setSelectedToken={setSelectedToken}
+				/>
 			)}
 		</>
 	);

@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import styled from 'styled-components';
 import { mediaQueries } from '@giveth/ui-design-system';
 import { IModal } from '@/types/common';
@@ -7,11 +6,18 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { TokenInfo } from './TokenInfo';
+import type { Dispatch, FC, SetStateAction } from 'react';
+import type { ISelectTokenWithBalance } from '../RecurringDonationCard';
 
-interface ISelectTokenModalProps extends IModal {}
+export interface ISelectTokenModalProps extends IModal {
+	setSelectedToken: Dispatch<
+		SetStateAction<ISelectTokenWithBalance | undefined>
+	>;
+}
 
 export const SelectTokenModal: FC<ISelectTokenModalProps> = ({
 	setShowModal,
+	setSelectedToken,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -22,13 +28,17 @@ export const SelectTokenModal: FC<ISelectTokenModalProps> = ({
 			headerTitle='Select a Token'
 			headerTitlePosition='left'
 		>
-			<SelectTokenInnerModal setShowModal={setShowModal} />
+			<SelectTokenInnerModal
+				setShowModal={setShowModal}
+				setSelectedToken={setSelectedToken}
+			/>
 		</Modal>
 	);
 };
 
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	setShowModal,
+	setSelectedToken,
 }) => {
 	const tokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
 	return (
@@ -37,7 +47,8 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				<TokenInfo
 					key={token.symbol}
 					token={token}
-					balance={1000000000000000n}
+					setShowModal={setShowModal}
+					setSelectedToken={setSelectedToken}
 				/>
 			))}
 		</Wrapper>

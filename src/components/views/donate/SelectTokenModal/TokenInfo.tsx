@@ -1,18 +1,30 @@
-import { FC } from 'react';
 import { Caption, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { useState, type FC } from 'react';
 import { IToken } from '@/types/config';
 import { Flex } from '@/components/styled-components/Flex';
 import { TokenIcon } from '../TokenIcon';
+import { type ISelectTokenModalProps } from './SelectTokenModal';
 
-interface ITokenInfoProps {
+interface ITokenInfoProps extends ISelectTokenModalProps {
 	token: IToken;
-	balance: bigint;
 }
 
-export const TokenInfo: FC<ITokenInfoProps> = ({ token, balance }) => {
+export const TokenInfo: FC<ITokenInfoProps> = ({
+	token,
+	setSelectedToken,
+	setShowModal,
+}) => {
+	const [balance, setBalance] = useState<bigint>(0n);
 	return (
-		<Wrapper gap='16px' alignItems='center'>
+		<Wrapper
+			gap='16px'
+			alignItems='center'
+			onClick={() => {
+				setSelectedToken({ token, balance });
+				setShowModal(false);
+			}}
+		>
 			<TokenIcon symbol={token.symbol} size={32} />
 			<InfoWrapper flexDirection='column' alignItems='flex-start'>
 				<TopRow justifyContent='space-between'>
@@ -30,6 +42,11 @@ export const TokenInfo: FC<ITokenInfoProps> = ({ token, balance }) => {
 
 const Wrapper = styled(Flex)`
 	padding: 4px 8px;
+	cursor: pointer;
+	&:hover {
+		background: ${neutralColors.gray[200]};
+	}
+	border-radius: 8px;
 `;
 
 const InfoWrapper = styled(Flex)`
