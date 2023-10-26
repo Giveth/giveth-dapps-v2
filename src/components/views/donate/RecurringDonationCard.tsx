@@ -6,13 +6,16 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { SelectTokenModal } from './SelectTokenModal';
 
 export const RecurringDonationCard = () => {
+	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
+
 	return (
 		<>
 			<Title weight={700}>
@@ -44,11 +47,16 @@ export const RecurringDonationCard = () => {
 						</IconWithTooltip>
 					</Flex>
 					<InputWrapper>
-						<B>Select Token</B>
+						<B onClick={() => setShowSelectTokenModal(true)}>
+							Select Token
+						</B>
 						<Input type='text' />
 					</InputWrapper>
 				</Flex>
 			</RecurringSection>
+			{showSelectTokenModal && (
+				<SelectTokenModal setShowModal={setShowSelectTokenModal} />
+			)}
 		</>
 	);
 };
