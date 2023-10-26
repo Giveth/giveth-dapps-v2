@@ -2,6 +2,7 @@ import {
 	B,
 	Caption,
 	H6,
+	IconCaretDown16,
 	IconHelpFilled16,
 	brandColors,
 	neutralColors,
@@ -47,9 +48,12 @@ export const RecurringDonationCard = () => {
 						</IconWithTooltip>
 					</Flex>
 					<InputWrapper>
-						<B onClick={() => setShowSelectTokenModal(true)}>
-							Select Token
-						</B>
+						<SelectTokenWrapper alignItems='center'>
+							<B onClick={() => setShowSelectTokenModal(true)}>
+								Select Token
+							</B>
+							<IconCaretDown16 />
+						</SelectTokenWrapper>
 						<Input type='text' />
 					</InputWrapper>
 				</Flex>
@@ -88,6 +92,10 @@ const RecurringSectionTitle = styled(B)`
 	padding-bottom: 8px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	text-align: left;
+`;
+
+const SelectTokenWrapper = styled(Flex)`
+	cursor: pointer;
 `;
 
 const InputWrapper = styled(Flex)`
