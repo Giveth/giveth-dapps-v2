@@ -330,6 +330,7 @@ const config: EnvConfig = {
 			unit: 'GIV',
 		},
 		uniswapV2Subgraph: '',
+		SUPER_FLUID_TOKENS: [],
 	},
 
 	CELO_CONFIG: {
