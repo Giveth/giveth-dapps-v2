@@ -9,6 +9,7 @@ import { ETheme } from '@/features/general/general.slice';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import StorageLabel from '@/lib/localStorage';
 
 const availableLanguages = ['ca', 'en', 'es'];
 
@@ -35,19 +36,19 @@ export const LanguageModal: FC<IModal> = ({ setShowModal }) => {
 			headerTitle={formatMessage({ id: 'label.choose_language' })}
 			headerTitlePosition='left'
 		>
-			<LanguageContainer isDark={isDark}></LanguageContainer>
+			<LanguageContainer isDark={isDark} />
 			<Languages>
 				{availableLanguages.map(locale => (
 					<Option
 						key={locale}
 						isCurrentLocale={locale === currentLocale}
 						onClick={() => {
+							localStorage.setItem(StorageLabel.LOCALE, locale);
 							if (locale === currentLocale)
 								return setShowModal(false);
 							router.push({ pathname, query }, asPath, {
 								locale,
 							});
-
 							setShowModal(false);
 						}}
 					>

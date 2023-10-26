@@ -25,7 +25,6 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import {
 	ICategory,
-	IProject,
 	IProjectCreation,
 	IProjectEdition,
 } from '@/apollo/types/types';
@@ -35,10 +34,9 @@ import {
 	ImageInput,
 	LocationIndex,
 } from './Inputs';
-import SuccessfulCreation from './SuccessfulCreation';
 import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
-import { slugToProjectView } from '@/lib/routeCreators';
+import { slugToProjectView, slugToSuccessView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import config from '@/configuration';
@@ -142,7 +140,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const { handleSubmit, setValue, watch } = formMethods;
 
-	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
 	const [isLoading, setIsLoading] = useState(false);
 	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
 
@@ -243,7 +240,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					await router.push(slugToProjectView(_project.slug));
 				} else {
 					if (!isEditMode || (isEditMode && isDraft)) {
-						setCreationSuccessful(_project);
+						await router.push(slugToSuccessView(_project.slug));
 					} else {
 						await router.push(slugToProjectView(_project.slug));
 					}
@@ -276,10 +273,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const { isTablet, isMobile } = useDetectDevice();
 	const isSmallScreen = isTablet || isMobile;
-
-	if (creationSuccessful) {
-		return <SuccessfulCreation project={creationSuccessful} />;
-	}
 
 	return (
 		<Wrapper>

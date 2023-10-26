@@ -4,6 +4,10 @@ export const slugToProjectView = (slug: string) => {
 	return Routes.Project + '/' + slug;
 };
 
+export const slugToSuccessView = (slug: string) => {
+	return Routes.Success + '/' + slug;
+};
+
 export const slugToProjectDonate = (slug: string) => {
 	return Routes.Donate + '/' + slug;
 };

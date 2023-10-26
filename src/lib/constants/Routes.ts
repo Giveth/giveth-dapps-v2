@@ -24,6 +24,7 @@ const Routes = {
 	AllQFProjects: '/qf/all',
 	QFProjects: '/qf',
 	Project: '/project',
+	Success: '/success',
 	ReFiProjects: '/projects/finance',
 	Donate: `/donate`,
 	User: `/user`,

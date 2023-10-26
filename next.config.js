@@ -10,6 +10,9 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 var pjson = require('./package.json');
 const generateRobotsTxt = require('./scripts/generate-robots-txt');
 
+const defaultLocale = 'en';
+const locales = ['ca', 'en', 'es'];
+
 const moduleExports = withBundleAnalyzer({
 	// Your existing module.exports
 	reactStrictMode: true,
@@ -68,9 +71,13 @@ const moduleExports = withBundleAnalyzer({
 		return config;
 	},
 	i18n: {
-		locales: ['ca', 'en', 'es'],
-		defaultLocale: 'en',
+		locales,
+		defaultLocale,
 		localeDetection: false,
+	},
+	env: {
+		locales,
+		defaultLocale,
 	},
 });
 
