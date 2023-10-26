@@ -51,7 +51,7 @@ const Footer = () => {
 								})}
 							</LinkItem>
 						</Link>
-						<Link href={Routes.Projects}>
+						<Link href={Routes.AllProjects}>
 							<LinkItem color={textColor}>
 								{formatMessage({
 									id: 'component.title.projects',

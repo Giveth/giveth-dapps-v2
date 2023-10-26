@@ -145,7 +145,7 @@ const BuyXDAI: FC = () => {
 										router.push({
 											pathname: slug
 												? `${Routes.Donate}/${slug}`
-												: Routes.Projects,
+												: Routes.AllProjects,
 										})
 									}
 								/>

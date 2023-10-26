@@ -94,7 +94,7 @@ const ProjectsSortSelect = () => {
 		});
 
 	const [value, setValue] = useState(sortByOptions[0]);
-	const { variables, setVariables } = useProjectsContext();
+	const { variables } = useProjectsContext();
 	const { isMobile } = useDetectDevice();
 	const router = useRouter();
 
@@ -125,9 +125,13 @@ const ProjectsSortSelect = () => {
 					Control: (props: any) => <Control {...props} />,
 				}}
 				onChange={(e: any) => {
-					setVariables({
-						...variables,
-						sortingBy: e.value,
+					const updatedQuery = {
+						...router.query,
+						sort: e.value,
+					};
+					router.push({
+						pathname: router.pathname,
+						query: updatedQuery,
 					});
 					setValue(e);
 				}}

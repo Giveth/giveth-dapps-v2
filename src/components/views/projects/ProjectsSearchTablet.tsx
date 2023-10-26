@@ -4,20 +4,33 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import Input from '@/components/Input';
 import { useProjectsContext } from '@/context/projects.context';
-import { removeQueryParamAndRedirect } from '@/helpers/url';
 
 const ProjectsSearchTablet = () => {
-	const { variables, setVariables } = useProjectsContext();
+	const { variables } = useProjectsContext();
 	const [searchValue, setSearchValue] = useState(variables.searchTerm);
 	const router = useRouter();
 
-	const handleSearch = (searchTerm?: string) =>
-		setVariables(prevVariables => ({ ...prevVariables, searchTerm }));
+	const handleSearch = (searchTerm?: string) => {
+		const updatedQuery = {
+			...router.query,
+			searchTerm,
+		};
+		router.push({
+			pathname: router.pathname,
+			query: updatedQuery,
+		});
+	};
 
 	const removeSearch = () => {
 		setSearchValue('');
-		handleSearch();
-		removeQueryParamAndRedirect(router, ['term']);
+		const updatedQuery = {
+			...router.query,
+		};
+		delete updatedQuery.searchTerm;
+		router.push({
+			pathname: router.pathname,
+			query: updatedQuery,
+		});
 	};
 
 	useEffect(() => {

@@ -224,7 +224,7 @@ const Header: FC<IHeader> = () => {
 					<LinkWithMenu
 						title={formatMessage({ id: 'label.projects' })}
 						isHeaderShowing={showHeader}
-						href={Routes.Projects}
+						href={Routes.AllProjects}
 					>
 						<ProjectsMenu />
 					</LinkWithMenu>

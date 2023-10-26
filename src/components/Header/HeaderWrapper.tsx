@@ -34,7 +34,7 @@ const HeaderLoading = () => {
 				</Link>
 			</Flex>
 			<HeaderLinks theme={theme}>
-				<Link href={Routes.Projects}>
+				<Link href={Routes.AllProjects}>
 					<HeaderLink>Projects</HeaderLink>
 				</Link>
 				<Link href={Routes.GIVeconomy}>

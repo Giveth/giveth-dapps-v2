@@ -51,7 +51,7 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 					<Paragraph isDark={theme === ETheme.Dark}>
 						Donate to awesome for-good{' '}
 						<ExternalLink
-							href={Routes.Projects}
+							href={Routes.AllProjects}
 							title='projects'
 							color={brandColors.pinky[500]}
 						/>
@@ -74,7 +74,7 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 						/>{' '}
 						when you donate to verified{' '}
 						<ExternalLink
-							href={Routes.Projects}
+							href={Routes.AllProjects}
 							title='projects'
 							color={brandColors.pinky[500]}
 						/>
@@ -94,7 +94,7 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 					<DonateButton
 						label='Donate to a project'
 						onClick={() => {
-							router.push(Routes.Projects);
+							router.push(Routes.AllProjects);
 							closeModal();
 						}}
 						buttonType={

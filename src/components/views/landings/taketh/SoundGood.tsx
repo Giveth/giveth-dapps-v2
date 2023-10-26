@@ -18,7 +18,7 @@ const SoundGood = () => {
 					then you’re always welcome to go back to{' '}
 					<ExternalLink
 						color={brandColors.pinky[500]}
-						href={Routes.Projects}
+						href={Routes.AllProjects}
 						title='Giveth'
 					/>{' '}
 					and support the mission to Build the Future of Giving while

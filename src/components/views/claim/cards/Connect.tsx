@@ -239,7 +239,7 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 							{title}
 						</Title>
 						<Desc>{desc}</Desc>
-						<Link href={Routes.Projects}>
+						<Link href={Routes.AllProjects}>
 							<GoProjects>
 								{formatMessage({
 									id: 'label.go_to_projets_page',

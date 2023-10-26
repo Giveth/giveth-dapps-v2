@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next/types';
-import { IMainCategory } from '@/apollo/types/types';
+import { EProjectsFilter, IMainCategory } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
@@ -13,7 +13,8 @@ import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { useReferral } from '@/hooks/useReferral';
-import { IProjectsRouteProps } from 'pages/projects';
+import { IProjectsRouteProps, allCategoriesItem } from 'pages/projects/[slug]';
+import { getMainCategorySlug } from '@/helpers/projects';
 
 interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
 	selectedMainCategory: IMainCategory;
@@ -70,15 +71,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			fetchPolicy: 'network-only',
 		});
 
-		const allCategoriesItem = {
-			title: 'All',
-			description: '',
-			banner: '',
-			slug: 'all',
-			categories: [],
-			selected: false,
-		};
-
 		const updatedMainCategory = [allCategoriesItem, ...mainCategories];
 		const selectedMainCategory = updatedMainCategory.find(mainCategory => {
 			return mainCategory.slug === slug;
@@ -90,11 +82,29 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				selected: true,
 			};
 			const apolloClient = initializeApollo();
+
+			let _filters = query.filter
+				? Array.isArray(query.filter)
+					? query.filter
+					: [query.filter]
+				: undefined;
+
+			_filters
+				? _filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
+				: (_filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
+
 			const { data } = await apolloClient.query({
 				query: FETCH_ALL_PROJECTS,
 				variables: {
 					...variables,
-					mainCategory: updatedSelectedMainCategory.slug,
+					sortingBy: query.sort,
+					searchTerm: query.searchTerm,
+					filters: _filters,
+					campaignSlug: query.campaignSlug,
+					category: query.category,
+					mainCategory: getMainCategorySlug(
+						updatedSelectedMainCategory,
+					),
 					notifyOnNetworkStatusChange,
 				},
 				fetchPolicy: 'network-only',

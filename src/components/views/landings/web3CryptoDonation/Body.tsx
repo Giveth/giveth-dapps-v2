@@ -20,7 +20,7 @@ const Body = () => {
 				<NumberedItem key={item.number} {...item} />
 			))}
 			<ButtonWrapper>
-				<ExternalLink href={Routes.Projects}>
+				<ExternalLink href={Routes.AllProjects}>
 					<Button label='DONATE TO CRYPTO PROJECTS' />
 				</ExternalLink>
 			</ButtonWrapper>

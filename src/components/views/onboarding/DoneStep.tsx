@@ -80,7 +80,7 @@ const DoneStep = () => {
 										Take a look and donate to projects.
 									</ContributeCardDesc>
 								</div>
-								<Link href={Routes.Projects}>
+								<Link href={Routes.AllProjects}>
 									<ContributeCardButton label='View projects' />
 								</Link>
 							</ContributeCard>
