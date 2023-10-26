@@ -3,9 +3,10 @@ import Image from 'next/image';
 
 interface IImageIconProps {
 	symbol: string;
+	size?: number;
 }
 
-export const TokenIcon: FC<IImageIconProps> = ({ symbol }) => {
+export const TokenIcon: FC<IImageIconProps> = ({ symbol, size = 24 }) => {
 	const [src, setSrc] = useState(
 		`/images/tokens/${symbol?.toUpperCase()}.svg`,
 	);
@@ -13,8 +14,8 @@ export const TokenIcon: FC<IImageIconProps> = ({ symbol }) => {
 		<Image
 			alt={symbol}
 			src={src}
-			width='24'
-			height='24'
+			width={size}
+			height={size}
 			onError={() => setSrc('/images/tokens/UNKOWN.svg')}
 		/>
 	);
