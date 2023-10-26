@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { SelectTokenModal } from './SelectTokenModal';
+import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 
 export const RecurringDonationCard = () => {
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
