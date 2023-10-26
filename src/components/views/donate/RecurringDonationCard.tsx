@@ -2,12 +2,15 @@ import {
 	B,
 	Caption,
 	H6,
+	IconHelpFilled16,
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
+import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 export const RecurringDonationCard = () => {
 	return (
@@ -26,6 +29,25 @@ export const RecurringDonationCard = () => {
 				<RecurringSectionTitle>
 					Creating a Monthly recurring donation
 				</RecurringSectionTitle>
+				<Flex flexDirection='column' gap='8px'>
+					<Flex gap='8px' alignItems='center'>
+						<Caption>Stream Balance</Caption>
+						<IconWithTooltip
+							icon={<IconHelpFilled16 />}
+							direction='right'
+							align='bottom'
+						>
+							<FlowRateTooltip>
+								The rate at which you receive liquid GIV from
+								your GIVstream.here!
+							</FlowRateTooltip>
+						</IconWithTooltip>
+					</Flex>
+					<InputWrapper>
+						<B>Select Token</B>
+						<Input type='text' />
+					</InputWrapper>
+				</Flex>
 			</RecurringSection>
 		</>
 	);
@@ -58,4 +80,20 @@ const RecurringSectionTitle = styled(B)`
 	padding-bottom: 8px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	text-align: left;
+`;
+
+const InputWrapper = styled(Flex)`
+	border: 2px solid ${neutralColors.gray[300]};
+	border-radius: 8px;
+	overflow: hidden;
+	& > * {
+		padding: 13px 16px;
+	}
+	align-items: center;
+`;
+
+const Input = styled.input`
+	border: none;
+	flex: 1;
+	border-left: 2px solid ${neutralColors.gray[300]};
 `;
