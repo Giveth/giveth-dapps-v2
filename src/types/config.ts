@@ -186,6 +186,7 @@ export interface OptimismNetworkConfig extends NetworkConfig {
 	GIVPOWER: SimplePoolStakingConfig;
 	GIV_TOKEN_ADDRESS: Address;
 	GIV_BUY_LINK: string;
+	SUPER_FLUID_TOKENS: Currency[];
 }
 
 interface MicroservicesConfig {
