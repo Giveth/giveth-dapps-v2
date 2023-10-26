@@ -18,19 +18,23 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 	setShowModal,
 }) => {
 	const { address } = useAccount();
-	const { data } = useBalance({
+	const { data, isFetched } = useBalance({
 		address: address,
 		token: 'address' in token ? token.address : undefined,
 	});
+
+	const disable = !isFetched || data?.value === 0n;
 
 	return (
 		<Wrapper
 			gap='16px'
 			alignItems='center'
 			onClick={() => {
+				if (disable) return;
 				setSelectedToken({ token, balance: data?.value });
 				setShowModal(false);
 			}}
+			disabled={disable}
 		>
 			<TokenIcon symbol={token.symbol} size={32} />
 			<InfoWrapper flexDirection='column' alignItems='flex-start'>
@@ -47,9 +51,13 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 	);
 };
 
-const Wrapper = styled(Flex)`
+interface IWrapper {
+	disabled?: boolean;
+}
+
+const Wrapper = styled(Flex)<IWrapper>`
 	padding: 4px 8px;
-	cursor: pointer;
+	cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
 	&:hover {
 		background: ${neutralColors.gray[200]};
 	}
