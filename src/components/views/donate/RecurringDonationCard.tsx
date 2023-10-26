@@ -1,6 +1,7 @@
 import {
 	B,
 	Caption,
+	GLink,
 	H6,
 	IconCaretDown16,
 	IconHelpFilled16,
@@ -10,6 +11,7 @@ import {
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ChainNativeCurrency } from 'viem/_types/types/chain';
+import { formatUnits } from 'viem';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -79,6 +81,18 @@ export const RecurringDonationCard = () => {
 						</SelectTokenWrapper>
 						<Input type='text' />
 					</InputWrapper>
+					{selectedToken !== undefined &&
+						selectedToken.balance !== undefined && (
+							<Flex>
+								<GLink>
+									Available:{' '}
+									{formatUnits(
+										selectedToken?.balance,
+										selectedToken?.token.decimals,
+									)}
+								</GLink>
+							</Flex>
+						)}
 				</Flex>
 			</RecurringSection>
 			{showSelectTokenModal && (
