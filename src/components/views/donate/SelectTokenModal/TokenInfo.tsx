@@ -1,22 +1,15 @@
 import { Caption, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useState, type FC, useEffect } from 'react';
-import { useAccount } from 'wagmi';
-import { formatUnits } from 'viem';
+import { type FC } from 'react';
+import { useAccount, useBalance } from 'wagmi';
+import { type ChainNativeCurrency } from 'viem/_types/types/chain';
 import { IToken } from '@/types/config';
 import { Flex } from '@/components/styled-components/Flex';
 import { TokenIcon } from '../TokenIcon';
 import { type ISelectTokenModalProps } from './SelectTokenModal';
-import { fetchBalance } from '@/services/token';
 
 interface ITokenInfoProps extends ISelectTokenModalProps {
-	token: IToken;
-}
-
-enum EState {
-	LOADING,
-	SUCCESS,
-	FAILED,
+	token: IToken | ChainNativeCurrency;
 }
 
 export const TokenInfo: FC<ITokenInfoProps> = ({
@@ -24,31 +17,18 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 	setSelectedToken,
 	setShowModal,
 }) => {
-	const [balance, setBalance] = useState<bigint>(0n);
-	const [state, setState] = useState(EState.LOADING);
-
 	const { address } = useAccount();
-
-	useEffect(() => {
-		if (!address || !token.address) return;
-		const fetchData = async () => {
-			const _balance = await fetchBalance(token.address, address);
-			if (_balance !== undefined) {
-				setBalance(_balance);
-				setState(EState.SUCCESS);
-			} else {
-				setState(EState.FAILED);
-			}
-		};
-		fetchData();
-	}, [address, token.address]);
+	const { data } = useBalance({
+		address: address,
+		token: 'address' in token ? token.address : undefined,
+	});
 
 	return (
 		<Wrapper
 			gap='16px'
 			alignItems='center'
 			onClick={() => {
-				setSelectedToken({ token, balance });
+				setSelectedToken({ token, balance: data?.value });
 				setShowModal(false);
 			}}
 		>
@@ -57,11 +37,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 				<TopRow justifyContent='space-between'>
 					<Caption medium>{token.symbol}</Caption>
 					<Flex gap='4px'>
-						<Caption medium>
-							{state === EState.SUCCESS
-								? formatUnits(balance, token.decimals)
-								: '--'}
-						</Caption>
+						<Caption medium>{data?.formatted}</Caption>
 						<GrayCaption>{token.symbol}</GrayCaption>
 					</Flex>
 				</TopRow>
