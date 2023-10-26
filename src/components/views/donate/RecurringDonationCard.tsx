@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { ChainNativeCurrency } from 'viem/_types/types/chain';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -17,8 +18,8 @@ import { IToken } from '@/types/config';
 import { TokenIcon } from './TokenIcon';
 
 export interface ISelectTokenWithBalance {
-	token: IToken;
-	balance: bigint;
+	token: IToken | ChainNativeCurrency;
+	balance?: bigint;
 }
 
 export const RecurringDonationCard = () => {
