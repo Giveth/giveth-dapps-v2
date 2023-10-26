@@ -2,6 +2,7 @@ import { Caption, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useState, type FC, useEffect } from 'react';
 import { useAccount } from 'wagmi';
+import { formatUnits } from 'viem';
 import { IToken } from '@/types/config';
 import { Flex } from '@/components/styled-components/Flex';
 import { TokenIcon } from '../TokenIcon';
@@ -58,7 +59,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 					<Flex gap='4px'>
 						<Caption medium>
 							{state === EState.SUCCESS
-								? balance.toString()
+								? formatUnits(balance, token.decimals)
 								: '--'}
 						</Caption>
 						<GrayCaption>{token.symbol}</GrayCaption>
