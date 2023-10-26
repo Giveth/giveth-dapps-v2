@@ -1,10 +1,12 @@
 import { Caption, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useState, type FC } from 'react';
+import { useState, type FC, useEffect } from 'react';
+import { useAccount } from 'wagmi';
 import { IToken } from '@/types/config';
 import { Flex } from '@/components/styled-components/Flex';
 import { TokenIcon } from '../TokenIcon';
 import { type ISelectTokenModalProps } from './SelectTokenModal';
+import { fetchBalance } from '@/services/token';
 
 interface ITokenInfoProps extends ISelectTokenModalProps {
 	token: IToken;
@@ -23,6 +25,23 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 }) => {
 	const [balance, setBalance] = useState<bigint>(0n);
 	const [state, setState] = useState(EState.LOADING);
+
+	const { address } = useAccount();
+
+	useEffect(() => {
+		if (!address || !token.address) return;
+		const fetchData = async () => {
+			const _balance = await fetchBalance(token.address, address);
+			if (_balance !== undefined) {
+				setBalance(_balance);
+				setState(EState.SUCCESS);
+			} else {
+				setState(EState.FAILED);
+			}
+		};
+		fetchData();
+	}, [address, token.address]);
+
 	return (
 		<Wrapper
 			gap='16px'
