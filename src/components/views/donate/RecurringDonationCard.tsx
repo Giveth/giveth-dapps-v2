@@ -96,4 +96,9 @@ const Input = styled.input`
 	border: none;
 	flex: 1;
 	border-left: 2px solid ${neutralColors.gray[300]};
+	font-family: Red Hat Text;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 150%; /* 24px */
 `;
