@@ -1,3 +1,4 @@
+import { ChainNativeCurrency } from 'viem/_types/types/chain';
 import type { Chain } from 'wagmi';
 
 export type Address = `0x${string}`;
@@ -186,7 +187,7 @@ export interface OptimismNetworkConfig extends NetworkConfig {
 	GIVPOWER: SimplePoolStakingConfig;
 	GIV_TOKEN_ADDRESS: Address;
 	GIV_BUY_LINK: string;
-	SUPER_FLUID_TOKENS: IToken[];
+	SUPER_FLUID_TOKENS: Array<IToken | ChainNativeCurrency>;
 }
 
 interface MicroservicesConfig {
