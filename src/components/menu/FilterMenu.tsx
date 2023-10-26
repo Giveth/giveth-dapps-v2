@@ -51,6 +51,10 @@ const fundsFilter = [
 		label: 'Optimism',
 		value: EProjectsFilter.ACCEPT_FUND_ON_OPTIMISM,
 	},
+	{
+		label: 'Ethereum Classic',
+		value: EProjectsFilter.ACCEPT_FUND_ON_ETC,
+	},
 ];
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(

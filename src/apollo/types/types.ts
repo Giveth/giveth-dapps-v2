@@ -91,6 +91,7 @@ export enum EProjectsFilter {
 	ACCEPT_FUND_ON_POLYGON = 'AcceptFundOnPolygon',
 	ACCEPT_FUND_ON_CELO = 'AcceptFundOnCelo',
 	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
+	ACCEPT_FUND_ON_ETC = 'AcceptFundOnETC',
 	ACTIVE_QF_ROUND = 'ActiveQfRound',
 }
 
