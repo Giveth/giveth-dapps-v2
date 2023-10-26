@@ -2,7 +2,7 @@ import type { Chain } from 'wagmi';
 
 export type Address = `0x${string}`;
 
-export type Currency = {
+export type IToken = {
 	address: Address;
 	name: string;
 	/** 2-6 characters long */
@@ -186,7 +186,7 @@ export interface OptimismNetworkConfig extends NetworkConfig {
 	GIVPOWER: SimplePoolStakingConfig;
 	GIV_TOKEN_ADDRESS: Address;
 	GIV_BUY_LINK: string;
-	SUPER_FLUID_TOKENS: Currency[];
+	SUPER_FLUID_TOKENS: IToken[];
 }
 
 interface MicroservicesConfig {
