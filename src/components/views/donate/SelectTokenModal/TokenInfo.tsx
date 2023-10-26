@@ -10,12 +10,19 @@ interface ITokenInfoProps extends ISelectTokenModalProps {
 	token: IToken;
 }
 
+enum EState {
+	LOADING,
+	SUCCESS,
+	FAILED,
+}
+
 export const TokenInfo: FC<ITokenInfoProps> = ({
 	token,
 	setSelectedToken,
 	setShowModal,
 }) => {
 	const [balance, setBalance] = useState<bigint>(0n);
+	const [state, setState] = useState(EState.LOADING);
 	return (
 		<Wrapper
 			gap='16px'
@@ -30,7 +37,11 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 				<TopRow justifyContent='space-between'>
 					<Caption medium>{token.symbol}</Caption>
 					<Flex gap='4px'>
-						<Caption medium>{balance.toString()}</Caption>
+						<Caption medium>
+							{state === EState.SUCCESS
+								? balance.toString()
+								: '--'}
+						</Caption>
 						<GrayCaption>{token.symbol}</GrayCaption>
 					</Flex>
 				</TopRow>
