@@ -17,7 +17,7 @@ interface IProjectsFilterProps {
 
 function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 	const { isQF } = useProjectsContext();
-	const projectsRoute = (isQF ? Routes.QFProjects : Routes.AllProjects) + '/';
+	const projectsRoute = (isQF ? Routes.QFProjects : Routes.Projects) + '/';
 	const { query } = useRouter();
 	const { formatMessage } = useIntl();
 
