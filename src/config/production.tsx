@@ -411,6 +411,38 @@ const config: EnvConfig = {
 			description: '100% GIV',
 			unit: 'GIV',
 		},
+		SUPER_FLUID_TOKENS: [
+			{
+				address: '0x4200000000000000000000000000000000000042',
+				name: 'OP',
+				symbol: 'OP',
+				decimals: 18,
+			},
+			{
+				address: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
+				name: 'DAI',
+				symbol: 'DAI',
+				decimals: 18,
+			},
+			{
+				address: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85',
+				name: 'USDC',
+				symbol: 'USDC',
+				decimals: 6,
+			},
+			{
+				address: '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98',
+				name: 'GIV',
+				symbol: 'GIV',
+				decimals: 18,
+			},
+			{
+				address: '0x0000000000000000000000000000000000000000',
+				name: 'ETH',
+				symbol: 'ETH',
+				decimals: 18,
+			},
+		],
 	},
 
 	CELO_CONFIG: {
