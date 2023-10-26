@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import styled from 'styled-components';
+import { mediaQueries } from '@giveth/ui-design-system';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -45,5 +46,9 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 
 const Wrapper = styled(Flex)`
 	flex-direction: column;
+	padding: 12px 24px;
 	gap: 12px;
+	${mediaQueries.tablet} {
+		width: 548px;
+	}
 `;
