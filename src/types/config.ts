@@ -2,6 +2,14 @@ import type { Chain } from 'wagmi';
 
 export type Address = `0x${string}`;
 
+export type Currency = {
+	address: Address;
+	name: string;
+	/** 2-6 characters long */
+	symbol: string;
+	decimals: number;
+};
+
 export enum StakingPlatform {
 	GIVETH = 'Staking',
 	UNISWAP = 'Uniswap',
