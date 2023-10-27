@@ -54,6 +54,7 @@ interface IProjectContext {
 	hasActiveQFRound: boolean;
 	totalDonationsCount: number;
 	isCancelled: boolean;
+	isLoading: boolean;
 }
 
 const ProjectContext = createContext<IProjectContext>({
@@ -69,6 +70,7 @@ const ProjectContext = createContext<IProjectContext>({
 	hasActiveQFRound: false,
 	totalDonationsCount: 0,
 	isCancelled: false,
+	isLoading: true,
 });
 ProjectContext.displayName = 'ProjectContext';
 
@@ -79,6 +81,7 @@ export const ProjectProvider = ({
 	children: ReactNode;
 	project?: IProject;
 }) => {
+	const [isLoading, setIsLoading] = useState(false);
 	const [totalDonationsCount, setTotalDonationsCount] = useState(0);
 	const [boostersData, setBoostersData] = useState<IBoostersData>();
 	const [isBoostingsLoading, setIsBoostingsLoading] = useState(false);
@@ -101,6 +104,7 @@ export const ProjectProvider = ({
 	const hasActiveQFRound = hasActiveRound(projectData?.qfRounds);
 
 	const fetchProjectBySlug = useCallback(async () => {
+		setIsLoading(true);
 		client
 			.query({
 				query: FETCH_PROJECT_BY_SLUG,
@@ -115,6 +119,7 @@ export const ProjectProvider = ({
 					setIsCancelled(true);
 					setProjectData(undefined);
 				}
+				setIsLoading(false);
 			})
 			.catch((error: unknown) => {
 				console.log('fetchProjectBySlug error: ', error);
@@ -123,6 +128,7 @@ export const ProjectProvider = ({
 						section: 'fetchProject',
 					},
 				});
+				setIsLoading(false);
 			});
 	}, [slug, user?.id]);
 
@@ -277,6 +283,7 @@ export const ProjectProvider = ({
 				hasActiveQFRound,
 				totalDonationsCount,
 				isCancelled,
+				isLoading,
 			}}
 		>
 			{children}

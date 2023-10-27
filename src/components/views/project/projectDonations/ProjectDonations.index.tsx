@@ -8,7 +8,6 @@ import { IQFRound } from '@/apollo/types/types';
 
 const ProjectDonationsIndex = () => {
 	const [selectedQF, setSelectedQF] = useState<IQFRound | null>(null);
-
 	return (
 		<>
 			<QfRoundSelector
@@ -32,6 +31,7 @@ const StyledRow = styled(Row)`
 	${mediaQueries.laptopL} {
 		align-items: flex-start;
 		flex-direction: row-reverse;
+		align-items: stretch !important;
 	}
 `;
 

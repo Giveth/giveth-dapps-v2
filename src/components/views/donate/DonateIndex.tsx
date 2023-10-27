@@ -3,9 +3,12 @@ import styled from 'styled-components';
 import {
 	brandColors,
 	ButtonLink,
+	IconDonation24,
 	IconExternalLink24,
 	Lead,
 	neutralColors,
+	semanticColors,
+	SublineBold,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
@@ -25,7 +28,9 @@ import { PassportBanner } from '@/components/PassportBanner';
 import ExternalLink from '@/components/ExternalLink';
 import { formatTxLink } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
+import { Shadow } from '@/components/styled-components/Shadow';
 
 const CryptoDonation = dynamic(
 	() => import('@/components/views/donate/CryptoDonation'),
@@ -39,6 +44,7 @@ const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isMobile } = useDetectDevice();
 	const { project, isSuccessDonation, hasActiveQFRound } = useDonateData();
+	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const { txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 
@@ -48,6 +54,16 @@ const DonateIndex: FC = () => {
 			{hasActiveQFRound && <PassportBanner />}
 			<Wrapper>
 				{/* <PurchaseXDAI /> */}
+				{alreadyDonated && (
+					<AlreadyDonatedWrapper>
+						<IconDonation24 />
+						<SublineBold>
+							{formatMessage({
+								id: 'component.already_donated.incorrect_estimate',
+							})}
+						</SublineBold>
+					</AlreadyDonatedWrapper>
+				)}
 				<NiceBanner />
 				<Sections>
 					<ProjectCardSelector />
@@ -93,6 +109,17 @@ const DonateIndex: FC = () => {
 		</>
 	);
 };
+
+const AlreadyDonatedWrapper = styled(Flex)`
+	margin: 0 40px 16px 40px;
+	padding: 12px 16px;
+	gap: 8px;
+	color: ${semanticColors.jade[500]};
+	box-shadow: ${Shadow.Neutral[400]};
+	background-color: ${neutralColors.gray[100]};
+	border-radius: 8px;
+	align-items: center;
+`;
 
 const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
 	const { chain } = useNetwork();

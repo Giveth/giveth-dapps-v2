@@ -38,8 +38,6 @@ export const GIVfarmTop = () => {
 		);
 	}, [chainsInfo, givTokenDistroHelper, chainId]);
 
-	console.log('chain', chain);
-
 	return (
 		<GIVfarmTopContainer>
 			<TopInnerContainer>

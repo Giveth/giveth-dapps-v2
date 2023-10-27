@@ -991,10 +991,10 @@
     intl-messageformat "10.5.3"
     tslib "^2.4.0"
 
-"@giveth/ui-design-system@^1.11.16":
-  version "1.11.16"
-  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.16.tgz#b708f6bf07e292e46e33b6c36b27536611bae5ff"
-  integrity sha512-0CZnzsvsVHVB+NaUp679lU6oiukp04+wH5qmVXoxaWAUu4Futnk0eHTDUkIfy00B92s55di3jca2WPNUeihDRQ==
+"@giveth/ui-design-system@^1.11.17":
+  version "1.11.17"
+  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.17.tgz#260c64583b57511f12c91c0f19cd47c87bdf695b"
+  integrity sha512-qrkMD/K047dKbXQs3U/AaQlhzngrq8cdPEATdOv6CD7qvgVy46pmu1SFgNDfrsso0+OqsovXjbtHVWfz9vNuKg==
   dependencies:
     next "13.1.6"
     react "18.2.0"
@@ -10234,10 +10234,17 @@ viem@^1.0.0:
     isomorphic-ws "5.0.0"
     ws "8.13.0"
 
+<<<<<<< HEAD
 viem@^1.17.2:
   version "1.17.2"
   resolved "https://registry.yarnpkg.com/viem/-/viem-1.17.2.tgz#1ce94816bcabc032594de104902d1048c51d45c6"
   integrity sha512-lsF4qqo5cu9llE9g3736MIY2Qzeb/V/BebB4f0DaVuujQVebA/myHaplZGLjAqjPqCf9iui1VRZ6YCQsQ1FIBw==
+=======
+viem@^1.16.6:
+  version "1.16.6"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-1.16.6.tgz#78118c9269506a59e2bc4deab13f1646e113d3fc"
+  integrity sha512-jcWcFQ+xzIfDwexwPJRvCuCRJKEkK9iHTStG7mpU5MmuSBpACs4nATBDyXNFtUiyYTFzLlVEwWkt68K0nCSImg==
+>>>>>>> origin/giveconomy
   dependencies:
     "@adraffy/ens-normalize" "1.9.4"
     "@noble/curves" "1.2.0"
