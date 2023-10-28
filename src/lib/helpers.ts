@@ -1,25 +1,32 @@
-import { promisify } from 'util';
 // eslint-disable-next-line import/named
 import unescape from 'lodash/unescape';
-import { parseEther, parseUnits } from '@ethersproject/units';
-import { keccak256 } from '@ethersproject/keccak256';
-import { Contract } from '@ethersproject/contracts';
-import { TransactionResponse, Web3Provider } from '@ethersproject/providers';
-import { AddressZero } from '@ethersproject/constants';
+
+// import { keccak256 } from '@ethersproject/keccak256';
+
+import { getContract } from 'wagmi/actions';
+import {
+	writeContract,
+	sendTransaction as wagmiSendTransaction,
+} from '@wagmi/core';
+
 // @ts-ignore
-import abi from 'human-standard-token-abi';
 import { captureException } from '@sentry/nextjs';
-import { NetworkConfig, GasPreference } from '@/types/config';
-import { EWallets } from '@/lib/wallet/walletTypes';
+import { erc20ABI } from 'wagmi';
+import { parseEther, parseUnits } from 'viem';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
-import StorageLabel from '@/lib/localStorage';
-import { networksParams } from '@/helpers/blockchain';
 import config from '@/configuration';
-import { ERC20 } from '@/types/contracts';
+import { AddressZero } from './constants/constants';
 
 declare let window: any;
+interface TransactionParams {
+	to: `0x${string}`;
+	value: string;
+}
+
+const defaultLocale = process.env.defaultLocale;
+const locales = process.env.locales;
 
 export const fullPath = (path: string) => `${config.FRONTEND_LINK}${path}`;
 
@@ -47,13 +54,13 @@ export const thousandsSeparator = (x?: string | number): string | undefined => {
 };
 
 export const formatTxLink = (networkId?: number, txHash?: string) => {
-	if (!networkId || !txHash || !networksParams[networkId]) return '';
-	return `${networksParams[networkId].blockExplorerUrls[0]}tx/${txHash}`;
+	if (!networkId || !txHash || !config.NETWORKS_CONFIG[networkId]) return '';
+	return `${config.NETWORKS_CONFIG[networkId].blockExplorers?.default.url}/tx/${txHash}`;
 };
 
 export function formatWalletLink(chainId?: number, address?: string) {
-	if (!address || !chainId || !networksParams[chainId]) return '';
-	return `${networksParams[chainId]?.blockExplorerUrls[0]}/address/${address}`;
+	if (!address || !chainId || !config.NETWORKS_CONFIG[chainId]) return '';
+	return `${config.NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/address/${address}`;
 }
 
 export const durationToYMDh = (
@@ -146,18 +153,6 @@ export const smallFormatDate = (date: Date, locale?: string) => {
 		.replace(/,/g, '');
 };
 
-export const getGasPreference = (
-	networkConfig: NetworkConfig,
-): GasPreference => {
-	const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
-	// MetaMask works with gas preference config
-	if (selectedWallet === EWallets.METAMASK)
-		return networkConfig.gasPreference || {};
-
-	// For torus, it should be empty to work!
-	return {};
-};
-
 export const isSSRMode = typeof window === 'undefined';
 
 export const suggestNewAddress = (addresses?: IWalletAddress[]) => {
@@ -235,51 +230,23 @@ export const shortenAddress = (
 	)}`;
 };
 
+// Sends a transaction, either as an ERC20 token transfer or a regular ETH transfer.
 export async function sendTransaction(
-	web3: Web3Provider,
-	params: { to: string; value: string },
-	txCallbacks: {
-		onTxHash: (hash: string, nonce: number) => void;
-		onReceipt: (receipt: any) => void;
-	},
-	contractAddress: string,
+	params: TransactionParams,
+	contractAddress?: `0x${string}`,
 ) {
 	try {
-		let tx: TransactionResponse;
-		const txParams: any = {
-			to: params.to,
-		};
+		let hash: `0x${string}`;
 
-		const fromSigner = web3.getSigner();
 		if (contractAddress && contractAddress !== AddressZero) {
-			// ERC20 TRANSFER
-			const contract = new Contract(
-				contractAddress,
-				abi,
-				fromSigner,
-			) as ERC20;
-			const decimals = await contract.decimals();
-			txParams.value = parseUnits(params.value, decimals);
-			tx = await contract.transfer(txParams.to, txParams.value);
+			hash = await handleErc20Transfer(params, contractAddress);
 		} else {
-			// REGULAR ETH TRANSFER
-			txParams.value = parseEther(params.value);
-			tx = await fromSigner.sendTransaction(txParams);
+			hash = await handleEthTransfer(params);
 		}
 
-		txCallbacks.onTxHash(tx.hash, tx.nonce);
-		const receipt = await tx.wait();
-
-		setTimeout(() => {
-			if (receipt.status) {
-				txCallbacks.onReceipt(tx.hash);
-			}
-			console.log('Tx ---> : ', { tx, receipt });
-		}, 5000);
+		return hash;
 	} catch (error: any) {
 		if (error.replacement && !error.cancelled) {
-			// Speed up the process by replacing the transaction
-			txCallbacks.onReceipt(error.replacement.hash);
 			return;
 		}
 		captureException(error, {
@@ -291,105 +258,144 @@ export async function sendTransaction(
 	}
 }
 
-export async function signMessage(
-	message: string,
-	address: string | undefined | null,
-	chainId?: number,
-	signer?: any,
-) {
-	try {
-		// COMMENTING THIS AS BACKEND NEEDS TO BE UPDATED TO THIS WAY
-
-		// const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
-		// const prefixWithLength = Buffer.from(`${customPrefix}${message.length.toString()}`, 'utf-8')
-		// const finalMessage = Buffer.concat([prefixWithLength, Buffer.from(message)])
-
-		// const hashedMsg = keccak256(finalMessage)
-
-		// const domain = {
-		//   name: 'Giveth Login',
-		//   version: '1',
-		//   chainId
-		// }
-
-		// const types = {
-		//   // EIP712Domain: [
-		//   //   { name: 'name', type: 'string' },
-		//   //   { name: 'chainId', type: 'uint256' },
-		//   //   { name: 'version', type: 'string' }
-		//   //   // { name: 'verifyingContract', type: 'address' }
-		//   // ],
-		//   User: [{ name: 'wallets', type: 'address[]' }],
-		//   Login: [
-		//     { name: 'user', type: 'User' },
-		//     { name: 'contents', type: 'string' }
-		//   ]
-		// }
-
-		// const value = {
-		//   user: {
-		//     wallets: [address]
-		//   },
-		//   contents: hashedMsg
-		// }
-
-		// return await signer._signTypedData(domain, types, value)
-
-		let signedMessage = null;
-		const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`;
-		const prefixWithLength = Buffer.from(
-			`${customPrefix}${message.length.toString()}`,
-			'utf-8',
-		);
-		const finalMessage = Buffer.concat([
-			prefixWithLength,
-			Buffer.from(message),
-		]);
-
-		const hashedMsg = keccak256(finalMessage);
-		const send = promisify(signer.provider.provider.sendAsync);
-		const msgParams = JSON.stringify({
-			primaryType: 'Login',
-			types: {
-				EIP712Domain: [
-					{ name: 'name', type: 'string' },
-					{ name: 'chainId', type: 'uint256' },
-					{ name: 'version', type: 'string' },
-					// { name: 'verifyingContract', type: 'address' }
-				],
-				Login: [{ name: 'user', type: 'User' }],
-				User: [{ name: 'wallets', type: 'address[]' }],
-			},
-			domain: {
-				name: 'Giveth Login',
-				chainId,
-				version: '1',
-			},
-			message: {
-				contents: hashedMsg,
-				user: {
-					wallets: [address],
-				},
-			},
-		});
-		const { result } = await send({
-			method: 'eth_signTypedData_v4',
-			params: [address, msgParams],
-			from: address,
-		});
-		signedMessage = result;
-
-		return signedMessage;
-	} catch (error) {
-		console.log('Signing Error!', { error });
-		captureException(error, {
-			tags: {
-				section: 'signError',
-			},
-		});
-		return false;
-	}
+// Handles the transfer for ERC20 tokens, returning the transaction hash.
+async function handleErc20Transfer(
+	params: TransactionParams,
+	contractAddress: `0x${string}`,
+): Promise<`0x${string}`> {
+	console.log('contractAddress', contractAddress);
+	const contract = getContract({
+		address: contractAddress,
+		abi: erc20ABI,
+	});
+	const decimals = await contract.read.decimals();
+	const value = parseUnits(params.value, decimals);
+	const write = await writeContract({
+		address: contractAddress,
+		abi: erc20ABI,
+		functionName: 'transfer',
+		args: [params.to, value],
+	});
+	console.log('Write', write);
+	console.log('ERC20 transfer result', { hash: write.hash });
+	return write.hash;
 }
+
+// Handles the transfer for ETH, returning the transaction hash.
+async function handleEthTransfer(
+	params: TransactionParams,
+): Promise<`0x${string}`> {
+	const value = parseEther(params.value);
+
+	const { hash } = await wagmiSendTransaction({
+		to: params.to,
+		value: value,
+	});
+
+	console.log('ETH transfer result', { hash });
+	return hash;
+}
+
+//TODO: Handle this
+// export async function signMessage(
+// 	message: string,
+// 	address: string | undefined | null,
+// 	chainId?: number,
+// 	signer?: any,
+// ) {
+// 	try {
+// 		// COMMENTING THIS AS BACKEND NEEDS TO BE UPDATED TO THIS WAY
+
+// 		// const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
+// 		// const prefixWithLength = Buffer.from(`${customPrefix}${message.length.toString()}`, 'utf-8')
+// 		// const finalMessage = Buffer.concat([prefixWithLength, Buffer.from(message)])
+
+// 		// const hashedMsg = keccak256(finalMessage)
+
+// 		// const domain = {
+// 		//   name: 'Giveth Login',
+// 		//   version: '1',
+// 		//   chainId
+// 		// }
+
+// 		// const types = {
+// 		//   // EIP712Domain: [
+// 		//   //   { name: 'name', type: 'string' },
+// 		//   //   { name: 'chainId', type: 'uint256' },
+// 		//   //   { name: 'version', type: 'string' }
+// 		//   //   // { name: 'verifyingContract', type: 'address' }
+// 		//   // ],
+// 		//   User: [{ name: 'wallets', type: 'address[]' }],
+// 		//   Login: [
+// 		//     { name: 'user', type: 'User' },
+// 		//     { name: 'contents', type: 'string' }
+// 		//   ]
+// 		// }
+
+// 		// const value = {
+// 		//   user: {
+// 		//     wallets: [address]
+// 		//   },
+// 		//   contents: hashedMsg
+// 		// }
+
+// 		// return await signer._signTypedData(domain, types, value)
+
+// 		let signedMessage = null;
+// 		const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`;
+// 		const prefixWithLength = Buffer.from(
+// 			`${customPrefix}${message.length.toString()}`,
+// 			'utf-8',
+// 		);
+// 		const finalMessage = Buffer.concat([
+// 			prefixWithLength,
+// 			Buffer.from(message),
+// 		]);
+
+// 		const hashedMsg = keccak256(finalMessage);
+// 		const send = promisify(signer.provider.provider.sendAsync);
+// 		const msgParams = JSON.stringify({
+// 			primaryType: 'Login',
+// 			types: {
+// 				EIP712Domain: [
+// 					{ name: 'name', type: 'string' },
+// 					{ name: 'chainId', type: 'uint256' },
+// 					{ name: 'version', type: 'string' },
+// 					// { name: 'verifyingContract', type: 'address' }
+// 				],
+// 				Login: [{ name: 'user', type: 'User' }],
+// 				User: [{ name: 'wallets', type: 'address[]' }],
+// 			},
+// 			domain: {
+// 				name: 'Giveth Login',
+// 				chainId,
+// 				version: '1',
+// 			},
+// 			message: {
+// 				contents: hashedMsg,
+// 				user: {
+// 					wallets: [address],
+// 				},
+// 			},
+// 		});
+// 		const { result } = await send({
+// 			method: 'eth_signTypedData_v4',
+// 			params: [address, msgParams],
+// 			from: address,
+// 		});
+// 		signedMessage = result;
+
+// 		return signedMessage;
+// 	} catch (error) {
+// 		console.log('Signing Error!', { error });
+// 		captureException(error, {
+// 			tags: {
+// 				section: 'signError',
+// 			},
+// 		});
+// 		return false;
+// 	}
+// }
 
 export const isGIVeconomyRoute = (route: string) => {
 	const givEconomyRoute = giveconomyTabs.find(
@@ -477,15 +483,6 @@ export function pollEvery(fn: Function, delay: any) {
 	};
 }
 
-export const networkInfo = (networkId?: number) => {
-	if (!networkId || !networksParams[networkId]) return {};
-	const info = networksParams[networkId];
-	return {
-		networkName: info.chainName,
-		networkToken: info.nativeCurrency.symbol,
-	};
-};
-
 export const createSiweMessage = async (
 	address: string,
 	chainId: number,
@@ -532,4 +529,58 @@ export const ArrayFrom0ToN = (n: number) => {
 		b = 0;
 	while (b < n) a[b] = b++;
 	return a;
+};
+
+export const getUserIPInfo = async () => {
+	return fetch('https://api.db-ip.com/v2/free/self')
+		.then(res => res.json())
+		.catch(err => {
+			console.log('getUserIp error: ', { err });
+			throw err;
+		});
+};
+
+export const matchLocaleToSystemLocals = (locale: string) => {
+	const spanishSpeakingCountryCodes = [
+		'es',
+		'mx',
+		'ar',
+		'pe',
+		'co',
+		'cl',
+		'gt',
+		'ec',
+		'bo',
+		'cu',
+		'hn',
+		'py',
+		'sv',
+		'ni',
+		'cr',
+		'pr',
+		'pa',
+		'uy',
+		've',
+		'do',
+	];
+	const lowercaseLocale = locale.toLowerCase();
+	const isSpanish = spanishSpeakingCountryCodes.includes(lowercaseLocale);
+	const _locale = isSpanish ? 'es' : lowercaseLocale;
+	const isValidLocale = locales?.includes(_locale);
+	return isValidLocale ? _locale : undefined;
+};
+
+export const getLocaleFromNavigator = () => {
+	if (typeof navigator === 'undefined') return defaultLocale!;
+	const navigatorLocale = navigator.language.split('-')[0];
+	return matchLocaleToSystemLocals(navigatorLocale);
+};
+
+export const getLocaleFromIP = async () => {
+	try {
+		const { countryCode } = await getUserIPInfo();
+		return matchLocaleToSystemLocals(countryCode);
+	} catch (e) {
+		return undefined;
+	}
 };

@@ -68,7 +68,7 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({
 						id: 'label.with_givpower_you_can_support_projects',
 					})}
 				</Desc>
-				<Link href={Routes.Projects}>
+				<Link href={Routes.AllProjects}>
 					<ButtonLink
 						label={formatMessage({ id: 'label.boost_projects' })}
 					/>
@@ -90,7 +90,7 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({
 			{showLockDetailModal && (
 				<LockupDetailsModal
 					setShowModal={setShowLockDetailModal}
-					unstakeable={stakedAmount.sub(userGIVLocked.balance)}
+					unstakeable={stakedAmount - BigInt(userGIVLocked.balance)}
 				/>
 			)}
 		</>

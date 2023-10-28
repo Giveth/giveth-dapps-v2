@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { Col, Container, Row } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
+import { useNetwork } from 'wagmi';
 import {
 	OverviewBottomContainer,
 	VoteCard,
@@ -22,8 +22,8 @@ import { getGIVpowerLink } from '@/helpers/givpower';
 
 export const TabOverview = () => {
 	const { formatMessage } = useIntl();
-	const { chainId } = useWeb3React();
-
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	return (
 		<>
 			<TopSpacer />
@@ -74,7 +74,7 @@ export const TabOverview = () => {
 									id: 'label.give_and_receive',
 								})}
 								button={
-									<Link href={Routes.Projects}>
+									<Link href={Routes.AllProjects}>
 										<DataBlockButton
 											label={formatMessage({
 												id: 'page.home.bigscreen.see_projects',

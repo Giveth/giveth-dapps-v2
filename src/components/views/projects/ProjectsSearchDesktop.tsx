@@ -8,24 +8,37 @@ import Input from '@/components/Input';
 import IconEnter from '../../../../public/images/icons/enter.svg';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { useProjectsContext } from '@/context/projects.context';
-import { removeQueryParamAndRedirect } from '@/helpers/url';
 import useFocus from '@/hooks/useFocus';
 
 const ProjectsSearchDesktop = () => {
-	const { variables, setVariables } = useProjectsContext();
+	const { variables } = useProjectsContext();
 	const [searchValue, setSearchValue] = useState(variables.searchTerm);
 	const router = useRouter();
 	const { formatMessage } = useIntl();
 
-	const handleSearch = (searchTerm?: string) =>
-		setVariables(prevVariables => ({ ...prevVariables, searchTerm }));
+	const handleSearch = (searchTerm?: string) => {
+		const updatedQuery = {
+			...router.query,
+			searchTerm: searchTerm,
+		};
+		router.push({
+			pathname: router.pathname,
+			query: updatedQuery,
+		});
+	};
 
 	const [inputRef, setFocus] = useFocus();
 
 	const removeSearch = () => {
 		setSearchValue('');
-		handleSearch();
-		removeQueryParamAndRedirect(router, ['term']);
+		const updatedQuery = {
+			...router.query,
+		};
+		delete updatedQuery.searchTerm;
+		router.push({
+			pathname: router.pathname,
+			query: updatedQuery,
+		});
 		setFocus();
 	};
 

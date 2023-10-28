@@ -1,12 +1,13 @@
 import React, { PropsWithChildren } from 'react';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
-
 import { IntlProvider } from 'react-intl';
 import { AppStore, RootState, setupStore } from '@/features/store';
 import { IntlMessages } from 'pages/_app';
 import type { PreloadedState } from '@reduxjs/toolkit';
 import type { RenderOptions } from '@testing-library/react';
+
+const defaultLocale = process.env.defaultLocale;
 
 Object.defineProperty(window, 'matchMedia', {
 	writable: true,
@@ -46,7 +47,7 @@ export function renderWithProviders(
 				<IntlProvider
 					locale={locale}
 					messages={IntlMessages[locale as keyof typeof IntlMessages]}
-					defaultLocale='en'
+					defaultLocale={defaultLocale}
 				>
 					{children}
 				</IntlProvider>

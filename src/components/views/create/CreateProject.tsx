@@ -12,12 +12,12 @@ import {
 	OutlineButton,
 } from '@giveth/ui-design-system';
 import { useMutation } from '@apollo/client';
-import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Container } from '@giveth/ui-design-system';
+import { getAddress } from 'viem';
 import {
 	ACTIVATE_PROJECT,
 	CREATE_PROJECT,
@@ -25,7 +25,6 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import {
 	ICategory,
-	IProject,
 	IProjectCreation,
 	IProjectEdition,
 } from '@/apollo/types/types';
@@ -35,10 +34,9 @@ import {
 	ImageInput,
 	LocationIndex,
 } from './Inputs';
-import SuccessfulCreation from './SuccessfulCreation';
 import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
-import { slugToProjectView } from '@/lib/routeCreators';
+import { slugToProjectView, slugToSuccessView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import config from '@/configuration';
@@ -49,6 +47,7 @@ import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
+import { Address } from '@/types/config';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
 
@@ -141,7 +140,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const { handleSubmit, setValue, watch } = formMethods;
 
-	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
 	const [isLoading, setIsLoading] = useState(false);
 	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
 
@@ -183,15 +181,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				draft,
 			} = formData;
 
-			let _addresses: { address: string; networkId: number }[] = [];
-			Object.entries(addresses).forEach(([id, address]) => {
-				if (id && address) {
-					_addresses.push({
-						address: utils.getAddress(address),
-						networkId: Number(id),
-					});
-				}
-			});
+			const _addresses = Object.entries(addresses).map(
+				([id, address]) => ({
+					address: getAddress(address) as Address,
+					networkId: Number(id),
+				}),
+			);
 
 			if (_addresses.length === 0) {
 				showToastError(
@@ -245,7 +240,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					await router.push(slugToProjectView(_project.slug));
 				} else {
 					if (!isEditMode || (isEditMode && isDraft)) {
-						setCreationSuccessful(_project);
+						await router.push(slugToSuccessView(_project.slug));
 					} else {
 						await router.push(slugToProjectView(_project.slug));
 					}
@@ -278,10 +273,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const { isTablet, isMobile } = useDetectDevice();
 	const isSmallScreen = isTablet || isMobile;
-
-	if (creationSuccessful) {
-		return <SuccessfulCreation project={creationSuccessful} />;
-	}
 
 	return (
 		<Wrapper>

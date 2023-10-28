@@ -21,7 +21,9 @@ interface IBoostModalContainerProps {
 
 export const BoostModalContainer = styled.div<IBoostModalContainerProps>`
 	width: 100%;
-	transition: width 0.2s ease, height 0.2s ease;
+	transition:
+		width 0.2s ease,
+		height 0.2s ease;
 	${mediaQueries.tablet} {
 		width: ${props =>
 			props.state === EBoostModalState.BOOSTED ? 716 : 480}px;

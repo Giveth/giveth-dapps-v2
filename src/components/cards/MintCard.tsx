@@ -7,21 +7,16 @@ import {
 	P,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import BigNumber from 'bignumber.js';
-import { Contract } from 'ethers';
-import { JsonRpcProvider } from '@ethersproject/providers';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
+import { useAccount, useSwitchNetwork, useNetwork } from 'wagmi';
+import { getContract } from 'wagmi/actions';
+import { erc20ABI } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { MintModal } from '../modals/MintModal';
 import { Flex } from '../styled-components/Flex';
-import { useAppDispatch } from '@/features/hooks';
 import { formatWeiHelper } from '@/helpers/number';
-import { ERC20, GiversPFP } from '@/types/contracts';
-import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
-import { switchNetwork } from '@/lib/metamask';
 import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { InsufficientFundModal } from '../modals/InsufficientFund';
@@ -29,8 +24,8 @@ import { usePFPMintData } from '@/context/pfpmint.context';
 
 const MIN_NFT_QTY = 1;
 
-interface IPFPContractData {
-	price: BigNumber;
+interface IpfpContractData {
+	price: bigint;
 	maxMintAmount: number;
 	totalSupply: number;
 	maxSupply: number;
@@ -42,11 +37,15 @@ export const MintCard = () => {
 	const [showMintModal, setShowMintModal] = useState(false);
 	const [showInsufficientFundModal, setShowInsufficientFundModal] =
 		useState(false);
-	const [pfpData, setPfpData] = useState<IPFPContractData>();
+	const [pfpData, setPfpData] = useState<IpfpContractData>();
 	const [balance, setBalance] = useState<number>();
-	const { account, library, chainId } = useWeb3React();
+
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const { address } = useAccount();
+	const { switchNetwork } = useSwitchNetwork();
 	const { formatMessage } = useIntl();
-	const dispatch = useAppDispatch();
+	const { open: openConnectModal } = useWeb3Modal();
 	const { setQty, isEligible, setIsEligible } = usePFPMintData();
 	let mintLeft = '-';
 	if (pfpData && balance !== undefined) {
@@ -59,57 +58,54 @@ export const MintCard = () => {
 		}
 	}
 
+	console.log('pfpData', pfpData);
+
 	useEffect(() => {
 		async function fetchData() {
 			try {
-				const _provider =
-					chainId === config.MAINNET_NETWORK_NUMBER
-						? library
-						: new JsonRpcProvider(config.MAINNET_CONFIG.nodeUrl);
-				const PFPContract = new Contract(
-					config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
-					PFP_ABI,
-					_provider,
-				) as GiversPFP;
-				const _price = await PFPContract.price();
-				const _maxMintAmount = await PFPContract.maxMintAmount();
-				const _totalSupply = await PFPContract.totalSupply();
-				const _maxSupply = await PFPContract.maxSupply();
+				const pfpContract = await getContract({
+					address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
+					chainId: config.MAINNET_NETWORK_NUMBER,
+					abi: PFP_ABI,
+				});
+				const _price = (await pfpContract.read.price()) as bigint;
+				const _maxMintAmount =
+					(await pfpContract.read.maxMintAmount()) as number;
+				const _totalSupply =
+					(await pfpContract.read.totalSupply()) as number;
+				const _maxSupply =
+					(await pfpContract.read.maxSupply()) as number;
 				setIsEligible(true);
 				setPfpData({
-					price: new BigNumber(_price.toString()),
+					price: _price,
 					maxMintAmount: _maxMintAmount || 0,
-					totalSupply: _totalSupply.toNumber() || 0,
-					maxSupply: _maxSupply.toNumber() || 0,
+					totalSupply: _totalSupply || 0,
+					maxSupply: _maxSupply || 0,
 				});
 			} catch (error) {
 				console.log('failed to fetch GIversPFP data');
 			}
 		}
 		fetchData();
-	}, [chainId, library]);
+	}, []);
 
 	useEffect(() => {
 		async function fetchData() {
-			if (!account) return;
+			if (!address) return;
 			try {
-				const _provider =
-					chainId === config.MAINNET_NETWORK_NUMBER
-						? library
-						: new JsonRpcProvider(config.MAINNET_CONFIG.nodeUrl);
-				const PFPContract = new Contract(
-					config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS ?? '',
-					PFP_ABI,
-					_provider,
-				) as GiversPFP;
-				let _balanceOf = await PFPContract.balanceOf(account);
-				setBalance(Number(_balanceOf?.toString() || '0'));
+				const pfpContract = await getContract({
+					address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
+					chainId: config.MAINNET_NETWORK_NUMBER,
+					abi: PFP_ABI,
+				});
+				let _balanceOf = await pfpContract.read.balanceOf([address]);
+				setBalance(Number(_balanceOf || '0'));
 			} catch (error) {
 				console.log('failed to fetch user balance data');
 			}
 		}
 		fetchData();
-	}, [account, chainId, library]);
+	}, [address, chainId]);
 
 	function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
 		if (!pfpData?.maxMintAmount) return;
@@ -153,19 +149,16 @@ export const MintCard = () => {
 	async function handleMint() {
 		if (!config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS) return;
 		if (!pfpData?.price) return;
+		if (!address) return;
 
-		//handle balance
-		const signer = library.getSigner();
-		const userAddress = await signer.getAddress();
-		const DAIContract = new Contract(
-			config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS,
-			ERC20_ABI,
-			library,
-		) as ERC20;
-		const balance = await DAIContract.balanceOf(userAddress);
-
-		const total = pfpData?.price.multipliedBy(qtyNFT);
-		if (total.lte(balance.toString())) {
+		const pfpContract = await getContract({
+			address: config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS,
+			chainId: config.MAINNET_NETWORK_NUMBER,
+			abi: erc20ABI,
+		});
+		let userDaiBalance = await pfpContract.read.balanceOf([address]);
+		const total = pfpData.price * BigInt(qtyNFT);
+		if (total <= userDaiBalance) {
 			setQty(Number(qtyNFT));
 			setShowMintModal(true);
 		} else {
@@ -200,8 +193,14 @@ export const MintCard = () => {
 						hasError={!!errorMsg}
 					/>
 					<InputHint>
-						{pfpData?.totalSupply ? pfpData.totalSupply : '-'}/
-						{pfpData?.maxSupply ? pfpData.maxSupply : '-'} Minted
+						{pfpData?.totalSupply
+							? pfpData.totalSupply.toString()
+							: '-'}
+						/
+						{pfpData?.maxSupply
+							? pfpData.maxSupply.toString()
+							: '-'}{' '}
+						Minted
 					</InputHint>
 					<ErrorPlaceHolder>{errorMsg}</ErrorPlaceHolder>
 				</InputWrapper>
@@ -216,20 +215,20 @@ export const MintCard = () => {
 						<InfoBoxTitle>Mint price per NFT</InfoBoxTitle>
 						<InfoBoxValue>
 							{pfpData?.price
-								? formatWeiHelper(pfpData.price)
+								? formatWeiHelper(pfpData.price.toString())
 								: '-'}{' '}
 							DAI
 						</InfoBoxValue>
 					</Flex>
 				</InfoBox>
-				{!account ? (
+				{!address ? (
 					<MintButton
 						size='small'
 						label={formatMessage({
 							id: 'component.button.connect_wallet',
 						})}
 						buttonType='primary'
-						onClick={() => dispatch(setShowWalletModal(true))}
+						onClick={() => openConnectModal?.()}
 					/>
 				) : chainId !== config.MAINNET_NETWORK_NUMBER ? (
 					<MintButton
@@ -237,7 +236,7 @@ export const MintCard = () => {
 						label={formatMessage({ id: 'label.switch_network' })}
 						buttonType='primary'
 						onClick={() =>
-							switchNetwork(config.MAINNET_NETWORK_NUMBER)
+							switchNetwork?.(config.MAINNET_NETWORK_NUMBER)
 						}
 					/>
 				) : (

@@ -80,7 +80,7 @@ export class SubgraphQueryBuilder {
 		networkConfig: NetworkConfig,
 		userAddress?: string,
 	): string => {
-		if (!networkConfig.TOKEN_DISTRO_ADDRESS) return '';
+		if (!networkConfig?.TOKEN_DISTRO_ADDRESS) return '';
 		const addresses = [networkConfig.TOKEN_DISTRO_ADDRESS];
 		if (networkConfig.regenStreams) {
 			addresses.push(
@@ -253,7 +253,7 @@ export class SubgraphQueryBuilder {
 
 	static getChainQuery = (chainId: number, userAddress?: string): string => {
 		const networkConfig = config.NETWORKS_CONFIG[chainId];
-		const givpowerConfig = networkConfig.GIVPOWER;
+		const givpowerConfig = networkConfig?.GIVPOWER;
 		return `
 		{
 			${SubgraphQueryBuilder.getBalanceQuery(networkConfig, userAddress)}

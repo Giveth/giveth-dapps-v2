@@ -9,9 +9,10 @@ import {
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
-import { useWeb3React } from '@web3-react/core';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
+import { waitForTransaction } from '@wagmi/core';
+import { useNetwork } from 'wagmi';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
@@ -27,7 +28,6 @@ import LockInfo, { LockInfoTooltip } from './LockInfo';
 import LockingBrief from './LockingBrief';
 import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
-import TotalGIVpowerBox from './TotalGIVpowerBox';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Flex } from '@/components/styled-components/Flex';
@@ -36,6 +36,7 @@ import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
+import TotalGIVpowerBox from './TotalGIVpowerBox';
 import type { PoolStakingConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -57,24 +58,27 @@ const LockModal: FC<ILockModalProps> = ({
 	setShowModal,
 }) => {
 	const { formatMessage } = useIntl();
-	const [amount, setAmount] = useState('0');
+	const [amount, setAmount] = useState(0n);
 	const [round, setRound] = useState(0);
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
-	const { library } = useWeb3React();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { stakedAmount: stakedLpAmount } = useStakingPool(poolStakingConfig);
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const { stakedAmount: stakedLpAmount } =
+		useStakingPool(poolStakingConfig) || {};
 
-	const { network: poolNetwork } = poolStakingConfig;
+	const { network: poolNetwork } = poolStakingConfig || {};
 
-	const { sdh } = useTokenDistroHelper(poolNetwork);
+	const { sdh } = useTokenDistroHelper(poolNetwork) || {};
 
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 
 	const maxAmount = isGIVpower
-		? stakedLpAmount.sub(userGIVLocked.balance)
+		? stakedLpAmount - BigInt(userGIVLocked.balance)
 		: stakedLpAmount;
 
 	const onLock = async () => {
+		if (!chainId) return;
 		const contractAddress =
 			config.NETWORKS_CONFIG[poolNetwork].GIVPOWER?.LM_ADDRESS;
 		if (!contractAddress) {
@@ -87,13 +91,17 @@ const LockModal: FC<ILockModalProps> = ({
 				amount,
 				round,
 				contractAddress,
-				library,
+				chainId,
 			);
 			if (txResponse) {
-				if (txResponse) {
-					const { status } = await txResponse.wait();
-					setLockState(status ? ELockState.BOOST : ELockState.ERROR);
-				}
+				const data = await waitForTransaction({
+					hash: txResponse,
+				});
+				setLockState(
+					data.status === 'success'
+						? ELockState.BOOST
+						: ELockState.ERROR,
+				);
 			} else {
 				setLockState(ELockState.LOCK);
 			}
@@ -160,8 +168,8 @@ const LockModal: FC<ILockModalProps> = ({
 								}}
 								disabled={
 									round === 0 ||
-									amount == '0' ||
-									maxAmount.lt(amount)
+									amount == 0n ||
+									maxAmount < amount
 								}
 							/>
 							<CancelButton
@@ -190,8 +198,8 @@ const LockModal: FC<ILockModalProps> = ({
 								})}
 								onClick={onLock}
 								disabled={
-									amount == '0' ||
-									maxAmount.lt(amount) ||
+									amount === 0n ||
+									maxAmount < amount ||
 									lockState === ELockState.LOCKING
 								}
 								loading={lockState === ELockState.LOCKING}
@@ -207,7 +215,7 @@ const LockModal: FC<ILockModalProps> = ({
 									id: 'label.user_your_givpower_to_support_verified_projects',
 								})}
 							</P>
-							<Link href={Routes.Projects}>
+							<Link href={Routes.AllProjects}>
 								<BoostButton
 									linkType='primary'
 									label={formatMessage({

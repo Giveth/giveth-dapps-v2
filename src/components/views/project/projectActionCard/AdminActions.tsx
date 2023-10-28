@@ -3,7 +3,6 @@ import {
 	IconChevronDown24,
 	IconEdit16,
 	IconShare16,
-	IconVerifiedBadge16,
 	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -13,7 +12,6 @@ import { captureException } from '@sentry/nextjs';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { useProjectContext } from '@/context/project.context';
-import { VerificationModal } from '@/components/modals/VerificationModal';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
 import { client } from '@/apollo/apolloClient';
 import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
@@ -37,7 +35,6 @@ interface IMobileActionsModalProps {
 }
 
 export const AdminActions = () => {
-	const [showVerificationModal, setShowVerificationModal] = useState(false);
 	const [deactivateModal, setDeactivateModal] = useState(false);
 	const [showShareModal, setShowShareModal] = useState(false);
 	const [showMobileActionsModal, setShowMobileActionsModal] = useState(false);
@@ -83,17 +80,6 @@ export const AdminActions = () => {
 		{
 			label: capitalizeAllWords(
 				formatMessage({
-					id: 'label.verify_your_project',
-				}),
-			),
-			type: OptionType.ITEM,
-			icon: <IconVerifiedBadge16 />,
-			cb: () => setShowVerificationModal(true),
-			disabled: verified,
-		},
-		{
-			label: capitalizeAllWords(
-				formatMessage({
 					id: isActive
 						? 'label.deactivate_project'
 						: 'label.activate_project',
@@ -101,10 +87,7 @@ export const AdminActions = () => {
 			),
 			type: OptionType.ITEM,
 			icon: <IconArchiving size={16} />,
-			cb: () => {
-				console.log('verify');
-				isActive ? setDeactivateModal(true) : activeProject();
-			},
+			cb: () => (isActive ? setDeactivateModal(true) : activeProject()),
 		},
 		{
 			label: formatMessage({
@@ -122,7 +105,7 @@ export const AdminActions = () => {
 		borderRadius: '8px',
 	};
 
-	const activeOptions = isActive ? options : [options[0], options[2]];
+	const activeOptions = isActive ? options : [options[0], options[1]];
 	return !isMobile ? (
 		<Wrapper>
 			<Dropdown
@@ -130,11 +113,6 @@ export const AdminActions = () => {
 				label='Project Actions'
 				options={activeOptions}
 			/>
-			{showVerificationModal && (
-				<VerificationModal
-					onClose={() => setShowVerificationModal(false)}
-				/>
-			)}
 			{deactivateModal && (
 				<DeactivateProjectModal
 					setShowModal={setDeactivateModal}
@@ -177,11 +155,6 @@ export const AdminActions = () => {
 							</Flex>
 						</MobileActionModalItem>
 					))}
-					{showVerificationModal && (
-						<VerificationModal
-							onClose={() => setShowVerificationModal(false)}
-						/>
-					)}
 					{deactivateModal && (
 						<DeactivateProjectModal
 							setShowModal={setDeactivateModal}

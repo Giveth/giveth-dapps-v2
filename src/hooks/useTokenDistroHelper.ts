@@ -3,6 +3,7 @@ import { TokenDistroHelper } from '@/lib/contractHelper/TokenDistroHelper';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { RegenStreamConfig } from '@/types/config';
 import { useAppSelector } from '@/features/hooks';
+import { chainInfoNames } from '@/features/subgraph/subgraph.helper';
 
 export const useTokenDistroHelper = (
 	poolNetwork: number,
@@ -13,7 +14,9 @@ export const useTokenDistroHelper = (
 		useState<TokenDistroHelper>();
 
 	const currentValues = useAppSelector(
-		state => state.subgraph.currentValues,
+		state =>
+			state.subgraph[chainInfoNames[poolNetwork]] ||
+			state.subgraph.currentValues,
 		() => (hold ? true : false),
 	);
 	const sdh = new SubgraphDataHelper(currentValues);

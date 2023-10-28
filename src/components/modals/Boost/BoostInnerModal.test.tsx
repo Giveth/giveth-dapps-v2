@@ -4,7 +4,6 @@ import { graphql } from 'msw';
 import { screen } from '@testing-library/react';
 import { renderWithProviders } from '@/tests/utils';
 import '@testing-library/jest-dom';
-import { BN } from '@/helpers/number';
 import BoostInnerModal from './BoostInnerModal';
 import { EBoostModalState } from './BoostModal';
 
@@ -37,7 +36,7 @@ test('showing user total GIVpower amount correctly', async () => {
 	jest.spyOn(React, 'useState').mockImplementation(useStateMock);
 	renderWithProviders(
 		<BoostInnerModal
-			totalGIVpower={BN('1000000000000000000000')}
+			totalGIVpower={1000000000000000000000n}
 			projectId='0'
 			setPercentage={setStateMock}
 			setState={setStateMock}
@@ -69,7 +68,7 @@ test('showing user total GIVpower amount correctly', async () => {
 	jest.spyOn(React, 'useState').mockImplementation(useStateMock);
 	renderWithProviders(
 		<BoostInnerModal
-			totalGIVpower={BN('1000000000000000000000')}
+			totalGIVpower={1000000000000000000000n}
 			projectId='0'
 			setPercentage={setStateMock}
 			setState={setStateMock}

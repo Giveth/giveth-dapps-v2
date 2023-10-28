@@ -17,7 +17,6 @@ import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IProjectBySlug } from '@/apollo/types/gqlTypes';
-import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { isSSRMode } from '@/lib/helpers';
@@ -58,7 +57,6 @@ export enum EProjectPageTabs {
 const ProjectIndex: FC<IProjectBySlug> = () => {
 	const { formatMessage } = useIntl();
 	const [activeTab, setActiveTab] = useState(0);
-	const [creationSuccessful, setCreationSuccessful] = useState(false);
 
 	const isMobile = !useMediaQuery(device.tablet);
 	const {
@@ -101,15 +99,6 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		if (!id) return;
 		fetchProjectBoosters(+id, projectData?.status.name);
 	}, [id]);
-
-	if (creationSuccessful) {
-		return (
-			<SuccessfulCreation
-				project={projectData!}
-				showSuccess={setCreationSuccessful}
-			/>
-		);
-	}
 
 	if (!projectData || (isDraft && !isAdmin)) {
 		return (

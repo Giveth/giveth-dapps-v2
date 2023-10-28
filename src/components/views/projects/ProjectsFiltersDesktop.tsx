@@ -19,8 +19,8 @@ const ProjectsFiltersDesktop = () => {
 	const router = useRouter();
 
 	useEffect(() => {
-		if (router.query.term) setIsSearchOpen(true);
-	}, [router.query.term]);
+		if (router.query.searchTerm) setIsSearchOpen(true);
+	}, [router.query.searchTerm]);
 
 	const toggleSearch = () => setIsSearchOpen(!isSearchOpen);
 

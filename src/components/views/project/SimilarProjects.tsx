@@ -12,7 +12,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { captureException } from '@sentry/nextjs';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper';
+import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper as SwiperClass } from 'swiper/types';
 import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';

@@ -73,7 +73,7 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 	}
 
 	const query = params.toString();
-	return `${Routes.Projects}${query ? `?${query}` : ''}`;
+	return `${Routes.AllProjects}${query ? `?${query}` : ''}`;
 }
 
 export function removeQueryParam(
@@ -100,3 +100,7 @@ export function removeQueryParamAndRedirect(
 	const newPath = removeQueryParam(router.asPath, params, true); // Get full URL
 	if (router.isReady) router.replace(newPath, undefined, { shallow: true });
 }
+
+export const convertIPFSToHTTPS = (url: string) => {
+	return url.replace('ipfs://', 'https://ipfs.io/ipfs/');
+};
