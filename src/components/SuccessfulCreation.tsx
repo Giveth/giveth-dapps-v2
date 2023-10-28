@@ -24,7 +24,7 @@ import { useAppDispatch } from '@/features/hooks';
 import CongratsAnimation from '@/animations/congrats.json';
 import LottieControl from '@/components/LottieControl';
 import { EContentType } from '@/lib/constants/shareContent';
-import NotAvailableProject from '@/components/NotAvailableProject';
+import NotAvailableHandler from '@/components/NotAvailableHandler';
 
 interface IProps {
 	project?: IProject;
@@ -45,7 +45,7 @@ const SuccessfulCreation = (props: IProps) => {
 		};
 	}, []);
 
-	if (!project) return <NotAvailableProject isProjectLoading={isLoading} />;
+	if (!project) return <NotAvailableHandler isProjectLoading={isLoading} />;
 
 	const { slug } = project;
 	const projectPath = slugToProjectView(slug);
