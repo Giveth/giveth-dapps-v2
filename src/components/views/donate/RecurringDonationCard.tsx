@@ -5,6 +5,7 @@ import {
 	H6,
 	IconCaretDown16,
 	IconHelpFilled16,
+	IconRefresh16,
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -12,6 +13,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ChainNativeCurrency } from 'viem/_types/types/chain';
 import { formatUnits } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -29,6 +31,11 @@ export const RecurringDonationCard = () => {
 	const [selectedToken, setSelectedToken] = useState<
 		ISelectTokenWithBalance | undefined
 	>();
+	const { address } = useAccount();
+	const { data: balance, refetch } = useBalance({
+		address: address,
+		enabled: false,
+	});
 
 	return (
 		<>
@@ -83,14 +90,18 @@ export const RecurringDonationCard = () => {
 					</InputWrapper>
 					{selectedToken !== undefined &&
 						selectedToken.balance !== undefined && (
-							<Flex>
+							<Flex gap='4px'>
 								<GLink>
 									Available:{' '}
-									{formatUnits(
-										selectedToken?.balance,
-										selectedToken?.token.decimals,
-									)}
+									{balance?.formatted ||
+										formatUnits(
+											selectedToken?.balance,
+											selectedToken?.token.decimals,
+										)}
 								</GLink>
+								<div onClick={() => refetch()}>
+									<IconRefresh16 />
+								</div>
 							</Flex>
 						)}
 				</Flex>
