@@ -19,6 +19,7 @@ import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { getMainCategorySlug } from '@/helpers/projects';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 export interface IProjectsRouteProps {
 	projects: IProject[];
@@ -103,7 +104,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				query: FETCH_ALL_PROJECTS,
 				variables: {
 					...variables,
-					sortingBy: query.sort,
+					sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
 					searchTerm: query.searchTerm,
 					filters: query.filter
 						? Array.isArray(query.filter)
