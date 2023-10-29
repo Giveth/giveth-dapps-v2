@@ -94,7 +94,6 @@ const ProjectsSortSelect = () => {
 		});
 
 	const [value, setValue] = useState(sortByOptions[0]);
-	const { variables } = useProjectsContext();
 	const { isMobile } = useDetectDevice();
 	const router = useRouter();
 
