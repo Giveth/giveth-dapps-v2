@@ -470,7 +470,7 @@ const faqContent = (formatMessage: any) => {
 							<li>
 								<FormattedMessage id='label.faq_by.two' />{' '}
 								<ExternalLink
-									href={Routes.Projects}
+									href={Routes.AllProjects}
 									title='donating'
 								/>{' '}
 								<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.two' />{' '}
@@ -741,7 +741,7 @@ const faqContent = (formatMessage: any) => {
 					<>
 						<FormattedMessage id='page.faq.why_is_there_a_givstream.content.one' />{' '}
 						<ExternalLink
-							href={Routes.Projects}
+							href={Routes.AllProjects}
 							title={formatMessage({
 								id: 'label.donate_to_verified_projects',
 							})}

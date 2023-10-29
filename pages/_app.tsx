@@ -30,7 +30,11 @@ import NotificationController from '@/components/controller/pfp.ctrl';
 import PfpController from '@/components/controller/notification.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import StorageLabel from '@/lib/localStorage';
-import { isGIVeconomyRoute } from '@/lib/helpers';
+import {
+	getLocaleFromIP,
+	getLocaleFromNavigator,
+	isGIVeconomyRoute,
+} from '@/lib/helpers';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import type { AppProps } from 'next/app';
@@ -49,6 +53,8 @@ export const IntlMessages = {
 	en,
 	es,
 };
+
+const defaultLocale = process.env.defaultLocale;
 
 function renderSnippet() {
 	const opts = {
@@ -96,6 +102,8 @@ const wagmiConfig = createConfig({
 	publicClient,
 });
 
+const classicNetworkNumber = config.CLASSIC_NETWORK_NUMBER;
+
 createWeb3Modal({
 	wagmiConfig,
 	projectId,
@@ -106,11 +114,15 @@ createWeb3Modal({
 	includeWalletIds: [
 		'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
 	],
+	chainImages: {
+		[classicNetworkNumber]: '/images/currencies/classic/32.svg',
+	},
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
-	const locale = router ? router.locale : 'en';
+	const { pathname, asPath, query } = router;
+	const locale = router ? router.locale : defaultLocale;
 	const apolloClient = useApollo(pageProps);
 	const isMaintenanceMode = process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true';
 
@@ -138,8 +150,26 @@ function MyApp({ Component, pageProps }: AppProps) {
 	}, [router]);
 
 	useEffect(() => {
-		localStorage.setItem(StorageLabel.LOCALE, locale || 'en');
-	}, [locale]);
+		const asyncFunc = async () => {
+			const storageLocale = localStorage.getItem(StorageLabel.LOCALE);
+			const navigatorLocale = getLocaleFromNavigator();
+			let ipLocale;
+			if (!storageLocale) {
+				ipLocale = await getLocaleFromIP();
+			}
+			const preferredLocale =
+				storageLocale || ipLocale || navigatorLocale || defaultLocale!;
+			if (router.locale !== preferredLocale) {
+				router.push({ pathname, query }, asPath, {
+					locale: preferredLocale,
+				});
+			}
+			if (!storageLocale || storageLocale !== preferredLocale) {
+				localStorage.setItem(StorageLabel.LOCALE, preferredLocale);
+			}
+		};
+		asyncFunc();
+	}, []);
 
 	return (
 		<>
@@ -153,7 +183,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 				<IntlProvider
 					locale={locale!}
 					messages={IntlMessages[locale as keyof typeof IntlMessages]}
-					defaultLocale='en'
+					defaultLocale={defaultLocale}
 				>
 					<ApolloProvider client={apolloClient}>
 						<WagmiConfig config={wagmiConfig}>

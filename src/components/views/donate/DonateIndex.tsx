@@ -110,7 +110,7 @@ const DonateIndex: FC = () => {
 						{hasMultipleTxs && (
 							<TxRow txHash={txHash[1]} title='Giveth' />
 						)}
-						<Link href={Routes.Projects}>
+						<Link href={Routes.AllProjects}>
 							<ProjectsButton
 								size='small'
 								label='SEE MORE PROJECTS'

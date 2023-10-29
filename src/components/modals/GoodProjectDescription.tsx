@@ -48,7 +48,7 @@ export const GoodProjectDescription: FC<IModal> = ({ setShowModal }) => {
 				</LeadStyled>
 				<ExternalLink
 					title={formatMessage({ id: 'label.browse_examples' })}
-					href={Routes.Projects}
+					href={Routes.AllProjects}
 					color={brandColors.pinky[500]}
 				/>
 

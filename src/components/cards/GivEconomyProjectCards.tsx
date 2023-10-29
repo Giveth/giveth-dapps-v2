@@ -16,7 +16,7 @@ const GivEconomyProjectCards = () => {
 				<IGsDataBox
 					title='GIVbacks'
 					button={
-						<Link href={Routes.Projects}>
+						<Link href={Routes.AllProjects}>
 							<GsButton
 								label={formatMessage({
 									id: 'page.home.bigscreen.see_projects',

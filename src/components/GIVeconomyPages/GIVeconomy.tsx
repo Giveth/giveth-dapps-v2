@@ -74,7 +74,7 @@ export const TabOverview = () => {
 									id: 'label.give_and_receive',
 								})}
 								button={
-									<Link href={Routes.Projects}>
+									<Link href={Routes.AllProjects}>
 										<DataBlockButton
 											label={formatMessage({
 												id: 'page.home.bigscreen.see_projects',
