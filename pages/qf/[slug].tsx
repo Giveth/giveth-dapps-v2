@@ -15,6 +15,7 @@ import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { useReferral } from '@/hooks/useReferral';
 import { IProjectsRouteProps, allCategoriesItem } from 'pages/projects/[slug]';
 import { getMainCategorySlug } from '@/helpers/projects';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
 	selectedMainCategory: IMainCategory;
@@ -97,7 +98,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				query: FETCH_ALL_PROJECTS,
 				variables: {
 					...variables,
-					sortingBy: query.sort,
+					sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
 					searchTerm: query.searchTerm,
 					filters: _filters,
 					campaignSlug: query.campaignSlug,
