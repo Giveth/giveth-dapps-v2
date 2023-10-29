@@ -41,7 +41,7 @@ const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
 );
 const ProjectUpdates = dynamic(() => import('./projectUpdates'));
-const NotAvailableProject = dynamic(() => import('../../NotAvailableProject'), {
+const NotAvailableHandler = dynamic(() => import('../../NotAvailableHandler'), {
 	ssr: false,
 });
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
@@ -100,9 +100,9 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		fetchProjectBoosters(+id, projectData?.status.name);
 	}, [id]);
 
-	if (!projectData) {
+	if (!projectData || (isDraft && !isAdmin)) {
 		return (
-			<NotAvailableProject
+			<NotAvailableHandler
 				isCancelled={isCancelled}
 				isProjectLoading={isLoading}
 			/>
