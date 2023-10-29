@@ -94,7 +94,6 @@ const ProjectsSortSelect = () => {
 		});
 
 	const [value, setValue] = useState(sortByOptions[0]);
-	const { variables } = useProjectsContext();
 	const { isMobile } = useDetectDevice();
 	const router = useRouter();
 
@@ -106,6 +105,8 @@ const ProjectsSortSelect = () => {
 					(router.query.sort as string).toLowerCase(),
 			);
 			if (_value) setValue(_value);
+		} else {
+			setValue(sortByOptions[0]);
 		}
 	}, [router.query.sort]);
 
