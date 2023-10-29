@@ -106,6 +106,8 @@ const ProjectsSortSelect = () => {
 					(router.query.sort as string).toLowerCase(),
 			);
 			if (_value) setValue(_value);
+		} else {
+			setValue(sortByOptions[0]);
 		}
 	}, [router.query.sort]);
 
