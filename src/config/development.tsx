@@ -330,7 +330,13 @@ const config: EnvConfig = {
 			unit: 'GIV',
 		},
 		uniswapV2Subgraph: '',
-		SUPER_FLUID_TOKENS: [],
+		SUPER_FLUID_TOKENS: [
+			{
+				name: 'Ethereum',
+				symbol: 'ETH',
+				decimals: 18,
+			},
+		],
 	},
 
 	CELO_CONFIG: {
