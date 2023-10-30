@@ -99,9 +99,9 @@ export const RecurringDonationCard = () => {
 											selectedToken?.token.decimals,
 										)}
 								</GLink>
-								<div onClick={() => refetch()}>
+								<IconWrapper onClick={() => refetch()}>
 									<IconRefresh16 />
-								</div>
+								</IconWrapper>
 							</Flex>
 						)}
 				</Flex>
@@ -168,4 +168,8 @@ const Input = styled.input`
 	font-style: normal;
 	font-weight: 500;
 	line-height: 150%; /* 24px */
+`;
+
+const IconWrapper = styled.div`
+	cursor: pointer;
 `;
