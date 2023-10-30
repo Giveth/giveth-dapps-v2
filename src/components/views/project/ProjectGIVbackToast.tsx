@@ -27,12 +27,15 @@ import BoostModal from '@/components/modals/Boost/BoostModal';
 import { useAppSelector } from '@/features/hooks';
 import { formatDonation } from '@/helpers/number';
 import { VerificationModal } from '@/components/modals/VerificationModal';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 
 const ProjectGIVbackToast = () => {
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
 	const [showBoost, setShowBoost] = useState(false);
 	const { projectData, isAdmin } = useProjectContext();
 	const verified = projectData?.verified;
+	const isActive = projectData?.status.name === EProjectStatus.ACTIVE;
+	const eligibleForVerification = !verified && isActive && isAdmin;
 	const { givbackFactor } = projectData || {};
 	const isOwnerVerified = verified && isAdmin;
 	const isOwnerNotVerified = !verified && isAdmin;
@@ -167,7 +170,7 @@ const ProjectGIVbackToast = () => {
 						/>
 					</ButtonWrapper>
 				)}
-				{isOwnerNotVerified && (
+				{eligibleForVerification && (
 					<ButtonWrapper>
 						<OutlineButton
 							onClick={() => setShowVerificationModal(true)}
