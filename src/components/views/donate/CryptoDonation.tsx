@@ -108,7 +108,7 @@ const CryptoDonation: FC = () => {
 	const [donationToGiveth, setDonationToGiveth] = useState(
 		noDonationSplit ? 0 : 5,
 	);
-	const [showQFModal, setShowQFModal] = useState(true);
+	const [showQFModal, setShowQFModal] = useState(false);
 
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
@@ -287,6 +287,8 @@ const CryptoDonation: FC = () => {
 		}
 		if (!isSignedIn) {
 			signInThenDonate();
+		} else if (hasActiveQFRound && !isOnEligibleNetworks) {
+			setShowQFModal(true);
 		} else {
 			setShowDonateModal(true);
 		}
@@ -310,10 +312,12 @@ const CryptoDonation: FC = () => {
 			<H4Styled weight={700}>
 				{formatMessage({ id: 'page.donate.title' })}
 			</H4Styled>
-			{showQFModal &&
-				hasActiveQFRound &&
-				!isOnEligibleNetworks &&
-				isOnAcceptedChain && <QFModal setShowModal={setShowQFModal} />}
+			{showQFModal && (
+				<QFModal
+					setShowDonateModal={setShowDonateModal}
+					setShowModal={setShowQFModal}
+				/>
+			)}
 			{geminiModal && <GeminiModal setShowModal={setGeminiModal} />}
 			{showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork

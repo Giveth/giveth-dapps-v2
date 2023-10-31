@@ -10,7 +10,11 @@ import { useDonateData } from '@/context/donate.context';
 import { getActiveRound } from '@/helpers/qf';
 import config from '@/configuration';
 
-const QFModal: FC<IModal> = ({ setShowModal }) => {
+interface IProps extends IModal {
+	setShowDonateModal: (showDonateModal: boolean) => void;
+}
+
+const QFModal: FC<IProps> = ({ setShowModal, setShowDonateModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const { switchNetwork } = useSwitchNetwork();
@@ -48,6 +52,17 @@ const QFModal: FC<IModal> = ({ setShowModal }) => {
 					}}
 					buttonType='primary'
 				/>
+				<Button
+					label={formatMessage({
+						id: 'label.donate_without_matching',
+					})}
+					onClick={() => {
+						setShowDonateModal(true);
+						closeModal();
+					}}
+					size='small'
+					buttonType='texty-gray'
+				/>
 				<Hr />
 				<Subline>
 					{formatMessage({ id: 'label.you_can_still_donate' })}
@@ -77,9 +92,13 @@ const Container = styled.div`
 		margin-top: 8px;
 		color: ${neutralColors.gray[700]};
 	}
-	> button {
+	> button:first-of-type {
 		padding: 16px 50px;
-		margin: 32px auto;
+		margin: 32px auto 0;
+	}
+	> button:last-of-type {
+		padding: 16px 50px;
+		margin: 10px auto;
 	}
 `;
 
