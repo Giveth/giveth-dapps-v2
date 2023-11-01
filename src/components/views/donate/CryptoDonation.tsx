@@ -217,6 +217,7 @@ const CryptoDonation: FC = () => {
 						const balance = await contract.read.balanceOf([
 							address!,
 						]);
+						console.log('balance', balance);
 						setSelectedTokenBalance(balance);
 						return balance;
 					} catch (e) {
