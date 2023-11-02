@@ -1,5 +1,5 @@
 import {
-	H1,
+	H2,
 	IconFund24,
 	IconHeartOutline24,
 	IconPublish16,
@@ -7,37 +7,49 @@ import {
 	Subline,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { IProject } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
 import { smallFormatDate } from '@/lib/helpers';
+import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
+import ProjectActions from './ProjectActions';
 
 interface IProjectItem {
 	project: IProject;
+	setProjects: Dispatch<SetStateAction<IProject[]>>;
 }
 
-const ProjectItem = ({ project }: IProjectItem) => {
+const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 	console.log('project', project);
 	const { formatMessage, locale } = useIntl();
+	const [showAddressModal, setShowAddressModal] = useState(false);
+	const [selectedProject, setSelectedProject] = useState<IProject>();
 
 	return (
 		<ProjectContainer>
-			<Flex gap='16px' alignItems='center'>
-				<Subline>
-					<Flex alignItems='center'>
-						<IconPublish16 />
-						&nbsp;
-						{formatMessage({ id: 'label.created_at' })} &nbsp;
-						{smallFormatDate(
-							new Date(project.creationDate!),
-							locale,
-						)}
-					</Flex>
-				</Subline>
+			<Flex justifyContent='space-between' alignItems='center'>
+				<div>
+					<Subline>
+						<Flex alignItems='center'>
+							<IconPublish16 />
+							&nbsp;
+							{formatMessage({ id: 'label.created_at' })} &nbsp;
+							{smallFormatDate(
+								new Date(project.creationDate!),
+								locale,
+							)}
+						</Flex>
+					</Subline>
+					<H2>{project.title}</H2>
+				</div>
+				<ProjectActions
+					setSelectedProject={setSelectedProject}
+					setShowAddressModal={setShowAddressModal}
+					project={project}
+				/>
 			</Flex>
-			<H1>{project.title}</H1>
 			<HorizontalDivider />
 			<Flex justifyContent='space-between'>
 				<ProjectStatusesContainer>
@@ -95,6 +107,13 @@ const ProjectItem = ({ project }: IProjectItem) => {
 					</Flex>
 				</ProjectStatusesContainer>
 			</Flex>
+			{showAddressModal && selectedProject && (
+				<ManageProjectAddressesModal
+					project={selectedProject}
+					setShowModal={setShowAddressModal}
+					setProjects={setProjects}
+				/>
+			)}
 		</ProjectContainer>
 	);
 };
