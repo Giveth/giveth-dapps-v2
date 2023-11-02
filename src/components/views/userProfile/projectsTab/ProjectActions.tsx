@@ -1,5 +1,4 @@
 import {
-	GLink,
 	IconEdit16,
 	IconEye16,
 	IconUpdate16,
@@ -63,7 +62,6 @@ const ProjectActions = (props: IProjectActions) => {
 	const dropdownStyle = {
 		padding: '4px 16px',
 		borderRadius: '8px',
-		background: isHover ? 'white' : '',
 	};
 
 	return (
@@ -71,7 +69,6 @@ const ProjectActions = (props: IProjectActions) => {
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 			isOpen={isHover}
-			size='Big'
 			isCancelled={isCancelled}
 		>
 			{isCancelled ? (
@@ -92,10 +89,11 @@ const CancelledWrapper = styled.div`
 	padding: 4px 16px;
 `;
 
-const Actions = styled(GLink)<{ isCancelled: boolean; isOpen: boolean }>`
-	color: ${props =>
-		props.isCancelled ? neutralColors.gray[500] : neutralColors.gray[900]};
+const Actions = styled.div<{ isCancelled: boolean; isOpen: boolean }>`
 	cursor: ${props => (props.isCancelled ? 'default' : 'pointer')};
+	background-color: ${neutralColors.gray[200]};
+	border-radius: 8px;
+	padding: 8px 10px;
 `;
 
 export default ProjectActions;
