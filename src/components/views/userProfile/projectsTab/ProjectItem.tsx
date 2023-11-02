@@ -128,13 +128,6 @@ const HorizontalDivider = styled.hr`
 	margin: 24px 0;
 `;
 
-const VerticalDivider = styled.div`
-	width: 1px;
-	background-color: ${neutralColors.gray[300]};
-	flex-shrink: 0;
-	margin: 10px 20px;
-`;
-
 const ProjectStatusesContainer = styled.div`
 	width: 330px;
 `;
