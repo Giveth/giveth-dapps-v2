@@ -29,30 +29,6 @@ const faqContent = (formatMessage: any) => {
 				),
 			},
 			{
-				question: 'page.faq.what_is_torus',
-				answer: (
-					<>
-						<FormattedMessage id='page.faq.what_is_torus.content.one' />{' '}
-						<a
-							href='https://metamask.io/'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							Metamask{' '}
-						</a>
-						<FormattedMessage id='page.faq.what_is_torus.content.two' />{' '}
-						<a
-							href='https://docs.tor.us'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							<FormattedMessage id='page.faq.what_is_torus.content.three' />
-						</a>
-						.{' '}
-					</>
-				),
-			},
-			{
 				question: 'page.faq.what_is_the_difference_betwee_btc_eth',
 				answer: (
 					<>
