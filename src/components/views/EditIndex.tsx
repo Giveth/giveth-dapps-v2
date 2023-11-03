@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
-
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import { IProjectEdition } from '@/apollo/types/types';
@@ -26,7 +24,6 @@ const EditIndex = () => {
 	const [isCancelled, setIsCancelled] = useState(false);
 	const [ownerAddress, setOwnerAddress] = useState<string>();
 
-	const { open: openConnectModal } = useWeb3Modal();
 	const dispatch = useAppDispatch();
 	const {
 		isLoading: isLoadingUser,
@@ -90,7 +87,6 @@ const EditIndex = () => {
 				});
 		} else {
 			if (!isLoadingUser) {
-				openConnectModal?.();
 				setIsLoadingProject(false);
 			}
 		}
