@@ -17,6 +17,9 @@ import { useAppSelector } from '@/features/hooks';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
 import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
+import TorusBanner from '@/components/views/homepage/TorusBanner';
+import StorageLabel from '@/lib/localStorage';
+import { isSSRMode } from '@/lib/helpers';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const {
@@ -55,8 +58,12 @@ const HomeIndex: FC<IHomeRoute> = props => {
 		fetchFeaturedUpdateProjects();
 	}, [userData?.id]);
 
+	const torusBannerViewed =
+		!isSSRMode && localStorage.getItem(StorageLabel.TORUS_BANNER_VIEWED);
+
 	return (
 		<Wrapper>
+			{!torusBannerViewed && <TorusBanner />}
 			<IntroBlock />
 			<Separator />
 			<Separator />
