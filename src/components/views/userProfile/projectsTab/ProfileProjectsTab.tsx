@@ -124,14 +124,6 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 						))}
 					</Flex>
 				) : (
-					// <ProjectsTableWrapper>
-					// 	<ProjectsTable
-					// 		projects={projects}
-					// 		changeOrder={changeOrder}
-					// 		order={order}
-					// 		setProjects={setProjects}
-					// 	/>
-					// </ProjectsTableWrapper>
 					<Row>
 						{projects.map(project => (
 							<Col key={project.id} md={6} lg={4}>
@@ -154,10 +146,6 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 
 export const ProjectsContainer = styled.div`
 	margin-bottom: 40px;
-`;
-
-const ProjectsTableWrapper = styled.div`
-	overflow: auto;
 `;
 
 export const Loading = styled(Flex)`
