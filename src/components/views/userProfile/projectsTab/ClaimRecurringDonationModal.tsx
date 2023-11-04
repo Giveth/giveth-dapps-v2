@@ -40,7 +40,7 @@ const ClaimRecurringDonationModal = ({
 			hiddenClose
 		>
 			<ModalContainer>
-				<Flex flexDirection='column' gap='40px'>
+				<Flex flexDirection='column' gap='32px'>
 					{recurringDonationItems.map(item => (
 						<ItemContainer
 							justifyContent='space-between'
