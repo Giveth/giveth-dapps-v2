@@ -19,10 +19,16 @@ interface IProjectActions {
 	project: IProject;
 	setSelectedProject: Dispatch<SetStateAction<IProject | undefined>>;
 	setShowAddressModal: Dispatch<SetStateAction<boolean>>;
+	setShowClaimModal: Dispatch<SetStateAction<boolean>>;
 }
 
 const ProjectActions = (props: IProjectActions) => {
-	const { project, setSelectedProject, setShowAddressModal } = props;
+	const {
+		project,
+		setSelectedProject,
+		setShowAddressModal,
+		setShowClaimModal,
+	} = props;
 	const status = project.status.name;
 	const isCancelled = status === EProjectStatus.CANCEL;
 
@@ -55,6 +61,14 @@ const ProjectActions = (props: IProjectActions) => {
 			cb: () => {
 				setSelectedProject(project);
 				setShowAddressModal(true);
+			},
+		},
+		{
+			label: 'Claim Recurring donation',
+			icon: <IconWalletOutline16 />,
+			cb: () => {
+				setSelectedProject(project);
+				setShowClaimModal(true);
 			},
 		},
 	];

@@ -15,6 +15,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { smallFormatDate } from '@/lib/helpers';
 import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
 import ProjectActions from './ProjectActions';
+import ClaimRecurringDonationModal from './ClaimRecurringDonationModal';
 
 interface IProjectItem {
 	project: IProject;
@@ -26,7 +27,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 	const { formatMessage, locale } = useIntl();
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const [selectedProject, setSelectedProject] = useState<IProject>();
-
+	const [showClaimModal, setShowClaimModal] = useState(false);
 	return (
 		<ProjectContainer>
 			<Flex justifyContent='space-between' alignItems='center'>
@@ -48,6 +49,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 					setSelectedProject={setSelectedProject}
 					setShowAddressModal={setShowAddressModal}
 					project={project}
+					setShowClaimModal={setShowClaimModal}
 				/>
 			</Flex>
 			<HorizontalDivider />
@@ -112,6 +114,12 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 					project={selectedProject}
 					setShowModal={setShowAddressModal}
 					setProjects={setProjects}
+				/>
+			)}
+			{showClaimModal && selectedProject && (
+				<ClaimRecurringDonationModal
+					setShowModal={setShowClaimModal}
+					project={project}
 				/>
 			)}
 		</ProjectContainer>
