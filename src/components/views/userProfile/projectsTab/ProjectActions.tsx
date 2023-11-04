@@ -1,4 +1,5 @@
 import {
+	IconArrowDownCircle16,
 	IconEdit16,
 	IconEye16,
 	IconUpdate16,
@@ -65,7 +66,7 @@ const ProjectActions = (props: IProjectActions) => {
 		},
 		{
 			label: 'Claim Recurring donation',
-			icon: <IconWalletOutline16 />,
+			icon: <IconArrowDownCircle16 />,
 			cb: () => {
 				setSelectedProject(project);
 				setShowClaimModal(true);
