@@ -55,11 +55,11 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 				<ProjectStatusesContainer>
 					<Flex justifyContent='space-between'>
 						<P>{formatMessage({ id: 'label.project_status' })}</P>
-						<div>456</div>
+						<div>1</div>
 					</Flex>
 					<Flex justifyContent='space-between'>
 						<P>Listed on public site</P>
-						<div>124312312412</div>
+						<div>1</div>
 					</Flex>
 					<Flex justifyContent='space-between'>
 						<P>
@@ -67,7 +67,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 								id: 'label.verification_status',
 							})}
 						</P>
-						<div>123123123</div>
+						<div>1 </div>
 					</Flex>
 					<Flex justifyContent='space-between'>
 						<div>
@@ -75,7 +75,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 								id: 'label.quadratic_funding',
 							})}
 						</div>
-						<div>123123123</div>
+						<div>1</div>
 					</Flex>
 				</ProjectStatusesContainer>
 				<ProjectStatusesContainer>
