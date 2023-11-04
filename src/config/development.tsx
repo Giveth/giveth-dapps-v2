@@ -332,9 +332,27 @@ const config: EnvConfig = {
 		uniswapV2Subgraph: '',
 		SUPER_FLUID_TOKENS: [
 			{
-				name: 'Ethereum',
-				symbol: 'ETH',
+				underlyingToken: {
+					decimals: 18,
+					address: '0xc916ce4025cb479d9ba9d798a80094a449667f5d',
+					name: 'Giveth',
+					symbol: 'GIV',
+				},
 				decimals: 18,
+				address: '0x34cf77c14f39c81adbdad922af538f05633fa07e',
+				name: 'fake Super Giveth Token',
+				symbol: 'fGIVx',
+			},
+			{
+				underlyingToken: {
+					name: 'Ethereum',
+					symbol: 'ETH',
+					decimals: 18,
+				},
+				decimals: 18,
+				address: '0xe01f8743677da897f4e7de9073b57bf034fc2433',
+				name: 'Super ETH',
+				symbol: 'ETHx',
 			},
 		],
 	},
