@@ -9,7 +9,7 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ChainNativeCurrency } from 'viem/_types/types/chain';
 import { formatUnits } from 'viem';
@@ -20,6 +20,9 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 import { IToken } from '@/types/config';
 import { TokenIcon } from './TokenIcon';
+import { gqlRequest } from '@/helpers/requests';
+import config from '@/configuration';
+import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
 
 export interface ISelectTokenWithBalance {
 	token: IToken | ChainNativeCurrency;
@@ -36,6 +39,20 @@ export const RecurringDonationCard = () => {
 		address: address,
 		enabled: false,
 	});
+
+	useEffect(() => {
+		if (!address) return;
+		const fetchData = async () => {
+			const { data } = await gqlRequest(
+				config.OPTIMISM_CONFIG.superFluidSubgraph,
+				undefined,
+				FETCH_USER_STREAMS,
+				{ address: address.toLowerCase() },
+			);
+			console.log('data', data);
+		};
+		fetchData();
+	}, [address]);
 
 	return (
 		<>
