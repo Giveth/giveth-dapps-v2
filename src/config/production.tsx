@@ -411,6 +411,8 @@ const config: EnvConfig = {
 			description: '100% GIV',
 			unit: 'GIV',
 		},
+		superFluidSubgraph:
+			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
