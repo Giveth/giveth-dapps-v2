@@ -7,13 +7,11 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ethIcon from '/public/images/tokens/ETH.svg';
-import googleIcon from '/public/images/google_icon.svg';
-import twitterIcon from '/public/images/social-tt.svg';
-import facebookIcon from '/public/images/social-fb2.svg';
-import discordIcon from '/public/images/social-disc.svg';
-import torusBrand from '/public/images/torus_pwr.svg';
+// import googleIcon from '/public/images/google_icon.svg';
+// import twitterIcon from '/public/images/social-tt.svg';
+// import facebookIcon from '/public/images/social-fb2.svg';
+// import discordIcon from '/public/images/social-disc.svg';
 import { mediaQueries } from '@/lib/constants/constants';
-import { detectBrave } from '@/lib/helpers';
 import LowerShields from '@/components/modals/LowerShields';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
@@ -28,14 +26,14 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
-	const checkIsBrave = async () => {
-		const isBrave = await detectBrave();
-		if (isBrave) {
-			setShowLowerShields(true);
-		} else {
-			connectTorus();
-		}
-	};
+	// const checkIsBrave = async () => {
+	// 	const isBrave = await detectBrave();
+	// 	if (isBrave) {
+	// 		setShowLowerShields(true);
+	// 	} else {
+	// 		connectTorus();
+	// 	}
+	// };
 
 	const connectTorus = (): void => {
 		// TODO: Handle this
@@ -93,24 +91,6 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 									})}
 								</B>
 							</EthIconContainer>
-							<BreakPoint>
-								<BreakLine />
-								<P>{formatMessage({ id: 'label.or' })}</P>
-								<BreakLine />
-							</BreakPoint>
-							<SocialContentContainer>
-								{socialArray.map(elem => (
-									<IconsContainer
-										key={elem.alt}
-										onClick={checkIsBrave}
-									>
-										{' '}
-										{/* best way to activate torus here? */}
-										<Image src={elem.icon} alt={elem.alt} />
-									</IconsContainer>
-								))}
-							</SocialContentContainer>
-							<Image src={torusBrand} alt='Powered by Torus' />
 						</IconContentContainer>
 					</ContentContainer>
 				</ModalGrid>
@@ -183,38 +163,38 @@ const EthIconContainer = styled(IconsContainer)`
 	color: ${brandColors.deep[800]};
 `;
 
-const SocialContentContainer = styled.div`
-	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
-	justify-content: space-between;
-	margin-bottom: 24px;
-`;
+// const SocialContentContainer = styled.div`
+// 	display: flex;
+// 	flex-wrap: wrap;
+// 	gap: 10px;
+// 	justify-content: space-between;
+// 	margin-bottom: 24px;
+// `;
 
-const BreakPoint = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin: 48px 0;
-	color: ${brandColors.deep[800]};
-`;
+// const BreakPoint = styled.div`
+// 	display: flex;
+// 	align-items: center;
+// 	justify-content: space-between;
+// 	margin: 48px 0;
+// 	color: ${brandColors.deep[800]};
+// `;
 
-const BreakLine = styled.hr`
-	width: 45%;
-	margin: auto 0;
-	border-top: 1px solid ${neutralColors.gray[300]};
-`;
+// const BreakLine = styled.hr`
+// 	width: 45%;
+// 	margin: auto 0;
+// 	border-top: 1px solid ${neutralColors.gray[300]};
+// `;
 
 const SignInTitle = styled(H3)`
 	color: ${brandColors.deep[800]};
 	font-weight: 700;
 `;
 
-const socialArray = [
-	{ icon: googleIcon, alt: 'Google icon.' },
-	{ icon: twitterIcon, alt: 'Twitter icon.' },
-	{ icon: facebookIcon, alt: 'Facebook icon.' },
-	{ icon: discordIcon, alt: 'Discord icon.' },
-];
+// const socialArray = [
+// 	{ icon: googleIcon, alt: 'Google icon.' },
+// 	{ icon: twitterIcon, alt: 'Twitter icon.' },
+// 	{ icon: facebookIcon, alt: 'Facebook icon.' },
+// 	{ icon: discordIcon, alt: 'Discord icon.' },
+// ];
 
 export default WelcomeModal;
