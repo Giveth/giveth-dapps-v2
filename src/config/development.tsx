@@ -330,6 +330,8 @@ const config: EnvConfig = {
 			unit: 'GIV',
 		},
 		uniswapV2Subgraph: '',
+		superFluidSubgraph:
+			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-goerli',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
