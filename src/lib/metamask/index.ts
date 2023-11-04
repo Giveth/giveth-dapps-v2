@@ -26,7 +26,7 @@ const getTokenImage = (symbol: string): string | undefined => {
 	return undefined;
 };
 
-interface ITokenOptins {
+interface ITokenOptions {
 	address: string;
 	symbol: string;
 	decimals: number;
@@ -36,7 +36,7 @@ interface ITokenOptins {
 const fetchTokenInfo = async (
 	chainId: number,
 	address: Address,
-): Promise<ITokenOptins | undefined> => {
+): Promise<ITokenOptions | undefined> => {
 	try {
 		const contract = getContract({
 			address: address,
