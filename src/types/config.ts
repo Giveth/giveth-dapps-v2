@@ -11,6 +11,10 @@ export type IToken = {
 	decimals: number;
 };
 
+export interface ISuperToken extends IToken {
+	underlyingToken: IToken | ChainNativeCurrency;
+}
+
 export enum StakingPlatform {
 	GIVETH = 'Staking',
 	UNISWAP = 'Uniswap',
@@ -187,7 +191,7 @@ export interface OptimismNetworkConfig extends NetworkConfig {
 	GIVPOWER: SimplePoolStakingConfig;
 	GIV_TOKEN_ADDRESS: Address;
 	GIV_BUY_LINK: string;
-	SUPER_FLUID_TOKENS: Array<IToken | ChainNativeCurrency>;
+	SUPER_FLUID_TOKENS: Array<ISuperToken>;
 }
 
 interface MicroservicesConfig {
