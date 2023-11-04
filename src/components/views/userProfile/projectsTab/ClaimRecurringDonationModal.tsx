@@ -18,7 +18,10 @@ const ClaimRecurringDonationModal = ({
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitle='Claimable Donations'
-		></Modal>
+			hiddenClose
+		>
+			asd
+		</Modal>
 	);
 };
 
