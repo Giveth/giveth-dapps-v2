@@ -45,6 +45,14 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 		<Wrapper>
 			{tokens.map(token => (
 				<TokenInfo
+					key={token.underlyingToken.symbol}
+					token={token.underlyingToken}
+					setShowModal={setShowModal}
+					setSelectedToken={setSelectedToken}
+				/>
+			))}
+			{tokens.map(token => (
+				<TokenInfo
 					key={token.symbol}
 					token={token}
 					setShowModal={setShowModal}
