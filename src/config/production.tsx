@@ -431,6 +431,7 @@ const config: EnvConfig = {
 					name: 'Ethereum',
 					symbol: 'ETH',
 					decimals: 18,
+					address: '0x0000000000000000000000000000000000000000',
 				},
 				decimals: 18,
 				address: '0x4ac8bd1bdae47beef2d1c6aa62229509b962aa0d',
