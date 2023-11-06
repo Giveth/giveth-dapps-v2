@@ -49,7 +49,7 @@ export const RecurringDonationCard = () => {
 				FETCH_USER_STREAMS,
 				{ address: address.toLowerCase() },
 			);
-			const streams: ISuperfluidStream[] = data.streams;
+			const streams: ISuperfluidStream[] = data?.streams;
 			console.log('streams', streams);
 		};
 		fetchData();
