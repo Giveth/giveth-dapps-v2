@@ -15,7 +15,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { TokenInfo } from './TokenInfo';
 import { fetchBalance } from '@/services/token';
-import { IToken } from '@/types/config';
+import { IToken } from '@/types/superFluid';
 import type { ISelectTokenWithBalance } from '../RecurringDonationCard';
 
 export interface ISelectTokenModalProps extends IModal {
@@ -68,7 +68,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 		// A helper function to fetch balance for a single token
 		const fetchTokenBalance = async (token: IToken) => {
 			try {
-				const balance = await fetchBalance(token.address, address);
+				const balance = await fetchBalance(token.id, address);
 				return { symbol: token.symbol, balance };
 			} catch (error) {
 				console.error(

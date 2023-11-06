@@ -1,31 +1,5 @@
-import type { Chain } from 'wagmi';
-
-export type Address = `0x${string}`;
-
-export type IToken = {
-	address: Address;
-	name: string;
-	/** 2-6 characters long */
-	symbol: string;
-	decimals: number;
-	isSuperToken?: boolean;
-	underlyingToken?: IToken;
-};
-
-export interface ISuperToken extends IToken {
-	underlyingToken: IToken;
-	isSuperToken: boolean;
-}
-
-export interface ISuperfluidStream {
-	receiver: {
-		id: Address;
-	};
-	sender: {
-		id: Address;
-	};
-	token: ISuperToken;
-}
+import { ISuperToken } from './superFluid';
+import type { Address, Chain } from 'wagmi';
 
 export enum StakingPlatform {
 	GIVETH = 'Staking',

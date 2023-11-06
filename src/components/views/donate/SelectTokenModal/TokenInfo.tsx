@@ -4,7 +4,7 @@ import { type FC } from 'react';
 import { formatUnits } from 'viem';
 import { Flex } from '@/components/styled-components/Flex';
 import { TokenIcon } from '../TokenIcon';
-import { IToken } from '@/types/config';
+import { IToken } from '@/types/superFluid';
 
 interface ITokenInfoProps {
 	token: IToken;
