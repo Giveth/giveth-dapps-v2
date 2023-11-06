@@ -1,4 +1,3 @@
-import { ChainNativeCurrency } from 'viem/_types/types/chain';
 import type { Chain } from 'wagmi';
 
 export type Address = `0x${string}`;
@@ -12,7 +11,7 @@ export type IToken = {
 };
 
 export interface ISuperToken extends IToken {
-	underlyingToken: IToken | ChainNativeCurrency;
+	underlyingToken: IToken;
 }
 
 export interface ISuperfluidStream {
