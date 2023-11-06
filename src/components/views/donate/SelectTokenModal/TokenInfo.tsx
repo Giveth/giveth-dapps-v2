@@ -2,17 +2,24 @@ import { Caption, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC } from 'react';
 import { type ChainNativeCurrency } from 'viem/_types/types/chain';
+import { formatUnits } from 'viem';
 import { IToken } from '@/types/config';
 import { Flex } from '@/components/styled-components/Flex';
 import { TokenIcon } from '../TokenIcon';
 
 interface ITokenInfoProps {
 	token: IToken | ChainNativeCurrency;
+	balance: bigint;
 	disable: boolean;
 	onClick: () => void;
 }
 
-export const TokenInfo: FC<ITokenInfoProps> = ({ token, disable, onClick }) => {
+export const TokenInfo: FC<ITokenInfoProps> = ({
+	token,
+	balance,
+	disable,
+	onClick,
+}) => {
 	return (
 		<Wrapper
 			gap='16px'
@@ -28,7 +35,11 @@ export const TokenInfo: FC<ITokenInfoProps> = ({ token, disable, onClick }) => {
 				<TopRow justifyContent='space-between'>
 					<Caption medium>{token.symbol}</Caption>
 					<Flex gap='4px'>
-						{/* <Caption medium>{data?.formatted}</Caption> */}
+						<Caption medium>
+							{balance !== undefined
+								? formatUnits(balance, token.decimals)
+								: '--'}
+						</Caption>
 						<GrayCaption>{token.symbol}</GrayCaption>
 					</Flex>
 				</TopRow>
