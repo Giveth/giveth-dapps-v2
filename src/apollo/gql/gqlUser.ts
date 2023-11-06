@@ -155,6 +155,20 @@ export const FETCH_USER_STREAMS = `
 			receiver {
 				id
 			}
+			token {
+				__typename
+				id
+				name
+				symbol
+				decimals
+				isSuperToken
+				underlyingToken {
+					id
+					name
+					symbol
+					decimals
+				}
+			}
 		}
 	}
 `;
