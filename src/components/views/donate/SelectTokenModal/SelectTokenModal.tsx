@@ -16,15 +16,20 @@ import config from '@/configuration';
 import { TokenInfo } from './TokenInfo';
 import { fetchBalance } from '@/services/token';
 import { IToken } from '@/types/superFluid';
-import type { ISelectTokenWithBalance } from '../RecurringDonationCard';
+import type {
+	ISelectTokenWithBalance,
+	ITokenStreams,
+} from '../RecurringDonationCard';
 
 export interface ISelectTokenModalProps extends IModal {
+	tokenStreams: ITokenStreams;
 	setSelectedToken: Dispatch<
 		SetStateAction<ISelectTokenWithBalance | undefined>
 	>;
 }
 
 export const SelectTokenModal: FC<ISelectTokenModalProps> = ({
+	tokenStreams,
 	setShowModal,
 	setSelectedToken,
 }) => {
@@ -38,6 +43,7 @@ export const SelectTokenModal: FC<ISelectTokenModalProps> = ({
 			headerTitlePosition='left'
 		>
 			<SelectTokenInnerModal
+				tokenStreams={tokenStreams}
 				setShowModal={setShowModal}
 				setSelectedToken={setSelectedToken}
 			/>
@@ -52,6 +58,7 @@ export interface IBalances {
 const allTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
 
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
+	tokenStreams,
 	setShowModal,
 	setSelectedToken,
 }) => {
@@ -113,22 +120,24 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 
 	return (
 		<Wrapper>
-			{allTokens.map(token => (
-				<TokenInfo
-					key={token.symbol}
-					token={token}
-					balance={balances[token.symbol]}
-					disable={balances[token.symbol] === 0n}
-					isSuperToken={true}
-					onClick={() => {
-						setSelectedToken({
-							token,
-							balance: balances[token.symbol],
-						});
-						setShowModal(false);
-					}}
-				/>
-			))}
+			{allTokens.map(token =>
+				tokenStreams[token.id] ? null : (
+					<TokenInfo
+						key={token.symbol}
+						token={token}
+						balance={balances[token.symbol]}
+						disable={balances[token.symbol] === 0n}
+						isSuperToken={true}
+						onClick={() => {
+							setSelectedToken({
+								token,
+								balance: balances[token.symbol],
+							});
+							setShowModal(false);
+						}}
+					/>
+				),
+			)}
 			{allTokens.map(token => (
 				<TokenInfo
 					key={token.underlyingToken.symbol}
