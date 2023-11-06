@@ -15,6 +15,15 @@ export interface ISuperToken extends IToken {
 	underlyingToken: IToken | ChainNativeCurrency;
 }
 
+export interface ISuperfluidStream {
+	receiver: {
+		id: Address;
+	};
+	sender: {
+		id: Address;
+	};
+}
+
 export enum StakingPlatform {
 	GIVETH = 'Staking',
 	UNISWAP = 'Uniswap',
