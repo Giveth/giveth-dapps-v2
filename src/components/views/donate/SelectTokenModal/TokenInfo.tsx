@@ -1,47 +1,34 @@
 import { Caption, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC } from 'react';
-import { useAccount, useBalance } from 'wagmi';
 import { type ChainNativeCurrency } from 'viem/_types/types/chain';
 import { IToken } from '@/types/config';
 import { Flex } from '@/components/styled-components/Flex';
 import { TokenIcon } from '../TokenIcon';
-import { type ISelectTokenModalProps } from './SelectTokenModal';
 
-interface ITokenInfoProps extends ISelectTokenModalProps {
+interface ITokenInfoProps {
 	token: IToken | ChainNativeCurrency;
+	disable: boolean;
+	onClick: () => void;
 }
 
-export const TokenInfo: FC<ITokenInfoProps> = ({
-	token,
-	setSelectedToken,
-	setShowModal,
-}) => {
-	const { address } = useAccount();
-	const { data, isFetched } = useBalance({
-		address: address,
-		token: 'address' in token ? token.address : undefined,
-	});
-
-	const disable = !isFetched || data?.value === 0n;
-
+export const TokenInfo: FC<ITokenInfoProps> = ({ token, disable, onClick }) => {
 	return (
 		<Wrapper
 			gap='16px'
 			alignItems='center'
+			disabled={disable}
 			onClick={() => {
 				if (disable) return;
-				setSelectedToken({ token, balance: data?.value });
-				setShowModal(false);
+				onClick();
 			}}
-			disabled={disable}
 		>
 			<TokenIcon symbol={token.symbol} size={32} />
 			<InfoWrapper flexDirection='column' alignItems='flex-start'>
 				<TopRow justifyContent='space-between'>
 					<Caption medium>{token.symbol}</Caption>
 					<Flex gap='4px'>
-						<Caption medium>{data?.formatted}</Caption>
+						{/* <Caption medium>{data?.formatted}</Caption> */}
 						<GrayCaption>{token.symbol}</GrayCaption>
 					</Flex>
 				</TopRow>
