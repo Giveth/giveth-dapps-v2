@@ -12,6 +12,7 @@ export type IToken = {
 
 export interface ISuperToken extends IToken {
 	underlyingToken: IToken;
+	isSuperToken: boolean;
 }
 
 export interface ISuperfluidStream {

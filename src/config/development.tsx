@@ -344,6 +344,7 @@ const config: EnvConfig = {
 				address: '0x34cf77c14f39c81adbdad922af538f05633fa07e',
 				name: 'fake Super Giveth Token',
 				symbol: 'fGIVx',
+				isSuperToken: true,
 			},
 			{
 				underlyingToken: {
@@ -356,6 +357,7 @@ const config: EnvConfig = {
 				address: '0xe01f8743677da897f4e7de9073b57bf034fc2433',
 				name: 'Super ETH',
 				symbol: 'ETHx',
+				isSuperToken: true,
 			},
 		],
 	},
