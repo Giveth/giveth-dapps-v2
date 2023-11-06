@@ -11,7 +11,6 @@ import {
 } from '@giveth/ui-design-system';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ChainNativeCurrency } from 'viem/_types/types/chain';
 import { formatUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import { Flex } from '@/components/styled-components/Flex';
@@ -25,12 +24,17 @@ import config from '@/configuration';
 import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
 
 export interface ISelectTokenWithBalance {
-	token: IToken | ChainNativeCurrency;
+	token: IToken;
 	balance?: bigint;
+}
+
+export interface ITokenStreams {
+	[key: string]: ISuperfluidStream[];
 }
 
 export const RecurringDonationCard = () => {
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
+	const [tokenStreams, setTokenStreams] = useState<ITokenStreams>({});
 	const [selectedToken, setSelectedToken] = useState<
 		ISelectTokenWithBalance | undefined
 	>();
@@ -53,16 +57,15 @@ export const RecurringDonationCard = () => {
 			console.log('streams', streams);
 
 			//categorize streams by token
-			const tokenStreams: {
-				[key: string]: ISuperfluidStream[];
-			} = {};
+			const _tokenStreams: ITokenStreams = {};
 			streams.forEach(stream => {
-				if (!tokenStreams[stream.token.id]) {
-					tokenStreams[stream.token.id] = [];
+				if (!_tokenStreams[stream.token.id]) {
+					_tokenStreams[stream.token.id] = [];
 				}
-				tokenStreams[stream.token.id].push(stream);
+				_tokenStreams[stream.token.id].push(stream);
 			});
-			console.log('tokenStreams', tokenStreams);
+			setTokenStreams(_tokenStreams);
+			console.log('tokenStreams', _tokenStreams);
 		};
 		fetchData();
 	}, [address]);
@@ -138,6 +141,7 @@ export const RecurringDonationCard = () => {
 			</RecurringSection>
 			{showSelectTokenModal && (
 				<SelectTokenModal
+					tokenStreams={tokenStreams}
 					setShowModal={setShowSelectTokenModal}
 					setSelectedToken={setSelectedToken}
 				/>
