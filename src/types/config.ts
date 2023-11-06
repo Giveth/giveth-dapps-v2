@@ -8,6 +8,8 @@ export type IToken = {
 	/** 2-6 characters long */
 	symbol: string;
 	decimals: number;
+	isSuperToken?: boolean;
+	underlyingToken?: IToken;
 };
 
 export interface ISuperToken extends IToken {
@@ -22,6 +24,7 @@ export interface ISuperfluidStream {
 	sender: {
 		id: Address;
 	};
+	token: ISuperToken;
 }
 
 export enum StakingPlatform {
