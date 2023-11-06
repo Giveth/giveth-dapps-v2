@@ -119,6 +119,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				<TokenInfo
 					key={token.symbol}
 					token={token}
+					balance={balances[token.symbol]}
 					disable={balances[token.symbol] === 0n}
 					onClick={() => {
 						setSelectedToken({
@@ -133,6 +134,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				<TokenInfo
 					key={token.underlyingToken.symbol}
 					token={token.underlyingToken}
+					balance={balances[token.underlyingToken.symbol]}
 					disable={balances[token.symbol] === 0n}
 					onClick={() => {
 						setSelectedToken({
