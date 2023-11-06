@@ -18,7 +18,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
-import { ISuperfluidStream, IToken } from '@/types/config';
+import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import { TokenIcon } from './TokenIcon';
 import { gqlRequest } from '@/helpers/requests';
 import config from '@/configuration';
@@ -51,6 +51,18 @@ export const RecurringDonationCard = () => {
 			);
 			const streams: ISuperfluidStream[] = data?.streams;
 			console.log('streams', streams);
+
+			//categorize streams by token
+			const tokenStreams: {
+				[key: string]: ISuperfluidStream[];
+			} = {};
+			streams.forEach(stream => {
+				if (!tokenStreams[stream.token.id]) {
+					tokenStreams[stream.token.id] = [];
+				}
+				tokenStreams[stream.token.id].push(stream);
+			});
+			console.log('tokenStreams', tokenStreams);
 		};
 		fetchData();
 	}, [address]);
