@@ -8,7 +8,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { useDonateData } from '@/context/donate.context';
 import { getActiveRound } from '@/helpers/qf';
-import config from '@/configuration';
+import { chainNameById } from '@/lib/network';
 
 interface IProps extends IModal {
 	setShowDonateModal: (showDonateModal: boolean) => void;
@@ -21,8 +21,7 @@ const QFModal: FC<IProps> = ({ setShowModal, setShowDonateModal }) => {
 	const { project } = useDonateData();
 	const activeRound = getActiveRound(project.qfRounds);
 	const roundName = activeRound?.name;
-	const eligibleChainName =
-		config.NETWORKS_CONFIG[activeRound?.eligibleNetworks[0] || 1].name;
+	const eligibleChainName = chainNameById(activeRound?.eligibleNetworks[0]);
 
 	return (
 		<Modal
