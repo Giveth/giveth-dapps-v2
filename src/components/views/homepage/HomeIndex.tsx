@@ -58,12 +58,12 @@ const HomeIndex: FC<IHomeRoute> = props => {
 		fetchFeaturedUpdateProjects();
 	}, [userData?.id]);
 
-	const torusBannerViewed =
-		!isSSRMode && localStorage.getItem(StorageLabel.TORUS_BANNER_VIEWED);
+	const showTorusBanner =
+		!isSSRMode && !localStorage.getItem(StorageLabel.TORUS_BANNER_VIEWED);
 
 	return (
 		<Wrapper>
-			{!torusBannerViewed && <TorusBanner />}
+			{showTorusBanner && <TorusBanner />}
 			<IntroBlock />
 			<Separator />
 			<Separator />
