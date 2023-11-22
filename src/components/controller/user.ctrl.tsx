@@ -1,17 +1,23 @@
 import { useEffect, useRef } from 'react';
 import { useAccount, useConnect } from 'wagmi';
 import { useAppDispatch } from '@/features/hooks';
-import { setToken, setIsEnabled } from '@/features/user/user.slice';
+import {
+	setToken,
+	setIsEnabled,
+	setIsLoading,
+} from '@/features/user/user.slice';
 import StorageLabel from '@/lib/localStorage';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { getTokens } from '@/helpers/user';
 
 const UserController = () => {
-	const { address, isConnected } = useAccount();
+	const { address, isConnected, isConnecting } = useAccount();
 	const dispatch = useAppDispatch();
 	const { connect, connectors } = useConnect();
-
 	const isMounted = useRef(false);
+	const isFirstRender = useRef(true);
+	const isConnectingRef = useRef(isConnecting);
+	const isConnectedRef = useRef(isConnected);
 
 	useEffect(() => {
 		if (isConnected) return;
@@ -34,6 +40,19 @@ const UserController = () => {
 			connect({ connector });
 		}
 	}, []);
+
+	useEffect(() => {
+		isConnectingRef.current = isConnecting;
+		isConnectedRef.current = isConnected;
+		if (!isConnecting && isFirstRender.current) {
+			setTimeout(() => {
+				if (!isConnectingRef.current && !isConnectedRef.current) {
+					dispatch(setIsLoading(false));
+				}
+			}, 1000);
+		}
+		isFirstRender.current = false;
+	}, [isConnecting]);
 
 	useEffect(() => {
 		if (isMounted.current) {

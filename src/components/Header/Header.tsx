@@ -29,7 +29,6 @@ import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import {
-	setShowWelcomeModal,
 	setShowCompleteProfile,
 	setShowSearchModal,
 } from '@/features/modal/modal.slice';
@@ -158,14 +157,6 @@ const Header: FC<IHeader> = () => {
 
 		return () => window.removeEventListener('scroll', onScroll);
 	}, [showHeader]);
-
-	const handleModals = () => {
-		if (isGIVeconomyRoute) {
-			openConnectModal?.();
-		} else {
-			dispatch(setShowWelcomeModal(true));
-		}
-	};
 
 	const { modalCallback: signInThenCreate } = useModalCallback(() =>
 		router.push(Routes.CreateProject),
@@ -300,7 +291,7 @@ const Header: FC<IHeader> = () => {
 								? 'component.button.connect_wallet'
 								: 'component.button.sign_in',
 						})}
-						onClick={handleModals}
+						onClick={() => openConnectModal?.()}
 					/>
 				)}
 			</Flex>
