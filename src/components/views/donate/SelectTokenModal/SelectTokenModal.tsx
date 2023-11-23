@@ -1,5 +1,11 @@
 import styled from 'styled-components';
-import { mediaQueries } from '@giveth/ui-design-system';
+import {
+	IconGIVBack,
+	SublineBold,
+	brandColors,
+	mediaQueries,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import {
 	useState,
 	type Dispatch,
@@ -110,6 +116,8 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				return acc;
 			}, {} as IBalances);
 
+			console.log('newBalances', newBalances);
+
 			// Update the state with the new balances
 			setBalances(newBalances);
 		};
@@ -119,8 +127,24 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	}, [address]); // Dependency array includes address to refetch if it changes
 
 	return (
-		<Wrapper>
-			{allTokens.map(token =>
+		<>
+			<Wrapper>
+				{/* {Object.keys(tokenStreams).map(tokenId => (
+				<StreamInfo
+					key={tokenId}
+					stream={tokenStreams[tokenId]}
+					balance={balances[tokenId]}
+					disable={!balances[tokenId] || balances[tokenId] === 0n}
+					onClick={() => {
+						setSelectedToken({
+							token,
+							balance: balances[tokenId],
+						});
+						setShowModal(false);
+					}}
+				/>
+			))} */}
+				{/* {allTokens.map(token =>
 				tokenStreams[token.id] ? null : (
 					<TokenInfo
 						key={token.symbol}
@@ -140,23 +164,30 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						}}
 					/>
 				),
-			)}
-			{allTokens.map(token => (
-				<TokenInfo
-					key={token.underlyingToken.symbol}
-					token={token.underlyingToken}
-					balance={balances[token.underlyingToken.symbol]}
-					disable={balances[token.symbol] === 0n}
-					onClick={() => {
-						setSelectedToken({
-							token: token.underlyingToken,
-							balance: balances[token.symbol],
-						});
-						setShowModal(false);
-					}}
-				/>
-			))}
-		</Wrapper>
+			)} */}
+				{allTokens.map(token => (
+					<TokenInfo
+						key={token.underlyingToken.symbol}
+						token={token.underlyingToken}
+						balance={balances[token.underlyingToken.symbol]}
+						disable={balances[token.underlyingToken.symbol] === 0n}
+						onClick={() => {
+							setSelectedToken({
+								token: token.underlyingToken,
+								balance: balances[token.underlyingToken.symbol],
+							});
+							setShowModal(false);
+						}}
+					/>
+				))}
+			</Wrapper>
+			<GIVbackWrapper>
+				<Flex gap='8px' alignItems='center'>
+					<IconGIVBack size={24} color={brandColors.giv[500]} />
+					<SublineBold>GIVbacks eligible tokens</SublineBold>
+				</Flex>
+			</GIVbackWrapper>
+		</>
 	);
 };
 
@@ -167,4 +198,9 @@ const Wrapper = styled(Flex)`
 	${mediaQueries.tablet} {
 		width: 548px;
 	}
+`;
+
+const GIVbackWrapper = styled.div`
+	padding: 12px 24px;
+	background: ${neutralColors.gray[200]};
 `;
