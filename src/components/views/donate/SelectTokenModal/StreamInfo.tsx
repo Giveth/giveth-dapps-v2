@@ -7,10 +7,9 @@ import { TokenIcon } from '../TokenIcon';
 import { ISuperfluidStream } from '@/types/superFluid';
 
 interface IStreamInfoProps {
-	stream: ISuperfluidStream;
+	stream: ISuperfluidStream[];
 	balance: bigint;
 	disable: boolean;
-	isSuperToken?: boolean;
 	onClick: () => void;
 }
 
@@ -18,7 +17,6 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 	stream,
 	balance,
 	disable,
-	isSuperToken,
 	onClick,
 }) => {
 	return (
@@ -32,23 +30,23 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			}}
 		>
 			<TokenIcon
-				symbol={stream.token.symbol}
+				symbol={stream[0].token.symbol}
 				size={32}
-				isSuperToken={isSuperToken}
+				isSuperToken={true}
 			/>
 			<InfoWrapper flexDirection='column' alignItems='flex-start'>
 				<TopRow justifyContent='space-between'>
-					<Caption medium>{stream.token.symbol}</Caption>
+					<Caption medium>{stream[0].token.symbol}</Caption>
 					<Flex gap='4px'>
 						<Caption medium>
 							{balance !== undefined
-								? formatUnits(balance, stream.token.decimals)
+								? formatUnits(balance, stream[0].token.decimals)
 								: '--'}
 						</Caption>
-						<GrayCaption>{stream.token.symbol}</GrayCaption>
+						<GrayCaption>{stream[0].token.symbol}</GrayCaption>
 					</Flex>
 				</TopRow>
-				<GrayCaption>{stream.token.name}</GrayCaption>
+				<GrayCaption>{stream[0].token.name}</GrayCaption>
 			</InfoWrapper>
 		</Wrapper>
 	);
