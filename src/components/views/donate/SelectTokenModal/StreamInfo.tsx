@@ -20,6 +20,12 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 	disable,
 	onClick,
 }) => {
+	console.log(
+		'stream[0].currentFlowRate',
+		balance,
+		BigInt(stream[0].currentFlowRate),
+		2628000n,
+	);
 	return (
 		<Wrapper
 			gap='16px'
@@ -36,7 +42,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 				isSuperToken={true}
 			/>
 			<InfoWrapper flexDirection='column' alignItems='flex-start'>
-				<TopRow justifyContent='space-between'>
+				<Row justifyContent='space-between'>
 					<Symbol>
 						<Caption medium>{stream[0].token.symbol}</Caption>
 						<GrayCaption>{stream[0].token.name}</GrayCaption>
@@ -55,7 +61,20 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 						</Caption>
 						<Caption medium>{stream[0].token.symbol}</Caption>
 					</Balance>
-				</TopRow>
+				</Row>
+				<Row justifyContent='space-between'>
+					<Flex gap='4px'>
+						<GrayCaption>Stream runs out in</GrayCaption>
+						<Caption medium>
+							{balance !== undefined &&
+								(
+									balance /
+									BigInt(stream[1].currentFlowRate) /
+									2628000n
+								).toString()}
+						</Caption>
+					</Flex>
+				</Row>
 			</InfoWrapper>
 		</Wrapper>
 	);
@@ -78,7 +97,7 @@ const InfoWrapper = styled(Flex)`
 	flex: 1;
 `;
 
-const TopRow = styled(Flex)`
+const Row = styled(Flex)`
 	width: 100%;
 `;
 
