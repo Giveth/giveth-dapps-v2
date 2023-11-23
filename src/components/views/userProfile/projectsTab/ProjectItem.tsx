@@ -17,6 +17,7 @@ import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAd
 import ProjectActions from './ProjectActions';
 import ClaimRecurringDonationModal from './ClaimRecurringDonationModal';
 import ProjectStatusBadge from './ProjectStatusBadge';
+import ProjectVerificationBadge from './ProjectVerificationBadge';
 
 interface IProjectItem {
 	project: IProject;
@@ -72,7 +73,9 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 								id: 'label.verification_status',
 							})}
 						</P>
-						<div>1 </div>
+						<div>
+							<ProjectVerificationBadge project={project} />
+						</div>
 					</Flex>
 					<Flex justifyContent='space-between'>
 						<div>
