@@ -16,6 +16,7 @@ import { smallFormatDate } from '@/lib/helpers';
 import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
 import ProjectActions from './ProjectActions';
 import ClaimRecurringDonationModal from './ClaimRecurringDonationModal';
+import ProjectStatusBadge from './ProjectStatusBadge';
 
 interface IProjectItem {
 	project: IProject;
@@ -57,7 +58,9 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 				<ProjectStatusesContainer>
 					<Flex justifyContent='space-between'>
 						<P>{formatMessage({ id: 'label.project_status' })}</P>
-						<div>1</div>
+						<div>
+							<ProjectStatusBadge project={project} />
+						</div>
 					</Flex>
 					<Flex justifyContent='space-between'>
 						<P>Listed on public site</P>
