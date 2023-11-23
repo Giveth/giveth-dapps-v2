@@ -46,7 +46,9 @@ interface IImageIconProps {
 }
 
 const ImageIcon: FC<IImageIconProps> = ({ symbol }) => {
-	const [src, setSrc] = useState(`/images/tokens/${symbol}.svg`);
+	const [src, setSrc] = useState(
+		`/images/tokens/${symbol?.toUpperCase()}.svg`,
+	);
 	return (
 		<Image
 			alt={symbol}
