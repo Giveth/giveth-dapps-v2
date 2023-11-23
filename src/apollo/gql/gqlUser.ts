@@ -169,6 +169,7 @@ export const FETCH_USER_STREAMS = `
 					decimals
 				}
 			}
+			currentFlowRate
 		}
 	}
 `;
