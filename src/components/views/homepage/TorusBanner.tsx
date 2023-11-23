@@ -33,9 +33,11 @@ const TorusBanner = () => {
 					<Caption>
 						{formatMessage({ id: 'label.torus_banner_text_1' })}
 						<ExternalLink href={links.Torus_MM_DOCS}>
-							{formatMessage({
-								id: 'label.torus_banner_text_2',
-							})}
+							<Underline>
+								{formatMessage({
+									id: 'label.torus_banner_text_2',
+								})}
+							</Underline>
 						</ExternalLink>
 					</Caption>
 				</div>
@@ -46,6 +48,10 @@ const TorusBanner = () => {
 		</Wrapper>
 	);
 };
+
+const Underline = styled.span`
+	text-decoration: underline;
+`;
 
 const Right = styled(Flex)`
 	cursor: pointer;
