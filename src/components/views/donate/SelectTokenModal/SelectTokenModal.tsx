@@ -23,6 +23,7 @@ import config from '@/configuration';
 import { TokenInfo } from './TokenInfo';
 import { fetchBalance } from '@/services/token';
 import { IToken } from '@/types/superFluid';
+import { StreamInfo } from './StreamInfo';
 import type {
 	ISelectTokenWithBalance,
 	ITokenStreams,
@@ -130,21 +131,29 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	return (
 		<>
 			<Wrapper>
-				{/* {Object.keys(tokenStreams).map(tokenId => (
-				<StreamInfo
-					key={tokenId}
-					stream={tokenStreams[tokenId]}
-					balance={balances[tokenId]}
-					disable={!balances[tokenId] || balances[tokenId] === 0n}
-					onClick={() => {
-						setSelectedToken({
-							token,
-							balance: balances[tokenId],
-						});
-						setShowModal(false);
-					}}
-				/>
-			))} */}
+				<Title medium>Stream Balances</Title>
+				{Object.keys(tokenStreams).map(tokenId => {
+					const token = allTokens.find(
+						token => token.id === tokenId,
+					) as IToken;
+					return (
+						<StreamInfo
+							key={tokenId}
+							stream={tokenStreams[tokenId]}
+							balance={balances[tokenId]}
+							disable={
+								!balances[tokenId] || balances[tokenId] === 0n
+							}
+							onClick={() => {
+								setSelectedToken({
+									token,
+									balance: balances[tokenId],
+								});
+								setShowModal(false);
+							}}
+						/>
+					);
+				})}
 				{/* {allTokens.map(token =>
 				tokenStreams[token.id] ? null : (
 					<TokenInfo
