@@ -1,4 +1,9 @@
-import { Caption, neutralColors } from '@giveth/ui-design-system';
+import {
+	Caption,
+	IconGIVBack16,
+	brandColors,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC } from 'react';
 import { formatUnits } from 'viem';
@@ -31,11 +36,16 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 				onClick();
 			}}
 		>
-			<TokenIcon
-				symbol={token.symbol}
-				size={32}
-				isSuperToken={isSuperToken}
-			/>
+			<TokenIconWrapper>
+				<TokenIcon
+					symbol={token.symbol}
+					size={32}
+					isSuperToken={isSuperToken}
+				/>
+				<GIVBackBadge>
+					<IconGIVBack16 size={16} color={brandColors.giv[500]} />
+				</GIVBackBadge>
+			</TokenIconWrapper>
 			<InfoWrapper flexDirection='column' alignItems='flex-start'>
 				<TopRow justifyContent='space-between'>
 					<Caption medium>{token.symbol}</Caption>
@@ -67,6 +77,20 @@ const Wrapper = styled(Flex)<IWrapper>`
 		background: ${neutralColors.gray[200]};
 	}
 	border-radius: 8px;
+`;
+
+const TokenIconWrapper = styled.div`
+	position: relative;
+`;
+
+const GIVBackBadge = styled.div`
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 16px;
+	height: 16px;
+	background: ${neutralColors.gray[100]};
+	border-radius: 50%;
 `;
 
 const InfoWrapper = styled(Flex)`
