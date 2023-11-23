@@ -10,6 +10,7 @@ import { formatUnits } from 'viem';
 import { Flex } from '@/components/styled-components/Flex';
 import { TokenIcon } from '../TokenIcon';
 import { IToken } from '@/types/superFluid';
+import { limitFraction } from '@/helpers/number';
 
 interface ITokenInfoProps {
 	token: IToken;
@@ -52,7 +53,9 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 					<Balance gap='4px'>
 						<Caption medium>
 							{balance !== undefined
-								? formatUnits(balance, token.decimals)
+								? limitFraction(
+										formatUnits(balance, token.decimals),
+								  )
 								: '--'}
 						</Caption>
 						{token.isSuperToken && (
@@ -104,7 +107,7 @@ const TopRow = styled(Flex)`
 const Balance = styled(Flex)`
 	padding: 2px 8px;
 	border-radius: 8px;
-	background: var(--neutral-gray-300, #ebecf2);
+	background: ${neutralColors.gray[300]};
 	align-items: flex-start;
 	gap: 8px;
 `;

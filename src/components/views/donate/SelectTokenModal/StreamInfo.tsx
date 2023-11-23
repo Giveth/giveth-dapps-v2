@@ -5,6 +5,7 @@ import { formatUnits } from 'viem';
 import { Flex } from '@/components/styled-components/Flex';
 import { TokenIcon } from '../TokenIcon';
 import { ISuperfluidStream } from '@/types/superFluid';
+import { limitFraction } from '@/helpers/number';
 
 interface IStreamInfoProps {
 	stream: ISuperfluidStream[];
@@ -44,7 +45,12 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 						<GrayCaption>Stream Balance</GrayCaption>
 						<Caption medium>
 							{balance !== undefined
-								? formatUnits(balance, stream[0].token.decimals)
+								? limitFraction(
+										formatUnits(
+											balance,
+											stream[0].token.decimals,
+										),
+								  )
 								: '--'}
 						</Caption>
 						<Caption medium>{stream[0].token.symbol}</Caption>
@@ -81,7 +87,7 @@ const Symbol = styled(Flex)`
 `;
 
 const Balance = styled(Flex)`
-	background: ${neutralColors.gray[200]};
+	background: ${neutralColors.gray[300]};
 	padding: 2px 8px;
 	align-items: flex-start;
 	gap: 8px;
