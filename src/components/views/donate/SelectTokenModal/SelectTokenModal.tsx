@@ -140,14 +140,15 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						<StreamInfo
 							key={tokenId}
 							stream={tokenStreams[tokenId]}
-							balance={balances[tokenId]}
+							balance={balances[token.symbol]}
 							disable={
-								!balances[tokenId] || balances[tokenId] === 0n
+								!balances[token.symbol] ||
+								balances[token.symbol] === 0n
 							}
 							onClick={() => {
 								setSelectedToken({
 									token,
-									balance: balances[tokenId],
+									balance: balances[token.symbol],
 								});
 								setShowModal(false);
 							}}
