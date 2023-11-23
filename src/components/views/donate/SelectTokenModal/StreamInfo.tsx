@@ -36,17 +36,20 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			/>
 			<InfoWrapper flexDirection='column' alignItems='flex-start'>
 				<TopRow justifyContent='space-between'>
-					<Caption medium>{stream[0].token.symbol}</Caption>
-					<Flex gap='4px'>
+					<Symbol>
+						<Caption medium>{stream[0].token.symbol}</Caption>
+						<GrayCaption>{stream[0].token.name}</GrayCaption>
+					</Symbol>
+					<Balance gap='4px'>
+						<GrayCaption>Stream Balance</GrayCaption>
 						<Caption medium>
 							{balance !== undefined
 								? formatUnits(balance, stream[0].token.decimals)
 								: '--'}
 						</Caption>
-						<GrayCaption>{stream[0].token.symbol}</GrayCaption>
-					</Flex>
+						<Caption medium>{stream[0].token.symbol}</Caption>
+					</Balance>
 				</TopRow>
-				<GrayCaption>{stream[0].token.name}</GrayCaption>
 			</InfoWrapper>
 		</Wrapper>
 	);
@@ -71,6 +74,18 @@ const InfoWrapper = styled(Flex)`
 
 const TopRow = styled(Flex)`
 	width: 100%;
+`;
+
+const Symbol = styled(Flex)`
+	gap: 4px;
+`;
+
+const Balance = styled(Flex)`
+	background: ${neutralColors.gray[200]};
+	padding: 2px 8px;
+	align-items: flex-start;
+	gap: 8px;
+	border-radius: 8px;
 `;
 
 const GrayCaption = styled(Caption)`
