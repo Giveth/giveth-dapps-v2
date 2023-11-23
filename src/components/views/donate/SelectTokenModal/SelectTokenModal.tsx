@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import {
+	Caption,
 	IconGIVBack,
 	SublineBold,
 	brandColors,
@@ -165,6 +166,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 					/>
 				),
 			)} */}
+				<Title medium>Eligible Tokens</Title>
 				{allTokens.map(token => (
 					<TokenInfo
 						key={token.underlyingToken.symbol}
@@ -198,6 +200,13 @@ const Wrapper = styled(Flex)`
 	${mediaQueries.tablet} {
 		width: 548px;
 	}
+`;
+
+const Title = styled(Caption)`
+	text-align: left;
+	padding-bottom: 4px;
+	border-bottom: 1px solid ${neutralColors.gray[300]};
+	color: ${neutralColors.gray[700]};
 `;
 
 const GIVbackWrapper = styled.div`
