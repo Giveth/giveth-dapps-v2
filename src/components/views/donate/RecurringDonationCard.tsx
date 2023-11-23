@@ -46,6 +46,8 @@ export const RecurringDonationCard = () => {
 
 	useEffect(() => {
 		if (!address) return;
+
+		// fetch user's streams
 		const fetchData = async () => {
 			const { data } = await gqlRequest(
 				config.OPTIMISM_CONFIG.superFluidSubgraph,

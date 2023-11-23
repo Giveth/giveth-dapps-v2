@@ -39,14 +39,16 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 			<InfoWrapper flexDirection='column' alignItems='flex-start'>
 				<TopRow justifyContent='space-between'>
 					<Caption medium>{token.symbol}</Caption>
-					<Flex gap='4px'>
+					<Balance gap='4px'>
 						<Caption medium>
 							{balance !== undefined
 								? formatUnits(balance, token.decimals)
 								: '--'}
 						</Caption>
-						<GrayCaption>{token.symbol}</GrayCaption>
-					</Flex>
+						{token.isSuperToken && (
+							<GrayCaption medium>{token.symbol}</GrayCaption>
+						)}
+					</Balance>
 				</TopRow>
 				<GrayCaption>{token.name}</GrayCaption>
 			</InfoWrapper>
@@ -75,6 +77,14 @@ const TopRow = styled(Flex)`
 	width: 100%;
 `;
 
+const Balance = styled(Flex)`
+	padding: 2px 8px;
+	border-radius: 8px;
+	background: var(--neutral-gray-300, #ebecf2);
+	align-items: flex-start;
+	gap: 8px;
+`;
+
 const GrayCaption = styled(Caption)`
-	color: ${neutralColors.gray[700]};
+	/* color: ${neutralColors.gray[700]}; */
 `;
