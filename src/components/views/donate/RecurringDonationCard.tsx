@@ -72,6 +72,8 @@ export const RecurringDonationCard = () => {
 		fetchData();
 	}, [address]);
 
+	console.log('selectedToken', selectedToken);
+
 	return (
 		<>
 			<Title weight={700}>
@@ -113,6 +115,9 @@ export const RecurringDonationCard = () => {
 									<TokenIcon
 										symbol={selectedToken.token.symbol}
 										size={24}
+										isSuperToken={
+											selectedToken.token.isSuperToken
+										}
 									/>
 									<B>{selectedToken.token.symbol}</B>
 								</Flex>

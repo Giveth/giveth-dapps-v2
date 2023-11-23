@@ -77,7 +77,7 @@ const TopRow = styled(Flex)`
 `;
 
 const Symbol = styled(Flex)`
-	gap: 4px;
+	gap: 8px;
 `;
 
 const Balance = styled(Flex)`
