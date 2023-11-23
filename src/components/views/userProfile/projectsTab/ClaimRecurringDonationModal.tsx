@@ -12,8 +12,8 @@ import { IconEthereum } from '@/components/Icons/Eth';
 import { IconPolygon } from '@/components/Icons/Polygon';
 import { Modal } from '@/components/modals/Modal';
 import { Flex } from '@/components/styled-components/Flex';
-import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 interface IClaimRecurringDonationModal extends IModal {
 	project: IProject;
