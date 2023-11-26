@@ -20,12 +20,12 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 	disable,
 	onClick,
 }) => {
-	console.log(
-		'stream[0].currentFlowRate',
-		balance,
-		BigInt(stream[0].currentFlowRate),
-		2628000n,
+	const totalFlowRate = stream.reduce(
+		(acc, curr) => acc + BigInt(curr.currentFlowRate),
+		0n,
 	);
+	const remainingMonths =
+		balance !== undefined ? balance / totalFlowRate / 2628000n : 0n;
 	return (
 		<Wrapper
 			gap='16px'
@@ -62,19 +62,19 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 						<Caption medium>{stream[0].token.symbol}</Caption>
 					</Balance>
 				</Row>
-				<Row justifyContent='space-between'>
-					<Flex gap='4px'>
-						<GrayCaption>Stream runs out in</GrayCaption>
-						<Caption medium>
-							{balance !== undefined &&
-								(
-									balance /
-									BigInt(stream[1].currentFlowRate) /
-									2628000n
-								).toString()}
-						</Caption>
-					</Flex>
-				</Row>
+				{totalFlowRate !== undefined && (
+					<Row justifyContent='space-between'>
+						<Flex gap='4px'>
+							<GrayCaption>Stream runs out in</GrayCaption>
+							<Caption medium>
+								{remainingMonths.toString()}
+							</Caption>
+							<Caption>
+								{remainingMonths === 1n ? 'month' : 'months'}
+							</Caption>
+						</Flex>
+					</Row>
+				)}
 			</InfoWrapper>
 		</Wrapper>
 	);
