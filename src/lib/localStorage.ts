@@ -14,12 +14,13 @@ const StorageLabel = {
 	TOKEN: getLocalTokenLabel(),
 	TOKENS: 'tokens',
 	FIRSTMODALSHOWED: 'FIRSTMODALSHOWED',
-	LOCALE: 'locale',
+	LOCALE: 'appLocale',
 	CHAINVINEREFERRED: 'chainvineReferred',
 	PASSPORT: 'passport',
 	WAGMI_WALLET: 'wagmi.wallet',
 	WAGMI_CONNECTED: 'wagmi.connected',
 	CREATE_PROJECT_FORM: 'createProjectForm',
+	TORUS_BANNER_VIEWED: 'torusBannerViewed',
 };
 
 export const setWithExpiry = (key: string, value: any, ttl: number) => {

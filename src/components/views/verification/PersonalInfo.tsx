@@ -143,123 +143,119 @@ const PersonalInfo = () => {
 	}, [verificationData]);
 
 	return (
-		<>
-			<form onSubmit={handleSubmit(handleFormSubmit)}>
-				<div>
-					<H6 weight={700}>
-						{formatMessage({ id: 'label.personal_info' })}
-					</H6>
-					<br />
-					<Input
-						label={formatMessage({
-							id: 'page.verification.personal_info.one',
-						})}
-						disabled
-						registerName='name'
-						register={register}
-					/>
-					<Input
-						label={formatMessage({
-							id: 'page.verification.personal_info.two',
-						})}
-						disabled
-						registerName='walletAddress'
-						register={register}
-					/>
-					<EmailSection>
-						{showMailInput() ? (
-							<>
-								<Input
-									key='1'
+		<form onSubmit={handleSubmit(handleFormSubmit)}>
+			<div>
+				<H6 weight={700}>
+					{formatMessage({ id: 'label.personal_info' })}
+				</H6>
+				<br />
+				<Input
+					label={formatMessage({
+						id: 'page.verification.personal_info.one',
+					})}
+					disabled
+					registerName='name'
+					register={register}
+				/>
+				<Input
+					label={formatMessage({
+						id: 'page.verification.personal_info.two',
+					})}
+					disabled
+					registerName='walletAddress'
+					register={register}
+				/>
+				<EmailSection>
+					{showMailInput() ? (
+						<>
+							<Input
+								key='1'
+								label={formatMessage({
+									id: 'page.verification.personal_info.three',
+								})}
+								registerName='email'
+								register={register}
+								registerOptions={requiredOptions.email}
+								error={errors.email}
+								autoFocus
+							/>
+							{isDraft && (
+								<ButtonStyled
+									loading={loading}
+									color={brandColors.giv[500]}
 									label={formatMessage({
-										id: 'page.verification.personal_info.three',
+										id: 'label.verify_email_address',
 									})}
-									registerName='email'
-									register={register}
-									registerOptions={requiredOptions.email}
-									error={errors.email}
-									autoFocus
+									size='small'
+									type='submit'
 								/>
-								{isDraft && (
-									<ButtonStyled
-										loading={loading}
+							)}
+						</>
+					) : (
+						<>
+							<Input
+								key='2'
+								label={formatMessage({
+									id: 'page.verification.personal_info.three',
+								})}
+								registerName='email'
+								register={register}
+								disabled
+							/>
+							{isDraft && (
+								<>
+									<ResendEmailButton
 										color={brandColors.giv[500]}
-										label={formatMessage({
-											id: 'label.verify_email_address',
-										})}
+										label={
+											canReSendEmail || timer === 0
+												? formatMessage({
+														id: 'label.resend_email',
+												  })
+												: `${formatMessage({
+														id: 'label.resend_email_in',
+												  })} ${addZero(
+														durationToYMDh(timer)
+															.min,
+												  )} : ${addZero(
+														durationToYMDh(timer)
+															.sec,
+												  )}`
+										}
 										size='small'
-										type='submit'
+										onClick={handleFormSubmit}
+										disabled={!canReSendEmail}
+										loading={isSentMailLoading}
 									/>
-								)}
-							</>
-						) : (
-							<>
-								<Input
-									key='2'
-									label={formatMessage({
-										id: 'page.verification.personal_info.three',
-									})}
-									registerName='email'
-									register={register}
-									disabled
-								/>
-								{isDraft && (
-									<>
-										<ResendEmailButton
-											color={brandColors.giv[500]}
-											label={
-												canReSendEmail || timer === 0
-													? formatMessage({
-															id: 'label.resend_email',
-													  })
-													: `${formatMessage({
-															id: 'label.resend_email_in',
-													  })} ${addZero(
-															durationToYMDh(
-																timer,
-															).min,
-													  )} : ${addZero(
-															durationToYMDh(
-																timer,
-															).sec,
-													  )}`
-											}
-											size='small'
-											onClick={handleFormSubmit}
-											disabled={!canReSendEmail}
-											loading={isSentMailLoading}
-										/>
-										<LightBotton
-											onClick={() => setResetMail(true)}
-											label={formatMessage({
-												id: 'label.change_email',
-											})}
-										/>
-									</>
-								)}
-							</>
-						)}
-					</EmailSection>
-				</div>
-				<div>
-					<ContentSeparator />
-					<BtnContainer>
-						<Button
-							onClick={() => setStep(0)}
-							label={`<     ${formatMessage({
-								id: 'label.prev',
-							})}`}
-						/>
-						<Button
-							onClick={handleNext}
-							label={`${formatMessage({
-								id: 'label.next',
-							})}     >`}
-						/>
-					</BtnContainer>
-				</div>
-			</form>
-		</>
+									<LightBotton
+										onClick={() => setResetMail(true)}
+										label={formatMessage({
+											id: 'label.change_email',
+										})}
+									/>
+								</>
+							)}
+						</>
+					)}
+				</EmailSection>
+			</div>
+			<div>
+				<ContentSeparator />
+				<BtnContainer>
+					<Button
+						onClick={() => setStep(0)}
+						label={`<     ${formatMessage({
+							id: 'label.prev',
+						})}`}
+					/>
+					<Button
+						onClick={handleNext}
+						label={`${formatMessage({
+							id: 'label.next',
+						})}     >`}
+					/>
+				</BtnContainer>
+			</div>
+		</form>
 	);
 };
 

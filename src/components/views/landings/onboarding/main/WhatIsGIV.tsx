@@ -26,7 +26,7 @@ const WhatIsGIV = () => {
 						GIV. You can buy give on the open market, or you can get
 						GIV as a reward for donating to{' '}
 						<InternalLink
-							href={Routes.Projects}
+							href={Routes.AllProjects}
 							title='verified projects'
 							color={brandColors.pinky[500]}
 						/>{' '}

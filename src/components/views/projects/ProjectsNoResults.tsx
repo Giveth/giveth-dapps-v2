@@ -2,6 +2,7 @@ import { brandColors, neutralColors, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries, searchSuggestions } from '@/lib/constants/constants';
 import { IMainCategory } from '@/apollo/types/types';
@@ -9,11 +10,16 @@ import Routes from '@/lib/constants/Routes';
 import { useProjectsContext } from '@/context/projects.context';
 
 const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
-	const { setVariables, isQF } = useProjectsContext();
-
-	const handleSearch = (searchTerm?: string) =>
-		setVariables(prevVariables => ({ ...prevVariables, searchTerm }));
 	const { formatMessage } = useIntl();
+	const { isQF } = useProjectsContext();
+	const router = useRouter();
+
+	const handleSearch = (searchTerm?: string) => {
+		router.push({
+			pathname: router.pathname,
+			query: { searchTerm: searchTerm },
+		});
+	};
 
 	return (
 		<Wrapper>
@@ -56,19 +62,19 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 							return (
 								<Link
 									key={`category-${index}`}
-									href={
-										category.slug === 'all'
-											? Routes.Projects
-											: `/projects/${category.slug}`
-									}
+									href={`${Routes.Projects}/${category.slug}`}
 								>
 									<MainCategoryItem
 										onClick={() => {
-											setVariables(prevVariables => ({
-												...prevVariables,
-												sortingBy: undefined,
-												filters: undefined,
-											}));
+											const updatedQuery = {
+												...router.query,
+											};
+											delete updatedQuery.sortingBy;
+											delete updatedQuery.filters;
+											router.push({
+												pathname: router.pathname,
+												query: updatedQuery,
+											});
 										}}
 									>
 										{formatMessage({ id: category.slug })}
@@ -108,6 +114,7 @@ const GrayLead = styled(LeadMedium)`
 
 const Categories = styled(FlexCenter)`
 	flex-direction: column;
+	flex-wrap: wrap;
 	gap: 8px;
 	margin: 16px;
 	${mediaQueries.tablet} {

@@ -37,7 +37,7 @@ const MainCategoryItem: FC<IProps> = props => {
 	return (
 		<Container>
 			<CategoryTitle>
-				{formatMessage({ id: mainCategoryItem.slug })}
+				{formatMessage({ id: 'projects_' + mainCategoryItem.slug })}
 			</CategoryTitle>
 			<SubCategoryItems>
 				{mainCategoryItem.categories.map(subcategory => {

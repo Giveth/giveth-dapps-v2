@@ -4,12 +4,12 @@ import {
 	ReactNode,
 	SetStateAction,
 	useContext,
-	useEffect,
 	useState,
 } from 'react';
 import { useRouter } from 'next/router';
 import { EProjectsFilter, IMainCategory, IQFRound } from '@/apollo/types/types';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
+import { sortMap } from '@/helpers/projects';
 
 interface IVariables {
 	sortingBy?: EProjectsSortBy;
@@ -22,7 +22,6 @@ interface IVariables {
 
 interface IProjectsContext {
 	variables: IVariables;
-	setVariables: Dispatch<SetStateAction<IVariables>>;
 	mainCategories: IMainCategory[];
 	selectedMainCategory?: IMainCategory;
 	qfRounds: IQFRound[];
@@ -35,14 +34,8 @@ const variablesDefaultValue = {
 	filters: undefined,
 };
 
-const variablesDefaultValueWithQF = {
-	sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
-	filters: [EProjectsFilter.ACTIVE_QF_ROUND],
-};
-
 const ProjectsContext = createContext<IProjectsContext>({
 	variables: variablesDefaultValue,
-	setVariables: () => console.log('setVariables not initialed yet!'),
 	mainCategories: [],
 	qfRounds: [],
 	isQF: false,
@@ -62,100 +55,43 @@ export const ProjectsProvider = (props: {
 		props;
 
 	const [_isQF, setIsQF] = useState(isQF);
-
-	const [variables, setVariables] = useState<IVariables>(
-		isQF ? variablesDefaultValueWithQF : variablesDefaultValue,
-	);
 	const router = useRouter();
 
-	useEffect(() => {
-		let sort = EProjectsSortBy.INSTANT_BOOSTING;
-		if (router.query.sort) {
-			switch ((router.query.sort as string).toLowerCase()) {
-				case EProjectsSortBy.MOST_FUNDED.toLowerCase():
-					sort = EProjectsSortBy.MOST_FUNDED;
-					break;
-				case EProjectsSortBy.MOST_LIKED.toLowerCase():
-					sort = EProjectsSortBy.MOST_LIKED;
-					break;
-				case EProjectsSortBy.NEWEST.toLowerCase():
-					sort = EProjectsSortBy.NEWEST;
-					break;
-				case EProjectsSortBy.OLDEST.toLowerCase():
-					sort = EProjectsSortBy.OLDEST;
-					break;
-				case EProjectsSortBy.QUALITY_SCORE.toLowerCase():
-					sort = EProjectsSortBy.QUALITY_SCORE;
-					break;
-				case EProjectsSortBy.INSTANT_BOOSTING.toLowerCase():
-					sort = EProjectsSortBy.INSTANT_BOOSTING;
-					break;
-				case EProjectsSortBy.GIVPOWER.toLowerCase():
-					sort = EProjectsSortBy.GIVPOWER;
-					break;
-				case EProjectsSortBy.RECENTLY_UPDATED.toLowerCase():
-					sort = EProjectsSortBy.RECENTLY_UPDATED;
-					break;
-				case EProjectsSortBy.ActiveQfRoundRaisedFunds.toLowerCase():
-					sort = EProjectsSortBy.ActiveQfRoundRaisedFunds;
-					break;
-				default:
-					break;
-			}
-		}
-		let filters: EProjectsFilter[] | undefined;
-		if (router.query.filter) {
-			filters = (
-				Array.isArray(router.query.filter)
-					? router.query.filter
-					: [router.query.filter]
-			) as EProjectsFilter[];
-		}
+	let sort = _isQF
+		? EProjectsSortBy.ActiveQfRoundRaisedFunds
+		: EProjectsSortBy.INSTANT_BOOSTING;
+	const sortValue = router.query.sort as string;
+	if (sortValue) sort = sortMap[sortValue.toLowerCase()];
 
-		if (_isQF) {
-			filters
-				? filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
-				: (filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
-		}
+	let filters: EProjectsFilter[] | undefined;
+	if (router.query.filter) {
+		filters = (
+			Array.isArray(router.query.filter)
+				? router.query.filter
+				: [router.query.filter]
+		) as EProjectsFilter[];
+	}
+	if (_isQF) {
+		filters
+			? filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
+			: (filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
+	}
 
-		let term = router.query.term as string;
-		let campaignSlug = router.query.campaign as string;
-		let category =
-			router.query?.slug === variables.mainCategory
-				? variables.category
-				: undefined;
-		const variablesObject = router.query?.slug
-			? {
-					...variables,
-					sortingBy: sort,
-					searchTerm: term,
-					filters,
-					campaignSlug,
-					mainCategory: router.query?.slug?.toString(),
-					category,
-			  }
-			: {
-					...variables,
-					sortingBy: sort,
-					searchTerm: term,
-					filters,
-					campaignSlug,
-			  };
-		setVariables(variablesObject);
-	}, [
-		router.query.sort,
-		router.query.term,
-		router.query.filter,
-		router.query.campaign,
-		router.query?.slug,
-		_isQF,
-	]);
+	let searchTerm = router.query.searchTerm as string;
+	let campaignSlug = router.query.campaign as string;
+	let category = router.query.category as string;
 
 	return (
 		<ProjectsContext.Provider
 			value={{
-				variables,
-				setVariables,
+				variables: {
+					sortingBy: sort,
+					searchTerm,
+					filters,
+					campaignSlug,
+					mainCategory: router.query?.slug?.toString(),
+					category,
+				},
 				mainCategories,
 				selectedMainCategory,
 				qfRounds: qfRounds || [],

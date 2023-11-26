@@ -10,6 +10,9 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 var pjson = require('./package.json');
 const generateRobotsTxt = require('./scripts/generate-robots-txt');
 
+const defaultLocale = 'en';
+const locales = ['ca', 'en', 'es'];
+
 const moduleExports = withBundleAnalyzer({
 	// Your existing module.exports
 	reactStrictMode: true,
@@ -49,6 +52,16 @@ const moduleExports = withBundleAnalyzer({
 					'https://giveth.notion.site/Giveth-s-Galactic-Impact-Quests-f8ef267e16d14acfaba41b43183c17de',
 				permanent: false,
 			},
+			{
+				source: '/projects',
+				destination: '/projects/all',
+				permanent: true,
+			},
+			{
+				source: '/qf',
+				destination: '/qf/all',
+				permanent: true,
+			},
 		];
 	},
 	webpack: (config, { isServer, dev }) => {
@@ -58,9 +71,13 @@ const moduleExports = withBundleAnalyzer({
 		return config;
 	},
 	i18n: {
-		locales: ['ca', 'en', 'es'],
-		defaultLocale: 'en',
+		locales,
+		defaultLocale,
 		localeDetection: false,
+	},
+	env: {
+		locales,
+		defaultLocale,
 	},
 });
 

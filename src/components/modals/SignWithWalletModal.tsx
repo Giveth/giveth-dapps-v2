@@ -11,13 +11,13 @@ import {
 import { useRouter } from 'next/router';
 
 import { useAccount, useNetwork } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Modal } from '@/components/modals/Modal';
 import { ETheme } from '@/features/general/general.slice';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { signToGetToken } from '@/features/user/user.thunks';
-import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { EModalEvents } from '@/hooks/useModalCallback';
 
@@ -29,7 +29,7 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 	const [loading, setLoading] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
-
+	const { open: openConnectModal } = useWeb3Modal();
 	const { address } = useAccount();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
@@ -61,7 +61,9 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 					loading={loading}
 					onClick={async () => {
 						if (!address) {
-							return dispatch(setShowWelcomeModal(true));
+							openConnectModal?.();
+							setShowModal(false);
+							return;
 						}
 						setLoading(true);
 						const signature = await dispatch(

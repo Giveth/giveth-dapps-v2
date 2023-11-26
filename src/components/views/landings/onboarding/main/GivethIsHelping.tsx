@@ -17,7 +17,7 @@ const GivethIsHelping = () => {
 						We believe we can make change and create a better world
 						to live in!
 					</H4>
-					<ExternalLink href={Routes.Projects}>
+					<ExternalLink href={Routes.AllProjects}>
 						<ButtonStyled
 							buttonType='texty-primary'
 							label='Explore projects on Giveth'

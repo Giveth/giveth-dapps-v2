@@ -17,7 +17,6 @@ import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import InfoBadge from '@/components/badges/InfoBadge';
 import { IProjectBySlug } from '@/apollo/types/gqlTypes';
-import SuccessfulCreation from '@/components/views/create/SuccessfulCreation';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import SimilarProjects from '@/components/views/project/SimilarProjects';
 import { isSSRMode } from '@/lib/helpers';
@@ -42,7 +41,7 @@ const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
 );
 const ProjectUpdates = dynamic(() => import('./projectUpdates'));
-const NotAvailableProject = dynamic(() => import('../../NotAvailableProject'), {
+const NotAvailableHandler = dynamic(() => import('../../NotAvailableHandler'), {
 	ssr: false,
 });
 const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
@@ -58,7 +57,6 @@ export enum EProjectPageTabs {
 const ProjectIndex: FC<IProjectBySlug> = () => {
 	const { formatMessage } = useIntl();
 	const [activeTab, setActiveTab] = useState(0);
-	const [creationSuccessful, setCreationSuccessful] = useState(false);
 
 	const isMobile = !useMediaQuery(device.tablet);
 	const {
@@ -102,18 +100,9 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		fetchProjectBoosters(+id, projectData?.status.name);
 	}, [id]);
 
-	if (creationSuccessful) {
+	if (!projectData || (isDraft && !isAdmin)) {
 		return (
-			<SuccessfulCreation
-				project={projectData!}
-				showSuccess={setCreationSuccessful}
-			/>
-		);
-	}
-
-	if (!projectData) {
-		return (
-			<NotAvailableProject
+			<NotAvailableHandler
 				isCancelled={isCancelled}
 				isProjectLoading={isLoading}
 			/>
