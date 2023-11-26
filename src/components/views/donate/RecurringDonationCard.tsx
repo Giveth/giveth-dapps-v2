@@ -1,5 +1,6 @@
 import {
 	B,
+	Button,
 	Caption,
 	GLink,
 	H6,
@@ -12,7 +13,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { formatUnits } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
+import { useAccount, useBalance, usePublicClient } from 'wagmi';
+import { Framework } from '@superfluid-finance/sdk-core';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -43,6 +45,7 @@ export const RecurringDonationCard = () => {
 		address: address,
 		enabled: false,
 	});
+	const provider = usePublicClient();
 
 	useEffect(() => {
 		if (!address) return;
@@ -73,6 +76,14 @@ export const RecurringDonationCard = () => {
 	}, [address]);
 
 	console.log('selectedToken', selectedToken);
+
+	const onDonate = async () => {
+		console.log('config.OPTIMISM_CONFIG.id', config.OPTIMISM_CONFIG.id);
+		const sf = await Framework.create({
+			chainId: config.OPTIMISM_CONFIG.id,
+			provider,
+		});
+	};
 
 	return (
 		<>
@@ -145,6 +156,7 @@ export const RecurringDonationCard = () => {
 							</Flex>
 						)}
 				</Flex>
+				<Button label='Donate' onClick={onDonate} />
 			</RecurringSection>
 			{showSelectTokenModal && (
 				<SelectTokenModal
