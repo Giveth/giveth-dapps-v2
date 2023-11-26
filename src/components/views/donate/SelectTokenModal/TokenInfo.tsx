@@ -49,7 +49,10 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 			</TokenIconWrapper>
 			<InfoWrapper flexDirection='column' alignItems='flex-start'>
 				<TopRow justifyContent='space-between'>
-					<Caption medium>{token.symbol}</Caption>
+					<Flex gap='4px'>
+						<Caption medium>{token.symbol}</Caption>
+						<GrayCaption>{token.name}</GrayCaption>
+					</Flex>
 					<Balance gap='4px'>
 						<Caption medium>
 							{balance !== undefined
@@ -63,7 +66,6 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 						)}
 					</Balance>
 				</TopRow>
-				<GrayCaption>{token.name}</GrayCaption>
 			</InfoWrapper>
 		</Wrapper>
 	);
@@ -113,5 +115,5 @@ const Balance = styled(Flex)`
 `;
 
 const GrayCaption = styled(Caption)`
-	/* color: ${neutralColors.gray[700]}; */
+	color: ${neutralColors.gray[700]};
 `;
