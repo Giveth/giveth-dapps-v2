@@ -6,7 +6,6 @@ import {
 	IconChevronRight,
 	IconGIVBack,
 	IconRocketInSpace16,
-	IconVerifiedBadge16,
 	mediaQueries,
 	neutralColors,
 	OutlineButton,
@@ -14,7 +13,7 @@ import {
 	semanticColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex } from '@/components/styled-components/Flex';
@@ -26,10 +25,8 @@ import { isSSRMode } from '@/lib/helpers';
 import BoostModal from '@/components/modals/Boost/BoostModal';
 import { useAppSelector } from '@/features/hooks';
 import { formatDonation } from '@/helpers/number';
-import { VerificationModal } from '@/components/modals/VerificationModal';
 
 const ProjectGIVbackToast = () => {
-	const [showVerificationModal, setShowVerificationModal] = useState(false);
 	const [showBoost, setShowBoost] = useState(false);
 	const { projectData, isAdmin } = useProjectContext();
 	const verified = projectData?.verified;
@@ -167,25 +164,11 @@ const ProjectGIVbackToast = () => {
 						/>
 					</ButtonWrapper>
 				)}
-				{isOwnerNotVerified && (
-					<ButtonWrapper>
-						<OutlineButton
-							onClick={() => setShowVerificationModal(true)}
-							label='Verify Project'
-							icon={<IconVerifiedBadge16 />}
-						/>
-					</ButtonWrapper>
-				)}
 			</Wrapper>
 			{showBoost && (
 				<BoostModal
 					projectId={projectData?.id!}
 					setShowModal={setShowBoost}
-				/>
-			)}
-			{showVerificationModal && (
-				<VerificationModal
-					onClose={() => setShowVerificationModal(false)}
 				/>
 			)}
 		</>
@@ -238,7 +221,7 @@ const Wrapper = styled(Flex)`
 	justify-content: space-between;
 	align-items: center;
 	gap: 24px;
-	padding: 16px 24px;
+	padding: 16px;
 	background: #ffffff;
 	border-radius: 16px;
 	margin-top: 12px;
