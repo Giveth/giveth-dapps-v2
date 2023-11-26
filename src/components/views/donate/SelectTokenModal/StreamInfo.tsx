@@ -29,7 +29,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 	return (
 		<Wrapper
 			gap='16px'
-			alignItems='center'
+			alignItems='flex-start'
 			disabled={disable}
 			onClick={() => {
 				if (disable) return;
@@ -41,7 +41,11 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 				size={32}
 				isSuperToken={true}
 			/>
-			<InfoWrapper flexDirection='column' alignItems='flex-start'>
+			<InfoWrapper
+				flexDirection='column'
+				alignItems='flex-start'
+				gap='8px'
+			>
 				<Row justifyContent='space-between'>
 					<Symbol>
 						<Caption medium>{stream[0].token.symbol}</Caption>
@@ -70,8 +74,16 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 								{remainingMonths.toString()}
 							</Caption>
 							<Caption>
-								{remainingMonths === 1n ? 'month' : 'months'}
+								Month
+								{remainingMonths === 1n ? '' : 's'}
 							</Caption>
+						</Flex>
+						<Flex gap='4px'>
+							<GrayCaption>Funding</GrayCaption>
+							<Caption medium>{stream.length}</Caption>
+							<GrayCaption>
+								Project{stream.length === 1 ? '' : 's'}
+							</GrayCaption>
 						</Flex>
 					</Row>
 				)}
