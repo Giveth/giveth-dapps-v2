@@ -10,7 +10,6 @@ import { useIntl } from 'react-intl';
 import { useState } from 'react';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
-import { zIndex } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import StorageLabel from '@/lib/localStorage';
 
@@ -68,9 +67,9 @@ const Left = styled(Flex)`
 const Wrapper = styled.div`
 	max-width: 1268px;
 	margin: 10px 10px 0;
-	z-index: ${zIndex.FIXED};
+	z-index: 99;
 	position: sticky;
-	top: 10px;
+	top: 185px;
 	padding: 16px;
 	background: ${semanticColors.golden[200]};
 	color: ${semanticColors.golden[700]};
@@ -79,6 +78,9 @@ const Wrapper = styled.div`
 	display: flex;
 	justify-content: space-between;
 	gap: 20px;
+	${mediaQueries.tablet} {
+		top: 159px;
+	}
 	${mediaQueries.laptopL} {
 		margin: 10px auto 0;
 	}
