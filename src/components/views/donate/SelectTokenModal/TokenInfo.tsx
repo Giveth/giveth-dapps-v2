@@ -58,6 +58,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 							{balance !== undefined
 								? limitFraction(
 										formatUnits(balance, token.decimals),
+										6,
 								  )
 								: '--'}
 						</Caption>
