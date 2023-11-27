@@ -80,15 +80,34 @@ export const RecurringDonationCard = () => {
 
 	const onDonate = async () => {
 		console.log('config.OPTIMISM_CONFIG.id', config.OPTIMISM_CONFIG.id);
-		console.log('provider', provider);
 		const _provider = getEthersProvider({
 			chainId: config.OPTIMISM_CONFIG.id,
 		});
+
+		// const signer = await getEthersSigner({
+		// 	chainId: config.OPTIMISM_CONFIG.id,
+		// });
+
 		const sf = await Framework.create({
 			chainId: config.OPTIMISM_CONFIG.id,
 			provider: _provider,
 		});
 		console.log('sf', sf);
+
+		// const superSigner = sf.createSigner({ signer: signer });
+
+		// console.log(signer);
+		// console.log(await superSigner.getAddress());
+
+		const ethx = await sf.loadSuperToken(
+			'0xe01f8743677da897f4e7de9073b57bf034fc2433',
+		);
+
+		const name = await ethx.name({ providerOrSigner: _provider });
+
+		console.log('name', name);
+
+		// ethx.upgrade({ amount: '0.001' });
 	};
 
 	return (
