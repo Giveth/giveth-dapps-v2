@@ -24,7 +24,7 @@ import { TokenIcon } from './TokenIcon';
 import { gqlRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
-import { getEthersProvider } from '@/helpers/ethers';
+import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 
 export interface ISelectTokenWithBalance {
 	token: IToken;
@@ -78,15 +78,17 @@ export const RecurringDonationCard = () => {
 
 	console.log('selectedToken', selectedToken);
 
-	const onDonate = async () => {
+	const onDonateEth = async () => {
 		console.log('config.OPTIMISM_CONFIG.id', config.OPTIMISM_CONFIG.id);
 		const _provider = getEthersProvider({
 			chainId: config.OPTIMISM_CONFIG.id,
 		});
 
-		// const signer = await getEthersSigner({
-		// 	chainId: config.OPTIMISM_CONFIG.id,
-		// });
+		const signer = await getEthersSigner({
+			chainId: config.OPTIMISM_CONFIG.id,
+		});
+
+		if (!_provider || !signer) return;
 
 		const sf = await Framework.create({
 			chainId: config.OPTIMISM_CONFIG.id,
@@ -94,20 +96,49 @@ export const RecurringDonationCard = () => {
 		});
 		console.log('sf', sf);
 
-		// const superSigner = sf.createSigner({ signer: signer });
-
-		// console.log(signer);
-		// console.log(await superSigner.getAddress());
-
-		const ethx = await sf.loadSuperToken(
+		const ethx = await sf.loadNativeAssetSuperToken(
 			'0xe01f8743677da897f4e7de9073b57bf034fc2433',
 		);
 
-		const name = await ethx.name({ providerOrSigner: _provider });
+		const upgradeOperation = await ethx.upgrade({
+			amount: '1000000000000',
+		});
 
-		console.log('name', name);
+		await upgradeOperation.exec(signer);
+	};
 
-		// ethx.upgrade({ amount: '0.001' });
+	const onDonate = async () => {
+		console.log('config.OPTIMISM_CONFIG.id', config.OPTIMISM_CONFIG.id);
+		const _provider = getEthersProvider({
+			chainId: config.OPTIMISM_CONFIG.id,
+		});
+
+		const signer = await getEthersSigner({
+			chainId: config.OPTIMISM_CONFIG.id,
+		});
+
+		if (!_provider || !signer) return;
+
+		const sf = await Framework.create({
+			chainId: config.OPTIMISM_CONFIG.id,
+			provider: _provider,
+		});
+		console.log('sf', sf);
+
+		const givx = await sf.loadWrapperSuperToken(
+			'0x34cf77c14f39c81adbdad922af538f05633fa07e',
+		);
+
+		const approve = await givx.approve({
+			amount: '1000000000000000000',
+			receiver: '0x..',
+		});
+
+		const upgradeOperation = await givx.upgrade({
+			amount: '1000000000000000000',
+		});
+
+		await upgradeOperation.exec(signer);
 	};
 
 	return (
