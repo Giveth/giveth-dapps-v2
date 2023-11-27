@@ -18,6 +18,7 @@ import ProjectActions from './ProjectActions';
 import ClaimRecurringDonationModal from './ClaimRecurringDonationModal';
 import ProjectStatusBadge from './ProjectStatusBadge';
 import ProjectVerificationBadge from './ProjectVerificationBadge';
+import ProjectQFStatus from './ProjectQFStatus';
 
 interface IProjectItem {
 	project: IProject;
@@ -56,7 +57,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 			</Flex>
 			<HorizontalDivider />
 			<Flex justifyContent='space-between'>
-				<ProjectStatusesContainer>
+				<ProjectStatusesContainer flexDirection='column' gap='16px'>
 					<Flex justifyContent='space-between'>
 						<P>{formatMessage({ id: 'label.project_status' })}</P>
 						<div>
@@ -83,10 +84,12 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 								id: 'label.quadratic_funding',
 							})}
 						</div>
-						<div>1</div>
+						<div>
+							<ProjectQFStatus project={project} />
+						</div>
 					</Flex>
 				</ProjectStatusesContainer>
-				<ProjectStatusesContainer>
+				<ProjectStatusesContainer flexDirection='column' gap='16px'>
 					<Flex justifyContent='space-between'>
 						<P>
 							<Flex alignItems='center' gap='6px'>
@@ -142,7 +145,7 @@ const HorizontalDivider = styled.hr`
 	margin: 24px 0;
 `;
 
-const ProjectStatusesContainer = styled.div`
+const ProjectStatusesContainer = styled(Flex)`
 	width: 330px;
 `;
 
