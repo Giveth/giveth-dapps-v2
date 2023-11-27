@@ -232,7 +232,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 														+qfRoundHistory.distributedFundNetwork!
 													]?.blockExplorers?.default
 														.url}
-			tx/${qfRoundHistory?.distributedFundTxHash}`}
+			/tx/${qfRoundHistory?.distributedFundTxHash}`}
 													target='_blank'
 													size='Big'
 												>
