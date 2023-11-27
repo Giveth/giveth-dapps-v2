@@ -24,6 +24,7 @@ import { TokenIcon } from './TokenIcon';
 import { gqlRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
+import { getEthersProvider } from '@/helpers/ethers';
 
 export interface ISelectTokenWithBalance {
 	token: IToken;
@@ -79,10 +80,15 @@ export const RecurringDonationCard = () => {
 
 	const onDonate = async () => {
 		console.log('config.OPTIMISM_CONFIG.id', config.OPTIMISM_CONFIG.id);
+		console.log('provider', provider);
+		const _provider = getEthersProvider({
+			chainId: config.OPTIMISM_CONFIG.id,
+		});
 		const sf = await Framework.create({
 			chainId: config.OPTIMISM_CONFIG.id,
-			provider,
+			provider: _provider,
 		});
+		console.log('sf', sf);
 	};
 
 	return (
