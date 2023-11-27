@@ -14,6 +14,7 @@ import { captureException } from '@sentry/nextjs';
 import { erc20ABI } from 'wagmi';
 import { parseEther, parseUnits } from 'viem';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
+import { getRequest } from '@/helpers/requests';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
 import config from '@/configuration';
@@ -272,6 +273,8 @@ async function handleErc20Transfer(
 		abi: erc20ABI,
 		functionName: 'transfer',
 		args: [params.to, value],
+		// @ts-ignore -- needed for safe txs
+		value: 0n,
 	});
 	console.log('Write', write);
 	console.log('ERC20 transfer result', { hash: write.hash });
@@ -526,4 +529,23 @@ export const ArrayFrom0ToN = (n: number) => {
 		b = 0;
 	while (b < n) a[b] = b++;
 	return a;
+};
+
+export const checkMultisigSession = async ({ safeAddress, chainId }: any) => {
+	try {
+		let status = 'not found';
+		const sessionCheck = await getRequest(
+			`${config.MICROSERVICES.authentication}/multisigAuthentication`,
+			false,
+			{
+				safeAddress,
+				network: chainId,
+			},
+		);
+		status = sessionCheck?.status;
+
+		return { status };
+	} catch (error) {
+		return { status: 'not found' };
+	}
 };

@@ -29,6 +29,8 @@ const ModalController = () => {
 
 	const { userData, isSignedIn } = useAppSelector(state => state.user);
 	const isRegistered = isUserRegistered(userData);
+	const { connector } = useAccount();
+	const isGSafeConnector = connector?.id === 'safe';
 
 	const dispatch = useAppDispatch();
 
@@ -59,6 +61,7 @@ const ModalController = () => {
 		<>
 			{showSignWithWallet && (
 				<SignWithWalletModal
+					isGSafeConnector={isGSafeConnector}
 					setShowModal={state =>
 						dispatch(setShowSignWithWallet(state))
 					}
