@@ -1,4 +1,4 @@
-import type { Address } from 'wagmi';
+import { type Address } from 'wagmi';
 
 export type IToken = {
 	id: Address;
