@@ -46,7 +46,6 @@ const Wrapper = styled(FlexCenter)`
 	gap: 4px;
 	background: ${brandColors.giv[100]};
 	z-index: 99;
-	top: 92px;
 	position: sticky;
 `;
 
