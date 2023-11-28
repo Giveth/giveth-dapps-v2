@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
-
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import { IProjectEdition } from '@/apollo/types/types';
@@ -11,7 +10,6 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
 	setShowSignWithWallet,
-	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
 import { WrappedSpinner } from '@/components/Spinner';
 import NotAvailableHandler from '@/components/NotAvailableHandler';
@@ -89,7 +87,6 @@ const EditIndex = () => {
 				});
 		} else {
 			if (!isLoadingUser) {
-				dispatch(setShowWelcomeModal(true));
 				setIsLoadingProject(false);
 			}
 		}

@@ -29,7 +29,6 @@ import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import {
-	setShowWelcomeModal,
 	setShowCompleteProfile,
 	setShowSearchModal,
 } from '@/features/modal/modal.slice';
@@ -134,7 +133,7 @@ const Header: FC<IHeader> = () => {
 		if (isGIVeconomyRoute) {
 			openConnectModal?.();
 		} else {
-			dispatch(setShowWelcomeModal(true));
+			// dispatch(setShowWelcomeModal(true));
 		}
 	};
 
@@ -271,7 +270,7 @@ const Header: FC<IHeader> = () => {
 								? 'component.button.connect_wallet'
 								: 'component.button.sign_in',
 						})}
-						onClick={handleModals}
+						onClick={() => openConnectModal?.()}
 					/>
 				)}
 			</Flex>

@@ -1,19 +1,28 @@
-import { H5, neutralColors, P } from '@giveth/ui-design-system';
+import {
+	Button,
+	H5,
+	IconChevronRight24,
+	neutralColors,
+	P,
+} from '@giveth/ui-design-system';
 import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
+import ExternalLink from '@/components/ExternalLink';
 
 interface IntroCardProps {
 	Icon: ReactElement;
-	LinkComponent: ReactElement;
+	buttonLink: string;
+	buttonText: string;
 	title: string;
 	description: string;
 }
 
 const IntroCard = ({
 	Icon,
-	LinkComponent,
+	buttonLink,
+	buttonText,
 	title,
 	description,
 }: IntroCardProps) => {
@@ -24,7 +33,13 @@ const IntroCard = ({
 				<H5 weight={700}>{title}</H5>
 			</IconAndTitleContainer>
 			<P>{description}</P>
-			{/* {LinkComponent} */}
+			<ExternalLink href={buttonLink}>
+				<Button
+					buttonType='texty-secondary'
+					label={buttonText}
+					icon={<IconChevronRight24 />}
+				/>
+			</ExternalLink>
 		</IntroCardContainer>
 	);
 };
