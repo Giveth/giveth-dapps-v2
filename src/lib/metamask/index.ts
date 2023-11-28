@@ -1,8 +1,8 @@
 import { captureException } from '@sentry/nextjs';
 import { erc20ABI } from 'wagmi';
 import { getContract } from 'wagmi/actions';
+import { type Address } from 'wagmi';
 import config from '@/configuration';
-import { Address } from '@/types/config';
 
 declare let window: any;
 

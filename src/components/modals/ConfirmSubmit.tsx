@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
-import { useNetwork } from 'wagmi';
+import { type Address, useNetwork } from 'wagmi';
 import config from '@/configuration';
 import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
@@ -18,7 +18,6 @@ import { AddTokenButton } from '../AddTokenButton';
 import { Flex } from '../styled-components/Flex';
 import LottieControl from '@/components/LottieControl';
 import { WrappedSpinner } from '../Spinner';
-import { Address } from '@/types/config';
 
 const AddTokenRow = styled(Flex)`
 	margin-top: 16px;
