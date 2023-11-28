@@ -131,7 +131,7 @@ export const RecurringDonationCard = () => {
 			);
 
 			const approve = await givx.approve({
-				amount: '100000000000000000',
+				amount: '1000000000000000000',
 				receiver: '0x34cf77c14f39c81adbdad922af538f05633fa07e',
 			});
 
