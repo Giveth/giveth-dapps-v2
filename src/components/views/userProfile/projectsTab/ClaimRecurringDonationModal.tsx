@@ -80,7 +80,7 @@ const ClaimRecurringDonationModal = ({
 				<SuperfluidLogoContainer gap='15px'>
 					<P>Streams powered by </P>{' '}
 					<Image
-						src='/images/logo/superfluid-logo.png'
+						src='/images/logo/superfluid-logo.svg'
 						width={120}
 						height={30}
 						alt='Superfluid logo'
