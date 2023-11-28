@@ -65,11 +65,13 @@ const Left = styled(Flex)`
 `;
 
 const Wrapper = styled.div`
-	max-width: 1268px;
-	margin: 10px 10px 0;
+	max-width: 1068px;
+	width: 100%;
 	z-index: 99;
-	position: sticky;
+	position: fixed;
 	top: 185px;
+	left: 50%;
+	transform: translateX(-50%);
 	padding: 16px;
 	background: ${semanticColors.golden[200]};
 	color: ${semanticColors.golden[700]};
@@ -79,10 +81,7 @@ const Wrapper = styled.div`
 	justify-content: space-between;
 	gap: 20px;
 	${mediaQueries.tablet} {
-		top: 159px;
-	}
-	${mediaQueries.laptopL} {
-		margin: 10px auto 0;
+		top: 152px;
 	}
 `;
 
