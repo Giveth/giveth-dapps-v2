@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { Caption, B, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
 import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
@@ -33,16 +33,11 @@ export const DonateHeader: FC<IHeader> = () => {
 	const { address } = useAccount();
 	const { chain } = useNetwork();
 	const router = useRouter();
-	const dispatch = useAppDispatch();
 	const { open: openConnectModal } = useWeb3Modal();
 	const { project } = useDonateData();
 	const showHeader = useShowHiderByScroll();
 	const chainId = chain?.id;
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
-
-	const handleModals = () => {
-		openConnectModal?.();
-	};
 
 	return (
 		<StyledHeader alignItems='center' theme={theme} show={showHeader}>
@@ -78,7 +73,7 @@ export const DonateHeader: FC<IHeader> = () => {
 								? 'component.button.connect_wallet'
 								: 'component.button.sign_in',
 						})}
-						onClick={handleModals}
+						onClick={() => openConnectModal?.()}
 					/>
 				)}
 			</Flex>
