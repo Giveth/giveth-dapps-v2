@@ -10,7 +10,6 @@ import styled from 'styled-components';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
-import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 
 import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import {
@@ -42,11 +41,7 @@ export const DonateHeader: FC<IHeader> = () => {
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
 	const handleModals = () => {
-		if (isGIVeconomyRoute) {
-			openConnectModal?.();
-		} else {
-			dispatch(setShowWelcomeModal(true));
-		}
+		openConnectModal?.();
 	};
 
 	return (
