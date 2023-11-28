@@ -129,14 +129,6 @@ const Header: FC<IHeader> = () => {
 		);
 	}, [router.route]);
 
-	const handleModals = () => {
-		if (isGIVeconomyRoute) {
-			openConnectModal?.();
-		} else {
-			// dispatch(setShowWelcomeModal(true));
-		}
-	};
-
 	const { modalCallback: signInThenCreate } = useModalCallback(() =>
 		router.push(Routes.CreateProject),
 	);
