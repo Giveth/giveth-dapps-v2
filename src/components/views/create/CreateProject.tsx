@@ -18,6 +18,7 @@ import { captureException } from '@sentry/nextjs';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Container } from '@giveth/ui-design-system';
 import { getAddress } from 'viem';
+import { type Address } from 'wagmi';
 import {
 	ACTIVATE_PROJECT,
 	CREATE_PROJECT,
@@ -47,7 +48,6 @@ import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
-import { Address } from '@/types/config';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
 

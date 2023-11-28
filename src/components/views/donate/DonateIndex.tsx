@@ -1,12 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
 	ButtonLink,
+	Col,
+	Container,
 	IconDonation24,
 	IconExternalLink24,
 	Lead,
 	neutralColors,
+	Row,
 	semanticColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
@@ -15,10 +18,7 @@ import { useIntl } from 'react-intl';
 import dynamic from 'next/dynamic';
 import { useNetwork } from 'wagmi';
 import { BigArc } from '@/components/styled-components/Arc';
-import { mediaQueries } from '@/lib/constants/constants';
 import SocialBox from '../../DonateSocialBox';
-import SuccessView from '@/components/views/donate/SuccessView';
-import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import NiceBanner from './NiceBanner';
 // import PurchaseXDAI from './PurchaseXDAIBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
@@ -31,6 +31,10 @@ import Routes from '@/lib/constants/Routes';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowHeader } from '@/features/general/general.slice';
+import { DonateHeader } from './DonateHeader';
+import { DonationCard } from './DonationCard';
 
 const CryptoDonation = dynamic(
 	() => import('@/components/views/donate/CryptoDonation'),
@@ -47,12 +51,21 @@ const DonateIndex: FC = () => {
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const { txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
+	const dispatch = useAppDispatch();
+
+	useEffect(() => {
+		dispatch(setShowHeader(false));
+		return () => {
+			dispatch(setShowHeader(true));
+		};
+	}, [dispatch]);
 
 	return (
 		<>
+			<DonateHeader />
 			<BigArc />
 			{hasActiveQFRound && <PassportBanner />}
-			<Wrapper>
+			<DonateContainer>
 				{/* <PurchaseXDAI /> */}
 				{alreadyDonated && (
 					<AlreadyDonatedWrapper>
@@ -65,7 +78,13 @@ const DonateIndex: FC = () => {
 					</AlreadyDonatedWrapper>
 				)}
 				<NiceBanner />
-				<Sections>
+				<Row>
+					<Col xs={12} lg={6}>
+						<DonationCard />
+					</Col>
+					<Col></Col>
+				</Row>
+				{/* <Sections>
 					<ProjectCardSelector />
 					<Right>
 						{isSuccessDonation ? (
@@ -74,7 +93,7 @@ const DonateIndex: FC = () => {
 							<CryptoDonation />
 						)}
 					</Right>
-				</Sections>
+				</Sections> */}
 				{isSuccessDonation && (
 					<Options>
 						<Lead style={{ color: neutralColors.gray[900] }}>
@@ -105,7 +124,7 @@ const DonateIndex: FC = () => {
 						isDonateFooter
 					/>
 				)}
-			</Wrapper>
+			</DonateContainer>
 		</>
 	);
 };
@@ -159,37 +178,11 @@ const ProjectsButton = styled(ButtonLink)`
 	margin-top: 40px;
 `;
 
-const Wrapper = styled.div`
-	max-width: 1052px;
+const DonateContainer = styled(Container)`
 	text-align: center;
-	padding: 64px 0;
-	margin: 0 auto;
+	padding-top: 128px;
+	padding-bottom: 64px;
 	position: relative;
-`;
-
-const Sections = styled.div`
-	height: 100%;
-	${mediaQueries.tablet} {
-		display: grid;
-		grid-template-columns: repeat(2, minmax(500px, 1fr));
-		grid-auto-rows: minmax(100px, auto);
-	}
-	${mediaQueries.mobileL} {
-		grid-template-columns: repeat(2, minmax(100px, 1fr));
-		padding: 0 40px;
-	}
-`;
-
-const Right = styled.div`
-	z-index: 1;
-	background: white;
-	text-align: left;
-	padding: 32px;
-	min-height: 620px;
-	border-radius: 16px;
-	${mediaQueries.tablet} {
-		border-radius: 0 16px 16px 0;
-	}
 `;
 
 export default DonateIndex;

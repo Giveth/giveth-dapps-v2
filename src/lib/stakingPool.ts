@@ -5,11 +5,10 @@ import {
 	signTypedData,
 	waitForTransaction,
 } from 'wagmi/actions';
-import { erc20ABI } from 'wagmi';
+import { type Address, erc20ABI } from 'wagmi';
 import { WriteContractReturnType, hexToSignature } from 'viem';
 import BigNumber from 'bignumber.js';
 import {
-	Address,
 	BalancerPoolStakingConfig,
 	ICHIPoolStakingConfig,
 	RegenPoolStakingConfig,

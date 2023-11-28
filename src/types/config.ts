@@ -1,6 +1,5 @@
-import type { Chain } from 'wagmi';
-
-export type Address = `0x${string}`;
+import { ISuperToken } from './superFluid';
+import type { Address, Chain } from 'wagmi';
 
 export enum StakingPlatform {
 	GIVETH = 'Staking',
@@ -178,6 +177,8 @@ export interface OptimismNetworkConfig extends NetworkConfig {
 	GIVPOWER: SimplePoolStakingConfig;
 	GIV_TOKEN_ADDRESS: Address;
 	GIV_BUY_LINK: string;
+	superFluidSubgraph: string;
+	SUPER_FLUID_TOKENS: Array<ISuperToken>;
 }
 
 interface MicroservicesConfig {

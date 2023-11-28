@@ -1,5 +1,5 @@
+import { type Address } from 'wagmi';
 import { IUser } from '@/apollo/types/types';
-import { Address } from './config';
 
 export interface ITokenAllocation {
 	amount: string;

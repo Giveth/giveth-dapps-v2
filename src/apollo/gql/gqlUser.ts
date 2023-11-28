@@ -143,6 +143,37 @@ export const VALIDATE_TOKEN = gql`
 	}
 `;
 
+export const FETCH_USER_STREAMS = `
+	query FetchUserStreams($address: String!) {
+		streams(
+			where: { sender: $address }
+		) {
+			id
+			sender {
+				id
+			}
+			receiver {
+				id
+			}
+			token {
+				__typename
+				id
+				name
+				symbol
+				decimals
+				isSuperToken
+				underlyingToken {
+					id
+					name
+					symbol
+					decimals
+				}
+			}
+			currentFlowRate
+		}
+	}
+`;
+
 export const FETCH_USER_GIVPOWER_BY_ADDRESS = `
 	query unipoolBalance($id: String!) {
 		unipoolBalance(

@@ -61,3 +61,22 @@ export const formatDonation = (
 		? symbol + num.toLocaleString(local, { maximumFractionDigits })
 		: symbol + Math.round(num);
 };
+
+export function limitFraction(
+	numberStr: string,
+	maxDecimals: number = 2,
+): string {
+	let number = parseFloat(numberStr);
+
+	if (isNaN(number)) {
+		return '--';
+	}
+
+	let smallestRepresentable = parseFloat(`1e-${maxDecimals}`);
+
+	if (0 < Math.abs(number) && Math.abs(number) < smallestRepresentable) {
+		return `<${smallestRepresentable.toFixed(maxDecimals)}`;
+	}
+
+	return number.toFixed(maxDecimals);
+}

@@ -1,6 +1,7 @@
 import { captureException } from '@sentry/nextjs';
 import { getWalletClient } from 'wagmi/actions';
 import { WriteContractReturnType } from 'viem';
+import { type Address } from 'wagmi';
 import { ClaimData } from '@/types/GIV';
 import config from '../configuration';
 import MerkleDropJson from '../artifacts/MerkleDrop.json';
@@ -8,7 +9,6 @@ import TOKEN_DISTRO_JSON from '../artifacts/TokenDistro.json';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { fetchChainInfo } from '@/features/subgraph/subgraph.services';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { Address } from '@/types/config';
 
 const { abi: MERKLE_ABI } = MerkleDropJson;
 const { abi: TOKEN_DISTRO_ABI } = TOKEN_DISTRO_JSON;
