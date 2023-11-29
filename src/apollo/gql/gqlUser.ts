@@ -174,6 +174,21 @@ export const FETCH_USER_STREAMS = `
 	}
 `;
 
+export const FETCH_USER_STREAMS_BY_ADDRESS = `
+	query FetchUserStreams($address: String!) {
+		accounts(where: {
+		  id: $address
+		  }) {
+		  inflows{
+			id
+			sender{
+			  id
+			}
+		  }
+		}
+	  }
+`;
+
 export const FETCH_USER_GIVPOWER_BY_ADDRESS = `
 	query unipoolBalance($id: String!) {
 		unipoolBalance(
