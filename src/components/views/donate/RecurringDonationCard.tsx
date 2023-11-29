@@ -122,16 +122,6 @@ export const RecurringDonationCard = () => {
 
 			if (!_provider || !signer || !address) return;
 
-			const sf = await Framework.create({
-				chainId: config.OPTIMISM_CONFIG.id,
-				provider: _provider,
-			});
-			console.log('sf', sf);
-
-			const givx = await sf.loadWrapperSuperToken(
-				'0x34cf77c14f39c81adbdad922af538f05633fa07e',
-			);
-
 			const approve = await approveERC20tokenTransfer(
 				1000000000000000000n,
 				address,
@@ -141,6 +131,17 @@ export const RecurringDonationCard = () => {
 			);
 
 			console.log('approve', approve);
+			if (!approve) return;
+
+			const sf = await Framework.create({
+				chainId: config.OPTIMISM_CONFIG.id,
+				provider: _provider,
+			});
+			console.log('sf', sf);
+
+			const givx = await sf.loadWrapperSuperToken(
+				'0x34cf77c14f39c81adbdad922af538f05633fa07e',
+			);
 
 			// const approve = await givx.approve({
 			// 	amount: '1000000000000000000',
@@ -158,7 +159,7 @@ export const RecurringDonationCard = () => {
 
 			let createFlowOp = givx.createFlow({
 				sender: address, // Alice's address
-				receiver: '0x4D0eA8BaAC3FEe45eF77776B492E4C6E97DD2332',
+				receiver: '0x871Cd6353B803CECeB090Bb827Ecb2F361Db81AB',
 				flowRate: '380517503',
 			});
 
