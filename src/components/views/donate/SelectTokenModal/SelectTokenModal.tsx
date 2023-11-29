@@ -155,27 +155,27 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						/>
 					);
 				})}
-				{/* {allTokens.map(token =>
-				tokenStreams[token.id] ? null : (
-					<TokenInfo
-						key={token.symbol}
-						token={token}
-						balance={balances[token.symbol]}
-						disable={
-							!balances[token.symbol] ||
-							balances[token.symbol] === 0n
-						}
-						isSuperToken={true}
-						onClick={() => {
-							setSelectedToken({
-								token,
-								balance: balances[token.symbol],
-							});
-							setShowModal(false);
-						}}
-					/>
-				),
-			)} */}
+				{allTokens.map(token =>
+					tokenStreams[token.id] ? null : (
+						<TokenInfo
+							key={token.symbol}
+							token={token}
+							balance={balances[token.symbol]}
+							disable={
+								!balances[token.symbol] ||
+								balances[token.symbol] === 0n
+							}
+							isSuperToken={true}
+							onClick={() => {
+								setSelectedToken({
+									token,
+									balance: balances[token.symbol],
+								});
+								setShowModal(false);
+							}}
+						/>
+					),
+				)}
 				<Title medium>Eligible Tokens</Title>
 				{allTokens.map(token => (
 					<TokenInfo
