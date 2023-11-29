@@ -26,6 +26,9 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 	);
 	const remainingMonths =
 		balance !== undefined ? balance / totalFlowRate / 2628000n : 0n;
+
+	const underlyingToken = stream[0].token.underlyingToken;
+
 	return (
 		<Wrapper
 			gap='16px'
@@ -37,9 +40,13 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			}}
 		>
 			<TokenIcon
-				symbol={stream[0].token.symbol}
+				symbol={
+					underlyingToken
+						? underlyingToken.symbol
+						: stream[0].token.symbol
+				}
 				size={32}
-				isSuperToken={true}
+				isSuperToken={underlyingToken ? false : true}
 			/>
 			<InfoWrapper
 				flexDirection='column'
