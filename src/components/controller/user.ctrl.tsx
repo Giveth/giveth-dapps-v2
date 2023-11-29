@@ -5,15 +5,17 @@ import { setToken, setIsEnabled } from '@/features/user/user.slice';
 import StorageLabel from '@/lib/localStorage';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { getTokens } from '@/helpers/user';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
 const UserController = () => {
 	const { address, isConnected } = useAccount();
 	const dispatch = useAppDispatch();
+	const isSafeEnv = useIsSafeEnvironment();
 	const { connect, connectors } = useConnect();
 
 	const isMounted = useRef(false);
-
 	useEffect(() => {
+		if (isSafeEnv === null) return; // gsafe check not ready
 		if (isConnected) return;
 
 		const isPrevConnected = localStorage.getItem(
@@ -36,6 +38,7 @@ const UserController = () => {
 	}, []);
 
 	useEffect(() => {
+		if (isSafeEnv === null) return; // not ready
 		if (isMounted.current) {
 			if (!address) {
 				// Case when wallet is locked

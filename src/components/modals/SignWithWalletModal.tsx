@@ -225,6 +225,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 							if (currentMultisigSession) return closeModal();
 							return startSignature(connector, true);
 						} else if (isGSafeConnector) {
+							reset();
 							return setSafeSecondaryConnection(true);
 						}
 						await startSignature();
