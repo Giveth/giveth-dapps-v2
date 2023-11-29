@@ -13,7 +13,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { formatUnits } from 'viem';
-import { useAccount, useBalance, usePublicClient } from 'wagmi';
+import { useAccount, useBalance } from 'wagmi';
 import { Framework } from '@superfluid-finance/sdk-core';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
@@ -47,7 +47,6 @@ export const RecurringDonationCard = () => {
 		address: address,
 		enabled: false,
 	});
-	const provider = usePublicClient();
 
 	useEffect(() => {
 		if (!address) return;
