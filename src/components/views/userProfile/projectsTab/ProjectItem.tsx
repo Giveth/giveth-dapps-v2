@@ -19,6 +19,7 @@ import ClaimRecurringDonationModal from './ClaimRecurringDonationModal';
 import ProjectStatusBadge from './ProjectStatusBadge';
 import ProjectVerificationBadge from './ProjectVerificationBadge';
 import ProjectQFStatus from './ProjectQFStatus';
+import ProjectListedStatus from './ProjectListedStatus';
 
 interface IProjectItem {
 	project: IProject;
@@ -66,7 +67,9 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 					</Flex>
 					<Flex justifyContent='space-between'>
 						<P>Listed on public site</P>
-						<div>1</div>
+						<div>
+							<ProjectListedStatus project={project} />
+						</div>
 					</Flex>
 					<Flex justifyContent='space-between'>
 						<P>
