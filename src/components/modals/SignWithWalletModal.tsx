@@ -64,6 +64,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 	const dispatch = useAppDispatch();
 	useEffect(() => {
 		const multisigConnection = async () => {
+			if (loading) return;
 			if (safeSecondaryConnection && address && isConnected) {
 				setSecondaryConnnector(connector);
 				// Check session before calling a new one

@@ -86,7 +86,6 @@ export const signToGetToken = createAsyncThunk(
 			const walletClient = await getWalletClient({ chainId });
 
 			const signature = await walletClient?.signMessage({ message });
-
 			if (signature) {
 				const state = getState() as RootState;
 				if (!state.user.userData) {
@@ -120,7 +119,6 @@ export const signToGetToken = createAsyncThunk(
 								jwt: currentUserToken,
 							},
 						);
-						console.log({ sessionCheck });
 						if (sessionCheck?.status === 'successful') {
 							activeSafeToken = sessionCheck?.jwt;
 						} else if (sessionCheck?.status === 'pending') {
@@ -138,7 +136,7 @@ export const signToGetToken = createAsyncThunk(
 					if (sessionPending)
 						return Promise.reject('Gnosis Safe Session pending');
 					if (!sessionPending && !!activeSafeToken) {
-						// returns active token
+						// returns active token - SUCCESS
 						saveTokenToLocalstorage(safeAddress!, activeSafeToken);
 						return activeSafeToken;
 					}
