@@ -25,7 +25,9 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 		0n,
 	);
 	const remainingMonths =
-		balance !== undefined ? balance / totalFlowRate / 2628000n : 0n;
+		balance !== undefined && totalFlowRate !== 0n
+			? balance / totalFlowRate / 2628000n
+			: 0n;
 
 	const underlyingToken = stream[0].token.underlyingToken;
 
