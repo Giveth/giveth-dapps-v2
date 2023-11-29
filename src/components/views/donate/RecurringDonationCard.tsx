@@ -29,7 +29,9 @@ import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 
 export interface ISelectTokenWithBalance {
 	token: IToken;
+	// stream: ISuperfluidStream;
 	balance?: bigint;
+	// isStream: boolean;
 }
 
 export interface ITokenStreams {
@@ -151,8 +153,8 @@ export const RecurringDonationCard = () => {
 				amount: '1000000000000000000',
 			});
 
-			const res = await upgradeOperation.exec(signer);
-			console.log('res', res);
+			// const res = await upgradeOperation.exec(signer);
+			// console.log('res', res);
 
 			let createFlowOp = givx.createFlow({
 				sender: address, // Alice's address
@@ -160,7 +162,13 @@ export const RecurringDonationCard = () => {
 				flowRate: '380517503',
 			});
 
-			await createFlowOp.exec(signer);
+			// await createFlowOp.exec(signer);
+			const sfSigner = sf.createSigner({
+				signer: signer,
+			});
+			const batchOp = sf.batchCall([upgradeOperation, createFlowOp]);
+			const res = await batchOp.exec(signer);
+			console.log('res', res);
 		} catch (error) {
 			console.log('error', error);
 		}
