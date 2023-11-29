@@ -25,6 +25,7 @@ import { gqlRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
+import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 
 export interface ISelectTokenWithBalance {
 	token: IToken;
@@ -118,7 +119,7 @@ export const RecurringDonationCard = () => {
 				chainId: config.OPTIMISM_CONFIG.id,
 			});
 
-			if (!_provider || !signer) return;
+			if (!_provider || !signer || !address) return;
 
 			const sf = await Framework.create({
 				chainId: config.OPTIMISM_CONFIG.id,
@@ -130,12 +131,22 @@ export const RecurringDonationCard = () => {
 				'0x34cf77c14f39c81adbdad922af538f05633fa07e',
 			);
 
-			const approve = await givx.approve({
-				amount: '1000000000000000000',
-				receiver: '0x34cf77c14f39c81adbdad922af538f05633fa07e',
-			});
+			const approve = await approveERC20tokenTransfer(
+				1000000000000000000n,
+				address,
+				'0x34cf77c14f39c81adbdad922af538f05633fa07e',
+				'0xc916ce4025cb479d9ba9d798a80094a449667f5d',
+				config.OPTIMISM_CONFIG.id,
+			);
 
-			await approve.exec(signer);
+			console.log('approve', approve);
+
+			// const approve = await givx.approve({
+			// 	amount: '1000000000000000000',
+			// 	receiver: '0x34cf77c14f39c81adbdad922af538f05633fa07e',
+			// });
+
+			// await approve.exec(signer);
 
 			const upgradeOperation = await givx.upgrade({
 				amount: '1000000000000000000',
