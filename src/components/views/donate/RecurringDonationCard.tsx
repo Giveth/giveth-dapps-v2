@@ -154,6 +154,14 @@ export const RecurringDonationCard = () => {
 
 			const res = await upgradeOperation.exec(signer);
 			console.log('res', res);
+
+			let createFlowOp = givx.createFlow({
+				sender: address, // Alice's address
+				receiver: '0x4D0eA8BaAC3FEe45eF77776B492E4C6E97DD2332',
+				flowRate: '380517503',
+			});
+
+			await createFlowOp.exec(signer);
 		} catch (error) {
 			console.log('error', error);
 		}
