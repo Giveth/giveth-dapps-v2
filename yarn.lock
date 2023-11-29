@@ -1086,10 +1086,10 @@
     intl-messageformat "10.5.3"
     tslib "^2.4.0"
 
-"@giveth/ui-design-system@^1.11.18":
-  version "1.11.18"
-  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.18.tgz#db382705fa3c4373bdb4762e6300df6362cee44c"
-  integrity sha512-nwe+Ddwxy1RyuKmkw1jTtw8f0vCjFXCy80wD0/JatCKIieAuXkEWbq0fQvKjI7J0/+mlYpemmF82Kqy7Xumglg==
+"@giveth/ui-design-system@^1.11.19":
+  version "1.11.19"
+  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.19.tgz#16ed911d19ddfb16536b1e19d46b3adf4e7da1df"
+  integrity sha512-RtVTJn9OIrlt8I0NiNd5XpMB8XYXHQpvmyrnGYNwdp5khObRjh6g15+TEgwfD52LgkUgeGjdlLLD8XGLVTFJkw==
   dependencies:
     next "13.1.6"
     react "18.2.0"
