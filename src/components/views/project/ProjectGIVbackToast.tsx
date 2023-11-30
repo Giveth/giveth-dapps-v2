@@ -25,10 +25,14 @@ import { isSSRMode } from '@/lib/helpers';
 import BoostModal from '@/components/modals/Boost/BoostModal';
 import { useAppSelector } from '@/features/hooks';
 import { formatDonation } from '@/helpers/number';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { EVerificationStatus } from '@/apollo/types/types';
 
 const ProjectGIVbackToast = () => {
 	const [showBoost, setShowBoost] = useState(false);
 	const { projectData, isAdmin } = useProjectContext();
+	const verStatus = projectData?.verificationFormStatus;
+	const projectStatus = projectData?.status.name;
 	const verified = projectData?.verified;
 	const { givbackFactor } = projectData || {};
 	const isOwnerVerified = verified && isAdmin;
@@ -46,12 +50,16 @@ const ProjectGIVbackToast = () => {
 	} = useAppSelector(state => state.user);
 	const router = useRouter();
 
-	const handleTitle = () => {
-		if (isOwnerVerified) {
-			if (givbackFactor === 0) return;
-			return (
+	const useIntlTitle = 'project.givback_toast.title.';
+	const useIntlDescription = 'project.givback_toast.description.';
+	let title,
+		description = '';
+
+	if (isOwnerVerified) {
+		if (givbackFactor !== 0) {
+			title =
 				formatMessage({
-					id: `project.givback_toast.title.verified_owner_1`,
+					id: `${useIntlTitle}verified_owner_1`,
 				}) +
 				formatDonation(
 					(givbackFactor || 0) * 100,
@@ -61,45 +69,85 @@ const ProjectGIVbackToast = () => {
 				) +
 				'%' +
 				formatMessage({
-					id: `project.givback_toast.title.verified_owner_2`,
-				})
-			);
-		} else if (isOwnerNotVerified) {
-			return formatMessage({
-				id: `project.givback_toast.title.non_verified_owner`,
+					id: `${useIntlTitle}verified_owner_2`,
+				});
+		}
+		description = formatMessage({
+			id: `${useIntlDescription}verified_owner`,
+		});
+	} else if (isOwnerNotVerified) {
+		if (verStatus === EVerificationStatus.SUBMITTED) {
+			title = formatMessage({
+				id: `${useIntlTitle}non_verified_owner_submitted`,
 			});
-		} else if (isPublicVerified) {
-			if (givbackFactor === 0) return;
-			return (
+			description = formatMessage({
+				id: `${useIntlDescription}non_verified_owner_submitted`,
+			});
+		} else if (verStatus === EVerificationStatus.REJECTED) {
+			title = formatMessage({
+				id: `${useIntlTitle}non_verified_owner_rejected`,
+			});
+			description = formatMessage({
+				id: `${useIntlDescription}non_verified_owner_rejected`,
+			});
+		} else if (verStatus === EVerificationStatus.DRAFT) {
+			title = formatMessage({
+				id: `${useIntlTitle}non_verified_owner_incomplete`,
+			});
+			description = formatMessage({
+				id: `${useIntlDescription}non_verified_owner_incomplete`,
+			});
+		} else if (projectStatus === EProjectStatus.DRAFT) {
+			title = formatMessage({
+				id: `${useIntlTitle}non_verified_owner_draft`,
+			});
+			description = formatMessage({
+				id: `${useIntlDescription}non_verified_owner_draft`,
+			});
+		} else if (projectStatus === EProjectStatus.DEACTIVE) {
+			title = formatMessage({
+				id: `${useIntlTitle}non_verified_owner_deactive`,
+			});
+			description = formatMessage({
+				id: `${useIntlDescription}non_verified_owner_deactive`,
+			});
+		} else if (projectStatus === EProjectStatus.CANCEL) {
+			title = formatMessage({
+				id: `${useIntlTitle}non_verified_owner_cancelled`,
+			});
+			description = formatMessage({
+				id: `${useIntlDescription}non_verified_owner_cancelled`,
+			});
+		}
+		title = formatMessage({
+			id: `${useIntlTitle}non_verified_owner`,
+		});
+		description = formatMessage({
+			id: `${useIntlDescription}non_verified_owner`,
+		});
+	} else if (isPublicVerified) {
+		if (givbackFactor !== 0) {
+			title =
 				formatMessage({
-					id: `project.givback_toast.title.verified_public_1`,
+					id: `${useIntlTitle}verified_public_1`,
 				}) +
 				Math.round(+(givbackFactor || 0) * 100) +
 				'%' +
 				formatMessage({
-					id: `project.givback_toast.title.verified_public_2`,
-				})
-			);
-		} else {
-			return formatMessage({
-				id: `project.givback_toast.title.non_verified_public`,
-			});
+					id: `${useIntlTitle}verified_public_2`,
+				});
 		}
-	};
-
-	const title = handleTitle();
-
-	const description = formatMessage({
-		id: `project.givback_toast.description.${
-			isOwnerVerified
-				? 'verified_owner'
-				: isOwnerNotVerified
-				? 'non_verified_owner'
-				: isPublicVerified
-				? 'verified_public'
-				: 'non_verified_public'
-		}`,
-	});
+		description = formatMessage({
+			id: `${useIntlDescription}verified_public`,
+		});
+	} else {
+		title = formatMessage({
+			id: `${useIntlTitle}non_verified_public`,
+		});
+		description = formatMessage({
+			id: `${useIntlDescription}non_verified_public`,
+		});
+	}
 
 	const showBoostModal = () => {
 		setShowBoost(true);
