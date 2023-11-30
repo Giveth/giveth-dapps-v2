@@ -58,11 +58,9 @@ const VerificationRoute = () => {
 					_project.adminUser.walletAddress,
 				);
 				setOwnerAddress(_project.adminUser.walletAddress);
-				if (_project.status.name === EProjectStatus.ACTIVE && isOwner) {
-					setAllowVerification(true);
-				} else {
-					setAllowVerification(false);
-				}
+				setAllowVerification(
+					_project.status.name === EProjectStatus.ACTIVE && isOwner,
+				);
 				if (_project.status.name === EProjectStatus.CANCEL && isOwner) {
 					setIsCancelled(true);
 				}
