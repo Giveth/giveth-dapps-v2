@@ -103,14 +103,19 @@ export const SignWithWalletModal: FC<IProps> = ({
 	};
 
 	const closeModal = async () => {
-		if (safeSecondaryConnection && connector?.id !== 'safe') {
-			await connect({
-				chainId,
-				connector: connectors[3],
-			});
+		try {
+			if (safeSecondaryConnection && connector?.id !== 'safe') {
+				await connect({
+					chainId,
+					connector: connectors[3],
+				});
+			}
+			_closeModal();
+			reset();
+		} catch (e) {
+			_closeModal();
+			reset();
 		}
-		_closeModal();
-		reset();
 	};
 
 	const startSignature = async (connector?: any, fromGnosis?: boolean) => {
