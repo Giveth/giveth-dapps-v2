@@ -290,6 +290,7 @@ async function handleEthTransfer(
 	const { hash } = await wagmiSendTransaction({
 		to: params.to,
 		value: value,
+		data: '0x',
 	});
 
 	console.log('ETH transfer result', { hash });
