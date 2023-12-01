@@ -4,7 +4,9 @@ import {
 	brandColors,
 	Caption,
 	IconChevronRight,
+	IconDeactivated24,
 	IconGIVBack,
+	IconPublish24,
 	IconRocketInSpace16,
 	mediaQueries,
 	neutralColors,
@@ -27,6 +29,7 @@ import { useAppSelector } from '@/features/hooks';
 import { formatDonation } from '@/helpers/number';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { EVerificationStatus } from '@/apollo/types/types';
+import Routes from '@/lib/constants/Routes';
 
 const ProjectGIVbackToast = () => {
 	const [showBoost, setShowBoost] = useState(false);
@@ -52,6 +55,9 @@ const ProjectGIVbackToast = () => {
 
 	const useIntlTitle = 'project.givback_toast.title.';
 	const useIntlDescription = 'project.givback_toast.description.';
+	let icon = <IconGIVBack color={color} size={24} />;
+	let link = links.GIVBACK_DOC;
+
 	let title,
 		description = '';
 
@@ -75,6 +81,7 @@ const ProjectGIVbackToast = () => {
 		description = formatMessage({
 			id: `${useIntlDescription}verified_owner`,
 		});
+		link = links.GIVPOWER_DOC;
 	} else if (isOwnerNotVerified) {
 		if (verStatus === EVerificationStatus.SUBMITTED) {
 			title = formatMessage({
@@ -83,6 +90,7 @@ const ProjectGIVbackToast = () => {
 			description = formatMessage({
 				id: `${useIntlDescription}non_verified_owner_submitted`,
 			});
+			link = links.VERIFICATION_DOCS;
 		} else if (verStatus === EVerificationStatus.REJECTED) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_rejected`,
@@ -90,6 +98,7 @@ const ProjectGIVbackToast = () => {
 			description = formatMessage({
 				id: `${useIntlDescription}non_verified_owner_rejected`,
 			});
+			link = links.VERIFICATION_DOCS;
 		} else if (verStatus === EVerificationStatus.DRAFT) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_incomplete`,
@@ -97,6 +106,7 @@ const ProjectGIVbackToast = () => {
 			description = formatMessage({
 				id: `${useIntlDescription}non_verified_owner_incomplete`,
 			});
+			link = links.VERIFICATION_DOCS;
 		} else if (projectStatus === EProjectStatus.DRAFT) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_draft`,
@@ -104,6 +114,8 @@ const ProjectGIVbackToast = () => {
 			description = formatMessage({
 				id: `${useIntlDescription}non_verified_owner_draft`,
 			});
+			icon = <IconPublish24 />;
+			link = Routes.OnboardingProjects;
 		} else if (projectStatus === EProjectStatus.DEACTIVE) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_deactive`,
@@ -111,6 +123,8 @@ const ProjectGIVbackToast = () => {
 			description = formatMessage({
 				id: `${useIntlDescription}non_verified_owner_deactive`,
 			});
+			icon = <IconDeactivated24 />;
+			link = '';
 		} else if (projectStatus === EProjectStatus.CANCEL) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_cancelled`,
@@ -118,13 +132,17 @@ const ProjectGIVbackToast = () => {
 			description = formatMessage({
 				id: `${useIntlDescription}non_verified_owner_cancelled`,
 			});
+			icon = <IconDeactivated24 />;
+			link = links.CANCELLED_PROJECTS_DOCS;
+		} else {
+			title = formatMessage({
+				id: `${useIntlTitle}non_verified_owner`,
+			});
+			description = formatMessage({
+				id: `${useIntlDescription}non_verified_owner`,
+			});
+			link = links.VERIFICATION_DOCS;
 		}
-		title = formatMessage({
-			id: `${useIntlTitle}non_verified_owner`,
-		});
-		description = formatMessage({
-			id: `${useIntlDescription}non_verified_owner`,
-		});
 	} else if (isPublicVerified) {
 		if (givbackFactor !== 0) {
 			title =
@@ -179,7 +197,7 @@ const ProjectGIVbackToast = () => {
 		<>
 			<Wrapper>
 				<Content>
-					<IconGIVBack color={color} size={24} />
+					{icon}
 					<div>
 						<Title color={color}>{title}</Title>
 						<Description>{description}</Description>
@@ -195,12 +213,14 @@ const ProjectGIVbackToast = () => {
 								})}
 							</Note>
 						)}
-						<ExternalLink href={links.GIVBACK_DOC}>
-							<LearnMore>
-								{formatMessage({ id: 'label.learn_more' })}
-								<IconChevronRight size={24} />
-							</LearnMore>
-						</ExternalLink>
+						{link && (
+							<ExternalLink href={link}>
+								<LearnMore>
+									{formatMessage({ id: 'label.learn_more' })}
+									<IconChevronRight size={24} />
+								</LearnMore>
+							</ExternalLink>
+						)}
 					</div>
 				</Content>
 				{verified && (
@@ -269,7 +289,7 @@ const Wrapper = styled(Flex)`
 	justify-content: space-between;
 	align-items: center;
 	gap: 24px;
-	padding: 16px;
+	padding: 24px 16px;
 	background: #ffffff;
 	border-radius: 16px;
 	margin-top: 12px;
