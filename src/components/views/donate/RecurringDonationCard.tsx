@@ -7,6 +7,7 @@ import {
 	IconCaretDown16,
 	IconHelpFilled16,
 	IconRefresh16,
+	P,
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -256,12 +257,13 @@ export const RecurringDonationCard = () => {
 							</Flex>
 						)}
 				</Flex>
-				<Flex flexDirection='column' gap='8px' alignItems='flex-start'>
+				<Flex flexDirection='column' gap='8px' alignItems='stretch'>
 					<Caption>Amount to donate Monthly</Caption>
 					<SliderWrapper>
 						<StyledSlider
 							min={0}
 							max={100}
+							step={1}
 							railStyle={{
 								backgroundColor: brandColors.giv[200],
 							}}
@@ -280,8 +282,37 @@ export const RecurringDonationCard = () => {
 								setPercentage(_value);
 							}}
 							value={percentage}
+							disabled={amount === 0n}
 						/>
 					</SliderWrapper>
+					<Flex justifyContent='space-between'>
+						<Caption>Donate to this project</Caption>
+						<Flex gap='4px'>
+							<B>
+								{amount !== 0n && percentage !== 0
+									? formatUnits(
+											((amount || 0n) *
+												BigInt(percentage)) /
+												100n,
+											selectedToken?.token.decimals || 18,
+									  )
+									: 0}
+							</B>
+							<B>{selectedToken?.token.symbol}</B>
+							<P>per Month</P>
+						</Flex>
+					</Flex>
+					<Flex justifyContent='space-between'>
+						<Caption>Stream balance runs out in</Caption>
+						<Flex gap='4px'>
+							<B>
+								{percentage !== 0
+									? Math.floor(100 / percentage)
+									: 0}
+							</B>
+							<B>Months</B>
+						</Flex>
+					</Flex>
 				</Flex>
 				<Button
 					label='Donate'
@@ -323,6 +354,7 @@ const RecurringSection = styled(Flex)`
 	border-radius: 12px;
 	border: 1px solid ${neutralColors.gray[300]};
 	width: 100%;
+	text-align: left;
 `;
 
 const RecurringSectionTitle = styled(B)`
