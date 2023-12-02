@@ -28,12 +28,14 @@ import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import { useDonateData } from '@/context/donate.context';
 import { RecurringDonationModal } from './RecurringDonationModal/RecurringDonationModal';
+import { AmountInput } from '@/components/AmountInput/AmountInput';
 
 export interface ITokenStreams {
 	[key: string]: ISuperfluidStream[];
 }
 
 export const RecurringDonationCard = () => {
+	const [amount, setAmount] = useState(0n);
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
 	const [showRecurringDonationModal, setShowRecurringDonationModal] =
 		useState(false);
@@ -223,7 +225,12 @@ export const RecurringDonationCard = () => {
 							)}
 							<IconCaretDown16 />
 						</SelectTokenWrapper>
-						<Input type='text' />
+						{/* <Input type='text' /> */}
+						<AmountInput
+							maxAmount={selectedToken?.balance || 0n}
+							setAmount={setAmount}
+							disabled={selectedToken === undefined}
+						/>
 					</InputWrapper>
 					{selectedToken !== undefined &&
 						selectedToken.balance !== undefined && (
