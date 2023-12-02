@@ -80,7 +80,7 @@ export const AmountInput: FC<IAmountInput> = ({
 				});
 			}
 		},
-		[setAmount],
+		[decimals, setAmount],
 	);
 
 	return (
