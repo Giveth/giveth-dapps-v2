@@ -61,20 +61,21 @@ BaseInput.displayName = 'BaseInput';
 
 const Input = styled.input`
 	border: 0;
-	background: #310bb5;
-	color: white;
 	flex: 1;
 	font-size: 18px;
 	line-height: 160%;
+	&:focus {
+		outline: none;
+	}
+	&[type='number'] {
+		-moz-appearance: textfield;
+	}
+	&::-webkit-outer-spin-button,
+	&::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
 	::placeholder {
 		color: white;
-	}
-	::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-	::-webkit-outer-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
 	}
 `;
