@@ -3,11 +3,11 @@ import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 
-interface IConfirmRecurringDonationModalProps extends IModal {}
+interface IRecurringDonationModalProps extends IModal {}
 
-export const ConfirmRecurringDonationModal: FC<
-	IConfirmRecurringDonationModalProps
-> = ({ setShowModal }) => {
+export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
+	setShowModal,
+}) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	return (
@@ -17,13 +17,11 @@ export const ConfirmRecurringDonationModal: FC<
 			headerTitle='Select a Token'
 			headerTitlePosition='left'
 		>
-			<ConfirmRecurringDonationInnerModal setShowModal={setShowModal} />
+			<RecurringDonationInnerModal setShowModal={setShowModal} />
 		</Modal>
 	);
 };
 
-const ConfirmRecurringDonationInnerModal: FC<
-	IConfirmRecurringDonationModalProps
-> = () => {
+const RecurringDonationInnerModal: FC<IRecurringDonationModalProps> = () => {
 	return <div></div>;
 };
