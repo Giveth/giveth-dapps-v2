@@ -334,4 +334,5 @@ const Input = styled(AmountInput)`
 
 const IconWrapper = styled.div`
 	cursor: pointer;
+	color: ${brandColors.giv[500]};
 `;
