@@ -5,8 +5,8 @@ import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
 import { formatWeiHelper } from '@/helpers/number';
-import { NumericalInput } from '@/components/input/NumericalInput';
 import { Flex } from '../styled-components/Flex';
+import { BaseInput } from '../input/BaseInput';
 
 export interface IAmountInput {
 	maxAmount: bigint;
@@ -105,7 +105,7 @@ export const AmountInput: FC<IAmountInput> = ({
 					</InputLabelAction>
 				</InputLabelRow>
 			)}
-			<NumericalInput
+			<BaseInput
 				value={displayAmount}
 				onUserInput={onUserInput}
 				disabled={disabled}
