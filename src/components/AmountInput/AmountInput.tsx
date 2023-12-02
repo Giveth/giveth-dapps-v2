@@ -5,24 +5,22 @@ import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
 import { formatWeiHelper } from '@/helpers/number';
-import { PoolStakingConfig, StakingPlatform } from '@/types/config';
 import { NumericalInput } from '@/components/input/NumericalInput';
 import { Flex } from '../styled-components/Flex';
 
 export interface IAmountInput {
 	maxAmount: bigint;
 	setAmount: Dispatch<SetStateAction<bigint>>;
-	poolStakingConfig: PoolStakingConfig;
 	className?: string;
 	disabled?: boolean;
 	showMax?: boolean;
+	balanceUnit?: string;
 	showPercentage?: boolean;
 }
 
 export const AmountInput: FC<IAmountInput> = ({
 	maxAmount,
 	setAmount,
-	poolStakingConfig,
 	className,
 	disabled = false,
 	showMax = false,
@@ -94,10 +92,6 @@ export const AmountInput: FC<IAmountInput> = ({
 							&nbsp;
 							{formatWeiHelper(maxAmount.toString())}
 							&nbsp;
-							{poolStakingConfig.title}
-							&nbsp;
-							{poolStakingConfig.platform !==
-								StakingPlatform.GIVETH && 'LP'}
 						</InputLabelValue>
 					</InputLabel>
 					<InputLabelAction
