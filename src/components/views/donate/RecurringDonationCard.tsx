@@ -27,6 +27,7 @@ import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import { useDonateData } from '@/context/donate.context';
+import { RecurringDonationModal } from './RecurringDonationModal/RecurringDonationModal';
 
 export interface ITokenStreams {
 	[key: string]: ISuperfluidStream[];
@@ -34,6 +35,8 @@ export interface ITokenStreams {
 
 export const RecurringDonationCard = () => {
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
+	const [showRecurringDonationModal, setShowRecurringDonationModal] =
+		useState(false);
 	const [tokenStreams, setTokenStreams] = useState<ITokenStreams>({});
 
 	const { address } = useAccount();
@@ -239,12 +242,20 @@ export const RecurringDonationCard = () => {
 							</Flex>
 						)}
 				</Flex>
-				<Button label='Donate' onClick={onWrap} />
+				<Button
+					label='Donate'
+					onClick={() => setShowRecurringDonationModal(true)}
+				/>
 			</RecurringSection>
 			{showSelectTokenModal && (
 				<SelectTokenModal
 					tokenStreams={tokenStreams}
 					setShowModal={setShowSelectTokenModal}
+				/>
+			)}
+			{showRecurringDonationModal && (
+				<RecurringDonationModal
+					setShowModal={setShowRecurringDonationModal}
 				/>
 			)}
 		</>
