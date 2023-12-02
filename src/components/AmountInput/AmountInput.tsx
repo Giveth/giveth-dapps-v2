@@ -83,7 +83,7 @@ export const AmountInput: FC<IAmountInput> = ({
 	return (
 		<div className={className}>
 			{showMax && (
-				<InputLabelRow justifyContent='space-between'>
+				<InputLabelRow justifyContent='space-between' id='max-row'>
 					<InputLabel>
 						<InputLabelText>
 							{formatMessage({ id: 'label.available' })}:{' '}
@@ -109,9 +109,10 @@ export const AmountInput: FC<IAmountInput> = ({
 				value={displayAmount}
 				onUserInput={onUserInput}
 				disabled={disabled}
+				id='amount-input'
 			/>
 			{showPercentage && (
-				<PercentageRow>
+				<PercentageRow id='percentage-row'>
 					<Step
 						onClick={() => {
 							if (disabled) return;
