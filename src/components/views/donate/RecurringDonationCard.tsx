@@ -225,8 +225,7 @@ export const RecurringDonationCard = () => {
 							)}
 							<IconCaretDown16 />
 						</SelectTokenWrapper>
-						{/* <Input type='text' /> */}
-						<AmountInput
+						<Input
 							maxAmount={selectedToken?.balance || 0n}
 							setAmount={setAmount}
 							disabled={selectedToken === undefined}
@@ -312,15 +311,19 @@ const InputWrapper = styled(Flex)`
 	align-items: center;
 `;
 
-const Input = styled.input`
-	border: none;
-	flex: 1;
+const Input = styled(AmountInput)`
+	width: 100%;
 	border-left: 2px solid ${neutralColors.gray[300]};
-	font-family: Red Hat Text;
-	font-size: 16px;
-	font-style: normal;
-	font-weight: 500;
-	line-height: 150%; /* 24px */
+	#amount-input {
+		border: none;
+		flex: 1;
+		font-family: Red Hat Text;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: 150%; /* 24px */
+		width: 100%;
+	}
 `;
 
 const IconWrapper = styled.div`
