@@ -43,12 +43,22 @@ export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
 			headerTitlePosition='left'
 			headerIcon={<IconDonation32 />}
 		>
-			<RecurringDonationInnerModal setShowModal={setShowModal} />
+			<RecurringDonationInnerModal
+				setShowModal={setShowModal}
+				setStep={setStep}
+			/>
 		</Modal>
 	);
 };
 
-const RecurringDonationInnerModal: FC<IRecurringDonationModalProps> = () => {
+interface IRecurringDonationInnerModalProps
+	extends IRecurringDonationModalProps {
+	setStep: (step: EDonationSteps) => void;
+}
+
+const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
+	setStep,
+}) => {
 	return <Wrapper>hi</Wrapper>;
 };
 
