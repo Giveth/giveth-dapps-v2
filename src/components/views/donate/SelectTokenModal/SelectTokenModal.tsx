@@ -7,13 +7,7 @@ import {
 	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import {
-	useState,
-	type Dispatch,
-	type FC,
-	type SetStateAction,
-	useEffect,
-} from 'react';
+import { useState, type FC, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
@@ -24,22 +18,16 @@ import { TokenInfo } from './TokenInfo';
 import { fetchBalance } from '@/services/token';
 import { IToken } from '@/types/superFluid';
 import { StreamInfo } from './StreamInfo';
-import type {
-	ISelectTokenWithBalance,
-	ITokenStreams,
-} from '../RecurringDonationCard';
+import { useDonateData } from '@/context/donate.context';
+import type { ITokenStreams } from '../RecurringDonationCard';
 
 export interface ISelectTokenModalProps extends IModal {
 	tokenStreams: ITokenStreams;
-	setSelectedToken: Dispatch<
-		SetStateAction<ISelectTokenWithBalance | undefined>
-	>;
 }
 
 export const SelectTokenModal: FC<ISelectTokenModalProps> = ({
 	tokenStreams,
 	setShowModal,
-	setSelectedToken,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -53,7 +41,6 @@ export const SelectTokenModal: FC<ISelectTokenModalProps> = ({
 			<SelectTokenInnerModal
 				tokenStreams={tokenStreams}
 				setShowModal={setShowModal}
-				setSelectedToken={setSelectedToken}
 			/>
 		</Modal>
 	);
@@ -68,10 +55,10 @@ const allTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	tokenStreams,
 	setShowModal,
-	setSelectedToken,
 }) => {
 	const [balances, setBalances] = useState<IBalances>({});
 	const { address } = useAccount();
+	const { setSelectedToken } = useDonateData();
 
 	useEffect(() => {
 		// Ensure we have an address before proceeding

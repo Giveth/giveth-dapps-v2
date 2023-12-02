@@ -19,20 +19,14 @@ import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
-import { ISuperfluidStream, IToken } from '@/types/superFluid';
+import { ISuperfluidStream } from '@/types/superFluid';
 import { TokenIcon } from './TokenIcon';
 import { gqlRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
-
-export interface ISelectTokenWithBalance {
-	token: IToken;
-	// stream: ISuperfluidStream;
-	balance?: bigint;
-	// isStream: boolean;
-}
+import { useDonateData } from '@/context/donate.context';
 
 export interface ITokenStreams {
 	[key: string]: ISuperfluidStream[];
@@ -41,14 +35,13 @@ export interface ITokenStreams {
 export const RecurringDonationCard = () => {
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
 	const [tokenStreams, setTokenStreams] = useState<ITokenStreams>({});
-	const [selectedToken, setSelectedToken] = useState<
-		ISelectTokenWithBalance | undefined
-	>();
+
 	const { address } = useAccount();
 	const { data: balance, refetch } = useBalance({
 		address: address,
 		enabled: false,
 	});
+	const { selectedToken } = useDonateData();
 
 	useEffect(() => {
 		if (!address) return;
@@ -252,7 +245,6 @@ export const RecurringDonationCard = () => {
 				<SelectTokenModal
 					tokenStreams={tokenStreams}
 					setShowModal={setShowSelectTokenModal}
-					setSelectedToken={setSelectedToken}
 				/>
 			)}
 		</>

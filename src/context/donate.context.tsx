@@ -1,6 +1,15 @@
-import { createContext, FC, ReactNode, useContext, useState } from 'react';
+import {
+	createContext,
+	FC,
+	ReactNode,
+	type SetStateAction,
+	useContext,
+	useState,
+	type Dispatch,
+} from 'react';
 import { IDonationProject } from '@/apollo/types/types';
 import { hasActiveRound } from '@/helpers/qf';
+import { IToken } from '@/types/superFluid';
 
 interface ISuccessDonation {
 	txHash: string[];
@@ -12,6 +21,10 @@ interface IDonateContext {
 	project: IDonationProject;
 	isSuccessDonation?: ISuccessDonation;
 	setSuccessDonation: (successDonation?: ISuccessDonation) => void;
+	selectedToken?: ISelectTokenWithBalance;
+	setSelectedToken: Dispatch<
+		SetStateAction<ISelectTokenWithBalance | undefined>
+	>;
 }
 
 interface IProviderProps {
@@ -21,12 +34,23 @@ interface IProviderProps {
 
 const DonateContext = createContext<IDonateContext>({
 	setSuccessDonation: () => {},
+	setSelectedToken: () => {},
 	project: {} as IDonationProject,
 });
 
 DonateContext.displayName = 'DonateContext';
 
+export interface ISelectTokenWithBalance {
+	token: IToken;
+	// stream: ISuperfluidStream;
+	balance?: bigint;
+	// isStream: boolean;
+}
+
 export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
+	const [selectedToken, setSelectedToken] = useState<
+		ISelectTokenWithBalance | undefined
+	>();
 	const [isSuccessDonation, setSuccessDonation] =
 		useState<ISuccessDonation>();
 
@@ -39,6 +63,8 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 				project,
 				isSuccessDonation,
 				setSuccessDonation,
+				selectedToken,
+				setSelectedToken,
 			}}
 		>
 			{children}
