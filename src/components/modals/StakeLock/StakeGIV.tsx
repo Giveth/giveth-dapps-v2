@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { useAccount, useNetwork } from 'wagmi';
 import { waitForTransaction } from '@wagmi/core';
 import { Modal } from '../Modal';
-import { AmountInput } from '../../AmountInput';
+import { AmountInput } from '../../AmountInput/AmountInput';
 import {
 	approveERC20tokenTransfer,
 	stakeGIV,

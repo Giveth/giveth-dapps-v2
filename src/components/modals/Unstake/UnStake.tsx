@@ -13,7 +13,7 @@ import { useNetwork } from 'wagmi';
 import { Modal } from '../Modal';
 import { Flex } from '../../styled-components/Flex';
 import { StakingPoolImages } from '../../StakingPoolImages';
-import { AmountInput } from '../../AmountInput';
+import { AmountInput } from '../../AmountInput/AmountInput';
 import { unwrapToken, withdrawTokens } from '@/lib/stakingPool';
 import {
 	ConfirmedInnerModal,

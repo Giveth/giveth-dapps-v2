@@ -5,7 +5,7 @@ import { useAccount, useNetwork } from 'wagmi';
 import { waitForTransaction } from 'wagmi/actions';
 import { Modal } from '../Modal';
 import { StakingPoolImages } from '../../StakingPoolImages';
-import { AmountInput } from '../../AmountInput';
+import { AmountInput } from '../../AmountInput/AmountInput';
 import { approveERC20tokenTransfer, stakeTokens } from '@/lib/stakingPool';
 import {
 	ConfirmedInnerModal,

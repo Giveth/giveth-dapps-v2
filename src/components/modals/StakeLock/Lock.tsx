@@ -22,7 +22,7 @@ import {
 	StakeInnerModalContainer,
 	StakeModalContainer,
 } from './StakeLock.sc';
-import { AmountInput } from '@/components/AmountInput';
+import { AmountInput } from '@/components/AmountInput/AmountInput';
 import LockSlider from './LockSlider';
 import LockInfo, { LockInfoTooltip } from './LockInfo';
 import LockingBrief from './LockingBrief';

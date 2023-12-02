@@ -6,10 +6,10 @@ import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
 import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig, StakingPlatform } from '@/types/config';
-import { Flex } from './styled-components/Flex';
-import { NumericalInput } from '@/components/input/index';
+import { NumericalInput } from '@/components/input/NumericalInput';
+import { Flex } from '../styled-components/Flex';
 
-interface IAmountInput {
+export interface IAmountInput {
 	maxAmount: bigint;
 	setAmount: Dispatch<SetStateAction<bigint>>;
 	poolStakingConfig: PoolStakingConfig;
