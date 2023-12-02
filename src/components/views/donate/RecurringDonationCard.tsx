@@ -173,6 +173,10 @@ export const RecurringDonationCard = () => {
 		}
 	};
 
+	const underlyingToken = selectedToken?.token.underlyingToken;
+
+	console.log('selectedToken', selectedToken);
+
 	return (
 		<>
 			<Title weight={700}>
@@ -212,11 +216,12 @@ export const RecurringDonationCard = () => {
 							{selectedToken ? (
 								<Flex gap='8px' alignItems='center'>
 									<TokenIcon
-										symbol={selectedToken.token.symbol}
-										size={24}
-										isSuperToken={
-											selectedToken.token.isSuperToken
+										symbol={
+											underlyingToken
+												? underlyingToken.symbol
+												: selectedToken.token.symbol
 										}
+										size={24}
 									/>
 									<B>{selectedToken.token.symbol}</B>
 								</Flex>
@@ -299,6 +304,7 @@ const RecurringSectionTitle = styled(B)`
 
 const SelectTokenWrapper = styled(Flex)`
 	cursor: pointer;
+	gap: 16px;
 `;
 
 const InputWrapper = styled(Flex)`

@@ -48,7 +48,6 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 						: stream[0].token.symbol
 				}
 				size={32}
-				isSuperToken={underlyingToken ? false : true}
 			/>
 			<InfoWrapper
 				flexDirection='column'

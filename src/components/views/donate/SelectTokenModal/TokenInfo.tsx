@@ -38,11 +38,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 			}}
 		>
 			<TokenIconWrapper>
-				<TokenIcon
-					symbol={token.symbol}
-					size={32}
-					isSuperToken={isSuperToken}
-				/>
+				<TokenIcon symbol={token.symbol} size={32} />
 				<GIVBackBadge>
 					<IconGIVBack16 size={16} color={brandColors.giv[500]} />
 				</GIVBackBadge>

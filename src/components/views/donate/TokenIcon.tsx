@@ -1,22 +1,16 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Image from 'next/image';
 
 interface IImageIconProps {
 	symbol: string;
 	size?: number;
-	isSuperToken?: boolean;
 }
 
-export const TokenIcon: FC<IImageIconProps> = ({
-	symbol,
-	size = 24,
-	isSuperToken,
-}) => {
-	const _symbol = symbol?.toUpperCase();
-	let superTokenSymbol = _symbol.slice(0, -1); // From start to one before the last character
-	const [src, setSrc] = useState(
-		`/images/tokens/${isSuperToken ? superTokenSymbol : _symbol}.svg`,
-	);
+export const TokenIcon: FC<IImageIconProps> = ({ symbol, size = 24 }) => {
+	const [src, setSrc] = useState(`/images/tokens/UNKOWN.svg`);
+	useEffect(() => {
+		setSrc(`/images/tokens/${symbol}.svg`);
+	}, [symbol]);
 	return (
 		<Image
 			alt={symbol}
