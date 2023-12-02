@@ -15,6 +15,7 @@ import styled from 'styled-components';
 import { formatUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import { Framework } from '@superfluid-finance/sdk-core';
+import Slider from 'rc-slider';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -29,6 +30,7 @@ import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import { useDonateData } from '@/context/donate.context';
 import { RecurringDonationModal } from './RecurringDonationModal/RecurringDonationModal';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
+import 'rc-slider/assets/index.css';
 
 export interface ITokenStreams {
 	[key: string]: ISuperfluidStream[];
@@ -36,6 +38,7 @@ export interface ITokenStreams {
 
 export const RecurringDonationCard = () => {
 	const [amount, setAmount] = useState(0n);
+	const [percentage, setPercentage] = useState(0);
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
 	const [showRecurringDonationModal, setShowRecurringDonationModal] =
 		useState(false);
@@ -239,7 +242,7 @@ export const RecurringDonationCard = () => {
 					{selectedToken !== undefined &&
 						selectedToken.balance !== undefined && (
 							<Flex gap='4px'>
-								<GLink>
+								<GLink size='Small'>
 									Available:{' '}
 									{balance?.formatted ||
 										formatUnits(
@@ -252,6 +255,33 @@ export const RecurringDonationCard = () => {
 								</IconWrapper>
 							</Flex>
 						)}
+				</Flex>
+				<Flex flexDirection='column' gap='8px' alignItems='flex-start'>
+					<Caption>Amount to donate Monthly</Caption>
+					<SliderWrapper>
+						<StyledSlider
+							min={0}
+							max={100}
+							railStyle={{
+								backgroundColor: brandColors.giv[200],
+							}}
+							trackStyle={{
+								backgroundColor: brandColors.giv[500],
+							}}
+							handleStyle={{
+								backgroundColor: brandColors.giv[500],
+								border: `3px solid ${brandColors.giv[200]}`,
+								opacity: 1,
+							}}
+							onChange={(value: any) => {
+								const _value = Array.isArray(value)
+									? value[0]
+									: value;
+								setPercentage(_value);
+							}}
+							value={percentage}
+						/>
+					</SliderWrapper>
 				</Flex>
 				<Button
 					label='Donate'
@@ -336,3 +366,10 @@ const IconWrapper = styled.div`
 	cursor: pointer;
 	color: ${brandColors.giv[500]};
 `;
+
+const SliderWrapper = styled.div`
+	width: 100%;
+	position: relative;
+`;
+
+const StyledSlider = styled(Slider)``;
