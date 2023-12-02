@@ -13,14 +13,20 @@ export interface IAmountInput {
 	maxAmount: bigint;
 	setAmount: Dispatch<SetStateAction<bigint>>;
 	poolStakingConfig: PoolStakingConfig;
+	className?: string;
 	disabled?: boolean;
+	showMax?: boolean;
+	showPercentage?: boolean;
 }
 
 export const AmountInput: FC<IAmountInput> = ({
 	maxAmount,
 	setAmount,
 	poolStakingConfig,
+	className,
 	disabled = false,
+	showMax = false,
+	showPercentage = false,
 }) => {
 	const { formatMessage } = useIntl();
 	const [displayAmount, setDisplayAmount] = useState('');
@@ -77,80 +83,84 @@ export const AmountInput: FC<IAmountInput> = ({
 	);
 
 	return (
-		<>
-			<InputLabelRow justifyContent='space-between'>
-				<InputLabel>
-					<InputLabelText>
-						{formatMessage({ id: 'label.available' })}:{' '}
-					</InputLabelText>
-					<InputLabelValue>
-						&nbsp;
-						{formatWeiHelper(maxAmount.toString())}
-						&nbsp;
-						{poolStakingConfig.title}
-						&nbsp;
-						{poolStakingConfig.platform !==
-							StakingPlatform.GIVETH && 'LP'}
-					</InputLabelValue>
-				</InputLabel>
-				<InputLabelAction
-					onClick={() => {
-						if (disabled) return;
-						setAmountPercentage(100);
-						setActiveStep(100);
-					}}
-				>
-					Max
-				</InputLabelAction>
-			</InputLabelRow>
+		<div className={className}>
+			{showMax && (
+				<InputLabelRow justifyContent='space-between'>
+					<InputLabel>
+						<InputLabelText>
+							{formatMessage({ id: 'label.available' })}:{' '}
+						</InputLabelText>
+						<InputLabelValue>
+							&nbsp;
+							{formatWeiHelper(maxAmount.toString())}
+							&nbsp;
+							{poolStakingConfig.title}
+							&nbsp;
+							{poolStakingConfig.platform !==
+								StakingPlatform.GIVETH && 'LP'}
+						</InputLabelValue>
+					</InputLabel>
+					<InputLabelAction
+						onClick={() => {
+							if (disabled) return;
+							setAmountPercentage(100);
+							setActiveStep(100);
+						}}
+					>
+						Max
+					</InputLabelAction>
+				</InputLabelRow>
+			)}
 			<NumericalInput
 				value={displayAmount}
 				onUserInput={onUserInput}
 				disabled={disabled}
 			/>
-			<FiltersRow>
-				<Step
-					onClick={() => {
-						if (disabled) return;
-						setAmountPercentage(25);
-						setActiveStep(25);
-					}}
-					active={activeStep === 25}
-				>
-					25%
-				</Step>
-				<Step
-					onClick={() => {
-						if (disabled) return;
-						setAmountPercentage(50);
-						setActiveStep(50);
-					}}
-					active={activeStep === 50}
-				>
-					50%
-				</Step>
-				<Step
-					onClick={() => {
-						if (disabled) return;
-						setAmountPercentage(75);
-						setActiveStep(75);
-					}}
-					active={activeStep === 75}
-				>
-					75%
-				</Step>
-				<Step
-					onClick={() => {
-						if (disabled) return;
-						setAmountPercentage(100);
-						setActiveStep(100);
-					}}
-					active={activeStep === 100}
-				>
-					100%
-				</Step>
-			</FiltersRow>
-		</>
+			{showPercentage && (
+				<PercentageRow>
+					<Step
+						onClick={() => {
+							if (disabled) return;
+							setAmountPercentage(25);
+							setActiveStep(25);
+						}}
+						active={activeStep === 25}
+					>
+						25%
+					</Step>
+					<Step
+						onClick={() => {
+							if (disabled) return;
+							setAmountPercentage(50);
+							setActiveStep(50);
+						}}
+						active={activeStep === 50}
+					>
+						50%
+					</Step>
+					<Step
+						onClick={() => {
+							if (disabled) return;
+							setAmountPercentage(75);
+							setActiveStep(75);
+						}}
+						active={activeStep === 75}
+					>
+						75%
+					</Step>
+					<Step
+						onClick={() => {
+							if (disabled) return;
+							setAmountPercentage(100);
+							setActiveStep(100);
+						}}
+						active={activeStep === 100}
+					>
+						100%
+					</Step>
+				</PercentageRow>
+			)}
+		</div>
 	);
 };
 
@@ -169,7 +179,7 @@ const InputLabelAction = styled(GLink)`
 	cursor: pointer;
 `;
 
-const FiltersRow = styled(Flex)`
+const PercentageRow = styled(Flex)`
 	gap: 8px;
 `;
 
