@@ -9,10 +9,10 @@ import { Flex } from '../styled-components/Flex';
 import { BaseInput } from '../input/BaseInput';
 
 export interface IAmountInput {
-	maxAmount: bigint;
 	setAmount: Dispatch<SetStateAction<bigint>>;
 	className?: string;
 	disabled?: boolean;
+	maxAmount?: bigint;
 	showMax?: boolean;
 	balanceUnit?: string;
 	showPercentage?: boolean;
@@ -32,6 +32,7 @@ export const AmountInput: FC<IAmountInput> = ({
 
 	const setAmountPercentage = useCallback(
 		(percentage: number): void => {
+			if (!maxAmount) return;
 			const newAmount = new BigNumber(maxAmount.toString())
 				.multipliedBy(percentage)
 				.div(100)
@@ -82,7 +83,7 @@ export const AmountInput: FC<IAmountInput> = ({
 
 	return (
 		<div className={className}>
-			{showMax && (
+			{showMax && maxAmount !== undefined && (
 				<InputLabelRow justifyContent='space-between' id='max-row'>
 					<InputLabel>
 						<InputLabelText>

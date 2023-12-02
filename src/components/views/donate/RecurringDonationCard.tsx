@@ -231,7 +231,6 @@ export const RecurringDonationCard = () => {
 							<IconCaretDown16 />
 						</SelectTokenWrapper>
 						<Input
-							maxAmount={selectedToken?.balance || 0n}
 							setAmount={setAmount}
 							disabled={selectedToken === undefined}
 						/>
