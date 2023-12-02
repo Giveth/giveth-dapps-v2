@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import Image from 'next/image';
 
-interface IImageIconProps {
+export interface ITokenIconProps {
 	symbol: string;
 	size?: number;
 }
 
-export const TokenIcon: FC<IImageIconProps> = ({ symbol, size = 24 }) => {
+export const TokenIcon: FC<ITokenIconProps> = ({ symbol, size = 24 }) => {
 	const [src, setSrc] = useState(`/images/tokens/UNKOWN.svg`);
 	useEffect(() => {
 		setSrc(`/images/tokens/${symbol}.svg`);

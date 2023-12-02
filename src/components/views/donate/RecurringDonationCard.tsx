@@ -20,7 +20,7 @@ import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
 import { ISuperfluidStream } from '@/types/superFluid';
-import { TokenIcon } from './TokenIcon';
+import { TokenIcon } from './TokenIcon/TokenIcon';
 import { gqlRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';

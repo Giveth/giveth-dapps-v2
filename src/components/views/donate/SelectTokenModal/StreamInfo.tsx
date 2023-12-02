@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { type FC } from 'react';
 import { formatUnits } from 'viem';
 import { Flex } from '@/components/styled-components/Flex';
-import { TokenIcon } from '../TokenIcon';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
+import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
 
 interface IStreamInfoProps {
 	stream: ISuperfluidStream[];
@@ -41,12 +41,9 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 				onClick();
 			}}
 		>
-			<TokenIcon
-				symbol={
-					underlyingToken
-						? underlyingToken.symbol
-						: stream[0].token.symbol
-				}
+			<TokenIconWithGIVBack
+				showGiveBack
+				symbol={underlyingToken ? underlyingToken.symbol : 'ETH'}
 				size={32}
 			/>
 			<InfoWrapper
