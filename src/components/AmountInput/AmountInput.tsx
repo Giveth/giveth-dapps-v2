@@ -10,6 +10,7 @@ import { BaseInput } from '../input/BaseInput';
 
 export interface IAmountInput {
 	setAmount: Dispatch<SetStateAction<bigint>>;
+	decimals?: number;
 	className?: string;
 	disabled?: boolean;
 	maxAmount?: bigint;
@@ -22,6 +23,7 @@ export const AmountInput: FC<IAmountInput> = ({
 	maxAmount,
 	setAmount,
 	className,
+	decimals = 18,
 	disabled = false,
 	showMax = false,
 	showPercentage = false,
@@ -44,18 +46,18 @@ export const AmountInput: FC<IAmountInput> = ({
 					? maxAmount
 					: BigInt(
 							new BigNumber(_displayAmount)
-								.multipliedBy(1e18)
+								.multipliedBy(10 ** decimals)
 								.toFixed(0),
 					  ),
 			);
 		},
-		[maxAmount, setAmount],
+		[decimals, maxAmount, setAmount],
 	);
 
 	const onUserInput = useCallback(
 		(value: string) => {
-			const [, decimals] = value.split('.');
-			if (decimals?.length > 6) {
+			const [, _decimals] = value.split('.');
+			if (_decimals?.length > 6) {
 				return;
 			}
 			setDisplayAmount(value);
@@ -63,7 +65,7 @@ export const AmountInput: FC<IAmountInput> = ({
 			let valueBn = new BigNumber(0);
 
 			try {
-				valueBn = new BigNumber(value).multipliedBy('1e18');
+				valueBn = new BigNumber(value).multipliedBy(10 ** decimals);
 				setAmount(BigInt(valueBn.toFixed(0)));
 			} catch (error) {
 				setAmount(0n);

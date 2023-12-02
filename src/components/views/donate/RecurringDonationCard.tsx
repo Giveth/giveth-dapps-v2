@@ -175,7 +175,7 @@ export const RecurringDonationCard = () => {
 
 	const underlyingToken = selectedToken?.token.underlyingToken;
 
-	console.log('selectedToken', selectedToken);
+	console.log('amount', amount);
 
 	return (
 		<>
@@ -233,6 +233,7 @@ export const RecurringDonationCard = () => {
 						<Input
 							setAmount={setAmount}
 							disabled={selectedToken === undefined}
+							decimals={selectedToken?.token.decimals}
 						/>
 					</InputWrapper>
 					{selectedToken !== undefined &&
