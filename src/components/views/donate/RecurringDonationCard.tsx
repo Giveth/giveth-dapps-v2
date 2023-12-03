@@ -32,6 +32,7 @@ import { useDonateData } from '@/context/donate.context';
 import { RecurringDonationModal } from './RecurringDonationModal/RecurringDonationModal';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import 'rc-slider/assets/index.css';
+import DonateToGiveth from './DonateToGiveth';
 
 export interface ITokenStreams {
 	[key: string]: ISuperfluidStream[];
@@ -40,6 +41,7 @@ export interface ITokenStreams {
 export const RecurringDonationCard = () => {
 	const [amount, setAmount] = useState(0n);
 	const [percentage, setPercentage] = useState(0);
+	const [donationToGiveth, setDonationToGiveth] = useState(5);
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
 	const [showRecurringDonationModal, setShowRecurringDonationModal] =
 		useState(false);
@@ -199,16 +201,13 @@ export const RecurringDonationCard = () => {
 				</RecurringSectionTitle>
 				<Flex flexDirection='column' gap='8px'>
 					<Flex gap='8px' alignItems='center'>
-						<Caption>Stream Balance</Caption>
+						<Caption medium>Stream Balance</Caption>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
 							direction='right'
 							align='bottom'
 						>
-							<FlowRateTooltip>
-								The rate at which you receive liquid GIV from
-								your GIVstream.here!
-							</FlowRateTooltip>
+							<FlowRateTooltip>PlaceHolder</FlowRateTooltip>
 						</IconWithTooltip>
 					</Flex>
 					<InputWrapper>
@@ -314,11 +313,33 @@ export const RecurringDonationCard = () => {
 						</Flex>
 					</Flex>
 				</Flex>
-				<Button
-					label='Donate'
-					onClick={() => setShowRecurringDonationModal(true)}
-				/>
 			</RecurringSection>
+			<GivethSection
+				flexDirection='column'
+				gap='8px'
+				alignItems='stretch'
+			>
+				<Flex gap='8px' alignItems='center'>
+					<Caption medium>Add a recurring donation to Giveth</Caption>
+					<IconWithTooltip
+						icon={<IconHelpFilled16 />}
+						direction='right'
+						align='bottom'
+					>
+						<FlowRateTooltip>PlaceHolder</FlowRateTooltip>
+					</IconWithTooltip>
+				</Flex>
+				<DonateToGiveth
+					setDonationToGiveth={e => {
+						setDonationToGiveth(e);
+					}}
+					donationToGiveth={donationToGiveth}
+				/>
+			</GivethSection>
+			<Button
+				label='Donate'
+				onClick={() => setShowRecurringDonationModal(true)}
+			/>
 			{showSelectTokenModal && (
 				<SelectTokenModal
 					tokenStreams={tokenStreams}
@@ -405,3 +426,10 @@ const SliderWrapper = styled.div`
 `;
 
 const StyledSlider = styled(Slider)``;
+
+const GivethSection = styled(Flex)`
+	flex-direction: column;
+	gap: 24px;
+	width: 100%;
+	text-align: left;
+`;
