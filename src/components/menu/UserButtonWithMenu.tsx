@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
+import { useNetwork } from 'wagmi';
 import { shortenAddress } from '@/lib/helpers';
 import {
 	MenuAndButtonContainer,
