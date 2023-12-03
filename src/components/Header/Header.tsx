@@ -31,6 +31,8 @@ import { ETheme } from '@/features/general/general.slice';
 import {
 	setShowCompleteProfile,
 	setShowSearchModal,
+	setShowWalletModal,
+	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { useModalCallback } from '@/hooks/useModalCallback';
@@ -50,7 +52,7 @@ import {
 	fetchQFRounds,
 } from '@/features/general/general.thunk';
 import { ItemsProvider } from '@/context/Items.context';
-import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
+// import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import { CommunityMenu } from '../menu/CommunityMenu';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import config from '@/configuration';
@@ -88,7 +90,7 @@ const Header: FC<IHeader> = () => {
 	const isMobile = useMediaQuery(device.mobileL);
 	const { open: openConnectModal } = useWeb3Modal();
 
-	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
+	// const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
 	const handleBack = () => {
 		const calculateSlug = () => {
@@ -158,6 +160,14 @@ const Header: FC<IHeader> = () => {
 		return () => window.removeEventListener('scroll', onScroll);
 	}, [showHeader]);
 
+	const handleModals = () => {
+		// if (isGIVeconomyRoute) {
+		// 	openConnectModal?.();
+		// } else {
+		dispatch(setShowWelcomeModal(true));
+		// }
+	};
+
 	const { modalCallback: signInThenCreate } = useModalCallback(() =>
 		router.push(Routes.CreateProject),
 	);
@@ -165,7 +175,7 @@ const Header: FC<IHeader> = () => {
 	const handleCreateButton = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			openConnectModal?.();
+			setShowWalletModal(true);
 		} else if (!isSignedIn) {
 			signInThenCreate();
 		} else if (isUserRegistered(userData)) {
@@ -287,11 +297,12 @@ const Header: FC<IHeader> = () => {
 						buttonType='primary'
 						size='small'
 						label={formatMessage({
-							id: isGIVeconomyRoute
-								? 'component.button.connect_wallet'
-								: 'component.button.sign_in',
+							id: 'component.button.sign_in',
+							// isGIVeconomyRoute
+							// 	? 'component.button.connect_wallet'
+							// 	: 'component.button.sign_in',
 						})}
-						onClick={() => openConnectModal?.()}
+						onClick={handleModals}
 					/>
 				)}
 			</Flex>

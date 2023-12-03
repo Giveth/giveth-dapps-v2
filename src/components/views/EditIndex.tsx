@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
 	setShowSignWithWallet,
+	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
 import { WrappedSpinner } from '@/components/Spinner';
 import NotAvailableHandler from '@/components/NotAvailableHandler';
@@ -87,6 +88,7 @@ const EditIndex = () => {
 				});
 		} else {
 			if (!isLoadingUser) {
+				dispatch(setShowWelcomeModal(true));
 				setIsLoadingProject(false);
 			}
 		}

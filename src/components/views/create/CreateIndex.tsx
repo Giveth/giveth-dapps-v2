@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
 	setShowSignWithWallet,
+	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
@@ -30,6 +31,8 @@ const CreateIndex = () => {
 			if (!isRegistered && isSignedIn) {
 				dispatch(setShowCompleteProfile(true));
 			}
+		} else {
+			if (!isLoading) dispatch(setShowWelcomeModal(true));
 		}
 	}, [user, isSignedIn, isLoading]);
 
