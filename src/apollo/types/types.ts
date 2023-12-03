@@ -6,6 +6,7 @@ import {
 	EProjectsSortBy,
 } from '@/apollo/types/gqlEnums';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
+import config from '@/configuration';
 
 export interface IProjectPower {
 	powerRank: number;
@@ -81,19 +82,44 @@ export interface IDonationProject extends IProject {
 	givethAddresses: IWalletAddress[];
 }
 
-export enum EProjectsFilter {
-	ACCEPT_GIV = 'AcceptGiv',
-	VERIFIED = 'Verified',
-	BOOSTED_WITH_GIVPOWER = 'BoostedWithGivPower',
-	GIVING_BLOCK = 'GivingBlock',
-	ACCEPT_FUND_ON_MAINNET = 'AcceptFundOnMainnet',
-	ACCEPT_FUND_ON_GNOSIS = 'AcceptFundOnGnosis',
-	ACCEPT_FUND_ON_POLYGON = 'AcceptFundOnPolygon',
-	ACCEPT_FUND_ON_CELO = 'AcceptFundOnCelo',
-	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
-	ACCEPT_FUND_ON_ETC = 'AcceptFundOnETC',
-	ACTIVE_QF_ROUND = 'ActiveQfRound',
-}
+const networkIds = Object.keys(config.NETWORKS_CONFIG).map(Number);
+const networkNames = networkIds.map(id =>
+	config.NETWORKS_CONFIG[id].chainName.split(' ')[0].toUpperCase(),
+);
+type TNetworkNames = (typeof networkNames)[number];
+
+type TStaticFilters = {
+	ACCEPT_GIV: 'AcceptGiv';
+	VERIFIED: 'Verified';
+	BOOSTED_WITH_GIVPOWER: 'BoostedWithGivPower';
+	GIVING_BLOCK: 'GivingBlock';
+	ACTIVE_QF_ROUND: 'ActiveQfRound';
+};
+
+// For dynamic members, we allow strings generated based on the network names
+type TDynamicFilters = {
+	[key in `ACCEPT_FUND_ON_${Uppercase<TNetworkNames>}`]: `AcceptFundOn${TNetworkNames}`;
+};
+
+export type TProjectsFilter = TStaticFilters & TDynamicFilters;
+
+const generateDynamicNetworks = (): Partial<TProjectsFilter> => {
+	return Object.fromEntries(
+		networkNames.map(network => [
+			`ACCEPT_FUND_ON_${network.toUpperCase()}`,
+			`AcceptFundOn${network}`,
+		]),
+	) as Partial<TProjectsFilter>;
+};
+
+export const EProjectsFilter: TProjectsFilter = {
+	ACCEPT_GIV: 'AcceptGiv',
+	VERIFIED: 'Verified',
+	BOOSTED_WITH_GIVPOWER: 'BoostedWithGivPower',
+	GIVING_BLOCK: 'GivingBlock',
+	ACTIVE_QF_ROUND: 'ActiveQfRound',
+	...generateDynamicNetworks(),
+};
 
 export enum ECampaignType {
 	MANUALLY_SELECTED = 'ManuallySelected',

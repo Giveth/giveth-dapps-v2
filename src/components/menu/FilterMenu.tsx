@@ -16,6 +16,9 @@ import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
 import { zIndex } from '@/lib/constants/constants';
 import { EProjectsFilter } from '@/apollo/types/types';
+import config from '@/configuration';
+
+const networksConfig = config.NETWORKS_CONFIG;
 
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
@@ -29,33 +32,35 @@ const projectsFeatures = [
 	},
 ];
 
-const fundsFilter = [
-	{
-		label: 'Mainnet',
+// const fundsFilter = [
+// 	{
+// 		label: 'Mainnet',
+// 		value: EProjectsFilter.ACCEPT_FUND_ON_MAINNET,
+// 	},
+// 	{
+// 		label: 'Gnosis',
+// 		value: EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
+// 	},
+// 	{
+// 		label: 'Polygon',
+// 		value: EProjectsFilter.ACCEPT_FUND_ON_POLYGON,
+// 	},
+// 	{
+// 		label: 'Celo',
+// 		value: EProjectsFilter.ACCEPT_FUND_ON_CELO,
+// 	},
+// 	{
+// 		label: 'Optimism',
+// 		value: EProjectsFilter.ACCEPT_FUND_ON_OPTIMISM,
+// 	},
+// ];
 
-		value: EProjectsFilter.ACCEPT_FUND_ON_MAINNET,
-	},
-	{
-		label: 'Gnosis',
-		value: EProjectsFilter.ACCEPT_FUND_ON_GNOSIS,
-	},
-	{
-		label: 'Polygon',
-		value: EProjectsFilter.ACCEPT_FUND_ON_POLYGON,
-	},
-	{
-		label: 'Celo',
-		value: EProjectsFilter.ACCEPT_FUND_ON_CELO,
-	},
-	{
-		label: 'Optimism',
-		value: EProjectsFilter.ACCEPT_FUND_ON_OPTIMISM,
-	},
-	{
-		label: 'Ethereum Classic',
-		value: EProjectsFilter.ACCEPT_FUND_ON_ETC,
-	},
-];
+const networkIds = Object.keys(networksConfig).map(Number);
+
+const fundsFilter = networkIds.map(networkId => ({
+	label: networksConfig[networkId].chainName,
+	value: networksConfig[networkId].chainName.split(' ')[0],
+}));
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {
