@@ -52,7 +52,7 @@ export const RecurringDonationCard = () => {
 		address: address,
 		enabled: false,
 	});
-	const { selectedToken } = useDonateData();
+	const { project, selectedToken } = useDonateData();
 
 	useEffect(() => {
 		if (!address) return;
@@ -183,6 +183,11 @@ export const RecurringDonationCard = () => {
 
 	console.log('amount', amount);
 
+	const totalPerMonth = ((amount || 0n) * BigInt(percentage)) / 100n;
+	const projectPerMonth =
+		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
+	const givethPerMonth = totalPerMonth - projectPerMonth;
+
 	return (
 		<>
 			<Title weight={700}>
@@ -290,9 +295,7 @@ export const RecurringDonationCard = () => {
 							<B>
 								{amount !== 0n && percentage !== 0
 									? formatUnits(
-											((amount || 0n) *
-												BigInt(percentage)) /
-												100n,
+											totalPerMonth,
 											selectedToken?.token.decimals || 18,
 									  )
 									: 0}
@@ -336,7 +339,62 @@ export const RecurringDonationCard = () => {
 					donationToGiveth={donationToGiveth}
 				/>
 			</GivethSection>
-			<Button
+			<DonatesInfoSection>
+				<Flex flexDirection='column' gap='8px'>
+					<Flex justifyContent='space-between'>
+						<Caption>
+							Donating to <b>{project.title}</b>
+						</Caption>
+						<Flex gap='4px'>
+							<Caption>
+								{amount !== 0n && percentage !== 0
+									? formatUnits(
+											projectPerMonth,
+											selectedToken?.token.decimals || 18,
+									  )
+									: 0}
+							</Caption>
+							<Caption>{selectedToken?.token.symbol}</Caption>
+							<Caption>monthly</Caption>
+						</Flex>
+					</Flex>
+					<Flex justifyContent='space-between'>
+						<Caption>
+							Donating <b>{donationToGiveth}%</b> to <b>Giveth</b>
+						</Caption>
+						<Flex gap='4px'>
+							<Caption>
+								{amount !== 0n && percentage !== 0
+									? formatUnits(
+											givethPerMonth,
+											selectedToken?.token.decimals || 18,
+									  )
+									: 0}
+							</Caption>
+							<Caption>{selectedToken?.token.symbol}</Caption>
+							<Caption>monthly</Caption>
+						</Flex>
+					</Flex>
+					<Flex justifyContent='space-between'>
+						<Caption medium>Your total donation</Caption>
+						<Flex gap='4px'>
+							<Caption medium>
+								{amount !== 0n && percentage !== 0
+									? formatUnits(
+											totalPerMonth,
+											selectedToken?.token.decimals || 18,
+									  )
+									: 0}
+							</Caption>
+							<Caption medium>
+								{selectedToken?.token.symbol}
+							</Caption>
+							<Caption medium>monthly</Caption>
+						</Flex>
+					</Flex>
+				</Flex>
+			</DonatesInfoSection>
+			<DonateButton
 				label='Donate'
 				onClick={() => setShowRecurringDonationModal(true)}
 			/>
@@ -370,6 +428,7 @@ const Desc = styled(Caption)`
 
 const RecurringSection = styled(Flex)`
 	flex-direction: column;
+	align-items: stretch;
 	gap: 24px;
 	padding: 16px;
 	border-radius: 12px;
@@ -432,4 +491,15 @@ const GivethSection = styled(Flex)`
 	gap: 24px;
 	width: 100%;
 	text-align: left;
+`;
+
+const DonatesInfoSection = styled(Flex)`
+	flex-direction: column;
+	gap: 24px;
+	width: 100%;
+	text-align: left;
+`;
+
+const DonateButton = styled(Button)`
+	width: 100%;
 `;
