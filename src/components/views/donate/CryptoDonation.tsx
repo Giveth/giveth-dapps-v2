@@ -419,6 +419,9 @@ const CryptoDonation: FC = () => {
 						setDonationToGiveth(e);
 					}}
 					donationToGiveth={donationToGiveth}
+					title={
+						formatMessage({ id: 'label.donation_to' }) + ' Giveth'
+					}
 				/>
 			) : (
 				<br />

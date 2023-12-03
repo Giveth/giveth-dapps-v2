@@ -322,21 +322,12 @@ export const RecurringDonationCard = () => {
 				gap='8px'
 				alignItems='stretch'
 			>
-				<Flex gap='8px' alignItems='center'>
-					<Caption medium>Add a recurring donation to Giveth</Caption>
-					<IconWithTooltip
-						icon={<IconHelpFilled16 />}
-						direction='right'
-						align='bottom'
-					>
-						<FlowRateTooltip>PlaceHolder</FlowRateTooltip>
-					</IconWithTooltip>
-				</Flex>
 				<DonateToGiveth
 					setDonationToGiveth={e => {
 						setDonationToGiveth(e);
 					}}
 					donationToGiveth={donationToGiveth}
+					title='Add a recurring donation to Giveth'
 				/>
 			</GivethSection>
 			<DonatesInfoSection>
