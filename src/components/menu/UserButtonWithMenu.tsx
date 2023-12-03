@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount, useNetwork } from 'wagmi';
+import { useWallet } from '@solana/wallet-adapter-react';
 import { shortenAddress } from '@/lib/helpers';
 import {
 	MenuAndButtonContainer,
@@ -27,6 +28,7 @@ import { FlexSpacer } from '../styled-components/Flex';
 import { ItemsProvider } from '@/context/Items.context';
 import { SignWithWalletModal } from '../modals/SignWithWalletModal';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -123,7 +125,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 };
 
 const HeaderUserButton = ({}) => {
-	const { address } = useAccount();
+	const { walletAddress } = useAuthenticationWallet();
 	const { userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	const { chain } = useNetwork();
@@ -137,7 +139,7 @@ const HeaderUserButton = ({}) => {
 			/>
 			<WBInfo>
 				<UserName size='Medium'>
-					{userData?.name || shortenAddress(address)}
+					{userData?.name || shortenAddress(walletAddress)}
 				</UserName>
 				<WBNetwork size='Tiny'>
 					{formatMessage({

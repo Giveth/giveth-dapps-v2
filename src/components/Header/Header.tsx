@@ -9,8 +9,12 @@ import {
 	IconSearch24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useAccount, useNetwork } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import {
+	WalletDisconnectButton,
+	WalletMultiButton,
+} from '@solana/wallet-adapter-react-ui';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
 	ConnectButton,
@@ -52,10 +56,11 @@ import {
 	fetchQFRounds,
 } from '@/features/general/general.thunk';
 import { ItemsProvider } from '@/context/Items.context';
-// import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
+import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import { CommunityMenu } from '../menu/CommunityMenu';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import config from '@/configuration';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -69,7 +74,7 @@ const Header: FC<IHeader> = () => {
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 
-	const { address } = useAccount();
+	const { walletAddress } = useAuthenticationWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 
@@ -90,7 +95,7 @@ const Header: FC<IHeader> = () => {
 	const isMobile = useMediaQuery(device.mobileL);
 	const { open: openConnectModal } = useWeb3Modal();
 
-	// const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
+	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
 	const handleBack = () => {
 		const calculateSlug = () => {
@@ -161,11 +166,11 @@ const Header: FC<IHeader> = () => {
 	}, [showHeader]);
 
 	const handleModals = () => {
-		// if (isGIVeconomyRoute) {
-		// 	openConnectModal?.();
-		// } else {
-		dispatch(setShowWelcomeModal(true));
-		// }
+		if (isGIVeconomyRoute) {
+			openConnectModal?.();
+		} else {
+			dispatch(setShowWelcomeModal(true));
+		}
 	};
 
 	const { modalCallback: signInThenCreate } = useModalCallback(() =>
@@ -275,7 +280,7 @@ const Header: FC<IHeader> = () => {
 						label='+'
 					/>
 				</SmallCreateProjectParent>
-				{address && chainId ? (
+				{walletAddress ? (
 					<>
 						<NotificationButtonWithMenu
 							isHeaderShowing={showHeader}
@@ -297,14 +302,15 @@ const Header: FC<IHeader> = () => {
 						buttonType='primary'
 						size='small'
 						label={formatMessage({
-							id: 'component.button.sign_in',
-							// isGIVeconomyRoute
-							// 	? 'component.button.connect_wallet'
-							// 	: 'component.button.sign_in',
+							id: isGIVeconomyRoute
+								? 'component.button.connect_wallet'
+								: 'component.button.sign_in',
 						})}
 						onClick={handleModals}
 					/>
 				)}
+				<WalletMultiButton />
+				<WalletDisconnectButton />
 			</Flex>
 			{sidebarCondition && (
 				<SideBar

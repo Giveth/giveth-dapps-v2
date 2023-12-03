@@ -1,3 +1,4 @@
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import type { Chain } from 'wagmi';
 
 export type Address = `0x${string}`;
@@ -206,6 +207,7 @@ export interface EnvConfig {
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
 	RARIBLE_ADDRESS: string;
+	SOLANA_NETWORK: WalletAdapterNetwork;
 }
 
 export interface GlobalConfig extends EnvConfig {

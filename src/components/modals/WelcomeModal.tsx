@@ -4,6 +4,7 @@ import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ethIcon from '/public/images/tokens/ETH.svg';
@@ -20,6 +21,7 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const { open: openConnectModal } = useWeb3Modal();
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { setVisible } = useWalletModal();
 
 	return (
 		<>
@@ -58,6 +60,7 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 								style={{ marginTop: '32px' }}
 								onClick={() => {
 									// openConnectModal && openConnectModal();
+									setVisible(true);
 									dispatch(setShowWelcomeModal(false));
 								}}
 							>

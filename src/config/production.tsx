@@ -6,6 +6,7 @@ import {
 	optimism,
 	polygon,
 } from 'wagmi/chains';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {
 	EnvConfig,
 	StakingPlatform,
@@ -35,6 +36,7 @@ const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
 const CLASSIC_NETWORK_NUMBER = 61;
+const SOLANA_NETWORK = WalletAdapterNetwork.Mainnet;
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -55,6 +57,7 @@ const config: EnvConfig = {
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
+	SOLANA_NETWORK: SOLANA_NETWORK,
 
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',

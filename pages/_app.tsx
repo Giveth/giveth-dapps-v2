@@ -6,7 +6,7 @@ import { ApolloProvider } from '@apollo/client';
 import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
 import Script from 'next/script';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { EIP6963Connector, createWeb3Modal } from '@web3modal/wagmi/react';
@@ -37,6 +37,7 @@ import {
 } from '@/lib/helpers';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
+import { SolanaProvider } from '@/solana/solanaWalletProvider';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 
@@ -179,66 +180,69 @@ function MyApp({ Component, pageProps }: AppProps) {
 					content='width=device-width, initial-scale=1.0'
 				/>
 			</Head>
-			<Provider store={store}>
+			<ReduxProvider store={store}>
 				<IntlProvider
 					locale={locale!}
 					messages={IntlMessages[locale as keyof typeof IntlMessages]}
 					defaultLocale={defaultLocale}
 				>
 					<ApolloProvider client={apolloClient}>
-						<WagmiConfig config={wagmiConfig}>
-							{isMaintenanceMode ? (
-								<MaintenanceIndex />
-							) : (
-								<>
-									<NotificationController />
-									<GeneralController />
-									<PriceController />
-									<SubgraphController />
-									<UserController />
-									<HeaderWrapper />
-									{isGIVeconomyRoute(router.route) && (
-										<GIVeconomyTab />
-									)}
-									{(pageProps as any).errorStatus ? (
-										<ErrorsIndex
-											statusCode={
-												(pageProps as any).errorStatus
-											}
-										/>
-									) : (
-										<Component {...pageProps} />
-									)}
-									{process.env.NEXT_PUBLIC_ENV ===
-										'production' && (
-										<Script
-											id='segment-script'
-											strategy='afterInteractive'
-											dangerouslySetInnerHTML={{
-												__html: renderSnippet(),
-											}}
-										/>
-									)}
-									{process.env.NEXT_PUBLIC_ENV !==
-										'production' && (
-										<Script
-											id='console-script'
-											strategy='afterInteractive'
-											dangerouslySetInnerHTML={{
-												__html: `javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();`,
-											}}
-										/>
-									)}
+						<SolanaProvider>
+							<WagmiConfig config={wagmiConfig}>
+								{isMaintenanceMode ? (
+									<MaintenanceIndex />
+								) : (
+									<>
+										<NotificationController />
+										<GeneralController />
+										<PriceController />
+										<SubgraphController />
+										<UserController />
+										<HeaderWrapper />
+										{isGIVeconomyRoute(router.route) && (
+											<GIVeconomyTab />
+										)}
+										{(pageProps as any).errorStatus ? (
+											<ErrorsIndex
+												statusCode={
+													(pageProps as any)
+														.errorStatus
+												}
+											/>
+										) : (
+											<Component {...pageProps} />
+										)}
+										{process.env.NEXT_PUBLIC_ENV ===
+											'production' && (
+											<Script
+												id='segment-script'
+												strategy='afterInteractive'
+												dangerouslySetInnerHTML={{
+													__html: renderSnippet(),
+												}}
+											/>
+										)}
+										{process.env.NEXT_PUBLIC_ENV !==
+											'production' && (
+											<Script
+												id='console-script'
+												strategy='afterInteractive'
+												dangerouslySetInnerHTML={{
+													__html: `javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();`,
+												}}
+											/>
+										)}
 
-									<FooterWrapper />
-									<ModalController />
-									<PfpController />
-								</>
-							)}
-						</WagmiConfig>
+										<FooterWrapper />
+										<ModalController />
+										<PfpController />
+									</>
+								)}
+							</WagmiConfig>
+						</SolanaProvider>
 					</ApolloProvider>
 				</IntlProvider>
-			</Provider>
+			</ReduxProvider>
 
 			<Toaster containerStyle={{ top: '80px' }} />
 		</>
