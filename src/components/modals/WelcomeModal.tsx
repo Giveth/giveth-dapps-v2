@@ -7,6 +7,7 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ethIcon from '/public/images/tokens/ETH.svg';
+import solanaIcon from '/public/images/tokens/SOLANA.svg';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
@@ -40,7 +41,7 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 							})}
 						</ContentSubtitle>
 						<IconContentContainer>
-							<EthIconContainer
+							<ChainIconContainer
 								onClick={() => {
 									openConnectModal && openConnectModal();
 									dispatch(setShowWelcomeModal(false));
@@ -52,12 +53,21 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 										id: 'label.sign_in_with_ethereum',
 									})}
 								</B>
-							</EthIconContainer>
-							<BreakPoint>
-								<BreakLine />
-								<P>{formatMessage({ id: 'label.or' })}</P>
-								<BreakLine />
-							</BreakPoint>
+							</ChainIconContainer>
+							<ChainIconContainer
+								style={{ marginTop: '32px' }}
+								onClick={() => {
+									// openConnectModal && openConnectModal();
+									dispatch(setShowWelcomeModal(false));
+								}}
+							>
+								<Image src={solanaIcon} alt='Solana icon' />
+								<B>
+									{formatMessage({
+										id: 'label.sign_in_with_solana',
+									})}
+								</B>
+							</ChainIconContainer>
 						</IconContentContainer>
 					</ContentContainer>
 				</ModalGrid>
@@ -124,7 +134,7 @@ const IconsContainer = styled.div`
 	cursor: pointer;
 `;
 
-const EthIconContainer = styled(IconsContainer)`
+const ChainIconContainer = styled(IconsContainer)`
 	padding: 20px 24px;
 	border-radius: 4px;
 	color: ${brandColors.deep[800]};
