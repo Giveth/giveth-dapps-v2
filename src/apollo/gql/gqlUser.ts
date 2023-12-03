@@ -185,7 +185,18 @@ export const FETCH_USER_STREAMS_BY_ADDRESS = `
 			token {
 			  symbol
 			  name
+			  isSuperToken
+			  decimals
 			}
+		  }
+		}
+		streams(where: {receiver: "0x871cd6353b803ceceb090bb827ecb2f361db81ab"}) {
+		  id
+		  deposit
+		  streamedUntilUpdatedAt
+		  token {
+			name
+			symbol
 		  }
 		}
 	  }
