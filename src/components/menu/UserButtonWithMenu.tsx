@@ -1,8 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
-import { useAccount, useNetwork } from 'wagmi';
-import { useWallet } from '@solana/wallet-adapter-react';
 import { shortenAddress } from '@/lib/helpers';
 import {
 	MenuAndButtonContainer,
