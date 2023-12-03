@@ -17,6 +17,7 @@ import { formatUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import { Framework } from '@superfluid-finance/sdk-core';
 import Slider from 'rc-slider';
+import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -389,6 +390,15 @@ export const RecurringDonationCard = () => {
 				label='Donate'
 				onClick={() => setShowRecurringDonationModal(true)}
 			/>
+			<Flex gap='16px'>
+				<P>Streams powered by</P>
+				<Image
+					src='/images/logo/superfluid-logo.svg'
+					width={120}
+					height={30}
+					alt='Superfluid logo'
+				/>
+			</Flex>
 			{showSelectTokenModal && (
 				<SelectTokenModal
 					tokenStreams={tokenStreams}
