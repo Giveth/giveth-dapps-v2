@@ -30,10 +30,10 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { getNowUnixMS } from '@/helpers/time';
-import { InputWithUnit } from '@/components/input/NumericalInput';
 import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
 import { WeiPerEther } from '@/lib/constants/constants';
+import { InputWithUnit } from '@/components/input/InputWithUnit';
 
 const InvestCardContainer = styled(Card)`
 	::before {
