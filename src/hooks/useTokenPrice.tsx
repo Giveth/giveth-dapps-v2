@@ -5,7 +5,6 @@ import { fetchETCPrice, fetchPrice } from '@/services/token';
 import { fetchEthPrice } from '@/features/price/price.services';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
-import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
 const ethereumChain = config.MAINNET_CONFIG;
 const gnosisChain = config.GNOSIS_CONFIG;
@@ -15,7 +14,14 @@ const stableCoins = [
 	'USDT',
 ];
 
-export const useTokenPrice = (token: IProjectAcceptedToken) => {
+interface ITokenPice {
+	symbol: string;
+	address?: Address;
+	id?: Address;
+	mainnetAddress?: Address;
+}
+
+export const useTokenPrice = (token?: ITokenPice) => {
 	const [tokenPrice, setTokenPrice] = useState<number>();
 
 	const { chain } = useNetwork();

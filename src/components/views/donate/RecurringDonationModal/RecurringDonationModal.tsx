@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { IconDonation32, mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Modal } from '@/components/modals/Modal';
@@ -8,6 +8,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { ITokenStreams } from '../RecurringDonationCard';
 import { useDonateData } from '@/context/donate.context';
 import { Item } from './Item';
+import { useTokenPrice } from '@/hooks/useTokenPrice';
 
 interface IRecurringDonationModalProps extends IModal {
 	tokenStreams: ITokenStreams;
@@ -74,7 +75,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 }) => {
 	const { project, selectedToken } = useDonateData();
 
-	useEffect(() => {}, [selectedToken]);
+	const tokenPrice = useTokenPrice(selectedToken?.token);
+	console.log('tokenPrice', tokenPrice);
 
 	const totalPerMonth = ((amount || 0n) * BigInt(percentage)) / 100n;
 	const projectPerMonth =
@@ -88,21 +90,21 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					<Item
 						title='Deposit into your stream balance'
 						amount={amount}
-						price={0n}
+						price={tokenPrice}
 						token={selectedToken?.token!}
 					/>
 				)}
 				<Item
 					title={`Donate Monthly to ${project.title}`}
 					amount={projectPerMonth}
-					price={0n}
+					price={tokenPrice}
 					token={selectedToken?.token!}
 				/>
 				{donationToGiveth > 0 && (
 					<Item
 						title='Donate Monthly to the Giveth DAO'
 						amount={givethPerMonth}
-						price={0n}
+						price={tokenPrice}
 						token={selectedToken?.token!}
 					/>
 				)}

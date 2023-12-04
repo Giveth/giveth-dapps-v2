@@ -2,13 +2,15 @@ import { type FC } from 'react';
 import styled from 'styled-components';
 import { P, B, neutralColors } from '@giveth/ui-design-system';
 import { formatUnits } from 'viem';
+import BigNumber from 'bignumber.js';
 import { Flex } from '@/components/styled-components/Flex';
 import { IToken } from '@/types/superFluid';
+import { limitFraction } from '@/helpers/number';
 
 interface IItemProps {
 	title: string;
 	amount: bigint;
-	price: bigint;
+	price?: number;
 	token: IToken;
 }
 
@@ -28,10 +30,18 @@ export const Item: FC<IItemProps> = ({ title, amount, price, token }) => {
 					</B>
 					<B>~</B>
 					<P>
-						{formatUnits(
-							amount * price,
-							token.underlyingToken?.decimals || 18,
-						)}
+						{price !== undefined &&
+							limitFraction(
+								formatUnits(
+									BigInt(
+										new BigNumber(price)
+											.multipliedBy(amount.toString())
+											.toFixed(0),
+									),
+									token.underlyingToken?.decimals || 18,
+								),
+								2,
+							)}
 						&nbsp;USD
 					</P>
 				</Flex>
