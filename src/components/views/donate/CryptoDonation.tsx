@@ -19,7 +19,7 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
-import DonateModal from '@/components/modals/DonateModal';
+import DonateModal from '@/components/views/donate/DonateModal';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import GeminiModal from './GeminiModal';
