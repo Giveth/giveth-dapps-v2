@@ -348,6 +348,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
 				farmStartTimeMS: 1685460000000,
+				farmEndTimeMS: 1701302400000,
 				introCard: {
 					title: 'ShapeShift DAO',
 					description:
