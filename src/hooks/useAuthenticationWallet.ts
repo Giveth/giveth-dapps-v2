@@ -1,7 +1,10 @@
 import { useWallet } from '@solana/wallet-adapter-react';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount, useDisconnect, useNetwork } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
 import { useEffect, useState } from 'react';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { chainNameById } from '@/lib/network';
+import config from '@/configuration';
 
 export enum WalletType {
 	SOLANA,
@@ -14,9 +17,10 @@ export const useAuthenticationWallet = () => {
 	// Wagmi hooks (Ethereum)
 	const { address } = useAccount();
 	const { chain } = useNetwork();
+	const { disconnect: ethereumWalletDisconnect } = useDisconnect();
 
 	// Solana wallet hooks
-	const { publicKey } = useWallet();
+	const { publicKey, disconnect: solanaWalletDisconnect } = useWallet();
 
 	const signByEvm = async (message: string) => {
 		const walletClient = await getWalletClient();
@@ -56,5 +60,35 @@ export const useAuthenticationWallet = () => {
 		}
 	};
 
-	return { walletType, signMessage, walletAddress };
+	const disconnect = () => {
+		switch (walletType) {
+			case WalletType.ETHEREUM:
+				ethereumWalletDisconnect();
+				break;
+			case WalletType.SOLANA:
+				solanaWalletDisconnect();
+				break;
+			default:
+				break;
+		}
+	};
+
+	const getChainName = () => {
+		switch (walletType) {
+			case WalletType.ETHEREUM:
+				return chainNameById(chain?.id);
+
+			case WalletType.SOLANA:
+				return (
+					'Solana' +
+					(config.SOLANA_NETWORK !== WalletAdapterNetwork.Mainnet
+						? ` ${config.SOLANA_NETWORK}`
+						: '')
+				);
+			default:
+				return '';
+		}
+	};
+
+	return { walletType, signMessage, walletAddress, disconnect, getChainName };
 };

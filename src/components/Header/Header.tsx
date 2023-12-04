@@ -11,10 +11,6 @@ import {
 import { useIntl } from 'react-intl';
 import { useNetwork } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import {
-	WalletDisconnectButton,
-	WalletMultiButton,
-} from '@solana/wallet-adapter-react-ui';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
 	ConnectButton,
@@ -309,8 +305,6 @@ const Header: FC<IHeader> = () => {
 						onClick={handleModals}
 					/>
 				)}
-				<WalletMultiButton />
-				<WalletDisconnectButton />
 			</Flex>
 			{sidebarCondition && (
 				<SideBar

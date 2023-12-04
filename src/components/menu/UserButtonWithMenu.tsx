@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
-import { useNetwork } from 'wagmi';
 import { shortenAddress } from '@/lib/helpers';
 import {
 	MenuAndButtonContainer,
@@ -124,10 +123,9 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 };
 
 const HeaderUserButton = ({}) => {
-	const { walletAddress } = useAuthenticationWallet();
+	const { walletAddress, getChainName } = useAuthenticationWallet();
 	const { userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
-	const { chain } = useNetwork();
 	return (
 		<HBContainer>
 			<HBPic
@@ -144,7 +142,7 @@ const HeaderUserButton = ({}) => {
 					{formatMessage({
 						id: 'label.connected_to',
 					})}{' '}
-					{chain?.name}
+					{getChainName()}
 				</WBNetwork>
 			</WBInfo>
 		</HBContainer>

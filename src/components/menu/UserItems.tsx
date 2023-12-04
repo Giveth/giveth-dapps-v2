@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 import { B, GLink } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
-import { useAccount, useDisconnect, useNetwork } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
@@ -22,7 +22,7 @@ import { Item } from './Item';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
 import StorageLabel from '@/lib/localStorage';
-import { chainNameById } from '@/lib/network';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 interface IUserItemsProps {
 	setSignWithWallet: Dispatch<SetStateAction<boolean>>;
@@ -35,8 +35,8 @@ export const UserItems: FC<IUserItemsProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 
-	const { address } = useAccount();
-	const { disconnect } = useDisconnect();
+	const { walletAddress, disconnect, getChainName } =
+		useAuthenticationWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
@@ -63,7 +63,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 		router.push(url);
 	};
 
-	const networkName = chainNameById(chainId);
+	const networkName = getChainName();
 
 	return (
 		<>
@@ -72,7 +72,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 					{formatMessage({ id: 'label.wallet' })}
 				</ItemTitle>
 				<ItemRow>
-					<B>{shortenAddress(address)}</B>
+					<B>{shortenAddress(walletAddress)}</B>
 				</ItemRow>
 			</Item>
 			<Item theme={theme}>
