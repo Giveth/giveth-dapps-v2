@@ -176,31 +176,49 @@ export const FETCH_USER_STREAMS = `
 
 export const FETCH_USER_STREAMS_BY_ADDRESS = `
 	query FetchUserStreams($address: String!) {
-		accounts(where: {id: "0x871cd6353b803ceceb090bb827ecb2f361db81ab"}) {
-		  inflows {
-			id
-			sender {
-			  id
-			}
-			token {
-			  symbol
-			  name
-			  isSuperToken
-			  decimals
-			}
-		  }
-		}
-		streams(where: {receiver: "0x871cd6353b803ceceb090bb827ecb2f361db81ab"}) {
+		streams(where: {receiver: $address}) {
 		  id
-		  deposit
-		  streamedUntilUpdatedAt
 		  token {
 			name
 			symbol
+			id
+			decimals
+			isSuperToken
 		  }
 		}
 	  }
 `;
+
+// export const FETCH_ACCOUNTS_STREAMS_BY_ADDRESS = `
+// 	query FetchUserStreams($address: String!) {
+// 		accounts(where: {id: "0x871cd6353b803ceceb090bb827ecb2f361db81ab"}) {
+// 		  inflows {
+// 			id
+// 			sender {
+// 			  id
+// 			}
+// 			token {
+// 			  symbol
+// 			  name
+// 			  isSuperToken
+// 			  decimals
+// 	          id
+// 			}
+// 		  }
+// 		}
+// 		streams(where: {receiver: "0x871cd6353b803ceceb090bb827ecb2f361db81ab"}) {
+// 		  id
+// 		  deposit
+// 		  streamedUntilUpdatedAt
+// 		  token {
+// 			name
+// 			symbol
+// 			id
+// 		  }
+// 		}
+// 	  }
+
+// `;
 
 export const FETCH_USER_GIVPOWER_BY_ADDRESS = `
 	query unipoolBalance($id: String!) {
