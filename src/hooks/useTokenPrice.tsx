@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { useState, useEffect } from 'react';
-import { useNetwork } from 'wagmi';
+import { type Address, useNetwork } from 'wagmi';
 import { fetchETCPrice, fetchPrice } from '@/services/token';
 import { fetchEthPrice } from '@/features/price/price.services';
 import { useAppSelector } from '@/features/hooks';
@@ -37,18 +37,18 @@ export const useTokenPrice = (token: IProjectAcceptedToken) => {
 				const ethPrice = await fetchEthPrice();
 				setTokenPrice(ethPrice || 0);
 			} else if (token?.address) {
-				let tokenAddress = token.address;
-				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
-				if (!isMainnet && token.mainnetAddress) {
-					tokenAddress =
-						(token.mainnetAddress as `0x${string}`) ||
-						('' as `0x${string}`);
-				}
 				// ETC is not supported by coingecko with contract address, so we should use this function to fetch the price
 				if (token.symbol === 'ETC') {
 					const fetchedETCPrice = await fetchETCPrice();
 					setTokenPrice(fetchedETCPrice || 0);
 					return;
+				}
+
+				let tokenAddress = token.address;
+				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
+				if (!isMainnet && token.mainnetAddress) {
+					tokenAddress =
+						(token.mainnetAddress as Address) || ('' as Address);
 				}
 				const coingeckoChainId =
 					isMainnet ||
