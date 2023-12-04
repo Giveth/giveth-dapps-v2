@@ -49,11 +49,12 @@ export const RecurringDonationCard = () => {
 	const [tokenStreams, setTokenStreams] = useState<ITokenStreams>({});
 
 	const { address } = useAccount();
+	const { project, selectedToken } = useDonateData();
 	const { data: balance, refetch } = useBalance({
+		token: selectedToken?.token.id,
 		address: address,
 		enabled: false,
 	});
-	const { project, selectedToken } = useDonateData();
 
 	useEffect(() => {
 		if (!address) return;
@@ -182,12 +183,13 @@ export const RecurringDonationCard = () => {
 
 	const underlyingToken = selectedToken?.token.underlyingToken;
 
-	console.log('amount', amount);
+	console.log('balance', balance);
 
 	const totalPerMonth = ((amount || 0n) * BigInt(percentage)) / 100n;
 	const projectPerMonth =
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
+	const tokenBalance = balance?.value || selectedToken?.balance;
 
 	return (
 		<>
@@ -253,7 +255,8 @@ export const RecurringDonationCard = () => {
 									{balance?.formatted ||
 										formatUnits(
 											selectedToken?.balance,
-											selectedToken?.token.decimals,
+											selectedToken?.token.underlyingToken
+												?.decimals || 18,
 										)}
 								</GLink>
 								<IconWrapper onClick={() => refetch()}>
@@ -389,6 +392,13 @@ export const RecurringDonationCard = () => {
 			<DonateButton
 				label='Donate'
 				onClick={() => setShowRecurringDonationModal(true)}
+				disabled={
+					selectedToken === undefined ||
+					tokenBalance === undefined ||
+					amount === 0n ||
+					percentage === 0 ||
+					amount > tokenBalance
+				}
 			/>
 			<Flex gap='16px'>
 				<P>Streams powered by</P>
