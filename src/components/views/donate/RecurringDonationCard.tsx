@@ -408,6 +408,10 @@ export const RecurringDonationCard = () => {
 			{showRecurringDonationModal && (
 				<RecurringDonationModal
 					setShowModal={setShowRecurringDonationModal}
+					tokenStreams={tokenStreams}
+					donationToGiveth={donationToGiveth}
+					amount={amount}
+					percentage={percentage}
 				/>
 			)}
 		</>

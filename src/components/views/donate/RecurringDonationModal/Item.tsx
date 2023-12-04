@@ -16,7 +16,7 @@ export const Item: FC<IItemProps> = ({ title, amount, price, token }) => {
 		<Wrapper gap='4px'>
 			<IconWrapper></IconWrapper>
 			<Flex flexDirection='column' gap='4px'>
-				<P>{title}</P>
+				<Title>{title}</Title>
 				<Flex gap='4px'>
 					<B>
 						{amount.toString()}&nbsp;{token.symbol}
@@ -32,6 +32,17 @@ export const Item: FC<IItemProps> = ({ title, amount, price, token }) => {
 const Wrapper = styled(Flex)`
 	padding: 8px;
 	background: ${neutralColors.gray[200]};
+	border-radius: 8px;
+	max-width: 100%;
+	* {
+		max-width: 100%;
+	}
 `;
 
 const IconWrapper = styled.div``;
+
+const Title = styled(P)`
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+`;

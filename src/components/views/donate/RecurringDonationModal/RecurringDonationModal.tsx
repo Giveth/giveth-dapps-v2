@@ -1,12 +1,20 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { IconDonation32, mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { Flex } from '@/components/styled-components/Flex';
+import { ITokenStreams } from '../RecurringDonationCard';
+import { useDonateData } from '@/context/donate.context';
+import { Item } from './Item';
 
-interface IRecurringDonationModalProps extends IModal {}
+interface IRecurringDonationModalProps extends IModal {
+	tokenStreams: ITokenStreams;
+	donationToGiveth: number;
+	amount: bigint;
+	percentage: number;
+}
 
 enum EDonationSteps {
 	APPROVE,
@@ -31,6 +39,7 @@ const headerTitleGenerator = (step: EDonationSteps) => {
 
 export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
 	setShowModal,
+	...props
 }) => {
 	const [step, setStep] = useState(EDonationSteps.APPROVE);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -46,6 +55,7 @@ export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
 			<RecurringDonationInnerModal
 				setShowModal={setShowModal}
 				setStep={setStep}
+				{...props}
 			/>
 		</Modal>
 	);
@@ -58,8 +68,39 @@ interface IRecurringDonationInnerModalProps
 
 const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	setStep,
+	donationToGiveth,
 }) => {
-	return <Wrapper>hi</Wrapper>;
+	const { project, selectedToken } = useDonateData();
+
+	useEffect(() => {}, [selectedToken]);
+	return (
+		<Wrapper>
+			<Items flexDirection='column' gap='16px'>
+				{!selectedToken?.token.isSuperToken && (
+					<Item
+						title='Deposit into your stream balance'
+						amount={0n}
+						price={0n}
+						token={selectedToken?.token!}
+					/>
+				)}
+				<Item
+					title={`Donate Monthly to ${project.title}`}
+					amount={0n}
+					price={0n}
+					token={selectedToken?.token!}
+				/>
+				{donationToGiveth > 0 && (
+					<Item
+						title='Donate Monthly to the Giveth DAO'
+						amount={0n}
+						price={0n}
+						token={selectedToken?.token!}
+					/>
+				)}
+			</Items>
+		</Wrapper>
+	);
 };
 
 const Wrapper = styled(Flex)`
@@ -71,4 +112,8 @@ const Wrapper = styled(Flex)`
 	${mediaQueries.tablet} {
 		width: 430px;
 	}
+`;
+
+const Items = styled(Flex)`
+	max-width: 100%;
 `;
