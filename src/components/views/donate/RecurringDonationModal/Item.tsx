@@ -1,6 +1,7 @@
 import { type FC } from 'react';
 import styled from 'styled-components';
 import { P, B, neutralColors } from '@giveth/ui-design-system';
+import { formatUnits } from 'viem';
 import { Flex } from '@/components/styled-components/Flex';
 import { IToken } from '@/types/superFluid';
 
@@ -19,10 +20,20 @@ export const Item: FC<IItemProps> = ({ title, amount, price, token }) => {
 				<Title>{title}</Title>
 				<Flex gap='4px'>
 					<B>
-						{amount.toString()}&nbsp;{token.symbol}
+						{formatUnits(
+							amount,
+							token.underlyingToken?.decimals || 18,
+						)}
+						&nbsp;{token.symbol}
 					</B>
 					<B>~</B>
-					<P>{(amount * price).toString()}&nbsp;USD</P>
+					<P>
+						{formatUnits(
+							amount * price,
+							token.underlyingToken?.decimals || 18,
+						)}
+						&nbsp;USD
+					</P>
 				</Flex>
 			</Flex>
 		</Wrapper>
