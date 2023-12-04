@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { fetchEnsAddress, fetchTransaction } from '@wagmi/core';
-import { useWaitForTransaction } from 'wagmi';
+import { useNetwork, useWaitForTransaction } from 'wagmi';
 
 import { sendTransaction } from '@/lib/helpers';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
@@ -9,17 +9,24 @@ import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { isAddressENS } from '@/lib/wallet';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
 import { ICreateDonation } from '@/components/views/donate/helpers';
+import { getTxHashFromSafeTxId } from '@/lib/safe';
 
-const MAX_RETRIES = 6;
+const MAX_RETRIES = 10;
 const RETRY_DELAY = 5000; // 5 seconds
 
 const retryFetchTransaction = async (
 	txHash: `0x${string}`,
+	chainId: number,
 	retries: number = MAX_RETRIES,
 ) => {
 	for (let i = 0; i < retries; i++) {
+		const safeTx = (await getTxHashFromSafeTxId(
+			txHash,
+			chainId,
+		)) as `0x${string}`;
+		console.log({ safeTx, txHash });
 		const transaction = await fetchTransaction({
-			hash: txHash,
+			hash: safeTx ? safeTx : txHash,
 		}).catch(error => {
 			console.log(
 				'Attempt',
@@ -48,6 +55,8 @@ export const useCreateDonation = () => {
 	const [resolveState, setResolveState] = useState<(() => void) | null>(null);
 	const [createDonationProps, setCreateDonationProps] =
 		useState<ICreateDonation>();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	const { status } = useWaitForTransaction({
 		hash: txHash,
@@ -75,9 +84,9 @@ export const useCreateDonation = () => {
 				return;
 			}
 
-			transaction = await retryFetchTransaction(txHash);
-
-			setTxHash(txHash);
+			transaction = await retryFetchTransaction(txHash, chainId!);
+			console.log({ transaction });
+			setTxHash(transaction?.hash || txHash);
 			const {
 				anonymous,
 				projectId,

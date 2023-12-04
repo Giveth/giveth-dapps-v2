@@ -1,3 +1,4 @@
+import SafeApiKit from '@safe-global/api-kit';
 import { hashMessage, _TypedDataEncoder } from 'ethers/lib/utils';
 export type EIP712TypedData = ReturnType<typeof _TypedDataEncoder.getPayload>;
 
@@ -16,4 +17,23 @@ export const generateSafeMessageMessage = (
 	return typeof message === 'string'
 		? hashMessage(message)
 		: hashTypedData(message);
+};
+
+export const getTxHashFromSafeTxId = async (
+	safeTxHash: string,
+	chainId: number,
+) => {
+	try {
+		const safeService = new SafeApiKit({
+			chainId: BigInt(chainId),
+			// Optional. txServiceUrl must be used to set a custom service. For example on chains where Safe doesn't run services.
+			// txServiceUrl: 'https://safe-transaction-mainnet.safe.global'
+		});
+
+		const tx = await safeService.getTransaction(safeTxHash);
+		console.log({ safeTxHash, chainId, tx });
+		return tx?.transactionHash;
+	} catch (error) {
+		return null;
+	}
 };
