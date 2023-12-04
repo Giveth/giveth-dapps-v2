@@ -1,5 +1,11 @@
 import { FC, useState } from 'react';
-import { IconDonation32, mediaQueries } from '@giveth/ui-design-system';
+import {
+	B,
+	IconDonation32,
+	P,
+	mediaQueries,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -9,6 +15,7 @@ import { ITokenStreams } from '../RecurringDonationCard';
 import { useDonateData } from '@/context/donate.context';
 import { Item } from './Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
+import { formatDate } from '@/lib/helpers';
 
 interface IRecurringDonationModalProps extends IModal {
 	tokenStreams: ITokenStreams;
@@ -82,6 +89,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	const projectPerMonth =
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
+	const totalPerSecond = totalPerMonth / BigInt(30 * 24 * 60 * 60);
+	const secondsUntilRunOut = amount / totalPerSecond;
+	const date = new Date();
+	date.setSeconds(date.getSeconds() + Number(secondsUntilRunOut.toString()));
 
 	return (
 		<Wrapper>
@@ -109,6 +120,11 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					/>
 				)}
 			</Items>
+			<RunOutSection>
+				<P>Your stream balance will run out funds on </P>
+				<B>{formatDate(date)}</B>
+				<P>Top-up before then!</P>
+			</RunOutSection>
 		</Wrapper>
 	);
 };
@@ -126,4 +142,12 @@ const Wrapper = styled(Flex)`
 
 const Items = styled(Flex)`
 	max-width: 100%;
+`;
+
+const RunOutSection = styled(Flex)`
+	flex-direction: column;
+	gap: 8px;
+	border-top: 1px solid ${neutralColors.gray[600]};
+	padding-top: 16px;
+	align-items: flex-start;
 `;
