@@ -12,19 +12,14 @@ import { useAccount } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
 import { waitForTransaction } from '@wagmi/core';
 import { IModal } from '@/types/common';
-import { Modal } from './Modal';
+import { Modal } from '../Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import {
-	StakeStepsContainer,
-	StakeStep,
-	StakeStepTitle,
-	StakeStepNumber,
-} from '../steps/StakeSteps.sc';
 import { formatWeiHelper } from '@/helpers/number';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
+import { MintSteps } from './MintSteps';
 export enum MintStep {
 	APPROVE,
 	APPROVING,
@@ -131,23 +126,7 @@ export const MintModal: FC<IMintModalProps> = ({
 			headerTitlePosition='left'
 		>
 			<MintModalContainer>
-				<StakeStepsContainer>
-					<StakeStep>
-						<StakeStepTitle>
-							{' '}
-							{formatMessage({ id: 'label.approve' })}
-						</StakeStepTitle>
-						<StakeStepNumber>1</StakeStepNumber>
-					</StakeStep>
-					<StakeStep>
-						<StakeStepTitle disable={isApproving}>
-							{formatMessage({ id: 'label.mint' })}
-						</StakeStepTitle>
-						<StakeStepNumber disable={isApproving}>
-							2
-						</StakeStepNumber>
-					</StakeStep>
-				</StakeStepsContainer>
+				<MintSteps mintState={step} />
 				<Desc>
 					You are Minting {qty} Giver NFT {qty > 1 && 's'} for{' '}
 				</Desc>
