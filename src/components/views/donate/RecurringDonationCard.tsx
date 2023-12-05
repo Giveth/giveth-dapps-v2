@@ -18,6 +18,7 @@ import { useAccount, useBalance } from 'wagmi';
 import { Framework } from '@superfluid-finance/sdk-core';
 import Slider from 'rc-slider';
 import Image from 'next/image';
+import { AddressZero } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -56,7 +57,10 @@ export const RecurringDonationCard = () => {
 		refetch,
 		isRefetching,
 	} = useBalance({
-		token: selectedToken?.token.id,
+		token:
+			selectedToken?.token.id === AddressZero
+				? undefined
+				: selectedToken?.token.id,
 		address: address,
 		enabled: false,
 	});
