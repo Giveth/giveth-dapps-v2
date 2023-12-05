@@ -6,7 +6,7 @@ interface IStakeStepsProps {
 	stakeState: StakeState;
 }
 
-const steps = ['Approve', 'Stake'];
+const steps = ['label.approve', 'label.stake'];
 
 export const StakeSteps: FC<IStakeStepsProps> = ({ stakeState }) => {
 	let activeStep = 0;

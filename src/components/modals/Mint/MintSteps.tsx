@@ -6,7 +6,7 @@ interface IMintStepsProps {
 	mintState: MintStep;
 }
 
-const steps = ['Approve', 'Mint'];
+const steps = ['label.approve', 'label.mint'];
 
 export const MintSteps: FC<IMintStepsProps> = ({ mintState }) => {
 	let activeStep = 0;

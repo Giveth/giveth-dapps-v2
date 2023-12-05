@@ -1,6 +1,7 @@
 import { brandColors, P, SublineBold } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC } from 'react';
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 
 interface IStepsProps {
@@ -9,11 +10,15 @@ interface IStepsProps {
 }
 
 export const Steps: FC<IStepsProps> = ({ steps, activeStep }) => {
+	const { formatMessage } = useIntl();
+
 	return (
 		<StepsContainer>
 			{steps.map((step, index) => (
 				<Step key={index}>
-					<StepTitle disable={index > activeStep}>{step}</StepTitle>
+					<StepTitle disable={index > activeStep}>
+						{formatMessage({ id: step })}
+					</StepTitle>
 					<StepNumber disable={index > activeStep}>
 						{index + 1}
 					</StepNumber>
