@@ -1,6 +1,7 @@
 import { useAccount } from 'wagmi';
 import { Framework, SuperToken__factory } from '@superfluid-finance/sdk-core';
 import { useEffect, useState } from 'react';
+import { BigNumber } from 'ethers';
 import { gqlRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import { FETCH_USER_STREAMS_BY_ADDRESS } from '@/apollo/gql/gqlUser';
@@ -8,7 +9,7 @@ import { getEthersProvider } from '@/helpers/ethers';
 import { IProjectStreamsData, IStream } from '@/types/superFluid';
 
 export interface IStreamWithBalance extends IStream {
-	balance: string;
+	balance: BigNumber;
 }
 
 export const useProjectClaimableDonations = () => {
@@ -81,7 +82,6 @@ export const useProjectClaimableDonations = () => {
 				};
 			}),
 		);
-		// formatUnits(balances[0], 18);
 		return balances;
 	};
 
@@ -102,8 +102,7 @@ export const useProjectClaimableDonations = () => {
 				providerOrSigner: sf.settings.provider,
 			}),
 		]);
-
-		return realtimeBalanceOfNowResult?.availableBalance?.toString() || '0';
+		return realtimeBalanceOfNowResult?.availableBalance;
 	};
 
 	return { isLoading, streams };
