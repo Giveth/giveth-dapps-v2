@@ -184,6 +184,12 @@ export const FETCH_USER_STREAMS_BY_ADDRESS = `
 			id
 			decimals
 			isSuperToken
+			underlyingToken {
+				id
+				symbol
+				decimals
+				name
+			}
 		  }
 		}
 	  }
