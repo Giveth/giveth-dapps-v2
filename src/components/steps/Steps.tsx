@@ -76,6 +76,7 @@ const Step = styled(Flex)`
 	width: 61px;
 	position: relative;
 	z-index: 1;
+	user-select: none;
 `;
 
 interface IStepState {
