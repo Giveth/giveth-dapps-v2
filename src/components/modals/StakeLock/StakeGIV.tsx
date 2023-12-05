@@ -13,7 +13,7 @@ import {
 import { ErrorInnerModal } from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
-import StakeSteps from './StakeSteps';
+import StakeSteps from '../../steps/StakeSteps';
 import {
 	CancelButton,
 	StakeModalContainer,

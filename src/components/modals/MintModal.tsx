@@ -19,7 +19,7 @@ import {
 	StakeStep,
 	StakeStepTitle,
 	StakeStepNumber,
-} from './StakeLock/StakeSteps.sc';
+} from '../steps/StakeSteps.sc';
 import { formatWeiHelper } from '@/helpers/number';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';

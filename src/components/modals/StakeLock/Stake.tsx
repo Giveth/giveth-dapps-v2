@@ -14,7 +14,7 @@ import {
 import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../../styled-components/Switch';
 import { IModal } from '@/types/common';
-import StakeSteps from './StakeSteps';
+import StakeSteps from '../../steps/StakeSteps';
 import {
 	CancelButton,
 	StakeModalContainer,
