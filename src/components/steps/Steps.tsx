@@ -21,7 +21,7 @@ export const Steps: FC<IStepsProps> = ({ steps, activeStep }) => {
 	const theme = useAppSelector(state => state.general.theme);
 
 	return (
-		<StepsContainer>
+		<StepsContainer theme={theme}>
 			{steps.map((step, index) => (
 				<Step key={index}>
 					<StepTitle disable={index > activeStep} theme={theme}>
@@ -44,7 +44,11 @@ const StepsContainer = styled(Flex)`
 		position: absolute;
 		width: 100%;
 		height: 1px;
-		border-top: 1px solid ${brandColors.giv[500]};
+		border-top: 1px solid
+			${props =>
+				props.theme === ETheme.Dark
+					? brandColors.giv[500]
+					: brandColors.giv[100]};
 		bottom: 11px;
 		z-index: 0;
 	}
@@ -52,7 +56,11 @@ const StepsContainer = styled(Flex)`
 		content: '';
 		position: absolute;
 		height: 1px;
-		border-top: 1px dashed ${brandColors.giv[500]};
+		border-top: 1px dashed
+			${props =>
+				props.theme === ETheme.Dark
+					? brandColors.giv[500]
+					: brandColors.giv[100]};
 		left: -24px;
 		right: -24px;
 		bottom: 11px;
