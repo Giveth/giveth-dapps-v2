@@ -1,6 +1,7 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import {
 	B,
+	Button,
 	IconDonation32,
 	P,
 	mediaQueries,
@@ -62,6 +63,7 @@ export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
 		>
 			<RecurringDonationInnerModal
 				setShowModal={setShowModal}
+				step={step}
 				setStep={setStep}
 				{...props}
 			/>
@@ -71,10 +73,12 @@ export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
 
 interface IRecurringDonationInnerModalProps
 	extends IRecurringDonationModalProps {
+	step: EDonationSteps;
 	setStep: (step: EDonationSteps) => void;
 }
 
 const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
+	step,
 	setStep,
 	amount,
 	percentage,
@@ -84,6 +88,16 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 	const tokenPrice = useTokenPrice(selectedToken?.token);
 	console.log('tokenPrice', tokenPrice);
+
+	useEffect(() => {
+		if (!selectedToken) return;
+		if (
+			selectedToken.token.isSuperToken ||
+			selectedToken.token.symbol === 'ETH'
+		) {
+			setStep(EDonationSteps.DONATE);
+		}
+	}, [selectedToken, setStep]);
 
 	const totalPerMonth = ((amount || 0n) * BigInt(percentage)) / 100n;
 	const projectPerMonth =
@@ -125,6 +139,12 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				<B>{formatDate(date)}</B>
 				<P>Top-up before then!</P>
 			</RunOutSection>
+			<ApproveButton
+				label={'Approve'}
+				onClick={() => {
+					console.log('selectedToken', selectedToken);
+				}}
+			/>
 		</Wrapper>
 	);
 };
@@ -150,4 +170,8 @@ const RunOutSection = styled(Flex)`
 	border-top: 1px solid ${neutralColors.gray[600]};
 	padding-top: 16px;
 	align-items: flex-start;
+`;
+
+const ApproveButton = styled(Button)`
+	width: 100%;
 `;
