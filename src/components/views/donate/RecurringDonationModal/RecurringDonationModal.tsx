@@ -25,7 +25,7 @@ interface IRecurringDonationModalProps extends IModal {
 	percentage: number;
 }
 
-enum EDonationSteps {
+export enum EDonationSteps {
 	APPROVE,
 	APPROVING,
 	DONATE,
