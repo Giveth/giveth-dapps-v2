@@ -14,7 +14,6 @@ import {
 import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../../styled-components/Switch';
 import { IModal } from '@/types/common';
-import StakeSteps from '../../steps/StakeSteps';
 import {
 	CancelButton,
 	StakeModalContainer,
@@ -34,6 +33,7 @@ import {
 } from '@/types/config';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput';
+import { StakeSteps } from './StakeSteps';
 
 interface IStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;

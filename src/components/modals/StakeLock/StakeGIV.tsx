@@ -13,7 +13,6 @@ import {
 import { ErrorInnerModal } from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
-import StakeSteps from '../../steps/StakeSteps';
 import {
 	CancelButton,
 	StakeModalContainer,
@@ -29,6 +28,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput';
+import { StakeSteps } from './StakeSteps';
 import type {
 	PoolStakingConfig,
 	SimplePoolStakingConfig,
