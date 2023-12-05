@@ -28,6 +28,7 @@ const ClaimRecurringDonationModal = ({
 }: IClaimRecurringDonationModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { streams, isLoading } = useProjectClaimableDonations();
+
 	console.log('Streams', streams);
 
 	return (
@@ -41,6 +42,8 @@ const ClaimRecurringDonationModal = ({
 			<ModalContainer>
 				{isLoading ? (
 					<WrappedSpinner size={300} />
+				) : streams.length === 0 ? (
+					<P>You have no streams yet!</P>
 				) : (
 					<Flex flexDirection='column' gap='32px'>
 						{streams.map(item => (
