@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { type FC } from 'react';
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
+import { useAppSelector } from '@/features/hooks';
+import { ETheme } from '@/features/general/general.slice';
 
 interface IStepsProps {
 	steps: string[];
@@ -11,12 +13,13 @@ interface IStepsProps {
 
 export const Steps: FC<IStepsProps> = ({ steps, activeStep }) => {
 	const { formatMessage } = useIntl();
+	const theme = useAppSelector(state => state.general.theme);
 
 	return (
 		<StepsContainer>
 			{steps.map((step, index) => (
 				<Step key={index}>
-					<StepTitle disable={index > activeStep}>
+					<StepTitle disable={index > activeStep} theme={theme}>
 						{formatMessage({ id: step })}
 					</StepTitle>
 					<StepNumber disable={index > activeStep}>
@@ -69,7 +72,13 @@ interface IStepState {
 const StepTitle = styled(P)<IStepState>`
 	margin-bottom: 8px;
 	color: ${props =>
-		props.disable ? brandColors.giv[300] : brandColors.giv['000']};
+		props.disable
+			? props.theme === ETheme.Dark
+				? brandColors.giv[300]
+				: brandColors.giv[200]
+			: props.theme === ETheme.Dark
+			? brandColors.giv['000']
+			: brandColors.giv[500]};
 `;
 const StepNumber = styled(SublineBold)<IStepState>`
 	color: ${props =>
