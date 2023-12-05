@@ -34,6 +34,7 @@ import { RecurringDonationModal } from './RecurringDonationModal/RecurringDonati
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import 'rc-slider/assets/index.css';
 import DonateToGiveth from './DonateToGiveth';
+import { Spinner } from '@/components/Spinner';
 
 export interface ITokenStreams {
 	[key: string]: ISuperfluidStream[];
@@ -50,7 +51,11 @@ export const RecurringDonationCard = () => {
 
 	const { address } = useAccount();
 	const { project, selectedToken } = useDonateData();
-	const { data: balance, refetch } = useBalance({
+	const {
+		data: balance,
+		refetch,
+		isRefetching,
+	} = useBalance({
 		token: selectedToken?.token.id,
 		address: address,
 		enabled: false,
@@ -261,8 +266,14 @@ export const RecurringDonationCard = () => {
 												?.decimals || 18,
 										)}
 								</GLink>
-								<IconWrapper onClick={() => refetch()}>
-									<IconRefresh16 />
+								<IconWrapper
+									onClick={() => !isRefetching && refetch()}
+								>
+									{isRefetching ? (
+										<Spinner size={16} />
+									) : (
+										<IconRefresh16 />
+									)}
 								</IconWrapper>
 							</Flex>
 						)}
