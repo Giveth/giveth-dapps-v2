@@ -15,6 +15,7 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { capitalizeAllWords } from '@/lib/helpers';
+import config from '@/configuration';
 
 interface IProjectActions {
 	project: IProject;
@@ -36,6 +37,11 @@ const ProjectActions = (props: IProjectActions) => {
 	const { formatMessage } = useIntl();
 
 	const [isHover, setIsHover] = useState(false);
+
+	const optimismAddress = project.addresses?.find(
+		address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
+	)?.address;
+	const hasOptimismAddress = optimismAddress !== undefined;
 
 	const options: IOption[] = [
 		{
@@ -64,15 +70,18 @@ const ProjectActions = (props: IProjectActions) => {
 				setShowAddressModal(true);
 			},
 		},
-		{
+	];
+
+	if (hasOptimismAddress) {
+		options.push({
 			label: 'Claim Recurring donation',
 			icon: <IconArrowDownCircle16 />,
 			cb: () => {
 				setSelectedProject(project);
 				setShowClaimModal(true);
 			},
-		},
-	];
+		});
+	}
 
 	const dropdownStyle = {
 		padding: '4px 16px',
