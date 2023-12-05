@@ -17,6 +17,7 @@ import { useDonateData } from '@/context/donate.context';
 import { Item } from './Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { formatDate } from '@/lib/helpers';
+import { DonateSteps } from './DonateSteps';
 
 interface IRecurringDonationModalProps extends IModal {
 	tokenStreams: ITokenStreams;
@@ -61,6 +62,7 @@ export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
 			headerTitlePosition='left'
 			headerIcon={<IconDonation32 />}
 		>
+			<DonateSteps donateState={step} />
 			<RecurringDonationInnerModal
 				setShowModal={setShowModal}
 				step={step}

@@ -3,16 +3,16 @@ import { Steps } from '@/components/steps/Steps';
 import { EDonationSteps } from './RecurringDonationModal';
 
 interface DonateStepsProps {
-	mintState: EDonationSteps;
+	donateState: EDonationSteps;
 }
 
 const steps = ['label.approve', 'label.donate'];
 
-export const DonateSteps: FC<DonateStepsProps> = ({ mintState }) => {
+export const DonateSteps: FC<DonateStepsProps> = ({ donateState }) => {
 	let activeStep = 0;
 	if (
-		mintState === EDonationSteps.DONATE ||
-		mintState === EDonationSteps.DONATING
+		donateState === EDonationSteps.DONATE ||
+		donateState === EDonationSteps.DONATING
 	) {
 		activeStep = 1;
 	}
