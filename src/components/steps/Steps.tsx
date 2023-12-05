@@ -1,4 +1,9 @@
-import { brandColors, P, SublineBold } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	neutralColors,
+	P,
+	SublineBold,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC } from 'react';
 import { useIntl } from 'react-intl';
@@ -22,7 +27,7 @@ export const Steps: FC<IStepsProps> = ({ steps, activeStep }) => {
 					<StepTitle disable={index > activeStep} theme={theme}>
 						{formatMessage({ id: step })}
 					</StepTitle>
-					<StepNumber disable={index > activeStep}>
+					<StepNumber disable={index > activeStep} theme={theme}>
 						{index + 1}
 					</StepNumber>
 				</Step>
@@ -82,11 +87,28 @@ const StepTitle = styled(P)<IStepState>`
 `;
 const StepNumber = styled(SublineBold)<IStepState>`
 	color: ${props =>
-		props.disable ? brandColors.giv[300] : brandColors.giv['000']};
-	background-color: ${brandColors.giv[500]};
+		props.disable
+			? props.theme === ETheme.Dark
+				? brandColors.giv[200]
+				: neutralColors.gray[100]
+			: props.theme === ETheme.Dark
+			? brandColors.giv['000']
+			: neutralColors.gray[100]};
+	background-color: ${props =>
+		props.disable
+			? props.theme === ETheme.Dark
+				? brandColors.giv[500]
+				: brandColors.giv[200]
+			: brandColors.giv[500]};
 	border: 3px solid
 		${props =>
-			props.disable ? brandColors.giv[300] : brandColors.giv['000']};
+			props.disable
+				? props.theme === ETheme.Dark
+					? brandColors.giv[300]
+					: brandColors.giv[100]
+				: props.theme === ETheme.Dark
+				? brandColors.giv['000']
+				: brandColors.giv[100]};
 	border-radius: 18px;
 	width: 24px;
 `;
