@@ -7,36 +7,28 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
+import { utils } from 'ethers';
 import { IProject } from '@/apollo/types/types';
-import { IconEthereum } from '@/components/Icons/Eth';
-import { IconPolygon } from '@/components/Icons/Polygon';
 import { Modal } from '@/components/modals/Modal';
 import { Flex } from '@/components/styled-components/Flex';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { useProjectClaimableDonations } from '@/hooks/useProjectClaimableDonations';
+import { TokenIcon } from '../../donate/TokenIcon';
+import { limitFraction } from '@/helpers/number';
+import { WrappedSpinner } from '@/components/Spinner';
 
 interface IClaimRecurringDonationModal extends IModal {
 	project: IProject;
 }
-
-const recurringDonationItems = [
-	{
-		icon: <IconEthereum size={24} />,
-		value: '0.5 ETH',
-		usdValue: '$1,000',
-	},
-	{
-		icon: <IconPolygon size={24} />,
-		value: '0.5 MATIC',
-		usdValue: '$1,000',
-	},
-];
 
 const ClaimRecurringDonationModal = ({
 	setShowModal,
 	project,
 }: IClaimRecurringDonationModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { streams, isLoading } = useProjectClaimableDonations();
+	console.log('Streams', streams);
 
 	return (
 		<Modal
@@ -47,36 +39,50 @@ const ClaimRecurringDonationModal = ({
 			hiddenClose
 		>
 			<ModalContainer>
-				<Flex flexDirection='column' gap='32px'>
-					{recurringDonationItems.map(item => (
-						<ItemContainer
-							justifyContent='space-between'
-							alignItems='center'
-							key={item.value}
-						>
-							<Flex alignItems='center'>
-								<div>{item.icon}</div>
-								&nbsp;
-								<B>
-									{item.value} ~ {item.usdValue}
-								</B>
+				{isLoading ? (
+					<WrappedSpinner size={300} />
+				) : (
+					<Flex flexDirection='column' gap='32px'>
+						{streams.map(item => (
+							<ItemContainer
+								justifyContent='space-between'
+								alignItems='center'
+								key={item.token.symbol}
+							>
+								<Flex alignItems='center'>
+									<TokenIcon
+										symbol={
+											item.token.underlyingToken?.symbol!
+										}
+									/>
+									&nbsp; &nbsp;
+									<B>
+										{`
+									${limitFraction(utils.formatUnits(item.balance, item.token.decimals), 6)} 
+									${item.token.underlyingToken?.symbol} ~
+									${limitFraction(utils.formatUnits(item.balance, item.token.decimals), 6)}
+									USD
+									`}
+									</B>
+								</Flex>
+								<ClaimButton>Claim tokens</ClaimButton>
+							</ItemContainer>
+						))}
+						<TotalAmountContainer>
+							<Flex justifyContent='space-between'>
+								<B>Total amount claimable </B>
+								<B>~945 USD</B>
 							</Flex>
-							<ClaimButton>Claim tokens</ClaimButton>
-						</ItemContainer>
-					))}
-					<TotalAmountContainer>
-						<Flex justifyContent='space-between'>
-							<B>Total amount claimable </B>
-							<B>~945 USD</B>
-						</Flex>
-					</TotalAmountContainer>
-					<Button label='Claim All Tokens' />
-					<Button
-						label='Cancel'
-						buttonType='texty-gray'
-						onClick={() => setShowModal(false)}
-					/>
-				</Flex>
+						</TotalAmountContainer>
+						<Button label='Claim All Tokens' />
+						<Button
+							label='Cancel'
+							buttonType='texty-gray'
+							onClick={() => setShowModal(false)}
+						/>
+					</Flex>
+				)}
+
 				<SuperfluidLogoContainer gap='15px'>
 					<P>Streams powered by </P>{' '}
 					<Image
