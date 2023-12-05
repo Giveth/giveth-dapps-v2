@@ -237,7 +237,9 @@ export const RecurringDonationCard = () => {
 									<B>{selectedToken.token.symbol}</B>
 								</Flex>
 							) : (
-								<B>Select Token</B>
+								<SelectTokenPlaceHolder>
+									Select Token
+								</SelectTokenPlaceHolder>
 							)}
 							<IconCaretDown16 />
 						</SelectTokenWrapper>
@@ -462,6 +464,10 @@ const RecurringSectionTitle = styled(B)`
 const SelectTokenWrapper = styled(Flex)`
 	cursor: pointer;
 	gap: 16px;
+`;
+
+const SelectTokenPlaceHolder = styled(B)`
+	white-space: nowrap;
 `;
 
 const InputWrapper = styled(Flex)`
