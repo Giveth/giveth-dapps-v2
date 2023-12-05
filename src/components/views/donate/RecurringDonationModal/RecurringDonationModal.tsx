@@ -62,7 +62,6 @@ export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
 			headerTitlePosition='left'
 			headerIcon={<IconDonation32 />}
 		>
-			<DonateSteps donateState={step} />
 			<RecurringDonationInnerModal
 				setShowModal={setShowModal}
 				step={step}
@@ -112,6 +111,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 	return (
 		<Wrapper>
+			<DonateSteps donateState={step} />
 			<Items flexDirection='column' gap='16px'>
 				{!selectedToken?.token.isSuperToken && (
 					<Item
@@ -153,7 +153,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 const Wrapper = styled(Flex)`
 	flex-direction: column;
-	align-items: flex-start;
+	align-items: stretch;
+	justify-content: stretch;
 	gap: 16px;
 	width: 100%;
 	padding: 16px 24px 24px 24px;
