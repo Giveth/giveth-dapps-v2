@@ -14,7 +14,7 @@ import { useAccount, useSwitchNetwork, useNetwork } from 'wagmi';
 import { getContract } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { MintModal } from '../modals/MintModal';
+import { MintModal } from '../modals/Mint/MintModal';
 import { Flex } from '../styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
