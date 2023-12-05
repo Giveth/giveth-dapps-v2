@@ -20,6 +20,7 @@ import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
 import TorusBanner from '@/components/views/homepage/TorusBanner';
 import StorageLabel from '@/lib/localStorage';
 import { isSSRMode } from '@/lib/helpers';
+import FundraisingBanner from './FundraisingBanner';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const {
@@ -63,6 +64,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 
 	return (
 		<Wrapper>
+			<FundraisingBanner />
 			{showTorusBanner && <TorusBanner />}
 			<IntroBlock />
 			<Separator />

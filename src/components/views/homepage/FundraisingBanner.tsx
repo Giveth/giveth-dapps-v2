@@ -4,27 +4,26 @@ import Image from 'next/image';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 
-const GitcoinGrantsBanner = () => {
+const FundraisingBanner = () => {
 	return (
 		<Wrapper>
-			<P>Support Giveth in Gitcoin Grants 19</P>
+			<P>Hold an ENS Voting Card?</P>
 			<Image
-				src='/images/gitcoin-grants.png'
-				alt='gitcoin-grants'
-				width={24.2}
+				src='/images/ENSlogoSmall.png'
+				alt='ENS-logo'
+				width={25}
 				height={25}
 			/>
 			<PStyled>
-				|{' '}
-				<ExternalLink href='https://www.layerswap.io/app'>
-					<Purple>Bridge your funds to PGN network</Purple>
+				<ExternalLink href='https://ensgrants.xyz/rounds/33/proposals/850'>
+					<Purple> Support Giveth in ENS Small Grants!</Purple>
 				</ExternalLink>
-				and{' '}
-				<ExternalLink href='https://explorer.gitcoin.co/#/round/424/0x98720dd1925d34a2453ebc1f91c9d48e7e89ec29/0x98720dd1925d34a2453ebc1f91c9d48e7e89ec29-127'>
+				{/* and{' '} */}
+				{/* <ExternalLink href='https://explorer.gitcoin.co/#/round/424/0x98720dd1925d34a2453ebc1f91c9d48e7e89ec29/0x98720dd1925d34a2453ebc1f91c9d48e7e89ec29-127'>
 					<Purple>
 						<b>donate to our Grant.</b>
 					</Purple>
-				</ExternalLink>
+				</ExternalLink> */}
 			</PStyled>
 		</Wrapper>
 	);
@@ -49,4 +48,4 @@ const Wrapper = styled(FlexCenter)`
 	position: sticky;
 `;
 
-export default GitcoinGrantsBanner;
+export default FundraisingBanner;
