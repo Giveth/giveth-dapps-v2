@@ -3005,6 +3005,11 @@
     loglevel "^1.8.1"
     pump "^3.0.0"
 
+"@toruslabs/tweetnacl-js@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@toruslabs/tweetnacl-js/-/tweetnacl-js-1.0.4.tgz#0f1965d1b93d4061472b07ed21d71c33ac533cce"
+  integrity sha512-h8fVemW5pstsKbm/fTx+y61dZkh5Pepy/92lsyKp83KErf96jT+w4LGx4nEgeAVrdYQDTLg2tO7vu/boEb23Iw==
+
 "@types/apollo-upload-client@^14.1.0":
   version "14.1.0"
   resolved "https://registry.yarnpkg.com/@types/apollo-upload-client/-/apollo-upload-client-14.1.0.tgz#21a57d7e3f29ff946ba51a53b3d7da46ddd21fbc"
@@ -4283,6 +4288,15 @@
     "@walletconnect/window-getters" "^1.0.1"
     tslib "1.14.1"
 
+"@web3auth/sign-in-with-solana@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@web3auth/sign-in-with-solana/-/sign-in-with-solana-3.0.0.tgz#aaea70e8bac2432573306b8467f2ffeeb8516158"
+  integrity sha512-F5w0v6nraF2x60DRgUwucN3sJU/R34ZnmyDYe4e6JhnfPrIu5NfPH5+yl69GezTXQcYWsEVBSsVxOO+LdAut1A==
+  dependencies:
+    "@toruslabs/tweetnacl-js" "^1.0.4"
+    bs58 "^5.0.0"
+    valid-url "^1.0.9"
+
 "@web3modal/core@3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@web3modal/core/-/core-3.1.0.tgz#b32f70b3fe4c75de0f7ce87a0cb4d16af1b20e78"
@@ -4904,6 +4918,11 @@ base-x@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/base-x/-/base-x-4.0.0.tgz#d0e3b7753450c73f8ad2389b5c018a4af7b2224a"
   integrity sha512-FuwxlW4H5kh37X/oW59pwTzzTKRzfrrQwhmyspRM7swOEZcHtDZSCt45U6oKgtuFE+WYPblePMVIPR4RZrh/hw==
+
+base58@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/base58/-/base58-2.0.1.tgz#e208f00c04ad38d680d76a11c5fa096abfb86b12"
+  integrity sha512-qK6gt2fMSxN2xGOi+btI5oAnXL+vEq0AsHWHhf5jfm2hE6MwmW+2414qF96utV3Xfg3En8hEA9Q4lif4lbXcgw==
 
 base64-js@^1.3.1:
   version "1.5.1"

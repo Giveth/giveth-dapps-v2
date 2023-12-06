@@ -3,6 +3,7 @@ import { useAccount, useDisconnect, useNetwork } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
 import { useEffect, useState } from 'react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { encodeBase58 } from 'ethers';
 import { chainNameById } from '@/lib/network';
 import config from '@/configuration';
 
@@ -14,23 +15,32 @@ export enum WalletType {
 export const useAuthenticationWallet = () => {
 	const [walletType, setWalletType] = useState<WalletType | null>(null);
 	const [walletAddress, setWalletAddress] = useState<string | null>(null);
+
 	// Wagmi hooks (Ethereum)
 	const { address } = useAccount();
 	const { chain } = useNetwork();
 	const { disconnect: ethereumWalletDisconnect } = useDisconnect();
 
 	// Solana wallet hooks
-	const { publicKey, disconnect: solanaWalletDisconnect } = useWallet();
+	const {
+		publicKey,
+		disconnect: solanaWalletDisconnect,
+		signMessage: solanaSignMessage,
+	} = useWallet();
 
 	const signByEvm = async (message: string) => {
 		const walletClient = await getWalletClient();
 		const signature = await walletClient?.signMessage({ message });
 		return signature;
 	};
-	const signBySolana = async (message: string) => {
-		const walletClient = await getWalletClient();
-		const signature = await walletClient?.signMessage({ message });
-		return signature;
+	const signBySolana = async (messageToSign: string) => {
+		const message = new TextEncoder().encode(messageToSign);
+
+		const signature = await solanaSignMessage?.(message);
+		if (!signature) {
+			return undefined;
+		}
+		return encodeBase58(signature);
 	};
 
 	useEffect(() => {

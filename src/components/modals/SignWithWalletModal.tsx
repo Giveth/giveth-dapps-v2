@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
-import { useAccount, useNetwork } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
 import { ETheme } from '@/features/general/general.slice';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -20,6 +20,12 @@ import { signToGetToken } from '@/features/user/user.thunks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { EModalEvents } from '@/hooks/useModalCallback';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
+import {
+	WalletType,
+	useAuthenticationWallet,
+} from '@/hooks/useAuthenticationWallet';
+import { createSwisMessage } from '@/lib/authentication';
+import { ISolanaSignToGetToken } from '@/features/user/user.types';
 
 interface IProps extends IModal {
 	callback?: () => void;
@@ -29,9 +35,10 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 	const [loading, setLoading] = useState(false);
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
-	const { address } = useAccount();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
+	const { walletAddress, signMessage, walletType } =
+		useAuthenticationWallet();
 	const router = useRouter();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const dispatch = useAppDispatch();
@@ -59,17 +66,37 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 					label={formatMessage({ id: 'component.button.sign_in' })}
 					loading={loading}
 					onClick={async () => {
-						if (!address) {
+						if (!walletAddress) {
 							return dispatch(setShowWelcomeModal(true));
 						}
 						setLoading(true);
-						const signature = await dispatch(
-							signToGetToken({
-								address,
-								chainId,
-								pathname: router.pathname,
-							}),
-						);
+
+						let signature;
+						if (walletType === WalletType.SOLANA) {
+							const { message, nonce } = await createSwisMessage(
+								walletAddress,
+								'Login into Giveth services',
+							);
+							const signedMessage = await signMessage(message);
+							signature = await dispatch(
+								signToGetToken({
+									address: walletAddress,
+									chainId,
+									pathname: router.pathname,
+									solanaSignedMessage: signedMessage,
+									message,
+									nonce,
+								} as ISolanaSignToGetToken),
+							);
+						} else {
+							signature = await dispatch(
+								signToGetToken({
+									address: walletAddress,
+									chainId,
+									pathname: router.pathname,
+								}),
+							);
+						}
 						setLoading(false);
 						if (
 							signature &&

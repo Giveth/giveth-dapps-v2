@@ -483,43 +483,6 @@ export function pollEvery(fn: Function, delay: any) {
 	};
 }
 
-export const createSiweMessage = async (
-	address: string,
-	chainId: number,
-	statement: string,
-) => {
-	try {
-		let domain = 'giveth.io';
-
-		if (typeof window !== 'undefined') {
-			domain = window.location.hostname;
-		}
-		const nonceResponse: any = await fetch(
-			`${config.MICROSERVICES.authentication}/nonce`,
-		).then(n => {
-			return n.json();
-		});
-		const nonce = nonceResponse.message;
-		const { SiweMessage } = await import('siwe');
-		const siweMessage = new SiweMessage({
-			domain,
-			address,
-			nonce,
-			statement,
-			uri: origin,
-			version: '1',
-			chainId,
-		});
-		return {
-			message: siweMessage.prepareMessage(),
-			nonce,
-		};
-	} catch (error) {
-		console.log({ error });
-		return false;
-	}
-};
-
 export function isObjEmpty(obj: Object) {
 	return Object.keys(obj).length > 0;
 }
