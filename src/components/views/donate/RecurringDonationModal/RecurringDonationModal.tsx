@@ -108,6 +108,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	console.log('tokenPrice', tokenPrice);
 
 	console.log('project', project);
+	console.log('tokenStreams', tokenStreams);
 
 	useEffect(() => {
 		if (!selectedToken) return;
@@ -129,8 +130,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			const approve = await approveERC20tokenTransfer(
 				amount,
 				address,
-				selectedToken?.token.id, //tokenAddress
 				superToken.id, //superTokenAddress
+				selectedToken?.token.id, //tokenAddress
 				config.OPTIMISM_CONFIG.id,
 			);
 			if (approve) {
@@ -210,6 +211,12 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					throw new Error('Giveth wallet address not found');
 				}
 
+				console.log(
+					'tokenStreams',
+					tokenStreams,
+					tokenStreams[_superToken.id],
+				);
+
 				const _flowRate =
 					(totalPerMonth * BigInt(donationToGiveth)) /
 					100n /
@@ -231,6 +238,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 		} catch (error) {
 			setStep(EDonationSteps.DONATE);
 			showToastError(error);
+			console.log('error', error);
 		}
 	};
 
