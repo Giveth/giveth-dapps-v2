@@ -8,6 +8,8 @@ import {
 	IconGIVBack,
 	IconPublish24,
 	IconRocketInSpace16,
+	IconSunrise16,
+	IconVerifiedBadge16,
 	mediaQueries,
 	neutralColors,
 	OutlineButton,
@@ -30,10 +32,12 @@ import { formatDonation } from '@/helpers/number';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { EVerificationStatus } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
+import { VerificationModal } from '@/components/modals/VerificationModal';
 
 const ProjectGIVbackToast = () => {
 	const [showBoost, setShowBoost] = useState(false);
-	const { projectData, isAdmin } = useProjectContext();
+	const [showVerification, setShowVerification] = useState(false);
+	const { projectData, isAdmin, activateProject } = useProjectContext();
 	const verStatus = projectData?.verificationFormStatus;
 	const projectStatus = projectData?.status.name;
 	const verified = projectData?.verified;
@@ -52,6 +56,24 @@ const ProjectGIVbackToast = () => {
 		isLoading: isUserLoading,
 	} = useAppSelector(state => state.user);
 	const router = useRouter();
+	const slug = router.query.projectIdSlug as string;
+
+	const showBoostModal = () => {
+		setShowBoost(true);
+	};
+
+	const { modalCallback: signInThenBoost } = useModalCallback(showBoostModal);
+
+	const handleBoostClick = () => {
+		if (isSSRMode) return;
+		if (!isEnabled) {
+			openConnectModal?.();
+		} else if (!isSignedIn) {
+			signInThenBoost();
+		} else {
+			showBoostModal();
+		}
+	};
 
 	const useIntlTitle = 'project.givback_toast.title.';
 	const useIntlDescription = 'project.givback_toast.description.';
@@ -60,6 +82,7 @@ const ProjectGIVbackToast = () => {
 
 	let title,
 		description = '';
+	let Button;
 
 	if (isOwnerVerified) {
 		if (givbackFactor !== 0) {
@@ -82,6 +105,13 @@ const ProjectGIVbackToast = () => {
 			id: `${useIntlDescription}verified_owner`,
 		});
 		link = links.GIVPOWER_DOC;
+		Button = (
+			<OutlineButton
+				onClick={handleBoostClick}
+				label='Boost'
+				icon={<IconRocketInSpace16 />}
+			/>
+		);
 	} else if (isOwnerNotVerified) {
 		if (verStatus === EVerificationStatus.SUBMITTED) {
 			title = formatMessage({
@@ -99,6 +129,13 @@ const ProjectGIVbackToast = () => {
 				id: `${useIntlDescription}non_verified_owner_rejected`,
 			});
 			link = links.VERIFICATION_DOCS;
+			Button = (
+				<OutlineButton
+					onClick={() => setShowVerification(true)}
+					label='Verify project'
+					icon={<IconVerifiedBadge16 />}
+				/>
+			);
 		} else if (verStatus === EVerificationStatus.DRAFT) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_incomplete`,
@@ -107,6 +144,14 @@ const ProjectGIVbackToast = () => {
 				id: `${useIntlDescription}non_verified_owner_incomplete`,
 			});
 			link = links.VERIFICATION_DOCS;
+			Button = (
+				<ExternalLink href={`${Routes.Verification}/${slug}`}>
+					<OutlineButton
+						label='Resume verification'
+						icon={<IconVerifiedBadge16 />}
+					/>
+				</ExternalLink>
+			);
 		} else if (projectStatus === EProjectStatus.DRAFT) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_draft`,
@@ -125,6 +170,13 @@ const ProjectGIVbackToast = () => {
 			});
 			icon = <IconDeactivated24 />;
 			link = '';
+			Button = (
+				<OutlineButton
+					onClick={activateProject}
+					label='Reactivate Project'
+					icon={<IconSunrise16 />}
+				/>
+			);
 		} else if (projectStatus === EProjectStatus.CANCEL) {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_cancelled`,
@@ -142,6 +194,13 @@ const ProjectGIVbackToast = () => {
 				id: `${useIntlDescription}non_verified_owner`,
 			});
 			link = links.VERIFICATION_DOCS;
+			Button = (
+				<OutlineButton
+					onClick={() => setShowVerification(true)}
+					label='Verify project'
+					icon={<IconVerifiedBadge16 />}
+				/>
+			);
 		}
 	} else if (isPublicVerified) {
 		if (givbackFactor !== 0) {
@@ -158,6 +217,13 @@ const ProjectGIVbackToast = () => {
 		description = formatMessage({
 			id: `${useIntlDescription}verified_public`,
 		});
+		Button = (
+			<OutlineButton
+				onClick={handleBoostClick}
+				label='Boost'
+				icon={<IconRocketInSpace16 />}
+			/>
+		);
 	} else {
 		title = formatMessage({
 			id: `${useIntlTitle}non_verified_public`,
@@ -166,23 +232,6 @@ const ProjectGIVbackToast = () => {
 			id: `${useIntlDescription}non_verified_public`,
 		});
 	}
-
-	const showBoostModal = () => {
-		setShowBoost(true);
-	};
-
-	const { modalCallback: signInThenBoost } = useModalCallback(showBoostModal);
-
-	const handleBoostClick = () => {
-		if (isSSRMode) return;
-		if (!isEnabled) {
-			openConnectModal?.();
-		} else if (!isSignedIn) {
-			signInThenBoost();
-		} else {
-			showBoostModal();
-		}
-	};
 
 	useEffect(() => {
 		if (isUserLoading) return;
@@ -223,21 +272,16 @@ const ProjectGIVbackToast = () => {
 						)}
 					</div>
 				</Content>
-				{verified && (
-					<ButtonWrapper>
-						<OutlineButton
-							onClick={handleBoostClick}
-							label='Boost'
-							icon={<IconRocketInSpace16 />}
-						/>
-					</ButtonWrapper>
-				)}
+				{Button && <ButtonWrapper>{Button}</ButtonWrapper>}
 			</Wrapper>
 			{showBoost && (
 				<BoostModal
 					projectId={projectData?.id!}
 					setShowModal={setShowBoost}
 				/>
+			)}
+			{showVerification && (
+				<VerificationModal onClose={() => setShowVerification(false)} />
 			)}
 		</>
 	);
@@ -274,6 +318,10 @@ const ButtonWrapper = styled.div`
 		width: 194px;
 		svg {
 			margin-right: 8px;
+			flex-shrink: 0;
+		}
+		span {
+			text-transform: capitalize;
 		}
 	}
 `;

@@ -9,17 +9,12 @@ import {
 } from '@giveth/ui-design-system';
 import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { captureException } from '@sentry/nextjs';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { useProjectContext } from '@/context/project.context';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
-import { client } from '@/apollo/apolloClient';
-import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowSignWithWallet } from '@/features/modal/modal.slice';
-import { capitalizeAllWords, showToastError } from '@/lib/helpers';
+import { capitalizeAllWords } from '@/lib/helpers';
 import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
 import { idToProjectEdit } from '@/lib/routeCreators';
 import ShareModal from '@/components/modals/ShareModal';
@@ -41,35 +36,12 @@ export const AdminActions = () => {
 	const [deactivateModal, setDeactivateModal] = useState(false);
 	const [showShareModal, setShowShareModal] = useState(false);
 	const [showMobileActionsModal, setShowMobileActionsModal] = useState(false);
-	const { projectData, isActive, fetchProjectBySlug } = useProjectContext();
+	const { projectData, isActive, activateProject } = useProjectContext();
 	const project = projectData!;
-	const { slug, id: projectId, verified } = project;
+	const { slug, verified } = project;
 	const { formatMessage } = useIntl();
-	const { isSignedIn } = useAppSelector(state => state.user);
-	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const isMobile = !useMediaQuery(device.tablet);
-
-	const activeProject = async () => {
-		try {
-			if (!isSignedIn) {
-				dispatch(setShowSignWithWallet(true));
-				return;
-			}
-			await client.mutate({
-				mutation: ACTIVATE_PROJECT,
-				variables: { projectId: Number(projectId || '') },
-			});
-			await fetchProjectBySlug();
-		} catch (e) {
-			showToastError(e);
-			captureException(e, {
-				tags: {
-					section: 'handleProjectStatus',
-				},
-			});
-		}
-	};
 
 	const options: IOption[] = [
 		{
@@ -103,7 +75,7 @@ export const AdminActions = () => {
 			icon: <IconArchiving size={16} />,
 			cb: () => {
 				console.log('verify');
-				isActive ? setDeactivateModal(true) : activeProject();
+				isActive ? setDeactivateModal(true) : activateProject();
 			},
 		},
 		{
