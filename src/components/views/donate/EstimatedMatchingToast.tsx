@@ -10,7 +10,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
-import { useNetwork } from 'wagmi';
+import { type Address, useNetwork } from 'wagmi';
 import Divider from '@/components/Divider';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -72,7 +72,7 @@ const EstimatedMatchingToast = ({
 				const ethPrice = await fetchEthPrice();
 				setTokenPrice(ethPrice || 0);
 			} else if (token?.address) {
-				let tokenAddress = token.address as `0x${string}`;
+				let tokenAddress = token.address as Address;
 				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
 				if (!isMainnet && token.mainnetAddress) {
 					tokenAddress = token.mainnetAddress || '';

@@ -14,7 +14,13 @@ import { captureException } from '@sentry/nextjs';
 import { formatUnits, parseUnits } from 'viem';
 
 import { getContract } from 'wagmi/actions';
-import { erc20ABI, useAccount, useBalance, useNetwork } from 'wagmi';
+import {
+	type Address,
+	erc20ABI,
+	useAccount,
+	useBalance,
+	useNetwork,
+} from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
@@ -214,7 +220,7 @@ const CryptoDonation: FC = () => {
 				request: async () => {
 					try {
 						const contract = getContract({
-							address: selectedToken.address! as `0x${string}`,
+							address: selectedToken.address! as Address,
 							abi: erc20ABI,
 						});
 
@@ -242,7 +248,7 @@ const CryptoDonation: FC = () => {
 		)();
 	}, [address, networkId, tokenSymbol, balance]);
 
-	const handleCustomToken = (i: `0x${string}`) => {
+	const handleCustomToken = (i: Address) => {
 		if (!supportCustomTokens) return;
 		// It's a contract
 		if (i?.length === 42) {
