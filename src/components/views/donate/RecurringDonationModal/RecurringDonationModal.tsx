@@ -18,11 +18,12 @@ import { ITokenStreams } from '../RecurringDonationCard';
 import { useDonateData } from '@/context/donate.context';
 import { Item } from './Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import { formatDate } from '@/lib/helpers';
+import { formatDate, showToastError } from '@/lib/helpers';
 import { DonateSteps } from './DonateSteps';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
+import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 
 interface IRecurringDonationModalProps extends IModal {
 	tokenStreams: ITokenStreams;
@@ -96,6 +97,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 	console.log('tokenPrice', tokenPrice);
 
+	console.log('project', project);
+
 	useEffect(() => {
 		if (!selectedToken) return;
 		if (
@@ -109,13 +112,15 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	const onApprove = async () => {
 		console.log('amount', amount);
 		setStep(EDonationSteps.APPROVING);
-		if (!address) return;
+		if (!address || !selectedToken) return;
+		const superToken = findSuperTokenByTokenAddress(selectedToken.token.id);
+		if (!superToken) return;
 		try {
 			const approve = await approveERC20tokenTransfer(
 				amount,
 				address,
-				'0x34cf77c14f39c81adbdad922af538f05633fa07e',
-				'0xc916ce4025cb479d9ba9d798a80094a449667f5d',
+				selectedToken?.token.id, //tokenAddress
+				superToken.id, //superTokenAddress
 				config.OPTIMISM_CONFIG.id,
 			);
 			if (approve) {
@@ -129,8 +134,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	};
 
 	const onDonate = async () => {
+		setStep(EDonationSteps.DONATING);
 		try {
-			console.log('config.OPTIMISM_CONFIG.id', config.OPTIMISM_CONFIG.id);
 			const _provider = getEthersProvider({
 				chainId: config.OPTIMISM_CONFIG.id,
 			});
@@ -139,58 +144,45 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				chainId: config.OPTIMISM_CONFIG.id,
 			});
 
-			if (!_provider || !signer || !address) return;
-
-			const approve = await approveERC20tokenTransfer(
-				1000000000000000000n,
-				address,
-				'0x34cf77c14f39c81adbdad922af538f05633fa07e',
-				'0xc916ce4025cb479d9ba9d798a80094a449667f5d',
-				config.OPTIMISM_CONFIG.id,
-			);
-
-			console.log('approve', approve);
-			if (!approve) return;
-
+			if (!_provider || !signer || !address || !selectedToken)
+				throw new Error('Provider or signer not found');
+			let _superToken = selectedToken.token;
+			if (!_superToken.isSuperToken) {
+				const sp = findSuperTokenByTokenAddress(_superToken.id);
+				if (!sp) {
+					throw new Error('Super token not found');
+				} else {
+					_superToken = sp;
+				}
+			}
 			const sf = await Framework.create({
 				chainId: config.OPTIMISM_CONFIG.id,
 				provider: _provider,
 			});
-			console.log('sf', sf);
 
-			const givx = await sf.loadWrapperSuperToken(
-				'0x34cf77c14f39c81adbdad922af538f05633fa07e',
-			);
+			const superToken = await sf.loadWrapperSuperToken(_superToken.id);
 
-			// const approve = await givx.approve({
-			// 	amount: '1000000000000000000',
-			// 	receiver: '0x34cf77c14f39c81adbdad922af538f05633fa07e',
-			// });
-
-			// await approve.exec(signer);
-
-			const upgradeOperation = await givx.upgrade({
-				amount: '1000000000000000000',
+			const upgradeOperation = await superToken.upgrade({
+				amount: amount.toString(),
 			});
 
-			// const res = await upgradeOperation.exec(signer);
-			// console.log('res', res);
-
-			let createFlowOp = givx.createFlow({
-				sender: address, // Alice's address
-				receiver: '0x871Cd6353B803CECeB090Bb827Ecb2F361Db81AB',
-				flowRate: '380517503',
+			let createFlowOp = superToken.createFlow({
+				sender: address,
+				receiver: project?.adminUser.walletAddress!, // should change with anchor contract address
+				flowRate: (
+					(totalPerMonth * BigInt(100 - donationToGiveth)) /
+					100n /
+					BigInt(30 * 24 * 60 * 60)
+				).toString(),
 			});
 
-			// await createFlowOp.exec(signer);
-			const sfSigner = sf.createSigner({
-				signer: signer,
-			});
 			const batchOp = sf.batchCall([upgradeOperation, createFlowOp]);
 			const res = await batchOp.exec(signer);
 			console.log('res', res);
+			setStep(EDonationSteps.SUBMITTED);
 		} catch (error) {
-			console.log('error', error);
+			setStep(EDonationSteps.DONATE);
+			showToastError(error);
 		}
 	};
 
@@ -235,7 +227,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				<B>{formatDate(date)}</B>
 				<P>Top-up before then!</P>
 			</RunOutSection>
-			<ApproveButton
+			<ActionButton
 				label={'Approve'}
 				onClick={onApprove}
 				loading={step === EDonationSteps.APPROVING}
@@ -268,6 +260,6 @@ const RunOutSection = styled(Flex)`
 	align-items: flex-start;
 `;
 
-const ApproveButton = styled(Button)`
+const ActionButton = styled(Button)`
 	width: 100%;
 `;
