@@ -8,6 +8,8 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { Framework } from '@superfluid-finance/sdk-core';
+import { useAccount } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -18,6 +20,9 @@ import { Item } from './Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { formatDate } from '@/lib/helpers';
 import { DonateSteps } from './DonateSteps';
+import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
+import { approveERC20tokenTransfer } from '@/lib/stakingPool';
+import config from '@/configuration';
 
 interface IRecurringDonationModalProps extends IModal {
 	tokenStreams: ITokenStreams;
@@ -86,8 +91,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	donationToGiveth,
 }) => {
 	const { project, selectedToken } = useDonateData();
-
+	const { address } = useAccount();
 	const tokenPrice = useTokenPrice(selectedToken?.token);
+
 	console.log('tokenPrice', tokenPrice);
 
 	useEffect(() => {
@@ -99,6 +105,94 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			setStep(EDonationSteps.DONATE);
 		}
 	}, [selectedToken, setStep]);
+
+	const onApprove = async () => {
+		console.log('amount', amount);
+		setStep(EDonationSteps.APPROVING);
+		if (!address) return;
+		try {
+			const approve = await approveERC20tokenTransfer(
+				amount,
+				address,
+				'0x34cf77c14f39c81adbdad922af538f05633fa07e',
+				'0xc916ce4025cb479d9ba9d798a80094a449667f5d',
+				config.OPTIMISM_CONFIG.id,
+			);
+			if (approve) {
+				setStep(EDonationSteps.DONATE);
+			} else {
+				setStep(EDonationSteps.APPROVE);
+			}
+		} catch (error) {
+			setStep(EDonationSteps.APPROVE);
+		}
+	};
+
+	const onDonate = async () => {
+		try {
+			console.log('config.OPTIMISM_CONFIG.id', config.OPTIMISM_CONFIG.id);
+			const _provider = getEthersProvider({
+				chainId: config.OPTIMISM_CONFIG.id,
+			});
+
+			const signer = await getEthersSigner({
+				chainId: config.OPTIMISM_CONFIG.id,
+			});
+
+			if (!_provider || !signer || !address) return;
+
+			const approve = await approveERC20tokenTransfer(
+				1000000000000000000n,
+				address,
+				'0x34cf77c14f39c81adbdad922af538f05633fa07e',
+				'0xc916ce4025cb479d9ba9d798a80094a449667f5d',
+				config.OPTIMISM_CONFIG.id,
+			);
+
+			console.log('approve', approve);
+			if (!approve) return;
+
+			const sf = await Framework.create({
+				chainId: config.OPTIMISM_CONFIG.id,
+				provider: _provider,
+			});
+			console.log('sf', sf);
+
+			const givx = await sf.loadWrapperSuperToken(
+				'0x34cf77c14f39c81adbdad922af538f05633fa07e',
+			);
+
+			// const approve = await givx.approve({
+			// 	amount: '1000000000000000000',
+			// 	receiver: '0x34cf77c14f39c81adbdad922af538f05633fa07e',
+			// });
+
+			// await approve.exec(signer);
+
+			const upgradeOperation = await givx.upgrade({
+				amount: '1000000000000000000',
+			});
+
+			// const res = await upgradeOperation.exec(signer);
+			// console.log('res', res);
+
+			let createFlowOp = givx.createFlow({
+				sender: address, // Alice's address
+				receiver: '0x871Cd6353B803CECeB090Bb827Ecb2F361Db81AB',
+				flowRate: '380517503',
+			});
+
+			// await createFlowOp.exec(signer);
+			const sfSigner = sf.createSigner({
+				signer: signer,
+			});
+			const batchOp = sf.batchCall([upgradeOperation, createFlowOp]);
+			const res = await batchOp.exec(signer);
+			console.log('res', res);
+		} catch (error) {
+			console.log('error', error);
+		}
+	};
 
 	const totalPerMonth = ((amount || 0n) * BigInt(percentage)) / 100n;
 	const projectPerMonth =
@@ -143,9 +237,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			</RunOutSection>
 			<ApproveButton
 				label={'Approve'}
-				onClick={() => {
-					console.log('selectedToken', selectedToken);
-				}}
+				onClick={onApprove}
+				loading={step === EDonationSteps.APPROVING}
 			/>
 		</Wrapper>
 	);
