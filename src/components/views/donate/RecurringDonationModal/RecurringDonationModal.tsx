@@ -53,6 +53,14 @@ const headerTitleGenerator = (step: EDonationSteps) => {
 	}
 };
 
+const buttonLabel = {
+	[EDonationSteps.APPROVE]: 'Approve',
+	[EDonationSteps.APPROVING]: 'Approving...',
+	[EDonationSteps.DONATE]: 'Donate',
+	[EDonationSteps.DONATING]: 'Donating...',
+	[EDonationSteps.SUBMITTED]: 'Done',
+};
+
 export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
 	setShowModal,
 	...props
@@ -90,6 +98,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	amount,
 	percentage,
 	donationToGiveth,
+	tokenStreams,
+	setShowModal,
 }) => {
 	const { project, selectedToken } = useDonateData();
 	const { address } = useAccount();
@@ -166,14 +176,15 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				amount: amount.toString(),
 			});
 
+			const _flowrate =
+				(totalPerMonth * BigInt(100 - donationToGiveth)) /
+				100n /
+				BigInt(30 * 24 * 60 * 60);
+
 			let createFlowOp = superToken.createFlow({
 				sender: address,
 				receiver: project?.adminUser.walletAddress!, // should change with anchor contract address
-				flowRate: (
-					(totalPerMonth * BigInt(100 - donationToGiveth)) /
-					100n /
-					BigInt(30 * 24 * 60 * 60)
-				).toString(),
+				flowRate: _flowrate.toString(),
 			});
 
 			const batchOp = sf.batchCall([upgradeOperation, createFlowOp]);
@@ -183,6 +194,20 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 		} catch (error) {
 			setStep(EDonationSteps.DONATE);
 			showToastError(error);
+		}
+	};
+
+	const handleAction = () => {
+		switch (step) {
+			case EDonationSteps.APPROVE:
+				onApprove();
+				break;
+			case EDonationSteps.DONATE:
+				onDonate();
+				break;
+			case EDonationSteps.SUBMITTED:
+				setShowModal(false);
+				break;
 		}
 	};
 
@@ -228,9 +253,12 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				<P>Top-up before then!</P>
 			</RunOutSection>
 			<ActionButton
-				label={'Approve'}
-				onClick={onApprove}
-				loading={step === EDonationSteps.APPROVING}
+				label={buttonLabel[step]}
+				onClick={handleAction}
+				loading={
+					step === EDonationSteps.APPROVING ||
+					step === EDonationSteps.DONATING
+				}
 			/>
 		</Wrapper>
 	);
