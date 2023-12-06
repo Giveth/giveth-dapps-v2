@@ -8,7 +8,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Framework } from '@superfluid-finance/sdk-core';
+import { Framework, type Operation } from '@superfluid-finance/sdk-core';
 import { useAccount } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -172,22 +172,59 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			const superToken = await sf.loadWrapperSuperToken(_superToken.id);
 
+			const operations: Operation[] = [];
+
 			const upgradeOperation = await superToken.upgrade({
 				amount: amount.toString(),
 			});
 
-			const _flowrate =
+			operations.push(upgradeOperation);
+
+			const projectOpWalletAddress = project?.addresses?.find(
+				address => address.networkId === config.OPTIMISM_CONFIG.id,
+			)?.address;
+
+			if (!projectOpWalletAddress) {
+				throw new Error('Project wallet address not found');
+			}
+
+			const _flowRate =
 				(totalPerMonth * BigInt(100 - donationToGiveth)) /
 				100n /
 				BigInt(30 * 24 * 60 * 60);
 
-			let createFlowOp = superToken.createFlow({
+			let projectFlowOp = superToken.createFlow({
 				sender: address,
-				receiver: project?.adminUser.walletAddress!, // should change with anchor contract address
-				flowRate: _flowrate.toString(),
+				receiver: projectOpWalletAddress, // should change with anchor contract address
+				flowRate: _flowRate.toString(),
 			});
 
-			const batchOp = sf.batchCall([upgradeOperation, createFlowOp]);
+			operations.push(projectFlowOp);
+
+			if (donationToGiveth > 0) {
+				const givethOpWalletAddress = project?.givethAddresses?.find(
+					address => address.networkId === config.OPTIMISM_CONFIG.id,
+				)?.address;
+
+				if (!givethOpWalletAddress) {
+					throw new Error('Giveth wallet address not found');
+				}
+
+				const _flowRate =
+					(totalPerMonth * BigInt(donationToGiveth)) /
+					100n /
+					BigInt(30 * 24 * 60 * 60);
+
+				const givethFlowOp = superToken.createFlow({
+					sender: address,
+					receiver: givethOpWalletAddress, // should change with anchor contract address
+					flowRate: _flowRate.toString(),
+				});
+
+				operations.push(givethFlowOp);
+			}
+
+			const batchOp = sf.batchCall(operations);
 			const res = await batchOp.exec(signer);
 			console.log('res', res);
 			setStep(EDonationSteps.SUBMITTED);
