@@ -217,18 +217,36 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					tokenStreams[_superToken.id],
 				);
 
-				const _flowRate =
+				const _newFlowRate =
 					(totalPerMonth * BigInt(donationToGiveth)) /
 					100n /
 					BigInt(30 * 24 * 60 * 60);
 
-				const givethFlowOp = superToken.createFlow({
-					sender: address,
-					receiver: givethOpWalletAddress, // should change with anchor contract address
-					flowRate: _flowRate.toString(),
-				});
+				const oldStream =
+					tokenStreams[_superToken.id] &&
+					tokenStreams[_superToken.id].find(
+						stream => stream.receiver.id === givethOpWalletAddress,
+					);
 
-				operations.push(givethFlowOp);
+				if (oldStream) {
+					const givethFlowOp = superToken.updateFlow({
+						sender: address,
+						receiver: givethOpWalletAddress, // should change with anchor contract address
+						flowRate: (
+							_newFlowRate + oldStream.currentFlowRate
+						).toString(),
+					});
+
+					operations.push(givethFlowOp);
+				} else {
+					const givethFlowOp = superToken.createFlow({
+						sender: address,
+						receiver: givethOpWalletAddress, // should change with anchor contract address
+						flowRate: _newFlowRate.toString(),
+					});
+
+					operations.push(givethFlowOp);
+				}
 			}
 
 			const batchOp = sf.batchCall(operations);
