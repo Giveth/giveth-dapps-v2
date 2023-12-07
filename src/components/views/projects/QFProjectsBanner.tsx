@@ -77,23 +77,28 @@ export const QFProjectsBanner = () => {
 	return (
 		<BannerContainer>
 			<Image
-				src={'/images/banners/qfBannerOP.png'}
+				src={'/images/banners/giving-season/bg.png'}
 				style={{ objectFit: 'cover' }}
 				fill
 				alt='QF Banner'
 			/>
 			<OPItem1
-				src={'/images/banners/optimism/op_giv_1.png'}
+				src={'/images/banners/giving-season/top-right.png'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<OPItem2
-				src={'/images/banners/optimism/op_giv_2.png'}
+				src={'/images/banners/giving-season/bottom-right.png'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<OPItem3
-				src={'/images/banners/optimism/op_giv_3.png'}
+				src={'/images/banners/giving-season/top-left.png'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
+			<OPItem4
+				src={'/images/banners/giving-season/bottom-left.png'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
@@ -123,14 +128,14 @@ export const QFProjectsBanner = () => {
 							</Desc>
 						)}
 					</StyledCol>
-					<StyledCol xs={12} md={6}>
+					{/* <StyledCol xs={12} md={6}>
 						<Image
 							src={'/images/banners/qfSponsorsOP.png'}
 							style={{ objectFit: 'contain' }}
 							fill
 							alt='QF Banner'
 						/>
-					</StyledCol>
+					</StyledCol> */}
 				</Row>
 			</Container>
 		</BannerContainer>
@@ -191,23 +196,35 @@ const Desc = styled(Flex)`
 const OPItem = styled.img`
 	z-index: 2;
 	position: absolute;
-	width: 177px;
+	width: 250px;
+
 	@media (max-width: ${deviceSize.laptopS}px) {
-		display: none;
+		width: 180px;
 	}
 `;
 const OPItem1 = styled(OPItem)`
 	top: 0;
-	left: 30%;
+	right: 0;
 `;
 const OPItem2 = styled(OPItem)`
-	left: 20%;
+	right: 0;
 	bottom: 0;
 `;
 const OPItem3 = styled(OPItem)`
-	width: 104px;
+	top: 0;
 	left: 0;
+	width: 300px;
+
 	@media (max-width: ${deviceSize.desktop}px) {
-		display: none;
+		width: 200px;
+	}
+`;
+
+const OPItem4 = styled(OPItem)`
+	left: 0;
+	bottom: 0;
+	width: 270px;
+	@media (max-width: ${deviceSize.desktop}px) {
+		width: 180px;
 	}
 `;
