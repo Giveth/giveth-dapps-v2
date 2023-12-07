@@ -93,6 +93,13 @@ export const RecurringDonationCard = () => {
 		fetchData();
 	}, [address]);
 
+	useEffect(() => {
+		if (!selectedToken) return;
+		if (selectedToken.token.isSuperToken) {
+			setAmount(selectedToken.balance || 0n);
+		}
+	}, [selectedToken]);
+
 	console.log('selectedToken', selectedToken);
 
 	const onDonateEth = async () => {
@@ -252,11 +259,20 @@ export const RecurringDonationCard = () => {
 							)}
 							<IconCaretDown16 />
 						</SelectTokenWrapper>
-						<Input
-							setAmount={setAmount}
-							disabled={selectedToken === undefined}
-							decimals={selectedToken?.token.decimals}
-						/>
+						{selectedToken?.token.isSuperToken ? (
+							<p>
+								{formatUnits(
+									selectedToken?.balance || 0n,
+									selectedToken.token.decimals,
+								)}
+							</p>
+						) : (
+							<Input
+								setAmount={setAmount}
+								disabled={selectedToken === undefined}
+								decimals={selectedToken?.token.decimals}
+							/>
+						)}
 					</InputWrapper>
 					{selectedToken !== undefined &&
 						selectedToken.balance !== undefined && (
