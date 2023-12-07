@@ -252,7 +252,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			const tx = await batchOp.exec(signer);
 			const res = await tx.wait();
 			console.log('res', res);
-			if (!res) {
+			if (!res.status) {
 				throw new Error('Transaction failed');
 			}
 			setStep(EDonationSteps.SUBMITTED);
@@ -322,6 +322,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				label={buttonLabel[step]}
 				onClick={handleAction}
 				loading={
+					step === EDonationSteps.APPROVING ||
+					step === EDonationSteps.DONATING
+				}
+				disabled={
 					step === EDonationSteps.APPROVING ||
 					step === EDonationSteps.DONATING
 				}
