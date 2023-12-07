@@ -194,7 +194,7 @@ const Desc = styled(Flex)`
 `;
 
 const OPItem = styled.img`
-	zindex: 1 !important;
+	z-index: 1 !important;
 	position: absolute;
 	width: 250px;
 
