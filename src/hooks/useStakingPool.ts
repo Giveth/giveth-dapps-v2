@@ -36,7 +36,7 @@ export const useStakingPool = (
 
 	const currentValues = useAppSelector(
 		state => state.subgraph[chainInfoName],
-		() => (hold ? true : false),
+		() => hold,
 	);
 
 	const { network, type } = poolStakingConfig;
@@ -44,7 +44,6 @@ export const useStakingPool = (
 
 	useEffect(() => {
 		const cb = () => {
-			console.log('Calculating APR');
 			if (isLoaded) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_GARDEN_LM ||
