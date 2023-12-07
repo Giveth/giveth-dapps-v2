@@ -171,7 +171,13 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				provider: _provider,
 			});
 
-			const superToken = await sf.loadWrapperSuperToken(_superToken.id);
+			// EThx is not a Wrapper Super Token and should load separately
+			let superToken;
+			if (_superToken.symbol === 'ETHx') {
+				superToken = await sf.loadNativeAssetSuperToken(_superToken.id);
+			} else {
+				superToken = await sf.loadWrapperSuperToken(_superToken.id);
+			}
 
 			const operations: Operation[] = [];
 
@@ -179,7 +185,12 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				amount: amount.toString(),
 			});
 
-			operations.push(upgradeOperation);
+			//Upgrading ETHx is a special case and can't be batched
+			if (_superToken.symbol === 'ETHx') {
+				await upgradeOperation.exec(signer);
+			} else {
+				operations.push(upgradeOperation);
+			}
 
 			const projectOpWalletAddress = project?.addresses?.find(
 				address => address.networkId === config.OPTIMISM_CONFIG.id,
