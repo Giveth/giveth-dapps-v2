@@ -49,6 +49,7 @@ export const fetchAllInfoAsync = createAsyncThunk(
 		} = {};
 		for (let i = 0; i < res.length; i++) {
 			const element = res[i] as ISubgraphState;
+			element.isLoaded = true;
 			response[chainValues[i]] = element;
 		}
 
