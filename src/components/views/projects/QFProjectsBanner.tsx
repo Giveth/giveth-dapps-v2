@@ -215,7 +215,7 @@ const OPItem3 = styled(OPItem)`
 	left: 0;
 	width: 300px;
 
-	@media (max-width: ${deviceSize.desktop}px) {
+	@media (max-width: ${deviceSize.tablet}px) {
 		width: 200px;
 	}
 `;
@@ -224,7 +224,7 @@ const OPItem4 = styled(OPItem)`
 	left: 0;
 	bottom: 0;
 	width: 270px;
-	@media (max-width: ${deviceSize.desktop}px) {
+	@media (max-width: ${deviceSize.tablet}px) {
 		width: 180px;
 	}
 `;
