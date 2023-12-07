@@ -19,7 +19,7 @@ export const generateSafeMessageMessage = (
 		: hashTypedData(message);
 };
 
-export const getTxHashFromSafeTxId = async (
+export const getTxFromSafeTxId = async (
 	safeTxHash: string,
 	chainId: number,
 ) => {
@@ -31,8 +31,7 @@ export const getTxHashFromSafeTxId = async (
 		});
 
 		const tx = await safeService.getTransaction(safeTxHash);
-		console.log({ safeTxHash, chainId, tx });
-		return tx?.transactionHash;
+		return tx;
 	} catch (error) {
 		return null;
 	}

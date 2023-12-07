@@ -1394,5 +1394,6 @@
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Agua & Saneamiento"
+	"water-and-sanitation": "Agua & Saneamiento",
+	"label.unfortunately_passport_is_incompatible": "Desafortunadamente, Passport no es compatible con multisigs. Por favor, inténtalo con tu billetera personal."
 }

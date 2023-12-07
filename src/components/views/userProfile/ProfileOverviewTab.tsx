@@ -33,6 +33,7 @@ import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { useProfileContext } from '@/context/profile.context';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
@@ -49,6 +50,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
+	const isSafeEnv = useIsSafeEnvironment();
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
@@ -150,7 +152,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 					)}
 				</Col>
 			</Row>
-			{myAccount && (
+			{myAccount && isSafeEnv ? (
 				<Row>
 					<Col lg={6}>
 						<SectionTitle weight={700}>
@@ -160,16 +162,36 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 						</SectionTitle>
 						<SectionDesc>
 							{formatMessage({
-								id: 'label.take_control_online_identity',
+								id: 'label.unfortunately_passport_is_incompatible',
 							})}
-							<br />
-							<PassportLink href={links.PASSPORT}>
-								{formatMessage({ id: 'label.go_to_passport' })}.
-							</PassportLink>
 						</SectionDesc>
-						<PassportCard />
 					</Col>
 				</Row>
+			) : (
+				myAccount && (
+					<Row>
+						<Col lg={6}>
+							<SectionTitle weight={700}>
+								{formatMessage({
+									id: 'label.gitcoin_passport',
+								})}
+							</SectionTitle>
+							<SectionDesc>
+								{formatMessage({
+									id: 'label.take_control_online_identity',
+								})}
+								<br />
+								<PassportLink href={links.PASSPORT}>
+									{formatMessage({
+										id: 'label.go_to_passport',
+									})}
+									.
+								</PassportLink>
+							</SectionDesc>
+							<PassportCard />
+						</Col>
+					</Row>
+				)
 			)}
 			{myAccount && (
 				<AccountHero leftAlign={title === _sections.donate.title}>

@@ -9,24 +9,19 @@ import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { isAddressENS } from '@/lib/wallet';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
 import { ICreateDonation } from '@/components/views/donate/helpers';
-import { getTxHashFromSafeTxId } from '@/lib/safe';
+import { getTxFromSafeTxId } from '@/lib/safe';
+import { useIsSafeEnvironment } from './useSafeAutoConnect';
 
 const MAX_RETRIES = 10;
 const RETRY_DELAY = 5000; // 5 seconds
 
 const retryFetchTransaction = async (
 	txHash: `0x${string}`,
-	chainId: number,
 	retries: number = MAX_RETRIES,
 ) => {
 	for (let i = 0; i < retries; i++) {
-		const safeTx = (await getTxHashFromSafeTxId(
-			txHash,
-			chainId,
-		)) as `0x${string}`;
-		console.log({ safeTx, txHash });
 		const transaction = await fetchTransaction({
-			hash: safeTx ? safeTx : txHash,
+			hash: txHash,
 		}).catch(error => {
 			console.log(
 				'Attempt',
@@ -57,6 +52,7 @@ export const useCreateDonation = () => {
 		useState<ICreateDonation>();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
+	const isSafeEnv = useIsSafeEnvironment();
 
 	const { status } = useWaitForTransaction({
 		hash: txHash,
@@ -78,15 +74,20 @@ export const useCreateDonation = () => {
 		txHash: `0x${string}`,
 		props: ICreateDonation,
 	) => {
-		let transaction;
+		let transaction, safeTransaction;
 		try {
 			if (!txHash) {
 				return;
 			}
+			transaction = !isSafeEnv
+				? await retryFetchTransaction(txHash)
+				: null;
 
-			transaction = await retryFetchTransaction(txHash, chainId!);
-			console.log({ transaction });
-			setTxHash(transaction?.hash || txHash);
+			if (!transaction && isSafeEnv) {
+				safeTransaction = await getTxFromSafeTxId(txHash, chainId!);
+			}
+
+			setTxHash(txHash);
 			const {
 				anonymous,
 				projectId,
@@ -96,20 +97,40 @@ export const useCreateDonation = () => {
 				setFailedModalType,
 			} = props;
 
-			if (!transaction) return;
-			const donationData: IOnTxHash = {
-				chainId: transaction.chainId!,
-				txHash: transaction.hash,
-				amount: amount,
-				token,
-				projectId,
-				anonymous,
-				nonce: transaction.nonce,
-				chainvineReferred,
-				walletAddress: transaction.from,
-				symbol: token.symbol,
-				setFailedModalType,
-			};
+			let donationData: IOnTxHash;
+
+			if (isSafeEnv && safeTransaction) {
+				donationData = {
+					chainId: chainId!,
+					amount: amount,
+					token,
+					projectId,
+					anonymous,
+					nonce: safeTransaction?.nonce,
+					chainvineReferred,
+					walletAddress: safeTransaction?.safe as `0x${string}`,
+					symbol: token.symbol,
+					setFailedModalType,
+					safeTransactionId: txHash,
+				};
+			} else if (!isSafeEnv && transaction) {
+				donationData = {
+					chainId: transaction.chainId!,
+					txHash: transaction.hash,
+					amount: amount,
+					token,
+					projectId,
+					anonymous,
+					nonce: transaction.nonce,
+					chainvineReferred,
+					walletAddress: transaction.from,
+					symbol: token.symbol,
+					setFailedModalType,
+					safeTransactionId: null,
+				};
+			} else return;
+
+			console.log({ donationData });
 			setCreateDonationProps(donationData);
 
 			try {

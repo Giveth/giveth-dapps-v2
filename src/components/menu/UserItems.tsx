@@ -86,12 +86,15 @@ export const UserItems: FC<IUserItemsProps> = ({
 						<NetworkLogo chainId={chainId} logoSize={16} />
 						<NetworkName>{networkName}</NetworkName>
 					</FlexCenter>
-					<ItemAction
-						size='Small'
-						onClick={() => openChainModal && openChainModal()}
-					>
-						{formatMessage({ id: 'label.switch_network' })}
-					</ItemAction>
+
+					{!isSafeEnv && (
+						<ItemAction
+							size='Small'
+							onClick={() => openChainModal && openChainModal()}
+						>
+							{formatMessage({ id: 'label.switch_network' })}
+						</ItemAction>
+					)}
 				</ItemRow>
 			</Item>
 			<ItemSpacer />

@@ -9,9 +9,10 @@ import { ICreateDonation } from '@/components/views/donate/helpers';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 
 export interface IOnTxHash extends ICreateDonation {
-	txHash: string;
+	txHash?: string | null;
 	nonce: number;
 	chainId: number;
+	safeTransactionId?: string | null;
 }
 
 export const updateDonation = (donationId: number, status: EDonationStatus) => {
@@ -39,6 +40,7 @@ export async function saveDonation(props: IOnTxHash) {
 		anonymous,
 		nonce,
 		chainvineReferred,
+		safeTransactionId,
 	} = props;
 
 	const { address, symbol } = token;
@@ -57,6 +59,7 @@ export async function saveDonation(props: IOnTxHash) {
 				tokenAddress: address,
 				anonymous,
 				referrerId: chainvineReferred,
+				safeTransactionId,
 			},
 		});
 
