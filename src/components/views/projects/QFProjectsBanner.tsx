@@ -198,7 +198,7 @@ const OPItem = styled.img`
 	position: absolute;
 	width: 250px;
 
-	@media (max-width: ${deviceSize.laptopS}px) {
+	@media (max-width: ${deviceSize.tablet}px) {
 		width: 180px;
 	}
 `;
