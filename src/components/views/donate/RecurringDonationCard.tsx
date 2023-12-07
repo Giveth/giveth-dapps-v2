@@ -15,7 +15,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { formatUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
-import { Framework } from '@superfluid-finance/sdk-core';
 import Slider from 'rc-slider';
 import Image from 'next/image';
 import { AddressZero } from '@/lib/constants/constants';
@@ -28,8 +27,6 @@ import { TokenIcon } from './TokenIcon/TokenIcon';
 import { gqlRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
-import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
-import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import { useDonateData } from '@/context/donate.context';
 import { RecurringDonationModal } from './RecurringDonationModal/RecurringDonationModal';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
@@ -100,106 +97,7 @@ export const RecurringDonationCard = () => {
 		}
 	}, [selectedToken]);
 
-	console.log('selectedToken', selectedToken);
-
-	const onDonateEth = async () => {
-		console.log('config.OPTIMISM_CONFIG.id', config.OPTIMISM_CONFIG.id);
-		const _provider = getEthersProvider({
-			chainId: config.OPTIMISM_CONFIG.id,
-		});
-
-		const signer = await getEthersSigner({
-			chainId: config.OPTIMISM_CONFIG.id,
-		});
-
-		if (!_provider || !signer) return;
-
-		const sf = await Framework.create({
-			chainId: config.OPTIMISM_CONFIG.id,
-			provider: _provider,
-		});
-		console.log('sf', sf);
-
-		const ethx = await sf.loadNativeAssetSuperToken(
-			'0xe01f8743677da897f4e7de9073b57bf034fc2433',
-		);
-
-		const upgradeOperation = await ethx.upgrade({
-			amount: '1000000000000',
-		});
-
-		await upgradeOperation.exec(signer);
-	};
-
-	const onWrap = async () => {
-		try {
-			console.log('config.OPTIMISM_CONFIG.id', config.OPTIMISM_CONFIG.id);
-			const _provider = getEthersProvider({
-				chainId: config.OPTIMISM_CONFIG.id,
-			});
-
-			const signer = await getEthersSigner({
-				chainId: config.OPTIMISM_CONFIG.id,
-			});
-
-			if (!_provider || !signer || !address) return;
-
-			const approve = await approveERC20tokenTransfer(
-				1000000000000000000n,
-				address,
-				'0x34cf77c14f39c81adbdad922af538f05633fa07e',
-				'0xc916ce4025cb479d9ba9d798a80094a449667f5d',
-				config.OPTIMISM_CONFIG.id,
-			);
-
-			console.log('approve', approve);
-			if (!approve) return;
-
-			const sf = await Framework.create({
-				chainId: config.OPTIMISM_CONFIG.id,
-				provider: _provider,
-			});
-			console.log('sf', sf);
-
-			const givx = await sf.loadWrapperSuperToken(
-				'0x34cf77c14f39c81adbdad922af538f05633fa07e',
-			);
-
-			// const approve = await givx.approve({
-			// 	amount: '1000000000000000000',
-			// 	receiver: '0x34cf77c14f39c81adbdad922af538f05633fa07e',
-			// });
-
-			// await approve.exec(signer);
-
-			const upgradeOperation = await givx.upgrade({
-				amount: '1000000000000000000',
-			});
-
-			// const res = await upgradeOperation.exec(signer);
-			// console.log('res', res);
-
-			let createFlowOp = givx.createFlow({
-				sender: address, // Alice's address
-				receiver: '0x871Cd6353B803CECeB090Bb827Ecb2F361Db81AB',
-				flowRate: '380517503',
-			});
-
-			// await createFlowOp.exec(signer);
-			const sfSigner = sf.createSigner({
-				signer: signer,
-			});
-			const batchOp = sf.batchCall([upgradeOperation, createFlowOp]);
-			const res = await batchOp.exec(signer);
-			console.log('res', res);
-		} catch (error) {
-			console.log('error', error);
-		}
-	};
-
 	const underlyingToken = selectedToken?.token.underlyingToken;
-
-	console.log('balance', balance);
 
 	const totalPerMonth = ((amount || 0n) * BigInt(percentage)) / 100n;
 	const projectPerMonth =
