@@ -105,10 +105,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	const { address } = useAccount();
 	const tokenPrice = useTokenPrice(selectedToken?.token);
 
-	console.log('tokenPrice', tokenPrice);
+	// console.log('tokenPrice', tokenPrice);
 
-	console.log('project', project);
-	console.log('tokenStreams', tokenStreams);
+	// console.log('project', project);
+	// console.log('tokenStreams', tokenStreams);
 
 	useEffect(() => {
 		if (!selectedToken) return;
@@ -211,12 +211,6 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					throw new Error('Giveth wallet address not found');
 				}
 
-				console.log(
-					'tokenStreams',
-					tokenStreams,
-					tokenStreams[_superToken.id],
-				);
-
 				const _newFlowRate =
 					(totalPerMonth * BigInt(donationToGiveth)) /
 					100n /
@@ -225,16 +219,19 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				const oldStream =
 					tokenStreams[_superToken.id] &&
 					tokenStreams[_superToken.id].find(
-						stream => stream.receiver.id === givethOpWalletAddress,
+						stream =>
+							stream.receiver.id.toLowerCase() ===
+							givethOpWalletAddress.toLowerCase(),
 					);
 
 				if (oldStream) {
+					const givethFlowRate =
+						_newFlowRate + BigInt(oldStream.currentFlowRate);
+
 					const givethFlowOp = superToken.updateFlow({
 						sender: address,
 						receiver: givethOpWalletAddress, // should change with anchor contract address
-						flowRate: (
-							_newFlowRate + oldStream.currentFlowRate
-						).toString(),
+						flowRate: givethFlowRate.toString(),
 					});
 
 					operations.push(givethFlowOp);
@@ -249,9 +246,15 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				}
 			}
 
+			console.log('operations', operations);
+
 			const batchOp = sf.batchCall(operations);
-			const res = await batchOp.exec(signer);
+			const tx = await batchOp.exec(signer);
+			const res = await tx.wait();
 			console.log('res', res);
+			if (!res) {
+				throw new Error('Transaction failed');
+			}
 			setStep(EDonationSteps.SUBMITTED);
 		} catch (error) {
 			setStep(EDonationSteps.DONATE);
