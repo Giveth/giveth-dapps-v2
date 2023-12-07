@@ -14,7 +14,6 @@ import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { Flex } from '@/components/styled-components/Flex';
-import { ITokenStreams } from '../RecurringDonationCard';
 import { useDonateData } from '@/context/donate.context';
 import { Item } from './Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
@@ -26,7 +25,6 @@ import config from '@/configuration';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 
 interface IRecurringDonationModalProps extends IModal {
-	tokenStreams: ITokenStreams;
 	donationToGiveth: number;
 	amount: bigint;
 	percentage: number;
@@ -98,10 +96,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	amount,
 	percentage,
 	donationToGiveth,
-	tokenStreams,
 	setShowModal,
 }) => {
-	const { project, selectedToken } = useDonateData();
+	const { project, selectedToken, tokenStreams } = useDonateData();
 	const { address } = useAccount();
 	const tokenPrice = useTokenPrice(selectedToken?.token);
 

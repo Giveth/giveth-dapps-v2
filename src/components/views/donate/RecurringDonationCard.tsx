@@ -22,21 +22,13 @@ import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
-import { ISuperfluidStream } from '@/types/superFluid';
 import { TokenIcon } from './TokenIcon/TokenIcon';
-import { gqlRequest } from '@/helpers/requests';
-import config from '@/configuration';
-import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
 import { useDonateData } from '@/context/donate.context';
 import { RecurringDonationModal } from './RecurringDonationModal/RecurringDonationModal';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import 'rc-slider/assets/index.css';
 import DonateToGiveth from './DonateToGiveth';
 import { Spinner } from '@/components/Spinner';
-
-export interface ITokenStreams {
-	[key: string]: ISuperfluidStream[];
-}
 
 export const RecurringDonationCard = () => {
 	const [amount, setAmount] = useState(0n);
@@ -45,7 +37,6 @@ export const RecurringDonationCard = () => {
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
 	const [showRecurringDonationModal, setShowRecurringDonationModal] =
 		useState(false);
-	const [tokenStreams, setTokenStreams] = useState<ITokenStreams>({});
 
 	const { address } = useAccount();
 	const { project, selectedToken } = useDonateData();
@@ -61,34 +52,6 @@ export const RecurringDonationCard = () => {
 		address: address,
 		enabled: false,
 	});
-
-	useEffect(() => {
-		if (!address) return;
-
-		// fetch user's streams
-		const fetchData = async () => {
-			const { data } = await gqlRequest(
-				config.OPTIMISM_CONFIG.superFluidSubgraph,
-				undefined,
-				FETCH_USER_STREAMS,
-				{ address: address.toLowerCase() },
-			);
-			const streams: ISuperfluidStream[] = data?.streams;
-			console.log('streams', streams);
-
-			//categorize streams by token
-			const _tokenStreams: ITokenStreams = {};
-			streams.forEach(stream => {
-				if (!_tokenStreams[stream.token.id]) {
-					_tokenStreams[stream.token.id] = [];
-				}
-				_tokenStreams[stream.token.id].push(stream);
-			});
-			setTokenStreams(_tokenStreams);
-			console.log('tokenStreams', _tokenStreams);
-		};
-		fetchData();
-	}, [address]);
 
 	useEffect(() => {
 		if (!selectedToken) return;
@@ -341,15 +304,11 @@ export const RecurringDonationCard = () => {
 				/>
 			</Flex>
 			{showSelectTokenModal && (
-				<SelectTokenModal
-					tokenStreams={tokenStreams}
-					setShowModal={setShowSelectTokenModal}
-				/>
+				<SelectTokenModal setShowModal={setShowSelectTokenModal} />
 			)}
 			{showRecurringDonationModal && (
 				<RecurringDonationModal
 					setShowModal={setShowRecurringDonationModal}
-					tokenStreams={tokenStreams}
 					donationToGiveth={donationToGiveth}
 					amount={amount}
 					percentage={percentage}

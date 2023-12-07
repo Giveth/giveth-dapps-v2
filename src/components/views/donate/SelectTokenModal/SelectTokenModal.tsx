@@ -19,14 +19,10 @@ import { fetchBalance } from '@/services/token';
 import { IToken } from '@/types/superFluid';
 import { StreamInfo } from './StreamInfo';
 import { useDonateData } from '@/context/donate.context';
-import type { ITokenStreams } from '../RecurringDonationCard';
 
-export interface ISelectTokenModalProps extends IModal {
-	tokenStreams: ITokenStreams;
-}
+export interface ISelectTokenModalProps extends IModal {}
 
 export const SelectTokenModal: FC<ISelectTokenModalProps> = ({
-	tokenStreams,
 	setShowModal,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -38,10 +34,7 @@ export const SelectTokenModal: FC<ISelectTokenModalProps> = ({
 			headerTitle='Select a Token'
 			headerTitlePosition='left'
 		>
-			<SelectTokenInnerModal
-				tokenStreams={tokenStreams}
-				setShowModal={setShowModal}
-			/>
+			<SelectTokenInnerModal setShowModal={setShowModal} />
 		</Modal>
 	);
 };
@@ -53,12 +46,11 @@ export interface IBalances {
 const allTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
 
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
-	tokenStreams,
 	setShowModal,
 }) => {
 	const [balances, setBalances] = useState<IBalances>({});
 	const { address } = useAccount();
-	const { setSelectedToken } = useDonateData();
+	const { tokenStreams, setSelectedToken } = useDonateData();
 
 	useEffect(() => {
 		// Ensure we have an address before proceeding
