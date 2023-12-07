@@ -10,6 +10,7 @@ import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { useAppSelector } from '@/features/hooks';
 import { Zero } from '@/helpers/number';
+import { chainInfoNames } from '@/features/subgraph/subgraph.helper';
 
 export interface IStakeInfo {
 	apr: APR;
@@ -31,8 +32,10 @@ export const useStakingPool = (
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 
+	const chainInfoName = chainInfoNames[poolStakingConfig.network];
+
 	const currentValues = useAppSelector(
-		state => state.subgraph.currentValues,
+		state => state.subgraph[chainInfoName],
 		() => (hold ? true : false),
 	);
 
