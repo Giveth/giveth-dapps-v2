@@ -25,6 +25,7 @@ import { device } from '@/lib/constants/constants';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
+import { EVerificationStatus } from '@/apollo/types/types';
 
 interface IMobileActionsModalProps {
 	setShowModal: (value: boolean) => void;
@@ -38,10 +39,14 @@ export const AdminActions = () => {
 	const [showMobileActionsModal, setShowMobileActionsModal] = useState(false);
 	const { projectData, isActive, activateProject } = useProjectContext();
 	const project = projectData!;
-	const { slug, verified } = project;
+	const { slug, verified, verificationFormStatus } = project;
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const isMobile = !useMediaQuery(device.tablet);
+	const isVerificationDisabled =
+		verified ||
+		verificationFormStatus === EVerificationStatus.SUBMITTED ||
+		verificationFormStatus === EVerificationStatus.REJECTED;
 
 	const options: IOption[] = [
 		{
@@ -61,7 +66,7 @@ export const AdminActions = () => {
 			type: OptionType.ITEM,
 			icon: <IconVerifiedBadge16 />,
 			cb: () => setShowVerificationModal(true),
-			disabled: verified,
+			disabled: isVerificationDisabled,
 		},
 		{
 			label: capitalizeAllWords(
