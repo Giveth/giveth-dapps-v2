@@ -11,7 +11,7 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { formatUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
@@ -29,9 +29,12 @@ import { AmountInput } from '@/components/AmountInput/AmountInput';
 import 'rc-slider/assets/index.css';
 import DonateToGiveth from './DonateToGiveth';
 import { Spinner } from '@/components/Spinner';
+import { findUserStreamOnSelectedToken } from '@/helpers/donate';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 export const RecurringDonationCard = () => {
 	const [amount, setAmount] = useState(0n);
+	const [isUpdating, setIsUpdating] = useState(false);
 	const [percentage, setPercentage] = useState(0);
 	const [donationToGiveth, setDonationToGiveth] = useState(5);
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
@@ -39,7 +42,7 @@ export const RecurringDonationCard = () => {
 		useState(false);
 
 	const { address } = useAccount();
-	const { project, selectedToken } = useDonateData();
+	const { project, selectedToken, tokenStreams } = useDonateData();
 	const {
 		data: balance,
 		refetch,
@@ -67,6 +70,17 @@ export const RecurringDonationCard = () => {
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
 	const tokenBalance = balance?.value || selectedToken?.balance;
+
+	const userStreamOnSelectedToken = useMemo(
+		() =>
+			findUserStreamOnSelectedToken(
+				address,
+				project,
+				tokenStreams,
+				selectedToken,
+			),
+		[selectedToken, address, project, tokenStreams],
+	);
 
 	return (
 		<>
@@ -135,7 +149,8 @@ export const RecurringDonationCard = () => {
 							/>
 						)}
 					</InputWrapper>
-					{selectedToken !== undefined &&
+					{!selectedToken?.token.isSuperToken &&
+						selectedToken !== undefined &&
 						selectedToken.balance !== undefined && (
 							<Flex gap='4px'>
 								<GLink size='Small'>
@@ -159,141 +174,172 @@ export const RecurringDonationCard = () => {
 							</Flex>
 						)}
 				</Flex>
-				<Flex flexDirection='column' gap='8px' alignItems='stretch'>
-					<Caption>Amount to donate Monthly</Caption>
-					<SliderWrapper>
-						<StyledSlider
-							min={0}
-							max={100}
-							step={1}
-							railStyle={{
-								backgroundColor: brandColors.giv[200],
-							}}
-							trackStyle={{
-								backgroundColor: brandColors.giv[500],
-							}}
-							handleStyle={{
-								backgroundColor: brandColors.giv[500],
-								border: `3px solid ${brandColors.giv[200]}`,
-								opacity: 1,
-							}}
-							onChange={(value: any) => {
-								const _value = Array.isArray(value)
-									? value[0]
-									: value;
-								setPercentage(_value);
-							}}
-							value={percentage}
-							disabled={amount === 0n}
-						/>
-					</SliderWrapper>
-					<Flex justifyContent='space-between'>
-						<Caption>Donate to this project</Caption>
-						<Flex gap='4px'>
-							<B>
-								{amount !== 0n && percentage !== 0
-									? formatUnits(
-											totalPerMonth,
-											selectedToken?.token.decimals || 18,
-									  )
-									: 0}
-							</B>
-							<B>{selectedToken?.token.symbol}</B>
-							<P>per Month</P>
+				{userStreamOnSelectedToken ? (
+					<ConfirmToast
+						type={EToastType.Info}
+						message='You already have a recurring donation to this project with this token.'
+					/>
+				) : (
+					<Flex flexDirection='column' gap='8px' alignItems='stretch'>
+						<Caption>Amount to donate Monthly</Caption>
+						<SliderWrapper>
+							<StyledSlider
+								min={0}
+								max={100}
+								step={1}
+								railStyle={{
+									backgroundColor: brandColors.giv[200],
+								}}
+								trackStyle={{
+									backgroundColor: brandColors.giv[500],
+								}}
+								handleStyle={{
+									backgroundColor: brandColors.giv[500],
+									border: `3px solid ${brandColors.giv[200]}`,
+									opacity: 1,
+								}}
+								onChange={(value: any) => {
+									const _value = Array.isArray(value)
+										? value[0]
+										: value;
+									setPercentage(_value);
+								}}
+								value={percentage}
+								disabled={amount === 0n}
+							/>
+						</SliderWrapper>
+						<Flex justifyContent='space-between'>
+							<Caption>Donate to this project</Caption>
+							<Flex gap='4px'>
+								<B>
+									{amount !== 0n && percentage !== 0
+										? formatUnits(
+												totalPerMonth,
+												selectedToken?.token.decimals ||
+													18,
+										  )
+										: 0}
+								</B>
+								<B>{selectedToken?.token.symbol}</B>
+								<P>per Month</P>
+							</Flex>
+						</Flex>
+						<Flex justifyContent='space-between'>
+							<Caption>Stream balance runs out in</Caption>
+							<Flex gap='4px'>
+								<B>
+									{percentage !== 0
+										? Math.floor(100 / percentage)
+										: 0}
+								</B>
+								<B>Months</B>
+							</Flex>
 						</Flex>
 					</Flex>
-					<Flex justifyContent='space-between'>
-						<Caption>Stream balance runs out in</Caption>
-						<Flex gap='4px'>
-							<B>
-								{percentage !== 0
-									? Math.floor(100 / percentage)
-									: 0}
-							</B>
-							<B>Months</B>
-						</Flex>
-					</Flex>
-				</Flex>
+				)}
 			</RecurringSection>
-			<GivethSection
-				flexDirection='column'
-				gap='8px'
-				alignItems='stretch'
-			>
-				<DonateToGiveth
-					setDonationToGiveth={e => {
-						setDonationToGiveth(e);
-					}}
-					donationToGiveth={donationToGiveth}
-					title='Add a recurring donation to Giveth'
+			{userStreamOnSelectedToken ? (
+				<ActionButton
+					label='Modify Recurring Donation'
+					onClick={() => setIsUpdating(true)}
+					disabled={
+						selectedToken === undefined ||
+						tokenBalance === undefined ||
+						amount === 0n ||
+						amount > tokenBalance
+					}
 				/>
-			</GivethSection>
-			<DonatesInfoSection>
-				<Flex flexDirection='column' gap='8px'>
-					<Flex justifyContent='space-between'>
-						<Caption>
-							Donating to <b>{project.title}</b>
-						</Caption>
-						<Flex gap='4px'>
-							<Caption>
-								{amount !== 0n && percentage !== 0
-									? formatUnits(
-											projectPerMonth,
-											selectedToken?.token.decimals || 18,
-									  )
-									: 0}
-							</Caption>
-							<Caption>{selectedToken?.token.symbol}</Caption>
-							<Caption>monthly</Caption>
+			) : (
+				<>
+					<GivethSection
+						flexDirection='column'
+						gap='8px'
+						alignItems='stretch'
+					>
+						<DonateToGiveth
+							setDonationToGiveth={e => {
+								setDonationToGiveth(e);
+							}}
+							donationToGiveth={donationToGiveth}
+							title='Add a recurring donation to Giveth'
+						/>
+					</GivethSection>
+					<DonatesInfoSection>
+						<Flex flexDirection='column' gap='8px'>
+							<Flex justifyContent='space-between'>
+								<Caption>
+									Donating to <b>{project.title}</b>
+								</Caption>
+								<Flex gap='4px'>
+									<Caption>
+										{amount !== 0n && percentage !== 0
+											? formatUnits(
+													projectPerMonth,
+													selectedToken?.token
+														.decimals || 18,
+											  )
+											: 0}
+									</Caption>
+									<Caption>
+										{selectedToken?.token.symbol}
+									</Caption>
+									<Caption>monthly</Caption>
+								</Flex>
+							</Flex>
+							<Flex justifyContent='space-between'>
+								<Caption>
+									Donating <b>{donationToGiveth}%</b> to{' '}
+									<b>Giveth</b>
+								</Caption>
+								<Flex gap='4px'>
+									<Caption>
+										{amount !== 0n && percentage !== 0
+											? formatUnits(
+													givethPerMonth,
+													selectedToken?.token
+														.decimals || 18,
+											  )
+											: 0}
+									</Caption>
+									<Caption>
+										{selectedToken?.token.symbol}
+									</Caption>
+									<Caption>monthly</Caption>
+								</Flex>
+							</Flex>
+							<Flex justifyContent='space-between'>
+								<Caption medium>Your total donation</Caption>
+								<Flex gap='4px'>
+									<Caption medium>
+										{amount !== 0n && percentage !== 0
+											? formatUnits(
+													totalPerMonth,
+													selectedToken?.token
+														.decimals || 18,
+											  )
+											: 0}
+									</Caption>
+									<Caption medium>
+										{selectedToken?.token.symbol}
+									</Caption>
+									<Caption medium>monthly</Caption>
+								</Flex>
+							</Flex>
 						</Flex>
-					</Flex>
-					<Flex justifyContent='space-between'>
-						<Caption>
-							Donating <b>{donationToGiveth}%</b> to <b>Giveth</b>
-						</Caption>
-						<Flex gap='4px'>
-							<Caption>
-								{amount !== 0n && percentage !== 0
-									? formatUnits(
-											givethPerMonth,
-											selectedToken?.token.decimals || 18,
-									  )
-									: 0}
-							</Caption>
-							<Caption>{selectedToken?.token.symbol}</Caption>
-							<Caption>monthly</Caption>
-						</Flex>
-					</Flex>
-					<Flex justifyContent='space-between'>
-						<Caption medium>Your total donation</Caption>
-						<Flex gap='4px'>
-							<Caption medium>
-								{amount !== 0n && percentage !== 0
-									? formatUnits(
-											totalPerMonth,
-											selectedToken?.token.decimals || 18,
-									  )
-									: 0}
-							</Caption>
-							<Caption medium>
-								{selectedToken?.token.symbol}
-							</Caption>
-							<Caption medium>monthly</Caption>
-						</Flex>
-					</Flex>
-				</Flex>
-			</DonatesInfoSection>
-			<DonateButton
-				label='Donate'
-				onClick={() => setShowRecurringDonationModal(true)}
-				disabled={
-					selectedToken === undefined ||
-					tokenBalance === undefined ||
-					amount === 0n ||
-					percentage === 0 ||
-					amount > tokenBalance
-				}
-			/>
+					</DonatesInfoSection>
+					<ActionButton
+						label='Donate'
+						onClick={() => setShowRecurringDonationModal(true)}
+						disabled={
+							selectedToken === undefined ||
+							tokenBalance === undefined ||
+							amount === 0n ||
+							percentage === 0 ||
+							amount > tokenBalance
+						}
+					/>
+				</>
+			)}
 			<Flex gap='16px'>
 				<P>Streams powered by</P>
 				<Image
@@ -409,6 +455,10 @@ const DonatesInfoSection = styled(Flex)`
 	text-align: left;
 `;
 
-const DonateButton = styled(Button)`
+const ActionButton = styled(Button)`
 	width: 100%;
+`;
+
+const ConfirmToast = styled(InlineToast)`
+	margin: 0px;
 `;
