@@ -10,7 +10,7 @@ import { EDonationStatus } from '@/apollo/types/gqlEnums';
 
 export interface IOnTxHash extends ICreateDonation {
 	txHash?: string | null;
-	nonce: number;
+	nonce?: number | null;
 	chainId: number;
 	safeTransactionId?: string | null;
 }

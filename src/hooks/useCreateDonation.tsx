@@ -106,7 +106,6 @@ export const useCreateDonation = () => {
 					token,
 					projectId,
 					anonymous,
-					nonce: safeTransaction?.nonce,
 					chainvineReferred,
 					walletAddress: safeTransaction?.safe as `0x${string}`,
 					symbol: token.symbol,

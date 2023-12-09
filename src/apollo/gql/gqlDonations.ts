@@ -113,7 +113,7 @@ export const CREATE_DONATION = gql`
 	mutation (
 		$transactionId: String
 		$transactionNetworkId: Float!
-		$nonce: Float!
+		$nonce: Float
 		$amount: Float!
 		$token: String!
 		$projectId: Float!
