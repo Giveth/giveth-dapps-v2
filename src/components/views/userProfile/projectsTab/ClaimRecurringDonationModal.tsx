@@ -8,15 +8,20 @@ import {
 import styled from 'styled-components';
 import Image from 'next/image';
 import { utils } from 'ethers';
+import { useState } from 'react';
 import { IProject } from '@/apollo/types/types';
 import { Modal } from '@/components/modals/Modal';
 import { Flex } from '@/components/styled-components/Flex';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { useProjectClaimableDonations } from '@/hooks/useProjectClaimableDonations';
+import {
+	IStreamWithBalance,
+	useProjectClaimableDonations,
+} from '@/hooks/useProjectClaimableDonations';
 import { TokenIcon } from '../../donate/TokenIcon';
 import { limitFraction } from '@/helpers/number';
 import { WrappedSpinner } from '@/components/Spinner';
+import ClaimWithdrawalModal from './ClaimWithdrawalModal';
 
 interface IClaimRecurringDonationModal extends IModal {
 	project: IProject;
@@ -28,7 +33,11 @@ const ClaimRecurringDonationModal = ({
 }: IClaimRecurringDonationModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { streams, isLoading } = useProjectClaimableDonations();
-
+	const [showClaimWithdrawalModal, setShowClaimWithdrawalModal] =
+		useState(false);
+	const [selectedStreams, setSelectedStreams] = useState<
+		IStreamWithBalance[]
+	>([]);
 	console.log('Streams', streams);
 
 	return (
@@ -68,7 +77,14 @@ const ClaimRecurringDonationModal = ({
 									`}
 									</B>
 								</Flex>
-								<ClaimButton>Claim tokens</ClaimButton>
+								<ClaimButton
+									onClick={() => {
+										setSelectedStreams([item]);
+										setShowClaimWithdrawalModal(true);
+									}}
+								>
+									Claim tokens
+								</ClaimButton>
 							</ItemContainer>
 						))}
 						<TotalAmountContainer>
@@ -77,7 +93,13 @@ const ClaimRecurringDonationModal = ({
 								<B>~945 USD</B>
 							</Flex>
 						</TotalAmountContainer>
-						<Button label='Claim All Tokens' />
+						<Button
+							label='Claim All Tokens'
+							onClick={() => {
+								setSelectedStreams(streams);
+								setShowClaimWithdrawalModal(true);
+							}}
+						/>
 						<Button
 							label='Cancel'
 							buttonType='texty-gray'
@@ -95,6 +117,13 @@ const ClaimRecurringDonationModal = ({
 						alt='Superfluid logo'
 					/>
 				</SuperfluidLogoContainer>
+				{showClaimWithdrawalModal && (
+					<ClaimWithdrawalModal
+						setShowModal={setShowClaimWithdrawalModal}
+						selectedStreams={selectedStreams}
+						projectName={project.title || ''}
+					/>
+				)}
 			</ModalContainer>
 		</Modal>
 	);
