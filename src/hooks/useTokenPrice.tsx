@@ -17,7 +17,7 @@ const stableCoins = [
 interface ITokenPice {
 	symbol: string;
 	address?: Address;
-	id?: Address;
+	id?: Address | string;
 	mainnetAddress?: Address;
 }
 
@@ -42,7 +42,7 @@ export const useTokenPrice = (token?: ITokenPice) => {
 			} else if (token?.symbol === ethereumChain.nativeCurrency.symbol) {
 				const ethPrice = await fetchEthPrice();
 				setTokenPrice(ethPrice || 0);
-			} else if (token?.address) {
+			} else if (token?.address || token?.id) {
 				// ETC is not supported by coingecko with contract address, so we should use this function to fetch the price
 				if (token.symbol === 'ETC') {
 					const fetchedETCPrice = await fetchETCPrice();
@@ -50,7 +50,7 @@ export const useTokenPrice = (token?: ITokenPice) => {
 					return;
 				}
 
-				let tokenAddress = token.address;
+				let tokenAddress = token.address || token.id;
 				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
 				if (!isMainnet && token.mainnetAddress) {
 					tokenAddress =
