@@ -18,10 +18,10 @@ const ClaimWithdrawalItem = ({
 		<Container>
 			<P>{`Withdraw to the ${projectName} recipient address`}</P>
 			<B>
-				{limitFraction(
+				{`${limitFraction(
 					utils.formatUnits(stream.balance, stream.token.decimals),
 					6,
-				)}
+				)} ${stream.token.underlyingToken?.symbol}`}
 			</B>
 		</Container>
 	);
