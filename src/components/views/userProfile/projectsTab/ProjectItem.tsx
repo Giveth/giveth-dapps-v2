@@ -32,6 +32,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const [selectedProject, setSelectedProject] = useState<IProject>();
 	const [showClaimModal, setShowClaimModal] = useState(false);
+
 	return (
 		<ProjectContainer>
 			<Flex justifyContent='space-between' alignItems='center'>
