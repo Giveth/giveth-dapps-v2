@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Button } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -33,10 +34,22 @@ const ClaimWithdrawalModal = ({
 						stream={item}
 					/>
 				))}
+				<br />
+				<FullWidthButton
+					label='Confirm'
+					onClick={() => {
+						console.log('Clicked');
+					}}
+					style={{ width: '100%' }}
+				/>
 			</ModalContainer>
 		</Modal>
 	);
 };
+
+const FullWidthButton = styled(Button)`
+	width: 100%;
+`;
 
 const ModalContainer = styled.div`
 	padding: 24px;
