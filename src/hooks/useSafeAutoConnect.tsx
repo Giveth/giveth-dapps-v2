@@ -30,7 +30,7 @@ function useIsSafeEnvironment() {
 		setIsSafe(checkForSafeConnector(connectors));
 	}, [connectors]);
 
-	return isSafe;
+	return !!isSafe;
 }
 
 export { useSafeAutoConnect, useIsSafeEnvironment };

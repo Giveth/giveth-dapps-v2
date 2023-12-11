@@ -1,10 +1,5 @@
 import { captureException } from '@sentry/nextjs';
-import {
-	getContract,
-	getWalletClient,
-	signTypedData,
-	waitForTransaction,
-} from 'wagmi/actions';
+import { getContract, getWalletClient, signTypedData } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
 import { WriteContractReturnType, hexToSignature } from 'viem';
 import BigNumber from 'bignumber.js';
@@ -20,6 +15,7 @@ import {
 import config from '../configuration';
 import { APR } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
+import { waitForTransaction } from '@/lib/transaction';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
 import GP_Json from '../artifacts/GivPower.json';
@@ -443,6 +439,7 @@ export const approveERC20tokenTransfer = async (
 	spenderAddress: Address,
 	tokenAddress: Address,
 	chainId: number,
+	isSafeEnv: boolean,
 ): Promise<boolean> => {
 	if (amount === 0n) return false;
 
@@ -473,7 +470,7 @@ export const approveERC20tokenTransfer = async (
 				value: 0n,
 			});
 			if (tx) {
-				await waitForTransaction({ hash: tx });
+				await waitForTransaction(tx, isSafeEnv);
 			} else {
 				return false;
 			}
@@ -489,7 +486,7 @@ export const approveERC20tokenTransfer = async (
 		});
 
 		if (txResponse) {
-			await waitForTransaction({ hash: txResponse });
+			await waitForTransaction(txResponse, isSafeEnv);
 			return true;
 		} else {
 			return false;

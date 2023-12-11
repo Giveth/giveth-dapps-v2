@@ -11,7 +11,6 @@ import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
-import { waitForTransaction } from '@wagmi/core';
 import { useNetwork } from 'wagmi';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
@@ -26,6 +25,7 @@ import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
 import LockInfo, { LockInfoTooltip } from './LockInfo';
 import LockingBrief from './LockingBrief';
+import { waitForTransaction } from '@/lib/transaction';
 import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
 import TotalGIVpowerBox from './TotalGIVpowerBox';
@@ -35,6 +35,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import links from '@/lib/constants/links';
 import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import type { PoolStakingConfig } from '@/types/config';
@@ -58,6 +59,7 @@ const LockModal: FC<ILockModalProps> = ({
 	setShowModal,
 }) => {
 	const { formatMessage } = useIntl();
+	const isSafeEnv = useIsSafeEnvironment();
 	const [amount, setAmount] = useState(0n);
 	const [round, setRound] = useState(0);
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
@@ -93,9 +95,7 @@ const LockModal: FC<ILockModalProps> = ({
 				chainId,
 			);
 			if (txResponse) {
-				const data = await waitForTransaction({
-					hash: txResponse,
-				});
+				const data = await waitForTransaction(txResponse, isSafeEnv);
 				setLockState(
 					data.status === 'success'
 						? ELockState.BOOST

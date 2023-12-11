@@ -137,7 +137,7 @@ export const useCreateDonation = () => {
 				setDonationId(id);
 				setDonationSaved(true);
 				return id;
-			} catch {
+			} catch (e) {
 				setFailedModalType(EDonationFailedType.NOT_SAVED);
 			}
 		} catch (error) {
@@ -201,7 +201,6 @@ export const useCreateDonation = () => {
 					setResolveState(() => resolve);
 				}
 			});
-
 			if (!id) {
 				return {
 					isSaved: false,
