@@ -279,17 +279,27 @@ export const RecurringDonationCard = () => {
 					</Flex>
 				)}
 			</RecurringSection>
-			{userStreamOnSelectedToken && !isUpdating ? (
-				<ActionButton
-					label='Modify Recurring Donation'
-					onClick={() => setIsUpdating(true)}
-					disabled={
-						selectedToken === undefined ||
-						tokenBalance === undefined ||
-						amount === 0n ||
-						amount > tokenBalance
-					}
-				/>
+			{userStreamOnSelectedToken ? (
+				isUpdating ? (
+					<ActionButton
+						label='confirm'
+						onClick={() => {
+							setDonationToGiveth(0);
+							setShowRecurringDonationModal(true);
+						}}
+						disabled={
+							selectedToken === undefined ||
+							tokenBalance === undefined ||
+							amount === 0n ||
+							amount > tokenBalance
+						}
+					/>
+				) : (
+					<ActionButton
+						label='Modify Recurring Donation'
+						onClick={() => setIsUpdating(true)}
+					/>
+				)
 			) : (
 				<>
 					<GivethSection
