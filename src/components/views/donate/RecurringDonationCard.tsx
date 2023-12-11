@@ -11,7 +11,7 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { formatUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
@@ -29,8 +29,10 @@ import { AmountInput } from '@/components/AmountInput/AmountInput';
 import 'rc-slider/assets/index.css';
 import DonateToGiveth from './DonateToGiveth';
 import { Spinner } from '@/components/Spinner';
-import { findUserStreamOnSelectedToken } from '@/helpers/donate';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { findUserStreamOnSelectedToken } from '@/helpers/donate';
+import { ISuperfluidStream } from '@/types/superFluid';
+import { showToastError } from '@/lib/helpers';
 
 export const RecurringDonationCard = () => {
 	const [amount, setAmount] = useState(0n);
@@ -40,6 +42,8 @@ export const RecurringDonationCard = () => {
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
 	const [showRecurringDonationModal, setShowRecurringDonationModal] =
 		useState(false);
+	const [userStreamOnSelectedToken, setUserStreamOnSelectedToken] =
+		useState<ISuperfluidStream>();
 
 	const { address } = useAccount();
 	const { project, selectedToken, tokenStreams } = useDonateData();
@@ -71,16 +75,40 @@ export const RecurringDonationCard = () => {
 	const givethPerMonth = totalPerMonth - projectPerMonth;
 	const tokenBalance = balance?.value || selectedToken?.balance;
 
-	const userStreamOnSelectedToken = useMemo(
-		() =>
-			findUserStreamOnSelectedToken(
+	// const userStreamOnSelectedToken = useMemo(
+	// 	() =>
+	// 		findUserStreamOnSelectedToken(
+	// 			address,
+	// 			project,
+	// 			tokenStreams,
+	// 			selectedToken,
+	// 		),
+	// 	[selectedToken, address, project, tokenStreams],
+	// );
+
+	useEffect(() => {
+		try {
+			if (!selectedToken || !selectedToken.balance) return;
+			const _userStreamOnSelectedToken = findUserStreamOnSelectedToken(
 				address,
 				project,
 				tokenStreams,
 				selectedToken,
-			),
-		[selectedToken, address, project, tokenStreams],
-	);
+			);
+			if (_userStreamOnSelectedToken) {
+				setUserStreamOnSelectedToken(_userStreamOnSelectedToken);
+				const _percentage =
+					(BigInt(_userStreamOnSelectedToken.currentFlowRate) *
+						BigInt(30 * 24 * 60 * 60) *
+						100n) /
+					selectedToken.balance;
+				setPercentage(parseInt(_percentage.toString()));
+				setAmount;
+			}
+		} catch (error) {
+			showToastError(error);
+		}
+	}, [selectedToken, address, project, tokenStreams]);
 
 	return (
 		<>
@@ -174,7 +202,7 @@ export const RecurringDonationCard = () => {
 							</Flex>
 						)}
 				</Flex>
-				{userStreamOnSelectedToken ? (
+				{userStreamOnSelectedToken && !isUpdating ? (
 					<ConfirmToast
 						type={EToastType.Info}
 						message='You already have a recurring donation to this project with this token.'
@@ -238,7 +266,7 @@ export const RecurringDonationCard = () => {
 					</Flex>
 				)}
 			</RecurringSection>
-			{userStreamOnSelectedToken ? (
+			{userStreamOnSelectedToken && !isUpdating ? (
 				<ActionButton
 					label='Modify Recurring Donation'
 					onClick={() => setIsUpdating(true)}
