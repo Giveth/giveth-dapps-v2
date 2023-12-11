@@ -35,6 +35,8 @@ const getBackgroundColor = (status: EProjectStatus) => {
 			return semanticColors.jade[100];
 		case EProjectStatus.DEACTIVE:
 			return semanticColors.golden[100];
+		case EProjectStatus.CANCEL:
+			return semanticColors.golden[100];
 		default:
 			return semanticColors.golden[100];
 	}
@@ -46,6 +48,8 @@ const getBorderColor = (status: EProjectStatus) => {
 			return semanticColors.jade[400];
 		case EProjectStatus.DEACTIVE:
 			return semanticColors.golden[400];
+		case EProjectStatus.CANCEL:
+			return semanticColors.golden[400];
 		default:
 			return semanticColors.golden[400];
 	}
@@ -56,6 +60,8 @@ const getColor = (status: EProjectStatus) => {
 		case EProjectStatus.ACTIVE:
 			return semanticColors.jade[700];
 		case EProjectStatus.DEACTIVE:
+			return semanticColors.golden[700];
+		case EProjectStatus.CANCEL:
 			return semanticColors.golden[700];
 		default:
 			return semanticColors.golden[700];
