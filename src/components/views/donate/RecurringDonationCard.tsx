@@ -71,17 +71,18 @@ export const RecurringDonationCard = () => {
 	const underlyingToken = selectedToken?.token.underlyingToken;
 
 	const totalPerMonth = ((amount || 0n) * BigInt(percentage)) / 100n;
+	const totalPerSec = totalPerMonth / BigInt(30 * 24 * 60 * 60);
 	const projectPerMonth =
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
 	const tokenBalance = balance?.value || selectedToken?.balance;
 	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
-	const totalStreamPerMonth =
-		tokenStream.reduce(
+	const totalStreamPerSec =
+		tokenStream?.reduce(
 			(acc, stream) => acc + BigInt(stream.currentFlowRate),
-			totalPerMonth / BigInt(30 * 24 * 60 * 60),
-		) * BigInt(30 * 24 * 60 * 60);
-	console.log('totalStreamPerMonth', totalStreamPerMonth);
+			totalPerSec,
+		) || totalPerSec;
+	// console.log('totalStreamPerMonth', totalStreamPerMonth);
 
 	useEffect(() => {
 		try {
@@ -255,14 +256,18 @@ export const RecurringDonationCard = () => {
 							<Caption>Stream balance runs out in</Caption>
 							<Flex gap='4px'>
 								<Caption medium>
-									{percentage !== 0
-										? Math.floor(100 / percentage)
+									{totalStreamPerSec !== 0n
+										? (
+												amount /
+												totalStreamPerSec /
+												BigInt(30 * 24 * 60 * 60)
+										  ).toString()
 										: 0}
 								</Caption>
 								<Caption>Months</Caption>
 							</Flex>
 						</Flex>
-						{tokenStream.length > 0 && (
+						{tokenStream?.length > 0 && (
 							<Flex justifyContent='space-between'>
 								<Caption>
 									you are supporting {tokenStream.length - 1}{' '}
