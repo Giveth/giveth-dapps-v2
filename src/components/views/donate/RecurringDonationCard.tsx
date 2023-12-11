@@ -101,7 +101,10 @@ export const RecurringDonationCard = () => {
 						100n) /
 					selectedToken.balance;
 				setPercentage(parseInt(_percentage.toString()));
-				setAmount;
+			} else {
+				setUserStreamOnSelectedToken(undefined);
+				setPercentage(0);
+				setIsUpdating(false);
 			}
 		} catch (error) {
 			showToastError(error);
