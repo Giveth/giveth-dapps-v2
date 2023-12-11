@@ -12,7 +12,8 @@ export const DonateSteps: FC<DonateStepsProps> = ({ donateState }) => {
 	let activeStep = 0;
 	if (
 		donateState === EDonationSteps.DONATE ||
-		donateState === EDonationSteps.DONATING
+		donateState === EDonationSteps.DONATING ||
+		donateState === EDonationSteps.SUBMITTED
 	) {
 		activeStep = 1;
 	}
