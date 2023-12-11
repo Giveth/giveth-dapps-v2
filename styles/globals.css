@@ -284,6 +284,14 @@ a {
 	z-index: 1;
 	animation: spinner 0.6s linear infinite;
   }
+
+	.pdfDocument {
+		display: flex;
+		flex-direction: column;
+	}
+	.pdfPage {
+		margin: 0px auto !important;
+	}
   
   @keyframes spinner {
 	to {
