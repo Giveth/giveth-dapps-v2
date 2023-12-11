@@ -35,8 +35,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 
-	const { walletAddress, disconnect, getChainName } =
-		useAuthenticationWallet();
+	const { walletAddress, disconnect, chainName } = useAuthenticationWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
@@ -63,7 +62,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 		router.push(url);
 	};
 
-	const networkName = getChainName();
+	const networkName = chainName;
 
 	return (
 		<>

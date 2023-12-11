@@ -123,7 +123,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 };
 
 const HeaderUserButton = ({}) => {
-	const { walletAddress, getChainName } = useAuthenticationWallet();
+	const { walletAddress, chainName } = useAuthenticationWallet();
 	const { userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	return (
@@ -142,7 +142,7 @@ const HeaderUserButton = ({}) => {
 					{formatMessage({
 						id: 'label.connected_to',
 					})}{' '}
-					{getChainName()}
+					{chainName}
 				</WBNetwork>
 			</WBInfo>
 		</HBContainer>

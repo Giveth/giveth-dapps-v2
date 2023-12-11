@@ -1,5 +1,5 @@
 import { useWallet } from '@solana/wallet-adapter-react';
-import { useAccount, useDisconnect, useNetwork } from 'wagmi';
+import { Chain, useAccount, useDisconnect, useNetwork } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
 import { useEffect, useState } from 'react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
@@ -15,10 +15,20 @@ export enum WalletType {
 export const useAuthenticationWallet = () => {
 	const [walletType, setWalletType] = useState<WalletType | null>(null);
 	const [walletAddress, setWalletAddress] = useState<string | null>(null);
+	const [isConnected, setIsConnected] = useState<boolean>(false);
+	const [isConnecting, setIsConnecting] = useState<boolean>(false);
+	const [chain, setChain] = useState<
+		Chain | WalletAdapterNetwork | undefined
+	>(undefined);
+	const [chainName, setChainName] = useState<string | undefined>(undefined);
 
 	// Wagmi hooks (Ethereum)
-	const { address } = useAccount();
-	const { chain } = useNetwork();
+	const {
+		address: evmAddress,
+		isConnected: evmIsConnected,
+		isConnecting: evmIsConnecting,
+	} = useAccount();
+	const { chain: evmChain } = useNetwork();
 	const { disconnect: ethereumWalletDisconnect } = useDisconnect();
 
 	// Solana wallet hooks
@@ -26,6 +36,8 @@ export const useAuthenticationWallet = () => {
 		publicKey,
 		disconnect: solanaWalletDisconnect,
 		signMessage: solanaSignMessage,
+		connecting: solanaIsConnecting,
+		connected: solanaIsConnected,
 	} = useWallet();
 
 	const signByEvm = async (message: string) => {
@@ -45,9 +57,9 @@ export const useAuthenticationWallet = () => {
 
 	useEffect(() => {
 		// TODO: This is a temporary solution. It must be smart when both wallets are connected
-		if (address && chain) {
+		if (evmAddress && evmChain) {
 			setWalletType(WalletType.ETHEREUM);
-			setWalletAddress(address);
+			setWalletAddress(evmAddress);
 		} else if (publicKey) {
 			setWalletType(WalletType.SOLANA);
 			setWalletAddress(publicKey?.toString());
@@ -55,7 +67,30 @@ export const useAuthenticationWallet = () => {
 			setWalletType(null);
 			setWalletAddress(null);
 		}
-	}, [address, chain, publicKey]);
+	}, [evmAddress, evmChain, publicKey]);
+
+	useEffect(() => {
+		switch (walletType) {
+			case WalletType.ETHEREUM:
+				setIsConnected(evmIsConnected);
+				setIsConnecting(evmIsConnecting);
+				break;
+			case WalletType.SOLANA:
+				setIsConnected(solanaIsConnected);
+				setIsConnecting(solanaIsConnecting);
+				break;
+			default:
+				setIsConnected(false);
+				setIsConnecting(false);
+				break;
+		}
+	}, [
+		walletType,
+		evmIsConnected,
+		evmIsConnecting,
+		solanaIsConnected,
+		solanaIsConnecting,
+	]);
 
 	const signMessage = async (
 		message: string,
@@ -83,22 +118,36 @@ export const useAuthenticationWallet = () => {
 		}
 	};
 
-	const getChainName = () => {
+	useEffect(() => {
 		switch (walletType) {
 			case WalletType.ETHEREUM:
-				return chainNameById(chain?.id);
-
+				setChain(evmChain);
+				setChainName(chainNameById(evmChain?.id));
+				break;
 			case WalletType.SOLANA:
-				return (
+				setChain(config.SOLANA_NETWORK);
+				setChainName(
 					'Solana' +
-					(config.SOLANA_NETWORK !== WalletAdapterNetwork.Mainnet
-						? ` ${config.SOLANA_NETWORK}`
-						: '')
+						(config.SOLANA_NETWORK !== WalletAdapterNetwork.Mainnet
+							? ` ${config.SOLANA_NETWORK}`
+							: ''),
 				);
+				break;
 			default:
-				return '';
+				setChain(undefined);
+				setChainName('');
+				break;
 		}
-	};
+	}, [walletType, evmChain]);
 
-	return { walletType, signMessage, walletAddress, disconnect, getChainName };
+	return {
+		walletType,
+		signMessage,
+		walletAddress,
+		disconnect,
+		isConnected,
+		isConnecting,
+		chainName,
+		chain,
+	};
 };
