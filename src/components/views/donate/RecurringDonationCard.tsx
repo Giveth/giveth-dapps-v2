@@ -5,6 +5,7 @@ import {
 	GLink,
 	H6,
 	IconCaretDown16,
+	IconChevronRight16,
 	IconHelpFilled16,
 	IconRefresh16,
 	P,
@@ -74,17 +75,13 @@ export const RecurringDonationCard = () => {
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
 	const tokenBalance = balance?.value || selectedToken?.balance;
-
-	// const userStreamOnSelectedToken = useMemo(
-	// 	() =>
-	// 		findUserStreamOnSelectedToken(
-	// 			address,
-	// 			project,
-	// 			tokenStreams,
-	// 			selectedToken,
-	// 		),
-	// 	[selectedToken, address, project, tokenStreams],
-	// );
+	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
+	const totalStreamPerMonth =
+		tokenStream.reduce(
+			(acc, stream) => acc + BigInt(stream.currentFlowRate),
+			totalPerMonth / BigInt(30 * 24 * 60 * 60),
+		) * BigInt(30 * 24 * 60 * 60);
+	console.log('totalStreamPerMonth', totalStreamPerMonth);
 
 	useEffect(() => {
 		try {
@@ -239,7 +236,7 @@ export const RecurringDonationCard = () => {
 						<Flex justifyContent='space-between'>
 							<Caption>Donate to this project</Caption>
 							<Flex gap='4px'>
-								<B>
+								<Caption medium>
 									{amount !== 0n && percentage !== 0
 										? formatUnits(
 												totalPerMonth,
@@ -247,22 +244,38 @@ export const RecurringDonationCard = () => {
 													18,
 										  )
 										: 0}
-								</B>
-								<B>{selectedToken?.token.symbol}</B>
-								<P>per Month</P>
+								</Caption>
+								<Caption medium>
+									{selectedToken?.token.symbol}
+								</Caption>
+								<Caption>per Month</Caption>
 							</Flex>
 						</Flex>
 						<Flex justifyContent='space-between'>
 							<Caption>Stream balance runs out in</Caption>
 							<Flex gap='4px'>
-								<B>
+								<Caption medium>
 									{percentage !== 0
 										? Math.floor(100 / percentage)
 										: 0}
-								</B>
-								<B>Months</B>
+								</Caption>
+								<Caption>Months</Caption>
 							</Flex>
 						</Flex>
+						{tokenStream.length > 0 && (
+							<Flex justifyContent='space-between'>
+								<Caption>
+									you are supporting {tokenStream.length - 1}{' '}
+									other project with this stream
+								</Caption>
+								<Flex gap='4px' alignItems='center'>
+									<Caption medium>
+										Manage recurring donations
+									</Caption>
+									<IconChevronRight16 />
+								</Flex>
+							</Flex>
+						)}
 					</Flex>
 				)}
 			</RecurringSection>
