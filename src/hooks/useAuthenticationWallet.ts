@@ -8,8 +8,8 @@ import { chainNameById } from '@/lib/network';
 import config from '@/configuration';
 
 export enum WalletType {
-	SOLANA,
-	ETHEREUM,
+	SOLANA = 'SOLANA',
+	ETHEREUM = 'ETHEREUM',
 }
 
 export const useAuthenticationWallet = () => {

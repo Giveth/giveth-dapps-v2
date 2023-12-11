@@ -65,12 +65,14 @@ export function formatWalletLink(
 	chain?: Chain | WalletAdapterNetwork,
 	address?: string,
 ) {
-	if (!address || !chain || walletType) return '';
+	if (!address || !chain || !walletType) return '';
+
 	switch (walletType) {
 		case WalletType.ETHEREUM:
 			const chainId = (chain as Chain)?.id;
 			if (!config.NETWORKS_CONFIG[chainId]) return '';
 			return `${config.NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/address/${address}`;
+
 		case WalletType.SOLANA:
 			const url = `https://explorer.solana.com/address/${address}`;
 			switch (chain) {
@@ -82,6 +84,7 @@ export function formatWalletLink(
 					return `${url}?cluster=testnet`;
 			}
 			return '';
+
 		default:
 			return '';
 	}
