@@ -124,4 +124,5 @@ export const MaxUint256 = BigInt(
 export const AddressZero = '0x0000000000000000000000000000000000000000';
 
 export const WeiPerEther = 1e18;
+
 export const PROFILE_PHOTO_PLACEHOLDER = '/images/placeholders/profile.svg';

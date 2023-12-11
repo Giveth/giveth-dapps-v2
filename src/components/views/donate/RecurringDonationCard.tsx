@@ -11,6 +11,7 @@ import {
 	P,
 	brandColors,
 	neutralColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -82,7 +83,14 @@ export const RecurringDonationCard = () => {
 			(acc, stream) => acc + BigInt(stream.currentFlowRate),
 			totalPerSec,
 		) || totalPerSec;
-	// console.log('totalStreamPerMonth', totalStreamPerMonth);
+	const streamRunOutInMonth =
+		totalStreamPerSec > 0
+			? amount / totalStreamPerSec / ONE_MONTH_SECONDS
+			: 0n;
+	const isTotalStreamExceed = streamRunOutInMonth < 1n;
+	const sliderColor = isTotalStreamExceed
+		? semanticColors.punch
+		: brandColors.giv;
 
 	useEffect(() => {
 		try {
@@ -217,14 +225,14 @@ export const RecurringDonationCard = () => {
 								max={100}
 								step={1}
 								railStyle={{
-									backgroundColor: brandColors.giv[200],
+									backgroundColor: sliderColor[200],
 								}}
 								trackStyle={{
-									backgroundColor: brandColors.giv[500],
+									backgroundColor: sliderColor[500],
 								}}
 								handleStyle={{
-									backgroundColor: brandColors.giv[500],
-									border: `3px solid ${brandColors.giv[200]}`,
+									backgroundColor: sliderColor[500],
+									border: `3px solid ${sliderColor[200]}`,
 									opacity: 1,
 								}}
 								onChange={(value: any) => {
@@ -259,13 +267,7 @@ export const RecurringDonationCard = () => {
 							<Caption>Stream balance runs out in</Caption>
 							<Flex gap='4px'>
 								<Caption medium>
-									{totalStreamPerSec !== 0n
-										? (
-												amount /
-												totalStreamPerSec /
-												ONE_MONTH_SECONDS
-										  ).toString()
-										: 0}
+									{totalStreamPerSec.toString()}
 								</Caption>
 								<Caption>Months</Caption>
 							</Flex>
