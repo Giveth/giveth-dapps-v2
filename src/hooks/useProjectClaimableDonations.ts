@@ -13,7 +13,7 @@ export interface IStreamWithBalance extends IStream {
 }
 
 export const useProjectClaimableDonations = () => {
-	//Optimism address
+	//Address should be project's Optimism address but for the simplicity of the testing we are using the user's address so it should be changed to the project's address
 	const { address } = useAccount();
 	const [isLoading, setIsLoading] = useState(false); // Add isLoading state
 	const [streams, setStreams] = useState<IStreamWithBalance[]>([]);
