@@ -87,7 +87,8 @@ export const RecurringDonationCard = () => {
 		totalStreamPerSec > 0
 			? amount / totalStreamPerSec / ONE_MONTH_SECONDS
 			: 0n;
-	const isTotalStreamExceed = streamRunOutInMonth < 1n;
+	const isTotalStreamExceed =
+		streamRunOutInMonth < 1n && totalStreamPerSec > 0;
 	const sliderColor = isTotalStreamExceed
 		? semanticColors.punch
 		: brandColors.giv;
@@ -267,7 +268,7 @@ export const RecurringDonationCard = () => {
 							<Caption>Stream balance runs out in</Caption>
 							<Flex gap='4px'>
 								<Caption medium>
-									{totalStreamPerSec.toString()}
+									{streamRunOutInMonth.toString()}
 								</Caption>
 								<Caption>Months</Caption>
 							</Flex>
