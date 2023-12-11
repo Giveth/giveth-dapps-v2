@@ -73,7 +73,7 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 						let signature;
 						if (walletType === WalletType.SOLANA) {
 							const { message, nonce } = await createSwisMessage(
-								walletAddress,
+								walletAddress!,
 								'Login into Giveth services',
 							);
 							const signedMessage = await signMessage(message);
@@ -90,7 +90,7 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 						} else {
 							signature = await dispatch(
 								signToGetToken({
-									address: walletAddress,
+									address: walletAddress!,
 									chainId,
 									pathname: router.pathname,
 								}),
