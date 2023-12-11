@@ -23,6 +23,7 @@ import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
+import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
@@ -204,7 +205,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			const _flowRate =
 				(totalPerMonth * BigInt(100 - donationToGiveth)) /
 				100n /
-				BigInt(30 * 24 * 60 * 60);
+				ONE_MONTH_SECONDS;
 
 			const options = {
 				sender: address,
@@ -230,7 +231,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				const _newFlowRate =
 					(totalPerMonth * BigInt(donationToGiveth)) /
 					100n /
-					BigInt(30 * 24 * 60 * 60);
+					ONE_MONTH_SECONDS;
 
 				const oldStream =
 					tokenStreams[_superToken.id] &&
@@ -293,7 +294,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	const projectPerMonth =
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
-	const totalPerSecond = totalPerMonth / BigInt(30 * 24 * 60 * 60);
+	const totalPerSecond = totalPerMonth / ONE_MONTH_SECONDS;
 	const secondsUntilRunOut = amount / totalPerSecond;
 	const date = new Date();
 	date.setSeconds(date.getSeconds() + Number(secondsUntilRunOut.toString()));

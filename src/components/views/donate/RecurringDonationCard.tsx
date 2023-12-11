@@ -18,7 +18,7 @@ import { formatUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import Slider from 'rc-slider';
 import Image from 'next/image';
-import { AddressZero } from '@/lib/constants/constants';
+import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -71,7 +71,7 @@ export const RecurringDonationCard = () => {
 	const underlyingToken = selectedToken?.token.underlyingToken;
 
 	const totalPerMonth = ((amount || 0n) * BigInt(percentage)) / 100n;
-	const totalPerSec = totalPerMonth / BigInt(30 * 24 * 60 * 60);
+	const totalPerSec = totalPerMonth / ONE_MONTH_SECONDS;
 	const projectPerMonth =
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
@@ -97,7 +97,7 @@ export const RecurringDonationCard = () => {
 				setUserStreamOnSelectedToken(_userStreamOnSelectedToken);
 				const _percentage =
 					(BigInt(_userStreamOnSelectedToken.currentFlowRate) *
-						BigInt(30 * 24 * 60 * 60) *
+						ONE_MONTH_SECONDS *
 						100n) /
 					selectedToken.balance;
 				setPercentage(parseInt(_percentage.toString()));
@@ -263,7 +263,7 @@ export const RecurringDonationCard = () => {
 										? (
 												amount /
 												totalStreamPerSec /
-												BigInt(30 * 24 * 60 * 60)
+												ONE_MONTH_SECONDS
 										  ).toString()
 										: 0}
 								</Caption>
