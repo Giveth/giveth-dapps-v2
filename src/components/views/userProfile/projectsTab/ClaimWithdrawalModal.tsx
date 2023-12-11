@@ -53,7 +53,6 @@ const FullWidthButton = styled(Button)`
 
 const ModalContainer = styled.div`
 	padding: 24px;
-	min-width: 650px;
 `;
 
 export default ClaimWithdrawalModal;
