@@ -31,8 +31,6 @@ import { ETheme } from '@/features/general/general.slice';
 import {
 	setShowCompleteProfile,
 	setShowSearchModal,
-	setShowWalletModal,
-	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { useModalCallback } from '@/hooks/useModalCallback';
@@ -70,7 +68,7 @@ const Header: FC<IHeader> = () => {
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 
-	const { walletAddress } = useAuthenticationWallet();
+	const { walletAddress, openWalletConnectModal } = useAuthenticationWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 
@@ -162,11 +160,7 @@ const Header: FC<IHeader> = () => {
 	}, [showHeader]);
 
 	const handleModals = () => {
-		if (isGIVeconomyRoute) {
-			openConnectModal?.();
-		} else {
-			dispatch(setShowWelcomeModal(true));
-		}
+		openWalletConnectModal();
 	};
 
 	const { modalCallback: signInThenCreate } = useModalCallback(() =>
@@ -176,7 +170,7 @@ const Header: FC<IHeader> = () => {
 	const handleCreateButton = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			setShowWalletModal(true);
+			openWalletConnectModal();
 		} else if (!isSignedIn) {
 			signInThenCreate();
 		} else if (isUserRegistered(userData)) {

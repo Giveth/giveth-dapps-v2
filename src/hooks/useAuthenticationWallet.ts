@@ -1,11 +1,16 @@
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Chain, useAccount, useDisconnect, useNetwork } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { encodeBase58 } from 'ethers';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useRouter } from 'next/router';
 import { chainNameById } from '@/lib/network';
 import config from '@/configuration';
+import { useAppDispatch } from '@/features/hooks';
+import { setShowWelcomeModal } from '@/features/modal/modal.slice';
+import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 
 export enum WalletType {
 	SOLANA = 'SOLANA',
@@ -21,7 +26,14 @@ export const useAuthenticationWallet = () => {
 		Chain | WalletAdapterNetwork | undefined
 	>(undefined);
 	const [chainName, setChainName] = useState<string | undefined>(undefined);
+	const dispatch = useAppDispatch();
+	const { open: openConnectModal } = useWeb3Modal();
+	const router = useRouter();
 
+	const isGIVeconomyRoute = useMemo(
+		() => checkIsGIVeconomyRoute(router.route),
+		[router.route],
+	);
 	// Wagmi hooks (Ethereum)
 	const {
 		address: evmAddress,
@@ -140,6 +152,14 @@ export const useAuthenticationWallet = () => {
 		}
 	}, [walletType, evmChain]);
 
+	const openWalletConnectModal = () => {
+		if (config.ENABLE_SOLANA && !isGIVeconomyRoute) {
+			dispatch(setShowWelcomeModal(true));
+		} else {
+			openConnectModal();
+		}
+	};
+
 	return {
 		walletType,
 		signMessage,
@@ -149,5 +169,6 @@ export const useAuthenticationWallet = () => {
 		isConnecting,
 		chainName,
 		chain,
+		openWalletConnectModal,
 	};
 };

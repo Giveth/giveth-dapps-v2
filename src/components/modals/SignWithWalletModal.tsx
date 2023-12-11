@@ -19,7 +19,6 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { signToGetToken } from '@/features/user/user.thunks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { EModalEvents } from '@/hooks/useModalCallback';
-import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import {
 	WalletType,
 	useAuthenticationWallet,
@@ -37,7 +36,7 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 	const { formatMessage } = useIntl();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
-	const { walletAddress, signMessage, walletType } =
+	const { walletAddress, signMessage, walletType, openWalletConnectModal } =
 		useAuthenticationWallet();
 	const router = useRouter();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -67,7 +66,7 @@ export const SignWithWalletModal: FC<IProps> = ({ setShowModal, callback }) => {
 					loading={loading}
 					onClick={async () => {
 						if (!walletAddress) {
-							return dispatch(setShowWelcomeModal(true));
+							openWalletConnectModal();
 						}
 						setLoading(true);
 

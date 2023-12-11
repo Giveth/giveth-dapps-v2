@@ -10,7 +10,6 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
 	setShowSignWithWallet,
-	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
 import { WrappedSpinner } from '@/components/Spinner';
 import NotAvailableHandler from '@/components/NotAvailableHandler';
@@ -18,12 +17,15 @@ import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import CompleteProfile from '@/components/CompleteProfile';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
 	const [isLoadingProject, setIsLoadingProject] = useState(true);
 	const [isCancelled, setIsCancelled] = useState(false);
 	const [ownerAddress, setOwnerAddress] = useState<string>();
+
+	const { openWalletConnectModal } = useAuthenticationWallet();
 
 	const dispatch = useAppDispatch();
 	const {
@@ -88,7 +90,7 @@ const EditIndex = () => {
 				});
 		} else {
 			if (!isLoadingUser) {
-				dispatch(setShowWelcomeModal(true));
+				openWalletConnectModal();
 				setIsLoadingProject(false);
 			}
 		}

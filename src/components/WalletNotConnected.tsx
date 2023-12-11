@@ -12,15 +12,11 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
-import { useAppDispatch } from '@/features/hooks';
-import { setShowWelcomeModal } from '@/features/modal/modal.slice';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 const WalletNotConnected = () => {
-	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
-	const handleConnectWallet = () => {
-		dispatch(setShowWelcomeModal(true));
-	};
+	const { openWalletConnectModal } = useAuthenticationWallet();
 	return (
 		<ContainerStyled>
 			<IconContainer>
@@ -35,7 +31,7 @@ const WalletNotConnected = () => {
 				})}
 			</H4Styled>
 			<ButtonStyled
-				onClick={handleConnectWallet}
+				onClick={openWalletConnectModal}
 				size='medium'
 				label={formatMessage({ id: 'component.button.connect_wallet' })}
 				buttonType='primary'
