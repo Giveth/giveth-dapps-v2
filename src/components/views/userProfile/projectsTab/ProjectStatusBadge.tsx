@@ -9,7 +9,6 @@ interface IProjectStatusBadge {
 
 const ProjectStatusBadge = ({ project }: IProjectStatusBadge) => {
 	const projectStatus = project.status.name!;
-
 	const handleStatusText = () => {
 		switch (projectStatus) {
 			case EProjectStatus.ACTIVE:
@@ -18,6 +17,8 @@ const ProjectStatusBadge = ({ project }: IProjectStatusBadge) => {
 				return 'Deactivated';
 			case EProjectStatus.DRAFT:
 				return 'Draft';
+			case EProjectStatus.CANCEL:
+				return 'Canceled';
 		}
 	};
 
@@ -34,8 +35,10 @@ const getBackgroundColor = (status: EProjectStatus) => {
 			return semanticColors.jade[100];
 		case EProjectStatus.DEACTIVE:
 			return semanticColors.golden[100];
+		case EProjectStatus.CANCEL:
+			return semanticColors.golden[100];
 		default:
-			return semanticColors.blueSky[100];
+			return semanticColors.golden[100];
 	}
 };
 
@@ -45,8 +48,10 @@ const getBorderColor = (status: EProjectStatus) => {
 			return semanticColors.jade[400];
 		case EProjectStatus.DEACTIVE:
 			return semanticColors.golden[400];
+		case EProjectStatus.CANCEL:
+			return semanticColors.golden[400];
 		default:
-			return semanticColors.blueSky[400];
+			return semanticColors.golden[400];
 	}
 };
 
@@ -56,8 +61,10 @@ const getColor = (status: EProjectStatus) => {
 			return semanticColors.jade[700];
 		case EProjectStatus.DEACTIVE:
 			return semanticColors.golden[700];
+		case EProjectStatus.CANCEL:
+			return semanticColors.golden[700];
 		default:
-			return semanticColors.blueSky[700];
+			return semanticColors.golden[700];
 	}
 };
 
