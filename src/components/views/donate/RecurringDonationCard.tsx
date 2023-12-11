@@ -417,6 +417,7 @@ export const RecurringDonationCard = () => {
 					donationToGiveth={donationToGiveth}
 					amount={amount}
 					percentage={percentage}
+					isUpdating={isUpdating}
 				/>
 			)}
 		</>

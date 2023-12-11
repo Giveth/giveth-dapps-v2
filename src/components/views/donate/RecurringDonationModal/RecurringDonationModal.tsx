@@ -28,6 +28,7 @@ interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
 	amount: bigint;
 	percentage: number;
+	isUpdating?: boolean;
 }
 
 export enum EDonationSteps {
@@ -97,6 +98,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	percentage,
 	donationToGiveth,
 	setShowModal,
+	isUpdating,
 }) => {
 	const { project, selectedToken, tokenStreams } = useDonateData();
 	const { address } = useAccount();
@@ -178,15 +180,17 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			const operations: Operation[] = [];
 
-			const upgradeOperation = await superToken.upgrade({
-				amount: amount.toString(),
-			});
+			if (!isUpdating && !selectedToken.token.isSuperToken) {
+				const upgradeOperation = await superToken.upgrade({
+					amount: amount.toString(),
+				});
 
-			//Upgrading ETHx is a special case and can't be batched
-			if (_superToken.symbol === 'ETHx') {
-				await upgradeOperation.exec(signer);
-			} else {
-				operations.push(upgradeOperation);
+				//Upgrading ETHx is a special case and can't be batched
+				if (_superToken.symbol === 'ETHx') {
+					await upgradeOperation.exec(signer);
+				} else {
+					operations.push(upgradeOperation);
+				}
 			}
 
 			const projectOpWalletAddress = project?.addresses?.find(
@@ -202,11 +206,15 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				100n /
 				BigInt(30 * 24 * 60 * 60);
 
-			let projectFlowOp = superToken.createFlow({
+			const options = {
 				sender: address,
 				receiver: projectOpWalletAddress, // should change with anchor contract address
 				flowRate: _flowRate.toString(),
-			});
+			};
+
+			let projectFlowOp = isUpdating
+				? superToken.updateFlow(options)
+				: superToken.createFlow(options);
 
 			operations.push(projectFlowOp);
 
