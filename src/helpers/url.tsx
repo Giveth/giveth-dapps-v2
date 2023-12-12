@@ -66,6 +66,12 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 						EProjectsFilter.ACCEPT_FUND_ON_OPTIMISM,
 					);
 					break;
+				case ECampaignFilterField.AcceptFundOnSolana:
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
+					);
+					break;
 				default:
 					break;
 			}

@@ -55,6 +55,10 @@ const fundsFilter = [
 		label: 'Ethereum Classic',
 		value: EProjectsFilter.ACCEPT_FUND_ON_ETC,
 	},
+	{
+		label: 'Solana',
+		value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
+	},
 ];
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
