@@ -62,6 +62,9 @@ export const FETCH_USER_PROJECTS = gql`
 					isRecipient
 					networkId
 				}
+				projectVerificationForm {
+					status
+				}
 			}
 			totalCount
 		}
