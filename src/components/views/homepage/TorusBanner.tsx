@@ -3,7 +3,6 @@ import {
 	Caption,
 	IconAlertTriangleFilled16,
 	IconXCircle,
-	mediaQueries,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
@@ -69,7 +68,7 @@ const Wrapper = styled.div`
 	width: 100%;
 	z-index: 99;
 	position: fixed;
-	top: 185px;
+	top: 95px;
 	left: 50%;
 	transform: translateX(-50%);
 	padding: 16px;
@@ -80,9 +79,6 @@ const Wrapper = styled.div`
 	display: flex;
 	justify-content: space-between;
 	gap: 20px;
-	${mediaQueries.tablet} {
-		top: 152px;
-	}
 `;
 
 export default TorusBanner;
