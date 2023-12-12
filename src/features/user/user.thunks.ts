@@ -184,6 +184,7 @@ export const signToGetToken = createAsyncThunk(
 					if (safeToken?.jwt) {
 						//save to localstorage if token is created
 						saveTokenToLocalstorage(safeAddress!, safeToken?.jwt);
+						await dispatch(fetchUserByAddress(safeAddress!));
 						return currentUserToken;
 					} else {
 						return Promise.reject('Signing pending');
