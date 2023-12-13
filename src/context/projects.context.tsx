@@ -26,6 +26,7 @@ interface IProjectsContext {
 	selectedMainCategory?: IMainCategory;
 	qfRounds: IQFRound[];
 	isQF: boolean;
+	isArchivedQF?: boolean;
 	setIsQF: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -39,6 +40,7 @@ const ProjectsContext = createContext<IProjectsContext>({
 	mainCategories: [],
 	qfRounds: [],
 	isQF: false,
+	isArchivedQF: false,
 	setIsQF: () => console.log('setIsQF not initialed yet!'),
 });
 
