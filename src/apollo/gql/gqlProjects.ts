@@ -72,6 +72,7 @@ export const FETCH_ALL_PROJECTS = gql`
 		$mainCategory: String
 		$campaignSlug: String
 		$connectedWalletUserId: Int
+		$qfRoundSlug: String
 	) {
 		allProjects(
 			limit: $limit
@@ -83,6 +84,7 @@ export const FETCH_ALL_PROJECTS = gql`
 			mainCategory: $mainCategory
 			campaignSlug: $campaignSlug
 			connectedWalletUserId: $connectedWalletUserId
+			qfRoundSlug: $qfRoundSlug
 		) {
 			projects {
 				...ProjectCardFields
