@@ -22,6 +22,7 @@ import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import NiceBanner from './NiceBanner';
 // import PurchaseXDAI from './PurchaseXDAIBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useDonateData } from '@/context/donate.context';
 import { EContentType } from '@/lib/constants/shareContent';
 import { PassportBanner } from '@/components/PassportBanner';
@@ -47,11 +48,12 @@ const DonateIndex: FC = () => {
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const { txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
+	const isSafeEnv = useIsSafeEnvironment();
 
 	return (
 		<>
 			<BigArc />
-			{hasActiveQFRound && <PassportBanner />}
+			{!isSafeEnv && hasActiveQFRound && <PassportBanner />}
 			<Wrapper>
 				{/* <PurchaseXDAI /> */}
 				{alreadyDonated && (
