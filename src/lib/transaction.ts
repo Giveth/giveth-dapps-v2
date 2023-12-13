@@ -2,7 +2,7 @@ import SafeAppsSDK, { TransactionStatus } from '@safe-global/safe-apps-sdk';
 import { waitForTransaction as wagmiWaitForTransaction } from '@wagmi/core';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-const maxAttempts = 50;
+const maxAttempts = 200; // keeping it high as gnosis safe takes a while to confirm and processing
 const attemptDelay = 5000;
 
 export const waitForTransaction = async (

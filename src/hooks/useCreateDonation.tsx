@@ -10,6 +10,7 @@ import { isAddressENS } from '@/lib/wallet';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
 import { ICreateDonation } from '@/components/views/donate/helpers';
 import { getTxFromSafeTxId } from '@/lib/safe';
+import { waitForTransaction } from '@/lib/transaction';
 import { useIsSafeEnvironment } from './useSafeAutoConnect';
 
 const MAX_RETRIES = 10;
@@ -67,6 +68,20 @@ export const useCreateDonation = () => {
 			}
 			createDonationProps &&
 				handleSaveDonation(data.transaction.hash, createDonationProps);
+		},
+		async onError(error) {
+			// Manage case for multisigs
+			const { status } = await waitForTransaction(txHash!, isSafeEnv);
+			if (status) {
+				// Make it successful if found
+				updateDonation(donationId, EDonationStatus.VERIFIED);
+				setDonationMinted(true);
+				if (resolveState) {
+					resolveState();
+					setResolveState(null); // clear the state to avoid calling it again
+				}
+			}
+			console.log('Error', error);
 		},
 	});
 
@@ -192,7 +207,6 @@ export const useCreateDonation = () => {
 			if (!hash) return { isSaved: false, txHash: '', isMinted: false };
 			setTxHash(hash);
 			const id = await handleSaveDonation(hash, props);
-
 			// Wait for the status to become 'success'
 			await new Promise(resolve => {
 				if (status === 'success') {
@@ -227,7 +241,8 @@ export const useCreateDonation = () => {
 				setResolveState(null); // clear the state to avoid calling it again
 			}
 		}
-		if (status === 'error') {
+		const comingFromSafe = isSafeEnv && txHash;
+		if (status === 'error' && !comingFromSafe) {
 			updateDonation(donationId, EDonationStatus.FAILED);
 			setDonationSaved(false);
 			createDonationProps?.setFailedModalType(EDonationFailedType.FAILED);
