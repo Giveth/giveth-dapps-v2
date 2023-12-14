@@ -1,11 +1,11 @@
 import {
+	ChainType,
 	EDonationStatus,
 	EDonationType,
 	EProjectStatus,
 	EProjectVerificationStatus,
 	EProjectsSortBy,
 } from '@/apollo/types/gqlEnums';
-import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 
 export interface IProjectPower {
 	powerRank: number;
@@ -424,4 +424,11 @@ export interface IGetQfRoundHistory {
 	raisedFundInUsd: number;
 	uniqueDonors: number;
 	estimatedMatching: IEstimatedMatching;
+}
+
+export interface IAddress {
+	address: string;
+	title: string;
+	networkId: number;
+	chainType: ChainType;
 }
