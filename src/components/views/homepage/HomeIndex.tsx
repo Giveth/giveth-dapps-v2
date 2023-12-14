@@ -18,8 +18,8 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
 import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
 import StorageLabel from '@/lib/localStorage';
-import GitcoinGrantsBanner from '@/components/views/homepage/GitcoinGrantsBanner';
 import TorusBanner from './TorusBanner';
+// import FundraisingBanner from './FundraisingBanner';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const {
@@ -66,7 +66,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 
 	return (
 		<Wrapper>
-			<GitcoinGrantsBanner />
+			{/* <FundraisingBanner /> */}
 			{showTorusBanner && <TorusBanner />}
 			<IntroBlock />
 			<Separator />
