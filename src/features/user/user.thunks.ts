@@ -10,13 +10,14 @@ import {
 	ISignToGetToken,
 	IChainvineSetReferral,
 	IChainvineClickCount,
+	ISolanaSignToGetToken,
 } from './user.types';
-import { createSiweMessage } from '@/lib/helpers';
 import { RootState } from '../store';
 import { postRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import StorageLabel from '@/lib/localStorage';
 import { getTokens } from '@/helpers/user';
+import { createSiweMessage, signWithEvm } from '@/lib/authentication';
 
 const saveTokenToLocalstorage = (address: string, token: string) => {
 	const _address = address.toLowerCase();
@@ -37,7 +38,10 @@ export const fetchUserByAddress = createAsyncThunk(
 export const signToGetToken = createAsyncThunk(
 	'user/signToGetToken',
 	async (
-		{
+		signToGetToken: ISignToGetToken | ISolanaSignToGetToken,
+		{ getState, dispatch },
+	) => {
+		const {
 			address,
 			safeAddress,
 			chainId,
@@ -45,60 +49,62 @@ export const signToGetToken = createAsyncThunk(
 			connectors,
 			isGSafeConnector,
 			expiration,
-		}: ISignToGetToken,
-		{ getState, dispatch },
-	) => {
+		} = signToGetToken;
+
+		const solanaSignToGetToken = signToGetToken as ISolanaSignToGetToken;
+		const isSolana = !!solanaSignToGetToken.solanaSignedMessage;
+
+		const isSAFE = isGSafeConnector;
+		let siweMessage,
+			safeMessage: any = null;
+
+		if (isSAFE) {
+			siweMessage = (await signWithEvm(address, chainId!)) || {};
+			safeMessage = await createSiweMessage(
+				address!,
+				chainId!,
+				'Login into Giveth services',
+			);
+		} else {
+			siweMessage = isSolana
+				? {
+						signature: solanaSignToGetToken.solanaSignedMessage,
+						nonce: solanaSignToGetToken.nonce,
+						message: solanaSignToGetToken.message,
+				  }
+				: (await signWithEvm(address, chainId!)) || {};
+		}
+
+		const { signature, nonce, message } = siweMessage;
+		console.log('signature', signature);
+		console.log('nonce', nonce);
+		console.log('message', message);
+
 		try {
-			console.log({
-				address,
-				chainId,
-				connector,
-				connectors,
-				isGSafeConnector,
-			});
-			const isSAFE = isGSafeConnector;
-			let siweMessage,
-				safeMessage: any = null;
-			if (isSAFE) {
-				// disconnect();
-				// await connect({ chainId, connector });
-				const wallet = await getWalletClient({ chainId });
-				siweMessage = await createSiweMessage(
-					wallet?.account?.address!,
-					chainId!,
-					'Login into Giveth services',
-				);
-				safeMessage = await createSiweMessage(
-					address!,
-					chainId!,
-					'Login into Giveth services',
-				);
-			} else {
-				siweMessage = await createSiweMessage(
-					address!,
-					chainId!,
-					'Login into Giveth services',
-				);
-			}
-
-			const { nonce, message } = siweMessage as any;
-
-			const walletClient = await getWalletClient({ chainId });
-
-			const signature = await walletClient?.signMessage({ message });
 			if (signature) {
 				const state = getState() as RootState;
 				if (!state.user.userData) {
 					await dispatch(fetchUserByAddress(address));
 				}
+
+				const path = isSolana
+					? 'solanaAuthentication'
+					: 'authentication';
+
+				const data: Record<string, any> = {
+					signature,
+					message,
+					nonce,
+				};
+
+				if (isSolana) {
+					data.address = address;
+				}
+
 				const token = await postRequest(
-					`${config.MICROSERVICES.authentication}/authentication`,
+					`${config.MICROSERVICES.authentication}/${path}`,
 					true,
-					{
-						signature,
-						message,
-						nonce,
-					},
+					data,
 				);
 				saveTokenToLocalstorage(address!, token.jwt);
 				await dispatch(fetchUserByAddress(address));

@@ -54,6 +54,7 @@ import { useModalCallback } from '@/hooks/useModalCallback';
 import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingToast';
 import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
+import QFModal from '@/components/views/donate/QFModal';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -107,6 +108,8 @@ const CryptoDonation: FC = () => {
 	const [donationToGiveth, setDonationToGiveth] = useState(
 		noDonationSplit ? 0 : 5,
 	);
+	const [showQFModal, setShowQFModal] = useState(false);
+
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowDonateModal(true),
 	);
@@ -117,6 +120,7 @@ const CryptoDonation: FC = () => {
 	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
 	const activeRound = getActiveRound(project.qfRounds);
 	const networkId = chain?.id;
+	const isOnAcceptedChain = networkId && acceptedChains?.includes(networkId);
 
 	const isOnEligibleNetworks =
 		networkId && activeRound?.eligibleNetworks?.includes(networkId);
@@ -283,6 +287,8 @@ const CryptoDonation: FC = () => {
 		}
 		if (!isSignedIn) {
 			signInThenDonate();
+		} else if (hasActiveQFRound && !isOnEligibleNetworks) {
+			setShowQFModal(true);
 		} else {
 			setShowDonateModal(true);
 		}
@@ -306,6 +312,12 @@ const CryptoDonation: FC = () => {
 			<H4Styled weight={700}>
 				{formatMessage({ id: 'page.donate.title' })}
 			</H4Styled>
+			{showQFModal && (
+				<QFModal
+					setShowDonateModal={setShowDonateModal}
+					setShowModal={setShowQFModal}
+				/>
+			)}
 			{geminiModal && <GeminiModal setShowModal={setGeminiModal} />}
 			{showChangeNetworkModal && acceptedChains && (
 				<DonateWrongNetwork

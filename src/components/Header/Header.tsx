@@ -9,7 +9,7 @@ import {
 	IconSearch24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useAccount, useNetwork } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
@@ -29,7 +29,6 @@ import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import {
-	setShowWelcomeModal,
 	setShowCompleteProfile,
 	setShowSearchModal,
 } from '@/features/modal/modal.slice';
@@ -55,6 +54,7 @@ import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import { CommunityMenu } from '../menu/CommunityMenu';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import config from '@/configuration';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -68,7 +68,7 @@ const Header: FC<IHeader> = () => {
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 
-	const { address } = useAccount();
+	const { walletAddress, openWalletConnectModal } = useAuthenticationWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 
@@ -160,11 +160,7 @@ const Header: FC<IHeader> = () => {
 	}, [showHeader]);
 
 	const handleModals = () => {
-		if (isGIVeconomyRoute) {
-			openConnectModal?.();
-		} else {
-			dispatch(setShowWelcomeModal(true));
-		}
+		openWalletConnectModal();
 	};
 
 	const { modalCallback: signInThenCreate } = useModalCallback(() =>
@@ -174,7 +170,7 @@ const Header: FC<IHeader> = () => {
 	const handleCreateButton = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			openConnectModal?.();
+			openWalletConnectModal();
 		} else if (!isSignedIn) {
 			signInThenCreate();
 		} else if (isUserRegistered(userData)) {
@@ -224,7 +220,7 @@ const Header: FC<IHeader> = () => {
 					<LinkWithMenu
 						title={formatMessage({ id: 'label.projects' })}
 						isHeaderShowing={showHeader}
-						href={Routes.Projects}
+						href={Routes.AllProjects}
 					>
 						<ProjectsMenu />
 					</LinkWithMenu>
@@ -274,7 +270,7 @@ const Header: FC<IHeader> = () => {
 						label='+'
 					/>
 				</SmallCreateProjectParent>
-				{address && chainId ? (
+				{walletAddress ? (
 					<>
 						<NotificationButtonWithMenu
 							isHeaderShowing={showHeader}

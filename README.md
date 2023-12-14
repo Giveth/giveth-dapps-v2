@@ -30,6 +30,18 @@ npm run dev
 # or
 yarn dev
 ```
+## Run locally with Docker
+You can run the image locally with docker using the below steps:
+
+1. Make a copy of the `.env.example` file and add your configurations there
+```
+cp .env.example .env.local
+```
+
+2. Run with `docker-compose`
+```
+docker-compose up -d
+```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 

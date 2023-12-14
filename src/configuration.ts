@@ -21,12 +21,14 @@ const config: GlobalConfig = {
 		[envConfig.POLYGON_NETWORK_NUMBER]: envConfig.POLYGON_CONFIG,
 		[envConfig.OPTIMISM_NETWORK_NUMBER]: envConfig.OPTIMISM_CONFIG,
 		[envConfig.CELO_NETWORK_NUMBER]: envConfig.CELO_CONFIG,
+		[envConfig.CLASSIC_NETWORK_NUMBER]: envConfig.CLASSIC_CONFIG,
 	},
 	// Used for adding networks to user wallet, useless since just xDAI is not
 	// included in metamask by default and its rpc endpoint is not infura
 	INFURA_API_KEY: process.env.NEXT_PUBLIC_INFURA_API_KEY,
 	BLOCKNATIVE_DAPP_ID: process.env.BLOCKNATIVE_DAPP_ID,
 	GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+	ENABLE_SOLANA: process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true',
 };
 
 export default config;

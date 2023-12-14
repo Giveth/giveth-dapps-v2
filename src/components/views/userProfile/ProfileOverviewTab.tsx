@@ -85,7 +85,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 				},
 				{
 					label: formatMessage({ id: 'label.view_projects' }),
-					onClick: () => router.push(Routes.Projects),
+					onClick: () => router.push(Routes.AllProjects),
 					outline: true,
 				},
 			],

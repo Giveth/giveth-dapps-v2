@@ -40,6 +40,7 @@ import { PassportBanner } from '@/components/PassportBanner';
 import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
 import { QFNoResultBanner } from './MiddleBanners/QFNoResultBanner';
 import { Spinner } from '@/components/Spinner';
+import { getMainCategorySlug } from '@/helpers/projects';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -79,6 +80,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const isInfiniteScrolling = useRef(true);
 	const { isTablet, isMobile } = useDetectDevice();
 
+	router?.events?.on('routeChangeStart', () => setIsLoading(true));
+
 	const fetchProjects = useCallback(
 		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
 			const variables: IQueries = {
@@ -106,6 +109,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					variables: {
 						...variables,
 						...contextVariables,
+						mainCategory: getMainCategorySlug(selectedMainCategory),
 					},
 					fetchPolicy: 'network-only',
 				})

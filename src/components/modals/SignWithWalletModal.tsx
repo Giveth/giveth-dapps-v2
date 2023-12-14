@@ -15,18 +15,24 @@ import { useRouter } from 'next/router';
 
 import { useAccount, useConnect, useNetwork } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
+import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { ETheme } from '@/features/general/general.slice';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { checkMultisigSession } from '@/lib/helpers';
 import { signToGetToken } from '@/features/user/user.thunks';
-import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { EModalEvents } from '@/hooks/useModalCallback';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { Dropdown } from './ExpirationDropdown';
 import { Flex } from '../styled-components/Flex';
+import {
+	WalletType,
+	useAuthenticationWallet,
+} from '@/hooks/useAuthenticationWallet';
+import { createSwisMessage } from '@/lib/authentication';
+import { ISolanaSignToGetToken } from '@/features/user/user.types';
 
 interface IProps extends IModal {
 	callback?: () => void;
@@ -58,6 +64,8 @@ export const SignWithWalletModal: FC<IProps> = ({
 	const isSafeEnv = useIsSafeEnvironment();
 
 	const chainId = chain?.id;
+	const { walletAddress, signMessage, walletType, openWalletConnectModal } =
+		useAuthenticationWallet();
 	const router = useRouter();
 	const { isAnimating, closeModal: _closeModal } =
 		useModalAnimation(setShowModal);
@@ -131,7 +139,6 @@ export const SignWithWalletModal: FC<IProps> = ({
 				connector,
 				connectors,
 				pathname: router.pathname,
-				// isGSafeConnector: fromGnosis || isGSafeConnector || isSafeEnv,
 				isGSafeConnector: fromGnosis,
 				expiration: fromGnosis ? expirations[expiration] : 0,
 			}),
@@ -227,14 +234,48 @@ export const SignWithWalletModal: FC<IProps> = ({
 					})}
 					loading={loading}
 					onClick={async () => {
-						if (multisigLastStep) {
+						// if (!walletAddress) {
+						// 	openWalletConnectModal();
+						// }
+						// setLoading(true);
+
+						let signature;
+						if (walletType === WalletType.SOLANA) {
+							const { message, nonce } = await createSwisMessage(
+								walletAddress!,
+								'Login into Giveth services',
+							);
+							const signedMessage = await signMessage(message);
+							signature = await dispatch(
+								signToGetToken({
+									address: walletAddress,
+									chainId,
+									pathname: router.pathname,
+									solanaSignedMessage: signedMessage,
+									message,
+									nonce,
+								} as ISolanaSignToGetToken),
+							);
+							setLoading(false);
+							if (
+								signature &&
+								signature.type ===
+									'user/signToGetToken/fulfilled'
+							) {
+								const event = new Event(EModalEvents.SIGNEDIN);
+								window.dispatchEvent(event);
+								callback && callback();
+								closeModal();
+							}
+						} else if (multisigLastStep) {
 							if (currentMultisigSession) return closeModal();
 							return startSignature(connector, true);
 						} else if (isGSafeConnector) {
 							reset();
 							return setSafeSecondaryConnection(true);
+						} else {
+							await startSignature();
 						}
-						await startSignature();
 					}}
 					buttonType={
 						theme === ETheme.Dark || multisigLastStep

@@ -172,7 +172,7 @@ export const TabGIVbacksBottom = () => {
 						<GbDataBlock
 							title={formatMessage({ id: 'label.donor_rewards' })}
 							button={
-								<Link href={Routes.Projects}>
+								<Link href={Routes.AllProjects}>
 									<GbButton
 										label={formatMessage({
 											id: 'label.donate_to_earn_giv',
@@ -291,7 +291,7 @@ export const TabGIVbacksBottom = () => {
 											</NoWrap>
 										</GivAllocated>
 									</RoundInfoTallRow>
-									<Link href={Routes.Projects}>
+									<Link href={Routes.AllProjects}>
 										<RoundButton
 											size='small'
 											label={formatMessage({

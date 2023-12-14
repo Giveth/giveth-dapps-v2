@@ -9,6 +9,12 @@ export interface ISignToGetToken {
 	expiration?: number;
 }
 
+export interface ISolanaSignToGetToken extends ISignToGetToken {
+	solanaSignedMessage: string;
+	nonce: string;
+	message: string;
+}
+
 export interface IChainvineSetReferral {
 	address: string;
 }

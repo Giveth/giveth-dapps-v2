@@ -1,29 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
-
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 import { IProjectEdition } from '@/apollo/types/types';
-import { isUserRegistered, showToastError } from '@/lib/helpers';
+import { compareAddresses, isUserRegistered } from '@/lib/helpers';
 import CreateProject from '@/components/views/create/CreateProject';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
 	setShowSignWithWallet,
-	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
 import { WrappedSpinner } from '@/components/Spinner';
-import NotAvailableProject from '@/components/NotAvailableProject';
+import NotAvailableHandler from '@/components/NotAvailableHandler';
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import CompleteProfile from '@/components/CompleteProfile';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
 	const [isLoadingProject, setIsLoadingProject] = useState(true);
 	const [isCancelled, setIsCancelled] = useState(false);
+	const [ownerAddress, setOwnerAddress] = useState<string>();
+
+	const { openWalletConnectModal } = useAuthenticationWallet();
 
 	const dispatch = useAppDispatch();
 	const {
@@ -38,6 +40,7 @@ const EditIndex = () => {
 	const isRegistered = isUserRegistered(user);
 
 	useEffect(() => {
+		setOwnerAddress(undefined);
 		setIsCancelled(false);
 		if (isLoadingUser) return;
 		if (isEnabled) {
@@ -60,8 +63,16 @@ const EditIndex = () => {
 				})
 				.then((res: { data: { projectById: IProjectEdition } }) => {
 					const project = res.data.projectById;
+					setOwnerAddress(project.adminUser.walletAddress);
 					if (project.status.name === EProjectStatus.CANCEL) {
 						setIsCancelled(true);
+						setProject(undefined);
+					} else if (
+						!compareAddresses(
+							project.adminUser.walletAddress,
+							user?.walletAddress,
+						)
+					) {
 						setProject(undefined);
 					} else {
 						setProject(project);
@@ -70,7 +81,7 @@ const EditIndex = () => {
 				})
 				.catch((error: unknown) => {
 					setIsLoadingProject(false);
-					showToastError(error);
+					console.log(error);
 					captureException(error, {
 						tags: {
 							section: 'EditIndex',
@@ -79,7 +90,7 @@ const EditIndex = () => {
 				});
 		} else {
 			if (!isLoadingUser) {
-				dispatch(setShowWelcomeModal(true));
+				openWalletConnectModal();
 				setIsLoadingProject(false);
 			}
 		}
@@ -94,7 +105,12 @@ const EditIndex = () => {
 	} else if (!isRegistered) {
 		return <CompleteProfile />;
 	} else if (!project) {
-		return <NotAvailableProject isCancelled={isCancelled} />;
+		return (
+			<NotAvailableHandler
+				ownerAddress={ownerAddress}
+				isCancelled={isCancelled}
+			/>
+		);
 	}
 	return <CreateProject project={project} />;
 };

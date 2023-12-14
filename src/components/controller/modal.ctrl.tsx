@@ -8,11 +8,11 @@ import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
-	setShowWelcomeModal,
 	setShowFirstWelcomeModal,
 	setShowSignWithWallet,
 	setShowSearchModal,
 	setShowSwitchNetworkModal,
+	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
 import { isUserRegistered } from '@/lib/helpers';
 import { SearchModal } from '../modals/SearchModal';

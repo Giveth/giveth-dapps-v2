@@ -13,7 +13,6 @@ import {
 } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
-import { showToastError } from '@/lib/helpers';
 import { findStepByName } from '@/lib/verification';
 import type { Dispatch, SetStateAction } from 'react';
 
@@ -71,7 +70,7 @@ export const VerificationProvider = ({ children }: { children: ReactNode }) => {
 						break;
 
 					default:
-						showToastError(error);
+						console.log('getVerificationData error: ', error);
 						captureException(error, {
 							tags: {
 								section: 'getVerificationData',

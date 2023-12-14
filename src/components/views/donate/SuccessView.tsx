@@ -7,7 +7,6 @@ import {
 } from '@giveth/ui-design-system';
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-
 import { useIntl } from 'react-intl';
 import { useNetwork } from 'wagmi';
 import links from '@/lib/constants/links';
@@ -31,13 +30,13 @@ import { getActiveRound } from '@/helpers/qf';
 const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isLoading } = useAppSelector(state => state.user);
-	const { isSuccessDonation, setSuccessDonation, hasActiveQFRound } =
+	const { isSuccessDonation, setSuccessDonation, hasActiveQFRound, project } =
 		useDonateData();
 	const { givBackEligible, txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 	const isSafeEnv = useIsSafeEnvironment();
 	const [givethSlug, setGivethSlug] = useState<string>('');
-	const { project } = useDonateData();
+
 	const {
 		info: { passportState },
 	} = usePassport();

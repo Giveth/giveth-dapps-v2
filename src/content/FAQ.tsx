@@ -29,30 +29,6 @@ const faqContent = (formatMessage: any) => {
 				),
 			},
 			{
-				question: 'page.faq.what_is_torus',
-				answer: (
-					<>
-						<FormattedMessage id='page.faq.what_is_torus.content.one' />{' '}
-						<a
-							href='https://metamask.io/'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							Metamask{' '}
-						</a>
-						<FormattedMessage id='page.faq.what_is_torus.content.two' />{' '}
-						<a
-							href='https://docs.tor.us'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							<FormattedMessage id='page.faq.what_is_torus.content.three' />
-						</a>
-						.{' '}
-					</>
-				),
-			},
-			{
 				question: 'page.faq.what_is_the_difference_betwee_btc_eth',
 				answer: (
 					<>
@@ -470,7 +446,7 @@ const faqContent = (formatMessage: any) => {
 							<li>
 								<FormattedMessage id='label.faq_by.two' />{' '}
 								<ExternalLink
-									href={Routes.Projects}
+									href={Routes.AllProjects}
 									title='donating'
 								/>{' '}
 								<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.two' />{' '}
@@ -741,7 +717,7 @@ const faqContent = (formatMessage: any) => {
 					<>
 						<FormattedMessage id='page.faq.why_is_there_a_givstream.content.one' />{' '}
 						<ExternalLink
-							href={Routes.Projects}
+							href={Routes.AllProjects}
 							title={formatMessage({
 								id: 'label.donate_to_verified_projects',
 							})}

@@ -26,17 +26,20 @@ export const projectsItems = {
 		// { name: 'Trending', query: '?q=?q=trending' },
 		{
 			name: 'All Projects',
-			url: Routes.Projects,
-			label: 'label.all_projects',
+			url: Routes.AllProjects,
+			label: 'label.projects_all',
 		},
 		{
 			name: 'Recently Updated',
-			url: Routes.Projects + '?sort=' + EProjectsSortBy.RECENTLY_UPDATED,
+			url:
+				Routes.AllProjects +
+				'?sort=' +
+				EProjectsSortBy.RECENTLY_UPDATED,
 			label: 'label.recently_updated',
 		},
 		{
 			name: 'Just Launched',
-			url: Routes.Projects + '?sort=' + EProjectsSortBy.NEWEST,
+			url: Routes.AllProjects + '?sort=' + EProjectsSortBy.NEWEST,
 			label: 'label.just_launched',
 		},
 	],

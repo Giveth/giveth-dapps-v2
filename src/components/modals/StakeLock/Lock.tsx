@@ -28,7 +28,6 @@ import LockingBrief from './LockingBrief';
 import { waitForTransaction } from '@/lib/transaction';
 import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
-import TotalGIVpowerBox from './TotalGIVpowerBox';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Flex } from '@/components/styled-components/Flex';
@@ -38,6 +37,7 @@ import Routes from '@/lib/constants/Routes';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
+import TotalGIVpowerBox from './TotalGIVpowerBox';
 import type { PoolStakingConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -66,11 +66,12 @@ const LockModal: FC<ILockModalProps> = ({
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
-	const { stakedAmount: stakedLpAmount } = useStakingPool(poolStakingConfig);
+	const { stakedAmount: stakedLpAmount } =
+		useStakingPool(poolStakingConfig) || {};
 
-	const { network: poolNetwork } = poolStakingConfig;
+	const { network: poolNetwork } = poolStakingConfig || {};
 
-	const { sdh } = useTokenDistroHelper(poolNetwork);
+	const { sdh } = useTokenDistroHelper(poolNetwork) || {};
 
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 
@@ -214,7 +215,7 @@ const LockModal: FC<ILockModalProps> = ({
 									id: 'label.user_your_givpower_to_support_verified_projects',
 								})}
 							</P>
-							<Link href={Routes.Projects}>
+							<Link href={Routes.AllProjects}>
 								<BoostButton
 									linkType='primary'
 									label={formatMessage({

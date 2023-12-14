@@ -1,3 +1,4 @@
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import type { Chain } from 'wagmi';
 
 export type Address = `0x${string}`;
@@ -194,16 +195,19 @@ export interface EnvConfig {
 	POLYGON_NETWORK_NUMBER: number;
 	OPTIMISM_NETWORK_NUMBER: number;
 	CELO_NETWORK_NUMBER: number;
+	CLASSIC_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	GNOSIS_CONFIG: GnosisNetworkConfig;
 	POLYGON_CONFIG: NetworkConfig;
 	OPTIMISM_CONFIG: OptimismNetworkConfig;
 	CELO_CONFIG: NetworkConfig;
+	CLASSIC_CONFIG: NetworkConfig;
 	GARDEN_LINK: string;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
 	RARIBLE_ADDRESS: string;
+	SOLANA_NETWORK: WalletAdapterNetwork;
 }
 
 export interface GlobalConfig extends EnvConfig {
@@ -219,4 +223,5 @@ export interface GlobalConfig extends EnvConfig {
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
 	GOOGLE_MAPS_API_KEY: string | undefined;
+	ENABLE_SOLANA: boolean;
 }

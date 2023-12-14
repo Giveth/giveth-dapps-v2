@@ -1,22 +1,44 @@
 import { useEffect, useRef } from 'react';
-import { useAccount, useConnect } from 'wagmi';
+import { useConnect } from 'wagmi';
 import { useAppDispatch } from '@/features/hooks';
-import { setToken, setIsEnabled } from '@/features/user/user.slice';
+import {
+	setToken,
+	setIsEnabled,
+	setIsLoading,
+} from '@/features/user/user.slice';
 import StorageLabel from '@/lib/localStorage';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { getTokens } from '@/helpers/user';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import {
+	WalletType,
+	useAuthenticationWallet,
+} from '@/hooks/useAuthenticationWallet';
 
 const UserController = () => {
-	const { address, isConnected } = useAccount();
+	const {
+		walletAddress: address,
+		isConnected,
+		isConnecting,
+		walletType,
+	} = useAuthenticationWallet();
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
 	const { connect, connectors } = useConnect();
-
 	const isMounted = useRef(false);
+
+	const isFirstRender = useRef(true);
+	const isConnectingRef = useRef(isConnecting);
+	const isConnectedRef = useRef(isConnected);
+
 	useEffect(() => {
-		if (isSafeEnv === null) return; // gsafe check not ready
-		if (isConnected) return;
+		if (isSafeEnv === null) return; // not ready
+		// TODO: implement auto connect for solana
+		if (
+			isConnected ||
+			(walletType !== null && walletType !== WalletType.ETHEREUM)
+		)
+			return;
 
 		const isPrevConnected = localStorage.getItem(
 			StorageLabel.WAGMI_CONNECTED,
@@ -36,6 +58,20 @@ const UserController = () => {
 			connect({ connector });
 		}
 	}, []);
+
+	useEffect(() => {
+		if (isSafeEnv === null) return; // not ready
+		isConnectingRef.current = isConnecting;
+		isConnectedRef.current = isConnected;
+		if (!isConnecting && isFirstRender.current) {
+			setTimeout(() => {
+				if (!isConnectingRef.current && !isConnectedRef.current) {
+					dispatch(setIsLoading(false));
+				}
+			}, 1000);
+		}
+		isFirstRender.current = false;
+	}, [isConnecting]);
 
 	useEffect(() => {
 		if (isSafeEnv === null) return; // not ready

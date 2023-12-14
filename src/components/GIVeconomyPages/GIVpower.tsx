@@ -127,7 +127,7 @@ export function TabPowerTop() {
 											href={
 												hasZeroGivPower
 													? Routes.GIVfarm
-													: Routes.Projects
+													: Routes.AllProjects
 											}
 										>
 											<BoostProjectButton
@@ -272,7 +272,7 @@ export function TabPowerBottom() {
 									id: 'label.boost_your_favorite_projects_to_help_them_rise',
 								})}
 							</Lead>
-							<Link href={Routes.Projects}>
+							<Link href={Routes.AllProjects}>
 								<CardBottomText>
 									{formatMessage({
 										id: 'label.boost_projects',
@@ -351,7 +351,7 @@ export function TabPowerBottom() {
 									})}
 								</QuoteText>
 								<br />
-								<Link href={Routes.Projects}>
+								<Link href={Routes.AllProjects}>
 									<CardBottomText>
 										{formatMessage({
 											id: 'label.browse_projects',

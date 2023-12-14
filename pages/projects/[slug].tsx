@@ -1,5 +1,10 @@
 import { GetServerSideProps } from 'next/types';
-import { IMainCategory } from '@/apollo/types/types';
+import {
+	ICategory,
+	IMainCategory,
+	IProject,
+	IQFRound,
+} from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
@@ -13,7 +18,25 @@ import { useReferral } from '@/hooks/useReferral';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
-import type { IProjectsRouteProps } from '.';
+import { getMainCategorySlug } from '@/helpers/projects';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
+
+export interface IProjectsRouteProps {
+	projects: IProject[];
+	totalCount: number;
+	categories: ICategory[];
+	mainCategories: IMainCategory[];
+	qfRounds: IQFRound[];
+}
+
+export const allCategoriesItem = {
+	title: 'All',
+	description: '',
+	banner: '',
+	slug: 'all',
+	categories: [],
+	selected: false,
+};
 
 interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
 	selectedMainCategory: IMainCategory;
@@ -54,13 +77,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 	try {
 		const { query } = context;
 		const slug = query.slug;
-		if (!slug)
-			return {
-				redirect: {
-					destination: '/',
-					permanent: false,
-				},
-			};
+
 		const {
 			data: { mainCategories },
 		}: {
@@ -70,19 +87,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			fetchPolicy: 'network-only',
 		});
 
-		const allCategoriesItem = {
-			title: 'All',
-			description: '',
-			banner: '',
-			slug: 'all',
-			categories: [],
-			selected: false,
-		};
-
 		const updatedMainCategory = [allCategoriesItem, ...mainCategories];
 		const selectedMainCategory = updatedMainCategory.find(mainCategory => {
 			return mainCategory.slug === slug;
 		});
+
+		console.log('selectedMainCategory', selectedMainCategory);
 
 		if (selectedMainCategory) {
 			const updatedSelectedMainCategory = {
@@ -94,7 +104,18 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				query: FETCH_ALL_PROJECTS,
 				variables: {
 					...variables,
-					mainCategory: updatedSelectedMainCategory.slug,
+					sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
+					searchTerm: query.searchTerm,
+					filters: query.filter
+						? Array.isArray(query.filter)
+							? query.filter
+							: [query.filter]
+						: null,
+					campaignSlug: query.campaignSlug,
+					category: query.category,
+					mainCategory: getMainCategorySlug(
+						updatedSelectedMainCategory,
+					),
 					notifyOnNetworkStatusChange,
 				},
 				fetchPolicy: 'network-only',

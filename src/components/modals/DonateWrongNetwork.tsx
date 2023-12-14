@@ -34,6 +34,7 @@ const networks = [
 	config.POLYGON_CONFIG,
 	config.CELO_CONFIG,
 	config.OPTIMISM_CONFIG,
+	config.CLASSIC_CONFIG,
 ];
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {

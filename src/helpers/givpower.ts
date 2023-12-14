@@ -76,7 +76,7 @@ export const getGIVpowerRoundsInfo = (
 };
 
 export const getUnlockDate = (givPowerInfo: IGIVpower, rounds: number) => {
-	const { nextRoundDate, roundDuration } = givPowerInfo;
+	const { nextRoundDate, roundDuration } = givPowerInfo || {};
 	return Number(nextRoundDate) + rounds * roundDuration * 1000;
 };
 

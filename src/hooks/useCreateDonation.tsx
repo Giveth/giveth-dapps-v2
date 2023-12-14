@@ -199,7 +199,6 @@ export const useCreateDonation = () => {
 			// setDonating(true);
 			const hash = await sendTransaction(transactionObj, address).catch(
 				error => {
-					console.log('Bia Injaaaaa', { error });
 					handleError(error, 0, setFailedModalType);
 				},
 			);

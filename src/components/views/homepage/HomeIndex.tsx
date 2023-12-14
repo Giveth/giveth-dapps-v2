@@ -17,6 +17,9 @@ import { useAppSelector } from '@/features/hooks';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_HOMEPAGE_DATA } from '@/apollo/gql/gqlHomePage';
 import { LatestUpdatesBlock } from './latestUpdates/LatestUpdatesBlock';
+import StorageLabel from '@/lib/localStorage';
+import GitcoinGrantsBanner from '@/components/views/homepage/GitcoinGrantsBanner';
+import TorusBanner from './TorusBanner';
 
 const HomeIndex: FC<IHomeRoute> = props => {
 	const {
@@ -26,6 +29,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 		...rest
 	} = props;
 	const [campaigns, setCampaigns] = useState(campaignsFromServer);
+	const [showTorusBanner, setShowTorusBanner] = useState(false);
 	const [featuredProjects, setFeaturedProjects] = useState(
 		featuredProjectsFromServer,
 	);
@@ -54,9 +58,16 @@ const HomeIndex: FC<IHomeRoute> = props => {
 		}
 		fetchFeaturedUpdateProjects();
 	}, [userData?.id]);
+	useEffect(() => {
+		setShowTorusBanner(
+			!localStorage.getItem(StorageLabel.TORUS_BANNER_VIEWED),
+		);
+	}, []);
 
 	return (
 		<Wrapper>
+			<GitcoinGrantsBanner />
+			{showTorusBanner && <TorusBanner />}
 			<IntroBlock />
 			<Separator />
 			<Separator />
