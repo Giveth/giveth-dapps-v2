@@ -11,6 +11,7 @@ import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import {
 	EVerificationSteps,
+	IAddress,
 	IProjectManagingFunds,
 } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
@@ -19,12 +20,6 @@ import { OutlineStyled } from '../Common.sc';
 import DescriptionInput from '@/components/DescriptionInput';
 import { requiredOptions } from '@/lib/constants/regex';
 
-export interface IAddress {
-	address: string;
-	title: string;
-	networkId: number;
-}
-
 const ManageFundsIndex = () => {
 	const [loading, setLoading] = useState(false);
 	const [showAddressModal, setShowAddressModal] = useState(false);
@@ -32,6 +27,7 @@ const ManageFundsIndex = () => {
 		useVerificationData();
 
 	const managingFundsData = verificationData?.managingFunds;
+	console.log('ManagingFundsData', managingFundsData);
 	const { relatedAddresses, description } = managingFundsData || {};
 
 	const [addresses, setAddresses] = useState<IAddress[]>(
