@@ -234,11 +234,6 @@ export const SignWithWalletModal: FC<IProps> = ({
 					})}
 					loading={loading}
 					onClick={async () => {
-						// if (!walletAddress) {
-						// 	openWalletConnectModal();
-						// }
-						// setLoading(true);
-
 						let signature;
 						if (walletType === WalletType.SOLANA) {
 							const { message, nonce } = await createSwisMessage(
