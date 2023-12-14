@@ -230,7 +230,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 										) : (
 											<RenderComponent
 												Component={Component}
-												pageProps={pageProps}
+												pageProps={...pageProps}
 											/>
 										)}
 										{process.env.NEXT_PUBLIC_ENV ===
