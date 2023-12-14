@@ -29,7 +29,9 @@ export const DonationCard = () => {
 				))}
 				<EmptyTab />
 			</Flex>
-			{tab === ETabs.RECURRING && <RecurringDonationCard />}
+			<TabWrapper>
+				{tab === ETabs.RECURRING && <RecurringDonationCard />}
+			</TabWrapper>
 		</DonationCardWrapper>
 	);
 };
@@ -42,6 +44,7 @@ const DonationCardWrapper = styled(Flex)`
 	align-items: flex-start;
 	background: ${neutralColors.gray[100]};
 	box-shadow: ${Shadow.Neutral[400]};
+	align-items: stretch;
 `;
 
 const Title = styled(B)`
@@ -74,4 +77,11 @@ const Tab = styled(P)<ITab>`
 const EmptyTab = styled.div`
 	flex: 1;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
+`;
+
+const TabWrapper = styled(Flex)`
+	position: relative;
+	flex-direction: column;
+	gap: 16px;
+	align-items: flex-start;
 `;

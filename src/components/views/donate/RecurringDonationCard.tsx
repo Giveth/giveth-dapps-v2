@@ -16,7 +16,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { formatUnits } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
+import { useAccount, useBalance, useNetwork } from 'wagmi';
 import Slider from 'rc-slider';
 import Image from 'next/image';
 import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
@@ -35,6 +35,8 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { findUserStreamOnSelectedToken } from '@/helpers/donate';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { showToastError } from '@/lib/helpers';
+import config from '@/configuration';
+import { WrongNetworkLayer } from './WrongNetworkLayer';
 
 export const RecurringDonationCard = () => {
 	const [amount, setAmount] = useState(0n);
@@ -48,6 +50,7 @@ export const RecurringDonationCard = () => {
 		useState<ISuperfluidStream>();
 
 	const { address } = useAccount();
+	const { chain } = useNetwork();
 	const { project, selectedToken, tokenStreams } = useDonateData();
 	const {
 		data: balance,
@@ -413,6 +416,9 @@ export const RecurringDonationCard = () => {
 			</Flex>
 			{showSelectTokenModal && (
 				<SelectTokenModal setShowModal={setShowSelectTokenModal} />
+			)}
+			{(!chain || chain.id !== config.OPTIMISM_NETWORK_NUMBER) && (
+				<WrongNetworkLayer />
 			)}
 			{showRecurringDonationModal && (
 				<RecurringDonationModal
