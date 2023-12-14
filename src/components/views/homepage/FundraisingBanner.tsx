@@ -18,9 +18,8 @@ const FundraisingBanner = () => {
 					</Purple>
 				</ExternalLink>
 				<P>
-					The Giveth team has updated our website to prevent the
-					exploit,
-					<b> the Giveth Dapp is SAFE to use.</b> ✅
+					The Giveth team has updated our website to mitigate the
+					exploit. ✅
 				</P>
 			</PStyled>
 		</Wrapper>
