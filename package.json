@@ -59,7 +59,7 @@
 		"swiper": "^10.2.0",
 		"unsplash-js": "^7.0.15",
 		"viem": "^1.16.6",
-		"wagmi": "^1.4.5"
+		"wagmi": "^1.4.12"
 	},
 	"devDependencies": {
 		"@next/bundle-analyzer": "^12.1.4",
