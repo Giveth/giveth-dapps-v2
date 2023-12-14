@@ -9,7 +9,7 @@ import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import Input from '@/components/Input';
 import { mediaQueries } from '@/lib/constants/constants';
-import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
+
 import SelectNetwork from '@/components/views/verification/manageFunds/SelectNetwork';
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
 import config from '@/configuration';
@@ -18,6 +18,8 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
 import { chainNameById } from '@/lib/network';
 import useFocus from '@/hooks/useFocus';
+import { IAddress } from '@/apollo/types/types';
+import { ChainType } from '@/apollo/types/gqlEnums';
 
 interface IProps extends IModal {
 	addAddress: (address: IAddress) => void;
@@ -32,6 +34,12 @@ const networkOptions = Object.keys(networksConfig).map(networkId => {
 		label: chainNameById(networkIdNumber),
 		id: networkIdNumber,
 	};
+});
+
+networkOptions.push({
+	value: 0,
+	label: 'Solana',
+	id: 0,
 });
 
 export interface IAddressForm {
@@ -65,6 +73,7 @@ const AddAddressModal: FC<IProps> = ({
 	const handleAdd = async (formData: IAddressForm) => {
 		const { address, title, network } = formData;
 		const isEns = isAddressENS(address);
+		console.log('Network Address', network);
 		const _address = isEns
 			? await getAddressFromENS(address)
 			: getAddress(address);
@@ -73,6 +82,10 @@ const AddAddressModal: FC<IProps> = ({
 				address: _address,
 				title,
 				networkId: network.value,
+				chainType:
+					network.label === 'Solana'
+						? ChainType.SOLANA
+						: ChainType.EVM,
 			});
 		}
 		closeModal();
