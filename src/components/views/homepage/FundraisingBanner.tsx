@@ -1,29 +1,27 @@
 import styled from 'styled-components';
 import { brandColors, P } from '@giveth/ui-design-system';
-import Image from 'next/image';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 
 const FundraisingBanner = () => {
 	return (
 		<Wrapper>
-			<P>Hold an ENS Voting Card?</P>
-			<Image
-				src='/images/ENSlogoSmall.png'
-				alt='ENS-logo'
-				width={25}
-				height={25}
-			/>
+			<P>
+				<b>ATTENTION:</b>
+			</P>
 			<PStyled>
-				<ExternalLink href='https://ensgrants.xyz/rounds/33/proposals/850'>
-					<Purple> Support Giveth in ENS Small Grants!</Purple>
-				</ExternalLink>
-				{/* and{' '} */}
-				{/* <ExternalLink href='https://explorer.gitcoin.co/#/round/424/0x98720dd1925d34a2453ebc1f91c9d48e7e89ec29/0x98720dd1925d34a2453ebc1f91c9d48e7e89ec29-127'>
+				<ExternalLink href='https://twitter.com/MatthewLilley/status/1735275960662921638'>
 					<Purple>
-						<b>donate to our Grant.</b>
+						{' '}
+						There is an exploit affecting many Ethereum websites and
+						applications.{' '}
 					</Purple>
-				</ExternalLink> */}
+				</ExternalLink>
+				<P>
+					The Giveth team has updated our website to prevent the
+					exploit,
+					<b> the Giveth Dapp is SAFE to use.</b> ✅
+				</P>
 			</PStyled>
 		</Wrapper>
 	);
