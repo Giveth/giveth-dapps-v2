@@ -12064,7 +12064,7 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-viem@^1.0.0, viem@^1.16.6:
+viem@^1.0.0, viem@^1.20.0:
   version "1.20.0"
   resolved "https://registry.yarnpkg.com/viem/-/viem-1.20.0.tgz#25cb019831f46aeecf2c8c5cdbad41e4f79b2e32"
   integrity sha512-yPjV9pJr10xi28C/9LEvs5zdZNEMiru3Kz7nufghVYABJAfeSkoZQXb6b23n7MscS7c55JO5nmUI3xKkd9g6Yg==

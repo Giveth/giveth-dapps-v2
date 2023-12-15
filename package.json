@@ -65,7 +65,7 @@
 		"styled-components": "^5.3.6",
 		"swiper": "^10.2.0",
 		"unsplash-js": "^7.0.15",
-		"viem": "^1.16.6",
+		"viem": "^1.20.0",
 		"wagmi": "^1.4.12"
 	},
 	"devDependencies": {
