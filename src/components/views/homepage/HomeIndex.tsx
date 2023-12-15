@@ -77,7 +77,7 @@ const HomeIndex: FC<IHomeRoute> = props => {
 							<ProjectsCampaignBlock campaign={campaign} />
 							<Separator />
 						</Fragment>
-				  ))
+					))
 				: []}
 			{newCampaigns && newCampaigns.length > 0 ? (
 				<CampaignsBlock campaigns={newCampaigns} />

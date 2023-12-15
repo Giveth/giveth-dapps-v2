@@ -56,10 +56,10 @@ const ProfileLikedTab: FC<IUserProfileView> = () => {
 							myAccount
 								? formatMessage({
 										id: 'label.you_havent_liked_any_projects_yet',
-								  })
+									})
 								: formatMessage({
 										id: 'label.this_user_hasnt_liked_any_project_yet',
-								  })
+									})
 						}`}
 						heartIcon
 					/>

@@ -24,7 +24,7 @@ export const formatEthHelper = (
 					groupSize: 3,
 					groupSeparator: ',',
 					decimalSeparator: '.',
-			  })
+				})
 		: amt.toFixed();
 };
 

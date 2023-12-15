@@ -41,7 +41,7 @@ export const signToGetToken = createAsyncThunk(
 					signature: solanaSignToGetToken.solanaSignedMessage,
 					nonce: solanaSignToGetToken.nonce,
 					message: solanaSignToGetToken.message,
-			  }
+				}
 			: (await signWithEvm(address, chainId!)) || {};
 
 		console.log('signature', signature);

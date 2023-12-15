@@ -110,17 +110,17 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 					projectDonationsSqrtRootSum,
 					allProjectsSum,
 					matchingPool,
-			  )
+				)
 			: qfRoundHistory
-			? qfRoundHistory.matchingFund !== null
-				? qfRoundHistory.matchingFund
-				: calculateTotalEstimatedMatching(
-						qfRoundHistory.estimatedMatching
-							.projectDonationsSqrtRootSum,
-						qfRoundHistory.estimatedMatching.allProjectsSum,
-						qfRoundHistory.estimatedMatching.matchingPool,
-				  )
-			: 0
+				? qfRoundHistory.matchingFund !== null
+					? qfRoundHistory.matchingFund
+					: calculateTotalEstimatedMatching(
+							qfRoundHistory.estimatedMatching
+								.projectDonationsSqrtRootSum,
+							qfRoundHistory.estimatedMatching.allProjectsSum,
+							qfRoundHistory.estimatedMatching.matchingPool,
+						)
+				: 0
 		: 0;
 	return (
 		<Wrapper>

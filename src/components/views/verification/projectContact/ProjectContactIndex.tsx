@@ -65,9 +65,8 @@ export default function ProjectContactIndex() {
 
 	const [showSocialModal, setShowSocialModal] = useState(false);
 	const [isOtherSocialChanged, setIsOtherSocialChanged] = useState(false);
-	const [otherSocials, setOtherSocials] = useState<IProjectContact[]>(
-		findOtherSocials(),
-	);
+	const [otherSocials, setOtherSocials] =
+		useState<IProjectContact[]>(findOtherSocials());
 
 	const createSocials = () => {
 		const mainSocials: IProjectContact[] = [];
