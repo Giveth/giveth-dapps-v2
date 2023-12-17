@@ -1,5 +1,5 @@
 import { GLink, Lead, neutralColors } from '@giveth/ui-design-system';
-import Select, { StylesConfig } from 'react-select';
+import Select, { type CSSObjectWithLabel, StylesConfig } from 'react-select';
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
 import styled from 'styled-components';
@@ -66,45 +66,51 @@ const WhyContent = ({
 );
 
 const selectCustomStyles: StylesConfig = {
-	control: styles => ({
-		...styles,
-		border: 0,
-		borderRadius: '8px',
-		boxShadow: 'none',
-		backgroundColor: neutralColors.gray[200],
-		margin: '12px 0',
-	}),
-	dropdownIndicator: styles => ({
-		...styles,
-		color: neutralColors.gray[900],
-	}),
-	indicatorSeparator: styles => ({
-		...styles,
-		backgroundColor: neutralColors.gray[200],
-	}),
-	menu: styles => ({
-		...styles,
-		border: '0px',
-		borderRadius: '8px',
-		boxShadow: Shadow.Neutral[500],
-	}),
-	option: (styles, { isFocused, isSelected }) => ({
-		...styles,
-		width: '95%',
-		height: '38px',
-		margin: '4px auto',
-		borderRadius: '8px',
-		color: 'black',
-		backgroundColor: isSelected
-			? neutralColors.gray[300]
-			: isFocused
-				? neutralColors.gray[200]
-				: neutralColors.gray[100],
-	}),
-	placeholder: styles => ({
-		...styles,
-		color: neutralColors.gray[900],
-	}),
+	control: (baseStyles, props) =>
+		({
+			...baseStyles,
+			border: 0,
+			borderRadius: '8px',
+			boxShadow: 'none',
+			backgroundColor: neutralColors.gray[200],
+			margin: '12px 0',
+		}) as CSSObjectWithLabel,
+	dropdownIndicator: (baseStyles, props) =>
+		({
+			...baseStyles,
+			color: neutralColors.gray[900],
+		}) as CSSObjectWithLabel,
+	indicatorSeparator: (baseStyles, props) =>
+		({
+			...baseStyles,
+			backgroundColor: neutralColors.gray[200],
+		}) as CSSObjectWithLabel,
+	menu: (baseStyles, props) =>
+		({
+			...baseStyles,
+			border: '0px',
+			borderRadius: '8px',
+			boxShadow: Shadow.Neutral[500],
+		}) as CSSObjectWithLabel,
+	option: (baseStyles, { isFocused, isSelected }) =>
+		({
+			...baseStyles,
+			width: '95%',
+			height: '38px',
+			margin: '4px auto',
+			borderRadius: '8px',
+			color: 'black',
+			backgroundColor: isSelected
+				? neutralColors.gray[300]
+				: isFocused
+					? neutralColors.gray[200]
+					: neutralColors.gray[100],
+		}) as CSSObjectWithLabel,
+	placeholder: (baseStyles, props) =>
+		({
+			...baseStyles,
+			color: neutralColors.gray[900],
+		}) as CSSObjectWithLabel,
 };
 
 const InputBox = styled(motion.textarea)`

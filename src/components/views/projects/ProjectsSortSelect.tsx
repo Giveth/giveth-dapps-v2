@@ -21,6 +21,7 @@ import Select, {
 	DropdownIndicatorProps,
 	StylesConfig,
 	ControlProps,
+	type CSSObjectWithLabel,
 } from 'react-select';
 
 import styled from 'styled-components';
@@ -187,26 +188,29 @@ const Control: ComponentType<ControlProps<ISelectedSort>> = ({
 
 const selectStyles: StylesConfig = {
 	...selectCustomStyles,
-	container: styles => ({
-		...styles,
-		zIndex: 3,
-		border: 'none',
-		borderRadius: '8px',
-		minWidth: '230px',
-		'&:hover': {
-			borderColor: 'transparent',
-		},
-	}),
-	control: styles => ({
-		...styles,
-		padding: '6px 8px',
-		border: 'none',
-		boxShadow: 'none',
-	}),
-	indicatorSeparator: styles => ({
-		...styles,
-		display: 'none',
-	}),
+	container: (baseStyles, props) =>
+		({
+			...baseStyles,
+			zIndex: 3,
+			border: 'none',
+			borderRadius: '8px',
+			minWidth: '230px',
+			'&:hover': {
+				borderColor: 'transparent',
+			},
+		}) as CSSObjectWithLabel,
+	control: (baseStyles, props) =>
+		({
+			...baseStyles,
+			padding: '6px 8px',
+			border: 'none',
+			boxShadow: 'none',
+		}) as CSSObjectWithLabel,
+	indicatorSeparator: (baseStyles, props) =>
+		({
+			...baseStyles,
+			display: 'none',
+		}) as CSSObjectWithLabel,
 };
 
 interface IRowContainer {
