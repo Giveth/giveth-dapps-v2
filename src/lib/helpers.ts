@@ -12,12 +12,14 @@ import {
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 import { erc20ABI } from 'wagmi';
-import { parseEther, parseUnits } from 'viem';
+import { Chain, parseEther, parseUnits } from 'viem';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
 import config from '@/configuration';
 import { AddressZero } from './constants/constants';
+import { WalletType } from '@/hooks/useAuthenticationWallet';
 
 declare let window: any;
 interface TransactionParams {
@@ -58,9 +60,34 @@ export const formatTxLink = (networkId?: number, txHash?: string) => {
 	return `${config.NETWORKS_CONFIG[networkId].blockExplorers?.default.url}/tx/${txHash}`;
 };
 
-export function formatWalletLink(chainId?: number, address?: string) {
-	if (!address || !chainId || !config.NETWORKS_CONFIG[chainId]) return '';
-	return `${config.NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/address/${address}`;
+export function formatWalletLink(
+	walletType: WalletType | null,
+	chain?: Chain | WalletAdapterNetwork,
+	address?: string,
+) {
+	if (!address || !chain || !walletType) return '';
+
+	switch (walletType) {
+		case WalletType.ETHEREUM:
+			const chainId = (chain as Chain)?.id;
+			if (!config.NETWORKS_CONFIG[chainId]) return '';
+			return `${config.NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/address/${address}`;
+
+		case WalletType.SOLANA:
+			const url = `https://explorer.solana.com/address/${address}`;
+			switch (chain) {
+				case WalletAdapterNetwork.Mainnet:
+					return url;
+				case WalletAdapterNetwork.Devnet:
+					return `${url}?cluster=devnet`;
+				case WalletAdapterNetwork.Testnet:
+					return `${url}?cluster=testnet`;
+			}
+			return '';
+
+		default:
+			return '';
+	}
 }
 
 export const durationToYMDh = (
@@ -482,43 +509,6 @@ export function pollEvery(fn: Function, delay: any) {
 		};
 	};
 }
-
-export const createSiweMessage = async (
-	address: string,
-	chainId: number,
-	statement: string,
-) => {
-	try {
-		let domain = 'giveth.io';
-
-		if (typeof window !== 'undefined') {
-			domain = window.location.hostname;
-		}
-		const nonceResponse: any = await fetch(
-			`${config.MICROSERVICES.authentication}/nonce`,
-		).then(n => {
-			return n.json();
-		});
-		const nonce = nonceResponse.message;
-		const { SiweMessage } = await import('siwe');
-		const siweMessage = new SiweMessage({
-			domain,
-			address,
-			nonce,
-			statement,
-			uri: origin,
-			version: '1',
-			chainId,
-		});
-		return {
-			message: siweMessage.prepareMessage(),
-			nonce,
-		};
-	} catch (error) {
-		console.log({ error });
-		return false;
-	}
-};
 
 export function isObjEmpty(obj: Object) {
 	return Object.keys(obj).length > 0;

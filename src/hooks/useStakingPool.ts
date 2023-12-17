@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNetwork } from 'wagmi';
 
 import {
 	getGivStakingAPR,
@@ -29,8 +28,6 @@ export const useStakingPool = (
 		notStakedAmount: 0n,
 		stakedAmount: 0n,
 	});
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
 
 	const chainInfoName = chainInfoNames[poolStakingConfig.network];
 
@@ -50,9 +47,10 @@ export const useStakingPool = (
 					type === StakingType.GIV_UNIPOOL_LM
 						? getGivStakingAPR(network, currentValues, network)
 						: getLPStakingAPR(poolStakingConfig, currentValues);
-				promise
-					.then(setApr)
-					.catch(() => setApr({ effectiveAPR: Zero }));
+				promise.then(setApr).catch(e => {
+					console.log('Error Calculating APR', e);
+					setApr({ effectiveAPR: Zero });
+				});
 			} else {
 				setApr({ effectiveAPR: Zero });
 			}
@@ -67,7 +65,7 @@ export const useStakingPool = (
 				clearInterval(interval);
 			}
 		};
-	}, [chainId, isLoaded]);
+	}, [isLoaded]);
 
 	useEffect(() => {
 		setUserStakeInfo(getUserStakeInfo(currentValues, poolStakingConfig));

@@ -29,7 +29,7 @@ export class SubgraphDataHelper {
 		return address
 			? (this.state[
 					'tokenDistro_' + address.toLowerCase()
-			  ] as ITokenDistro) || transformTokenDistro()
+				] as ITokenDistro) || transformTokenDistro()
 			: transformTokenDistro();
 	}
 
@@ -37,7 +37,7 @@ export class SubgraphDataHelper {
 		return tokenAddress
 			? (this.state[
 					'tokenBalance_' + tokenAddress?.toLowerCase()
-			  ] as ITokenBalance) || transformTokenBalance()
+				] as ITokenBalance) || transformTokenBalance()
 			: transformTokenBalance();
 	}
 
@@ -53,7 +53,7 @@ export class SubgraphDataHelper {
 		return address
 			? (this.state[
 					'tokenDistroBalance_' + address.toLowerCase()
-			  ] as ITokenDistroBalance) || transformTokenDistroBalance({})
+				] as ITokenDistroBalance) || transformTokenDistroBalance({})
 			: transformTokenDistroBalance({});
 	}
 

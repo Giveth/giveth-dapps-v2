@@ -70,13 +70,13 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 					{isChanged
 						? `${formatMessage({
 								id: 'label.lock_until',
-						  })} ${smallFormatDate(unlockDate, locale)}`
+							})} ${smallFormatDate(unlockDate, locale)}`
 						: formatMessage(
 								{
 									id: 'label.max_max_round',
 								},
 								{ maxRound },
-						  )}
+							)}
 				</GLink>
 			</Flex>
 			<MidRoundToast>
@@ -96,13 +96,13 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 												id: 'label.plural.round_count',
 											},
 											{ round },
-									  )
+										)
 									: formatMessage(
 											{
 												id: 'label.singular.round_count',
 											},
 											{ round },
-									  )}
+										)}
 							</ToastRound>{' '}
 							{formatMessage({ id: 'label.you_selected' })}
 						</ToastDesc>

@@ -6,6 +6,7 @@ import {
 	optimismGoerli,
 	polygon,
 } from 'wagmi/chains';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {
 	EnvConfig,
 	StakingPlatform,
@@ -43,6 +44,7 @@ const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
+const SOLANA_NETWORK = WalletAdapterNetwork.Testnet;
 
 const classic = {
 	id: 63,
@@ -83,6 +85,8 @@ const config: EnvConfig = {
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
+	SOLANA_NETWORK: SOLANA_NETWORK,
+
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
 
@@ -254,6 +258,7 @@ const config: EnvConfig = {
 				unit: 'LP',
 				regenStreamType: StreamType.FOX,
 				farmStartTimeMS: 1685460000000,
+				farmEndTimeMS: 1701302400000,
 				introCard: {
 					title: 'ShapeShift DAO',
 					description:

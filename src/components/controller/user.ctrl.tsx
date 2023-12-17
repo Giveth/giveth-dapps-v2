@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useAccount, useConnect } from 'wagmi';
+import { useConnect } from 'wagmi';
 import { useAppDispatch } from '@/features/hooks';
 import {
 	setToken,
@@ -9,9 +9,18 @@ import {
 import StorageLabel from '@/lib/localStorage';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { getTokens } from '@/helpers/user';
+import {
+	WalletType,
+	useAuthenticationWallet,
+} from '@/hooks/useAuthenticationWallet';
 
 const UserController = () => {
-	const { address, isConnected, isConnecting } = useAccount();
+	const {
+		walletAddress: address,
+		isConnected,
+		isConnecting,
+		walletType,
+	} = useAuthenticationWallet();
 	const dispatch = useAppDispatch();
 	const { connect, connectors } = useConnect();
 	const isMounted = useRef(false);
@@ -20,7 +29,12 @@ const UserController = () => {
 	const isConnectedRef = useRef(isConnected);
 
 	useEffect(() => {
-		if (isConnected) return;
+		// TODO: implement auto connect for solana
+		if (
+			isConnected ||
+			(walletType !== null && walletType !== WalletType.ETHEREUM)
+		)
+			return;
 
 		const isPrevConnected = localStorage.getItem(
 			StorageLabel.WAGMI_CONNECTED,
