@@ -128,14 +128,14 @@ export const QFProjectsBanner = () => {
 							</Desc>
 						)}
 					</StyledCol>
-					{/* <StyledCol xs={12} md={6}>
+					<StyledCol xs={12} md={6}>
 						<Image
 							src={'/images/banners/qfSponsorsOP.png'}
 							style={{ objectFit: 'contain' }}
 							fill
 							alt='QF Banner'
 						/>
-					</StyledCol> */}
+					</StyledCol>
 				</Row>
 			</Container>
 		</BannerContainer>
