@@ -9,7 +9,7 @@ import {
 	IconSearch24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useAccount, useNetwork } from 'wagmi';
+import { useNetwork } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
@@ -55,6 +55,7 @@ import { CommunityMenu } from '../menu/CommunityMenu';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import config from '@/configuration';
 import { useShowHiderByScroll } from '@/hooks/useShowHiderByScroll';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -67,7 +68,7 @@ const Header: FC<IHeader> = () => {
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 
-	const { address } = useAccount();
+	const { walletAddress, openWalletConnectModal } = useAuthenticationWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 
@@ -86,7 +87,6 @@ const Header: FC<IHeader> = () => {
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const isMobile = useMediaQuery(device.mobileL);
-	const { open: openConnectModal } = useWeb3Modal();
 	const showHeader = useShowHiderByScroll();
 
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
@@ -129,6 +129,10 @@ const Header: FC<IHeader> = () => {
 		);
 	}, [router.route]);
 
+	const handleModals = () => {
+		openWalletConnectModal();
+	};
+
 	const { modalCallback: signInThenCreate } = useModalCallback(() =>
 		router.push(Routes.CreateProject),
 	);
@@ -136,7 +140,7 @@ const Header: FC<IHeader> = () => {
 	const handleCreateButton = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			openConnectModal?.();
+			openWalletConnectModal();
 		} else if (!isSignedIn) {
 			signInThenCreate();
 		} else if (isUserRegistered(userData)) {
@@ -236,7 +240,7 @@ const Header: FC<IHeader> = () => {
 						label='+'
 					/>
 				</SmallCreateProjectParent>
-				{address && chainId ? (
+				{walletAddress ? (
 					<>
 						<NotificationButtonWithMenu
 							isHeaderShowing={showHeader}
@@ -262,7 +266,7 @@ const Header: FC<IHeader> = () => {
 								? 'component.button.connect_wallet'
 								: 'component.button.sign_in',
 						})}
-						onClick={() => openConnectModal?.()}
+						onClick={handleModals}
 					/>
 				)}
 			</Flex>

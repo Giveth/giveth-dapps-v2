@@ -19,6 +19,10 @@ const ProjectBadges = () => {
 	const { formatMessage } = useIntl();
 	const isQF = hasActiveRound(qfRounds);
 
+	if (!verified && !isQF && (!campaigns || campaigns.length === 0)) {
+		return null;
+	}
+
 	return (
 		<CustomFlex gap='16px'>
 			{verified && (
@@ -55,7 +59,8 @@ const CustomFlex = styled(Flex)`
 	overflow-x: scroll;
 	overflow-y: hidden;
 	white-space: nowrap;
-	padding-bottom: 8px;
+	margin-bottom: -3px;
+	padding-top: 8px;
 `;
 
 export default ProjectBadges;

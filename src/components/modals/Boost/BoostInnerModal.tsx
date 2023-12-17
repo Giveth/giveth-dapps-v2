@@ -349,12 +349,12 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 												totalGIVpower
 													.multipliedBy(percentage)
 													.div(100),
-										  )
+											)
 										: 0
-							  } GIVpower`
+								} GIVpower`
 							: `${formatMessage({
 									id: 'label.drag_to_allocate',
-							  })}.`}
+								})}.`}
 					</SliderDesc>
 				</>
 			)}

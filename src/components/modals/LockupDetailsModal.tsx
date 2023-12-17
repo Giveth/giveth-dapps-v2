@@ -158,10 +158,10 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 																{
 																	rounds: locksInfo.rounds,
 																},
-														  )
+															)
 														: formatMessage({
 																id: 'label.one_round',
-														  })
+															})
 												}`}
 											</LockTableCell>
 											<LockTableCell>
@@ -173,7 +173,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 															apr.effectiveAPR.multipliedBy(
 																multiplier,
 															),
-													  )
+														)
 													: ' ? '}
 												%
 											</LockTableCell>
