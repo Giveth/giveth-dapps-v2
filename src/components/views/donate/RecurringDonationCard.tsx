@@ -258,7 +258,7 @@ export const RecurringDonationCard = () => {
 												totalPerMonth,
 												selectedToken?.token.decimals ||
 													18,
-										  )
+											)
 										: 0}
 								</Caption>
 								<Caption medium>
@@ -342,7 +342,7 @@ export const RecurringDonationCard = () => {
 													projectPerMonth,
 													selectedToken?.token
 														.decimals || 18,
-											  )
+												)
 											: 0}
 									</Caption>
 									<Caption>
@@ -363,7 +363,7 @@ export const RecurringDonationCard = () => {
 													givethPerMonth,
 													selectedToken?.token
 														.decimals || 18,
-											  )
+												)
 											: 0}
 									</Caption>
 									<Caption>
@@ -381,7 +381,7 @@ export const RecurringDonationCard = () => {
 													totalPerMonth,
 													selectedToken?.token
 														.decimals || 18,
-											  )
+												)
 											: 0}
 									</Caption>
 									<Caption medium>
