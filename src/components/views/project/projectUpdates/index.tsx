@@ -28,7 +28,7 @@ import ProjectTimeline from '@/components/views/project/projectUpdates/ProjectTi
 import TimelineSection from '@/components/views/project/projectUpdates/TimelineSection';
 
 const RichTextInput = dynamic(
-	() => import('@/components/rich-text/QuillTextInput'),
+	() => import('@/components/rich-text/RichTextInput'),
 	{
 		ssr: false,
 	},

@@ -176,7 +176,7 @@ interface ITextRichWithQuillProps {
 	error?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
 }
 
-const QuillTextInput: FC<ITextRichWithQuillProps> = ({
+const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 	value,
 	setValue,
 	placeholder,
@@ -262,4 +262,4 @@ const ReactQuillStyled = styled(ReactQuill)<{
 	}
 `;
 
-export default QuillTextInput;
+export default TextRichWithQuill;

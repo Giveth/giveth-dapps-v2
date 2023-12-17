@@ -20,13 +20,13 @@ import {
 import TimelineSection from '@/components/views/project/projectUpdates/TimelineSection';
 
 const RichTextViewer = dynamic(
-	() => import('@/components/rich-text/QuillTextViewer'),
+	() => import('@/components/rich-text/RichTextViewer'),
 	{
 		ssr: false,
 	},
 );
 const RichTextInput = dynamic(
-	() => import('@/components/rich-text/QuillTextInput'),
+	() => import('@/components/rich-text/RichTextInput'),
 	{
 		ssr: false,
 	},

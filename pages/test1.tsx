@@ -18,7 +18,7 @@ import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 
 const RichTextInput = dynamic(
-	() => import('@/components/rich-text/QuillTextInput'),
+	() => import('@/components/rich-text/RichTextInput'),
 	{
 		ssr: false,
 	},
