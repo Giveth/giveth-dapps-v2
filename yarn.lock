@@ -3445,6 +3445,11 @@
   resolved "https://registry.yarnpkg.com/@types/extract-files/-/extract-files-13.0.0.tgz#81672fa2b26df37ef5883da77995874017bb302e"
   integrity sha512-WtluFBP4T0S3l3bd+tBciZYX5uTyi5FaRt4DLY6/C1UjtDRB6LKC7YobGWP03S4/kC0HN35BHsgS8ny9sf1IsQ==
 
+"@types/extract-files@^8.1.3":
+  version "8.1.3"
+  resolved "https://registry.yarnpkg.com/@types/extract-files/-/extract-files-8.1.3.tgz#03b99c71298f21cd9c555ca7bcd7737756b63959"
+  integrity sha512-FQT1aXHL4NuSK44A9w3aFVG3p7q04uWnKNreGVoF0jno2SlWaMuaUjUZ6If0sVPEen3UVqYxdsEPJQLpvbkHEg==
+
 "@types/google.maps@*":
   version "3.54.10"
   resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.54.10.tgz#f3101dda3e873f3602ae664cf518592686ca215b"
