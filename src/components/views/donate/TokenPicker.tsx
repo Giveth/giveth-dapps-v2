@@ -22,6 +22,7 @@ import Select, {
 	OnChangeValue,
 	StylesConfig,
 	MenuListProps,
+	type CSSObjectWithLabel,
 } from 'react-select';
 
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
@@ -181,18 +182,21 @@ const TokenPicker = (props: {
 			left: isMobile ? 0 : 'null',
 			bottom: isMobile ? 0 : 'null',
 		}),
-		option: (provided, state) => ({
-			...provided,
-			width: '100%',
-			background: state.isSelected ? neutralColors.gray[200] : 'white',
-			':hover': {
-				background: neutralColors.gray[200],
-			},
-			color: neutralColors.gray[900],
-			padding: '8px 16px',
-			borderRadius: '8px',
-			cursor: 'pointer',
-		}),
+		option: (baseStyles, state) =>
+			({
+				...baseStyles,
+				width: '100%',
+				background: state.isSelected
+					? neutralColors.gray[200]
+					: 'white',
+				':hover': {
+					background: neutralColors.gray[200],
+				},
+				color: neutralColors.gray[900],
+				padding: '8px 16px',
+				borderRadius: '8px',
+				cursor: 'pointer',
+			}) as CSSObjectWithLabel,
 		placeholder: (base: any) => ({
 			...base,
 			color: neutralColors.gray[500],
