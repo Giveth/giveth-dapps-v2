@@ -75,12 +75,16 @@ const selectCustomStyles: StylesConfig = {
 			backgroundColor: neutralColors.gray[200],
 			margin: '12px 0',
 		}) as CSSObjectWithLabel,
-	dropdownIndicator: styles => ({
-		color: neutralColors.gray[900],
-	}),
-	indicatorSeparator: styles => ({
-		backgroundColor: neutralColors.gray[200],
-	}),
+	dropdownIndicator: (baseStyles, props) =>
+		({
+			...baseStyles,
+			color: neutralColors.gray[900],
+		}) as CSSObjectWithLabel,
+	indicatorSeparator: (baseStyles, props) =>
+		({
+			...baseStyles,
+			backgroundColor: neutralColors.gray[200],
+		}) as CSSObjectWithLabel,
 	menu: (baseStyles, props) =>
 		({
 			...baseStyles,

@@ -138,9 +138,10 @@ const selectStyles: StylesConfig = {
 			...baseStyles,
 			display: 'none',
 		}) as CSSObjectWithLabel,
-	placeholder: styles => ({
-		...styles,
-	}),
+	placeholder: baseStyles =>
+		({
+			...baseStyles,
+		}) as CSSObjectWithLabel,
 	singleValue: (baseStyles, props) =>
 		({
 			...baseStyles,
@@ -148,13 +149,14 @@ const selectStyles: StylesConfig = {
 		}) as CSSObjectWithLabel,
 	menu: (baseStyles, props) =>
 		({
+			...baseStyles,
 			marginTop: '8px',
 			borderRadius: '8px',
 			padding: '8px',
 			backgroundColor: brandColors.giv[600],
 			boxShadow: Shadow.Dark[500],
 		}) as CSSObjectWithLabel,
-	option: (styles, { isFocused, isSelected, isDisabled }) => ({
+	option: (baseStyles, { isFocused, isSelected, isDisabled }) => ({
 		padding: '8px 16px',
 		margin: '8px',
 		borderRadius: '8px',
