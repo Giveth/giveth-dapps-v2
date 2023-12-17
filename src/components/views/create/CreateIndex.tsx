@@ -10,6 +10,7 @@ import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import CompleteProfile from '@/components/CompleteProfile';
 import { WrappedSpinner } from '@/components/Spinner';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 const CreateIndex = () => {
 	const dispatch = useAppDispatch();
@@ -19,6 +20,7 @@ const CreateIndex = () => {
 		isSignedIn,
 		userData: user,
 	} = useAppSelector(state => state.user);
+	const { openWalletConnectModal } = useAuthenticationWallet();
 	const isRegistered = isUserRegistered(user);
 
 	useEffect(() => {
@@ -30,6 +32,8 @@ const CreateIndex = () => {
 			if (!isRegistered && isSignedIn) {
 				dispatch(setShowCompleteProfile(true));
 			}
+		} else {
+			if (!isLoading) openWalletConnectModal();
 		}
 	}, [user, isSignedIn, isLoading]);
 

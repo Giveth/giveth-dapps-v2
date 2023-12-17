@@ -135,6 +135,6 @@ const NextRankContainer = styled(RankContainer)<ILoading>`
 							transform: translateX(100%);
 						}
 					}
-			  `
+				`
 			: undefined}
 `;

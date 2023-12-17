@@ -4,6 +4,12 @@ export interface ISignToGetToken {
 	pathname?: string;
 }
 
+export interface ISolanaSignToGetToken extends ISignToGetToken {
+	solanaSignedMessage: string;
+	nonce: string;
+	message: string;
+}
+
 export interface IChainvineSetReferral {
 	address: string;
 }

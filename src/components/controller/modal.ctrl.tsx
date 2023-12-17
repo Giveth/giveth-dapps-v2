@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import { useAccount } from 'wagmi';
+import WelcomeModal from '@/components/modals/WelcomeModal';
 import { FirstWelcomeModal } from '@/components/modals/FirstWelcomeModal';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { CompleteProfileModal } from '@/components/modals/CompleteProfileModal';
@@ -9,6 +11,7 @@ import {
 	setShowSignWithWallet,
 	setShowSearchModal,
 	setShowSwitchNetworkModal,
+	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
 import { isUserRegistered } from '@/lib/helpers';
 import { SearchModal } from '../modals/SearchModal';
@@ -19,6 +22,7 @@ const ModalController = () => {
 		showCompleteProfile,
 		showFirstWelcomeModal,
 		showSignWithWallet,
+		showWelcomeModal,
 		showSearchModal,
 		showSwitchNetwork,
 	} = useAppSelector(state => state.modal);
@@ -28,11 +32,19 @@ const ModalController = () => {
 
 	const dispatch = useAppDispatch();
 
+	const { isConnected } = useAccount();
+
 	useEffect(() => {
 		if (isRegistered && showCompleteProfile) {
 			dispatch(setShowCompleteProfile(false));
 		}
 	}, [isRegistered]);
+
+	useEffect(() => {
+		if (showWelcomeModal && isConnected) {
+			dispatch(setShowWelcomeModal(false));
+		}
+	}, [isConnected, showWelcomeModal]);
 
 	//I think we need to handle it in better way
 	useEffect(() => {
@@ -57,6 +69,11 @@ const ModalController = () => {
 					setShowModal={state =>
 						dispatch(setShowCompleteProfile(state))
 					}
+				/>
+			)}
+			{showWelcomeModal && (
+				<WelcomeModal
+					setShowModal={state => dispatch(setShowWelcomeModal(state))}
 				/>
 			)}
 			{showFirstWelcomeModal && (

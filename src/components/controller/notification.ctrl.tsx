@@ -11,7 +11,7 @@ const NotificationController = () => {
 	const { address } = useAccount();
 
 	useEffect(() => {
-		let interval: NodeJS.Timer;
+		let interval: any;
 		if (isEnabled && address) {
 			dispatch(fetchNotificationCountAsync(address));
 			interval = setInterval(() => {

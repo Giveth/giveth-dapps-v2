@@ -247,7 +247,7 @@ const BadgeButton = styled(Flex)<IBadgeButton>`
 						left: 2px;
 						right: 2px;
 					}
-			  `
+				`
 			: ``}
 
 	@keyframes rotate {

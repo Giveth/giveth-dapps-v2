@@ -1,3 +1,4 @@
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { ISuperToken } from './superFluid';
 import type { Address, Chain } from 'wagmi';
 
@@ -207,6 +208,7 @@ export interface EnvConfig {
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
 	RARIBLE_ADDRESS: string;
+	SOLANA_NETWORK: WalletAdapterNetwork;
 }
 
 export interface GlobalConfig extends EnvConfig {
@@ -222,4 +224,5 @@ export interface GlobalConfig extends EnvConfig {
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
 	GOOGLE_MAPS_API_KEY: string | undefined;
+	ENABLE_SOLANA: boolean;
 }

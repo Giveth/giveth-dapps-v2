@@ -16,7 +16,7 @@ const PfpController = () => {
 
 	useEffect(() => {
 		const _pendingList = Object.keys(pendingList);
-		const interval: NodeJS.Timer = setInterval(async () => {
+		const interval = setInterval(async () => {
 			try {
 				if (_pendingList && _pendingList.length > 0) {
 					const query = buildUsersPfpInfoQuery(_pendingList);

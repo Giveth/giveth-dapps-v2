@@ -21,6 +21,7 @@ import Select, {
 	OnChangeValue,
 	StylesConfig,
 	MenuListProps,
+	type CSSObjectWithLabel,
 } from 'react-select';
 
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
@@ -162,18 +163,19 @@ const TokenPicker = (props: {
 			left: isMobile ? 0 : 'null',
 			bottom: isMobile ? 0 : 'null',
 		}),
-		option: (provided, state) => ({
-			...provided,
-			width: '100%',
-			background: state.isSelected ? neutralColors.gray[200] : 'white',
-			':hover': {
-				background: neutralColors.gray[200],
-			},
-			color: neutralColors.gray[900],
-			padding: '8px 16px',
-			borderRadius: '8px',
-			cursor: 'pointer',
-		}),
+		option: (baseStyles, { isSelected }) =>
+			({
+				...baseStyles,
+				width: '100%',
+				background: isSelected ? neutralColors.gray[200] : 'white',
+				':hover': {
+					background: neutralColors.gray[200],
+				},
+				color: neutralColors.gray[900],
+				padding: '8px 16px',
+				borderRadius: '8px',
+				cursor: 'pointer',
+			}) as CSSObjectWithLabel,
 		placeholder: (base: any) => ({
 			...base,
 			color: neutralColors.gray[500],
@@ -367,10 +369,10 @@ const TargetContainer = styled.div<ITokenPicker>`
 		props.disabled
 			? neutralColors.gray[200]
 			: props.isOpen && props.isMobile
-			? 'rgba(79, 87, 106, 0.1)'
-			: props.isOpen
-			? neutralColors.gray[200]
-			: 'transparent'};
+				? 'rgba(79, 87, 106, 0.1)'
+				: props.isOpen
+					? neutralColors.gray[200]
+					: 'transparent'};
 `;
 
 const RowContainer = styled.div`
