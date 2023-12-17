@@ -10,7 +10,7 @@ import { GoodProjectDescription } from '@/components/modals/GoodProjectDescripti
 import { EInputs } from '@/components/views/create/CreateProject';
 
 const RichTextInput = dynamic(
-	() => import('@/components/rich-text/RichTextInput'),
+	() => import('@/components/rich-text/QuillTextInput'),
 	{
 		ssr: false,
 	},

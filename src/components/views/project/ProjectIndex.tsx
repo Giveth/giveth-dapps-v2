@@ -45,7 +45,7 @@ const NotAvailableHandler = dynamic(() => import('../../NotAvailableHandler'), {
 	ssr: false,
 });
 const RichTextViewer = dynamic(
-	() => import('@/components/rich-text/RichTextViewer'),
+	() => import('@/components/rich-text/QuillTextViewer'),
 	{
 		ssr: false,
 	},

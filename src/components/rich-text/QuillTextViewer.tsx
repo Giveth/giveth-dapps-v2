@@ -2,7 +2,7 @@ import ReactQuill from 'react-quill';
 import styled from 'styled-components';
 import { QuillWrapper } from '@/components/styled-components/Quill';
 
-const RichTextViewer = (props: { content?: string }) => {
+const QuillTextViewer = (props: { content?: string }) => {
 	return (
 		<Wrapper>
 			<ReactQuill value={props.content} readOnly theme='bubble' />
@@ -16,4 +16,4 @@ const Wrapper = styled(QuillWrapper)`
 	}
 `;
 
-export default RichTextViewer;
+export default QuillTextViewer;
