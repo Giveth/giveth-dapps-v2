@@ -213,12 +213,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							newProjectData: projectData,
 							projectId: parseFloat(project.id as string),
 						},
-				  })
+					})
 				: await addProjectMutation({
 						variables: {
 							project: { ...projectData },
 						},
-				  });
+					});
 
 			if (isDraft && !draft) {
 				await client.mutate({
@@ -321,7 +321,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							{isEditMode
 								? formatMessage({
 										id: 'label.publish_edited_project',
-								  })
+									})
 								: formatMessage({ id: 'label.lets_publish' })}
 						</PublishTitle>
 						<PublishList>
@@ -329,10 +329,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								{isEditMode
 									? formatMessage({
 											id: 'label.edited_projects',
-									  })
+										})
 									: formatMessage({
 											id: 'label.newly_published_projects',
-									  })}{' '}
+										})}{' '}
 								{formatMessage({
 									id: 'label.will_be_unlisted_until',
 								})}

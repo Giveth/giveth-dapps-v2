@@ -28,6 +28,7 @@ const config: GlobalConfig = {
 	INFURA_API_KEY: process.env.NEXT_PUBLIC_INFURA_API_KEY,
 	BLOCKNATIVE_DAPP_ID: process.env.BLOCKNATIVE_DAPP_ID,
 	GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+	ENABLE_SOLANA: process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true',
 };
 
 export default config;

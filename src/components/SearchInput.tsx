@@ -122,7 +122,7 @@ const StyledInput = styled(ButtonText)`
 					::placeholder {
 						color: ${brandColors.giv[300]};
 					}
-			  `
+				`
 			: css`
 					background-color: ${neutralColors.gray[100]};
 					border: 1px solid ${neutralColors.gray[400]};
@@ -130,7 +130,7 @@ const StyledInput = styled(ButtonText)`
 					::placeholder {
 						color: ${neutralColors.gray[700]};
 					}
-			  `}
+				`}
 `;
 
 const IconWrapper = styled.div`

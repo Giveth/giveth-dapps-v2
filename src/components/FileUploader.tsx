@@ -226,7 +226,7 @@ const FileUploader: FC<IFileUploader> = ({
 								<UplaodBar status={file.status} />
 							</UploadInfoRow>
 						</UploadContainer>
-				  ))
+					))
 				: urls.map((url, idx) => (
 						<UploadContainer key={idx}>
 							<Image
@@ -262,7 +262,7 @@ const FileUploader: FC<IFileUploader> = ({
 								/>
 							</UploadInfoRow>
 						</UploadContainer>
-				  ))}
+					))}
 		</>
 	);
 };

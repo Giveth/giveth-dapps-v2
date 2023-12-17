@@ -48,7 +48,7 @@ export const AmountInput: FC<IAmountInput> = ({
 							new BigNumber(_displayAmount)
 								.multipliedBy(10 ** decimals)
 								.toFixed(0),
-					  ),
+						),
 			);
 		},
 		[decimals, maxAmount, setAmount],

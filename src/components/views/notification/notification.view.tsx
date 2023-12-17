@@ -8,7 +8,6 @@ import {
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useAccount } from 'wagmi';
 import {
 	NotificationContainer,
 	IconContainer,
@@ -37,6 +36,7 @@ import { useNotification } from '@/hooks/useNotification';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { fetchNotificationCountAsync } from '@/features/notification/notification.thunks';
 import { WrappedSpinner } from '@/components/Spinner';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 enum ENotificationTabs {
 	ALL,
@@ -59,7 +59,7 @@ function NotificationView() {
 	const { notifications, setNotifications, markOneNotificationRead } =
 		useNotification();
 	const dispatch = useAppDispatch();
-	const { address } = useAccount();
+	const { walletAddress: address } = useAuthenticationWallet();
 
 	const showLoadMore = totalCount > notifications.length;
 	const {
@@ -98,12 +98,12 @@ function NotificationView() {
 			? (query = {
 					limit,
 					offset: pageNumber * limit,
-			  })
+				})
 			: (query = {
 					category: tab,
 					limit,
 					offset: pageNumber * limit,
-			  });
+				});
 		fetchNotificationsData(query, { signal })
 			.then(res => {
 				if (res?.notifications) {
@@ -259,7 +259,7 @@ function NotificationView() {
 									markOneNotificationRead
 								}
 							/>
-					  ))
+						))
 					: !loading && (
 							<FlexCenter>
 								<Lead>
@@ -268,7 +268,7 @@ function NotificationView() {
 									})}
 								</Lead>
 							</FlexCenter>
-					  )}
+						)}
 			</div>
 			<FlexCenter>
 				{showLoadMore && !loading && (

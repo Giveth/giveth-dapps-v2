@@ -25,12 +25,16 @@ import {
 	EProjectStatus,
 	ESortby,
 } from '@/apollo/types/gqlEnums';
-import { useAppSelector } from '@/features/hooks';
-import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import {
+	ACTIVATE_PROJECT,
+	FETCH_PROJECT_BY_SLUG,
+} from '@/apollo/gql/gqlProjects';
 import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import { FETCH_PROJECT_DONATIONS_COUNT } from '@/apollo/gql/gqlDonations';
 import { hasActiveRound } from '@/helpers/qf';
 import { getGIVpowerBalanceByAddress } from '@/services/givpower';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
 interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
@@ -47,6 +51,7 @@ interface IProjectContext {
 		status?: EProjectStatus,
 	) => Promise<void>;
 	fetchProjectBySlug: () => Promise<void>;
+	activateProject: () => Promise<void>;
 	projectData?: IProject;
 	isActive: boolean;
 	isDraft: boolean;
@@ -63,6 +68,7 @@ const ProjectContext = createContext<IProjectContext>({
 		Promise.reject('fetchProjectBoosters not initialed yet!'),
 	fetchProjectBySlug: () =>
 		Promise.reject('fetchProjectBySlug not initialed yet!'),
+	activateProject: () => Promise.reject('activateProject not initialed yet!'),
 	projectData: undefined,
 	isActive: true,
 	isDraft: false,
@@ -92,7 +98,8 @@ export const ProjectProvider = ({
 	const [projectData, setProjectData] = useState(project);
 	const [isCancelled, setIsCancelled] = useState(false);
 
-	const user = useAppSelector(state => state.user.userData);
+	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
+	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
 
@@ -131,6 +138,27 @@ export const ProjectProvider = ({
 				setIsLoading(false);
 			});
 	}, [slug, user?.id]);
+
+	const activateProject = async () => {
+		try {
+			if (!isSignedIn) {
+				dispatch(setShowSignWithWallet(true));
+				return;
+			}
+			await client.mutate({
+				mutation: ACTIVATE_PROJECT,
+				variables: { projectId: Number(projectData?.id || '') },
+			});
+			await fetchProjectBySlug();
+		} catch (e) {
+			showToastError(e);
+			captureException(e, {
+				tags: {
+					section: 'handleProjectStatus',
+				},
+			});
+		}
+	};
 
 	useEffect(() => {
 		if (!projectData?.id) return;
@@ -276,6 +304,7 @@ export const ProjectProvider = ({
 				isBoostingsLoading,
 				fetchProjectBoosters,
 				fetchProjectBySlug,
+				activateProject,
 				projectData,
 				isActive,
 				isDraft,

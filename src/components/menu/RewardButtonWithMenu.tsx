@@ -48,7 +48,7 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 		? {
 				onMouseEnter: openMenu,
 				onMouseLeave: closeMenu,
-		  }
+			}
 		: { onClick: openSidebar };
 
 	return (
