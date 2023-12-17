@@ -63,12 +63,12 @@ const Tab = styled(P)<ITab>`
 					font-weight: 500;
 					color: ${neutralColors.gray[900]};
 					border-bottom-color: ${neutralColors.gray[900]};
-			  `
+				`
 			: css`
 					font-weight: 400;
 					color: ${neutralColors.gray[700]};
 					border-bottom-color: ${neutralColors.gray[300]};
-			  `}
+				`}
 `;
 
 const EmptyTab = styled.div`
