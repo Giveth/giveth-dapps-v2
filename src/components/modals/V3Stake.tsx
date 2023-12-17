@@ -83,14 +83,14 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 					chainId,
 					currentIncentive,
 					setStakeStatus,
-			  )
+				)
 			: await transfer(
 					tokenId,
 					address,
 					chainId,
 					currentIncentive,
 					setStakeStatus,
-			  );
+				);
 		try {
 			if (tx) {
 				setTxStatus(tx);

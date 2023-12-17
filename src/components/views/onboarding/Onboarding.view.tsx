@@ -92,8 +92,8 @@ const OnboardHeader: FC<IOnboard> = ({ step }) => {
 							idx > step
 								? LabelStatus.NEXT
 								: idx === 0
-								? LabelStatus.PREV
-								: LabelStatus.ACTIVE
+									? LabelStatus.PREV
+									: LabelStatus.ACTIVE
 						}
 					>
 						{label}

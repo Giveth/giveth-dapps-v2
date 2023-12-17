@@ -105,10 +105,10 @@ const ProfileDonationsTab: FC<IUserProfileView> = () => {
 								myAccount
 									? formatMessage({
 											id: 'label.you_havent_donated_to_any_projects_yet',
-									  })
+										})
 									: formatMessage({
 											id: 'label.this_user_hasnt_donated_to_any_project_yet',
-									  })
+										})
 							}`}
 						/>
 					</NothingWrapper>
