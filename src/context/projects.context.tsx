@@ -57,9 +57,7 @@ export const ProjectsProvider = (props: {
 	const [_isQF, setIsQF] = useState(isQF);
 	const router = useRouter();
 
-	let sort = _isQF
-		? EProjectsSortBy.ActiveQfRoundRaisedFunds
-		: EProjectsSortBy.INSTANT_BOOSTING;
+	let sort = EProjectsSortBy.INSTANT_BOOSTING;
 	const sortValue = router.query.sort as string;
 	if (sortValue) sort = sortMap[sortValue.toLowerCase()];
 
