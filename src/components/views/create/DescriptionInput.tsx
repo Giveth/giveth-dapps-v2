@@ -39,16 +39,18 @@ const DescriptionInput = () => {
 	};
 
 	const setIsLimitExceeded = (IsExceeded: boolean) => {
-		IsExceeded
-			? setError(
-					EInputs.description,
-					{
-						type: 'focus',
-						message: `Please enter less than ${DESCRIPTION_LIMIT} characters`,
-					},
-					{ shouldFocus: true },
-			  )
-			: clearErrors(EInputs.description);
+		if (IsExceeded) {
+			setError(
+				EInputs.description,
+				{
+					type: 'focus',
+					message: `Please enter less than ${DESCRIPTION_LIMIT} characters`,
+				},
+				{ shouldFocus: true },
+			);
+		} else {
+			clearErrors(EInputs.description);
+		}
 	};
 
 	return (
