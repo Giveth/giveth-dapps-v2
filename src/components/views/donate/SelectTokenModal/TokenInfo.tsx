@@ -59,7 +59,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 								? limitFraction(
 										formatUnits(balance, token.decimals),
 										6,
-								  )
+									)
 								: '--'}
 						</Caption>
 						{token.isSuperToken && (

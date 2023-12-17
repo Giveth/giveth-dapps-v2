@@ -61,7 +61,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 											stream[0].token.decimals,
 										),
 										6,
-								  )
+									)
 								: '--'}
 						</Caption>
 						<Caption medium>{stream[0].token.symbol}</Caption>

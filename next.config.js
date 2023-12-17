@@ -62,6 +62,11 @@ const moduleExports = withBundleAnalyzer({
 				destination: '/qf/all',
 				permanent: true,
 			},
+			{
+				source: '/QuadraticForce',
+				destination: '/assets/GivethQF.Marketing.pdf',
+				permanent: false,
+			},
 		];
 	},
 	webpack: (config, { isServer, dev }) => {

@@ -106,10 +106,10 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 								myAccount
 									? formatMessage({
 											id: 'label.you_havent_created_any_projects_yet',
-									  })
+										})
 									: formatMessage({
 											id: 'label.this_user_hasnt_created_any_project_yet',
-									  })
+										})
 							} `}
 						/>
 					</NothingWrapper>

@@ -8,16 +8,15 @@ import {
 	IconXCircle,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 const WalletNotConnected = () => {
 	const { formatMessage } = useIntl();
-	const { open: openConnectModal } = useWeb3Modal();
-
+	const { openWalletConnectModal } = useAuthenticationWallet();
 	return (
 		<ContainerStyled>
 			<IconContainer>
@@ -32,7 +31,7 @@ const WalletNotConnected = () => {
 				})}
 			</H4Styled>
 			<ButtonStyled
-				onClick={() => openConnectModal?.()}
+				onClick={openWalletConnectModal}
 				size='medium'
 				label={formatMessage({ id: 'component.button.connect_wallet' })}
 				buttonType='primary'

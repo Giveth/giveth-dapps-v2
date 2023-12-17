@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
 	showWalletModal: false,
+	showWelcomeModal: false,
 	showFirstWelcomeModal: false,
 	showSignWithWallet: false,
 	showCompleteProfile: false,
@@ -25,6 +26,9 @@ export const ModalSlice = createSlice({
 		setShowCompleteProfile: (state, action: PayloadAction<boolean>) => {
 			state.showCompleteProfile = action.payload;
 		},
+		setShowWelcomeModal: (state, action: PayloadAction<boolean>) => {
+			state.showWelcomeModal = action.payload;
+		},
 		setShowSearchModal: (state, action: PayloadAction<boolean>) => {
 			state.showSearchModal = action.payload;
 		},
@@ -39,6 +43,7 @@ export const {
 	setShowFirstWelcomeModal,
 	setShowSignWithWallet,
 	setShowWalletModal,
+	setShowWelcomeModal,
 	setShowSearchModal,
 	setShowSwitchNetworkModal,
 } = ModalSlice.actions;

@@ -13,7 +13,6 @@ import {
 	IconExternalLink16,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
-import { useNetwork } from 'wagmi';
 import config from '@/configuration';
 
 import {
@@ -43,6 +42,7 @@ import { gqlRequest } from '@/helpers/requests';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import { IGiverPFPToken } from '@/apollo/types/types';
 import { useProfileContext } from '@/context/profile.context';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -67,12 +67,10 @@ const UserProfileView: FC<IUserProfileView> = () => {
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
-	const { chain } = useNetwork();
+	const { walletType, chain } = useAuthenticationWallet();
 	const { user, myAccount } = useProfileContext();
 	const router = useRouter();
 	const pfpToken = useGiverPFPToken(user?.walletAddress, user?.avatar);
-
-	const chainId = chain?.id;
 
 	const showCompleteProfile =
 		!isUserRegistered(user) && showIncompleteWarning && myAccount;
@@ -159,17 +157,16 @@ const UserProfileView: FC<IUserProfileView> = () => {
 								)}
 								<AddressContainer>
 									<AddressTextNonMobile size='Big'>
-										{user?.walletAddress?.toLowerCase()}
+										{user?.walletAddress}
 									</AddressTextNonMobile>
 									<AddressTextMobile size='Big'>
-										{shortenAddress(
-											user?.walletAddress?.toLowerCase(),
-										)}
+										{shortenAddress(user?.walletAddress)}
 									</AddressTextMobile>
 									<ExternalLink
 										href={formatWalletLink(
-											chainId,
-											user?.walletAddress?.toLowerCase(),
+											walletType,
+											chain,
+											user?.walletAddress,
 										)}
 										color={brandColors.pinky[500]}
 									>

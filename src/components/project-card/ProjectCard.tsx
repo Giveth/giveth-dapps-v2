@@ -339,8 +339,8 @@ const CardBody = styled.div<ICardBody>`
 			props.isHover == ECardBodyHover.FULL
 				? '59px'
 				: props.isHover == ECardBodyHover.HALF
-				? '104px'
-				: '137px'};
+					? '104px'
+					: '137px'};
 	}
 `;
 
