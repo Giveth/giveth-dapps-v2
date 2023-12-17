@@ -94,10 +94,10 @@ const ProjectGIVbackToast = () => {
 			isOwnerVerified
 				? 'verified_owner'
 				: isOwnerNotVerified
-				? 'non_verified_owner'
-				: isPublicVerified
-				? 'verified_public'
-				: 'non_verified_public'
+					? 'non_verified_owner'
+					: isPublicVerified
+						? 'verified_public'
+						: 'non_verified_public'
 		}`,
 	});
 

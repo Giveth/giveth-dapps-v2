@@ -98,8 +98,8 @@ const selectCustomStyles: StylesConfig = {
 		backgroundColor: isSelected
 			? neutralColors.gray[300]
 			: isFocused
-			? neutralColors.gray[200]
-			: neutralColors.gray[100],
+				? neutralColors.gray[200]
+				: neutralColors.gray[100],
 	}),
 	placeholder: styles => ({
 		...styles,

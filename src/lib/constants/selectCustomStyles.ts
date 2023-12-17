@@ -34,8 +34,8 @@ const selectCustomStyles: StylesConfig = {
 		backgroundColor: isSelected
 			? neutralColors.gray[300]
 			: isFocused
-			? neutralColors.gray[200]
-			: 'white',
+				? neutralColors.gray[200]
+				: 'white',
 		color: isSelected ? neutralColors.gray[900] : neutralColors.gray[700],
 	}),
 	menu: styles => ({

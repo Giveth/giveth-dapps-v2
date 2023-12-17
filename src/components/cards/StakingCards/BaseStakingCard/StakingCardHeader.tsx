@@ -40,8 +40,8 @@ export const StakingCardHeader: FC<IStakingCardHeaderProps> = ({
 				{regenStreamType
 					? 'REGENFARM'
 					: isGIVpower
-					? 'GIVPOWER'
-					: 'GIVFARM'}
+						? 'GIVPOWER'
+						: 'GIVFARM'}
 			</StakingPoolExchange>
 			{isGIVpower && (
 				<IconWithTooltip
