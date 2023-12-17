@@ -362,10 +362,10 @@ const CryptoDonation: FC = () => {
 								supportCustomTokens
 									? formatMessage({
 											id: 'component.input.search_or_paste',
-										})
+									  })
 									: formatMessage({
 											id: 'component.input.search_name',
-										})
+									  })
 							}
 							projectVerified={project?.verified!}
 							disabled={!isConnected}

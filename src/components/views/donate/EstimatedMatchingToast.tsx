@@ -82,12 +82,12 @@ const EstimatedMatchingToast = ({
 					(token.mainnetAddress && token.symbol !== 'CELO')
 						? config.MAINNET_NETWORK_NUMBER
 						: isGnosis
-							? config.GNOSIS_NETWORK_NUMBER
-							: isCelo
-								? config.CELO_NETWORK_NUMBER
-								: isPolygon
-									? config.POLYGON_NETWORK_NUMBER
-									: config.OPTIMISM_NETWORK_NUMBER;
+						? config.GNOSIS_NETWORK_NUMBER
+						: isCelo
+						? config.CELO_NETWORK_NUMBER
+						: isPolygon
+						? config.POLYGON_NETWORK_NUMBER
+						: config.OPTIMISM_NETWORK_NUMBER;
 				const fetchedPrice = await fetchPrice(
 					coingeckoChainId,
 					tokenAddress,

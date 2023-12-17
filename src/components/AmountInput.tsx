@@ -41,7 +41,7 @@ export const AmountInput: FC<IAmountInput> = ({
 							new BigNumber(_displayAmount)
 								.multipliedBy(1e18)
 								.toFixed(0),
-						),
+					  ),
 			);
 		},
 		[maxAmount, setAmount],

@@ -9,5 +9,5 @@ export const currentValuesHelper = (chainId?: number) =>
 	chainId === config.MAINNET_NETWORK_NUMBER
 		? 'mainnetValues'
 		: chainId === config.OPTIMISM_NETWORK_NUMBER
-			? 'optimismValues'
-			: 'gnosisValues';
+		? 'optimismValues'
+		: 'gnosisValues';

@@ -83,7 +83,7 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 											month: 'short',
 											year: 'numeric',
 										},
-									)
+								  )
 								: ''}
 						</UpdateDate>
 						<UpdateTitle weight={700}>{update?.title}</UpdateTitle>

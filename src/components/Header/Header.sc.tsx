@@ -83,7 +83,7 @@ export const HeaderButton = styled(CButton)<IHeaderButtonProps>`
 								? brandColors.giv[600]
 								: 'white'};
 					}
-				`
+			  `
 			: ''}
 `;
 

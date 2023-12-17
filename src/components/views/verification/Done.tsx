@@ -79,10 +79,10 @@ const Done = () => {
 						{status === EVerificationStatus.REJECTED
 							? formatMessage({
 									id: 'label.verification_rejected',
-								})
+							  })
 							: formatMessage({
 									id: 'label.waiting_for_verification',
-								})}
+							  })}
 						{status === EVerificationStatus.VERIFIED && (
 							<CheckCircle />
 						)}

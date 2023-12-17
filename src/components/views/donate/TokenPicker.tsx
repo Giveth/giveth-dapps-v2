@@ -390,10 +390,10 @@ const TargetContainer = styled.div<ITokenPicker>`
 		props.disabled
 			? neutralColors.gray[200]
 			: props.isOpen && props.isMobile
-				? 'rgba(79, 87, 106, 0.1)'
-				: props.isOpen
-					? neutralColors.gray[200]
-					: 'transparent'};
+			? 'rgba(79, 87, 106, 0.1)'
+			: props.isOpen
+			? neutralColors.gray[200]
+			: 'transparent'};
 `;
 
 const RowContainer = styled.div`

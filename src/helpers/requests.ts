@@ -24,7 +24,7 @@ export function sendRequest(
 				...defaultHeaders,
 				Authorization,
 				authVersion: '2',
-			}
+		  }
 		: { ...defaultHeaders };
 	try {
 		return fetch(url + '?' + new URLSearchParams(query), {

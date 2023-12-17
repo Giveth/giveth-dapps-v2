@@ -103,7 +103,7 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 							myAccount
 								? formatMessage({
 										id: 'label.my_donations',
-									})
+								  })
 								: formatMessage({ id: 'label.donations' })
 						}`}
 						{myAccount && user?.donationsCount != 0 && (

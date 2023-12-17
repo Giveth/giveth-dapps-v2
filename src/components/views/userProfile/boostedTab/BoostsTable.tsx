@@ -498,7 +498,7 @@ const CustomTableFooter = styled(TableFooter)<ICustomTableFooter>`
 		props.isExceed
 			? css`
 					color: ${semanticColors.punch[500]};
-				`
+			  `
 			: ''}
 `;
 

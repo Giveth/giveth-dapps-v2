@@ -264,19 +264,19 @@ export class SubgraphQueryBuilder {
 							givpowerConfig,
 							...(networkConfig?.pools || []),
 							...(networkConfig?.regenPools || []),
-						]
+					  ]
 					: [
 							...(networkConfig?.pools || []),
 							...(networkConfig?.regenPools || []),
-						],
+					  ],
 				userAddress,
 			)}
 			${
 				givpowerConfig?.LM_ADDRESS
 					? 'givpowerInfo:' +
-						SubgraphQueryBuilder.getGIVPowersInfoQuery(
+					  SubgraphQueryBuilder.getGIVPowersInfoQuery(
 							givpowerConfig.LM_ADDRESS,
-						)
+					  )
 					: ''
 			},
 		}

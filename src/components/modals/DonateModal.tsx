@@ -271,10 +271,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 							{firstDonationMinted
 								? formatMessage({
 										id: 'label.donation_submitted',
-									})
+								  })
 								: formatMessage({
 										id: 'label.you_are_donating',
-									})}
+								  })}
 						</Lead>
 						<DonateSummary
 							value={amount}
@@ -318,14 +318,14 @@ const DonateModal: FC<IDonateModalProps> = props => {
 									{secondDonationSaved
 										? formatMessage({
 												id: 'label.donation_submitted',
-											})
+										  })
 										: firstDonationSaved
-											? formatMessage({
-													id: 'label.you_are_donating',
-												})
-											: formatMessage({
-													id: 'label.and',
-												})}
+										? formatMessage({
+												id: 'label.you_are_donating',
+										  })
+										: formatMessage({
+												id: 'label.and',
+										  })}
 								</Lead>
 								<DonateSummary
 									value={donationToGivethAmount}
@@ -346,10 +346,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 														EToastType.Success
 															? formatMessage({
 																	id: 'label.successful',
-																})
+															  })
 															: formatMessage({
 																	id: 'label.failed_lowercase',
-																})
+															  })
 													}
 											`}
 										/>

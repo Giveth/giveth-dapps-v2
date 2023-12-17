@@ -84,7 +84,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 				slugToProjectView(
 					projectHref + `?referrer_id=${user?.chainvineId}`,
 				),
-			)
+		  )
 		: fullPath(Routes.AllProjects + `?referrer_id=${user?.chainvineId}`);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
@@ -145,34 +145,34 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 				{error
 					? formatMessage({
 							id: 'label.we_ran_into_an_issue_and_couldnt_generate_your_referral',
-						})
+					  })
 					: notSigned
-						? getMessageWithBoldText(
-								formatMessage({
-									id: 'label.connet_your_wallet_and_sign_in_to_get_your_referral',
-								}),
-							)
-						: chainvineId && projectTitle
-							? getMessageWithBoldText(
-									formatMessage(
-										{
-											id: 'label.heres_your_referral',
-										},
-										{ projectTitle },
-									),
-									projectTitle,
-								)
-							: chainvineId && (
-									<>
-										{formatMessage({
-											id: 'label.heres_your_unique_referral',
-										})}
-										<br />
-										{formatMessage({
-											id: 'label.share_your_unique_link_to_get_started',
-										})}
-									</>
-								)}
+					? getMessageWithBoldText(
+							formatMessage({
+								id: 'label.connet_your_wallet_and_sign_in_to_get_your_referral',
+							}),
+					  )
+					: chainvineId && projectTitle
+					? getMessageWithBoldText(
+							formatMessage(
+								{
+									id: 'label.heres_your_referral',
+								},
+								{ projectTitle },
+							),
+							projectTitle,
+					  )
+					: chainvineId && (
+							<>
+								{formatMessage({
+									id: 'label.heres_your_unique_referral',
+								})}
+								<br />
+								{formatMessage({
+									id: 'label.share_your_unique_link_to_get_started',
+								})}
+							</>
+					  )}
 			</Content>
 			<Container>
 				{error ? (

@@ -210,16 +210,16 @@ const PersonalInfo = () => {
 											canReSendEmail || timer === 0
 												? formatMessage({
 														id: 'label.resend_email',
-													})
+												  })
 												: `${formatMessage({
 														id: 'label.resend_email_in',
-													})} ${addZero(
+												  })} ${addZero(
 														durationToYMDh(timer)
 															.min,
-													)} : ${addZero(
+												  )} : ${addZero(
 														durationToYMDh(timer)
 															.sec,
-													)}`
+												  )}`
 										}
 										size='small'
 										onClick={handleFormSubmit}

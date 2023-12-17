@@ -303,7 +303,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 									? ''
 									: formatMessage({
 											id: 'component.button.load_more',
-										})
+									  })
 							}
 							icon={
 								isLoading && (

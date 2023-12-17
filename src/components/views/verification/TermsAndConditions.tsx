@@ -28,7 +28,7 @@ export default function TermsAndConditions() {
 				? {
 						...prevState,
 						status: EVerificationStatus.DRAFT,
-					}
+				  }
 				: undefined,
 		);
 		setStep(8);
