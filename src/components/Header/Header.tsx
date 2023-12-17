@@ -10,7 +10,6 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useNetwork } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
 	ConnectButton,

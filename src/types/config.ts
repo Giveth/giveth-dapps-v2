@@ -1,6 +1,6 @@
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { ISuperToken } from './superFluid';
 import type { Address, Chain } from 'wagmi';
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 
 export enum StakingPlatform {
 	GIVETH = 'Staking',
