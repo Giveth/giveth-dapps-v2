@@ -7,9 +7,13 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { useSwitchNetwork } from 'wagmi';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import config from '@/configuration';
 
 export const WrongNetworkLayer = () => {
+	const { switchNetwork } = useSwitchNetwork();
+
 	return (
 		<Overlay>
 			<Toast>
@@ -21,7 +25,14 @@ export const WrongNetworkLayer = () => {
 							Optimism
 						</Caption>
 					</Title>
-					<SwitchButton>Switch network</SwitchButton>
+					<SwitchButton
+						onClick={() =>
+							switchNetwork &&
+							switchNetwork(config.OPTIMISM_NETWORK_NUMBER)
+						}
+					>
+						Switch network
+					</SwitchButton>
 				</Header>
 				<Desc>
 					Switch to <b>Optimism</b> to continue donating to this
