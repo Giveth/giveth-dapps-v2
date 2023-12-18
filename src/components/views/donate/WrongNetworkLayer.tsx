@@ -23,6 +23,10 @@ export const WrongNetworkLayer = () => {
 					</Title>
 					<SwitchButton>Switch network</SwitchButton>
 				</Header>
+				<Desc>
+					Switch to <b>Optimism</b> to continue donating to this
+					project.
+				</Desc>
 			</Toast>
 		</Overlay>
 	);
@@ -65,4 +69,10 @@ const SwitchButton = styled(B)`
 	&:hover {
 		color: ${brandColors.pinky[600]};
 	}
+`;
+
+const Desc = styled(Caption)`
+	color: ${neutralColors.gray[700]};
+	margin-top: 8px;
+	text-align: left;
 `;
