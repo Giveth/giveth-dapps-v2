@@ -30,7 +30,7 @@ const DonateToGiveth: FC<IDonateToGiveth> = props => {
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const newPercentage = +e.target.value;
-		if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 10000)
+		if (isNaN(newPercentage) || newPercentage < 0 || newPercentage > 90)
 			return;
 		setDonationToGiveth(newPercentage);
 	};
