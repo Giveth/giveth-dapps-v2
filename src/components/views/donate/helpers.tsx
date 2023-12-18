@@ -3,6 +3,7 @@ import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { IWalletAddress } from '@/apollo/types/types';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import config from '@/configuration';
+import { minDonationAmount } from '@/lib/constants/constants';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -85,9 +86,14 @@ export interface ICreateDonation {
 	setFailedModalType: (type: EDonationFailedType) => void;
 }
 
-export interface ICreateDonationResult {
-	isSaved: boolean;
-	txHash: string;
-}
-
-type TCreateDonation = (i: ICreateDonation) => Promise<ICreateDonationResult>;
+export const calcDonationShare = (
+	totalDonation: number,
+	givethDonationPercent: number,
+) => {
+	let givethDonation = totalDonation * (givethDonationPercent / 100);
+	if (givethDonation < minDonationAmount && givethDonationPercent !== 0) {
+		givethDonation = minDonationAmount;
+	}
+	const projectDonation = totalDonation - givethDonation;
+	return { projectDonation, givethDonation };
+};
