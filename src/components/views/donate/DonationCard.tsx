@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex } from '@/components/styled-components/Flex';
 import { RecurringDonationCard } from './RecurringDonationCard';
+import CryptoDonation from './CryptoDonation';
 
 enum ETabs {
 	ONE_TIME,
@@ -31,6 +32,7 @@ export const DonationCard = () => {
 			</Flex>
 			<TabWrapper>
 				{tab === ETabs.RECURRING && <RecurringDonationCard />}
+				{tab === ETabs.ONE_TIME && <CryptoDonation />}
 			</TabWrapper>
 		</DonationCardWrapper>
 	);
