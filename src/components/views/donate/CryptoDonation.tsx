@@ -20,7 +20,11 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/modals/DonateModal';
-import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
+import {
+	donationDecimals,
+	mediaQueries,
+	minDonationAmount,
+} from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import GeminiModal from './GeminiModal';
 import config from '@/configuration';
@@ -297,7 +301,7 @@ const CryptoDonation: FC = () => {
 
 	const userBalance = truncateToDecimalPlaces(
 		formatUnits(selectedTokenBalance, tokenDecimals),
-		6,
+		donationDecimals,
 	);
 	const setMaxDonation = () => setAmountTyped(userBalance);
 
