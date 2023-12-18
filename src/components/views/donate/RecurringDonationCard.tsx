@@ -7,6 +7,7 @@ import {
 	IconCaretDown16,
 	IconChevronRight16,
 	IconHelpFilled16,
+	IconPlus16,
 	IconRefresh16,
 	P,
 	brandColors,
@@ -267,14 +268,31 @@ export const RecurringDonationCard = () => {
 								<Caption>per Month</Caption>
 							</Flex>
 						</Flex>
-						<Flex justifyContent='space-between'>
-							<Caption>Stream balance runs out in</Caption>
+						<Flex justifyContent='space-between' gap='4px'>
 							<Flex gap='4px'>
-								<Caption medium>
-									{streamRunOutInMonth.toString()}
-								</Caption>
-								<Caption>Months</Caption>
+								<Caption>Stream balance runs out in</Caption>
+								{selectedToken?.token.isSuperToken && (
+									<Flex gap='4px'>
+										<Caption medium>
+											{streamRunOutInMonth.toString()}
+										</Caption>
+										<Caption>Months</Caption>
+									</Flex>
+								)}
 							</Flex>
+							{selectedToken?.token.isSuperToken ? (
+								<TopUpStream gap='4px' alignItems='center'>
+									<Caption>Top-up stream balance</Caption>
+									<IconPlus16 />
+								</TopUpStream>
+							) : (
+								<Flex gap='4px'>
+									<Caption medium>
+										{streamRunOutInMonth.toString()}
+									</Caption>
+									<Caption>Months</Caption>
+								</Flex>
+							)}
 						</Flex>
 						{tokenStream?.length > 0 && (
 							<Flex justifyContent='space-between'>
@@ -530,4 +548,13 @@ const ActionButton = styled(Button)`
 
 const ConfirmToast = styled(InlineToast)`
 	margin: 0px;
+`;
+
+const TopUpStream = styled(Flex)`
+	cursor: pointer;
+	color: ${brandColors.pinky[500]};
+	&:hover {
+		color: ${brandColors.pinky[700]};
+	}
+	transition: color 0.2s ease-in-out;
 `;
