@@ -178,7 +178,12 @@ function MyApp({ Component, pageProps }: AppProps) {
 			}
 			const preferredLocale =
 				storageLocale || ipLocale || navigatorLocale || defaultLocale!;
-			if (router.locale !== preferredLocale) {
+
+			if (
+				preferredLocale !== 'undefined' &&
+				typeof preferredLocale !== 'undefined' &&
+				router.locale !== preferredLocale
+			) {
 				router.push({ pathname, query }, asPath, {
 					locale: preferredLocale,
 				});
