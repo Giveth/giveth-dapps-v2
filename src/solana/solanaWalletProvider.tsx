@@ -21,17 +21,14 @@ interface IProviderProps {
 // Create a context for the provider
 export const SolanaCtx = createContext<any>(null);
 
-const wallets = (() => {
-	const _wallets: BaseMessageSignerWalletAdapter[] = [
-		new PhantomWalletAdapter(),
-		new SolflareWalletAdapter({ network: config.SOLANA_NETWORK }),
-	];
-	if (!isProduction) {
-		_wallets.push(new UnsafeBurnerWalletAdapter());
-	}
-	return _wallets;
-})();
+const wallets: BaseMessageSignerWalletAdapter[] = [
+	new PhantomWalletAdapter(),
+	new SolflareWalletAdapter({ network: config.SOLANA_NETWORK }),
+];
 
+if (!isProduction) {
+	wallets.push(new UnsafeBurnerWalletAdapter());
+}
 // Create the provider component
 export const SolanaProvider: FC<IProviderProps> = ({ children }) => {
 	const endpoint = useMemo(() => clusterApiUrl(config.SOLANA_NETWORK), []);
