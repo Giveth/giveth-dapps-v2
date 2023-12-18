@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
+	B,
 	Caption,
 	IconInfoFilled16,
 	brandColors,
@@ -20,6 +21,7 @@ export const WrongNetworkLayer = () => {
 							Optimism
 						</Caption>
 					</Title>
+					<SwitchButton>Switch network</SwitchButton>
 				</Header>
 			</Toast>
 		</Overlay>
@@ -49,8 +51,18 @@ const Toast = styled.div`
 const Header = styled(Flex)`
 	padding-bottom: 4px;
 	border-bottom: 1px solid ${neutralColors.gray[400]};
+	gap: 16px;
+	flex-wrap: wrap;
 `;
 
 const Title = styled(Flex)`
 	color: ${brandColors.giv[500]};
+`;
+
+const SwitchButton = styled(B)`
+	cursor: pointer;
+	color: ${brandColors.pinky[500]};
+	&:hover {
+		color: ${brandColors.pinky[600]};
+	}
 `;
