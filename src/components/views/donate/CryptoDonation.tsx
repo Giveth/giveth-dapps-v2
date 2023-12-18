@@ -29,7 +29,11 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import { formatBalance, pollEvery, showToastError } from '@/lib/helpers';
+import {
+	pollEvery,
+	showToastError,
+	truncateToDecimalPlaces,
+} from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
@@ -104,7 +108,6 @@ const CryptoDonation: FC = () => {
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();
 	const [acceptedChains, setAcceptedChains] = useState<number[]>();
-	const [maxDonationEnabled, setMaxDonationEnabled] = useState(false);
 	const [donationToGiveth, setDonationToGiveth] = useState(
 		noDonationSplit ? 0 : 5,
 	);
@@ -117,10 +120,8 @@ const CryptoDonation: FC = () => {
 	const tokenSymbol = selectedToken?.symbol;
 	const tokenDecimals = selectedToken?.decimals || 18;
 	const projectIsGivBackEligible = !!verified;
-	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
 	const activeRound = getActiveRound(project.qfRounds);
 	const networkId = chain?.id;
-	const isOnAcceptedChain = networkId && acceptedChains?.includes(networkId);
 
 	const isOnEligibleNetworks =
 		networkId && activeRound?.eligibleNetworks?.includes(networkId);
@@ -146,13 +147,13 @@ const CryptoDonation: FC = () => {
 	}, [networkId, acceptedTokens]);
 
 	useEffect(() => {
-		setMaxDonationEnabled(false);
 		if (isEnabled) pollToken();
 		else {
 			setSelectedToken(undefined);
 		}
 		return () => clearPoll();
 	}, [selectedToken, isEnabled, address, balance]);
+
 	useEffect(() => {
 		client
 			.query({
@@ -280,7 +281,7 @@ const CryptoDonation: FC = () => {
 
 	const handleDonate = () => {
 		if (
-			parseUnits(String(totalDonation), tokenDecimals) >
+			parseUnits(String(amountTyped), tokenDecimals) >
 			selectedTokenBalance
 		) {
 			return setShowInsufficientModal(true);
@@ -294,16 +295,11 @@ const CryptoDonation: FC = () => {
 		}
 	};
 
-	const calcMaxDonation = (givethDonation?: number) => {
-		const s = givethDonation ?? donationToGiveth;
-		const t = (selectedTokenBalance * 100n) / BigInt(100 + s);
-		return Number(formatUnits(t, tokenDecimals));
-	};
-
-	const setMaxDonation = (givethDonation?: number) =>
-		setAmountTyped(calcMaxDonation(givethDonation ?? donationToGiveth));
-
-	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
+	const userBalance = truncateToDecimalPlaces(
+		formatUnits(selectedTokenBalance, tokenDecimals),
+		6,
+	);
+	const setMaxDonation = () => setAmountTyped(userBalance);
 
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
@@ -362,10 +358,10 @@ const CryptoDonation: FC = () => {
 								supportCustomTokens
 									? formatMessage({
 											id: 'component.input.search_or_paste',
-										})
+									  })
 									: formatMessage({
 											id: 'component.input.search_name',
-										})
+									  })
 							}
 							projectVerified={project?.verified!}
 							disabled={!isConnected}
@@ -376,7 +372,6 @@ const CryptoDonation: FC = () => {
 						value={amountTyped}
 						error={amountError}
 						onChange={val => {
-							setMaxDonationEnabled(false);
 							const checkGIV = checkGIVTokenAvailability();
 							if (/^0+(?=\d)/.test(String(val))) return;
 							setAmountError(
@@ -391,14 +386,9 @@ const CryptoDonation: FC = () => {
 					/>
 				</SearchContainer>
 				{selectedToken && (
-					<AvText
-						onClick={() => {
-							setMaxDonationEnabled(true);
-							setMaxDonation();
-						}}
-					>
+					<AvText onClick={setMaxDonation}>
 						{formatMessage({ id: 'label.available' })}:{' '}
-						{formatBalance(userBalance)} {tokenSymbol}
+						{userBalance} {tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
@@ -414,10 +404,7 @@ const CryptoDonation: FC = () => {
 			)}
 			{!noDonationSplit ? (
 				<DonateToGiveth
-					setDonationToGiveth={e => {
-						maxDonationEnabled && setMaxDonation(e);
-						setDonationToGiveth(e);
-					}}
+					setDonationToGiveth={setDonationToGiveth}
 					donationToGiveth={donationToGiveth}
 				/>
 			) : (
@@ -433,7 +420,7 @@ const CryptoDonation: FC = () => {
 			{!noDonationSplit ? (
 				<TotalDonation
 					donationToGiveth={donationToGiveth}
-					donationToProject={amountTyped}
+					totalDonation={amountTyped}
 					projectTitle={projectTitle}
 					tokenSymbol={selectedToken?.symbol}
 					isActive={!donationDisabled}

@@ -14,7 +14,7 @@ import { useAccount, useNetwork } from 'wagmi';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
-import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
 import { IModal } from '@/types/common';
@@ -35,6 +35,7 @@ import { useDonateData } from '@/context/donate.context';
 import { fetchETCPrice, fetchPrice } from '@/services/token';
 import { fetchEthPrice } from '@/features/price/price.services';
 import { useCreateDonation } from '@/hooks/useCreateDonation';
+import { calcDonationShare } from '@/components/views/donate/helpers';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -103,13 +104,12 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		a => a.isRecipient && a.networkId === chainId,
 	)?.address;
 
-	const avgPrice = tokenPrice && tokenPrice * amount;
-	let donationToGivethAmount = (amount * donationToGiveth) / 100;
-	if (donationToGivethAmount < minDonationAmount && isDonatingToGiveth) {
-		donationToGivethAmount = minDonationAmount;
-	}
-	const donationToGivethPrice =
-		tokenPrice && donationToGivethAmount * tokenPrice;
+	const { projectDonation, givethDonation } = calcDonationShare(
+		amount,
+		donationToGiveth,
+	);
+	const projectDonationPrice = tokenPrice && tokenPrice * projectDonation;
+	const givethDonationPrice = tokenPrice && givethDonation * tokenPrice;
 
 	// this function is used to validate the token, if the token is valid, the user can donate, otherwise it will show a error message.
 	const validateTokenThenDonate = async () => {
@@ -150,7 +150,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		const txProps = {
 			anonymous,
 			setDonating,
-			amount,
 			token,
 			setFailedModalType,
 		};
@@ -158,6 +157,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 		createFirstDonation({
 			...txProps,
+			amount: projectDonation,
 			walletAddress: projectWalletAddress,
 			projectId: Number(project.id),
 			chainvineReferred,
@@ -175,7 +175,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 					createSecondDonation({
 						...txProps,
 						walletAddress: givethWalletAddress,
-						amount: donationToGivethAmount,
+						amount: givethDonation,
 						projectId: config.GIVETH_PROJECT_ID,
 						setFailedModalType,
 						symbol: token.symbol,
@@ -271,15 +271,15 @@ const DonateModal: FC<IDonateModalProps> = props => {
 							{firstDonationMinted
 								? formatMessage({
 										id: 'label.donation_submitted',
-									})
+								  })
 								: formatMessage({
 										id: 'label.you_are_donating',
-									})}
+								  })}
 						</Lead>
 						<DonateSummary
-							value={amount}
+							value={projectDonation}
 							tokenSymbol={token.symbol}
-							usdValue={avgPrice}
+							usdValue={projectDonationPrice}
 							title={title}
 						/>
 						{firstDonationMinted && (
@@ -318,19 +318,19 @@ const DonateModal: FC<IDonateModalProps> = props => {
 									{secondDonationSaved
 										? formatMessage({
 												id: 'label.donation_submitted',
-											})
+										  })
 										: firstDonationSaved
-											? formatMessage({
-													id: 'label.you_are_donating',
-												})
-											: formatMessage({
-													id: 'label.and',
-												})}
+										? formatMessage({
+												id: 'label.you_are_donating',
+										  })
+										: formatMessage({
+												id: 'label.and',
+										  })}
 								</Lead>
 								<DonateSummary
-									value={donationToGivethAmount}
+									value={givethDonation}
 									tokenSymbol={token.symbol}
-									usdValue={donationToGivethPrice}
+									usdValue={givethDonationPrice}
 									title='The Giveth DAO'
 								/>
 								{secondTxStatus && (
@@ -346,10 +346,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 														EToastType.Success
 															? formatMessage({
 																	id: 'label.successful',
-																})
+															  })
 															: formatMessage({
 																	id: 'label.failed_lowercase',
-																})
+															  })
 													}
 											`}
 										/>

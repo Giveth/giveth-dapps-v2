@@ -4,12 +4,12 @@ import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatPrice } from '@/lib/helpers';
-import { minDonationAmount } from '@/lib/constants/constants';
+import { calcDonationShare } from '@/components/views/donate/helpers';
 
 interface ITotalDonation {
 	projectTitle?: string;
 	donationToGiveth: number;
-	donationToProject?: number;
+	totalDonation?: number;
 	tokenSymbol?: string;
 	isActive?: boolean;
 }
@@ -22,23 +22,16 @@ const TotalDonation: FC<ITotalDonation> = props => {
 	const {
 		projectTitle,
 		donationToGiveth = 0,
-		donationToProject = 0,
+		totalDonation = 0,
 		tokenSymbol,
 		isActive,
 	} = props;
 
 	const { formatMessage } = useIntl();
 
-	let donationToGivethAmount = (donationToProject * donationToGiveth) / 100;
-	if (
-		donationToGivethAmount < minDonationAmount &&
-		donationToGivethAmount > 0
-	) {
-		donationToGivethAmount = minDonationAmount;
-	}
-
-	const totalDonation = formatPrice(
-		donationToProject + donationToGivethAmount,
+	const { projectDonation, givethDonation } = calcDonationShare(
+		totalDonation,
+		donationToGiveth,
 	);
 
 	return (
@@ -50,7 +43,7 @@ const TotalDonation: FC<ITotalDonation> = props => {
 				</Caption>
 				{isActive && (
 					<Caption>
-						{formatPrice(donationToProject) + ' ' + tokenSymbol}
+						{formatPrice(projectDonation) + ' ' + tokenSymbol}
 					</Caption>
 				)}
 			</TableRow>
@@ -63,9 +56,7 @@ const TotalDonation: FC<ITotalDonation> = props => {
 				</Caption>
 				{isActive && (
 					<Caption>
-						{formatPrice(donationToGivethAmount) +
-							' ' +
-							tokenSymbol}
+						{formatPrice(givethDonation) + ' ' + tokenSymbol}
 					</Caption>
 				)}
 			</TableRow>
