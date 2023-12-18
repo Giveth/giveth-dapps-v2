@@ -68,6 +68,9 @@ export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
 	const [step, setStep] = useState(EDonationSteps.APPROVE);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
+	const disableClose =
+		step === EDonationSteps.DONATING || step === EDonationSteps.APPROVING;
+
 	return (
 		<Modal
 			closeModal={closeModal}
@@ -75,6 +78,8 @@ export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
 			headerTitle={headerTitleGenerator(step)}
 			headerTitlePosition='left'
 			headerIcon={<IconDonation32 />}
+			hiddenClose={disableClose}
+			doNotCloseOnClickOutside={disableClose}
 		>
 			<RecurringDonationInnerModal
 				setShowModal={setShowModal}
