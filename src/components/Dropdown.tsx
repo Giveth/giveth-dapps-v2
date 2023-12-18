@@ -64,17 +64,17 @@ export const Dropdown: FC<IDropdownProps> = props => {
 						'px',
 					right: stickToRight
 						? document.documentElement.clientWidth -
-						  containerRef.current.getBoundingClientRect().right +
-						  window.scrollX +
-						  'px'
+							containerRef.current.getBoundingClientRect().right +
+							window.scrollX +
+							'px'
 						: 'unset',
 					left: stickToRight
 						? 'unset'
 						: containerRef.current.getBoundingClientRect().left +
-						  window.scrollX +
-						  'px',
+							window.scrollX +
+							'px',
 					zIndex: zIndex.DROPDOWN,
-			  }
+				}
 			: {};
 
 	return (

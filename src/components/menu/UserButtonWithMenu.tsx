@@ -61,7 +61,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 		? {
 				onMouseEnter: () => openMenu(),
 				onMouseLeave: () => closeMenu(),
-		  }
+			}
 		: { onClick: openSidebar };
 
 	return (

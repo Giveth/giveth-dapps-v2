@@ -98,12 +98,12 @@ function NotificationView() {
 			? (query = {
 					limit,
 					offset: pageNumber * limit,
-			  })
+				})
 			: (query = {
 					category: tab,
 					limit,
 					offset: pageNumber * limit,
-			  });
+				});
 		fetchNotificationsData(query, { signal })
 			.then(res => {
 				if (res?.notifications) {
@@ -259,7 +259,7 @@ function NotificationView() {
 									markOneNotificationRead
 								}
 							/>
-					  ))
+						))
 					: !loading && (
 							<FlexCenter>
 								<Lead>
@@ -268,7 +268,7 @@ function NotificationView() {
 									})}
 								</Lead>
 							</FlexCenter>
-					  )}
+						)}
 			</div>
 			<FlexCenter>
 				{showLoadMore && !loading && (

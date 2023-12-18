@@ -1,6 +1,6 @@
 {
 	"name": "givethdapp",
-	"version": "2.20.4",
+	"version": "2.20.8",
 	"private": true,
 	"scripts": {
 		"build": "next build",
@@ -59,15 +59,15 @@
 		"react-places-autocomplete": "^7.3.0",
 		"react-quill": "^2.0.0",
 		"react-redux": "^8.0.1",
-		"react-select": "^5.2.1",
+		"react-select": "^5.8.0",
 		"react-share": "^4.4.1",
 		"sharp": "^0.30.5",
 		"siwe": "^2.1.4",
 		"styled-components": "^5.3.6",
 		"swiper": "^10.2.0",
 		"unsplash-js": "^7.0.15",
-		"viem": "^1.16.6",
-		"wagmi": "^1.4.5"
+		"viem": "^1.20.0",
+		"wagmi": "^1.4.12"
 	},
 	"devDependencies": {
 		"@next/bundle-analyzer": "^12.1.4",

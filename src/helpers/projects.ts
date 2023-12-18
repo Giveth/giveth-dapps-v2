@@ -16,4 +16,6 @@ export const sortMap = {
 	[EProjectsSortBy.GIVPOWER.toLowerCase()]: EProjectsSortBy.GIVPOWER,
 	[EProjectsSortBy.RECENTLY_UPDATED.toLowerCase()]:
 		EProjectsSortBy.RECENTLY_UPDATED,
+	[EProjectsSortBy.ActiveQfRoundRaisedFunds.toLowerCase()]:
+		EProjectsSortBy.ActiveQfRoundRaisedFunds,
 };
