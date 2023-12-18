@@ -35,7 +35,7 @@
 		"base58": "^2.0.1",
 		"bignumber.js": "^9.1.2",
 		"deepmerge": "^4.2.2",
-		"ethers": "5.7",
+		"ethers": "^6.7.1",
 		"framer-motion": "^10.12.12",
 		"graphql": "^16.8.0",
 		"lodash.isequal": "^4.5.0",

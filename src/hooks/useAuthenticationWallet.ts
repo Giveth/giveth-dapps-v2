@@ -3,7 +3,7 @@ import { Chain, useAccount, useDisconnect, useNetwork } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
 import { useEffect, useState, useMemo } from 'react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { utils } from 'ethers';
+import { encodeBase58 } from 'ethers';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useRouter } from 'next/router';
 import { chainNameById } from '@/lib/network';
@@ -64,7 +64,7 @@ export const useAuthenticationWallet = () => {
 		if (!signature) {
 			return undefined;
 		}
-		return utils.base58.encode(signature);
+		return encodeBase58(signature);
 	};
 
 	useEffect(() => {
