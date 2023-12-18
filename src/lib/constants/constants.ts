@@ -85,6 +85,7 @@ export const zIndex = {
 	POPOVER: 1070,
 	TOOLTIP: 1080,
 	NAVBAR: 1100,
+	WEB3MODAL: 1500,
 };
 
 export const searchSuggestions = [
@@ -122,4 +123,7 @@ export const MaxUint256 = BigInt(
 export const AddressZero = '0x0000000000000000000000000000000000000000';
 
 export const WeiPerEther = 1e18;
+
 export const PROFILE_PHOTO_PLACEHOLDER = '/images/placeholders/profile.svg';
+
+export const QF_MATCHING_CAP_PERCENTAGE = 18;

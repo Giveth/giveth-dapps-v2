@@ -21,11 +21,11 @@ export const RegenStreamSection: FC<IRegenStreamSectionProps> = ({
 			? [
 					...config.GNOSIS_CONFIG.regenStreams,
 					...config.MAINNET_CONFIG.regenStreams,
-			  ]
+				]
 			: [
 					...config.MAINNET_CONFIG.regenStreams,
 					...config.GNOSIS_CONFIG.regenStreams,
-			  ];
+				];
 	const regenStreams = showArchivedPools
 		? _regenStreams.filter(regenStream => regenStream.archived)
 		: _regenStreams.filter(regenStream => !regenStream.archived);

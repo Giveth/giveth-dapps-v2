@@ -1,10 +1,5 @@
 import { captureException } from '@sentry/nextjs';
-import {
-	getContract,
-	getWalletClient,
-	signTypedData,
-	waitForTransaction,
-} from 'wagmi/actions';
+import { getContract, getWalletClient, signTypedData } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
 import { WriteContractReturnType, hexToSignature } from 'viem';
 import BigNumber from 'bignumber.js';
@@ -20,6 +15,7 @@ import {
 import config from '../configuration';
 import { APR } from '@/types/poolInfo';
 import { UnipoolHelper } from '@/lib/contractHelper/UnipoolHelper';
+import { waitForTransaction } from '@/lib/transaction';
 
 import LM_Json from '../artifacts/UnipoolTokenDistributor.json';
 import GP_Json from '../artifacts/GivPower.json';
@@ -432,6 +428,8 @@ const permitTokens = async (
 			signature.r,
 			signature.s,
 		],
+		// @ts-ignore -- needed for safe txs
+		value: 0n,
 	});
 };
 
@@ -441,6 +439,7 @@ export const approveERC20tokenTransfer = async (
 	spenderAddress: Address,
 	tokenAddress: Address,
 	chainId: number,
+	isSafeEnv: boolean,
 ): Promise<boolean> => {
 	if (amount === 0n) return false;
 
@@ -460,7 +459,6 @@ export const approveERC20tokenTransfer = async (
 
 	try {
 		const walletClient = await getWalletClient({ chainId });
-
 		if (allowance > 0n) {
 			console.log('allowance is bigger than zero');
 			const tx = await walletClient?.writeContract({
@@ -468,9 +466,11 @@ export const approveERC20tokenTransfer = async (
 				abi: erc20ABI,
 				functionName: 'approve',
 				args: [spenderAddress, 0n],
+				// @ts-ignore -- needed for safe txs
+				value: 0n,
 			});
 			if (tx) {
-				await waitForTransaction({ hash: tx });
+				await waitForTransaction(tx, isSafeEnv);
 			} else {
 				return false;
 			}
@@ -481,10 +481,12 @@ export const approveERC20tokenTransfer = async (
 			abi: erc20ABI,
 			functionName: 'approve',
 			args: [spenderAddress, amount],
+			// @ts-ignore -- needed for safe txs
+			value: 0n,
 		});
 
 		if (txResponse) {
-			await waitForTransaction({ hash: txResponse });
+			await waitForTransaction(txResponse, isSafeEnv);
 			return true;
 		} else {
 			return false;
@@ -513,6 +515,8 @@ export const wrapToken = async (
 			abi: TOKEN_MANAGER_ABI,
 			functionName: 'wrap',
 			args: [amount],
+			// @ts-ignore -- needed for safe txs
+			value: 0n,
 		});
 	} catch (error) {
 		console.log('Error on wrapping token:', error);
@@ -542,6 +546,8 @@ export const stakeGIV = async (
 			abi: UNIPOOL_GIVPOWER_ABI,
 			functionName: 'stake',
 			args: [amount],
+			// @ts-ignore -- needed for safe txs
+			value: 0n,
 		});
 	} catch (error) {
 		console.log('Error on stake token:', error);
@@ -571,6 +577,8 @@ export const unwrapToken = async (
 			abi: TOKEN_MANAGER_ABI,
 			functionName: 'unwrap',
 			args: [amount],
+			// @ts-ignore -- needed for safe txs
+			value: 0n,
 		});
 	} catch (error) {
 		console.log('Error on unwrapping token:', error);
@@ -611,6 +619,8 @@ export const stakeTokens = async (
 				abi: LM_ABI,
 				functionName: 'stakeWithPermit',
 				args: [amount, rawPermitCall],
+				// @ts-ignore -- needed for safe txs
+				value: 0n,
 			});
 		} else {
 			return await walletClient.writeContract({
@@ -618,6 +628,8 @@ export const stakeTokens = async (
 				abi: LM_ABI,
 				functionName: 'stake',
 				args: [amount],
+				// @ts-ignore -- needed for safe txs
+				value: 0n,
 			});
 		}
 	} catch (e) {
@@ -646,6 +658,8 @@ export const harvestTokens = async (
 			address: lmAddress,
 			abi: LM_ABI,
 			functionName: 'getReward',
+			// @ts-ignore -- needed for safe txs
+			value: 0n,
 		});
 	} catch (error) {
 		console.error('Error on harvesting:', Error);
@@ -675,6 +689,8 @@ export const withdrawTokens = async (
 			abi: LM_ABI,
 			functionName: 'withdraw',
 			args: [amount],
+			// @ts-ignore -- needed for safe txs
+			value: 0n,
 		});
 	} catch (e) {
 		console.error('Error on withdrawing:', e);
@@ -704,6 +720,8 @@ export const lockToken = async (
 			abi: GP_ABI,
 			functionName: 'lock',
 			args: [amount, round],
+			// @ts-ignore -- needed for safe txs
+			value: 0n,
 		});
 	} catch (error) {
 		console.log('Error on locking token:', error);

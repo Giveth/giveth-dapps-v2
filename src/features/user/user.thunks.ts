@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { connect, getWalletClient } from '@wagmi/core';
 import { backendGQLRequest } from '@/helpers/requests';
 import {
 	GET_USER_BY_ADDRESS,
@@ -16,7 +17,16 @@ import { postRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import StorageLabel from '@/lib/localStorage';
 import { getTokens } from '@/helpers/user';
-import { signWithEvm } from '@/lib/authentication';
+import { createSiweMessage, signWithEvm } from '@/lib/authentication';
+
+const saveTokenToLocalstorage = (address: string, token: string) => {
+	const _address = address.toLowerCase();
+	localStorage.setItem(StorageLabel.USER, _address);
+	localStorage.setItem(StorageLabel.TOKEN, token);
+	const tokens = getTokens();
+	tokens[_address] = token;
+	localStorage.setItem(StorageLabel.TOKENS, JSON.stringify(tokens));
+};
 
 export const fetchUserByAddress = createAsyncThunk(
 	'user/fetchUser',
@@ -31,22 +41,44 @@ export const signToGetToken = createAsyncThunk(
 		signToGetToken: ISignToGetToken | ISolanaSignToGetToken,
 		{ getState, dispatch },
 	) => {
-		const { address, chainId } = signToGetToken;
+		const {
+			address,
+			safeAddress,
+			chainId,
+			connector,
+			connectors,
+			isGSafeConnector,
+			expiration,
+		} = signToGetToken;
 
 		const solanaSignToGetToken = signToGetToken as ISolanaSignToGetToken;
 		const isSolana = !!solanaSignToGetToken.solanaSignedMessage;
 
-		const { signature, nonce, message } = isSolana
-			? {
-					signature: solanaSignToGetToken.solanaSignedMessage,
-					nonce: solanaSignToGetToken.nonce,
-					message: solanaSignToGetToken.message,
-			  }
-			: (await signWithEvm(address, chainId!)) || {};
+		const isSAFE = isGSafeConnector;
+		let siweMessage,
+			safeMessage: any = null;
+		if (isSAFE) {
+			siweMessage = (await signWithEvm(address, chainId!)) || {};
+			safeMessage = await createSiweMessage(
+				address!,
+				chainId!,
+				'Login into Giveth services',
+			);
+		} else {
+			siweMessage = isSolana
+				? {
+						signature: solanaSignToGetToken.solanaSignedMessage,
+						nonce: solanaSignToGetToken.nonce,
+						message: solanaSignToGetToken.message,
+					}
+				: (await signWithEvm(address, chainId!)) || {};
+		}
 
+		const { signature, nonce, message } = siweMessage;
 		console.log('signature', signature);
 		console.log('nonce', nonce);
 		console.log('message', message);
+
 		try {
 			if (signature) {
 				const state = getState() as RootState;
@@ -73,19 +105,98 @@ export const signToGetToken = createAsyncThunk(
 					true,
 					data,
 				);
-
-				const _address = address.toLowerCase();
-				localStorage.setItem(StorageLabel.USER, _address);
-				localStorage.setItem(StorageLabel.TOKEN, token.jwt);
-				const tokens = getTokens();
-				tokens[_address] = token.jwt;
-				localStorage.setItem(
-					StorageLabel.TOKENS,
-					JSON.stringify(tokens),
-				);
-				// When token is fetched, user should be fetched again to get email address
+				saveTokenToLocalstorage(address!, token.jwt);
 				await dispatch(fetchUserByAddress(address));
-				return token.jwt;
+
+				const currentUserToken = token.jwt;
+				if (isSAFE && !!safeMessage) {
+					let activeSafeToken,
+						sessionPending = false;
+
+					try {
+						const sessionCheck = await postRequest(
+							`${config.MICROSERVICES.authentication}/multisigAuthentication`,
+							false,
+							{
+								safeMessageTimestamp: null,
+								safeAddress,
+								network: chainId,
+								jwt: currentUserToken,
+							},
+						);
+						if (sessionCheck?.status === 'successful') {
+							activeSafeToken = sessionCheck?.jwt;
+						} else if (sessionCheck?.status === 'pending') {
+							sessionPending = true;
+						}
+					} catch (error) {
+						console.log({ error });
+					}
+					console.log({
+						activeSafeToken,
+						sessionPending,
+						connectors,
+					});
+
+					if (sessionPending)
+						return Promise.reject('Gnosis Safe Session pending');
+					if (!sessionPending && !!activeSafeToken) {
+						// returns active token - SUCCESS
+						saveTokenToLocalstorage(safeAddress!, activeSafeToken);
+						return activeSafeToken;
+					}
+
+					try {
+						// Connect to gnosis safe
+						await connect({
+							chainId,
+							connector: connectors[3],
+						});
+					} catch (error) {}
+
+					const gnosisClient = await getWalletClient({ chainId });
+					let safeSignature;
+					const safeMessageTimestamp = new Date().getTime();
+					try {
+						safeSignature = await gnosisClient?.signMessage({
+							message: safeMessage.message,
+						});
+					} catch (error) {
+						// user will close the transaction but it will create anyway
+						console.log({ error });
+					}
+					// calls the backend to create gnosis safe token
+					console.log({
+						safeMessageTimestamp,
+						safeAddress,
+						network: chainId,
+						jwt: currentUserToken,
+						approvalExpirationDays: expiration || 8,
+					});
+					const safeToken = await postRequest(
+						`${config.MICROSERVICES.authentication}/multisigAuthentication`,
+						false,
+						{
+							safeMessageTimestamp,
+							safeAddress,
+							network: chainId,
+							jwt: currentUserToken,
+							approvalExpirationDays: expiration || 8, // defaults to 1 week
+						},
+					);
+					console.log({ safeToken });
+
+					if (safeToken?.jwt) {
+						//save to localstorage if token is created
+						saveTokenToLocalstorage(safeAddress!, safeToken?.jwt);
+						await dispatch(fetchUserByAddress(safeAddress!));
+						return currentUserToken;
+					} else {
+						return Promise.reject('Signing pending');
+					}
+				} else {
+					return currentUserToken;
+				}
 			} else {
 				return Promise.reject('Signing failed');
 			}

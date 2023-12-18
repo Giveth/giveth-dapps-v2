@@ -10,7 +10,6 @@ import {
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useAccount, useNetwork } from 'wagmi';
-import { waitForTransaction } from 'wagmi/actions';
 import { Modal } from './Modal';
 import { CancelButton, HarvestButton, HelpRow } from './HarvestAll.sc';
 import { Flex } from '../styled-components/Flex';
@@ -28,8 +27,10 @@ import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { waitForTransaction } from '@/lib/transaction';
 
 interface IV3StakeModalProps extends IModal {
 	poolStakingConfig: PoolStakingConfig;
@@ -49,6 +50,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	currentIncentive,
 	setShowModal,
 }) => {
+	const isSafeEnv = useIsSafeEnvironment();
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph.currentValues),
 	);
@@ -83,20 +85,18 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 					chainId,
 					currentIncentive,
 					setStakeStatus,
-			  )
+				)
 			: await transfer(
 					tokenId,
 					address,
 					chainId,
 					currentIncentive,
 					setStakeStatus,
-			  );
+				);
 		try {
 			if (tx) {
 				setTxStatus(tx);
-				const { status } = await waitForTransaction({
-					hash: tx,
-				});
+				const { status } = await waitForTransaction(tx, isSafeEnv);
 				if (status) {
 					setStakeStatus(StakeState.CONFIRMED);
 				} else {
