@@ -111,7 +111,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const projectDonationPrice = tokenPrice && tokenPrice * projectDonation;
 	const givethDonationPrice = tokenPrice && givethDonation * tokenPrice;
 
-	// this function is used to validate the token, if the token is valid, the user can donate, otherwise it will show a error message.
+	// this function is used to validate the token, if the token is valid, the user can donate, otherwise it will show an error message.
 	const validateTokenThenDonate = async () => {
 		setDonating(true);
 		client
@@ -271,10 +271,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 							{firstDonationMinted
 								? formatMessage({
 										id: 'label.donation_submitted',
-								  })
+									})
 								: formatMessage({
 										id: 'label.you_are_donating',
-								  })}
+									})}
 						</Lead>
 						<DonateSummary
 							value={projectDonation}
@@ -318,14 +318,14 @@ const DonateModal: FC<IDonateModalProps> = props => {
 									{secondDonationSaved
 										? formatMessage({
 												id: 'label.donation_submitted',
-										  })
+											})
 										: firstDonationSaved
-										? formatMessage({
-												id: 'label.you_are_donating',
-										  })
-										: formatMessage({
-												id: 'label.and',
-										  })}
+											? formatMessage({
+													id: 'label.you_are_donating',
+												})
+											: formatMessage({
+													id: 'label.and',
+												})}
 								</Lead>
 								<DonateSummary
 									value={givethDonation}
@@ -346,10 +346,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 														EToastType.Success
 															? formatMessage({
 																	id: 'label.successful',
-															  })
+																})
 															: formatMessage({
 																	id: 'label.failed_lowercase',
-															  })
+																})
 													}
 											`}
 										/>
