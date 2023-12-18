@@ -85,6 +85,7 @@ export const zIndex = {
 	POPOVER: 1070,
 	TOOLTIP: 1080,
 	NAVBAR: 1100,
+	WEB3MODAL: 1500,
 };
 
 export const searchSuggestions = [

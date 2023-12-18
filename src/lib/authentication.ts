@@ -14,7 +14,7 @@ export const fetchNonce = async (): Promise<string> => {
 	return nonce;
 };
 
-const createSiweMessage = async (
+export const createSiweMessage = async (
 	address: string,
 	chainId: number,
 	statement: string,

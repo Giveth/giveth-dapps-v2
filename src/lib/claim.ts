@@ -84,6 +84,8 @@ export const claimAirDrop = async (
 			functionName: 'claim',
 			abi: MERKLE_ABI,
 			args: [claimData.index, claimData.amount, claimData.proof],
+			// @ts-ignore -- needed for safe txs
+			value: 0n,
 		});
 	} catch (error) {
 		console.error('Error on claiming GIVdrop:', error);
@@ -109,6 +111,7 @@ export const claimReward = async (
 			address: tokenDistroAddress,
 			functionName: 'claim',
 			abi: TOKEN_DISTRO_ABI,
+			value: 0n,
 		});
 	} catch (error) {
 		console.error('Error on claiming token distro reward:', error);

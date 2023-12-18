@@ -45,6 +45,7 @@ const YourApp = () => {
 								?.LM_ADDRESS!,
 							config.NETWORKS_CONFIG[chainId].GIV_TOKEN_ADDRESS!,
 							chainId,
+							false,
 						);
 					}}
 				>

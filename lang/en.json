@@ -1412,5 +1412,6 @@
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Water & Sanitation"
+	"water-and-sanitation": "Water & Sanitation",
+	"label.unfortunately_passport_is_incompatible": "Unfortunately Passport is not compatible with Multisigs, sign in with your regular wallet to verify your passport & make QF Donations."
 }
