@@ -16,6 +16,7 @@ import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
 import { zIndex } from '@/lib/constants/constants';
 import { EProjectsFilter } from '@/apollo/types/types';
+import config from '@/configuration';
 
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
@@ -32,7 +33,6 @@ const projectsFeatures = [
 const fundsFilter = [
 	{
 		label: 'Mainnet',
-
 		value: EProjectsFilter.ACCEPT_FUND_ON_MAINNET,
 	},
 	{
@@ -55,10 +55,14 @@ const fundsFilter = [
 		label: 'Ethereum Classic',
 		value: EProjectsFilter.ACCEPT_FUND_ON_ETC,
 	},
-	{
-		label: 'Solana',
-		value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
-	},
+	...(config.ENABLE_SOLANA //Check feature flag
+		? [
+				{
+					label: 'Solana',
+					value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
+				},
+		  ]
+		: []),
 ];
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
