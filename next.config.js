@@ -62,6 +62,11 @@ const moduleExports = withBundleAnalyzer({
 				destination: '/qf/all',
 				permanent: true,
 			},
+			{
+				source: '/QuadraticForce',
+				destination: '/assets/GivethQF.Marketing.pdf',
+				permanent: false,
+			},
 		];
 	},
 	webpack: (config, { isServer, dev }) => {
@@ -75,9 +80,24 @@ const moduleExports = withBundleAnalyzer({
 		defaultLocale,
 		localeDetection: false,
 	},
-	env: {
-		locales,
-		defaultLocale,
+	headers: () => {
+		return [
+			{
+				// Adding CORS headers for /manifest.json
+				source: '/manifest.json',
+				headers: [
+					{
+						key: 'Access-Control-Allow-Origin',
+						value: 'https://app.safe.global',
+					},
+					{ key: 'Access-Control-Allow-Methods', value: 'GET' },
+					{
+						key: 'Access-Control-Allow-Headers',
+						value: 'X-Requested-With, content-type, Authorization',
+					},
+				],
+			},
+		];
 	},
 });
 

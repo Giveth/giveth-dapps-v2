@@ -16,8 +16,8 @@ export const Button = styled.button<IButtonProps>`
 		return props.neutral
 			? '#F7F7F9'
 			: props.secondary
-			? '#E1458D'
-			: '#5326EC';
+				? '#E1458D'
+				: '#5326EC';
 	}};
 	height: 64px;
 	border-width: 2px;

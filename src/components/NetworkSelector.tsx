@@ -11,6 +11,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import Select, {
+	type CSSObjectWithLabel,
 	ControlProps,
 	DropdownIndicatorProps,
 	OptionProps,
@@ -107,57 +108,63 @@ const Control: ComponentType<ControlProps<ISelected>> = ({
 };
 
 const selectStyles: StylesConfig = {
-	container: styles => ({
-		...styles,
-		backgroundColor: brandColors.giv[600],
-		color: neutralColors.gray[100],
-		zIndex: 3,
-		border: 'none',
-		borderRadius: '32px',
-		minWidth: '220px',
-		'&:hover': {
-			borderColor: 'transparent',
-		},
-	}),
-	control: styles => ({
-		...styles,
-		backgroundColor: brandColors.giv[600],
-		color: neutralColors.gray[100],
-		padding: '12px 16px',
-		fontWeight: 500,
-		border: 'none',
-		boxShadow: 'none',
-		borderRadius: '0 24px 24px 0 ',
-		cursor: 'pointer',
-	}),
-	indicatorSeparator: styles => ({
-		...styles,
-		display: 'none',
-	}),
-	placeholder: styles => ({
-		...styles,
-	}),
-	singleValue: styles => ({
-		...styles,
-		color: neutralColors.gray[100],
-	}),
-	menu: styles => ({
-		...styles,
-		marginTop: '8px',
-		borderRadius: '8px',
-		padding: '8px',
-		backgroundColor: brandColors.giv[600],
-		boxShadow: Shadow.Dark[500],
-	}),
-	option: (styles, { isFocused, isSelected, isDisabled }) => ({
+	container: (baseStyles, props) =>
+		({
+			...baseStyles,
+			backgroundColor: brandColors.giv[600],
+			color: neutralColors.gray[100],
+			zIndex: 3,
+			border: 'none',
+			borderRadius: '32px',
+			minWidth: '220px',
+			'&:hover': {
+				borderColor: 'transparent',
+			},
+		}) as CSSObjectWithLabel,
+	control: (baseStyles, props) =>
+		({
+			...baseStyles,
+			backgroundColor: brandColors.giv[600],
+			color: neutralColors.gray[100],
+			padding: '12px 16px',
+			fontWeight: 500,
+			border: 'none',
+			boxShadow: 'none',
+			borderRadius: '0 24px 24px 0 ',
+			cursor: 'pointer',
+		}) as CSSObjectWithLabel,
+	indicatorSeparator: (baseStyles, props) =>
+		({
+			...baseStyles,
+			display: 'none',
+		}) as CSSObjectWithLabel,
+	placeholder: baseStyles =>
+		({
+			...baseStyles,
+		}) as CSSObjectWithLabel,
+	singleValue: (baseStyles, props) =>
+		({
+			...baseStyles,
+			color: neutralColors.gray[100],
+		}) as CSSObjectWithLabel,
+	menu: (baseStyles, props) =>
+		({
+			...baseStyles,
+			marginTop: '8px',
+			borderRadius: '8px',
+			padding: '8px',
+			backgroundColor: brandColors.giv[600],
+			boxShadow: Shadow.Dark[500],
+		}) as CSSObjectWithLabel,
+	option: (baseStyles, { isFocused, isSelected, isDisabled }) => ({
 		padding: '8px 16px',
 		margin: '8px',
 		borderRadius: '8px',
 		backgroundColor: isSelected
 			? brandColors.giv[700]
 			: isFocused
-			? brandColors.giv[500]
-			: brandColors.giv[600],
+				? brandColors.giv[500]
+				: brandColors.giv[600],
 		color: neutralColors.gray[100],
 		opacity: isDisabled ? 0.5 : 1,
 		cursor: isDisabled ? 'default' : 'pointer',

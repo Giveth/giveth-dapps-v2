@@ -15,6 +15,7 @@ import { erc20ABI } from 'wagmi';
 import { Chain, parseEther, parseUnits } from 'viem';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
+import { getRequest } from '@/helpers/requests';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
 import config from '@/configuration';
@@ -302,6 +303,8 @@ async function handleErc20Transfer(
 		abi: erc20ABI,
 		functionName: 'transfer',
 		args: [params.to, value],
+		// @ts-ignore -- needed for safe txs
+		value: 0n,
 	});
 	console.log('Write', write);
 	console.log('ERC20 transfer result', { hash: write.hash });
@@ -317,6 +320,7 @@ async function handleEthTransfer(
 	const { hash } = await wagmiSendTransaction({
 		to: params.to,
 		value: value,
+		data: '0x',
 	});
 
 	console.log('ETH transfer result', { hash });
@@ -519,6 +523,25 @@ export const ArrayFrom0ToN = (n: number) => {
 		b = 0;
 	while (b < n) a[b] = b++;
 	return a;
+};
+
+export const checkMultisigSession = async ({ safeAddress, chainId }: any) => {
+	try {
+		let status = 'not found';
+		const sessionCheck = await getRequest(
+			`${config.MICROSERVICES.authentication}/multisigAuthentication`,
+			false,
+			{
+				safeAddress,
+				network: chainId,
+			},
+		);
+		status = sessionCheck?.status;
+
+		return { status };
+	} catch (error) {
+		return { status: 'not found' };
+	}
 };
 
 export const getUserIPInfo = async () => {

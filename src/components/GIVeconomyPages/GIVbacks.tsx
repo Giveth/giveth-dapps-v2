@@ -106,7 +106,7 @@ export const TabGIVbacksTop = () => {
 									givbackLiquidPart === 0n
 										? formatMessage({
 												id: 'label.why_dont_i_have_givbacks',
-										  })
+											})
 										: undefined
 								}
 								subButtonCb={() => setShowGivBackExplain(true)}
@@ -243,7 +243,7 @@ export const TabGIVbacksBottom = () => {
 													? formatDate(
 															roundStarTime,
 															locale,
-													  )
+														)
 													: '--'}
 											</NoWrap>
 										</P>
@@ -266,7 +266,7 @@ export const TabGIVbacksBottom = () => {
 													? formatDate(
 															roundEndTime,
 															locale,
-													  )
+														)
 													: '--'}
 											</NoWrap>
 										</P>

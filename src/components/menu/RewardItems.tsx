@@ -35,6 +35,7 @@ import { useItemsContext } from '@/context/Items.context';
 import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
 import { chainNameById } from '@/lib/network';
 import { getNetworkConfig } from '@/helpers/givpower';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;
@@ -65,6 +66,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	const networkName = chainNameById(chainId);
 	const { close } = useItemsContext();
 	const _config = getNetworkConfig(config.GNOSIS_NETWORK_NUMBER, chainId);
+	const isSafeEnv = useIsSafeEnvironment();
 
 	useEffect(() => {
 		const _allocatedTokens = BigInt(tokenDistroBalance.allocatedTokens);
@@ -120,14 +122,16 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				</ItemTitle>
 				<ItemRow>
 					<Caption medium>{networkName}</Caption>
-					<ItemAction
-						size='Small'
-						onClick={() =>
-							dispatch(setShowSwitchNetworkModal(true))
-						}
-					>
-						{formatMessage({ id: 'label.switch_network' })}
-					</ItemAction>
+					{!isSafeEnv && (
+						<ItemAction
+							size='Small'
+							onClick={() =>
+								dispatch(setShowSwitchNetworkModal(true))
+							}
+						>
+							{formatMessage({ id: 'label.switch_network' })}
+						</ItemAction>
+					)}
 				</ItemRow>
 			</Item>
 			<Link href={Routes.GIVstream_FlowRate}>
