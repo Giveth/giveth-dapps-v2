@@ -58,11 +58,11 @@ const fundsFilter = [
 ];
 
 if (config.ENABLE_SOLANA) {
-    fundsFilter.push({
-					label: 'Solana',
-					value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
-				},);
-
+	fundsFilter.push({
+		label: 'Solana',
+		value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
+	});
+}
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {
