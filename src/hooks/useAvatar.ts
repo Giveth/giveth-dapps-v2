@@ -18,7 +18,7 @@ export const useAvatar = () => {
 	const [loading, setLoading] = useState(false);
 	const [updateUser] = useMutation(UPDATE_USER);
 	const dispatch = useAppDispatch();
-	const { walletAddress } = useAuthenticationWallet();
+	const { walletAddress: address } = useAuthenticationWallet();
 
 	const handleAvatar = (nftUrl?: string, url?: string) => {
 		if (activeTab === 1) {
@@ -41,9 +41,9 @@ export const useAvatar = () => {
 				},
 			});
 			if (response.updateUser) {
-				if (walletAddress) {
-					dispatch(fetchUserByAddress(walletAddress));
-					dispatch(updateUserFromList({ address: walletAddress }));
+				if (address) {
+					dispatch(fetchUserByAddress(address));
+					dispatch(updateUserFromList({ address }));
 				}
 				gToast('Profile Photo updated.', {
 					type: ToastType.SUCCESS,
