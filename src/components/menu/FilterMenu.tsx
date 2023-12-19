@@ -55,15 +55,12 @@ const fundsFilter = [
 		label: 'Ethereum Classic',
 		value: EProjectsFilter.ACCEPT_FUND_ON_ETC,
 	},
-	...(config.ENABLE_SOLANA //Check feature flag
-		? [
-				{
+if (config.ENABLE_SOLANA) {
+    filters.push({
 					label: 'Solana',
 					value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
-				},
-		  ]
-		: []),
-];
+				},);
+}
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {
