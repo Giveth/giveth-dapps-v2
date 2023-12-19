@@ -8,7 +8,6 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { waitForTransaction } from '@wagmi/core';
 import { useNetwork } from 'wagmi';
 import { Modal } from '../Modal';
 import { Flex } from '../../styled-components/Flex';
@@ -20,6 +19,7 @@ import {
 	ErrorInnerModal,
 	SubmittedInnerModal,
 } from '../ConfirmSubmit';
+import { waitForTransaction } from '@/lib/transaction';
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
 import {
@@ -34,6 +34,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
 interface IUnStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
@@ -65,6 +66,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 	regenStreamConfig,
 	setShowModal,
 }) => {
+	const isSafeEnv = useIsSafeEnvironment();
 	const [txHash, setTxHash] = useState('');
 	const [amount, setAmount] = useState(0n);
 	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
@@ -106,9 +108,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 		}
 		setTxHash(tx);
 		setUnstakeState(StakeState.SUBMITTING);
-		const { status } = await waitForTransaction({
-			hash: tx,
-		});
+		const { status } = await waitForTransaction(tx, isSafeEnv);
 		if (status) {
 			setUnstakeState(StakeState.CONFIRMED);
 		} else {

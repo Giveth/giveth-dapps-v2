@@ -35,7 +35,7 @@ const SearchPlaces: FC<IMyProps> = ({ setLocation, address, onSelect }) => {
 								? formatMessage({ id: 'label.global_impact' })
 								: formatMessage({
 										id: 'label.search_places...',
-								  }),
+									}),
 						})}
 						disabled={isGlobal}
 					/>

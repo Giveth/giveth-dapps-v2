@@ -117,6 +117,11 @@ export const PassportBannerData: IData = {
 		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 	},
+	[EPassportState.NOT_AVAILABLE_FOR_GSAFE]: {
+		content: 'label.unfortunately_passport_is_incompatible',
+		bg: EPBGState.ERROR,
+		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
+	},
 };
 
 export const PassportBanner = () => {

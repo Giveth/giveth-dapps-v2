@@ -4,6 +4,7 @@ import WelcomeModal from '@/components/modals/WelcomeModal';
 import { FirstWelcomeModal } from '@/components/modals/FirstWelcomeModal';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { CompleteProfileModal } from '@/components/modals/CompleteProfileModal';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
@@ -29,6 +30,9 @@ const ModalController = () => {
 
 	const { userData, isSignedIn } = useAppSelector(state => state.user);
 	const isRegistered = isUserRegistered(userData);
+	const { connector } = useAccount();
+	const isGSafeConnector = connector?.id === 'safe';
+	const isSafeEnv = useIsSafeEnvironment();
 
 	const dispatch = useAppDispatch();
 
@@ -48,7 +52,9 @@ const ModalController = () => {
 
 	//I think we need to handle it in better way
 	useEffect(() => {
-		if (isSignedIn && showSignWithWallet) {
+		// (Mateo): Only make it happen if it's not a gnosis safe environment
+		// we have a different logic for modal management there
+		if (isSignedIn && showSignWithWallet && !isSafeEnv) {
 			setTimeout(() => {
 				dispatch(setShowSignWithWallet(false));
 			}, 300);
@@ -59,6 +65,7 @@ const ModalController = () => {
 		<>
 			{showSignWithWallet && (
 				<SignWithWalletModal
+					isGSafeConnector={isGSafeConnector}
 					setShowModal={state =>
 						dispatch(setShowSignWithWallet(state))
 					}

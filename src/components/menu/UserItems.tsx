@@ -9,6 +9,7 @@ import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
 import {
@@ -42,6 +43,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 	const router = useRouter();
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
 	const theme = useAppSelector(state => state.general.theme);
+	const isSafeEnv = useIsSafeEnvironment();
 
 	const { open: openChainModal } = useWeb3Modal();
 
@@ -83,12 +85,15 @@ export const UserItems: FC<IUserItemsProps> = ({
 						<NetworkLogo chainId={chainId} logoSize={16} />
 						<NetworkName>{networkName}</NetworkName>
 					</FlexCenter>
-					<ItemAction
-						size='Small'
-						onClick={() => openChainModal && openChainModal()}
-					>
-						{formatMessage({ id: 'label.switch_network' })}
-					</ItemAction>
+
+					{!isSafeEnv && (
+						<ItemAction
+							size='Small'
+							onClick={() => openChainModal && openChainModal()}
+						>
+							{formatMessage({ id: 'label.switch_network' })}
+						</ItemAction>
+					)}
 				</ItemRow>
 			</Item>
 			<ItemSpacer />
@@ -97,18 +102,20 @@ export const UserItems: FC<IUserItemsProps> = ({
 					<GLink size='Big'>{formatMessage({ id: i.title })}</GLink>
 				</Item>
 			))}
-			<Item
-				onClick={() => {
-					isSignedIn && dispatch(signOut(token!));
-					localStorage.removeItem(StorageLabel.WALLET);
-					disconnect();
-				}}
-				theme={theme}
-			>
-				<GLink size='Big'>
-					{formatMessage({ id: 'label.sign_out' })}
-				</GLink>
-			</Item>
+			{!isSafeEnv && (
+				<Item
+					onClick={() => {
+						isSignedIn && dispatch(signOut(token!));
+						localStorage.removeItem(StorageLabel.WALLET);
+						disconnect();
+					}}
+					theme={theme}
+				>
+					<GLink size='Big'>
+						{formatMessage({ id: 'label.sign_out' })}
+					</GLink>
+				</Item>
+			)}
 		</>
 	);
 };

@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
+import { useAccount } from 'wagmi';
 import { shortenAddress } from '@/lib/helpers';
 import {
 	MenuAndButtonContainer,
@@ -47,6 +48,8 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 	const isDesktop = useMediaQuery(device.laptopL);
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
+	const { connector } = useAccount();
+	const isGSafeConnector = connector?.id === 'safe';
 
 	useEffect(() => {
 		if (!isHeaderShowing) {
@@ -58,7 +61,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 		? {
 				onMouseEnter: () => openMenu(),
 				onMouseLeave: () => closeMenu(),
-		  }
+			}
 		: { onClick: openSidebar };
 
 	return (
@@ -103,6 +106,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 			)}
 			{signWithWallet && (
 				<SignWithWalletModal
+					isGSafeConnector={isGSafeConnector}
 					callback={() => {
 						router.push(queueRoute);
 						setQueueRoute('');

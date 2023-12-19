@@ -18,7 +18,7 @@ export default ProjectOwnerBanner;
 const Wrapper = styled(Flex)`
 	padding: 16px;
 	background-color: ${semanticColors.blueSky[100]};
-	margin-bottom: 8px;
+	margin-bottom: 16px;
 	color: ${semanticColors.blueSky[600]};
 	border: 1px solid ${semanticColors.blueSky[600]};
 	border-radius: 8px;

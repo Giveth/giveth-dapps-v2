@@ -219,7 +219,7 @@ export interface IDonation {
 	amount: number;
 	currency: string;
 	valueUsd?: number;
-	transactionId: string;
+	transactionId?: string;
 	transactionNetworkId: number;
 	createdAt: string;
 	donationType?: EDonationType;
