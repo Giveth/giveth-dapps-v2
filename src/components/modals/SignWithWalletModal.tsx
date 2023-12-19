@@ -64,7 +64,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 	const isSafeEnv = useIsSafeEnvironment();
 
 	const chainId = chain?.id;
-	const { walletAddress, signMessage, walletType, openWalletConnectModal } =
+	const { walletAddress, signMessage, walletType } =
 		useAuthenticationWallet();
 	const router = useRouter();
 	const { isAnimating, closeModal: _closeModal } =
