@@ -2,10 +2,12 @@ import { useFormContext } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import {
+	B,
 	Button,
 	GLink,
 	IconArrowRight16,
 	IconTrash24,
+	P,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { EInputs } from '@/components/views/create/CreateProject';
@@ -13,6 +15,8 @@ import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { chainNameById } from '@/lib/network';
+import config from '@/configuration';
+import ToggleSwitch from '@/components/ToggleSwitch';
 
 interface IAddressInterfaceProps {
 	networkId: number;
@@ -23,20 +27,17 @@ const AddressInterface = ({
 	networkId,
 	onButtonClick,
 }: IAddressInterfaceProps) => {
-	const {
-		formState: { errors },
-		setValue,
-		watch,
-	} = useFormContext();
+	const { formState, setValue, watch } = useFormContext();
+	const { formatMessage } = useIntl();
 
+	const { errors } = formState;
 	const inputName = EInputs.addresses;
+	const alloProtocolRegistry = watch(EInputs.alloProtocolRegistry) as boolean;
 
 	const value = watch(inputName);
 
-	const { formatMessage } = useIntl();
-
 	const hasAddress = !!value[networkId] && !errors[inputName]?.message;
-
+	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
 	return (
 		<Container>
 			<TopContainer>
@@ -95,6 +96,33 @@ const AddressInterface = ({
 						</IconContainer>
 					)}
 				</Flex>
+				{isOptimism && (
+					<AlloProtocolContainer>
+						<Flex>
+							<div>
+								<B>
+									Set up Profile on the Allo Protocol Registry
+								</B>
+								<P>
+									Your project will be included in a shared
+									registry of public goods projects with
+									Gitcoin and others. You will also set up
+									your project to receive recurring donations.
+								</P>
+							</div>
+							<ToggleSwitch
+								isOn={alloProtocolRegistry}
+								toggleOnOff={() =>
+									setValue(
+										EInputs.alloProtocolRegistry,
+										!alloProtocolRegistry,
+									)
+								}
+								caption=''
+							/>
+						</Flex>
+					</AlloProtocolContainer>
+				)}
 			</MiddleContainer>
 		</Container>
 	);
@@ -143,6 +171,10 @@ const IconContainer = styled(FlexCenter)`
 	:hover {
 		background-color: ${neutralColors.gray[300]};
 	}
+`;
+
+const AlloProtocolContainer = styled.div`
+	margin-top: 24px;
 `;
 
 export default AddressInterface;
