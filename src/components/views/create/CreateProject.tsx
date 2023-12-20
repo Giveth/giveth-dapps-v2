@@ -66,6 +66,7 @@ export enum EInputs {
 	image = 'image',
 	draft = 'draft',
 	addresses = 'addresses',
+	alloProtocolRegistry = 'alloProtocolRegistry',
 }
 
 export type TInputs = {
@@ -76,6 +77,7 @@ export type TInputs = {
 	[EInputs.image]?: string;
 	[EInputs.draft]?: boolean;
 	[EInputs.addresses]: { [key: number]: string };
+	[EInputs.alloProtocolRegistry]?: boolean;
 };
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
@@ -135,6 +137,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				defaultImpactLocation || storageImpactLocation,
 			[EInputs.image]: image || storageImage || '',
 			[EInputs.addresses]: isEditMode ? addressesObj : storageAddresses,
+			[EInputs.alloProtocolRegistry]: false,
 		},
 	});
 
