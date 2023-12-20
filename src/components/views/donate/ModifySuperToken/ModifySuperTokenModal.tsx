@@ -5,6 +5,8 @@ import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { Flex } from '@/components/styled-components/Flex';
+import { DepositSuperToken } from './DepositSuperToken';
+import { WithDrawSuperToken } from './WithDrawSuperToken';
 
 interface IModifySuperTokenModalProps extends IModal {}
 
@@ -98,8 +100,8 @@ const ModifySuperTokenInnerModal: FC<
 					</Tab>
 				))}
 			</Tabs>
-			{tab === EModifyTabs.DEPOSIT && <div>Deposit</div>}
-			{tab === EModifyTabs.WITHDRAW && <div>Withdraw</div>}
+			{tab === EModifyTabs.DEPOSIT && <DepositSuperToken />}
+			{tab === EModifyTabs.WITHDRAW && <WithDrawSuperToken />}
 		</Wrapper>
 	);
 };
