@@ -86,7 +86,7 @@ export interface IProjectAcceptedToken {
 	decimals: number;
 	isGivbackEligible?: boolean;
 	order: number;
-	isStableCoin: boolean;
+	isStableCoin?: boolean;
 }
 
 export interface IFetchGivethProjectGQL {
