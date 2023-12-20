@@ -97,6 +97,7 @@ const AddressInterface = ({
 					)}
 				</Flex>
 				{isOptimism && (
+					// Render this section only on Optimism
 					<AlloProtocolContainer>
 						<Flex>
 							<div>
