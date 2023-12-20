@@ -59,7 +59,8 @@ const BadgeContainer = styled.span<IBadgeContainer>`
 	display: flex;
 	flex-shrink: 0;
 	align-items: center;
-	color: ${props => props.mainColor[700]} !important;
+	color: ${({ mainColor }) =>
+		mainColor[mainColor === brandColors.giv ? 500 : 700]} !important;
 	background: ${props => props.mainColor[100]};
 	border: 2px solid ${props => props.mainColor[300]};
 	border-radius: 50px;

@@ -92,6 +92,7 @@ export enum EProjectsFilter {
 	ACCEPT_FUND_ON_CELO = 'AcceptFundOnCelo',
 	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
 	ACCEPT_FUND_ON_ETC = 'AcceptFundOnETC',
+	ACCEPT_FUND_ON_SOLANA = 'AcceptFundOnSolana',
 	ACTIVE_QF_ROUND = 'ActiveQfRound',
 }
 
@@ -112,6 +113,7 @@ export enum ECampaignFilterField {
 	AcceptFundOnPolygon = 'acceptFundOnPolygon',
 	AcceptFundOnCelo = 'acceptFundOnCelo',
 	AcceptFundOnOptimism = 'acceptFundOnOptimism',
+	AcceptFundOnSolana = 'acceptFundOnSolana',
 }
 
 export interface ICampaign {

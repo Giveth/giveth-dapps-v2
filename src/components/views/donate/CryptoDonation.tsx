@@ -285,10 +285,10 @@ const CryptoDonation: FC = () => {
 		) {
 			return setShowInsufficientModal(true);
 		}
-		if (!isSignedIn) {
-			signInThenDonate();
-		} else if (hasActiveQFRound && !isOnEligibleNetworks) {
+		if (hasActiveQFRound && !isOnEligibleNetworks) {
 			setShowQFModal(true);
+		} else if (!isSignedIn) {
+			signInThenDonate();
 		} else {
 			setShowDonateModal(true);
 		}
@@ -307,6 +307,15 @@ const CryptoDonation: FC = () => {
 
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
+
+	const donateWithoutMatching = () => {
+		if (isSignedIn) {
+			setShowDonateModal(true);
+		} else {
+			signInThenDonate();
+		}
+	};
+
 	return (
 		<MainContainer>
 			<H4Styled weight={700}>
@@ -314,7 +323,7 @@ const CryptoDonation: FC = () => {
 			</H4Styled>
 			{showQFModal && (
 				<QFModal
-					setShowDonateModal={setShowDonateModal}
+					donateWithoutMatching={donateWithoutMatching}
 					setShowModal={setShowQFModal}
 				/>
 			)}

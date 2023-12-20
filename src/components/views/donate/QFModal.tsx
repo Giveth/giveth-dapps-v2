@@ -11,10 +11,10 @@ import { getActiveRound } from '@/helpers/qf';
 import { chainNameById } from '@/lib/network';
 
 interface IProps extends IModal {
-	setShowDonateModal: (showDonateModal: boolean) => void;
+	donateWithoutMatching: () => void;
 }
 
-const QFModal: FC<IProps> = ({ setShowModal, setShowDonateModal }) => {
+const QFModal: FC<IProps> = ({ setShowModal, donateWithoutMatching }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const { switchNetwork } = useSwitchNetwork();
@@ -56,7 +56,7 @@ const QFModal: FC<IProps> = ({ setShowModal, setShowDonateModal }) => {
 						id: 'label.donate_without_matching',
 					})}
 					onClick={() => {
-						setShowDonateModal(true);
+						donateWithoutMatching();
 						closeModal();
 					}}
 					size='small'
