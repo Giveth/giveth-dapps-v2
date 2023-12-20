@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -8,8 +8,6 @@ import {
 	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import BigNumber from 'bignumber.js';
-
 import { useAccount, useNetwork } from 'wagmi';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
@@ -23,7 +21,7 @@ import FailedDonation, {
 } from '@/components/modals/FailedDonation';
 import { client } from '@/apollo/apolloClient';
 import { VALIDATE_TOKEN } from '@/apollo/gql/gqlUser';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppDispatch } from '@/features/hooks';
 import { signOut } from '@/features/user/user.thunks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -32,9 +30,8 @@ import DonateSummary from '@/components/views/donate/DonateSummary';
 import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useDonateData } from '@/context/donate.context';
-import { fetchETCPrice, fetchPrice } from '@/services/token';
-import { fetchEthPrice } from '@/features/price/price.services';
 import { useCreateDonation } from '@/hooks/useCreateDonation';
+import useTokenPrice from '@/hooks/useTokenPrice';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -44,14 +41,6 @@ interface IDonateModalProps extends IModal {
 	anonymous?: boolean;
 	givBackEligible?: boolean;
 }
-
-const ethereumChain = config.MAINNET_CONFIG;
-const gnosisChain = config.GNOSIS_CONFIG;
-const stableCoins = [
-	gnosisChain.nativeCurrency.symbol.toUpperCase(),
-	'DAI',
-	'USDT',
-];
 
 const DonateModal: FC<IDonateModalProps> = props => {
 	const {
@@ -82,14 +71,9 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const { formatMessage } = useIntl();
 	const { setSuccessDonation, project } = useDonateData();
 
-	const givPrice = useAppSelector(state => state.price.givPrice);
-	const givTokenPrice = new BigNumber(givPrice).toNumber();
-	const isMainnet = chainId === config.MAINNET_NETWORK_NUMBER;
-
 	const [donating, setDonating] = useState(false);
 	const [secondTxStatus, setSecondTxStatus] = useState<EToastType>();
 	const [processFinished, setProcessFinished] = useState(false);
-	const [tokenPrice, setTokenPrice] = useState<number>();
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 
@@ -102,6 +86,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const givethWalletAddress = givethAddresses?.find(
 		a => a.isRecipient && a.networkId === chainId,
 	)?.address;
+
+	const tokenPrice = useTokenPrice(token);
 
 	const avgPrice = tokenPrice && tokenPrice * amount;
 	let donationToGivethAmount = (amount * donationToGiveth) / 100;
@@ -202,49 +188,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			})
 			.catch(console.log);
 	};
-
-	useEffect(() => {
-		const setPrice = async () => {
-			if (
-				token?.symbol &&
-				stableCoins.includes(token.symbol.toUpperCase())
-			) {
-				setTokenPrice(1);
-			} else if (token?.symbol === 'GIV') {
-				setTokenPrice(givTokenPrice || 0);
-			} else if (token?.symbol === ethereumChain.nativeCurrency.symbol) {
-				const ethPrice = await fetchEthPrice();
-				setTokenPrice(ethPrice || 0);
-			} else if (token?.address) {
-				let tokenAddress = token.address;
-				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
-				if (!isMainnet && token.mainnetAddress) {
-					tokenAddress =
-						(token.mainnetAddress as `0x${string}`) ||
-						('' as `0x${string}`);
-				}
-				// ETC is not supported by coingecko with contract address, so we should use this function to fetch the price
-				if (token.symbol === 'ETC') {
-					const fetchedETCPrice = await fetchETCPrice();
-					setTokenPrice(fetchedETCPrice || 0);
-					return;
-				}
-				const coingeckoChainId =
-					isMainnet ||
-					(token.mainnetAddress && token.symbol !== 'CELO')
-						? config.MAINNET_NETWORK_NUMBER
-						: chainId!;
-				const fetchedPrice = await fetchPrice(
-					coingeckoChainId,
-					tokenAddress,
-				);
-				setTokenPrice(fetchedPrice || 0);
-			}
-		};
-		if (token) {
-			setPrice().catch(() => setTokenPrice(0));
-		}
-	}, [token]);
 
 	if (!projectWalletAddress) {
 		showToastError('There is no eth address assigned for this project');
