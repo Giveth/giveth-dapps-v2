@@ -92,11 +92,9 @@ export const SetProfilePic = ({
 		if (user?.walletAddress) {
 			console.log('wallet address', user?.walletAddress);
 			if (isAddress(user?.walletAddress)) {
-				console.log('is ethereum address');
-
 				fetchPFPInfo(user?.walletAddress);
 			} else if (isSolanaAddress(user?.walletAddress)) {
-				console.log('is solana address');
+				setPfpData([]);
 				setActiveTab(EProfilePicTab.UPLOAD);
 				setTabs([UploadTab]);
 			}
