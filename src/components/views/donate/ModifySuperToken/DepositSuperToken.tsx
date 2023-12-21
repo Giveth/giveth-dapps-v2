@@ -21,6 +21,7 @@ import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ITokenStreams } from '@/context/donate.context';
+import { ModifyInfoToast } from './ModifyInfoToast';
 
 interface IDepositSuperTokenProps {
 	tokenStreams: ITokenStreams;
@@ -138,6 +139,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 					</Flex>
 				</StreamSection>
 			</TopUpSection>
+			<ModifyInfoToast />
 		</Wrapper>
 	);
 };
