@@ -20,13 +20,16 @@ import { ISuperToken, IToken } from '@/types/superFluid';
 import { AddressZero } from '@/lib/constants/constants';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
+import { ITokenStreams } from '@/context/donate.context';
 
 interface IDepositSuperTokenProps {
+	tokenStreams: ITokenStreams;
 	selectedToken: IToken;
 }
 
 export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	selectedToken,
+	tokenStreams,
 }) => {
 	const [amount, setAmount] = useState(0n);
 
@@ -52,7 +55,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		address: address,
 	});
 
-	console.log('[token, superToken]', token, superToken);
+	const tokenStream = tokenStreams[superToken?.id || ''];
 
 	return (
 		<Wrapper>
@@ -111,8 +114,9 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 							</strong>
 						</Caption>
 						<Caption>
-							Funding <strong>{2}</strong> Project
-							{2 > 1 ? 's' : ''}
+							Funding <strong>{tokenStream.length}</strong>{' '}
+							Project
+							{tokenStream.length > 1 ? 's' : ''}
 						</Caption>
 					</Flex>
 				</StreamSection>

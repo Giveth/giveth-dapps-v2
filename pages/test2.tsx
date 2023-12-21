@@ -25,6 +25,7 @@ const YourApp = () => {
 				<ModifySuperTokenModal
 					setShowModal={setShowModal}
 					selectedToken={config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS[1]}
+					tokenStreams={{}}
 				/>
 			)}
 		</div>

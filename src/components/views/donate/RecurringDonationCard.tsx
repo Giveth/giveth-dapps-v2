@@ -38,6 +38,7 @@ import { ISuperfluidStream } from '@/types/superFluid';
 import { showToastError } from '@/lib/helpers';
 import config from '@/configuration';
 import { WrongNetworkLayer } from './WrongNetworkLayer';
+import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 
 export const RecurringDonationCard = () => {
 	const [amount, setAmount] = useState(0n);
@@ -45,6 +46,7 @@ export const RecurringDonationCard = () => {
 	const [percentage, setPercentage] = useState(0);
 	const [donationToGiveth, setDonationToGiveth] = useState(5);
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
+	const [showTopUpModal, setShowTopUpModal] = useState(false);
 	const [showRecurringDonationModal, setShowRecurringDonationModal] =
 		useState(false);
 	const [userStreamOnSelectedToken, setUserStreamOnSelectedToken] =
@@ -281,7 +283,11 @@ export const RecurringDonationCard = () => {
 								)}
 							</Flex>
 							{selectedToken?.token.isSuperToken ? (
-								<TopUpStream gap='4px' alignItems='center'>
+								<TopUpStream
+									gap='4px'
+									alignItems='center'
+									onClick={() => setShowTopUpModal(true)}
+								>
 									<Caption>Top-up stream balance</Caption>
 									<IconPlus16 />
 								</TopUpStream>
@@ -445,6 +451,13 @@ export const RecurringDonationCard = () => {
 					amount={amount}
 					percentage={percentage}
 					isUpdating={isUpdating}
+				/>
+			)}
+			{showTopUpModal && (
+				<ModifySuperTokenModal
+					tokenStreams={tokenStreams}
+					setShowModal={setShowTopUpModal}
+					selectedToken={config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS[1]}
 				/>
 			)}
 		</>
