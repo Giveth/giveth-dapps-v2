@@ -7,8 +7,11 @@ import { IModal } from '@/types/common';
 import { Flex } from '@/components/styled-components/Flex';
 import { DepositSuperToken } from './DepositSuperToken';
 import { WithDrawSuperToken } from './WithDrawSuperToken';
+import { IToken } from '@/types/superFluid';
 
-interface IModifySuperTokenModalProps extends IModal {}
+interface IModifySuperTokenModalProps extends IModal {
+	selectedToken: IToken;
+}
 
 export enum EModifySuperTokenSteps {
 	MODIFY,
@@ -81,9 +84,9 @@ const tabs = [
 	},
 ];
 
-const ModifySuperTokenInnerModal: FC<
-	IModifySuperTokenInnerModalProps
-> = ({}) => {
+const ModifySuperTokenInnerModal: FC<IModifySuperTokenInnerModalProps> = ({
+	selectedToken,
+}) => {
 	const [tab, setTab] = useState(EModifyTabs.DEPOSIT);
 	return (
 		<Wrapper>
@@ -100,7 +103,9 @@ const ModifySuperTokenInnerModal: FC<
 					</Tab>
 				))}
 			</Tabs>
-			{tab === EModifyTabs.DEPOSIT && <DepositSuperToken />}
+			{tab === EModifyTabs.DEPOSIT && (
+				<DepositSuperToken selectedToken={selectedToken} />
+			)}
 			{tab === EModifyTabs.WITHDRAW && <WithDrawSuperToken />}
 		</Wrapper>
 	);
