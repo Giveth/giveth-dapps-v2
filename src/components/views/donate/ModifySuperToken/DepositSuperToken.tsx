@@ -8,6 +8,7 @@ import {
 	IconRefresh16,
 	neutralColors,
 	brandColors,
+	Button,
 } from '@giveth/ui-design-system';
 
 import { useAccount, useBalance } from 'wagmi';
@@ -140,6 +141,14 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 				</StreamSection>
 			</TopUpSection>
 			<ModifyInfoToast />
+			<ActionButton
+				label='Confirm'
+				disabled={
+					amount <= 0 ||
+					balance === undefined ||
+					amount > balance.value
+				}
+			/>
 		</Wrapper>
 	);
 };
@@ -201,3 +210,5 @@ const StreamBalanceInfo = styled(Caption)`
 	border-radius: 8px;
 	padding: 2px 8px;
 `;
+
+const ActionButton = styled(Button)``;
