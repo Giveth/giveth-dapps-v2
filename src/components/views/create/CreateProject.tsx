@@ -16,7 +16,7 @@ import { useMutation } from '@apollo/client';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import {
 	ACTIVATE_PROJECT,
 	CREATE_PROJECT,
@@ -165,6 +165,14 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchAddresses,
 	]);
 
+	const onError = (errors: FieldErrors<TInputs>) => {
+		if (errors[EInputs.description]) {
+			(
+				document?.getElementsByClassName('ql-editor')[0] as HTMLElement
+			)?.focus();
+		}
+	};
+
 	const onSubmit = async (formData: TInputs) => {
 		try {
 			setIsLoading(true);
@@ -281,7 +289,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				</div>
 
 				<FormProvider {...formMethods}>
-					<form onSubmit={handleSubmit(onSubmit)}>
+					<form onSubmit={handleSubmit(onSubmit, onError)}>
 						<NameInput
 							showGuidelineModal={showGuidelineModal}
 							preTitle={title}
