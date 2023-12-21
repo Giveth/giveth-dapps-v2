@@ -102,6 +102,19 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 							1200 {superToken?.symbol}
 						</StreamBalanceInfo>
 					</Flex>
+					<Flex alignItems='center' justifyContent='space-between'>
+						<Caption>
+							Balance runs out in{' '}
+							<strong>
+								{' '}
+								{11} Month{11 > 1 ? 's' : ''}
+							</strong>
+						</Caption>
+						<Caption>
+							Funding <strong>{2}</strong> Project
+							{2 > 1 ? 's' : ''}
+						</Caption>
+					</Flex>
 				</StreamSection>
 			</TopUpSection>
 		</Wrapper>
