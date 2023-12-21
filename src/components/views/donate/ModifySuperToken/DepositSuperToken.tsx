@@ -86,82 +86,100 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 
 	return (
 		<Wrapper>
-			{step !== EModifySuperTokenSteps.MODIFY && (
+			{step === EModifySuperTokenSteps.MODIFY ? (
+				<>
+					<TopUpSection flexDirection='column' gap='8px'>
+						<Flex gap='8px' alignItems='center'>
+							<Caption medium>Top up stream Balance</Caption>
+							<IconWithTooltip
+								icon={<IconHelpFilled16 />}
+								direction='right'
+								align='bottom'
+							>
+								<FlowRateTooltip>PlaceHolder</FlowRateTooltip>
+							</IconWithTooltip>
+						</Flex>
+						<InputWrapper>
+							<SelectTokenWrapper
+								alignItems='center'
+								justifyContent='space-between'
+							>
+								<Flex gap='8px' alignItems='center'>
+									{token?.symbol && (
+										<TokenIcon
+											symbol={token?.symbol}
+											size={24}
+										/>
+									)}
+									<B>{token?.symbol}</B>
+								</Flex>
+							</SelectTokenWrapper>
+							<Input
+								setAmount={setAmount}
+								disabled={token === undefined}
+								decimals={token?.decimals}
+							/>
+						</InputWrapper>
+						<Flex gap='4px'>
+							<GLink size='Small'>
+								Available: {balance?.formatted}
+							</GLink>
+							<IconWrapper
+								onClick={() => !isRefetching && refetch()}
+							>
+								{isRefetching ? (
+									<Spinner size={16} />
+								) : (
+									<IconRefresh16 />
+								)}
+							</IconWrapper>
+						</Flex>
+						<StreamSection>
+							<Flex
+								alignItems='center'
+								justifyContent='space-between'
+							>
+								<Caption medium>Stream Balance</Caption>
+								<StreamBalanceInfo medium>
+									{SuperTokenBalance?.formatted}{' '}
+									{superToken?.symbol}
+								</StreamBalanceInfo>
+							</Flex>
+							<Flex
+								alignItems='center'
+								justifyContent='space-between'
+							>
+								<Caption>
+									Balance runs out in{' '}
+									<strong>
+										{' '}
+										{streamRunOutInMonth.toString()} Month
+										{streamRunOutInMonth > 1n ? 's' : ''}
+									</strong>
+								</Caption>
+								<Caption>
+									Funding{' '}
+									<strong>{tokenStream.length}</strong>{' '}
+									Project
+									{tokenStream.length > 1 ? 's' : ''}
+								</Caption>
+							</Flex>
+						</StreamSection>
+					</TopUpSection>
+					<ModifyInfoToast />
+					<ActionButton
+						label={formatMessage({ id: 'label.deposit' })}
+						disabled={
+							amount <= 0 ||
+							balance === undefined ||
+							amount > balance.value
+						}
+						onClick={() => setStep(EModifySuperTokenSteps.APPROVE)}
+					/>
+				</>
+			) : (
 				<DepositSteps modifyTokenState={step} />
 			)}
-			<TopUpSection flexDirection='column' gap='8px'>
-				<Flex gap='8px' alignItems='center'>
-					<Caption medium>Top up stream Balance</Caption>
-					<IconWithTooltip
-						icon={<IconHelpFilled16 />}
-						direction='right'
-						align='bottom'
-					>
-						<FlowRateTooltip>PlaceHolder</FlowRateTooltip>
-					</IconWithTooltip>
-				</Flex>
-				<InputWrapper>
-					<SelectTokenWrapper
-						alignItems='center'
-						justifyContent='space-between'
-					>
-						<Flex gap='8px' alignItems='center'>
-							{token?.symbol && (
-								<TokenIcon symbol={token?.symbol} size={24} />
-							)}
-							<B>{token?.symbol}</B>
-						</Flex>
-					</SelectTokenWrapper>
-					<Input
-						setAmount={setAmount}
-						disabled={token === undefined}
-						decimals={token?.decimals}
-					/>
-				</InputWrapper>
-				<Flex gap='4px'>
-					<GLink size='Small'>Available: {balance?.formatted}</GLink>
-					<IconWrapper onClick={() => !isRefetching && refetch()}>
-						{isRefetching ? (
-							<Spinner size={16} />
-						) : (
-							<IconRefresh16 />
-						)}
-					</IconWrapper>
-				</Flex>
-				<StreamSection>
-					<Flex alignItems='center' justifyContent='space-between'>
-						<Caption medium>Stream Balance</Caption>
-						<StreamBalanceInfo medium>
-							1200 {superToken?.symbol}
-						</StreamBalanceInfo>
-					</Flex>
-					<Flex alignItems='center' justifyContent='space-between'>
-						<Caption>
-							Balance runs out in{' '}
-							<strong>
-								{' '}
-								{streamRunOutInMonth.toString()} Month
-								{streamRunOutInMonth > 1n ? 's' : ''}
-							</strong>
-						</Caption>
-						<Caption>
-							Funding <strong>{tokenStream.length}</strong>{' '}
-							Project
-							{tokenStream.length > 1 ? 's' : ''}
-						</Caption>
-					</Flex>
-				</StreamSection>
-			</TopUpSection>
-			<ModifyInfoToast />
-			<ActionButton
-				label={formatMessage({ id: 'label.deposit' })}
-				disabled={
-					amount <= 0 ||
-					balance === undefined ||
-					amount > balance.value
-				}
-				onClick={() => setStep(EModifySuperTokenSteps.APPROVE)}
-			/>
 		</Wrapper>
 	);
 };
