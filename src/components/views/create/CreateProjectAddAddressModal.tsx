@@ -4,26 +4,19 @@ import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import WalletAddressInput from './WalletAddressInput';
+import { IChainType } from '@/types/config';
 
-interface ICreateProjectAddAddressModal {
-	setShowModal: (show: number | undefined) => void;
+interface ICreateProjectAddAddressModal extends IChainType {
+	setShowModal: () => void;
 	networkId: number;
 	userAddresses: string[];
 	setResolvedENS?: (resolvedENS: string) => void;
 	resolvedENS?: string;
-	onSubmit?: () => void;
 }
 
-const CreateProjectAddAddressModal = ({
-	setShowModal,
-	networkId,
-	userAddresses,
-	onSubmit,
-}: ICreateProjectAddAddressModal) => {
-	const { isAnimating, closeModal } = useModalAnimation(() =>
-		setShowModal(undefined),
-	);
-
+const CreateProjectAddAddressModal = (props: ICreateProjectAddAddressModal) => {
+	const { setShowModal, networkId, userAddresses, chainType } = props;
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
 	return (
@@ -37,7 +30,8 @@ const CreateProjectAddAddressModal = ({
 				<WalletAddressInput
 					networkId={networkId}
 					userAddresses={userAddresses}
-					onSubmit={onSubmit}
+					onSubmit={setShowModal}
+					chainType={chainType}
 				/>
 			</AddressContainer>
 		</Modal>
