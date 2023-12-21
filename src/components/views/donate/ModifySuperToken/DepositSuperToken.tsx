@@ -95,6 +95,14 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 						)}
 					</IconWrapper>
 				</Flex>
+				<StreamSection>
+					<Flex alignItems='center' justifyContent='space-between'>
+						<Caption medium>Stream Balance</Caption>
+						<StreamBalanceInfo medium>
+							1200 {superToken?.symbol}
+						</StreamBalanceInfo>
+					</Flex>
+				</StreamSection>
 			</TopUpSection>
 		</Wrapper>
 	);
@@ -140,4 +148,20 @@ const Input = styled(AmountInput)`
 const IconWrapper = styled.div`
 	cursor: pointer;
 	color: ${brandColors.giv[500]};
+`;
+
+const StreamSection = styled(Flex)`
+	flex-direction: column;
+	padding: 8px;
+	gap: 16px;
+	border-radius: 8px;
+	background-color: ${neutralColors.gray[200]};
+	margin-top: 16px;
+	color: ${neutralColors.gray[800]};
+`;
+
+const StreamBalanceInfo = styled(Caption)`
+	background-color: ${neutralColors.gray[300]};
+	border-radius: 8px;
+	padding: 2px 8px;
 `;
