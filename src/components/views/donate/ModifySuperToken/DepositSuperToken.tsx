@@ -23,8 +23,13 @@ import { AmountInput } from '@/components/AmountInput/AmountInput';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ITokenStreams } from '@/context/donate.context';
 import { ModifyInfoToast } from './ModifyInfoToast';
+import {
+	EModifySuperTokenSteps,
+	IModifySuperTokenInnerModalProps,
+} from './ModifySuperTokenModal';
+import { DepositSteps } from './DepositSuperTokenSteps';
 
-interface IDepositSuperTokenProps {
+interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	tokenStreams: ITokenStreams;
 	selectedToken: IToken;
 }
@@ -32,6 +37,8 @@ interface IDepositSuperTokenProps {
 export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	selectedToken,
 	tokenStreams,
+	step,
+	setStep,
 }) => {
 	const [amount, setAmount] = useState(0n);
 
@@ -77,6 +84,9 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 
 	return (
 		<Wrapper>
+			{step !== EModifySuperTokenSteps.MODIFY && (
+				<DepositSteps modifyTokenState={step} />
+			)}
 			<TopUpSection flexDirection='column' gap='8px'>
 				<Flex gap='8px' alignItems='center'>
 					<Caption medium>Top up stream Balance</Caption>
@@ -148,6 +158,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 					balance === undefined ||
 					amount > balance.value
 				}
+				onClick={() => setStep(EModifySuperTokenSteps.APPROVE)}
 			/>
 		</Wrapper>
 	);

@@ -14,13 +14,7 @@ interface DonateStepsProps {
 	modifyTokenState: EModifySuperTokenSteps;
 }
 
-const steps = [
-	'label.approve',
-	'label.approving',
-	'label.deposit',
-	'label.depositing',
-	'label.done',
-];
+const steps = ['label.approve', 'label.deposit'];
 
 export const DepositSteps: FC<DonateStepsProps> = ({ modifyTokenState }) => {
 	let activeStep = 0;

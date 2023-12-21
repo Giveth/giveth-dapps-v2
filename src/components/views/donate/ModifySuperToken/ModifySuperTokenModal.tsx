@@ -65,7 +65,8 @@ export const ModifySuperTokenModal: FC<IModifySuperTokenModalProps> = ({
 	);
 };
 
-interface IModifySuperTokenInnerModalProps extends IModifySuperTokenModalProps {
+export interface IModifySuperTokenInnerModalProps
+	extends IModifySuperTokenModalProps {
 	step: EModifySuperTokenSteps;
 	setStep: (step: EModifySuperTokenSteps) => void;
 }
@@ -86,10 +87,9 @@ const tabs = [
 	},
 ];
 
-const ModifySuperTokenInnerModal: FC<IModifySuperTokenInnerModalProps> = ({
-	selectedToken,
-	tokenStreams,
-}) => {
+const ModifySuperTokenInnerModal: FC<
+	IModifySuperTokenInnerModalProps
+> = props => {
 	const [tab, setTab] = useState(EModifyTabs.DEPOSIT);
 	return (
 		<Wrapper>
@@ -106,12 +106,7 @@ const ModifySuperTokenInnerModal: FC<IModifySuperTokenInnerModalProps> = ({
 					</Tab>
 				))}
 			</Tabs>
-			{tab === EModifyTabs.DEPOSIT && (
-				<DepositSuperToken
-					selectedToken={selectedToken}
-					tokenStreams={tokenStreams}
-				/>
-			)}
+			{tab === EModifyTabs.DEPOSIT && <DepositSuperToken {...props} />}
 			{tab === EModifyTabs.WITHDRAW && <WithDrawSuperToken />}
 		</Wrapper>
 	);
