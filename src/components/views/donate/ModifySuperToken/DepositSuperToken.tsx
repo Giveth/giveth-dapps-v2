@@ -17,7 +17,7 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Spinner } from '@/components/Spinner';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { ISuperToken, IToken } from '@/types/superFluid';
-import { AddressZero } from '@/lib/constants/constants';
+import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ITokenStreams } from '@/context/donate.context';
@@ -55,7 +55,23 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		address: address,
 	});
 
+	const { data: SuperTokenBalance } = useBalance({
+		token: superToken?.id,
+		address: address,
+	});
+
 	const tokenStream = tokenStreams[superToken?.id || ''];
+	const totalStreamPerSec =
+		tokenStream?.reduce(
+			(acc, stream) => acc + BigInt(stream.currentFlowRate),
+			0n,
+		) || 0n;
+	const streamRunOutInMonth =
+		SuperTokenBalance !== undefined &&
+		totalStreamPerSec > 0 &&
+		SuperTokenBalance.value > 0n
+			? SuperTokenBalance.value / totalStreamPerSec / ONE_MONTH_SECONDS
+			: 0n;
 
 	return (
 		<Wrapper>
@@ -110,7 +126,8 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 							Balance runs out in{' '}
 							<strong>
 								{' '}
-								{11} Month{11 > 1 ? 's' : ''}
+								{streamRunOutInMonth.toString()} Month
+								{streamRunOutInMonth > 1n ? 's' : ''}
 							</strong>
 						</Caption>
 						<Caption>
