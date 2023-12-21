@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react';
+import { useState, type FC, useMemo } from 'react';
 import styled from 'styled-components';
 import {
 	Caption,
@@ -16,9 +16,10 @@ import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Spinner } from '@/components/Spinner';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
-import { IToken } from '@/types/superFluid';
+import { ISuperToken, IToken } from '@/types/superFluid';
 import { AddressZero } from '@/lib/constants/constants';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
+import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 
 interface IDepositSuperTokenProps {
 	selectedToken: IToken;
@@ -30,21 +31,34 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	const [amount, setAmount] = useState(0n);
 
 	const { address } = useAccount();
+
+	const [token, superToken] = useMemo(
+		() =>
+			selectedToken.isSuperToken
+				? [selectedToken.underlyingToken, selectedToken as ISuperToken]
+				: [
+						selectedToken,
+						findSuperTokenByTokenAddress(selectedToken.id),
+					],
+		[selectedToken],
+	);
+
 	const {
 		data: balance,
 		refetch,
 		isRefetching,
 	} = useBalance({
-		token: selectedToken.id === AddressZero ? undefined : selectedToken.id,
+		token: token?.id === AddressZero ? undefined : token?.id,
 		address: address,
 	});
-	const underlyingToken = selectedToken.underlyingToken;
+
+	console.log('[token, superToken]', token, superToken);
 
 	return (
 		<Wrapper>
 			<TopUpSection flexDirection='column' gap='8px'>
 				<Flex gap='8px' alignItems='center'>
-					<Caption medium>Stream Balance</Caption>
+					<Caption medium>Top up stream Balance</Caption>
 					<IconWithTooltip
 						icon={<IconHelpFilled16 />}
 						direction='right'
@@ -59,21 +73,16 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 						justifyContent='space-between'
 					>
 						<Flex gap='8px' alignItems='center'>
-							<TokenIcon
-								symbol={
-									underlyingToken
-										? underlyingToken.symbol
-										: selectedToken.symbol
-								}
-								size={24}
-							/>
-							<B>{selectedToken.symbol}</B>
+							{token?.symbol && (
+								<TokenIcon symbol={token?.symbol} size={24} />
+							)}
+							<B>{token?.symbol}</B>
 						</Flex>
 					</SelectTokenWrapper>
 					<Input
 						setAmount={setAmount}
-						disabled={selectedToken === undefined}
-						decimals={selectedToken.decimals}
+						disabled={token === undefined}
+						decimals={token?.decimals}
 					/>
 				</InputWrapper>
 				<Flex gap='4px'>
