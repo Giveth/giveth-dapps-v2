@@ -12,30 +12,35 @@ import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { isAddress } from 'viem';
 import { useNetwork } from 'wagmi';
-import { compareAddresses } from '@/lib/helpers';
+import { compareAddresses, findAddressByChain } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import Input, { InputSize } from '@/components/Input';
 import { EInputs } from '@/components/views/create/CreateProject';
 import { gqlAddressValidation } from '@/components/views/create/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
+import { getAddressFromENS, isAddressENS, isSolanaAddress } from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
 import NetworkLogo from '@/components/NetworkLogo';
 import { chainNameById } from '@/lib/network';
 import useFocus from '@/hooks/useFocus';
+import { ChainType, IChainType } from '@/types/config';
+import config from '@/configuration';
 
-interface IProps {
+interface IProps extends IChainType {
 	networkId: number;
 	userAddresses: string[];
 	onSubmit?: () => void;
 }
 
+const isSolanaEnabled = config.ENABLE_SOLANA;
+
 const WalletAddressInput: FC<IProps> = ({
 	networkId,
 	userAddresses,
 	onSubmit,
+	chainType,
 }) => {
 	const [resolvedENS, setResolvedENS] = useState<`0x${string}` | undefined>();
 
@@ -47,18 +52,19 @@ const WalletAddressInput: FC<IProps> = ({
 
 	const inputName = EInputs.addresses;
 	const addresses = getValues(inputName);
-	const value = addresses[networkId];
+	const prevAddressObj = findAddressByChain(addresses, networkId, chainType);
+	const prevAddress = prevAddressObj?.address;
 
 	const [isValidating, setIsValidating] = useState(false);
 	const { formatMessage } = useIntl();
-	const [inputValue, setInputValue] = useState(value);
+	const [inputValue, setInputValue] = useState(prevAddress);
 	const [error, setError] = useState({
 		message: '',
 		ref: undefined,
 		type: undefined,
 	});
 
-	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
+	const isDefaultAddress = compareAddresses(prevAddress, user?.walletAddress);
 	const errorMessage = error.message;
 
 	const isAddressUsed =
@@ -74,7 +80,7 @@ const WalletAddressInput: FC<IProps> = ({
 		caption = formatMessage({
 			id: 'label.this_is_the_default_address_associated_with_your_account',
 		});
-	} else if (errorMessage || !value) {
+	} else if (errorMessage || !prevAddress) {
 		caption = `${formatMessage({
 			id: 'label.you_can_enter_a_new_address',
 		})} ${chainNameById(networkId)}.`;
@@ -99,11 +105,11 @@ const WalletAddressInput: FC<IProps> = ({
 		else throw formatMessage({ id: 'label.invalid_ens_address' });
 	};
 
-	const addressValidation = async (address: string) => {
+	const addressValidation = async (address?: string) => {
 		try {
 			setError({ ...error, message: '' });
 			setResolvedENS(undefined);
-			if (address.length === 0) {
+			if (!address || address.length === 0) {
 				return formatMessage({ id: 'label.this_field_is_required' });
 			}
 			let _address = (' ' + address).slice(1) as `0x${string}`;
@@ -116,9 +122,24 @@ const WalletAddressInput: FC<IProps> = ({
 				setIsValidating(false);
 				return true;
 			}
-			if (!isAddress(_address)) {
+			if (isSolanaEnabled && chainType === ChainType.SOLANA) {
+				if (!isSolanaAddress(_address)) {
+					setIsValidating(false);
+					return formatMessage(
+						{
+							id: 'label.eth_addres_not_valid',
+						},
+						{ type: chainType },
+					);
+				}
+			} else if (!isAddress(_address)) {
 				setIsValidating(false);
-				return formatMessage({ id: 'label.eth_addres_not_valid' });
+				return formatMessage(
+					{
+						id: 'label.eth_addres_not_valid',
+					},
+					{ type: 'ETH' },
+				);
 			}
 			const res = await gqlAddressValidation(_address);
 			setIsValidating(false);
@@ -129,9 +150,25 @@ const WalletAddressInput: FC<IProps> = ({
 		}
 	};
 
+	const addAddress = () => {
+		if (prevAddressObj) {
+			addresses.splice(addresses.indexOf(prevAddressObj), 1);
+		}
+		const _addresses = [
+			...addresses,
+			{
+				chainType,
+				networkId,
+				address: resolvedENS || inputValue,
+			},
+		];
+		setValue(inputName, _addresses);
+		onSubmit && onSubmit();
+	};
+
 	useEffect(() => {
 		//We had an issue with onBlur so when the user clicks on submit exactly after filling the address, then process of address validation began, so i changed it to this.
-		if (inputValue === value) return;
+		if (inputValue === prevAddress) return;
 		addressValidation(inputValue).then(res => {
 			if (res === true) {
 				setError({ ...error, message: '' });
@@ -210,12 +247,7 @@ const WalletAddressInput: FC<IProps> = ({
 					disabled={
 						error.message !== '' || !inputValue || isValidating
 					}
-					onClick={() => {
-						const _addresses = { ...addresses };
-						_addresses[networkId] = resolvedENS || inputValue;
-						setValue(inputName, _addresses);
-						onSubmit && onSubmit();
-					}}
+					onClick={addAddress}
 				/>
 			</ButtonWrapper>
 		</Container>
