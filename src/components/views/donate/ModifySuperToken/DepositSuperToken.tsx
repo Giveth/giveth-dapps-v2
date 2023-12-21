@@ -12,6 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 
 import { useAccount, useBalance } from 'wagmi';
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -43,6 +44,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	const [amount, setAmount] = useState(0n);
 
 	const { address } = useAccount();
+	const { formatMessage } = useIntl();
 
 	const [token, superToken] = useMemo(
 		() =>
@@ -152,7 +154,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			</TopUpSection>
 			<ModifyInfoToast />
 			<ActionButton
-				label='Confirm'
+				label={formatMessage({ id: 'label.deposit' })}
 				disabled={
 					amount <= 0 ||
 					balance === undefined ||
