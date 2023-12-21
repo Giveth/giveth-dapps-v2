@@ -13,29 +13,26 @@ import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { chainNameById } from '@/lib/network';
+import { IChainType } from '@/types/config';
+import { findAddressByChain } from '@/lib/helpers';
 
-interface IAddressInterfaceProps {
+interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
 	onButtonClick?: () => void;
 }
 
-const AddressInterface = ({
-	networkId,
-	onButtonClick,
-}: IAddressInterfaceProps) => {
-	const {
-		formState: { errors },
-		setValue,
-		watch,
-	} = useFormContext();
+const AddressInterface = (props: IAddressInterfaceProps) => {
+	const { networkId, onButtonClick, chainType } = props;
+	const { setValue, getValues } = useFormContext();
 
 	const inputName = EInputs.addresses;
 
-	const value = watch(inputName);
-
+	const addresses = getValues(inputName);
+	const addressObj = findAddressByChain(addresses, networkId, chainType);
+	const walletAddress = addressObj?.address;
 	const { formatMessage } = useIntl();
 
-	const hasAddress = !!value[networkId] && !errors[inputName]?.message;
+	const hasAddress = !!walletAddress;
 
 	return (
 		<Container>
@@ -79,16 +76,17 @@ const AddressInterface = ({
 					gap='8px'
 				>
 					<AddressContainer hasAddress={hasAddress}>
-						{hasAddress
-							? value[networkId]
-							: 'No address added yet!'}
+						{hasAddress ? walletAddress : 'No address added yet!'}
 					</AddressContainer>
 					{hasAddress && (
 						<IconContainer
 							onClick={() => {
-								const newValue = { ...value };
-								delete newValue[networkId];
-								setValue(inputName, newValue);
+								const _addresses = [...addresses];
+								_addresses.splice(
+									_addresses.indexOf(addressObj),
+									1,
+								);
+								setValue(inputName, _addresses);
 							}}
 						>
 							<IconTrash24 />
