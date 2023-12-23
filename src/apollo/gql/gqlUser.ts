@@ -61,6 +61,7 @@ export const FETCH_USER_PROJECTS = gql`
 					address
 					isRecipient
 					networkId
+					chainType
 				}
 				projectVerificationForm {
 					status
