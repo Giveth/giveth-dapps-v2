@@ -6,6 +6,7 @@ import {
 	EProjectsSortBy,
 } from '@/apollo/types/gqlEnums';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
+import { ChainType } from '@/types/config';
 
 export interface IProjectPower {
 	powerRank: number;
@@ -140,9 +141,10 @@ export interface ICampaign {
 }
 
 export interface IWalletAddress {
-	address?: `0x${string}`;
+	address?: string;
 	isRecipient?: boolean;
 	networkId?: number;
+	chainType?: ChainType;
 }
 
 export interface IProjectEdition {
