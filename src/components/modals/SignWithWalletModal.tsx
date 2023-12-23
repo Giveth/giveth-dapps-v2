@@ -193,16 +193,6 @@ export const SignWithWalletModal: FC<IProps> = ({
 						})}
 					</NoteDescription>
 				)}
-				{!multisigLastStep && (
-					<div>
-						<ExternalLink href={links.MULTISIG_GUIDE}>
-							<Purple>
-								Read the Giveth MultiSig Sign-in Guide{' '}
-								<IconExternalLink16 />
-							</Purple>
-						</ExternalLink>
-					</div>
-				)}
 
 				{multisigLastStep && !currentMultisigSession ? (
 					<Flex flexDirection='column'>
@@ -237,6 +227,12 @@ export const SignWithWalletModal: FC<IProps> = ({
 						</Flex>
 					)
 				)}
+				<MultisigGuideLink href={links.MULTISIG_GUIDE}>
+					<Purple>
+						Read the Giveth MultiSig Sign-in Guide{' '}
+						<IconExternalLink16 />
+					</Purple>
+				</MultisigGuideLink>
 				<OkButton
 					label={formatMessage({
 						id: multisigLastStep
@@ -354,6 +350,11 @@ const Purple = styled.div`
 	color: ${brandColors.giv[500]};
 `;
 
+const MultisigGuideLink = styled(ExternalLink)`
+	color: ${brandColors.giv[500]};
+	margin-top: 10px;
+	margin-bottom: 10px;
+`;
 // const MultisigMsgContainer = styled(Flex)`
 // 	position: relative;
 // 	background: ${brandColors.giv[50]};
