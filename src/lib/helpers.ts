@@ -21,6 +21,7 @@ import { gToast, ToastType } from '@/components/toasts';
 import config from '@/configuration';
 import { AddressZero } from './constants/constants';
 import { WalletType } from '@/hooks/useAuthenticationWallet';
+import { ChainType } from '@/types/config';
 
 declare let window: any;
 interface TransactionParams {
@@ -215,6 +216,18 @@ export const compareAddressesArray = (
 		}
 	}
 	return new Set(lowerCaseAddresses).size === 1;
+};
+
+export const findAddressByChain = (
+	addresses: IWalletAddress[],
+	chainId: number,
+	chainType?: ChainType,
+) => {
+	return addresses?.find(address =>
+		chainType
+			? address.chainType === chainType
+			: address.networkId === chainId,
+	);
 };
 
 export const isUserRegistered = (user?: IUser) => {
