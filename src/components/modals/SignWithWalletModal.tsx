@@ -10,6 +10,7 @@ import {
 	IconWalletApprove32,
 	Lead,
 	neutralColors,
+	IconExternalLink16,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
@@ -172,32 +173,34 @@ export const SignWithWalletModal: FC<IProps> = ({
 		>
 			<Container>
 				{!multisigLastStep && (
-					<>
-						<Description>
-							{formatMessage({
-								id: isGSafeConnector
-									? currentMultisigSession
-										? "You'll need to execute the pending Multisig transaction to complete your log-in to Giveth & proceed to this area"
-										: 'Sign a message with your Safe signer address to continue the log in process'
-									: 'label.you_need_to_authorize_your_wallet',
-							})}
-						</Description>
-						<ExternalLink href='https://docs.giveth.io/dapps/multisigs'>
-							<Purple>
-								Learn how to Sign in to Giveth with Multisisg
-								Wallets
-							</Purple>
-						</ExternalLink>
-					</>
-				)}
-				{!multisigLastStep && (
-					<NoteDescription color='red'>
+					<Description>
 						{formatMessage({
 							id: isGSafeConnector
-								? 'This is necessary to be able to create projects, manage your profile or use GIVpower.'
-								: 'label.note:this_is_necessary_to_donate_to_projects_or_receive_funding',
+								? currentMultisigSession
+									? "You'll need to execute the pending Multisig transaction to complete your log-in to Giveth & proceed to this area"
+									: 'Sign a message with your Safe signer address to continue the log in process'
+								: 'label.you_need_to_authorize_your_wallet',
 						})}
-					</NoteDescription>
+					</Description>
+				)}
+				{!multisigLastStep && (
+					<>
+						<NoteDescription color='red'>
+							{formatMessage({
+								id: isGSafeConnector
+									? 'This is necessary to be able to create projects, manage your profile or use GIVpower.'
+									: 'label.note:this_is_necessary_to_donate_to_projects_or_receive_funding',
+							})}
+						</NoteDescription>
+						<div>
+							<ExternalLink href='https://docs.giveth.io/dapps/multisigs'>
+								<Purple>
+									Giveth MultiSig Sign-in Guide{' '}
+									<IconExternalLink16 />
+								</Purple>
+							</ExternalLink>
+						</div>
+					</>
 				)}
 
 				{multisigLastStep && !currentMultisigSession ? (
