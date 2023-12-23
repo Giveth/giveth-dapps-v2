@@ -185,23 +185,23 @@ export const SignWithWalletModal: FC<IProps> = ({
 					</Description>
 				)}
 				{!multisigLastStep && (
-					<>
-						<NoteDescription color='red'>
-							{formatMessage({
-								id: isGSafeConnector
-									? 'This is necessary to be able to create projects, manage your profile or use GIVpower.'
-									: 'label.note:this_is_necessary_to_donate_to_projects_or_receive_funding',
-							})}
-						</NoteDescription>
-						<div>
-							<ExternalLink href={links.MULTISIG_GUIDE}>
-								<Purple>
-									Giveth MultiSig Sign-in Guide{' '}
-									<IconExternalLink16 />
-								</Purple>
-							</ExternalLink>
-						</div>
-					</>
+					<NoteDescription color='red'>
+						{formatMessage({
+							id: isGSafeConnector
+								? 'This is necessary to be able to create projects, manage your profile or use GIVpower.'
+								: 'label.note:this_is_necessary_to_donate_to_projects_or_receive_funding',
+						})}
+					</NoteDescription>
+				)}
+				{!multisigLastStep && (
+					<div>
+						<ExternalLink href={links.MULTISIG_GUIDE}>
+							<Purple>
+								Giveth MultiSig Sign-in Guide{' '}
+								<IconExternalLink16 />
+							</Purple>
+						</ExternalLink>
+					</div>
 				)}
 
 				{multisigLastStep && !currentMultisigSession ? (
