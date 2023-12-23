@@ -35,6 +35,7 @@ import {
 import { createSwisMessage } from '@/lib/authentication';
 import { ISolanaSignToGetToken } from '@/features/user/user.types';
 import ExternalLink from '@/components/ExternalLink';
+import links from '@/lib/constants/links';
 
 interface IProps extends IModal {
 	callback?: () => void;
@@ -193,7 +194,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 							})}
 						</NoteDescription>
 						<div>
-							<ExternalLink href='https://docs.giveth.io/dapps/multisigs'>
+							<ExternalLink href={links.MULTISIG_GUIDE}>
 								<Purple>
 									Giveth MultiSig Sign-in Guide{' '}
 									<IconExternalLink16 />
