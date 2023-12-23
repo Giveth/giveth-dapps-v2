@@ -33,6 +33,7 @@ import {
 } from '@/hooks/useAuthenticationWallet';
 import { createSwisMessage } from '@/lib/authentication';
 import { ISolanaSignToGetToken } from '@/features/user/user.types';
+import ExternalLink from '@/components/ExternalLink';
 
 interface IProps extends IModal {
 	callback?: () => void;
@@ -171,21 +172,29 @@ export const SignWithWalletModal: FC<IProps> = ({
 		>
 			<Container>
 				{!multisigLastStep && (
-					<Description>
-						{formatMessage({
-							id: isGSafeConnector
-								? currentMultisigSession
-									? "You'll need to execute the pending Multisig transaction to complete your log-in to Giveth & proceed to this area"
-									: 'Sign a message with your Safe signer address to continue the log in process'
-								: 'label.you_need_to_authorize_your_wallet',
-						})}
-					</Description>
+					<>
+						<Description>
+							{formatMessage({
+								id: isGSafeConnector
+									? currentMultisigSession
+										? "You'll need to execute the pending Multisig transaction to complete your log-in to Giveth & proceed to this area"
+										: 'Sign a message with your Safe signer address to continue the log in process'
+									: 'label.you_need_to_authorize_your_wallet',
+							})}
+						</Description>
+						<ExternalLink href='https://docs.giveth.io/dapps/multisigs'>
+							<Purple>
+								Learn how to Sign in to Giveth with Multisisg
+								Wallets
+							</Purple>
+						</ExternalLink>
+					</>
 				)}
 				{!multisigLastStep && (
 					<NoteDescription color='red'>
 						{formatMessage({
 							id: isGSafeConnector
-								? 'This is necessary to be able to donate to projects or receive funding.'
+								? 'This is necessary to be able to create projects, manage your profile or use GIVpower.'
 								: 'label.note:this_is_necessary_to_donate_to_projects_or_receive_funding',
 						})}
 					</NoteDescription>
@@ -335,6 +344,10 @@ const ExpirationContainer = styled(Flex)`
 	text-align: left;
 	justify-content: space-between;
 	align-items: center;
+`;
+
+const Purple = styled.div`
+	color: ${brandColors.giv[500]};
 `;
 
 // const MultisigMsgContainer = styled(Flex)`
