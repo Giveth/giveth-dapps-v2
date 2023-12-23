@@ -197,7 +197,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 					<div>
 						<ExternalLink href={links.MULTISIG_GUIDE}>
 							<Purple>
-								Giveth MultiSig Sign-in Guide{' '}
+								Read the Giveth MultiSig Sign-in Guide{' '}
 								<IconExternalLink16 />
 							</Purple>
 						</ExternalLink>
