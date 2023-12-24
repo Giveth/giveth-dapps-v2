@@ -104,19 +104,21 @@ const ModifySuperTokenInnerModal: FC<
 	const [tab, setTab] = useState(EModifyTabs.DEPOSIT);
 	return (
 		<Wrapper>
-			<Tabs>
-				{tabs.map(({ label, value }) => (
-					<Tab
-						key={value}
-						onClick={() => {
-							setTab(value);
-						}}
-						active={tab === value}
-					>
-						{label}
-					</Tab>
-				))}
-			</Tabs>
+			{props.step === EModifySuperTokenSteps.MODIFY && (
+				<Tabs>
+					{tabs.map(({ label, value }) => (
+						<Tab
+							key={value}
+							onClick={() => {
+								setTab(value);
+							}}
+							active={tab === value}
+						>
+							{label}
+						</Tab>
+					))}
+				</Tabs>
+			)}
 			{tab === EModifyTabs.DEPOSIT && <DepositSuperToken {...props} />}
 			{tab === EModifyTabs.WITHDRAW && <WithDrawSuperToken />}
 		</Wrapper>
