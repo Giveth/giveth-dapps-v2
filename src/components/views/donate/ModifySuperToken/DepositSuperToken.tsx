@@ -29,6 +29,9 @@ import {
 	IModifySuperTokenInnerModalProps,
 } from './ModifySuperTokenModal';
 import { DepositSteps } from './DepositSuperTokenSteps';
+import { Item } from '../RecurringDonationModal/Item';
+import { useTokenPrice } from '@/hooks/useTokenPrice';
+import { RunOutInfo } from '../RunOutInfo';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	tokenStreams: ITokenStreams;
@@ -70,6 +73,8 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		token: superToken?.id,
 		address: address,
 	});
+
+	const tokenPrice = useTokenPrice(token);
 
 	const tokenStream = tokenStreams[superToken?.id || ''];
 	const totalStreamPerSec =
@@ -178,7 +183,19 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 					/>
 				</>
 			) : (
-				<DepositSteps modifyTokenState={step} />
+				<Flex flexDirection='column' gap='16px'>
+					<DepositSteps modifyTokenState={step} />
+					<Item
+						title='Deposit into your stream balance'
+						amount={amount}
+						price={tokenPrice}
+						token={token!}
+					/>
+					<RunOutInfo
+						amount={amount + (SuperTokenBalance?.value || 0n)}
+						totalPerMonth={0n}
+					/>
+				</Flex>
 			)}
 		</Wrapper>
 	);
