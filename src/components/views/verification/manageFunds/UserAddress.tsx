@@ -4,7 +4,7 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import Input from '@/components/Input';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
 import { RemoveIcon } from '@/components/views/verification/Common';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 
 interface IProps {
 	address: IAddress;
@@ -18,7 +18,7 @@ const UserAddress: FC<IProps> = ({ address, remove }) => {
 			<Input
 				disabled
 				value={walletAddress?.toLowerCase()}
-				label={title + ' - ' + chainNameById(networkId)}
+				label={title + ' - ' + getChainName(networkId)}
 				name='walletAddress'
 			/>
 			<RemoveIcon onClick={remove} />

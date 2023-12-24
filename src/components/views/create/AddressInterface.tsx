@@ -12,7 +12,7 @@ import { EInputs } from '@/components/views/create/CreateProject';
 import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 import { IChainType } from '@/types/config';
 import { findAddressByChain } from '@/lib/helpers';
 
@@ -40,12 +40,16 @@ const AddressInterface = (props: IAddressInterfaceProps) => {
 				<Flex justifyContent='space-between'>
 					<Flex gap='8px'>
 						<ChainIconShadow>
-							<NetworkLogo chainId={networkId} logoSize={24} />
+							<NetworkLogo
+								chainType={chainType}
+								chainId={networkId}
+								logoSize={24}
+							/>
 						</ChainIconShadow>
 						{formatMessage(
 							{ id: 'label.chain_address' },
 							{
-								chainName: chainNameById(networkId),
+								chainName: getChainName(networkId, chainType),
 							},
 						)}
 					</Flex>
@@ -65,7 +69,7 @@ const AddressInterface = (props: IAddressInterfaceProps) => {
 								id: 'label.receiving_address_on',
 							},
 							{
-								chainName: chainNameById(networkId),
+								chainName: getChainName(networkId),
 							},
 						)}
 					</GLink>

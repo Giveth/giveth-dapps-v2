@@ -8,7 +8,7 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { jointItems } from '@/helpers/text';
 import SwitchNetwork from './SwitchNetwork';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 
 export interface IWrongNetworkInnerModal {
 	cardName: string;
@@ -25,7 +25,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
 
-	const chainNames = targetNetworks.map(network => chainNameById(network));
+	const chainNames = targetNetworks.map(network => getChainName(network));
 
 	const chainsStr = jointItems(chainNames);
 

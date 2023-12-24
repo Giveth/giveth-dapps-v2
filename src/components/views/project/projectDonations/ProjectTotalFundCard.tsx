@@ -15,7 +15,6 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-
 import { useEffect, useState } from 'react';
 import config from '@/configuration';
 import { Shadow } from '@/components/styled-components/Shadow';

@@ -16,7 +16,7 @@ import config from '@/configuration';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 import useFocus from '@/hooks/useFocus';
 
 interface IProps extends IModal {
@@ -29,7 +29,7 @@ const networkOptions = Object.keys(networksConfig).map(networkId => {
 	const networkIdNumber = Number(networkId);
 	return {
 		value: networkIdNumber,
-		label: chainNameById(networkIdNumber),
+		label: getChainName(networkIdNumber),
 		id: networkIdNumber,
 	};
 });

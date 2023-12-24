@@ -15,7 +15,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { NetworkWalletAddress } from './NetworkWalletAddress';
 import { AddNewAddress } from './AddNewAddress';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 import type { IModal } from '@/types/common';
 
 const networksConfig = config.NETWORKS_CONFIG;
@@ -76,7 +76,7 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 									id: 'label.chain_address',
 								},
 								{
-									chainName: chainNameById(
+									chainName: getChainName(
 										selectedWallet.networkId,
 									),
 								},

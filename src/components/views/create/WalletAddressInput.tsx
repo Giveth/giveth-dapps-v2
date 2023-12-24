@@ -23,7 +23,7 @@ import { getAddressFromENS, isAddressENS, isSolanaAddress } from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
 import NetworkLogo from '@/components/NetworkLogo';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 import useFocus from '@/hooks/useFocus';
 import { ChainType, IChainType } from '@/types/config';
 import config from '@/configuration';
@@ -83,7 +83,7 @@ const WalletAddressInput: FC<IProps> = ({
 	} else if (errorMessage || !prevAddress) {
 		caption = `${formatMessage({
 			id: 'label.you_can_enter_a_new_address',
-		})} ${chainNameById(networkId)}.`;
+		})} ${getChainName(networkId, chainType)}.`;
 	}
 
 	const isProjectPrevAddress = (newAddress: string) => {
@@ -187,7 +187,7 @@ const WalletAddressInput: FC<IProps> = ({
 					{formatMessage(
 						{ id: 'label.chain_address' },
 						{
-							chainName: chainNameById(networkId),
+							chainName: getChainName(networkId, chainType),
 						},
 					)}
 				</H6>
@@ -203,7 +203,7 @@ const WalletAddressInput: FC<IProps> = ({
 						id: 'label.receiving_address_on',
 					},
 					{
-						chainName: chainNameById(networkId),
+						chainName: getChainName(networkId, chainType),
 					},
 				)}
 				ref={inputRef}
