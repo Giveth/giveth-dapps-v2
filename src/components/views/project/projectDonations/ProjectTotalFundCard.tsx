@@ -209,9 +209,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 												matchFund,
 												'$',
 												locale,
-												selectedQFData?.isActive
-													? true
-													: false,
+												!!selectedQFData?.isActive,
 											)}
 										</EstimatedMatchingPrice>
 										<EstimatedMatchingText>
@@ -227,7 +225,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 												<BlockExplorerLink
 													as='a'
 													href={`${config
-														.NETWORKS_CONFIG[
+														.EVM_NETWORKS_CONFIG[
 														+qfRoundHistory.distributedFundNetwork!
 													]?.blockExplorers?.default
 														.url}
@@ -272,6 +270,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						key={addObj.networkId}
 						address={addObj.address!}
 						networkId={addObj.networkId!}
+						chainType={addObj.chainType}
 					/>
 				))}
 			</BottomSection>
