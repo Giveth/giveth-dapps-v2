@@ -214,15 +214,6 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 						</StreamSection>
 					</TopUpSection>
 					<ModifyInfoToast />
-					{/* <ActionButton
-						label={formatMessage({ id: 'label.deposit' })}
-						disabled={
-							amount <= 0 ||
-							balance === undefined ||
-							amount > balance.value
-						}
-						onClick={() => setStep(EModifySuperTokenSteps.APPROVE)}
-					/> */}
 				</>
 			) : (
 				<Flex flexDirection='column' gap='16px'>
@@ -241,6 +232,12 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			)}
 			<Button
 				label={formatMessage({ id: actionButtonLabel[step] })}
+				disabled={
+					step === EModifySuperTokenSteps.APPROVE &&
+					(amount <= 0 ||
+						balance === undefined ||
+						amount > balance.value)
+				}
 				onClick={onAction}
 			/>
 		</Wrapper>
