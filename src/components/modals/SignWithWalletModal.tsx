@@ -10,6 +10,7 @@ import {
 	IconWalletApprove32,
 	Lead,
 	neutralColors,
+	IconExternalLink16,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
@@ -33,6 +34,8 @@ import {
 } from '@/hooks/useAuthenticationWallet';
 import { createSwisMessage } from '@/lib/authentication';
 import { ISolanaSignToGetToken } from '@/features/user/user.types';
+import ExternalLink from '@/components/ExternalLink';
+import links from '@/lib/constants/links';
 
 interface IProps extends IModal {
 	callback?: () => void;
@@ -185,7 +188,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 					<NoteDescription color='red'>
 						{formatMessage({
 							id: isGSafeConnector
-								? 'This is necessary to be able to donate to projects or receive funding.'
+								? 'This is necessary to be able to create projects, manage your profile or use GIVpower.'
 								: 'label.note:this_is_necessary_to_donate_to_projects_or_receive_funding',
 						})}
 					</NoteDescription>
@@ -224,6 +227,12 @@ export const SignWithWalletModal: FC<IProps> = ({
 						</Flex>
 					)
 				)}
+				<MultisigGuideLink href={links.MULTISIG_GUIDE}>
+					<Purple>
+						Read the Giveth MultiSig Sign-in Guide{' '}
+						<IconExternalLink16 />
+					</Purple>
+				</MultisigGuideLink>
 				<OkButton
 					label={formatMessage({
 						id: multisigLastStep
@@ -337,6 +346,15 @@ const ExpirationContainer = styled(Flex)`
 	align-items: center;
 `;
 
+const Purple = styled.div`
+	color: ${brandColors.giv[500]};
+`;
+
+const MultisigGuideLink = styled(ExternalLink)`
+	color: ${brandColors.giv[500]};
+	margin-top: 10px;
+	margin-bottom: 10px;
+`;
 // const MultisigMsgContainer = styled(Flex)`
 // 	position: relative;
 // 	background: ${brandColors.giv[50]};
