@@ -1,4 +1,4 @@
-import { useState, type FC, useMemo } from 'react';
+import { useState, type FC, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
 import {
 	Caption,
@@ -77,6 +77,13 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	});
 
 	const tokenPrice = useTokenPrice(token);
+
+	useEffect(() => {
+		if (!token) return;
+		if (token.symbol === 'ETH') {
+			setStep(EModifySuperTokenSteps.DEPOSIT);
+		}
+	}, [token, setStep]);
 
 	const tokenStream = tokenStreams[superToken?.id || ''];
 	const totalStreamPerSec =
