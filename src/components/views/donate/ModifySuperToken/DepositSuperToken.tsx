@@ -32,6 +32,8 @@ import { DepositSteps } from './DepositSuperTokenSteps';
 import { Item } from '../RecurringDonationModal/Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { RunOutInfo } from '../RunOutInfo';
+import { approveERC20tokenTransfer } from '@/lib/stakingPool';
+import config from '@/configuration';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	tokenStreams: ITokenStreams;
@@ -88,6 +90,29 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		SuperTokenBalance.value > 0n
 			? SuperTokenBalance.value / totalStreamPerSec / ONE_MONTH_SECONDS
 			: 0n;
+
+	const onApprove = async () => {
+		console.log('Approve', amount, address, superToken, token);
+		if (!address || !superToken || !token) return;
+		setStep(EModifySuperTokenSteps.APPROVING);
+		try {
+			const approve = await approveERC20tokenTransfer(
+				amount,
+				address,
+				superToken.id, //superTokenAddress
+				token.id, //tokenAddress
+				config.OPTIMISM_CONFIG.id,
+			);
+			if (approve) {
+				setStep(EModifySuperTokenSteps.DEPOSIT);
+			} else {
+				setStep(EModifySuperTokenSteps.APPROVE);
+			}
+		} catch (error) {
+			console.log('error', error);
+			setStep(EModifySuperTokenSteps.APPROVE);
+		}
+	};
 
 	return (
 		<Wrapper>
@@ -194,6 +219,10 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 					<RunOutInfo
 						amount={amount + (SuperTokenBalance?.value || 0n)}
 						totalPerMonth={0n}
+					/>
+					<Button
+						label={formatMessage({ id: 'label.approve' })}
+						onClick={onApprove}
 					/>
 				</Flex>
 			)}
