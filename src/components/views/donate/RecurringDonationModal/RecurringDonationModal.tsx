@@ -1,12 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import {
-	B,
-	Button,
-	IconDonation32,
-	P,
-	mediaQueries,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { Button, IconDonation32, mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Framework, type Operation } from '@superfluid-finance/sdk-core';
 import { useAccount } from 'wagmi';
@@ -17,13 +10,14 @@ import { Flex } from '@/components/styled-components/Flex';
 import { useDonateData } from '@/context/donate.context';
 import { Item } from './Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
-import { formatDate, showToastError } from '@/lib/helpers';
+import { showToastError } from '@/lib/helpers';
 import { DonateSteps } from './DonateSteps';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
+import { RunOutInfo } from '../RunOutInfo';
 
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
@@ -299,10 +293,6 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	const projectPerMonth =
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
-	const totalPerSecond = totalPerMonth / ONE_MONTH_SECONDS;
-	const secondsUntilRunOut = amount / totalPerSecond;
-	const date = new Date();
-	date.setSeconds(date.getSeconds() + Number(secondsUntilRunOut.toString()));
 
 	return (
 		<Wrapper>
@@ -331,11 +321,12 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					/>
 				)}
 			</Items>
-			<RunOutSection>
+			{/* <RunOutSection>
 				<P>Your stream balance will run out funds on </P>
 				<B>{formatDate(date)}</B>
 				<P>Top-up before then!</P>
-			</RunOutSection>
+			</RunOutSection> */}
+			<RunOutInfo amount={amount} totalPerMonth={totalPerMonth} />
 			<ActionButton
 				label={buttonLabel[step]}
 				onClick={handleAction}
@@ -366,14 +357,6 @@ const Wrapper = styled(Flex)`
 
 const Items = styled(Flex)`
 	max-width: 100%;
-`;
-
-const RunOutSection = styled(Flex)`
-	flex-direction: column;
-	gap: 8px;
-	border-top: 1px solid ${neutralColors.gray[600]};
-	padding-top: 16px;
-	align-items: flex-start;
 `;
 
 const ActionButton = styled(Button)`
