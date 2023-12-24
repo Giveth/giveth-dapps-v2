@@ -83,13 +83,12 @@ export const getGivStakingAPR = async (
 	if (!lmAddress) return { effectiveAPR: Zero };
 	const sdh = new SubgraphDataHelper(subgraphValue);
 	const unipoolHelper = new UnipoolHelper(sdh.getUnipool(lmAddress));
-	let givStakingAPR = Zero;
 	const { totalSupply, rewardRate } = await getUnipoolInfo(
 		unipoolHelper,
 		lmAddress,
 		chainId,
 	);
-	givStakingAPR =
+	const givStakingAPR =
 		totalSupply === 0n
 			? Zero
 			: new BigNumber(rewardRate.toString())
@@ -333,7 +332,7 @@ export const getUserStakeInfo = (
 	);
 	const rewards = BigInt(unipoolBalance.rewards);
 	const rewardPerTokenPaid = BigInt(unipoolBalance.rewardPerTokenPaid);
-	let stakedAmount = BigInt(unipoolBalance.balance);
+	let stakedAmount: bigint;
 	const networkConfig = config.NETWORKS_CONFIG[poolStakingConfig.network];
 	if (poolStakingConfig.type === StakingType.GIV_GARDEN_LM) {
 		const gGIVBalance = sdh.getTokenBalance(
@@ -372,7 +371,7 @@ const permitTokens = async (
 	lmAddress: string,
 	amount: bigint,
 ) => {
-	const poolContract = await getContract({
+	const poolContract = getContract({
 		address: poolAddress,
 		abi: UNI_ABI,
 		chainId,
