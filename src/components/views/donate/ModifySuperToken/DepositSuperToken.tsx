@@ -13,6 +13,7 @@ import {
 
 import { useAccount, useBalance } from 'wagmi';
 import { useIntl } from 'react-intl';
+import { Framework } from '@superfluid-finance/sdk-core';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -35,6 +36,8 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { RunOutInfo } from '../RunOutInfo';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
+import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
+import { showToastError } from '@/lib/helpers';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	tokenStreams: ITokenStreams;
@@ -122,12 +125,58 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		}
 	};
 
+	const onDeposit = async () => {
+		setStep(EModifySuperTokenSteps.DEPOSITING);
+		try {
+			const _provider = getEthersProvider({
+				chainId: config.OPTIMISM_CONFIG.id,
+			});
+
+			const signer = await getEthersSigner({
+				chainId: config.OPTIMISM_CONFIG.id,
+			});
+
+			if (!_provider || !signer || !address || !superToken)
+				throw new Error('Provider or signer not found');
+
+			const sf = await Framework.create({
+				chainId: config.OPTIMISM_CONFIG.id,
+				provider: _provider,
+			});
+
+			// EThx is not a Wrapper Super Token and should load separately
+			let superTokenAsset;
+			if (superToken.symbol === 'ETHx') {
+				superTokenAsset = await sf.loadNativeAssetSuperToken(
+					superToken.id,
+				);
+			} else {
+				superTokenAsset = await sf.loadWrapperSuperToken(superToken.id);
+			}
+			const upgradeOperation = await superTokenAsset.upgrade({
+				amount: amount.toString(),
+			});
+
+			const tx = await upgradeOperation.exec(signer);
+			const res = await tx.wait();
+			if (!res.status) {
+				throw new Error('Deposit failed');
+			}
+			setStep(EModifySuperTokenSteps.SUBMITTED);
+		} catch (error) {
+			setStep(EModifySuperTokenSteps.DEPOSIT);
+			showToastError(error);
+			console.log('error', error);
+		}
+	};
+
 	const onAction = () => {
 		if (step === EModifySuperTokenSteps.MODIFY) {
 			setStep(EModifySuperTokenSteps.APPROVE);
 		} else if (step === EModifySuperTokenSteps.APPROVE) {
 			onApprove();
 		} else if (step === EModifySuperTokenSteps.DEPOSIT) {
+			onDeposit();
 		}
 	};
 
