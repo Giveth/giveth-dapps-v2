@@ -49,6 +49,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	tokenStreams,
 	step,
 	setStep,
+	setShowModal,
 }) => {
 	const [amount, setAmount] = useState(0n);
 
@@ -177,6 +178,8 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			onApprove();
 		} else if (step === EModifySuperTokenSteps.DEPOSIT) {
 			onDeposit();
+		} else if (step === EModifySuperTokenSteps.SUBMITTED) {
+			setShowModal(false);
 		}
 	};
 
