@@ -11,7 +11,7 @@ import React from 'react';
 import {
 	ChainType,
 	EnvConfig,
-	NonEthChain,
+	NonEVMChain,
 	StakingPlatform,
 	StakingType,
 	StreamType,
@@ -40,7 +40,7 @@ const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
 const CLASSIC_NETWORK_NUMBER = 61;
-const SOLANA_NETWORK: NonEthChain = {
+const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
 	chainType: ChainType.SOLANA,
 	adapterNetwork: WalletAdapterNetwork.Mainnet,
@@ -52,7 +52,8 @@ const SOLANA_NETWORK: NonEthChain = {
 		},
 	},
 };
-const ETH_CHAINS = [mainnet, gnosis, polygon, optimism, celo, classic];
+const EVM_CHAINS = [mainnet, gnosis, polygon, optimism, celo, classic];
+const NON_EVM_CHAINS = [SOLANA_NETWORK];
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -66,8 +67,8 @@ const config: EnvConfig = {
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
-	ETH_CHAINS,
-	ALL_CHAINS: [...ETH_CHAINS, SOLANA_NETWORK],
+	EVM_CHAINS,
+	CHAINS: [...EVM_CHAINS, ...NON_EVM_CHAINS],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
