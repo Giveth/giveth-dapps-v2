@@ -18,12 +18,14 @@ require('@solana/wallet-adapter-react-ui/styles.css');
 interface IProviderProps {
 	children: ReactNode;
 }
+const { SOLANA_CONFIG } = config;
+const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;
 // Create a context for the provider
 export const SolanaCtx = createContext<any>(null);
 
 const wallets: BaseMessageSignerWalletAdapter[] = [
 	new PhantomWalletAdapter(),
-	new SolflareWalletAdapter({ network: config.SOLANA_NETWORK }),
+	new SolflareWalletAdapter({ network: solanaAdapter }),
 ];
 
 if (!isProduction) {
@@ -31,7 +33,7 @@ if (!isProduction) {
 }
 // Create the provider component
 export const SolanaProvider: FC<IProviderProps> = ({ children }) => {
-	const endpoint = useMemo(() => clusterApiUrl(config.SOLANA_NETWORK), []);
+	const endpoint = useMemo(() => clusterApiUrl(solanaAdapter), []);
 
 	return (
 		<SolanaCtx.Provider value={null}>

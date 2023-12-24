@@ -8,7 +8,9 @@ import {
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {
+	ChainType,
 	EnvConfig,
+	NonEthChain,
 	StakingPlatform,
 	StakingType,
 	StreamType,
@@ -19,6 +21,7 @@ import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconEthereum } from '@/components/Icons/Eth';
 import { IconUnknown } from '@/components/Icons/Unknown';
+import IconSolana from '@/components/Icons/Solana';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -44,7 +47,18 @@ const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
-const SOLANA_NETWORK = WalletAdapterNetwork.Testnet;
+const SOLANA_NETWORK: NonEthChain = {
+	id: 0,
+	chainType: ChainType.SOLANA,
+	name: 'Solana Testnet',
+	adapterNetwork: WalletAdapterNetwork.Testnet,
+	blockExplorers: {
+		default: {
+			name: 'Solana Explorer',
+			url: 'https://explorer.solana.com',
+		},
+	},
+};
 
 const classic = {
 	id: 63,
@@ -68,6 +82,15 @@ const classic = {
 	subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
 };
 
+const ETH_CHAINS = [
+	polygon,
+	goerli,
+	gnosis,
+	optimismGoerli,
+	celoAlfajores,
+	classic,
+];
+
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
 	BACKEND_LINK: BACKEND_LINK,
@@ -78,14 +101,14 @@ const config: EnvConfig = {
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
 
-	CHAINS: [polygon, goerli, gnosis, optimismGoerli, celoAlfajores, classic],
+	ETH_CHAINS,
+	ALL_CHAINS: [...ETH_CHAINS, SOLANA_NETWORK],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
-	SOLANA_NETWORK: SOLANA_NETWORK,
 
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
@@ -354,6 +377,12 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+	},
+
+	SOLANA_CONFIG: {
+		...SOLANA_NETWORK,
+		coingeckoChainName: 'solana',
+		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
 	},
 };
 

@@ -1,6 +1,6 @@
 import development from './config/development';
 import production from './config/production';
-import { GlobalConfig } from './types/config';
+import { ChainType, GlobalConfig } from './types/config';
 
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 console.log('isProduction', isProduction);
@@ -22,6 +22,7 @@ const config: GlobalConfig = {
 		[envConfig.OPTIMISM_NETWORK_NUMBER]: envConfig.OPTIMISM_CONFIG,
 		[envConfig.CELO_NETWORK_NUMBER]: envConfig.CELO_CONFIG,
 		[envConfig.CLASSIC_NETWORK_NUMBER]: envConfig.CLASSIC_CONFIG,
+		[ChainType.SOLANA]: envConfig.SOLANA_CONFIG,
 	},
 	// Used for adding networks to user wallet, useless since just xDAI is not
 	// included in metamask by default and its rpc endpoint is not infura

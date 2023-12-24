@@ -187,8 +187,27 @@ interface MicroservicesConfig {
 	notificationSettings: string;
 }
 
+export interface NonEthChain {
+	id: number;
+	name: string;
+	chainType: ChainType;
+	adapterNetwork: WalletAdapterNetwork;
+	blockExplorers: {
+		default: {
+			name: string;
+			url: string;
+		};
+	};
+}
+
+export interface NonEthChainConfig extends NonEthChain {
+	coingeckoChainName: string;
+	chainLogo: (logoSize?: number) => JSX.Element;
+}
+
 export interface EnvConfig {
-	CHAINS: Chain[];
+	ETH_CHAINS: Chain[];
+	ALL_CHAINS: (Chain | NonEthChain)[];
 	GIVETH_PROJECT_ID: number;
 	MAINNET_NETWORK_NUMBER: number;
 	GNOSIS_NETWORK_NUMBER: number;
@@ -207,7 +226,7 @@ export interface EnvConfig {
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
 	RARIBLE_ADDRESS: string;
-	SOLANA_NETWORK: WalletAdapterNetwork;
+	SOLANA_CONFIG: NonEthChainConfig;
 }
 
 export interface GlobalConfig extends EnvConfig {
@@ -218,10 +237,19 @@ export interface GlobalConfig extends EnvConfig {
 	PFP_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
 	NETWORKS_CONFIG: {
-		[key: number]: NetworkConfig;
+		[key: number | string]: NetworkConfig | NonEthChainConfig;
 	};
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
 	GOOGLE_MAPS_API_KEY: string | undefined;
 	ENABLE_SOLANA: boolean;
+}
+
+export enum ChainType {
+	SOLANA = 'SOLANA',
+	EVM = 'EVM',
+}
+
+export interface IChainType {
+	chainType?: ChainType;
 }
