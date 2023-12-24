@@ -51,7 +51,7 @@ import { ChainType } from '@/types/config';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
 
-const ALL_CHAINS = config.ALL_CHAINS;
+const ALL_CHAINS = config.CHAINS;
 
 interface ICreateProjectProps {
 	project?: IProjectEdition;

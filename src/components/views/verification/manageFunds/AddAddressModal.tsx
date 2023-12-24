@@ -24,7 +24,7 @@ interface IProps extends IModal {
 	addresses: IAddress[];
 }
 
-const networksConfig = config.NETWORKS_CONFIG;
+const networksConfig = config.EVM_NETWORKS_CONFIG;
 const networkOptions = Object.keys(networksConfig).map(networkId => {
 	const networkIdNumber = Number(networkId);
 	return {
