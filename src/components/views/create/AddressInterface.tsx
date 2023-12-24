@@ -69,7 +69,7 @@ const AddressInterface = (props: IAddressInterfaceProps) => {
 								id: 'label.receiving_address_on',
 							},
 							{
-								chainName: getChainName(networkId),
+								chainName: getChainName(networkId, chainType),
 							},
 						)}
 					</GLink>
