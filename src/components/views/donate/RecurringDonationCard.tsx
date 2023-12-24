@@ -65,15 +65,16 @@ export const RecurringDonationCard = () => {
 				? undefined
 				: selectedToken?.token.id,
 		address: address,
-		enabled: false,
+		watch: true,
+		cacheTime: 5_000,
 	});
 
 	useEffect(() => {
-		if (!selectedToken) return;
+		if (!selectedToken || !balance) return;
 		if (selectedToken.token.isSuperToken) {
-			setAmount(selectedToken.balance || 0n);
+			setAmount(balance.value || 0n);
 		}
-	}, [selectedToken]);
+	}, [selectedToken, balance]);
 
 	const underlyingToken = selectedToken?.token.underlyingToken;
 
@@ -82,7 +83,7 @@ export const RecurringDonationCard = () => {
 	const projectPerMonth =
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
-	const tokenBalance = balance?.value || selectedToken?.balance;
+	const tokenBalance = balance?.value;
 	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
 	const totalStreamPerSec =
 		tokenStream?.reduce(
@@ -181,7 +182,7 @@ export const RecurringDonationCard = () => {
 						{selectedToken?.token.isSuperToken ? (
 							<p>
 								{formatUnits(
-									selectedToken?.balance || 0n,
+									balance?.value || 0n,
 									selectedToken.token.decimals,
 								)}
 							</p>
@@ -195,13 +196,13 @@ export const RecurringDonationCard = () => {
 					</InputWrapper>
 					{!selectedToken?.token.isSuperToken &&
 						selectedToken !== undefined &&
-						selectedToken.balance !== undefined && (
+						balance !== undefined && (
 							<Flex gap='4px'>
 								<GLink size='Small'>
 									Available:{' '}
 									{balance?.formatted ||
 										formatUnits(
-											selectedToken?.balance,
+											balance.value,
 											selectedToken?.token.underlyingToken
 												?.decimals || 18,
 										)}
