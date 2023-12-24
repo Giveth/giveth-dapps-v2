@@ -51,8 +51,7 @@ import { ChainType } from '@/types/config';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
 
-const { NETWORKS_CONFIG } = config;
-const networksIds = Object.keys(NETWORKS_CONFIG).map(Number);
+const ALL_CHAINS = config.ALL_CHAINS;
 
 interface ICreateProjectProps {
 	project?: IProjectEdition;
@@ -115,9 +114,18 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = impactLocation || '';
-	const activeAddresses = addresses?.filter(a => a.isRecipient) || [];
+	const activeAddresses =
+		addresses
+			?.filter(a => a.isRecipient)
+			.map(a => {
+				const _a = { ...a };
+				delete _a.isRecipient;
+				return _a;
+			}) || [];
 
-	const userAddresses = [...new Set(activeAddresses.map(a => a.address!))];
+	const userUniqueAddresses = [
+		...new Set(activeAddresses.map(a => a.address!)),
+	];
 
 	const formMethods = useForm<TInputs>({
 		mode: 'onBlur',
@@ -306,23 +314,25 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								id: 'label.you_can_set_a_custom_ethereum_address',
 							})}
 						</CaptionContainer>
-						{networksIds.map(networkId => (
+						{ALL_CHAINS.map(chain => (
 							<AddressInterface
-								key={networkId}
-								networkId={networkId}
-								onButtonClick={() =>
-									setAddressModalChainId(networkId)
+								key={chain.id}
+								networkId={chain.id}
+								chainType={
+									'chainType' in chain
+										? chain.chainType
+										: undefined
 								}
+								onButtonClick={() => {
+									if ('chainType' in chain) {
+										setAddressModalChainType(
+											chain.chainType,
+										);
+									}
+									setAddressModalChainId(chain.id);
+								}}
 							/>
 						))}
-						<AddressInterface
-							networkId={0}
-							onButtonClick={() => {
-								setAddressModalChainType(ChainType.SOLANA);
-								setAddressModalChainId(0);
-							}}
-							chainType={ChainType.SOLANA}
-						/>
 						<PublishTitle>
 							{isEditMode
 								? formatMessage({
@@ -391,7 +401,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							<CreateProjectAddAddressModal
 								networkId={addressModalChainId}
 								chainType={addressModalChainType}
-								userAddresses={userAddresses}
+								userAddresses={userUniqueAddresses}
 								setShowModal={() => {
 									setAddressModalChainId(undefined);
 									setAddressModalChainType(undefined);
