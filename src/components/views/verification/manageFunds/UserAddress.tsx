@@ -12,13 +12,13 @@ interface IProps {
 }
 
 const UserAddress: FC<IProps> = ({ address, remove }) => {
-	const { title, address: walletAddress, networkId } = address;
+	const { title, address: walletAddress, networkId, chainType } = address;
 	return (
 		<Container>
 			<Input
 				disabled
 				value={walletAddress?.toLowerCase()}
-				label={title + ' - ' + getChainName(networkId)}
+				label={title + ' - ' + getChainName(networkId, chainType)}
 				name='walletAddress'
 			/>
 			<RemoveIcon onClick={remove} />
