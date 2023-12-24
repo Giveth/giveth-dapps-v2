@@ -289,7 +289,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			<Button
 				label={formatMessage({ id: actionButtonLabel[step] })}
 				disabled={
-					step === EModifySuperTokenSteps.APPROVE &&
+					step === EModifySuperTokenSteps.MODIFY &&
 					(amount <= 0 ||
 						balance === undefined ||
 						amount > balance.value)
