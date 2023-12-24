@@ -103,6 +103,10 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			? SuperTokenBalance.value / totalStreamPerSec / ONE_MONTH_SECONDS
 			: 0n;
 
+	const isLoading =
+		step === EModifySuperTokenSteps.APPROVING ||
+		step === EModifySuperTokenSteps.DEPOSITING;
+
 	const onApprove = async () => {
 		console.log('Approve', amount, address, superToken, token);
 		if (!address || !superToken || !token) return;
@@ -290,6 +294,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 						balance === undefined ||
 						amount > balance.value)
 				}
+				loading={isLoading}
 				onClick={onAction}
 			/>
 		</Wrapper>
