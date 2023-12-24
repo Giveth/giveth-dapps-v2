@@ -86,7 +86,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 
 	useEffect(() => {
 		if (!chainId) return;
-		const networkConfig = config.NETWORKS_CONFIG[chainId];
+		const networkConfig = config.EVM_NETWORKS_CONFIG[chainId];
 
 		if (!networkConfig || !networkConfig.pools) return;
 		let pools = [];

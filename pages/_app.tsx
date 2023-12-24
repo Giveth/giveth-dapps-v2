@@ -88,7 +88,7 @@ const metadata = {
 	icons: ['https://giveth.io/images/currencies/giv/24.svg'],
 };
 
-const chains = config.ETH_CHAINS;
+const chains = config.EVM_CHAINS;
 const { publicClient } = configureChains(chains, [
 	walletConnectProvider({ projectId }),
 	publicProvider(),

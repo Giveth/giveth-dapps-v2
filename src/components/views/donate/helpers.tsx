@@ -63,7 +63,7 @@ export const getNetworkIds = (
 
 export const getNetworkNames = (networks: number[], text: string) => {
 	return networks.map((network, index) => {
-		const name = config.NETWORKS_CONFIG[network]?.name;
+		const name = config.EVM_NETWORKS_CONFIG[network]?.name;
 		const lastLoop = networks.length === index + 1;
 		return (
 			<span key={network}>

@@ -19,7 +19,7 @@ import config from '@/configuration';
 import { ETheme } from '@/features/general/general.slice';
 import { getChainName } from '@/lib/network';
 
-const networksConfig = config.NETWORKS_CONFIG;
+const networksConfig = config.EVM_NETWORKS_CONFIG;
 const defaultNetworkIds = Object.keys(networksConfig).map(Number);
 
 interface ISwitchNetworkModal extends IModal {

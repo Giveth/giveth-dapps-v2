@@ -18,7 +18,7 @@ import { AddNewAddress } from './AddNewAddress';
 import { getChainName } from '@/lib/network';
 import type { IModal } from '@/types/common';
 
-const networksConfig = config.NETWORKS_CONFIG;
+const networksConfig = config.EVM_NETWORKS_CONFIG;
 const networkIds = Object.keys(networksConfig).map(Number);
 
 interface IManageProjectAddressesModal extends IModal {

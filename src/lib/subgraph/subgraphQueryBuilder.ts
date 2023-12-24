@@ -252,7 +252,7 @@ export class SubgraphQueryBuilder {
 	};
 
 	static getChainQuery = (chainId: number, userAddress?: string): string => {
-		const networkConfig = config.NETWORKS_CONFIG[chainId];
+		const networkConfig = config.EVM_NETWORKS_CONFIG[chainId];
 		const givpowerConfig = networkConfig?.GIVPOWER;
 		return `
 		{
