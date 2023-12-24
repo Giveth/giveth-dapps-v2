@@ -41,6 +41,17 @@ const headerTitleGenerator = (step: EModifySuperTokenSteps) => {
 	}
 };
 
+export const actionButtonLabel = {
+	[EModifySuperTokenSteps.MODIFY]: 'label.confirm',
+	[EModifySuperTokenSteps.APPROVE]: 'label.approve',
+	[EModifySuperTokenSteps.APPROVING]: 'label.approving',
+	[EModifySuperTokenSteps.DEPOSIT]: 'label.deposit',
+	[EModifySuperTokenSteps.DEPOSITING]: 'label.depositing',
+	[EModifySuperTokenSteps.WITHDRAW]: 'label.withdraw',
+	[EModifySuperTokenSteps.WITHDRAWING]: 'label.withdrawing',
+	[EModifySuperTokenSteps.SUBMITTED]: 'label.done',
+};
+
 export const ModifySuperTokenModal: FC<IModifySuperTokenModalProps> = ({
 	setShowModal,
 	...props

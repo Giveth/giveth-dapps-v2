@@ -27,6 +27,7 @@ import { ModifyInfoToast } from './ModifyInfoToast';
 import {
 	EModifySuperTokenSteps,
 	IModifySuperTokenInnerModalProps,
+	actionButtonLabel,
 } from './ModifySuperTokenModal';
 import { DepositSteps } from './DepositSuperTokenSteps';
 import { Item } from '../RecurringDonationModal/Item';
@@ -80,10 +81,10 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 
 	useEffect(() => {
 		if (!token) return;
-		if (token.symbol === 'ETH') {
+		if (step === EModifySuperTokenSteps.APPROVE && token.symbol === 'ETH') {
 			setStep(EModifySuperTokenSteps.DEPOSIT);
 		}
-	}, [token, setStep]);
+	}, [token, setStep, step]);
 
 	const tokenStream = tokenStreams[superToken?.id || ''];
 	const totalStreamPerSec =
@@ -118,6 +119,15 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		} catch (error) {
 			console.log('error', error);
 			setStep(EModifySuperTokenSteps.APPROVE);
+		}
+	};
+
+	const onAction = () => {
+		if (step === EModifySuperTokenSteps.MODIFY) {
+			setStep(EModifySuperTokenSteps.APPROVE);
+		} else if (step === EModifySuperTokenSteps.APPROVE) {
+			onApprove();
+		} else if (step === EModifySuperTokenSteps.DEPOSIT) {
 		}
 	};
 
@@ -204,7 +214,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 						</StreamSection>
 					</TopUpSection>
 					<ModifyInfoToast />
-					<ActionButton
+					{/* <ActionButton
 						label={formatMessage({ id: 'label.deposit' })}
 						disabled={
 							amount <= 0 ||
@@ -212,7 +222,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 							amount > balance.value
 						}
 						onClick={() => setStep(EModifySuperTokenSteps.APPROVE)}
-					/>
+					/> */}
 				</>
 			) : (
 				<Flex flexDirection='column' gap='16px'>
@@ -227,12 +237,12 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 						amount={amount + (SuperTokenBalance?.value || 0n)}
 						totalPerMonth={0n}
 					/>
-					<Button
-						label={formatMessage({ id: 'label.approve' })}
-						onClick={onApprove}
-					/>
 				</Flex>
 			)}
+			<Button
+				label={formatMessage({ id: actionButtonLabel[step] })}
+				onClick={onAction}
+			/>
 		</Wrapper>
 	);
 };
