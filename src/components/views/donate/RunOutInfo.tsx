@@ -12,7 +12,8 @@ interface IRunOutInfoProps {
 
 export const RunOutInfo: FC<IRunOutInfoProps> = ({ amount, totalPerMonth }) => {
 	const totalPerSecond = totalPerMonth / ONE_MONTH_SECONDS;
-	const secondsUntilRunOut = amount / totalPerSecond;
+	const secondsUntilRunOut =
+		totalPerSecond > 0 ? amount / totalPerSecond : 0n;
 	const date = new Date();
 	date.setSeconds(date.getSeconds() + Number(secondsUntilRunOut.toString()));
 	return (
