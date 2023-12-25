@@ -1,18 +1,31 @@
 import styled from 'styled-components';
-import { FC } from 'react';
-import { IconBulbOutline32, P, brandColors } from '@giveth/ui-design-system';
+import { FC, useState } from 'react';
+import {
+	Button,
+	IconBulbOutline32,
+	P,
+	brandColors,
+} from '@giveth/ui-design-system';
 import { useNetwork } from 'wagmi';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
+import SwitchNetwork from '@/components/modals/SwitchNetwork';
 
 const AlloProtocolModal: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chain } = useNetwork();
+	const [showSwitchNetworkModal, setShowSwitchNetworkModal] = useState(false);
 	const isOnOptimism = chain
 		? chain.id === config.OPTIMISM_NETWORK_NUMBER
 		: false;
+
+	const handleButtonClick = () => {
+		if (!isOnOptimism) {
+			setShowSwitchNetworkModal(true);
+		}
+	};
 
 	console.log('Rendering AlloProtocolModal');
 	return (
@@ -43,7 +56,18 @@ const AlloProtocolModal: FC<IModal> = ({ setShowModal }) => {
 					</P>
 					<Ellipse />
 				</ItemContainer>
+				<br />
+				<CustomButton
+					label={isOnOptimism ? 'Confirm' : 'Switch To Optimism'}
+					onClick={handleButtonClick}
+				/>
 			</Container>
+			{showSwitchNetworkModal && (
+				<SwitchNetwork
+					customNetworks={[config.OPTIMISM_NETWORK_NUMBER]}
+					setShowModal={setShowSwitchNetworkModal}
+				/>
+			)}
 		</Modal>
 	);
 };
@@ -68,6 +92,14 @@ const Ellipse = styled.div`
 	border-radius: 50%;
 	background-color: ${brandColors.giv[600]};
 	box-shadow: 0 0 0 4px ${brandColors.giv[100]};
+`;
+
+const CustomButton = styled(Button)`
+	width: 100%;
+`;
+
+const ButtonContainer = styled.div`
+	width: 100%;
 `;
 
 export default AlloProtocolModal;
