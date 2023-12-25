@@ -26,15 +26,12 @@ import NetworkLogo from '@/components/NetworkLogo';
 import { getChainName } from '@/lib/network';
 import useFocus from '@/hooks/useFocus';
 import { ChainType, IChainType } from '@/types/config';
-import config from '@/configuration';
 
 interface IProps extends IChainType {
 	networkId: number;
 	userAddresses: string[];
 	onSubmit?: () => void;
 }
-
-const isSolanaEnabled = config.ENABLE_SOLANA;
 
 const WalletAddressInput: FC<IProps> = ({
 	networkId,
@@ -122,7 +119,7 @@ const WalletAddressInput: FC<IProps> = ({
 				setIsValidating(false);
 				return true;
 			}
-			if (isSolanaEnabled && chainType === ChainType.SOLANA) {
+			if (chainType === ChainType.SOLANA) {
 				if (!isSolanaAddress(_address)) {
 					setIsValidating(false);
 					return formatMessage(

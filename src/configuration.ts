@@ -1,11 +1,12 @@
 import development from './config/development';
 import production from './config/production';
-import { ChainType, GlobalConfig } from './types/config';
+import { ChainType, GlobalConfig, NonEVMNetworkConfig } from './types/config';
 
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 console.log('isProduction', isProduction);
 
 const envConfig = isProduction ? production : development;
+const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
 
 const EVM_NETWORKS_CONFIG = {
 	[envConfig.MAINNET_NETWORK_NUMBER]: envConfig.MAINNET_CONFIG,
@@ -16,9 +17,11 @@ const EVM_NETWORKS_CONFIG = {
 	[envConfig.CLASSIC_NETWORK_NUMBER]: envConfig.CLASSIC_CONFIG,
 };
 
-const NON_EVM_NETWORKS_CONFIG = {
-	[ChainType.SOLANA]: envConfig.SOLANA_CONFIG,
-};
+const NON_EVM_NETWORKS_CONFIG: { [key: string]: NonEVMNetworkConfig } = {};
+
+if (isSolanaEnabled) {
+	NON_EVM_NETWORKS_CONFIG[ChainType.SOLANA] = envConfig.SOLANA_CONFIG;
+}
 
 const config: GlobalConfig = {
 	TOKEN_NAME: 'DRGIV',
@@ -36,7 +39,7 @@ const config: GlobalConfig = {
 	INFURA_API_KEY: process.env.NEXT_PUBLIC_INFURA_API_KEY,
 	BLOCKNATIVE_DAPP_ID: process.env.BLOCKNATIVE_DAPP_ID,
 	GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-	ENABLE_SOLANA: process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true',
+	ENABLE_SOLANA: isSolanaEnabled,
 };
 
 export default config;

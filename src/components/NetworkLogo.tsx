@@ -2,6 +2,7 @@ import config from '@/configuration';
 import { ChainType } from '@/types/config';
 
 const networkIds = Object.keys(config.EVM_NETWORKS_CONFIG).map(Number);
+const networkTypes = Object.keys(config.NON_EVM_NETWORKS_CONFIG);
 
 interface INetworkLogoProps {
 	chainId?: number;
@@ -11,8 +12,11 @@ interface INetworkLogoProps {
 
 const NetworkLogo = (props: INetworkLogoProps) => {
 	const { chainId, logoSize, chainType } = props;
-	if ((chainId && networkIds.includes(chainId)) || chainType) {
-		return config.NETWORKS_CONFIG[(chainId || chainType)!].chainLogo(
+	if (
+		(chainId && networkIds.includes(chainId)) ||
+		(chainType && networkTypes.includes(chainType))
+	) {
+		return config.NETWORKS_CONFIG[(chainId || chainType)!]?.chainLogo(
 			logoSize,
 		);
 	}

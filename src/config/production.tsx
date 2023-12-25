@@ -33,6 +33,8 @@ const NOTIFICATION_BASE_ROUTE =
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
 
+const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
+
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
 const GNOSIS_NETWORK_NUMBER = 100; // xDAI
@@ -53,7 +55,10 @@ const SOLANA_NETWORK: NonEVMChain = {
 	},
 };
 const EVM_CHAINS = [mainnet, gnosis, polygon, optimism, celo, classic];
-const NON_EVM_CHAINS = [SOLANA_NETWORK];
+const NON_EVM_CHAINS: NonEVMChain[] = [];
+if (isSolanaEnabled) {
+	NON_EVM_CHAINS.push(SOLANA_NETWORK);
+}
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
