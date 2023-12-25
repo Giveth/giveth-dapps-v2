@@ -18,7 +18,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
 import { getChainName } from '@/lib/network';
 import useFocus from '@/hooks/useFocus';
-import { ChainType } from '@/types/config';
+import { ChainType, NonEVMNetworkConfig } from '@/types/config';
 
 interface IProps extends IModal {
 	addAddress: (address: IAddress) => void;
