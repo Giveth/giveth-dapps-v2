@@ -30,7 +30,7 @@ import QFToast from '@/components/views/donate/QFToast';
 import { useAppSelector } from '@/features/hooks';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { getActiveRound } from '@/helpers/qf';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { formatTxLink } from '@/lib/helpers';
 
@@ -106,45 +106,40 @@ export const SuccessView: FC = () => {
 	}, [isLoading]);
 
 	return (
-		<>
-			<SuccessContainer>
-				<ConfettiContainer>
-					<LottieControl
-						size={400}
-						animationData={CongratsAnimation}
-					/>
-				</ConfettiContainer>
-				<GiverH4 weight={700}>
-					{formatMessage({ id: 'label.youre_giver_now' })}
-				</GiverH4>
-				<SuccessMessage>{message}</SuccessMessage>
-				{givBackEligible && (
-					<GivBackContainer>
-						<H6>
-							{formatMessage({
-								id: 'label.youre_eligible_for_givbacks',
-							})}
-						</H6>
-						<P>
-							{formatMessage({
-								id: 'label.givback_distributed_after_round',
-							})}
-						</P>
-						<ExternalLink href={links.GIVBACK_DOC}>
-							<LearnButton size='small' label='LEARN MORE' />
-						</ExternalLink>
-					</GivBackContainer>
-				)}
-				{hasActiveQFRound &&
-					passportState !== EPassportState.LOADING &&
-					isOnEligibleNetworks && <QFToast />}
-				<SocialBoxWrapper>
-					<SocialBox
-						project={project}
-						contentType={EContentType.justDonated}
-					/>
-				</SocialBoxWrapper>
-			</SuccessContainer>
+		<Wrapper>
+			<ConfettiContainer>
+				<LottieControl size={400} animationData={CongratsAnimation} />
+			</ConfettiContainer>
+			<GiverH4 weight={700}>
+				{formatMessage({ id: 'label.youre_giver_now' })}
+			</GiverH4>
+			<SuccessMessage>{message}</SuccessMessage>
+			{givBackEligible && (
+				<GivBackContainer>
+					<H6>
+						{formatMessage({
+							id: 'label.youre_eligible_for_givbacks',
+						})}
+					</H6>
+					<P>
+						{formatMessage({
+							id: 'label.givback_distributed_after_round',
+						})}
+					</P>
+					<ExternalLink href={links.GIVBACK_DOC}>
+						<LearnButton size='small' label='LEARN MORE' />
+					</ExternalLink>
+				</GivBackContainer>
+			)}
+			{hasActiveQFRound &&
+				passportState !== EPassportState.LOADING &&
+				isOnEligibleNetworks && <QFToast />}
+			<SocialBoxWrapper>
+				<SocialBox
+					project={project}
+					contentType={EContentType.justDonated}
+				/>
+			</SocialBoxWrapper>
 			<Options>
 				<Lead style={{ color: neutralColors.gray[900] }}>
 					{formatMessage({
@@ -161,9 +156,15 @@ export const SuccessView: FC = () => {
 					<ProjectsButton size='small' label='SEE MORE PROJECTS' />
 				</Link>
 			</Options>
-		</>
+		</Wrapper>
 	);
 };
+
+const Wrapper = styled(Flex)`
+	flex-direction: column;
+	gap: 24px;
+	align-items: center;
+`;
 
 const SocialBoxWrapper = styled.div`
 	margin: -50px 0;
@@ -178,20 +179,8 @@ const GiverH4 = styled(H4)`
 	color: ${brandColors.deep[700]};
 `;
 
-const SuccessContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-	align-items: center;
-	text-align: center;
-	color: ${brandColors.deep[900]};
-	height: 100%;
-	padding: 0;
-`;
-
 const SuccessMessage = styled(P)`
 	position: relative;
-	margin: 16px 0 30px;
 	color: ${brandColors.deep[900]};
 	a {
 		color: ${brandColors.pinky[500]};
