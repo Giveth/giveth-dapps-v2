@@ -16,7 +16,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { TokenInfo } from './TokenInfo';
 import { fetchBalance } from '@/services/token';
-import { IToken } from '@/types/superFluid';
+import { ISuperToken, IToken } from '@/types/superFluid';
 import { StreamInfo } from './StreamInfo';
 import { useDonateData } from '@/context/donate.context';
 
@@ -48,9 +48,10 @@ const allTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	setShowModal,
 }) => {
+	const [tokens, setTokens] = useState<ISuperToken[]>([]);
 	const [balances, setBalances] = useState<IBalances>({});
 	const { address } = useAccount();
-	const { tokenStreams, setSelectedToken } = useDonateData();
+	const { tokenStreams, setSelectedToken, project } = useDonateData();
 
 	useEffect(() => {
 		// Ensure we have an address before proceeding
@@ -58,6 +59,21 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 			console.log('No address found.');
 			return;
 		}
+
+		// Filter out tokens that already have a stream
+		const projectOpAddress = project.addresses?.find(
+			address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
+		)?.address;
+
+		const filteredTokens = allTokens.filter(token => {
+			return !tokenStreams[token.id].find(
+				stream =>
+					stream.receiver.id.toLowerCase() ===
+					projectOpAddress?.toLowerCase(),
+			);
+		});
+
+		setTokens(filteredTokens);
 
 		// A helper function to fetch balance for a single token
 		const fetchTokenBalance = async (token: IToken) => {
@@ -105,7 +121,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 
 		// Call the function to fetch all balances
 		fetchAllBalances();
-	}, [address]); // Dependency array includes address to refetch if it changes
+	}, [address, project.addresses, tokenStreams]); // Dependency array includes address to refetch if it changes
 
 	return (
 		<>
@@ -156,7 +172,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 					),
 				)}
 				<Title medium>Eligible Tokens</Title>
-				{allTokens.map(token => (
+				{tokens.map(token => (
 					<TokenInfo
 						key={token.underlyingToken.symbol}
 						token={token.underlyingToken}
