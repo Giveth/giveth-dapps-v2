@@ -227,12 +227,14 @@ export const SignWithWalletModal: FC<IProps> = ({
 						</Flex>
 					)
 				)}
-				<MultisigGuideLink href={links.MULTISIG_GUIDE}>
-					<Purple>
-						Read the Giveth MultiSig Sign-in Guide{' '}
-						<IconExternalLink16 />
-					</Purple>
-				</MultisigGuideLink>
+				{isSafeEnv && (
+					<MultisigGuideLink href={links.MULTISIG_GUIDE}>
+						<Purple>
+							Read the Giveth MultiSig Sign-in Guide{' '}
+							<IconExternalLink16 />
+						</Purple>
+					</MultisigGuideLink>
+				)}
 				<OkButton
 					label={formatMessage({
 						id: multisigLastStep
