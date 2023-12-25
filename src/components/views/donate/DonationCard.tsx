@@ -2,9 +2,12 @@ import { B, P, neutralColors } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { RecurringDonationCard } from './RecurringDonationCard';
 import CryptoDonation from './CryptoDonation';
+
+export const isRecurringActive =
+	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true';
 
 enum ETabs {
 	ONE_TIME,
@@ -31,8 +34,15 @@ export const DonationCard = () => {
 				<EmptyTab />
 			</Flex>
 			<TabWrapper>
-				{tab === ETabs.RECURRING && <RecurringDonationCard />}
 				{tab === ETabs.ONE_TIME && <CryptoDonation />}
+				{tab === ETabs.RECURRING &&
+					(isRecurringActive ? (
+						<RecurringDonationCard />
+					) : (
+						<FlexCenter>
+							This Feature is not available now
+						</FlexCenter>
+					))}
 			</TabWrapper>
 		</DonationCardWrapper>
 	);
