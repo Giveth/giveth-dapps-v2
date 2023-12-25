@@ -99,7 +99,7 @@ const DonateIndex: FC = () => {
 };
 
 const AlreadyDonatedWrapper = styled(Flex)`
-	margin: 0 40px 16px 40px;
+	margin-bottom: 16px;
 	padding: 12px 16px;
 	gap: 8px;
 	color: ${semanticColors.jade[500]};
