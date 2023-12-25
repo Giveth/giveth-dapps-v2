@@ -406,6 +406,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									setAddressModalChainId(undefined);
 									setAddressModalChainType(undefined);
 								}}
+								onSubmit={() => {
+									setAddressModalChainId(undefined);
+									setAddressModalChainType(undefined);
+								}}
 							/>
 						)}
 					</form>

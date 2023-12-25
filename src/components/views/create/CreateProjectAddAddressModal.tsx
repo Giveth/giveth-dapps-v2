@@ -12,10 +12,12 @@ interface ICreateProjectAddAddressModal extends IChainType {
 	userAddresses: string[];
 	setResolvedENS?: (resolvedENS: string) => void;
 	resolvedENS?: string;
+	onSubmit?: () => void;
 }
 
 const CreateProjectAddAddressModal = (props: ICreateProjectAddAddressModal) => {
-	const { setShowModal, networkId, userAddresses, chainType } = props;
+	const { setShowModal, networkId, userAddresses, onSubmit, chainType } =
+		props;
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
@@ -30,7 +32,7 @@ const CreateProjectAddAddressModal = (props: ICreateProjectAddAddressModal) => {
 				<WalletAddressInput
 					networkId={networkId}
 					userAddresses={userAddresses}
-					onSubmit={setShowModal}
+					onSubmit={onSubmit}
 					chainType={chainType}
 				/>
 			</AddressContainer>
