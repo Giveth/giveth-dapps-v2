@@ -26,6 +26,7 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import {
 	ICategory,
+	IProject,
 	IProjectCreation,
 	IProjectEdition,
 } from '@/apollo/types/types';
@@ -147,6 +148,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
+	const [addedProjectState, setAddedProjectState] = useState<IProject>();
 
 	const data = watch();
 	const {
@@ -227,19 +229,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				hasOptimismAddress,
 			);
 
-			if (watchAlloProtocolRegistry && hasOptimismAddress) {
-				console.log(
-					'Openning',
-					showAlloProtocolModal,
-					watchAlloProtocolRegistry,
-					hasOptimismAddress,
-				);
-				setShowAlloProtocolModal(true);
-				console.log('Rendering after setShowAlloProtocolModal');
-				setIsLoading(false);
-				return;
-			}
-
 			const addedProject = isEditMode
 				? await editProjectMutation({
 						variables: {
@@ -253,6 +242,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						},
 					});
 
+			if (watchAlloProtocolRegistry && hasOptimismAddress) {
+				setAddedProjectState(addedProject.data?.createProject);
+				setIsLoading(false);
+			}
+
 			if (isDraft && !draft) {
 				await client.mutate({
 					mutation: ACTIVATE_PROJECT,
@@ -264,20 +258,27 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 			if (addedProject) {
 				// Success
-				setIsLoading(false);
-				if (!isEditMode) {
-					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
-				}
-				const _project = isEditMode
-					? addedProject.data?.updateProject
-					: addedProject.data?.createProject;
-				if (draft) {
-					await router.push(slugToProjectView(_project.slug));
+
+				if (watchAlloProtocolRegistry && hasOptimismAddress) {
+					setShowAlloProtocolModal(true);
 				} else {
-					if (!isEditMode || (isEditMode && isDraft)) {
-						await router.push(slugToSuccessView(_project.slug));
-					} else {
+					setIsLoading(false);
+					if (!isEditMode) {
+						localStorage.removeItem(
+							StorageLabel.CREATE_PROJECT_FORM,
+						);
+					}
+					const _project = isEditMode
+						? addedProject.data?.updateProject
+						: addedProject.data?.createProject;
+					if (draft) {
 						await router.push(slugToProjectView(_project.slug));
+					} else {
+						if (!isEditMode || (isEditMode && isDraft)) {
+							await router.push(slugToSuccessView(_project.slug));
+						} else {
+							await router.push(slugToProjectView(_project.slug));
+						}
 					}
 				}
 			}
@@ -438,8 +439,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			{showGuidelineModal && (
 				<ProjectGuidelineModal setShowModal={setShowGuidelineModal} />
 			)}
-			{showAlloProtocolModal && (
-				<AlloProtocolModal setShowModal={setShowAlloProtocolModal} />
+			{showAlloProtocolModal && addedProjectState && (
+				<AlloProtocolModal
+					setShowModal={setShowAlloProtocolModal}
+					addedProjectState={addedProjectState}
+				/>
 			)}
 		</Wrapper>
 	);

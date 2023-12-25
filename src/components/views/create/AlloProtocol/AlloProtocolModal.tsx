@@ -12,8 +12,17 @@ import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
+import useCreateAnchorContract from '@/hooks/useCreateAnchorContract';
+import { IProject } from '@/apollo/types/types';
 
-const AlloProtocolModal: FC<IModal> = ({ setShowModal }) => {
+interface IAlloProtocolModal extends IModal {
+	addedProjectState: IProject;
+}
+
+const AlloProtocolModal: FC<IAlloProtocolModal> = ({
+	setShowModal,
+	addedProjectState,
+}) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chain } = useNetwork();
 	const [showSwitchNetworkModal, setShowSwitchNetworkModal] = useState(false);
@@ -21,9 +30,28 @@ const AlloProtocolModal: FC<IModal> = ({ setShowModal }) => {
 		? chain.id === config.OPTIMISM_NETWORK_NUMBER
 		: false;
 
-	const handleButtonClick = () => {
+	const { writeAsync } = useCreateAnchorContract({
+		adminUser: addedProjectState?.adminUser,
+		id: addedProjectState?.id,
+		slug: addedProjectState?.slug!,
+	});
+
+	const handleAnchorContract = async () => {
+		const tx = await writeAsync?.();
+		return tx;
+	};
+
+	const handleButtonClick = async () => {
 		if (!isOnOptimism) {
 			setShowSwitchNetworkModal(true);
+		} else {
+			try {
+				const tx = await handleAnchorContract();
+				console.log('TX', tx);
+				setShowModal(false); // Close the modal
+			} catch (error) {
+				console.error('Error signing contract:', error);
+			}
 		}
 	};
 
@@ -38,6 +66,7 @@ const AlloProtocolModal: FC<IModal> = ({ setShowModal }) => {
 		>
 			<Container>
 				{isOnOptimism ? 'On Optimism' : 'Not On Optimism'}
+				{addedProjectState.id}
 				<P>Set up your profile on the Allo protocol Registry </P>
 				<br />
 				<ItemContainer>
