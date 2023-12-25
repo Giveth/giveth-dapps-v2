@@ -14,6 +14,7 @@ import config from '@/configuration';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
 import useCreateAnchorContract from '@/hooks/useCreateAnchorContract';
 import { IProject } from '@/apollo/types/types';
+import StorageLabel from '@/lib/localStorage';
 
 interface IAlloProtocolModal extends IModal {
 	addedProjectState: IProject;
@@ -26,6 +27,8 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chain } = useNetwork();
 	const [showSwitchNetworkModal, setShowSwitchNetworkModal] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+
 	const isOnOptimism = chain
 		? chain.id === config.OPTIMISM_NETWORK_NUMBER
 		: false;
@@ -36,21 +39,21 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 		slug: addedProjectState?.slug!,
 	});
 
-	const handleAnchorContract = async () => {
-		const tx = await writeAsync?.();
-		return tx;
-	};
-
 	const handleButtonClick = async () => {
 		if (!isOnOptimism) {
 			setShowSwitchNetworkModal(true);
 		} else {
 			try {
-				const tx = await handleAnchorContract();
+				setIsLoading(true);
+				const tx = await writeAsync?.();
 				console.log('TX', tx);
+				//Call backend to update project
 				setShowModal(false); // Close the modal
 			} catch (error) {
 				console.error('Error signing contract:', error);
+			} finally {
+				localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
+				setIsLoading(false);
 			}
 		}
 	};
@@ -89,6 +92,8 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 				<CustomButton
 					label={isOnOptimism ? 'Confirm' : 'Switch To Optimism'}
 					onClick={handleButtonClick}
+					loading={isLoading}
+					disabled={isLoading}
 				/>
 			</Container>
 			{showSwitchNetworkModal && (
