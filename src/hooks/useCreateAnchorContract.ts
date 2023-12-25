@@ -4,18 +4,17 @@ import config from '@/configuration';
 import { IProject } from '@/apollo/types/types';
 
 interface ICreateAnchorContract {
-	project: IProject;
+	slug: string;
+	adminUser: IProject['adminUser'];
+	id: IProject['id'];
 }
 
 // Custom hook for creating an anchor contract
-const useCreateAnchorContract = ({ project }: ICreateAnchorContract) => {
-	// Destructure project properties
-	const {
-		slug,
-		adminUser: { walletAddress },
-		id,
-	} = project;
-
+const useCreateAnchorContract = ({
+	slug,
+	adminUser: { walletAddress },
+	id,
+}: ICreateAnchorContract) => {
 	// Prepare the contract configuration using usePrepareContractWrite hook
 	const { config: contractConfig } = usePrepareContractWrite({
 		address: config.OPTIMISM_CONFIG.anchorRegistryAddress,
