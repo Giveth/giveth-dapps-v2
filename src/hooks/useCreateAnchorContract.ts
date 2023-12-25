@@ -1,20 +1,22 @@
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import createProfileABI from '@/artifacts/createProfile.json';
 import config from '@/configuration';
-import { IProject } from '@/apollo/types/types';
+import { IAdminUser } from '@/apollo/types/types';
 
 interface ICreateAnchorContract {
-	slug: string;
-	adminUser: IProject['adminUser'];
-	id: IProject['id'];
+	slug?: string;
+	adminUser?: IAdminUser;
+	id?: string;
 }
 
 // Custom hook for creating an anchor contract
 const useCreateAnchorContract = ({
 	slug,
-	adminUser: { walletAddress },
+	adminUser,
 	id,
 }: ICreateAnchorContract) => {
+	const { walletAddress } = adminUser || {};
+
 	// Prepare the contract configuration using usePrepareContractWrite hook
 	const { config: contractConfig } = usePrepareContractWrite({
 		address: config.OPTIMISM_CONFIG.anchorRegistryAddress,
@@ -22,7 +24,7 @@ const useCreateAnchorContract = ({
 		abi: createProfileABI.abi,
 		chainId: config.OPTIMISM_NETWORK_NUMBER,
 		args: [
-			+id, // Convert id to a number
+			+id!, // Convert id to a number
 			slug,
 			{
 				protocol: 1,
