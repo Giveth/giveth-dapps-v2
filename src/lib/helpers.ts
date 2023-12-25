@@ -225,9 +225,9 @@ export const findAddressByChain = (
 	chainType?: ChainType,
 ) => {
 	return addresses?.find(address =>
-		chainType
-			? address.chainType === chainType
-			: address.networkId === chainId,
+		chainId
+			? address.networkId === chainId
+			: address.chainType === chainType,
 	);
 };
 
