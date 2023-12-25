@@ -64,15 +64,19 @@ const ProjectActions = (props: IProjectActions) => {
 				setShowAddressModal(true);
 			},
 		},
-		{
-			label: 'Claim Recurring donation',
-			icon: <IconArrowDownCircle16 />,
-			cb: () => {
-				setSelectedProject(project);
-				setShowClaimModal(true);
-			},
-		},
 	];
+
+	const recurringDonationOption: IOption = {
+		label: 'Claim Recurring donation',
+		icon: <IconArrowDownCircle16 />,
+		cb: () => {
+			setSelectedProject(project);
+			setShowClaimModal(true);
+		},
+	};
+
+	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true' &&
+		options.push(recurringDonationOption);
 
 	const dropdownStyle = {
 		padding: '4px 16px',
