@@ -25,12 +25,11 @@ interface IProps extends IModal {
 	addresses: IAddress[];
 }
 
-const networkOptions = config.CHAINS.map(chain => {
-	const networkId = Number(chain.id);
-	let chainType;
-	if ('chainType' in chain) {
-		chainType = chain.chainType;
-	}
+const networksConfig = config.NETWORKS_CONFIG;
+const networkOptions = Object.keys(networksConfig).map(key => {
+	const chain = networksConfig[key];
+	const networkId = chain.id;
+	const chainType = 'chainType' in chain ? chain.chainType : undefined;
 	return {
 		value: networkId,
 		label: getChainName(networkId, chainType),
@@ -95,7 +94,7 @@ const AddAddressModal: FC<IProps> = ({
 
 	const validateAddress = async (address: string) => {
 		let actualAddress = address;
-		if (watchChain.chainType === ChainType.SOLANA) {
+		if (watchChain?.chainType === ChainType.SOLANA) {
 			if (!isSolanaAddress(address)) {
 				return 'Invalid Solana address';
 			}
