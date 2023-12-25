@@ -50,6 +50,7 @@ import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
+import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
 
 const { NETWORKS_CONFIG } = config;
 const networksIds = Object.keys(NETWORKS_CONFIG).map(Number);
@@ -90,6 +91,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [addressModalChainId, setAddressModalChainId] = useState<
 		number | undefined
 	>(undefined);
+	const [showAlloProtocolModal, setShowAlloProtocolModal] = useState(false);
 
 	const isEditMode = !!project;
 
@@ -154,6 +156,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		image: watchImage,
 		impactLocation: watchImpactLocation,
 		addresses: watchAddresses,
+		alloProtocolRegistry: watchAlloProtocolRegistry,
 	} = data;
 
 	useEffect(() => {
@@ -169,7 +172,14 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchImage,
 		watchImpactLocation,
 		watchAddresses,
+		watchAlloProtocolRegistry,
 	]);
+
+	const hasOptimismAddress = watchAddresses.hasOwnProperty(
+		config.OPTIMISM_NETWORK_NUMBER,
+	);
+
+	console.log('OptimismAddress', hasOptimismAddress);
 
 	const onSubmit = async (formData: TInputs) => {
 		try {
@@ -210,6 +220,26 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				isDraft: draft,
 			};
 
+			console.log(
+				'Openning',
+				showAlloProtocolModal,
+				watchAlloProtocolRegistry,
+				hasOptimismAddress,
+			);
+
+			if (watchAlloProtocolRegistry && hasOptimismAddress) {
+				console.log(
+					'Openning',
+					showAlloProtocolModal,
+					watchAlloProtocolRegistry,
+					hasOptimismAddress,
+				);
+				setShowAlloProtocolModal(true);
+				console.log('Rendering after setShowAlloProtocolModal');
+				setIsLoading(false);
+				return;
+			}
+
 			const addedProject = isEditMode
 				? await editProjectMutation({
 						variables: {
@@ -229,6 +259,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					variables: { projectId: Number(project.id) },
 				});
 			}
+
+			//handle Anchor contract modal here.
 
 			if (addedProject) {
 				// Success
@@ -405,6 +437,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			)}
 			{showGuidelineModal && (
 				<ProjectGuidelineModal setShowModal={setShowGuidelineModal} />
+			)}
+			{showAlloProtocolModal && (
+				<AlloProtocolModal setShowModal={setShowAlloProtocolModal} />
 			)}
 		</Wrapper>
 	);
