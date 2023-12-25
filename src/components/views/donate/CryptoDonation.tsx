@@ -5,7 +5,6 @@ import {
 	brandColors,
 	Button,
 	GLink,
-	H4,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -126,7 +125,6 @@ const CryptoDonation: FC = () => {
 	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
 	const activeRound = getActiveRound(project.qfRounds);
 	const networkId = chain?.id;
-	const isOnAcceptedChain = networkId && acceptedChains?.includes(networkId);
 
 	const isOnEligibleNetworks =
 		networkId && activeRound?.eligibleNetworks?.includes(networkId);
@@ -315,9 +313,6 @@ const CryptoDonation: FC = () => {
 		!isActive || !amountTyped || !selectedToken || amountError;
 	return (
 		<MainContainer>
-			<H4Styled weight={700}>
-				{formatMessage({ id: 'page.donate.title' })}
-			</H4Styled>
 			{showQFModal && (
 				<QFModal
 					setShowDonateModal={setShowDonateModal}
@@ -491,10 +486,6 @@ const CryptoDonation: FC = () => {
 	);
 };
 
-const H4Styled = styled(H4)`
-	margin-bottom: 30px;
-`;
-
 const EmptySpace = styled.div`
 	margin-top: 70px;
 `;
@@ -504,6 +495,7 @@ const MainContainer = styled.div`
 	flex-direction: column;
 	height: 60%;
 	justify-content: space-between;
+	text-align: left;
 `;
 
 const InputContainer = styled.div`

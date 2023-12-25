@@ -81,7 +81,9 @@ const DonateIndex: FC = () => {
 					<Col xs={12} lg={6}>
 						<DonationCard />
 					</Col>
-					<Col></Col>
+					<Col>
+					<Projec
+						</Col>
 				</Row>
 				{!isMobile && (
 					<SocialBox
