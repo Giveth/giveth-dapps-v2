@@ -26,7 +26,9 @@ import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
 import { DonationCard } from './DonationCard';
 import { SuccessView } from './SuccessView';
-import ProjectCard from '@/components/project-card/ProjectCard';
+import { DonateSection } from '../project/projectActionCard/DonationSection';
+import QFSection from '../project/projectActionCard/QFSection';
+import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -72,7 +74,16 @@ const DonateIndex: FC = () => {
 						<DonationCard />
 					</Col>
 					<Col xs={12} lg={6}>
-						<ProjectCard project={project} />
+						<InfoWrapper>
+							<ImageWrapper>
+								<ProjectCardImage image={project.image} />
+							</ImageWrapper>
+							{!isMobile && hasActiveQFRound ? (
+								<QFSection projectData={project} />
+							) : (
+								<DonateSection projectData={project} />
+							)}
+						</InfoWrapper>
 					</Col>
 				</Row>
 				{!isMobile && (
@@ -103,6 +114,23 @@ const DonateContainer = styled(Container)`
 	padding-top: 128px;
 	padding-bottom: 64px;
 	position: relative;
+`;
+
+const InfoWrapper = styled.div`
+	background-color: ${neutralColors.gray[100]};
+	padding: 24px;
+	border-radius: 16px;
+	height: 100%;
+	text-align: left;
+`;
+
+const ImageWrapper = styled.div`
+	position: relative;
+	width: 100%;
+	height: 231px;
+	margin-bottom: 24px;
+	border-radius: 8px;
+	overflow: hidden;
 `;
 
 export default DonateIndex;
