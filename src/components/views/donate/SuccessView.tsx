@@ -52,8 +52,7 @@ const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isLoading } = useAppSelector(state => state.user);
-	const { isSuccessDonation, setSuccessDonation, hasActiveQFRound, project } =
-		useDonateData();
+	const { isSuccessDonation, hasActiveQFRound, project } = useDonateData();
 	const { givBackEligible, txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 

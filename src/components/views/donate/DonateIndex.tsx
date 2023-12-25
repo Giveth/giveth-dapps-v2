@@ -10,7 +10,6 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import dynamic from 'next/dynamic';
 import { BigArc } from '@/components/styled-components/Arc';
 import SocialBox from '../../DonateSocialBox';
 import NiceBanner from './NiceBanner';
@@ -27,22 +26,13 @@ import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
 import { DonationCard } from './DonationCard';
 import { SuccessView } from './SuccessView';
-
-const CryptoDonation = dynamic(
-	() => import('@/components/views/donate/CryptoDonation'),
-	{
-		loading: () => <p>Loading...</p>,
-		ssr: false,
-	},
-);
+import ProjectCard from '@/components/project-card/ProjectCard';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isMobile } = useDetectDevice();
 	const { project, isSuccessDonation, hasActiveQFRound } = useDonateData();
 	const alreadyDonated = useAlreadyDonatedToProject(project);
-	const { txHash = [] } = isSuccessDonation || {};
-	const hasMultipleTxs = txHash.length > 1;
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
@@ -81,9 +71,9 @@ const DonateIndex: FC = () => {
 					<Col xs={12} lg={6}>
 						<DonationCard />
 					</Col>
-					<Col>
-					<Projec
-						</Col>
+					<Col xs={12} lg={6}>
+						<ProjectCard project={project} />
+					</Col>
 				</Row>
 				{!isMobile && (
 					<SocialBox
