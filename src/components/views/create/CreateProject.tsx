@@ -109,8 +109,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		categories: storageCategories,
 		impactLocation: storageImpactLocation,
 		image: storageImage,
-		addresses: storageAddresses = [],
 	} = storageProjectData || {};
+	const storageAddresses =
+		storageProjectData?.addresses instanceof Array
+			? storageProjectData.addresses
+			: [];
 
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = impactLocation || '';

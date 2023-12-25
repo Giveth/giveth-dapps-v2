@@ -21,14 +21,16 @@ interface IAddressInterfaceProps extends IChainType {
 	onButtonClick?: () => void;
 }
 
-const AddressInterface = (props: IAddressInterfaceProps) => {
-	const { networkId, onButtonClick, chainType } = props;
-	const { setValue, getValues } = useFormContext();
+const AddressInterface = ({
+	networkId,
+	onButtonClick,
+	chainType,
+}: IAddressInterfaceProps) => {
+	const { setValue, watch } = useFormContext();
 
 	const inputName = EInputs.addresses;
-
-	const addresses = getValues(inputName);
-	const addressObj = findAddressByChain(addresses, networkId, chainType);
+	const value = watch(inputName);
+	const addressObj = findAddressByChain(value, networkId, chainType);
 	const walletAddress = addressObj?.address;
 	const { formatMessage } = useIntl();
 
@@ -85,7 +87,7 @@ const AddressInterface = (props: IAddressInterfaceProps) => {
 					{hasAddress && (
 						<IconContainer
 							onClick={() => {
-								const _addresses = [...addresses];
+								const _addresses = [...value];
 								_addresses.splice(
 									_addresses.indexOf(addressObj),
 									1,
