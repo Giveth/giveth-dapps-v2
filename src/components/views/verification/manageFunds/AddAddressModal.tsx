@@ -29,7 +29,7 @@ const networksConfig = config.NETWORKS_CONFIG;
 const networkOptions = Object.keys(networksConfig).map(key => {
 	const chain = networksConfig[key];
 	const networkId = chain.id;
-	const chainType = 'chainType' in chain ? chain.chainType : undefined;
+	const chainType = (chain as NonEVMNetworkConfig).chainType;
 	return {
 		value: networkId,
 		label: getChainName(networkId, chainType),
