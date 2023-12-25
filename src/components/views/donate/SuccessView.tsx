@@ -1,7 +1,11 @@
 import {
 	brandColors,
+	ButtonLink,
 	H4,
 	H6,
+	IconExternalLink24,
+	Lead,
+	neutralColors,
 	OutlineButton,
 	P,
 } from '@giveth/ui-design-system';
@@ -9,6 +13,7 @@ import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useNetwork } from 'wagmi';
+import Link from 'next/link';
 import links from '@/lib/constants/links';
 import SocialBox from '@/components/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
@@ -25,8 +30,26 @@ import QFToast from '@/components/views/donate/QFToast';
 import { useAppSelector } from '@/features/hooks';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { getActiveRound } from '@/helpers/qf';
+import { FlexCenter } from '@/components/styled-components/Flex';
+import Routes from '@/lib/constants/Routes';
+import { formatTxLink } from '@/lib/helpers';
 
-const SuccessView: FC = () => {
+const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	return (
+		<TxLink>
+			<span>Donation to {title + ' '}</span>
+			<ExternalLink
+				href={formatTxLink(chainId, txHash)}
+				title='View the transaction'
+			/>
+			<IconExternalLink24 />
+		</TxLink>
+	);
+};
+
+export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isLoading } = useAppSelector(state => state.user);
 	const { isSuccessDonation, setSuccessDonation, hasActiveQFRound, project } =
@@ -78,46 +101,67 @@ const SuccessView: FC = () => {
 	useEffect(() => {
 		//Switch to donate view if user is changed
 		if (isLoading) {
-			setSuccessDonation(undefined);
+			// setSuccessDonation(undefined);
 		}
 	}, [isLoading]);
 
 	return (
-		<SuccessContainer>
-			<ConfettiContainer>
-				<LottieControl size={400} animationData={CongratsAnimation} />
-			</ConfettiContainer>
-			<GiverH4 weight={700}>
-				{formatMessage({ id: 'label.youre_giver_now' })}
-			</GiverH4>
-			<SuccessMessage>{message}</SuccessMessage>
-			{givBackEligible && (
-				<GivBackContainer>
-					<H6>
-						{formatMessage({
-							id: 'label.youre_eligible_for_givbacks',
-						})}
-					</H6>
-					<P>
-						{formatMessage({
-							id: 'label.givback_distributed_afer_round',
-						})}
-					</P>
-					<ExternalLink href={links.GIVBACK_DOC}>
-						<LearnButton size='small' label='LEARN MORE' />
-					</ExternalLink>
-				</GivBackContainer>
-			)}
-			{hasActiveQFRound &&
-				passportState !== EPassportState.LOADING &&
-				isOnEligibleNetworks && <QFToast />}
-			<SocialBoxWrapper>
-				<SocialBox
-					project={project}
-					contentType={EContentType.justDonated}
-				/>
-			</SocialBoxWrapper>
-		</SuccessContainer>
+		<>
+			<SuccessContainer>
+				<ConfettiContainer>
+					<LottieControl
+						size={400}
+						animationData={CongratsAnimation}
+					/>
+				</ConfettiContainer>
+				<GiverH4 weight={700}>
+					{formatMessage({ id: 'label.youre_giver_now' })}
+				</GiverH4>
+				<SuccessMessage>{message}</SuccessMessage>
+				{givBackEligible && (
+					<GivBackContainer>
+						<H6>
+							{formatMessage({
+								id: 'label.youre_eligible_for_givbacks',
+							})}
+						</H6>
+						<P>
+							{formatMessage({
+								id: 'label.givback_distributed_after_round',
+							})}
+						</P>
+						<ExternalLink href={links.GIVBACK_DOC}>
+							<LearnButton size='small' label='LEARN MORE' />
+						</ExternalLink>
+					</GivBackContainer>
+				)}
+				{hasActiveQFRound &&
+					passportState !== EPassportState.LOADING &&
+					isOnEligibleNetworks && <QFToast />}
+				<SocialBoxWrapper>
+					<SocialBox
+						project={project}
+						contentType={EContentType.justDonated}
+					/>
+				</SocialBoxWrapper>
+			</SuccessContainer>
+			<Options>
+				<Lead style={{ color: neutralColors.gray[900] }}>
+					{formatMessage({
+						id: 'label.your_transactions_have_been_submitted',
+					})}
+					<br />
+					{formatMessage({
+						id: 'label.you_can_view_them_on_a_blockchain_explorer_here',
+					})}
+				</Lead>
+				<TxRow txHash={txHash[0]} title={project.title} />
+				{hasMultipleTxs && <TxRow txHash={txHash[1]} title='Giveth' />}
+				<Link href={Routes.AllProjects}>
+					<ProjectsButton size='small' label='SEE MORE PROJECTS' />
+				</Link>
+			</Options>
+		</>
 	);
 };
 
@@ -163,6 +207,7 @@ const LearnButton = styled(OutlineButton)`
 
 const GivBackContainer = styled.div`
 	width: 100%;
+	max-width: 560px;
 	padding: 32px 53px;
 	text-align: center;
 	background-image: url('/images/GIVeconomy_Banner.png');
@@ -176,4 +221,25 @@ const GivBackContainer = styled.div`
 	}
 `;
 
-export default SuccessView;
+const TxLink = styled(Lead)`
+	color: ${brandColors.pinky[500]};
+	cursor: pointer;
+	margin-top: 16px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	> span {
+		color: ${neutralColors.gray[700]};
+	}
+`;
+
+const Options = styled(FlexCenter)`
+	flex-direction: column;
+	width: 100%;
+	padding: 40px 20px 0;
+`;
+
+const ProjectsButton = styled(ButtonLink)`
+	width: 242px;
+	margin-top: 40px;
+`;
