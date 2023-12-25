@@ -11,11 +11,10 @@ interface INetworkLogoProps {
 
 const NetworkLogo = (props: INetworkLogoProps) => {
 	const { chainId, logoSize, chainType } = props;
-	if (chainType && chainType !== ChainType.EVM) {
-		return config.NON_EVM_NETWORKS_CONFIG[chainType].chainLogo(logoSize);
-	}
-	if (chainId && networkIds.includes(chainId)) {
-		return config.EVM_NETWORKS_CONFIG[chainId].chainLogo(logoSize);
+	if ((chainId && networkIds.includes(chainId)) || chainType) {
+		return config.NETWORKS_CONFIG[(chainId || chainType)!].chainLogo(
+			logoSize,
+		);
 	}
 	return null;
 };
