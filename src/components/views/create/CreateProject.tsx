@@ -242,7 +242,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						},
 					});
 
-			if (watchAlloProtocolRegistry && hasOptimismAddress) {
+			if (
+				watchAlloProtocolRegistry &&
+				hasOptimismAddress &&
+				process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true'
+			) {
 				setAddedProjectState(addedProject.data?.createProject);
 				setIsLoading(false);
 			}
@@ -259,7 +263,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			if (addedProject) {
 				// Success
 
-				if (watchAlloProtocolRegistry && hasOptimismAddress) {
+				if (
+					watchAlloProtocolRegistry &&
+					hasOptimismAddress &&
+					process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true'
+				) {
 					setShowAlloProtocolModal(true);
 				} else {
 					setIsLoading(false);
