@@ -66,7 +66,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 		)?.address;
 
 		const filteredTokens = allTokens.filter(token => {
-			return !tokenStreams[token.id].find(
+			return !tokenStreams[token.id]?.find(
 				stream =>
 					stream.receiver.id.toLowerCase() ===
 					projectOpAddress?.toLowerCase(),
