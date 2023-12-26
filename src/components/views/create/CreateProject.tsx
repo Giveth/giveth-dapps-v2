@@ -47,7 +47,7 @@ import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
-import { ChainType } from '@/types/config';
+import { ChainType, NonEVMChain } from '@/types/config';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
 
@@ -321,17 +321,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							<AddressInterface
 								key={chain.id}
 								networkId={chain.id}
-								chainType={
-									'chainType' in chain
-										? chain.chainType
-										: undefined
-								}
+								chainType={(chain as NonEVMChain).chainType}
 								onButtonClick={() => {
-									if ('chainType' in chain) {
-										setAddressModalChainType(
-											chain.chainType,
-										);
-									}
+									setAddressModalChainType(
+										(chain as NonEVMChain).chainType,
+									);
 									setAddressModalChainId(chain.id);
 								}}
 							/>
