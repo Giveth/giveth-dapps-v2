@@ -96,34 +96,37 @@ const AddressInterface = ({
 						</IconContainer>
 					)}
 				</Flex>
-				{isOptimism && (
-					// Render this section only on Optimism
-					<AlloProtocolContainer>
-						<Flex>
-							<div>
-								<B>
-									Set up Profile on the Allo Protocol Registry
-								</B>
-								<P>
-									Your project will be included in a shared
-									registry of public goods projects with
-									Gitcoin and others. You will also set up
-									your project to receive recurring donations.
-								</P>
-							</div>
-							<ToggleSwitch
-								isOn={alloProtocolRegistry}
-								toggleOnOff={() =>
-									setValue(
-										EInputs.alloProtocolRegistry,
-										!alloProtocolRegistry,
-									)
-								}
-								caption=''
-							/>
-						</Flex>
-					</AlloProtocolContainer>
-				)}
+				{isOptimism &&
+					process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true' && (
+						// Render this section only on Optimism
+						<AlloProtocolContainer>
+							<Flex>
+								<div>
+									<B>
+										Set up Profile on the Allo Protocol
+										Registry
+									</B>
+									<P>
+										Your project will be included in a
+										shared registry of public goods projects
+										with Gitcoin and others. You will also
+										set up your project to receive recurring
+										donations.
+									</P>
+								</div>
+								<ToggleSwitch
+									isOn={alloProtocolRegistry}
+									toggleOnOff={() =>
+										setValue(
+											EInputs.alloProtocolRegistry,
+											!alloProtocolRegistry,
+										)
+									}
+									caption=''
+								/>
+							</Flex>
+						</AlloProtocolContainer>
+					)}
 			</MiddleContainer>
 		</Container>
 	);
