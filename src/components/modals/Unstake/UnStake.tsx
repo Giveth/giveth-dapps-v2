@@ -13,7 +13,6 @@ import { useNetwork } from 'wagmi';
 import { Modal } from '../Modal';
 import { Flex } from '../../styled-components/Flex';
 import { StakingPoolImages } from '../../StakingPoolImages';
-import { AmountInput } from '../../AmountInput';
 import { unwrapToken, withdrawTokens } from '@/lib/stakingPool';
 import {
 	ConfirmedInnerModal,
@@ -34,6 +33,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
+import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput';
 
 interface IUnStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
@@ -129,7 +129,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 						</UnStakeModalTitle>
 
 						<InnerModal>
-							<AmountInput
+							<StakingAmountInput
 								setAmount={setAmount}
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}

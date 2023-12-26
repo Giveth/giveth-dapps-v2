@@ -1096,6 +1096,7 @@
     intl-messageformat "10.5.8"
     tslib "^2.4.0"
 
+
 "@fractalwagmi/popup-connection@^1.0.18":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@fractalwagmi/popup-connection/-/popup-connection-1.1.1.tgz#2dfff4f3bb89d17947adae597f355faf46c194a9"
@@ -1110,7 +1111,7 @@
     "@solana/wallet-adapter-base" "^0.9.17"
     bs58 "^5.0.0"
 
-"@giveth/ui-design-system@^1.11.18":
+"@giveth/ui-design-system@^1.11.19":
   version "1.11.19"
   resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.19.tgz#16ed911d19ddfb16536b1e19d46b3adf4e7da1df"
   integrity sha512-RtVTJn9OIrlt8I0NiNd5XpMB8XYXHQpvmyrnGYNwdp5khObRjh6g15+TEgwfD52LgkUgeGjdlLLD8XGLVTFJkw==

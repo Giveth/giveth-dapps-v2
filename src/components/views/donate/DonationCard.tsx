@@ -2,8 +2,12 @@ import { B, P, neutralColors } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { RecurringDonationCard } from './RecurringDonationCard';
+import CryptoDonation from './CryptoDonation';
+
+export const isRecurringActive =
+	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true';
 
 enum ETabs {
 	ONE_TIME,
@@ -29,7 +33,17 @@ export const DonationCard = () => {
 				))}
 				<EmptyTab />
 			</Flex>
-			{tab === ETabs.RECURRING && <RecurringDonationCard />}
+			<TabWrapper>
+				{tab === ETabs.ONE_TIME && <CryptoDonation />}
+				{tab === ETabs.RECURRING &&
+					(isRecurringActive ? (
+						<RecurringDonationCard />
+					) : (
+						<FlexCenter>
+							This Feature is not available now
+						</FlexCenter>
+					))}
+			</TabWrapper>
 		</DonationCardWrapper>
 	);
 };
@@ -42,6 +56,7 @@ const DonationCardWrapper = styled(Flex)`
 	align-items: flex-start;
 	background: ${neutralColors.gray[100]};
 	box-shadow: ${Shadow.Neutral[400]};
+	align-items: stretch;
 `;
 
 const Title = styled(B)`
@@ -74,4 +89,11 @@ const Tab = styled(P)<ITab>`
 const EmptyTab = styled.div`
 	flex: 1;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
+`;
+
+const TabWrapper = styled(Flex)`
+	position: relative;
+	flex-direction: column;
+	gap: 16px;
+	align-items: flex-start;
 `;

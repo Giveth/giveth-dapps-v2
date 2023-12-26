@@ -1,3 +1,4 @@
+import { type Address } from 'wagmi';
 import {
 	EDonationStatus,
 	EDonationType,
@@ -138,7 +139,7 @@ export interface ICampaign {
 }
 
 export interface IWalletAddress {
-	address?: `0x${string}`;
+	address?: Address;
 	isRecipient?: boolean;
 	networkId?: number;
 }

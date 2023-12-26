@@ -1,16 +1,11 @@
-import {
-	Caption,
-	IconGIVBack16,
-	brandColors,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { Caption, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC } from 'react';
 import { formatUnits } from 'viem';
 import { Flex } from '@/components/styled-components/Flex';
-import { TokenIcon } from '../TokenIcon';
 import { IToken } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
+import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
 
 interface ITokenInfoProps {
 	token: IToken;
@@ -37,16 +32,11 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 				onClick();
 			}}
 		>
-			<TokenIconWrapper>
-				<TokenIcon
-					symbol={token.symbol}
-					size={32}
-					isSuperToken={isSuperToken}
-				/>
-				<GIVBackBadge>
-					<IconGIVBack16 size={16} color={brandColors.giv[500]} />
-				</GIVBackBadge>
-			</TokenIconWrapper>
+			<TokenIconWithGIVBack
+				showGiveBack
+				symbol={token.symbol}
+				size={32}
+			/>
 			<InfoWrapper flexDirection='column' alignItems='flex-start'>
 				<TopRow justifyContent='space-between'>
 					<Flex gap='4px'>
@@ -83,20 +73,6 @@ const Wrapper = styled(Flex)<IWrapper>`
 		background: ${neutralColors.gray[200]};
 	}
 	border-radius: 8px;
-`;
-
-const TokenIconWrapper = styled.div`
-	position: relative;
-`;
-
-const GIVBackBadge = styled.div`
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	width: 16px;
-	height: 16px;
-	background: ${neutralColors.gray[100]};
-	border-radius: 50%;
 `;
 
 const InfoWrapper = styled(Flex)`

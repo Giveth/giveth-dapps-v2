@@ -1,3 +1,4 @@
+import { type Address } from 'wagmi';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { IWalletAddress } from '@/apollo/types/types';
@@ -75,7 +76,7 @@ export const getNetworkNames = (networks: number[], text: string) => {
 };
 
 export interface ICreateDonation {
-	walletAddress: `0x${string}`;
+	walletAddress: Address;
 	projectId: number;
 	amount: number;
 	token: IProjectAcceptedToken;

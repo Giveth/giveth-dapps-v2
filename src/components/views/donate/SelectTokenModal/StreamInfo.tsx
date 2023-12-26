@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import { type FC } from 'react';
 import { formatUnits } from 'viem';
 import { Flex } from '@/components/styled-components/Flex';
-import { TokenIcon } from '../TokenIcon';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
+import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
 
 interface IStreamInfoProps {
 	stream: ISuperfluidStream[];
@@ -25,7 +25,12 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 		0n,
 	);
 	const remainingMonths =
-		balance !== undefined ? balance / totalFlowRate / 2628000n : 0n;
+		balance !== undefined && totalFlowRate !== 0n
+			? balance / totalFlowRate / 2628000n
+			: 0n;
+
+	const underlyingToken = stream[0].token.underlyingToken;
+
 	return (
 		<Wrapper
 			gap='16px'
@@ -36,10 +41,10 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 				onClick();
 			}}
 		>
-			<TokenIcon
-				symbol={stream[0].token.symbol}
+			<TokenIconWithGIVBack
+				showGiveBack
+				symbol={underlyingToken ? underlyingToken.symbol : 'ETH'}
 				size={32}
-				isSuperToken={true}
 			/>
 			<InfoWrapper
 				flexDirection='column'

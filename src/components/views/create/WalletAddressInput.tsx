@@ -11,7 +11,7 @@ import {
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { isAddress } from 'viem';
-import { useNetwork } from 'wagmi';
+import { type Address, useNetwork } from 'wagmi';
 import { compareAddresses } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import Input, { InputSize } from '@/components/Input';
@@ -37,7 +37,7 @@ const WalletAddressInput: FC<IProps> = ({
 	userAddresses,
 	onSubmit,
 }) => {
-	const [resolvedENS, setResolvedENS] = useState<`0x${string}` | undefined>();
+	const [resolvedENS, setResolvedENS] = useState<Address | undefined>();
 
 	const { getValues, setValue } = useFormContext();
 	const { chain } = useNetwork();
@@ -106,7 +106,7 @@ const WalletAddressInput: FC<IProps> = ({
 			if (address.length === 0) {
 				return formatMessage({ id: 'label.this_field_is_required' });
 			}
-			let _address = (' ' + address).slice(1) as `0x${string}`;
+			let _address = (' ' + address).slice(1) as Address;
 			setIsValidating(true);
 			if (isAddressENS(address)) {
 				_address = await ENSHandler(address);

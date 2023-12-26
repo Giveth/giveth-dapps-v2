@@ -19,13 +19,16 @@ import CheckBox from '@/components/Checkbox';
 interface IDonateToGiveth {
 	donationToGiveth: number;
 	setDonationToGiveth: (donationToGiveth: number) => void;
+	title: string;
 }
 
 const givethDonationOptions = [5, 10, 15, 20];
 
-const DonateToGiveth: FC<IDonateToGiveth> = props => {
-	const { donationToGiveth, setDonationToGiveth } = props;
-
+const DonateToGiveth: FC<IDonateToGiveth> = ({
+	donationToGiveth,
+	setDonationToGiveth,
+	title,
+}) => {
 	const { formatMessage } = useIntl();
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -42,9 +45,7 @@ const DonateToGiveth: FC<IDonateToGiveth> = props => {
 	return (
 		<Container>
 			<Flex alignItems='center' gap='4px'>
-				<Caption medium>
-					{formatMessage({ id: 'label.donation_to' }) + ' Giveth'}
-				</Caption>
+				<Caption medium>{title}</Caption>
 				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
 					<TooltipContainer>
 						{formatMessage({ id: 'label.support_giveth_with' })}

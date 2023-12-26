@@ -5,22 +5,28 @@ import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
 import { formatWeiHelper } from '@/helpers/number';
-import { PoolStakingConfig, StakingPlatform } from '@/types/config';
-import { Flex } from './styled-components/Flex';
-import { NumericalInput } from '@/components/input/index';
+import { Flex } from '../styled-components/Flex';
+import { BaseInput } from '../input/BaseInput';
 
-interface IAmountInput {
-	maxAmount: bigint;
+export interface IAmountInput {
 	setAmount: Dispatch<SetStateAction<bigint>>;
-	poolStakingConfig: PoolStakingConfig;
+	decimals?: number;
+	className?: string;
 	disabled?: boolean;
+	maxAmount?: bigint;
+	showMax?: boolean;
+	balanceUnit?: string;
+	showPercentage?: boolean;
 }
 
 export const AmountInput: FC<IAmountInput> = ({
 	maxAmount,
 	setAmount,
-	poolStakingConfig,
+	className,
+	decimals = 18,
 	disabled = false,
+	showMax = false,
+	showPercentage = false,
 }) => {
 	const { formatMessage } = useIntl();
 	const [displayAmount, setDisplayAmount] = useState('');
@@ -28,6 +34,7 @@ export const AmountInput: FC<IAmountInput> = ({
 
 	const setAmountPercentage = useCallback(
 		(percentage: number): void => {
+			if (!maxAmount) return;
 			const newAmount = new BigNumber(maxAmount.toString())
 				.multipliedBy(percentage)
 				.div(100)
@@ -39,18 +46,18 @@ export const AmountInput: FC<IAmountInput> = ({
 					? maxAmount
 					: BigInt(
 							new BigNumber(_displayAmount)
-								.multipliedBy(1e18)
+								.multipliedBy(10 ** decimals)
 								.toFixed(0),
 						),
 			);
 		},
-		[maxAmount, setAmount],
+		[decimals, maxAmount, setAmount],
 	);
 
 	const onUserInput = useCallback(
 		(value: string) => {
-			const [, decimals] = value.split('.');
-			if (decimals?.length > 6) {
+			const [, _decimals] = value.split('.');
+			if (_decimals?.length > 6) {
 				return;
 			}
 			setDisplayAmount(value);
@@ -58,7 +65,7 @@ export const AmountInput: FC<IAmountInput> = ({
 			let valueBn = new BigNumber(0);
 
 			try {
-				valueBn = new BigNumber(value).multipliedBy('1e18');
+				valueBn = new BigNumber(value).multipliedBy(10 ** decimals);
 				setAmount(BigInt(valueBn.toFixed(0)));
 			} catch (error) {
 				setAmount(0n);
@@ -73,84 +80,85 @@ export const AmountInput: FC<IAmountInput> = ({
 				});
 			}
 		},
-		[setAmount],
+		[decimals, setAmount],
 	);
 
 	return (
-		<>
-			<InputLabelRow justifyContent='space-between'>
-				<InputLabel>
-					<InputLabelText>
-						{formatMessage({ id: 'label.available' })}:{' '}
-					</InputLabelText>
-					<InputLabelValue>
-						&nbsp;
-						{formatWeiHelper(maxAmount.toString())}
-						&nbsp;
-						{poolStakingConfig.title}
-						&nbsp;
-						{poolStakingConfig.platform !==
-							StakingPlatform.GIVETH && 'LP'}
-					</InputLabelValue>
-				</InputLabel>
-				<InputLabelAction
-					onClick={() => {
-						if (disabled) return;
-						setAmountPercentage(100);
-						setActiveStep(100);
-					}}
-				>
-					Max
-				</InputLabelAction>
-			</InputLabelRow>
-			<NumericalInput
+		<div className={className}>
+			{showMax && maxAmount !== undefined && (
+				<InputLabelRow justifyContent='space-between' id='max-row'>
+					<InputLabel>
+						<InputLabelText>
+							{formatMessage({ id: 'label.available' })}:{' '}
+						</InputLabelText>
+						<InputLabelValue>
+							&nbsp;
+							{formatWeiHelper(maxAmount.toString())}
+							&nbsp;
+						</InputLabelValue>
+					</InputLabel>
+					<InputLabelAction
+						onClick={() => {
+							if (disabled) return;
+							setAmountPercentage(100);
+							setActiveStep(100);
+						}}
+					>
+						Max
+					</InputLabelAction>
+				</InputLabelRow>
+			)}
+			<BaseInput
 				value={displayAmount}
 				onUserInput={onUserInput}
 				disabled={disabled}
+				id='amount-input'
 			/>
-			<FiltersRow>
-				<Step
-					onClick={() => {
-						if (disabled) return;
-						setAmountPercentage(25);
-						setActiveStep(25);
-					}}
-					active={activeStep === 25}
-				>
-					25%
-				</Step>
-				<Step
-					onClick={() => {
-						if (disabled) return;
-						setAmountPercentage(50);
-						setActiveStep(50);
-					}}
-					active={activeStep === 50}
-				>
-					50%
-				</Step>
-				<Step
-					onClick={() => {
-						if (disabled) return;
-						setAmountPercentage(75);
-						setActiveStep(75);
-					}}
-					active={activeStep === 75}
-				>
-					75%
-				</Step>
-				<Step
-					onClick={() => {
-						if (disabled) return;
-						setAmountPercentage(100);
-						setActiveStep(100);
-					}}
-					active={activeStep === 100}
-				>
-					100%
-				</Step>
-			</FiltersRow>
-		</>
+			{showPercentage && (
+				<PercentageRow id='percentage-row'>
+					<Step
+						onClick={() => {
+							if (disabled) return;
+							setAmountPercentage(25);
+							setActiveStep(25);
+						}}
+						active={activeStep === 25}
+					>
+						25%
+					</Step>
+					<Step
+						onClick={() => {
+							if (disabled) return;
+							setAmountPercentage(50);
+							setActiveStep(50);
+						}}
+						active={activeStep === 50}
+					>
+						50%
+					</Step>
+					<Step
+						onClick={() => {
+							if (disabled) return;
+							setAmountPercentage(75);
+							setActiveStep(75);
+						}}
+						active={activeStep === 75}
+					>
+						75%
+					</Step>
+					<Step
+						onClick={() => {
+							if (disabled) return;
+							setAmountPercentage(100);
+							setActiveStep(100);
+						}}
+						active={activeStep === 100}
+					>
+						100%
+					</Step>
+				</PercentageRow>
+			)}
+		</div>
 	);
 };
 
@@ -169,7 +177,7 @@ const InputLabelAction = styled(GLink)`
 	cursor: pointer;
 `;
 
-const FiltersRow = styled(Flex)`
+const PercentageRow = styled(Flex)`
 	gap: 8px;
 `;
 

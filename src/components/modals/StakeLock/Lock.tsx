@@ -22,7 +22,6 @@ import {
 	StakeInnerModalContainer,
 	StakeModalContainer,
 } from './StakeLock.sc';
-import { AmountInput } from '@/components/AmountInput';
 import LockSlider from './LockSlider';
 import LockInfo, { LockInfoTooltip } from './LockInfo';
 import LockingBrief from './LockingBrief';
@@ -37,6 +36,7 @@ import Routes from '@/lib/constants/Routes';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
 import TotalGIVpowerBox from './TotalGIVpowerBox';
+import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput';
 import type { PoolStakingConfig } from '@/types/config';
 
 interface ILockModalProps extends IModal {
@@ -134,7 +134,7 @@ const LockModal: FC<ILockModalProps> = ({
 									id: 'label.lock_your_staked_giv',
 								})}
 							</SectionTitle>
-							<AmountInput
+							<StakingAmountInput
 								setAmount={setAmount}
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}

@@ -5,141 +5,129 @@ import {
 	GLink,
 	H6,
 	IconCaretDown16,
+	IconChevronRight16,
 	IconHelpFilled16,
+	IconPlus16,
 	IconRefresh16,
+	P,
 	brandColors,
 	neutralColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { formatUnits } from 'viem';
-import { useAccount, useBalance, usePublicClient } from 'wagmi';
-import { Framework } from '@superfluid-finance/sdk-core';
+import { useAccount, useBalance, useNetwork } from 'wagmi';
+import Slider from 'rc-slider';
+import Image from 'next/image';
+import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
-import { ISuperfluidStream, IToken } from '@/types/superFluid';
-import { TokenIcon } from './TokenIcon';
-import { gqlRequest } from '@/helpers/requests';
+import { TokenIcon } from './TokenIcon/TokenIcon';
+import { useDonateData } from '@/context/donate.context';
+import { RecurringDonationModal } from './RecurringDonationModal/RecurringDonationModal';
+import { AmountInput } from '@/components/AmountInput/AmountInput';
+import 'rc-slider/assets/index.css';
+import DonateToGiveth from './DonateToGiveth';
+import { Spinner } from '@/components/Spinner';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { findUserStreamOnSelectedToken } from '@/helpers/donate';
+import { ISuperfluidStream } from '@/types/superFluid';
+import { showToastError } from '@/lib/helpers';
 import config from '@/configuration';
-import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
-import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
-
-export interface ISelectTokenWithBalance {
-	token: IToken;
-	balance?: bigint;
-}
-
-export interface ITokenStreams {
-	[key: string]: ISuperfluidStream[];
-}
+import { WrongNetworkLayer } from './WrongNetworkLayer';
+import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 
 export const RecurringDonationCard = () => {
+	const [amount, setAmount] = useState(0n);
+	const [isUpdating, setIsUpdating] = useState(false);
+	const [percentage, setPercentage] = useState(0);
+	const [donationToGiveth, setDonationToGiveth] = useState(5);
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
-	const [tokenStreams, setTokenStreams] = useState<ITokenStreams>({});
-	const [selectedToken, setSelectedToken] = useState<
-		ISelectTokenWithBalance | undefined
-	>();
+	const [showTopUpModal, setShowTopUpModal] = useState(false);
+	const [showRecurringDonationModal, setShowRecurringDonationModal] =
+		useState(false);
+	const [userStreamOnSelectedToken, setUserStreamOnSelectedToken] =
+		useState<ISuperfluidStream>();
+
 	const { address } = useAccount();
-	const { data: balance, refetch } = useBalance({
+	const { chain } = useNetwork();
+	const { project, selectedToken, tokenStreams } = useDonateData();
+	const {
+		data: balance,
+		refetch,
+		isRefetching,
+	} = useBalance({
+		token:
+			selectedToken?.token.id === AddressZero
+				? undefined
+				: selectedToken?.token.id,
 		address: address,
-		enabled: false,
+		watch: true,
+		cacheTime: 5_000,
 	});
-	const provider = usePublicClient();
+
+	const isGivethProject = Number(project.id!) === config.GIVETH_PROJECT_ID;
 
 	useEffect(() => {
-		if (!address) return;
+		if (!selectedToken || !balance) return;
+		if (selectedToken.token.isSuperToken) {
+			setAmount(balance.value || 0n);
+		}
+	}, [selectedToken, balance]);
 
-		// fetch user's streams
-		const fetchData = async () => {
-			const { data } = await gqlRequest(
-				config.OPTIMISM_CONFIG.superFluidSubgraph,
-				undefined,
-				FETCH_USER_STREAMS,
-				{ address: address.toLowerCase() },
+	const underlyingToken = selectedToken?.token.underlyingToken;
+
+	const totalPerMonth = ((amount || 0n) * BigInt(percentage)) / 100n;
+	const totalPerSec = totalPerMonth / ONE_MONTH_SECONDS;
+	const projectPerMonth =
+		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
+	const givethPerMonth = totalPerMonth - projectPerMonth;
+	const tokenBalance = balance?.value;
+	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
+	const totalStreamPerSec =
+		tokenStream?.reduce(
+			(acc, stream) => acc + BigInt(stream.currentFlowRate),
+			totalPerSec,
+		) || totalPerSec;
+	const streamRunOutInMonth =
+		totalStreamPerSec > 0
+			? amount / totalStreamPerSec / ONE_MONTH_SECONDS
+			: 0n;
+	const isTotalStreamExceed =
+		streamRunOutInMonth < 1n && totalStreamPerSec > 0;
+	const sliderColor = isTotalStreamExceed
+		? semanticColors.punch
+		: brandColors.giv;
+
+	useEffect(() => {
+		try {
+			if (!selectedToken || !selectedToken.balance) return;
+			const _userStreamOnSelectedToken = findUserStreamOnSelectedToken(
+				address,
+				project,
+				tokenStreams,
+				selectedToken,
 			);
-			const streams: ISuperfluidStream[] = data?.streams;
-			console.log('streams', streams);
-
-			//categorize streams by token
-			const _tokenStreams: ITokenStreams = {};
-			streams.forEach(stream => {
-				if (!_tokenStreams[stream.token.id]) {
-					_tokenStreams[stream.token.id] = [];
-				}
-				_tokenStreams[stream.token.id].push(stream);
-			});
-			setTokenStreams(_tokenStreams);
-			console.log('tokenStreams', _tokenStreams);
-		};
-		fetchData();
-	}, [address]);
-
-	console.log('selectedToken', selectedToken);
-
-	const onDonateEth = async () => {
-		console.log('config.OPTIMISM_CONFIG.id', config.OPTIMISM_CONFIG.id);
-		const _provider = getEthersProvider({
-			chainId: config.OPTIMISM_CONFIG.id,
-		});
-
-		const signer = await getEthersSigner({
-			chainId: config.OPTIMISM_CONFIG.id,
-		});
-
-		if (!_provider || !signer) return;
-
-		const sf = await Framework.create({
-			chainId: config.OPTIMISM_CONFIG.id,
-			provider: _provider,
-		});
-		console.log('sf', sf);
-
-		const ethx = await sf.loadNativeAssetSuperToken(
-			'0xe01f8743677da897f4e7de9073b57bf034fc2433',
-		);
-
-		const upgradeOperation = await ethx.upgrade({
-			amount: '1000000000000',
-		});
-
-		await upgradeOperation.exec(signer);
-	};
-
-	const onDonate = async () => {
-		console.log('config.OPTIMISM_CONFIG.id', config.OPTIMISM_CONFIG.id);
-		const _provider = getEthersProvider({
-			chainId: config.OPTIMISM_CONFIG.id,
-		});
-
-		const signer = await getEthersSigner({
-			chainId: config.OPTIMISM_CONFIG.id,
-		});
-
-		if (!_provider || !signer) return;
-
-		const sf = await Framework.create({
-			chainId: config.OPTIMISM_CONFIG.id,
-			provider: _provider,
-		});
-		console.log('sf', sf);
-
-		const givx = await sf.loadWrapperSuperToken(
-			'0x34cf77c14f39c81adbdad922af538f05633fa07e',
-		);
-
-		const approve = await givx.approve({
-			amount: '1000000000000000000',
-			receiver: '0x..',
-		});
-
-		const upgradeOperation = await givx.upgrade({
-			amount: '1000000000000000000',
-		});
-
-		await upgradeOperation.exec(signer);
-	};
+			if (_userStreamOnSelectedToken) {
+				setUserStreamOnSelectedToken(_userStreamOnSelectedToken);
+				const _percentage =
+					(BigInt(_userStreamOnSelectedToken.currentFlowRate) *
+						ONE_MONTH_SECONDS *
+						100n) /
+					selectedToken.balance;
+				setPercentage(parseInt(_percentage.toString()));
+			} else {
+				setUserStreamOnSelectedToken(undefined);
+				setPercentage(0);
+				setIsUpdating(false);
+			}
+		} catch (error) {
+			showToastError(error);
+		}
+	}, [selectedToken, address, project, tokenStreams]);
 
 	return (
 		<>
@@ -159,16 +147,13 @@ export const RecurringDonationCard = () => {
 				</RecurringSectionTitle>
 				<Flex flexDirection='column' gap='8px'>
 					<Flex gap='8px' alignItems='center'>
-						<Caption>Stream Balance</Caption>
+						<Caption medium>Stream Balance</Caption>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
 							direction='right'
 							align='bottom'
 						>
-							<FlowRateTooltip>
-								The rate at which you receive liquid GIV from
-								your GIVstream.here!
-							</FlowRateTooltip>
+							<FlowRateTooltip>PlaceHolder</FlowRateTooltip>
 						</IconWithTooltip>
 					</Flex>
 					<InputWrapper>
@@ -180,45 +165,304 @@ export const RecurringDonationCard = () => {
 							{selectedToken ? (
 								<Flex gap='8px' alignItems='center'>
 									<TokenIcon
-										symbol={selectedToken.token.symbol}
-										size={24}
-										isSuperToken={
-											selectedToken.token.isSuperToken
+										symbol={
+											underlyingToken
+												? underlyingToken.symbol
+												: selectedToken.token.symbol
 										}
+										size={24}
 									/>
 									<B>{selectedToken.token.symbol}</B>
 								</Flex>
 							) : (
-								<B>Select Token</B>
+								<SelectTokenPlaceHolder>
+									Select Token
+								</SelectTokenPlaceHolder>
 							)}
 							<IconCaretDown16 />
 						</SelectTokenWrapper>
-						<Input type='text' />
+						{selectedToken?.token.isSuperToken ? (
+							<p>
+								{formatUnits(
+									balance?.value || 0n,
+									selectedToken.token.decimals,
+								)}
+							</p>
+						) : (
+							<Input
+								setAmount={setAmount}
+								disabled={selectedToken === undefined}
+								decimals={selectedToken?.token.decimals}
+							/>
+						)}
 					</InputWrapper>
-					{selectedToken !== undefined &&
-						selectedToken.balance !== undefined && (
+					{!selectedToken?.token.isSuperToken &&
+						selectedToken !== undefined &&
+						balance !== undefined && (
 							<Flex gap='4px'>
-								<GLink>
+								<GLink size='Small'>
 									Available:{' '}
 									{balance?.formatted ||
 										formatUnits(
-											selectedToken?.balance,
-											selectedToken?.token.decimals,
+											balance.value,
+											selectedToken?.token.underlyingToken
+												?.decimals || 18,
 										)}
 								</GLink>
-								<IconWrapper onClick={() => refetch()}>
-									<IconRefresh16 />
+								<IconWrapper
+									onClick={() => !isRefetching && refetch()}
+								>
+									{isRefetching ? (
+										<Spinner size={16} />
+									) : (
+										<IconRefresh16 />
+									)}
 								</IconWrapper>
 							</Flex>
 						)}
 				</Flex>
-				<Button label='Donate' onClick={onDonate} />
+				{userStreamOnSelectedToken && !isUpdating ? (
+					<ConfirmToast
+						type={EToastType.Info}
+						message='You already have a recurring donation to this project with this token.'
+					/>
+				) : (
+					<Flex flexDirection='column' gap='8px' alignItems='stretch'>
+						<Caption>Amount to donate Monthly</Caption>
+						<SliderWrapper>
+							<StyledSlider
+								min={0}
+								max={100}
+								step={1}
+								railStyle={{
+									backgroundColor: sliderColor[200],
+								}}
+								trackStyle={{
+									backgroundColor: sliderColor[500],
+								}}
+								handleStyle={{
+									backgroundColor: sliderColor[500],
+									border: `3px solid ${sliderColor[200]}`,
+									opacity: 1,
+								}}
+								onChange={(value: any) => {
+									const _value = Array.isArray(value)
+										? value[0]
+										: value;
+									setPercentage(_value);
+								}}
+								value={percentage}
+								disabled={amount === 0n}
+							/>
+						</SliderWrapper>
+						<Flex justifyContent='space-between'>
+							<Caption>Donate to this project</Caption>
+							<Flex gap='4px'>
+								<Caption medium>
+									{amount !== 0n && percentage !== 0
+										? formatUnits(
+												totalPerMonth,
+												selectedToken?.token.decimals ||
+													18,
+											)
+										: 0}
+								</Caption>
+								<Caption medium>
+									{selectedToken?.token.symbol}
+								</Caption>
+								<Caption>per Month</Caption>
+							</Flex>
+						</Flex>
+						<Flex justifyContent='space-between' gap='4px'>
+							<Flex gap='4px'>
+								<Caption>Stream balance runs out in</Caption>
+								{selectedToken?.token.isSuperToken && (
+									<Flex gap='4px'>
+										<Caption medium>
+											{streamRunOutInMonth.toString()}
+										</Caption>
+										<Caption>Months</Caption>
+									</Flex>
+								)}
+							</Flex>
+							{selectedToken?.token.isSuperToken ? (
+								<TopUpStream
+									gap='4px'
+									alignItems='center'
+									onClick={() => setShowTopUpModal(true)}
+								>
+									<Caption>Top-up stream balance</Caption>
+									<IconPlus16 />
+								</TopUpStream>
+							) : (
+								<Flex gap='4px'>
+									<Caption medium>
+										{streamRunOutInMonth.toString()}
+									</Caption>
+									<Caption>Months</Caption>
+								</Flex>
+							)}
+						</Flex>
+						{tokenStream?.length > 0 && (
+							<Flex justifyContent='space-between'>
+								<Caption>
+									you are supporting {tokenStream.length - 1}{' '}
+									other project with this stream
+								</Caption>
+								<Flex gap='4px' alignItems='center'>
+									<Caption medium>
+										Manage recurring donations
+									</Caption>
+									<IconChevronRight16 />
+								</Flex>
+							</Flex>
+						)}
+					</Flex>
+				)}
 			</RecurringSection>
+			{userStreamOnSelectedToken ? (
+				isUpdating ? (
+					<ActionButton
+						label='confirm'
+						onClick={() => {
+							setDonationToGiveth(0);
+							setShowRecurringDonationModal(true);
+						}}
+						disabled={
+							selectedToken === undefined ||
+							tokenBalance === undefined ||
+							amount === 0n ||
+							amount > tokenBalance
+						}
+					/>
+				) : (
+					<ActionButton
+						label='Modify Recurring Donation'
+						onClick={() => setIsUpdating(true)}
+					/>
+				)
+			) : (
+				<>
+					{!isGivethProject && (
+						<GivethSection
+							flexDirection='column'
+							gap='8px'
+							alignItems='stretch'
+						>
+							<DonateToGiveth
+								setDonationToGiveth={e => {
+									setDonationToGiveth(e);
+								}}
+								donationToGiveth={donationToGiveth}
+								title='Add a recurring donation to Giveth'
+							/>
+						</GivethSection>
+					)}
+					<DonatesInfoSection>
+						<Flex flexDirection='column' gap='8px'>
+							<Flex justifyContent='space-between'>
+								<Caption>
+									Donating to <b>{project.title}</b>
+								</Caption>
+								<Flex gap='4px'>
+									<Caption>
+										{amount !== 0n && percentage !== 0
+											? formatUnits(
+													projectPerMonth,
+													selectedToken?.token
+														.decimals || 18,
+												)
+											: 0}
+									</Caption>
+									<Caption>
+										{selectedToken?.token.symbol}
+									</Caption>
+									<Caption>monthly</Caption>
+								</Flex>
+							</Flex>
+							<Flex justifyContent='space-between'>
+								<Caption>
+									Donating <b>{donationToGiveth}%</b> to{' '}
+									<b>Giveth</b>
+								</Caption>
+								<Flex gap='4px'>
+									<Caption>
+										{amount !== 0n && percentage !== 0
+											? formatUnits(
+													givethPerMonth,
+													selectedToken?.token
+														.decimals || 18,
+												)
+											: 0}
+									</Caption>
+									<Caption>
+										{selectedToken?.token.symbol}
+									</Caption>
+									<Caption>monthly</Caption>
+								</Flex>
+							</Flex>
+							<Flex justifyContent='space-between'>
+								<Caption medium>Your total donation</Caption>
+								<Flex gap='4px'>
+									<Caption medium>
+										{amount !== 0n && percentage !== 0
+											? formatUnits(
+													totalPerMonth,
+													selectedToken?.token
+														.decimals || 18,
+												)
+											: 0}
+									</Caption>
+									<Caption medium>
+										{selectedToken?.token.symbol}
+									</Caption>
+									<Caption medium>monthly</Caption>
+								</Flex>
+							</Flex>
+						</Flex>
+					</DonatesInfoSection>
+					<ActionButton
+						label='Donate'
+						onClick={() => setShowRecurringDonationModal(true)}
+						disabled={
+							selectedToken === undefined ||
+							tokenBalance === undefined ||
+							amount === 0n ||
+							percentage === 0 ||
+							amount > tokenBalance
+						}
+					/>
+				</>
+			)}
+			<Flex gap='16px'>
+				<P>Streams powered by</P>
+				<Image
+					src='/images/logo/superfluid-logo.svg'
+					width={120}
+					height={30}
+					alt='Superfluid logo'
+				/>
+			</Flex>
 			{showSelectTokenModal && (
-				<SelectTokenModal
+				<SelectTokenModal setShowModal={setShowSelectTokenModal} />
+			)}
+			{(!chain || chain.id !== config.OPTIMISM_NETWORK_NUMBER) && (
+				<WrongNetworkLayer />
+			)}
+			{showRecurringDonationModal && (
+				<RecurringDonationModal
+					setShowModal={setShowRecurringDonationModal}
+					donationToGiveth={isGivethProject ? 0 : donationToGiveth}
+					amount={amount}
+					percentage={percentage}
+					isUpdating={isUpdating}
+				/>
+			)}
+			{showTopUpModal && (
+				<ModifySuperTokenModal
 					tokenStreams={tokenStreams}
-					setShowModal={setShowSelectTokenModal}
-					setSelectedToken={setSelectedToken}
+					setShowModal={setShowTopUpModal}
+					selectedToken={config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS[1]}
 				/>
 			)}
 		</>
@@ -240,11 +484,13 @@ const Desc = styled(Caption)`
 
 const RecurringSection = styled(Flex)`
 	flex-direction: column;
+	align-items: stretch;
 	gap: 24px;
 	padding: 16px;
 	border-radius: 12px;
 	border: 1px solid ${neutralColors.gray[300]};
 	width: 100%;
+	text-align: left;
 `;
 
 const RecurringSectionTitle = styled(B)`
@@ -256,6 +502,11 @@ const RecurringSectionTitle = styled(B)`
 
 const SelectTokenWrapper = styled(Flex)`
 	cursor: pointer;
+	gap: 16px;
+`;
+
+const SelectTokenPlaceHolder = styled(B)`
+	white-space: nowrap;
 `;
 
 const InputWrapper = styled(Flex)`
@@ -268,17 +519,60 @@ const InputWrapper = styled(Flex)`
 	align-items: center;
 `;
 
-const Input = styled.input`
-	border: none;
-	flex: 1;
+const Input = styled(AmountInput)`
+	width: 100%;
 	border-left: 2px solid ${neutralColors.gray[300]};
-	font-family: Red Hat Text;
-	font-size: 16px;
-	font-style: normal;
-	font-weight: 500;
-	line-height: 150%; /* 24px */
+	#amount-input {
+		border: none;
+		flex: 1;
+		font-family: Red Hat Text;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: 150%; /* 24px */
+		width: 100%;
+	}
 `;
 
 const IconWrapper = styled.div`
 	cursor: pointer;
+	color: ${brandColors.giv[500]};
+`;
+
+const SliderWrapper = styled.div`
+	width: 100%;
+	position: relative;
+`;
+
+const StyledSlider = styled(Slider)``;
+
+const GivethSection = styled(Flex)`
+	flex-direction: column;
+	gap: 24px;
+	width: 100%;
+	text-align: left;
+`;
+
+const DonatesInfoSection = styled(Flex)`
+	flex-direction: column;
+	gap: 24px;
+	width: 100%;
+	text-align: left;
+`;
+
+const ActionButton = styled(Button)`
+	width: 100%;
+`;
+
+const ConfirmToast = styled(InlineToast)`
+	margin: 0px;
+`;
+
+const TopUpStream = styled(Flex)`
+	cursor: pointer;
+	color: ${brandColors.pinky[500]};
+	&:hover {
+		color: ${brandColors.pinky[700]};
+	}
+	transition: color 0.2s ease-in-out;
 `;

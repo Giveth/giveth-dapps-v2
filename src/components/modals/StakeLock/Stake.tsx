@@ -5,7 +5,6 @@ import { useAccount, useNetwork } from 'wagmi';
 import { waitForTransaction } from 'wagmi/actions';
 import { Modal } from '../Modal';
 import { StakingPoolImages } from '../../StakingPoolImages';
-import { AmountInput } from '../../AmountInput';
 import { approveERC20tokenTransfer, stakeTokens } from '@/lib/stakingPool';
 import {
 	ConfirmedInnerModal,
@@ -15,7 +14,6 @@ import {
 import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../../styled-components/Switch';
 import { IModal } from '@/types/common';
-import StakeSteps from './StakeSteps';
 import {
 	CancelButton,
 	StakeModalContainer,
@@ -34,6 +32,8 @@ import {
 	StakingPlatform,
 } from '@/types/config';
 import { useStakingPool } from '@/hooks/useStakingPool';
+import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput';
+import { StakeSteps } from './StakeSteps';
 
 interface IStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
@@ -199,7 +199,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 						</StakeModalTitle>
 						<StakeInnerModalContainer>
 							<StakeSteps stakeState={stakeState} />
-							<AmountInput
+							<StakingAmountInput
 								setAmount={setAmount}
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}

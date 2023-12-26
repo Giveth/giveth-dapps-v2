@@ -7,13 +7,7 @@ import {
 	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import {
-	useState,
-	type Dispatch,
-	type FC,
-	type SetStateAction,
-	useEffect,
-} from 'react';
+import { useState, type FC, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
@@ -22,24 +16,14 @@ import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { TokenInfo } from './TokenInfo';
 import { fetchBalance } from '@/services/token';
-import { IToken } from '@/types/superFluid';
+import { ISuperToken, IToken } from '@/types/superFluid';
 import { StreamInfo } from './StreamInfo';
-import type {
-	ISelectTokenWithBalance,
-	ITokenStreams,
-} from '../RecurringDonationCard';
+import { useDonateData } from '@/context/donate.context';
 
-export interface ISelectTokenModalProps extends IModal {
-	tokenStreams: ITokenStreams;
-	setSelectedToken: Dispatch<
-		SetStateAction<ISelectTokenWithBalance | undefined>
-	>;
-}
+export interface ISelectTokenModalProps extends IModal {}
 
 export const SelectTokenModal: FC<ISelectTokenModalProps> = ({
-	tokenStreams,
 	setShowModal,
-	setSelectedToken,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
@@ -50,11 +34,7 @@ export const SelectTokenModal: FC<ISelectTokenModalProps> = ({
 			headerTitle='Select a Token'
 			headerTitlePosition='left'
 		>
-			<SelectTokenInnerModal
-				tokenStreams={tokenStreams}
-				setShowModal={setShowModal}
-				setSelectedToken={setSelectedToken}
-			/>
+			<SelectTokenInnerModal setShowModal={setShowModal} />
 		</Modal>
 	);
 };
@@ -66,12 +46,12 @@ export interface IBalances {
 const allTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
 
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
-	tokenStreams,
 	setShowModal,
-	setSelectedToken,
 }) => {
+	const [tokens, setTokens] = useState<ISuperToken[]>([]);
 	const [balances, setBalances] = useState<IBalances>({});
 	const { address } = useAccount();
+	const { tokenStreams, setSelectedToken, project } = useDonateData();
 
 	useEffect(() => {
 		// Ensure we have an address before proceeding
@@ -79,6 +59,21 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 			console.log('No address found.');
 			return;
 		}
+
+		// Filter out tokens that already have a stream
+		const projectOpAddress = project.addresses?.find(
+			address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
+		)?.address;
+
+		const filteredTokens = allTokens.filter(token => {
+			return !tokenStreams[token.id]?.find(
+				stream =>
+					stream.receiver.id.toLowerCase() ===
+					projectOpAddress?.toLowerCase(),
+			);
+		});
+
+		setTokens(filteredTokens);
 
 		// A helper function to fetch balance for a single token
 		const fetchTokenBalance = async (token: IToken) => {
@@ -126,7 +121,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 
 		// Call the function to fetch all balances
 		fetchAllBalances();
-	}, [address]); // Dependency array includes address to refetch if it changes
+	}, [address, project.addresses, tokenStreams]); // Dependency array includes address to refetch if it changes
 
 	return (
 		<>
@@ -155,34 +150,38 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						/>
 					);
 				})}
-				{/* {allTokens.map(token =>
-				tokenStreams[token.id] ? null : (
-					<TokenInfo
-						key={token.symbol}
-						token={token}
-						balance={balances[token.symbol]}
-						disable={
-							!balances[token.symbol] ||
-							balances[token.symbol] === 0n
-						}
-						isSuperToken={true}
-						onClick={() => {
-							setSelectedToken({
-								token,
-								balance: balances[token.symbol],
-							});
-							setShowModal(false);
-						}}
-					/>
-				),
-			)} */}
+				{allTokens.map(token =>
+					tokenStreams[token.id] ? null : (
+						<TokenInfo
+							key={token.symbol}
+							token={token}
+							balance={balances[token.symbol]}
+							disable={
+								!balances[token.symbol] ||
+								balances[token.symbol] === 0n
+							}
+							isSuperToken={true}
+							onClick={() => {
+								setSelectedToken({
+									token,
+									balance: balances[token.symbol],
+								});
+								setShowModal(false);
+							}}
+						/>
+					),
+				)}
 				<Title medium>Eligible Tokens</Title>
-				{allTokens.map(token => (
+				{tokens.map(token => (
 					<TokenInfo
 						key={token.underlyingToken.symbol}
 						token={token.underlyingToken}
 						balance={balances[token.underlyingToken.symbol]}
-						disable={balances[token.underlyingToken.symbol] === 0n}
+						disable={
+							balances[token.underlyingToken.symbol] ===
+								undefined ||
+							balances[token.underlyingToken.symbol] === 0n
+						}
 						onClick={() => {
 							setSelectedToken({
 								token: token.underlyingToken,
