@@ -138,7 +138,10 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 						validate: validateAddress,
 					}}
 					placeholder='0x...'
-					defaultValue={suggestNewAddress(project.addresses)}
+					defaultValue={suggestNewAddress(
+						project.addresses!,
+						selectedChain,
+					)}
 					caption={`You can enter a new address to receive funds on ${chainName} network.`}
 				/>
 				{errors.address && (

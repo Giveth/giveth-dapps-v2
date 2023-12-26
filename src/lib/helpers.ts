@@ -21,7 +21,8 @@ import { gToast, ToastType } from '@/components/toasts';
 import config from '@/configuration';
 import { AddressZero } from './constants/constants';
 import { WalletType } from '@/hooks/useAuthenticationWallet';
-import { ChainType } from '@/types/config';
+import { ChainType, NonEVMChain } from '@/types/config';
+import { isSolanaAddress } from '@/lib/wallet';
 
 declare let window: any;
 interface TransactionParams {
@@ -185,10 +186,21 @@ export const smallFormatDate = (date: Date, locale?: string) => {
 
 export const isSSRMode = typeof window === 'undefined';
 
-export const suggestNewAddress = (addresses?: IWalletAddress[]) => {
+export const suggestNewAddress = (
+	addresses: IWalletAddress[],
+	chain: Chain | NonEVMChain,
+) => {
 	if (!addresses || addresses.length < 1) return '';
 	const isSame = compareAddressesArray(addresses.map(a => a.address));
 	if (isSame) {
+		// Don't suggest EVM addresses for Solana input
+		if ('chainType' in chain && chain.chainType === ChainType.SOLANA) {
+			return '';
+		}
+		// Don't suggest Solana address for EVM chains input
+		if (isSolanaAddress(addresses[0].address || '')) {
+			return '';
+		}
 		return addresses[0].address;
 	} else {
 		return '';
