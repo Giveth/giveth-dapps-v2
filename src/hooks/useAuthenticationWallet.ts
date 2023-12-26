@@ -1,5 +1,17 @@
 import { useWallet } from '@solana/wallet-adapter-react';
-import { Chain, useAccount, useDisconnect, useNetwork } from 'wagmi';
+import {
+	PublicKey,
+	Connection,
+	clusterApiUrl,
+	LAMPORTS_PER_SOL,
+} from '@solana/web3.js';
+import {
+	Chain,
+	useAccount,
+	useBalance,
+	useDisconnect,
+	useNetwork,
+} from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
 import { useEffect, useState, useMemo } from 'react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
@@ -24,6 +36,7 @@ const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;
 export const useAuthenticationWallet = () => {
 	const [walletType, setWalletType] = useState<WalletType | null>(null);
 	const [walletAddress, setWalletAddress] = useState<string | null>(null);
+	const [balance, setBalance] = useState<string>();
 	const [isConnected, setIsConnected] = useState<boolean>(false);
 	const [isConnecting, setIsConnecting] = useState<boolean>(false);
 	const [chain, setChain] = useState<
@@ -46,6 +59,8 @@ export const useAuthenticationWallet = () => {
 	} = useAccount();
 	const { chain: evmChain } = useNetwork();
 	const { disconnect: ethereumWalletDisconnect } = useDisconnect();
+	const nonFormatedEvmBalance = useBalance({ address: evmAddress });
+	const [solanaBalance, setSolanaBalance] = useState<number>();
 
 	// Solana wallet hooks
 	const {
@@ -71,6 +86,41 @@ export const useAuthenticationWallet = () => {
 		return encodeBase58(signature);
 	};
 
+	const getSolanaWalletBalance = async (
+		publicKey: PublicKey,
+	): Promise<number> => {
+		// Connect to the cluster
+		const connection = new Connection(
+			clusterApiUrl(config.SOLANA_CONFIG.adapterNetwork),
+			'confirmed',
+		);
+		// Get the balance
+		try {
+			const balance =
+				(await connection.getBalance(publicKey)) / LAMPORTS_PER_SOL;
+			return balance;
+		} catch (error) {
+			console.error('Error getting solana wallet balance:', error);
+		}
+		return 0;
+	};
+
+	useEffect(() => {
+		let canceled = false;
+		if (publicKey) {
+			getSolanaWalletBalance(publicKey).then(balance => {
+				if (!canceled) {
+					setSolanaBalance(balance);
+				}
+			});
+		} else {
+			setSolanaBalance(undefined);
+		}
+		return () => {
+			canceled = true;
+		};
+	}, [publicKey]);
+
 	useEffect(() => {
 		// TODO: This is a temporary solution. It must be smart when both wallets are connected
 		if (evmAddress && evmChain) {
@@ -82,6 +132,7 @@ export const useAuthenticationWallet = () => {
 		} else {
 			setWalletType(null);
 			setWalletAddress(null);
+			setBalance(undefined);
 		}
 	}, [evmAddress, evmChain, publicKey]);
 
@@ -107,6 +158,20 @@ export const useAuthenticationWallet = () => {
 		solanaIsConnected,
 		solanaIsConnecting,
 	]);
+
+	useEffect(() => {
+		switch (walletType) {
+			case WalletType.ETHEREUM:
+				setBalance(nonFormatedEvmBalance?.data?.formatted || undefined);
+				break;
+			case WalletType.SOLANA:
+				setBalance(solanaBalance?.toString());
+				break;
+			default:
+				setBalance(undefined);
+				break;
+		}
+	}, [walletType, nonFormatedEvmBalance, solanaBalance]);
 
 	const signMessage = async (
 		message: string,
@@ -174,5 +239,6 @@ export const useAuthenticationWallet = () => {
 		chainName,
 		chain,
 		openWalletConnectModal,
+		balance,
 	};
 };

@@ -1,3 +1,4 @@
+import { ChainType } from '@/types/config';
 import {
 	ICategory,
 	IDonation,
@@ -86,6 +87,7 @@ export interface IProjectAcceptedToken {
 	decimals: number;
 	isGivbackEligible?: boolean;
 	order: number;
+	chainType?: ChainType;
 }
 
 export interface IFetchGivethProjectGQL {

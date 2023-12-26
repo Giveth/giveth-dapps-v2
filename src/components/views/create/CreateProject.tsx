@@ -74,7 +74,7 @@ export type TInputs = {
 	[EInputs.impactLocation]?: string;
 	[EInputs.image]?: string;
 	[EInputs.draft]?: boolean;
-	[EInputs.addresses]: IWalletAddress[];
+	[EInputs.addresses]: Record<string | number, IWalletAddress>;
 };
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
