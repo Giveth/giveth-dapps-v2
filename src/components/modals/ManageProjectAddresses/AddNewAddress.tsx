@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { getAddress, isAddress } from 'viem';
+import { Chain } from 'wagmi';
 import { IProject, IWalletAddress } from '@/apollo/types/types';
 import Input from '../../Input';
 import { requiredOptions } from '@/lib/constants/regex';
@@ -10,14 +11,15 @@ import { client } from '@/apollo/apolloClient';
 import { ADD_RECIPIENT_ADDRESS_TO_PROJECT } from '@/apollo/gql/gqlProjects';
 import InlineToast, { EToastType } from '../../toasts/InlineToast';
 import { suggestNewAddress } from '@/lib/helpers';
-import { Address } from '@/types/config';
+import { ChainType, NonEVMChain } from '@/types/config';
 import { getChainName } from '@/lib/network';
+import { isSolanaAddress } from '@/lib/wallet';
 
 interface IAddNewAddress {
 	project: IProject;
-	selectedWallet: IWalletAddress;
+	selectedChain: Chain | NonEVMChain;
 	setProjects: Dispatch<SetStateAction<IProject[]>>;
-	setSelectedWallet: Dispatch<SetStateAction<IWalletAddress | undefined>>;
+	setSelectedChain: Dispatch<SetStateAction<Chain | NonEVMChain | undefined>>;
 	setAddresses: Dispatch<SetStateAction<IWalletAddress[]>>;
 }
 
@@ -27,9 +29,9 @@ interface IAddressForm {
 
 export const AddNewAddress: FC<IAddNewAddress> = ({
 	project,
-	selectedWallet,
+	selectedChain,
 	setProjects,
-	setSelectedWallet,
+	setSelectedChain,
 	setAddresses,
 }) => {
 	const [loading, setLoading] = useState(false);
@@ -39,18 +41,25 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 		formState: { errors },
 		setError,
 	} = useForm<IAddressForm>({ mode: 'onSubmit', reValidateMode: 'onSubmit' });
+	const chainType =
+		'chainType' in selectedChain ? selectedChain.chainType : undefined;
 
 	const handleAdd = async (formData: IAddressForm) => {
 		setLoading(true);
 		const { address } = formData;
-		console.log('ASD1', address);
 		try {
-			const _address = getAddress(address) as Address;
+			let _address: string;
+			if (chainType === ChainType.SOLANA) {
+				_address = address;
+			} else {
+				_address = getAddress(address);
+			}
 			await client.mutate({
 				mutation: ADD_RECIPIENT_ADDRESS_TO_PROJECT,
 				variables: {
 					projectId: Number(project.id),
-					networkId: selectedWallet.networkId,
+					networkId: selectedChain.id,
+					chainType,
 					address: _address,
 				},
 			});
@@ -65,7 +74,8 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 							{
 								address: _address,
 								isRecipient: true,
-								networkId: selectedWallet.networkId,
+								networkId: selectedChain.id,
+								chainType,
 							},
 						];
 						newProjects.push(structuredClone(_project));
@@ -73,18 +83,17 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 						newProjects.push(_project);
 					}
 				}
-				setSelectedWallet(undefined);
+				setSelectedChain(undefined);
 				return newProjects;
 			});
 			setAddresses(_addresses => {
 				const _adds = structuredClone(_addresses);
-				for (let i = 0; i < _adds.length; i++) {
-					const _add = _adds[i];
-					if (_add.networkId === selectedWallet.networkId) {
-						_add.isRecipient = true;
-						_add.address = _address;
-					}
-				}
+				_adds.push({
+					address: _address,
+					isRecipient: true,
+					networkId: selectedChain.id,
+					chainType,
+				});
 				return _adds;
 			});
 		} catch (error: any) {
@@ -102,14 +111,19 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 
 	const validateAddress = async (address: string) => {
 		setLoading(true);
-		if (!isAddress(address)) {
+		if (chainType === ChainType.SOLANA) {
+			if (!isSolanaAddress(address)) {
+				setLoading(false);
+				return 'Invalid Solana address';
+			}
+		} else if (!isAddress(address)) {
 			setLoading(false);
-			return 'Invalid address';
+			return 'Invalid ETH address';
 		}
 		return true;
 	};
 
-	const chainName = getChainName(selectedWallet.networkId);
+	const chainName = getChainName(selectedChain.id, chainType);
 
 	return (
 		<>
@@ -118,8 +132,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 					register={register}
 					registerName='address'
 					autoFocus
-					label={`Receiving address on 
-						${chainName}`}
+					label={`Receiving address on ${chainName}`}
 					registerOptions={{
 						...requiredOptions.walletAddress,
 						validate: validateAddress,
