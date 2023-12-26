@@ -325,11 +325,6 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					/>
 				)}
 			</Items>
-			{/* <RunOutSection>
-				<P>Your stream balance will run out funds on </P>
-				<B>{formatDate(date)}</B>
-				<P>Top-up before then!</P>
-			</RunOutSection> */}
 			<RunOutInfo amount={amount} totalPerMonth={totalPerMonth} />
 			<ActionButton
 				label={buttonLabel[step]}

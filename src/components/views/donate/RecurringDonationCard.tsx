@@ -69,6 +69,8 @@ export const RecurringDonationCard = () => {
 		cacheTime: 5_000,
 	});
 
+	const isGivethProject = Number(project.id!) === config.GIVETH_PROJECT_ID;
+
 	useEffect(() => {
 		if (!selectedToken || !balance) return;
 		if (selectedToken.token.isSuperToken) {
@@ -341,19 +343,21 @@ export const RecurringDonationCard = () => {
 				)
 			) : (
 				<>
-					<GivethSection
-						flexDirection='column'
-						gap='8px'
-						alignItems='stretch'
-					>
-						<DonateToGiveth
-							setDonationToGiveth={e => {
-								setDonationToGiveth(e);
-							}}
-							donationToGiveth={donationToGiveth}
-							title='Add a recurring donation to Giveth'
-						/>
-					</GivethSection>
+					{!isGivethProject && (
+						<GivethSection
+							flexDirection='column'
+							gap='8px'
+							alignItems='stretch'
+						>
+							<DonateToGiveth
+								setDonationToGiveth={e => {
+									setDonationToGiveth(e);
+								}}
+								donationToGiveth={donationToGiveth}
+								title='Add a recurring donation to Giveth'
+							/>
+						</GivethSection>
+					)}
 					<DonatesInfoSection>
 						<Flex flexDirection='column' gap='8px'>
 							<Flex justifyContent='space-between'>
@@ -448,7 +452,7 @@ export const RecurringDonationCard = () => {
 			{showRecurringDonationModal && (
 				<RecurringDonationModal
 					setShowModal={setShowRecurringDonationModal}
-					donationToGiveth={donationToGiveth}
+					donationToGiveth={isGivethProject ? 0 : donationToGiveth}
 					amount={amount}
 					percentage={percentage}
 					isUpdating={isUpdating}
