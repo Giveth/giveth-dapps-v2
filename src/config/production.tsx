@@ -35,13 +35,19 @@ const BASE_ROUTE =
 const BACKEND_LINK =
 	process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`;
 const FRONTEND_LINK =
-	process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://staging.giveth.io';
+	process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://giveth.io';
 const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
 	'https://notification.giveth.io';
 const AUTH_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
 	'https://auth.serve.giveth.io/v1';
+
+console.log('BASE_ROUTE', BASE_ROUTE);
+console.log('BACKEND_LINK', BACKEND_LINK);
+console.log('FRONTEND_LINK', FRONTEND_LINK);
+console.log('NOTIFICATION_BASE_ROUTE', NOTIFICATION_BASE_ROUTE);
+console.log('AUTH_BASE_ROUTE', AUTH_BASE_ROUTE);
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
