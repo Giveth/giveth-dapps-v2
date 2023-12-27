@@ -193,7 +193,11 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 				<>
 					<TopUpSection flexDirection='column' gap='8px'>
 						<Flex gap='8px' alignItems='center'>
-							<Caption medium>Top up stream Balance</Caption>
+							<Caption medium>
+								{formatMessage({
+									id: 'label.top_up_stream_balance',
+								})}
+							</Caption>
 							<IconWithTooltip
 								icon={<IconHelpFilled16 />}
 								direction='right'
@@ -225,7 +229,10 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 						</InputWrapper>
 						<Flex gap='4px'>
 							<GLink size='Small'>
-								Available: {balance?.formatted}
+								{formatMessage({
+									id: 'label.available',
+								})}
+								: {balance?.formatted}
 							</GLink>
 							<IconWrapper
 								onClick={() => !isRefetching && refetch()}
@@ -242,7 +249,11 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 								alignItems='center'
 								justifyContent='space-between'
 							>
-								<Caption medium>Stream Balance</Caption>
+								<Caption medium>
+									{formatMessage({
+										id: 'label.stream_balance',
+									})}
+								</Caption>
 								<StreamBalanceInfo medium>
 									{SuperTokenBalance?.formatted}{' '}
 									{superToken?.symbol}
