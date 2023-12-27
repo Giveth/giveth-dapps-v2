@@ -7,6 +7,7 @@ import {
 	brandColors,
 } from '@giveth/ui-design-system';
 import { useNetwork } from 'wagmi';
+import { WriteContractResult } from '@wagmi/core';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -28,6 +29,19 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	const { chain } = useNetwork();
 	const [showSwitchNetworkModal, setShowSwitchNetworkModal] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
+	const [txResult, setTxResult] = useState<WriteContractResult>();
+	const updatedCloseModal = () => {
+		if (!txResult) {
+			//Show the user did not complete the transaction
+			console.log('User did not complete the transaction');
+			alert(
+				'You did not complete the transaction but your project was created',
+			);
+			//handle success project
+		}
+		localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
+		closeModal();
+	};
 
 	const isOnOptimism = chain
 		? chain.id === config.OPTIMISM_NETWORK_NUMBER
@@ -46,13 +60,14 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 			try {
 				setIsLoading(true);
 				const tx = await writeAsync?.();
+				setTxResult(tx);
 				console.log('TX', tx);
 				//Call backend to update project
+				localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 				setShowModal(false); // Close the modal
 			} catch (error) {
 				console.error('Error signing contract:', error);
 			} finally {
-				localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 				setIsLoading(false);
 			}
 		}
@@ -61,15 +76,15 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	console.log('Rendering AlloProtocolModal');
 	return (
 		<Modal
-			closeModal={closeModal}
+			closeModal={updatedCloseModal}
 			isAnimating={isAnimating}
 			headerIcon={<IconBulbOutline32 />}
 			headerTitle='Set up Allo Protocol Registry'
 			headerTitlePosition='left'
 		>
 			<Container>
-				{isOnOptimism ? 'On Optimism' : 'Not On Optimism'}
-				{addedProjectState.id}
+				{/* {isOnOptimism ? 'On Optimism' : 'Not On Optimism'}
+				{addedProjectState.id} */}
 				<P>Set up your profile on the Allo protocol Registry </P>
 				<br />
 				<ItemContainer>
@@ -84,7 +99,13 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 				<ItemContainer>
 					<P>
 						There will be one extra transaction you need to sign to
-						enable recurring donations for this project on Optimism.
+						enable recurring donations for this project on{' '}
+						<span
+							style={{ whiteSpace: 'nowrap', display: 'inline' }}
+						>
+							Optimism
+						</span>
+						.
 					</P>
 					<Ellipse />
 				</ItemContainer>
@@ -129,10 +150,6 @@ const Ellipse = styled.div`
 `;
 
 const CustomButton = styled(Button)`
-	width: 100%;
-`;
-
-const ButtonContainer = styled.div`
 	width: 100%;
 `;
 
