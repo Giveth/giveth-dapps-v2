@@ -115,11 +115,16 @@ export const SignWithWalletModal: FC<IProps> = ({
 
 	const closeModal = async () => {
 		try {
-			if (safeSecondaryConnection && connector?.id !== 'safe') {
-				await connect({
-					chainId,
-					connector: connectors[3],
-				});
+			if (
+				isSafeEnv ||
+				(safeSecondaryConnection && connector?.id !== 'safe')
+			) {
+				const safeConnector = connectors.find(i => i.id === 'safe');
+				safeConnector &&
+					(await connect({
+						chainId,
+						connector: safeConnector,
+					}));
 			}
 			_closeModal();
 			reset();
