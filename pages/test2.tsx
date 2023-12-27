@@ -29,7 +29,7 @@ const YourApp = () => {
 			.then(res => console.log('Allow', formatWeiHelper(res.toString())));
 	}, []);
 
-	console.log('contractRead', getContract);
+	console.log('contractRead1', getContract);
 
 	return (
 		<div>

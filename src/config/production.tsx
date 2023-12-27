@@ -20,12 +20,6 @@ import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconCelo } from '@/components/Icons/Celo';
 import { IconClassic } from '@/components/Icons/Classic';
 
-const BASE_ROUTE =
-	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
-const NOTIFICATION_BASE_ROUTE =
-	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
-	'https://notification.giveth.io';
-
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
 
@@ -38,15 +32,31 @@ const CELO_NETWORK_NUMBER = 42220;
 const CLASSIC_NETWORK_NUMBER = 61;
 const SOLANA_NETWORK = WalletAdapterNetwork.Mainnet;
 
+const BASE_ROUTE =
+	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
+const BACKEND_LINK =
+	process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`;
+const FRONTEND_LINK =
+	process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://giveth.io';
+const NOTIFICATION_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
+	'https://notification.giveth.io';
+const AUTH_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
+	'https://auth.serve.giveth.io/v1';
+
+console.log('BASE_ROUTE', BASE_ROUTE);
+console.log('BACKEND_LINK', BACKEND_LINK);
+console.log('FRONTEND_LINK', FRONTEND_LINK);
+console.log('NOTIFICATION_BASE_ROUTE', NOTIFICATION_BASE_ROUTE);
+console.log('AUTH_BASE_ROUTE', AUTH_BASE_ROUTE);
+
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
-	BACKEND_LINK:
-		process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`,
-	FRONTEND_LINK: process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://giveth.io',
+	BACKEND_LINK: BACKEND_LINK,
+	FRONTEND_LINK: FRONTEND_LINK,
 	MICROSERVICES: {
-		authentication:
-			process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
-			`${BASE_ROUTE}/siweauthmicroservice/v1`,
+		authentication: AUTH_BASE_ROUTE,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
