@@ -37,7 +37,9 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	const [txResult, setTxResult] = useState<WriteContractResult>();
 	const router = useRouter();
 
-	const isDraft = project?.status.name === EProjectStatus.DRAFT;
+	const isDraft =
+		project?.status.name === EProjectStatus.DRAFT ||
+		addedProjectState.status.name === EProjectStatus.DRAFT;
 
 	const isEditMode = !!project;
 
