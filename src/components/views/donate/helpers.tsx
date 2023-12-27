@@ -1,17 +1,11 @@
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
-import { IWalletAddress } from '@/apollo/types/types';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import config from '@/configuration';
-import { ChainType } from '@/types/config';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
 	label?: string;
-}
-
-interface INetworkIds {
-	[key: number]: boolean;
 }
 
 export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
