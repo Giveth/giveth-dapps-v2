@@ -19,6 +19,7 @@ import config from '@/configuration';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { RunOutInfo } from '../RunOutInfo';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
@@ -107,6 +108,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 		useDonateData();
 	const { address } = useAccount();
 	const tokenPrice = useTokenPrice(selectedToken?.token);
+	const isSafeEnv = useIsSafeEnvironment();
 
 	// console.log('tokenPrice', tokenPrice);
 
@@ -136,6 +138,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				superToken.id, //superTokenAddress
 				selectedToken?.token.id, //tokenAddress
 				config.OPTIMISM_CONFIG.id,
+				isSafeEnv,
 			);
 			if (approve) {
 				setStep(EDonationSteps.DONATE);

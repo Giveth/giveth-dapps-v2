@@ -38,6 +38,7 @@ import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { showToastError } from '@/lib/helpers';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	tokenStreams: ITokenStreams;
@@ -82,6 +83,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	});
 
 	const tokenPrice = useTokenPrice(token);
+	const isSafeEnv = useIsSafeEnvironment();
 
 	useEffect(() => {
 		if (!token) return;
@@ -118,6 +120,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 				superToken.id, //superTokenAddress
 				token.id, //tokenAddress
 				config.OPTIMISM_CONFIG.id,
+				isSafeEnv,
 			);
 			if (approve) {
 				setStep(EModifySuperTokenSteps.DEPOSIT);
