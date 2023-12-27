@@ -53,7 +53,7 @@ import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import { CommunityMenu } from '../menu/CommunityMenu';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import config from '@/configuration';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -67,7 +67,7 @@ const Header: FC<IHeader> = () => {
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 
-	const { walletAddress, openWalletConnectModal } = useAuthenticationWallet();
+	const { walletAddress, openWalletConnectModal } = useGeneralWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 

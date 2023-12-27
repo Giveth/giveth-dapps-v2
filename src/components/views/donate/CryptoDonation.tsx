@@ -52,7 +52,7 @@ import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingT
 import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
 import QFModal from '@/components/views/donate/QFModal';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
@@ -69,7 +69,7 @@ const CryptoDonation: FC = () => {
 		walletAddress: address,
 		isConnected,
 		balance,
-	} = useAuthenticationWallet();
+	} = useGeneralWallet();
 	const { formatMessage } = useIntl();
 	const { isEnabled, isSignedIn } = useAppSelector(state => state.user);
 

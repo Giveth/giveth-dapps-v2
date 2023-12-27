@@ -1,3 +1,12 @@
+// create a react provider with the context
+import React, {
+	ReactNode,
+	createContext,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import {
 	PublicKey,
@@ -15,7 +24,6 @@ import {
 	useNetwork,
 } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
-import { useEffect, useState, useMemo } from 'react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { encodeBase58 } from 'ethers';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
@@ -33,7 +41,14 @@ import { ChainType } from '@/types/config';
 const { SOLANA_CONFIG } = config;
 const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;
 
-export const useAuthenticationWallet = () => {
+// Create the context
+export const GeneralWalletContext = createContext<any>(null);
+
+// Create the provider component
+export const GeneralWalletProvider: React.FC<{
+	children: ReactNode;
+}> = ({ children }) => {
+	// Define the state or any other necessary variables
 	const [walletChainType, setWalletChainType] = useState<ChainType | null>(
 		null,
 	);
@@ -277,7 +292,7 @@ export const useAuthenticationWallet = () => {
 		}
 	};
 
-	return {
+	const contextValue = {
 		walletChainType,
 		signMessage,
 		walletAddress,
@@ -290,4 +305,22 @@ export const useAuthenticationWallet = () => {
 		balance,
 		sendNativeToken,
 	};
+
+	// Render the provider component with the provided context value
+	return (
+		<GeneralWalletContext.Provider value={contextValue}>
+			{children}
+		</GeneralWalletContext.Provider>
+	);
+};
+
+// export const useGeneralWallet
+export const useGeneralWallet = () => {
+	const context = useContext(GeneralWalletContext);
+	if (context === undefined) {
+		throw new Error(
+			'useGeneralWallet must be used within a GeneralWalletProvider',
+		);
+	}
+	return context;
 };

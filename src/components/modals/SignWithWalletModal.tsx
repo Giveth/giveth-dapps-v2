@@ -28,7 +28,7 @@ import { EModalEvents } from '@/hooks/useModalCallback';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { Dropdown } from './ExpirationDropdown';
 import { Flex } from '../styled-components/Flex';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { createSwisMessage } from '@/lib/authentication';
 import { ISolanaSignToGetToken } from '@/features/user/user.types';
 import ExternalLink from '@/components/ExternalLink';
@@ -65,8 +65,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 	const isSafeEnv = useIsSafeEnvironment();
 
 	const chainId = chain?.id;
-	const { walletAddress, signMessage, walletChainType } =
-		useAuthenticationWallet();
+	const { walletAddress, signMessage, walletChainType } = useGeneralWallet();
 	const router = useRouter();
 	const { isAnimating, closeModal: _closeModal } =
 		useModalAnimation(setShowModal);

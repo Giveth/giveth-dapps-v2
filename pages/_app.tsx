@@ -38,9 +38,10 @@ import {
 	getLocaleFromNavigator,
 	isGIVeconomyRoute,
 } from '@/lib/helpers';
+import { GeneralWalletProvider } from '@/providers/generalWalletProvider';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
-import { SolanaProvider } from '@/solana/solanaWalletProvider';
+import { SolanaProvider } from '@/providers/solanaWalletProvider';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 
@@ -212,58 +213,60 @@ function MyApp({ Component, pageProps }: AppProps) {
 					<ApolloProvider client={apolloClient}>
 						<SolanaProvider>
 							<WagmiConfig config={wagmiConfig}>
-								{isMaintenanceMode ? (
-									<MaintenanceIndex />
-								) : (
-									<>
-										<NotificationController />
-										<GeneralController />
-										<PriceController />
-										<SubgraphController />
-										<UserController />
-										<HeaderWrapper />
-										{isGIVeconomyRoute(router.route) && (
-											<GIVeconomyTab />
-										)}
-										{(pageProps as any).errorStatus ? (
-											<ErrorsIndex
-												statusCode={
-													(pageProps as any)
-														.errorStatus
-												}
-											/>
-										) : (
-											<RenderComponent
-												Component={Component}
-												pageProps={pageProps}
-											/>
-										)}
-										{process.env.NEXT_PUBLIC_ENV ===
-											'production' && (
-											<Script
-												id='segment-script'
-												strategy='afterInteractive'
-												dangerouslySetInnerHTML={{
-													__html: renderSnippet(),
-												}}
-											/>
-										)}
-										{process.env.NEXT_PUBLIC_ENV !==
-											'production' && (
-											<Script
-												id='console-script'
-												strategy='afterInteractive'
-												dangerouslySetInnerHTML={{
-													__html: `javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();`,
-												}}
-											/>
-										)}
+								<GeneralWalletProvider>
+									{isMaintenanceMode ? (
+										<MaintenanceIndex />
+									) : (
+										<>
+											<NotificationController />
+											<GeneralController />
+											<PriceController />
+											<SubgraphController />
+											<UserController />
+											<HeaderWrapper />
+											{isGIVeconomyRoute(
+												router.route,
+											) && <GIVeconomyTab />}
+											{(pageProps as any).errorStatus ? (
+												<ErrorsIndex
+													statusCode={
+														(pageProps as any)
+															.errorStatus
+													}
+												/>
+											) : (
+												<RenderComponent
+													Component={Component}
+													pageProps={pageProps}
+												/>
+											)}
+											{process.env.NEXT_PUBLIC_ENV ===
+												'production' && (
+												<Script
+													id='segment-script'
+													strategy='afterInteractive'
+													dangerouslySetInnerHTML={{
+														__html: renderSnippet(),
+													}}
+												/>
+											)}
+											{process.env.NEXT_PUBLIC_ENV !==
+												'production' && (
+												<Script
+													id='console-script'
+													strategy='afterInteractive'
+													dangerouslySetInnerHTML={{
+														__html: `javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();`,
+													}}
+												/>
+											)}
 
-										<FooterWrapper />
-										<ModalController />
-										<PfpController />
-									</>
-								)}
+											<FooterWrapper />
+											<ModalController />
+											<PfpController />
+										</>
+									)}
+								</GeneralWalletProvider>
 							</WagmiConfig>
 						</SolanaProvider>
 					</ApolloProvider>

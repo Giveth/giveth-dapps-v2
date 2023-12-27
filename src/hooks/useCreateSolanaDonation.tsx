@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
-import {
-	fetchEnsAddress,
-	fetchTransaction as fetchEvmTransaction,
-} from '@wagmi/core';
+import { fetchEnsAddress } from '@wagmi/core';
 import { Chain, useWaitForTransaction } from 'wagmi';
 
 import { useConnection } from '@solana/wallet-adapter-react';
@@ -16,8 +13,8 @@ import { ICreateDonation } from '@/components/views/donate/helpers';
 import { getTxFromSafeTxId } from '@/lib/safe';
 import { retryFetchTransaction, waitForTransaction } from '@/lib/transaction';
 import { useIsSafeEnvironment } from './useSafeAutoConnect';
-import { useAuthenticationWallet } from './useAuthenticationWallet';
 import { ChainType } from '@/types/config';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export const useCreateSolanaDonation = () => {
 	const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
@@ -27,8 +24,7 @@ export const useCreateSolanaDonation = () => {
 	const [resolveState, setResolveState] = useState<(() => void) | null>(null);
 	const [createDonationProps, setCreateDonationProps] =
 		useState<ICreateDonation>();
-	const { chain, walletChainType, sendNativeToken } =
-		useAuthenticationWallet();
+	const { chain, walletChainType, sendNativeToken } = useGeneralWallet();
 	const chainId = (chain as Chain)?.id;
 	const isSafeEnv = useIsSafeEnvironment();
 	const { connection: solanaConnection } = useConnection();

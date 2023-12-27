@@ -10,8 +10,8 @@ import StorageLabel from '@/lib/localStorage';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { getTokens } from '@/helpers/user';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 import { ChainType } from '@/types/config';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const UserController = () => {
 	const {
@@ -19,7 +19,7 @@ const UserController = () => {
 		isConnected,
 		isConnecting,
 		walletChainType,
-	} = useAuthenticationWallet();
+	} = useGeneralWallet();
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
 	const { connect, connectors } = useConnect();
