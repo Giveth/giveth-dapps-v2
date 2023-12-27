@@ -1438,5 +1438,7 @@
 	"label.modify_recurring_donation": "Modify Recurring Donation",
 	"label.stream_balances": "Stream Balances",
 	"label.eligible_tokens": "Tokens Elegibles",
-	"label.you_have_stream_on_all_tokens": "You have stream on all tokens"
+	"label.you_have_stream_on_all_tokens": "You have stream on all tokens",
+	"label.stream_runs_out_in": "Stream runs out in",
+	"label.funding_count_projects": "Funding {count} {count, plural, one { Project} other { Projects} }"
 }

@@ -1437,5 +1437,7 @@
 	"label.modify_recurring_donation": "Modificar Donación Recurrente",
 	"label.stream_balances": "Saldos de Transmisión",
 	"label.eligible_tokens": "Tokens Elegibles",
-	"label.you_have_stream_on_all_tokens": "Tienes transmisión en todos los tokens"
+	"label.you_have_stream_on_all_tokens": "Tienes transmisión en todos los tokens",
+	"label.stream_runs_out_in": "La transmisión se agota en",
+	"label.funding_count_projects": "Financiando {count} {count, plural, one { Proyecto} other { Proyectos} }"
 }
