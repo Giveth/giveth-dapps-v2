@@ -9,6 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useState, type FC, useEffect } from 'react';
 import { useAccount } from 'wagmi';
+import { useIntl } from 'react-intl';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -50,6 +51,8 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 }) => {
 	const [tokens, setTokens] = useState<ISuperToken[]>([]);
 	const [balances, setBalances] = useState<IBalances>({});
+
+	const { formatMessage } = useIntl();
 	const { address } = useAccount();
 	const { tokenStreams, setSelectedToken, project } = useDonateData();
 
@@ -126,7 +129,9 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	return (
 		<>
 			<Wrapper>
-				<Title medium>Stream Balances</Title>
+				<Title medium>
+					{formatMessage({ id: 'label.stream_balances' })}
+				</Title>
 				{Object.keys(tokenStreams).map(tokenId => {
 					const token = allTokens.find(
 						token => token.id === tokenId,
@@ -171,31 +176,46 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						/>
 					),
 				)}
-				<Title medium>Eligible Tokens</Title>
-				{tokens.map(token => (
-					<TokenInfo
-						key={token.underlyingToken.symbol}
-						token={token.underlyingToken}
-						balance={balances[token.underlyingToken.symbol]}
-						disable={
-							balances[token.underlyingToken.symbol] ===
-								undefined ||
-							balances[token.underlyingToken.symbol] === 0n
-						}
-						onClick={() => {
-							setSelectedToken({
-								token: token.underlyingToken,
-								balance: balances[token.underlyingToken.symbol],
-							});
-							setShowModal(false);
-						}}
-					/>
-				))}
+				<Title medium>
+					{formatMessage({ id: 'label.eligible_tokens' })}
+				</Title>
+				{tokens.length > 0 ? (
+					tokens.map(token => (
+						<TokenInfo
+							key={token.underlyingToken.symbol}
+							token={token.underlyingToken}
+							balance={balances[token.underlyingToken.symbol]}
+							disable={
+								balances[token.underlyingToken.symbol] ===
+									undefined ||
+								balances[token.underlyingToken.symbol] === 0n
+							}
+							onClick={() => {
+								setSelectedToken({
+									token: token.underlyingToken,
+									balance:
+										balances[token.underlyingToken.symbol],
+								});
+								setShowModal(false);
+							}}
+						/>
+					))
+				) : (
+					<Caption>
+						{formatMessage({
+							id: 'label.you_have_stream_on_all_tokens',
+						})}
+					</Caption>
+				)}
 			</Wrapper>
 			<GIVbackWrapper>
 				<Flex gap='8px' alignItems='center'>
 					<IconGIVBack size={24} color={brandColors.giv[500]} />
-					<SublineBold>GIVbacks eligible tokens</SublineBold>
+					<SublineBold>
+						{formatMessage({
+							id: 'label.givbacks_eligible_tokens',
+						})}
+					</SublineBold>
 				</Flex>
 			</GIVbackWrapper>
 		</>
