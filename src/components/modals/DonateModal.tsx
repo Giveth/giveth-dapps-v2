@@ -10,7 +10,7 @@ import {
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 
-import { useAccount, useNetwork } from 'wagmi';
+import { Chain } from 'wagmi';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
@@ -34,7 +34,11 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useDonateData } from '@/context/donate.context';
 import { fetchETCPrice, fetchPrice } from '@/services/token';
 import { fetchEthPrice } from '@/features/price/price.services';
-import { useCreateDonation } from '@/hooks/useCreateDonation';
+import { useCreateEvmDonation } from '@/hooks/useCreateEvmDonation';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { ChainType } from '@/types/config';
+import { IWalletAddress } from '@/apollo/types/types';
+import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -62,20 +66,27 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		anonymous,
 		givBackEligible,
 	} = props;
+	const createDonationHook =
+		token.chainType === ChainType.SOLANA
+			? useCreateSolanaDonation
+			: useCreateEvmDonation;
 	const {
 		createDonation: createFirstDonation,
 		txHash: firstTxHash,
 		donationSaved: firstDonationSaved,
 		donationMinted: firstDonationMinted,
-	} = useCreateDonation();
+	} = createDonationHook();
 	const {
 		createDonation: createSecondDonation,
 		txHash: secondTxHash,
 		donationSaved: secondDonationSaved,
-	} = useCreateDonation();
-	const { address } = useAccount();
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
+	} = createDonationHook();
+	const {
+		chain,
+		walletChainType,
+		walletAddress: address,
+	} = useAuthenticationWallet();
+	const chainId = (chain as Chain)?.id;
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const isDonatingToGiveth = donationToGiveth > 0;
@@ -95,13 +106,19 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses, givethAddresses } = project || {};
-	const projectWalletAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === chainId,
-	)?.address;
-
-	const givethWalletAddress = givethAddresses?.find(
-		a => a.isRecipient && a.networkId === chainId,
-	)?.address;
+	// console.log('addresses', addresses);
+	// console.log('walletChainType:', walletChainType);
+	// console.log('chainId:', chainId);
+	const projectWalletAddress = findMatchingWalletAddress(
+		addresses,
+		chainId,
+		walletChainType,
+	);
+	const givethWalletAddress = findMatchingWalletAddress(
+		givethAddresses,
+		chainId,
+		walletChainType,
+	);
 
 	const avgPrice = tokenPrice && tokenPrice * amount;
 	let donationToGivethAmount = (amount * donationToGiveth) / 100;
@@ -246,8 +263,9 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		}
 	}, [token]);
 
-	if (!projectWalletAddress) {
-		showToastError('There is no eth address assigned for this project');
+	if (!projectWalletAddress && walletChainType) {
+		// console.log('projectWalletAddress:', projectWalletAddress);
+		showToastError('There is no address assigned for this project');
 		return null;
 	}
 
@@ -402,6 +420,20 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			)}
 		</>
 	);
+};
+
+const findMatchingWalletAddress = (
+	addresses: IWalletAddress[] = [],
+	chainId: number,
+	chainType: ChainType | null,
+) => {
+	return addresses.find(a => {
+		return (
+			a.isRecipient &&
+			((chainType !== ChainType.EVM && a.chainType === chainType) ||
+				a.networkId === chainId)
+		);
+	})?.address;
 };
 
 const TxStatus = styled.div`

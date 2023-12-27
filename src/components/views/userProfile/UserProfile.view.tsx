@@ -67,7 +67,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
-	const { walletType, chain } = useAuthenticationWallet();
+	const { walletChainType, chain } = useAuthenticationWallet();
 	const { user, myAccount } = useProfileContext();
 	const router = useRouter();
 	const pfpToken = useGiverPFPToken(user?.walletAddress, user?.avatar);
@@ -164,7 +164,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 									</AddressTextMobile>
 									<ExternalLink
 										href={formatWalletLink(
-											walletType,
+											walletChainType,
 											chain,
 											user?.walletAddress,
 										)}

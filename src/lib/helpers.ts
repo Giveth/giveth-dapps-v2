@@ -20,7 +20,6 @@ import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
 import config from '@/configuration';
 import { AddressZero } from './constants/constants';
-import { WalletType } from '@/hooks/useAuthenticationWallet';
 import { ChainType } from '@/types/config';
 
 declare let window: any;
@@ -64,19 +63,19 @@ export const formatTxLink = (networkId?: number, txHash?: string) => {
 };
 
 export function formatWalletLink(
-	walletType: WalletType | null,
+	walletChainType: ChainType | null,
 	chain?: Chain | WalletAdapterNetwork,
 	address?: string,
 ) {
-	if (!address || !chain || !walletType) return '';
+	if (!address || !chain || !walletChainType) return '';
 
-	switch (walletType) {
-		case WalletType.ETHEREUM:
+	switch (walletChainType) {
+		case ChainType.EVM:
 			const chainId = (chain as Chain)?.id;
 			if (!config.EVM_NETWORKS_CONFIG[chainId]) return '';
 			return `${config.EVM_NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/address/${address}`;
 
-		case WalletType.SOLANA:
+		case ChainType.SOLANA:
 			const url = `https://explorer.solana.com/address/${address}`;
 			switch (chain) {
 				case WalletAdapterNetwork.Mainnet:
@@ -273,7 +272,7 @@ export const shortenAddress = (
 };
 
 // Sends a transaction, either as an ERC20 token transfer or a regular ETH transfer.
-export async function sendTransaction(
+export async function sendEvmTransaction(
 	params: TransactionParams,
 	contractAddress?: `0x${string}`,
 ) {

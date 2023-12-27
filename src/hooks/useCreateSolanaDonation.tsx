@@ -1,49 +1,25 @@
 import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
-import { fetchEnsAddress, fetchTransaction } from '@wagmi/core';
-import { useNetwork, useWaitForTransaction } from 'wagmi';
+import {
+	fetchEnsAddress,
+	fetchTransaction as fetchEvmTransaction,
+} from '@wagmi/core';
+import { Chain, useWaitForTransaction } from 'wagmi';
 
-import { sendTransaction } from '@/lib/helpers';
+import { useConnection } from '@solana/wallet-adapter-react';
+import { sendEvmTransaction } from '@/lib/helpers';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { isAddressENS } from '@/lib/wallet';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
 import { ICreateDonation } from '@/components/views/donate/helpers';
 import { getTxFromSafeTxId } from '@/lib/safe';
-import { waitForTransaction } from '@/lib/transaction';
+import { retryFetchTransaction, waitForTransaction } from '@/lib/transaction';
 import { useIsSafeEnvironment } from './useSafeAutoConnect';
+import { useAuthenticationWallet } from './useAuthenticationWallet';
+import { ChainType } from '@/types/config';
 
-const MAX_RETRIES = 10;
-const RETRY_DELAY = 5000; // 5 seconds
-
-const retryFetchTransaction = async (
-	txHash: `0x${string}`,
-	retries: number = MAX_RETRIES,
-) => {
-	for (let i = 0; i < retries; i++) {
-		const transaction = await fetchTransaction({
-			hash: txHash,
-		}).catch(error => {
-			console.log(
-				'Attempt',
-				i,
-				'Fetching Transaction Error:',
-				error,
-				txHash,
-			);
-			return null;
-		});
-
-		if (transaction) return transaction;
-
-		// If not found, wait for the delay time and try again
-		await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
-	}
-	// Return null if the transaction is still not found after all retries
-	throw new Error('Transaction not found');
-};
-
-export const useCreateDonation = () => {
+export const useCreateSolanaDonation = () => {
 	const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
 	const [donationSaved, setDonationSaved] = useState<boolean>(false);
 	const [donationMinted, setDonationMinted] = useState<boolean>(false);
@@ -51,11 +27,29 @@ export const useCreateDonation = () => {
 	const [resolveState, setResolveState] = useState<(() => void) | null>(null);
 	const [createDonationProps, setCreateDonationProps] =
 		useState<ICreateDonation>();
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
+	const { chain, walletChainType, sendNativeToken } =
+		useAuthenticationWallet();
+	const chainId = (chain as Chain)?.id;
 	const isSafeEnv = useIsSafeEnvironment();
+	const { connection: solanaConnection } = useConnection();
+
+	const fetchTransaction = async ({ hash }: { hash: string }) => {
+		const transaction = await solanaConnection.getTransaction(hash);
+		const from: string =
+			transaction?.transaction.message.accountKeys[0].toBase58()!;
+		if (!from) {
+			throw new Error('Solana transction from not found');
+		}
+		return {
+			hash,
+			chainId: 0,
+			nonce: null,
+			from,
+		};
+	};
 
 	const { status } = useWaitForTransaction({
+		enabled: walletChainType === ChainType.EVM,
 		hash: txHash,
 		onReplaced(data) {
 			console.log('Transaction Updated', data);
@@ -95,7 +89,7 @@ export const useCreateDonation = () => {
 				return;
 			}
 			transaction = !isSafeEnv
-				? await retryFetchTransaction(txHash)
+				? await retryFetchTransaction(fetchTransaction, txHash)
 				: null;
 
 			if (!transaction && isSafeEnv) {
@@ -129,13 +123,13 @@ export const useCreateDonation = () => {
 				};
 			} else if (!isSafeEnv && transaction) {
 				donationData = {
-					chainId: transaction.chainId!,
+					chainId: transaction.chainId! || 0,
 					txHash: transaction.hash,
 					amount: amount,
 					token,
 					projectId,
 					anonymous,
-					nonce: transaction.nonce,
+					nonce: transaction.nonce || 0,
 					chainvineReferred,
 					walletAddress: transaction.from,
 					symbol: token.symbol,
@@ -184,7 +178,7 @@ export const useCreateDonation = () => {
 	const createDonation = async (props: ICreateDonation) => {
 		console.log('Props', props);
 		const { walletAddress, amount, token, setFailedModalType } = props;
-		const { address } = token;
+		const { address, chainType = ChainType.EVM } = token;
 
 		const toAddress = isAddressENS(walletAddress!)
 			? await fetchEnsAddress({ name: walletAddress })
@@ -197,11 +191,14 @@ export const useCreateDonation = () => {
 
 		try {
 			// setDonating(true);
-			const hash = await sendTransaction(transactionObj, address).catch(
-				error => {
-					handleError(error, 0, setFailedModalType);
-				},
-			);
+			const hash =
+				walletChainType === ChainType.SOLANA
+					? await sendNativeToken(toAddress!, amount.toString())
+					: await sendEvmTransaction(transactionObj, address).catch(
+							error => {
+								handleError(error, 0, setFailedModalType);
+							},
+						);
 			console.log('HERE IS THE hash', hash);
 			if (!hash) return { isSaved: false, txHash: '', isMinted: false };
 			setTxHash(hash);

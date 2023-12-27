@@ -52,10 +52,7 @@ import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingT
 import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
 import QFModal from '@/components/views/donate/QFModal';
-import {
-	WalletType,
-	useAuthenticationWallet,
-} from '@/hooks/useAuthenticationWallet';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 import { ChainType } from '@/types/config';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
@@ -68,7 +65,7 @@ interface IInputBox {
 const CryptoDonation: FC = () => {
 	const {
 		chain,
-		walletType,
+		walletChainType,
 		walletAddress: address,
 		isConnected,
 		balance,
@@ -132,7 +129,8 @@ const CryptoDonation: FC = () => {
 
 	useEffect(() => {
 		if (
-			(networkId || (walletType && walletType !== WalletType.ETHEREUM)) &&
+			(networkId ||
+				(walletChainType && walletChainType !== ChainType.EVM)) &&
 			acceptedTokens
 		) {
 			const acceptedNetworkIds = [
@@ -144,16 +142,16 @@ const CryptoDonation: FC = () => {
 			].filter(chainType => chainType && chainType !== ChainType.EVM);
 
 			const filteredTokens = acceptedTokens.filter(token => {
-				switch (walletType) {
-					case WalletType.ETHEREUM:
+				switch (walletChainType) {
+					case ChainType.EVM:
 						return (
 							token.networkId === networkId &&
 							acceptedNetworkIds.includes(networkId)
 						);
-					case WalletType.SOLANA:
+					case ChainType.SOLANA:
 						return (
-							token.chainType === ChainType.SOLANA &&
-							acceptedNonEvmNetworks.includes(ChainType.SOLANA)
+							token.chainType === walletChainType &&
+							acceptedNonEvmNetworks.includes(walletChainType)
 						);
 					default:
 						return false;
@@ -170,7 +168,7 @@ const CryptoDonation: FC = () => {
 			setSelectedToken(tokens[0]);
 			setTokenIsGivBackEligible(tokens[0]?.isGivbackEligible);
 		}
-	}, [networkId, acceptedTokens, walletType]);
+	}, [networkId, acceptedTokens, walletChainType]);
 
 	useEffect(() => {
 		setMaxDonationEnabled(false);
@@ -224,9 +222,9 @@ const CryptoDonation: FC = () => {
 
 	const pollToken = useCallback(async () => {
 		clearPoll();
-		if (walletType === WalletType.SOLANA) {
+		if (walletChainType === ChainType.SOLANA) {
 			return setSelectedTokenBalance(
-				BigInt(Number(balance) * LAMPORTS_PER_SOL),
+				BigInt(Number(balance || 0) * LAMPORTS_PER_SOL),
 			);
 		}
 
@@ -274,7 +272,7 @@ const CryptoDonation: FC = () => {
 			}),
 			POLL_DELAY_TOKENS,
 		)();
-	}, [address, networkId, tokenSymbol, balance, walletType]);
+	}, [address, networkId, tokenSymbol, balance, walletChainType]);
 
 	const handleCustomToken = (i: `0x${string}`) => {
 		if (!supportCustomTokens) return;

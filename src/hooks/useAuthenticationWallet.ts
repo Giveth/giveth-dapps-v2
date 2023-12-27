@@ -1,9 +1,11 @@
-import { useWallet } from '@solana/wallet-adapter-react';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import {
 	PublicKey,
 	Connection,
 	clusterApiUrl,
 	LAMPORTS_PER_SOL,
+	Transaction,
+	SystemProgram,
 } from '@solana/web3.js';
 import {
 	Chain,
@@ -22,19 +24,19 @@ import { getChainName } from '@/lib/network';
 import config from '@/configuration';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
-import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
+import {
+	isGIVeconomyRoute as checkIsGIVeconomyRoute,
+	sendEvmTransaction,
+} from '@/lib/helpers';
 import { ChainType } from '@/types/config';
-
-export enum WalletType {
-	SOLANA = ChainType.SOLANA,
-	ETHEREUM = 'ETHEREUM',
-}
 
 const { SOLANA_CONFIG } = config;
 const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;
 
 export const useAuthenticationWallet = () => {
-	const [walletType, setWalletType] = useState<WalletType | null>(null);
+	const [walletChainType, setWalletChainType] = useState<ChainType | null>(
+		null,
+	);
 	const [walletAddress, setWalletAddress] = useState<string | null>(null);
 	const [balance, setBalance] = useState<string>();
 	const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -67,9 +69,11 @@ export const useAuthenticationWallet = () => {
 		publicKey,
 		disconnect: solanaWalletDisconnect,
 		signMessage: solanaSignMessage,
+		sendTransaction: solanaSendTransaction,
 		connecting: solanaIsConnecting,
 		connected: solanaIsConnected,
 	} = useWallet();
+	const { connection: solanaConnection } = useConnection();
 
 	const signByEvm = async (message: string) => {
 		const walletClient = await getWalletClient();
@@ -122,27 +126,44 @@ export const useAuthenticationWallet = () => {
 	}, [publicKey]);
 
 	useEffect(() => {
+		console.log('publicKey', publicKey);
+	}, [publicKey]);
+	useEffect(() => {
+		console.log('evmChain', evmChain);
+	}, [evmChain]);
+	useEffect(() => {
+		console.log('evmAddress', evmAddress);
+	}, [evmAddress]);
+
+	useEffect(() => {
 		// TODO: This is a temporary solution. It must be smart when both wallets are connected
+		console.log('-- publicKey', publicKey);
+		console.log('-- evmChain', evmChain);
+		console.log('-- evmAddress', evmAddress);
 		if (evmAddress && evmChain) {
-			setWalletType(WalletType.ETHEREUM);
+			setWalletChainType(ChainType.EVM);
 			setWalletAddress(evmAddress);
 		} else if (publicKey) {
-			setWalletType(WalletType.SOLANA);
+			setWalletChainType(ChainType.SOLANA);
 			setWalletAddress(publicKey?.toString());
 		} else {
-			setWalletType(null);
+			setWalletChainType(null);
 			setWalletAddress(null);
 			setBalance(undefined);
 		}
 	}, [evmAddress, evmChain, publicKey]);
 
 	useEffect(() => {
-		switch (walletType) {
-			case WalletType.ETHEREUM:
+		console.log('walletChainType:', walletChainType);
+	}, [walletChainType]);
+
+	useEffect(() => {
+		switch (walletChainType) {
+			case ChainType.EVM:
 				setIsConnected(evmIsConnected);
 				setIsConnecting(evmIsConnecting);
 				break;
-			case WalletType.SOLANA:
+			case ChainType.SOLANA:
 				setIsConnected(solanaIsConnected);
 				setIsConnecting(solanaIsConnecting);
 				break;
@@ -152,7 +173,7 @@ export const useAuthenticationWallet = () => {
 				break;
 		}
 	}, [
-		walletType,
+		walletChainType,
 		evmIsConnected,
 		evmIsConnecting,
 		solanaIsConnected,
@@ -160,38 +181,65 @@ export const useAuthenticationWallet = () => {
 	]);
 
 	useEffect(() => {
-		switch (walletType) {
-			case WalletType.ETHEREUM:
+		switch (walletChainType) {
+			case ChainType.EVM:
 				setBalance(nonFormatedEvmBalance?.data?.formatted || undefined);
 				break;
-			case WalletType.SOLANA:
+			case ChainType.SOLANA:
 				setBalance(solanaBalance?.toString());
 				break;
 			default:
 				setBalance(undefined);
 				break;
 		}
-	}, [walletType, nonFormatedEvmBalance, solanaBalance]);
+	}, [walletChainType, nonFormatedEvmBalance, solanaBalance]);
 
 	const signMessage = async (
 		message: string,
 	): Promise<string | undefined> => {
-		switch (walletType) {
-			case WalletType.ETHEREUM:
+		switch (walletChainType) {
+			case ChainType.EVM:
 				return signByEvm(message);
-			case WalletType.SOLANA:
+			case ChainType.SOLANA:
 				return signBySolana(message);
 			default:
 				return undefined;
 		}
 	};
 
+	const sendNativeToken = async (to: string, value: string) => {
+		if (!isConnected) throw Error('Wallet is not connected');
+		switch (walletChainType) {
+			case ChainType.EVM:
+				return sendEvmTransaction({
+					to: to as `0x${string}`,
+					value,
+				});
+				return;
+			case ChainType.SOLANA: {
+				const transaction = new Transaction().add(
+					SystemProgram.transfer({
+						fromPubkey: publicKey!,
+						toPubkey: new PublicKey(to),
+						lamports: BigInt(value),
+					}),
+				);
+				const signature = await solanaSendTransaction(
+					transaction,
+					solanaConnection,
+				);
+			}
+			default:
+				return;
+		}
+	};
+
 	const disconnect = () => {
-		switch (walletType) {
-			case WalletType.ETHEREUM:
+		switch (walletChainType) {
+			case ChainType.EVM:
 				ethereumWalletDisconnect();
 				break;
-			case WalletType.SOLANA:
+			case ChainType.SOLANA:
 				solanaWalletDisconnect();
 				break;
 			default:
@@ -200,12 +248,12 @@ export const useAuthenticationWallet = () => {
 	};
 
 	useEffect(() => {
-		switch (walletType) {
-			case WalletType.ETHEREUM:
+		switch (walletChainType) {
+			case ChainType.EVM:
 				setChain(evmChain);
 				setChainName(getChainName(evmChain?.id));
 				break;
-			case WalletType.SOLANA:
+			case ChainType.SOLANA:
 				setChain(solanaAdapter);
 				setChainName(
 					'Solana' +
@@ -219,7 +267,7 @@ export const useAuthenticationWallet = () => {
 				setChainName('');
 				break;
 		}
-	}, [walletType, evmChain]);
+	}, [walletChainType, evmChain]);
 
 	const openWalletConnectModal = () => {
 		if (config.ENABLE_SOLANA && !isGIVeconomyRoute) {
@@ -230,7 +278,7 @@ export const useAuthenticationWallet = () => {
 	};
 
 	return {
-		walletType,
+		walletChainType,
 		signMessage,
 		walletAddress,
 		disconnect,
@@ -240,5 +288,6 @@ export const useAuthenticationWallet = () => {
 		chain,
 		openWalletConnectModal,
 		balance,
+		sendNativeToken,
 	};
 };
