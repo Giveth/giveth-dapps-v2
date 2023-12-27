@@ -56,15 +56,15 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 			{txHash && (
 				<BlockExplorerLink
 					as='a'
-					href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorers
-						?.default.url}
+					href={`${config.EVM_NETWORKS_CONFIG[chainId!]
+						?.blockExplorers?.default.url}
 			/tx/${txHash}`}
 					target='_blank'
 					size='Big'
 				>
 					View on{' '}
 					{
-						config.NETWORKS_CONFIG[chainId!]?.blockExplorers
+						config.EVM_NETWORKS_CONFIG[chainId!]?.blockExplorers
 							?.default.name
 					}
 					&nbsp;
@@ -102,14 +102,17 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 			</AddTokenRow>
 			<BlockExplorerLink
 				as='a'
-				href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorers
+				href={`${config.EVM_NETWORKS_CONFIG[chainId!]?.blockExplorers
 					?.default.url}
 							/tx/${txHash}`}
 				target='_blank'
 				size='Big'
 			>
 				View on{' '}
-				{config.NETWORKS_CONFIG[chainId!]?.blockExplorers?.default.name}
+				{
+					config.EVM_NETWORKS_CONFIG[chainId!]?.blockExplorers
+						?.default.name
+				}
 				&nbsp;
 				<IconExternalLink size={16} color={'currentColor'} />
 			</BlockExplorerLink>
@@ -142,15 +145,15 @@ export const ErrorInnerModal: FC<IErrorProps> = ({
 			{txHash && (
 				<BlockExplorerLink
 					as='a'
-					href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorers
-						?.default.url}
+					href={`${config.EVM_NETWORKS_CONFIG[chainId!]
+						?.blockExplorers?.default.url}
 			/tx/${txHash}`}
 					target='_blank'
 					size='Big'
 				>
 					View on{' '}
 					{
-						config.NETWORKS_CONFIG[chainId!]?.blockExplorers
+						config.EVM_NETWORKS_CONFIG[chainId!]?.blockExplorers
 							?.default.name
 					}
 					&nbsp;

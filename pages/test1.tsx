@@ -17,9 +17,12 @@ import { Modal } from '@/components/modals/Modal';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 
-const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
-	ssr: false,
-});
+const RichTextInput = dynamic(
+	() => import('@/components/rich-text/RichTextInput'),
+	{
+		ssr: false,
+	},
+);
 
 const TestRoute = () => {
 	return (

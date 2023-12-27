@@ -11,6 +11,7 @@ function checkForSafeConnector(connectors: any) {
 
 function useSafeAutoConnect() {
 	const { connect, connectors } = useConnect();
+	const isSafeEnv = useIsSafeEnvironment();
 
 	useEffect(() => {
 		if (checkForSafeConnector(connectors)) {
@@ -19,7 +20,7 @@ function useSafeAutoConnect() {
 			);
 			connect({ connector: connectorInstance });
 		}
-	}, [connect, connectors]);
+	}, [connect, connectors, isSafeEnv]);
 }
 
 function useIsSafeEnvironment() {

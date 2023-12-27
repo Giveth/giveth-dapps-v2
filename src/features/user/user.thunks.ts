@@ -45,7 +45,6 @@ export const signToGetToken = createAsyncThunk(
 			address,
 			safeAddress,
 			chainId,
-			connector,
 			connectors,
 			isGSafeConnector,
 			expiration,
@@ -60,7 +59,7 @@ export const signToGetToken = createAsyncThunk(
 		if (isSAFE) {
 			siweMessage = (await signWithEvm(address, chainId!)) || {};
 			safeMessage = await createSiweMessage(
-				address!,
+				safeAddress!,
 				chainId!,
 				'Login into Giveth services',
 			);
@@ -148,10 +147,14 @@ export const signToGetToken = createAsyncThunk(
 
 					try {
 						// Connect to gnosis safe
-						await connect({
-							chainId,
-							connector: connectors[3],
-						});
+						const safeConnector = connectors.find(
+							(i: any) => i.id === 'safe',
+						);
+						safeConnector &&
+							(await connect({
+								chainId,
+								connector: safeConnector,
+							}));
 					} catch (error) {}
 
 					const gnosisClient = await getWalletClient({ chainId });

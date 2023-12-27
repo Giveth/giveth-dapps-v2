@@ -21,6 +21,7 @@ import { gToast, ToastType } from '@/components/toasts';
 import config from '@/configuration';
 import { AddressZero } from './constants/constants';
 import { WalletType } from '@/hooks/useAuthenticationWallet';
+import { ChainType } from '@/types/config';
 
 declare let window: any;
 interface TransactionParams {
@@ -57,8 +58,9 @@ export const thousandsSeparator = (x?: string | number): string | undefined => {
 };
 
 export const formatTxLink = (networkId?: number, txHash?: string) => {
-	if (!networkId || !txHash || !config.NETWORKS_CONFIG[networkId]) return '';
-	return `${config.NETWORKS_CONFIG[networkId].blockExplorers?.default.url}/tx/${txHash}`;
+	if (!networkId || !txHash || !config.EVM_NETWORKS_CONFIG[networkId])
+		return '';
+	return `${config.EVM_NETWORKS_CONFIG[networkId].blockExplorers?.default.url}/tx/${txHash}`;
 };
 
 export function formatWalletLink(
@@ -71,8 +73,8 @@ export function formatWalletLink(
 	switch (walletType) {
 		case WalletType.ETHEREUM:
 			const chainId = (chain as Chain)?.id;
-			if (!config.NETWORKS_CONFIG[chainId]) return '';
-			return `${config.NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/address/${address}`;
+			if (!config.EVM_NETWORKS_CONFIG[chainId]) return '';
+			return `${config.EVM_NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/address/${address}`;
 
 		case WalletType.SOLANA:
 			const url = `https://explorer.solana.com/address/${address}`;
@@ -215,6 +217,18 @@ export const compareAddressesArray = (
 		}
 	}
 	return new Set(lowerCaseAddresses).size === 1;
+};
+
+export const findAddressByChain = (
+	addresses: IWalletAddress[],
+	chainId: number,
+	chainType?: ChainType,
+) => {
+	return addresses?.find(address =>
+		chainId
+			? address.networkId === chainId
+			: address.chainType === chainType,
+	);
 };
 
 export const isUserRegistered = (user?: IUser) => {
