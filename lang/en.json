@@ -1444,5 +1444,6 @@
 	"label.recurring_donations_currently_only_available_on_optimism": "Recurring donations are currently only available on Optimism",
 	"label.switch_to_network_to_continue_donating": "Switch to {network} to continue donating to this project.",
 	"label.confirm_your_donation": "Confirm your donation",
-	"label.approving": "Approving"
+	"label.approving": "Approving",
+	"label.modify_stream_balance": "Modify Stream Balance"
 }

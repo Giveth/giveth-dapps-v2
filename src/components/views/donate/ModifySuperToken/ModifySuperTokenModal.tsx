@@ -1,6 +1,7 @@
 import { P, brandColors, neutralColors } from '@giveth/ui-design-system';
 import { type FC, useState } from 'react';
 import styled, { css } from 'styled-components';
+import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -29,15 +30,15 @@ export enum EModifySuperTokenSteps {
 const headerTitleGenerator = (step: EModifySuperTokenSteps) => {
 	switch (step) {
 		case EModifySuperTokenSteps.MODIFY:
-			return 'Modify Stream Balance';
+			return 'label.modify_stream_balance';
 		case EModifySuperTokenSteps.APPROVE:
 		case EModifySuperTokenSteps.APPROVING:
 		case EModifySuperTokenSteps.DEPOSIT:
-			return 'Confirm your donation';
+			return 'label.confirm_your_donation';
 		case EModifySuperTokenSteps.DEPOSITING:
-			return 'Donating';
+			return 'label.donating';
 		case EModifySuperTokenSteps.SUBMITTED:
-			return 'Donation Submitted';
+			return 'label.donation_submitted';
 	}
 };
 
@@ -58,12 +59,13 @@ export const ModifySuperTokenModal: FC<IModifySuperTokenModalProps> = ({
 }) => {
 	const [step, setStep] = useState(EModifySuperTokenSteps.MODIFY);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	return (
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerTitle={headerTitleGenerator(step)}
+			headerTitle={formatMessage({ id: headerTitleGenerator(step) })}
 			headerTitlePosition='left'
 		>
 			<ModifySuperTokenInnerModal
