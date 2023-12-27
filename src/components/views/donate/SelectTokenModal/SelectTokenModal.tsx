@@ -165,7 +165,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 								!balances[token.symbol] ||
 								balances[token.symbol] === 0n
 							}
-							isSuperToken={true}
 							onClick={() => {
 								setSelectedToken({
 									token,

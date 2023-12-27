@@ -11,7 +11,6 @@ interface ITokenInfoProps {
 	token: IToken;
 	balance: bigint;
 	disable: boolean;
-	isSuperToken?: boolean;
 	onClick: () => void;
 }
 
@@ -19,7 +18,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 	token,
 	balance,
 	disable,
-	isSuperToken,
+
 	onClick,
 }) => {
 	return (
