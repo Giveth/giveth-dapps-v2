@@ -6,6 +6,7 @@ import { ApolloProvider } from '@apollo/client';
 import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Provider } from 'react-redux';
 import Script from 'next/script';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
@@ -245,6 +246,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 			</Provider>
 
 			<Toaster containerStyle={{ top: '80px' }} />
+			<SpeedInsights />
 		</>
 	);
 }

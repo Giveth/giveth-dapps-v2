@@ -23,6 +23,7 @@
 		"@segment/snippet": "^4.15.3",
 		"@sentry/nextjs": "^7.69.0",
 		"@uniswap/v3-sdk": "^3.10.0",
+		"@vercel/speed-insights": "^1.0.2",
 		"@web3modal/wagmi": "^3.1.0",
 		"apollo-upload-client": "^17.0.0",
 		"bignumber.js": "^9.1.2",
