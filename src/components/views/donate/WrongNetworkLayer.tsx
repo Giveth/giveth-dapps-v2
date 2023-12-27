@@ -8,11 +8,13 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { useSwitchNetwork } from 'wagmi';
+import { useIntl } from 'react-intl';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 
 export const WrongNetworkLayer = () => {
 	const { switchNetwork } = useSwitchNetwork();
+	const { formatMessage } = useIntl();
 
 	return (
 		<Overlay>
@@ -21,8 +23,9 @@ export const WrongNetworkLayer = () => {
 					<Title gap='4px' alignItems='center'>
 						<IconInfoFilled16 />
 						<Caption>
-							Recurring donations are currently only available on
-							Optimism
+							{formatMessage({
+								id: 'label.recurring_donations_currently_only_available_on_optimism',
+							})}
 						</Caption>
 					</Title>
 					<SwitchButton
@@ -31,12 +34,20 @@ export const WrongNetworkLayer = () => {
 							switchNetwork(config.OPTIMISM_NETWORK_NUMBER)
 						}
 					>
-						Switch network
+						{formatMessage({
+							id: 'label.switch_network',
+						})}
 					</SwitchButton>
 				</Header>
 				<Desc>
-					Switch to <b>Optimism</b> to continue donating to this
-					project.
+					{formatMessage(
+						{
+							id: 'label.switch_to_network_to_continue_donating',
+						},
+						{
+							network: <b>{config.OPTIMISM_CONFIG.name}</b>,
+						},
+					)}
 				</Desc>
 			</Toast>
 		</Overlay>

@@ -1440,5 +1440,7 @@
 	"label.eligible_tokens": "Tokens Elegibles",
 	"label.you_have_stream_on_all_tokens": "Tens transmissió en tots els tokens",
 	"label.stream_runs_out_in": "El flux s'esgota en",
-	"label.funding_count_projects": "Finançant {count} {count, plural, one { Projecte} other { Projectes} }"
+	"label.funding_count_projects": "Finançant {count} {count, plural, one { Projecte} other { Projectes} }",
+	"label.recurring_donations_currently_only_available_on_optimism": "Les donacions recurrents actualment només estan disponibles en Optimism",
+	"label.switch_to_network_to_continue_donating": "Canvia a {network} per continuar donant a aquest projecte."
 }

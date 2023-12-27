@@ -1439,5 +1439,7 @@
 	"label.eligible_tokens": "Tokens Elegibles",
 	"label.you_have_stream_on_all_tokens": "Tienes transmisión en todos los tokens",
 	"label.stream_runs_out_in": "La transmisión se agota en",
-	"label.funding_count_projects": "Financiando {count} {count, plural, one { Proyecto} other { Proyectos} }"
+	"label.funding_count_projects": "Financiando {count} {count, plural, one { Proyecto} other { Proyectos} }",
+	"label.recurring_donations_currently_only_available_on_optimism": "Las donaciones recurrentes actualmente solo están disponibles en Optimism",
+	"label.switch_to_network_to_continue_donating": "Cambia a {network} para continuar donando a este proyecto."
 }
