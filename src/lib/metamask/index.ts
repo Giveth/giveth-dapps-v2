@@ -69,7 +69,7 @@ export async function addToken(
 	tokenAddress: Address | undefined, // Default is GIV
 ): Promise<void> {
 	const address =
-		tokenAddress || config.NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS;
+		tokenAddress || config.EVM_NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS;
 	if (!address) return;
 
 	const tokenOptions = await fetchTokenInfo(chainId, address);
@@ -89,13 +89,13 @@ export async function addNetwork(network: number): Promise<void> {
 	const { ethereum } = window;
 	await ethereum.request({
 		method: 'wallet_addEthereumChain',
-		params: [config.NETWORKS_CONFIG[network]],
+		params: [config.EVM_NETWORKS_CONFIG[network]],
 	});
 }
 
 export async function switchNetwork(network: number): Promise<void> {
 	const { ethereum } = window;
-	const { id: chainId } = config.NETWORKS_CONFIG[network];
+	const { id: chainId } = config.EVM_NETWORKS_CONFIG[network];
 
 	try {
 		const res = await ethereum.request({

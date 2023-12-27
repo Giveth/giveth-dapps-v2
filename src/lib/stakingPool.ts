@@ -78,7 +78,7 @@ export const getGivStakingAPR = async (
 	subgraphValue: ISubgraphState,
 	chainId: number,
 ): Promise<APR> => {
-	const networkConfig = config.NETWORKS_CONFIG[network];
+	const networkConfig = config.EVM_NETWORKS_CONFIG[network];
 	const lmAddress = networkConfig.GIVPOWER?.LM_ADDRESS;
 	if (!lmAddress) return { effectiveAPR: Zero };
 	const sdh = new SubgraphDataHelper(subgraphValue);
@@ -180,7 +180,7 @@ const getBalancerPoolStakingAPR = async (
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
-	const tokenAddress = config.NETWORKS_CONFIG[chainId].GIV_TOKEN_ADDRESS;
+	const tokenAddress = config.EVM_NETWORKS_CONFIG[chainId].GIV_TOKEN_ADDRESS;
 	if (!tokenAddress) return { effectiveAPR: Zero };
 
 	const weightedPoolContract = getContract({
@@ -252,7 +252,7 @@ const getSimplePoolStakingAPR = async (
 	unipoolHelper: UnipoolHelper,
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
-	const networkConfig = config.NETWORKS_CONFIG[chainId];
+	const networkConfig = config.EVM_NETWORKS_CONFIG[chainId];
 
 	const givTokenAddress = networkConfig.GIV_TOKEN_ADDRESS;
 	if (!givTokenAddress) return { effectiveAPR: Zero };
@@ -333,7 +333,7 @@ export const getUserStakeInfo = (
 	const rewards = BigInt(unipoolBalance.rewards);
 	const rewardPerTokenPaid = BigInt(unipoolBalance.rewardPerTokenPaid);
 	let stakedAmount: bigint;
-	const networkConfig = config.NETWORKS_CONFIG[poolStakingConfig.network];
+	const networkConfig = config.EVM_NETWORKS_CONFIG[poolStakingConfig.network];
 	if (poolStakingConfig.type === StakingType.GIV_GARDEN_LM) {
 		const gGIVBalance = sdh.getTokenBalance(
 			networkConfig.gGIV_TOKEN_ADDRESS,
@@ -742,7 +742,7 @@ export const getGIVpowerOnChain = async (
 	}
 	try {
 		const contractAddress =
-			config.NETWORKS_CONFIG[chainId].GIVPOWER?.LM_ADDRESS;
+			config.EVM_NETWORKS_CONFIG[chainId].GIVPOWER?.LM_ADDRESS;
 		if (!contractAddress) {
 			console.error('GIVpower contract address is null');
 			return;

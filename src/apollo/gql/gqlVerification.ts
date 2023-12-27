@@ -48,6 +48,7 @@ const gqlRes = `{
 		relatedAddresses {
 			address
 			networkId
+			chainType
 			title
 		}
 	}
@@ -66,97 +67,6 @@ const gqlRes = `{
 	status
 	lastStep
 }`;
-
-export const GET_CURRENT_PROJECT_VERIFICATION_FORM = `
-query getCurrentProjectVerificationForm($projectId: Float!){
-    getCurrentProjectVerificationForm(projectId: $projectId) {
-             id
-             isTermAndConditionsAccepted
-			 email
-             emailConfirmationToken
-             emailConfirmationSent
-             emailConfirmationSentAt
-             emailConfirmedAt
-             emailConfirmed
-             projectRegistry {
-               organizationDescription
-               isNonProfitOrganization
-               organizationCountry
-               organizationWebsite
-             }
-             projectContacts {
-				name
-				url
-			}
-             milestones {
-               mission
-               foundationDate
-               achievedMilestones
-               achievedMilestonesProofs
-             }
-             managingFunds {
-               description
-               relatedAddresses {
-                 address
-                 networkId
-                 title
-               }
-             }
-             user {
-               id
-               walletAddress
-             }
-             project {
-               id
-               slug
-             }
-             status
-			 lastStep
-             }
-     }
-`;
-
-export const FETCH_PROJECT_BY_SLUG = `
-	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
-		projectBySlug(
-			slug: $slug
-			connectedWalletUserId: $connectedWalletUserId
-		) {
-			id
-			title
-			image
-			slug
-			description
-			verified
-			walletAddress
-			totalProjectUpdates
-			totalDonations
-			creationDate
-			reaction {
-				id
-				userId
-			}
-			totalReactions
-			categories {
-				name
-			}
-			adminUser {
-				id
-				name
-				walletAddress
-			}
-			status {
-				id
-				name
-			}
-			organization {
-				name
-				label
-				supportCustomTokens
-			}
-		}
-	}
-`;
 
 export const CREATE_PROJECT_VERIFICATION = gql`
 	mutation createProjectVerificationForm($slug: String!) {

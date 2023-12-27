@@ -18,11 +18,13 @@ import { showToastError } from '@/lib/helpers';
 import { OutlineStyled } from '../Common.sc';
 import DescriptionInput from '@/components/DescriptionInput';
 import { requiredOptions } from '@/lib/constants/regex';
+import { ChainType } from '@/types/config';
 
 export interface IAddress {
 	address: string;
 	title: string;
 	networkId: number;
+	chainType?: ChainType;
 }
 
 const ManageFundsIndex = () => {

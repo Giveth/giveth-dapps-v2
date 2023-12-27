@@ -33,7 +33,7 @@ import { ItemAction, ItemRow, ItemTitle } from './common';
 import { Item } from './Item';
 import { useItemsContext } from '@/context/Items.context';
 import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 import { getNetworkConfig } from '@/helpers/givpower';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
@@ -63,7 +63,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 
 	const tokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const { givbackLiquidPart } = tokenDistroBalance;
-	const networkName = chainNameById(chainId);
+	const networkName = getChainName(chainId);
 	const { close } = useItemsContext();
 	const _config = getNetworkConfig(config.GNOSIS_NETWORK_NUMBER, chainId);
 	const isSafeEnv = useIsSafeEnvironment();
@@ -86,7 +86,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 
 	useEffect(() => {
 		if (!chainId) return;
-		const networkConfig = config.NETWORKS_CONFIG[chainId];
+		const networkConfig = config.EVM_NETWORKS_CONFIG[chainId];
 
 		if (!networkConfig || !networkConfig.pools) return;
 		let pools = [];

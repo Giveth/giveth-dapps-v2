@@ -297,7 +297,7 @@
 	"label.enter_your_phone_number_and_click_next": "Enter your phone number and click next.",
 	"label.estimated_matching": "Estimated matching",
 	"label.ethereum_mainnet_or_gnosis_chain": "Ethereum Mainnet or Gnosis Chain",
-	"label.eth_addres_not_valid": "Eth address not valid",
+	"label.eth_addres_not_valid": "{type} address not valid",
 	"label.everytime_you_claim_giv_rewards": "Every time you claim GIV rewards from GIVbacks, the GIVgarden, or the GIVfarm, your GIVstream flowrate increases. Below is a summary.",
 	"label.expected_rank_for_next_round": "This is the expected rank for the next round based on",
 	"label.explore_a_multiverse_of_projects": "Explore a multiverse of projects changing the world and earn rewards for staking liquidity.",

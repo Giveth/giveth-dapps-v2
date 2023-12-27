@@ -10,7 +10,6 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useNetwork } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
 	ConnectButton,
@@ -73,7 +72,8 @@ const Header: FC<IHeader> = () => {
 	const chainId = chain?.id;
 
 	const networkHasGIV =
-		(chainId && config.NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS) ?? null;
+		(chainId && config.EVM_NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS) ??
+		null;
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
@@ -87,7 +87,6 @@ const Header: FC<IHeader> = () => {
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const isMobile = useMediaQuery(device.mobileL);
-	const { open: openConnectModal } = useWeb3Modal();
 
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 

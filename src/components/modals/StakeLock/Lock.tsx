@@ -82,7 +82,7 @@ const LockModal: FC<ILockModalProps> = ({
 	const onLock = async () => {
 		if (!chainId) return;
 		const contractAddress =
-			config.NETWORKS_CONFIG[poolNetwork].GIVPOWER?.LM_ADDRESS;
+			config.EVM_NETWORKS_CONFIG[poolNetwork].GIVPOWER?.LM_ADDRESS;
 		if (!contractAddress) {
 			console.error('No GIVPOWER LM address found');
 			return;

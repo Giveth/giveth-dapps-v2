@@ -287,11 +287,11 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 						</H5White>
 						<ButtonLink
 							isExternal
-							label={`View on ${config.NETWORKS_CONFIG[chainId].blockExplorers?.default.name}`}
+							label={`View on ${config.EVM_NETWORKS_CONFIG[chainId].blockExplorers?.default.name}`}
 							linkType='texty'
 							size='small'
 							icon={<IconExternalLink size={16} />}
-							href={`${config.NETWORKS_CONFIG[chainId].blockExplorers?.default.url}/tx/${txHash}`}
+							href={`${config.EVM_NETWORKS_CONFIG[chainId].blockExplorers?.default.url}/tx/${txHash}`}
 							target='_blank'
 						/>
 					</BriefContainer>

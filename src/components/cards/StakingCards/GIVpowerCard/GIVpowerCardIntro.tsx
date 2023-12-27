@@ -36,7 +36,7 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({
 	const { formatMessage } = useIntl();
 	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
 	const { stakedAmount } = useStakingPool(
-		config.NETWORKS_CONFIG[poolNetwork].GIVPOWER ||
+		config.EVM_NETWORKS_CONFIG[poolNetwork].GIVPOWER ||
 			config.GNOSIS_CONFIG.GIVPOWER,
 	);
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);

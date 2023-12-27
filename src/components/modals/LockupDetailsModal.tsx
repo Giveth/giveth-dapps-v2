@@ -41,7 +41,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	const chainId = chain?.id;
 	const { address } = useAccount();
 	const { apr, stakedAmount } = useStakingPool(
-		config.NETWORKS_CONFIG[chainId!].GIVPOWER ||
+		config.EVM_NETWORKS_CONFIG[chainId!].GIVPOWER ||
 			config.GNOSIS_CONFIG.GIVPOWER,
 	);
 	const [loading, setLoading] = useState(true);
