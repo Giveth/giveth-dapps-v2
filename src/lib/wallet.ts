@@ -13,8 +13,8 @@ export async function getAddressFromENS(ens: string | undefined) {
 
 export function isSolanaAddress(address: string) {
 	try {
-		new PublicKey(address.trim());
-		return true;
+		const publicKey = new PublicKey(address.trim());
+		return PublicKey.isOnCurve(publicKey);
 	} catch (e) {
 		console.log(e);
 		return false;

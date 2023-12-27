@@ -2,7 +2,6 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 import { P } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useAccount, useNetwork } from 'wagmi';
-import { waitForTransaction } from 'wagmi/actions';
 import { Modal } from '../Modal';
 import { StakingPoolImages } from '../../StakingPoolImages';
 import { approveERC20tokenTransfer, stakeTokens } from '@/lib/stakingPool';
@@ -11,6 +10,7 @@ import {
 	ErrorInnerModal,
 	SubmittedInnerModal,
 } from '../ConfirmSubmit';
+import { waitForTransaction } from '@/lib/transaction';
 import { StakeState } from '@/lib/staking';
 import ToggleSwitch from '../../styled-components/Switch';
 import { IModal } from '@/types/common';
@@ -34,6 +34,7 @@ import {
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput';
 import { StakeSteps } from './StakeSteps';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
 interface IStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
@@ -75,6 +76,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	const chainId = chain?.id;
 	const { address } = useAccount();
 	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
+	const isSafeEnv = useIsSafeEnvironment();
 
 	const { title, LM_ADDRESS, POOL_ADDRESS, platform } =
 		poolStakingConfig as SimplePoolStakingConfig;
@@ -134,6 +136,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 			LM_ADDRESS,
 			POOL_ADDRESS,
 			chainId,
+			isSafeEnv,
 		);
 
 		if (isApproved) {
@@ -157,9 +160,10 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 			if (txResponse) {
 				setTxHash(txResponse);
 				setStakeState(StakeState.CONFIRMING);
-				const { status } = await waitForTransaction({
-					hash: txResponse,
-				});
+				const { status } = await waitForTransaction(
+					txResponse,
+					isSafeEnv,
+				);
 				setStakeState(status ? StakeState.CONFIRMED : StakeState.ERROR);
 			} else {
 				setStakeState(StakeState.STAKE);

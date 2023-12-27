@@ -117,7 +117,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		provideLiquidityLink,
 	} = poolStakingConfig;
 	const regenStreamConfig = regenStreamType
-		? config.NETWORKS_CONFIG[poolNetwork].regenStreams?.find(
+		? config.EVM_NETWORKS_CONFIG[poolNetwork].regenStreams?.find(
 				regenStream => regenStream.type === regenStreamType,
 			)
 		: undefined;

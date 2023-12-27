@@ -28,6 +28,7 @@ import LottieControl from '@/components/LottieControl';
 import { EContentType } from '@/lib/constants/shareContent';
 import QFToast from '@/components/views/donate/QFToast';
 import { useAppSelector } from '@/features/hooks';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { getActiveRound } from '@/helpers/qf';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
@@ -55,7 +56,7 @@ export const SuccessView: FC = () => {
 	const { isSuccessDonation, hasActiveQFRound, project } = useDonateData();
 	const { givBackEligible, txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
-
+	const isSafeEnv = useIsSafeEnvironment();
 	const [givethSlug, setGivethSlug] = useState<string>('');
 
 	const {
@@ -130,7 +131,8 @@ export const SuccessView: FC = () => {
 					</ExternalLink>
 				</GivBackContainer>
 			)}
-			{hasActiveQFRound &&
+			{!isSafeEnv &&
+				hasActiveQFRound &&
 				passportState !== EPassportState.LOADING &&
 				isOnEligibleNetworks && <QFToast />}
 			<SocialBoxWrapper>

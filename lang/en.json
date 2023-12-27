@@ -297,7 +297,7 @@
 	"label.enter_your_phone_number_and_click_next": "Enter your phone number and click next.",
 	"label.estimated_matching": "Estimated matching",
 	"label.ethereum_mainnet_or_gnosis_chain": "Ethereum Mainnet or Gnosis Chain",
-	"label.eth_addres_not_valid": "Eth address not valid",
+	"label.eth_addres_not_valid": "{type} address not valid",
 	"label.everytime_you_claim_giv_rewards": "Every time you claim GIV rewards from GIVbacks, the GIVgarden, or the GIVfarm, your GIVstream flowrate increases. Below is a summary.",
 	"label.expected_rank_for_next_round": "This is the expected rank for the next round based on",
 	"label.explore_a_multiverse_of_projects": "Explore a multiverse of projects changing the world and earn rewards for staking liquidity.",
@@ -1350,7 +1350,7 @@
 	"poverity": "Poverity",
 	"project.givback_toast.description.non_verified_owner_submitted": "Exciting news! Your project is in the queue for verification. Our team is diligently reviewing it. Stay tuned for updates, and thank you for your patience as we ensure your project meets the highest standards!",
 	"project.givback_toast.description.non_verified_owner_rejected": "Regrettably, your project didn't meet the criteria this time. Review the feedback, make necessary adjustments, and feel free to reapply!",
-	"project.givback_toast.description.non_verified_owner_incomplete": "You haven’t submitted your verification application! Resume filling out your application and submit it so the Giveth team can review your eligibility.",
+	"project.givback_toast.description.non_verified_owner_incomplete": "Your verification application is incomplete and requires more information! Fill out the missing info and submit it so the Giveth team can review your eligibility.",
 	"project.givback_toast.description.non_verified_owner_draft": "Your Project is still a draft. Publish your project now to let donors discover your project & make donations. The sooner you share, the sooner you can start raising funds!",
 	"project.givback_toast.description.non_verified_owner_deactive": "Your Project is currently Deactivated. It won’t appear in the list of projects and cannot receive donations. You can reactivate your project any time you wish.",
 	"project.givback_toast.description.non_verified_owner_cancelled": "This Project has violated one or more of Giveth’s Terms of Service or quality assurance policies. If you think this was a mistake, reach out to us via Discord.",
@@ -1447,5 +1447,6 @@
 	"label.approving": "Approving",
 	"label.modify_stream_balance": "Modify Stream Balance",
 	"label.funding": "Funding",
-	"label.balance_runs_out_in": "Balance runs out in"
+	"label.balance_runs_out_in": "Balance runs out in",
+	"label.unfortunately_passport_is_incompatible": "Unfortunately Passport is not compatible with Multisigs, sign in with your regular wallet to verify your passport & make QF Donations."
 }

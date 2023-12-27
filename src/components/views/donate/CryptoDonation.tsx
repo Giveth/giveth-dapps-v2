@@ -206,7 +206,7 @@ const CryptoDonation: FC = () => {
 		// Native token balance is provided by the Web3Provider
 		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
 		const nativeCurrency =
-			config.NETWORKS_CONFIG[networkId!]?.nativeCurrency;
+			config.EVM_NETWORKS_CONFIG[networkId!]?.nativeCurrency;
 
 		if (_selectedTokenSymbol === nativeCurrency?.symbol?.toUpperCase()) {
 			return setSelectedTokenBalance(
@@ -289,10 +289,10 @@ const CryptoDonation: FC = () => {
 		) {
 			return setShowInsufficientModal(true);
 		}
-		if (!isSignedIn) {
-			signInThenDonate();
-		} else if (hasActiveQFRound && !isOnEligibleNetworks) {
+		if (hasActiveQFRound && !isOnEligibleNetworks) {
 			setShowQFModal(true);
+		} else if (!isSignedIn) {
+			signInThenDonate();
 		} else {
 			setShowDonateModal(true);
 		}
@@ -311,11 +311,20 @@ const CryptoDonation: FC = () => {
 
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
+
+	const donateWithoutMatching = () => {
+		if (isSignedIn) {
+			setShowDonateModal(true);
+		} else {
+			signInThenDonate();
+		}
+	};
+
 	return (
 		<MainContainer>
 			{showQFModal && (
 				<QFModal
-					setShowDonateModal={setShowDonateModal}
+					donateWithoutMatching={donateWithoutMatching}
 					setShowModal={setShowQFModal}
 				/>
 			)}

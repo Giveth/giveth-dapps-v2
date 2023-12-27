@@ -10,11 +10,12 @@ import {
 } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
-import { waitForTransaction } from '@wagmi/core';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { formatWeiHelper } from '@/helpers/number';
+import { waitForTransaction } from '@/lib/transaction';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
@@ -37,6 +38,7 @@ export const MintModal: FC<IMintModalProps> = ({
 	nftPrice,
 	setShowModal,
 }) => {
+	const isSafeEnv = useIsSafeEnvironment();
 	const [step, setStep] = useState(MintStep.APPROVE);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
@@ -62,6 +64,7 @@ export const MintModal: FC<IMintModalProps> = ({
 				config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
 				config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS,
 				config.MAINNET_NETWORK_NUMBER,
+				isSafeEnv,
 			);
 
 			if (isApproved) {
@@ -93,13 +96,16 @@ export const MintModal: FC<IMintModalProps> = ({
 				abi: PFP_ABI,
 				functionName: 'mint',
 				args: [qty],
+				// @ts-ignore -- needed for safe txs
+				value: 0n,
 			});
 
 			if (txResponse) {
 				setTx(txResponse);
-				const { status } = await waitForTransaction({
-					hash: txResponse,
-				});
+				const { status } = await waitForTransaction(
+					txResponse,
+					isSafeEnv,
+				);
 				if (status) {
 					setMintStep(EPFPMinSteps.SUCCESS);
 					closeModal();

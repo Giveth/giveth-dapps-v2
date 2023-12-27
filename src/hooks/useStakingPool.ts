@@ -29,13 +29,14 @@ export const useStakingPool = (
 		stakedAmount: 0n,
 	});
 
-	const subgraphValues = useAppSelector(
-		state => state.subgraph,
-		() => (hold ? true : false),
+	const chainInfoName = chainInfoNames[poolStakingConfig.network];
+
+	const currentValues = useAppSelector(
+		state => state.subgraph[chainInfoName],
+		() => hold,
 	);
 
 	const { network, type } = poolStakingConfig;
-	const currentValues = subgraphValues[chainInfoNames[network]];
 	const { isLoaded } = currentValues;
 
 	useEffect(() => {

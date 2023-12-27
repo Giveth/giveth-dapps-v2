@@ -15,6 +15,7 @@ import SocialBox from '../../DonateSocialBox';
 import NiceBanner from './NiceBanner';
 // import PurchaseXDAI from './PurchaseXDAIBanner';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useDonateData } from '@/context/donate.context';
 import { EContentType } from '@/lib/constants/shareContent';
 import { PassportBanner } from '@/components/PassportBanner';
@@ -36,6 +37,7 @@ const DonateIndex: FC = () => {
 	const { project, isSuccessDonation, hasActiveQFRound } = useDonateData();
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const dispatch = useAppDispatch();
+	const isSafeEnv = useIsSafeEnvironment();
 
 	useEffect(() => {
 		dispatch(setShowHeader(false));
@@ -55,7 +57,7 @@ const DonateIndex: FC = () => {
 		<>
 			<DonateHeader />
 			<BigArc />
-			{hasActiveQFRound && <PassportBanner />}
+			{!isSafeEnv && hasActiveQFRound && <PassportBanner />}
 			<DonateContainer>
 				{/* <PurchaseXDAI /> */}
 				{alreadyDonated && (

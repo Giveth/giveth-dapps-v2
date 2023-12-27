@@ -12,7 +12,6 @@ import BigNumber from 'bignumber.js';
 import { captureException } from '@sentry/nextjs';
 import { useAccount, useNetwork } from 'wagmi';
 import { WriteContractReturnType } from 'viem';
-import { waitForTransaction } from 'wagmi/actions';
 import { Modal } from './Modal';
 import {
 	ConfirmedInnerModal,
@@ -35,9 +34,11 @@ import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '../AmountBoxWithPrice';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { claimAirDrop } from '@/lib/claim';
+import { waitForTransaction } from '@/lib/transaction';
 import config from '@/configuration';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
@@ -63,6 +64,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	checkNetworkAndWallet,
 	onSuccess,
 }) => {
+	const isSafeEnv = useIsSafeEnvironment();
 	const { formatMessage } = useIntl();
 	const [givBackLiquidPart, setGivBackLiquidPart] = useState(0n);
 	const [txResp, setTxResp] = useState<WriteContractReturnType | undefined>();
@@ -179,7 +181,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 			if (tx) {
 				setTxResp(tx);
 				setClaimState(ClaimState.SUBMITTING);
-				const { status } = await waitForTransaction({ hash: tx });
+				const { status } = await waitForTransaction(tx, isSafeEnv);
 
 				if (status) {
 					setClaimState(ClaimState.CLAIMED);

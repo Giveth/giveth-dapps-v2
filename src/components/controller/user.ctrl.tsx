@@ -9,6 +9,7 @@ import {
 import StorageLabel from '@/lib/localStorage';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { getTokens } from '@/helpers/user';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import {
 	WalletType,
 	useAuthenticationWallet,
@@ -22,13 +23,16 @@ const UserController = () => {
 		walletType,
 	} = useAuthenticationWallet();
 	const dispatch = useAppDispatch();
+	const isSafeEnv = useIsSafeEnvironment();
 	const { connect, connectors } = useConnect();
 	const isMounted = useRef(false);
+
 	const isFirstRender = useRef(true);
 	const isConnectingRef = useRef(isConnecting);
 	const isConnectedRef = useRef(isConnected);
 
 	useEffect(() => {
+		if (isSafeEnv === null || !!isSafeEnv) return; // auto connect handled somewhere else
 		// TODO: implement auto connect for solana
 		if (
 			isConnected ||
@@ -56,6 +60,7 @@ const UserController = () => {
 	}, []);
 
 	useEffect(() => {
+		if (isSafeEnv === null) return; // not ready
 		isConnectingRef.current = isConnecting;
 		isConnectedRef.current = isConnected;
 		if (!isConnecting && isFirstRender.current) {
@@ -69,6 +74,7 @@ const UserController = () => {
 	}, [isConnecting]);
 
 	useEffect(() => {
+		if (isSafeEnv === null) return; // not ready
 		if (isMounted.current) {
 			if (!address) {
 				// Case when wallet is locked

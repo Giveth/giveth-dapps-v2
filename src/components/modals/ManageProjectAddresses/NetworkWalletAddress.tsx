@@ -11,7 +11,7 @@ import { useIntl } from 'react-intl';
 import { IWalletAddress } from '@/apollo/types/types';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 
 interface INetworkWalletAddress {
 	networkWallet: IWalletAddress;
@@ -34,7 +34,7 @@ export const NetworkWalletAddress: FC<INetworkWalletAddress> = ({
 					/>
 					{networkWallet.networkId && (
 						<Caption>
-							{chainNameById(networkWallet.networkId)}
+							{getChainName(networkWallet.networkId)}
 						</Caption>
 					)}
 				</FlexCenter>

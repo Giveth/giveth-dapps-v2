@@ -6,6 +6,7 @@ import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { client } from '@/apollo/apolloClient';
 import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useAppSelector } from '@/features/hooks';
 
 export enum EPassportState {
@@ -20,6 +21,7 @@ export enum EPassportState {
 	ENDED,
 	INVALID,
 	ERROR,
+	NOT_AVAILABLE_FOR_GSAFE,
 }
 
 export interface IPassportAndStateInfo {
@@ -40,9 +42,17 @@ export const usePassport = () => {
 	const { userData: user, isUserFullFilled } = useAppSelector(
 		state => state.user,
 	);
+	const isSafeEnv = useIsSafeEnvironment();
 
 	const updateState = useCallback(
 		async (refreshUserScores: IPassportInfo) => {
+			if (isSafeEnv) {
+				return setInfo({
+					passportState: EPassportState.NOT_AVAILABLE_FOR_GSAFE,
+					passportScore: null,
+					currentRound: null,
+				});
+			}
 			setInfo({
 				passportState: EPassportState.LOADING,
 				passportScore: null,
@@ -126,6 +136,13 @@ export const usePassport = () => {
 
 	const refreshScore = useCallback(async () => {
 		if (!address) return;
+		if (isSafeEnv) {
+			return setInfo({
+				passportState: EPassportState.NOT_AVAILABLE_FOR_GSAFE,
+				passportScore: null,
+				currentRound: null,
+			});
+		}
 		setInfo({
 			passportState: EPassportState.LOADING,
 			passportScore: null,
@@ -142,10 +159,17 @@ export const usePassport = () => {
 				currentRound: null,
 			});
 		}
-	}, [address, updateState]);
+	}, [address, updateState, isSafeEnv]);
 
 	const handleSign = async () => {
 		if (!address) return;
+		if (isSafeEnv) {
+			return setInfo({
+				passportState: EPassportState.NOT_AVAILABLE_FOR_GSAFE,
+				passportScore: null,
+				currentRound: null,
+			});
+		}
 		setInfo({
 			passportState: EPassportState.LOADING,
 			passportScore: null,
@@ -170,6 +194,13 @@ export const usePassport = () => {
 
 	useEffect(() => {
 		console.log('******0', address, isUserFullFilled, user);
+		if (isSafeEnv) {
+			return setInfo({
+				passportState: EPassportState.NOT_AVAILABLE_FOR_GSAFE,
+				passportScore: null,
+				currentRound: null,
+			});
+		}
 		if (!address) {
 			console.log('******1', address, isUserFullFilled, user);
 			return setInfo({
@@ -204,7 +235,7 @@ export const usePassport = () => {
 			}
 		};
 		fetchData();
-	}, [address, isUserFullFilled, updateState, user]);
+	}, [address, isUserFullFilled, updateState, user, isSafeEnv]);
 
 	return { info, handleSign, refreshScore };
 };

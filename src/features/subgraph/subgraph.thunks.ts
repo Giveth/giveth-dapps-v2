@@ -3,16 +3,6 @@ import { fetchChainInfo } from './subgraph.services';
 import { ICurrentInfo, ISubgraphState } from './subgraph.types';
 import { chainInfoNames } from './subgraph.helper';
 
-type ChainInfoNamesType = typeof chainInfoNames;
-
-type ChainKeys = keyof ChainInfoNamesType;
-
-type IResponse = {
-	isLoaded: boolean;
-} & {
-	[K in ChainInfoNamesType[ChainKeys]]?: ISubgraphState;
-};
-
 export const fetchChainInfoAsync = createAsyncThunk(
 	'subgraph/fetchChainInfo',
 	async ({ userAddress, chainId }: ICurrentInfo) => {
@@ -48,14 +38,9 @@ export const fetchAllInfoAsync = createAsyncThunk(
 			[key: string]: ISubgraphState;
 		} = {};
 		for (let i = 0; i < res.length; i++) {
-			const element = res[i] as ISubgraphState;
-			element.isLoaded = true;
-			response[chainValues[i]] = element;
+			response[chainValues[i]] = { ...res[i], isLoaded: true };
 		}
 
-		return {
-			response: { ...response, isLoaded: true } as IResponse,
-			chainId: chainId,
-		};
+		return { response, chainId };
 	},
 );
