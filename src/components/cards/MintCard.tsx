@@ -58,8 +58,6 @@ export const MintCard = () => {
 		}
 	}
 
-	console.log('pfpData', pfpData);
-
 	useEffect(() => {
 		async function fetchData() {
 			try {
