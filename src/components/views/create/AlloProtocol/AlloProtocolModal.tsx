@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import {
 	Button,
 	IconBulbOutline32,
@@ -8,28 +8,39 @@ import {
 } from '@giveth/ui-design-system';
 import { useNetwork } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
+import { useRouter } from 'next/router';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
 import useCreateAnchorContract from '@/hooks/useCreateAnchorContract';
-import { IProject } from '@/apollo/types/types';
+import { IProject, IProjectEdition } from '@/apollo/types/types';
 import StorageLabel from '@/lib/localStorage';
+import { slugToSuccessView, slugToProjectView } from '@/lib/routeCreators';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 
 interface IAlloProtocolModal extends IModal {
+	project?: IProjectEdition; //If undefined, it means we are in create mode
 	addedProjectState: IProject;
 }
 
 const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	setShowModal,
 	addedProjectState,
+	project,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chain } = useNetwork();
 	const [showSwitchNetworkModal, setShowSwitchNetworkModal] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [txResult, setTxResult] = useState<WriteContractResult>();
+	const router = useRouter();
+
+	const isDraft = project?.status.name === EProjectStatus.DRAFT;
+
+	const isEditMode = !!project;
+
 	const updatedCloseModal = () => {
 		if (!txResult) {
 			//Show the user did not complete the transaction
@@ -39,7 +50,6 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 			);
 			//handle success project
 		}
-		localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 		closeModal();
 	};
 
@@ -63,7 +73,20 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 				setTxResult(tx);
 				console.log('TX', tx);
 				//Call backend to update project
-				localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
+				if (tx?.hash) {
+					if (!isEditMode || (isEditMode && isDraft)) {
+						console.log('User completed the transaction !EditMode');
+
+						await router.push(
+							slugToSuccessView(addedProjectState.slug),
+						);
+					} else {
+						console.log('User completed the transaction EditMode');
+						await router.push(
+							slugToProjectView(addedProjectState.slug),
+						);
+					}
+				}
 				setShowModal(false); // Close the modal
 			} catch (error) {
 				console.error('Error signing contract:', error);
@@ -72,6 +95,10 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 			}
 		}
 	};
+
+	useEffect(() => {
+		localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
+	}, []);
 
 	console.log('Rendering AlloProtocolModal');
 	return (
@@ -85,7 +112,11 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 			<Container>
 				{/* {isOnOptimism ? 'On Optimism' : 'Not On Optimism'}
 				{addedProjectState.id} */}
-				<P>Set up your profile on the Allo protocol Registry </P>
+				<P>
+					Your project has now been created, next you will need to
+					sign a transaction to register it to Allo Protocol on
+					Optimism.
+				</P>
 				<br />
 				<ItemContainer>
 					<P>
