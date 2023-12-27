@@ -116,6 +116,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		impactLocation: storageImpactLocation,
 		image: storageImage,
 		addresses: storageAddresses = {},
+		alloProtocolRegistry: storageAlloProtocolRegistry,
 	} = storageProjectData || {};
 
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
@@ -140,7 +141,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				defaultImpactLocation || storageImpactLocation,
 			[EInputs.image]: image || storageImage || '',
 			[EInputs.addresses]: isEditMode ? addressesObj : storageAddresses,
-			[EInputs.alloProtocolRegistry]: false,
+			[EInputs.alloProtocolRegistry]: isEditMode
+				? false //Should change to backend data when the backend is ready
+				: storageAlloProtocolRegistry,
 		},
 	});
 
