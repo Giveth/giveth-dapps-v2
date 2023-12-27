@@ -1,6 +1,7 @@
 import { B, P, neutralColors } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
+import { useIntl } from 'react-intl';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { RecurringDonationCard } from './RecurringDonationCard';
@@ -14,13 +15,16 @@ enum ETabs {
 	RECURRING,
 }
 
-const tabs = ['One-Time Donation', 'Recurring Donation'];
+const tabs = ['label.one_time_donation', 'label.recurring_donation'];
 
 export const DonationCard = () => {
-	const [tab, setTab] = useState(ETabs.RECURRING);
+	const [tab, setTab] = useState(ETabs.ONE_TIME);
+	const { formatMessage } = useIntl();
 	return (
 		<DonationCardWrapper>
-			<Title>How do you want to donate?</Title>
+			<Title>
+				{formatMessage({ id: 'label.how_do_you_want_to_donate' })}
+			</Title>
 			<Flex>
 				{tabs.map((_tab, idx) => (
 					<Tab
@@ -28,7 +32,9 @@ export const DonationCard = () => {
 						selected={idx === tab}
 						onClick={() => setTab(idx)}
 					>
-						{_tab}
+						{formatMessage({
+							id: _tab,
+						})}
 					</Tab>
 				))}
 				<EmptyTab />
@@ -40,7 +46,9 @@ export const DonationCard = () => {
 						<RecurringDonationCard />
 					) : (
 						<FlexCenter>
-							This Feature is not available now
+							{formatMessage({
+								id: 'label.this_feature_will_be_available_soon',
+							})}
 						</FlexCenter>
 					))}
 			</TabWrapper>
@@ -57,6 +65,7 @@ const DonationCardWrapper = styled(Flex)`
 	background: ${neutralColors.gray[100]};
 	box-shadow: ${Shadow.Neutral[400]};
 	align-items: stretch;
+	height: 100%;
 `;
 
 const Title = styled(B)`
