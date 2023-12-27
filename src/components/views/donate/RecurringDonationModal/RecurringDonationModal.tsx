@@ -3,6 +3,7 @@ import { Button, IconDonation32, mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Framework, type Operation } from '@superfluid-finance/sdk-core';
 import { useAccount } from 'wagmi';
+import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -39,20 +40,20 @@ const headerTitleGenerator = (step: EDonationSteps) => {
 		case EDonationSteps.APPROVE:
 		case EDonationSteps.APPROVING:
 		case EDonationSteps.DONATE:
-			return 'Confirm your donation';
+			return 'label.confirm_your_donation';
 		case EDonationSteps.DONATING:
-			return 'Donating';
+			return 'label.donating';
 		case EDonationSteps.SUBMITTED:
-			return 'Donation Submitted';
+			return 'label.donation_submitted';
 	}
 };
 
 const buttonLabel = {
-	[EDonationSteps.APPROVE]: 'Approve',
-	[EDonationSteps.APPROVING]: 'Approving...',
-	[EDonationSteps.DONATE]: 'Donate',
-	[EDonationSteps.DONATING]: 'Donating...',
-	[EDonationSteps.SUBMITTED]: 'Done',
+	[EDonationSteps.APPROVE]: 'label.approve',
+	[EDonationSteps.APPROVING]: 'label.approving',
+	[EDonationSteps.DONATE]: 'label.donate',
+	[EDonationSteps.DONATING]: 'label.donating',
+	[EDonationSteps.SUBMITTED]: 'label.done',
 };
 
 export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
@@ -62,6 +63,8 @@ export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
 	const [step, setStep] = useState(EDonationSteps.APPROVE);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
+	const { formatMessage } = useIntl();
+
 	const disableClose =
 		step === EDonationSteps.DONATING || step === EDonationSteps.APPROVING;
 
@@ -69,7 +72,7 @@ export const RecurringDonationModal: FC<IRecurringDonationModalProps> = ({
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerTitle={headerTitleGenerator(step)}
+			headerTitle={formatMessage({ id: headerTitleGenerator(step) })}
 			headerTitlePosition='left'
 			headerIcon={<IconDonation32 />}
 			hiddenClose={disableClose}
