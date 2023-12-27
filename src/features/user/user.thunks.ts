@@ -147,10 +147,14 @@ export const signToGetToken = createAsyncThunk(
 
 					try {
 						// Connect to gnosis safe
-						await connect({
-							chainId,
-							connector: connectors[3],
-						});
+						const safeConnector = connectors.find(
+							(i: any) => i.id === 'safe',
+						);
+						safeConnector &&
+							(await connect({
+								chainId,
+								connector: safeConnector,
+							}));
 					} catch (error) {}
 
 					const gnosisClient = await getWalletClient({ chainId });
