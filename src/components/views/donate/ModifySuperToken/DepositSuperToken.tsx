@@ -253,18 +253,29 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 								justifyContent='space-between'
 							>
 								<Caption>
-									Balance runs out in{' '}
+									{formatMessage({
+										id: 'label.balance_runs_out_in',
+									})}{' '}
 									<strong>
-										{' '}
-										{streamRunOutInMonth.toString()} Month
-										{streamRunOutInMonth > 1n ? 's' : ''}
+										{formatMessage(
+											{
+												id: 'label.months',
+											},
+											{
+												count: streamRunOutInMonth.toString(),
+											},
+										)}
 									</strong>
 								</Caption>
 								<Caption>
-									Funding{' '}
+									{formatMessage({ id: 'label.funding' })}{' '}
 									<strong>{tokenStream.length}</strong>{' '}
-									Project
-									{tokenStream.length > 1 ? 's' : ''}
+									{formatMessage(
+										{ id: 'label.project' },
+										{
+											count: tokenStream.length,
+										},
+									)}
 								</Caption>
 							</Flex>
 						</StreamSection>

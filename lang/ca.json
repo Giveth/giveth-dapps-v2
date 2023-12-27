@@ -1445,5 +1445,7 @@
 	"label.switch_to_network_to_continue_donating": "Canvia a {network} per continuar donant a aquest projecte.",
 	"label.confirm_your_donation": "Confirma la teva donació",
 	"label.approving": "Aprovant",
-	"label.modify_stream_balance": "Modificar el Saldo de la Transmissió"
+	"label.modify_stream_balance": "Modificar el Saldo de la Transmissió",
+	"label.funding": "Finançament",
+	"label.balance_runs_out_in": "El saldo s'esgota en"
 }

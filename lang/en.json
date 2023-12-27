@@ -1445,5 +1445,7 @@
 	"label.switch_to_network_to_continue_donating": "Switch to {network} to continue donating to this project.",
 	"label.confirm_your_donation": "Confirm your donation",
 	"label.approving": "Approving",
-	"label.modify_stream_balance": "Modify Stream Balance"
+	"label.modify_stream_balance": "Modify Stream Balance",
+	"label.funding": "Funding",
+	"label.balance_runs_out_in": "Balance runs out in"
 }

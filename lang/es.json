@@ -1444,5 +1444,7 @@
 	"label.switch_to_network_to_continue_donating": "Cambia a {network} para continuar donando a este proyecto.",
 	"label.confirm_your_donation": "Confirma tu donación",
 	"label.approving": "Aprobando",
-	"label.modify_stream_balance": "Modificar el Saldo de Transmisión"
+	"label.modify_stream_balance": "Modificar el Saldo de Transmisión",
+	"label.funding": "Financiamiento",
+	"label.balance_runs_out_in": "El saldo se agota en"
 }
