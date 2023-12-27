@@ -41,8 +41,35 @@ import { ChainType } from '@/types/config';
 const { SOLANA_CONFIG } = config;
 const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;
 
+interface IGeneralWalletContext {
+	walletChainType: ChainType | null;
+	signMessage: (message: string) => Promise<string | undefined>;
+	walletAddress: string | null;
+	disconnect: () => void;
+	isConnected: boolean;
+	isConnecting: boolean;
+	chainName: string | undefined;
+	chain: Chain | WalletAdapterNetwork | undefined;
+	openWalletConnectModal: () => void;
+	balance?: string;
+	sendNativeToken: (
+		to: string,
+		value: string,
+	) => Promise<string | `0x${string}` | undefined>;
+}
 // Create the context
-export const GeneralWalletContext = createContext<any>(null);
+export const GeneralWalletContext = createContext<IGeneralWalletContext>({
+	walletChainType: null,
+	signMessage: async () => undefined,
+	walletAddress: null,
+	disconnect: () => {},
+	isConnected: false,
+	isConnecting: false,
+	chainName: undefined,
+	chain: undefined,
+	openWalletConnectModal: () => {},
+	sendNativeToken: async () => undefined,
+});
 
 // Create the provider component
 export const GeneralWalletProvider: React.FC<{
@@ -239,7 +266,7 @@ export const GeneralWalletProvider: React.FC<{
 						lamports: BigInt(value),
 					}),
 				);
-				const signature = await solanaSendTransaction(
+				return await solanaSendTransaction(
 					transaction,
 					solanaConnection,
 				);
@@ -292,7 +319,7 @@ export const GeneralWalletProvider: React.FC<{
 		}
 	};
 
-	const contextValue = {
+	const contextValue: IGeneralWalletContext = {
 		walletChainType,
 		signMessage,
 		walletAddress,

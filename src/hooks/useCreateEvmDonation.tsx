@@ -10,38 +10,8 @@ import { isAddressENS } from '@/lib/wallet';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
 import { ICreateDonation } from '@/components/views/donate/helpers';
 import { getTxFromSafeTxId } from '@/lib/safe';
-import { waitForTransaction } from '@/lib/transaction';
+import { retryFetchTransaction, waitForTransaction } from '@/lib/transaction';
 import { useIsSafeEnvironment } from './useSafeAutoConnect';
-
-const MAX_RETRIES = 10;
-const RETRY_DELAY = 5000; // 5 seconds
-
-const retryFetchTransaction = async (
-	txHash: `0x${string}`,
-	retries: number = MAX_RETRIES,
-) => {
-	for (let i = 0; i < retries; i++) {
-		const transaction = await fetchTransaction({
-			hash: txHash,
-		}).catch(error => {
-			console.log(
-				'Attempt',
-				i,
-				'Fetching Transaction Error:',
-				error,
-				txHash,
-			);
-			return null;
-		});
-
-		if (transaction) return transaction;
-
-		// If not found, wait for the delay time and try again
-		await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
-	}
-	// Return null if the transaction is still not found after all retries
-	throw new Error('Transaction not found');
-};
 
 export const useCreateEvmDonation = () => {
 	const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
@@ -95,7 +65,7 @@ export const useCreateEvmDonation = () => {
 				return;
 			}
 			transaction = !isSafeEnv
-				? await retryFetchTransaction(txHash)
+				? await retryFetchTransaction(fetchTransaction, txHash)
 				: null;
 
 			if (!transaction && isSafeEnv) {
