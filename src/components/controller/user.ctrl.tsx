@@ -32,7 +32,7 @@ const UserController = () => {
 	const isConnectedRef = useRef(isConnected);
 
 	useEffect(() => {
-		if (isSafeEnv === null) return; // not ready
+		if (isSafeEnv === null || !!isSafeEnv) return; // auto connect handled somewhere else
 		// TODO: implement auto connect for solana
 		if (
 			isConnected ||
