@@ -198,7 +198,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				image,
 				draft,
 			} = formData;
-
 			const _addresses = Object.entries(addresses).map(
 				([id, address]) => ({
 					address: getAddress(address) as Address,
@@ -454,6 +453,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				<AlloProtocolModal
 					setShowModal={setShowAlloProtocolModal}
 					addedProjectState={addedProjectState}
+					project={project}
 				/>
 			)}
 		</Wrapper>
