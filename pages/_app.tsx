@@ -248,7 +248,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 												}}
 											/>
 										)}
-										{process.env.NEXT_PUBLIC_ENV !==
+										{/* {process.env.NEXT_PUBLIC_ENV !==
 											'production' && (
 											<Script
 												id='console-script'
@@ -257,7 +257,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 													__html: `javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();`,
 												}}
 											/>
-										)}
+										)} */}
 
 										<FooterWrapper />
 										<ModalController />
