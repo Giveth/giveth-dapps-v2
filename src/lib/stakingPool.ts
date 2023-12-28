@@ -185,7 +185,7 @@ const getBalancerPoolStakingAPR = async (
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
-	const tokenAddress = config.NETWORKS_CONFIG[chainId].GIV_TOKEN_ADDRESS;
+	const tokenAddress = config.NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS;
 	if (!tokenAddress) return { effectiveAPR: Zero };
 
 	const weightedPoolContract = getContract({
@@ -259,7 +259,7 @@ const getSimplePoolStakingAPR = async (
 	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
 	const networkConfig = config.NETWORKS_CONFIG[chainId];
 
-	const givTokenAddress = networkConfig.GIV_TOKEN_ADDRESS;
+	const givTokenAddress = networkConfig?.GIV_TOKEN_ADDRESS;
 	if (!givTokenAddress) return { effectiveAPR: Zero };
 
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
