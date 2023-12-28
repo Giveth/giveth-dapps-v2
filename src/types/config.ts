@@ -174,6 +174,7 @@ export interface GnosisNetworkConfig extends NetworkConfig {
 
 export interface OptimismNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
+	anchorRegistryAddress: Address;
 	TOKEN_DISTRO_ADDRESS: Address;
 	GIVPOWER: SimplePoolStakingConfig;
 	GIV_TOKEN_ADDRESS: Address;
