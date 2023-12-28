@@ -55,9 +55,8 @@ export const NotificationButtonWithMenu: FC<
 		state => state.notification.notificationInfo,
 	);
 
-	const lastFetchedNotificationId = notifications[0]?.id ?? undefined;
-
 	useEffect(() => {
+		if (!isSignedIn) return;
 		const fetchNotificationsAndSetState = async () => {
 			try {
 				const res = await fetchNotificationsData({ limit: 4 });
