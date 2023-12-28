@@ -1,13 +1,21 @@
+import { erc20ABI, useAccount, useContractRead, useNetwork } from 'wagmi';
 import { useState } from 'react';
-import { useAccount, useNetwork } from 'wagmi';
-import { ModifySuperTokenModal } from '@/components/views/donate/ModifySuperToken/ModifySuperTokenModal';
-import config from '@/configuration';
+import FailedDonation, {
+	EDonationFailedType,
+} from '@/components/modals/FailedDonation';
 
 const YourApp = () => {
-	const [showModal, setShowModal] = useState(false);
+	const [failedModalType, setFailedModalType] =
+		useState<EDonationFailedType>();
 	const { address, isConnected, status } = useAccount();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
+	// console.log('address', address, isConnected, status, chainId);
+	const { data } = useContractRead({
+		address: '0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
+		abi: erc20ABI,
+		functionName: 'allowance',
+	});
 
 	return (
 		<div>
@@ -15,17 +23,17 @@ const YourApp = () => {
 			<div>
 				<button
 					onClick={() => {
-						setShowModal(true);
+						setFailedModalType(EDonationFailedType.NOT_SAVED);
 					}}
 				>
 					Test Button
 				</button>
 			</div>
-			{showModal && (
-				<ModifySuperTokenModal
-					setShowModal={setShowModal}
-					selectedToken={config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS[1]}
-					tokenStreams={{}}
+			{failedModalType && (
+				<FailedDonation
+					txUrl={'0x011212'}
+					setShowModal={() => setFailedModalType(undefined)}
+					type={failedModalType}
 				/>
 			)}
 		</div>
