@@ -42,18 +42,14 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 			case EDonationFailedType.NOT_SAVED:
 				return (
 					<NotSaved>
+						<p>We were not able to record your donation.</p>
 						<p>
-							Our dApp is experiencing a lot of traffic right now
-							and we were not able to record your donation.
-						</p>
-						<p>
-							Don't worry! If the transaction was successful and
-							funds were sent, we will be adding your donation to
-							the UI soon.
+							Please check if the transaction was successful and
+							report this to our support team.
 						</p>
 						<ExternalLink
 							href={links.DISCORD_SUPPORT}
-							title='Please contact our support team'
+							title='Contact support'
 						/>
 					</NotSaved>
 				);
