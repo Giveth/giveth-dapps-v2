@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { isAddress } from 'viem';
 import useUpload from '@/hooks/useUpload';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
@@ -28,6 +29,7 @@ import { useAppSelector } from '@/features/hooks';
 import OnboardButtons from '../modals/UploadProfilePicModal/OnboardButtons';
 import AttributeItems from './AttributeItems';
 import { convertIPFSToHTTPS } from '@/helpers/url';
+import { isSolanaAddress } from '@/lib/wallet';
 
 enum EProfilePicTab {
 	LOADING,
@@ -35,11 +37,8 @@ enum EProfilePicTab {
 	PFP,
 }
 
-const tabs = [
-	{ id: EProfilePicTab.UPLOAD, title: 'Upload Image' },
-	{ id: EProfilePicTab.PFP, title: 'My Givers' },
-];
-
+const UploadTab = { id: EProfilePicTab.UPLOAD, title: 'Upload Image' };
+const PFPsTab = { id: EProfilePicTab.PFP, title: 'My Givers' };
 interface ISetProfilePic {
 	isOnboarding?: boolean;
 	callback?: () => void;
@@ -52,6 +51,7 @@ export const SetProfilePic = ({
 	closeModal = () => {},
 }: ISetProfilePic) => {
 	const { loading, activeTab, setActiveTab, onSaveAvatar } = useAvatar();
+	const [tabs, setTabs] = useState([UploadTab, PFPsTab]);
 	const useUploadProps = useUpload();
 	const { url, onDelete } = useUploadProps;
 	const { userData: user, isLoading } = useAppSelector(state => state.user);
@@ -90,7 +90,14 @@ export const SetProfilePic = ({
 			}
 		};
 		if (user?.walletAddress) {
-			fetchPFPInfo(user.walletAddress);
+			console.log('wallet address', user?.walletAddress);
+			if (isAddress(user?.walletAddress)) {
+				fetchPFPInfo(user?.walletAddress);
+			} else if (isSolanaAddress(user?.walletAddress)) {
+				setPfpData([]);
+				setActiveTab(EProfilePicTab.UPLOAD);
+				setTabs([UploadTab]);
+			}
 		}
 	}, [user]);
 

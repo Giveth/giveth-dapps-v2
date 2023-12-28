@@ -1,5 +1,6 @@
 import { IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from './time';
+import { QF_MATCHING_CAP_PERCENTAGE } from '@/lib/constants/constants';
 
 export const hasActiveRound = (qfRounds: IQFRound[] | undefined) => {
 	if (!qfRounds) return false;
@@ -29,7 +30,7 @@ export const calculateTotalEstimatedMatching = (
 	const result = Math.min(
 		(Math.pow(projectDonationsSqrtRootSum, 2) / allProjectsSum) *
 			matchingPool,
-		(matchingPool * 20) / 100,
+		(matchingPool * QF_MATCHING_CAP_PERCENTAGE) / 100,
 	);
 	return result > 0 && result < 1 ? 1 : result;
 };
@@ -54,7 +55,7 @@ export const calculateEstimatedMatchingWithDonationAmount = (
 		(afterNewDonationPow /
 			(_allProjectsSum + afterNewDonationPow - beforeNewDonationPow)) *
 			matchingPool,
-		(matchingPool * 20) / 100,
+		(matchingPool * QF_MATCHING_CAP_PERCENTAGE) / 100,
 	);
 	return (
 		newEstimateMatching *

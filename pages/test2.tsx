@@ -41,10 +41,12 @@ const YourApp = () => {
 						approveERC20tokenTransfer(
 							1000000000000000000n,
 							address!,
-							config.NETWORKS_CONFIG[chainId]?.GIVPOWER
+							config.EVM_NETWORKS_CONFIG[chainId]?.GIVPOWER
 								?.LM_ADDRESS!,
-							config.NETWORKS_CONFIG[chainId].GIV_TOKEN_ADDRESS!,
+							config.EVM_NETWORKS_CONFIG[chainId]
+								.GIV_TOKEN_ADDRESS!,
 							chainId,
+							false,
 						);
 					}}
 				>

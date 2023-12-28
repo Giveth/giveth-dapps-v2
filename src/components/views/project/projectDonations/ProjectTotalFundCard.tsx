@@ -15,7 +15,6 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-
 import { useEffect, useState } from 'react';
 import config from '@/configuration';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -110,17 +109,17 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 					projectDonationsSqrtRootSum,
 					allProjectsSum,
 					matchingPool,
-			  )
+				)
 			: qfRoundHistory
-			? qfRoundHistory.matchingFund !== null
-				? qfRoundHistory.matchingFund
-				: calculateTotalEstimatedMatching(
-						qfRoundHistory.estimatedMatching
-							.projectDonationsSqrtRootSum,
-						qfRoundHistory.estimatedMatching.allProjectsSum,
-						qfRoundHistory.estimatedMatching.matchingPool,
-				  )
-			: 0
+				? qfRoundHistory.matchingFund !== null
+					? qfRoundHistory.matchingFund
+					: calculateTotalEstimatedMatching(
+							qfRoundHistory.estimatedMatching
+								.projectDonationsSqrtRootSum,
+							qfRoundHistory.estimatedMatching.allProjectsSum,
+							qfRoundHistory.estimatedMatching.matchingPool,
+						)
+				: 0
 		: 0;
 	return (
 		<Wrapper>
@@ -210,9 +209,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 												matchFund,
 												'$',
 												locale,
-												selectedQFData?.isActive
-													? true
-													: false,
+												!!selectedQFData?.isActive,
 											)}
 										</EstimatedMatchingPrice>
 										<EstimatedMatchingText>
@@ -228,11 +225,11 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 												<BlockExplorerLink
 													as='a'
 													href={`${config
-														.NETWORKS_CONFIG[
+														.EVM_NETWORKS_CONFIG[
 														+qfRoundHistory.distributedFundNetwork!
 													]?.blockExplorers?.default
 														.url}
-			tx/${qfRoundHistory?.distributedFundTxHash}`}
+			/tx/${qfRoundHistory?.distributedFundTxHash}`}
 													target='_blank'
 													size='Big'
 												>
@@ -273,6 +270,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						key={addObj.networkId}
 						address={addObj.address!}
 						networkId={addObj.networkId!}
+						chainType={addObj.chainType}
 					/>
 				))}
 			</BottomSection>

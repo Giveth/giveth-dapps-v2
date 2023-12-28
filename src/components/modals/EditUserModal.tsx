@@ -6,7 +6,6 @@ import { useMutation } from '@apollo/client';
 import { Button, brandColors } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useForm } from 'react-hook-form';
-import { useAccount } from 'wagmi';
 import { Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
@@ -24,6 +23,7 @@ import Input, { InputSize } from '../Input';
 import { requiredOptions, validators } from '@/lib/constants/regex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import useUpload from '@/hooks/useUpload';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 interface IEditUserModal extends IModal {
 	user: IUser;
@@ -55,7 +55,7 @@ const EditUserModal = ({
 		formState: { errors },
 	} = useForm<Inputs>();
 	const dispatch = useAppDispatch();
-	const { address } = useAccount();
+	const { walletAddress: address } = useAuthenticationWallet();
 
 	const [updateUser] = useMutation(UPDATE_USER);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);

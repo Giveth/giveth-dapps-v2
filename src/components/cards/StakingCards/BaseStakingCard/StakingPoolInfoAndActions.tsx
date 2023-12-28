@@ -117,9 +117,9 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		provideLiquidityLink,
 	} = poolStakingConfig;
 	const regenStreamConfig = regenStreamType
-		? config.NETWORKS_CONFIG[poolNetwork].regenStreams?.find(
+		? config.EVM_NETWORKS_CONFIG[poolNetwork].regenStreams?.find(
 				regenStream => regenStream.type === regenStreamType,
-		  )
+			)
 		: undefined;
 
 	const { tokenDistroHelper, sdh } = useTokenDistroHelper(
@@ -221,24 +221,24 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 										{isZeroGIVStacked
 											? formatMessage({
 													id: 'label.this_is_the_range_of_possible_apr',
-											  })
+												})
 											: `${formatMessage({
 													id: 'label.this_is_the_weighed_average_apr',
-											  })} ${
+												})} ${
 													apr &&
 													formatEthHelper(
 														apr.effectiveAPR.toString(),
 													)
-											  }%-${
+												}%-${
 													apr &&
 													formatEthHelper(
 														apr.effectiveAPR.multipliedBy(
 															5.196,
 														), // sqrt(1 + max rounds)
 													)
-											  }%. ${formatMessage({
+												}%. ${formatMessage({
 													id: 'label.lock_your_giv_for_longer',
-											  })}`}
+												})}`}
 									</AngelVaultTooltip>
 								</IconWithTooltip>
 							)}
@@ -261,7 +261,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 																BigInt(
 																	userGIVPowerBalance.balance,
 																),
-														  ).toString()
+															).toString()
 														: apr.effectiveAPR.toString(),
 												)}
 											%
@@ -395,7 +395,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 							? `${userNotStakedAmount.toString()} ${unit}`
 							: `${formatWeiHelper(
 									userNotStakedAmount.toString(),
-							  )} ${unit}`}
+								)} ${unit}`}
 					</StakeAmount>
 				</StakeContainer>
 				<StakeContainer flexDirection='column'>
@@ -413,7 +413,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 								? `${stakedLpAmount.toString()} ${unit}`
 								: `${formatWeiHelper(
 										stakedLpAmount.toString(),
-								  )} ${unit}`}
+									)} ${unit}`}
 						</StakeAmount>
 						{isLocked && (
 							<IconWithTooltip

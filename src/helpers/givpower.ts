@@ -124,8 +124,8 @@ export const getGIVpowerLink = (chainId?: number) => {
 export const getNetworkConfig = (defaultChianID: number, chainId?: number) => {
 	const _chainId = chainId || defaultChianID;
 	const _networkConf =
-		config.NETWORKS_CONFIG[_chainId] ||
-		config.NETWORKS_CONFIG[defaultChianID];
+		config.EVM_NETWORKS_CONFIG[_chainId] ||
+		config.EVM_NETWORKS_CONFIG[defaultChianID];
 	return _networkConf;
 };
 

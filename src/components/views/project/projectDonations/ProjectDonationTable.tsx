@@ -29,7 +29,7 @@ import {
 import { useProjectContext } from '@/context/project.context';
 import NetworkLogo from '@/components/NetworkLogo';
 import { UserWithPFPInCell } from '../../../UserWithPFPInCell';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 import { formatDonation } from '@/helpers/number';
 import { Spinner } from '@/components/Spinner';
 import { NoDonation } from './NoDonation';
@@ -203,7 +203,7 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 									chainId={donation.transactionNetworkId}
 								/>
 								<NetworkName>
-									{chainNameById(
+									{getChainName(
 										donation.transactionNetworkId,
 									)}
 								</NetworkName>

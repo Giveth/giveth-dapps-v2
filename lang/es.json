@@ -297,7 +297,7 @@
 	"label.enter_your_phone_number_and_click_next": "Ingresa tu numero de teléfono y presiona siguiente.",
 	"label.estimated_matching": "Estimated matching",
 	"label.ethereum_mainnet_or_gnosis_chain": "Ethereum Mainnet o Gnosis Chain",
-	"label.eth_addres_not_valid": "Dirección Eth no es válida",
+	"label.eth_addres_not_valid": "Dirección {type} no es válida",
 	"label.everytime_you_claim_giv_rewards": "Cada vez que reclamas tus recompensas en GIV desde GIVbacks, GIVgarden, o GIVfarm, tu GIVstram flowrate incrementa. A continuación un resumen.",
 	"label.expected_rank_for_next_round": "This is the expected rank for the next round based on",
 	"label.explore_a_multiverse_of_projects": "Explora un multiverso de proyectos que están cambiando al mundo y obtén recompensas proveyendo liquidez.",
@@ -552,7 +552,8 @@
 	"label.notification_center": "Centro de Notificaciones",
 	"label.notify_me_in_the_dapp": "Notifícame en la DApp",
 	"label.not_now": "Ahora no",
-	"label.not_owner": "Sólo el propietario del proyecto puede editar este proyecto.",
+	"label.not_owner_edit": "Sólo el propietario del proyecto puede editar este proyecto.",
+	"label.not_owner_verification": "Solo la dueña del proyecto puede solicitar verificación.",
 	"label.now_its_time_to_complete_your_profile": "Ahora es momento de completar tu perfil!",
 	"label.no_active_qf_round": "There is no active round!",
 	"label.no_data": "No data",
@@ -741,6 +742,7 @@
 	"label.show_your_support": "Muestra tu apoyo al futuro de las donaciones y desbloquea tu estilo único de Giveth minteando una de las primeras piezas NFT PFP inspiradas en Giveth.",
 	"label.sign_in_to_giveth": "Inicia Sesión en Giveth",
 	"label.sign_in_with_ethereum": "Ingresa con Ethereum",
+	"label.sign_in_with_ethereum": "Ingresa con Solana",
 	"label.sign_message": "Firmar Mensaje",
 	"label.sign_out": "Salir",
 	"label.sign_wallet": "Firmar Billetera",
@@ -1411,5 +1413,6 @@
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Agua & Saneamiento"
+	"water-and-sanitation": "Agua & Saneamiento",
+	"label.unfortunately_passport_is_incompatible": "Desafortunadamente, Passport no es compatible con multisigs. Por favor, inténtalo con tu billetera personal."
 }

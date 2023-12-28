@@ -17,9 +17,9 @@ import NetworkLogo from '@/components/NetworkLogo';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { ETheme } from '@/features/general/general.slice';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 
-const networksConfig = config.NETWORKS_CONFIG;
+const networksConfig = config.EVM_NETWORKS_CONFIG;
 const defaultNetworkIds = Object.keys(networksConfig).map(Number);
 
 interface ISwitchNetworkModal extends IModal {
@@ -61,7 +61,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 						theme={theme}
 					>
 						<NetworkLogo chainId={networkId} logoSize={32} />
-						<B>{chainNameById(networkId)}</B>
+						<B>{getChainName(networkId)}</B>
 						{networkId === chainId && (
 							<SelectedNetwork styleType='Small' theme={theme}>
 								{formatMessage({ id: 'label.selected' })}

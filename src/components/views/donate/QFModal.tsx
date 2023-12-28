@@ -8,20 +8,20 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { useDonateData } from '@/context/donate.context';
 import { getActiveRound } from '@/helpers/qf';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 
 interface IProps extends IModal {
-	setShowDonateModal: (showDonateModal: boolean) => void;
+	donateWithoutMatching: () => void;
 }
 
-const QFModal: FC<IProps> = ({ setShowModal, setShowDonateModal }) => {
+const QFModal: FC<IProps> = ({ setShowModal, donateWithoutMatching }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const { switchNetwork } = useSwitchNetwork();
 	const { project } = useDonateData();
 	const activeRound = getActiveRound(project.qfRounds);
 	const roundName = activeRound?.name;
-	const eligibleChainName = chainNameById(activeRound?.eligibleNetworks[0]);
+	const eligibleChainName = getChainName(activeRound?.eligibleNetworks[0]);
 
 	return (
 		<Modal
@@ -56,7 +56,7 @@ const QFModal: FC<IProps> = ({ setShowModal, setShowDonateModal }) => {
 						id: 'label.donate_without_matching',
 					})}
 					onClick={() => {
-						setShowDonateModal(true);
+						donateWithoutMatching();
 						closeModal();
 					}}
 					size='small'

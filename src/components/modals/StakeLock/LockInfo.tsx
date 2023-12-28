@@ -30,7 +30,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 	const chainId = chain?.id;
 	const { apr } =
 		useStakingPool(
-			config.NETWORKS_CONFIG[chainId!]?.GIVPOWER ||
+			config.EVM_NETWORKS_CONFIG[chainId!]?.GIVPOWER ||
 				config.GNOSIS_CONFIG.GIVPOWER,
 		) || {};
 
@@ -74,7 +74,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 					{apr
 						? `${formatEthHelper(
 								apr.effectiveAPR.multipliedBy(multipler),
-						  )}%`
+							)}%`
 						: ' ? '}
 					<LockInfoRowSpark>
 						<IconSpark size={16} />
@@ -102,7 +102,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 								new BigNumber(amount.toString()).multipliedBy(
 									multipler,
 								),
-						  )
+							)
 						: 0}
 				</LockInfoRowValue>
 			</LockInfoRow>
