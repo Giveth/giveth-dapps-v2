@@ -48,12 +48,8 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 		setLoading(true);
 		const { address } = formData;
 		try {
-			let _address: string;
-			if (chainType === ChainType.SOLANA) {
-				_address = address;
-			} else {
-				_address = getAddress(address);
-			}
+			const _address =
+				chainType === ChainType.SOLANA ? address : getAddress(address);
 			await client.mutate({
 				mutation: ADD_RECIPIENT_ADDRESS_TO_PROJECT,
 				variables: {
