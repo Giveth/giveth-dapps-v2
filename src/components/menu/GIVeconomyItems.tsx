@@ -82,7 +82,7 @@ export const GIVeconomyItems = () => {
 							{formatMessage({ id: item.title })}
 						</ItemTitle>
 						<ItemRow>
-							<GLink>{item.label}</GLink>
+							<GLink> {item.label}</GLink>
 						</ItemRow>
 					</Item>
 				</Link>
