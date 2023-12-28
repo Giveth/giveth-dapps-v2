@@ -46,7 +46,8 @@ export const AdminActions = () => {
 	const isVerificationDisabled =
 		verified ||
 		verificationFormStatus === EVerificationStatus.SUBMITTED ||
-		verificationFormStatus === EVerificationStatus.REJECTED;
+		verificationFormStatus === EVerificationStatus.REJECTED ||
+		!isActive;
 
 	const options: IOption[] = [
 		{
@@ -66,7 +67,7 @@ export const AdminActions = () => {
 			type: OptionType.ITEM,
 			icon: <IconVerifiedBadge16 />,
 			cb: () => setShowVerificationModal(true),
-			disabled: isVerificationDisabled,
+			isHidden: isVerificationDisabled,
 		},
 		{
 			label: capitalizeAllWords(
@@ -78,10 +79,7 @@ export const AdminActions = () => {
 			),
 			type: OptionType.ITEM,
 			icon: <IconArchiving size={16} />,
-			cb: () => {
-				console.log('verify');
-				isActive ? setDeactivateModal(true) : activateProject();
-			},
+			cb: () => (isActive ? setDeactivateModal(true) : activateProject()),
 		},
 		{
 			label: formatMessage({
@@ -90,6 +88,7 @@ export const AdminActions = () => {
 			type: OptionType.ITEM,
 			icon: <IconShare16 />,
 			cb: () => setShowShareModal(true),
+			isHidden: !isActive,
 		},
 	];
 
@@ -99,13 +98,12 @@ export const AdminActions = () => {
 		borderRadius: '8px',
 	};
 
-	const activeOptions = isActive ? options : [options[0], options[2]];
 	return !isMobile ? (
 		<Wrapper>
 			<Dropdown
 				style={dropdownStyle}
 				label='Project Actions'
-				options={activeOptions}
+				options={options}
 			/>
 			{showVerificationModal && (
 				<VerificationModal
@@ -143,7 +141,7 @@ export const AdminActions = () => {
 			<IconChevronDown24 />
 			{showMobileActionsModal && (
 				<MobileActionsModal setShowModal={setShowMobileActionsModal}>
-					{activeOptions.map(option => (
+					{options.map(option => (
 						<MobileActionModalItem
 							key={option.label}
 							onClick={option.cb}
