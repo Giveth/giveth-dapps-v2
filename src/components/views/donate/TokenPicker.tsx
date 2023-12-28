@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import {
 	neutralColors,
 	P,
@@ -14,7 +14,6 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import Image from 'next/image';
 import Select, {
 	GroupBase,
 	components,
@@ -29,6 +28,7 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { TokenIcon } from './TokenIcon/TokenIcon';
 
 declare module 'react-select/dist/declarations/src/Select' {
 	export interface Props<
@@ -41,25 +41,6 @@ declare module 'react-select/dist/declarations/src/Select' {
 		projectVerified?: boolean;
 	}
 }
-
-interface IImageIconProps {
-	symbol: string;
-}
-
-const ImageIcon: FC<IImageIconProps> = ({ symbol }) => {
-	const [src, setSrc] = useState(
-		`/images/tokens/${symbol?.toUpperCase()}.svg`,
-	);
-	return (
-		<Image
-			alt={symbol}
-			src={src}
-			width='24'
-			height='24'
-			onError={() => setSrc('/images/tokens/UNKOWN.svg')}
-		/>
-	);
-};
 
 const MenuList = (props: MenuListProps<IProjectAcceptedToken, false>) => {
 	const projectVerified = props.selectProps.projectVerified;
@@ -89,7 +70,7 @@ const Option = ({ ...props }: OptionProps<IProjectAcceptedToken, false>) => {
 		<components.Option {...props}>
 			<OptionContainer>
 				<RowContainer>
-					<ImageIcon symbol={symbol} />
+					<TokenIcon symbol={symbol} />
 					<B>
 						{name} ({symbol}){' '}
 					</B>
@@ -253,7 +234,7 @@ const TokenPicker = (props: {
 			>
 				<TokenContainer>
 					{selectedToken && (
-						<ImageIcon
+						<TokenIcon
 							key={selectedToken.symbol}
 							symbol={selectedToken.symbol}
 						/>

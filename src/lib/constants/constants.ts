@@ -102,6 +102,8 @@ export const regenFarmStreamCardCol = {
 	lg: [12, 8, 4],
 };
 
+export const ONE_MONTH_SECONDS = 2_592_000n;
+
 export const TWO_WEEK = 1_209_600_000;
 
 export const minDonationAmount = 0.000001;

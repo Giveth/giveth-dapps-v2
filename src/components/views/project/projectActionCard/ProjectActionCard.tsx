@@ -35,11 +35,16 @@ export const ProjectActionCard = () => {
 const ProjectActionInnerCard = () => {
 	const { isAdmin, hasActiveQFRound, isDraft } = useProjectContext();
 	const isMobile = !useMediaQuery(device.tablet);
+	const { projectData } = useProjectContext();
 
 	return (
 		<>
 			{isAdmin && !isDraft && <AdminActions />}
-			{!isMobile && hasActiveQFRound ? <QFSection /> : <DonateSection />}
+			{!isMobile && hasActiveQFRound ? (
+				<QFSection projectData={projectData} />
+			) : (
+				<DonateSection projectData={projectData} />
+			)}
 			{!isMobile && !isAdmin && <ProjectPublicActions />}
 			{isAdmin && <ProjectStats />}
 		</>

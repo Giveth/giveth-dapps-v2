@@ -1,5 +1,5 @@
 import {
-	GLink,
+	IconArrowDownCircle16,
 	IconEdit16,
 	IconEye16,
 	IconUpdate16,
@@ -20,10 +20,16 @@ interface IProjectActions {
 	project: IProject;
 	setSelectedProject: Dispatch<SetStateAction<IProject | undefined>>;
 	setShowAddressModal: Dispatch<SetStateAction<boolean>>;
+	setShowClaimModal: Dispatch<SetStateAction<boolean>>;
 }
 
 const ProjectActions = (props: IProjectActions) => {
-	const { project, setSelectedProject, setShowAddressModal } = props;
+	const {
+		project,
+		setSelectedProject,
+		setShowAddressModal,
+		setShowClaimModal,
+	} = props;
 	const status = project.status.name;
 	const isCancelled = status === EProjectStatus.CANCEL;
 
@@ -60,10 +66,21 @@ const ProjectActions = (props: IProjectActions) => {
 		},
 	];
 
+	const recurringDonationOption: IOption = {
+		label: 'Claim Recurring donation',
+		icon: <IconArrowDownCircle16 />,
+		cb: () => {
+			setSelectedProject(project);
+			setShowClaimModal(true);
+		},
+	};
+
+	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true' &&
+		options.push(recurringDonationOption);
+
 	const dropdownStyle = {
 		padding: '4px 16px',
 		borderRadius: '8px',
-		background: isHover ? 'white' : '',
 	};
 
 	return (
@@ -71,7 +88,6 @@ const ProjectActions = (props: IProjectActions) => {
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 			isOpen={isHover}
-			size='Big'
 			isCancelled={isCancelled}
 		>
 			{isCancelled ? (
@@ -92,10 +108,11 @@ const CancelledWrapper = styled.div`
 	padding: 4px 16px;
 `;
 
-const Actions = styled(GLink)<{ isCancelled: boolean; isOpen: boolean }>`
-	color: ${props =>
-		props.isCancelled ? neutralColors.gray[500] : neutralColors.gray[900]};
+const Actions = styled.div<{ isCancelled: boolean; isOpen: boolean }>`
 	cursor: ${props => (props.isCancelled ? 'default' : 'pointer')};
+	background-color: ${neutralColors.gray[200]};
+	border-radius: 8px;
+	padding: 8px 10px;
 `;
 
 export default ProjectActions;

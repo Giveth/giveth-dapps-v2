@@ -63,7 +63,7 @@ const Container = styled.div`
 	background: white;
 	box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
 	border-radius: 16px;
-	margin: 0 40px 16px 40px;
+	margin-bottom: 16px;
 	${mediaQueries.tablet} {
 		height: 127px;
 	}
