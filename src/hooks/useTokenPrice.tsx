@@ -19,6 +19,7 @@ interface ITokenPice {
 	address?: Address;
 	id?: Address | string;
 	mainnetAddress?: Address;
+	isStableCoin?: boolean;
 }
 
 export const useTokenPrice = (token?: ITokenPice) => {
@@ -33,8 +34,9 @@ export const useTokenPrice = (token?: ITokenPice) => {
 	useEffect(() => {
 		const setPrice = async () => {
 			if (
-				token?.symbol &&
-				stableCoins.includes(token.symbol.toUpperCase())
+				token?.isStableCoin ||
+				(token?.symbol &&
+					stableCoins.includes(token.symbol.toUpperCase()))
 			) {
 				setTokenPrice(1);
 			} else if (token?.symbol === 'GIV') {
@@ -70,6 +72,10 @@ export const useTokenPrice = (token?: ITokenPice) => {
 		};
 		if (token) {
 			setPrice().catch(() => setTokenPrice(0));
+			console.error(
+				'Error fetching token price in useTokenPrice. Token name: ',
+				token?.symbol,
+			);
 		}
 	}, [token]);
 	return tokenPrice;

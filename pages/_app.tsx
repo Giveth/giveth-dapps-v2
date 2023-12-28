@@ -194,7 +194,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 		};
 		asyncFunc();
 	}, []);
-
 	return (
 		<>
 			<Head>

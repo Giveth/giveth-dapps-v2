@@ -549,6 +549,7 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 			mainnetAddress
 			isGivbackEligible
 			order
+			isStableCoin
 		}
 	}
 `;
