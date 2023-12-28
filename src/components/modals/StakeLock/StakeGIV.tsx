@@ -4,7 +4,6 @@ import { ButtonLink, H5, IconExternalLink } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount, useNetwork } from 'wagmi';
 import { Modal } from '../Modal';
-import { AmountInput } from '../../AmountInput';
 import {
 	approveERC20tokenTransfer,
 	stakeGIV,
@@ -14,7 +13,6 @@ import { ErrorInnerModal } from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
 import { waitForTransaction } from '@/lib/transaction';
 import { IModal } from '@/types/common';
-import StakeSteps from './StakeSteps';
 import {
 	CancelButton,
 	StakeModalContainer,
@@ -30,6 +28,8 @@ import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
+import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput';
+import { StakeSteps } from './StakeSteps';
 import type {
 	PoolStakingConfig,
 	SimplePoolStakingConfig,
@@ -186,7 +186,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 											id: 'label.amount_to_stake',
 										})}
 									</SectionTitle>
-									<AmountInput
+									<StakingAmountInput
 										setAmount={setAmount}
 										maxAmount={maxAmount}
 										poolStakingConfig={poolStakingConfig}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { fetchEnsAddress, fetchTransaction } from '@wagmi/core';
-import { useNetwork, useWaitForTransaction } from 'wagmi';
+import { type Address, useNetwork, useWaitForTransaction } from 'wagmi';
 
 import { sendTransaction } from '@/lib/helpers';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
@@ -17,7 +17,7 @@ const MAX_RETRIES = 10;
 const RETRY_DELAY = 5000; // 5 seconds
 
 const retryFetchTransaction = async (
-	txHash: `0x${string}`,
+	txHash: Address,
 	retries: number = MAX_RETRIES,
 ) => {
 	for (let i = 0; i < retries; i++) {
@@ -44,7 +44,7 @@ const retryFetchTransaction = async (
 };
 
 export const useCreateDonation = () => {
-	const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
+	const [txHash, setTxHash] = useState<Address | undefined>();
 	const [donationSaved, setDonationSaved] = useState<boolean>(false);
 	const [donationMinted, setDonationMinted] = useState<boolean>(false);
 	const [donationId, setDonationId] = useState<number>(0);
@@ -86,7 +86,7 @@ export const useCreateDonation = () => {
 	});
 
 	const handleSaveDonation = async (
-		txHash: `0x${string}`,
+		txHash: Address,
 		props: ICreateDonation,
 	) => {
 		let transaction, safeTransaction;
@@ -191,7 +191,7 @@ export const useCreateDonation = () => {
 			: walletAddress;
 
 		const transactionObj = {
-			to: toAddress! as `0x${string}`,
+			to: toAddress! as Address,
 			value: amount.toString(),
 		};
 

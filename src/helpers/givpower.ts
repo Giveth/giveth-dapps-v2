@@ -22,8 +22,6 @@ export const getTotalGIVpower = (
 		balance: BigNumber;
 	},
 ) => {
-	console.log('onChain', onChain);
-	console.log('values', values);
 	const res = [];
 	let sum = new BigNumber('0');
 	for (const key in values) {
@@ -49,7 +47,6 @@ export const getTotalGIVpower = (
 			}
 		}
 	}
-	console.log('res', res);
 	return { total: sum, byChain: res };
 };
 

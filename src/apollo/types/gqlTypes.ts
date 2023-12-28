@@ -1,3 +1,4 @@
+import { type Address } from 'wagmi';
 import {
 	ICategory,
 	IDonation,
@@ -80,12 +81,13 @@ export interface IProjectAcceptedToken {
 	id?: string;
 	symbol: string;
 	networkId: number;
-	address: `0x${string}`;
-	mainnetAddress?: `0x${string}`;
+	address: Address;
+	mainnetAddress?: Address;
 	name: string;
 	decimals: number;
 	isGivbackEligible?: boolean;
 	order: number;
+	isStableCoin?: boolean;
 }
 
 export interface IFetchGivethProjectGQL {
