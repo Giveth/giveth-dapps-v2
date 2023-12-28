@@ -7,8 +7,11 @@ import {
 	polygon,
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import React from 'react';
 import {
+	ChainType,
 	EnvConfig,
+	NonEVMChain,
 	StakingPlatform,
 	StakingType,
 	StreamType,
@@ -19,6 +22,7 @@ import { IconPolygon } from '@/components/Icons/Polygon';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconCelo } from '@/components/Icons/Celo';
 import { IconClassic } from '@/components/Icons/Classic';
+import IconSolana from '@/components/Icons/Solana';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
@@ -29,6 +33,8 @@ const NOTIFICATION_BASE_ROUTE =
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
 
+const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
+
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
 const GNOSIS_NETWORK_NUMBER = 100; // xDAI
@@ -36,7 +42,23 @@ const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
 const CLASSIC_NETWORK_NUMBER = 61;
-const SOLANA_NETWORK = WalletAdapterNetwork.Mainnet;
+const SOLANA_NETWORK: NonEVMChain = {
+	id: 0,
+	chainType: ChainType.SOLANA,
+	adapterNetwork: WalletAdapterNetwork.Mainnet,
+	name: 'Solana',
+	blockExplorers: {
+		default: {
+			name: 'Solana Explorer',
+			url: 'https://explorer.solana.com',
+		},
+	},
+};
+const EVM_CHAINS = [mainnet, gnosis, polygon, optimism, celo, classic];
+const NON_EVM_CHAINS: NonEVMChain[] = [];
+if (isSolanaEnabled) {
+	NON_EVM_CHAINS.push(SOLANA_NETWORK);
+}
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -50,14 +72,14 @@ const config: EnvConfig = {
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
-	CHAINS: [mainnet, gnosis, polygon, optimism, celo, classic],
+	EVM_CHAINS,
+	CHAINS: [...EVM_CHAINS, ...NON_EVM_CHAINS],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
-	SOLANA_NETWORK: SOLANA_NETWORK,
 
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
@@ -504,6 +526,11 @@ const config: EnvConfig = {
 		subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
 		coingeckoChainName: 'ethereum-classic',
 		chainLogo: (logoSize = 24) => <IconClassic size={logoSize} />,
+	},
+	SOLANA_CONFIG: {
+		...SOLANA_NETWORK,
+		coingeckoChainName: 'solana',
+		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
 	},
 };
 

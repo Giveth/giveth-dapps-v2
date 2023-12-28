@@ -63,7 +63,7 @@ export const getNetworkIds = (
 
 export const getNetworkNames = (networks: number[], text: string) => {
 	return networks.map((network, index) => {
-		const name = config.NETWORKS_CONFIG[network]?.name;
+		const name = config.EVM_NETWORKS_CONFIG[network]?.name;
 		const lastLoop = networks.length === index + 1;
 		return (
 			<span key={network}>
@@ -75,7 +75,7 @@ export const getNetworkNames = (networks: number[], text: string) => {
 };
 
 export interface ICreateDonation {
-	walletAddress: `0x${string}`;
+	walletAddress: string;
 	projectId: number;
 	amount: number;
 	token: IProjectAcceptedToken;
@@ -84,10 +84,3 @@ export interface ICreateDonation {
 	symbol: string;
 	setFailedModalType: (type: EDonationFailedType) => void;
 }
-
-export interface ICreateDonationResult {
-	isSaved: boolean;
-	txHash: string;
-}
-
-type TCreateDonation = (i: ICreateDonation) => Promise<ICreateDonationResult>;

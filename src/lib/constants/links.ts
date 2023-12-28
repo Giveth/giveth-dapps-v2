@@ -63,6 +63,7 @@ const links = {
 	GIV_BRIDGE: 'https://omni.gnosischain.com/bridge',
 	PASSPORT: 'https://passport.gitcoin.co',
 	QF_DOC: DOCS + 'quadraticfunding',
+	MULTISIG_GUIDE: DOCS + 'dapps/multisigs',
 };
 
 if (!isProduction) {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { fetchEnsAddress, fetchTransaction } from '@wagmi/core';
-import { useNetwork, useWaitForTransaction } from 'wagmi';
+import { type Address, useNetwork, useWaitForTransaction } from 'wagmi';
 
 import { sendTransaction } from '@/lib/helpers';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
@@ -9,12 +9,15 @@ import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { isAddressENS } from '@/lib/wallet';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
 import { ICreateDonation } from '@/components/views/donate/helpers';
+import { getTxFromSafeTxId } from '@/lib/safe';
+import { waitForTransaction } from '@/lib/transaction';
+import { useIsSafeEnvironment } from './useSafeAutoConnect';
 
-const MAX_RETRIES = 6;
+const MAX_RETRIES = 10;
 const RETRY_DELAY = 5000; // 5 seconds
 
 const retryFetchTransaction = async (
-	txHash: `0x${string}`,
+	txHash: Address,
 	retries: number = MAX_RETRIES,
 ) => {
 	for (let i = 0; i < retries; i++) {
@@ -41,7 +44,7 @@ const retryFetchTransaction = async (
 };
 
 export const useCreateDonation = () => {
-	const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
+	const [txHash, setTxHash] = useState<Address | undefined>();
 	const [donationSaved, setDonationSaved] = useState<boolean>(false);
 	const [donationMinted, setDonationMinted] = useState<boolean>(false);
 	const [donationId, setDonationId] = useState<number>(0);
@@ -50,6 +53,8 @@ export const useCreateDonation = () => {
 		useState<ICreateDonation>();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
+	const isSafeEnv = useIsSafeEnvironment();
+
 	const { status } = useWaitForTransaction({
 		hash: txHash,
 		onReplaced(data) {
@@ -64,19 +69,38 @@ export const useCreateDonation = () => {
 			createDonationProps &&
 				handleSaveDonation(data.transaction.hash, createDonationProps);
 		},
+		async onError(error) {
+			// Manage case for multisigs
+			const { status } = await waitForTransaction(txHash!, isSafeEnv);
+			if (status) {
+				// Make it successful if found
+				updateDonation(donationId, EDonationStatus.VERIFIED);
+				setDonationMinted(true);
+				if (resolveState) {
+					resolveState();
+					setResolveState(null); // clear the state to avoid calling it again
+				}
+			}
+			console.log('Error', error);
+		},
 	});
 
 	const handleSaveDonation = async (
-		txHash: `0x${string}`,
+		txHash: Address,
 		props: ICreateDonation,
 	) => {
-		let transaction;
+		let transaction, safeTransaction;
 		try {
 			if (!txHash) {
 				return;
 			}
+			transaction = !isSafeEnv
+				? await retryFetchTransaction(txHash)
+				: null;
 
-			transaction = await retryFetchTransaction(txHash);
+			if (!transaction && isSafeEnv) {
+				safeTransaction = await getTxFromSafeTxId(txHash, chainId!);
+			}
 
 			setTxHash(txHash);
 			const {
@@ -88,20 +112,39 @@ export const useCreateDonation = () => {
 				setFailedModalType,
 			} = props;
 
-			if (!transaction) return;
-			const donationData: IOnTxHash = {
-				chainId: transaction.chainId! || chainId!,
-				txHash: transaction.hash,
-				amount: amount,
-				token,
-				projectId,
-				anonymous,
-				nonce: transaction.nonce,
-				chainvineReferred,
-				walletAddress: transaction.from,
-				symbol: token.symbol,
-				setFailedModalType,
-			};
+			let donationData: IOnTxHash;
+
+			if (isSafeEnv && safeTransaction) {
+				donationData = {
+					chainId: chainId!,
+					amount: amount,
+					token,
+					projectId,
+					anonymous,
+					chainvineReferred,
+					walletAddress: safeTransaction?.safe as `0x${string}`,
+					symbol: token.symbol,
+					setFailedModalType,
+					safeTransactionId: txHash,
+				};
+			} else if (!isSafeEnv && transaction) {
+				donationData = {
+					chainId: transaction.chainId!,
+					txHash: transaction.hash,
+					amount: amount,
+					token,
+					projectId,
+					anonymous,
+					nonce: transaction.nonce,
+					chainvineReferred,
+					walletAddress: transaction.from,
+					symbol: token.symbol,
+					setFailedModalType,
+					safeTransactionId: null,
+				};
+			} else return;
+
+			console.log({ donationData });
 			setCreateDonationProps(donationData);
 
 			try {
@@ -109,7 +152,7 @@ export const useCreateDonation = () => {
 				setDonationId(id);
 				setDonationSaved(true);
 				return id;
-			} catch {
+			} catch (e) {
 				setFailedModalType(EDonationFailedType.NOT_SAVED);
 			}
 		} catch (error) {
@@ -148,7 +191,7 @@ export const useCreateDonation = () => {
 			: walletAddress;
 
 		const transactionObj = {
-			to: toAddress! as `0x${string}`,
+			to: toAddress! as Address,
 			value: amount.toString(),
 		};
 
@@ -163,7 +206,6 @@ export const useCreateDonation = () => {
 			if (!hash) return { isSaved: false, txHash: '', isMinted: false };
 			setTxHash(hash);
 			const id = await handleSaveDonation(hash, props);
-
 			// Wait for the status to become 'success'
 			await new Promise(resolve => {
 				if (status === 'success') {
@@ -172,7 +214,6 @@ export const useCreateDonation = () => {
 					setResolveState(() => resolve);
 				}
 			});
-
 			if (!id) {
 				return {
 					isSaved: false,
@@ -199,7 +240,8 @@ export const useCreateDonation = () => {
 				setResolveState(null); // clear the state to avoid calling it again
 			}
 		}
-		if (status === 'error') {
+		const comingFromSafe = isSafeEnv && txHash;
+		if (status === 'error' && !comingFromSafe) {
 			updateDonation(donationId, EDonationStatus.FAILED);
 			setDonationSaved(false);
 			createDonationProps?.setFailedModalType(EDonationFailedType.FAILED);

@@ -4,6 +4,7 @@ import {
 	brandColors,
 	Button,
 	Caption,
+	Container,
 	H3,
 	H4,
 	H5,
@@ -15,10 +16,7 @@ import { useMutation } from '@apollo/client';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
-import { FormProvider, useForm } from 'react-hook-form';
-import { Container } from '@giveth/ui-design-system';
-import { getAddress } from 'viem';
-import { type Address } from 'wagmi';
+import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import {
 	ACTIVATE_PROJECT,
 	CREATE_PROJECT,
@@ -29,6 +27,7 @@ import {
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
+	IWalletAddress,
 } from '@/apollo/types/types';
 import {
 	CategoryInput,
@@ -49,12 +48,12 @@ import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
+import { ChainType, NonEVMChain } from '@/types/config';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
 import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
 
-const { NETWORKS_CONFIG } = config;
-const networksIds = Object.keys(NETWORKS_CONFIG).map(Number);
+const ALL_CHAINS = config.CHAINS;
 
 interface ICreateProjectProps {
 	project?: IProjectEdition;
@@ -78,8 +77,8 @@ export type TInputs = {
 	[EInputs.impactLocation]?: string;
 	[EInputs.image]?: string;
 	[EInputs.draft]?: boolean;
-	[EInputs.addresses]: { [key: number]: string };
 	[EInputs.alloProtocolRegistry]?: boolean;
+	[EInputs.addresses]: IWalletAddress[];
 };
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
@@ -89,10 +88,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 
-	const [addressModalChainId, setAddressModalChainId] = useState<
-		number | undefined
-	>(undefined);
 	const [showAlloProtocolModal, setShowAlloProtocolModal] = useState(false);
+	const [addressModalChainId, setAddressModalChainId] = useState<number>();
+	const [addressModalChainType, setAddressModalChainType] =
+		useState<ChainType>();
 
 	const isEditMode = !!project;
 
@@ -115,20 +114,27 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		categories: storageCategories,
 		impactLocation: storageImpactLocation,
 		image: storageImage,
-		addresses: storageAddresses = {},
 		alloProtocolRegistry: storageAlloProtocolRegistry,
 	} = storageProjectData || {};
+	const storageAddresses =
+		storageProjectData?.addresses instanceof Array
+			? storageProjectData.addresses
+			: [];
 
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = impactLocation || '';
-	const activeAddresses = addresses?.filter(a => a.isRecipient) || [];
+	const activeAddresses =
+		addresses
+			?.filter(a => a.isRecipient)
+			.map(a => {
+				const _a = { ...a };
+				delete _a.isRecipient;
+				return _a;
+			}) || [];
 
-	const userAddresses = [...new Set(activeAddresses.map(a => a.address!))];
-
-	const addressesObj: { [key: number]: string } = {};
-	activeAddresses.forEach(a => {
-		addressesObj[a.networkId!] = a.address!;
-	});
+	const userUniqueAddresses = [
+		...new Set(activeAddresses.map(a => a.address!)),
+	];
 
 	const formMethods = useForm<TInputs>({
 		mode: 'onBlur',
@@ -140,10 +146,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.impactLocation]:
 				defaultImpactLocation || storageImpactLocation,
 			[EInputs.image]: image || storageImage || '',
-			[EInputs.addresses]: isEditMode ? addressesObj : storageAddresses,
 			[EInputs.alloProtocolRegistry]: isEditMode
 				? false //Should change to backend data when the backend is ready
 				: storageAlloProtocolRegistry,
+			[EInputs.addresses]: isEditMode
+				? activeAddresses
+				: storageAddresses,
 		},
 	});
 
@@ -185,6 +193,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	);
 
 	console.log('OptimismAddress', hasOptimismAddress);
+	const onError = (errors: FieldErrors<TInputs>) => {
+		if (errors[EInputs.description]) {
+			(
+				document?.getElementsByClassName('ql-editor')[0] as HTMLElement
+			)?.focus();
+		}
+	};
 
 	const onSubmit = async (formData: TInputs) => {
 		try {
@@ -198,14 +213,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				image,
 				draft,
 			} = formData;
-			const _addresses = Object.entries(addresses).map(
-				([id, address]) => ({
-					address: getAddress(address) as Address,
-					networkId: Number(id),
-				}),
-			);
 
-			if (_addresses.length === 0) {
+			if (addresses.length === 0) {
 				showToastError(
 					formatMessage({ id: 'label.recipient_addresses_cant' }),
 				);
@@ -219,7 +228,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				impactLocation,
 				categories: categories?.map(category => category.name),
 				organisationId: 1,
-				addresses: _addresses,
+				addresses,
 				image,
 				isDraft: draft,
 			};
@@ -337,7 +346,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				</div>
 
 				<FormProvider {...formMethods}>
-					<form onSubmit={handleSubmit(onSubmit)}>
+					<form onSubmit={handleSubmit(onSubmit, onError)}>
 						<NameInput
 							showGuidelineModal={showGuidelineModal}
 							preTitle={title}
@@ -354,13 +363,17 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								id: 'label.you_can_set_a_custom_ethereum_address',
 							})}
 						</CaptionContainer>
-						{networksIds.map(networkId => (
+						{ALL_CHAINS.map(chain => (
 							<AddressInterface
-								key={networkId}
-								networkId={networkId}
-								onButtonClick={() =>
-									setAddressModalChainId(networkId)
-								}
+								key={chain.id}
+								networkId={chain.id}
+								chainType={(chain as NonEVMChain).chainType}
+								onButtonClick={() => {
+									setAddressModalChainType(
+										(chain as NonEVMChain).chainType,
+									);
+									setAddressModalChainId(chain.id);
+								}}
 							/>
 						))}
 						<PublishTitle>
@@ -427,14 +440,19 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								disabled={isLoading}
 							/>
 						</Buttons>
-						{addressModalChainId && (
+						{addressModalChainId !== undefined && (
 							<CreateProjectAddAddressModal
 								networkId={addressModalChainId}
-								setShowModal={setAddressModalChainId}
-								userAddresses={userAddresses}
-								onSubmit={() =>
-									setAddressModalChainId(undefined)
-								}
+								chainType={addressModalChainType}
+								userAddresses={userUniqueAddresses}
+								setShowModal={() => {
+									setAddressModalChainId(undefined);
+									setAddressModalChainType(undefined);
+								}}
+								onSubmit={() => {
+									setAddressModalChainId(undefined);
+									setAddressModalChainType(undefined);
+								}}
 							/>
 						)}
 					</form>

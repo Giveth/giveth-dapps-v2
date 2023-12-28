@@ -111,14 +111,16 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 						</P>
 						<div>{project.sumDonationValueUsd}</div>
 					</Flex>
-					<Flex justifyContent='space-between'>
-						<P>
-							<Flex alignItems='center' gap='6px'>
-								Claim Recurring Donations
-							</Flex>
-						</P>
-						<div>{project.sumDonationValueUsd}</div>
-					</Flex>
+					{process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true' && (
+						<Flex justifyContent='space-between'>
+							<P>
+								<Flex alignItems='center' gap='6px'>
+									Claim Recurring Donations
+								</Flex>
+							</P>
+							<div>{project.sumDonationValueUsd}</div>
+						</Flex>
+					)}
 				</ProjectStatusesContainer>
 			</Flex>
 			{showAddressModal && selectedProject && (

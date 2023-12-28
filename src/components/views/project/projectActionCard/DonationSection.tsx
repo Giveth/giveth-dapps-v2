@@ -12,15 +12,19 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { useProjectContext } from '@/context/project.context';
+import { type FC } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { formatDonation } from '@/helpers/number';
+import { IProject } from '@/apollo/types/types';
 
-export const DonateSection = () => {
+interface IDonateSectionProps {
+	projectData?: IProject;
+}
+
+export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 	const { formatMessage, locale } = useIntl();
-	const { projectData } = useProjectContext();
 	const { sumDonationValueUsd } = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 

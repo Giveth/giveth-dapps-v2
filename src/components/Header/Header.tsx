@@ -72,7 +72,8 @@ const Header: FC<IHeader> = () => {
 	const chainId = chain?.id;
 
 	const networkHasGIV =
-		(chainId && config.NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS) ?? null;
+		(chainId && config.EVM_NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS) ??
+		null;
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
