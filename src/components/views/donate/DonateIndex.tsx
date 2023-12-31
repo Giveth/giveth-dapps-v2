@@ -4,6 +4,7 @@ import {
 	Col,
 	Container,
 	IconDonation24,
+	mediaQueries,
 	neutralColors,
 	Row,
 	semanticColors,
@@ -25,11 +26,13 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
-import { DonationCard } from './DonationCard';
+import { DonationCard, isRecurringActive } from './DonationCard';
 import { SuccessView } from './SuccessView';
 import { DonateSection } from '../project/projectActionCard/DonationSection';
 import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
+import CryptoDonation from './CryptoDonation';
+import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -40,6 +43,7 @@ const DonateIndex: FC = () => {
 	const isSafeEnv = useIsSafeEnvironment();
 
 	useEffect(() => {
+		if (!isRecurringActive) return;
 		dispatch(setShowHeader(false));
 		return () => {
 			dispatch(setShowHeader(true));
@@ -48,14 +52,14 @@ const DonateIndex: FC = () => {
 
 	return isSuccessDonation ? (
 		<>
-			<DonateHeader />
+			{isRecurringActive && <DonateHeader />}
 			<DonateContainer>
 				<SuccessView />
 			</DonateContainer>
 		</>
 	) : (
 		<>
-			<DonateHeader />
+			{isRecurringActive && <DonateHeader />}
 			<BigArc />
 			{!isSafeEnv && hasActiveQFRound && <PassportBanner />}
 			<DonateContainer>
@@ -71,23 +75,36 @@ const DonateIndex: FC = () => {
 					</AlreadyDonatedWrapper>
 				)}
 				<NiceBanner />
-				<Row>
-					<Col xs={12} lg={6}>
-						<DonationCard />
-					</Col>
-					<Col xs={12} lg={6}>
-						<InfoWrapper>
-							<ImageWrapper>
-								<ProjectCardImage image={project.image} />
-							</ImageWrapper>
-							{!isMobile && hasActiveQFRound ? (
-								<QFSection projectData={project} />
+				{isRecurringActive ? (
+					<Row>
+						<Col xs={12} lg={6}>
+							<DonationCard />
+						</Col>
+						<Col xs={12} lg={6}>
+							<InfoWrapper>
+								<ImageWrapper>
+									<ProjectCardImage image={project.image} />
+								</ImageWrapper>
+								{!isMobile && hasActiveQFRound ? (
+									<QFSection projectData={project} />
+								) : (
+									<DonateSection projectData={project} />
+								)}
+							</InfoWrapper>
+						</Col>
+					</Row>
+				) : (
+					<Sections>
+						<ProjectCardSelector />
+						<Right>
+							{isSuccessDonation ? (
+								<SuccessView />
 							) : (
-								<DonateSection projectData={project} />
+								<CryptoDonation />
 							)}
-						</InfoWrapper>
-					</Col>
-				</Row>
+						</Right>
+					</Sections>
+				)}
 				{!isMobile && (
 					<SocialBox
 						contentType={EContentType.thisProject}
@@ -133,6 +150,31 @@ const ImageWrapper = styled.div`
 	margin-bottom: 24px;
 	border-radius: 8px;
 	overflow: hidden;
+`;
+
+const Sections = styled.div`
+	height: 100%;
+	${mediaQueries.tablet} {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(500px, 1fr));
+		grid-auto-rows: minmax(100px, auto);
+	}
+	${mediaQueries.mobileL} {
+		grid-template-columns: repeat(2, minmax(100px, 1fr));
+		padding: 0 40px;
+	}
+`;
+
+const Right = styled.div`
+	z-index: 1;
+	background: white;
+	text-align: left;
+	padding: 32px;
+	min-height: 620px;
+	border-radius: 16px;
+	${mediaQueries.tablet} {
+		border-radius: 0 16px 16px 0;
+	}
 `;
 
 export default DonateIndex;
