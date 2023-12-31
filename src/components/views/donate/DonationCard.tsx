@@ -56,7 +56,7 @@ export const DonationCard = () => {
 	);
 };
 
-const DonationCardWrapper = styled(Flex)`
+export const DonationCardWrapper = styled(Flex)`
 	flex-direction: column;
 	gap: 16px;
 	padding: 24px;

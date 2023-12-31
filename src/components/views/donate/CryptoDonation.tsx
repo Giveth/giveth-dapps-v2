@@ -5,6 +5,7 @@ import {
 	brandColors,
 	Button,
 	GLink,
+	H4,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -60,6 +61,7 @@ import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingT
 import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
 import QFModal from '@/components/views/donate/QFModal';
+import { isRecurringActive } from './DonationCard';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -322,6 +324,11 @@ const CryptoDonation: FC = () => {
 
 	return (
 		<MainContainer>
+			{!isRecurringActive && (
+				<H4Styled weight={700}>
+					{formatMessage({ id: 'page.donate.title' })}
+				</H4Styled>
+			)}
 			{showQFModal && (
 				<QFModal
 					donateWithoutMatching={donateWithoutMatching}
@@ -494,6 +501,10 @@ const CryptoDonation: FC = () => {
 		</MainContainer>
 	);
 };
+
+const H4Styled = styled(H4)`
+	margin-bottom: 30px;
+`;
 
 const EmptySpace = styled.div`
 	margin-top: 70px;
