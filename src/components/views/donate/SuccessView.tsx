@@ -1,11 +1,7 @@
 import {
 	brandColors,
-	ButtonLink,
 	H4,
 	H6,
-	IconExternalLink24,
-	Lead,
-	neutralColors,
 	OutlineButton,
 	P,
 } from '@giveth/ui-design-system';
@@ -13,7 +9,6 @@ import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useNetwork } from 'wagmi';
-import Link from 'next/link';
 import links from '@/lib/constants/links';
 import SocialBox from '@/components/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
@@ -31,24 +26,9 @@ import { useAppSelector } from '@/features/hooks';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { getActiveRound } from '@/helpers/qf';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import Routes from '@/lib/constants/Routes';
-import { formatTxLink } from '@/lib/helpers';
-
-const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
-	return (
-		<TxLink>
-			<span>Donation to {title + ' '}</span>
-			<ExternalLink
-				href={formatTxLink(chainId, txHash)}
-				title='View the transaction'
-			/>
-			<IconExternalLink24 />
-		</TxLink>
-	);
-};
+import { Flex } from '@/components/styled-components/Flex';
+import { DonationInfo } from './DonationInfo';
+import { isRecurringActive } from './DonationCard';
 
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
@@ -141,22 +121,7 @@ export const SuccessView: FC = () => {
 					contentType={EContentType.justDonated}
 				/>
 			</SocialBoxWrapper>
-			<Options>
-				<Lead style={{ color: neutralColors.gray[900] }}>
-					{formatMessage({
-						id: 'label.your_transactions_have_been_submitted',
-					})}
-					<br />
-					{formatMessage({
-						id: 'label.you_can_view_them_on_a_blockchain_explorer_here',
-					})}
-				</Lead>
-				<TxRow txHash={txHash[0]} title={project.title} />
-				{hasMultipleTxs && <TxRow txHash={txHash[1]} title='Giveth' />}
-				<Link href={Routes.AllProjects}>
-					<ProjectsButton size='small' label='SEE MORE PROJECTS' />
-				</Link>
-			</Options>
+			{isRecurringActive && <DonationInfo />}
 		</Wrapper>
 	);
 };
@@ -209,27 +174,4 @@ const GivBackContainer = styled.div`
 		font-weight: bold;
 		margin: 0 0 8px 0;
 	}
-`;
-
-const TxLink = styled(Lead)`
-	color: ${brandColors.pinky[500]};
-	cursor: pointer;
-	margin-top: 16px;
-	display: flex;
-	align-items: center;
-	gap: 8px;
-	> span {
-		color: ${neutralColors.gray[700]};
-	}
-`;
-
-const Options = styled(FlexCenter)`
-	flex-direction: column;
-	width: 100%;
-	padding: 40px 20px 0;
-`;
-
-const ProjectsButton = styled(ButtonLink)`
-	width: 242px;
-	margin-top: 40px;
 `;
