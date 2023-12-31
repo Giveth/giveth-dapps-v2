@@ -28,6 +28,7 @@ import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { encodeBase58 } from 'ethers';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useRouter } from 'next/router';
+import BigNumber from 'bignumber.js';
 import { getChainName } from '@/lib/network';
 import config from '@/configuration';
 import { useAppDispatch } from '@/features/hooks';
@@ -251,6 +252,7 @@ export const GeneralWalletProvider: React.FC<{
 
 	const sendNativeToken = async (to: string, value: string) => {
 		if (!isConnected) throw Error('Wallet is not connected');
+		console.log('Calling Transaction', value);
 		switch (walletChainType) {
 			case ChainType.EVM:
 				return sendEvmTransaction({
@@ -259,11 +261,15 @@ export const GeneralWalletProvider: React.FC<{
 				});
 				return;
 			case ChainType.SOLANA: {
+				const lamports = new BigNumber(value)
+					.times(LAMPORTS_PER_SOL)
+					.toFixed();
+
 				const transaction = new Transaction().add(
 					SystemProgram.transfer({
 						fromPubkey: publicKey!,
 						toPubkey: new PublicKey(to),
-						lamports: BigInt(value),
+						lamports: BigInt(lamports),
 					}),
 				);
 				return await solanaSendTransaction(
