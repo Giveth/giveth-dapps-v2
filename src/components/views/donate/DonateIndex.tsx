@@ -58,10 +58,9 @@ const DonateIndex: FC = () => {
 				<SuccessView />
 			</DonateContainer>
 		</>
-	) : (
+	) : isRecurringActive ? (
 		<>
-			{isRecurringActive && <DonateHeader />}
-			<BigArc />
+			<DonateHeader />
 			{!isSafeEnv && hasActiveQFRound && <PassportBanner />}
 			<DonateContainer>
 				{/* <PurchaseXDAI /> */}
@@ -76,39 +75,23 @@ const DonateIndex: FC = () => {
 					</AlreadyDonatedWrapper>
 				)}
 				<NiceBanner />
-				{isRecurringActive ? (
-					<Row>
-						<Col xs={12} lg={6}>
-							<DonationCard />
-						</Col>
-						<Col xs={12} lg={6}>
-							<InfoWrapper>
-								<ImageWrapper>
-									<ProjectCardImage image={project.image} />
-								</ImageWrapper>
-								{!isMobile && hasActiveQFRound ? (
-									<QFSection projectData={project} />
-								) : (
-									<DonateSection projectData={project} />
-								)}
-							</InfoWrapper>
-						</Col>
-					</Row>
-				) : (
-					<>
-						<Sections>
-							<ProjectCardSelector />
-							<Right>
-								{isSuccessDonation ? (
-									<SuccessView />
-								) : (
-									<CryptoDonation />
-								)}
-							</Right>
-						</Sections>
-						<DonationInfo />
-					</>
-				)}
+				<Row>
+					<Col xs={12} lg={6}>
+						<DonationCard />
+					</Col>
+					<Col xs={12} lg={6}>
+						<InfoWrapper>
+							<ImageWrapper>
+								<ProjectCardImage image={project.image} />
+							</ImageWrapper>
+							{!isMobile && hasActiveQFRound ? (
+								<QFSection projectData={project} />
+							) : (
+								<DonateSection projectData={project} />
+							)}
+						</InfoWrapper>
+					</Col>
+				</Row>
 				{!isMobile && (
 					<SocialBox
 						contentType={EContentType.thisProject}
@@ -117,6 +100,42 @@ const DonateIndex: FC = () => {
 					/>
 				)}
 			</DonateContainer>
+		</>
+	) : (
+		<>
+			<BigArc />
+			{!isSafeEnv && hasActiveQFRound && <PassportBanner />}
+			<Wrapper>
+				{alreadyDonated && (
+					<AlreadyDonatedWrapper>
+						<IconDonation24 />
+						<SublineBold>
+							{formatMessage({
+								id: 'component.already_donated.incorrect_estimate',
+							})}
+						</SublineBold>
+					</AlreadyDonatedWrapper>
+				)}
+				<NiceBanner />
+				<Sections>
+					<ProjectCardSelector />
+					<Right>
+						{isSuccessDonation ? (
+							<SuccessView />
+						) : (
+							<CryptoDonation />
+						)}
+					</Right>
+				</Sections>
+				<DonationInfo />
+				{!isMobile && (
+					<SocialBox
+						contentType={EContentType.thisProject}
+						project={project}
+						isDonateFooter
+					/>
+				)}
+			</Wrapper>
 		</>
 	);
 };
@@ -137,6 +156,12 @@ const DonateContainer = styled(Container)`
 	padding-top: 128px;
 	padding-bottom: 64px;
 	position: relative;
+`;
+
+const Wrapper = styled.div`
+	max-width: 1052px;
+	padding: 64px 0;
+	margin: 0 auto;
 `;
 
 const InfoWrapper = styled.div`

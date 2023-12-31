@@ -144,7 +144,7 @@ export const useCreateDonation = () => {
 				};
 			} else return;
 
-			console.log({ donationData });
+			console.log('donationData', { donationData });
 			setCreateDonationProps(donationData);
 
 			try {
