@@ -33,6 +33,7 @@ import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import CryptoDonation from './CryptoDonation';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
+import { DonationInfo } from './DonationInfo';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -50,9 +51,9 @@ const DonateIndex: FC = () => {
 		};
 	}, [dispatch]);
 
-	return isSuccessDonation ? (
+	return isRecurringActive && isSuccessDonation ? (
 		<>
-			{isRecurringActive && <DonateHeader />}
+			<DonateHeader />
 			<DonateContainer>
 				<SuccessView />
 			</DonateContainer>
@@ -94,16 +95,19 @@ const DonateIndex: FC = () => {
 						</Col>
 					</Row>
 				) : (
-					<Sections>
-						<ProjectCardSelector />
-						<Right>
-							{isSuccessDonation ? (
-								<SuccessView />
-							) : (
-								<CryptoDonation />
-							)}
-						</Right>
-					</Sections>
+					<>
+						<Sections>
+							<ProjectCardSelector />
+							<Right>
+								{isSuccessDonation ? (
+									<SuccessView />
+								) : (
+									<CryptoDonation />
+								)}
+							</Right>
+						</Sections>
+						<DonationInfo />
+					</>
 				)}
 				{!isMobile && (
 					<SocialBox
