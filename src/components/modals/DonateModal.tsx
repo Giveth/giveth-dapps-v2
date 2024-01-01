@@ -13,7 +13,12 @@ import BigNumber from 'bignumber.js';
 import { Chain } from 'wagmi';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
-import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
+import {
+	compareAddresses,
+	formatSolanaTxLink,
+	formatTxLink,
+	showToastError,
+} from '@/lib/helpers';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
@@ -32,7 +37,7 @@ import DonateSummary from '@/components/views/donate/DonateSummary';
 import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useDonateData } from '@/context/donate.context';
-import { fetchETCPrice, fetchPrice } from '@/services/token';
+import { fetchETCPrice, fetchPrice, fetchSolanaPrice } from '@/services/token';
 import { fetchEthPrice } from '@/features/price/price.services';
 import { useCreateEvmDonation } from '@/hooks/useCreateEvmDonation';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
@@ -109,6 +114,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	// console.log('addresses', addresses);
 	// console.log('walletChainType:', walletChainType);
 	// console.log('chainId:', chainId);
+	console.log('Project', project);
+	console.log('Addresses', addresses);
 	const projectWalletAddress = findMatchingWalletAddress(
 		addresses,
 		chainId,
@@ -171,8 +178,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			token,
 			setFailedModalType,
 		};
+		console.log('Token', token);
 		if (!projectWalletAddress || !givethWalletAddress) return;
-
 		createFirstDonation({
 			...txProps,
 			walletAddress: projectWalletAddress,
@@ -220,6 +227,14 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			.catch(console.log);
 	};
 
+	const handleTxLink = (txHash?: string) => {
+		if (token.symbol === 'SOL') {
+			return formatSolanaTxLink(txHash);
+		} else {
+			return formatTxLink(chainId, firstTxHash);
+		}
+	};
+
 	useEffect(() => {
 		const setPrice = async () => {
 			if (
@@ -245,12 +260,20 @@ const DonateModal: FC<IDonateModalProps> = props => {
 					const fetchedETCPrice = await fetchETCPrice();
 					setTokenPrice(fetchedETCPrice || 0);
 					return;
+				} else if (token.symbol === 'SOL') {
+					const fetchedSolPrice = await fetchSolanaPrice();
+					console.log('SOL Price', fetchedSolPrice);
+					setTokenPrice(fetchedSolPrice || 0);
+					return;
 				}
+				console.log('Token Symbol', token.symbol);
 				const coingeckoChainId =
-					isMainnet ||
-					(token.mainnetAddress && token.symbol !== 'CELO')
-						? config.MAINNET_NETWORK_NUMBER
-						: chainId!;
+					token.symbol === 'SOL'
+						? 0
+						: isMainnet ||
+							  (token.mainnetAddress && token.symbol !== 'CELO')
+							? config.MAINNET_NETWORK_NUMBER
+							: chainId!;
 				const fetchedPrice = await fetchPrice(
 					coingeckoChainId,
 					tokenAddress,
@@ -318,10 +341,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 								/>
 								{firstTxHash && (
 									<ExternalLink
-										href={formatTxLink(
-											chainId,
-											firstTxHash,
-										)}
+										href={handleTxLink(firstTxHash)}
 										title={formatMessage({
 											id: 'label.view_on_block_explorer',
 										})}
@@ -373,8 +393,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 										/>
 										{secondTxHash && (
 											<ExternalLink
-												href={formatTxLink(
-													chainId,
+												href={handleTxLink(
 													secondTxHash,
 												)}
 												title={formatMessage({
@@ -413,7 +432,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			</Modal>
 			{failedModalType && (
 				<FailedDonation
-					txUrl={formatTxLink(chainId, firstTxHash || secondTxHash)}
+					// txUrl={formatTxLink(chainId, firstTxHash || secondTxHash)}
+					txUrl={handleTxLink(firstTxHash || secondTxHash)}
 					setShowModal={() => setFailedModalType(undefined)}
 					type={failedModalType}
 				/>
