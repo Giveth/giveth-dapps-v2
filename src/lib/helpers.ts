@@ -18,7 +18,7 @@ import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { getRequest } from '@/helpers/requests';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
-import config from '@/configuration';
+import config, { isProduction } from '@/configuration';
 import { AddressZero } from './constants/constants';
 import { ChainType } from '@/types/config';
 
@@ -60,6 +60,14 @@ export const formatTxLink = (networkId?: number, txHash?: string) => {
 	if (!networkId || !txHash || !config.EVM_NETWORKS_CONFIG[networkId])
 		return '';
 	return `${config.EVM_NETWORKS_CONFIG[networkId].blockExplorers?.default.url}/tx/${txHash}`;
+};
+
+export const formatSolanaTxLink = (txHash?: string) => {
+	if (!txHash) return '';
+	if (isProduction) {
+		return `${config.SOLANA_CONFIG.blockExplorers.default.url}/tx/${txHash}`;
+	}
+	return `${config.SOLANA_CONFIG.blockExplorers.default.url}/tx/${txHash}?cluster=devnet`;
 };
 
 export function formatWalletLink(
