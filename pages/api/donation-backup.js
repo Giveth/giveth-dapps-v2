@@ -1,0 +1,30 @@
+const handler = (req, res) => {
+	const { body, method } = req;
+	try {
+		if (method === 'POST') {
+			fetch(process.env.MONGO_DONATION_URL, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Access-Control-Request-Headers': '*',
+					'api-key': process.env.MONGO_DONATION_API_KEY,
+				},
+				body: JSON.stringify({
+					collection: process.env.MONGO_DONATION_COLLECTION,
+					database: process.env.MONGO_DONATION_DATABASE,
+					dataSource: process.env.MONGO_DONATION_DATA_SOURCE,
+					document: body,
+				}),
+			})
+				.then(response => response.json())
+				.then(data => console.log(data))
+				.catch(error => console.error('Error:', error));
+
+			console.log('body', body);
+		}
+	} catch (error) {
+		res.status(500).json();
+	}
+};
+
+export default handler;
