@@ -1,49 +1,22 @@
-import React from 'react';
+import { type FC } from 'react';
+import { Steps } from '@/components/steps/Steps';
 import { StakeState } from '@/lib/staking';
-import {
-	StakeStep,
-	StakeStepTitle,
-	StakeStepNumber,
-	StakeStepsPlaceholder,
-	StakeStepsContainer,
-} from './StakeSteps.sc';
 
-const StakeSteps = ({ stakeState }: { stakeState: StakeState }) => {
-	return stakeState === StakeState.APPROVE ||
-		stakeState === StakeState.APPROVING ||
+interface IStakeStepsProps {
+	stakeState: StakeState;
+}
+
+const steps = ['label.approve', 'label.stake'];
+
+export const StakeSteps: FC<IStakeStepsProps> = ({ stakeState }) => {
+	let activeStep = 0;
+	if (
 		stakeState === StakeState.WRAP ||
-		stakeState === StakeState.WRAPPING ? (
-		<StakeStepsContainer>
-			<StakeStep>
-				<StakeStepTitle>Approve</StakeStepTitle>
-				<StakeStepNumber>1</StakeStepNumber>
-			</StakeStep>
-			<StakeStep>
-				<StakeStepTitle
-					disable={
-						!(
-							stakeState === StakeState.WRAP ||
-							stakeState === StakeState.WRAPPING
-						)
-					}
-				>
-					Stake
-				</StakeStepTitle>
-				<StakeStepNumber
-					disable={
-						!(
-							stakeState === StakeState.WRAP ||
-							stakeState === StakeState.WRAPPING
-						)
-					}
-				>
-					2
-				</StakeStepNumber>
-			</StakeStep>
-		</StakeStepsContainer>
-	) : (
-		<StakeStepsPlaceholder />
-	);
+		stakeState === StakeState.WRAPPING ||
+		stakeState === StakeState.STAKE ||
+		stakeState === StakeState.STAKING
+	) {
+		activeStep = 1;
+	}
+	return <Steps steps={steps} activeStep={activeStep} />;
 };
-
-export default StakeSteps;

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { getAddress, isAddress } from 'viem';
+import { type Address } from 'wagmi';
 import { IProject, IWalletAddress } from '@/apollo/types/types';
 import Input from '../../Input';
 import { requiredOptions } from '@/lib/constants/regex';
@@ -10,8 +11,7 @@ import { client } from '@/apollo/apolloClient';
 import { ADD_RECIPIENT_ADDRESS_TO_PROJECT } from '@/apollo/gql/gqlProjects';
 import InlineToast, { EToastType } from '../../toasts/InlineToast';
 import { suggestNewAddress } from '@/lib/helpers';
-import { Address } from '@/types/config';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 
 interface IAddNewAddress {
 	project: IProject;
@@ -109,7 +109,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 		return true;
 	};
 
-	const chainName = chainNameById(selectedWallet.networkId);
+	const chainName = getChainName(selectedWallet.networkId);
 
 	return (
 		<>

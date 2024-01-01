@@ -81,7 +81,7 @@ export const NotificationButtonWithMenu: FC<
 			? {
 					onMouseEnter: openMenu,
 					onMouseLeave: closeMenu,
-			  }
+				}
 			: { onClick: openSidebar }
 		: { onClick: () => signInThenGoToNotifs() };
 	return (

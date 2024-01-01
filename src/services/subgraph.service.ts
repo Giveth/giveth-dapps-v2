@@ -8,7 +8,7 @@ export const fetchSubgraph = async (
 	network: number,
 ): Promise<any> => {
 	const reqBody = { query };
-	let uri = config.NETWORKS_CONFIG[network]?.subgraphAddress;
+	let uri = config.EVM_NETWORKS_CONFIG[network]?.subgraphAddress;
 	if (!uri) {
 		console.error('Network is not Defined in fetchSubgraph!');
 		return {};
@@ -28,7 +28,7 @@ export const getHistory = async (
 	from?: number,
 	count?: number,
 ): Promise<ITokenAllocation[]> => {
-	const networkConfig = config.NETWORKS_CONFIG[network];
+	const networkConfig = config.EVM_NETWORKS_CONFIG[network];
 	let tokenDistroAddress = networkConfig?.TOKEN_DISTRO_ADDRESS;
 	let uri = networkConfig?.subgraphAddress;
 	if (!tokenDistroAddress || !uri) {

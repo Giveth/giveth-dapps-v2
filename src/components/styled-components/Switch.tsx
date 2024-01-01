@@ -61,8 +61,8 @@ const Switch = styled.div<{ checked: boolean; disabled: boolean }>`
 			props.checked
 				? brandColors.pinky[500]
 				: props.disabled
-				? neutralColors.gray[200]
-				: brandColors.pinky[200]};
+					? neutralColors.gray[200]
+					: brandColors.pinky[200]};
 		border: 3px solid ${brandColors.giv['000']};
 		border-radius: 50%;
 		transform: ${props =>

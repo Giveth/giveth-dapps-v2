@@ -7,7 +7,7 @@ import config from '@/configuration';
 export const fetchChainInfo = async (chainId: number, userAddress?: string) => {
 	try {
 		let response;
-		let uri = config.NETWORKS_CONFIG[chainId]?.subgraphAddress;
+		let uri = config.EVM_NETWORKS_CONFIG[chainId]?.subgraphAddress;
 
 		if (!uri) {
 			response = {};

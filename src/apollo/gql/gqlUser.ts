@@ -61,6 +61,10 @@ export const FETCH_USER_PROJECTS = gql`
 					address
 					isRecipient
 					networkId
+					chainType
+				}
+				projectVerificationForm {
+					status
 				}
 			}
 			totalCount
@@ -139,6 +143,37 @@ export const VALIDATE_TOKEN = gql`
 	query {
 		me {
 			walletAddress
+		}
+	}
+`;
+
+export const FETCH_USER_STREAMS = `
+	query FetchUserStreams($address: String!) {
+		streams(
+			where: { sender: $address }
+		) {
+			id
+			sender {
+				id
+			}
+			receiver {
+				id
+			}
+			token {
+				__typename
+				id
+				name
+				symbol
+				decimals
+				isSuperToken
+				underlyingToken {
+					id
+					name
+					symbol
+					decimals
+				}
+			}
+			currentFlowRate
 		}
 	}
 `;

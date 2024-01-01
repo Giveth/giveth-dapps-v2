@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNetwork } from 'wagmi';
 
 import {
 	getGivStakingAPR,
@@ -10,6 +9,7 @@ import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { APR, UserStakeInfo } from '@/types/poolInfo';
 import { useAppSelector } from '@/features/hooks';
 import { Zero } from '@/helpers/number';
+import { chainInfoNames } from '@/features/subgraph/subgraph.helper';
 
 export interface IStakeInfo {
 	apr: APR;
@@ -28,12 +28,12 @@ export const useStakingPool = (
 		notStakedAmount: 0n,
 		stakedAmount: 0n,
 	});
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
+
+	const chainInfoName = chainInfoNames[poolStakingConfig.network];
 
 	const currentValues = useAppSelector(
-		state => state.subgraph.currentValues,
-		() => (hold ? true : false),
+		state => state.subgraph[chainInfoName],
+		() => hold,
 	);
 
 	const { network, type } = poolStakingConfig;
@@ -41,16 +41,16 @@ export const useStakingPool = (
 
 	useEffect(() => {
 		const cb = () => {
-			console.log('Calculating APR');
 			if (isLoaded) {
 				const promise: Promise<APR> =
 					type === StakingType.GIV_GARDEN_LM ||
 					type === StakingType.GIV_UNIPOOL_LM
 						? getGivStakingAPR(network, currentValues, network)
 						: getLPStakingAPR(poolStakingConfig, currentValues);
-				promise
-					.then(setApr)
-					.catch(() => setApr({ effectiveAPR: Zero }));
+				promise.then(setApr).catch(e => {
+					console.log('Error Calculating APR', e);
+					setApr({ effectiveAPR: Zero });
+				});
 			} else {
 				setApr({ effectiveAPR: Zero });
 			}
@@ -65,7 +65,7 @@ export const useStakingPool = (
 				clearInterval(interval);
 			}
 		};
-	}, [chainId, isLoaded]);
+	}, [isLoaded]);
 
 	useEffect(() => {
 		setUserStakeInfo(getUserStakeInfo(currentValues, poolStakingConfig));

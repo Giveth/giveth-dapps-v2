@@ -9,17 +9,12 @@ import {
 } from '@giveth/ui-design-system';
 import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { captureException } from '@sentry/nextjs';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { useProjectContext } from '@/context/project.context';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
-import { client } from '@/apollo/apolloClient';
-import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowSignWithWallet } from '@/features/modal/modal.slice';
-import { capitalizeAllWords, showToastError } from '@/lib/helpers';
+import { capitalizeAllWords } from '@/lib/helpers';
 import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
 import { idToProjectEdit } from '@/lib/routeCreators';
 import ShareModal from '@/components/modals/ShareModal';
@@ -30,6 +25,7 @@ import { device } from '@/lib/constants/constants';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
+import { EVerificationStatus } from '@/apollo/types/types';
 
 interface IMobileActionsModalProps {
 	setShowModal: (value: boolean) => void;
@@ -41,35 +37,17 @@ export const AdminActions = () => {
 	const [deactivateModal, setDeactivateModal] = useState(false);
 	const [showShareModal, setShowShareModal] = useState(false);
 	const [showMobileActionsModal, setShowMobileActionsModal] = useState(false);
-	const { projectData, isActive, fetchProjectBySlug } = useProjectContext();
+	const { projectData, isActive, activateProject } = useProjectContext();
 	const project = projectData!;
-	const { slug, id: projectId, verified } = project;
+	const { slug, verified, verificationFormStatus } = project;
 	const { formatMessage } = useIntl();
-	const { isSignedIn } = useAppSelector(state => state.user);
-	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const isMobile = !useMediaQuery(device.tablet);
-
-	const activeProject = async () => {
-		try {
-			if (!isSignedIn) {
-				dispatch(setShowSignWithWallet(true));
-				return;
-			}
-			await client.mutate({
-				mutation: ACTIVATE_PROJECT,
-				variables: { projectId: Number(projectId || '') },
-			});
-			await fetchProjectBySlug();
-		} catch (e) {
-			showToastError(e);
-			captureException(e, {
-				tags: {
-					section: 'handleProjectStatus',
-				},
-			});
-		}
-	};
+	const isVerificationDisabled =
+		verified ||
+		verificationFormStatus === EVerificationStatus.SUBMITTED ||
+		verificationFormStatus === EVerificationStatus.REJECTED ||
+		!isActive;
 
 	const options: IOption[] = [
 		{
@@ -89,7 +67,7 @@ export const AdminActions = () => {
 			type: OptionType.ITEM,
 			icon: <IconVerifiedBadge16 />,
 			cb: () => setShowVerificationModal(true),
-			disabled: verified,
+			isHidden: isVerificationDisabled,
 		},
 		{
 			label: capitalizeAllWords(
@@ -101,10 +79,7 @@ export const AdminActions = () => {
 			),
 			type: OptionType.ITEM,
 			icon: <IconArchiving size={16} />,
-			cb: () => {
-				console.log('verify');
-				isActive ? setDeactivateModal(true) : activeProject();
-			},
+			cb: () => (isActive ? setDeactivateModal(true) : activateProject()),
 		},
 		{
 			label: formatMessage({
@@ -113,6 +88,7 @@ export const AdminActions = () => {
 			type: OptionType.ITEM,
 			icon: <IconShare16 />,
 			cb: () => setShowShareModal(true),
+			isHidden: !isActive,
 		},
 	];
 
@@ -122,13 +98,12 @@ export const AdminActions = () => {
 		borderRadius: '8px',
 	};
 
-	const activeOptions = isActive ? options : [options[0], options[2]];
 	return !isMobile ? (
 		<Wrapper>
 			<Dropdown
 				style={dropdownStyle}
 				label='Project Actions'
-				options={activeOptions}
+				options={options}
 			/>
 			{showVerificationModal && (
 				<VerificationModal
@@ -166,7 +141,7 @@ export const AdminActions = () => {
 			<IconChevronDown24 />
 			{showMobileActionsModal && (
 				<MobileActionsModal setShowModal={setShowMobileActionsModal}>
-					{activeOptions.map(option => (
+					{options.map(option => (
 						<MobileActionModalItem
 							key={option.label}
 							onClick={option.cb}

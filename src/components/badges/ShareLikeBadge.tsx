@@ -25,8 +25,8 @@ const ShareLikeBadge = (props: {
 		type === 'share'
 			? formatMessage({ id: 'label.share' })
 			: type === 'reward'
-			? formatMessage({ id: 'label.share_and_get_rewarded' })
-			: formatMessage({ id: 'label.like' });
+				? formatMessage({ id: 'label.share_and_get_rewarded' })
+				: formatMessage({ id: 'label.like' });
 	const icon = isShare ? (
 		<IconShare
 			color={

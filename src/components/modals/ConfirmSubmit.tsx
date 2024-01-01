@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
-import { useNetwork } from 'wagmi';
+import { type Address, useNetwork } from 'wagmi';
 import config from '@/configuration';
 import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
@@ -18,7 +18,6 @@ import { AddTokenButton } from '../AddTokenButton';
 import { Flex } from '../styled-components/Flex';
 import LottieControl from '@/components/LottieControl';
 import { WrappedSpinner } from '../Spinner';
-import { Address } from '@/types/config';
 
 const AddTokenRow = styled(Flex)`
 	margin-top: 16px;
@@ -56,15 +55,15 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 			{txHash && (
 				<BlockExplorerLink
 					as='a'
-					href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorers
-						?.default.url}
+					href={`${config.EVM_NETWORKS_CONFIG[chainId!]
+						?.blockExplorers?.default.url}
 			/tx/${txHash}`}
 					target='_blank'
 					size='Big'
 				>
 					View on{' '}
 					{
-						config.NETWORKS_CONFIG[chainId!]?.blockExplorers
+						config.EVM_NETWORKS_CONFIG[chainId!]?.blockExplorers
 							?.default.name
 					}
 					&nbsp;
@@ -102,14 +101,17 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 			</AddTokenRow>
 			<BlockExplorerLink
 				as='a'
-				href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorers
+				href={`${config.EVM_NETWORKS_CONFIG[chainId!]?.blockExplorers
 					?.default.url}
 							/tx/${txHash}`}
 				target='_blank'
 				size='Big'
 			>
 				View on{' '}
-				{config.NETWORKS_CONFIG[chainId!]?.blockExplorers?.default.name}
+				{
+					config.EVM_NETWORKS_CONFIG[chainId!]?.blockExplorers
+						?.default.name
+				}
 				&nbsp;
 				<IconExternalLink size={16} color={'currentColor'} />
 			</BlockExplorerLink>
@@ -142,15 +144,15 @@ export const ErrorInnerModal: FC<IErrorProps> = ({
 			{txHash && (
 				<BlockExplorerLink
 					as='a'
-					href={`${config.NETWORKS_CONFIG[chainId!]?.blockExplorers
-						?.default.url}
+					href={`${config.EVM_NETWORKS_CONFIG[chainId!]
+						?.blockExplorers?.default.url}
 			/tx/${txHash}`}
 					target='_blank'
 					size='Big'
 				>
 					View on{' '}
 					{
-						config.NETWORKS_CONFIG[chainId!]?.blockExplorers
+						config.EVM_NETWORKS_CONFIG[chainId!]?.blockExplorers
 							?.default.name
 					}
 					&nbsp;

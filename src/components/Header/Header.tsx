@@ -9,8 +9,7 @@ import {
 	IconSearch24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useAccount, useNetwork } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useNetwork } from 'wagmi';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
 	ConnectButton,
@@ -54,6 +53,8 @@ import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import { CommunityMenu } from '../menu/CommunityMenu';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import config from '@/configuration';
+import { useShowHiderByScroll } from '@/hooks/useShowHiderByScroll';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -61,18 +62,18 @@ export interface IHeader {
 }
 
 const Header: FC<IHeader> = () => {
-	const [showHeader, setShowHeader] = useState(true);
 	const [showBackBtn, setShowBackBtn] = useState(false);
 
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 
-	const { address } = useAccount();
+	const { walletAddress, openWalletConnectModal } = useAuthenticationWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 
 	const networkHasGIV =
-		(chainId && config.NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS) ?? null;
+		(chainId && config.EVM_NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS) ??
+		null;
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
@@ -86,7 +87,7 @@ const Header: FC<IHeader> = () => {
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const isMobile = useMediaQuery(device.mobileL);
-	const { open: openConnectModal } = useWeb3Modal();
+	const showHeader = useShowHiderByScroll();
 
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
@@ -128,35 +129,9 @@ const Header: FC<IHeader> = () => {
 		);
 	}, [router.route]);
 
-	useEffect(() => {
-		const threshold = 0;
-		let lastScrollY = window.pageYOffset;
-		let ticking = false;
-
-		const updateScrollDir = () => {
-			const scrollY = window.pageYOffset;
-
-			if (Math.abs(scrollY - lastScrollY) < threshold) {
-				ticking = false;
-				return;
-			}
-			const show = scrollY <= lastScrollY;
-			setShowHeader(show);
-			lastScrollY = scrollY > 0 ? scrollY : 0;
-			ticking = false;
-		};
-
-		const onScroll = () => {
-			if (!ticking) {
-				window.requestAnimationFrame(updateScrollDir);
-				ticking = true;
-			}
-		};
-
-		window.addEventListener('scroll', onScroll);
-
-		return () => window.removeEventListener('scroll', onScroll);
-	}, [showHeader]);
+	const handleModals = () => {
+		openWalletConnectModal();
+	};
 
 	const { modalCallback: signInThenCreate } = useModalCallback(() =>
 		router.push(Routes.CreateProject),
@@ -165,7 +140,7 @@ const Header: FC<IHeader> = () => {
 	const handleCreateButton = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			openConnectModal?.();
+			openWalletConnectModal();
 		} else if (!isSignedIn) {
 			signInThenCreate();
 		} else if (isUserRegistered(userData)) {
@@ -265,7 +240,7 @@ const Header: FC<IHeader> = () => {
 						label='+'
 					/>
 				</SmallCreateProjectParent>
-				{address && chainId ? (
+				{walletAddress ? (
 					<>
 						<NotificationButtonWithMenu
 							isHeaderShowing={showHeader}
@@ -291,7 +266,7 @@ const Header: FC<IHeader> = () => {
 								? 'component.button.connect_wallet'
 								: 'component.button.sign_in',
 						})}
-						onClick={() => openConnectModal?.()}
+						onClick={handleModals}
 					/>
 				)}
 			</Flex>

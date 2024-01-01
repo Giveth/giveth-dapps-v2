@@ -3,9 +3,7 @@ import { captureException } from '@sentry/nextjs';
 import { ButtonLink, H5, IconExternalLink } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount, useNetwork } from 'wagmi';
-import { waitForTransaction } from '@wagmi/core';
 import { Modal } from '../Modal';
-import { AmountInput } from '../../AmountInput';
 import {
 	approveERC20tokenTransfer,
 	stakeGIV,
@@ -13,8 +11,8 @@ import {
 } from '@/lib/stakingPool';
 import { ErrorInnerModal } from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
+import { waitForTransaction } from '@/lib/transaction';
 import { IModal } from '@/types/common';
-import StakeSteps from './StakeSteps';
 import {
 	CancelButton,
 	StakeModalContainer,
@@ -26,9 +24,12 @@ import {
 import { BriefContainer, H5White } from './LockingBrief';
 import { formatWeiHelper } from '@/helpers/number';
 import LockInfo from './LockInfo';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
+import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput';
+import { StakeSteps } from './StakeSteps';
 import type {
 	PoolStakingConfig,
 	SimplePoolStakingConfig,
@@ -80,6 +81,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	const chainId = chain?.id;
 	const { notStakedAmount: _maxAmount } = useStakingPool(poolStakingConfig);
 	const maxAmount = _maxAmount || 0n;
+	const isSafeEnv = useIsSafeEnvironment();
 
 	const { POOL_ADDRESS, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
@@ -96,6 +98,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 				: LM_ADDRESS!,
 			POOL_ADDRESS,
 			chainId!,
+			isSafeEnv,
 		);
 
 		if (isApproved) {
@@ -115,9 +118,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			);
 			if (txResponse) {
 				setTxHash(txResponse);
-				const data = await waitForTransaction({
-					hash: txResponse,
-				});
+				const data = await waitForTransaction(txResponse, isSafeEnv);
 				setStakeState(
 					data.status === 'success'
 						? StakeState.CONFIRMED
@@ -149,9 +150,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			);
 			if (txResponse) {
 				setTxHash(txResponse);
-				const data = await waitForTransaction({
-					hash: txResponse,
-				});
+				const data = await waitForTransaction(txResponse, isSafeEnv);
 				setStakeState(
 					data.status === 'success'
 						? StakeState.CONFIRMED
@@ -187,7 +186,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 											id: 'label.amount_to_stake',
 										})}
 									</SectionTitle>
-									<AmountInput
+									<StakingAmountInput
 										setAmount={setAmount}
 										maxAmount={maxAmount}
 										poolStakingConfig={poolStakingConfig}
@@ -288,11 +287,11 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 						</H5White>
 						<ButtonLink
 							isExternal
-							label={`View on ${config.NETWORKS_CONFIG[chainId].blockExplorers?.default.name}`}
+							label={`View on ${config.EVM_NETWORKS_CONFIG[chainId].blockExplorers?.default.name}`}
 							linkType='texty'
 							size='small'
 							icon={<IconExternalLink size={16} />}
-							href={`${config.NETWORKS_CONFIG[chainId].blockExplorers?.default.url}/tx/${txHash}`}
+							href={`${config.EVM_NETWORKS_CONFIG[chainId].blockExplorers?.default.url}/tx/${txHash}`}
 							target='_blank'
 						/>
 					</BriefContainer>

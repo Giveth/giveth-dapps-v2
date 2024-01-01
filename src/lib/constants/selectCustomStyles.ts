@@ -7,9 +7,9 @@ import {
 import { Shadow } from '@/components/styled-components/Shadow';
 
 const selectCustomStyles: StylesConfig = {
-	control: (styles, { isDisabled, selectProps }) =>
+	control: (baseStyles, { isDisabled, selectProps }) =>
 		({
-			...styles,
+			...baseStyles,
 			maxWidth: '520px',
 			borderColor: selectProps.hasError
 				? semanticColors.punch[500]
@@ -35,8 +35,8 @@ const selectCustomStyles: StylesConfig = {
 		backgroundColor: isSelected
 			? neutralColors.gray[300]
 			: isFocused
-			? neutralColors.gray[200]
-			: 'white',
+				? neutralColors.gray[200]
+				: 'white',
 		color: isSelected ? neutralColors.gray[900] : neutralColors.gray[700],
 	}),
 	menu: (baseStyles, props) =>

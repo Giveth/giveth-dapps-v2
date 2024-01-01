@@ -36,7 +36,7 @@ export const BoostModalContainer = styled.div<IBoostModalContainerProps>`
 					background-image: url('/images/backgrounds/rocket.png');
 					background-repeat: no-repeat;
 					background-position: left bottom;
-			  `
+				`
 			: ''}
 `;
 

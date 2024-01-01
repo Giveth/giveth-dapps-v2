@@ -1,5 +1,4 @@
 import { erc20ABI, useAccount, useContractRead, useNetwork } from 'wagmi';
-import { getContract } from 'wagmi/actions';
 import { useState } from 'react';
 import FailedDonation, {
 	EDonationFailedType,
@@ -18,8 +17,6 @@ const YourApp = () => {
 		functionName: 'allowance',
 	});
 
-	console.log('contractRead1', getContract);
-
 	return (
 		<div>
 			<w3m-button />
@@ -29,7 +26,7 @@ const YourApp = () => {
 						setFailedModalType(EDonationFailedType.NOT_SAVED);
 					}}
 				>
-					FUck This Approval stuffs
+					Test Button
 				</button>
 			</div>
 			{failedModalType && (
