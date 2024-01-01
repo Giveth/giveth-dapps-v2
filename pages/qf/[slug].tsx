@@ -27,7 +27,6 @@ const QFProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		mainCategories,
 		selectedMainCategory,
 		totalCount,
-		categories,
 		qfRounds,
 	} = props;
 
@@ -41,11 +40,7 @@ const QFProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 			qfRounds={qfRounds}
 		>
 			<GeneralMetatags info={projectsMetatags} />
-			<ProjectsIndex
-				projects={projects}
-				totalCount={totalCount}
-				categories={categories}
-			/>
+			<ProjectsIndex projects={projects} totalCount={totalCount} />
 		</ProjectsProvider>
 	);
 };
@@ -110,7 +105,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				},
 				fetchPolicy: 'network-only',
 			});
-			const { projects, totalCount, categories } = data.allProjects;
+			const { projects, totalCount } = data.allProjects;
 			const {
 				data: { qfRounds },
 			} = await apolloClient.query({
@@ -123,7 +118,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 					mainCategories: updatedMainCategory,
 					selectedMainCategory: updatedSelectedMainCategory,
 					totalCount,
-					categories,
 					qfRounds,
 				},
 			};
