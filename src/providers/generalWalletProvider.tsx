@@ -252,7 +252,6 @@ export const GeneralWalletProvider: React.FC<{
 
 	const sendNativeToken = async (to: string, value: string) => {
 		if (!isConnected) throw Error('Wallet is not connected');
-		console.log('Calling Transaction', value);
 		switch (walletChainType) {
 			case ChainType.EVM:
 				return sendEvmTransaction({
