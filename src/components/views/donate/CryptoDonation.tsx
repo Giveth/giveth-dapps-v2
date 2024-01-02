@@ -15,7 +15,6 @@ import { Chain, formatUnits, parseUnits } from 'viem';
 
 import { getContract } from 'wagmi/actions';
 import { type Address, erc20ABI } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
@@ -76,7 +75,7 @@ const CryptoDonation: FC = () => {
 	const { isEnabled, isSignedIn } = useAppSelector(state => state.user);
 
 	const isPurpleListed = usePurpleList();
-	const { open: openConnectModal } = useWeb3Modal();
+
 	const { project, hasActiveQFRound } = useDonateData();
 	const dispatch = useAppDispatch();
 
@@ -125,7 +124,6 @@ const CryptoDonation: FC = () => {
 	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
 	const activeRound = getActiveRound(project.qfRounds);
 	const networkId = (chain as Chain)?.id;
-	const isOnAcceptedChain = networkId && acceptedChains?.includes(networkId);
 
 	const isOnEligibleNetworks =
 		networkId && activeRound?.eligibleNetworks?.includes(networkId);
