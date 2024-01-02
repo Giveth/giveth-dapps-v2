@@ -1,5 +1,6 @@
 import {
 	GLink,
+	IconArrowDownCircle16,
 	IconEdit16,
 	IconEye16,
 	IconUpdate16,
@@ -15,15 +16,22 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { capitalizeAllWords } from '@/lib/helpers';
+import { isRecurringActive } from '../../donate/DonationCard';
 
 interface IProjectActions {
 	project: IProject;
 	setSelectedProject: Dispatch<SetStateAction<IProject | undefined>>;
 	setShowAddressModal: Dispatch<SetStateAction<boolean>>;
+	setShowClaimModal?: Dispatch<SetStateAction<boolean>>;
 }
 
 const ProjectActions = (props: IProjectActions) => {
-	const { project, setSelectedProject, setShowAddressModal } = props;
+	const {
+		project,
+		setSelectedProject,
+		setShowAddressModal,
+		setShowClaimModal,
+	} = props;
 	const status = project.status.name;
 	const isCancelled = status === EProjectStatus.CANCEL;
 
@@ -60,18 +68,29 @@ const ProjectActions = (props: IProjectActions) => {
 		},
 	];
 
+	const recurringDonationOption: IOption = {
+		label: 'Claim Recurring donation',
+		icon: <IconArrowDownCircle16 />,
+		cb: () => {
+			setSelectedProject(project);
+			setShowClaimModal && setShowClaimModal(true);
+		},
+	};
+
+	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true' &&
+		options.push(recurringDonationOption);
+
 	const dropdownStyle = {
 		padding: '4px 16px',
 		borderRadius: '8px',
-		background: isHover ? 'white' : '',
+		background: isHover && !isRecurringActive ? 'white' : '',
 	};
 
-	return (
+	return isRecurringActive ? (
 		<Actions
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 			isOpen={isHover}
-			size='Big'
 			isCancelled={isCancelled}
 		>
 			{isCancelled ? (
@@ -85,6 +104,25 @@ const ProjectActions = (props: IProjectActions) => {
 				/>
 			)}
 		</Actions>
+	) : (
+		<ActionsOld
+			onMouseEnter={() => setIsHover(true)}
+			onMouseLeave={() => setIsHover(false)}
+			isOpen={isHover}
+			isCancelled={isCancelled}
+			size='Big'
+		>
+			{isCancelled ? (
+				<CancelledWrapper>CANCELLED</CancelledWrapper>
+			) : (
+				<Dropdown
+					style={dropdownStyle}
+					label='Actions'
+					options={options}
+					stickToRight
+				/>
+			)}
+		</ActionsOld>
 	);
 };
 
@@ -92,7 +130,14 @@ const CancelledWrapper = styled.div`
 	padding: 4px 16px;
 `;
 
-const Actions = styled(GLink)<{ isCancelled: boolean; isOpen: boolean }>`
+const Actions = styled.div<{ isCancelled: boolean; isOpen: boolean }>`
+	cursor: ${props => (props.isCancelled ? 'default' : 'pointer')};
+	background-color: ${neutralColors.gray[200]};
+	border-radius: 8px;
+	padding: 8px 10px;
+`;
+
+const ActionsOld = styled(GLink)<{ isCancelled: boolean; isOpen: boolean }>`
 	color: ${props =>
 		props.isCancelled ? neutralColors.gray[500] : neutralColors.gray[900]};
 	cursor: ${props => (props.isCancelled ? 'default' : 'pointer')};

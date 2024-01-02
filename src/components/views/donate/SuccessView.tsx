@@ -26,12 +26,14 @@ import { useAppSelector } from '@/features/hooks';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { getActiveRound } from '@/helpers/qf';
+import { Flex } from '@/components/styled-components/Flex';
+import { DonationInfo } from './DonationInfo';
+import { isRecurringActive } from './DonationCard';
 
-const SuccessView: FC = () => {
+export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isLoading } = useAppSelector(state => state.user);
-	const { isSuccessDonation, setSuccessDonation, hasActiveQFRound, project } =
-		useDonateData();
+	const { isSuccessDonation, hasActiveQFRound, project } = useDonateData();
 	const { givBackEligible, txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 	const isSafeEnv = useIsSafeEnvironment();
@@ -79,12 +81,12 @@ const SuccessView: FC = () => {
 	useEffect(() => {
 		//Switch to donate view if user is changed
 		if (isLoading) {
-			setSuccessDonation(undefined);
+			// setSuccessDonation(undefined);
 		}
 	}, [isLoading]);
 
 	return (
-		<SuccessContainer>
+		<Wrapper>
 			<ConfettiContainer>
 				<LottieControl size={400} animationData={CongratsAnimation} />
 			</ConfettiContainer>
@@ -101,7 +103,7 @@ const SuccessView: FC = () => {
 					</H6>
 					<P>
 						{formatMessage({
-							id: 'label.givback_distributed_afer_round',
+							id: 'label.givback_distributed_after_round',
 						})}
 					</P>
 					<ExternalLink href={links.GIVBACK_DOC}>
@@ -119,9 +121,16 @@ const SuccessView: FC = () => {
 					contentType={EContentType.justDonated}
 				/>
 			</SocialBoxWrapper>
-		</SuccessContainer>
+			{isRecurringActive && <DonationInfo />}
+		</Wrapper>
 	);
 };
+
+const Wrapper = styled(Flex)`
+	flex-direction: column;
+	gap: 24px;
+	align-items: center;
+`;
 
 const SocialBoxWrapper = styled.div`
 	margin: -50px 0;
@@ -136,20 +145,8 @@ const GiverH4 = styled(H4)`
 	color: ${brandColors.deep[700]};
 `;
 
-const SuccessContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-	align-items: center;
-	text-align: center;
-	color: ${brandColors.deep[900]};
-	height: 100%;
-	padding: 0;
-`;
-
 const SuccessMessage = styled(P)`
 	position: relative;
-	margin: 16px 0 30px;
 	color: ${brandColors.deep[900]};
 	a {
 		color: ${brandColors.pinky[500]};
@@ -165,6 +162,7 @@ const LearnButton = styled(OutlineButton)`
 
 const GivBackContainer = styled.div`
 	width: 100%;
+	max-width: 560px;
 	padding: 32px 53px;
 	text-align: center;
 	background-image: url('/images/GIVeconomy_Banner.png');
@@ -177,5 +175,3 @@ const GivBackContainer = styled.div`
 		margin: 0 0 8px 0;
 	}
 `;
-
-export default SuccessView;

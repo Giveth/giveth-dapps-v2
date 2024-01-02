@@ -9,7 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
-import { Address, useNetwork, useSwitchNetwork } from 'wagmi';
+import { type Address, useNetwork, useSwitchNetwork } from 'wagmi';
 import { getContract } from 'wagmi/actions';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';

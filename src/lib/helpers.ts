@@ -11,7 +11,7 @@ import {
 
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { erc20ABI } from 'wagmi';
+import { type Address, erc20ABI } from 'wagmi';
 import { Chain, parseEther, parseUnits } from 'viem';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
@@ -24,7 +24,7 @@ import { ChainType } from '@/types/config';
 
 declare let window: any;
 interface TransactionParams {
-	to: `0x${string}`;
+	to: Address;
 	value: string;
 }
 
@@ -282,10 +282,10 @@ export const shortenAddress = (
 // Sends a transaction, either as an ERC20 token transfer or a regular ETH transfer.
 export async function sendEvmTransaction(
 	params: TransactionParams,
-	contractAddress?: `0x${string}`,
+	contractAddress?: Address,
 ) {
 	try {
-		let hash: `0x${string}`;
+		let hash: Address;
 
 		if (contractAddress && contractAddress !== AddressZero) {
 			hash = await handleErc20Transfer(params, contractAddress);
@@ -310,8 +310,8 @@ export async function sendEvmTransaction(
 // Handles the transfer for ERC20 tokens, returning the transaction hash.
 async function handleErc20Transfer(
 	params: TransactionParams,
-	contractAddress: `0x${string}`,
-): Promise<`0x${string}`> {
+	contractAddress: Address,
+): Promise<Address> {
 	console.log('contractAddress', contractAddress);
 	const contract = getContract({
 		address: contractAddress,
@@ -333,9 +333,7 @@ async function handleErc20Transfer(
 }
 
 // Handles the transfer for ETH, returning the transaction hash.
-async function handleEthTransfer(
-	params: TransactionParams,
-): Promise<`0x${string}`> {
+async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 	const value = parseEther(params.value);
 
 	const { hash } = await wagmiSendTransaction({

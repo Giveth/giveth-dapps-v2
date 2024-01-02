@@ -7,15 +7,20 @@ import {
 } from './price.queries';
 
 export const fetchEthPrice = async (): Promise<number> => {
-	const res = await getRequest(
-		'https://api.coingecko.com/api/v3/simple/price',
-		undefined,
-		{
-			ids: 'ethereum',
-			vs_currencies: 'usd',
-		},
-	);
-	return res?.ethereum?.usd;
+	try {
+		const res = await getRequest(
+			'https://api.coingecko.com/api/v3/simple/price',
+			undefined,
+			{
+				ids: 'ethereum',
+				vs_currencies: 'usd',
+			},
+		);
+		return res?.ethereum?.usd;
+	} catch (error) {
+		console.log(error);
+		return 0;
+	}
 };
 
 export const fetchMainnetTokenPrice = async (

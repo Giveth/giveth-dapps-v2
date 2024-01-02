@@ -7,6 +7,7 @@ import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider as ReduxProvider } from 'react-redux';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { EIP6963Connector, createWeb3Modal } from '@web3modal/wagmi/react';
@@ -195,7 +196,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 		};
 		asyncFunc();
 	}, []);
-
 	return (
 		<>
 			<Head>
@@ -274,6 +274,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 			</ReduxProvider>
 
 			<Toaster containerStyle={{ top: '80px' }} />
+			<SpeedInsights />
 		</>
 	);
 }

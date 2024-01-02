@@ -14,14 +14,14 @@ import { captureException } from '@sentry/nextjs';
 import { Chain, formatUnits, parseUnits } from 'viem';
 
 import { getContract } from 'wagmi/actions';
-import { erc20ABI } from 'wagmi';
+import { type Address, erc20ABI } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
-import DonateModal from '@/components/modals/DonateModal';
+import DonateModal from '@/components/views/donate/DonateModal';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import GeminiModal from './GeminiModal';
@@ -55,6 +55,7 @@ import { getActiveRound } from '@/helpers/qf';
 import QFModal from '@/components/views/donate/QFModal';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
+import { isRecurringActive } from './DonationCard';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -248,7 +249,7 @@ const CryptoDonation: FC = () => {
 				request: async () => {
 					try {
 						const contract = getContract({
-							address: selectedToken.address! as `0x${string}`,
+							address: selectedToken.address! as Address,
 							abi: erc20ABI,
 						});
 
@@ -276,7 +277,7 @@ const CryptoDonation: FC = () => {
 		)();
 	}, [address, networkId, tokenSymbol, balance, walletChainType]);
 
-	const handleCustomToken = (i: `0x${string}`) => {
+	const handleCustomToken = (i: Address) => {
 		if (!supportCustomTokens) return;
 		// It's a contract
 		if (i?.length === 42) {
@@ -359,9 +360,11 @@ const CryptoDonation: FC = () => {
 
 	return (
 		<MainContainer>
-			<H4Styled weight={700}>
-				{formatMessage({ id: 'page.donate.title' })}
-			</H4Styled>
+			{!isRecurringActive && (
+				<H4Styled weight={700}>
+					{formatMessage({ id: 'page.donate.title' })}
+				</H4Styled>
+			)}
 			{showQFModal && (
 				<QFModal
 					donateWithoutMatching={donateWithoutMatching}
@@ -469,6 +472,9 @@ const CryptoDonation: FC = () => {
 						setDonationToGiveth(e);
 					}}
 					donationToGiveth={donationToGiveth}
+					title={
+						formatMessage({ id: 'label.donation_to' }) + ' Giveth'
+					}
 				/>
 			) : (
 				<br />
@@ -545,6 +551,7 @@ const MainContainer = styled.div`
 	flex-direction: column;
 	height: 60%;
 	justify-content: space-between;
+	text-align: left;
 `;
 
 const InputContainer = styled.div`

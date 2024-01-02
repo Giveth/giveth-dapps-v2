@@ -5,6 +5,7 @@ import {
 	Caption,
 	IconChevronRight,
 	IconDeactivated24,
+	IconDiscord18,
 	IconGIVBack,
 	IconPublish24,
 	IconRocketInSpace16,
@@ -80,9 +81,8 @@ const ProjectGIVbackToast = () => {
 	let icon = <IconGIVBack color={color} size={24} />;
 	let link = links.GIVBACK_DOC;
 
-	let title,
-		description = '';
-	let Button;
+	let title = '';
+	let description, Button;
 
 	if (isOwnerVerified) {
 		if (givbackFactor !== 0) {
@@ -125,16 +125,25 @@ const ProjectGIVbackToast = () => {
 			title = formatMessage({
 				id: `${useIntlTitle}non_verified_owner_rejected`,
 			});
-			description = formatMessage({
-				id: `${useIntlDescription}non_verified_owner_rejected`,
-			});
+			description = (
+				<>
+					{formatMessage({
+						id: `${useIntlDescription}non_verified_owner_rejected_1`,
+					})}
+					<span> info@giveth.io </span>
+					{formatMessage({
+						id: `${useIntlDescription}non_verified_owner_rejected_2`,
+					})}
+				</>
+			);
 			link = links.VERIFICATION_DOCS;
 			Button = (
-				<OutlineButton
-					onClick={() => setShowVerification(true)}
-					label='Verify project'
-					icon={<IconVerifiedBadge16 />}
-				/>
+				<ExternalLink href={links.DISCORD}>
+					<OutlineButton
+						label='Join Discord'
+						icon={<IconDiscord18 />}
+					/>
+				</ExternalLink>
 			);
 		} else if (verStatus === EVerificationStatus.DRAFT) {
 			title = formatMessage({
@@ -303,6 +312,9 @@ const LearnMore = styled(Caption)`
 const Description = styled(P)`
 	margin: 4px 0;
 	color: ${neutralColors.gray[900]};
+	> span {
+		color: ${brandColors.pinky[500]};
+	}
 `;
 
 const Title = styled(B)<{ color: string }>`
