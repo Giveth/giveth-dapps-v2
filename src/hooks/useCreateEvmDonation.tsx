@@ -15,7 +15,6 @@ import { useIsSafeEnvironment } from './useSafeAutoConnect';
 
 export const useCreateEvmDonation = () => {
 	const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
-
 	const [donationSaved, setDonationSaved] = useState<boolean>(false);
 	const [donationMinted, setDonationMinted] = useState<boolean>(false);
 	const [donationId, setDonationId] = useState<number>(0);

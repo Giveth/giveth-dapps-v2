@@ -25,7 +25,6 @@ export const useCreateSolanaDonation = () => {
 
 	const fetchTransaction = async ({ hash }: { hash: string }) => {
 		const transaction = await solanaConnection.getTransaction(hash);
-		console.log('Transasction', transaction);
 		const from: string =
 			transaction?.transaction.message.accountKeys[0].toBase58()!;
 		if (!from) {
