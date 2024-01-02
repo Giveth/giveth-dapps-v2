@@ -56,7 +56,7 @@ export const thousandsSeparator = (x?: string | number): string | undefined => {
 	return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
-export const formatTxLink = (networkId?: number, txHash?: string) => {
+export const formatEvmTxLink = (networkId?: number, txHash?: string) => {
 	if (!networkId || !txHash || !config.EVM_NETWORKS_CONFIG[networkId])
 		return '';
 	return `${config.EVM_NETWORKS_CONFIG[networkId].blockExplorers?.default.url}/tx/${txHash}`;
