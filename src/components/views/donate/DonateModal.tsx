@@ -225,95 +225,93 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	if (!projectWalletAddress && walletChainType) {
 		// console.log('projectWalletAddress:', projectWalletAddress);
 		showToastError('There is no address assigned for this project');
-		if (!projectWalletAddress) {
-			showToastError('There is no eth address assigned for this project');
-			return null;
-		}
+		return null;
+	}
 
-		return (
-			<>
-				<Modal
-					closeModal={closeModal}
-					isAnimating={isAnimating}
-					headerTitlePosition='left'
-					headerIcon={<IconDonation size={32} />}
-					doNotCloseOnClickOutside
-					headerTitle={
-						firstDonationSaved
-							? formatMessage({ id: 'label.donation_submitted' })
-							: formatMessage({ id: 'label.donating' })
-					}
-				>
-					<DonateContainer>
-						<DonatingBox>
-							<Lead>
-								{firstDonationMinted
-									? formatMessage({
-											id: 'label.donation_submitted',
+	return (
+		<>
+			<Modal
+				closeModal={closeModal}
+				isAnimating={isAnimating}
+				headerTitlePosition='left'
+				headerIcon={<IconDonation size={32} />}
+				doNotCloseOnClickOutside
+				headerTitle={
+					firstDonationSaved
+						? formatMessage({ id: 'label.donation_submitted' })
+						: formatMessage({ id: 'label.donating' })
+				}
+			>
+				<DonateContainer>
+					<DonatingBox>
+						<Lead>
+							{firstDonationMinted
+								? formatMessage({
+										id: 'label.donation_submitted',
+									})
+								: formatMessage({
+										id: 'label.you_are_donating',
+									})}
+						</Lead>
+						<DonateSummary
+							value={amount}
+							tokenSymbol={token.symbol}
+							usdValue={avgPrice}
+							title={title}
+						/>
+						{firstDonationMinted && (
+							<TxStatus>
+								<InlineToast
+									type={EToastType.Success}
+									message={
+										formatMessage({
+											id: 'label.donation_to_the',
+										}) +
+										' ' +
+										title +
+										' ' +
+										formatMessage({
+											id: 'label.successful',
 										})
-									: formatMessage({
-											id: 'label.you_are_donating',
+									}
+								/>
+								{firstTxHash && (
+									<ExternalLink
+										href={handleTxLink(firstTxHash)}
+										title={formatMessage({
+											id: 'label.view_on_block_explorer',
 										})}
-							</Lead>
-							<DonateSummary
-								value={amount}
-								tokenSymbol={token.symbol}
-								usdValue={avgPrice}
-								title={title}
-							/>
-							{firstDonationMinted && (
-								<TxStatus>
-									<InlineToast
-										type={EToastType.Success}
-										message={
-											formatMessage({
-												id: 'label.donation_to_the',
-											}) +
-											' ' +
-											title +
-											' ' +
-											formatMessage({
-												id: 'label.successful',
+										color={brandColors.pinky[500]}
+									/>
+								)}
+							</TxStatus>
+						)}
+						{isDonatingToGiveth && (
+							<>
+								<Lead>
+									{secondDonationSaved
+										? formatMessage({
+												id: 'label.donation_submitted',
 											})
-										}
-									/>
-									{firstTxHash && (
-										<ExternalLink
-											href={handleTxLink(firstTxHash)}
-											title={formatMessage({
-												id: 'label.view_on_block_explorer',
-											})}
-											color={brandColors.pinky[500]}
-										/>
-									)}
-								</TxStatus>
-							)}
-							{isDonatingToGiveth && (
-								<>
-									<Lead>
-										{secondDonationSaved
+										: firstDonationSaved
 											? formatMessage({
-													id: 'label.donation_submitted',
+													id: 'label.you_are_donating',
 												})
-											: firstDonationSaved
-												? formatMessage({
-														id: 'label.you_are_donating',
-													})
-												: formatMessage({
-														id: 'label.and',
-													})}
-									</Lead>
-									<DonateSummary
-										value={donationToGivethAmount}
-										tokenSymbol={token.symbol}
-										usdValue={donationToGivethPrice}
-										title='The Giveth DAO'
-									/>
-									{secondTxStatus && (
-										<TxStatus>
-											<InlineToast
-												type={secondTxStatus}
-												message={`
+											: formatMessage({
+													id: 'label.and',
+												})}
+								</Lead>
+								<DonateSummary
+									value={donationToGivethAmount}
+									tokenSymbol={token.symbol}
+									usdValue={donationToGivethPrice}
+									title='The Giveth DAO'
+								/>
+								{secondTxStatus && (
+									<TxStatus>
+										<InlineToast
+											type={secondTxStatus}
+											message={`
 												${formatMessage({
 													id: 'label.donation_to_the',
 												})} Giveth DAO
@@ -328,61 +326,58 @@ const DonateModal: FC<IDonateModalProps> = props => {
 																})
 													}
 											`}
+										/>
+										{secondTxHash && (
+											<ExternalLink
+												href={handleTxLink(
+													secondTxHash,
+												)}
+												title={formatMessage({
+													id: 'label.view_on_block_explorer',
+												})}
+												color={brandColors.pinky[500]}
 											/>
-											{secondTxHash && (
-												<ExternalLink
-													href={handleTxLink(
-														secondTxHash,
-													)}
-													title={formatMessage({
-														id: 'label.view_on_block_explorer',
-													})}
-													color={
-														brandColors.pinky[500]
-													}
-												/>
-											)}
-										</TxStatus>
-									)}
-								</>
-							)}
-						</DonatingBox>
-						<Buttons>
-							{firstDonationSaved && !processFinished && (
-								<InlineToast
-									type={EToastType.Info}
-									message={formatMessage({
-										id: 'label.your_donation_is_being_processed',
-									})}
-								/>
-							)}
-							<DonateButton
-								loading={donating}
-								buttonType='primary'
-								disabled={donating || processFinished}
-								label={
-									donating
-										? formatMessage({
-												id: 'label.donating',
-											})
-										: formatMessage({ id: 'label.donate' })
-								}
-								onClick={validateTokenThenDonate}
+										)}
+									</TxStatus>
+								)}
+							</>
+						)}
+					</DonatingBox>
+					<Buttons>
+						{firstDonationSaved && !processFinished && (
+							<InlineToast
+								type={EToastType.Info}
+								message={formatMessage({
+									id: 'label.your_donation_is_being_processed',
+								})}
 							/>
-						</Buttons>
-					</DonateContainer>
-				</Modal>
-				{failedModalType && (
-					<FailedDonation
-						// txUrl={formatTxLink(chainId, firstTxHash || secondTxHash)}
-						txUrl={handleTxLink(firstTxHash || secondTxHash)}
-						setShowModal={() => setFailedModalType(undefined)}
-						type={failedModalType}
-					/>
-				)}
-			</>
-		);
-	}
+						)}
+						<DonateButton
+							loading={donating}
+							buttonType='primary'
+							disabled={donating || processFinished}
+							label={
+								donating
+									? formatMessage({
+											id: 'label.donating',
+										})
+									: formatMessage({ id: 'label.donate' })
+							}
+							onClick={validateTokenThenDonate}
+						/>
+					</Buttons>
+				</DonateContainer>
+			</Modal>
+			{failedModalType && (
+				<FailedDonation
+					// txUrl={formatTxLink(chainId, firstTxHash || secondTxHash)}
+					txUrl={handleTxLink(firstTxHash || secondTxHash)}
+					setShowModal={() => setFailedModalType(undefined)}
+					type={failedModalType}
+				/>
+			)}
+		</>
+	);
 };
 
 const findMatchingWalletAddress = (
