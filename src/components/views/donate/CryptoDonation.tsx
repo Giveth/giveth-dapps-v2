@@ -323,7 +323,6 @@ const CryptoDonation: FC = () => {
 			!isOnEligibleNetworks &&
 			selectedToken?.chainType === ChainType.EVM
 		) {
-			console.log('Here is 1');
 			setShowQFModal(true);
 		} else if (!isSignedIn) {
 			console.log('Here is 2');
