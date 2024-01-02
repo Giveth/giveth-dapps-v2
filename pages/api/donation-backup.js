@@ -1,7 +1,7 @@
 import { captureException } from '@sentry/nextjs';
 
 const handler = (req, res) => {
-	const { body, method } = req;
+	const { body, method, headers } = req;
 	try {
 		if (method === 'POST') {
 			fetch(process.env.MONGO_DONATION_URL, {
@@ -22,7 +22,11 @@ const handler = (req, res) => {
 				.then(data => console.log(data))
 				.catch(error =>
 					captureException(
-						{ data: body, error },
+						{
+							data: body,
+							authorization: headers.authorization,
+							error,
+						},
 						{
 							tags: {
 								section: 'onDonationBackup',
