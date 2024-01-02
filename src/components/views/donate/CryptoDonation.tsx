@@ -14,13 +14,7 @@ import { captureException } from '@sentry/nextjs';
 import { Chain, formatUnits, parseUnits } from 'viem';
 
 import { getContract } from 'wagmi/actions';
-import {
-	type Address,
-	erc20ABI,
-	useAccount,
-	useBalance,
-	useNetwork,
-} from 'wagmi';
+import { type Address, erc20ABI } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { Shadow } from '@/components/styled-components/Shadow';

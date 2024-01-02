@@ -31,13 +31,12 @@ import DonateSummary from '@/components/views/donate/DonateSummary';
 import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useDonateData } from '@/context/donate.context';
-import { fetchETCPrice, fetchPrice } from '@/services/token';
-import { fetchEthPrice } from '@/features/price/price.services';
 import { useCreateEvmDonation } from '@/hooks/useCreateEvmDonation';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 import { IWalletAddress } from '@/apollo/types/types';
 import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
+import { useTokenPrice } from '@/hooks/useTokenPrice';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
