@@ -325,10 +325,8 @@ const CryptoDonation: FC = () => {
 		) {
 			setShowQFModal(true);
 		} else if (!isSignedIn) {
-			console.log('Here is 2');
 			signInThenDonate();
 		} else {
-			console.log('Here is 3');
 			setShowDonateModal(true);
 		}
 	};

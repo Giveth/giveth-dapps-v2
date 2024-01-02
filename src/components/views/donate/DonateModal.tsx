@@ -220,7 +220,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	};
 
 	if (!projectWalletAddress && walletChainType) {
-		// console.log('projectWalletAddress:', projectWalletAddress);
 		showToastError('There is no address assigned for this project');
 		return null;
 	}

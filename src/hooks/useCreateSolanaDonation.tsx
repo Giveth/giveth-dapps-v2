@@ -12,7 +12,6 @@ import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export const useCreateSolanaDonation = () => {
-	console.log('Solana Create donation');
 	const [txHash, setTxHash] = useState<string | undefined>();
 	const [donationSaved, setDonationSaved] = useState<boolean>(false);
 	const [donationMinted, setDonationMinted] = useState<boolean>(false);
