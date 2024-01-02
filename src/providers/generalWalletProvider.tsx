@@ -25,7 +25,7 @@ import {
 } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { encodeBase58 } from 'ethers';
+import ethers from 'ethers';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
@@ -130,7 +130,7 @@ export const GeneralWalletProvider: React.FC<{
 		if (!signature) {
 			return undefined;
 		}
-		return encodeBase58(signature);
+		return ethers.utils.base58.encode(signature);
 	};
 
 	const getSolanaWalletBalance = async (
