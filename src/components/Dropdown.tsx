@@ -37,7 +37,7 @@ export interface IOption {
 	label: string;
 	icon?: ReactNode;
 	cb?: any;
-	disabled?: boolean;
+	isHidden?: boolean;
 }
 
 export const Dropdown: FC<IDropdownProps> = props => {
@@ -93,7 +93,7 @@ export const Dropdown: FC<IDropdownProps> = props => {
 				createPortal(
 					<OptionsWrapper style={dropdownStyle} ref={dropdownRef}>
 						{options.map(option =>
-							option.disabled ? null : (
+							option.isHidden ? null : (
 								<Option
 									key={option.label}
 									option={option}

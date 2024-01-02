@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { fetchEnsAddress, fetchTransaction } from '@wagmi/core';
-import { useNetwork, useWaitForTransaction } from 'wagmi';
+import { type Address, useNetwork, useWaitForTransaction } from 'wagmi';
 
 import { sendEvmTransaction } from '@/lib/helpers';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
@@ -56,7 +56,7 @@ export const useCreateEvmDonation = () => {
 	});
 
 	const handleSaveDonation = async (
-		txHash: `0x${string}`,
+		txHash: Address,
 		props: ICreateDonation,
 	) => {
 		let transaction, safeTransaction;
@@ -114,7 +114,7 @@ export const useCreateEvmDonation = () => {
 				};
 			} else return;
 
-			console.log({ donationData });
+			console.log('donationData', { donationData });
 			setCreateDonationProps(donationData);
 
 			try {
@@ -161,7 +161,7 @@ export const useCreateEvmDonation = () => {
 			: walletAddress;
 
 		const transactionObj = {
-			to: toAddress! as `0x${string}`,
+			to: toAddress! as Address,
 			value: amount.toString(),
 		};
 

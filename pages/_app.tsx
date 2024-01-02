@@ -7,6 +7,7 @@ import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider as ReduxProvider } from 'react-redux';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { EIP6963Connector, createWeb3Modal } from '@web3modal/wagmi/react';
@@ -195,7 +196,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 		};
 		asyncFunc();
 	}, []);
-
 	return (
 		<>
 			<Head>
@@ -250,7 +250,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 													}}
 												/>
 											)}
-											{process.env.NEXT_PUBLIC_ENV !==
+											{/* {process.env.NEXT_PUBLIC_ENV !==
 												'production' && (
 												<Script
 													id='console-script'
@@ -259,7 +259,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 														__html: `javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();`,
 													}}
 												/>
-											)}
+											)} */}
 
 											<FooterWrapper />
 											<ModalController />
@@ -274,6 +274,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 			</ReduxProvider>
 
 			<Toaster containerStyle={{ top: '80px' }} />
+			<SpeedInsights />
 		</>
 	);
 }
