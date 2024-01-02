@@ -25,7 +25,7 @@ import {
 } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import ethers from 'ethers';
+import { ethers } from 'ethers';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useRouter } from 'next/router';
 import { getChainName } from '@/lib/network';
