@@ -15,8 +15,8 @@ import { Chain, formatUnits, parseUnits } from 'viem';
 
 import { getContract } from 'wagmi/actions';
 import { type Address, erc20ABI } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
@@ -40,7 +40,7 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import usePurpleList from '@/hooks/usePurpleList';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
 import TotalDonation from '@/components/views/donate/TotalDonation';
@@ -75,8 +75,9 @@ const CryptoDonation: FC = () => {
 	const { isEnabled, isSignedIn } = useAppSelector(state => state.user);
 
 	const isPurpleListed = usePurpleList();
-	const { open: openConnectModal } = useWeb3Modal();
+
 	const { project, hasActiveQFRound } = useDonateData();
+	const dispatch = useAppDispatch();
 
 	const {
 		organization,
@@ -317,7 +318,11 @@ const CryptoDonation: FC = () => {
 		) {
 			return setShowInsufficientModal(true);
 		}
-		if (hasActiveQFRound && !isOnEligibleNetworks) {
+		if (
+			hasActiveQFRound &&
+			!isOnEligibleNetworks &&
+			selectedToken?.chainType === ChainType.EVM
+		) {
 			setShowQFModal(true);
 		} else if (!isSignedIn) {
 			signInThenDonate();
@@ -508,7 +513,7 @@ const CryptoDonation: FC = () => {
 					label={formatMessage({
 						id: 'component.button.connect_wallet',
 					})}
-					onClick={() => openConnectModal()}
+					onClick={() => dispatch(setShowWelcomeModal(true))}
 				/>
 			)}
 			<CheckBoxContainer>

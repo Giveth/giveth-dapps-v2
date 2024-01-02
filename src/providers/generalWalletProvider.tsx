@@ -25,9 +25,10 @@ import {
 } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { ethers } from 'ethers';
+import ethers from 'ethers';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useRouter } from 'next/router';
+import BigNumber from 'bignumber.js';
 import { getChainName } from '@/lib/network';
 import config from '@/configuration';
 import { useAppDispatch } from '@/features/hooks';
@@ -259,11 +260,15 @@ export const GeneralWalletProvider: React.FC<{
 				});
 				return;
 			case ChainType.SOLANA: {
+				const lamports = new BigNumber(value)
+					.times(LAMPORTS_PER_SOL)
+					.toFixed();
+
 				const transaction = new Transaction().add(
 					SystemProgram.transfer({
 						fromPubkey: publicKey!,
 						toPubkey: new PublicKey(to),
-						lamports: BigInt(value),
+						lamports: BigInt(lamports),
 					}),
 				);
 				return await solanaSendTransaction(

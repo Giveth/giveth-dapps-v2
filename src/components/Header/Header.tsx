@@ -53,8 +53,8 @@ import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import { CommunityMenu } from '../menu/CommunityMenu';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import config from '@/configuration';
-import { useShowHiderByScroll } from '@/hooks/useShowHiderByScroll';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { useShowHiderByScroll } from '@/hooks/useShowHiderByScroll';
 
 export interface IHeader {
 	theme?: ETheme;

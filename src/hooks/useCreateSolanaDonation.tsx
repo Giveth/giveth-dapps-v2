@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 
 import { useConnection } from '@solana/wallet-adapter-react';
-import { Connection, SystemProgram, clusterApiUrl } from '@solana/web3.js';
+import { SystemProgram } from '@solana/web3.js';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
@@ -10,7 +10,6 @@ import { ICreateDonation } from '@/components/views/donate/helpers';
 import { retryFetchTransaction } from '@/lib/transaction';
 import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import config from '@/configuration';
 
 export const useCreateSolanaDonation = () => {
 	const [txHash, setTxHash] = useState<string | undefined>();
@@ -24,11 +23,7 @@ export const useCreateSolanaDonation = () => {
 	const { connection: solanaConnection } = useConnection();
 
 	const fetchTransaction = async ({ hash }: { hash: string }) => {
-		const connection = new Connection(
-			clusterApiUrl(config.SOLANA_CONFIG.adapterNetwork),
-			'confirmed',
-		);
-		const transaction = await connection.getTransaction(hash);
+		const transaction = await solanaConnection.getTransaction(hash);
 		const from: string =
 			transaction?.transaction.message.accountKeys[0].toBase58()!;
 		if (!from) {

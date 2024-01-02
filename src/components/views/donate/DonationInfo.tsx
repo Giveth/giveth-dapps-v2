@@ -12,7 +12,7 @@ import { useIntl } from 'react-intl';
 import { useNetwork } from 'wagmi';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import { formatTxLink } from '@/lib/helpers';
+import { formatEvmTxLink } from '@/lib/helpers';
 import { useDonateData } from '@/context/donate.context';
 import ExternalLink from '@/components/ExternalLink';
 
@@ -23,7 +23,7 @@ const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
 		<TxLink>
 			<span>Donation to {title + ' '}</span>
 			<ExternalLink
-				href={formatTxLink(chainId, txHash)}
+				href={formatEvmTxLink(chainId, txHash)}
 				title='View the transaction'
 			/>
 			<IconExternalLink24 />

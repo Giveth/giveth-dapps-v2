@@ -11,7 +11,11 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation, IQFRound } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
-import { smallFormatDate, formatTxLink, compareAddresses } from '@/lib/helpers';
+import {
+	smallFormatDate,
+	compareAddresses,
+	formatEvmTxLink,
+} from '@/lib/helpers';
 import {
 	EDirection,
 	EDonationStatus,
@@ -213,7 +217,7 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 								<Currency>{donation.currency}</Currency>
 								{!donation.anonymous && (
 									<ExternalLink
-										href={formatTxLink(
+										href={formatEvmTxLink(
 											donation.transactionNetworkId,
 											donation.transactionId,
 										)}

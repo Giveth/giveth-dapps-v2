@@ -12,7 +12,12 @@ import { useIntl } from 'react-intl';
 import { Chain } from 'wagmi';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
-import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
+import {
+	compareAddresses,
+	formatEvmTxLink,
+	formatSolanaTxLink,
+	showToastError,
+} from '@/lib/helpers';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
@@ -159,7 +164,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			setFailedModalType,
 		};
 		if (!projectWalletAddress || !givethWalletAddress) return;
-
 		createFirstDonation({
 			...txProps,
 			walletAddress: projectWalletAddress,
@@ -207,8 +211,15 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			.catch(console.log);
 	};
 
+	const handleTxLink = (txHash?: string) => {
+		if (token.chainType === 'SOLANA') {
+			return formatSolanaTxLink(txHash);
+		} else {
+			return formatEvmTxLink(chainId, firstTxHash);
+		}
+	};
+
 	if (!projectWalletAddress && walletChainType) {
-		// console.log('projectWalletAddress:', projectWalletAddress);
 		showToastError('There is no address assigned for this project');
 		return null;
 	}
@@ -262,10 +273,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 								/>
 								{firstTxHash && (
 									<ExternalLink
-										href={formatTxLink(
-											chainId,
-											firstTxHash,
-										)}
+										href={handleTxLink(firstTxHash)}
 										title={formatMessage({
 											id: 'label.view_on_block_explorer',
 										})}
@@ -317,8 +325,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 										/>
 										{secondTxHash && (
 											<ExternalLink
-												href={formatTxLink(
-													chainId,
+												href={handleTxLink(
 													secondTxHash,
 												)}
 												title={formatMessage({
@@ -347,7 +354,9 @@ const DonateModal: FC<IDonateModalProps> = props => {
 							disabled={donating || processFinished}
 							label={
 								donating
-									? formatMessage({ id: 'label.donating' })
+									? formatMessage({
+											id: 'label.donating',
+										})
 									: formatMessage({ id: 'label.donate' })
 							}
 							onClick={validateTokenThenDonate}
@@ -357,7 +366,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			</Modal>
 			{failedModalType && (
 				<FailedDonation
-					txUrl={formatTxLink(chainId, firstTxHash || secondTxHash)}
+					// txUrl={formatTxLink(chainId, firstTxHash || secondTxHash)}
+					txUrl={handleTxLink(firstTxHash || secondTxHash)}
 					setShowModal={() => setFailedModalType(undefined)}
 					type={failedModalType}
 				/>
