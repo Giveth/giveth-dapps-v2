@@ -1,3 +1,5 @@
+import { captureException } from '@sentry/nextjs';
+
 const handler = (req, res) => {
 	const { body, method } = req;
 	try {
@@ -18,8 +20,16 @@ const handler = (req, res) => {
 			})
 				.then(response => response.json())
 				.then(data => console.log(data))
-				.catch(error => console.error('Error:', error));
-
+				.catch(error =>
+					captureException(
+						{ data: body, error },
+						{
+							tags: {
+								section: 'onDonationBackup',
+							},
+						},
+					),
+				);
 			console.log('body', body);
 		}
 	} catch (error) {
