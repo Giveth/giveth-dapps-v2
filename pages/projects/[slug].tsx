@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next/types';
+import { GetStaticProps } from 'next/types';
 import { IMainCategory, IProject, IQFRound } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
@@ -60,12 +60,34 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export async function getStaticPaths() {
+	const apolloClient = initializeApollo();
+	const {
+		data: { mainCategories },
+	}: {
+		data: { mainCategories: IMainCategory[] };
+	} = await apolloClient.query({
+		query: FETCH_MAIN_CATEGORIES,
+	});
+	const paths = mainCategories.map(c => {
+		return {
+			params: {
+				slug: c.slug,
+			},
+		};
+	});
+	return {
+		paths,
+		fallback: 'blocking', //false or "blocking" // See the "fallback" section below
+	};
+}
+
+export const getStaticProps: GetStaticProps = async context => {
 	const apolloClient = initializeApollo();
 	const { variables, notifyOnNetworkStatusChange } = OPTIONS_HOME_PROJECTS;
 	try {
-		const { query } = context;
-		const slug = query.slug;
+		const { params } = context;
+		const slug = params?.slug;
 
 		const {
 			data: { mainCategories },
@@ -81,8 +103,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			return mainCategory.slug === slug;
 		});
 
-		console.log('selectedMainCategory', selectedMainCategory);
-
 		if (selectedMainCategory) {
 			const updatedSelectedMainCategory = {
 				...selectedMainCategory,
@@ -93,15 +113,15 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				query: FETCH_ALL_PROJECTS,
 				variables: {
 					...variables,
-					sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
-					searchTerm: query.searchTerm,
-					filters: query.filter
-						? Array.isArray(query.filter)
-							? query.filter
-							: [query.filter]
+					sortingBy: params?.sort || EProjectsSortBy.INSTANT_BOOSTING,
+					searchTerm: params?.searchTerm,
+					filters: params?.filter
+						? Array.isArray(params?.filter)
+							? params?.filter
+							: [params?.filter]
 						: null,
-					campaignSlug: query.campaignSlug,
-					category: query.category,
+					campaignSlug: params?.campaignSlug,
+					category: params?.category,
 					mainCategory: getMainCategorySlug(
 						updatedSelectedMainCategory,
 					),
@@ -124,6 +144,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 					totalCount,
 					qfRounds,
 				},
+				revalidate: 600,
 			};
 		}
 		return {
