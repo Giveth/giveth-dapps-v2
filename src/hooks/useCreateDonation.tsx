@@ -12,6 +12,7 @@ import { ICreateDonation } from '@/components/views/donate/helpers';
 import { getTxFromSafeTxId } from '@/lib/safe';
 import { waitForTransaction } from '@/lib/transaction';
 import { useIsSafeEnvironment } from './useSafeAutoConnect';
+import { postRequest } from '@/helpers/requests';
 
 const MAX_RETRIES = 10;
 const RETRY_DELAY = 5000; // 5 seconds
@@ -153,6 +154,18 @@ export const useCreateDonation = () => {
 				setDonationSaved(true);
 				return id;
 			} catch (e) {
+				postRequest('/api/donation-backup', true, {
+					chainId: transaction?.chainId!,
+					txHash: transaction?.hash,
+					amount: amount,
+					token,
+					projectId,
+					anonymous,
+					nonce: transaction?.nonce,
+					chainvineReferred,
+					walletAddress: transaction?.from,
+					symbol: token.symbol,
+				});
 				setFailedModalType(EDonationFailedType.NOT_SAVED);
 			}
 		} catch (error) {
