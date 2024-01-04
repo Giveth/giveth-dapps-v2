@@ -10,6 +10,7 @@ import { ICreateDonation } from '@/components/views/donate/helpers';
 import { retryFetchTransaction } from '@/lib/transaction';
 import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { postRequest } from '@/helpers/requests';
 
 export const useCreateSolanaDonation = () => {
 	const [txHash, setTxHash] = useState<string | undefined>();
@@ -86,6 +87,18 @@ export const useCreateSolanaDonation = () => {
 				setDonationSaved(true);
 				return id;
 			} catch (e) {
+				postRequest('/api/donation-backup', true, {
+					chainId: transaction?.chainId!,
+					txHash: transaction?.hash,
+					amount: amount,
+					token,
+					projectId,
+					anonymous,
+					nonce: transaction?.nonce,
+					chainvineReferred,
+					walletAddress: transaction?.from,
+					symbol: token.symbol,
+				});
 				setFailedModalType(EDonationFailedType.NOT_SAVED);
 			}
 		} catch (error) {
