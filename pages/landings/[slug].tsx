@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 		rules.notFound = true;
 	}
 
-	console.log('ajab', {
+	console.log('props', {
 		props: {},
 		...rules,
 	});
