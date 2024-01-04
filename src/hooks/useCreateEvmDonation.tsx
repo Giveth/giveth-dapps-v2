@@ -12,6 +12,7 @@ import { ICreateDonation } from '@/components/views/donate/helpers';
 import { getTxFromSafeTxId } from '@/lib/safe';
 import { retryFetchTransaction, waitForTransaction } from '@/lib/transaction';
 import { useIsSafeEnvironment } from './useSafeAutoConnect';
+import { postRequest } from '@/helpers/requests';
 
 export const useCreateEvmDonation = () => {
 	const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
@@ -123,6 +124,18 @@ export const useCreateEvmDonation = () => {
 				setDonationSaved(true);
 				return id;
 			} catch (e) {
+				postRequest('/api/donation-backup', true, {
+					chainId: transaction?.chainId!,
+					txHash: transaction?.hash,
+					amount: amount,
+					token,
+					projectId,
+					anonymous,
+					nonce: transaction?.nonce,
+					chainvineReferred,
+					walletAddress: transaction?.from,
+					symbol: token.symbol,
+				});
 				setFailedModalType(EDonationFailedType.NOT_SAVED);
 			}
 		} catch (error) {
