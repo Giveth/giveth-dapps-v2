@@ -135,10 +135,10 @@ export function TabPowerTop() {
 													hasZeroGivPower
 														? formatMessage({
 																id: 'label.stake_for_givpower',
-														  })
+															})
 														: formatMessage({
 																id: 'label.boost_projects',
-														  })
+															})
 												}
 												size='large'
 												linkType='primary'

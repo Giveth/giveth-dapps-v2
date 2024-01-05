@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
 import { CHECK_PURPLE_LIST } from '@/apollo/gql/gqlPurpleList';
 import { ICheckPurpleListGQL } from '@/apollo/types/gqlTypes';
 import { backendGQLRequest } from '@/helpers/requests';
+import { useAuthenticationWallet } from './useAuthenticationWallet';
 
 export default function usePurpleList() {
-	const { address } = useAccount();
+	const { walletAddress: address } = useAuthenticationWallet();
 
 	const [isPurpleList, setIsPurpleList] = useState(false);
 

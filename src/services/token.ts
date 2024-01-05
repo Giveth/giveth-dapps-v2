@@ -1,9 +1,14 @@
 import { captureException } from '@sentry/nextjs';
+import { type Address } from 'wagmi';
+import { getContract, getPublicClient } from 'wagmi/actions';
+import { erc20ABI } from '@wagmi/core';
 import config from '@/configuration';
+import { AddressZero } from '@/lib/constants/constants';
 
 export const fetchPrice = async (chainId: number, tokenAddress?: string) => {
 	try {
-		const chain = config.NETWORKS_CONFIG[chainId || 1].coingeckoChainName;
+		const chain =
+			config.EVM_NETWORKS_CONFIG[chainId || 1].coingeckoChainName;
 		const fetchCall = await fetch(
 			`https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`,
 		);
@@ -15,6 +20,29 @@ export const fetchPrice = async (chainId: number, tokenAddress?: string) => {
 				section: 'fetchPrice',
 			},
 		});
+	}
+};
+
+export const fetchBalance = async (
+	tokenAddress: Address,
+	userAddress: Address,
+) => {
+	try {
+		if (tokenAddress === AddressZero) {
+			const client = getPublicClient();
+			return client.getBalance({ address: userAddress });
+		} else {
+			console.log('tokenAddress', tokenAddress);
+			const contract = getContract({
+				address: tokenAddress,
+				abi: erc20ABI,
+			});
+			const balance = await contract.read.balanceOf([userAddress]);
+			return balance;
+		}
+	} catch (error) {
+		console.log('error on fetchBalance', { error });
+		return;
 	}
 };
 

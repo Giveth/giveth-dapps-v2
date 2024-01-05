@@ -6,7 +6,8 @@ import { ApolloProvider } from '@apollo/client';
 import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { EIP6963Connector, createWeb3Modal } from '@web3modal/wagmi/react';
@@ -14,6 +15,7 @@ import { walletConnectProvider } from '@web3modal/wagmi';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { publicProvider } from 'wagmi/providers/public';
+import { SafeConnector } from 'wagmi/connectors/safe';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
@@ -30,6 +32,8 @@ import NotificationController from '@/components/controller/pfp.ctrl';
 import PfpController from '@/components/controller/notification.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import StorageLabel from '@/lib/localStorage';
+import { zIndex } from '@/lib/constants/constants';
+import { useSafeAutoConnect } from '@/hooks/useSafeAutoConnect';
 import {
 	getLocaleFromIP,
 	getLocaleFromNavigator,
@@ -37,6 +41,7 @@ import {
 } from '@/lib/helpers';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
+import { SolanaProvider } from '@/solana/solanaWalletProvider';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 
@@ -84,7 +89,7 @@ const metadata = {
 	icons: ['https://giveth.io/images/currencies/giv/24.svg'],
 };
 
-const chains = config.CHAINS;
+const chains = config.EVM_CHAINS;
 const { publicClient } = configureChains(chains, [
 	walletConnectProvider({ projectId }),
 	publicProvider(),
@@ -98,6 +103,13 @@ const wagmiConfig = createConfig({
 		}),
 		new EIP6963Connector({ chains }),
 		new InjectedConnector({ chains, options: { shimDisconnect: true } }),
+		new SafeConnector({
+			chains,
+			options: {
+				allowedDomains: [/app.safe.global$/],
+				debug: false,
+			},
+		}),
 	],
 	publicClient,
 });
@@ -108,6 +120,9 @@ createWeb3Modal({
 	wagmiConfig,
 	projectId,
 	chains,
+	themeVariables: {
+		'--w3m-z-index': zIndex.WEB3MODAL,
+	},
 	featuredWalletIds: [
 		'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
 	],
@@ -118,6 +133,11 @@ createWeb3Modal({
 		[classicNetworkNumber]: '/images/currencies/classic/32.svg',
 	},
 });
+
+const RenderComponent = ({ Component, pageProps }: any) => {
+	useSafeAutoConnect();
+	return <Component {...pageProps} />;
+};
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
@@ -183,68 +203,75 @@ function MyApp({ Component, pageProps }: AppProps) {
 					content='width=device-width, initial-scale=1.0'
 				/>
 			</Head>
-			<Provider store={store}>
+			<ReduxProvider store={store}>
 				<IntlProvider
 					locale={locale!}
 					messages={IntlMessages[locale as keyof typeof IntlMessages]}
 					defaultLocale={defaultLocale}
 				>
 					<ApolloProvider client={apolloClient}>
-						<WagmiConfig config={wagmiConfig}>
-							{isMaintenanceMode ? (
-								<MaintenanceIndex />
-							) : (
-								<>
-									<NotificationController />
-									<GeneralController />
-									<PriceController />
-									<SubgraphController />
-									<UserController />
-									<HeaderWrapper />
-									{isGIVeconomyRoute(router.route) && (
-										<GIVeconomyTab />
-									)}
-									{(pageProps as any).errorStatus ? (
-										<ErrorsIndex
-											statusCode={
-												(pageProps as any).errorStatus
-											}
-										/>
-									) : (
-										<Component {...pageProps} />
-									)}
-									{process.env.NEXT_PUBLIC_ENV ===
-										'production' && (
-										<Script
-											id='segment-script'
-											strategy='afterInteractive'
-											dangerouslySetInnerHTML={{
-												__html: renderSnippet(),
-											}}
-										/>
-									)}
-									{process.env.NEXT_PUBLIC_ENV !==
-										'production' && (
-										<Script
-											id='console-script'
-											strategy='afterInteractive'
-											dangerouslySetInnerHTML={{
-												__html: `javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();`,
-											}}
-										/>
-									)}
+						<SolanaProvider>
+							<WagmiConfig config={wagmiConfig}>
+								{isMaintenanceMode ? (
+									<MaintenanceIndex />
+								) : (
+									<>
+										<NotificationController />
+										<GeneralController />
+										<PriceController />
+										<SubgraphController />
+										<UserController />
+										<HeaderWrapper />
+										{isGIVeconomyRoute(router.route) && (
+											<GIVeconomyTab />
+										)}
+										{(pageProps as any).errorStatus ? (
+											<ErrorsIndex
+												statusCode={
+													(pageProps as any)
+														.errorStatus
+												}
+											/>
+										) : (
+											<RenderComponent
+												Component={Component}
+												pageProps={pageProps}
+											/>
+										)}
+										{process.env.NEXT_PUBLIC_ENV ===
+											'production' && (
+											<Script
+												id='segment-script'
+												strategy='afterInteractive'
+												dangerouslySetInnerHTML={{
+													__html: renderSnippet(),
+												}}
+											/>
+										)}
+										{/* {process.env.NEXT_PUBLIC_ENV !==
+											'production' && (
+											<Script
+												id='console-script'
+												strategy='afterInteractive'
+												dangerouslySetInnerHTML={{
+													__html: `javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();`,
+												}}
+											/>
+										)} */}
 
-									<FooterWrapper />
-									<ModalController />
-									<PfpController />
-								</>
-							)}
-						</WagmiConfig>
+										<FooterWrapper />
+										<ModalController />
+										<PfpController />
+									</>
+								)}
+							</WagmiConfig>
+						</SolanaProvider>
 					</ApolloProvider>
 				</IntlProvider>
-			</Provider>
+			</ReduxProvider>
 
 			<Toaster containerStyle={{ top: '80px' }} />
+			<SpeedInsights />
 		</>
 	);
 }

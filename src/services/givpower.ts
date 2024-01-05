@@ -5,7 +5,7 @@ import config from '@/configuration';
 
 export const getGIVpowerBalanceByAddress = async (users: string[]) => {
 	//get users balance
-	const _networkConfigs = config.NETWORKS_CONFIG;
+	const _networkConfigs = config.EVM_NETWORKS_CONFIG;
 	const queries = [];
 	for (const key in _networkConfigs) {
 		if (Object.prototype.hasOwnProperty.call(_networkConfigs, key)) {

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { useNetwork } from 'wagmi';
 import { Cover } from './common';
 import { Flex } from '../styled-components/Flex';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 
 interface IWrongNetworkCoverProps {
 	targetNetwork: number;
@@ -32,8 +32,8 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 								id: 'label.wrong_network',
 							},
 							{
-								chainName: chainNameById(chainId || 0),
-								targetChain: chainNameById(targetNetwork || 0),
+								chainName: getChainName(chainId || 0),
+								targetChain: getChainName(targetNetwork || 0),
 							},
 						)}
 					</Content>

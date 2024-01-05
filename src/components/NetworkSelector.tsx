@@ -24,6 +24,7 @@ import config from '../configuration';
 import { NetworkConfig } from '@/types/config';
 import NetworkLogo from './NetworkLogo';
 import { Shadow } from './styled-components/Shadow';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
 export interface ISelected {
 	label: string;
@@ -163,8 +164,8 @@ const selectStyles: StylesConfig = {
 		backgroundColor: isSelected
 			? brandColors.giv[700]
 			: isFocused
-			? brandColors.giv[500]
-			: brandColors.giv[600],
+				? brandColors.giv[500]
+				: brandColors.giv[600],
 		color: neutralColors.gray[100],
 		opacity: isDisabled ? 0.5 : 1,
 		cursor: isDisabled ? 'default' : 'pointer',
@@ -181,6 +182,7 @@ export const NetworkSelector = () => {
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 	const { switchNetwork } = useSwitchNetwork();
+	const isSafeEnv = useIsSafeEnvironment();
 
 	const handleChangeNetwork = async (networkNumber: number) => {
 		setTargetNetwork(networkNumber);
@@ -201,6 +203,8 @@ export const NetworkSelector = () => {
 			setValue(null);
 		}
 	}, [chainId]);
+
+	if (isSafeEnv) return null;
 
 	return (
 		<>

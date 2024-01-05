@@ -8,6 +8,7 @@ import {
 	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+
 import { useAccount, useNetwork } from 'wagmi';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
@@ -31,7 +32,7 @@ import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { useDonateData } from '@/context/donate.context';
 import { useCreateDonation } from '@/hooks/useCreateDonation';
-import useTokenPrice from '@/hooks/useTokenPrice';
+import { useTokenPrice } from '@/hooks/useTokenPrice';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -77,6 +78,8 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
 
+	const tokenPrice = useTokenPrice(token);
+
 	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses, givethAddresses } = project || {};
 	const projectWalletAddress = addresses?.find(
@@ -86,8 +89,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const givethWalletAddress = givethAddresses?.find(
 		a => a.isRecipient && a.networkId === chainId,
 	)?.address;
-
-	const tokenPrice = useTokenPrice(token);
 
 	const avgPrice = tokenPrice && tokenPrice * amount;
 	let donationToGivethAmount = (amount * donationToGiveth) / 100;
@@ -214,10 +215,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 							{firstDonationMinted
 								? formatMessage({
 										id: 'label.donation_submitted',
-								  })
+									})
 								: formatMessage({
 										id: 'label.you_are_donating',
-								  })}
+									})}
 						</Lead>
 						<DonateSummary
 							value={amount}
@@ -261,14 +262,14 @@ const DonateModal: FC<IDonateModalProps> = props => {
 									{secondDonationSaved
 										? formatMessage({
 												id: 'label.donation_submitted',
-										  })
+											})
 										: firstDonationSaved
-										? formatMessage({
-												id: 'label.you_are_donating',
-										  })
-										: formatMessage({
-												id: 'label.and',
-										  })}
+											? formatMessage({
+													id: 'label.you_are_donating',
+												})
+											: formatMessage({
+													id: 'label.and',
+												})}
 								</Lead>
 								<DonateSummary
 									value={donationToGivethAmount}
@@ -289,10 +290,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 														EToastType.Success
 															? formatMessage({
 																	id: 'label.successful',
-															  })
+																})
 															: formatMessage({
 																	id: 'label.failed_lowercase',
-															  })
+																})
 													}
 											`}
 										/>

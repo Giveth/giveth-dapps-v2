@@ -1,15 +1,28 @@
-import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { useNetwork } from 'wagmi';
-import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { fetchEthPrice } from '@/features/price/price.services';
+import { useState, useEffect } from 'react';
+import { type Address, useNetwork } from 'wagmi';
 import { fetchETCPrice, fetchPrice } from '@/services/token';
-import config from '@/configuration';
+import { fetchEthPrice } from '@/features/price/price.services';
 import { useAppSelector } from '@/features/hooks';
+import config from '@/configuration';
 
 const ethereumChain = config.MAINNET_CONFIG;
+const gnosisChain = config.GNOSIS_CONFIG;
+const stableCoins = [
+	gnosisChain.nativeCurrency.symbol.toUpperCase(),
+	'DAI',
+	'USDT',
+];
 
-const useTokenPrice = (token?: IProjectAcceptedToken) => {
+interface ITokenPice {
+	symbol: string;
+	address?: Address;
+	id?: Address | string;
+	mainnetAddress?: Address;
+	isStableCoin?: boolean;
+}
+
+export const useTokenPrice = (token?: ITokenPice) => {
 	const [tokenPrice, setTokenPrice] = useState<number>();
 
 	const { chain } = useNetwork();
@@ -20,27 +33,30 @@ const useTokenPrice = (token?: IProjectAcceptedToken) => {
 
 	useEffect(() => {
 		const setPrice = async () => {
-			// stable coins can be set in admin panel
-			if (token?.isStableCoin) {
+			if (
+				token?.isStableCoin ||
+				(token?.symbol &&
+					stableCoins.includes(token.symbol.toUpperCase()))
+			) {
 				setTokenPrice(1);
 			} else if (token?.symbol === 'GIV') {
 				setTokenPrice(givTokenPrice || 0);
 			} else if (token?.symbol === ethereumChain.nativeCurrency.symbol) {
 				const ethPrice = await fetchEthPrice();
 				setTokenPrice(ethPrice || 0);
-			} else if (token?.address) {
-				let tokenAddress = token.address;
-				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
-				if (!isMainnet && token.mainnetAddress) {
-					tokenAddress =
-						(token.mainnetAddress as `0x${string}`) ||
-						('' as `0x${string}`);
-				}
+			} else if (token?.address || token?.id) {
 				// ETC is not supported by coingecko with contract address, so we should use this function to fetch the price
 				if (token.symbol === 'ETC') {
 					const fetchedETCPrice = await fetchETCPrice();
 					setTokenPrice(fetchedETCPrice || 0);
 					return;
+				}
+
+				let tokenAddress = token.address || token.id;
+				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
+				if (!isMainnet && token.mainnetAddress) {
+					tokenAddress =
+						(token.mainnetAddress as Address) || ('' as Address);
 				}
 				const coingeckoChainId =
 					isMainnet ||
@@ -55,17 +71,12 @@ const useTokenPrice = (token?: IProjectAcceptedToken) => {
 			}
 		};
 		if (token) {
-			setPrice().catch(() => {
-				setTokenPrice(0);
-				console.error(
-					'Error fetching token price in useTokenPrice. Token name: ',
-					token?.symbol,
-				);
-			});
+			setPrice().catch(() => setTokenPrice(0));
+			console.error(
+				'Error fetching token price in useTokenPrice. Token name: ',
+				token?.symbol,
+			);
 		}
 	}, [token]);
-
 	return tokenPrice;
 };
-
-export default useTokenPrice;

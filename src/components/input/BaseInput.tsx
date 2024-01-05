@@ -1,42 +1,5 @@
-import React, { FC } from 'react';
+import { memo } from 'react';
 import styled from 'styled-components';
-import { neutralColors, brandColors } from '@giveth/ui-design-system';
-
-const InputContainer = styled.div`
-	background: #310bb5;
-	border-radius: 34px;
-	padding: 10px 10px 10px 32px;
-	height: 68px;
-	display: flex;
-	width: 100%;
-	align-items: center;
-	margin: 8px 0;
-`;
-
-const Input = styled.input`
-	border: 0;
-	background: #310bb5;
-	color: white;
-	flex: 1;
-	font-size: 18px;
-	line-height: 160%;
-	::placeholder {
-		color: white;
-	}
-	::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-	::-webkit-outer-spin-button {
-		-webkit-appearance: none;
-		margin: 0;
-	}
-`;
-
-const Unit = styled.span`
-	padding-right: 10px;
-	color: #cabaff;
-`;
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`); // match escaped "." characters via in a non-capturing group
 
@@ -45,7 +8,7 @@ function escapeRegExp(string: string): string {
 }
 
 // Shamelessly copied from Sushiswap front-end
-const BaseInput = React.memo(
+export const BaseInput = memo(
 	({
 		value,
 		onUserInput,
@@ -96,25 +59,11 @@ const BaseInput = React.memo(
 
 BaseInput.displayName = 'BaseInput';
 
-export const NumericalInput = styled(BaseInput)`
-	width: 100%;
-	height: 54px;
-	padding: 15px 16px;
-	margin-top: 10px;
-	margin-bottom: 8px;
-
-	background: ${brandColors.giv[700]};
-	color: ${neutralColors.gray[100]};
-
-	border: 1px solid ${brandColors.giv[500]};
-	border-radius: 8px;
-
-	font-family: Red Hat Text;
-	font-style: normal;
-	font-weight: normal;
-	font-size: 16px;
-	line-height: 150%;
-
+const Input = styled.input`
+	border: 0;
+	flex: 1;
+	font-size: 18px;
+	line-height: 160%;
 	&:focus {
 		outline: none;
 	}
@@ -126,33 +75,7 @@ export const NumericalInput = styled(BaseInput)`
 		-webkit-appearance: none;
 		margin: 0;
 	}
-	${props => (props.disabled ? `color: ${brandColors.giv[300]};` : '')}
+	::placeholder {
+		color: white;
+	}
 `;
-
-interface IInputWithUnitProps {
-	placeholder?: string;
-	unit: string;
-	value: string;
-	onChange?: any;
-	type?: string;
-}
-
-export const InputWithUnit: FC<IInputWithUnitProps> = ({
-	placeholder,
-	unit,
-	value,
-	onChange,
-	type,
-}) => {
-	return (
-		<InputContainer>
-			<BaseInput
-				type={type}
-				placeholder={placeholder}
-				value={value}
-				onUserInput={onChange}
-			/>
-			<Unit>{unit}</Unit>
-		</InputContainer>
-	);
-};

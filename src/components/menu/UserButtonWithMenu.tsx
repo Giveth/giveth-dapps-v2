@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { shortenAddress } from '@/lib/helpers';
 import {
 	MenuAndButtonContainer,
@@ -27,6 +27,7 @@ import { FlexSpacer } from '../styled-components/Flex';
 import { ItemsProvider } from '@/context/Items.context';
 import { SignWithWalletModal } from '../modals/SignWithWalletModal';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -47,6 +48,8 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 	const isDesktop = useMediaQuery(device.laptopL);
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
+	const { connector } = useAccount();
+	const isGSafeConnector = connector?.id === 'safe';
 
 	useEffect(() => {
 		if (!isHeaderShowing) {
@@ -58,7 +61,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 		? {
 				onMouseEnter: () => openMenu(),
 				onMouseLeave: () => closeMenu(),
-		  }
+			}
 		: { onClick: openSidebar };
 
 	return (
@@ -103,6 +106,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 			)}
 			{signWithWallet && (
 				<SignWithWalletModal
+					isGSafeConnector={isGSafeConnector}
 					callback={() => {
 						router.push(queueRoute);
 						setQueueRoute('');
@@ -123,10 +127,9 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 };
 
 const HeaderUserButton = ({}) => {
-	const { address } = useAccount();
+	const { walletAddress, chainName } = useAuthenticationWallet();
 	const { userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
-	const { chain } = useNetwork();
 	return (
 		<HBContainer>
 			<HBPic
@@ -137,13 +140,13 @@ const HeaderUserButton = ({}) => {
 			/>
 			<WBInfo>
 				<UserName size='Medium'>
-					{userData?.name || shortenAddress(address)}
+					{userData?.name || shortenAddress(walletAddress)}
 				</UserName>
 				<WBNetwork size='Tiny'>
 					{formatMessage({
 						id: 'label.connected_to',
 					})}{' '}
-					{chain?.name}
+					{chainName}
 				</WBNetwork>
 			</WBInfo>
 		</HBContainer>

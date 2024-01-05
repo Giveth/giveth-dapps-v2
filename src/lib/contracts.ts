@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/nextjs';
 import { getContract } from 'wagmi/actions';
-import { erc20ABI } from 'wagmi';
+import { type Address, erc20ABI } from 'wagmi';
 import config from '@/configuration';
 import { MAX_TOKEN_ORDER } from './constants/tokens';
 
@@ -11,7 +11,7 @@ const { NFT_POSITIONS_MANAGER_ADDRESS, UNISWAP_V3_STAKER, UNISWAP_V3_LP_POOL } =
 	uniswapV3Config || {};
 
 interface IERC20Info {
-	contractAddress: `0x${string}`;
+	contractAddress: Address;
 	networkId: number;
 }
 

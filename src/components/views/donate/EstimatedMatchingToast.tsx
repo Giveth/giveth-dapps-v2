@@ -17,7 +17,7 @@ import { IDonationProject } from '@/apollo/types/types';
 import { calculateEstimatedMatchingWithDonationAmount } from '@/helpers/qf';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { formatDonation } from '@/helpers/number';
-import useTokenPrice from '@/hooks/useTokenPrice';
+import { useTokenPrice } from '@/hooks/useTokenPrice';
 
 interface IEstimatedMatchingToast {
 	projectData: IDonationProject;

@@ -20,12 +20,12 @@ import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 import { captureException } from '@sentry/nextjs';
 import { useAccount, useNetwork } from 'wagmi';
-import { waitForTransaction } from '@wagmi/core';
 import { Modal } from './Modal';
 import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 import { formatWeiHelper } from '@/helpers/number';
 import { harvestTokens } from '@/lib/stakingPool';
 import { claimUnstakeStake } from '@/lib/stakingNFT';
+import { waitForTransaction } from '@/lib/transaction';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
@@ -62,6 +62,7 @@ import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
 import { Flex } from '../styled-components/Flex';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { getPoolIconWithName } from '@/helpers/platform';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
@@ -104,6 +105,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		xDaiThirdPartyTokensPrice,
 		givPrice,
 	} = useAppSelector(state => state.price);
+	const isSafeEnv = useIsSafeEnvironment();
 	const [txHash, setTxHash] = useState('');
 	//GIVdrop TODO: Should we show Givdrop in new  design?
 	const [givDrop, setGIVdrop] = useState(0n);
@@ -220,9 +222,10 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 						stakedPositions,
 					);
 					if (txResponse) {
-						const { status } = await waitForTransaction({
-							hash: txResponse,
-						});
+						const { status } = await waitForTransaction(
+							txResponse,
+							isSafeEnv,
+						);
 						setState(
 							status
 								? HarvestStates.CONFIRMED
@@ -240,9 +243,11 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 					if (txResponse) {
 						setState(HarvestStates.SUBMITTED);
 						setTxHash(txResponse);
-						const { status } = await waitForTransaction({
-							hash: txResponse,
-						});
+						const { status } = await waitForTransaction(
+							txResponse,
+							isSafeEnv,
+						);
+
 						setState(
 							status
 								? HarvestStates.CONFIRMED
@@ -260,9 +265,11 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 				if (txResponse) {
 					setState(HarvestStates.SUBMITTED);
 					setTxHash(txResponse);
-					const { status } = await waitForTransaction({
-						hash: txResponse,
-					});
+					const { status } = await waitForTransaction(
+						txResponse,
+						isSafeEnv,
+					);
+
 					setState(
 						status ? HarvestStates.CONFIRMED : HarvestStates.ERROR,
 					);

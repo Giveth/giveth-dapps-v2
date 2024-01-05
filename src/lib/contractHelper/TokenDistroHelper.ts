@@ -1,5 +1,5 @@
+import { type Address } from 'wagmi';
 import { getNowUnixMS } from '@/helpers/time';
-import { Address } from '@/types/config';
 import { ITokenDistro, ITokenDistroBalance } from '@/types/subgraph';
 
 export class TokenDistroHelper {

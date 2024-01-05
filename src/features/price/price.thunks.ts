@@ -9,7 +9,7 @@ export const fetchGIVPriceAsync = createAsyncThunk(
 	'price/fetchGIVPrice',
 	async (chainId: number) => {
 		const tokenAddress =
-			config.NETWORKS_CONFIG[chainId]?.tokenAddressOnUniswapV2;
+			config.EVM_NETWORKS_CONFIG[chainId]?.tokenAddressOnUniswapV2;
 		return tokenAddress ? await fetchGnosisTokenPrice(tokenAddress) : '0';
 	},
 );

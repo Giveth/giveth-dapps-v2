@@ -60,7 +60,6 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 	}, [router?.query?.tab]);
 
 	const pathname = removeQueryParam(router.asPath, ['tab'], true);
-
 	return (
 		<Container>
 			<ProfileTabsContainer>
@@ -103,7 +102,7 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 							myAccount
 								? formatMessage({
 										id: 'label.my_donations',
-								  })
+									})
 								: formatMessage({ id: 'label.donations' })
 						}`}
 						{myAccount && user?.donationsCount != 0 && (
@@ -119,7 +118,7 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 						onClick={() => setTab(EProfile.LIKED)}
 					>
 						{formatMessage({ id: 'label.liked_projects' })}
-						{myAccount && !!user.likedProjectsCount && (
+						{myAccount && !!user?.likedProjectsCount && (
 							<Count active={tab === EProfile.LIKED}>
 								{user?.likedProjectsCount}
 							</Count>

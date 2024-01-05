@@ -14,12 +14,18 @@ import { captureException } from '@sentry/nextjs';
 import { formatUnits, parseUnits } from 'viem';
 
 import { getContract } from 'wagmi/actions';
-import { erc20ABI, useAccount, useBalance, useNetwork } from 'wagmi';
+import {
+	type Address,
+	erc20ABI,
+	useAccount,
+	useBalance,
+	useNetwork,
+} from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
-import DonateModal from '@/components/modals/DonateModal';
+import DonateModal from '@/components/views/donate/DonateModal';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import GeminiModal from './GeminiModal';
@@ -55,6 +61,7 @@ import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingT
 import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
 import QFModal from '@/components/views/donate/QFModal';
+import { isRecurringActive } from './DonationCard';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -120,7 +127,6 @@ const CryptoDonation: FC = () => {
 	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
 	const activeRound = getActiveRound(project.qfRounds);
 	const networkId = chain?.id;
-	const isOnAcceptedChain = networkId && acceptedChains?.includes(networkId);
 
 	const isOnEligibleNetworks =
 		networkId && activeRound?.eligibleNetworks?.includes(networkId);
@@ -202,7 +208,7 @@ const CryptoDonation: FC = () => {
 		// Native token balance is provided by the Web3Provider
 		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
 		const nativeCurrency =
-			config.NETWORKS_CONFIG[networkId!]?.nativeCurrency;
+			config.EVM_NETWORKS_CONFIG[networkId!]?.nativeCurrency;
 
 		if (_selectedTokenSymbol === nativeCurrency?.symbol?.toUpperCase()) {
 			return setSelectedTokenBalance(
@@ -214,7 +220,7 @@ const CryptoDonation: FC = () => {
 				request: async () => {
 					try {
 						const contract = getContract({
-							address: selectedToken.address! as `0x${string}`,
+							address: selectedToken.address! as Address,
 							abi: erc20ABI,
 						});
 
@@ -242,7 +248,7 @@ const CryptoDonation: FC = () => {
 		)();
 	}, [address, networkId, tokenSymbol, balance]);
 
-	const handleCustomToken = (i: `0x${string}`) => {
+	const handleCustomToken = (i: Address) => {
 		if (!supportCustomTokens) return;
 		// It's a contract
 		if (i?.length === 42) {
@@ -285,10 +291,10 @@ const CryptoDonation: FC = () => {
 		) {
 			return setShowInsufficientModal(true);
 		}
-		if (!isSignedIn) {
-			signInThenDonate();
-		} else if (hasActiveQFRound && !isOnEligibleNetworks) {
+		if (hasActiveQFRound && !isOnEligibleNetworks) {
 			setShowQFModal(true);
+		} else if (!isSignedIn) {
+			signInThenDonate();
 		} else {
 			setShowDonateModal(true);
 		}
@@ -307,14 +313,25 @@ const CryptoDonation: FC = () => {
 
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
+
+	const donateWithoutMatching = () => {
+		if (isSignedIn) {
+			setShowDonateModal(true);
+		} else {
+			signInThenDonate();
+		}
+	};
+
 	return (
 		<MainContainer>
-			<H4Styled weight={700}>
-				{formatMessage({ id: 'page.donate.title' })}
-			</H4Styled>
+			{!isRecurringActive && (
+				<H4Styled weight={700}>
+					{formatMessage({ id: 'page.donate.title' })}
+				</H4Styled>
+			)}
 			{showQFModal && (
 				<QFModal
-					setShowDonateModal={setShowDonateModal}
+					donateWithoutMatching={donateWithoutMatching}
 					setShowModal={setShowQFModal}
 				/>
 			)}
@@ -362,10 +379,10 @@ const CryptoDonation: FC = () => {
 								supportCustomTokens
 									? formatMessage({
 											id: 'component.input.search_or_paste',
-									  })
+										})
 									: formatMessage({
 											id: 'component.input.search_name',
-									  })
+										})
 							}
 							projectVerified={project?.verified!}
 							disabled={!isConnected}
@@ -419,6 +436,9 @@ const CryptoDonation: FC = () => {
 						setDonationToGiveth(e);
 					}}
 					donationToGiveth={donationToGiveth}
+					title={
+						formatMessage({ id: 'label.donation_to' }) + ' Giveth'
+					}
 				/>
 			) : (
 				<br />
@@ -495,6 +515,7 @@ const MainContainer = styled.div`
 	flex-direction: column;
 	height: 60%;
 	justify-content: space-between;
+	text-align: left;
 `;
 
 const InputContainer = styled.div`

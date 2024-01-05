@@ -44,9 +44,12 @@ const ProjectUpdates = dynamic(() => import('./projectUpdates'));
 const NotAvailableHandler = dynamic(() => import('../../NotAvailableHandler'), {
 	ssr: false,
 });
-const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
-	ssr: false,
-});
+const RichTextViewer = dynamic(
+	() => import('@/components/rich-text/RichTextViewer'),
+	{
+		ssr: false,
+	},
+);
 
 export enum EProjectPageTabs {
 	DONATIONS = 'donations',
