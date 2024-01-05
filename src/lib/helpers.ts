@@ -76,10 +76,11 @@ export const formatEvmTxLink = (networkId?: number, txHash?: string) => {
 
 export const formatSolanaTxLink = (txHash?: string) => {
 	if (!txHash) return '';
+	let txLink = `${config.SOLANA_CONFIG.blockExplorers.default.url}/tx/${txHash}`;
 	if (isProduction) {
-		return `${config.SOLANA_CONFIG.blockExplorers.default.url}/tx/${txHash}`;
+		return txLink;
 	}
-	return `${config.SOLANA_CONFIG.blockExplorers.default.url}/tx/${txHash}?cluster=devnet`;
+	return `${txLink}?cluster=devnet`;
 };
 
 export function formatWalletLink(

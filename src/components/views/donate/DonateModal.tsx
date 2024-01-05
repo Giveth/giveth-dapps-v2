@@ -12,7 +12,11 @@ import { useIntl } from 'react-intl';
 import { useAccount, useNetwork } from 'wagmi';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
-import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
+import {
+	compareAddresses,
+	formatEvmTxLink,
+	showToastError,
+} from '@/lib/helpers';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
@@ -244,7 +248,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 								/>
 								{firstTxHash && (
 									<ExternalLink
-										href={formatTxLink(
+										href={formatEvmTxLink(
 											chainId,
 											firstTxHash,
 										)}
@@ -299,7 +303,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 										/>
 										{secondTxHash && (
 											<ExternalLink
-												href={formatTxLink(
+												href={formatEvmTxLink(
 													chainId,
 													secondTxHash,
 												)}
@@ -339,7 +343,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			</Modal>
 			{failedModalType && (
 				<FailedDonation
-					txUrl={formatTxLink(chainId, firstTxHash || secondTxHash)}
+					txUrl={formatEvmTxLink(
+						chainId,
+						firstTxHash || secondTxHash,
+					)}
 					setShowModal={() => setFailedModalType(undefined)}
 					type={failedModalType}
 				/>
