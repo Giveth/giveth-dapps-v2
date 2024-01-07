@@ -85,6 +85,7 @@ export const zIndex = {
 	POPOVER: 1070,
 	TOOLTIP: 1080,
 	NAVBAR: 1100,
+	WEB3MODAL: 1500,
 };
 
 export const searchSuggestions = [
@@ -100,6 +101,8 @@ export const regenFarmStreamCardCol = {
 	sm: [12, 6, 12],
 	lg: [12, 8, 4],
 };
+
+export const ONE_MONTH_SECONDS = 2_592_000n;
 
 export const TWO_WEEK = 1_209_600_000;
 

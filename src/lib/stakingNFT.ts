@@ -209,6 +209,8 @@ export const claim = async (
 			abi: UNISWAP_V3_STAKER_ABI,
 			functionName: 'claimReward',
 			args: [currentIncentive.key[0] as string, walletAddress, 0],
+			// @ts-ignore -- needed for safe txs
+			value: 0n,
 		});
 	} catch (e) {
 		console.warn(e);
@@ -234,6 +236,8 @@ export const stake = async (
 			abi: UNISWAP_V3_STAKER_ABI,
 			functionName: 'stakeToken',
 			args: [currentIncentive.key, tokenId],
+			// @ts-ignore -- needed for safe txs
+			value: 0n,
 		});
 	} catch (e) {
 		console.warn(e);

@@ -83,9 +83,6 @@ export const FETCH_ALL_PROJECTS = gql`
 				...ProjectCardFields
 			}
 			totalCount
-			categories {
-				name
-			}
 		}
 	}
 `;
@@ -108,6 +105,7 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				address
 				isRecipient
 				networkId
+				chainType
 			}
 			totalProjectUpdates
 			creationDate
@@ -203,6 +201,7 @@ export const FETCH_PROJECT_BY_ID = gql`
 				address
 				isRecipient
 				networkId
+				chainType
 			}
 			impactLocation
 			categories {
@@ -227,6 +226,7 @@ export const FETCH_GIVETH_PROJECT_BY_ID = gql`
 				address
 				isRecipient
 				networkId
+				chainType
 			}
 			slug
 		}
@@ -401,6 +401,7 @@ export const CREATE_PROJECT = gql`
 			addresses {
 				address
 				networkId
+				chainType
 			}
 			categories {
 				name
@@ -428,6 +429,7 @@ export const UPDATE_PROJECT = gql`
 			addresses {
 				address
 				networkId
+				chainType
 			}
 			impactLocation
 			categories {
@@ -466,6 +468,7 @@ export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
 				address
 				isRecipient
 				networkId
+				chainType
 			}
 			adminUser {
 				id
@@ -477,6 +480,7 @@ export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
 				address
 				isRecipient
 				networkId
+				chainType
 			}
 		}
 	}
@@ -542,6 +546,7 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 			mainnetAddress
 			isGivbackEligible
 			order
+			isStableCoin
 		}
 	}
 `;

@@ -7,8 +7,11 @@ import {
 	polygon,
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import React from 'react';
 import {
+	ChainType,
 	EnvConfig,
+	NonEVMChain,
 	StakingPlatform,
 	StakingType,
 	StreamType,
@@ -19,15 +22,12 @@ import { IconPolygon } from '@/components/Icons/Polygon';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconCelo } from '@/components/Icons/Celo';
 import { IconClassic } from '@/components/Icons/Classic';
-
-const BASE_ROUTE =
-	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
-const NOTIFICATION_BASE_ROUTE =
-	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
-	'https://notification.giveth.io';
+import IconSolana from '@/components/Icons/Solana';
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
+
+const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
 
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
@@ -36,28 +36,60 @@ const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
 const CLASSIC_NETWORK_NUMBER = 61;
-const SOLANA_NETWORK = WalletAdapterNetwork.Mainnet;
+const SOLANA_NETWORK: NonEVMChain = {
+	id: 0,
+	chainType: ChainType.SOLANA,
+	adapterNetwork: WalletAdapterNetwork.Mainnet,
+	name: 'Solana',
+	blockExplorers: {
+		default: {
+			name: 'Solana Explorer',
+			url: 'https://explorer.solana.com',
+		},
+	},
+};
+const EVM_CHAINS = [mainnet, gnosis, polygon, optimism, celo, classic];
+const NON_EVM_CHAINS: NonEVMChain[] = [];
+if (isSolanaEnabled) {
+	NON_EVM_CHAINS.push(SOLANA_NETWORK);
+}
+
+const BASE_ROUTE =
+	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
+const BACKEND_LINK =
+	process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`;
+const FRONTEND_LINK =
+	process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://giveth.io';
+const NOTIFICATION_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
+	'https://notification.giveth.io';
+const AUTH_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
+	'https://auth.serve.giveth.io/v1';
+
+console.log('BASE_ROUTE', BASE_ROUTE);
+console.log('BACKEND_LINK', BACKEND_LINK);
+console.log('FRONTEND_LINK', FRONTEND_LINK);
+console.log('NOTIFICATION_BASE_ROUTE', NOTIFICATION_BASE_ROUTE);
+console.log('AUTH_BASE_ROUTE', AUTH_BASE_ROUTE);
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
-	BACKEND_LINK:
-		process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`,
-	FRONTEND_LINK: process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://giveth.io',
+	BACKEND_LINK: BACKEND_LINK,
+	FRONTEND_LINK: FRONTEND_LINK,
 	MICROSERVICES: {
-		authentication:
-			process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
-			`${BASE_ROUTE}/siweauthmicroservice/v1`,
+		authentication: AUTH_BASE_ROUTE,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
-	CHAINS: [mainnet, gnosis, polygon, optimism, celo, classic],
+	EVM_CHAINS,
+	CHAINS: [...EVM_CHAINS, ...NON_EVM_CHAINS],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
-	SOLANA_NETWORK: SOLANA_NETWORK,
 
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
@@ -395,6 +427,7 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
@@ -415,6 +448,75 @@ const config: EnvConfig = {
 			description: '100% GIV',
 			unit: 'GIV',
 		},
+		superFluidSubgraph:
+			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet',
+		SUPER_FLUID_TOKENS: [
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0x4200000000000000000000000000000000000042',
+					name: 'Optimism',
+					symbol: 'OP',
+				},
+				decimals: 18,
+				id: '0x1828bff08bd244f7990eddcd9b19cc654b33cdb4',
+				name: 'Super Optimism',
+				symbol: 'OPx',
+				isSuperToken: true,
+			},
+			{
+				underlyingToken: {
+					name: 'Ethereum',
+					symbol: 'ETH',
+					decimals: 18,
+					id: '0x0000000000000000000000000000000000000000',
+				},
+				decimals: 18,
+				id: '0x4ac8bd1bdae47beef2d1c6aa62229509b962aa0d',
+				name: 'Super ETH',
+				symbol: 'ETHx',
+				isSuperToken: true,
+			},
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
+					name: 'Giveth Token',
+					symbol: 'GIV',
+				},
+				decimals: 18,
+				id: '0x4cab5b9930210e2edc6a905b9c75d615872a1a7e',
+				name: 'Super Giveth Token',
+				symbol: 'GIVx',
+				isSuperToken: true,
+			},
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
+					name: 'Dai Stablecoin',
+					symbol: 'DAI',
+				},
+				decimals: 18,
+				id: '0x7d342726b69c28d942ad8bfe6ac81b972349d524',
+				name: 'Super Dai Stablecoin',
+				symbol: 'DAIx',
+				isSuperToken: true,
+			},
+			{
+				underlyingToken: {
+					decimals: 6,
+					id: '0x7f5c764cbc14f9669b88837ca1490cca17c31607',
+					name: 'USD Coin',
+					symbol: 'USDC',
+				},
+				decimals: 18,
+				id: '0x8430f084b939208e2eded1584889c9a66b90562f',
+				name: 'Super USD Coin',
+				symbol: 'USDCx',
+				isSuperToken: true,
+			},
+		],
 	},
 
 	CELO_CONFIG: {
@@ -434,6 +536,11 @@ const config: EnvConfig = {
 		subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
 		coingeckoChainName: 'ethereum-classic',
 		chainLogo: (logoSize = 24) => <IconClassic size={logoSize} />,
+	},
+	SOLANA_CONFIG: {
+		...SOLANA_NETWORK,
+		coingeckoChainName: 'solana',
+		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
 	},
 };
 

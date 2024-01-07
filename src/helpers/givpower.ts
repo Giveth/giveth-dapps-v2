@@ -22,8 +22,6 @@ export const getTotalGIVpower = (
 		balance: BigNumber;
 	},
 ) => {
-	console.log('onChain', onChain);
-	console.log('values', values);
 	const res = [];
 	let sum = new BigNumber('0');
 	for (const key in values) {
@@ -49,7 +47,6 @@ export const getTotalGIVpower = (
 			}
 		}
 	}
-	console.log('res', res);
 	return { total: sum, byChain: res };
 };
 
@@ -124,8 +121,8 @@ export const getGIVpowerLink = (chainId?: number) => {
 export const getNetworkConfig = (defaultChianID: number, chainId?: number) => {
 	const _chainId = chainId || defaultChianID;
 	const _networkConf =
-		config.NETWORKS_CONFIG[_chainId] ||
-		config.NETWORKS_CONFIG[defaultChianID];
+		config.EVM_NETWORKS_CONFIG[_chainId] ||
+		config.EVM_NETWORKS_CONFIG[defaultChianID];
 	return _networkConf;
 };
 

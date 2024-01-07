@@ -3,18 +3,29 @@ import styled from 'styled-components';
 import { getAddress } from 'viem';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
+import { ChainType } from '@/types/config';
 
-const ProjectWalletAddress = (props: {
+interface IProjectWalletAddressProps {
 	address: string;
 	networkId: number;
-}) => {
-	const { address, networkId } = props;
-	const checksumAddress = getAddress(address);
+	chainType?: ChainType;
+}
+
+const ProjectWalletAddress = (props: IProjectWalletAddressProps) => {
+	const { address, networkId, chainType } = props;
+	let _address = address;
+	if (chainType === ChainType.EVM) {
+		_address = getAddress(address);
+	}
 
 	return (
 		<AddressContainer>
-			<Subline>{checksumAddress}</Subline>
-			<NetworkLogo chainId={networkId} logoSize={24} />
+			<Subline>{_address}</Subline>
+			<NetworkLogo
+				chainId={networkId}
+				logoSize={24}
+				chainType={chainType}
+			/>
 		</AddressContainer>
 	);
 };

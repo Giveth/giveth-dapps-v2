@@ -11,19 +11,21 @@ import {
 
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { erc20ABI } from 'wagmi';
+import { type Address, erc20ABI } from 'wagmi';
 import { Chain, parseEther, parseUnits } from 'viem';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
+import { getRequest } from '@/helpers/requests';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
 import config from '@/configuration';
 import { AddressZero } from './constants/constants';
 import { WalletType } from '@/hooks/useAuthenticationWallet';
+import { ChainType } from '@/types/config';
 
 declare let window: any;
 interface TransactionParams {
-	to: `0x${string}`;
+	to: Address;
 	value: string;
 }
 
@@ -65,8 +67,9 @@ export const thousandsSeparator = (x?: string | number): string | undefined => {
 };
 
 export const formatTxLink = (networkId?: number, txHash?: string) => {
-	if (!networkId || !txHash || !config.NETWORKS_CONFIG[networkId]) return '';
-	return `${config.NETWORKS_CONFIG[networkId].blockExplorers?.default.url}/tx/${txHash}`;
+	if (!networkId || !txHash || !config.EVM_NETWORKS_CONFIG[networkId])
+		return '';
+	return `${config.EVM_NETWORKS_CONFIG[networkId].blockExplorers?.default.url}/tx/${txHash}`;
 };
 
 export function formatWalletLink(
@@ -79,8 +82,8 @@ export function formatWalletLink(
 	switch (walletType) {
 		case WalletType.ETHEREUM:
 			const chainId = (chain as Chain)?.id;
-			if (!config.NETWORKS_CONFIG[chainId]) return '';
-			return `${config.NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/address/${address}`;
+			if (!config.EVM_NETWORKS_CONFIG[chainId]) return '';
+			return `${config.EVM_NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/address/${address}`;
 
 		case WalletType.SOLANA:
 			const url = `https://explorer.solana.com/address/${address}`;
@@ -225,6 +228,18 @@ export const compareAddressesArray = (
 	return new Set(lowerCaseAddresses).size === 1;
 };
 
+export const findAddressByChain = (
+	addresses: IWalletAddress[],
+	chainId: number,
+	chainType?: ChainType,
+) => {
+	return addresses?.find(address =>
+		chainId
+			? address.networkId === chainId
+			: address.chainType === chainType,
+	);
+};
+
 export const isUserRegistered = (user?: IUser) => {
 	// You should check if user is isSignedIn then call this function
 	return Boolean(user && user.name && user.email);
@@ -269,10 +284,10 @@ export const shortenAddress = (
 // Sends a transaction, either as an ERC20 token transfer or a regular ETH transfer.
 export async function sendTransaction(
 	params: TransactionParams,
-	contractAddress?: `0x${string}`,
+	contractAddress?: Address,
 ) {
 	try {
-		let hash: `0x${string}`;
+		let hash: Address;
 
 		if (contractAddress && contractAddress !== AddressZero) {
 			hash = await handleErc20Transfer(params, contractAddress);
@@ -297,8 +312,8 @@ export async function sendTransaction(
 // Handles the transfer for ERC20 tokens, returning the transaction hash.
 async function handleErc20Transfer(
 	params: TransactionParams,
-	contractAddress: `0x${string}`,
-): Promise<`0x${string}`> {
+	contractAddress: Address,
+): Promise<Address> {
 	console.log('contractAddress', contractAddress);
 	const contract = getContract({
 		address: contractAddress,
@@ -311,6 +326,8 @@ async function handleErc20Transfer(
 		abi: erc20ABI,
 		functionName: 'transfer',
 		args: [params.to, value],
+		// @ts-ignore -- needed for safe txs
+		value: 0n,
 	});
 	console.log('Write', write);
 	console.log('ERC20 transfer result', { hash: write.hash });
@@ -318,14 +335,13 @@ async function handleErc20Transfer(
 }
 
 // Handles the transfer for ETH, returning the transaction hash.
-async function handleEthTransfer(
-	params: TransactionParams,
-): Promise<`0x${string}`> {
+async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 	const value = parseEther(params.value);
 
 	const { hash } = await wagmiSendTransaction({
 		to: params.to,
 		value: value,
+		data: '0x',
 	});
 
 	console.log('ETH transfer result', { hash });
@@ -528,6 +544,25 @@ export const ArrayFrom0ToN = (n: number) => {
 		b = 0;
 	while (b < n) a[b] = b++;
 	return a;
+};
+
+export const checkMultisigSession = async ({ safeAddress, chainId }: any) => {
+	try {
+		let status = 'not found';
+		const sessionCheck = await getRequest(
+			`${config.MICROSERVICES.authentication}/multisigAuthentication`,
+			false,
+			{
+				safeAddress,
+				network: chainId,
+			},
+		);
+		status = sessionCheck?.status;
+
+		return { status };
+	} catch (error) {
+		return { status: 'not found' };
+	}
 };
 
 export const getUserIPInfo = async () => {

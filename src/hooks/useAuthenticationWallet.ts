@@ -3,19 +3,24 @@ import { Chain, useAccount, useDisconnect, useNetwork } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
 import { useEffect, useState, useMemo } from 'react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { encodeBase58 } from 'ethers';
+
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useRouter } from 'next/router';
-import { chainNameById } from '@/lib/network';
+import { base58 } from 'ethers/lib/utils';
+import { getChainName } from '@/lib/network';
 import config from '@/configuration';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
+import { ChainType } from '@/types/config';
 
 export enum WalletType {
-	SOLANA = 'SOLANA',
+	SOLANA = ChainType.SOLANA,
 	ETHEREUM = 'ETHEREUM',
 }
+
+const { SOLANA_CONFIG } = config;
+const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;
 
 export const useAuthenticationWallet = () => {
 	const [walletType, setWalletType] = useState<WalletType | null>(null);
@@ -64,7 +69,7 @@ export const useAuthenticationWallet = () => {
 		if (!signature) {
 			return undefined;
 		}
-		return encodeBase58(signature);
+		return base58.encode(signature);
 	};
 
 	useEffect(() => {
@@ -134,14 +139,14 @@ export const useAuthenticationWallet = () => {
 		switch (walletType) {
 			case WalletType.ETHEREUM:
 				setChain(evmChain);
-				setChainName(chainNameById(evmChain?.id));
+				setChainName(getChainName(evmChain?.id));
 				break;
 			case WalletType.SOLANA:
-				setChain(config.SOLANA_NETWORK);
+				setChain(solanaAdapter);
 				setChainName(
 					'Solana' +
-						(config.SOLANA_NETWORK !== WalletAdapterNetwork.Mainnet
-							? ` ${config.SOLANA_NETWORK}`
+						(solanaAdapter !== WalletAdapterNetwork.Mainnet
+							? ` ${solanaAdapter}`
 							: ''),
 				);
 				break;

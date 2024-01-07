@@ -13,11 +13,12 @@ import { IAddress } from '@/components/views/verification/manageFunds/ManageFund
 import SelectNetwork from '@/components/views/verification/manageFunds/SelectNetwork';
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
 import config from '@/configuration';
-import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
+import { getAddressFromENS, isAddressENS, isSolanaAddress } from '@/lib/wallet';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 import useFocus from '@/hooks/useFocus';
+import { ChainType, NonEVMNetworkConfig } from '@/types/config';
 
 interface IProps extends IModal {
 	addAddress: (address: IAddress) => void;
@@ -25,12 +26,15 @@ interface IProps extends IModal {
 }
 
 const networksConfig = config.NETWORKS_CONFIG;
-const networkOptions = Object.keys(networksConfig).map(networkId => {
-	const networkIdNumber = Number(networkId);
+const networkOptions = Object.keys(networksConfig).map(key => {
+	const chain = networksConfig[key];
+	const networkId = chain.id;
+	const chainType = (chain as NonEVMNetworkConfig).chainType;
 	return {
-		value: networkIdNumber,
-		label: chainNameById(networkIdNumber),
-		id: networkIdNumber,
+		value: networkId,
+		label: getChainName(networkId, chainType),
+		id: networkId,
+		chainType,
 	};
 });
 
@@ -61,18 +65,23 @@ const AddAddressModal: FC<IProps> = ({
 	const [inputRef] = useFocus();
 
 	const watchTitle = watch('title');
+	const watchChain = watch('network');
 
 	const handleAdd = async (formData: IAddressForm) => {
 		const { address, title, network } = formData;
-		const isEns = isAddressENS(address);
-		const _address = isEns
-			? await getAddressFromENS(address)
-			: getAddress(address);
+		let _address: null | string = address;
+		if (!network.chainType) {
+			const isEns = isAddressENS(address);
+			_address = isEns
+				? await getAddressFromENS(address)
+				: getAddress(address);
+		}
 		if (_address) {
 			addAddress({
 				address: _address,
 				title,
 				networkId: network.value,
+				chainType: network.chainType,
 			});
 		}
 		closeModal();
@@ -85,7 +94,11 @@ const AddAddressModal: FC<IProps> = ({
 
 	const validateAddress = async (address: string) => {
 		let actualAddress = address;
-		if (isAddressENS(address)) {
+		if (watchChain?.chainType === ChainType.SOLANA) {
+			if (!isSolanaAddress(address)) {
+				return 'Invalid Solana address';
+			}
+		} else if (isAddressENS(address)) {
 			if (chainId !== 1) {
 				return 'Please switch to Mainnet to handle ENS addresses';
 			}
@@ -93,7 +106,7 @@ const AddAddressModal: FC<IProps> = ({
 			if (!temp) return 'Invalid ENS address';
 			actualAddress = temp;
 		} else if (!isAddress(address)) {
-			return 'Invalid address';
+			return 'Invalid ETH address';
 		}
 		const isDuplicate = addresses.some(
 			item =>

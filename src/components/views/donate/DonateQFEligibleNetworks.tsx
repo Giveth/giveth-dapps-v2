@@ -12,7 +12,7 @@ import SwitchNetwork from '@/components/modals/SwitchNetwork';
 import { useDonateData } from '@/context/donate.context';
 import { getActiveRound } from '@/helpers/qf';
 import { SwitchCaption } from './common.styled';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 
 const DonateQFEligibleNetworks = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -22,7 +22,7 @@ const DonateQFEligibleNetworks = () => {
 	const activeRound = getActiveRound(project.qfRounds);
 
 	const eligibleChainNames = activeRound?.eligibleNetworks.map(network =>
-		chainNameById(network),
+		getChainName(network),
 	);
 
 	const chainsString = eligibleChainNames?.join(' & ');
@@ -44,7 +44,7 @@ const DonateQFEligibleNetworks = () => {
 			</Flex>
 			<MakeDonationDescription>
 				{formatMessage({ id: 'label.donations_made_on' })}
-				&nbsp; <BoldCaption>{chainsString}</BoldCaption> &nbsp;
+				&nbsp;<BoldCaption>{chainsString}</BoldCaption>&nbsp;
 				{formatMessage({ id: 'label.are_eligible_to_be_matched' })}
 			</MakeDonationDescription>
 			{showModal && (

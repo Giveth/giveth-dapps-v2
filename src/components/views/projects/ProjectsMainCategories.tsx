@@ -8,15 +8,10 @@ import 'swiper/css/navigation';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
-import { IMainCategory } from '@/apollo/types/types';
 import { useProjectsContext } from '@/context/projects.context';
 
-interface IProjectsFilterProps {
-	mainCategories: IMainCategory[];
-}
-
-function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
-	const { isQF } = useProjectsContext();
+function ProjectsMainCategories() {
+	const { isQF, mainCategories } = useProjectsContext();
 	const projectsRoute = (isQF ? Routes.QFProjects : Routes.Projects) + '/';
 	const { query } = useRouter();
 	const { formatMessage } = useIntl();

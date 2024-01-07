@@ -1,14 +1,14 @@
 import { useEffect } from 'react';
-import { useAccount } from 'wagmi';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 
 import { fetchNotificationCountAsync } from '@/features/notification/notification.thunks';
+import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
 
 const NotificationController = () => {
 	const dispatch = useAppDispatch();
 	const { isEnabled } = useAppSelector(state => state.user);
-	const { address } = useAccount();
+	const { walletAddress: address } = useAuthenticationWallet();
 
 	useEffect(() => {
 		let interval: any;

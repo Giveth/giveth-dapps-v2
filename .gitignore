@@ -33,8 +33,11 @@ yarn-error.log*
 # vercel
 .vercel
 
-#IntelliJ IDEA
+# IntelliJ IDEA
 .idea
+
+# Visual Studio Code
+.vscode
 
 # Sentry
 .sentryclirc

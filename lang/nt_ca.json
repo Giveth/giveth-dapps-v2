@@ -66,7 +66,7 @@
 	"label.get_your_giveth_name": "Get your Giveth Name.",
 	"label.gitcoin_passport": "Gitcoin Passport",
 	"label.givbacks": "GIVbacks",
-	"label.givback_distributed_afer_round": "GIV rewards from the GIVbacks program will be distributed after the end of the current round.",
+	"label.givback_distributed_after_round": "GIV rewards from the GIVbacks program will be distributed after the end of the current round.",
 	"label.giveconomy": "GIVeconomy",
 	"label.givers_nft": "Givers NFT",
 	"label.givers_pfp_holders": "Givers PFP Holders will be able to claim their own unique ",

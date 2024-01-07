@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Col, Row } from '@giveth/ui-design-system';
 import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
-import ProjectsTable from './ProjectsTable';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import { client } from '@/apollo/apolloClient';
@@ -18,6 +17,9 @@ import { Flex } from '@/components/styled-components/Flex';
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { ProjectsContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
+import ProjectsTable from './ProjectsTable';
+import { isRecurringActive } from '../../donate/DonationCard';
+import ProjectItem from './ProjectItem';
 
 const itemPerPage = 10;
 
@@ -114,14 +116,26 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 						/>
 					</NothingWrapper>
 				) : myAccount ? (
-					<ProjectsTableWrapper>
-						<ProjectsTable
-							projects={projects}
-							changeOrder={changeOrder}
-							order={order}
-							setProjects={setProjects}
-						/>
-					</ProjectsTableWrapper>
+					isRecurringActive ? (
+						<Flex flexDirection='column' gap='18px'>
+							{projects.map(project => (
+								<ProjectItem
+									key={project.id}
+									project={project}
+									setProjects={setProjects}
+								/>
+							))}
+						</Flex>
+					) : (
+						<ProjectsTableWrapper>
+							<ProjectsTable
+								projects={projects}
+								changeOrder={changeOrder}
+								order={order}
+								setProjects={setProjects}
+							/>
+						</ProjectsTableWrapper>
+					)
 				) : (
 					<Row>
 						{projects.map(project => (
@@ -143,12 +157,12 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	);
 };
 
-export const ProjectsContainer = styled.div`
-	margin-bottom: 40px;
-`;
-
 const ProjectsTableWrapper = styled.div`
 	overflow: auto;
+`;
+
+export const ProjectsContainer = styled.div`
+	margin-bottom: 40px;
 `;
 
 export const Loading = styled(Flex)`

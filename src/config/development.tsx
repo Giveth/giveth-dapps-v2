@@ -8,7 +8,9 @@ import {
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {
+	ChainType,
 	EnvConfig,
+	NonEVMChain,
 	StakingPlatform,
 	StakingType,
 	StreamType,
@@ -19,6 +21,7 @@ import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconEthereum } from '@/components/Icons/Eth';
 import { IconUnknown } from '@/components/Icons/Unknown';
+import IconSolana from '@/components/Icons/Solana';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -38,13 +41,26 @@ const SEPT_8TH_2022 = 1662595200000;
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0xc916Ce4025Cb479d9BA9D798A80094a449667F5D';
 
+const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
+
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
-const SOLANA_NETWORK = WalletAdapterNetwork.Testnet;
+const SOLANA_NETWORK: NonEVMChain = {
+	id: 0,
+	chainType: ChainType.SOLANA,
+	name: 'Solana Testnet',
+	adapterNetwork: WalletAdapterNetwork.Testnet,
+	blockExplorers: {
+		default: {
+			name: 'Solana Explorer',
+			url: 'https://explorer.solana.com',
+		},
+	},
+};
 
 const classic = {
 	id: 63,
@@ -68,6 +84,19 @@ const classic = {
 	subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
 };
 
+const EVM_CHAINS = [
+	polygon,
+	goerli,
+	gnosis,
+	optimismGoerli,
+	celoAlfajores,
+	classic,
+];
+const NON_EVM_CHAINS: NonEVMChain[] = [];
+if (isSolanaEnabled) {
+	NON_EVM_CHAINS.push(SOLANA_NETWORK);
+}
+
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
 	BACKEND_LINK: BACKEND_LINK,
@@ -78,14 +107,14 @@ const config: EnvConfig = {
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
 
-	CHAINS: [polygon, goerli, gnosis, optimismGoerli, celoAlfajores, classic],
+	EVM_CHAINS,
+	CHAINS: [...EVM_CHAINS, ...NON_EVM_CHAINS],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
-	SOLANA_NETWORK: SOLANA_NETWORK,
 
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
@@ -315,6 +344,7 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-staging',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
@@ -335,6 +365,36 @@ const config: EnvConfig = {
 			unit: 'GIV',
 		},
 		uniswapV2Subgraph: '',
+		superFluidSubgraph:
+			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-goerli',
+		SUPER_FLUID_TOKENS: [
+			{
+				underlyingToken: {
+					decimals: 18,
+					id: '0xc916ce4025cb479d9ba9d798a80094a449667f5d',
+					name: 'Giveth',
+					symbol: 'GIV',
+				},
+				decimals: 18,
+				id: '0x34cf77c14f39c81adbdad922af538f05633fa07e',
+				name: 'fake Super Giveth Token',
+				symbol: 'fGIVx',
+				isSuperToken: true,
+			},
+			{
+				underlyingToken: {
+					name: 'Ethereum',
+					symbol: 'ETH',
+					decimals: 18,
+					id: '0x0000000000000000000000000000000000000000',
+				},
+				decimals: 18,
+				id: '0xe01f8743677da897f4e7de9073b57bf034fc2433',
+				name: 'Super ETH',
+				symbol: 'ETHx',
+				isSuperToken: true,
+			},
+		],
 	},
 
 	CELO_CONFIG: {
@@ -354,6 +414,12 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+	},
+
+	SOLANA_CONFIG: {
+		...SOLANA_NETWORK,
+		coingeckoChainName: 'solana',
+		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
 	},
 };
 

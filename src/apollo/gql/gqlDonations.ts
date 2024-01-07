@@ -111,9 +111,9 @@ export const SAVE_DONATION = gql`
 
 export const CREATE_DONATION = gql`
 	mutation (
-		$transactionId: String!
+		$transactionId: String
 		$transactionNetworkId: Float!
-		$nonce: Float!
+		$nonce: Float
 		$amount: Float!
 		$token: String!
 		$projectId: Float!
@@ -121,6 +121,7 @@ export const CREATE_DONATION = gql`
 		$tokenAddress: String
 		$anonymous: Boolean
 		$referrerId: String
+		$safeTransactionId: String
 	) {
 		createDonation(
 			transactionId: $transactionId
@@ -133,6 +134,7 @@ export const CREATE_DONATION = gql`
 			tokenAddress: $tokenAddress
 			anonymous: $anonymous
 			referrerId: $referrerId
+			safeTransactionId: $safeTransactionId
 		)
 	}
 `;

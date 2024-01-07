@@ -97,7 +97,9 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 						>
 							<CategoryItem theme={theme}>
 								<GLink size='Big'>
-									{formatMessage({ id: category.slug })}
+									{formatMessage({
+										id: 'projects_' + category.slug,
+									})}
 								</GLink>
 							</CategoryItem>
 						</Link>

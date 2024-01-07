@@ -14,7 +14,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { useProjectContext } from '@/context/project.context';
+import { type FC } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
@@ -27,10 +27,14 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { formatDonation } from '@/helpers/number';
 import ProjectEligibleQFChains from './ProjectEligibleQFChains';
+import { IProject } from '@/apollo/types/types';
 
-const QFSection = () => {
+interface IQFSectionProps {
+	projectData?: IProject;
+}
+
+const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	const { formatMessage, locale } = useIntl();
-	const { projectData } = useProjectContext();
 	const { estimatedMatching, sumDonationValueUsdForActiveQfRound } =
 		projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);

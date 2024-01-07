@@ -27,9 +27,12 @@ import { useProjectContext } from '@/context/project.context';
 import ProjectTimeline from '@/components/views/project/projectUpdates/ProjectTimeline';
 import TimelineSection from '@/components/views/project/projectUpdates/TimelineSection';
 
-const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
-	ssr: false,
-});
+const RichTextInput = dynamic(
+	() => import('@/components/rich-text/RichTextInput'),
+	{
+		ssr: false,
+	},
+);
 
 const UPDATE_LIMIT = 2000;
 

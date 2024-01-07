@@ -8,13 +8,17 @@ import { client } from '@/apollo/apolloClient';
 import { ICreateDonation } from '@/components/views/donate/helpers';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 
+const SAVE_DONATION_ITERATIONS = 5;
+
 export interface IOnTxHash extends ICreateDonation {
-	txHash: string;
-	nonce: number;
+	txHash?: string | null;
+	nonce?: number | null;
 	chainId: number;
+	safeTransactionId?: string | null;
 }
 
 export const updateDonation = (donationId: number, status: EDonationStatus) => {
+	if (!donationId || donationId === 0) return;
 	client
 		.mutate({
 			mutation: UPDATE_DONATION_STATUS,
@@ -29,7 +33,20 @@ export const updateDonation = (donationId: number, status: EDonationStatus) => {
 		);
 };
 
+let saveDonationIteration = 0;
 export async function saveDonation(props: IOnTxHash) {
+	try {
+		return await createDonation(props);
+	} catch (error) {
+		saveDonationIteration++;
+		if (saveDonationIteration >= SAVE_DONATION_ITERATIONS) {
+			saveDonationIteration = 0;
+			throw error;
+		} else return saveDonation(props);
+	}
+}
+
+const createDonation = async (props: IOnTxHash) => {
 	const {
 		chainId,
 		txHash,
@@ -39,11 +56,11 @@ export async function saveDonation(props: IOnTxHash) {
 		anonymous,
 		nonce,
 		chainvineReferred,
+		safeTransactionId,
 	} = props;
-
 	const { address, symbol } = token;
-
 	let donationId = 0;
+
 	try {
 		const { data } = await client.mutate({
 			mutation: CREATE_DONATION,
@@ -57,9 +74,9 @@ export async function saveDonation(props: IOnTxHash) {
 				tokenAddress: address,
 				anonymous,
 				referrerId: chainvineReferred,
+				safeTransactionId,
 			},
 		});
-
 		donationId = data.createDonation;
 	} catch (error) {
 		captureException(error, {
@@ -67,9 +84,10 @@ export async function saveDonation(props: IOnTxHash) {
 				section: 'createDonation',
 			},
 		});
-		console.log(error);
+		console.log('createDonation error: ', error);
 		throw error;
 	}
+
 	console.log('DONATION ID: ', { donationId });
 	return donationId;
-}
+};
