@@ -26,7 +26,6 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
 import DonateModal from '@/components/views/donate/DonateModal';
-import DonateModal from '@/components/modals/DonateModal';
 import {
 	donationDecimals,
 	mediaQueries,
