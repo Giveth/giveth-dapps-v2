@@ -9,21 +9,25 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useNetwork } from 'wagmi';
+import { Chain } from 'wagmi';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import { formatEvmTxLink } from '@/lib/helpers';
 import { useDonateData } from '@/context/donate.context';
 import ExternalLink from '@/components/ExternalLink';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { formatTxLink } from '@/lib/helpers';
 
 const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
+	const { chain, walletChainType } = useGeneralWallet();
 	return (
 		<TxLink>
 			<span>Donation to {title + ' '}</span>
 			<ExternalLink
-				href={formatEvmTxLink(chainId, txHash)}
+				href={formatTxLink({
+					txHash,
+					networkId: (chain as Chain)?.id,
+					chainType: walletChainType || undefined,
+				})}
 				title='View the transaction'
 			/>
 			<IconExternalLink24 />

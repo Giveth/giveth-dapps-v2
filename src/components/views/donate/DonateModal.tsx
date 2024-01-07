@@ -14,7 +14,7 @@ import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import {
 	compareAddresses,
-	formatEvmTxLink,
+	formatTxLink,
 	formatSolanaTxLink,
 	showToastError,
 } from '@/lib/helpers';
@@ -98,9 +98,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses, givethAddresses } = project || {};
-	// console.log('addresses', addresses);
-	// console.log('walletChainType:', walletChainType);
-	// console.log('chainId:', chainId);
+
 	const projectWalletAddress = findMatchingWalletAddress(
 		addresses,
 		chainId,
@@ -212,11 +210,11 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	};
 
 	const handleTxLink = (txHash?: string) => {
-		if (token.chainType === 'SOLANA') {
-			return formatSolanaTxLink(txHash);
-		} else {
-			return formatEvmTxLink(chainId, firstTxHash);
-		}
+		return formatTxLink({
+			txHash,
+			networkId: chainId,
+			chainType: token.chainType,
+		});
 	};
 
 	if (!projectWalletAddress && walletChainType) {
