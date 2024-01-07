@@ -83,9 +83,6 @@ export const FETCH_ALL_PROJECTS = gql`
 				...ProjectCardFields
 			}
 			totalCount
-			categories {
-				name
-			}
 		}
 	}
 `;
