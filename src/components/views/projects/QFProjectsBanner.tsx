@@ -87,11 +87,11 @@ export const QFProjectsBanner = () => {
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
-			<ImgBottomRight
+			{/* <ImgBottomRight
 				src={'/images/banners/qf-round/bottom-right.png'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
-			/>
+			/> */}
 			<ImgTopLeft
 				src={'/images/banners/qf-round/top-left.png'}
 				style={{ objectFit: 'cover' }}
