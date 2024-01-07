@@ -55,6 +55,7 @@ import QFModal from '@/components/views/donate/QFModal';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 import { isRecurringActive } from './DonationCard';
+import { INetworkIdWithChain } from './common.types';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -107,7 +108,9 @@ const CryptoDonation: FC = () => {
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();
-	const [acceptedChains, setAcceptedChains] = useState<number[]>();
+	const [acceptedChains, setAcceptedChains] = useState<INetworkIdWithChain[]>(
+		[],
+	);
 	const [maxDonationEnabled, setMaxDonationEnabled] = useState(false);
 	const [donationToGiveth, setDonationToGiveth] = useState(
 		noDonationSplit ? 0 : 5,
@@ -127,6 +130,8 @@ const CryptoDonation: FC = () => {
 
 	const isOnEligibleNetworks =
 		networkId && activeRound?.eligibleNetworks?.includes(networkId);
+
+	console.log('acceptedTokens', acceptedTokens);
 
 	useEffect(() => {
 		if (
@@ -158,8 +163,36 @@ const CryptoDonation: FC = () => {
 						return false;
 				}
 			});
+			console.log('acceptedTokens', acceptedTokens);
 
-			setAcceptedChains(acceptedNetworkIds);
+			const acceptedChainsWithChaintypeAndNetworkId: INetworkIdWithChain[] =
+				acceptedTokens.reduce(
+					(
+						acc: INetworkIdWithChain[],
+						token: IProjectAcceptedToken,
+					) => {
+						// Check if the networkId already exists in the accumulator
+						if (
+							!acc.some(
+								accToken =>
+									accToken.networkId === token.networkId,
+							)
+						) {
+							acc.push({
+								chainType: token.chainType!,
+								networkId: token.networkId,
+							});
+						}
+						return acc;
+					},
+					[] as INetworkIdWithChain[],
+				);
+			console.log(
+				'acceptedChainsWithChaintypeAndNetworkId',
+				acceptedChainsWithChaintypeAndNetworkId,
+			);
+
+			setAcceptedChains(acceptedChainsWithChaintypeAndNetworkId);
 			if (filteredTokens.length < 1) {
 				setShowChangeNetworkModal(true);
 			}
