@@ -12,12 +12,7 @@ import { useIntl } from 'react-intl';
 import { Chain } from 'wagmi';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
-import {
-	compareAddresses,
-	formatTxLink,
-	formatSolanaTxLink,
-	showToastError,
-} from '@/lib/helpers';
+import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
 import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
