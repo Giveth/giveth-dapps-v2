@@ -12,18 +12,32 @@ import { useIntl } from 'react-intl';
 import { useNetwork } from 'wagmi';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import { formatEvmTxLink } from '@/lib/helpers';
-import { useDonateData } from '@/context/donate.context';
+import { TxHashWithChainType, useDonateData } from '@/context/donate.context';
 import ExternalLink from '@/components/ExternalLink';
+import { ChainType } from '@/types/config';
+import { formatEvmTxLink, formatSolanaTxLink } from '@/lib/helpers';
 
-const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
+const TxRow = ({
+	txHash,
+	title,
+}: {
+	txHash: TxHashWithChainType;
+	title?: string;
+}) => {
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
+	const hash = txHash?.txHash || undefined;
+	console.log('TX HASH', txHash);
+	if (!hash) return; // Check if hash is not present
 	return (
 		<TxLink>
 			<span>Donation to {title + ' '}</span>
 			<ExternalLink
-				href={formatEvmTxLink(chainId, txHash)}
+				href={
+					txHash.chainType === ChainType.SOLANA
+						? formatSolanaTxLink(hash)
+						: formatEvmTxLink(chainId, hash)
+				}
 				title='View the transaction'
 			/>
 			<IconExternalLink24 />
