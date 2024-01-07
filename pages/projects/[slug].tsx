@@ -122,7 +122,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 					totalCount,
 					qfRounds,
 				},
-				revalidate: 600,
 			};
 		}
 		return {
