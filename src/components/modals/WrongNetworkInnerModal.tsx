@@ -9,10 +9,11 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { jointItems } from '@/helpers/text';
 import SwitchNetwork from './SwitchNetwork';
 import { getChainName } from '@/lib/network';
+import { INetworkIdWithChain } from '../views/donate/common.types';
 
 export interface IWrongNetworkInnerModal {
 	cardName: string;
-	targetNetworks: number[];
+	targetNetworks: INetworkIdWithChain[];
 }
 
 export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
@@ -25,8 +26,10 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
 
-	const chainNames = targetNetworks.map(network => getChainName(network));
-
+	const chainNames = targetNetworks.map(network =>
+		getChainName(network.networkId),
+	);
+	console.log('targetNetworks', targetNetworks);
 	const chainsStr = jointItems(chainNames);
 
 	return (
