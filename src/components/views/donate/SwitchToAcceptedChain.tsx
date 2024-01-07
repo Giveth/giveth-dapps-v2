@@ -7,18 +7,26 @@ import {
 	NetworkToast,
 	SwitchCaption,
 } from '@/components/views/donate/common.styled';
-import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
+import { INetworkIdWithChain } from './common.types'; // Import the type
 
-const SwitchToAcceptedChain: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
+const SwitchToAcceptedChain: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({
+	acceptedChains,
+}) => {
 	const { formatMessage } = useIntl();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 	const { switchNetwork } = useSwitchNetwork();
 
-	if (!chainId || !acceptedChains || acceptedChains?.includes(chainId)) {
+	// Update the condition to check if the current chainId is in the list of acceptedChains
+	if (
+		!chainId ||
+		!acceptedChains ||
+		acceptedChains.some(chain => chain.networkId === chainId)
+	) {
 		return null;
 	}
 
+	// Assuming getNetworkNames is updated to handle INetworkIdWithChain array
 	return (
 		<NetworkToast>
 			<Caption medium>
@@ -27,7 +35,10 @@ const SwitchToAcceptedChain: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
 				})}{' '}
 				{getNetworkNames(acceptedChains, 'and')}.
 			</Caption>
-			<SwitchCaption onClick={() => switchNetwork?.(acceptedChains[0])}>
+			{/* Use the first accepted chain's networkId for the switchNetwork call */}
+			<SwitchCaption
+				onClick={() => switchNetwork?.(acceptedChains[0].networkId)}
+			>
 				{formatMessage({ id: 'label.switch_network' })}
 			</SwitchCaption>
 		</NetworkToast>
