@@ -13,6 +13,7 @@
 	"component.project-stats.status.tooltip": "Projects status refers to if the project is active and raising funds, deactivated, canceled or in draft phase.",
 	"component.project-stats.verification.tooltip": "Verified projects have been reviewed by our team and found to be providing a public good, with a history of impact and reputation at stake.",
 	"component.qf-section.tooltip": "This estimation is the matching funds that this project would get if the round ended now, disregarding fraud analysis.",
+	"component.qf-section.tooltip_polygon": "Esta estimación representa los fondos de contrapartida que recibiría este proyecto si la ronda se cerrara ahora, ignorando el análisis de fraude y el proceso de asignación especial para los 100 mejores de Jokerace.",
 	"component.regenstream_card.harvest_caption": "Use the Harvest button to claim liquid rewards from this RegenStream",
 	"component.reward_card.wrong_network": "{name} is available on {chains}. Please switch the network.",
 	"component.title.commons_stack": "Commons Stack",
@@ -152,5 +153,6 @@
 	"refi": "Refi",
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
+	"tooltip.donation.matching_polygon": "Esta estimación representa los fondos de contrapartida que recibiría este proyecto si la ronda se cerrara ahora, ignorando el análisis de fraude y el proceso de asignación especial para los 100 mejores de Jokerace.",
 	"ubi": "UBI"
 }
