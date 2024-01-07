@@ -6,7 +6,7 @@ import {
 	Row,
 	H2,
 	Col,
-	deviceSize,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -77,28 +77,28 @@ export const QFProjectsBanner = () => {
 	return (
 		<BannerContainer>
 			<Image
-				src={'/images/banners/giving-season/bg.png'}
+				src={'/images/banners/qf-round/bg.png'}
 				style={{ objectFit: 'cover' }}
 				fill
 				alt='QF Banner'
 			/>
-			<OPItem1
-				src={'/images/banners/giving-season/top-right.png'}
+			<ImgTopRight
+				src={'/images/banners/qf-round/top-right.png'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
-			<OPItem2
-				src={'/images/banners/giving-season/bottom-right.png'}
+			{/* <ImgBottomRight
+				src={'/images/banners/qf-round/bottom-right.png'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/> */}
+			<ImgTopLeft
+				src={'/images/banners/qf-round/top-left.png'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
-			<OPItem3
-				src={'/images/banners/giving-season/top-left.png'}
-				style={{ objectFit: 'cover' }}
-				alt='QF OP'
-			/>
-			<OPItem4
-				src={'/images/banners/giving-season/bottom-left.png'}
+			<ImgBottomLeft
+				src={'/images/banners/qf-round/bottom-left.png'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
@@ -128,14 +128,14 @@ export const QFProjectsBanner = () => {
 							</Desc>
 						)}
 					</StyledCol>
-					<StyledCol xs={12} md={6}>
+					{/* <StyledCol xs={12} md={6}>
 						<Image
 							src={'/images/banners/qfSponsorsOP.png'}
 							style={{ objectFit: 'contain' }}
 							fill
 							alt='QF Banner'
 						/>
-					</StyledCol>
+					</StyledCol> */}
 				</Row>
 			</Container>
 		</BannerContainer>
@@ -161,12 +161,11 @@ const StyledCol = styled(Col)`
 	flex-direction: column;
 	z-index: 1;
 	min-height: 300px;
-	text-align: left;
-	align-items: flex-start;
-
-	@media (max-width: ${deviceSize.laptopS}px) {
-		text-align: center;
-		align-items: center;
+	text-align: center;
+	align-items: center;
+	${mediaQueries.laptopS} {
+		text-align: left;
+		align-items: flex-start;
 	}
 `;
 
@@ -182,49 +181,35 @@ const Name = styled(H2)`
 const Desc = styled(Flex)`
 	width: fit-content;
 	color: #fff;
-	border: 2px solid #fff;
-	border-radius: 48.202px;
+	border: 2px solid #d640f9;
+	border-radius: 20px;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
 	padding: 9px 20px;
-	background: #e11527;
+	background: #272526;
 	margin-top: 12px;
 	margin-bottom: 32px;
 `;
 
-const OPItem = styled.img`
+const ImgBase = styled.img`
 	z-index: 1 !important;
 	position: absolute;
-	width: 250px;
-
-	@media (max-width: ${deviceSize.tablet}px) {
-		width: 180px;
-	}
 `;
-const OPItem1 = styled(OPItem)`
+const ImgTopRight = styled(ImgBase)`
 	top: 0;
 	right: 0;
 `;
-const OPItem2 = styled(OPItem)`
+const ImgBottomRight = styled(ImgBase)`
 	right: 0;
 	bottom: 0;
 `;
-const OPItem3 = styled(OPItem)`
+const ImgTopLeft = styled(ImgBase)`
 	top: 0;
-	left: 0;
-	width: 300px;
-
-	@media (max-width: ${deviceSize.tablet}px) {
-		width: 200px;
-	}
+	left: 130px;
 `;
 
-const OPItem4 = styled(OPItem)`
+const ImgBottomLeft = styled(ImgBase)`
 	left: 0;
 	bottom: 0;
-	width: 270px;
-	@media (max-width: ${deviceSize.tablet}px) {
-		width: 180px;
-	}
 `;
