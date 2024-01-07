@@ -179,7 +179,7 @@ const CryptoDonation: FC = () => {
 			setSelectedToken(tokens[0]);
 			setTokenIsGivBackEligible(tokens[0]?.isGivbackEligible);
 		}
-	}, [networkId, acceptedTokens, walletChainType]);
+	}, [networkId, acceptedTokens, walletChainType, addresses]);
 
 	useEffect(() => {
 		setMaxDonationEnabled(false);
