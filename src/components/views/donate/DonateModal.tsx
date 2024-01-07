@@ -35,7 +35,7 @@ import config from '@/configuration';
 import DonateSummary from '@/components/views/donate/DonateSummary';
 import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import { useDonateData } from '@/context/donate.context';
+import { TxHashWithChainType, useDonateData } from '@/context/donate.context';
 import { useCreateEvmDonation } from '@/hooks/useCreateEvmDonation';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
@@ -111,7 +111,13 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		chainId,
 		walletChainType,
 	);
-
+	console.log(
+		'projectWalletAddress && walletChainType',
+		projectWalletAddress,
+		walletChainType,
+		addresses,
+		chainId,
+	);
 	const avgPrice = tokenPrice && tokenPrice * amount;
 	let donationToGivethAmount = (amount * donationToGiveth) / 100;
 	if (donationToGivethAmount < minDonationAmount && isDonatingToGiveth) {
@@ -148,10 +154,21 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const delayedCloseModal = (txHash1: string, txHash2?: string) => {
 		setProcessFinished(true);
 		setDonating(false);
-		const txHash = txHash2 ? [txHash1, txHash2] : [txHash1];
+
+		const { chainType } = token;
+
+		const txHashArray: TxHashWithChainType[] = [
+			{ txHash: txHash1, chainType: chainType || ChainType.EVM },
+			...(txHash2
+				? [{ txHash: txHash2, chainType: chainType || ChainType.EVM }]
+				: []),
+		];
+
+		console.log('txHash', txHashArray);
+
 		setTimeout(() => {
 			closeModal();
-			setSuccessDonation({ txHash, givBackEligible });
+			setSuccessDonation({ txHash: txHashArray, givBackEligible });
 		}, 4000);
 	};
 
