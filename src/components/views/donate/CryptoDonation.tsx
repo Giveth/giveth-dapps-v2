@@ -84,6 +84,7 @@ const CryptoDonation: FC = () => {
 		verified,
 		id: projectId,
 		status,
+		addresses,
 		title: projectTitle,
 	} = project;
 
@@ -147,12 +148,21 @@ const CryptoDonation: FC = () => {
 					case ChainType.EVM:
 						return (
 							token.networkId === networkId &&
-							acceptedNetworkIds.includes(networkId)
+							acceptedNetworkIds.includes(networkId) &&
+							addresses?.some(
+								({ networkId, chainType }) =>
+									networkId === networkId &&
+									chainType === walletChainType,
+							)
 						);
 					case ChainType.SOLANA:
 						return (
 							token.chainType === walletChainType &&
-							acceptedNonEvmNetworks.includes(walletChainType)
+							acceptedNonEvmNetworks.includes(walletChainType) &&
+							addresses?.some(
+								({ chainType }) =>
+									chainType === walletChainType,
+							)
 						);
 					default:
 						return false;
