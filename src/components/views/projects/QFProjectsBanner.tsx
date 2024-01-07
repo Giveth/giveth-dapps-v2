@@ -6,7 +6,7 @@ import {
 	Row,
 	H2,
 	Col,
-	deviceSize,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -161,12 +161,11 @@ const StyledCol = styled(Col)`
 	flex-direction: column;
 	z-index: 1;
 	min-height: 300px;
-	text-align: left;
-	align-items: flex-start;
-
-	@media (max-width: ${deviceSize.laptopS}px) {
-		text-align: center;
-		align-items: center;
+	text-align: center;
+	align-items: center;
+	${mediaQueries.laptopS} {
+		text-align: left;
+		align-items: flex-start;
 	}
 `;
 
