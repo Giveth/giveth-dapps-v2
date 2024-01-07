@@ -10,6 +10,7 @@
 	"component.project-stats.status.tooltip": "L'estat dels projectes es refereix a si el projecte està actiu i recaptant fons, desactivat, cancel·lat o en fase d'esborrany.",
 	"component.project-stats.verification.tooltip": "Els projectes verificats han estat revisats pel nostre equip i s'ha comprovat que proporcionen un bé públic, amb una història d'impacte i reputació en joc.",
 	"component.qf-section.tooltip": "Aquesta estimació són els fons de coincidència que aquest projecte obtindria si la ronda acabés ara, sense tenir en compte l'anàlisi de frau.",
+	"component.qf-section.tooltip_polygon": "Aquesta estimació representa els fons coincidents que rebria aquest projecte si la ronda es tanqués ara, ignorant l'anàlisi del frau i el procés d'assignació especial per als 100 millors de Jokerace.",
 	"component.qf_middle_banner.desc": "La ronda Buidl on Polygon pretén premiar els creadors, constructors i projectes que contribueixen al creixement i el benestar de l'ecosistema del Polígon. Fes una donació als projectes participants a Polygon PoS i fes que les teves donacions coincideixin amb el poder del finançament quadràtic.",
 	"component.qf_middle_banner.title": "Finançament quadràtic al Polygon",
 	"component.regenstream_card.harvest_caption": "Utilitzeu el botó de Collita per reclamar recompenses líquides d'aquest RegenStream",
@@ -174,5 +175,6 @@
 	"project.givback_toast.title.verified_public_2": " del valor de la teva donació!",
 	"refi": "Refi",
 	"testfilter": "testfilter",
-	"tooltip.donation.matching": "Aquesta estimació es basa en les donacions fetes fins ara aquesta ronda de finançament quadràtic i no està considerant l'anàlisi de frau. La quantitat real de coincidència pot variar."
+	"tooltip.donation.matching": "Aquesta estimació es basa en les donacions fetes fins ara aquesta ronda de finançament quadràtic i no està considerant l'anàlisi de frau. La quantitat real de coincidència pot variar.",
+	"tooltip.donation.matching_polygon": "Aquesta estimació representa els fons coincidents que rebria aquest projecte si la ronda es tanqués ara, ignorant l'anàlisi del frau i el procés d'assignació especial per als 100 millors de Jokerace."
 }
