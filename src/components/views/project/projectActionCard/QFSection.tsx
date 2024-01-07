@@ -62,7 +62,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
 					<TooltipContent>
 						{formatMessage({
-							id: 'component.qf-section.tooltip',
+							id: 'component.qf-section.tooltip_polygon',
 						})}
 					</TooltipContent>
 				</IconWithTooltip>

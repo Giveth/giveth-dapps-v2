@@ -44,7 +44,6 @@ const TestIndex = () => {
 	const [description, setDescription] = useState('');
 	const router = useRouter();
 	const { setTest } = useTestData();
-	console.log('Index rerender');
 
 	useEffect(() => {
 		setInterval(() => {

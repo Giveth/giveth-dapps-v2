@@ -61,7 +61,9 @@ const DescriptionInput = () => {
 				/>
 			)}
 
-			<H5>{formatMessage({ id: 'label.tell_us_about_your_project' })}</H5>
+			<H5 id='project_description'>
+				{formatMessage({ id: 'label.tell_us_about_your_project' })}
+			</H5>
 			<CaptionContainer>
 				{formatMessage({ id: 'label.aim_for_200_500_words' })}{' '}
 				<span onClick={() => setShowModal(true)}>
