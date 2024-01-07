@@ -13,20 +13,25 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
+import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
+import { INetworkIdWithChain } from '@/components/views/donate/common.types';
 import config from '@/configuration';
-import { NetworkConfig } from '@/types/config';
 import NetworkLogo from '../NetworkLogo';
 import { NetworkItem, SelectedNetwork } from './SwitchNetwork';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { Flex, FlexCenter } from '../styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
+import { ChainType } from '@/types/config';
+import { signOut } from '@/features/user/user.thunks';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
-interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
+interface IDonateWrongNetwork extends IModal {
+	acceptedChains?: INetworkIdWithChain[];
+}
 
 const networks = [
 	config.MAINNET_CONFIG,
@@ -35,6 +40,7 @@ const networks = [
 	config.CELO_CONFIG,
 	config.OPTIMISM_CONFIG,
 	config.CLASSIC_CONFIG,
+	config.SOLANA_CONFIG,
 ];
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
@@ -46,18 +52,36 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
 	const { switchNetwork } = useSwitchNetwork();
+	const { setVisible } = useWalletModal();
+	const dispatch = useAppDispatch();
+	const { disconnect } = useGeneralWallet();
 
 	const { slug } = router.query;
 
-	const eligibleNetworks: NetworkConfig[] = networks.filter(
-		network => acceptedChains?.includes(network.id),
+	const eligibleNetworks = networks.filter(
+		network =>
+			acceptedChains?.some(
+				acceptedChain => acceptedChain.networkId === network.id,
+			),
 	);
 
 	useEffect(() => {
-		if (chainId && acceptedChains?.includes(chainId)) {
+		if (
+			chainId &&
+			acceptedChains?.some(
+				acceptedChain => acceptedChain.networkId === chainId,
+			)
+		) {
 			closeModal();
 		}
 	}, [chainId, acceptedChains]);
+
+	const handleSignOutAndSignInWithSolana = async () => {
+		await dispatch(signOut());
+		disconnect();
+		setVisible(true);
+		closeModal();
+	};
 
 	return (
 		<Modal
@@ -86,14 +110,24 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 						return (
 							<NetworkItem
 								onClick={() => {
-									switchNetwork?.(_chainId);
-									closeModal();
+									if (
+										network.chainType === ChainType.SOLANA
+									) {
+										handleSignOutAndSignInWithSolana();
+									} else {
+										switchNetwork?.(_chainId);
+										closeModal();
+									}
 								}}
 								isSelected={_chainId === chainId}
 								key={_chainId}
 								theme={theme}
 							>
-								<NetworkLogo chainId={_chainId} logoSize={32} />
+								<NetworkLogo
+									chainId={_chainId}
+									logoSize={32}
+									chainType={network.chainType}
+								/>
 								<B>{network.name}</B>
 								{_chainId === chainId && (
 									<SelectedNetwork
