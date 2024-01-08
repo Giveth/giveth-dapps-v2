@@ -23,6 +23,7 @@ import NetworkLogo from './NetworkLogo';
 import { ScaleRate, ScaleRateBig } from '@/lib/constants/constants';
 import { getChainName } from '@/lib/network';
 import { INetworkIdWithChain } from './views/donate/common.types';
+import { ChainType } from '@/types/config';
 
 interface IRewardCardProps {
 	cardName: string;
@@ -70,10 +71,17 @@ export const RewardCard: FC<IRewardCardProps> = ({
 		setUSDAmount(usd);
 	}, [liquidAmount, givPrice, tokenPrice]);
 
+	const evmNetworks = targetNetworks.reduce((acc, network) => {
+		if (network.chainType === ChainType.EVM) {
+			acc.push(network.networkId);
+		}
+		return acc;
+	}, [] as number[]);
+
 	return (
 		<>
 			<RewardCardContainer className={className}>
-				{!network || !targetNetworks.includes(network) ? (
+				{!network || !evmNetworks.includes(network) ? (
 					<WrongNetworkInnerModal
 						targetNetworks={targetNetworks}
 						cardName={cardName}
