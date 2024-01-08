@@ -4,12 +4,13 @@ import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { jointItems } from '@/helpers/text';
 import SwitchNetwork from './SwitchNetwork';
 import { getChainName } from '@/lib/network';
 import { INetworkIdWithChain } from '../views/donate/common.types';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
 
 export interface IWrongNetworkInnerModal {
 	cardName: string;
@@ -21,16 +22,22 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 	targetNetworks,
 }) => {
 	const [showSwitchNetwork, setShowSwitchNetwork] = useState(false);
-
 	const { address } = useAccount();
 	const { formatMessage } = useIntl();
-	const { open: openConnectModal } = useWeb3Modal();
+
+	const { walletChainType, handleSingOutAndSignInWithEVM } =
+		useGeneralWallet();
 
 	const chainNames = targetNetworks.map(network =>
 		getChainName(network.networkId),
 	);
-	console.log('targetNetworks', targetNetworks);
 	const chainsStr = jointItems(chainNames);
+
+	const handleConnectWallet = async () => {
+		if (walletChainType === ChainType.SOLANA) {
+			handleSingOutAndSignInWithEVM();
+		}
+	};
 
 	return (
 		<WrongNetworkInnerModalContainer>
@@ -79,7 +86,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 							label={formatMessage({
 								id: 'component.button.connect_wallet',
 							})}
-							onClick={() => openConnectModal?.()}
+							onClick={handleConnectWallet}
 							buttonType='primary'
 						/>
 					</ButtonsContainer>
