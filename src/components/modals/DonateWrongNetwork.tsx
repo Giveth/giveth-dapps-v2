@@ -13,8 +13,6 @@ import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
-import { useWalletModal } from '@solana/wallet-adapter-react-ui';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
@@ -23,11 +21,10 @@ import { INetworkIdWithChain } from '@/components/views/donate/common.types';
 import config from '@/configuration';
 import NetworkLogo from '../NetworkLogo';
 import { NetworkItem, SelectedNetwork } from './SwitchNetwork';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppSelector } from '@/features/hooks';
 import { Flex, FlexCenter } from '../styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
-import { signOut } from '@/features/user/user.thunks';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 interface IDonateWrongNetwork extends IModal {
@@ -53,10 +50,13 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
 	const { switchNetwork } = useSwitchNetwork();
-	const { setVisible } = useWalletModal();
-	const dispatch = useAppDispatch();
-	const { disconnect, walletChainType } = useGeneralWallet();
-	const { open: openConnectModal } = useWeb3Modal();
+
+	const {
+		walletChainType,
+		handleSingOutAndSignInWithEVM,
+		handleSignOutAndSignInWithSolana,
+	} = useGeneralWallet();
+
 	const { slug } = router.query;
 	const eligibleNetworks = networks.filter(
 		network =>
@@ -75,20 +75,6 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 			closeModal();
 		}
 	}, [chainId, acceptedChains]);
-
-	const handleSignOutAndSignInWithSolana = async () => {
-		await dispatch(signOut());
-		disconnect();
-		setVisible(true);
-		closeModal();
-	};
-
-	const handleSingOutAndSignInWithEVM = async () => {
-		await dispatch(signOut());
-		console.log('disconnectAli', disconnect);
-		disconnect();
-		openConnectModal();
-	};
 
 	return (
 		<Modal
@@ -123,6 +109,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 										walletChainType === ChainType.EVM
 									) {
 										await handleSignOutAndSignInWithSolana();
+										closeModal();
 									} else if (
 										network.chainType === ChainType.EVM &&
 										walletChainType === ChainType.SOLANA
