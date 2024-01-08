@@ -115,13 +115,13 @@ export const TabGIVbacksTop = () => {
 									{
 										networkId: config.GNOSIS_NETWORK_NUMBER,
 										chainType:
-											config.GNOSIS_CONFIG.chainType!,
+											config.GNOSIS_CONFIG.chainType,
 									},
 									{
 										networkId:
 											config.OPTIMISM_NETWORK_NUMBER,
 										chainType:
-											config.OPTIMISM_CONFIG.chainType!,
+											config.OPTIMISM_CONFIG.chainType,
 									},
 								]}
 							/>

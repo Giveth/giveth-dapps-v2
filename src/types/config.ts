@@ -134,7 +134,7 @@ export interface NetworkConfig extends Chain {
 	uniswapV2Subgraph?: string;
 	WETH_TOKEN_ADDRESS?: Address;
 	MERKLE_ADDRESS?: Address;
-	chainType?: ChainType;
+	chainType: ChainType;
 }
 
 export interface GIVpowerGgivStakingConfig extends SimplePoolStakingConfig {

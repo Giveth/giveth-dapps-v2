@@ -130,7 +130,7 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 					customNetworks={[
 						{
 							networkId: config.GNOSIS_NETWORK_NUMBER,
-							chainType: config.GNOSIS_CONFIG.chainType!,
+							chainType: config.GNOSIS_CONFIG.chainType,
 						},
 					]}
 				/>

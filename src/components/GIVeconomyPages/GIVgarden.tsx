@@ -77,7 +77,7 @@ export const TabGardenTop = () => {
 							targetNetworks={[
 								{
 									networkId: config.GNOSIS_NETWORK_NUMBER,
-									chainType: config.GNOSIS_CONFIG.chainType!,
+									chainType: config.GNOSIS_CONFIG.chainType,
 								},
 							]}
 						/>

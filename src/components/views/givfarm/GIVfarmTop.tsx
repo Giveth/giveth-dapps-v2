@@ -65,16 +65,15 @@ export const GIVfarmTop = () => {
 							targetNetworks={[
 								{
 									networkId: config.MAINNET_NETWORK_NUMBER,
-									chainType: config.MAINNET_CONFIG.chainType!,
+									chainType: config.MAINNET_CONFIG.chainType,
 								},
 								{
 									networkId: config.GNOSIS_NETWORK_NUMBER,
-									chainType: config.GNOSIS_CONFIG.chainType!,
+									chainType: config.GNOSIS_CONFIG.chainType,
 								},
 								{
 									networkId: config.OPTIMISM_NETWORK_NUMBER,
-									chainType:
-										config.OPTIMISM_CONFIG.chainType!,
+									chainType: config.OPTIMISM_CONFIG.chainType,
 								},
 							]}
 						/>
