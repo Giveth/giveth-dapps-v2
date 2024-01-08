@@ -41,7 +41,7 @@ export const DonationInfo = () => {
 	const { isSuccessDonation, project } = useDonateData();
 	const { txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
-	
+
 	return (
 		<Options>
 			<Lead style={{ color: neutralColors.gray[900] }}>
