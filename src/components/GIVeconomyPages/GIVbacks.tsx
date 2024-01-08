@@ -112,8 +112,17 @@ export const TabGIVbacksTop = () => {
 								subButtonCb={() => setShowGivBackExplain(true)}
 								network={chainId}
 								targetNetworks={[
-									config.GNOSIS_NETWORK_NUMBER,
-									config.OPTIMISM_NETWORK_NUMBER,
+									{
+										networkId: config.GNOSIS_NETWORK_NUMBER,
+										chainType:
+											config.GNOSIS_CONFIG.chainType!,
+									},
+									{
+										networkId:
+											config.OPTIMISM_NETWORK_NUMBER,
+										chainType:
+											config.OPTIMISM_CONFIG.chainType!,
+									},
 								]}
 							/>
 						</Col>
