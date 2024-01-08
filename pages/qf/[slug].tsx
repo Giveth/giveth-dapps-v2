@@ -1,4 +1,4 @@
-import { type GetStaticProps } from 'next/types';
+import { GetServerSideProps } from 'next/types';
 import { EProjectsFilter, IMainCategory } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
@@ -27,7 +27,6 @@ const QFProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		mainCategories,
 		selectedMainCategory,
 		totalCount,
-		categories,
 		qfRounds,
 	} = props;
 
@@ -41,43 +40,17 @@ const QFProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 			qfRounds={qfRounds}
 		>
 			<GeneralMetatags info={projectsMetatags} />
-			<ProjectsIndex
-				projects={projects}
-				totalCount={totalCount}
-				categories={categories}
-			/>
+			<ProjectsIndex projects={projects} totalCount={totalCount} />
 		</ProjectsProvider>
 	);
 };
 
-export async function getStaticPaths() {
-	const apolloClient = initializeApollo();
-	const {
-		data: { mainCategories },
-	}: {
-		data: { mainCategories: IMainCategory[] };
-	} = await apolloClient.query({
-		query: FETCH_MAIN_CATEGORIES,
-	});
-	const paths = mainCategories.map(c => {
-		return {
-			params: {
-				slug: c.slug,
-			},
-		};
-	});
-	return {
-		paths,
-		fallback: 'blocking', //false or "blocking" // See the "fallback" section below
-	};
-}
-
-export const getStaticProps: GetStaticProps = async context => {
+export const getServerSideProps: GetServerSideProps = async context => {
 	const apolloClient = initializeApollo();
 	const { variables, notifyOnNetworkStatusChange } = OPTIONS_HOME_PROJECTS;
 	try {
-		const { params } = context;
-		const slug = params?.slug;
+		const { query } = context;
+		const slug = query.slug;
 
 		const {
 			data: { mainCategories },
@@ -100,10 +73,10 @@ export const getStaticProps: GetStaticProps = async context => {
 			};
 			const apolloClient = initializeApollo();
 
-			let _filters = params?.filter
-				? Array.isArray(params?.filter)
-					? params?.filter
-					: [params?.filter]
+			let _filters = query.filter
+				? Array.isArray(query.filter)
+					? query.filter
+					: [query.filter]
 				: undefined;
 
 			_filters
@@ -114,11 +87,11 @@ export const getStaticProps: GetStaticProps = async context => {
 				query: FETCH_ALL_PROJECTS,
 				variables: {
 					...variables,
-					sortingBy: params?.sort || EProjectsSortBy.INSTANT_BOOSTING,
-					searchTerm: params?.searchTerm,
+					sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
+					searchTerm: query.searchTerm,
 					filters: _filters,
-					campaignSlug: params?.campaignSlug,
-					category: params?.category,
+					campaignSlug: query.campaignSlug,
+					category: query.category,
 					mainCategory: getMainCategorySlug(
 						updatedSelectedMainCategory,
 					),
@@ -126,7 +99,7 @@ export const getStaticProps: GetStaticProps = async context => {
 				},
 				fetchPolicy: 'network-only',
 			});
-			const { projects, totalCount, categories } = data.allProjects;
+			const { projects, totalCount } = data.allProjects;
 			const {
 				data: { qfRounds },
 			} = await apolloClient.query({
@@ -139,7 +112,6 @@ export const getStaticProps: GetStaticProps = async context => {
 					mainCategories: updatedMainCategory,
 					selectedMainCategory: updatedSelectedMainCategory,
 					totalCount,
-					categories,
 					qfRounds,
 				},
 			};

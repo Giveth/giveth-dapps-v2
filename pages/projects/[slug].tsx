@@ -1,10 +1,5 @@
-import { GetStaticProps } from 'next/types';
-import {
-	ICategory,
-	IMainCategory,
-	IProject,
-	IQFRound,
-} from '@/apollo/types/types';
+import { GetServerSideProps } from 'next/types';
+import { IMainCategory, IProject, IQFRound } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
@@ -24,7 +19,6 @@ import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 export interface IProjectsRouteProps {
 	projects: IProject[];
 	totalCount: number;
-	categories: ICategory[];
 	mainCategories: IMainCategory[];
 	qfRounds: IQFRound[];
 }
@@ -48,7 +42,6 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		mainCategories,
 		selectedMainCategory,
 		totalCount,
-		categories,
 		qfRounds,
 	} = props;
 
@@ -62,43 +55,17 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 			qfRounds={qfRounds}
 		>
 			<GeneralMetatags info={projectsMetatags} />
-			<ProjectsIndex
-				projects={projects}
-				totalCount={totalCount}
-				categories={categories}
-			/>
+			<ProjectsIndex projects={projects} totalCount={totalCount} />
 		</ProjectsProvider>
 	);
 };
 
-export async function getStaticPaths() {
-	const apolloClient = initializeApollo();
-	const {
-		data: { mainCategories },
-	}: {
-		data: { mainCategories: IMainCategory[] };
-	} = await apolloClient.query({
-		query: FETCH_MAIN_CATEGORIES,
-	});
-	const paths = mainCategories.map(c => {
-		return {
-			params: {
-				slug: c.slug,
-			},
-		};
-	});
-	return {
-		paths,
-		fallback: 'blocking', //false or "blocking" // See the "fallback" section below
-	};
-}
-
-export const getStaticProps: GetStaticProps = async context => {
+export const getServerSideProps: GetServerSideProps = async context => {
 	const apolloClient = initializeApollo();
 	const { variables, notifyOnNetworkStatusChange } = OPTIONS_HOME_PROJECTS;
 	try {
-		const { params } = context;
-		const slug = params?.slug;
+		const { query } = context;
+		const slug = query.slug;
 
 		const {
 			data: { mainCategories },
@@ -124,15 +91,15 @@ export const getStaticProps: GetStaticProps = async context => {
 				query: FETCH_ALL_PROJECTS,
 				variables: {
 					...variables,
-					sortingBy: params?.sort || EProjectsSortBy.INSTANT_BOOSTING,
-					searchTerm: params?.searchTerm,
-					filters: params?.filter
-						? Array.isArray(params?.filter)
-							? params?.filter
-							: [params?.filter]
+					sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
+					searchTerm: query.searchTerm,
+					filters: query.filter
+						? Array.isArray(query.filter)
+							? query.filter
+							: [query.filter]
 						: null,
-					campaignSlug: params?.campaignSlug,
-					category: params?.category,
+					campaignSlug: query.campaignSlug,
+					category: query.category,
 					mainCategory: getMainCategorySlug(
 						updatedSelectedMainCategory,
 					),
@@ -140,7 +107,7 @@ export const getStaticProps: GetStaticProps = async context => {
 				},
 				fetchPolicy: 'network-only',
 			});
-			const { projects, totalCount, categories } = data.allProjects;
+			const { projects, totalCount } = data.allProjects;
 			const {
 				data: { qfRounds },
 			} = await apolloClient.query({
@@ -153,10 +120,8 @@ export const getStaticProps: GetStaticProps = async context => {
 					mainCategories: updatedMainCategory,
 					selectedMainCategory: updatedSelectedMainCategory,
 					totalCount,
-					categories,
 					qfRounds,
 				},
-				revalidate: 600,
 			};
 		}
 		return {

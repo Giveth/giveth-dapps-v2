@@ -56,18 +56,34 @@ export const thousandsSeparator = (x?: string | number): string | undefined => {
 	return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
-export const formatEvmTxLink = (networkId?: number, txHash?: string) => {
+export const formatTxLink = (params: {
+	txHash?: string;
+	chainType?: ChainType;
+	networkId?: number;
+}) => {
+	const { txHash, chainType, networkId } = params;
+	if (chainType === ChainType.SOLANA) {
+		return formatSolanaTxLink(txHash);
+	}
+	return formatEvmTxLink(networkId, txHash);
+};
+
+const formatEvmTxLink = (networkId?: number, txHash?: string) => {
 	if (!networkId || !txHash || !config.EVM_NETWORKS_CONFIG[networkId])
 		return '';
 	return `${config.EVM_NETWORKS_CONFIG[networkId].blockExplorers?.default.url}/tx/${txHash}`;
 };
 
-export const formatSolanaTxLink = (txHash?: string) => {
+const formatSolanaTxLink = (txHash?: string) => {
 	if (!txHash) return '';
+
+	const baseUrl = `${config.SOLANA_CONFIG.blockExplorers.default.url}/tx/${txHash}`;
+
 	if (isProduction) {
-		return `${config.SOLANA_CONFIG.blockExplorers.default.url}/tx/${txHash}`;
+		return baseUrl;
 	}
-	return `${config.SOLANA_CONFIG.blockExplorers.default.url}/tx/${txHash}?cluster=devnet`;
+	// Test environment
+	return `${baseUrl}?cluster=devnet`;
 };
 
 export function formatWalletLink(

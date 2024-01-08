@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
-import { smallFormatDate, formatEvmTxLink } from '@/lib/helpers';
+import { smallFormatDate, formatTxLink } from '@/lib/helpers';
 import { slugToProjectView } from '@/lib/routeCreators';
 import ExternalLink from '@/components/ExternalLink';
 import { IWalletDonation } from '@/apollo/types/types';
@@ -83,10 +83,11 @@ const DonationTable: FC<DonationTable> = ({
 						<B>{formatDonation(donation.amount)}</B>
 						<Currency>{donation.currency}</Currency>
 						<ExternalLink
-							href={formatEvmTxLink(
-								donation.transactionNetworkId,
-								donation.transactionId,
-							)}
+							href={formatTxLink({
+								networkId: donation.transactionNetworkId,
+								txHash: donation.transactionId,
+								chainType: donation.chainType,
+							})}
 						>
 							<IconExternalLink
 								size={16}
