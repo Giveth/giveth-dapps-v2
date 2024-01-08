@@ -156,6 +156,7 @@ const CryptoDonation: FC = () => {
 						);
 					case ChainType.SOLANA:
 						return (
+							addressesChainTypes.includes(ChainType.SOLANA) &&
 							token.chainType === walletChainType &&
 							acceptedNonEvmNetworks.includes(walletChainType)
 						);
@@ -165,8 +166,12 @@ const CryptoDonation: FC = () => {
 			});
 			console.log('acceptedTokens', acceptedTokens);
 
+			const filteredAcceptedTokens = acceptedTokens.filter(token =>
+				addressesChainTypes.includes(token.chainType),
+			);
+
 			const acceptedChainsWithChaintypeAndNetworkId: INetworkIdWithChain[] =
-				acceptedTokens.reduce(
+				filteredAcceptedTokens.reduce(
 					(
 						acc: INetworkIdWithChain[],
 						token: IProjectAcceptedToken,
@@ -191,6 +196,8 @@ const CryptoDonation: FC = () => {
 				'acceptedChainsWithChaintypeAndNetworkId',
 				acceptedChainsWithChaintypeAndNetworkId,
 			);
+
+			console.log('filteredTokens', filteredTokens);
 
 			setAcceptedChains(acceptedChainsWithChaintypeAndNetworkId);
 			if (filteredTokens.length < 1) {
@@ -385,6 +392,10 @@ const CryptoDonation: FC = () => {
 			signInThenDonate();
 		}
 	};
+
+	const addressesChainTypes = [
+		...new Set(project?.addresses?.map(({ chainType }) => chainType)),
+	];
 
 	return (
 		<MainContainer>
