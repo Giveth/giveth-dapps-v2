@@ -4,6 +4,7 @@ import {
 	Col,
 	Container,
 	IconDonation24,
+	mediaQueries,
 	neutralColors,
 	Row,
 	semanticColors,
@@ -25,11 +26,14 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
-import { DonationCard } from './DonationCard';
+import { DonationCard, isRecurringActive } from './DonationCard';
 import { SuccessView } from './SuccessView';
 import { DonateSection } from '../project/projectActionCard/DonationSection';
 import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
+import CryptoDonation from './CryptoDonation';
+import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
+import { DonationInfo } from './DonationInfo';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -40,23 +44,23 @@ const DonateIndex: FC = () => {
 	const isSafeEnv = useIsSafeEnvironment();
 
 	useEffect(() => {
+		if (!isRecurringActive) return;
 		dispatch(setShowHeader(false));
 		return () => {
 			dispatch(setShowHeader(true));
 		};
 	}, [dispatch]);
 
-	return isSuccessDonation ? (
+	return isRecurringActive && isSuccessDonation ? (
 		<>
 			<DonateHeader />
 			<DonateContainer>
 				<SuccessView />
 			</DonateContainer>
 		</>
-	) : (
+	) : isRecurringActive ? (
 		<>
 			<DonateHeader />
-			<BigArc />
 			{!isSafeEnv && hasActiveQFRound && <PassportBanner />}
 			<DonateContainer>
 				{/* <PurchaseXDAI /> */}
@@ -97,6 +101,42 @@ const DonateIndex: FC = () => {
 				)}
 			</DonateContainer>
 		</>
+	) : (
+		<>
+			<BigArc />
+			{!isSafeEnv && hasActiveQFRound && <PassportBanner />}
+			<Wrapper>
+				{alreadyDonated && (
+					<AlreadyDonatedWrapper>
+						<IconDonation24 />
+						<SublineBold>
+							{formatMessage({
+								id: 'component.already_donated.incorrect_estimate',
+							})}
+						</SublineBold>
+					</AlreadyDonatedWrapper>
+				)}
+				<NiceBanner />
+				<Sections>
+					<ProjectCardSelector />
+					<Right>
+						{isSuccessDonation ? (
+							<SuccessView />
+						) : (
+							<CryptoDonation />
+						)}
+					</Right>
+				</Sections>
+				<DonationInfo />
+				{!isMobile && (
+					<SocialBox
+						contentType={EContentType.thisProject}
+						project={project}
+						isDonateFooter
+					/>
+				)}
+			</Wrapper>
+		</>
 	);
 };
 
@@ -118,6 +158,12 @@ const DonateContainer = styled(Container)`
 	position: relative;
 `;
 
+const Wrapper = styled.div`
+	max-width: 1052px;
+	padding: 64px 0;
+	margin: 0 auto;
+`;
+
 const InfoWrapper = styled.div`
 	background-color: ${neutralColors.gray[100]};
 	padding: 24px;
@@ -133,6 +179,31 @@ const ImageWrapper = styled.div`
 	margin-bottom: 24px;
 	border-radius: 8px;
 	overflow: hidden;
+`;
+
+const Sections = styled.div`
+	height: 100%;
+	${mediaQueries.tablet} {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(500px, 1fr));
+		grid-auto-rows: minmax(100px, auto);
+	}
+	${mediaQueries.mobileL} {
+		grid-template-columns: repeat(2, minmax(100px, 1fr));
+		padding: 0 40px;
+	}
+`;
+
+const Right = styled.div`
+	z-index: 1;
+	background: white;
+	text-align: left;
+	padding: 32px;
+	min-height: 620px;
+	border-radius: 16px;
+	${mediaQueries.tablet} {
+		border-radius: 0 16px 16px 0;
+	}
 `;
 
 export default DonateIndex;

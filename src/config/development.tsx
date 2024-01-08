@@ -53,7 +53,7 @@ const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
 	chainType: ChainType.SOLANA,
 	name: 'Solana Testnet',
-	adapterNetwork: WalletAdapterNetwork.Testnet,
+	adapterNetwork: WalletAdapterNetwork.Devnet,
 	blockExplorers: {
 		default: {
 			name: 'Solana Explorer',

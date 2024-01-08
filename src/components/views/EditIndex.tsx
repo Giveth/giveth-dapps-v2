@@ -17,7 +17,7 @@ import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import CompleteProfile from '@/components/CompleteProfile';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const EditIndex = () => {
 	const [project, setProject] = useState<IProjectEdition>();
@@ -25,7 +25,7 @@ const EditIndex = () => {
 	const [isCancelled, setIsCancelled] = useState(false);
 	const [ownerAddress, setOwnerAddress] = useState<string>();
 
-	const { openWalletConnectModal } = useAuthenticationWallet();
+	const { openWalletConnectModal } = useGeneralWallet();
 
 	const dispatch = useAppDispatch();
 	const {

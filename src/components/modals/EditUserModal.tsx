@@ -23,7 +23,7 @@ import Input, { InputSize } from '../Input';
 import { requiredOptions, validators } from '@/lib/constants/regex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import useUpload from '@/hooks/useUpload';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 interface IEditUserModal extends IModal {
 	user: IUser;
@@ -55,7 +55,7 @@ const EditUserModal = ({
 		formState: { errors },
 	} = useForm<Inputs>();
 	const dispatch = useAppDispatch();
-	const { walletAddress: address } = useAuthenticationWallet();
+	const { walletAddress: address } = useGeneralWallet();
 
 	const [updateUser] = useMutation(UPDATE_USER);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
