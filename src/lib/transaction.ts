@@ -44,3 +44,34 @@ export const waitForTransaction = async (
 		throw new Error('Transaction status check timed out');
 	}
 };
+
+const MAX_RETRIES = 10;
+const RETRY_DELAY = 5000; // 5 seconds
+
+export const retryFetchTransaction = async <T, H>(
+	fetchTransaction: (params: { hash: H }) => Promise<T>,
+	txHash: H,
+	retries: number = MAX_RETRIES,
+): Promise<T> => {
+	for (let i = 0; i < retries; i++) {
+		const transaction = await fetchTransaction({
+			hash: txHash,
+		}).catch(error => {
+			console.log(
+				'Attempt',
+				i,
+				'Fetching Transaction Error:',
+				error,
+				txHash,
+			);
+			return null;
+		});
+
+		if (transaction) return transaction;
+
+		// If not found, wait for the delay time and try again
+		await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+	}
+	// Return null if the transaction is still not found after all retries
+	throw new Error('Transaction not found');
+};

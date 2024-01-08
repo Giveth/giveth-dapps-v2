@@ -540,6 +540,7 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 			id
 			symbol
 			networkId
+			chainType
 			address
 			name
 			decimals
