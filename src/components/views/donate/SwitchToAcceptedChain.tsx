@@ -19,7 +19,6 @@ const SwitchToAcceptedChain: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({
 
 	// Update the condition to check if the current chainId is in the list of acceptedChains
 	if (
-		!chainId ||
 		!acceptedChains ||
 		acceptedChains.some(chain => chain.networkId === chainId)
 	) {
