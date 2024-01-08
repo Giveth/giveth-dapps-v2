@@ -266,14 +266,14 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 			const batchOp = sf.batchCall(operations);
 			const tx = await batchOp.exec(signer);
-			if (tx.hash) {
-				setSuccessDonation({ txHash: [tx.hash] });
-			}
 			const res = await tx.wait();
 			if (!res.status) {
 				throw new Error('Transaction failed');
 			}
 			setStep(EDonationSteps.SUBMITTED);
+			if (tx.hash) {
+				setSuccessDonation({ txHash: [tx.hash] });
+			}
 		} catch (error) {
 			setStep(EDonationSteps.DONATE);
 			showToastError(error);
