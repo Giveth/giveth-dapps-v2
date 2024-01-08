@@ -109,11 +109,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	const { address } = useAccount();
 	const tokenPrice = useTokenPrice(selectedToken?.token);
 	const isSafeEnv = useIsSafeEnvironment();
-
-	// console.log('tokenPrice', tokenPrice);
-
-	// console.log('project', project);
-	// console.log('tokenStreams', tokenStreams);
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		if (!selectedToken) return;
@@ -333,7 +329,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			</Items>
 			<RunOutInfo amount={amount} totalPerMonth={totalPerMonth} />
 			<ActionButton
-				label={buttonLabel[step]}
+				label={formatMessage({ id: buttonLabel[step] })}
 				onClick={handleAction}
 				loading={
 					step === EDonationSteps.APPROVING ||
