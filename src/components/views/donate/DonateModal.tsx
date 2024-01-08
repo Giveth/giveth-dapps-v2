@@ -104,13 +104,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		chainId,
 		walletChainType,
 	);
-	console.log(
-		'projectWalletAddress && walletChainType',
-		projectWalletAddress,
-		walletChainType,
-		addresses,
-		chainId,
-	);
+
 	const avgPrice = tokenPrice && tokenPrice * amount;
 	let donationToGivethAmount = (amount * donationToGiveth) / 100;
 	if (donationToGivethAmount < minDonationAmount && isDonatingToGiveth) {
@@ -157,8 +151,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				: []),
 		];
 
-		console.log('txHash', txHashArray);
-
 		setTimeout(() => {
 			closeModal();
 			setSuccessDonation({ txHash: txHashArray, givBackEligible });
@@ -183,7 +175,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			symbol: token.symbol,
 		})
 			.then(({ isSaved, txHash: firstHash }) => {
-				console.log('FirstTxHash', firstHash);
 				if (!firstHash) {
 					setDonating(false);
 					return;
