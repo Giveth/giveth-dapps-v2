@@ -199,12 +199,6 @@ const CryptoDonation: FC = () => {
 					},
 					[] as INetworkIdWithChain[],
 				);
-			console.log(
-				'acceptedChainsWithChaintypeAndNetworkId',
-				acceptedChainsWithChaintypeAndNetworkId,
-			);
-
-			console.log('filteredTokens', filteredTokens);
 
 			setAcceptedChains(acceptedChainsWithChaintypeAndNetworkId);
 			if (filteredTokens.length < 1) {
