@@ -132,8 +132,6 @@ const CryptoDonation: FC = () => {
 	const isOnEligibleNetworks =
 		networkId && activeRound?.eligibleNetworks?.includes(networkId);
 
-	console.log('acceptedTokens', acceptedTokens);
-
 	useEffect(() => {
 		if (
 			(networkId ||
@@ -174,7 +172,6 @@ const CryptoDonation: FC = () => {
 						return false;
 				}
 			});
-			console.log('acceptedTokens', acceptedTokens);
 
 			const filteredAcceptedTokens = acceptedTokens.filter(token =>
 				addressesChainTypes.includes(token.chainType),
