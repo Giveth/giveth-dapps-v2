@@ -12,8 +12,8 @@ import { ADD_RECIPIENT_ADDRESS_TO_PROJECT } from '@/apollo/gql/gqlProjects';
 import InlineToast, { EToastType } from '../../toasts/InlineToast';
 import { suggestNewAddress } from '@/lib/helpers';
 import { ChainType, NonEVMChain } from '@/types/config';
-import { getChainName } from '@/lib/network';
 import { isSolanaAddress } from '@/lib/wallet';
+import { getChainName } from '@/lib/network';
 
 interface IAddNewAddress {
 	project: IProject;
@@ -41,6 +41,7 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 		formState: { errors },
 		setError,
 	} = useForm<IAddressForm>({ mode: 'onSubmit', reValidateMode: 'onSubmit' });
+
 	const chainType =
 		'chainType' in selectedChain ? selectedChain.chainType : undefined;
 
@@ -122,43 +123,39 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 	const chainName = getChainName(selectedChain.id, chainType);
 
 	return (
-		<>
-			<form onSubmit={handleSubmit(handleAdd)}>
-				<StyledInput
-					register={register}
-					registerName='address'
-					autoFocus
-					label={`Receiving address on ${chainName}`}
-					registerOptions={{
-						...requiredOptions.walletAddress,
-						validate: validateAddress,
-					}}
-					placeholder='0x...'
-					defaultValue={suggestNewAddress(
-						project.addresses!,
-						selectedChain,
-					)}
-					caption={`You can enter a new address to receive funds on ${chainName} network.`}
-				/>
-				{errors.address && (
-					<StyledInlineToast
-						type={EToastType.Error}
-						message={errors.address?.message as string}
-					/>
+		<form onSubmit={handleSubmit(handleAdd)}>
+			<StyledInput
+				register={register}
+				registerName='address'
+				autoFocus
+				label={`Receiving address on ${chainName}`}
+				registerOptions={{
+					...requiredOptions.walletAddress,
+					validate: validateAddress,
+				}}
+				placeholder='0x...'
+				defaultValue={suggestNewAddress(
+					project.addresses!,
+					selectedChain,
 				)}
-				<StyledButton
-					size='small'
-					label='SAVE ADDRESS'
-					buttonType='secondary'
-					type='submit'
-					loading={loading}
+				caption={`You can enter a new address to receive funds on ${chainName} network.`}
+			/>
+			{errors.address && (
+				<InlineToast
+					type={EToastType.Error}
+					message={errors.address?.message as string}
 				/>
-			</form>
-		</>
+			)}
+			<StyledButton
+				size='small'
+				label='SAVE ADDRESS'
+				buttonType='secondary'
+				type='submit'
+				loading={loading}
+			/>
+		</form>
 	);
 };
-
-const StyledInlineToast = styled(InlineToast)``;
 
 const StyledInput = styled(Input)`
 	margin-top: 24px;
