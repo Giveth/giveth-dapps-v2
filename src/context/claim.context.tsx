@@ -127,7 +127,12 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 				<SwitchNetwork
 					setShowModal={setShowModal}
 					desc="You're connected to the wrong network! please switch to Gnosis Chain."
-					customNetworks={[config.GNOSIS_NETWORK_NUMBER]}
+					customNetworks={[
+						{
+							networkId: config.GNOSIS_NETWORK_NUMBER,
+							chainType: config.GNOSIS_CONFIG.chainType!,
+						},
+					]}
 				/>
 			)}
 		</ClaimContext.Provider>
