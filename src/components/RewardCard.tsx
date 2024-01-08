@@ -71,17 +71,17 @@ export const RewardCard: FC<IRewardCardProps> = ({
 		setUSDAmount(usd);
 	}, [liquidAmount, givPrice, tokenPrice]);
 
-	const evmNetworks = targetNetworks.reduce((acc, network) => {
-		if (network.chainType === ChainType.EVM) {
-			acc.push(network.networkId);
-		}
-		return acc;
-	}, [] as number[]);
+	const targetNetwork = targetNetworks.find(_network => {
+		return (
+			_network.networkId === network &&
+			_network.chainType === ChainType.EVM
+		);
+	});
 
 	return (
 		<>
 			<RewardCardContainer className={className}>
-				{!network || !evmNetworks.includes(network) ? (
+				{!network || !targetNetwork ? (
 					<WrongNetworkInnerModal
 						targetNetworks={targetNetworks}
 						cardName={cardName}
