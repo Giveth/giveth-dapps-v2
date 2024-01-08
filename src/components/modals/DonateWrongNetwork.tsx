@@ -14,6 +14,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
@@ -54,10 +55,9 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { switchNetwork } = useSwitchNetwork();
 	const { setVisible } = useWalletModal();
 	const dispatch = useAppDispatch();
-	const { disconnect } = useGeneralWallet();
-
+	const { disconnect, walletChainType } = useGeneralWallet();
+	const { open: openConnectModal } = useWeb3Modal();
 	const { slug } = router.query;
-
 	const eligibleNetworks = networks.filter(
 		network =>
 			acceptedChains?.some(
@@ -81,6 +81,13 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 		disconnect();
 		setVisible(true);
 		closeModal();
+	};
+
+	const handleSingOutAndSignInWithEVM = async () => {
+		await dispatch(signOut());
+		console.log('disconnectAli', disconnect);
+		disconnect();
+		openConnectModal();
 	};
 
 	return (
@@ -109,11 +116,18 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 						const _chainId = network.id;
 						return (
 							<NetworkItem
-								onClick={() => {
+								onClick={async () => {
 									if (
-										network.chainType === ChainType.SOLANA
+										network.chainType ===
+											ChainType.SOLANA &&
+										walletChainType === ChainType.EVM
 									) {
-										handleSignOutAndSignInWithSolana();
+										await handleSignOutAndSignInWithSolana();
+									} else if (
+										network.chainType === ChainType.EVM &&
+										walletChainType === ChainType.SOLANA
+									) {
+										await handleSingOutAndSignInWithEVM();
 									} else {
 										switchNetwork?.(_chainId);
 										closeModal();
