@@ -41,6 +41,7 @@ export const DonationInfo = () => {
 	const { isSuccessDonation, project } = useDonateData();
 	const { txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
+	console.log('txHash', txHash);
 	return (
 		<Options>
 			<Lead style={{ color: neutralColors.gray[900] }}>
@@ -52,9 +53,9 @@ export const DonationInfo = () => {
 					id: 'label.you_can_view_them_on_a_blockchain_explorer_here',
 				})}
 			</Lead>
-			<TxRow txHash={txHash[0].txHash} title={project.title} />
+			<TxRow txHash={txHash[0]?.txHash} title={project.title} />
 			{hasMultipleTxs && (
-				<TxRow txHash={txHash[1].txHash} title='Giveth' />
+				<TxRow txHash={txHash[1]?.txHash} title='Giveth' />
 			)}
 			<Link href={Routes.AllProjects}>
 				<ProjectsButton size='small' label='SEE MORE PROJECTS' />
