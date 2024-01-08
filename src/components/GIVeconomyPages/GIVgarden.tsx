@@ -74,7 +74,12 @@ export const TabGardenTop = () => {
 								setShowModal(true);
 							}}
 							network={chainId}
-							targetNetworks={[config.GNOSIS_NETWORK_NUMBER]}
+							targetNetworks={[
+								{
+									networkId: config.GNOSIS_NETWORK_NUMBER,
+									chainType: config.GNOSIS_CONFIG.chainType!,
+								},
+							]}
 						/>
 					</Col>
 				</Row>
