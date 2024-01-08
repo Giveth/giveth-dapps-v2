@@ -22,6 +22,7 @@ import { WrongNetworkInnerModal } from '@/components//modals/WrongNetworkInnerMo
 import NetworkLogo from './NetworkLogo';
 import { ScaleRate, ScaleRateBig } from '@/lib/constants/constants';
 import { getChainName } from '@/lib/network';
+import { INetworkIdWithChain } from './views/donate/common.types';
 
 interface IRewardCardProps {
 	cardName: string;
@@ -34,7 +35,7 @@ interface IRewardCardProps {
 	subButtonCb?: Function;
 	network?: number;
 	className?: string;
-	targetNetworks: number[];
+	targetNetworks: INetworkIdWithChain[];
 	rewardTokenSymbol?: string;
 	tokenPrice?: bigint;
 }
