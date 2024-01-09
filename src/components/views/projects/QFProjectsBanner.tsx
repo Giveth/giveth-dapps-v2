@@ -36,8 +36,9 @@ export const QFProjectsBanner = () => {
 		if (!activeRound) return setState(ERoundStatus.NO_ACTIVE);
 		const _startDate = new Date(activeRound?.beginDate).getTime();
 		const _endDate = new Date(activeRound?.endDate).getTime();
-		const isRoundStarted = getNowUnixMS() > _startDate;
-		const isRoundEnded = getNowUnixMS() > _endDate;
+		const now = getNowUnixMS();
+		const isRoundStarted = now > _startDate;
+		const isRoundEnded = now > _endDate;
 		if (!isRoundStarted) {
 			setState(ERoundStatus.NOT_STARTED);
 		} else if (!isRoundEnded) {
