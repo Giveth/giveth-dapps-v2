@@ -258,7 +258,7 @@ export const RecurringDonationCard = () => {
 							<StyledSlider
 								min={0}
 								max={100}
-								step={1}
+								step={0.1}
 								railStyle={{
 									backgroundColor: sliderColor[200],
 								}}
