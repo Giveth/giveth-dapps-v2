@@ -17,6 +17,7 @@ import { Item } from './Item';
 import Routes from '@/lib/constants/Routes';
 import { ETheme } from '@/features/general/general.slice';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
+import { getNowUnixMS } from '@/helpers/time';
 
 interface IProjectsItems {
 	inSidebar?: boolean;
@@ -57,6 +58,10 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 		state => state.general,
 	);
 	const { formatMessage } = useIntl();
+	const now = getNowUnixMS();
+	const _startDate = new Date(activeQFRound?.beginDate || 0).getTime();
+	const _endDate = new Date(activeQFRound?.endDate || 0).getTime();
+	const showQFLink = activeQFRound && now > _startDate && now < _endDate;
 
 	return (
 		<>
@@ -75,7 +80,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 							</ExploreItem>
 						</Link>
 					))}
-					{activeQFRound && (
+					{showQFLink && (
 						<Link href={QFItem.url}>
 							<ExploreItem
 								className='qf-item'
