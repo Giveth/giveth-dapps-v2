@@ -41,6 +41,7 @@ import { showToastError } from '@/lib/helpers';
 import config from '@/configuration';
 import { WrongNetworkLayer } from './WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
+import { limitFraction } from '@/helpers/number';
 
 export const RecurringDonationCard = () => {
 	const [amount, setAmount] = useState(0n);
@@ -201,9 +202,11 @@ export const RecurringDonationCard = () => {
 						</SelectTokenWrapper>
 						{selectedToken?.token.isSuperToken ? (
 							<p>
-								{formatUnits(
-									balance?.value || 0n,
-									selectedToken.token.decimals,
+								{limitFraction(
+									formatUnits(
+										balance?.value || 0n,
+										selectedToken.token.decimals,
+									),
 								)}
 							</p>
 						) : (
@@ -222,13 +225,7 @@ export const RecurringDonationCard = () => {
 									{formatMessage({
 										id: 'label.available',
 									})}
-									:{' '}
-									{balance?.formatted ||
-										formatUnits(
-											balance.value,
-											selectedToken?.token.underlyingToken
-												?.decimals || 18,
-										)}
+									: {limitFraction(balance?.formatted)}
 								</GLink>
 								<IconWrapper
 									onClick={() => !isRefetching && refetch()}
@@ -292,10 +289,12 @@ export const RecurringDonationCard = () => {
 							<Flex gap='4px'>
 								<Caption medium>
 									{amount !== 0n && percentage !== 0
-										? formatUnits(
-												totalPerMonth,
-												selectedToken?.token.decimals ||
-													18,
+										? limitFraction(
+												formatUnits(
+													totalPerMonth,
+													selectedToken?.token
+														.decimals || 18,
+												),
 											)
 										: 0}
 								</Caption>
@@ -434,10 +433,12 @@ export const RecurringDonationCard = () => {
 								<Flex gap='4px'>
 									<Caption>
 										{amount !== 0n && percentage !== 0
-											? formatUnits(
-													projectPerMonth,
-													selectedToken?.token
-														.decimals || 18,
+											? limitFraction(
+													formatUnits(
+														projectPerMonth,
+														selectedToken?.token
+															.decimals || 18,
+													),
 												)
 											: 0}
 									</Caption>
@@ -464,10 +465,12 @@ export const RecurringDonationCard = () => {
 								<Flex gap='4px'>
 									<Caption>
 										{amount !== 0n && percentage !== 0
-											? formatUnits(
-													givethPerMonth,
-													selectedToken?.token
-														.decimals || 18,
+											? limitFraction(
+													formatUnits(
+														givethPerMonth,
+														selectedToken?.token
+															.decimals || 18,
+													),
 												)
 											: 0}
 									</Caption>
@@ -488,10 +491,12 @@ export const RecurringDonationCard = () => {
 								<Flex gap='4px'>
 									<Caption medium>
 										{amount !== 0n && percentage !== 0
-											? formatUnits(
-													totalPerMonth,
-													selectedToken?.token
-														.decimals || 18,
+											? limitFraction(
+													formatUnits(
+														totalPerMonth,
+														selectedToken?.token
+															.decimals || 18,
+													),
 												)
 											: 0}
 									</Caption>
