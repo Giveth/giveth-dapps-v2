@@ -52,7 +52,7 @@ const CLASSIC_NETWORK_NUMBER = 63;
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
 	chainType: ChainType.SOLANA,
-	name: 'Solana Testnet',
+	name: 'Solana Devnet',
 	adapterNetwork: WalletAdapterNetwork.Devnet,
 	blockExplorers: {
 		default: {
