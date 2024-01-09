@@ -3,6 +3,7 @@ import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import config from '@/configuration';
 import { minDonationAmount } from '@/lib/constants/constants';
+import { truncateToDecimalPlaces } from '@/lib/helpers';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -58,11 +59,24 @@ export interface ICreateDonation {
 export const calcDonationShare = (
 	totalDonation: number,
 	givethDonationPercent: number,
+	decimals = 6,
 ) => {
 	let givethDonation = totalDonation * (givethDonationPercent / 100);
 	if (givethDonation < minDonationAmount && givethDonationPercent !== 0) {
 		givethDonation = minDonationAmount;
 	}
-	const projectDonation = totalDonation - givethDonation;
-	return { projectDonation, givethDonation };
+	let projectDonation = totalDonation - givethDonation;
+	if (projectDonation < minDonationAmount) {
+		projectDonation = minDonationAmount;
+	}
+	return {
+		projectDonation: truncateToDecimalPlaces(
+			String(projectDonation),
+			decimals,
+		),
+		givethDonation: truncateToDecimalPlaces(
+			String(givethDonation),
+			decimals,
+		),
+	};
 };

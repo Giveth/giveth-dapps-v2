@@ -107,6 +107,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const { projectDonation, givethDonation } = calcDonationShare(
 		amount,
 		donationToGiveth,
+		token.decimals,
 	);
 	const projectDonationPrice = tokenPrice && tokenPrice * projectDonation;
 	const givethDonationPrice = tokenPrice && givethDonation * tokenPrice;

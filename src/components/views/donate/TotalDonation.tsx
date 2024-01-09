@@ -5,12 +5,13 @@ import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatPrice } from '@/lib/helpers';
 import { calcDonationShare } from '@/components/views/donate/helpers';
+import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
 interface ITotalDonation {
 	projectTitle?: string;
 	donationToGiveth: number;
 	totalDonation?: number;
-	tokenSymbol?: string;
+	token?: IProjectAcceptedToken;
 	isActive?: boolean;
 }
 
@@ -23,15 +24,18 @@ const TotalDonation: FC<ITotalDonation> = props => {
 		projectTitle,
 		donationToGiveth = 0,
 		totalDonation = 0,
-		tokenSymbol,
+		token,
 		isActive,
 	} = props;
+
+	const { decimals, symbol } = token || {};
 
 	const { formatMessage } = useIntl();
 
 	const { projectDonation, givethDonation } = calcDonationShare(
 		totalDonation,
 		donationToGiveth,
+		decimals,
 	);
 
 	return (
@@ -43,7 +47,7 @@ const TotalDonation: FC<ITotalDonation> = props => {
 				</Caption>
 				{isActive && (
 					<Caption>
-						{formatPrice(projectDonation) + ' ' + tokenSymbol}
+						{formatPrice(projectDonation) + ' ' + symbol}
 					</Caption>
 				)}
 			</TableRow>
@@ -56,7 +60,7 @@ const TotalDonation: FC<ITotalDonation> = props => {
 				</Caption>
 				{isActive && (
 					<Caption>
-						{formatPrice(givethDonation) + ' ' + tokenSymbol}
+						{formatPrice(givethDonation) + ' ' + symbol}
 					</Caption>
 				)}
 			</TableRow>
@@ -66,7 +70,7 @@ const TotalDonation: FC<ITotalDonation> = props => {
 				</Caption>
 				{isActive && (
 					<Caption medium>
-						{totalDonation + ' ' + tokenSymbol}
+						{projectDonation + givethDonation + ' ' + symbol}
 					</Caption>
 				)}
 			</Total>

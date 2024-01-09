@@ -487,7 +487,7 @@ const CryptoDonation: FC = () => {
 					donationToGiveth={donationToGiveth}
 					totalDonation={amountTyped}
 					projectTitle={projectTitle}
-					tokenSymbol={selectedToken?.symbol}
+					token={selectedToken}
 					isActive={!donationDisabled}
 				/>
 			) : (
