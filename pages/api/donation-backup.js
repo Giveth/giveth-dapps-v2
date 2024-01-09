@@ -19,7 +19,10 @@ const handler = (req, res) => {
 				}),
 			})
 				.then(response => response.json())
-				.then(data => console.log(data))
+				.then(data => {
+					console.log(data);
+					res.status(200).json('Successful');
+				})
 				.catch(error =>
 					captureException(
 						{
