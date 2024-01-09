@@ -104,7 +104,7 @@ export const GeneralWalletProvider: React.FC<{
 	} = useAccount();
 	const { chain: evmChain } = useNetwork();
 	const { disconnect: ethereumWalletDisconnect } = useDisconnect();
-	const nonFormatedEvmBalance = useBalance({ address: evmAddress });
+	const nonFormattedEvBalance = useBalance({ address: evmAddress });
 	const [solanaBalance, setSolanaBalance] = useState<number>();
 
 	// Solana wallet hooks
@@ -226,7 +226,7 @@ export const GeneralWalletProvider: React.FC<{
 	useEffect(() => {
 		switch (walletChainType) {
 			case ChainType.EVM:
-				setBalance(nonFormatedEvmBalance?.data?.formatted || undefined);
+				setBalance(nonFormattedEvBalance?.data?.formatted || undefined);
 				break;
 			case ChainType.SOLANA:
 				setBalance(solanaBalance?.toString());
@@ -235,7 +235,7 @@ export const GeneralWalletProvider: React.FC<{
 				setBalance(undefined);
 				break;
 		}
-	}, [walletChainType, nonFormatedEvmBalance, solanaBalance]);
+	}, [walletChainType, nonFormattedEvBalance, solanaBalance]);
 
 	const signMessage = async (
 		message: string,
