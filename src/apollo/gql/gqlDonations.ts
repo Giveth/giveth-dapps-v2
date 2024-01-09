@@ -10,6 +10,7 @@ export const DONATION_CORE_FIELDS = gql`
 		currency
 		transactionId
 		transactionNetworkId
+		chainType
 		createdAt
 		donationType
 		status

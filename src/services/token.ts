@@ -61,3 +61,19 @@ export const fetchETCPrice = async () => {
 		});
 	}
 };
+
+export const fetchSolanaPrice = async () => {
+	try {
+		const res = await fetch(
+			'https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd',
+		);
+		const data = await res.json();
+		return parseFloat(data.solana.usd);
+	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: 'fetchPrice',
+			},
+		});
+	}
+};

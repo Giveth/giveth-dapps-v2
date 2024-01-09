@@ -42,7 +42,7 @@ import { gqlRequest } from '@/helpers/requests';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import { IGiverPFPToken } from '@/apollo/types/types';
 import { useProfileContext } from '@/context/profile.context';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -67,7 +67,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
-	const { walletType, chain } = useAuthenticationWallet();
+	const { walletChainType, chain } = useGeneralWallet();
 	const { user, myAccount } = useProfileContext();
 	const router = useRouter();
 	const pfpToken = useGiverPFPToken(user?.walletAddress, user?.avatar);
@@ -164,7 +164,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 									</AddressTextMobile>
 									<ExternalLink
 										href={formatWalletLink(
-											walletType,
+											walletChainType,
 											chain,
 											user?.walletAddress,
 										)}
