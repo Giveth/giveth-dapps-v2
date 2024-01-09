@@ -225,7 +225,7 @@ export interface IDonation {
 	valueUsd?: number;
 	transactionId?: string;
 	transactionNetworkId: number;
-	chainType: ChainType;
+	chainType?: ChainType;
 	createdAt: string;
 	donationType?: EDonationType;
 	anonymous?: boolean;

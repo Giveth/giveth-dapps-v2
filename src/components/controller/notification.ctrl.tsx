@@ -3,12 +3,12 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 
 import { fetchNotificationCountAsync } from '@/features/notification/notification.thunks';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const NotificationController = () => {
 	const dispatch = useAppDispatch();
 	const { isEnabled } = useAppSelector(state => state.user);
-	const { walletAddress: address } = useAuthenticationWallet();
+	const { walletAddress: address } = useGeneralWallet();
 
 	useEffect(() => {
 		let interval: any;

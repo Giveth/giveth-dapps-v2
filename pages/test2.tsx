@@ -26,7 +26,7 @@ const YourApp = () => {
 						setFailedModalType(EDonationFailedType.NOT_SAVED);
 					}}
 				>
-					Test Button
+					Test Button1
 				</button>
 			</div>
 			{failedModalType && (

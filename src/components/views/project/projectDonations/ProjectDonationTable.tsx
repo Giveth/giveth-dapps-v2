@@ -215,11 +215,12 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 								<Currency>{donation.currency}</Currency>
 								{!donation.anonymous && (
 									<ExternalLink
-										href={formatTxLink(
-											donation.transactionNetworkId,
-											donation.transactionId,
-											donation.chainType,
-										)}
+										href={formatTxLink({
+											networkId:
+												donation.transactionNetworkId,
+											txHash: donation.transactionId,
+											chainType: donation.chainType,
+										})}
 									>
 										<IconExternalLink
 											size={16}

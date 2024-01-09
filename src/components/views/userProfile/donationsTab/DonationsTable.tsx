@@ -82,11 +82,11 @@ const DonationTable: FC<DonationTable> = ({
 						<B>{formatDonation(donation.amount)}</B>
 						<Currency>{donation.currency}</Currency>
 						<ExternalLink
-							href={formatTxLink(
-								donation.transactionNetworkId,
-								donation.transactionId,
-								donation.chainType,
-							)}
+							href={formatTxLink({
+								networkId: donation.transactionNetworkId,
+								txHash: donation.transactionId,
+								chainType: donation.chainType,
+							})}
 						>
 							<IconExternalLink
 								size={16}
