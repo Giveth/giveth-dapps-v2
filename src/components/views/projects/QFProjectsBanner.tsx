@@ -78,7 +78,7 @@ export const QFProjectsBanner = () => {
 	return (
 		<BannerContainer>
 			<Image
-				src={'/images/banners/qf-round/bg.png'}
+				src={'/images/banners/qf-round/bg.svg'}
 				style={{ objectFit: 'cover' }}
 				fill
 				alt='QF Banner'
@@ -147,6 +147,7 @@ const BannerContainer = styled.div`
 	position: relative;
 	padding-top: 100px;
 	padding-bottom: 100px;
+	background: linear-gradient(98deg, #0f0116 24.06%, #380950 93.92%);
 	img {
 		-webkit-user-drag: none;
 		-khtml-user-drag: none;
