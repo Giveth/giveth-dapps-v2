@@ -21,7 +21,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { requiredOptions, validators } from '@/lib/constants/regex';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export interface IUserInfo {
 	email: string;
@@ -44,7 +44,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	const [updateUser] = useMutation(UPDATE_USER);
 	const [showModal, setShowModal] = useState(false);
 
-	const { walletAddress: address } = useAuthenticationWallet();
+	const { walletAddress: address } = useGeneralWallet();
 	const dispatch = useAppDispatch();
 	const { isSignedIn, userData } = useAppSelector(state => state.user);
 

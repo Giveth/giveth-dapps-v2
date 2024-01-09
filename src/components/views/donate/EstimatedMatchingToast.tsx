@@ -63,7 +63,7 @@ const EstimatedMatchingToast = ({
 					>
 						<TooltipContent>
 							{formatMessage({
-								id: 'tooltip.donation.matching',
+								id: 'tooltip.donation.matching_polygon',
 							})}
 						</TooltipContent>
 					</IconWithTooltip>

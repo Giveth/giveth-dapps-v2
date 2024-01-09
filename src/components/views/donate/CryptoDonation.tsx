@@ -11,17 +11,12 @@ import {
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { formatUnits, parseUnits } from 'viem';
+import { Chain, formatUnits, parseUnits } from 'viem';
 
 import { getContract } from 'wagmi/actions';
-import {
-	type Address,
-	erc20ABI,
-	useAccount,
-	useBalance,
-	useNetwork,
-} from 'wagmi';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { type Address, erc20ABI } from 'wagmi';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
@@ -48,16 +43,12 @@ import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
 } from '@/apollo/types/gqlTypes';
-import {
-	filterTokens,
-	getNetworkIds,
-	prepareTokenList,
-} from '@/components/views/donate/helpers';
+import { prepareTokenList } from '@/components/views/donate/helpers';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import usePurpleList from '@/hooks/usePurpleList';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
 import TotalDonation from '@/components/views/donate/TotalDonation';
@@ -69,6 +60,8 @@ import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingT
 import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
 import QFModal from '@/components/views/donate/QFModal';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
 import { isRecurringActive } from './DonationCard';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
@@ -79,15 +72,20 @@ interface IInputBox {
 }
 
 const CryptoDonation: FC = () => {
-	const { address, isConnected } = useAccount();
-	const { chain } = useNetwork();
+	const {
+		chain,
+		walletChainType,
+		walletAddress: address,
+		isConnected,
+		balance,
+	} = useGeneralWallet();
 	const { formatMessage } = useIntl();
 	const { isEnabled, isSignedIn } = useAppSelector(state => state.user);
-	const notFormattedBalance = useBalance({ address });
-	const balance = notFormattedBalance.data?.formatted;
+
 	const isPurpleListed = usePurpleList();
-	const { open: openConnectModal } = useWeb3Modal();
+
 	const { project, hasActiveQFRound } = useDonateData();
+	const dispatch = useAppDispatch();
 
 	const {
 		organization,
@@ -132,20 +130,52 @@ const CryptoDonation: FC = () => {
 	const tokenDecimals = selectedToken?.decimals || 18;
 	const projectIsGivBackEligible = !!verified;
 	const activeRound = getActiveRound(project.qfRounds);
-	const networkId = chain?.id;
+	const networkId = (chain as Chain)?.id;
 
 	const isOnEligibleNetworks =
 		networkId && activeRound?.eligibleNetworks?.includes(networkId);
 
 	useEffect(() => {
-		if (networkId && acceptedTokens) {
-			const networkIds = getNetworkIds(acceptedTokens, addresses);
-			const filteredTokens = filterTokens(
-				acceptedTokens,
-				networkId,
-				networkIds,
-			);
-			setAcceptedChains(networkIds);
+		if (
+			(networkId ||
+				(walletChainType && walletChainType !== ChainType.EVM)) &&
+			acceptedTokens
+		) {
+			const acceptedNetworkIds = [
+				...new Set(acceptedTokens.map(token => +token.networkId)),
+			].filter(i => i); // Exclude network id 0
+
+			const acceptedNonEvmNetworks = [
+				...new Set(acceptedTokens.map(({ chainType }) => chainType)),
+			].filter(chainType => chainType && chainType !== ChainType.EVM);
+
+			const filteredTokens = acceptedTokens.filter(token => {
+				switch (walletChainType) {
+					case ChainType.EVM:
+						return (
+							token.networkId === networkId &&
+							acceptedNetworkIds.includes(networkId) &&
+							addresses?.some(
+								({ networkId, chainType }) =>
+									networkId === networkId &&
+									chainType === walletChainType,
+							)
+						);
+					case ChainType.SOLANA:
+						return (
+							token.chainType === walletChainType &&
+							acceptedNonEvmNetworks.includes(walletChainType) &&
+							addresses?.some(
+								({ chainType }) =>
+									chainType === walletChainType,
+							)
+						);
+					default:
+						return false;
+				}
+			});
+
+			setAcceptedChains(acceptedNetworkIds);
 			if (filteredTokens.length < 1) {
 				setShowChangeNetworkModal(true);
 			}
@@ -155,7 +185,7 @@ const CryptoDonation: FC = () => {
 			setSelectedToken(tokens[0]);
 			setTokenIsGivBackEligible(tokens[0]?.isGivbackEligible);
 		}
-	}, [networkId, acceptedTokens]);
+	}, [networkId, acceptedTokens, walletChainType, addresses]);
 
 	useEffect(() => {
 		if (isEnabled) pollToken();
@@ -208,6 +238,12 @@ const CryptoDonation: FC = () => {
 
 	const pollToken = useCallback(async () => {
 		clearPoll();
+		if (walletChainType === ChainType.SOLANA) {
+			return setSelectedTokenBalance(
+				BigInt(Number(balance || 0) * LAMPORTS_PER_SOL),
+			);
+		}
+
 		if (!selectedToken) {
 			return setSelectedTokenBalance(0n);
 		}
@@ -231,7 +267,7 @@ const CryptoDonation: FC = () => {
 						});
 
 						const balance = await contract.read.balanceOf([
-							address!,
+							address! as `0x${string}`,
 						]);
 						setSelectedTokenBalance(balance);
 						return balance;
@@ -252,7 +288,7 @@ const CryptoDonation: FC = () => {
 			}),
 			POLL_DELAY_TOKENS,
 		)();
-	}, [address, networkId, tokenSymbol, balance]);
+	}, [address, networkId, tokenSymbol, balance, walletChainType]);
 
 	const handleCustomToken = (i: Address) => {
 		if (!supportCustomTokens) return;
@@ -297,7 +333,11 @@ const CryptoDonation: FC = () => {
 		) {
 			return setShowInsufficientModal(true);
 		}
-		if (hasActiveQFRound && !isOnEligibleNetworks) {
+		if (
+			hasActiveQFRound &&
+			!isOnEligibleNetworks &&
+			selectedToken?.chainType === ChainType.EVM
+		) {
 			setShowQFModal(true);
 		} else if (!isSignedIn) {
 			signInThenDonate();
@@ -474,7 +514,7 @@ const CryptoDonation: FC = () => {
 					label={formatMessage({
 						id: 'component.button.connect_wallet',
 					})}
-					onClick={() => openConnectModal()}
+					onClick={() => dispatch(setShowWelcomeModal(true))}
 				/>
 			)}
 			<CheckBoxContainer>
