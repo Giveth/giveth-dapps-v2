@@ -19,8 +19,14 @@ const handler = (req, res) => {
 				}),
 			})
 				.then(response => response.json())
-				.then(data => console.log(data))
-				.catch(error =>
+				.then(data => {
+					console.log(data);
+					res.status(200).json({
+						message: 'Successfully saved',
+						id: data.insertedId,
+					});
+				})
+				.catch(error => {
 					captureException(
 						{
 							data: body,
@@ -32,8 +38,9 @@ const handler = (req, res) => {
 								section: 'onDonationBackup',
 							},
 						},
-					),
-				);
+					);
+					res.status(200).json('Sent to sentry');
+				});
 			console.log('body', body);
 		}
 	} catch (error) {
