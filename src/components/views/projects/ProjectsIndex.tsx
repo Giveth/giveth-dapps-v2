@@ -15,7 +15,7 @@ import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
-import { ICategory, IProject } from '@/apollo/types/types';
+import { IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import {
@@ -45,7 +45,6 @@ import { getMainCategorySlug } from '@/helpers/projects';
 export interface IProjectsView {
 	projects: IProject[];
 	totalCount: number;
-	categories: ICategory[];
 }
 
 interface IQueries {

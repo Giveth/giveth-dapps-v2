@@ -178,9 +178,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const onError = (errors: FieldErrors<TInputs>) => {
 		if (errors[EInputs.description]) {
-			(
-				document?.getElementsByClassName('ql-editor')[0] as HTMLElement
-			)?.focus();
+			document?.getElementById('project_description')?.scrollIntoView();
 		}
 	};
 

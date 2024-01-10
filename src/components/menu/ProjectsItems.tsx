@@ -9,6 +9,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+
 import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
 import { HighlightSection } from './common';
@@ -97,7 +98,9 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 						>
 							<CategoryItem theme={theme}>
 								<GLink size='Big'>
-									{formatMessage({ id: category.slug })}
+									{formatMessage({
+										id: 'projects_' + category.slug,
+									})}
 								</GLink>
 							</CategoryItem>
 						</Link>
