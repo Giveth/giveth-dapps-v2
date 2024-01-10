@@ -138,67 +138,65 @@ const CryptoDonation: FC = () => {
 				(walletChainType && walletChainType !== ChainType.EVM)) &&
 			acceptedTokens
 		) {
-			const acceptedNetworkIds = [
-				...new Set(acceptedTokens.map(token => +token.networkId)),
-			].filter(i => i); // Exclude network id 0
+			const acceptedEvmTokensNetworkIds = new Set<Number>();
+			const acceptedNonEvmTokenChainTypes = new Set<ChainType>();
 
-			const acceptedNonEvmNetworks = [
-				...new Set(acceptedTokens.map(({ chainType }) => chainType)),
-			].filter(chainType => chainType && chainType !== ChainType.EVM);
+			acceptedTokens.forEach(t => {
+				if (
+					t.chainType === ChainType.EVM ||
+					t.chainType === undefined
+				) {
+					acceptedEvmTokensNetworkIds.add(t.networkId);
+				} else {
+					acceptedNonEvmTokenChainTypes.add(t.chainType);
+				}
+			});
+
+			const addressesChainTypes = new Set(
+				addresses?.map(({ chainType }) => chainType),
+			);
 
 			const filteredTokens = acceptedTokens.filter(token => {
 				switch (walletChainType) {
 					case ChainType.EVM:
 						return (
 							token.networkId === networkId &&
-							acceptedNetworkIds.includes(networkId) &&
 							addresses?.some(
-								({ networkId, chainType }) =>
-									networkId === networkId &&
-									chainType === walletChainType,
+								token =>
+									token.networkId === networkId &&
+									token.chainType === walletChainType,
 							)
 						);
 					case ChainType.SOLANA:
 						return (
-							addressesChainTypes.includes(ChainType.SOLANA) &&
-							token.chainType === walletChainType &&
-							acceptedNonEvmNetworks.includes(walletChainType) &&
-							addresses?.some(
-								({ chainType }) =>
-									chainType === walletChainType,
-							)
+							addressesChainTypes.has(ChainType.SOLANA) &&
+							token.chainType === walletChainType
 						);
 					default:
 						return false;
 				}
 			});
 
-			const filteredAcceptedTokens = acceptedTokens.filter(token =>
-				addressesChainTypes.includes(token.chainType),
-			);
-
 			const acceptedChainsWithChaintypeAndNetworkId: INetworkIdWithChain[] =
-				filteredAcceptedTokens.reduce(
-					(
-						acc: INetworkIdWithChain[],
-						token: IProjectAcceptedToken,
-					) => {
-						// Check if the networkId already exists in the accumulator
-						if (
-							!acc.some(
-								accToken =>
-									accToken.networkId === token.networkId,
-							)
-						) {
-							acc.push({
-								chainType: token.chainType!,
-								networkId: token.networkId,
-							});
-						}
-						return acc;
-					},
-					[] as INetworkIdWithChain[],
-				);
+				[];
+			addresses?.forEach(a => {
+				if (
+					a.chainType === undefined ||
+					a.chainType === ChainType.EVM
+				) {
+					if (acceptedEvmTokensNetworkIds.has(a.networkId!)) {
+						acceptedChainsWithChaintypeAndNetworkId.push({
+							networkId: a.networkId!,
+							chainType: ChainType.EVM,
+						});
+					}
+				} else if (acceptedNonEvmTokenChainTypes.has(a.chainType)) {
+					acceptedChainsWithChaintypeAndNetworkId.push({
+						networkId: a.networkId!,
+						chainType: a.chainType!,
+					});
+				}
+			});
 
 			setAcceptedChains(acceptedChainsWithChaintypeAndNetworkId);
 			if (filteredTokens.length < 1) {
@@ -393,10 +391,6 @@ const CryptoDonation: FC = () => {
 			signInThenDonate();
 		}
 	};
-
-	const addressesChainTypes = [
-		...new Set(project?.addresses?.map(({ chainType }) => chainType)),
-	];
 
 	return (
 		<MainContainer>
