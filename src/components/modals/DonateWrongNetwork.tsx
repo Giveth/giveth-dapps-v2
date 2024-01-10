@@ -12,7 +12,7 @@ import {
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
+import { Chain, useSwitchNetwork } from 'wagmi';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
@@ -43,8 +43,6 @@ const networks = [
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { setShowModal, acceptedChains } = props;
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
@@ -55,6 +53,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 		walletChainType,
 		handleSingOutAndSignInWithEVM,
 		handleSignOutAndSignInWithSolana,
+		chain,
 	} = useGeneralWallet();
 
 	const { slug } = router.query;
@@ -65,16 +64,18 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 			),
 	);
 
+	const networkId = (chain as Chain)?.id;
+
 	useEffect(() => {
 		if (
-			chainId &&
+			networkId &&
 			acceptedChains?.some(
-				acceptedChain => acceptedChain.networkId === chainId,
+				acceptedChain => acceptedChain.networkId === networkId,
 			)
 		) {
 			closeModal();
 		}
-	}, [chainId, acceptedChains]);
+	}, [networkId, acceptedChains]);
 
 	return (
 		<Modal
