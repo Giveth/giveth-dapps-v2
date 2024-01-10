@@ -121,7 +121,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 										closeModal();
 									}
 								}}
-								isSelected={_chainId === chainId}
+								isSelected={_chainId === networkId}
 								key={_chainId}
 								theme={theme}
 							>
@@ -131,7 +131,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 									chainType={network.chainType}
 								/>
 								<B>{network.name}</B>
-								{_chainId === chainId && (
+								{_chainId === networkId && (
 									<SelectedNetwork
 										styleType='Small'
 										theme={theme}
