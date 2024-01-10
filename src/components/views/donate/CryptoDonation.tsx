@@ -176,7 +176,6 @@ const CryptoDonation: FC = () => {
 						return false;
 				}
 			});
-
 			const acceptedChainsWithChaintypeAndNetworkId: INetworkIdWithChain[] =
 				[];
 			addresses?.forEach(a => {
@@ -430,7 +429,9 @@ const CryptoDonation: FC = () => {
 				/>
 			)}
 			<InputContainer>
-				<SwitchToAcceptedChain acceptedChains={acceptedChains} />
+				{walletChainType && (
+					<SwitchToAcceptedChain acceptedChains={acceptedChains} />
+				)}
 				<SaveGasFees acceptedChains={acceptedChains} />
 				<SearchContainer error={amountError} focused={inputBoxFocused}>
 					<DropdownContainer>
@@ -489,7 +490,7 @@ const CryptoDonation: FC = () => {
 					</AvText>
 				)}
 			</InputContainer>
-			{hasActiveQFRound && !isOnEligibleNetworks && (
+			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
 				<DonateQFEligibleNetworks />
 			)}
 			{hasActiveQFRound && isOnEligibleNetworks && (
