@@ -1,26 +1,33 @@
 import React, { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { Caption } from '@giveth/ui-design-system';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
+import { Chain, useSwitchNetwork } from 'wagmi';
 import { getNetworkNames } from '@/components/views/donate/helpers';
 import {
 	NetworkToast,
 	SwitchCaption,
 } from '@/components/views/donate/common.styled';
 import { INetworkIdWithChain } from './common.types'; // Import the type
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
 
 const SwitchToAcceptedChain: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({
 	acceptedChains,
 }) => {
 	const { formatMessage } = useIntl();
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
-	const { switchNetwork } = useSwitchNetwork();
+	const { chain, walletChainType } = useGeneralWallet();
 
-	// Update the condition to check if the current chainId is in the list of acceptedChains
+	const networkId = (chain as Chain)?.id;
+
+	const { switchNetwork } = useSwitchNetwork();
 	if (
 		!acceptedChains ||
-		acceptedChains.some(chain => chain.networkId === chainId)
+		acceptedChains.some(
+			chain =>
+				chain.networkId === networkId ||
+				(chain.chainType === ChainType.SOLANA &&
+					walletChainType === ChainType.SOLANA),
+		)
 	) {
 		return null;
 	}
