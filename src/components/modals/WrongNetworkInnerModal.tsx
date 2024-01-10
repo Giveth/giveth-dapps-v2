@@ -12,12 +12,12 @@ import { INetworkIdWithChain } from '../views/donate/common.types';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 
-export interface IWrongNetworkInnerModal {
+export interface IEVMWrongNetworkSwitchModal {
 	cardName: string;
 	targetNetworks: INetworkIdWithChain[];
 }
 
-export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
+export const EVMWrongNetworkSwitchModal: FC<IEVMWrongNetworkSwitchModal> = ({
 	cardName,
 	targetNetworks,
 }) => {
@@ -40,7 +40,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 	};
 
 	return (
-		<WrongNetworkInnerModalContainer>
+		<EVMWrongNetworkSwitchModalContainer>
 			{address ? (
 				<>
 					<Description>
@@ -98,11 +98,11 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 					customNetworks={targetNetworks}
 				/>
 			)}
-		</WrongNetworkInnerModalContainer>
+		</EVMWrongNetworkSwitchModalContainer>
 	);
 };
 
-const WrongNetworkInnerModalContainer = styled.div`
+const EVMWrongNetworkSwitchModalContainer = styled.div`
 	padding: 6px 24px;
 	width: 100%;
 	${mediaQueries.tablet} {
