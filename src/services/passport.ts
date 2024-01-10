@@ -61,7 +61,6 @@ export const connectPassport = async (account: string, singin: boolean) => {
 
 		if (singin) {
 			//use passport jwt to sign in to the giveth and create user
-			console.log('Use Passport token to sign in to the giveth');
 			localStorage.setItem(StorageLabel.USER, account.toLowerCase());
 			localStorage.setItem(StorageLabel.TOKEN, jwt);
 		}
