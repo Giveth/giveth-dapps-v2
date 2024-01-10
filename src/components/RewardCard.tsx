@@ -18,12 +18,13 @@ import { formatWeiHelper } from '@/helpers/number';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
-import { WrongNetworkInnerModal } from '@/components//modals/WrongNetworkInnerModal';
+
 import NetworkLogo from './NetworkLogo';
 import { ScaleRate, ScaleRateBig } from '@/lib/constants/constants';
 import { getChainName } from '@/lib/network';
 import { INetworkIdWithChain } from './views/donate/common.types';
 import { ChainType } from '@/types/config';
+import { EVMWrongNetworkSwitchModal } from './modals/WrongNetworkInnerModal';
 
 interface IRewardCardProps {
 	cardName: string;
@@ -82,7 +83,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 		<>
 			<RewardCardContainer className={className}>
 				{!network || !targetNetwork ? (
-					<WrongNetworkInnerModal
+					<EVMWrongNetworkSwitchModal
 						targetNetworks={targetNetworks}
 						cardName={cardName}
 					/>
