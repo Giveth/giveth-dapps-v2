@@ -48,8 +48,8 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 							report this to our support team.
 						</p>
 						<ExternalLink
-							href={links.REPORT_FAILED_DONATION}
-							title='Send Report'
+							href={links.DISCORD_SUPPORT}
+							title='Contact support'
 						/>
 					</NotSaved>
 				);
