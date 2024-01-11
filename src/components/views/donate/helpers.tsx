@@ -1,7 +1,8 @@
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
-import config from '@/configuration';
+import { INetworkIdWithChain } from './common.types';
+import { getChainName } from '@/lib/network';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
@@ -30,12 +31,17 @@ export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 	return _tokens;
 };
 
-export const getNetworkNames = (networks: number[], text: string) => {
+export const getNetworkNames = (
+	networks: INetworkIdWithChain[],
+	text: string,
+) => {
 	return networks.map((network, index) => {
-		const name = config.EVM_NETWORKS_CONFIG[network]?.name;
+		// Access the network name using networkId or chainType based on the chainType
+		const name = getChainName(network.networkId, network.chainType);
+
 		const lastLoop = networks.length === index + 1;
 		return (
-			<span key={network}>
+			<span key={network.networkId}>
 				{name}
 				{!lastLoop && ' ' + text + ' '}
 			</span>
