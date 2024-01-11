@@ -173,10 +173,12 @@ const DonateModal: FC<IDonateModalProps> = props => {
 									delayedCloseModal(firstHash, secondHash);
 								return;
 							}
+							console.log('SecondDonation Success', secondHash);
 							setSecondTxStatus(EToastType.Success);
 							isSaved && delayedCloseModal(firstHash, secondHash);
 						})
 						.catch(({ txHash: secondHash }) => {
+							console.log('SecondDonation Error', secondHash);
 							setSecondTxStatus(EToastType.Error);
 							isSaved && delayedCloseModal(firstHash, secondHash);
 						});

@@ -332,6 +332,7 @@ async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 		data: '0x',
 	});
 
+	console.log('ETH transfer result', { hash });
 	return hash;
 }
 
