@@ -107,7 +107,6 @@ const sentryWebpackPluginOptions = {
 	// recommended:
 	//   release, url, org, project, authToken, configFile, stripPrefix,
 	//   urlPrefix, include, ignore
-	release: pjson.version,
 	org: process.env.NEXT_PUBLIC_SENTRY_ORG,
 	project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
 	authToken: process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN,
