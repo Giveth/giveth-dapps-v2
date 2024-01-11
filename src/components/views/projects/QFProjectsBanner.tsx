@@ -88,13 +88,13 @@ export const QFProjectsBanner = () => {
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
-			{/* <ImgBottomRight
-				src={'/images/banners/qf-round/bottom-right.png'}
+			<ImgBottomRight
+				src={'/images/banners/qf-round/bottom-right.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
-			/> */}
+			/>
 			<ImgTopLeft
-				src={'/images/banners/qf-round/top-left.png'}
+				src={'/images/banners/qf-round/top-left.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
@@ -165,8 +165,7 @@ const StyledCol = styled(Col)`
 	min-height: 300px;
 	text-align: center;
 	align-items: center;
-	${mediaQueries.laptopS} {
-	}
+	padding-top: 40px;
 `;
 
 const Title = styled(H1)`
@@ -197,19 +196,35 @@ const ImgBase = styled.img`
 	position: absolute;
 `;
 const ImgTopRight = styled(ImgBase)`
-	top: 0;
+	top: 40px;
 	right: 0;
+	width: 200px;
+	${mediaQueries.tablet} {
+		width: 300px;
+	}
+	${mediaQueries.laptopS} {
+		width: 450px;
+	}
 `;
 const ImgBottomRight = styled(ImgBase)`
-	right: 0;
+	right: 100px;
 	bottom: 0;
 `;
 const ImgTopLeft = styled(ImgBase)`
 	top: 0;
-	left: 130px;
+	left: 10px;
+	width: 100px;
+	${mediaQueries.tablet} {
+		left: 130px;
+		width: 180px;
+	}
 `;
 
 const ImgBottomLeft = styled(ImgBase)`
 	left: 0;
 	bottom: 0;
+	width: 150px;
+	${mediaQueries.laptopS} {
+		width: 200px;
+	}
 `;
