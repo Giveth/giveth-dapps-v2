@@ -207,8 +207,11 @@ const ImgTopRight = styled(ImgBase)`
 	}
 `;
 const ImgBottomRight = styled(ImgBase)`
-	right: 100px;
+	right: 10px;
 	bottom: 0;
+	${mediaQueries.tablet} {
+		right: 100px;
+	}
 `;
 const ImgTopLeft = styled(ImgBase)`
 	top: 0;
