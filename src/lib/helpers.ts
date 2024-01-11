@@ -229,7 +229,7 @@ export const suggestNewAddress = (
 		) {
 			return '';
 		}
-		return addresses[0].address;
+		return EVMAddresses[0].address;
 	} else {
 		return '';
 	}
