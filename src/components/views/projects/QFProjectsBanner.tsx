@@ -36,8 +36,9 @@ export const QFProjectsBanner = () => {
 		if (!activeRound) return setState(ERoundStatus.NO_ACTIVE);
 		const _startDate = new Date(activeRound?.beginDate).getTime();
 		const _endDate = new Date(activeRound?.endDate).getTime();
-		const isRoundStarted = getNowUnixMS() > _startDate;
-		const isRoundEnded = getNowUnixMS() > _endDate;
+		const now = getNowUnixMS();
+		const isRoundStarted = now > _startDate;
+		const isRoundEnded = now > _endDate;
 		if (!isRoundStarted) {
 			setState(ERoundStatus.NOT_STARTED);
 		} else if (!isRoundEnded) {
@@ -77,7 +78,7 @@ export const QFProjectsBanner = () => {
 	return (
 		<BannerContainer>
 			<Image
-				src={'/images/banners/qf-round/bg.png'}
+				src={'/images/banners/qf-round/bg.svg'}
 				style={{ objectFit: 'cover' }}
 				fill
 				alt='QF Banner'
@@ -146,6 +147,7 @@ const BannerContainer = styled.div`
 	position: relative;
 	padding-top: 100px;
 	padding-bottom: 100px;
+	background: linear-gradient(98deg, #0f0116 24.06%, #380950 93.92%);
 	img {
 		-webkit-user-drag: none;
 		-khtml-user-drag: none;
