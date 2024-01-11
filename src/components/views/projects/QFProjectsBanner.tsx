@@ -105,7 +105,7 @@ export const QFProjectsBanner = () => {
 			/>
 			<Container>
 				<Row>
-					<StyledCol xs={12} md={6}>
+					<StyledCol xs={12} md={12}>
 						<Title weight={700}>
 							{formatMessage({ id: 'label.quadratic_funding' })}
 						</Title>
@@ -166,8 +166,6 @@ const StyledCol = styled(Col)`
 	text-align: center;
 	align-items: center;
 	${mediaQueries.laptopS} {
-		text-align: left;
-		align-items: flex-start;
 	}
 `;
 
