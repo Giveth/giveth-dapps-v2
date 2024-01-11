@@ -18,6 +18,8 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex } from './styled-components/Flex';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import Routes from '@/lib/constants/Routes';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
 
 enum EPBGState {
 	SUCCESS,
@@ -130,6 +132,9 @@ export const PassportBanner = () => {
 
 	const { formatMessage, locale } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
+	const { walletChainType } = useGeneralWallet();
+
+	if (walletChainType === ChainType.SOLANA) return;
 
 	return (
 		<PassportBannerWrapper bgColor={PassportBannerData[passportState].bg}>
