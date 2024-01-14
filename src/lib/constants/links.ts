@@ -9,6 +9,7 @@ const TYPEFORM = 'https://giveth.typeform.com/';
 
 const links = {
 	REPORT_ISSUE: TYPEFORM + 'issue-bug',
+	REPORT_FAILED_DONATION: TYPEFORM + 'failed-donation',
 	ASK_QUESTION: TYPEFORM + 'question',
 	FEATURE_REQUEST: TYPEFORM + 'featurerequest',
 	FEEDBACK: TYPEFORM + 'feedback',

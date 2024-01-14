@@ -116,8 +116,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				return acc;
 			}, {} as IBalances);
 
-			console.log('newBalances', newBalances);
-
 			// Update the state with the new balances
 			setBalances(newBalances);
 		};

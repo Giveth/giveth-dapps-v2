@@ -98,7 +98,6 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 	useEffect(() => {
 		if (!id) return;
 		const fetchProjectDonations = async () => {
-			console.log('fetching project donations');
 			const { data: projectDonations } = await client.query({
 				query: FETCH_PROJECT_DONATIONS,
 				variables: {

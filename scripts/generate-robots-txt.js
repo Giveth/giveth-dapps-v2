@@ -4,7 +4,6 @@ const path = require('path');
 const publicPath = path.join(__dirname, '..', 'public');
 
 function generateRobotsTxt() {
-	console.log('VERCEL_ENV: ', process.env.VERCEL_ENV);
 	const isCrawlable = process.env.VERCEL_ENV === 'production';
 	// Create a non-crawlable robots.txt in non-production environments
 	const sourceFile = path.join(

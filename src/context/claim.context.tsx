@@ -79,7 +79,6 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 		if (claimData) {
 			const _hasClaimed = await hasClaimedAirDrop(address);
 			// const _hasClaimed = false;
-			console.log(`_hasClaimed`, _hasClaimed);
 			setTotalAmount(BigInt(claimData.amount));
 			setIsLoading(false);
 			if (!_hasClaimed) {
