@@ -278,9 +278,11 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					txHash: [{ txHash: tx.hash, chainType: ChainType.EVM }],
 				});
 			}
-		} catch (error) {
+		} catch (error: any) {
 			setStep(EDonationSteps.DONATE);
-			showToastError(error);
+			if (error?.code !== 'ACTION_REJECTED') {
+				showToastError(error);
+			}
 			console.log('error', { error });
 		}
 	};
