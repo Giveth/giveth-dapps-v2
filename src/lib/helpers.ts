@@ -305,7 +305,6 @@ async function handleErc20Transfer(
 	params: TransactionParams,
 	contractAddress: Address,
 ): Promise<Address> {
-	console.log('contractAddress', contractAddress);
 	const contract = getContract({
 		address: contractAddress,
 		abi: erc20ABI,
@@ -320,8 +319,6 @@ async function handleErc20Transfer(
 		// @ts-ignore -- needed for safe txs
 		value: 0n,
 	});
-	console.log('Write', write);
-	console.log('ERC20 transfer result', { hash: write.hash });
 	return write.hash;
 }
 

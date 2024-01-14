@@ -43,7 +43,6 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 	const handleAdd = async (formData: IAddressForm) => {
 		setLoading(true);
 		const { address } = formData;
-		console.log('ASD1', address);
 		try {
 			const _address = getAddress(address) as Address;
 			await client.mutate({
