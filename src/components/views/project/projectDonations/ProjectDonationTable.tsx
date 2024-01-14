@@ -201,10 +201,12 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 								<NetworkLogo
 									logoSize={24}
 									chainId={donation.transactionNetworkId}
+									chainType={donation.chainType}
 								/>
 								<NetworkName>
 									{getChainName(
 										donation.transactionNetworkId,
+										donation.chainType,
 									)}
 								</NetworkName>
 							</DonationTableCell>
@@ -263,7 +265,7 @@ const Wrapper = styled(Flex)`
 `;
 
 const NetworkName = styled.div`
-	width: 80px;
+	width: 80%;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
@@ -281,8 +283,8 @@ const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
 	width: 100%;
 	grid-template-columns: ${props =>
 		props.isAdmin
-			? '1fr 2.2fr 0.8fr 1.25fr 1.4fr 1fr'
-			: '1fr 2.2fr 1.1fr 1.1fr 1fr'};
+			? '1fr 2fr 0.8fr 1.5fr 1.4fr 1fr'
+			: '1fr 2fr 1.5fr 1.1fr 1fr'};
 	min-width: 800px;
 `;
 
