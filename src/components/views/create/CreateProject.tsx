@@ -193,7 +193,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		config.OPTIMISM_NETWORK_NUMBER,
 	);
 
-	console.log('OptimismAddress', hasOptimismAddress);
 	const onError = (errors: FieldErrors<TInputs>) => {
 		if (errors[EInputs.description]) {
 			(

@@ -46,7 +46,6 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	const updatedCloseModal = () => {
 		if (!txResult) {
 			//Show the user did not complete the transaction
-			console.log('User did not complete the transaction');
 			alert(
 				'You did not complete the transaction but your project was created',
 			);
@@ -73,17 +72,13 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 				setIsLoading(true);
 				const tx = await writeAsync?.();
 				setTxResult(tx);
-				console.log('TX', tx);
 				//Call backend to update project
 				if (tx?.hash) {
 					if (!isEditMode || (isEditMode && isDraft)) {
-						console.log('User completed the transaction !EditMode');
-
 						await router.push(
 							slugToSuccessView(addedProjectState.slug),
 						);
 					} else {
-						console.log('User completed the transaction EditMode');
 						await router.push(
 							slugToProjectView(addedProjectState.slug),
 						);
@@ -91,7 +86,6 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 				}
 				setShowModal(false); // Close the modal
 			} catch (error) {
-				console.error('Error signing contract:', error);
 			} finally {
 				setIsLoading(false);
 			}
@@ -102,7 +96,6 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 		localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 	}, []);
 
-	console.log('Rendering AlloProtocolModal');
 	return (
 		<Modal
 			closeModal={updatedCloseModal}
