@@ -15,6 +15,7 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { capitalizeAllWords } from '@/lib/helpers';
+import { isRecurringActive } from '../../donate/DonationCard';
 
 interface IProjectActions {
 	project: IProject;
@@ -75,8 +76,7 @@ const ProjectActions = (props: IProjectActions) => {
 		},
 	};
 
-	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true' &&
-		options.push(recurringDonationOption);
+	isRecurringActive && options.push(recurringDonationOption);
 
 	const dropdownStyle = {
 		padding: '4px 16px',

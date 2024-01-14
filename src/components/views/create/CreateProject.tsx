@@ -52,6 +52,7 @@ import { ChainType, NonEVMChain } from '@/types/config';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
 import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
+import { isRecurringActive } from '../donate/DonationCard';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -256,7 +257,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			if (
 				watchAlloProtocolRegistry &&
 				hasOptimismAddress &&
-				process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true'
+				isRecurringActive
 			) {
 				setAddedProjectState(addedProject.data?.createProject);
 				setIsLoading(false);
@@ -277,7 +278,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				if (
 					watchAlloProtocolRegistry &&
 					hasOptimismAddress &&
-					process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true'
+					isRecurringActive
 				) {
 					setShowAlloProtocolModal(true);
 				} else {
