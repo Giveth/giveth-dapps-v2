@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Framework, type Operation } from '@superfluid-finance/sdk-core';
 import { useAccount } from 'wagmi';
 import { useIntl } from 'react-intl';
+import BigNumber from 'bignumber.js';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -280,7 +281,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 		} catch (error) {
 			setStep(EDonationSteps.DONATE);
 			showToastError(error);
-			console.log('error', error);
+			console.log('error', { error });
 		}
 	};
 
@@ -298,7 +299,12 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 		}
 	};
 
-	const totalPerMonth = ((amount || 0n) * BigInt(percentage)) / 100n;
+	const totalPerMonth =
+		BigInt(
+			new BigNumber((amount || 0n).toString())
+				.multipliedBy(percentage)
+				.toFixed(0),
+		) / 100n;
 	const projectPerMonth =
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
