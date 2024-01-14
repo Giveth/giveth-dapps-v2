@@ -72,7 +72,6 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const campaignCount = variables?.campaignSlug ? 1 : 0;
 		const count = filtersCount + campaignCount;
 		const router = useRouter();
-		console.log('variables', variables);
 
 		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
 			let updatedQuery;

@@ -20,7 +20,7 @@ import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
 import config, { isProduction } from '@/configuration';
 import { AddressZero } from './constants/constants';
-import { ChainType } from '@/types/config';
+import { ChainType, NonEVMChain } from '@/types/config';
 
 declare let window: any;
 interface TransactionParams {
@@ -217,11 +217,28 @@ export const smallFormatDate = (date: Date, locale?: string) => {
 
 export const isSSRMode = typeof window === 'undefined';
 
-export const suggestNewAddress = (addresses?: IWalletAddress[]) => {
+export const suggestNewAddress = (
+	addresses: IWalletAddress[],
+	chain: Chain | NonEVMChain,
+) => {
 	if (!addresses || addresses.length < 1) return '';
-	const isSame = compareAddressesArray(addresses.map(a => a.address));
+	const EVMAddresses = addresses.filter(
+		address =>
+			address.chainType === ChainType.EVM ||
+			address.chainType === undefined,
+	);
+	// We shouldn't suggest anything for NON EVM address input
+	const isSame = compareAddressesArray(EVMAddresses.map(a => a.address));
 	if (isSame) {
-		return addresses[0].address;
+		// Don't suggest EVM addresses for Non EVM address input
+		if (
+			'chainType' in chain &&
+			chain.chainType !== ChainType.EVM &&
+			chain.chainType !== undefined
+		) {
+			return '';
+		}
+		return EVMAddresses[0].address;
 	} else {
 		return '';
 	}
@@ -337,7 +354,6 @@ async function handleErc20Transfer(
 	params: TransactionParams,
 	contractAddress: Address,
 ): Promise<Address> {
-	console.log('contractAddress', contractAddress);
 	const contract = getContract({
 		address: contractAddress,
 		abi: erc20ABI,
@@ -352,8 +368,6 @@ async function handleErc20Transfer(
 		// @ts-ignore -- needed for safe txs
 		value: 0n,
 	});
-	console.log('Write', write);
-	console.log('ERC20 transfer result', { hash: write.hash });
 	return write.hash;
 }
 

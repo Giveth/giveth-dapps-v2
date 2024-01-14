@@ -63,9 +63,18 @@ export const GIVfarmTop = () => {
 							stream={rewardStream}
 							network={chainId}
 							targetNetworks={[
-								config.MAINNET_NETWORK_NUMBER,
-								config.GNOSIS_NETWORK_NUMBER,
-								config.OPTIMISM_NETWORK_NUMBER,
+								{
+									networkId: config.MAINNET_NETWORK_NUMBER,
+									chainType: config.MAINNET_CONFIG.chainType,
+								},
+								{
+									networkId: config.GNOSIS_NETWORK_NUMBER,
+									chainType: config.GNOSIS_CONFIG.chainType,
+								},
+								{
+									networkId: config.OPTIMISM_NETWORK_NUMBER,
+									chainType: config.OPTIMISM_CONFIG.chainType,
+								},
 							]}
 						/>
 					</Col>

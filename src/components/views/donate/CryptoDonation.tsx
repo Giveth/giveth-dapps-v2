@@ -63,6 +63,7 @@ import QFModal from '@/components/views/donate/QFModal';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 import { isRecurringActive } from './DonationCard';
+import { INetworkIdWithChain } from './common.types';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -116,7 +117,9 @@ const CryptoDonation: FC = () => {
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();
-	const [acceptedChains, setAcceptedChains] = useState<number[]>();
+	const [acceptedChains, setAcceptedChains] = useState<INetworkIdWithChain[]>(
+		[],
+	);
 	const [donationToGiveth, setDonationToGiveth] = useState(
 		noDonationSplit ? 0 : 5,
 	);
@@ -141,41 +144,66 @@ const CryptoDonation: FC = () => {
 				(walletChainType && walletChainType !== ChainType.EVM)) &&
 			acceptedTokens
 		) {
-			const acceptedNetworkIds = [
-				...new Set(acceptedTokens.map(token => +token.networkId)),
-			].filter(i => i); // Exclude network id 0
+			const acceptedEvmTokensNetworkIds = new Set<Number>();
+			const acceptedNonEvmTokenChainTypes = new Set<ChainType>();
 
-			const acceptedNonEvmNetworks = [
-				...new Set(acceptedTokens.map(({ chainType }) => chainType)),
-			].filter(chainType => chainType && chainType !== ChainType.EVM);
+			acceptedTokens.forEach(t => {
+				if (
+					t.chainType === ChainType.EVM ||
+					t.chainType === undefined
+				) {
+					acceptedEvmTokensNetworkIds.add(t.networkId);
+				} else {
+					acceptedNonEvmTokenChainTypes.add(t.chainType);
+				}
+			});
+
+			const addressesChainTypes = new Set(
+				addresses?.map(({ chainType }) => chainType),
+			);
 
 			const filteredTokens = acceptedTokens.filter(token => {
 				switch (walletChainType) {
 					case ChainType.EVM:
 						return (
 							token.networkId === networkId &&
-							acceptedNetworkIds.includes(networkId) &&
 							addresses?.some(
-								({ networkId, chainType }) =>
-									networkId === networkId &&
-									chainType === walletChainType,
+								token =>
+									token.networkId === networkId &&
+									token.chainType === walletChainType,
 							)
 						);
 					case ChainType.SOLANA:
 						return (
-							token.chainType === walletChainType &&
-							acceptedNonEvmNetworks.includes(walletChainType) &&
-							addresses?.some(
-								({ chainType }) =>
-									chainType === walletChainType,
-							)
+							addressesChainTypes.has(ChainType.SOLANA) &&
+							token.chainType === walletChainType
 						);
 					default:
 						return false;
 				}
 			});
+			const acceptedChainsWithChaintypeAndNetworkId: INetworkIdWithChain[] =
+				[];
+			addresses?.forEach(a => {
+				if (
+					a.chainType === undefined ||
+					a.chainType === ChainType.EVM
+				) {
+					if (acceptedEvmTokensNetworkIds.has(a.networkId!)) {
+						acceptedChainsWithChaintypeAndNetworkId.push({
+							networkId: a.networkId!,
+							chainType: ChainType.EVM,
+						});
+					}
+				} else if (acceptedNonEvmTokenChainTypes.has(a.chainType)) {
+					acceptedChainsWithChaintypeAndNetworkId.push({
+						networkId: a.networkId!,
+						chainType: a.chainType!,
+					});
+				}
+			});
 
-			setAcceptedChains(acceptedNetworkIds);
+			setAcceptedChains(acceptedChainsWithChaintypeAndNetworkId);
 			if (filteredTokens.length < 1) {
 				setShowChangeNetworkModal(true);
 			}
@@ -401,7 +429,9 @@ const CryptoDonation: FC = () => {
 				/>
 			)}
 			<InputContainer>
-				<SwitchToAcceptedChain acceptedChains={acceptedChains} />
+				{walletChainType && (
+					<SwitchToAcceptedChain acceptedChains={acceptedChains} />
+				)}
 				<SaveGasFees acceptedChains={acceptedChains} />
 				<SearchContainer error={amountError} focused={inputBoxFocused}>
 					<DropdownContainer>
@@ -454,7 +484,7 @@ const CryptoDonation: FC = () => {
 					</AvText>
 				)}
 			</InputContainer>
-			{hasActiveQFRound && !isOnEligibleNetworks && (
+			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
 				<DonateQFEligibleNetworks />
 			)}
 			{hasActiveQFRound && isOnEligibleNetworks && (

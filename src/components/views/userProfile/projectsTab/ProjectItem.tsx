@@ -27,7 +27,6 @@ interface IProjectItem {
 }
 
 const ProjectItem = ({ project, setProjects }: IProjectItem) => {
-	console.log('project', project);
 	const { formatMessage, locale } = useIntl();
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const [selectedProject, setSelectedProject] = useState<IProject>();

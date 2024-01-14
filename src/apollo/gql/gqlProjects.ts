@@ -441,11 +441,17 @@ export const UPDATE_PROJECT = gql`
 `;
 
 export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
-	mutation ($projectId: Float!, $networkId: Float!, $address: String!) {
+	mutation (
+		$projectId: Float!
+		$networkId: Float!
+		$address: String!
+		$chainType: ChainType
+	) {
 		addRecipientAddressToProject(
 			projectId: $projectId
 			networkId: $networkId
 			address: $address
+			chainType: $chainType
 		) {
 			id
 			title
