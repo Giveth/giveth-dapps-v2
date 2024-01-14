@@ -32,7 +32,6 @@ export const fetchBalance = async (
 			const client = getPublicClient();
 			return client.getBalance({ address: userAddress });
 		} else {
-			console.log('tokenAddress', tokenAddress);
 			const contract = getContract({
 				address: tokenAddress,
 				abi: erc20ABI,

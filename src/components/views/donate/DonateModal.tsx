@@ -152,7 +152,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			symbol: token.symbol,
 		})
 			.then(({ isSaved, txHash: firstHash }) => {
-				console.log('FirstTxHash', firstHash);
 				if (!firstHash) {
 					setDonating(false);
 					return;
