@@ -52,6 +52,15 @@ export const formatPrice = (balance?: string | number) => {
 	});
 };
 
+export const truncateToDecimalPlaces = (strNum: string, decimals: number) => {
+	let index = strNum.indexOf('.');
+	if (index === -1 || decimals < 1) {
+		return Number(strNum);
+	}
+	let length = index + 1 + decimals;
+	return Number(strNum.substring(0, length));
+};
+
 export const thousandsSeparator = (x?: string | number): string | undefined => {
 	return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
