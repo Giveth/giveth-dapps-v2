@@ -36,8 +36,9 @@ export const QFProjectsBanner = () => {
 		if (!activeRound) return setState(ERoundStatus.NO_ACTIVE);
 		const _startDate = new Date(activeRound?.beginDate).getTime();
 		const _endDate = new Date(activeRound?.endDate).getTime();
-		const isRoundStarted = getNowUnixMS() > _startDate;
-		const isRoundEnded = getNowUnixMS() > _endDate;
+		const now = getNowUnixMS();
+		const isRoundStarted = now > _startDate;
+		const isRoundEnded = now > _endDate;
 		if (!isRoundStarted) {
 			setState(ERoundStatus.NOT_STARTED);
 		} else if (!isRoundEnded) {
@@ -77,7 +78,7 @@ export const QFProjectsBanner = () => {
 	return (
 		<BannerContainer>
 			<Image
-				src={'/images/banners/qf-round/bg.png'}
+				src={'/images/banners/qf-round/bg.svg'}
 				style={{ objectFit: 'cover' }}
 				fill
 				alt='QF Banner'
@@ -87,13 +88,13 @@ export const QFProjectsBanner = () => {
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
-			{/* <ImgBottomRight
-				src={'/images/banners/qf-round/bottom-right.png'}
+			<ImgBottomRight
+				src={'/images/banners/qf-round/bottom-right.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
-			/> */}
+			/>
 			<ImgTopLeft
-				src={'/images/banners/qf-round/top-left.png'}
+				src={'/images/banners/qf-round/top-left.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
@@ -104,7 +105,7 @@ export const QFProjectsBanner = () => {
 			/>
 			<Container>
 				<Row>
-					<StyledCol xs={12} md={6}>
+					<StyledCol xs={12} md={12}>
 						<Title weight={700}>
 							{formatMessage({ id: 'label.quadratic_funding' })}
 						</Title>
@@ -146,6 +147,7 @@ const BannerContainer = styled.div`
 	position: relative;
 	padding-top: 100px;
 	padding-bottom: 100px;
+	background: linear-gradient(98deg, #0f0116 24.06%, #380950 93.92%);
 	img {
 		-webkit-user-drag: none;
 		-khtml-user-drag: none;
@@ -163,10 +165,7 @@ const StyledCol = styled(Col)`
 	min-height: 300px;
 	text-align: center;
 	align-items: center;
-	${mediaQueries.laptopS} {
-		text-align: left;
-		align-items: flex-start;
-	}
+	padding-top: 40px;
 `;
 
 const Title = styled(H1)`
@@ -197,19 +196,38 @@ const ImgBase = styled.img`
 	position: absolute;
 `;
 const ImgTopRight = styled(ImgBase)`
-	top: 0;
+	top: 40px;
 	right: 0;
+	width: 200px;
+	${mediaQueries.tablet} {
+		width: 300px;
+	}
+	${mediaQueries.laptopS} {
+		width: 450px;
+	}
 `;
 const ImgBottomRight = styled(ImgBase)`
-	right: 0;
+	right: 10px;
 	bottom: 0;
+	${mediaQueries.tablet} {
+		right: 100px;
+	}
 `;
 const ImgTopLeft = styled(ImgBase)`
 	top: 0;
-	left: 130px;
+	left: 10px;
+	width: 100px;
+	${mediaQueries.tablet} {
+		left: 130px;
+		width: 180px;
+	}
 `;
 
 const ImgBottomLeft = styled(ImgBase)`
 	left: 0;
 	bottom: 0;
+	width: 150px;
+	${mediaQueries.laptopS} {
+		width: 200px;
+	}
 `;

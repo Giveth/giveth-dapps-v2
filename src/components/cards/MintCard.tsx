@@ -50,7 +50,6 @@ export const MintCard = () => {
 	let mintLeft = '-';
 	if (pfpData && balance !== undefined) {
 		let mintAmount = pfpData.maxMintAmount - balance;
-		console.log(mintAmount);
 		if (mintAmount < 0) {
 			mintLeft = '0';
 		} else {

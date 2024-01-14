@@ -14,6 +14,7 @@ import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { useDonateData } from '@/context/donate.context';
 import ExternalLink from '@/components/ExternalLink';
+
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { formatTxLink } from '@/lib/helpers';
 
@@ -40,6 +41,7 @@ export const DonationInfo = () => {
 	const { isSuccessDonation, project } = useDonateData();
 	const { txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
+
 	return (
 		<Options>
 			<Lead style={{ color: neutralColors.gray[900] }}>
@@ -51,8 +53,10 @@ export const DonationInfo = () => {
 					id: 'label.you_can_view_them_on_a_blockchain_explorer_here',
 				})}
 			</Lead>
-			<TxRow txHash={txHash[0]} title={project.title} />
-			{hasMultipleTxs && <TxRow txHash={txHash[1]} title='Giveth' />}
+			<TxRow txHash={txHash[0]?.txHash} title={project.title} />
+			{hasMultipleTxs && (
+				<TxRow txHash={txHash[1]?.txHash} title='Giveth' />
+			)}
 			<Link href={Routes.AllProjects}>
 				<ProjectsButton size='small' label='SEE MORE PROJECTS' />
 			</Link>

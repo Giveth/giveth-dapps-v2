@@ -29,6 +29,7 @@ import { ethers } from 'ethers';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
+import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { getChainName } from '@/lib/network';
 import config from '@/configuration';
 import { useAppDispatch } from '@/features/hooks';
@@ -38,6 +39,7 @@ import {
 	sendEvmTransaction,
 } from '@/lib/helpers';
 import { ChainType } from '@/types/config';
+import { signOut } from '@/features/user/user.thunks';
 
 const { SOLANA_CONFIG } = config;
 const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;
@@ -57,6 +59,8 @@ interface IGeneralWalletContext {
 		to: string,
 		value: string,
 	) => Promise<string | `0x${string}` | undefined>;
+	handleSingOutAndSignInWithEVM: () => Promise<void>;
+	handleSignOutAndSignInWithSolana: () => Promise<void>;
 }
 // Create the context
 export const GeneralWalletContext = createContext<IGeneralWalletContext>({
@@ -70,6 +74,8 @@ export const GeneralWalletContext = createContext<IGeneralWalletContext>({
 	chain: undefined,
 	openWalletConnectModal: () => {},
 	sendNativeToken: async () => undefined,
+	handleSingOutAndSignInWithEVM: async () => {},
+	handleSignOutAndSignInWithSolana: async () => {},
 });
 
 // Create the provider component
@@ -91,6 +97,7 @@ export const GeneralWalletProvider: React.FC<{
 	const dispatch = useAppDispatch();
 	const { open: openConnectModal } = useWeb3Modal();
 	const router = useRouter();
+	const { setVisible } = useWalletModal();
 
 	const isGIVeconomyRoute = useMemo(
 		() => checkIsGIVeconomyRoute(router.route),
@@ -150,6 +157,18 @@ export const GeneralWalletProvider: React.FC<{
 			console.error('Error getting solana wallet balance:', error);
 		}
 		return 0;
+	};
+
+	const handleSingOutAndSignInWithEVM = async () => {
+		await dispatch(signOut());
+		disconnect();
+		openConnectModal();
+	};
+
+	const handleSignOutAndSignInWithSolana = async () => {
+		await dispatch(signOut());
+		disconnect();
+		setVisible(true);
 	};
 
 	useEffect(() => {
@@ -336,6 +355,8 @@ export const GeneralWalletProvider: React.FC<{
 		openWalletConnectModal,
 		balance,
 		sendNativeToken,
+		handleSingOutAndSignInWithEVM,
+		handleSignOutAndSignInWithSolana,
 	};
 
 	// Render the provider component with the provided context value

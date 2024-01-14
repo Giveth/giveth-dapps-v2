@@ -88,6 +88,5 @@ const createDonation = async (props: IOnTxHash) => {
 		throw error;
 	}
 
-	console.log('DONATION ID: ', { donationId });
 	return donationId;
 };

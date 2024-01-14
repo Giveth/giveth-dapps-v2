@@ -3,7 +3,6 @@ import production from './config/production';
 import { ChainType, GlobalConfig, NonEVMNetworkConfig } from './types/config';
 
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
-console.log('isProduction', isProduction);
 
 const envConfig = isProduction ? production : development;
 const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';

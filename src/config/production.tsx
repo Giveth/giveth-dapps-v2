@@ -67,12 +67,6 @@ const AUTH_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
 	'https://auth.serve.giveth.io/v1';
 
-console.log('BASE_ROUTE', BASE_ROUTE);
-console.log('BACKEND_LINK', BACKEND_LINK);
-console.log('FRONTEND_LINK', FRONTEND_LINK);
-console.log('NOTIFICATION_BASE_ROUTE', NOTIFICATION_BASE_ROUTE);
-console.log('AUTH_BASE_ROUTE', AUTH_BASE_ROUTE);
-
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
 	BACKEND_LINK: BACKEND_LINK,
@@ -97,7 +91,7 @@ const config: EnvConfig = {
 	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
 		...mainnet,
-
+		chainType: ChainType.EVM,
 		DAI_TOKEN_ADDRESS: '0x6b175474e89094c44da98b954eedeac495271d0f',
 		PFP_CONTRACT_ADDRESS: '0x78fde77737d5b9ab32fc718c9535c7f1b8ce84db',
 
@@ -269,6 +263,7 @@ const config: EnvConfig = {
 
 	GNOSIS_CONFIG: {
 		...gnosis,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			maxFeePerGas: (2e9).toString(),
 			maxPriorityFeePerGas: (1e9).toString(),
@@ -414,6 +409,7 @@ const config: EnvConfig = {
 
 	POLYGON_CONFIG: {
 		...polygon,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -424,6 +420,7 @@ const config: EnvConfig = {
 
 	OPTIMISM_CONFIG: {
 		...optimism,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -521,6 +518,7 @@ const config: EnvConfig = {
 
 	CELO_CONFIG: {
 		...celo,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -530,6 +528,7 @@ const config: EnvConfig = {
 	},
 	CLASSIC_CONFIG: {
 		...classic,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},

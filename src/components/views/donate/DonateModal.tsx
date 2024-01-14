@@ -8,14 +8,12 @@ import {
 	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-
 import { Chain } from 'wagmi';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
-import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-
 import { IModal } from '@/types/common';
 import FailedDonation, {
 	EDonationFailedType,
@@ -30,13 +28,14 @@ import config from '@/configuration';
 import DonateSummary from '@/components/views/donate/DonateSummary';
 import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import { useDonateData } from '@/context/donate.context';
+import { TxHashWithChainType, useDonateData } from '@/context/donate.context';
 import { useCreateEvmDonation } from '@/hooks/useCreateEvmDonation';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 import { IWalletAddress } from '@/apollo/types/types';
 import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
+import { calcDonationShare } from '@/components/views/donate/helpers';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -105,15 +104,15 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		walletChainType,
 	);
 
-	const avgPrice = tokenPrice && tokenPrice * amount;
-	let donationToGivethAmount = (amount * donationToGiveth) / 100;
-	if (donationToGivethAmount < minDonationAmount && isDonatingToGiveth) {
-		donationToGivethAmount = minDonationAmount;
-	}
-	const donationToGivethPrice =
-		tokenPrice && donationToGivethAmount * tokenPrice;
+	const { projectDonation, givethDonation } = calcDonationShare(
+		amount,
+		donationToGiveth,
+		token.decimals,
+	);
+	const projectDonationPrice = tokenPrice && tokenPrice * projectDonation;
+	const givethDonationPrice = tokenPrice && givethDonation * tokenPrice;
 
-	// this function is used to validate the token, if the token is valid, the user can donate, otherwise it will show a error message.
+	// this function is used to validate the token, if the token is valid, the user can donate, otherwise it will show an error message.
 	const validateTokenThenDonate = async () => {
 		setDonating(true);
 		client
@@ -141,10 +140,19 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const delayedCloseModal = (txHash1: string, txHash2?: string) => {
 		setProcessFinished(true);
 		setDonating(false);
-		const txHash = txHash2 ? [txHash1, txHash2] : [txHash1];
+
+		const { chainType } = token;
+
+		const txHashArray: TxHashWithChainType[] = [
+			{ txHash: txHash1, chainType: chainType || ChainType.EVM },
+			...(txHash2
+				? [{ txHash: txHash2, chainType: chainType || ChainType.EVM }]
+				: []),
+		];
+
 		setTimeout(() => {
 			closeModal();
-			setSuccessDonation({ txHash, givBackEligible });
+			setSuccessDonation({ txHash: txHashArray, givBackEligible });
 		}, 4000);
 	};
 
@@ -152,13 +160,13 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		const txProps = {
 			anonymous,
 			setDonating,
-			amount,
 			token,
 			setFailedModalType,
 		};
 		if (!projectWalletAddress || !givethWalletAddress) return;
 		createFirstDonation({
 			...txProps,
+			amount: projectDonation,
 			walletAddress: projectWalletAddress,
 			projectId: Number(project.id),
 			chainvineReferred,
@@ -166,7 +174,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			symbol: token.symbol,
 		})
 			.then(({ isSaved, txHash: firstHash }) => {
-				console.log('FirstTxHash', firstHash);
 				if (!firstHash) {
 					setDonating(false);
 					return;
@@ -176,7 +183,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 					createSecondDonation({
 						...txProps,
 						walletAddress: givethWalletAddress,
-						amount: donationToGivethAmount,
+						amount: givethDonation,
 						projectId: config.GIVETH_PROJECT_ID,
 						setFailedModalType,
 						symbol: token.symbol,
@@ -243,9 +250,9 @@ const DonateModal: FC<IDonateModalProps> = props => {
 									})}
 						</Lead>
 						<DonateSummary
-							value={amount}
+							value={projectDonation}
 							tokenSymbol={token.symbol}
-							usdValue={avgPrice}
+							usdValue={projectDonationPrice}
 							title={title}
 						/>
 						{firstDonationMinted && (
@@ -291,9 +298,9 @@ const DonateModal: FC<IDonateModalProps> = props => {
 												})}
 								</Lead>
 								<DonateSummary
-									value={donationToGivethAmount}
+									value={givethDonation}
 									tokenSymbol={token.symbol}
-									usdValue={donationToGivethPrice}
+									usdValue={givethDonationPrice}
 									title='The Giveth DAO'
 								/>
 								{secondTxStatus && (
