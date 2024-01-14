@@ -41,6 +41,8 @@ import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
 import { QFNoResultBanner } from './MiddleBanners/QFNoResultBanner';
 import { Spinner } from '@/components/Spinner';
 import { getMainCategorySlug } from '@/helpers/projects';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -78,6 +80,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
 	const { isTablet, isMobile } = useDetectDevice();
+	const { walletChainType } = useGeneralWallet();
+
+	const isOnSolana = walletChainType === ChainType.SOLANA;
 
 	router?.events?.on('routeChangeStart', () => setIsLoading(true));
 
@@ -252,7 +257,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				</Loading>
 			)}
 
-			{isQF ? (
+			{isQF && !isOnSolana ? (
 				<>
 					<PassportBanner />
 					<QFProjectsBanner />

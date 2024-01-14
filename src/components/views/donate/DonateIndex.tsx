@@ -34,6 +34,8 @@ import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import CryptoDonation from './CryptoDonation';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import { DonationInfo } from './DonationInfo';
+import { ChainType } from '@/types/config';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -42,6 +44,9 @@ const DonateIndex: FC = () => {
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
+	const { walletChainType } = useGeneralWallet();
+
+	const isOnSolana = walletChainType === ChainType.SOLANA;
 
 	useEffect(() => {
 		if (!isRecurringActive) return;
@@ -61,7 +66,9 @@ const DonateIndex: FC = () => {
 	) : isRecurringActive ? (
 		<>
 			<DonateHeader />
-			{!isSafeEnv && hasActiveQFRound && <PassportBanner />}
+			{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
+				<PassportBanner />
+			)}
 			<DonateContainer>
 				{/* <PurchaseXDAI /> */}
 				{alreadyDonated && (
@@ -104,7 +111,9 @@ const DonateIndex: FC = () => {
 	) : (
 		<>
 			<BigArc />
-			{!isSafeEnv && hasActiveQFRound && <PassportBanner />}
+			{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
+				<PassportBanner />
+			)}
 			<Wrapper>
 				{alreadyDonated && (
 					<AlreadyDonatedWrapper>
