@@ -145,7 +145,12 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 			</Container>
 			{showSwitchNetworkModal && (
 				<SwitchNetwork
-					customNetworks={[config.OPTIMISM_NETWORK_NUMBER]}
+					customNetworks={[
+						{
+							networkId: config.OPTIMISM_NETWORK_NUMBER,
+							chainType: config.OPTIMISM_CONFIG.chainType,
+						},
+					]}
 					setShowModal={setShowSwitchNetworkModal}
 				/>
 			)}
