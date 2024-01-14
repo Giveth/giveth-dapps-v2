@@ -18,11 +18,8 @@ import config from '@/configuration';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
-import CongratsAnimation from '@/animations/congrats.json';
-import LottieControl from '@/components/LottieControl';
 import { EContentType } from '@/lib/constants/shareContent';
 import QFToast from '@/components/views/donate/QFToast';
-import { useAppSelector } from '@/features/hooks';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { getActiveRound } from '@/helpers/qf';
@@ -32,7 +29,6 @@ import { isRecurringActive } from './DonationCard';
 
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
-	const { isLoading } = useAppSelector(state => state.user);
 	const { isSuccessDonation, hasActiveQFRound, project } = useDonateData();
 	const { givBackEligible, txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
@@ -78,18 +74,8 @@ export const SuccessView: FC = () => {
 			);
 	}, []);
 
-	useEffect(() => {
-		//Switch to donate view if user is changed
-		if (isLoading) {
-			// setSuccessDonation(undefined);
-		}
-	}, [isLoading]);
-
 	return (
 		<Wrapper>
-			<ConfettiContainer>
-				<LottieControl size={400} animationData={CongratsAnimation} />
-			</ConfettiContainer>
 			<GiverH4 weight={700}>
 				{formatMessage({ id: 'label.youre_giver_now' })}
 			</GiverH4>
@@ -134,11 +120,6 @@ const Wrapper = styled(Flex)`
 
 const SocialBoxWrapper = styled.div`
 	margin: -50px 0;
-`;
-
-const ConfettiContainer = styled.div`
-	position: absolute;
-	top: 30px;
 `;
 
 const GiverH4 = styled(H4)`

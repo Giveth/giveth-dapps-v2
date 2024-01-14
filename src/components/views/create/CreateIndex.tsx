@@ -10,7 +10,7 @@ import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import CompleteProfile from '@/components/CompleteProfile';
 import { WrappedSpinner } from '@/components/Spinner';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const CreateIndex = () => {
 	const dispatch = useAppDispatch();
@@ -20,7 +20,7 @@ const CreateIndex = () => {
 		isSignedIn,
 		userData: user,
 	} = useAppSelector(state => state.user);
-	const { openWalletConnectModal } = useAuthenticationWallet();
+	const { openWalletConnectModal } = useGeneralWallet();
 	const isRegistered = isUserRegistered(user);
 
 	useEffect(() => {

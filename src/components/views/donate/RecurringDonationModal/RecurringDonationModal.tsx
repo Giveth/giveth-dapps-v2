@@ -20,6 +20,7 @@ import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { RunOutInfo } from '../RunOutInfo';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import { ChainType } from '@/types/config';
 
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
@@ -271,7 +272,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			const batchOp = sf.batchCall(operations);
 			const tx = await batchOp.exec(signer);
 			if (tx.hash) {
-				setSuccessDonation({ txHash: [tx.hash] });
+				setSuccessDonation({
+					txHash: [{ txHash: tx.hash, chainType: ChainType.EVM }],
+				});
 			}
 			const res = await tx.wait();
 			if (!res.status) {

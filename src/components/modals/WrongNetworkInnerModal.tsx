@@ -4,33 +4,43 @@ import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { jointItems } from '@/helpers/text';
 import SwitchNetwork from './SwitchNetwork';
 import { getChainName } from '@/lib/network';
+import { INetworkIdWithChain } from '../views/donate/common.types';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
 
-export interface IWrongNetworkInnerModal {
+export interface IEVMWrongNetworkSwitchModal {
 	cardName: string;
-	targetNetworks: number[];
+	targetNetworks: INetworkIdWithChain[];
 }
 
-export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
+export const EVMWrongNetworkSwitchModal: FC<IEVMWrongNetworkSwitchModal> = ({
 	cardName,
 	targetNetworks,
 }) => {
 	const [showSwitchNetwork, setShowSwitchNetwork] = useState(false);
-
 	const { address } = useAccount();
 	const { formatMessage } = useIntl();
-	const { open: openConnectModal } = useWeb3Modal();
 
-	const chainNames = targetNetworks.map(network => getChainName(network));
+	const { walletChainType, handleSingOutAndSignInWithEVM } =
+		useGeneralWallet();
 
+	const chainNames = targetNetworks.map(network =>
+		getChainName(network.networkId),
+	);
 	const chainsStr = jointItems(chainNames);
 
+	const handleConnectWallet = async () => {
+		if (walletChainType === ChainType.SOLANA) {
+			handleSingOutAndSignInWithEVM();
+		}
+	};
+
 	return (
-		<WrongNetworkInnerModalContainer>
+		<EVMWrongNetworkSwitchModalContainer>
 			{address ? (
 				<>
 					<Description>
@@ -76,7 +86,7 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 							label={formatMessage({
 								id: 'component.button.connect_wallet',
 							})}
-							onClick={() => openConnectModal?.()}
+							onClick={handleConnectWallet}
 							buttonType='primary'
 						/>
 					</ButtonsContainer>
@@ -88,11 +98,11 @@ export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
 					customNetworks={targetNetworks}
 				/>
 			)}
-		</WrongNetworkInnerModalContainer>
+		</EVMWrongNetworkSwitchModalContainer>
 	);
 };
 
-const WrongNetworkInnerModalContainer = styled.div`
+const EVMWrongNetworkSwitchModalContainer = styled.div`
 	padding: 6px 24px;
 	width: 100%;
 	${mediaQueries.tablet} {

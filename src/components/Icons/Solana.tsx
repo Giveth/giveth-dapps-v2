@@ -5,7 +5,7 @@ import { ICurrencyIconProps } from './type';
 const IconSolana: FC<ICurrencyIconProps> = ({ size = 16 }) => {
 	return (
 		<Image
-			src={'/images/tokens/SOLANA.svg'}
+			src={'/images/tokens/SOL.svg'}
 			alt='Solana icon'
 			width={size}
 			height={size}
