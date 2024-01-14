@@ -233,13 +233,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				isDraft: draft,
 			};
 
-			console.log(
-				'Openning',
-				showAlloProtocolModal,
-				watchAlloProtocolRegistry,
-				hasOptimismAddress,
-			);
-
 			const addedProject = isEditMode
 				? await editProjectMutation({
 						variables: {
