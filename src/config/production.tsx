@@ -24,12 +24,6 @@ import { IconCelo } from '@/components/Icons/Celo';
 import { IconClassic } from '@/components/Icons/Classic';
 import IconSolana from '@/components/Icons/Solana';
 
-const BASE_ROUTE =
-	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
-const NOTIFICATION_BASE_ROUTE =
-	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
-	'https://notification.giveth.io';
-
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
 
@@ -60,15 +54,25 @@ if (isSolanaEnabled) {
 	NON_EVM_CHAINS.push(SOLANA_NETWORK);
 }
 
+const BASE_ROUTE =
+	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
+const BACKEND_LINK =
+	process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`;
+const FRONTEND_LINK =
+	process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://giveth.io';
+const NOTIFICATION_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
+	'https://notification.giveth.io';
+const AUTH_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
+	'https://auth.serve.giveth.io/v1';
+
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
-	BACKEND_LINK:
-		process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`,
-	FRONTEND_LINK: process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://giveth.io',
+	BACKEND_LINK: BACKEND_LINK,
+	FRONTEND_LINK: FRONTEND_LINK,
 	MICROSERVICES: {
-		authentication:
-			process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
-			`${BASE_ROUTE}/siweauthmicroservice/v1`,
+		authentication: AUTH_BASE_ROUTE,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
@@ -87,7 +91,7 @@ const config: EnvConfig = {
 	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
 		...mainnet,
-
+		chainType: ChainType.EVM,
 		DAI_TOKEN_ADDRESS: '0x6b175474e89094c44da98b954eedeac495271d0f',
 		PFP_CONTRACT_ADDRESS: '0x78fde77737d5b9ab32fc718c9535c7f1b8ce84db',
 
@@ -259,6 +263,7 @@ const config: EnvConfig = {
 
 	GNOSIS_CONFIG: {
 		...gnosis,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			maxFeePerGas: (2e9).toString(),
 			maxPriorityFeePerGas: (1e9).toString(),
@@ -404,6 +409,7 @@ const config: EnvConfig = {
 
 	POLYGON_CONFIG: {
 		...polygon,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -414,6 +420,7 @@ const config: EnvConfig = {
 
 	OPTIMISM_CONFIG: {
 		...optimism,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -511,6 +518,7 @@ const config: EnvConfig = {
 
 	CELO_CONFIG: {
 		...celo,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -520,6 +528,7 @@ const config: EnvConfig = {
 	},
 	CLASSIC_CONFIG: {
 		...classic,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},

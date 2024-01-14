@@ -90,7 +90,6 @@ export const SetProfilePic = ({
 			}
 		};
 		if (user?.walletAddress) {
-			console.log('wallet address', user?.walletAddress);
 			if (isAddress(user?.walletAddress)) {
 				fetchPFPInfo(user?.walletAddress);
 			} else if (isSolanaAddress(user?.walletAddress)) {

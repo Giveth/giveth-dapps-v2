@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import { useAccount, useNetwork } from 'wagmi';
-import { ModifySuperTokenModal } from '@/components/views/donate/ModifySuperToken/ModifySuperTokenModal';
-import config from '@/configuration';
+import FailedDonation, {
+	EDonationFailedType,
+} from '@/components/modals/FailedDonation';
 
 const YourApp = () => {
-	const [showModal, setShowModal] = useState(false);
-	const { address, isConnected, status } = useAccount();
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
+	const [failedModalType, setFailedModalType] =
+		useState<EDonationFailedType>();
 
 	return (
 		<div>
@@ -15,17 +13,17 @@ const YourApp = () => {
 			<div>
 				<button
 					onClick={() => {
-						setShowModal(true);
+						setFailedModalType(EDonationFailedType.NOT_SAVED);
 					}}
 				>
-					Test Button
+					Test Button1
 				</button>
 			</div>
-			{showModal && (
-				<ModifySuperTokenModal
-					setShowModal={setShowModal}
-					selectedToken={config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS[1]}
-					tokenStreams={{}}
+			{failedModalType && (
+				<FailedDonation
+					txUrl={'0x011212'}
+					setShowModal={() => setFailedModalType(undefined)}
+					type={failedModalType}
 				/>
 			)}
 		</div>

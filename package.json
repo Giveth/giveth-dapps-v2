@@ -1,6 +1,6 @@
 {
 	"name": "givethdapp",
-	"version": "2.20.8",
+	"version": "2.21.4",
 	"private": true,
 	"scripts": {
 		"build": "next build",
@@ -31,6 +31,7 @@
 		"@superfluid-finance/sdk-core": "^0.6.12",
 		"@uniswap/v3-sdk": "^3.10.0",
 		"@web3auth/sign-in-with-solana": "^3.0.0",
+		"@vercel/speed-insights": "^1.0.2",
 		"@web3modal/wagmi": "^3.1.0",
 		"apollo-upload-client": "^17.0.0",
 		"base58": "^2.0.1",

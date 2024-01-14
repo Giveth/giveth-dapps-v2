@@ -7,6 +7,7 @@ import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
 import { Provider as ReduxProvider } from 'react-redux';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { EIP6963Connector, createWeb3Modal } from '@web3modal/wagmi/react';
@@ -38,9 +39,10 @@ import {
 	getLocaleFromNavigator,
 	isGIVeconomyRoute,
 } from '@/lib/helpers';
+import { GeneralWalletProvider } from '@/providers/generalWalletProvider';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
-import { SolanaProvider } from '@/solana/solanaWalletProvider';
+import { SolanaProvider } from '@/providers/solanaWalletProvider';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 
@@ -147,7 +149,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 	useEffect(() => {
 		const handleStart = (url: string) => {
-			console.log(`Loading: ${url}`);
 			NProgress.start();
 		};
 		const handleChangeComplete = (url: string) => {
@@ -194,7 +195,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 		};
 		asyncFunc();
 	}, []);
-
 	return (
 		<>
 			<Head>
@@ -212,58 +212,60 @@ function MyApp({ Component, pageProps }: AppProps) {
 					<ApolloProvider client={apolloClient}>
 						<SolanaProvider>
 							<WagmiConfig config={wagmiConfig}>
-								{isMaintenanceMode ? (
-									<MaintenanceIndex />
-								) : (
-									<>
-										<NotificationController />
-										<GeneralController />
-										<PriceController />
-										<SubgraphController />
-										<UserController />
-										<HeaderWrapper />
-										{isGIVeconomyRoute(router.route) && (
-											<GIVeconomyTab />
-										)}
-										{(pageProps as any).errorStatus ? (
-											<ErrorsIndex
-												statusCode={
-													(pageProps as any)
-														.errorStatus
-												}
-											/>
-										) : (
-											<RenderComponent
-												Component={Component}
-												pageProps={pageProps}
-											/>
-										)}
-										{process.env.NEXT_PUBLIC_ENV ===
-											'production' && (
-											<Script
-												id='segment-script'
-												strategy='afterInteractive'
-												dangerouslySetInnerHTML={{
-													__html: renderSnippet(),
-												}}
-											/>
-										)}
-										{/* {process.env.NEXT_PUBLIC_ENV !==
-											'production' && (
-											<Script
-												id='console-script'
-												strategy='afterInteractive'
-												dangerouslySetInnerHTML={{
-													__html: `javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();`,
-												}}
-											/>
-										)} */}
+								<GeneralWalletProvider>
+									{isMaintenanceMode ? (
+										<MaintenanceIndex />
+									) : (
+										<>
+											<NotificationController />
+											<GeneralController />
+											<PriceController />
+											<SubgraphController />
+											<UserController />
+											<HeaderWrapper />
+											{isGIVeconomyRoute(
+												router.route,
+											) && <GIVeconomyTab />}
+											{(pageProps as any).errorStatus ? (
+												<ErrorsIndex
+													statusCode={
+														(pageProps as any)
+															.errorStatus
+													}
+												/>
+											) : (
+												<RenderComponent
+													Component={Component}
+													pageProps={pageProps}
+												/>
+											)}
+											{process.env.NEXT_PUBLIC_ENV ===
+												'production' && (
+												<Script
+													id='segment-script'
+													strategy='afterInteractive'
+													dangerouslySetInnerHTML={{
+														__html: renderSnippet(),
+													}}
+												/>
+											)}
+											{/* {process.env.NEXT_PUBLIC_ENV !==
+												'production' && (
+												<Script
+													id='console-script'
+													strategy='afterInteractive'
+													dangerouslySetInnerHTML={{
+														__html: `javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();`,
+													}}
+												/>
+											)} */}
 
-										<FooterWrapper />
-										<ModalController />
-										<PfpController />
-									</>
-								)}
+											<FooterWrapper />
+											<ModalController />
+											<PfpController />
+										</>
+									)}
+								</GeneralWalletProvider>
 							</WagmiConfig>
 						</SolanaProvider>
 					</ApolloProvider>
@@ -271,6 +273,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 			</ReduxProvider>
 
 			<Toaster containerStyle={{ top: '80px' }} />
+			<SpeedInsights />
 		</>
 	);
 }

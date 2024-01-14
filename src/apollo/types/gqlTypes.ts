@@ -1,4 +1,5 @@
 import { type Address } from 'wagmi';
+import { ChainType } from '@/types/config';
 import {
 	ICategory,
 	IDonation,
@@ -87,6 +88,8 @@ export interface IProjectAcceptedToken {
 	decimals: number;
 	isGivbackEligible?: boolean;
 	order: number;
+	chainType?: ChainType;
+	isStableCoin?: boolean;
 }
 
 export interface IFetchGivethProjectGQL {

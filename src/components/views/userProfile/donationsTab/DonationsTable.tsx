@@ -8,7 +8,6 @@ import {
 	IconLink24,
 	neutralColors,
 } from '@giveth/ui-design-system';
-
 import { useIntl } from 'react-intl';
 import { smallFormatDate, formatTxLink } from '@/lib/helpers';
 import { slugToProjectView } from '@/lib/routeCreators';
@@ -83,10 +82,11 @@ const DonationTable: FC<DonationTable> = ({
 						<B>{formatDonation(donation.amount)}</B>
 						<Currency>{donation.currency}</Currency>
 						<ExternalLink
-							href={formatTxLink(
-								donation.transactionNetworkId,
-								donation.transactionId,
-							)}
+							href={formatTxLink({
+								networkId: donation.transactionNetworkId,
+								txHash: donation.transactionId,
+								chainType: donation.chainType,
+							})}
 						>
 							<IconExternalLink
 								size={16}

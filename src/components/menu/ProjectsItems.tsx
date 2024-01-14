@@ -9,6 +9,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+
 import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
 import { HighlightSection } from './common';
@@ -16,6 +17,7 @@ import { Item } from './Item';
 import Routes from '@/lib/constants/Routes';
 import { ETheme } from '@/features/general/general.slice';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
+import { getNowUnixMS } from '@/helpers/time';
 
 interface IProjectsItems {
 	inSidebar?: boolean;
@@ -57,6 +59,11 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 	);
 	const { formatMessage } = useIntl();
 
+	const now = getNowUnixMS();
+	const _startDate = new Date(activeQFRound?.beginDate || 0).getTime();
+	const _endDate = new Date(activeQFRound?.endDate || 0).getTime();
+	const showQFLink = activeQFRound && now > _startDate && now < _endDate;
+
 	return (
 		<>
 			<HighlightSection theme={theme}>
@@ -74,7 +81,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 							</ExploreItem>
 						</Link>
 					))}
-					{activeQFRound && (
+					{showQFLink && (
 						<Link href={QFItem.url}>
 							<ExploreItem
 								className='qf-item'
@@ -97,7 +104,9 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 						>
 							<CategoryItem theme={theme}>
 								<GLink size='Big'>
-									{formatMessage({ id: category.slug })}
+									{formatMessage({
+										id: 'projects_' + category.slug,
+									})}
 								</GLink>
 							</CategoryItem>
 						</Link>

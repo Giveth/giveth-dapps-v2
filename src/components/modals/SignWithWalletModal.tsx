@@ -28,14 +28,12 @@ import { EModalEvents } from '@/hooks/useModalCallback';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { Dropdown } from './ExpirationDropdown';
 import { Flex } from '../styled-components/Flex';
-import {
-	WalletType,
-	useAuthenticationWallet,
-} from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { createSwisMessage } from '@/lib/authentication';
 import { ISolanaSignToGetToken } from '@/features/user/user.types';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
+import { ChainType } from '@/types/config';
 
 interface IProps extends IModal {
 	callback?: () => void;
@@ -67,8 +65,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 	const isSafeEnv = useIsSafeEnvironment();
 
 	const chainId = chain?.id;
-	const { walletAddress, signMessage, walletType } =
-		useAuthenticationWallet();
+	const { walletAddress, signMessage, walletChainType } = useGeneralWallet();
 	const router = useRouter();
 	const { isAnimating, closeModal: _closeModal } =
 		useModalAnimation(setShowModal);
@@ -251,7 +248,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 					loading={loading}
 					onClick={async () => {
 						let signature;
-						if (walletType === WalletType.SOLANA) {
+						if (walletChainType === ChainType.SOLANA) {
 							const { message, nonce } = await createSwisMessage(
 								walletAddress!,
 								'Login into Giveth services',

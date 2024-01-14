@@ -2,13 +2,21 @@ import { captureException } from '@sentry/nextjs';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { fetchSubgraph } from '@/services/subgraph.service';
+import config from '@/configuration';
 
 export const fetchChainInfo = async (chainId: number, userAddress?: string) => {
 	try {
-		const response = await fetchSubgraph(
-			SubgraphQueryBuilder.getChainQuery(chainId, userAddress),
-			chainId,
-		);
+		let response;
+		let uri = config.EVM_NETWORKS_CONFIG[chainId]?.subgraphAddress;
+
+		if (!uri) {
+			response = {};
+		} else {
+			response = await fetchSubgraph(
+				SubgraphQueryBuilder.getChainQuery(chainId, userAddress),
+				chainId,
+			);
+		}
 		return transformSubgraphData({
 			...response,
 			networkNumber: chainId,

@@ -8,37 +8,40 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { Chain } from 'wagmi';
 import { IWalletAddress } from '@/apollo/types/types';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
 import { getChainName } from '@/lib/network';
+import { NonEVMChain } from '@/types/config';
+import { findAddressByChain } from '@/lib/helpers';
 
 interface INetworkWalletAddress {
-	networkWallet: IWalletAddress;
-	setSelectedWallet: Dispatch<SetStateAction<IWalletAddress | undefined>>;
+	chain: Chain | NonEVMChain;
+	setSelectedChain: Dispatch<SetStateAction<Chain | NonEVMChain | undefined>>;
+	addresses: IWalletAddress[];
 }
 export const NetworkWalletAddress: FC<INetworkWalletAddress> = ({
-	networkWallet,
-	setSelectedWallet,
+	chain,
+	setSelectedChain,
+	addresses,
 }) => {
 	const { formatMessage } = useIntl();
-
+	const chainType = 'chainType' in chain ? chain.chainType : undefined;
+	const walletAddress = findAddressByChain(addresses, chain.id, chainType);
 	return (
 		<Wrapper flexDirection='column'>
 			{/* <StyledBadge label='wow' status={EBadgeStatus.SUCCESS} /> */}
 			<Flex justifyContent='space-between'>
 				<FlexCenter gap='8px'>
 					<NetworkLogo
-						chainId={networkWallet.networkId}
+						chainId={chain.id}
+						chainType={chainType}
 						logoSize={24}
 					/>
-					{networkWallet.networkId && (
-						<Caption>
-							{getChainName(networkWallet.networkId)}
-						</Caption>
-					)}
+					<Caption>{getChainName(chain.id, chainType)}</Caption>
 				</FlexCenter>
-				{!networkWallet.address && (
+				{!walletAddress?.address && (
 					<Button
 						size='small'
 						label={formatMessage({ id: 'label.add_address' })}
@@ -48,12 +51,12 @@ export const NetworkWalletAddress: FC<INetworkWalletAddress> = ({
 								<IconChevronRight16 />
 							</div>
 						}
-						onClick={() => setSelectedWallet(networkWallet)}
+						onClick={() => setSelectedChain(chain)}
 					/>
 				)}
 			</Flex>
 			<Address>
-				{networkWallet.address ? networkWallet.address : '---'}
+				{walletAddress?.address ? walletAddress.address : '---'}
 			</Address>
 		</Wrapper>
 	);

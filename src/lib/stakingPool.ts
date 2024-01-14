@@ -180,7 +180,7 @@ const getBalancerPoolStakingAPR = async (
 ): Promise<APR> => {
 	const { LM_ADDRESS, POOL_ADDRESS, VAULT_ADDRESS, POOL_ID } =
 		balancerPoolStakingConfig;
-	const tokenAddress = config.EVM_NETWORKS_CONFIG[chainId].GIV_TOKEN_ADDRESS;
+	const tokenAddress = config.EVM_NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS;
 	if (!tokenAddress) return { effectiveAPR: Zero };
 
 	const weightedPoolContract = getContract({
@@ -254,7 +254,7 @@ const getSimplePoolStakingAPR = async (
 	const { LM_ADDRESS, POOL_ADDRESS } = poolStakingConfig;
 	const networkConfig = config.EVM_NETWORKS_CONFIG[chainId];
 
-	const givTokenAddress = networkConfig.GIV_TOKEN_ADDRESS;
+	const givTokenAddress = networkConfig?.GIV_TOKEN_ADDRESS;
 	if (!givTokenAddress) return { effectiveAPR: Zero };
 
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
@@ -451,15 +451,12 @@ export const approveERC20tokenTransfer = async (
 		ownerAddress,
 		spenderAddress,
 	]);
-	console.log('allowance', allowance);
-	console.log('amount', amount);
 
 	if (amount <= allowance) return true;
 
 	try {
 		const walletClient = await getWalletClient({ chainId });
 		if (allowance > 0n) {
-			console.log('allowance is bigger than zero');
 			const tx = await walletClient?.writeContract({
 				address: tokenAddress,
 				abi: erc20ABI,

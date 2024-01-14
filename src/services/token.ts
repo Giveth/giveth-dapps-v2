@@ -32,7 +32,6 @@ export const fetchBalance = async (
 			const client = getPublicClient();
 			return client.getBalance({ address: userAddress });
 		} else {
-			console.log('tokenAddress', tokenAddress);
 			const contract = getContract({
 				address: tokenAddress,
 				abi: erc20ABI,
@@ -53,6 +52,22 @@ export const fetchETCPrice = async () => {
 		);
 		const data = await res.json();
 		return parseFloat(data['ethereum-classic'].usd);
+	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: 'fetchPrice',
+			},
+		});
+	}
+};
+
+export const fetchSolanaPrice = async () => {
+	try {
+		const res = await fetch(
+			'https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd',
+		);
+		const data = await res.json();
+		return parseFloat(data.solana.usd);
 	} catch (error) {
 		captureException(error, {
 			tags: {

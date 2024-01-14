@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useState, useEffect } from 'react';
 import { type Address, useNetwork } from 'wagmi';
-import { fetchETCPrice, fetchPrice } from '@/services/token';
+import { fetchETCPrice, fetchPrice, fetchSolanaPrice } from '@/services/token';
 import { fetchEthPrice } from '@/features/price/price.services';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
@@ -19,6 +19,7 @@ interface ITokenPice {
 	address?: Address;
 	id?: Address | string;
 	mainnetAddress?: Address;
+	isStableCoin?: boolean;
 }
 
 export const useTokenPrice = (token?: ITokenPice) => {
@@ -33,12 +34,15 @@ export const useTokenPrice = (token?: ITokenPice) => {
 	useEffect(() => {
 		const setPrice = async () => {
 			if (
-				token?.symbol &&
-				stableCoins.includes(token.symbol.toUpperCase())
+				token?.isStableCoin ||
+				(token?.symbol &&
+					stableCoins.includes(token.symbol.toUpperCase()))
 			) {
 				setTokenPrice(1);
 			} else if (token?.symbol === 'GIV') {
 				setTokenPrice(givTokenPrice || 0);
+			} else if (token?.symbol === 'SOL') {
+				setTokenPrice((await fetchSolanaPrice()) || 0);
 			} else if (token?.symbol === ethereumChain.nativeCurrency.symbol) {
 				const ethPrice = await fetchEthPrice();
 				setTokenPrice(ethPrice || 0);
@@ -69,7 +73,14 @@ export const useTokenPrice = (token?: ITokenPice) => {
 			}
 		};
 		if (token) {
-			setPrice().catch(() => setTokenPrice(0));
+			setPrice().catch(e => {
+				console.error(
+					'Error fetching token price in useTokenPrice. Token name: ',
+					token?.symbol,
+					e,
+				);
+				setTokenPrice(0);
+			});
 		}
 	}, [token]);
 	return tokenPrice;

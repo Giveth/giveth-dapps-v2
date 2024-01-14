@@ -1,10 +1,5 @@
 import { GetServerSideProps } from 'next/types';
-import {
-	ICategory,
-	IMainCategory,
-	IProject,
-	IQFRound,
-} from '@/apollo/types/types';
+import { IMainCategory, IProject, IQFRound } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
@@ -24,7 +19,6 @@ import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 export interface IProjectsRouteProps {
 	projects: IProject[];
 	totalCount: number;
-	categories: ICategory[];
 	mainCategories: IMainCategory[];
 	qfRounds: IQFRound[];
 }
@@ -48,7 +42,6 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		mainCategories,
 		selectedMainCategory,
 		totalCount,
-		categories,
 		qfRounds,
 	} = props;
 
@@ -62,11 +55,7 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 			qfRounds={qfRounds}
 		>
 			<GeneralMetatags info={projectsMetatags} />
-			<ProjectsIndex
-				projects={projects}
-				totalCount={totalCount}
-				categories={categories}
-			/>
+			<ProjectsIndex projects={projects} totalCount={totalCount} />
 		</ProjectsProvider>
 	);
 };
@@ -91,8 +80,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 		const selectedMainCategory = updatedMainCategory.find(mainCategory => {
 			return mainCategory.slug === slug;
 		});
-
-		console.log('selectedMainCategory', selectedMainCategory);
 
 		if (selectedMainCategory) {
 			const updatedSelectedMainCategory = {
@@ -120,7 +107,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				},
 				fetchPolicy: 'network-only',
 			});
-			const { projects, totalCount, categories } = data.allProjects;
+			const { projects, totalCount } = data.allProjects;
 			const {
 				data: { qfRounds },
 			} = await apolloClient.query({
@@ -133,7 +120,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 					mainCategories: updatedMainCategory,
 					selectedMainCategory: updatedSelectedMainCategory,
 					totalCount,
-					categories,
 					qfRounds,
 				},
 			};

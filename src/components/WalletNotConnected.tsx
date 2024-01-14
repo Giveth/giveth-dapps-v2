@@ -12,11 +12,11 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const WalletNotConnected = () => {
 	const { formatMessage } = useIntl();
-	const { openWalletConnectModal } = useAuthenticationWallet();
+	const { openWalletConnectModal } = useGeneralWallet();
 	return (
 		<ContainerStyled>
 			<IconContainer>

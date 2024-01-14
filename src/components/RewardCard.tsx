@@ -18,10 +18,13 @@ import { formatWeiHelper } from '@/helpers/number';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
-import { WrongNetworkInnerModal } from '@/components//modals/WrongNetworkInnerModal';
+
 import NetworkLogo from './NetworkLogo';
 import { ScaleRate, ScaleRateBig } from '@/lib/constants/constants';
 import { getChainName } from '@/lib/network';
+import { INetworkIdWithChain } from './views/donate/common.types';
+import { ChainType } from '@/types/config';
+import { EVMWrongNetworkSwitchModal } from './modals/WrongNetworkInnerModal';
 
 interface IRewardCardProps {
 	cardName: string;
@@ -34,7 +37,7 @@ interface IRewardCardProps {
 	subButtonCb?: Function;
 	network?: number;
 	className?: string;
-	targetNetworks: number[];
+	targetNetworks: INetworkIdWithChain[];
 	rewardTokenSymbol?: string;
 	tokenPrice?: bigint;
 }
@@ -69,11 +72,18 @@ export const RewardCard: FC<IRewardCardProps> = ({
 		setUSDAmount(usd);
 	}, [liquidAmount, givPrice, tokenPrice]);
 
+	const targetNetwork = targetNetworks.find(_network => {
+		return (
+			_network.networkId === network &&
+			_network.chainType === ChainType.EVM
+		);
+	});
+
 	return (
 		<>
 			<RewardCardContainer className={className}>
-				{!network || !targetNetworks.includes(network) ? (
-					<WrongNetworkInnerModal
+				{!network || !targetNetwork ? (
+					<EVMWrongNetworkSwitchModal
 						targetNetworks={targetNetworks}
 						cardName={cardName}
 					/>
