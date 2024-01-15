@@ -836,7 +836,7 @@
 	"label.supported_projects": "Proyectos Apoyados",
 	"label.supported_project_activity": "Actividad de Proyectos Apoyados",
 	"label.support_giveth": "Apoya a Giveth",
-	"label.support_giveth_with": "Apoya a Giveth con una donación a la Giveth DAO. El porcentaje de la donación seleccionado se agregará al monto de su donación en el mismo token seleccionado en que realizas la donación.",
+	"label.support_giveth_with": "Apoya a Giveth con una donación a la Giveth DAO.El porcentaje de donación seleccionado se tomará del total de la cantidad de tu donación en el mismo token que estás donando.",
 	"label.support_upcoming_qf_round": "Apoye las próximas rondas y done al grupo correspondiente.",
 	"label.switch_network": "Cambiar Red",
 	"label.switch_to": "cambiar a",

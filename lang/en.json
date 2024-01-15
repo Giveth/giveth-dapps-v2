@@ -836,7 +836,7 @@
 	"label.supported_projects": "Supported Projects",
 	"label.supported_project_activity": "Supported Project Activity",
 	"label.support_giveth": "Support Giveth",
-	"label.support_giveth_with": "Support Giveth with a donation to the Giveth DAO. The selected donation percentage will be added on top of your donation amount in the same token you are donating.",
+	"label.support_giveth_with": "Support Giveth with a donation to the Giveth DAO. The selected donation percentage will be taken from the total of your donation amount in the same token you are donating.",
 	"label.support_upcoming_qf_round": "Support upcoming rounds and donate to the matching pool.",
 	"label.switch_network": "Switch Network",
 	"label.switch_to": "switch to",
