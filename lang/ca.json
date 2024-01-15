@@ -838,7 +838,7 @@
 	"label.switch_network": "Canviar xarxa",
 	"label.switch_to": "canvia a",
 	"label.switch_to_archive_cards": "Canvia a Targetes d'arxiu",
-	"label.switch_to_ethereum": "Switch to Ethereum",
+	"label.switch_to_evm": "Switch to EVM",
 	"label.switch_to_network_name": "Canviar a {networkNames}",
 	"label.switch_to_network_to_continue_donating": "Canvia a {network} per continuar donant a aquest projecte.",
 	"label.take_a_dive_into_the_history": "Fes un cop d'ull a la història de Giveth",

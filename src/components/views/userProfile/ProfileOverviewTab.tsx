@@ -208,7 +208,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 							<br />
 							<Button
 								label={formatMessage({
-									id: 'label.switch_to_ethereum',
+									id: 'label.switch_to_evm',
 								})}
 								buttonType='primary'
 								onClick={handleSingOutAndSignInWithEVM}

@@ -203,7 +203,7 @@ export const PassportBanner = () => {
 			</P>
 			<StyledP onClick={handleSingOutAndSignInWithEVM}>
 				{formatMessage({
-					id: 'label.switch_to_ethereum',
+					id: 'label.switch_to_evm',
 				})}
 			</StyledP>
 		</PassportBannerWrapper>
