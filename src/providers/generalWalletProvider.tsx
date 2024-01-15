@@ -82,6 +82,17 @@ export const GeneralWalletContext = createContext<IGeneralWalletContext>({
 	isOnEVM: false,
 });
 
+const getSolanaProvider = () => {
+	if (typeof window !== 'undefined') {
+		if ('phantom' in window) {
+			const provider = (window.phantom as any)?.solana;
+			if (provider?.isPhantom) {
+				return provider;
+			}
+		}
+	}
+};
+
 // Create the provider component
 export const GeneralWalletProvider: React.FC<{
 	children: ReactNode;
@@ -346,6 +357,16 @@ export const GeneralWalletProvider: React.FC<{
 			openConnectModal();
 		}
 	};
+
+	useEffect(() => {
+		const solanaProvider = getSolanaProvider();
+		solanaProvider?.on('accountChanged', (publicKey: PublicKey) => {
+			if (publicKey) {
+				const address = publicKey.toBase58();
+				setWalletAddress(address);
+			}
+		});
+	}, []);
 
 	const isOnSolana = walletChainType === ChainType.SOLANA;
 	const isOnEVM = walletChainType === ChainType.EVM;
