@@ -129,7 +129,6 @@ export const RecurringDonationCard = () => {
 						100n
 					).toString(),
 				).dividedBy(selectedToken.balance.toString());
-				console.log('_percentage', _percentage.toString());
 				setPercentage(parseFloat(_percentage.toString()));
 			} else {
 				setUserStreamOnSelectedToken(undefined);
