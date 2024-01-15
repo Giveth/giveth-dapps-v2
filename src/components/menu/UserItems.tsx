@@ -10,7 +10,10 @@ import links from '@/lib/constants/links';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { setShowCompleteProfile } from '@/features/modal/modal.slice';
+import {
+	setShowCompleteProfile,
+	setShowWelcomeModal,
+} from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
 import {
 	ItemRow,
@@ -36,7 +39,8 @@ export const UserItems: FC<IUserItemsProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 
-	const { walletAddress, disconnect, chainName } = useGeneralWallet();
+	const { walletAddress, disconnect, chainName, isOnSolana } =
+		useGeneralWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
@@ -89,7 +93,18 @@ export const UserItems: FC<IUserItemsProps> = ({
 					{!isSafeEnv && (
 						<ItemAction
 							size='Small'
-							onClick={() => openChainModal && openChainModal()}
+							onClick={() => {
+								if (!isOnSolana) {
+									openChainModal && openChainModal();
+								} else {
+									dispatch(signOut(token!)).then(() => {
+										disconnect();
+										setTimeout(() => {
+											dispatch(setShowWelcomeModal(true));
+										}, 100); // wait 100 milliseconds (0.1 seconds) before dispatching, because otherwise the modal will not show
+									});
+								}
+							}}
 						>
 							{formatMessage({ id: 'label.switch_network' })}
 						</ItemAction>
