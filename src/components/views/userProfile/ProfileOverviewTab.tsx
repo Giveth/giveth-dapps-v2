@@ -35,7 +35,6 @@ import { getTotalGIVpower } from '@/helpers/givpower';
 import { useProfileContext } from '@/context/profile.context';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import { ChainType } from '@/types/config';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
@@ -53,9 +52,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
-	const { walletChainType, handleSingOutAndSignInWithEVM } =
-		useGeneralWallet();
-	const isOnSolana = walletChainType === ChainType.SOLANA;
+	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
