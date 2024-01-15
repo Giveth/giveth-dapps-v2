@@ -70,7 +70,9 @@ const TotalDonation: FC<ITotalDonation> = props => {
 				</Caption>
 				{isActive && (
 					<Caption medium>
-						{projectDonation + givethDonation + ' ' + symbol}
+						{formatPrice(projectDonation + givethDonation) +
+							' ' +
+							symbol}
 					</Caption>
 				)}
 			</Total>
