@@ -6,6 +6,7 @@ import {
 	IconBackward24,
 	IconNetwork32,
 	Lead,
+	P,
 	neutralColors,
 	ButtonText,
 } from '@giveth/ui-design-system';
@@ -26,6 +27,7 @@ import { Flex, FlexCenter } from '../styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
 interface IDonateWrongNetwork extends IModal {
 	acceptedChains?: INetworkIdWithChain[];
@@ -48,12 +50,14 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
 	const { switchNetwork } = useSwitchNetwork();
+	const isSafeEnv = useIsSafeEnvironment();
 
 	const {
 		walletChainType,
 		handleSingOutAndSignInWithEVM,
 		handleSignOutAndSignInWithSolana,
 		chain,
+		chainName,
 	} = useGeneralWallet();
 
 	const { slug } = router.query;
@@ -89,62 +93,96 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 			<CustomHr margin='24px' />
 			<ModalContainer>
 				<Lead>
-					{formatMessage({
-						id: 'label.sorry_this_projet_doesnt_support_your_current_net',
-					})}
+					{formatMessage(
+						{
+							id: isSafeEnv
+								? 'label.this_projet_doesnt_receive_donations_on'
+								: 'label.sorry_this_projet_doesnt_support_your_current_net',
+						},
+						{ chainName },
+					)}
 				</Lead>
 				<br />
-				<Lead>
-					{formatMessage({ id: 'label.please_switch_your_network' })}
-				</Lead>
-				<br />
-				<CustomFlex>
-					{eligibleNetworks.map(network => {
-						const _chainId = network.id;
-						return (
-							<NetworkItem
-								onClick={async () => {
-									if (
-										network.chainType ===
-											ChainType.SOLANA &&
-										walletChainType === ChainType.EVM
-									) {
-										await handleSignOutAndSignInWithSolana();
-										closeModal();
-									} else if (
-										network.chainType === ChainType.EVM &&
-										walletChainType === ChainType.SOLANA
-									) {
-										await handleSingOutAndSignInWithEVM();
-									} else {
-										switchNetwork?.(_chainId);
-										closeModal();
-									}
-								}}
-								isSelected={_chainId === networkId}
-								key={_chainId}
-								theme={theme}
-							>
-								<NetworkLogo
-									chainId={_chainId}
-									logoSize={32}
-									chainType={network.chainType}
-								/>
-								<B>{network.name}</B>
-								{_chainId === networkId && (
-									<SelectedNetwork
-										styleType='Small'
+				{isSafeEnv ? (
+					<>
+						<P>
+							{formatMessage(
+								{
+									id: 'label.this_project_only_accepts_donations_on',
+								},
+								{
+									chainName: eligibleNetworks
+										.map(network => network.name)
+										.join(', '),
+								},
+							)}
+						</P>
+						<P>
+							{formatMessage({
+								id: 'label.connect_to_giveth_from_a_multisig',
+							})}
+						</P>
+					</>
+				) : (
+					<>
+						<Lead>
+							{formatMessage({
+								id: 'label.please_switch_your_network',
+							})}
+						</Lead>
+						<br />
+						<CustomFlex>
+							{eligibleNetworks.map(network => {
+								const _chainId = network.id;
+								return (
+									<NetworkItem
+										onClick={async () => {
+											if (
+												network.chainType ===
+													ChainType.SOLANA &&
+												walletChainType ===
+													ChainType.EVM
+											) {
+												await handleSignOutAndSignInWithSolana();
+												closeModal();
+											} else if (
+												network.chainType ===
+													ChainType.EVM &&
+												walletChainType ===
+													ChainType.SOLANA
+											) {
+												await handleSingOutAndSignInWithEVM();
+											} else {
+												switchNetwork?.(_chainId);
+												closeModal();
+											}
+										}}
+										isSelected={_chainId === networkId}
+										key={_chainId}
 										theme={theme}
 									>
-										{formatMessage({
-											id: 'label.selected',
-										})}
-									</SelectedNetwork>
-								)}
-							</NetworkItem>
-						);
-					})}
-				</CustomFlex>
+										<NetworkLogo
+											chainId={_chainId}
+											logoSize={32}
+											chainType={network.chainType}
+										/>
+										<B>{network.name}</B>
+										{_chainId === networkId && (
+											<SelectedNetwork
+												styleType='Small'
+												theme={theme}
+											>
+												{formatMessage({
+													id: 'label.selected',
+												})}
+											</SelectedNetwork>
+										)}
+									</NetworkItem>
+								);
+							})}
+						</CustomFlex>
+					</>
+				)}
 				<br />
 				<CustomHr margin='0' />
 				<FlexCenter direction='column'>

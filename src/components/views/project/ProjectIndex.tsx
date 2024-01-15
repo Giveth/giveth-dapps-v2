@@ -36,6 +36,7 @@ import { DonateSection } from './projectActionCard/DonationSection';
 import { ProjectStats } from './projectActionCard/ProjectStats';
 import { AdminActions } from './projectActionCard/AdminActions';
 import ProjectOwnerBanner from './ProjectOwnerBanner';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -72,6 +73,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		isAdmin,
 		isLoading,
 	} = useProjectContext();
+	const { isOnSolana } = useGeneralWallet();
 
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
@@ -114,7 +116,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 
 	return (
 		<Wrapper>
-			{hasActiveQFRound && <PassportBanner />}
+			{hasActiveQFRound && !isOnSolana && <PassportBanner />}
 			<Head>
 				<title>{title && `${title} |`} Giveth</title>
 				<ProjectMeta project={projectData} />

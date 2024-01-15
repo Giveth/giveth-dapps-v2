@@ -61,6 +61,8 @@ interface IGeneralWalletContext {
 	) => Promise<string | `0x${string}` | undefined>;
 	handleSingOutAndSignInWithEVM: () => Promise<void>;
 	handleSignOutAndSignInWithSolana: () => Promise<void>;
+	isOnSolana: boolean;
+	isOnEVM: boolean;
 }
 // Create the context
 export const GeneralWalletContext = createContext<IGeneralWalletContext>({
@@ -76,6 +78,8 @@ export const GeneralWalletContext = createContext<IGeneralWalletContext>({
 	sendNativeToken: async () => undefined,
 	handleSingOutAndSignInWithEVM: async () => {},
 	handleSignOutAndSignInWithSolana: async () => {},
+	isOnSolana: false,
+	isOnEVM: false,
 });
 
 // Create the provider component
@@ -343,6 +347,9 @@ export const GeneralWalletProvider: React.FC<{
 		}
 	};
 
+	const isOnSolana = walletChainType === ChainType.SOLANA;
+	const isOnEVM = walletChainType === ChainType.EVM;
+
 	const contextValue: IGeneralWalletContext = {
 		walletChainType,
 		signMessage,
@@ -357,6 +364,8 @@ export const GeneralWalletProvider: React.FC<{
 		sendNativeToken,
 		handleSingOutAndSignInWithEVM,
 		handleSignOutAndSignInWithSolana,
+		isOnSolana,
+		isOnEVM,
 	};
 
 	// Render the provider component with the provided context value
