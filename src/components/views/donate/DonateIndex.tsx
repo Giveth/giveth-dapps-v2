@@ -133,7 +133,7 @@ const DonateIndex: FC = () => {
 						)}
 					</Right>
 				</Sections>
-				<DonationInfo />
+				{isSuccessDonation && <DonationInfo />}
 				{!isMobile && (
 					<SocialBox
 						contentType={EContentType.thisProject}
