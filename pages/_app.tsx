@@ -149,7 +149,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
 	useEffect(() => {
 		const handleStart = (url: string) => {
-			console.log(`Loading: ${url}`);
 			NProgress.start();
 		};
 		const handleChangeComplete = (url: string) => {

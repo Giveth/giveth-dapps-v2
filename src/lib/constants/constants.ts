@@ -108,6 +108,8 @@ export const TWO_WEEK = 1_209_600_000;
 
 export const minDonationAmount = 0.000001;
 
+export const donationDecimals = 6;
+
 export const BACKEND_QUERY_LIMIT = 50;
 
 export const E18 = 1_000_000_000_000_000_000n;
@@ -128,4 +130,4 @@ export const WeiPerEther = 1e18;
 
 export const PROFILE_PHOTO_PLACEHOLDER = '/images/placeholders/profile.svg';
 
-export const QF_MATCHING_CAP_PERCENTAGE = 18;
+export const QF_MATCHING_CAP_PERCENTAGE = 4;

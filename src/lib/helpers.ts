@@ -21,7 +21,6 @@ import { gToast, ToastType } from '@/components/toasts';
 import config, { isProduction } from '@/configuration';
 import { AddressZero } from './constants/constants';
 import { ChainType, NonEVMChain } from '@/types/config';
-import { isSolanaAddress } from '@/lib/wallet';
 
 declare let window: any;
 interface TransactionParams {
@@ -51,6 +50,15 @@ export const formatPrice = (balance?: string | number) => {
 	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
 		maximumFractionDigits: 6,
 	});
+};
+
+export const truncateToDecimalPlaces = (strNum: string, decimals: number) => {
+	let index = strNum.indexOf('.');
+	if (index === -1 || decimals < 1) {
+		return Number(strNum);
+	}
+	let length = index + 1 + decimals;
+	return Number(strNum.substring(0, length));
 };
 
 export const thousandsSeparator = (x?: string | number): string | undefined => {
@@ -214,17 +222,23 @@ export const suggestNewAddress = (
 	chain: Chain | NonEVMChain,
 ) => {
 	if (!addresses || addresses.length < 1) return '';
-	const isSame = compareAddressesArray(addresses.map(a => a.address));
+	const EVMAddresses = addresses.filter(
+		address =>
+			address.chainType === ChainType.EVM ||
+			address.chainType === undefined,
+	);
+	// We shouldn't suggest anything for NON EVM address input
+	const isSame = compareAddressesArray(EVMAddresses.map(a => a.address));
 	if (isSame) {
-		// Don't suggest EVM addresses for Solana input
-		if ('chainType' in chain && chain.chainType === ChainType.SOLANA) {
+		// Don't suggest EVM addresses for Non EVM address input
+		if (
+			'chainType' in chain &&
+			chain.chainType !== ChainType.EVM &&
+			chain.chainType !== undefined
+		) {
 			return '';
 		}
-		// Don't suggest Solana address for EVM chains input
-		if (isSolanaAddress(addresses[0].address || '')) {
-			return '';
-		}
-		return addresses[0].address;
+		return EVMAddresses[0].address;
 	} else {
 		return '';
 	}
@@ -340,7 +354,6 @@ async function handleErc20Transfer(
 	params: TransactionParams,
 	contractAddress: Address,
 ): Promise<Address> {
-	console.log('contractAddress', contractAddress);
 	const contract = getContract({
 		address: contractAddress,
 		abi: erc20ABI,
@@ -355,8 +368,6 @@ async function handleErc20Transfer(
 		// @ts-ignore -- needed for safe txs
 		value: 0n,
 	});
-	console.log('Write', write);
-	console.log('ERC20 transfer result', { hash: write.hash });
 	return write.hash;
 }
 

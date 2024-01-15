@@ -15,8 +15,6 @@ const ProjectQFStatus = ({ project }: IProjectQFStatus) => {
 	const { qfRounds } = project;
 	const isRoundActive = hasActiveRound(qfRounds);
 	const activeRound = getActiveRound(qfRounds);
-	console.log('activeRound', activeRound);
-	console.log('isRoundActive', isRoundActive);
 
 	const handleQFTermsText = isRoundActive
 		? `Eligible for QF round #${activeRound?.id}`

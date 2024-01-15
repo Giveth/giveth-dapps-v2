@@ -1,6 +1,8 @@
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
+import { minDonationAmount } from '@/lib/constants/constants';
+import { truncateToDecimalPlaces } from '@/lib/helpers';
 import { INetworkIdWithChain } from './common.types';
 import { getChainName } from '@/lib/network';
 
@@ -59,3 +61,28 @@ export interface ICreateDonation {
 	symbol: string;
 	setFailedModalType: (type: EDonationFailedType) => void;
 }
+
+export const calcDonationShare = (
+	totalDonation: number,
+	givethDonationPercent: number,
+	decimals = 6,
+) => {
+	let givethDonation = totalDonation * (givethDonationPercent / 100);
+	if (givethDonation < minDonationAmount && givethDonationPercent !== 0) {
+		givethDonation = minDonationAmount;
+	}
+	let projectDonation = totalDonation - givethDonation;
+	if (projectDonation < minDonationAmount) {
+		projectDonation = minDonationAmount;
+	}
+	return {
+		projectDonation: truncateToDecimalPlaces(
+			String(projectDonation),
+			decimals,
+		),
+		givethDonation: truncateToDecimalPlaces(
+			String(givethDonation),
+			decimals,
+		),
+	};
+};

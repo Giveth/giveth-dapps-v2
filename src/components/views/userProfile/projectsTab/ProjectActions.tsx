@@ -77,8 +77,7 @@ const ProjectActions = (props: IProjectActions) => {
 		},
 	};
 
-	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true' &&
-		options.push(recurringDonationOption);
+	isRecurringActive && options.push(recurringDonationOption);
 
 	const dropdownStyle = {
 		padding: '4px 16px',
