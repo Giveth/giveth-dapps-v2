@@ -8,10 +8,12 @@ import {
 	IconHeartOutline16,
 	IconDonation16,
 	neutralColors,
-	P,
-	IconRocketInSpace16,
 	IconFast16,
 	IconFlash16,
+	IconRocketInSpace16,
+	IconIncrease16,
+	semanticColors,
+	Caption,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -19,6 +21,7 @@ import Select, {
 	DropdownIndicatorProps,
 	StylesConfig,
 	ControlProps,
+	type CSSObjectWithLabel,
 } from 'react-select';
 
 import styled from 'styled-components';
@@ -34,6 +37,7 @@ export interface ISelectedSort {
 	icon: ReactElement;
 	label: string;
 	value: EProjectsSortBy;
+	color?: string;
 }
 
 const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
@@ -42,47 +46,55 @@ const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 
 const ProjectsSortSelect = () => {
 	const { formatMessage } = useIntl();
+	const { isQF } = useProjectsContext();
 
-	const sortByOptions = [
+	let sortByOptions: ISelectedSort[] = [
 		{
 			label: formatMessage({ id: 'label.givpower' }),
 			value: EProjectsSortBy.INSTANT_BOOSTING,
-			icon: <IconRocketInSpace16 color={brandColors.deep[900]} />,
+			icon: <IconRocketInSpace16 />,
 		},
 		{
 			label: formatMessage({ id: 'label.rank' }),
 			value: EProjectsSortBy.GIVPOWER,
-			icon: <IconFlash16 color={brandColors.deep[900]} />,
+			icon: <IconFlash16 />,
 		},
 		{
 			label: formatMessage({ id: 'label.newest' }),
 			value: EProjectsSortBy.NEWEST,
-			icon: <IconArrowTop size={16} color={brandColors.deep[900]} />,
+			icon: <IconArrowTop size={16} />,
 		},
 		{
 			label: formatMessage({ id: 'label.oldest' }),
 			value: EProjectsSortBy.OLDEST,
-			icon: <IconArrowBottom size={16} color={brandColors.deep[900]} />,
+			icon: <IconArrowBottom size={16} />,
 		},
 		{
-			label: formatMessage({ id: 'label.most_liked' }),
+			label: formatMessage({ id: 'label.likes' }),
 			value: EProjectsSortBy.MOST_LIKED,
-			icon: <IconHeartOutline16 color={brandColors.deep[900]} />,
+			icon: <IconHeartOutline16 />,
 		},
 		{
-			label: formatMessage({ id: 'label.most_funded' }),
+			label: formatMessage({ id: 'label.amount_raised_all_time' }),
 			value: EProjectsSortBy.MOST_FUNDED,
-			icon: <IconDonation16 color={brandColors.deep[900]} />,
+			icon: <IconDonation16 />,
 		},
 		{
 			label: formatMessage({ id: 'label.recently_updated' }),
 			value: EProjectsSortBy.RECENTLY_UPDATED,
-			icon: <IconFast16 color={brandColors.deep[900]} />,
+			icon: <IconFast16 />,
 		},
 	];
 
+	isQF &&
+		sortByOptions.splice(sortByOptions.length - 1, 0, {
+			label: formatMessage({ id: 'label.amount_raised_in_qf' }),
+			value: EProjectsSortBy.ActiveQfRoundRaisedFunds,
+			icon: <IconIncrease16 />,
+			color: semanticColors.jade[700],
+		});
+
 	const [value, setValue] = useState(sortByOptions[0]);
-	const { variables, setVariables } = useProjectsContext();
 	const { isMobile } = useDetectDevice();
 	const router = useRouter();
 
@@ -94,6 +106,8 @@ const ProjectsSortSelect = () => {
 					(router.query.sort as string).toLowerCase(),
 			);
 			if (_value) setValue(_value);
+		} else {
+			setValue(sortByOptions[0]);
 		}
 	}, [router.query.sort]);
 
@@ -113,9 +127,13 @@ const ProjectsSortSelect = () => {
 					Control: (props: any) => <Control {...props} />,
 				}}
 				onChange={(e: any) => {
-					setVariables({
-						...variables,
-						sortingBy: e.value,
+					const updatedQuery = {
+						...router.query,
+						sort: e.value,
+					};
+					router.push({
+						pathname: router.pathname,
+						query: updatedQuery,
 					});
 					setValue(e);
 				}}
@@ -136,13 +154,14 @@ const Option: ComponentType<OptionProps<ISelectedSort>> = props => {
 	const { data } = props;
 	const { label } = data;
 	const Icon = data.icon;
+	const color = data.color || brandColors.deep[900];
 
 	return (
 		<components.Option {...props}>
 			<OptionContainer>
-				<RowContainer>
+				<RowContainer textColor={color}>
 					{Icon}
-					<P>{label}</P>
+					<Caption>{label}</Caption>
 				</RowContainer>
 			</OptionContainer>
 		</components.Option>
@@ -169,38 +188,45 @@ const Control: ComponentType<ControlProps<ISelectedSort>> = ({
 
 const selectStyles: StylesConfig = {
 	...selectCustomStyles,
-	container: styles => ({
-		...styles,
-		zIndex: 3,
-		border: 'none',
-		borderRadius: '8px',
-		minWidth: '220px',
-		'&:hover': {
-			borderColor: 'transparent',
-		},
-	}),
-	control: styles => ({
-		...styles,
-		padding: '6px 8px',
-		border: 'none',
-		boxShadow: 'none',
-	}),
-	indicatorSeparator: styles => ({
-		...styles,
-		display: 'none',
-	}),
+	container: (baseStyles, props) =>
+		({
+			...baseStyles,
+			zIndex: 3,
+			border: 'none',
+			borderRadius: '8px',
+			minWidth: '230px',
+			'&:hover': {
+				borderColor: 'transparent',
+			},
+		}) as CSSObjectWithLabel,
+	control: (baseStyles, props) =>
+		({
+			...baseStyles,
+			padding: '6px 8px',
+			border: 'none',
+			boxShadow: 'none',
+		}) as CSSObjectWithLabel,
+	indicatorSeparator: (baseStyles, props) =>
+		({
+			...baseStyles,
+			display: 'none',
+		}) as CSSObjectWithLabel,
 };
 
-const RowContainer = styled.div`
+interface IRowContainer {
+	textColor: string;
+}
+
+const RowContainer = styled.div<IRowContainer>`
 	display: flex;
 	align-items: center;
 	gap: 8px;
+	color: ${props => props.textColor};
 	> :first-child {
 		flex-shrink: 0;
 	}
 	> :last-child {
 		width: 100%;
-		color: ${neutralColors.gray[900]};
 	}
 `;
 

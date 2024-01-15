@@ -1,94 +1,110 @@
 import {
-	Button,
-	ButtonLink,
 	IconArchiving,
+	IconChevronDown24,
 	IconEdit16,
+	IconShare16,
 	IconVerifiedBadge16,
-	OutlineButton,
-	brandColors,
-	semanticColors,
+	mediaQueries,
+	neutralColors,
 } from '@giveth/ui-design-system';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { captureException } from '@sentry/nextjs';
-import { Flex } from '@/components/styled-components/Flex';
 import { useProjectContext } from '@/context/project.context';
 import { VerificationModal } from '@/components/modals/VerificationModal';
-import { idToProjectEdit } from '@/lib/routeCreators';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
-import { client } from '@/apollo/apolloClient';
-import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { setShowSignWithWallet } from '@/features/modal/modal.slice';
-import { showToastError } from '@/lib/helpers';
+import { capitalizeAllWords } from '@/lib/helpers';
+import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
+import { idToProjectEdit } from '@/lib/routeCreators';
+import ShareModal from '@/components/modals/ShareModal';
+import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
+import { EContentType } from '@/lib/constants/shareContent';
+import useMediaQuery from '@/hooks/useMediaQuery';
+import { device } from '@/lib/constants/constants';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { Modal } from '@/components/modals/Modal';
+import { EVerificationStatus } from '@/apollo/types/types';
+
+interface IMobileActionsModalProps {
+	setShowModal: (value: boolean) => void;
+	children: React.ReactNode;
+}
 
 export const AdminActions = () => {
 	const [showVerificationModal, setShowVerificationModal] = useState(false);
-	const [deactivateModal, setDeactivateModal] = useState<boolean>(false);
-	const [activateLoading, setActivateLoading] = useState(false);
-
-	const { projectData, isActive, fetchProjectBySlug } = useProjectContext();
+	const [deactivateModal, setDeactivateModal] = useState(false);
+	const [showShareModal, setShowShareModal] = useState(false);
+	const [showMobileActionsModal, setShowMobileActionsModal] = useState(false);
+	const { projectData, isActive, activateProject } = useProjectContext();
+	const project = projectData!;
+	const { slug, verified, verificationFormStatus } = project;
 	const { formatMessage } = useIntl();
-	const { isSignedIn } = useAppSelector(state => state.user);
-	const dispatch = useAppDispatch();
+	const router = useRouter();
+	const isMobile = !useMediaQuery(device.tablet);
+	const isVerificationDisabled =
+		verified ||
+		verificationFormStatus === EVerificationStatus.SUBMITTED ||
+		verificationFormStatus === EVerificationStatus.REJECTED ||
+		!isActive;
 
-	const activeProject = async () => {
-		setActivateLoading(true);
-		try {
-			if (!isSignedIn) {
-				dispatch(setShowSignWithWallet(true));
-				return;
-			}
-			await client.mutate({
-				mutation: ACTIVATE_PROJECT,
-				variables: { projectId: Number(projectData?.id || '') },
-			});
-			await fetchProjectBySlug();
-		} catch (e) {
-			showToastError(e);
-			captureException(e, {
-				tags: {
-					section: 'handleProjectStatus',
-				},
-			});
-		} finally {
-			setActivateLoading(false);
-		}
+	const options: IOption[] = [
+		{
+			label: formatMessage({
+				id: 'label.edit_project',
+			}),
+			type: OptionType.ITEM,
+			icon: <IconEdit16 />,
+			cb: () => router.push(idToProjectEdit(projectData?.id || '')),
+		},
+		{
+			label: capitalizeAllWords(
+				formatMessage({
+					id: 'label.verify_your_project',
+				}),
+			),
+			type: OptionType.ITEM,
+			icon: <IconVerifiedBadge16 />,
+			cb: () => setShowVerificationModal(true),
+			isHidden: isVerificationDisabled,
+		},
+		{
+			label: capitalizeAllWords(
+				formatMessage({
+					id: isActive
+						? 'label.deactivate_project'
+						: 'label.activate_project',
+				}),
+			),
+			type: OptionType.ITEM,
+			icon: <IconArchiving size={16} />,
+			cb: () => (isActive ? setDeactivateModal(true) : activateProject()),
+		},
+		{
+			label: formatMessage({
+				id: verified ? 'label.share_and_get_rewarded' : 'label.share',
+			}),
+			type: OptionType.ITEM,
+			icon: <IconShare16 />,
+			cb: () => setShowShareModal(true),
+			isHidden: !isActive,
+		},
+	];
+
+	const dropdownStyle = {
+		padding: '10px 16px',
+		background: neutralColors.gray[300],
+		borderRadius: '8px',
 	};
-	return (
-		<>
-			<Flex flexDirection='column' gap='16px'>
-				<EditButton
-					isExternal
-					linkType='texty-secondary'
-					label={formatMessage({ id: 'label.edit' })}
-					icon={<IconEdit16 />}
-					href={idToProjectEdit(projectData?.id || '')}
-				/>
-				<VerifyButton
-					label={formatMessage({
-						id: 'label.verify_your_project',
-					})}
-					icon={<IconVerifiedBadge16 />}
-					disabled={!isActive}
-					onClick={() => setShowVerificationModal(true)}
-				/>
-				<ActiveButton
-					label={formatMessage({
-						id: isActive
-							? 'label.deactivate_project'
-							: 'label.activate_project',
-					})}
-					buttonType='texty-gray'
-					icon={<IconArchiving size={16} />}
-					size='small'
-					onClick={() =>
-						isActive ? setDeactivateModal(true) : activeProject()
-					}
-					loading={activateLoading}
-				/>
-			</Flex>
+
+	return !isMobile ? (
+		<Wrapper>
+			<Dropdown
+				style={dropdownStyle}
+				label='Project Actions'
+				options={options}
+			/>
 			{showVerificationModal && (
 				<VerificationModal
 					onClose={() => setShowVerificationModal(false)}
@@ -100,44 +116,107 @@ export const AdminActions = () => {
 					projectId={projectData?.id}
 				/>
 			)}
-		</>
+			{showShareModal &&
+				(verified ? (
+					<ShareRewardedModal
+						contentType={EContentType.thisProject}
+						setShowModal={setShowShareModal}
+						projectHref={slug}
+						projectTitle={project.title}
+					/>
+				) : (
+					<ShareModal
+						contentType={EContentType.thisProject}
+						setShowModal={setShowShareModal}
+						projectHref={slug}
+					/>
+				))}
+		</Wrapper>
+	) : (
+		<MobileWrapper
+			gap='4px'
+			onClick={() => setShowMobileActionsModal(true)}
+		>
+			<div>Project Actions</div>
+			<IconChevronDown24 />
+			{showMobileActionsModal && (
+				<MobileActionsModal setShowModal={setShowMobileActionsModal}>
+					{options.map(option => (
+						<MobileActionModalItem
+							key={option.label}
+							onClick={option.cb}
+						>
+							<Flex gap='8px'>
+								<Flex alignItems='center'>{option.icon}</Flex>
+								<div>{option.label}</div>
+							</Flex>
+						</MobileActionModalItem>
+					))}
+					{showVerificationModal && (
+						<VerificationModal
+							onClose={() => setShowVerificationModal(false)}
+						/>
+					)}
+					{deactivateModal && (
+						<DeactivateProjectModal
+							setShowModal={setDeactivateModal}
+							projectId={projectData?.id}
+						/>
+					)}
+					{showShareModal &&
+						(verified ? (
+							<ShareRewardedModal
+								contentType={EContentType.thisProject}
+								setShowModal={setShowShareModal}
+								projectHref={slug}
+								projectTitle={project.title}
+							/>
+						) : (
+							<ShareModal
+								contentType={EContentType.thisProject}
+								setShowModal={setShowShareModal}
+								projectHref={slug}
+							/>
+						))}
+				</MobileActionsModal>
+			)}
+		</MobileWrapper>
 	);
 };
 
-const EditButton = styled(ButtonLink)`
-	width: 100%;
-	flex-direction: row-reverse;
-	gap: 8px;
-	box-shadow: 0px 3px 20px rgba(83, 38, 236, 0.13);
-	padding: 16px 24px;
-	&:hover {
-		color: ${brandColors.giv[300]};
+const MobileActionsModal: FC<IMobileActionsModalProps> = ({
+	setShowModal,
+	children,
+}) => {
+	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
+	return (
+		<Modal
+			closeModal={closeModal}
+			isAnimating={isAnimating}
+			headerTitlePosition='left'
+		>
+			{children}
+		</Modal>
+	);
+};
+
+const Wrapper = styled.div`
+	order: 1;
+	margin-bottom: 16px;
+	${mediaQueries.tablet} {
+		margin-bottom: unset;
+		order: unset;
 	}
-	transition: color 0.3s ease;
 `;
 
-const VerifyButton = styled(OutlineButton)`
-	width: 100%;
-	flex-direction: row-reverse;
-	gap: 8px;
-	padding: 16px 24px;
-	color: ${brandColors.giv[500]};
-	border: 2px solid ${brandColors.giv[500]};
-	&:hover {
-		border: 2px solid ${brandColors.giv[300]};
-		color: ${brandColors.giv[300]};
-	}
+const MobileWrapper = styled(FlexCenter)`
+	padding: 10px 16px;
+	background-color: ${neutralColors.gray[300]};
+	border-radius: 8px;
 `;
 
-const ActiveButton = styled(Button)`
-	width: 100%;
-	flex-direction: row-reverse;
-	gap: 8px;
-	color: ${semanticColors.golden[700]};
-	&:hover {
-		color: ${semanticColors.golden[500]};
-	}
-	& > div[loading='1'] > div {
-		left: 0;
-	}
+const MobileActionModalItem = styled(Flex)`
+	padding: 16px 24px;
+	border-bottom: ${neutralColors.gray[400]} 1px solid;
 `;

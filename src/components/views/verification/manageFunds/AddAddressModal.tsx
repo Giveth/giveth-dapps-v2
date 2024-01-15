@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import React, { FC } from 'react';
 import { Button, IconWalletOutline24 } from '@giveth/ui-design-system';
 import { Controller, useForm } from 'react-hook-form';
-import { useWeb3React } from '@web3-react/core';
-import { utils } from 'ethers';
+import { getAddress, isAddress } from 'viem';
+import { useIntl } from 'react-intl';
+import { useNetwork } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import Input from '@/components/Input';
@@ -12,42 +13,30 @@ import { IAddress } from '@/components/views/verification/manageFunds/ManageFund
 import SelectNetwork from '@/components/views/verification/manageFunds/SelectNetwork';
 import { ISelectedNetwork } from '@/components/views/verification/manageFunds/types';
 import config from '@/configuration';
-import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
+import { getAddressFromENS, isAddressENS, isSolanaAddress } from '@/lib/wallet';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { requiredOptions } from '@/lib/constants/regex';
+import { getChainName } from '@/lib/network';
+import useFocus from '@/hooks/useFocus';
+import { ChainType, NonEVMNetworkConfig } from '@/types/config';
 
 interface IProps extends IModal {
 	addAddress: (address: IAddress) => void;
 	addresses: IAddress[];
 }
 
-const networkOptions = [
-	{
-		value: config.MAINNET_NETWORK_NUMBER,
-		label: 'Ethereum Mainnet',
-		id: config.MAINNET_NETWORK_NUMBER,
-	},
-	{
-		value: config.XDAI_NETWORK_NUMBER,
-		label: 'Gnosis',
-		id: config.XDAI_NETWORK_NUMBER,
-	},
-	{
-		value: config.POLYGON_NETWORK_NUMBER,
-		label: 'Polygon Mainnet',
-		id: config.POLYGON_NETWORK_NUMBER,
-	},
-	{
-		value: config.CELO_NETWORK_NUMBER,
-		label: 'Celo Mainnet',
-		id: config.CELO_NETWORK_NUMBER,
-	},
-	{
-		value: config.OPTIMISM_NETWORK_NUMBER,
-		label: 'Optimism',
-		id: config.OPTIMISM_NETWORK_NUMBER,
-	},
-];
+const networksConfig = config.NETWORKS_CONFIG;
+const networkOptions = Object.keys(networksConfig).map(key => {
+	const chain = networksConfig[key];
+	const networkId = chain.id;
+	const chainType = (chain as NonEVMNetworkConfig).chainType;
+	return {
+		value: networkId,
+		label: getChainName(networkId, chainType),
+		id: networkId,
+		chainType,
+	};
+});
 
 export interface IAddressForm {
 	address: string;
@@ -69,22 +58,32 @@ const AddAddressModal: FC<IProps> = ({
 		getValues,
 	} = useForm<IAddressForm>({ mode: 'onBlur', reValidateMode: 'onBlur' });
 
-	const { library, chainId } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const { formatMessage } = useIntl();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const [inputRef] = useFocus();
 
 	const watchTitle = watch('title');
+	const watchChain = watch('network');
 
 	const handleAdd = async (formData: IAddressForm) => {
 		const { address, title, network } = formData;
-		const isEns = isAddressENS(address);
-		const _address = isEns
-			? await getAddressFromENS(address, library)
-			: utils.getAddress(address);
-		addAddress({
-			address: _address,
-			title,
-			networkId: network.value,
-		});
+		let _address: null | string = address;
+		if (!network.chainType) {
+			const isEns = isAddressENS(address);
+			_address = isEns
+				? await getAddressFromENS(address)
+				: getAddress(address);
+		}
+		if (_address) {
+			addAddress({
+				address: _address,
+				title,
+				networkId: network.value,
+				chainType: network.chainType,
+			});
+		}
 		closeModal();
 	};
 
@@ -95,15 +94,19 @@ const AddAddressModal: FC<IProps> = ({
 
 	const validateAddress = async (address: string) => {
 		let actualAddress = address;
-		if (!library) return 'Web3 is not initialized';
-		if (isAddressENS(address)) {
+		if (watchChain?.chainType === ChainType.SOLANA) {
+			if (!isSolanaAddress(address)) {
+				return 'Invalid Solana address';
+			}
+		} else if (isAddressENS(address)) {
 			if (chainId !== 1) {
 				return 'Please switch to Mainnet to handle ENS addresses';
 			}
-			actualAddress = await getAddressFromENS(address, library);
-			if (!actualAddress) return 'Invalid ENS address';
-		} else {
-			if (!utils.isAddress(address)) return 'Invalid address';
+			const temp = await getAddressFromENS(address);
+			if (!temp) return 'Invalid ENS address';
+			actualAddress = temp;
+		} else if (!isAddress(address)) {
+			return 'Invalid ETH address';
 		}
 		const isDuplicate = addresses.some(
 			item =>
@@ -133,6 +136,7 @@ const AddAddressModal: FC<IProps> = ({
 								selectedNetwork={field.value}
 								onChange={network => field.onChange(network)}
 								error={error}
+								ref={inputRef}
 							/>
 						)}
 					/>
@@ -166,7 +170,9 @@ const AddAddressModal: FC<IProps> = ({
 					<Buttons>
 						<Button
 							size='small'
-							label='ADD NEW ADDRESS'
+							label={formatMessage({
+								id: 'label.add_new_address',
+							})}
 							buttonType='secondary'
 							type='submit'
 						/>

@@ -8,12 +8,13 @@ import {
 	H6,
 	Caption,
 	IconHelpFilled,
+	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
+import { useAccount, useNetwork } from 'wagmi';
 import { smallFormatDate } from '@/lib/helpers';
-import { Flex } from '../styled-components/Flex';
+import { Flex, FlexCenter } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
@@ -23,40 +24,45 @@ import { SubgraphQueryBuilder } from '@/lib/subgraph/subgraphQueryBuilder';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { RowWrapper, TableCell, TableHeader } from '../styled-components/Table';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { useStakingPool } from '@/hooks/useStakingPool';
+import { Spinner } from '../Spinner';
 import type { IGIVpowerPosition } from '@/types/subgraph';
-import type { BigNumber } from 'ethers';
 import type { IModal } from '@/types/common';
 
 interface ILockupDetailsModal extends IModal {
-	unstakeable: BigNumber;
+	unstakeable: bigint;
 }
 
 export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 	unstakeable,
 	setShowModal,
 }) => {
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const { address } = useAccount();
 	const { apr, stakedAmount } = useStakingPool(
-		getGivStakingConfig(config.XDAI_CONFIG),
+		config.EVM_NETWORKS_CONFIG[chainId!].GIVPOWER ||
+			config.GNOSIS_CONFIG.GIVPOWER,
 	);
-	const { account } = useWeb3React();
+	const [loading, setLoading] = useState(true);
 	const [locksInfo, setLocksInfo] = useState<IGIVpowerPosition[]>([]);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		async function fetchGIVLockDetails() {
-			if (!account) return;
+			if (!address) return;
+			setLoading(true);
 			const LocksInfo = await fetchSubgraph(
-				SubgraphQueryBuilder.getTokenLocksInfoQuery(account),
-				config.XDAI_NETWORK_NUMBER,
+				SubgraphQueryBuilder.getTokenLocksInfoQuery(address),
+				chainId || config.GNOSIS_NETWORK_NUMBER,
 			);
 			setLocksInfo(LocksInfo.tokenLocks);
+			setLoading(false);
 		}
 
 		fetchGIVLockDetails();
-	}, [account]);
+	}, [address, chainId]);
 
 	return (
 		<Modal
@@ -79,13 +85,18 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					<div>
 						<IconUnlock32 />
 						<CloseText>
-							<Subtitle>{formatWeiHelper(unstakeable)}</Subtitle>
+							<Subtitle>
+								{formatWeiHelper(unstakeable.toString())}
+							</Subtitle>
 							<H6>GIV</H6>
 						</CloseText>
 					</div>
 					<div>
 						<H6>
-							{apr ? formatEthHelper(apr.effectiveAPR) : ' ? '}%
+							{apr
+								? formatEthHelper(apr.effectiveAPR.toString())
+								: ' ? '}
+							%
 						</H6>
 						<CloseText>
 							<H6>APR</H6>
@@ -108,7 +119,11 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					<Subtitle>
 						{formatMessage({ id: 'label.locekd_giv' })}
 					</Subtitle>
-					{locksInfo?.length > 0 ? (
+					{loading ? (
+						<FlexCenter>
+							<Spinner />
+						</FlexCenter>
+					) : locksInfo?.length > 0 ? (
 						<LockedTable>
 							<LockTableHeader>GIV</LockTableHeader>
 							<LockTableHeader>
@@ -143,10 +158,10 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 																{
 																	rounds: locksInfo.rounds,
 																},
-														  )
+															)
 														: formatMessage({
 																id: 'label.one_round',
-														  })
+															})
 												}`}
 											</LockTableCell>
 											<LockTableCell>
@@ -158,7 +173,7 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 															apr.effectiveAPR.multipliedBy(
 																multiplier,
 															),
-													  )
+														)
 													: ' ? '}
 												%
 											</LockTableCell>
@@ -177,7 +192,9 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 							)}
 						</LockedTable>
 					) : (
-						<Subtitle>0</Subtitle>
+						<FlexCenter>
+							<P>There is no data</P>
+						</FlexCenter>
 					)}
 				</LockedContainer>
 
@@ -199,7 +216,9 @@ export const LockupDetailsModal: FC<ILockupDetailsModal> = ({
 					</SubtitleWithTooltip>
 
 					<TotalContainer>
-						<SubtitleH5>{formatWeiHelper(stakedAmount)}</SubtitleH5>
+						<SubtitleH5>
+							{formatWeiHelper(stakedAmount.toString())}
+						</SubtitleH5>
 						<H6>GIV</H6>
 					</TotalContainer>
 				</StakedContainer>

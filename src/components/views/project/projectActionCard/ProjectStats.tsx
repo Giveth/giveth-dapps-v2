@@ -1,10 +1,4 @@
-import {
-	IconHelpFilled16,
-	P,
-	SemiTitle,
-	Subline,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { IconHelpFilled16, P, Subline } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -14,20 +8,13 @@ import { useProjectContext } from '@/context/project.context';
 import StatusBadge from './StatusBadge';
 import ListingBadge from '@/components/ListingBadge';
 import VerificationBadge from '@/components/VerificationBadge';
-import { Badge, EBadgeStatus } from '@/components/Badge';
 
 export const ProjectStats = () => {
 	const { formatMessage } = useIntl();
 	const { projectData } = useProjectContext();
 
-	console.log(
-		'projectData?.verificationFormStatus',
-		projectData?.verificationFormStatus,
-		projectData?.verified,
-	);
 	return (
 		<div>
-			<Title>{formatMessage({ id: 'label.project_stats' })}</Title>
 			<Flex flexDirection='column' gap='24px'>
 				<StatRow justifyContent='space-between'>
 					<Flex alignItems='center' gap='4px'>
@@ -36,7 +23,11 @@ export const ProjectStats = () => {
 							icon={<IconHelpFilled16 />}
 							direction='bottom'
 						>
-							<StatTooltip>Project status</StatTooltip>
+							<StatTooltip>
+								{formatMessage({
+									id: 'component.project-stats.status.tooltip',
+								})}
+							</StatTooltip>
 						</IconWithTooltip>
 					</Flex>
 					<StatusBadge status={projectData?.status.name} />
@@ -48,12 +39,20 @@ export const ProjectStats = () => {
 							icon={<IconHelpFilled16 />}
 							direction='bottom'
 						>
-							<StatTooltip>Listing</StatTooltip>
+							<StatTooltip>
+								{formatMessage({
+									id: 'component.project-stats.listing.tooltip',
+								})}
+							</StatTooltip>
 						</IconWithTooltip>
 					</Flex>
 					<ListingBadge listed={projectData?.listed} />
 				</StatRow>
-				<StatRow justifyContent='space-between'>
+				<StatRow
+					gap='5px'
+					justifyContent='space-between'
+					alignItems='center'
+				>
 					<Flex alignItems='center' gap='4px'>
 						<P>
 							{formatMessage({ id: 'label.verification_status' })}
@@ -62,33 +61,22 @@ export const ProjectStats = () => {
 							icon={<IconHelpFilled16 />}
 							direction='bottom'
 						>
-							<StatTooltip>Verification status</StatTooltip>
+							<StatTooltip>
+								{formatMessage({
+									id: 'component.project-stats.verification.tooltip',
+								})}
+							</StatTooltip>
 						</IconWithTooltip>
 					</Flex>
-					{projectData?.verified ? (
-						<Badge label='Verified' status={EBadgeStatus.SUCCESS} />
-					) : projectData?.verificationFormStatus ? (
-						<VerificationBadge
-							status={projectData?.verificationFormStatus}
-						/>
-					) : (
-						<Badge
-							label='Not verified'
-							status={EBadgeStatus.DEFAULT}
-						/>
-					)}
+					<VerificationBadge
+						isVerified={projectData?.verified}
+						verificationStatus={projectData?.verificationFormStatus}
+					/>
 				</StatRow>
 			</Flex>
 		</div>
 	);
 };
-
-const Title = styled(SemiTitle)`
-	font-weight: 500;
-	padding-bottom: 16px;
-	border-bottom: 1px solid ${neutralColors.gray[300]};
-	margin-bottom: 16px;
-`;
 
 const StatRow = styled(Flex)``;
 

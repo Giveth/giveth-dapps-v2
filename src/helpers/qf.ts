@@ -1,9 +1,19 @@
 import { IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from './time';
+import { QF_MATCHING_CAP_PERCENTAGE } from '@/lib/constants/constants';
 
 export const hasActiveRound = (qfRounds: IQFRound[] | undefined) => {
 	if (!qfRounds) return false;
 	return qfRounds.some(
+		round =>
+			round.isActive &&
+			new Date(round.beginDate).getTime() < getNowUnixMS(),
+	);
+};
+
+export const getActiveRound = (qfRounds: IQFRound[] | undefined) => {
+	if (!qfRounds) return undefined;
+	return qfRounds.find(
 		round =>
 			round.isActive &&
 			new Date(round.beginDate).getTime() < getNowUnixMS(),
@@ -17,10 +27,12 @@ export const calculateTotalEstimatedMatching = (
 ) => {
 	if (!matchingPool || !projectDonationsSqrtRootSum || !allProjectsSum)
 		return 0;
-	return (
+	const result = Math.min(
 		(Math.pow(projectDonationsSqrtRootSum, 2) / allProjectsSum) *
-		matchingPool
+			matchingPool,
+		(matchingPool * QF_MATCHING_CAP_PERCENTAGE) / 100,
 	);
+	return result > 0 && result < 1 ? 1 : result;
 };
 
 export const calculateEstimatedMatchingWithDonationAmount = (
@@ -37,9 +49,16 @@ export const calculateEstimatedMatchingWithDonationAmount = (
 		_projectDonationsSqrtRootSum + Math.sqrt(donationAmount),
 		2,
 	);
-	return (
+
+	// To address https://github.com/Giveth/giveth-dapps-v2/issues/2886#issuecomment-1634650868
+	const newEstimateMatching = Math.min(
 		(afterNewDonationPow /
 			(_allProjectsSum + afterNewDonationPow - beforeNewDonationPow)) *
-		matchingPool
+			matchingPool,
+		(matchingPool * QF_MATCHING_CAP_PERCENTAGE) / 100,
+	);
+	return (
+		newEstimateMatching *
+		((afterNewDonationPow - beforeNewDonationPow) / afterNewDonationPow)
 	);
 };

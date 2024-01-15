@@ -15,7 +15,7 @@ import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
-import { ICategory, IProject } from '@/apollo/types/types';
+import { IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import {
@@ -30,8 +30,6 @@ import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
 import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
 import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
-import LottieControl from '@/components/LottieControl';
-import LoadingAnimation from '@/animations/loading_giv.json';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
@@ -41,11 +39,12 @@ import { QFProjectsBanner } from './QFProjectsBanner';
 import { PassportBanner } from '@/components/PassportBanner';
 import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
 import { QFNoResultBanner } from './MiddleBanners/QFNoResultBanner';
+import { Spinner } from '@/components/Spinner';
+import { getMainCategorySlug } from '@/helpers/projects';
 
 export interface IProjectsView {
 	projects: IProject[];
 	totalCount: number;
-	categories: ICategory[];
 }
 
 interface IQueries {
@@ -80,6 +79,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const isInfiniteScrolling = useRef(true);
 	const { isTablet, isMobile } = useDetectDevice();
 
+	router?.events?.on('routeChangeStart', () => setIsLoading(true));
+
 	const fetchProjects = useCallback(
 		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
 			const variables: IQueries = {
@@ -107,6 +108,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					variables: {
 						...variables,
 						...contextVariables,
+						mainCategory: getMainCategorySlug(selectedMainCategory),
 					},
 					fetchPolicy: 'network-only',
 				})
@@ -246,10 +248,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		<>
 			{isLoading && (
 				<Loading>
-					<LottieControl
-						animationData={LoadingAnimation}
-						size={250}
-					/>
+					<Spinner />
 				</Loading>
 			)}
 
@@ -303,7 +302,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 									? ''
 									: formatMessage({
 											id: 'component.button.load_more',
-									  })
+										})
 							}
 							icon={
 								isLoading && (
@@ -356,9 +355,9 @@ const FiltersContainer = styled.div`
 	padding: 32px 21px;
 	border-radius: 0;
 	margin-bottom: 24px;
-	margin-top: 50px;
 	gap: 16px;
 	${mediaQueries.tablet} {
+		margin-top: 32px;
 		border-radius: 16px;
 	}
 `;

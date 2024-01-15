@@ -9,6 +9,7 @@ const TYPEFORM = 'https://giveth.typeform.com/';
 
 const links = {
 	REPORT_ISSUE: TYPEFORM + 'issue-bug',
+	REPORT_FAILED_DONATION: TYPEFORM + 'failed-donation',
 	ASK_QUESTION: TYPEFORM + 'question',
 	FEATURE_REQUEST: TYPEFORM + 'featurerequest',
 	FEEDBACK: TYPEFORM + 'feedback',
@@ -17,6 +18,8 @@ const links = {
 	PROJECT_VERIFICATION: TYPEFORM + 'verification',
 	DISCORD: 'https://discord.giveth.io',
 	DISCOURSE,
+	BLOG: 'https://blog.giveth.io/',
+	NEWS: 'https://news.giveth.io/',
 	GIVBACK_TOKENS_FORUM: DISCOURSE + 't/givbacks-token-list/253',
 	GITHUB: 'https://github.com/Giveth/',
 	TELEGRAM: 'https://t.me/Givethio',
@@ -24,6 +27,8 @@ const links = {
 	TWITTER: 'https://twitter.com/giveth',
 	YOUTUBE: 'https://www.youtube.com/givethio',
 	REDDIT: 'https://reddit.com/r/giveth',
+	INSTAGRAM: 'https://www.instagram.com/giveth.io/',
+	LINKEDIN: 'https://www.linkedin.com/company/givethio/',
 	DOCS,
 	GIVFARM_DOCS: DOCS + 'giveconomy/givfarm',
 	GIVSTREAM_DOCS: DOCS + 'giveconomy/givstream',
@@ -45,6 +50,7 @@ const links = {
 	MAKE_TRACEABLE_DOCS: DOCS + 'dapps/makeTraceableProject',
 	VERIFICATION_DOCS: DOCS + 'dapps/projectVerification',
 	CANCELLED_PROJECTS_DOCS: DOCS + 'dapps/listedUnlisted/#cancelled-projects',
+	Torus_MM_DOCS: DOCS + 'dapps/importTorusMM/',
 	TRACE: 'https://trace.giveth.io/',
 	SWAG: 'https://swag.giveth.io/',
 	COMMONS_STACK: 'https://commonsstack.org/',
@@ -58,6 +64,7 @@ const links = {
 	GIV_BRIDGE: 'https://omni.gnosischain.com/bridge',
 	PASSPORT: 'https://passport.gitcoin.co',
 	QF_DOC: DOCS + 'quadraticfunding',
+	MULTISIG_GUIDE: DOCS + 'dapps/multisigs',
 };
 
 if (!isProduction) {

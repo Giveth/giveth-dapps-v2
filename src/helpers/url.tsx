@@ -6,6 +6,7 @@ import {
 	ICampaign,
 } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
+import config from '@/configuration';
 
 export function campaignLinkGenerator(campaign: ICampaign) {
 	if (
@@ -66,6 +67,15 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 						EProjectsFilter.ACCEPT_FUND_ON_OPTIMISM,
 					);
 					break;
+				case ECampaignFilterField.AcceptFundOnSolana:
+					//Check feature flag
+					if (config.ENABLE_SOLANA) {
+						params.append(
+							'filter',
+							EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
+						);
+					}
+					break;
 				default:
 					break;
 			}
@@ -73,7 +83,7 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 	}
 
 	const query = params.toString();
-	return `${Routes.Projects}${query ? `?${query}` : ''}`;
+	return `${Routes.AllProjects}${query ? `?${query}` : ''}`;
 }
 
 export function removeQueryParam(
@@ -97,13 +107,10 @@ export function removeQueryParamAndRedirect(
 	router: NextRouter,
 	params: string[],
 ) {
-	const newParams = removeQueryParam(router.asPath, params);
-	if (router.isReady)
-		router.replace(
-			{
-				query: newParams,
-			},
-			undefined,
-			{ shallow: true },
-		);
+	const newPath = removeQueryParam(router.asPath, params, true); // Get full URL
+	if (router.isReady) router.replace(newPath, undefined, { shallow: true });
 }
+
+export const convertIPFSToHTTPS = (url: string) => {
+	return url.replace('ipfs://', 'https://ipfs.io/ipfs/');
+};

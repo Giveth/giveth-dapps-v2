@@ -7,15 +7,20 @@ import {
 } from './price.queries';
 
 export const fetchEthPrice = async (): Promise<number> => {
-	const res = await getRequest(
-		'https://api.coingecko.com/api/v3/simple/price',
-		undefined,
-		{
-			ids: 'ethereum',
-			vs_currencies: 'usd',
-		},
-	);
-	return res?.ethereum?.usd;
+	try {
+		const res = await getRequest(
+			'https://api.coingecko.com/api/v3/simple/price',
+			undefined,
+			{
+				ids: 'ethereum',
+				vs_currencies: 'usd',
+			},
+		);
+		return res?.ethereum?.usd;
+	} catch (error) {
+		console.log(error);
+		return 0;
+	}
 };
 
 export const fetchMainnetTokenPrice = async (
@@ -44,11 +49,11 @@ export const fetchGnosisTokenPrice = async (
 	const variables = {
 		id: tokenId.toLowerCase(),
 	};
-	const { data } = await gqlRequest(
-		config.XDAI_CONFIG.uniswapV2Subgraph,
-		false,
-		query,
-		variables,
-	);
+	const subgraph = config.GNOSIS_CONFIG.uniswapV2Subgraph;
+	if (!subgraph) {
+		console.log('Subgraph is not defined');
+		return '0';
+	}
+	const { data } = await gqlRequest(subgraph, false, query, variables);
 	return data?.token?.derivedETH || '0';
 };

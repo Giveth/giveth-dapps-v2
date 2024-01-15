@@ -7,11 +7,11 @@ import {
 	IconInstagram,
 	IconLink,
 	IconLinkedin,
-	IconTwitter,
 	IconYoutube,
 	neutralColors,
 	P,
 	IconInfoFilled,
+	IconXSocial,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
@@ -65,9 +65,8 @@ export default function ProjectContactIndex() {
 
 	const [showSocialModal, setShowSocialModal] = useState(false);
 	const [isOtherSocialChanged, setIsOtherSocialChanged] = useState(false);
-	const [otherSocials, setOtherSocials] = useState<IProjectContact[]>(
-		findOtherSocials(),
-	);
+	const [otherSocials, setOtherSocials] =
+		useState<IProjectContact[]>(findOtherSocials());
 
 	const createSocials = () => {
 		const mainSocials: IProjectContact[] = [];
@@ -140,11 +139,15 @@ export default function ProjectContactIndex() {
 							register={register}
 							registerName={i.type}
 							registerOptions={
+								// Twitter is the only one that has a space and () in the name, and it can not be used as a key in the regex file
 								validators[
-									i.type.toLowerCase() as keyof typeof validators
+									i.type.toLocaleLowerCase() === 'x (twitter)'
+										? 'twitter'
+										: (i.type.toLowerCase() as keyof typeof validators)
 								]
 							}
 							disabled={!isDraft}
+							autoFocus={i.type === EMainSocials.Twitter}
 						/>
 					))}
 					{otherSocials.map(social => (
@@ -215,7 +218,7 @@ export default function ProjectContactIndex() {
 const mainSocialsInputs = [
 	{
 		type: EMainSocials.Twitter,
-		icon: <IconTwitter color={neutralColors.gray[600]} />,
+		icon: <IconXSocial color={neutralColors.gray[600]} />,
 	},
 	{
 		type: EMainSocials.Facebook,

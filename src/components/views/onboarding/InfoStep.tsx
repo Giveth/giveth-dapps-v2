@@ -3,9 +3,7 @@ import { useMutation } from '@apollo/client';
 import { H6, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
-
 import { useForm } from 'react-hook-form';
-import { useWeb3React } from '@web3-react/core';
 import { Col, Row } from '@giveth/ui-design-system';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { SkipOnboardingModal } from '@/components/modals/SkipOnboardingModal';
@@ -23,6 +21,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { requiredOptions, validators } from '@/lib/constants/regex';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export interface IUserInfo {
 	email: string;
@@ -45,9 +44,9 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 	const [updateUser] = useMutation(UPDATE_USER);
 	const [showModal, setShowModal] = useState(false);
 
+	const { walletAddress: address } = useGeneralWallet();
 	const dispatch = useAppDispatch();
 	const { isSignedIn, userData } = useAppSelector(state => state.user);
-	const { account } = useWeb3React();
 
 	const {
 		register,
@@ -85,7 +84,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 			});
 			if (response.updateUser) {
 				setStep(OnboardSteps.PHOTO);
-				account && dispatch(fetchUserByAddress(account));
+				address && dispatch(fetchUserByAddress(address));
 				gToast('Profile information updated.', {
 					type: ToastType.SUCCESS,
 					title: 'Success',
@@ -119,6 +118,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 							registerName={EUserInfo.FIRST_NAME}
 							label='first name'
 							placeholder='John'
+							autoFocus
 							register={register}
 							registerOptions={requiredOptions.firstName}
 							error={errors.firstName}

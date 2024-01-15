@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { FC, useState, useEffect } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import {
@@ -10,7 +9,7 @@ import {
 	IconSearch24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-
+import { useNetwork } from 'wagmi';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
 	ConnectButton,
@@ -20,23 +19,20 @@ import {
 	Logo,
 	SmallCreateProjectParent,
 	LargeCreateProject,
-	HeaderLink,
 	HomeButton,
-	SearchButton,
 	GLinkNoWrap,
+	SearchButton,
 } from './Header.sc';
 import { isSSRMode, isUserRegistered } from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import {
-	setShowWalletModal,
-	setShowWelcomeModal,
 	setShowCompleteProfile,
 	setShowSearchModal,
 } from '@/features/modal/modal.slice';
 import { slugToProjectView } from '@/lib/routeCreators';
-import { EModalEvents, useModalCallback } from '@/hooks/useModalCallback';
+import { useModalCallback } from '@/hooks/useModalCallback';
 import { LinkWithMenu } from '../menu/LinkWithMenu';
 import { ProjectsMenu } from '../menu/ProjectsMenu';
 import { GIVeconomyMenu } from '../menu/GIVeconomyMenu';
@@ -48,9 +44,17 @@ import { RewardButtonWithMenu } from '../menu/RewardButtonWithMenu';
 import { UserButtonWithMenu } from '../menu/UserButtonWithMenu';
 import { NotificationButtonWithMenu } from '../menu/NotificationButtonWithMenu';
 import { HomeSidebar } from '../sidebar/HomeSidebar';
-import { fetchMainCategories } from '@/features/general/general.thunk';
+import {
+	fetchMainCategories,
+	fetchQFRounds,
+} from '@/features/general/general.thunk';
 import { ItemsProvider } from '@/context/Items.context';
 import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
+import { CommunityMenu } from '../menu/CommunityMenu';
+import { useNavigationInfo } from '@/hooks/useNavigationInfo';
+import config from '@/configuration';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { useShowHiderByScroll } from '@/hooks/useShowHiderByScroll';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -58,14 +62,18 @@ export interface IHeader {
 }
 
 const Header: FC<IHeader> = () => {
-	const [showHeader, setShowHeader] = useState(true);
 	const [showBackBtn, setShowBackBtn] = useState(false);
 
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 
-	const { chainId, active, account } = useWeb3React();
+	const { walletAddress, openWalletConnectModal } = useGeneralWallet();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
+	const networkHasGIV =
+		(chainId && config.EVM_NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS) ??
+		null;
 	const dispatch = useAppDispatch();
 	const { isEnabled, isSignedIn, userData } = useAppSelector(
 		state => state.user,
@@ -73,9 +81,14 @@ const Header: FC<IHeader> = () => {
 	const theme = useAppSelector(state => state.general.theme);
 
 	const router = useRouter();
+	const { currentLabel } = useNavigationInfo();
+	const isProjectPage = router.route.startsWith(Routes.Project + '/');
+
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const isMobile = useMediaQuery(device.mobileL);
+	const showHeader = useShowHiderByScroll();
+
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
 	const handleBack = () => {
@@ -105,6 +118,7 @@ const Header: FC<IHeader> = () => {
 
 	useEffect(() => {
 		dispatch(fetchMainCategories());
+		dispatch(fetchQFRounds());
 	}, []);
 
 	useEffect(() => {
@@ -115,57 +129,18 @@ const Header: FC<IHeader> = () => {
 		);
 	}, [router.route]);
 
-	useEffect(() => {
-		const threshold = 0;
-		let lastScrollY = window.pageYOffset;
-		let ticking = false;
-
-		const updateScrollDir = () => {
-			const scrollY = window.pageYOffset;
-
-			if (Math.abs(scrollY - lastScrollY) < threshold) {
-				ticking = false;
-				return;
-			}
-			const show = scrollY <= lastScrollY;
-			setShowHeader(show);
-			lastScrollY = scrollY > 0 ? scrollY : 0;
-			ticking = false;
-		};
-
-		const onScroll = () => {
-			if (!ticking) {
-				window.requestAnimationFrame(updateScrollDir);
-				ticking = true;
-			}
-		};
-
-		window.addEventListener('scroll', onScroll);
-
-		return () => window.removeEventListener('scroll', onScroll);
-	}, [showHeader]);
-
 	const handleModals = () => {
-		if (isGIVeconomyRoute) {
-			dispatch(setShowWalletModal(true));
-		} else {
-			dispatch(setShowWelcomeModal(true));
-		}
+		openWalletConnectModal();
 	};
 
 	const { modalCallback: signInThenCreate } = useModalCallback(() =>
 		router.push(Routes.CreateProject),
 	);
 
-	const { modalCallback: connectThenSignIn } = useModalCallback(
-		signInThenCreate,
-		EModalEvents.CONNECTED,
-	);
-
 	const handleCreateButton = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			connectThenSignIn();
+			openWalletConnectModal();
 		} else if (!isSignedIn) {
 			signInThenCreate();
 		} else if (isUserRegistered(userData)) {
@@ -204,9 +179,7 @@ const Header: FC<IHeader> = () => {
 						{!isDesktop && (
 							<HomeButton gap='4px' onClick={openSidebar}>
 								<IconMenu24 />
-								<GLink size='Big'>
-									{formatMessage({ id: 'label.home' })}
-								</GLink>
+								<GLink size='Big'>{currentLabel} </GLink>
 							</HomeButton>
 						)}
 					</Flex>
@@ -217,7 +190,7 @@ const Header: FC<IHeader> = () => {
 					<LinkWithMenu
 						title={formatMessage({ id: 'label.projects' })}
 						isHeaderShowing={showHeader}
-						href={Routes.Projects}
+						href={Routes.AllProjects}
 					>
 						<ProjectsMenu />
 					</LinkWithMenu>
@@ -228,13 +201,13 @@ const Header: FC<IHeader> = () => {
 					>
 						<GIVeconomyMenu />
 					</LinkWithMenu>
-					<HeaderLink theme={theme}>
-						<Link href={Routes.Join}>
-							<GLink size='Big'>
-								{formatMessage({ id: 'label.community' })}
-							</GLink>
-						</Link>
-					</HeaderLink>
+					<LinkWithMenu
+						title={formatMessage({ id: 'label.community' })}
+						isHeaderShowing={showHeader}
+						href={Routes.Join}
+					>
+						<CommunityMenu />
+					</LinkWithMenu>
 					<SearchButton
 						theme={theme}
 						onClick={() => dispatch(setShowSearchModal(true))}
@@ -250,13 +223,13 @@ const Header: FC<IHeader> = () => {
 			)}
 			<FlexSpacer />
 			<Flex gap='8px'>
-				<LargeCreateProject>
+				<LargeCreateProject isTexty={isProjectPage}>
 					<Button
 						label={formatMessage({
 							id: 'component.button.create_project',
 						})}
 						size='small'
-						buttonType='primary'
+						buttonType={isProjectPage ? 'texty-primary' : 'primary'}
 						onClick={handleCreateButton}
 					/>
 				</LargeCreateProject>
@@ -267,16 +240,18 @@ const Header: FC<IHeader> = () => {
 						label='+'
 					/>
 				</SmallCreateProjectParent>
-				{active && account && chainId ? (
+				{walletAddress ? (
 					<>
 						<NotificationButtonWithMenu
 							isHeaderShowing={showHeader}
 							theme={theme}
-						/>
-						<RewardButtonWithMenu
-							isHeaderShowing={showHeader}
-							theme={theme}
-						/>
+						/>{' '}
+						{networkHasGIV && (
+							<RewardButtonWithMenu
+								isHeaderShowing={showHeader}
+								theme={theme}
+							/>
+						)}
 						<UserButtonWithMenu
 							isHeaderShowing={showHeader}
 							theme={theme}

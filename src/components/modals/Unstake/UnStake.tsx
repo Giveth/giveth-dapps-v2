@@ -8,17 +8,17 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useWeb3React } from '@web3-react/core';
+import { useNetwork } from 'wagmi';
 import { Modal } from '../Modal';
 import { Flex } from '../../styled-components/Flex';
 import { StakingPoolImages } from '../../StakingPoolImages';
-import { AmountInput } from '../../AmountInput';
 import { unwrapToken, withdrawTokens } from '@/lib/stakingPool';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
 	SubmittedInnerModal,
 } from '../ConfirmSubmit';
+import { waitForTransaction } from '@/lib/transaction';
 import { StakeState } from '@/lib/staking';
 import { IModal } from '@/types/common';
 import {
@@ -31,9 +31,10 @@ import { formatWeiHelper } from '@/helpers/number';
 import { LockupDetailsModal } from '../LockupDetailsModal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { useTokenDistroHelper } from '@/hooks/useTokenDistroHelper';
+import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
 interface IUnStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
@@ -65,8 +66,9 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 	regenStreamConfig,
 	setShowModal,
 }) => {
+	const isSafeEnv = useIsSafeEnvironment();
 	const [txHash, setTxHash] = useState('');
-	const [amount, setAmount] = useState('0');
+	const [amount, setAmount] = useState(0n);
 	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
 	const [unStakeState, setUnstakeState] = useState<StakeState>(
 		StakeState.UNSTAKE,
@@ -77,30 +79,36 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 	);
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 	const { stakedAmount } = useStakingPool(poolStakingConfig);
-	const { library, chainId } = useWeb3React();
-	const { title, type, LM_ADDRESS, GARDEN_ADDRESS } =
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const { title, type, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
-	const isGIVStaking = type === StakingType.GIV_LM;
-	const isGIVpower = isGIVStaking && chainId === config.XDAI_NETWORK_NUMBER;
+	const isGIVpower =
+		type === StakingType.GIV_GARDEN_LM ||
+		type === StakingType.GIV_UNIPOOL_LM;
+
 	const maxAmount = isGIVpower
-		? stakedAmount.sub(userGIVLocked.balance)
+		? stakedAmount - BigInt(userGIVLocked.balance)
 		: stakedAmount;
 
 	const onWithdraw = async () => {
+		if (!chainId) return;
 		setUnstakeState(StakeState.UNSTAKING);
 
+		const GARDEN_ADDRESS = poolStakingConfig.GARDEN_ADDRESS;
+
 		const tx = GARDEN_ADDRESS
-			? await unwrapToken(amount, GARDEN_ADDRESS, library)
-			: await withdrawTokens(amount, LM_ADDRESS, library);
+			? await unwrapToken(amount, GARDEN_ADDRESS, chainId)
+			: await withdrawTokens(amount, LM_ADDRESS, chainId);
 
 		if (!tx) {
 			setUnstakeState(StakeState.UNSTAKE);
 			return;
 		}
-		setTxHash(tx.hash);
+		setTxHash(tx);
 		setUnstakeState(StakeState.SUBMITTING);
-		const { status } = await tx.wait();
+		const { status } = await waitForTransaction(tx, isSafeEnv);
 		if (status) {
 			setUnstakeState(StakeState.CONFIRMED);
 		} else {
@@ -121,7 +129,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 						</UnStakeModalTitle>
 
 						<InnerModal>
-							<AmountInput
+							<StakingAmountInput
 								setAmount={setAmount}
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}
@@ -137,12 +145,18 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 												<IconUnlock16 />
 												<P>Available to unstake</P>
 											</Flex>
-											<B>{formatWeiHelper(maxAmount)}</B>
+											<B>
+												{formatWeiHelper(
+													maxAmount.toString(),
+												)}
+											</B>
 										</Flex>
 										<TotalStakedRow justifyContent='space-between'>
 											<P>Total staked</P>
 											<B>
-												{formatWeiHelper(stakedAmount)}
+												{formatWeiHelper(
+													stakedAmount.toString(),
+												)}
 											</B>
 										</TotalStakedRow>
 									</LockInfoContainer>
@@ -157,8 +171,8 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 								onClick={onWithdraw}
 								buttonType='primary'
 								disabled={
-									amount == '0' ||
-									maxAmount.lt(amount) ||
+									amount == 0n ||
+									maxAmount < amount ||
 									unStakeState === StakeState.UNSTAKING
 								}
 								loading={unStakeState === StakeState.UNSTAKING}
@@ -168,9 +182,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 									buttonType='texty'
 									size='small'
 									label='locked giv details'
-									disabled={stakedAmount
-										.sub(maxAmount)
-										.isZero()}
+									disabled={stakedAmount - maxAmount === 0n}
 									onClick={() => {
 										setShowLockDetailModal(true);
 									}}

@@ -6,7 +6,7 @@ import { Container } from '@giveth/ui-design-system';
 import DoneStep from './DoneStep';
 import InfoStep from './InfoStep';
 import PhotoStep from './PhotoStep';
-import Spinner from '@/components/Spinner';
+import { WrappedSpinner } from '@/components/Spinner';
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import { useAppSelector } from '@/features/hooks';
@@ -52,7 +52,7 @@ const OnboardView = () => {
 	}, [userData?.isSignedIn]);
 
 	if (isLoading || firstLoading) {
-		return <Spinner />;
+		return <WrappedSpinner />;
 	} else if (!isEnabled) {
 		return <WalletNotConnected />;
 	} else if (!isSignedIn) {
@@ -92,8 +92,8 @@ const OnboardHeader: FC<IOnboard> = ({ step }) => {
 							idx > step
 								? LabelStatus.NEXT
 								: idx === 0
-								? LabelStatus.PREV
-								: LabelStatus.ACTIVE
+									? LabelStatus.PREV
+									: LabelStatus.ACTIVE
 						}
 					>
 						{label}

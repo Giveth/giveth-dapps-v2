@@ -77,7 +77,7 @@ export const DeletePowerBoostModal: FC<IDeletePowerBoostModal> = ({
 					<>
 						<CustomButton
 							label={formatMessage({ id: 'label.view_projects' })}
-							onClick={() => router.push(Routes.Projects)}
+							onClick={() => router.push(Routes.AllProjects)}
 						/>
 						<CustomButton
 							buttonType='texty-primary'

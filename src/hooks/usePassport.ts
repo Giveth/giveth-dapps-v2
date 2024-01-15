@@ -1,11 +1,12 @@
-import { useWeb3React } from '@web3-react/core';
 import { useCallback, useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 import { getPassports } from '@/helpers/passport';
 import { connectPassport, fetchPassportScore } from '@/services/passport';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { client } from '@/apollo/apolloClient';
 import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useAppSelector } from '@/features/hooks';
 
 export enum EPassportState {
@@ -14,11 +15,13 @@ export enum EPassportState {
 	NOT_SIGNED,
 	NOT_CREATED,
 	NOT_ELIGIBLE,
+	NOT_STARTED,
 	NOT_ACTIVE_ROUND,
 	ELIGIBLE,
 	ENDED,
 	INVALID,
 	ERROR,
+	NOT_AVAILABLE_FOR_GSAFE,
 }
 
 export interface IPassportAndStateInfo {
@@ -34,12 +37,22 @@ const initialInfo = {
 };
 
 export const usePassport = () => {
-	const { account, library } = useWeb3React();
+	const { address } = useAccount();
 	const [info, setInfo] = useState<IPassportAndStateInfo>(initialInfo);
-	const user = useAppSelector(state => state.user.userData);
+	const { userData: user, isUserFullFilled } = useAppSelector(
+		state => state.user,
+	);
+	const isSafeEnv = useIsSafeEnvironment();
 
 	const updateState = useCallback(
 		async (refreshUserScores: IPassportInfo) => {
+			if (isSafeEnv) {
+				return setInfo({
+					passportState: EPassportState.NOT_AVAILABLE_FOR_GSAFE,
+					passportScore: null,
+					currentRound: null,
+				});
+			}
 			setInfo({
 				passportState: EPassportState.LOADING,
 				passportScore: null,
@@ -69,6 +82,14 @@ export const usePassport = () => {
 						passportState: EPassportState.NOT_ACTIVE_ROUND,
 						passportScore: refreshUserScores.passportScore,
 						currentRound: null,
+					});
+				} else if (
+					getNowUnixMS() < new Date(currentRound.beginDate).getTime()
+				) {
+					return setInfo({
+						passportState: EPassportState.NOT_STARTED,
+						passportScore: refreshUserScores.passportScore,
+						currentRound: currentRound,
 					});
 				} else if (
 					getNowUnixMS() > new Date(currentRound.endDate).getTime()
@@ -114,14 +135,21 @@ export const usePassport = () => {
 	);
 
 	const refreshScore = useCallback(async () => {
-		if (!account) return;
+		if (!address) return;
+		if (isSafeEnv) {
+			return setInfo({
+				passportState: EPassportState.NOT_AVAILABLE_FOR_GSAFE,
+				passportScore: null,
+				currentRound: null,
+			});
+		}
 		setInfo({
 			passportState: EPassportState.LOADING,
 			passportScore: null,
 			currentRound: null,
 		});
 		try {
-			const { refreshUserScores } = await fetchPassportScore(account);
+			const { refreshUserScores } = await fetchPassportScore(address);
 			await updateState(refreshUserScores);
 		} catch (error) {
 			console.log(error);
@@ -131,20 +159,27 @@ export const usePassport = () => {
 				currentRound: null,
 			});
 		}
-	}, [account, updateState]);
+	}, [address, updateState, isSafeEnv]);
 
 	const handleSign = async () => {
-		if (!library || !account) return;
+		if (!address) return;
+		if (isSafeEnv) {
+			return setInfo({
+				passportState: EPassportState.NOT_AVAILABLE_FOR_GSAFE,
+				passportScore: null,
+				currentRound: null,
+			});
+		}
 		setInfo({
 			passportState: EPassportState.LOADING,
 			passportScore: null,
 			currentRound: null,
 		});
 		const passports = getPassports();
-		if (passports[account.toLowerCase()]) {
+		if (passports[address.toLowerCase()]) {
 			await refreshScore();
 		} else {
-			const res = await connectPassport(account, library, !user);
+			const res = await connectPassport(address, !user);
 			if (res) {
 				await refreshScore();
 			} else {
@@ -158,22 +193,36 @@ export const usePassport = () => {
 	};
 
 	useEffect(() => {
-		if (!account) {
+		console.log('******0', address, isUserFullFilled, user);
+		if (isSafeEnv) {
+			return setInfo({
+				passportState: EPassportState.NOT_AVAILABLE_FOR_GSAFE,
+				passportScore: null,
+				currentRound: null,
+			});
+		}
+		if (!address) {
+			console.log('******1', address, isUserFullFilled, user);
 			return setInfo({
 				passportState: EPassportState.NOT_CONNECTED,
 				passportScore: null,
 				currentRound: null,
 			});
 		}
-
+		console.log('******2', address, isUserFullFilled, user);
+		if (!isUserFullFilled) return;
+		console.log('******3', address, isUserFullFilled, user);
 		const fetchData = async () => {
 			if (!user || user.passportScore === null) {
+				console.log('******4', address, isUserFullFilled, user);
 				console.log('Passport score is null in our database');
 				const passports = getPassports();
-				//user has not passport account
-				if (passports[account.toLowerCase()] && user) {
+				//user has not passport address
+				if (passports[address.toLowerCase()] && user) {
+					console.log('******5', address, isUserFullFilled, user);
 					await updateState(user);
 				} else {
+					console.log('******6', address, isUserFullFilled, user);
 					setInfo({
 						passportState: EPassportState.NOT_SIGNED,
 						passportScore: null,
@@ -181,11 +230,12 @@ export const usePassport = () => {
 					});
 				}
 			} else {
+				console.log('******7', address, isUserFullFilled, user);
 				await updateState(user);
 			}
 		};
 		fetchData();
-	}, [account, updateState, user]);
+	}, [address, isUserFullFilled, updateState, user, isSafeEnv]);
 
 	return { info, handleSign, refreshScore };
 };

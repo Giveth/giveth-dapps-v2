@@ -1,8 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
-import { networksParams } from '@/helpers/blockchain';
+import { useAccount } from 'wagmi';
 import { shortenAddress } from '@/lib/helpers';
 import {
 	MenuAndButtonContainer,
@@ -20,7 +19,7 @@ import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { device } from '@/lib/constants/constants';
+import { PROFILE_PHOTO_PLACEHOLDER, device } from '@/lib/constants/constants';
 import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
 import { MenuContainer } from './Menu.sc';
 import { UserItems } from './UserItems';
@@ -28,6 +27,7 @@ import { FlexSpacer } from '../styled-components/Flex';
 import { ItemsProvider } from '@/context/Items.context';
 import { SignWithWalletModal } from '../modals/SignWithWalletModal';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -44,11 +44,12 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 	const [signWithWallet, setSignWithWallet] = useState<boolean>(false);
 	const [queueRoute, setQueueRoute] = useState<string>('');
 	const [showSwitchNetwork, setShowSwitchNetwork] = useState(false);
-
 	const router = useRouter();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
+	const { connector } = useAccount();
+	const isGSafeConnector = connector?.id === 'safe';
 
 	useEffect(() => {
 		if (!isHeaderShowing) {
@@ -60,7 +61,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 		? {
 				onMouseEnter: () => openMenu(),
 				onMouseLeave: () => closeMenu(),
-		  }
+			}
 		: { onClick: openSidebar };
 
 	return (
@@ -105,6 +106,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 			)}
 			{signWithWallet && (
 				<SignWithWalletModal
+					isGSafeConnector={isGSafeConnector}
 					callback={() => {
 						router.push(queueRoute);
 						setQueueRoute('');
@@ -125,27 +127,26 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 };
 
 const HeaderUserButton = ({}) => {
-	const { chainId, account, library } = useWeb3React();
+	const { walletAddress, chainName } = useGeneralWallet();
 	const { userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	return (
 		<HBContainer>
 			<HBPic
-				src={userData?.avatar || '/images/placeholders/profile.png'}
+				src={userData?.avatar || PROFILE_PHOTO_PLACEHOLDER}
 				alt='Profile Pic'
 				width={'24px'}
 				height={'24px'}
 			/>
 			<WBInfo>
 				<UserName size='Medium'>
-					{userData?.name || shortenAddress(account)}
+					{userData?.name || shortenAddress(walletAddress)}
 				</UserName>
 				<WBNetwork size='Tiny'>
 					{formatMessage({
 						id: 'label.connected_to',
 					})}{' '}
-					{(chainId && networksParams[chainId]?.chainName) ||
-						library?._network?.name}
+					{chainName}
 				</WBNetwork>
 			</WBInfo>
 		</HBContainer>

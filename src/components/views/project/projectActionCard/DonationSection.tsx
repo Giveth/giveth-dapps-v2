@@ -12,15 +12,19 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { useProjectContext } from '@/context/project.context';
+import { type FC } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
-import { formatDonations } from '@/helpers/number';
+import { formatDonation } from '@/helpers/number';
+import { IProject } from '@/apollo/types/types';
 
-export const DonateSection = () => {
+interface IDonateSectionProps {
+	projectData?: IProject;
+}
+
+export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 	const { formatMessage, locale } = useIntl();
-	const { projectData } = useProjectContext();
 	const { sumDonationValueUsd } = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 
@@ -29,9 +33,11 @@ export const DonateSection = () => {
 			{sumDonationValueUsd && sumDonationValueUsd !== 0 ? (
 				<DonateInfo>
 					{isMobile && <br />}
-					<Title>Total amount raised</Title>
+					<Title>
+						{formatMessage({ id: 'label.total_amount_raised' })}
+					</Title>
 					<Amount weight={700}>
-						{formatDonations(sumDonationValueUsd || 0, '$')}
+						{formatDonation(sumDonationValueUsd || 0, '$', locale)}
 					</Amount>
 					<Description>
 						{formatMessage({
@@ -76,7 +82,12 @@ export const DonateSection = () => {
 						id: 'component.donation_section.desc',
 					})}
 				</P>
-				<a href='/' target='_blank' referrerPolicy='no-referrer'>
+				<a
+					href='https://docs.giveth.io/whatisgiveth/zero-fees'
+					target='_blank'
+					referrerPolicy='no-referrer'
+					rel='noreferrer'
+				>
 					<LearnLink alignItems='center' gap='2px'>
 						<Subline>
 							{formatMessage({
@@ -138,6 +149,7 @@ const DonateDescription = styled(Flex)`
 	border: 1px solid ${neutralColors.gray[300]};
 	border-radius: 16px;
 	margin-bottom: 24px;
+	margin-top: 10px;
 `;
 
 const LearnLink = styled(Flex)`

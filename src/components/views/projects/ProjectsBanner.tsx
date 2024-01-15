@@ -17,7 +17,7 @@ export const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 	const allCategory = {
 		title: formatMessage({ id: 'label.giveth_projects' }),
 		banner: '/images/banners/categories/all.png',
-		slug: 'all_projects',
+		slug: 'all',
 		description: '',
 		categories: [],
 	};
@@ -34,9 +34,11 @@ export const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 				alt={_mainCategory.title}
 			/>
 			<Title weight={700}>
-				{formatMessage({ id: _mainCategory.slug })}
+				{formatMessage({ id: `projects_${_mainCategory.slug}` })}
 			</Title>
-			<Desc>{formatMessage({ id: `${_mainCategory.slug}_desc` })}</Desc>
+			<Desc>
+				{formatMessage({ id: `projects_${_mainCategory.slug}_desc` })}
+			</Desc>
 		</BannerContainer>
 	);
 };
@@ -44,11 +46,8 @@ export const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 export const BannerContainer = styled(FlexCenter)`
 	height: 0;
 	position: relative;
-	margin-top: 32px;
 	overflow: hidden;
-
 	${mediaQueries.tablet} {
-		margin-top: 0;
 		height: 540px;
 	}
 `;

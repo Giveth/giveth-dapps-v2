@@ -19,13 +19,18 @@ import {
 } from '@/components/views/project/projectUpdates/common.styled';
 import TimelineSection from '@/components/views/project/projectUpdates/TimelineSection';
 
-const RichTextViewer = dynamic(() => import('@/components/RichTextViewer'), {
-	ssr: false,
-});
-
-const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
-	ssr: false,
-});
+const RichTextViewer = dynamic(
+	() => import('@/components/rich-text/RichTextViewer'),
+	{
+		ssr: false,
+	},
+);
+const RichTextInput = dynamic(
+	() => import('@/components/rich-text/RichTextInput'),
+	{
+		ssr: false,
+	},
+);
 
 const UPDATE_LIMIT = 2000;
 

@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Col, Row } from '@giveth/ui-design-system';
 import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
-import ProjectsTable from './ProjectsTable';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import { client } from '@/apollo/apolloClient';
@@ -16,24 +15,25 @@ import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { Flex } from '@/components/styled-components/Flex';
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
-import {
-	DonateContributeCard,
-	ProjectsContributeCard,
-} from '@/components/ContributeCard';
+import { ProjectsContributeCard } from '@/components/ContributeCard';
+import { useProfileContext } from '@/context/profile.context';
+import ProjectsTable from './ProjectsTable';
+import { isRecurringActive } from '../../donate/DonationCard';
+import ProjectItem from './ProjectItem';
 
 const itemPerPage = 10;
 
-const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
+const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	const [loading, setLoading] = useState(false);
 	const [projects, setProjects] = useState<IProject[]>([]);
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [page, setPage] = useState(0);
-	const { formatMessage } = useIntl();
-
 	const [order, setOrder] = useState<IOrder>({
 		by: EOrderBy.CreationDate,
 		direction: EDirection.DESC,
 	});
+	const { user, myAccount } = useProfileContext();
+	const { formatMessage } = useIntl();
 	const userName = user?.name || 'Unknown';
 
 	const changeOrder = (orderBy: EOrderBy) => {
@@ -66,6 +66,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 					orderBy: order.by,
 					direction: order.direction,
 				},
+				fetchPolicy: 'no-cache',
 			});
 			setLoading(false);
 			if (userProjects?.projectsByUserId) {
@@ -83,10 +84,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 			{!myAccount && (
 				<Row>
 					<Col lg={6}>
-						<DonateContributeCard user={user} />
-					</Col>
-					<Col lg={6}>
-						<ProjectsContributeCard user={user} />
+						<ProjectsContributeCard />
 					</Col>
 				</Row>
 			)}
@@ -94,7 +92,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 				<UserContributeTitle weight={700}>
 					{formatMessage(
 						{
-							id: 'label.user_donations_and_projects',
+							id: 'label.user_projects',
 						},
 						{
 							userName,
@@ -110,22 +108,34 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 								myAccount
 									? formatMessage({
 											id: 'label.you_havent_created_any_projects_yet',
-									  })
+										})
 									: formatMessage({
 											id: 'label.this_user_hasnt_created_any_project_yet',
-									  })
+										})
 							} `}
 						/>
 					</NothingWrapper>
 				) : myAccount ? (
-					<ProjectsTableWrapper>
-						<ProjectsTable
-							projects={projects}
-							changeOrder={changeOrder}
-							order={order}
-							setProjects={setProjects}
-						/>
-					</ProjectsTableWrapper>
+					isRecurringActive ? (
+						<Flex flexDirection='column' gap='18px'>
+							{projects.map(project => (
+								<ProjectItem
+									key={project.id}
+									project={project}
+									setProjects={setProjects}
+								/>
+							))}
+						</Flex>
+					) : (
+						<ProjectsTableWrapper>
+							<ProjectsTable
+								projects={projects}
+								changeOrder={changeOrder}
+								order={order}
+								setProjects={setProjects}
+							/>
+						</ProjectsTableWrapper>
+					)
 				) : (
 					<Row>
 						{projects.map(project => (
@@ -147,12 +157,12 @@ const ProfileProjectsTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 	);
 };
 
-export const ProjectsContainer = styled.div`
-	margin-bottom: 40px;
-`;
-
 const ProjectsTableWrapper = styled.div`
 	overflow: auto;
+`;
+
+export const ProjectsContainer = styled.div`
+	margin-bottom: 40px;
 `;
 
 export const Loading = styled(Flex)`

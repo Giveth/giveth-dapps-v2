@@ -8,14 +8,9 @@ import {
 export const fetchGIVPriceAsync = createAsyncThunk(
 	'price/fetchGIVPrice',
 	async (chainId: number) => {
-		if (chainId === config.MAINNET_NETWORK_NUMBER) {
-			return await fetchMainnetTokenPrice(
-				config.MAINNET_CONFIG.tokenAddressOnUniswapV2,
-			);
-		}
-		return await fetchGnosisTokenPrice(
-			config.XDAI_CONFIG.tokenAddressOnUniswapV2,
-		);
+		const tokenAddress =
+			config.EVM_NETWORKS_CONFIG[chainId]?.tokenAddressOnUniswapV2;
+		return tokenAddress ? await fetchGnosisTokenPrice(tokenAddress) : '0';
 	},
 );
 
@@ -44,14 +39,14 @@ export const fetchGnosisThirdPartyTokensPriceAsync = createAsyncThunk(
 	'price/fetchGnosisThirdPartyTokensPric',
 	async () => {
 		const promises: Promise<string>[] = [];
-		config.XDAI_CONFIG.regenStreams.forEach(streamConfig => {
+		config.GNOSIS_CONFIG.regenStreams.forEach(streamConfig => {
 			const tokenAddress =
 				streamConfig.tokenAddressOnUniswapV2.toLowerCase();
 			promises.push(fetchGnosisTokenPrice(tokenAddress));
 		});
 		return Promise.all(promises).then(prices => {
 			let res: { [x: string]: string } = {};
-			config.XDAI_CONFIG.regenStreams.forEach((streamConfig, idx) => {
+			config.GNOSIS_CONFIG.regenStreams.forEach((streamConfig, idx) => {
 				const tokenAddress =
 					streamConfig.tokenAddressOnUniswapV2.toLowerCase();
 				res[tokenAddress] = prices[idx];

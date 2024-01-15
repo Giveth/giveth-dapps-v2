@@ -2,21 +2,26 @@ import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { IntlProvider } from 'react-intl';
 import { Toaster } from 'react-hot-toast';
-import { Web3ReactProvider } from '@web3-react/core';
 import { ApolloProvider } from '@apollo/client';
-import { ExternalProvider, Web3Provider } from '@ethersproject/providers';
 import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
-
+import { WagmiConfig, configureChains, createConfig } from 'wagmi';
+import { EIP6963Connector, createWeb3Modal } from '@web3modal/wagmi/react';
+import { walletConnectProvider } from '@web3modal/wagmi';
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import { InjectedConnector } from 'wagmi/connectors/injected';
+import { publicProvider } from 'wagmi/providers/public';
+import { SafeConnector } from 'wagmi/connectors/safe';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
-
 import '../styles/globals.css';
 import { ca, en, es } from '../lang';
+import config from '@/configuration';
 import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';
 import UserController from '@/components/controller/user.ctrl';
@@ -27,9 +32,17 @@ import NotificationController from '@/components/controller/pfp.ctrl';
 import PfpController from '@/components/controller/notification.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import StorageLabel from '@/lib/localStorage';
-import { isGIVeconomyRoute } from '@/lib/helpers';
+import { zIndex } from '@/lib/constants/constants';
+import { useSafeAutoConnect } from '@/hooks/useSafeAutoConnect';
+import {
+	getLocaleFromIP,
+	getLocaleFromNavigator,
+	isGIVeconomyRoute,
+} from '@/lib/helpers';
+import { GeneralWalletProvider } from '@/providers/generalWalletProvider';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
+import { SolanaProvider } from '@/providers/solanaWalletProvider';
 import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 
@@ -47,6 +60,8 @@ export const IntlMessages = {
 	es,
 };
 
+const defaultLocale = process.env.defaultLocale;
+
 function renderSnippet() {
 	const opts = {
 		apiKey:
@@ -63,25 +78,82 @@ function renderSnippet() {
 	return snippet.min(opts);
 }
 
-function getLibrary(provider: ExternalProvider) {
-	return new Web3Provider(provider);
-}
+const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+
+const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!;
+
+const metadata = {
+	name: 'Giveth',
+	description:
+		'Get rewarded for giving to for-good projects with zero added fees. Donate crypto directly to thousands of for-good projects, nonprofits &amp; charities!',
+	url: 'https://giveth.io',
+	icons: ['https://giveth.io/images/currencies/giv/24.svg'],
+};
+
+const chains = config.EVM_CHAINS;
+const { publicClient } = configureChains(chains, [
+	walletConnectProvider({ projectId }),
+	publicProvider(),
+]);
+const wagmiConfig = createConfig({
+	autoConnect: false,
+	connectors: [
+		new WalletConnectConnector({
+			chains,
+			options: { projectId, showQrModal: false, metadata },
+		}),
+		new EIP6963Connector({ chains }),
+		new InjectedConnector({ chains, options: { shimDisconnect: true } }),
+		new SafeConnector({
+			chains,
+			options: {
+				allowedDomains: [/app.safe.global$/],
+				debug: false,
+			},
+		}),
+	],
+	publicClient,
+});
+
+const classicNetworkNumber = config.CLASSIC_NETWORK_NUMBER;
+
+createWeb3Modal({
+	wagmiConfig,
+	projectId,
+	chains,
+	themeVariables: {
+		'--w3m-z-index': zIndex.WEB3MODAL,
+	},
+	featuredWalletIds: [
+		'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
+	],
+	includeWalletIds: [
+		'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
+	],
+	chainImages: {
+		[classicNetworkNumber]: '/images/currencies/classic/32.svg',
+	},
+});
+
+const RenderComponent = ({ Component, pageProps }: any) => {
+	useSafeAutoConnect();
+	return <Component {...pageProps} />;
+};
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
-	const locale = router ? router.locale : 'en';
+	const { pathname, asPath, query } = router;
+	const locale = router ? router.locale : defaultLocale;
 	const apolloClient = useApollo(pageProps);
 	const isMaintenanceMode = process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true';
 
 	useEffect(() => {
 		const handleStart = (url: string) => {
-			console.log(`Loading: ${url}`);
 			NProgress.start();
 		};
 		const handleChangeComplete = (url: string) => {
 			NProgress.done();
-			process.env.NEXT_PUBLIC_ENV === 'production' &&
-				window.analytics.page(url);
+			isProduction && window.analytics.page(url);
 		};
 		const handleChangeError = () => {
 			NProgress.done();
@@ -98,9 +170,31 @@ function MyApp({ Component, pageProps }: AppProps) {
 	}, [router]);
 
 	useEffect(() => {
-		localStorage.setItem(StorageLabel.LOCALE, locale || 'en');
-	}, [locale]);
+		const asyncFunc = async () => {
+			const storageLocale = localStorage.getItem(StorageLabel.LOCALE);
+			const navigatorLocale = getLocaleFromNavigator();
+			let ipLocale;
+			if (!storageLocale) {
+				ipLocale = await getLocaleFromIP();
+			}
+			const preferredLocale =
+				storageLocale || ipLocale || navigatorLocale || defaultLocale!;
 
+			if (
+				preferredLocale !== 'undefined' &&
+				typeof preferredLocale !== 'undefined' &&
+				router.locale !== preferredLocale
+			) {
+				router.push({ pathname, query }, asPath, {
+					locale: preferredLocale,
+				});
+			}
+			if (!storageLocale || storageLocale !== preferredLocale) {
+				localStorage.setItem(StorageLabel.LOCALE, preferredLocale);
+			}
+		};
+		asyncFunc();
+	}, []);
 	return (
 		<>
 			<Head>
@@ -109,58 +203,77 @@ function MyApp({ Component, pageProps }: AppProps) {
 					content='width=device-width, initial-scale=1.0'
 				/>
 			</Head>
-			<Provider store={store}>
+			<ReduxProvider store={store}>
 				<IntlProvider
 					locale={locale!}
 					messages={IntlMessages[locale as keyof typeof IntlMessages]}
-					defaultLocale='en'
+					defaultLocale={defaultLocale}
 				>
 					<ApolloProvider client={apolloClient}>
-						<Web3ReactProvider getLibrary={getLibrary}>
-							{isMaintenanceMode ? (
-								<MaintenanceIndex />
-							) : (
-								<>
-									<NotificationController />
-									<GeneralController />
-									<PriceController />
-									<SubgraphController />
-									<UserController />
-									<HeaderWrapper />
-									{isGIVeconomyRoute(router.route) && (
-										<GIVeconomyTab />
-									)}
-									{(pageProps as any).errorStatus ? (
-										<ErrorsIndex
-											statusCode={
-												(pageProps as any).errorStatus
-											}
-										/>
+						<SolanaProvider>
+							<WagmiConfig config={wagmiConfig}>
+								<GeneralWalletProvider>
+									{isMaintenanceMode ? (
+										<MaintenanceIndex />
 									) : (
-										<Component {...pageProps} />
-									)}
-									{process.env.NEXT_PUBLIC_ENV ===
-										'production' && (
-										<Script
-											id='segment-script'
-											strategy='afterInteractive'
-											dangerouslySetInnerHTML={{
-												__html: renderSnippet(),
-											}}
-										/>
-									)}
+										<>
+											<NotificationController />
+											<GeneralController />
+											<PriceController />
+											<SubgraphController />
+											<UserController />
+											<HeaderWrapper />
+											{isGIVeconomyRoute(
+												router.route,
+											) && <GIVeconomyTab />}
+											{(pageProps as any).errorStatus ? (
+												<ErrorsIndex
+													statusCode={
+														(pageProps as any)
+															.errorStatus
+													}
+												/>
+											) : (
+												<RenderComponent
+													Component={Component}
+													pageProps={pageProps}
+												/>
+											)}
+											{process.env.NEXT_PUBLIC_ENV ===
+												'production' && (
+												<Script
+													id='segment-script'
+													strategy='afterInteractive'
+													dangerouslySetInnerHTML={{
+														__html: renderSnippet(),
+													}}
+												/>
+											)}
+											{/* {process.env.NEXT_PUBLIC_ENV !==
+												'production' && (
+												<Script
+													id='console-script'
+													strategy='afterInteractive'
+													dangerouslySetInnerHTML={{
+														__html: `javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();`,
+													}}
+												/>
+											)} */}
 
-									<FooterWrapper />
-									<ModalController />
-									<PfpController />
-								</>
-							)}
-						</Web3ReactProvider>
+											<FooterWrapper />
+											<ModalController />
+											<PfpController />
+										</>
+									)}
+								</GeneralWalletProvider>
+							</WagmiConfig>
+						</SolanaProvider>
 					</ApolloProvider>
 				</IntlProvider>
-			</Provider>
+			</ReduxProvider>
 
 			<Toaster containerStyle={{ top: '80px' }} />
+			<SpeedInsights />
 		</>
 	);
 }

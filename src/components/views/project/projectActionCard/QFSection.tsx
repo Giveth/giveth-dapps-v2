@@ -14,7 +14,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { useProjectContext } from '@/context/project.context';
+import { type FC } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
@@ -25,11 +25,16 @@ import {
 import links from '@/lib/constants/links';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
-import { formatDonations } from '@/helpers/number';
+import { formatDonation } from '@/helpers/number';
+import ProjectEligibleQFChains from './ProjectEligibleQFChains';
+import { IProject } from '@/apollo/types/types';
 
-const QFSection = () => {
+interface IQFSectionProps {
+	projectData?: IProject;
+}
+
+const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	const { formatMessage, locale } = useIntl();
-	const { projectData } = useProjectContext();
 	const { estimatedMatching, sumDonationValueUsdForActiveQfRound } =
 		projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
@@ -39,13 +44,15 @@ const QFSection = () => {
 	const EstimatedMatchingSection = () => (
 		<Flex flexDirection='column' gap='4px'>
 			<EstimatedMatchingPrice>
-				{formatDonations(
+				{formatDonation(
 					calculateTotalEstimatedMatching(
 						projectDonationsSqrtRootSum,
 						allProjectsSum,
 						matchingPool,
 					),
 					'$',
+					locale,
+					true,
 				)}
 			</EstimatedMatchingPrice>
 			<Flex alignItems='center' gap='4px'>
@@ -55,7 +62,7 @@ const QFSection = () => {
 				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
 					<TooltipContent>
 						{formatMessage({
-							id: 'tooltip.donation.matching',
+							id: 'component.qf-section.tooltip_polygon',
 						})}
 					</TooltipContent>
 				</IconWithTooltip>
@@ -75,10 +82,11 @@ const QFSection = () => {
 						})}
 					</Title>
 					<Amount weight={700}>
-						$
-						{(
-							sumDonationValueUsdForActiveQfRound || 0
-						).toLocaleString(locale)}
+						{formatDonation(
+							sumDonationValueUsdForActiveQfRound || 0,
+							'$',
+							locale,
+						)}
 					</Amount>
 					<Description>
 						{formatMessage({
@@ -137,13 +145,16 @@ const QFSection = () => {
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
 								+{' '}
-								{formatDonations(
+								{formatDonation(
 									calculateEstimatedMatchingWithDonationAmount(
 										1,
 										projectDonationsSqrtRootSum,
 										allProjectsSum,
 										matchingPool,
 									),
+									'',
+									locale,
+									true,
 								)}
 								&nbsp; DAI
 							</EndAlignedSubline>
@@ -153,13 +164,16 @@ const QFSection = () => {
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
 								+{' '}
-								{formatDonations(
+								{formatDonation(
 									calculateEstimatedMatchingWithDonationAmount(
 										10,
 										projectDonationsSqrtRootSum,
 										allProjectsSum,
 										matchingPool,
 									),
+									'',
+									locale,
+									true,
 								)}
 								&nbsp; DAI
 							</EndAlignedSubline>
@@ -169,13 +183,16 @@ const QFSection = () => {
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
 								+{' '}
-								{formatDonations(
+								{formatDonation(
 									calculateEstimatedMatchingWithDonationAmount(
 										100,
 										projectDonationsSqrtRootSum,
 										allProjectsSum,
 										matchingPool,
 									),
+									'',
+									locale,
+									true,
 								)}
 								&nbsp; DAI
 							</EndAlignedSubline>
@@ -202,6 +219,7 @@ const QFSection = () => {
 						</a>
 					</Flex>
 				</ContributionsContainer>
+				<ProjectEligibleQFChains />
 			</ChartContainer>
 		</DonationSectionWrapper>
 	);

@@ -2,6 +2,7 @@ import { brandColors, neutralColors, Lead } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries, searchSuggestions } from '@/lib/constants/constants';
 import { IMainCategory } from '@/apollo/types/types';
@@ -9,68 +10,81 @@ import Routes from '@/lib/constants/Routes';
 import { useProjectsContext } from '@/context/projects.context';
 
 const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
-	const { setVariables } = useProjectsContext();
-
-	const handleSearch = (searchTerm?: string) =>
-		setVariables(prevVariables => ({ ...prevVariables, searchTerm }));
 	const { formatMessage } = useIntl();
+	const { isQF } = useProjectsContext();
+	const router = useRouter();
+
+	const handleSearch = (searchTerm?: string) => {
+		router.push({
+			pathname: router.pathname,
+			query: { searchTerm: searchTerm },
+		});
+	};
 
 	return (
 		<Wrapper>
 			<Content>
 				{formatMessage({
-					id: 'label.it_seems_we_couldnt_find_any_result',
+					id: 'label.there_are_no_projects_matching_your_search',
 				})}
 			</Content>
 			<LeadMedium>
 				{formatMessage({
-					id: 'label.try_another_keyword_or_broaden_your_search',
+					id: 'label.try_removing_some_filters_keyword',
 				})}
 			</LeadMedium>
-			<GrayLead>{formatMessage({ id: 'label.try_these' })}</GrayLead>
-			<Categories>
-				{searchSuggestions.map((suggestion, index) => {
-					return (
-						<SuggestionItem
-							key={index}
-							onClick={() => {
-								handleSearch(suggestion);
-							}}
-						>
-							{suggestion}
-						</SuggestionItem>
-					);
-				})}
-			</Categories>
-			<GrayLead>
-				{formatMessage({ id: 'label.or_go_back_to_main_categories' })}
-			</GrayLead>
-			<Categories>
-				{props.mainCategories.map((category, index) => {
-					return (
-						<Link
-							key={`category-${index}`}
-							href={
-								category.slug === 'all'
-									? Routes.Projects
-									: `/projects/${category.slug}`
-							}
-						>
-							<MainCategoryItem
-								onClick={() => {
-									setVariables(prevVariables => ({
-										...prevVariables,
-										sortingBy: undefined,
-										filters: undefined,
-									}));
-								}}
-							>
-								{formatMessage({ id: category.slug })}
-							</MainCategoryItem>
-						</Link>
-					);
-				})}
-			</Categories>
+			{!isQF && (
+				<>
+					<GrayLead>
+						{formatMessage({ id: 'label.try_these' })}
+					</GrayLead>
+					<Categories>
+						{searchSuggestions.map((suggestion, index) => {
+							return (
+								<SuggestionItem
+									key={index}
+									onClick={() => {
+										handleSearch(suggestion);
+									}}
+								>
+									{suggestion}
+								</SuggestionItem>
+							);
+						})}
+					</Categories>
+					<GrayLead>
+						{formatMessage({
+							id: 'label.or_go_back_to_main_categories',
+						})}
+					</GrayLead>
+					<Categories>
+						{props.mainCategories.map((category, index) => {
+							return (
+								<Link
+									key={`category-${index}`}
+									href={`${Routes.Projects}/${category.slug}`}
+								>
+									<MainCategoryItem
+										onClick={() => {
+											const updatedQuery = {
+												...router.query,
+											};
+											delete updatedQuery.sortingBy;
+											delete updatedQuery.filters;
+											router.push({
+												pathname: router.pathname,
+												query: updatedQuery,
+											});
+										}}
+									>
+										{formatMessage({ id: category.slug })}
+									</MainCategoryItem>
+								</Link>
+							);
+						})}
+					</Categories>
+				</>
+			)}
 		</Wrapper>
 	);
 };
@@ -100,6 +114,7 @@ const GrayLead = styled(LeadMedium)`
 
 const Categories = styled(FlexCenter)`
 	flex-direction: column;
+	flex-wrap: wrap;
 	gap: 8px;
 	margin: 16px;
 	${mediaQueries.tablet} {
@@ -119,7 +134,9 @@ const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 	:hover {
 		color: white;
 		background: ${brandColors.giv[600]};
-		transition: background-color 300ms linear, color 150ms linear;
+		transition:
+			background-color 300ms linear,
+			color 150ms linear;
 	}
 	font-weight: 400;
 	text-align: center;
@@ -138,7 +155,9 @@ const SuggestionItem = styled.div`
 	padding: 0 15px;
 	:hover {
 		color: ${neutralColors.gray[700]};
-		transition: color 300ms linear, color 150ms linear;
+		transition:
+			color 300ms linear,
+			color 150ms linear;
 	}
 	${mediaQueries.tablet} {
 		font-size: 16px;

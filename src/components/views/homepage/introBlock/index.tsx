@@ -50,7 +50,7 @@ const IntroBlock = () => {
 								})}
 							</CustomLead>
 							<ButtonsContainer gap='16px'>
-								<Link href={Routes.Projects}>
+								<Link href={Routes.AllProjects}>
 									<ButtonLink
 										label={formatMessage({
 											id: 'label.explore_projects',
@@ -58,7 +58,7 @@ const IntroBlock = () => {
 										icon={<IconChevronRight24 />}
 									/>
 								</Link>
-								<Link href={links.OUR_MISSION} target='_blank'>
+								<Link href={Routes.AboutUs + '#mission'}>
 									<OurMissionButton
 										linkType='texty-secondary'
 										label={formatMessage({
@@ -96,15 +96,10 @@ const IntroBlock = () => {
 									color={neutralColors.gray[800]}
 								/>
 							}
-							LinkComponent={
-								<ButtonLink
-									linkType='texty-secondary'
-									label={formatMessage({
-										id: 'label.how_it_works',
-									})}
-									icon={<IconChevronRight24 />}
-								/>
-							}
+							buttonText={formatMessage({
+								id: 'label.how_it_works',
+							})}
+							buttonLink={links.VERIFICATION_DOCS}
 							title={formatMessage({
 								id: 'label.verified_projects',
 							})}
@@ -118,15 +113,10 @@ const IntroBlock = () => {
 									color={neutralColors.gray[800]}
 								/>
 							}
-							LinkComponent={
-								<ButtonLink
-									linkType='texty-secondary'
-									label={formatMessage({
-										id: 'label.learn_more',
-									})}
-									icon={<IconChevronRight24 />}
-								/>
-							}
+							buttonText={formatMessage({
+								id: 'label.learn_more',
+							})}
+							buttonLink={links.GIVBACK_DOC}
 							title={formatMessage({
 								id: 'label.donor_rewards',
 							})}
@@ -138,15 +128,10 @@ const IntroBlock = () => {
 							Icon={
 								<IconSpark32 color={neutralColors.gray[800]} />
 							}
-							LinkComponent={
-								<ButtonLink
-									linkType='texty-primary'
-									label={formatMessage({
-										id: 'label.get_started',
-									})}
-									icon={<IconChevronRight24 />}
-								/>
-							}
+							buttonLink={Routes.Onboarding}
+							buttonText={formatMessage({
+								id: 'label.get_started',
+							})}
 							title={formatMessage({
 								id: 'label.easy_onboarding',
 							})}
@@ -268,6 +253,10 @@ const OurMissionButton = styled(ButtonLink)`
 	display: flex;
 	align-items: center;
 	height: 100%;
+	transition: color 0.2s ease-in-out;
+	&:hover {
+		color: ${brandColors.giv[300]};
+	}
 `;
 
 export default IntroBlock;

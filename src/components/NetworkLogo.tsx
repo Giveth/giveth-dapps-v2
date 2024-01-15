@@ -1,24 +1,26 @@
-import React from 'react';
 import config from '@/configuration';
-import { IconEthereum } from '@/components/Icons/Eth';
-import { IconGnosisChain } from '@/components/Icons/GnosisChain';
-import { IconPolygon } from '@/components/Icons/Polygon';
-import { IconCelo } from './Icons/Celo';
-import { IconOptimism } from './Icons/Optimism';
+import { ChainType } from '@/types/config';
 
-const NetworkLogo = (props: { chainId?: number; logoSize?: number }) => {
-	const { chainId, logoSize } = props;
-	if (chainId === config.MAINNET_NETWORK_NUMBER) {
-		return <IconEthereum size={logoSize} />;
-	} else if (chainId === config.XDAI_NETWORK_NUMBER) {
-		return <IconGnosisChain size={logoSize} />;
-	} else if (chainId === config.POLYGON_NETWORK_NUMBER) {
-		return <IconPolygon size={logoSize} />;
-	} else if (chainId === config.OPTIMISM_NETWORK_NUMBER) {
-		return <IconOptimism size={logoSize} />;
-	} else if (chainId === config.CELO_NETWORK_NUMBER) {
-		return <IconCelo size={logoSize} />;
-	} else return null;
+const networkIds = Object.keys(config.EVM_NETWORKS_CONFIG).map(Number);
+const networkTypes = Object.keys(config.NON_EVM_NETWORKS_CONFIG);
+
+interface INetworkLogoProps {
+	chainId?: number;
+	logoSize?: number;
+	chainType?: ChainType;
+}
+
+const NetworkLogo = (props: INetworkLogoProps) => {
+	const { chainId, logoSize, chainType } = props;
+	if (
+		(chainId && networkIds.includes(chainId)) ||
+		(chainType && networkTypes.includes(chainType))
+	) {
+		return config.NETWORKS_CONFIG[(chainId || chainType)!]?.chainLogo(
+			logoSize,
+		);
+	}
+	return null;
 };
 
 export default NetworkLogo;

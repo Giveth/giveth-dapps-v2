@@ -2,21 +2,16 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper';
+import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
-import { IMainCategory } from '@/apollo/types/types';
-import InternalLink from '@/components/InternalLink';
 import { useProjectsContext } from '@/context/projects.context';
 
-interface IProjectsFilterProps {
-	mainCategories: IMainCategory[];
-}
-
-function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
-	const { isQF } = useProjectsContext();
+function ProjectsMainCategories() {
+	const { isQF, mainCategories } = useProjectsContext();
 	const projectsRoute = (isQF ? Routes.QFProjects : Routes.Projects) + '/';
 	const { query } = useRouter();
 	const { formatMessage } = useIntl();
@@ -27,6 +22,13 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 		}
 		return categorySlug === query.slug;
 	};
+
+	const newQuery = {
+		...query,
+	};
+
+	delete newQuery.slug;
+	delete newQuery.category;
 
 	return (
 		<Swiper
@@ -50,19 +52,18 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 		>
 			{mainCategories.map(category => (
 				<SwiperSlide key={category.slug} style={{ width: 'auto' }}>
-					<InternalLink
-						href={
-							category.slug === 'all'
-								? projectsRoute
-								: projectsRoute + category.slug
-						}
+					<Link
+						href={{
+							pathname: projectsRoute + category.slug,
+							query: newQuery,
+						}}
 					>
 						<MainCategoryItem
 							isSelected={handleIsSelected(category.slug)}
 						>
-							{formatMessage({ id: category.slug })}
+							{formatMessage({ id: 'projects_' + category.slug })}
 						</MainCategoryItem>
-					</InternalLink>
+					</Link>
 				</SwiperSlide>
 			))}
 		</Swiper>
@@ -70,6 +71,7 @@ function ProjectsMainCategories({ mainCategories }: IProjectsFilterProps) {
 }
 
 const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
+	min-width: 57px;
 	cursor: pointer;
 	border-radius: 50px;
 	background: ${props =>
@@ -78,7 +80,9 @@ const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 	padding: 16px;
 	:hover {
 		background: ${neutralColors.gray[400]};
-		transition: background-color 300ms linear, color 150ms linear;
+		transition:
+			background-color 300ms linear,
+			color 150ms linear;
 	}
 	font-weight: 400;
 	text-align: center;

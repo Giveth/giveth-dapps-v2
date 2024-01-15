@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Col, H3, Row } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
+import { useNetwork } from 'wagmi';
 import { Subtitle, GIVfrensLink } from './RegenStreamSection.sc';
 import config from '@/configuration';
 import { RegenStreamCard } from './RegenStreamCard';
@@ -13,18 +13,19 @@ interface IRegenStreamSectionProps {
 export const RegenStreamSection: FC<IRegenStreamSectionProps> = ({
 	showArchivedPools,
 }) => {
-	const { chainId } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const { formatMessage } = useIntl();
 	const _regenStreams =
-		chainId === config.XDAI_NETWORK_NUMBER
+		chainId === config.GNOSIS_NETWORK_NUMBER
 			? [
-					...config.XDAI_CONFIG.regenStreams,
+					...config.GNOSIS_CONFIG.regenStreams,
 					...config.MAINNET_CONFIG.regenStreams,
-			  ]
+				]
 			: [
 					...config.MAINNET_CONFIG.regenStreams,
-					...config.XDAI_CONFIG.regenStreams,
-			  ];
+					...config.GNOSIS_CONFIG.regenStreams,
+				];
 	const regenStreams = showArchivedPools
 		? _regenStreams.filter(regenStream => regenStream.archived)
 		: _regenStreams.filter(regenStream => !regenStream.archived);

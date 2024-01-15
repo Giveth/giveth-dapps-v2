@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { useMutation } from '@apollo/client';
 import { Button, brandColors } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
-import { useWeb3React } from '@web3-react/core';
 import { useForm } from 'react-hook-form';
 import { Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
@@ -13,7 +12,10 @@ import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { gToast, ToastType } from '../toasts';
-import { mediaQueries } from '@/lib/constants/constants';
+import {
+	PROFILE_PHOTO_PLACEHOLDER,
+	mediaQueries,
+} from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
@@ -21,6 +23,7 @@ import Input, { InputSize } from '../Input';
 import { requiredOptions, validators } from '@/lib/constants/regex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import useUpload from '@/hooks/useUpload';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 interface IEditUserModal extends IModal {
 	user: IUser;
@@ -42,8 +45,9 @@ const EditUserModal = ({
 }: IEditUserModal) => {
 	const { formatMessage } = useIntl();
 	const [isLoading, setIsLoading] = useState(false);
-	const useUploadProps = useUpload();
-	const { url, onDelete } = useUploadProps;
+	const { onDelete } = useUpload();
+
+	const { avatar, name } = user;
 
 	const {
 		register,
@@ -51,19 +55,18 @@ const EditUserModal = ({
 		formState: { errors },
 	} = useForm<Inputs>();
 	const dispatch = useAppDispatch();
-	const { account } = useWeb3React();
+	const { walletAddress: address } = useGeneralWallet();
+
 	const [updateUser] = useMutation(UPDATE_USER);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
 	const onSaveAvatar = async () => {
 		try {
 			const { data: response } = await updateUser({
-				variables: {
-					avatar: url,
-				},
+				variables: { avatar: '' },
 			});
 			if (response.updateUser) {
-				account && dispatch(fetchUserByAddress(account));
+				address && dispatch(fetchUserByAddress(address));
 				gToast('Profile Photo updated.', {
 					type: ToastType.SUCCESS,
 					title: 'Success',
@@ -96,7 +99,7 @@ const EditUserModal = ({
 				},
 			});
 			if (data.updateUser) {
-				account && dispatch(fetchUserByAddress(account));
+				address && dispatch(fetchUserByAddress(address));
 				gToast('Profile information updated.', {
 					type: ToastType.SUCCESS,
 					title: 'Success',
@@ -132,10 +135,8 @@ const EditUserModal = ({
 				<>
 					<FlexCenter direction='column' gap='8px'>
 						<ProfilePicture
-							src={
-								user.avatar ? user.avatar : '/images/avatar.svg'
-							}
-							alt={user.name || ''}
+							src={avatar ? avatar : PROFILE_PHOTO_PLACEHOLDER}
+							alt={name || ''}
 							height={80}
 							width={80}
 						/>
@@ -151,13 +152,15 @@ const EditUserModal = ({
 									closeModal();
 								}}
 							/>
-							<TextButton
-								buttonType='texty'
-								label={formatMessage({
-									id: 'label.delete_pic',
-								})}
-								onClick={onSaveAvatar}
-							/>
+							{avatar && (
+								<TextButton
+									buttonType='texty'
+									label={formatMessage({
+										id: 'label.delete_pic',
+									})}
+									onClick={onSaveAvatar}
+								/>
+							)}
 						</FlexCenter>
 					</FlexCenter>
 					<form onSubmit={handleSubmit(onSubmit)}>

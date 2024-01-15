@@ -1,5 +1,6 @@
 import {
 	B,
+	Button,
 	Col,
 	Container,
 	H2,
@@ -25,10 +26,12 @@ import {
 } from '@/components/PassportBanner';
 import { PassportButton } from '@/components/PassportButton';
 import links from '@/lib/constants/links';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export const PassportView = () => {
 	const { formatMessage, locale } = useIntl();
 	const { info, handleSign, refreshScore } = usePassport();
+	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 
 	const { passportScore, passportState, currentRound } = info;
 
@@ -36,6 +39,30 @@ export const PassportView = () => {
 		passportState !== EPassportState.NOT_CONNECTED &&
 		passportState !== EPassportState.NOT_SIGNED &&
 		passportState !== EPassportState.LOADING;
+
+	if (isOnSolana) {
+		return (
+			<Container>
+				<Wrapper>
+					<B>
+						{formatMessage({
+							id: 'label.to_activate_your_gitcoin_passport',
+						})}
+					</B>
+					<br />
+					<FlexCenter>
+						<Button
+							label={formatMessage({
+								id: 'label.switch_to_evm',
+							})}
+							onClick={handleSingOutAndSignInWithEVM}
+							buttonType='primary'
+						/>
+					</FlexCenter>
+				</Wrapper>
+			</Container>
+		);
+	}
 
 	return (
 		<Container>
@@ -58,7 +85,7 @@ export const PassportView = () => {
 					<ExternalLink
 						href={links.PASSPORT}
 						title={formatMessage({
-							id: 'label.learn_more',
+							id: 'label.go_to_passport',
 						})}
 					/>
 					<IconExternalLink16 />

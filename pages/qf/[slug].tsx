@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next/types';
-import { IMainCategory } from '@/apollo/types/types';
+import { EProjectsFilter, IMainCategory } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
@@ -12,21 +12,25 @@ import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
-import type { IQFProjectsRouteProps } from '.';
+import { useReferral } from '@/hooks/useReferral';
+import { IProjectsRouteProps, allCategoriesItem } from 'pages/projects/[slug]';
+import { getMainCategorySlug } from '@/helpers/projects';
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
-interface IQFProjectsCategoriesRouteProps extends IQFProjectsRouteProps {
+interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
 	selectedMainCategory: IMainCategory;
 }
 
-const QFProjectsCategoriesRoute = (props: IQFProjectsCategoriesRouteProps) => {
+const QFProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 	const {
 		projects,
 		mainCategories,
 		selectedMainCategory,
 		totalCount,
-		categories,
 		qfRounds,
 	} = props;
+
+	useReferral();
 
 	return (
 		<ProjectsProvider
@@ -36,11 +40,7 @@ const QFProjectsCategoriesRoute = (props: IQFProjectsCategoriesRouteProps) => {
 			qfRounds={qfRounds}
 		>
 			<GeneralMetatags info={projectsMetatags} />
-			<ProjectsIndex
-				projects={projects}
-				totalCount={totalCount}
-				categories={categories}
-			/>
+			<ProjectsIndex projects={projects} totalCount={totalCount} />
 		</ProjectsProvider>
 	);
 };
@@ -51,13 +51,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 	try {
 		const { query } = context;
 		const slug = query.slug;
-		if (!slug)
-			return {
-				redirect: {
-					destination: '/',
-					permanent: false,
-				},
-			};
+
 		const {
 			data: { mainCategories },
 		}: {
@@ -66,15 +60,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			query: FETCH_MAIN_CATEGORIES,
 			fetchPolicy: 'network-only',
 		});
-
-		const allCategoriesItem = {
-			title: 'All',
-			description: '',
-			banner: '',
-			slug: 'all',
-			categories: [],
-			selected: false,
-		};
 
 		const updatedMainCategory = [allCategoriesItem, ...mainCategories];
 		const selectedMainCategory = updatedMainCategory.find(mainCategory => {
@@ -87,16 +72,34 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				selected: true,
 			};
 			const apolloClient = initializeApollo();
+
+			let _filters = query.filter
+				? Array.isArray(query.filter)
+					? query.filter
+					: [query.filter]
+				: undefined;
+
+			_filters
+				? _filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
+				: (_filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
+
 			const { data } = await apolloClient.query({
 				query: FETCH_ALL_PROJECTS,
 				variables: {
 					...variables,
-					mainCategory: updatedSelectedMainCategory.slug,
+					sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
+					searchTerm: query.searchTerm,
+					filters: _filters,
+					campaignSlug: query.campaignSlug,
+					category: query.category,
+					mainCategory: getMainCategorySlug(
+						updatedSelectedMainCategory,
+					),
 					notifyOnNetworkStatusChange,
 				},
 				fetchPolicy: 'network-only',
 			});
-			const { projects, totalCount, categories } = data.allProjects;
+			const { projects, totalCount } = data.allProjects;
 			const {
 				data: { qfRounds },
 			} = await apolloClient.query({
@@ -109,7 +112,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 					mainCategories: updatedMainCategory,
 					selectedMainCategory: updatedSelectedMainCategory,
 					totalCount,
-					categories,
 					qfRounds,
 				},
 			};

@@ -1,20 +1,16 @@
 import { captureException } from '@sentry/nextjs';
 import config from '@/configuration';
 import { ITokenAllocation } from '@/types/subgraph';
-import type { SimpleNetworkConfig } from '@/types/config';
+import { gqlRequest } from '@/helpers/requests';
 
 export const fetchSubgraph = async (
 	query: string,
 	network: number,
 ): Promise<any> => {
 	const reqBody = { query };
-	let uri;
-	if (network === config.MAINNET_NETWORK_NUMBER) {
-		uri = config.MAINNET_CONFIG.subgraphAddress;
-	} else if (network === config.XDAI_NETWORK_NUMBER) {
-		uri = config.XDAI_CONFIG.subgraphAddress;
-	} else {
-		console.error('Network is not Defined!');
+	let uri = config.EVM_NETWORKS_CONFIG[network]?.subgraphAddress;
+	if (!uri) {
+		console.error('Network is not Defined in fetchSubgraph!');
 		return {};
 	}
 	const res = await fetch(uri, {
@@ -32,12 +28,11 @@ export const getHistory = async (
 	from?: number,
 	count?: number,
 ): Promise<ITokenAllocation[]> => {
-	let tokenDistroAddress = (
-		config.NETWORKS_CONFIG[network] as SimpleNetworkConfig
-	).TOKEN_DISTRO_ADDRESS;
-	let uri = config.NETWORKS_CONFIG[network].subgraphAddress;
+	const networkConfig = config.EVM_NETWORKS_CONFIG[network];
+	let tokenDistroAddress = networkConfig?.TOKEN_DISTRO_ADDRESS;
+	let uri = networkConfig?.subgraphAddress;
 	if (!tokenDistroAddress || !uri) {
-		console.error('Network is not Defined!');
+		console.error('Network is not Defined in getHistory!');
 		return [];
 	}
 	const query = `{
@@ -55,14 +50,9 @@ export const getHistory = async (
 		distributor
 	  }
 	}`;
-	const body = { query };
 	try {
-		const res = await fetch(uri, {
-			method: 'POST',
-			body: JSON.stringify(body),
-		});
-		const data = await res.json();
-		const { tokenAllocations } = data.data;
+		const { data } = await gqlRequest(uri, false, query);
+		const { tokenAllocations } = data;
 		return tokenAllocations;
 	} catch (error) {
 		console.error('Error in getting History from Subgraph', error);

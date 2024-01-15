@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  givethio-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: givethio-frontend
+    restart: always
+    volumes:
+      - .env.local:/usr/src/app/.env.local
+    ports:
+      - 3000:3000
+    env_file:
+      - .env.local

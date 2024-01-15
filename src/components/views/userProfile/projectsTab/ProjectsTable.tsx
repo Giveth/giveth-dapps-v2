@@ -2,22 +2,19 @@ import {
 	brandColors,
 	neutralColors,
 	IconHeartFilled,
-	GLink,
 } from '@giveth/ui-design-system';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
-
 import { useIntl } from 'react-intl';
+import Link from 'next/link';
 import { EOrderBy, IOrder } from '../UserProfile.view';
-import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
-import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { slugToProjectView } from '@/lib/routeCreators';
 import { formatUSD, smallFormatDate } from '@/lib/helpers';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import InternalLink from '@/components/InternalLink';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import ListingBadge from '@/components/ListingBadge';
 import StatusBadge from '@/components/views/userProfile/projectsTab/StatusBadge';
 import SortIcon from '@/components/SortIcon';
-import { EVerificationStatus, IProject } from '@/apollo/types/types';
+import { IProject } from '@/apollo/types/types';
 import { mediaQueries } from '@/lib/constants/constants';
 import VerificationBadge from '@/components/VerificationBadge';
 import {
@@ -26,6 +23,8 @@ import {
 	TableHeader,
 } from '@/components/styled-components/Table';
 import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
+import ProjectActions from '@/components/views/userProfile/projectsTab/ProjectActions';
+import { EProjectStatus } from '@/apollo/types/gqlEnums';
 
 interface IProjectsTable {
 	projects: IProject[];
@@ -73,15 +72,10 @@ const ProjectsTable: FC<IProjectsTable> = ({
 				<ProjectsTableHeader>
 					{formatMessage({ id: 'label.listing' })}
 				</ProjectsTableHeader>
-				<ProjectsTableHeader>
-					{formatMessage({ id: 'label.actions' })}
-				</ProjectsTableHeader>
+				<ProjectsTableHeader />
 				{projects?.map(project => {
 					const status = project.status.name;
 					const isCancelled = status === EProjectStatus.CANCEL;
-					const verStatus = project.verified
-						? EVerificationStatus.VERIFIED
-						: project.projectVerificationForm?.status;
 					return (
 						<ProjectsRowWrapper key={project.id}>
 							<ProjectTableCell>
@@ -95,8 +89,24 @@ const ProjectsTable: FC<IProjectsTable> = ({
 							</ProjectTableCell>
 							<ProjectTableCell bold>
 								<ProjectTitle>
-									{project.title}
-									<VerificationBadge status={verStatus} />
+									{isCancelled ? (
+										<div>{project.title}</div>
+									) : (
+										<Link
+											href={slugToProjectView(
+												project.slug,
+											)}
+										>
+											{project.title}
+										</Link>
+									)}
+									<VerificationBadge
+										isVerified={project.verified}
+										verificationStatus={
+											project.projectVerificationForm
+												?.status
+										}
+									/>
 								</ProjectTitle>
 							</ProjectTableCell>
 							<ProjectTableCell>
@@ -112,32 +122,11 @@ const ProjectsTable: FC<IProjectsTable> = ({
 								/>
 							</ProjectTableCell>
 							<ProjectTableCell>
-								<Actions isCancelled={isCancelled}>
-									<InternalLink
-										href={idToProjectEdit(project.id)}
-										title={formatMessage({
-											id: 'label.edit',
-										})}
-										disabled={isCancelled}
-									/>
-									<InternalLink
-										href={slugToProjectView(project.slug)}
-										title={formatMessage({
-											id: 'label.view',
-										})}
-										disabled={isCancelled}
-									/>
-									<CustomGlink
-										onClick={() => {
-											setSelectedProject(project);
-											setShowAddressModal(true);
-										}}
-									>
-										{formatMessage({
-											id: 'label.manage_addresses',
-										})}
-									</CustomGlink>
-								</Actions>
+								<ProjectActions
+									setSelectedProject={setSelectedProject}
+									setShowAddressModal={setShowAddressModal}
+									project={project}
+								/>
 							</ProjectTableCell>
 						</ProjectsRowWrapper>
 					);
@@ -156,10 +145,9 @@ const ProjectsTable: FC<IProjectsTable> = ({
 
 const Table = styled.div`
 	display: grid;
-	grid-template-columns: 1.5fr 1.1fr 4fr 1.1fr 1.5fr 2fr 200px;
+	grid-template-columns: 1.5fr 1.3fr 4fr 1.1fr 1.5fr 2fr 130px;
 	overflow: auto;
 	min-width: 900px;
-
 	${mediaQueries.laptopS} {
 		min-width: 1000px;
 	}
@@ -185,26 +173,18 @@ const ProjectsRowWrapper = styled(RowWrapper)`
 	}
 `;
 
-const Actions = styled(Flex)<{ isCancelled: boolean }>`
-	gap: 10px;
-	> * {
-		color: ${props =>
-			props.isCancelled
-				? brandColors.pinky[200]
-				: brandColors.pinky[500]};
-		cursor: ${props => (props.isCancelled ? 'default' : 'pointer')};
-		font-size: 14px;
+const ProjectTitle = styled(FlexCenter)`
+	justify-content: flex-start;
+	width: 100%;
+	gap: 0 5px;
+	> a:first-child {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
-`;
-
-const ProjectTitle = styled(Flex)`
-	padding-top: 8px;
-	flex-wrap: wrap;
-	gap: 0 10px;
-`;
-
-const CustomGlink = styled(GLink)`
-	padding-top: 2px;
+	> span:last-child {
+		margin-right: 20px;
+	}
 `;
 
 export default ProjectsTable;

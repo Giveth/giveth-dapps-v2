@@ -1,80 +1,108 @@
 import { P, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
-import { switchNetwork } from '@/lib/wallet';
+import { useAccount } from 'wagmi';
+import { mediaQueries } from '@/lib/constants/constants';
+import { jointItems } from '@/helpers/text';
+import SwitchNetwork from './SwitchNetwork';
+import { getChainName } from '@/lib/network';
+import { INetworkIdWithChain } from '../views/donate/common.types';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
 
-import { chainName, mediaQueries } from '@/lib/constants/constants';
-import { useAppDispatch } from '@/features/hooks';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
-
-export interface IWrongNetworkInnerModal {
-	text?: string;
-	targetNetworks: number[];
+export interface IEVMWrongNetworkSwitchModal {
+	cardName: string;
+	targetNetworks: INetworkIdWithChain[];
 }
 
-export const WrongNetworkInnerModal: FC<IWrongNetworkInnerModal> = ({
-	text,
+export const EVMWrongNetworkSwitchModal: FC<IEVMWrongNetworkSwitchModal> = ({
+	cardName,
 	targetNetworks,
 }) => {
-	const { account } = useWeb3React();
-	const dispatch = useAppDispatch();
+	const [showSwitchNetwork, setShowSwitchNetwork] = useState(false);
+	const { address } = useAccount();
 	const { formatMessage } = useIntl();
 
-	const connectWallet = () => {
-		dispatch(setShowWalletModal(true));
-	};
+	const { walletChainType, handleSingOutAndSignInWithEVM } =
+		useGeneralWallet();
 
-	const checkWalletAndSwitchNetwork = async (network: number) => {
-		await switchNetwork(network);
+	const chainNames = targetNetworks.map(network =>
+		getChainName(network.networkId),
+	);
+	const chainsStr = jointItems(chainNames);
+
+	const handleConnectWallet = async () => {
+		if (walletChainType === ChainType.SOLANA) {
+			handleSingOutAndSignInWithEVM();
+		}
 	};
 
 	return (
-		<WrongNetworkInnerModalContainer>
-			{account ? (
+		<EVMWrongNetworkSwitchModalContainer>
+			{address ? (
 				<>
 					<Description>
-						<P>{text}</P>
-						<P>Please switch the network.</P>
+						<P>
+							{formatMessage(
+								{
+									id: 'component.reward_card.wrong_network',
+								},
+								{
+									name: cardName,
+									chains: chainsStr,
+								},
+							)}
+						</P>
 					</Description>
 					<ButtonsContainer>
-						{targetNetworks.map(network => (
-							<Button
-								label={`${formatMessage({
-									id: 'label.switch_to',
-								})} ${chainName(network)}`}
-								onClick={() =>
-									checkWalletAndSwitchNetwork(network)
-								}
-								buttonType='primary'
-								key={network}
-							/>
-						))}
+						<Button
+							label={formatMessage({
+								id: 'label.switch_network',
+							})}
+							buttonType='primary'
+							onClick={() => setShowSwitchNetwork(true)}
+						/>
 					</ButtonsContainer>
 				</>
 			) : (
 				<>
 					<Description>
-						<P>{text}</P>
+						<P>
+							{formatMessage(
+								{
+									id: 'label.please_connect_your_wallet',
+								},
+								{
+									name: cardName,
+									chains: chainsStr,
+								},
+							)}
+						</P>
 					</Description>
 					<ButtonsContainer>
 						<Button
 							label={formatMessage({
 								id: 'component.button.connect_wallet',
 							})}
-							onClick={connectWallet}
+							onClick={handleConnectWallet}
 							buttonType='primary'
 						/>
 					</ButtonsContainer>
 				</>
 			)}
-		</WrongNetworkInnerModalContainer>
+			{showSwitchNetwork && (
+				<SwitchNetwork
+					setShowModal={setShowSwitchNetwork}
+					customNetworks={targetNetworks}
+				/>
+			)}
+		</EVMWrongNetworkSwitchModalContainer>
 	);
 };
 
-const WrongNetworkInnerModalContainer = styled.div`
+const EVMWrongNetworkSwitchModalContainer = styled.div`
 	padding: 6px 24px;
 	width: 100%;
 	${mediaQueries.tablet} {

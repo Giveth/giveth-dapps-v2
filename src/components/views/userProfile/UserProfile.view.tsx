@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
+
 import {
 	brandColors,
 	GLink,
@@ -15,9 +15,11 @@ import {
 import { useRouter } from 'next/router';
 import config from '@/configuration';
 
-import { mediaQueries } from '@/lib/constants/constants';
+import {
+	PROFILE_PHOTO_PLACEHOLDER,
+	mediaQueries,
+} from '@/lib/constants/constants';
 import ProfileContributes from './ProfileContributes';
-import { IUser } from '@/apollo/types/types';
 import EditUserModal from '@/components/modals/EditUserModal';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import {
@@ -39,6 +41,8 @@ import { EPFPSize, PFP } from '@/components/PFP';
 import { gqlRequest } from '@/helpers/requests';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
 import { IGiverPFPToken } from '@/apollo/types/types';
+import { useProfileContext } from '@/context/profile.context';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export enum EOrderBy {
 	TokenAmount = 'TokenAmount',
@@ -52,25 +56,20 @@ export interface IOrder {
 	direction: EDirection;
 }
 
-export interface IUserProfileView {
-	user: IUser;
-	myAccount?: boolean;
-}
+export interface IUserProfileView {}
 
-const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
+const UserProfileView: FC<IUserProfileView> = () => {
+	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
+	const [showUploadProfileModal, setShowUploadProfileModal] = useState(false);
+	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
+
 	const dispatch = useAppDispatch();
 	const { isSignedIn } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	const [pfpData, setPfpData] = useState<IGiverPFPToken[]>();
-	const { chainId } = useWeb3React();
-
-	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
-	const [showUploadProfileModal, setShowUploadProfileModal] = useState(false);
-
-	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
-
+	const { walletChainType, chain } = useGeneralWallet();
+	const { user, myAccount } = useProfileContext();
 	const router = useRouter();
-
 	const pfpToken = useGiverPFPToken(user?.walletAddress, user?.avatar);
 
 	const showCompleteProfile =
@@ -134,7 +133,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 							<PFP pfpToken={pfpToken} size={EPFPSize.LARGE} />
 						) : (
 							<StyledImage
-								src={user?.avatar || '/images/avatar.svg'}
+								src={user?.avatar || PROFILE_PHOTO_PLACEHOLDER}
 								width={180}
 								height={180}
 								alt={user?.name}
@@ -158,17 +157,16 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 								)}
 								<AddressContainer>
 									<AddressTextNonMobile size='Big'>
-										{user?.walletAddress?.toLowerCase()}
+										{user?.walletAddress}
 									</AddressTextNonMobile>
 									<AddressTextMobile size='Big'>
-										{shortenAddress(
-											user?.walletAddress?.toLowerCase(),
-										)}
+										{shortenAddress(user?.walletAddress)}
 									</AddressTextMobile>
 									<ExternalLink
 										href={formatWalletLink(
-											chainId,
-											user?.walletAddress?.toLowerCase(),
+											walletChainType,
+											chain,
+											user?.walletAddress,
 										)}
 										color={brandColors.pinky[500]}
 									>
@@ -210,7 +208,7 @@ const UserProfileView: FC<IUserProfileView> = ({ myAccount, user }) => {
 					</UserInfo>
 				</Container>
 			</ProfileHeader>
-			<ProfileContributes user={user} myAccount={myAccount} />
+			<ProfileContributes />
 			{showModal && (
 				<EditUserModal
 					setShowModal={setShowModal}

@@ -1,4 +1,4 @@
-import React, { ComponentType, FC } from 'react';
+import React, { ComponentType, forwardRef } from 'react';
 import {
 	neutralColors,
 	B,
@@ -16,6 +16,7 @@ import Select, {
 	StylesConfig,
 	DropdownIndicatorProps,
 	GroupBase,
+	type CSSObjectWithLabel,
 } from 'react-select';
 import { FieldError } from 'react-hook-form';
 
@@ -40,12 +41,8 @@ interface IProps {
 	error?: FieldError;
 }
 
-const SelectNetwork: FC<IProps> = ({
-	networkOptions,
-	onChange,
-	selectedNetwork,
-	error,
-}) => {
+const SelectNetwork = forwardRef<HTMLElement, IProps>((props, ref) => {
+	const { networkOptions, onChange, selectedNetwork, error } = props;
 	return (
 		<>
 			<Select
@@ -57,6 +54,7 @@ const SelectNetwork: FC<IProps> = ({
 				onChange={(e: any) => onChange(e)}
 				options={networkOptions}
 				styles={selectStyles}
+				ref={ref as any}
 				hasError={!!error}
 				placeholder='Select chain'
 			/>
@@ -65,7 +63,8 @@ const SelectNetwork: FC<IProps> = ({
 			)}
 		</>
 	);
-};
+});
+SelectNetwork.displayName = 'SelectNetwork';
 
 const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 	return props.selectProps.menuIsOpen ? <IconCaretUp /> : <IconCaretDown />;
@@ -73,12 +72,16 @@ const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 
 const Option: ComponentType<OptionProps<ISelectedNetwork>> = props => {
 	const { data, isSelected } = props;
-	const { label, id } = data;
+	const { label, id, chainType } = data;
 	return (
 		<components.Option {...props}>
 			<OptionContainer>
 				<RowContainer>
-					<NetworkLogo chainId={id} logoSize={40} />
+					<NetworkLogo
+						chainId={id}
+						logoSize={40}
+						chainType={chainType}
+					/>
 					<B>{label}</B>
 				</RowContainer>
 				{isSelected && <IconCheck color={brandColors.giv[500]} />}
@@ -89,16 +92,18 @@ const Option: ComponentType<OptionProps<ISelectedNetwork>> = props => {
 
 const selectStyles: StylesConfig = {
 	...selectCustomStyles,
-	placeholder: styles => ({
-		...styles,
-		color: neutralColors.gray[900],
-		fontSize: '16px',
-		fontWeight: 500,
-	}),
-	indicatorSeparator: styles => ({
-		...styles,
-		display: 'none',
-	}),
+	placeholder: (baseStyles, props) =>
+		({
+			...baseStyles,
+			color: neutralColors.gray[900],
+			fontSize: '16px',
+			fontWeight: 500,
+		}) as CSSObjectWithLabel,
+	indicatorSeparator: (baseStyles, props) =>
+		({
+			...baseStyles,
+			display: 'none',
+		}) as CSSObjectWithLabel,
 };
 
 const InputValidation = styled(GLink)`

@@ -1,9 +1,13 @@
 import styled from 'styled-components';
 import {
 	B,
+	brandColors,
+	GLink,
 	H2,
 	H4,
 	H5,
+	H6,
+	IconExternalLink,
 	neutralColors,
 	P,
 	semanticColors,
@@ -11,8 +15,8 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-
 import { useEffect, useState } from 'react';
+import config from '@/configuration';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectWalletAddress from '@/components/views/project/projectDonations/ProjectWalletAddress';
 import { useProjectContext } from '@/context/project.context';
@@ -21,7 +25,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_QF_ROUND_HISTORY } from '@/apollo/gql/gqlDonations';
 import { IGetQfRoundHistory, IQFRound } from '@/apollo/types/types';
-import { formatDonations } from '@/helpers/number';
+import { formatDonation } from '@/helpers/number';
 
 interface IProjectTotalFundCardProps {
 	selectedQF: IQFRound | null;
@@ -38,12 +42,15 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 		estimatedMatching,
 		countUniqueDonors,
 	} = projectData || {};
-	const { formatMessage } = useIntl();
+	const { formatMessage, locale } = useIntl();
 	const recipientAddresses = addresses?.filter(a => a.isRecipient);
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
 	const selectedQFData = qfRounds?.find(round => round.id === selectedQF?.id);
+
+	const notDistributedFund =
+		!qfRoundHistory?.matchingFund && !selectedQF?.isActive;
 
 	useEffect(() => {
 		if (!id) return;
@@ -102,19 +109,18 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 					projectDonationsSqrtRootSum,
 					allProjectsSum,
 					matchingPool,
-			  )
+				)
 			: qfRoundHistory
-			? qfRoundHistory.matchingFund !== null
-				? qfRoundHistory.matchingFund
-				: calculateTotalEstimatedMatching(
-						qfRoundHistory.estimatedMatching
-							.projectDonationsSqrtRootSum,
-						qfRoundHistory.estimatedMatching.allProjectsSum,
-						qfRoundHistory.estimatedMatching.matchingPool,
-				  )
-			: 0
+				? qfRoundHistory.matchingFund !== null
+					? qfRoundHistory.matchingFund
+					: calculateTotalEstimatedMatching(
+							qfRoundHistory.estimatedMatching
+								.projectDonationsSqrtRootSum,
+							qfRoundHistory.estimatedMatching.allProjectsSum,
+							qfRoundHistory.estimatedMatching.matchingPool,
+						)
+				: 0
 		: 0;
-
 	return (
 		<Wrapper>
 			{selectedQF === null ? (
@@ -127,62 +133,115 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						</B>
 						{totalDonations && totalDonations > 0 ? (
 							<TotalFund>
-								{formatDonations(totalDonations, '$')}
+								{formatDonation(totalDonations, '$')}
 							</TotalFund>
 						) : (
 							<NoDonation>
 								{formatMessage({
-									id: 'label.be_the_first_to_donate',
+									id: 'label.be_the_first_to_give',
 								})}
 							</NoDonation>
 						)}
 					</UpperSection>
-					<div>
-						<LightSubline>
-							{formatMessage({
-								id: 'label.raised_from',
-							})}
-						</LightSubline>
-						<Subline style={{ display: 'inline-block' }}>
-							&nbsp;{countUniqueDonors}
-							&nbsp;
-						</Subline>
-						<LightSubline>
-							{formatMessage(
-								{
-									id: 'label.contributors',
-								},
-								{
-									count: countUniqueDonors,
-								},
-							)}
-						</LightSubline>
-					</div>
+					{countUniqueDonors !== undefined &&
+						countUniqueDonors > 0 && (
+							<div>
+								<LightSubline>
+									{formatMessage({
+										id: 'label.raised_from',
+									})}
+								</LightSubline>
+								<Subline style={{ display: 'inline-block' }}>
+									&nbsp;{countUniqueDonors}
+									&nbsp;
+								</Subline>
+								<LightSubline>
+									{formatMessage(
+										{
+											id: 'label.contributors',
+										},
+										{
+											count: countUniqueDonors,
+										},
+									)}
+								</LightSubline>
+							</div>
+						)}
 				</>
 			) : (
 				<div>
 					<BorderedFlex>
-						<P>Round: &nbsp;</P>
-						<B>QF round {selectedQF.id} donations</B>
+						<B>{selectedQF.name} donations</B>
 					</BorderedFlex>
 					{roundDonorsCount && roundDonorsCount > 0 ? (
 						<div>
 							<TotalFund>
-								{formatDonations(roundTotalDonation || 0, '$')}
+								{formatDonation(roundTotalDonation || 0, '$')}
 							</TotalFund>
-							<EstimatedMatchingSection
-								justifyContent='space-between'
-								alignItems='center'
-							>
-								<EstimatedMatchingPrice>
-									+ {formatDonations(matchFund, '$')}
-								</EstimatedMatchingPrice>
-								<EstimatedMatchingText>
-									{selectedQFData?.isActive
-										? 'Estimated Matching'
-										: 'Matching Funds'}
-								</EstimatedMatchingText>
-							</EstimatedMatchingSection>
+							{notDistributedFund ? (
+								<NotDistributedFundContainer>
+									<EstimatedMatchingSection>
+										<Flex flexDirection='column' gap='8px'>
+											<H6 weight={700}>
+												{formatMessage({
+													id: 'label.matching_funds_coming_soon',
+												})}{' '}
+											</H6>
+											<NotDistributedContainer>
+												<NotDistributedProjectName>
+													{selectedQF.name}&nbsp;
+												</NotDistributedProjectName>
+												<NotDistributedDescription>
+													{formatMessage({
+														id: 'label.funds_have_not_yet_been_sent',
+													})}
+												</NotDistributedDescription>
+											</NotDistributedContainer>
+										</Flex>
+									</EstimatedMatchingSection>
+								</NotDistributedFundContainer>
+							) : (
+								<EstimatedMatchingSection flexDirection='column'>
+									<Flex justifyContent='space-between'>
+										<EstimatedMatchingPrice>
+											+{' '}
+											{formatDonation(
+												matchFund,
+												'$',
+												locale,
+												!!selectedQFData?.isActive,
+											)}
+										</EstimatedMatchingPrice>
+										<EstimatedMatchingText>
+											{selectedQFData?.isActive
+												? 'Estimated Matching'
+												: 'Matching Funds'}
+										</EstimatedMatchingText>
+									</Flex>
+
+									{qfRoundHistory?.distributedFundTxHash &&
+										!selectedQF.isActive && (
+											<EstimatedMatchingTransaction>
+												<BlockExplorerLink
+													as='a'
+													href={`${config
+														.EVM_NETWORKS_CONFIG[
+														+qfRoundHistory.distributedFundNetwork!
+													]?.blockExplorers?.default
+														.url}
+			/tx/${qfRoundHistory?.distributedFundTxHash}`}
+													target='_blank'
+													size='Big'
+												>
+													View transaction &nbsp;
+													<IconExternalLink
+														size={16}
+													/>
+												</BlockExplorerLink>
+											</EstimatedMatchingTransaction>
+										)}
+								</EstimatedMatchingSection>
+							)}
 							<div>
 								<LightSubline> Raised from </LightSubline>
 								<Subline style={{ display: 'inline-block' }}>
@@ -196,7 +255,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						<NoDonation>
 							{formatMessage({
 								id: selectedQF.isActive
-									? 'label.be_the_first_to_donate'
+									? 'label.be_the_first_to_give'
 									: 'label.qf_no_donations',
 							})}
 						</NoDonation>
@@ -211,6 +270,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 						key={addObj.networkId}
 						address={addObj.address!}
 						networkId={addObj.networkId!}
+						chainType={addObj.chainType}
 					/>
 				))}
 			</BottomSection>
@@ -237,7 +297,6 @@ const Wrapper = styled.div`
 
 const UpperSection = styled.div`
 	color: ${neutralColors.gray[900]};
-	text-transform: uppercase;
 `;
 
 const TotalFund = styled(H2)`
@@ -255,6 +314,12 @@ const EstimatedMatchingSection = styled(Flex)`
 	padding: 16px 8px;
 	border-radius: 8px;
 	margin-top: 8px;
+`;
+
+const EstimatedMatchingTransaction = styled.div`
+	margin-top: 8px;
+	padding-top: 8px;
+	border-top: 1px solid ${neutralColors.gray[300]};
 `;
 
 const EstimatedMatchingPrice = styled(H5)`
@@ -276,6 +341,36 @@ const LightSubline = styled(Subline)`
 const CustomP = styled(P)`
 	padding-bottom: 8px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
+`;
+
+const NotDistributedContainer = styled.div`
+	border-top: 1px solid ${neutralColors.gray[300]};
+	padding-top: 8px;
+`;
+
+const NotDistributedProjectName = styled(B)`
+	display: inline-block;
+	color: ${neutralColors.gray[700]};
+	white-space: nowrap;
+`;
+
+const NotDistributedDescription = styled(P)`
+	display: inline;
+	color: ${neutralColors.gray[700]};
+`;
+
+const NotDistributedFundContainer = styled.div`
+	margin-bottom: 8px;
+`;
+
+const BlockExplorerLink = styled(GLink)`
+	display: flex;
+	align-items: center;
+	width: 100%;
+	color: ${brandColors.pinky[400]};
+	&:hover {
+		color: ${brandColors.pinky[500]};
+	}
 `;
 
 export default ProjectTotalFundCard;

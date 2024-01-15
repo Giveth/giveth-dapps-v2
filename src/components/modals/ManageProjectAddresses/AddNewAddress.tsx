@@ -1,22 +1,25 @@
 import { Button } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { getAddress, isAddress } from 'ethers/lib/utils';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { getAddress, isAddress } from 'viem';
+import { Chain } from 'wagmi';
 import { IProject, IWalletAddress } from '@/apollo/types/types';
 import Input from '../../Input';
 import { requiredOptions } from '@/lib/constants/regex';
 import { client } from '@/apollo/apolloClient';
 import { ADD_RECIPIENT_ADDRESS_TO_PROJECT } from '@/apollo/gql/gqlProjects';
 import InlineToast, { EToastType } from '../../toasts/InlineToast';
-import { networksParams } from '@/helpers/blockchain';
 import { suggestNewAddress } from '@/lib/helpers';
+import { ChainType, NonEVMChain } from '@/types/config';
+import { isSolanaAddress } from '@/lib/wallet';
+import { getChainName } from '@/lib/network';
 
 interface IAddNewAddress {
 	project: IProject;
-	selectedWallet: IWalletAddress;
+	selectedChain: Chain | NonEVMChain;
 	setProjects: Dispatch<SetStateAction<IProject[]>>;
-	setSelectedWallet: Dispatch<SetStateAction<IWalletAddress | undefined>>;
+	setSelectedChain: Dispatch<SetStateAction<Chain | NonEVMChain | undefined>>;
 	setAddresses: Dispatch<SetStateAction<IWalletAddress[]>>;
 }
 
@@ -26,9 +29,9 @@ interface IAddressForm {
 
 export const AddNewAddress: FC<IAddNewAddress> = ({
 	project,
-	selectedWallet,
+	selectedChain,
 	setProjects,
-	setSelectedWallet,
+	setSelectedChain,
 	setAddresses,
 }) => {
 	const [loading, setLoading] = useState(false);
@@ -39,16 +42,21 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 		setError,
 	} = useForm<IAddressForm>({ mode: 'onSubmit', reValidateMode: 'onSubmit' });
 
+	const chainType =
+		'chainType' in selectedChain ? selectedChain.chainType : undefined;
+
 	const handleAdd = async (formData: IAddressForm) => {
 		setLoading(true);
 		const { address } = formData;
 		try {
-			const _address = getAddress(address);
-			const { data } = await client.mutate({
+			const _address =
+				chainType === ChainType.SOLANA ? address : getAddress(address);
+			await client.mutate({
 				mutation: ADD_RECIPIENT_ADDRESS_TO_PROJECT,
 				variables: {
 					projectId: Number(project.id),
-					networkId: selectedWallet.networkId,
+					networkId: selectedChain.id,
+					chainType,
 					address: _address,
 				},
 			});
@@ -63,7 +71,8 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 							{
 								address: _address,
 								isRecipient: true,
-								networkId: selectedWallet.networkId,
+								networkId: selectedChain.id,
+								chainType,
 							},
 						];
 						newProjects.push(structuredClone(_project));
@@ -71,19 +80,17 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 						newProjects.push(_project);
 					}
 				}
-				console.log('newProjects', newProjects);
-				setSelectedWallet(undefined);
+				setSelectedChain(undefined);
 				return newProjects;
 			});
 			setAddresses(_addresses => {
 				const _adds = structuredClone(_addresses);
-				for (let i = 0; i < _adds.length; i++) {
-					const _add = _adds[i];
-					if (_add.networkId === selectedWallet.networkId) {
-						_add.isRecipient = true;
-						_add.address = _address;
-					}
-				}
+				_adds.push({
+					address: _address,
+					isRecipient: true,
+					networkId: selectedChain.id,
+					chainType,
+				});
 				return _adds;
 			});
 		} catch (error: any) {
@@ -101,52 +108,54 @@ export const AddNewAddress: FC<IAddNewAddress> = ({
 
 	const validateAddress = async (address: string) => {
 		setLoading(true);
-		if (!isAddress(address)) {
+		if (chainType === ChainType.SOLANA) {
+			if (!isSolanaAddress(address)) {
+				setLoading(false);
+				return 'Invalid Solana address';
+			}
+		} else if (!isAddress(address)) {
 			setLoading(false);
-			return 'Invalid address';
+			return 'Invalid ETH address';
 		}
 		return true;
 	};
 
-	const chainName = selectedWallet.networkId
-		? networksParams[selectedWallet.networkId].chainName
-		: 'Unknown';
+	const chainName = getChainName(selectedChain.id, chainType);
 
 	return (
-		<>
-			<form onSubmit={handleSubmit(handleAdd)}>
-				<StyledInput
-					register={register}
-					registerName='address'
-					label={`Receiving address on 
-						${chainName}`}
-					registerOptions={{
-						...requiredOptions.walletAddress,
-						validate: validateAddress,
-					}}
-					placeholder='0x...'
-					defaultValue={suggestNewAddress(project.addresses)}
-					caption={`You can enter a new address to receive funds on ${chainName} network.`}
-				/>
-				{errors.address && (
-					<StyledInlineToast
-						type={EToastType.Error}
-						message={errors.address?.message as string}
-					/>
+		<form onSubmit={handleSubmit(handleAdd)}>
+			<StyledInput
+				register={register}
+				registerName='address'
+				autoFocus
+				label={`Receiving address on ${chainName}`}
+				registerOptions={{
+					...requiredOptions.walletAddress,
+					validate: validateAddress,
+				}}
+				placeholder='0x...'
+				defaultValue={suggestNewAddress(
+					project.addresses!,
+					selectedChain,
 				)}
-				<StyledButton
-					size='small'
-					label='SAVE ADDRESS'
-					buttonType='secondary'
-					type='submit'
-					loading={loading}
+				caption={`You can enter a new address to receive funds on ${chainName} network.`}
+			/>
+			{errors.address && (
+				<InlineToast
+					type={EToastType.Error}
+					message={errors.address?.message as string}
 				/>
-			</form>
-		</>
+			)}
+			<StyledButton
+				size='small'
+				label='SAVE ADDRESS'
+				buttonType='secondary'
+				type='submit'
+				loading={loading}
+			/>
+		</form>
 	);
 };
-
-const StyledInlineToast = styled(InlineToast)``;
 
 const StyledInput = styled(Input)`
 	margin-top: 24px;

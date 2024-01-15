@@ -28,10 +28,13 @@ import {
 	PublicGIVpowerContributeCard,
 } from '@/components/ContributeCard';
 import { formatWeiHelper } from '@/helpers/number';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { PassportCard } from './PassportCard';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
+import { getTotalGIVpower } from '@/helpers/givpower';
+import { useProfileContext } from '@/context/profile.context';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
@@ -43,10 +46,13 @@ interface ISection {
 	buttons: IBtnProps[];
 }
 
-const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
+const ProfileOverviewTab: FC<IUserProfileView> = () => {
+	const { user, myAccount } = useProfileContext();
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
+	const isSafeEnv = useIsSafeEnvironment();
+	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
@@ -81,7 +87,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 				},
 				{
 					label: formatMessage({ id: 'label.view_projects' }),
-					onClick: () => router.push(Routes.Projects),
+					onClick: () => router.push(Routes.AllProjects),
 					outline: true,
 				},
 			],
@@ -101,12 +107,10 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 	};
 
 	const [section, setSection] = useState<ISection>(_sections.getGiv);
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.xDaiValues),
-	);
 	const { userData } = useAppSelector(state => state.user);
 	const boostedProjectsCount = userData?.boostedProjectsCount ?? 0;
-	const givPower = sdh.getUserGIVPowerBalance();
+	const values = useAppSelector(state => state.subgraph);
+	const givPower = getTotalGIVpower(values);
 	const { title, subtitle, buttons } = section;
 
 	useEffect(() => {
@@ -126,10 +130,10 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 		<UserContributeInfo>
 			<Row>
 				<Col lg={6}>
-					<DonateContributeCard user={user} />
+					<DonateContributeCard />
 				</Col>
 				<Col lg={6}>
-					<ProjectsContributeCard user={user} />
+					<ProjectsContributeCard />
 				</Col>
 				<Col lg={6}>
 					{myAccount ? (
@@ -142,15 +146,30 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 							}}
 							data2={{
 								label: 'GIVpower',
-								value: `${formatWeiHelper(givPower.balance)}`,
+								value: `${formatWeiHelper(givPower.total)}`,
 							}}
 						/>
 					) : (
-						<PublicGIVpowerContributeCard user={user} />
+						<PublicGIVpowerContributeCard />
 					)}
 				</Col>
 			</Row>
-			{myAccount && (
+			{myAccount && isSafeEnv ? (
+				<Row>
+					<Col lg={6}>
+						<SectionTitle weight={700}>
+							{formatMessage({
+								id: 'label.gitcoin_passport',
+							})}
+						</SectionTitle>
+						<SectionDesc>
+							{formatMessage({
+								id: 'label.unfortunately_passport_is_incompatible',
+							})}
+						</SectionDesc>
+					</Col>
+				</Row>
+			) : myAccount && !isOnSolana ? (
 				<Row>
 					<Col lg={6}>
 						<SectionTitle weight={700}>
@@ -164,10 +183,37 @@ const ProfileOverviewTab: FC<IUserProfileView> = ({ user, myAccount }) => {
 							})}
 							<br />
 							<PassportLink href={links.PASSPORT}>
-								{formatMessage({ id: 'label.learn_more' })}.
+								{formatMessage({
+									id: 'label.go_to_passport',
+								})}
+								.
 							</PassportLink>
 						</SectionDesc>
 						<PassportCard />
+					</Col>
+				</Row>
+			) : (
+				<Row>
+					<Col lg={6}>
+						<SectionTitle weight={700}>
+							{formatMessage({
+								id: 'label.gitcoin_passport',
+							})}
+						</SectionTitle>
+						<SectionDesc>
+							{formatMessage({
+								id: 'label.to_activate_your_gitcoin_passport',
+							})}
+							<br />
+							<br />
+							<Button
+								label={formatMessage({
+									id: 'label.switch_to_evm',
+								})}
+								buttonType='primary'
+								onClick={handleSingOutAndSignInWithEVM}
+							/>
+						</SectionDesc>
 					</Col>
 				</Row>
 			)}

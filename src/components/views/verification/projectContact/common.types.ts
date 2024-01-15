@@ -1,5 +1,5 @@
 export enum EMainSocials {
-	Twitter = 'Twitter',
+	Twitter = 'X (Twitter)',
 	Facebook = 'Facebook',
 	Instagram = 'Instagram',
 	YouTube = 'YouTube',

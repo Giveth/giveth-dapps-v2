@@ -7,101 +7,64 @@ import {
 	useCallback,
 	ReactNode,
 } from 'react';
-import { ethers } from 'ethers';
-import { useWeb3React } from '@web3-react/core';
-import config from '@/configuration';
+import { useAccount } from 'wagmi';
 
 export interface FarmContext {
-	totalEarned: ethers.BigNumber;
-	setInfo: (network: number, key: string, value: ethers.BigNumber) => void;
+	chainsInfo: IChainsInfo;
+	setChainInfo: (network: number, key: string, value: bigint) => void;
 }
 
 export const FarmContext = createContext<FarmContext>({
-	totalEarned: ethers.constants.Zero,
-	setInfo: (network: number, key: string, value: ethers.BigNumber) => {
-		console.log('Not implemented!');
+	chainsInfo: {},
+	setChainInfo: (network: number, key: string, value: bigint) => {
+		console.log('The setChainInfo function has not been implemented yet.');
 	},
 });
 
 FarmContext.displayName = 'FarmContext';
 
-interface IInfos {
-	[key: string]: ethers.BigNumber;
-}
-
 interface IFarmProvider {
 	children: ReactNode;
 }
 
-export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
-	const [xDaiInfos, setxDaiInfos] = useState<IInfos>({});
-	const [xDaiTotalEarned, setxDaiTotalEarned] = useState(
-		ethers.constants.Zero,
-	);
-	const [mainnetInfos, setMainnetInfos] = useState<IInfos>({});
-	const [mainnetTotalEarned, setMainnetTotalEarned] = useState(
-		ethers.constants.Zero,
-	);
-	const { account, chainId } = useWeb3React();
+interface IInfo {
+	[key: string]: bigint;
+	totalInfo: bigint;
+}
 
-	const setInfo = useCallback(
-		(network: number, key: string, value: ethers.BigNumber) => {
-			if (network === config.MAINNET_NETWORK_NUMBER) {
-				setMainnetInfos(prevInfos => ({ ...prevInfos, [key]: value }));
-			} else if (network === config.XDAI_NETWORK_NUMBER) {
-				setxDaiInfos(prevInfos => ({ ...prevInfos, [key]: value }));
-			}
+export interface IChainsInfo {
+	[key: number]: IInfo;
+}
+
+export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
+	const [chainsInfo, setChainsInfo] = useState<IChainsInfo>({});
+	const { address } = useAccount();
+
+	const setChainInfo = useCallback(
+		(network: number, key: string, value: bigint) => {
+			console.log('network', network, key, value);
+			const chainInfo = chainsInfo[network] || {};
+			const totalInfo =
+				(chainInfo.totalInfo || 0n) - (chainInfo[key] || 0n) + value;
+
+			const newChainInfo = { ...chainInfo, [key]: value, totalInfo };
+			setChainsInfo(prevInfos => ({
+				...prevInfos,
+				[network]: newChainInfo,
+			}));
 		},
 		[],
 	);
 
 	useEffect(() => {
-		let sum = ethers.constants.Zero;
-		for (const key in xDaiInfos) {
-			if (Object.prototype.hasOwnProperty.call(xDaiInfos, key)) {
-				const value = xDaiInfos[key];
-				sum = sum.add(value);
-			}
-		}
-		setxDaiTotalEarned(sum);
-	}, [xDaiInfos]);
-
-	useEffect(() => {
-		let sum = ethers.constants.Zero;
-		for (const key in mainnetInfos) {
-			if (Object.prototype.hasOwnProperty.call(mainnetInfos, key)) {
-				const value = mainnetInfos[key];
-				sum = sum.add(value);
-			}
-		}
-		setMainnetTotalEarned(sum);
-	}, [mainnetInfos]);
-
-	useEffect(() => {
-		setxDaiInfos({});
-		setxDaiTotalEarned(ethers.constants.Zero);
-		setMainnetInfos({});
-		setMainnetTotalEarned(ethers.constants.Zero);
-	}, [account]);
-
-	useEffect(() => {
-		if (chainId === config.MAINNET_NETWORK_NUMBER) {
-			setxDaiInfos({});
-			setxDaiTotalEarned(ethers.constants.Zero);
-		} else if (chainId === config.XDAI_NETWORK_NUMBER) {
-			setMainnetInfos({});
-			setMainnetTotalEarned(ethers.constants.Zero);
-		}
-	}, [chainId]);
+		setChainsInfo({});
+	}, [address]);
 
 	return (
 		<FarmContext.Provider
 			value={{
-				totalEarned:
-					chainId === config.MAINNET_NETWORK_NUMBER
-						? mainnetTotalEarned
-						: xDaiTotalEarned,
-				setInfo,
+				chainsInfo,
+				setChainInfo,
 			}}
 		>
 			{children}
@@ -113,7 +76,7 @@ export function useFarms() {
 	const context = useContext(FarmContext);
 
 	if (!context) {
-		throw new Error('Token balance context not found!');
+		throw new Error('Farms context not found!');
 	}
 
 	return context;

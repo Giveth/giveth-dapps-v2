@@ -1,6 +1,6 @@
 import { useIntl } from 'react-intl';
 import { GeneralMetatags } from '@/components/Metatag';
-import Spinner from '@/components/Spinner';
+import { WrappedSpinner } from '@/components/Spinner';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import NotificationView from '@/components/views/notification/notification.view';
 import WalletNotConnected from '@/components/WalletNotConnected';
@@ -13,7 +13,7 @@ const NotificationRoute = () => {
 	const { formatMessage } = useIntl();
 
 	if (isLoading) {
-		return <Spinner />;
+		return <WrappedSpinner />;
 	} else if (!isEnabled) {
 		return <WalletNotConnected />;
 	} else if (!isSignedIn) {

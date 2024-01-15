@@ -1,30 +1,29 @@
-import { useWeb3React } from '@web3-react/core';
 import { useEffect } from 'react';
-import WalletModal from '@/components/modals/WalletModal';
+import { useAccount } from 'wagmi';
 import WelcomeModal from '@/components/modals/WelcomeModal';
 import { FirstWelcomeModal } from '@/components/modals/FirstWelcomeModal';
 import { SignWithWalletModal } from '@/components/modals/SignWithWalletModal';
 import { CompleteProfileModal } from '@/components/modals/CompleteProfileModal';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
-	setShowWelcomeModal,
 	setShowFirstWelcomeModal,
-	setShowWalletModal,
 	setShowSignWithWallet,
 	setShowSearchModal,
 	setShowSwitchNetworkModal,
+	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
 import { isUserRegistered } from '@/lib/helpers';
 import { SearchModal } from '../modals/SearchModal';
 import SwitchNetwork from '../modals/SwitchNetwork';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const ModalController = () => {
 	const {
 		showCompleteProfile,
 		showFirstWelcomeModal,
 		showSignWithWallet,
-		showWalletModal,
 		showWelcomeModal,
 		showSearchModal,
 		showSwitchNetwork,
@@ -32,10 +31,13 @@ const ModalController = () => {
 
 	const { userData, isSignedIn } = useAppSelector(state => state.user);
 	const isRegistered = isUserRegistered(userData);
+	const { connector } = useAccount();
+	const isGSafeConnector = connector?.id === 'safe';
+	const isSafeEnv = useIsSafeEnvironment();
 
 	const dispatch = useAppDispatch();
 
-	const { active } = useWeb3React();
+	const { isConnected } = useGeneralWallet();
 
 	useEffect(() => {
 		if (isRegistered && showCompleteProfile) {
@@ -44,14 +46,16 @@ const ModalController = () => {
 	}, [isRegistered]);
 
 	useEffect(() => {
-		if (showWelcomeModal && active) {
+		if (showWelcomeModal && isConnected) {
 			dispatch(setShowWelcomeModal(false));
 		}
-	}, [active, showWelcomeModal]);
+	}, [isConnected, showWelcomeModal]);
 
 	//I think we need to handle it in better way
 	useEffect(() => {
-		if (isSignedIn && showSignWithWallet) {
+		// (Mateo): Only make it happen if it's not a gnosis safe environment
+		// we have a different logic for modal management there
+		if (isSignedIn && showSignWithWallet && !isSafeEnv) {
 			setTimeout(() => {
 				dispatch(setShowSignWithWallet(false));
 			}, 300);
@@ -60,13 +64,9 @@ const ModalController = () => {
 
 	return (
 		<>
-			{showWalletModal && (
-				<WalletModal
-					setShowModal={state => dispatch(setShowWalletModal(state))}
-				/>
-			)}
 			{showSignWithWallet && (
 				<SignWithWalletModal
+					isGSafeConnector={isGSafeConnector}
 					setShowModal={state =>
 						dispatch(setShowSignWithWallet(state))
 					}

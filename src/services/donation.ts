@@ -8,12 +8,17 @@ import { client } from '@/apollo/apolloClient';
 import { ICreateDonation } from '@/components/views/donate/helpers';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 
-interface IOnTxHash extends ICreateDonation {
-	txHash: string;
-	nonce: number;
+const SAVE_DONATION_ITERATIONS = 5;
+
+export interface IOnTxHash extends ICreateDonation {
+	txHash?: string | null;
+	nonce?: number | null;
+	chainId: number;
+	safeTransactionId?: string | null;
 }
 
 export const updateDonation = (donationId: number, status: EDonationStatus) => {
+	if (!donationId || donationId === 0) return;
 	client
 		.mutate({
 			mutation: UPDATE_DONATION_STATUS,
@@ -28,9 +33,22 @@ export const updateDonation = (donationId: number, status: EDonationStatus) => {
 		);
 };
 
+let saveDonationIteration = 0;
 export async function saveDonation(props: IOnTxHash) {
+	try {
+		return await createDonation(props);
+	} catch (error) {
+		saveDonationIteration++;
+		if (saveDonationIteration >= SAVE_DONATION_ITERATIONS) {
+			saveDonationIteration = 0;
+			throw error;
+		} else return saveDonation(props);
+	}
+}
+
+const createDonation = async (props: IOnTxHash) => {
 	const {
-		web3Context,
+		chainId,
 		txHash,
 		amount,
 		token,
@@ -38,11 +56,11 @@ export async function saveDonation(props: IOnTxHash) {
 		anonymous,
 		nonce,
 		chainvineReferred,
+		safeTransactionId,
 	} = props;
-	const { chainId } = web3Context;
 	const { address, symbol } = token;
-
 	let donationId = 0;
+
 	try {
 		const { data } = await client.mutate({
 			mutation: CREATE_DONATION,
@@ -56,6 +74,7 @@ export async function saveDonation(props: IOnTxHash) {
 				tokenAddress: address,
 				anonymous,
 				referrerId: chainvineReferred,
+				safeTransactionId,
 			},
 		});
 		donationId = data.createDonation;
@@ -65,52 +84,9 @@ export async function saveDonation(props: IOnTxHash) {
 				section: 'createDonation',
 			},
 		});
-		console.log(error);
+		console.log('createDonation error: ', error);
 		throw error;
 	}
-	console.log('DONATION ID: ', { donationId });
+
 	return donationId;
-}
-
-// export async function startTransakDonation({ project, setSuccess }) {
-//   const request = await fetch(`/api/transak`)
-//   const response = await request.json()
-//   const apiKey = response?.apiKey
-//   const transak = new transakSDK({
-//     apiKey: apiKey, // Your API Key
-//     environment: process.env.NEXT_PUBLIC_ENVIRONMENT == 'live' ? 'PRODUCTION' : 'STAGING', // STAGING/PRODUCTION
-//     defaultCryptoCurrency: 'DAI',
-//     walletAddress: project.walletAddress, // Your customer's wallet address
-//     themeColor: '000000', // App theme color
-//     // fiatCurrency: 'USD', // INR/GBP
-//     // defaultFiatAmount: amount,
-//     cryptoCurrencyList: 'DAI,USDT',
-//     email: '', // Your customer's email address
-//     redirectURL: '',
-//     hostURL: window.location.origin,
-//     widgetHeight: '550px',
-//     widgetWidth: '450px',
-//     exchangeScreenTitle: `Donate to ${project.title}`,
-//     hideMenu: true
-//   })
-
-//   transak.init()
-
-//   transak.on(transak.ALL_EVENTS, async data => {
-//     if (data?.eventName === 'TRANSAK_ORDER_SUCCESSFUL') {
-//       transak.close()
-//       setSuccess(data.status.walletLink)
-//     }
-//     if (data?.eventName === 'TRANSAK_ORDER_CREATED') {
-//       // data.status
-//       await saveDonationFromTransak(
-//         data.status.walletAddress,
-//         data.status.cryptoAmount,
-//         data.status.cryptoCurrency,
-//         parseFloat(project.id),
-//         data.status.id,
-//         data.status.status
-//       )
-//     }
-//   })
-// }
+};

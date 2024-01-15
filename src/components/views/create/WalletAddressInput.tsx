@@ -1,84 +1,69 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
+	Button,
 	Caption,
 	H6,
+	mediaQueries,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import { useWeb3React } from '@web3-react/core';
-import { utils } from 'ethers';
-
-import { compareAddresses } from '@/lib/helpers';
+import { isAddress } from 'viem';
+import { type Address, useNetwork } from 'wagmi';
+import { compareAddresses, findAddressByChain } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
-import config from '@/configuration';
 import Input, { InputSize } from '@/components/Input';
 import { EInputs } from '@/components/views/create/CreateProject';
 import { gqlAddressValidation } from '@/components/views/create/helpers';
-import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import CheckBox from '@/components/Checkbox';
-import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
+import { getAddressFromENS, isAddressENS, isSolanaAddress } from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';
-import { IconEthereum } from '@/components/Icons/Eth';
 import NetworkLogo from '@/components/NetworkLogo';
-import { networksParams } from '@/helpers/blockchain';
+import { getChainName } from '@/lib/network';
+import useFocus from '@/hooks/useFocus';
+import { ChainType, IChainType } from '@/types/config';
 
-interface IProps {
+interface IProps extends IChainType {
 	networkId: number;
 	userAddresses: string[];
-	sameAddress: boolean;
-	isActive: boolean;
-	setIsActive: (active: boolean) => void;
-	resolvedENS?: string;
-	setResolvedENS: (resolvedENS: string) => void;
+	onSubmit?: () => void;
 }
 
 const WalletAddressInput: FC<IProps> = ({
 	networkId,
 	userAddresses,
-	sameAddress,
-	isActive,
-	setIsActive,
-	resolvedENS,
-	setResolvedENS,
+	onSubmit,
+	chainType,
 }) => {
-	const {
-		register,
-		formState: { errors },
-		getValues,
-		clearErrors,
-	} = useFormContext();
+	const [resolvedENS, setResolvedENS] = useState<Address | undefined>();
 
-	const [isHidden, setIsHidden] = useState(false);
-	const [isValidating, setIsValidating] = useState(false);
-	const { formatMessage } = useIntl();
-
-	const { chainId, library } = useWeb3React();
+	const { getValues, setValue } = useFormContext();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	const user = useAppSelector(state => state.user?.userData);
-	const isMainnet = networkId === config.MAINNET_NETWORK_NUMBER;
-	const isGnosis = networkId === config.XDAI_NETWORK_NUMBER;
-	const isPolygon = networkId === config.POLYGON_NETWORK_NUMBER;
-	const isCelo = networkId === config.CELO_NETWORK_NUMBER;
-	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
-	const inputName = isGnosis
-		? EInputs.gnosisAddress
-		: isPolygon
-		? EInputs.polygonAddress
-		: isCelo
-		? EInputs.celoAddress
-		: isOptimism
-		? EInputs.optimismAddress
-		: EInputs.mainAddress;
-	const value = getValues(inputName);
-	const isDefaultAddress = compareAddresses(value, user?.walletAddress);
-	const error = errors[inputName];
-	const errorMessage = (error?.message || '') as string;
+
+	const inputName = EInputs.addresses;
+	const addresses = getValues(inputName);
+	const prevAddressObj = findAddressByChain(addresses, networkId, chainType);
+	const prevAddress = prevAddressObj?.address;
+
+	const [isValidating, setIsValidating] = useState(false);
+	const { formatMessage } = useIntl();
+	const [inputValue, setInputValue] = useState(prevAddress);
+	const [error, setError] = useState({
+		message: '',
+		ref: undefined,
+		type: undefined,
+	});
+
+	const isDefaultAddress = compareAddresses(prevAddress, user?.walletAddress);
+	const errorMessage = error.message;
+
 	const isAddressUsed =
 		errorMessage.indexOf(
 			formatMessage({ id: 'label.is_already_being_used_for_a_project' }),
@@ -87,31 +72,15 @@ const WalletAddressInput: FC<IProps> = ({
 	const delayedResolvedENS = useDelay(!!resolvedENS);
 	const delayedIsAddressUsed = useDelay(isAddressUsed);
 
-	let disabled: boolean;
-	if (isGnosis) disabled = !isActive;
-	else disabled = !isActive && !sameAddress;
-
 	let caption: string = '';
 	if (isDefaultAddress) {
 		caption = formatMessage({
 			id: 'label.this_is_the_default_address_associated_with_your_account',
 		});
-	} else if (errorMessage || !value) {
+	} else if (errorMessage || !prevAddress) {
 		caption = `${formatMessage({
 			id: 'label.you_can_enter_a_new_address',
-		})} ${
-			sameAddress
-				? formatMessage({ id: 'label.all_supported_networks' })
-				: isGnosis
-				? 'Gnosis Chain'
-				: isPolygon
-				? 'Polygon Mainnet'
-				: isCelo
-				? 'Celo Mainnet'
-				: isOptimism
-				? 'Optimism'
-				: 'Mainnet'
-		}.`;
+		})} ${getChainName(networkId, chainType)}.`;
 	}
 
 	const isProjectPrevAddress = (newAddress: string) => {
@@ -123,30 +92,24 @@ const WalletAddressInput: FC<IProps> = ({
 	};
 
 	const ENSHandler = async (ens: string) => {
-		if (networkId !== config.MAINNET_NETWORK_NUMBER) {
-			throw formatMessage({
-				id: 'label.ens_is_only_supported_on_mainnet',
-			});
-		}
 		if (chainId !== 1) {
 			throw formatMessage({
 				id: 'label.please_switcth_to_mainnet_to_handle_ens',
 			});
 		}
-		const address = await getAddressFromENS(ens, library);
+		const address = await getAddressFromENS(ens);
 		if (address) return address;
 		else throw formatMessage({ id: 'label.invalid_ens_address' });
 	};
 
-	const addressValidation = async (address: string) => {
+	const addressValidation = async (address?: string) => {
 		try {
-			clearErrors(inputName);
-			setResolvedENS('');
-			if (disabled) return true;
-			if (address.length === 0) {
+			setError({ ...error, message: '' });
+			setResolvedENS(undefined);
+			if (!address || address.length === 0) {
 				return formatMessage({ id: 'label.this_field_is_required' });
 			}
-			let _address = (' ' + address).slice(1);
+			let _address = (' ' + address).slice(1) as Address;
 			setIsValidating(true);
 			if (isAddressENS(address)) {
 				_address = await ENSHandler(address);
@@ -156,9 +119,24 @@ const WalletAddressInput: FC<IProps> = ({
 				setIsValidating(false);
 				return true;
 			}
-			if (!utils.isAddress(_address)) {
+			if (chainType === ChainType.SOLANA) {
+				if (!isSolanaAddress(_address)) {
+					setIsValidating(false);
+					return formatMessage(
+						{
+							id: 'label.eth_addres_not_valid',
+						},
+						{ type: chainType },
+					);
+				}
+			} else if (!isAddress(_address)) {
 				setIsValidating(false);
-				return formatMessage({ id: 'label.eth_addres_not_valid' });
+				return formatMessage(
+					{
+						id: 'label.eth_addres_not_valid',
+					},
+					{ type: 'ETH' },
+				);
 			}
 			const res = await gqlAddressValidation(_address);
 			setIsValidating(false);
@@ -169,82 +147,70 @@ const WalletAddressInput: FC<IProps> = ({
 		}
 	};
 
-	useEffect(() => {
-		if (sameAddress) {
-			setTimeout(() => setIsHidden(true), 250);
-		} else {
-			setIsHidden(false);
+	const addAddress = () => {
+		if (prevAddressObj) {
+			addresses.splice(addresses.indexOf(prevAddressObj), 1);
 		}
-	}, [sameAddress]);
+		const _addresses = [
+			...addresses,
+			{
+				chainType,
+				networkId,
+				address: resolvedENS || inputValue,
+			},
+		];
+		setValue(inputName, _addresses);
+		onSubmit && onSubmit();
+	};
 
-	if (isHidden && !isMainnet) return null;
+	useEffect(() => {
+		//We had an issue with onBlur so when the user clicks on submit exactly after filling the address, then process of address validation began, so i changed it to this.
+		if (inputValue === prevAddress) return;
+		addressValidation(inputValue).then(res => {
+			if (res === true) {
+				setError({ ...error, message: '' });
+				return;
+			}
+			setError({ ...error, message: res });
+		});
+	}, [inputValue]);
+
+	const [inputRef] = useFocus();
 
 	return (
-		<Container hide={sameAddress && !isMainnet}>
+		<Container>
 			<Header>
 				<H6>
-					{sameAddress
-						? formatMessage({ id: 'label.receiving_address' })
-						: formatMessage(
-								{ id: 'label.chain_address' },
-								{
-									chainName:
-										networksParams[networkId].chainName,
-								},
-						  )}
+					{formatMessage(
+						{ id: 'label.chain_address' },
+						{
+							chainName: getChainName(networkId, chainType),
+						},
+					)}
 				</H6>
 				<Flex gap='10px'>
-					{sameAddress ? (
-						<>
-							<MainnetIcon />
-							<GnosisIcon />
-							<PolygonIcon />
-							<CeloIcon />
-							<OptimismIcon />
-						</>
-					) : isGnosis ? (
-						<GnosisIcon />
-					) : isPolygon ? (
-						<PolygonIcon />
-					) : isCelo ? (
-						<CeloIcon />
-					) : isOptimism ? (
-						<OptimismIcon />
-					) : (
-						<MainnetIcon />
-					)}
+					<ChainIconShadow>
+						<NetworkLogo chainId={networkId} logoSize={24} />
+					</ChainIconShadow>
 				</Flex>
 			</Header>
 			<Input
-				label={
-					sameAddress
-						? formatMessage({ id: 'label.receiving_address' })
-						: formatMessage(
-								{
-									id: 'label.receiving_address_on',
-								},
-								{
-									chainName: isGnosis
-										? 'Gnosis Chain'
-										: isPolygon
-										? 'Polygon Mainnet'
-										: isCelo
-										? 'Celo Mainnet'
-										: isOptimism
-										? 'Optimism Mainnet'
-										: 'Mainnet',
-								},
-						  )
-				}
+				label={formatMessage(
+					{
+						id: 'label.receiving_address_on',
+					},
+					{
+						chainName: getChainName(networkId, chainType),
+					},
+				)}
+				ref={inputRef}
 				placeholder={formatMessage({ id: 'label.my_wallet_address' })}
 				caption={caption}
 				size={InputSize.LARGE}
-				disabled={disabled}
 				isValidating={isValidating}
-				register={register}
-				registerName={inputName}
-				registerOptions={{ validate: addressValidation }}
-				error={isAddressUsed ? undefined : error}
+				value={inputValue}
+				onChange={e => setInputValue(e.target.value)}
+				error={!error.message || !inputValue ? undefined : error}
 			/>
 			{delayedResolvedENS && (
 				<InlineToast
@@ -272,52 +238,18 @@ const WalletAddressInput: FC<IProps> = ({
 					})}
 				</Caption>
 			</ExchangeNotify>
-			{!isHidden && (
-				<CheckBoxContainer
-					className={sameAddress ? 'fadeOut' : 'fadeIn'}
-				>
-					<CheckBox
-						onChange={setIsActive}
-						label={formatMessage({
-							id: 'label.ill_receive_funds_on_this_address',
-						})}
-						checked={isActive}
-					/>
-				</CheckBoxContainer>
-			)}
+			<ButtonWrapper>
+				<Button
+					label='Add ADDRESS'
+					disabled={
+						error.message !== '' || !inputValue || isValidating
+					}
+					onClick={addAddress}
+				/>
+			</ButtonWrapper>
 		</Container>
 	);
 };
-
-const OptimismIcon = () => (
-	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.OPTIMISM_NETWORK_NUMBER} />
-	</ChainIconShadow>
-);
-
-const CeloIcon = () => (
-	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.CELO_NETWORK_NUMBER} />
-	</ChainIconShadow>
-);
-
-const PolygonIcon = () => (
-	<ChainIconShadow>
-		<NetworkLogo logoSize={24} chainId={config.POLYGON_NETWORK_NUMBER} />
-	</ChainIconShadow>
-);
-
-const GnosisIcon = () => (
-	<ChainIconShadow>
-		<IconGnosisChain size={24} />
-	</ChainIconShadow>
-);
-
-const MainnetIcon = () => (
-	<ChainIconShadow>
-		<IconEthereum size={24} />
-	</ChainIconShadow>
-);
 
 const Warning = styled(FlexCenter)`
 	flex-shrink: 0;
@@ -336,12 +268,6 @@ const ExchangeNotify = styled(Flex)`
 	margin-top: 24px;
 `;
 
-const CheckBoxContainer = styled.div`
-	margin-top: 24px;
-	padding-top: 11px;
-	border-top: 1px solid ${neutralColors.gray[300]};
-`;
-
 const ChainIconShadow = styled.div`
 	height: 24px;
 	width: fit-content;
@@ -357,15 +283,20 @@ const Header = styled.div`
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 `;
 
-const Container = styled.div<{ hide?: boolean }>`
+const Container = styled.div`
 	margin-top: 25px;
 	background: ${neutralColors.gray[100]};
 	border-radius: 12px;
 	padding: 16px;
-	opacity: ${props => (props.hide ? 0 : 1)};
-	visibility: ${props => (props.hide ? 'hidden' : 'visible')};
-	transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-	animation: fadeIn 0.3s ease-in-out;
+`;
+
+const ButtonWrapper = styled.div`
+	position: absolute;
+	right: 20px; // Adjust the distance from the right edge as per your need
+	bottom: 78px; // Adjust the distance from the bottom edge as per your need
+	${mediaQueries.tablet} {
+		bottom: 20px;
+	}
 `;
 
 export default WalletAddressInput;

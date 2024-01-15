@@ -1,32 +1,41 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { IconSearch, IconX } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import Input from '@/components/Input';
 import { useProjectsContext } from '@/context/projects.context';
-import { removeQueryParamAndRedirect } from '@/helpers/url';
 
 const ProjectsSearchTablet = () => {
-	const { variables, setVariables } = useProjectsContext();
+	const { variables } = useProjectsContext();
 	const [searchValue, setSearchValue] = useState(variables.searchTerm);
 	const router = useRouter();
-	const inputRef = useRef<HTMLInputElement>(null);
 
-	const handleSearch = (searchTerm?: string) =>
-		setVariables(prevVariables => ({ ...prevVariables, searchTerm }));
+	const handleSearch = (searchTerm?: string) => {
+		const updatedQuery = {
+			...router.query,
+			searchTerm,
+		};
+		router.push({
+			pathname: router.pathname,
+			query: updatedQuery,
+		});
+	};
 
 	const removeSearch = () => {
 		setSearchValue('');
-		handleSearch();
-		removeQueryParamAndRedirect(router, ['term']);
+		const updatedQuery = {
+			...router.query,
+		};
+		delete updatedQuery.searchTerm;
+		router.push({
+			pathname: router.pathname,
+			query: updatedQuery,
+		});
 	};
 
 	useEffect(() => {
-		if (inputRef.current) {
-			inputRef.current.focus();
-		}
 		setSearchValue(variables.searchTerm);
-	}, [variables.searchTerm, inputRef.current]);
+	}, [variables.searchTerm]);
 
 	return (
 		<SearchContainer className='fadeIn'>
@@ -40,7 +49,6 @@ const ProjectsSearchTablet = () => {
 					placeholder='SEARCH...'
 					value={searchValue}
 					onChange={e => setSearchValue(e.target.value)}
-					ref={inputRef}
 				/>
 			</form>
 			{variables.searchTerm ? (

@@ -20,20 +20,24 @@ import { LockupDetailsModal } from '@/components/modals/LockupDetailsModal';
 import TotalGIVpowerBox from '@/components/modals/StakeLock/TotalGIVpowerBox';
 import { FlexSpacer, Flex } from '@/components/styled-components/Flex';
 import { StakeCardState } from '../BaseStakingCard/BaseStakingCard';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import config from '@/configuration';
 import type { Dispatch, FC, SetStateAction } from 'react';
 
 interface IGIVpowerCardIntro {
+	poolNetwork: number;
 	setState: Dispatch<SetStateAction<StakeCardState>>;
 }
 
-const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
+const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({
+	poolNetwork,
+	setState,
+}) => {
 	const { formatMessage } = useIntl();
 	const [showLockDetailModal, setShowLockDetailModal] = useState(false);
 	const { stakedAmount } = useStakingPool(
-		getGivStakingConfig(config.XDAI_CONFIG),
+		config.EVM_NETWORKS_CONFIG[poolNetwork].GIVPOWER ||
+			config.GNOSIS_CONFIG.GIVPOWER,
 	);
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 
@@ -64,7 +68,7 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 						id: 'label.with_givpower_you_can_support_projects',
 					})}
 				</Desc>
-				<Link href={Routes.Projects}>
+				<Link href={Routes.AllProjects}>
 					<ButtonLink
 						label={formatMessage({ id: 'label.boost_projects' })}
 					/>
@@ -86,7 +90,7 @@ const GIVpowerCardIntro: FC<IGIVpowerCardIntro> = ({ setState }) => {
 			{showLockDetailModal && (
 				<LockupDetailsModal
 					setShowModal={setShowLockDetailModal}
-					unstakeable={stakedAmount.sub(userGIVLocked.balance)}
+					unstakeable={stakedAmount - BigInt(userGIVLocked.balance)}
 				/>
 			)}
 		</>

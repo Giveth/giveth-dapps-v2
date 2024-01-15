@@ -83,7 +83,7 @@ export const HeaderButton = styled(CButton)<IHeaderButtonProps>`
 								? brandColors.giv[600]
 								: 'white'};
 					}
-			  `
+				`
 			: ''}
 `;
 
@@ -248,11 +248,14 @@ export const SmallCreateProject = styled(Button)`
 	}
 `;
 
-export const LargeCreateProject = styled.div`
+export const LargeCreateProject = styled.div<{ isTexty?: boolean }>`
 	display: none;
 	> button {
+		${props => props.isTexty && `height: 50px;`}
 		box-shadow: ${props =>
-			props.theme === ETheme.Dark ? '' : Shadow.Dark[500]};
+			props.theme === ETheme.Dark || props.isTexty
+				? ''
+				: Shadow.Dark[500]};
 	}
 
 	${mediaQueries.laptopS} {
@@ -294,6 +297,7 @@ export const HomeButton = styled(Flex)`
 
 export const HeaderSidebarButtonWrapper = styled.div`
 	padding: 12px;
+	position: relative;
 `;
 
 export const SidebarInnerContainer = styled(Flex)`

@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import check_stars from '/public/images/icons/check_stars.svg';
 import failed_stars from '/public/images/icons/failed_stars.svg';
-import LoadingAnimation from '@/animations/loading_giv.json';
 import { SEND_EMAIL_VERIFICATION_TOKEN } from '@/apollo/gql/gqlVerification';
 import { client } from '@/apollo/apolloClient';
 import { slugToVerification } from '@/lib/routeCreators';
@@ -18,7 +17,7 @@ import {
 	VerificationCard,
 	VerificationContainer,
 } from './Common.sc';
-import LottieControl from '@/components/LottieControl';
+import { WrappedSpinner } from '@/components/Spinner';
 
 export enum EEmailVerificationStatus {
 	Pending = 'Pending',
@@ -37,9 +36,7 @@ const ContentSelector: FC<IContentSelector> = ({ status }) => {
 		case EEmailVerificationStatus.Rejected:
 			return <Rejected />;
 		default:
-			return (
-				<LottieControl animationData={LoadingAnimation} size={250} />
-			);
+			return <WrappedSpinner size={250} />;
 	}
 };
 

@@ -8,15 +8,17 @@ import {
 	IconWalletOutline16,
 	P,
 	brandColors,
+	mediaQueries,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex } from './styled-components/Flex';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
-import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
 import Routes from '@/lib/constants/Routes';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 enum EPBGState {
 	SUCCESS,
@@ -65,7 +67,7 @@ export const PassportBannerData: IData = {
 		bg: EPBGState.INFO,
 		icon: <IconInfoOutline24 color={semanticColors.golden[700]} />,
 		link: {
-			label: 'label.passport.link.update_score',
+			label: 'label.passport.link.go_to_passport',
 			url: Routes.Passport,
 		},
 	},
@@ -74,7 +76,7 @@ export const PassportBannerData: IData = {
 		bg: EPBGState.WARNING,
 		icon: <IconAlertTriangleFilled24 color={brandColors.giv[500]} />,
 		link: {
-			label: 'label.passport.link.update_score',
+			label: 'label.passport.link.go_to_passport',
 			url: Routes.Passport,
 		},
 	},
@@ -83,7 +85,7 @@ export const PassportBannerData: IData = {
 		bg: EPBGState.SUCCESS,
 		icon: <IconVerifiedBadge24 color={semanticColors.jade[600]} />,
 		link: {
-			label: 'label.passport.link.update_score',
+			label: 'label.passport.link.go_to_passport',
 			url: Routes.Passport,
 		},
 	},
@@ -91,6 +93,11 @@ export const PassportBannerData: IData = {
 		content: 'label.passport.ended',
 		bg: EPBGState.ERROR,
 		icon: <IconAlertTriangleFilled24 color={semanticColors.punch[500]} />,
+	},
+	[EPassportState.NOT_STARTED]: {
+		content: 'label.passport.no_active_round',
+		bg: EPBGState.INFO,
+		icon: <IconAlertTriangleFilled24 color={semanticColors.golden[500]} />,
 	},
 	[EPassportState.NOT_ACTIVE_ROUND]: {
 		content: 'label.passport.no_active_round',
@@ -111,6 +118,11 @@ export const PassportBannerData: IData = {
 		bg: EPBGState.ERROR,
 		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
 	},
+	[EPassportState.NOT_AVAILABLE_FOR_GSAFE]: {
+		content: 'label.unfortunately_passport_is_incompatible',
+		bg: EPBGState.ERROR,
+		icon: <IconInfoOutline24 color={semanticColors.punch[500]} />,
+	},
 };
 
 export const PassportBanner = () => {
@@ -118,32 +130,33 @@ export const PassportBanner = () => {
 	const { passportState, currentRound } = info;
 
 	const { formatMessage, locale } = useIntl();
+	const { open: openConnectModal } = useWeb3Modal();
+	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 
-	const { modalCallback: connectThenSignIn } = useModalCallback(
-		handleSign,
-		EModalEvents.CONNECTED,
-	);
-
-	return (
+	return !isOnSolana ? (
 		<PassportBannerWrapper bgColor={PassportBannerData[passportState].bg}>
-			{PassportBannerData[passportState].icon}
-			<P>
-				{formatMessage({
-					id: PassportBannerData[passportState].content,
-				})}
-				{currentRound &&
-					(passportState === EPassportState.NOT_CREATED ||
-						passportState === EPassportState.NOT_ELIGIBLE) && (
-						<strong>
-							{new Date(currentRound.endDate)
-								.toLocaleString(locale || 'en-US', {
-									day: 'numeric',
-									month: 'short',
-								})
-								.replace(/,/g, '')}
-						</strong>
-					)}
-			</P>
+			<Flex gap='8px' alignItems='center'>
+				<IconWrapper>
+					{PassportBannerData[passportState].icon}
+				</IconWrapper>
+				<P>
+					{formatMessage({
+						id: PassportBannerData[passportState].content,
+					})}
+					{currentRound &&
+						(passportState === EPassportState.NOT_CREATED ||
+							passportState === EPassportState.NOT_ELIGIBLE) && (
+							<strong>
+								{new Date(currentRound.endDate)
+									.toLocaleString(locale || 'en-US', {
+										day: 'numeric',
+										month: 'short',
+									})
+									.replace(/,/g, '')}
+							</strong>
+						)}
+				</P>
+			</Flex>
 			{PassportBannerData[passportState].link && (
 				<StyledLink
 					as='a'
@@ -161,7 +174,7 @@ export const PassportBanner = () => {
 				</StyledLink>
 			)}
 			{passportState === EPassportState.NOT_CONNECTED && (
-				<StyledLink onClick={() => connectThenSignIn()}>
+				<StyledLink onClick={() => openConnectModal?.()}>
 					<GLink>
 						{formatMessage({
 							id: 'component.button.connect_wallet',
@@ -181,6 +194,19 @@ export const PassportBanner = () => {
 				</StyledLink>
 			)}
 		</PassportBannerWrapper>
+	) : (
+		<PassportBannerWrapper bgColor={PassportBannerData[passportState].bg}>
+			<P>
+				{formatMessage({
+					id: 'label.to_activate_your_gitcoin_passport',
+				})}
+			</P>
+			<StyledP onClick={handleSingOutAndSignInWithEVM}>
+				{formatMessage({
+					id: 'label.switch_to_evm',
+				})}
+			</StyledP>
+		</PassportBannerWrapper>
 	);
 };
 
@@ -189,16 +215,30 @@ interface IPassportBannerWrapperProps {
 }
 
 export const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
-	height: 56px;
+	flex-direction: column;
 	background-color: ${props => bgColor[props.bgColor]};
 	padding: 16px;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
 	position: relative;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
+`;
+
+const IconWrapper = styled.div`
+	width: 24px;
 `;
 
 const StyledLink = styled(Flex)`
+	color: ${brandColors.giv[500]};
+	align-items: center;
+	gap: 4px;
+	cursor: pointer;
+`;
+
+const StyledP = styled(P)`
 	color: ${brandColors.giv[500]};
 	align-items: center;
 	gap: 4px;

@@ -5,11 +5,10 @@ import {
 	P,
 	brandColors,
 } from '@giveth/ui-design-system';
-import BigNumber from 'bignumber.js';
-import { useWeb3React } from '@web3-react/core';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { Col, Container, Row } from '@giveth/ui-design-system';
+import { useNetwork } from 'wagmi';
 import { Flex } from '../styled-components/Flex';
 import {
 	GIVbacksTopContainer,
@@ -41,7 +40,6 @@ import { GIVBackExplainModal } from '../modals/GIVBackExplain';
 import { NoWrap, TopInnerContainer } from './commons';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
-import { BN } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 
@@ -49,24 +47,30 @@ export const TabGIVbacksTop = () => {
 	const { formatMessage } = useIntl();
 	const [showHarvestModal, setShowHarvestModal] = useState(false);
 	const [showGivBackExplain, setShowGivBackExplain] = useState(false);
-	const [givBackStream, setGivBackStream] = useState<BigNumber.Value>(0);
+	const [givBackStream, setGivBackStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper(showHarvestModal);
-	const xDaiValues = useAppSelector(
-		state => state.subgraph.xDaiValues,
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const values = useAppSelector(
+		state =>
+			chainId === config.OPTIMISM_NETWORK_NUMBER
+				? state.subgraph.optimismValues
+				: state.subgraph.gnosisValues,
 		() => (showHarvestModal ? true : false),
 	);
+
 	const givTokenDistroBalance = useMemo(() => {
-		const sdh = new SubgraphDataHelper(xDaiValues);
+		const sdh = new SubgraphDataHelper(values);
 		return sdh.getGIVTokenDistroBalance();
-	}, [xDaiValues]);
-	const { chainId } = useWeb3React();
+	}, [values]);
+
+	const givbackLiquidPart = BigInt(givTokenDistroBalance.givbackLiquidPart);
 
 	useEffect(() => {
-		const _givback = BN(givTokenDistroBalance.givback);
 		setGivBackStream(
-			givTokenDistroHelper.getStreamPartTokenPerWeek(_givback),
+			givTokenDistroHelper.getStreamPartTokenPerWeek(givbackLiquidPart),
 		);
-	}, [givTokenDistroBalance, givTokenDistroHelper]);
+	}, [givTokenDistroBalance, givTokenDistroHelper, givbackLiquidPart]);
 
 	return (
 		<>
@@ -86,15 +90,11 @@ export const TabGIVbacksTop = () => {
 						</Col>
 						<Col xs={12} sm={5} xl={4}>
 							<GIVbackRewardCard
+								cardName='GIVbacks'
 								title={formatMessage({
 									id: 'label.your_givbacks_rewards',
 								})}
-								wrongNetworkText={formatMessage({
-									id: 'label.givbacks_is_only_available_on_gnosis',
-								})}
-								liquidAmount={BN(
-									givTokenDistroBalance.givbackLiquidPart,
-								)}
+								liquidAmount={givbackLiquidPart}
 								stream={givBackStream}
 								actionLabel={formatMessage({
 									id: 'label.harvest',
@@ -103,17 +103,27 @@ export const TabGIVbacksTop = () => {
 									setShowHarvestModal(true);
 								}}
 								subButtonLabel={
-									BN(
-										givTokenDistroBalance.givbackLiquidPart,
-									)?.isZero()
+									givbackLiquidPart === 0n
 										? formatMessage({
 												id: 'label.why_dont_i_have_givbacks',
-										  })
+											})
 										: undefined
 								}
 								subButtonCb={() => setShowGivBackExplain(true)}
 								network={chainId}
-								targetNetworks={[config.XDAI_NETWORK_NUMBER]}
+								targetNetworks={[
+									{
+										networkId: config.GNOSIS_NETWORK_NUMBER,
+										chainType:
+											config.GNOSIS_CONFIG.chainType,
+									},
+									{
+										networkId:
+											config.OPTIMISM_NETWORK_NUMBER,
+										chainType:
+											config.OPTIMISM_CONFIG.chainType,
+									},
+								]}
 							/>
 						</Col>
 					</Row>
@@ -171,7 +181,7 @@ export const TabGIVbacksBottom = () => {
 						<GbDataBlock
 							title={formatMessage({ id: 'label.donor_rewards' })}
 							button={
-								<Link href={Routes.Projects}>
+								<Link href={Routes.AllProjects}>
 									<GbButton
 										label={formatMessage({
 											id: 'label.donate_to_earn_giv',
@@ -242,7 +252,7 @@ export const TabGIVbacksBottom = () => {
 													? formatDate(
 															roundStarTime,
 															locale,
-													  )
+														)
 													: '--'}
 											</NoWrap>
 										</P>
@@ -265,7 +275,7 @@ export const TabGIVbacksBottom = () => {
 													? formatDate(
 															roundEndTime,
 															locale,
-													  )
+														)
 													: '--'}
 											</NoWrap>
 										</P>
@@ -290,7 +300,7 @@ export const TabGIVbacksBottom = () => {
 											</NoWrap>
 										</GivAllocated>
 									</RoundInfoTallRow>
-									<Link href={Routes.Projects}>
+									<Link href={Routes.AllProjects}>
 										<RoundButton
 											size='small'
 											label={formatMessage({

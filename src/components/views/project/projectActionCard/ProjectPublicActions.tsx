@@ -6,10 +6,15 @@ import {
 	IconHeartFilled16,
 	IconHeartOutline16,
 	mediaQueries,
+	neutralColors,
+	semanticColors,
+	IconDonation16,
+	SublineBold,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import ShareModal from '@/components/modals/ShareModal';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
@@ -19,16 +24,16 @@ import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { isSSRMode, showToastError } from '@/lib/helpers';
-import { useModalCallback, EModalEvents } from '@/hooks/useModalCallback';
+import { useModalCallback } from '@/hooks/useModalCallback';
 import {
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
 } from '@/features/user/user.slice';
-import { startChainvineReferral } from '@/features/user/user.thunks';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { FETCH_PROJECT_REACTION_BY_ID } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { slugToProjectDonate } from '@/lib/routeCreators';
+import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 
 export const ProjectPublicActions = () => {
 	const [showModal, setShowShareModal] = useState<boolean>(false);
@@ -48,6 +53,8 @@ export const ProjectPublicActions = () => {
 	} = useAppSelector(state => state.user);
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
+	const { open: openConnectModal } = useWeb3Modal();
+	const alreadyDonated = useAlreadyDonatedToProject(projectData);
 
 	useEffect(() => {
 		const fetchProjectReaction = async () => {
@@ -120,23 +127,10 @@ export const ProjectPublicActions = () => {
 	const { modalCallback: signInThenLike } =
 		useModalCallback(likeUnlikeProject);
 
-	const { modalCallback: connectThenSignIn } = useModalCallback(
-		signInThenLike,
-		EModalEvents.CONNECTED,
-	);
-
-	const setReferral = async () => {
-		await dispatch(
-			startChainvineReferral({
-				address: user?.walletAddress!,
-			}),
-		);
-	};
-
 	const checkSignInThenLike = () => {
 		if (isSSRMode) return;
 		if (!isEnabled) {
-			connectThenSignIn();
+			openConnectModal?.();
 		} else if (!isSignedIn) {
 			signInThenLike();
 		} else {
@@ -146,6 +140,16 @@ export const ProjectPublicActions = () => {
 
 	return (
 		<ProjectPublicActionsWrapper gap='16px'>
+			{alreadyDonated && (
+				<AlreadyDonatedWrapper>
+					<IconDonation16 />
+					<SublineBold>
+						{formatMessage({
+							id: 'component.already_donated.once_more',
+						})}
+					</SublineBold>
+				</AlreadyDonatedWrapper>
+			)}
 			<Link href={slugToProjectDonate(slug || '')}>
 				<DonateButton
 					label={formatMessage({ id: 'label.donate' })}
@@ -159,7 +163,6 @@ export const ProjectPublicActions = () => {
 					onClick={() => isActive && setShowShareModal(true)}
 					isSimple={isMobile}
 				/>
-
 				<StyledButton
 					label={totalReactions.toString()}
 					onClick={() => isActive && checkSignInThenLike()}
@@ -197,7 +200,9 @@ export const ProjectPublicActions = () => {
 };
 
 const ProjectPublicActionsWrapper = styled(Flex)`
-	flex-direction: column;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 100%;
 	${mediaQueries.tablet} {
 		flex-direction: row-reverse;
 		justify-content: space-between;
@@ -205,6 +210,12 @@ const ProjectPublicActionsWrapper = styled(Flex)`
 	${mediaQueries.laptopS} {
 		flex-direction: column;
 	}
+`;
+
+const AlreadyDonatedWrapper = styled(Flex)`
+	margin: 4px 0;
+	gap: 8px;
+	color: ${semanticColors.jade[500]};
 `;
 
 const DonateButton = styled(ButtonLink)`
@@ -223,12 +234,8 @@ const StyledButton = styled(Button)`
 	& > div[loading='1'] > div {
 		left: 0;
 	}
-`;
-
-const StyledShareButton = styled(StyledButton)`
-	padding: 16px 8px;
-	* {
-		font-size: 12px;
-		text-transform: capitalize;
+	color: ${neutralColors.gray[700]};
+	&:hover {
+		color: ${neutralColors.gray[800]};
 	}
 `;

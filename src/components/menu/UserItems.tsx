@@ -1,19 +1,16 @@
 import { Dispatch, FC, SetStateAction } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import { useIntl } from 'react-intl';
 import { B, GLink } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
+import { useNetwork } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
-import { isUserRegistered, networkInfo, shortenAddress } from '@/lib/helpers';
-import StorageLabel from '@/lib/localStorage';
+import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import {
-	setShowCompleteProfile,
-	setShowSwitchNetworkModal,
-	setShowWalletModal,
-} from '@/features/modal/modal.slice';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
 import {
 	ItemRow,
@@ -25,6 +22,8 @@ import {
 import { Item } from './Item';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
+import StorageLabel from '@/lib/localStorage';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 interface IUserItemsProps {
 	setSignWithWallet: Dispatch<SetStateAction<boolean>>;
@@ -36,11 +35,18 @@ export const UserItems: FC<IUserItemsProps> = ({
 	setQueueRoute,
 }) => {
 	const { formatMessage } = useIntl();
-	const { chainId, account, deactivate } = useWeb3React();
+
+	const { walletAddress, disconnect, chainName } = useGeneralWallet();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
 	const theme = useAppSelector(state => state.general.theme);
+	const isSafeEnv = useIsSafeEnvironment();
+
+	const { open: openChainModal } = useWeb3Modal();
+
 	const goRoute = (input: {
 		url: string;
 		requiresSign: boolean;
@@ -58,7 +64,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 		router.push(url);
 	};
 
-	const { networkName } = networkInfo(chainId);
+	const networkName = chainName;
 
 	return (
 		<>
@@ -67,16 +73,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 					{formatMessage({ id: 'label.wallet' })}
 				</ItemTitle>
 				<ItemRow>
-					<B>{shortenAddress(account)}</B>
-					<ItemAction
-						size='Small'
-						onClick={() => {
-							window.localStorage.removeItem(StorageLabel.WALLET);
-							dispatch(setShowWalletModal(true));
-						}}
-					>
-						{formatMessage({ id: 'label.change_wallet' })}
-					</ItemAction>
+					<B>{shortenAddress(walletAddress)}</B>
 				</ItemRow>
 			</Item>
 			<Item theme={theme}>
@@ -88,14 +85,15 @@ export const UserItems: FC<IUserItemsProps> = ({
 						<NetworkLogo chainId={chainId} logoSize={16} />
 						<NetworkName>{networkName}</NetworkName>
 					</FlexCenter>
-					<ItemAction
-						size='Small'
-						onClick={() =>
-							dispatch(setShowSwitchNetworkModal(true))
-						}
-					>
-						{formatMessage({ id: 'label.switch_network' })}
-					</ItemAction>
+
+					{!isSafeEnv && (
+						<ItemAction
+							size='Small'
+							onClick={() => openChainModal && openChainModal()}
+						>
+							{formatMessage({ id: 'label.switch_network' })}
+						</ItemAction>
+					)}
 				</ItemRow>
 			</Item>
 			<ItemSpacer />
@@ -104,18 +102,20 @@ export const UserItems: FC<IUserItemsProps> = ({
 					<GLink size='Big'>{formatMessage({ id: i.title })}</GLink>
 				</Item>
 			))}
-			<Item
-				onClick={() => {
-					isSignedIn && dispatch(signOut(token!));
-					deactivate();
-					localStorage.removeItem(StorageLabel.WALLET);
-				}}
-				theme={theme}
-			>
-				<GLink size='Big'>
-					{formatMessage({ id: 'label.sign_out' })}
-				</GLink>
-			</Item>
+			{!isSafeEnv && (
+				<Item
+					onClick={() => {
+						isSignedIn && dispatch(signOut(token!));
+						localStorage.removeItem(StorageLabel.WALLET);
+						disconnect();
+					}}
+					theme={theme}
+				>
+					<GLink size='Big'>
+						{formatMessage({ id: 'label.sign_out' })}
+					</GLink>
+				</Item>
+			)}
 		</>
 	);
 };

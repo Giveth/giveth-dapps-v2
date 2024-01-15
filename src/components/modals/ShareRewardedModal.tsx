@@ -12,11 +12,11 @@ import {
 	brandColors,
 	neutralColors,
 	IconExternalLink,
-	IconTwitter,
 	IconLinkedin,
 	IconFacebook,
 	IconAlertTriangleOutline,
 	mediaQueries,
+	IconXSocial,
 } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -61,12 +61,9 @@ function getMessageWithBoldText(
 	return parts.map((part, index) => {
 		if (part.startsWith('<strong>') && part.endsWith('</strong>')) {
 			const text = part.replace(/<\/?strong>/g, '');
-			console.log({ text });
 
 			return <strong key={index}>{text}</strong>;
 		}
-		console.log({ part });
-
 		return part;
 	});
 }
@@ -84,8 +81,8 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 				slugToProjectView(
 					projectHref + `?referrer_id=${user?.chainvineId}`,
 				),
-		  )
-		: fullPath(Routes.Projects + `?referrer_id=${user?.chainvineId}`);
+			)
+		: fullPath(Routes.AllProjects + `?referrer_id=${user?.chainvineId}`);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const [error, setError] = useState(false);
@@ -145,34 +142,34 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 				{error
 					? formatMessage({
 							id: 'label.we_ran_into_an_issue_and_couldnt_generate_your_referral',
-					  })
+						})
 					: notSigned
-					? getMessageWithBoldText(
-							formatMessage({
-								id: 'label.connet_your_wallet_and_sign_in_to_get_your_referral',
-							}),
-					  )
-					: chainvineId && projectTitle
-					? getMessageWithBoldText(
-							formatMessage(
-								{
-									id: 'label.heres_your_referral',
-								},
-								{ projectTitle },
-							),
-							projectTitle,
-					  )
-					: chainvineId && (
-							<>
-								{formatMessage({
-									id: 'label.heres_your_unique_referral',
-								})}
-								<br />
-								{formatMessage({
-									id: 'label.share_your_unique_link_to_get_started',
-								})}
-							</>
-					  )}
+						? getMessageWithBoldText(
+								formatMessage({
+									id: 'label.connet_your_wallet_and_sign_in_to_get_your_referral',
+								}),
+							)
+						: chainvineId && projectTitle
+							? getMessageWithBoldText(
+									formatMessage(
+										{
+											id: 'label.heres_your_referral',
+										},
+										{ projectTitle },
+									),
+									projectTitle,
+								)
+							: chainvineId && (
+									<>
+										{formatMessage({
+											id: 'label.heres_your_unique_referral',
+										})}
+										<br />
+										{formatMessage({
+											id: 'label.share_your_unique_link_to_get_started',
+										})}
+									</>
+								)}
 			</Content>
 			<Container>
 				{error ? (
@@ -219,7 +216,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 									url={url}
 								>
 									<SocialButtonContainer>
-										<IconTwitter />
+										<IconXSocial />
 										{formatMessage({
 											id: 'label.share_on_twitter',
 										})}

@@ -1,28 +1,35 @@
-import { promisify } from 'util';
 // eslint-disable-next-line import/named
 import unescape from 'lodash/unescape';
 
-import { parseEther, parseUnits } from '@ethersproject/units';
-import { keccak256 } from '@ethersproject/keccak256';
-import { Contract } from '@ethersproject/contracts';
-import { Web3Provider } from '@ethersproject/providers';
-import { AddressZero } from '@ethersproject/constants';
-import { brandColors } from '@giveth/ui-design-system';
-// @ts-ignore
-import abi from 'human-standard-token-abi';
+// import { keccak256 } from '@ethersproject/keccak256';
 
+import { getContract } from 'wagmi/actions';
+import {
+	writeContract,
+	sendTransaction as wagmiSendTransaction,
+} from '@wagmi/core';
+
+// @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { BasicNetworkConfig, GasPreference } from '@/types/config';
-import { EWallets } from '@/lib/wallet/walletTypes';
+import { type Address, erc20ABI } from 'wagmi';
+import { Chain, parseEther, parseUnits } from 'viem';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
+import { getRequest } from '@/helpers/requests';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
-import StorageLabel from '@/lib/localStorage';
-import { networksParams } from '@/helpers/blockchain';
-import config from '@/configuration';
-import { ERC20 } from '@/types/contracts';
+import config, { isProduction } from '@/configuration';
+import { AddressZero } from './constants/constants';
+import { ChainType, NonEVMChain } from '@/types/config';
 
 declare let window: any;
+interface TransactionParams {
+	to: Address;
+	value: string;
+}
+
+const defaultLocale = process.env.defaultLocale;
+const locales = process.env.locales;
 
 export const fullPath = (path: string) => `${config.FRONTEND_LINK}${path}`;
 
@@ -33,9 +40,9 @@ export const formatBalance = (balance?: string | number) => {
 	});
 };
 
-export const formatUSD = (balance?: string | number) => {
+export const formatUSD = (balance?: string | number, decimals = 2) => {
 	return parseFloat(String(balance || 0)).toLocaleString('en-US', {
-		maximumFractionDigits: 2,
+		maximumFractionDigits: decimals,
 	});
 };
 
@@ -45,18 +52,77 @@ export const formatPrice = (balance?: string | number) => {
 	});
 };
 
+export const truncateToDecimalPlaces = (strNum: string, decimals: number) => {
+	let index = strNum.indexOf('.');
+	if (index === -1 || decimals < 1) {
+		return Number(strNum);
+	}
+	let length = index + 1 + decimals;
+	return Number(strNum.substring(0, length));
+};
+
 export const thousandsSeparator = (x?: string | number): string | undefined => {
 	return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
-export const formatTxLink = (networkId?: number, txHash?: string) => {
-	if (!networkId || !txHash || !networksParams[networkId]) return '';
-	return `${networksParams[networkId].blockExplorerUrls[0]}tx/${txHash}`;
+export const formatTxLink = (params: {
+	txHash?: string;
+	chainType?: ChainType;
+	networkId?: number;
+}) => {
+	const { txHash, chainType, networkId } = params;
+	if (chainType === ChainType.SOLANA) {
+		return formatSolanaTxLink(txHash);
+	}
+	return formatEvmTxLink(networkId, txHash);
 };
 
-export function formatWalletLink(chainId?: number, address?: string) {
-	if (!address || !chainId || !networksParams[chainId]) return '';
-	return `${networksParams[chainId]?.blockExplorerUrls[0]}/address/${address}`;
+const formatEvmTxLink = (networkId?: number, txHash?: string) => {
+	if (!networkId || !txHash || !config.EVM_NETWORKS_CONFIG[networkId])
+		return '';
+	return `${config.EVM_NETWORKS_CONFIG[networkId].blockExplorers?.default.url}/tx/${txHash}`;
+};
+
+const formatSolanaTxLink = (txHash?: string) => {
+	if (!txHash) return '';
+
+	const baseUrl = `${config.SOLANA_CONFIG.blockExplorers.default.url}/tx/${txHash}`;
+
+	if (isProduction) {
+		return baseUrl;
+	}
+	// Test environment
+	return `${baseUrl}?cluster=devnet`;
+};
+
+export function formatWalletLink(
+	walletChainType: ChainType | null,
+	chain?: Chain | WalletAdapterNetwork,
+	address?: string,
+) {
+	if (!address || !chain || !walletChainType) return '';
+
+	switch (walletChainType) {
+		case ChainType.EVM:
+			const chainId = (chain as Chain)?.id;
+			if (!config.EVM_NETWORKS_CONFIG[chainId]) return '';
+			return `${config.EVM_NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/address/${address}`;
+
+		case ChainType.SOLANA:
+			const url = `https://explorer.solana.com/address/${address}`;
+			switch (chain) {
+				case WalletAdapterNetwork.Mainnet:
+					return url;
+				case WalletAdapterNetwork.Devnet:
+					return `${url}?cluster=devnet`;
+				case WalletAdapterNetwork.Testnet:
+					return `${url}?cluster=testnet`;
+			}
+			return '';
+
+		default:
+			return '';
+	}
 }
 
 export const durationToYMDh = (
@@ -149,25 +215,30 @@ export const smallFormatDate = (date: Date, locale?: string) => {
 		.replace(/,/g, '');
 };
 
-export const getGasPreference = (
-	networkConfig: BasicNetworkConfig,
-): GasPreference => {
-	const selectedWallet = window.localStorage.getItem(StorageLabel.WALLET);
-	// MetaMask works with gas preference config
-	if (selectedWallet === EWallets.METAMASK)
-		return networkConfig.gasPreference || {};
-
-	// For torus, it should be empty to work!
-	return {};
-};
-
 export const isSSRMode = typeof window === 'undefined';
 
-export const suggestNewAddress = (addresses?: IWalletAddress[]) => {
+export const suggestNewAddress = (
+	addresses: IWalletAddress[],
+	chain: Chain | NonEVMChain,
+) => {
 	if (!addresses || addresses.length < 1) return '';
-	const isSame = compareAddressesArray(addresses.map(a => a.address));
+	const EVMAddresses = addresses.filter(
+		address =>
+			address.chainType === ChainType.EVM ||
+			address.chainType === undefined,
+	);
+	// We shouldn't suggest anything for NON EVM address input
+	const isSame = compareAddressesArray(EVMAddresses.map(a => a.address));
 	if (isSame) {
-		return addresses[0].address;
+		// Don't suggest EVM addresses for Non EVM address input
+		if (
+			'chainType' in chain &&
+			chain.chainType !== ChainType.EVM &&
+			chain.chainType !== undefined
+		) {
+			return '';
+		}
+		return EVMAddresses[0].address;
 	} else {
 		return '';
 	}
@@ -197,6 +268,18 @@ export const compareAddressesArray = (
 	return new Set(lowerCaseAddresses).size === 1;
 };
 
+export const findAddressByChain = (
+	addresses: IWalletAddress[],
+	chainId: number,
+	chainType?: ChainType,
+) => {
+	return addresses?.find(address =>
+		chainId
+			? address.networkId === chainId
+			: address.chainType === chainType,
+	);
+};
+
 export const isUserRegistered = (user?: IUser) => {
 	// You should check if user is isSignedIn then call this function
 	return Boolean(user && user.name && user.email);
@@ -216,17 +299,11 @@ export const capitalizeFirstLetter = (string: string) => {
 	return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-const noImgColors = [
-	brandColors.cyan[500],
-	brandColors.mustard[500],
-	brandColors.giv[500],
-];
-export const noImgColor = () => noImgColors[Math.floor(Math.random() * 3)];
+export const capitalizeAllWords = (string: string) => {
+	return string.split(' ').map(capitalizeFirstLetter).join(' ');
+};
 
-export const noImgIcon = '/images/GIV-icon-text.svg';
-
-export const isNoImg = (image: string | undefined) =>
-	!(image && !Number(image));
+export const isNoImg = (image: string | undefined) => !image || image === '';
 
 export const shortenAddress = (
 	address: string | null | undefined,
@@ -244,49 +321,23 @@ export const shortenAddress = (
 	)}`;
 };
 
-export async function sendTransaction(
-	web3: Web3Provider,
-	params: { to: string; value: string },
-	txCallbacks: {
-		onTxHash: (hash: string, nonce: number) => void;
-		onReceipt: (receipt: any) => void;
-	},
-	contractAddress: string,
+// Sends a transaction, either as an ERC20 token transfer or a regular ETH transfer.
+export async function sendEvmTransaction(
+	params: TransactionParams,
+	contractAddress?: Address,
 ) {
 	try {
-		let tx;
-		const txParams: any = {
-			to: params.to,
-		};
+		let hash: Address;
 
-		const fromSigner = web3.getSigner();
 		if (contractAddress && contractAddress !== AddressZero) {
-			// ERC20 TRANSFER
-			const contract = new Contract(
-				contractAddress,
-				abi,
-				fromSigner,
-			) as ERC20;
-			const decimals = await contract.decimals();
-			txParams.value = parseUnits(params.value, decimals);
-			tx = await contract.transfer(txParams.to, txParams.value);
+			hash = await handleErc20Transfer(params, contractAddress);
 		} else {
-			// REGULAR ETH TRANSFER
-			txParams.value = parseEther(params.value);
-			tx = await fromSigner.sendTransaction(txParams);
+			hash = await handleEthTransfer(params);
 		}
 
-		txCallbacks.onTxHash(tx.hash, tx.nonce);
-		const receipt = await tx.wait();
-		if (receipt.status) {
-			txCallbacks.onReceipt(tx.hash);
-		}
-
-		console.log('Tx ---> : ', { tx, receipt });
+		return hash;
 	} catch (error: any) {
 		if (error.replacement && !error.cancelled) {
-			// Speed up the process by replacing the transaction
-			txCallbacks.onReceipt(error.replacement.hash);
 			return;
 		}
 		captureException(error, {
@@ -298,105 +349,142 @@ export async function sendTransaction(
 	}
 }
 
-export async function signMessage(
-	message: string,
-	address: string | undefined | null,
-	chainId?: number,
-	signer?: any,
-) {
-	try {
-		// COMMENTING THIS AS BACKEND NEEDS TO BE UPDATED TO THIS WAY
-
-		// const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
-		// const prefixWithLength = Buffer.from(`${customPrefix}${message.length.toString()}`, 'utf-8')
-		// const finalMessage = Buffer.concat([prefixWithLength, Buffer.from(message)])
-
-		// const hashedMsg = keccak256(finalMessage)
-
-		// const domain = {
-		//   name: 'Giveth Login',
-		//   version: '1',
-		//   chainId
-		// }
-
-		// const types = {
-		//   // EIP712Domain: [
-		//   //   { name: 'name', type: 'string' },
-		//   //   { name: 'chainId', type: 'uint256' },
-		//   //   { name: 'version', type: 'string' }
-		//   //   // { name: 'verifyingContract', type: 'address' }
-		//   // ],
-		//   User: [{ name: 'wallets', type: 'address[]' }],
-		//   Login: [
-		//     { name: 'user', type: 'User' },
-		//     { name: 'contents', type: 'string' }
-		//   ]
-		// }
-
-		// const value = {
-		//   user: {
-		//     wallets: [address]
-		//   },
-		//   contents: hashedMsg
-		// }
-
-		// return await signer._signTypedData(domain, types, value)
-
-		let signedMessage = null;
-		const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`;
-		const prefixWithLength = Buffer.from(
-			`${customPrefix}${message.length.toString()}`,
-			'utf-8',
-		);
-		const finalMessage = Buffer.concat([
-			prefixWithLength,
-			Buffer.from(message),
-		]);
-
-		const hashedMsg = keccak256(finalMessage);
-		const send = promisify(signer.provider.provider.sendAsync);
-		const msgParams = JSON.stringify({
-			primaryType: 'Login',
-			types: {
-				EIP712Domain: [
-					{ name: 'name', type: 'string' },
-					{ name: 'chainId', type: 'uint256' },
-					{ name: 'version', type: 'string' },
-					// { name: 'verifyingContract', type: 'address' }
-				],
-				Login: [{ name: 'user', type: 'User' }],
-				User: [{ name: 'wallets', type: 'address[]' }],
-			},
-			domain: {
-				name: 'Giveth Login',
-				chainId,
-				version: '1',
-			},
-			message: {
-				contents: hashedMsg,
-				user: {
-					wallets: [address],
-				},
-			},
-		});
-		const { result } = await send({
-			method: 'eth_signTypedData_v4',
-			params: [address, msgParams],
-			from: address,
-		});
-		signedMessage = result;
-
-		return signedMessage;
-	} catch (error) {
-		console.log('Signing Error!', { error });
-		captureException(error, {
-			tags: {
-				section: 'signError',
-			},
-		});
-		return false;
-	}
+// Handles the transfer for ERC20 tokens, returning the transaction hash.
+async function handleErc20Transfer(
+	params: TransactionParams,
+	contractAddress: Address,
+): Promise<Address> {
+	const contract = getContract({
+		address: contractAddress,
+		abi: erc20ABI,
+	});
+	const decimals = await contract.read.decimals();
+	const value = parseUnits(params.value, decimals);
+	const write = await writeContract({
+		address: contractAddress,
+		abi: erc20ABI,
+		functionName: 'transfer',
+		args: [params.to, value],
+		// @ts-ignore -- needed for safe txs
+		value: 0n,
+	});
+	return write.hash;
 }
+
+// Handles the transfer for ETH, returning the transaction hash.
+async function handleEthTransfer(params: TransactionParams): Promise<Address> {
+	const value = parseEther(params.value);
+
+	const { hash } = await wagmiSendTransaction({
+		to: params.to,
+		value: value,
+		data: '0x',
+	});
+
+	console.log('ETH transfer result', { hash });
+	return hash;
+}
+
+//TODO: Handle this
+// export async function signMessage(
+// 	message: string,
+// 	address: string | undefined | null,
+// 	chainId?: number,
+// 	signer?: any,
+// ) {
+// 	try {
+// 		// COMMENTING THIS AS BACKEND NEEDS TO BE UPDATED TO THIS WAY
+
+// 		// const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
+// 		// const prefixWithLength = Buffer.from(`${customPrefix}${message.length.toString()}`, 'utf-8')
+// 		// const finalMessage = Buffer.concat([prefixWithLength, Buffer.from(message)])
+
+// 		// const hashedMsg = keccak256(finalMessage)
+
+// 		// const domain = {
+// 		//   name: 'Giveth Login',
+// 		//   version: '1',
+// 		//   chainId
+// 		// }
+
+// 		// const types = {
+// 		//   // EIP712Domain: [
+// 		//   //   { name: 'name', type: 'string' },
+// 		//   //   { name: 'chainId', type: 'uint256' },
+// 		//   //   { name: 'version', type: 'string' }
+// 		//   //   // { name: 'verifyingContract', type: 'address' }
+// 		//   // ],
+// 		//   User: [{ name: 'wallets', type: 'address[]' }],
+// 		//   Login: [
+// 		//     { name: 'user', type: 'User' },
+// 		//     { name: 'contents', type: 'string' }
+// 		//   ]
+// 		// }
+
+// 		// const value = {
+// 		//   user: {
+// 		//     wallets: [address]
+// 		//   },
+// 		//   contents: hashedMsg
+// 		// }
+
+// 		// return await signer._signTypedData(domain, types, value)
+
+// 		let signedMessage = null;
+// 		const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`;
+// 		const prefixWithLength = Buffer.from(
+// 			`${customPrefix}${message.length.toString()}`,
+// 			'utf-8',
+// 		);
+// 		const finalMessage = Buffer.concat([
+// 			prefixWithLength,
+// 			Buffer.from(message),
+// 		]);
+
+// 		const hashedMsg = keccak256(finalMessage);
+// 		const send = promisify(signer.provider.provider.sendAsync);
+// 		const msgParams = JSON.stringify({
+// 			primaryType: 'Login',
+// 			types: {
+// 				EIP712Domain: [
+// 					{ name: 'name', type: 'string' },
+// 					{ name: 'chainId', type: 'uint256' },
+// 					{ name: 'version', type: 'string' },
+// 					// { name: 'verifyingContract', type: 'address' }
+// 				],
+// 				Login: [{ name: 'user', type: 'User' }],
+// 				User: [{ name: 'wallets', type: 'address[]' }],
+// 			},
+// 			domain: {
+// 				name: 'Giveth Login',
+// 				chainId,
+// 				version: '1',
+// 			},
+// 			message: {
+// 				contents: hashedMsg,
+// 				user: {
+// 					wallets: [address],
+// 				},
+// 			},
+// 		});
+// 		const { result } = await send({
+// 			method: 'eth_signTypedData_v4',
+// 			params: [address, msgParams],
+// 			from: address,
+// 		});
+// 		signedMessage = result;
+
+// 		return signedMessage;
+// 	} catch (error) {
+// 		console.log('Signing Error!', { error });
+// 		captureException(error, {
+// 			tags: {
+// 				section: 'signError',
+// 			},
+// 		});
+// 		return false;
+// 	}
+// }
 
 export const isGIVeconomyRoute = (route: string) => {
 	const givEconomyRoute = giveconomyTabs.find(
@@ -406,8 +494,11 @@ export const isGIVeconomyRoute = (route: string) => {
 };
 
 export const showToastError = (err: any) => {
-	const errorMessage =
+	let errorMessage =
 		typeof err === 'string' ? err : JSON.stringify(err.message || err);
+	if (errorMessage.startsWith('"') && errorMessage.endsWith('"')) {
+		errorMessage = errorMessage.slice(1, -1);
+	}
 	gToast(errorMessage, {
 		type: ToastType.DANGER,
 		position: 'top-center',
@@ -450,7 +541,8 @@ export const timeFromNow = (
 	if (diff.h > 0)
 		return ` ${formatter(Math.trunc(diff.h * -1), 'hour', options)}`;
 	if (diff.min > 0)
-		return ` ${formatter(Math.trunc(diff.m * -1), 'min', options)}`;
+		return ` ${formatter(Math.trunc(diff.min * -1), 'minute', options)}`;
+
 	return ` ${defaultMessage}`;
 };
 
@@ -480,52 +572,6 @@ export function pollEvery(fn: Function, delay: any) {
 	};
 }
 
-export const networkInfo = (networkId?: number) => {
-	if (!networkId || !networksParams[networkId]) return {};
-	const info = networksParams[networkId];
-	return {
-		networkName: info.chainName,
-		networkToken: info.nativeCurrency.symbol,
-	};
-};
-
-export const createSiweMessage = async (
-	address: string,
-	chainId: number,
-	statement: string,
-) => {
-	try {
-		let domain = 'giveth.io';
-
-		if (typeof window !== 'undefined') {
-			domain = window.location.hostname;
-		}
-		const nonceResponse: any = await fetch(
-			`${config.MICROSERVICES.authentication}/nonce`,
-		).then(n => {
-			return n.json();
-		});
-		const nonce = nonceResponse.message;
-		const { SiweMessage } = await import('siwe');
-		const siweMessage = new SiweMessage({
-			domain,
-			address,
-			nonce,
-			statement,
-			uri: origin,
-			version: '1',
-			chainId,
-		});
-		return {
-			message: siweMessage.prepareMessage(),
-			nonce,
-		};
-	} catch (error) {
-		console.log({ error });
-		return false;
-	}
-};
-
 export function isObjEmpty(obj: Object) {
 	return Object.keys(obj).length > 0;
 }
@@ -535,4 +581,77 @@ export const ArrayFrom0ToN = (n: number) => {
 		b = 0;
 	while (b < n) a[b] = b++;
 	return a;
+};
+
+export const checkMultisigSession = async ({ safeAddress, chainId }: any) => {
+	try {
+		let status = 'not found';
+		const sessionCheck = await getRequest(
+			`${config.MICROSERVICES.authentication}/multisigAuthentication`,
+			false,
+			{
+				safeAddress,
+				network: chainId,
+			},
+		);
+		status = sessionCheck?.status;
+
+		return { status };
+	} catch (error) {
+		return { status: 'not found' };
+	}
+};
+
+export const getUserIPInfo = async () => {
+	return fetch('https://api.db-ip.com/v2/free/self')
+		.then(res => res.json())
+		.catch(err => {
+			console.log('getUserIp error: ', { err });
+			throw err;
+		});
+};
+
+export const matchLocaleToSystemLocals = (locale: string) => {
+	const spanishSpeakingCountryCodes = [
+		'es',
+		'mx',
+		'ar',
+		'pe',
+		'co',
+		'cl',
+		'gt',
+		'ec',
+		'bo',
+		'cu',
+		'hn',
+		'py',
+		'sv',
+		'ni',
+		'cr',
+		'pr',
+		'pa',
+		'uy',
+		've',
+		'do',
+	];
+	const lowercaseLocale = locale.toLowerCase();
+	const isSpanish = spanishSpeakingCountryCodes.includes(lowercaseLocale);
+	const _locale = isSpanish ? 'es' : lowercaseLocale;
+	const isValidLocale = locales?.includes(_locale);
+	return isValidLocale ? _locale : undefined;
+};
+
+export const getLocaleFromNavigator = () => {
+	if (typeof navigator === 'undefined') return defaultLocale!;
+	const navigatorLocale = navigator.language.split('-')[0];
+	return matchLocaleToSystemLocals(navigatorLocale);
+};
+
+export const getLocaleFromIP = async () => {
+	try {
+		const { countryCode } = await getUserIPInfo();
+		return matchLocaleToSystemLocals(countryCode);
+	} catch (e) {
+		return undefined;
+	}
 };

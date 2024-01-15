@@ -16,7 +16,7 @@ const StatusBadge: FC<IStatusBadge> = ({ status = EProjectStatus.DRAFT }) => {
 			break;
 		case EProjectStatus.DEACTIVE:
 			badgeStatus = EBadgeStatus.ERROR;
-			label = 'Deactivate';
+			label = 'Deactivated';
 			break;
 		case EProjectStatus.DRAFT:
 			badgeStatus = EBadgeStatus.DEFAULT;

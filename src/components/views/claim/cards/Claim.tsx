@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { H2, Lead } from '@giveth/ui-design-system';
-import { useWeb3React } from '@web3-react/core';
-import { InjectedConnector } from '@web3-react/injected-connector';
+import { useAccount, useConnect, useNetwork } from 'wagmi';
+import { WriteContractReturnType } from 'viem';
 import { Button } from '../../../styled-components/Button';
 import { Flex } from '../../../styled-components/Flex';
 import { Card, Header, PreviousArrowButton } from './common';
@@ -11,7 +11,6 @@ import useClaim from '@/context/claim.context';
 import config from '@/configuration';
 import { GIVdropHarvestModal } from '../../../modals/GIVdropHarvestModal';
 import { AddTokenButton } from '../../../AddTokenButton';
-import type { TransactionResponse } from '@ethersproject/providers';
 
 interface IClaimCardContainer {
 	claimed: any;
@@ -54,19 +53,24 @@ const AddTokenRow = styled(Flex)`
 
 const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const { totalAmount, step, goPreviousStep, goNextStep } = useClaim();
-	const { active, activate, chainId, library } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const { isConnected } = useAccount();
+	const { connect } = useConnect();
 
-	const [txStatus, setTxStatus] = useState<TransactionResponse | undefined>();
+	const [txStatus, setTxStatus] = useState<
+		WriteContractReturnType | undefined
+	>();
 	const [showClaimModal, setShowClaimModal] = useState<boolean>(false);
 
 	const checkNetworkAndWallet = async () => {
-		if (!active) {
+		if (!isConnected) {
 			console.log('Wallet is not connected');
-			await activate(new InjectedConnector({}));
+			await connect();
 			return false;
 		}
 
-		return chainId === config.XDAI_NETWORK_NUMBER;
+		return chainId === config.GNOSIS_NETWORK_NUMBER;
 	};
 
 	const openHarvestModal = async () => {
@@ -76,7 +80,7 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 		setShowClaimModal(true);
 	};
 
-	const onSuccess = (tx: TransactionResponse) => {
+	const onSuccess = (tx: WriteContractReturnType) => {
 		setTxStatus(tx);
 		goNextStep();
 	};
@@ -109,7 +113,7 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 					</ClaimButton>
 				</Flex>
 				<AddTokenRow alignItems={'center'} justifyContent={'center'}>
-					<AddTokenButton provider={library} />
+					<AddTokenButton chainId={chainId} />
 				</AddTokenRow>
 				{step === index && (
 					<>
@@ -120,7 +124,7 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 			{showClaimModal && (
 				<GIVdropHarvestModal
 					setShowModal={setShowClaimModal}
-					network={config.XDAI_NETWORK_NUMBER}
+					network={config.GNOSIS_NETWORK_NUMBER}
 					givdropAmount={totalAmount}
 					checkNetworkAndWallet={checkNetworkAndWallet}
 					onSuccess={onSuccess}

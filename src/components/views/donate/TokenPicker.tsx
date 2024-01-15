@@ -14,7 +14,6 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import Image from 'next/image';
 import Select, {
 	GroupBase,
 	components,
@@ -22,12 +21,14 @@ import Select, {
 	OnChangeValue,
 	StylesConfig,
 	MenuListProps,
+	type CSSObjectWithLabel,
 } from 'react-select';
 
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { TokenIcon } from './TokenIcon/TokenIcon';
 
 declare module 'react-select/dist/declarations/src/Select' {
 	export interface Props<
@@ -40,18 +41,6 @@ declare module 'react-select/dist/declarations/src/Select' {
 		projectVerified?: boolean;
 	}
 }
-
-const ImageIcon = (props: { symbol: string }) => {
-	const { symbol } = props;
-	let image_path = '';
-	try {
-		require(`../../../../public/images/tokens/${symbol?.toUpperCase()}.svg`);
-		image_path = `/images/tokens/${symbol?.toUpperCase()}.svg`;
-	} catch (err) {
-		image_path = '/images/tokens/ETH.svg'; //set default image path
-	}
-	return <Image alt={symbol} src={image_path} width='24' height='24' />;
-};
 
 const MenuList = (props: MenuListProps<IProjectAcceptedToken, false>) => {
 	const projectVerified = props.selectProps.projectVerified;
@@ -81,7 +70,7 @@ const Option = ({ ...props }: OptionProps<IProjectAcceptedToken, false>) => {
 		<components.Option {...props}>
 			<OptionContainer>
 				<RowContainer>
-					<ImageIcon symbol={symbol} />
+					<TokenIcon symbol={symbol} />
 					<B>
 						{name} ({symbol}){' '}
 					</B>
@@ -174,18 +163,19 @@ const TokenPicker = (props: {
 			left: isMobile ? 0 : 'null',
 			bottom: isMobile ? 0 : 'null',
 		}),
-		option: (provided, state) => ({
-			...provided,
-			width: '100%',
-			background: state.isSelected ? neutralColors.gray[200] : 'white',
-			':hover': {
-				background: neutralColors.gray[200],
-			},
-			color: neutralColors.gray[900],
-			padding: '8px 16px',
-			borderRadius: '8px',
-			cursor: 'pointer',
-		}),
+		option: (baseStyles, { isSelected }) =>
+			({
+				...baseStyles,
+				width: '100%',
+				background: isSelected ? neutralColors.gray[200] : 'white',
+				':hover': {
+					background: neutralColors.gray[200],
+				},
+				color: neutralColors.gray[900],
+				padding: '8px 16px',
+				borderRadius: '8px',
+				cursor: 'pointer',
+			}) as CSSObjectWithLabel,
 		placeholder: (base: any) => ({
 			...base,
 			color: neutralColors.gray[500],
@@ -244,7 +234,10 @@ const TokenPicker = (props: {
 			>
 				<TokenContainer>
 					{selectedToken && (
-						<ImageIcon symbol={selectedToken.symbol} />
+						<TokenIcon
+							key={selectedToken.symbol}
+							symbol={selectedToken.symbol}
+						/>
 					)}
 					{selectedToken
 						? selectedToken.symbol
@@ -376,10 +369,10 @@ const TargetContainer = styled.div<ITokenPicker>`
 		props.disabled
 			? neutralColors.gray[200]
 			: props.isOpen && props.isMobile
-			? 'rgba(79, 87, 106, 0.1)'
-			: props.isOpen
-			? neutralColors.gray[200]
-			: 'transparent'};
+				? 'rgba(79, 87, 106, 0.1)'
+				: props.isOpen
+					? neutralColors.gray[200]
+					: 'transparent'};
 `;
 
 const RowContainer = styled.div`

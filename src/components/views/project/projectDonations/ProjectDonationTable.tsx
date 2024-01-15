@@ -11,12 +11,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation, IQFRound } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
-import {
-	smallFormatDate,
-	formatTxLink,
-	compareAddresses,
-	formatUSD,
-} from '@/lib/helpers';
+import { smallFormatDate, compareAddresses, formatTxLink } from '@/lib/helpers';
 import {
 	EDirection,
 	EDonationStatus,
@@ -33,8 +28,12 @@ import {
 } from '@/components/styled-components/Table';
 import { useProjectContext } from '@/context/project.context';
 import NetworkLogo from '@/components/NetworkLogo';
-import { networksParams } from '@/helpers/blockchain';
 import { UserWithPFPInCell } from '../../../UserWithPFPInCell';
+import { getChainName } from '@/lib/network';
+import { formatDonation } from '@/helpers/number';
+import { Spinner } from '@/components/Spinner';
+import { NoDonation } from './NoDonation';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 
 const itemPerPage = 10;
 
@@ -59,10 +58,11 @@ interface PageDonations {
 }
 
 const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
+	const [loading, setLoading] = useState(true);
 	const [pageDonations, setPageDonations] = useState<PageDonations>();
 	const [page, setPage] = useState<number>(0);
 	const [order, setOrder] = useState<IOrder>({
-		by: EOrderBy.CreationDate,
+		by: EOrderBy.UsdAmount,
 		direction: EDirection.DESC,
 	});
 	const { projectData } = useProjectContext();
@@ -92,6 +92,10 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 	};
 
 	useEffect(() => {
+		setLoading(true);
+	}, [selectedQF]);
+
+	useEffect(() => {
 		if (!id) return;
 		const fetchProjectDonations = async () => {
 			const { data: projectDonations } = await client.query({
@@ -108,6 +112,7 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 					status: isAdmin ? null : EDonationStatus.VERIFIED,
 				},
 			});
+			setLoading(false);
 			const { donationsByProjectId } = projectDonations;
 			if (!!donationsByProjectId?.donations) {
 				setPageDonations(donationsByProjectId);
@@ -116,8 +121,16 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 		fetchProjectDonations();
 	}, [page, order.by, order.direction, id, isAdmin, selectedQF]);
 
+	if (loading)
+		return (
+			<LoadingWrapper>
+				<Spinner />
+			</LoadingWrapper>
+		);
+
 	//TODO: Show meaningful message when there is no donation
-	if (pageDonations?.totalCount === 0) return null;
+	if (pageDonations?.totalCount === 0)
+		return <NoDonation selectedQF={selectedQF} />;
 
 	return (
 		<Wrapper>
@@ -187,24 +200,26 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 								<NetworkLogo
 									logoSize={24}
 									chainId={donation.transactionNetworkId}
+									chainType={donation.chainType}
 								/>
 								<NetworkName>
-									{
-										networksParams[
-											donation.transactionNetworkId
-										].chainName
-									}
+									{getChainName(
+										donation.transactionNetworkId,
+										donation.chainType,
+									)}
 								</NetworkName>
 							</DonationTableCell>
 							<DonationTableCell>
-								<B>{donation.amount}</B>
+								<B>{formatDonation(donation.amount)}</B>
 								<Currency>{donation.currency}</Currency>
 								{!donation.anonymous && (
 									<ExternalLink
-										href={formatTxLink(
-											donation.transactionNetworkId,
-											donation.transactionId,
-										)}
+										href={formatTxLink({
+											networkId:
+												donation.transactionNetworkId,
+											txHash: donation.transactionId,
+											chainType: donation.chainType,
+										})}
 									>
 										<IconExternalLink
 											size={16}
@@ -215,7 +230,11 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 							</DonationTableCell>
 							<DonationTableCell>
 								{donation.valueUsd &&
-									'$' + formatUSD(donation.valueUsd)}
+									formatDonation(
+										donation.valueUsd,
+										'$',
+										locale,
+									)}
 							</DonationTableCell>
 						</DonationRowWrapper>
 					))}
@@ -239,14 +258,13 @@ const LeftPadding = styled.div`
 	padding-left: 44px;
 `;
 
-const Wrapper = styled.div`
-	display: flex;
+const Wrapper = styled(Flex)`
 	flex-direction: column;
 	gap: 16px;
 `;
 
 const NetworkName = styled.div`
-	width: 80px;
+	width: 80%;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
@@ -264,8 +282,8 @@ const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
 	width: 100%;
 	grid-template-columns: ${props =>
 		props.isAdmin
-			? '1fr 2.2fr 0.8fr 1.25fr 1.4fr 1fr'
-			: '1fr 2.2fr 1.1fr 1.1fr 1fr'};
+			? '1fr 2fr 0.8fr 1.5fr 1.4fr 1fr'
+			: '1fr 2fr 1.5fr 1.1fr 1fr'};
 	min-width: 800px;
 `;
 
@@ -282,6 +300,10 @@ const DonationRowWrapper = styled(RowWrapper)`
 const DonationTableCell = styled(TableCell)`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
+`;
+
+const LoadingWrapper = styled(FlexCenter)`
+	height: 500px;
 `;
 
 export default ProjectDonationTable;

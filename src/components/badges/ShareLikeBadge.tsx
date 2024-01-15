@@ -25,18 +25,18 @@ const ShareLikeBadge = (props: {
 		type === 'share'
 			? formatMessage({ id: 'label.share' })
 			: type === 'reward'
-			? formatMessage({ id: 'label.share_and_get_rewarded' })
-			: formatMessage({ id: 'label.like' });
+				? formatMessage({ id: 'label.share_and_get_rewarded' })
+				: formatMessage({ id: 'label.like' });
 	const icon = isShare ? (
 		<IconShare
 			color={
-				fromDonate ? brandColors.pinky[500] : neutralColors.gray[500]
+				fromDonate ? brandColors.pinky[500] : neutralColors.gray[700]
 			}
 		/>
 	) : active ? (
 		<IconHeartFilled color={brandColors.pinky[500]} />
 	) : (
-		<IconHeartOutline color={neutralColors.gray[500]} />
+		<IconHeartOutline color={neutralColors.gray[700]} />
 	);
 
 	return (
@@ -67,7 +67,7 @@ const Wrapper = styled(FlexCenter)<{ isSimple?: boolean | null }>`
 
 const BadgeText = styled(ButtonText)<{ fromDonate?: boolean | null }>`
 	color: ${props =>
-		props.fromDonate ? brandColors.pinky[500] : neutralColors.gray[500]};
+		props.fromDonate ? brandColors.pinky[500] : neutralColors.gray[700]};
 	text-transform: ${props => (props.fromDonate ? 'none' : 'uppercase')};
 	margin: 0 auto;
 `;

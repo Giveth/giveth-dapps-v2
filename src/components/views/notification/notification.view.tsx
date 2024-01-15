@@ -8,7 +8,6 @@ import {
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import {
 	NotificationContainer,
 	IconContainer,
@@ -19,8 +18,6 @@ import {
 	MarkAllNotifsButton,
 	Loading,
 } from './notification.sc';
-import LottieControl from '@/components/LottieControl';
-import LoadingAnimation from '@/animations/loading_giv.json';
 import {
 	TabsContainer,
 	TabItemCount,
@@ -38,6 +35,8 @@ import {
 import { useNotification } from '@/hooks/useNotification';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { fetchNotificationCountAsync } from '@/features/notification/notification.thunks';
+import { WrappedSpinner } from '@/components/Spinner';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 enum ENotificationTabs {
 	ALL,
@@ -50,16 +49,18 @@ enum ENotificationTabs {
 const limit = 6;
 
 function NotificationView() {
-	const { notifications, setNotifications, markOneNotificationRead } =
-		useNotification();
-	const dispatch = useAppDispatch();
-	const { account } = useWeb3React();
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
 	const [loading, setLoading] = useState(false);
 	const [totalCount, setTotalCount] = useState(0);
 	const [pageNumber, setPageNumber] = useState(0);
 	const [markedAllNotificationsRead, setMarkedAllNotificationsRead] =
 		useState(false);
+
+	const { notifications, setNotifications, markOneNotificationRead } =
+		useNotification();
+	const dispatch = useAppDispatch();
+	const { walletAddress: address } = useGeneralWallet();
+
 	const showLoadMore = totalCount > notifications.length;
 	const {
 		total: totalUnreadNotifications,
@@ -97,12 +98,12 @@ function NotificationView() {
 			? (query = {
 					limit,
 					offset: pageNumber * limit,
-			  })
+				})
 			: (query = {
 					category: tab,
 					limit,
 					offset: pageNumber * limit,
-			  });
+				});
 		fetchNotificationsData(query, { signal })
 			.then(res => {
 				if (res?.notifications) {
@@ -126,10 +127,7 @@ function NotificationView() {
 		<NotificationContainer>
 			{loading && (
 				<Loading data-testid='loading'>
-					<LottieControl
-						animationData={LoadingAnimation}
-						size={250}
-					/>
+					<WrappedSpinner size={250} />
 				</Loading>
 			)}
 			<Flex gap='8px'>
@@ -242,8 +240,8 @@ function NotificationView() {
 							setMarkedAllNotificationsRead(
 								!markedAllNotificationsRead,
 							);
-							if (account)
-								dispatch(fetchNotificationCountAsync(account));
+							if (address)
+								dispatch(fetchNotificationCountAsync(address));
 						});
 					}}
 					buttonType='texty-primary'
@@ -261,7 +259,7 @@ function NotificationView() {
 									markOneNotificationRead
 								}
 							/>
-					  ))
+						))
 					: !loading && (
 							<FlexCenter>
 								<Lead>
@@ -270,7 +268,7 @@ function NotificationView() {
 									})}
 								</Lead>
 							</FlexCenter>
-					  )}
+						)}
 			</div>
 			<FlexCenter>
 				{showLoadMore && !loading && (

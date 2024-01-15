@@ -17,15 +17,15 @@ const initialState: {
 	token?: string;
 	isEnabled: boolean;
 	isSignedIn: boolean;
-	balance: string | null;
 	isLoading: boolean;
+	isUserFullFilled: boolean;
 } = {
 	userData: undefined,
 	token: undefined,
 	isEnabled: false,
 	isSignedIn: false,
-	balance: null,
 	isLoading: true,
+	isUserFullFilled: false,
 };
 
 type UserStateType = RootState['user'];
@@ -54,9 +54,6 @@ export const userSlice = createSlice({
 		},
 		setToken: (state, action: PayloadAction<string>) => {
 			state.token = action.payload;
-		},
-		setBalance: (state, action: PayloadAction<string | null>) => {
-			state.balance = action.payload;
 		},
 		incrementLikedProjectsCount: state => {
 			if (state.userData) {
@@ -121,10 +118,12 @@ export const userSlice = createSlice({
 						signOutUser(state);
 					}
 					state.isLoading = false;
+					state.isUserFullFilled = true;
 				},
 			)
 			.addCase(fetchUserByAddress.rejected, state => {
 				state.isLoading = false;
+				state.isUserFullFilled = true;
 			})
 			.addCase(signToGetToken.fulfilled, (state, action) => {
 				state.token = action.payload;
@@ -152,7 +151,6 @@ export const {
 	setIsEnabled,
 	setIsSignedIn,
 	setToken,
-	setBalance,
 	incrementLikedProjectsCount,
 	decrementLikedProjectsCount,
 	setBoostedProjectsCount,

@@ -1,3 +1,4 @@
+import { type Address } from 'wagmi';
 import { IUser } from '@/apollo/types/types';
 
 export interface ITokenAllocation {
@@ -9,7 +10,7 @@ export interface ITokenAllocation {
 }
 
 export interface ITokenDistro {
-	contractAddress: string;
+	contractAddress: Address;
 	initialAmount: string;
 	lockedAmount: string;
 	totalTokens: string;
@@ -96,5 +97,5 @@ export interface ITokenDistroBalance {
 	givback: string;
 	givDropClaimed: boolean;
 	givbackLiquidPart: string;
-	tokenDistroAddress: string;
+	tokenDistroAddress: Address;
 }

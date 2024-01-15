@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { neutralColors } from '@giveth/ui-design-system';
+import { Col, Row, neutralColors } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
 import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
@@ -13,11 +13,13 @@ import Pagination from '@/components/Pagination';
 import { Flex } from '@/components/styled-components/Flex';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import DonationTable from '@/components/views/userProfile/donationsTab/DonationsTable';
-import { UserProfileTab } from '../common.sc';
+import { UserContributeTitle, UserProfileTab } from '../common.sc';
+import { DonateContributeCard } from '@/components/ContributeCard';
+import { useProfileContext } from '@/context/profile.context';
 
 const itemPerPage = 10;
 
-const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
+const ProfileDonationsTab: FC<IUserProfileView> = () => {
 	const [loading, setLoading] = useState(false);
 	const [donations, setDonations] = useState<IWalletDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState<number>(0);
@@ -26,6 +28,7 @@ const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 		by: EOrderBy.CreationDate,
 		direction: EDirection.DESC,
 	});
+	const { myAccount, user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
 	const changeOrder = (orderBy: EOrderBy) => {
@@ -71,8 +74,29 @@ const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 		fetchUserDonations().then();
 	}, [user, page, order.by, order.direction]);
 
+	const userName = user?.name || 'Unknown';
+
 	return (
 		<UserProfileTab>
+			{!myAccount && (
+				<Row>
+					<Col lg={6}>
+						<DonateContributeCard />
+					</Col>
+				</Row>
+			)}
+			{!myAccount && (
+				<UserContributeTitle weight={700}>
+					{formatMessage(
+						{
+							id: 'label.user_donations',
+						},
+						{
+							userName,
+						},
+					)}
+				</UserContributeTitle>
+			)}
 			<DonationTableWrapper>
 				{!loading && totalDonations === 0 ? (
 					<NothingWrapper>
@@ -81,10 +105,10 @@ const ProfileDonationsTab: FC<IUserProfileView> = ({ myAccount, user }) => {
 								myAccount
 									? formatMessage({
 											id: 'label.you_havent_donated_to_any_projects_yet',
-									  })
+										})
 									: formatMessage({
 											id: 'label.this_user_hasnt_donated_to_any_project_yet',
-									  })
+										})
 							}`}
 						/>
 					</NothingWrapper>

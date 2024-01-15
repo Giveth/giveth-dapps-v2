@@ -1,70 +1,30 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { H3, P, brandColors, neutralColors, B } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
-import { useWeb3React } from '@web3-react/core';
-
-import { captureException } from '@sentry/nextjs';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useWalletModal } from '@solana/wallet-adapter-react-ui';
+import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ethIcon from '/public/images/tokens/ETH.svg';
-import googleIcon from '/public/images/google_icon.svg';
-import twitterIcon from '/public/images/social-tt.svg';
-import facebookIcon from '/public/images/social-fb2.svg';
-import discordIcon from '/public/images/social-disc.svg';
-import torusBrand from '/public/images/torus_pwr.svg';
-import { EWallets, torusConnector } from '@/lib/wallet/walletTypes';
+import solanaIcon from '/public/images/tokens/SOL.svg';
 import { mediaQueries } from '@/lib/constants/constants';
-import { detectBrave, showToastError } from '@/lib/helpers';
-import StorageLabel from '@/lib/localStorage';
-import LowerShields from '@/components/modals/LowerShields';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useAppDispatch } from '@/features/hooks';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 
 const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
-	const [showLowerShields, setShowLowerShields] = useState<boolean>();
 	const { formatMessage } = useIntl();
 
-	const { activate } = useWeb3React();
+	const { open: openConnectModal } = useWeb3Modal();
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-
-	const checkIsBrave = async () => {
-		const isBrave = await detectBrave();
-		if (isBrave) {
-			setShowLowerShields(true);
-		} else {
-			connectTorus();
-		}
-	};
-
-	const connectTorus = (): void => {
-		activate(torusConnector)
-			.then(() => {
-				localStorage.setItem(StorageLabel.WALLET, EWallets.TORUS);
-				closeModal();
-			})
-			.catch(error => {
-				showToastError(error);
-				captureException(error, {
-					tags: {
-						section: 'connectTorus',
-					},
-				});
-			});
-	};
-
-	const onCloseLowerShields = () => {
-		connectTorus();
-		setShowLowerShields(false);
-	};
+	const { setVisible } = useWalletModal();
 
 	return (
 		<>
-			{showLowerShields && <LowerShields onClose={onCloseLowerShields} />}
 			<Modal
 				closeModal={closeModal}
 				isAnimating={isAnimating}
@@ -83,10 +43,11 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 							})}
 						</ContentSubtitle>
 						<IconContentContainer>
-							<EthIconContainer
-								onClick={() =>
-									dispatch(setShowWalletModal(true))
-								}
+							<ChainIconContainer
+								onClick={() => {
+									openConnectModal && openConnectModal();
+									dispatch(setShowWelcomeModal(false));
+								}}
 							>
 								<Image src={ethIcon} alt='Ether icon' />
 								<B>
@@ -94,25 +55,22 @@ const WelcomeModal: FC<IModal> = ({ setShowModal }) => {
 										id: 'label.sign_in_with_ethereum',
 									})}
 								</B>
-							</EthIconContainer>
-							<BreakPoint>
-								<BreakLine />
-								<P>{formatMessage({ id: 'label.or' })}</P>
-								<BreakLine />
-							</BreakPoint>
-							<SocialContentContainer>
-								{socialArray.map(elem => (
-									<IconsContainer
-										key={elem.alt}
-										onClick={checkIsBrave}
-									>
-										{' '}
-										{/* best way to activate torus here? */}
-										<Image src={elem.icon} alt={elem.alt} />
-									</IconsContainer>
-								))}
-							</SocialContentContainer>
-							<Image src={torusBrand} alt='Powered by Torus' />
+							</ChainIconContainer>
+							<ChainIconContainer
+								style={{ marginTop: '32px' }}
+								onClick={() => {
+									// openConnectModal && openConnectModal();
+									setVisible(true);
+									dispatch(setShowWelcomeModal(false));
+								}}
+							>
+								<Image src={solanaIcon} alt='Solana icon' />
+								<B>
+									{formatMessage({
+										id: 'label.sign_in_with_solana',
+									})}
+								</B>
+							</ChainIconContainer>
 						</IconContentContainer>
 					</ContentContainer>
 				</ModalGrid>
@@ -179,7 +137,7 @@ const IconsContainer = styled.div`
 	cursor: pointer;
 `;
 
-const EthIconContainer = styled(IconsContainer)`
+const ChainIconContainer = styled(IconsContainer)`
 	padding: 20px 24px;
 	border-radius: 4px;
 	color: ${brandColors.deep[800]};
@@ -211,12 +169,5 @@ const SignInTitle = styled(H3)`
 	color: ${brandColors.deep[800]};
 	font-weight: 700;
 `;
-
-const socialArray = [
-	{ icon: googleIcon, alt: 'Google icon.' },
-	{ icon: twitterIcon, alt: 'Twitter icon.' },
-	{ icon: facebookIcon, alt: 'Facebook icon.' },
-	{ icon: discordIcon, alt: 'Discord icon.' },
-];
 
 export default WelcomeModal;

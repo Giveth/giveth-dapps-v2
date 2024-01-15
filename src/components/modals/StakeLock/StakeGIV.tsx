@@ -1,20 +1,18 @@
-import React, { FC, useEffect, useState } from 'react';
-import { BigNumber } from 'ethers';
-import { useWeb3React } from '@web3-react/core';
-import { Contract, ethers } from 'ethers';
+import React, { FC, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { ButtonLink, H5, IconExternalLink } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { useAccount, useNetwork } from 'wagmi';
 import { Modal } from '../Modal';
-import { AmountInput } from '../../AmountInput';
-import { approveERC20tokenTransfer, wrapToken } from '@/lib/stakingPool';
-import LoadingAnimation from '../../../animations/loading.json';
+import {
+	approveERC20tokenTransfer,
+	stakeGIV,
+	wrapToken,
+} from '@/lib/stakingPool';
 import { ErrorInnerModal } from '../ConfirmSubmit';
 import { StakeState } from '@/lib/staking';
-import { abi as ERC20_ABI } from '@/artifacts/ERC20.json';
+import { waitForTransaction } from '@/lib/transaction';
 import { IModal } from '@/types/common';
-import StakeSteps from './StakeSteps';
-import { ERC20 } from '@/types/contracts';
 import {
 	CancelButton,
 	StakeModalContainer,
@@ -26,9 +24,12 @@ import {
 import { BriefContainer, H5White } from './LockingBrief';
 import { formatWeiHelper } from '@/helpers/number';
 import LockInfo from './LockInfo';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
+import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput';
+import { StakeSteps } from './StakeSteps';
 import type {
 	PoolStakingConfig,
 	SimplePoolStakingConfig,
@@ -40,15 +41,6 @@ interface IStakeInnerModalProps {
 }
 
 interface IStakeModalProps extends IModal, IStakeInnerModalProps {}
-
-export const loadingAnimationOptions = {
-	loop: true,
-	autoplay: true,
-	animationData: LoadingAnimation,
-	rendererSettings: {
-		preserveAspectRatio: 'xMidYMid slice',
-	},
-};
 
 export const StakeGIVModal: FC<IStakeModalProps> = ({
 	poolStakingConfig,
@@ -79,78 +71,34 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	setShowModal,
 }) => {
 	const { formatMessage } = useIntl();
-	const [amount, setAmount] = useState('0');
+	const [amount, setAmount] = useState(0n);
 	const [txHash, setTxHash] = useState('');
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
-	const { chainId, library } = useWeb3React();
-	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
+	const { address } = useAccount();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const { notStakedAmount: _maxAmount } = useStakingPool(poolStakingConfig);
+	const maxAmount = _maxAmount || 0n;
+	const isSafeEnv = useIsSafeEnvironment();
 
-	const { POOL_ADDRESS, GARDEN_ADDRESS } =
+	const { POOL_ADDRESS, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
-	useEffect(() => {
-		if (stakeState == StakeState.WRAP) {
-			setStakeState(StakeState.APPROVE);
-		}
-	}, [amount]);
-
-	useEffect(() => {
-		library?.on('block', async () => {
-			const amountNumber = ethers.BigNumber.from(amount);
-			if (
-				amountNumber.gt(ethers.constants.Zero) &&
-				stakeState === StakeState.APPROVING
-			) {
-				const signer = library.getSigner();
-				const userAddress = await signer.getAddress();
-				const tokenContract = new Contract(
-					POOL_ADDRESS,
-					ERC20_ABI,
-					signer,
-				) as ERC20;
-				const allowance: BigNumber = await tokenContract.allowance(
-					userAddress,
-					GARDEN_ADDRESS!,
-				);
-				const amountNumber = ethers.BigNumber.from(amount);
-				const allowanceNumber = ethers.BigNumber.from(
-					allowance.toString(),
-				);
-				if (amountNumber.lte(allowanceNumber)) {
-					setStakeState(StakeState.WRAP);
-				}
-			}
-		});
-		return () => {
-			library.removeAllListeners('block');
-		};
-	}, [library, amount, stakeState]);
-
 	const onApprove = async () => {
-		if (!GARDEN_ADDRESS) {
-			console.error('GARDEN_ADDRESS is null');
-			return;
-		}
-		if (amount === '0') return;
-		if (!library) {
-			console.error('library is null');
-			return;
-		}
-
+		if (amount === 0n) return;
 		setStakeState(StakeState.APPROVING);
-
-		const signer = library.getSigner();
-
-		const userAddress = await signer.getAddress();
 
 		const isApproved = await approveERC20tokenTransfer(
 			amount,
-			userAddress,
-			GARDEN_ADDRESS,
+			address!,
+			poolStakingConfig.network === config.GNOSIS_NETWORK_NUMBER
+				? poolStakingConfig.GARDEN_ADDRESS!
+				: LM_ADDRESS!,
 			POOL_ADDRESS,
-			library,
+			chainId!,
+			isSafeEnv,
 		);
 
 		if (isApproved) {
@@ -161,21 +109,21 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	};
 
 	const onWrap = async () => {
-		if (!GARDEN_ADDRESS) {
-			console.error('GARDEN_ADDRESS is null');
-			return;
-		}
 		setStakeState(StakeState.WRAPPING);
 		try {
-			const txResponse = await wrapToken(amount, GARDEN_ADDRESS, library);
+			const txResponse = await wrapToken(
+				amount,
+				poolStakingConfig.GARDEN_ADDRESS!,
+				chainId!,
+			);
 			if (txResponse) {
-				setTxHash(txResponse.hash);
-				if (txResponse) {
-					const { status } = await txResponse.wait();
-					setStakeState(
-						status ? StakeState.CONFIRMED : StakeState.ERROR,
-					);
-				}
+				setTxHash(txResponse);
+				const data = await waitForTransaction(txResponse, isSafeEnv);
+				setStakeState(
+					data.status === 'success'
+						? StakeState.CONFIRMED
+						: StakeState.ERROR,
+				);
 			} else {
 				setStakeState(StakeState.WRAP);
 			}
@@ -190,6 +138,39 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 			});
 		}
 	};
+
+	const onStake = async () => {
+		if (!chainId) return;
+		setStakeState(StakeState.WRAPPING);
+		try {
+			const txResponse = await stakeGIV(
+				amount,
+				poolStakingConfig.LM_ADDRESS,
+				chainId,
+			);
+			if (txResponse) {
+				setTxHash(txResponse);
+				const data = await waitForTransaction(txResponse, isSafeEnv);
+				setStakeState(
+					data.status === 'success'
+						? StakeState.CONFIRMED
+						: StakeState.ERROR,
+				);
+			} else {
+				setStakeState(StakeState.WRAP);
+			}
+		} catch (err: any) {
+			setStakeState(
+				err?.code === 4001 ? StakeState.WRAP : StakeState.ERROR,
+			);
+			captureException(err, {
+				tags: {
+					section: 'onStake',
+				},
+			});
+		}
+	};
+
 	return (
 		<StakeModalContainer>
 			{stakeState !== StakeState.CONFIRMED &&
@@ -205,7 +186,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 											id: 'label.amount_to_stake',
 										})}
 									</SectionTitle>
-									<AmountInput
+									<StakingAmountInput
 										setAmount={setAmount}
 										maxAmount={maxAmount}
 										poolStakingConfig={poolStakingConfig}
@@ -223,8 +204,8 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 										})}
 										onClick={onApprove}
 										disabled={
-											amount == '0' ||
-											maxAmount.lt(amount) ||
+											amount === 0n ||
+											maxAmount < amount ||
 											stakeState === StakeState.APPROVING
 										}
 										loading={
@@ -255,7 +236,8 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 											})}
 										</H5>
 										<H5White weight={700}>
-											{formatWeiHelper(amount)} GIV
+											{formatWeiHelper(amount.toString())}{' '}
+											GIV
 										</H5White>
 									</BriefContainer>
 									<StyledOutlineButton
@@ -265,10 +247,15 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 													? 'label.stake'
 													: 'label.stake_pending',
 										})}
-										onClick={onWrap}
+										onClick={
+											poolStakingConfig.network ===
+											config.GNOSIS_NETWORK_NUMBER
+												? onWrap
+												: onStake
+										}
 										disabled={
-											amount == '0' ||
-											maxAmount.lt(amount) ||
+											amount === 0n ||
+											maxAmount < amount ||
 											stakeState === StakeState.WRAPPING
 										}
 										loading={
@@ -296,15 +283,15 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 						<H5>Successful!</H5>
 						<H5White>You have staked</H5White>
 						<H5White weight={700}>
-							{formatWeiHelper(amount)} GIV
+							{formatWeiHelper(amount.toString())} GIV
 						</H5White>
 						<ButtonLink
 							isExternal
-							label='View on blockscout'
+							label={`View on ${config.EVM_NETWORKS_CONFIG[chainId].blockExplorers?.default.name}`}
 							linkType='texty'
 							size='small'
 							icon={<IconExternalLink size={16} />}
-							href={`${config.XDAI_CONFIG.blockExplorerUrls}tx/${txHash}`}
+							href={`${config.EVM_NETWORKS_CONFIG[chainId].blockExplorers?.default.url}/tx/${txHash}`}
 							target='_blank'
 						/>
 					</BriefContainer>

@@ -10,7 +10,7 @@ import type { IGIVpower } from '@/types/subgraph';
 
 interface ILockingBrief {
 	round: number;
-	amount: string;
+	amount: bigint;
 	onLocking?: boolean;
 }
 const LockingBrief: FC<ILockingBrief> = ({
@@ -19,13 +19,15 @@ const LockingBrief: FC<ILockingBrief> = ({
 	onLocking = false,
 }) => {
 	const givpowerInfo = useAppSelector(
-		state => state.subgraph.xDaiValues.givpowerInfo,
+		state => state.subgraph.gnosisValues.givpowerInfo,
 	) as IGIVpower;
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (
 		<BriefContainer>
 			<H5>{`You ${onLocking ? 'are locking' : 'locked'} `}</H5>
-			<H5White weight={700}>{formatWeiHelper(amount)} GIV</H5White>
+			<H5White weight={700}>
+				{formatWeiHelper(amount.toString())} GIV
+			</H5White>
 			<H5White>until {smallFormatDate(unlockDate)}</H5White>
 		</BriefContainer>
 	);

@@ -9,13 +9,14 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { useNetwork } from 'wagmi';
 import { Flex } from '@/components/styled-components/Flex';
-import Routes from '@/lib/constants/Routes';
-import { StakingType } from '@/types/config';
-import config from '@/configuration';
+import { getGIVConfig, getGIVpowerLink } from '@/helpers/givpower';
 
 const GetMoreGIVpowerBanner = () => {
 	const { formatMessage } = useIntl();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	return (
 		<GetMoreGIVpowerContainer>
@@ -30,9 +31,7 @@ const GetMoreGIVpowerBanner = () => {
 				.
 			</QuoteText>
 			<Actions gap='16px' flexWrap>
-				<Link
-					href={`${Routes.GIVfarm}/?open=${StakingType.GIV_LM}&chain=gnosis`}
-				>
+				<Link href={getGIVpowerLink(chainId)}>
 					<ButtonLink
 						label={formatMessage({ id: 'label.stake_giv' })}
 						size='small'
@@ -44,7 +43,7 @@ const GetMoreGIVpowerBanner = () => {
 					label={formatMessage({ id: 'label.get_giv' })}
 					size='small'
 					linkType='primary'
-					href={config.XDAI_CONFIG.GIV.BUY_LINK}
+					href={getGIVConfig(chainId).GIV_BUY_LINK}
 					target='_blank'
 				/>
 			</Actions>

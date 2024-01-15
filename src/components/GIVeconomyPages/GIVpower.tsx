@@ -12,8 +12,9 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
 import { Col, Row } from '@giveth/ui-design-system';
+import { useAccount } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex } from '../styled-components/Flex';
 import {
 	GIVpowerTopContainer,
@@ -57,23 +58,20 @@ import RocketImage from '../../../public/images/rocket.svg';
 import Growth from '../../../public/images/growth.svg';
 import GivStake from '../../../public/images/giv_stake.svg';
 import Routes from '@/lib/constants/Routes';
-import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import { setShowWalletModal } from '@/features/modal/modal.slice';
 import { formatWeiHelper } from '@/helpers/number';
 import links from '@/lib/constants/links';
+import { getTotalGIVpower } from '@/helpers/givpower';
 
 export function TabPowerTop() {
 	const { formatMessage } = useIntl();
-	const { account } = useWeb3React();
-	const sdh = new SubgraphDataHelper(
-		useAppSelector(state => state.subgraph.xDaiValues),
-	);
-	const givPower = sdh.getUserGIVPowerBalance();
-	const givPowerFormatted = formatWeiHelper(givPower.balance);
+	const { address } = useAccount();
+	const { open: openConnectModal } = useWeb3Modal();
+	const values = useAppSelector(state => state.subgraph);
+	const givPower = getTotalGIVpower(values);
+	const givPowerFormatted = formatWeiHelper(givPower.total);
 	const hasZeroGivPower = givPowerFormatted === '0';
-	const dispatch = useAppDispatch();
 
 	return (
 		<GIVpowerTopContainer>
@@ -98,7 +96,7 @@ export function TabPowerTop() {
 					</Col>
 					<Col xs={12} sm={4}>
 						<GivPowerCardContainer>
-							{account ? (
+							{address ? (
 								<>
 									<Caption>
 										{formatMessage({
@@ -129,7 +127,7 @@ export function TabPowerTop() {
 											href={
 												hasZeroGivPower
 													? Routes.GIVfarm
-													: Routes.Projects
+													: Routes.AllProjects
 											}
 										>
 											<BoostProjectButton
@@ -137,10 +135,10 @@ export function TabPowerTop() {
 													hasZeroGivPower
 														? formatMessage({
 																id: 'label.stake_for_givpower',
-														  })
+															})
 														: formatMessage({
 																id: 'label.boost_projects',
-														  })
+															})
 												}
 												size='large'
 												linkType='primary'
@@ -161,9 +159,7 @@ export function TabPowerTop() {
 										})}
 										buttonType='primary'
 										size='small'
-										onClick={() =>
-											dispatch(setShowWalletModal(true))
-										}
+										onClick={() => openConnectModal?.()}
 									/>
 								</ConnectWallet>
 							)}
@@ -176,7 +172,7 @@ export function TabPowerTop() {
 }
 
 export function TabPowerBottom() {
-	const getGivLink = config.XDAI_CONFIG.GIV.BUY_LINK;
+	const getGivLink = config.GNOSIS_CONFIG.GIV_BUY_LINK;
 	const { formatMessage } = useIntl();
 
 	return (
@@ -276,7 +272,7 @@ export function TabPowerBottom() {
 									id: 'label.boost_your_favorite_projects_to_help_them_rise',
 								})}
 							</Lead>
-							<Link href={Routes.Projects}>
+							<Link href={Routes.AllProjects}>
 								<CardBottomText>
 									{formatMessage({
 										id: 'label.boost_projects',
@@ -355,7 +351,7 @@ export function TabPowerBottom() {
 									})}
 								</QuoteText>
 								<br />
-								<Link href={Routes.Projects}>
+								<Link href={Routes.AllProjects}>
 									<CardBottomText>
 										{formatMessage({
 											id: 'label.browse_projects',

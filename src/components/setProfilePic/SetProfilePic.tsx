@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { isAddress } from 'viem';
 import useUpload from '@/hooks/useUpload';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
@@ -20,14 +21,15 @@ import { TabItem } from '../styled-components/Tabs';
 import { IGiverPFPToken } from '@/apollo/types/types';
 import { gqlRequest } from '@/helpers/requests';
 import { buildUsersPfpInfoQuery } from '@/lib/subgraph/pfpQueryBuilder';
-import Spinner from '../Spinner';
+import { WrappedSpinner } from '../Spinner';
 import { NoPFP } from './NoPFP';
 import { useAvatar } from '@/hooks/useAvatar';
-import { convertIPFSToHTTPS } from '@/helpers/blockchain';
 import NFTButtons from '../modals/UploadProfilePicModal/NFTButtons';
 import { useAppSelector } from '@/features/hooks';
 import OnboardButtons from '../modals/UploadProfilePicModal/OnboardButtons';
 import AttributeItems from './AttributeItems';
+import { convertIPFSToHTTPS } from '@/helpers/url';
+import { isSolanaAddress } from '@/lib/wallet';
 
 enum EProfilePicTab {
 	LOADING,
@@ -35,11 +37,8 @@ enum EProfilePicTab {
 	PFP,
 }
 
-const tabs = [
-	{ id: EProfilePicTab.UPLOAD, title: 'Upload Image' },
-	{ id: EProfilePicTab.PFP, title: 'My Givers' },
-];
-
+const UploadTab = { id: EProfilePicTab.UPLOAD, title: 'Upload Image' };
+const PFPsTab = { id: EProfilePicTab.PFP, title: 'My Givers' };
 interface ISetProfilePic {
 	isOnboarding?: boolean;
 	callback?: () => void;
@@ -52,6 +51,7 @@ export const SetProfilePic = ({
 	closeModal = () => {},
 }: ISetProfilePic) => {
 	const { loading, activeTab, setActiveTab, onSaveAvatar } = useAvatar();
+	const [tabs, setTabs] = useState([UploadTab, PFPsTab]);
 	const useUploadProps = useUpload();
 	const { url, onDelete } = useUploadProps;
 	const { userData: user, isLoading } = useAppSelector(state => state.user);
@@ -90,7 +90,13 @@ export const SetProfilePic = ({
 			}
 		};
 		if (user?.walletAddress) {
-			fetchPFPInfo(user.walletAddress);
+			if (isAddress(user?.walletAddress)) {
+				fetchPFPInfo(user?.walletAddress);
+			} else if (isSolanaAddress(user?.walletAddress)) {
+				setPfpData([]);
+				setActiveTab(EProfilePicTab.UPLOAD);
+				setTabs([UploadTab]);
+			}
 		}
 	}, [user]);
 
@@ -133,7 +139,7 @@ export const SetProfilePic = ({
 
 	return activeTab === EProfilePicTab.LOADING || isLoading === true ? (
 		<Wrapper>
-			<Spinner />
+			<WrappedSpinner />
 		</Wrapper>
 	) : (
 		<>

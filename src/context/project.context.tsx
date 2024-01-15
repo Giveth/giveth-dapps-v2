@@ -9,17 +9,15 @@ import {
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
-import config from '@/configuration';
 import { IPowerBoostingWithUserGIVpower } from '@/components/views/project/projectGIVPower';
 import { client } from '@/apollo/apolloClient';
 import {
 	FETCH_PROJECTED_RANK,
 	FETCH_PROJECT_BOOSTERS,
 } from '@/apollo/gql/gqlPowerBoosting';
-import { FETCH_USERS_GIVPOWER_BY_ADDRESS } from '@/apollo/gql/gqlUser';
 import { IPowerBoosting, IProject } from '@/apollo/types/types';
 import { formatWeiHelper } from '@/helpers/number';
-import { backendGQLRequest, gqlRequest } from '@/helpers/requests';
+import { backendGQLRequest } from '@/helpers/requests';
 import { compareAddresses, showToastError } from '@/lib/helpers';
 import {
 	EDirection,
@@ -27,11 +25,16 @@ import {
 	EProjectStatus,
 	ESortby,
 } from '@/apollo/types/gqlEnums';
-import { useAppSelector } from '@/features/hooks';
-import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import {
+	ACTIVATE_PROJECT,
+	FETCH_PROJECT_BY_SLUG,
+} from '@/apollo/gql/gqlProjects';
 import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import { FETCH_PROJECT_DONATIONS_COUNT } from '@/apollo/gql/gqlDonations';
 import { hasActiveRound } from '@/helpers/qf';
+import { getGIVpowerBalanceByAddress } from '@/services/givpower';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
 interface IBoostersData {
 	powerBoostings: IPowerBoostingWithUserGIVpower[];
@@ -48,12 +51,15 @@ interface IProjectContext {
 		status?: EProjectStatus,
 	) => Promise<void>;
 	fetchProjectBySlug: () => Promise<void>;
+	activateProject: () => Promise<void>;
 	projectData?: IProject;
 	isActive: boolean;
 	isDraft: boolean;
 	isAdmin: boolean;
 	hasActiveQFRound: boolean;
 	totalDonationsCount: number;
+	isCancelled: boolean;
+	isLoading: boolean;
 }
 
 const ProjectContext = createContext<IProjectContext>({
@@ -62,12 +68,15 @@ const ProjectContext = createContext<IProjectContext>({
 		Promise.reject('fetchProjectBoosters not initialed yet!'),
 	fetchProjectBySlug: () =>
 		Promise.reject('fetchProjectBySlug not initialed yet!'),
+	activateProject: () => Promise.reject('activateProject not initialed yet!'),
 	projectData: undefined,
 	isActive: true,
 	isDraft: false,
 	isAdmin: false,
 	hasActiveQFRound: false,
 	totalDonationsCount: 0,
+	isCancelled: false,
+	isLoading: true,
 });
 ProjectContext.displayName = 'ProjectContext';
 
@@ -78,6 +87,7 @@ export const ProjectProvider = ({
 	children: ReactNode;
 	project?: IProject;
 }) => {
+	const [isLoading, setIsLoading] = useState(false);
 	const [totalDonationsCount, setTotalDonationsCount] = useState(0);
 	const [boostersData, setBoostersData] = useState<IBoostersData>();
 	const [isBoostingsLoading, setIsBoostingsLoading] = useState(false);
@@ -86,8 +96,10 @@ export const ProjectProvider = ({
 	>(undefined);
 
 	const [projectData, setProjectData] = useState(project);
+	const [isCancelled, setIsCancelled] = useState(false);
 
-	const user = useAppSelector(state => state.user.userData);
+	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
+	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
 
@@ -99,6 +111,7 @@ export const ProjectProvider = ({
 	const hasActiveQFRound = hasActiveRound(projectData?.qfRounds);
 
 	const fetchProjectBySlug = useCallback(async () => {
+		setIsLoading(true);
 		client
 			.query({
 				query: FETCH_PROJECT_BY_SLUG,
@@ -110,18 +123,42 @@ export const ProjectProvider = ({
 				if (_project.status.name !== EProjectStatus.CANCEL) {
 					setProjectData(_project);
 				} else {
+					setIsCancelled(true);
 					setProjectData(undefined);
 				}
+				setIsLoading(false);
 			})
 			.catch((error: unknown) => {
-				showToastError(error);
+				console.log('fetchProjectBySlug error: ', error);
 				captureException(error, {
 					tags: {
 						section: 'fetchProject',
 					},
 				});
+				setIsLoading(false);
 			});
 	}, [slug, user?.id]);
+
+	const activateProject = async () => {
+		try {
+			if (!isSignedIn) {
+				dispatch(setShowSignWithWallet(true));
+				return;
+			}
+			await client.mutate({
+				mutation: ACTIVATE_PROJECT,
+				variables: { projectId: Number(projectData?.id || '') },
+			});
+			await fetchProjectBySlug();
+		} catch (e) {
+			showToastError(e);
+			captureException(e, {
+				tags: {
+					section: 'handleProjectStatus',
+				},
+			});
+		}
+	};
 
 	useEffect(() => {
 		if (!projectData?.id) return;
@@ -183,28 +220,8 @@ export const ProjectProvider = ({
 						return;
 					}
 
-					//get users balance
-					const balancesResp = await gqlRequest(
-						config.XDAI_CONFIG.subgraphAddress,
-						false,
-						FETCH_USERS_GIVPOWER_BY_ADDRESS,
-						{
-							addresses: _users,
-							contract:
-								config.XDAI_CONFIG.GIV.LM_ADDRESS.toLowerCase(),
-							length: _users.length,
-						},
-					);
-
-					const unipoolBalances = balancesResp.data.unipoolBalances;
-
-					const unipoolBalancesObj: { [key: string]: string } = {};
-
-					for (let i = 0; i < unipoolBalances.length; i++) {
-						const unipoolBalance = unipoolBalances[i];
-						unipoolBalancesObj[unipoolBalance.user.id] =
-							unipoolBalance.balance;
-					}
+					const unipoolBalancesObj =
+						await getGIVpowerBalanceByAddress(_users);
 
 					const _boostersData: IBoostersData = structuredClone(
 						boostingResp.data.getPowerBoosting,
@@ -220,7 +237,7 @@ export const ProjectProvider = ({
 						const powerBoosting = _boostersData.powerBoostings[i];
 						powerBoosting.user.givpowerBalance =
 							unipoolBalancesObj[
-								powerBoosting.user.walletAddress
+								powerBoosting.user.walletAddress.toLowerCase()
 							];
 						const _allocated = new BigNumber(
 							powerBoosting.user.givpowerBalance,
@@ -271,6 +288,7 @@ export const ProjectProvider = ({
 	const isDraft = projectData?.status.name === EProjectStatus.DRAFT;
 
 	useEffect(() => {
+		setIsCancelled(false);
 		if (user?.isSignedIn && !project) {
 			fetchProjectBySlug();
 		} else {
@@ -286,12 +304,15 @@ export const ProjectProvider = ({
 				isBoostingsLoading,
 				fetchProjectBoosters,
 				fetchProjectBySlug,
+				activateProject,
 				projectData,
 				isActive,
 				isDraft,
 				isAdmin,
 				hasActiveQFRound,
 				totalDonationsCount,
+				isCancelled,
+				isLoading,
 			}}
 		>
 			{children}

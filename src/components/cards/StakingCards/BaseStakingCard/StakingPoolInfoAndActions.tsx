@@ -7,19 +7,16 @@ import {
 } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import BigNumber from 'bignumber.js';
-import { constants } from 'ethers';
-import { useWeb3React } from '@web3-react/core';
 import { useRouter } from 'next/router';
+import { useAccount, useNetwork } from 'wagmi';
 import FarmCountDown from '@/components/FarmCountDown';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { FlexCenter, Flex } from '@/components/styled-components/Flex';
 import { avgAPR } from '@/helpers/givpower';
-import { BN, formatEthHelper, formatWeiHelper } from '@/helpers/number';
+import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
 	PoolStakingConfig,
 	RegenPoolStakingConfig,
-	SimpleNetworkConfig,
 	SimplePoolStakingConfig,
 	StakingType,
 } from '@/types/config';
@@ -78,8 +75,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	currentIncentive,
 }) => {
 	const [started, setStarted] = useState(true);
-	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
-	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
+	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
+	const [rewardStream, setRewardStream] = useState(0n);
 	const [isFirstStakeShown, setIsFirstStakeShown] = useState(false);
 	//Modals
 	const [showAPRModal, setShowAPRModal] = useState(false);
@@ -98,7 +95,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		showHarvestModal ||
 		showLockModal;
 	const { formatMessage } = useIntl();
-	const { setInfo } = useFarms();
+	const { setChainInfo } = useFarms();
 	const router = useRouter();
 	const {
 		apr,
@@ -106,7 +103,9 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		stakedAmount: stakedLpAmount,
 		earned,
 	} = useStakingPool(poolStakingConfig, hold);
-	const { chainId, account, active: isWalletActive } = useWeb3React();
+	const { address, isConnected: isWalletActive } = useAccount();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 	const {
@@ -118,11 +117,9 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		provideLiquidityLink,
 	} = poolStakingConfig;
 	const regenStreamConfig = regenStreamType
-		? (
-				config.NETWORKS_CONFIG[poolNetwork] as SimpleNetworkConfig
-		  ).regenStreams.find(
+		? config.EVM_NETWORKS_CONFIG[poolNetwork].regenStreams?.find(
 				regenStream => regenStream.type === regenStreamType,
-		  )
+			)
 		: undefined;
 
 	const { tokenDistroHelper, sdh } = useTokenDistroHelper(
@@ -139,13 +136,13 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 
 	useEffect(() => {
 		if (!(exploited || regenStreamConfig))
-			setInfo(poolNetwork, type, earned);
-	}, [poolNetwork, earned, type, regenStreamConfig, setInfo]);
+			setChainInfo(poolNetwork, type, earned);
+	}, [poolNetwork, earned, type, regenStreamConfig, setChainInfo, exploited]);
 
 	const isLocked = isGIVpower && userGIVLocked.balance !== '0';
 
 	const availableStakedToken = isGIVpower
-		? stakedLpAmount.sub(userGIVLocked.balance)
+		? stakedLpAmount - BigInt(userGIVLocked.balance)
 		: stakedLpAmount;
 
 	useEffect(() => {
@@ -162,17 +159,14 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		const { open, chain } = router.query;
 		const _open = Array.isArray(open) ? open[0] : open;
 		const _chain = Array.isArray(chain) ? chain[0] : chain;
-		const _chainId =
-			_chain === 'gnosis'
-				? config.XDAI_NETWORK_NUMBER
-				: config.MAINNET_NETWORK_NUMBER;
+		const _chainId = parseInt(_chain || '');
 		const checkNetworkAndShowStakeModal = async () => {
 			if (
 				_chainId === chainId &&
 				_chainId === poolNetwork &&
 				_open === type
 			) {
-				if (account) {
+				if (address) {
 					setShowStakeModal(true);
 					setIsFirstStakeShown(true);
 					router.replace(Routes.GIVfarm, undefined, {
@@ -182,12 +176,12 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 			}
 		};
 		checkNetworkAndShowStakeModal();
-	}, [router, account, isWalletActive]);
+	}, [router, address, isWalletActive]);
 
 	const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
 	const rewardTokenSymbol = regenStreamConfig?.rewardTokenSymbol || 'GIV';
 	const isZeroGIVStacked =
-		isGIVpower && (!account || userGIVPowerBalance.balance === '0');
+		isGIVpower && (!address || userGIVPowerBalance.balance === '0');
 
 	return (
 		<StakePoolInfoContainer>
@@ -206,16 +200,15 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 											id: 'label.your_cummulative_apr_including_both_rewards',
 										})}{' '}
 										(
-										{apr?.vaultIRR &&
-											formatEthHelper(apr.vaultIRR)}
+										{apr?.vaultIRR
+											? apr?.vaultIRR?.toString()
+											: '0'}
 										% IRR),{' '}
 										{formatMessage({
 											id: 'label.and_rewards_earned_in_giv',
 										})}{' '}
-										(
-										{apr &&
-											formatEthHelper(apr.effectiveAPR)}
-										% APR).
+										({apr && apr.effectiveAPR.toString()}%
+										APR).
 									</AngelVaultTooltip>
 								</IconWithTooltip>
 							)}
@@ -228,24 +221,24 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 										{isZeroGIVStacked
 											? formatMessage({
 													id: 'label.this_is_the_range_of_possible_apr',
-											  })
+												})
 											: `${formatMessage({
 													id: 'label.this_is_the_weighed_average_apr',
-											  })} ${
+												})} ${
 													apr &&
 													formatEthHelper(
-														apr.effectiveAPR,
+														apr.effectiveAPR.toString(),
 													)
-											  }%-${
+												}%-${
 													apr &&
 													formatEthHelper(
 														apr.effectiveAPR.multipliedBy(
-															5.196152423, // sqrt(1 + max rounds)
-														),
+															5.196,
+														), // sqrt(1 + max rounds)
 													)
-											  }%. ${formatMessage({
+												}%. ${formatMessage({
 													id: 'label.lock_your_giv_for_longer',
-											  })}`}
+												})}`}
 									</AngelVaultTooltip>
 								</IconWithTooltip>
 							)}
@@ -264,10 +257,12 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 													isLocked
 														? avgAPR(
 																apr.effectiveAPR,
-																stakedLpAmount.toString(),
-																userGIVPowerBalance.balance,
-														  )
-														: apr.effectiveAPR,
+																stakedLpAmount,
+																BigInt(
+																	userGIVPowerBalance.balance,
+																),
+															).toString()
+														: apr.effectiveAPR.toString(),
 												)}
 											%
 											{isZeroGIVStacked &&
@@ -275,7 +270,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 													apr &&
 													formatEthHelper(
 														apr.effectiveAPR.multipliedBy(
-															5.2, // sqrt(1 + max rounds)
+															5.2,
 														),
 													)
 												}%`}
@@ -308,7 +303,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						<DetailValue>
 							{!exploited ? (
 								`${formatWeiHelper(
-									rewardLiquidPart,
+									rewardLiquidPart.toString(),
 								)} ${rewardTokenSymbol}`
 							) : (
 								<div>
@@ -337,7 +332,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						<Flex gap='4px' alignItems='center'>
 							<DetailValue>
 								{!exploited ? (
-									formatWeiHelper(rewardStream)
+									formatWeiHelper(rewardStream.toString())
 								) : (
 									<div>
 										{formatMessage({
@@ -363,7 +358,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 			)}
 			<HarvestButtonsWrapper>
 				<ClaimButton
-					disabled={exploited || earned.isZero()}
+					disabled={exploited || earned === 0n}
 					onClick={() => setShowHarvestModal(true)}
 					label={formatMessage({
 						id: 'label.harvest_rewards',
@@ -372,7 +367,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 				/>
 				{isGIVpower && (
 					<ClaimButton
-						disabled={availableStakedToken.lte(constants.Zero)}
+						disabled={availableStakedToken <= 0n}
 						onClick={() => setShowLockModal(true)}
 						label={formatMessage({
 							id: 'label.increase_rewards',
@@ -391,14 +386,16 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 						disabled={
 							isDiscontinued ||
 							exploited ||
-							BN(userNotStakedAmount).isZero()
+							userNotStakedAmount === 0n
 						}
 						onClick={() => setShowStakeModal(true)}
 					/>
 					<StakeAmount>
 						{type === StakingType.UNISWAPV3_ETH_GIV
-							? `${userNotStakedAmount.toNumber()} ${unit}`
-							: `${formatWeiHelper(userNotStakedAmount)} ${unit}`}
+							? `${userNotStakedAmount.toString()} ${unit}`
+							: `${formatWeiHelper(
+									userNotStakedAmount.toString(),
+								)} ${unit}`}
 					</StakeAmount>
 				</StakeContainer>
 				<StakeContainer flexDirection='column'>
@@ -407,14 +404,16 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 							id: 'label.unstake',
 						})}
 						size='small'
-						disabled={availableStakedToken.isZero()}
+						disabled={availableStakedToken === 0n}
 						onClick={() => setShowUnStakeModal(true)}
 					/>
 					<FlexCenter gap='5px'>
 						<StakeAmount>
 							{type === StakingType.UNISWAPV3_ETH_GIV
-								? `${stakedLpAmount.toNumber()} ${unit}`
-								: `${formatWeiHelper(stakedLpAmount)} ${unit}`}
+								? `${stakedLpAmount.toString()} ${unit}`
+								: `${formatWeiHelper(
+										stakedLpAmount.toString(),
+									)} ${unit}`}
 						</StakeAmount>
 						{isLocked && (
 							<IconWithTooltip

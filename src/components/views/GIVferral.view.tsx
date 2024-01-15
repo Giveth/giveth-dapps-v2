@@ -13,9 +13,9 @@ import {
 	Col,
 	Container,
 	IconLinkedin,
-	IconTwitter,
 	IconFacebook,
 	IconShare,
+	IconXSocial,
 } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex, FlexCenter } from '../styled-components/Flex';
@@ -111,7 +111,7 @@ const GIVferralView = () => {
 					<SocialItems>
 						<SocialCol>
 							<SocialButtonContainer>
-								<IconTwitter />
+								<IconXSocial />
 								{formatMessage({
 									id: 'label.share_on_twitter',
 								})}
@@ -516,7 +516,7 @@ const Dot = styled.div`
 	height: 24px;
 	padding: 12px;
 	background-color: ${brandColors.giv[500]};
-	border: 4px solid ${brandColors.giv[100]}};
+	border: 4px solid ${brandColors.giv[100]};
 	border-radius: 50%;
 	color: white;
 	font-size: 16px;

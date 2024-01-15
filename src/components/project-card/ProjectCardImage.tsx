@@ -1,7 +1,7 @@
 import { FC, memo, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
-import { isNoImg, noImgColor, noImgIcon } from '../../lib/helpers';
+import { isNoImg } from '../../lib/helpers';
 
 interface IProjectCardImageProps {
 	image?: string;
@@ -17,7 +17,7 @@ const ProjectCardImage: FC<IProjectCardImageProps> = ({ image }) => {
 			src={src!}
 			fill
 			alt='project image'
-			onError={() => setSrc(undefined)}
+			onError={() => setSrc('/images/backgrounds/project-bg.png')}
 			loading='lazy'
 		/>
 	);
@@ -30,10 +30,10 @@ const Img = styled(Image)`
 `;
 
 const NoImg = styled.div`
-	background: ${noImgColor};
 	width: 100%;
 	height: 100%;
-	background-image: url(${noImgIcon});
+	background-image: url('/images/backgrounds/project-bg.png');
+	background-size: cover;
 `;
 
 export default memo(ProjectCardImage);

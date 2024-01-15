@@ -6,47 +6,49 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import BigNumber from 'bignumber.js';
+import { useAccount, useNetwork } from 'wagmi';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
-import { getTotalGIVpower } from '@/lib/stakingPool';
-import config from '@/configuration';
-import LoadingAnimation from '@/animations/loading.json';
 import { useAppSelector } from '@/features/hooks';
-import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
-import LottieControl from '@/components/LottieControl';
+import { WrappedSpinner } from '@/components/Spinner';
+import { getTotalGIVpower } from '@/helpers/givpower';
+import { getGIVpowerOnChain } from '@/lib/stakingPool';
 
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
-	const { account, library, chainId } = useWeb3React();
-	const xDaiValues = useAppSelector(state => state.subgraph.xDaiValues);
+	const values = useAppSelector(state => state.subgraph);
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
+	const { address } = useAccount();
 
 	useEffect(() => {
 		async function fetchTotalGIVpower() {
 			try {
-				if (!account) return;
-				if (chainId !== config.XDAI_NETWORK_NUMBER)
-					throw new Error('Change Netowrk to fetchTotalGIVpower');
-				const contractAddress = config.XDAI_CONFIG.GIV.LM_ADDRESS;
-				const _totalGIVpower = await getTotalGIVpower(
-					account,
-					contractAddress,
-					library,
+				if (!address || !chainId) return;
+				// try to get the GIVpower from the contract
+				const _totalGIVpower = await getGIVpowerOnChain(
+					address,
+					chainId,
 				);
+				// if we can get the GIVpower from the contract, we use that
 				if (_totalGIVpower) {
-					setTotalGIVpower(_totalGIVpower);
+					const { total } = getTotalGIVpower(values, {
+						chainId,
+						balance: new BigNumber(_totalGIVpower.toString()),
+					});
+					return setTotalGIVpower(total);
 				}
 			} catch (err) {
-				console.log({ err });
-				const sdh = new SubgraphDataHelper(xDaiValues);
-				const userGIVPowerBalance = sdh.getUserGIVPowerBalance();
-				setTotalGIVpower(new BigNumber(userGIVPowerBalance.balance));
+				console.log('Error on getGIVpowerOnChain', { err });
 			}
+			// if we can't get the GIVpower from the contract, we calculate it from the subgraph
+			const { total } = getTotalGIVpower(values);
+			setTotalGIVpower(total);
 		}
 
 		fetchTotalGIVpower();
-	}, []);
+	}, [address, chainId, values]);
 
 	return (
 		<BoxContainer>
@@ -66,7 +68,7 @@ const TotalGIVpowerBox = () => {
 					</BoxRow>
 				</>
 			) : (
-				<LottieControl animationData={LoadingAnimation} size={90} />
+				<WrappedSpinner size={90} />
 			)}
 		</BoxContainer>
 	);

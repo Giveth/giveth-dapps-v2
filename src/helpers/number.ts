@@ -1,9 +1,8 @@
 import BigNumber from 'bignumber.js';
-import { ethers } from 'ethers';
+import { formatEther } from 'viem';
 import config from '@/configuration';
 
 export const Zero = new BigNumber(0);
-export const BN = ethers.BigNumber.from;
 
 export const formatEthHelper = (
 	amount: BigNumber.Value,
@@ -25,29 +24,59 @@ export const formatEthHelper = (
 					groupSize: 3,
 					groupSeparator: ',',
 					decimalSeparator: '.',
-			  })
+				})
 		: amt.toFixed();
 };
 
 export const formatWeiHelper = (
-	amountWei: ethers.BigNumber | BigNumber.Value,
+	amountWei: bigint | BigNumber.Value,
 	decimals: number = config.TOKEN_PRECISION,
 	format = true,
 ): string => {
 	let amountEth: BigNumber.Value;
-	if (amountWei instanceof ethers.BigNumber)
-		amountEth = ethers.utils.formatEther(amountWei);
+	if (typeof amountWei === 'bigint') amountEth = formatEther(amountWei);
 	else {
 		amountEth = new BigNumber(amountWei).div(10 ** 18);
 	}
 	return formatEthHelper(amountEth, decimals, format);
 };
 
-export const formatDonations = (
-	amount: number,
+export const formatDonation = (
+	amount: string | number,
 	symbol: string = '',
+	local: Intl.LocalesArgument = 'en-US',
+	rounded: boolean = false,
+	maximumFractionDigits: number = 2,
 ): string => {
-	if (amount === 0) return '0.00';
-	if (amount < 0.01) return `<${symbol}0.01`;
-	return symbol + amount.toFixed(2);
+	const num = parseFloat(String(amount || 0));
+	if (rounded) maximumFractionDigits = 0;
+	const threshold = Math.pow(10, -maximumFractionDigits);
+	if (num === 0) {
+		return rounded
+			? `${symbol}0`
+			: `${symbol}${threshold.toString().replace('1', '0')}`;
+	}
+	if (num < threshold) return `< ${symbol}${threshold}`;
+	return !rounded
+		? symbol + num.toLocaleString(local, { maximumFractionDigits })
+		: symbol + Math.round(num);
 };
+
+export function limitFraction(
+	numberStr: string,
+	maxDecimals: number = config.DONATE_TOKEN_PRECISION,
+): string {
+	let number = parseFloat(numberStr);
+
+	if (isNaN(number)) {
+		return '--';
+	}
+
+	let smallestRepresentable = parseFloat(`1e-${maxDecimals}`);
+
+	if (0 < Math.abs(number) && Math.abs(number) < smallestRepresentable) {
+		return `<${smallestRepresentable.toFixed(maxDecimals)}`;
+	}
+
+	return number.toFixed(maxDecimals);
+}

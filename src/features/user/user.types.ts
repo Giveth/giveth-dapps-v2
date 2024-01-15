@@ -1,8 +1,18 @@
 export interface ISignToGetToken {
 	address: string;
+	safeAddress?: string;
 	chainId?: number;
-	signer: any;
 	pathname?: string;
+	connectors?: any; // TODO: CHANGE THIS
+	isGSafeConnector?: boolean;
+	connector?: any; // TODO: CHANGE THIS TYPE
+	expiration?: number;
+}
+
+export interface ISolanaSignToGetToken extends ISignToGetToken {
+	solanaSignedMessage: string;
+	nonce: string;
+	message: string;
 }
 
 export interface IChainvineSetReferral {

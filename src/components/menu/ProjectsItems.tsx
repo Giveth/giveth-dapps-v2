@@ -9,48 +9,60 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+
 import { useAppSelector } from '@/features/hooks';
 import { Flex } from '../styled-components/Flex';
 import { HighlightSection } from './common';
 import { Item } from './Item';
-import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import Routes from '@/lib/constants/Routes';
 import { ETheme } from '@/features/general/general.slice';
-
-const projectsItems = {
-	explore: [
-		// { name: 'Trending', query: '?q=?q=trending' },
-		{
-			name: 'All Projects',
-			url: Routes.Projects,
-			label: 'label.all_projects',
-		},
-		{
-			name: 'Recently Updated',
-			url: Routes.Projects + '?sort=' + EProjectsSortBy.RECENTLY_UPDATED,
-			label: 'label.recently_updated',
-		},
-		{
-			name: 'Just Launched',
-			url: Routes.Projects + '?sort=' + EProjectsSortBy.NEWEST,
-			label: 'label.just_launched',
-		},
-		{
-			name: 'Quadratic Funding',
-			url: Routes.QuadraticFunding,
-			label: 'label.quadratic_funding',
-		},
-		// { name: 'Popular', query: '?q=popular' },
-	],
-};
+import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
+import { getNowUnixMS } from '@/helpers/time';
 
 interface IProjectsItems {
 	inSidebar?: boolean;
 }
 
+export const projectsItems = {
+	explore: [
+		// { name: 'Trending', query: '?q=?q=trending' },
+		{
+			name: 'All Projects',
+			url: Routes.AllProjects,
+			label: 'label.projects_all',
+		},
+		{
+			name: 'Recently Updated',
+			url:
+				Routes.AllProjects +
+				'?sort=' +
+				EProjectsSortBy.RECENTLY_UPDATED,
+			label: 'label.recently_updated',
+		},
+		{
+			name: 'Just Launched',
+			url: Routes.AllProjects + '?sort=' + EProjectsSortBy.NEWEST,
+			label: 'label.just_launched',
+		},
+	],
+};
+
+const QFItem = {
+	name: 'Quadratic Funding',
+	url: Routes.QFProjects,
+	label: 'label.eligible_for_matching',
+};
+
 export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
-	const { theme, mainCategories } = useAppSelector(state => state.general);
+	const { theme, mainCategories, activeQFRound } = useAppSelector(
+		state => state.general,
+	);
 	const { formatMessage } = useIntl();
+
+	const now = getNowUnixMS();
+	const _startDate = new Date(activeQFRound?.beginDate || 0).getTime();
+	const _endDate = new Date(activeQFRound?.endDate || 0).getTime();
+	const showQFLink = activeQFRound && now > _startDate && now < _endDate;
 
 	return (
 		<>
@@ -64,19 +76,22 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={explore.url}>
-							<Item
-								className={`${
-									explore.url === Routes.QuadraticFunding
-										? 'quadratic-menu-item'
-										: ''
-								} projects-menu-items`}
+							<ExploreItem theme={theme} isHighlighted>
+								<B>{formatMessage({ id: explore.label })}</B>
+							</ExploreItem>
+						</Link>
+					))}
+					{showQFLink && (
+						<Link href={QFItem.url}>
+							<ExploreItem
+								className='qf-item'
 								theme={theme}
 								isHighlighted
 							>
-								<B>{formatMessage({ id: explore.label })}</B>
-							</Item>
+								<B>{formatMessage({ id: QFItem.label })}</B>
+							</ExploreItem>
 						</Link>
-					))}
+					)}
 				</ExploreByRow>
 			</HighlightSection>
 			<NormalSection inSidebar={inSidebar}>
@@ -87,11 +102,13 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 							key={idx}
 							href={`${Routes.Projects}/${category.slug}`}
 						>
-							<Item className='menu-category-item' theme={theme}>
+							<CategoryItem theme={theme}>
 								<GLink size='Big'>
-									{formatMessage({ id: category.slug })}
+									{formatMessage({
+										id: 'projects_' + category.slug,
+									})}
 								</GLink>
-							</Item>
+							</CategoryItem>
 						</Link>
 					))}
 				</CategoriesGrid>
@@ -102,13 +119,14 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 
 const ExploreByRow = styled(Flex)`
 	margin-top: 16px;
-	.quadratic-menu-item {
+`;
+
+const ExploreItem = styled(Item)`
+	padding: 2px 8px;
+	&.qf-item {
 		background: ${brandColors.cyan[600]};
 		border-radius: 16px;
 		color: white;
-	}
-	.projects-menu-items {
-		padding: 2px 8px;
 	}
 `;
 
@@ -123,15 +141,16 @@ const CategoriesGrid = styled.div<{ inSidebar?: boolean; theme: ETheme }>`
 	grid-template: ${props =>
 		props.inSidebar ? 'auto' : 'auto auto auto auto / auto auto auto'};
 	margin-top: 8px;
-	.menu-category-item {
-		padding: 8px;
-		:hover {
-			background: transparent;
-			color: ${({ theme }) =>
-				theme === ETheme.Dark
-					? brandColors.giv[200]
-					: brandColors.giv[500]};
-		}
+`;
+
+const CategoryItem = styled(Item)`
+	padding: 8px;
+	&:hover {
+		background: transparent;
+		color: ${({ theme }) =>
+			theme === ETheme.Dark
+				? brandColors.giv[200]
+				: brandColors.giv[500]};
 	}
 `;
 

@@ -16,7 +16,7 @@ import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
 import { zIndex } from '@/lib/constants/constants';
 import { EProjectsFilter } from '@/apollo/types/types';
-import { removeQueryParamAndRedirect } from '@/helpers/url';
+import config from '@/configuration';
 
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
@@ -33,7 +33,6 @@ const projectsFeatures = [
 const fundsFilter = [
 	{
 		label: 'Mainnet',
-
 		value: EProjectsFilter.ACCEPT_FUND_ON_MAINNET,
 	},
 	{
@@ -52,42 +51,66 @@ const fundsFilter = [
 		label: 'Optimism',
 		value: EProjectsFilter.ACCEPT_FUND_ON_OPTIMISM,
 	},
+	{
+		label: 'Ethereum Classic',
+		value: EProjectsFilter.ACCEPT_FUND_ON_ETC,
+	},
 ];
+
+if (config.ENABLE_SOLANA) {
+	fundsFilter.push({
+		label: 'Solana',
+		value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
+	});
+}
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {
 		const { formatMessage } = useIntl();
-		const { setVariables, variables, isQF } = useProjectsContext();
+		const { variables, isQF, setIsQF } = useProjectsContext();
 		const filtersCount = variables?.filters?.length ?? 0;
 		const campaignCount = variables?.campaignSlug ? 1 : 0;
-		const count = filtersCount + campaignCount - (isQF ? 1 : 0);
+		const count = filtersCount + campaignCount;
 		const router = useRouter();
 
 		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
+			let updatedQuery;
 			if (e) {
-				setVariables({
-					...variables,
-					filters: !variables.filters?.includes(filter)
-						? [...(variables.filters || []), filter]
-						: variables.filters,
-				});
+				updatedQuery = {
+					...router.query,
+					filter: router.query.filter
+						? Array.isArray(router.query.filter)
+							? [...router.query.filter, filter]
+							: [router.query.filter, filter]
+						: [filter],
+				};
 			} else {
-				setVariables({
-					...variables,
-					filters: variables.filters?.filter(
-						(f: string) => f !== filter,
-					),
-				});
+				updatedQuery = {
+					...router.query,
+					filter: router.query.filter
+						? Array.isArray(router.query.filter)
+							? router.query.filter.filter(f => f !== filter)
+							: []
+						: [],
+				};
 			}
+			router.push({
+				pathname: router.pathname,
+				query: updatedQuery,
+			});
+			handleClose();
 		};
 
 		const clearFilters = () => {
-			setVariables({
-				...variables,
-				filters: isQF ? [EProjectsFilter.ACTIVE_QF_ROUND] : [],
-				campaignSlug: undefined,
+			const updatedQuery = {
+				...router.query,
+			};
+			delete updatedQuery.filter;
+			delete updatedQuery.campaign;
+			router.push({
+				pathname: router.pathname,
+				query: updatedQuery,
 			});
-			removeQueryParamAndRedirect(router, ['filter', 'campaign']);
 		};
 
 		return (
@@ -108,37 +131,45 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					</FlexCenter>
 				</Header>
 				<Section>
-					{!isQF && (
-						<>
-							<B>
-								{formatMessage({
-									id: 'label.project_features',
-								})}
-							</B>
-							{projectsFeatures.map((projectFeature, idx) => (
-								<FeatureItem key={idx}>
-									<CheckBox
-										label={formatMessage(
-											{ id: projectFeature.label.id },
-											projectFeature.label,
-										)}
-										onChange={e => {
-											handleSelectFilter(
-												e,
-												projectFeature.value,
-											);
-										}}
-										checked={
-											variables?.filters?.includes(
-												projectFeature.value,
-											) ?? false
-										}
-										size={14}
-									/>
-								</FeatureItem>
-							))}
-						</>
-					)}
+					<B>
+						{formatMessage({
+							id: 'label.project_features',
+						})}
+					</B>
+					{projectsFeatures.map((projectFeature, idx) => (
+						<FeatureItem key={idx}>
+							<CheckBox
+								label={formatMessage(
+									{ id: projectFeature.label.id },
+									projectFeature.label,
+								)}
+								onChange={e => {
+									handleSelectFilter(e, projectFeature.value);
+								}}
+								checked={
+									variables?.filters?.includes(
+										projectFeature.value,
+									) ?? false
+								}
+								size={14}
+							/>
+						</FeatureItem>
+					))}
+					<FeatureItem>
+						<CheckBox
+							label={formatMessage({
+								id: 'label.eligible_for_matching',
+							})}
+							onChange={e => {
+								handleClose(e);
+								setIsQF(isQF => !isQF);
+							}}
+							disabled={router.pathname === '/qf'}
+							checked={isQF}
+							size={14}
+						/>
+					</FeatureItem>
+
 					<B>{formatMessage({ id: 'label.accepts_funds_on' })}</B>
 					{fundsFilter.map((projectFeature, idx) => (
 						<FeatureItem key={idx}>
@@ -161,13 +192,14 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 							<CheckBox
 								label='Campaign'
 								onChange={e => {
-									setVariables({
-										...variables,
-										campaignSlug: undefined,
+									const updatedQuery = {
+										...router.query,
+										campaign: undefined,
+									};
+									router.push({
+										pathname: router.pathname,
+										query: updatedQuery,
 									});
-									removeQueryParamAndRedirect(router, [
-										'campaign',
-									]);
 								}}
 								checked={!!variables?.campaignSlug}
 								size={14}

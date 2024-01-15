@@ -8,16 +8,26 @@ import UserProfileView from '@/components/views/userProfile/UserProfile.view';
 import { GeneralMetatags } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
+import { ProfileProvider } from '@/context/profile.context';
+import { useAppSelector } from '@/features/hooks';
+import { useReferral } from '@/hooks/useReferral';
 
 interface IUserRouteProps {
 	user?: IUser;
 }
 
 const UserRoute: FC<IUserRouteProps> = ({ user }) => {
+	const { isSignedIn, userData } = useAppSelector(state => state.user);
+	useReferral();
+
 	// When user is not found, GQL doesn't return any error. After backend is fixed, this can be deleted.
 	if (!user) {
 		return <ErrorsIndex statusCode='404' />;
 	}
+
+	const areSameUsers =
+		user.walletAddress?.toLowerCase() ===
+		userData?.walletAddress?.toLowerCase();
 
 	return (
 		<>
@@ -32,7 +42,12 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 					url: `https://giveth.io/user/${user.walletAddress}`,
 				}}
 			/>
-			<UserProfileView user={user} />
+			<ProfileProvider
+				user={areSameUsers ? userData! : user}
+				myAccount={isSignedIn && areSameUsers}
+			>
+				<UserProfileView />
+			</ProfileProvider>
 		</>
 	);
 };

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
-import { useWeb3React } from '@web3-react/core';
 import { IconHelpFilled16 } from '@giveth/ui-design-system';
 import { FC, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -8,8 +7,6 @@ import { useRouter } from 'next/router';
 
 import { Container } from '@giveth/ui-design-system';
 import { gToast, ToastType } from '@/components/toasts';
-import { useAppDispatch } from '@/features/hooks';
-import { fetchXDaiInfoAsync } from '@/features/subgraph/subgraph.thunks';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
@@ -20,9 +17,12 @@ import { Modal } from '@/components/modals/Modal';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 
-const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
-	ssr: false,
-});
+const RichTextInput = dynamic(
+	() => import('@/components/rich-text/RichTextInput'),
+	{
+		ssr: false,
+	},
+);
 
 const TestRoute = () => {
 	return (
@@ -35,18 +35,15 @@ const TestRoute = () => {
 //This comment is for testing1
 
 const TestIndex = () => {
-	// const xDaiValues = useSelector(
-	// 	(state: RootState) => state.subgraph.xDaiValues,
+	// const gnosisValues = useSelector(
+	// 	(state: RootState) => state.subgraph.gnosisValues,
 	// );
 	const [showModal, setShowModal] = useState(false);
-	const { account } = useWeb3React();
-	const dispatch = useAppDispatch();
 	const functionRef = useRef<Function>();
 	const [state, setState] = useState(0);
 	const [description, setDescription] = useState('');
 	const router = useRouter();
 	const { setTest } = useTestData();
-	console.log('Index rerender');
 
 	useEffect(() => {
 		setInterval(() => {
@@ -77,10 +74,9 @@ const TestIndex = () => {
 			query: FETCH_ALL_PROJECTS,
 			fetchPolicy: 'network-only',
 		});
-		console.log('res', res);
 	};
 
-	// console.log('xDaiValues', xDaiValues);
+	// console.log('gnosisValues', gnosisValues);
 	// useEffect(() => {
 	// 	if (!library) return;
 	// 	library.on('block', (evt: any) => {
@@ -111,15 +107,7 @@ const TestIndex = () => {
 				{/* <Tooltip direction={direction} align={align} parentRef={elRef}>
 					<div>Test</div>
 				</Tooltip> */}
-				<button
-					onClick={() => {
-						if (account) {
-							dispatch(fetchXDaiInfoAsync(account));
-						}
-					}}
-				>
-					Dispatch
-				</button>
+				<button onClick={() => {}}>Dispatch</button>
 				<button onClick={notify}>Test</button>
 				<button
 					type='button'

@@ -17,9 +17,12 @@ import InternalLink from '@/components/InternalLink';
 const QFToast = () => {
 	const { info } = usePassport();
 	const { passportState, currentRound } = info;
+
 	const isEligible = passportState === EPassportState.ELIGIBLE;
 	const isNotEligible = passportState === EPassportState.NOT_ELIGIBLE;
 	const { formatMessage, locale } = useIntl();
+
+	if (passportState === EPassportState.LOADING) return null;
 
 	const color = isEligible
 		? semanticColors.jade['500']
@@ -32,7 +35,6 @@ const QFToast = () => {
 	});
 
 	let description;
-	const roundNumber = currentRound?.id;
 	const endDate = new Date(currentRound?.endDate || '')
 		.toLocaleString(locale || 'en-US', {
 			day: 'numeric',
@@ -46,7 +48,7 @@ const QFToast = () => {
 				id: 'page.donate.passport_toast.description.eligible',
 			}) +
 			' ' +
-			roundNumber +
+			currentRound?.name +
 			' ' +
 			formatMessage({
 				id: 'label.ends_on',
@@ -77,10 +79,14 @@ const QFToast = () => {
 			</Title>
 			<Description>{description}</Description>
 			<FlexCenter>
-				<InternalLink href={Routes.Passport}>
+				<InternalLink
+					href={isEligible ? Routes.QFProjects : Routes.Passport}
+				>
 					<Button
 						label={formatMessage({
-							id: 'label.passport.link.go_to_passport',
+							id: isEligible
+								? 'label.go_to_projects'
+								: 'label.passport.link.go_to_passport',
 						})}
 						buttonType='primary'
 						size='small'

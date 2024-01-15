@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Col, IconGIVFarm, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { BigNumber } from 'bignumber.js';
-import { constants } from 'ethers';
-import { useWeb3React } from '@web3-react/core';
+import { useNetwork } from 'wagmi';
 import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 
@@ -19,18 +17,26 @@ import { TopInnerContainer } from '../../GIVeconomyPages/commons';
 
 export const GIVfarmTop = () => {
 	const { formatMessage } = useIntl();
-	const [rewardLiquidPart, setRewardLiquidPart] = useState(constants.Zero);
-	const [rewardStream, setRewardStream] = useState<BigNumber.Value>(0);
+	const [rewardLiquidPart, setRewardLiquidPart] = useState(0n);
+	const [rewardStream, setRewardStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { totalEarned } = useFarms();
-	const { chainId } = useWeb3React();
+	const { chainsInfo } = useFarms();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 
 	useEffect(() => {
-		setRewardLiquidPart(givTokenDistroHelper.getLiquidPart(totalEarned));
-		setRewardStream(
-			givTokenDistroHelper.getStreamPartTokenPerWeek(totalEarned),
+		if (!chainId) return;
+		setRewardLiquidPart(
+			givTokenDistroHelper.getLiquidPart(
+				chainsInfo[chainId]?.totalInfo || 0n,
+			),
 		);
-	}, [totalEarned, givTokenDistroHelper]);
+		setRewardStream(
+			givTokenDistroHelper.getStreamPartTokenPerWeek(
+				chainsInfo[chainId]?.totalInfo || 0n,
+			),
+		);
+	}, [chainsInfo, givTokenDistroHelper, chainId]);
 
 	return (
 		<GIVfarmTopContainer>
@@ -49,18 +55,26 @@ export const GIVfarmTop = () => {
 					</Col>
 					<Col xs={12} sm={5} xl={4}>
 						<GIVfarmRewardCard
+							cardName='GIVfarm'
 							title={formatMessage({
 								id: 'label.your_givfarm_rewards',
-							})}
-							wrongNetworkText={formatMessage({
-								id: 'label.givfarm_is_only_available_on_main_and_gnosis',
 							})}
 							liquidAmount={rewardLiquidPart}
 							stream={rewardStream}
 							network={chainId}
 							targetNetworks={[
-								config.MAINNET_NETWORK_NUMBER,
-								config.XDAI_NETWORK_NUMBER,
+								{
+									networkId: config.MAINNET_NETWORK_NUMBER,
+									chainType: config.MAINNET_CONFIG.chainType,
+								},
+								{
+									networkId: config.GNOSIS_NETWORK_NUMBER,
+									chainType: config.GNOSIS_CONFIG.chainType,
+								},
+								{
+									networkId: config.OPTIMISM_NETWORK_NUMBER,
+									chainType: config.OPTIMISM_CONFIG.chainType,
+								},
 							]}
 						/>
 					</Col>

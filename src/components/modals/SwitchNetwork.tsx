@@ -5,32 +5,47 @@ import {
 	IconNetwork32,
 	neutralColors,
 	Overline,
+	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useWeb3React } from '@web3-react/core';
+import { Chain, useSwitchNetwork } from 'wagmi';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import NetworkLogo from '@/components/NetworkLogo';
-import { switchNetwork } from '@/lib/wallet';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { ETheme } from '@/features/general/general.slice';
+import { getChainName } from '@/lib/network';
+import { INetworkIdWithChain } from '../views/donate/common.types';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
 
-const networks = [
-	config.MAINNET_CONFIG,
-	config.XDAI_CONFIG,
-	config.POLYGON_CONFIG,
-	config.CELO_CONFIG,
-	config.OPTIMISM_CONFIG,
-];
+const networksConfig = config.EVM_NETWORKS_CONFIG;
+const defaultNetworkIds = Object.keys(networksConfig).map(Number);
 
-const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
+interface ISwitchNetworkModal extends IModal {
+	desc?: string;
+	customNetworks?: INetworkIdWithChain[];
+}
+
+const SwitchNetwork: FC<ISwitchNetworkModal> = ({
+	desc,
+	customNetworks,
+	setShowModal,
+}) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { chainId } = useWeb3React();
+
+	const { switchNetwork } = useSwitchNetwork();
 	const { formatMessage } = useIntl();
+	const { walletChainType, handleSingOutAndSignInWithEVM, chain } =
+		useGeneralWallet();
+	const chainId = (chain as Chain)?.id;
+
 	const theme = useAppSelector(state => state.general.theme);
+	const networkIds =
+		customNetworks?.map(network => network.networkId) || defaultNetworkIds;
 
 	return (
 		<Modal
@@ -41,31 +56,29 @@ const SwitchNetwork: FC<IModal> = ({ setShowModal }) => {
 			headerTitlePosition='left'
 		>
 			<Wrapper>
-				{networks.map(network => {
-					const _chainId = parseInt(network.chainId);
-					return (
-						<NetworkItem
-							onClick={() => {
-								switchNetwork(_chainId);
-								closeModal();
-							}}
-							isSelected={_chainId === chainId}
-							key={_chainId}
-							theme={theme}
-						>
-							<NetworkLogo chainId={_chainId} logoSize={32} />
-							<B>{network.chainName}</B>
-							{_chainId === chainId && (
-								<SelectedNetwork
-									styleType='Small'
-									theme={theme}
-								>
-									{formatMessage({ id: 'label.selected' })}
-								</SelectedNetwork>
-							)}
-						</NetworkItem>
-					);
-				})}
+				{desc && <P>{desc}</P>}
+				{networkIds.map(networkId => (
+					<NetworkItem
+						onClick={() => {
+							if (walletChainType === ChainType.SOLANA) {
+								handleSingOutAndSignInWithEVM();
+							}
+							switchNetwork?.(networkId);
+							closeModal();
+						}}
+						isSelected={networkId === chainId}
+						key={networkId}
+						theme={theme}
+					>
+						<NetworkLogo chainId={networkId} logoSize={32} />
+						<B>{getChainName(networkId)}</B>
+						{networkId === chainId && (
+							<SelectedNetwork styleType='Small' theme={theme}>
+								{formatMessage({ id: 'label.selected' })}
+							</SelectedNetwork>
+						)}
+					</NetworkItem>
+				))}
 			</Wrapper>
 		</Modal>
 	);

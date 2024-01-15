@@ -1,27 +1,27 @@
 import { useEffect } from 'react';
-import { useWeb3React } from '@web3-react/core';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 
 import { fetchNotificationCountAsync } from '@/features/notification/notification.thunks';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const NotificationController = () => {
 	const dispatch = useAppDispatch();
 	const { isEnabled } = useAppSelector(state => state.user);
-	const { account } = useWeb3React();
+	const { walletAddress: address } = useGeneralWallet();
 
 	useEffect(() => {
-		let interval: NodeJS.Timer;
-		if (isEnabled && account) {
-			dispatch(fetchNotificationCountAsync(account));
+		let interval: any;
+		if (isEnabled && address) {
+			dispatch(fetchNotificationCountAsync(address));
 			interval = setInterval(() => {
-				dispatch(fetchNotificationCountAsync(account));
+				dispatch(fetchNotificationCountAsync(address));
 			}, config.NOTIFICATION_POLLING_INTERVAL);
 		}
 		return () => {
 			if (interval) clearInterval(interval);
 		};
-	}, [dispatch, isEnabled, account]);
+	}, [dispatch, isEnabled, address]);
 	return null;
 };
 

@@ -4,6 +4,7 @@ import {
 	brandColors,
 	Button,
 	Caption,
+	Container,
 	H3,
 	H4,
 	H5,
@@ -12,55 +13,49 @@ import {
 	OutlineButton,
 } from '@giveth/ui-design-system';
 import { useMutation } from '@apollo/client';
-import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { captureException } from '@sentry/nextjs';
-import { FormProvider, useForm } from 'react-hook-form';
-
-import { Container } from '@giveth/ui-design-system';
+import { FieldErrors, FormProvider, useForm } from 'react-hook-form';
 import {
 	ACTIVATE_PROJECT,
 	CREATE_PROJECT,
 	UPDATE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
-import { isAddressENS } from '@/lib/wallet';
 import {
 	ICategory,
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
+	IWalletAddress,
 } from '@/apollo/types/types';
 import {
 	CategoryInput,
 	DescriptionInput,
 	ImageInput,
 	LocationIndex,
-	WalletAddressInput,
 } from './Inputs';
-import SuccessfulCreation from './SuccessfulCreation';
-import { compareAddressesArray, showToastError } from '@/lib/helpers';
+import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
-import { slugToProjectView } from '@/lib/routeCreators';
+import { slugToProjectView, slugToSuccessView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
-import { Shadow } from '@/components/styled-components/Shadow';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
-// import useLeaveConfirm from '@/hooks/useLeaveConfirm';
 import config from '@/configuration';
-import CheckBox from '@/components/Checkbox';
 import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
+import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
+import AddressInterface from './AddressInterface';
+import { ChainType, NonEVMChain } from '@/types/config';
+import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
+import StorageLabel from '@/lib/localStorage';
+import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
+import { isRecurringActive } from '../donate/DonationCard';
 
-const {
-	MAINNET_NETWORK_NUMBER,
-	XDAI_NETWORK_NUMBER,
-	POLYGON_NETWORK_NUMBER,
-	CELO_NETWORK_NUMBER,
-	OPTIMISM_NETWORK_NUMBER,
-} = config;
+const ALL_CHAINS = config.CHAINS;
+
 interface ICreateProjectProps {
 	project?: IProjectEdition;
 }
@@ -72,11 +67,8 @@ export enum EInputs {
 	impactLocation = 'impactLocation',
 	image = 'image',
 	draft = 'draft',
-	mainAddress = 'mainAddress',
-	gnosisAddress = 'gnosisAddress',
-	polygonAddress = 'polygonAddress',
-	celoAddress = 'celoAddress',
-	optimismAddress = 'optimismAddress',
+	addresses = 'addresses',
+	alloProtocolRegistry = 'alloProtocolRegistry',
 }
 
 export type TInputs = {
@@ -86,11 +78,8 @@ export type TInputs = {
 	[EInputs.impactLocation]?: string;
 	[EInputs.image]?: string;
 	[EInputs.draft]?: boolean;
-	[EInputs.mainAddress]: string;
-	[EInputs.gnosisAddress]: string;
-	[EInputs.polygonAddress]: string;
-	[EInputs.celoAddress]: string;
-	[EInputs.optimismAddress]: string;
+	[EInputs.alloProtocolRegistry]?: boolean;
+	[EInputs.addresses]: IWalletAddress[];
 };
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
@@ -100,97 +89,121 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 
+	const [showAlloProtocolModal, setShowAlloProtocolModal] = useState(false);
+	const [addressModalChainId, setAddressModalChainId] = useState<number>();
+	const [addressModalChainType, setAddressModalChainType] =
+		useState<ChainType>();
+
 	const isEditMode = !!project;
+
+	let storageProjectData: TInputs | undefined;
+
+	if (!isEditMode) {
+		const storedProject = localStorage.getItem(
+			StorageLabel.CREATE_PROJECT_FORM,
+		);
+		if (storedProject) {
+			storageProjectData = JSON.parse(storedProject);
+		}
+	}
+
 	const { title, description, categories, impactLocation, image, addresses } =
 		project || {};
+	const {
+		name: storageTitle,
+		description: storageDescription,
+		categories: storageCategories,
+		impactLocation: storageImpactLocation,
+		image: storageImage,
+		alloProtocolRegistry: storageAlloProtocolRegistry,
+	} = storageProjectData || {};
+	const storageAddresses =
+		storageProjectData?.addresses instanceof Array
+			? storageProjectData.addresses
+			: [];
+
 	const isDraft = project?.status.name === EProjectStatus.DRAFT;
 	const defaultImpactLocation = impactLocation || '';
+	const activeAddresses =
+		addresses
+			?.filter(a => a.isRecipient)
+			.map(a => {
+				const _a = { ...a };
+				delete _a.isRecipient;
+				return _a;
+			}) || [];
 
-	const prevMainAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === MAINNET_NETWORK_NUMBER,
-	)?.address;
-	const prevGnosisAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === XDAI_NETWORK_NUMBER,
-	)?.address;
-	const prevPolygonAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === POLYGON_NETWORK_NUMBER,
-	)?.address;
-	const prevCeloAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === CELO_NETWORK_NUMBER,
-	)?.address;
-	const prevOptimismAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === OPTIMISM_NETWORK_NUMBER,
-	)?.address;
-	const isSamePrevAddresses = compareAddressesArray([
-		prevMainAddress,
-		prevGnosisAddress,
-		prevPolygonAddress,
-		prevCeloAddress,
-		prevOptimismAddress,
-	]);
-	const userAddresses: string[] = [];
-	if (isSamePrevAddresses) userAddresses.push(prevMainAddress!);
-	else {
-		if (prevMainAddress) userAddresses.push(prevMainAddress);
-		if (prevGnosisAddress) userAddresses.push(prevGnosisAddress);
-		if (prevPolygonAddress) userAddresses.push(prevPolygonAddress);
-		if (prevCeloAddress) userAddresses.push(prevCeloAddress);
-		if (prevOptimismAddress) userAddresses.push(prevOptimismAddress);
-	}
+	const userUniqueAddresses = [
+		...new Set(activeAddresses.map(a => a.address!)),
+	];
 
 	const formMethods = useForm<TInputs>({
 		mode: 'onBlur',
 		reValidateMode: 'onBlur',
 		defaultValues: {
-			[EInputs.name]: title,
-			[EInputs.description]: description || '',
-			[EInputs.categories]: categories || [],
-			[EInputs.impactLocation]: defaultImpactLocation,
-			[EInputs.image]: image || '',
-			[EInputs.mainAddress]: prevMainAddress || '',
-			[EInputs.gnosisAddress]: prevGnosisAddress || '',
-			[EInputs.polygonAddress]: prevPolygonAddress || '',
-			[EInputs.celoAddress]: prevCeloAddress || '',
-			[EInputs.optimismAddress]: prevOptimismAddress || '',
+			[EInputs.name]: title || storageTitle,
+			[EInputs.description]: description || storageDescription || '',
+			[EInputs.categories]: categories || storageCategories || [],
+			[EInputs.impactLocation]:
+				defaultImpactLocation || storageImpactLocation,
+			[EInputs.image]: image || storageImage || '',
+			[EInputs.alloProtocolRegistry]: isEditMode
+				? false //Should change to backend data when the backend is ready
+				: storageAlloProtocolRegistry,
+			[EInputs.addresses]: isEditMode
+				? activeAddresses
+				: storageAddresses,
 		},
 	});
 
-	const { unregister, handleSubmit, setValue } = formMethods;
+	const { handleSubmit, setValue, watch } = formMethods;
 
-	const [creationSuccessful, setCreationSuccessful] = useState<IProject>();
-	const [mainnetAddressActive, setMainnetAddressActive] = useState(
-		isEditMode ? !!prevMainAddress : true,
-	);
-	const [gnosisAddressActive, setGnosisAddressActive] = useState(
-		isEditMode ? !!prevGnosisAddress : true,
-	);
-	const [polygonAddressActive, setPolygonAddressActive] = useState(
-		isEditMode ? !!prevPolygonAddress : true,
-	);
-	const [celoAddressActive, setCeloAddressActive] = useState(
-		isEditMode ? !!prevCeloAddress : true,
-	);
-	const [optimismAddressActive, setOptimismAddressActive] = useState(
-		isEditMode ? !!prevOptimismAddress : true,
-	);
-	const [isSameAddress, setIsSameAddress] = useState(
-		isEditMode ? isSamePrevAddresses : true,
-	);
 	const [isLoading, setIsLoading] = useState(false);
-	const [resolvedENS, setResolvedENS] = useState('');
+	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
+	const [addedProjectState, setAddedProjectState] = useState<IProject>();
 
-	// useLeaveConfirm({ shouldConfirm: formChange });
+	const data = watch();
+	const {
+		name: watchName,
+		description: watchDescription,
+		categories: watchCategories,
+		image: watchImage,
+		impactLocation: watchImpactLocation,
+		addresses: watchAddresses,
+		alloProtocolRegistry: watchAlloProtocolRegistry,
+	} = data;
+
+	useEffect(() => {
+		if (isEditMode) return;
+		localStorage.setItem(
+			StorageLabel.CREATE_PROJECT_FORM,
+			JSON.stringify(data),
+		);
+	}, [
+		watchName,
+		watchDescription,
+		watchCategories,
+		watchImage,
+		watchImpactLocation,
+		watchAddresses,
+		watchAlloProtocolRegistry,
+	]);
+
+	const hasOptimismAddress = watchAddresses.hasOwnProperty(
+		config.OPTIMISM_NETWORK_NUMBER,
+	);
+
+	const onError = (errors: FieldErrors<TInputs>) => {
+		if (errors[EInputs.description]) {
+			document?.getElementById('project_description')?.scrollIntoView();
+		}
+	};
 
 	const onSubmit = async (formData: TInputs) => {
 		try {
 			setIsLoading(true);
-			const addresses = [];
 			const {
-				mainAddress,
-				gnosisAddress,
-				polygonAddress,
-				celoAddress,
-				optimismAddress,
+				addresses,
 				name,
 				description,
 				categories,
@@ -199,72 +212,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				draft,
 			} = formData;
 
-			if (isSameAddress) {
-				const address = isAddressENS(mainAddress)
-					? resolvedENS
-					: mainAddress;
-				const checksumAddress = utils.getAddress(address);
-				addresses.push(
-					{
-						address: checksumAddress,
-						networkId: MAINNET_NETWORK_NUMBER,
-					},
-					{
-						address: checksumAddress,
-						networkId: XDAI_NETWORK_NUMBER,
-					},
-					{
-						address: checksumAddress,
-						networkId: POLYGON_NETWORK_NUMBER,
-					},
-					{
-						address: checksumAddress,
-						networkId: CELO_NETWORK_NUMBER,
-					},
-					{
-						address: checksumAddress,
-						networkId: OPTIMISM_NETWORK_NUMBER,
-					},
+			if (addresses.length === 0) {
+				showToastError(
+					formatMessage({ id: 'label.recipient_addresses_cant' }),
 				);
-			} else {
-				if (mainnetAddressActive) {
-					const address = isAddressENS(mainAddress)
-						? resolvedENS
-						: mainAddress;
-					const checksumAddress = utils.getAddress(address);
-					addresses.push({
-						address: checksumAddress,
-						networkId: MAINNET_NETWORK_NUMBER,
-					});
-				}
-				if (gnosisAddressActive) {
-					const checksumAddress = utils.getAddress(gnosisAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: XDAI_NETWORK_NUMBER,
-					});
-				}
-				if (polygonAddressActive) {
-					const checksumAddress = utils.getAddress(polygonAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: POLYGON_NETWORK_NUMBER,
-					});
-				}
-				if (celoAddressActive) {
-					const checksumAddress = utils.getAddress(celoAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: CELO_NETWORK_NUMBER,
-					});
-				}
-				if (optimismAddressActive) {
-					const checksumAddress = utils.getAddress(optimismAddress);
-					addresses.push({
-						address: checksumAddress,
-						networkId: OPTIMISM_NETWORK_NUMBER,
-					});
-				}
+				setIsLoading(false);
+				return;
 			}
 
 			const projectData: IProjectCreation = {
@@ -284,12 +237,21 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							newProjectData: projectData,
 							projectId: parseFloat(project.id as string),
 						},
-				  })
+					})
 				: await addProjectMutation({
 						variables: {
 							project: { ...projectData },
 						},
-				  });
+					});
+
+			if (
+				watchAlloProtocolRegistry &&
+				hasOptimismAddress &&
+				isRecurringActive
+			) {
+				setAddedProjectState(addedProject.data?.createProject);
+				setIsLoading(false);
+			}
 
 			if (isDraft && !draft) {
 				await client.mutate({
@@ -298,19 +260,35 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				});
 			}
 
+			//handle Anchor contract modal here.
+
 			if (addedProject) {
 				// Success
-				setIsLoading(false);
-				const _project = isEditMode
-					? addedProject.data?.updateProject
-					: addedProject.data?.createProject;
-				if (draft) {
-					await router.push(slugToProjectView(_project.slug));
+
+				if (
+					watchAlloProtocolRegistry &&
+					hasOptimismAddress &&
+					isRecurringActive
+				) {
+					setShowAlloProtocolModal(true);
 				} else {
-					if (!isEditMode || (isEditMode && isDraft)) {
-						setCreationSuccessful(_project);
-					} else {
+					setIsLoading(false);
+					if (!isEditMode) {
+						localStorage.removeItem(
+							StorageLabel.CREATE_PROJECT_FORM,
+						);
+					}
+					const _project = isEditMode
+						? addedProject.data?.updateProject
+						: addedProject.data?.createProject;
+					if (draft) {
 						await router.push(slugToProjectView(_project.slug));
+					} else {
+						if (!isEditMode || (isEditMode && isDraft)) {
+							await router.push(slugToSuccessView(_project.slug));
+						} else {
+							await router.push(slugToProjectView(_project.slug));
+						}
 					}
 				}
 			}
@@ -325,6 +303,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		}
 	};
 
+	const handleCancel = () => {
+		router.back();
+		if (!isEditMode) {
+			localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
+		}
+	};
+
 	useEffect(() => {
 		dispatch(setShowFooter(false));
 		return () => {
@@ -334,10 +319,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const { isTablet, isMobile } = useDetectDevice();
 	const isSmallScreen = isTablet || isMobile;
-
-	if (creationSuccessful) {
-		return <SuccessfulCreation project={creationSuccessful} />;
-	}
 
 	return (
 		<Wrapper>
@@ -349,15 +330,18 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							: formatMessage({ id: 'label.create_a_project' })}
 					</Title>
 					{isSmallScreen && (
-						<GuidelinesStyleTablet>
-							<Guidelines />
-						</GuidelinesStyleTablet>
+						<Guidelines
+							setShowGuidelineModal={setShowGuidelineModal}
+						/>
 					)}
 				</div>
 
 				<FormProvider {...formMethods}>
-					<form onSubmit={handleSubmit(onSubmit)}>
-						<NameInput preTitle={title} />
+					<form onSubmit={handleSubmit(onSubmit, onError)}>
+						<NameInput
+							showGuidelineModal={showGuidelineModal}
+							preTitle={title}
+						/>
 						<DescriptionInput />
 						<CategoryInput />
 						<LocationIndex />
@@ -370,134 +354,24 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								id: 'label.you_can_set_a_custom_ethereum_address',
 							})}
 						</CaptionContainer>
-						<CheckBox
-							onChange={setIsSameAddress}
-							checked={isSameAddress}
-							label={formatMessage({
-								id: 'label.ill_raise_and_receive_funds_on_all_chains',
-							})}
-						/>
-						<WalletAddressInput
-							networkId={MAINNET_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
-							isActive={mainnetAddressActive}
-							userAddresses={userAddresses}
-							resolvedENS={resolvedENS}
-							setResolvedENS={setResolvedENS}
-							setIsActive={e => {
-								if (
-									!e &&
-									!gnosisAddressActive &&
-									!polygonAddressActive &&
-									!celoAddressActive &&
-									!optimismAddressActive
-								)
-									return showToastError(
-										formatMessage({
-											id: 'label.you_must_select_at_least_one_address',
-										}),
+						{ALL_CHAINS.map(chain => (
+							<AddressInterface
+								key={chain.id}
+								networkId={chain.id}
+								chainType={(chain as NonEVMChain).chainType}
+								onButtonClick={() => {
+									setAddressModalChainType(
+										(chain as NonEVMChain).chainType,
 									);
-								if (!e) unregister(EInputs.mainAddress);
-								setMainnetAddressActive(e);
-							}}
-						/>
-						<WalletAddressInput
-							networkId={XDAI_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
-							isActive={gnosisAddressActive}
-							userAddresses={userAddresses}
-							setResolvedENS={() => {}}
-							setIsActive={e => {
-								if (
-									!e &&
-									!mainnetAddressActive &&
-									!polygonAddressActive &&
-									!celoAddressActive &&
-									!optimismAddressActive
-								)
-									return showToastError(
-										formatMessage({
-											id: 'label.you_must_select_at_least_one_address',
-										}),
-									);
-								if (!e) unregister(EInputs.gnosisAddress);
-								setGnosisAddressActive(e);
-							}}
-						/>
-						<WalletAddressInput
-							networkId={POLYGON_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
-							isActive={polygonAddressActive}
-							userAddresses={userAddresses}
-							setResolvedENS={() => {}}
-							setIsActive={e => {
-								if (
-									!e &&
-									!mainnetAddressActive &&
-									!gnosisAddressActive &&
-									!celoAddressActive &&
-									!optimismAddressActive
-								)
-									return showToastError(
-										formatMessage({
-											id: 'label.you_must_select_at_least_one_address',
-										}),
-									);
-								if (!e) unregister(EInputs.polygonAddress);
-								setPolygonAddressActive(e);
-							}}
-						/>
-						<WalletAddressInput
-							networkId={CELO_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
-							isActive={celoAddressActive}
-							userAddresses={userAddresses}
-							setResolvedENS={() => {}}
-							setIsActive={e => {
-								if (
-									!e &&
-									!mainnetAddressActive &&
-									!gnosisAddressActive &&
-									!polygonAddressActive &&
-									!optimismAddressActive
-								)
-									return showToastError(
-										formatMessage({
-											id: 'label.you_must_select_at_least_one_address',
-										}),
-									);
-								if (!e) unregister(EInputs.celoAddress);
-								setCeloAddressActive(e);
-							}}
-						/>
-						<WalletAddressInput
-							networkId={OPTIMISM_NETWORK_NUMBER}
-							sameAddress={isSameAddress}
-							isActive={optimismAddressActive}
-							userAddresses={userAddresses}
-							setResolvedENS={() => {}}
-							setIsActive={e => {
-								if (
-									!e &&
-									!mainnetAddressActive &&
-									!gnosisAddressActive &&
-									!polygonAddressActive &&
-									!celoAddressActive
-								)
-									return showToastError(
-										formatMessage({
-											id: 'label.you_must_select_at_least_one_address',
-										}),
-									);
-								if (!e) unregister(EInputs.optimismAddress);
-								setOptimismAddressActive(e);
-							}}
-						/>
+									setAddressModalChainId(chain.id);
+								}}
+							/>
+						))}
 						<PublishTitle>
 							{isEditMode
 								? formatMessage({
 										id: 'label.publish_edited_project',
-								  })
+									})
 								: formatMessage({ id: 'label.lets_publish' })}
 						</PublishTitle>
 						<PublishList>
@@ -505,10 +379,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								{isEditMode
 									? formatMessage({
 											id: 'label.edited_projects',
-									  })
+										})
 									: formatMessage({
 											id: 'label.newly_published_projects',
-									  })}{' '}
+										})}{' '}
 								{formatMessage({
 									id: 'label.will_be_unlisted_until',
 								})}
@@ -550,24 +424,46 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								type='submit'
 								disabled={isLoading}
 							/>
-							{isEditMode && (
-								<OutlineButton
-									onClick={() => !isLoading && router.back()}
-									label={formatMessage({
-										id: 'label.cancel',
-									})}
-									buttonType='primary'
-									disabled={isLoading}
-								/>
-							)}
+							<OutlineButton
+								onClick={handleCancel}
+								label={formatMessage({ id: 'label.cancel' })}
+								buttonType='primary'
+								disabled={isLoading}
+							/>
 						</Buttons>
+						{addressModalChainId !== undefined && (
+							<CreateProjectAddAddressModal
+								networkId={addressModalChainId}
+								chainType={addressModalChainType}
+								userAddresses={userUniqueAddresses}
+								setShowModal={() => {
+									setAddressModalChainId(undefined);
+									setAddressModalChainType(undefined);
+								}}
+								onSubmit={() => {
+									setAddressModalChainId(undefined);
+									setAddressModalChainType(undefined);
+								}}
+							/>
+						)}
 					</form>
 				</FormProvider>
 			</CreateContainer>
 			{!isSmallScreen && (
-				<GuidelinesStyleLaptop>
-					<Guidelines />
-				</GuidelinesStyleLaptop>
+				<Guidelines
+					isLaptop
+					setShowGuidelineModal={setShowGuidelineModal}
+				/>
+			)}
+			{showGuidelineModal && (
+				<ProjectGuidelineModal setShowModal={setShowGuidelineModal} />
+			)}
+			{showAlloProtocolModal && addedProjectState && (
+				<AlloProtocolModal
+					setShowModal={setShowAlloProtocolModal}
+					addedProjectState={addedProjectState}
+					project={project}
+				/>
 			)}
 		</Wrapper>
 	);
@@ -583,36 +479,6 @@ const Wrapper = styled.div`
 	margin: 0 auto;
 	position: relative;
 	display: flex;
-`;
-
-const GuidelinesStyle = styled.div`
-	> div {
-		display: flex;
-		height: 87px;
-		align-items: center;
-		gap: 20px;
-		padding: 28px 30px 28px 28px;
-		border-radius: 8px;
-		box-shadow: ${Shadow.Dark[500]};
-		position: relative;
-		cursor: pointer;
-		margin-bottom: 20px;
-		> h6 {
-			font-weight: 700;
-		}
-	}
-`;
-
-const GuidelinesStyleTablet = styled(GuidelinesStyle)`
-	display: flex;
-`;
-
-const GuidelinesStyleLaptop = styled(GuidelinesStyle)`
-	display: flex;
-	> div {
-		position: sticky;
-		top: 104px;
-	}
 `;
 
 const CreateContainer = styled(Container)`

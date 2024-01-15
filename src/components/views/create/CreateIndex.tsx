@@ -5,12 +5,12 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	setShowCompleteProfile,
 	setShowSignWithWallet,
-	setShowWelcomeModal,
 } from '@/features/modal/modal.slice';
 import WalletNotConnected from '@/components/WalletNotConnected';
 import UserNotSignedIn from '@/components/UserNotSignedIn';
 import CompleteProfile from '@/components/CompleteProfile';
-import Spinner from '@/components/Spinner';
+import { WrappedSpinner } from '@/components/Spinner';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const CreateIndex = () => {
 	const dispatch = useAppDispatch();
@@ -20,6 +20,7 @@ const CreateIndex = () => {
 		isSignedIn,
 		userData: user,
 	} = useAppSelector(state => state.user);
+	const { openWalletConnectModal } = useGeneralWallet();
 	const isRegistered = isUserRegistered(user);
 
 	useEffect(() => {
@@ -32,12 +33,12 @@ const CreateIndex = () => {
 				dispatch(setShowCompleteProfile(true));
 			}
 		} else {
-			if (!isLoading) dispatch(setShowWelcomeModal(true));
+			if (!isLoading) openWalletConnectModal();
 		}
 	}, [user, isSignedIn, isLoading]);
 
 	if (isLoading) {
-		return <Spinner />;
+		return <WrappedSpinner />;
 	} else if (!isEnabled) {
 		return <WalletNotConnected />;
 	} else if (!isSignedIn) {

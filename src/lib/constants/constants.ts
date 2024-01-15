@@ -1,25 +1,6 @@
 import { brandColors, semanticColors } from '@giveth/ui-design-system';
 import config from '@/configuration';
 
-export const chainName = (chainId: number) => {
-	switch (chainId) {
-		case 31337:
-			return 'Hardhat';
-		case 1:
-			return 'Mainnet';
-		case 42:
-			return 'Kovan';
-		case 5:
-			return 'Goerli';
-		case 4:
-			return 'Rinkeby';
-		case 100:
-			return 'Gnosis Chain';
-		default:
-			return 'Unknown';
-	}
-};
-
 export const NFT_POSITIONS_MANAGER_ADDRESS: Record<string, string> = {
 	4: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
 	42: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
@@ -89,7 +70,7 @@ export const OurImages = [
 
 export const givEconomySupportedNetworks = [
 	config.MAINNET_NETWORK_NUMBER,
-	config.XDAI_NETWORK_NUMBER,
+	config.GNOSIS_NETWORK_NUMBER,
 ];
 
 export const zIndex = {
@@ -104,6 +85,7 @@ export const zIndex = {
 	POPOVER: 1070,
 	TOOLTIP: 1080,
 	NAVBAR: 1100,
+	WEB3MODAL: 1500,
 };
 
 export const searchSuggestions = [
@@ -120,8 +102,32 @@ export const regenFarmStreamCardCol = {
 	lg: [12, 8, 4],
 };
 
+export const ONE_MONTH_SECONDS = 2_592_000n;
+
 export const TWO_WEEK = 1_209_600_000;
 
 export const minDonationAmount = 0.000001;
 
+export const donationDecimals = 6;
+
 export const BACKEND_QUERY_LIMIT = 50;
+
+export const E18 = 1_000_000_000_000_000_000n;
+
+export const PRECISION = 5;
+
+export const ScaleRate = 10 ** PRECISION;
+
+export const ScaleRateBig = BigInt(ScaleRate);
+
+export const MaxUint256 = BigInt(
+	'115792089237316195423570985008687907853269984665640564039457584007913129639935',
+);
+
+export const AddressZero = '0x0000000000000000000000000000000000000000';
+
+export const WeiPerEther = 1e18;
+
+export const PROFILE_PHOTO_PLACEHOLDER = '/images/placeholders/profile.svg';
+
+export const QF_MATCHING_CAP_PERCENTAGE = 4;

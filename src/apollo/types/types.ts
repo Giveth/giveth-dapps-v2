@@ -6,6 +6,7 @@ import {
 	EProjectsSortBy,
 } from '@/apollo/types/gqlEnums';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
+import { ChainType } from '@/types/config';
 
 export interface IProjectPower {
 	powerRank: number;
@@ -28,7 +29,7 @@ export interface IEstimatedMatching {
 }
 
 export interface IProject {
-	id?: string;
+	id: string;
 	title?: string;
 	balance?: number;
 	image?: string;
@@ -74,6 +75,7 @@ export interface IProject {
 	sumDonationValueUsd?: number;
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
+	campaigns?: ICampaign[];
 }
 
 export interface IDonationProject extends IProject {
@@ -90,6 +92,8 @@ export enum EProjectsFilter {
 	ACCEPT_FUND_ON_POLYGON = 'AcceptFundOnPolygon',
 	ACCEPT_FUND_ON_CELO = 'AcceptFundOnCelo',
 	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
+	ACCEPT_FUND_ON_ETC = 'AcceptFundOnETC',
+	ACCEPT_FUND_ON_SOLANA = 'AcceptFundOnSolana',
 	ACTIVE_QF_ROUND = 'ActiveQfRound',
 }
 
@@ -110,6 +114,7 @@ export enum ECampaignFilterField {
 	AcceptFundOnPolygon = 'acceptFundOnPolygon',
 	AcceptFundOnCelo = 'acceptFundOnCelo',
 	AcceptFundOnOptimism = 'acceptFundOnOptimism',
+	AcceptFundOnSolana = 'acceptFundOnSolana',
 }
 
 export interface ICampaign {
@@ -139,6 +144,7 @@ export interface IWalletAddress {
 	address?: string;
 	isRecipient?: boolean;
 	networkId?: number;
+	chainType?: ChainType;
 }
 
 export interface IProjectEdition {
@@ -217,8 +223,9 @@ export interface IDonation {
 	amount: number;
 	currency: string;
 	valueUsd?: number;
-	transactionId: string;
+	transactionId?: string;
 	transactionNetworkId: number;
+	chainType?: ChainType;
 	createdAt: string;
 	donationType?: EDonationType;
 	anonymous?: boolean;
@@ -411,6 +418,7 @@ export interface IQFRound {
 	beginDate: string;
 	endDate: string;
 	minimumPassportScore: number;
+	eligibleNetworks: number[];
 }
 
 export interface IGetQfRoundHistory {

@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Lead, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
+import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { FlexCenter } from '@/components/styled-components/Flex';
@@ -25,6 +26,7 @@ interface IProps extends IModal {
 
 const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const { formatMessage } = useIntl();
 
 	const messageContent = () => {
 		switch (type) {
@@ -40,12 +42,15 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 			case EDonationFailedType.NOT_SAVED:
 				return (
 					<NotSaved>
-						<p>Your donation has NOT been saved!</p>
+						<p>We were not able to record your donation.</p>
+						<p>
+							Please check if the transaction was successful and
+							report this to our support team.
+						</p>
 						<ExternalLink
 							href={links.DISCORD_SUPPORT}
-							title='Please contact our support team'
+							title='Contact support'
 						/>
-						.
 					</NotSaved>
 				);
 			default:
@@ -70,7 +75,12 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 			<Container>
 				<Content>{messageContent()}</Content>
 				{txUrl && (
-					<ExternalLink href={txUrl} title='View on Etherscan' />
+					<ExternalLink
+						href={txUrl}
+						title={formatMessage({
+							id: 'label.view_on_block_explorer',
+						})}
+					/>
 				)}
 			</Container>
 		</Modal>
@@ -78,9 +88,10 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 };
 
 const NotSaved = styled.div`
-	> :last-child {
+	> a > span {
 		font-weight: 500;
 		text-decoration: underline;
+		margin-top: 16px;
 	}
 `;
 
@@ -97,10 +108,7 @@ const Content = styled(Lead)`
 	}
 
 	${mediaQueries.mobileL} {
-		padding: 38px 50px;
-	}
-	${mediaQueries.tablet} {
-		padding: 38px 93px;
+		padding: 24px;
 	}
 `;
 

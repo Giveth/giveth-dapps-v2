@@ -7,20 +7,15 @@ import {
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
-import BigNumber from 'bignumber.js';
-import { Zero } from '@ethersproject/constants';
 import Link from 'next/link';
-import { constants } from 'ethers';
-import { useWeb3React } from '@web3-react/core';
+import { useNetwork } from 'wagmi';
 import { Flex } from '../styled-components/Flex';
 import config from '@/configuration';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
-import { BN, formatWeiHelper } from '@/helpers/number';
+import { formatWeiHelper } from '@/helpers/number';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
-import { getGivStakingConfig } from '@/helpers/networkProvider';
 import { getUserStakeInfo } from '@/lib/stakingPool';
 import Routes from '@/lib/constants/Routes';
-import { networkInfo } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
@@ -38,6 +33,9 @@ import { ItemAction, ItemRow, ItemTitle } from './common';
 import { Item } from './Item';
 import { useItemsContext } from '@/context/Items.context';
 import { setShowSwitchNetworkModal } from '@/features/modal/modal.slice';
+import { getChainName } from '@/lib/network';
+import { getNetworkConfig } from '@/helpers/givpower';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
 export interface IRewardItemsProps {
 	showWhatIsGIVstreamModal: boolean;
@@ -51,61 +49,63 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 	theme,
 }) => {
 	const { formatMessage } = useIntl();
-	const [farmsLiquidPart, setFarmsLiquidPart] = useState(Zero);
-	const [givStreamLiquidPart, setGIVstreamLiquidPart] = useState(Zero);
-	const [flowRateNow, setFlowRateNow] = useState<BigNumber.Value>(0);
+	const [farmsLiquidPart, setFarmsLiquidPart] = useState(0n);
+	const [givStreamLiquidPart, setGIVstreamLiquidPart] = useState(0n);
+	const [flowRateNow, setFlowRateNow] = useState(0n);
 
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { chainId } = useWeb3React();
+	const { chain } = useNetwork();
+	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
 
 	const sdh = new SubgraphDataHelper(currentValues);
 
 	const tokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const { givbackLiquidPart } = tokenDistroBalance;
-	const { networkName } = networkInfo(chainId);
+	const networkName = getChainName(chainId);
 	const { close } = useItemsContext();
+	const _config = getNetworkConfig(config.GNOSIS_NETWORK_NUMBER, chainId);
+	const isSafeEnv = useIsSafeEnvironment();
 
 	useEffect(() => {
-		const _allocatedTokens = BN(tokenDistroBalance.allocatedTokens);
-		const _givbackLiquidPart = BN(tokenDistroBalance.givbackLiquidPart);
-		const _claimed = BN(tokenDistroBalance.claimed);
+		const _allocatedTokens = BigInt(tokenDistroBalance.allocatedTokens);
+		const _givbackLiquidPart = BigInt(tokenDistroBalance.givbackLiquidPart);
+		const _claimed = BigInt(tokenDistroBalance.claimed);
 		setGIVstreamLiquidPart(
-			givTokenDistroHelper
-				.getLiquidPart(_allocatedTokens.sub(_givbackLiquidPart))
-				.sub(_claimed),
+			givTokenDistroHelper.getLiquidPart(
+				_allocatedTokens - _givbackLiquidPart,
+			) - _claimed,
 		);
 		setFlowRateNow(
 			givTokenDistroHelper.getStreamPartTokenPerWeek(
-				_allocatedTokens.sub(_givbackLiquidPart),
+				_allocatedTokens - _givbackLiquidPart,
 			),
 		);
 	}, [currentValues, givTokenDistroHelper]);
 
 	useEffect(() => {
-		let pools;
-		if (chainId === config.XDAI_NETWORK_NUMBER) {
-			pools = [
-				...config.XDAI_CONFIG.pools,
-				getGivStakingConfig(config.XDAI_CONFIG),
-			];
-		} else if (chainId === config.MAINNET_NETWORK_NUMBER) {
-			pools = [
-				...config.MAINNET_CONFIG.pools,
-				getGivStakingConfig(config.MAINNET_CONFIG),
-			];
+		if (!chainId) return;
+		const networkConfig = config.EVM_NETWORKS_CONFIG[chainId];
+
+		if (!networkConfig || !networkConfig.pools) return;
+		let pools = [];
+		if (networkConfig.GIVPOWER) {
+			pools = [networkConfig.GIVPOWER, ...networkConfig.pools];
+		} else {
+			pools = networkConfig.pools;
 		}
+
 		if (pools) {
-			let _farmRewards = constants.Zero;
+			let _farmRewards = 0n;
 			pools.forEach(pool => {
 				if (pool.type !== StakingType.UNISWAPV3_ETH_GIV) {
-					_farmRewards = _farmRewards.add(
-						getUserStakeInfo(
+					if (!pool?.exploited) {
+						_farmRewards += getUserStakeInfo(
 							currentValues,
 							pool as SimplePoolStakingConfig,
-						).earned,
-					);
+						).earned;
+					}
 				}
 			});
 			setFarmsLiquidPart(
@@ -113,6 +113,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 			);
 		}
 	}, [currentValues, chainId, givTokenDistroHelper]);
+
 	return (
 		<>
 			<Item theme={theme}>
@@ -121,14 +122,16 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				</ItemTitle>
 				<ItemRow>
 					<Caption medium>{networkName}</Caption>
-					<ItemAction
-						size='Small'
-						onClick={() =>
-							dispatch(setShowSwitchNetworkModal(true))
-						}
-					>
-						{formatMessage({ id: 'label.switch_network' })}
-					</ItemAction>
+					{!isSafeEnv && (
+						<ItemAction
+							size='Small'
+							onClick={() =>
+								dispatch(setShowSwitchNetworkModal(true))
+							}
+						>
+							{formatMessage({ id: 'label.switch_network' })}
+						</ItemAction>
+					)}
 				</ItemRow>
 			</Item>
 			<Link href={Routes.GIVstream_FlowRate}>
@@ -144,7 +147,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 							alt='Thunder image'
 						/>
 						<FlowrateAmount>
-							{formatWeiHelper(flowRateNow)}
+							{formatWeiHelper(flowRateNow.toString())}
 						</FlowrateAmount>
 						<FlowrateUnit>
 							GIV/{formatMessage({ id: 'label.week' })}
@@ -168,7 +171,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 					</ItemTitle>
 					<Flex gap='4px'>
 						<PartAmount medium>
-							{formatWeiHelper(givStreamLiquidPart)}
+							{formatWeiHelper(givStreamLiquidPart.toString())}
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
 						<ForwardWrapper>
@@ -184,7 +187,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 					</ItemTitle>
 					<Flex gap='4px'>
 						<PartAmount medium>
-							{formatWeiHelper(farmsLiquidPart)}
+							{formatWeiHelper(farmsLiquidPart.toString())}
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
 						<ForwardWrapper>
@@ -214,7 +217,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				label={formatMessage({ id: 'label.get_giv_token' })}
 				size='small'
 				linkType='primary'
-				href={config.XDAI_CONFIG.GIV.BUY_LINK}
+				href={_config.GIV_BUY_LINK}
 				target='_blank'
 			/>
 			{showWhatIsGIVstreamModal && (
