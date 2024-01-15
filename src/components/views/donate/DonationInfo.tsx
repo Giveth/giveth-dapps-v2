@@ -9,21 +9,26 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useNetwork } from 'wagmi';
+import { Chain } from 'wagmi';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
-import { formatTxLink } from '@/lib/helpers';
 import { useDonateData } from '@/context/donate.context';
 import ExternalLink from '@/components/ExternalLink';
 
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { formatTxLink } from '@/lib/helpers';
+
 const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
+	const { chain, walletChainType } = useGeneralWallet();
 	return (
 		<TxLink>
 			<span>Donation to {title + ' '}</span>
 			<ExternalLink
-				href={formatTxLink(chainId, txHash)}
+				href={formatTxLink({
+					txHash,
+					networkId: (chain as Chain)?.id,
+					chainType: walletChainType || undefined,
+				})}
 				title='View the transaction'
 			/>
 			<IconExternalLink24 />
@@ -36,6 +41,7 @@ export const DonationInfo = () => {
 	const { isSuccessDonation, project } = useDonateData();
 	const { txHash = [] } = isSuccessDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
+
 	return (
 		<Options>
 			<Lead style={{ color: neutralColors.gray[900] }}>
@@ -47,8 +53,10 @@ export const DonationInfo = () => {
 					id: 'label.you_can_view_them_on_a_blockchain_explorer_here',
 				})}
 			</Lead>
-			<TxRow txHash={txHash[0]} title={project.title} />
-			{hasMultipleTxs && <TxRow txHash={txHash[1]} title='Giveth' />}
+			<TxRow txHash={txHash[0]?.txHash} title={project.title} />
+			{hasMultipleTxs && (
+				<TxRow txHash={txHash[1]?.txHash} title='Giveth' />
+			)}
 			<Link href={Routes.AllProjects}>
 				<ProjectsButton size='small' label='SEE MORE PROJECTS' />
 			</Link>
@@ -69,7 +77,6 @@ const ProjectsButton = styled(ButtonLink)`
 
 const TxLink = styled(Lead)`
 	color: ${brandColors.pinky[500]};
-	cursor: pointer;
 	margin-top: 16px;
 	display: flex;
 	align-items: center;

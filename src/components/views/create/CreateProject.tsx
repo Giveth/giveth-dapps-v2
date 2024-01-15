@@ -24,6 +24,7 @@ import {
 } from '@/apollo/gql/gqlProjects';
 import {
 	ICategory,
+	IProject,
 	IProjectCreation,
 	IProjectEdition,
 	IWalletAddress,
@@ -50,6 +51,8 @@ import AddressInterface from './AddressInterface';
 import { ChainType, NonEVMChain } from '@/types/config';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
+import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
+import { isRecurringActive } from '../donate/DonationCard';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -65,6 +68,7 @@ export enum EInputs {
 	image = 'image',
 	draft = 'draft',
 	addresses = 'addresses',
+	alloProtocolRegistry = 'alloProtocolRegistry',
 }
 
 export type TInputs = {
@@ -74,6 +78,7 @@ export type TInputs = {
 	[EInputs.impactLocation]?: string;
 	[EInputs.image]?: string;
 	[EInputs.draft]?: boolean;
+	[EInputs.alloProtocolRegistry]?: boolean;
 	[EInputs.addresses]: IWalletAddress[];
 };
 
@@ -84,6 +89,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 
+	const [showAlloProtocolModal, setShowAlloProtocolModal] = useState(false);
 	const [addressModalChainId, setAddressModalChainId] = useState<number>();
 	const [addressModalChainType, setAddressModalChainType] =
 		useState<ChainType>();
@@ -109,6 +115,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		categories: storageCategories,
 		impactLocation: storageImpactLocation,
 		image: storageImage,
+		alloProtocolRegistry: storageAlloProtocolRegistry,
 	} = storageProjectData || {};
 	const storageAddresses =
 		storageProjectData?.addresses instanceof Array
@@ -140,6 +147,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.impactLocation]:
 				defaultImpactLocation || storageImpactLocation,
 			[EInputs.image]: image || storageImage || '',
+			[EInputs.alloProtocolRegistry]: isEditMode
+				? false //Should change to backend data when the backend is ready
+				: storageAlloProtocolRegistry,
 			[EInputs.addresses]: isEditMode
 				? activeAddresses
 				: storageAddresses,
@@ -150,6 +160,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
+	const [addedProjectState, setAddedProjectState] = useState<IProject>();
 
 	const data = watch();
 	const {
@@ -159,6 +170,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		image: watchImage,
 		impactLocation: watchImpactLocation,
 		addresses: watchAddresses,
+		alloProtocolRegistry: watchAlloProtocolRegistry,
 	} = data;
 
 	useEffect(() => {
@@ -174,7 +186,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchImage,
 		watchImpactLocation,
 		watchAddresses,
+		watchAlloProtocolRegistry,
 	]);
+
+	const hasOptimismAddress = watchAddresses.hasOwnProperty(
+		config.OPTIMISM_NETWORK_NUMBER,
+	);
 
 	const onError = (errors: FieldErrors<TInputs>) => {
 		if (errors[EInputs.description]) {
@@ -227,6 +244,15 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						},
 					});
 
+			if (
+				watchAlloProtocolRegistry &&
+				hasOptimismAddress &&
+				isRecurringActive
+			) {
+				setAddedProjectState(addedProject.data?.createProject);
+				setIsLoading(false);
+			}
+
 			if (isDraft && !draft) {
 				await client.mutate({
 					mutation: ACTIVATE_PROJECT,
@@ -234,22 +260,35 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				});
 			}
 
+			//handle Anchor contract modal here.
+
 			if (addedProject) {
 				// Success
-				setIsLoading(false);
-				if (!isEditMode) {
-					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
-				}
-				const _project = isEditMode
-					? addedProject.data?.updateProject
-					: addedProject.data?.createProject;
-				if (draft) {
-					await router.push(slugToProjectView(_project.slug));
+
+				if (
+					watchAlloProtocolRegistry &&
+					hasOptimismAddress &&
+					isRecurringActive
+				) {
+					setShowAlloProtocolModal(true);
 				} else {
-					if (!isEditMode || (isEditMode && isDraft)) {
-						await router.push(slugToSuccessView(_project.slug));
-					} else {
+					setIsLoading(false);
+					if (!isEditMode) {
+						localStorage.removeItem(
+							StorageLabel.CREATE_PROJECT_FORM,
+						);
+					}
+					const _project = isEditMode
+						? addedProject.data?.updateProject
+						: addedProject.data?.createProject;
+					if (draft) {
 						await router.push(slugToProjectView(_project.slug));
+					} else {
+						if (!isEditMode || (isEditMode && isDraft)) {
+							await router.push(slugToSuccessView(_project.slug));
+						} else {
+							await router.push(slugToProjectView(_project.slug));
+						}
 					}
 				}
 			}
@@ -418,6 +457,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			)}
 			{showGuidelineModal && (
 				<ProjectGuidelineModal setShowModal={setShowGuidelineModal} />
+			)}
+			{showAlloProtocolModal && addedProjectState && (
+				<AlloProtocolModal
+					setShowModal={setShowAlloProtocolModal}
+					addedProjectState={addedProjectState}
+					project={project}
+				/>
 			)}
 		</Wrapper>
 	);

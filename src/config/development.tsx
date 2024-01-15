@@ -52,8 +52,8 @@ const CLASSIC_NETWORK_NUMBER = 63;
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
 	chainType: ChainType.SOLANA,
-	name: 'Solana Testnet',
-	adapterNetwork: WalletAdapterNetwork.Testnet,
+	name: 'Solana Devnet',
+	adapterNetwork: WalletAdapterNetwork.Devnet,
 	blockExplorers: {
 		default: {
 			name: 'Solana Explorer',
@@ -122,6 +122,7 @@ const config: EnvConfig = {
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
 		...goerli,
+		chainType: ChainType.EVM,
 		DAI_TOKEN_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',
 		DAI_BUY_LINK: '',
 		PFP_CONTRACT_ADDRESS: '0x9F8c0e0353234F6f644fc7AF84Ac006f02cecE77',
@@ -180,6 +181,7 @@ const config: EnvConfig = {
 
 	GNOSIS_CONFIG: {
 		...gnosis,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			maxFeePerGas: (2e9).toString(),
 			maxPriorityFeePerGas: (1e9).toString(),
@@ -332,6 +334,7 @@ const config: EnvConfig = {
 
 	POLYGON_CONFIG: {
 		...polygon,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -341,6 +344,7 @@ const config: EnvConfig = {
 
 	OPTIMISM_CONFIG: {
 		...optimismGoerli,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -399,6 +403,7 @@ const config: EnvConfig = {
 
 	CELO_CONFIG: {
 		...celoAlfajores,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -409,6 +414,7 @@ const config: EnvConfig = {
 	CLASSIC_CONFIG: {
 		...classic,
 		//TODO: should change the icon
+		chainType: ChainType.EVM,
 		chainLogo: (logoSize?: number) => <IconUnknown size={logoSize} />,
 		coingeckoChainName: 'ethereum-classic',
 		gasPreference: {

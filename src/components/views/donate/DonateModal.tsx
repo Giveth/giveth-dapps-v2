@@ -8,14 +8,12 @@ import {
 	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-
-import { useAccount, useNetwork } from 'wagmi';
+import { Chain } from 'wagmi';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
-import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
+import { mediaQueries } from '@/lib/constants/constants';
 import { IMeGQL, IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-
 import { IModal } from '@/types/common';
 import FailedDonation, {
 	EDonationFailedType,
@@ -30,9 +28,14 @@ import config from '@/configuration';
 import DonateSummary from '@/components/views/donate/DonateSummary';
 import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import { useDonateData } from '@/context/donate.context';
-import { useCreateDonation } from '@/hooks/useCreateDonation';
+import { TxHashWithChainType, useDonateData } from '@/context/donate.context';
+import { useCreateEvmDonation } from '@/hooks/useCreateEvmDonation';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
+import { IWalletAddress } from '@/apollo/types/types';
+import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
+import { calcDonationShare } from '@/components/views/donate/helpers';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -52,20 +55,27 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		anonymous,
 		givBackEligible,
 	} = props;
+	const createDonationHook =
+		token.chainType === ChainType.SOLANA
+			? useCreateSolanaDonation
+			: useCreateEvmDonation;
 	const {
 		createDonation: createFirstDonation,
 		txHash: firstTxHash,
 		donationSaved: firstDonationSaved,
 		donationMinted: firstDonationMinted,
-	} = useCreateDonation();
+	} = createDonationHook();
 	const {
 		createDonation: createSecondDonation,
 		txHash: secondTxHash,
 		donationSaved: secondDonationSaved,
-	} = useCreateDonation();
-	const { address } = useAccount();
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
+	} = createDonationHook();
+	const {
+		chain,
+		walletChainType,
+		walletAddress: address,
+	} = useGeneralWallet();
+	const chainId = (chain as Chain)?.id;
 	const dispatch = useAppDispatch();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const isDonatingToGiveth = donationToGiveth > 0;
@@ -82,23 +92,27 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
 	const { title, addresses, givethAddresses } = project || {};
-	const projectWalletAddress = addresses?.find(
-		a => a.isRecipient && a.networkId === chainId,
-	)?.address;
 
-	const givethWalletAddress = givethAddresses?.find(
-		a => a.isRecipient && a.networkId === chainId,
-	)?.address;
+	const projectWalletAddress = findMatchingWalletAddress(
+		addresses,
+		chainId,
+		walletChainType,
+	);
+	const givethWalletAddress = findMatchingWalletAddress(
+		givethAddresses,
+		chainId,
+		walletChainType,
+	);
 
-	const avgPrice = tokenPrice && tokenPrice * amount;
-	let donationToGivethAmount = (amount * donationToGiveth) / 100;
-	if (donationToGivethAmount < minDonationAmount && isDonatingToGiveth) {
-		donationToGivethAmount = minDonationAmount;
-	}
-	const donationToGivethPrice =
-		tokenPrice && donationToGivethAmount * tokenPrice;
+	const { projectDonation, givethDonation } = calcDonationShare(
+		amount,
+		donationToGiveth,
+		token.decimals,
+	);
+	const projectDonationPrice = tokenPrice && tokenPrice * projectDonation;
+	const givethDonationPrice = tokenPrice && givethDonation * tokenPrice;
 
-	// this function is used to validate the token, if the token is valid, the user can donate, otherwise it will show a error message.
+	// this function is used to validate the token, if the token is valid, the user can donate, otherwise it will show an error message.
 	const validateTokenThenDonate = async () => {
 		setDonating(true);
 		client
@@ -126,10 +140,19 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const delayedCloseModal = (txHash1: string, txHash2?: string) => {
 		setProcessFinished(true);
 		setDonating(false);
-		const txHash = txHash2 ? [txHash1, txHash2] : [txHash1];
+
+		const { chainType } = token;
+
+		const txHashArray: TxHashWithChainType[] = [
+			{ txHash: txHash1, chainType: chainType || ChainType.EVM },
+			...(txHash2
+				? [{ txHash: txHash2, chainType: chainType || ChainType.EVM }]
+				: []),
+		];
+
 		setTimeout(() => {
 			closeModal();
-			setSuccessDonation({ txHash, givBackEligible });
+			setSuccessDonation({ txHash: txHashArray, givBackEligible });
 		}, 4000);
 	};
 
@@ -137,14 +160,13 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		const txProps = {
 			anonymous,
 			setDonating,
-			amount,
 			token,
 			setFailedModalType,
 		};
 		if (!projectWalletAddress || !givethWalletAddress) return;
-
 		createFirstDonation({
 			...txProps,
+			amount: projectDonation,
 			walletAddress: projectWalletAddress,
 			projectId: Number(project.id),
 			chainvineReferred,
@@ -161,7 +183,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 					createSecondDonation({
 						...txProps,
 						walletAddress: givethWalletAddress,
-						amount: donationToGivethAmount,
+						amount: givethDonation,
 						projectId: config.GIVETH_PROJECT_ID,
 						setFailedModalType,
 						symbol: token.symbol,
@@ -189,8 +211,16 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			.catch(console.log);
 	};
 
-	if (!projectWalletAddress) {
-		showToastError('There is no eth address assigned for this project');
+	const handleTxLink = (txHash?: string) => {
+		return formatTxLink({
+			txHash,
+			networkId: chainId,
+			chainType: token.chainType,
+		});
+	};
+
+	if (!projectWalletAddress && walletChainType) {
+		showToastError('There is no address assigned for this project');
 		return null;
 	}
 
@@ -220,9 +250,9 @@ const DonateModal: FC<IDonateModalProps> = props => {
 									})}
 						</Lead>
 						<DonateSummary
-							value={amount}
+							value={projectDonation}
 							tokenSymbol={token.symbol}
-							usdValue={avgPrice}
+							usdValue={projectDonationPrice}
 							title={title}
 						/>
 						{firstDonationMinted && (
@@ -243,10 +273,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 								/>
 								{firstTxHash && (
 									<ExternalLink
-										href={formatTxLink(
-											chainId,
-											firstTxHash,
-										)}
+										href={handleTxLink(firstTxHash)}
 										title={formatMessage({
 											id: 'label.view_on_block_explorer',
 										})}
@@ -271,9 +298,9 @@ const DonateModal: FC<IDonateModalProps> = props => {
 												})}
 								</Lead>
 								<DonateSummary
-									value={donationToGivethAmount}
+									value={givethDonation}
 									tokenSymbol={token.symbol}
-									usdValue={donationToGivethPrice}
+									usdValue={givethDonationPrice}
 									title='The Giveth DAO'
 								/>
 								{secondTxStatus && (
@@ -298,8 +325,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 										/>
 										{secondTxHash && (
 											<ExternalLink
-												href={formatTxLink(
-													chainId,
+												href={handleTxLink(
 													secondTxHash,
 												)}
 												title={formatMessage({
@@ -328,7 +354,9 @@ const DonateModal: FC<IDonateModalProps> = props => {
 							disabled={donating || processFinished}
 							label={
 								donating
-									? formatMessage({ id: 'label.donating' })
+									? formatMessage({
+											id: 'label.donating',
+										})
 									: formatMessage({ id: 'label.donate' })
 							}
 							onClick={validateTokenThenDonate}
@@ -338,13 +366,28 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			</Modal>
 			{failedModalType && (
 				<FailedDonation
-					txUrl={formatTxLink(chainId, firstTxHash || secondTxHash)}
+					// txUrl={formatTxLink(chainId, firstTxHash || secondTxHash)}
+					txUrl={handleTxLink(firstTxHash || secondTxHash)}
 					setShowModal={() => setFailedModalType(undefined)}
 					type={failedModalType}
 				/>
 			)}
 		</>
 	);
+};
+
+const findMatchingWalletAddress = (
+	addresses: IWalletAddress[] = [],
+	chainId: number,
+	chainType: ChainType | null,
+) => {
+	return addresses.find(a => {
+		return (
+			a.isRecipient &&
+			((chainType !== ChainType.EVM && a.chainType === chainType) ||
+				a.networkId === chainId)
+		);
+	})?.address;
 };
 
 const TxStatus = styled.div`

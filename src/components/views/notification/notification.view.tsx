@@ -36,7 +36,7 @@ import { useNotification } from '@/hooks/useNotification';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { fetchNotificationCountAsync } from '@/features/notification/notification.thunks';
 import { WrappedSpinner } from '@/components/Spinner';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 enum ENotificationTabs {
 	ALL,
@@ -59,7 +59,7 @@ function NotificationView() {
 	const { notifications, setNotifications, markOneNotificationRead } =
 		useNotification();
 	const dispatch = useAppDispatch();
-	const { walletAddress: address } = useAuthenticationWallet();
+	const { walletAddress: address } = useGeneralWallet();
 
 	const showLoadMore = totalCount > notifications.length;
 	const {

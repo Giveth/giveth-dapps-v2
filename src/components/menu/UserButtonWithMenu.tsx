@@ -27,7 +27,7 @@ import { FlexSpacer } from '../styled-components/Flex';
 import { ItemsProvider } from '@/context/Items.context';
 import { SignWithWalletModal } from '../modals/SignWithWalletModal';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -127,7 +127,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 };
 
 const HeaderUserButton = ({}) => {
-	const { walletAddress, chainName } = useAuthenticationWallet();
+	const { walletAddress, chainName } = useGeneralWallet();
 	const { userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	return (

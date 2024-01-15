@@ -17,7 +17,7 @@ import {
 import { isUserRegistered } from '@/lib/helpers';
 import { SearchModal } from '../modals/SearchModal';
 import SwitchNetwork from '../modals/SwitchNetwork';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const ModalController = () => {
 	const {
@@ -37,7 +37,7 @@ const ModalController = () => {
 
 	const dispatch = useAppDispatch();
 
-	const { isConnected } = useAuthenticationWallet();
+	const { isConnected } = useGeneralWallet();
 
 	useEffect(() => {
 		if (isRegistered && showCompleteProfile) {

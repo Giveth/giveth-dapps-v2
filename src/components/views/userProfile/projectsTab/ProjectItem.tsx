@@ -20,6 +20,7 @@ import ProjectStatusBadge from './ProjectStatusBadge';
 import ProjectVerificationBadge from './ProjectVerificationBadge';
 import ProjectQFStatus from './ProjectQFStatus';
 import ProjectListedStatus from './ProjectListedStatus';
+import { isRecurringActive } from '../../donate/DonationCard';
 
 interface IProjectItem {
 	project: IProject;
@@ -110,7 +111,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 						</P>
 						<div>{project.sumDonationValueUsd}</div>
 					</Flex>
-					{process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true' && (
+					{isRecurringActive && (
 						<Flex justifyContent='space-between'>
 							<P>
 								<Flex alignItems='center' gap='6px'>

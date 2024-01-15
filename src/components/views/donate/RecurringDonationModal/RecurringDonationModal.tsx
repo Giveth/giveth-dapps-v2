@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Framework, type Operation } from '@superfluid-finance/sdk-core';
 import { useAccount } from 'wagmi';
 import { useIntl } from 'react-intl';
+import BigNumber from 'bignumber.js';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -20,6 +21,7 @@ import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { RunOutInfo } from '../RunOutInfo';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import { ChainType } from '@/types/config';
 
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
@@ -109,11 +111,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	const { address } = useAccount();
 	const tokenPrice = useTokenPrice(selectedToken?.token);
 	const isSafeEnv = useIsSafeEnvironment();
-
-	// console.log('tokenPrice', tokenPrice);
-
-	// console.log('project', project);
-	// console.log('tokenStreams', tokenStreams);
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		if (!selectedToken) return;
@@ -270,18 +268,22 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 			const batchOp = sf.batchCall(operations);
 			const tx = await batchOp.exec(signer);
-			if (tx.hash) {
-				setSuccessDonation({ txHash: [tx.hash] });
-			}
 			const res = await tx.wait();
 			if (!res.status) {
 				throw new Error('Transaction failed');
 			}
 			setStep(EDonationSteps.SUBMITTED);
-		} catch (error) {
+			if (tx.hash) {
+				setSuccessDonation({
+					txHash: [{ txHash: tx.hash, chainType: ChainType.EVM }],
+				});
+			}
+		} catch (error: any) {
 			setStep(EDonationSteps.DONATE);
-			showToastError(error);
-			console.log('error', error);
+			if (error?.code !== 'ACTION_REJECTED') {
+				showToastError(error);
+			}
+			console.log('Error on recurring donation', { error });
 		}
 	};
 
@@ -299,7 +301,12 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 		}
 	};
 
-	const totalPerMonth = ((amount || 0n) * BigInt(percentage)) / 100n;
+	const totalPerMonth =
+		BigInt(
+			new BigNumber((amount || 0n).toString())
+				.multipliedBy(percentage)
+				.toFixed(0),
+		) / 100n;
 	const projectPerMonth =
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
@@ -333,7 +340,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			</Items>
 			<RunOutInfo amount={amount} totalPerMonth={totalPerMonth} />
 			<ActionButton
-				label={buttonLabel[step]}
+				label={formatMessage({ id: buttonLabel[step] })}
 				onClick={handleAction}
 				loading={
 					step === EDonationSteps.APPROVING ||

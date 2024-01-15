@@ -10,18 +10,16 @@ import StorageLabel from '@/lib/localStorage';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { getTokens } from '@/helpers/user';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import {
-	WalletType,
-	useAuthenticationWallet,
-} from '@/hooks/useAuthenticationWallet';
+import { ChainType } from '@/types/config';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const UserController = () => {
 	const {
 		walletAddress: address,
 		isConnected,
 		isConnecting,
-		walletType,
-	} = useAuthenticationWallet();
+		walletChainType,
+	} = useGeneralWallet();
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
 	const { connect, connectors } = useConnect();
@@ -36,7 +34,7 @@ const UserController = () => {
 		// TODO: implement auto connect for solana
 		if (
 			isConnected ||
-			(walletType !== null && walletType !== WalletType.ETHEREUM)
+			(walletChainType !== null && walletChainType !== ChainType.EVM)
 		)
 			return;
 

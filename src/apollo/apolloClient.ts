@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
+import { RetryLink } from '@apollo/client/link/retry';
+
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import gql from 'graphql-tag';
@@ -88,6 +90,8 @@ function createApolloClient() {
 		userWalletAddress = localStorage.getItem(StorageLabel.USER);
 	}
 
+	const retryLink = new RetryLink();
+
 	const httpLink = createUploadLink({
 		uri: config.BACKEND_LINK,
 		fetch: customFetch as any,
@@ -144,7 +148,7 @@ function createApolloClient() {
 
 	return new ApolloClient({
 		ssrMode,
-		link: errorLink.concat(authLink.concat(httpLink)),
+		link: errorLink.concat(authLink.concat(httpLink.concat(retryLink))),
 		cache: new InMemoryCache({
 			addTypename: false,
 		}),

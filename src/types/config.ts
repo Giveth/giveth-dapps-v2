@@ -134,6 +134,7 @@ export interface NetworkConfig extends Chain {
 	uniswapV2Subgraph?: string;
 	WETH_TOKEN_ADDRESS?: Address;
 	MERKLE_ADDRESS?: Address;
+	chainType: ChainType;
 }
 
 export interface GIVpowerGgivStakingConfig extends SimplePoolStakingConfig {
@@ -238,6 +239,7 @@ export interface GlobalConfig extends EnvConfig {
 	NOTIFICATION_POLLING_INTERVAL: number;
 	PFP_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
+	DONATE_TOKEN_PRECISION: number;
 	EVM_NETWORKS_CONFIG: {
 		[key: number]: NetworkConfig;
 	};

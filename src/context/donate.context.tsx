@@ -15,9 +15,14 @@ import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
 import { gqlRequest } from '@/helpers/requests';
 import config from '@/configuration';
+import { ChainType } from '@/types/config';
 
+export interface TxHashWithChainType {
+	txHash: string;
+	chainType: ChainType;
+}
 interface ISuccessDonation {
-	txHash: string[];
+	txHash: TxHashWithChainType[];
 	givBackEligible?: boolean;
 }
 

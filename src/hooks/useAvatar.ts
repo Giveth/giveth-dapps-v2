@@ -6,7 +6,7 @@ import { gToast, ToastType } from '@/components/toasts';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { useAppDispatch } from '@/features/hooks';
 import { updateUserFromList } from '@/features/pfp/pfp.slice';
-import { useAuthenticationWallet } from './useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 enum EProfilePicTab {
 	LOADING,
@@ -18,7 +18,7 @@ export const useAvatar = () => {
 	const [loading, setLoading] = useState(false);
 	const [updateUser] = useMutation(UPDATE_USER);
 	const dispatch = useAppDispatch();
-	const { walletAddress: address } = useAuthenticationWallet();
+	const { walletAddress: address } = useGeneralWallet();
 
 	const handleAvatar = (nftUrl?: string, url?: string) => {
 		if (activeTab === 1) {
