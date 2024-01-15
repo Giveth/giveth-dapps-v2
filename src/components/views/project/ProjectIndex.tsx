@@ -37,7 +37,6 @@ import { ProjectStats } from './projectActionCard/ProjectStats';
 import { AdminActions } from './projectActionCard/AdminActions';
 import ProjectOwnerBanner from './ProjectOwnerBanner';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import { ChainType } from '@/types/config';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -74,12 +73,11 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 		isAdmin,
 		isLoading,
 	} = useProjectContext();
-	const { walletChainType } = useGeneralWallet();
+	const { isOnSolana } = useGeneralWallet();
 
 	const router = useRouter();
 	const slug = router.query.projectIdSlug as string;
 	const categories = projectData?.categories;
-	const isOnSolana = walletChainType === ChainType.SOLANA;
 
 	useEffect(() => {
 		if (!isSSRMode) {

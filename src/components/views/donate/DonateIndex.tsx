@@ -34,7 +34,6 @@ import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import CryptoDonation from './CryptoDonation';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import { DonationInfo } from './DonationInfo';
-import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const DonateIndex: FC = () => {
@@ -44,9 +43,7 @@ const DonateIndex: FC = () => {
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
-	const { walletChainType } = useGeneralWallet();
-
-	const isOnSolana = walletChainType === ChainType.SOLANA;
+	const { isOnSolana } = useGeneralWallet();
 
 	useEffect(() => {
 		if (!isRecurringActive) return;
