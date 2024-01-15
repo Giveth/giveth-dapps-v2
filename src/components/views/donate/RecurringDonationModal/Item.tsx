@@ -22,9 +22,11 @@ export const Item: FC<IItemProps> = ({ title, amount, price, token }) => {
 				<Title>{title}</Title>
 				<Flex gap='4px'>
 					<B>
-						{formatUnits(
-							amount,
-							token.underlyingToken?.decimals || 18,
+						{limitFraction(
+							formatUnits(
+								amount,
+								token.underlyingToken?.decimals || 18,
+							),
 						)}
 						&nbsp;{token.symbol}
 					</B>
