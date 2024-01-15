@@ -77,7 +77,6 @@ const ProjectsButton = styled(ButtonLink)`
 
 const TxLink = styled(Lead)`
 	color: ${brandColors.pinky[500]};
-	cursor: pointer;
 	margin-top: 16px;
 	display: flex;
 	align-items: center;
