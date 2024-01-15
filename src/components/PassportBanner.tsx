@@ -18,6 +18,7 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex } from './styled-components/Flex';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import Routes from '@/lib/constants/Routes';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 enum EPBGState {
 	SUCCESS,
@@ -130,8 +131,9 @@ export const PassportBanner = () => {
 
 	const { formatMessage, locale } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
+	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 
-	return (
+	return !isOnSolana ? (
 		<PassportBannerWrapper bgColor={PassportBannerData[passportState].bg}>
 			<Flex gap='8px' alignItems='center'>
 				<IconWrapper>
@@ -192,6 +194,19 @@ export const PassportBanner = () => {
 				</StyledLink>
 			)}
 		</PassportBannerWrapper>
+	) : (
+		<PassportBannerWrapper bgColor={PassportBannerData[passportState].bg}>
+			<P>
+				{formatMessage({
+					id: 'label.to_activate_your_gitcoin_passport',
+				})}
+			</P>
+			<StyledP onClick={handleSingOutAndSignInWithEVM}>
+				{formatMessage({
+					id: 'label.switch_to_ethereum',
+				})}
+			</StyledP>
+		</PassportBannerWrapper>
 	);
 };
 
@@ -217,6 +232,13 @@ const IconWrapper = styled.div`
 `;
 
 const StyledLink = styled(Flex)`
+	color: ${brandColors.giv[500]};
+	align-items: center;
+	gap: 4px;
+	cursor: pointer;
+`;
+
+const StyledP = styled(P)`
 	color: ${brandColors.giv[500]};
 	align-items: center;
 	gap: 4px;
