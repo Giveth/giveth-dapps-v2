@@ -838,7 +838,7 @@
 	"label.switch_network": "Switch Network",
 	"label.switch_to": "switch to",
 	"label.switch_to_archive_cards": "Switch to Archive Cards",
-	"label.switch_to_evm": "Switch to EVM",
+	"label.switch_to_evm": "Switch to EVM wallet",
 	"label.switch_to_network_name": "Switch to {networkNames}",
 	"label.switch_to_network_to_continue_donating": "Switch to {network} to continue donating to this project.",
 	"label.take_a_dive_into_the_history": "Take a dive into the History of Giveth",

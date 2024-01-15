@@ -838,7 +838,7 @@
 	"label.switch_network": "Cambiar Red",
 	"label.switch_to": "cambiar a",
 	"label.switch_to_archive_cards": "Cambiar a tarjetas de archivo",
-	"label.switch_to_evm": "Switch to EVM",
+	"label.switch_to_evm": "Switch to EVM wallet",
 	"label.switch_to_network_name": "Cambiar a {networkNames}",
 	"label.switch_to_network_to_continue_donating": "Cambia a {network} para continuar donando a este proyecto.",
 	"label.take_a_dive_into_the_history": "Adéntrate en la historia de Giveth",
