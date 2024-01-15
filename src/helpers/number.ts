@@ -64,7 +64,7 @@ export const formatDonation = (
 
 export function limitFraction(
 	numberStr: string,
-	maxDecimals: number = 2,
+	maxDecimals: number = config.DONATE_TOKEN_PRECISION,
 ): string {
 	let number = parseFloat(numberStr);
 

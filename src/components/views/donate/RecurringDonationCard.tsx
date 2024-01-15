@@ -21,6 +21,7 @@ import { useAccount, useBalance, useNetwork } from 'wagmi';
 import Slider from 'rc-slider';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
+import BigNumber from 'bignumber.js';
 import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
@@ -40,6 +41,7 @@ import { showToastError } from '@/lib/helpers';
 import config from '@/configuration';
 import { WrongNetworkLayer } from './WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
+import { limitFraction } from '@/helpers/number';
 
 export const RecurringDonationCard = () => {
 	const [amount, setAmount] = useState(0n);
@@ -82,7 +84,12 @@ export const RecurringDonationCard = () => {
 
 	const underlyingToken = selectedToken?.token.underlyingToken;
 
-	const totalPerMonth = ((amount || 0n) * BigInt(percentage)) / 100n;
+	const totalPerMonth =
+		BigInt(
+			new BigNumber((amount || 0n).toString())
+				.multipliedBy(percentage)
+				.toFixed(0),
+		) / 100n;
 	const totalPerSec = totalPerMonth / ONE_MONTH_SECONDS;
 	const projectPerMonth =
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
@@ -115,12 +122,14 @@ export const RecurringDonationCard = () => {
 			);
 			if (_userStreamOnSelectedToken) {
 				setUserStreamOnSelectedToken(_userStreamOnSelectedToken);
-				const _percentage =
-					(BigInt(_userStreamOnSelectedToken.currentFlowRate) *
+				const _percentage = BigNumber(
+					(
+						BigInt(_userStreamOnSelectedToken.currentFlowRate) *
 						ONE_MONTH_SECONDS *
-						100n) /
-					selectedToken.balance;
-				setPercentage(parseInt(_percentage.toString()));
+						100n
+					).toString(),
+				).dividedBy(selectedToken.balance.toString());
+				setPercentage(parseFloat(_percentage.toString()));
 			} else {
 				setUserStreamOnSelectedToken(undefined);
 				setPercentage(0);
@@ -192,9 +201,11 @@ export const RecurringDonationCard = () => {
 						</SelectTokenWrapper>
 						{selectedToken?.token.isSuperToken ? (
 							<p>
-								{formatUnits(
-									balance?.value || 0n,
-									selectedToken.token.decimals,
+								{limitFraction(
+									formatUnits(
+										balance?.value || 0n,
+										selectedToken.token.decimals,
+									),
 								)}
 							</p>
 						) : (
@@ -211,15 +222,9 @@ export const RecurringDonationCard = () => {
 							<Flex gap='4px'>
 								<GLink size='Small'>
 									{formatMessage({
-										id: 'label.label.available',
+										id: 'label.available',
 									})}
-									:{' '}
-									{balance?.formatted ||
-										formatUnits(
-											balance.value,
-											selectedToken?.token.underlyingToken
-												?.decimals || 18,
-										)}
+									: {limitFraction(balance?.formatted)}
 								</GLink>
 								<IconWrapper
 									onClick={() => !isRefetching && refetch()}
@@ -249,7 +254,7 @@ export const RecurringDonationCard = () => {
 							<StyledSlider
 								min={0}
 								max={100}
-								step={1}
+								step={0.1}
 								railStyle={{
 									backgroundColor: sliderColor[200],
 								}}
@@ -272,18 +277,23 @@ export const RecurringDonationCard = () => {
 							/>
 						</SliderWrapper>
 						<Flex justifyContent='space-between'>
-							<Caption>
-								{formatMessage({
-									id: 'label.donating_to',
-								})}
-							</Caption>
+							<Flex gap='4px'>
+								<Caption>
+									{formatMessage({
+										id: 'label.donating_to',
+									})}
+								</Caption>
+								<Caption medium>{project.title}</Caption>
+							</Flex>
 							<Flex gap='4px'>
 								<Caption medium>
 									{amount !== 0n && percentage !== 0
-										? formatUnits(
-												totalPerMonth,
-												selectedToken?.token.decimals ||
-													18,
+										? limitFraction(
+												formatUnits(
+													totalPerMonth,
+													selectedToken?.token
+														.decimals || 18,
+												),
 											)
 										: 0}
 								</Caption>
@@ -422,10 +432,12 @@ export const RecurringDonationCard = () => {
 								<Flex gap='4px'>
 									<Caption>
 										{amount !== 0n && percentage !== 0
-											? formatUnits(
-													projectPerMonth,
-													selectedToken?.token
-														.decimals || 18,
+											? limitFraction(
+													formatUnits(
+														projectPerMonth,
+														selectedToken?.token
+															.decimals || 18,
+													),
 												)
 											: 0}
 									</Caption>
@@ -452,10 +464,12 @@ export const RecurringDonationCard = () => {
 								<Flex gap='4px'>
 									<Caption>
 										{amount !== 0n && percentage !== 0
-											? formatUnits(
-													givethPerMonth,
-													selectedToken?.token
-														.decimals || 18,
+											? limitFraction(
+													formatUnits(
+														givethPerMonth,
+														selectedToken?.token
+															.decimals || 18,
+													),
 												)
 											: 0}
 									</Caption>
@@ -476,10 +490,12 @@ export const RecurringDonationCard = () => {
 								<Flex gap='4px'>
 									<Caption medium>
 										{amount !== 0n && percentage !== 0
-											? formatUnits(
-													totalPerMonth,
-													selectedToken?.token
-														.decimals || 18,
+											? limitFraction(
+													formatUnits(
+														totalPerMonth,
+														selectedToken?.token
+															.decimals || 18,
+													),
 												)
 											: 0}
 									</Caption>
