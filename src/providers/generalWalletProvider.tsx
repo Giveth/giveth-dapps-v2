@@ -360,12 +360,23 @@ export const GeneralWalletProvider: React.FC<{
 
 	useEffect(() => {
 		const solanaProvider = getSolanaProvider();
-		solanaProvider?.on('accountChanged', (publicKey: PublicKey) => {
+
+		const handleAccountChange = (publicKey: PublicKey) => {
 			if (publicKey) {
 				const address = publicKey.toBase58();
 				setWalletAddress(address);
 			}
-		});
+		};
+
+		if (solanaProvider) {
+			solanaProvider.on('accountChanged', handleAccountChange);
+		}
+
+		return () => {
+			if (solanaProvider) {
+				solanaProvider.off('accountChanged', handleAccountChange);
+			}
+		};
 	}, []);
 
 	const isOnSolana = walletChainType === ChainType.SOLANA;
