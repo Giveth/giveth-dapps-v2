@@ -51,6 +51,7 @@ const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
+	particleChainId: 103,
 	chainType: ChainType.SOLANA,
 	name: 'Solana Devnet',
 	adapterNetwork: WalletAdapterNetwork.Devnet,

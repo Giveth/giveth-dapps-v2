@@ -192,6 +192,7 @@ interface MicroservicesConfig {
 
 export interface NonEVMChain {
 	id: number;
+	particleChainId: number;
 	name: string;
 	chainType: ChainType;
 	adapterNetwork: WalletAdapterNetwork;

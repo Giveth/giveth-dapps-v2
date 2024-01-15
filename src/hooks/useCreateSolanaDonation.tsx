@@ -11,6 +11,7 @@ import { retryFetchTransaction } from '@/lib/transaction';
 import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { postRequest } from '@/helpers/requests';
+import config from '@/configuration';
 
 export const useCreateSolanaDonation = () => {
 	const [txHash, setTxHash] = useState<string | undefined>();
@@ -63,7 +64,7 @@ export const useCreateSolanaDonation = () => {
 
 			if (transaction) {
 				donationData = {
-					chainId: transaction.chainId! || 0,
+					chainId: config.SOLANA_CONFIG.particleChainId,
 					txHash: transaction.hash,
 					amount: amount,
 					token,
@@ -149,11 +150,6 @@ export const useCreateSolanaDonation = () => {
 				'Token address is not native token address - not supported yet!',
 			);
 		}
-
-		const transactionObj = {
-			to: toAddress! as `0x${string}`,
-			value: amount.toString(),
-		};
 
 		try {
 			// setDonating(true);
