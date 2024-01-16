@@ -353,12 +353,11 @@ export const GeneralWalletProvider: React.FC<{
 	const isOnSolana = walletChainType === ChainType.SOLANA;
 	const isOnEVM = walletChainType === ChainType.EVM;
 	const handleSignOutAndShowWelcomModal = async () => {
-		dispatch(signOut(token!)).then(() => {
-			isOnSolana ? solanaWalletDisconnect() : ethereumWalletDisconnect();
-			setTimeout(() => {
-				dispatch(setShowWelcomeModal(true));
-			}, 100); // wait 100 milliseconds (0.1 seconds) before dispatching, because otherwise the modal will not show
-		});
+		await dispatch(signOut(token!));
+		isOnSolana ? solanaWalletDisconnect() : ethereumWalletDisconnect();
+		setTimeout(() => {
+			dispatch(setShowWelcomeModal(true));
+		}, 100); // wait 100 milliseconds (0.1 seconds) before dispatching, because otherwise the modal will not show
 	};
 
 	const contextValue: IGeneralWalletContext = {
