@@ -29,10 +29,13 @@ import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import Routes from '@/lib/constants/Routes';
 import { NotificationItems } from './NotificationItems';
-// import { fetchNotificationsData } from '@/features/notification/notification.services';
+import { fetchNotificationsData } from '@/features/notification/notification.services';
 import { useNotification } from '@/hooks/useNotification';
 
 interface INotificationButtonWithMenuProps extends IHeaderButtonProps {}
+
+const NOTIFICATION_ENABLED =
+	process.env.NEXT_PUBLIC_NOTIFICATION_CENTER_ENABLED;
 
 export const NotificationButtonWithMenu: FC<
 	INotificationButtonWithMenuProps
@@ -56,16 +59,18 @@ export const NotificationButtonWithMenu: FC<
 	);
 
 	useEffect(() => {
-		// if (!isSignedIn) return;
-		// const fetchNotificationsAndSetState = async () => {
-		// 	try {
-		// 		const res = await fetchNotificationsData({ limit: 4 });
-		// 		if (res?.notifications) setNotifications(res.notifications);
-		// 	} catch {
-		// 		console.log('Error fetching notifications');
-		// 	}
-		// };
-		// fetchNotificationsAndSetState();
+		if (!isSignedIn) return;
+		const fetchNotificationsAndSetState = async () => {
+			try {
+				const res = await fetchNotificationsData({ limit: 4 });
+				if (res?.notifications) setNotifications(res.notifications);
+			} catch {
+				console.log('Error fetching notifications');
+			}
+		};
+		if (NOTIFICATION_ENABLED === 'true') {
+			fetchNotificationsAndSetState();
+		}
 	}, [lastNotificationId, isSignedIn]);
 
 	useEffect(() => {
@@ -90,7 +95,7 @@ export const NotificationButtonWithMenu: FC<
 				<HeaderNotificationButton theme={theme} />
 				<CoverLine theme={theme} className='cover-line' />
 			</NotificationsButton>
-			{false && (
+			{NOTIFICATION_ENABLED === 'true' && menuCondition && (
 				// menuCondition && ( // Hiding container for now
 				<NotificationMenuContainer isAnimating={showMenu} theme={theme}>
 					<NotificationMenuWrapper>
@@ -105,7 +110,7 @@ export const NotificationButtonWithMenu: FC<
 					</NotificationMenuWrapper>
 				</NotificationMenuContainer>
 			)}
-			{false && (
+			{NOTIFICATION_ENABLED === 'true' && sidebarCondition && (
 				// sidebarCondition && (  // Hiding sidebar for now
 				<SideBar
 					close={closeSidebar}
