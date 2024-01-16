@@ -101,7 +101,7 @@ export const GeneralWalletProvider: React.FC<{
 	const dispatch = useAppDispatch();
 	const { open: openConnectModal } = useWeb3Modal();
 	const router = useRouter();
-	const { setVisible } = useWalletModal();
+	const { setVisible, visible } = useWalletModal();
 
 	const isGIVeconomyRoute = useMemo(
 		() => checkIsGIVeconomyRoute(router.route),
@@ -338,6 +338,13 @@ export const GeneralWalletProvider: React.FC<{
 				break;
 		}
 	}, [walletChainType, evmChain]);
+
+	useEffect(() => {
+		// If the modal is not visible (closed), it resets the overflow style to 'auto'.
+		if (!visible) {
+			document.body.style.overflow = 'auto';
+		}
+	}, [visible]);
 
 	const openWalletConnectModal = () => {
 		if (config.ENABLE_SOLANA && !isGIVeconomyRoute) {
