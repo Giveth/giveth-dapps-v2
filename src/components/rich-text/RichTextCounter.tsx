@@ -9,28 +9,32 @@ const calcLengthOfHTML = (html: string) => {
 
 interface IRichTextCounterProps {
 	value: string;
-	limit: number;
-	setIsLimitExceeded?: (i: boolean) => void;
+	maxLimit?: number;
+	minLimit?: number;
+	setHasLimitError?: (i: boolean) => void;
 }
 
 const RichTextCounter: FC<IRichTextCounterProps> = props => {
-	const { value, limit, setIsLimitExceeded } = props;
+	const { value, maxLimit, minLimit, setHasLimitError } = props;
 	const [count, setCount] = useState(0);
+
 	useEffect(() => {
 		const temp = setTimeout(() => {
 			const _count = calcLengthOfHTML(value);
 			setCount(_count);
-			setIsLimitExceeded && setIsLimitExceeded(_count > limit);
+			setHasLimitError &&
+				setHasLimitError(
+					maxLimit ? _count > maxLimit : _count < minLimit!,
+				);
 		}, 1000);
-
 		return () => {
 			clearTimeout(temp);
 		};
-	}, [limit, setIsLimitExceeded, value]);
+	}, [maxLimit, minLimit, setHasLimitError, value]);
 
 	return (
 		<CounterContainer>
-			{count} / {limit}
+			{count} / {maxLimit || minLimit}
 		</CounterContainer>
 	);
 };

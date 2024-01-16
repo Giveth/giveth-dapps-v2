@@ -166,9 +166,10 @@ const formats = [
 interface ITextRichWithQuillProps {
 	value: string;
 	setValue: (value: string) => void;
-	setIsLimitExceeded?: (i: boolean) => void;
+	setHasLimitError?: (i: boolean) => void;
 	placeholder?: string;
-	limit?: number;
+	maxLimit?: number;
+	minLimit?: number;
 	style?: any;
 	projectId?: string;
 	noShadow?: boolean;
@@ -179,10 +180,11 @@ const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 	value,
 	setValue,
 	placeholder,
-	limit,
+	maxLimit,
+	minLimit,
 	style,
 	projectId,
-	setIsLimitExceeded,
+	setHasLimitError,
 	noShadow,
 	error,
 }) => {
@@ -210,11 +212,12 @@ const TextRichWithQuill: FC<ITextRichWithQuillProps> = ({
 						hasError={!!error}
 					/>
 				</QuillWrapper>
-				{limit && (
+				{(maxLimit || minLimit) && (
 					<RichTextCounter
-						limit={limit}
+						maxLimit={maxLimit}
+						minLimit={minLimit}
 						value={value}
-						setIsLimitExceeded={setIsLimitExceeded}
+						setHasLimitError={setHasLimitError}
 					/>
 				)}
 			</Relative>
