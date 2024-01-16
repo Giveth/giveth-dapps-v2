@@ -67,11 +67,6 @@ const moduleExports = withBundleAnalyzer({
 				destination: '/assets/GivethQF.Marketing.pdf',
 				permanent: false,
 			},
-			{
-				source: '/notifications',
-				destination: '/',
-				permanent: false,
-			},
 		];
 	},
 	webpack: (config, { isServer, dev }) => {

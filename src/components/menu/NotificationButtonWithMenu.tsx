@@ -29,7 +29,7 @@ import { useAppSelector } from '@/features/hooks';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import Routes from '@/lib/constants/Routes';
 import { NotificationItems } from './NotificationItems';
-import { fetchNotificationsData } from '@/features/notification/notification.services';
+// import { fetchNotificationsData } from '@/features/notification/notification.services';
 import { useNotification } from '@/hooks/useNotification';
 
 interface INotificationButtonWithMenuProps extends IHeaderButtonProps {}
@@ -56,17 +56,16 @@ export const NotificationButtonWithMenu: FC<
 	);
 
 	useEffect(() => {
-		if (!isSignedIn) return;
-		const fetchNotificationsAndSetState = async () => {
-			try {
-				const res = await fetchNotificationsData({ limit: 4 });
-				if (res?.notifications) setNotifications(res.notifications);
-			} catch {
-				console.log('Error fetching notifications');
-			}
-		};
-
-		fetchNotificationsAndSetState();
+		// if (!isSignedIn) return;
+		// const fetchNotificationsAndSetState = async () => {
+		// 	try {
+		// 		const res = await fetchNotificationsData({ limit: 4 });
+		// 		if (res?.notifications) setNotifications(res.notifications);
+		// 	} catch {
+		// 		console.log('Error fetching notifications');
+		// 	}
+		// };
+		// fetchNotificationsAndSetState();
 	}, [lastNotificationId, isSignedIn]);
 
 	useEffect(() => {
@@ -84,13 +83,15 @@ export const NotificationButtonWithMenu: FC<
 				}
 			: { onClick: openSidebar }
 		: { onClick: () => signInThenGoToNotifs() };
+
 	return (
 		<MenuAndButtonContainer {...props}>
 			<NotificationsButton outline theme={theme} isHover={showMenu}>
 				<HeaderNotificationButton theme={theme} />
 				<CoverLine theme={theme} className='cover-line' />
 			</NotificationsButton>
-			{menuCondition && (
+			{false && (
+				// menuCondition && ( // Hiding container for now
 				<NotificationMenuContainer isAnimating={showMenu} theme={theme}>
 					<NotificationMenuWrapper>
 						<ItemsProvider close={closeMenu}>
@@ -104,7 +105,8 @@ export const NotificationButtonWithMenu: FC<
 					</NotificationMenuWrapper>
 				</NotificationMenuContainer>
 			)}
-			{sidebarCondition && (
+			{false && (
+				// sidebarCondition && (  // Hiding sidebar for now
 				<SideBar
 					close={closeSidebar}
 					isAnimating={showSidebar}
