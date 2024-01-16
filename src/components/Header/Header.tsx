@@ -42,7 +42,7 @@ import { ESideBarDirection, SideBar } from '../sidebar/SideBar';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import { RewardButtonWithMenu } from '../menu/RewardButtonWithMenu';
 import { UserButtonWithMenu } from '../menu/UserButtonWithMenu';
-import { NotificationButtonWithMenu } from '../menu/NotificationButtonWithMenu';
+// import { NotificationButtonWithMenu } from '../menu/NotificationButtonWithMenu';
 import { HomeSidebar } from '../sidebar/HomeSidebar';
 import {
 	fetchMainCategories,
@@ -242,10 +242,10 @@ const Header: FC<IHeader> = () => {
 				</SmallCreateProjectParent>
 				{walletAddress ? (
 					<>
-						<NotificationButtonWithMenu
+						{/* <NotificationButtonWithMenu
 							isHeaderShowing={showHeader}
 							theme={theme}
-						/>{' '}
+						/>*/}
 						{networkHasGIV && (
 							<RewardButtonWithMenu
 								isHeaderShowing={showHeader}
