@@ -160,10 +160,13 @@ export const MintCard = () => {
 	}, [balance, pfpData, qtyNFT]);
 
 	async function handleMint() {
-		if (isOnSolana) return;
-		if (!config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS) return;
-		if (!pfpData?.price) return;
-		if (!walletAddress) return;
+		if (
+			isOnSolana ||
+			!config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS ||
+			!pfpData?.price ||
+			!walletAddress
+		)
+			return;
 
 		const pfpContract = await getContract({
 			address: config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS,
