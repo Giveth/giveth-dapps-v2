@@ -10,7 +10,7 @@ import {
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { useAccount, useSwitchNetwork, useNetwork } from 'wagmi';
+import { useSwitchNetwork, useNetwork, Address } from 'wagmi';
 import { getContract } from 'wagmi/actions';
 import { erc20ABI } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
@@ -21,6 +21,7 @@ import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { InsufficientFundModal } from '../modals/InsufficientFund';
 import { usePFPMintData } from '@/context/pfpmint.context';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const MIN_NFT_QTY = 1;
 
@@ -42,11 +43,16 @@ export const MintCard = () => {
 
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
-	const { address } = useAccount();
 	const { switchNetwork } = useSwitchNetwork();
 	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
 	const { setQty, isEligible, setIsEligible } = usePFPMintData();
+	const {
+		handleSignOutAndShowWelcomModal,
+		isOnSolana,
+		walletAddress,
+		isOnEVM,
+	} = useGeneralWallet();
 	let mintLeft = '-';
 	if (pfpData && balance !== undefined) {
 		let mintAmount = pfpData.maxMintAmount - balance;
@@ -88,21 +94,23 @@ export const MintCard = () => {
 
 	useEffect(() => {
 		async function fetchData() {
-			if (!address) return;
+			if (!walletAddress) return;
 			try {
 				const pfpContract = await getContract({
 					address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
 					chainId: config.MAINNET_NETWORK_NUMBER,
 					abi: PFP_ABI,
 				});
-				let _balanceOf = await pfpContract.read.balanceOf([address]);
+				let _balanceOf = await pfpContract.read.balanceOf([
+					walletAddress,
+				]);
 				setBalance(Number(_balanceOf || '0'));
 			} catch (error) {
 				console.log('failed to fetch user balance data');
 			}
 		}
 		fetchData();
-	}, [address, chainId]);
+	}, [walletAddress, chainId]);
 
 	function onChangeHandler(event: ChangeEvent<HTMLInputElement>) {
 		if (!pfpData?.maxMintAmount) return;
@@ -114,6 +122,14 @@ export const MintCard = () => {
 
 		if (Number.isInteger(_qty)) setQtyNFT('' + _qty);
 	}
+
+	const handleSwitchNetwork = () => {
+		if (isOnSolana) {
+			handleSignOutAndShowWelcomModal();
+		} else {
+			switchNetwork?.(config.MAINNET_NETWORK_NUMBER);
+		}
+	};
 
 	useEffect(() => {
 		//handle range
@@ -144,16 +160,19 @@ export const MintCard = () => {
 	}, [balance, pfpData, qtyNFT]);
 
 	async function handleMint() {
+		if (isOnSolana) return;
 		if (!config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS) return;
 		if (!pfpData?.price) return;
-		if (!address) return;
+		if (!walletAddress) return;
 
 		const pfpContract = await getContract({
 			address: config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS,
 			chainId: config.MAINNET_NETWORK_NUMBER,
 			abi: erc20ABI,
 		});
-		let userDaiBalance = await pfpContract.read.balanceOf([address]);
+		let userDaiBalance = await pfpContract.read.balanceOf([
+			walletAddress as Address,
+		]);
 		const total = pfpData.price * BigInt(qtyNFT);
 		if (total <= userDaiBalance) {
 			setQty(Number(qtyNFT));
@@ -205,7 +224,9 @@ export const MintCard = () => {
 					<Flex justifyContent='space-between'>
 						<InfoBoxTitle>Max Mint Amount</InfoBoxTitle>
 						<InfoBoxValue>
-							{pfpData && balance !== undefined ? mintLeft : '-'}
+							{pfpData && balance !== undefined && isOnEVM
+								? mintLeft
+								: '-'}
 						</InfoBoxValue>
 					</Flex>
 					<Flex justifyContent='space-between'>
@@ -218,7 +239,7 @@ export const MintCard = () => {
 						</InfoBoxValue>
 					</Flex>
 				</InfoBox>
-				{!address ? (
+				{!walletAddress ? (
 					<MintButton
 						size='small'
 						label={formatMessage({
@@ -232,9 +253,7 @@ export const MintCard = () => {
 						size='small'
 						label={formatMessage({ id: 'label.switch_network' })}
 						buttonType='primary'
-						onClick={() =>
-							switchNetwork?.(config.MAINNET_NETWORK_NUMBER)
-						}
+						onClick={handleSwitchNetwork}
 					/>
 				) : (
 					<MintButton
