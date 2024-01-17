@@ -335,7 +335,12 @@ const Wrapper = styled(Flex)`
 	gap: 24px;
 `;
 
-const TopUpSection = styled(Flex)``;
+const TopUpSection = styled(Flex)`
+	border-radius: 12px;
+	border: 1px solid ${neutralColors.gray[300]};
+	background: ${neutralColors.gray[100]};
+	padding: 16px;
+`;
 
 const SelectTokenWrapper = styled(Flex)`
 	min-width: 132px;
