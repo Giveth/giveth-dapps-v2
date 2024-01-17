@@ -20,7 +20,7 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Spinner } from '@/components/Spinner';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { ISuperToken, IToken } from '@/types/superFluid';
-import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
+import { AddressZero } from '@/lib/constants/constants';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ITokenStreams } from '@/context/donate.context';
@@ -39,7 +39,7 @@ import config from '@/configuration';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { showToastError } from '@/lib/helpers';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { limitFraction } from '@/helpers/number';
+import { StreamInfo } from './StreamInfo';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	tokenStreams: ITokenStreams;
@@ -92,19 +92,6 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			setStep(EModifySuperTokenSteps.DEPOSIT);
 		}
 	}, [token, setStep, step]);
-
-	const tokenStream = tokenStreams[superToken?.id || ''];
-	const totalStreamPerSec =
-		tokenStream?.reduce(
-			(acc, stream) => acc + BigInt(stream.currentFlowRate),
-			0n,
-		) || 0n;
-	const streamRunOutInMonth =
-		SuperTokenBalance !== undefined &&
-		totalStreamPerSec > 0 &&
-		SuperTokenBalance.value > 0n
-			? SuperTokenBalance.value / totalStreamPerSec / ONE_MONTH_SECONDS
-			: 0n;
 
 	const isLoading =
 		step === EModifySuperTokenSteps.APPROVING ||
@@ -248,56 +235,12 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 								)}
 							</IconWrapper>
 						</Flex>
-						<StreamSection>
-							<Flex
-								alignItems='center'
-								justifyContent='space-between'
-							>
-								<Caption medium>
-									{formatMessage({
-										id: 'label.stream_balance',
-									})}
-								</Caption>
-								<StreamBalanceInfo medium>
-									{limitFraction(
-										SuperTokenBalance?.formatted || '0',
-									)}{' '}
-									{superToken?.symbol}
-								</StreamBalanceInfo>
-							</Flex>
-							<Flex
-								alignItems='center'
-								justifyContent='space-between'
-							>
-								<Caption>
-									{formatMessage({
-										id: 'label.balance_runs_out_in',
-									})}{' '}
-									<strong>
-										{streamRunOutInMonth.toString()}{' '}
-										{formatMessage(
-											{
-												id: 'label.months',
-											},
-											{
-												count: streamRunOutInMonth.toString(),
-											},
-										)}
-									</strong>
-								</Caption>
-								<Caption>
-									{formatMessage({ id: 'label.funding' })}{' '}
-									<strong>{tokenStream.length}</strong>{' '}
-									{formatMessage(
-										{ id: 'label.project' },
-										{
-											count: tokenStream.length,
-										},
-									)}
-								</Caption>
-							</Flex>
-						</StreamSection>
 					</TopUpSection>
+					<StreamInfo
+						tokenStreams={tokenStreams}
+						superToken={superToken}
+						SuperTokenBalance={SuperTokenBalance}
+					/>
 					<ModifyInfoToast />
 				</>
 			) : (
@@ -375,22 +318,6 @@ const Input = styled(AmountInput)`
 const IconWrapper = styled.div`
 	cursor: pointer;
 	color: ${brandColors.giv[500]};
-`;
-
-const StreamSection = styled(Flex)`
-	flex-direction: column;
-	padding: 8px;
-	gap: 16px;
-	border-radius: 8px;
-	background-color: ${neutralColors.gray[200]};
-	margin-top: 16px;
-	color: ${neutralColors.gray[800]};
-`;
-
-const StreamBalanceInfo = styled(Caption)`
-	background-color: ${neutralColors.gray[300]};
-	border-radius: 8px;
-	padding: 2px 8px;
 `;
 
 const ActionButton = styled(Button)``;
