@@ -70,7 +70,7 @@ const UpdatesSection: FC<IProps> = props => {
 									value={updateContent}
 									style={TextInputStyle}
 									setValue={setUpdateContent}
-									limit={UPDATE_LIMIT}
+									maxLimit={UPDATE_LIMIT}
 									placeholder='Edit your project'
 								/>
 							) : (
