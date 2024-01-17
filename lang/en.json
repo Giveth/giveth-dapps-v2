@@ -910,6 +910,7 @@
 	"label.token_stream_rewards": "{rewardTokenSymbol} stream rewards",
 	"label.topranked_projects_will_eventually_get_funding": "Top-ranked projects will eventually get funding from the Giveth Matching Pool.",
 	"label.top_up_stream_balance": "Top-up stream balance",
+	"label.withdraw_from_stream_balance": "Withdraw from stream balance",
 	"label.torus_banner_text_1": "We've removed support for Torus Wallets to connect to the Giveth Dapp, ",
 	"label.torus_banner_text_2": "follow this guide to move your keys over to MetaMask.",
 	"label.torus_banner_title": "Torus Wallet support has been removed!",
