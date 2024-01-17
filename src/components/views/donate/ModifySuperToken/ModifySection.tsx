@@ -21,6 +21,7 @@ import { IToken } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
 
 interface IModifySectionProps {
+	titleLabel: string;
 	token?: IToken;
 	setAmount: Dispatch<SetStateAction<bigint>>;
 	balance?: FetchBalanceResult;
@@ -28,6 +29,7 @@ interface IModifySectionProps {
 	isRefetching: boolean;
 }
 export const ModifySection: FC<IModifySectionProps> = ({
+	titleLabel,
 	token,
 	setAmount,
 	balance,
@@ -41,7 +43,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 			<Flex gap='8px' alignItems='center'>
 				<Caption medium>
 					{formatMessage({
-						id: 'label.top_up_stream_balance',
+						id: titleLabel,
 					})}
 				</Caption>
 				<IconWithTooltip

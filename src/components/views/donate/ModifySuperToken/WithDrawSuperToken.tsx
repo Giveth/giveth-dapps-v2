@@ -53,6 +53,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 				<>
 					<ModifyWrapper>
 						<ModifySection
+							titleLabel='label.withdraw_from_stream_balance'
 							setAmount={setAmount}
 							token={superToken}
 							balance={SuperTokenBalance}

@@ -157,6 +157,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 				<>
 					<ModifyWrapper>
 						<ModifySection
+							titleLabel='label.top_up_stream_balance'
 							setAmount={setAmount}
 							token={token}
 							balance={balance}
