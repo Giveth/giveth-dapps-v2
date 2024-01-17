@@ -57,9 +57,14 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					justifyContent='space-between'
 				>
 					<Flex gap='8px' alignItems='center'>
-						{token?.symbol && (
-							<TokenIcon symbol={token?.symbol} size={24} />
-						)}
+						<TokenIcon
+							symbol={
+								token?.isSuperToken
+									? token.underlyingToken?.symbol
+									: token?.symbol
+							}
+							size={24}
+						/>
 						<B>{token?.symbol}</B>
 					</Flex>
 				</SelectTokenWrapper>
