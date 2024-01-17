@@ -11,21 +11,11 @@ import { WithDrawSuperToken } from './WithDrawSuperToken';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { type ITokenStreams } from '@/context/donate.context';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
+import { EModifySuperTokenSteps } from './common';
 
 interface IModifySuperTokenModalProps extends IModal {
 	selectedToken: IToken;
 	tokenStreams: ITokenStreams;
-}
-
-export enum EModifySuperTokenSteps {
-	MODIFY,
-	APPROVE,
-	APPROVING,
-	DEPOSIT,
-	DEPOSITING,
-	WITHDRAW,
-	WITHDRAWING,
-	SUBMITTED,
 }
 
 const headerTitleGenerator = (step: EModifySuperTokenSteps) => {
@@ -41,17 +31,6 @@ const headerTitleGenerator = (step: EModifySuperTokenSteps) => {
 		case EModifySuperTokenSteps.SUBMITTED:
 			return 'label.donation_submitted';
 	}
-};
-
-export const actionButtonLabel = {
-	[EModifySuperTokenSteps.MODIFY]: 'label.confirm',
-	[EModifySuperTokenSteps.APPROVE]: 'label.approve',
-	[EModifySuperTokenSteps.APPROVING]: 'label.approve',
-	[EModifySuperTokenSteps.DEPOSIT]: 'label.deposit',
-	[EModifySuperTokenSteps.DEPOSITING]: 'label.deposit',
-	[EModifySuperTokenSteps.WITHDRAW]: 'label.withdraw',
-	[EModifySuperTokenSteps.WITHDRAWING]: 'label.withdraw',
-	[EModifySuperTokenSteps.SUBMITTED]: 'label.done',
 };
 
 export const ModifySuperTokenModal: FC<IModifySuperTokenModalProps> = ({

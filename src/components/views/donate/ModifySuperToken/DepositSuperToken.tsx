@@ -8,11 +8,7 @@ import { ISuperToken, IToken } from '@/types/superFluid';
 import { AddressZero } from '@/lib/constants/constants';
 import { ITokenStreams } from '@/context/donate.context';
 import { ModifyInfoToast } from './ModifyInfoToast';
-import {
-	EModifySuperTokenSteps,
-	IModifySuperTokenInnerModalProps,
-	actionButtonLabel,
-} from './ModifySuperTokenModal';
+import { IModifySuperTokenInnerModalProps } from './ModifySuperTokenModal';
 import { DepositSteps } from './DepositSuperTokenSteps';
 import { Item } from '../RecurringDonationModal/Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
@@ -25,6 +21,7 @@ import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { StreamInfo } from './StreamInfo';
 import { ModifySection } from './ModifySection';
 import { Wrapper } from './common.sc';
+import { EModifySuperTokenSteps, actionButtonLabel } from './common';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	tokenStreams: ITokenStreams;
