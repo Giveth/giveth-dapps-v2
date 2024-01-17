@@ -1,4 +1,4 @@
-import { useState, type FC, useMemo, useEffect } from 'react';
+import { useState, type FC, useEffect } from 'react';
 import { Button } from '@giveth/ui-design-system';
 import { useAccount, useBalance } from 'wagmi';
 import { useIntl } from 'react-intl';
@@ -6,7 +6,6 @@ import { Framework } from '@superfluid-finance/sdk-core';
 import { Flex } from '@/components/styled-components/Flex';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { AddressZero } from '@/lib/constants/constants';
-import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ITokenStreams } from '@/context/donate.context';
 import { ModifyInfoToast } from './ModifyInfoToast';
 import {
@@ -29,11 +28,13 @@ import { Wrapper } from './common.sc';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	tokenStreams: ITokenStreams;
-	selectedToken: IToken;
+	token?: IToken;
+	superToken?: ISuperToken;
 }
 
 export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
-	selectedToken,
+	token,
+	superToken,
 	tokenStreams,
 	step,
 	setStep,
@@ -43,17 +44,6 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 
 	const { address } = useAccount();
 	const { formatMessage } = useIntl();
-
-	const [token, superToken] = useMemo(
-		() =>
-			selectedToken.isSuperToken
-				? [selectedToken.underlyingToken, selectedToken as ISuperToken]
-				: [
-						selectedToken,
-						findSuperTokenByTokenAddress(selectedToken.id),
-					],
-		[selectedToken],
-	);
 
 	const {
 		data: balance,

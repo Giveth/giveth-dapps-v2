@@ -34,6 +34,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 		SuperTokenBalance.value > 0n
 			? SuperTokenBalance.value / totalStreamPerSec / ONE_MONTH_SECONDS
 			: 0n;
+
 	return (
 		<StreamSection>
 			<Flex alignItems='center' justifyContent='space-between'>

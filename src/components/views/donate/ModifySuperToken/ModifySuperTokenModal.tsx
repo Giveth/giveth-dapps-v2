@@ -1,5 +1,5 @@
 import { P, brandColors, neutralColors } from '@giveth/ui-design-system';
-import { type FC, useState } from 'react';
+import { type FC, useState, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
@@ -8,8 +8,9 @@ import { IModal } from '@/types/common';
 import { Flex } from '@/components/styled-components/Flex';
 import { DepositSuperToken } from './DepositSuperToken';
 import { WithDrawSuperToken } from './WithDrawSuperToken';
-import { IToken } from '@/types/superFluid';
+import { ISuperToken, IToken } from '@/types/superFluid';
 import { type ITokenStreams } from '@/context/donate.context';
+import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 
 interface IModifySuperTokenModalProps extends IModal {
 	selectedToken: IToken;
@@ -104,6 +105,19 @@ const ModifySuperTokenInnerModal: FC<
 	IModifySuperTokenInnerModalProps
 > = props => {
 	const [tab, setTab] = useState(EModifyTabs.DEPOSIT);
+	const [token, superToken] = useMemo(
+		() =>
+			props.selectedToken.isSuperToken
+				? [
+						props.selectedToken.underlyingToken,
+						props.selectedToken as ISuperToken,
+					]
+				: [
+						props.selectedToken,
+						findSuperTokenByTokenAddress(props.selectedToken.id),
+					],
+		[props.selectedToken],
+	);
 	return (
 		<Wrapper>
 			{props.step === EModifySuperTokenSteps.MODIFY && (
@@ -121,8 +135,20 @@ const ModifySuperTokenInnerModal: FC<
 					))}
 				</Tabs>
 			)}
-			{tab === EModifyTabs.DEPOSIT && <DepositSuperToken {...props} />}
-			{tab === EModifyTabs.WITHDRAW && <WithDrawSuperToken />}
+			{tab === EModifyTabs.DEPOSIT && (
+				<DepositSuperToken
+					token={token}
+					superToken={superToken}
+					{...props}
+				/>
+			)}
+			{tab === EModifyTabs.WITHDRAW && (
+				<WithDrawSuperToken
+					token={token}
+					superToken={superToken}
+					{...props}
+				/>
+			)}
 		</Wrapper>
 	);
 };
