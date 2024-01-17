@@ -84,6 +84,13 @@ export const GeneralWalletContext = createContext<IGeneralWalletContext>({
 	isOnEVM: false,
 });
 
+const getPhantomSolanaProvider = () => {
+	const provider = (window as any)?.solana;
+	if (provider?.isPhantom) {
+		return provider;
+	}
+};
+
 // Create the provider component
 export const GeneralWalletProvider: React.FC<{
 	children: ReactNode;
@@ -103,8 +110,8 @@ export const GeneralWalletProvider: React.FC<{
 	const dispatch = useAppDispatch();
 	const { open: openConnectModal } = useWeb3Modal();
 	const router = useRouter();
-	const { setVisible } = useWalletModal();
 	const { token } = useAppSelector(state => state.user);
+	const { setVisible, visible } = useWalletModal();
 
 	const isGIVeconomyRoute = useMemo(
 		() => checkIsGIVeconomyRoute(router.route),
@@ -342,6 +349,14 @@ export const GeneralWalletProvider: React.FC<{
 		}
 	}, [walletChainType, evmChain]);
 
+	useEffect(() => {
+		// If the modal is not visible (closed), it resets the overflow style to 'auto'.
+		if (!visible) {
+			document.body.style.overflow = 'auto';
+			document.body.style.overflow = 'overlay';
+		}
+	}, [visible]);
+
 	const openWalletConnectModal = () => {
 		if (config.ENABLE_SOLANA && !isGIVeconomyRoute) {
 			dispatch(setShowWelcomeModal(true));
@@ -349,6 +364,27 @@ export const GeneralWalletProvider: React.FC<{
 			openConnectModal();
 		}
 	};
+
+	useEffect(() => {
+		const solanaProvider = getPhantomSolanaProvider();
+
+		const handleAccountChange = (publicKey: PublicKey) => {
+			if (publicKey) {
+				const address = publicKey.toBase58();
+				setWalletAddress(address);
+			}
+		};
+
+		if (solanaProvider) {
+			solanaProvider.on('accountChanged', handleAccountChange);
+		}
+
+		return () => {
+			if (solanaProvider) {
+				solanaProvider.off('accountChanged', handleAccountChange);
+			}
+		};
+	}, []);
 
 	const isOnSolana = walletChainType === ChainType.SOLANA;
 	const isOnEVM = walletChainType === ChainType.EVM;
