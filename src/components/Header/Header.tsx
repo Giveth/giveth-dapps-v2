@@ -245,7 +245,7 @@ const Header: FC<IHeader> = () => {
 						<NotificationButtonWithMenu
 							isHeaderShowing={showHeader}
 							theme={theme}
-						/>{' '}
+						/>
 						{networkHasGIV && (
 							<RewardButtonWithMenu
 								isHeaderShowing={showHeader}
