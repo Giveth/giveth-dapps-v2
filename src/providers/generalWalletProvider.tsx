@@ -82,14 +82,10 @@ export const GeneralWalletContext = createContext<IGeneralWalletContext>({
 	isOnEVM: false,
 });
 
-const getSolanaProvider = () => {
-	if (typeof window !== 'undefined') {
-		if ('phantom' in window) {
-			const provider = (window.phantom as any)?.solana;
-			if (provider?.isPhantom) {
-				return provider;
-			}
-		}
+const getPhantomSolanaProvider = () => {
+	const provider = (window as any)?.solana;
+	if (provider?.isPhantom) {
+		return provider;
 	}
 };
 
@@ -359,7 +355,7 @@ export const GeneralWalletProvider: React.FC<{
 	};
 
 	useEffect(() => {
-		const solanaProvider = getSolanaProvider();
+		const solanaProvider = getPhantomSolanaProvider();
 
 		const handleAccountChange = (publicKey: PublicKey) => {
 			if (publicKey) {
