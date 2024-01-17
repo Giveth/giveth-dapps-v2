@@ -8,7 +8,6 @@ import { StreamInfo } from './StreamInfo';
 import { IModifySuperTokenInnerModalProps } from './ModifySuperTokenModal';
 import { ITokenStreams } from '@/context/donate.context';
 import { ISuperToken, IToken } from '@/types/superFluid';
-import { AddressZero } from '@/lib/constants/constants';
 import { actionButtonLabel, EModifySuperTokenSteps } from './common';
 import { ModifyWrapper, Wrapper } from './common.sc';
 
@@ -30,18 +29,21 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 	const { formatMessage } = useIntl();
 
 	const {
-		data: balance,
+		data: SuperTokenBalance,
 		refetch,
 		isRefetching,
 	} = useBalance({
-		token: token?.id === AddressZero ? undefined : token?.id,
-		address: address,
-	});
-
-	const { data: SuperTokenBalance } = useBalance({
 		token: superToken?.id,
 		address: address,
 	});
+
+	const tokenStream = tokenStreams[superToken?.id || ''];
+	const totalStreamPerSec =
+		tokenStream?.reduce(
+			(acc, stream) => acc + BigInt(stream.currentFlowRate),
+			0n,
+		) || 0n;
+	const minRemainingBalance = totalStreamPerSec * BigInt(6 * 60 * 60);
 
 	const onWithDraw = async () => {};
 
@@ -73,8 +75,8 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 				disabled={
 					step === EModifySuperTokenSteps.MODIFY &&
 					(amount <= 0 ||
-						balance === undefined ||
-						amount > balance.value)
+						SuperTokenBalance === undefined ||
+						amount > SuperTokenBalance.value - minRemainingBalance)
 				}
 				loading={step === EModifySuperTokenSteps.WITHDRAWING}
 				onClick={onWithDraw}
