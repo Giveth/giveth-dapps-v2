@@ -18,6 +18,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { Item } from '../RecurringDonationModal/Item';
 import { RunOutInfo } from '../RunOutInfo';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
+import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 
 interface IWithDrawSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	tokenStreams: ITokenStreams;
@@ -53,6 +54,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 			(acc, stream) => acc + BigInt(stream.currentFlowRate),
 			0n,
 		) || 0n;
+	const totalPerMonth = totalStreamPerSec * BigInt(ONE_MONTH_SECONDS);
 	const minRemainingBalance = totalStreamPerSec * BigInt(6 * 60 * 60);
 
 	const onWithdraw = async () => {
@@ -146,7 +148,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 					/>
 					<RunOutInfo
 						amount={(SuperTokenBalance?.value || 0n) - amount}
-						totalPerMonth={0n}
+						totalPerMonth={totalPerMonth}
 					/>
 				</Flex>
 			)}
