@@ -6,7 +6,6 @@ import {
 	IconRefresh16,
 	neutralColors,
 	brandColors,
-	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -126,5 +125,3 @@ const IconWrapper = styled.div`
 	cursor: pointer;
 	color: ${brandColors.giv[500]};
 `;
-
-const ActionButton = styled(Button)``;
