@@ -20,7 +20,7 @@ import { showToastError } from '@/lib/helpers';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { StreamInfo } from './StreamInfo';
 import { ModifySection } from './ModifySection';
-import { Wrapper } from './common.sc';
+import { ModifyWrapper, Wrapper } from './common.sc';
 import { EModifySuperTokenSteps, actionButtonLabel } from './common';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
@@ -155,18 +155,20 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		<Wrapper>
 			{step === EModifySuperTokenSteps.MODIFY ? (
 				<>
-					<ModifySection
-						setAmount={setAmount}
-						token={token}
-						balance={balance}
-						refetch={refetch}
-						isRefetching={isRefetching}
-					/>
-					<StreamInfo
-						tokenStreams={tokenStreams}
-						superToken={superToken}
-						SuperTokenBalance={SuperTokenBalance}
-					/>
+					<ModifyWrapper>
+						<ModifySection
+							setAmount={setAmount}
+							token={token}
+							balance={balance}
+							refetch={refetch}
+							isRefetching={isRefetching}
+						/>
+						<StreamInfo
+							tokenStreams={tokenStreams}
+							superToken={superToken}
+							SuperTokenBalance={SuperTokenBalance}
+						/>
+					</ModifyWrapper>
 					<ModifyInfoToast />
 				</>
 			) : (

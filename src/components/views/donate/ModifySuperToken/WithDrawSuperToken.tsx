@@ -10,6 +10,7 @@ import { ITokenStreams } from '@/context/donate.context';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { AddressZero } from '@/lib/constants/constants';
 import { actionButtonLabel, EModifySuperTokenSteps } from './common';
+import { ModifyWrapper, Wrapper } from './common.sc';
 
 interface IWithDrawSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	tokenStreams: ITokenStreams;
@@ -42,23 +43,31 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 		address: address,
 	});
 
-	const onAction = async () => {};
+	const onWithDraw = async () => {};
 
 	return (
-		<>
-			<ModifySection
-				setAmount={setAmount}
-				token={superToken}
-				balance={SuperTokenBalance}
-				refetch={refetch}
-				isRefetching={isRefetching}
-			/>
-			<StreamInfo
-				tokenStreams={tokenStreams}
-				superToken={superToken}
-				SuperTokenBalance={SuperTokenBalance}
-			/>
-			<ModifyInfoToast />
+		<Wrapper>
+			{step === EModifySuperTokenSteps.MODIFY ? (
+				<>
+					<ModifyWrapper>
+						<ModifySection
+							setAmount={setAmount}
+							token={superToken}
+							balance={SuperTokenBalance}
+							refetch={refetch}
+							isRefetching={isRefetching}
+						/>
+						<StreamInfo
+							tokenStreams={tokenStreams}
+							superToken={superToken}
+							SuperTokenBalance={SuperTokenBalance}
+						/>
+					</ModifyWrapper>
+					<ModifyInfoToast />
+				</>
+			) : (
+				<div></div>
+			)}
 			<Button
 				label={formatMessage({ id: actionButtonLabel[step] })}
 				disabled={
@@ -68,8 +77,8 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 						amount > balance.value)
 				}
 				loading={step === EModifySuperTokenSteps.WITHDRAWING}
-				onClick={onAction}
+				onClick={onWithDraw}
 			/>
-		</>
+		</Wrapper>
 	);
 };

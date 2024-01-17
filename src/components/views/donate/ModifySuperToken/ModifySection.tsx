@@ -18,6 +18,7 @@ import { Spinner } from '@/components/Spinner';
 import { Flex } from '@/components/styled-components/Flex';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { IToken } from '@/types/superFluid';
+import { limitFraction } from '@/helpers/number';
 
 interface IModifySectionProps {
 	token?: IToken;
@@ -79,7 +80,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					{formatMessage({
 						id: 'label.available',
 					})}
-					: {balance?.formatted}
+					: {limitFraction(balance?.formatted || '0')}
 				</GLink>
 				<IconWrapper onClick={() => !isRefetching && refetch()}>
 					{isRefetching ? <Spinner size={16} /> : <IconRefresh16 />}
@@ -89,25 +90,18 @@ export const ModifySection: FC<IModifySectionProps> = ({
 	);
 };
 
-const TopUpSection = styled(Flex)`
-	border-radius: 12px;
-	border: 1px solid ${neutralColors.gray[300]};
-	background: ${neutralColors.gray[100]};
-	padding: 16px;
-`;
+const TopUpSection = styled(Flex)``;
 
 const SelectTokenWrapper = styled(Flex)`
 	min-width: 132px;
 	gap: 16px;
+	padding: 13px 16px;
 `;
 
 const InputWrapper = styled(Flex)`
 	border: 2px solid ${neutralColors.gray[300]};
 	border-radius: 8px;
 	overflow: hidden;
-	& > * {
-		padding: 13px 16px;
-	}
 	align-items: center;
 `;
 
@@ -123,6 +117,7 @@ const Input = styled(AmountInput)`
 		font-weight: 500;
 		line-height: 150%; /* 24px */
 		width: 100%;
+		padding: 13px 16px;
 	}
 `;
 
