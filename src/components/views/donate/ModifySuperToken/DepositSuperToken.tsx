@@ -1,27 +1,13 @@
 import { useState, type FC, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
-import {
-	Caption,
-	IconHelpFilled16,
-	B,
-	GLink,
-	IconRefresh16,
-	neutralColors,
-	brandColors,
-	Button,
-} from '@giveth/ui-design-system';
+import { Button } from '@giveth/ui-design-system';
 
 import { useAccount, useBalance } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { Framework } from '@superfluid-finance/sdk-core';
 import { Flex } from '@/components/styled-components/Flex';
-import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
-import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { Spinner } from '@/components/Spinner';
-import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { AddressZero } from '@/lib/constants/constants';
-import { AmountInput } from '@/components/AmountInput/AmountInput';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ITokenStreams } from '@/context/donate.context';
 import { ModifyInfoToast } from './ModifyInfoToast';
@@ -40,6 +26,7 @@ import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { showToastError } from '@/lib/helpers';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { StreamInfo } from './StreamInfo';
+import { ModifySection } from './ModifySection';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	tokenStreams: ITokenStreams;
@@ -182,60 +169,13 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		<Wrapper>
 			{step === EModifySuperTokenSteps.MODIFY ? (
 				<>
-					<TopUpSection flexDirection='column' gap='8px'>
-						<Flex gap='8px' alignItems='center'>
-							<Caption medium>
-								{formatMessage({
-									id: 'label.top_up_stream_balance',
-								})}
-							</Caption>
-							<IconWithTooltip
-								icon={<IconHelpFilled16 />}
-								direction='right'
-								align='bottom'
-							>
-								<FlowRateTooltip>PlaceHolder</FlowRateTooltip>
-							</IconWithTooltip>
-						</Flex>
-						<InputWrapper>
-							<SelectTokenWrapper
-								alignItems='center'
-								justifyContent='space-between'
-							>
-								<Flex gap='8px' alignItems='center'>
-									{token?.symbol && (
-										<TokenIcon
-											symbol={token?.symbol}
-											size={24}
-										/>
-									)}
-									<B>{token?.symbol}</B>
-								</Flex>
-							</SelectTokenWrapper>
-							<Input
-								setAmount={setAmount}
-								disabled={token === undefined}
-								decimals={token?.decimals}
-							/>
-						</InputWrapper>
-						<Flex gap='4px'>
-							<GLink size='Small'>
-								{formatMessage({
-									id: 'label.available',
-								})}
-								: {balance?.formatted}
-							</GLink>
-							<IconWrapper
-								onClick={() => !isRefetching && refetch()}
-							>
-								{isRefetching ? (
-									<Spinner size={16} />
-								) : (
-									<IconRefresh16 />
-								)}
-							</IconWrapper>
-						</Flex>
-					</TopUpSection>
+					<ModifySection
+						setAmount={setAmount}
+						token={token}
+						balance={balance}
+						refetch={refetch}
+						isRefetching={isRefetching}
+					/>
 					<StreamInfo
 						tokenStreams={tokenStreams}
 						superToken={superToken}
@@ -277,47 +217,3 @@ const Wrapper = styled(Flex)`
 	flex-direction: column;
 	gap: 24px;
 `;
-
-const TopUpSection = styled(Flex)`
-	border-radius: 12px;
-	border: 1px solid ${neutralColors.gray[300]};
-	background: ${neutralColors.gray[100]};
-	padding: 16px;
-`;
-
-const SelectTokenWrapper = styled(Flex)`
-	min-width: 132px;
-	gap: 16px;
-`;
-
-const InputWrapper = styled(Flex)`
-	border: 2px solid ${neutralColors.gray[300]};
-	border-radius: 8px;
-	overflow: hidden;
-	& > * {
-		padding: 13px 16px;
-	}
-	align-items: center;
-`;
-
-const Input = styled(AmountInput)`
-	width: 100%;
-	border-left: 2px solid ${neutralColors.gray[300]};
-	#amount-input {
-		border: none;
-		flex: 1;
-		font-family: Red Hat Text;
-		font-size: 16px;
-		font-style: normal;
-		font-weight: 500;
-		line-height: 150%; /* 24px */
-		width: 100%;
-	}
-`;
-
-const IconWrapper = styled.div`
-	cursor: pointer;
-	color: ${brandColors.giv[500]};
-`;
-
-const ActionButton = styled(Button)``;
