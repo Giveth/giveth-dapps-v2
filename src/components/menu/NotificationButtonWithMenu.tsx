@@ -34,6 +34,9 @@ import { useNotification } from '@/hooks/useNotification';
 
 interface INotificationButtonWithMenuProps extends IHeaderButtonProps {}
 
+const NOTIFICATION_ENABLED =
+	process.env.NEXT_PUBLIC_NOTIFICATION_CENTER_ENABLED;
+
 export const NotificationButtonWithMenu: FC<
 	INotificationButtonWithMenuProps
 > = ({ isHeaderShowing, theme }) => {
@@ -65,8 +68,9 @@ export const NotificationButtonWithMenu: FC<
 				console.log('Error fetching notifications');
 			}
 		};
-
-		fetchNotificationsAndSetState();
+		if (NOTIFICATION_ENABLED === 'true') {
+			fetchNotificationsAndSetState();
+		}
 	}, [lastNotificationId, isSignedIn]);
 
 	useEffect(() => {
@@ -84,13 +88,15 @@ export const NotificationButtonWithMenu: FC<
 				}
 			: { onClick: openSidebar }
 		: { onClick: () => signInThenGoToNotifs() };
+
 	return (
 		<MenuAndButtonContainer {...props}>
 			<NotificationsButton outline theme={theme} isHover={showMenu}>
 				<HeaderNotificationButton theme={theme} />
 				<CoverLine theme={theme} className='cover-line' />
 			</NotificationsButton>
-			{menuCondition && (
+			{NOTIFICATION_ENABLED === 'true' && menuCondition && (
+				// menuCondition && ( // Hiding container for now
 				<NotificationMenuContainer isAnimating={showMenu} theme={theme}>
 					<NotificationMenuWrapper>
 						<ItemsProvider close={closeMenu}>
@@ -104,7 +110,8 @@ export const NotificationButtonWithMenu: FC<
 					</NotificationMenuWrapper>
 				</NotificationMenuContainer>
 			)}
-			{sidebarCondition && (
+			{NOTIFICATION_ENABLED === 'true' && sidebarCondition && (
+				// sidebarCondition && (  // Hiding sidebar for now
 				<SideBar
 					close={closeSidebar}
 					isAnimating={showSidebar}
