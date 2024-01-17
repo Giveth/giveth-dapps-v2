@@ -1,7 +1,5 @@
 import { useState, type FC, useMemo, useEffect } from 'react';
-import styled from 'styled-components';
 import { Button } from '@giveth/ui-design-system';
-
 import { useAccount, useBalance } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { Framework } from '@superfluid-finance/sdk-core';
@@ -27,6 +25,7 @@ import { showToastError } from '@/lib/helpers';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { StreamInfo } from './StreamInfo';
 import { ModifySection } from './ModifySection';
+import { Wrapper } from './common.sc';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	tokenStreams: ITokenStreams;
@@ -212,8 +211,3 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		</Wrapper>
 	);
 };
-
-const Wrapper = styled(Flex)`
-	flex-direction: column;
-	gap: 24px;
-`;
