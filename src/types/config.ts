@@ -196,6 +196,11 @@ export interface NonEVMChain {
 	name: string;
 	chainType: ChainType;
 	adapterNetwork: WalletAdapterNetwork;
+	nativeCurrency: {
+		name: string;
+		symbol: string;
+		decimals: number;
+	};
 	blockExplorers: {
 		default: {
 			name: string;

@@ -55,6 +55,7 @@ const SOLANA_NETWORK: NonEVMChain = {
 	chainType: ChainType.SOLANA,
 	name: 'Solana Devnet',
 	adapterNetwork: WalletAdapterNetwork.Devnet,
+	nativeCurrency: { name: 'Solana native token', symbol: 'SOL', decimals: 9 },
 	blockExplorers: {
 		default: {
 			name: 'Solana Explorer',
