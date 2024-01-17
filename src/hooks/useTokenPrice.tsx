@@ -14,7 +14,7 @@ const stableCoins = [
 	'USDT',
 ];
 
-interface ITokenPice {
+interface ITokenPrice {
 	symbol: string;
 	address?: Address;
 	id?: Address | string;
@@ -22,7 +22,7 @@ interface ITokenPice {
 	isStableCoin?: boolean;
 }
 
-export const useTokenPrice = (token?: ITokenPice) => {
+export const useTokenPrice = (token?: ITokenPrice) => {
 	const [tokenPrice, setTokenPrice] = useState<number>();
 
 	const { chain } = useNetwork();

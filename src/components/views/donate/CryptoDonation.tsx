@@ -134,6 +134,7 @@ const CryptoDonation: FC = () => {
 	const projectIsGivBackEligible = !!verified;
 	const activeRound = getActiveRound(project.qfRounds);
 	const networkId = (chain as Chain)?.id;
+	console.log('networkId', chain, networkId);
 
 	const isOnEligibleNetworks =
 		networkId && activeRound?.eligibleNetworks?.includes(networkId);
@@ -176,7 +177,9 @@ const CryptoDonation: FC = () => {
 					case ChainType.SOLANA:
 						return (
 							addressesChainTypes.has(ChainType.SOLANA) &&
-							token.chainType === walletChainType
+							token.chainType === walletChainType &&
+							token.networkId ===
+								config.SOLANA_CONFIG.particleChainId
 						);
 					default:
 						return false;
@@ -214,6 +217,11 @@ const CryptoDonation: FC = () => {
 			setTokenIsGivBackEligible(tokens[0]?.isGivbackEligible);
 		}
 	}, [networkId, acceptedTokens, walletChainType, addresses]);
+
+	console.log(
+		'setErc20List',
+		acceptedTokens?.filter(t => t.networkId === 103),
+	);
 
 	useEffect(() => {
 		if (isEnabled) pollToken();
