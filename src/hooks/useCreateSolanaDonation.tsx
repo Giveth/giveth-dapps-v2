@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 
 import { useConnection } from '@solana/wallet-adapter-react';
-import { SystemProgram } from '@solana/web3.js';
+import { SystemProgram, TransactionResponse } from '@solana/web3.js';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
@@ -20,9 +20,10 @@ export const useCreateSolanaDonation = () => {
 	const [resolveState, setResolveState] = useState<(() => void) | null>(null);
 	const [createDonationProps, setCreateDonationProps] =
 		useState<ICreateDonation>();
+	const [transactionObject, setTransactionObject] =
+		useState<TransactionResponse | null>(null);
 	const { sendNativeToken, walletChainType } = useGeneralWallet();
 	const { connection: solanaConnection } = useConnection();
-
 	const fetchTransaction = async ({ hash }: { hash: string }) => {
 		const transaction = await solanaConnection.getTransaction(hash);
 		const from: string =
@@ -35,6 +36,7 @@ export const useCreateSolanaDonation = () => {
 			chainId: 0,
 			nonce: null,
 			from,
+			transactionObj: transaction,
 		};
 	};
 
@@ -48,6 +50,7 @@ export const useCreateSolanaDonation = () => {
 				return;
 			}
 			transaction = await retryFetchTransaction(fetchTransaction, txHash);
+			setTransactionObject(transaction?.transactionObj);
 
 			setTxHash(txHash);
 			const {
@@ -170,7 +173,7 @@ export const useCreateSolanaDonation = () => {
 				return {
 					isSaved: false,
 					txHash: hash,
-					isMinted: status === 'success',
+					isMinted: transactionObject?.meta?.err === null,
 				};
 			}
 			return {
@@ -184,7 +187,7 @@ export const useCreateSolanaDonation = () => {
 	};
 
 	useEffect(() => {
-		if (status === 'success') {
+		if (transactionObject?.meta?.err === null && txHash) {
 			updateDonation(donationId, EDonationStatus.VERIFIED);
 			setDonationMinted(true);
 			if (resolveState) {
@@ -193,7 +196,7 @@ export const useCreateSolanaDonation = () => {
 			}
 		}
 		const comingFromSafe = txHash;
-		if (status === 'error' && !comingFromSafe) {
+		if (transactionObject?.meta?.err && !comingFromSafe) {
 			updateDonation(donationId, EDonationStatus.FAILED);
 			setDonationSaved(false);
 			createDonationProps?.setFailedModalType(EDonationFailedType.FAILED);
