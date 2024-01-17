@@ -1,7 +1,10 @@
 import { captureException } from '@sentry/nextjs';
+import { getNowUnixMS } from '@/helpers/time';
 
 const handler = (req, res) => {
 	const { body, method, headers } = req;
+	const now = getNowUnixMS();
+	body.saveTimestamp = now;
 	try {
 		if (method === 'POST') {
 			fetch(process.env.MONGO_DONATION_URL, {
