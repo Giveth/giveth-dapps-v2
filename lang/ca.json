@@ -836,7 +836,7 @@
 	"label.supported_projects": "Projectes Suportats",
 	"label.supported_project_activity": "Activitat del Projecte Suportat",
 	"label.support_giveth": "Recolzeu Giveth",
-	"label.support_giveth_with": "Doni suport a Giveth amb una donació a la Giveth DAO. El percentatge de donació seleccionat s'afegirà al seu import de donació en el mateix token que està donant.",
+	"label.support_giveth_with": "Doni suport a Giveth amb una donació a la Giveth DAO. El percentatge de donació seleccionat es prendrà del total de la quantitat de la vostra donació en el mateix token que esteu donant.",
 	"label.support_upcoming_qf_round": "Doneu suport a les properes rondes i feu una donació al grup corresponent.",
 	"label.switch_network": "Canviar xarxa",
 	"label.switch_to": "canvia a",

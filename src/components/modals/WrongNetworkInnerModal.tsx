@@ -4,6 +4,7 @@ import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { jointItems } from '@/helpers/text';
 import SwitchNetwork from './SwitchNetwork';
@@ -28,6 +29,8 @@ export const EVMWrongNetworkSwitchModal: FC<IEVMWrongNetworkSwitchModal> = ({
 	const { walletChainType, handleSingOutAndSignInWithEVM } =
 		useGeneralWallet();
 
+	const { open: openConnectModal } = useWeb3Modal();
+
 	const chainNames = targetNetworks.map(network =>
 		getChainName(network.networkId),
 	);
@@ -36,6 +39,8 @@ export const EVMWrongNetworkSwitchModal: FC<IEVMWrongNetworkSwitchModal> = ({
 	const handleConnectWallet = async () => {
 		if (walletChainType === ChainType.SOLANA) {
 			handleSingOutAndSignInWithEVM();
+		} else {
+			openConnectModal?.();
 		}
 	};
 
