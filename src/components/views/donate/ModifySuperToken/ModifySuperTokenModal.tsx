@@ -27,9 +27,15 @@ const headerTitleGenerator = (step: EModifySuperTokenSteps) => {
 		case EModifySuperTokenSteps.DEPOSIT:
 			return 'label.confirm_your_donation';
 		case EModifySuperTokenSteps.DEPOSITING:
-			return 'label.donating';
-		case EModifySuperTokenSteps.SUBMITTED:
-			return 'label.donation_submitted';
+			return 'label.depositing';
+		case EModifySuperTokenSteps.DEPOSIT_CONFIRMED:
+			return 'label.deposit_confirmed';
+		case EModifySuperTokenSteps.WITHDRAW:
+			return 'label.confirm_your_withdrawal';
+		case EModifySuperTokenSteps.WITHDRAWING:
+			return 'label.withdrawing';
+		case EModifySuperTokenSteps.WITHDRAW_CONFIRMED:
+			return 'label.withdraw_confirmed';
 	}
 };
 

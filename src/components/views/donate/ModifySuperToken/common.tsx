@@ -6,7 +6,8 @@ export enum EModifySuperTokenSteps {
 	DEPOSITING,
 	WITHDRAW,
 	WITHDRAWING,
-	SUBMITTED,
+	DEPOSIT_CONFIRMED,
+	WITHDRAW_CONFIRMED,
 }
 
 export const actionButtonLabel = {
@@ -17,5 +18,6 @@ export const actionButtonLabel = {
 	[EModifySuperTokenSteps.DEPOSITING]: 'label.deposit',
 	[EModifySuperTokenSteps.WITHDRAW]: 'label.withdraw',
 	[EModifySuperTokenSteps.WITHDRAWING]: 'label.withdraw',
-	[EModifySuperTokenSteps.SUBMITTED]: 'label.done',
+	[EModifySuperTokenSteps.DEPOSIT_CONFIRMED]: 'label.done',
+	[EModifySuperTokenSteps.WITHDRAW_CONFIRMED]: 'label.done',
 };
