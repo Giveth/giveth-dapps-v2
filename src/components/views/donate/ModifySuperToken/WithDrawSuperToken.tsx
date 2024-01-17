@@ -87,9 +87,9 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 			if (!res.status) {
 				throw new Error('Withdraw failed');
 			}
-			setStep(EModifySuperTokenSteps.SUBMITTED);
+			setStep(EModifySuperTokenSteps.WITHDRAW_CONFIRMED);
 		} catch (error) {
-			setStep(EModifySuperTokenSteps.WITHDRAWING);
+			setStep(EModifySuperTokenSteps.WITHDRAW);
 			showToastError(error);
 			console.log('error', error);
 		}
