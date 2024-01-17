@@ -132,9 +132,13 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 				throw new Error('Deposit failed');
 			}
 			setStep(EModifySuperTokenSteps.DEPOSIT_CONFIRMED);
-		} catch (error) {
-			setStep(EModifySuperTokenSteps.DEPOSIT);
-			showToastError(error);
+		} catch (error: any) {
+			if (error?.code === 'ACTION_REJECTED') {
+				setStep(EModifySuperTokenSteps.MODIFY);
+			} else {
+				showToastError(error);
+				setStep(EModifySuperTokenSteps.DEPOSIT);
+			}
 			console.log('error', error);
 		}
 	};
