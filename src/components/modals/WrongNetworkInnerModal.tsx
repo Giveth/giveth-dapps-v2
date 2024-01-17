@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Button } from '@giveth/ui-design-system';
-import { useAccount } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { jointItems } from '@/helpers/text';
@@ -23,10 +22,10 @@ export const EVMWrongNetworkSwitchModal: FC<IEVMWrongNetworkSwitchModal> = ({
 	targetNetworks,
 }) => {
 	const [showSwitchNetwork, setShowSwitchNetwork] = useState(false);
-	const { address } = useAccount();
+	const { walletAddress } = useGeneralWallet();
 	const { formatMessage } = useIntl();
 
-	const { walletChainType, handleSingOutAndSignInWithEVM } =
+	const { walletChainType, handleSignOutAndShowWelcomModal } =
 		useGeneralWallet();
 
 	const { open: openConnectModal } = useWeb3Modal();
@@ -38,15 +37,15 @@ export const EVMWrongNetworkSwitchModal: FC<IEVMWrongNetworkSwitchModal> = ({
 
 	const handleConnectWallet = async () => {
 		if (walletChainType === ChainType.SOLANA) {
-			handleSingOutAndSignInWithEVM();
+			handleSignOutAndShowWelcomModal();
 		} else {
-			openConnectModal?.();
+			setShowSwitchNetwork(true);
 		}
 	};
 
 	return (
 		<EVMWrongNetworkSwitchModalContainer>
-			{address ? (
+			{walletAddress ? (
 				<>
 					<Description>
 						<P>
@@ -67,7 +66,7 @@ export const EVMWrongNetworkSwitchModal: FC<IEVMWrongNetworkSwitchModal> = ({
 								id: 'label.switch_network',
 							})}
 							buttonType='primary'
-							onClick={() => setShowSwitchNetwork(true)}
+							onClick={handleConnectWallet}
 						/>
 					</ButtonsContainer>
 				</>
@@ -91,7 +90,7 @@ export const EVMWrongNetworkSwitchModal: FC<IEVMWrongNetworkSwitchModal> = ({
 							label={formatMessage({
 								id: 'component.button.connect_wallet',
 							})}
-							onClick={handleConnectWallet}
+							onClick={() => openConnectModal?.()}
 							buttonType='primary'
 						/>
 					</ButtonsContainer>

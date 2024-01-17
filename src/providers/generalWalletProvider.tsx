@@ -32,7 +32,7 @@ import BigNumber from 'bignumber.js';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { getChainName } from '@/lib/network';
 import config from '@/configuration';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import {
 	isGIVeconomyRoute as checkIsGIVeconomyRoute,
@@ -61,6 +61,7 @@ interface IGeneralWalletContext {
 	) => Promise<string | `0x${string}` | undefined>;
 	handleSingOutAndSignInWithEVM: () => Promise<void>;
 	handleSignOutAndSignInWithSolana: () => Promise<void>;
+	handleSignOutAndShowWelcomModal: () => Promise<void>;
 	isOnSolana: boolean;
 	isOnEVM: boolean;
 }
@@ -78,6 +79,7 @@ export const GeneralWalletContext = createContext<IGeneralWalletContext>({
 	sendNativeToken: async () => undefined,
 	handleSingOutAndSignInWithEVM: async () => {},
 	handleSignOutAndSignInWithSolana: async () => {},
+	handleSignOutAndShowWelcomModal: async () => {},
 	isOnSolana: false,
 	isOnEVM: false,
 });
@@ -108,6 +110,7 @@ export const GeneralWalletProvider: React.FC<{
 	const dispatch = useAppDispatch();
 	const { open: openConnectModal } = useWeb3Modal();
 	const router = useRouter();
+	const { token } = useAppSelector(state => state.user);
 	const { setVisible, visible } = useWalletModal();
 
 	const isGIVeconomyRoute = useMemo(
@@ -350,6 +353,7 @@ export const GeneralWalletProvider: React.FC<{
 		// If the modal is not visible (closed), it resets the overflow style to 'auto'.
 		if (!visible) {
 			document.body.style.overflow = 'auto';
+			document.body.style.overflow = 'overlay';
 		}
 	}, [visible]);
 
@@ -384,6 +388,13 @@ export const GeneralWalletProvider: React.FC<{
 
 	const isOnSolana = walletChainType === ChainType.SOLANA;
 	const isOnEVM = walletChainType === ChainType.EVM;
+	const handleSignOutAndShowWelcomModal = async () => {
+		await dispatch(signOut(token!));
+		isOnSolana ? solanaWalletDisconnect() : ethereumWalletDisconnect();
+		setTimeout(() => {
+			dispatch(setShowWelcomeModal(true));
+		}, 100); // wait 100 milliseconds (0.1 seconds) before dispatching, because otherwise the modal will not show
+	};
 
 	const contextValue: IGeneralWalletContext = {
 		walletChainType,
@@ -399,6 +410,7 @@ export const GeneralWalletProvider: React.FC<{
 		sendNativeToken,
 		handleSingOutAndSignInWithEVM,
 		handleSignOutAndSignInWithSolana,
+		handleSignOutAndShowWelcomModal,
 		isOnSolana,
 		isOnEVM,
 	};
