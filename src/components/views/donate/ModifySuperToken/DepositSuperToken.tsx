@@ -39,6 +39,7 @@ import config from '@/configuration';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { showToastError } from '@/lib/helpers';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import { limitFraction } from '@/helpers/number';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	tokenStreams: ITokenStreams;
@@ -258,7 +259,9 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 									})}
 								</Caption>
 								<StreamBalanceInfo medium>
-									{SuperTokenBalance?.formatted}{' '}
+									{limitFraction(
+										SuperTokenBalance?.formatted || '0',
+									)}{' '}
 									{superToken?.symbol}
 								</StreamBalanceInfo>
 							</Flex>
@@ -271,6 +274,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 										id: 'label.balance_runs_out_in',
 									})}{' '}
 									<strong>
+										{streamRunOutInMonth.toString()}{' '}
 										{formatMessage(
 											{
 												id: 'label.months',
