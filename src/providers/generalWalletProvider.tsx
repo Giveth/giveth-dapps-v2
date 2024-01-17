@@ -1,4 +1,4 @@
-// create a react provider with the context
+// create a React provider with the context
 import React, {
 	ReactNode,
 	createContext,
