@@ -28,24 +28,20 @@ const SwitchToAcceptedChain: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({
 	const { switchNetwork } = useSwitchNetwork();
 
 	const handleSwitchNetwork = () => {
-		const firstAcceptedChainId = acceptedChains[0].networkId;
+		const firstAcceptedChainType = acceptedChains[0].chainType;
 		switch (walletChainType) {
 			case ChainType.EVM:
-				if (firstAcceptedChainId === config.SOLANA_CONFIG.networkId) {
+				if (firstAcceptedChainType === config.SOLANA_CONFIG.chainType) {
 					handleSignOutAndSignInWithSolana();
 				} else {
-					switchNetwork?.(firstAcceptedChainId);
+					switchNetwork?.(acceptedChains[0].networkId);
 				}
 				break;
 			case ChainType.SOLANA:
-				if (firstAcceptedChainId !== config.SOLANA_CONFIG.networkId) {
-					handleSingOutAndSignInWithEVM();
-				} else {
-					switchNetwork?.(firstAcceptedChainId);
-				}
+				handleSingOutAndSignInWithEVM();
 				break;
 			default:
-				switchNetwork?.(firstAcceptedChainId);
+				switchNetwork?.(acceptedChains[0].networkId);
 		}
 	};
 
