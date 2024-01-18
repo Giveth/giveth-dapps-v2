@@ -192,7 +192,6 @@ interface MicroservicesConfig {
 
 export interface NonEVMChain {
 	id: number;
-	networkId: number;
 	name: string;
 	chainType: ChainType;
 	adapterNetwork: WalletAdapterNetwork;
