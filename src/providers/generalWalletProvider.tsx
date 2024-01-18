@@ -17,6 +17,12 @@ import {
 	SystemProgram,
 } from '@solana/web3.js';
 import {
+	createAssociatedTokenAccountInstruction,
+	createTransferInstruction,
+	getAssociatedTokenAddress,
+	TOKEN_PROGRAM_ID,
+} from '@solana/spl-token';
+import {
 	Chain,
 	useAccount,
 	useBalance,
@@ -59,6 +65,11 @@ interface IGeneralWalletContext {
 		to: string,
 		value: string,
 	) => Promise<string | `0x${string}` | undefined>;
+	sendSolanaSPLToken: (
+		to: string,
+		value: bigint,
+		tokenAddress: string,
+	) => Promise<string | undefined>;
 	handleSingOutAndSignInWithEVM: () => Promise<void>;
 	handleSignOutAndSignInWithSolana: () => Promise<void>;
 	handleSignOutAndShowWelcomModal: () => Promise<void>;
@@ -77,6 +88,7 @@ export const GeneralWalletContext = createContext<IGeneralWalletContext>({
 	chain: undefined,
 	openWalletConnectModal: () => {},
 	sendNativeToken: async () => undefined,
+	sendSolanaSPLToken: async () => Promise.resolve(''),
 	handleSingOutAndSignInWithEVM: async () => {},
 	handleSignOutAndSignInWithSolana: async () => {},
 	handleSignOutAndShowWelcomModal: async () => {},
@@ -291,12 +303,10 @@ export const GeneralWalletProvider: React.FC<{
 					to: to as `0x${string}`,
 					value,
 				});
-				return;
 			case ChainType.SOLANA: {
 				const lamports = new BigNumber(value)
 					.times(LAMPORTS_PER_SOL)
 					.toFixed();
-
 				const transaction = new Transaction().add(
 					SystemProgram.transfer({
 						fromPubkey: publicKey!,
@@ -312,6 +322,50 @@ export const GeneralWalletProvider: React.FC<{
 			default:
 				return;
 		}
+	};
+
+	const sendSolanaSPLToken = async (
+		to: string,
+		value: bigint,
+		tokenAddress: string,
+	) => {
+		if (!publicKey) throw Error('Wallet is not connected');
+		const splTokenMintAddress = new PublicKey(tokenAddress);
+		const receiverAddress = new PublicKey(to);
+		const senderTokenAccountAddress = await getAssociatedTokenAddress(
+			splTokenMintAddress,
+			publicKey,
+		);
+		const receiverTokenAccountAddress = await getAssociatedTokenAddress(
+			splTokenMintAddress,
+			receiverAddress,
+		);
+		const transaction = new Transaction();
+		const receiverAccountInfo = await solanaConnection.getAccountInfo(
+			receiverTokenAccountAddress,
+		);
+		if (!receiverAccountInfo) {
+			// In the case where user is new to the token and doesn't have an associated token account
+			transaction.add(
+				createAssociatedTokenAccountInstruction(
+					publicKey,
+					receiverTokenAccountAddress,
+					receiverAddress,
+					splTokenMintAddress,
+				),
+			);
+		}
+		transaction.add(
+			createTransferInstruction(
+				senderTokenAccountAddress,
+				receiverTokenAccountAddress,
+				publicKey,
+				value,
+				[],
+				TOKEN_PROGRAM_ID,
+			),
+		);
+		return await solanaSendTransaction(transaction, solanaConnection);
 	};
 
 	const disconnect = () => {
@@ -408,6 +462,7 @@ export const GeneralWalletProvider: React.FC<{
 		openWalletConnectModal,
 		balance,
 		sendNativeToken,
+		sendSolanaSPLToken,
 		handleSingOutAndSignInWithEVM,
 		handleSignOutAndSignInWithSolana,
 		handleSignOutAndShowWelcomModal,
