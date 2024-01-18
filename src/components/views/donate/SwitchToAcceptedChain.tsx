@@ -10,16 +10,45 @@ import {
 import { INetworkIdWithChain } from './common.types'; // Import the type
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
+import config from '@/configuration';
 
 const SwitchToAcceptedChain: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({
 	acceptedChains,
 }) => {
 	const { formatMessage } = useIntl();
-	const { chain, walletChainType } = useGeneralWallet();
+	const {
+		chain,
+		walletChainType,
+		handleSignOutAndSignInWithSolana,
+		handleSingOutAndSignInWithEVM,
+	} = useGeneralWallet();
 
 	const networkId = (chain as Chain)?.id;
 
 	const { switchNetwork } = useSwitchNetwork();
+
+	const handleSwitchNetwork = () => {
+		const firstAcceptedChainId = acceptedChains[0].networkId;
+		switch (walletChainType) {
+			case ChainType.EVM:
+				if (firstAcceptedChainId === config.SOLANA_CONFIG.networkId) {
+					handleSignOutAndSignInWithSolana();
+				} else {
+					switchNetwork?.(firstAcceptedChainId);
+				}
+				break;
+			case ChainType.SOLANA:
+				if (firstAcceptedChainId !== config.SOLANA_CONFIG.networkId) {
+					handleSingOutAndSignInWithEVM();
+				} else {
+					switchNetwork?.(firstAcceptedChainId);
+				}
+				break;
+			default:
+				switchNetwork?.(firstAcceptedChainId);
+		}
+	};
+
 	if (
 		!acceptedChains ||
 		acceptedChains.some(
@@ -42,9 +71,7 @@ const SwitchToAcceptedChain: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({
 				{getNetworkNames(acceptedChains, 'and')}.
 			</Caption>
 			{/* Use the first accepted chain's networkId for the switchNetwork call */}
-			<SwitchCaption
-				onClick={() => switchNetwork?.(acceptedChains[0].networkId)}
-			>
+			<SwitchCaption onClick={handleSwitchNetwork}>
 				{formatMessage({ id: 'label.switch_network' })}
 			</SwitchCaption>
 		</NetworkToast>
