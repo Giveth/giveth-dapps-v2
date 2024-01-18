@@ -22,14 +22,15 @@ export const useCreateSolanaDonation = () => {
 		useState<ICreateDonation>();
 	const [transactionObject, setTransactionObject] =
 		useState<TransactionResponse | null>(null);
-	const { sendNativeToken, walletChainType } = useGeneralWallet();
+	const { sendNativeToken, walletChainType, sendSolanaSPLToken } =
+		useGeneralWallet();
 	const { connection: solanaConnection } = useConnection();
 	const fetchTransaction = async ({ hash }: { hash: string }) => {
 		const transaction = await solanaConnection.getTransaction(hash);
 		const from: string =
 			transaction?.transaction.message.accountKeys[0].toBase58()!;
 		if (!from) {
-			throw new Error('Solana transction from not found');
+			throw new Error('Solana transaction from not found');
 		}
 		return {
 			hash,
@@ -147,20 +148,15 @@ export const useCreateSolanaDonation = () => {
 			throw new Error('Invalid wallet chain type');
 		}
 
-		if (address !== SystemProgram.programId.toBase58()) {
-			throw new Error(
-				'Token address is not native token address - not supported yet!',
-			);
-		}
-
-		const transactionObj = {
-			to: toAddress! as `0x${string}`,
-			value: amount.toString(),
-		};
-
 		try {
 			// setDonating(true);
-			const hash = await sendNativeToken(toAddress!, amount.toString());
+			let hash;
+			if (address === SystemProgram.programId.toBase58()) {
+				hash = await sendNativeToken(toAddress!, amount.toString());
+			} else {
+				const bigAmount = BigInt(amount * 10 ** token.decimals);
+				hash = await sendSolanaSPLToken(toAddress!, bigAmount, address);
+			}
 			console.log('HERE IS THE hash', hash);
 			if (!hash) {
 				updateDonation(donationId, EDonationStatus.FAILED);
@@ -195,8 +191,7 @@ export const useCreateSolanaDonation = () => {
 				setResolveState(null); // clear the state to avoid calling it again
 			}
 		}
-		const comingFromSafe = txHash;
-		if (transactionObject?.meta?.err && !comingFromSafe) {
+		if (transactionObject?.meta?.err && !txHash) {
 			updateDonation(donationId, EDonationStatus.FAILED);
 			setDonationSaved(false);
 			createDonationProps?.setFailedModalType(EDonationFailedType.FAILED);
