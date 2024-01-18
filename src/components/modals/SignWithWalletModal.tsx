@@ -247,42 +247,52 @@ export const SignWithWalletModal: FC<IProps> = ({
 					})}
 					loading={loading}
 					onClick={async () => {
-						let signature;
-						if (walletChainType === ChainType.SOLANA) {
-							const { message, nonce } = await createSwisMessage(
-								walletAddress!,
-								'Login into Giveth services',
-							);
-							const signedMessage = await signMessage(message);
-							signature = await dispatch(
-								signToGetToken({
-									address: walletAddress,
-									chainId,
-									pathname: router.pathname,
-									solanaSignedMessage: signedMessage,
-									message,
-									nonce,
-								} as ISolanaSignToGetToken),
-							);
-							setLoading(false);
-							if (
-								signature &&
-								signature.type ===
-									'user/signToGetToken/fulfilled'
-							) {
-								const event = new Event(EModalEvents.SIGNEDIN);
-								window.dispatchEvent(event);
-								callback && callback();
-								closeModal();
+						try {
+							let signature;
+							if (walletChainType === ChainType.SOLANA) {
+								setLoading(true);
+								const { message, nonce } =
+									await createSwisMessage(
+										walletAddress!,
+										'Login into Giveth services',
+									);
+								const signedMessage =
+									await signMessage(message);
+								signature = await dispatch(
+									signToGetToken({
+										address: walletAddress,
+										chainId,
+										pathname: router.pathname,
+										solanaSignedMessage: signedMessage,
+										message,
+										nonce,
+									} as ISolanaSignToGetToken),
+								);
+								setLoading(false);
+								if (
+									signature &&
+									signature.type ===
+										'user/signToGetToken/fulfilled'
+								) {
+									const event = new Event(
+										EModalEvents.SIGNEDIN,
+									);
+									window.dispatchEvent(event);
+									callback && callback();
+									closeModal();
+								}
+							} else if (multisigLastStep) {
+								if (currentMultisigSession) return closeModal();
+								return startSignature(connector, true);
+							} else if (isGSafeConnector) {
+								reset();
+								return setSafeSecondaryConnection(true);
+							} else {
+								await startSignature();
 							}
-						} else if (multisigLastStep) {
-							if (currentMultisigSession) return closeModal();
-							return startSignature(connector, true);
-						} else if (isGSafeConnector) {
-							reset();
-							return setSafeSecondaryConnection(true);
-						} else {
-							await startSignature();
+						} catch (error) {
+						} finally {
+							setLoading(false);
 						}
 					}}
 					buttonType={
