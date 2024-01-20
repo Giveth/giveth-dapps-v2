@@ -179,8 +179,7 @@ const CryptoDonation: FC = () => {
 						return (
 							addressesChainTypes.has(ChainType.SOLANA) &&
 							token.chainType === walletChainType &&
-							token.networkId ===
-								config.SOLANA_CONFIG.particleChainId
+							token.networkId === config.SOLANA_CONFIG.networkId
 						);
 					default:
 						return false;
