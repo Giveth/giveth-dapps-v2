@@ -81,7 +81,7 @@ const CryptoDonation: FC = () => {
 		balance,
 	} = useGeneralWallet();
 	const { formatMessage } = useIntl();
-	const { isEnabled, isSignedIn } = useAppSelector(state => state.user);
+	const { isSignedIn } = useAppSelector(state => state.user);
 
 	const isPurpleListed = usePurpleList();
 
@@ -216,12 +216,12 @@ const CryptoDonation: FC = () => {
 	}, [networkId, acceptedTokens, walletChainType, addresses]);
 
 	useEffect(() => {
-		if (isEnabled) pollToken();
+		if (isConnected || address) pollToken();
 		else {
 			setSelectedToken(undefined);
 		}
 		return () => clearPoll();
-	}, [selectedToken, isEnabled, address, balance]);
+	}, [selectedToken, isConnected, address, balance]);
 
 	useEffect(() => {
 		client
@@ -245,7 +245,7 @@ const CryptoDonation: FC = () => {
 
 	useEffect(() => {
 		setAmountTyped(undefined);
-	}, [selectedToken, isEnabled, address, networkId]);
+	}, [selectedToken, isConnected, address, networkId]);
 
 	const checkGIVTokenAvailability = () => {
 		if (orgLabel !== ORGANIZATION.givingBlock) return true;
@@ -531,7 +531,7 @@ const CryptoDonation: FC = () => {
 					})}
 				/>
 			)}
-			{isEnabled && (
+			{isConnected && (
 				<MainButton
 					label={formatMessage({ id: 'label.donate' })}
 					disabled={donationDisabled}
@@ -539,7 +539,7 @@ const CryptoDonation: FC = () => {
 					onClick={handleDonate}
 				/>
 			)}
-			{!isEnabled && (
+			{!isConnected && (
 				<MainButton
 					label={formatMessage({
 						id: 'component.button.connect_wallet',

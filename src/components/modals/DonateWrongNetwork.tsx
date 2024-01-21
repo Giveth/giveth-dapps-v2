@@ -63,8 +63,10 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { slug } = router.query;
 	const eligibleNetworks = networks.filter(
 		network =>
-			acceptedChains?.some(
-				acceptedChain => acceptedChain.networkId === network.id,
+			acceptedChains?.some(acceptedChain =>
+				acceptedChain.chainType === ChainType.SOLANA
+					? acceptedChain.chainType === network.chainType
+					: acceptedChain.networkId === network.id,
 			),
 	);
 
