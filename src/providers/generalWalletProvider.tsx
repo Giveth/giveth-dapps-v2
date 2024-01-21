@@ -1,4 +1,4 @@
-// create a react provider with the context
+// create a React provider with the context
 import React, {
 	ReactNode,
 	createContext,
@@ -291,12 +291,10 @@ export const GeneralWalletProvider: React.FC<{
 					to: to as `0x${string}`,
 					value,
 				});
-				return;
 			case ChainType.SOLANA: {
 				const lamports = new BigNumber(value)
 					.times(LAMPORTS_PER_SOL)
 					.toFixed();
-
 				const transaction = new Transaction().add(
 					SystemProgram.transfer({
 						fromPubkey: publicKey!,

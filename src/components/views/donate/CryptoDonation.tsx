@@ -12,10 +12,10 @@ import {
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 import { Chain, formatUnits, parseUnits } from 'viem';
-
 import { getContract } from 'wagmi/actions';
 import { type Address, erc20ABI } from 'wagmi';
-import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { PublicKey } from '@solana/web3.js';
+import { useConnection } from '@solana/wallet-adapter-react';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
@@ -80,6 +80,7 @@ const CryptoDonation: FC = () => {
 		isConnected,
 		balance,
 	} = useGeneralWallet();
+	const { connection: solanaConnection } = useConnection();
 	const { formatMessage } = useIntl();
 	const { isSignedIn } = useAppSelector(state => state.user);
 
@@ -176,7 +177,8 @@ const CryptoDonation: FC = () => {
 					case ChainType.SOLANA:
 						return (
 							addressesChainTypes.has(ChainType.SOLANA) &&
-							token.chainType === walletChainType
+							token.chainType === walletChainType &&
+							token.networkId === config.SOLANA_CONFIG.networkId
 						);
 					default:
 						return false;
@@ -266,11 +268,6 @@ const CryptoDonation: FC = () => {
 
 	const pollToken = useCallback(async () => {
 		clearPoll();
-		if (walletChainType === ChainType.SOLANA) {
-			return setSelectedTokenBalance(
-				BigInt(Number(balance || 0) * LAMPORTS_PER_SOL),
-			);
-		}
 
 		if (!selectedToken) {
 			return setSelectedTokenBalance(0n);
@@ -278,7 +275,11 @@ const CryptoDonation: FC = () => {
 		// Native token balance is provided by the Web3Provider
 		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
 		const nativeCurrency =
-			config.EVM_NETWORKS_CONFIG[networkId!]?.nativeCurrency;
+			config.NETWORKS_CONFIG[
+				!walletChainType || walletChainType == ChainType.EVM
+					? networkId
+					: walletChainType
+			]?.nativeCurrency;
 
 		if (_selectedTokenSymbol === nativeCurrency?.symbol?.toUpperCase()) {
 			return setSelectedTokenBalance(
@@ -289,16 +290,32 @@ const CryptoDonation: FC = () => {
 			() => ({
 				request: async () => {
 					try {
+						if (walletChainType === ChainType.SOLANA) {
+							const splTokenMintAddress = new PublicKey(
+								selectedToken.address,
+							);
+							const tokenAccounts =
+								await solanaConnection.getParsedTokenAccountsByOwner(
+									new PublicKey(address!),
+									{ mint: splTokenMintAddress },
+								);
+							const accountInfo =
+								tokenAccounts.value[0].account.data;
+							const splBalance =
+								accountInfo.parsed.info.tokenAmount.amount;
+							return setSelectedTokenBalance(BigInt(splBalance));
+						}
+
 						const contract = getContract({
 							address: selectedToken.address! as Address,
 							abi: erc20ABI,
 						});
 
-						const balance = await contract.read.balanceOf([
+						const _balance = await contract.read.balanceOf([
 							address! as `0x${string}`,
 						]);
-						setSelectedTokenBalance(balance);
-						return balance;
+						setSelectedTokenBalance(_balance);
+						return _balance;
 					} catch (e) {
 						captureException(e, {
 							tags: {

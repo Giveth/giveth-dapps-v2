@@ -38,9 +38,11 @@ const CELO_NETWORK_NUMBER = 42220;
 const CLASSIC_NETWORK_NUMBER = 61;
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
+	networkId: 101,
 	chainType: ChainType.SOLANA,
 	adapterNetwork: WalletAdapterNetwork.Mainnet,
 	name: 'Solana',
+	nativeCurrency: { name: 'Solana native token', symbol: 'SOL', decimals: 9 },
 	blockExplorers: {
 		default: {
 			name: 'Solana Explorer',
