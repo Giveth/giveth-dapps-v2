@@ -1,8 +1,18 @@
 import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
-
-import { useConnection } from '@solana/wallet-adapter-react';
-import { SystemProgram, TransactionResponse } from '@solana/web3.js';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import {
+	PublicKey,
+	SystemProgram,
+	Transaction,
+	TransactionResponse,
+} from '@solana/web3.js';
+import {
+	createAssociatedTokenAccountInstruction,
+	createTransferInstruction,
+	getAssociatedTokenAddress,
+	TOKEN_PROGRAM_ID,
+} from '@solana/spl-token';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
@@ -22,8 +32,8 @@ export const useCreateSolanaDonation = () => {
 		useState<ICreateDonation>();
 	const [transactionObject, setTransactionObject] =
 		useState<TransactionResponse | null>(null);
-	const { sendNativeToken, walletChainType, sendSolanaSPLToken } =
-		useGeneralWallet();
+	const { sendNativeToken, walletChainType } = useGeneralWallet();
+	const { sendTransaction, publicKey } = useWallet();
 	const { connection: solanaConnection } = useConnection();
 	const fetchTransaction = async ({ hash }: { hash: string }) => {
 		const transaction = await solanaConnection.getTransaction(hash);
@@ -129,6 +139,50 @@ export const useCreateSolanaDonation = () => {
 		setDonationSaved(false);
 		updateDonation(donationId, EDonationStatus.FAILED);
 		captureException(error, { tags: { section: 'confirmDonation' } });
+	};
+
+	const sendSolanaSPLToken = async (
+		to: string,
+		value: bigint,
+		tokenAddress: string,
+	) => {
+		if (!publicKey) throw Error('Wallet is not connected');
+		const splTokenMintAddress = new PublicKey(tokenAddress);
+		const receiverAddress = new PublicKey(to);
+		const senderTokenAccountAddress = await getAssociatedTokenAddress(
+			splTokenMintAddress,
+			publicKey,
+		);
+		const receiverTokenAccountAddress = await getAssociatedTokenAddress(
+			splTokenMintAddress,
+			receiverAddress,
+		);
+		const transaction = new Transaction();
+		const receiverAccountInfo = await solanaConnection.getAccountInfo(
+			receiverTokenAccountAddress,
+		);
+		if (!receiverAccountInfo) {
+			// In the case where user is new to the token and doesn't have an associated token account
+			transaction.add(
+				createAssociatedTokenAccountInstruction(
+					publicKey,
+					receiverTokenAccountAddress,
+					receiverAddress,
+					splTokenMintAddress,
+				),
+			);
+		}
+		transaction.add(
+			createTransferInstruction(
+				senderTokenAccountAddress,
+				receiverTokenAccountAddress,
+				publicKey,
+				value,
+				[],
+				TOKEN_PROGRAM_ID,
+			),
+		);
+		return await sendTransaction(transaction, solanaConnection);
 	};
 
 	const createDonation = async (props: ICreateDonation) => {
