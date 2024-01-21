@@ -241,8 +241,8 @@ const ProjectUpdates = () => {
 								value={newUpdate}
 								style={TextInputStyle}
 								setValue={setNewUpdate}
-								setIsLimitExceeded={setIsLimitExceeded}
-								limit={UPDATE_LIMIT}
+								setHasLimitError={setIsLimitExceeded}
+								maxLimit={UPDATE_LIMIT}
 								placeholder='Clear project description explaining who you are and what you want to do with the funds...'
 							/>
 						</div>

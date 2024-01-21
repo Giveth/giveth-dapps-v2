@@ -16,7 +16,7 @@ const RichTextInput = dynamic(
 	},
 );
 
-const DESCRIPTION_LIMIT = 1200;
+const DESCRIPTION_MIN_LIMIT = 1200;
 
 const DescriptionInput = () => {
 	const {
@@ -38,13 +38,13 @@ const DescriptionInput = () => {
 		setValue(EInputs.description, value);
 	};
 
-	const setIsLimitExceeded = (IsExceeded: boolean) => {
-		if (IsExceeded) {
+	const setHasLimitError = (hasLimitError: boolean) => {
+		if (hasLimitError) {
 			setError(
 				EInputs.description,
 				{
 					type: 'focus',
-					message: `Please enter less than ${DESCRIPTION_LIMIT} characters`,
+					message: `Describe your project with at least ${DESCRIPTION_MIN_LIMIT} characters, tell us more!`,
 				},
 				{ shouldFocus: true },
 			);
@@ -79,8 +79,8 @@ const DescriptionInput = () => {
 					setValue={handleDescription}
 					value={description}
 					noShadow
-					limit={DESCRIPTION_LIMIT}
-					setIsLimitExceeded={setIsLimitExceeded}
+					minLimit={DESCRIPTION_MIN_LIMIT}
+					setHasLimitError={setHasLimitError}
 					error={errors[EInputs.description]?.message}
 				/>
 			</InputContainer>

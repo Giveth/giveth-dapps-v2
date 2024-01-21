@@ -163,7 +163,7 @@ const TestIndex = () => {
 				<RichTextInput
 					setValue={setDescription}
 					value={description}
-					limit={200}
+					maxLimit={200}
 				/>
 			</TestContainer>
 			{showModal && <TestModal setShowModal={setShowModal} />}
