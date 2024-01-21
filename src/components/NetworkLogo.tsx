@@ -16,9 +16,9 @@ const NetworkLogo = (props: INetworkLogoProps) => {
 		(chainId && networkIds.includes(chainId)) ||
 		(chainType && networkTypes.includes(chainType))
 	) {
-		return config.NETWORKS_CONFIG[(chainId || chainType)!]?.chainLogo(
-			logoSize,
-		);
+		return config.NETWORKS_CONFIG[
+			chainType && chainType !== ChainType.EVM ? chainType : chainId!
+		]?.chainLogo(logoSize);
 	}
 	return null;
 };
