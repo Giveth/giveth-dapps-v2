@@ -15,7 +15,7 @@ import { Chain, formatUnits, parseUnits } from 'viem';
 import { getContract } from 'wagmi/actions';
 import { type Address, erc20ABI } from 'wagmi';
 import { PublicKey } from '@solana/web3.js';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { useConnection } from '@solana/wallet-adapter-react';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
@@ -81,7 +81,6 @@ const CryptoDonation: FC = () => {
 		balance,
 	} = useGeneralWallet();
 	const { connection: solanaConnection } = useConnection();
-	const { publicKey } = useWallet();
 	const { formatMessage } = useIntl();
 	const { isEnabled, isSignedIn } = useAppSelector(state => state.user);
 
@@ -297,7 +296,7 @@ const CryptoDonation: FC = () => {
 							);
 							const tokenAccounts =
 								await solanaConnection.getParsedTokenAccountsByOwner(
-									publicKey!,
+									new PublicKey(address!),
 									{ mint: splTokenMintAddress },
 								);
 							const accountInfo =
