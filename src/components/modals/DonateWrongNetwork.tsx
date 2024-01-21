@@ -51,7 +51,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const router = useRouter();
 	const { switchNetwork } = useSwitchNetwork();
 	const isSafeEnv = useIsSafeEnvironment();
-	console.log('acceptedChains', acceptedChains);
+
 	const {
 		walletChainType,
 		handleSingOutAndSignInWithEVM,
@@ -69,7 +69,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 					: acceptedChain.networkId === network.id,
 			),
 	);
-	console.log('eligibleNetworks', eligibleNetworks, networks);
+
 	const networkId = (chain as Chain)?.id;
 
 	useEffect(() => {
