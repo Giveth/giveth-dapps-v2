@@ -7,20 +7,14 @@ const FundraisingBanner = () => {
 	return (
 		<Wrapper>
 			<P>
-				<b>ATTENTION:</b>
+				<b>Got $GLM?</b> Octant Epoch 2 allocation for GLM stakers is
+				open until January 31st! Support Giveth with your rewards
+				allocation via the{' '}
 			</P>
 			<PStyled>
-				<ExternalLink href='https://twitter.com/MatthewLilley/status/1735275960662921638'>
-					<Purple>
-						{' '}
-						There is an exploit affecting many Ethereum websites and
-						applications.{' '}
-					</Purple>
+				<ExternalLink href='https://octant.app/projects'>
+					<Purple> Octant App. </Purple>
 				</ExternalLink>
-				<P>
-					The Giveth team has updated our website to mitigate the
-					exploit. ✅
-				</P>
 			</PStyled>
 		</Wrapper>
 	);
