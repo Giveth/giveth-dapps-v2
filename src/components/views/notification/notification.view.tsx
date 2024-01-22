@@ -48,9 +48,6 @@ enum ENotificationTabs {
 
 const limit = 6;
 
-const NOTIFICATION_ENABLED =
-	process.env.NEXT_PUBLIC_NOTIFICATION_CENTER_ENABLED === 'true';
-
 function NotificationView() {
 	const [tab, setTab] = useState(ENotificationTabs.ALL);
 	const [loading, setLoading] = useState(false);
@@ -142,13 +139,11 @@ function NotificationView() {
 						<H5 weight={700}>
 							{formatMessage({ id: 'label.notification_center' })}
 						</H5>
-						{NOTIFICATION_ENABLED && (
-							<InternalLink href={Routes.NotificationsSettings}>
-								<ConfigContainer>
-									<IconConfig24 />
-								</ConfigContainer>
-							</InternalLink>
-						)}
+						<InternalLink href={Routes.NotificationsSettings}>
+							<ConfigContainer>
+								<IconConfig24 />
+							</ConfigContainer>
+						</InternalLink>
 					</Flex>
 					<Lead>
 						{formatMessage({

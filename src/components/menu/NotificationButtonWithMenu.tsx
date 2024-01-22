@@ -76,7 +76,6 @@ export const NotificationButtonWithMenu: FC<IHeaderButtonProps> = ({
 		if (!isHeaderShowing) {
 			closeMenu();
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isHeaderShowing]);
 
 	const props = isSignedIn
@@ -96,7 +95,6 @@ export const NotificationButtonWithMenu: FC<IHeaderButtonProps> = ({
 				<CoverLine theme={theme} className='cover-line' />
 			</NotificationsButton>
 			{NOTIFICATION_ENABLED && menuCondition && (
-				// menuCondition && ( // Hiding container for now
 				<NotificationMenuContainer isAnimating={showMenu} theme={theme}>
 					<NotificationMenuWrapper>
 						<ItemsProvider close={closeMenu}>
