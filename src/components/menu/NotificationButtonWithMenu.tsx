@@ -32,24 +32,23 @@ import { NotificationItems } from './NotificationItems';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
 import { useNotification } from '@/hooks/useNotification';
 
-interface INotificationButtonWithMenuProps extends IHeaderButtonProps {}
-
 const NOTIFICATION_ENABLED =
-	process.env.NEXT_PUBLIC_NOTIFICATION_CENTER_ENABLED;
+	process.env.NEXT_PUBLIC_NOTIFICATION_CENTER_ENABLED === 'true';
 
-export const NotificationButtonWithMenu: FC<
-	INotificationButtonWithMenuProps
-> = ({ isHeaderShowing, theme }) => {
+export const NotificationButtonWithMenu: FC<IHeaderButtonProps> = ({
+	isHeaderShowing,
+	theme,
+}) => {
 	const isDesktop = useMediaQuery(device.laptopL);
 	const [showMenu, menuCondition, openMenu, closeMenu] = useDelayedState();
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 	const router = useRouter();
+	const goToNotifs = () => router.push(Routes.Notifications);
 	const { isSignedIn } = useAppSelector(state => state.user);
 
-	const { modalCallback: signInThenGoToNotifs } = useModalCallback(() =>
-		router.push(Routes.Notifications),
-	);
+	const { modalCallback: signInThenGoToNotifs } =
+		useModalCallback(goToNotifs);
 
 	const { notifications, setNotifications, markOneNotificationRead } =
 		useNotification();
@@ -64,11 +63,11 @@ export const NotificationButtonWithMenu: FC<
 			try {
 				const res = await fetchNotificationsData({ limit: 4 });
 				if (res?.notifications) setNotifications(res.notifications);
-			} catch {
-				console.log('Error fetching notifications');
+			} catch (e) {
+				console.log('fetchNotificationsAndSetState error: ', e);
 			}
 		};
-		if (NOTIFICATION_ENABLED === 'true') {
+		if (NOTIFICATION_ENABLED) {
 			fetchNotificationsAndSetState();
 		}
 	}, [lastNotificationId, isSignedIn]);
@@ -85,8 +84,9 @@ export const NotificationButtonWithMenu: FC<
 			? {
 					onMouseEnter: openMenu,
 					onMouseLeave: closeMenu,
+					onClick: goToNotifs,
 				}
-			: { onClick: openSidebar }
+			: { onClick: NOTIFICATION_ENABLED ? openSidebar : goToNotifs }
 		: { onClick: () => signInThenGoToNotifs() };
 
 	return (
@@ -95,7 +95,7 @@ export const NotificationButtonWithMenu: FC<
 				<HeaderNotificationButton theme={theme} />
 				<CoverLine theme={theme} className='cover-line' />
 			</NotificationsButton>
-			{NOTIFICATION_ENABLED === 'true' && menuCondition && (
+			{NOTIFICATION_ENABLED && menuCondition && (
 				// menuCondition && ( // Hiding container for now
 				<NotificationMenuContainer isAnimating={showMenu} theme={theme}>
 					<NotificationMenuWrapper>
@@ -110,8 +110,7 @@ export const NotificationButtonWithMenu: FC<
 					</NotificationMenuWrapper>
 				</NotificationMenuContainer>
 			)}
-			{NOTIFICATION_ENABLED === 'true' && sidebarCondition && (
-				// sidebarCondition && (  // Hiding sidebar for now
+			{NOTIFICATION_ENABLED && sidebarCondition && (
 				<SideBar
 					close={closeSidebar}
 					isAnimating={showSidebar}
