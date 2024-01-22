@@ -13,7 +13,6 @@ import {
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { Col, Row } from '@giveth/ui-design-system';
-import { useAccount } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Flex } from '../styled-components/Flex';
 import {
@@ -63,15 +62,19 @@ import config from '@/configuration';
 import { formatWeiHelper } from '@/helpers/number';
 import links from '@/lib/constants/links';
 import { getTotalGIVpower } from '@/helpers/givpower';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
 
 export function TabPowerTop() {
 	const { formatMessage } = useIntl();
-	const { address } = useAccount();
 	const { open: openConnectModal } = useWeb3Modal();
 	const values = useAppSelector(state => state.subgraph);
 	const givPower = getTotalGIVpower(values);
 	const givPowerFormatted = formatWeiHelper(givPower.total);
 	const hasZeroGivPower = givPowerFormatted === '0';
+
+	const { handleSignOutAndShowWelcomModal, walletAddress, walletChainType } =
+		useGeneralWallet();
 
 	return (
 		<GIVpowerTopContainer>
@@ -96,7 +99,8 @@ export function TabPowerTop() {
 					</Col>
 					<Col xs={12} sm={4}>
 						<GivPowerCardContainer>
-							{address ? (
+							{walletAddress &&
+							walletChainType !== ChainType.SOLANA ? (
 								<>
 									<Caption>
 										{formatMessage({
@@ -146,7 +150,7 @@ export function TabPowerTop() {
 										</Link>
 									</BoostLinkContainer>
 								</>
-							) : (
+							) : walletChainType !== ChainType.SOLANA ? (
 								<ConnectWallet>
 									<ConnectWalletDesc>
 										{formatMessage({
@@ -162,6 +166,30 @@ export function TabPowerTop() {
 										onClick={() => openConnectModal?.()}
 									/>
 								</ConnectWallet>
+							) : (
+								<div>
+									<ConnectWalletDesc>
+										{formatMessage(
+											{
+												id: 'component.reward_card.wrong_network',
+											},
+											{
+												name: 'GIVpower',
+												chains: 'EVM Wallets',
+											},
+										)}
+									</ConnectWalletDesc>
+									<ConnectWalletButton
+										label={formatMessage({
+											id: 'label.switch_to_evm',
+										})}
+										buttonType='primary'
+										size='small'
+										onClick={
+											handleSignOutAndShowWelcomModal
+										}
+									/>
+								</div>
 							)}
 						</GivPowerCardContainer>
 					</Col>

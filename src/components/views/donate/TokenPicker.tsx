@@ -119,7 +119,6 @@ const TokenPicker = (props: {
 		projectVerified,
 		disabled,
 	} = props;
-
 	const { isMobile } = useDetectDevice();
 	const [isOpen, setIsOpen] = useState(false);
 	const { formatMessage } = useIntl();

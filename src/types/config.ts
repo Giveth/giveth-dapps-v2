@@ -192,9 +192,15 @@ interface MicroservicesConfig {
 
 export interface NonEVMChain {
 	id: number;
+	networkId: number;
 	name: string;
 	chainType: ChainType;
 	adapterNetwork: WalletAdapterNetwork;
+	nativeCurrency: {
+		name: string;
+		symbol: string;
+		decimals: number;
+	};
 	blockExplorers: {
 		default: {
 			name: string;
