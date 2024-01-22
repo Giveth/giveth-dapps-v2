@@ -1,3 +1,9 @@
+import { ActiveStreamsSection } from './ActiveStreamsSection';
+
 export const RecurringTab = () => {
-	return <div>RecurringTab</div>;
+	return (
+		<div>
+			<ActiveStreamsSection />
+		</div>
+	);
 };
