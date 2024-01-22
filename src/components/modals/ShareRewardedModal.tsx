@@ -39,6 +39,7 @@ import {
 import { useAppDispatch } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import Routes from '@/lib/constants/Routes';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 interface IShareRewardedModal extends IModal {
 	projectHref?: string;
@@ -74,6 +75,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 		isEnabled,
 		userData: user,
 	} = useAppSelector(state => state.user);
+	const { isOnSolana, handleSignOutAndShowWelcomModal } = useGeneralWallet();
 	const dispatch = useAppDispatch();
 	const { projectHref, setShowModal, contentType, projectTitle } = props;
 	const url = projectHref
@@ -138,39 +140,48 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 			}
 			headerTitlePosition='left'
 		>
-			<Content>
-				{error
-					? formatMessage({
-							id: 'label.we_ran_into_an_issue_and_couldnt_generate_your_referral',
-						})
-					: notSigned
-						? getMessageWithBoldText(
-								formatMessage({
-									id: 'label.connet_your_wallet_and_sign_in_to_get_your_referral',
-								}),
-							)
-						: chainvineId && projectTitle
+			{isOnSolana ? (
+				<Content>
+					{formatMessage({
+						id: 'label.currently_this_feature_is_only_available',
+					})}
+				</Content>
+			) : (
+				<Content>
+					{error
+						? formatMessage({
+								id: 'label.we_ran_into_an_issue_and_couldnt_generate_your_referral',
+							})
+						: notSigned
 							? getMessageWithBoldText(
-									formatMessage(
-										{
-											id: 'label.heres_your_referral',
-										},
-										{ projectTitle },
-									),
-									projectTitle,
+									formatMessage({
+										id: 'label.connet_your_wallet_and_sign_in_to_get_your_referral',
+									}),
 								)
-							: chainvineId && (
-									<>
-										{formatMessage({
-											id: 'label.heres_your_unique_referral',
-										})}
-										<br />
-										{formatMessage({
-											id: 'label.share_your_unique_link_to_get_started',
-										})}
-									</>
-								)}
-			</Content>
+							: chainvineId && projectTitle
+								? getMessageWithBoldText(
+										formatMessage(
+											{
+												id: 'label.heres_your_referral',
+											},
+											{ projectTitle },
+										),
+										projectTitle,
+									)
+								: chainvineId && (
+										<>
+											{formatMessage({
+												id: 'label.heres_your_unique_referral',
+											})}
+											<br />
+											{formatMessage({
+												id: 'label.share_your_unique_link_to_get_started',
+											})}
+										</>
+									)}
+				</Content>
+			)}
+
 			<Container>
 				{error ? (
 					<ConnectButton
@@ -180,6 +191,16 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 						onClick={() => setReferral()}
 						buttonType='primary'
 					/>
+				) : isOnSolana ? (
+					<div>
+						<ConnectButton
+							label={formatMessage({
+								id: 'label.switch_to_evm',
+							})}
+							onClick={handleSignOutAndShowWelcomModal}
+							buttonType='primary'
+						/>
+					</div>
 				) : notSigned ? (
 					<ConnectButton
 						label={formatMessage({
