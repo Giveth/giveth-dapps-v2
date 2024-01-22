@@ -41,6 +41,7 @@ import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
 import { QFNoResultBanner } from './MiddleBanners/QFNoResultBanner';
 import { Spinner } from '@/components/Spinner';
 import { getMainCategorySlug } from '@/helpers/projects';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -57,7 +58,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
 	const user = useAppSelector(state => state.user.userData);
-
+	const { isOnEVM } = useGeneralWallet();
 	const [isLoading, setIsLoading] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
@@ -209,7 +210,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							<ProjectCard key={project.id} project={project} />
 						))}
 					</ProjectsContainer>
-					<FloatingButtonReferral />
+					{isOnEVM && <FloatingButtonReferral />}
 				</ProjectsWrapper>
 			);
 		} else {
