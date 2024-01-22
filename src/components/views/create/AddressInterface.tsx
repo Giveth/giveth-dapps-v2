@@ -14,12 +14,11 @@ import { EInputs } from '@/components/views/create/CreateProject';
 import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import config from '@/configuration';
+import config, { isRecurringActive } from '@/configuration';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { getChainName } from '@/lib/network';
 import { IChainType } from '@/types/config';
 import { findAddressByChain } from '@/lib/helpers';
-import { isRecurringActive } from '../donate/DonationCard';
 
 interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
