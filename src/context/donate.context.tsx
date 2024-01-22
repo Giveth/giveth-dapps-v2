@@ -12,10 +12,8 @@ import { useAccount } from 'wagmi';
 import { IDonationProject } from '@/apollo/types/types';
 import { hasActiveRound } from '@/helpers/qf';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
-import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
-import { gqlRequest } from '@/helpers/requests';
-import config from '@/configuration';
 import { ChainType } from '@/types/config';
+import { fetchUserStreams } from '@/services/donation';
 
 export interface TxHashWithChainType {
 	txHash: string;
@@ -80,25 +78,8 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 
 		// fetch user's streams
 		const fetchData = async () => {
-			const { data } = await gqlRequest(
-				config.OPTIMISM_CONFIG.superFluidSubgraph,
-				undefined,
-				FETCH_USER_STREAMS,
-				{ address: address.toLowerCase() },
-			);
-			const streams: ISuperfluidStream[] = data?.streams;
-			console.log('streams', streams);
-
-			//categorize streams by token
-			const _tokenStreams: ITokenStreams = {};
-			streams.forEach(stream => {
-				if (!_tokenStreams[stream.token.id]) {
-					_tokenStreams[stream.token.id] = [];
-				}
-				_tokenStreams[stream.token.id].push(stream);
-			});
+			const _tokenStreams = await fetchUserStreams(address);
 			setTokenStreams(_tokenStreams);
-			console.log('tokenStreams', _tokenStreams);
 		};
 		fetchData();
 	}, [address]);

@@ -1,5 +1,6 @@
 // import transakSDK from '@transak/transak-sdk'
 import { captureException } from '@sentry/nextjs';
+import { Address } from 'viem';
 import {
 	CREATE_DONATION,
 	UPDATE_DONATION_STATUS,
@@ -7,6 +8,11 @@ import {
 import { client } from '@/apollo/apolloClient';
 import { ICreateDonation } from '@/components/views/donate/helpers';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
+import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
+import { ITokenStreams } from '@/context/donate.context';
+import { gqlRequest } from '@/helpers/requests';
+import { ISuperfluidStream } from '@/types/superFluid';
+import config from '@/configuration';
 
 const SAVE_DONATION_ITERATIONS = 5;
 
@@ -89,4 +95,25 @@ const createDonation = async (props: IOnTxHash) => {
 	}
 
 	return donationId;
+};
+
+export const fetchUserStreams = async (address: Address) => {
+	const { data } = await gqlRequest(
+		config.OPTIMISM_CONFIG.superFluidSubgraph,
+		undefined,
+		FETCH_USER_STREAMS,
+		{ address: address.toLowerCase() },
+	);
+	const streams: ISuperfluidStream[] = data?.streams;
+	console.log('streams', streams);
+
+	//categorize streams by token
+	const _tokenStreams: ITokenStreams = {};
+	streams.forEach(stream => {
+		if (!_tokenStreams[stream.token.id]) {
+			_tokenStreams[stream.token.id] = [];
+		}
+		_tokenStreams[stream.token.id].push(stream);
+	});
+	return _tokenStreams;
 };
