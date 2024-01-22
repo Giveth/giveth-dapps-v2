@@ -1,4 +1,3 @@
-import { neutralColors } from '@giveth/ui-design-system';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -8,11 +7,11 @@ import { EDirection, EDonationStatus } from '@/apollo/types/gqlEnums';
 import { IUserDonations } from '@/apollo/types/gqlTypes';
 import { IWalletDonation } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
-import { Flex } from '@/components/styled-components/Flex';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
 import DonationTable from '@/components/views/userProfile/donationsTab/oneTimeTab/OneTimeDonationsTable';
 import { IOrder, EOrderBy } from '../../UserProfile.view';
 import { useProfileContext } from '@/context/profile.context';
+import { WrappedSpinner } from '@/components/Spinner';
 
 const itemPerPage = 10;
 
@@ -96,7 +95,7 @@ export const OneTimeTab = () => {
 						myAccount={myAccount}
 					/>
 				)}
-				{loading && <Loading />}
+				{loading && <WrappedSpinner size={250} />}
 			</DonationTableWrapper>
 			<Pagination
 				currentPage={page}
@@ -107,15 +106,6 @@ export const OneTimeTab = () => {
 		</>
 	);
 };
-
-const Loading = styled(Flex)`
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 42px;
-	bottom: 0;
-	background-color: ${neutralColors.gray[200]}aa;
-`;
 
 const DonationTableWrapper = styled.div`
 	position: relative;
