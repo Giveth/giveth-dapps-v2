@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/nextjs';
 import { getNowUnixMS } from '@/helpers/time';
 
 const handler = (req, res) => {
