@@ -183,15 +183,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 			)}
 
 			<Container>
-				{error ? (
-					<ConnectButton
-						label={formatMessage({
-							id: 'label.create_referrral_id_again',
-						})}
-						onClick={() => setReferral()}
-						buttonType='primary'
-					/>
-				) : isOnSolana ? (
+				{isOnSolana ? (
 					<div>
 						<ConnectButton
 							label={formatMessage({
@@ -201,6 +193,14 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 							buttonType='primary'
 						/>
 					</div>
+				) : error ? (
+					<ConnectButton
+						label={formatMessage({
+							id: 'label.create_referrral_id_again',
+						})}
+						onClick={() => setReferral()}
+						buttonType='primary'
+					/>
 				) : notSigned ? (
 					<ConnectButton
 						label={formatMessage({
