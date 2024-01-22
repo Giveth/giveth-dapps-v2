@@ -117,6 +117,11 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 		}
 	};
 
+	const isInvalidAmount =
+		amount <= 0 ||
+		SuperTokenBalance === undefined ||
+		amount > SuperTokenBalance.value - minRemainingBalance;
+
 	return (
 		<Wrapper>
 			{step === EModifySuperTokenSteps.MODIFY ? (
@@ -129,6 +134,11 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 							balance={SuperTokenBalance}
 							refetch={refetch}
 							isRefetching={isRefetching}
+							error={
+								amount !== 0n && isInvalidAmount
+									? 'invalid_amount'
+									: undefined
+							}
 						/>
 						<StreamInfo
 							tokenStreams={tokenStreams}
@@ -155,10 +165,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 			<Button
 				label={formatMessage({ id: actionButtonLabel[step] })}
 				disabled={
-					step === EModifySuperTokenSteps.MODIFY &&
-					(amount <= 0 ||
-						SuperTokenBalance === undefined ||
-						amount > SuperTokenBalance.value - minRemainingBalance)
+					step === EModifySuperTokenSteps.MODIFY && isInvalidAmount
 				}
 				loading={step === EModifySuperTokenSteps.WITHDRAWING}
 				onClick={onAction}

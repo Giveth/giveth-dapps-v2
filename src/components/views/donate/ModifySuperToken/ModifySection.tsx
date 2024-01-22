@@ -6,6 +6,7 @@ import {
 	IconRefresh16,
 	neutralColors,
 	brandColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -27,6 +28,7 @@ interface IModifySectionProps {
 	balance?: FetchBalanceResult;
 	refetch: any;
 	isRefetching: boolean;
+	error?: string;
 }
 export const ModifySection: FC<IModifySectionProps> = ({
 	titleLabel,
@@ -35,6 +37,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 	balance,
 	refetch,
 	isRefetching,
+	error,
 }) => {
 	const { formatMessage } = useIntl();
 
@@ -54,7 +57,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					<FlowRateTooltip>PlaceHolder</FlowRateTooltip>
 				</IconWithTooltip>
 			</Flex>
-			<InputWrapper>
+			<InputWrapper hasError={!!error}>
 				<SelectTokenWrapper
 					alignItems='center'
 					justifyContent='space-between'
@@ -100,8 +103,16 @@ const SelectTokenWrapper = styled(Flex)`
 	padding: 13px 16px;
 `;
 
-const InputWrapper = styled(Flex)`
-	border: 2px solid ${neutralColors.gray[300]};
+interface IInputWrapper {
+	hasError: boolean;
+}
+
+const InputWrapper = styled(Flex)<IInputWrapper>`
+	border: 2px solid
+		${props =>
+			props.hasError
+				? semanticColors.punch[300]
+				: neutralColors.gray[300]};
 	border-radius: 8px;
 	overflow: hidden;
 	align-items: center;
