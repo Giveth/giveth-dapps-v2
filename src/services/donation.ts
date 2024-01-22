@@ -105,7 +105,6 @@ export const fetchUserStreams = async (address: Address) => {
 		{ address: address.toLowerCase() },
 	);
 	const streams: ISuperfluidStream[] = data?.streams;
-	console.log('streams', streams);
 
 	//categorize streams by token
 	const _tokenStreams: ITokenStreams = {};

@@ -6,14 +6,12 @@ import {
 	useContext,
 	useState,
 	type Dispatch,
-	useEffect,
 } from 'react';
-import { useAccount } from 'wagmi';
 import { IDonationProject } from '@/apollo/types/types';
 import { hasActiveRound } from '@/helpers/qf';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import { ChainType } from '@/types/config';
-import { fetchUserStreams } from '@/services/donation';
+import { useUserStreams } from '@/hooks/useUserStreams';
 
 export interface TxHashWithChainType {
 	txHash: string;
@@ -62,27 +60,15 @@ export interface ITokenStreams {
 }
 
 export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
-	const [tokenStreams, setTokenStreams] = useState<ITokenStreams>({});
 	const [selectedToken, setSelectedToken] = useState<
 		ISelectTokenWithBalance | undefined
 	>();
 	const [isSuccessDonation, setSuccessDonation] =
 		useState<ISuccessDonation>();
 
-	const { address } = useAccount();
+	const tokenStreams = useUserStreams();
 
 	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
-
-	useEffect(() => {
-		if (!address) return;
-
-		// fetch user's streams
-		const fetchData = async () => {
-			const _tokenStreams = await fetchUserStreams(address);
-			setTokenStreams(_tokenStreams);
-		};
-		fetchData();
-	}, [address]);
 
 	return (
 		<DonateContext.Provider
