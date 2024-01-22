@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 import { B, H5, neutralColors } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
+import { useUserStreams } from '@/hooks/useUserStreams';
 
 export const ActiveStreamsSection = () => {
+	const tokenStream = useUserStreams();
+	console.log('tokenStream', tokenStream);
 	return (
 		<Wrapper>
 			<H5 weight={900}>My Active Streams</H5>
