@@ -21,6 +21,7 @@ import {
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
+import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Modal } from './Modal';
 import GiftIcon from '../../../public/images/icons/gift.svg';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
@@ -37,9 +38,9 @@ import {
 	shareContentCreator,
 } from '@/lib/constants/shareContent';
 import { useAppDispatch } from '@/features/hooks';
-import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import Routes from '@/lib/constants/Routes';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 
 interface IShareRewardedModal extends IModal {
 	projectHref?: string;
@@ -70,12 +71,12 @@ function getMessageWithBoldText(
 }
 
 const ShareRewardedModal: FC<IShareRewardedModal> = props => {
-	const {
-		isSignedIn,
-		isEnabled,
-		userData: user,
-	} = useAppSelector(state => state.user);
-	const { isOnSolana, handleSignOutAndShowWelcomModal } = useGeneralWallet();
+	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
+	const { isOnSolana, handleSignOutAndShowWelcomModal, isConnected } =
+		useGeneralWallet();
+
+	const { open: openConnectModal } = useWeb3Modal();
+
 	const dispatch = useAppDispatch();
 	const { projectHref, setShowModal, contentType, projectTitle } = props;
 	const url = projectHref
@@ -89,7 +90,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 	const { formatMessage } = useIntl();
 	const [error, setError] = useState(false);
 	const chainvineId = user?.chainvineId;
-	const notSigned = !isEnabled || !isSignedIn;
+	const notSigned = !isConnected || !isSignedIn;
 
 	const shareTitleTwitter = shareContentCreator(
 		contentType,
@@ -101,7 +102,11 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 	);
 
 	const connectAndSignWallet = () => {
-		dispatch(setShowSignWithWallet(true));
+		if (isConnected) {
+			dispatch(setShowSignWithWallet(true));
+		} else {
+			openConnectModal();
+		}
 	};
 
 	const setReferral = async () => {
@@ -204,7 +209,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 				) : notSigned ? (
 					<ConnectButton
 						label={formatMessage({
-							id: !isEnabled
+							id: !isConnected
 								? 'component.button.connect_wallet'
 								: 'component.button.sign_in',
 						})}
