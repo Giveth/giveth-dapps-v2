@@ -2,6 +2,7 @@ import { type FC } from 'react';
 import styled from 'styled-components';
 import { P } from '@giveth/ui-design-system';
 import { formatUnits } from 'viem';
+import { useAccount, useBalance } from 'wagmi';
 import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
 import { TableCell } from './ActiveStreamsSection';
 import { ISuperfluidStream } from '@/types/superFluid';
@@ -13,6 +14,19 @@ interface IStreamRowProps {
 }
 
 export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
+	const { address } = useAccount();
+
+	const {
+		data: balance,
+		refetch,
+		isRefetching,
+	} = useBalance({
+		token: tokenStream[0].token.id,
+		address: address,
+		// watch: true,
+		// cacheTime: 5_000,
+	});
+
 	const symbol = tokenStream[0].token.underlyingToken?.symbol || 'ETH';
 	const totalFlowRate = tokenStream.reduce(
 		(acc, curr) => acc + BigInt(curr.currentFlowRate),
@@ -24,6 +38,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 		<RowWrapper>
 			<TableCell>
 				<TokenIcon symbol={symbol} />
+				<P>{limitFraction(balance?.formatted || '0')}</P>
 				<P>{tokenStream[0].token.symbol}</P>
 			</TableCell>
 			<TableCell>
