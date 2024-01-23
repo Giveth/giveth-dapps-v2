@@ -628,7 +628,7 @@
 	"label.please_confirm_your_email": "Please confirm your email",
 	"label.please_connect_your_wallet": "Please connect your wallet",
 	"label.please_contact_support_team": "Please contact support team.",
-	"label.please_do_not_enter_exchange_deposit": "Please DO NOT enter an exchange deposit address, use a key you control in a wallet like Metamask, or your funds maybe lost",
+	"label.please_do_not_enter_exchange_deposit": "Please DO NOT enter an exchange deposit address, or your funds maybe lost! Use an account you control on this network. We recommend using Metamask.",
 	"label.please_enter_full_link": "Please enter full link",
 	"label.please_note_it_will_take_few_minutes_for_your_giv_to_bridge": "Please note, it will take a few minutes for your GIV to bridge.",
 	"label.please_provide_links_to_any_social_media": "Please provide links to any social media accounts owned by your organization/project.",

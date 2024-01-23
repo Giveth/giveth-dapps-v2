@@ -628,7 +628,7 @@
 	"label.please_confirm_your_email": "Si us plau, confirma el teu correu electrònic",
 	"label.please_connect_your_wallet": "Please connect your wallet",
 	"label.please_contact_support_team": "Si us plau, contacteu l'equip de suport.",
-	"label.please_do_not_enter_exchange_deposit": "Si us plau, NO introduïu l'adreça de dipòsit d'un exchange, utilitzeu l'adreça d'una cartera que controla, com Metamask, o els seus fons poden perdre's",
+	"label.please_do_not_enter_exchange_deposit": "Si us plau, NO introduïu una adreça de dipòsit d'intercanvi, o els vostres fons podrien perdre's! Utilitzeu un compte que controleu en aquesta xarxa. Recomanem utilitzar Metamask.",
 	"label.please_enter_full_link": "Introdueix el vincle complet",
 	"label.please_note_it_will_take_few_minutes_for_your_giv_to_bridge": "Si us plau, tingueu en compte que trigarà uns minuts perquè el vostre GIV es transfereixi.",
 	"label.please_provide_links_to_any_social_media": "Proporciona els enllaços a qualsevol compte de xarxes socials que tingui la teva organització/projecte.",
