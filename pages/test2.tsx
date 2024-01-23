@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { captureException } from '@sentry/nextjs';
 import FailedDonation, {
 	EDonationFailedType,
 } from '@/components/modals/FailedDonation';
+import { SENTRY_URGENT } from '@/configuration';
 
 const YourApp = () => {
 	const [failedModalType, setFailedModalType] =
@@ -13,7 +15,15 @@ const YourApp = () => {
 			<div>
 				<button
 					onClick={() => {
-						setFailedModalType(EDonationFailedType.NOT_SAVED);
+						try {
+							throw new Error('oopppssss');
+						} catch (error) {
+							captureException(error, {
+								tags: {
+									section: SENTRY_URGENT,
+								},
+							});
+						}
 					}}
 				>
 					Test Button1

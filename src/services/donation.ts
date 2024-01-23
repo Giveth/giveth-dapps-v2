@@ -7,6 +7,7 @@ import {
 import { client } from '@/apollo/apolloClient';
 import { ICreateDonation } from '@/components/views/donate/helpers';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
+import { SENTRY_URGENT } from '@/configuration';
 
 const SAVE_DONATION_ITERATIONS = 5;
 
@@ -81,7 +82,7 @@ const createDonation = async (props: IOnTxHash) => {
 	} catch (error) {
 		captureException(error, {
 			tags: {
-				section: 'createDonation',
+				section: SENTRY_URGENT,
 			},
 		});
 		console.log('createDonation error: ', error);
