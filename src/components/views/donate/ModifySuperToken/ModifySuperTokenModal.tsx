@@ -8,12 +8,11 @@ import { IModal } from '@/types/common';
 import { Flex } from '@/components/styled-components/Flex';
 import { DepositSuperToken } from './DepositSuperToken';
 import { WithDrawSuperToken } from './WithDrawSuperToken';
-import { IToken } from '@/types/superFluid';
-import { type ITokenStreams } from '@/context/donate.context';
+import { ISuperfluidStream, IToken } from '@/types/superFluid';
 
 interface IModifySuperTokenModalProps extends IModal {
 	selectedToken: IToken;
-	tokenStreams: ITokenStreams;
+	tokenStreams: ISuperfluidStream[];
 }
 
 export enum EModifySuperTokenSteps {

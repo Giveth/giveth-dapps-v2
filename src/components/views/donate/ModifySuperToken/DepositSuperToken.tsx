@@ -19,11 +19,10 @@ import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Spinner } from '@/components/Spinner';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
-import { ISuperToken, IToken } from '@/types/superFluid';
+import { ISuperToken } from '@/types/superFluid';
 import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
-import { ITokenStreams } from '@/context/donate.context';
 import { ModifyInfoToast } from './ModifyInfoToast';
 import {
 	EModifySuperTokenSteps,
@@ -40,10 +39,7 @@ import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { showToastError } from '@/lib/helpers';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
-interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
-	tokenStreams: ITokenStreams;
-	selectedToken: IToken;
-}
+interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {}
 
 export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	selectedToken,
@@ -92,9 +88,8 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		}
 	}, [token, setStep, step]);
 
-	const tokenStream = tokenStreams[superToken?.id || ''];
 	const totalStreamPerSec =
-		tokenStream?.reduce(
+		tokenStreams?.reduce(
 			(acc, stream) => acc + BigInt(stream.currentFlowRate),
 			0n,
 		) || 0n;
@@ -283,11 +278,11 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 								</Caption>
 								<Caption>
 									{formatMessage({ id: 'label.funding' })}{' '}
-									<strong>{tokenStream.length}</strong>{' '}
+									<strong>{tokenStreams.length}</strong>{' '}
 									{formatMessage(
 										{ id: 'label.project' },
 										{
-											count: tokenStream.length,
+											count: tokenStreams.length,
 										},
 									)}
 								</Caption>

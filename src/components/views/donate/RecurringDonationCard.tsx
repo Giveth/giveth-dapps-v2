@@ -548,9 +548,9 @@ export const RecurringDonationCard = () => {
 			)}
 			{showTopUpModal && (
 				<ModifySuperTokenModal
-					tokenStreams={tokenStreams}
+					tokenStreams={tokenStreams[selectedToken?.token.id || '']}
 					setShowModal={setShowTopUpModal}
-					selectedToken={config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS[1]}
+					selectedToken={selectedToken?.token!}
 				/>
 			)}
 		</>
