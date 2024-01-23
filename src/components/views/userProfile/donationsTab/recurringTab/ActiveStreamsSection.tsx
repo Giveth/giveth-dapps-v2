@@ -1,14 +1,11 @@
 import styled from 'styled-components';
-import { B, H5, P, neutralColors } from '@giveth/ui-design-system';
+import { B, H5, neutralColors } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 import { useUserStreams } from '@/hooks/useUserStreams';
-import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
-
-console.log('B', B);
+import { StreamRow } from './StreamRow';
 
 export const ActiveStreamsSection = () => {
 	const tokenStream = useUserStreams();
-	console.log('tokenStream', tokenStream);
 	return (
 		<Wrapper>
 			<H5 weight={900}>My Active Streams</H5>
@@ -30,22 +27,9 @@ export const ActiveStreamsSection = () => {
 						<B>Actions</B>
 					</TableHeader>
 				</TableHeaderRow>
-				{Object.entries(tokenStream).map(([key, value]) => {
-					const symbol =
-						value[0].token.underlyingToken?.symbol || 'ETH';
-					return (
-						<RowWrapper key={key}>
-							<TableCell>
-								<TokenIcon symbol={symbol} />
-								<P>{value[0].token.symbol}</P>
-							</TableCell>
-							<TableCell></TableCell>
-							<TableCell>{value.length}</TableCell>
-							<TableCell></TableCell>
-							<TableCell>Modify stream balance</TableCell>
-						</RowWrapper>
-					);
-				})}
+				{Object.entries(tokenStream).map(([key, value]) => (
+					<StreamRow key={key} tokenStream={value} />
+				))}
 			</DonationTableContainer>
 		</Wrapper>
 	);
@@ -78,11 +62,7 @@ const TableHeaderRow = styled.div`
 	}
 `;
 
-const RowWrapper = styled.div`
-	display: contents;
-`;
-
-const TableCell = styled(Flex)`
+export const TableCell = styled(Flex)`
 	align-items: center;
 	overflow-x: auto;
 	gap: 8px;
