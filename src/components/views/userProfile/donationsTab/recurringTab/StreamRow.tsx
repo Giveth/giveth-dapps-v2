@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import styled from 'styled-components';
 import { P, semanticColors } from '@giveth/ui-design-system';
 import { formatUnits } from 'viem';
@@ -9,12 +9,14 @@ import { TableCell } from './ActiveStreamsSection';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { limitFraction } from '@/helpers/number';
+import { ModifySuperTokenModal } from '@/components/views/donate/ModifySuperToken/ModifySuperTokenModal';
 
 interface IStreamRowProps {
 	tokenStream: ISuperfluidStream[];
 }
 
 export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
+	const [showModifyModal, setShowModifyModal] = useState(false);
 	const { address } = useAccount();
 	const { formatMessage } = useIntl();
 
@@ -64,7 +66,18 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 					{ count: runOutMonth.toString() },
 				)}
 			</TableCell>
-			<TableCell>Modify stream balance</TableCell>
+			<TableCell>
+				<P onClick={() => setShowModifyModal(true)}>
+					Modify stream balance
+				</P>
+			</TableCell>
+			{showModifyModal && (
+				<ModifySuperTokenModal
+					tokenStreams={tokenStream}
+					setShowModal={setShowModifyModal}
+					selectedToken={tokenStream[0].token}
+				/>
+			)}
 		</RowWrapper>
 	);
 };
