@@ -92,7 +92,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 						<NetworkName>{networkName}</NetworkName>
 					</FlexCenter>
 
-					{!isSafeEnv && (
+					{!isSafeEnv && !isOnSolana && (
 						<ItemAction
 							size='Small'
 							onClick={() => {
