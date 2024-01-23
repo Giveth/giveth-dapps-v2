@@ -1,7 +1,10 @@
 import styled from 'styled-components';
-import { B, H5, neutralColors } from '@giveth/ui-design-system';
+import { B, H5, P, neutralColors } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 import { useUserStreams } from '@/hooks/useUserStreams';
+import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
+
+console.log('B', B);
 
 export const ActiveStreamsSection = () => {
 	const tokenStream = useUserStreams();
@@ -11,12 +14,38 @@ export const ActiveStreamsSection = () => {
 			<H5 weight={900}>My Active Streams</H5>
 			<DonationTableContainer>
 				<TableHeaderRow>
-					<TableHeader>Current stream Balance</TableHeader>
-					<TableHeader>Total Recurring Donations</TableHeader>
-					<TableHeader>Projects</TableHeader>
-					<TableHeader>Runs out in</TableHeader>
-					<TableHeader>Actions</TableHeader>
+					<TableHeader>
+						<B>Current stream Balance</B>{' '}
+					</TableHeader>
+					<TableHeader>
+						<B>Total Recurring Donations</B>
+					</TableHeader>
+					<TableHeader>
+						<B>Projects</B>
+					</TableHeader>
+					<TableHeader>
+						<B>Runs out in</B>
+					</TableHeader>
+					<TableHeader>
+						<B>Actions</B>
+					</TableHeader>
 				</TableHeaderRow>
+				{Object.entries(tokenStream).map(([key, value]) => {
+					const symbol =
+						value[0].token.underlyingToken?.symbol || 'ETH';
+					return (
+						<RowWrapper key={key}>
+							<TableCell>
+								<TokenIcon symbol={symbol} />
+								<P>{value[0].token.symbol}</P>
+							</TableCell>
+							<TableCell></TableCell>
+							<TableCell>{value.length}</TableCell>
+							<TableCell></TableCell>
+							<TableCell>Modify stream balance</TableCell>
+						</RowWrapper>
+					);
+				})}
 			</DonationTableContainer>
 		</Wrapper>
 	);
@@ -41,10 +70,6 @@ const DonationTableContainer = styled.div<{ myAccount?: boolean }>`
 
 const TableHeaderRow = styled.div`
 	display: contents;
-	& > * {
-		background-color: ${neutralColors.gray[200]};
-		padding: 22px 24px;
-	}
 	& > *:first-child {
 		border-radius: 12px 0 0 12px;
 	}
@@ -53,4 +78,17 @@ const TableHeaderRow = styled.div`
 	}
 `;
 
-const TableHeader = styled(B)``;
+const RowWrapper = styled.div`
+	display: contents;
+`;
+
+const TableCell = styled(Flex)`
+	align-items: center;
+	overflow-x: auto;
+	gap: 8px;
+	padding: 22px 24px;
+`;
+
+const TableHeader = styled(TableCell)`
+	background-color: ${neutralColors.gray[200]};
+`;
