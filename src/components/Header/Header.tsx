@@ -52,7 +52,7 @@ import { ItemsProvider } from '@/context/Items.context';
 import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import { CommunityMenu } from '../menu/CommunityMenu';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
-import config from '@/configuration';
+import config, { isProduction } from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { useShowHiderByScroll } from '@/hooks/useShowHiderByScroll';
 
@@ -149,6 +149,8 @@ const Header: FC<IHeader> = () => {
 			dispatch(setShowCompleteProfile(true));
 		}
 	};
+
+	console.log('isProduction', isProduction, process.env.NEXT_PUBLIC_ENV);
 
 	return (
 		<StyledHeader alignItems='center' theme={theme} show={showHeader}>
