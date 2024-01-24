@@ -47,6 +47,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	step,
 	setStep,
 	setShowModal,
+	refreshBalance,
 }) => {
 	const [amount, setAmount] = useState(0n);
 
@@ -165,6 +166,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			if (!res.status) {
 				throw new Error('Deposit failed');
 			}
+			refreshBalance();
 			setStep(EModifySuperTokenSteps.SUBMITTED);
 		} catch (error) {
 			setStep(EModifySuperTokenSteps.DEPOSIT);

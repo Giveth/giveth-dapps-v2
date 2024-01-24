@@ -76,6 +76,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 					tokenStreams={tokenStream}
 					setShowModal={setShowModifyModal}
 					selectedToken={tokenStream[0].token}
+					refreshBalance={refetch}
 				/>
 			)}
 		</RowWrapper>

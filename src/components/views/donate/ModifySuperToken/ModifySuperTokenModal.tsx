@@ -13,6 +13,7 @@ import { ISuperfluidStream, IToken } from '@/types/superFluid';
 interface IModifySuperTokenModalProps extends IModal {
 	selectedToken: IToken;
 	tokenStreams: ISuperfluidStream[];
+	refreshBalance: () => void;
 }
 
 export enum EModifySuperTokenSteps {

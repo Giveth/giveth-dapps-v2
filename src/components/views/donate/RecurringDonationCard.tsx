@@ -551,6 +551,7 @@ export const RecurringDonationCard = () => {
 					tokenStreams={tokenStreams[selectedToken?.token.id || '']}
 					setShowModal={setShowTopUpModal}
 					selectedToken={selectedToken?.token!}
+					refreshBalance={refetch}
 				/>
 			)}
 		</>
