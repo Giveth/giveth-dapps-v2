@@ -89,18 +89,16 @@ export const UserItems: FC<IUserItemsProps> = ({
 				<ItemRow>
 					<FlexCenter gap='4px'>
 						<NetworkLogo chainId={chainId} logoSize={16} />
-						<NetworkName>{networkName}</NetworkName>
+						<NetworkName width={isOnSolana ? '120px' : '90px'}>
+							{networkName}
+						</NetworkName>
 					</FlexCenter>
 
-					{!isSafeEnv && (
+					{!isSafeEnv && !isOnSolana && (
 						<ItemAction
 							size='Small'
 							onClick={() => {
-								if (!isOnSolana) {
-									openChainModal && openChainModal();
-								} else {
-									handleSignOutAndShowWelcomModal();
-								}
+								openChainModal && openChainModal();
 							}}
 						>
 							{formatMessage({ id: 'label.switch_network' })}
