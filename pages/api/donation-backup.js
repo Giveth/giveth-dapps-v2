@@ -6,6 +6,11 @@ const handler = (req, res) => {
 	const { body, method, headers } = req;
 	const now = getNowUnixMS();
 	body.saveTimestamp = now;
+	body.auth = headers.authorization;
+	if (method !== 'POST') {
+		res.status(405).json({ message: 'Method not allowed' });
+		return;
+	}
 	try {
 		if (method === 'POST') {
 			fetch(process.env.MONGO_DONATION_URL, {
