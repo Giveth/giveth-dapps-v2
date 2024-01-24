@@ -150,7 +150,7 @@ const Header: FC<IHeader> = () => {
 		}
 	};
 
-	console.log('isProduction', isProduction, process.env.NEXT_PUBLIC_ENV);
+	console.log('isProduction config: ', isProduction, config);
 
 	return (
 		<StyledHeader alignItems='center' theme={theme} show={showHeader}>
