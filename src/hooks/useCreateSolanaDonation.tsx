@@ -100,8 +100,8 @@ export const useCreateSolanaDonation = () => {
 				setDonationId(id);
 				setDonationSaved(true);
 				return id;
-			} catch (e) {
-				postRequest('/api/donation-backup', true, {
+			} catch (e: any) {
+				await postRequest('/api/donation-backup', true, {
 					chainId: transaction?.chainId!,
 					txHash: transaction?.hash,
 					amount: amount,
@@ -112,6 +112,7 @@ export const useCreateSolanaDonation = () => {
 					chainvineReferred,
 					walletAddress: transaction?.from,
 					symbol: token.symbol,
+					error: e.message,
 				});
 				setFailedModalType(EDonationFailedType.NOT_SAVED);
 			}
