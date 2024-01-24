@@ -9,6 +9,8 @@ const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
 export const isRecurringActive =
 	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true';
 
+export const SENTRY_URGENT = 'urgent';
+
 const EVM_NETWORKS_CONFIG = {
 	[envConfig.MAINNET_NETWORK_NUMBER]: envConfig.MAINNET_CONFIG,
 	[envConfig.GNOSIS_NETWORK_NUMBER]: envConfig.GNOSIS_CONFIG,

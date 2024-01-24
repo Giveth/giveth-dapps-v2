@@ -10,6 +10,10 @@ import { ETheme } from '@/features/general/general.slice';
 import { Shadow } from '../styled-components/Shadow';
 import { Flex } from '../styled-components/Flex';
 
+interface NetworkNameProps {
+	width?: string;
+}
+
 export const BaseMenuContainer = styled.div`
 	padding: 16px;
 	background-color: ${props =>
@@ -50,11 +54,11 @@ export const ItemRow = styled(Flex)`
 	align-items: center;
 `;
 
-export const NetworkName = styled(B)`
+export const NetworkName = styled(B)<NetworkNameProps>`
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
-	width: 90px;
+	width: ${props => props.width || '90px'};
 `;
 
 export const ItemAction = styled(GLink)`

@@ -13,6 +13,7 @@ import { ITokenStreams } from '@/context/donate.context';
 import { gqlRequest } from '@/helpers/requests';
 import { ISuperfluidStream } from '@/types/superFluid';
 import config from '@/configuration';
+import { SENTRY_URGENT } from '@/configuration';
 
 const SAVE_DONATION_ITERATIONS = 5;
 
@@ -87,7 +88,7 @@ const createDonation = async (props: IOnTxHash) => {
 	} catch (error) {
 		captureException(error, {
 			tags: {
-				section: 'createDonation',
+				section: SENTRY_URGENT,
 			},
 		});
 		console.log('createDonation error: ', error);

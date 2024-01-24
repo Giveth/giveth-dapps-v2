@@ -41,7 +41,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 		disconnect,
 		chainName,
 		isOnSolana,
-		handleSignOutAndShowWelcomModal,
+		walletChainType,
 	} = useGeneralWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
@@ -70,8 +70,6 @@ export const UserItems: FC<IUserItemsProps> = ({
 		router.push(url);
 	};
 
-	const networkName = chainName;
-
 	return (
 		<>
 			<Item theme={theme}>
@@ -88,19 +86,21 @@ export const UserItems: FC<IUserItemsProps> = ({
 				</ItemTitle>
 				<ItemRow>
 					<FlexCenter gap='4px'>
-						<NetworkLogo chainId={chainId} logoSize={16} />
-						<NetworkName>{networkName}</NetworkName>
+						<NetworkLogo
+							chainId={chainId}
+							chainType={walletChainType}
+							logoSize={16}
+						/>
+						<NetworkName width={isOnSolana ? '120px' : '90px'}>
+							{chainName}
+						</NetworkName>
 					</FlexCenter>
 
-					{!isSafeEnv && (
+					{!isSafeEnv && !isOnSolana && (
 						<ItemAction
 							size='Small'
 							onClick={() => {
-								if (!isOnSolana) {
-									openChainModal && openChainModal();
-								} else {
-									handleSignOutAndShowWelcomModal();
-								}
+								openChainModal && openChainModal();
 							}}
 						>
 							{formatMessage({ id: 'label.switch_network' })}

@@ -446,7 +446,10 @@ const CryptoDonation: FC = () => {
 			)}
 			<InputContainer>
 				{walletChainType && (
-					<SwitchToAcceptedChain acceptedChains={acceptedChains} />
+					<SwitchToAcceptedChain
+						acceptedChains={acceptedChains}
+						setShowChangeNetworkModal={setShowChangeNetworkModal}
+					/>
 				)}
 				<SaveGasFees acceptedChains={acceptedChains} />
 				<SearchContainer error={amountError} focused={inputBoxFocused}>

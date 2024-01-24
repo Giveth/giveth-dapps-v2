@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { Caption } from '@giveth/ui-design-system';
-import { Chain, useSwitchNetwork } from 'wagmi';
+import { Chain } from 'wagmi';
 import { getNetworkNames } from '@/components/views/donate/helpers';
 import {
 	NetworkToast,
@@ -10,40 +10,20 @@ import {
 import { INetworkIdWithChain } from './common.types'; // Import the type
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
-import config from '@/configuration';
 
-const SwitchToAcceptedChain: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({
+interface ISwitchToAcceptedChain {
+	acceptedChains: INetworkIdWithChain[];
+	setShowChangeNetworkModal: (show: boolean) => void;
+}
+
+const SwitchToAcceptedChain: FC<ISwitchToAcceptedChain> = ({
 	acceptedChains,
+	setShowChangeNetworkModal,
 }) => {
 	const { formatMessage } = useIntl();
-	const {
-		chain,
-		walletChainType,
-		handleSignOutAndSignInWithSolana,
-		handleSingOutAndSignInWithEVM,
-	} = useGeneralWallet();
+	const { chain, walletChainType } = useGeneralWallet();
 
 	const networkId = (chain as Chain)?.id;
-
-	const { switchNetwork } = useSwitchNetwork();
-
-	const handleSwitchNetwork = () => {
-		const firstAcceptedChainType = acceptedChains[0].chainType;
-		switch (walletChainType) {
-			case ChainType.EVM:
-				if (firstAcceptedChainType === config.SOLANA_CONFIG.chainType) {
-					handleSignOutAndSignInWithSolana();
-				} else {
-					switchNetwork?.(acceptedChains[0].networkId);
-				}
-				break;
-			case ChainType.SOLANA:
-				handleSingOutAndSignInWithEVM();
-				break;
-			default:
-				switchNetwork?.(acceptedChains[0].networkId);
-		}
-	};
 
 	if (
 		!acceptedChains ||
@@ -66,8 +46,11 @@ const SwitchToAcceptedChain: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({
 				})}{' '}
 				{getNetworkNames(acceptedChains, 'and')}.
 			</Caption>
-			{/* Use the first accepted chain's networkId for the switchNetwork call */}
-			<SwitchCaption onClick={handleSwitchNetwork}>
+			<SwitchCaption
+				onClick={() => {
+					setShowChangeNetworkModal(true);
+				}}
+			>
 				{formatMessage({ id: 'label.switch_network' })}
 			</SwitchCaption>
 		</NetworkToast>
