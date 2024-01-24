@@ -1,5 +1,6 @@
 import { captureException } from '@sentry/nextjs';
 import { getNowUnixMS } from '@/helpers/time';
+import { SENTRY_URGENT } from '@/configuration';
 
 const handler = (req, res) => {
 	const { body, method, headers } = req;
@@ -38,7 +39,7 @@ const handler = (req, res) => {
 						},
 						{
 							tags: {
-								section: 'onDonationBackup',
+								section: SENTRY_URGENT,
 							},
 						},
 					);
