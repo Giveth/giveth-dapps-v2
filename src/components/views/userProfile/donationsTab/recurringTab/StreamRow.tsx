@@ -10,6 +10,7 @@ import { ISuperfluidStream } from '@/types/superFluid';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { limitFraction } from '@/helpers/number';
 import { ModifySuperTokenModal } from '@/components/views/donate/ModifySuperToken/ModifySuperTokenModal';
+import config from '@/configuration';
 
 interface IStreamRowProps {
 	tokenStream: ISuperfluidStream[];
@@ -27,6 +28,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 	} = useBalance({
 		token: tokenStream[0].token.id,
 		address: address,
+		chainId: config.OPTIMISM_NETWORK_NUMBER,
 		// watch: true,
 		// cacheTime: 5_000,
 	});
