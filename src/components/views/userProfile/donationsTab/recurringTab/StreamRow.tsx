@@ -1,6 +1,6 @@
 import { useState, type FC } from 'react';
 import styled from 'styled-components';
-import { P, semanticColors } from '@giveth/ui-design-system';
+import { P, brandColors, semanticColors } from '@giveth/ui-design-system';
 import { formatUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import { useIntl } from 'react-intl';
@@ -67,9 +67,9 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 				)}
 			</TableCell>
 			<TableCell>
-				<P onClick={() => setShowModifyModal(true)}>
+				<ModifyButton onClick={() => setShowModifyModal(true)}>
 					Modify stream balance
-				</P>
+				</ModifyButton>
 			</TableCell>
 			{showModifyModal && (
 				<ModifySuperTokenModal
@@ -84,4 +84,12 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 
 const RowWrapper = styled.div`
 	display: contents;
+`;
+
+const ModifyButton = styled(P)`
+	cursor: pointer;
+	color: ${brandColors.pinky[500]};
+	:hover {
+		color: ${brandColors.pinky[700]};
+	}
 `;
