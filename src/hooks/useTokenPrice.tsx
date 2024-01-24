@@ -24,7 +24,6 @@ interface ITokenPrice {
 
 export const useTokenPrice = (token?: ITokenPrice) => {
 	const [tokenPrice, setTokenPrice] = useState<number>();
-
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 	const givPrice = useAppSelector(state => state.price.givPrice);
