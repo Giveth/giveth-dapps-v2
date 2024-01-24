@@ -321,7 +321,7 @@ const CryptoDonation: FC = () => {
 								section: 'Polltoken pollEvery',
 							},
 						});
-						return 0;
+						return setSelectedTokenBalance(0n);
 					}
 				},
 				onResult: (_balance: bigint) => {

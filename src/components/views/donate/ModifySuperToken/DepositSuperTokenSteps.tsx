@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { Steps } from '@/components/steps/Steps';
-import { EModifySuperTokenSteps } from './ModifySuperTokenModal';
+import { EModifySuperTokenSteps } from './common';
 
 export enum EDepositSteps {
 	APPROVE,
@@ -21,7 +21,7 @@ export const DepositSteps: FC<DonateStepsProps> = ({ modifyTokenState }) => {
 	if (
 		modifyTokenState === EModifySuperTokenSteps.DEPOSIT ||
 		modifyTokenState === EModifySuperTokenSteps.DEPOSITING ||
-		modifyTokenState === EModifySuperTokenSteps.SUBMITTED
+		modifyTokenState === EModifySuperTokenSteps.DEPOSIT_CONFIRMED
 	) {
 		activeStep = 1;
 	}
