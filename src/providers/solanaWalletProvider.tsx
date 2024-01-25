@@ -20,9 +20,8 @@ interface IProviderProps {
 }
 const { SOLANA_CONFIG } = config;
 const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;
-const productionSolanaNode = process.env.NEXT_PUBLIC_SOLANA_NODE_URL;
-const developSolanaNode = clusterApiUrl(solanaAdapter);
-const solanaNode = isProduction ? productionSolanaNode! : developSolanaNode;
+const solanaNode =
+	process.env.NEXT_PUBLIC_SOLANA_NODE_URL || clusterApiUrl(solanaAdapter);
 // Create a context for the provider
 export const SolanaCtx = createContext<any>(null);
 
