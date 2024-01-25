@@ -10,6 +10,7 @@ import {
 } from '@solana/wallet-adapter-wallets';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import { BaseMessageSignerWalletAdapter } from '@solana/wallet-adapter-base';
+import { clusterApiUrl } from '@solana/web3.js';
 import config, { isProduction } from '@/configuration';
 
 require('@solana/wallet-adapter-react-ui/styles.css');
@@ -19,7 +20,9 @@ interface IProviderProps {
 }
 const { SOLANA_CONFIG } = config;
 const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;
-const solanaNode = process.env.NEXT_PUBLIC_SOLANA_NODE_URL;
+const productionSolanaNode = process.env.NEXT_PUBLIC_SOLANA_NODE_URL;
+const developSolanaNode = clusterApiUrl(solanaAdapter);
+const solanaNode = isProduction ? productionSolanaNode! : developSolanaNode;
 // Create a context for the provider
 export const SolanaCtx = createContext<any>(null);
 
@@ -35,7 +38,7 @@ if (!isProduction) {
 export const SolanaProvider: FC<IProviderProps> = ({ children }) => {
 	return (
 		<SolanaCtx.Provider value={null}>
-			<ConnectionProvider endpoint={solanaNode!}>
+			<ConnectionProvider endpoint={solanaNode}>
 				<WalletProvider wallets={wallets} autoConnect>
 					<WalletModalProvider>{children}</WalletModalProvider>
 				</WalletProvider>
