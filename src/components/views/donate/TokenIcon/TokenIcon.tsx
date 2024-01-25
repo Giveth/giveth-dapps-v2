@@ -9,7 +9,7 @@ export interface ITokenIconProps {
 export const TokenIcon: FC<ITokenIconProps> = ({ symbol, size = 24 }) => {
 	const [src, setSrc] = useState(`/images/tokens/UNKOWN.svg`);
 	useEffect(() => {
-		setSrc(`/images/tokens/${symbol.toUpperCase()}.svg`);
+		setSrc(`/images/tokens/${symbol}.svg`);
 	}, [symbol]);
 	return (
 		<Image
