@@ -4,11 +4,14 @@ import { getContract, getPublicClient } from 'wagmi/actions';
 import { erc20ABI } from '@wagmi/core';
 import config from '@/configuration';
 import { AddressZero } from '@/lib/constants/constants';
+import { ChainType } from '@/types/config';
 
-export const fetchPrice = async (chainId: number, tokenAddress?: string) => {
+export const fetchPrice = async (
+	chainId: number | ChainType,
+	tokenAddress?: string,
+) => {
 	try {
-		const chain =
-			config.EVM_NETWORKS_CONFIG[chainId || 1].coingeckoChainName;
+		const chain = config.NETWORKS_CONFIG[chainId || 1].coingeckoChainName;
 		const fetchCall = await fetch(
 			`https://api.coingecko.com/api/v3/simple/token_price/${chain}?contract_addresses=${tokenAddress}&vs_currencies=usd`,
 		);

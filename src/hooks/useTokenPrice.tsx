@@ -1,10 +1,12 @@
 import BigNumber from 'bignumber.js';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { type Address, useNetwork } from 'wagmi';
 import { fetchETCPrice, fetchPrice, fetchSolanaPrice } from '@/services/token';
 import { fetchEthPrice } from '@/features/price/price.services';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
 
 const ethereumChain = config.MAINNET_CONFIG;
 const gnosisChain = config.GNOSIS_CONFIG;
@@ -12,6 +14,8 @@ const stableCoins = [
 	gnosisChain.nativeCurrency.symbol.toUpperCase(),
 	'DAI',
 	'USDT',
+	'USDC',
+	'USDCT',
 ];
 
 interface ITokenPrice {
@@ -24,7 +28,7 @@ interface ITokenPrice {
 
 export const useTokenPrice = (token?: ITokenPrice) => {
 	const [tokenPrice, setTokenPrice] = useState<number>();
-
+	const { walletChainType } = useGeneralWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 	const givPrice = useAppSelector(state => state.price.givPrice);
@@ -64,7 +68,9 @@ export const useTokenPrice = (token?: ITokenPrice) => {
 					isMainnet ||
 					(token.mainnetAddress && token.symbol !== 'CELO')
 						? config.MAINNET_NETWORK_NUMBER
-						: chainId!;
+						: walletChainType && walletChainType !== ChainType.EVM
+							? walletChainType
+							: chainId!;
 				const fetchedPrice = await fetchPrice(
 					coingeckoChainId,
 					tokenAddress,
