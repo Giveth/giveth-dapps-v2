@@ -150,13 +150,6 @@ const Header: FC<IHeader> = () => {
 		}
 	};
 
-	console.log(
-		'isProduction config: ',
-		process.env.NEXT_PUBLIC_AUTH,
-		process.env.NEXT_PUBLIC_AUTH === '',
-		process.env.NEXT_PUBLIC_AUTH === ' ',
-	);
-
 	return (
 		<StyledHeader alignItems='center' theme={theme} show={showHeader}>
 			<Flex>
