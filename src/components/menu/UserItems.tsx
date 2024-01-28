@@ -36,7 +36,13 @@ export const UserItems: FC<IUserItemsProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 
-	const { walletAddress, disconnect, chainName } = useGeneralWallet();
+	const {
+		walletAddress,
+		disconnect,
+		chainName,
+		isOnSolana,
+		walletChainType,
+	} = useGeneralWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
@@ -64,8 +70,6 @@ export const UserItems: FC<IUserItemsProps> = ({
 		router.push(url);
 	};
 
-	const networkName = chainName;
-
 	return (
 		<>
 			<Item theme={theme}>
@@ -82,14 +86,22 @@ export const UserItems: FC<IUserItemsProps> = ({
 				</ItemTitle>
 				<ItemRow>
 					<FlexCenter gap='4px'>
-						<NetworkLogo chainId={chainId} logoSize={16} />
-						<NetworkName>{networkName}</NetworkName>
+						<NetworkLogo
+							chainId={chainId}
+							chainType={walletChainType}
+							logoSize={16}
+						/>
+						<NetworkName width={isOnSolana ? '120px' : '90px'}>
+							{chainName}
+						</NetworkName>
 					</FlexCenter>
 
-					{!isSafeEnv && (
+					{!isSafeEnv && !isOnSolana && (
 						<ItemAction
 							size='Small'
-							onClick={() => openChainModal && openChainModal()}
+							onClick={() => {
+								openChainModal && openChainModal();
+							}}
 						>
 							{formatMessage({ id: 'label.switch_network' })}
 						</ItemAction>

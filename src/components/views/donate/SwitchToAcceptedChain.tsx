@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { Caption } from '@giveth/ui-design-system';
-import { Chain, useSwitchNetwork } from 'wagmi';
+import { Chain } from 'wagmi';
 import { getNetworkNames } from '@/components/views/donate/helpers';
 import {
 	NetworkToast,
@@ -11,15 +11,20 @@ import { INetworkIdWithChain } from './common.types'; // Import the type
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 
-const SwitchToAcceptedChain: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({
+interface ISwitchToAcceptedChain {
+	acceptedChains: INetworkIdWithChain[];
+	setShowChangeNetworkModal: (show: boolean) => void;
+}
+
+const SwitchToAcceptedChain: FC<ISwitchToAcceptedChain> = ({
 	acceptedChains,
+	setShowChangeNetworkModal,
 }) => {
 	const { formatMessage } = useIntl();
 	const { chain, walletChainType } = useGeneralWallet();
 
 	const networkId = (chain as Chain)?.id;
 
-	const { switchNetwork } = useSwitchNetwork();
 	if (
 		!acceptedChains ||
 		acceptedChains.some(
@@ -41,9 +46,10 @@ const SwitchToAcceptedChain: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({
 				})}{' '}
 				{getNetworkNames(acceptedChains, 'and')}.
 			</Caption>
-			{/* Use the first accepted chain's networkId for the switchNetwork call */}
 			<SwitchCaption
-				onClick={() => switchNetwork?.(acceptedChains[0].networkId)}
+				onClick={() => {
+					setShowChangeNetworkModal(true);
+				}}
 			>
 				{formatMessage({ id: 'label.switch_network' })}
 			</SwitchCaption>

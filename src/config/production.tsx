@@ -38,9 +38,11 @@ const CELO_NETWORK_NUMBER = 42220;
 const CLASSIC_NETWORK_NUMBER = 61;
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
+	networkId: 101,
 	chainType: ChainType.SOLANA,
 	adapterNetwork: WalletAdapterNetwork.Mainnet,
 	name: 'Solana',
+	nativeCurrency: { name: 'Solana native token', symbol: 'SOL', decimals: 9 },
 	blockExplorers: {
 		default: {
 			name: 'Solana Explorer',
@@ -64,8 +66,7 @@ const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
 	'https://notification.giveth.io';
 const AUTH_BASE_ROUTE =
-	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
-	'https://auth.serve.giveth.io/v1';
+	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE || 'https://auth.giveth.io/v1';
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,

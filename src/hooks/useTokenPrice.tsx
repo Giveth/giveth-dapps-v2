@@ -1,10 +1,12 @@
 import BigNumber from 'bignumber.js';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { type Address, useNetwork } from 'wagmi';
 import { fetchETCPrice, fetchPrice, fetchSolanaPrice } from '@/services/token';
 import { fetchEthPrice } from '@/features/price/price.services';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
 
 const ethereumChain = config.MAINNET_CONFIG;
 const gnosisChain = config.GNOSIS_CONFIG;
@@ -12,9 +14,11 @@ const stableCoins = [
 	gnosisChain.nativeCurrency.symbol.toUpperCase(),
 	'DAI',
 	'USDT',
+	'USDC',
+	'USDCT',
 ];
 
-interface ITokenPice {
+interface ITokenPrice {
 	symbol: string;
 	address?: Address;
 	id?: Address | string;
@@ -22,9 +26,9 @@ interface ITokenPice {
 	isStableCoin?: boolean;
 }
 
-export const useTokenPrice = (token?: ITokenPice) => {
+export const useTokenPrice = (token?: ITokenPrice) => {
 	const [tokenPrice, setTokenPrice] = useState<number>();
-
+	const { walletChainType } = useGeneralWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 	const givPrice = useAppSelector(state => state.price.givPrice);
@@ -53,7 +57,6 @@ export const useTokenPrice = (token?: ITokenPice) => {
 					setTokenPrice(fetchedETCPrice || 0);
 					return;
 				}
-
 				let tokenAddress = token.address || token.id;
 				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
 				if (!isMainnet && token.mainnetAddress) {
@@ -64,7 +67,9 @@ export const useTokenPrice = (token?: ITokenPice) => {
 					isMainnet ||
 					(token.mainnetAddress && token.symbol !== 'CELO')
 						? config.MAINNET_NETWORK_NUMBER
-						: chainId!;
+						: walletChainType && walletChainType !== ChainType.EVM
+							? walletChainType
+							: chainId!;
 				const fetchedPrice = await fetchPrice(
 					coingeckoChainId,
 					tokenAddress,

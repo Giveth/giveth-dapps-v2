@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, createContext, useMemo } from 'react';
+import React, { FC, ReactNode, createContext } from 'react';
 import {
 	ConnectionProvider,
 	WalletProvider,
@@ -9,8 +9,8 @@ import {
 	SolflareWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { clusterApiUrl } from '@solana/web3.js';
 import { BaseMessageSignerWalletAdapter } from '@solana/wallet-adapter-base';
+import { clusterApiUrl } from '@solana/web3.js';
 import config, { isProduction } from '@/configuration';
 
 require('@solana/wallet-adapter-react-ui/styles.css');
@@ -20,6 +20,8 @@ interface IProviderProps {
 }
 const { SOLANA_CONFIG } = config;
 const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;
+const solanaNode =
+	process.env.NEXT_PUBLIC_SOLANA_NODE_URL || clusterApiUrl(solanaAdapter);
 // Create a context for the provider
 export const SolanaCtx = createContext<any>(null);
 
@@ -33,11 +35,9 @@ if (!isProduction) {
 }
 // Create the provider component
 export const SolanaProvider: FC<IProviderProps> = ({ children }) => {
-	const endpoint = useMemo(() => clusterApiUrl(solanaAdapter), []);
-
 	return (
 		<SolanaCtx.Provider value={null}>
-			<ConnectionProvider endpoint={endpoint}>
+			<ConnectionProvider endpoint={solanaNode}>
 				<WalletProvider wallets={wallets} autoConnect>
 					<WalletModalProvider>{children}</WalletModalProvider>
 				</WalletProvider>

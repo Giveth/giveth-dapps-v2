@@ -11,13 +11,7 @@ const YourApp = () => {
 		<div>
 			<w3m-button />
 			<div>
-				<button
-					onClick={() => {
-						setFailedModalType(EDonationFailedType.NOT_SAVED);
-					}}
-				>
-					Test Button1
-				</button>
+				<button onClick={() => {}}>Test Button1</button>
 			</div>
 			{failedModalType && (
 				<FailedDonation

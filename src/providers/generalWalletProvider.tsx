@@ -1,4 +1,4 @@
-// create a react provider with the context
+// create a React provider with the context
 import React, {
 	ReactNode,
 	createContext,
@@ -10,8 +10,6 @@ import React, {
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import {
 	PublicKey,
-	Connection,
-	clusterApiUrl,
 	LAMPORTS_PER_SOL,
 	Transaction,
 	SystemProgram,
@@ -32,7 +30,7 @@ import BigNumber from 'bignumber.js';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { getChainName } from '@/lib/network';
 import config from '@/configuration';
-import { useAppDispatch } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import {
 	isGIVeconomyRoute as checkIsGIVeconomyRoute,
@@ -61,6 +59,7 @@ interface IGeneralWalletContext {
 	) => Promise<string | `0x${string}` | undefined>;
 	handleSingOutAndSignInWithEVM: () => Promise<void>;
 	handleSignOutAndSignInWithSolana: () => Promise<void>;
+	handleSignOutAndShowWelcomModal: () => Promise<void>;
 	isOnSolana: boolean;
 	isOnEVM: boolean;
 }
@@ -78,9 +77,17 @@ export const GeneralWalletContext = createContext<IGeneralWalletContext>({
 	sendNativeToken: async () => undefined,
 	handleSingOutAndSignInWithEVM: async () => {},
 	handleSignOutAndSignInWithSolana: async () => {},
+	handleSignOutAndShowWelcomModal: async () => {},
 	isOnSolana: false,
 	isOnEVM: false,
 });
+
+const getPhantomSolanaProvider = () => {
+	const provider = (window as any)?.solana;
+	if (provider?.isPhantom) {
+		return provider;
+	}
+};
 
 // Create the provider component
 export const GeneralWalletProvider: React.FC<{
@@ -101,7 +108,8 @@ export const GeneralWalletProvider: React.FC<{
 	const dispatch = useAppDispatch();
 	const { open: openConnectModal } = useWeb3Modal();
 	const router = useRouter();
-	const { setVisible } = useWalletModal();
+	const { token } = useAppSelector(state => state.user);
+	const { setVisible, visible } = useWalletModal();
 
 	const isGIVeconomyRoute = useMemo(
 		() => checkIsGIVeconomyRoute(router.route),
@@ -147,15 +155,10 @@ export const GeneralWalletProvider: React.FC<{
 	const getSolanaWalletBalance = async (
 		publicKey: PublicKey,
 	): Promise<number> => {
-		// Connect to the cluster
-		const connection = new Connection(
-			clusterApiUrl(config.SOLANA_CONFIG.adapterNetwork),
-			'confirmed',
-		);
-		// Get the balance
 		try {
 			const balance =
-				(await connection.getBalance(publicKey)) / LAMPORTS_PER_SOL;
+				(await solanaConnection.getBalance(publicKey)) /
+				LAMPORTS_PER_SOL;
 			return balance;
 		} catch (error) {
 			console.error('Error getting solana wallet balance:', error);
@@ -281,12 +284,10 @@ export const GeneralWalletProvider: React.FC<{
 					to: to as `0x${string}`,
 					value,
 				});
-				return;
 			case ChainType.SOLANA: {
 				const lamports = new BigNumber(value)
 					.times(LAMPORTS_PER_SOL)
 					.toFixed();
-
 				const transaction = new Transaction().add(
 					SystemProgram.transfer({
 						fromPubkey: publicKey!,
@@ -339,6 +340,14 @@ export const GeneralWalletProvider: React.FC<{
 		}
 	}, [walletChainType, evmChain]);
 
+	useEffect(() => {
+		// If the modal is not visible (closed), it resets the overflow style to 'auto'.
+		if (!visible) {
+			document.body.style.overflow = 'auto';
+			document.body.style.overflow = 'overlay';
+		}
+	}, [visible]);
+
 	const openWalletConnectModal = () => {
 		if (config.ENABLE_SOLANA && !isGIVeconomyRoute) {
 			dispatch(setShowWelcomeModal(true));
@@ -347,8 +356,36 @@ export const GeneralWalletProvider: React.FC<{
 		}
 	};
 
+	useEffect(() => {
+		const solanaProvider = getPhantomSolanaProvider();
+
+		const handleAccountChange = (publicKey: PublicKey) => {
+			if (publicKey) {
+				const address = publicKey.toBase58();
+				setWalletAddress(address);
+			}
+		};
+
+		if (solanaProvider) {
+			solanaProvider.on('accountChanged', handleAccountChange);
+		}
+
+		return () => {
+			if (solanaProvider) {
+				solanaProvider.off('accountChanged', handleAccountChange);
+			}
+		};
+	}, []);
+
 	const isOnSolana = walletChainType === ChainType.SOLANA;
 	const isOnEVM = walletChainType === ChainType.EVM;
+	const handleSignOutAndShowWelcomModal = async () => {
+		await dispatch(signOut(token!));
+		isOnSolana ? solanaWalletDisconnect() : ethereumWalletDisconnect();
+		setTimeout(() => {
+			dispatch(setShowWelcomeModal(true));
+		}, 100); // wait 100 milliseconds (0.1 seconds) before dispatching, because otherwise the modal will not show
+	};
 
 	const contextValue: IGeneralWalletContext = {
 		walletChainType,
@@ -364,6 +401,7 @@ export const GeneralWalletProvider: React.FC<{
 		sendNativeToken,
 		handleSingOutAndSignInWithEVM,
 		handleSignOutAndSignInWithSolana,
+		handleSignOutAndShowWelcomModal,
 		isOnSolana,
 		isOnEVM,
 	};
