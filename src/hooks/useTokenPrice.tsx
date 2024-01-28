@@ -57,7 +57,6 @@ export const useTokenPrice = (token?: ITokenPrice) => {
 					setTokenPrice(fetchedETCPrice || 0);
 					return;
 				}
-
 				let tokenAddress = token.address || token.id;
 				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
 				if (!isMainnet && token.mainnetAddress) {
