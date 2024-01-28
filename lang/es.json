@@ -1401,7 +1401,7 @@
 	"project.givback_toast.description.non_verified_public": "Los GIVbacks actualmente solo se otorgan por donaciones a proyectos verificados. Tu contribución aún importa, incluso si no genera GIVbacks.",
 	"project.givback_toast.description.verified_owner": "¡Impulsa tu proyecto para aumentar la cantidad de GIVbacks que reciben tus donantes y aumenta su visibilidad entre otros proyectos!",
 	"project.givback_toast.description.verified_owner.note": "Como propietario de este proyecto, no recibirás GIVbacks por donar a él.",
-	"project.givback_toast.description.verified_public": "¡Los donantes de proyectos verificados son recompensados con GIV! Impulsa este proyecto para aumentar su porcentaje de recompensas y hacerlo más visible en la página de proyectos.",
+	"project.givback_toast.description.verified_public": "Los donaciones en Ethereum a proyectos verificados son recompensados con GIV! Impulsa este proyecto para aumentar su porcentaje de recompensas y hacerlo más visible en la página de proyectos.",
 	"project.givback_toast.title.non_verified_owner": "¿Tu proyecto está creando o apoyando bienes públicos?",
 	"project.givback_toast.title.non_verified_owner_cancelled": "Estado Cancelado",
 	"project.givback_toast.title.non_verified_owner_deactive": "Modo Desactivado",
