@@ -188,11 +188,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchAddresses,
 		watchAlloProtocolRegistry,
 	]);
-
-	const hasOptimismAddress = watchAddresses.hasOwnProperty(
-		config.OPTIMISM_NETWORK_NUMBER,
+	const hasOptimismAddress = watchAddresses.some(
+		address => config.OPTIMISM_NETWORK_NUMBER === address.networkId,
 	);
-
 	const onError = (errors: FieldErrors<TInputs>) => {
 		if (errors[EInputs.description]) {
 			document?.getElementById('project_description')?.scrollIntoView();
