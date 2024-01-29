@@ -20,6 +20,7 @@ import { getChainName } from '@/lib/network';
 import { IChainType } from '@/types/config';
 import { findAddressByChain } from '@/lib/helpers';
 import { isRecurringActive } from '../donate/DonationCard';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
@@ -31,10 +32,10 @@ const AddressInterface = ({
 	onButtonClick,
 	chainType,
 }: IAddressInterfaceProps) => {
-	const { formState, setValue, watch } = useFormContext();
+	const { setValue, watch } = useFormContext();
 	const { formatMessage } = useIntl();
+	const { isOnEVM } = useGeneralWallet();
 
-	const { errors } = formState;
 	const inputName = EInputs.addresses;
 	const alloProtocolRegistry = watch(EInputs.alloProtocolRegistry) as boolean;
 
@@ -110,7 +111,7 @@ const AddressInterface = ({
 						</IconContainer>
 					)}
 				</Flex>
-				{isOptimism && isRecurringActive && (
+				{isOptimism && isRecurringActive && isOnEVM && (
 					// Render this section only on Optimism
 					<AlloProtocolContainer>
 						<Flex>
