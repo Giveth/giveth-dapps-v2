@@ -6,14 +6,13 @@ import {
 	P,
 	brandColors,
 } from '@giveth/ui-design-system';
-import { useNetwork } from 'wagmi';
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
 import { useRouter } from 'next/router';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
-import SwitchNetwork from '@/components/modals/SwitchNetwork';
 import useCreateAnchorContract from '@/hooks/useCreateAnchorContract';
 import { IProject, IProjectEdition } from '@/apollo/types/types';
 import StorageLabel from '@/lib/localStorage';
@@ -32,14 +31,14 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chain } = useNetwork();
-	const [showSwitchNetworkModal, setShowSwitchNetworkModal] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [txResult, setTxResult] = useState<WriteContractResult>();
 	const router = useRouter();
+	const { switchNetwork } = useSwitchNetwork();
 
 	const isDraft =
 		project?.status.name === EProjectStatus.DRAFT ||
-		addedProjectState.status.name === EProjectStatus.DRAFT;
+		addedProjectState.status?.name === EProjectStatus.DRAFT;
 
 	const isEditMode = !!project;
 
@@ -66,7 +65,7 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 
 	const handleButtonClick = async () => {
 		if (!isOnOptimism) {
-			setShowSwitchNetworkModal(true);
+			switchNetwork?.(config.OPTIMISM_NETWORK_NUMBER);
 		} else {
 			try {
 				setIsLoading(true);
@@ -143,17 +142,6 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 					disabled={isLoading}
 				/>
 			</Container>
-			{showSwitchNetworkModal && (
-				<SwitchNetwork
-					customNetworks={[
-						{
-							networkId: config.OPTIMISM_NETWORK_NUMBER,
-							chainType: config.OPTIMISM_CONFIG.chainType,
-						},
-					]}
-					setShowModal={setShowSwitchNetworkModal}
-				/>
-			)}
 		</Modal>
 	);
 };
