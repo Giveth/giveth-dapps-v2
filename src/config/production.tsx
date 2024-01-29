@@ -66,8 +66,7 @@ const NOTIFICATION_BASE_ROUTE =
 	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
 	'https://notification.giveth.io';
 const AUTH_BASE_ROUTE =
-	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
-	'https://auth.serve.giveth.io/v1';
+	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE || 'https://auth.giveth.io/v1';
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
