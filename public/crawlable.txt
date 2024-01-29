@@ -1,3 +1,4 @@
 User-agent: *
 Disallow: /onboard
 Disallow: /account
+Allow: /onboarding/

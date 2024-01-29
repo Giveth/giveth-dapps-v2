@@ -10,8 +10,6 @@ import React, {
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import {
 	PublicKey,
-	Connection,
-	clusterApiUrl,
 	LAMPORTS_PER_SOL,
 	Transaction,
 	SystemProgram,
@@ -157,15 +155,10 @@ export const GeneralWalletProvider: React.FC<{
 	const getSolanaWalletBalance = async (
 		publicKey: PublicKey,
 	): Promise<number> => {
-		// Connect to the cluster
-		const connection = new Connection(
-			clusterApiUrl(config.SOLANA_CONFIG.adapterNetwork),
-			'confirmed',
-		);
-		// Get the balance
 		try {
 			const balance =
-				(await connection.getBalance(publicKey)) / LAMPORTS_PER_SOL;
+				(await solanaConnection.getBalance(publicKey)) /
+				LAMPORTS_PER_SOL;
 			return balance;
 		} catch (error) {
 			console.error('Error getting solana wallet balance:', error);
