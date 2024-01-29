@@ -23,6 +23,7 @@ const SuccessRoute = () => {
 					variables: { slug },
 					fetchPolicy: 'no-cache',
 				});
+				console.log('Data', data);
 				setProject(data.projectBySlug);
 				setIsLoading(false);
 			} catch (error) {
