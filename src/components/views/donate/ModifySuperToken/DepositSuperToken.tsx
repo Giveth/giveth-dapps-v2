@@ -6,7 +6,6 @@ import { Framework } from '@superfluid-finance/sdk-core';
 import { Flex } from '@/components/styled-components/Flex';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { AddressZero } from '@/lib/constants/constants';
-import { ITokenStreams } from '@/context/donate.context';
 import { ModifyInfoToast } from './ModifyInfoToast';
 import { IModifySuperTokenInnerModalProps } from './ModifySuperTokenModal';
 import { DepositSteps } from './DepositSuperTokenSteps';
@@ -24,7 +23,6 @@ import { ModifyWrapper, Wrapper } from './common.sc';
 import { EModifySuperTokenSteps, actionButtonLabel } from './common';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
-	tokenStreams: ITokenStreams;
 	token?: IToken;
 	superToken?: ISuperToken;
 }
@@ -36,6 +34,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	step,
 	setStep,
 	setShowModal,
+	refreshBalance,
 }) => {
 	const [amount, setAmount] = useState(0n);
 
@@ -131,6 +130,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			if (!res.status) {
 				throw new Error('Deposit failed');
 			}
+			refreshBalance();
 			setStep(EModifySuperTokenSteps.DEPOSIT_CONFIRMED);
 		} catch (error: any) {
 			if (error?.code === 'ACTION_REJECTED') {

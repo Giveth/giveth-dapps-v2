@@ -20,7 +20,7 @@ import ProjectStatusBadge from './ProjectStatusBadge';
 import ProjectVerificationBadge from './ProjectVerificationBadge';
 import ProjectQFStatus from './ProjectQFStatus';
 import ProjectListedStatus from './ProjectListedStatus';
-import { isRecurringActive } from '../../donate/DonationCard';
+import { isRecurringActive } from '@/configuration';
 
 interface IProjectItem {
 	project: IProject;

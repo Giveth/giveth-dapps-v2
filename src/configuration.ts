@@ -6,6 +6,8 @@ export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
 const envConfig = isProduction ? production : development;
 const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
+export const isRecurringActive =
+	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true';
 
 export const SENTRY_URGENT = 'urgent';
 

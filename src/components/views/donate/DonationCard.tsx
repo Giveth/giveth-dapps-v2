@@ -6,9 +6,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { RecurringDonationCard } from './RecurringDonationCard';
 import CryptoDonation from './CryptoDonation';
-
-export const isRecurringActive =
-	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true';
+import { isRecurringActive } from '@/configuration';
 
 enum ETabs {
 	ONE_TIME,

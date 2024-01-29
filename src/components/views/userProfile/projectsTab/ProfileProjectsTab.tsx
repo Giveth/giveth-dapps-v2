@@ -18,8 +18,8 @@ import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { ProjectsContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
 import ProjectsTable from './ProjectsTable';
-import { isRecurringActive } from '../../donate/DonationCard';
 import ProjectItem from './ProjectItem';
+import { isRecurringActive } from '@/configuration';
 
 const itemPerPage = 10;
 

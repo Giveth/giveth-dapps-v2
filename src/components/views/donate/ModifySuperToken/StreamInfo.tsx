@@ -6,11 +6,10 @@ import { FetchBalanceResult } from '@wagmi/core';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { limitFraction } from '@/helpers/number';
 import { Flex } from '@/components/styled-components/Flex';
-import { ITokenStreams } from '@/context/donate.context';
-import { ISuperToken } from '@/types/superFluid';
+import { ISuperToken, ISuperfluidStream } from '@/types/superFluid';
 
 interface IStreamInfoProps {
-	tokenStreams: ITokenStreams;
+	tokenStreams: ISuperfluidStream[];
 	superToken?: ISuperToken;
 	SuperTokenBalance?: FetchBalanceResult;
 }
@@ -21,10 +20,8 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 	SuperTokenBalance,
 }) => {
 	const { formatMessage } = useIntl();
-
-	const tokenStream = tokenStreams[superToken?.id || ''];
 	const totalStreamPerSec =
-		tokenStream?.reduce(
+		tokenStreams?.reduce(
 			(acc, stream) => acc + BigInt(stream.currentFlowRate),
 			0n,
 		) || 0n;
@@ -67,11 +64,11 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 				</Caption>
 				<Caption>
 					{formatMessage({ id: 'label.funding' })}{' '}
-					<strong>{tokenStream.length}</strong>{' '}
+					<strong>{tokenStreams.length}</strong>{' '}
 					{formatMessage(
 						{ id: 'label.project' },
 						{
-							count: tokenStream.length,
+							count: tokenStreams.length,
 						},
 					)}
 				</Caption>

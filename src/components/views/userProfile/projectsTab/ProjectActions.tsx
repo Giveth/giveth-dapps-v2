@@ -16,7 +16,7 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { capitalizeAllWords } from '@/lib/helpers';
-import { isRecurringActive } from '../../donate/DonationCard';
+import { isRecurringActive } from '@/configuration';
 
 interface IProjectActions {
 	project: IProject;
