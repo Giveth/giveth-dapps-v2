@@ -269,6 +269,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					isRecurringActive
 				) {
 					setShowAlloProtocolModal(true);
+					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 				} else {
 					setIsLoading(false);
 					if (!isEditMode) {
