@@ -16,7 +16,7 @@ const useCreateAnchorContract = ({
 	id,
 }: ICreateAnchorContract) => {
 	const { walletAddress } = adminUser || {};
-
+	console.log('WalletAddress', walletAddress);
 	// Prepare the contract configuration using usePrepareContractWrite hook
 	const { config: contractConfig } = usePrepareContractWrite({
 		address: config.OPTIMISM_CONFIG.anchorRegistryAddress,
@@ -24,13 +24,13 @@ const useCreateAnchorContract = ({
 		abi: createProfileABI.abi,
 		chainId: config.OPTIMISM_NETWORK_NUMBER,
 		args: [
-			+id!, // Convert id to a number
+			+id!, // project id
 			slug,
 			{
 				protocol: 1,
 				pointer: '',
 			},
-			walletAddress,
+			walletAddress, //admin user wallet address
 			[],
 		],
 	});
