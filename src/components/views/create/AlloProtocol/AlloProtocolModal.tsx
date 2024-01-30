@@ -9,6 +9,7 @@ import {
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
 import { useRouter } from 'next/router';
+import { waitForTransaction } from '@wagmi/core';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -22,6 +23,20 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 interface IAlloProtocolModal extends IModal {
 	project?: IProjectEdition; //If undefined, it means we are in create mode
 	addedProjectState: IProject;
+}
+
+function extractContractAddressFromString(text: string) {
+	// The hexadecimal string starts at the 282th character (0-indexed)
+	// We use a regex to match any characters up to that point, then capture the next 40 characters
+	const regex = /.{282}([0-9a-fA-F]{40})/;
+	const match = text.match(regex);
+
+	if (match && match[1]) {
+		// Prepending '0x' to the matched string
+		return '0x' + match[1];
+	} else {
+		return 'No matching pattern found';
+	}
 }
 
 const AlloProtocolModal: FC<IAlloProtocolModal> = ({
@@ -71,6 +86,20 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 				setIsLoading(true);
 				const tx = await writeAsync?.();
 				setTxResult(tx);
+				if (tx?.hash) {
+					const data = await waitForTransaction({
+						hash: tx.hash,
+						chainId: config.OPTIMISM_NETWORK_NUMBER,
+					});
+					const profileId = data.logs[0].topics[1];
+					const contractAddress = extractContractAddressFromString(
+						data.logs[0].data,
+					);
+					console.log('Test Data', data);
+					console.log('Test ProfileID = ', profileId);
+					console.log('Test Contract Address = ', data.logs[0].data);
+					console.log('Test Contract Address = ', contractAddress);
+				}
 				//Call backend to update project
 				if (tx?.hash) {
 					if (!isEditMode || (isEditMode && isDraft)) {
