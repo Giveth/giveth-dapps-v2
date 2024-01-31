@@ -577,9 +577,12 @@ const CryptoDonation: FC = () => {
 					onChange={() => setAnonymous(!anonymous)}
 					size={14}
 				/>
+				donate_anonymously
 				<div>
 					{formatMessage({
-						id: 'component.tooltip.donate_privately',
+						id: isRecurringActive
+							? 'component.tooltip.donate_anonymously'
+							: 'component.tooltip.donate_privately',
 					})}
 				</div>
 			</CheckBoxContainer>

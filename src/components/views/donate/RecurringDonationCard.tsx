@@ -547,7 +547,9 @@ export const RecurringDonationCard = () => {
 				/>
 				<div>
 					{formatMessage({
-						id: 'component.tooltip.donate_privately',
+						id: isRecurringActive
+							? 'component.tooltip.donate_anonymously'
+							: 'component.tooltip.donate_privately',
 					})}
 				</div>
 			</CheckBoxContainer>
