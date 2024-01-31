@@ -28,6 +28,11 @@ export interface IEstimatedMatching {
 	projectDonationsSqrtRootSum: number;
 }
 
+export interface IAnchorContractData {
+	address: string;
+	isActive: boolean;
+}
+
 export interface IProject {
 	id: string;
 	title?: string;
@@ -76,6 +81,7 @@ export interface IProject {
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
 	campaigns?: ICampaign[];
+	anchorContracts: IAnchorContractData[];
 }
 
 export interface IDonationProject extends IProject {
