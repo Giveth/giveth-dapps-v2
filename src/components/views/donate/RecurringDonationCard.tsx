@@ -566,6 +566,7 @@ export const RecurringDonationCard = () => {
 					amount={amount}
 					percentage={percentage}
 					isUpdating={isUpdating}
+					anonymous={anonymous}
 				/>
 			)}
 			{showTopUpModal && selectedToken && (

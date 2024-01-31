@@ -28,6 +28,7 @@ interface IRecurringDonationModalProps extends IModal {
 	amount: bigint;
 	percentage: number;
 	isUpdating?: boolean;
+	anonymous: boolean;
 }
 
 export enum EDonationSteps {
