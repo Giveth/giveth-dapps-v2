@@ -14,6 +14,7 @@ import { gqlRequest } from '@/helpers/requests';
 import { ISuperfluidStream } from '@/types/superFluid';
 import config from '@/configuration';
 import { SENTRY_URGENT } from '@/configuration';
+import { CREATE_RECURRING_DONATION } from '@/apollo/gql/gqlSuperfluid';
 
 const SAVE_DONATION_ITERATIONS = 5;
 
@@ -116,4 +117,32 @@ export const fetchUserStreams = async (address: Address) => {
 		_tokenStreams[stream.token.id].push(stream);
 	});
 	return _tokenStreams;
+};
+
+export const createRecurringDonation = async (props: IOnTxHash) => {
+	const { chainId, txHash, projectId, anonymous } = props;
+	let donationId = 0;
+
+	try {
+		const { data } = await client.mutate({
+			mutation: CREATE_RECURRING_DONATION,
+			variables: {
+				transactionId: txHash,
+				networkId: chainId,
+				projectId,
+				anonymous,
+			},
+		});
+		donationId = data.createDonation;
+	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('createDonation error: ', error);
+		throw error;
+	}
+
+	return donationId;
 };

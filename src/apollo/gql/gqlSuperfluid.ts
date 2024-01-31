@@ -9,6 +9,7 @@ export const CREATE_RECURRING_DONATION = gql`
 		) {
 			txHash
 			networkId
+			projectId
 		}
 	}
 `;

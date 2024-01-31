@@ -577,7 +577,6 @@ const CryptoDonation: FC = () => {
 					onChange={() => setAnonymous(!anonymous)}
 					size={14}
 				/>
-				donate_anonymously
 				<div>
 					{formatMessage({
 						id: isRecurringActive
