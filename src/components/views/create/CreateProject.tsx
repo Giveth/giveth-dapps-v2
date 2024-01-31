@@ -93,7 +93,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [addressModalChainId, setAddressModalChainId] = useState<number>();
 	const [addressModalChainType, setAddressModalChainType] =
 		useState<ChainType>();
-
+	console.log('Projects', project);
 	const isEditMode = !!project;
 
 	let storageProjectData: TInputs | undefined;
@@ -366,6 +366,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									);
 									setAddressModalChainId(chain.id);
 								}}
+								isEditMode={isEditMode}
+								anchorContractData={
+									(project?.anchorContracts &&
+										project?.anchorContracts[0]) ??
+									undefined
+								}
 							/>
 						))}
 						<PublishTitle>
