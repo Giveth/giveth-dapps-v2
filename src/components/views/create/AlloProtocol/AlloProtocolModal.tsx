@@ -19,6 +19,8 @@ import { IProject, IProjectEdition } from '@/apollo/types/types';
 import StorageLabel from '@/lib/localStorage';
 import { slugToSuccessView, slugToProjectView } from '@/lib/routeCreators';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY } from '@/apollo/gql/gqlSuperfluid';
+import { client } from '@/apollo/apolloClient';
 
 interface IAlloProtocolModal extends IModal {
 	project?: IProjectEdition; //If undefined, it means we are in create mode
@@ -71,7 +73,6 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	const isOnOptimism = chain
 		? chain.id === config.OPTIMISM_NETWORK_NUMBER
 		: false;
-
 	const { writeAsync } = useCreateAnchorContract({
 		adminUser: addedProjectState?.adminUser,
 		id: addedProjectState?.id,
@@ -99,8 +100,18 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 					console.log('Test ProfileID = ', profileId);
 					console.log('Test Contract Address = ', data.logs[0].data);
 					console.log('Test Contract Address = ', contractAddress);
+					//Call backend to update project
+					const saveContract = await client.mutate({
+						mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
+						variables: {
+							projectId: Number(addedProjectState.id),
+							networkId: config.OPTIMISM_NETWORK_NUMBER,
+							address: contractAddress,
+							txHash: tx.hash,
+						},
+					});
+					console.log('Test saveContract = ', saveContract);
 				}
-				//Call backend to update project
 				if (tx?.hash) {
 					if (!isEditMode || (isEditMode && isDraft)) {
 						await router.push(
@@ -114,6 +125,7 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 				}
 				setShowModal(false); // Close the modal
 			} catch (error) {
+				console.log('Error Contract', error);
 			} finally {
 				setIsLoading(false);
 			}
