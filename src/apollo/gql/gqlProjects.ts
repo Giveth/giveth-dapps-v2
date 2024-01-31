@@ -186,6 +186,10 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				# createdAt
 				# updatedAt
 			}
+			anchorContracts {
+				address
+				isActive
+			}
 		}
 	}
 `;
@@ -215,6 +219,10 @@ export const FETCH_PROJECT_BY_ID = gql`
 				name
 			}
 			slug
+			anchorContracts {
+				address
+				isActive
+			}
 		}
 	}
 `;
