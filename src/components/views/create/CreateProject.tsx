@@ -247,7 +247,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				hasOptimismAddress &&
 				isRecurringActive
 			) {
-				setAddedProjectState(addedProject.data?.createProject);
+				!isEditMode
+					? setAddedProjectState(addedProject.data?.createProject)
+					: setAddedProjectState(addedProject.data?.updateProject);
 				setIsLoading(false);
 			}
 
