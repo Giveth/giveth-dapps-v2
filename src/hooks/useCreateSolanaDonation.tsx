@@ -1,8 +1,18 @@
 import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
-
-import { useConnection } from '@solana/wallet-adapter-react';
-import { SystemProgram } from '@solana/web3.js';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import {
+	PublicKey,
+	SystemProgram,
+	Transaction,
+	TransactionResponse,
+} from '@solana/web3.js';
+import {
+	createAssociatedTokenAccountInstruction,
+	createTransferInstruction,
+	getAssociatedTokenAddress,
+	TOKEN_PROGRAM_ID,
+} from '@solana/spl-token';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
@@ -20,21 +30,24 @@ export const useCreateSolanaDonation = () => {
 	const [resolveState, setResolveState] = useState<(() => void) | null>(null);
 	const [createDonationProps, setCreateDonationProps] =
 		useState<ICreateDonation>();
+	const [transactionObject, setTransactionObject] =
+		useState<TransactionResponse | null>(null);
 	const { sendNativeToken, walletChainType } = useGeneralWallet();
+	const { sendTransaction, publicKey } = useWallet();
 	const { connection: solanaConnection } = useConnection();
-
 	const fetchTransaction = async ({ hash }: { hash: string }) => {
 		const transaction = await solanaConnection.getTransaction(hash);
 		const from: string =
 			transaction?.transaction.message.accountKeys[0].toBase58()!;
 		if (!from) {
-			throw new Error('Solana transction from not found');
+			throw new Error('Solana transaction from not found');
 		}
 		return {
 			hash,
 			chainId: 0,
 			nonce: null,
 			from,
+			transactionObj: transaction,
 		};
 	};
 
@@ -48,6 +61,7 @@ export const useCreateSolanaDonation = () => {
 				return;
 			}
 			transaction = await retryFetchTransaction(fetchTransaction, txHash);
+			setTransactionObject(transaction?.transactionObj);
 
 			setTxHash(txHash);
 			const {
@@ -128,6 +142,50 @@ export const useCreateSolanaDonation = () => {
 		captureException(error, { tags: { section: 'confirmDonation' } });
 	};
 
+	const sendSolanaSPLToken = async (
+		to: string,
+		value: bigint,
+		tokenAddress: string,
+	) => {
+		if (!publicKey) throw Error('Wallet is not connected');
+		const splTokenMintAddress = new PublicKey(tokenAddress);
+		const receiverAddress = new PublicKey(to);
+		const senderTokenAccountAddress = await getAssociatedTokenAddress(
+			splTokenMintAddress,
+			publicKey,
+		);
+		const receiverTokenAccountAddress = await getAssociatedTokenAddress(
+			splTokenMintAddress,
+			receiverAddress,
+		);
+		const transaction = new Transaction();
+		const receiverAccountInfo = await solanaConnection.getAccountInfo(
+			receiverTokenAccountAddress,
+		);
+		if (!receiverAccountInfo) {
+			// In the case where user is new to the token and doesn't have an associated token account
+			transaction.add(
+				createAssociatedTokenAccountInstruction(
+					publicKey,
+					receiverTokenAccountAddress,
+					receiverAddress,
+					splTokenMintAddress,
+				),
+			);
+		}
+		transaction.add(
+			createTransferInstruction(
+				senderTokenAccountAddress,
+				receiverTokenAccountAddress,
+				publicKey,
+				value,
+				[],
+				TOKEN_PROGRAM_ID,
+			),
+		);
+		return await sendTransaction(transaction, solanaConnection);
+	};
+
 	const createDonation = async (props: ICreateDonation) => {
 		const {
 			walletAddress: toAddress,
@@ -145,20 +203,15 @@ export const useCreateSolanaDonation = () => {
 			throw new Error('Invalid wallet chain type');
 		}
 
-		if (address !== SystemProgram.programId.toBase58()) {
-			throw new Error(
-				'Token address is not native token address - not supported yet!',
-			);
-		}
-
-		const transactionObj = {
-			to: toAddress! as `0x${string}`,
-			value: amount.toString(),
-		};
-
 		try {
 			// setDonating(true);
-			const hash = await sendNativeToken(toAddress!, amount.toString());
+			let hash;
+			if (address === SystemProgram.programId.toBase58()) {
+				hash = await sendNativeToken(toAddress!, amount.toString());
+			} else {
+				const bigAmount = BigInt(amount * 10 ** token.decimals);
+				hash = await sendSolanaSPLToken(toAddress!, bigAmount, address);
+			}
 			console.log('HERE IS THE hash', hash);
 			if (!hash) {
 				updateDonation(donationId, EDonationStatus.FAILED);
@@ -171,7 +224,7 @@ export const useCreateSolanaDonation = () => {
 				return {
 					isSaved: false,
 					txHash: hash,
-					isMinted: status === 'success',
+					isMinted: transactionObject?.meta?.err === null,
 				};
 			}
 			return {
@@ -185,7 +238,7 @@ export const useCreateSolanaDonation = () => {
 	};
 
 	useEffect(() => {
-		if (status === 'success') {
+		if (transactionObject?.meta?.err === null && txHash) {
 			updateDonation(donationId, EDonationStatus.VERIFIED);
 			setDonationMinted(true);
 			if (resolveState) {
@@ -193,8 +246,7 @@ export const useCreateSolanaDonation = () => {
 				setResolveState(null); // clear the state to avoid calling it again
 			}
 		}
-		const comingFromSafe = txHash;
-		if (status === 'error' && !comingFromSafe) {
+		if (transactionObject?.meta?.err && !txHash) {
 			updateDonation(donationId, EDonationStatus.FAILED);
 			setDonationSaved(false);
 			createDonationProps?.setFailedModalType(EDonationFailedType.FAILED);

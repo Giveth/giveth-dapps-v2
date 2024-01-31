@@ -163,7 +163,14 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			token,
 			setFailedModalType,
 		};
-		if (!projectWalletAddress || !givethWalletAddress) return;
+		if (!projectWalletAddress || !givethWalletAddress) {
+			setDonating(false);
+			return showToastError(
+				`${
+					!projectWalletAddress ? 'Project' : 'Giveth'
+				} wallet address for the destination network doesn't exist`,
+			);
+		}
 		createFirstDonation({
 			...txProps,
 			amount: projectDonation,
@@ -218,11 +225,6 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			chainType: token.chainType,
 		});
 	};
-
-	if (!projectWalletAddress && walletChainType) {
-		showToastError('There is no address assigned for this project');
-		return null;
-	}
 
 	return (
 		<>

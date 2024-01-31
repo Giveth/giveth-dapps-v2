@@ -49,11 +49,14 @@ const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
+
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
+	networkId: 103,
 	chainType: ChainType.SOLANA,
 	name: 'Solana Devnet',
 	adapterNetwork: WalletAdapterNetwork.Devnet,
+	nativeCurrency: { name: 'Solana native token', symbol: 'SOL', decimals: 9 },
 	blockExplorers: {
 		default: {
 			name: 'Solana Explorer',

@@ -7,7 +7,7 @@ const networkTypes = Object.keys(config.NON_EVM_NETWORKS_CONFIG);
 interface INetworkLogoProps {
 	chainId?: number;
 	logoSize?: number;
-	chainType?: ChainType;
+	chainType?: ChainType | null;
 }
 
 const NetworkLogo = (props: INetworkLogoProps) => {
@@ -16,9 +16,9 @@ const NetworkLogo = (props: INetworkLogoProps) => {
 		(chainId && networkIds.includes(chainId)) ||
 		(chainType && networkTypes.includes(chainType))
 	) {
-		return config.NETWORKS_CONFIG[(chainId || chainType)!]?.chainLogo(
-			logoSize,
-		);
+		return config.NETWORKS_CONFIG[
+			chainType && chainType !== ChainType.EVM ? chainType : chainId!
+		]?.chainLogo(logoSize);
 	}
 	return null;
 };
