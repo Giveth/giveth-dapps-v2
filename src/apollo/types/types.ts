@@ -168,6 +168,7 @@ export interface IProjectEdition {
 		name?: string;
 	};
 	slug: string;
+	anchorContracts?: IAnchorContractData[];
 }
 
 export interface IProjectCreation {
