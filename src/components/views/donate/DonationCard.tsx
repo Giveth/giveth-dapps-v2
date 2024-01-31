@@ -6,7 +6,9 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { RecurringDonationCard } from './RecurringDonationCard';
 import CryptoDonation from './CryptoDonation';
-import { isRecurringActive } from '@/configuration';
+import config, { isRecurringActive } from '@/configuration';
+import { useDonateData } from '@/context/donate.context';
+import { ChainType } from '@/types/config';
 
 enum ETabs {
 	ONE_TIME,
@@ -17,7 +19,17 @@ const tabs = ['label.one_time_donation', 'label.recurring_donation'];
 
 export const DonationCard = () => {
 	const [tab, setTab] = useState(ETabs.ONE_TIME);
+	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
+
+	const { addresses } = project;
+	const hasOpAddress =
+		addresses &&
+		addresses.some(
+			address =>
+				address.chainType === ChainType.EVM &&
+				address.networkId === config.OPTIMISM_NETWORK_NUMBER,
+		);
 	return (
 		<DonationCardWrapper>
 			<Title>
