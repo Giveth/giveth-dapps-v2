@@ -42,12 +42,15 @@ import config from '@/configuration';
 import { WrongNetworkLayer } from './WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 import { limitFraction } from '@/helpers/number';
+import CheckBox from '@/components/Checkbox';
+import { CheckBoxContainer } from './CryptoDonation';
 
 export const RecurringDonationCard = () => {
 	const [amount, setAmount] = useState(0n);
 	const [isUpdating, setIsUpdating] = useState(false);
 	const [percentage, setPercentage] = useState(0);
 	const [donationToGiveth, setDonationToGiveth] = useState(5);
+	const [anonymous, setAnonymous] = useState<boolean>(false);
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
 	const [showTopUpModal, setShowTopUpModal] = useState(false);
 	const [showRecurringDonationModal, setShowRecurringDonationModal] =
@@ -531,6 +534,19 @@ export const RecurringDonationCard = () => {
 					alt='Superfluid logo'
 				/>
 			</Flex>
+			<CheckBoxContainer>
+				<CheckBox
+					label={formatMessage({ id: 'label.donate_privately' })}
+					checked={anonymous}
+					onChange={() => setAnonymous(!anonymous)}
+					size={14}
+				/>
+				<div>
+					{formatMessage({
+						id: 'component.tooltip.donate_privately',
+					})}
+				</div>
+			</CheckBoxContainer>
 			{showSelectTokenModal && (
 				<SelectTokenModal setShowModal={setShowSelectTokenModal} />
 			)}

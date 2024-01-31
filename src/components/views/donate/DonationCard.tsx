@@ -64,6 +64,7 @@ export const DonationCardWrapper = styled(Flex)`
 	box-shadow: ${Shadow.Neutral[400]};
 	align-items: stretch;
 	height: 100%;
+	text-align: left;
 `;
 
 const Title = styled(B)`

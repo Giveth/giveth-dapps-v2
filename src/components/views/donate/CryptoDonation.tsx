@@ -645,7 +645,7 @@ const MainButton = styled(Button)`
 	text-transform: uppercase;
 `;
 
-const CheckBoxContainer = styled.div`
+export const CheckBoxContainer = styled.div`
 	margin-top: 16px;
 	> div:nth-child(2) {
 		color: ${neutralColors.gray[900]};
