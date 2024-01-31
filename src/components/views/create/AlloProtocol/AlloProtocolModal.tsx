@@ -92,16 +92,12 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 						hash: tx.hash,
 						chainId: config.OPTIMISM_NETWORK_NUMBER,
 					});
-					const profileId = data.logs[0].topics[1];
+
 					const contractAddress = extractContractAddressFromString(
 						data.logs[0].data,
 					);
-					console.log('Test Data', data);
-					console.log('Test ProfileID = ', profileId);
-					console.log('Test Contract Address = ', data.logs[0].data);
-					console.log('Test Contract Address = ', contractAddress);
 					//Call backend to update project
-					const saveContract = await client.mutate({
+					await client.mutate({
 						mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
 						variables: {
 							projectId: Number(addedProjectState.id),
@@ -110,7 +106,6 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 							txHash: tx.hash,
 						},
 					});
-					console.log('Test saveContract = ', saveContract);
 				}
 				if (tx?.hash) {
 					if (!isEditMode || (isEditMode && isDraft)) {

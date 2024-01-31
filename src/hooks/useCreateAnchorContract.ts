@@ -16,7 +16,7 @@ const useCreateAnchorContract = ({
 	id,
 }: ICreateAnchorContract) => {
 	const { walletAddress } = adminUser || {};
-	console.log('WalletAddress', walletAddress);
+
 	// Prepare the contract configuration using usePrepareContractWrite hook
 	const { config: contractConfig } = usePrepareContractWrite({
 		address: config.OPTIMISM_CONFIG.anchorRegistryAddress,
