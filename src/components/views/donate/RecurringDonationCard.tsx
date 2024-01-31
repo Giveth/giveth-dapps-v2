@@ -38,7 +38,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { findUserStreamOnSelectedToken } from '@/helpers/donate';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { showToastError } from '@/lib/helpers';
-import config from '@/configuration';
+import config, { isRecurringActive } from '@/configuration';
 import { WrongNetworkLayer } from './WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 import { limitFraction } from '@/helpers/number';
@@ -536,7 +536,11 @@ export const RecurringDonationCard = () => {
 			</Flex>
 			<CheckBoxContainer>
 				<CheckBox
-					label={formatMessage({ id: 'label.donate_privately' })}
+					label={formatMessage({
+						id: isRecurringActive
+							? 'label.make_it_anonymous'
+							: 'label.donate_privately',
+					})}
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
 					size={14}

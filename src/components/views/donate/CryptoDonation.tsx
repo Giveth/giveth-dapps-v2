@@ -568,7 +568,11 @@ const CryptoDonation: FC = () => {
 			)}
 			<CheckBoxContainer>
 				<CheckBox
-					label={formatMessage({ id: 'label.donate_privately' })}
+					label={formatMessage({
+						id: isRecurringActive
+							? 'label.make_it_anonymous'
+							: 'label.donate_privately',
+					})}
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
 					size={14}
