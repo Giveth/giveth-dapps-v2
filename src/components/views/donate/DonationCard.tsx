@@ -15,8 +15,6 @@ enum ETabs {
 	RECURRING,
 }
 
-const tabs = ['label.one_time_donation', 'label.recurring_donation'];
-
 export const DonationCard = () => {
 	const [tab, setTab] = useState(ETabs.ONE_TIME);
 	const { project } = useDonateData();
@@ -36,17 +34,30 @@ export const DonationCard = () => {
 				{formatMessage({ id: 'label.how_do_you_want_to_donate' })}
 			</Title>
 			<Flex>
-				{tabs.map((_tab, idx) => (
+				<Tab
+					selected={tab === ETabs.ONE_TIME}
+					onClick={() => setTab(ETabs.ONE_TIME)}
+				>
+					{formatMessage({
+						id: 'label.one_time_donation',
+					})}
+				</Tab>
+				{hasOpAddress ? (
 					<Tab
-						key={idx}
-						selected={idx === tab}
-						onClick={() => setTab(idx)}
+						selected={tab === ETabs.RECURRING}
+						onClick={() => setTab(ETabs.RECURRING)}
 					>
 						{formatMessage({
-							id: _tab,
+							id: 'label.recurring_donation',
 						})}
 					</Tab>
-				))}
+				) : (
+					<BaseTab>
+						{formatMessage({
+							id: 'label.recurring_donation',
+						})}
+					</BaseTab>
+				)}
 				<EmptyTab />
 			</Flex>
 			<TabWrapper>
@@ -87,22 +98,24 @@ interface ITab {
 	selected?: boolean;
 }
 
-const Tab = styled(P)<ITab>`
+const BaseTab = styled(P)`
 	padding: 8px 12px;
 	border-bottom: 1px solid;
+	font-weight: 400;
+	color: ${neutralColors.gray[700]};
+	border-bottom-color: ${neutralColors.gray[300]};
+	user-select: none;
+`;
+
+const Tab = styled(BaseTab)<ITab>`
 	cursor: pointer;
 	${props =>
-		props.selected
-			? css`
-					font-weight: 500;
-					color: ${neutralColors.gray[900]};
-					border-bottom-color: ${neutralColors.gray[900]};
-				`
-			: css`
-					font-weight: 400;
-					color: ${neutralColors.gray[700]};
-					border-bottom-color: ${neutralColors.gray[300]};
-				`}
+		props.selected &&
+		css`
+			font-weight: 500;
+			color: ${neutralColors.gray[900]};
+			border-bottom-color: ${neutralColors.gray[900]};
+		`}
 `;
 
 const EmptyTab = styled.div`
