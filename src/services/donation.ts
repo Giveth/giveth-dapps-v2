@@ -140,7 +140,7 @@ export const createRecurringDonation = async (props: IOnTxHash) => {
 				section: SENTRY_URGENT,
 			},
 		});
-		console.log('createDonation error: ', error);
+		console.log('createRecurringDonation error: ', error);
 		throw error;
 	}
 
