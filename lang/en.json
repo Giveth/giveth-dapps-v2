@@ -1465,5 +1465,6 @@
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"tooltip.donation.matching_polygon": "This estimate represents the matching funds this project would receive if the round closed now, ignoring the fraud analysis and special allocation process for Jokerace's top 100.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Water & Sanitation"
+	"water-and-sanitation": "Water & Sanitation",
+	"label.make_it_anonymous": "Make it anonymous"
 }

@@ -1465,5 +1465,6 @@
 	"tooltip.donation.matching": "Esta estimación se basa en las donaciones realizadas hasta ahora en esta ronda de financiamiento cuadrático y no tiene en cuenta el análisis de fraude. El monto real de fondos complementarios puede variar.",
 	"tooltip.donation.matching_polygon": "Esta estimación representa los fondos de contrapartida que recibiría este proyecto si la ronda se cerrara ahora, ignorando el análisis de fraude y el proceso de asignación especial para los 100 mejores de Jokerace.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Agua & Saneamiento"
+	"water-and-sanitation": "Agua & Saneamiento",
+	"label.make_it_anonymous": "Hazlo anónimo"
 }

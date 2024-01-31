@@ -1465,5 +1465,6 @@
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"tooltip.donation.matching_polygon": "Aquesta estimació representa els fons coincidents que rebria aquest projecte si la ronda es tanqués ara, ignorant l'anàlisi del frau i el procés d'assignació especial per als 100 millors de Jokerace.",
 	"ubi": "Renta bàsica",
-	"water-and-sanitation": "Aigua i Sanejament"
+	"water-and-sanitation": "Aigua i Sanejament",
+	"label.make_it_anonymous": "Fes-ho anònim"
 }
