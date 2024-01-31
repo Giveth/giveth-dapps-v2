@@ -9,6 +9,7 @@ import CryptoDonation from './CryptoDonation';
 import config, { isRecurringActive } from '@/configuration';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 enum ETabs {
 	ONE_TIME,
@@ -52,11 +53,22 @@ export const DonationCard = () => {
 						})}
 					</Tab>
 				) : (
-					<BaseTab>
-						{formatMessage({
-							id: 'label.recurring_donation',
-						})}
-					</BaseTab>
+					<IconWithTooltip
+						icon={
+							<BaseTab>
+								{formatMessage({
+									id: 'label.recurring_donation',
+								})}
+							</BaseTab>
+						}
+						direction='bottom'
+					>
+						<>
+							{formatMessage({
+								id: 'label.this_project_is_not_eligible_for_recurring_donations',
+							})}
+						</>
+					</IconWithTooltip>
 				)}
 				<EmptyTab />
 			</Flex>
