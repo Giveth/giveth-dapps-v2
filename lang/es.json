@@ -1466,5 +1466,6 @@
 	"tooltip.donation.matching_polygon": "Esta estimación representa los fondos de contrapartida que recibiría este proyecto si la ronda se cerrara ahora, ignorando el análisis de fraude y el proceso de asignación especial para los 100 mejores de Jokerace.",
 	"ubi": "UBI",
 	"water-and-sanitation": "Agua & Saneamiento",
-	"label.make_it_anonymous": "Hazlo anónimo"
+	"label.make_it_anonymous": "Hazlo anónimo",
+	"component.tooltip.donate_anonymously": "Al marcar esto, no consideraremos la información de tu perfil como donante para esta donación y no la mostraremos en las páginas públicas."
 }
