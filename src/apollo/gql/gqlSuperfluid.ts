@@ -1,7 +1,11 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_RECURRING_DONATION = gql`
-	mutation ($projectId: Int!, $networkId: Int!, $txHash: String!) {
+	mutation CreateRecurringDonation(
+		$projectId: Int!
+		$networkId: Int!
+		$txHash: String!
+	) {
 		createRecurringDonation(
 			projectId: $projectId
 			networkId: $networkId
@@ -9,6 +13,9 @@ export const CREATE_RECURRING_DONATION = gql`
 		) {
 			txHash
 			networkId
+			project {
+				id
+			}
 		}
 	}
 `;
