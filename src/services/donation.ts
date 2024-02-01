@@ -119,18 +119,29 @@ export const fetchUserStreams = async (address: Address) => {
 	return _tokenStreams;
 };
 
-export const createRecurringDonation = async (props: IOnTxHash) => {
-	const { chainId, txHash, projectId, anonymous } = props;
+export interface ICreateRecurringDonation {
+	projectId: number;
+	chainId: number;
+	txHash: string;
+	anonymous?: boolean;
+}
+
+export const createRecurringDonation = async ({
+	chainId,
+	txHash,
+	projectId,
+	anonymous,
+}: ICreateRecurringDonation) => {
 	let donationId = 0;
 
 	try {
 		const { data } = await client.mutate({
 			mutation: CREATE_RECURRING_DONATION,
 			variables: {
-				transactionId: txHash,
+				txHash,
 				networkId: chainId,
 				projectId,
-				anonymous,
+				// anonymous, // will enable when backend is ready
 			},
 		});
 		donationId = data.createDonation;

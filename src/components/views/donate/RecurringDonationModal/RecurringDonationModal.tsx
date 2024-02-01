@@ -22,6 +22,7 @@ import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { RunOutInfo } from '../RunOutInfo';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { ChainType } from '@/types/config';
+import { createRecurringDonation } from '@/services/donation';
 
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
@@ -106,6 +107,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	donationToGiveth,
 	setShowModal,
 	isUpdating,
+	anonymous,
 }) => {
 	const { project, selectedToken, tokenStreams, setSuccessDonation } =
 		useDonateData();
@@ -269,6 +271,14 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 			const batchOp = sf.batchCall(operations);
 			const tx = await batchOp.exec(signer);
+			console.log('tx', tx);
+			const test = await createRecurringDonation({
+				projectId: +project.id,
+				anonymous,
+				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				txHash: tx.hash,
+			});
+			console.log('test', test);
 			const res = await tx.wait();
 			if (!res.status) {
 				throw new Error('Transaction failed');
