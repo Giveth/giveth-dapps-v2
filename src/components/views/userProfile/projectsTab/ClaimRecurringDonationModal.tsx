@@ -18,10 +18,11 @@ import {
 	IStreamWithBalance,
 	useProjectClaimableDonations,
 } from '@/hooks/useProjectClaimableDonations';
-import { TokenIcon } from '../../donate/TokenIcon';
+
 import { limitFraction } from '@/helpers/number';
 import { WrappedSpinner } from '@/components/Spinner';
 import ClaimWithdrawalModal from './ClaimWithdrawalModal';
+import { TokenIcon } from '../../donate/TokenIcon/TokenIcon';
 
 interface IClaimRecurringDonationModal extends IModal {
 	project: IProject;
