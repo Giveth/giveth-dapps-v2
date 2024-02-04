@@ -6,23 +6,39 @@ import {
 	P,
 	brandColors,
 } from '@giveth/ui-design-system';
-import { useNetwork } from 'wagmi';
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
 import { useRouter } from 'next/router';
+import { waitForTransaction } from '@wagmi/core';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
-import SwitchNetwork from '@/components/modals/SwitchNetwork';
 import useCreateAnchorContract from '@/hooks/useCreateAnchorContract';
 import { IProject, IProjectEdition } from '@/apollo/types/types';
 import StorageLabel from '@/lib/localStorage';
 import { slugToSuccessView, slugToProjectView } from '@/lib/routeCreators';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
+import { CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY } from '@/apollo/gql/gqlSuperfluid';
+import { client } from '@/apollo/apolloClient';
 
 interface IAlloProtocolModal extends IModal {
 	project?: IProjectEdition; //If undefined, it means we are in create mode
 	addedProjectState: IProject;
+}
+
+function extractContractAddressFromString(text: string) {
+	// The hexadecimal string starts at the 282th character (0-indexed)
+	// We use a regex to match any characters up to that point, then capture the next 40 characters
+	const regex = /.{282}([0-9a-fA-F]{40})/;
+	const match = text.match(regex);
+
+	if (match && match[1]) {
+		// Prepending '0x' to the matched string
+		return '0x' + match[1];
+	} else {
+		return 'No matching pattern found';
+	}
 }
 
 const AlloProtocolModal: FC<IAlloProtocolModal> = ({
@@ -32,14 +48,14 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chain } = useNetwork();
-	const [showSwitchNetworkModal, setShowSwitchNetworkModal] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [txResult, setTxResult] = useState<WriteContractResult>();
 	const router = useRouter();
+	const { switchNetwork } = useSwitchNetwork();
 
 	const isDraft =
 		project?.status.name === EProjectStatus.DRAFT ||
-		addedProjectState.status.name === EProjectStatus.DRAFT;
+		addedProjectState.status?.name === EProjectStatus.DRAFT;
 
 	const isEditMode = !!project;
 
@@ -57,7 +73,6 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	const isOnOptimism = chain
 		? chain.id === config.OPTIMISM_NETWORK_NUMBER
 		: false;
-
 	const { writeAsync } = useCreateAnchorContract({
 		adminUser: addedProjectState?.adminUser,
 		id: addedProjectState?.id,
@@ -66,13 +81,32 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 
 	const handleButtonClick = async () => {
 		if (!isOnOptimism) {
-			setShowSwitchNetworkModal(true);
+			switchNetwork?.(config.OPTIMISM_NETWORK_NUMBER);
 		} else {
 			try {
 				setIsLoading(true);
 				const tx = await writeAsync?.();
 				setTxResult(tx);
-				//Call backend to update project
+				if (tx?.hash) {
+					const data = await waitForTransaction({
+						hash: tx.hash,
+						chainId: config.OPTIMISM_NETWORK_NUMBER,
+					});
+
+					const contractAddress = extractContractAddressFromString(
+						data.logs[0].data,
+					);
+					//Call backend to update project
+					await client.mutate({
+						mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
+						variables: {
+							projectId: Number(addedProjectState.id),
+							networkId: config.OPTIMISM_NETWORK_NUMBER,
+							address: contractAddress,
+							txHash: tx.hash,
+						},
+					});
+				}
 				if (tx?.hash) {
 					if (!isEditMode || (isEditMode && isDraft)) {
 						await router.push(
@@ -86,6 +120,7 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 				}
 				setShowModal(false); // Close the modal
 			} catch (error) {
+				console.log('Error Contract', error);
 			} finally {
 				setIsLoading(false);
 			}
@@ -143,17 +178,6 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 					disabled={isLoading}
 				/>
 			</Container>
-			{showSwitchNetworkModal && (
-				<SwitchNetwork
-					customNetworks={[
-						{
-							networkId: config.OPTIMISM_NETWORK_NUMBER,
-							chainType: config.OPTIMISM_CONFIG.chainType,
-						},
-					]}
-					setShowModal={setShowSwitchNetworkModal}
-				/>
-			)}
 		</Modal>
 	);
 };

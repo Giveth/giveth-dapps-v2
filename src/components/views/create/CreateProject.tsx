@@ -187,11 +187,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchAddresses,
 		watchAlloProtocolRegistry,
 	]);
-
-	const hasOptimismAddress = watchAddresses.hasOwnProperty(
-		config.OPTIMISM_NETWORK_NUMBER,
+	const hasOptimismAddress = watchAddresses.some(
+		address => config.OPTIMISM_NETWORK_NUMBER === address.networkId,
 	);
-
 	const onError = (errors: FieldErrors<TInputs>) => {
 		if (errors[EInputs.description]) {
 			document?.getElementById('project_description')?.scrollIntoView();
@@ -248,7 +246,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				hasOptimismAddress &&
 				isRecurringActive
 			) {
-				setAddedProjectState(addedProject.data?.createProject);
+				!isEditMode
+					? setAddedProjectState(addedProject.data?.createProject)
+					: setAddedProjectState(addedProject.data?.updateProject);
 				setIsLoading(false);
 			}
 
@@ -270,6 +270,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					isRecurringActive
 				) {
 					setShowAlloProtocolModal(true);
+					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 				} else {
 					setIsLoading(false);
 					if (!isEditMode) {
@@ -364,6 +365,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									);
 									setAddressModalChainId(chain.id);
 								}}
+								isEditMode={isEditMode}
+								anchorContractData={
+									(project?.anchorContracts &&
+										project?.anchorContracts[0]) ??
+									undefined
+								}
 							/>
 						))}
 						<PublishTitle>
