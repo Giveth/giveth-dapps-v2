@@ -11,7 +11,7 @@ import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation, IQFRound } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
-import { smallFormatDate, formatTxLink, compareAddresses } from '@/lib/helpers';
+import { smallFormatDate, compareAddresses, formatTxLink } from '@/lib/helpers';
 import {
 	EDirection,
 	EDonationStatus,
@@ -29,7 +29,7 @@ import {
 import { useProjectContext } from '@/context/project.context';
 import NetworkLogo from '@/components/NetworkLogo';
 import { UserWithPFPInCell } from '../../../UserWithPFPInCell';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 import { formatDonation } from '@/helpers/number';
 import { Spinner } from '@/components/Spinner';
 import { NoDonation } from './NoDonation';
@@ -98,7 +98,6 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 	useEffect(() => {
 		if (!id) return;
 		const fetchProjectDonations = async () => {
-			console.log('fetching project donations');
 			const { data: projectDonations } = await client.query({
 				query: FETCH_PROJECT_DONATIONS,
 				variables: {
@@ -201,10 +200,12 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 								<NetworkLogo
 									logoSize={24}
 									chainId={donation.transactionNetworkId}
+									chainType={donation.chainType}
 								/>
 								<NetworkName>
-									{chainNameById(
+									{getChainName(
 										donation.transactionNetworkId,
+										donation.chainType,
 									)}
 								</NetworkName>
 							</DonationTableCell>
@@ -213,10 +214,12 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 								<Currency>{donation.currency}</Currency>
 								{!donation.anonymous && (
 									<ExternalLink
-										href={formatTxLink(
-											donation.transactionNetworkId,
-											donation.transactionId,
-										)}
+										href={formatTxLink({
+											networkId:
+												donation.transactionNetworkId,
+											txHash: donation.transactionId,
+											chainType: donation.chainType,
+										})}
 									>
 										<IconExternalLink
 											size={16}
@@ -261,7 +264,7 @@ const Wrapper = styled(Flex)`
 `;
 
 const NetworkName = styled.div`
-	width: 80px;
+	width: 80%;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
@@ -279,8 +282,8 @@ const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
 	width: 100%;
 	grid-template-columns: ${props =>
 		props.isAdmin
-			? '1fr 2.2fr 0.8fr 1.25fr 1.4fr 1fr'
-			: '1fr 2.2fr 1.1fr 1.1fr 1fr'};
+			? '1fr 2fr 0.8fr 1.5fr 1.4fr 1fr'
+			: '1fr 2fr 1.5fr 1.1fr 1fr'};
 	min-width: 800px;
 `;
 

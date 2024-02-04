@@ -2,10 +2,11 @@ import { Caption, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC } from 'react';
 import { formatUnits } from 'viem';
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
-import { TokenIcon } from '../TokenIcon';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
+import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
 
 interface IStreamInfoProps {
 	stream: ISuperfluidStream[];
@@ -20,12 +21,19 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 	disable,
 	onClick,
 }) => {
+	const { formatMessage } = useIntl();
+
 	const totalFlowRate = stream.reduce(
 		(acc, curr) => acc + BigInt(curr.currentFlowRate),
 		0n,
 	);
 	const remainingMonths =
-		balance !== undefined ? balance / totalFlowRate / 2628000n : 0n;
+		balance !== undefined && totalFlowRate !== 0n
+			? balance / totalFlowRate / 2628000n
+			: 0n;
+
+	const underlyingToken = stream[0].token.underlyingToken;
+
 	return (
 		<Wrapper
 			gap='16px'
@@ -36,10 +44,10 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 				onClick();
 			}}
 		>
-			<TokenIcon
-				symbol={stream[0].token.symbol}
+			<TokenIconWithGIVBack
+				showGiveBack
+				symbol={underlyingToken ? underlyingToken.symbol : 'ETH'}
 				size={32}
-				isSuperToken={true}
 			/>
 			<InfoWrapper
 				flexDirection='column'
@@ -70,20 +78,35 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 				{totalFlowRate !== undefined && (
 					<Row justifyContent='space-between'>
 						<Flex gap='4px'>
-							<GrayCaption>Stream runs out in</GrayCaption>
+							<GrayCaption>
+								{formatMessage({
+									id: 'label.stream_runs_out_in',
+								})}
+							</GrayCaption>
 							<Caption medium>
 								{remainingMonths.toString()}
 							</Caption>
 							<Caption>
-								Month
-								{remainingMonths === 1n ? '' : 's'}
+								{formatMessage(
+									{
+										id: 'label.months',
+									},
+									{
+										count: remainingMonths.toString(),
+									},
+								)}
 							</Caption>
 						</Flex>
 						<Flex gap='4px'>
 							<GrayCaption>Funding</GrayCaption>
 							<Caption medium>{stream.length}</Caption>
 							<GrayCaption>
-								Project{stream.length === 1 ? '' : 's'}
+								{formatMessage(
+									{ id: 'label.funding_count_projects' },
+									{
+										count: stream.length.toString(),
+									},
+								)}
 							</GrayCaption>
 						</Flex>
 					</Row>

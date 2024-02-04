@@ -59,14 +59,14 @@ export class SubgraphDataHelper {
 
 	getGIVTokenBalance(): ITokenBalance {
 		const givTokenAddress =
-			config.NETWORKS_CONFIG[this.state.networkNumber as number]
+			config.EVM_NETWORKS_CONFIG[this.state.networkNumber as number]
 				?.GIV_TOKEN_ADDRESS;
 		return this.getTokenBalance(givTokenAddress);
 	}
 
 	getUserGIVPowerBalance(): IUnipoolBalance {
 		const _config =
-			config.NETWORKS_CONFIG[this.state.networkNumber as number];
+			config.EVM_NETWORKS_CONFIG[this.state.networkNumber as number];
 		if (!_config || !_config.GIVPOWER) return transformUnipoolBalance();
 		const givpowerLMAddress = _config.GIVPOWER.LM_ADDRESS;
 		return this.getUnipoolBalance(givpowerLMAddress);
@@ -81,14 +81,14 @@ export class SubgraphDataHelper {
 
 	getGIVTokenDistro(): ITokenDistro {
 		const tokenDistroAddress =
-			config.NETWORKS_CONFIG[this.state.networkNumber as number]
+			config.EVM_NETWORKS_CONFIG[this.state.networkNumber as number]
 				?.TOKEN_DISTRO_ADDRESS;
 		return this.getTokenDistro(tokenDistroAddress);
 	}
 
 	getGIVTokenDistroBalance(): ITokenDistroBalance {
 		const tokenDistroAddress =
-			config.NETWORKS_CONFIG[this.state.networkNumber as number]
+			config.EVM_NETWORKS_CONFIG[this.state.networkNumber as number]
 				?.TOKEN_DISTRO_ADDRESS;
 		return this.getTokenDistroBalance(tokenDistroAddress);
 	}

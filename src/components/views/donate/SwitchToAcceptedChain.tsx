@@ -1,24 +1,43 @@
 import React, { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { Caption } from '@giveth/ui-design-system';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
+import { Chain } from 'wagmi';
 import { getNetworkNames } from '@/components/views/donate/helpers';
 import {
 	NetworkToast,
 	SwitchCaption,
 } from '@/components/views/donate/common.styled';
-import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
+import { INetworkIdWithChain } from './common.types'; // Import the type
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
 
-const SwitchToAcceptedChain: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
+interface ISwitchToAcceptedChain {
+	acceptedChains: INetworkIdWithChain[];
+	setShowChangeNetworkModal: (show: boolean) => void;
+}
+
+const SwitchToAcceptedChain: FC<ISwitchToAcceptedChain> = ({
+	acceptedChains,
+	setShowChangeNetworkModal,
+}) => {
 	const { formatMessage } = useIntl();
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
-	const { switchNetwork } = useSwitchNetwork();
+	const { chain, walletChainType } = useGeneralWallet();
 
-	if (!chainId || !acceptedChains || acceptedChains?.includes(chainId)) {
+	const networkId = (chain as Chain)?.id;
+
+	if (
+		!acceptedChains ||
+		acceptedChains.some(
+			chain =>
+				chain.networkId === networkId ||
+				(chain.chainType === ChainType.SOLANA &&
+					walletChainType === ChainType.SOLANA),
+		)
+	) {
 		return null;
 	}
 
+	// Assuming getNetworkNames is updated to handle INetworkIdWithChain array
 	return (
 		<NetworkToast>
 			<Caption medium>
@@ -27,7 +46,11 @@ const SwitchToAcceptedChain: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
 				})}{' '}
 				{getNetworkNames(acceptedChains, 'and')}.
 			</Caption>
-			<SwitchCaption onClick={() => switchNetwork?.(acceptedChains[0])}>
+			<SwitchCaption
+				onClick={() => {
+					setShowChangeNetworkModal(true);
+				}}
+			>
 				{formatMessage({ id: 'label.switch_network' })}
 			</SwitchCaption>
 		</NetworkToast>

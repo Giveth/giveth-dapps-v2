@@ -42,12 +42,15 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 			case EDonationFailedType.NOT_SAVED:
 				return (
 					<NotSaved>
-						<p>Your donation has NOT been saved!</p>
+						<p>We were not able to record your donation.</p>
+						<p>
+							Please check if the transaction was successful and
+							report this to our support team.
+						</p>
 						<ExternalLink
-							href={links.DISCORD_SUPPORT}
-							title='Please contact our support team'
+							href={links.REPORT_FAILED_DONATION}
+							title='Send Report'
 						/>
-						.
 					</NotSaved>
 				);
 			default:
@@ -85,9 +88,10 @@ const FailedDonation: FC<IProps> = ({ setShowModal, txUrl, type }) => {
 };
 
 const NotSaved = styled.div`
-	> :last-child {
+	> a > span {
 		font-weight: 500;
 		text-decoration: underline;
+		margin-top: 16px;
 	}
 `;
 
@@ -104,10 +108,7 @@ const Content = styled(Lead)`
 	}
 
 	${mediaQueries.mobileL} {
-		padding: 38px 50px;
-	}
-	${mediaQueries.tablet} {
-		padding: 38px 93px;
+		padding: 24px;
 	}
 `;
 

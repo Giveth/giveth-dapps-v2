@@ -1,12 +1,26 @@
 import config from '@/configuration';
+import { ChainType } from '@/types/config';
 
-const networkIds = Object.keys(config.NETWORKS_CONFIG).map(Number);
+const networkIds = Object.keys(config.EVM_NETWORKS_CONFIG).map(Number);
+const networkTypes = Object.keys(config.NON_EVM_NETWORKS_CONFIG);
 
-const NetworkLogo = (props: { chainId?: number; logoSize?: number }) => {
-	const { chainId, logoSize } = props;
-	if (chainId && networkIds.includes(chainId)) {
-		return config.NETWORKS_CONFIG[chainId].chainLogo(logoSize);
-	} else return null;
+interface INetworkLogoProps {
+	chainId?: number;
+	logoSize?: number;
+	chainType?: ChainType | null;
+}
+
+const NetworkLogo = (props: INetworkLogoProps) => {
+	const { chainId, logoSize, chainType } = props;
+	if (
+		(chainId && networkIds.includes(chainId)) ||
+		(chainType && networkTypes.includes(chainType))
+	) {
+		return config.NETWORKS_CONFIG[
+			chainType && chainType !== ChainType.EVM ? chainType : chainId!
+		]?.chainLogo(logoSize);
+	}
+	return null;
 };
 
 export default NetworkLogo;

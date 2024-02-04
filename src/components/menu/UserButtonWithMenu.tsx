@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
+import { useAccount } from 'wagmi';
 import { shortenAddress } from '@/lib/helpers';
 import {
 	MenuAndButtonContainer,
@@ -25,8 +26,7 @@ import { UserItems } from './UserItems';
 import { FlexSpacer } from '../styled-components/Flex';
 import { ItemsProvider } from '@/context/Items.context';
 import { SignWithWalletModal } from '../modals/SignWithWalletModal';
-import SwitchNetwork from '@/components/modals/SwitchNetwork';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export interface IHeaderButtonProps {
 	isHeaderShowing: boolean;
@@ -42,11 +42,12 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 	const [showMenu, menuCondition, openMenu, closeMenu] = useDelayedState();
 	const [signWithWallet, setSignWithWallet] = useState<boolean>(false);
 	const [queueRoute, setQueueRoute] = useState<string>('');
-	const [showSwitchNetwork, setShowSwitchNetwork] = useState(false);
 	const router = useRouter();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
+	const { connector } = useAccount();
+	const isGSafeConnector = connector?.id === 'safe';
 
 	useEffect(() => {
 		if (!isHeaderShowing) {
@@ -103,6 +104,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 			)}
 			{signWithWallet && (
 				<SignWithWalletModal
+					isGSafeConnector={isGSafeConnector}
 					callback={() => {
 						router.push(queueRoute);
 						setQueueRoute('');
@@ -115,15 +117,12 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 					}}
 				/>
 			)}
-			{showSwitchNetwork && (
-				<SwitchNetwork setShowModal={setShowSwitchNetwork} />
-			)}
 		</MenuAndButtonContainer>
 	);
 };
 
 const HeaderUserButton = ({}) => {
-	const { walletAddress, chainName } = useAuthenticationWallet();
+	const { walletAddress, chainName } = useGeneralWallet();
 	const { userData } = useAppSelector(state => state.user);
 	const { formatMessage } = useIntl();
 	return (

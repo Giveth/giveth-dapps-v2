@@ -15,7 +15,7 @@ import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
-import { ICategory, IProject } from '@/apollo/types/types';
+import { IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
 import {
@@ -45,7 +45,6 @@ import { getMainCategorySlug } from '@/helpers/projects';
 export interface IProjectsView {
 	projects: IProject[];
 	totalCount: number;
-	categories: ICategory[];
 }
 
 interface IQueries {
@@ -58,7 +57,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
 	const user = useAppSelector(state => state.user.userData);
-
 	const [isLoading, setIsLoading] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);

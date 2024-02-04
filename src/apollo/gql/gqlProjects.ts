@@ -83,9 +83,6 @@ export const FETCH_ALL_PROJECTS = gql`
 				...ProjectCardFields
 			}
 			totalCount
-			categories {
-				name
-			}
 		}
 	}
 `;
@@ -108,6 +105,7 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				address
 				isRecipient
 				networkId
+				chainType
 			}
 			totalProjectUpdates
 			creationDate
@@ -188,6 +186,10 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				# createdAt
 				# updatedAt
 			}
+			anchorContracts {
+				address
+				isActive
+			}
 		}
 	}
 `;
@@ -203,6 +205,7 @@ export const FETCH_PROJECT_BY_ID = gql`
 				address
 				isRecipient
 				networkId
+				chainType
 			}
 			impactLocation
 			categories {
@@ -216,6 +219,10 @@ export const FETCH_PROJECT_BY_ID = gql`
 				name
 			}
 			slug
+			anchorContracts {
+				address
+				isActive
+			}
 		}
 	}
 `;
@@ -227,6 +234,7 @@ export const FETCH_GIVETH_PROJECT_BY_ID = gql`
 				address
 				isRecipient
 				networkId
+				chainType
 			}
 			slug
 		}
@@ -401,6 +409,7 @@ export const CREATE_PROJECT = gql`
 			addresses {
 				address
 				networkId
+				chainType
 			}
 			categories {
 				name
@@ -428,6 +437,7 @@ export const UPDATE_PROJECT = gql`
 			addresses {
 				address
 				networkId
+				chainType
 			}
 			impactLocation
 			categories {
@@ -439,11 +449,17 @@ export const UPDATE_PROJECT = gql`
 `;
 
 export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
-	mutation ($projectId: Float!, $networkId: Float!, $address: String!) {
+	mutation (
+		$projectId: Float!
+		$networkId: Float!
+		$address: String!
+		$chainType: ChainType
+	) {
 		addRecipientAddressToProject(
 			projectId: $projectId
 			networkId: $networkId
 			address: $address
+			chainType: $chainType
 		) {
 			id
 			title
@@ -466,6 +482,7 @@ export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
 				address
 				isRecipient
 				networkId
+				chainType
 			}
 			adminUser {
 				id
@@ -477,6 +494,7 @@ export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
 				address
 				isRecipient
 				networkId
+				chainType
 			}
 		}
 	}
@@ -536,12 +554,14 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 			id
 			symbol
 			networkId
+			chainType
 			address
 			name
 			decimals
 			mainnetAddress
 			isGivbackEligible
 			order
+			isStableCoin
 		}
 	}
 `;

@@ -9,7 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
+import { Chain, useSwitchNetwork } from 'wagmi';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
@@ -17,14 +17,19 @@ import NetworkLogo from '@/components/NetworkLogo';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { ETheme } from '@/features/general/general.slice';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
+import { INetworkIdWithChain } from '../views/donate/common.types';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
 
-const networksConfig = config.NETWORKS_CONFIG;
-const defaultNetworkIds = Object.keys(networksConfig).map(Number);
-
+const networksConfig = config.EVM_NETWORKS_CONFIG;
+const defaultNetworks = Object.keys(networksConfig).map(key => ({
+	networkId: Number(key),
+	chainType: networksConfig[Number(key)].chainType,
+}));
 interface ISwitchNetworkModal extends IModal {
 	desc?: string;
-	customNetworks?: number[];
+	customNetworks?: INetworkIdWithChain[];
 }
 
 const SwitchNetwork: FC<ISwitchNetworkModal> = ({
@@ -33,12 +38,21 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 	setShowModal,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
+
 	const { switchNetwork } = useSwitchNetwork();
 	const { formatMessage } = useIntl();
+	const { walletChainType, handleSingOutAndSignInWithEVM, chain } =
+		useGeneralWallet();
+	const chainId = (chain as Chain)?.id;
 	const theme = useAppSelector(state => state.general.theme);
-	const networkIds = customNetworks || defaultNetworkIds;
+
+	const networks =
+		customNetworks?.map(network => {
+			return {
+				networkId: network.networkId,
+				chainType: network.chainType,
+			};
+		}) || defaultNetworks;
 
 	return (
 		<Modal
@@ -50,9 +64,12 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 		>
 			<Wrapper>
 				{desc && <P>{desc}</P>}
-				{networkIds.map(networkId => (
+				{networks?.map(({ networkId, chainType }) => (
 					<NetworkItem
 						onClick={() => {
+							if (walletChainType === ChainType.SOLANA) {
+								handleSingOutAndSignInWithEVM();
+							}
 							switchNetwork?.(networkId);
 							closeModal();
 						}}
@@ -60,8 +77,12 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 						key={networkId}
 						theme={theme}
 					>
-						<NetworkLogo chainId={networkId} logoSize={32} />
-						<B>{chainNameById(networkId)}</B>
+						<NetworkLogo
+							chainId={networkId}
+							chainType={chainType}
+							logoSize={32}
+						/>
+						<B>{getChainName(networkId, chainType)}</B>
 						{networkId === chainId && (
 							<SelectedNetwork styleType='Small' theme={theme}>
 								{formatMessage({ id: 'label.selected' })}

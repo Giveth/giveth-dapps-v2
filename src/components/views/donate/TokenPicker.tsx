@@ -28,7 +28,7 @@ import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import { TokenIcon } from './TokenIcon';
+import { TokenIcon } from './TokenIcon/TokenIcon';
 
 declare module 'react-select/dist/declarations/src/Select' {
 	export interface Props<
@@ -119,7 +119,6 @@ const TokenPicker = (props: {
 		projectVerified,
 		disabled,
 	} = props;
-
 	const { isMobile } = useDetectDevice();
 	const [isOpen, setIsOpen] = useState(false);
 	const { formatMessage } = useIntl();

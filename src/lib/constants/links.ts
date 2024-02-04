@@ -9,6 +9,7 @@ const TYPEFORM = 'https://giveth.typeform.com/';
 
 const links = {
 	REPORT_ISSUE: TYPEFORM + 'issue-bug',
+	REPORT_FAILED_DONATION: TYPEFORM + 'failed-donation',
 	ASK_QUESTION: TYPEFORM + 'question',
 	FEATURE_REQUEST: TYPEFORM + 'featurerequest',
 	FEEDBACK: TYPEFORM + 'feedback',
@@ -63,6 +64,7 @@ const links = {
 	GIV_BRIDGE: 'https://omni.gnosischain.com/bridge',
 	PASSPORT: 'https://passport.gitcoin.co',
 	QF_DOC: DOCS + 'quadraticfunding',
+	MULTISIG_GUIDE: DOCS + 'dapps/multisigs',
 };
 
 if (!isProduction) {

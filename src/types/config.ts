@@ -134,6 +134,7 @@ export interface NetworkConfig extends Chain {
 	uniswapV2Subgraph?: string;
 	WETH_TOKEN_ADDRESS?: Address;
 	MERKLE_ADDRESS?: Address;
+	chainType: ChainType;
 }
 
 export interface GIVpowerGgivStakingConfig extends SimplePoolStakingConfig {
@@ -174,6 +175,7 @@ export interface GnosisNetworkConfig extends NetworkConfig {
 
 export interface OptimismNetworkConfig extends NetworkConfig {
 	subgraphAddress: string;
+	anchorRegistryAddress: Address;
 	TOKEN_DISTRO_ADDRESS: Address;
 	GIVPOWER: SimplePoolStakingConfig;
 	GIV_TOKEN_ADDRESS: Address;
@@ -188,8 +190,33 @@ interface MicroservicesConfig {
 	notificationSettings: string;
 }
 
+export interface NonEVMChain {
+	id: number;
+	networkId: number;
+	name: string;
+	chainType: ChainType;
+	adapterNetwork: WalletAdapterNetwork;
+	nativeCurrency: {
+		name: string;
+		symbol: string;
+		decimals: number;
+	};
+	blockExplorers: {
+		default: {
+			name: string;
+			url: string;
+		};
+	};
+}
+
+export interface NonEVMNetworkConfig extends NonEVMChain {
+	coingeckoChainName: string;
+	chainLogo: (logoSize?: number) => JSX.Element;
+}
+
 export interface EnvConfig {
-	CHAINS: Chain[];
+	EVM_CHAINS: Chain[];
+	CHAINS: (Chain | NonEVMChain)[];
 	GIVETH_PROJECT_ID: number;
 	MAINNET_NETWORK_NUMBER: number;
 	GNOSIS_NETWORK_NUMBER: number;
@@ -208,7 +235,7 @@ export interface EnvConfig {
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
 	RARIBLE_ADDRESS: string;
-	SOLANA_NETWORK: WalletAdapterNetwork;
+	SOLANA_CONFIG: NonEVMNetworkConfig;
 }
 
 export interface GlobalConfig extends EnvConfig {
@@ -218,11 +245,27 @@ export interface GlobalConfig extends EnvConfig {
 	NOTIFICATION_POLLING_INTERVAL: number;
 	PFP_POLLING_INTERVAL: number;
 	TOKEN_PRECISION: number;
-	NETWORKS_CONFIG: {
+	DONATE_TOKEN_PRECISION: number;
+	EVM_NETWORKS_CONFIG: {
 		[key: number]: NetworkConfig;
+	};
+	NON_EVM_NETWORKS_CONFIG: {
+		[key: string]: NonEVMNetworkConfig;
+	};
+	NETWORKS_CONFIG: {
+		[key: number | string]: NetworkConfig | NonEVMNetworkConfig;
 	};
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
 	GOOGLE_MAPS_API_KEY: string | undefined;
 	ENABLE_SOLANA: boolean;
+}
+
+export enum ChainType {
+	SOLANA = 'SOLANA',
+	EVM = 'EVM',
+}
+
+export interface IChainType {
+	chainType?: ChainType;
 }

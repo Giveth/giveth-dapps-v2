@@ -4,13 +4,14 @@ import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatPrice } from '@/lib/helpers';
-import { minDonationAmount } from '@/lib/constants/constants';
+import { calcDonationShare } from '@/components/views/donate/helpers';
+import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 
 interface ITotalDonation {
 	projectTitle?: string;
 	donationToGiveth: number;
-	donationToProject?: number;
-	tokenSymbol?: string;
+	totalDonation?: number;
+	token?: IProjectAcceptedToken;
 	isActive?: boolean;
 }
 
@@ -22,23 +23,19 @@ const TotalDonation: FC<ITotalDonation> = props => {
 	const {
 		projectTitle,
 		donationToGiveth = 0,
-		donationToProject = 0,
-		tokenSymbol,
+		totalDonation = 0,
+		token,
 		isActive,
 	} = props;
 
+	const { decimals, symbol } = token || {};
+
 	const { formatMessage } = useIntl();
 
-	let donationToGivethAmount = (donationToProject * donationToGiveth) / 100;
-	if (
-		donationToGivethAmount < minDonationAmount &&
-		donationToGivethAmount > 0
-	) {
-		donationToGivethAmount = minDonationAmount;
-	}
-
-	const totalDonation = formatPrice(
-		donationToProject + donationToGivethAmount,
+	const { projectDonation, givethDonation } = calcDonationShare(
+		totalDonation,
+		donationToGiveth,
+		decimals,
 	);
 
 	return (
@@ -50,7 +47,7 @@ const TotalDonation: FC<ITotalDonation> = props => {
 				</Caption>
 				{isActive && (
 					<Caption>
-						{formatPrice(donationToProject) + ' ' + tokenSymbol}
+						{formatPrice(projectDonation) + ' ' + symbol}
 					</Caption>
 				)}
 			</TableRow>
@@ -63,9 +60,7 @@ const TotalDonation: FC<ITotalDonation> = props => {
 				</Caption>
 				{isActive && (
 					<Caption>
-						{formatPrice(donationToGivethAmount) +
-							' ' +
-							tokenSymbol}
+						{formatPrice(givethDonation) + ' ' + symbol}
 					</Caption>
 				)}
 			</TableRow>
@@ -75,7 +70,9 @@ const TotalDonation: FC<ITotalDonation> = props => {
 				</Caption>
 				{isActive && (
 					<Caption medium>
-						{totalDonation + ' ' + tokenSymbol}
+						{formatPrice(projectDonation + givethDonation) +
+							' ' +
+							symbol}
 					</Caption>
 				)}
 			</Total>

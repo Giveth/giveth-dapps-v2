@@ -20,6 +20,7 @@ import ProjectStatusBadge from './ProjectStatusBadge';
 import ProjectVerificationBadge from './ProjectVerificationBadge';
 import ProjectQFStatus from './ProjectQFStatus';
 import ProjectListedStatus from './ProjectListedStatus';
+import { isRecurringActive } from '@/configuration';
 
 interface IProjectItem {
 	project: IProject;
@@ -27,7 +28,6 @@ interface IProjectItem {
 }
 
 const ProjectItem = ({ project, setProjects }: IProjectItem) => {
-	console.log('project', project);
 	const { formatMessage, locale } = useIntl();
 	const [showAddressModal, setShowAddressModal] = useState(false);
 	const [selectedProject, setSelectedProject] = useState<IProject>();
@@ -112,14 +112,16 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 						</P>
 						<div>{project.sumDonationValueUsd}</div>
 					</Flex>
-					<Flex justifyContent='space-between'>
-						<P>
-							<Flex alignItems='center' gap='6px'>
-								Claim Recurring Donations
-							</Flex>
-						</P>
-						<div>{project.sumDonationValueUsd}</div>
-					</Flex>
+					{isRecurringActive && (
+						<Flex justifyContent='space-between'>
+							<P>
+								<Flex alignItems='center' gap='6px'>
+									Claim Recurring Donations
+								</Flex>
+							</P>
+							<div>{project.sumDonationValueUsd}</div>
+						</Flex>
+					)}
 				</ProjectStatusesContainer>
 			</Flex>
 			{showAddressModal && selectedProject && (

@@ -9,10 +9,12 @@ import {
 	NetworkToast,
 	SwitchCaption,
 } from '@/components/views/donate/common.styled';
-import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
+import { INetworkIdWithChain } from './common.types'; // Import the type
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
 
-const SaveGasFees: FC<ISwitchNetworkToast> = ({ acceptedChains }) => {
+const SaveGasFees: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({
+	acceptedChains,
+}) => {
 	const [showModal, setShowModal] = useState(false);
 	const { chain } = useNetwork();
 	const chainId = chain?.id;

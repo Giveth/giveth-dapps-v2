@@ -9,6 +9,7 @@ import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { signOut } from '@/features/user/user.thunks';
 import {
@@ -22,7 +23,7 @@ import { Item } from './Item';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
 import StorageLabel from '@/lib/localStorage';
-import { useAuthenticationWallet } from '@/hooks/useAuthenticationWallet';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 interface IUserItemsProps {
 	setSignWithWallet: Dispatch<SetStateAction<boolean>>;
@@ -35,13 +36,20 @@ export const UserItems: FC<IUserItemsProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 
-	const { walletAddress, disconnect, chainName } = useAuthenticationWallet();
+	const {
+		walletAddress,
+		disconnect,
+		chainName,
+		isOnSolana,
+		walletChainType,
+	} = useGeneralWallet();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
 	const router = useRouter();
 	const { isSignedIn, userData, token } = useAppSelector(state => state.user);
 	const theme = useAppSelector(state => state.general.theme);
+	const isSafeEnv = useIsSafeEnvironment();
 
 	const { open: openChainModal } = useWeb3Modal();
 
@@ -62,8 +70,6 @@ export const UserItems: FC<IUserItemsProps> = ({
 		router.push(url);
 	};
 
-	const networkName = chainName;
-
 	return (
 		<>
 			<Item theme={theme}>
@@ -80,15 +86,26 @@ export const UserItems: FC<IUserItemsProps> = ({
 				</ItemTitle>
 				<ItemRow>
 					<FlexCenter gap='4px'>
-						<NetworkLogo chainId={chainId} logoSize={16} />
-						<NetworkName>{networkName}</NetworkName>
+						<NetworkLogo
+							chainId={chainId}
+							chainType={walletChainType}
+							logoSize={16}
+						/>
+						<NetworkName width={isOnSolana ? '120px' : '90px'}>
+							{chainName}
+						</NetworkName>
 					</FlexCenter>
-					<ItemAction
-						size='Small'
-						onClick={() => openChainModal && openChainModal()}
-					>
-						{formatMessage({ id: 'label.switch_network' })}
-					</ItemAction>
+
+					{!isSafeEnv && !isOnSolana && (
+						<ItemAction
+							size='Small'
+							onClick={() => {
+								openChainModal && openChainModal();
+							}}
+						>
+							{formatMessage({ id: 'label.switch_network' })}
+						</ItemAction>
+					)}
 				</ItemRow>
 			</Item>
 			<ItemSpacer />
@@ -97,18 +114,20 @@ export const UserItems: FC<IUserItemsProps> = ({
 					<GLink size='Big'>{formatMessage({ id: i.title })}</GLink>
 				</Item>
 			))}
-			<Item
-				onClick={() => {
-					isSignedIn && dispatch(signOut(token!));
-					localStorage.removeItem(StorageLabel.WALLET);
-					disconnect();
-				}}
-				theme={theme}
-			>
-				<GLink size='Big'>
-					{formatMessage({ id: 'label.sign_out' })}
-				</GLink>
-			</Item>
+			{!isSafeEnv && (
+				<Item
+					onClick={() => {
+						isSignedIn && dispatch(signOut(token!));
+						localStorage.removeItem(StorageLabel.WALLET);
+						disconnect();
+					}}
+					theme={theme}
+				>
+					<GLink size='Big'>
+						{formatMessage({ id: 'label.sign_out' })}
+					</GLink>
+				</Item>
+			)}
 		</>
 	);
 };

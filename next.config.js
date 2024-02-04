@@ -80,9 +80,24 @@ const moduleExports = withBundleAnalyzer({
 		defaultLocale,
 		localeDetection: false,
 	},
-	env: {
-		locales,
-		defaultLocale,
+	headers: () => {
+		return [
+			{
+				// Adding CORS headers for /manifest.json
+				source: '/manifest.json',
+				headers: [
+					{
+						key: 'Access-Control-Allow-Origin',
+						value: 'https://app.safe.global',
+					},
+					{ key: 'Access-Control-Allow-Methods', value: 'GET' },
+					{
+						key: 'Access-Control-Allow-Headers',
+						value: 'X-Requested-With, content-type, Authorization',
+					},
+				],
+			},
+		];
 	},
 });
 
@@ -92,7 +107,6 @@ const sentryWebpackPluginOptions = {
 	// recommended:
 	//   release, url, org, project, authToken, configFile, stripPrefix,
 	//   urlPrefix, include, ignore
-	release: pjson.version,
 	org: process.env.NEXT_PUBLIC_SENTRY_ORG,
 	project: process.env.NEXT_PUBLIC_SENTRY_PROJECT,
 	authToken: process.env.NEXT_PUBLIC_SENTRY_AUTH_TOKEN,

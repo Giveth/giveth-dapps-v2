@@ -27,7 +27,7 @@ const selectCustomStyles: StylesConfig = {
 				borderColor: `${brandColors.giv[600]}`,
 			},
 		}) as CSSObjectWithLabel,
-	option: (styles, { isFocused, isSelected }) => ({
+	option: (baseStyles, { isFocused, isSelected }) => ({
 		padding: '8px',
 		margin: '7px',
 		fontWeight: 500,

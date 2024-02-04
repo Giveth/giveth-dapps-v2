@@ -1,16 +1,14 @@
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { MAX_TOKEN_ORDER } from '@/lib/constants/tokens';
-import { IWalletAddress } from '@/apollo/types/types';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
-import config from '@/configuration';
+import { minDonationAmount } from '@/lib/constants/constants';
+import { truncateToDecimalPlaces } from '@/lib/helpers';
+import { INetworkIdWithChain } from './common.types';
+import { getChainName } from '@/lib/network';
 
 export interface ISelectedToken extends IProjectAcceptedToken {
 	value?: IProjectAcceptedToken;
 	label?: string;
-}
-
-interface INetworkIds {
-	[key: number]: boolean;
 }
 
 export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
@@ -35,38 +33,17 @@ export const prepareTokenList = (tokens: IProjectAcceptedToken[]) => {
 	return _tokens;
 };
 
-export const filterTokens = (
-	tokens: IProjectAcceptedToken[],
-	networkId: number,
-	acceptedNetworkIds: number[],
+export const getNetworkNames = (
+	networks: INetworkIdWithChain[],
+	text: string,
 ) => {
-	if (!acceptedNetworkIds.includes(networkId)) return [];
-	return tokens.filter(i => i.networkId === networkId);
-};
-
-export const getNetworkIds = (
-	tokens: IProjectAcceptedToken[],
-	recipientAddresses?: IWalletAddress[],
-) => {
-	const recipientAddressesNetwork = recipientAddresses?.map(
-		address => address.isRecipient && address.networkId,
-	);
-	const networkIds: INetworkIds = {};
-	tokens.forEach(i => {
-		networkIds[i.networkId] = true;
-	});
-	const networkIdArrays = Object.keys(networkIds).map(i => Number(i));
-	return networkIdArrays.filter(
-		networkId => recipientAddressesNetwork?.includes(networkId),
-	);
-};
-
-export const getNetworkNames = (networks: number[], text: string) => {
 	return networks.map((network, index) => {
-		const name = config.NETWORKS_CONFIG[network]?.name;
+		// Access the network name using networkId or chainType based on the chainType
+		const name = getChainName(network.networkId, network.chainType);
+
 		const lastLoop = networks.length === index + 1;
 		return (
-			<span key={network}>
+			<span key={network.networkId}>
 				{name}
 				{!lastLoop && ' ' + text + ' '}
 			</span>
@@ -75,7 +52,7 @@ export const getNetworkNames = (networks: number[], text: string) => {
 };
 
 export interface ICreateDonation {
-	walletAddress: `0x${string}`;
+	walletAddress: string;
 	projectId: number;
 	amount: number;
 	token: IProjectAcceptedToken;
@@ -85,9 +62,27 @@ export interface ICreateDonation {
 	setFailedModalType: (type: EDonationFailedType) => void;
 }
 
-export interface ICreateDonationResult {
-	isSaved: boolean;
-	txHash: string;
-}
-
-type TCreateDonation = (i: ICreateDonation) => Promise<ICreateDonationResult>;
+export const calcDonationShare = (
+	totalDonation: number,
+	givethDonationPercent: number,
+	decimals = 6,
+) => {
+	let givethDonation = totalDonation * (givethDonationPercent / 100);
+	if (givethDonation < minDonationAmount && givethDonationPercent !== 0) {
+		givethDonation = minDonationAmount;
+	}
+	let projectDonation = totalDonation - givethDonation;
+	if (projectDonation < minDonationAmount) {
+		projectDonation = minDonationAmount;
+	}
+	return {
+		projectDonation: truncateToDecimalPlaces(
+			String(projectDonation),
+			decimals,
+		),
+		givethDonation: truncateToDecimalPlaces(
+			String(givethDonation),
+			decimals,
+		),
+	};
+};

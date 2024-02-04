@@ -32,21 +32,23 @@ import { NotificationItems } from './NotificationItems';
 import { fetchNotificationsData } from '@/features/notification/notification.services';
 import { useNotification } from '@/hooks/useNotification';
 
-interface INotificationButtonWithMenuProps extends IHeaderButtonProps {}
+const NOTIFICATION_ENABLED =
+	process.env.NEXT_PUBLIC_NOTIFICATION_CENTER_ENABLED === 'true';
 
-export const NotificationButtonWithMenu: FC<
-	INotificationButtonWithMenuProps
-> = ({ isHeaderShowing, theme }) => {
+export const NotificationButtonWithMenu: FC<IHeaderButtonProps> = ({
+	isHeaderShowing,
+	theme,
+}) => {
 	const isDesktop = useMediaQuery(device.laptopL);
 	const [showMenu, menuCondition, openMenu, closeMenu] = useDelayedState();
 	const [showSidebar, sidebarCondition, openSidebar, closeSidebar] =
 		useDelayedState();
 	const router = useRouter();
+	const goToNotifs = () => router.push(Routes.Notifications);
 	const { isSignedIn } = useAppSelector(state => state.user);
 
-	const { modalCallback: signInThenGoToNotifs } = useModalCallback(() =>
-		router.push(Routes.Notifications),
-	);
+	const { modalCallback: signInThenGoToNotifs } =
+		useModalCallback(goToNotifs);
 
 	const { notifications, setNotifications, markOneNotificationRead } =
 		useNotification();
@@ -55,26 +57,25 @@ export const NotificationButtonWithMenu: FC<
 		state => state.notification.notificationInfo,
 	);
 
-	const lastFetchedNotificationId = notifications[0]?.id ?? undefined;
-
 	useEffect(() => {
+		if (!isSignedIn) return;
 		const fetchNotificationsAndSetState = async () => {
 			try {
 				const res = await fetchNotificationsData({ limit: 4 });
 				if (res?.notifications) setNotifications(res.notifications);
-			} catch {
-				console.log('Error fetching notifications');
+			} catch (e) {
+				console.log('fetchNotificationsAndSetState error: ', e);
 			}
 		};
-
-		fetchNotificationsAndSetState();
+		if (NOTIFICATION_ENABLED) {
+			fetchNotificationsAndSetState();
+		}
 	}, [lastNotificationId, isSignedIn]);
 
 	useEffect(() => {
 		if (!isHeaderShowing) {
 			closeMenu();
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isHeaderShowing]);
 
 	const props = isSignedIn
@@ -82,16 +83,18 @@ export const NotificationButtonWithMenu: FC<
 			? {
 					onMouseEnter: openMenu,
 					onMouseLeave: closeMenu,
+					onClick: goToNotifs,
 				}
-			: { onClick: openSidebar }
+			: { onClick: NOTIFICATION_ENABLED ? openSidebar : goToNotifs }
 		: { onClick: () => signInThenGoToNotifs() };
+
 	return (
 		<MenuAndButtonContainer {...props}>
 			<NotificationsButton outline theme={theme} isHover={showMenu}>
 				<HeaderNotificationButton theme={theme} />
 				<CoverLine theme={theme} className='cover-line' />
 			</NotificationsButton>
-			{menuCondition && (
+			{NOTIFICATION_ENABLED && menuCondition && (
 				<NotificationMenuContainer isAnimating={showMenu} theme={theme}>
 					<NotificationMenuWrapper>
 						<ItemsProvider close={closeMenu}>
@@ -105,7 +108,7 @@ export const NotificationButtonWithMenu: FC<
 					</NotificationMenuWrapper>
 				</NotificationMenuContainer>
 			)}
-			{sidebarCondition && (
+			{NOTIFICATION_ENABLED && sidebarCondition && (
 				<SideBar
 					close={closeSidebar}
 					isAnimating={showSidebar}

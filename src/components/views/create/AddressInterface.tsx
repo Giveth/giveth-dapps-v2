@@ -2,40 +2,54 @@ import { useFormContext } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import {
+	B,
 	Button,
 	GLink,
 	IconArrowRight16,
 	IconTrash24,
+	P,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { EInputs } from '@/components/views/create/CreateProject';
 import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import { chainNameById } from '@/lib/network';
+import config, { isRecurringActive } from '@/configuration';
+import ToggleSwitch from '@/components/ToggleSwitch';
+import { getChainName } from '@/lib/network';
+import { IChainType } from '@/types/config';
+import { findAddressByChain } from '@/lib/helpers';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { IAnchorContractData } from '@/apollo/types/types';
 
-interface IAddressInterfaceProps {
+interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
 	onButtonClick?: () => void;
+	anchorContractData?: IAnchorContractData;
+	isEditMode?: boolean;
 }
 
 const AddressInterface = ({
 	networkId,
 	onButtonClick,
+	chainType,
+	anchorContractData,
 }: IAddressInterfaceProps) => {
-	const {
-		formState: { errors },
-		setValue,
-		watch,
-	} = useFormContext();
+	const { setValue, watch } = useFormContext();
+	const { formatMessage } = useIntl();
+	const { isOnEVM } = useGeneralWallet();
 
 	const inputName = EInputs.addresses;
+	const alloProtocolRegistry = watch(EInputs.alloProtocolRegistry) as boolean;
 
 	const value = watch(inputName);
 
-	const { formatMessage } = useIntl();
+	const isOptimism = networkId === config.OPTIMISM_NETWORK_NUMBER;
 
-	const hasAddress = !!value[networkId] && !errors[inputName]?.message;
+	const addressObj = findAddressByChain(value, networkId, chainType);
+	const walletAddress = addressObj?.address;
+
+	const hasAddress = !!walletAddress;
 
 	return (
 		<Container>
@@ -43,12 +57,16 @@ const AddressInterface = ({
 				<Flex justifyContent='space-between'>
 					<Flex gap='8px'>
 						<ChainIconShadow>
-							<NetworkLogo chainId={networkId} logoSize={24} />
+							<NetworkLogo
+								chainType={chainType}
+								chainId={networkId}
+								logoSize={24}
+							/>
 						</ChainIconShadow>
 						{formatMessage(
 							{ id: 'label.chain_address' },
 							{
-								chainName: chainNameById(networkId),
+								chainName: getChainName(networkId, chainType),
 							},
 						)}
 					</Flex>
@@ -68,7 +86,7 @@ const AddressInterface = ({
 								id: 'label.receiving_address_on',
 							},
 							{
-								chainName: chainNameById(networkId),
+								chainName: getChainName(networkId, chainType),
 							},
 						)}
 					</GLink>
@@ -79,22 +97,56 @@ const AddressInterface = ({
 					gap='8px'
 				>
 					<AddressContainer hasAddress={hasAddress}>
-						{hasAddress
-							? value[networkId]
-							: 'No address added yet!'}
+						{hasAddress ? walletAddress : 'No address added yet!'}
 					</AddressContainer>
 					{hasAddress && (
 						<IconContainer
 							onClick={() => {
-								const newValue = { ...value };
-								delete newValue[networkId];
-								setValue(inputName, newValue);
+								const _addresses = [...value];
+								_addresses.splice(
+									_addresses.indexOf(addressObj),
+									1,
+								);
+								setValue(inputName, _addresses);
 							}}
 						>
 							<IconTrash24 />
 						</IconContainer>
 					)}
 				</Flex>
+				{isOptimism &&
+					isRecurringActive &&
+					isOnEVM &&
+					!anchorContractData?.isActive && (
+						// Render this section only on Optimism
+						<AlloProtocolContainer>
+							<Flex>
+								<div>
+									<B>
+										Set up Profile on the Allo Protocol
+										Registry
+									</B>
+									<P>
+										Your project will be included in a
+										shared registry of public goods projects
+										with Gitcoin and others. You will also
+										set up your project to receive recurring
+										donations.
+									</P>
+								</div>
+								<ToggleSwitch
+									isOn={alloProtocolRegistry}
+									toggleOnOff={() =>
+										setValue(
+											EInputs.alloProtocolRegistry,
+											!alloProtocolRegistry,
+										)
+									}
+									caption=''
+								/>
+							</Flex>
+						</AlloProtocolContainer>
+					)}
 			</MiddleContainer>
 		</Container>
 	);
@@ -143,6 +195,10 @@ const IconContainer = styled(FlexCenter)`
 	:hover {
 		background-color: ${neutralColors.gray[300]};
 	}
+`;
+
+const AlloProtocolContainer = styled.div`
+	margin-top: 24px;
 `;
 
 export default AddressInterface;

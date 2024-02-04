@@ -72,12 +72,16 @@ const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
 
 const Option: ComponentType<OptionProps<ISelectedNetwork>> = props => {
 	const { data, isSelected } = props;
-	const { label, id } = data;
+	const { label, id, chainType } = data;
 	return (
 		<components.Option {...props}>
 			<OptionContainer>
 				<RowContainer>
-					<NetworkLogo chainId={id} logoSize={40} />
+					<NetworkLogo
+						chainId={id}
+						logoSize={40}
+						chainType={chainType}
+					/>
 					<B>{label}</B>
 				</RowContainer>
 				{isSelected && <IconCheck color={brandColors.giv[500]} />}

@@ -16,6 +16,7 @@ import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
 import { zIndex } from '@/lib/constants/constants';
 import { EProjectsFilter } from '@/apollo/types/types';
+import config from '@/configuration';
 
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
@@ -32,7 +33,6 @@ const projectsFeatures = [
 const fundsFilter = [
 	{
 		label: 'Mainnet',
-
 		value: EProjectsFilter.ACCEPT_FUND_ON_MAINNET,
 	},
 	{
@@ -57,6 +57,13 @@ const fundsFilter = [
 	},
 ];
 
+if (config.ENABLE_SOLANA) {
+	fundsFilter.push({
+		label: 'Solana',
+		value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
+	});
+}
+
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {
 		const { formatMessage } = useIntl();
@@ -65,7 +72,6 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		const campaignCount = variables?.campaignSlug ? 1 : 0;
 		const count = filtersCount + campaignCount;
 		const router = useRouter();
-		console.log('variables', variables);
 
 		const handleSelectFilter = (e: boolean, filter: EProjectsFilter) => {
 			let updatedQuery;

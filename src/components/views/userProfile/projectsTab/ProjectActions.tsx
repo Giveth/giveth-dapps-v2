@@ -1,4 +1,5 @@
 import {
+	GLink,
 	IconArrowDownCircle16,
 	IconEdit16,
 	IconEye16,
@@ -15,13 +16,13 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { capitalizeAllWords } from '@/lib/helpers';
-import config from '@/configuration';
+import config, { isRecurringActive } from '@/configuration';
 
 interface IProjectActions {
 	project: IProject;
 	setSelectedProject: Dispatch<SetStateAction<IProject | undefined>>;
 	setShowAddressModal: Dispatch<SetStateAction<boolean>>;
-	setShowClaimModal: Dispatch<SetStateAction<boolean>>;
+	setShowClaimModal?: Dispatch<SetStateAction<boolean>>;
 }
 
 const ProjectActions = (props: IProjectActions) => {
@@ -78,17 +79,29 @@ const ProjectActions = (props: IProjectActions) => {
 			icon: <IconArrowDownCircle16 />,
 			cb: () => {
 				setSelectedProject(project);
-				setShowClaimModal(true);
+				setShowClaimModal && setShowClaimModal(true);
 			},
 		});
 	}
 
+	const recurringDonationOption: IOption = {
+		label: 'Claim Recurring donation',
+		icon: <IconArrowDownCircle16 />,
+		cb: () => {
+			setSelectedProject(project);
+			setShowClaimModal && setShowClaimModal(true);
+		},
+	};
+
+	isRecurringActive && options.push(recurringDonationOption);
+
 	const dropdownStyle = {
 		padding: '4px 16px',
 		borderRadius: '8px',
+		background: isHover && !isRecurringActive ? 'white' : '',
 	};
 
-	return (
+	return isRecurringActive ? (
 		<Actions
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
@@ -106,6 +119,25 @@ const ProjectActions = (props: IProjectActions) => {
 				/>
 			)}
 		</Actions>
+	) : (
+		<ActionsOld
+			onMouseEnter={() => setIsHover(true)}
+			onMouseLeave={() => setIsHover(false)}
+			isOpen={isHover}
+			isCancelled={isCancelled}
+			size='Big'
+		>
+			{isCancelled ? (
+				<CancelledWrapper>CANCELLED</CancelledWrapper>
+			) : (
+				<Dropdown
+					style={dropdownStyle}
+					label='Actions'
+					options={options}
+					stickToRight
+				/>
+			)}
+		</ActionsOld>
 	);
 };
 
@@ -118,6 +150,12 @@ const Actions = styled.div<{ isCancelled: boolean; isOpen: boolean }>`
 	background-color: ${neutralColors.gray[200]};
 	border-radius: 8px;
 	padding: 8px 10px;
+`;
+
+const ActionsOld = styled(GLink)<{ isCancelled: boolean; isOpen: boolean }>`
+	color: ${props =>
+		props.isCancelled ? neutralColors.gray[500] : neutralColors.gray[900]};
+	cursor: ${props => (props.isCancelled ? 'default' : 'pointer')};
 `;
 
 export default ProjectActions;

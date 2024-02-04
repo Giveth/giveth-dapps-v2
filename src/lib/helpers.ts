@@ -11,19 +11,20 @@ import {
 
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { erc20ABI } from 'wagmi';
+import { type Address, erc20ABI } from 'wagmi';
 import { Chain, parseEther, parseUnits } from 'viem';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
+import { getRequest } from '@/helpers/requests';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
 import { gToast, ToastType } from '@/components/toasts';
-import config from '@/configuration';
+import config, { isProduction } from '@/configuration';
 import { AddressZero } from './constants/constants';
-import { WalletType } from '@/hooks/useAuthenticationWallet';
+import { ChainType, NonEVMChain } from '@/types/config';
 
 declare let window: any;
 interface TransactionParams {
-	to: `0x${string}`;
+	to: Address;
 	value: string;
 }
 
@@ -51,29 +52,63 @@ export const formatPrice = (balance?: string | number) => {
 	});
 };
 
+export const truncateToDecimalPlaces = (strNum: string, decimals: number) => {
+	let index = strNum.indexOf('.');
+	if (index === -1 || decimals < 1) {
+		return Number(strNum);
+	}
+	let length = index + 1 + decimals;
+	return Number(strNum.substring(0, length));
+};
+
 export const thousandsSeparator = (x?: string | number): string | undefined => {
 	return x?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
-export const formatTxLink = (networkId?: number, txHash?: string) => {
-	if (!networkId || !txHash || !config.NETWORKS_CONFIG[networkId]) return '';
-	return `${config.NETWORKS_CONFIG[networkId].blockExplorers?.default.url}/tx/${txHash}`;
+export const formatTxLink = (params: {
+	txHash?: string;
+	chainType?: ChainType;
+	networkId?: number;
+}) => {
+	const { txHash, chainType, networkId } = params;
+	if (chainType === ChainType.SOLANA) {
+		return formatSolanaTxLink(txHash);
+	}
+	return formatEvmTxLink(networkId, txHash);
+};
+
+const formatEvmTxLink = (networkId?: number, txHash?: string) => {
+	if (!networkId || !txHash || !config.EVM_NETWORKS_CONFIG[networkId])
+		return '';
+	return `${config.EVM_NETWORKS_CONFIG[networkId].blockExplorers?.default.url}/tx/${txHash}`;
+};
+
+const formatSolanaTxLink = (txHash?: string) => {
+	if (!txHash) return '';
+
+	const baseUrl = `${config.SOLANA_CONFIG.blockExplorers.default.url}/tx/${txHash}`;
+
+	if (isProduction) {
+		return baseUrl;
+	}
+	// Test environment
+	return `${baseUrl}?cluster=devnet`;
 };
 
 export function formatWalletLink(
-	walletType: WalletType | null,
+	walletChainType: ChainType | null,
 	chain?: Chain | WalletAdapterNetwork,
 	address?: string,
 ) {
-	if (!address || !chain || !walletType) return '';
+	if (!address || !chain || !walletChainType) return '';
 
-	switch (walletType) {
-		case WalletType.ETHEREUM:
+	switch (walletChainType) {
+		case ChainType.EVM:
 			const chainId = (chain as Chain)?.id;
-			if (!config.NETWORKS_CONFIG[chainId]) return '';
-			return `${config.NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/address/${address}`;
+			if (!config.EVM_NETWORKS_CONFIG[chainId]) return '';
+			return `${config.EVM_NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/address/${address}`;
 
-		case WalletType.SOLANA:
+		case ChainType.SOLANA:
 			const url = `https://explorer.solana.com/address/${address}`;
 			switch (chain) {
 				case WalletAdapterNetwork.Mainnet:
@@ -182,11 +217,28 @@ export const smallFormatDate = (date: Date, locale?: string) => {
 
 export const isSSRMode = typeof window === 'undefined';
 
-export const suggestNewAddress = (addresses?: IWalletAddress[]) => {
+export const suggestNewAddress = (
+	addresses: IWalletAddress[],
+	chain: Chain | NonEVMChain,
+) => {
 	if (!addresses || addresses.length < 1) return '';
-	const isSame = compareAddressesArray(addresses.map(a => a.address));
+	const EVMAddresses = addresses.filter(
+		address =>
+			address.chainType === ChainType.EVM ||
+			address.chainType === undefined,
+	);
+	// We shouldn't suggest anything for NON EVM address input
+	const isSame = compareAddressesArray(EVMAddresses.map(a => a.address));
 	if (isSame) {
-		return addresses[0].address;
+		// Don't suggest EVM addresses for Non EVM address input
+		if (
+			'chainType' in chain &&
+			chain.chainType !== ChainType.EVM &&
+			chain.chainType !== undefined
+		) {
+			return '';
+		}
+		return EVMAddresses[0].address;
 	} else {
 		return '';
 	}
@@ -214,6 +266,18 @@ export const compareAddressesArray = (
 		}
 	}
 	return new Set(lowerCaseAddresses).size === 1;
+};
+
+export const findAddressByChain = (
+	addresses: IWalletAddress[],
+	chainId: number,
+	chainType?: ChainType,
+) => {
+	return addresses?.find(address =>
+		chainId
+			? address.networkId === chainId
+			: address.chainType === chainType,
+	);
 };
 
 export const isUserRegistered = (user?: IUser) => {
@@ -258,12 +322,12 @@ export const shortenAddress = (
 };
 
 // Sends a transaction, either as an ERC20 token transfer or a regular ETH transfer.
-export async function sendTransaction(
+export async function sendEvmTransaction(
 	params: TransactionParams,
-	contractAddress?: `0x${string}`,
+	contractAddress?: Address,
 ) {
 	try {
-		let hash: `0x${string}`;
+		let hash: Address;
 
 		if (contractAddress && contractAddress !== AddressZero) {
 			hash = await handleErc20Transfer(params, contractAddress);
@@ -288,9 +352,8 @@ export async function sendTransaction(
 // Handles the transfer for ERC20 tokens, returning the transaction hash.
 async function handleErc20Transfer(
 	params: TransactionParams,
-	contractAddress: `0x${string}`,
-): Promise<`0x${string}`> {
-	console.log('contractAddress', contractAddress);
+	contractAddress: Address,
+): Promise<Address> {
 	const contract = getContract({
 		address: contractAddress,
 		abi: erc20ABI,
@@ -302,21 +365,20 @@ async function handleErc20Transfer(
 		abi: erc20ABI,
 		functionName: 'transfer',
 		args: [params.to, value],
+		// @ts-ignore -- needed for safe txs
+		value: 0n,
 	});
-	console.log('Write', write);
-	console.log('ERC20 transfer result', { hash: write.hash });
 	return write.hash;
 }
 
 // Handles the transfer for ETH, returning the transaction hash.
-async function handleEthTransfer(
-	params: TransactionParams,
-): Promise<`0x${string}`> {
+async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 	const value = parseEther(params.value);
 
 	const { hash } = await wagmiSendTransaction({
 		to: params.to,
 		value: value,
+		data: '0x',
 	});
 
 	console.log('ETH transfer result', { hash });
@@ -519,6 +581,25 @@ export const ArrayFrom0ToN = (n: number) => {
 		b = 0;
 	while (b < n) a[b] = b++;
 	return a;
+};
+
+export const checkMultisigSession = async ({ safeAddress, chainId }: any) => {
+	try {
+		let status = 'not found';
+		const sessionCheck = await getRequest(
+			`${config.MICROSERVICES.authentication}/multisigAuthentication`,
+			false,
+			{
+				safeAddress,
+				network: chainId,
+			},
+		);
+		status = sessionCheck?.status;
+
+		return { status };
+	} catch (error) {
+		return { status: 'not found' };
+	}
 };
 
 export const getUserIPInfo = async () => {

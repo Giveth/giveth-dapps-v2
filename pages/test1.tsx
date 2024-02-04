@@ -17,9 +17,12 @@ import { Modal } from '@/components/modals/Modal';
 import { FETCH_ALL_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 
-const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
-	ssr: false,
-});
+const RichTextInput = dynamic(
+	() => import('@/components/rich-text/RichTextInput'),
+	{
+		ssr: false,
+	},
+);
 
 const TestRoute = () => {
 	return (
@@ -41,7 +44,6 @@ const TestIndex = () => {
 	const [description, setDescription] = useState('');
 	const router = useRouter();
 	const { setTest } = useTestData();
-	console.log('Index rerender');
 
 	useEffect(() => {
 		setInterval(() => {
@@ -72,7 +74,6 @@ const TestIndex = () => {
 			query: FETCH_ALL_PROJECTS,
 			fetchPolicy: 'network-only',
 		});
-		console.log('res', res);
 	};
 
 	// console.log('gnosisValues', gnosisValues);
@@ -162,7 +163,7 @@ const TestIndex = () => {
 				<RichTextInput
 					setValue={setDescription}
 					value={description}
-					limit={200}
+					maxLimit={200}
 				/>
 			</TestContainer>
 			{showModal && <TestModal setShowModal={setShowModal} />}

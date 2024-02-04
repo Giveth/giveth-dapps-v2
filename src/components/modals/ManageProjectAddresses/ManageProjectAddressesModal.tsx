@@ -5,8 +5,9 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FC, useState, useEffect, Dispatch, SetStateAction } from 'react';
+import { FC, useState, Dispatch, SetStateAction } from 'react';
 import { useIntl } from 'react-intl';
+import { Chain } from 'wagmi';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '../Modal';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -15,48 +16,35 @@ import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { NetworkWalletAddress } from './NetworkWalletAddress';
 import { AddNewAddress } from './AddNewAddress';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
+import { NonEVMChain } from '@/types/config';
 import type { IModal } from '@/types/common';
 
-const networksConfig = config.NETWORKS_CONFIG;
-const networkIds = Object.keys(networksConfig).map(Number);
+const { CHAINS } = config;
 
-interface IManageProjectAddressesModal extends IModal {
+interface IModalProps extends IModal {
 	project: IProject;
 	setProjects: Dispatch<SetStateAction<IProject[]>>;
 }
 
-export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
-	project,
-	setShowModal,
-	setProjects,
-}) => {
-	const [selectedWallet, setSelectedWallet] = useState<IWalletAddress>();
-	const [addresses, setAddresses] = useState<IWalletAddress[]>([]);
+export const ManageProjectAddressesModal: FC<IModalProps> = props => {
+	const { project, setShowModal, setProjects } = props;
+	const [selectedChain, setSelectedChain] = useState<Chain | NonEVMChain>();
+	const [addresses, setAddresses] = useState<IWalletAddress[]>(
+		project.addresses || [],
+	);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-
-	useEffect(() => {
-		let WalletAddr: { [key: number]: IWalletAddress } = {};
-		networkIds.forEach(networkId => {
-			WalletAddr[networkId] = { networkId };
-		});
-		const { addresses } = project;
-		if (!addresses) return;
-		for (let i = 0; i < addresses.length; i++) {
-			const address = addresses[i];
-			if (address.networkId) {
-				WalletAddr[address.networkId] = address;
-			}
-		}
-		setAddresses(Object.values(WalletAddr));
-	}, [project]);
+	const selectedChainType =
+		selectedChain && 'chainType' in selectedChain
+			? selectedChain.chainType
+			: undefined;
 
 	return (
 		<Modal
 			headerIcon={<IconWalletOutline32 />}
 			headerTitle={formatMessage({
-				id: selectedWallet
+				id: selectedChain
 					? 'label.add_new_address'
 					: 'label.manage_addresses',
 			})}
@@ -64,20 +52,21 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 			isAnimating={isAnimating}
 			headerTitlePosition='left'
 			backButtonCallback={
-				selectedWallet ? () => setSelectedWallet(undefined) : undefined
+				selectedChain ? () => setSelectedChain(undefined) : undefined
 			}
 		>
 			<ModalContainer>
 				<Content>
-					{selectedWallet ? (
+					{selectedChain ? (
 						<SublineBold>
 							{formatMessage(
 								{
 									id: 'label.chain_address',
 								},
 								{
-									chainName: chainNameById(
-										selectedWallet.networkId,
+									chainName: getChainName(
+										selectedChain.id,
+										selectedChainType,
 									),
 								},
 							)}
@@ -93,20 +82,21 @@ export const ManageProjectAddressesModal: FC<IManageProjectAddressesModal> = ({
 						</>
 					)}
 				</Content>
-				{selectedWallet ? (
+				{selectedChain ? (
 					<AddNewAddress
 						project={project}
-						selectedWallet={selectedWallet}
+						selectedChain={selectedChain}
 						setProjects={setProjects}
-						setSelectedWallet={setSelectedWallet}
+						setSelectedChain={setSelectedChain}
 						setAddresses={setAddresses}
 					/>
 				) : (
-					addresses.map((addr, index) => (
+					CHAINS.map(chain => (
 						<NetworkWalletAddress
-							key={index}
-							networkWallet={addr}
-							setSelectedWallet={setSelectedWallet}
+							key={chain.name}
+							chain={chain}
+							addresses={addresses}
+							setSelectedChain={setSelectedChain}
 						/>
 					))
 				)}

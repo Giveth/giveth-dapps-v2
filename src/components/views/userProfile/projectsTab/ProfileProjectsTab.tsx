@@ -17,7 +17,9 @@ import { Flex } from '@/components/styled-components/Flex';
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { ProjectsContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
+import ProjectsTable from './ProjectsTable';
 import ProjectItem from './ProjectItem';
+import { isRecurringActive } from '@/configuration';
 
 const itemPerPage = 10;
 
@@ -114,15 +116,26 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 						/>
 					</NothingWrapper>
 				) : myAccount ? (
-					<Flex flexDirection='column' gap='18px'>
-						{projects.map(project => (
-							<ProjectItem
-								key={project.id}
-								project={project}
+					isRecurringActive ? (
+						<Flex flexDirection='column' gap='18px'>
+							{projects.map(project => (
+								<ProjectItem
+									key={project.id}
+									project={project}
+									setProjects={setProjects}
+								/>
+							))}
+						</Flex>
+					) : (
+						<ProjectsTableWrapper>
+							<ProjectsTable
+								projects={projects}
+								changeOrder={changeOrder}
+								order={order}
 								setProjects={setProjects}
 							/>
-						))}
-					</Flex>
+						</ProjectsTableWrapper>
+					)
 				) : (
 					<Row>
 						{projects.map(project => (
@@ -143,6 +156,10 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 		</UserProfileTab>
 	);
 };
+
+const ProjectsTableWrapper = styled.div`
+	overflow: auto;
+`;
 
 export const ProjectsContainer = styled.div`
 	margin-bottom: 40px;

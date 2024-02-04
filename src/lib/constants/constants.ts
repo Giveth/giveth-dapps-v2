@@ -85,6 +85,7 @@ export const zIndex = {
 	POPOVER: 1070,
 	TOOLTIP: 1080,
 	NAVBAR: 1100,
+	WEB3MODAL: 1500,
 };
 
 export const searchSuggestions = [
@@ -101,9 +102,13 @@ export const regenFarmStreamCardCol = {
 	lg: [12, 8, 4],
 };
 
+export const ONE_MONTH_SECONDS = 2_592_000n;
+
 export const TWO_WEEK = 1_209_600_000;
 
 export const minDonationAmount = 0.000001;
+
+export const donationDecimals = 6;
 
 export const BACKEND_QUERY_LIMIT = 50;
 
@@ -125,4 +130,4 @@ export const WeiPerEther = 1e18;
 
 export const PROFILE_PHOTO_PLACEHOLDER = '/images/placeholders/profile.svg';
 
-export const QF_MATCHING_CAP_PERCENTAGE = 18;
+export const QF_MATCHING_CAP_PERCENTAGE = 4;

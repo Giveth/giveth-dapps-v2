@@ -1,7 +1,12 @@
 import config from '@/configuration';
+import { ChainType } from '@/types/config';
 
-export const chainNameById = (chainId?: number) => {
+export const getChainName = (chainId?: number, chainType?: ChainType) => {
 	const unknown = `Unknown (${chainId})`;
-	if (!chainId) return unknown;
-	return config.NETWORKS_CONFIG[chainId]?.name || unknown;
+	if (!chainId && !chainType) return unknown;
+	return (
+		config.NETWORKS_CONFIG[
+			chainType && chainType !== ChainType.EVM ? chainType : chainId!
+		]?.name || unknown
+	);
 };

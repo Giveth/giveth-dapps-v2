@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { getActiveRound } from '@/helpers/qf';
-import { chainNameById } from '@/lib/network';
+import { getChainName } from '@/lib/network';
 import { useProjectContext } from '@/context/project.context';
 
 const ProjectEligibleQFChains = () => {
@@ -13,7 +13,7 @@ const ProjectEligibleQFChains = () => {
 	const activeRound = getActiveRound(projectData?.qfRounds);
 
 	const eligibleChainNames = activeRound?.eligibleNetworks.map(network =>
-		chainNameById(network),
+		getChainName(network),
 	);
 
 	const chainsString = eligibleChainNames?.join(' & ');

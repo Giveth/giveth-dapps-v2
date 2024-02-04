@@ -6,27 +6,32 @@ import {
 	IconBackward24,
 	IconNetwork32,
 	Lead,
+	P,
 	neutralColors,
 	ButtonText,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
+import { Chain, useSwitchNetwork } from 'wagmi';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { ISwitchNetworkToast } from '@/components/views/donate/common.types';
+import { INetworkIdWithChain } from '@/components/views/donate/common.types';
 import config from '@/configuration';
-import { NetworkConfig } from '@/types/config';
 import NetworkLogo from '../NetworkLogo';
 import { NetworkItem, SelectedNetwork } from './SwitchNetwork';
 import { useAppSelector } from '@/features/hooks';
 import { Flex, FlexCenter } from '../styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
+import { ChainType } from '@/types/config';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 
-interface IDonateWrongNetwork extends IModal, ISwitchNetworkToast {}
+interface IDonateWrongNetwork extends IModal {
+	acceptedChains?: INetworkIdWithChain[];
+}
 
 const networks = [
 	config.MAINNET_CONFIG,
@@ -35,29 +40,48 @@ const networks = [
 	config.CELO_CONFIG,
 	config.OPTIMISM_CONFIG,
 	config.CLASSIC_CONFIG,
+	config.SOLANA_CONFIG,
 ];
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { setShowModal, acceptedChains } = props;
-	const { chain } = useNetwork();
-	const chainId = chain?.id;
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
 	const { switchNetwork } = useSwitchNetwork();
+	const isSafeEnv = useIsSafeEnvironment();
+
+	const {
+		walletChainType,
+		handleSingOutAndSignInWithEVM,
+		handleSignOutAndSignInWithSolana,
+		chain,
+		chainName,
+	} = useGeneralWallet();
 
 	const { slug } = router.query;
-
-	const eligibleNetworks: NetworkConfig[] = networks.filter(
-		network => acceptedChains?.includes(network.id),
+	const eligibleNetworks = networks.filter(
+		network =>
+			acceptedChains?.some(acceptedChain =>
+				acceptedChain.chainType === ChainType.SOLANA
+					? acceptedChain.chainType === network.chainType
+					: acceptedChain.networkId === network.id,
+			),
 	);
 
+	const networkId = (chain as Chain)?.id;
+
 	useEffect(() => {
-		if (chainId && acceptedChains?.includes(chainId)) {
+		if (
+			networkId &&
+			acceptedChains?.some(
+				acceptedChain => acceptedChain.networkId === networkId,
+			)
+		) {
 			closeModal();
 		}
-	}, [chainId, acceptedChains]);
+	}, [networkId, acceptedChains]);
 
 	return (
 		<Modal
@@ -71,44 +95,96 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 			<CustomHr margin='24px' />
 			<ModalContainer>
 				<Lead>
-					{formatMessage({
-						id: 'label.sorry_this_projet_doesnt_support_your_current_net',
-					})}
+					{formatMessage(
+						{
+							id: isSafeEnv
+								? 'label.this_projet_doesnt_receive_donations_on'
+								: 'label.sorry_this_projet_doesnt_support_your_current_net',
+						},
+						{ chainName },
+					)}
 				</Lead>
 				<br />
-				<Lead>
-					{formatMessage({ id: 'label.please_switch_your_network' })}
-				</Lead>
-				<br />
-				<CustomFlex>
-					{eligibleNetworks.map(network => {
-						const _chainId = network.id;
-						return (
-							<NetworkItem
-								onClick={() => {
-									switchNetwork?.(_chainId);
-									closeModal();
-								}}
-								isSelected={_chainId === chainId}
-								key={_chainId}
-								theme={theme}
-							>
-								<NetworkLogo chainId={_chainId} logoSize={32} />
-								<B>{network.name}</B>
-								{_chainId === chainId && (
-									<SelectedNetwork
-										styleType='Small'
+				{isSafeEnv ? (
+					<>
+						<P>
+							{formatMessage(
+								{
+									id: 'label.this_project_only_accepts_donations_on',
+								},
+								{
+									chainName: eligibleNetworks
+										.map(network => network.name)
+										.join(', '),
+								},
+							)}
+						</P>
+						<P>
+							{formatMessage({
+								id: 'label.connect_to_giveth_from_a_multisig',
+							})}
+						</P>
+					</>
+				) : (
+					<>
+						<Lead>
+							{formatMessage({
+								id: 'label.please_switch_your_network',
+							})}
+						</Lead>
+						<br />
+						<CustomFlex>
+							{eligibleNetworks.map(network => {
+								const _chainId = network.id;
+								return (
+									<NetworkItem
+										onClick={async () => {
+											if (
+												network.chainType ===
+													ChainType.SOLANA &&
+												walletChainType ===
+													ChainType.EVM
+											) {
+												await handleSignOutAndSignInWithSolana();
+												closeModal();
+											} else if (
+												network.chainType ===
+													ChainType.EVM &&
+												walletChainType ===
+													ChainType.SOLANA
+											) {
+												await handleSingOutAndSignInWithEVM();
+											} else {
+												switchNetwork?.(_chainId);
+												closeModal();
+											}
+										}}
+										isSelected={_chainId === networkId}
+										key={_chainId}
 										theme={theme}
 									>
-										{formatMessage({
-											id: 'label.selected',
-										})}
-									</SelectedNetwork>
-								)}
-							</NetworkItem>
-						);
-					})}
-				</CustomFlex>
+										<NetworkLogo
+											chainId={_chainId}
+											logoSize={32}
+											chainType={network.chainType}
+										/>
+										<B>{network.name}</B>
+										{_chainId === networkId && (
+											<SelectedNetwork
+												styleType='Small'
+												theme={theme}
+											>
+												{formatMessage({
+													id: 'label.selected',
+												})}
+											</SelectedNetwork>
+										)}
+									</NetworkItem>
+								);
+							})}
+						</CustomFlex>
+					</>
+				)}
 				<br />
 				<CustomHr margin='0' />
 				<FlexCenter direction='column'>

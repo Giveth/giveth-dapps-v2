@@ -11,39 +11,44 @@ import {
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { formatUnits, parseUnits } from 'viem';
-
+import { Chain, formatUnits, parseUnits } from 'viem';
 import { getContract } from 'wagmi/actions';
-import { erc20ABI, useAccount, useBalance, useNetwork } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { type Address, erc20ABI } from 'wagmi';
+import { PublicKey } from '@solana/web3.js';
+import { useConnection } from '@solana/wallet-adapter-react';
+import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InputBox from './InputBox';
 import CheckBox from '@/components/Checkbox';
-import DonateModal from '@/components/modals/DonateModal';
-import { mediaQueries, minDonationAmount } from '@/lib/constants/constants';
+import DonateModal from '@/components/views/donate/DonateModal';
+import {
+	donationDecimals,
+	mediaQueries,
+	minDonationAmount,
+} from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import GeminiModal from './GeminiModal';
-import config from '@/configuration';
+import config, { isRecurringActive } from '@/configuration';
 import TokenPicker from './TokenPicker';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { client } from '@/apollo/apolloClient';
 import { PROJECT_ACCEPTED_TOKENS } from '@/apollo/gql/gqlProjects';
-import { formatBalance, pollEvery, showToastError } from '@/lib/helpers';
+import {
+	pollEvery,
+	showToastError,
+	truncateToDecimalPlaces,
+} from '@/lib/helpers';
 import {
 	IProjectAcceptedToken,
 	IProjectAcceptedTokensGQL,
 } from '@/apollo/types/gqlTypes';
-import {
-	filterTokens,
-	getNetworkIds,
-	prepareTokenList,
-} from '@/components/views/donate/helpers';
+import { prepareTokenList } from '@/components/views/donate/helpers';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import usePurpleList from '@/hooks/usePurpleList';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
 import TotalDonation from '@/components/views/donate/TotalDonation';
@@ -55,6 +60,9 @@ import EstimatedMatchingToast from '@/components/views/donate/EstimatedMatchingT
 import DonateQFEligibleNetworks from './DonateQFEligibleNetworks';
 import { getActiveRound } from '@/helpers/qf';
 import QFModal from '@/components/views/donate/QFModal';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { ChainType } from '@/types/config';
+import { INetworkIdWithChain } from './common.types';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -64,15 +72,21 @@ interface IInputBox {
 }
 
 const CryptoDonation: FC = () => {
-	const { address, isConnected } = useAccount();
-	const { chain } = useNetwork();
+	const {
+		chain,
+		walletChainType,
+		walletAddress: address,
+		isConnected,
+		balance,
+	} = useGeneralWallet();
+	const { connection: solanaConnection } = useConnection();
 	const { formatMessage } = useIntl();
-	const { isEnabled, isSignedIn } = useAppSelector(state => state.user);
-	const notFormattedBalance = useBalance({ address });
-	const balance = notFormattedBalance.data?.formatted;
+	const { isSignedIn } = useAppSelector(state => state.user);
+
 	const isPurpleListed = usePurpleList();
-	const { open: openConnectModal } = useWeb3Modal();
+
 	const { project, hasActiveQFRound } = useDonateData();
+	const dispatch = useAppDispatch();
 
 	const {
 		organization,
@@ -103,8 +117,9 @@ const CryptoDonation: FC = () => {
 	const [showChangeNetworkModal, setShowChangeNetworkModal] = useState(false);
 	const [acceptedTokens, setAcceptedTokens] =
 		useState<IProjectAcceptedToken[]>();
-	const [acceptedChains, setAcceptedChains] = useState<number[]>();
-	const [maxDonationEnabled, setMaxDonationEnabled] = useState(false);
+	const [acceptedChains, setAcceptedChains] = useState<INetworkIdWithChain[]>(
+		[],
+	);
 	const [donationToGiveth, setDonationToGiveth] = useState(
 		noDonationSplit ? 0 : 5,
 	);
@@ -117,23 +132,79 @@ const CryptoDonation: FC = () => {
 	const tokenSymbol = selectedToken?.symbol;
 	const tokenDecimals = selectedToken?.decimals || 18;
 	const projectIsGivBackEligible = !!verified;
-	const totalDonation = ((amountTyped || 0) * (donationToGiveth + 100)) / 100;
 	const activeRound = getActiveRound(project.qfRounds);
-	const networkId = chain?.id;
-	const isOnAcceptedChain = networkId && acceptedChains?.includes(networkId);
+	const networkId = (chain as Chain)?.id;
 
 	const isOnEligibleNetworks =
 		networkId && activeRound?.eligibleNetworks?.includes(networkId);
 
 	useEffect(() => {
-		if (networkId && acceptedTokens) {
-			const networkIds = getNetworkIds(acceptedTokens, addresses);
-			const filteredTokens = filterTokens(
-				acceptedTokens,
-				networkId,
-				networkIds,
+		if (
+			(networkId ||
+				(walletChainType && walletChainType !== ChainType.EVM)) &&
+			acceptedTokens
+		) {
+			const acceptedEvmTokensNetworkIds = new Set<Number>();
+			const acceptedNonEvmTokenChainTypes = new Set<ChainType>();
+
+			acceptedTokens.forEach(t => {
+				if (
+					t.chainType === ChainType.EVM ||
+					t.chainType === undefined
+				) {
+					acceptedEvmTokensNetworkIds.add(t.networkId);
+				} else {
+					acceptedNonEvmTokenChainTypes.add(t.chainType);
+				}
+			});
+
+			const addressesChainTypes = new Set(
+				addresses?.map(({ chainType }) => chainType),
 			);
-			setAcceptedChains(networkIds);
+
+			const filteredTokens = acceptedTokens.filter(token => {
+				switch (walletChainType) {
+					case ChainType.EVM:
+						return (
+							token.networkId === networkId &&
+							addresses?.some(
+								token =>
+									token.networkId === networkId &&
+									token.chainType === walletChainType,
+							)
+						);
+					case ChainType.SOLANA:
+						return (
+							addressesChainTypes.has(ChainType.SOLANA) &&
+							token.chainType === walletChainType &&
+							token.networkId === config.SOLANA_CONFIG.networkId
+						);
+					default:
+						return false;
+				}
+			});
+			const acceptedChainsWithChaintypeAndNetworkId: INetworkIdWithChain[] =
+				[];
+			addresses?.forEach(a => {
+				if (
+					a.chainType === undefined ||
+					a.chainType === ChainType.EVM
+				) {
+					if (acceptedEvmTokensNetworkIds.has(a.networkId!)) {
+						acceptedChainsWithChaintypeAndNetworkId.push({
+							networkId: a.networkId!,
+							chainType: ChainType.EVM,
+						});
+					}
+				} else if (acceptedNonEvmTokenChainTypes.has(a.chainType)) {
+					acceptedChainsWithChaintypeAndNetworkId.push({
+						networkId: a.networkId!,
+						chainType: a.chainType!,
+					});
+				}
+			});
+
+			setAcceptedChains(acceptedChainsWithChaintypeAndNetworkId);
 			if (filteredTokens.length < 1) {
 				setShowChangeNetworkModal(true);
 			}
@@ -143,16 +214,16 @@ const CryptoDonation: FC = () => {
 			setSelectedToken(tokens[0]);
 			setTokenIsGivBackEligible(tokens[0]?.isGivbackEligible);
 		}
-	}, [networkId, acceptedTokens]);
+	}, [networkId, acceptedTokens, walletChainType, addresses]);
 
 	useEffect(() => {
-		setMaxDonationEnabled(false);
-		if (isEnabled) pollToken();
+		if (isConnected || address) pollToken();
 		else {
 			setSelectedToken(undefined);
 		}
 		return () => clearPoll();
-	}, [selectedToken, isEnabled, address, balance]);
+	}, [selectedToken, isConnected, address, balance]);
+
 	useEffect(() => {
 		client
 			.query({
@@ -175,7 +246,7 @@ const CryptoDonation: FC = () => {
 
 	useEffect(() => {
 		setAmountTyped(undefined);
-	}, [selectedToken, isEnabled, address, networkId]);
+	}, [selectedToken, isConnected, address, networkId]);
 
 	const checkGIVTokenAvailability = () => {
 		if (orgLabel !== ORGANIZATION.givingBlock) return true;
@@ -196,13 +267,18 @@ const CryptoDonation: FC = () => {
 
 	const pollToken = useCallback(async () => {
 		clearPoll();
+
 		if (!selectedToken) {
 			return setSelectedTokenBalance(0n);
 		}
 		// Native token balance is provided by the Web3Provider
 		const _selectedTokenSymbol = selectedToken.symbol.toUpperCase();
 		const nativeCurrency =
-			config.NETWORKS_CONFIG[networkId!]?.nativeCurrency;
+			config.NETWORKS_CONFIG[
+				!walletChainType || walletChainType == ChainType.EVM
+					? networkId
+					: walletChainType
+			]?.nativeCurrency;
 
 		if (_selectedTokenSymbol === nativeCurrency?.symbol?.toUpperCase()) {
 			return setSelectedTokenBalance(
@@ -213,23 +289,39 @@ const CryptoDonation: FC = () => {
 			() => ({
 				request: async () => {
 					try {
+						if (walletChainType === ChainType.SOLANA) {
+							const splTokenMintAddress = new PublicKey(
+								selectedToken.address,
+							);
+							const tokenAccounts =
+								await solanaConnection.getParsedTokenAccountsByOwner(
+									new PublicKey(address!),
+									{ mint: splTokenMintAddress },
+								);
+							const accountInfo =
+								tokenAccounts.value[0].account.data;
+							const splBalance =
+								accountInfo.parsed.info.tokenAmount.amount;
+							return setSelectedTokenBalance(BigInt(splBalance));
+						}
+
 						const contract = getContract({
-							address: selectedToken.address! as `0x${string}`,
+							address: selectedToken.address! as Address,
 							abi: erc20ABI,
 						});
 
-						const balance = await contract.read.balanceOf([
-							address!,
+						const _balance = await contract.read.balanceOf([
+							address! as `0x${string}`,
 						]);
-						setSelectedTokenBalance(balance);
-						return balance;
+						setSelectedTokenBalance(_balance);
+						return _balance;
 					} catch (e) {
 						captureException(e, {
 							tags: {
 								section: 'Polltoken pollEvery',
 							},
 						});
-						return 0;
+						return setSelectedTokenBalance(0n);
 					}
 				},
 				onResult: (_balance: bigint) => {
@@ -240,9 +332,9 @@ const CryptoDonation: FC = () => {
 			}),
 			POLL_DELAY_TOKENS,
 		)();
-	}, [address, networkId, tokenSymbol, balance]);
+	}, [address, networkId, tokenSymbol, balance, walletChainType]);
 
-	const handleCustomToken = (i: `0x${string}`) => {
+	const handleCustomToken = (i: Address) => {
 		if (!supportCustomTokens) return;
 		// It's a contract
 		if (i?.length === 42) {
@@ -280,41 +372,51 @@ const CryptoDonation: FC = () => {
 
 	const handleDonate = () => {
 		if (
-			parseUnits(String(totalDonation), tokenDecimals) >
+			parseUnits(String(amountTyped), tokenDecimals) >
 			selectedTokenBalance
 		) {
 			return setShowInsufficientModal(true);
 		}
-		if (!isSignedIn) {
-			signInThenDonate();
-		} else if (hasActiveQFRound && !isOnEligibleNetworks) {
+		if (
+			hasActiveQFRound &&
+			!isOnEligibleNetworks &&
+			selectedToken?.chainType === ChainType.EVM
+		) {
 			setShowQFModal(true);
+		} else if (!isSignedIn) {
+			signInThenDonate();
 		} else {
 			setShowDonateModal(true);
 		}
 	};
 
-	const calcMaxDonation = (givethDonation?: number) => {
-		const s = givethDonation ?? donationToGiveth;
-		const t = (selectedTokenBalance * 100n) / BigInt(100 + s);
-		return Number(formatUnits(t, tokenDecimals));
-	};
-
-	const setMaxDonation = (givethDonation?: number) =>
-		setAmountTyped(calcMaxDonation(givethDonation ?? donationToGiveth));
-
-	const userBalance = formatUnits(selectedTokenBalance, tokenDecimals);
+	const userBalance = truncateToDecimalPlaces(
+		formatUnits(selectedTokenBalance, tokenDecimals),
+		donationDecimals,
+	);
+	const setMaxDonation = () => setAmountTyped(userBalance);
 
 	const donationDisabled =
 		!isActive || !amountTyped || !selectedToken || amountError;
+
+	const donateWithoutMatching = () => {
+		if (isSignedIn) {
+			setShowDonateModal(true);
+		} else {
+			signInThenDonate();
+		}
+	};
+
 	return (
 		<MainContainer>
-			<H4Styled weight={700}>
-				{formatMessage({ id: 'page.donate.title' })}
-			</H4Styled>
+			{!isRecurringActive && (
+				<H4Styled weight={700}>
+					{formatMessage({ id: 'page.donate.title' })}
+				</H4Styled>
+			)}
 			{showQFModal && (
 				<QFModal
-					setShowDonateModal={setShowDonateModal}
+					donateWithoutMatching={donateWithoutMatching}
 					setShowModal={setShowQFModal}
 				/>
 			)}
@@ -343,7 +445,12 @@ const CryptoDonation: FC = () => {
 				/>
 			)}
 			<InputContainer>
-				<SwitchToAcceptedChain acceptedChains={acceptedChains} />
+				{walletChainType && (
+					<SwitchToAcceptedChain
+						acceptedChains={acceptedChains}
+						setShowChangeNetworkModal={setShowChangeNetworkModal}
+					/>
+				)}
 				<SaveGasFees acceptedChains={acceptedChains} />
 				<SearchContainer error={amountError} focused={inputBoxFocused}>
 					<DropdownContainer>
@@ -376,7 +483,6 @@ const CryptoDonation: FC = () => {
 						value={amountTyped}
 						error={amountError}
 						onChange={val => {
-							setMaxDonationEnabled(false);
 							const checkGIV = checkGIVTokenAvailability();
 							if (/^0+(?=\d)/.test(String(val))) return;
 							setAmountError(
@@ -391,18 +497,13 @@ const CryptoDonation: FC = () => {
 					/>
 				</SearchContainer>
 				{selectedToken && (
-					<AvText
-						onClick={() => {
-							setMaxDonationEnabled(true);
-							setMaxDonation();
-						}}
-					>
+					<AvText onClick={setMaxDonation}>
 						{formatMessage({ id: 'label.available' })}:{' '}
-						{formatBalance(userBalance)} {tokenSymbol}
+						{userBalance} {tokenSymbol}
 					</AvText>
 				)}
 			</InputContainer>
-			{hasActiveQFRound && !isOnEligibleNetworks && (
+			{hasActiveQFRound && !isOnEligibleNetworks && walletChainType && (
 				<DonateQFEligibleNetworks />
 			)}
 			{hasActiveQFRound && isOnEligibleNetworks && (
@@ -414,11 +515,11 @@ const CryptoDonation: FC = () => {
 			)}
 			{!noDonationSplit ? (
 				<DonateToGiveth
-					setDonationToGiveth={e => {
-						maxDonationEnabled && setMaxDonation(e);
-						setDonationToGiveth(e);
-					}}
+					setDonationToGiveth={setDonationToGiveth}
 					donationToGiveth={donationToGiveth}
+					title={
+						formatMessage({ id: 'label.donation_to' }) + ' Giveth'
+					}
 				/>
 			) : (
 				<br />
@@ -433,9 +534,9 @@ const CryptoDonation: FC = () => {
 			{!noDonationSplit ? (
 				<TotalDonation
 					donationToGiveth={donationToGiveth}
-					donationToProject={amountTyped}
+					totalDonation={amountTyped}
 					projectTitle={projectTitle}
-					tokenSymbol={selectedToken?.symbol}
+					token={selectedToken}
 					isActive={!donationDisabled}
 				/>
 			) : (
@@ -449,7 +550,7 @@ const CryptoDonation: FC = () => {
 					})}
 				/>
 			)}
-			{isEnabled && (
+			{isConnected && (
 				<MainButton
 					label={formatMessage({ id: 'label.donate' })}
 					disabled={donationDisabled}
@@ -457,12 +558,12 @@ const CryptoDonation: FC = () => {
 					onClick={handleDonate}
 				/>
 			)}
-			{!isEnabled && (
+			{!isConnected && (
 				<MainButton
 					label={formatMessage({
 						id: 'component.button.connect_wallet',
 					})}
-					onClick={() => openConnectModal()}
+					onClick={() => dispatch(setShowWelcomeModal(true))}
 				/>
 			)}
 			<CheckBoxContainer>
@@ -495,6 +596,7 @@ const MainContainer = styled.div`
 	flex-direction: column;
 	height: 60%;
 	justify-content: space-between;
+	text-align: left;
 `;
 
 const InputContainer = styled.div`

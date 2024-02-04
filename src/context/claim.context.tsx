@@ -79,7 +79,6 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 		if (claimData) {
 			const _hasClaimed = await hasClaimedAirDrop(address);
 			// const _hasClaimed = false;
-			console.log(`_hasClaimed`, _hasClaimed);
 			setTotalAmount(BigInt(claimData.amount));
 			setIsLoading(false);
 			if (!_hasClaimed) {
@@ -127,7 +126,12 @@ export const ClaimProvider: FC<Props> = ({ children }) => {
 				<SwitchNetwork
 					setShowModal={setShowModal}
 					desc="You're connected to the wrong network! please switch to Gnosis Chain."
-					customNetworks={[config.GNOSIS_NETWORK_NUMBER]}
+					customNetworks={[
+						{
+							networkId: config.GNOSIS_NETWORK_NUMBER,
+							chainType: config.GNOSIS_CONFIG.chainType,
+						},
+					]}
 				/>
 			)}
 		</ClaimContext.Provider>

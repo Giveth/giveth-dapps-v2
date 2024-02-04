@@ -6,6 +6,7 @@ import {
 	EProjectsSortBy,
 } from '@/apollo/types/gqlEnums';
 import { IAddress } from '@/components/views/verification/manageFunds/ManageFundsIndex';
+import { ChainType } from '@/types/config';
 
 export interface IProjectPower {
 	powerRank: number;
@@ -27,8 +28,13 @@ export interface IEstimatedMatching {
 	projectDonationsSqrtRootSum: number;
 }
 
+export interface IAnchorContractData {
+	address: string;
+	isActive: boolean;
+}
+
 export interface IProject {
-	id?: string;
+	id: string;
 	title?: string;
 	balance?: number;
 	image?: string;
@@ -75,6 +81,7 @@ export interface IProject {
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
 	campaigns?: ICampaign[];
+	anchorContracts: IAnchorContractData[];
 }
 
 export interface IDonationProject extends IProject {
@@ -92,6 +99,7 @@ export enum EProjectsFilter {
 	ACCEPT_FUND_ON_CELO = 'AcceptFundOnCelo',
 	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
 	ACCEPT_FUND_ON_ETC = 'AcceptFundOnETC',
+	ACCEPT_FUND_ON_SOLANA = 'AcceptFundOnSolana',
 	ACTIVE_QF_ROUND = 'ActiveQfRound',
 }
 
@@ -112,6 +120,7 @@ export enum ECampaignFilterField {
 	AcceptFundOnPolygon = 'acceptFundOnPolygon',
 	AcceptFundOnCelo = 'acceptFundOnCelo',
 	AcceptFundOnOptimism = 'acceptFundOnOptimism',
+	AcceptFundOnSolana = 'acceptFundOnSolana',
 }
 
 export interface ICampaign {
@@ -138,9 +147,10 @@ export interface ICampaign {
 }
 
 export interface IWalletAddress {
-	address?: `0x${string}`;
+	address?: string;
 	isRecipient?: boolean;
 	networkId?: number;
+	chainType?: ChainType;
 }
 
 export interface IProjectEdition {
@@ -158,6 +168,7 @@ export interface IProjectEdition {
 		name?: string;
 	};
 	slug: string;
+	anchorContracts?: IAnchorContractData[];
 }
 
 export interface IProjectCreation {
@@ -219,8 +230,9 @@ export interface IDonation {
 	amount: number;
 	currency: string;
 	valueUsd?: number;
-	transactionId: string;
+	transactionId?: string;
 	transactionNetworkId: number;
+	chainType?: ChainType;
 	createdAt: string;
 	donationType?: EDonationType;
 	anonymous?: boolean;

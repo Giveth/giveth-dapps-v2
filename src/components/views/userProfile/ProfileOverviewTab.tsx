@@ -33,6 +33,8 @@ import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { getTotalGIVpower } from '@/helpers/givpower';
 import { useProfileContext } from '@/context/profile.context';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 interface IBtnProps extends IButtonProps {
 	outline?: boolean;
@@ -49,6 +51,8 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const dispatch = useAppDispatch();
+	const isSafeEnv = useIsSafeEnvironment();
+	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 
 	const handleCreateButton = () => {
 		if (isUserRegistered(user)) {
@@ -150,7 +154,22 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 					)}
 				</Col>
 			</Row>
-			{myAccount && (
+			{myAccount && isSafeEnv ? (
+				<Row>
+					<Col lg={6}>
+						<SectionTitle weight={700}>
+							{formatMessage({
+								id: 'label.gitcoin_passport',
+							})}
+						</SectionTitle>
+						<SectionDesc>
+							{formatMessage({
+								id: 'label.unfortunately_passport_is_incompatible',
+							})}
+						</SectionDesc>
+					</Col>
+				</Row>
+			) : myAccount && !isOnSolana ? (
 				<Row>
 					<Col lg={6}>
 						<SectionTitle weight={700}>
@@ -164,10 +183,37 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 							})}
 							<br />
 							<PassportLink href={links.PASSPORT}>
-								{formatMessage({ id: 'label.go_to_passport' })}.
+								{formatMessage({
+									id: 'label.go_to_passport',
+								})}
+								.
 							</PassportLink>
 						</SectionDesc>
 						<PassportCard />
+					</Col>
+				</Row>
+			) : (
+				<Row>
+					<Col lg={6}>
+						<SectionTitle weight={700}>
+							{formatMessage({
+								id: 'label.gitcoin_passport',
+							})}
+						</SectionTitle>
+						<SectionDesc>
+							{formatMessage({
+								id: 'label.to_activate_your_gitcoin_passport',
+							})}
+							<br />
+							<br />
+							<Button
+								label={formatMessage({
+									id: 'label.switch_to_evm',
+								})}
+								buttonType='primary'
+								onClick={handleSingOutAndSignInWithEVM}
+							/>
+						</SectionDesc>
 					</Col>
 				</Row>
 			)}

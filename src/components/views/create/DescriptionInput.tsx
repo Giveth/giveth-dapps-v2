@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import { useIntl } from 'react-intl';
-import {
-	H5,
-	Caption,
-	brandColors,
-	semanticColors,
-} from '@giveth/ui-design-system';
+import { H5, Caption, brandColors } from '@giveth/ui-design-system';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
@@ -14,12 +9,23 @@ import { InputContainer, Label } from './Create.sc';
 import { GoodProjectDescription } from '@/components/modals/GoodProjectDescription';
 import { EInputs } from '@/components/views/create/CreateProject';
 
-const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
-	ssr: false,
-});
+const RichTextInput = dynamic(
+	() => import('@/components/rich-text/RichTextInput'),
+	{
+		ssr: false,
+	},
+);
+
+const DESCRIPTION_MIN_LIMIT = 1200;
 
 const DescriptionInput = () => {
-	const { getValues, setValue } = useFormContext();
+	const {
+		getValues,
+		setValue,
+		formState: { errors },
+		setError,
+		clearErrors,
+	} = useFormContext();
 	const { formatMessage } = useIntl();
 
 	const [showModal, setShowModal] = useState(false);
@@ -32,6 +38,21 @@ const DescriptionInput = () => {
 		setValue(EInputs.description, value);
 	};
 
+	const setHasLimitError = (hasLimitError: boolean) => {
+		if (hasLimitError) {
+			setError(
+				EInputs.description,
+				{
+					type: 'focus',
+					message: `Describe your project with at least ${DESCRIPTION_MIN_LIMIT} characters, tell us more!`,
+				},
+				{ shouldFocus: true },
+			);
+		} else {
+			clearErrors(EInputs.description);
+		}
+	};
+
 	return (
 		<>
 			{showModal && (
@@ -40,7 +61,9 @@ const DescriptionInput = () => {
 				/>
 			)}
 
-			<H5>{formatMessage({ id: 'label.tell_us_about_your_project' })}</H5>
+			<H5 id='project_description'>
+				{formatMessage({ id: 'label.tell_us_about_your_project' })}
+			</H5>
 			<CaptionContainer>
 				{formatMessage({ id: 'label.aim_for_200_500_words' })}{' '}
 				<span onClick={() => setShowModal(true)}>
@@ -49,43 +72,21 @@ const DescriptionInput = () => {
 					})}
 				</span>
 			</CaptionContainer>
-			<InputContainerStyled>
+			<InputContainer>
 				<Label>{formatMessage({ id: 'label.project_story' })}</Label>
 				<RichTextInput
 					style={TextInputStyle}
 					setValue={handleDescription}
 					value={description}
 					noShadow
+					minLimit={DESCRIPTION_MIN_LIMIT}
+					setHasLimitError={setHasLimitError}
+					error={errors[EInputs.description]?.message}
 				/>
-			</InputContainerStyled>
-			{/*<ErrorStyled>{error || null}</ErrorStyled>*/}
+			</InputContainer>
 		</>
 	);
 };
-
-const InputContainerStyled = styled(InputContainer)<{ error?: string }>`
-	.ql-container.ql-snow,
-	.ql-toolbar.ql-snow {
-		border: ${props =>
-			props.error && `2px solid ${semanticColors.punch[500]}`};
-	}
-
-	&:focus-within {
-		.ql-toolbar.ql-snow,
-		.ql-container.ql-snow {
-			border: ${props =>
-				!props.error && `2px solid ${brandColors.giv[600]}`};
-		}
-	}
-`;
-
-const ErrorStyled = styled.div`
-	margin-top: -10px;
-	margin-bottom: 20px;
-	color: ${semanticColors.punch[500]};
-	font-size: 12px;
-	word-break: break-word;
-`;
 
 const CaptionContainer = styled(Caption)`
 	margin: 8.5px 0 0 0;

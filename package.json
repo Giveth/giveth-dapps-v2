@@ -1,6 +1,6 @@
 {
 	"name": "givethdapp",
-	"version": "2.20.7",
+	"version": "2.22",
 	"private": true,
 	"scripts": {
 		"build": "next build",
@@ -18,10 +18,12 @@
 	},
 	"dependencies": {
 		"@apollo/client": "^3.8.3",
-		"@giveth/ui-design-system": "^1.11.18",
+		"@giveth/ui-design-system": "^1.11.20",
 		"@reduxjs/toolkit": "^1.9.5",
+		"@safe-global/api-kit": "^2.0.0",
 		"@segment/snippet": "^4.15.3",
 		"@sentry/nextjs": "^7.69.0",
+		"@solana/spl-token": "^0.3.11",
 		"@solana/wallet-adapter-base": "^0.9.23",
 		"@solana/wallet-adapter-react": "^0.15.35",
 		"@solana/wallet-adapter-react-ui": "^0.9.34",
@@ -29,6 +31,7 @@
 		"@solana/web3.js": "^1.87.6",
 		"@superfluid-finance/sdk-core": "^0.6.12",
 		"@uniswap/v3-sdk": "^3.10.0",
+		"@vercel/speed-insights": "^1.0.2",
 		"@web3auth/sign-in-with-solana": "^3.0.0",
 		"@web3modal/wagmi": "^3.1.0",
 		"apollo-upload-client": "^17.0.0",

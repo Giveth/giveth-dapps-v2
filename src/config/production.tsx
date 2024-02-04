@@ -7,8 +7,11 @@ import {
 	polygon,
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import React from 'react';
 import {
+	ChainType,
 	EnvConfig,
+	NonEVMChain,
 	StakingPlatform,
 	StakingType,
 	StreamType,
@@ -19,15 +22,12 @@ import { IconPolygon } from '@/components/Icons/Polygon';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconCelo } from '@/components/Icons/Celo';
 import { IconClassic } from '@/components/Icons/Classic';
-
-const BASE_ROUTE =
-	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
-const NOTIFICATION_BASE_ROUTE =
-	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
-	'https://notification.giveth.io';
+import IconSolana from '@/components/Icons/Solana';
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
+
+const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
 
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
@@ -36,28 +36,55 @@ const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
 const CLASSIC_NETWORK_NUMBER = 61;
-const SOLANA_NETWORK = WalletAdapterNetwork.Mainnet;
+const SOLANA_NETWORK: NonEVMChain = {
+	id: 0,
+	networkId: 101,
+	chainType: ChainType.SOLANA,
+	adapterNetwork: WalletAdapterNetwork.Mainnet,
+	name: 'Solana',
+	nativeCurrency: { name: 'Solana native token', symbol: 'SOL', decimals: 9 },
+	blockExplorers: {
+		default: {
+			name: 'Solana Explorer',
+			url: 'https://explorer.solana.com',
+		},
+	},
+};
+const EVM_CHAINS = [mainnet, gnosis, polygon, optimism, celo, classic];
+const NON_EVM_CHAINS: NonEVMChain[] = [];
+if (isSolanaEnabled) {
+	NON_EVM_CHAINS.push(SOLANA_NETWORK);
+}
+
+const BASE_ROUTE =
+	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
+const BACKEND_LINK =
+	process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`;
+const FRONTEND_LINK =
+	process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://giveth.io';
+const NOTIFICATION_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_NOTIFICATION_BASE_ROUTE ||
+	'https://notification.giveth.io';
+const AUTH_BASE_ROUTE =
+	process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE || 'https://auth.giveth.io/v1';
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
-	BACKEND_LINK:
-		process.env.NEXT_PUBLIC_BACKEND_LINK || `${BASE_ROUTE}/graphql`,
-	FRONTEND_LINK: process.env.NEXT_PUBLIC_FRONTEND_LINK || 'https://giveth.io',
+	BACKEND_LINK: BACKEND_LINK,
+	FRONTEND_LINK: FRONTEND_LINK,
 	MICROSERVICES: {
-		authentication:
-			process.env.NEXT_PUBLIC_AUTH_BASE_ROUTE ||
-			`${BASE_ROUTE}/siweauthmicroservice/v1`,
+		authentication: AUTH_BASE_ROUTE,
 		notification: `${NOTIFICATION_BASE_ROUTE}/v1/notifications`,
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
-	CHAINS: [mainnet, gnosis, polygon, optimism, celo, classic],
+	EVM_CHAINS,
+	CHAINS: [...EVM_CHAINS, ...NON_EVM_CHAINS],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
-	SOLANA_NETWORK: SOLANA_NETWORK,
 
 	GARDEN_LINK:
 		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
@@ -65,7 +92,7 @@ const config: EnvConfig = {
 	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
 		...mainnet,
-
+		chainType: ChainType.EVM,
 		DAI_TOKEN_ADDRESS: '0x6b175474e89094c44da98b954eedeac495271d0f',
 		PFP_CONTRACT_ADDRESS: '0x78fde77737d5b9ab32fc718c9535c7f1b8ce84db',
 
@@ -237,6 +264,7 @@ const config: EnvConfig = {
 
 	GNOSIS_CONFIG: {
 		...gnosis,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			maxFeePerGas: (2e9).toString(),
 			maxPriorityFeePerGas: (1e9).toString(),
@@ -382,6 +410,7 @@ const config: EnvConfig = {
 
 	POLYGON_CONFIG: {
 		...polygon,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -392,9 +421,11 @@ const config: EnvConfig = {
 
 	OPTIMISM_CONFIG: {
 		...optimism,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
@@ -488,6 +519,7 @@ const config: EnvConfig = {
 
 	CELO_CONFIG: {
 		...celo,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -497,12 +529,18 @@ const config: EnvConfig = {
 	},
 	CLASSIC_CONFIG: {
 		...classic,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
 		subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
 		coingeckoChainName: 'ethereum-classic',
 		chainLogo: (logoSize = 24) => <IconClassic size={logoSize} />,
+	},
+	SOLANA_CONFIG: {
+		...SOLANA_NETWORK,
+		coingeckoChainName: 'solana',
+		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
 	},
 };
 

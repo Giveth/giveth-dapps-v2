@@ -8,7 +8,9 @@ import {
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {
+	ChainType,
 	EnvConfig,
+	NonEVMChain,
 	StakingPlatform,
 	StakingType,
 	StreamType,
@@ -19,6 +21,7 @@ import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconEthereum } from '@/components/Icons/Eth';
 import { IconUnknown } from '@/components/Icons/Unknown';
+import IconSolana from '@/components/Icons/Solana';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -38,13 +41,29 @@ const SEPT_8TH_2022 = 1662595200000;
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0xc916Ce4025Cb479d9BA9D798A80094a449667F5D';
 
+const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
+
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
-const SOLANA_NETWORK = WalletAdapterNetwork.Testnet;
+
+const SOLANA_NETWORK: NonEVMChain = {
+	id: 0,
+	networkId: 103,
+	chainType: ChainType.SOLANA,
+	name: 'Solana Devnet',
+	adapterNetwork: WalletAdapterNetwork.Devnet,
+	nativeCurrency: { name: 'Solana native token', symbol: 'SOL', decimals: 9 },
+	blockExplorers: {
+		default: {
+			name: 'Solana Explorer',
+			url: 'https://explorer.solana.com',
+		},
+	},
+};
 
 const classic = {
 	id: 63,
@@ -68,6 +87,19 @@ const classic = {
 	subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
 };
 
+const EVM_CHAINS = [
+	polygon,
+	goerli,
+	gnosis,
+	optimismGoerli,
+	celoAlfajores,
+	classic,
+];
+const NON_EVM_CHAINS: NonEVMChain[] = [];
+if (isSolanaEnabled) {
+	NON_EVM_CHAINS.push(SOLANA_NETWORK);
+}
+
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
 	BACKEND_LINK: BACKEND_LINK,
@@ -78,14 +110,14 @@ const config: EnvConfig = {
 		notificationSettings: `${NOTIFICATION_BASE_ROUTE}/v1/notification_settings`,
 	},
 
-	CHAINS: [polygon, goerli, gnosis, optimismGoerli, celoAlfajores, classic],
+	EVM_CHAINS,
+	CHAINS: [...EVM_CHAINS, ...NON_EVM_CHAINS],
 	MAINNET_NETWORK_NUMBER: MAINNET_NETWORK_NUMBER,
 	GNOSIS_NETWORK_NUMBER: GNOSIS_NETWORK_NUMBER,
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
-	SOLANA_NETWORK: SOLANA_NETWORK,
 
 	GARDEN_LINK:
 		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
@@ -93,6 +125,7 @@ const config: EnvConfig = {
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
 		...goerli,
+		chainType: ChainType.EVM,
 		DAI_TOKEN_ADDRESS: '0xdc31Ee1784292379Fbb2964b3B9C4124D8F89C60',
 		DAI_BUY_LINK: '',
 		PFP_CONTRACT_ADDRESS: '0x9F8c0e0353234F6f644fc7AF84Ac006f02cecE77',
@@ -151,6 +184,7 @@ const config: EnvConfig = {
 
 	GNOSIS_CONFIG: {
 		...gnosis,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			maxFeePerGas: (2e9).toString(),
 			maxPriorityFeePerGas: (1e9).toString(),
@@ -303,6 +337,7 @@ const config: EnvConfig = {
 
 	POLYGON_CONFIG: {
 		...polygon,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -312,9 +347,11 @@ const config: EnvConfig = {
 
 	OPTIMISM_CONFIG: {
 		...optimismGoerli,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
 			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-staging',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
@@ -369,6 +406,7 @@ const config: EnvConfig = {
 
 	CELO_CONFIG: {
 		...celoAlfajores,
+		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -379,11 +417,18 @@ const config: EnvConfig = {
 	CLASSIC_CONFIG: {
 		...classic,
 		//TODO: should change the icon
+		chainType: ChainType.EVM,
 		chainLogo: (logoSize?: number) => <IconUnknown size={logoSize} />,
 		coingeckoChainName: 'ethereum-classic',
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
+	},
+
+	SOLANA_CONFIG: {
+		...SOLANA_NETWORK,
+		coingeckoChainName: 'solana',
+		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
 	},
 };
 

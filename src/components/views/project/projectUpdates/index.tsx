@@ -27,9 +27,12 @@ import { useProjectContext } from '@/context/project.context';
 import ProjectTimeline from '@/components/views/project/projectUpdates/ProjectTimeline';
 import TimelineSection from '@/components/views/project/projectUpdates/TimelineSection';
 
-const RichTextInput = dynamic(() => import('@/components/RichTextInput'), {
-	ssr: false,
-});
+const RichTextInput = dynamic(
+	() => import('@/components/rich-text/RichTextInput'),
+	{
+		ssr: false,
+	},
+);
 
 const UPDATE_LIMIT = 2000;
 
@@ -238,8 +241,8 @@ const ProjectUpdates = () => {
 								value={newUpdate}
 								style={TextInputStyle}
 								setValue={setNewUpdate}
-								setIsLimitExceeded={setIsLimitExceeded}
-								limit={UPDATE_LIMIT}
+								setHasLimitError={setIsLimitExceeded}
+								maxLimit={UPDATE_LIMIT}
 								placeholder='Clear project description explaining who you are and what you want to do with the funds...'
 							/>
 						</div>

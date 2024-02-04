@@ -1,40 +1,95 @@
 import { B, P, neutralColors } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
+import { useIntl } from 'react-intl';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { RecurringDonationCard } from './RecurringDonationCard';
+import CryptoDonation from './CryptoDonation';
+import config, { isRecurringActive } from '@/configuration';
+import { useDonateData } from '@/context/donate.context';
+import { ChainType } from '@/types/config';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 enum ETabs {
 	ONE_TIME,
 	RECURRING,
 }
 
-const tabs = ['One-Time Donation', 'Recurring Donation'];
-
 export const DonationCard = () => {
-	const [tab, setTab] = useState(ETabs.RECURRING);
+	const [tab, setTab] = useState(ETabs.ONE_TIME);
+	const { project } = useDonateData();
+	const { formatMessage } = useIntl();
+
+	const { addresses } = project;
+	const hasOpAddress =
+		addresses &&
+		addresses.some(
+			address =>
+				address.chainType === ChainType.EVM &&
+				address.networkId === config.OPTIMISM_NETWORK_NUMBER,
+		);
 	return (
 		<DonationCardWrapper>
-			<Title>How do you want to donate?</Title>
+			<Title>
+				{formatMessage({ id: 'label.how_do_you_want_to_donate' })}
+			</Title>
 			<Flex>
-				{tabs.map((_tab, idx) => (
+				<Tab
+					selected={tab === ETabs.ONE_TIME}
+					onClick={() => setTab(ETabs.ONE_TIME)}
+				>
+					{formatMessage({
+						id: 'label.one_time_donation',
+					})}
+				</Tab>
+				{hasOpAddress ? (
 					<Tab
-						key={idx}
-						selected={idx === tab}
-						onClick={() => setTab(idx)}
+						selected={tab === ETabs.RECURRING}
+						onClick={() => setTab(ETabs.RECURRING)}
 					>
-						{_tab}
+						{formatMessage({
+							id: 'label.recurring_donation',
+						})}
 					</Tab>
-				))}
+				) : (
+					<IconWithTooltip
+						icon={
+							<BaseTab>
+								{formatMessage({
+									id: 'label.recurring_donation',
+								})}
+							</BaseTab>
+						}
+						direction='bottom'
+					>
+						<>
+							{formatMessage({
+								id: 'label.this_project_is_not_eligible_for_recurring_donations',
+							})}
+						</>
+					</IconWithTooltip>
+				)}
 				<EmptyTab />
 			</Flex>
-			{tab === ETabs.RECURRING && <RecurringDonationCard />}
+			<TabWrapper>
+				{tab === ETabs.ONE_TIME && <CryptoDonation />}
+				{tab === ETabs.RECURRING &&
+					(isRecurringActive ? (
+						<RecurringDonationCard />
+					) : (
+						<FlexCenter>
+							{formatMessage({
+								id: 'label.this_feature_will_be_available_soon',
+							})}
+						</FlexCenter>
+					))}
+			</TabWrapper>
 		</DonationCardWrapper>
 	);
 };
 
-const DonationCardWrapper = styled(Flex)`
+export const DonationCardWrapper = styled(Flex)`
 	flex-direction: column;
 	gap: 16px;
 	padding: 24px;
@@ -42,6 +97,8 @@ const DonationCardWrapper = styled(Flex)`
 	align-items: flex-start;
 	background: ${neutralColors.gray[100]};
 	box-shadow: ${Shadow.Neutral[400]};
+	align-items: stretch;
+	height: 100%;
 `;
 
 const Title = styled(B)`
@@ -53,25 +110,34 @@ interface ITab {
 	selected?: boolean;
 }
 
-const Tab = styled(P)<ITab>`
+const BaseTab = styled(P)`
 	padding: 8px 12px;
 	border-bottom: 1px solid;
+	font-weight: 400;
+	color: ${neutralColors.gray[700]};
+	border-bottom-color: ${neutralColors.gray[300]};
+	user-select: none;
+`;
+
+const Tab = styled(BaseTab)<ITab>`
 	cursor: pointer;
 	${props =>
-		props.selected
-			? css`
-					font-weight: 500;
-					color: ${neutralColors.gray[900]};
-					border-bottom-color: ${neutralColors.gray[900]};
-				`
-			: css`
-					font-weight: 400;
-					color: ${neutralColors.gray[700]};
-					border-bottom-color: ${neutralColors.gray[300]};
-				`}
+		props.selected &&
+		css`
+			font-weight: 500;
+			color: ${neutralColors.gray[900]};
+			border-bottom-color: ${neutralColors.gray[900]};
+		`}
 `;
 
 const EmptyTab = styled.div`
 	flex: 1;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
+`;
+
+const TabWrapper = styled(Flex)`
+	position: relative;
+	flex-direction: column;
+	gap: 16px;
+	align-items: flex-start;
 `;

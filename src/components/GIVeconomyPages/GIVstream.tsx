@@ -129,9 +129,23 @@ export const TabGIVstreamTop = () => {
 								}}
 								network={chainId}
 								targetNetworks={[
-									config.MAINNET_NETWORK_NUMBER,
-									config.GNOSIS_NETWORK_NUMBER,
-									config.OPTIMISM_NETWORK_NUMBER,
+									{
+										networkId:
+											config.MAINNET_NETWORK_NUMBER,
+										chainType:
+											config.MAINNET_CONFIG.chainType,
+									},
+									{
+										networkId: config.GNOSIS_NETWORK_NUMBER,
+										chainType:
+											config.GNOSIS_CONFIG.chainType,
+									},
+									{
+										networkId:
+											config.OPTIMISM_NETWORK_NUMBER,
+										chainType:
+											config.OPTIMISM_CONFIG.chainType,
+									},
 								]}
 								title='Your GIVstream Rewards'
 							/>
@@ -458,7 +472,7 @@ export const GIVstreamHistory: FC = () => {
 											<TxHash
 												as='a'
 												size='Big'
-												href={`${config.NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/tx/${tokenAllocation.txHash}`}
+												href={`${config.EVM_NETWORKS_CONFIG[chainId]?.blockExplorers?.default.url}/tx/${tokenAllocation.txHash}`}
 												target='_blank'
 											>
 												{shortenAddress(

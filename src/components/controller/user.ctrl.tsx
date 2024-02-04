@@ -9,30 +9,32 @@ import {
 import StorageLabel from '@/lib/localStorage';
 import { fetchUserByAddress } from '@/features/user/user.thunks';
 import { getTokens } from '@/helpers/user';
-import {
-	WalletType,
-	useAuthenticationWallet,
-} from '@/hooks/useAuthenticationWallet';
+import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import { ChainType } from '@/types/config';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 const UserController = () => {
 	const {
 		walletAddress: address,
 		isConnected,
 		isConnecting,
-		walletType,
-	} = useAuthenticationWallet();
+		walletChainType,
+	} = useGeneralWallet();
 	const dispatch = useAppDispatch();
+	const isSafeEnv = useIsSafeEnvironment();
 	const { connect, connectors } = useConnect();
 	const isMounted = useRef(false);
+
 	const isFirstRender = useRef(true);
 	const isConnectingRef = useRef(isConnecting);
 	const isConnectedRef = useRef(isConnected);
 
 	useEffect(() => {
+		if (isSafeEnv === null || !!isSafeEnv) return; // auto connect handled somewhere else
 		// TODO: implement auto connect for solana
 		if (
 			isConnected ||
-			(walletType !== null && walletType !== WalletType.ETHEREUM)
+			(walletChainType !== null && walletChainType !== ChainType.EVM)
 		)
 			return;
 
@@ -56,6 +58,7 @@ const UserController = () => {
 	}, []);
 
 	useEffect(() => {
+		if (isSafeEnv === null) return; // not ready
 		isConnectingRef.current = isConnecting;
 		isConnectedRef.current = isConnected;
 		if (!isConnecting && isFirstRender.current) {
@@ -69,6 +72,7 @@ const UserController = () => {
 	}, [isConnecting]);
 
 	useEffect(() => {
+		if (isSafeEnv === null) return; // not ready
 		if (isMounted.current) {
 			if (!address) {
 				// Case when wallet is locked
