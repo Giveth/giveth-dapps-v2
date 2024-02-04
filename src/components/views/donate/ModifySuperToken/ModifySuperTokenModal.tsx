@@ -8,14 +8,15 @@ import { IModal } from '@/types/common';
 import { Flex } from '@/components/styled-components/Flex';
 import { DepositSuperToken } from './DepositSuperToken';
 import { WithDrawSuperToken } from './WithDrawSuperToken';
-import { ISuperToken, IToken } from '@/types/superFluid';
-import { type ITokenStreams } from '@/context/donate.context';
+import { ISuperToken, ISuperfluidStream, IToken } from '@/types/superFluid';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { EModifySuperTokenSteps } from './common';
+import config from '@/configuration';
 
 interface IModifySuperTokenModalProps extends IModal {
 	selectedToken: IToken;
-	tokenStreams: ITokenStreams;
+	tokenStreams: ISuperfluidStream[];
+	refreshBalance: () => void;
 }
 
 const headerTitleGenerator = (step: EModifySuperTokenSteps) => {
@@ -25,7 +26,7 @@ const headerTitleGenerator = (step: EModifySuperTokenSteps) => {
 		case EModifySuperTokenSteps.APPROVE:
 		case EModifySuperTokenSteps.APPROVING:
 		case EModifySuperTokenSteps.DEPOSIT:
-			return 'label.confirm_your_donation';
+			return 'label.confirm_your_deposit';
 		case EModifySuperTokenSteps.DEPOSITING:
 			return 'label.depositing';
 		case EModifySuperTokenSteps.DEPOSIT_CONFIRMED:
@@ -94,7 +95,10 @@ const ModifySuperTokenInnerModal: FC<
 		() =>
 			props.selectedToken.isSuperToken
 				? [
-						props.selectedToken.underlyingToken,
+						props.selectedToken.underlyingToken ||
+							config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
+								token => token.id === props.selectedToken.id,
+							)?.underlyingToken,
 						props.selectedToken as ISuperToken,
 					]
 				: [
@@ -103,6 +107,7 @@ const ModifySuperTokenInnerModal: FC<
 					],
 		[props.selectedToken],
 	);
+
 	return (
 		<Wrapper>
 			{props.step === EModifySuperTokenSteps.MODIFY && (

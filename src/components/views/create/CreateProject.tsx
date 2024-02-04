@@ -40,7 +40,7 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView, slugToSuccessView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
-import config from '@/configuration';
+import config, { isRecurringActive } from '@/configuration';
 import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { setShowFooter } from '@/features/general/general.slice';
@@ -52,7 +52,6 @@ import { ChainType, NonEVMChain } from '@/types/config';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
 import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
-import { isRecurringActive } from '../donate/DonationCard';
 
 const ALL_CHAINS = config.CHAINS;
 

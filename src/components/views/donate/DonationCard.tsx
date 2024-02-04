@@ -6,37 +6,70 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { RecurringDonationCard } from './RecurringDonationCard';
 import CryptoDonation from './CryptoDonation';
-
-export const isRecurringActive =
-	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true';
+import config, { isRecurringActive } from '@/configuration';
+import { useDonateData } from '@/context/donate.context';
+import { ChainType } from '@/types/config';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 enum ETabs {
 	ONE_TIME,
 	RECURRING,
 }
 
-const tabs = ['label.one_time_donation', 'label.recurring_donation'];
-
 export const DonationCard = () => {
 	const [tab, setTab] = useState(ETabs.ONE_TIME);
+	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
+
+	const { addresses } = project;
+	const hasOpAddress =
+		addresses &&
+		addresses.some(
+			address =>
+				address.chainType === ChainType.EVM &&
+				address.networkId === config.OPTIMISM_NETWORK_NUMBER,
+		);
 	return (
 		<DonationCardWrapper>
 			<Title>
 				{formatMessage({ id: 'label.how_do_you_want_to_donate' })}
 			</Title>
 			<Flex>
-				{tabs.map((_tab, idx) => (
+				<Tab
+					selected={tab === ETabs.ONE_TIME}
+					onClick={() => setTab(ETabs.ONE_TIME)}
+				>
+					{formatMessage({
+						id: 'label.one_time_donation',
+					})}
+				</Tab>
+				{hasOpAddress ? (
 					<Tab
-						key={idx}
-						selected={idx === tab}
-						onClick={() => setTab(idx)}
+						selected={tab === ETabs.RECURRING}
+						onClick={() => setTab(ETabs.RECURRING)}
 					>
 						{formatMessage({
-							id: _tab,
+							id: 'label.recurring_donation',
 						})}
 					</Tab>
-				))}
+				) : (
+					<IconWithTooltip
+						icon={
+							<BaseTab>
+								{formatMessage({
+									id: 'label.recurring_donation',
+								})}
+							</BaseTab>
+						}
+						direction='bottom'
+					>
+						<>
+							{formatMessage({
+								id: 'label.this_project_is_not_eligible_for_recurring_donations',
+							})}
+						</>
+					</IconWithTooltip>
+				)}
 				<EmptyTab />
 			</Flex>
 			<TabWrapper>
@@ -77,22 +110,24 @@ interface ITab {
 	selected?: boolean;
 }
 
-const Tab = styled(P)<ITab>`
+const BaseTab = styled(P)`
 	padding: 8px 12px;
 	border-bottom: 1px solid;
+	font-weight: 400;
+	color: ${neutralColors.gray[700]};
+	border-bottom-color: ${neutralColors.gray[300]};
+	user-select: none;
+`;
+
+const Tab = styled(BaseTab)<ITab>`
 	cursor: pointer;
 	${props =>
-		props.selected
-			? css`
-					font-weight: 500;
-					color: ${neutralColors.gray[900]};
-					border-bottom-color: ${neutralColors.gray[900]};
-				`
-			: css`
-					font-weight: 400;
-					color: ${neutralColors.gray[700]};
-					border-bottom-color: ${neutralColors.gray[300]};
-				`}
+		props.selected &&
+		css`
+			font-weight: 500;
+			color: ${neutralColors.gray[900]};
+			border-bottom-color: ${neutralColors.gray[900]};
+		`}
 `;
 
 const EmptyTab = styled.div`

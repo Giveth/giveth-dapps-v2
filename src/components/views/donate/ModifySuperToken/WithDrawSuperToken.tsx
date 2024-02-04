@@ -7,7 +7,6 @@ import { ModifyInfoToast } from './ModifyInfoToast';
 import { ModifySection } from './ModifySection';
 import { StreamInfo } from './StreamInfo';
 import { IModifySuperTokenInnerModalProps } from './ModifySuperTokenModal';
-import { ITokenStreams } from '@/context/donate.context';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { actionButtonLabel, EModifySuperTokenSteps } from './common';
 import { ModifyWrapper, Wrapper } from './common.sc';
@@ -21,7 +20,6 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 
 interface IWithDrawSuperTokenProps extends IModifySuperTokenInnerModalProps {
-	tokenStreams: ITokenStreams;
 	token?: IToken;
 	superToken?: ISuperToken;
 }
@@ -47,10 +45,8 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 		token: superToken?.id,
 		address: address,
 	});
-
-	const tokenStream = tokenStreams[superToken?.id || ''];
 	const totalStreamPerSec =
-		tokenStream?.reduce(
+		tokenStreams?.reduce(
 			(acc, stream) => acc + BigInt(stream.currentFlowRate),
 			0n,
 		) || 0n;
