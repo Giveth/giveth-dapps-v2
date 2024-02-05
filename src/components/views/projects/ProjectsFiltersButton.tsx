@@ -9,7 +9,7 @@ import useDelay from '@/hooks/useDelay';
 
 const ProjectsFiltersButton = () => {
 	const { formatMessage } = useIntl();
-	const { variables, isQF } = useProjectsContext();
+	const { variables } = useProjectsContext();
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
 	const filtersCount = variables?.filters?.length ?? 0;
 	const campaignCount = variables?.campaignSlug ? 1 : 0;
