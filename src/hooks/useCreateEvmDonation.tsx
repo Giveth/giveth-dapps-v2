@@ -186,7 +186,7 @@ export const useCreateEvmDonation = () => {
 			//calculate tx before sending
 			const value = parseUnits(amount.toString(), token.decimals);
 			console.log('value', value);
-			calculateERC20TransferTxHash(
+			const { txHash, nonce } = await calculateERC20TransferTxHash(
 				token.address,
 				address,
 				value,

@@ -1,7 +1,14 @@
-import { Address, encodeFunctionData } from 'viem';
+import {
+	Address,
+	TransactionSerializable,
+	encodeFunctionData,
+	publicActions,
+	serializeTransaction,
+	keccak256,
+	parseGwei,
+} from 'viem';
 import { getWalletClient } from '@wagmi/core';
 import { erc20ABI } from 'wagmi';
-import { utils } from 'ethers/lib/ethers';
 import config from '@/configuration';
 import { IProject } from '@/apollo/types/types';
 import {
@@ -47,10 +54,23 @@ export async function calculateERC20TransferTxHash(
 	toAddress: Address,
 	amount: bigint,
 	chainId: number,
-) {
-	const walletClient = await getWalletClient({ chainId });
+): Promise<{ txHash: string; nonce: number } | undefined> {
+	const walletClient = (await getWalletClient({ chainId }))?.extend(
+		publicActions,
+	);
+
 	if (!walletClient) return;
 	console.log('filter| walletClient', walletClient);
+
+	const nonce = await walletClient.getTransactionCount({
+		address: walletClient.account.address,
+	});
+
+	const gasPrice = await walletClient.getGasPrice().catch(e => {
+		console.log('error on getGasPrice', e);
+		return parseGwei('1');
+	});
+	console.log('filter| gasPrice', gasPrice);
 
 	// Encode the transaction data
 	const data = encodeFunctionData({
@@ -61,20 +81,54 @@ export async function calculateERC20TransferTxHash(
 	console.log('filter| data', data);
 
 	// Create the transaction object
-	const tx = {
+	const tx: TransactionSerializable = {
 		to: tokenAddress,
 		value: 0n,
-		data: data,
+		data,
+		chainId,
+		maxFeePerGas: gasPrice,
+		maxPriorityFeePerGas: gasPrice / 10n,
+		nonce,
 	};
 	console.log('filter| tx', tx);
 
-	// Sign the transaction
-	const signedTx = await walletClient.signTransaction(tx);
-	console.log('filter| signedTx', signedTx);
+	const gasLimit = ((await walletClient.estimateGas(tx)) * 10n) / 10n;
+	console.log('filter| estimatedGas', gasLimit);
 
+	tx.gas = gasLimit;
+	// tx.type = 'eip1559';
+
+	const s = serializeTransaction(tx);
+
+	// Sign the transaction
+	// const signedTx = await walletClient.signTransaction(tx);
+
+	// const txInfo: UnsignedTransaction = {
+	// 	nonce, // Replace with the nonce of the sender's address
+	// 	// gasPrice: ethers.utils.parseUnits(gasPrice.toString(), 'wei'),
+	// 	// type: 2,
+	// 	maxFeePerGas: gasPrice,
+	// 	maxPriorityFeePerGas: gasPrice / 10n,
+	// 	gasLimit: ethers.utils.parseUnits(gasLimit.toString(), 'wei'), // Replace with the desired gas limit
+	// 	to: tokenAddress, // Dummy recipient address
+	// 	value: ethers.utils.parseUnits('0'), // Replace with the desired value in Ether
+	// 	data, // Empty data field
+	// };
+
+	// console.log('filter| txInfo', txInfo);
+
+	// try {
+	// 	const unsignedTransaction = ethers.utils.serializeTransaction(txInfo);
+	// 	const _txHash = ethers.utils.keccak256(unsignedTransaction);
+	// 	console.log('filter| _txHash', _txHash);
+	// } catch (e) {
+	// 	console.log('filter| e', JSON.stringify(e, null, 2));
+	// }
+
+	const txHash = keccak256(s);
 	// Calculate the transaction hash
-	const txHash = utils.keccak256(signedTx);
+	// const txHash = utils.keccak256(signedTx);
 	console.log('filter| txHash', txHash);
 
-	return txHash;
+	return { txHash, nonce };
 }
