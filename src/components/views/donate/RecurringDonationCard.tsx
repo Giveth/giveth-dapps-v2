@@ -399,10 +399,7 @@ export const RecurringDonationCard = () => {
 				isUpdating ? (
 					<ActionButton
 						label={formatMessage({ id: 'label.confirm' })}
-						onClick={() => {
-							setDonationToGiveth(0);
-							setShowRecurringDonationModal(true);
-						}}
+						onClick={handleDonate}
 						disabled={
 							selectedToken === undefined ||
 							tokenBalance === undefined ||
