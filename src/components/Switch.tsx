@@ -7,6 +7,7 @@ interface IToggleSwitch {
 	label?: string;
 	disabled?: boolean;
 	setStateChange: Dispatch<SetStateAction<boolean>>;
+	className?: string;
 }
 
 const ToggleSwitch = ({
@@ -14,12 +15,13 @@ const ToggleSwitch = ({
 	label,
 	disabled = false,
 	setStateChange,
+	className,
 }: IToggleSwitch) => {
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
 		setStateChange(e.target.checked);
 
 	return (
-		<Label>
+		<Label className={className}>
 			<Input
 				checked={checked}
 				disabled={disabled}
@@ -27,7 +29,7 @@ const ToggleSwitch = ({
 				onChange={handleChange}
 			/>
 			{label && <GLink>{label}</GLink>}
-			<Switch checked={checked} disabled={disabled} />
+			<Switch checked={checked} disabled={disabled} id='switch' />
 		</Label>
 	);
 };
