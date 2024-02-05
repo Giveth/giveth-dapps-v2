@@ -5,20 +5,26 @@ import { FC } from 'react';
 interface IToggleButton {
 	isOn: boolean;
 	toggleOnOff: (isOn: boolean) => void;
-	caption: string;
+	label: string;
+	disabled?: boolean;
 }
 
-const ToggleSwitch: FC<IToggleButton> = ({ isOn, toggleOnOff, caption }) => {
+const ToggleSwitch: FC<IToggleButton> = ({
+	isOn,
+	toggleOnOff,
+	label,
+	disabled,
+}) => {
 	const handleClick = () => {
 		toggleOnOff(!isOn);
 	};
 	return (
-		<Container onClick={handleClick}>
+		<Container onClick={handleClick} disabled={disabled}>
 			<InputStyled checked={isOn} type='checkbox' />
 			<Switch isOn={isOn}>
 				<Bullet isOn={isOn} />
 			</Switch>
-			<Caption>{caption}</Caption>
+			<Caption>{label}</Caption>
 		</Container>
 	);
 };
@@ -59,11 +65,12 @@ const Caption = styled(P)`
 	color: ${neutralColors.gray[800]};
 `;
 
-const Container = styled.div`
+const Container = styled.div<{ disabled?: boolean }>`
 	display: flex;
 	gap: 25px;
 	align-items: center;
 	cursor: pointer;
+	opacity: ${props => (props.disabled ? 0.3 : 1)};
 `;
 
 export default ToggleSwitch;
