@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
 import ToggleSwitch from '@/components/ToggleSwitch';
+import { RecurringDonationFiltersButton } from './RecurringDonationFiltersButton';
 
 export const ActiveProjectsSection = () => {
 	const [showArchive, setShowArchive] = useState(false);
@@ -16,6 +17,7 @@ export const ActiveProjectsSection = () => {
 						label='Switch to Archive Donations'
 						toggleOnOff={() => setShowArchive(archive => !archive)}
 					/>
+					<RecurringDonationFiltersButton />
 				</Flex>
 			</Flex>
 		</Wrapper>
