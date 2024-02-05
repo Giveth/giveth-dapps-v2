@@ -12,7 +12,7 @@ import {
 } from '../ConfirmSubmit';
 import { waitForTransaction } from '@/lib/transaction';
 import { StakeState } from '@/lib/staking';
-import ToggleSwitch from '../../styled-components/Switch';
+import ToggleSwitch from '../../Switch';
 import { IModal } from '@/types/common';
 import {
 	CancelButton,
