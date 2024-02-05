@@ -3,6 +3,7 @@ import { captureException } from '@sentry/nextjs';
 import { fetchEnsAddress, fetchTransaction } from '@wagmi/core';
 import { type Address, useNetwork, useWaitForTransaction } from 'wagmi';
 
+import { parseUnits } from 'viem';
 import { sendEvmTransaction } from '@/lib/helpers';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
@@ -13,6 +14,7 @@ import { getTxFromSafeTxId } from '@/lib/safe';
 import { retryFetchTransaction, waitForTransaction } from '@/lib/transaction';
 import { useIsSafeEnvironment } from './useSafeAutoConnect';
 import { postRequest } from '@/helpers/requests';
+import { calculateERC20TransferTxHash } from '@/helpers/donate';
 
 export const useCreateEvmDonation = () => {
 	const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
@@ -180,6 +182,16 @@ export const useCreateEvmDonation = () => {
 		};
 
 		try {
+			if (!chainId) return;
+			//calculate tx before sending
+			const value = parseUnits(amount.toString(), token.decimals);
+			console.log('value', value);
+			calculateERC20TransferTxHash(
+				token.address,
+				address,
+				value,
+				chainId,
+			);
 			// setDonating(true);
 			const hash = await sendEvmTransaction(
 				transactionObj,
