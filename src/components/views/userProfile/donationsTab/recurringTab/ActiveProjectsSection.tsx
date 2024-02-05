@@ -10,7 +10,7 @@ export const ActiveProjectsSection = () => {
 		<Wrapper>
 			<Flex justifyContent='space-between'>
 				<H5 weight={900}>Active projects</H5>
-				<Flex>
+				<Flex gap='24px'>
 					<StyledToggleSwitch
 						isOn={showArchive}
 						label='Switch to Archive Donations'
