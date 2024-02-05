@@ -21,24 +21,11 @@ import { slugToSuccessView, slugToProjectView } from '@/lib/routeCreators';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY } from '@/apollo/gql/gqlSuperfluid';
 import { client } from '@/apollo/apolloClient';
+import { extractContractAddressFromString } from '../../donate/AlloProtocolFirstDonationModal';
 
 interface IAlloProtocolModal extends IModal {
 	project?: IProjectEdition; //If undefined, it means we are in create mode
 	addedProjectState: IProject;
-}
-
-function extractContractAddressFromString(text: string) {
-	// The hexadecimal string starts at the 282th character (0-indexed)
-	// We use a regex to match any characters up to that point, then capture the next 40 characters
-	const regex = /.{282}([0-9a-fA-F]{40})/;
-	const match = text.match(regex);
-
-	if (match && match[1]) {
-		// Prepending '0x' to the matched string
-		return '0x' + match[1];
-	} else {
-		return 'No matching pattern found';
-	}
 }
 
 const AlloProtocolModal: FC<IAlloProtocolModal> = ({

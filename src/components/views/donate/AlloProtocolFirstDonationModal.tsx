@@ -23,7 +23,7 @@ interface IAlloProtocolModal extends IModal {
 	onModalCompletion: () => void;
 }
 
-function extractContractAddressFromString(text: string) {
+export function extractContractAddressFromString(text: string) {
 	// The hexadecimal string starts at the 282th character (0-indexed)
 	// We use a regex to match any characters up to that point, then capture the next 40 characters
 	const regex = /.{282}([0-9a-fA-F]{40})/;
