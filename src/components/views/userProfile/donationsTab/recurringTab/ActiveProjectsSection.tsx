@@ -11,7 +11,7 @@ export const ActiveProjectsSection = () => {
 			<Flex justifyContent='space-between'>
 				<H5 weight={900}>Active projects</H5>
 				<Flex>
-					<ToggleSwitch
+					<StyledToggleSwitch
 						isOn={showArchive}
 						label='Switch to Archive Donations'
 						toggleOnOff={() => setShowArchive(archive => !archive)}
@@ -30,9 +30,6 @@ const Wrapper = styled(Flex)`
 	border-radius: 12px;
 `;
 
-// const ToggleSwitch = styled(Switch)`
-// 	/* #switch {
-// 		background: ${props =>
-// 		props.checked ? brandColors.pinky[500] : brandColors.pinky[200]};
-// 	} */
-// `;
+const StyledToggleSwitch = styled(ToggleSwitch)`
+	flex-direction: row-reverse;
+`;
