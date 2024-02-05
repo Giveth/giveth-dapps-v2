@@ -909,6 +909,7 @@
 	"label.three_pillars_of_governance": "Los Tres Pilares de la Gobernanza",
 	"label.time_remaining": "Tiempo restante",
 	"label.to": "A",
+	"label.tokens": "Tokens",
 	"label.token_list": "Lista de tokens",
 	"label.token_stream_rewards": "Recompensas del {rewardTokenSymbol} stream",
 	"label.topranked_projects_will_eventually_get_funding": "Proyectos altamente clasificados eventualmente obtendrán financiamiento de la Giveth Matching Pool.",
