@@ -2,24 +2,22 @@ import { MouseEvent, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { IconOptions16, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FilterMenu, PinkyColoredNumber } from '@/components/menu/FilterMenu';
-import { useProjectsContext } from '@/context/projects.context';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import useDelay from '@/hooks/useDelay';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Relative } from '@/components/styled-components/Position';
+import { FilterMenu } from './FilterMenu';
+import { PinkyColoredNumber } from '@/components/styled-components/PinkyColoredNumber';
 
 export const RecurringDonationFiltersButton = () => {
 	const { formatMessage } = useIntl();
-	const { variables } = useProjectsContext();
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
-	const filtersCount = variables?.filters?.length ?? 0;
-	const campaignCount = variables?.campaignSlug ? 1 : 0;
-	const count = filtersCount + campaignCount;
 
 	const delayedIsFilterOpen = useDelay(isFilterOpen, 280);
 
 	const filterMenuRef = useRef<HTMLDivElement>(null);
+
+	const count = 0;
 
 	useOnClickOutside(
 		() => setIsFilterOpen(false),
