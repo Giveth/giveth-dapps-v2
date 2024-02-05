@@ -430,6 +430,7 @@
 	"label.go_to_projects": "Go to projects",
 	"label.go_to_projets_page": "Go to Projects page",
 	"label.great_projects_make_the_giveconomy_thrive": "Great projects make the GIVeconomy thrive! As a project owner, when you get your project verified, your donors become eligible to receive GIVbacks.",
+	"label.guess_what_you_are_awsome": "Guess what? You’re awesome!",
 	"label.harvest": "Harvest",
 	"label.harvest_pending": "Harvest pending",
 	"label.harvest_rewards": "Harvest Rewards",
@@ -856,6 +857,7 @@
 	"label.the": "the",
 	"label.the.two": "The",
 	"label.there_are_no_projects_matching_your_search": "There are no projects matching your search",
+	"label.there_will_be_one_extra_transaction_you_need_to_sign_to": "There will be one extra transaction you need to sign to enable recurring donations for this project on",
 	"label.these_are_just_simulations": "These are just simulations.",
 	"label.these_calculators_demonstrate_how_you_can_use_giv": "These calculators demonstrate how you can use GIV to participate in the GIVeconomy!",
 	"label.the_economy_of_giving": "The Economy of Giving",
@@ -895,6 +897,7 @@
 	"label.this_project_doesnt_have_any_givpower_behind_it": "This project doesn't have any GIVpower behind it! Give it a boost",
 	"label.this_project_has_global_impact": "This project has global impact",
 	"label.this_project_is_not_active": "This project is not active.",
+	"label.this_project_is_not_eligible_for_recurring_donations": "This project is not eligible for recurring donations.",
 	"label.this_project_only_accepts_donations_on": "This project only accepts donations on {chainName}.",
 	"label.this_project_only_accept_on": "This project only accept donations on",
 	"label.this_projet_doesnt_receive_donations_on": "This project does not accept donations on {chainName}",
@@ -1066,6 +1069,7 @@
 	"label.you_are_donating": "You are donating",
 	"label.you_are_staking": "You are staking",
 	"label.you_are_supporting_other_projects_with_this_stream": "You are supporting {count} other project with this stream",
+	"label.you_are_the_first_donor_to_make_a_recurring_donation_to_this_project": "You are the first donor to make a recurring donation to this project.",
 	"label.you_boosted_this_project_with_percentage": "Nice, You boosted this project with {percentage}% of your GIVpower.",
 	"label.you_cant_create_a_project_unless": "You can’t create a project unless you complete your profile.",
 	"label.you_cant_remove_your_givpower_from_this_project": "You can't remove your GIVpower from this project because it is the only boost you have. Please boost another project with GIVpower before continuing.",
@@ -1465,6 +1469,5 @@
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"tooltip.donation.matching_polygon": "This estimate represents the matching funds this project would receive if the round closed now, ignoring the fraud analysis and special allocation process for Jokerace's top 100.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Water & Sanitation",
-	"label.this_project_is_not_eligible_for_recurring_donations": "This project is not eligible for recurring donations."
+	"water-and-sanitation": "Water & Sanitation"
 }

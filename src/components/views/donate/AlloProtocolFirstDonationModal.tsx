@@ -9,6 +9,7 @@ import {
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
 import { waitForTransaction } from '@wagmi/core';
+import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
@@ -47,6 +48,7 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 
 	const { switchNetwork } = useSwitchNetwork();
 	const { project } = useDonateData();
+	const { formatMessage } = useIntl();
 	const updatedCloseModal = () => {
 		if (!txResult) {
 			//Show the user did not complete the transaction
@@ -116,20 +118,24 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 			headerTitlePosition='left'
 		>
 			<Container>
-				<P>Guess what? You’re awesome! </P>
+				<P>
+					{formatMessage({ id: 'label.guess_what_you_are_awsome' })}{' '}
+				</P>
 				<br />
 				<ItemContainer>
 					<P>
-						You are the first donor to make a recurring donation to
-						this project.
+						{formatMessage({
+							id: 'label.you_are_the_first_donor_to_make_a_recurring_donation_to_this_project',
+						})}{' '}
 					</P>
 					<Ellipse />
 				</ItemContainer>
 				<br />
 				<ItemContainer>
 					<P>
-						There will be one extra transaction you need to sign to
-						enable recurring donations for this project on{' '}
+						{formatMessage({
+							id: 'label.there_will_be_one_extra_transaction_you_need_to_sign_to',
+						})}{' '}
 						<span
 							style={{ whiteSpace: 'nowrap', display: 'inline' }}
 						>
@@ -141,7 +147,13 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 				</ItemContainer>
 				<br />
 				<CustomButton
-					label={isOnOptimism ? 'Confirm' : 'Switch To Optimism'}
+					label={
+						isOnOptimism
+							? formatMessage({ id: 'label.confirm' })
+							: `${formatMessage({
+									id: 'label.switch_to',
+								})} Optimism`
+					}
 					onClick={handleButtonClick}
 					loading={isLoading}
 					disabled={isLoading}
