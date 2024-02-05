@@ -7,7 +7,7 @@ const ToggleReceiveNotifications = () => {
 		<ToggleSwitch
 			isOn={isOn}
 			toggleOnOff={setIsOn}
-			caption='I’d like to receive all notifications'
+			label='I’d like to receive all notifications'
 		/>
 	);
 };

@@ -1,9 +1,8 @@
-import { H5, brandColors, neutralColors } from '@giveth/ui-design-system';
+import { H5, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { Flex } from '@/components/styled-components/Flex';
-// import ToggleSwitch from '@/components/ToggleSwitch';
-import Switch from '@/components/Switch';
+import ToggleSwitch from '@/components/ToggleSwitch';
 
 export const ActiveProjectsSection = () => {
 	const [showArchive, setShowArchive] = useState(false);
@@ -13,11 +12,9 @@ export const ActiveProjectsSection = () => {
 				<H5 weight={900}>Active projects</H5>
 				<Flex>
 					<ToggleSwitch
-						checked={showArchive}
+						isOn={showArchive}
 						label='Switch to Archive Donations'
-						setStateChange={() =>
-							setShowArchive(archive => !archive)
-						}
+						toggleOnOff={() => setShowArchive(archive => !archive)}
 					/>
 				</Flex>
 			</Flex>
@@ -33,9 +30,9 @@ const Wrapper = styled(Flex)`
 	border-radius: 12px;
 `;
 
-const ToggleSwitch = styled(Switch)`
-	#switch {
-		background: ${props =>
-			props.checked ? brandColors.pinky[500] : brandColors.pinky[200]};
-	}
-`;
+// const ToggleSwitch = styled(Switch)`
+// 	/* #switch {
+// 		background: ${props =>
+// 		props.checked ? brandColors.pinky[500] : brandColors.pinky[200]};
+// 	} */
+// `;
