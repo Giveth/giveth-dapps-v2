@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 import { brandColors, neutralColors, P } from '@giveth/ui-design-system';
 import { FC } from 'react';
+import { Flex } from './styled-components/Flex';
 
 interface IToggleButton {
 	isOn: boolean;
 	toggleOnOff: (isOn: boolean) => void;
 	label: string;
 	disabled?: boolean;
+	className?: string;
 }
 
 const ToggleSwitch: FC<IToggleButton> = ({
@@ -14,12 +16,17 @@ const ToggleSwitch: FC<IToggleButton> = ({
 	toggleOnOff,
 	label,
 	disabled,
+	className,
 }) => {
 	const handleClick = () => {
 		toggleOnOff(!isOn);
 	};
 	return (
-		<Container onClick={handleClick} disabled={disabled}>
+		<Container
+			onClick={handleClick}
+			disabled={disabled}
+			className={className}
+		>
 			<InputStyled checked={isOn} type='checkbox' />
 			<Switch isOn={isOn}>
 				<Bullet isOn={isOn} />
@@ -65,9 +72,8 @@ const Caption = styled(P)`
 	color: ${neutralColors.gray[800]};
 `;
 
-const Container = styled.div<{ disabled?: boolean }>`
-	display: flex;
-	gap: 25px;
+const Container = styled(Flex)<{ disabled?: boolean }>`
+	gap: 8px;
 	align-items: center;
 	cursor: pointer;
 	opacity: ${props => (props.disabled ? 0.3 : 1)};
