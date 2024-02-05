@@ -7,6 +7,7 @@ import {
 	useState,
 	type Dispatch,
 } from 'react';
+import { useCallback } from 'react';
 import { IDonationProject } from '@/apollo/types/types';
 import { hasActiveRound } from '@/helpers/qf';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
@@ -71,7 +72,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		useState<ISuccessDonation>();
 	const [projectData, setProjectData] = useState<IDonationProject>(project);
 
-	const fetchProject = async () => {
+	const fetchProject = useCallback(async () => {
 		const { data } = (await client.query({
 			query: FETCH_PROJECT_BY_SLUG,
 			variables: { slug: project.slug },
@@ -79,7 +80,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		})) as { data: { projectBySlug: IDonationProject } };
 
 		setProjectData(data.projectBySlug);
-	};
+	}, [project.slug]);
 
 	const tokenStreams = useUserStreams();
 
