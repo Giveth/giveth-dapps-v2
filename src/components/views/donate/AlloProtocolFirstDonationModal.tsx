@@ -47,7 +47,7 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 	const [txResult, setTxResult] = useState<WriteContractResult>();
 
 	const { switchNetwork } = useSwitchNetwork();
-	const { project } = useDonateData();
+	const { project, fetchProject } = useDonateData();
 	const { formatMessage } = useIntl();
 	const updatedCloseModal = () => {
 		if (!txResult) {
@@ -96,6 +96,7 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 					});
 				}
 				if (tx?.hash) {
+					await fetchProject();
 					onModalCompletion();
 				}
 				setShowModal(false); // Close the modal

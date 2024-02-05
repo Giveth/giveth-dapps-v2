@@ -12,6 +12,8 @@ import { hasActiveRound } from '@/helpers/qf';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import { ChainType } from '@/types/config';
 import { useUserStreams } from '@/hooks/useUserStreams';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 
 export interface TxHashWithChainType {
 	txHash: string;
@@ -32,6 +34,7 @@ interface IDonateContext {
 	setSelectedToken: Dispatch<
 		SetStateAction<ISelectTokenWithBalance | undefined>
 	>;
+	fetchProject: () => Promise<void>;
 }
 
 interface IProviderProps {
@@ -44,6 +47,7 @@ const DonateContext = createContext<IDonateContext>({
 	setSelectedToken: () => {},
 	project: {} as IDonationProject,
 	tokenStreams: {},
+	fetchProject: async () => {},
 });
 
 DonateContext.displayName = 'DonateContext';
@@ -65,6 +69,16 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 	>();
 	const [isSuccessDonation, setSuccessDonation] =
 		useState<ISuccessDonation>();
+	const [projectData, setProjectData] = useState<IDonationProject>(project);
+
+	const fetchProject = async () => {
+		const { data } = (await client.query({
+			query: FETCH_PROJECT_BY_SLUG,
+			variables: { slug: project.slug },
+			fetchPolicy: 'no-cache',
+		})) as { data: IDonationProject };
+		setProjectData(data);
+	};
 
 	const tokenStreams = useUserStreams();
 
@@ -74,12 +88,13 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		<DonateContext.Provider
 			value={{
 				hasActiveQFRound,
-				project,
+				project: projectData,
 				isSuccessDonation,
 				setSuccessDonation,
 				selectedToken,
 				setSelectedToken,
 				tokenStreams,
+				fetchProject,
 			}}
 		>
 			{children}
