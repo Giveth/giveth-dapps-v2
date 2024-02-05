@@ -76,8 +76,9 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 			query: FETCH_PROJECT_BY_SLUG,
 			variables: { slug: project.slug },
 			fetchPolicy: 'no-cache',
-		})) as { data: IDonationProject };
-		setProjectData(data);
+		})) as { data: { projectBySlug: IDonationProject } };
+
+		setProjectData(data.projectBySlug);
 	};
 
 	const tokenStreams = useUserStreams();
