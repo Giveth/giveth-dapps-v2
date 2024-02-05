@@ -116,8 +116,6 @@ export const RecurringDonationCard = () => {
 
 	const hasAnchorContract = project.anchorContracts[0]?.isActive;
 
-	console.log('hasAnchorContract', hasAnchorContract);
-
 	const handleDonate = () => {
 		if (!hasAnchorContract) {
 			setShowAlloProtocolModal(true);

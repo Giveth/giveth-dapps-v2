@@ -52,9 +52,7 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 	const updatedCloseModal = () => {
 		if (!txResult) {
 			//Show the user did not complete the transaction
-			alert(
-				'You did not complete the transaction but your project was created',
-			);
+			alert('You did not complete the transaction.');
 			//handle success project
 		}
 		closeModal();
@@ -102,7 +100,6 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 				}
 				setShowModal(false); // Close the modal
 			} catch (error) {
-				console.log('Error Contract', error);
 			} finally {
 				setIsLoading(false);
 			}
