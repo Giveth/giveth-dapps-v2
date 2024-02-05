@@ -1,79 +1,69 @@
-import React, { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
-import { brandColors, GLink, neutralColors } from '@giveth/ui-design-system';
+import { brandColors, neutralColors, P } from '@giveth/ui-design-system';
+import { FC } from 'react';
 
-interface IToggleSwitch {
-	checked: boolean;
-	label?: string;
-	disabled?: boolean;
-	setStateChange: Dispatch<SetStateAction<boolean>>;
-	className?: string;
+interface IToggleButton {
+	isOn: boolean;
+	toggleOnOff: (isOn: boolean) => void;
+	caption: string;
 }
 
-const ToggleSwitch = ({
-	checked,
-	label,
-	disabled = false,
-	setStateChange,
-	className,
-}: IToggleSwitch) => {
-	const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
-		setStateChange(e.target.checked);
-
+const ToggleSwitch: FC<IToggleButton> = ({ isOn, toggleOnOff, caption }) => {
+	const handleClick = () => {
+		toggleOnOff(!isOn);
+	};
 	return (
-		<Label className={className}>
-			<Input
-				checked={checked}
-				disabled={disabled}
-				type='checkbox'
-				onChange={handleChange}
-			/>
-			{label && <GLink>{label}</GLink>}
-			<Switch checked={checked} disabled={disabled} id='switch' />
-		</Label>
+		<Container onClick={handleClick}>
+			<InputStyled checked={isOn} type='checkbox' />
+			<Switch isOn={isOn}>
+				<Bullet isOn={isOn} />
+			</Switch>
+			<Caption>{caption}</Caption>
+		</Container>
 	);
 };
 
-const Label = styled.label`
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	cursor: pointer;
+const InputStyled = styled.input`
+	opacity: 0;
+	width: 0;
+	height: 0;
 `;
 
-const Switch = styled.div<{ checked: boolean; disabled: boolean }>`
+const Bullet = styled.div<{ isOn: boolean }>`
+	position: absolute;
+	border-radius: 50%;
+	width: 14px;
+	height: 14px;
+	background-color: ${brandColors.pinky[200]};
+	border: 3px solid white;
+	left: ${props => (props.isOn ? '15px' : '1px')};
+	transition: left 0.2s ease-in-out;
+	top: 1px;
+`;
+
+const Switch = styled.span<{ isOn: boolean }>`
 	position: relative;
 	width: 30px;
 	height: 16px;
-	background: ${props =>
-		props.disabled ? neutralColors.gray[700] : brandColors.giv[700]};
-	border-radius: 32px;
-	padding: 1px;
-	transition: 300ms all;
-	&:before {
-		transition: 300ms all;
-		content: '';
-		position: absolute;
-		width: 11px;
-		height: 11px;
-		border-radius: 7px;
-		top: 0;
-		left: 1px;
-		background: ${props =>
-			props.checked
-				? brandColors.pinky[500]
-				: props.disabled
-					? neutralColors.gray[200]
-					: brandColors.pinky[200]};
-		border: 3px solid ${brandColors.giv['000']};
-		border-radius: 50%;
-		transform: ${props =>
-			props.checked ? 'translateX(100%)' : 'translateX(0)'};
-	}
+	flex-shrink: 0;
+	padding-left: 1px;
+	padding-right: 1px;
+	border-radius: 50px;
+	cursor: pointer;
+	background-color: ${props =>
+		props.isOn ? brandColors.pinky[500] : neutralColors.gray[700]};
+	transition: background-color 0.3s ease-in-out;
 `;
 
-const Input = styled.input`
-	display: none;
+const Caption = styled(P)`
+	color: ${neutralColors.gray[800]};
+`;
+
+const Container = styled.div`
+	display: flex;
+	gap: 25px;
+	align-items: center;
+	cursor: pointer;
 `;
 
 export default ToggleSwitch;
