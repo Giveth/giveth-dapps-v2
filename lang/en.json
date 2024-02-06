@@ -623,6 +623,7 @@
 	"label.passport.not_eligible": "Get your donation matched with quadratic funding! Increase your Gitcoin Passport score before ",
 	"label.passport.not_signed": "Sign the message with your wallet to connect to Passport",
 	"label.passport.no_active_round": "There is no active round!",
+	"label.passport.round_starts_on": "The next round starts on {data}",
 	"label.passport_score": "Passport Score",
 	"label.personal_info": "Personal info",
 	"label.personal_social_media": "Personal Social Media",
