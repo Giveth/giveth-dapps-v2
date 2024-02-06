@@ -141,7 +141,7 @@ export const createRecurringDonation = async ({
 				txHash,
 				networkId: chainId,
 				projectId,
-				// anonymous, // will enable when backend is ready
+				anonymous,
 			},
 		});
 		donationId = data.createDonation;
