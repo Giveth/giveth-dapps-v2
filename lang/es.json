@@ -1467,5 +1467,6 @@
 	"ubi": "UBI",
 	"water-and-sanitation": "Agua & Saneamiento",
 	"label.make_it_anonymous": "Hazlo anónimo",
-	"component.tooltip.donate_anonymously": "Al marcar esto, no consideraremos la información de tu perfil como donante para esta donación y no la mostraremos en las páginas públicas."
+	"component.tooltip.donate_anonymously": "Al marcar esto, no consideraremos la información de tu perfil como donante para esta donación y no la mostraremos en las páginas públicas.",
+	"label.this_project_is_not_eligible_for_recurring_donations": "Este proyecto no es elegible para donaciones recurrentes"
 }

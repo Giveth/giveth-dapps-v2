@@ -1467,5 +1467,6 @@
 	"ubi": "Renta bàsica",
 	"water-and-sanitation": "Aigua i Sanejament",
 	"label.make_it_anonymous": "Fes-ho anònim",
-	"component.tooltip.donate_anonymously": "En marcar això, no considerarem la informació del teu perfil com a donant per a aquesta donació i no la mostrarem a les pàgines públiques."
+	"component.tooltip.donate_anonymously": "En marcar això, no considerarem la informació del teu perfil com a donant per a aquesta donació i no la mostrarem a les pàgines públiques.",
+	"label.this_project_is_not_eligible_for_recurring_donations": "Aquest projecte no és elegible per a donacions recurrents"
 }

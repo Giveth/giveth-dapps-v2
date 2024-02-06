@@ -19,21 +19,26 @@ import ToggleSwitch from '@/components/ToggleSwitch';
 import { getChainName } from '@/lib/network';
 import { IChainType } from '@/types/config';
 import { findAddressByChain } from '@/lib/helpers';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { IAnchorContractData } from '@/apollo/types/types';
 
 interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
 	onButtonClick?: () => void;
+	anchorContractData?: IAnchorContractData;
+	isEditMode?: boolean;
 }
 
 const AddressInterface = ({
 	networkId,
 	onButtonClick,
 	chainType,
+	anchorContractData,
 }: IAddressInterfaceProps) => {
-	const { formState, setValue, watch } = useFormContext();
+	const { setValue, watch } = useFormContext();
 	const { formatMessage } = useIntl();
+	const { isOnEVM } = useGeneralWallet();
 
-	const { errors } = formState;
 	const inputName = EInputs.addresses;
 	const alloProtocolRegistry = watch(EInputs.alloProtocolRegistry) as boolean;
 
@@ -109,34 +114,39 @@ const AddressInterface = ({
 						</IconContainer>
 					)}
 				</Flex>
-				{isOptimism && isRecurringActive && (
-					// Render this section only on Optimism
-					<AlloProtocolContainer>
-						<Flex>
-							<div>
-								<B>
-									Set up Profile on the Allo Protocol Registry
-								</B>
-								<P>
-									Your project will be included in a shared
-									registry of public goods projects with
-									Gitcoin and others. You will also set up
-									your project to receive recurring donations.
-								</P>
-							</div>
-							<ToggleSwitch
-								isOn={alloProtocolRegistry}
-								toggleOnOff={() =>
-									setValue(
-										EInputs.alloProtocolRegistry,
-										!alloProtocolRegistry,
-									)
-								}
-								caption=''
-							/>
-						</Flex>
-					</AlloProtocolContainer>
-				)}
+				{isOptimism &&
+					isRecurringActive &&
+					isOnEVM &&
+					!anchorContractData?.isActive && (
+						// Render this section only on Optimism
+						<AlloProtocolContainer>
+							<Flex>
+								<div>
+									<B>
+										Set up Profile on the Allo Protocol
+										Registry
+									</B>
+									<P>
+										Your project will be included in a
+										shared registry of public goods projects
+										with Gitcoin and others. You will also
+										set up your project to receive recurring
+										donations.
+									</P>
+								</div>
+								<ToggleSwitch
+									isOn={alloProtocolRegistry}
+									toggleOnOff={() =>
+										setValue(
+											EInputs.alloProtocolRegistry,
+											!alloProtocolRegistry,
+										)
+									}
+									caption=''
+								/>
+							</Flex>
+						</AlloProtocolContainer>
+					)}
 			</MiddleContainer>
 		</Container>
 	);
