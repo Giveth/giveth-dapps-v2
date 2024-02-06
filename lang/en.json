@@ -62,6 +62,7 @@
 	"component.title.we_hiring": "We're Hiring!",
 	"component.title.what_is_giveth": "What is Giveth?",
 	"component.title.with_your_donation": "with your Donation",
+	"component.tooltip.donate_anonymously": "By checking this, we won't consider your profile information as a donor for this donation and won't show it on public pages.",
 	"component.tooltip.donate_privately": "If you check this, we will hide your name and donation transaction link from the project page, and won't show this donation on your public profile page.",
 	"conservation-and-biodiversity": "Conservation & Biodiversity",
 	"culture": "Culture",
@@ -527,6 +528,7 @@
 	"label.lock_your_tokens": "Lock your tokens",
 	"label.look_for_the_share_and_get_rewarded": "Look for the 'Share & get rewarded' button to generate links to specific pages across the Giveth site.",
 	"label.make_a_recurring_donation_with": "Make a recurring donation with ",
+	"label.make_it_anonymous": "Make it anonymous",
 	"label.make_it_easier_for_donors_to_find_your_project": "Make it easier for donors to find your project by providing a location.",
 	"label.make_your_donation_eligible_for_matching": "Make your donation eligible for matching",
 	"label.manage_addresses": "Manage addresses",
@@ -895,6 +897,7 @@
 	"label.this_project_doesnt_have_any_givpower_behind_it": "This project doesn't have any GIVpower behind it! Give it a boost",
 	"label.this_project_has_global_impact": "This project has global impact",
 	"label.this_project_is_not_active": "This project is not active.",
+	"label.this_project_is_not_eligible_for_recurring_donations": "This project is not eligible for recurring donations.",
 	"label.this_project_only_accepts_donations_on": "This project only accepts donations on {chainName}.",
 	"label.this_project_only_accept_on": "This project only accept donations on",
 	"label.this_projet_doesnt_receive_donations_on": "This project does not accept donations on {chainName}",
@@ -1465,8 +1468,5 @@
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"tooltip.donation.matching_polygon": "This estimate represents the matching funds this project would receive if the round closed now, ignoring the fraud analysis and special allocation process for Jokerace's top 100.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Water & Sanitation",
-	"label.make_it_anonymous": "Make it anonymous",
-	"component.tooltip.donate_anonymously": "By checking this, we won't consider your profile information as a donor for this donation and won't show it on public pages.",
-	"label.this_project_is_not_eligible_for_recurring_donations": "This project is not eligible for recurring donations."
+	"water-and-sanitation": "Water & Sanitation"
 }

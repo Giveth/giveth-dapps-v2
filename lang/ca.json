@@ -62,6 +62,7 @@
 	"component.title.we_hiring": "Estem contractant!",
 	"component.title.what_is_giveth": "Què és Giveth?",
 	"component.title.with_your_donation": "amb la teva donació",
+	"component.tooltip.donate_anonymously": "En marcar això, no considerarem la informació del teu perfil com a donant per a aquesta donació i no la mostrarem a les pàgines públiques.",
 	"component.tooltip.donate_privately": "If you check this, we will hide your name and donation transaction link from the project page, and won't show this donation on your public profile page.",
 	"conservation-and-biodiversity": "Conservació i Biodiversitat",
 	"culture": "Cultura",
@@ -527,6 +528,7 @@
 	"label.lock_your_tokens": "Bloqueja els teus tokens",
 	"label.look_for_the_share_and_get_rewarded": "Look for the 'Share & get rewarded' button to generate links to specific pages across the Giveth site.",
 	"label.make_a_recurring_donation_with": "Fes una donació recurrent amb ",
+	"label.make_it_anonymous": "Fes-ho anònim",
 	"label.make_it_easier_for_donors_to_find_your_project": "Fes més fàcil que els donants trobin el teu projecte proporcionant una ubicació.",
 	"label.make_your_donation_eligible_for_matching": "Make your donation eligible for matching",
 	"label.manage_addresses": "Manage addresses",
@@ -895,6 +897,7 @@
 	"label.this_project_doesnt_have_any_givpower_behind_it": "Aquest projecte no té GIVpower recolzant-lo! Dóna-li un boost",
 	"label.this_project_has_global_impact": "Aquest projecte té un impacte global",
 	"label.this_project_is_not_active": "Aquest projecte no està actiu.",
+	"label.this_project_is_not_eligible_for_recurring_donations": "Aquest projecte no és elegible per a donacions recurrents",
 	"label.this_project_only_accepts_donations_on": "Aquest projecte només accepta donacions a {chainName}.",
 	"label.this_project_only_accept_on": "Aquest projecte només accepta donacions a",
 	"label.this_projet_doesnt_receive_donations_on": "Aquest projecte no accepta donacions a {chainName}",
@@ -1465,8 +1468,5 @@
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"tooltip.donation.matching_polygon": "Aquesta estimació representa els fons coincidents que rebria aquest projecte si la ronda es tanqués ara, ignorant l'anàlisi del frau i el procés d'assignació especial per als 100 millors de Jokerace.",
 	"ubi": "Renta bàsica",
-	"water-and-sanitation": "Aigua i Sanejament",
-	"label.make_it_anonymous": "Fes-ho anònim",
-	"component.tooltip.donate_anonymously": "En marcar això, no considerarem la informació del teu perfil com a donant per a aquesta donació i no la mostrarem a les pàgines públiques.",
-	"label.this_project_is_not_eligible_for_recurring_donations": "Aquest projecte no és elegible per a donacions recurrents"
+	"water-and-sanitation": "Aigua i Sanejament"
 }
