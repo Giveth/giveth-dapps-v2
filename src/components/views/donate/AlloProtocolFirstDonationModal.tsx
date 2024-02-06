@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import {
 	Button,
 	IconBulbOutline32,
@@ -8,50 +8,51 @@ import {
 } from '@giveth/ui-design-system';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
-import { useRouter } from 'next/router';
 import { waitForTransaction } from '@wagmi/core';
-import { IModal } from '@/types/common';
+import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
 import useCreateAnchorContract from '@/hooks/useCreateAnchorContract';
-import { IProject, IProjectEdition } from '@/apollo/types/types';
-import StorageLabel from '@/lib/localStorage';
-import { slugToSuccessView, slugToProjectView } from '@/lib/routeCreators';
-import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY } from '@/apollo/gql/gqlSuperfluid';
 import { client } from '@/apollo/apolloClient';
-import { extractContractAddressFromString } from '../../donate/AlloProtocolFirstDonationModal';
+import { useDonateData } from '@/context/donate.context';
+import { IModal } from '@/types/common';
 
 interface IAlloProtocolModal extends IModal {
-	project?: IProjectEdition; //If undefined, it means we are in create mode
-	addedProjectState: IProject;
+	onModalCompletion: () => void;
 }
 
-const AlloProtocolModal: FC<IAlloProtocolModal> = ({
+export function extractContractAddressFromString(text: string) {
+	// The hexadecimal string starts at the 282th character (0-indexed)
+	// We use a regex to match any characters up to that point, then capture the next 40 characters
+	const regex = /.{282}([0-9a-fA-F]{40})/;
+	const match = text.match(regex);
+
+	if (match && match[1]) {
+		// Prepending '0x' to the matched string
+		return '0x' + match[1];
+	} else {
+		return 'No matching pattern found';
+	}
+}
+
+const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 	setShowModal,
-	addedProjectState,
-	project,
+	onModalCompletion,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { chain } = useNetwork();
 	const [isLoading, setIsLoading] = useState(false);
 	const [txResult, setTxResult] = useState<WriteContractResult>();
-	const router = useRouter();
+
 	const { switchNetwork } = useSwitchNetwork();
-
-	const isDraft =
-		project?.status.name === EProjectStatus.DRAFT ||
-		addedProjectState.status?.name === EProjectStatus.DRAFT;
-
-	const isEditMode = !!project;
-
+	const { project, fetchProject } = useDonateData();
+	const { formatMessage } = useIntl();
 	const updatedCloseModal = () => {
 		if (!txResult) {
 			//Show the user did not complete the transaction
-			alert(
-				'You did not complete the transaction but your project was created',
-			);
+			alert('You did not complete the transaction.');
 			//handle success project
 		}
 		closeModal();
@@ -61,9 +62,9 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 		? chain.id === config.OPTIMISM_NETWORK_NUMBER
 		: false;
 	const { writeAsync } = useCreateAnchorContract({
-		adminUser: addedProjectState?.adminUser,
-		id: addedProjectState?.id,
-		slug: addedProjectState?.slug!,
+		adminUser: project?.adminUser,
+		id: project?.id,
+		slug: project?.slug!,
 	});
 
 	const handleButtonClick = async () => {
@@ -87,7 +88,7 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 					await client.mutate({
 						mutation: CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY,
 						variables: {
-							projectId: Number(addedProjectState.id),
+							projectId: Number(project.id),
 							networkId: config.OPTIMISM_NETWORK_NUMBER,
 							address: contractAddress,
 							txHash: tx.hash,
@@ -95,28 +96,16 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 					});
 				}
 				if (tx?.hash) {
-					if (!isEditMode || (isEditMode && isDraft)) {
-						await router.push(
-							slugToSuccessView(addedProjectState.slug),
-						);
-					} else {
-						await router.push(
-							slugToProjectView(addedProjectState.slug),
-						);
-					}
+					await fetchProject();
+					onModalCompletion();
 				}
 				setShowModal(false); // Close the modal
 			} catch (error) {
-				console.log('Error Contract', error);
 			} finally {
 				setIsLoading(false);
 			}
 		}
 	};
-
-	useEffect(() => {
-		localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
-	}, []);
 
 	return (
 		<Modal
@@ -127,27 +116,24 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 			headerTitlePosition='left'
 		>
 			<Container>
-				{/* {isOnOptimism ? 'On Optimism' : 'Not On Optimism'}
-				{addedProjectState.id} */}
 				<P>
-					Your project has now been created, next you will need to
-					sign a transaction to register it to Allo Protocol on
-					Optimism.
+					{formatMessage({ id: 'label.guess_what_you_are_awsome' })}{' '}
 				</P>
 				<br />
 				<ItemContainer>
 					<P>
-						Your project will be included in a shared registry of
-						public goods projects with Gitcoin and others. You will
-						also set up your project to receive recurring donations.
+						{formatMessage({
+							id: 'label.you_are_the_first_donor_to_make_a_recurring_donation_to_this_project',
+						})}{' '}
 					</P>
 					<Ellipse />
 				</ItemContainer>
 				<br />
 				<ItemContainer>
 					<P>
-						There will be one extra transaction you need to sign to
-						enable recurring donations for this project on{' '}
+						{formatMessage({
+							id: 'label.there_will_be_one_extra_transaction_you_need_to_sign_to',
+						})}{' '}
 						<span
 							style={{ whiteSpace: 'nowrap', display: 'inline' }}
 						>
@@ -159,7 +145,13 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 				</ItemContainer>
 				<br />
 				<CustomButton
-					label={isOnOptimism ? 'Confirm' : 'Switch To Optimism'}
+					label={
+						isOnOptimism
+							? formatMessage({ id: 'label.confirm' })
+							: `${formatMessage({
+									id: 'label.switch_to',
+								})} Optimism`
+					}
 					onClick={handleButtonClick}
 					loading={isLoading}
 					disabled={isLoading}
@@ -195,4 +187,4 @@ const CustomButton = styled(Button)`
 	width: 100%;
 `;
 
-export default AlloProtocolModal;
+export default AlloProtocolFirstDonationModal;
