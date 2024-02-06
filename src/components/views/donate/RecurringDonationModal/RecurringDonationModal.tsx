@@ -271,14 +271,17 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 			const batchOp = sf.batchCall(operations);
 			const tx = await batchOp.exec(signer);
-			console.log('tx', tx);
-			const test = await createRecurringDonation({
-				projectId: +project.id,
-				anonymous,
-				chainId: config.OPTIMISM_NETWORK_NUMBER,
-				txHash: tx.hash,
-			});
-			console.log('test', test);
+			try {
+				const backendRes = await createRecurringDonation({
+					projectId: +project.id,
+					anonymous,
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					txHash: tx.hash,
+				});
+			} catch (error) {
+				console.log('error', error);
+			}
+
 			const res = await tx.wait();
 			if (!res.status) {
 				throw new Error('Transaction failed');
