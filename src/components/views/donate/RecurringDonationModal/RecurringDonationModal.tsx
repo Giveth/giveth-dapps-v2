@@ -226,7 +226,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			operations.push(projectFlowOp);
 
-			if (donationToGiveth > 0) {
+			if (!isUpdating && donationToGiveth > 0) {
 				const givethOpWalletAddress = project?.givethAddresses?.find(
 					address => address.networkId === config.OPTIMISM_CONFIG.id,
 				)?.address;

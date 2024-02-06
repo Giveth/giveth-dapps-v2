@@ -44,6 +44,7 @@ import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal'
 import { limitFraction } from '@/helpers/number';
 import CheckBox from '@/components/Checkbox';
 import { CheckBoxContainer } from './CryptoDonation';
+import AlloProtocolFirstDonationModal from './AlloProtocolFirstDonationModal';
 
 export const RecurringDonationCard = () => {
 	const [amount, setAmount] = useState(0n);
@@ -57,11 +58,13 @@ export const RecurringDonationCard = () => {
 		useState(false);
 	const [userStreamOnSelectedToken, setUserStreamOnSelectedToken] =
 		useState<ISuperfluidStream>();
+	const [showAlloProtocolModal, setShowAlloProtocolModal] = useState(false);
 
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
 	const { chain } = useNetwork();
 	const { project, selectedToken, tokenStreams } = useDonateData();
+
 	const {
 		data: balance,
 		refetch,
@@ -113,6 +116,16 @@ export const RecurringDonationCard = () => {
 	const sliderColor = isTotalStreamExceed
 		? semanticColors.punch
 		: brandColors.giv;
+
+	const hasAnchorContract = project.anchorContracts[0]?.isActive;
+
+	const handleDonate = () => {
+		if (!hasAnchorContract) {
+			setShowAlloProtocolModal(true);
+		} else {
+			setShowRecurringDonationModal(true);
+		}
+	};
 
 	useEffect(() => {
 		try {
@@ -389,10 +402,7 @@ export const RecurringDonationCard = () => {
 				isUpdating ? (
 					<ActionButton
 						label={formatMessage({ id: 'label.confirm' })}
-						onClick={() => {
-							setDonationToGiveth(0);
-							setShowRecurringDonationModal(true);
-						}}
+						onClick={handleDonate}
 						disabled={
 							selectedToken === undefined ||
 							tokenBalance === undefined ||
@@ -514,7 +524,7 @@ export const RecurringDonationCard = () => {
 					</DonatesInfoSection>
 					<ActionButton
 						label={formatMessage({ id: 'label.donate' })}
-						onClick={() => setShowRecurringDonationModal(true)}
+						onClick={handleDonate}
 						disabled={
 							selectedToken === undefined ||
 							tokenBalance === undefined ||
@@ -575,6 +585,14 @@ export const RecurringDonationCard = () => {
 					setShowModal={setShowTopUpModal}
 					selectedToken={selectedToken?.token!}
 					refreshBalance={refetch}
+				/>
+			)}
+			{showAlloProtocolModal && (
+				<AlloProtocolFirstDonationModal
+					setShowModal={setShowAlloProtocolModal}
+					onModalCompletion={() =>
+						setShowRecurringDonationModal(true)
+					}
 				/>
 			)}
 		</>
