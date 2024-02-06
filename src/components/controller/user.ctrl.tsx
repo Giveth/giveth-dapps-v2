@@ -24,13 +24,14 @@ const UserController = () => {
 	const isSafeEnv = useIsSafeEnvironment();
 	const { connect, connectors } = useConnect();
 	const isMounted = useRef(false);
-
 	const isFirstRender = useRef(true);
 	const isConnectingRef = useRef(isConnecting);
 	const isConnectedRef = useRef(isConnected);
 
 	useEffect(() => {
-		if (isSafeEnv === null || !!isSafeEnv) return; // auto connect handled somewhere else
+		// for safe auto connect is handled somewhere else
+		console.log({ isSafeEnv });
+		if (isSafeEnv === null || !!isSafeEnv) return;
 		// TODO: implement auto connect for solana
 		if (
 			isConnected ||
@@ -55,7 +56,7 @@ const UserController = () => {
 		if (connector) {
 			connect({ connector });
 		}
-	}, []);
+	}, [isSafeEnv]);
 
 	useEffect(() => {
 		if (isSafeEnv === null) return; // not ready
