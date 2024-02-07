@@ -4451,7 +4451,7 @@
   resolved "https://registry.yarnpkg.com/@uniswap/lib/-/lib-4.0.1-alpha.tgz#2881008e55f075344675b3bca93f020b028fbd02"
   integrity sha512-f6UIliwBbRsgVLxIaBANF6w09tYqc6Y/qXdsrbEmXHyFA7ILiKrIwRFXe1yOg8M3cksgVsO9N7yuL2DdCGQKBA==
 
-"@uniswap/sdk-core@^4":
+"@uniswap/sdk-core@^4.0.7":
   version "4.0.10"
   resolved "https://registry.yarnpkg.com/@uniswap/sdk-core/-/sdk-core-4.0.10.tgz#6173cc39d4e6b5ed679775447bb96a5b3c3fb2f2"
   integrity sha512-RiobXJKXvVVb+wfNM09Ik8djOMOuRQGfyRP5pHgUjojicK/7nscZILjZ87DjVCGjXEoD8yTSIps0UAQuz6pJIw==
@@ -4501,14 +4501,14 @@
     "@uniswap/v3-core" "^1.0.0"
     base64-sol "1.0.1"
 
-"@uniswap/v3-sdk@^3.10.0":
-  version "3.10.0"
-  resolved "https://registry.yarnpkg.com/@uniswap/v3-sdk/-/v3-sdk-3.10.0.tgz#962c9e598250ced00702d944783c2d9ee3fa12f6"
-  integrity sha512-sbmSA1O+Ct960r66Ie/c1rOmVadpwRu8nQ79pGICv0pZJdnFIQ/SReG3F+iC2C2UNNjNP6aC2WDUggXrjyrgnA==
+"@uniswap/v3-sdk@^3.10.2":
+  version "3.10.2"
+  resolved "https://registry.yarnpkg.com/@uniswap/v3-sdk/-/v3-sdk-3.10.2.tgz#dd23aa80b9b3a539ecdd5532e6778cd2aa799e31"
+  integrity sha512-5sfYSvRB9ityrB0c/MFaYUsTBQvrwgCuXSyBPsqU8fh6v2dzFgOD3SLx/tHFg8R0RRyN4XPTrw6nqDYXRFtu+g==
   dependencies:
     "@ethersproject/abi" "^5.0.12"
     "@ethersproject/solidity" "^5.0.9"
-    "@uniswap/sdk-core" "^4"
+    "@uniswap/sdk-core" "^4.0.7"
     "@uniswap/swap-router-contracts" "^1.2.1"
     "@uniswap/v3-periphery" "^1.1.1"
     "@uniswap/v3-staker" "1.0.0"
