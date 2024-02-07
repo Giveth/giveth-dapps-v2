@@ -34,7 +34,7 @@
 		"@vercel/speed-insights": "^1.0.9",
 		"@web3auth/sign-in-with-solana": "^3.0.0",
 		"@web3modal/wagmi": "^4.0.0",
-		"apollo-upload-client": "^17.0.0",
+		"apollo-upload-client": "^18.0.1",
 		"base58": "^2.0.1",
 		"bignumber.js": "^9.1.2",
 		"deepmerge": "^4.2.2",
