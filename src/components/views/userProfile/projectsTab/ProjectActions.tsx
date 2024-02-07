@@ -73,17 +73,6 @@ const ProjectActions = (props: IProjectActions) => {
 		},
 	];
 
-	if (hasOptimismAddress) {
-		options.push({
-			label: 'Claim Recurring donation',
-			icon: <IconArrowDownCircle16 />,
-			cb: () => {
-				setSelectedProject(project);
-				setShowClaimModal && setShowClaimModal(true);
-			},
-		});
-	}
-
 	const recurringDonationOption: IOption = {
 		label: 'Claim Recurring donation',
 		icon: <IconArrowDownCircle16 />,
@@ -93,7 +82,9 @@ const ProjectActions = (props: IProjectActions) => {
 		},
 	};
 
-	isRecurringActive && options.push(recurringDonationOption);
+	isRecurringActive &&
+		hasOptimismAddress &&
+		options.push(recurringDonationOption);
 
 	const dropdownStyle = {
 		padding: '4px 16px',
