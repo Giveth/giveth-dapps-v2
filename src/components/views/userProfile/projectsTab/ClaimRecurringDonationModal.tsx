@@ -23,10 +23,13 @@ import { limitFraction } from '@/helpers/number';
 import { WrappedSpinner } from '@/components/Spinner';
 import ClaimWithdrawalModal from './ClaimWithdrawalModal';
 import { TokenIcon } from '../../donate/TokenIcon/TokenIcon';
+import config from '@/configuration';
 
 interface IClaimRecurringDonationModal extends IModal {
 	project: IProject;
 }
+
+const allTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
 
 const ClaimRecurringDonationModal = ({
 	setShowModal,
@@ -41,6 +44,7 @@ const ClaimRecurringDonationModal = ({
 	>([]);
 	console.log('Streams', streams);
 
+	console.log('Project', project);
 	return (
 		<Modal
 			closeModal={closeModal}
@@ -94,13 +98,6 @@ const ClaimRecurringDonationModal = ({
 								<B>~945 USD</B>
 							</Flex>
 						</TotalAmountContainer>
-						<Button
-							label='Claim All Tokens'
-							onClick={() => {
-								setSelectedStreams(streams);
-								setShowClaimWithdrawalModal(true);
-							}}
-						/>
 						<Button
 							label='Cancel'
 							buttonType='texty-gray'

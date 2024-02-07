@@ -52,6 +52,10 @@ export const PROJECT_CARD_FIELDS = gql`
 			allProjectsSum
 			matchingPool
 		}
+		anchorContracts {
+			address
+			isActive
+		}
 	}
 `;
 
