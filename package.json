@@ -63,7 +63,7 @@
 		"react-quill": "^2.0.0",
 		"react-redux": "^9.1.0",
 		"react-select": "^5.8.0",
-		"react-share": "^4.4.1",
+		"react-share": "^5.0.3",
 		"sharp": "^0.30.5",
 		"siwe": "^2.1.4",
 		"styled-components": "^5.3.6",
