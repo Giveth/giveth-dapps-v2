@@ -39,7 +39,7 @@
 		"bignumber.js": "^9.1.2",
 		"deepmerge": "^4.3.1",
 		"ethers": "5.7.2",
-		"framer-motion": "^10.12.12",
+		"framer-motion": "^11.0.3",
 		"graphql": "^16.8.1",
 		"lodash.isequal": "^4.5.0",
 		"lottie-react": "^2.3.1",
