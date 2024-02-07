@@ -430,6 +430,7 @@
 	"label.go_to_projects": "Anar a projectes",
 	"label.go_to_projets_page": "Anar a la pàgina de projectes",
 	"label.great_projects_make_the_giveconomy_thrive": "Els grans projectes fan prosperar la GIVeconomy. Com a propietari d'un projecte, quan el verifiques, els teus donants poden optar a rebre GIVbacks.",
+	"label.guess_what_you_are_awsome": "Guess what? You’re awesome!",
 	"label.harvest": "Collita",
 	"label.harvest_pending": "Collita pendent",
 	"label.harvest_rewards": "Recol·lecta les recompenses",
@@ -856,6 +857,7 @@
 	"label.the": "el",
 	"label.the.two": "El",
 	"label.there_are_no_projects_matching_your_search": "No hi ha cap projecte que coincideixi amb la vostra cerca",
+	"label.there_will_be_one_extra_transaction_you_need_to_sign_to": "There will be one extra transaction you need to sign to enable recurring donations for this project on",
 	"label.these_are_just_simulations": "Són només simulacions.",
 	"label.these_calculators_demonstrate_how_you_can_use_giv": "Aquestes calculadores demostren com pots fer servir GIV per participar en la GIVeconomy!",
 	"label.the_economy_of_giving": "L'economia del \"Giving\"",
@@ -895,6 +897,7 @@
 	"label.this_project_doesnt_have_any_givpower_behind_it": "Aquest projecte no té GIVpower recolzant-lo! Dóna-li un boost",
 	"label.this_project_has_global_impact": "Aquest projecte té un impacte global",
 	"label.this_project_is_not_active": "Aquest projecte no està actiu.",
+	"label.this_project_is_not_eligible_for_recurring_donations": "Aquest projecte no és elegible per a donacions recurrents",
 	"label.this_project_only_accepts_donations_on": "Aquest projecte només accepta donacions a {chainName}.",
 	"label.this_project_only_accept_on": "Aquest projecte només accepta donacions a",
 	"label.this_projet_doesnt_receive_donations_on": "Aquest projecte no accepta donacions a {chainName}",
@@ -1066,6 +1069,7 @@
 	"label.you_are_donating": "Esteu fent una donació",
 	"label.you_are_staking": "Estàs stakejant",
 	"label.you_are_supporting_other_projects_with_this_stream": "Estàs recolzant {count} altre projecte amb aquest flux",
+	"label.you_are_the_first_donor_to_make_a_recurring_donation_to_this_project": "You are the first donor to make a recurring donation to this project.",
 	"label.you_boosted_this_project_with_percentage": "Bé, Has impulsat aquest projecte amb el {percentage}% del teu GIVpower.",
 	"label.you_cant_create_a_project_unless": "No pots crear un projecte fins que no completis el teu perfil.",
 	"label.you_cant_remove_your_givpower_from_this_project": "No pots eliminar el teu GIVpower d'aquest projecte perquè és l'únic boost que tens. Boosteja un altre projecte amb GIVpower abans de continuar.",
@@ -1465,6 +1469,5 @@
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"tooltip.donation.matching_polygon": "Aquesta estimació representa els fons coincidents que rebria aquest projecte si la ronda es tanqués ara, ignorant l'anàlisi del frau i el procés d'assignació especial per als 100 millors de Jokerace.",
 	"ubi": "Renta bàsica",
-	"water-and-sanitation": "Aigua i Sanejament",
-	"label.this_project_is_not_eligible_for_recurring_donations": "Aquest projecte no és elegible per a donacions recurrents"
+	"water-and-sanitation": "Aigua i Sanejament"
 }
