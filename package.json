@@ -20,7 +20,7 @@
 		"@apollo/client": "^3.9.3",
 		"@giveth/ui-design-system": "^1.11.20",
 		"@reduxjs/toolkit": "^2.1.0",
-		"@safe-global/api-kit": "^2.0.0",
+		"@safe-global/api-kit": "^2.1.0",
 		"@segment/snippet": "^4.15.3",
 		"@sentry/nextjs": "^7.100.1",
 		"@solana/spl-token": "^0.4.0",
