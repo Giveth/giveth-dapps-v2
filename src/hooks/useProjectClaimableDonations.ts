@@ -1,109 +1,73 @@
-import { useAccount } from 'wagmi';
-import { Framework, SuperToken__factory } from '@superfluid-finance/sdk-core';
+import { Address } from 'wagmi';
 import { useEffect, useState } from 'react';
 import { BigNumber } from 'ethers';
-import { gqlRequest } from '@/helpers/requests';
+import { IStream, IToken } from '@/types/superFluid';
 import config from '@/configuration';
-import { FETCH_USER_STREAMS_BY_ADDRESS } from '@/apollo/gql/gqlUser';
-import { getEthersProvider } from '@/helpers/ethers';
-import { IProjectStreamsData, IStream } from '@/types/superFluid';
+import { fetchBalance } from '@/services/token';
 
 export interface IStreamWithBalance extends IStream {
 	balance: BigNumber;
 }
 
-export const useProjectClaimableDonations = () => {
-	//Address should be project's Optimism address but for the simplicity of the testing we are using the user's address so it should be changed to the project's address
-	const { address } = useAccount();
+export interface ITokenWithBalance {
+	token: IToken;
+	balance: bigint;
+}
+
+const allTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
+
+export const useProjectClaimableDonations = (
+	anchorContractAddress?: Address,
+) => {
 	const [isLoading, setIsLoading] = useState(false); // Add isLoading state
-	const [streams, setStreams] = useState<IStreamWithBalance[]>([]);
+	const [balances, setBalances] = useState<ITokenWithBalance[]>([]);
+
+	const fetchTokenBalance = async (
+		token: IToken,
+	): Promise<ITokenWithBalance | null> => {
+		if (!anchorContractAddress) return null;
+		try {
+			const balance = await fetchBalance(token.id, anchorContractAddress);
+			if (balance) {
+				return {
+					token,
+					balance: balance, // Convert balance to BigNumber
+				};
+			}
+			return null;
+		} catch (error) {
+			console.error(`Error fetching balance for ${token.symbol}:`, error);
+			return null;
+		}
+	};
+
+	// Initiate all balance fetches concurrently
+	const fetchAllBalances = async () => {
+		try {
+			const _allTokensWithBalance = allTokens.map(token => {
+				return fetchTokenBalance(token);
+			});
+			console.log('All tokens with balance', _allTokensWithBalance);
+			const results = await Promise.all(_allTokensWithBalance);
+			// Filter out null values
+			const filteredResults = results.filter(
+				result => result !== null && result.balance !== 0n,
+			) as ITokenWithBalance[];
+			console.log('Filtered results', filteredResults);
+			setBalances(filteredResults);
+		} catch (error) {
+			console.error('Error fetching all balances:', error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	useEffect(() => {
-		const fetchData = async () => {
-			if (!address) return;
+		if (!anchorContractAddress) return;
+		fetchAllBalances();
+	}, []);
 
-			setIsLoading(true); // Set isLoading to true when fetching data
+	console.log('Balances', balances);
 
-			try {
-				const { data }: { data: IProjectStreamsData } =
-					await fetchUserStreams(address);
-				if (data && data.streams) {
-					const sf = await initializeSuperFluid();
-					const streamsWithBalances = await getStreamsBalances(
-						sf,
-						data.streams,
-						address,
-					);
-					setStreams(streamsWithBalances);
-				}
-			} catch (error) {
-				console.error('Error fetching data:', error);
-			} finally {
-				setIsLoading(false); // Set isLoading to false when data fetching is complete
-			}
-		};
-
-		fetchData();
-	}, [address]);
-
-	const fetchUserStreams = async (userAddress: string) => {
-		return gqlRequest(
-			config.OPTIMISM_CONFIG.superFluidSubgraph,
-			undefined,
-			FETCH_USER_STREAMS_BY_ADDRESS,
-			{ address: userAddress.toLowerCase() },
-		);
-	};
-
-	const initializeSuperFluid = async () => {
-		const _provider = getEthersProvider({
-			chainId: config.OPTIMISM_CONFIG.id,
-		});
-		return await Framework.create({
-			chainId: config.OPTIMISM_CONFIG.id,
-			provider: _provider,
-		});
-	};
-
-	const getStreamsBalances = async (
-		sf: Framework,
-		streams: IStream[],
-		userAddress: string,
-	) => {
-		const balances = await Promise.all(
-			streams.map(async stream => {
-				return {
-					...stream,
-					balance: await calculateStreamBalance(
-						sf,
-						stream,
-						userAddress,
-					),
-				};
-			}),
-		);
-		return balances;
-	};
-
-	const calculateStreamBalance = async (
-		sf: Framework,
-		stream: IStream,
-		userAddress: string,
-	) => {
-		const superTokenContract = SuperToken__factory.connect(
-			stream.token.id,
-			sf.settings.provider,
-		);
-		const [realtimeBalanceOfNowResult] = await Promise.all([
-			superTokenContract.realtimeBalanceOfNow(userAddress),
-			sf.cfaV1.getNetFlow({
-				superToken: stream.token.id,
-				account: userAddress,
-				providerOrSigner: sf.settings.provider,
-			}),
-		]);
-		return realtimeBalanceOfNowResult?.availableBalance;
-	};
-
-	return { isLoading, streams };
+	return { isLoading, balances };
 };
