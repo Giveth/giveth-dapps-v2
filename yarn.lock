@@ -2520,10 +2520,10 @@
     "@solana/options" "2.0.0-experimental.8618508"
     "@solana/spl-type-length-value" "0.1.0"
 
-"@solana/spl-token@^0.3.11":
-  version "0.3.11"
-  resolved "https://registry.yarnpkg.com/@solana/spl-token/-/spl-token-0.3.11.tgz#cdc10f9472b29b39c8983c92592cadd06627fb9a"
-  integrity sha512-bvohO3rIMSVL24Pb+I4EYTJ6cL82eFpInEXD/I8K8upOGjpqHsKUoAempR/RnUlI1qSFNyFlWJfu6MNUgfbCQQ==
+"@solana/spl-token@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@solana/spl-token/-/spl-token-0.4.0.tgz#c057e82afd2b9ea59019525f3fbf6c9a20349a54"
+  integrity sha512-jjBIBG9IsclqQVl5Y82npGE6utdCh7Z9VFcF5qgJa5EUq2XgspW3Dt1wujWjH/vQDRnkp9zGO+BqQU/HhX/3wg==
   dependencies:
     "@solana/buffer-layout" "^4.0.0"
     "@solana/buffer-layout-utils" "^0.2.0"
