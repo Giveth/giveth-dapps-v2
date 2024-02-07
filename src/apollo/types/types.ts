@@ -1,3 +1,4 @@
+import { Address } from 'viem';
 import {
 	EDonationStatus,
 	EDonationType,
@@ -29,7 +30,7 @@ export interface IEstimatedMatching {
 }
 
 export interface IAnchorContractData {
-	address: string;
+	address: Address;
 	isActive: boolean;
 }
 
