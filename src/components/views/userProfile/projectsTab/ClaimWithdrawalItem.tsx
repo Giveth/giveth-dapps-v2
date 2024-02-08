@@ -2,12 +2,12 @@ import { B, P, neutralColors } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import { utils } from 'ethers';
-import { IStreamWithBalance } from '@/hooks/useProjectClaimableDonations';
+import { ITokenWithBalance } from '@/hooks/useProjectClaimableDonations';
 import { limitFraction } from '@/helpers/number';
 
 interface IClaimWithdrawalItem {
 	projectName: string;
-	stream: IStreamWithBalance;
+	stream: ITokenWithBalance;
 }
 
 const ClaimWithdrawalItem = ({
