@@ -1,13 +1,6 @@
-import {
-	B,
-	Button,
-	P,
-	brandColors,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { B, Button, P, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
-import { utils } from 'ethers';
 import { useState } from 'react';
 import { IProject } from '@/apollo/types/types';
 import { Modal } from '@/components/modals/Modal';
@@ -15,36 +8,39 @@ import { Flex } from '@/components/styled-components/Flex';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
-	IStreamWithBalance,
+	ITokenWithBalance,
 	useProjectClaimableDonations,
 } from '@/hooks/useProjectClaimableDonations';
 
-import { limitFraction } from '@/helpers/number';
 import { WrappedSpinner } from '@/components/Spinner';
 import ClaimWithdrawalModal from './ClaimWithdrawalModal';
-import { TokenIcon } from '../../donate/TokenIcon/TokenIcon';
-import config from '@/configuration';
+import { ClaimRecurringItem } from './ClaimRecurringItem';
 
 interface IClaimRecurringDonationModal extends IModal {
 	project: IProject;
 }
 
-const allTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
+export interface IAllTokensUsd {
+	[key: string]: number; //key is token name and value is usd value
+}
 
 const ClaimRecurringDonationModal = ({
 	setShowModal,
 	project,
 }: IClaimRecurringDonationModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { streams, isLoading } = useProjectClaimableDonations();
+	const { balances, isLoading } = useProjectClaimableDonations(
+		project?.anchorContracts && project.anchorContracts[0]?.address,
+	);
 	const [showClaimWithdrawalModal, setShowClaimWithdrawalModal] =
 		useState(false);
-	const [selectedStreams, setSelectedStreams] = useState<
-		IStreamWithBalance[]
-	>([]);
-	console.log('Streams', streams);
-
+	const [selectedStream, setSelectedStream] = useState<ITokenWithBalance>();
+	const [allTokensUsd, setAllTokensUsd] = useState<IAllTokensUsd>({});
+	console.log('allTokensUsd', allTokensUsd);
+	console.log('balances', balances);
+	console.log('isLoading', isLoading);
 	console.log('Project', project);
+
 	return (
 		<Modal
 			closeModal={closeModal}
@@ -56,41 +52,21 @@ const ClaimRecurringDonationModal = ({
 			<ModalContainer>
 				{isLoading ? (
 					<WrappedSpinner size={300} />
-				) : streams.length === 0 ? (
+				) : balances.length === 0 ? (
 					<P>You have no streams yet!</P>
 				) : (
 					<Flex flexDirection='column' gap='32px'>
-						{streams.map(item => (
-							<ItemContainer
-								justifyContent='space-between'
-								alignItems='center'
-								key={item.token.symbol}
-							>
-								<Flex alignItems='center'>
-									<TokenIcon
-										symbol={
-											item.token.underlyingToken?.symbol!
-										}
-									/>
-									&nbsp; &nbsp;
-									<B>
-										{`
-									${limitFraction(utils.formatUnits(item.balance, item.token.decimals), 6)} 
-									${item.token.underlyingToken?.symbol} ~
-									${limitFraction(utils.formatUnits(item.balance, item.token.decimals), 6)}
-									USD
-									`}
-									</B>
-								</Flex>
-								<ClaimButton
-									onClick={() => {
-										setSelectedStreams([item]);
-										setShowClaimWithdrawalModal(true);
-									}}
-								>
-									Claim tokens
-								</ClaimButton>
-							</ItemContainer>
+						{balances.map(tokenWithBalance => (
+							<ClaimRecurringItem
+								key={tokenWithBalance.token.symbol}
+								tokenWithBalance={tokenWithBalance}
+								onSelectStream={selectedItem => {
+									setSelectedStream(selectedItem);
+									setShowClaimWithdrawalModal(true);
+								}}
+								setAllTokensUsd={setAllTokensUsd}
+								allTokensUsd={allTokensUsd}
+							/>
 						))}
 						<TotalAmountContainer>
 							<Flex justifyContent='space-between'>
@@ -115,10 +91,10 @@ const ClaimRecurringDonationModal = ({
 						alt='Superfluid logo'
 					/>
 				</SuperfluidLogoContainer>
-				{showClaimWithdrawalModal && (
+				{showClaimWithdrawalModal && selectedStream && (
 					<ClaimWithdrawalModal
 						setShowModal={setShowClaimWithdrawalModal}
-						selectedStreams={selectedStreams}
+						selectedStream={selectedStream}
 						projectName={project.title || ''}
 					/>
 				)}
@@ -130,19 +106,6 @@ const ClaimRecurringDonationModal = ({
 const ModalContainer = styled.div`
 	padding: 24px;
 	min-width: 650px;
-`;
-
-const ItemContainer = styled(Flex)`
-	padding: 8px;
-	border-radius: 8px;
-	:hover {
-		background-color: ${neutralColors.gray[300]};
-	}
-`;
-
-const ClaimButton = styled(P)`
-	color: ${brandColors.pinky[500]};
-	cursor: pointer;
 `;
 
 const TotalAmountContainer = styled.div`
