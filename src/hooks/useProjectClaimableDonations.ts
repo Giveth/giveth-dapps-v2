@@ -44,6 +44,7 @@ export const useProjectClaimableDonations = (
 	// Initiate all balance fetches concurrently
 	const fetchAllBalances = async () => {
 		try {
+			setIsLoading(true);
 			const _allTokensWithBalance = allTokens.map(token => {
 				return fetchTokenBalance(token);
 			});
