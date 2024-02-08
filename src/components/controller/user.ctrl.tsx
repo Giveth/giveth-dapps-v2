@@ -30,7 +30,6 @@ const UserController = () => {
 
 	useEffect(() => {
 		// for safe auto connect is handled somewhere else
-		console.log({ isSafeEnv });
 		if (isSafeEnv === null || !!isSafeEnv) return;
 		// TODO: implement auto connect for solana
 		if (

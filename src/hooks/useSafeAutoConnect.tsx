@@ -14,7 +14,6 @@ function useSafeAutoConnect() {
 	const isSafeEnv = useIsSafeEnvironment();
 
 	useEffect(() => {
-		console.log('RUNNING SAFE AUTO CONNECT', { connectors });
 		if (checkForSafeConnector(connectors)) {
 			const connectorInstance = connectors.find(
 				c => c.id === AUTOCONNECTED_CONNECTOR_IDS[0] && c.ready,
