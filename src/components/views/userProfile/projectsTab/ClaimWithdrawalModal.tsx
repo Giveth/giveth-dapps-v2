@@ -3,21 +3,21 @@ import { Button } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { IStreamWithBalance } from '@/hooks/useProjectClaimableDonations';
+import { ITokenWithBalance } from '@/hooks/useProjectClaimableDonations';
 import ClaimWithdrawalItem from './ClaimWithdrawalItem';
 
 interface IClaimWithdrawalModal extends IModal {
-	selectedStreams: IStreamWithBalance[];
+	selectedStream: ITokenWithBalance;
 	projectName: string;
 }
 
 const ClaimWithdrawalModal = ({
 	setShowModal,
-	selectedStreams,
+	selectedStream,
 	projectName,
 }: IClaimWithdrawalModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	console.log('Selected Streams', selectedStreams);
+	console.log('Selected Streams', selectedStream);
 	return (
 		<Modal
 			closeModal={closeModal}
@@ -27,13 +27,11 @@ const ClaimWithdrawalModal = ({
 			hiddenClose
 		>
 			<ModalContainer>
-				{selectedStreams.map((item, index) => (
-					<ClaimWithdrawalItem
-						key={index}
-						projectName={projectName}
-						stream={item}
-					/>
-				))}
+				<ClaimWithdrawalItem
+					projectName={projectName}
+					stream={selectedStream}
+				/>
+
 				<br />
 				<FullWidthButton
 					label='Confirm'
