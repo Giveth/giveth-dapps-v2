@@ -1064,6 +1064,8 @@
 	"label.your_tokens_will_be_locked_for_the_remainder": "Els teus tokens estaran bloquejats pel que queda de la ronda actual +",
 	"label.your_total_donation": "La seva donació total",
 	"label.your_transactions_have_been_submitted": "Your transactions have been submitted",
+	"label.your_withdrawal_from_this_stream_balance_is_being_processed": "Your withdrawal from this stream balance is being processed.",
+	"label.your_withdrawal_from_this_stream_balance_was_successful": "Your withdrawal from this stream balance was successful.",
 	"label.you_already_completed_your_profile": "Ja has completat el teu perfil!",
 	"label.you_are_about_to_save_the_changes_you_made": "Estàs a punt de desar els canvis que has fet a la teva assignació de GIVpower. Això no es pot desfer.",
 	"label.you_are_donating": "Esteu fent una donació",
