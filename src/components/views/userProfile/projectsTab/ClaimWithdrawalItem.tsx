@@ -8,11 +8,13 @@ import { limitFraction } from '@/helpers/number';
 interface IClaimWithdrawalItem {
 	projectName: string;
 	stream: ITokenWithBalance;
+	balanceInUsd: number;
 }
 
 const ClaimWithdrawalItem = ({
 	projectName = '',
 	stream,
+	balanceInUsd = 0,
 }: IClaimWithdrawalItem) => {
 	return (
 		<Container>
@@ -21,7 +23,8 @@ const ClaimWithdrawalItem = ({
 				{`${limitFraction(
 					utils.formatUnits(stream.balance, stream.token.decimals),
 					6,
-				)} ${stream.token.underlyingToken?.symbol}`}
+				)} ${stream.token.underlyingToken
+					?.symbol} ~ ${balanceInUsd} USD`}
 			</B>
 		</Container>
 	);
