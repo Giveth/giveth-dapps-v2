@@ -24,6 +24,12 @@ export interface IAllTokensUsd {
 	[key: string]: number; //key is token name and value is usd value
 }
 
+export enum ClaimTransactionState {
+	NOT_STARTED = 'Not_Started',
+	PENDING = 'Pending',
+	SUCCESS = 'Success',
+}
+
 const ClaimRecurringDonationModal = ({
 	setShowModal,
 	project,
@@ -36,10 +42,22 @@ const ClaimRecurringDonationModal = ({
 		useState(false);
 	const [selectedStream, setSelectedStream] = useState<ITokenWithBalance>();
 	const [allTokensUsd, setAllTokensUsd] = useState<IAllTokensUsd>({});
+	const [transactionState, setTransactionState] =
+		useState<ClaimTransactionState>(ClaimTransactionState.NOT_STARTED);
+
 	console.log('allTokensUsd', allTokensUsd);
 	console.log('balances', balances);
 	console.log('isLoading', isLoading);
 	console.log('Project', project);
+	const anchorContractAddress = project.anchorContracts[0]?.address;
+
+	const sumAllTokensUsd = () => {
+		let sum = 0;
+		for (const key in allTokensUsd) {
+			sum += allTokensUsd[key];
+		}
+		return sum;
+	};
 
 	return (
 		<Modal
@@ -71,7 +89,7 @@ const ClaimRecurringDonationModal = ({
 						<TotalAmountContainer>
 							<Flex justifyContent='space-between'>
 								<B>Total amount claimable </B>
-								<B>~945 USD</B>
+								<B>~ {sumAllTokensUsd()} USD</B>
 							</Flex>
 						</TotalAmountContainer>
 						<Button
@@ -95,7 +113,15 @@ const ClaimRecurringDonationModal = ({
 					<ClaimWithdrawalModal
 						setShowModal={setShowClaimWithdrawalModal}
 						selectedStream={selectedStream}
-						projectName={project.title || ''}
+						project={project}
+						anchorContractAddress={anchorContractAddress}
+						transactionState={transactionState}
+						setTransactionState={setTransactionState}
+						balanceInUsd={
+							allTokensUsd[
+								selectedStream.token.underlyingToken?.symbol!
+							]
+						}
 					/>
 				)}
 			</ModalContainer>
