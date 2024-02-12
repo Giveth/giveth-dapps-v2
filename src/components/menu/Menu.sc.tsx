@@ -16,18 +16,20 @@ export const MenuContainer = styled(Flex)<IMenuContainerProps>`
 	right: 0;
 	width: 276px;
 	background-color: ${props =>
-		props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
+		props.theme.base === ETheme.Dark ? brandColors.giv[600] : 'white'};
 	border: 1px solid
 		${props =>
-			props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
+			props.theme.base === ETheme.Dark ? brandColors.giv[600] : 'white'};
 	border-radius: 10px 0 10px 10px;
 	padding: 24px 16px 16px;
 	z-index: 0;
 	box-shadow: ${props =>
-		props.theme === ETheme.Dark ? Shadow.Dark[500] : Shadow.Neutral[500]};
+		props.theme.base === ETheme.Dark
+			? Shadow.Dark[500]
+			: Shadow.Neutral[500]};
 	overflow-y: overlay;
 	color: ${props =>
-		props.theme === ETheme.Dark
+		props.theme.base === ETheme.Dark
 			? neutralColors.gray[100]
 			: neutralColors.gray[900]};
 	opacity: ${props => (props.isAnimating ? 1 : 0)};

@@ -101,13 +101,13 @@ const PaginationItem = styled(Caption)<IPaginationItem>`
 	${props =>
 		props.disable
 			? css`
-					color: ${props.theme === ETheme.Dark
+					color: ${props.theme.base === ETheme.Dark
 						? neutralColors.gray[700]
 						: neutralColors.gray[500]};
 				`
 			: css`
 					cursor: pointer;
-					color: ${props.theme === ETheme.Dark
+					color: ${props.theme.base === ETheme.Dark
 						? neutralColors.gray[100]
 						: neutralColors.gray[900]};
 				`};

@@ -53,7 +53,7 @@ const ChildrenWrapper = styled.div`
 	padding: 12px 0;
 	border-bottom: 1px solid
 		${props =>
-			props.theme === ETheme.Dark
+			props.theme.base === ETheme.Dark
 				? brandColors.giv[500]
 				: neutralColors.gray[400]};
 `;

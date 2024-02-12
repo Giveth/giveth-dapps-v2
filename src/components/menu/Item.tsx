@@ -44,18 +44,18 @@ const ItemContainer = styled(Flex)<{ isHighlighted?: boolean }>`
 	border-radius: 8px;
 	background-color: ${props =>
 		props.isHighlighted
-			? props.theme === ETheme.Dark
+			? props.theme.base === ETheme.Dark
 				? brandColors.giv[500]
 				: neutralColors.gray[200]
 			: 'unset'};
 	&:hover {
 		background-color: ${props =>
 			// props.isHighlighted
-			// 	? props.theme === ETheme.Dark
+			// 	? props.theme.base=== ETheme.Dark
 			// 		? brandColors.giv[700]
 			// 		: neutralColors.gray[400]
 			// 	:
-			props.theme === ETheme.Dark
+			props.theme.base === ETheme.Dark
 				? brandColors.giv[500]
 				: neutralColors.gray[200]};
 	}

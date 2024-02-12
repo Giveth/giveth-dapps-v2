@@ -46,7 +46,7 @@ const StepsContainer = styled(Flex)`
 		height: 1px;
 		border-top: 1px solid
 			${props =>
-				props.theme === ETheme.Dark
+				props.theme.base === ETheme.Dark
 					? brandColors.giv[500]
 					: brandColors.giv[100]};
 		bottom: 11px;
@@ -58,7 +58,7 @@ const StepsContainer = styled(Flex)`
 		height: 1px;
 		border-top: 1px dashed
 			${props =>
-				props.theme === ETheme.Dark
+				props.theme.base === ETheme.Dark
 					? brandColors.giv[500]
 					: brandColors.giv[100]};
 		left: -24px;
@@ -87,35 +87,35 @@ const StepTitle = styled(P)<IStepState>`
 	margin-bottom: 8px;
 	color: ${props =>
 		props.disable
-			? props.theme === ETheme.Dark
+			? props.theme.base === ETheme.Dark
 				? brandColors.giv[300]
 				: brandColors.giv[200]
-			: props.theme === ETheme.Dark
+			: props.theme.base === ETheme.Dark
 				? brandColors.giv['000']
 				: brandColors.giv[500]};
 `;
 const StepNumber = styled(SublineBold)<IStepState>`
 	color: ${props =>
 		props.disable
-			? props.theme === ETheme.Dark
+			? props.theme.base === ETheme.Dark
 				? brandColors.giv[200]
 				: neutralColors.gray[100]
-			: props.theme === ETheme.Dark
+			: props.theme.base === ETheme.Dark
 				? brandColors.giv['000']
 				: neutralColors.gray[100]};
 	background-color: ${props =>
 		props.disable
-			? props.theme === ETheme.Dark
+			? props.theme.base === ETheme.Dark
 				? brandColors.giv[500]
 				: brandColors.giv[200]
 			: brandColors.giv[500]};
 	border: 3px solid
 		${props =>
 			props.disable
-				? props.theme === ETheme.Dark
+				? props.theme.base === ETheme.Dark
 					? brandColors.giv[300]
 					: brandColors.giv[100]
-				: props.theme === ETheme.Dark
+				: props.theme.base === ETheme.Dark
 					? brandColors.giv['000']
 					: brandColors.giv[100]};
 	border-radius: 18px;

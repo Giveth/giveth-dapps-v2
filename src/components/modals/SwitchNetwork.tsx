@@ -45,7 +45,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 	const { walletChainType, handleSingOutAndSignInWithEVM, chain } =
 		useGeneralWallet();
 	const chainId = (chain as Chain)?.id;
-	const theme = useAppSelector(state => state.general.theme);
+	const theme = useAppSelector(state => state.general.themeBase);
 
 	const networks =
 		customNetworks?.map(network => {
@@ -98,14 +98,14 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 
 export const SelectedNetwork = styled(Overline)`
 	color: ${props =>
-		props.theme === ETheme.Dark
+		props.theme.base === ETheme.Dark
 			? brandColors.giv[100]
 			: brandColors.giv[500]};
 	position: absolute;
 	top: -8px;
 	left: 10px;
 	background: ${props =>
-		props.theme === ETheme.Dark
+		props.theme.base === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	padding: 0 3px;
@@ -123,7 +123,7 @@ export const NetworkItem = styled.div<{ isSelected: boolean; theme: ETheme }>`
 	gap: 16px;
 	:hover {
 		background-color: ${props =>
-			props.theme === ETheme.Dark
+			props.theme.base === ETheme.Dark
 				? brandColors.giv[700]
 				: neutralColors.gray[200]};
 	}

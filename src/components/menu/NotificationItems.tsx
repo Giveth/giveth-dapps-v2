@@ -77,7 +77,7 @@ const AllNotifsLink = styled(Link)`
 	bottom: 0;
 	width: 100%;
 	background-color: ${props =>
-		props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
+		props.theme.base === ETheme.Dark ? brandColors.giv[600] : 'white'};
 	display: inline-block;
 	padding: 8px 0;
 `;

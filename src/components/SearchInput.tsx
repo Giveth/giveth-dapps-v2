@@ -114,7 +114,7 @@ const StyledInput = styled(ButtonText)`
 	padding: 16px 48px 16px 24px;
 	border-radius: 30px;
 	${props =>
-		props.theme === ETheme.Dark
+		props.theme.base === ETheme.Dark
 			? css`
 					background-color: ${brandColors.giv[600]};
 					border: 1px solid ${brandColors.giv[500]};
@@ -153,7 +153,7 @@ const HintRow = styled(Flex)`
 	margin-top: 4px;
 	padding: 4px;
 	color: ${props =>
-		props.theme === ETheme.Dark
+		props.theme.base === ETheme.Dark
 			? brandColors.giv[300]
 			: neutralColors.gray[600]};
 `;

@@ -109,7 +109,7 @@ export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 const WhatIsStreamContainer = styled.div`
 	padding: 24px 24px 24px;
 	background-image: ${props =>
-		props.theme === ETheme.Dark
+		props.theme.base === ETheme.Dark
 			? `url('/images/stream1.svg')`
 			: `url('/images/stream2.svg')`};
 	background-repeat: no-repeat;

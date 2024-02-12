@@ -109,11 +109,11 @@ const SidebarContainer = styled.div<{
 	top: 0;
 	z-index: ${zIndex.MODAL};
 	background-color: ${props =>
-		props.theme === ETheme.Dark
+		props.theme.base === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	color: ${props =>
-		props.theme === ETheme.Dark
+		props.theme.base === ETheme.Dark
 			? neutralColors.gray[100]
 			: neutralColors.gray[900]};
 	${props => {

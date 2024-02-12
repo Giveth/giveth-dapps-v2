@@ -1,5 +1,5 @@
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
-import { createGlobalStyle, css } from 'styled-components';
+import { createGlobalStyle, css, useTheme } from 'styled-components';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
@@ -13,8 +13,9 @@ const GeneralController = () => {
 	const chainId = chain?.id;
 	const { address, isConnected: isWalletActive } = useAccount();
 	const { switchChain } = useSwitchChain();
+	const { theme: defaultTheme } = useTheme();
 	const router = useRouter();
-	const theme = useAppSelector(state => state.general.theme);
+	const themeBase = useAppSelector(state => state.general.themeBase);
 
 	useEffect(() => {
 		if (!router) return;
@@ -30,20 +31,21 @@ const GeneralController = () => {
 			}
 		}
 	}, [router, address, isWalletActive, chainId]);
-	return <GlobalStyle theme={theme} />;
+
+	return <GlobalStyle theme={{ base: themeBase, ...defaultTheme }} />;
 };
 
-const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
+const GlobalStyle = createGlobalStyle`
   :root {
 	${props =>
-		props.theme === ETheme.Dark
+		props.theme.base === ETheme.Dark
 			? css`
 					--bgColor: ${brandColors.giv[900]} !important;
 					--color: white !important;
 					--scrollColor: ${brandColors.giv[400]} !important;
 					--scrollHoverColor: ${brandColors.giv[700]} !important;
 				`
-			: props.theme === ETheme.Light
+			: props.theme.base === ETheme.Light
 				? css`
 						--bgColor: ${neutralColors.gray[200]} !important;
 						--color: ${neutralColors.gray[900]} !important;
@@ -55,23 +57,5 @@ const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
 	
   }
 `;
-
-// const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
-//   body {
-// 	${props =>
-// 		props.theme === ETheme.Dark
-// 			? css`
-// 					background-color: ${brandColors.giv[900]};
-// 					color: ${'white'};
-// 			  `
-// 			: props.theme === ETheme.Light
-// 			? css`
-// 					background-color: ${neutralColors.gray[200]};
-// 					color: ${neutralColors.gray[900]};
-// 			  `
-// 			: ''}
-
-//   }
-// `;
 
 export default GeneralController;

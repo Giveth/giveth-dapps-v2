@@ -141,11 +141,11 @@ const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
 
 const ModalWrapper = styled.div<ModalWrapperProps>`
 	background-color: ${props =>
-		props.theme === ETheme.Dark
+		props.theme.base === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	color: ${props =>
-		props.theme === ETheme.Dark
+		props.theme.base === ETheme.Dark
 			? neutralColors.gray[100]
 			: brandColors.deep[900]};
 	position: relative;
@@ -157,7 +157,8 @@ const ModalWrapper = styled.div<ModalWrapperProps>`
 	${mediaQueries.tablet} {
 		border-radius: ${props => (props.fullScreen ? 0 : '8px')};
 		box-shadow: 0 3px 20px
-			${props => (props.theme === ETheme.Dark ? '#00000026' : '#21203c')};
+			${props =>
+				props.theme.base === ETheme.Dark ? '#00000026' : '#21203c'};
 		max-height: ${props => (props.fullScreen ? 'none' : '90vh')};
 		width: ${props => (props.fullScreen ? '100%' : 'auto')};
 		height: ${props => (props.fullScreen ? '100%' : 'auto')};
