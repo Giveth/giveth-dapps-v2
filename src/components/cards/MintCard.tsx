@@ -13,7 +13,7 @@ import styled from 'styled-components';
 import { getContract, erc20Abi, Address, Abi } from 'viem';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAccount, useSwitchChain } from 'wagmi';
-import { readContracts } from '@wagmi/core';
+import { readContracts, readContract } from '@wagmi/core';
 import { MintModal } from '../modals/Mint/MintModal';
 import { Flex } from '../styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
@@ -116,14 +116,13 @@ export const MintCard = () => {
 		async function fetchData() {
 			if (!walletAddress) return;
 			try {
-				const pfpContract = await getContract({
+				const _balanceOf = await readContract(wagmiConfig, {
 					address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
 					chainId: config.MAINNET_NETWORK_NUMBER,
-					abi: PFP_ABI,
+					abi: PFP_ABI as Abi,
+					functionName: 'balanceOf',
+					args: [walletAddress],
 				});
-				let _balanceOf = await pfpContract.read.balanceOf([
-					walletAddress,
-				]);
 				setBalance(Number(_balanceOf || '0'));
 			} catch (error) {
 				console.log('failed to fetch user balance data');
