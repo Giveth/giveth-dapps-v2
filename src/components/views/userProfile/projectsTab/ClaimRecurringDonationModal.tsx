@@ -85,7 +85,7 @@ const ClaimRecurringDonationModal = ({
 						<TotalAmountContainer>
 							<Flex justifyContent='space-between'>
 								<B>Total amount claimable </B>
-								<B>~ {sumAllTokensUsd()} USD</B>
+								<B>~ {sumAllTokensUsd} USD</B>
 							</Flex>
 						</TotalAmountContainer>
 						<Button
