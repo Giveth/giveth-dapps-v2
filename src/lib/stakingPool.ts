@@ -196,32 +196,47 @@ const getBalancerPoolStakingAPR = async (
 		balancerPoolStakingConfig;
 	const tokenAddress = config.EVM_NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS;
 	if (!tokenAddress) return { effectiveAPR: Zero };
-
-	const weightedPoolContract = getContract({
-		address: POOL_ADDRESS,
-		abi: BAL_WEIGHTED_POOL_ABI,
-		chainId,
-	});
-
-	const vaultContract = getContract({
-		address: VAULT_ADDRESS,
-		abi: BAL_VAULT_ABI,
-		chainId,
-	});
-
-	interface PoolTokens {
-		balances: Array<bigint>;
-		tokens: Array<string>;
-	}
 	let farmAPR = null;
 
 	try {
+		const weightedPoolContract = {
+			address: POOL_ADDRESS,
+			abi: BAL_WEIGHTED_POOL_ABI as Abi,
+			chainId,
+		};
+
+		const vaultContract = {
+			address: VAULT_ADDRESS,
+			abi: BAL_VAULT_ABI as Abi,
+			chainId,
+		};
+		interface PoolTokens {
+			balances: Array<bigint>;
+			tokens: Array<string>;
+		}
+		const results = await readContracts(wagmiConfig, {
+			contracts: [
+				{
+					...vaultContract,
+					functionName: 'getPoolTokens',
+					args: [POOL_ID],
+				},
+				{
+					...weightedPoolContract,
+					functionName: 'totalSupply',
+				},
+				{
+					...weightedPoolContract,
+					functionName: 'getNormalizedWeights',
+				},
+			],
+		});
 		const [_poolTokens, _poolTotalSupply, _poolNormalizedWeights] =
-			(await Promise.all([
-				vaultContract.read.getPoolTokens([POOL_ID]),
-				weightedPoolContract.read.totalSupply(),
-				weightedPoolContract.read.getNormalizedWeights(),
-			])) as [PoolTokens, bigint, Array<bigint>];
+			results.map(res => getReadContractResult(res)) as [
+				PoolTokens,
+				bigint,
+				Array<bigint>,
+			];
 
 		const { totalSupply, rewardRate } = await getUnipoolInfo(
 			unipool,
