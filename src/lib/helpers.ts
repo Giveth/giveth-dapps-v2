@@ -379,7 +379,7 @@ async function handleErc20Transfer(
 async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 	const value = parseEther(params.value);
 
-	const { hash } = await wagmiSendTransaction({
+	const hash = await wagmiSendTransaction(wagmiConfig, {
 		to: params.to,
 		value: value,
 		data: '0x',
