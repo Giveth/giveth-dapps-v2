@@ -1,9 +1,9 @@
 import { captureException } from '@sentry/nextjs';
-import { getContract } from 'viem';
-import { type Address, erc20ABI } from 'wagmi';
-
+import { readContracts } from '@wagmi/core';
+import { Address, erc20Abi } from 'viem';
 import config from '@/configuration';
 import { MAX_TOKEN_ORDER } from './constants/tokens';
+import { wagmiConfig } from '@/wagmiconfig';
 
 const mainnetConfig = config.MAINNET_CONFIG;
 export const uniswapV3Config = mainnetConfig.v3Pools[0];
@@ -18,13 +18,29 @@ interface IERC20Info {
 
 export async function getERC20Info({ contractAddress, networkId }: IERC20Info) {
 	try {
-		const contract = getContract({
+		const baseProps = {
 			address: contractAddress!,
-			abi: erc20ABI,
+			abi: erc20Abi,
+		} as const;
+		const result = await readContracts(wagmiConfig, {
+			contracts: [
+				{
+					...baseProps,
+					functionName: 'name',
+				},
+				{
+					...baseProps,
+					functionName: 'symbol',
+				},
+				{
+					...baseProps,
+					functionName: 'decimals',
+				},
+			],
 		});
-		const name = await contract.read.name();
-		const symbol = await contract.read.symbol();
-		const decimals = await contract.read.decimals();
+		const name = getReadContractResult(result[0]);
+		const symbol = getReadContractResult(result[1]);
+		const decimals = getReadContractResult(result[2]);
 		const ERC20Info = {
 			name,
 			symbol,
