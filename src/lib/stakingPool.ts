@@ -508,6 +508,7 @@ export const approveERC20tokenTransfer = async (
 			const tx = await writeContract(wagmiConfig, {
 				address: tokenAddress,
 				abi: erc20Abi,
+				chainId,
 				functionName: 'approve',
 				args: [spenderAddress, 0n],
 				// @ts-ignore -- needed for safe txs
@@ -523,6 +524,7 @@ export const approveERC20tokenTransfer = async (
 		const txResponse = await writeContract(wagmiConfig, {
 			address: tokenAddress,
 			abi: erc20Abi,
+			chainId,
 			functionName: 'approve',
 			args: [spenderAddress, amount],
 			// @ts-ignore -- needed for safe txs
@@ -547,19 +549,13 @@ export const wrapToken = async (
 	chainId: number,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
-
 	try {
-		return await walletClient?.writeContract({
+		return await writeContract(wagmiConfig, {
 			address: gardenAddress,
 			abi: TOKEN_MANAGER_ABI,
+			chainId,
 			functionName: 'wrap',
 			args: [amount],
-			// @ts-ignore -- needed for safe txs
 			value: 0n,
 		});
 	} catch (error) {
@@ -578,19 +574,13 @@ export const stakeGIV = async (
 	chainId: number,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
-
 	try {
-		return await walletClient?.writeContract({
+		return await writeContract(wagmiConfig, {
 			address: lmAddress,
 			abi: UNIPOOL_GIVPOWER_ABI,
+			chainId,
 			functionName: 'stake',
 			args: [amount],
-			// @ts-ignore -- needed for safe txs
 			value: 0n,
 		});
 	} catch (error) {
@@ -609,16 +599,11 @@ export const unwrapToken = async (
 	chainId: number,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
-
 	try {
-		return await walletClient?.writeContract({
+		return await writeContract(wagmiConfig, {
 			address: gardenAddress,
 			abi: TOKEN_MANAGER_ABI,
+			chainId,
 			functionName: 'unwrap',
 			args: [amount],
 			// @ts-ignore -- needed for safe txs
@@ -642,12 +627,6 @@ export const stakeTokens = async (
 	permit: boolean,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
-
 	const walletAddress = walletClient.account.address;
 	try {
 		if (permit) {
