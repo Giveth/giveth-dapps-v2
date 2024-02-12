@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/nextjs';
-import { getWalletClient, signTypedData } from 'wagmi/actions';
+import { signTypedData } from 'wagmi/actions';
 import { Abi, erc20Abi } from 'viem';
 import { WriteContractReturnType, hexToSignature } from 'viem';
 import { type Address } from 'viem';
@@ -719,18 +719,13 @@ export const lockToken = async (
 	chainId: number,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
 	try {
-		return await walletClient?.writeContract({
+		return await writeContract(wagmiConfig, {
 			address: contractAddress,
 			abi: GP_ABI,
+			chainId,
 			functionName: 'lock',
 			args: [amount, round],
-			// @ts-ignore -- needed for safe txs
 			value: 0n,
 		});
 	} catch (error) {
