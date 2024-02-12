@@ -10,12 +10,14 @@ import {
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import { useAccount, useSwitchChain } from 'wagmi';
-import { Address, getContract } from 'viem';
+import { Address } from 'viem';
+import { readContract } from '@wagmi/core';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { Flex } from '@/components/styled-components/Flex';
 import EligibilityModal from './EligibilityModal';
+import { wagmiConfig } from '@/wagmiconfig';
 
 const CheckEligibility = () => {
 	const [walletAddress, setWalletAddress] = useState('');
@@ -33,12 +35,13 @@ const CheckEligibility = () => {
 
 	const checkAddress = async (address: Address) => {
 		try {
-			const pfpContract = getContract({
+			const isAllowed = await readContract(wagmiConfig, {
 				address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
 				abi: PFP_ABI,
+				functionName: 'allowList',
+				args: [address],
 			});
-			const res = await pfpContract.read.allowList([address]);
-			res === true ? setStatus(true) : setStatus(false);
+			isAllowed === true ? setStatus(true) : setStatus(false);
 			setShowModal(true);
 		} catch (error) {
 			setError('Cannot get data');
