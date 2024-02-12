@@ -147,10 +147,11 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	};
 
 	const onStake = async () => {
-		if (!chainId) return;
+		if (!chainId || !address) return;
 		setStakeState(StakeState.STAKING);
 		try {
 			const txResponse = await stakeTokens(
+				address,
 				amount,
 				POOL_ADDRESS,
 				LM_ADDRESS,

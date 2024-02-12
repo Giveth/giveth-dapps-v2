@@ -620,6 +620,7 @@ export const unwrapToken = async (
 };
 
 export const stakeTokens = async (
+	walletAddress: Address,
 	amount: bigint,
 	poolAddress: Address,
 	lmAddress: Address,
@@ -627,7 +628,7 @@ export const stakeTokens = async (
 	permit: boolean,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
-	const walletAddress = walletClient.account.address;
+
 	try {
 		if (permit) {
 			const rawPermitCall = await permitTokens(
@@ -637,21 +638,19 @@ export const stakeTokens = async (
 				lmAddress,
 				amount,
 			);
-			return await walletClient.writeContract({
+			return await writeContract(wagmiConfig, {
 				address: lmAddress,
 				abi: LM_ABI,
 				functionName: 'stakeWithPermit',
 				args: [amount, rawPermitCall],
-				// @ts-ignore -- needed for safe txs
 				value: 0n,
 			});
 		} else {
-			return await walletClient.writeContract({
+			return await writeContract(wagmiConfig, {
 				address: lmAddress,
 				abi: LM_ABI,
 				functionName: 'stake',
 				args: [amount],
-				// @ts-ignore -- needed for safe txs
 				value: 0n,
 			});
 		}
