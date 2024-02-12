@@ -55,7 +55,7 @@ export const ClaimRecurringItem = ({
 						6,
 					)} 
                     ${tokenWithBalance.token.underlyingToken?.symbol} ~
-                    ${price}
+                    ${price ?? 0}
                     USD
                 `}
 				</B>
