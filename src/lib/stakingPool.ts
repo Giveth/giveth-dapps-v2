@@ -753,12 +753,13 @@ export const getGIVpowerOnChain = async (
 			console.error('GIVpower contract address is null');
 			return;
 		}
-		const givpowerContract = getContract({
+		return (await readContract(wagmiConfig, {
 			address: contractAddress,
 			abi: GP_ABI,
 			chainId,
-		});
-		return (await givpowerContract.read.balanceOf([account])) as bigint;
+			functionName: 'balanceOf',
+			args: [account],
+		})) as bigint;
 	} catch (error) {
 		console.log('Error on get total GIVpower:', error);
 		captureException(error, {
