@@ -1,7 +1,7 @@
 import { B, Button, P, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { IProject } from '@/apollo/types/types';
 import { Modal } from '@/components/modals/Modal';
 import { Flex } from '@/components/styled-components/Flex';
@@ -47,13 +47,13 @@ const ClaimRecurringDonationModal = ({
 
 	const anchorContractAddress = project.anchorContracts[0]?.address;
 
-	const sumAllTokensUsd = () => {
+	const sumAllTokensUsd = useMemo(() => {
 		let sum = 0;
 		for (const key in allTokensUsd) {
 			sum += allTokensUsd[key];
 		}
 		return sum;
-	};
+	}, [allTokensUsd]);
 
 	return (
 		<Modal
