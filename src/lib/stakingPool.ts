@@ -669,18 +669,12 @@ export const harvestTokens = async (
 	lmAddress: Address,
 	chainId: number,
 ): Promise<WriteContractReturnType | undefined> => {
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
-
 	try {
-		return await walletClient.writeContract({
+		return await writeContract(wagmiConfig, {
 			address: lmAddress,
 			abi: LM_ABI,
+			chainId,
 			functionName: 'getReward',
-			// @ts-ignore -- needed for safe txs
 			value: 0n,
 		});
 	} catch (error) {
@@ -699,19 +693,13 @@ export const withdrawTokens = async (
 	chainId: number,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
-
 	try {
-		return await walletClient.writeContract({
+		return await writeContract(wagmiConfig, {
 			address: lmAddress,
 			abi: LM_ABI,
+			chainId,
 			functionName: 'withdraw',
 			args: [amount],
-			// @ts-ignore -- needed for safe txs
 			value: 0n,
 		});
 	} catch (e) {
