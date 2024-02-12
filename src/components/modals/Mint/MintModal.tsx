@@ -9,7 +9,7 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
-import { getWalletClient } from '@wagmi/core';
+import { writeContract } from '@wagmi/core';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -21,6 +21,7 @@ import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
 import { MintSteps } from './MintSteps';
+import { wagmiConfig } from '@/wagmiconfig';
 export enum MintStep {
 	APPROVE,
 	APPROVING,
@@ -87,13 +88,10 @@ export const MintModal: FC<IMintModalProps> = ({
 
 		setStep(MintStep.MINTING);
 		try {
-			const walletClient = await getWalletClient({
-				chainId: config.MAINNET_NETWORK_NUMBER,
-			});
-
-			const txResponse = await walletClient?.writeContract({
+			const txResponse = await writeContract(wagmiConfig, {
 				address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
 				abi: PFP_ABI,
+				chainId: config.MAINNET_NETWORK_NUMBER,
 				functionName: 'mint',
 				args: [qty],
 				// @ts-ignore -- needed for safe txs
