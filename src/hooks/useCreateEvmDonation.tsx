@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
-import { fetchEnsAddress, fetchTransaction } from '@wagmi/core';
-import { useAccount, useWaitForTransaction } from 'wagmi';
-
+import { getEnsAddress } from '@wagmi/core';
+import { useAccount } from 'wagmi';
 import { Address } from 'viem';
+import { useWaitForTransactionReceipt } from 'wagmi';
 import { sendEvmTransaction } from '@/lib/helpers';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
@@ -11,9 +11,10 @@ import { isAddressENS } from '@/lib/wallet';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
 import { ICreateDonation } from '@/components/views/donate/helpers';
 import { getTxFromSafeTxId } from '@/lib/safe';
-import { retryFetchTransaction, waitForTransaction } from '@/lib/transaction';
+import { retryFetchEVMTransaction } from '@/lib/transaction';
 import { useIsSafeEnvironment } from './useSafeAutoConnect';
 import { postRequest } from '@/helpers/requests';
+import { wagmiConfig } from '@/wagmiconfig';
 
 export const useCreateEvmDonation = () => {
 	const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
@@ -27,7 +28,7 @@ export const useCreateEvmDonation = () => {
 	const chainId = chain?.id;
 	const isSafeEnv = useIsSafeEnvironment();
 
-	const { status } = useWaitForTransaction({
+	const { status } = useWaitForTransactionReceipt({
 		hash: txHash,
 		onReplaced(data) {
 			console.log('Transaction Updated', data);
@@ -41,40 +42,32 @@ export const useCreateEvmDonation = () => {
 			createDonationProps &&
 				handleSaveDonation(data.transaction.hash, createDonationProps);
 		},
-		async onError(error) {
-			// Manage case for multisigs
-			const { status } = await waitForTransaction(txHash!, isSafeEnv);
-			if (status) {
-				// Make it successful if found
-				updateDonation(donationId, EDonationStatus.VERIFIED);
-				setDonationMinted(true);
-				if (resolveState) {
-					resolveState();
-					setResolveState(null); // clear the state to avoid calling it again
-				}
-			}
-			console.log('Error', error);
-		},
+		// async onError(error) { //TODO:Migrate
+		// 	// Manage case for multisigs
+		// 	const { status } = await waitForTransaction(txHash!, isSafeEnv);
+		// 	if (status) {
+		// 		// Make it successful if found
+		// 		updateDonation(donationId, EDonationStatus.VERIFIED);
+		// 		setDonationMinted(true);
+		// 		if (resolveState) {
+		// 			resolveState();
+		// 			setResolveState(null); // clear the state to avoid calling it again
+		// 		}
+		// 	}
+		// 	console.log('Error', error);
+		// },
 	});
 
 	const handleSaveDonation = async (
 		txHash: Address,
 		props: ICreateDonation,
 	) => {
-		let transaction, safeTransaction;
+		if (!txHash) return;
 		try {
-			if (!txHash) {
-				return;
-			}
-			transaction = !isSafeEnv
-				? await retryFetchTransaction(fetchTransaction, txHash)
-				: null;
-
-			if (!transaction && isSafeEnv) {
-				safeTransaction = await getTxFromSafeTxId(txHash, chainId!);
-			}
-
+			let transaction, safeTransaction;
+			let donationData: IOnTxHash;
 			setTxHash(txHash);
+
 			const {
 				anonymous,
 				projectId,
@@ -84,37 +77,45 @@ export const useCreateEvmDonation = () => {
 				setFailedModalType,
 			} = props;
 
-			let donationData: IOnTxHash;
-
-			if (isSafeEnv && safeTransaction) {
-				donationData = {
-					chainId: chainId!,
-					amount: amount,
-					token,
-					projectId,
-					anonymous,
-					chainvineReferred,
-					walletAddress: safeTransaction?.safe as `0x${string}`,
-					symbol: token.symbol,
-					setFailedModalType,
-					safeTransactionId: txHash,
-				};
-			} else if (!isSafeEnv && transaction) {
-				donationData = {
-					chainId: transaction.chainId!,
-					txHash: transaction.hash,
-					amount: amount,
-					token,
-					projectId,
-					anonymous,
-					nonce: transaction.nonce,
-					chainvineReferred,
-					walletAddress: transaction.from,
-					symbol: token.symbol,
-					setFailedModalType,
-					safeTransactionId: null,
-				};
-			} else return;
+			if (isSafeEnv) {
+				safeTransaction = await getTxFromSafeTxId(txHash, chainId!);
+				if (safeTransaction) {
+					donationData = {
+						chainId: chainId!,
+						amount: amount,
+						token,
+						projectId,
+						anonymous,
+						chainvineReferred,
+						walletAddress: safeTransaction?.safe as `0x${string}`,
+						symbol: token.symbol,
+						setFailedModalType,
+						safeTransactionId: txHash,
+					};
+				} else {
+					return null;
+				}
+			} else {
+				transaction = await retryFetchEVMTransaction(txHash);
+				if (transaction) {
+					donationData = {
+						chainId: transaction.chainId!,
+						txHash: transaction.hash,
+						amount: amount,
+						token,
+						projectId,
+						anonymous,
+						nonce: transaction.nonce,
+						chainvineReferred,
+						walletAddress: transaction.from,
+						symbol: token.symbol,
+						setFailedModalType,
+						safeTransactionId: null,
+					};
+				} else {
+					return null;
+				}
+			}
 
 			console.log('donationData', { donationData });
 			setCreateDonationProps(donationData);
@@ -172,7 +173,7 @@ export const useCreateEvmDonation = () => {
 		const { address } = token;
 
 		const toAddress = isAddressENS(walletAddress!)
-			? await fetchEnsAddress({ name: walletAddress })
+			? await getEnsAddress(wagmiConfig, { name: walletAddress })
 			: walletAddress;
 
 		const transactionObj = {
