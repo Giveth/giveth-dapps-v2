@@ -1,5 +1,6 @@
 import SafeAppsSDK, { TransactionStatus } from '@safe-global/safe-apps-sdk';
 import { waitForTransactionReceipt } from '@wagmi/core';
+import { wagmiConfig } from '@/wagmiconfig';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 const maxAttempts = 200; // keeping it high as gnosis safe takes a while to confirm and processing
@@ -10,7 +11,7 @@ export const waitForTransaction = async (
 	isSafeEnv?: boolean,
 ) => {
 	if (!isSafeEnv) {
-		return await waitForTransactionReceipt({ hash });
+		return await waitForTransactionReceipt(wagmiConfig, { hash });
 	} else {
 		const sdk = new SafeAppsSDK({
 			allowedDomains: [/app.safe.global$/],
@@ -30,7 +31,7 @@ export const waitForTransaction = async (
 						TransactionStatus.AWAITING_CONFIRMATIONS &&
 					queued.txStatus !== TransactionStatus.AWAITING_EXECUTION
 				) {
-					return await waitForTransactionReceipt({
+					return await waitForTransactionReceipt(wagmiConfig, {
 						hash: queued.txHash as `0x${string}`,
 					});
 				}
