@@ -17,7 +17,7 @@ export const ClaimWithdrawalStatus = ({
 	status,
 }: IClaimWithdrawalStatusProps) => {
 	const { formatMessage } = useIntl();
-	console.log('Statys', status);
+
 	const handleStatusText = () => {
 		switch (status) {
 			case ClaimTransactionState.SUCCESS:

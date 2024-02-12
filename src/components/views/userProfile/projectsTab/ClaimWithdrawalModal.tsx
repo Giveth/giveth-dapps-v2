@@ -46,17 +46,12 @@ const ClaimWithdrawalModal = ({
 	const [txHash, setTxHash] = useState<Address>();
 	const { formatMessage } = useIntl();
 
-	console.log('Selected Streams', selectedStream);
-	console.log('Selected Streams', selectedStream);
 	const projectName = project.title || '';
 	const optimismAddress = project.addresses?.find(
 		address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 	)?.address;
 
-	console.log('Optimism address', optimismAddress);
-
 	const [loading, setLoading] = useState(false);
-	console.log('Balance', selectedStream.balance.toString());
 
 	const encodedDowngradeTo = encodeFunctionData({
 		abi: superTokenABI.abi,
@@ -78,21 +73,17 @@ const ClaimWithdrawalModal = ({
 		try {
 			setLoading(true);
 			setTransactionState(ClaimTransactionState.PENDING);
-			console.log('Clicked inside if');
 			const tx = await executeContractWrite.writeAsync?.();
-			console.log('tx', tx);
 			if (tx?.hash) {
 				setTxHash(tx.hash);
-				const data = await waitForTransaction({
+				waitForTransaction({
 					hash: tx.hash,
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
 				});
 				setTransactionState(ClaimTransactionState.SUCCESS);
-				console.log('executeData', data);
 			}
 		} catch (error) {
 			setTransactionState(ClaimTransactionState.NOT_STARTED);
-			console.log('error', error);
 		} finally {
 			setLoading(false);
 		}
@@ -144,8 +135,6 @@ const ClaimWithdrawalModal = ({
 				};
 		}
 	};
-
-	console.log('Streamm', selectedStream);
 
 	//view_on_block_explorer
 

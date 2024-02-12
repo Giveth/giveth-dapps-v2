@@ -36,7 +36,6 @@ export const useProjectClaimableDonations = (
 			}
 			return null;
 		} catch (error) {
-			console.error(`Error fetching balance for ${token.symbol}:`, error);
 			return null;
 		}
 	};
@@ -48,16 +47,13 @@ export const useProjectClaimableDonations = (
 			const _allTokensWithBalance = allTokens.map(token => {
 				return fetchTokenBalance(token);
 			});
-			console.log('All tokens with balance', _allTokensWithBalance);
 			const results = await Promise.all(_allTokensWithBalance);
 			// Filter out null values
 			const filteredResults = results.filter(
 				result => result !== null && result.balance !== 0n,
 			) as ITokenWithBalance[];
-			console.log('Filtered results', filteredResults);
 			setBalances(filteredResults);
 		} catch (error) {
-			console.error('Error fetching all balances:', error);
 		} finally {
 			setIsLoading(false);
 		}
@@ -67,8 +63,6 @@ export const useProjectClaimableDonations = (
 		if (!anchorContractAddress) return;
 		fetchAllBalances();
 	}, []);
-
-	console.log('Balances', balances);
 
 	return { isLoading, balances };
 };

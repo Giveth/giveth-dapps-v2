@@ -34,7 +34,6 @@ export const ClaimRecurringItem = ({
 		}
 	}, [price]);
 
-	console.log('Price', price);
 	return (
 		<ItemContainer
 			justifyContent='space-between'

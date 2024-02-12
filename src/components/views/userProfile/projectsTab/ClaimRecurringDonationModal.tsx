@@ -45,10 +45,6 @@ const ClaimRecurringDonationModal = ({
 	const [transactionState, setTransactionState] =
 		useState<ClaimTransactionState>(ClaimTransactionState.NOT_STARTED);
 
-	console.log('allTokensUsd', allTokensUsd);
-	console.log('balances', balances);
-	console.log('isLoading', isLoading);
-	console.log('Project', project);
 	const anchorContractAddress = project.anchorContracts[0]?.address;
 
 	const sumAllTokensUsd = () => {
