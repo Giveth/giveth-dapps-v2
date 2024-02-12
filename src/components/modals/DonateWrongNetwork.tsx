@@ -155,7 +155,9 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 											) {
 												await handleSingOutAndSignInWithEVM();
 											} else {
-												switchChain?.(_chainId);
+												switchChain?.({
+													chainId: _chainId,
+												});
 												closeModal();
 											}
 										}}
