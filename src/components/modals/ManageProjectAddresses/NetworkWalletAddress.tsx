@@ -8,7 +8,7 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain } from 'wagmi';
+import { Chain } from 'viem';
 import { IWalletAddress } from '@/apollo/types/types';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';

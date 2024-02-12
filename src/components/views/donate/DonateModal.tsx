@@ -8,7 +8,7 @@ import {
 	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain } from 'wagmi';
+import { Chain } from 'viem';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
