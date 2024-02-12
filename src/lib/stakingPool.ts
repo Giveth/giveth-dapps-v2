@@ -297,19 +297,32 @@ const getSimplePoolStakingAPR = async (
 		? streamConfig.rewardTokenAddress
 		: givTokenAddress;
 
-	const poolContract = getContract({
-		address: POOL_ADDRESS,
-		abi: UNI_ABI,
-		chainId,
-	});
-
 	let farmAPR = null;
 	try {
-		const [_reserves, _token0, _poolTotalSupply] = (await Promise.all([
-			poolContract.read.getReserves(),
-			poolContract.read.token0(),
-			poolContract.read.totalSupply(),
-		])) as [[bigint, bigint, number], Address, bigint];
+		const poolContractInfo = {
+			address: POOL_ADDRESS,
+			abi: UNI_ABI as Abi,
+			chainId,
+		};
+		const results = await readContracts(wagmiConfig, {
+			contracts: [
+				{
+					...poolContractInfo,
+					functionName: 'getReserves',
+				},
+				{
+					...poolContractInfo,
+					functionName: 'token0',
+				},
+				{
+					...poolContractInfo,
+					functionName: 'totalSupply',
+				},
+			],
+		});
+		const [_reserves, _token0, _poolTotalSupply] = results.map(res =>
+			getReadContractResult(res),
+		) as [[bigint, bigint, number], Address, bigint];
 
 		const { totalSupply, rewardRate } = await getUnipoolInfo(
 			unipoolHelper,
