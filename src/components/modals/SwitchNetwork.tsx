@@ -9,7 +9,8 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Chain, useSwitchChain } from 'wagmi';
+import { useSwitchChain } from 'wagmi';
+import { Chain } from 'viem';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
@@ -70,7 +71,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 							if (walletChainType === ChainType.SOLANA) {
 								handleSingOutAndSignInWithEVM();
 							}
-							switchChain?.(networkId);
+							switchChain?.({ chainId: networkId });
 							closeModal();
 						}}
 						isSelected={networkId === chainId}
@@ -111,7 +112,7 @@ export const SelectedNetwork = styled(Overline)`
 	border-radius: 4px;
 `;
 
-export const NetworkItem = styled.div<{ isSelected: boolean }>`
+export const NetworkItem = styled.div<{ isSelected: boolean; theme: ETheme }>`
 	position: relative;
 	padding: 8px;
 	width: 213px;
