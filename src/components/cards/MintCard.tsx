@@ -10,7 +10,7 @@ import {
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { getContract, erc20Abi, Address, Abi } from 'viem';
+import { erc20Abi, Abi, Address } from 'viem';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { readContracts, readContract } from '@wagmi/core';
@@ -187,14 +187,14 @@ export const MintCard = () => {
 		)
 			return;
 
-		const pfpContract = await getContract({
+		const userDaiBalance = await readContract(wagmiConfig, {
 			address: config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS,
 			chainId: config.MAINNET_NETWORK_NUMBER,
 			abi: erc20Abi,
+			functionName: 'balanceOf',
+			args: [walletAddress as Address],
 		});
-		let userDaiBalance = await pfpContract.read.balanceOf([
-			walletAddress as Address,
-		]);
+
 		const total = pfpData.price * BigInt(qtyNFT);
 		if (total <= userDaiBalance) {
 			setQty(Number(qtyNFT));
