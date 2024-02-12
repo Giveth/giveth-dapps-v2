@@ -3,10 +3,11 @@ import unescape from 'lodash/unescape';
 
 // import { keccak256 } from '@ethersproject/keccak256';
 
-import { erc20Abi, getContract } from 'viem';
+import { erc20Abi } from 'viem';
 import {
 	writeContract,
 	sendTransaction as wagmiSendTransaction,
+	readContract,
 } from '@wagmi/core';
 
 // @ts-ignore
@@ -21,6 +22,7 @@ import { gToast, ToastType } from '@/components/toasts';
 import config, { isProduction } from '@/configuration';
 import { AddressZero } from './constants/constants';
 import { ChainType, NonEVMChain } from '@/types/config';
+import { wagmiConfig } from '@/wagmiconfig';
 
 declare let window: any;
 interface TransactionParams {
@@ -354,21 +356,23 @@ async function handleErc20Transfer(
 	params: TransactionParams,
 	contractAddress: Address,
 ): Promise<Address> {
-	const contract = getContract({
+	const baseProps = {
 		address: contractAddress,
 		abi: erc20Abi,
+	};
+	const decimals = await readContract(wagmiConfig, {
+		...baseProps,
+		functionName: 'decimals',
 	});
-	const decimals = await contract.read.decimals();
 	const value = parseUnits(params.value, decimals);
-	const write = await writeContract({
-		address: contractAddress,
-		abi: erc20Abi,
+	const hash = await writeContract(wagmiConfig, {
+		...baseProps,
 		functionName: 'transfer',
 		args: [params.to, value],
 		// @ts-ignore -- needed for safe txs
 		value: 0n,
 	});
-	return write.hash;
+	return hash;
 }
 
 // Handles the transfer for ETH, returning the transaction hash.
