@@ -109,6 +109,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 					projectDonationsSqrtRootSum,
 					allProjectsSum,
 					matchingPool,
+					selectedQF.maximumReward,
 				)
 			: qfRoundHistory
 				? qfRoundHistory.matchingFund !== null
@@ -118,6 +119,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 								.projectDonationsSqrtRootSum,
 							qfRoundHistory.estimatedMatching.allProjectsSum,
 							qfRoundHistory.estimatedMatching.matchingPool,
+							selectedQF.maximumReward,
 						)
 				: 0
 		: 0;

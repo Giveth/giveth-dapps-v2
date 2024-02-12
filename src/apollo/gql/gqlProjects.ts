@@ -15,6 +15,7 @@ export const PROJECT_CORE_FIELDS = gql`
 			isActive
 			beginDate
 			endDate
+			maximumReward
 		}
 	}
 `;
@@ -168,6 +169,7 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				beginDate
 				endDate
 				eligibleNetworks
+				maximumReward
 			}
 			campaigns {
 				id
