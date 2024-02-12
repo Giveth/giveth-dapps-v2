@@ -13,7 +13,8 @@ import {
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Chain, useSwitchChain } from 'wagmi';
+import { useSwitchChain } from 'wagmi';
+import { Chain } from 'viem';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
@@ -61,13 +62,12 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	} = useGeneralWallet();
 
 	const { slug } = router.query;
-	const eligibleNetworks = networks.filter(
-		network =>
-			acceptedChains?.some(acceptedChain =>
-				acceptedChain.chainType === ChainType.SOLANA
-					? acceptedChain.chainType === network.chainType
-					: acceptedChain.networkId === network.id,
-			),
+	const eligibleNetworks = networks.filter(network =>
+		acceptedChains?.some(acceptedChain =>
+			acceptedChain.chainType === ChainType.SOLANA
+				? acceptedChain.chainType === network.chainType
+				: acceptedChain.networkId === network.id,
+		),
 	);
 
 	const networkId = (chain as Chain)?.id;
