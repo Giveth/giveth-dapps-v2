@@ -1,9 +1,10 @@
 import { captureException } from '@sentry/nextjs';
-import { getContract, getWalletClient, signTypedData } from 'wagmi/actions';
-import { erc20Abi } from 'viem';
+import { getWalletClient, signTypedData } from 'wagmi/actions';
+import { Abi, erc20Abi } from 'viem';
 import { WriteContractReturnType, hexToSignature } from 'viem';
 import { type Address } from 'viem';
 import BigNumber from 'bignumber.js';
+import { readContracts } from '@wagmi/core';
 import {
 	BalancerPoolStakingConfig,
 	ICHIPoolStakingConfig,
@@ -28,6 +29,8 @@ import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { E18, MaxUint256 } from './constants/constants';
 import { Zero } from '@/helpers/number';
+import { wagmiConfig } from '@/wagmiconfig';
+import { getReadContractResult } from './contracts';
 
 const { abi: LM_ABI } = LM_Json;
 const { abi: GP_ABI } = GP_Json;
@@ -50,15 +53,26 @@ const getUnipoolInfo = async (
 		rewardRate = unipoolHelper.rewardRate;
 	} else {
 		try {
-			const lmContract = getContract({
+			const baseProps = {
 				address: lmAddress,
-				abi: LM_ABI,
+				abi: LM_ABI as Abi,
 				chainId,
+			};
+			const results = await readContracts(wagmiConfig, {
+				contracts: [
+					{
+						...baseProps,
+						functionName: 'totalSupply',
+					},
+					{
+						...baseProps,
+						functionName: 'rewardRate',
+					},
+				],
 			});
-			const [_totalSupply, _rewardRate] = await Promise.all([
-				lmContract.read.totalSupply(),
-				lmContract.read.rewardRate(),
-			]);
+			const [_totalSupply, _rewardRate] = results.map(res =>
+				getReadContractResult(res),
+			);
 			totalSupply = _totalSupply as bigint;
 			rewardRate = _rewardRate as bigint;
 		} catch (error) {
