@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
-import { type Address, useAccount } from 'wagmi';
+import { useAccount } from 'wagmi';
+import { Address } from 'viem';
 import { fetchETCPrice, fetchPrice, fetchSolanaPrice } from '@/services/token';
 import { fetchEthPrice } from '@/features/price/price.services';
 import { useAppSelector } from '@/features/hooks';

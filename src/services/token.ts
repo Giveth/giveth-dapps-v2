@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/nextjs';
-import { type Address } from 'wagmi';
+import { type Address } from 'viem';
 import { getContract, getPublicClient } from 'wagmi/actions';
 import { erc20Abi } from 'viem';
 import config from '@/configuration';

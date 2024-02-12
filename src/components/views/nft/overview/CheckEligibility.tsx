@@ -9,8 +9,8 @@ import {
 } from '@giveth/ui-design-system';
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
-import { type Address, useAccount, useSwitchChain } from 'wagmi';
-import { getContract } from 'viem';
+import { useAccount, useSwitchChain } from 'wagmi';
+import { Address, getContract } from 'viem';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';

@@ -1,7 +1,7 @@
 import { captureException } from '@sentry/nextjs';
 import { getWalletClient } from 'wagmi/actions';
 import { WriteContractReturnType } from 'viem';
-import { type Address } from 'wagmi';
+import { type Address } from 'viem';
 import { ClaimData } from '@/types/GIV';
 import config from '../configuration';
 import MerkleDropJson from '../artifacts/MerkleDrop.json';

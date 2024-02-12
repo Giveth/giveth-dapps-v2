@@ -2,7 +2,7 @@ import { captureException } from '@sentry/nextjs';
 import { getContract, getWalletClient, signTypedData } from 'wagmi/actions';
 import { erc20Abi } from 'viem';
 import { WriteContractReturnType, hexToSignature } from 'viem';
-import { type Address } from 'wagmi';
+import { type Address } from 'viem';
 import BigNumber from 'bignumber.js';
 import {
 	BalancerPoolStakingConfig,

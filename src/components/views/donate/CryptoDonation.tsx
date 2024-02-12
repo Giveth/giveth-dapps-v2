@@ -11,7 +11,7 @@ import {
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { Chain, erc20Abi, formatUnits, parseUnits } from 'viem';
+import { Address, Chain, erc20Abi, formatUnits, parseUnits } from 'viem';
 import { getContract } from 'viem';
 import { PublicKey } from '@solana/web3.js';
 import { useConnection } from '@solana/wallet-adapter-react';

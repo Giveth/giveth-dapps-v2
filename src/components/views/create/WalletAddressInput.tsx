@@ -10,8 +10,8 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import { isAddress } from 'viem';
-import { type Address, useAccount } from 'wagmi';
+import { Address, isAddress } from 'viem';
+import { useAccount } from 'wagmi';
 import { compareAddresses, findAddressByChain } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import Input, { InputSize } from '@/components/Input';
