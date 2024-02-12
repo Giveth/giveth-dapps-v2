@@ -626,6 +626,7 @@
 	"label.passport.not_eligible": "¡Haz que tu donación sea complementada con financiamiento cuadrático! Aumenta tu puntuación en el Pasaporte de Gitcoin antes de ",
 	"label.passport.not_signed": "Firma el mensaje con tu billetera para conectarte al Pasaporte",
 	"label.passport.no_active_round": "¡No hay una ronda activa!",
+	"label.passport.round_starts_on": "La ronda comienza el {date}",
 	"label.passport_score": "Passport Score",
 	"label.personal_info": "Información Personal",
 	"label.personal_social_media": "Redes Sociales personales",

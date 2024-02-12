@@ -26,7 +26,11 @@ const GIVBackToast = (props: {
 				})}{' '}
 				<ExternalLink
 					href={links.GIVBACK_TOKENS_FORUM}
-					title={formatMessage({ id: 'label.our_forum' })}
+					title={
+						<strong>
+							{formatMessage({ id: 'label.our_forum' })}
+						</strong>
+					}
 				/>
 				.
 			</>

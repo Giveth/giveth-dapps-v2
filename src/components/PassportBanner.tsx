@@ -19,6 +19,7 @@ import { Flex } from './styled-components/Flex';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import Routes from '@/lib/constants/Routes';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { smallFormatDate } from '@/lib/helpers';
 
 enum EPBGState {
 	SUCCESS,
@@ -95,7 +96,7 @@ export const PassportBannerData: IData = {
 		icon: <IconAlertTriangleFilled24 color={semanticColors.punch[500]} />,
 	},
 	[EPassportState.NOT_STARTED]: {
-		content: 'label.passport.no_active_round',
+		content: 'label.passport.round_starts_on',
 		bg: EPBGState.INFO,
 		icon: <IconAlertTriangleFilled24 color={semanticColors.golden[500]} />,
 	},
@@ -140,9 +141,20 @@ export const PassportBanner = () => {
 					{PassportBannerData[passportState].icon}
 				</IconWrapper>
 				<P>
-					{formatMessage({
-						id: PassportBannerData[passportState].content,
-					})}
+					{formatMessage(
+						{
+							id: PassportBannerData[passportState].content,
+						},
+						{
+							data:
+								passportState === EPassportState.NOT_STARTED &&
+								currentRound
+									? smallFormatDate(
+											new Date(currentRound?.beginDate),
+										)
+									: undefined,
+						},
+					)}
 					{currentRound &&
 						(passportState === EPassportState.NOT_CREATED ||
 							passportState === EPassportState.NOT_ELIGIBLE) && (
