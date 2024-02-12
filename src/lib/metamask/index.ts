@@ -1,7 +1,9 @@
 import { captureException } from '@sentry/nextjs';
-import { Address, erc20Abi, getContract } from 'viem';
+import { Address, erc20Abi } from 'viem';
+import { readContracts } from '@wagmi/core';
 import config from '@/configuration';
-
+import { wagmiConfig } from '@/wagmiconfig';
+import { getReadContractResult } from '../contracts';
 declare let window: any;
 
 const getTokenImage = (symbol: string): string | undefined => {
@@ -36,15 +38,26 @@ const fetchTokenInfo = async (
 	address: Address,
 ): Promise<ITokenOptions | undefined> => {
 	try {
-		const contract = getContract({
+		const tokenInfo = {
 			address: address,
 			abi: erc20Abi,
 			chainId,
+		};
+		const results = await readContracts(wagmiConfig, {
+			contracts: [
+				{
+					...tokenInfo,
+					functionName: 'decimals',
+				},
+				{
+					...tokenInfo,
+					functionName: 'symbol',
+				},
+			],
 		});
-		const [_decimal, _symbol]: [number, string] = await Promise.all([
-			contract.read.decimals(),
-			contract.read.symbol(),
-		]);
+		const [_decimal, _symbol] = results.map(res =>
+			getReadContractResult(res),
+		) as [number, string];
 		return {
 			address: address,
 			symbol: _symbol,
