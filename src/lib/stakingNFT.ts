@@ -1,12 +1,13 @@
 import { Dispatch, SetStateAction } from 'react';
 import { captureException } from '@sentry/nextjs';
-import { getContract, getWalletClient } from 'wagmi/actions';
+import { getWalletClient } from 'wagmi/actions';
 import { WriteContractReturnType } from 'viem';
+import { readContract } from '@wagmi/core';
 import { LiquidityPosition } from '@/types/nfts';
 import { uniswapV3Config } from './contracts';
 import { StakeState } from '@/lib/staking';
 import UNISWAP_V3_STAKER_ABI from '@/artifacts/uniswap_v3_staker.json';
-
+import { wagmiConfig } from '@/wagmiconfig';
 export const transfer = async (
 	tokenId: number | undefined,
 	walletAddress: string,
@@ -253,15 +254,12 @@ export const getReward = async (
 	tokenId: number,
 	currentIncentiveKey?: (string | number)[] | null,
 ): Promise<bigint> => {
-	const uniswapV3StakerContract = getContract({
+	const reward = await readContract(wagmiConfig, {
 		address: uniswapV3Config.UNISWAP_V3_STAKER,
 		abi: UNISWAP_V3_STAKER_ABI,
+		functionName: 'getRewardInfo',
+		args: [currentIncentiveKey, tokenId],
 	});
-
-	const reward = await uniswapV3StakerContract.read.getRewardInfo([
-		currentIncentiveKey,
-		tokenId,
-	]);
 
 	return (reward as bigint) || 0n;
 };
