@@ -66,7 +66,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 
 	return (
 		<>
-			<HighlightSection theme={theme}>
+			<HighlightSection themeState={theme}>
 				<Label medium>
 					{formatMessage({ id: 'label.explore_by' })}
 				</Label>
@@ -76,7 +76,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={explore.url}>
-							<ExploreItem theme={theme} isHighlighted>
+							<ExploreItem themeState={theme} isHighlighted>
 								<B>{formatMessage({ id: explore.label })}</B>
 							</ExploreItem>
 						</Link>
@@ -85,7 +85,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 						<Link href={QFItem.url}>
 							<ExploreItem
 								className='qf-item'
-								theme={theme}
+								themeState={theme}
 								isHighlighted
 							>
 								<B>{formatMessage({ id: QFItem.label })}</B>
@@ -96,13 +96,13 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 			</HighlightSection>
 			<NormalSection inSidebar={inSidebar}>
 				<Label medium>{formatMessage({ id: 'label.category' })}</Label>
-				<CategoriesGrid inSidebar={inSidebar} theme={theme}>
+				<CategoriesGrid inSidebar={inSidebar} themeState={theme}>
 					{mainCategories.map((category, idx) => (
 						<Link
 							key={idx}
 							href={`${Routes.Projects}/${category.slug}`}
 						>
-							<CategoryItem theme={theme}>
+							<CategoryItem themeState={theme}>
 								<GLink size='Big'>
 									{formatMessage({
 										id: 'projects_' + category.slug,
@@ -121,7 +121,7 @@ const ExploreByRow = styled(Flex)`
 	margin-top: 16px;
 `;
 
-const ExploreItem = styled(Item)`
+const ExploreItem = styled(Item)<{ themeState?: ETheme }>`
 	padding: 2px 8px;
 	&.qf-item {
 		background: ${brandColors.cyan[600]};
@@ -136,14 +136,14 @@ const NormalSection = styled.div<{ inSidebar?: boolean }>`
 	border-radius: 16px;
 `;
 
-const CategoriesGrid = styled.div<{ inSidebar?: boolean; theme: ETheme }>`
+const CategoriesGrid = styled.div<{ inSidebar?: boolean; themeState: ETheme }>`
 	display: grid;
 	grid-template: ${props =>
 		props.inSidebar ? 'auto' : 'auto auto auto auto / auto auto auto'};
 	margin-top: 8px;
 `;
 
-const CategoryItem = styled(Item)`
+const CategoryItem = styled(Item)<{ themeState: ETheme }>`
 	padding: 8px;
 	&:hover {
 		background: transparent;

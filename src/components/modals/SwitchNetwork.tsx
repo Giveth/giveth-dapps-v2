@@ -45,7 +45,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 	const { walletChainType, handleSingOutAndSignInWithEVM, chain } =
 		useGeneralWallet();
 	const chainId = (chain as Chain)?.id;
-	const theme = useAppSelector(state => state.general.themeBase);
+	const theme = useAppSelector(state => state.general.theme);
 
 	const networks =
 		customNetworks?.map(network => {
@@ -76,7 +76,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 						}}
 						isSelected={networkId === chainId}
 						key={networkId}
-						theme={theme}
+						themeState={theme}
 					>
 						<NetworkLogo
 							chainId={networkId}
@@ -85,7 +85,10 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 						/>
 						<B>{getChainName(networkId, chainType)}</B>
 						{networkId === chainId && (
-							<SelectedNetwork styleType='Small' theme={theme}>
+							<SelectedNetwork
+								styleType='Small'
+								themeState={theme}
+							>
 								{formatMessage({ id: 'label.selected' })}
 							</SelectedNetwork>
 						)}
@@ -98,21 +101,24 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 
 export const SelectedNetwork = styled(Overline)`
 	color: ${props =>
-		props.theme.base === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? brandColors.giv[100]
 			: brandColors.giv[500]};
 	position: absolute;
 	top: -8px;
 	left: 10px;
 	background: ${props =>
-		props.theme.base === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	padding: 0 3px;
 	border-radius: 4px;
 `;
 
-export const NetworkItem = styled.div<{ isSelected: boolean; theme: ETheme }>`
+export const NetworkItem = styled.div<{
+	isSelected: boolean;
+	themeState: ETheme;
+}>`
 	position: relative;
 	padding: 8px;
 	width: 213px;
@@ -123,7 +129,7 @@ export const NetworkItem = styled.div<{ isSelected: boolean; theme: ETheme }>`
 	gap: 16px;
 	:hover {
 		background-color: ${props =>
-			props.theme.base === ETheme.Dark
+			props.themeState === ETheme.Dark
 				? brandColors.giv[700]
 				: neutralColors.gray[200]};
 	}

@@ -1,5 +1,5 @@
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
-import { createGlobalStyle, css, useTheme } from 'styled-components';
+import { createGlobalStyle, css } from 'styled-components';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
@@ -13,9 +13,8 @@ const GeneralController = () => {
 	const chainId = chain?.id;
 	const { address, isConnected: isWalletActive } = useAccount();
 	const { switchChain } = useSwitchChain();
-	const { theme: defaultTheme } = useTheme();
 	const router = useRouter();
-	const themeBase = useAppSelector(state => state.general.themeBase);
+	const theme = useAppSelector(state => state.general.theme);
 
 	useEffect(() => {
 		if (!router) return;
@@ -32,20 +31,20 @@ const GeneralController = () => {
 		}
 	}, [router, address, isWalletActive, chainId]);
 
-	return <GlobalStyle theme={{ base: themeBase, ...defaultTheme }} />;
+	return <GlobalStyle themeState={theme} />;
 };
 
-const GlobalStyle = createGlobalStyle`
+const GlobalStyle = createGlobalStyle<{ themeState?: ETheme }>`
   :root {
 	${props =>
-		props.theme.base === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? css`
 					--bgColor: ${brandColors.giv[900]} !important;
 					--color: white !important;
 					--scrollColor: ${brandColors.giv[400]} !important;
 					--scrollHoverColor: ${brandColors.giv[700]} !important;
 				`
-			: props.theme.base === ETheme.Light
+			: props.themeState === ETheme.Light
 				? css`
 						--bgColor: ${neutralColors.gray[200]} !important;
 						--color: ${neutralColors.gray[900]} !important;

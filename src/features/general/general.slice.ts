@@ -10,7 +10,7 @@ export enum ETheme {
 }
 
 const initialState = {
-	themeBase: ETheme.NOT_INITIATED,
+	theme: ETheme.NOT_INITIATED,
 	showHeader: true,
 	showFooter: true,
 	mainCategories: [] as IMainCategory[],
@@ -23,10 +23,10 @@ export const GeneralSlice = createSlice({
 	initialState,
 	reducers: {
 		setDarkTheme: state => {
-			state.themeBase = ETheme.Dark;
+			state.theme = ETheme.Dark;
 		},
 		setLightTheme: state => {
-			state.themeBase = ETheme.Light;
+			state.theme = ETheme.Light;
 		},
 		showHeaderFooter: state => {
 			state.showHeader = true;

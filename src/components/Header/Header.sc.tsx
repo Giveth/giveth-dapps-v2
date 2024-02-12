@@ -13,7 +13,11 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { ETheme } from '@/features/general/general.slice';
 
-export const StyledHeader = styled(Flex)<IHeader>`
+interface IStyledHeader extends IHeader {
+	themeState?: ETheme;
+}
+
+export const StyledHeader = styled(Flex)<IStyledHeader>`
 	position: fixed;
 	left: 0;
 	right: 0;
@@ -22,11 +26,11 @@ export const StyledHeader = styled(Flex)<IHeader>`
 	transition: top 0.3s ease;
 	padding: 16px 24px;
 	background: ${props =>
-		props.theme.base === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	box-shadow: ${props =>
-		props.theme.base === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? '0px 3px 20px rgba(33, 32, 60, 0.24)'
 			: '0px 3px 20px rgba(212, 218, 238, 0.4)'};
 	${mediaQueries.tablet} {
@@ -34,13 +38,17 @@ export const StyledHeader = styled(Flex)<IHeader>`
 	}
 `;
 
-export const Logo = styled.span`
+interface ILogo {
+	themeState?: ETheme;
+}
+
+export const Logo = styled.span<ILogo>`
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	background: ${neutralColors.gray[100]};
 	box-shadow: ${props =>
-		props.theme.base === ETheme.Dark ? '' : Shadow.Neutral[400]};
+		props.themeState === ETheme.Dark ? '' : Shadow.Neutral[400]};
 	border-radius: 99px;
 	padding: 8px;
 	width: 60px;
@@ -50,6 +58,7 @@ export const Logo = styled.span`
 
 interface IHeaderButtonProps {
 	isHover: boolean;
+	themeState?: ETheme;
 }
 
 export const HeaderButton = styled(CButton)<IHeaderButtonProps>`
@@ -62,26 +71,26 @@ export const HeaderButton = styled(CButton)<IHeaderButtonProps>`
 	border-radius: 48px;
 	text-align: left;
 	color: ${props =>
-		props.theme.base === ETheme.Dark ? 'white' : brandColors.giv[900]};
+		props.themeState === ETheme.Dark ? 'white' : brandColors.giv[900]};
 	background-color: ${props =>
-		props.theme.base === ETheme.Dark ? brandColors.giv[900] : 'white'};
+		props.themeState === ETheme.Dark ? brandColors.giv[900] : 'white'};
 	border: 1px solid
 		${props =>
-			props.theme.base === ETheme.Dark ? brandColors.giv[600] : 'white'};
+			props.themeState === ETheme.Dark ? brandColors.giv[600] : 'white'};
 	box-shadow: ${props =>
-		props.theme.base === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? Shadow.Dark[500]
 			: Shadow.Neutral[500]};
 	${props =>
 		props.isHover
-			? css`
+			? css<{ themeState?: ETheme }>`
 					background-color: ${props =>
-						props.theme.base === ETheme.Dark
+						props.themeState === ETheme.Dark
 							? brandColors.giv[600]
 							: 'white'};
 					.cover-line {
 						background-color: ${props =>
-							props.theme.base === ETheme.Dark
+							props.themeState === ETheme.Dark
 								? brandColors.giv[600]
 								: 'white'};
 					}
@@ -97,7 +106,7 @@ export const NotificationsButton = styled(HeaderButton)`
 	align-items: center;
 	position: relative;
 	background-color: ${props =>
-		props.theme.base === ETheme.Dark ? brandColors.giv[900] : 'white'};
+		props.themeState === ETheme.Dark ? brandColors.giv[900] : 'white'};
 `;
 
 export const NotificationsButtonCircle = styled.div`
@@ -188,9 +197,10 @@ export const Title = styled.h1`
 interface IHeaderLinkProps {
 	active?: boolean;
 	theme?: ETheme;
+	themeState?: ETheme;
 }
 
-export const HeaderLinks = styled(Flex)`
+export const HeaderLinks = styled(Flex)<{ themeState?: ETheme }>`
 	margin-left: 48px;
 	gap: 8px;
 `;
@@ -200,7 +210,7 @@ export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 	border-radius: 72px;
 	background-color: ${props => {
 		if (props.active) {
-			return props.theme.base === ETheme.Dark
+			return props.themeState === ETheme.Dark
 				? brandColors.giv[600]
 				: brandColors.giv[100];
 		}
@@ -208,7 +218,7 @@ export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 	}};
 	&:hover {
 		background-color: ${props =>
-			props.theme.base === ETheme.Dark
+			props.themeState === ETheme.Dark
 				? brandColors.giv[300]
 				: brandColors.giv[50]};
 	}
@@ -217,7 +227,7 @@ export const HeaderLink = styled(GLink)<IHeaderLinkProps>`
 export const SearchButton = styled(HeaderLink)`
 	cursor: pointer;
 	background-color: ${props =>
-		props.theme.base === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? brandColors.giv[300]
 			: neutralColors.gray[200]};
 	& > div > span {
@@ -230,17 +240,21 @@ export const SearchButton = styled(HeaderLink)`
 	}
 `;
 
-export const ConnectButton = styled(Button)`
+interface IButton {
+	themeState?: ETheme;
+}
+
+export const ConnectButton = styled(Button)<IButton>`
 	box-shadow: ${props =>
-		props.theme.base === ETheme.Dark ? '' : Shadow.Dark[500]};
+		props.themeState === ETheme.Dark ? '' : Shadow.Dark[500]};
 	text-transform: uppercase;
 `;
 
-export const SmallCreateProject = styled(Button)`
+export const SmallCreateProject = styled(Button)<IButton>`
 	width: 48px;
 	height: 48px;
 	box-shadow: ${props =>
-		props.theme.base === ETheme.Dark ? '' : Shadow.Dark[500]};
+		props.themeState === ETheme.Dark ? '' : Shadow.Dark[500]};
 	> :first-child {
 		display: none;
 	}
@@ -250,12 +264,15 @@ export const SmallCreateProject = styled(Button)`
 	}
 `;
 
-export const LargeCreateProject = styled.div<{ isTexty?: boolean }>`
+export const LargeCreateProject = styled.div<{
+	isTexty?: boolean;
+	themeState?: ETheme;
+}>`
 	display: none;
 	> button {
 		${props => props.isTexty && `height: 50px;`}
 		box-shadow: ${props =>
-			props.theme.base === ETheme.Dark || props.isTexty
+			props.themeState === ETheme.Dark || props.isTexty
 				? ''
 				: Shadow.Dark[500]};
 	}
@@ -280,9 +297,9 @@ export const MenuAndButtonContainer = styled.div`
 	z-index: 2;
 `;
 
-export const CoverLine = styled.div`
+export const CoverLine = styled.div<{ themeState?: ETheme }>`
 	background-color: ${props =>
-		props.theme.base === ETheme.Dark ? brandColors.giv[900] : 'white'};
+		props.themeState === ETheme.Dark ? brandColors.giv[900] : 'white'};
 	position: absolute;
 	z-index: 1;
 	left: 1px;

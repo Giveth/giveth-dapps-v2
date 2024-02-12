@@ -45,15 +45,15 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 	const [inputRef] = useFocus();
 
 	return (
-		<SearchInputContainer className={className} theme={theme}>
-			<InputContainer theme={theme} onKeyDown={handleKeyDown}>
+		<SearchInputContainer className={className}>
+			<InputContainer onKeyDown={handleKeyDown}>
 				<StyledInput
 					onChange={handleOnChange}
 					as='input'
 					placeholder={formatMessage({
 						id: 'label.search_for_project',
 					})}
-					theme={theme}
+					themeState={theme}
 					value={value}
 					ref={inputRef}
 				/>
@@ -72,7 +72,7 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 					</IconWrapper>
 				)}
 			</InputContainer>
-			<HintRow>
+			<HintRow themeState={theme}>
 				{value.length > 0 ? (
 					value.length > 2 ? (
 						<>
@@ -107,14 +107,14 @@ const InputContainer = styled(Flex)`
 	position: relative;
 `;
 
-const StyledInput = styled(ButtonText)`
+const StyledInput = styled(ButtonText)<{ themeState?: ETheme }>`
 	border: none;
 	background-color: inherit;
 	flex: 1;
 	padding: 16px 48px 16px 24px;
 	border-radius: 30px;
 	${props =>
-		props.theme.base === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? css`
 					background-color: ${brandColors.giv[600]};
 					border: 1px solid ${brandColors.giv[500]};
@@ -145,7 +145,7 @@ const IconRemoveWrapper = styled(IconWrapper)`
 	cursor: pointer;
 `;
 
-const HintRow = styled(Flex)`
+const HintRow = styled(Flex)<{ themeState?: ETheme }>`
 	height: 24px;
 	align-items: center;
 	justify-content: flex-end;
@@ -153,7 +153,7 @@ const HintRow = styled(Flex)`
 	margin-top: 4px;
 	padding: 4px;
 	color: ${props =>
-		props.theme.base === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? brandColors.giv[300]
 			: neutralColors.gray[600]};
 `;

@@ -24,7 +24,7 @@ export const Item: FC<IItem> = ({
 	return (
 		<ItemContainer
 			isHighlighted={isHighlighted}
-			theme={theme}
+			themeState={theme}
 			onClick={() => {
 				close();
 				onClick && onClick();
@@ -36,7 +36,10 @@ export const Item: FC<IItem> = ({
 	);
 };
 
-const ItemContainer = styled(Flex)<{ isHighlighted?: boolean }>`
+const ItemContainer = styled(Flex)<{
+	isHighlighted?: boolean;
+	themeState: ETheme;
+}>`
 	position: relative;
 	padding: 12px 16px;
 	gap: 6px;
@@ -44,18 +47,18 @@ const ItemContainer = styled(Flex)<{ isHighlighted?: boolean }>`
 	border-radius: 8px;
 	background-color: ${props =>
 		props.isHighlighted
-			? props.theme.base === ETheme.Dark
+			? props.themeState === ETheme.Dark
 				? brandColors.giv[500]
 				: neutralColors.gray[200]
 			: 'unset'};
 	&:hover {
 		background-color: ${props =>
 			// props.isHighlighted
-			// 	? props.theme.base=== ETheme.Dark
+			// 	? props.themeState=== ETheme.Dark
 			// 		? brandColors.giv[700]
 			// 		: neutralColors.gray[400]
 			// 	:
-			props.theme.base === ETheme.Dark
+			props.themeState === ETheme.Dark
 				? brandColors.giv[500]
 				: neutralColors.gray[200]};
 	}

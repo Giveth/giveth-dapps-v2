@@ -51,7 +51,7 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 						<IconGnosisChain size={64} />
 					</>
 				)}
-				<Title theme={theme}>
+				<Title themeState={theme}>
 					{formatMessage(
 						{ id: 'label.switch_to_network_name' },
 						{ networkNames: NetworkName },
@@ -97,5 +97,5 @@ const ChangeNetworkModalContainer = styled.div`
 const Title = styled(H4)`
 	margin: 18px 0 24px;
 	color: ${props =>
-		props.theme.base === ETheme.Dark ? 'white' : brandColors.giv[700]};
+		props.themeState === ETheme.Dark ? 'white' : brandColors.giv[700]};
 `;

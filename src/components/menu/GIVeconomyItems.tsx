@@ -56,7 +56,7 @@ export const GIVeconomyItems = () => {
 		<>
 			<Link href={Routes.GIVfarm}>
 				<Item isHighlighted theme={theme}>
-					<ItemTitle theme={theme}>
+					<ItemTitle themeState={theme}>
 						{formatMessage({ id: 'label.use_your_giv' })}
 					</ItemTitle>
 					<ItemRow>
@@ -78,7 +78,7 @@ export const GIVeconomyItems = () => {
 			{giveconomyItems.map((item, idx) => (
 				<Link key={idx} href={item.href}>
 					<Item theme={theme}>
-						<ItemTitle theme={theme}>
+						<ItemTitle themeState={theme}>
 							{formatMessage({ id: item.title })}
 						</ItemTitle>
 						<ItemRow>

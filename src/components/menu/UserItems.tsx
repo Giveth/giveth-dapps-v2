@@ -73,7 +73,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 	return (
 		<>
 			<Item theme={theme}>
-				<ItemTitle theme={theme}>
+				<ItemTitle themeState={theme}>
 					{formatMessage({ id: 'label.wallet' })}
 				</ItemTitle>
 				<ItemRow>
@@ -81,7 +81,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 				</ItemRow>
 			</Item>
 			<Item theme={theme}>
-				<ItemTitle theme={theme}>
+				<ItemTitle themeState={theme}>
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>

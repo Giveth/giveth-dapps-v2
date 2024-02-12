@@ -52,7 +52,7 @@ export const CommunityItem: FC<ICommunityItemProps> = ({ item }) => {
 
 	return (
 		<Item theme={theme}>
-			<ItemTitle theme={theme}>
+			<ItemTitle themeState={theme}>
 				{formatMessage({ id: item.title })}
 			</ItemTitle>
 			<ItemRow>

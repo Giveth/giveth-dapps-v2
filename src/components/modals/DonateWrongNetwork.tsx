@@ -163,7 +163,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 										}}
 										isSelected={_chainId === networkId}
 										key={_chainId}
-										theme={theme}
+										themeState={theme}
 									>
 										<NetworkLogo
 											chainId={_chainId}
@@ -174,7 +174,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 										{_chainId === networkId && (
 											<SelectedNetwork
 												styleType='Small'
-												theme={theme}
+												themeState={theme}
 											>
 												{formatMessage({
 													id: 'label.selected',
