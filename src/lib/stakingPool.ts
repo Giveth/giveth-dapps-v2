@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/nextjs';
 import { getContract, getWalletClient, signTypedData } from 'wagmi/actions';
-import { erc20ABI } from 'wagmi';
+import { erc20ABI } from 'viem';
 import { WriteContractReturnType, hexToSignature } from 'viem';
 import { type Address } from 'wagmi';
 import BigNumber from 'bignumber.js';

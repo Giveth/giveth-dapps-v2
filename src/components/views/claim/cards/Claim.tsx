@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
 import { H2, Lead } from '@giveth/ui-design-system';
-import { useAccount, useConnect, useNetwork } from 'wagmi';
+import { useConnect, useAccount } from 'wagmi';
 import { WriteContractReturnType } from 'viem';
 import { Button } from '../../../styled-components/Button';
 import { Flex } from '../../../styled-components/Flex';
@@ -53,10 +53,10 @@ const AddTokenRow = styled(Flex)`
 
 const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const { totalAmount, step, goPreviousStep, goNextStep } = useClaim();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { isConnected } = useAccount();
-	const { connect } = useConnect();
+	const { connect, connectors } = useConnect();
 
 	const [txStatus, setTxStatus] = useState<
 		WriteContractReturnType | undefined
@@ -66,7 +66,9 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const checkNetworkAndWallet = async () => {
 		if (!isConnected) {
 			console.log('Wallet is not connected');
-			await connect();
+			await connect({
+				connector: connectors.filter(c => c.id === 'injected')[0],
+			});
 			return false;
 		}
 

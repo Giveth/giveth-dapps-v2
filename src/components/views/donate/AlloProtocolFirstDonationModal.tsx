@@ -6,7 +6,7 @@ import {
 	P,
 	brandColors,
 } from '@giveth/ui-design-system';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
 import { waitForTransaction } from '@wagmi/core';
 import { useIntl } from 'react-intl';
@@ -42,11 +42,11 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 	onModalCompletion,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const [isLoading, setIsLoading] = useState(false);
 	const [txResult, setTxResult] = useState<WriteContractResult>();
 
-	const { switchNetwork } = useSwitchNetwork();
+	const { switchChain } = useSwitchChain();
 	const { project, fetchProject } = useDonateData();
 	const { formatMessage } = useIntl();
 	const updatedCloseModal = () => {
@@ -69,7 +69,7 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 
 	const handleButtonClick = async () => {
 		if (!isOnOptimism) {
-			switchNetwork?.(config.OPTIMISM_NETWORK_NUMBER);
+			switchChain?.({ chainId: config.OPTIMISM_NETWORK_NUMBER });
 		} else {
 			try {
 				setIsLoading(true);

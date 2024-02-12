@@ -9,8 +9,8 @@ import {
 } from '@giveth/ui-design-system';
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
-import { type Address, useNetwork, useSwitchNetwork } from 'wagmi';
-import { getContract } from 'wagmi/actions';
+import { type Address, useAccount, useSwitchChain } from 'wagmi';
+import { getContract } from 'viem';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
@@ -23,8 +23,8 @@ const CheckEligibility = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [status, setStatus] = useState<boolean | undefined>();
 
-	const { chain } = useNetwork();
-	const { switchNetwork } = useSwitchNetwork();
+	const { chain } = useAccount();
+	const { switchChain } = useSwitchChain();
 
 	const chainId = chain?.id;
 	const onAddressChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -53,7 +53,9 @@ const CheckEligibility = () => {
 			if (walletAddress) {
 				let resolvedAddress;
 				if (chainId !== config.MAINNET_NETWORK_NUMBER) {
-					await switchNetwork?.(config.MAINNET_NETWORK_NUMBER);
+					await switchChain?.({
+						chainId: config.MAINNET_NETWORK_NUMBER,
+					});
 				}
 				if (isAddressENS(walletAddress)) {
 					resolvedAddress = await getAddressFromENS(walletAddress);

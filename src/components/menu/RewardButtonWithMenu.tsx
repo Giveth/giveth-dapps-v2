@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { formatWeiHelper } from '@/helpers/number';
 import {
 	MenuAndButtonContainer,
@@ -98,7 +98,7 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 };
 
 const HeaderRewardButton = () => {
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),

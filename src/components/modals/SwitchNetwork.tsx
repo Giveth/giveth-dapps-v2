@@ -9,7 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Chain, useSwitchNetwork } from 'wagmi';
+import { Chain, useSwitchChain } from 'wagmi';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
@@ -39,7 +39,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
-	const { switchNetwork } = useSwitchNetwork();
+	const { switchChain } = useSwitchChain();
 	const { formatMessage } = useIntl();
 	const { walletChainType, handleSingOutAndSignInWithEVM, chain } =
 		useGeneralWallet();
@@ -70,7 +70,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 							if (walletChainType === ChainType.SOLANA) {
 								handleSingOutAndSignInWithEVM();
 							}
-							switchNetwork?.(networkId);
+							switchChain?.(networkId);
 							closeModal();
 						}}
 						isSelected={networkId === chainId}

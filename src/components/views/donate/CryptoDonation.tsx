@@ -12,7 +12,7 @@ import {
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 import { Chain, formatUnits, parseUnits } from 'viem';
-import { getContract } from 'wagmi/actions';
+import { getContract } from 'viem';
 import { type Address, erc20ABI } from 'wagmi';
 import { PublicKey } from '@solana/web3.js';
 import { useConnection } from '@solana/wallet-adapter-react';

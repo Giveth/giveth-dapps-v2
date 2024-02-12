@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
-import { type Address, useNetwork } from 'wagmi';
+import { type Address, useAccount } from 'wagmi';
 import config from '@/configuration';
 import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
@@ -37,7 +37,7 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 	rewardTokenSymbol,
 	rewardTokenAddress,
 }) => {
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 
 	return (
@@ -80,7 +80,7 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 	rewardTokenSymbol,
 	rewardTokenAddress,
 }) => {
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	return (
 		<>
@@ -128,7 +128,7 @@ export const ErrorInnerModal: FC<IErrorProps> = ({
 	txHash,
 	message,
 }) => {
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 
 	return (

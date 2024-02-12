@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { fetchEnsAddress, fetchTransaction } from '@wagmi/core';
-import { type Address, useNetwork, useWaitForTransaction } from 'wagmi';
+import { type Address, useAccount, useWaitForTransaction } from 'wagmi';
 
 import { sendEvmTransaction } from '@/lib/helpers';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
@@ -22,7 +22,7 @@ export const useCreateEvmDonation = () => {
 	const [resolveState, setResolveState] = useState<(() => void) | null>(null);
 	const [createDonationProps, setCreateDonationProps] =
 		useState<ICreateDonation>();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const isSafeEnv = useIsSafeEnvironment();
 

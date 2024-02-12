@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { FC } from 'react';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Link from 'next/link';
 import { Caption, B, neutralColors } from '@giveth/ui-design-system';
@@ -31,7 +31,7 @@ export const DonateHeader: FC<IHeader> = () => {
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const router = useRouter();
 	const { open: openConnectModal } = useWeb3Modal();
 	const { project } = useDonateData();

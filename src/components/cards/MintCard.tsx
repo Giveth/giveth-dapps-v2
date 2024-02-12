@@ -10,10 +10,10 @@ import {
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { useSwitchNetwork, useNetwork, Address } from 'wagmi';
-import { getContract } from 'wagmi/actions';
-import { erc20ABI } from 'wagmi';
+import { getContract, erc20Abi, Address, Abi } from 'viem';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { useAccount, useSwitchChain } from 'wagmi';
+import { readContracts } from '@wagmi/core';
 import { MintModal } from '../modals/Mint/MintModal';
 import { Flex } from '../styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
@@ -22,7 +22,8 @@ import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { InsufficientFundModal } from '../modals/InsufficientFund';
 import { usePFPMintData } from '@/context/pfpmint.context';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-
+import { wagmiConfig } from '@/wagmiconfig';
+import { getReadContractResult } from '@/lib/contracts';
 const MIN_NFT_QTY = 1;
 
 interface IpfpContractData {
@@ -41,9 +42,9 @@ export const MintCard = () => {
 	const [pfpData, setPfpData] = useState<IpfpContractData>();
 	const [balance, setBalance] = useState<number>();
 
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
-	const { switchNetwork } = useSwitchNetwork();
+	const { switchChain } = useSwitchChain();
 	const { formatMessage } = useIntl();
 	const { open: openConnectModal } = useWeb3Modal();
 	const { setQty, isEligible, setIsEligible } = usePFPMintData();
@@ -66,18 +67,37 @@ export const MintCard = () => {
 	useEffect(() => {
 		async function fetchData() {
 			try {
-				const pfpContract = await getContract({
+				const baseParams = {
 					address: config.MAINNET_CONFIG.PFP_CONTRACT_ADDRESS,
 					chainId: config.MAINNET_NETWORK_NUMBER,
-					abi: PFP_ABI,
+					abi: PFP_ABI as Abi,
+				} as const;
+				const result = await readContracts(wagmiConfig, {
+					contracts: [
+						{
+							...baseParams,
+							functionName: 'price',
+						},
+						{
+							...baseParams,
+							functionName: 'maxMintAmount',
+						},
+						{
+							...baseParams,
+							functionName: 'totalSupply',
+						},
+						{
+							...baseParams,
+							functionName: 'maxSupply',
+						},
+					],
 				});
-				const _price = (await pfpContract.read.price()) as bigint;
-				const _maxMintAmount =
-					(await pfpContract.read.maxMintAmount()) as number;
-				const _totalSupply =
-					(await pfpContract.read.totalSupply()) as number;
-				const _maxSupply =
-					(await pfpContract.read.maxSupply()) as number;
+				const _price = getReadContractResult(result[0]) as bigint;
+				const _maxMintAmount = getReadContractResult(
+					result[1],
+				) as number;
+				const _totalSupply = getReadContractResult(result[2]) as number;
+				const _maxSupply = getReadContractResult(result[3]) as number;
 				setIsEligible(true);
 				setPfpData({
 					price: _price,
@@ -127,7 +147,7 @@ export const MintCard = () => {
 		if (isOnSolana) {
 			handleSignOutAndShowWelcomModal();
 		} else {
-			switchNetwork?.(config.MAINNET_NETWORK_NUMBER);
+			switchChain?.({ chainId: config.MAINNET_NETWORK_NUMBER });
 		}
 	};
 
@@ -171,7 +191,7 @@ export const MintCard = () => {
 		const pfpContract = await getContract({
 			address: config.MAINNET_CONFIG.DAI_TOKEN_ADDRESS,
 			chainId: config.MAINNET_NETWORK_NUMBER,
-			abi: erc20ABI,
+			abi: erc20Abi,
 		});
 		let userDaiBalance = await pfpContract.read.balanceOf([
 			walletAddress as Address,

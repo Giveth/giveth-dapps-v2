@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 import { B, GLink } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
@@ -43,7 +43,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 		isOnSolana,
 		walletChainType,
 	} = useGeneralWallet();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
 	const router = useRouter();

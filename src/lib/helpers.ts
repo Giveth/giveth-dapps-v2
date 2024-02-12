@@ -3,7 +3,7 @@ import unescape from 'lodash/unescape';
 
 // import { keccak256 } from '@ethersproject/keccak256';
 
-import { getContract } from 'wagmi/actions';
+import { getContract } from 'viem';
 import {
 	writeContract,
 	sendTransaction as wagmiSendTransaction,
@@ -11,8 +11,8 @@ import {
 
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { type Address, erc20ABI } from 'wagmi';
-import { Chain, parseEther, parseUnits } from 'viem';
+// import { type Address, erc20ABI } from 'wagmi';
+import { Address, Chain, parseEther, parseUnits } from 'viem';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { getRequest } from '@/helpers/requests';

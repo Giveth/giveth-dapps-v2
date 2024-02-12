@@ -1,6 +1,7 @@
 import { captureException } from '@sentry/nextjs';
-import { getContract } from 'wagmi/actions';
+import { getContract } from 'viem';
 import { type Address, erc20ABI } from 'wagmi';
+
 import config from '@/configuration';
 import { MAX_TOKEN_ORDER } from './constants/tokens';
 
@@ -44,4 +45,8 @@ export async function getERC20Info({ contractAddress, networkId }: IERC20Info) {
 		});
 		return false;
 	}
+}
+
+export function getReadContractResult(result: any) {
+	return result.status === 'success' ? result.result : undefined;
 }

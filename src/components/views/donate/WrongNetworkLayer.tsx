@@ -7,13 +7,13 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { useSwitchNetwork } from 'wagmi';
+import { useSwitchChain } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 
 export const WrongNetworkLayer = () => {
-	const { switchNetwork } = useSwitchNetwork();
+	const { switchChain } = useSwitchChain();
 	const { formatMessage } = useIntl();
 
 	return (
@@ -30,8 +30,10 @@ export const WrongNetworkLayer = () => {
 					</Title>
 					<SwitchButton
 						onClick={() =>
-							switchNetwork &&
-							switchNetwork(config.OPTIMISM_NETWORK_NUMBER)
+							switchChain &&
+							switchChain({
+								chainId: config.OPTIMISM_NETWORK_NUMBER,
+							})
 						}
 					>
 						{formatMessage({

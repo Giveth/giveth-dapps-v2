@@ -6,7 +6,7 @@ import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import { formatEther } from 'viem';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import {
 	APRRow,
 	ArrowButton,
@@ -109,7 +109,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [earnEstimate, setEarnEstimate] = useState(0n);
 	const [apr, setApr] = useState<APR>(null);
 
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const gnosisValues = useAppSelector(state => state.subgraph.gnosisValues);

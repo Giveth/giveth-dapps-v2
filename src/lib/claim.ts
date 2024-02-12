@@ -104,9 +104,7 @@ export const claimReward = async (
 	if (!chainId) return;
 
 	try {
-		const walletClient = await getWalletClient({
-			chainId,
-		});
+		const walletClient = await getWalletClient({}, chainId);
 		return walletClient?.writeContract({
 			address: tokenDistroAddress,
 			functionName: 'claim',

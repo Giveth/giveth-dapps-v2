@@ -6,7 +6,7 @@ import {
 	P,
 	brandColors,
 } from '@giveth/ui-design-system';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { WriteContractResult } from '@wagmi/core';
 import { useRouter } from 'next/router';
 import { waitForTransaction } from '@wagmi/core';
@@ -34,11 +34,11 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	project,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const [isLoading, setIsLoading] = useState(false);
 	const [txResult, setTxResult] = useState<WriteContractResult>();
 	const router = useRouter();
-	const { switchNetwork } = useSwitchNetwork();
+	const { switchChain } = useSwitchChain();
 
 	const isDraft =
 		project?.status.name === EProjectStatus.DRAFT ||

@@ -5,7 +5,7 @@ import { RetryLink } from '@apollo/client/link/retry';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import gql from 'graphql-tag';
-import { createUploadLink } from 'apollo-upload-client';
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
 import { isSSRMode } from '@/lib/helpers';

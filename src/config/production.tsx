@@ -5,9 +5,10 @@ import {
 	mainnet,
 	optimism,
 	polygon,
-} from 'wagmi/chains';
+} from '@wagmi/core/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import React from 'react';
+import { type Chain } from 'viem';
 import {
 	ChainType,
 	EnvConfig,
@@ -50,7 +51,15 @@ const SOLANA_NETWORK: NonEVMChain = {
 		},
 	},
 };
-const EVM_CHAINS = [mainnet, gnosis, polygon, optimism, celo, classic];
+const EVM_CHAINS = [
+	mainnet,
+	gnosis,
+	polygon,
+	optimism,
+	celo,
+	classic,
+] as readonly [Chain, ...Chain[]];
+
 const NON_EVM_CHAINS: NonEVMChain[] = [];
 if (isSolanaEnabled) {
 	NON_EVM_CHAINS.push(SOLANA_NETWORK);

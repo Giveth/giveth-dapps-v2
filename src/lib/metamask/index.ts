@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/nextjs';
-import { erc20ABI } from 'wagmi';
-import { getContract } from 'wagmi/actions';
+import { erc20ABI } from 'viem';
+import { getContract } from 'viem';
 import { type Address } from 'wagmi';
 import config from '@/configuration';
 

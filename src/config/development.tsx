@@ -7,6 +7,7 @@ import {
 	polygon,
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { type Chain } from 'viem';
 import {
 	ChainType,
 	EnvConfig,
@@ -94,7 +95,8 @@ const EVM_CHAINS = [
 	optimismGoerli,
 	celoAlfajores,
 	classic,
-];
+] as readonly [Chain, ...Chain[]];
+
 const NON_EVM_CHAINS: NonEVMChain[] = [];
 if (isSolanaEnabled) {
 	NON_EVM_CHAINS.push(SOLANA_NETWORK);
