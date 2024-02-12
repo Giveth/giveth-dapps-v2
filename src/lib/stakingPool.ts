@@ -4,7 +4,7 @@ import { Abi, erc20Abi } from 'viem';
 import { WriteContractReturnType, hexToSignature } from 'viem';
 import { type Address } from 'viem';
 import BigNumber from 'bignumber.js';
-import { readContracts, writeContract } from '@wagmi/core';
+import { readContract, readContracts, writeContract } from '@wagmi/core';
 import {
 	BalancerPoolStakingConfig,
 	ICHIPoolStakingConfig,
@@ -494,22 +494,18 @@ export const approveERC20tokenTransfer = async (
 ): Promise<boolean> => {
 	if (amount === 0n) return false;
 
-	const tokenContract = getContract({
+	const allowance = await readContract(wagmiConfig, {
 		address: tokenAddress,
 		abi: erc20Abi,
+		functionName: 'allowance',
+		args: [ownerAddress, spenderAddress],
 	});
-
-	const allowance = await tokenContract.read.allowance([
-		ownerAddress,
-		spenderAddress,
-	]);
 
 	if (amount <= allowance) return true;
 
 	try {
-		const walletClient = await getWalletClient({ chainId });
 		if (allowance > 0n) {
-			const tx = await walletClient?.writeContract({
+			const tx = await writeContract(wagmiConfig, {
 				address: tokenAddress,
 				abi: erc20Abi,
 				functionName: 'approve',
@@ -524,7 +520,7 @@ export const approveERC20tokenTransfer = async (
 			}
 		}
 
-		const txResponse = await walletClient?.writeContract({
+		const txResponse = await writeContract(wagmiConfig, {
 			address: tokenAddress,
 			abi: erc20Abi,
 			functionName: 'approve',
