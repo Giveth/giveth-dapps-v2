@@ -4,7 +4,7 @@ import { Abi, erc20Abi } from 'viem';
 import { WriteContractReturnType, hexToSignature } from 'viem';
 import { type Address } from 'viem';
 import BigNumber from 'bignumber.js';
-import { readContracts } from '@wagmi/core';
+import { readContracts, writeContract } from '@wagmi/core';
 import {
 	BalancerPoolStakingConfig,
 	ICHIPoolStakingConfig,
@@ -413,14 +413,27 @@ const permitTokens = async (
 	lmAddress: string,
 	amount: bigint,
 ) => {
-	const poolContract = getContract({
+	const poolContractInfo = {
 		address: poolAddress,
-		abi: UNI_ABI,
+		abi: UNI_ABI as Abi,
 		chainId,
+	};
+
+	const results = await readContracts(wagmiConfig, {
+		contracts: [
+			{ ...poolContractInfo, functionName: 'name' },
+			{
+				...poolContractInfo,
+				functionName: 'nonces',
+				args: [walletAddress],
+			},
+		],
 	});
 
+	const [name, nonce] = results.map(res => getReadContractResult(res));
+
 	const domain = {
-		name: (await poolContract.read.name()) as string,
+		name,
 		version: '1',
 		chainId: chainId,
 		verifyingContract: poolAddress,
@@ -442,11 +455,11 @@ const permitTokens = async (
 		owner: walletAddress,
 		spender: lmAddress,
 		value: amount,
-		nonce: await poolContract.read.nonces([walletAddress]),
+		nonce,
 		deadline: MaxUint256,
 	} as const;
 
-	const hexSignature = await signTypedData({
+	const hexSignature = await signTypedData(wagmiConfig, {
 		domain,
 		message,
 		primaryType: 'Permit',
@@ -454,9 +467,7 @@ const permitTokens = async (
 	});
 
 	const signature = hexToSignature(hexSignature);
-
-	const walletClient = await getWalletClient({ chainId });
-	return await walletClient?.writeContract({
+	return await writeContract(wagmiConfig, {
 		address: poolAddress,
 		abi: UNI_ABI,
 		functionName: 'permit',
@@ -469,7 +480,6 @@ const permitTokens = async (
 			signature.r,
 			signature.s,
 		],
-		// @ts-ignore -- needed for safe txs
 		value: 0n,
 	});
 };
