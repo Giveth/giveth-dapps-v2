@@ -72,7 +72,6 @@ const SocialBox: FC<ISocialBox> = props => {
 				</SocialItem>
 				<SocialItem isDonateFooter={isDonateFooter}>
 					<FacebookShareButton
-						quote={shareTitleFacebookAndLinkedin}
 						url={projectUrl || ''}
 						hashtag='#Giveth'
 					>

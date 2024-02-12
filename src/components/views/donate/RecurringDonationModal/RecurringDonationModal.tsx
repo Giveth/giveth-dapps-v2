@@ -268,7 +268,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 			const batchOp = sf.batchCall(operations);
 			const tx = await batchOp.exec(signer);
-			const res = await tx.wait();
+			const res = await tx.;
 			if (!res.status) {
 				throw new Error('Transaction failed');
 			}
