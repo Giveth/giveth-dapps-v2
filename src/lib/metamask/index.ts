@@ -1,7 +1,5 @@
 import { captureException } from '@sentry/nextjs';
-import { erc20ABI } from 'viem';
-import { getContract } from 'viem';
-import { type Address } from 'wagmi';
+import { Address, erc20Abi, getContract } from 'viem';
 import config from '@/configuration';
 
 declare let window: any;
@@ -40,7 +38,7 @@ const fetchTokenInfo = async (
 	try {
 		const contract = getContract({
 			address: address,
-			abi: erc20ABI,
+			abi: erc20Abi,
 			chainId,
 		});
 		const [_decimal, _symbol]: [number, string] = await Promise.all([

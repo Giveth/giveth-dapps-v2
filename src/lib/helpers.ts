@@ -3,7 +3,7 @@ import unescape from 'lodash/unescape';
 
 // import { keccak256 } from '@ethersproject/keccak256';
 
-import { getContract } from 'viem';
+import { erc20Abi, getContract } from 'viem';
 import {
 	writeContract,
 	sendTransaction as wagmiSendTransaction,
@@ -11,7 +11,7 @@ import {
 
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-// import { type Address, erc20ABI } from 'wagmi';
+// import { type Address, erc20Abi } from 'wagmi';
 import { Address, Chain, parseEther, parseUnits } from 'viem';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
@@ -356,13 +356,13 @@ async function handleErc20Transfer(
 ): Promise<Address> {
 	const contract = getContract({
 		address: contractAddress,
-		abi: erc20ABI,
+		abi: erc20Abi,
 	});
 	const decimals = await contract.read.decimals();
 	const value = parseUnits(params.value, decimals);
 	const write = await writeContract({
 		address: contractAddress,
-		abi: erc20ABI,
+		abi: erc20Abi,
 		functionName: 'transfer',
 		args: [params.to, value],
 		// @ts-ignore -- needed for safe txs

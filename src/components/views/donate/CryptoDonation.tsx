@@ -11,9 +11,8 @@ import {
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { Chain, formatUnits, parseUnits } from 'viem';
+import { Chain, erc20Abi, formatUnits, parseUnits } from 'viem';
 import { getContract } from 'viem';
-import { type Address, erc20ABI } from 'wagmi';
 import { PublicKey } from '@solana/web3.js';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
@@ -307,7 +306,7 @@ const CryptoDonation: FC = () => {
 
 						const contract = getContract({
 							address: selectedToken.address! as Address,
-							abi: erc20ABI,
+							abi: erc20Abi,
 						});
 
 						const _balance = await contract.read.balanceOf([

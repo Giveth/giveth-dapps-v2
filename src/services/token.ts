@@ -1,7 +1,7 @@
 import { captureException } from '@sentry/nextjs';
 import { type Address } from 'wagmi';
 import { getContract, getPublicClient } from 'wagmi/actions';
-import { erc20ABI } from '@wagmi/core';
+import { erc20Abi } from 'viem';
 import config from '@/configuration';
 import { AddressZero } from '@/lib/constants/constants';
 import { ChainType } from '@/types/config';
@@ -37,7 +37,7 @@ export const fetchBalance = async (
 		} else {
 			const contract = getContract({
 				address: tokenAddress,
-				abi: erc20ABI,
+				abi: erc20Abi,
 			});
 			const balance = await contract.read.balanceOf([userAddress]);
 			return balance;

@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/nextjs';
 import { getContract, getWalletClient, signTypedData } from 'wagmi/actions';
-import { erc20ABI } from 'viem';
+import { erc20Abi } from 'viem';
 import { WriteContractReturnType, hexToSignature } from 'viem';
 import { type Address } from 'wagmi';
 import BigNumber from 'bignumber.js';
@@ -444,7 +444,7 @@ export const approveERC20tokenTransfer = async (
 
 	const tokenContract = getContract({
 		address: tokenAddress,
-		abi: erc20ABI,
+		abi: erc20Abi,
 	});
 
 	const allowance = await tokenContract.read.allowance([
@@ -459,7 +459,7 @@ export const approveERC20tokenTransfer = async (
 		if (allowance > 0n) {
 			const tx = await walletClient?.writeContract({
 				address: tokenAddress,
-				abi: erc20ABI,
+				abi: erc20Abi,
 				functionName: 'approve',
 				args: [spenderAddress, 0n],
 				// @ts-ignore -- needed for safe txs
@@ -474,7 +474,7 @@ export const approveERC20tokenTransfer = async (
 
 		const txResponse = await walletClient?.writeContract({
 			address: tokenAddress,
-			abi: erc20ABI,
+			abi: erc20Abi,
 			functionName: 'approve',
 			args: [spenderAddress, amount],
 			// @ts-ignore -- needed for safe txs
