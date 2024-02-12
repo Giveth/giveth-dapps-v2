@@ -1,5 +1,10 @@
 import styled from 'styled-components';
-import { Button, IconDonation32, brandColors } from '@giveth/ui-design-system';
+import {
+	Button,
+	IconDonation32,
+	IconWalletApprove32,
+	brandColors,
+} from '@giveth/ui-design-system';
 import { Address, encodeFunctionData } from 'viem';
 import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { useState } from 'react';
@@ -93,6 +98,53 @@ const ClaimWithdrawalModal = ({
 		}
 	};
 
+	const handleStates = () => {
+		switch (transactionState) {
+			case ClaimTransactionState.NOT_STARTED:
+				return {
+					title: formatMessage({
+						id: 'label.claim_recurring_donaiton',
+					}),
+					icon: <IconDonation32 />,
+					buttonText: formatMessage({
+						id: 'label.confirm',
+					}),
+				};
+			case ClaimTransactionState.PENDING:
+				return {
+					title: formatMessage({
+						id: 'label.claim_recurring_donaiton',
+					}),
+					icon: <IconWalletApprove32 />,
+					buttonText: formatMessage({
+						id: 'label.withdrawing',
+					}),
+				};
+
+			case ClaimTransactionState.SUCCESS:
+				return {
+					title: formatMessage({
+						id: 'label.claim_successful',
+					}),
+					icon: <IconWalletApprove32 />,
+					buttonText: formatMessage({
+						id: 'label.done',
+					}),
+				};
+
+			default:
+				return {
+					title: formatMessage({
+						id: 'label.claim_recurring_donaiton',
+					}),
+					icon: <IconDonation32 />,
+					buttonText: formatMessage({
+						id: 'label.confirm',
+					}),
+				};
+		}
+	};
+
 	console.log('Streamm', selectedStream);
 
 	//view_on_block_explorer
@@ -101,9 +153,9 @@ const ClaimWithdrawalModal = ({
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerTitle='Claim Recurring Donaiton'
+			headerTitle={handleStates()?.title}
 			headerTitlePosition='left'
-			headerIcon={<IconDonation32 />}
+			headerIcon={handleStates()?.icon}
 			hiddenClose
 		>
 			<ModalContainer>
@@ -131,11 +183,7 @@ const ClaimWithdrawalModal = ({
 					</>
 				)}
 				<FullWidthButton
-					label={
-						transactionState === ClaimTransactionState.SUCCESS
-							? 'Done'
-							: 'Confirm'
-					}
+					label={handleStates()?.buttonText}
 					onClick={
 						transactionState === ClaimTransactionState.SUCCESS
 							? closeModal
