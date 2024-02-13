@@ -1,9 +1,9 @@
-import { getWalletClient } from '@wagmi/core';
 import { Header, Payload, SIWS } from '@web3auth/sign-in-with-solana';
+import { signMessage } from '@wagmi/core';
 import config from '@/configuration';
+import { wagmiConfig } from '@/wagmiconfig';
 
 let domain = 'giveth.io';
-
 export const fetchNonce = async (): Promise<string> => {
 	const nonceResponse: any = await fetch(
 		`${config.MICROSERVICES.authentication}/nonce`,
@@ -61,9 +61,7 @@ export const signWithEvm = async (
 
 	const { message, nonce } = siweMessage;
 
-	const walletClient = await getWalletClient();
-
-	const signature = await walletClient?.signMessage({ message });
+	const signature = await signMessage(wagmiConfig, { message: message });
 
 	return (
 		signature && {
