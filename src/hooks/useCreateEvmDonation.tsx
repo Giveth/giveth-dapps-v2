@@ -194,7 +194,7 @@ export const useCreateEvmDonation = () => {
 					tokenAddress: token.address,
 					anonymous: props.anonymous,
 					referrerId: props.chainvineReferred,
-					// safeTransactionId: safeTransactionId, // Not supported yed
+					// safeTransactionId: safeTransactionId, // Not supported yet
 				},
 			});
 			console.log('draftDonationData', draftDonationData);
