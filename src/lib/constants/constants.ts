@@ -131,4 +131,5 @@ export const WeiPerEther = 1e18;
 
 export const PROFILE_PHOTO_PLACEHOLDER = '/images/placeholders/profile.svg';
 
-export const QF_MATCHING_CAP_PERCENTAGE = 4;
+// Deprecated: maximumRewards coming from backend for each qfRound
+// export const QF_MATCHING_CAP_PERCENTAGE = 4;

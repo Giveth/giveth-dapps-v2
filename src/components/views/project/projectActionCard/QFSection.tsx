@@ -21,6 +21,7 @@ import { device } from '@/lib/constants/constants';
 import {
 	calculateEstimatedMatchingWithDonationAmount,
 	calculateTotalEstimatedMatching,
+	getActiveRound,
 } from '@/helpers/qf';
 import links from '@/lib/constants/links';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -35,12 +36,13 @@ interface IQFSectionProps {
 
 const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	const { formatMessage, locale } = useIntl();
-	const { estimatedMatching, sumDonationValueUsdForActiveQfRound } =
+	const { qfRounds, estimatedMatching, sumDonationValueUsdForActiveQfRound } =
 		projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 	const { projectDonationsSqrtRootSum, matchingPool, allProjectsSum } =
 		estimatedMatching ?? {};
 
+	const activeRound = getActiveRound(qfRounds);
 	const EstimatedMatchingSection = () => (
 		<Flex flexDirection='column' gap='4px'>
 			<EstimatedMatchingPrice>
@@ -49,6 +51,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 						projectDonationsSqrtRootSum,
 						allProjectsSum,
 						matchingPool,
+						activeRound?.maximumReward,
 					),
 					'$',
 					locale,
@@ -151,6 +154,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 										projectDonationsSqrtRootSum,
 										allProjectsSum,
 										matchingPool,
+										activeRound?.maximumReward,
 									),
 									'',
 									locale,
@@ -170,6 +174,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 										projectDonationsSqrtRootSum,
 										allProjectsSum,
 										matchingPool,
+										activeRound?.maximumReward,
 									),
 									'',
 									locale,
@@ -189,6 +194,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 										projectDonationsSqrtRootSum,
 										allProjectsSum,
 										matchingPool,
+										activeRound?.maximumReward,
 									),
 									'',
 									locale,
