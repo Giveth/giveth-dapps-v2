@@ -10,6 +10,7 @@ import {
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import Link from 'next/link';
 import { IProject } from '@/apollo/types/types';
 import { Flex } from '@/components/styled-components/Flex';
 import { smallFormatDate } from '@/lib/helpers';
@@ -17,10 +18,10 @@ import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAd
 import ProjectActions from './ProjectActions';
 import ClaimRecurringDonationModal from './ClaimRecurringDonationModal';
 import ProjectStatusBadge from './ProjectStatusBadge';
-import ProjectVerificationBadge from './ProjectVerificationBadge';
 import ProjectQFStatus from './ProjectQFStatus';
 import ProjectListedStatus from './ProjectListedStatus';
 import { formatDonation } from '@/helpers/number';
+import VerificationBadge from '@/components/VerificationBadge';
 
 interface IProjectItem {
 	project: IProject;
@@ -47,7 +48,9 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 							)}
 						</Flex>
 					</Subline>
-					<H2>{project.title}</H2>
+					<Link href={`project/${project.slug}`}>
+						<H2>{project.title}</H2>
+					</Link>
 				</div>
 				<ProjectActions
 					setSelectedProject={setSelectedProject}
@@ -78,7 +81,12 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 							})}
 						</P>
 						<div>
-							<ProjectVerificationBadge project={project} />
+							<VerificationBadge
+								isVerified={project?.verified}
+								verificationStatus={
+									project?.verificationFormStatus
+								}
+							/>
 						</div>
 					</Flex>
 					<Flex justifyContent='space-between'>
