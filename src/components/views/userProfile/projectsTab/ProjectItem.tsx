@@ -20,7 +20,7 @@ import ProjectStatusBadge from './ProjectStatusBadge';
 import ProjectVerificationBadge from './ProjectVerificationBadge';
 import ProjectQFStatus from './ProjectQFStatus';
 import ProjectListedStatus from './ProjectListedStatus';
-import { isRecurringActive } from '@/configuration';
+import { formatDonation } from '@/helpers/number';
 
 interface IProjectItem {
 	project: IProject;
@@ -109,9 +109,13 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 								{formatMessage({ id: 'label.total_raised' })}
 							</Flex>
 						</P>
-						<div>{project.sumDonationValueUsd}</div>
+						{formatDonation(
+							project.sumDonationValueUsd || 0,
+							'$',
+							locale,
+						)}
 					</Flex>
-					{isRecurringActive && (
+					{/* add this part when the backend has calculated {isRecurringActive && (
 						<Flex justifyContent='space-between'>
 							<P>
 								<Flex alignItems='center' gap='6px'>
@@ -120,7 +124,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 							</P>
 							<div>{project.sumDonationValueUsd}</div>
 						</Flex>
-					)}
+					)} */}
 				</ProjectStatusesContainer>
 			</Flex>
 			{showAddressModal && selectedProject && (
