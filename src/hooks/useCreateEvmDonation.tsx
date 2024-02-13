@@ -184,7 +184,7 @@ export const useCreateEvmDonation = () => {
 		try {
 			// setDonating(true);
 			//save draft donation
-			const { data: drafDonationData } = await client.mutate({
+			const { data: draftDonationData } = await client.mutate({
 				mutation: CREATE_DRAFT_DONATION,
 				variables: {
 					networkId: chainId,
@@ -197,7 +197,7 @@ export const useCreateEvmDonation = () => {
 					// safeTransactionId: safeTransactionId, // Not supported yed
 				},
 			});
-			console.log('drafDonationData', drafDonationData);
+			console.log('draftDonationData', draftDonationData);
 			const hash = await sendEvmTransaction(
 				transactionObj,
 				address,
@@ -207,7 +207,6 @@ export const useCreateEvmDonation = () => {
 			console.log('HERE IS THE hash', hash);
 			if (!hash) return { isSaved: false, txHash: '', isMinted: false };
 			setTxHash(hash);
-			// throw new Error('Transaction save failed');
 			const id = await handleSaveDonation(hash!, props);
 			// Wait for the status to become 'success'
 			await new Promise(resolve => {
