@@ -284,6 +284,9 @@ const ImgBottomLeft1 = styled(ImgBase)`
 
 const Sponsor = styled(ImgBase)`
 	width: 232px;
-	right: 100px;
-	margin-top: 80px;
+
+	${mediaQueries.laptopS} {
+		right: 100px;
+		margin-top: 80px;
+	}
 `;
