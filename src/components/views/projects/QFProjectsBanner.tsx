@@ -104,7 +104,12 @@ export const QFProjectsBanner = () => {
 				alt='QF OP'
 			/>
 			<ImgBottomLeft
-				src={'/images/banners/qf-round/bottom-left.png'}
+				src={'/images/banners/qf-round/bl1.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
+			<ImgBottomLeft
+				src={'/images/banners/qf-round/bl2.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
