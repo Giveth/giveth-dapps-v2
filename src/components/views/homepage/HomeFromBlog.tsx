@@ -15,6 +15,7 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { BlockHeader, BlockTitle } from './common';
+import { regexList } from '@/lib/constants/regex';
 
 const HomeFromBlog = () => {
 	const [mediumPosts, setMediumPosts] = useState<IMediumBlogPost[]>();
@@ -30,14 +31,12 @@ const HomeFromBlog = () => {
 				const modifiedPosts = posts?.items
 					?.slice(0, 3)
 					.map((post: any) => {
-						const regex = /<img[^>]+src="(.*?)"/g;
+						const regex = regexList.mediumBlogBanner;
 						let match = regex.exec(post.description);
-						console.log('match', match);
 						let src = match ? match[1] : '';
 						return { ...post, thumbnail: src };
 					});
 				setMediumPosts(modifiedPosts);
-				console.log('posts', modifiedPosts);
 			} catch (error) {
 				console.log('error', error);
 			}
