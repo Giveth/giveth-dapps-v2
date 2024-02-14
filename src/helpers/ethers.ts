@@ -1,6 +1,5 @@
+import { type Config, getClient, getConnectorClient } from '@wagmi/core';
 import { providers } from 'ethers';
-import { useMemo } from 'react';
-import { Config, useClient, useConnectorClient } from 'wagmi';
 import type { Account, Chain, Client, Transport } from 'viem';
 
 export function clientToProvider(client: Client<Transport, Chain>) {
@@ -20,12 +19,13 @@ export function clientToProvider(client: Client<Transport, Chain>) {
 	return new providers.JsonRpcProvider(transport.url, network);
 }
 
-/** Hook to convert a viem Client to an ethers.js Provider. */
-export function useEthersProvider({
-	chainId,
-}: { chainId?: number | undefined } = {}) {
-	const client = useClient<Config>({ chainId }) as Client<Transport, Chain>;
-	return useMemo(() => clientToProvider(client), [client]);
+/** Action to convert a viem Public Client to an ethers.js Provider. */
+export function getEthersProvider(
+	config: Config,
+	{ chainId }: { chainId?: number } = {},
+) {
+	const client = getClient(config, { chainId });
+	return client ? clientToProvider(client) : undefined;
 }
 
 export function clientToSigner(client: Client<Transport, Chain, Account>) {
@@ -40,11 +40,11 @@ export function clientToSigner(client: Client<Transport, Chain, Account>) {
 	return signer;
 }
 
-/** Hook to convert a Viem Client to an ethers.js Signer. */
-export async function useEthersSigner({ chainId }: { chainId?: number } = {}) {
-	const { data: client } = useConnectorClient<Config>({ chainId });
-	return useMemo(
-		() => (client ? clientToSigner(client) : undefined),
-		[client],
-	);
+/** Action to convert a Viem Client to an ethers.js Signer. */
+export async function getEthersSigner(
+	config: Config,
+	{ chainId }: { chainId?: number } = {},
+) {
+	const client = await getConnectorClient(config, { chainId });
+	return clientToSigner(client);
 }
