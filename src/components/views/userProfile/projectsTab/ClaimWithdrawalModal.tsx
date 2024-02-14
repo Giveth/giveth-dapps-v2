@@ -7,9 +7,8 @@ import {
 } from '@giveth/ui-design-system';
 import { Address, encodeFunctionData } from 'viem';
 import { useState } from 'react';
-import { waitForTransaction } from '@wagmi/core';
 import { useIntl } from 'react-intl';
-import { writeContract } from '@wagmi/core';
+import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -23,6 +22,7 @@ import { ClaimWithdrawalStatus } from './ClaimWithdrawalStatus';
 import { formatTxLink } from '@/lib/helpers';
 import { ChainType } from '@/types/config';
 import { ClaimTransactionState } from './type';
+import { wagmiConfig } from '@/wagmiconfig';
 interface IClaimWithdrawalModal extends IModal {
 	selectedStream: ITokenWithBalance;
 	project: IProject;
@@ -80,7 +80,7 @@ const ClaimWithdrawalModal = ({
 
 			setLoading(true);
 
-			const tx = await writeContract({
+			const tx = await writeContract(wagmiConfig, {
 				abi: anchorContractABI.abi,
 				address: anchorContractAddress,
 				functionName: 'execute',
@@ -90,10 +90,10 @@ const ClaimWithdrawalModal = ({
 
 			setTransactionState(ClaimTransactionState.PENDING);
 
-			if (tx?.hash) {
-				setTxHash(tx.hash);
-				await waitForTransaction({
-					hash: tx.hash,
+			if (tx) {
+				setTxHash(tx);
+				await waitForTransactionReceipt(wagmiConfig, {
+					hash: tx,
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
 				});
 				setTransactionState(ClaimTransactionState.SUCCESS);
