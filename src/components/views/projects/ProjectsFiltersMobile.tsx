@@ -4,13 +4,16 @@ import ProjectsSubCategories from '@/components/views/projects/ProjectsSubCatego
 import ProjectsFiltersSwiper from '@/components/views/projects/ProjectsFiltersSwiper';
 import { StyledLine } from '@/components/views/projects/common.styled';
 import ProjectsFiltersButton from '@/components/views/projects/ProjectsFiltersButton';
+import { useProjectsContext } from '@/context/projects.context';
 
 const ProjectsFiltersMobile = () => {
+	const { isQF } = useProjectsContext();
+
 	return (
 		<>
 			<ProjectsFiltersSwiper />
-			<StyledLine />
-			<ProjectsSubCategories />
+			{!isQF && <StyledLine />}
+			{!isQF && <ProjectsSubCategories />}
 			<Flex alignItems='center' gap='16px'>
 				<ProjectsSearchTablet />
 				<ProjectsFiltersButton />
