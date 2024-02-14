@@ -57,8 +57,6 @@ const AddressInterface = ({
 	const hasAddress = !!walletAddress;
 	const hasAnchorContract = !!anchorContractData?.isActive;
 
-	const hasAnchorContract = !!anchorContractData?.isActive;
-
 	return (
 		<Container>
 			<TopContainer>
