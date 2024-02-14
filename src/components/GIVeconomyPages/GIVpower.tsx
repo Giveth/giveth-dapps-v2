@@ -73,7 +73,7 @@ export function TabPowerTop() {
 	const givPowerFormatted = formatWeiHelper(givPower.total);
 	const hasZeroGivPower = givPowerFormatted === '0';
 
-	const { handleSignOutAndShowWelcomModal, walletAddress, walletChainType } =
+	const { handleSignOutAndShowWelcomeModal, walletAddress, walletChainType } =
 		useGeneralWallet();
 
 	return (
@@ -186,7 +186,7 @@ export function TabPowerTop() {
 										buttonType='primary'
 										size='small'
 										onClick={
-											handleSignOutAndShowWelcomModal
+											handleSignOutAndShowWelcomeModal
 										}
 									/>
 								</div>
