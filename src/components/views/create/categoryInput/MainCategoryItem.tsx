@@ -33,7 +33,6 @@ const MainCategoryItem: FC<IProps> = props => {
 			setSelectedCategories(newCategories);
 		}
 	};
-
 	return (
 		<Container>
 			<CategoryTitle>
@@ -48,7 +47,7 @@ const MainCategoryItem: FC<IProps> = props => {
 						<SubCategory xs={6} sm={3} key={subcategory.value}>
 							<CheckBox
 								size={20}
-								label={formatMessage({ id: subcategory.name! })}
+								label={subcategory.name!}
 								checked={!!checked}
 								onChange={e => onChange(e, subcategory.name)}
 								disabled={isMaxCategories && !checked}
