@@ -7,14 +7,17 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { useSwitchNetwork } from 'wagmi';
 import { useIntl } from 'react-intl';
+import { useSwitchNetwork } from 'wagmi';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import config from '@/configuration';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export const WrongNetworkLayer = () => {
-	const { switchNetwork } = useSwitchNetwork();
+	const { isConnected, isOnEVM, handleSingOutAndSignInWithEVM } =
+		useGeneralWallet();
 	const { formatMessage } = useIntl();
+	const { switchNetwork } = useSwitchNetwork();
 
 	return (
 		<Overlay>
@@ -24,15 +27,20 @@ export const WrongNetworkLayer = () => {
 						<IconInfoFilled16 />
 						<Caption>
 							{formatMessage({
-								id: 'label.recurring_donations_currently_only_available_on_optimism',
+								id: isConnected
+									? 'label.recurring_donations_currently_only_available_on_optimism'
+									: 'label.connect_wallet_to_continue_donating',
 							})}
 						</Caption>
 					</Title>
 					<SwitchButton
-						onClick={() =>
-							switchNetwork &&
-							switchNetwork(config.OPTIMISM_NETWORK_NUMBER)
-						}
+						onClick={async () => {
+							if (isOnEVM) {
+								switchNetwork?.(config.OPTIMISM_NETWORK_NUMBER);
+							} else {
+								await handleSingOutAndSignInWithEVM();
+							}
+						}}
 					>
 						{formatMessage({
 							id: 'label.switch_network',
