@@ -109,6 +109,7 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 				}
 				setShowModal(false); // Close the modal
 			} catch (error) {
+				console.log('error', error);
 			} finally {
 				setIsLoading(false);
 			}
