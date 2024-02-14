@@ -142,7 +142,7 @@ const AddressInterface = ({
 											!alloProtocolRegistry,
 										)
 									}
-									caption=''
+									label=''
 								/>
 							</Flex>
 						</AlloProtocolContainer>
