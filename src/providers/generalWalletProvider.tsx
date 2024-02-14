@@ -22,7 +22,7 @@ import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { Chain } from 'viem';
-import { encodeBase58 } from 'ethers';
+import { utils } from 'ethers';
 import { getChainName } from '@/lib/network';
 import config from '@/configuration';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -145,7 +145,7 @@ export const GeneralWalletProvider: React.FC<{
 		if (!signature) {
 			return undefined;
 		}
-		return encodeBase58(signature);
+		return utils.base58.encode(signature);
 	};
 
 	const getSolanaWalletBalance = async (
