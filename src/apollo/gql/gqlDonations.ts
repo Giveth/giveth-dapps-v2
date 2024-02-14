@@ -175,6 +175,7 @@ export const CREATE_DRAFT_DONATION = gql`
 		$token: String!
 		$projectId: Float!
 		$tokenAddress: String
+		$toAddress: String
 		$anonymous: Boolean
 		$referrerId: String
 		$safeTransactionId: String
@@ -184,6 +185,7 @@ export const CREATE_DRAFT_DONATION = gql`
 			amount: $amount
 			token: $token
 			projectId: $projectId
+			toAddress: $toAddress
 			tokenAddress: $tokenAddress
 			anonymous: $anonymous
 			referrerId: $referrerId
