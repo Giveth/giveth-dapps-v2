@@ -47,11 +47,13 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	const isEditMode = !!project;
 
 	const updatedCloseModal = () => {
-		if (!txResult) {
+		if (!txResult && !isEditMode) {
 			//Show the user did not complete the transaction
 			alert(
 				'You did not complete the transaction but your project was created',
 			);
+			localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
+			router.push(slugToSuccessView(addedProjectState.slug));
 			//handle success project
 		}
 		closeModal();
