@@ -14,8 +14,7 @@ import config from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export const WrongNetworkLayer = () => {
-	const { isConnected, isOnEVM, handleSingOutAndSignInWithEVM } =
-		useGeneralWallet();
+	const { isOnEVM, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 	const { formatMessage } = useIntl();
 	const { switchNetwork } = useSwitchNetwork();
 
@@ -27,9 +26,7 @@ export const WrongNetworkLayer = () => {
 						<IconInfoFilled16 />
 						<Caption>
 							{formatMessage({
-								id: isConnected
-									? 'label.recurring_donations_currently_only_available_on_optimism'
-									: 'label.connect_wallet_to_continue_donating',
+								id: 'label.recurring_donations_currently_only_available_on_optimism',
 							})}
 						</Caption>
 					</Title>
