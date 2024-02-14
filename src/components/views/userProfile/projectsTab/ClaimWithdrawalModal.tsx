@@ -6,10 +6,10 @@ import {
 	brandColors,
 } from '@giveth/ui-design-system';
 import { Address, encodeFunctionData } from 'viem';
-import { useContractWrite, usePrepareContractWrite } from 'wagmi';
 import { useState } from 'react';
 import { waitForTransaction } from '@wagmi/core';
 import { useIntl } from 'react-intl';
+import { writeContract } from '@wagmi/core';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -23,7 +23,6 @@ import { ClaimTransactionState } from './ClaimRecurringDonationModal';
 import { ClaimWithdrawalStatus } from './ClaimWithdrawalStatus';
 import { formatTxLink } from '@/lib/helpers';
 import { ChainType } from '@/types/config';
-
 interface IClaimWithdrawalModal extends IModal {
 	selectedStream: ITokenWithBalance;
 	project: IProject;
@@ -32,6 +31,24 @@ interface IClaimWithdrawalModal extends IModal {
 	setTransactionState: (state: ClaimTransactionState) => void;
 	balanceInUsd: number;
 }
+
+const contents = {
+	[ClaimTransactionState.NOT_STARTED]: {
+		title: 'label.claim_recurring_donaiton',
+		icon: <IconDonation32 />,
+		buttonText: 'label.confirm',
+	},
+	[ClaimTransactionState.PENDING]: {
+		title: 'label.claim_recurring_donaiton',
+		icon: <IconWalletApprove32 />,
+		buttonText: 'label.withdrawing',
+	},
+	[ClaimTransactionState.SUCCESS]: {
+		title: 'label.claim_successful',
+		icon: <IconWalletApprove32 />,
+		buttonText: 'label.done',
+	},
+};
 
 const ClaimWithdrawalModal = ({
 	setShowModal,
@@ -53,30 +70,29 @@ const ClaimWithdrawalModal = ({
 
 	const [loading, setLoading] = useState(false);
 
-	const encodedDowngradeTo = encodeFunctionData({
-		abi: superTokenABI.abi,
-		functionName: 'downgradeTo',
-		args: [optimismAddress, +selectedStream.balance.toString()],
-	});
-
-	const { config: executeConfig } = usePrepareContractWrite({
-		abi: anchorContractABI.abi,
-		address: anchorContractAddress,
-		functionName: 'execute',
-		chainId: config.OPTIMISM_NETWORK_NUMBER,
-		args: [selectedStream.token.id, '', encodedDowngradeTo],
-	});
-
-	const executeContractWrite = useContractWrite(executeConfig);
-
 	const handleConfirm = async () => {
 		try {
+			const encodedDowngradeTo = encodeFunctionData({
+				abi: superTokenABI.abi,
+				functionName: 'downgradeTo',
+				args: [optimismAddress, +selectedStream.balance.toString()],
+			});
+
 			setLoading(true);
+
+			const tx = await writeContract({
+				abi: anchorContractABI.abi,
+				address: anchorContractAddress,
+				functionName: 'execute',
+				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				args: [selectedStream.token.id, '', encodedDowngradeTo],
+			});
+
 			setTransactionState(ClaimTransactionState.PENDING);
-			const tx = await executeContractWrite.writeAsync?.();
+
 			if (tx?.hash) {
 				setTxHash(tx.hash);
-				waitForTransaction({
+				await waitForTransaction({
 					hash: tx.hash,
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
 				});
@@ -89,62 +105,15 @@ const ClaimWithdrawalModal = ({
 		}
 	};
 
-	const handleStates = () => {
-		switch (transactionState) {
-			case ClaimTransactionState.NOT_STARTED:
-				return {
-					title: formatMessage({
-						id: 'label.claim_recurring_donaiton',
-					}),
-					icon: <IconDonation32 />,
-					buttonText: formatMessage({
-						id: 'label.confirm',
-					}),
-				};
-			case ClaimTransactionState.PENDING:
-				return {
-					title: formatMessage({
-						id: 'label.claim_recurring_donaiton',
-					}),
-					icon: <IconWalletApprove32 />,
-					buttonText: formatMessage({
-						id: 'label.withdrawing',
-					}),
-				};
-
-			case ClaimTransactionState.SUCCESS:
-				return {
-					title: formatMessage({
-						id: 'label.claim_successful',
-					}),
-					icon: <IconWalletApprove32 />,
-					buttonText: formatMessage({
-						id: 'label.done',
-					}),
-				};
-
-			default:
-				return {
-					title: formatMessage({
-						id: 'label.claim_recurring_donaiton',
-					}),
-					icon: <IconDonation32 />,
-					buttonText: formatMessage({
-						id: 'label.confirm',
-					}),
-				};
-		}
-	};
-
-	//view_on_block_explorer
-
 	return (
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerTitle={handleStates()?.title}
+			headerTitle={formatMessage({
+				id: contents[transactionState].title,
+			})}
 			headerTitlePosition='left'
-			headerIcon={handleStates()?.icon}
+			headerIcon={contents[transactionState].icon}
 			hiddenClose
 		>
 			<ModalContainer>
@@ -172,7 +141,9 @@ const ClaimWithdrawalModal = ({
 					</>
 				)}
 				<FullWidthButton
-					label={handleStates()?.buttonText}
+					label={formatMessage({
+						id: contents[transactionState].buttonText,
+					})}
 					onClick={
 						transactionState === ClaimTransactionState.SUCCESS
 							? closeModal
