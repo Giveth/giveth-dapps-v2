@@ -120,7 +120,7 @@ export const QFProjectsBanner = () => {
 			/>
 			<Container>
 				<Row>
-					<StyledCol xs={12} md={12}>
+					<StyledCol xs={12} md={6}>
 						<Title weight={700}>
 							{formatMessage({ id: 'label.quadratic_funding' })}
 						</Title>
@@ -144,14 +144,14 @@ export const QFProjectsBanner = () => {
 							</Desc>
 						)}
 					</StyledCol>
-					{/* <StyledCol xs={12} md={6}>
+					<StyledCol xs={12} md={6}>
 						<Image
-							src={'/images/banners/qfSponsorsOP.png'}
+							src={'/images/banners/qf-round/sponsor.svg'}
 							style={{ objectFit: 'contain' }}
 							fill
 							alt='QF Banner'
 						/>
-					</StyledCol> */}
+					</StyledCol>
 				</Row>
 			</Container>
 		</BannerContainer>
@@ -181,27 +181,25 @@ const StyledCol = styled(Col)`
 	text-align: center;
 	align-items: center;
 	padding-top: 40px;
+	color: #6241d6;
 `;
 
 const Title = styled(H1)`
 	margin-top: 32px;
-	color: #fff;
 `;
 
-const Name = styled(H2)`
-	color: #fff;
-`;
+const Name = styled(H2)``;
 
 const Desc = styled(Flex)`
 	width: fit-content;
-	color: #fff;
-	border: 2px solid #d640f9;
+
+	border: 2px solid #6241d6;
 	border-radius: 20px;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
 	padding: 9px 20px;
-	background: #272526;
+	background: #ceff1a;
 	margin-top: 12px;
 	margin-bottom: 32px;
 `;
