@@ -1,6 +1,5 @@
 import {
 	B,
-	brandColors,
 	Button,
 	ButtonText,
 	IconX,
@@ -17,6 +16,7 @@ import { useProjectsContext } from '@/context/projects.context';
 import { zIndex } from '@/lib/constants/constants';
 import { EProjectsFilter } from '@/apollo/types/types';
 import config from '@/configuration';
+import { PinkyColoredNumber } from '../styled-components/PinkyColoredNumber';
 
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
@@ -274,12 +274,4 @@ const FeatureItem = styled.div`
 	&:hover {
 		background-color: ${neutralColors.gray[200]};
 	}
-`;
-
-export const PinkyColoredNumber = styled(ButtonText)`
-	background-color: ${brandColors.pinky[500]};
-	width: 18px;
-	height: 18px;
-	border-radius: 50%;
-	color: ${neutralColors.gray[100]};
 `;
