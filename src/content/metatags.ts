@@ -1,3 +1,5 @@
+import Routes from '@/lib/constants/Routes';
+
 export const homeMetatags = {
 	title: 'Giveth: Welcome to the Future of Giving',
 	desc: 'Get rewarded for giving to for-good projects with zero added fees. Donate crypto directly to thousands of for-good projects, nonprofits & charities!',
@@ -108,4 +110,32 @@ export const nftMetatags = {
 	desc: 'Mint a Giver and show off your support for the Future of Giving!',
 	image: 'https://giveth.mypinata.cloud/ipfs/QmULaTJR5KHZeaDQ26p1ALcwAKgMcZGqVqGejPwbcmRwYc',
 	url: 'https://giveth.io/nft',
+};
+
+export const generalOnboardingMetaTags = {
+	title: 'Giveth Onboarding | Intro',
+	desc: 'Learn how to use the Giveth platform like a pro with this onboarding guide!',
+	image: 'https://giveth.mypinata.cloud/ipfs/QmX2242gXzRp5tHWGkJu5L5VbgWD6Fu4NDbLunBhCKBEtY/General%20banner.svg',
+	url: Routes.Onboarding,
+};
+
+export const projectOnboardingMetaTags = {
+	title: 'Giveth Onboarding | Projects',
+	desc: 'Learn how to manage your Giveth project like a pro with this onboarding guide!',
+	image: 'https://giveth.mypinata.cloud/ipfs/QmX2242gXzRp5tHWGkJu5L5VbgWD6Fu4NDbLunBhCKBEtY/project%20banner.svg',
+	url: Routes.OnboardingProjects,
+};
+
+export const donorOnboardingMetaTags = {
+	title: ' Giveth Onboarding | Donors',
+	desc: 'Learn how to use the Giveth platform like a pro with this onboarding guide!',
+	image: 'https://giveth.mypinata.cloud/ipfs/QmX2242gXzRp5tHWGkJu5L5VbgWD6Fu4NDbLunBhCKBEtY/Donate%20banner.svg',
+	url: Routes.OnboardingDonors,
+};
+
+export const giveconomyOnboardingMetaTags = {
+	title: 'Giveth Onboarding | GIVeconomy',
+	desc: 'Learn how to use the GIVeconomy like a pro with this onboarding guide!',
+	image: 'https://giveth.mypinata.cloud/ipfs/QmX2242gXzRp5tHWGkJu5L5VbgWD6Fu4NDbLunBhCKBEtY/GIVecon%20banner.svg',
+	url: Routes.OnboardingGiveconomy,
 };
