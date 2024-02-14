@@ -21,6 +21,7 @@ import { IChainType } from '@/types/config';
 import { findAddressByChain } from '@/lib/helpers';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { IAnchorContractData } from '@/apollo/types/types';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
@@ -50,6 +51,8 @@ const AddressInterface = ({
 	const walletAddress = addressObj?.address;
 
 	const hasAddress = !!walletAddress;
+
+	const hasAnchorContract = !!anchorContractData?.isActive;
 
 	return (
 		<Container>
@@ -99,20 +102,36 @@ const AddressInterface = ({
 					<AddressContainer hasAddress={hasAddress}>
 						{hasAddress ? walletAddress : 'No address added yet!'}
 					</AddressContainer>
-					{hasAddress && (
-						<IconContainer
-							onClick={() => {
-								const _addresses = [...value];
-								_addresses.splice(
-									_addresses.indexOf(addressObj),
-									1,
-								);
-								setValue(inputName, _addresses);
-							}}
-						>
-							<IconTrash24 />
-						</IconContainer>
-					)}
+					{hasAddress &&
+						(hasAnchorContract && isOptimism ? (
+							<IconWithTooltip
+								direction='top'
+								icon={
+									<IconContainer>
+										<IconTrash24
+											color={neutralColors.gray[600]}
+										/>
+									</IconContainer>
+								}
+							>
+								{formatMessage({
+									id: 'label.you_cannot_remove_your_optimism_recipient_address',
+								})}
+							</IconWithTooltip>
+						) : (
+							<IconContainer
+								onClick={() => {
+									const _addresses = [...value];
+									_addresses.splice(
+										_addresses.indexOf(addressObj),
+										1,
+									);
+									setValue(inputName, _addresses);
+								}}
+							>
+								<IconTrash24 />
+							</IconContainer>
+						))}
 				</Flex>
 				{isOptimism &&
 					isRecurringActive &&

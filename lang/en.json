@@ -1073,6 +1073,7 @@
 	"label.you_are_supporting_other_projects_with_this_stream": "You are supporting {count} other project with this stream",
 	"label.you_are_the_first_donor_to_make_a_recurring_donation_to_this_project": "You are the first donor to make a recurring donation to this project.",
 	"label.you_boosted_this_project_with_percentage": "Nice, You boosted this project with {percentage}% of your GIVpower.",
+	"label.you_cannot_remove_your_optimism_recipient_address": "You cannot remove your Optimism recipient address because you have enabled Recurring Donations for this project. You can still replace your recipient address with a new one.",
 	"label.you_cant_create_a_project_unless": "You can’t create a project unless you complete your profile.",
 	"label.you_cant_remove_your_givpower_from_this_project": "You can't remove your GIVpower from this project because it is the only boost you have. Please boost another project with GIVpower before continuing.",
 	"label.you_can_boost_your_favorite_projects": "You can boost your favorite projects with GIVpower or delegate to community top supporters. GIVpower allows you to influence the ranking of projects on Giveth. Get GIVpower when you stake & lock GIV. Top ranked projects from GIVpower get additional matching funds & their donors get more GIVbacks.",
