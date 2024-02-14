@@ -14,13 +14,14 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { RunOutInfo } from '../RunOutInfo';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
-import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { showToastError } from '@/lib/helpers';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { StreamInfo } from './StreamInfo';
 import { ModifySection } from './ModifySection';
 import { ModifyWrapper, Wrapper } from './common.sc';
 import { EModifySuperTokenSteps, actionButtonLabel } from './common';
+import { wagmiConfig } from '@/wagmiconfig';
+import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	token?: IToken;
@@ -96,20 +97,23 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	const onDeposit = async () => {
 		setStep(EModifySuperTokenSteps.DEPOSITING);
 		try {
-			const _provider = getEthersProvider({
-				chainId: config.OPTIMISM_CONFIG.id,
-			});
+			if (!address) {
+				throw new Error('address not found1');
+			}
 
-			const signer = await getEthersSigner({
-				chainId: config.OPTIMISM_CONFIG.id,
-			});
+			if (!superToken) {
+				throw new Error('SuperToken not found');
+			}
 
-			if (!_provider || !signer || !address || !superToken)
+			const provider = await getEthersProvider(wagmiConfig);
+			const signer = await getEthersSigner(wagmiConfig);
+
+			if (!provider || !signer)
 				throw new Error('Provider or signer not found');
 
 			const sf = await Framework.create({
 				chainId: config.OPTIMISM_CONFIG.id,
-				provider: _provider,
+				provider: provider,
 			});
 
 			// EThx is not a Wrapper Super Token and should load separately
