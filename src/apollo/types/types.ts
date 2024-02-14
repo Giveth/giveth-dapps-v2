@@ -427,6 +427,7 @@ export interface IQFRound {
 	endDate: string;
 	minimumPassportScore: number;
 	eligibleNetworks: number[];
+	maximumReward: number;
 }
 
 export interface IGetQfRoundHistory {
