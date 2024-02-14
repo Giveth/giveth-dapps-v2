@@ -167,3 +167,27 @@ export const FETCH_QF_ROUND_HISTORY = gql`
 		}
 	}
 `;
+
+export const CREATE_DRAFT_DONATION = gql`
+	mutation (
+		$networkId: Float!
+		$amount: Float!
+		$token: String!
+		$projectId: Float!
+		$tokenAddress: String
+		$anonymous: Boolean
+		$referrerId: String
+		$safeTransactionId: String
+	) {
+		createDraftDonation(
+			networkId: $networkId
+			amount: $amount
+			token: $token
+			projectId: $projectId
+			tokenAddress: $tokenAddress
+			anonymous: $anonymous
+			referrerId: $referrerId
+			safeTransactionId: $safeTransactionId
+		)
+	}
+`;
