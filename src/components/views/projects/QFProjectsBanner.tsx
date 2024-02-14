@@ -223,44 +223,47 @@ const ImgTopRight = styled(ImgBase)`
 	top: 0;
 	right: 120px;
 	width: 110px;
-	/* ${mediaQueries.tablet} {
-		width: 300px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
 	}
-	${mediaQueries.laptopS} {
-		width: 450px;
-	} */
 `;
 
 const ImgTopRight1 = styled(ImgBase)`
 	top: 0;
 	right: 0;
 	width: 180px;
-	/* ${mediaQueries.tablet} {
-		width: 300px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
 	}
-	${mediaQueries.laptopS} {
-		width: 450px;
-	} */
 `;
 
 const ImgTopMiddle = styled(ImgBase)`
 	top: 20px;
 	right: 40%;
 	width: 110px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
+	}
 `;
 
 const ImgBottomRight = styled(ImgBase)`
 	right: 0;
 	bottom: 0;
-	${mediaQueries.tablet} {
-		right: 0;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
 	}
 `;
 const ImgTopLeft = styled(ImgBase)`
 	top: 0;
 	left: 64px;
 	width: 127px;
-	${mediaQueries.tablet} {
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
 	}
 `;
 
@@ -268,18 +271,20 @@ const ImgBottomLeft = styled(ImgBase)`
 	left: 0;
 	bottom: 0;
 	width: 110px;
-	/* ${mediaQueries.laptopS} {
-		width: 200px;
-	} */
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
+	}
 `;
 
 const ImgBottomLeft1 = styled(ImgBase)`
 	left: 48px;
 	bottom: 0;
 	width: 100px;
-	/* ${mediaQueries.laptopS} {
-		width: 200px;
-	} */
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
+	}
 `;
 
 const Sponsor = styled(ImgBase)`
