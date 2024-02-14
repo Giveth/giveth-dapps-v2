@@ -39,7 +39,7 @@ const ProjectsFiltersDesktop = () => {
 					<ProjectsFiltersButton />
 				</FilterAndSearchContainer>
 			</FiltersSection>
-			{selectedMainCategory && <StyledLine />}
+			{!isQF && selectedMainCategory && <StyledLine />}
 			{!isQF && <ProjectsSubCategories />}
 		</>
 	);
