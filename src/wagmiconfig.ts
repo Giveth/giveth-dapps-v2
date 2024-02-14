@@ -1,7 +1,8 @@
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config';
-import { cookieStorage, createStorage } from 'wagmi';
+import { cookieStorage, createStorage, http } from 'wagmi';
 import { safe } from '@wagmi/connectors';
 
+import { createClient } from 'viem';
 import configuration from './configuration';
 
 // export const wagmiConfig = createConfig({
@@ -85,4 +86,7 @@ export const wagmiConfig = defaultWagmiConfig({
 	enableEIP6963: true, // Optional - true by default
 	enableCoinbase: true, // Optional - true by default
 	// ...wagmiOptions, // Optional - Override createConfig parameters
+	client({ chain }) {
+		return createClient({ chain, transport: http() });
+	},
 });
