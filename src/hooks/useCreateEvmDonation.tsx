@@ -15,6 +15,8 @@ import { retryFetchEVMTransaction } from '@/lib/transaction';
 import { useIsSafeEnvironment } from './useSafeAutoConnect';
 import { postRequest } from '@/helpers/requests';
 import { wagmiConfig } from '@/wagmiconfig';
+import { client } from '@/apollo/apolloClient';
+import { CREATE_DRAFT_DONATION } from '@/apollo/gql/gqlDonations';
 
 export const useCreateEvmDonation = () => {
 	const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
@@ -183,6 +185,22 @@ export const useCreateEvmDonation = () => {
 
 		try {
 			// setDonating(true);
+			//save draft donation
+			const { data: draftDonationData } = await client.mutate({
+				mutation: CREATE_DRAFT_DONATION,
+				variables: {
+					networkId: chainId,
+					amount: amount,
+					token: token.symbol,
+					projectId: props.projectId,
+					toAddress: toAddress,
+					tokenAddress: token.address,
+					anonymous: props.anonymous,
+					referrerId: props.chainvineReferred,
+					// safeTransactionId: safeTransactionId, // Not supported yet
+				},
+			});
+			console.log('draftDonationData', draftDonationData);
 			const hash = await sendEvmTransaction(
 				transactionObj,
 				address,
@@ -192,7 +210,7 @@ export const useCreateEvmDonation = () => {
 			console.log('HERE IS THE hash', hash);
 			if (!hash) return { isSaved: false, txHash: '', isMinted: false };
 			setTxHash(hash);
-			const id = await handleSaveDonation(hash, props);
+			const id = await handleSaveDonation(hash!, props);
 			// Wait for the status to become 'success'
 			await new Promise(resolve => {
 				if (status === 'success') {
@@ -209,7 +227,7 @@ export const useCreateEvmDonation = () => {
 				};
 			}
 			return {
-				isSaved: id > 0,
+				isSaved: id! > 0,
 				txHash: hash,
 			};
 		} catch (error: any) {

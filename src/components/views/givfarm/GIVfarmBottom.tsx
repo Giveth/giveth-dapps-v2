@@ -29,7 +29,7 @@ import { getNowUnixMS } from '@/helpers/time';
 import { TWO_WEEK } from '@/lib/constants/constants';
 import StakingPoolCard from '@/components/cards/StakingCards/BaseStakingCard/BaseStakingCard';
 import { RegenStreamSection } from '@/components/givfarm/RegenStreamSection';
-import ToggleSwitch from '@/components/styled-components/Switch';
+import ToggleSwitch from '@/components/ToggleSwitch';
 import { getNetworkConfig } from '@/helpers/givpower';
 
 const renderPool = (
@@ -153,8 +153,8 @@ export const GIVfarmBottom = () => {
 						label={formatMessage({
 							id: 'label.switch_to_archive_cards',
 						})}
-						checked={showArchivedPools}
-						setStateChange={setShowArchivedPools}
+						isOn={showArchivedPools}
+						toggleOnOff={setShowArchivedPools}
 					/>
 				</GIVfarmToolBoxRow>
 				<PoolRow>{renderPools(chainId, showArchivedPools)}</PoolRow>
