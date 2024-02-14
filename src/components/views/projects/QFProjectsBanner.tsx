@@ -93,7 +93,7 @@ export const QFProjectsBanner = () => {
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
-			<ImgTopRight
+			<ImgTopRight1
 				src={'/images/banners/qf-round/tr2.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
@@ -118,7 +118,7 @@ export const QFProjectsBanner = () => {
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
-			<ImgBottomLeft
+			<ImgBottomLeft1
 				src={'/images/banners/qf-round/bl2.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
@@ -150,10 +150,9 @@ export const QFProjectsBanner = () => {
 						)}
 					</StyledCol>
 					<StyledCol xs={12} md={6}>
-						<Image
+						<Sponsor
 							src={'/images/banners/qf-round/sponsor.svg'}
 							style={{ objectFit: 'contain' }}
-							fill
 							alt='QF Banner'
 						/>
 					</StyledCol>
@@ -217,23 +216,37 @@ const ImgBase = styled.img`
 const ImgMiddleRight = styled(ImgBase)`
 	top: 0;
 	right: 0;
+	width: 620px;
 `;
 
 const ImgTopRight = styled(ImgBase)`
 	top: 0;
-	right: 0;
-	width: 200px;
-	${mediaQueries.tablet} {
+	right: 120px;
+	width: 110px;
+	/* ${mediaQueries.tablet} {
 		width: 300px;
 	}
 	${mediaQueries.laptopS} {
 		width: 450px;
+	} */
+`;
+
+const ImgTopRight1 = styled(ImgBase)`
+	top: 0;
+	right: 0;
+	width: 180px;
+	/* ${mediaQueries.tablet} {
+		width: 300px;
 	}
+	${mediaQueries.laptopS} {
+		width: 450px;
+	} */
 `;
 
 const ImgTopMiddle = styled(ImgBase)`
-	top: 0;
-	right: 50%;
+	top: 20px;
+	right: 40%;
+	width: 110px;
 `;
 
 const ImgBottomRight = styled(ImgBase)`
@@ -246,6 +259,7 @@ const ImgBottomRight = styled(ImgBase)`
 const ImgTopLeft = styled(ImgBase)`
 	top: 0;
 	left: 64px;
+	width: 127px;
 	${mediaQueries.tablet} {
 	}
 `;
@@ -253,8 +267,23 @@ const ImgTopLeft = styled(ImgBase)`
 const ImgBottomLeft = styled(ImgBase)`
 	left: 0;
 	bottom: 0;
-	width: 150px;
-	${mediaQueries.laptopS} {
+	width: 110px;
+	/* ${mediaQueries.laptopS} {
 		width: 200px;
-	}
+	} */
+`;
+
+const ImgBottomLeft1 = styled(ImgBase)`
+	left: 48px;
+	bottom: 0;
+	width: 100px;
+	/* ${mediaQueries.laptopS} {
+		width: 200px;
+	} */
+`;
+
+const Sponsor = styled(ImgBase)`
+	width: 232px;
+	right: 100px;
+	margin-top: 80px;
 `;
