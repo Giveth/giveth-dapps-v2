@@ -118,7 +118,7 @@ const OptionWrapper = styled(GLink)<{ isSelected: boolean }>`
 	border-radius: 54px;
 	width: 48px;
 	height: 32px;
-	display: flex;
+	display: flex !important;
 	justify-content: center;
 	align-items: center;
 	color: ${brandColors.giv[500]};
