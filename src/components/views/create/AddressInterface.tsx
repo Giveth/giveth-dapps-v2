@@ -6,9 +6,12 @@ import {
 	Button,
 	GLink,
 	IconArrowRight16,
+	IconCheck16,
 	IconTrash24,
 	P,
+	brandColors,
 	neutralColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { EInputs } from '@/components/views/create/CreateProject';
 import NetworkLogo from '@/components/NetworkLogo';
@@ -21,6 +24,7 @@ import { IChainType } from '@/types/config';
 import { findAddressByChain } from '@/lib/helpers';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { IAnchorContractData } from '@/apollo/types/types';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
@@ -34,6 +38,7 @@ const AddressInterface = ({
 	onButtonClick,
 	chainType,
 	anchorContractData,
+	isEditMode,
 }: IAddressInterfaceProps) => {
 	const { setValue, watch } = useFormContext();
 	const { formatMessage } = useIntl();
@@ -50,6 +55,9 @@ const AddressInterface = ({
 	const walletAddress = addressObj?.address;
 
 	const hasAddress = !!walletAddress;
+	const hasAnchorContract = !!anchorContractData?.isActive;
+
+	const hasAnchorContract = !!anchorContractData?.isActive;
 
 	return (
 		<Container>
@@ -99,41 +107,66 @@ const AddressInterface = ({
 					<AddressContainer hasAddress={hasAddress}>
 						{hasAddress ? walletAddress : 'No address added yet!'}
 					</AddressContainer>
-					{hasAddress && (
-						<IconContainer
-							onClick={() => {
-								const _addresses = [...value];
-								_addresses.splice(
-									_addresses.indexOf(addressObj),
-									1,
-								);
-								setValue(inputName, _addresses);
-							}}
-						>
-							<IconTrash24 />
-						</IconContainer>
-					)}
+					{hasAddress &&
+						(hasAnchorContract && isOptimism ? (
+							<IconWithTooltip
+								direction='top'
+								icon={
+									<IconContainer>
+										<IconTrash24
+											color={neutralColors.gray[600]}
+										/>
+									</IconContainer>
+								}
+							>
+								{formatMessage({
+									id: 'label.you_cannot_remove_your_optimism_recipient_address',
+								})}
+							</IconWithTooltip>
+						) : (
+							<IconContainer
+								onClick={() => {
+									const _addresses = [...value];
+									_addresses.splice(
+										_addresses.indexOf(addressObj),
+										1,
+									);
+									setValue(inputName, _addresses);
+								}}
+							>
+								<IconTrash24 />
+							</IconContainer>
+						))}
 				</Flex>
-				{isOptimism &&
-					isRecurringActive &&
-					isOnEVM &&
-					!anchorContractData?.isActive && (
-						// Render this section only on Optimism
-						<AlloProtocolContainer>
-							<Flex>
-								<div>
-									<B>
-										Set up Profile on the Allo Protocol
-										Registry
-									</B>
-									<P>
-										Your project will be included in a
-										shared registry of public goods projects
-										with Gitcoin and others. You will also
-										set up your project to receive recurring
-										donations.
-									</P>
-								</div>
+				{isOptimism && isRecurringActive && isOnEVM && (
+					// Render this section only on Optimism
+					<AlloProtocolContainer>
+						<Flex>
+							<div>
+								<B>
+									{hasAnchorContract && isEditMode
+										? formatMessage({
+												id: 'label.allo_protocol_registry_set_up',
+											})
+										: formatMessage({
+												id: 'label.set_up_profile_on_the_allo_protocol_registry',
+											})}
+								</B>
+								<P>
+									{hasAnchorContract && isEditMode
+										? formatMessage({
+												id: 'label.your_project_is_set_up_to_receive_recurring_donations',
+											})
+										: formatMessage({
+												id: 'label.do_you_want_this_project_to_be_setup_to_receive_recurring_donations',
+											})}
+								</P>
+							</div>
+							{hasAnchorContract && isEditMode ? (
+								<IconCheckContainer>
+									<IconCheck16 color={brandColors.giv[100]} />
+								</IconCheckContainer>
+							) : (
 								<ToggleSwitch
 									isOn={alloProtocolRegistry}
 									toggleOnOff={() =>
@@ -144,9 +177,10 @@ const AddressInterface = ({
 									}
 									label=''
 								/>
-							</Flex>
-						</AlloProtocolContainer>
-					)}
+							)}
+						</Flex>
+					</AlloProtocolContainer>
+				)}
 			</MiddleContainer>
 		</Container>
 	);
@@ -199,6 +233,14 @@ const IconContainer = styled(FlexCenter)`
 
 const AlloProtocolContainer = styled.div`
 	margin-top: 24px;
+`;
+
+const IconCheckContainer = styled(FlexCenter)`
+	width: 24px;
+	height: 24px;
+	border-radius: 50px;
+	background-color: ${semanticColors.jade[500]};
+	padding: 5px;
 `;
 
 export default AddressInterface;
