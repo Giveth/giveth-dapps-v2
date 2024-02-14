@@ -11,6 +11,8 @@ export const isRecurringActive =
 
 export const SENTRY_URGENT = 'urgent';
 
+export const QF_SPECIFIC_CATEGORIES = ['polygon'];
+
 const EVM_NETWORKS_CONFIG = {
 	[envConfig.MAINNET_NETWORK_NUMBER]: envConfig.MAINNET_CONFIG,
 	[envConfig.GNOSIS_NETWORK_NUMBER]: envConfig.GNOSIS_CONFIG,
