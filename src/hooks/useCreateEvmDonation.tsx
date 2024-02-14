@@ -191,6 +191,7 @@ export const useCreateEvmDonation = () => {
 					amount: amount,
 					token: token.symbol,
 					projectId: props.projectId,
+					toAddress: toAddress,
 					tokenAddress: token.address,
 					anonymous: props.anonymous,
 					referrerId: props.chainvineReferred,
