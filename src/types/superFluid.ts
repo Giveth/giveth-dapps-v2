@@ -24,3 +24,12 @@ export interface ISuperfluidStream {
 	token: ISuperToken;
 	currentFlowRate: string;
 }
+
+export interface IStream {
+	id: string;
+	token: IToken;
+}
+
+export interface IProjectStreamsData {
+	streams: IStream[];
+}

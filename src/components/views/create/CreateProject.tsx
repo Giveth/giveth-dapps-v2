@@ -267,7 +267,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				if (
 					watchAlloProtocolRegistry &&
 					hasOptimismAddress &&
-					isRecurringActive
+					isRecurringActive &&
+					!draft
 				) {
 					setShowAlloProtocolModal(true);
 					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
