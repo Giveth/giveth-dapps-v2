@@ -164,7 +164,7 @@ const ProfileTab = styled(P)<ITab>`
 	`}
 `;
 
-const Count = styled.div`
+const Count = styled.div<ITab>`
 	background-color: ${(props: ITab) =>
 		props.active ? neutralColors.gray[500] : brandColors.pinky[500]};
 	color: white;
