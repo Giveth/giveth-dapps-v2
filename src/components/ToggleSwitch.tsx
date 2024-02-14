@@ -1,24 +1,37 @@
 import styled from 'styled-components';
 import { brandColors, neutralColors, P } from '@giveth/ui-design-system';
 import { FC } from 'react';
+import { Flex } from './styled-components/Flex';
 
 interface IToggleButton {
 	isOn: boolean;
 	toggleOnOff: (isOn: boolean) => void;
-	caption: string;
+	label: string;
+	disabled?: boolean;
+	className?: string;
 }
 
-const ToggleSwitch: FC<IToggleButton> = ({ isOn, toggleOnOff, caption }) => {
+const ToggleSwitch: FC<IToggleButton> = ({
+	isOn,
+	toggleOnOff,
+	label,
+	disabled,
+	className,
+}) => {
 	const handleClick = () => {
 		toggleOnOff(!isOn);
 	};
 	return (
-		<Container onClick={handleClick}>
+		<Container
+			onClick={handleClick}
+			disabled={disabled}
+			className={className}
+		>
 			<InputStyled checked={isOn} type='checkbox' />
 			<Switch isOn={isOn}>
 				<Bullet isOn={isOn} />
 			</Switch>
-			<Caption>{caption}</Caption>
+			<Caption>{label}</Caption>
 		</Container>
 	);
 };
@@ -34,7 +47,7 @@ const Bullet = styled.div<{ isOn: boolean }>`
 	border-radius: 50%;
 	width: 14px;
 	height: 14px;
-	background: ${brandColors.pinky[200]};
+	background-color: ${brandColors.pinky[200]};
 	border: 3px solid white;
 	left: ${props => (props.isOn ? '15px' : '1px')};
 	transition: left 0.2s ease-in-out;
@@ -50,20 +63,20 @@ const Switch = styled.span<{ isOn: boolean }>`
 	padding-right: 1px;
 	border-radius: 50px;
 	cursor: pointer;
-	background: ${props =>
+	background-color: ${props =>
 		props.isOn ? brandColors.pinky[500] : neutralColors.gray[700]};
-	transition: background 0.3s ease-in-out;
+	transition: background-color 0.3s ease-in-out;
 `;
 
 const Caption = styled(P)`
 	color: ${neutralColors.gray[800]};
 `;
 
-const Container = styled.div`
-	display: flex;
-	gap: 25px;
+const Container = styled(Flex)<{ disabled?: boolean }>`
+	gap: 8px;
 	align-items: center;
 	cursor: pointer;
+	opacity: ${props => (props.disabled ? 0.3 : 1)};
 `;
 
 export default ToggleSwitch;
