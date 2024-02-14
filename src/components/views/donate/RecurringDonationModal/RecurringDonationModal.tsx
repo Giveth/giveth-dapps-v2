@@ -14,15 +14,15 @@ import { Item } from './Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { showToastError } from '@/lib/helpers';
 import { DonateSteps } from './DonateSteps';
-import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { RunOutInfo } from '../RunOutInfo';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
+import { wagmiConfig } from '@/wagmiconfig';
 import { ChainType } from '@/types/config';
-
+import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
 	amount: bigint;
@@ -151,15 +151,13 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	const onDonate = async () => {
 		setStep(EDonationSteps.DONATING);
 		try {
-			const _provider = getEthersProvider({
-				chainId: config.OPTIMISM_CONFIG.id,
-			});
+			if (!address || !selectedToken) {
+				throw new Error('address not found');
+			}
+			const provider = await getEthersProvider(wagmiConfig);
+			const signer = await getEthersSigner(wagmiConfig);
 
-			const signer = await getEthersSigner({
-				chainId: config.OPTIMISM_CONFIG.id,
-			});
-
-			if (!_provider || !signer || !address || !selectedToken)
+			if (!provider || !signer)
 				throw new Error('Provider or signer not found');
 			let _superToken = selectedToken.token;
 			if (!_superToken.isSuperToken) {
@@ -172,7 +170,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 			const sf = await Framework.create({
 				chainId: config.OPTIMISM_CONFIG.id,
-				provider: _provider,
+				provider: provider,
 			});
 
 			// EThx is not a Wrapper Super Token and should load separately
@@ -268,7 +266,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 			const batchOp = sf.batchCall(operations);
 			const tx = await batchOp.exec(signer);
-			const res = await tx.;
+			const res = await tx.wait();
 			if (!res.status) {
 				throw new Error('Transaction failed');
 			}
