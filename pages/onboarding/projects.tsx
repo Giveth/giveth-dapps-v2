@@ -11,7 +11,7 @@ const OnboardingOwnerRoute = () => {
 					title: 'Giveth Onboarding | Projects',
 					desc: 'Learn how to manage your Giveth project like a pro with this onboarding guide!',
 					image: projectBanner,
-					url: Routes.Onboarding,
+					url: Routes.OnboardingProjects,
 				}}
 			/>
 			<OnboardingOwnerIndex />

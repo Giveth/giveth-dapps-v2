@@ -11,7 +11,7 @@ const OnboardingDonorRoute = () => {
 					title: ' Giveth Onboarding | Donors',
 					desc: 'Learn how to use the Giveth platform like a pro with this onboarding guide!',
 					image: donorBanner,
-					url: Routes.Onboarding,
+					url: Routes.OnboardingDonors,
 				}}
 			/>
 			<OnboardingDonorIndex />
