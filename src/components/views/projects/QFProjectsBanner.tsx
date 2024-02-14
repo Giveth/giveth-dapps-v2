@@ -93,6 +93,11 @@ export const QFProjectsBanner = () => {
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
+			<ImgTopMiddle
+				src={'/images/banners/qf-round/tm.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
 			<ImgBottomRight
 				src={'/images/banners/qf-round/br.svg'}
 				style={{ objectFit: 'cover' }}
@@ -216,6 +221,12 @@ const ImgTopRight = styled(ImgBase)`
 		width: 450px;
 	}
 `;
+
+const ImgTopMiddle = styled(ImgBase)`
+	top: 0;
+	right: 50%;
+`;
+
 const ImgBottomRight = styled(ImgBase)`
 	right: 0;
 	bottom: 0;
