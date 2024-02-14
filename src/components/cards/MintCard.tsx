@@ -49,7 +49,7 @@ export const MintCard = () => {
 	const { open: openConnectModal } = useWeb3Modal();
 	const { setQty, isEligible, setIsEligible } = usePFPMintData();
 	const {
-		handleSignOutAndShowWelcomModal,
+		handleSignOutAndShowWelcomeModal,
 		isOnSolana,
 		walletAddress,
 		isOnEVM,
@@ -144,7 +144,7 @@ export const MintCard = () => {
 
 	const handleSwitchNetwork = () => {
 		if (isOnSolana) {
-			handleSignOutAndShowWelcomModal();
+			handleSignOutAndShowWelcomeModal();
 		} else {
 			switchChain?.({ chainId: config.MAINNET_NETWORK_NUMBER });
 		}

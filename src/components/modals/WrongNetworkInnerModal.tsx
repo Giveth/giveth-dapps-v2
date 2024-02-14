@@ -25,7 +25,7 @@ export const EVMWrongNetworkSwitchModal: FC<IEVMWrongNetworkSwitchModal> = ({
 	const { walletAddress } = useGeneralWallet();
 	const { formatMessage } = useIntl();
 
-	const { walletChainType, handleSignOutAndShowWelcomModal } =
+	const { walletChainType, handleSignOutAndShowWelcomeModal } =
 		useGeneralWallet();
 
 	const { open: openConnectModal } = useWeb3Modal();
@@ -37,7 +37,7 @@ export const EVMWrongNetworkSwitchModal: FC<IEVMWrongNetworkSwitchModal> = ({
 
 	const handleConnectWallet = async () => {
 		if (walletChainType === ChainType.SOLANA) {
-			handleSignOutAndShowWelcomModal();
+			handleSignOutAndShowWelcomeModal();
 		} else {
 			setShowSwitchNetwork(true);
 		}

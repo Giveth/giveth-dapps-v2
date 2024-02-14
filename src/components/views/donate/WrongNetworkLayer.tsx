@@ -11,9 +11,11 @@ import { useSwitchChain } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import config from '@/configuration';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export const WrongNetworkLayer = () => {
 	const { switchChain } = useSwitchChain();
+	const { isOnEVM, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 	const { formatMessage } = useIntl();
 
 	return (
@@ -29,12 +31,16 @@ export const WrongNetworkLayer = () => {
 						</Caption>
 					</Title>
 					<SwitchButton
-						onClick={() =>
-							switchChain &&
-							switchChain({
-								chainId: config.OPTIMISM_NETWORK_NUMBER,
-							})
-						}
+						onClick={async () => {
+							if (isOnEVM) {
+								switchChain &&
+									switchChain({
+										chainId: config.OPTIMISM_NETWORK_NUMBER,
+									});
+							} else {
+								await handleSingOutAndSignInWithEVM();
+							}
+						}}
 					>
 						{formatMessage({
 							id: 'label.switch_network',
