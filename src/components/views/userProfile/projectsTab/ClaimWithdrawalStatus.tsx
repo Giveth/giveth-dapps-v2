@@ -6,8 +6,8 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { ClaimTransactionState } from './ClaimRecurringDonationModal';
 import { Flex } from '@/components/styled-components/Flex';
+import { ClaimTransactionState } from './type';
 
 interface IClaimWithdrawalStatusProps {
 	status: ClaimTransactionState;

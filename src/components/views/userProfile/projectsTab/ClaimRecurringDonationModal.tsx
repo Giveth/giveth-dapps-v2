@@ -15,6 +15,7 @@ import {
 import { WrappedSpinner } from '@/components/Spinner';
 import ClaimWithdrawalModal from './ClaimWithdrawalModal';
 import { ClaimRecurringItem } from './ClaimRecurringItem';
+import { ClaimTransactionState } from './type';
 
 interface IClaimRecurringDonationModal extends IModal {
 	project: IProject;
@@ -22,12 +23,6 @@ interface IClaimRecurringDonationModal extends IModal {
 
 export interface IAllTokensUsd {
 	[key: string]: number; //key is token name and value is usd value
-}
-
-export enum ClaimTransactionState {
-	NOT_STARTED = 'Not_Started',
-	PENDING = 'Pending',
-	SUCCESS = 'Success',
 }
 
 const ClaimRecurringDonationModal = ({

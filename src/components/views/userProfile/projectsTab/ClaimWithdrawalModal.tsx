@@ -19,10 +19,10 @@ import { IProject } from '@/apollo/types/types';
 import config from '@/configuration';
 import superTokenABI from '@/artifacts/superToken.json';
 import anchorContractABI from '@/artifacts/anchorContract.json';
-import { ClaimTransactionState } from './ClaimRecurringDonationModal';
 import { ClaimWithdrawalStatus } from './ClaimWithdrawalStatus';
 import { formatTxLink } from '@/lib/helpers';
 import { ChainType } from '@/types/config';
+import { ClaimTransactionState } from './type';
 interface IClaimWithdrawalModal extends IModal {
 	selectedStream: ITokenWithBalance;
 	project: IProject;
