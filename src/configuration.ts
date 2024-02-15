@@ -6,12 +6,8 @@ export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
 const envConfig = isProduction ? production : development;
 const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
-export const isRecurringActive =
-	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true';
 
 export const SENTRY_URGENT = 'urgent';
-
-export const QF_SPECIFIC_CATEGORIES = ['polygon'];
 
 const EVM_NETWORKS_CONFIG = {
 	[envConfig.MAINNET_NETWORK_NUMBER]: envConfig.MAINNET_CONFIG,

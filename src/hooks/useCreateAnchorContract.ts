@@ -24,13 +24,13 @@ const useCreateAnchorContract = ({
 		abi: createProfileABI.abi,
 		chainId: config.OPTIMISM_NETWORK_NUMBER,
 		args: [
-			+id!, // project id
+			+id!, // Convert id to a number
 			slug,
 			{
 				protocol: 1,
 				pointer: '',
 			},
-			walletAddress, //admin user wallet address
+			walletAddress,
 			[],
 		],
 	});

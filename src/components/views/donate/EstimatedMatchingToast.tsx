@@ -14,10 +14,7 @@ import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { IDonationProject } from '@/apollo/types/types';
-import {
-	calculateEstimatedMatchingWithDonationAmount,
-	getActiveRound,
-} from '@/helpers/qf';
+import { calculateEstimatedMatchingWithDonationAmount } from '@/helpers/qf';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { formatDonation } from '@/helpers/number';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
@@ -34,20 +31,17 @@ const EstimatedMatchingToast = ({
 	amountTyped,
 }: IEstimatedMatchingToast) => {
 	const { formatMessage, locale } = useIntl();
-	const { estimatedMatching, qfRounds } = projectData || {};
+	const { estimatedMatching } = projectData || {};
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
 	const tokenPrice = useTokenPrice(token);
-
-	const activeRound = getActiveRound(qfRounds);
 
 	const esMatching = calculateEstimatedMatchingWithDonationAmount(
 		(tokenPrice || 0) * (amountTyped || 0),
 		projectDonationsSqrtRootSum,
 		allProjectsSum,
 		matchingPool,
-		activeRound?.maximumReward,
 	);
 
 	return (

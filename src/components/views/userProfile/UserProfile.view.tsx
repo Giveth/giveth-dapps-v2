@@ -61,7 +61,7 @@ export interface IUserProfileView {}
 const UserProfileView: FC<IUserProfileView> = () => {
 	const [showModal, setShowModal] = useState<boolean>(false); // follow this state to refresh user content on screen
 	const [showUploadProfileModal, setShowUploadProfileModal] = useState(false);
-	const [showIncompleteWarning, setShowIncompleteWarning] = useState(false);
+	const [showIncompleteWarning, setShowIncompleteWarning] = useState(true);
 
 	const dispatch = useAppDispatch();
 	const { isSignedIn } = useAppSelector(state => state.user);
@@ -73,13 +73,7 @@ const UserProfileView: FC<IUserProfileView> = () => {
 	const pfpToken = useGiverPFPToken(user?.walletAddress, user?.avatar);
 
 	const showCompleteProfile =
-		user && !isUserRegistered(user) && showIncompleteWarning && myAccount;
-
-	useEffect(() => {
-		if (user && !isUserRegistered(user) && myAccount) {
-			setShowIncompleteWarning(true);
-		}
-	}, [user]);
+		!isUserRegistered(user) && showIncompleteWarning && myAccount;
 
 	useEffect(() => {
 		if (myAccount && !isSignedIn) {

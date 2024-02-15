@@ -59,7 +59,7 @@ interface IGeneralWalletContext {
 	) => Promise<string | `0x${string}` | undefined>;
 	handleSingOutAndSignInWithEVM: () => Promise<void>;
 	handleSignOutAndSignInWithSolana: () => Promise<void>;
-	handleSignOutAndShowWelcomeModal: () => Promise<void>;
+	handleSignOutAndShowWelcomModal: () => Promise<void>;
 	isOnSolana: boolean;
 	isOnEVM: boolean;
 }
@@ -77,7 +77,7 @@ export const GeneralWalletContext = createContext<IGeneralWalletContext>({
 	sendNativeToken: async () => undefined,
 	handleSingOutAndSignInWithEVM: async () => {},
 	handleSignOutAndSignInWithSolana: async () => {},
-	handleSignOutAndShowWelcomeModal: async () => {},
+	handleSignOutAndShowWelcomModal: async () => {},
 	isOnSolana: false,
 	isOnEVM: false,
 });
@@ -167,13 +167,13 @@ export const GeneralWalletProvider: React.FC<{
 	};
 
 	const handleSingOutAndSignInWithEVM = async () => {
-		await dispatch(signOut(null));
+		await dispatch(signOut());
 		disconnect();
 		openConnectModal();
 	};
 
 	const handleSignOutAndSignInWithSolana = async () => {
-		await dispatch(signOut(null));
+		await dispatch(signOut());
 		disconnect();
 		setVisible(true);
 	};
@@ -379,7 +379,7 @@ export const GeneralWalletProvider: React.FC<{
 
 	const isOnSolana = walletChainType === ChainType.SOLANA;
 	const isOnEVM = walletChainType === ChainType.EVM;
-	const handleSignOutAndShowWelcomeModal = async () => {
+	const handleSignOutAndShowWelcomModal = async () => {
 		await dispatch(signOut(token!));
 		isOnSolana ? solanaWalletDisconnect() : ethereumWalletDisconnect();
 		setTimeout(() => {
@@ -401,7 +401,7 @@ export const GeneralWalletProvider: React.FC<{
 		sendNativeToken,
 		handleSingOutAndSignInWithEVM,
 		handleSignOutAndSignInWithSolana,
-		handleSignOutAndShowWelcomeModal,
+		handleSignOutAndShowWelcomModal,
 		isOnSolana,
 		isOnEVM,
 	};

@@ -1,12 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { type Address, useNetwork } from 'wagmi';
-import {
-	fetchETCPrice,
-	fetchPrice,
-	fetchSolanaPrice,
-	fetchVelodromePrice,
-} from '@/services/token';
+import { fetchETCPrice, fetchPrice, fetchSolanaPrice } from '@/services/token';
 import { fetchEthPrice } from '@/features/price/price.services';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
@@ -50,11 +45,6 @@ export const useTokenPrice = (token?: ITokenPrice) => {
 				setTokenPrice(1);
 			} else if (token?.symbol === 'GIV') {
 				setTokenPrice(givTokenPrice || 0);
-			} else if (token?.symbol?.toUpperCase() === 'MPETH') {
-				// Burning the address here as we can only fetch the price of the token from optimism
-				const mpETHAddress =
-					'0x819845b60a192167ed1139040b4f8eca31834f27';
-				setTokenPrice((await fetchVelodromePrice(mpETHAddress)) || 0);
 			} else if (token?.symbol === 'SOL') {
 				setTokenPrice((await fetchSolanaPrice()) || 0);
 			} else if (token?.symbol === ethereumChain.nativeCurrency.symbol) {

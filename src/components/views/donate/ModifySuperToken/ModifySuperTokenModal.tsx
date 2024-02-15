@@ -1,5 +1,5 @@
 import { P, brandColors, neutralColors } from '@giveth/ui-design-system';
-import { type FC, useState, useMemo } from 'react';
+import { type FC, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
@@ -8,15 +8,23 @@ import { IModal } from '@/types/common';
 import { Flex } from '@/components/styled-components/Flex';
 import { DepositSuperToken } from './DepositSuperToken';
 import { WithDrawSuperToken } from './WithDrawSuperToken';
-import { ISuperToken, ISuperfluidStream, IToken } from '@/types/superFluid';
-import { findSuperTokenByTokenAddress } from '@/helpers/donate';
-import { EModifySuperTokenSteps } from './common';
-import config from '@/configuration';
+import { IToken } from '@/types/superFluid';
+import { type ITokenStreams } from '@/context/donate.context';
 
 interface IModifySuperTokenModalProps extends IModal {
 	selectedToken: IToken;
-	tokenStreams: ISuperfluidStream[];
-	refreshBalance: () => void;
+	tokenStreams: ITokenStreams;
+}
+
+export enum EModifySuperTokenSteps {
+	MODIFY,
+	APPROVE,
+	APPROVING,
+	DEPOSIT,
+	DEPOSITING,
+	WITHDRAW,
+	WITHDRAWING,
+	SUBMITTED,
 }
 
 const headerTitleGenerator = (step: EModifySuperTokenSteps) => {
@@ -26,18 +34,23 @@ const headerTitleGenerator = (step: EModifySuperTokenSteps) => {
 		case EModifySuperTokenSteps.APPROVE:
 		case EModifySuperTokenSteps.APPROVING:
 		case EModifySuperTokenSteps.DEPOSIT:
-			return 'label.confirm_your_deposit';
+			return 'label.confirm_your_donation';
 		case EModifySuperTokenSteps.DEPOSITING:
-			return 'label.depositing';
-		case EModifySuperTokenSteps.DEPOSIT_CONFIRMED:
-			return 'label.deposit_confirmed';
-		case EModifySuperTokenSteps.WITHDRAW:
-			return 'label.confirm_your_withdrawal';
-		case EModifySuperTokenSteps.WITHDRAWING:
-			return 'label.withdrawing';
-		case EModifySuperTokenSteps.WITHDRAW_CONFIRMED:
-			return 'label.withdraw_confirmed';
+			return 'label.donating';
+		case EModifySuperTokenSteps.SUBMITTED:
+			return 'label.donation_submitted';
 	}
+};
+
+export const actionButtonLabel = {
+	[EModifySuperTokenSteps.MODIFY]: 'label.confirm',
+	[EModifySuperTokenSteps.APPROVE]: 'label.approve',
+	[EModifySuperTokenSteps.APPROVING]: 'label.approve',
+	[EModifySuperTokenSteps.DEPOSIT]: 'label.deposit',
+	[EModifySuperTokenSteps.DEPOSITING]: 'label.deposit',
+	[EModifySuperTokenSteps.WITHDRAW]: 'label.withdraw',
+	[EModifySuperTokenSteps.WITHDRAWING]: 'label.withdraw',
+	[EModifySuperTokenSteps.SUBMITTED]: 'label.done',
 };
 
 export const ModifySuperTokenModal: FC<IModifySuperTokenModalProps> = ({
@@ -91,23 +104,6 @@ const ModifySuperTokenInnerModal: FC<
 	IModifySuperTokenInnerModalProps
 > = props => {
 	const [tab, setTab] = useState(EModifyTabs.DEPOSIT);
-	const [token, superToken] = useMemo(
-		() =>
-			props.selectedToken.isSuperToken
-				? [
-						props.selectedToken.underlyingToken ||
-							config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
-								token => token.id === props.selectedToken.id,
-							)?.underlyingToken,
-						props.selectedToken as ISuperToken,
-					]
-				: [
-						props.selectedToken,
-						findSuperTokenByTokenAddress(props.selectedToken.id),
-					],
-		[props.selectedToken],
-	);
-
 	return (
 		<Wrapper>
 			{props.step === EModifySuperTokenSteps.MODIFY && (
@@ -125,20 +121,8 @@ const ModifySuperTokenInnerModal: FC<
 					))}
 				</Tabs>
 			)}
-			{tab === EModifyTabs.DEPOSIT && (
-				<DepositSuperToken
-					token={token}
-					superToken={superToken}
-					{...props}
-				/>
-			)}
-			{tab === EModifyTabs.WITHDRAW && (
-				<WithDrawSuperToken
-					token={token}
-					superToken={superToken}
-					{...props}
-				/>
-			)}
+			{tab === EModifyTabs.DEPOSIT && <DepositSuperToken {...props} />}
+			{tab === EModifyTabs.WITHDRAW && <WithDrawSuperToken />}
 		</Wrapper>
 	);
 };

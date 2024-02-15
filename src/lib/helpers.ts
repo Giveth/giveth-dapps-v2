@@ -206,11 +206,13 @@ export const formatDate = (date: Date, locale?: string) => {
 };
 
 export const smallFormatDate = (date: Date, locale?: string) => {
-	return date.toLocaleString(locale || 'en-US', {
-		day: 'numeric',
-		year: 'numeric',
-		month: 'short',
-	});
+	return date
+		.toLocaleString(locale || 'en-US', {
+			day: 'numeric',
+			year: 'numeric',
+			month: 'short',
+		})
+		.replace(/,/g, '');
 };
 
 export const isSSRMode = typeof window === 'undefined';

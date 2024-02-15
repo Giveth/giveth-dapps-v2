@@ -1,13 +1,35 @@
-import { useState, type FC, useEffect } from 'react';
-import { Button } from '@giveth/ui-design-system';
+import { useState, type FC, useMemo, useEffect } from 'react';
+import styled from 'styled-components';
+import {
+	Caption,
+	IconHelpFilled16,
+	B,
+	GLink,
+	IconRefresh16,
+	neutralColors,
+	brandColors,
+	Button,
+} from '@giveth/ui-design-system';
+
 import { useAccount, useBalance } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { Framework } from '@superfluid-finance/sdk-core';
 import { Flex } from '@/components/styled-components/Flex';
+import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { Spinner } from '@/components/Spinner';
+import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { ISuperToken, IToken } from '@/types/superFluid';
-import { AddressZero } from '@/lib/constants/constants';
+import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
+import { AmountInput } from '@/components/AmountInput/AmountInput';
+import { findSuperTokenByTokenAddress } from '@/helpers/donate';
+import { ITokenStreams } from '@/context/donate.context';
 import { ModifyInfoToast } from './ModifyInfoToast';
-import { IModifySuperTokenInnerModalProps } from './ModifySuperTokenModal';
+import {
+	EModifySuperTokenSteps,
+	IModifySuperTokenInnerModalProps,
+	actionButtonLabel,
+} from './ModifySuperTokenModal';
 import { DepositSteps } from './DepositSuperTokenSteps';
 import { Item } from '../RecurringDonationModal/Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
@@ -17,29 +39,34 @@ import config from '@/configuration';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { showToastError } from '@/lib/helpers';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { StreamInfo } from './StreamInfo';
-import { ModifySection } from './ModifySection';
-import { ModifyWrapper, Wrapper } from './common.sc';
-import { EModifySuperTokenSteps, actionButtonLabel } from './common';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
-	token?: IToken;
-	superToken?: ISuperToken;
+	tokenStreams: ITokenStreams;
+	selectedToken: IToken;
 }
 
 export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
-	token,
-	superToken,
+	selectedToken,
 	tokenStreams,
 	step,
 	setStep,
 	setShowModal,
-	refreshBalance,
 }) => {
 	const [amount, setAmount] = useState(0n);
 
 	const { address } = useAccount();
 	const { formatMessage } = useIntl();
+
+	const [token, superToken] = useMemo(
+		() =>
+			selectedToken.isSuperToken
+				? [selectedToken.underlyingToken, selectedToken as ISuperToken]
+				: [
+						selectedToken,
+						findSuperTokenByTokenAddress(selectedToken.id),
+					],
+		[selectedToken],
+	);
 
 	const {
 		data: balance,
@@ -64,6 +91,19 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			setStep(EModifySuperTokenSteps.DEPOSIT);
 		}
 	}, [token, setStep, step]);
+
+	const tokenStream = tokenStreams[superToken?.id || ''];
+	const totalStreamPerSec =
+		tokenStream?.reduce(
+			(acc, stream) => acc + BigInt(stream.currentFlowRate),
+			0n,
+		) || 0n;
+	const streamRunOutInMonth =
+		SuperTokenBalance !== undefined &&
+		totalStreamPerSec > 0 &&
+		SuperTokenBalance.value > 0n
+			? SuperTokenBalance.value / totalStreamPerSec / ONE_MONTH_SECONDS
+			: 0n;
 
 	const isLoading =
 		step === EModifySuperTokenSteps.APPROVING ||
@@ -130,15 +170,10 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			if (!res.status) {
 				throw new Error('Deposit failed');
 			}
-			refreshBalance();
-			setStep(EModifySuperTokenSteps.DEPOSIT_CONFIRMED);
-		} catch (error: any) {
-			if (error?.code === 'ACTION_REJECTED') {
-				setStep(EModifySuperTokenSteps.MODIFY);
-			} else {
-				showToastError(error);
-				setStep(EModifySuperTokenSteps.DEPOSIT);
-			}
+			setStep(EModifySuperTokenSteps.SUBMITTED);
+		} catch (error) {
+			setStep(EModifySuperTokenSteps.DEPOSIT);
+			showToastError(error);
 			console.log('error', error);
 		}
 	};
@@ -150,7 +185,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			onApprove();
 		} else if (step === EModifySuperTokenSteps.DEPOSIT) {
 			onDeposit();
-		} else if (step === EModifySuperTokenSteps.DEPOSIT_CONFIRMED) {
+		} else if (step === EModifySuperTokenSteps.SUBMITTED) {
 			setShowModal(false);
 		}
 	};
@@ -159,21 +194,106 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		<Wrapper>
 			{step === EModifySuperTokenSteps.MODIFY ? (
 				<>
-					<ModifyWrapper>
-						<ModifySection
-							titleLabel='label.top_up_stream_balance'
-							setAmount={setAmount}
-							token={token}
-							balance={balance}
-							refetch={refetch}
-							isRefetching={isRefetching}
-						/>
-						<StreamInfo
-							tokenStreams={tokenStreams}
-							superToken={superToken}
-							SuperTokenBalance={SuperTokenBalance}
-						/>
-					</ModifyWrapper>
+					<TopUpSection flexDirection='column' gap='8px'>
+						<Flex gap='8px' alignItems='center'>
+							<Caption medium>
+								{formatMessage({
+									id: 'label.top_up_stream_balance',
+								})}
+							</Caption>
+							<IconWithTooltip
+								icon={<IconHelpFilled16 />}
+								direction='right'
+								align='bottom'
+							>
+								<FlowRateTooltip>PlaceHolder</FlowRateTooltip>
+							</IconWithTooltip>
+						</Flex>
+						<InputWrapper>
+							<SelectTokenWrapper
+								alignItems='center'
+								justifyContent='space-between'
+							>
+								<Flex gap='8px' alignItems='center'>
+									{token?.symbol && (
+										<TokenIcon
+											symbol={token?.symbol}
+											size={24}
+										/>
+									)}
+									<B>{token?.symbol}</B>
+								</Flex>
+							</SelectTokenWrapper>
+							<Input
+								setAmount={setAmount}
+								disabled={token === undefined}
+								decimals={token?.decimals}
+							/>
+						</InputWrapper>
+						<Flex gap='4px'>
+							<GLink size='Small'>
+								{formatMessage({
+									id: 'label.available',
+								})}
+								: {balance?.formatted}
+							</GLink>
+							<IconWrapper
+								onClick={() => !isRefetching && refetch()}
+							>
+								{isRefetching ? (
+									<Spinner size={16} />
+								) : (
+									<IconRefresh16 />
+								)}
+							</IconWrapper>
+						</Flex>
+						<StreamSection>
+							<Flex
+								alignItems='center'
+								justifyContent='space-between'
+							>
+								<Caption medium>
+									{formatMessage({
+										id: 'label.stream_balance',
+									})}
+								</Caption>
+								<StreamBalanceInfo medium>
+									{SuperTokenBalance?.formatted}{' '}
+									{superToken?.symbol}
+								</StreamBalanceInfo>
+							</Flex>
+							<Flex
+								alignItems='center'
+								justifyContent='space-between'
+							>
+								<Caption>
+									{formatMessage({
+										id: 'label.balance_runs_out_in',
+									})}{' '}
+									<strong>
+										{formatMessage(
+											{
+												id: 'label.months',
+											},
+											{
+												count: streamRunOutInMonth.toString(),
+											},
+										)}
+									</strong>
+								</Caption>
+								<Caption>
+									{formatMessage({ id: 'label.funding' })}{' '}
+									<strong>{tokenStream.length}</strong>{' '}
+									{formatMessage(
+										{ id: 'label.project' },
+										{
+											count: tokenStream.length,
+										},
+									)}
+								</Caption>
+							</Flex>
+						</StreamSection>
+					</TopUpSection>
 					<ModifyInfoToast />
 				</>
 			) : (
@@ -205,3 +325,63 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		</Wrapper>
 	);
 };
+
+const Wrapper = styled(Flex)`
+	flex-direction: column;
+	gap: 24px;
+`;
+
+const TopUpSection = styled(Flex)``;
+
+const SelectTokenWrapper = styled(Flex)`
+	min-width: 132px;
+	gap: 16px;
+`;
+
+const InputWrapper = styled(Flex)`
+	border: 2px solid ${neutralColors.gray[300]};
+	border-radius: 8px;
+	overflow: hidden;
+	& > * {
+		padding: 13px 16px;
+	}
+	align-items: center;
+`;
+
+const Input = styled(AmountInput)`
+	width: 100%;
+	border-left: 2px solid ${neutralColors.gray[300]};
+	#amount-input {
+		border: none;
+		flex: 1;
+		font-family: Red Hat Text;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: 150%; /* 24px */
+		width: 100%;
+	}
+`;
+
+const IconWrapper = styled.div`
+	cursor: pointer;
+	color: ${brandColors.giv[500]};
+`;
+
+const StreamSection = styled(Flex)`
+	flex-direction: column;
+	padding: 8px;
+	gap: 16px;
+	border-radius: 8px;
+	background-color: ${neutralColors.gray[200]};
+	margin-top: 16px;
+	color: ${neutralColors.gray[800]};
+`;
+
+const StreamBalanceInfo = styled(Caption)`
+	background-color: ${neutralColors.gray[300]};
+	border-radius: 8px;
+	padding: 2px 8px;
+`;
+
+const ActionButton = styled(Button)``;

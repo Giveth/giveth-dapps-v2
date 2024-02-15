@@ -1,16 +1,15 @@
 import { MouseEvent, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { IconOptions16 } from '@giveth/ui-design-system';
-import { FilterMenu } from '@/components/menu/FilterMenu';
+import { FilterMenu, PinkyColoredNumber } from '@/components/menu/FilterMenu';
 import { useProjectsContext } from '@/context/projects.context';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
 import { FiltersButton } from '@/components/views/projects/common.styled';
 import useDelay from '@/hooks/useDelay';
-import { PinkyColoredNumber } from '@/components/styled-components/PinkyColoredNumber';
 
 const ProjectsFiltersButton = () => {
 	const { formatMessage } = useIntl();
-	const { variables } = useProjectsContext();
+	const { variables, isQF } = useProjectsContext();
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
 	const filtersCount = variables?.filters?.length ?? 0;
 	const campaignCount = variables?.campaignSlug ? 1 : 0;

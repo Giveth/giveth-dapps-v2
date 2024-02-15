@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import Image from 'next/image';
 
 export interface ITokenIconProps {
-	symbol?: string;
+	symbol: string;
 	size?: number;
 }
 
@@ -13,7 +13,7 @@ export const TokenIcon: FC<ITokenIconProps> = ({ symbol, size = 24 }) => {
 	}, [symbol]);
 	return (
 		<Image
-			alt={symbol || 'unknown token'}
+			alt={symbol}
 			src={src}
 			width={size}
 			height={size}

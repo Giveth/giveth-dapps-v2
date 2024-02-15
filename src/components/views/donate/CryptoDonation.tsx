@@ -28,7 +28,7 @@ import {
 } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import GeminiModal from './GeminiModal';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import TokenPicker from './TokenPicker';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
@@ -62,6 +62,7 @@ import { getActiveRound } from '@/helpers/qf';
 import QFModal from '@/components/views/donate/QFModal';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
+import { isRecurringActive } from './DonationCard';
 import { INetworkIdWithChain } from './common.types';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;

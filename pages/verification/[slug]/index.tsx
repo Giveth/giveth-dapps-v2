@@ -38,7 +38,6 @@ const VerificationRoute = () => {
 	}, []);
 
 	useEffect(() => {
-		if (!slug) return;
 		setIsProjectLoading(true);
 		setAllowVerification(false);
 		setOwnerAddress(undefined);

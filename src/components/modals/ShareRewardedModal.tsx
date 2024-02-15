@@ -72,7 +72,7 @@ function getMessageWithBoldText(
 
 const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 	const { isSignedIn, userData: user } = useAppSelector(state => state.user);
-	const { isOnSolana, handleSignOutAndShowWelcomeModal, isConnected } =
+	const { isOnSolana, handleSignOutAndShowWelcomModal, isConnected } =
 		useGeneralWallet();
 
 	const { open: openConnectModal } = useWeb3Modal();
@@ -194,7 +194,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 							label={formatMessage({
 								id: 'label.switch_to_evm',
 							})}
-							onClick={handleSignOutAndShowWelcomeModal}
+							onClick={handleSignOutAndShowWelcomModal}
 							buttonType='primary'
 						/>
 					</div>

@@ -67,12 +67,6 @@ const moduleExports = withBundleAnalyzer({
 				destination: '/assets/GivethQF.Marketing.pdf',
 				permanent: false,
 			},
-			{
-				source: '/qfguide',
-				destination:
-					'https://giveth.notion.site/Giveth-Quadratic-Funding-3478aa27eb094a699f9ddd6a8b611027',
-				permanent: false,
-			},
 		];
 	},
 	webpack: (config, { isServer, dev }) => {

@@ -62,6 +62,7 @@ const ProjectCard = (props: IProjectCard) => {
 		estimatedMatching,
 	} = project;
 	const [isHover, setIsHover] = useState(false);
+
 	const orgLabel = organization?.label;
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
@@ -187,7 +188,6 @@ const ProjectCard = (props: IProjectCard) => {
 											projectDonationsSqrtRootSum,
 											allProjectsSum,
 											matchingPool,
-											activeRound?.maximumReward,
 										),
 										'$',
 										locale,

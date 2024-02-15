@@ -27,14 +27,14 @@ import {
 import { Badge, EBadgeStatus } from '@/components/Badge';
 import { formatDonation } from '@/helpers/number';
 
-interface OneTimeDonationTable {
+interface DonationTable {
 	donations: IWalletDonation[];
 	order: IOrder;
 	changeOrder: (orderBy: EOrderBy) => void;
 	myAccount?: boolean;
 }
 
-const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
+const DonationTable: FC<DonationTable> = ({
 	donations,
 	order,
 	changeOrder,
@@ -153,4 +153,4 @@ const ProjectTitleCell = styled(DonationTableCell)`
 	}
 `;
 
-export default OneTimeDonationTable;
+export default DonationTable;

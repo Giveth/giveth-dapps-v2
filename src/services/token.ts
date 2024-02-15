@@ -79,30 +79,3 @@ export const fetchSolanaPrice = async () => {
 		});
 	}
 };
-
-export const fetchVelodromePrice = async (tokenAddress?: string) => {
-	try {
-		const apiUrl = `/api/velodromeFetchPrice?tokenAddress=${
-			tokenAddress || ''
-		}`;
-		const res = await fetch(apiUrl, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-		console.log({ res });
-		const data = await res.json();
-		return parseFloat(data?.price);
-	} catch (error) {
-		captureException(error, {
-			tags: {
-				section: 'fetchVelodromePrice',
-			},
-		});
-		console.error(
-			'Failed to fetch price from Velodrome via /api/velodromeFetchPrice',
-			error,
-		);
-	}
-};

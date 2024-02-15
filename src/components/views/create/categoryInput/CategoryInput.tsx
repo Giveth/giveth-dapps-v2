@@ -18,7 +18,6 @@ import { InputContainer } from '@/components/views/create/Create.sc';
 import MainCategoryItem from '@/components/views/create/categoryInput/MainCategoryItem';
 import { showToastError } from '@/lib/helpers';
 import { EInputs } from '@/components/views/create/CreateProject';
-import { QF_SPECIFIC_CATEGORIES } from '@/configuration';
 
 const CategoryInput: FC = () => {
 	const { getValues, setValue } = useFormContext();
@@ -62,21 +61,14 @@ const CategoryInput: FC = () => {
 					{selectedCategories.length}/{maxSelectedCategory}
 				</CategoryCount>
 			</CaptionContainer>
-			{allCategories
-				?.filter(
-					mainCategory =>
-						!QF_SPECIFIC_CATEGORIES.some(
-							c => c === mainCategory.slug,
-						),
-				)
-				.map(mainCategory => (
-					<MainCategoryItem
-						key={mainCategory.title}
-						mainCategoryItem={mainCategory}
-						selectedCategories={selectedCategories}
-						setSelectedCategories={handleSelectCategory}
-					/>
-				))}
+			{allCategories?.map(mainCategory => (
+				<MainCategoryItem
+					key={mainCategory.title}
+					mainCategoryItem={mainCategory}
+					selectedCategories={selectedCategories}
+					setSelectedCategories={handleSelectCategory}
+				/>
+			))}
 		</InputContainer>
 	);
 };

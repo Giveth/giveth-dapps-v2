@@ -29,6 +29,7 @@ const ProjectDonationsIndex = () => {
 const StyledRow = styled(Row)`
 	margin-bottom: 100px;
 	${mediaQueries.laptopL} {
+		align-items: flex-start;
 		flex-direction: row-reverse;
 		align-items: stretch !important;
 	}

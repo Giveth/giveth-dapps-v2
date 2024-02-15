@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
+import { P } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useAccount, useNetwork } from 'wagmi';
 import { Modal } from '../Modal';
@@ -11,7 +12,7 @@ import {
 } from '../ConfirmSubmit';
 import { waitForTransaction } from '@/lib/transaction';
 import { StakeState } from '@/lib/staking';
-import ToggleSwitch from '@/components/ToggleSwitch';
+import ToggleSwitch from '../../styled-components/Switch';
 import { IModal } from '@/types/common';
 import {
 	CancelButton,
@@ -216,7 +217,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 							{!onlyApproveMode && (
 								<ToggleContainer>
 									<ToggleSwitch
-										isOn={permit}
+										checked={permit}
 										disabled={
 											!(
 												stakeState ===
@@ -224,11 +225,9 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 												stakeState === StakeState.STAKE
 											)
 										}
-										toggleOnOff={handlePermit}
-										label={`${
-											permit ? 'Permit' : 'Approve'
-										} mode`}
+										setStateChange={handlePermit}
 									/>
+									<P>{permit ? 'Permit' : 'Approve'} mode</P>
 								</ToggleContainer>
 							)}
 							{(stakeState === StakeState.APPROVE ||

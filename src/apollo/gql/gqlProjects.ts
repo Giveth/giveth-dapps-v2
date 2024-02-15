@@ -15,7 +15,6 @@ export const PROJECT_CORE_FIELDS = gql`
 			isActive
 			beginDate
 			endDate
-			maximumReward
 		}
 	}
 `;
@@ -52,10 +51,6 @@ export const PROJECT_CARD_FIELDS = gql`
 			projectDonationsSqrtRootSum
 			allProjectsSum
 			matchingPool
-		}
-		anchorContracts {
-			address
-			isActive
 		}
 	}
 `;
@@ -173,7 +168,6 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				beginDate
 				endDate
 				eligibleNetworks
-				maximumReward
 			}
 			campaigns {
 				id
@@ -191,10 +185,6 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				# sortingField
 				# createdAt
 				# updatedAt
-			}
-			anchorContracts {
-				address
-				isActive
 			}
 		}
 	}
@@ -225,10 +215,6 @@ export const FETCH_PROJECT_BY_ID = gql`
 				name
 			}
 			slug
-			anchorContracts {
-				address
-				isActive
-			}
 		}
 	}
 `;

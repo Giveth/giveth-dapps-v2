@@ -14,7 +14,7 @@ import SocialBox from '@/components/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
@@ -25,6 +25,7 @@ import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { getActiveRound } from '@/helpers/qf';
 import { Flex } from '@/components/styled-components/Flex';
 import { DonationInfo } from './DonationInfo';
+import { isRecurringActive } from './DonationCard';
 
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
