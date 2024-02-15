@@ -1,6 +1,5 @@
 import { IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from './time';
-import { QF_MATCHING_CAP_PERCENTAGE } from '@/lib/constants/constants';
 
 export const hasActiveRound = (qfRounds: IQFRound[] | undefined) => {
 	if (!qfRounds) return false;
@@ -24,13 +23,19 @@ export const calculateTotalEstimatedMatching = (
 	projectDonationsSqrtRootSum?: number,
 	allProjectsSum?: number,
 	matchingPool?: number,
+	matchingCapPercentage?: number,
 ) => {
-	if (!matchingPool || !projectDonationsSqrtRootSum || !allProjectsSum)
+	if (
+		!matchingCapPercentage ||
+		!matchingPool ||
+		!projectDonationsSqrtRootSum ||
+		!allProjectsSum
+	)
 		return 0;
 	const result = Math.min(
 		(Math.pow(projectDonationsSqrtRootSum, 2) / allProjectsSum) *
 			matchingPool,
-		(matchingPool * QF_MATCHING_CAP_PERCENTAGE) / 100,
+		matchingPool * matchingCapPercentage,
 	);
 	return result > 0 && result < 1 ? 1 : result;
 };
@@ -40,8 +45,9 @@ export const calculateEstimatedMatchingWithDonationAmount = (
 	projectDonationsSqrtRootSum?: number,
 	allProjectsSum?: number,
 	matchingPool?: number,
+	matchingCapPercentage?: number,
 ) => {
-	if (!matchingPool || !donationAmount) return 0;
+	if (!matchingCapPercentage || !matchingPool || !donationAmount) return 0;
 	const _projectDonationsSqrtRootSum = projectDonationsSqrtRootSum || 0;
 	const _allProjectsSum = allProjectsSum || 0;
 	const beforeNewDonationPow = Math.pow(_projectDonationsSqrtRootSum, 2);
@@ -55,7 +61,7 @@ export const calculateEstimatedMatchingWithDonationAmount = (
 		(afterNewDonationPow /
 			(_allProjectsSum + afterNewDonationPow - beforeNewDonationPow)) *
 			matchingPool,
-		(matchingPool * QF_MATCHING_CAP_PERCENTAGE) / 100,
+		matchingPool * matchingCapPercentage,
 	);
 	return (
 		newEstimateMatching *
