@@ -1,4 +1,11 @@
-import { H3, P, brandColors, neutralColors } from '@giveth/ui-design-system';
+import {
+	H3,
+	H4,
+	P,
+	brandColors,
+	mediaQueries,
+	neutralColors,
+} from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
@@ -35,15 +42,20 @@ const Wrapper = styled.div`
 `;
 
 const InfoSection = styled(Flex)`
+	flex-direction: column;
 	margin-top: 40px;
 	padding: 40px;
 	background-color: ${brandColors.giv[100]};
 	border-radius: 16px;
+	gap: 16px;
 	justify-content: space-around;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
 `;
 
 const ItemContainer = styled.div``;
 
 const ItemTitle = styled(P)``;
 
-const ItemValue = styled(H3)``;
+const ItemValue = styled(H4)``;
