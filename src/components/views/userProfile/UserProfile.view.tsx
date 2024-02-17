@@ -246,7 +246,7 @@ const ProfileHeader = styled.div`
 `;
 
 const EditProfile = styled(GLink)`
-	color: ${brandColors.pinky[500]};
+	color: ${brandColors.pinky[500]} !important;
 	cursor: pointer;
 	flex-shrink: 0;
 `;
