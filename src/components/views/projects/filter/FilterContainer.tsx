@@ -1,9 +1,9 @@
 import React from 'react';
 import { mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import ProjectsFiltersDesktop from '@/components/views/projects/filterContainer/ProjectsFiltersDesktop';
-import ProjectsFiltersTablet from '@/components/views/projects/filterContainer/ProjectsFiltersTablet';
-import ProjectsFiltersMobile from '@/components/views/projects/filterContainer/ProjectsFiltersMobile';
+import ProjectsFiltersDesktop from '@/components/views/projects/filter/ProjectsFiltersDesktop';
+import ProjectsFiltersTablet from '@/components/views/projects/filter/ProjectsFiltersTablet';
+import ProjectsFiltersMobile from '@/components/views/projects/filter/ProjectsFiltersMobile';
 import useDetectDevice from '@/hooks/useDetectDevice';
 
 export const FilterContainer = () => {

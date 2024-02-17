@@ -39,7 +39,7 @@ import { QFProjectsMiddleBanner } from './middleBanners/QFMiddleBanner';
 import { QFNoResultBanner } from './middleBanners/QFNoResultBanner';
 import { Spinner } from '@/components/Spinner';
 import { getMainCategorySlug } from '@/helpers/projects';
-import { FilterContainer } from './filterContainer/FilterContainer';
+import { FilterContainer } from './filter/FilterContainer';
 
 export interface IProjectsView {
 	projects: IProject[];
