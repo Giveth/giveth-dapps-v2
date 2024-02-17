@@ -1,11 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import {
-	brandColors,
-	neutralColors,
-	OutlineButton,
-	H5,
-} from '@giveth/ui-design-system';
+import { brandColors, OutlineButton } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
@@ -339,15 +334,6 @@ const Loading = styled(FlexCenter)`
 	background-color: gray;
 	transition: opacity 0.3s ease-in-out;
 	opacity: 0.9;
-`;
-
-const Title = styled(H5)`
-	font-weight: 700;
-	position: relative;
-
-	span {
-		color: ${neutralColors.gray[700]};
-	}
 `;
 
 const SortingContainer = styled.div`
