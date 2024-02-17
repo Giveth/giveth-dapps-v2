@@ -4,6 +4,7 @@ export const FETCH_QF_ROUNDS_QUERY = `
 	query FetchQFRounds {
 		qfRounds {
 			id
+			slug
 			name
 			isActive
 			beginDate
