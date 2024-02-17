@@ -28,9 +28,7 @@ import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
 
-import useDetectDevice from '@/hooks/useDetectDevice';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import ProjectsSortSelect from './ProjectsSortSelect';
+import { FlexCenter } from '@/components/styled-components/Flex';
 import { ProjectsMiddleBanner } from './middleBanners/ProjectsMiddleBanner';
 import FloatingButtonReferral from '@/components/FloatingReferral';
 import { QFProjectsBanner } from './QFProjectsBanner';
@@ -40,6 +38,7 @@ import { QFNoResultBanner } from './middleBanners/QFNoResultBanner';
 import { Spinner } from '@/components/Spinner';
 import { getMainCategorySlug } from '@/helpers/projects';
 import { FilterContainer } from './filter/FilterContainer';
+import { SortContainer } from './sort/SortContainer';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -76,7 +75,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const pageNum = useRef(0);
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
-	const { isTablet, isMobile } = useDetectDevice();
 
 	router?.events?.on('routeChangeStart', () => setIsLoading(true));
 
@@ -218,26 +216,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			<Wrapper>
 				<FilterContainer />
 				<SortingContainer>
-					<Flex
-						justifyContent='space-between'
-						flexDirection={isMobile ? 'column' : 'row'}
-						gap={isMobile ? '16px' : undefined}
-						alignItems={isMobile ? 'stretch' : 'center'}
-					>
-						<Title>
-							{formatMessage({
-								id: 'page.projects.title.explore',
-							})}
-							<span>
-								{' '}
-								{totalCount}{' '}
-								{formatMessage({
-									id: 'page.projects.title.projects',
-								})}
-							</span>
-						</Title>
-						<ProjectsSortSelect />
-					</Flex>
+					<SortContainer totalCount={totalCount} />
 				</SortingContainer>
 				{isLoading && <Loader className='dot-flashing' />}
 				{filteredProjects?.length > 0 ? (
