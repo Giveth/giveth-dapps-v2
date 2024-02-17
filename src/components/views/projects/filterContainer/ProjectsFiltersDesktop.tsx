@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import ProjectsSearchDesktop from '@/components/views/projects/ProjectsSearchDesktop';
-import ProjectsFiltersSwiper from '@/components/views/projects/ProjectsFiltersSwiper';
+import ProjectsFiltersSwiper from '@/components/views/projects/filterContainer/ProjectsFiltersSwiper';
 import ProjectsSubCategories from '@/components/views/projects/ProjectsSubCategories';
 import {
 	FiltersSection,
@@ -11,7 +11,7 @@ import {
 	StyledLine,
 } from '@/components/views/projects/common.styled';
 import { useProjectsContext } from '@/context/projects.context';
-import ProjectsFiltersButton from '@/components/views/projects/ProjectsFiltersButton';
+import ProjectsFiltersButton from '@/components/views/projects/filterContainer/ProjectsFiltersButton';
 
 const ProjectsFiltersDesktop = () => {
 	const { selectedMainCategory } = useProjectsContext();
