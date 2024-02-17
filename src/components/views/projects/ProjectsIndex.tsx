@@ -27,9 +27,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
-import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
-import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
-import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
+
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
@@ -41,6 +39,7 @@ import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
 import { QFNoResultBanner } from './MiddleBanners/QFNoResultBanner';
 import { Spinner } from '@/components/Spinner';
 import { getMainCategorySlug } from '@/helpers/projects';
+import { FilterContainer } from './filterContainer/FilterContainer';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -266,11 +265,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				<ProjectsBanner mainCategory={selectedMainCategory} />
 			)}
 			<Wrapper>
-				<FiltersContainer>
-					{!isTablet && !isMobile && <ProjectsFiltersDesktop />}
-					{isTablet && <ProjectsFiltersTablet />}
-					{isMobile && <ProjectsFiltersMobile />}
-				</FiltersContainer>
+				<FilterContainer />
 				<SortingContainer>
 					<Flex
 						justifyContent='space-between'
@@ -350,21 +345,6 @@ const StyledButton = styled(OutlineButton)<{ transparent?: boolean }>`
 
 const LoadingDotIcon = styled.div`
 	padding: 4px 37px;
-`;
-
-const FiltersContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	background: white;
-	position: relative;
-	padding: 32px 21px;
-	border-radius: 0;
-	margin-bottom: 24px;
-	gap: 16px;
-	${mediaQueries.tablet} {
-		margin-top: 32px;
-		border-radius: 16px;
-	}
 `;
 
 export const ProjectsWrapper = styled.div`
