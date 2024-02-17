@@ -52,9 +52,16 @@ export const ProjectsProvider = (props: {
 	selectedMainCategory?: IMainCategory;
 	qfRounds: IQFRound[];
 	isQF: boolean;
+	isArchivedQF?: boolean;
 }) => {
-	const { children, mainCategories, selectedMainCategory, isQF, qfRounds } =
-		props;
+	const {
+		children,
+		mainCategories,
+		selectedMainCategory,
+		isQF,
+		isArchivedQF,
+		qfRounds,
+	} = props;
 
 	const [_isQF, setIsQF] = useState(isQF);
 	const router = useRouter();
@@ -96,6 +103,7 @@ export const ProjectsProvider = (props: {
 				selectedMainCategory,
 				qfRounds: qfRounds || [],
 				isQF: _isQF || false,
+				isArchivedQF: isArchivedQF || false,
 				setIsQF,
 			}}
 		>
