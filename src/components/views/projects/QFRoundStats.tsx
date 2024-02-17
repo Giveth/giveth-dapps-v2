@@ -34,7 +34,7 @@ export const QFRoundStats = () => {
 						{formatMessage({ id: 'label.matching_pool' })}
 					</ItemTitle>
 					<ItemValue>
-						{data?.qfRoundStats?.matchingPool || '--'}
+						{data?.qfRoundStats?.matchingPool || '--'}&nbsp;DAI
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
@@ -42,6 +42,7 @@ export const QFRoundStats = () => {
 						{formatMessage({ id: 'label.donations' })}
 					</ItemTitle>
 					<ItemValue>
+						$&nbsp;
 						{data?.qfRoundStats?.allDonationsUsdValue || '--'}
 					</ItemValue>
 				</ItemContainer>
