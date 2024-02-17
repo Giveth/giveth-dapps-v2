@@ -40,6 +40,7 @@ const SIDE_PADDING = '26px';
 interface IProjectCard {
 	project: IProject;
 	className?: string;
+	order?: number;
 }
 
 const ProjectCard = (props: IProjectCard) => {
@@ -80,6 +81,7 @@ const ProjectCard = (props: IProjectCard) => {
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 			className={className}
+			order={props.order}
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges project={project} />
@@ -366,7 +368,7 @@ const ImagePlaceholder = styled.div`
 	overflow: hidden;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ order?: number }>`
 	position: relative;
 	width: 100%;
 	border-radius: ${cardRadius};
@@ -375,6 +377,7 @@ const Wrapper = styled.div`
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
 	height: 536px;
+	order: ${props => props.order};
 	${mediaQueries.laptopS} {
 		height: 472px;
 	}

@@ -174,43 +174,24 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const showLoadMore =
 		totalCount > filteredProjects?.length && !isInfiniteScrolling.current;
 
-	const handleSliceNumber = () => {
-		if (isMobile) {
-			return 1;
-		} else if (isTablet) {
-			return 2;
-		} else {
-			return 3;
-		}
-	};
-
-	const handleArraySlice = () => {
-		const sliceIndex = handleSliceNumber();
-		const firstSlice = filteredProjects.slice(0, sliceIndex);
-		const secondSlice = filteredProjects.slice(sliceIndex);
-		return [firstSlice, secondSlice];
-	};
-
 	const activeRound = qfRounds.find(round => round.isActive);
 
 	const renderProjects = () => {
-		const [firstSlice, secondSlice] = handleArraySlice();
 		if (filteredProjects?.length > 0) {
 			return (
 				<ProjectsWrapper>
 					<ProjectsContainer>
-						{firstSlice.map(project => (
-							<ProjectCard key={project.id} project={project} />
-						))}
-					</ProjectsContainer>
-					{isQF ? (
-						<QFProjectsMiddleBanner />
-					) : (
-						<ProjectsMiddleBanner />
-					)}
-					<ProjectsContainer>
-						{secondSlice.map(project => (
-							<ProjectCard key={project.id} project={project} />
+						{isQF ? (
+							<QFProjectsMiddleBanner />
+						) : (
+							<ProjectsMiddleBanner />
+						)}
+						{filteredProjects.map((project, idx) => (
+							<ProjectCard
+								key={project.id}
+								project={project}
+								order={idx}
+							/>
 						))}
 					</ProjectsContainer>
 					<FloatingButtonReferral />
