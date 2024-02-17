@@ -88,6 +88,9 @@ createWeb3Modal({
 	wagmiConfig,
 	projectId,
 	enableAnalytics: true, // Optional - defaults to your Cloud configuration
+	featuredWalletIds: [
+		'225affb176778569276e484e1b92637ad061b01e13a048b35a9d280c3b58970f',
+	],
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
