@@ -10,12 +10,17 @@ import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
-import { useQuery } from 'wagmi';
+import { useQuery } from '@apollo/client';
+import { useRouter } from 'next/router';
 import { Flex } from '@/components/styled-components/Flex';
+import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
 
 export const QFRoundStats = () => {
 	const { formatMessage } = useIntl();
-	useQuery();
+	const router = useRouter();
+	const { data } = useQuery(FETCH_QF_ROUND_STATS, {
+		variables: { slug: router.query.slug },
+	});
 
 	return (
 		<Wrapper>
@@ -28,19 +33,25 @@ export const QFRoundStats = () => {
 					<ItemTitle>
 						{formatMessage({ id: 'label.matching_pool' })}
 					</ItemTitle>
-					<ItemValue>25,000 DAI</ItemValue>
+					<ItemValue>
+						{data?.qfRoundStats?.matchingPool || '--'}
+					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
 					<ItemTitle>
 						{formatMessage({ id: 'label.donations' })}
 					</ItemTitle>
-					<ItemValue>$190,854</ItemValue>
+					<ItemValue>
+						{data?.qfRoundStats?.allDonationsUsdValue || '--'}
+					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
 					<ItemTitle>
 						{formatMessage({ id: 'label.number_of_unique_donors' })}
 					</ItemTitle>
-					<ItemValue>19,702</ItemValue>
+					<ItemValue>
+						{data?.qfRoundStats?.uniqueDonors || '--'}
+					</ItemValue>
 				</ItemContainer>
 			</InfoSection>
 		</Wrapper>
