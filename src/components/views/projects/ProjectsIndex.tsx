@@ -176,36 +176,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const activeRound = qfRounds.find(round => round.isActive);
 
-	const renderProjects = () => {
-		if (filteredProjects?.length > 0) {
-			return (
-				<ProjectsWrapper>
-					<ProjectsContainer>
-						{isQF ? (
-							<QFProjectsMiddleBanner />
-						) : (
-							<ProjectsMiddleBanner />
-						)}
-						{filteredProjects.map((project, idx) => (
-							<ProjectCard
-								key={project.id}
-								project={project}
-								order={idx}
-							/>
-						))}
-					</ProjectsContainer>
-					<FloatingButtonReferral />
-				</ProjectsWrapper>
-			);
-		} else {
-			return isQF && !activeRound ? (
-				<QFNoResultBanner />
-			) : (
-				<ProjectsNoResults mainCategories={mainCategories} />
-			);
-		}
-	};
-
 	useEffect(() => {
 		const handleObserver = (entities: any) => {
 			if (!isInfiniteScrolling.current) return;
@@ -270,7 +240,29 @@ const ProjectsIndex = (props: IProjectsView) => {
 					</Flex>
 				</SortingContainer>
 				{isLoading && <Loader className='dot-flashing' />}
-				{renderProjects()}
+				{filteredProjects?.length > 0 ? (
+					<ProjectsWrapper>
+						<ProjectsContainer>
+							{isQF ? (
+								<QFProjectsMiddleBanner />
+							) : (
+								<ProjectsMiddleBanner />
+							)}
+							{filteredProjects.map((project, idx) => (
+								<ProjectCard
+									key={project.id}
+									project={project}
+									order={idx}
+								/>
+							))}
+						</ProjectsContainer>
+						<FloatingButtonReferral />
+					</ProjectsWrapper>
+				) : isQF && !activeRound ? (
+					<QFNoResultBanner />
+				) : (
+					<ProjectsNoResults mainCategories={mainCategories} />
+				)}
 				{totalCount > filteredProjects?.length && (
 					<div ref={lastElementRef} />
 				)}
