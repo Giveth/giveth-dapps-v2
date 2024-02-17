@@ -9,12 +9,14 @@ import {
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import Image from 'next/image';
 import { Flex } from '@/components/styled-components/Flex';
 
 export const QFRoundStats = () => {
 	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
+			<Smile src='/images/arc3.svg' width={70} height={100} alt='arc' />
 			<H3 weight={700}>Round Stats</H3>
 			<InfoSection>
 				<ItemContainer>
@@ -47,6 +49,8 @@ const Wrapper = styled.div`
 	border-radius: 16px;
 	color: ${brandColors.giv[500]};
 	text-align: center;
+	position: relative;
+	overflow: hidden;
 `;
 
 const InfoSection = styled(Flex)`
@@ -67,3 +71,11 @@ const ItemContainer = styled.div``;
 const ItemTitle = styled(P)``;
 
 const ItemValue = styled(H4)``;
+
+const BaseImage = styled(Image)`
+	position: absolute;
+`;
+
+const Smile = styled(BaseImage)`
+	right: -20px;
+`;
