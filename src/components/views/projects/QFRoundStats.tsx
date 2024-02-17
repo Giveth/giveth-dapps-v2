@@ -10,10 +10,13 @@ import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
+import { useQuery } from 'wagmi';
 import { Flex } from '@/components/styled-components/Flex';
 
 export const QFRoundStats = () => {
 	const { formatMessage } = useIntl();
+	useQuery();
+
 	return (
 		<Wrapper>
 			<Smile src='/images/arc3.svg' width={70} height={100} alt='arc' />
