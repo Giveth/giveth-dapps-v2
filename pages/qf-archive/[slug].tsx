@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next/types';
-import { EProjectsFilter, IMainCategory } from '@/apollo/types/types';
+import { IMainCategory } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
@@ -77,25 +77,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
 			};
 			const apolloClient = initializeApollo();
 
-			let _filters = query.filter
-				? Array.isArray(query.filter)
-					? query.filter
-					: [query.filter]
-				: undefined;
-
-			_filters
-				? _filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
-				: (_filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
-
 			const { data } = await apolloClient.query({
 				query: FETCH_ALL_PROJECTS,
 				variables: {
 					...variables,
 					sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
-					searchTerm: query.searchTerm,
-					filters: _filters,
 					campaignSlug: query.campaignSlug,
-					category: query.category,
 					qfRoundSlug: slug,
 					notifyOnNetworkStatusChange,
 				},
