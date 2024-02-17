@@ -44,6 +44,7 @@ const Wrapper = styled(Flex)`
 	flex-direction: column;
 	gap: 16px;
 	align-items: stretch;
+	margin-top: 24px;
 	${mediaQueries.tablet} {
 		flex-direction: row;
 		gap: 8px;

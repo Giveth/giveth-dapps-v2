@@ -24,7 +24,6 @@ const FiltersContainer = styled.div`
 	position: relative;
 	padding: 32px 21px;
 	border-radius: 0;
-	margin-bottom: 24px;
 	gap: 16px;
 	${mediaQueries.tablet} {
 		margin-top: 32px;

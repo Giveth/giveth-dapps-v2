@@ -209,7 +209,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				<ProjectsBanner mainCategory={selectedMainCategory} />
 			)}
 			<Wrapper>
-				<FilterContainer />
+				{!isArchivedQF && <FilterContainer />}
 				<SortingContainer>
 					<SortContainer totalCount={totalCount} />
 				</SortingContainer>
