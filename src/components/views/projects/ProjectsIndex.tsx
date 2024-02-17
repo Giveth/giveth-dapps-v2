@@ -34,6 +34,7 @@ import { Spinner } from '@/components/Spinner';
 import { getMainCategorySlug } from '@/helpers/projects';
 import { FilterContainer } from './filter/FilterContainer';
 import { SortContainer } from './sort/SortContainer';
+import { QFRoundStats } from './QFRoundStats';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -209,7 +210,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				<ProjectsBanner mainCategory={selectedMainCategory} />
 			)}
 			<Wrapper>
-				{!isArchivedQF && <FilterContainer />}
+				{isArchivedQF ? <QFRoundStats /> : <FilterContainer />}
 				<SortingContainer>
 					<SortContainer totalCount={totalCount} />
 				</SortingContainer>
