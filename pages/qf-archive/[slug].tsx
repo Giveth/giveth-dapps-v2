@@ -1,63 +1,3 @@
-// import { GetServerSideProps } from 'next/types';
-// import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
-// import { initializeApollo } from '@/apollo/apolloClient';
-// import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
-// import { IProjectsRouteProps } from 'pages/projects/[slug]';
-// import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
-// import { FETCH_ARCHIVED_QF_ROUND_PROJECTS } from '@/apollo/gql/gqlQF';
-
-// const ArchivedQFProjectsCategoriesRoute = (props: IProjectsRouteProps) => {
-// 	const { projects, mainCategories, totalCount, categories, qfRounds } =
-// 		props;
-
-// 	return <div></div>;
-// };
-
-// export const getServerSideProps: GetServerSideProps = async context => {
-// 	const apolloClient = initializeApollo();
-// 	const { variables, notifyOnNetworkStatusChange } = OPTIONS_HOME_PROJECTS;
-// 	try {
-// 		const { query } = context;
-// 		const slug = query.slug;
-// 		if (!slug)
-// 			return {
-// 				redirect: {
-// 					destination: '/',
-// 					permanent: false,
-// 				},
-// 			};
-// 		console.log('slug', slug);
-// 		const { data } = await apolloClient.query({
-// 			query: FETCH_ARCHIVED_QF_ROUND_PROJECTS,
-// 			variables: {
-// 				...variables,
-// 				ز
-// 				sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
-// 				notifyOnNetworkStatusChange,
-// 			},
-// 			fetchPolicy: 'network-only',
-// 		});
-// 		const { projects, totalCount } = data.allProjects;
-// 		return {
-// 			props: {
-// 				projects,
-// 				totalCount,
-// 			},
-// 		};
-// 	} catch (error: any) {
-// 		const statusCode = transformGraphQLErrorsToStatusCode(
-// 			error?.graphQLErrors,
-// 		);
-// 		return {
-// 			props: {
-// 				errorStatus: statusCode,
-// 			},
-// 		};
-// 	}
-// };
-
-// export default ArchivedQFProjectsCategoriesRoute;
-
 import { GetServerSideProps } from 'next/types';
 import { EProjectsFilter, IMainCategory } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
@@ -74,7 +14,6 @@ import { ProjectsProvider } from '@/context/projects.context';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { useReferral } from '@/hooks/useReferral';
 import { IProjectsRouteProps, allCategoriesItem } from 'pages/projects/[slug]';
-import { getMainCategorySlug } from '@/helpers/projects';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
@@ -87,7 +26,6 @@ const QFProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		mainCategories,
 		selectedMainCategory,
 		totalCount,
-		categories,
 		qfRounds,
 	} = props;
 
@@ -97,15 +35,12 @@ const QFProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		<ProjectsProvider
 			mainCategories={mainCategories}
 			selectedMainCategory={selectedMainCategory}
-			isQF={true}
+			isQF={false}
+			isArchivedQF={true}
 			qfRounds={qfRounds}
 		>
 			<GeneralMetatags info={projectsMetatags} />
-			<ProjectsIndex
-				projects={projects}
-				totalCount={totalCount}
-				categories={categories}
-			/>
+			<ProjectsIndex projects={projects} totalCount={totalCount} />
 		</ProjectsProvider>
 	);
 };
@@ -162,15 +97,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
 					campaignSlug: query.campaignSlug,
 					category: query.category,
 					qfRoundSlug: slug,
-					mainCategory: getMainCategorySlug(
-						updatedSelectedMainCategory,
-					),
 					notifyOnNetworkStatusChange,
 				},
 				fetchPolicy: 'network-only',
 			});
 			console.log('data', data);
-			const { projects, totalCount, categories } = data.allProjects;
+			const { projects, totalCount } = data.allProjects;
 			const {
 				data: { qfRounds },
 			} = await apolloClient.query({
@@ -183,7 +115,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 					mainCategories: updatedMainCategory,
 					selectedMainCategory: updatedSelectedMainCategory,
 					totalCount,
-					categories,
 					qfRounds,
 				},
 			};
