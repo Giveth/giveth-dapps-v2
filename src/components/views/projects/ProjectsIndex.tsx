@@ -26,7 +26,7 @@ import { useProjectsContext } from '@/context/projects.context';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { ProjectsMiddleBanner } from './MiddleBanners/ProjectsMiddleBanner';
 import FloatingButtonReferral from '@/components/FloatingReferral';
-import { QFProjectsBanner } from './QFProjectsBanner';
+import { ActiveQFProjectsBanner } from './qfBanner/ActiveQFProjectsBanner';
 import { PassportBanner } from '@/components/PassportBanner';
 import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
 import { QFNoResultBanner } from './MiddleBanners/QFNoResultBanner';
@@ -35,6 +35,7 @@ import { getMainCategorySlug } from '@/helpers/projects';
 import { FilterContainer } from './filter/FilterContainer';
 import { SortContainer } from './sort/SortContainer';
 import { QFRoundStats } from './QFRoundStats';
+import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -204,8 +205,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 			{isQF ? (
 				<>
 					<PassportBanner />
-					<QFProjectsBanner />
+					<ActiveQFProjectsBanner />
 				</>
+			) : isArchivedQF ? (
+				<ArchivedQFProjectsBanner />
 			) : (
 				<ProjectsBanner mainCategory={selectedMainCategory} />
 			)}
