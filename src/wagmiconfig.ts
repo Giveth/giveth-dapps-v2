@@ -74,7 +74,12 @@ const classicNetworkNumber = configuration.CLASSIC_NETWORK_NUMBER;
 // Create wagmiConfig
 export const wagmiConfig = defaultWagmiConfig({
 	chains: chains, // required
-	connectors: [safe()],
+	connectors: [
+		safe({
+			allowedDomains: [/app.safe.global$/],
+			debug: false,
+		}),
+	],
 	projectId, // required
 	metadata, // required
 	ssr: true,
@@ -84,7 +89,7 @@ export const wagmiConfig = defaultWagmiConfig({
 	enableWalletConnect: true, // Optional - true by default
 	enableInjected: true, // Optional - true by default
 	enableEIP6963: true, // Optional - true by default
-	enableCoinbase: true, // Optional - true by default
+	enableCoinbase: false, // Optional - true by default
 	// ...wagmiOptions, // Optional - Override createConfig parameters
 	client({ chain }) {
 		return createClient({ chain, transport: http() });
