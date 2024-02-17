@@ -8,23 +8,31 @@ import {
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import { Flex } from '@/components/styled-components/Flex';
 
 export const QFRoundStats = () => {
+	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
 			<H3 weight={700}>Round Stats</H3>
 			<InfoSection>
 				<ItemContainer>
-					<ItemTitle>Matching Pool</ItemTitle>
+					<ItemTitle>
+						{formatMessage({ id: 'label.matching_pool' })}
+					</ItemTitle>
 					<ItemValue>25,000 DAI</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
-					<ItemTitle>Donations</ItemTitle>
+					<ItemTitle>
+						{formatMessage({ id: 'label.donations' })}
+					</ItemTitle>
 					<ItemValue>$190,854</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
-					<ItemTitle># of unique donors</ItemTitle>
+					<ItemTitle>
+						{formatMessage({ id: 'label.number_of_unique_donors' })}
+					</ItemTitle>
 					<ItemValue>19,702</ItemValue>
 				</ItemContainer>
 			</InfoSection>
