@@ -18,6 +18,7 @@ export const QFRoundStats = () => {
 		<Wrapper>
 			<Smile src='/images/arc3.svg' width={70} height={100} alt='arc' />
 			<Plus src='/images/plus.svg' width={30} height={30} alt='arc' />
+			<Arc src='/images/arc.svg' width={30} height={30} alt='arc' />
 			<H3 weight={700}>Round Stats</H3>
 			<InfoSection>
 				<ItemContainer>
@@ -82,5 +83,11 @@ const Smile = styled(BaseImage)`
 `;
 
 const Plus = styled(BaseImage)`
+	top: 20px;
 	left: 30%;
+`;
+
+const Arc = styled(BaseImage)`
+	top: 60px;
+	left: 6%;
 `;
