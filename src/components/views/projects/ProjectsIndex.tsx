@@ -69,6 +69,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		mainCategories,
 		selectedMainCategory,
 		isQF,
+		isArchivedQF,
 		qfRounds,
 	} = useProjectsContext();
 
@@ -107,7 +108,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 					variables: {
 						...variables,
 						...contextVariables,
-						mainCategory: getMainCategorySlug(selectedMainCategory),
+						mainCategory: isArchivedQF
+							? undefined
+							: getMainCategorySlug(selectedMainCategory),
+						qfRoundSlug: isArchivedQF ? router.query.slug : null,
 					},
 					fetchPolicy: 'network-only',
 				})
@@ -136,8 +140,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 		[
 			contextVariables,
 			filteredProjects.length,
+			isArchivedQF,
 			projects.length,
-			router.query?.slug,
+			router.query.slug,
+			selectedMainCategory,
 			user?.id,
 		],
 	);
