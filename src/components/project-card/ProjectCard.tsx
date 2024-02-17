@@ -175,7 +175,7 @@ const ProjectCard = (props: IProjectCard) => {
 								</LightSubline>
 							</div>
 						</Flex>
-						{activeQFRound ? (
+						{activeQFRound && (
 							<Flex flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
 									+
@@ -197,7 +197,7 @@ const ProjectCard = (props: IProjectCard) => {
 									})}
 								</LightSubline>
 							</Flex>
-						) : null}
+						)}
 					</PaddedRow>
 				</Link>
 				{hasFooter && (
