@@ -26,11 +26,7 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ProjectCardUserName } from './ProjectCardUserName';
-import {
-	calculateTotalEstimatedMatching,
-	getActiveRound,
-	hasActiveRound,
-} from '@/helpers/qf';
+import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
 import { formatDonation } from '@/helpers/number';
 
 const cardRadius = '12px';
@@ -69,12 +65,11 @@ const ProjectCard = (props: IProjectCard) => {
 	const name = adminUser?.name;
 	const { formatMessage, formatRelativeTime, locale } = useIntl();
 
-	const isRoundActive = hasActiveRound(qfRounds);
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
-	const activeRound = getActiveRound(qfRounds);
-	const hasFooter = isRoundActive || verified;
+	const activeQFRound = getActiveRound(qfRounds);
+	const hasFooter = activeQFRound || verified;
 
 	return (
 		<Wrapper
@@ -132,14 +127,14 @@ const ProjectCard = (props: IProjectCard) => {
 						<Flex flexDirection='column' gap='2px'>
 							<PriceText>
 								{formatDonation(
-									(isRoundActive
+									(activeQFRound
 										? sumDonationValueUsdForActiveQfRound
 										: sumDonationValueUsd) || 0,
 									'$',
 									locale,
 								)}
 							</PriceText>
-							{isRoundActive ? (
+							{activeQFRound ? (
 								<AmountRaisedText>
 									{formatMessage({
 										id: 'label.amount_raised_in_this_round',
@@ -161,7 +156,7 @@ const ProjectCard = (props: IProjectCard) => {
 								</LightSubline>
 								<Subline style={{ display: 'inline-block' }}>
 									&nbsp;
-									{isRoundActive
+									{activeQFRound
 										? countUniqueDonorsForActiveQfRound
 										: countUniqueDonors}
 									&nbsp;
@@ -172,7 +167,7 @@ const ProjectCard = (props: IProjectCard) => {
 											id: 'label.contributors',
 										},
 										{
-											count: isRoundActive
+											count: activeQFRound
 												? countUniqueDonorsForActiveQfRound
 												: countUniqueDonors,
 										},
@@ -180,7 +175,7 @@ const ProjectCard = (props: IProjectCard) => {
 								</LightSubline>
 							</div>
 						</Flex>
-						{isRoundActive ? (
+						{activeQFRound ? (
 							<Flex flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
 									+
@@ -222,8 +217,8 @@ const ProjectCard = (props: IProjectCard) => {
 										</VerifiedText>
 									</Flex>
 								)}
-								{isRoundActive && (
-									<QFBadge>{activeRound?.name}</QFBadge>
+								{activeQFRound && (
+									<QFBadge>{activeQFRound?.name}</QFBadge>
 								)}
 							</Flex>
 							{/* {verified && (
