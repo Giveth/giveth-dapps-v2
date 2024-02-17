@@ -24,12 +24,12 @@ import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
 
 import { FlexCenter } from '@/components/styled-components/Flex';
-import { ProjectsMiddleBanner } from './middleBanners/ProjectsMiddleBanner';
+import { ProjectsMiddleBanner } from './MiddleBanners/ProjectsMiddleBanner';
 import FloatingButtonReferral from '@/components/FloatingReferral';
 import { QFProjectsBanner } from './QFProjectsBanner';
 import { PassportBanner } from '@/components/PassportBanner';
-import { QFProjectsMiddleBanner } from './middleBanners/QFMiddleBanner';
-import { QFNoResultBanner } from './middleBanners/QFNoResultBanner';
+import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
+import { QFNoResultBanner } from './MiddleBanners/QFNoResultBanner';
 import { Spinner } from '@/components/Spinner';
 import { getMainCategorySlug } from '@/helpers/projects';
 import { FilterContainer } from './filter/FilterContainer';
