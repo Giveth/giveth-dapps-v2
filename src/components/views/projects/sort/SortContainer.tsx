@@ -1,9 +1,9 @@
-import { Title } from '@giveth/ui-design-system';
+import { Title, mediaQueries } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
+import styled from 'styled-components';
 import { Flex } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
-import useDetectDevice from '@/hooks/useDetectDevice';
 
 interface ISortContainerProps {
 	totalCount: number;
@@ -11,15 +11,8 @@ interface ISortContainerProps {
 
 export const SortContainer: FC<ISortContainerProps> = ({ totalCount }) => {
 	const { formatMessage } = useIntl();
-	const { isTablet, isMobile } = useDetectDevice();
-
 	return (
-		<Flex
-			justifyContent='space-between'
-			flexDirection={isMobile ? 'column' : 'row'}
-			gap={isMobile ? '16px' : undefined}
-			alignItems={isMobile ? 'stretch' : 'center'}
-		>
+		<Wrapper>
 			<Title>
 				{formatMessage({
 					id: 'page.projects.title.explore',
@@ -33,6 +26,18 @@ export const SortContainer: FC<ISortContainerProps> = ({ totalCount }) => {
 				</span>
 			</Title>
 			<ProjectsSortSelect />
-		</Flex>
+		</Wrapper>
 	);
 };
+
+const Wrapper = styled(Flex)`
+	justify-content: space-between;
+	flex-direction: column;
+	gap: 16px;
+	align-items: stretch;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+		gap: 8px;
+		align-items: center;
+	}
+`;
