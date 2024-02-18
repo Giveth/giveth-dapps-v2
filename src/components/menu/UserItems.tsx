@@ -72,7 +72,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 
 	return (
 		<>
-			<Item theme={theme}>
+			<Item themeState={theme}>
 				<ItemTitle themeState={theme}>
 					{formatMessage({ id: 'label.wallet' })}
 				</ItemTitle>
@@ -80,7 +80,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 					<B>{shortenAddress(walletAddress)}</B>
 				</ItemRow>
 			</Item>
-			<Item theme={theme}>
+			<Item themeState={theme}>
 				<ItemTitle themeState={theme}>
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
@@ -110,7 +110,11 @@ export const UserItems: FC<IUserItemsProps> = ({
 			</Item>
 			<ItemSpacer />
 			{walletMenuArray.map(i => (
-				<Item key={i.title} onClick={() => goRoute(i)} theme={theme}>
+				<Item
+					key={i.title}
+					onClick={() => goRoute(i)}
+					themeState={theme}
+				>
 					<GLink size='Big'>{formatMessage({ id: i.title })}</GLink>
 				</Item>
 			))}
@@ -121,7 +125,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 						localStorage.removeItem(StorageLabel.WALLET);
 						disconnect();
 					}}
-					theme={theme}
+					themeState={theme}
 				>
 					<GLink size='Big'>
 						{formatMessage({ id: 'label.sign_out' })}
