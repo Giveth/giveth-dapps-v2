@@ -15,7 +15,7 @@ import { useProjectsContext } from '@/context/projects.context';
 import ProjectsFiltersButton from '@/components/views/projects/ProjectsFiltersButton';
 
 const ProjectsFiltersTablet = () => {
-	const { selectedMainCategory } = useProjectsContext();
+	const { selectedMainCategory, isQF } = useProjectsContext();
 	const [showSearchAndFilter, setShowSearchAndFilter] = useState(false);
 	const router = useRouter();
 
@@ -51,8 +51,8 @@ const ProjectsFiltersTablet = () => {
 					</IconContainer>
 				</FiltersSection>
 			)}
-			{selectedMainCategory && <StyledLine />}
-			<ProjectsSubCategories />
+			{!isQF && selectedMainCategory && <StyledLine />}
+			{!isQF && <ProjectsSubCategories />}
 		</>
 	);
 };
