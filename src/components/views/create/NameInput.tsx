@@ -11,10 +11,9 @@ import Routes from '@/lib/constants/Routes';
 
 interface IProps {
 	preTitle?: string;
-	showGuidelineModal: boolean;
 }
 
-const NameInput: FC<IProps> = ({ preTitle, showGuidelineModal }) => {
+const NameInput: FC<IProps> = ({ preTitle }) => {
 	const router = useRouter();
 	const locale = router.locale || 'en';
 
@@ -47,7 +46,6 @@ const NameInput: FC<IProps> = ({ preTitle, showGuidelineModal }) => {
 	useEffect(() => {
 		// For handling a case when the user clicks on Submission guidelines and close it - We shouldn't focus in this case
 		if (
-			!showGuidelineModal &&
 			isCreateMode &&
 			!firstGuideModalClosed.current &&
 			!isFirstRender.current
@@ -56,7 +54,7 @@ const NameInput: FC<IProps> = ({ preTitle, showGuidelineModal }) => {
 			firstGuideModalClosed.current = true;
 		}
 		isFirstRender.current = false;
-	}, [showGuidelineModal]);
+	}, []);
 
 	return (
 		<>
