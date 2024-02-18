@@ -7,16 +7,22 @@ import { IModal } from '@/types/common';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '../modals/Modal';
+import { IQFRound } from '@/apollo/types/types';
+import { formatDate } from '@/lib/helpers';
 
 interface IRoundNotStartedModalProps extends IModal {
 	destination: string;
+	qfRounds: IQFRound[];
 }
 
 export const RoundNotStartedModal: FC<IRoundNotStartedModalProps> = ({
 	setShowModal,
 	destination,
+	qfRounds,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+
+	const beginDate = qfRounds.find(r => r.isActive)?.beginDate;
 
 	return (
 		<Modal
@@ -27,9 +33,10 @@ export const RoundNotStartedModal: FC<IRoundNotStartedModalProps> = ({
 		>
 			<ModalContainer>
 				<Desc>
-					The Alpha round hasn't started yet. It starts on 12/03/2024,
-					8:00pm UTC. You can donate now, but your donation will not
-					be eligible for matching.
+					The Alpha round hasn&apos;t started yet. It starts on{' '}
+					{beginDate ? formatDate(new Date(beginDate)) : '--'}. You
+					can donate now, but your donation will not be eligible for
+					matching.
 				</Desc>
 				<Link href={destination}>
 					<GotItButton label='Got It' buttonType='primary' />
