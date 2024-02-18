@@ -65,6 +65,7 @@ const ProjectCard = (props: IProjectCard) => {
 	} = project;
 	const [isHover, setIsHover] = useState(false);
 	const [showHintModal, setShowHintModal] = useState(false);
+	const [destination, setDestination] = useState('');
 	const orgLabel = organization?.label;
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
@@ -80,10 +81,11 @@ const ProjectCard = (props: IProjectCard) => {
 	const hasFooter = isRoundActive || verified;
 
 	const projectLink = slugToProjectView(slug);
+	const donateLink = slugToProjectDonate(slug);
 
+	// Show hint modal if the user clicks on the card and the round is not started
 	const handleClick = (e: any) => {
 		if (router.route === '/qf/[slug]') {
-			console.log('activeRound', activeRound);
 			if (activeRound) return;
 			e.preventDefault();
 			e.stopPropagation();
@@ -103,7 +105,13 @@ const ProjectCard = (props: IProjectCard) => {
 					organization={orgLabel}
 					isHover={isHover}
 				/>
-				<Link href={projectLink}>
+				<Link
+					href={projectLink}
+					onClick={e => {
+						setDestination(projectLink);
+						handleClick(e);
+					}}
+				>
 					<ProjectCardImage image={image} />
 				</Link>
 			</ImagePlaceholder>
@@ -128,7 +136,13 @@ const ProjectCard = (props: IProjectCard) => {
 							formatMessage({ id: 'label.just_now' }),
 						)}
 					</LastUpdatedContainer>
-					<Link href={projectLink}>
+					<Link
+						href={projectLink}
+						onClick={e => {
+							setDestination(projectLink);
+							handleClick(e);
+						}}
+					>
 						<Title weight={700} isHover={isHover}>
 							{title}
 						</Title>
@@ -140,7 +154,13 @@ const ProjectCard = (props: IProjectCard) => {
 					slug={slug}
 					isForeignOrg={isForeignOrg}
 				/>
-				<Link href={projectLink} onClick={handleClick}>
+				<Link
+					href={projectLink}
+					onClick={e => {
+						setDestination(projectLink);
+						handleClick(e);
+					}}
+				>
 					<Description>{descriptionSummary}</Description>
 					<PaddedRow justifyContent='space-between'>
 						<Flex flexDirection='column' gap='2px'>
@@ -220,7 +240,13 @@ const ProjectCard = (props: IProjectCard) => {
 					</PaddedRow>
 				</Link>
 				{hasFooter && (
-					<Link href={projectLink}>
+					<Link
+						href={projectLink}
+						onClick={e => {
+							setDestination(projectLink);
+							handleClick(e);
+						}}
+					>
 						<Hr />
 						<PaddedRow justifyContent='space-between'>
 							<Flex gap='16px'>
@@ -260,7 +286,13 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				)}
 				<ActionButtons>
-					<Link href={slugToProjectDonate(slug)}>
+					<Link
+						href={donateLink}
+						onClick={e => {
+							setDestination(donateLink);
+							handleClick(e);
+						}}
+					>
 						<CustomizedDonateButton
 							linkType='primary'
 							size='small'
@@ -273,7 +305,7 @@ const ProjectCard = (props: IProjectCard) => {
 			{showHintModal && qfRounds && (
 				<RoundNotStartedModal
 					setShowModal={setShowHintModal}
-					destination={projectLink}
+					destination={destination}
 					qfRounds={qfRounds}
 				/>
 			)}
