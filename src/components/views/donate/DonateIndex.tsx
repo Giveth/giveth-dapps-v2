@@ -26,7 +26,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
-import { DonationCard, isRecurringActive } from './DonationCard';
+import { DonationCard } from './DonationCard';
 import { SuccessView } from './SuccessView';
 import { DonateSection } from '../project/projectActionCard/DonationSection';
 import QFSection from '../project/projectActionCard/QFSection';
@@ -35,6 +35,7 @@ import CryptoDonation from './CryptoDonation';
 import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import { DonationInfo } from './DonationInfo';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { isRecurringActive } from '@/configuration';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();

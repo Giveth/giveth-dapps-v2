@@ -6,16 +6,15 @@ import {
 	useContext,
 	useState,
 	type Dispatch,
-	useEffect,
 } from 'react';
-import { useAccount } from 'wagmi';
+import { useCallback } from 'react';
 import { IDonationProject } from '@/apollo/types/types';
 import { hasActiveRound } from '@/helpers/qf';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
-import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
-import { gqlRequest } from '@/helpers/requests';
-import config from '@/configuration';
 import { ChainType } from '@/types/config';
+import { useUserStreams } from '@/hooks/useUserStreams';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
 
 export interface TxHashWithChainType {
 	txHash: string;
@@ -36,6 +35,7 @@ interface IDonateContext {
 	setSelectedToken: Dispatch<
 		SetStateAction<ISelectTokenWithBalance | undefined>
 	>;
+	fetchProject: () => Promise<void>;
 }
 
 interface IProviderProps {
@@ -48,6 +48,7 @@ const DonateContext = createContext<IDonateContext>({
 	setSelectedToken: () => {},
 	project: {} as IDonationProject,
 	tokenStreams: {},
+	fetchProject: async () => {},
 });
 
 DonateContext.displayName = 'DonateContext';
@@ -64,55 +65,38 @@ export interface ITokenStreams {
 }
 
 export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
-	const [tokenStreams, setTokenStreams] = useState<ITokenStreams>({});
 	const [selectedToken, setSelectedToken] = useState<
 		ISelectTokenWithBalance | undefined
 	>();
 	const [isSuccessDonation, setSuccessDonation] =
 		useState<ISuccessDonation>();
+	const [projectData, setProjectData] = useState<IDonationProject>(project);
 
-	const { address } = useAccount();
+	const fetchProject = useCallback(async () => {
+		const { data } = (await client.query({
+			query: FETCH_PROJECT_BY_SLUG,
+			variables: { slug: project.slug },
+			fetchPolicy: 'no-cache',
+		})) as { data: { projectBySlug: IDonationProject } };
+
+		setProjectData(data.projectBySlug);
+	}, [project.slug]);
+
+	const tokenStreams = useUserStreams();
 
 	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
-
-	useEffect(() => {
-		if (!address) return;
-
-		// fetch user's streams
-		const fetchData = async () => {
-			const { data } = await gqlRequest(
-				config.OPTIMISM_CONFIG.superFluidSubgraph,
-				undefined,
-				FETCH_USER_STREAMS,
-				{ address: address.toLowerCase() },
-			);
-			const streams: ISuperfluidStream[] = data?.streams;
-			console.log('streams', streams);
-
-			//categorize streams by token
-			const _tokenStreams: ITokenStreams = {};
-			streams.forEach(stream => {
-				if (!_tokenStreams[stream.token.id]) {
-					_tokenStreams[stream.token.id] = [];
-				}
-				_tokenStreams[stream.token.id].push(stream);
-			});
-			setTokenStreams(_tokenStreams);
-			console.log('tokenStreams', _tokenStreams);
-		};
-		fetchData();
-	}, [address]);
 
 	return (
 		<DonateContext.Provider
 			value={{
 				hasActiveQFRound,
-				project,
+				project: projectData,
 				isSuccessDonation,
 				setSuccessDonation,
 				selectedToken,
 				setSelectedToken,
 				tokenStreams,
+				fetchProject,
 			}}
 		>
 			{children}

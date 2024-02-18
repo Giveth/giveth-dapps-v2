@@ -1,3 +1,4 @@
+import { Address } from 'viem';
 import {
 	EDonationStatus,
 	EDonationType,
@@ -26,6 +27,11 @@ export interface IEstimatedMatching {
 	allProjectsSum: number;
 	matchingPool: number;
 	projectDonationsSqrtRootSum: number;
+}
+
+export interface IAnchorContractData {
+	address: Address;
+	isActive: boolean;
 }
 
 export interface IProject {
@@ -76,6 +82,7 @@ export interface IProject {
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
 	campaigns?: ICampaign[];
+	anchorContracts: IAnchorContractData[];
 }
 
 export interface IDonationProject extends IProject {
@@ -162,6 +169,7 @@ export interface IProjectEdition {
 		name?: string;
 	};
 	slug: string;
+	anchorContracts?: IAnchorContractData[];
 }
 
 export interface IProjectCreation {
@@ -412,6 +420,7 @@ export interface IUsersPFPTokens {
 }
 
 export interface IQFRound {
+	slug: string;
 	id: string;
 	name: string;
 	isActive: boolean;
@@ -419,6 +428,7 @@ export interface IQFRound {
 	endDate: string;
 	minimumPassportScore: number;
 	eligibleNetworks: number[];
+	maximumReward: number;
 }
 
 export interface IGetQfRoundHistory {

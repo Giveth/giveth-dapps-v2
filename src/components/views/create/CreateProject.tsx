@@ -40,7 +40,7 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView, slugToSuccessView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
-import config from '@/configuration';
+import config, { isRecurringActive } from '@/configuration';
 import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { setShowFooter } from '@/features/general/general.slice';
@@ -52,7 +52,6 @@ import { ChainType, NonEVMChain } from '@/types/config';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
 import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
-import { isRecurringActive } from '../donate/DonationCard';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -188,11 +187,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchAddresses,
 		watchAlloProtocolRegistry,
 	]);
-
-	const hasOptimismAddress = watchAddresses.hasOwnProperty(
-		config.OPTIMISM_NETWORK_NUMBER,
+	const hasOptimismAddress = watchAddresses.some(
+		address => config.OPTIMISM_NETWORK_NUMBER === address.networkId,
 	);
-
 	const onError = (errors: FieldErrors<TInputs>) => {
 		if (errors[EInputs.description]) {
 			document?.getElementById('project_description')?.scrollIntoView();
@@ -249,7 +246,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				hasOptimismAddress &&
 				isRecurringActive
 			) {
-				setAddedProjectState(addedProject.data?.createProject);
+				!isEditMode
+					? setAddedProjectState(addedProject.data?.createProject)
+					: setAddedProjectState(addedProject.data?.updateProject);
 				setIsLoading(false);
 			}
 
@@ -268,9 +267,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				if (
 					watchAlloProtocolRegistry &&
 					hasOptimismAddress &&
-					isRecurringActive
+					isRecurringActive &&
+					!draft
 				) {
 					setShowAlloProtocolModal(true);
+					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 				} else {
 					setIsLoading(false);
 					if (!isEditMode) {
@@ -365,6 +366,12 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									);
 									setAddressModalChainId(chain.id);
 								}}
+								isEditMode={isEditMode}
+								anchorContractData={
+									(project?.anchorContracts &&
+										project?.anchorContracts[0]) ??
+									undefined
+								}
 							/>
 						))}
 						<PublishTitle>

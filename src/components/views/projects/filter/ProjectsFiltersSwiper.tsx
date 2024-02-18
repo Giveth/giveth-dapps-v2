@@ -43,14 +43,10 @@ const NextIcon = styled(IconContainer)`
 		display: inline-block;
 	}
 	${mediaQueries.laptopS} {
-		width: 50px;
-		height: 50px;
-		position: absolute;
-		top: calc(50% - 25px);
+		display: block;
+		min-width: 50px;
+		min-height: 50px;
 		right: 0;
-		:disabled {
-			display: none;
-		}
 	}
 `;
 
@@ -60,9 +56,6 @@ const PrevIcon = styled(NextIcon)<{ disabled?: boolean }>`
 	left: 0;
 	z-index: 2;
 	${mediaQueries.laptopS} {
-		:disabled {
-			display: none;
-		}
 	}
 `;
 

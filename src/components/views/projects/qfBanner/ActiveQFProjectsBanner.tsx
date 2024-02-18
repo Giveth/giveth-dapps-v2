@@ -1,21 +1,26 @@
-import {
-	H1,
-	B,
-	Lead,
-	Container,
-	Row,
-	H2,
-	Col,
-	mediaQueries,
-} from '@giveth/ui-design-system';
+import { B, Lead, Container, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import styled from 'styled-components';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useProjectsContext } from '@/context/projects.context';
-import { Flex } from '@/components/styled-components/Flex';
 import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
+import {
+	BannerContainer,
+	ImgTopRight,
+	ImgBottomRight,
+	ImgTopLeft,
+	ImgBottomLeft,
+	StyledCol,
+	Name,
+	Desc,
+	Title,
+	ImgBottomLeft1,
+	ImgMiddleRight,
+	ImgTopMiddle,
+	ImgTopRight1,
+	Sponsor,
+} from './common';
 
 enum ERoundStatus {
 	LOADING,
@@ -25,7 +30,7 @@ enum ERoundStatus {
 	NO_ACTIVE,
 }
 
-export const QFProjectsBanner = () => {
+export const ActiveQFProjectsBanner = () => {
 	const [state, setState] = useState(ERoundStatus.LOADING);
 	const [timer, setTimer] = useState<number | null>(null);
 	const { formatMessage } = useIntl();
@@ -83,29 +88,49 @@ export const QFProjectsBanner = () => {
 				fill
 				alt='QF Banner'
 			/>
+			<ImgMiddleRight
+				src={'/images/banners/qf-round/mr.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='Middle Right'
+			/>
 			<ImgTopRight
-				src={'/images/banners/qf-round/top-right.png'}
+				src={'/images/banners/qf-round/tr1.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
+			<ImgTopRight1
+				src={'/images/banners/qf-round/tr2.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
+			<ImgTopMiddle
+				src={'/images/banners/qf-round/tm.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<ImgBottomRight
-				src={'/images/banners/qf-round/bottom-right.svg'}
+				src={'/images/banners/qf-round/br.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<ImgTopLeft
-				src={'/images/banners/qf-round/top-left.svg'}
+				src={'/images/banners/qf-round/tl.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<ImgBottomLeft
-				src={'/images/banners/qf-round/bottom-left.png'}
+				src={'/images/banners/qf-round/bl1.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
+			<ImgBottomLeft1
+				src={'/images/banners/qf-round/bl2.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<Container>
 				<Row>
-					<StyledCol xs={12} md={12}>
+					<StyledCol xs={12} md={6}>
 						<Title weight={700}>
 							{formatMessage({ id: 'label.quadratic_funding' })}
 						</Title>
@@ -129,105 +154,15 @@ export const QFProjectsBanner = () => {
 							</Desc>
 						)}
 					</StyledCol>
-					{/* <StyledCol xs={12} md={6}>
-						<Image
-							src={'/images/banners/qfSponsorsOP.png'}
+					<StyledCol xs={12} md={6}>
+						<Sponsor
+							src={'/images/banners/qf-round/sponsor.svg'}
 							style={{ objectFit: 'contain' }}
-							fill
 							alt='QF Banner'
 						/>
-					</StyledCol> */}
+					</StyledCol>
 				</Row>
 			</Container>
 		</BannerContainer>
 	);
 };
-
-const BannerContainer = styled.div`
-	position: relative;
-	padding-top: 100px;
-	padding-bottom: 100px;
-	background: linear-gradient(98deg, #0f0116 24.06%, #380950 93.92%);
-	img {
-		-webkit-user-drag: none;
-		-khtml-user-drag: none;
-		-moz-user-drag: none;
-		-o-user-drag: none;
-		user-drag: none;
-	}
-`;
-
-const StyledCol = styled(Col)`
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	z-index: 1;
-	min-height: 300px;
-	text-align: center;
-	align-items: center;
-	padding-top: 40px;
-`;
-
-const Title = styled(H1)`
-	margin-top: 32px;
-	color: #fff;
-`;
-
-const Name = styled(H2)`
-	color: #fff;
-`;
-
-const Desc = styled(Flex)`
-	width: fit-content;
-	color: #fff;
-	border: 2px solid #d640f9;
-	border-radius: 20px;
-	align-items: center;
-	justify-content: center;
-	gap: 8px;
-	padding: 9px 20px;
-	background: #272526;
-	margin-top: 12px;
-	margin-bottom: 32px;
-`;
-
-const ImgBase = styled.img`
-	z-index: 1 !important;
-	position: absolute;
-`;
-const ImgTopRight = styled(ImgBase)`
-	top: 40px;
-	right: 0;
-	width: 200px;
-	${mediaQueries.tablet} {
-		width: 300px;
-	}
-	${mediaQueries.laptopS} {
-		width: 450px;
-	}
-`;
-const ImgBottomRight = styled(ImgBase)`
-	right: 10px;
-	bottom: 0;
-	${mediaQueries.tablet} {
-		right: 100px;
-	}
-`;
-const ImgTopLeft = styled(ImgBase)`
-	top: 0;
-	left: 10px;
-	width: 100px;
-	${mediaQueries.tablet} {
-		left: 130px;
-		width: 180px;
-	}
-`;
-
-const ImgBottomLeft = styled(ImgBase)`
-	left: 0;
-	bottom: 0;
-	width: 150px;
-	${mediaQueries.laptopS} {
-		width: 200px;
-	}
-`;

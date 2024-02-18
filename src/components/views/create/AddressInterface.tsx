@@ -6,35 +6,44 @@ import {
 	Button,
 	GLink,
 	IconArrowRight16,
+	IconCheck16,
 	IconTrash24,
 	P,
+	brandColors,
 	neutralColors,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { EInputs } from '@/components/views/create/CreateProject';
 import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import config from '@/configuration';
+import config, { isRecurringActive } from '@/configuration';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { getChainName } from '@/lib/network';
 import { IChainType } from '@/types/config';
 import { findAddressByChain } from '@/lib/helpers';
-import { isRecurringActive } from '../donate/DonationCard';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { IAnchorContractData } from '@/apollo/types/types';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
 	onButtonClick?: () => void;
+	anchorContractData?: IAnchorContractData;
+	isEditMode?: boolean;
 }
 
 const AddressInterface = ({
 	networkId,
 	onButtonClick,
 	chainType,
+	anchorContractData,
+	isEditMode,
 }: IAddressInterfaceProps) => {
-	const { formState, setValue, watch } = useFormContext();
+	const { setValue, watch } = useFormContext();
 	const { formatMessage } = useIntl();
+	const { isOnEVM } = useGeneralWallet();
 
-	const { errors } = formState;
 	const inputName = EInputs.addresses;
 	const alloProtocolRegistry = watch(EInputs.alloProtocolRegistry) as boolean;
 
@@ -46,6 +55,7 @@ const AddressInterface = ({
 	const walletAddress = addressObj?.address;
 
 	const hasAddress = !!walletAddress;
+	const hasAnchorContract = !!anchorContractData?.isActive;
 
 	return (
 		<Container>
@@ -95,46 +105,77 @@ const AddressInterface = ({
 					<AddressContainer hasAddress={hasAddress}>
 						{hasAddress ? walletAddress : 'No address added yet!'}
 					</AddressContainer>
-					{hasAddress && (
-						<IconContainer
-							onClick={() => {
-								const _addresses = [...value];
-								_addresses.splice(
-									_addresses.indexOf(addressObj),
-									1,
-								);
-								setValue(inputName, _addresses);
-							}}
-						>
-							<IconTrash24 />
-						</IconContainer>
-					)}
+					{hasAddress &&
+						(hasAnchorContract && isOptimism ? (
+							<IconWithTooltip
+								direction='top'
+								icon={
+									<IconContainer>
+										<IconTrash24
+											color={neutralColors.gray[600]}
+										/>
+									</IconContainer>
+								}
+							>
+								{formatMessage({
+									id: 'label.you_cannot_remove_your_optimism_recipient_address',
+								})}
+							</IconWithTooltip>
+						) : (
+							<IconContainer
+								onClick={() => {
+									const _addresses = [...value];
+									_addresses.splice(
+										_addresses.indexOf(addressObj),
+										1,
+									);
+									setValue(inputName, _addresses);
+								}}
+							>
+								<IconTrash24 />
+							</IconContainer>
+						))}
 				</Flex>
-				{isOptimism && isRecurringActive && (
+				{isOptimism && isRecurringActive && isOnEVM && (
 					// Render this section only on Optimism
 					<AlloProtocolContainer>
 						<Flex>
 							<div>
 								<B>
-									Set up Profile on the Allo Protocol Registry
+									{hasAnchorContract && isEditMode
+										? formatMessage({
+												id: 'label.allo_protocol_registry_set_up',
+											})
+										: formatMessage({
+												id: 'label.set_up_profile_on_the_allo_protocol_registry',
+											})}
 								</B>
 								<P>
-									Your project will be included in a shared
-									registry of public goods projects with
-									Gitcoin and others. You will also set up
-									your project to receive recurring donations.
+									{hasAnchorContract && isEditMode
+										? formatMessage({
+												id: 'label.your_project_is_set_up_to_receive_recurring_donations',
+											})
+										: formatMessage({
+												id: 'label.do_you_want_this_project_to_be_setup_to_receive_recurring_donations',
+											})}
 								</P>
 							</div>
-							<ToggleSwitch
-								isOn={alloProtocolRegistry}
-								toggleOnOff={() =>
-									setValue(
-										EInputs.alloProtocolRegistry,
-										!alloProtocolRegistry,
-									)
-								}
-								caption=''
-							/>
+							{hasAnchorContract && isEditMode ? (
+								<IconCheckContainer>
+									<IconCheck16 color={brandColors.giv[100]} />
+								</IconCheckContainer>
+							) : (
+								<ToggleSwitch
+									isOn={alloProtocolRegistry}
+									toggleOnOff={() =>
+										setValue(
+											EInputs.alloProtocolRegistry,
+											!alloProtocolRegistry,
+										)
+									}
+									label=''
+								/>
+							)}
 						</Flex>
 					</AlloProtocolContainer>
 				)}
@@ -190,6 +231,14 @@ const IconContainer = styled(FlexCenter)`
 
 const AlloProtocolContainer = styled.div`
 	margin-top: 24px;
+`;
+
+const IconCheckContainer = styled(FlexCenter)`
+	width: 24px;
+	height: 24px;
+	border-radius: 50px;
+	background-color: ${semanticColors.jade[500]};
+	padding: 5px;
 `;
 
 export default AddressInterface;
