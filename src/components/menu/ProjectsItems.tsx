@@ -121,7 +121,7 @@ const ExploreByRow = styled(Flex)`
 	margin-top: 16px;
 `;
 
-const ExploreItem = styled(Item)<{ themeState?: ETheme }>`
+const ExploreItem = styled(Item)`
 	padding: 2px 8px;
 	&.qf-item {
 		background: ${brandColors.cyan[600]};
@@ -147,8 +147,8 @@ const CategoryItem = styled(Item)<{ themeState: ETheme }>`
 	padding: 8px;
 	&:hover {
 		background: transparent;
-		color: ${({ theme }) =>
-			theme === ETheme.Dark
+		color: ${({ themeState }) =>
+			themeState === ETheme.Dark
 				? brandColors.giv[200]
 				: brandColors.giv[500]};
 	}

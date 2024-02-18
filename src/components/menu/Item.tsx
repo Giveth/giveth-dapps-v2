@@ -6,7 +6,7 @@ import { ETheme } from '@/features/general/general.slice';
 import { Flex } from '../styled-components/Flex';
 
 interface IItem {
-	theme: ETheme;
+	themeState: ETheme;
 	isHighlighted?: boolean;
 	onClick?: Function;
 	children: ReactNode;
@@ -15,7 +15,7 @@ interface IItem {
 
 export const Item: FC<IItem> = ({
 	isHighlighted,
-	theme,
+	themeState,
 	onClick,
 	children,
 	className,
@@ -24,7 +24,7 @@ export const Item: FC<IItem> = ({
 	return (
 		<ItemContainer
 			isHighlighted={isHighlighted}
-			themeState={theme}
+			themeState={themeState}
 			onClick={() => {
 				close();
 				onClick && onClick();
@@ -36,10 +36,12 @@ export const Item: FC<IItem> = ({
 	);
 };
 
-const ItemContainer = styled(Flex)<{
+interface IItemContainer {
 	isHighlighted?: boolean;
 	themeState: ETheme;
-}>`
+}
+
+const ItemContainer = styled(Flex)<IItemContainer>`
 	position: relative;
 	padding: 12px 16px;
 	gap: 6px;
