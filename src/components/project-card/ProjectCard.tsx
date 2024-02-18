@@ -184,7 +184,7 @@ const ProjectCard = (props: IProjectCard) => {
 											projectDonationsSqrtRootSum,
 											allProjectsSum,
 											matchingPool,
-											activeRound?.maximumReward,
+											activeQFRound?.maximumReward,
 										),
 										'$',
 										locale,
