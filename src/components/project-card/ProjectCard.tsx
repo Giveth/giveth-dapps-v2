@@ -82,7 +82,7 @@ const ProjectCard = (props: IProjectCard) => {
 	// Show hint modal if the user clicks on the card and the round is not started
 	const handleClick = (e: any) => {
 		if (router.route === '/qf/[slug]') {
-			if (activeRound) return;
+			if (activeQFRound) return;
 			e.preventDefault();
 			e.stopPropagation();
 			setShowHintModal(true);
