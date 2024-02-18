@@ -40,7 +40,7 @@ const DropdownItem = styled.a`
 	text-decoration: none;
 	display: block;
 	cursor: pointer;
-	:hover {
+	&:hover {
 		background: ${neutralColors.gray[300]};
 	}
 `;

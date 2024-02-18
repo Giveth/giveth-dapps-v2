@@ -127,7 +127,7 @@ export const NetworkItem = styled.div<{
 	display: flex;
 	align-items: center;
 	gap: 16px;
-	:hover {
+	&:hover {
 		background-color: ${props =>
 			props.themeState === ETheme.Dark
 				? brandColors.giv[700]

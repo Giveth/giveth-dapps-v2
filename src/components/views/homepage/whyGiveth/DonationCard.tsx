@@ -84,7 +84,7 @@ const CardContainer = styled(Flex)`
 	background: white;
 	cursor: pointer;
 	transition: box-shadow 0.3s ease-in-out;
-	:hover {
+	&:hover {
 		box-shadow: ${Shadow.Ocean[400]};
 		transition: box-shadow 0.3s ease-in-out;
 	}

@@ -199,7 +199,7 @@ const DonationCardContainer = styled(Flex)<{ width?: number }>`
 	animation: moveSlideshow ${props => (props.width || 1000) / 100}s linear
 		infinite;
 	width: max-content;
-	:hover {
+	&:hover {
 		animation-play-state: paused;
 	}
 	@keyframes moveSlideshow {

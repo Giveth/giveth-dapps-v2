@@ -18,13 +18,13 @@ export const StyledDatePicker = styled(DatePicker)<{
 		props.hasError ? semanticColors.punch[500] : neutralColors.gray[300]};
 	padding: 15px 16px;
 	padding-right: 50px;
-	::placeholder {
+	&::placeholder {
 		color: ${neutralColors.gray[500]};
 	}
-	:hover {
+	&:hover {
 		box-shadow: ${Shadow.Neutral[400]};
 	}
-	:focus-within {
+	&:focus-within {
 		border-color: ${brandColors.giv[600]};
 	}
 `;

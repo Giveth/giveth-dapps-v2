@@ -88,7 +88,7 @@ const Desc = styled(Lead)`
 `;
 
 const SeeGivPowerAllocationsButton = styled(CustomButtonLink)`
-	:hover {
+	&:hover {
 		color: ${brandColors.pinky[600]};
 	}
 `;

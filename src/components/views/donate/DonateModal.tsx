@@ -433,7 +433,7 @@ const DonatingBox = styled.div`
 const DonateButton = styled(Button)<{ disabled: boolean }>`
 	background: ${props =>
 		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
-	:hover:enabled {
+	&:hover:enabled {
 		background: ${brandColors.giv[700]};
 	}
 	:disabled {

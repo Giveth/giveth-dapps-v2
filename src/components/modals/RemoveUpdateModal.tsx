@@ -60,7 +60,7 @@ const NoButton = styled(Button)`
 	width: 300px;
 	height: 48px;
 	margin: 0 auto;
-	:hover {
+	&:hover {
 		background: transparent;
 	}
 `;

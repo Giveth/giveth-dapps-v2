@@ -334,7 +334,7 @@ const OkButton = styled(Button)`
 const SkipButton = styled(Button)`
 	width: 300px;
 	margin: 10px auto 0;
-	:hover {
+	&:hover {
 		background: transparent;
 		color: ${brandColors.deep[200]};
 	}

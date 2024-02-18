@@ -66,7 +66,7 @@ const CustomButton = styled(Button)<{ isCopied: boolean }>`
 	color: ${props =>
 		props.isCopied ? brandColors.pinky[300] : brandColors.pinky[500]};
 
-	:hover {
+	&:hover {
 		background: transparent;
 		color: ${props =>
 			props.isCopied ? brandColors.pinky[300] : brandColors.pinky[500]};
