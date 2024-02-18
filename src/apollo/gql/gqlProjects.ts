@@ -341,38 +341,67 @@ export const FETCH_PROJECT_BY_SLUG = isRecurringActive
 			}
 		`;
 
-export const FETCH_PROJECT_BY_ID = gql`
-	query ProjectById($id: Float!) {
-		projectById(id: $id) {
-			id
-			title
-			image
-			description
-			addresses {
-				address
-				isRecipient
-				networkId
-				chainType
+export const FETCH_PROJECT_BY_ID = isRecurringActive
+	? gql`
+			query ProjectById($id: Float!) {
+				projectById(id: $id) {
+					id
+					title
+					image
+					description
+					addresses {
+						address
+						isRecipient
+						networkId
+						chainType
+					}
+					impactLocation
+					categories {
+						name
+						value
+					}
+					adminUser {
+						walletAddress
+					}
+					status {
+						name
+					}
+					slug
+					anchorContracts {
+						address
+						isActive
+					}
+				}
 			}
-			impactLocation
-			categories {
-				name
-				value
+		`
+	: gql`
+			query ProjectById($id: Float!) {
+				projectById(id: $id) {
+					id
+					title
+					image
+					description
+					addresses {
+						address
+						isRecipient
+						networkId
+						chainType
+					}
+					impactLocation
+					categories {
+						name
+						value
+					}
+					adminUser {
+						walletAddress
+					}
+					status {
+						name
+					}
+					slug
+				}
 			}
-			adminUser {
-				walletAddress
-			}
-			status {
-				name
-			}
-			slug
-			anchorContracts {
-				address
-				isActive
-			}
-		}
-	}
-`;
+		`;
 
 export const FETCH_GIVETH_PROJECT_BY_ID = gql`
 	query ProjectById($id: Float!) {
