@@ -15,6 +15,7 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
@@ -32,6 +33,7 @@ import {
 	hasActiveRound,
 } from '@/helpers/qf';
 import { formatDonation } from '@/helpers/number';
+import { RoundNotStartedModal } from './RoundNotStartedModal';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -62,11 +64,14 @@ const ProjectCard = (props: IProjectCard) => {
 		estimatedMatching,
 	} = project;
 	const [isHover, setIsHover] = useState(false);
+	const [showHintModal, setShowHintModal] = useState(false);
+	const [destination, setDestination] = useState('');
 	const orgLabel = organization?.label;
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
 	const { formatMessage, formatRelativeTime, locale } = useIntl();
+	const router = useRouter();
 
 	const isRoundActive = hasActiveRound(qfRounds);
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
@@ -74,6 +79,19 @@ const ProjectCard = (props: IProjectCard) => {
 
 	const activeRound = getActiveRound(qfRounds);
 	const hasFooter = isRoundActive || verified;
+
+	const projectLink = slugToProjectView(slug);
+	const donateLink = slugToProjectDonate(slug);
+
+	// Show hint modal if the user clicks on the card and the round is not started
+	const handleClick = (e: any) => {
+		if (router.route === '/qf/[slug]') {
+			if (activeRound) return;
+			e.preventDefault();
+			e.stopPropagation();
+			setShowHintModal(true);
+		}
+	};
 
 	return (
 		<Wrapper
@@ -87,7 +105,13 @@ const ProjectCard = (props: IProjectCard) => {
 					organization={orgLabel}
 					isHover={isHover}
 				/>
-				<Link href={slugToProjectView(slug)}>
+				<Link
+					href={projectLink}
+					onClick={e => {
+						setDestination(projectLink);
+						handleClick(e);
+					}}
+				>
 					<ProjectCardImage image={image} />
 				</Link>
 			</ImagePlaceholder>
@@ -112,7 +136,13 @@ const ProjectCard = (props: IProjectCard) => {
 							formatMessage({ id: 'label.just_now' }),
 						)}
 					</LastUpdatedContainer>
-					<Link href={slugToProjectView(slug)}>
+					<Link
+						href={projectLink}
+						onClick={e => {
+							setDestination(projectLink);
+							handleClick(e);
+						}}
+					>
 						<Title weight={700} isHover={isHover}>
 							{title}
 						</Title>
@@ -124,7 +154,13 @@ const ProjectCard = (props: IProjectCard) => {
 					slug={slug}
 					isForeignOrg={isForeignOrg}
 				/>
-				<Link href={slugToProjectView(slug)}>
+				<Link
+					href={projectLink}
+					onClick={e => {
+						setDestination(projectLink);
+						handleClick(e);
+					}}
+				>
 					<Description>{descriptionSummary}</Description>
 					<PaddedRow justifyContent='space-between'>
 						<Flex flexDirection='column' gap='2px'>
@@ -204,7 +240,13 @@ const ProjectCard = (props: IProjectCard) => {
 					</PaddedRow>
 				</Link>
 				{hasFooter && (
-					<Link href={slugToProjectView(slug)}>
+					<Link
+						href={projectLink}
+						onClick={e => {
+							setDestination(projectLink);
+							handleClick(e);
+						}}
+					>
 						<Hr />
 						<PaddedRow justifyContent='space-between'>
 							<Flex gap='16px'>
@@ -244,7 +286,13 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				)}
 				<ActionButtons>
-					<Link href={slugToProjectDonate(slug)}>
+					<Link
+						href={donateLink}
+						onClick={e => {
+							setDestination(donateLink);
+							handleClick(e);
+						}}
+					>
 						<CustomizedDonateButton
 							linkType='primary'
 							size='small'
@@ -254,6 +302,13 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				</ActionButtons>
 			</CardBody>
+			{showHintModal && qfRounds && (
+				<RoundNotStartedModal
+					setShowModal={setShowHintModal}
+					destination={destination}
+					qfRounds={qfRounds}
+				/>
+			)}
 		</Wrapper>
 		// </Link>
 	);
