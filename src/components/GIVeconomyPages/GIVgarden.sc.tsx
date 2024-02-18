@@ -144,7 +144,7 @@ export const VoteCard = styled.div`
 		bottom: 30px;
 		right: 20px;
 	}
-	::after {
+	&::after {
 		content: url('/images/bee2.svg');
 		position: absolute;
 		top: 30px;

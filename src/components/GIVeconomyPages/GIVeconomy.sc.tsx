@@ -52,7 +52,7 @@ export const VoteCard = styled.div`
 		top: 0;
 		right: 0;
 	}
-	::after {
+	&::after {
 		content: url('/images/pie2.png');
 		position: absolute;
 		bottom: -4px;
