@@ -606,7 +606,7 @@ const InputContainer = styled.div`
 const AvText = styled(GLink)`
 	color: ${brandColors.deep[500]};
 	padding: 4px 0 0 5px;
-	:hover {
+	&:hover {
 		cursor: pointer;
 		text-decoration: underline;
 	}
@@ -621,7 +621,7 @@ const SearchContainer = styled.div<IInputBox>`
 				: neutralColors.gray[300]};
 	border-radius: 8px;
 	box-shadow: ${props => props.focused && Shadow.Neutral[500]};
-	:hover {
+	&:hover {
 		box-shadow: ${Shadow.Neutral[500]};
 	}
 `;
