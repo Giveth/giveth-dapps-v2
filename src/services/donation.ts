@@ -20,6 +20,7 @@ const SAVE_DONATION_ITERATIONS = 5;
 export interface IOnTxHash extends ICreateDonation {
 	txHash?: string | null;
 	nonce?: number | null;
+	draftDonationId?: number;
 	chainId: number;
 	safeTransactionId?: string | null;
 }
@@ -64,6 +65,7 @@ const createDonation = async (props: IOnTxHash) => {
 		nonce,
 		chainvineReferred,
 		safeTransactionId,
+		draftDonationId,
 	} = props;
 	const { address, symbol } = token;
 	let donationId = 0;
@@ -82,6 +84,7 @@ const createDonation = async (props: IOnTxHash) => {
 				anonymous,
 				referrerId: chainvineReferred,
 				safeTransactionId,
+				draftDonationId,
 			},
 		});
 		donationId = data.createDonation;
