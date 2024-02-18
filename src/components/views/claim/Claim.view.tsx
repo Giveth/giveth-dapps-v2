@@ -35,7 +35,7 @@ const StepTitle = styled.div<IStepTitleProps>`
 	padding: 8px 0;
 	margin: 4px;
 	cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
-	::before {
+	&::before {
 		content: '';
 		position: absolute;
 		bottom: -6px;

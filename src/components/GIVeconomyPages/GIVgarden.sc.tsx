@@ -138,7 +138,7 @@ export const VoteCard = styled.div`
 	min-height: 480px;
 	margin: 80px 0 45px;
 	position: relative;
-	::before {
+	&::before {
 		content: url('/images/bee1.svg');
 		position: absolute;
 		bottom: 30px;

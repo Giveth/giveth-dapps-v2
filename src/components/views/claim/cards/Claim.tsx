@@ -17,7 +17,7 @@ interface IClaimCardContainer {
 }
 
 const ClaimCardContainer = styled(Card)<IClaimCardContainer>`
-	::before {
+	&::before {
 		content: '';
 		background-image: ${props =>
 			props.claimed ? '' : 'url(/images/wave.png)'};

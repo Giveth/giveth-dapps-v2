@@ -39,7 +39,7 @@ import { InputWithUnit } from '@/components/input/InputWithUnit';
 
 const GovernCardContainer = styled(Card)`
 	padding-left: 254px;
-	::before {
+	&::before {
 		content: '';
 		background-image: url('/images/vote.png');
 		position: absolute;
@@ -51,7 +51,7 @@ const GovernCardContainer = styled(Card)`
 	}
 	@media only screen and (max-width: 1360px) {
 		padding-left: 112px;
-		::before {
+		&::before {
 			width: 170px;
 			height: 150px;
 			background-size: contain;
@@ -60,7 +60,7 @@ const GovernCardContainer = styled(Card)`
 	}
 	@media only screen and (max-width: 1120px) {
 		padding: 8px;
-		::before {
+		&::before {
 			background-image: none;
 		}
 	}

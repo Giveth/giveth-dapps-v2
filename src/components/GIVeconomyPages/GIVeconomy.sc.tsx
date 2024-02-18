@@ -46,7 +46,7 @@ export const VoteCard = styled.div`
 	min-height: 480px;
 	margin: 100px 0 45px;
 	position: relative;
-	::before {
+	&::before {
 		content: url('/images/pie1.png');
 		position: absolute;
 		top: 0;

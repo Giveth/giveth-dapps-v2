@@ -105,7 +105,7 @@ a {
 	background: white;
 }
 
-.quill > .ql-container > .ql-editor.ql-blank::before {
+.quill > .ql-container > .ql-editor.ql-blank&::before {
 	font-size: 16px;
 	font-family: Red Hat Text, sans-serif;
 	font-style: normal;
@@ -122,11 +122,11 @@ a {
 	animation: dot-flashing 1s infinite linear alternate;
 	animation-delay: 0.5s;
 }
-.dot-flashing::before {
+.dot-flashing&::before {
 	left: -15px;
 	animation-delay: 0s;
 }
-.dot-flashing::before,
+.dot-flashing&::before,
 .dot-flashing::after {
 	border-radius: 5px;
 	width: 10px;
@@ -268,7 +268,7 @@ a {
 	opacity: 0.3;
   }
   
-  .image-uploading::before {
+  .image-uploading&::before {
 	content: "";
 	box-sizing: border-box;
 	position: absolute;
