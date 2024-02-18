@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/dist/client/router';
 import ProjectsSearchTablet from '@/components/views/projects/ProjectsSearchTablet';
-import ProjectsFiltersSwiper from '@/components/views/projects/ProjectsFiltersSwiper';
+import ProjectsFiltersSwiper from '@/components/views/projects/filter/ProjectsFiltersSwiper';
 import { Flex } from '@/components/styled-components/Flex';
 import {
 	FiltersSection,
@@ -12,7 +12,7 @@ import {
 } from '@/components/views/projects/common.styled';
 import ProjectsSubCategories from '@/components/views/projects/ProjectsSubCategories';
 import { useProjectsContext } from '@/context/projects.context';
-import ProjectsFiltersButton from '@/components/views/projects/ProjectsFiltersButton';
+import ProjectsFiltersButton from '@/components/views/projects/filter/ProjectsFiltersButton';
 
 const ProjectsFiltersTablet = () => {
 	const { selectedMainCategory, isQF } = useProjectsContext();

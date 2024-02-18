@@ -27,11 +27,7 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ProjectCardUserName } from './ProjectCardUserName';
-import {
-	calculateTotalEstimatedMatching,
-	getActiveRound,
-	hasActiveRound,
-} from '@/helpers/qf';
+import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
 import { formatDonation } from '@/helpers/number';
 import { RoundNotStartedModal } from './RoundNotStartedModal';
 
@@ -42,6 +38,7 @@ const SIDE_PADDING = '26px';
 interface IProjectCard {
 	project: IProject;
 	className?: string;
+	order?: number;
 }
 
 const ProjectCard = (props: IProjectCard) => {
@@ -73,12 +70,11 @@ const ProjectCard = (props: IProjectCard) => {
 	const { formatMessage, formatRelativeTime, locale } = useIntl();
 	const router = useRouter();
 
-	const isRoundActive = hasActiveRound(qfRounds);
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
-	const activeRound = getActiveRound(qfRounds);
-	const hasFooter = isRoundActive || verified;
+	const activeQFRound = getActiveRound(qfRounds);
+	const hasFooter = activeQFRound || verified;
 
 	const projectLink = slugToProjectView(slug);
 	const donateLink = slugToProjectDonate(slug);
@@ -98,6 +94,7 @@ const ProjectCard = (props: IProjectCard) => {
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 			className={className}
+			order={props.order}
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges project={project} />
@@ -166,14 +163,14 @@ const ProjectCard = (props: IProjectCard) => {
 						<Flex flexDirection='column' gap='2px'>
 							<PriceText>
 								{formatDonation(
-									(isRoundActive
+									(activeQFRound
 										? sumDonationValueUsdForActiveQfRound
 										: sumDonationValueUsd) || 0,
 									'$',
 									locale,
 								)}
 							</PriceText>
-							{isRoundActive ? (
+							{activeQFRound ? (
 								<AmountRaisedText>
 									{formatMessage({
 										id: 'label.amount_raised_in_this_round',
@@ -195,7 +192,7 @@ const ProjectCard = (props: IProjectCard) => {
 								</LightSubline>
 								<Subline style={{ display: 'inline-block' }}>
 									&nbsp;
-									{isRoundActive
+									{activeQFRound
 										? countUniqueDonorsForActiveQfRound
 										: countUniqueDonors}
 									&nbsp;
@@ -206,7 +203,7 @@ const ProjectCard = (props: IProjectCard) => {
 											id: 'label.contributors',
 										},
 										{
-											count: isRoundActive
+											count: activeQFRound
 												? countUniqueDonorsForActiveQfRound
 												: countUniqueDonors,
 										},
@@ -214,7 +211,7 @@ const ProjectCard = (props: IProjectCard) => {
 								</LightSubline>
 							</div>
 						</Flex>
-						{isRoundActive ? (
+						{activeQFRound && (
 							<Flex flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
 									+
@@ -223,7 +220,7 @@ const ProjectCard = (props: IProjectCard) => {
 											projectDonationsSqrtRootSum,
 											allProjectsSum,
 											matchingPool,
-											activeRound?.maximumReward,
+											activeQFRound?.maximumReward,
 										),
 										'$',
 										locale,
@@ -236,7 +233,7 @@ const ProjectCard = (props: IProjectCard) => {
 									})}
 								</LightSubline>
 							</Flex>
-						) : null}
+						)}
 					</PaddedRow>
 				</Link>
 				{hasFooter && (
@@ -262,8 +259,8 @@ const ProjectCard = (props: IProjectCard) => {
 										</VerifiedText>
 									</Flex>
 								)}
-								{isRoundActive && (
-									<QFBadge>{activeRound?.name}</QFBadge>
+								{activeQFRound && (
+									<QFBadge>{activeQFRound?.name}</QFBadge>
 								)}
 							</Flex>
 							{/* {verified && (
@@ -421,7 +418,7 @@ const ImagePlaceholder = styled.div`
 	overflow: hidden;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ order?: number }>`
 	position: relative;
 	width: 100%;
 	border-radius: ${cardRadius};
@@ -430,6 +427,7 @@ const Wrapper = styled.div`
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
 	height: 536px;
+	order: ${props => props.order};
 	${mediaQueries.laptopS} {
 		height: 472px;
 	}
