@@ -15,6 +15,7 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
@@ -67,6 +68,7 @@ const ProjectCard = (props: IProjectCard) => {
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
 	const { formatMessage, formatRelativeTime, locale } = useIntl();
+	const router = useRouter();
 
 	const isRoundActive = hasActiveRound(qfRounds);
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
@@ -74,6 +76,17 @@ const ProjectCard = (props: IProjectCard) => {
 
 	const activeRound = getActiveRound(qfRounds);
 	const hasFooter = isRoundActive || verified;
+
+	const projectLink = slugToProjectView(slug);
+
+	const handleClick = (e: any) => {
+		if (router.route === '/qf/[slug]') {
+			console.log('activeRound', activeRound);
+			if (activeRound) return;
+			e.preventDefault();
+			e.stopPropagation();
+		}
+	};
 
 	return (
 		<Wrapper
@@ -87,7 +100,7 @@ const ProjectCard = (props: IProjectCard) => {
 					organization={orgLabel}
 					isHover={isHover}
 				/>
-				<Link href={slugToProjectView(slug)}>
+				<Link href={projectLink}>
 					<ProjectCardImage image={image} />
 				</Link>
 			</ImagePlaceholder>
@@ -112,7 +125,7 @@ const ProjectCard = (props: IProjectCard) => {
 							formatMessage({ id: 'label.just_now' }),
 						)}
 					</LastUpdatedContainer>
-					<Link href={slugToProjectView(slug)}>
+					<Link href={projectLink}>
 						<Title weight={700} isHover={isHover}>
 							{title}
 						</Title>
@@ -124,7 +137,7 @@ const ProjectCard = (props: IProjectCard) => {
 					slug={slug}
 					isForeignOrg={isForeignOrg}
 				/>
-				<Link href={slugToProjectView(slug)}>
+				<Link href={projectLink} onClick={handleClick}>
 					<Description>{descriptionSummary}</Description>
 					<PaddedRow justifyContent='space-between'>
 						<Flex flexDirection='column' gap='2px'>
@@ -204,7 +217,7 @@ const ProjectCard = (props: IProjectCard) => {
 					</PaddedRow>
 				</Link>
 				{hasFooter && (
-					<Link href={slugToProjectView(slug)}>
+					<Link href={projectLink}>
 						<Hr />
 						<PaddedRow justifyContent='space-between'>
 							<Flex gap='16px'>
