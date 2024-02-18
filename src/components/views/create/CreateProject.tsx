@@ -41,7 +41,6 @@ import { slugToProjectView, slugToSuccessView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import config, { isRecurringActive } from '@/configuration';
-import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
@@ -49,9 +48,9 @@ import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
 import { ChainType, NonEVMChain } from '@/types/config';
-import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
 import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
+import ProjectTip from './ProjectTips/ProjectTip';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -68,6 +67,16 @@ export enum EInputs {
 	draft = 'draft',
 	addresses = 'addresses',
 	alloProtocolRegistry = 'alloProtocolRegistry',
+}
+
+export enum ECreateProjectSections {
+	default = 'default',
+	name = 'name',
+	description = 'description',
+	categories = 'categories',
+	location = 'impactLocation',
+	image = 'image',
+	addresses = 'addresses',
 }
 
 export type TInputs = {
@@ -92,6 +101,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [addressModalChainId, setAddressModalChainId] = useState<number>();
 	const [addressModalChainType, setAddressModalChainType] =
 		useState<ChainType>();
+	const [activeProjectSection, setActiveProjectSection] =
+		useState<ECreateProjectSections>(ECreateProjectSections.default);
 
 	const isEditMode = !!project;
 
@@ -158,7 +169,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const { handleSubmit, setValue, watch } = formMethods;
 
 	const [isLoading, setIsLoading] = useState(false);
-	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
+	// const [showGuidelineModal, setShowGuidelineModal] = useState(false);
 	const [addedProjectState, setAddedProjectState] = useState<IProject>();
 
 	const data = watch();
@@ -330,17 +341,17 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							? formatMessage({ id: 'label.project_details' })
 							: formatMessage({ id: 'label.create_a_project' })}
 					</Title>
-					{isSmallScreen && (
+					{/* {isSmallScreen && (
 						<Guidelines
 							setShowGuidelineModal={setShowGuidelineModal}
 						/>
-					)}
+					)} */}
 				</div>
 
 				<FormProvider {...formMethods}>
 					<form onSubmit={handleSubmit(onSubmit, onError)}>
 						<NameInput
-							showGuidelineModal={showGuidelineModal}
+							// showGuidelineModal={showGuidelineModal}
 							preTitle={title}
 						/>
 						<DescriptionInput />
@@ -457,14 +468,14 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				</FormProvider>
 			</CreateContainer>
 			{!isSmallScreen && (
-				<Guidelines
-					isLaptop
-					setShowGuidelineModal={setShowGuidelineModal}
-				/>
+				<ProjectTip activeSection={activeProjectSection} />
+				// <Guidelines
+				// 	isLaptop
+				// 	setShowGuidelineModal={setShowGuidelineModal}
+				// />
+				// adsasd
 			)}
-			{showGuidelineModal && (
-				<ProjectGuidelineModal setShowModal={setShowGuidelineModal} />
-			)}
+
 			{showAlloProtocolModal && addedProjectState && (
 				<AlloProtocolModal
 					setShowModal={setShowAlloProtocolModal}
@@ -482,16 +493,17 @@ const CaptionContainer = styled(Caption)`
 `;
 
 const Wrapper = styled.div`
-	max-width: ${deviceSize.laptopS + 'px'};
+	max-width: ${deviceSize.laptopS + 80 + 'px'};
 	margin: 0 auto;
 	position: relative;
 	display: flex;
+	align-items: flex-start;
 `;
 
 const CreateContainer = styled(Container)`
-	margin-top: 104px;
+	margin-top: 80px;
 	margin-bottom: 154px;
-	max-width: 720px;
+	max-width: 715px;
 	> :nth-child(1) {
 		display: flex;
 		justify-content: space-between;
