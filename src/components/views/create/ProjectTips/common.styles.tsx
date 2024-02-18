@@ -2,7 +2,6 @@ import { brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 export const TipListItem = styled.div`
-	padding: 10px;
 	padding-left: 30px; // Include the space for the custom bullet
 	font-size: 18px;
 	line-height: 1.5;
@@ -15,7 +14,7 @@ export const TipListItem = styled.div`
 		content: '';
 		position: absolute;
 		left: 10px;
-		top: 22px;
+		top: 12px;
 		height: 5px;
 		width: 5px;
 		max-width: 100%;

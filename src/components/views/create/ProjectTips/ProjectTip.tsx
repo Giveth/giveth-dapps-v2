@@ -1,13 +1,8 @@
 import styled from 'styled-components';
-import {
-	H6,
-	IconBulbOutline24,
-	P,
-	neutralColors,
-} from '@giveth/ui-design-system';
+import { H6, IconBulbOutline24, neutralColors } from '@giveth/ui-design-system';
 import { ECreateProjectSections } from '../CreateProject';
 import { Flex } from '@/components/styled-components/Flex';
-import { TipListItem } from './common.styles';
+import DefaultTip from './DefaultTip';
 
 interface IProjectTipProps {
 	activeSection: ECreateProjectSections;
@@ -19,6 +14,7 @@ const ProjectTip = ({ activeSection }: IProjectTipProps) => {
 			case ECreateProjectSections.default: {
 				return {
 					title: 'Tips to Make a Great Project',
+					component: <DefaultTip />,
 				};
 			}
 			case ECreateProjectSections.name: {
@@ -59,15 +55,8 @@ const ProjectTip = ({ activeSection }: IProjectTipProps) => {
 				<IconBulbOutline24 />
 				<H6>{renderContent()?.title}</H6>
 			</Flex>
-
-			<TipListItem>
-				<P>
-					Hello HelloHello HelloHelloHelloHello Hello
-					HelloHelloHelloHelloHelloHello Hello HelloHelloHello Hello
-				</P>
-			</TipListItem>
-			<TipListItem>Hello</TipListItem>
-			<TipListItem>Hello</TipListItem>
+			<br />
+			{renderContent()?.component}
 		</Container>
 	);
 };
