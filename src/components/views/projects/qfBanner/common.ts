@@ -25,27 +25,25 @@ export const StyledCol = styled(Col)`
 	text-align: center;
 	align-items: center;
 	padding-top: 40px;
+	color: #6241d6;
 `;
 
 export const Title = styled(H1)`
 	margin-top: 32px;
-	color: #fff;
 `;
 
-export const Name = styled(H2)`
-	color: #fff;
-`;
+export const Name = styled(H2)``;
 
 export const Desc = styled(Flex)`
 	width: fit-content;
-	color: #fff;
-	border: 2px solid #d640f9;
+
+	border: 2px solid #6241d6;
 	border-radius: 20px;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
 	padding: 9px 20px;
-	background: #272526;
+	background: #ceff1a;
 	margin-top: 12px;
 	margin-bottom: 32px;
 `;
@@ -54,39 +52,86 @@ export const ImgBase = styled.img`
 	z-index: 1 !important;
 	position: absolute;
 `;
-export const ImgTopRight = styled(ImgBase)`
-	top: 40px;
+
+export const ImgMiddleRight = styled(ImgBase)`
+	top: 0;
 	right: 0;
-	width: 200px;
-	${mediaQueries.tablet} {
-		width: 300px;
-	}
-	${mediaQueries.laptopS} {
-		width: 450px;
+	width: 620px;
+`;
+
+export const ImgTopRight = styled(ImgBase)`
+	top: 0;
+	right: 120px;
+	width: 110px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
 	}
 `;
+
+export const ImgTopRight1 = styled(ImgBase)`
+	top: 0;
+	right: 0;
+	width: 180px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
+	}
+`;
+
+export const ImgTopMiddle = styled(ImgBase)`
+	top: 20px;
+	right: 40%;
+	width: 110px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
+	}
+`;
+
 export const ImgBottomRight = styled(ImgBase)`
-	right: 10px;
+	right: 0;
 	bottom: 0;
-	${mediaQueries.tablet} {
-		right: 100px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
 	}
 `;
 export const ImgTopLeft = styled(ImgBase)`
 	top: 0;
-	left: 10px;
-	width: 100px;
-	${mediaQueries.tablet} {
-		left: 130px;
-		width: 180px;
+	left: 64px;
+	width: 127px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
 	}
 `;
 
 export const ImgBottomLeft = styled(ImgBase)`
 	left: 0;
 	bottom: 0;
-	width: 150px;
+	width: 110px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
+	}
+`;
+
+export const ImgBottomLeft1 = styled(ImgBase)`
+	left: 48px;
+	bottom: 0;
+	width: 100px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
+	}
+`;
+
+export const Sponsor = styled(ImgBase)`
+	width: 332px;
+
 	${mediaQueries.laptopS} {
-		width: 200px;
+		right: 60px;
+		margin-top: 60px;
 	}
 `;
