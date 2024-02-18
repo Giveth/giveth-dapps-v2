@@ -12,6 +12,7 @@ export const regexList = {
 		/^(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile|company)/,
 	youtube: /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/,
 	tooShort: /^.{3,}$/,
+	mediumBlogBanner: /<img[^>]+src="(.*?)"/,
 };
 
 export const validators = {

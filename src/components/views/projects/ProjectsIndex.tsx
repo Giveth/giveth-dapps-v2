@@ -1,11 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import {
-	brandColors,
-	neutralColors,
-	OutlineButton,
-	H5,
-} from '@giveth/ui-design-system';
+import { brandColors, OutlineButton } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
@@ -27,20 +22,20 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
-import ProjectsFiltersDesktop from '@/components/views/projects/ProjectsFiltersDesktop';
-import ProjectsFiltersTablet from '@/components/views/projects/ProjectsFiltersTablet';
-import ProjectsFiltersMobile from '@/components/views/projects/ProjectsFiltersMobile';
-import useDetectDevice from '@/hooks/useDetectDevice';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import ProjectsSortSelect from './ProjectsSortSelect';
+
+import { FlexCenter } from '@/components/styled-components/Flex';
 import { ProjectsMiddleBanner } from './MiddleBanners/ProjectsMiddleBanner';
 import FloatingButtonReferral from '@/components/FloatingReferral';
-import { QFProjectsBanner } from './QFProjectsBanner';
+import { ActiveQFProjectsBanner } from './qfBanner/ActiveQFProjectsBanner';
 import { PassportBanner } from '@/components/PassportBanner';
 import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
 import { QFNoResultBanner } from './MiddleBanners/QFNoResultBanner';
 import { Spinner } from '@/components/Spinner';
 import { getMainCategorySlug } from '@/helpers/projects';
+import { FilterContainer } from './filter/FilterContainer';
+import { SortContainer } from './sort/SortContainer';
+import { QFRoundStats } from './QFRoundStats';
+import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -69,6 +64,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 		mainCategories,
 		selectedMainCategory,
 		isQF,
+		isArchivedQF,
 		qfRounds,
 	} = useProjectsContext();
 
@@ -76,7 +72,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const pageNum = useRef(0);
 	const lastElementRef = useRef<HTMLDivElement>(null);
 	const isInfiniteScrolling = useRef(true);
-	const { isTablet, isMobile } = useDetectDevice();
 
 	router?.events?.on('routeChangeStart', () => setIsLoading(true));
 
@@ -107,7 +102,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 					variables: {
 						...variables,
 						...contextVariables,
-						mainCategory: getMainCategorySlug(selectedMainCategory),
+						mainCategory: isArchivedQF
+							? undefined
+							: getMainCategorySlug(selectedMainCategory),
+						qfRoundSlug: isArchivedQF ? router.query.slug : null,
 					},
 					fetchPolicy: 'network-only',
 				})
@@ -136,8 +134,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 		[
 			contextVariables,
 			filteredProjects.length,
+			isArchivedQF,
 			projects.length,
-			router.query?.slug,
+			router.query.slug,
+			selectedMainCategory,
 			user?.id,
 		],
 	);
@@ -169,56 +169,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const showLoadMore =
 		totalCount > filteredProjects?.length && !isInfiniteScrolling.current;
 
-	const handleSliceNumber = () => {
-		if (isMobile) {
-			return 1;
-		} else if (isTablet) {
-			return 2;
-		} else {
-			return 3;
-		}
-	};
-
-	const handleArraySlice = () => {
-		const sliceIndex = handleSliceNumber();
-		const firstSlice = filteredProjects.slice(0, sliceIndex);
-		const secondSlice = filteredProjects.slice(sliceIndex);
-		return [firstSlice, secondSlice];
-	};
-
 	const activeRound = qfRounds.find(round => round.isActive);
-
-	const renderProjects = () => {
-		const [firstSlice, secondSlice] = handleArraySlice();
-		if (filteredProjects?.length > 0) {
-			return (
-				<ProjectsWrapper>
-					<ProjectsContainer>
-						{firstSlice.map(project => (
-							<ProjectCard key={project.id} project={project} />
-						))}
-					</ProjectsContainer>
-					{isQF ? (
-						<QFProjectsMiddleBanner />
-					) : (
-						<ProjectsMiddleBanner />
-					)}
-					<ProjectsContainer>
-						{secondSlice.map(project => (
-							<ProjectCard key={project.id} project={project} />
-						))}
-					</ProjectsContainer>
-					<FloatingButtonReferral />
-				</ProjectsWrapper>
-			);
-		} else {
-			return isQF && !activeRound ? (
-				<QFNoResultBanner />
-			) : (
-				<ProjectsNoResults mainCategories={mainCategories} />
-			);
-		}
-	};
 
 	useEffect(() => {
 		const handleObserver = (entities: any) => {
@@ -254,41 +205,42 @@ const ProjectsIndex = (props: IProjectsView) => {
 			{isQF ? (
 				<>
 					<PassportBanner />
-					<QFProjectsBanner />
+					<ActiveQFProjectsBanner />
 				</>
+			) : isArchivedQF ? (
+				<ArchivedQFProjectsBanner />
 			) : (
 				<ProjectsBanner mainCategory={selectedMainCategory} />
 			)}
 			<Wrapper>
-				<FiltersContainer>
-					{!isTablet && !isMobile && <ProjectsFiltersDesktop />}
-					{isTablet && <ProjectsFiltersTablet />}
-					{isMobile && <ProjectsFiltersMobile />}
-				</FiltersContainer>
+				{isArchivedQF ? <QFRoundStats /> : <FilterContainer />}
 				<SortingContainer>
-					<Flex
-						justifyContent='space-between'
-						flexDirection={isMobile ? 'column' : 'row'}
-						gap={isMobile ? '16px' : undefined}
-						alignItems={isMobile ? 'stretch' : 'center'}
-					>
-						<Title>
-							{formatMessage({
-								id: 'page.projects.title.explore',
-							})}
-							<span>
-								{' '}
-								{totalCount}{' '}
-								{formatMessage({
-									id: 'page.projects.title.projects',
-								})}
-							</span>
-						</Title>
-						<ProjectsSortSelect />
-					</Flex>
+					<SortContainer totalCount={totalCount} />
 				</SortingContainer>
 				{isLoading && <Loader className='dot-flashing' />}
-				{renderProjects()}
+				{filteredProjects?.length > 0 ? (
+					<ProjectsWrapper>
+						<ProjectsContainer>
+							{isQF ? (
+								<QFProjectsMiddleBanner />
+							) : (
+								<ProjectsMiddleBanner />
+							)}
+							{filteredProjects.map((project, idx) => (
+								<ProjectCard
+									key={project.id}
+									project={project}
+									order={idx}
+								/>
+							))}
+						</ProjectsContainer>
+						<FloatingButtonReferral />
+					</ProjectsWrapper>
+				) : isQF && !activeRound ? (
+					<QFNoResultBanner />
+				) : (
+					<ProjectsNoResults mainCategories={mainCategories} />
+				)}
 				{totalCount > filteredProjects?.length && (
 					<div ref={lastElementRef} />
 				)}
@@ -346,21 +298,6 @@ const LoadingDotIcon = styled.div`
 	padding: 4px 37px;
 `;
 
-const FiltersContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	background: white;
-	position: relative;
-	padding: 32px 21px;
-	border-radius: 0;
-	margin-bottom: 24px;
-	gap: 16px;
-	${mediaQueries.tablet} {
-		margin-top: 32px;
-		border-radius: 16px;
-	}
-`;
-
 export const ProjectsWrapper = styled.div`
 	margin-bottom: 64px;
 `;
@@ -401,15 +338,6 @@ const Loading = styled(FlexCenter)`
 	background-color: gray;
 	transition: opacity 0.3s ease-in-out;
 	opacity: 0.9;
-`;
-
-const Title = styled(H5)`
-	font-weight: 700;
-	position: relative;
-
-	span {
-		color: ${neutralColors.gray[700]};
-	}
 `;
 
 const SortingContainer = styled.div`

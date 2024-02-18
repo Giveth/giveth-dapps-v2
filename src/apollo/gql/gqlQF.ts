@@ -4,6 +4,7 @@ export const FETCH_QF_ROUNDS_QUERY = `
 	query FetchQFRounds {
 		qfRounds {
 			id
+			slug
 			name
 			isActive
 			beginDate
@@ -24,5 +25,15 @@ export const FETCH_DOES_DONATED_PROJECT_IN_ROUND = gql`
 			qfRoundId: $qfRoundId
 			userId: $userId
 		)
+	}
+`;
+
+export const FETCH_QF_ROUND_STATS = gql`
+	query ($slug: String!) {
+		qfRoundStats(slug: $slug) {
+			uniqueDonors
+			allDonationsUsdValue
+			matchingPool
+		}
 	}
 `;

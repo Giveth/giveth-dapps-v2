@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import ProjectsSearchDesktop from '@/components/views/projects/ProjectsSearchDesktop';
-import ProjectsFiltersSwiper from '@/components/views/projects/ProjectsFiltersSwiper';
+import ProjectsFiltersSwiper from '@/components/views/projects/filter/ProjectsFiltersSwiper';
 import ProjectsSubCategories from '@/components/views/projects/ProjectsSubCategories';
 import {
 	FiltersSection,
@@ -11,10 +11,10 @@ import {
 	StyledLine,
 } from '@/components/views/projects/common.styled';
 import { useProjectsContext } from '@/context/projects.context';
-import ProjectsFiltersButton from '@/components/views/projects/ProjectsFiltersButton';
+import ProjectsFiltersButton from '@/components/views/projects/filter/ProjectsFiltersButton';
 
 const ProjectsFiltersDesktop = () => {
-	const { selectedMainCategory } = useProjectsContext();
+	const { selectedMainCategory, isQF } = useProjectsContext();
 	const [isSearchOpen, setIsSearchOpen] = useState(false);
 	const router = useRouter();
 
@@ -39,8 +39,8 @@ const ProjectsFiltersDesktop = () => {
 					<ProjectsFiltersButton />
 				</FilterAndSearchContainer>
 			</FiltersSection>
-			{selectedMainCategory && <StyledLine />}
-			<ProjectsSubCategories />
+			{!isQF && selectedMainCategory && <StyledLine />}
+			{!isQF && <ProjectsSubCategories />}
 		</>
 	);
 };

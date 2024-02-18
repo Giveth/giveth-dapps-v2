@@ -17,19 +17,40 @@ const moduleExports = withBundleAnalyzer({
 	// Your existing module.exports
 	reactStrictMode: true,
 	images: {
-		domains: [
-			'gateway.pinata.cloud',
-			'giveth.mypinata.cloud',
-			'static.tgbwidget.com',
-			'images.unsplash.com',
-			'd2m0e1zy3fwxmp.cloudfront.net', // temporal for CHANGE default image
-			'i.imgur.com',
-			'd2jyzh4ah9xf6q.cloudfront.net', // temporal for CHANGE default image
-			'static.tgb-preprod.com',
-			'tgb-preproduction-formio.s3.amazonaws.com',
-			'dashboard.tgb-preprod.com',
-			'cdn-images-1.medium.com',
-			'ipfs.io',
+		remotePatterns: [
+			{ protocol: 'https', port: '', hostname: 'gateway.pinata.cloud' },
+			{ protocol: 'https', port: '', hostname: 'giveth.mypinata.cloud' },
+			{ protocol: 'https', port: '', hostname: 'static.tgbwidget.com' },
+			{ protocol: 'https', port: '', hostname: 'images.unsplash.com' },
+			{
+				protocol: 'https',
+				port: '',
+				hostname: 'd2m0e1zy3fwxmp.cloudfront.net',
+			}, // temporal for CHANGE default image
+			{ protocol: 'https', port: '', hostname: 'i.imgur.com' },
+			{
+				protocol: 'https',
+				port: '',
+				hostname: 'd2jyzh4ah9xf6q.cloudfront.net',
+			}, // temporal for CHANGE default image
+			{ protocol: 'https', port: '', hostname: 'static.tgb-preprod.com' },
+			{
+				protocol: 'https',
+				port: '',
+				hostname: 'tgb-preproduction-formio.s3.amazonaws.com',
+			},
+			{
+				protocol: 'https',
+				port: '',
+				hostname: 'dashboard.tgb-preprod.com',
+			},
+			{
+				protocol: 'https',
+				port: '',
+				hostname: 'cdn-images-1.medium.com',
+			},
+			{ protocol: 'https', port: '', hostname: 'ipfs.io' },
+			{ protocol: 'https', port: '', hostname: '*.amazonaws.com' },
 		],
 	},
 	compiler: {
