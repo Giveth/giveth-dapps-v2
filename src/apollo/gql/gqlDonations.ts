@@ -123,6 +123,7 @@ export const CREATE_DONATION = gql`
 		$anonymous: Boolean
 		$referrerId: String
 		$safeTransactionId: String
+		$draftDonationId: Float
 	) {
 		createDonation(
 			transactionId: $transactionId
@@ -136,6 +137,7 @@ export const CREATE_DONATION = gql`
 			anonymous: $anonymous
 			referrerId: $referrerId
 			safeTransactionId: $safeTransactionId
+			draftDonationId: $draftDonationId
 		)
 	}
 `;
