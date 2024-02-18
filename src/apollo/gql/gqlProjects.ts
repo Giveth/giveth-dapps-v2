@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { isRecurringActive } from '@/configuration';
 
 export const PROJECT_CORE_FIELDS = gql`
 	fragment ProjectCoreFields on Project {
@@ -20,45 +21,81 @@ export const PROJECT_CORE_FIELDS = gql`
 	}
 `;
 
-export const PROJECT_CARD_FIELDS = gql`
-	${PROJECT_CORE_FIELDS}
-	fragment ProjectCardFields on Project {
-		...ProjectCoreFields
-		descriptionSummary
-		totalReactions
-		reaction {
-			id
-			userId
-		}
-		adminUser {
-			name
-			walletAddress
-			avatar
-		}
-		updatedAt
-		organization {
-			label
-		}
-		projectPower {
-			powerRank
-			totalPower
-			round
-		}
-		sumDonationValueUsdForActiveQfRound
-		sumDonationValueUsd
-		countUniqueDonorsForActiveQfRound
-		countUniqueDonors
-		estimatedMatching {
-			projectDonationsSqrtRootSum
-			allProjectsSum
-			matchingPool
-		}
-		anchorContracts {
-			address
-			isActive
-		}
-	}
-`;
+export const PROJECT_CARD_FIELDS = isRecurringActive
+	? gql`
+			${PROJECT_CORE_FIELDS}
+			fragment ProjectCardFields on Project {
+				...ProjectCoreFields
+				descriptionSummary
+				totalReactions
+				reaction {
+					id
+					userId
+				}
+				adminUser {
+					name
+					walletAddress
+					avatar
+				}
+				updatedAt
+				organization {
+					label
+				}
+				projectPower {
+					powerRank
+					totalPower
+					round
+				}
+				sumDonationValueUsdForActiveQfRound
+				sumDonationValueUsd
+				countUniqueDonorsForActiveQfRound
+				countUniqueDonors
+				estimatedMatching {
+					projectDonationsSqrtRootSum
+					allProjectsSum
+					matchingPool
+				}
+				anchorContracts {
+					address
+					isActive
+				}
+			}
+		`
+	: gql`
+			${PROJECT_CORE_FIELDS}
+			fragment ProjectCardFields on Project {
+				...ProjectCoreFields
+				descriptionSummary
+				totalReactions
+				reaction {
+					id
+					userId
+				}
+				adminUser {
+					name
+					walletAddress
+					avatar
+				}
+				updatedAt
+				organization {
+					label
+				}
+				projectPower {
+					powerRank
+					totalPower
+					round
+				}
+				sumDonationValueUsdForActiveQfRound
+				sumDonationValueUsd
+				countUniqueDonorsForActiveQfRound
+				countUniqueDonors
+				estimatedMatching {
+					projectDonationsSqrtRootSum
+					allProjectsSum
+					matchingPool
+				}
+			}
+		`;
 
 export const FETCH_ALL_PROJECTS = gql`
 	${PROJECT_CARD_FIELDS}
