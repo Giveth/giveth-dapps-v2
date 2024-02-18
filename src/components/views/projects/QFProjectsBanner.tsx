@@ -83,29 +83,49 @@ export const QFProjectsBanner = () => {
 				fill
 				alt='QF Banner'
 			/>
+			<ImgMiddleRight
+				src={'/images/banners/qf-round/mr.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='Middle Right'
+			/>
 			<ImgTopRight
-				src={'/images/banners/qf-round/top-right.png'}
+				src={'/images/banners/qf-round/tr1.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
+			<ImgTopRight1
+				src={'/images/banners/qf-round/tr2.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
+			<ImgTopMiddle
+				src={'/images/banners/qf-round/tm.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<ImgBottomRight
-				src={'/images/banners/qf-round/bottom-right.svg'}
+				src={'/images/banners/qf-round/br.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<ImgTopLeft
-				src={'/images/banners/qf-round/top-left.svg'}
+				src={'/images/banners/qf-round/tl.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<ImgBottomLeft
-				src={'/images/banners/qf-round/bottom-left.png'}
+				src={'/images/banners/qf-round/bl1.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
+			<ImgBottomLeft1
+				src={'/images/banners/qf-round/bl2.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<Container>
 				<Row>
-					<StyledCol xs={12} md={12}>
+					<StyledCol xs={12} md={6}>
 						<Title weight={700}>
 							{formatMessage({ id: 'label.quadratic_funding' })}
 						</Title>
@@ -129,14 +149,13 @@ export const QFProjectsBanner = () => {
 							</Desc>
 						)}
 					</StyledCol>
-					{/* <StyledCol xs={12} md={6}>
-						<Image
-							src={'/images/banners/qfSponsorsOP.png'}
+					<StyledCol xs={12} md={6}>
+						<Sponsor
+							src={'/images/banners/qf-round/sponsor.svg'}
 							style={{ objectFit: 'contain' }}
-							fill
 							alt='QF Banner'
 						/>
-					</StyledCol> */}
+					</StyledCol>
 				</Row>
 			</Container>
 		</BannerContainer>
@@ -166,27 +185,25 @@ const StyledCol = styled(Col)`
 	text-align: center;
 	align-items: center;
 	padding-top: 40px;
+	color: #6241d6;
 `;
 
 const Title = styled(H1)`
 	margin-top: 32px;
-	color: #fff;
 `;
 
-const Name = styled(H2)`
-	color: #fff;
-`;
+const Name = styled(H2)``;
 
 const Desc = styled(Flex)`
 	width: fit-content;
-	color: #fff;
-	border: 2px solid #d640f9;
+
+	border: 2px solid #6241d6;
 	border-radius: 20px;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
 	padding: 9px 20px;
-	background: #272526;
+	background: #ceff1a;
 	margin-top: 12px;
 	margin-bottom: 32px;
 `;
@@ -195,39 +212,86 @@ const ImgBase = styled.img`
 	z-index: 1 !important;
 	position: absolute;
 `;
-const ImgTopRight = styled(ImgBase)`
-	top: 40px;
+
+const ImgMiddleRight = styled(ImgBase)`
+	top: 0;
 	right: 0;
-	width: 200px;
-	${mediaQueries.tablet} {
-		width: 300px;
-	}
-	${mediaQueries.laptopS} {
-		width: 450px;
+	width: 620px;
+`;
+
+const ImgTopRight = styled(ImgBase)`
+	top: 0;
+	right: 120px;
+	width: 110px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
 	}
 `;
+
+const ImgTopRight1 = styled(ImgBase)`
+	top: 0;
+	right: 0;
+	width: 180px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
+	}
+`;
+
+const ImgTopMiddle = styled(ImgBase)`
+	top: 20px;
+	right: 40%;
+	width: 110px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
+	}
+`;
+
 const ImgBottomRight = styled(ImgBase)`
-	right: 10px;
+	right: 0;
 	bottom: 0;
-	${mediaQueries.tablet} {
-		right: 100px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
 	}
 `;
 const ImgTopLeft = styled(ImgBase)`
 	top: 0;
-	left: 10px;
-	width: 100px;
-	${mediaQueries.tablet} {
-		left: 130px;
-		width: 180px;
+	left: 64px;
+	width: 127px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
 	}
 `;
 
 const ImgBottomLeft = styled(ImgBase)`
 	left: 0;
 	bottom: 0;
-	width: 150px;
+	width: 110px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
+	}
+`;
+
+const ImgBottomLeft1 = styled(ImgBase)`
+	left: 48px;
+	bottom: 0;
+	width: 100px;
+	display: none;
+	${mediaQueries.mobileL} {
+		display: block;
+	}
+`;
+
+const Sponsor = styled(ImgBase)`
+	width: 232px;
+
 	${mediaQueries.laptopS} {
-		width: 200px;
+		right: 100px;
+		margin-top: 80px;
 	}
 `;
