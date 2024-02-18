@@ -15,6 +15,11 @@ import {
 	Name,
 	Desc,
 	Title,
+	ImgBottomLeft1,
+	ImgMiddleRight,
+	ImgTopMiddle,
+	ImgTopRight1,
+	Sponsor,
 } from './common';
 
 enum ERoundStatus {
@@ -83,29 +88,49 @@ export const ActiveQFProjectsBanner = () => {
 				fill
 				alt='QF Banner'
 			/>
+			<ImgMiddleRight
+				src={'/images/banners/qf-round/mr.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='Middle Right'
+			/>
 			<ImgTopRight
-				src={'/images/banners/qf-round/top-right.png'}
+				src={'/images/banners/qf-round/tr1.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
+			<ImgTopRight1
+				src={'/images/banners/qf-round/tr2.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
+			<ImgTopMiddle
+				src={'/images/banners/qf-round/tm.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<ImgBottomRight
-				src={'/images/banners/qf-round/bottom-right.svg'}
+				src={'/images/banners/qf-round/br.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<ImgTopLeft
-				src={'/images/banners/qf-round/top-left.svg'}
+				src={'/images/banners/qf-round/tl.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<ImgBottomLeft
-				src={'/images/banners/qf-round/bottom-left.png'}
+				src={'/images/banners/qf-round/bl1.svg'}
+				style={{ objectFit: 'cover' }}
+				alt='QF OP'
+			/>
+			<ImgBottomLeft1
+				src={'/images/banners/qf-round/bl2.svg'}
 				style={{ objectFit: 'cover' }}
 				alt='QF OP'
 			/>
 			<Container>
 				<Row>
-					<StyledCol xs={12} md={12}>
+					<StyledCol xs={12} md={6}>
 						<Title weight={700}>
 							{formatMessage({ id: 'label.quadratic_funding' })}
 						</Title>
@@ -129,14 +154,13 @@ export const ActiveQFProjectsBanner = () => {
 							</Desc>
 						)}
 					</StyledCol>
-					{/* <StyledCol xs={12} md={6}>
-						<Image
-							src={'/images/banners/qfSponsorsOP.png'}
+					<StyledCol xs={12} md={6}>
+						<Sponsor
+							src={'/images/banners/qf-round/sponsor.svg'}
 							style={{ objectFit: 'contain' }}
-							fill
 							alt='QF Banner'
 						/>
-					</StyledCol> */}
+					</StyledCol>
 				</Row>
 			</Container>
 		</BannerContainer>
