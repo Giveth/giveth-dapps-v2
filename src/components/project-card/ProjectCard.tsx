@@ -33,6 +33,7 @@ import {
 	hasActiveRound,
 } from '@/helpers/qf';
 import { formatDonation } from '@/helpers/number';
+import { RoundNotStartedModal } from './RoundNotStartedModal';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -63,6 +64,7 @@ const ProjectCard = (props: IProjectCard) => {
 		estimatedMatching,
 	} = project;
 	const [isHover, setIsHover] = useState(false);
+	const [showHintModal, setShowHintModal] = useState(false);
 	const orgLabel = organization?.label;
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
@@ -85,6 +87,7 @@ const ProjectCard = (props: IProjectCard) => {
 			if (activeRound) return;
 			e.preventDefault();
 			e.stopPropagation();
+			setShowHintModal(true);
 		}
 	};
 
@@ -267,6 +270,13 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				</ActionButtons>
 			</CardBody>
+			{showHintModal && qfRounds && (
+				<RoundNotStartedModal
+					setShowModal={setShowHintModal}
+					destination={projectLink}
+					qfRounds={qfRounds}
+				/>
+			)}
 		</Wrapper>
 		// </Link>
 	);
