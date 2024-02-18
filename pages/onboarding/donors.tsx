@@ -1,12 +1,10 @@
-import Head from 'next/head';
 import OnboardingDonorIndex from '@/components/views/landings/onboarding/donor';
-
+import { GeneralMetatags } from '@/components/Metatag';
+import { donorOnboardingMetaTags } from 'src/content/metatags';
 const OnboardingDonorRoute = () => {
 	return (
 		<>
-			<Head>
-				<title>Giveth | Onboarding Donors</title>
-			</Head>
+			<GeneralMetatags info={donorOnboardingMetaTags} />
 			<OnboardingDonorIndex />
 		</>
 	);
