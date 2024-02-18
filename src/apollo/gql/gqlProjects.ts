@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { isRecurringActive } from '@/configuration';
 
 export const PROJECT_CORE_FIELDS = gql`
 	fragment ProjectCoreFields on Project {
@@ -20,45 +21,81 @@ export const PROJECT_CORE_FIELDS = gql`
 	}
 `;
 
-export const PROJECT_CARD_FIELDS = gql`
-	${PROJECT_CORE_FIELDS}
-	fragment ProjectCardFields on Project {
-		...ProjectCoreFields
-		descriptionSummary
-		totalReactions
-		reaction {
-			id
-			userId
-		}
-		adminUser {
-			name
-			walletAddress
-			avatar
-		}
-		updatedAt
-		organization {
-			label
-		}
-		projectPower {
-			powerRank
-			totalPower
-			round
-		}
-		sumDonationValueUsdForActiveQfRound
-		sumDonationValueUsd
-		countUniqueDonorsForActiveQfRound
-		countUniqueDonors
-		estimatedMatching {
-			projectDonationsSqrtRootSum
-			allProjectsSum
-			matchingPool
-		}
-		anchorContracts {
-			address
-			isActive
-		}
-	}
-`;
+export const PROJECT_CARD_FIELDS = isRecurringActive
+	? gql`
+			${PROJECT_CORE_FIELDS}
+			fragment ProjectCardFields on Project {
+				...ProjectCoreFields
+				descriptionSummary
+				totalReactions
+				reaction {
+					id
+					userId
+				}
+				adminUser {
+					name
+					walletAddress
+					avatar
+				}
+				updatedAt
+				organization {
+					label
+				}
+				projectPower {
+					powerRank
+					totalPower
+					round
+				}
+				sumDonationValueUsdForActiveQfRound
+				sumDonationValueUsd
+				countUniqueDonorsForActiveQfRound
+				countUniqueDonors
+				estimatedMatching {
+					projectDonationsSqrtRootSum
+					allProjectsSum
+					matchingPool
+				}
+				anchorContracts {
+					address
+					isActive
+				}
+			}
+		`
+	: gql`
+			${PROJECT_CORE_FIELDS}
+			fragment ProjectCardFields on Project {
+				...ProjectCoreFields
+				descriptionSummary
+				totalReactions
+				reaction {
+					id
+					userId
+				}
+				adminUser {
+					name
+					walletAddress
+					avatar
+				}
+				updatedAt
+				organization {
+					label
+				}
+				projectPower {
+					powerRank
+					totalPower
+					round
+				}
+				sumDonationValueUsdForActiveQfRound
+				sumDonationValueUsd
+				countUniqueDonorsForActiveQfRound
+				countUniqueDonors
+				estimatedMatching {
+					projectDonationsSqrtRootSum
+					allProjectsSum
+					matchingPool
+				}
+			}
+		`;
 
 export const FETCH_ALL_PROJECTS = gql`
 	${PROJECT_CARD_FIELDS}
@@ -92,146 +129,279 @@ export const FETCH_ALL_PROJECTS = gql`
 	}
 `;
 
-export const FETCH_PROJECT_BY_SLUG = gql`
-	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
-		projectBySlug(
-			slug: $slug
-			connectedWalletUserId: $connectedWalletUserId
-		) {
-			__typename
-			id
-			title
-			image
-			slug
-			verified
-			totalDonations
-			description
-			addresses {
-				address
-				isRecipient
-				networkId
-				chainType
-			}
-			totalProjectUpdates
-			creationDate
-			reaction {
-				id
-				userId
-			}
-			totalReactions
-			categories {
-				name
-				value
-				mainCategory {
+export const FETCH_PROJECT_BY_SLUG = isRecurringActive
+	? gql`
+			query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
+				projectBySlug(
+					slug: $slug
+					connectedWalletUserId: $connectedWalletUserId
+				) {
+					__typename
+					id
 					title
+					image
+					slug
+					verified
+					totalDonations
+					description
+					addresses {
+						address
+						isRecipient
+						networkId
+						chainType
+					}
+					totalProjectUpdates
+					creationDate
+					reaction {
+						id
+						userId
+					}
+					totalReactions
+					categories {
+						name
+						value
+						mainCategory {
+							title
+						}
+					}
+					adminUser {
+						id
+						name
+						walletAddress
+						avatar
+					}
+					listed
+					status {
+						id
+						name
+					}
+					organization {
+						name
+						label
+						supportCustomTokens
+					}
+					projectVerificationForm {
+						status
+					}
+					verificationFormStatus
+					projectPower {
+						powerRank
+						totalPower
+						round
+					}
+					projectFuturePower {
+						totalPower
+						powerRank
+						round
+					}
+					givbackFactor
+					sumDonationValueUsdForActiveQfRound
+					sumDonationValueUsd
+					countUniqueDonorsForActiveQfRound
+					countUniqueDonors
+					estimatedMatching {
+						projectDonationsSqrtRootSum
+						allProjectsSum
+						matchingPool
+					}
+					qfRounds {
+						id
+						name
+						isActive
+						beginDate
+						endDate
+						eligibleNetworks
+						maximumReward
+					}
+					campaigns {
+						id
+						title
+						# description
+						# type
+						# photo
+						# video
+						# videoPreview
+						# slug
+						# isActive
+						# order
+						# landingLink
+						# filterFields
+						# sortingField
+						# createdAt
+						# updatedAt
+					}
+					anchorContracts {
+						address
+						isActive
+					}
 				}
 			}
-			adminUser {
-				id
-				name
-				walletAddress
-				avatar
+		`
+	: gql`
+			query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
+				projectBySlug(
+					slug: $slug
+					connectedWalletUserId: $connectedWalletUserId
+				) {
+					__typename
+					id
+					title
+					image
+					slug
+					verified
+					totalDonations
+					description
+					addresses {
+						address
+						isRecipient
+						networkId
+						chainType
+					}
+					totalProjectUpdates
+					creationDate
+					reaction {
+						id
+						userId
+					}
+					totalReactions
+					categories {
+						name
+						value
+						mainCategory {
+							title
+						}
+					}
+					adminUser {
+						id
+						name
+						walletAddress
+						avatar
+					}
+					listed
+					status {
+						id
+						name
+					}
+					organization {
+						name
+						label
+						supportCustomTokens
+					}
+					projectVerificationForm {
+						status
+					}
+					verificationFormStatus
+					projectPower {
+						powerRank
+						totalPower
+						round
+					}
+					projectFuturePower {
+						totalPower
+						powerRank
+						round
+					}
+					givbackFactor
+					sumDonationValueUsdForActiveQfRound
+					sumDonationValueUsd
+					countUniqueDonorsForActiveQfRound
+					countUniqueDonors
+					estimatedMatching {
+						projectDonationsSqrtRootSum
+						allProjectsSum
+						matchingPool
+					}
+					qfRounds {
+						id
+						name
+						isActive
+						beginDate
+						endDate
+						eligibleNetworks
+						maximumReward
+					}
+					campaigns {
+						id
+						title
+						# description
+						# type
+						# photo
+						# video
+						# videoPreview
+						# slug
+						# isActive
+						# order
+						# landingLink
+						# filterFields
+						# sortingField
+						# createdAt
+						# updatedAt
+					}
+				}
 			}
-			listed
-			status {
-				id
-				name
-			}
-			organization {
-				name
-				label
-				supportCustomTokens
-			}
-			projectVerificationForm {
-				status
-			}
-			verificationFormStatus
-			projectPower {
-				powerRank
-				totalPower
-				round
-			}
-			projectFuturePower {
-				totalPower
-				powerRank
-				round
-			}
-			givbackFactor
-			sumDonationValueUsdForActiveQfRound
-			sumDonationValueUsd
-			countUniqueDonorsForActiveQfRound
-			countUniqueDonors
-			estimatedMatching {
-				projectDonationsSqrtRootSum
-				allProjectsSum
-				matchingPool
-			}
-			qfRounds {
-				id
-				name
-				isActive
-				beginDate
-				endDate
-				eligibleNetworks
-				maximumReward
-			}
-			campaigns {
-				id
-				title
-				# description
-				# type
-				# photo
-				# video
-				# videoPreview
-				# slug
-				# isActive
-				# order
-				# landingLink
-				# filterFields
-				# sortingField
-				# createdAt
-				# updatedAt
-			}
-			anchorContracts {
-				address
-				isActive
-			}
-		}
-	}
-`;
+		`;
 
-export const FETCH_PROJECT_BY_ID = gql`
-	query ProjectById($id: Float!) {
-		projectById(id: $id) {
-			id
-			title
-			image
-			description
-			addresses {
-				address
-				isRecipient
-				networkId
-				chainType
+export const FETCH_PROJECT_BY_ID = isRecurringActive
+	? gql`
+			query ProjectById($id: Float!) {
+				projectById(id: $id) {
+					id
+					title
+					image
+					description
+					addresses {
+						address
+						isRecipient
+						networkId
+						chainType
+					}
+					impactLocation
+					categories {
+						name
+						value
+					}
+					adminUser {
+						walletAddress
+					}
+					status {
+						name
+					}
+					slug
+					anchorContracts {
+						address
+						isActive
+					}
+				}
 			}
-			impactLocation
-			categories {
-				name
-				value
+		`
+	: gql`
+			query ProjectById($id: Float!) {
+				projectById(id: $id) {
+					id
+					title
+					image
+					description
+					addresses {
+						address
+						isRecipient
+						networkId
+						chainType
+					}
+					impactLocation
+					categories {
+						name
+						value
+					}
+					adminUser {
+						walletAddress
+					}
+					status {
+						name
+					}
+					slug
+				}
 			}
-			adminUser {
-				walletAddress
-			}
-			status {
-				name
-			}
-			slug
-			anchorContracts {
-				address
-				isActive
-			}
-		}
-	}
-`;
+		`;
 
 export const FETCH_GIVETH_PROJECT_BY_ID = gql`
 	query ProjectById($id: Float!) {
