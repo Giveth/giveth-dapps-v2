@@ -21,6 +21,7 @@ export const useCreateEvmDonation = () => {
 	const [donationSaved, setDonationSaved] = useState<boolean>(false);
 	const [donationMinted, setDonationMinted] = useState<boolean>(false);
 	const [donationId, setDonationId] = useState<number>(0);
+	const [draftDonationId, setDraftDonationId] = useState(0);
 	const [resolveState, setResolveState] = useState<(() => void) | null>(null);
 	const [createDonationProps, setCreateDonationProps] =
 		useState<ICreateDonation>();
@@ -60,6 +61,7 @@ export const useCreateEvmDonation = () => {
 
 	const handleSaveDonation = async (
 		txHash: Address,
+		draftDonationId: number,
 		props: ICreateDonation,
 	) => {
 		let transaction, safeTransaction;
@@ -99,6 +101,7 @@ export const useCreateEvmDonation = () => {
 					symbol: token.symbol,
 					setFailedModalType,
 					safeTransactionId: txHash,
+					draftDonationId,
 				};
 			} else if (!isSafeEnv && transaction) {
 				donationData = {
@@ -114,6 +117,7 @@ export const useCreateEvmDonation = () => {
 					symbol: token.symbol,
 					setFailedModalType,
 					safeTransactionId: null,
+					draftDonationId,
 				};
 			} else return;
 
@@ -199,6 +203,7 @@ export const useCreateEvmDonation = () => {
 				},
 			});
 			console.log('draftDonationData', draftDonationData);
+			const draftDonationId = draftDonationData.createDraftDonation;
 			const hash = await sendEvmTransaction(
 				transactionObj,
 				address,
@@ -208,7 +213,7 @@ export const useCreateEvmDonation = () => {
 			console.log('HERE IS THE hash', hash);
 			if (!hash) return { isSaved: false, txHash: '', isMinted: false };
 			setTxHash(hash);
-			const id = await handleSaveDonation(hash!, props);
+			const id = await handleSaveDonation(hash!, draftDonationId, props);
 			// Wait for the status to become 'success'
 			await new Promise(resolve => {
 				if (status === 'success') {
