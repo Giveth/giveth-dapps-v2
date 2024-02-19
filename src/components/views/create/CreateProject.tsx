@@ -49,9 +49,9 @@ import AddressInterface from './AddressInterface';
 import { ChainType, NonEVMChain } from '@/types/config';
 import StorageLabel from '@/lib/localStorage';
 import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
-import ProjectTip from './ProjectTips/ProjectTip';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { ECreateProjectSections, TInputs, EInputs } from './types';
+import { ProGuide } from './ProGuide';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -468,7 +468,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					</FormProvider>
 				</Col>
 				<Col lg={4} md={12}>
-					<ProjectTip activeSection={activeProjectSection} />
+					<ProGuide activeSection={activeProjectSection} />
 				</Col>
 			</Row>
 			{showAlloProtocolModal && addedProjectState && (
