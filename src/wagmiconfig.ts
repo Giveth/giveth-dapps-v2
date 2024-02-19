@@ -1,8 +1,7 @@
-import { defaultWagmiConfig } from '@web3modal/wagmi/react/config';
-import { cookieStorage, createStorage, http } from 'wagmi';
-import { safe } from '@wagmi/connectors';
+import { cookieStorage, createConfig, createStorage } from 'wagmi';
+import { safe, walletConnect } from '@wagmi/connectors';
 
-import { createClient } from 'viem';
+import { createClient, http } from 'viem';
 import configuration from './configuration';
 
 // export const wagmiConfig = createConfig({
@@ -72,25 +71,19 @@ const chains = configuration.EVM_CHAINS;
 const classicNetworkNumber = configuration.CLASSIC_NETWORK_NUMBER;
 
 // Create wagmiConfig
-export const wagmiConfig = defaultWagmiConfig({
+export const wagmiConfig = createConfig({
 	chains: chains, // required
 	connectors: [
-		safe({
-			allowedDomains: [/app.safe.global$/],
-			debug: false,
+		safe({ allowedDomains: [/app.safe.global$/], debug: false }),
+		walletConnect({
+			projectId,
+			metadata,
 		}),
 	],
-	projectId, // required
-	metadata, // required
 	ssr: true,
 	storage: createStorage({
 		storage: cookieStorage,
 	}),
-	enableWalletConnect: true, // Optional - true by default
-	enableInjected: true, // Optional - true by default
-	enableEIP6963: true, // Optional - true by default
-	enableCoinbase: false, // Optional - true by default
-	// ...wagmiOptions, // Optional - Override createConfig parameters
 	client({ chain }) {
 		return createClient({ chain, transport: http() });
 	},
