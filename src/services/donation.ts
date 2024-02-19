@@ -20,7 +20,6 @@ const SAVE_DONATION_ITERATIONS = 5;
 export interface IOnTxHash extends ICreateDonation {
 	txHash?: string | null;
 	nonce?: number | null;
-	draftDonationId?: number;
 	chainId: number;
 	safeTransactionId?: string | null;
 }
