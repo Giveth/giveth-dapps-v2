@@ -350,11 +350,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							? formatMessage({ id: 'label.project_details' })
 							: formatMessage({ id: 'label.create_a_project' })}
 					</Title>
-					{/* {isSmallScreen && (
-						<Guidelines
-							setShowGuidelineModal={setShowGuidelineModal}
-						/>
-					)} */}
 				</div>
 
 				<FormProvider {...formMethods}>
@@ -489,11 +484,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			</CreateContainer>
 			{!isSmallScreen && (
 				<ProjectTip activeSection={activeProjectSection} />
-				// <Guidelines
-				// 	isLaptop
-				// 	setShowGuidelineModal={setShowGuidelineModal}
-				// />
-				// adsasd
 			)}
 
 			{showAlloProtocolModal && addedProjectState && (
