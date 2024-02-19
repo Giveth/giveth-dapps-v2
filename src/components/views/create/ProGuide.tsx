@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import ProjectTip, { IProjectTipProps } from './ProjectTips/ProjectTip';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { Flex } from '@/components/styled-components/Flex';
-import { ProjectScoreCard } from './score/projectScoreCard';
+import { ProjectScoreCard } from './score/ProjectScoreCard';
 
 interface IProGuideProps extends IProjectTipProps {}
 

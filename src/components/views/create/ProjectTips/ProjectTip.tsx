@@ -1,4 +1,4 @@
-import { H6, IconBulbOutline24 } from '@giveth/ui-design-system';
+import { H6, IconBulbOutline32 } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 import DefaultTip from './DefaultTip';
 import TitleTip from './TitleTip';
@@ -55,8 +55,8 @@ const ProjectTip = ({ activeSection }: IProjectTipProps) => {
 	return (
 		<Card>
 			<Flex gap='16px'>
-				<IconBulbOutline24 />
-				<H6>{contentMap[activeSection].title}</H6>
+				<IconBulbOutline32 />
+				<H6 weight={700}>{contentMap[activeSection].title}</H6>
 			</Flex>
 			<br />
 			{contentMap[activeSection].component}
