@@ -1,13 +1,6 @@
-import { neutralColors } from '@giveth/ui-design-system';
 import React from 'react';
-import styled from 'styled-components';
+import { Card } from '../ProGuide.sc';
 
 export const ProjectScoreCard = () => {
-	return <Container>projectScoreCard</Container>;
+	return <Card>projectScoreCard</Card>;
 };
-
-const Container = styled.div`
-	padding: 24px;
-	background-color: ${neutralColors.gray[100]};
-	border-radius: 16px;
-`;
