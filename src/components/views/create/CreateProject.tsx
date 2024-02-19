@@ -75,7 +75,7 @@ export enum ECreateProjectSections {
 	name = 'name',
 	description = 'description',
 	categories = 'categories',
-	location = 'impactLocation',
+	location = 'location',
 	image = 'image',
 	addresses = 'addresses',
 }
