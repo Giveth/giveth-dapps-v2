@@ -43,7 +43,7 @@ export const useIntersectionObserver = <T extends HTMLElement = HTMLDivElement>(
 				observer.unobserve(ref.current);
 			}
 		};
-	}, [onVisible, root, rootMargin, threshold, delay]);
+	}, [root, rootMargin, threshold, delay]);
 
 	return ref;
 };
