@@ -1,12 +1,11 @@
-import Head from 'next/head';
 import OnboardingMainIndex from '@/components/views/landings/onboarding/main';
+import { GeneralMetatags } from '@/components/Metatag';
+import { generalOnboardingMetaTags } from 'src/content/metatags';
 
 const OnboardingRoute = () => {
 	return (
 		<>
-			<Head>
-				<title>Giveth | Onboarding Landing Page</title>
-			</Head>
+			<GeneralMetatags info={generalOnboardingMetaTags} />
 			<OnboardingMainIndex />
 		</>
 	);

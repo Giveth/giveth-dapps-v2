@@ -1,12 +1,11 @@
-import Head from 'next/head';
 import OnboardingGIVeconomyIndex from '@/components/views/landings/onboarding/GIVeconomy';
+import { GeneralMetatags } from '@/components/Metatag';
+import { giveconomyOnboardingMetaTags } from 'src/content/metatags';
 
 const OnboardingGIVeconomyRoute = () => {
 	return (
 		<>
-			<Head>
-				<title>Giveth | Onboarding GIVeconomy</title>
-			</Head>
+			<GeneralMetatags info={giveconomyOnboardingMetaTags} />
 			<OnboardingGIVeconomyIndex />
 		</>
 	);

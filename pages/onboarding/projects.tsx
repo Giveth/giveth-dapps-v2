@@ -1,12 +1,11 @@
-import Head from 'next/head';
 import OnboardingOwnerIndex from '@/components/views/landings/onboarding/project-owner';
+import { GeneralMetatags } from '@/components/Metatag';
+import { projectOnboardingMetaTags } from 'src/content/metatags';
 
 const OnboardingOwnerRoute = () => {
 	return (
 		<>
-			<Head>
-				<title>Giveth | Onboarding Project Owner</title>
-			</Head>
+			<GeneralMetatags info={projectOnboardingMetaTags} />
 			<OnboardingOwnerIndex />
 		</>
 	);

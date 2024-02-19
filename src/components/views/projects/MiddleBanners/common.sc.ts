@@ -1,4 +1,4 @@
-import { H3, Lead } from '@giveth/ui-design-system';
+import { H3, Lead, mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Arc } from '@/components/styled-components/Arc';
 import { Flex } from '@/components/styled-components/Flex';
@@ -6,11 +6,22 @@ import { Flex } from '@/components/styled-components/Flex';
 export const Box = styled(Flex)`
 	position: relative;
 	background-color: white;
-	margin: 20px 0px;
+	/* margin: 20px 0px; */
 	/* padding: 95px 190px; */
 	padding: 7% 10%;
 	overflow: hidden;
 	z-index: 1;
+	grid-row: 2;
+	grid-column: 1;
+	grid-column-start: 1;
+	grid-column-end: 2;
+	${mediaQueries.tablet} {
+		grid-column-end: 3;
+	}
+
+	${mediaQueries.laptopL} {
+		grid-column-end: 4;
+	}
 `;
 
 interface IColor {
