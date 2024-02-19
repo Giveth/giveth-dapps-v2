@@ -40,7 +40,6 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView, slugToSuccessView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
 import config, { isRecurringActive } from '@/configuration';
-import useDetectDevice from '@/hooks/useDetectDevice';
 import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
@@ -305,9 +304,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			dispatch(setShowFooter(true));
 		};
 	}, []);
-
-	const { isTablet, isMobile } = useDetectDevice();
-	const isSmallScreen = isTablet || isMobile;
 
 	return (
 		<Container>
