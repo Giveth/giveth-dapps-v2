@@ -15,7 +15,7 @@ const YourApp = () => {
 			</div>
 			{failedModalType && (
 				<FailedDonation
-					txUrl={'0x0112121'}
+					txUrl={'0x01121212'}
 					setShowModal={() => setFailedModalType(undefined)}
 					type={failedModalType}
 				/>

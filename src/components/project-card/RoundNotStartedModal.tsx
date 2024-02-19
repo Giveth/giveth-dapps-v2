@@ -22,7 +22,9 @@ export const RoundNotStartedModal: FC<IRoundNotStartedModalProps> = ({
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
-	const beginDate = qfRounds.find(r => r.isActive)?.beginDate;
+	const activeRound = qfRounds.find(r => r.isActive);
+	const beginDate = activeRound?.beginDate;
+	const name = activeRound?.name;
 
 	return (
 		<Modal
@@ -33,7 +35,7 @@ export const RoundNotStartedModal: FC<IRoundNotStartedModalProps> = ({
 		>
 			<ModalContainer>
 				<Desc>
-					The Alpha round hasn&apos;t started yet. It starts on{' '}
+					The {name} hasn&apos;t started yet. It starts on{' '}
 					{beginDate ? formatDate(new Date(beginDate)) : '--'}. You
 					can donate now, but your donation will not be eligible for
 					matching.
