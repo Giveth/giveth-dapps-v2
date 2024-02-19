@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { fetchEnsAddress, fetchTransaction } from '@wagmi/core';
 import { type Address, useNetwork, useWaitForTransaction } from 'wagmi';
@@ -21,13 +21,13 @@ export const useCreateEvmDonation = () => {
 	const [donationSaved, setDonationSaved] = useState<boolean>(false);
 	const [donationMinted, setDonationMinted] = useState<boolean>(false);
 	const [donationId, setDonationId] = useState<number>(0);
-	const [draftDonationId, setDraftDonationId] = useState(0);
 	const [resolveState, setResolveState] = useState<(() => void) | null>(null);
 	const [createDonationProps, setCreateDonationProps] =
 		useState<ICreateDonation>();
 	const { chain } = useNetwork();
 	const chainId = chain?.id;
 	const isSafeEnv = useIsSafeEnvironment();
+	const draftDonationIdRef = useRef(0);
 
 	const { status } = useWaitForTransaction({
 		hash: txHash,
@@ -41,7 +41,11 @@ export const useCreateEvmDonation = () => {
 				);
 			}
 			createDonationProps &&
-				handleSaveDonation(data.transaction.hash, createDonationProps);
+				handleSaveDonation(
+					data.transaction.hash,
+					draftDonationIdRef.current,
+					createDonationProps,
+				);
 		},
 		async onError(error) {
 			// Manage case for multisigs
@@ -204,6 +208,7 @@ export const useCreateEvmDonation = () => {
 			});
 			console.log('draftDonationData', draftDonationData);
 			const draftDonationId = draftDonationData.createDraftDonation;
+			draftDonationIdRef.current = draftDonationId;
 			const hash = await sendEvmTransaction(
 				transactionObj,
 				address,
