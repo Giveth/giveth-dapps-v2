@@ -35,7 +35,7 @@ import { ISolanaSignToGetToken } from '@/features/user/user.types';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { ChainType } from '@/types/config';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 interface IProps extends IModal {
 	callback?: () => void;

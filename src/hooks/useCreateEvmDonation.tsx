@@ -14,7 +14,7 @@ import { getTxFromSafeTxId } from '@/lib/safe';
 import { retryFetchEVMTransaction } from '@/lib/transaction';
 import { useIsSafeEnvironment } from './useSafeAutoConnect';
 import { postRequest } from '@/helpers/requests';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 import { client } from '@/apollo/apolloClient';
 import { CREATE_DRAFT_DONATION } from '@/apollo/gql/gqlDonations';
 

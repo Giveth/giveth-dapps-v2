@@ -21,7 +21,7 @@ import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
 import { MintSteps } from './MintSteps';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 export enum MintStep {
 	APPROVE,
 	APPROVING,

@@ -6,7 +6,7 @@ import { readContract } from '@wagmi/core';
 import config from '@/configuration';
 import { AddressZero } from '@/lib/constants/constants';
 import { ChainType } from '@/types/config';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 export const fetchPrice = async (
 	chainId: number | ChainType,

@@ -20,7 +20,7 @@ import { StreamInfo } from './StreamInfo';
 import { ModifySection } from './ModifySection';
 import { ModifyWrapper, Wrapper } from './common.sc';
 import { EModifySuperTokenSteps, actionButtonLabel } from './common';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {

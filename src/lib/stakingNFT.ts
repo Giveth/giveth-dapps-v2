@@ -7,7 +7,7 @@ import { LiquidityPosition } from '@/types/nfts';
 import { uniswapV3Config } from './contracts';
 import { StakeState } from '@/lib/staking';
 import UNISWAP_V3_STAKER_ABI from '@/artifacts/uniswap_v3_staker.json';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 export const transfer = async (
 	tokenId: number | undefined,

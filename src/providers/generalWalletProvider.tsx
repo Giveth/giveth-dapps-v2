@@ -33,7 +33,7 @@ import {
 } from '@/lib/helpers';
 import { ChainType } from '@/types/config';
 import { signOut } from '@/features/user/user.thunks';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 const { SOLANA_CONFIG } = config;
 const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;

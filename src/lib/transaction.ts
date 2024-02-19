@@ -3,7 +3,7 @@ import { waitForTransactionReceipt } from '@wagmi/core';
 import { getTransaction } from '@wagmi/core';
 import { Address } from 'viem';
 import { Connection } from '@solana/web3.js';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 const maxAttempts = 200; // keeping it high as gnosis safe takes a while to confirm and processing

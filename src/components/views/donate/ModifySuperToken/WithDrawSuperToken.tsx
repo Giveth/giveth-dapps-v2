@@ -17,7 +17,7 @@ import { Item } from '../RecurringDonationModal/Item';
 import { RunOutInfo } from '../RunOutInfo';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 
 interface IWithDrawSuperTokenProps extends IModifySuperTokenInnerModalProps {

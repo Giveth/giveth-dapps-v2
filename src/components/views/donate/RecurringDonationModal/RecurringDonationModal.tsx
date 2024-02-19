@@ -20,7 +20,7 @@ import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { RunOutInfo } from '../RunOutInfo';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 import { ChainType } from '@/types/config';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 interface IRecurringDonationModalProps extends IModal {

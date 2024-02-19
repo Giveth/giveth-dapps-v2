@@ -22,7 +22,7 @@ import { ClaimWithdrawalStatus } from './ClaimWithdrawalStatus';
 import { formatTxLink } from '@/lib/helpers';
 import { ChainType } from '@/types/config';
 import { ClaimTransactionState } from './type';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 interface IClaimWithdrawalModal extends IModal {
 	selectedStream: ITokenWithBalance;
 	project: IProject;

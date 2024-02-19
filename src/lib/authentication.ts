@@ -1,7 +1,7 @@
 import { Header, Payload, SIWS } from '@web3auth/sign-in-with-solana';
 import { signMessage } from '@wagmi/core';
 import config from '@/configuration';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 let domain = 'giveth.io';
 export const fetchNonce = async (): Promise<string> => {

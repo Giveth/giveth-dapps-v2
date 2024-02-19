@@ -19,7 +19,7 @@ import config from '@/configuration';
 import StorageLabel from '@/lib/localStorage';
 import { getTokens } from '@/helpers/user';
 import { createSiweMessage, signWithEvm } from '@/lib/authentication';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 const saveTokenToLocalstorage = (address: string, token: string) => {
 	const _address = address.toLowerCase();

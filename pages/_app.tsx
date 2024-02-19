@@ -14,7 +14,7 @@ import Script from 'next/script';
 // import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 // import { walletConnectProvider } from '@web3modal/wagmi';
 import { WagmiProvider } from 'wagmi';
-import { projectId, wagmiConfig } from '@/wagmiconfig';
+import { projectId, wagmiConfig } from '@/wagmiConfigs';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';

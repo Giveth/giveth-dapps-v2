@@ -22,7 +22,7 @@ import { gToast, ToastType } from '@/components/toasts';
 import config, { isProduction } from '@/configuration';
 import { AddressZero } from './constants/constants';
 import { ChainType, NonEVMChain } from '@/types/config';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 declare let window: any;
 interface TransactionParams {

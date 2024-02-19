@@ -6,7 +6,7 @@ import { getPassports } from '@/helpers/passport';
 import { getRequest, postRequest } from '@/helpers/requests';
 import { showToastError } from '@/lib/helpers';
 import StorageLabel from '@/lib/localStorage';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 export const fetchPassportScore = async (account: string) => {
 	try {

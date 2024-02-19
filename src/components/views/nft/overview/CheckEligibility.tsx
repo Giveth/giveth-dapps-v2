@@ -17,7 +17,7 @@ import config from '@/configuration';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
 import { Flex } from '@/components/styled-components/Flex';
 import EligibilityModal from './EligibilityModal';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 const CheckEligibility = () => {
 	const [walletAddress, setWalletAddress] = useState('');

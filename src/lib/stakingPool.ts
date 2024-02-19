@@ -29,7 +29,7 @@ import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { E18, MaxUint256 } from './constants/constants';
 import { Zero } from '@/helpers/number';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 import { getReadContractResult } from './contracts';
 
 const { abi: LM_ABI } = LM_Json;

@@ -10,7 +10,7 @@ import { useAccount, useSwitchChain } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
 import { Address } from 'viem';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';

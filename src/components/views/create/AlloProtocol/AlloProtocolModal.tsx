@@ -21,7 +21,7 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY } from '@/apollo/gql/gqlSuperfluid';
 import { client } from '@/apollo/apolloClient';
 import { extractContractAddressFromString } from '../../donate/AlloProtocolFirstDonationModal';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 import createProfileABI from '@/artifacts/createProfile.json';
 
 interface IAlloProtocolModal extends IModal {

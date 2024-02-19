@@ -22,7 +22,7 @@ import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import { InsufficientFundModal } from '../modals/InsufficientFund';
 import { usePFPMintData } from '@/context/pfpmint.context';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 import { getReadContractResult } from '@/lib/contracts';
 const MIN_NFT_QTY = 1;
 

@@ -2,7 +2,7 @@ import { captureException } from '@sentry/nextjs';
 import { Address, erc20Abi } from 'viem';
 import { readContracts } from '@wagmi/core';
 import config from '@/configuration';
-import { wagmiConfig } from '@/wagmiconfig';
+import { wagmiConfig } from '@/wagmiConfigs';
 import { getReadContractResult } from '../contracts';
 declare let window: any;
 
