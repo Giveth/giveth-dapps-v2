@@ -14,13 +14,16 @@ function scoreColor(score: number) {
 }
 
 export const ScoreBox = () => {
-	const [score, setScore] = useState(55);
+	const [score, setScore] = useState(100);
 	const color = scoreColor(score);
 	return (
 		<Wrapper>
-			<Flex justifyContent='space-between' alignItems='flex-end'>
+			<Flex
+				justifyContent={score === 100 ? 'center' : 'space-between'}
+				alignItems='flex-end'
+			>
 				<Score color={color}>{score}</Score>
-				<Hundred>100</Hundred>
+				{score !== 100 && <Hundred>100</Hundred>}
 			</Flex>
 			<Bar color={color} score={score} />
 		</Wrapper>
