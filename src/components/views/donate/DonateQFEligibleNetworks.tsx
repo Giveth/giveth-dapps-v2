@@ -14,6 +14,7 @@ import { useDonateData } from '@/context/donate.context';
 import { getActiveRound } from '@/helpers/qf';
 import { getChainName } from '@/lib/network';
 import { ChainType } from '@/types/config';
+import links from '@/lib/constants/links';
 
 const DonateQFEligibleNetworks = () => {
 	const [showModal, setShowModal] = useState(false);
@@ -51,14 +52,18 @@ const DonateQFEligibleNetworks = () => {
 				{formatMessage({ id: 'label.are_eligible_to_be_matched' })}
 			</MakeDonationDescription>
 			<ActionsRow justifyContent='flex-start' alignItems='center'>
-				<CustomSwitchCaption onClick={() => setShowModal(true)}>
+				<StyledCaption onClick={() => setShowModal(true)}>
 					{formatMessage({ id: 'label.switch_network' })}
-				</CustomSwitchCaption>
+				</StyledCaption>
 				<Divider />
-				<ExternalLink href='/'>
-					<CustomSwitchCaption onClick={() => setShowModal(true)}>
+				<ExternalLink
+					href={links.ACROSS_BRIDGE}
+					target='_blank'
+					rel='noreferrer noopener'
+				>
+					<StyledCaption>
 						{formatMessage({ id: 'label.bridge_tokens' })}
-					</CustomSwitchCaption>
+					</StyledCaption>
 					<IconExternalLink16 />
 				</ExternalLink>
 			</ActionsRow>
@@ -76,7 +81,7 @@ const Container = styled.div`
 	margin-top: 8px;
 	border: 1px solid ${brandColors.giv[500]};
 	border-radius: 8px;
-	padding: 16px 8px;
+	padding: 16px 16px;
 `;
 
 const MakeDonationTitle = styled(Caption)`
@@ -97,7 +102,7 @@ const BoldCaption = styled(Caption)`
 	display: inline;
 `;
 
-const CustomSwitchCaption = styled(Caption)`
+const StyledCaption = styled(Caption)`
 	margin: 0;
 `;
 
