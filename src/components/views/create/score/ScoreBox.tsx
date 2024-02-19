@@ -14,20 +14,31 @@ function scoreColor(score: number) {
 }
 
 export const ScoreBox = () => {
-	const [score, setScore] = useState(0);
+	const [score, setScore] = useState(45);
 	return (
 		<div>
-			<Flex justifyContent='space-between'>
+			<Flex justifyContent='space-between' alignItems='flex-end'>
 				<Score color={scoreColor(score)}>{score}</Score>
+				<Hundred>100</Hundred>
 			</Flex>
 		</div>
 	);
 };
 
-const Score = styled.div<{ color: string }>`
+const BaseNumber = styled.div`
 	font-family: 'TeX Gyre Adventor';
 	font-style: normal;
 	font-weight: 700;
+`;
+
+const Score = styled(BaseNumber)<{ color: string }>`
 	font-size: 66px;
+	line-height: 66px;
 	color: ${props => props.color};
+`;
+
+const Hundred = styled(BaseNumber)`
+	font-size: 25px;
+	line-height: 25px;
+	color: ${semanticColors.jade[500]};
 `;
