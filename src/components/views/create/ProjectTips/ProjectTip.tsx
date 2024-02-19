@@ -74,6 +74,8 @@ const ProjectTip = ({ activeSection }: IProjectTipProps) => {
 };
 
 const Container = styled.div`
+	position: sticky;
+	top: 100px;
 	width: 400px;
 	padding: 24px;
 	margin-top: 80px;
