@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { semanticColors } from '@giveth/ui-design-system';
+import { neutralColors, semanticColors } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 
 function scoreColor(score: number) {
@@ -14,16 +14,23 @@ function scoreColor(score: number) {
 }
 
 export const ScoreBox = () => {
-	const [score, setScore] = useState(45);
+	const [score, setScore] = useState(55);
+	const color = scoreColor(score);
 	return (
-		<div>
+		<Wrapper>
 			<Flex justifyContent='space-between' alignItems='flex-end'>
-				<Score color={scoreColor(score)}>{score}</Score>
+				<Score color={color}>{score}</Score>
 				<Hundred>100</Hundred>
 			</Flex>
-		</div>
+			<Bar color={color} score={score} />
+		</Wrapper>
 	);
 };
+
+const Wrapper = styled(Flex)`
+	flex-direction: column;
+	gap: 16px;
+`;
 
 const BaseNumber = styled.div`
 	font-family: 'TeX Gyre Adventor';
@@ -41,4 +48,13 @@ const Hundred = styled(BaseNumber)`
 	font-size: 25px;
 	line-height: 25px;
 	color: ${semanticColors.jade[500]};
+`;
+
+const Bar = styled.div<{ score: number; color: string }>`
+	background: ${semanticColors.jade[500]};
+	background-image: ${props =>
+		`linear-gradient(to right, ${props.color} ${props.score}%, ${neutralColors.gray[200]} ${props.score}%)`};
+	height: 8px;
+	width: 100%;
+	border-radius: 8px;
 `;
