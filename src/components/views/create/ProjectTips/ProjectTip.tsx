@@ -58,7 +58,6 @@ const ProjectTip = ({ activeSection }: IProjectTipProps) => {
 				<IconBulbOutline32 />
 				<H6 weight={700}>{contentMap[activeSection].title}</H6>
 			</Flex>
-			<br />
 			{contentMap[activeSection].component}
 		</Card>
 	);
