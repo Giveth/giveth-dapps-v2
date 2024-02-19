@@ -10,7 +10,7 @@ import MapTip from './MapTip';
 import AddressesTip from './AddressesTip';
 import { ECreateProjectSections } from '../types';
 
-interface IProjectTipProps {
+export interface IProjectTipProps {
 	activeSection: ECreateProjectSections;
 }
 
