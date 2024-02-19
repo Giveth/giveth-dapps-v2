@@ -15,6 +15,7 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { BlockHeader, BlockTitle } from './common';
+import { regexList } from '@/lib/constants/regex';
 
 const HomeFromBlog = () => {
 	const [mediumPosts, setMediumPosts] = useState<IMediumBlogPost[]>();
@@ -27,7 +28,15 @@ const HomeFromBlog = () => {
 					'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth/',
 				);
 				const posts = await medium.json();
-				setMediumPosts(posts?.items?.slice(0, 3));
+				const modifiedPosts = posts?.items
+					?.slice(0, 3)
+					.map((post: any) => {
+						const regex = regexList.mediumBlogBanner;
+						let match = regex.exec(post.description);
+						let src = match ? match[1] : '';
+						return { ...post, thumbnail: src };
+					});
+				setMediumPosts(modifiedPosts);
 			} catch (error) {
 				console.log('error', error);
 			}

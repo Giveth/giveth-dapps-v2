@@ -93,8 +93,8 @@ export const fetchVelodromePrice = async (tokenAddress?: string) => {
 				'Content-Type': 'application/json',
 			},
 		});
-		console.log({ res });
 		const data = await res.json();
+		console.log('VelodromePrice', data);
 		return parseFloat(data?.price);
 	} catch (error) {
 		captureException(error, {
