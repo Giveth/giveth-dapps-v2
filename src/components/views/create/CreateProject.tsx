@@ -351,7 +351,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				<FormProvider {...formMethods}>
 					<form onSubmit={handleSubmit(onSubmit, onError)}>
 						<NameInput
-							// showGuidelineModal={showGuidelineModal}
+							setActiveProjectSection={setActiveProjectSection}
 							preTitle={title}
 						/>
 						<DescriptionInput />

@@ -4,16 +4,20 @@ import { useFormContext } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Input, { InputSize } from '@/components/Input';
 import { requiredOptions } from '@/lib/constants/regex';
-import { EInputs } from '@/components/views/create/CreateProject';
+import {
+	ECreateProjectSections,
+	EInputs,
+} from '@/components/views/create/CreateProject';
 import { gqlTitleValidation } from '@/components/views/create/helpers';
 import useFocus from '@/hooks/useFocus';
 import Routes from '@/lib/constants/Routes';
 
 interface IProps {
 	preTitle?: string;
+	setActiveProjectSection: (section: ECreateProjectSections) => void;
 }
 
-const NameInput: FC<IProps> = ({ preTitle }) => {
+const NameInput: FC<IProps> = ({ preTitle, setActiveProjectSection }) => {
 	const router = useRouter();
 	const locale = router.locale || 'en';
 
@@ -74,6 +78,9 @@ const NameInput: FC<IProps> = ({ preTitle }) => {
 					validate: titleValidation,
 				}}
 				error={formErrors[EInputs.name]}
+				onMouseOver={() =>
+					setActiveProjectSection(ECreateProjectSections.name)
+				}
 			/>
 			<br />
 		</>
