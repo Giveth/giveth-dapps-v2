@@ -4,6 +4,7 @@ import {
 	brandColors,
 	Button,
 	Caption,
+	Col,
 	Container,
 	H3,
 	H4,
@@ -11,6 +12,7 @@ import {
 	IconExternalLink,
 	neutralColors,
 	OutlineButton,
+	Row,
 } from '@giveth/ui-design-system';
 import { useMutation } from '@apollo/client';
 import styled from 'styled-components';
@@ -37,7 +39,6 @@ import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView, slugToSuccessView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
-import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import config, { isRecurringActive } from '@/configuration';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { setShowFooter } from '@/features/general/general.slice';
@@ -309,150 +310,167 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const isSmallScreen = isTablet || isMobile;
 
 	return (
-		<Wrapper>
-			<CreateContainer>
-				<div>
+		<Container>
+			<Row>
+				<Col lg={8} md={12}>
 					<Title>
 						{isEditMode
 							? formatMessage({ id: 'label.project_details' })
 							: formatMessage({ id: 'label.create_a_project' })}
 					</Title>
-				</div>
-
-				<FormProvider {...formMethods}>
-					<form onSubmit={handleSubmit(onSubmit, onError)}>
-						<NameInput
-							setActiveProjectSection={setActiveProjectSection}
-							preTitle={title}
-						/>
-						<DescriptionInput
-							setActiveProjectSection={setActiveProjectSection}
-						/>
-						<CategoryInput
-							setActiveProjectSection={setActiveProjectSection}
-						/>
-						<LocationIndex
-							setActiveProjectSection={setActiveProjectSection}
-						/>
-						<ImageInput
-							setIsLoading={setIsLoading}
-							setActiveProjectSection={setActiveProjectSection}
-						/>
-						<H5>
-							{formatMessage({ id: 'label.receiving_funds' })}
-						</H5>
-						<CaptionContainer>
-							{formatMessage({
-								id: 'label.you_can_set_a_custom_ethereum_address',
-							})}
-						</CaptionContainer>
-						<div ref={addressesRef}>
-							{ALL_CHAINS.map(chain => (
-								<AddressInterface
-									key={chain.id}
-									networkId={chain.id}
-									chainType={(chain as NonEVMChain).chainType}
-									onButtonClick={() => {
-										setAddressModalChainType(
-											(chain as NonEVMChain).chainType,
-										);
-										setAddressModalChainId(chain.id);
-									}}
-									isEditMode={isEditMode}
-									anchorContractData={
-										(project?.anchorContracts &&
-											project?.anchorContracts[0]) ??
-										undefined
-									}
-								/>
-							))}
-						</div>
-						<PublishTitle>
-							{isEditMode
-								? formatMessage({
-										id: 'label.publish_edited_project',
-									})
-								: formatMessage({ id: 'label.lets_publish' })}
-						</PublishTitle>
-						<PublishList>
-							<li>
+					<FormProvider {...formMethods}>
+						<form onSubmit={handleSubmit(onSubmit, onError)}>
+							<NameInput
+								setActiveProjectSection={
+									setActiveProjectSection
+								}
+								preTitle={title}
+							/>
+							<DescriptionInput
+								setActiveProjectSection={
+									setActiveProjectSection
+								}
+							/>
+							<CategoryInput
+								setActiveProjectSection={
+									setActiveProjectSection
+								}
+							/>
+							<LocationIndex
+								setActiveProjectSection={
+									setActiveProjectSection
+								}
+							/>
+							<ImageInput
+								setIsLoading={setIsLoading}
+								setActiveProjectSection={
+									setActiveProjectSection
+								}
+							/>
+							<H5>
+								{formatMessage({ id: 'label.receiving_funds' })}
+							</H5>
+							<CaptionContainer>
+								{formatMessage({
+									id: 'label.you_can_set_a_custom_ethereum_address',
+								})}
+							</CaptionContainer>
+							<div ref={addressesRef}>
+								{ALL_CHAINS.map(chain => (
+									<AddressInterface
+										key={chain.id}
+										networkId={chain.id}
+										chainType={
+											(chain as NonEVMChain).chainType
+										}
+										onButtonClick={() => {
+											setAddressModalChainType(
+												(chain as NonEVMChain)
+													.chainType,
+											);
+											setAddressModalChainId(chain.id);
+										}}
+										isEditMode={isEditMode}
+										anchorContractData={
+											(project?.anchorContracts &&
+												project?.anchorContracts[0]) ??
+											undefined
+										}
+									/>
+								))}
+							</div>
+							<PublishTitle>
 								{isEditMode
 									? formatMessage({
-											id: 'label.edited_projects',
+											id: 'label.publish_edited_project',
 										})
 									: formatMessage({
-											id: 'label.newly_published_projects',
-										})}{' '}
-								{formatMessage({
-									id: 'label.will_be_unlisted_until',
-								})}
-								{isEditMode &&
-									` ${formatMessage({
-										id: 'label.again',
-									})}`}
-								.
-							</li>
-							<li>
-								{formatMessage({
-									id: 'label.you_can_still_access_your_project_from_your_account',
-								})}
-							</li>
-							<li>
-								{formatMessage({
-									id: 'label.youll_receive_an_email_from_us_once_its_listed',
-								})}
-							</li>
-						</PublishList>
-						<Buttons>
-							{(!isEditMode || isDraft) && (
-								<OutlineButton
+											id: 'label.lets_publish',
+										})}
+							</PublishTitle>
+							<PublishList>
+								<li>
+									{isEditMode
+										? formatMessage({
+												id: 'label.edited_projects',
+											})
+										: formatMessage({
+												id: 'label.newly_published_projects',
+											})}{' '}
+									{formatMessage({
+										id: 'label.will_be_unlisted_until',
+									})}
+									{isEditMode &&
+										` ${formatMessage({
+											id: 'label.again',
+										})}`}
+									.
+								</li>
+								<li>
+									{formatMessage({
+										id: 'label.you_can_still_access_your_project_from_your_account',
+									})}
+								</li>
+								<li>
+									{formatMessage({
+										id: 'label.youll_receive_an_email_from_us_once_its_listed',
+									})}
+								</li>
+							</PublishList>
+							<Buttons>
+								{(!isEditMode || isDraft) && (
+									<OutlineButton
+										label={formatMessage({
+											id: 'label.preview',
+										})}
+										buttonType='primary'
+										disabled={isLoading}
+										icon={<IconExternalLink size={16} />}
+										type='submit'
+										onClick={() =>
+											setValue(EInputs.draft, true)
+										}
+									/>
+								)}
+								<Button
 									label={formatMessage({
-										id: 'label.preview',
+										id: 'label.publish',
+									})}
+									buttonType='primary'
+									type='submit'
+									disabled={isLoading}
+								/>
+								<OutlineButton
+									onClick={handleCancel}
+									label={formatMessage({
+										id: 'label.cancel',
 									})}
 									buttonType='primary'
 									disabled={isLoading}
-									icon={<IconExternalLink size={16} />}
-									type='submit'
-									onClick={() =>
-										setValue(EInputs.draft, true)
-									}
+								/>
+							</Buttons>
+							{addressModalChainId !== undefined && (
+								<CreateProjectAddAddressModal
+									networkId={addressModalChainId}
+									chainType={addressModalChainType}
+									userAddresses={userUniqueAddresses}
+									setShowModal={() => {
+										setAddressModalChainId(undefined);
+										setAddressModalChainType(undefined);
+									}}
+									onSubmit={() => {
+										setAddressModalChainId(undefined);
+										setAddressModalChainType(undefined);
+									}}
 								/>
 							)}
-							<Button
-								label={formatMessage({ id: 'label.publish' })}
-								buttonType='primary'
-								type='submit'
-								disabled={isLoading}
-							/>
-							<OutlineButton
-								onClick={handleCancel}
-								label={formatMessage({ id: 'label.cancel' })}
-								buttonType='primary'
-								disabled={isLoading}
-							/>
-						</Buttons>
-						{addressModalChainId !== undefined && (
-							<CreateProjectAddAddressModal
-								networkId={addressModalChainId}
-								chainType={addressModalChainType}
-								userAddresses={userUniqueAddresses}
-								setShowModal={() => {
-									setAddressModalChainId(undefined);
-									setAddressModalChainType(undefined);
-								}}
-								onSubmit={() => {
-									setAddressModalChainId(undefined);
-									setAddressModalChainType(undefined);
-								}}
-							/>
-						)}
-					</form>
-				</FormProvider>
-			</CreateContainer>
-			{!isSmallScreen && (
-				<ProjectTip activeSection={activeProjectSection} />
-			)}
-
+						</form>
+					</FormProvider>
+				</Col>
+				<Col lg={4} md={12}>
+					<ProjectTip activeSection={activeProjectSection} />
+				</Col>
+			</Row>
 			{showAlloProtocolModal && addedProjectState && (
 				<AlloProtocolModal
 					setShowModal={setShowAlloProtocolModal}
@@ -460,40 +478,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					project={project}
 				/>
 			)}
-		</Wrapper>
+		</Container>
 	);
 };
 
 const CaptionContainer = styled(Caption)`
 	margin-top: 8px;
 	margin-bottom: 27px;
-`;
-
-const Wrapper = styled.div`
-	max-width: ${deviceSize.laptopS + 80 + 'px'};
-	margin: 0 auto;
-	position: relative;
-	display: flex;
-	align-items: flex-start;
-`;
-
-const CreateContainer = styled(Container)`
-	margin-top: 80px;
-	margin-bottom: 154px;
-	max-width: 715px;
-	> :nth-child(1) {
-		display: flex;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		flex-direction: column-reverse;
-		${mediaQueries.tablet} {
-			flex-direction: row;
-		}
-	}
-	@media (max-width: ${deviceSize.mobileL + 'px'}) {
-		padding-right: 16px;
-		padding-left: 16px;
-	}
 `;
 
 const Buttons = styled.div`
