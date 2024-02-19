@@ -11,8 +11,6 @@ import { useRouter } from 'next/router';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
-// import { WagmiConfig, configureChains, createConfig } from 'wagmi';
-// import { walletConnectProvider } from '@web3modal/wagmi';
 import { WagmiProvider } from 'wagmi';
 import { projectId, wagmiConfig } from '@/wagmiConfigs';
 import { useApollo } from '@/apollo/apolloClient';
