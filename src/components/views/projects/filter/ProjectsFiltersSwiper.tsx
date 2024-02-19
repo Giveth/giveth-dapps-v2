@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import ProjectsMainCategories from '@/components/views/projects/ProjectsMainCategories';
+import ProjectsMainCategories from '@/components/views/projects/filter/ProjectsMainCategories';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IconContainer } from '@/components/views/projects/common.styled';
 
