@@ -103,7 +103,7 @@ const BoldCaption = styled(Caption)`
 `;
 
 const StyledCaption = styled(Caption)`
-	margin: 0;
+	cursor: pointer;
 `;
 
 const ActionsRow = styled(Flex)`
