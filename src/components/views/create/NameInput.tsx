@@ -4,13 +4,10 @@ import { useFormContext } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Input, { InputSize } from '@/components/Input';
 import { requiredOptions } from '@/lib/constants/regex';
-import {
-	ECreateProjectSections,
-	EInputs,
-} from '@/components/views/create/CreateProject';
 import { gqlTitleValidation } from '@/components/views/create/helpers';
 import useFocus from '@/hooks/useFocus';
 import Routes from '@/lib/constants/Routes';
+import { ECreateProjectSections, EInputs } from './types';
 
 interface IProps {
 	preTitle?: string;

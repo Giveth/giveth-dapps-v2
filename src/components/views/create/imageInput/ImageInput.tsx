@@ -19,11 +19,8 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import ImageUploader from '@/components/ImageUploader';
 import ExternalLink from '@/components/ExternalLink';
 import useUpload from '@/hooks/useUpload';
-import {
-	ECreateProjectSections,
-	EInputs,
-} from '@/components/views/create/CreateProject';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { ECreateProjectSections, EInputs } from '../types';
 
 const ImageSearch = dynamic(() => import('./ImageSearch'), {
 	ssr: false,

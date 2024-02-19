@@ -6,11 +6,8 @@ import { useFormContext } from 'react-hook-form';
 import LocationInput from '@/components/views/create/locationInput/LocationInput';
 import { InputContainer, Label } from '../Create.sc';
 import config from '@/configuration';
-import {
-	ECreateProjectSections,
-	EInputs,
-} from '@/components/views/create/CreateProject';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { ECreateProjectSections, EInputs } from '../types';
 
 const googleMapURL = `https://maps.googleapis.com/maps/api/js?key=${config.GOOGLE_MAPS_API_KEY}&v=3.exp&libraries=geometry,drawing,places`;
 

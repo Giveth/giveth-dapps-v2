@@ -17,12 +17,10 @@ import { ICategory, IMainCategory } from '@/apollo/types/types';
 import { InputContainer } from '@/components/views/create/Create.sc';
 import MainCategoryItem from '@/components/views/create/categoryInput/MainCategoryItem';
 import { showToastError } from '@/lib/helpers';
-import {
-	ECreateProjectSections,
-	EInputs,
-} from '@/components/views/create/CreateProject';
+
 import { QF_SPECIFIC_CATEGORIES } from '@/configuration';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { ECreateProjectSections, EInputs } from '../types';
 
 interface ICategoriesInputProps {
 	setActiveProjectSection: (section: ECreateProjectSections) => void;

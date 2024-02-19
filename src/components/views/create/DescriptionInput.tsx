@@ -7,11 +7,8 @@ import { useFormContext } from 'react-hook-form';
 
 import { InputContainer, Label } from './Create.sc';
 import { GoodProjectDescription } from '@/components/modals/GoodProjectDescription';
-import {
-	ECreateProjectSections,
-	EInputs,
-} from '@/components/views/create/CreateProject';
 import { WrappedSpinner } from '@/components/Spinner';
+import { ECreateProjectSections, EInputs } from './types';
 
 const RichTextInput = dynamic(
 	() => import('@/components/rich-text/RichTextInput'),

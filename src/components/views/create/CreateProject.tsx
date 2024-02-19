@@ -23,11 +23,9 @@ import {
 	UPDATE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
 import {
-	ICategory,
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
-	IWalletAddress,
 } from '@/apollo/types/types';
 import {
 	CategoryInput,
@@ -52,44 +50,13 @@ import StorageLabel from '@/lib/localStorage';
 import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
 import ProjectTip from './ProjectTips/ProjectTip';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { ECreateProjectSections, TInputs, EInputs } from './types';
 
 const ALL_CHAINS = config.CHAINS;
 
 interface ICreateProjectProps {
 	project?: IProjectEdition;
 }
-
-export enum EInputs {
-	name = 'name',
-	description = 'description',
-	categories = 'categories',
-	impactLocation = 'impactLocation',
-	image = 'image',
-	draft = 'draft',
-	addresses = 'addresses',
-	alloProtocolRegistry = 'alloProtocolRegistry',
-}
-
-export enum ECreateProjectSections {
-	default = 'default',
-	name = 'name',
-	description = 'description',
-	categories = 'categories',
-	location = 'location',
-	image = 'image',
-	addresses = 'addresses',
-}
-
-export type TInputs = {
-	[EInputs.name]: string;
-	[EInputs.description]?: string;
-	[EInputs.categories]?: ICategory[];
-	[EInputs.impactLocation]?: string;
-	[EInputs.image]?: string;
-	[EInputs.draft]?: boolean;
-	[EInputs.alloProtocolRegistry]?: boolean;
-	[EInputs.addresses]: IWalletAddress[];
-};
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const { formatMessage } = useIntl();
