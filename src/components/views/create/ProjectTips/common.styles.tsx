@@ -1,4 +1,4 @@
-import { brandColors } from '@giveth/ui-design-system';
+import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 export const TipListItem = styled.div`
@@ -22,4 +22,11 @@ export const TipListItem = styled.div`
 		border-radius: 50%;
 		box-shadow: 0 0 0 3px ${brandColors.giv[100]};
 	}
+`;
+
+export const TipLine = styled.div`
+	width: 100%;
+	height: 1px;
+	background-color: ${neutralColors.gray[400]};
+	margin: 16px 0;
 `;
