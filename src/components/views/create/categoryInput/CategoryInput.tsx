@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import {
@@ -17,10 +17,18 @@ import { ICategory, IMainCategory } from '@/apollo/types/types';
 import { InputContainer } from '@/components/views/create/Create.sc';
 import MainCategoryItem from '@/components/views/create/categoryInput/MainCategoryItem';
 import { showToastError } from '@/lib/helpers';
-import { EInputs } from '@/components/views/create/CreateProject';
+import {
+	ECreateProjectSections,
+	EInputs,
+} from '@/components/views/create/CreateProject';
 import { QF_SPECIFIC_CATEGORIES } from '@/configuration';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
-const CategoryInput: FC = () => {
+interface ICategoriesInputProps {
+	setActiveProjectSection: (section: ECreateProjectSections) => void;
+}
+
+const CategoryInput = ({ setActiveProjectSection }: ICategoriesInputProps) => {
 	const { getValues, setValue } = useFormContext();
 	const { formatMessage } = useIntl();
 
@@ -28,6 +36,10 @@ const CategoryInput: FC = () => {
 	const [selectedCategories, setSelectedCategories] = useState<ICategory[]>(
 		getValues(EInputs.categories),
 	);
+	const onVisible = () =>
+		setActiveProjectSection(ECreateProjectSections.categories);
+	const delay = 500; // Delay in milliseconds
+	const ref = useIntersectionObserver(onVisible, { threshold: 0.25, delay });
 
 	const handleSelectCategory = (categories: ICategory[]) => {
 		setSelectedCategories(categories);
@@ -52,7 +64,7 @@ const CategoryInput: FC = () => {
 	}, []);
 
 	return (
-		<InputContainer>
+		<InputContainer ref={ref}>
 			<H5>{formatMessage({ id: 'label.please_select_a_category' })}</H5>
 			<CaptionContainer>
 				{formatMessage({ id: 'label.you_can_choose_up_to' })}{' '}

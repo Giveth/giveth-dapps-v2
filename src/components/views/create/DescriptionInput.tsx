@@ -7,7 +7,10 @@ import { useFormContext } from 'react-hook-form';
 
 import { InputContainer, Label } from './Create.sc';
 import { GoodProjectDescription } from '@/components/modals/GoodProjectDescription';
-import { EInputs } from '@/components/views/create/CreateProject';
+import {
+	ECreateProjectSections,
+	EInputs,
+} from '@/components/views/create/CreateProject';
 
 const RichTextInput = dynamic(
 	() => import('@/components/rich-text/RichTextInput'),
@@ -18,7 +21,13 @@ const RichTextInput = dynamic(
 
 const DESCRIPTION_MIN_LIMIT = 1200;
 
-const DescriptionInput = () => {
+interface IDescriptionInputProps {
+	setActiveProjectSection: (section: ECreateProjectSections) => void;
+}
+
+const DescriptionInput = ({
+	setActiveProjectSection,
+}: IDescriptionInputProps) => {
 	const {
 		getValues,
 		setValue,
@@ -72,7 +81,11 @@ const DescriptionInput = () => {
 					})}
 				</span>
 			</CaptionContainer>
-			<InputContainer>
+			<InputContainer
+				onMouseOver={() =>
+					setActiveProjectSection(ECreateProjectSections.description)
+				}
+			>
 				<Label>{formatMessage({ id: 'label.project_story' })}</Label>
 				<RichTextInput
 					style={TextInputStyle}

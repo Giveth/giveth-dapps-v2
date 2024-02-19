@@ -19,7 +19,11 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 import ImageUploader from '@/components/ImageUploader';
 import ExternalLink from '@/components/ExternalLink';
 import useUpload from '@/hooks/useUpload';
-import { EInputs } from '@/components/views/create/CreateProject';
+import {
+	ECreateProjectSections,
+	EInputs,
+} from '@/components/views/create/CreateProject';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 const ImageSearch = dynamic(() => import('./ImageSearch'), {
 	ssr: false,
@@ -34,15 +38,24 @@ const unsplashPhoto = (i: string) =>
 
 interface ImageInputProps {
 	setIsLoading: Dispatch<SetStateAction<boolean>>;
+	setActiveProjectSection: (section: ECreateProjectSections) => void;
 }
 
-const ImageInput: FC<ImageInputProps> = ({ setIsLoading }) => {
+const ImageInput: FC<ImageInputProps> = ({
+	setIsLoading,
+	setActiveProjectSection,
+}) => {
 	const { getValues, setValue } = useFormContext();
 	const { formatMessage } = useIntl();
 
 	const [image, setImage] = useState(getValues(EInputs.image));
 	const [isUploadTab, setIsUploadTab] = useState(true);
 	const [attributes, setAttributes] = useState({ name: '', username: '' });
+
+	const onVisible = () =>
+		setActiveProjectSection(ECreateProjectSections.image);
+	const delay = 500; // Delay in milliseconds
+	const ref = useIntersectionObserver(onVisible, { threshold: 0.8, delay });
 
 	const handleSetImage = (img: string) => {
 		setImage(img);
@@ -67,7 +80,7 @@ const ImageInput: FC<ImageInputProps> = ({ setIsLoading }) => {
 	};
 
 	return (
-		<>
+		<div ref={ref}>
 			<H5>
 				{formatMessage({ id: 'label.add_an_image_to_your_project' })}
 			</H5>
@@ -138,7 +151,7 @@ const ImageInput: FC<ImageInputProps> = ({ setIsLoading }) => {
 					</div>
 				</PickImageContainer>
 			</InputContainer>
-		</>
+		</div>
 	);
 };
 

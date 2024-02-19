@@ -51,6 +51,7 @@ import { ChainType, NonEVMChain } from '@/types/config';
 import StorageLabel from '@/lib/localStorage';
 import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
 import ProjectTip from './ProjectTips/ProjectTip';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -171,6 +172,14 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [isLoading, setIsLoading] = useState(false);
 	// const [showGuidelineModal, setShowGuidelineModal] = useState(false);
 	const [addedProjectState, setAddedProjectState] = useState<IProject>();
+
+	const onAddressesVisible = () =>
+		setActiveProjectSection(ECreateProjectSections.addresses);
+	const delay = 500; // Delay in milliseconds
+	const addressesRef = useIntersectionObserver(onAddressesVisible, {
+		threshold: 0.3,
+		delay,
+	});
 
 	const data = watch();
 	const {
@@ -354,10 +363,19 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							setActiveProjectSection={setActiveProjectSection}
 							preTitle={title}
 						/>
-						<DescriptionInput />
-						<CategoryInput />
-						<LocationIndex />
-						<ImageInput setIsLoading={setIsLoading} />
+						<DescriptionInput
+							setActiveProjectSection={setActiveProjectSection}
+						/>
+						<CategoryInput
+							setActiveProjectSection={setActiveProjectSection}
+						/>
+						<LocationIndex
+							setActiveProjectSection={setActiveProjectSection}
+						/>
+						<ImageInput
+							setIsLoading={setIsLoading}
+							setActiveProjectSection={setActiveProjectSection}
+						/>
 						<H5>
 							{formatMessage({ id: 'label.receiving_funds' })}
 						</H5>
@@ -366,25 +384,27 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								id: 'label.you_can_set_a_custom_ethereum_address',
 							})}
 						</CaptionContainer>
-						{ALL_CHAINS.map(chain => (
-							<AddressInterface
-								key={chain.id}
-								networkId={chain.id}
-								chainType={(chain as NonEVMChain).chainType}
-								onButtonClick={() => {
-									setAddressModalChainType(
-										(chain as NonEVMChain).chainType,
-									);
-									setAddressModalChainId(chain.id);
-								}}
-								isEditMode={isEditMode}
-								anchorContractData={
-									(project?.anchorContracts &&
-										project?.anchorContracts[0]) ??
-									undefined
-								}
-							/>
-						))}
+						<div ref={addressesRef}>
+							{ALL_CHAINS.map(chain => (
+								<AddressInterface
+									key={chain.id}
+									networkId={chain.id}
+									chainType={(chain as NonEVMChain).chainType}
+									onButtonClick={() => {
+										setAddressModalChainType(
+											(chain as NonEVMChain).chainType,
+										);
+										setAddressModalChainId(chain.id);
+									}}
+									isEditMode={isEditMode}
+									anchorContractData={
+										(project?.anchorContracts &&
+											project?.anchorContracts[0]) ??
+										undefined
+									}
+								/>
+							))}
+						</div>
 						<PublishTitle>
 							{isEditMode
 								? formatMessage({
