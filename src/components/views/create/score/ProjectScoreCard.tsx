@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { H6 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { Card } from '../ProGuide.sc';
 import { Flex } from '@/components/styled-components/Flex';
+import { ScoreBox } from './ScoreBox';
 
 enum EScoreState {
 	LOW = 'LOW',
@@ -29,7 +30,6 @@ const contentMap = {
 };
 
 export const ProjectScoreCard = () => {
-	const [Score, setScore] = useState(0);
 	return (
 		<Card>
 			<Flex gap='16px'>
@@ -41,7 +41,7 @@ export const ProjectScoreCard = () => {
 				/>
 				<H6 weight={700}>Your Project Score</H6>
 			</Flex>
-			<br />
+			<ScoreBox />
 		</Card>
 	);
 };
