@@ -1,31 +1,25 @@
-import React, { useState } from 'react';
+import { type FC } from 'react';
 import styled from 'styled-components';
 import { neutralColors, semanticColors } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
+import { infoMap, getScoreState } from './ProjectScoreCard';
 
-function scoreColor(score: number) {
-	if (score < 50) {
-		return semanticColors.punch[500];
-	} else if (score < 80) {
-		return semanticColors.golden[500];
-	} else {
-		return semanticColors.jade[500];
-	}
+interface IScoreBoxProps {
+	score: number;
 }
 
-export const ScoreBox = () => {
-	const [score, setScore] = useState(100);
-	const color = scoreColor(score);
+export const ScoreBox: FC<IScoreBoxProps> = ({ score }) => {
+	const info = infoMap[getScoreState(score)];
 	return (
 		<Wrapper>
 			<Flex
 				justifyContent={score === 100 ? 'center' : 'space-between'}
 				alignItems='flex-end'
 			>
-				<Score color={color}>{score}</Score>
+				<Score color={info.scoreColor}>{score}</Score>
 				{score !== 100 && <Hundred>100</Hundred>}
 			</Flex>
-			<Bar color={color} score={score} />
+			<Bar color={info.scoreColor} score={score} />
 		</Wrapper>
 	);
 };
