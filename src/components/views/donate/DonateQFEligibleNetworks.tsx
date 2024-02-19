@@ -37,24 +37,24 @@ const DonateQFEligibleNetworks = () => {
 
 	return (
 		<Container>
-			<Flex justifyContent='space-between' alignItems='center'>
-				<MakeDonationTitle>
-					<Flex alignItems='center' gap='4px'>
-						<IconInfoFilled16 />
-						{formatMessage({
-							id: 'label.make_your_donation_eligible_for_matching',
-						})}
-					</Flex>
-				</MakeDonationTitle>
-				<CustomSwitchCaption onClick={() => setShowModal(true)}>
-					{formatMessage({ id: 'label.switch_network' })}
-				</CustomSwitchCaption>
-			</Flex>
+			<MakeDonationTitle>
+				<Flex alignItems='center' gap='4px'>
+					<IconInfoFilled16 />
+					{formatMessage({
+						id: 'label.make_your_donation_eligible_for_matching',
+					})}
+				</Flex>
+			</MakeDonationTitle>
 			<MakeDonationDescription>
 				{formatMessage({ id: 'label.donations_made_on' })}
 				&nbsp;<BoldCaption>{chainsString}</BoldCaption>&nbsp;
 				{formatMessage({ id: 'label.are_eligible_to_be_matched' })}
 			</MakeDonationDescription>
+			<ActionsRow justifyContent='space-between' alignItems='center'>
+				<CustomSwitchCaption onClick={() => setShowModal(true)}>
+					{formatMessage({ id: 'label.switch_network' })}
+				</CustomSwitchCaption>
+			</ActionsRow>
 			{showModal && (
 				<SwitchNetwork
 					setShowModal={setShowModal}
@@ -90,9 +90,10 @@ const BoldCaption = styled(Caption)`
 	display: inline;
 `;
 
-const CustomSwitchCaption = styled(SwitchCaption)`
-	margin: 0;
-	font-weight: 500;
+const CustomSwitchCaption = styled(SwitchCaption)``;
+
+const ActionsRow = styled(Flex)`
+	margin-top: 8px;
 `;
 
 export default DonateQFEligibleNetworks;
