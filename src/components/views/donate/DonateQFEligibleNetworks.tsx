@@ -54,6 +54,7 @@ const DonateQFEligibleNetworks = () => {
 				<CustomSwitchCaption onClick={() => setShowModal(true)}>
 					{formatMessage({ id: 'label.switch_network' })}
 				</CustomSwitchCaption>
+				<Divider />
 				<ExternalLink href='/'>
 					<CustomSwitchCaption onClick={() => setShowModal(true)}>
 						{formatMessage({ id: 'label.bridge_tokens' })}
@@ -104,6 +105,12 @@ const ActionsRow = styled(Flex)`
 	margin-top: 8px;
 	gap: 16px;
 	color: ${brandColors.pinky[500]};
+`;
+
+const Divider = styled.div`
+	border-right: 1px solid ${neutralColors.gray[400]};
+	width: 0px;
+	height: 16px;
 `;
 
 const ExternalLink = styled.a`
