@@ -1,6 +1,7 @@
 import React from 'react';
-import { H6 } from '@giveth/ui-design-system';
+import { H6, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
+import styled from 'styled-components';
 import { Card } from '../ProGuide.sc';
 import { Flex } from '@/components/styled-components/Flex';
 import { ScoreBox } from './ScoreBox';
@@ -9,6 +10,7 @@ enum EScoreState {
 	LOW = 'LOW',
 	MEDIUM = 'MEDIUM',
 	HIGH = 'HIGH',
+	PERFECT = 'PERFECT',
 }
 
 const contentMap = {
@@ -27,6 +29,10 @@ const contentMap = {
 			'Just keep in mind to regularly update your project to keep donation coming your way.',
 		title: 'What else you can do?',
 	},
+	[EScoreState.PERFECT]: {
+		mainTip:
+			'A perfect score! Just keep in mind to regularly update your project to keep donation coming your way.',
+	},
 };
 
 export const ProjectScoreCard = () => {
@@ -42,6 +48,11 @@ export const ProjectScoreCard = () => {
 				<H6 weight={700}>Your Project Score</H6>
 			</Flex>
 			<ScoreBox />
+			<MainTip>{contentMap[EScoreState.PERFECT].mainTip}</MainTip>
 		</Card>
 	);
 };
+
+const MainTip = styled(P)`
+	text-align: center;
+`;
