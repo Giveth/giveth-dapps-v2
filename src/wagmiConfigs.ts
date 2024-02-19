@@ -68,8 +68,6 @@ const metadata = {
 
 const chains = configuration.EVM_CHAINS;
 
-const classicNetworkNumber = configuration.CLASSIC_NETWORK_NUMBER;
-
 // Create wagmiConfig
 export const wagmiConfig = createConfig({
 	chains: chains, // required

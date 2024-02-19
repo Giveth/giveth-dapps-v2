@@ -39,6 +39,7 @@ import {
 import { GeneralWalletProvider } from '@/providers/generalWalletProvider';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import { zIndex } from '@/lib/constants/constants';
+import configuration from '@/configuration';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import { SolanaProvider } from '@/providers/solanaWalletProvider';
 import type { AppProps } from 'next/app';
@@ -84,13 +85,17 @@ const RenderComponent = ({ Component, pageProps }: any) => {
 	return <Component {...pageProps} />;
 };
 
-// Create modal
+// Create web3 modal
 createWeb3Modal({
 	wagmiConfig,
 	projectId,
 	enableAnalytics: true, // Optional - defaults to your Cloud configuration
 	themeVariables: {
 		'--w3m-z-index': zIndex.WEB3MODAL,
+	},
+	chainImages: {
+		[configuration.CLASSIC_NETWORK_NUMBER]:
+			'/images/currencies/classic/32.svg',
 	},
 });
 
