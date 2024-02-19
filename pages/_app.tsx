@@ -38,6 +38,7 @@ import {
 } from '@/lib/helpers';
 import { GeneralWalletProvider } from '@/providers/generalWalletProvider';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
+import { zIndex } from '@/lib/constants/constants';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import { SolanaProvider } from '@/providers/solanaWalletProvider';
 import type { AppProps } from 'next/app';
@@ -88,9 +89,9 @@ createWeb3Modal({
 	wagmiConfig,
 	projectId,
 	enableAnalytics: true, // Optional - defaults to your Cloud configuration
-	featuredWalletIds: [
-		'225affb176778569276e484e1b92637ad061b01e13a048b35a9d280c3b58970f',
-	],
+	themeVariables: {
+		'--w3m-z-index': zIndex.WEB3MODAL,
+	},
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
