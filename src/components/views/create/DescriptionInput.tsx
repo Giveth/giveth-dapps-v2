@@ -11,11 +11,13 @@ import {
 	ECreateProjectSections,
 	EInputs,
 } from '@/components/views/create/CreateProject';
+import { WrappedSpinner } from '@/components/Spinner';
 
 const RichTextInput = dynamic(
 	() => import('@/components/rich-text/RichTextInput'),
 	{
 		ssr: false,
+		loading: () => <WrappedSpinner size={500} />,
 	},
 );
 
