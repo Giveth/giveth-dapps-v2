@@ -307,6 +307,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		};
 	}, []);
 
+	console.log('rendered');
+
 	return (
 		<Container>
 			<Row>
