@@ -82,6 +82,8 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 		}
 	}, [formData.categories?.length]);
 
+	console.log('formData', formData);
+
 	return (
 		<Card>
 			<Flex gap='16px'>
