@@ -10,12 +10,11 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
-import { isAddress } from 'viem';
-import { type Address, useNetwork } from 'wagmi';
+import { Address, isAddress } from 'viem';
+import { useAccount } from 'wagmi';
 import { compareAddresses, findAddressByChain } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import Input, { InputSize } from '@/components/Input';
-import { EInputs } from '@/components/views/create/CreateProject';
 import { gqlAddressValidation } from '@/components/views/create/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
@@ -26,6 +25,7 @@ import NetworkLogo from '@/components/NetworkLogo';
 import { getChainName } from '@/lib/network';
 import useFocus from '@/hooks/useFocus';
 import { ChainType, IChainType } from '@/types/config';
+import { EInputs } from './types';
 
 interface IProps extends IChainType {
 	networkId: number;
@@ -42,7 +42,7 @@ const WalletAddressInput: FC<IProps> = ({
 	const [resolvedENS, setResolvedENS] = useState<Address | undefined>();
 
 	const { getValues, setValue } = useFormContext();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 
 	const user = useAppSelector(state => state.user?.userData);

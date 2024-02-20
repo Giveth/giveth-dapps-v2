@@ -105,7 +105,7 @@ a {
 	background: white;
 }
 
-.quill > .ql-container > .ql-editor.ql-blank::before {
+.quill > .ql-container > .ql-editor.ql-blank&::before {
 	font-size: 16px;
 	font-family: Red Hat Text, sans-serif;
 	font-style: normal;
@@ -268,7 +268,7 @@ a {
 	opacity: 0.3;
   }
   
-  .image-uploading::before {
+  .image-uploading&::before {
 	content: "";
 	box-sizing: border-box;
 	position: absolute;

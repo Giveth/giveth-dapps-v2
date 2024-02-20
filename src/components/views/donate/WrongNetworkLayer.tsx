@@ -7,16 +7,16 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import { useSwitchChain } from 'wagmi';
 import { useIntl } from 'react-intl';
-import { useSwitchNetwork } from 'wagmi';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
 export const WrongNetworkLayer = () => {
+	const { switchChain } = useSwitchChain();
 	const { isOnEVM, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 	const { formatMessage } = useIntl();
-	const { switchNetwork } = useSwitchNetwork();
 
 	return (
 		<Overlay>
@@ -33,7 +33,10 @@ export const WrongNetworkLayer = () => {
 					<SwitchButton
 						onClick={async () => {
 							if (isOnEVM) {
-								switchNetwork?.(config.OPTIMISM_NETWORK_NUMBER);
+								switchChain &&
+									switchChain({
+										chainId: config.OPTIMISM_NETWORK_NUMBER,
+									});
 							} else {
 								await handleSingOutAndSignInWithEVM();
 							}

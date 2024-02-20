@@ -4,17 +4,17 @@ import { useFormContext } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Input, { InputSize } from '@/components/Input';
 import { requiredOptions } from '@/lib/constants/regex';
-import { EInputs } from '@/components/views/create/CreateProject';
 import { gqlTitleValidation } from '@/components/views/create/helpers';
 import useFocus from '@/hooks/useFocus';
 import Routes from '@/lib/constants/Routes';
+import { ECreateProjectSections, EInputs } from './types';
 
 interface IProps {
 	preTitle?: string;
-	showGuidelineModal: boolean;
+	setActiveProjectSection: (section: ECreateProjectSections) => void;
 }
 
-const NameInput: FC<IProps> = ({ preTitle, showGuidelineModal }) => {
+const NameInput: FC<IProps> = ({ preTitle, setActiveProjectSection }) => {
 	const router = useRouter();
 	const locale = router.locale || 'en';
 
@@ -47,7 +47,6 @@ const NameInput: FC<IProps> = ({ preTitle, showGuidelineModal }) => {
 	useEffect(() => {
 		// For handling a case when the user clicks on Submission guidelines and close it - We shouldn't focus in this case
 		if (
-			!showGuidelineModal &&
 			isCreateMode &&
 			!firstGuideModalClosed.current &&
 			!isFirstRender.current
@@ -56,7 +55,7 @@ const NameInput: FC<IProps> = ({ preTitle, showGuidelineModal }) => {
 			firstGuideModalClosed.current = true;
 		}
 		isFirstRender.current = false;
-	}, [showGuidelineModal]);
+	}, []);
 
 	return (
 		<>
@@ -76,6 +75,9 @@ const NameInput: FC<IProps> = ({ preTitle, showGuidelineModal }) => {
 					validate: titleValidation,
 				}}
 				error={formErrors[EInputs.name]}
+				onMouseOver={() =>
+					setActiveProjectSection(ECreateProjectSections.name)
+				}
 			/>
 			<br />
 		</>

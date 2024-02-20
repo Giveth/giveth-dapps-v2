@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
+import { createWeb3Modal } from '@web3modal/wagmi/react';
 import Head from 'next/head';
 import { IntlProvider } from 'react-intl';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { ApolloProvider } from '@apollo/client';
 import NProgress from 'nprogress';
@@ -9,19 +11,13 @@ import { useRouter } from 'next/router';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
-import { WagmiConfig, configureChains, createConfig } from 'wagmi';
-import { EIP6963Connector, createWeb3Modal } from '@web3modal/wagmi/react';
-import { walletConnectProvider } from '@web3modal/wagmi';
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-import { InjectedConnector } from 'wagmi/connectors/injected';
-import { publicProvider } from 'wagmi/providers/public';
-import { SafeConnector } from 'wagmi/connectors/safe';
+import { WagmiProvider } from 'wagmi';
+import { projectId, wagmiConfig } from '@/wagmiConfigs';
 import { useApollo } from '@/apollo/apolloClient';
 import { HeaderWrapper } from '@/components/Header/HeaderWrapper';
 import { FooterWrapper } from '@/components/Footer/FooterWrapper';
 import '../styles/globals.css';
 import { ca, en, es } from '../lang';
-import config from '@/configuration';
 import { store } from '@/features/store';
 import SubgraphController from '@/components/controller/subgraph.ctrl';
 import UserController from '@/components/controller/user.ctrl';
@@ -32,7 +28,6 @@ import NotificationController from '@/components/controller/pfp.ctrl';
 import PfpController from '@/components/controller/notification.ctrl';
 import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import StorageLabel from '@/lib/localStorage';
-import { zIndex } from '@/lib/constants/constants';
 import { useSafeAutoConnect } from '@/hooks/useSafeAutoConnect';
 import {
 	getLocaleFromIP,
@@ -41,6 +36,8 @@ import {
 } from '@/lib/helpers';
 import { GeneralWalletProvider } from '@/providers/generalWalletProvider';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
+import { zIndex } from '@/lib/constants/constants';
+import configuration from '@/configuration';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import { SolanaProvider } from '@/providers/solanaWalletProvider';
 import type { AppProps } from 'next/app';
@@ -53,6 +50,7 @@ declare global {
 }
 
 const DEFAULT_WRITE_KEY = 'MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB';
+const queryClient = new QueryClient();
 
 export const IntlMessages = {
 	ca,
@@ -80,65 +78,24 @@ function renderSnippet() {
 
 const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
-const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!;
-
-const metadata = {
-	name: 'Giveth',
-	description:
-		'Get rewarded for giving to for-good projects with zero added fees. Donate crypto directly to thousands of for-good projects, nonprofits &amp; charities!',
-	url: 'https://giveth.io',
-	icons: ['https://giveth.io/images/currencies/giv/24.svg'],
-};
-
-const chains = config.EVM_CHAINS;
-const { publicClient } = configureChains(chains, [
-	walletConnectProvider({ projectId }),
-	publicProvider(),
-]);
-const wagmiConfig = createConfig({
-	autoConnect: false,
-	connectors: [
-		new WalletConnectConnector({
-			chains,
-			options: { projectId, showQrModal: false, metadata },
-		}),
-		new EIP6963Connector({ chains }),
-		new InjectedConnector({ chains, options: { shimDisconnect: true } }),
-		new SafeConnector({
-			chains,
-			options: {
-				allowedDomains: [/app.safe.global$/],
-				debug: false,
-			},
-		}),
-	],
-	publicClient,
-});
-
-const classicNetworkNumber = config.CLASSIC_NETWORK_NUMBER;
-
-createWeb3Modal({
-	wagmiConfig,
-	projectId,
-	chains,
-	themeVariables: {
-		'--w3m-z-index': zIndex.WEB3MODAL,
-	},
-	featuredWalletIds: [
-		'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
-	],
-	includeWalletIds: [
-		'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
-	],
-	chainImages: {
-		[classicNetworkNumber]: '/images/currencies/classic/32.svg',
-	},
-});
-
 const RenderComponent = ({ Component, pageProps }: any) => {
 	useSafeAutoConnect();
 	return <Component {...pageProps} />;
 };
+
+// Create web3 modal
+createWeb3Modal({
+	wagmiConfig,
+	projectId,
+	enableAnalytics: true, // Optional - defaults to your Cloud configuration
+	themeVariables: {
+		'--w3m-z-index': zIndex.WEB3MODAL,
+	},
+	chainImages: {
+		[configuration.CLASSIC_NETWORK_NUMBER]:
+			'/images/currencies/classic/32.svg',
+	},
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
 	const router = useRouter();
@@ -195,6 +152,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 		};
 		asyncFunc();
 	}, []);
+
 	return (
 		<>
 			<Head>
@@ -211,45 +169,47 @@ function MyApp({ Component, pageProps }: AppProps) {
 				>
 					<ApolloProvider client={apolloClient}>
 						<SolanaProvider>
-							<WagmiConfig config={wagmiConfig}>
-								<GeneralWalletProvider>
-									{isMaintenanceMode ? (
-										<MaintenanceIndex />
-									) : (
-										<>
-											<NotificationController />
-											<GeneralController />
-											<PriceController />
-											<SubgraphController />
-											<UserController />
-											<HeaderWrapper />
-											{isGIVeconomyRoute(
-												router.route,
-											) && <GIVeconomyTab />}
-											{(pageProps as any).errorStatus ? (
-												<ErrorsIndex
-													statusCode={
-														(pageProps as any)
-															.errorStatus
-													}
-												/>
-											) : (
-												<RenderComponent
-													Component={Component}
-													pageProps={pageProps}
-												/>
-											)}
-											{process.env.NEXT_PUBLIC_ENV ===
-												'production' && (
-												<Script
-													id='segment-script'
-													strategy='afterInteractive'
-													dangerouslySetInnerHTML={{
-														__html: renderSnippet(),
-													}}
-												/>
-											)}
-											{/* {process.env.NEXT_PUBLIC_ENV !==
+							<WagmiProvider config={wagmiConfig}>
+								<QueryClientProvider client={queryClient}>
+									<GeneralWalletProvider>
+										{isMaintenanceMode ? (
+											<MaintenanceIndex />
+										) : (
+											<>
+												<NotificationController />
+												<GeneralController />
+												<PriceController />
+												<SubgraphController />
+												<UserController />
+												<HeaderWrapper />
+												{isGIVeconomyRoute(
+													router.route,
+												) && <GIVeconomyTab />}
+												{(pageProps as any)
+													.errorStatus ? (
+													<ErrorsIndex
+														statusCode={
+															(pageProps as any)
+																.errorStatus
+														}
+													/>
+												) : (
+													<RenderComponent
+														Component={Component}
+														pageProps={pageProps}
+													/>
+												)}
+												{process.env.NEXT_PUBLIC_ENV ===
+													'production' && (
+													<Script
+														id='segment-script'
+														strategy='afterInteractive'
+														dangerouslySetInnerHTML={{
+															__html: renderSnippet(),
+														}}
+													/>
+												)}
+												{/* {process.env.NEXT_PUBLIC_ENV !==
 												'production' && (
 												<Script
 													id='console-script'
@@ -260,13 +220,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 												/>
 											)} */}
 
-											<FooterWrapper />
-											<ModalController />
-											<PfpController />
-										</>
-									)}
-								</GeneralWalletProvider>
-							</WagmiConfig>
+												<FooterWrapper />
+												<ModalController />
+												<PfpController />
+											</>
+										)}
+									</GeneralWalletProvider>
+								</QueryClientProvider>
+							</WagmiProvider>
 						</SolanaProvider>
 					</ApolloProvider>
 				</IntlProvider>

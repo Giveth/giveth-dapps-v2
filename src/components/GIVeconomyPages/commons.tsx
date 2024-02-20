@@ -27,7 +27,7 @@ export const ExtLinkRow = styled(Flex)`
 	color: ${brandColors.cyan[500]};
 	cursor: pointer;
 	gap: 4px;
-	:hover {
+	&:hover {
 		color: ${brandColors.cyan[300]};
 	}
 `;

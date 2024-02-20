@@ -1,4 +1,4 @@
-import { type Address } from 'wagmi';
+import { type Address } from 'viem';
 import { getNowUnixMS } from '@/helpers/time';
 import { ITokenDistro, ITokenDistroBalance } from '@/types/subgraph';
 

@@ -19,7 +19,7 @@ import {
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 import { captureException } from '@sentry/nextjs';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Modal } from './Modal';
 import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 import { formatWeiHelper } from '@/helpers/number';
@@ -123,7 +123,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	const [sumStream, setSumStream] = useState(0n);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { address } = useAccount();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { tokenDistroHelper, sdh } = useTokenDistroHelper(
 		chainId!,

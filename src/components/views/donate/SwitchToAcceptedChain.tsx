@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useIntl } from 'react-intl';
 import { Caption } from '@giveth/ui-design-system';
-import { Chain } from 'wagmi';
+import { Chain } from 'viem';
 import { getNetworkNames } from '@/components/views/donate/helpers';
 import {
 	NetworkToast,

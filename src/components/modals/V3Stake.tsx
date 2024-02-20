@@ -9,7 +9,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Modal } from './Modal';
 import { CancelButton, HarvestButton, HelpRow } from './HarvestAll.sc';
 import { Flex } from '../styled-components/Flex';
@@ -69,7 +69,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 	const [claimableNow, setClaimableNow] = useState(0n);
 	const [givBackLiquidPart, setGivBackLiquidPart] = useState(0n);
 
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { address } = useAccount();
 

@@ -11,9 +11,8 @@ import {
 } from '@giveth/ui-design-system';
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { Chain, formatUnits, parseUnits } from 'viem';
-import { getContract } from 'wagmi/actions';
-import { type Address, erc20ABI } from 'wagmi';
+import { Address, Chain, erc20Abi, formatUnits, parseUnits } from 'viem';
+import { readContract } from '@wagmi/core';
 import { PublicKey } from '@solana/web3.js';
 import { useConnection } from '@solana/wallet-adapter-react';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
@@ -63,6 +62,7 @@ import QFModal from '@/components/views/donate/QFModal';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
 import { INetworkIdWithChain } from './common.types';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
@@ -305,14 +305,12 @@ const CryptoDonation: FC = () => {
 							return setSelectedTokenBalance(BigInt(splBalance));
 						}
 
-						const contract = getContract({
+						const _balance = await readContract(wagmiConfig, {
 							address: selectedToken.address! as Address,
-							abi: erc20ABI,
+							abi: erc20Abi,
+							functionName: 'balanceOf',
+							args: [address as Address],
 						});
-
-						const _balance = await contract.read.balanceOf([
-							address! as `0x${string}`,
-						]);
 						setSelectedTokenBalance(_balance);
 						return _balance;
 					} catch (e) {
@@ -608,7 +606,7 @@ const InputContainer = styled.div`
 const AvText = styled(GLink)`
 	color: ${brandColors.deep[500]};
 	padding: 4px 0 0 5px;
-	:hover {
+	&:hover {
 		cursor: pointer;
 		text-decoration: underline;
 	}
@@ -623,7 +621,7 @@ const SearchContainer = styled.div<IInputBox>`
 				: neutralColors.gray[300]};
 	border-radius: 8px;
 	box-shadow: ${props => props.focused && Shadow.Neutral[500]};
-	:hover {
+	&:hover {
 		box-shadow: ${Shadow.Neutral[500]};
 	}
 `;

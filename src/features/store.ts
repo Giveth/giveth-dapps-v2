@@ -2,7 +2,6 @@ import {
 	configureStore,
 	ThunkAction,
 	Action,
-	PreloadedState,
 	combineReducers,
 } from '@reduxjs/toolkit';
 import subgraphReducer from './subgraph/subgraph.slice';
@@ -23,10 +22,9 @@ const rootReducer = combineReducers({
 	pfp: pfpReducer,
 });
 
-export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
+export const setupStore = () => {
 	return configureStore({
 		reducer: rootReducer,
-		preloadedState,
 	});
 };
 

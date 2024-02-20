@@ -13,7 +13,6 @@ import {
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { EInputs } from '@/components/views/create/CreateProject';
 import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
@@ -25,6 +24,7 @@ import { findAddressByChain } from '@/lib/helpers';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { IAnchorContractData } from '@/apollo/types/types';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { EInputs } from './types';
 
 interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
@@ -224,7 +224,7 @@ const IconContainer = styled(FlexCenter)`
 	border-radius: 50%;
 	cursor: pointer;
 	transition: background-color 0.2s ease-in-out;
-	:hover {
+	&:hover {
 		background-color: ${neutralColors.gray[300]};
 	}
 `;
