@@ -7,14 +7,16 @@ import {
 } from '@giveth/ui-design-system';
 import useAnimatedHeight from '@/hooks/useAnimatedHeight';
 import { Flex } from '@/components/styled-components/Flex';
-import { infoMap, getScoreState } from './scoreHelpers';
+import { infoMap, getScoreState, ScoreState } from './scoreHelpers';
 
 interface IImprovementTipsProps {
-	score: number;
+	fieldsScores: ScoreState;
 }
 
-export const ImprovementTips: FC<IImprovementTipsProps> = ({ score }) => {
-	const info = infoMap[getScoreState(score)];
+export const ImprovementTips: FC<IImprovementTipsProps> = ({
+	fieldsScores,
+}) => {
+	const info = infoMap[getScoreState(fieldsScores.totalScore)];
 	const { isOpen, toggleOpen, maxHeight, contentRef } = useAnimatedHeight();
 	return (
 		<div>

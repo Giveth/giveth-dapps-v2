@@ -81,7 +81,7 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 			<ScoreBox score={fieldsScores.totalScore} />
 			<MainTip>{infoMap[EScoreState.PERFECT].mainTip}</MainTip>
 			{fieldsScores.totalScore < 100 && (
-				<ImprovementTips score={fieldsScores.totalScore} />
+				<ImprovementTips fieldsScores={fieldsScores} />
 			)}
 		</Card>
 	);
