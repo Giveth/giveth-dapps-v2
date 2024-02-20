@@ -60,7 +60,7 @@ export const GhostButton = styled(GivethButton)<{ color?: string }>`
 	background: transparent;
 	border-color: transparent;
 	padding: 10px;
-	:hover {
+	&:hover {
 		color: ${({ color }) => color || brandColors.pinky[500]};
 		background: transparent;
 	}

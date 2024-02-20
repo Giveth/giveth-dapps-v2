@@ -6,7 +6,7 @@ import { H2, H5, Lead } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import { formatEther } from 'viem';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import {
 	APRRow,
 	ArrowButton,
@@ -39,7 +39,7 @@ import { InputWithUnit } from '@/components/input/InputWithUnit';
 
 const GovernCardContainer = styled(Card)`
 	padding-left: 254px;
-	::before {
+	&::before {
 		content: '';
 		background-image: url('/images/vote.png');
 		position: absolute;
@@ -51,7 +51,7 @@ const GovernCardContainer = styled(Card)`
 	}
 	@media only screen and (max-width: 1360px) {
 		padding-left: 112px;
-		::before {
+		&::before {
 			width: 170px;
 			height: 150px;
 			background-size: contain;
@@ -60,7 +60,7 @@ const GovernCardContainer = styled(Card)`
 	}
 	@media only screen and (max-width: 1120px) {
 		padding: 8px;
-		::before {
+		&::before {
 			background-image: none;
 		}
 	}
@@ -109,7 +109,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	const [earnEstimate, setEarnEstimate] = useState(0n);
 	const [apr, setApr] = useState<APR>(null);
 
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const gnosisValues = useAppSelector(state => state.subgraph.gnosisValues);

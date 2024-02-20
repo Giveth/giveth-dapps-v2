@@ -224,7 +224,7 @@ const IconContainer = styled(FlexCenter)`
 	border-radius: 50%;
 	cursor: pointer;
 	transition: background-color 0.2s ease-in-out;
-	:hover {
+	&:hover {
 		background-color: ${neutralColors.gray[300]};
 	}
 `;

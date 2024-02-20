@@ -9,7 +9,7 @@ import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Chain } from 'wagmi';
+import { Chain } from 'viem';
 import Routes from '@/lib/constants/Routes';
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { useDonateData } from '@/context/donate.context';

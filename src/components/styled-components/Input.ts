@@ -68,7 +68,7 @@ const Input = styled.input<IInputField>`
 	font-family: 'Red Hat Text', sans-serif;
 	caret-color: ${brandColors.giv[300]};
 	box-shadow: none;
-	:focus {
+	&:focus {
 		border: 2px solid
 			${props => {
 				switch (props.validation) {
@@ -85,13 +85,13 @@ const Input = styled.input<IInputField>`
 				}
 			}};
 	}
-	:hover {
+	&:hover {
 		box-shadow: ${Shadow.Neutral[400]};
 	}
-	:disabled {
+	&:disabled {
 		background: ${neutralColors.gray[300]};
 	}
-	::placeholder {
+	&::placeholder {
 		color: ${neutralColors.gray[500]};
 	}
 `;

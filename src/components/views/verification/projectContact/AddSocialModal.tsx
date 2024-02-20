@@ -79,7 +79,7 @@ const Buttons = styled.div`
 	margin-top: 15px;
 	> :last-child {
 		margin-top: 10px;
-		:hover {
+		&:hover {
 			background-color: transparent;
 		}
 	}

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { Col, Container, Row } from '@giveth/ui-design-system';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import {
 	OverviewBottomContainer,
 	VoteCard,
@@ -22,7 +22,7 @@ import { getGIVpowerLink } from '@/helpers/givpower';
 
 export const TabOverview = () => {
 	const { formatMessage } = useIntl();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	return (
 		<>

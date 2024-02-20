@@ -2,7 +2,7 @@ import { Caption, neutralColors } from '@giveth/ui-design-system';
 import { type FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { FetchBalanceResult } from '@wagmi/core';
+import { type GetBalanceReturnType } from '@wagmi/core';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { limitFraction } from '@/helpers/number';
 import { Flex } from '@/components/styled-components/Flex';
@@ -11,7 +11,7 @@ import { ISuperToken, ISuperfluidStream } from '@/types/superFluid';
 interface IStreamInfoProps {
 	tokenStreams: ISuperfluidStream[];
 	superToken?: ISuperToken;
-	SuperTokenBalance?: FetchBalanceResult;
+	SuperTokenBalance?: GetBalanceReturnType;
 }
 
 export const StreamInfo: FC<IStreamInfoProps> = ({

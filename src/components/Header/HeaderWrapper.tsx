@@ -20,7 +20,7 @@ const Header = dynamic(() => import('./Header'), {
 const HeaderLoading = () => {
 	const theme = useAppSelector(state => state.general.theme);
 	return (
-		<StyledHeader alignItems='center' theme={theme} show={true}>
+		<StyledHeader alignItems='center' themeState={theme} show={true}>
 			<Flex gap='24px' alignItems='center'>
 				<Link href={Routes.Home}>
 					<Logo>
@@ -33,7 +33,7 @@ const HeaderLoading = () => {
 					</Logo>
 				</Link>
 			</Flex>
-			<HeaderLinks theme={theme}>
+			<HeaderLinks themeState={theme}>
 				<Link href={Routes.AllProjects}>
 					<HeaderLink>Projects</HeaderLink>
 				</Link>

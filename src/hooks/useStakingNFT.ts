@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import config from '@/configuration';
 import { getReward } from '@/lib/stakingNFT';
 import { LiquidityPosition } from '@/types/nfts';
 
 export const useStakingNFT = (stakedPositions: LiquidityPosition[]) => {
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { address } = useAccount();
 	const [rewardBalance, setRewardBalance] = useState(0n);

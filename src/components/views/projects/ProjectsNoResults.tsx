@@ -131,7 +131,7 @@ const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 		!props.isSelected ? neutralColors.gray[300] : brandColors.giv[600]};
 	color: ${props => (!props.isSelected ? 'black' : 'white')};
 	padding: 16px;
-	:hover {
+	&:hover {
 		color: white;
 		background: ${brandColors.giv[600]};
 		transition:
@@ -153,7 +153,7 @@ const SuggestionItem = styled.div`
 	color: ${neutralColors.gray[500]};
 	cursor: pointer;
 	padding: 0 15px;
-	:hover {
+	&:hover {
 		color: ${neutralColors.gray[700]};
 		transition:
 			color 300ms linear,

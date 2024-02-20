@@ -1,5 +1,6 @@
 import { PublicKey } from '@solana/web3.js';
-import { fetchEnsAddress } from '@wagmi/core';
+import { getEnsAddress } from '@wagmi/core';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 export function isAddressENS(ens: string | undefined) {
 	if (!ens) return false;
@@ -8,7 +9,7 @@ export function isAddressENS(ens: string | undefined) {
 
 // Before calling getAddressFromENS, check if user is on Mainnet
 export async function getAddressFromENS(ens: string | undefined) {
-	return await fetchEnsAddress({ name: ens! });
+	return await getEnsAddress(wagmiConfig, { name: ens! });
 }
 
 export function isSolanaAddress(address: string) {

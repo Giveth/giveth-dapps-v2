@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { connect, getWalletClient } from '@wagmi/core';
+import { connect } from '@wagmi/core';
+import { signMessage } from '@wagmi/core';
 import { backendGQLRequest } from '@/helpers/requests';
 import {
 	GET_USER_BY_ADDRESS,
@@ -18,6 +19,7 @@ import config from '@/configuration';
 import StorageLabel from '@/lib/localStorage';
 import { getTokens } from '@/helpers/user';
 import { createSiweMessage, signWithEvm } from '@/lib/authentication';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 const saveTokenToLocalstorage = (address: string, token: string) => {
 	const _address = address.toLowerCase();
@@ -151,17 +153,16 @@ export const signToGetToken = createAsyncThunk(
 							(i: any) => i.id === 'safe',
 						);
 						safeConnector &&
-							(await connect({
+							(await connect(wagmiConfig, {
 								chainId,
 								connector: safeConnector,
 							}));
 					} catch (error) {}
 
-					const gnosisClient = await getWalletClient({ chainId });
 					let safeSignature;
 					const safeMessageTimestamp = new Date().getTime();
 					try {
-						safeSignature = await gnosisClient?.signMessage({
+						safeSignature = await signMessage(wagmiConfig, {
 							message: safeMessage.message,
 						});
 					} catch (error) {
