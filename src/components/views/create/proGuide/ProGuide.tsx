@@ -15,7 +15,7 @@ export const ProGuide: FC<IProGuideProps> = ({
 	activeSection,
 	formData,
 	getFieldState,
-	setScoreState,
+	setQuality,
 }) => {
 	const isLaptopL = useMediaQuery(`(min-width: ${deviceSize.laptopL}px)`);
 	return isLaptopL ? (
@@ -24,7 +24,7 @@ export const ProGuide: FC<IProGuideProps> = ({
 			<ProjectScoreCard
 				formData={formData}
 				getFieldState={getFieldState}
-				setScoreState={setScoreState}
+				setQuality={setQuality}
 			/>
 		</Wrapper>
 	) : null;

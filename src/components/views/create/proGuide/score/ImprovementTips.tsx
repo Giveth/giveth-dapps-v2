@@ -31,7 +31,7 @@ const tipMap = {
 export const ImprovementTips: FC<IImprovementTipsProps> = ({
 	fieldsScores,
 }) => {
-	const info = infoMap[fieldsScores.state];
+	const info = infoMap[fieldsScores.quality];
 	const { isOpen, toggleOpen, maxHeight, contentRef } = useAnimatedHeight();
 	const bulletColor = info.bulletColor;
 	return (

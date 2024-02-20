@@ -21,22 +21,27 @@ import {
 	initialState,
 	EScoreType,
 	infoMap,
-	EScoreState,
+	EQualityState,
 } from './scoreHelpers';
 
 export interface IProjectScoreCardProps {
 	formData: TInputs;
 	getFieldState: UseFormGetFieldState<TInputs>;
-	setScoreState: Dispatch<SetStateAction<EScoreState>>;
+	setQuality: Dispatch<SetStateAction<EQualityState>>;
 }
 
 export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 	formData,
 	getFieldState,
+	setQuality,
 }) => {
 	const [fieldsScores, dispatch] = useReducer<
 		React.Reducer<ScoreState, ScoreAction>
 	>(calculateScore, initialState);
+
+	useEffect(() => {
+		setQuality(fieldsScores.quality);
+	}, [fieldsScores.quality, setQuality]);
 
 	// Description score
 	const descriptionError = getFieldState(EInputs.description).error;
@@ -87,9 +92,9 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 			</Flex>
 			<ScoreBox
 				score={fieldsScores.totalScore}
-				color={infoMap[fieldsScores.state].scoreColor}
+				color={infoMap[fieldsScores.quality].scoreColor}
 			/>
-			<MainTip>{infoMap[fieldsScores.state].mainTip}</MainTip>
+			<MainTip>{infoMap[fieldsScores.quality].mainTip}</MainTip>
 			{fieldsScores.totalScore < 100 && (
 				<ImprovementTips fieldsScores={fieldsScores} />
 			)}

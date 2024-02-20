@@ -51,7 +51,7 @@ import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { ECreateProjectSections, TInputs, EInputs } from './types';
 import { ProGuide } from './proGuide/ProGuide';
-import { EScoreState } from './proGuide/score/scoreHelpers';
+import { EQualityState } from './proGuide/score/scoreHelpers';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -60,7 +60,7 @@ interface ICreateProjectProps {
 }
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
-	const [scoreState, setScoreState] = useState(EScoreState.LOW);
+	const [quality, setQuality] = useState(EQualityState.LOW);
 	const [isLoading, setIsLoading] = useState(false);
 	const [addedProjectState, setAddedProjectState] = useState<IProject>();
 	const [showAlloProtocolModal, setShowAlloProtocolModal] = useState(false);
@@ -435,7 +435,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									})}
 									buttonType='primary'
 									type='submit'
-									disabled={isLoading}
+									disabled={
+										isLoading ||
+										quality === EQualityState.LOW
+									}
 								/>
 								<OutlineButton
 									onClick={handleCancel}
@@ -469,7 +472,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						activeSection={activeProjectSection}
 						formData={data}
 						getFieldState={getFieldState}
-						setScoreState={setScoreState}
+						setQuality={setQuality}
 					/>
 				</Col>
 			</Row>

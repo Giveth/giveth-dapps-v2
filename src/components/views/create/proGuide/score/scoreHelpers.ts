@@ -8,7 +8,7 @@ export enum EScoreType {
 	DESC_IMAGE = 'DESC_IMAGE',
 }
 
-export enum EScoreState {
+export enum EQualityState {
 	LOW = 'LOW',
 	MEDIUM = 'MEDIUM',
 	HIGH = 'HIGH',
@@ -24,7 +24,7 @@ export type ScoreState = {
 	[key in EScoreType]: number;
 } & {
 	totalScore: number;
-	state: EScoreState;
+	quality: EQualityState;
 };
 
 export const initialState: ScoreState = {
@@ -34,32 +34,32 @@ export const initialState: ScoreState = {
 	[EScoreType.IMAGE]: 0,
 	[EScoreType.DESC_IMAGE]: 0,
 	totalScore: 0,
-	state: EScoreState.LOW,
+	quality: EQualityState.LOW,
 };
 
 export const infoMap = {
-	[EScoreState.LOW]: {
+	[EQualityState.LOW]: {
 		mainTip:
 			'Your project score is too low to publish, you need at least a score of 50 to proceed.',
 		title: 'Why is it low?',
 		scoreColor: semanticColors.punch[500],
 		bulletColor: semanticColors.punch,
 	},
-	[EScoreState.MEDIUM]: {
+	[EQualityState.MEDIUM]: {
 		mainTip:
 			'You can still publish your project but it might prevent you to receive the donation your are looking for.',
 		title: 'Why is it low?',
 		scoreColor: semanticColors.golden[500],
 		bulletColor: semanticColors.golden,
 	},
-	[EScoreState.HIGH]: {
+	[EQualityState.HIGH]: {
 		mainTip:
 			'Just keep in mind to regularly update your project to keep donation coming your way.',
 		title: 'What else you can do?',
 		scoreColor: semanticColors.jade[400],
 		bulletColor: brandColors.giv,
 	},
-	[EScoreState.PERFECT]: {
+	[EQualityState.PERFECT]: {
 		mainTip:
 			'A perfect score! Just keep in mind to regularly update your project to keep donation coming your way.',
 		title: '',
@@ -68,11 +68,11 @@ export const infoMap = {
 	},
 };
 
-export function getScoreState(score: number): EScoreState {
-	if (score < 50) return EScoreState.LOW;
-	if (score < 75) return EScoreState.MEDIUM;
-	if (score < 100) return EScoreState.HIGH;
-	return EScoreState.PERFECT;
+export function getScoreState(score: number): EQualityState {
+	if (score < 50) return EQualityState.LOW;
+	if (score < 75) return EQualityState.MEDIUM;
+	if (score < 100) return EQualityState.HIGH;
+	return EQualityState.PERFECT;
 }
 
 export function calculateScore(
@@ -111,7 +111,7 @@ export function calculateScore(
 		newState[EScoreType.IMAGE] +
 		newState[EScoreType.DESC_IMAGE];
 
-	newState.state = getScoreState(newState.totalScore);
+	newState.quality = getScoreState(newState.totalScore);
 
 	return newState;
 }
