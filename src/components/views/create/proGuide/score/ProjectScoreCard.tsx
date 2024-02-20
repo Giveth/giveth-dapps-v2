@@ -56,19 +56,29 @@ export interface IProjectScoreCardProps {
 }
 
 export enum EScoreType {
-	DESCRIPTION,
-	CATEGORIES,
-	LOCATION,
-	IMAGE,
-	DESC_IMAGE,
+	DESCRIPTION = 'DESCRIPTION',
+	CATEGORIES = 'CATEGORIES',
+	LOCATION = 'LOCATION',
+	IMAGE = 'IMAGE',
+	DESC_IMAGE = 'DESC_IMAGE',
 }
 
 export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 	formData,
 	getFieldState,
 }) => {
-	const [fieldsScores, setFieldsScores] = useState([0, 0, 0, 0, 0]);
-	const score = fieldsScores.reduce((acc, score) => acc + score, 0);
+	// const [fieldsScores, setFieldsScores] = useState([0, 0, 0, 0, 0]);
+	const [fieldsScores, setFieldsScores] = useState({
+		[EScoreType.DESCRIPTION]: 0,
+		[EScoreType.CATEGORIES]: 0,
+		[EScoreType.LOCATION]: 0,
+		[EScoreType.IMAGE]: 0,
+		[EScoreType.DESC_IMAGE]: 0,
+	});
+	const score = Object.values(fieldsScores).reduce(
+		(acc, curr) => acc + curr,
+		0,
+	);
 	console.log('score', fieldsScores, score);
 
 	// handle description score
@@ -76,15 +86,9 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 	useEffect(() => {
 		console.log('Checking description score');
 		if (descError) {
-			setFieldsScores(prev => {
-				prev[EScoreType.DESCRIPTION] = 0;
-				return prev;
-			});
+			setFieldsScores({ ...fieldsScores, [EScoreType.DESCRIPTION]: 0 });
 		} else {
-			setFieldsScores(prev => {
-				prev[EScoreType.DESCRIPTION] = 51;
-				return prev;
-			});
+			setFieldsScores({ ...fieldsScores, [EScoreType.DESCRIPTION]: 51 });
 		}
 	}, [descError]);
 
@@ -92,15 +96,9 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 	useEffect(() => {
 		console.log('Checking categories score');
 		if (formData.categories && formData.categories.length > 0) {
-			setFieldsScores(prev => {
-				prev[EScoreType.CATEGORIES] = 9;
-				return prev;
-			});
+			setFieldsScores({ ...fieldsScores, [EScoreType.CATEGORIES]: 9 });
 		} else {
-			setFieldsScores(prev => {
-				prev[EScoreType.CATEGORIES] = 0;
-				return prev;
-			});
+			setFieldsScores({ ...fieldsScores, [EScoreType.CATEGORIES]: 0 });
 		}
 	}, [formData.categories?.length]);
 
@@ -108,15 +106,9 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 	useEffect(() => {
 		console.log('Checking location score');
 		if (formData[EInputs.impactLocation]) {
-			setFieldsScores(prev => {
-				prev[EScoreType.LOCATION] = 9;
-				return prev;
-			});
+			setFieldsScores({ ...fieldsScores, [EScoreType.LOCATION]: 9 });
 		} else {
-			setFieldsScores(prev => {
-				prev[EScoreType.LOCATION] = 0;
-				return prev;
-			});
+			setFieldsScores({ ...fieldsScores, [EScoreType.LOCATION]: 0 });
 		}
 	}, [formData[EInputs.impactLocation]]);
 
@@ -130,14 +122,14 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 			const description = formData[EInputs.description];
 
 			if (description && description.includes('<img')) {
-				setFieldsScores(prev => {
-					prev[EScoreType.DESC_IMAGE] = 12;
-					return prev;
+				setFieldsScores({
+					...fieldsScores,
+					[EScoreType.DESC_IMAGE]: 12,
 				});
 			} else {
-				setFieldsScores(prev => {
-					prev[EScoreType.DESC_IMAGE] = 0;
-					return prev;
+				setFieldsScores({
+					...fieldsScores,
+					[EScoreType.DESC_IMAGE]: 0,
 				});
 			}
 		}, 1000);
@@ -151,14 +143,14 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 			formData[EInputs.image] &&
 			!formData[EInputs.image].startsWith('/')
 		) {
-			setFieldsScores(prev => {
-				prev[EScoreType.IMAGE] = 19;
-				return prev;
+			setFieldsScores({
+				...fieldsScores,
+				[EScoreType.IMAGE]: 19,
 			});
 		} else {
-			setFieldsScores(prev => {
-				prev[EScoreType.IMAGE] = 0;
-				return prev;
+			setFieldsScores({
+				...fieldsScores,
+				[EScoreType.IMAGE]: 0,
 			});
 		}
 	}, [formData[EInputs.image]]);
