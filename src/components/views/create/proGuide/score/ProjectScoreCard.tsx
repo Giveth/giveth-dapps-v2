@@ -103,7 +103,7 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 			const description = formData[EInputs.description];
 
 			if (description && description.includes('<img')) {
-				console.log('image in description score is 9');
+				console.log('image in description score is 12');
 			} else {
 				console.log('image in description score is 0');
 			}
