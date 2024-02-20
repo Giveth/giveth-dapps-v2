@@ -92,6 +92,19 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 		}
 	}, [formData[EInputs.impactLocation]]);
 
+	// handle image score
+	useEffect(() => {
+		console.log('Checking image score');
+		if (
+			formData[EInputs.image] &&
+			!formData[EInputs.image].startsWith('/')
+		) {
+			console.log('image score is 19');
+		} else {
+			console.log('image score is 0');
+		}
+	}, [formData[EInputs.image]]);
+
 	console.log('formData', formData);
 
 	return (
