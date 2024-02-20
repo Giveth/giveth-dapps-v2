@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { ArchiveCover } from './ArchiveCover';
 import { WrongNetworkCover } from './WrongNetworkCover';
 
@@ -16,7 +16,7 @@ export const ArchiveAndNetworkCover: FC<IArchiveAndNetworkCoverProps> = ({
 	isArchived,
 	isExploited,
 }) => {
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 
 	return chainId === undefined || chainId !== targetNetwork ? (

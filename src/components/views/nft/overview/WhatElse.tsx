@@ -78,7 +78,7 @@ const WhatElse = () => {
 const WhatElseContainer = styled.div`
 	padding-top: 100px;
 	position: relative;
-	::before {
+	&::before {
 		content: ' ';
 		position: absolute;
 		background-image: url('/images/GIV_homepage.svg');

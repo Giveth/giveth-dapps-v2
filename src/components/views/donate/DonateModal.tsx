@@ -8,7 +8,7 @@ import {
 	Button,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Chain } from 'wagmi';
+import { Chain } from 'viem';
 import StorageLabel, { getWithExpiry } from '@/lib/localStorage';
 import { Modal } from '@/components/modals/Modal';
 import { compareAddresses, formatTxLink, showToastError } from '@/lib/helpers';
@@ -433,7 +433,7 @@ const DonatingBox = styled.div`
 const DonateButton = styled(Button)<{ disabled: boolean }>`
 	background: ${props =>
 		props.disabled ? brandColors.giv[200] : brandColors.giv[500]};
-	:hover:enabled {
+	&:hover:enabled {
 		background: ${brandColors.giv[700]};
 	}
 	:disabled {

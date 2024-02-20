@@ -122,7 +122,7 @@ const DesktopRow = styled(Flex)<{ index: number; isLast: boolean }>`
 	flex-direction: ${({ index }) => (index % 2 === 0 ? 'row' : 'row-reverse')};
 	${({ isLast }) =>
 		!isLast &&
-		`	::after {
+		`	&::after {
 		content: '';
 		position: absolute;
 		top: 50%;

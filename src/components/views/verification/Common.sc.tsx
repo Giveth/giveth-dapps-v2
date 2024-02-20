@@ -46,7 +46,7 @@ export const VerificationCard = styled(Flex)<{ background: string }>`
 	position: relative;
 	overflow: hidden;
 	box-shadow: 0 3px 20px ${Shadow.Neutral[400]};
-	::before {
+	&::before {
 		content: '';
 		display: 'block';
 		position: absolute;

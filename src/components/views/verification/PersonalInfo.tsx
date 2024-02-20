@@ -272,7 +272,7 @@ const EmailSection = styled(Flex)`
 const LightBotton = styled(Button)`
 	background-color: transparent;
 	color: ${brandColors.deep[400]};
-	:hover {
+	&:hover {
 		background-color: transparent;
 		color: ${brandColors.deep[600]};
 	}

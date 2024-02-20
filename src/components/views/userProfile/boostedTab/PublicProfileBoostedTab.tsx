@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 import { Col, Row } from '@giveth/ui-design-system';
 import BigNumber from 'bignumber.js';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { IUserProfileView } from '../UserProfile.view';
 import { Loading } from '../projectsTab/ProfileProjectsTab';
 import { EmptyPowerBoosting } from './EmptyPowerBoosting';
@@ -21,7 +21,7 @@ export const PublicProfileBoostedTab: FC<IUserProfileView> = () => {
 
 	const { loading, boosts, order, totalCount, changeOrder } =
 		useFetchPowerBoostingInfo(user);
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const givpower = new BigNumber(givpowerBalance);
 	const isZeroGivPower = givpower.isZero();

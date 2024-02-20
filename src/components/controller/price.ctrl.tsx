@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useAppDispatch } from '@/features/hooks';
 import {
 	fetchGIVPriceAsync,
@@ -9,7 +9,7 @@ import {
 
 const PriceController = () => {
 	const dispatch = useAppDispatch();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 
 	useEffect(() => {

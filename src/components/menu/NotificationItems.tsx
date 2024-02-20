@@ -49,7 +49,11 @@ export const NotificationItems: FC<INotificationMenuProps> = ({
 				</P>
 			)}
 			<br />
-			<AllNotifsLink href={Routes.Notifications} passHref theme={theme}>
+			<AllNotifsLink
+				href={Routes.Notifications}
+				passHref
+				themeState={theme}
+			>
 				<AllNotificationsLink
 					onClick={close}
 					color={brandColors.pinky[500]}
@@ -72,12 +76,12 @@ const AllNotificationsLink = styled(GLink)`
 	color: ${brandColors.pinky[500]};
 `;
 
-const AllNotifsLink = styled(Link)`
+const AllNotifsLink = styled(Link)<{ themeState: ETheme }>`
 	position: sticky;
 	bottom: 0;
 	width: 100%;
 	background-color: ${props =>
-		props.theme === ETheme.Dark ? brandColors.giv[600] : 'white'};
+		props.themeState === ETheme.Dark ? brandColors.giv[600] : 'white'};
 	display: inline-block;
 	padding: 8px 0;
 `;

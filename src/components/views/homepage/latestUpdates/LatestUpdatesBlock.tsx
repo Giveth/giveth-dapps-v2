@@ -52,7 +52,7 @@ const LatestUpdatesCardsContainer = styled(Flex)`
 	${mediaQueries.laptopL} {
 		animation-duration: 30s;
 	}
-	:hover {
+	&:hover {
 		animation-play-state: paused;
 	}
 	@keyframes marquee {

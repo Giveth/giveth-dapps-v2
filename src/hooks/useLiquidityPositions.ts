@@ -2,7 +2,7 @@ import { createContext, useEffect, useMemo, useState } from 'react';
 import { Pool, Position } from '@uniswap/v3-sdk';
 import { Token } from '@uniswap/sdk-core';
 import { captureException } from '@sentry/nextjs';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { LiquidityPosition } from '@/types/nfts';
 import config from '@/configuration';
 import { getUniswapV3TokenURI } from '@/services/subgraph.service';
@@ -24,7 +24,7 @@ ERC721NftContext.displayName = 'ERC721NftContext';
 
 export const useLiquidityPositions = () => {
 	const mainnetValues = useAppSelector(state => state.subgraph.mainnetValues);
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 
 	const network = config.MAINNET_NETWORK_NUMBER;

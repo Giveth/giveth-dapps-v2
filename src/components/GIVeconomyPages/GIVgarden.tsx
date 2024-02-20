@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { H1, IconGIVGarden } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Col, Container, Row } from '@giveth/ui-design-system';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import {
 	GardenTopContainer,
 	GardenBottomContainer,
@@ -29,7 +29,7 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { TopInnerContainer } from './commons';
 
 export const TabGardenTop = () => {
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const [showModal, setShowModal] = useState(false);
 	const [earnedLiquidPart, setEarnedLiquidPart] = useState(0n);

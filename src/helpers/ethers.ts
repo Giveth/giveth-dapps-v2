@@ -1,14 +1,9 @@
-import {
-	type PublicClient,
-	type WalletClient,
-	getPublicClient,
-	getWalletClient,
-} from '@wagmi/core';
+import { type Config, getClient, getConnectorClient } from '@wagmi/core';
 import { providers } from 'ethers';
-import { type HttpTransport } from 'viem';
+import type { Account, Chain, Client, Transport } from 'viem';
 
-export function publicClientToProvider(publicClient: PublicClient) {
-	const { chain, transport } = publicClient;
+export function clientToProvider(client: Client<Transport, Chain>) {
+	const { chain, transport } = client;
 	const network = {
 		chainId: chain.id,
 		name: chain.name,
@@ -16,7 +11,7 @@ export function publicClientToProvider(publicClient: PublicClient) {
 	};
 	if (transport.type === 'fallback')
 		return new providers.FallbackProvider(
-			(transport.transports as ReturnType<HttpTransport>[]).map(
+			(transport.transports as ReturnType<Transport>[]).map(
 				({ value }) =>
 					new providers.JsonRpcProvider(value?.url, network),
 			),
@@ -25,13 +20,16 @@ export function publicClientToProvider(publicClient: PublicClient) {
 }
 
 /** Action to convert a viem Public Client to an ethers.js Provider. */
-export function getEthersProvider({ chainId }: { chainId?: number } = {}) {
-	const publicClient = getPublicClient({ chainId });
-	return publicClientToProvider(publicClient);
+export function getEthersProvider(
+	config: Config,
+	{ chainId }: { chainId?: number } = {},
+) {
+	const client = getClient(config, { chainId });
+	return client ? clientToProvider(client) : undefined;
 }
 
-export function walletClientToSigner(walletClient: WalletClient) {
-	const { account, chain, transport } = walletClient;
+export function clientToSigner(client: Client<Transport, Chain, Account>) {
+	const { account, chain, transport } = client;
 	const network = {
 		chainId: chain.id,
 		name: chain.name,
@@ -42,9 +40,11 @@ export function walletClientToSigner(walletClient: WalletClient) {
 	return signer;
 }
 
-/** Action to convert a viem Wallet Client to an ethers.js Signer. */
-export async function getEthersSigner({ chainId }: { chainId?: number } = {}) {
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) return undefined;
-	return walletClientToSigner(walletClient);
+/** Action to convert a Viem Client to an ethers.js Signer. */
+export async function getEthersSigner(
+	config: Config,
+	{ chainId }: { chainId?: number } = {},
+) {
+	const client = await getConnectorClient(config, { chainId });
+	return clientToSigner(client);
 }

@@ -17,7 +17,7 @@ import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { IOnTxHash, saveDonation, updateDonation } from '@/services/donation';
 import { ICreateDonation } from '@/components/views/donate/helpers';
-import { retryFetchTransaction } from '@/lib/transaction';
+import { retryFetchSolanaTransaction } from '@/lib/transaction';
 import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { postRequest } from '@/helpers/requests';
@@ -35,21 +35,6 @@ export const useCreateSolanaDonation = () => {
 	const { sendNativeToken, walletChainType } = useGeneralWallet();
 	const { sendTransaction, publicKey } = useWallet();
 	const { connection: solanaConnection } = useConnection();
-	const fetchTransaction = async ({ hash }: { hash: string }) => {
-		const transaction = await solanaConnection.getTransaction(hash);
-		const from: string =
-			transaction?.transaction.message.accountKeys[0].toBase58()!;
-		if (!from) {
-			throw new Error('Solana transaction from not found');
-		}
-		return {
-			hash,
-			chainId: 0,
-			nonce: null,
-			from,
-			transactionObj: transaction,
-		};
-	};
 
 	const handleSaveDonation = async (
 		txHash: string,
@@ -60,7 +45,10 @@ export const useCreateSolanaDonation = () => {
 			if (!txHash) {
 				return;
 			}
-			transaction = await retryFetchTransaction(fetchTransaction, txHash);
+			transaction = await retryFetchSolanaTransaction(
+				solanaConnection,
+				txHash,
+			);
 			setTransactionObject(transaction?.transactionObj);
 
 			setTxHash(txHash);

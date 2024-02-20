@@ -8,7 +8,7 @@ import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Flex } from '../styled-components/Flex';
 import config from '@/configuration';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
@@ -55,7 +55,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 
 	const currentValues = useAppSelector(state => state.subgraph.currentValues);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
 
@@ -116,8 +116,8 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 
 	return (
 		<>
-			<Item theme={theme}>
-				<ItemTitle upperCase theme={theme}>
+			<Item themeState={theme}>
+				<ItemTitle upperCase themeState={theme}>
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>
@@ -135,8 +135,8 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				</ItemRow>
 			</Item>
 			<Link href={Routes.GIVstream_FlowRate}>
-				<Item isHighlighted theme={theme}>
-					<ItemTitle upperCase theme={theme}>
+				<Item isHighlighted themeState={theme}>
+					<ItemTitle upperCase themeState={theme}>
 						{formatMessage({ id: 'label.givstream_flowrate' })}
 					</ItemTitle>
 					<FlowrateRow>
@@ -165,8 +165,8 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				</Item>
 			</Link>
 			<Link href={Routes.GIVstream}>
-				<Item theme={theme}>
-					<ItemTitle upperCase theme={theme}>
+				<Item themeState={theme}>
+					<ItemTitle upperCase themeState={theme}>
 						{formatMessage({ id: 'label.from' })} GIVstream
 					</ItemTitle>
 					<Flex gap='4px'>
@@ -181,8 +181,8 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				</Item>
 			</Link>
 			<Link href={Routes.GIVfarm}>
-				<Item theme={theme}>
-					<ItemTitle upperCase theme={theme}>
+				<Item themeState={theme}>
+					<ItemTitle upperCase themeState={theme}>
 						GIVfarm & GIVgarden
 					</ItemTitle>
 					<Flex gap='4px'>
@@ -197,8 +197,8 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				</Item>
 			</Link>
 			<Link href={Routes.GIVbacks}>
-				<Item theme={theme}>
-					<ItemTitle upperCase theme={theme}>
+				<Item themeState={theme}>
+					<ItemTitle upperCase themeState={theme}>
 						GIVbacks
 					</ItemTitle>
 					<Flex gap='4px'>

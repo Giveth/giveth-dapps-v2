@@ -151,7 +151,7 @@ const SectionContainer = styled.div`
 	background-color: ${neutralColors.gray[100]};
 	padding: 100px 0;
 	margin-top: 10px;
-	::before {
+	&::before {
 		content: '';
 		background-image: url('/images/backgrounds/giv-background-homepage.svg');
 		background-repeat: repeat;

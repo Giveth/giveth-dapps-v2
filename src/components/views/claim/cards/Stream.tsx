@@ -13,7 +13,7 @@ import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
 
 const StreamCardContainer = styled(Card)`
-	::before {
+	&::before {
 		content: '';
 		background-image: url('/images/donate.png');
 		position: absolute;
@@ -25,7 +25,7 @@ const StreamCardContainer = styled(Card)`
 	}
 	@media only screen and (max-width: 1360px) {
 		padding-right: 112px;
-		::before {
+		&::before {
 			width: 240px;
 			background-size: contain;
 			background-repeat: no-repeat;
@@ -33,7 +33,7 @@ const StreamCardContainer = styled(Card)`
 	}
 	@media only screen and (max-width: 1120px) {
 		padding: 8px;
-		::before {
+		&::before {
 			background-image: none;
 		}
 	}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Col, IconGIVFarm, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 
@@ -21,7 +21,7 @@ export const GIVfarmTop = () => {
 	const [rewardStream, setRewardStream] = useState(0n);
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 	const { chainsInfo } = useFarms();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 
 	useEffect(() => {
