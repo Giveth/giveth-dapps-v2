@@ -59,6 +59,7 @@ const EVM_CHAINS = [
 	polygon,
 	optimism,
 	celo,
+	arbitrum,
 	classic,
 ] as readonly [Chain, ...Chain[]];
 

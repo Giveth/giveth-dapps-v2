@@ -96,6 +96,7 @@ const EVM_CHAINS = [
 	gnosis,
 	optimismGoerli,
 	celoAlfajores,
+	arbitrumSepolia,
 	classic,
 ] as readonly [Chain, ...Chain[]];
 
