@@ -8,7 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import useAnimatedHeight from '@/hooks/useAnimatedHeight';
 import { Flex } from '@/components/styled-components/Flex';
-import { infoMap, getScoreState, ScoreState, EScoreType } from './scoreHelpers';
+import { infoMap, ScoreState, EScoreType } from './scoreHelpers';
 import { TipListItem } from '../ProjectTips/common.styles';
 
 interface IImprovementTipsProps {
@@ -31,7 +31,7 @@ const tipMap = {
 export const ImprovementTips: FC<IImprovementTipsProps> = ({
 	fieldsScores,
 }) => {
-	const info = infoMap[getScoreState(fieldsScores.totalScore)];
+	const info = infoMap[fieldsScores.state];
 	const { isOpen, toggleOpen, maxHeight, contentRef } = useAnimatedHeight();
 	const bulletColor = info.bulletColor;
 	return (

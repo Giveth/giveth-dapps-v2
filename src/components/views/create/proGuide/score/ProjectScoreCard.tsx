@@ -85,7 +85,10 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 				/>
 				<H6 weight={700}>Your Project Score</H6>
 			</Flex>
-			<ScoreBox score={fieldsScores.totalScore} />
+			<ScoreBox
+				score={fieldsScores.totalScore}
+				color={infoMap[fieldsScores.state].scoreColor}
+			/>
 			<MainTip>{infoMap[EScoreState.PERFECT].mainTip}</MainTip>
 			{fieldsScores.totalScore < 100 && (
 				<ImprovementTips fieldsScores={fieldsScores} />

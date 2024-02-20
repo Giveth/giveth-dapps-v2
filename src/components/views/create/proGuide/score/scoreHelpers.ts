@@ -24,6 +24,7 @@ export type ScoreState = {
 	[key in EScoreType]: number;
 } & {
 	totalScore: number;
+	state: EScoreState;
 };
 
 export const initialState: ScoreState = {
@@ -33,6 +34,7 @@ export const initialState: ScoreState = {
 	[EScoreType.IMAGE]: 0,
 	[EScoreType.DESC_IMAGE]: 0,
 	totalScore: 0,
+	state: EScoreState.LOW,
 };
 
 export const infoMap = {
@@ -108,6 +110,8 @@ export function calculateScore(
 		newState[EScoreType.LOCATION] +
 		newState[EScoreType.IMAGE] +
 		newState[EScoreType.DESC_IMAGE];
+
+	newState.state = getScoreState(newState.totalScore);
 
 	return newState;
 }

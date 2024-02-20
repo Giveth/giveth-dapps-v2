@@ -2,24 +2,23 @@ import { type FC } from 'react';
 import styled from 'styled-components';
 import { neutralColors, semanticColors } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
-import { infoMap, getScoreState } from './scoreHelpers';
 
 interface IScoreBoxProps {
 	score: number;
+	color: string;
 }
 
-export const ScoreBox: FC<IScoreBoxProps> = ({ score }) => {
-	const info = infoMap[getScoreState(score)];
+export const ScoreBox: FC<IScoreBoxProps> = ({ score, color }) => {
 	return (
 		<Wrapper>
 			<Flex
 				justifyContent={score === 100 ? 'center' : 'space-between'}
 				alignItems='flex-end'
 			>
-				<Score color={info.scoreColor}>{score}</Score>
+				<Score color={color}>{score}</Score>
 				{score !== 100 && <Hundred>100</Hundred>}
 			</Flex>
-			<Bar color={info.scoreColor} score={score} />
+			<Bar color={color} score={score} />
 		</Wrapper>
 	);
 };
