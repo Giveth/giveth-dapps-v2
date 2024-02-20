@@ -76,6 +76,7 @@ export const useCreateEvmDonation = () => {
 				chainvineReferred,
 				amount,
 				token,
+				draftDonationId,
 				setFailedModalType,
 			} = props;
 
@@ -93,6 +94,7 @@ export const useCreateEvmDonation = () => {
 						symbol: token.symbol,
 						setFailedModalType,
 						safeTransactionId: txHash,
+						draftDonationId,
 					};
 				} else {
 					return null;
@@ -113,6 +115,7 @@ export const useCreateEvmDonation = () => {
 						symbol: token.symbol,
 						setFailedModalType,
 						safeTransactionId: null,
+						draftDonationId,
 					};
 				} else {
 					return null;
@@ -201,6 +204,7 @@ export const useCreateEvmDonation = () => {
 				},
 			});
 			console.log('draftDonationData', draftDonationData);
+			props.draftDonationId = draftDonationData.createDraftDonation;
 			const hash = await sendEvmTransaction(
 				transactionObj,
 				address,
