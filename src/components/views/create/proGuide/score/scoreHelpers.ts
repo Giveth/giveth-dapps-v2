@@ -1,4 +1,4 @@
-import { semanticColors } from '@giveth/ui-design-system';
+import { brandColors, semanticColors } from '@giveth/ui-design-system';
 
 export enum EScoreType {
 	DESCRIPTION = 'DESCRIPTION',
@@ -41,24 +41,28 @@ export const infoMap = {
 			'Your project score is too low to publish, you need at least a score of 50 to proceed.',
 		title: 'Why is it low?',
 		scoreColor: semanticColors.punch[500],
+		bulletColor: semanticColors.punch,
 	},
 	[EScoreState.MEDIUM]: {
 		mainTip:
 			'You can still publish your project but it might prevent you to receive the donation your are looking for.',
 		title: 'Why is it low?',
 		scoreColor: semanticColors.golden[500],
+		bulletColor: semanticColors.golden,
 	},
 	[EScoreState.HIGH]: {
 		mainTip:
 			'Just keep in mind to regularly update your project to keep donation coming your way.',
 		title: 'What else you can do?',
 		scoreColor: semanticColors.jade[400],
+		bulletColor: brandColors.giv,
 	},
 	[EScoreState.PERFECT]: {
 		mainTip:
 			'A perfect score! Just keep in mind to regularly update your project to keep donation coming your way.',
 		title: '',
 		scoreColor: semanticColors.jade[500],
+		bulletColor: brandColors.giv,
 	},
 };
 

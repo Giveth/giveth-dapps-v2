@@ -33,6 +33,7 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 }) => {
 	const info = infoMap[getScoreState(fieldsScores.totalScore)];
 	const { isOpen, toggleOpen, maxHeight, contentRef } = useAnimatedHeight();
+	const bulletColor = info.bulletColor;
 	return (
 		<div>
 			<TitleRow
@@ -48,27 +49,27 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 				ref={contentRef}
 			>
 				{fieldsScores.DESCRIPTION === 0 && (
-					<TipListItem>
+					<TipListItem color={bulletColor}>
 						<P>{tipMap[EScoreType.DESCRIPTION]}</P>
 					</TipListItem>
 				)}
 				{fieldsScores.DESC_IMAGE === 0 && (
-					<TipListItem>
+					<TipListItem color={bulletColor}>
 						<P>{tipMap[EScoreType.DESC_IMAGE]}</P>
 					</TipListItem>
 				)}
 				{fieldsScores.CATEGORIES === 0 && (
-					<TipListItem>
+					<TipListItem color={bulletColor}>
 						<P>{tipMap[EScoreType.CATEGORIES]}</P>
 					</TipListItem>
 				)}
 				{fieldsScores.LOCATION === 0 && (
-					<TipListItem>
+					<TipListItem color={bulletColor}>
 						<P>{tipMap[EScoreType.LOCATION]}</P>
 					</TipListItem>
 				)}
 				{fieldsScores.IMAGE === 0 && (
-					<TipListItem>
+					<TipListItem color={bulletColor}>
 						<P>{tipMap[EScoreType.IMAGE]}</P>
 					</TipListItem>
 				)}
