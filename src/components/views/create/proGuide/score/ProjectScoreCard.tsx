@@ -92,6 +92,27 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 		}
 	}, [formData[EInputs.impactLocation]]);
 
+	// Checking image in description score 1 second after change
+	useEffect(() => {
+		// Setting a timeout to check the content 1 second after it changes
+		const timeoutId = setTimeout(() => {
+			console.log(
+				'Checking image in description score 1 second after change',
+			);
+
+			const description = formData[EInputs.description];
+
+			if (description && description.includes('<img')) {
+				console.log('image in description score is 9');
+			} else {
+				console.log('image in description score is 0');
+			}
+		}, 1000); // 1000 milliseconds = 1 second
+
+		// Clearing the timeout when the component unmounts or the content changes
+		return () => clearTimeout(timeoutId);
+	}, [formData[EInputs.description]]);
+
 	// handle image score
 	useEffect(() => {
 		console.log('Checking image score');
