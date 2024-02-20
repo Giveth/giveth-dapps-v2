@@ -15,7 +15,6 @@ import { useAccount } from 'wagmi';
 import { compareAddresses, findAddressByChain } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import Input, { InputSize } from '@/components/Input';
-import { EInputs } from '@/components/views/create/CreateProject';
 import { gqlAddressValidation } from '@/components/views/create/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { Flex, FlexCenter } from '@/components/styled-components/Flex';
@@ -26,6 +25,7 @@ import NetworkLogo from '@/components/NetworkLogo';
 import { getChainName } from '@/lib/network';
 import useFocus from '@/hooks/useFocus';
 import { ChainType, IChainType } from '@/types/config';
+import { EInputs } from './types';
 
 interface IProps extends IChainType {
 	networkId: number;

@@ -23,11 +23,9 @@ import {
 	UPDATE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
 import {
-	ICategory,
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
-	IWalletAddress,
 } from '@/apollo/types/types';
 import {
 	CategoryInput,
@@ -41,7 +39,6 @@ import { slugToProjectView, slugToSuccessView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
 import { deviceSize, mediaQueries } from '@/lib/constants/constants';
 import config, { isRecurringActive } from '@/configuration';
-import Guidelines from '@/components/views/create/Guidelines';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
@@ -49,37 +46,17 @@ import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
 import AddressInterface from './AddressInterface';
 import { ChainType, NonEVMChain } from '@/types/config';
-import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 import StorageLabel from '@/lib/localStorage';
 import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
+import ProjectTip from './ProjectTips/ProjectTip';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { ECreateProjectSections, TInputs, EInputs } from './types';
 
 const ALL_CHAINS = config.CHAINS;
 
 interface ICreateProjectProps {
 	project?: IProjectEdition;
 }
-
-export enum EInputs {
-	name = 'name',
-	description = 'description',
-	categories = 'categories',
-	impactLocation = 'impactLocation',
-	image = 'image',
-	draft = 'draft',
-	addresses = 'addresses',
-	alloProtocolRegistry = 'alloProtocolRegistry',
-}
-
-export type TInputs = {
-	[EInputs.name]: string;
-	[EInputs.description]?: string;
-	[EInputs.categories]?: ICategory[];
-	[EInputs.impactLocation]?: string;
-	[EInputs.image]?: string;
-	[EInputs.draft]?: boolean;
-	[EInputs.alloProtocolRegistry]?: boolean;
-	[EInputs.addresses]: IWalletAddress[];
-};
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const { formatMessage } = useIntl();
@@ -92,6 +69,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [addressModalChainId, setAddressModalChainId] = useState<number>();
 	const [addressModalChainType, setAddressModalChainType] =
 		useState<ChainType>();
+	const [activeProjectSection, setActiveProjectSection] =
+		useState<ECreateProjectSections>(ECreateProjectSections.default);
 
 	const isEditMode = !!project;
 
@@ -158,8 +137,16 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const { handleSubmit, setValue, watch } = formMethods;
 
 	const [isLoading, setIsLoading] = useState(false);
-	const [showGuidelineModal, setShowGuidelineModal] = useState(false);
+	// const [showGuidelineModal, setShowGuidelineModal] = useState(false);
 	const [addedProjectState, setAddedProjectState] = useState<IProject>();
+
+	const onAddressesVisible = () =>
+		setActiveProjectSection(ECreateProjectSections.addresses);
+	const delay = 500; // Delay in milliseconds
+	const addressesRef = useIntersectionObserver(onAddressesVisible, {
+		threshold: 0.3,
+		delay,
+	});
 
 	const data = watch();
 	const {
@@ -330,23 +317,27 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 							? formatMessage({ id: 'label.project_details' })
 							: formatMessage({ id: 'label.create_a_project' })}
 					</Title>
-					{isSmallScreen && (
-						<Guidelines
-							setShowGuidelineModal={setShowGuidelineModal}
-						/>
-					)}
 				</div>
 
 				<FormProvider {...formMethods}>
 					<form onSubmit={handleSubmit(onSubmit, onError)}>
 						<NameInput
-							showGuidelineModal={showGuidelineModal}
+							setActiveProjectSection={setActiveProjectSection}
 							preTitle={title}
 						/>
-						<DescriptionInput />
-						<CategoryInput />
-						<LocationIndex />
-						<ImageInput setIsLoading={setIsLoading} />
+						<DescriptionInput
+							setActiveProjectSection={setActiveProjectSection}
+						/>
+						<CategoryInput
+							setActiveProjectSection={setActiveProjectSection}
+						/>
+						<LocationIndex
+							setActiveProjectSection={setActiveProjectSection}
+						/>
+						<ImageInput
+							setIsLoading={setIsLoading}
+							setActiveProjectSection={setActiveProjectSection}
+						/>
 						<H5>
 							{formatMessage({ id: 'label.receiving_funds' })}
 						</H5>
@@ -355,25 +346,27 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 								id: 'label.you_can_set_a_custom_ethereum_address',
 							})}
 						</CaptionContainer>
-						{ALL_CHAINS.map(chain => (
-							<AddressInterface
-								key={chain.id}
-								networkId={chain.id}
-								chainType={(chain as NonEVMChain).chainType}
-								onButtonClick={() => {
-									setAddressModalChainType(
-										(chain as NonEVMChain).chainType,
-									);
-									setAddressModalChainId(chain.id);
-								}}
-								isEditMode={isEditMode}
-								anchorContractData={
-									(project?.anchorContracts &&
-										project?.anchorContracts[0]) ??
-									undefined
-								}
-							/>
-						))}
+						<div ref={addressesRef}>
+							{ALL_CHAINS.map(chain => (
+								<AddressInterface
+									key={chain.id}
+									networkId={chain.id}
+									chainType={(chain as NonEVMChain).chainType}
+									onButtonClick={() => {
+										setAddressModalChainType(
+											(chain as NonEVMChain).chainType,
+										);
+										setAddressModalChainId(chain.id);
+									}}
+									isEditMode={isEditMode}
+									anchorContractData={
+										(project?.anchorContracts &&
+											project?.anchorContracts[0]) ??
+										undefined
+									}
+								/>
+							))}
+						</div>
 						<PublishTitle>
 							{isEditMode
 								? formatMessage({
@@ -457,14 +450,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				</FormProvider>
 			</CreateContainer>
 			{!isSmallScreen && (
-				<Guidelines
-					isLaptop
-					setShowGuidelineModal={setShowGuidelineModal}
-				/>
+				<ProjectTip activeSection={activeProjectSection} />
 			)}
-			{showGuidelineModal && (
-				<ProjectGuidelineModal setShowModal={setShowGuidelineModal} />
-			)}
+
 			{showAlloProtocolModal && addedProjectState && (
 				<AlloProtocolModal
 					setShowModal={setShowAlloProtocolModal}
@@ -482,16 +470,17 @@ const CaptionContainer = styled(Caption)`
 `;
 
 const Wrapper = styled.div`
-	max-width: ${deviceSize.laptopS + 'px'};
+	max-width: ${deviceSize.laptopS + 80 + 'px'};
 	margin: 0 auto;
 	position: relative;
 	display: flex;
+	align-items: flex-start;
 `;
 
 const CreateContainer = styled(Container)`
-	margin-top: 104px;
+	margin-top: 80px;
 	margin-bottom: 154px;
-	max-width: 720px;
+	max-width: 715px;
 	> :nth-child(1) {
 		display: flex;
 		justify-content: space-between;
