@@ -1,4 +1,4 @@
-import { type FC, useState } from 'react';
+import { type FC, useState, useEffect } from 'react';
 import { H6, P, semanticColors } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
@@ -56,10 +56,22 @@ export interface IProjectScoreCardProps {
 }
 
 export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
+	formData,
 	getFieldState,
 }) => {
 	const [score, setScore] = useState(19);
-	console.log('score', getFieldState(EInputs.description));
+
+	// handle description score
+	const { error: descError } = getFieldState(EInputs.description);
+	useEffect(() => {
+		console.log('Checking description score');
+		if (descError) {
+			console.log('description score is 0');
+		} else {
+			console.log('description score is 51');
+		}
+	}, [descError]);
+
 	return (
 		<Card>
 			<Flex gap='16px'>
