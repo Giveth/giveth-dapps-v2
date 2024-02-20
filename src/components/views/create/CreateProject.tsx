@@ -134,7 +134,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		},
 	});
 
-	const { handleSubmit, setValue, watch } = formMethods;
+	const { handleSubmit, setValue, watch, getFieldState } = formMethods;
 
 	const [isLoading, setIsLoading] = useState(false);
 	// const [showGuidelineModal, setShowGuidelineModal] = useState(false);
@@ -158,8 +158,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		addresses: watchAddresses,
 		alloProtocolRegistry: watchAlloProtocolRegistry,
 	} = data;
-
-	console.log('data', data);
 
 	useEffect(() => {
 		if (isEditMode) return;
@@ -306,8 +304,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			dispatch(setShowFooter(true));
 		};
 	}, []);
-
-	console.log('rendered');
 
 	return (
 		<Container>
@@ -471,6 +467,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					<ProGuide
 						activeSection={activeProjectSection}
 						formData={data}
+						getFieldState={getFieldState}
 					/>
 				</Col>
 			</Row>

@@ -2,11 +2,12 @@ import { type FC, useState } from 'react';
 import { H6, P, semanticColors } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
+import { UseFormGetFieldState } from 'react-hook-form';
 import { Card } from '../ProGuide.sc';
 import { Flex } from '@/components/styled-components/Flex';
 import { ScoreBox } from './ScoreBox';
 import { ImprovementTips } from './ImprovementTips';
-import { TInputs } from '../types';
+import { EInputs, TInputs } from '../types';
 
 enum EScoreState {
 	LOW = 'LOW',
@@ -51,10 +52,14 @@ export function getScoreState(score: number) {
 
 export interface IProjectScoreCardProps {
 	formData: TInputs;
+	getFieldState: UseFormGetFieldState<TInputs>;
 }
 
-export const ProjectScoreCard: FC<IProjectScoreCardProps> = () => {
+export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
+	getFieldState,
+}) => {
 	const [score, setScore] = useState(19);
+	console.log('score', getFieldState(EInputs.description));
 	return (
 		<Card>
 			<Flex gap='16px'>
