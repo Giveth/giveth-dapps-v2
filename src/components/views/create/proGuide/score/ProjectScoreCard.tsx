@@ -76,11 +76,21 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 	useEffect(() => {
 		console.log('Checking categories score');
 		if (formData.categories && formData.categories.length > 0) {
-			console.log('categories score is 51');
+			console.log('categories score is 9');
 		} else {
 			console.log('categories score is 0');
 		}
 	}, [formData.categories?.length]);
+
+	// handle location score
+	useEffect(() => {
+		console.log('Checking location score');
+		if (formData[EInputs.impactLocation]) {
+			console.log('location score is 9');
+		} else {
+			console.log('location score is 0');
+		}
+	}, [formData[EInputs.impactLocation]]);
 
 	console.log('formData', formData);
 
