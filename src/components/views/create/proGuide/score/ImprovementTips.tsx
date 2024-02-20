@@ -9,6 +9,7 @@ import {
 import useAnimatedHeight from '@/hooks/useAnimatedHeight';
 import { Flex } from '@/components/styled-components/Flex';
 import { infoMap, getScoreState, ScoreState, EScoreType } from './scoreHelpers';
+import { TipListItem } from '../ProjectTips/common.styles';
 
 interface IImprovementTipsProps {
 	fieldsScores: ScoreState;
@@ -47,18 +48,30 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 				ref={contentRef}
 			>
 				{fieldsScores.DESCRIPTION === 0 && (
-					<P>{tipMap[EScoreType.DESCRIPTION]}</P>
+					<TipListItem>
+						<P>{tipMap[EScoreType.DESCRIPTION]}</P>
+					</TipListItem>
 				)}
 				{fieldsScores.DESC_IMAGE === 0 && (
-					<P>{tipMap[EScoreType.DESC_IMAGE]}</P>
+					<TipListItem>
+						<P>{tipMap[EScoreType.DESC_IMAGE]}</P>
+					</TipListItem>
 				)}
 				{fieldsScores.CATEGORIES === 0 && (
-					<P>{tipMap[EScoreType.CATEGORIES]}</P>
+					<TipListItem>
+						<P>{tipMap[EScoreType.CATEGORIES]}</P>
+					</TipListItem>
 				)}
 				{fieldsScores.LOCATION === 0 && (
-					<P>{tipMap[EScoreType.LOCATION]}</P>
+					<TipListItem>
+						<P>{tipMap[EScoreType.LOCATION]}</P>
+					</TipListItem>
 				)}
-				{fieldsScores.IMAGE === 0 && <P>{tipMap[EScoreType.IMAGE]}</P>}
+				{fieldsScores.IMAGE === 0 && (
+					<TipListItem>
+						<P>{tipMap[EScoreType.IMAGE]}</P>
+					</TipListItem>
+				)}
 			</AnimatedDiv>
 		</div>
 	);
@@ -68,6 +81,7 @@ const AnimatedDiv = styled.div<{ maxHeight: string }>`
 	overflow: hidden;
 	transition: max-height 0.5s ease;
 	max-height: ${props => props.maxHeight};
+	padding-top: 8px;
 `;
 
 const TitleRow = styled(Flex)`
