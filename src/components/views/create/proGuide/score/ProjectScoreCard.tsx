@@ -72,6 +72,16 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 		}
 	}, [descError]);
 
+	// handle categories score
+	useEffect(() => {
+		console.log('Checking categories score');
+		if (formData.categories && formData.categories.length > 0) {
+			console.log('categories score is 51');
+		} else {
+			console.log('categories score is 0');
+		}
+	}, [formData.categories?.length]);
+
 	return (
 		<Card>
 			<Flex gap='16px'>
