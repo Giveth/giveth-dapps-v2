@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { type FC, useState } from 'react';
 import { H6, P, semanticColors } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
@@ -6,6 +6,7 @@ import { Card } from '../ProGuide.sc';
 import { Flex } from '@/components/styled-components/Flex';
 import { ScoreBox } from './ScoreBox';
 import { ImprovementTips } from './ImprovementTips';
+import { TInputs } from '../types';
 
 enum EScoreState {
 	LOW = 'LOW',
@@ -48,7 +49,11 @@ export function getScoreState(score: number) {
 	return EScoreState.PERFECT;
 }
 
-export const ProjectScoreCard = () => {
+export interface IProjectScoreCardProps {
+	formData: TInputs;
+}
+
+export const ProjectScoreCard: FC<IProjectScoreCardProps> = () => {
 	const [score, setScore] = useState(19);
 	return (
 		<Card>

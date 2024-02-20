@@ -1,19 +1,22 @@
 import { type FC } from 'react';
 import { deviceSize } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import ProjectTip, { IProjectTipProps } from './ProjectTips/ProjectTip';
+import ProjectTip, { type IProjectTipProps } from './ProjectTips/ProjectTip';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { Flex } from '@/components/styled-components/Flex';
-import { ProjectScoreCard } from './score/ProjectScoreCard';
+import {
+	type IProjectScoreCardProps,
+	ProjectScoreCard,
+} from './score/ProjectScoreCard';
 
-interface IProGuideProps extends IProjectTipProps {}
+interface IProGuideProps extends IProjectTipProps, IProjectScoreCardProps {}
 
-export const ProGuide: FC<IProGuideProps> = ({ activeSection }) => {
+export const ProGuide: FC<IProGuideProps> = ({ formData, activeSection }) => {
 	const isLaptopL = useMediaQuery(`(min-width: ${deviceSize.laptopL}px)`);
 	return isLaptopL ? (
 		<Wrapper>
 			<ProjectTip activeSection={activeSection} />
-			<ProjectScoreCard />
+			<ProjectScoreCard formData={formData} />
 		</Wrapper>
 	) : null;
 };

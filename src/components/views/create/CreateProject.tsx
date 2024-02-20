@@ -159,6 +159,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		alloProtocolRegistry: watchAlloProtocolRegistry,
 	} = data;
 
+	console.log('data', data);
+
 	useEffect(() => {
 		if (isEditMode) return;
 		localStorage.setItem(
@@ -464,7 +466,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					</FormProvider>
 				</Col>
 				<Col lg={4} md={12}>
-					<ProGuide activeSection={activeProjectSection} />
+					<ProGuide
+						activeSection={activeProjectSection}
+						formData={data}
+					/>
 				</Col>
 			</Row>
 			{showAlloProtocolModal && addedProjectState && (
