@@ -18,10 +18,14 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({ score }) => {
 	const { isOpen, toggleOpen, maxHeight, contentRef } = useAnimatedHeight();
 	return (
 		<div>
-			<Flex justifyContent='space-between' onClick={toggleOpen}>
+			<TitleRow
+				justifyContent='space-between'
+				onClick={toggleOpen}
+				alignItems='center'
+			>
 				<H5>{info.title}</H5>
 				{isOpen ? <IconChevronUp32 /> : <IconChevronDown32 />}
-			</Flex>
+			</TitleRow>
 			<AnimatedDiv
 				maxHeight={isOpen ? maxHeight : '0px'}
 				ref={contentRef}
@@ -39,4 +43,8 @@ const AnimatedDiv = styled.div<{ maxHeight: string }>`
 	overflow: hidden;
 	transition: max-height 0.5s ease;
 	max-height: ${props => props.maxHeight};
+`;
+
+const TitleRow = styled(Flex)`
+	cursor: pointer;
 `;
