@@ -185,7 +185,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const onSubmit = async (formData: TInputs) => {
 		try {
-			setIsLoading(true);
 			const {
 				addresses,
 				name,
@@ -320,7 +319,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				</div>
 
 				<FormProvider {...formMethods}>
-					<form onSubmit={handleSubmit(onSubmit, onError)}>
+					<form
+						onSubmit={handleSubmit(onSubmit, onError)}
+						onSubmitCapture={() => setIsLoading(true)}
+					>
 						<NameInput
 							setActiveProjectSection={setActiveProjectSection}
 							preTitle={title}
