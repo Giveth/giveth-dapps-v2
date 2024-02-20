@@ -52,6 +52,7 @@ import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { ECreateProjectSections, TInputs, EInputs } from './types';
 import { ProGuide } from './proGuide/ProGuide';
 import { EQualityState } from './proGuide/score/scoreHelpers';
+import { LowScoreModal } from './LowScoreModal';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -69,6 +70,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		useState<ChainType>();
 	const [activeProjectSection, setActiveProjectSection] =
 		useState<ECreateProjectSections>(ECreateProjectSections.default);
+	const [showLowScoreModal, setShowLowScoreModal] = useState(false);
 
 	const { formatMessage } = useIntl();
 	const [addProjectMutation] = useMutation(CREATE_PROJECT);
@@ -183,6 +185,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	};
 
 	const onSubmit = async (formData: TInputs) => {
+		if (quality === EQualityState.MEDIUM) {
+			setShowLowScoreModal(true);
+			return;
+		}
 		try {
 			const {
 				addresses,
@@ -482,6 +488,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					addedProjectState={addedProjectState}
 					project={project}
 				/>
+			)}
+			{showLowScoreModal && (
+				<LowScoreModal setShowModal={setShowLowScoreModal} />
 			)}
 		</Container>
 	);
