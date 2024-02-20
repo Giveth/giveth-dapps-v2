@@ -89,7 +89,7 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 				score={fieldsScores.totalScore}
 				color={infoMap[fieldsScores.state].scoreColor}
 			/>
-			<MainTip>{infoMap[EScoreState.PERFECT].mainTip}</MainTip>
+			<MainTip>{infoMap[fieldsScores.state].mainTip}</MainTip>
 			{fieldsScores.totalScore < 100 && (
 				<ImprovementTips fieldsScores={fieldsScores} />
 			)}
