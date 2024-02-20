@@ -7,7 +7,7 @@ import {
 } from '@giveth/ui-design-system';
 import useAnimatedHeight from '@/hooks/useAnimatedHeight';
 import { Flex } from '@/components/styled-components/Flex';
-import { infoMap, getScoreState } from './ProjectScoreCard';
+import { infoMap, getScoreState } from './scoreHelpers';
 
 interface IImprovementTipsProps {
 	score: number;

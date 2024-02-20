@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import styled from 'styled-components';
 import { neutralColors, semanticColors } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
-import { infoMap, getScoreState } from './ProjectScoreCard';
+import { infoMap, getScoreState } from './scoreHelpers';
 
 interface IScoreBoxProps {
 	score: number;

@@ -1,5 +1,5 @@
-import { type FC, useState, useEffect } from 'react';
-import { H6, P, semanticColors } from '@giveth/ui-design-system';
+import { type FC, useEffect, useReducer } from 'react';
+import { H6, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { UseFormGetFieldState } from 'react-hook-form';
@@ -8,151 +8,64 @@ import { Flex } from '@/components/styled-components/Flex';
 import { ScoreBox } from './ScoreBox';
 import { ImprovementTips } from './ImprovementTips';
 import { EInputs, TInputs } from '../../types';
-
-enum EScoreState {
-	LOW = 'LOW',
-	MEDIUM = 'MEDIUM',
-	HIGH = 'HIGH',
-	PERFECT = 'PERFECT',
-}
-
-export const infoMap = {
-	[EScoreState.LOW]: {
-		mainTip:
-			'Your project score is too low to publish, you need at least a score of 50 to proceed.',
-		title: 'Why is it low?',
-		scoreColor: semanticColors.punch[500],
-	},
-	[EScoreState.MEDIUM]: {
-		mainTip:
-			'You can still publish your project but it might prevent you to receive the donation your are looking for.',
-		title: 'Why is it low?',
-		scoreColor: semanticColors.golden[500],
-	},
-	[EScoreState.HIGH]: {
-		mainTip:
-			'Just keep in mind to regularly update your project to keep donation coming your way.',
-		title: 'What else you can do?',
-		scoreColor: semanticColors.jade[400],
-	},
-	[EScoreState.PERFECT]: {
-		mainTip:
-			'A perfect score! Just keep in mind to regularly update your project to keep donation coming your way.',
-		title: '',
-		scoreColor: semanticColors.jade[500],
-	},
-};
-
-export function getScoreState(score: number) {
-	if (score < 50) return EScoreState.LOW;
-	if (score < 75) return EScoreState.MEDIUM;
-	if (score < 100) return EScoreState.HIGH;
-	return EScoreState.PERFECT;
-}
+import {
+	ScoreState,
+	ScoreAction,
+	calculateScore,
+	initialState,
+	EScoreType,
+	infoMap,
+	EScoreState,
+} from './scoreHelpers';
 
 export interface IProjectScoreCardProps {
 	formData: TInputs;
 	getFieldState: UseFormGetFieldState<TInputs>;
 }
 
-export enum EScoreType {
-	DESCRIPTION = 'DESCRIPTION',
-	CATEGORIES = 'CATEGORIES',
-	LOCATION = 'LOCATION',
-	IMAGE = 'IMAGE',
-	DESC_IMAGE = 'DESC_IMAGE',
-}
-
 export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 	formData,
 	getFieldState,
 }) => {
-	// const [fieldsScores, setFieldsScores] = useState([0, 0, 0, 0, 0]);
-	const [fieldsScores, setFieldsScores] = useState({
-		[EScoreType.DESCRIPTION]: 0,
-		[EScoreType.CATEGORIES]: 0,
-		[EScoreType.LOCATION]: 0,
-		[EScoreType.IMAGE]: 0,
-		[EScoreType.DESC_IMAGE]: 0,
-	});
-	const score = Object.values(fieldsScores).reduce(
-		(acc, curr) => acc + curr,
-		0,
-	);
+	const [fieldsScores, dispatch] = useReducer<
+		React.Reducer<ScoreState, ScoreAction>
+	>(calculateScore, initialState);
 
-	// handle description score
-	const { error: descError } = getFieldState(EInputs.description);
+	// Description score
+	const descriptionError = getFieldState(EInputs.description).error;
 	useEffect(() => {
-		console.log('Checking description score');
-		if (descError) {
-			setFieldsScores(s => ({ ...s, [EScoreType.DESCRIPTION]: 0 }));
-		} else {
-			setFieldsScores(s => ({ ...s, [EScoreType.DESCRIPTION]: 51 }));
-		}
-	}, [descError]);
+		console.log('descriptionError', descriptionError);
+		dispatch({ type: EScoreType.DESCRIPTION, payload: descriptionError });
+	}, [descriptionError]);
 
-	// handle categories score
+	// Categories score
 	useEffect(() => {
-		console.log('Checking categories score');
-		if (formData.categories && formData.categories.length > 0) {
-			setFieldsScores(s => ({ ...s, [EScoreType.CATEGORIES]: 9 }));
-		} else {
-			setFieldsScores(s => ({ ...s, [EScoreType.CATEGORIES]: 0 }));
-		}
-	}, [formData.categories?.length]);
+		dispatch({ type: EScoreType.CATEGORIES, payload: formData.categories });
+	}, [formData.categories]);
 
-	// handle location score
+	// Location score
 	useEffect(() => {
-		console.log('Checking location score');
-		if (formData[EInputs.impactLocation]) {
-			setFieldsScores(s => ({ ...s, [EScoreType.LOCATION]: 9 }));
-		} else {
-			setFieldsScores(s => ({ ...s, [EScoreType.LOCATION]: 0 }));
-		}
-	}, [formData[EInputs.impactLocation]]);
+		dispatch({
+			type: EScoreType.LOCATION,
+			payload: formData.impactLocation,
+		});
+	}, [formData.impactLocation]);
 
-	// Checking image in description score 1 second after change
+	// Image score
+	useEffect(() => {
+		dispatch({ type: EScoreType.IMAGE, payload: formData.image });
+	}, [formData.image]);
+
+	// Description image score
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
-			console.log(
-				'Checking image in description score 1 second after change',
-			);
-
-			const description = formData[EInputs.description];
-
-			if (description && description.includes('<img')) {
-				setFieldsScores(s => ({
-					...s,
-					[EScoreType.DESC_IMAGE]: 12,
-				}));
-			} else {
-				setFieldsScores(s => ({
-					...s,
-					[EScoreType.DESC_IMAGE]: 0,
-				}));
-			}
+			const description = formData.description;
+			const hasImage = description && description.includes('<img');
+			dispatch({ type: EScoreType.DESC_IMAGE, payload: hasImage });
 		}, 1000);
-		return () => clearTimeout(timeoutId);
-	}, [formData[EInputs.description]]);
 
-	// handle image score
-	useEffect(() => {
-		console.log('Checking image score');
-		if (
-			formData[EInputs.image] &&
-			!formData[EInputs.image].startsWith('/')
-		) {
-			setFieldsScores(s => ({
-				...s,
-				[EScoreType.IMAGE]: 19,
-			}));
-		} else {
-			setFieldsScores(s => ({
-				...s,
-				[EScoreType.IMAGE]: 0,
-			}));
-		}
-	}, [formData[EInputs.image]]);
+		return () => clearTimeout(timeoutId);
+	}, [formData.description]);
 
 	return (
 		<Card>
@@ -165,9 +78,11 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 				/>
 				<H6 weight={700}>Your Project Score</H6>
 			</Flex>
-			<ScoreBox score={score} />
+			<ScoreBox score={fieldsScores.totalScore} />
 			<MainTip>{infoMap[EScoreState.PERFECT].mainTip}</MainTip>
-			{score < 100 && <ImprovementTips score={score} />}
+			{fieldsScores.totalScore < 100 && (
+				<ImprovementTips score={fieldsScores.totalScore} />
+			)}
 		</Card>
 	);
 };
