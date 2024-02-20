@@ -44,11 +44,11 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 	}, [fieldsScores.quality, setQuality]);
 
 	// Description score
-	const descriptionError = getFieldState(EInputs.description).error;
+	const descriptionInvalid = getFieldState(EInputs.description).invalid;
 	useEffect(() => {
-		console.log('descriptionError', descriptionError);
-		dispatch({ type: EScoreType.DESCRIPTION, payload: descriptionError });
-	}, [descriptionError]);
+		console.log('descriptionError', descriptionInvalid);
+		dispatch({ type: EScoreType.DESCRIPTION, payload: descriptionInvalid });
+	}, [descriptionInvalid]);
 
 	// Categories score
 	useEffect(() => {
