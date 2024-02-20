@@ -99,7 +99,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 	const [term, setTerm] = useState<string>('');
 	const [projects, setProjects] = useState<IProject[]>();
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { theme } = useAppSelector(state => state.general);
+	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 
@@ -131,12 +131,12 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 		<StyledModal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			theme={theme}
+			themeState={theme}
 			fullScreen
 			hiddenClose
 		>
 			<SearchModalContainer>
-				<CloseModal theme={theme} onClick={closeModal}>
+				<CloseModal themeState={theme} onClick={closeModal}>
 					<ButtonText>
 						{formatMessage({ id: 'label.close' })}
 					</ButtonText>
@@ -153,7 +153,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 				<Row>
 					<Col xs={12} sm={3}>
 						<Columns>
-							<Title size='large' theme={theme}>
+							<Title size='large' themeState={theme}>
 								{formatMessage({ id: 'label.quick_links' })}
 							</Title>
 							{quickLinks.map((item, idx) => (
@@ -161,7 +161,10 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 									key={idx}
 									href={Routes.Projects + item.query}
 								>
-									<Item theme={theme} onClick={closeModal}>
+									<Item
+										themeState={theme}
+										onClick={closeModal}
+									>
 										{item.title}
 									</Item>
 								</Link>
@@ -170,7 +173,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 					</Col>
 					<Col xs={12} sm={6}>
 						<Columns>
-							<Title size='large' theme={theme}>
+							<Title size='large' themeState={theme}>
 								{formatMessage({
 									id: 'label.featured_projects',
 								})}
@@ -185,7 +188,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 										}
 									>
 										<Item
-											theme={theme}
+											themeState={theme}
 											onClick={closeModal}
 										>
 											{project.title}
@@ -196,7 +199,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 					</Col>
 					<Col xs={12} sm={3}>
 						<Columns>
-							<Title size='large' theme={theme}>
+							<Title size='large' themeState={theme}>
 								{formatMessage({
 									id: 'label.popular_categories',
 								})}
@@ -206,7 +209,10 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 									key={idx}
 									href={Routes.Projects + '/' + category.slug}
 								>
-									<Item theme={theme} onClick={closeModal}>
+									<Item
+										themeState={theme}
+										onClick={closeModal}
+									>
 										{formatMessage({ id: category.slug })}
 									</Item>
 								</Link>
@@ -219,21 +225,21 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 	);
 };
 
-const StyledModal = styled(Modal)`
+const StyledModal = styled(Modal)<{ themeState?: ETheme }>`
 	background-color: ${props =>
-		props.theme === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? brandColors.giv[800]
 			: neutralColors.gray[200]};
 `;
 
-const CloseModal = styled(FlexCenter)`
+const CloseModal = styled(FlexCenter)<{ themeState?: ETheme }>`
 	position: absolute;
 	top: 16px;
 	left: 32px;
 	gap: 8px;
 	padding: 12px 16px;
 	background-color: ${props =>
-		props.theme === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? brandColors.giv[700]
 			: neutralColors.gray[100]};
 	border-radius: 50px;
@@ -265,17 +271,17 @@ const SearchBox = styled(Flex)`
 	margin: 0 auto 80px;
 `;
 
-const Title = styled(Lead)`
+const Title = styled(Lead)<{ themeState?: ETheme }>`
 	margin-bottom: 16px;
 	color: ${props =>
-		props.theme === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? brandColors.giv[200]
 			: neutralColors.gray[700]};
 `;
 
-const Item = styled(Lead)`
+const Item = styled(Lead)<{ themeState?: ETheme }>`
 	color: ${props =>
-		props.theme === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? neutralColors.gray[100]
 			: neutralColors.gray[900]};
 `;

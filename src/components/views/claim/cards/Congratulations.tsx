@@ -4,7 +4,7 @@ import { H2, Lead } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { Container } from '@giveth/ui-design-system';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import useClaim from '@/context/claim.context';
 import { formatWeiHelper } from '@/helpers/number';
 import SparkleBurstAnimation from '@/animations/sparkle-burst.json';
@@ -135,7 +135,7 @@ export const CongratulationsCard = () => {
 	const { formatMessage } = useIntl();
 	const [streamValue, setStreamValue] = useState<string>('0');
 	const { totalAmount, resetWallet } = useClaim();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { givTokenDistroHelper } = useGIVTokenDistroHelper();
 

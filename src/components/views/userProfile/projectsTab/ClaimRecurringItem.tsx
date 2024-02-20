@@ -70,7 +70,7 @@ export const ClaimRecurringItem = ({
 const ItemContainer = styled(Flex)`
 	padding: 8px;
 	border-radius: 8px;
-	:hover {
+	&:hover {
 		background-color: ${neutralColors.gray[300]};
 	}
 `;

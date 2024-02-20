@@ -119,7 +119,7 @@ const OnboardProgressbar = styled.div<IOnboard>`
 	border-radius: 12px;
 	position: relative;
 	margin: 24px 0 16px;
-	::after {
+	&::after {
 		content: '';
 		background: ${brandColors.giv[500]};
 		position: absolute;

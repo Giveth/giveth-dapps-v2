@@ -1,7 +1,7 @@
 import { captureException } from '@sentry/nextjs';
-import { getWalletClient } from 'wagmi/actions';
 import { WriteContractReturnType } from 'viem';
-import { type Address } from 'wagmi';
+import { type Address } from 'viem';
+import { writeContract } from '@wagmi/core';
 import { ClaimData } from '@/types/GIV';
 import config from '../configuration';
 import MerkleDropJson from '../artifacts/MerkleDrop.json';
@@ -9,6 +9,7 @@ import TOKEN_DISTRO_JSON from '../artifacts/TokenDistro.json';
 import { transformSubgraphData } from '@/lib/subgraph/subgraphDataTransform';
 import { fetchChainInfo } from '@/features/subgraph/subgraph.services';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 const { abi: MERKLE_ABI } = MerkleDropJson;
 const { abi: TOKEN_DISTRO_ABI } = TOKEN_DISTRO_JSON;
@@ -76,13 +77,11 @@ export const claimAirDrop = async (
 	if (!claimData) throw new Error('No claim data');
 
 	try {
-		const walletClient = await getWalletClient({
-			chainId,
-		});
-		return await walletClient?.writeContract({
+		return await writeContract(wagmiConfig, {
 			address: merkleAddress,
-			functionName: 'claim',
+			chainId,
 			abi: MERKLE_ABI,
+			functionName: 'claim',
 			args: [claimData.index, claimData.amount, claimData.proof],
 			// @ts-ignore -- needed for safe txs
 			value: 0n,
@@ -104,13 +103,11 @@ export const claimReward = async (
 	if (!chainId) return;
 
 	try {
-		const walletClient = await getWalletClient({
-			chainId,
-		});
-		return walletClient?.writeContract({
+		return writeContract(wagmiConfig, {
 			address: tokenDistroAddress,
-			functionName: 'claim',
 			abi: TOKEN_DISTRO_ABI,
+			chainId,
+			functionName: 'claim',
 			value: 0n,
 		});
 	} catch (error) {

@@ -16,9 +16,9 @@ function useSafeAutoConnect() {
 	useEffect(() => {
 		if (checkForSafeConnector(connectors)) {
 			const connectorInstance = connectors.find(
-				c => c.id === AUTOCONNECTED_CONNECTOR_IDS[0] && c.ready,
+				c => c.id === AUTOCONNECTED_CONNECTOR_IDS[0], // TODO:Migrate && c.ready,
 			);
-			connect({ connector: connectorInstance });
+			if (connectorInstance) connect({ connector: connectorInstance });
 		}
 	}, [connect, connectors, isSafeEnv]);
 }

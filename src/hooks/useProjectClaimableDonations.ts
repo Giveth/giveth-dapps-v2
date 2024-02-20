@@ -1,4 +1,4 @@
-import { Address } from 'wagmi';
+import { type Address } from 'viem';
 import { useEffect, useState } from 'react';
 import { BigNumber } from 'ethers';
 import { IStream, IToken } from '@/types/superFluid';

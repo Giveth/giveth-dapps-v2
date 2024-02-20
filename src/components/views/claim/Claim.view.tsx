@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import config from '@/configuration';
 import ClaimCard from '@/components/views/claim/cards/Claim';
 import { CongratulationsCard } from '@/components/views/claim/cards/Congratulations';
@@ -35,7 +35,7 @@ const StepTitle = styled.div<IStepTitleProps>`
 	padding: 8px 0;
 	margin: 4px;
 	cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
-	::before {
+	&::before {
 		content: '';
 		position: absolute;
 		bottom: -6px;
@@ -92,7 +92,7 @@ export interface IClaimViewCardProps {
 
 const ClaimView = () => {
 	const { giveDropState, step, setStep } = useClaim();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 
 	return (

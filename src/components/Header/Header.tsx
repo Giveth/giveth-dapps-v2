@@ -9,7 +9,7 @@ import {
 	IconSearch24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
 	ConnectButton,
@@ -64,7 +64,7 @@ const Header: FC<IHeader> = () => {
 		useDelayedState();
 
 	const { walletAddress, openWalletConnectModal } = useGeneralWallet();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 
 	const networkHasGIV =
@@ -142,7 +142,7 @@ const Header: FC<IHeader> = () => {
 	};
 
 	return (
-		<StyledHeader alignItems='center' theme={theme} show={showHeader}>
+		<StyledHeader alignItems='center' themeState={theme} show={showHeader}>
 			<Flex>
 				{showBackBtn ? (
 					<Logo onClick={handleBack}>
@@ -177,7 +177,7 @@ const Header: FC<IHeader> = () => {
 				)}
 			</Flex>
 			{isDesktop && !showBackBtn && (
-				<HeaderLinks theme={theme}>
+				<HeaderLinks themeState={theme}>
 					<LinkWithMenu
 						title={formatMessage({ id: 'label.projects' })}
 						isHeaderShowing={showHeader}
@@ -200,7 +200,7 @@ const Header: FC<IHeader> = () => {
 						<CommunityMenu />
 					</LinkWithMenu>
 					<SearchButton
-						theme={theme}
+						themeState={theme}
 						onClick={() => dispatch(setShowSearchModal(true))}
 					>
 						<Flex alignItems='center' gap='16px'>

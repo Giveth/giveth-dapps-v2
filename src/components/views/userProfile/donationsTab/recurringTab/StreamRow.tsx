@@ -92,7 +92,7 @@ const RowWrapper = styled.div`
 const ModifyButton = styled(P)`
 	cursor: pointer;
 	color: ${brandColors.pinky[500]};
-	:hover {
+	&:hover {
 		color: ${brandColors.pinky[700]};
 	}
 `;

@@ -9,7 +9,7 @@
 	opacity: 0.3;
 }
 
-.image-uploading::before {
+.image-uploading&::before {
 	content: '';
 	box-sizing: border-box;
 	position: absolute;

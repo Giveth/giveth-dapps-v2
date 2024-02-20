@@ -93,7 +93,7 @@ const LetsDoIt = styled(Button)`
 	margin: 5px 10px 10px;
 	font-weight: bold;
 	color: ${brandColors.mustard[700]};
-	:hover {
+	&:hover {
 		background: transparent;
 		color: ${brandColors.mustard[800]};
 	}

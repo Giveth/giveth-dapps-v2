@@ -6,13 +6,23 @@ import { useFormContext } from 'react-hook-form';
 import LocationInput from '@/components/views/create/locationInput/LocationInput';
 import { InputContainer, Label } from '../Create.sc';
 import config from '@/configuration';
-import { EInputs } from '@/components/views/create/CreateProject';
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { ECreateProjectSections, EInputs } from '../types';
 
 const googleMapURL = `https://maps.googleapis.com/maps/api/js?key=${config.GOOGLE_MAPS_API_KEY}&v=3.exp&libraries=geometry,drawing,places`;
 
-const LocationIndex = () => {
+interface ILocationIndexProps {
+	setActiveProjectSection: (section: ECreateProjectSections) => void;
+}
+
+const LocationIndex = ({ setActiveProjectSection }: ILocationIndexProps) => {
 	const { getValues, setValue } = useFormContext();
 	const { formatMessage } = useIntl();
+
+	const onVisible = () =>
+		setActiveProjectSection(ECreateProjectSections.location);
+	const delay = 500; // Delay in milliseconds
+	const ref = useIntersectionObserver(onVisible, { threshold: 0.8, delay });
 
 	const defaultLocation = getValues(EInputs.impactLocation);
 
@@ -21,7 +31,7 @@ const LocationIndex = () => {
 	};
 
 	return (
-		<>
+		<div ref={ref}>
 			<H5>
 				{formatMessage({
 					id: 'label.where_will_your_project_have_the_most_impact',
@@ -41,7 +51,7 @@ const LocationIndex = () => {
 					loadingElement={<MapContainer />}
 				/>
 			</InputContainer>
-		</>
+		</div>
 	);
 };
 

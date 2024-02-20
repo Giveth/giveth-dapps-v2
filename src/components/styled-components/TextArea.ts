@@ -35,13 +35,13 @@ export const TextArea = styled.textarea<ITextareaProps>`
 					return neutralColors.gray[300];
 			}
 		}};
-	::placeholder {
+	&::placeholder {
 		color: ${neutralColors.gray[500]};
 	}
-	:hover {
+	&:hover {
 		box-shadow: ${Shadow.Neutral[400]};
 	}
-	:focus {
+	&:focus {
 		border: 2px solid
 			${props => {
 				switch (props.validation) {

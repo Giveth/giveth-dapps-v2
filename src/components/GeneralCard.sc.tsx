@@ -2,7 +2,7 @@ import { P, Button, H4, brandColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { mediaQueries } from '@/lib/constants/constants';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
 
 export const ButtonStyled = styled(Button)`
@@ -43,7 +43,7 @@ export const TitleSection = styled.div`
 	text-align: center;
 `;
 
-export const HorizontalTitleSection = styled.div`
+export const HorizontalTitleSection = styled.div<{ fullWidth?: boolean }>`
 	display: flex;
 	flex-direction: column;
 	max-width: calc(100vw - 72px);
@@ -51,8 +51,7 @@ export const HorizontalTitleSection = styled.div`
 	${mediaQueries.tablet} {
 		text-align: left;
 		padding: 0 15px 0 70px;
-		width: ${(props: { fullWidth?: boolean }) =>
-			props.fullWidth ? '100%' : '485px'};
+		width: ${props => (props.fullWidth ? '100%' : '485px')};
 	}
 `;
 
@@ -74,9 +73,8 @@ export const Wrapper = styled(FlexCenter)`
 	}
 `;
 
-export const HorizontalWrap = styled.div`
+export const HorizontalWrap = styled(Flex)`
 	z-index: 2;
-	display: flex;
 	background: white;
 	align-items: center;
 	color: ${brandColors.giv[800]};

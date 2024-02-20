@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
@@ -64,7 +64,7 @@ const LockModal: FC<ILockModalProps> = ({
 	const [round, setRound] = useState(0);
 	const [lockState, setLockState] = useState<ELockState>(ELockState.LOCK);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { stakedAmount: stakedLpAmount } =
 		useStakingPool(poolStakingConfig) || {};

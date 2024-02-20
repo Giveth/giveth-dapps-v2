@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Col, H3, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Subtitle, GIVfrensLink } from './RegenStreamSection.sc';
 import config from '@/configuration';
 import { RegenStreamCard } from './RegenStreamCard';
@@ -13,7 +13,7 @@ interface IRegenStreamSectionProps {
 export const RegenStreamSection: FC<IRegenStreamSectionProps> = ({
 	showArchivedPools,
 }) => {
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { formatMessage } = useIntl();
 	const _regenStreams =

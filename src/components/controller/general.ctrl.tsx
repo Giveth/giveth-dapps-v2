@@ -2,7 +2,7 @@ import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import { createGlobalStyle, css } from 'styled-components';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
@@ -13,10 +13,10 @@ import {
 
 const GeneralController = () => {
 	const dispatch = useAppDispatch();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { address, isConnected: isWalletActive } = useAccount();
-	const { switchNetwork } = useSwitchNetwork();
+	const { switchChain } = useSwitchChain();
 	const router = useRouter();
 	const theme = useAppSelector(state => state.general.theme);
 
@@ -35,24 +35,25 @@ const GeneralController = () => {
 			const _chainId = parseInt(_chain);
 
 			if (isWalletActive && chainId !== _chainId) {
-				switchNetwork?.(_chainId);
+				switchChain?.({ chainId: _chainId });
 			}
 		}
 	}, [router, address, isWalletActive, chainId]);
-	return <GlobalStyle theme={theme} />;
+
+	return <GlobalStyle themeState={theme} />;
 };
 
-const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
+const GlobalStyle = createGlobalStyle<{ themeState?: ETheme }>`
   :root {
 	${props =>
-		props.theme === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? css`
 					--bgColor: ${brandColors.giv[900]} !important;
 					--color: white !important;
 					--scrollColor: ${brandColors.giv[400]} !important;
 					--scrollHoverColor: ${brandColors.giv[700]} !important;
 				`
-			: props.theme === ETheme.Light
+			: props.themeState === ETheme.Light
 				? css`
 						--bgColor: ${neutralColors.gray[200]} !important;
 						--color: ${neutralColors.gray[900]} !important;
@@ -64,23 +65,5 @@ const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
 	
   }
 `;
-
-// const GlobalStyle = createGlobalStyle<{ theme: ETheme }>`
-//   body {
-// 	${props =>
-// 		props.theme === ETheme.Dark
-// 			? css`
-// 					background-color: ${brandColors.giv[900]};
-// 					color: ${'white'};
-// 			  `
-// 			: props.theme === ETheme.Light
-// 			? css`
-// 					background-color: ${neutralColors.gray[200]};
-// 					color: ${neutralColors.gray[900]};
-// 			  `
-// 			: ''}
-
-//   }
-// `;
 
 export default GeneralController;

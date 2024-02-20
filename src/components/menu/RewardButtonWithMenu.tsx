@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { formatWeiHelper } from '@/helpers/number';
 import {
 	MenuAndButtonContainer,
@@ -51,12 +51,12 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 
 	return (
 		<MenuAndButtonContainer {...props}>
-			<BalanceButton outline theme={theme} isHover={showMenu}>
+			<BalanceButton outline themeState={theme} isHover={showMenu}>
 				<HeaderRewardButton />
-				<CoverLine theme={theme} className='cover-line' />
+				<CoverLine themeState={theme} className='cover-line' />
 			</BalanceButton>
 			{menuCondition && (
-				<MenuContainer isAnimating={showMenu} theme={theme}>
+				<MenuContainer isAnimating={showMenu} themeState={theme}>
 					<ItemsProvider close={closeMenu}>
 						<RewardItems
 							showWhatIsGIVstreamModal={showRewardMenuModal}
@@ -98,7 +98,7 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 };
 
 const HeaderRewardButton = () => {
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const sdh = new SubgraphDataHelper(
 		useAppSelector(state => state.subgraph[currentValuesHelper(chainId)]),

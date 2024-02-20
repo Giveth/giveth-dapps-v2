@@ -9,7 +9,8 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Chain, useSwitchNetwork } from 'wagmi';
+import { useSwitchChain } from 'wagmi';
+import { Chain } from 'viem';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
@@ -39,7 +40,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
-	const { switchNetwork } = useSwitchNetwork();
+	const { switchChain } = useSwitchChain();
 	const { formatMessage } = useIntl();
 	const { walletChainType, handleSingOutAndSignInWithEVM, chain } =
 		useGeneralWallet();
@@ -70,12 +71,12 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 							if (walletChainType === ChainType.SOLANA) {
 								handleSingOutAndSignInWithEVM();
 							}
-							switchNetwork?.(networkId);
+							switchChain?.({ chainId: networkId });
 							closeModal();
 						}}
 						isSelected={networkId === chainId}
 						key={networkId}
-						theme={theme}
+						themeState={theme}
 					>
 						<NetworkLogo
 							chainId={networkId}
@@ -84,7 +85,10 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 						/>
 						<B>{getChainName(networkId, chainType)}</B>
 						{networkId === chainId && (
-							<SelectedNetwork styleType='Small' theme={theme}>
+							<SelectedNetwork
+								styleType='Small'
+								themeState={theme}
+							>
 								{formatMessage({ id: 'label.selected' })}
 							</SelectedNetwork>
 						)}
@@ -97,21 +101,24 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 
 export const SelectedNetwork = styled(Overline)`
 	color: ${props =>
-		props.theme === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? brandColors.giv[100]
 			: brandColors.giv[500]};
 	position: absolute;
 	top: -8px;
 	left: 10px;
 	background: ${props =>
-		props.theme === ETheme.Dark
+		props.themeState === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	padding: 0 3px;
 	border-radius: 4px;
 `;
 
-export const NetworkItem = styled.div<{ isSelected: boolean }>`
+export const NetworkItem = styled.div<{
+	isSelected: boolean;
+	themeState: ETheme;
+}>`
 	position: relative;
 	padding: 8px;
 	width: 213px;
@@ -120,9 +127,9 @@ export const NetworkItem = styled.div<{ isSelected: boolean }>`
 	display: flex;
 	align-items: center;
 	gap: 16px;
-	:hover {
+	&:hover {
 		background-color: ${props =>
-			props.theme === ETheme.Dark
+			props.themeState === ETheme.Dark
 				? brandColors.giv[700]
 				: neutralColors.gray[200]};
 	}

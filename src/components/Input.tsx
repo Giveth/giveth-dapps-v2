@@ -233,7 +233,7 @@ const InputLabel = styled(GLink)<IInputLabelProps>`
 	padding-bottom: 4px;
 	color: ${props =>
 		props.disabled ? neutralColors.gray[600] : neutralColors.gray[900]};
-	::after {
+	&::after {
 		content: '*';
 		display: ${props => (props.required ? 'inline-block' : 'none')};
 		padding: 0 4px;

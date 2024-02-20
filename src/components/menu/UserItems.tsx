@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 import { B, GLink } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
@@ -43,7 +43,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 		isOnSolana,
 		walletChainType,
 	} = useGeneralWallet();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const dispatch = useAppDispatch();
 	const router = useRouter();
@@ -72,16 +72,16 @@ export const UserItems: FC<IUserItemsProps> = ({
 
 	return (
 		<>
-			<Item theme={theme}>
-				<ItemTitle theme={theme}>
+			<Item themeState={theme}>
+				<ItemTitle themeState={theme}>
 					{formatMessage({ id: 'label.wallet' })}
 				</ItemTitle>
 				<ItemRow>
 					<B>{shortenAddress(walletAddress)}</B>
 				</ItemRow>
 			</Item>
-			<Item theme={theme}>
-				<ItemTitle theme={theme}>
+			<Item themeState={theme}>
+				<ItemTitle themeState={theme}>
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>
@@ -110,7 +110,11 @@ export const UserItems: FC<IUserItemsProps> = ({
 			</Item>
 			<ItemSpacer />
 			{walletMenuArray.map(i => (
-				<Item key={i.title} onClick={() => goRoute(i)} theme={theme}>
+				<Item
+					key={i.title}
+					onClick={() => goRoute(i)}
+					themeState={theme}
+				>
 					<GLink size='Big'>{formatMessage({ id: i.title })}</GLink>
 				</Item>
 			))}
@@ -121,7 +125,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 						localStorage.removeItem(StorageLabel.WALLET);
 						disconnect();
 					}}
-					theme={theme}
+					themeState={theme}
 				>
 					<GLink size='Big'>
 						{formatMessage({ id: 'label.sign_out' })}

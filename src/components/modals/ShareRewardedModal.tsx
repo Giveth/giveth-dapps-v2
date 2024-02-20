@@ -261,7 +261,6 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 								</LinkedinShareButton>
 								<FacebookShareButton
 									hashtag='#giveth'
-									quote={shareTitleFacebookAndLinkedin}
 									url={url}
 								>
 									<SocialButtonContainer>

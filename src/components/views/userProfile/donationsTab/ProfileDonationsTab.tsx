@@ -101,7 +101,7 @@ const Tab = styled(P)<ITab>`
 			background-color: ${neutralColors.gray[100]};
 			box-shadow: 0px 3px 20px 0px rgba(212, 218, 238, 0.4);
 		`}
-	:hover {
+	&:hover {
 		background-color: ${neutralColors.gray[100]};
 	}
 `;
