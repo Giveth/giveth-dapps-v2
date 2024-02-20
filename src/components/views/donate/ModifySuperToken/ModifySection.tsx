@@ -11,7 +11,7 @@ import {
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Dispatch, SetStateAction, type FC } from 'react';
-import { FetchBalanceResult } from '@wagmi/core';
+import { type GetBalanceReturnType } from '@wagmi/core';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -25,7 +25,7 @@ interface IModifySectionProps {
 	titleLabel: string;
 	token?: IToken;
 	setAmount: Dispatch<SetStateAction<bigint>>;
-	balance?: FetchBalanceResult;
+	balance?: GetBalanceReturnType;
 	refetch: any;
 	isRefetching: boolean;
 	error?: string;

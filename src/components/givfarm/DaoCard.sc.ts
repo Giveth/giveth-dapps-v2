@@ -13,11 +13,11 @@ export const DaoCardContainer = styled.div`
 	background-image: url('/images/backgrounds/giv-outline.svg');
 	border-radius: 8px;
 	position: relative;
-	::before {
+	&::before {
 		content: url('');
 	}
 	@media ${device.laptopL} {
-		::before {
+		&::before {
 			content: url('/images/pie1.png');
 			position: absolute;
 			top: 0;

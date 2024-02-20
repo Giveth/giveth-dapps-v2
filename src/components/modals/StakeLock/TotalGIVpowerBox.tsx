@@ -7,7 +7,7 @@ import {
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
@@ -18,7 +18,7 @@ import { getGIVpowerOnChain } from '@/lib/stakingPool';
 const TotalGIVpowerBox = () => {
 	const [totalGIVpower, setTotalGIVpower] = useState<BigNumber>();
 	const values = useAppSelector(state => state.subgraph);
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { address } = useAccount();
 

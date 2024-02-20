@@ -8,7 +8,7 @@ import { CommunityItems } from './CommunityItems';
 export const CommunityMenu = () => {
 	const theme = useAppSelector(state => state.general.theme);
 	return (
-		<MenuContainer theme={theme}>
+		<MenuContainer themeState={theme}>
 			<CommunityItems />
 		</MenuContainer>
 	);

@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { H4, B, brandColors, Caption } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { mediaQueries } from '@/lib/constants/constants';
 import config from '@/configuration';
 import { IconEthereum } from '../Icons/Eth';
@@ -21,13 +21,13 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 	setShowModal,
 	targetNetwork,
 }) => {
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const theme = useAppSelector(state => state.general.theme);
 
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-	const { switchNetwork } = useSwitchNetwork();
+	const { switchChain } = useSwitchChain();
 
 	useEffect(() => {
 		if (chainId === targetNetwork) {
@@ -51,7 +51,7 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 						<IconGnosisChain size={64} />
 					</>
 				)}
-				<Title theme={theme}>
+				<Title themeState={theme}>
 					{formatMessage(
 						{ id: 'label.switch_to_network_name' },
 						{ networkNames: NetworkName },
@@ -67,7 +67,9 @@ export const ChangeNetworkModal: FC<IChangeNetworkModalProps> = ({
 				</B>
 				<SwitchCaption
 					onClick={() =>
-						switchNetwork?.(config.MAINNET_NETWORK_NUMBER)
+						switchChain?.({
+							chainId: config.MAINNET_NETWORK_NUMBER,
+						})
 					}
 				>
 					{formatMessage({ id: 'label.switch_network' })}
@@ -95,5 +97,5 @@ const ChangeNetworkModalContainer = styled.div`
 const Title = styled(H4)`
 	margin: 18px 0 24px;
 	color: ${props =>
-		props.theme === ETheme.Dark ? 'white' : brandColors.giv[700]};
+		props.themeState === ETheme.Dark ? 'white' : brandColors.giv[700]};
 `;

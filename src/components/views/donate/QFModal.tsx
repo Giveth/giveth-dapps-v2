@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Button, neutralColors, P, Subline } from '@giveth/ui-design-system';
-import { useSwitchNetwork } from 'wagmi';
+import { useSwitchChain } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -17,7 +17,7 @@ interface IProps extends IModal {
 const QFModal: FC<IProps> = ({ setShowModal, donateWithoutMatching }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-	const { switchNetwork } = useSwitchNetwork();
+	const { switchChain } = useSwitchChain();
 	const { project } = useDonateData();
 	const activeRound = getActiveRound(project.qfRounds);
 	const roundName = activeRound?.name;
@@ -46,7 +46,11 @@ const QFModal: FC<IProps> = ({ setShowModal, donateWithoutMatching }) => {
 				<Button
 					label={formatMessage({ id: 'label.switch_network' })}
 					onClick={() => {
-						switchNetwork?.(activeRound?.eligibleNetworks[0]);
+						switchChain &&
+							activeRound?.eligibleNetworks[0] &&
+							switchChain({
+								chainId: activeRound.eligibleNetworks[0],
+							});
 						closeModal();
 					}}
 					buttonType='primary'

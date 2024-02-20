@@ -18,7 +18,7 @@ interface IConnectCardContainerProps {
 
 const ConnectCardContainer = styled(Card)<IConnectCardContainerProps>`
 	padding-top: 96px;
-	::before {
+	&::before {
 		content: '';
 		background-image: url('${props => props.data.bg}');
 		position: absolute;
@@ -32,7 +32,7 @@ const ConnectCardContainer = styled(Card)<IConnectCardContainerProps>`
 	// @media only screen and (max-width: 1120px) {}
 	@media only screen and (max-width: 1120px) {
 		padding: 32px;
-		::before {
+		&::before {
 			background-image: none;
 		}
 	}

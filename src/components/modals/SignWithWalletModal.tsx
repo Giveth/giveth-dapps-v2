@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { connect, Address } from '@wagmi/core';
+import { connect } from '@wagmi/core';
 
 import {
 	brandColors,
@@ -14,7 +14,8 @@ import {
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
-import { useAccount, useConnect, useNetwork } from 'wagmi';
+import { useConnect, useAccount } from 'wagmi';
+import { Address } from 'viem';
 import { Modal } from '@/components/modals/Modal';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { ETheme } from '@/features/general/general.slice';
@@ -34,6 +35,7 @@ import { ISolanaSignToGetToken } from '@/features/user/user.types';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import { ChainType } from '@/types/config';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 interface IProps extends IModal {
 	callback?: () => void;
@@ -60,7 +62,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 
 	const { address, connector, isConnected } = useAccount();
 	const { connectors } = useConnect();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const { open } = useWeb3Modal();
 	const isSafeEnv = useIsSafeEnvironment();
 
@@ -118,7 +120,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 			) {
 				const safeConnector = connectors.find(i => i.id === 'safe');
 				safeConnector &&
-					(await connect({
+					(await connect(wagmiConfig, {
 						chainId,
 						connector: safeConnector,
 					}));
@@ -332,7 +334,7 @@ const OkButton = styled(Button)`
 const SkipButton = styled(Button)`
 	width: 300px;
 	margin: 10px auto 0;
-	:hover {
+	&:hover {
 		background: transparent;
 		color: ${brandColors.deep[200]};
 	}

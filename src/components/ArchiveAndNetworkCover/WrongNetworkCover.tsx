@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Caption, IconAlertCircle16 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Cover } from './common';
 import { Flex } from '../styled-components/Flex';
 import { getChainName } from '@/lib/network';
@@ -16,7 +16,7 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 
 	return targetNetwork !== chainId ? (

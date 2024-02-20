@@ -8,7 +8,7 @@ export const ProjectsMenu = () => {
 	const { theme } = useAppSelector(state => state.general);
 
 	return (
-		<MenuContainer theme={theme}>
+		<MenuContainer themeState={theme}>
 			<ProjectsItems />
 		</MenuContainer>
 	);

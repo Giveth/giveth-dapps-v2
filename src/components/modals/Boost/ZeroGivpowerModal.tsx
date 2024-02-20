@@ -8,7 +8,7 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
@@ -18,7 +18,7 @@ import { getGIVpowerLink } from '@/helpers/givpower';
 export const ZeroGivpowerModal: FC<IModal> = ({ setShowModal }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 
 	return (

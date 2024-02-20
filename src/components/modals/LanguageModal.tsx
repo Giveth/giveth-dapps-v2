@@ -96,7 +96,7 @@ const Option = styled.div<{ isCurrentLocale?: boolean; isDark?: boolean }>`
 				: neutralColors.gray[200]
 			: 'transparent'};
 
-	:hover {
+	&:hover {
 		background: ${props =>
 			props.isDark ? brandColors.giv[500] : neutralColors.gray[300]};
 	}

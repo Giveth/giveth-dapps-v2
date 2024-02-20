@@ -1,10 +1,12 @@
 import { captureException } from '@sentry/nextjs';
-import { type Address } from 'wagmi';
-import { getContract, getPublicClient } from 'wagmi/actions';
-import { erc20ABI } from '@wagmi/core';
+import { type Address } from 'viem';
+import { getPublicClient } from 'wagmi/actions';
+import { erc20Abi } from 'viem';
+import { readContract } from '@wagmi/core';
 import config from '@/configuration';
 import { AddressZero } from '@/lib/constants/constants';
 import { ChainType } from '@/types/config';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 export const fetchPrice = async (
 	chainId: number | ChainType,
@@ -32,15 +34,15 @@ export const fetchBalance = async (
 ) => {
 	try {
 		if (tokenAddress === AddressZero) {
-			const client = getPublicClient();
-			return client.getBalance({ address: userAddress });
+			const client = getPublicClient(wagmiConfig);
+			return client?.getBalance({ address: userAddress });
 		} else {
-			const contract = getContract({
+			return await readContract(wagmiConfig, {
 				address: tokenAddress,
-				abi: erc20ABI,
+				abi: erc20Abi,
+				functionName: 'balanceOf',
+				args: [userAddress],
 			});
-			const balance = await contract.read.balanceOf([userAddress]);
-			return balance;
 		}
 	} catch (error) {
 		console.log('error on fetchBalance', { error });
