@@ -65,6 +65,8 @@ const links = {
 	PASSPORT: 'https://passport.gitcoin.co',
 	QF_DOC: DOCS + 'quadraticfunding',
 	MULTISIG_GUIDE: DOCS + 'dapps/multisigs',
+	ACROSS_BRIDGE:
+		'https://across.to?ref=0x9cd1E4A6b3361abcCC90C7F8E788ac246d194303',
 };
 
 if (!isProduction) {
