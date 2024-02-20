@@ -44,10 +44,6 @@ import { RewardButtonWithMenu } from '../menu/RewardButtonWithMenu';
 import { UserButtonWithMenu } from '../menu/UserButtonWithMenu';
 import { NotificationButtonWithMenu } from '../menu/NotificationButtonWithMenu';
 import { HomeSidebar } from '../sidebar/HomeSidebar';
-import {
-	fetchMainCategories,
-	fetchQFRounds,
-} from '@/features/general/general.thunk';
 import { ItemsProvider } from '@/context/Items.context';
 import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import { CommunityMenu } from '../menu/CommunityMenu';
@@ -115,11 +111,6 @@ const Header: FC<IHeader> = () => {
 			router.back();
 		}
 	};
-
-	useEffect(() => {
-		dispatch(fetchMainCategories());
-		dispatch(fetchQFRounds());
-	}, []);
 
 	useEffect(() => {
 		setShowBackBtn(
