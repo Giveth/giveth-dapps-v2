@@ -12,9 +12,10 @@ import {
 interface IProGuideProps extends IProjectTipProps, IProjectScoreCardProps {}
 
 export const ProGuide: FC<IProGuideProps> = ({
+	activeSection,
 	formData,
 	getFieldState,
-	activeSection,
+	setScoreState,
 }) => {
 	const isLaptopL = useMediaQuery(`(min-width: ${deviceSize.laptopL}px)`);
 	return isLaptopL ? (
@@ -23,6 +24,7 @@ export const ProGuide: FC<IProGuideProps> = ({
 			<ProjectScoreCard
 				formData={formData}
 				getFieldState={getFieldState}
+				setScoreState={setScoreState}
 			/>
 		</Wrapper>
 	) : null;

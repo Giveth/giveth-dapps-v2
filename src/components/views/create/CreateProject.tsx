@@ -51,6 +51,7 @@ import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { ECreateProjectSections, TInputs, EInputs } from './types';
 import { ProGuide } from './proGuide/ProGuide';
+import { EScoreState } from './proGuide/score/scoreHelpers';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -59,18 +60,21 @@ interface ICreateProjectProps {
 }
 
 const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
-	const { formatMessage } = useIntl();
-	const [addProjectMutation] = useMutation(CREATE_PROJECT);
-	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
-	const router = useRouter();
-	const dispatch = useAppDispatch();
-
+	const [scoreState, setScoreState] = useState(EScoreState.LOW);
+	const [isLoading, setIsLoading] = useState(false);
+	const [addedProjectState, setAddedProjectState] = useState<IProject>();
 	const [showAlloProtocolModal, setShowAlloProtocolModal] = useState(false);
 	const [addressModalChainId, setAddressModalChainId] = useState<number>();
 	const [addressModalChainType, setAddressModalChainType] =
 		useState<ChainType>();
 	const [activeProjectSection, setActiveProjectSection] =
 		useState<ECreateProjectSections>(ECreateProjectSections.default);
+
+	const { formatMessage } = useIntl();
+	const [addProjectMutation] = useMutation(CREATE_PROJECT);
+	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
+	const router = useRouter();
+	const dispatch = useAppDispatch();
 
 	const isEditMode = !!project;
 
@@ -135,11 +139,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	});
 
 	const { handleSubmit, setValue, watch, getFieldState } = formMethods;
-
-	const [isLoading, setIsLoading] = useState(false);
-	// const [showGuidelineModal, setShowGuidelineModal] = useState(false);
-	const [addedProjectState, setAddedProjectState] = useState<IProject>();
-
 	const onAddressesVisible = () =>
 		setActiveProjectSection(ECreateProjectSections.addresses);
 	const delay = 500; // Delay in milliseconds
@@ -470,6 +469,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						activeSection={activeProjectSection}
 						formData={data}
 						getFieldState={getFieldState}
+						setScoreState={setScoreState}
 					/>
 				</Col>
 			</Row>

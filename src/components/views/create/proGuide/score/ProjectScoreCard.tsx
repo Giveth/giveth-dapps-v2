@@ -1,4 +1,10 @@
-import { type FC, useEffect, useReducer } from 'react';
+import {
+	type FC,
+	useEffect,
+	useReducer,
+	type Dispatch,
+	type SetStateAction,
+} from 'react';
 import { H6, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
@@ -21,6 +27,7 @@ import {
 export interface IProjectScoreCardProps {
 	formData: TInputs;
 	getFieldState: UseFormGetFieldState<TInputs>;
+	setScoreState: Dispatch<SetStateAction<EScoreState>>;
 }
 
 export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
