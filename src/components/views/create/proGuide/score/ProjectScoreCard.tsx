@@ -3,11 +3,11 @@ import { H6, P, semanticColors } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { UseFormGetFieldState } from 'react-hook-form';
-import { Card } from '../ProGuide.sc';
+import { Card } from '../common.sc';
 import { Flex } from '@/components/styled-components/Flex';
 import { ScoreBox } from './ScoreBox';
 import { ImprovementTips } from './ImprovementTips';
-import { EInputs, TInputs } from '../types';
+import { EInputs, TInputs } from '../../types';
 
 enum EScoreState {
 	LOW = 'LOW',

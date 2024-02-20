@@ -7,8 +7,8 @@ import BannerImageTip from './BannerImageTip';
 import CategoryTip from './CategoryTip';
 import MapTip from './MapTip';
 import AddressesTip from './AddressesTip';
-import { ECreateProjectSections } from '../types';
-import { Card } from '../ProGuide.sc';
+import { ECreateProjectSections } from '../../types';
+import { Card } from '../common.sc';
 
 export interface IProjectTipProps {
 	activeSection: ECreateProjectSections;

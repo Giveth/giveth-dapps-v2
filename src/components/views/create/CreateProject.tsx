@@ -50,7 +50,7 @@ import StorageLabel from '@/lib/localStorage';
 import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { ECreateProjectSections, TInputs, EInputs } from './types';
-import { ProGuide } from './ProGuide';
+import { ProGuide } from './proGuide/ProGuide';
 
 const ALL_CHAINS = config.CHAINS;
 
