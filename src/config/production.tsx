@@ -5,6 +5,7 @@ import {
 	mainnet,
 	optimism,
 	polygon,
+	arbitrum,
 } from '@wagmi/core/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import React from 'react';
@@ -36,6 +37,7 @@ const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
+const ARBITRUM_NETWORK_NUMBER = 42161;
 const CLASSIC_NETWORK_NUMBER = 61;
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
@@ -93,6 +95,7 @@ const config: EnvConfig = {
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
+	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 
 	GARDEN_LINK:
@@ -535,6 +538,16 @@ const config: EnvConfig = {
 		subgraphAddress: '',
 		coingeckoChainName: 'celo',
 		chainLogo: (logoSize = 24) => <IconCelo size={logoSize} />,
+	},
+	ARBITRUM_CONFIG: {
+		...arbitrum,
+		chainType: ChainType.EVM,
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		subgraphAddress: '',
+		coingeckoChainName: 'arbitrum',
+		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
 	},
 	CLASSIC_CONFIG: {
 		...classic,
