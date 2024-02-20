@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Card } from '../ProGuide.sc';
 import { Flex } from '@/components/styled-components/Flex';
 import { ScoreBox } from './ScoreBox';
+import { ImprovementTips } from './ImprovementTips';
 
 enum EScoreState {
 	LOW = 'LOW',
@@ -35,6 +36,7 @@ export const infoMap = {
 	[EScoreState.PERFECT]: {
 		mainTip:
 			'A perfect score! Just keep in mind to regularly update your project to keep donation coming your way.',
+		title: '',
 		scoreColor: semanticColors.jade[500],
 	},
 };
@@ -61,6 +63,7 @@ export const ProjectScoreCard = () => {
 			</Flex>
 			<ScoreBox score={score} />
 			<MainTip>{infoMap[EScoreState.PERFECT].mainTip}</MainTip>
+			{score < 100 && <ImprovementTips score={score} />}
 		</Card>
 	);
 };
