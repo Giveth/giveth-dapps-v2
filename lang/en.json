@@ -4,6 +4,17 @@
 	"all": "All",
 	"animals": "Animals",
 	"art": "Art",
+	"component.score.low.title": "Why is it low?",
+	"component.score.low.tip": "Your project score is too low to publish, you need at least a score of 50 to proceed.",
+
+	"component.score.medium.title": "Why is it low?",
+	"component.score.medium.tip": "You can still publish your project but try increasing your score to make your project more attractive to donors.",
+
+	"component.score.high.title": "What else you can do?",
+	"component.score.high.tip": "Great score! Just keep in mind to regularly update your project to keep donations coming your way.",
+
+	"component.score.perfect.title": "",
+	"component.score.perfect.tip": "A perfect score! Just keep in mind to regularly update your project to keep donations coming your way.",
 	"component.improve_tip.desc": "The project description is way too short, use at least 1200 characters to describe your project.",
 	"component.improve_tip.desc_image": "Adding media such as photos or videos relevant to your project helps donors visualize the work you're doing.",
 	"component.improve_tip.categories": "Ensure donors understand your project's purpose by picking at least one category.",

@@ -4,6 +4,17 @@
 	"all": "Todos",
 	"animals": "Animales",
 	"art": "Arte",
+	"component.score.low.title": "¿Por qué es bajo?",
+	"component.score.low.tip": "La puntuación de tu proyecto es demasiado baja para publicar, necesitas al menos una puntuación de 50 para proceder.",
+
+	"component.score.medium.title": "¿Por qué es bajo?",
+	"component.score.medium.tip": "Aún puedes publicar tu proyecto, pero intenta aumentar tu puntuación para hacer tu proyecto más atractivo para los donantes.",
+
+	"component.score.high.title": "¿Qué más puedes hacer?",
+	"component.score.high.tip": "¡Gran puntuación! Solo recuerda actualizar regularmente tu proyecto para seguir recibiendo donaciones.",
+
+	"component.score.perfect.title": "",
+	"component.score.perfect.tip": "¡Una puntuación perfecta! Solo recuerda actualizar regularmente tu proyecto para seguir recibiendo donaciones.",
 	"component.improve_tip.desc": "La descripción del proyecto es demasiado corta, usa al menos 1200 caracteres para describir tu proyecto.",
 	"component.improve_tip.desc_image": "Agregar medios como fotos o videos relevantes a tu proyecto ayuda a los donantes a visualizar el trabajo que estás haciendo.",
 	"component.improve_tip.categories": "Asegúrate de que los donantes entiendan el propósito de tu proyecto eligiendo al menos una categoría.",
