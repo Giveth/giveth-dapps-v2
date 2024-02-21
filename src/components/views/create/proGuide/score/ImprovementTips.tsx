@@ -16,16 +16,11 @@ interface IImprovementTipsProps {
 }
 
 const tipMap = {
-	[EScoreType.DESCRIPTION]:
-		'The project description is way too short, use at least 1200 characters to describe your project.',
-	[EScoreType.DESC_IMAGE]:
-		"Adding media such as photos or videos relevant to your project helps donors visualize the work you're doing.",
-	[EScoreType.CATEGORIES]:
-		"Ensure donors understand your project's purpose by picking at least one category.",
-	[EScoreType.LOCATION]:
-		'Define the location where this project is creating impact.',
-	[EScoreType.IMAGE]:
-		'Add a custom banner image to make your project stand out on Giveth.',
+	[EScoreType.DESCRIPTION]: 'component.improve_tip.desc',
+	[EScoreType.DESC_IMAGE]: 'component.improve_tip.desc_image',
+	[EScoreType.CATEGORIES]: 'component.improve_tip.categories',
+	[EScoreType.LOCATION]: 'component.improve_tip.location',
+	[EScoreType.IMAGE]: 'component.improve_tip.image',
 };
 
 export const ImprovementTips: FC<IImprovementTipsProps> = ({
