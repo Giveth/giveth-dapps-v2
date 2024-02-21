@@ -70,7 +70,7 @@ export const infoMap = {
 
 export function getScoreState(score: number): EQualityState {
 	if (score < 50) return EQualityState.LOW;
-	if (score < 75) return EQualityState.MEDIUM;
+	if (score < 80) return EQualityState.MEDIUM;
 	if (score < 100) return EQualityState.HIGH;
 	return EQualityState.PERFECT;
 }
