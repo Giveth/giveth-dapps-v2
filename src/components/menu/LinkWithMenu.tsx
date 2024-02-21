@@ -37,7 +37,7 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({
 			onMouseEnter={openMenu}
 			onMouseLeave={closeMenu}
 			ref={elRef}
-			themeState={theme}
+			basetheme={theme}
 		>
 			<Link href={href}>
 				<GLink size='Big'>{title}</GLink>

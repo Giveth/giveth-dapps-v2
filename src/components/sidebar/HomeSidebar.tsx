@@ -22,7 +22,7 @@ export const HomeSidebar = () => {
 	return (
 		<HomeSidebarContainer>
 			<Link href='/'>
-				<Item themeState={theme}>
+				<Item basetheme={theme}>
 					<GLink size='Big'>
 						{formatMessage({ id: 'label.home' })}
 					</GLink>
@@ -47,7 +47,7 @@ export const HomeSidebar = () => {
 			</SidebarParentItem>
 
 			<SearchButton
-				themeState={theme}
+				basetheme={theme}
 				isHighlighted
 				onClick={() => dispatch(setShowSearchModal(true))}
 			>

@@ -66,7 +66,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 
 	return (
 		<>
-			<HighlightSection themeState={theme}>
+			<HighlightSection basetheme={theme}>
 				<Label medium>
 					{formatMessage({ id: 'label.explore_by' })}
 				</Label>
@@ -76,7 +76,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={explore.url}>
-							<ExploreItem themeState={theme} isHighlighted>
+							<ExploreItem basetheme={theme} isHighlighted>
 								<B>{formatMessage({ id: explore.label })}</B>
 							</ExploreItem>
 						</Link>
@@ -85,7 +85,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 						<Link href={QFItem.url}>
 							<ExploreItem
 								className='qf-item'
-								themeState={theme}
+								basetheme={theme}
 								isHighlighted
 							>
 								<B>{formatMessage({ id: QFItem.label })}</B>
@@ -96,13 +96,13 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 			</HighlightSection>
 			<NormalSection inSidebar={inSidebar}>
 				<Label medium>{formatMessage({ id: 'label.category' })}</Label>
-				<CategoriesGrid inSidebar={inSidebar} themeState={theme}>
+				<CategoriesGrid inSidebar={inSidebar} basetheme={theme}>
 					{mainCategories.map((category, idx) => (
 						<Link
 							key={idx}
 							href={`${Routes.Projects}/${category.slug}`}
 						>
-							<CategoryItem themeState={theme}>
+							<CategoryItem basetheme={theme}>
 								<GLink size='Big'>
 									{formatMessage({
 										id: 'projects_' + category.slug,
@@ -136,19 +136,19 @@ const NormalSection = styled.div<{ inSidebar?: boolean }>`
 	border-radius: 16px;
 `;
 
-const CategoriesGrid = styled.div<{ inSidebar?: boolean; themeState: ETheme }>`
+const CategoriesGrid = styled.div<{ inSidebar?: boolean; basetheme: ETheme }>`
 	display: grid;
 	grid-template: ${props =>
 		props.inSidebar ? 'auto' : 'auto auto auto auto / auto auto auto'};
 	margin-top: 8px;
 `;
 
-const CategoryItem = styled(Item)<{ themeState: ETheme }>`
+const CategoryItem = styled(Item)<{ basetheme: ETheme }>`
 	padding: 8px;
 	&:hover {
 		background: transparent;
-		color: ${({ themeState }) =>
-			themeState === ETheme.Dark
+		color: ${({ basetheme }) =>
+			basetheme === ETheme.Dark
 				? brandColors.giv[200]
 				: brandColors.giv[500]};
 	}

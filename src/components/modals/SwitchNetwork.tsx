@@ -76,7 +76,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 						}}
 						isSelected={networkId === chainId}
 						key={networkId}
-						themeState={theme}
+						basetheme={theme}
 					>
 						<NetworkLogo
 							chainId={networkId}
@@ -87,7 +87,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 						{networkId === chainId && (
 							<SelectedNetwork
 								styleType='Small'
-								themeState={theme}
+								basetheme={theme}
 							>
 								{formatMessage({ id: 'label.selected' })}
 							</SelectedNetwork>
@@ -101,14 +101,14 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 
 export const SelectedNetwork = styled(Overline)`
 	color: ${props =>
-		props.themeState === ETheme.Dark
+		props.basetheme === ETheme.Dark
 			? brandColors.giv[100]
 			: brandColors.giv[500]};
 	position: absolute;
 	top: -8px;
 	left: 10px;
 	background: ${props =>
-		props.themeState === ETheme.Dark
+		props.basetheme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	padding: 0 3px;
@@ -117,7 +117,7 @@ export const SelectedNetwork = styled(Overline)`
 
 export const NetworkItem = styled.div<{
 	isSelected: boolean;
-	themeState: ETheme;
+	basetheme: ETheme;
 }>`
 	position: relative;
 	padding: 8px;
@@ -129,7 +129,7 @@ export const NetworkItem = styled.div<{
 	gap: 16px;
 	&:hover {
 		background-color: ${props =>
-			props.themeState === ETheme.Dark
+			props.basetheme === ETheme.Dark
 				? brandColors.giv[700]
 				: neutralColors.gray[200]};
 	}

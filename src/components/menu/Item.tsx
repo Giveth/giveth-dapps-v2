@@ -6,7 +6,7 @@ import { ETheme } from '@/features/general/general.slice';
 import { Flex } from '../styled-components/Flex';
 
 interface IItem {
-	themeState: ETheme;
+	basetheme: ETheme;
 	isHighlighted?: boolean;
 	onClick?: Function;
 	children: ReactNode;
@@ -15,7 +15,7 @@ interface IItem {
 
 export const Item: FC<IItem> = ({
 	isHighlighted,
-	themeState,
+	basetheme,
 	onClick,
 	children,
 	className,
@@ -24,7 +24,7 @@ export const Item: FC<IItem> = ({
 	return (
 		<ItemContainer
 			isHighlighted={isHighlighted}
-			themeState={themeState}
+			basetheme={basetheme}
 			onClick={() => {
 				close();
 				onClick && onClick();
@@ -38,7 +38,7 @@ export const Item: FC<IItem> = ({
 
 interface IItemContainer {
 	isHighlighted?: boolean;
-	themeState: ETheme;
+	basetheme: ETheme;
 }
 
 const ItemContainer = styled(Flex)<IItemContainer>`
@@ -49,18 +49,18 @@ const ItemContainer = styled(Flex)<IItemContainer>`
 	border-radius: 8px;
 	background-color: ${props =>
 		props.isHighlighted
-			? props.themeState === ETheme.Dark
+			? props.basetheme === ETheme.Dark
 				? brandColors.giv[500]
 				: neutralColors.gray[200]
 			: 'unset'};
 	&:hover {
 		background-color: ${props =>
 			// props.isHighlighted
-			// 	? props.themeState=== ETheme.Dark
+			// 	? props.basetheme=== ETheme.Dark
 			// 		? brandColors.giv[700]
 			// 		: neutralColors.gray[400]
 			// 	:
-			props.themeState === ETheme.Dark
+			props.basetheme === ETheme.Dark
 				? brandColors.giv[500]
 				: neutralColors.gray[200]};
 	}

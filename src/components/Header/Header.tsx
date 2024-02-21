@@ -142,7 +142,7 @@ const Header: FC<IHeader> = () => {
 	};
 
 	return (
-		<StyledHeader alignItems='center' themeState={theme} show={showHeader}>
+		<StyledHeader alignItems='center' basetheme={theme} show={showHeader}>
 			<Flex>
 				{showBackBtn ? (
 					<Logo onClick={handleBack}>
@@ -177,7 +177,7 @@ const Header: FC<IHeader> = () => {
 				)}
 			</Flex>
 			{isDesktop && !showBackBtn && (
-				<HeaderLinks themeState={theme}>
+				<HeaderLinks basetheme={theme}>
 					<LinkWithMenu
 						title={formatMessage({ id: 'label.projects' })}
 						isHeaderShowing={showHeader}
@@ -200,7 +200,7 @@ const Header: FC<IHeader> = () => {
 						<CommunityMenu />
 					</LinkWithMenu>
 					<SearchButton
-						themeState={theme}
+						basetheme={theme}
 						onClick={() => dispatch(setShowSearchModal(true))}
 					>
 						<Flex alignItems='center' gap='16px'>

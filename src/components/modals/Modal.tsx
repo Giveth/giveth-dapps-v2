@@ -16,7 +16,7 @@ import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;
-	themeState?: ETheme;
+	basetheme?: ETheme;
 }
 
 interface IModal {
@@ -93,7 +93,7 @@ export const Modal: FC<IModal> = ({
 			{!doNotCloseOnClickOutside && <Surrounding onClick={closeModal} />}
 			<ModalWrapper
 				fullScreen={fullScreen}
-				themeState={customTheme || theme}
+				basetheme={customTheme || theme}
 				className={className}
 			>
 				<ModalHeader
@@ -142,11 +142,11 @@ const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
 
 const ModalWrapper = styled.div<ModalWrapperProps>`
 	background-color: ${props =>
-		props.themeState === ETheme.Dark
+		props.basetheme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	color: ${props =>
-		props.themeState === ETheme.Dark
+		props.basetheme === ETheme.Dark
 			? neutralColors.gray[100]
 			: brandColors.deep[900]};
 	position: relative;
@@ -159,7 +159,7 @@ const ModalWrapper = styled.div<ModalWrapperProps>`
 		border-radius: ${props => (props.fullScreen ? 0 : '8px')};
 		box-shadow: 0 3px 20px
 			${props =>
-				props.themeState === ETheme.Dark ? '#00000026' : '#21203c'};
+				props.basetheme === ETheme.Dark ? '#00000026' : '#21203c'};
 		max-height: ${props => (props.fullScreen ? 'none' : '90vh')};
 		width: ${props => (props.fullScreen ? '100%' : 'auto')};
 		height: ${props => (props.fullScreen ? '100%' : 'auto')};

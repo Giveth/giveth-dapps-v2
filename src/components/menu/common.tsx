@@ -14,24 +14,24 @@ interface NetworkNameProps {
 	width?: string;
 }
 
-export const BaseMenuContainer = styled.div<{ themeState?: ETheme }>`
+export const BaseMenuContainer = styled.div<{ basetheme?: ETheme }>`
 	padding: 16px;
 	background-color: ${props =>
-		props.themeState === ETheme.Dark
+		props.basetheme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	border-radius: 16px;
 	box-shadow: ${Shadow.Dark[500]};
 	color: ${props =>
-		props.themeState === ETheme.Dark
+		props.basetheme === ETheme.Dark
 			? neutralColors.gray[100]
 			: neutralColors.gray[900]};
 `;
 
-export const HighlightSection = styled.div<{ themeState?: ETheme }>`
+export const HighlightSection = styled.div<{ basetheme?: ETheme }>`
 	padding: 16px 8px;
 	background-color: ${props =>
-		props.themeState === ETheme.Dark
+		props.basetheme === ETheme.Dark
 			? brandColors.giv[500]
 			: neutralColors.gray[200]};
 	border-radius: 16px;
@@ -39,12 +39,12 @@ export const HighlightSection = styled.div<{ themeState?: ETheme }>`
 
 interface IItemTitle {
 	upperCase?: boolean;
-	themeState?: ETheme;
+	basetheme?: ETheme;
 }
 
 export const ItemTitle = styled(Overline)<IItemTitle>`
 	color: ${props =>
-		props.themeState === ETheme.Dark
+		props.basetheme === ETheme.Dark
 			? brandColors.giv[300]
 			: neutralColors.gray[800]};
 	text-transform: ${props => (props.upperCase ? 'uppercase' : 'none')};

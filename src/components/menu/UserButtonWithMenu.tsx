@@ -64,12 +64,12 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 
 	return (
 		<MenuAndButtonContainer {...props}>
-			<WalletButton outline themeState={theme} isHover={showMenu}>
+			<WalletButton outline basetheme={theme} isHover={showMenu}>
 				<HeaderUserButton />
-				<CoverLine themeState={theme} className='cover-line' />
+				<CoverLine basetheme={theme} className='cover-line' />
 			</WalletButton>
 			{menuCondition && (
-				<MenuContainer isAnimating={showMenu} themeState={theme}>
+				<MenuContainer isAnimating={showMenu} basetheme={theme}>
 					<ItemsProvider close={closeMenu}>
 						<UserItems
 							setQueueRoute={setQueueRoute}

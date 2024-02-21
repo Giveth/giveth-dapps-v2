@@ -47,7 +47,7 @@ export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 
 	return (
 		<Modal closeModal={closeModalWithCb} isAnimating={isAnimating}>
-			<WhatIsStreamContainer themeState={theme}>
+			<WhatIsStreamContainer basetheme={theme}>
 				<TitleRow>
 					<IconGIVStream size={24} />
 					<Title>
@@ -106,10 +106,10 @@ export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 	);
 };
 
-const WhatIsStreamContainer = styled.div<{ themeState: ETheme }>`
+const WhatIsStreamContainer = styled.div<{ basetheme: ETheme }>`
 	padding: 24px 24px 24px;
 	background-image: ${props =>
-		props.themeState === ETheme.Dark
+		props.basetheme === ETheme.Dark
 			? `url('/images/stream1.svg')`
 			: `url('/images/stream2.svg')`};
 	background-repeat: no-repeat;
