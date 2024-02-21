@@ -56,6 +56,11 @@ const AddressInterface = ({
 
 	const hasAddress = !!walletAddress;
 	const hasAnchorContract = !!anchorContractData?.isActive;
+	const hasOptimismAddress = !!findAddressByChain(
+		value,
+		config.OPTIMISM_NETWORK_NUMBER,
+		chainType,
+	);
 
 	return (
 		<Container>
@@ -130,6 +135,12 @@ const AddressInterface = ({
 										1,
 									);
 									setValue(inputName, _addresses);
+									if (isOptimism) {
+										setValue(
+											EInputs.alloProtocolRegistry,
+											false,
+										);
+									}
 								}}
 							>
 								<IconTrash24 />
@@ -167,13 +178,15 @@ const AddressInterface = ({
 							) : (
 								<ToggleSwitch
 									isOn={alloProtocolRegistry}
-									toggleOnOff={() =>
+									toggleOnOff={() => {
+										if (!hasOptimismAddress) return;
 										setValue(
 											EInputs.alloProtocolRegistry,
 											!alloProtocolRegistry,
-										)
-									}
+										);
+									}}
 									label=''
+									disabled={!hasOptimismAddress}
 								/>
 							)}
 						</Flex>
