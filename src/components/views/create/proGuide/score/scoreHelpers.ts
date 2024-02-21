@@ -47,21 +47,21 @@ export const infoMap = {
 	},
 	[EQualityState.MEDIUM]: {
 		mainTip:
-			'You can still publish your project but it might prevent you to receive the donation your are looking for.',
+			'You can still publish your project but try increasing your score to make your project more attractive to donors.',
 		title: 'Why is it low?',
 		scoreColor: semanticColors.golden[500],
 		bulletColor: semanticColors.golden,
 	},
 	[EQualityState.HIGH]: {
 		mainTip:
-			'Just keep in mind to regularly update your project to keep donation coming your way.',
+			'Great score! Just keep in mind to regularly update your project to keep donations coming your way.',
 		title: 'What else you can do?',
 		scoreColor: semanticColors.jade[400],
 		bulletColor: brandColors.giv,
 	},
 	[EQualityState.PERFECT]: {
 		mainTip:
-			'A perfect score! Just keep in mind to regularly update your project to keep donation coming your way.',
+			'A perfect score! Just keep in mind to regularly update your project to keep donations coming your way.',
 		title: '',
 		scoreColor: semanticColors.jade[500],
 		bulletColor: brandColors.giv,
