@@ -9,6 +9,7 @@ import { H6, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { UseFormGetFieldState } from 'react-hook-form';
+import { useIntl } from 'react-intl';
 import { Card } from '../common.sc';
 import { Flex } from '@/components/styled-components/Flex';
 import { ScoreBox } from './ScoreBox';
@@ -38,6 +39,7 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 	const [fieldsScores, dispatch] = useReducer<
 		React.Reducer<ScoreState, ScoreAction>
 	>(calculateScore, initialState);
+	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		setQuality(fieldsScores.quality);
@@ -94,7 +96,9 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 				score={fieldsScores.totalScore}
 				color={infoMap[fieldsScores.quality].scoreColor}
 			/>
-			<MainTip>{infoMap[fieldsScores.quality].mainTip}</MainTip>
+			<MainTip>
+				{formatMessage({ id: infoMap[fieldsScores.quality].mainTip })}
+			</MainTip>
 			{fieldsScores.totalScore < 100 && (
 				<ImprovementTips fieldsScores={fieldsScores} />
 			)}

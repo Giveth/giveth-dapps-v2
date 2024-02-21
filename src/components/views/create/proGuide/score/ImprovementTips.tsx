@@ -6,6 +6,7 @@ import {
 	IconChevronUp32,
 	P,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import useAnimatedHeight from '@/hooks/useAnimatedHeight';
 import { Flex } from '@/components/styled-components/Flex';
 import { infoMap, ScoreState, EScoreType } from './scoreHelpers';
@@ -26,6 +27,7 @@ const tipMap = {
 export const ImprovementTips: FC<IImprovementTipsProps> = ({
 	fieldsScores,
 }) => {
+	const { formatMessage } = useIntl();
 	const info = infoMap[fieldsScores.quality];
 	const { isOpen, toggleOpen, maxHeight, contentRef } = useAnimatedHeight();
 	const bulletColor = info.bulletColor;
@@ -36,7 +38,7 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 				onClick={toggleOpen}
 				alignItems='center'
 			>
-				<H6 weight={700}>{info.title}</H6>
+				<H6 weight={700}>{formatMessage({ id: info.title })}</H6>
 				{isOpen ? <IconChevronUp32 /> : <IconChevronDown32 />}
 			</TitleRow>
 			<AnimatedDiv
@@ -45,27 +47,47 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 			>
 				{fieldsScores.DESCRIPTION === 0 && (
 					<TipListItem color={bulletColor}>
-						<P>{tipMap[EScoreType.DESCRIPTION]}</P>
+						<P>
+							{formatMessage({
+								id: tipMap[EScoreType.DESCRIPTION],
+							})}
+						</P>
 					</TipListItem>
 				)}
 				{fieldsScores.DESC_IMAGE === 0 && (
 					<TipListItem color={bulletColor}>
-						<P>{tipMap[EScoreType.DESC_IMAGE]}</P>
+						<P>
+							{formatMessage({
+								id: tipMap[EScoreType.DESC_IMAGE],
+							})}
+						</P>
 					</TipListItem>
 				)}
 				{fieldsScores.CATEGORIES === 0 && (
 					<TipListItem color={bulletColor}>
-						<P>{tipMap[EScoreType.CATEGORIES]}</P>
+						<P>
+							{formatMessage({
+								id: tipMap[EScoreType.CATEGORIES],
+							})}
+						</P>
 					</TipListItem>
 				)}
 				{fieldsScores.LOCATION === 0 && (
 					<TipListItem color={bulletColor}>
-						<P>{tipMap[EScoreType.LOCATION]}</P>
+						<P>
+							{formatMessage({
+								id: tipMap[EScoreType.LOCATION],
+							})}
+						</P>
 					</TipListItem>
 				)}
 				{fieldsScores.IMAGE === 0 && (
 					<TipListItem color={bulletColor}>
-						<P>{tipMap[EScoreType.IMAGE]}</P>
+						<P>
+							{formatMessage({
+								id: tipMap[EScoreType.IMAGE],
+							})}
+						</P>
 					</TipListItem>
 				)}
 			</AnimatedDiv>
