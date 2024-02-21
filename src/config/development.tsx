@@ -24,6 +24,7 @@ import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconEthereum } from '@/components/Icons/Eth';
 import { IconUnknown } from '@/components/Icons/Unknown';
 import IconSolana from '@/components/Icons/Solana';
+import IconArbitrum from '@/components/Icons/Arbitrum';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -427,7 +428,7 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		coingeckoChainName: 'arbitrum',
-		chainLogo: (logoSize?: number) => <IconUnknown size={logoSize} />,
+		chainLogo: (logoSize?: number) => <IconArbitrum size={logoSize} />,
 	},
 
 	CLASSIC_CONFIG: {
