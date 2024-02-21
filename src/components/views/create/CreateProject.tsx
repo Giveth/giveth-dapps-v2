@@ -186,6 +186,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const onSubmit = async (formData: TInputs) => {
 		if (quality === EQualityState.MEDIUM) {
+			setIsLoading(false);
 			setShowLowScoreModal(true);
 			return;
 		}
@@ -445,6 +446,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 										isLoading ||
 										quality === EQualityState.LOW
 									}
+									loading={isLoading}
 								/>
 								<OutlineButton
 									onClick={handleCancel}
@@ -490,7 +492,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				/>
 			)}
 			{showLowScoreModal && (
-				<LowScoreModal setShowModal={setShowLowScoreModal} />
+				<LowScoreModal
+					setShowModal={setShowLowScoreModal}
+					onSubmit={() => handleSubmit(onSubmit, onError)}
+				/>
 			)}
 		</Container>
 	);
