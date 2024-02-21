@@ -8,10 +8,12 @@ import { Flex } from '@/components/styled-components/Flex';
 
 interface ISwitchNetworkModal extends IModal {
 	onSubmit: any;
+	publishOnMediumQuality: React.MutableRefObject<boolean>;
 }
 
 export const LowScoreModal: FC<ISwitchNetworkModal> = ({
 	onSubmit,
+	publishOnMediumQuality,
 	setShowModal,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
@@ -38,6 +40,7 @@ export const LowScoreModal: FC<ISwitchNetworkModal> = ({
 						label='Yes, Publish My Project'
 						buttonType='primary'
 						onClick={() => {
+							publishOnMediumQuality.current = true;
 							closeModal();
 							onSubmit();
 						}}

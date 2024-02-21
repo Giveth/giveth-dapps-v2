@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
 	brandColors,
@@ -77,6 +77,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const [editProjectMutation] = useMutation(UPDATE_PROJECT);
 	const router = useRouter();
 	const dispatch = useAppDispatch();
+	const publishOnMediumQuality = useRef(false);
 
 	const isEditMode = !!project;
 
@@ -185,7 +186,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	};
 
 	const onSubmit = async (formData: TInputs) => {
-		if (quality === EQualityState.MEDIUM) {
+		setIsLoading(true);
+		if (
+			quality === EQualityState.MEDIUM &&
+			!publishOnMediumQuality.current
+		) {
 			setIsLoading(false);
 			setShowLowScoreModal(true);
 			return;
@@ -293,6 +298,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					section: 'CreateProjectSubmit',
 				},
 			});
+		} finally {
+			setIsLoading(false);
+			publishOnMediumQuality.current = false;
 		}
 	};
 
@@ -323,6 +331,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						<form
 							onSubmit={handleSubmit(onSubmit, onError)}
 							onSubmitCapture={() => setIsLoading(true)}
+							id='hook-form'
 						>
 							<NameInput
 								setActiveProjectSection={
@@ -494,7 +503,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			{showLowScoreModal && (
 				<LowScoreModal
 					setShowModal={setShowLowScoreModal}
-					onSubmit={() => handleSubmit(onSubmit, onError)}
+					publishOnMediumQuality={publishOnMediumQuality}
+					onSubmit={handleSubmit(onSubmit, onError)}
 				/>
 			)}
 		</Container>
