@@ -20,8 +20,8 @@ const Header = dynamic(() => import('./Header'), {
 const HeaderLoading = () => {
 	const theme = useAppSelector(state => state.general.theme);
 	return (
-		<StyledHeader alignItems='center' $baseTheme={theme} show={true}>
-			<Flex gap='24px' alignItems='center'>
+		<StyledHeader $alignItems='center' $baseTheme={theme} show={true}>
+			<Flex gap='24px' $alignItems='center'>
 				<Link href={Routes.Home}>
 					<Logo>
 						<Image
