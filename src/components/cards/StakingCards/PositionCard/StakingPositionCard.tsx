@@ -12,7 +12,7 @@ import {
 } from '../BaseStakingCard/BaseStakingCard.sc';
 
 const OutOfRangeBadge = () => (
-	<OutOfRangeBadgeContianer alignItems='center'>
+	<OutOfRangeBadgeContianer $alignItems='center'>
 		<YellowDot />
 		<SublineBold>Out of Range</SublineBold>
 	</OutOfRangeBadgeContianer>
