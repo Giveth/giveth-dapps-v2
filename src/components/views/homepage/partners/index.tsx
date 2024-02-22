@@ -43,7 +43,7 @@ const HomePartners = () => {
 					<CustomHeading weight={700}>
 						{formatMessage({ id: 'label.proud_of_our_partners' })}
 					</CustomHeading>
-					<CustomFlex justifyContent='space-around'>
+					<CustomFlex $justifyContent='space-around'>
 						{PartnersArray.map(partner => (
 							<FlexCenter
 								direction='column'
