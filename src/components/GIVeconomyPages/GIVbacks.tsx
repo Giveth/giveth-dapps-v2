@@ -76,9 +76,9 @@ export const TabGIVbacksTop = () => {
 		<>
 			<GIVbacksTopContainer>
 				<TopInnerContainer>
-					<Row style={{ alignItems: 'flex-end' }}>
+					<Row style={{ $alignItems: 'flex-end' }}>
 						<Col xs={12} sm={7} xl={8}>
-							<Flex alignItems='baseline' gap='16px'>
+							<Flex $alignItems='baseline' gap='16px'>
 								<GBTitle>GIVbacks</GBTitle>
 								<IconGIVBack size={64} />
 							</Flex>
@@ -234,9 +234,9 @@ export const TabGIVbacksBottom = () => {
 								</RoundTitle>
 								<RoundInfo>
 									<RoundInfoTallRow
-										justifyContent='space-between'
-										alignItems='center'
-										flexWrap
+										$justifyContent='space-between'
+										$alignItems='center'
+										$flexWrap
 									>
 										{' '}
 										<P>
@@ -258,9 +258,9 @@ export const TabGIVbacksBottom = () => {
 										</P>
 									</RoundInfoTallRow>
 									<RoundInfoTallRow
-										justifyContent='space-between'
-										alignItems='center'
-										flexWrap
+										$justifyContent='space-between'
+										$alignItems='center'
+										$flexWrap
 									>
 										<P>
 											<NoWrap>
@@ -281,9 +281,9 @@ export const TabGIVbacksBottom = () => {
 										</P>
 									</RoundInfoTallRow>
 									<RoundInfoTallRow
-										justifyContent='space-between'
-										alignItems='center'
-										flexWrap
+										$justifyContent='space-between'
+										$alignItems='center'
+										$flexWrap
 									>
 										<P>
 											<NoWrap>
