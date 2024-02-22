@@ -85,7 +85,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 							<VerificationBadge
 								isVerified={project?.verified}
 								verificationStatus={
-									project?.verificationFormStatus
+									project.projectVerificationForm?.status
 								}
 							/>
 						</div>
