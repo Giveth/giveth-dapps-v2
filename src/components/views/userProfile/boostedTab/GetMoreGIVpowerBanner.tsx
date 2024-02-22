@@ -30,7 +30,7 @@ const GetMoreGIVpowerBanner = () => {
 				})}
 				.
 			</QuoteText>
-			<Actions gap='16px' flexWrap>
+			<Actions gap='16px' $flexWrap>
 				<Link href={getGIVpowerLink(chainId)}>
 					<ButtonLink
 						label={formatMessage({ id: 'label.stake_giv' })}
