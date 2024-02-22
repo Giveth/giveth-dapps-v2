@@ -142,7 +142,7 @@ const Header: FC<IHeader> = () => {
 	};
 
 	return (
-		<StyledHeader alignItems='center' $baseTheme={theme} show={showHeader}>
+		<StyledHeader $alignItems='center' $baseTheme={theme} show={showHeader}>
 			<Flex>
 				{showBackBtn ? (
 					<Logo onClick={handleBack}>
@@ -154,7 +154,7 @@ const Header: FC<IHeader> = () => {
 						/>
 					</Logo>
 				) : (
-					<Flex gap='24px' alignItems='center'>
+					<Flex gap='24px' $alignItems='center'>
 						{isMobile && (
 							<Link href={Routes.Home}>
 								<Logo>
@@ -203,7 +203,7 @@ const Header: FC<IHeader> = () => {
 						$baseTheme={theme}
 						onClick={() => dispatch(setShowSearchModal(true))}
 					>
-						<Flex alignItems='center' gap='16px'>
+						<Flex $alignItems='center' gap='16px'>
 							<GLinkNoWrap size='Big'>
 								{formatMessage({ id: 'label.search_projects' })}
 							</GLinkNoWrap>
