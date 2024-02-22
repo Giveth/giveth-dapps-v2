@@ -36,7 +36,7 @@ export const LanguageModal: FC<IModal> = ({ setShowModal }) => {
 			headerTitle={formatMessage({ id: 'label.choose_language' })}
 			headerTitlePosition='left'
 		>
-			<LanguageContainer isDark={isDark} />
+			<LanguageContainer $isDark={isDark} />
 			<Languages>
 				{availableLanguages.map(locale => (
 					<Option
@@ -66,11 +66,11 @@ export const LanguageModal: FC<IModal> = ({ setShowModal }) => {
 	);
 };
 
-const LanguageContainer = styled.div<{ isDark?: boolean }>`
+const LanguageContainer = styled.div<{ $isDark?: boolean }>`
 	width: 362px;
 
 	color: ${props =>
-		props.isDark ? neutralColors.gray[100] : brandColors.deep[900]};
+		props.$isDark ? neutralColors.gray[100] : brandColors.deep[900]};
 `;
 
 const Languages = styled.div`
@@ -80,7 +80,7 @@ const Languages = styled.div`
 	margin: 24px;
 `;
 
-const Option = styled.div<{ isCurrentLocale?: boolean; isDark?: boolean }>`
+const Option = styled.div<{ isCurrentLocale?: boolean; $isDark?: boolean }>`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -91,13 +91,13 @@ const Option = styled.div<{ isCurrentLocale?: boolean; isDark?: boolean }>`
 
 	background: ${props =>
 		props.isCurrentLocale
-			? props.isDark
+			? props.$isDark
 				? brandColors.giv[500]
 				: neutralColors.gray[200]
 			: 'transparent'};
 
 	&:hover {
 		background: ${props =>
-			props.isDark ? brandColors.giv[500] : neutralColors.gray[300]};
+			props.$isDark ? brandColors.giv[500] : neutralColors.gray[300]};
 	}
 `;
