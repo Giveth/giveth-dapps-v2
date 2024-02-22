@@ -60,7 +60,7 @@ const AddressInterface = ({
 	return (
 		<Container>
 			<TopContainer>
-				<Flex justifyContent='space-between'>
+				<Flex $justifyContent='space-between'>
 					<Flex gap='8px'>
 						<ChainIconShadow>
 							<NetworkLogo
@@ -98,8 +98,8 @@ const AddressInterface = ({
 					</GLink>
 				)}
 				<Flex
-					justifyContent='space-between'
-					alignItems='center'
+					$justifyContent='space-between'
+					$alignItems='center'
 					gap='8px'
 				>
 					<AddressContainer hasAddress={hasAddress}>
