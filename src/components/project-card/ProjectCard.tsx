@@ -159,8 +159,8 @@ const ProjectCard = (props: IProjectCard) => {
 					}}
 				>
 					<Description>{descriptionSummary}</Description>
-					<PaddedRow justifyContent='space-between'>
-						<Flex flexDirection='column' gap='2px'>
+					<PaddedRow $justifyContent='space-between'>
+						<Flex $flexDirection='column' gap='2px'>
 							<PriceText>
 								{formatDonation(
 									(activeQFRound
@@ -212,7 +212,7 @@ const ProjectCard = (props: IProjectCard) => {
 							</div>
 						</Flex>
 						{activeQFRound && (
-							<Flex flexDirection='column' gap='6px'>
+							<Flex $flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
 									+
 									{formatDonation(
@@ -245,10 +245,10 @@ const ProjectCard = (props: IProjectCard) => {
 						}}
 					>
 						<Hr />
-						<PaddedRow justifyContent='space-between'>
+						<PaddedRow $justifyContent='space-between'>
 							<Flex gap='16px'>
 								{verified && (
-									<Flex alignItems='center' gap='4px'>
+									<Flex $alignItems='center' gap='4px'>
 										<IconVerifiedBadge16
 											color={semanticColors.jade[500]}
 										/>
@@ -266,7 +266,7 @@ const ProjectCard = (props: IProjectCard) => {
 							{/* {verified && (
 								<GivpowerRankContainer
 									gap='8px'
-									alignItems='center'
+									$alignItems='center'
 								>
 									<IconRocketInSpace16
 										color={neutralColors.gray[700]}
