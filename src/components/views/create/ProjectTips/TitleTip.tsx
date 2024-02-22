@@ -8,7 +8,7 @@ const TitleTip = () => {
 	const { formatMessage } = useIntl();
 	return (
 		<div>
-			<Flex flexDirection='column' gap='16px'>
+			<Flex $flexDirection='column' gap='16px'>
 				<TipListItem>
 					<P>
 						{formatMessage({
