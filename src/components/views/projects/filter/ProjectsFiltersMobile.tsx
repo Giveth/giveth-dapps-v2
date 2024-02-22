@@ -14,7 +14,7 @@ const ProjectsFiltersMobile = () => {
 			<ProjectsFiltersSwiper />
 			{!isQF && <StyledLine />}
 			{!isQF && <ProjectsSubCategories />}
-			<Flex alignItems='center' gap='16px'>
+			<Flex $alignItems='center' gap='16px'>
 				<ProjectsSearchTablet />
 				<ProjectsFiltersButton />
 			</Flex>
