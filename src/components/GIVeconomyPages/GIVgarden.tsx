@@ -47,7 +47,7 @@ export const TabGardenTop = () => {
 	return (
 		<GardenTopContainer>
 			<TopInnerContainer>
-				<Row style={{ alignItems: 'flex-end' }}>
+				<Row style={{ $alignItems: 'flex-end' }}>
 					<Col xs={12} sm={7} md={8}>
 						<Title>
 							GIVgarden
