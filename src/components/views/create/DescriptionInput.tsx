@@ -33,6 +33,7 @@ const DescriptionInput = ({
 		formState: { errors },
 		setError,
 		clearErrors,
+		getFieldState,
 	} = useFormContext();
 	const { formatMessage } = useIntl();
 
@@ -47,7 +48,9 @@ const DescriptionInput = ({
 	};
 
 	const setHasLimitError = (hasLimitError: boolean) => {
+		const oldError = getFieldState(EInputs.description)?.error;
 		if (hasLimitError) {
+			if (oldError) return;
 			setError(
 				EInputs.description,
 				{
@@ -57,6 +60,7 @@ const DescriptionInput = ({
 				{ shouldFocus: true },
 			);
 		} else {
+			if (!oldError) return;
 			clearErrors(EInputs.description);
 		}
 	};

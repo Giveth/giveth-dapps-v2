@@ -1,5 +1,4 @@
-import styled from 'styled-components';
-import { H6, IconBulbOutline24, neutralColors } from '@giveth/ui-design-system';
+import { H6, IconBulbOutline32 } from '@giveth/ui-design-system';
 import { Flex } from '@/components/styled-components/Flex';
 import DefaultTip from './DefaultTip';
 import TitleTip from './TitleTip';
@@ -8,9 +7,10 @@ import BannerImageTip from './BannerImageTip';
 import CategoryTip from './CategoryTip';
 import MapTip from './MapTip';
 import AddressesTip from './AddressesTip';
-import { ECreateProjectSections } from '../types';
+import { ECreateProjectSections } from '../../types';
+import { Card } from '../common.sc';
 
-interface IProjectTipProps {
+export interface IProjectTipProps {
 	activeSection: ECreateProjectSections;
 }
 
@@ -53,25 +53,14 @@ const contentMap = {
 
 const ProjectTip = ({ activeSection }: IProjectTipProps) => {
 	return (
-		<Container>
+		<Card>
 			<Flex gap='16px'>
-				<IconBulbOutline24 />
-				<H6>{contentMap[activeSection].title}</H6>
+				<IconBulbOutline32 />
+				<H6 weight={700}>{contentMap[activeSection].title}</H6>
 			</Flex>
-			<br />
 			{contentMap[activeSection].component}
-		</Container>
+		</Card>
 	);
 };
-
-const Container = styled.div`
-	position: sticky;
-	top: 100px;
-	width: 400px;
-	padding: 24px;
-	margin-top: 80px;
-	background-color: ${neutralColors.gray[100]};
-	border-radius: 16px;
-`;
 
 export default ProjectTip;
