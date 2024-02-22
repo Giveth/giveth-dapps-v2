@@ -34,7 +34,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 
 	return (
 		<StreamSection>
-			<Flex alignItems='center' justifyContent='space-between'>
+			<Flex $alignItems='center' $justifyContent='space-between'>
 				<Caption medium>
 					{formatMessage({
 						id: 'label.stream_balance',
@@ -45,7 +45,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 					{superToken?.symbol}
 				</StreamBalanceInfo>
 			</Flex>
-			<Flex alignItems='center' justifyContent='space-between'>
+			<Flex $alignItems='center' $justifyContent='space-between'>
 				<Caption>
 					{formatMessage({
 						id: 'label.balance_runs_out_in',
