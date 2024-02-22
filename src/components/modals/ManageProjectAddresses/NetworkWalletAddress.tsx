@@ -30,9 +30,9 @@ export const NetworkWalletAddress: FC<INetworkWalletAddress> = ({
 	const chainType = 'chainType' in chain ? chain.chainType : undefined;
 	const walletAddress = findAddressByChain(addresses, chain.id, chainType);
 	return (
-		<Wrapper flexDirection='column'>
+		<Wrapper $flexDirection='column'>
 			{/* <StyledBadge label='wow' status={EBadgeStatus.SUCCESS} /> */}
-			<Flex justifyContent='space-between'>
+			<Flex $justifyContent='space-between'>
 				<FlexCenter gap='8px'>
 					<NetworkLogo
 						chainId={chain.id}
