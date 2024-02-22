@@ -29,7 +29,7 @@ export const ArchiveCover: FC<IArchiveCoverProps> = ({
 				<ArchiveModalIcon>
 					<IconInfoFilled16 color={brandColors.giv['000']} />
 				</ArchiveModalIcon>
-				<Flex flexDirection='column' justifyContent='space-evenly'>
+				<Flex $flexDirection='column' $justifyContent='space-evenly'>
 					<ArchiveModalText weight={700}>
 						{formatMessage({
 							id: 'component.archive_cover.archived',
