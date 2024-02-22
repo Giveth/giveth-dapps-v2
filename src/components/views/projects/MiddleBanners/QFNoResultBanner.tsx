@@ -8,7 +8,7 @@ import links from '@/lib/constants/links';
 export const QFNoResultBanner = () => {
 	const { formatMessage } = useIntl();
 	return (
-		<StyledBox flexDirection='column' gap='24px'>
+		<StyledBox $flexDirection='column' gap='24px'>
 			<BigArc color={semanticColors.jade[200]} />
 			<Title weight={700} color={semanticColors.jade[700]}>
 				{formatMessage({
