@@ -214,7 +214,7 @@ const Header: FC<IHeader> = () => {
 			)}
 			<FlexSpacer />
 			<Flex gap='8px'>
-				<LargeCreateProject isTexty={isProjectPage}>
+				<LargeCreateProject $isTexty={isProjectPage}>
 					<Button
 						label={formatMessage({
 							id: 'component.button.create_project',
