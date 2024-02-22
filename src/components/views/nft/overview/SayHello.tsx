@@ -21,7 +21,7 @@ const SayHelloSection = () => {
 		<OverviewContainer>
 			<Container>
 				<FlexContainer>
-					<TextsContainer flexDirection='column' gap='24px'>
+					<TextsContainer $flexDirection='column' gap='24px'>
 						<ColoredD3>
 							{formatMessage({ id: 'label.say_hello_to' })}
 						</ColoredD3>
