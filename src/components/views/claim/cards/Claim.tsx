@@ -102,7 +102,7 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 						Let&apos;s Build the Future of Giving, together.
 					</Desc>
 				</ClaimHeader>
-				<Flex alignItems={'center'} justifyContent={'center'}>
+				<Flex $alignItems={'center'} $justifyContent={'center'}>
 					{/* <ClaimButton secondary onClick={onClaim}> */}
 					<ClaimButton
 						secondary
@@ -114,7 +114,7 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 						CLAIM
 					</ClaimButton>
 				</Flex>
-				<AddTokenRow alignItems={'center'} justifyContent={'center'}>
+				<AddTokenRow $alignItems={'center'} $justifyContent={'center'}>
 					<AddTokenButton chainId={chainId} />
 				</AddTokenRow>
 				{step === index && (
