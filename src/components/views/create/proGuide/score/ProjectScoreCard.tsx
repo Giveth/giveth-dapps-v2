@@ -70,12 +70,14 @@ export const ProjectScoreCard: FC<IProjectScoreCardProps> = ({
 		dispatch({ type: EScoreType.IMAGE, payload: formData.image });
 	}, [formData.image]);
 
-	// Description image score
+	// Description image or video score
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
 			const description = formData.description;
-			const hasImage = description && description.includes('<img');
-			dispatch({ type: EScoreType.DESC_IMAGE, payload: hasImage });
+			// Regular expression to check for '<img' or '<iframe class="ql-video/'
+			const mediaRegex = /<img|<iframe class="ql-video/;
+			const hasMedia = description && mediaRegex.test(description);
+			dispatch({ type: EScoreType.DESC_MEDIA, payload: hasMedia });
 		}, 1000);
 
 		return () => clearTimeout(timeoutId);
