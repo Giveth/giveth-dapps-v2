@@ -85,7 +85,7 @@ export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 					<LinksRow>
 						<Link href={Routes.GIVstream}>
 							<GLink onClick={closeModalWithCb}>
-								<Flex justifyContent='center'>
+								<Flex $justifyContent='center'>
 									View Your {rewardTokenSymbol}stream{' '}
 									<IconExternalLink
 										size={16}
