@@ -86,7 +86,7 @@ export const AmountInput: FC<IAmountInput> = ({
 	return (
 		<div className={className}>
 			{showMax && maxAmount !== undefined && (
-				<InputLabelRow justifyContent='space-between' id='max-row'>
+				<InputLabelRow $justifyContent='space-between' id='max-row'>
 					<InputLabel>
 						<InputLabelText>
 							{formatMessage({ id: 'label.available' })}:{' '}
