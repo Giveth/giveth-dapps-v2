@@ -44,7 +44,7 @@ const DonateToGiveth: FC<IDonateToGiveth> = ({
 
 	return (
 		<Container>
-			<Flex alignItems='center' gap='4px'>
+			<Flex $alignItems='center' gap='4px'>
 				<Caption medium>{title}</Caption>
 				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
 					<TooltipContainer>
