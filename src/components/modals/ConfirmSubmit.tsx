@@ -46,7 +46,7 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 			<Title>{title}</Title>
 			<WrappedSpinner size={200} />
 			<TxSubmit weight={700}>{txHash && 'Transaction pending'}</TxSubmit>
-			<AddTokenRow alignItems={'center'} justifyContent={'center'}>
+			<AddTokenRow $alignItems={'center'} $justifyContent={'center'}>
 				<AddTokenButton
 					chainId={chainId}
 					tokenSymbol={rewardTokenSymbol}
@@ -95,7 +95,7 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 			/>
 			<TxConfirm weight={700}>Transaction confirmed!</TxConfirm>
 			<Info>It may take a few minutes for the UI to update</Info>
-			<AddTokenRow alignItems={'center'} justifyContent={'center'}>
+			<AddTokenRow $alignItems={'center'} $justifyContent={'center'}>
 				<AddTokenButton
 					chainId={chainId}
 					tokenSymbol={rewardTokenSymbol}
