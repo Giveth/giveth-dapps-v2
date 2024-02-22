@@ -149,7 +149,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 					<ModifyInfoToast />
 				</>
 			) : (
-				<Flex flexDirection='column' gap='16px'>
+				<Flex $flexDirection='column' gap='16px'>
 					<Item
 						title='Withdraw from this stream balance'
 						amount={amount}
