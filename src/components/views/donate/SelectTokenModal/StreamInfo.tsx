@@ -37,7 +37,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 	return (
 		<Wrapper
 			gap='16px'
-			alignItems='flex-start'
+			$alignItems='flex-start'
 			disabled={disable}
 			onClick={() => {
 				if (disable) return;
@@ -50,11 +50,11 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 				size={32}
 			/>
 			<InfoWrapper
-				flexDirection='column'
-				alignItems='flex-start'
+				$flexDirection='column'
+				$alignItems='flex-start'
 				gap='8px'
 			>
-				<Row justifyContent='space-between'>
+				<Row $justifyContent='space-between'>
 					<Symbol>
 						<Caption medium>{stream[0].token.symbol}</Caption>
 						<GrayCaption>{stream[0].token.name}</GrayCaption>
@@ -76,7 +76,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 					</Balance>
 				</Row>
 				{totalFlowRate !== undefined && (
-					<Row justifyContent='space-between'>
+					<Row $justifyContent='space-between'>
 						<Flex gap='4px'>
 							<GrayCaption>
 								{formatMessage({
