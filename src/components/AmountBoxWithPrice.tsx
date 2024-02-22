@@ -34,7 +34,7 @@ export const AmountBoxWithPrice: FC<IGIVBoxWithPriceProps> = ({
 }) => {
 	return (
 		<>
-			<AmountBoxWithPriceContainer alignItems='center'>
+			<AmountBoxWithPriceContainer $alignItems='center'>
 				{getTokenIconBySymbol(tokenSymbol)}
 				<AmountBoxWithPriceAmount>
 					{formatWeiHelper(amount)}
