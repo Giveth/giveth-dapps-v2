@@ -13,6 +13,7 @@ interface IProjectQFStatus {
 
 const ProjectQFStatus = ({ project }: IProjectQFStatus) => {
 	const { qfRounds } = project;
+	console.log('qfRounds', qfRounds);
 	const isRoundActive = hasActiveRound(qfRounds);
 	const activeRound = getActiveRound(qfRounds);
 
