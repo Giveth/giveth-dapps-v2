@@ -40,8 +40,8 @@ const StakingCardIntro: FC<IStakingCardIntro> = ({
 				<H6 weight={700}>{introCard?.title}</H6>
 			</HeaderRow>
 			<ContentWrapper
-				flexDirection='column'
-				justifyContent='space-between'
+				$flexDirection='column'
+				$justifyContent='space-between'
 			>
 				<Description>{introCard?.description}</Description>
 				<LearnMoreButton
