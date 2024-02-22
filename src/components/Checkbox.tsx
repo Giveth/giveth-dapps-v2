@@ -31,7 +31,7 @@ const CheckBox: FC<ICheckBox> = ({
 			disabled={disabled}
 			checked={checked}
 			size={size}
-			alignItems='center'
+			$alignItems='center'
 		>
 			<FlexCenter>
 				{checked && <IconCheck size={size} color='white' />}
