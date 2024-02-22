@@ -65,7 +65,7 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 					</NoFund>
 				</DonateInfo>
 			)}
-			<DonateDescription flexDirection='column' gap='8px'>
+			<DonateDescription $flexDirection='column' gap='8px'>
 				<B>
 					{formatMessage({
 						id: 'component.donation_section.100_to_the_project',
@@ -88,7 +88,7 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 					referrerPolicy='no-referrer'
 					rel='noreferrer'
 				>
-					<LearnLink alignItems='center' gap='2px'>
+					<LearnLink $alignItems='center' gap='2px'>
 						<Subline>
 							{formatMessage({
 								id: 'component.donation_section.learn_zero_fee',
