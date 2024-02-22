@@ -116,8 +116,8 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 
 	return (
 		<>
-			<Item basetheme={theme}>
-				<ItemTitle upperCase basetheme={theme}>
+			<Item $baseTheme={theme}>
+				<ItemTitle upperCase $baseTheme={theme}>
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>
@@ -135,8 +135,8 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				</ItemRow>
 			</Item>
 			<Link href={Routes.GIVstream_FlowRate}>
-				<Item isHighlighted basetheme={theme}>
-					<ItemTitle upperCase basetheme={theme}>
+				<Item isHighlighted $baseTheme={theme}>
+					<ItemTitle upperCase $baseTheme={theme}>
 						{formatMessage({ id: 'label.givstream_flowrate' })}
 					</ItemTitle>
 					<FlowrateRow>
@@ -165,8 +165,8 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				</Item>
 			</Link>
 			<Link href={Routes.GIVstream}>
-				<Item basetheme={theme}>
-					<ItemTitle upperCase basetheme={theme}>
+				<Item $baseTheme={theme}>
+					<ItemTitle upperCase $baseTheme={theme}>
 						{formatMessage({ id: 'label.from' })} GIVstream
 					</ItemTitle>
 					<Flex gap='4px'>
@@ -181,8 +181,8 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				</Item>
 			</Link>
 			<Link href={Routes.GIVfarm}>
-				<Item basetheme={theme}>
-					<ItemTitle upperCase basetheme={theme}>
+				<Item $baseTheme={theme}>
+					<ItemTitle upperCase $baseTheme={theme}>
 						GIVfarm & GIVgarden
 					</ItemTitle>
 					<Flex gap='4px'>
@@ -197,8 +197,8 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 				</Item>
 			</Link>
 			<Link href={Routes.GIVbacks}>
-				<Item basetheme={theme}>
-					<ItemTitle upperCase basetheme={theme}>
+				<Item $baseTheme={theme}>
+					<ItemTitle upperCase $baseTheme={theme}>
 						GIVbacks
 					</ItemTitle>
 					<Flex gap='4px'>

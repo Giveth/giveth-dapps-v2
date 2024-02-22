@@ -40,7 +40,7 @@ export const DonateHeader: FC<IHeader> = () => {
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
 	return (
-		<StyledHeader alignItems='center' basetheme={theme} show={showHeader}>
+		<StyledHeader alignItems='center' $baseTheme={theme} show={showHeader}>
 			<Flex alignItems='center' gap='16px'>
 				<Link href={Routes.Project + '/' + project.slug}>
 					<Logo>

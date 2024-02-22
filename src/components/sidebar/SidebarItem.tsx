@@ -38,7 +38,7 @@ export const SidebarParentItem: FC<ISidebarItemProps> = ({
 				{children && <IconChevronDown24 />}
 			</ItemWrapper>
 			{showChildren && children && (
-				<ChildrenWrapper basetheme={theme}>{children}</ChildrenWrapper>
+				<ChildrenWrapper $baseTheme={theme}>{children}</ChildrenWrapper>
 			)}
 		</Flex>
 	);
@@ -49,11 +49,11 @@ const ItemWrapper = styled(Flex)`
 	padding: 12px 16px;
 `;
 
-const ChildrenWrapper = styled.div<{ basetheme?: ETheme }>`
+const ChildrenWrapper = styled.div<{ $baseTheme?: ETheme }>`
 	padding: 12px 0;
 	border-bottom: 1px solid
 		${props =>
-			props.basetheme === ETheme.Dark
+			props.$baseTheme === ETheme.Dark
 				? brandColors.giv[500]
 				: neutralColors.gray[400]};
 `;

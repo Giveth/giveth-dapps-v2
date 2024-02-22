@@ -21,13 +21,13 @@ export const Steps: FC<IStepsProps> = ({ steps, activeStep }) => {
 	const theme = useAppSelector(state => state.general.theme);
 
 	return (
-		<StepsContainer basetheme={theme}>
+		<StepsContainer $baseTheme={theme}>
 			{steps.map((step, index) => (
 				<Step key={index}>
-					<StepTitle disable={index > activeStep} basetheme={theme}>
+					<StepTitle disable={index > activeStep} $baseTheme={theme}>
 						{formatMessage({ id: step })}
 					</StepTitle>
-					<StepNumber disable={index > activeStep} basetheme={theme}>
+					<StepNumber disable={index > activeStep} $baseTheme={theme}>
 						{index + 1}
 					</StepNumber>
 				</Step>
@@ -36,7 +36,7 @@ export const Steps: FC<IStepsProps> = ({ steps, activeStep }) => {
 	);
 };
 
-const StepsContainer = styled(Flex)<{ basetheme?: ETheme }>`
+const StepsContainer = styled(Flex)<{ $baseTheme?: ETheme }>`
 	position: relative;
 	justify-content: space-evenly;
 	&::before {
@@ -46,7 +46,7 @@ const StepsContainer = styled(Flex)<{ basetheme?: ETheme }>`
 		height: 1px;
 		border-top: 1px solid
 			${props =>
-				props.basetheme === ETheme.Dark
+				props.$baseTheme === ETheme.Dark
 					? brandColors.giv[500]
 					: brandColors.giv[100]};
 		bottom: 11px;
@@ -58,7 +58,7 @@ const StepsContainer = styled(Flex)<{ basetheme?: ETheme }>`
 		height: 1px;
 		border-top: 1px dashed
 			${props =>
-				props.basetheme === ETheme.Dark
+				props.$baseTheme === ETheme.Dark
 					? brandColors.giv[500]
 					: brandColors.giv[100]};
 		left: -24px;
@@ -81,42 +81,42 @@ const Step = styled(Flex)`
 
 interface IStepState {
 	disable?: boolean;
-	basetheme?: ETheme;
+	$baseTheme?: ETheme;
 }
 
 const StepTitle = styled(P)<IStepState>`
 	margin-bottom: 8px;
 	color: ${props =>
 		props.disable
-			? props.basetheme === ETheme.Dark
+			? props.$baseTheme === ETheme.Dark
 				? brandColors.giv[300]
 				: brandColors.giv[200]
-			: props.basetheme === ETheme.Dark
+			: props.$baseTheme === ETheme.Dark
 				? brandColors.giv['000']
 				: brandColors.giv[500]};
 `;
 const StepNumber = styled(SublineBold)<IStepState>`
 	color: ${props =>
 		props.disable
-			? props.basetheme === ETheme.Dark
+			? props.$baseTheme === ETheme.Dark
 				? brandColors.giv[200]
 				: neutralColors.gray[100]
-			: props.basetheme === ETheme.Dark
+			: props.$baseTheme === ETheme.Dark
 				? brandColors.giv['000']
 				: neutralColors.gray[100]};
 	background-color: ${props =>
 		props.disable
-			? props.basetheme === ETheme.Dark
+			? props.$baseTheme === ETheme.Dark
 				? brandColors.giv[500]
 				: brandColors.giv[200]
 			: brandColors.giv[500]};
 	border: 3px solid
 		${props =>
 			props.disable
-				? props.basetheme === ETheme.Dark
+				? props.$baseTheme === ETheme.Dark
 					? brandColors.giv[300]
 					: brandColors.giv[100]
-				: props.basetheme === ETheme.Dark
+				: props.$baseTheme === ETheme.Dark
 					? brandColors.giv['000']
 					: brandColors.giv[100]};
 	border-radius: 18px;

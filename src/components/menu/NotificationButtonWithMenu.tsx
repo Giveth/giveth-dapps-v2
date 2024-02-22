@@ -90,14 +90,14 @@ export const NotificationButtonWithMenu: FC<IHeaderButtonProps> = ({
 
 	return (
 		<MenuAndButtonContainer {...props}>
-			<NotificationsButton outline basetheme={theme} isHover={showMenu}>
+			<NotificationsButton outline $baseTheme={theme} isHover={showMenu}>
 				<HeaderNotificationButton theme={theme} />
-				<CoverLine basetheme={theme} className='cover-line' />
+				<CoverLine $baseTheme={theme} className='cover-line' />
 			</NotificationsButton>
 			{NOTIFICATION_ENABLED && menuCondition && (
 				<NotificationMenuContainer
 					isAnimating={showMenu}
-					basetheme={theme}
+					$baseTheme={theme}
 				>
 					<NotificationMenuWrapper>
 						<ItemsProvider close={closeMenu}>

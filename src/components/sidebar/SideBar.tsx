@@ -63,7 +63,7 @@ export const SideBar: FC<ISideBar> = ({
 		>
 			<SidebarContainer
 				isAnimating={isAnimating}
-				basetheme={theme}
+				$baseTheme={theme}
 				direction={direction}
 				onClick={e => {
 					e.stopPropagation();
@@ -100,7 +100,7 @@ const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
 const SidebarContainer = styled.div<{
 	isAnimating: boolean;
 	direction: ESideBarDirection;
-	basetheme?: ETheme;
+	$baseTheme?: ETheme;
 }>`
 	width: 353px;
 	height: 100%;
@@ -110,11 +110,11 @@ const SidebarContainer = styled.div<{
 	top: 0;
 	z-index: ${zIndex.MODAL};
 	background-color: ${props =>
-		props.basetheme === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	color: ${props =>
-		props.basetheme === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? neutralColors.gray[100]
 			: neutralColors.gray[900]};
 	${props => {
