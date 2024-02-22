@@ -148,14 +148,14 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 					by Giveth with GIV!
 				</Desc>
 			</DonateHeader>
-			<APRRow alignItems={'center'} justifyContent={'space-between'}>
+			<APRRow $alignItems={'center'} $justifyContent={'space-between'}>
 				<ImpactCard>
 					<H5 as='h2' weight={700}>
 						If you donate your GIVdrop
 					</H5>
 					<div>
-						<Flex justifyContent={'space-between'}>
-							<Flex gap='4px' alignItems='center'>
+						<Flex $justifyContent={'space-between'}>
+							<Flex gap='4px' $alignItems='center'>
 								<ImpactCardLabel>Your donation</ImpactCardLabel>
 								<IconWithTooltip
 									icon={<IconHelpFilled16 />}
@@ -188,13 +188,13 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 				<PoolCardContainer>
 					<DonatePoolCard>
 						<PoolItems>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>GIVbacks</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(potentialClaim)} GIV
 								</PoolItemBold>
 							</Flex>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>Streaming</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(earnEstimate)} GIV
