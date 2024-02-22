@@ -320,7 +320,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										regenStreamConfig?.rewardTokenSymbol
 									}
 								/>
-								<HelpRow alignItems='baseline' flexWrap>
+								<HelpRow $alignItems='baseline' $flexWrap>
 									<Caption>
 										{formatMessage({
 											id: 'label.your_new',
