@@ -172,8 +172,8 @@ export const RecurringDonationCard = () => {
 						id: 'label.creating_a_monthly_recurring_donation',
 					})}
 				</RecurringSectionTitle>
-				<Flex flexDirection='column' gap='8px'>
-					<Flex gap='8px' alignItems='center'>
+				<Flex $flexDirection='column' gap='8px'>
+					<Flex gap='8px' $alignItems='center'>
 						<Caption medium>
 							{formatMessage({ id: 'label.stream_balance' })}
 						</Caption>
@@ -187,12 +187,12 @@ export const RecurringDonationCard = () => {
 					</Flex>
 					<InputWrapper>
 						<SelectTokenWrapper
-							alignItems='center'
-							justifyContent='space-between'
+							$alignItems='center'
+							$justifyContent='space-between'
 							onClick={() => setShowSelectTokenModal(true)}
 						>
 							{selectedToken ? (
-								<Flex gap='8px' alignItems='center'>
+								<Flex gap='8px' $alignItems='center'>
 									<TokenIcon
 										symbol={
 											underlyingToken
@@ -257,7 +257,11 @@ export const RecurringDonationCard = () => {
 						message='You already have a recurring donation to this project with this token.'
 					/>
 				) : (
-					<Flex flexDirection='column' gap='8px' alignItems='stretch'>
+					<Flex
+						$flexDirection='column'
+						gap='8px'
+						$alignItems='stretch'
+					>
 						<Caption>
 							{formatMessage({
 								id: 'label.amount_to_donate_monthly',
@@ -289,7 +293,7 @@ export const RecurringDonationCard = () => {
 								disabled={amount === 0n}
 							/>
 						</SliderWrapper>
-						<Flex justifyContent='space-between'>
+						<Flex $justifyContent='space-between'>
 							<Flex gap='4px'>
 								<Caption>
 									{formatMessage({
@@ -318,7 +322,7 @@ export const RecurringDonationCard = () => {
 								</Caption>
 							</Flex>
 						</Flex>
-						<Flex justifyContent='space-between' gap='4px'>
+						<Flex $justifyContent='space-between' gap='4px'>
 							<Flex gap='4px'>
 								<Caption>
 									{formatMessage({
@@ -344,7 +348,7 @@ export const RecurringDonationCard = () => {
 							{selectedToken?.token.isSuperToken ? (
 								<TopUpStream
 									gap='4px'
-									alignItems='center'
+									$alignItems='center'
 									onClick={() => setShowTopUpModal(true)}
 								>
 									<Caption>
@@ -371,7 +375,7 @@ export const RecurringDonationCard = () => {
 							)}
 						</Flex>
 						{tokenStream?.length > 0 && (
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<Caption>
 									{formatMessage(
 										{
@@ -382,7 +386,7 @@ export const RecurringDonationCard = () => {
 										},
 									)}
 								</Caption>
-								<Flex gap='4px' alignItems='center'>
+								<Flex gap='4px' $alignItems='center'>
 									<Caption medium>
 										{formatMessage({
 											id: 'label.manage_recurring_donations',
@@ -419,9 +423,9 @@ export const RecurringDonationCard = () => {
 				<>
 					{!isGivethProject && (
 						<GivethSection
-							flexDirection='column'
+							$flexDirection='column'
 							gap='8px'
-							alignItems='stretch'
+							$alignItems='stretch'
 						>
 							<DonateToGiveth
 								setDonationToGiveth={e => {
@@ -433,8 +437,8 @@ export const RecurringDonationCard = () => {
 						</GivethSection>
 					)}
 					<DonatesInfoSection>
-						<Flex flexDirection='column' gap='8px'>
-							<Flex justifyContent='space-between'>
+						<Flex $flexDirection='column' gap='8px'>
+							<Flex $justifyContent='space-between'>
 								<Caption>
 									{formatMessage({ id: 'label.donation_to' })}{' '}
 									<b>{project.title}</b>
@@ -459,7 +463,7 @@ export const RecurringDonationCard = () => {
 									</Caption>
 								</Flex>
 							</Flex>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<Caption>
 									{formatMessage(
 										{ id: 'label.donating_percentage_to' },
@@ -491,7 +495,7 @@ export const RecurringDonationCard = () => {
 									</Caption>
 								</Flex>
 							</Flex>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<Caption medium>
 									{formatMessage({
 										id: 'label.your_total_donation',
