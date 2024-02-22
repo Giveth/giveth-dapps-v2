@@ -64,7 +64,7 @@ const ClaimRecurringDonationModal = ({
 				) : balances.length === 0 ? (
 					<P>You have no streams yet!</P>
 				) : (
-					<Flex flexDirection='column' gap='32px'>
+					<Flex $flexDirection='column' gap='32px'>
 						{balances.map(tokenWithBalance => (
 							<ClaimRecurringItem
 								key={tokenWithBalance.token.symbol}
@@ -78,7 +78,7 @@ const ClaimRecurringDonationModal = ({
 							/>
 						))}
 						<TotalAmountContainer>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<B>Total amount claimable </B>
 								<B>~ {sumAllTokensUsd} USD</B>
 							</Flex>
