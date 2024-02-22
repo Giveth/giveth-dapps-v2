@@ -49,7 +49,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 							)}
 						</Flex>
 					</Subline>
-					<Link href={`project/${project.slug}`}>
+					<Link href={`/project/${project.slug}`}>
 						<H2>{project.title}</H2>
 					</Link>
 				</div>
