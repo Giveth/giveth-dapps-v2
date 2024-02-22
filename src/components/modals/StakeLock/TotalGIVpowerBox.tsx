@@ -56,9 +56,9 @@ const TotalGIVpowerBox = () => {
 				<>
 					<H6>You have</H6>
 					<BoxRow
-						alignItems='baseline'
+						$alignItems='baseline'
 						gap='8px'
-						justifyContent='center'
+						$justifyContent='center'
 					>
 						<IconWrapper>
 							<IconRocketInSpace32 />
