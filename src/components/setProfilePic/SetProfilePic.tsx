@@ -157,7 +157,7 @@ export const SetProfilePic = ({
 					))}
 				</Flex>
 				{activeTab === EProfilePicTab.UPLOAD && (
-					<Flex flexDirection='column' gap='36px'>
+					<Flex $flexDirection='column' gap='36px'>
 						<ImageUploader {...useUploadProps} />
 						{isOnboarding ? (
 							<OnboardButtons
@@ -176,8 +176,8 @@ export const SetProfilePic = ({
 							/>
 						) : (
 							<Flex
-								flexDirection='row'
-								justifyContent='space-between'
+								$flexDirection='row'
+								$justifyContent='space-between'
 							>
 								<Button
 									buttonType='secondary'
@@ -204,7 +204,7 @@ export const SetProfilePic = ({
 				{activeTab === EProfilePicTab.PFP && (
 					<>
 						{pfpData && pfpData.length > 0 ? (
-							<Flex flexDirection='column' gap='30px'>
+							<Flex $flexDirection='column' gap='30px'>
 								<CustomH5>Your Givers PFP NFTs</CustomH5>
 								<PFPItemsContainer gap='25px'>
 									{pfpData?.map(pfp => (
@@ -227,7 +227,7 @@ export const SetProfilePic = ({
 								>
 									{selectedPFP && (
 										<AttributesWrapper
-											flexDirection='column'
+											$flexDirection='column'
 											gap='16px'
 										>
 											<H6>
@@ -236,14 +236,14 @@ export const SetProfilePic = ({
 											</H6>
 											<SelectedPFPContainer
 												gap='16px'
-												flexWrap
+												$flexWrap
 											>
 												<AttributeItems
 													id={selectedPFP.tokenId}
 												/>
 											</SelectedPFPContainer>
 											<Flex
-												flexDirection='column'
+												$flexDirection='column'
 												gap='8px'
 											>
 												<CustomLink
@@ -299,10 +299,10 @@ export const SetProfilePic = ({
 								)}
 							</Flex>
 						) : (
-							<Flex flexDirection='column' alignItems='stretch'>
+							<Flex $flexDirection='column' $alignItems='stretch'>
 								<NoPFP />
 								<br />
-								<Flex justifyContent='space-between'>
+								<Flex $justifyContent='space-between'>
 									<Link
 										href={Routes.NFT}
 										style={{
