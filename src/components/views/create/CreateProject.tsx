@@ -459,11 +459,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 										}
 										direction='top'
 									>
-										<div>
-											Your project score is below the
-											minimum score of 50. add more detail
-											to your project to proceed
-										</div>
+										<TooltipWrapper>
+											{formatMessage({
+												id: 'component.create_project.low_score',
+											})}
+										</TooltipWrapper>
 									</IconWithTooltip>
 								) : (
 									<Button
@@ -563,6 +563,10 @@ const PublishTitle = styled(H4)`
 
 const PublishList = styled(Caption)`
 	color: ${neutralColors.gray[900]};
+`;
+
+const TooltipWrapper = styled(Caption)`
+	max-width: 320px;
 `;
 
 export default CreateProject;
