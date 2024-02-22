@@ -147,7 +147,7 @@ export const AdminActions = () => {
 							onClick={option.cb}
 						>
 							<Flex gap='8px'>
-								<Flex alignItems='center'>{option.icon}</Flex>
+								<Flex $alignItems='center'>{option.icon}</Flex>
 								<div>{option.label}</div>
 							</Flex>
 						</MobileActionModalItem>
