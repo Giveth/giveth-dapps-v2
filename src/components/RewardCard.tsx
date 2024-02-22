@@ -89,16 +89,16 @@ export const RewardCard: FC<IRewardCardProps> = ({
 					/>
 				) : (
 					<>
-						<CardHeader justifyContent='space-between' gap='4px'>
+						<CardHeader $justifyContent='space-between' gap='4px'>
 							<CardTitle>{title}</CardTitle>
-							<ChainInfo alignItems='center'>
+							<ChainInfo $alignItems='center'>
 								<NetworkLogo chainId={network} logoSize={16} />
 								<ChainName styleType='Small'>
 									{getChainName(network)}
 								</ChainName>
 							</ChainInfo>
 						</CardHeader>
-						<AmountInfo alignItems='center' gap='8px'>
+						<AmountInfo $alignItems='center' gap='8px'>
 							<IconGIV size={32} />
 							<Title>
 								{formatWeiHelper(liquidAmount.toString())}
@@ -108,7 +108,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 						<Converted>
 							~${formatWeiHelper(usdAmount.toString())}
 						</Converted>
-						<RateInfo alignItems='center' gap='8px'>
+						<RateInfo $alignItems='center' gap='8px'>
 							<IconGIVStream size={24} />
 							<P>{formatWeiHelper(stream.toString())}</P>
 							<RateUnit>
