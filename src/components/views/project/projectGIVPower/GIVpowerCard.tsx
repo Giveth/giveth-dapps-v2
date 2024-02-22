@@ -52,7 +52,7 @@ export const GIVpowerCard = () => {
 
 	return (
 		<GIVpowerCardWrapper>
-			<Flex gap='8px' alignItems='center'>
+			<Flex gap='8px' $alignItems='center'>
 				<IconRocketInSpace24 />
 				<Subline>
 					{formatMessage({
@@ -90,7 +90,7 @@ export const GIVpowerCard = () => {
 				</Flex>
 			</CurrentRankSection>
 			<NextRankSection>
-				<Flex alignItems='center' justifyContent='space-between'>
+				<Flex $alignItems='center' $justifyContent='space-between'>
 					<P>
 						{formatMessage({
 							id: 'label.projected_rank',
