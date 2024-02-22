@@ -40,8 +40,8 @@ export const DonateHeader: FC<IHeader> = () => {
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
 	return (
-		<StyledHeader alignItems='center' $baseTheme={theme} show={showHeader}>
-			<Flex alignItems='center' gap='16px'>
+		<StyledHeader $alignItems='center' $baseTheme={theme} show={showHeader}>
+			<Flex $alignItems='center' gap='16px'>
 				<Link href={Routes.Project + '/' + project.slug}>
 					<Logo>
 						<Image
@@ -52,7 +52,7 @@ export const DonateHeader: FC<IHeader> = () => {
 						/>
 					</Logo>
 				</Link>
-				<Flex flexDirection='column' gap='4px'>
+				<Flex $flexDirection='column' gap='4px'>
 					<StyledCaption medium>Donating to</StyledCaption>
 					<B>{project.title}</B>
 				</Flex>
