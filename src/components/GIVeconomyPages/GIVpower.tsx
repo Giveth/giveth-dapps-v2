@@ -79,9 +79,9 @@ export function TabPowerTop() {
 	return (
 		<GIVpowerTopContainer>
 			<GIVpowerContainer>
-				<Row style={{ alignItems: 'flex-end' }}>
+				<Row style={{ $alignItems: 'flex-end' }}>
 					<Col xs={12} sm={8}>
-						<Flex alignItems='baseline' gap='16px'>
+						<Flex $alignItems='baseline' gap='16px'>
 							<Title>GIVpower</Title>
 							{/* <IconGIVFarm size={64} /> */}
 							<Image
