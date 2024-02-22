@@ -23,9 +23,9 @@ const RadioButton: FC<IProps> = props => {
 			</RadioCircle>
 			<div>
 				<RadioTitle
-					isSelected={isSelected}
-					isDark={theme === ETheme.Dark}
-					isSmall={small}
+					$isSelected={isSelected}
+					$isDark={theme === ETheme.Dark}
+					$isSmall={small}
 				>
 					{title}
 				</RadioTitle>
@@ -67,15 +67,15 @@ const Container = styled.div`
 `;
 
 const RadioTitle = styled.div<{
-	isDark: boolean;
-	isSelected: boolean;
-	isSmall?: boolean;
+	$isDark: boolean;
+	$isSelected: boolean;
+	$isSmall?: boolean;
 }>`
-	font-size: ${props => (props.isSmall ? '16px' : '20px')};
+	font-size: ${props => (props.$isSmall ? '16px' : '20px')};
 	user-select: none;
 	color: ${props =>
-		props.isSelected
-			? props.isDark
+		props.$isSelected
+			? props.$isDark
 				? 'white'
 				: brandColors.deep[900]
 			: neutralColors.gray[600]};
