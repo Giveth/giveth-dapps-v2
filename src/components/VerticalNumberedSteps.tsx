@@ -49,7 +49,7 @@ const MobileVersion = ({ inputArray }: IVerticalNumberedSteps) => {
 		<>
 			{inputArray.map((i, index) => (
 				<MobileRow key={i.title}>
-					<Flex gap='16px' alignItems='center'>
+					<Flex gap='16px' $alignItems='center'>
 						<Number>{index + 1}</Number>
 						<H5 weight={700}>{i.title}</H5>
 					</Flex>
