@@ -24,8 +24,8 @@ export const ProjectActionCard = () => {
 
 	return (
 		<ProjectActionCardWrapper
-			flexDirection='column'
-			justifyContent='space-between'
+			$flexDirection='column'
+			$justifyContent='space-between'
 		>
 			<ProjectActionInnerCard />
 		</ProjectActionCardWrapper>
