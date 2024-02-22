@@ -138,7 +138,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 					stakeStatus === StakeState.CONFIRMING ||
 					stakeStatus === StakeState.UNSTAKING ||
 					stakeStatus === StakeState.CONFIRM_UNSTAKE) && (
-					<StakeModalTitle alignItems='center'>
+					<StakeModalTitle $alignItems='center'>
 						<StakingPoolImages title={title} icon={icon} />
 						<StakeModalTitleText weight={700}>
 							{title}
