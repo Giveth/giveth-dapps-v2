@@ -27,8 +27,8 @@ const ProjectsFiltersTablet = () => {
 		<>
 			{showSearchAndFilter ? (
 				<FilterAndSearchContainer
-					justifyContent='space-between'
-					alignItems='center'
+					$justifyContent='space-between'
+					$alignItems='center'
 					gap='16px'
 					className='fadeIn'
 				>
