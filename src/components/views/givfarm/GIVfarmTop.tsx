@@ -41,9 +41,9 @@ export const GIVfarmTop = () => {
 	return (
 		<GIVfarmTopContainer>
 			<TopInnerContainer>
-				<Row style={{ alignItems: 'flex-end' }}>
+				<Row style={{ $alignItems: 'flex-end' }}>
 					<Col xs={12} sm={7} xl={8}>
-						<Flex alignItems='baseline' gap='16px'>
+						<Flex $alignItems='baseline' gap='16px'>
 							<Title>GIVfarm</Title>
 							<IconGIVFarm size={64} />
 						</Flex>
