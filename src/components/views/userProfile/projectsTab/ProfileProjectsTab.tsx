@@ -117,7 +117,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 					</NothingWrapper>
 				) : myAccount ? (
 					isRecurringActive ? (
-						<Flex flexDirection='column' gap='18px'>
+						<Flex $flexDirection='column' gap='18px'>
 							{projects.map(project => (
 								<ProjectItem
 									key={project.id}
