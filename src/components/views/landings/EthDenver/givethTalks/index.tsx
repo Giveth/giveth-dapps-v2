@@ -44,7 +44,7 @@ const GivethTalks = () => {
 					</a>
 				</Talks>
 				<Calendar xs={12} md={6} xl={8}>
-					<Flex flexDirection='column' gap='40px'>
+					<Flex $flexDirection='column' gap='40px'>
 						<CalendarItem
 							title='Combating the Metacrisis'
 							lecturer='Griff Green'
