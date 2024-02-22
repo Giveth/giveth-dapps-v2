@@ -22,7 +22,7 @@ export const ProjectOwnerWithPfp: FC<IProjectOwnerWithPfpProps> = ({
 	return (
 		<Link href={addressToUserView(user?.walletAddress?.toLowerCase())}>
 			{pfpToken ? (
-				<Flex gap='8px' alignItems='center'>
+				<Flex gap='8px' $alignItems='center'>
 					<StyledPFP pfpToken={pfpToken} />
 					<Author>{name || '\u200C'}</Author>
 				</Flex>
