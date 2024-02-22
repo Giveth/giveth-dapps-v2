@@ -104,9 +104,9 @@ export const TabGIVstreamTop = () => {
 		<>
 			<GIVstreamTopContainer>
 				<GIVstreamTopInnerContainer>
-					<Row style={{ alignItems: 'flex-end' }}>
+					<Row style={{ $alignItems: 'flex-end' }}>
 						<TitleCol xs={12} sm={7} xl={8}>
-							<Flex alignItems='baseline' gap='16px'>
+							<Flex $alignItems='baseline' gap='16px'>
 								<GSTitle>GIVstream</GSTitle>
 								<IconGIVStream size={64} />
 							</Flex>
@@ -204,7 +204,7 @@ export const TabGIVstreamBottom = () => {
 			<Container>
 				<div id='flowRate'></div>
 				<NetworkSelector />
-				<FlowRateRow alignItems='baseline' gap='8px' flexWrap>
+				<FlowRateRow $alignItems='baseline' gap='8px' $flexWrap>
 					<H3 weight={700}>
 						{formatMessage({ id: 'label.your_flowrate' })}:
 					</H3>
@@ -302,8 +302,8 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 	const { formatMessage } = useIntl();
 	return (
 		<GIVstreamProgressContainer>
-			<GsPTitleRow justifyContent='space-between'>
-				<GsPTitle alignItems='center' gap='8px'>
+			<GsPTitleRow $justifyContent='space-between'>
+				<GsPTitle $alignItems='center' gap='8px'>
 					<H6>
 						{formatMessage({ id: 'label.giviverse_expansion' })}
 					</H6>
@@ -324,7 +324,7 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 				</P>
 			</GsPTitleRow>
 			<Bar percentage={percentage} />
-			<PercentageRow justifyContent='space-between'>
+			<PercentageRow $justifyContent='space-between'>
 				<B>{percentage?.toFixed(2)}%</B>
 				<B>100%</B>
 			</PercentageRow>
