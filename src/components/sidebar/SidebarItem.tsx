@@ -29,9 +29,9 @@ export const SidebarParentItem: FC<ISidebarItemProps> = ({
 	const theme = useAppSelector(state => state.general.theme);
 
 	return (
-		<Flex flexDirection='column'>
+		<Flex $flexDirection='column'>
 			<ItemWrapper
-				justifyContent='space-between'
+				$justifyContent='space-between'
 				onClick={() => setShowChildren(s => !s)}
 			>
 				<GLink size='Big'>{item.title}</GLink>
