@@ -203,7 +203,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 					})}
 				</Desc>
 			</GovernHeader>
-			<APRRow alignItems={'center'} justifyContent={'flex-end'}>
+			<APRRow $alignItems={'center'} $justifyContent={'flex-end'}>
 				<ImpactCard>
 					<H5 as='h2' weight={700}>
 						{formatMessage({
@@ -212,8 +212,8 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 					</H5>
 					<div>
 						<Flex
-							alignItems={'center'}
-							justifyContent={'space-between'}
+							$alignItems={'center'}
+							$justifyContent={'space-between'}
 						>
 							<ImpactCardLabel>
 								{formatMessage({
@@ -246,7 +246,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 					</PoolCardTitle>
 					<PoolCard>
 						<PoolItems>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>APR</PoolItem>
 								<PoolItemBold>
 									<Image
@@ -261,7 +261,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 									%
 								</PoolItemBold>
 							</Flex>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>
 									{formatMessage({ id: 'label.claimable' })}
 								</PoolItem>
@@ -269,7 +269,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 									{formatWeiHelper(potentialClaim)} GIV
 								</PoolItemBold>
 							</Flex>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>
 									{formatMessage({ id: 'label.streaming' })}
 								</PoolItem>
