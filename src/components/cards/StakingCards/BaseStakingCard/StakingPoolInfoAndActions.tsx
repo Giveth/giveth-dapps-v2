@@ -187,7 +187,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 		<StakePoolInfoContainer>
 			{started ? (
 				<Details>
-					<Flex justifyContent='space-between'>
+					<Flex $justifyContent='space-between'>
 						<FlexCenter gap='8px'>
 							<DetailLabel>APR</DetailLabel>
 							{type === StakingType.ICHI_GIV_ONEGIV && (
@@ -243,7 +243,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 								</IconWithTooltip>
 							)}
 						</FlexCenter>
-						<Flex gap='8px' alignItems='center'>
+						<Flex gap='8px' $alignItems='center'>
 							{!(exploited || isDiscontinued) ? (
 								<>
 									<IconSpark
@@ -294,7 +294,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 							)}
 						</Flex>
 					</Flex>
-					<Flex justifyContent='space-between'>
+					<Flex $justifyContent='space-between'>
 						<DetailLabel>
 							{formatMessage({
 								id: 'label.claimable',
@@ -314,8 +314,8 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 							)}
 						</DetailValue>
 					</Flex>
-					<Flex justifyContent='space-between'>
-						<Flex gap='8px' alignItems='center'>
+					<Flex $justifyContent='space-between'>
+						<Flex gap='8px' $alignItems='center'>
 							<DetailLabel>
 								{formatMessage({
 									id: 'label.streaming',
@@ -329,7 +329,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 								<IconHelpFilled16 />
 							</IconHelpFilledWrapper>
 						</Flex>
-						<Flex gap='4px' alignItems='center'>
+						<Flex gap='4px' $alignItems='center'>
 							<DetailValue>
 								{!exploited ? (
 									formatWeiHelper(rewardStream.toString())
@@ -377,7 +377,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 				)}
 			</HarvestButtonsWrapper>
 			<StakeButtonsRow>
-				<StakeContainer flexDirection='column'>
+				<StakeContainer $flexDirection='column'>
 					<StakeButton
 						label={formatMessage({
 							id: 'label.stake',
@@ -398,7 +398,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 								)} ${unit}`}
 					</StakeAmount>
 				</StakeContainer>
-				<StakeContainer flexDirection='column'>
+				<StakeContainer $flexDirection='column'>
 					<StakeButton
 						label={formatMessage({
 							id: 'label.unstake',
