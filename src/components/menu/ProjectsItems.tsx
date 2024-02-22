@@ -72,7 +72,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				</Label>
 				<ExploreByRow
 					gap='16px'
-					flexDirection={inSidebar ? 'column' : undefined}
+					$flexDirection={inSidebar ? 'column' : undefined}
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={explore.url}>
