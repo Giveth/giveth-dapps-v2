@@ -24,7 +24,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 	return (
 		<Wrapper
 			gap='16px'
-			alignItems='center'
+			$alignItems='center'
 			disabled={disable}
 			onClick={() => {
 				if (disable) return;
@@ -36,8 +36,8 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 				symbol={token.symbol}
 				size={32}
 			/>
-			<InfoWrapper flexDirection='column' alignItems='flex-start'>
-				<TopRow justifyContent='space-between'>
+			<InfoWrapper $flexDirection='column' $alignItems='flex-start'>
+				<TopRow $justifyContent='space-between'>
 					<Flex gap='4px'>
 						<Caption medium>{token.symbol}</Caption>
 						<GrayCaption>{token.name}</GrayCaption>
