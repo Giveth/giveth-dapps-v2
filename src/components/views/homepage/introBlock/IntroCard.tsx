@@ -27,8 +27,8 @@ const IntroCard = ({
 	description,
 }: IntroCardProps) => {
 	return (
-		<IntroCardContainer flexDirection='column' gap='16px'>
-			<IconAndTitleContainer gap='16px' alignItems='center'>
+		<IntroCardContainer $flexDirection='column' gap='16px'>
+			<IconAndTitleContainer gap='16px' $alignItems='center'>
 				{Icon}
 				<H5 weight={700}>{title}</H5>
 			</IconAndTitleContainer>
