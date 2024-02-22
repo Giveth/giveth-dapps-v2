@@ -312,7 +312,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	return (
 		<Wrapper>
 			<DonateSteps donateState={step} />
-			<Items flexDirection='column' gap='16px'>
+			<Items $flexDirection='column' gap='16px'>
 				{!selectedToken?.token.isSuperToken && (
 					<Item
 						title='Deposit into your stream balance'
