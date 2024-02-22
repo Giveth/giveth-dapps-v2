@@ -42,8 +42,8 @@ export const ModifySection: FC<IModifySectionProps> = ({
 	const { formatMessage } = useIntl();
 
 	return (
-		<TopUpSection flexDirection='column' gap='8px'>
-			<Flex gap='8px' alignItems='center'>
+		<TopUpSection $flexDirection='column' gap='8px'>
+			<Flex gap='8px' $alignItems='center'>
 				<Caption medium>
 					{formatMessage({
 						id: titleLabel,
@@ -59,10 +59,10 @@ export const ModifySection: FC<IModifySectionProps> = ({
 			</Flex>
 			<InputWrapper hasError={!!error}>
 				<SelectTokenWrapper
-					alignItems='center'
-					justifyContent='space-between'
+					$alignItems='center'
+					$justifyContent='space-between'
 				>
-					<Flex gap='8px' alignItems='center'>
+					<Flex gap='8px' $alignItems='center'>
 						<TokenIcon
 							symbol={
 								token?.isSuperToken
