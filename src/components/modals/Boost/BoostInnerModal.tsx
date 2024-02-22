@@ -241,7 +241,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	return (
 		<>
 			<InfoPart>
-				<TotalGIVpowerRow alignItems='baseline' gap='12px'>
+				<TotalGIVpowerRow $alignItems='baseline' gap='12px'>
 					<H6>{formatMessage({ id: 'label.total_givpower' })}</H6>
 					<GIVpowerValue weight={700}>
 						{formatWeiHelper(totalGIVpower)}
@@ -259,8 +259,8 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 						</GIVpowerHelp>
 					</GIVpowerValue>
 				</TotalGIVpowerRow>
-				<Flex justifyContent='space-between'>
-					<Flex alignItems='baseline' gap='4px'>
+				<Flex $justifyContent='space-between'>
+					<Flex $alignItems='baseline' gap='4px'>
 						<P>{formatMessage({ id: 'label.boosted_projects' })}</P>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
