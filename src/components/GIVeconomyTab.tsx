@@ -17,7 +17,7 @@ const GIVeconomyTab: FC = () => {
 	return (
 		<Container>
 			<LabelsContainer>
-				<Flex gap='16px' justifyContent='space-between'>
+				<Flex gap='16px' $justifyContent='space-between'>
 					{giveconomyTabs.map((tab, idx) => (
 						<Link key={idx} href={tab.href}>
 							<Label size='Big' isActive={asPath === tab.href}>
