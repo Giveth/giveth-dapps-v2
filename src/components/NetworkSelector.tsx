@@ -63,11 +63,11 @@ const Option: ComponentType<OptionProps<ISelected>> = props => {
 	return (
 		<components.Option {...props}>
 			{isSelected || isDisabled ? (
-				<Flex gap='4px' flexDirection='column'>
+				<Flex gap='4px' $flexDirection='column'>
 					<SelectedTitle>
 						{isSelected ? 'Selected' : 'Coming soon'}
 					</SelectedTitle>
-					<Flex gap='8px' alignItems='center'>
+					<Flex gap='8px' $alignItems='center'>
 						<IconWrapper>
 							<NetworkLogo chainId={value} logoSize={16} />
 						</IconWrapper>
@@ -75,7 +75,7 @@ const Option: ComponentType<OptionProps<ISelected>> = props => {
 					</Flex>
 				</Flex>
 			) : (
-				<Flex gap='8px' alignItems='center'>
+				<Flex gap='8px' $alignItems='center'>
 					<IconWrapper>
 						<NetworkLogo chainId={value} logoSize={16} />
 					</IconWrapper>
