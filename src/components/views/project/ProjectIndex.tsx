@@ -129,7 +129,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						<ProjectHeader />
 						{isMobile && isAdmin && (
 							<MobileActionsContainer
-								flexDirection='column'
+								$flexDirection='column'
 								gap='24px'
 							>
 								<ProjectStats />
@@ -186,7 +186,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					{activeTab === 2 && <ProjectDonations />}
 					{activeTab === 3 && <ProjectGIVPowerIndex />}
 					{isDraft && (
-						<Flex justifyContent='flex-end'>
+						<Flex $justifyContent='flex-end'>
 							<ContinueCreationButton
 								label={formatMessage({
 									id: 'label.continue_creation',
