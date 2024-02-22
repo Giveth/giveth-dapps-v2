@@ -104,7 +104,7 @@ const ClaimView = () => {
 						chainId === 0
 					}
 				>
-					<Steps justifyContent='center' alignItems='center'>
+					<Steps $justifyContent='center' $alignItems='center'>
 						{stepsTitle.map((title, idx) => (
 							<Step
 								title={title}
