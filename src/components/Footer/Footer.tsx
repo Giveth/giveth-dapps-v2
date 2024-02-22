@@ -42,7 +42,7 @@ const Footer = () => {
 				<LanguageModal setShowModal={setShowLanguageModal} />
 			)}
 			<ContainerStyled>
-				<LeftContainer flexWrap>
+				<LeftContainer $flexWrap>
 					<LinkColumn>
 						<Link href={Routes.Home}>
 							<LinkItem color={textColor}>
@@ -169,7 +169,7 @@ const Footer = () => {
 				</RightContainer>
 			</ContainerStyled>
 			<Language
-				isDark={isDark}
+				$isDark={isDark}
 				onClick={() => setShowLanguageModal(true)}
 			>
 				<Image
@@ -253,7 +253,7 @@ const CaptionRed = styled(Caption)`
 	color: ${brandColors.pinky[500]};
 `;
 
-const Language = styled.div<{ isDark?: boolean }>`
+const Language = styled.div<{ $isDark?: boolean }>`
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-end;
@@ -263,7 +263,7 @@ const Language = styled.div<{ isDark?: boolean }>`
 	padding: 24px 48px;
 
 	color: ${props =>
-		props.isDark ? brandColors.deep[100] : neutralColors.gray[800]};
+		props.$isDark ? brandColors.deep[100] : neutralColors.gray[800]};
 	${mediaQueries.laptopS} {
 		margin: 16px 0 32px 0;
 	}
