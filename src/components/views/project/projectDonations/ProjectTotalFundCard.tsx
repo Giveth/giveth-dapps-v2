@@ -183,7 +183,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 							{notDistributedFund ? (
 								<NotDistributedFundContainer>
 									<EstimatedMatchingSection>
-										<Flex flexDirection='column' gap='8px'>
+										<Flex $flexDirection='column' gap='8px'>
 											<H6 weight={700}>
 												{formatMessage({
 													id: 'label.matching_funds_coming_soon',
@@ -203,8 +203,8 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 									</EstimatedMatchingSection>
 								</NotDistributedFundContainer>
 							) : (
-								<EstimatedMatchingSection flexDirection='column'>
-									<Flex justifyContent='space-between'>
+								<EstimatedMatchingSection $flexDirection='column'>
+									<Flex $justifyContent='space-between'>
 										<EstimatedMatchingPrice>
 											+{' '}
 											{formatDonation(
