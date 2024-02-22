@@ -47,8 +47,8 @@ const VideoBlock = () => {
 	return (
 		<SectionContainer>
 			<Container>
-				<CustomFlex alignItems='center'>
-					<Flex flexDirection='column' gap='24px'>
+				<CustomFlex $alignItems='center'>
+					<Flex $flexDirection='column' gap='24px'>
 						<H2 weight={700}>
 							{formatMessage({ id: 'label.what_is_giveth' })}
 						</H2>
