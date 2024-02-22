@@ -59,7 +59,7 @@ export const NextRank: FC<IGIVpowerNextRank> = ({
 	return isBoostingsLoading ? (
 		<NextRankContainer state={0} isLoading={true}></NextRankContainer>
 	) : (
-		<NextRankContainer state={goingUp} alignItems='baseline' gap='4px'>
+		<NextRankContainer state={goingUp} $alignItems='baseline' gap='4px'>
 			{goingUp === 0 ? (
 				''
 			) : goingUp > 0 ? (
@@ -84,7 +84,7 @@ export const CurrentRank: FC<ICurrentRank> = ({
 	const content =
 		projectPower?.totalPower === 0 ? '--' : `#${projectPower?.powerRank}`;
 	return (
-		<RankContainer alignItems='baseline' gap='4px'>
+		<RankContainer $alignItems='baseline' gap='4px'>
 			{projectPower?.totalPower === 0 && <IconRocketInSpace32 />}
 			{size === 'big' ? (
 				<H2 weight={700}>{content}</H2>
