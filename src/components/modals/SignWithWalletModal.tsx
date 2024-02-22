@@ -199,7 +199,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 				)}
 
 				{multisigLastStep && !currentMultisigSession ? (
-					<Flex flexDirection='column'>
+					<Flex $flexDirection='column'>
 						<Description>
 							You will be redirected to the Multisig transaction
 							that requires signatures. You can safely close that
@@ -222,7 +222,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 				) : (
 					multisigLastStep &&
 					currentMultisigSession && (
-						<Flex flexDirection='column'>
+						<Flex $flexDirection='column'>
 							<Description>
 								You'll need to execute the pending Multisig tx
 								to complete your log-in to Giveth & proceed to
