@@ -35,7 +35,7 @@ export const PublicBoostsTable: FC<IBoostsTable> = ({
 }) => {
 	return (
 		<>
-			<Header justifyContent='space-between' flexWrap gap='16px'>
+			<Header $justifyContent='space-between' $flexWrap gap='16px'>
 				<H5 weight={700}>GIVpower Summary</H5>
 			</Header>
 			<Table>
