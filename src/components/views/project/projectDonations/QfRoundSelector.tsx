@@ -58,7 +58,7 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 			>
 				<SwiperSlide style={{ width: 'auto' }}>
 					<TabItem
-						alignItems='center'
+						$alignItems='center'
 						gap='4px'
 						onClick={() => setSelectedQF(null)}
 						isSelected={selectedQF === null}
@@ -79,7 +79,7 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 					return (
 						<SwiperSlide key={index} style={{ width: 'auto' }}>
 							<TabItem
-								alignItems='center'
+								$alignItems='center'
 								gap='4px'
 								onClick={() => setSelectedQF(round)}
 								isSelected={isSelected}
