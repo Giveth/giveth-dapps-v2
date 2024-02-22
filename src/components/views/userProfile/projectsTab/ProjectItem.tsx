@@ -36,10 +36,10 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 
 	return (
 		<ProjectContainer>
-			<Flex justifyContent='space-between' alignItems='center'>
+			<Flex $justifyContent='space-between' $alignItems='center'>
 				<div>
 					<Subline>
-						<Flex alignItems='center'>
+						<Flex $alignItems='center'>
 							<IconPublish16 />
 							&nbsp;
 							{formatMessage({ id: 'label.created_at' })} &nbsp;
@@ -61,21 +61,21 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 				/>
 			</Flex>
 			<HorizontalDivider />
-			<Flex justifyContent='space-between'>
-				<ProjectStatusesContainer flexDirection='column' gap='16px'>
-					<Flex justifyContent='space-between'>
+			<Flex $justifyContent='space-between'>
+				<ProjectStatusesContainer $flexDirection='column' gap='16px'>
+					<Flex $justifyContent='space-between'>
 						<P>{formatMessage({ id: 'label.project_status' })}</P>
 						<div>
 							<ProjectStatusBadge project={project} />
 						</div>
 					</Flex>
-					<Flex justifyContent='space-between'>
+					<Flex $justifyContent='space-between'>
 						<P>Listed on public site</P>
 						<div>
 							<ProjectListedStatus project={project} />
 						</div>
 					</Flex>
-					<Flex justifyContent='space-between'>
+					<Flex $justifyContent='space-between'>
 						<P>
 							{formatMessage({
 								id: 'label.verification_status',
@@ -90,7 +90,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 							/>
 						</div>
 					</Flex>
-					<Flex justifyContent='space-between'>
+					<Flex $justifyContent='space-between'>
 						<div>
 							{formatMessage({
 								id: 'label.quadratic_funding',
@@ -101,19 +101,19 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 						</div>
 					</Flex>
 				</ProjectStatusesContainer>
-				<ProjectStatusesContainer flexDirection='column' gap='16px'>
-					<Flex justifyContent='space-between'>
+				<ProjectStatusesContainer $flexDirection='column' gap='16px'>
+					<Flex $justifyContent='space-between'>
 						<P>
-							<Flex alignItems='center' gap='6px'>
+							<Flex $alignItems='center' gap='6px'>
 								<IconHeartOutline24 />
 								{formatMessage({ id: 'label.likes' })}
 							</Flex>
 						</P>
 						<div>{project.totalReactions}</div>
 					</Flex>
-					<Flex justifyContent='space-between'>
+					<Flex $justifyContent='space-between'>
 						<P>
-							<Flex alignItems='center' gap='6px'>
+							<Flex $alignItems='center' gap='6px'>
 								<IconFund24 />
 								{formatMessage({ id: 'label.total_raised' })}
 							</Flex>
@@ -125,9 +125,9 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 						)}
 					</Flex>
 					{/* add this part when the backend has calculated {isRecurringActive && (
-						<Flex justifyContent='space-between'>
+						<Flex $justifyContent='space-between'>
 							<P>
-								<Flex alignItems='center' gap='6px'>
+								<Flex $alignItems='center' gap='6px'>
 									Claim Recurring Donations
 								</Flex>
 							</P>
