@@ -126,14 +126,14 @@ export const StreamCard: FC<IClaimViewCardProps> = ({ index }) => {
 					the GIVeconomy grows, so does your GIV!
 				</Desc>
 			</StreamHeader>
-			<StreamRow alignItems={'center'}>
-				<StreamContainer flexDirection='column'>
+			<StreamRow $alignItems={'center'}>
+				<StreamContainer $flexDirection='column'>
 					<H5 as='h2' weight={700}>
 						Your flowrate
 					</H5>
 					<StreamSubtitle>Time remaining: {remain}</StreamSubtitle>
 				</StreamContainer>
-				<StreamValueContainer alignItems={'center'}>
+				<StreamValueContainer $alignItems={'center'}>
 					<Image
 						src='/images/icons/thunder.svg'
 						height='56'
