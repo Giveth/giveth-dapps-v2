@@ -22,7 +22,7 @@ export const WrongNetworkLayer = () => {
 		<Overlay>
 			<Toast>
 				<Header>
-					<Title gap='4px' alignItems='center'>
+					<Title gap='4px' $alignItems='center'>
 						<IconInfoFilled16 />
 						<Caption>
 							{formatMessage({
