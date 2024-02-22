@@ -51,7 +51,7 @@ export const HomeSidebar = () => {
 				isHighlighted
 				onClick={() => dispatch(setShowSearchModal(true))}
 			>
-				<Flex alignItems='center' justifyContent='space-between'>
+				<Flex $alignItems='center' $justifyContent='space-between'>
 					<GLink size='Big'>
 						{formatMessage({ id: 'label.search' })}
 					</GLink>
