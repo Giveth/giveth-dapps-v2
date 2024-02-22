@@ -41,7 +41,7 @@ export const LinkWithMenu: FC<ILinkWithMenu> = ({
 		>
 			<Link href={href}>
 				<GLink size='Big'>{title}</GLink>
-				<ArrowContainer up={showMenu}>
+				<ArrowContainer $up={showMenu}>
 					<IconChevronDown24 />
 				</ArrowContainer>
 			</Link>
@@ -62,14 +62,14 @@ const LinkWithMenuContainer = styled(HeaderLink)`
 	position: relative;
 `;
 
-const ArrowContainer = styled.span<{ up: boolean }>`
+const ArrowContainer = styled.span<{ $up: boolean }>`
 	position: relative;
 	margin-left: 10px;
 	width: 24px;
 	height: 24px;
 	display: inline-block;
 	transition: transform 0.3s ease;
-	transform: ${props => (props.up ? 'rotate(-180deg)' : 'rotate(0deg)')};
+	transform: ${props => (props.$up ? 'rotate(-180deg)' : 'rotate(0deg)')};
 	position: absolute;
 	top: 9px;
 	right: 10px;
@@ -98,7 +98,7 @@ export const Menu: FC<IMenuProps> = ({ parentRef, isAnimating, children }) => {
 
 	return createPortal(
 		<MenuContainer
-			isAnimating={isAnimating}
+			$isAnimating={isAnimating}
 			style={{
 				top: parentRef?.current?.getBoundingClientRect().bottom,
 				left: parentRef?.current?.getBoundingClientRect().left,
@@ -110,7 +110,7 @@ export const Menu: FC<IMenuProps> = ({ parentRef, isAnimating, children }) => {
 	);
 };
 
-const MenuContainer = styled.div<{ isAnimating: boolean }>`
+const MenuContainer = styled.div<{ $isAnimating: boolean }>`
 	position: fixed;
 	color: #fff;
 	border-radius: 6px;
@@ -118,6 +118,6 @@ const MenuContainer = styled.div<{ isAnimating: boolean }>`
 	z-index: ${zIndex.MODAL};
 	top: 0;
 	left: 0;
-	opacity: ${props => (props.isAnimating ? 1 : 0)};
+	opacity: ${props => (props.$isAnimating ? 1 : 0)};
 	transition: opacity 0.3s ease;
 `;
