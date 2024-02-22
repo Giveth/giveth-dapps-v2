@@ -17,7 +17,7 @@ export const PassportCard = () => {
 			passportState === EPassportState.LOADING ? (
 				<B>{formatMessage({ id: 'label.gitcoin_passport' })}</B>
 			) : (
-				<Flex alignItems='center' justifyContent='space-between'>
+				<Flex $alignItems='center' $justifyContent='space-between'>
 					<B>{formatMessage({ id: 'label.passport_score' })}</B>
 					<Score weight={700}>
 						{passportScore === null ? '--' : passportScore}
