@@ -53,6 +53,7 @@ import { ECreateProjectSections, TInputs, EInputs } from './types';
 import { ProGuide } from './proGuide/ProGuide';
 import { EQualityState } from './proGuide/score/scoreHelpers';
 import { LowScoreModal } from './LowScoreModal';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -445,18 +446,36 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 										}
 									/>
 								)}
-								<Button
-									label={formatMessage({
-										id: 'label.publish',
-									})}
-									buttonType='primary'
-									type='submit'
-									disabled={
-										isLoading ||
-										quality === EQualityState.LOW
-									}
-									loading={isLoading}
-								/>
+								{quality === EQualityState.LOW ? (
+									<IconWithTooltip
+										icon={
+											<Button
+												label={formatMessage({
+													id: 'label.publish',
+												})}
+												buttonType='primary'
+												disabled={true}
+											/>
+										}
+										direction='top'
+									>
+										<div>
+											Your project score is below the
+											minimum score of 50. add more detail
+											to your project to proceed
+										</div>
+									</IconWithTooltip>
+								) : (
+									<Button
+										label={formatMessage({
+											id: 'label.publish',
+										})}
+										buttonType='primary'
+										type='submit'
+										disabled={isLoading}
+										loading={isLoading}
+									/>
+								)}
 								<OutlineButton
 									onClick={handleCancel}
 									label={formatMessage({
@@ -523,6 +542,7 @@ const Buttons = styled.div`
 	flex-wrap: wrap;
 	gap: 10px;
 	margin: 61px 0 32px 0;
+	& > *,
 	button {
 		width: 100%;
 		max-width: 320px;
