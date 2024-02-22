@@ -18,7 +18,7 @@ export const Item: FC<IItemProps> = ({ title, amount, price, token }) => {
 	return (
 		<Wrapper gap='4px'>
 			<IconWrapper></IconWrapper>
-			<Flex flexDirection='column' gap='4px'>
+			<Flex $flexDirection='column' gap='4px'>
 				<Title>{title}</Title>
 				<Flex gap='4px'>
 					<B>
