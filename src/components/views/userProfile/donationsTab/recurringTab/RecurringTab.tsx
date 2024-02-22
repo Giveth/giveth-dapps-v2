@@ -4,7 +4,7 @@ import { ActiveStreamsSection } from './ActiveStreamsSection';
 
 export const RecurringTab = () => {
 	return (
-		<Flex flexDirection='column' gap='24px'>
+		<Flex $flexDirection='column' gap='24px'>
 			<ActiveStreamsSection />
 			<ActiveProjectsSection />
 		</Flex>
