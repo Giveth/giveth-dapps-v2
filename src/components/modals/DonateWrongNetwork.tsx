@@ -192,7 +192,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 				<FlexCenter direction='column'>
 					<FooterText>{formatMessage({ id: 'label.or' })}</FooterText>
 					<Link href={`${Routes.Project}/${slug}`}>
-						<Flex gap='12px' alignItems='center'>
+						<Flex gap='12px' $alignItems='center'>
 							<IconBackward24 color={brandColors.giv[500]} />
 							<BackButton>
 								{formatMessage({
