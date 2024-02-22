@@ -34,7 +34,7 @@ export const ClaimWithdrawalStatus = ({
 	if (status === ClaimTransactionState.NOT_STARTED) return;
 	return (
 		<Container status={status}>
-			<Flex gap='16px' alignItems='center'>
+			<Flex gap='16px' $alignItems='center'>
 				{status === ClaimTransactionState.SUCCESS ? (
 					<IconCheckCircleFilled16 />
 				) : (
