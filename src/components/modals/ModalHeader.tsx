@@ -29,7 +29,7 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 }) => {
 	return !hiddenHeader ? (
 		<ModalHeaderRow
-			justifyContent={position === 'center' ? 'center' : 'flex-start'}
+			$justifyContent={position === 'center' ? 'center' : 'flex-start'}
 			hasContent={!!icon || !!title}
 			color={color}
 		>
