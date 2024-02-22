@@ -29,8 +29,8 @@ const SaveGasFees: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({
 	}
 
 	return (
-		<NetworkToast justifyContent='space-between'>
-			<Flex alignItems='center' gap='9px'>
+		<NetworkToast $justifyContent='space-between'>
+			<Flex $alignItems='center' gap='9px'>
 				<IconGasStation />
 				<Caption medium>
 					{formatMessage({
