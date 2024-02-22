@@ -5,7 +5,7 @@ export enum EScoreType {
 	CATEGORIES = 'CATEGORIES',
 	LOCATION = 'LOCATION',
 	IMAGE = 'IMAGE',
-	DESC_IMAGE = 'DESC_IMAGE',
+	DESC_MEDIA = 'DESC_MEDIA',
 }
 
 export enum EQualityState {
@@ -32,7 +32,7 @@ export const initialState: ScoreState = {
 	[EScoreType.CATEGORIES]: 0,
 	[EScoreType.LOCATION]: 0,
 	[EScoreType.IMAGE]: 0,
-	[EScoreType.DESC_IMAGE]: 0,
+	[EScoreType.DESC_MEDIA]: 0,
 	totalScore: 0,
 	quality: EQualityState.LOW,
 };
@@ -92,8 +92,8 @@ export function calculateScore(
 			newState[EScoreType.IMAGE] =
 				action.payload && !action.payload.startsWith('/') ? 19 : 0;
 			break;
-		case EScoreType.DESC_IMAGE:
-			newState[EScoreType.DESC_IMAGE] = action.payload ? 12 : 0;
+		case EScoreType.DESC_MEDIA:
+			newState[EScoreType.DESC_MEDIA] = action.payload ? 12 : 0;
 			break;
 		default:
 			return state;
@@ -105,7 +105,7 @@ export function calculateScore(
 		newState[EScoreType.CATEGORIES] +
 		newState[EScoreType.LOCATION] +
 		newState[EScoreType.IMAGE] +
-		newState[EScoreType.DESC_IMAGE];
+		newState[EScoreType.DESC_MEDIA];
 
 	newState.quality = getScoreState(newState.totalScore);
 

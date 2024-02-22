@@ -30,7 +30,7 @@
 	"component.givback_toast.desc": "Obtienes GIVbacks al donar a este proyecto.",
 	"component.improve_tip.categories": "Asegúrate de que los donantes entiendan el propósito de tu proyecto eligiendo al menos una categoría.",
 	"component.improve_tip.desc": "La descripción del proyecto es demasiado corta, usa al menos 1200 caracteres para describir tu proyecto.",
-	"component.improve_tip.desc_image": "Agregar medios como fotos o videos relevantes a tu proyecto ayuda a los donantes a visualizar el trabajo que estás haciendo.",
+	"component.improve_tip.desc_media": "Agregar medios como fotos o videos relevantes a tu proyecto ayuda a los donantes a visualizar el trabajo que estás haciendo.",
 	"component.improve_tip.image": "Añade una imagen de banner personalizada para hacer que tu proyecto destaque en Giveth.",
 	"component.improve_tip.location": "Define la ubicación donde este proyecto está creando impacto.",
 	"component.input.search_name": "Busca un nombre",

@@ -18,7 +18,7 @@ interface IImprovementTipsProps {
 
 const tipMap = {
 	[EScoreType.DESCRIPTION]: 'component.improve_tip.desc',
-	[EScoreType.DESC_IMAGE]: 'component.improve_tip.desc_image',
+	[EScoreType.DESC_MEDIA]: 'component.improve_tip.desc_media',
 	[EScoreType.CATEGORIES]: 'component.improve_tip.categories',
 	[EScoreType.LOCATION]: 'component.improve_tip.location',
 	[EScoreType.IMAGE]: 'component.improve_tip.image',
@@ -54,11 +54,11 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 						</P>
 					</TipListItem>
 				)}
-				{fieldsScores.DESC_IMAGE === 0 && (
+				{fieldsScores.DESC_MEDIA === 0 && (
 					<TipListItem color={bulletColor}>
 						<P>
 							{formatMessage({
-								id: tipMap[EScoreType.DESC_IMAGE],
+								id: tipMap[EScoreType.DESC_MEDIA],
 							})}
 						</P>
 					</TipListItem>
