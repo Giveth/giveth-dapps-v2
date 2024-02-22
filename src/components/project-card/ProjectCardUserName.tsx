@@ -37,7 +37,7 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 						)}
 					>
 						{pfpToken ? (
-							<Flex gap='8px' alignItems='center'>
+							<Flex gap='8px' $alignItems='center'>
 								<PFP pfpToken={pfpToken} />
 								<Author bold size='Big'>
 									{name || '\u200C'}
