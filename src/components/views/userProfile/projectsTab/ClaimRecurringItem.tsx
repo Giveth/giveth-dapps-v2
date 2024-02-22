@@ -36,11 +36,11 @@ export const ClaimRecurringItem = ({
 
 	return (
 		<ItemContainer
-			justifyContent='space-between'
-			alignItems='center'
+			$justifyContent='space-between'
+			$alignItems='center'
 			key={tokenWithBalance.token.symbol}
 		>
-			<Flex alignItems='center'>
+			<Flex $alignItems='center'>
 				<TokenIcon
 					symbol={tokenWithBalance.token.underlyingToken?.symbol!}
 				/>
