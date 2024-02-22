@@ -22,8 +22,8 @@ const NFTButtons = ({
 
 	return (
 		<NFTsButtonsContainer
-			flexDirection='row'
-			justifyContent='space-between'
+			$flexDirection='row'
+			$justifyContent='space-between'
 		>
 			<Button
 				buttonType='secondary'
