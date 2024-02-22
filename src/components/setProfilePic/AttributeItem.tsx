@@ -14,7 +14,7 @@ const AttributeItem = ({ heading, subtitle }: IAttributeItem) => {
 	return (
 		<Container
 			isOnboard={isOnboardingPage}
-			flexDirection='column'
+			$flexDirection='column'
 			gap='8px'
 		>
 			<Heading>{heading}</Heading>
