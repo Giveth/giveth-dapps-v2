@@ -32,7 +32,7 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (
 		<>
-			<Flex justifyContent='space-between'>
+			<Flex $justifyContent='space-between'>
 				<SliderLabel>
 					<P>
 						{formatMessage({ id: 'label.rounds_to_lock' })}: &nbsp;
