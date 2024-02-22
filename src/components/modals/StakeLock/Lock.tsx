@@ -139,7 +139,7 @@ const LockModal: FC<ILockModalProps> = ({
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}
 							/>
-							<Flex gap='4px' alignItems='center'>
+							<Flex gap='4px' $alignItems='center'>
 								<SectionTitle weight={700}>
 									{formatMessage({ id: 'label.rounds' })}
 								</SectionTitle>
