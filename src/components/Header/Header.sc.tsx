@@ -265,14 +265,14 @@ export const SmallCreateProject = styled(Button)<IButton>`
 `;
 
 export const LargeCreateProject = styled.div<{
-	isTexty?: boolean;
+	$isTexty?: boolean;
 	$baseTheme?: ETheme;
 }>`
 	display: none;
 	> button {
-		${props => props.isTexty && `height: 50px;`}
+		${props => props.$isTexty && `height: 50px;`}
 		box-shadow: ${props =>
-			props.$baseTheme === ETheme.Dark || props.isTexty
+			props.$baseTheme === ETheme.Dark || props.$isTexty
 				? ''
 				: Shadow.Dark[500]};
 	}
