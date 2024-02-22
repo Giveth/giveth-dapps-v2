@@ -14,20 +14,15 @@ import {
 	Transaction,
 	SystemProgram,
 } from '@solana/web3.js';
-import {
-	Chain,
-	useAccount,
-	useBalance,
-	useDisconnect,
-	useNetwork,
-} from 'wagmi';
+import { useBalance, useDisconnect, useAccount } from 'wagmi';
 import { getWalletClient } from '@wagmi/core';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { ethers } from 'ethers';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
+import { Chain } from 'viem';
+import { utils } from 'ethers';
 import { getChainName } from '@/lib/network';
 import config from '@/configuration';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
@@ -38,6 +33,7 @@ import {
 } from '@/lib/helpers';
 import { ChainType } from '@/types/config';
 import { signOut } from '@/features/user/user.thunks';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 const { SOLANA_CONFIG } = config;
 const solanaAdapter = SOLANA_CONFIG?.adapterNetwork;
@@ -59,7 +55,7 @@ interface IGeneralWalletContext {
 	) => Promise<string | `0x${string}` | undefined>;
 	handleSingOutAndSignInWithEVM: () => Promise<void>;
 	handleSignOutAndSignInWithSolana: () => Promise<void>;
-	handleSignOutAndShowWelcomModal: () => Promise<void>;
+	handleSignOutAndShowWelcomeModal: () => Promise<void>;
 	isOnSolana: boolean;
 	isOnEVM: boolean;
 }
@@ -77,7 +73,7 @@ export const GeneralWalletContext = createContext<IGeneralWalletContext>({
 	sendNativeToken: async () => undefined,
 	handleSingOutAndSignInWithEVM: async () => {},
 	handleSignOutAndSignInWithSolana: async () => {},
-	handleSignOutAndShowWelcomModal: async () => {},
+	handleSignOutAndShowWelcomeModal: async () => {},
 	isOnSolana: false,
 	isOnEVM: false,
 });
@@ -121,7 +117,7 @@ export const GeneralWalletProvider: React.FC<{
 		isConnected: evmIsConnected,
 		isConnecting: evmIsConnecting,
 	} = useAccount();
-	const { chain: evmChain } = useNetwork();
+	const { chain: evmChain } = useAccount();
 	const { disconnect: ethereumWalletDisconnect } = useDisconnect();
 	const nonFormattedEvBalance = useBalance({ address: evmAddress });
 	const [solanaBalance, setSolanaBalance] = useState<number>();
@@ -138,7 +134,7 @@ export const GeneralWalletProvider: React.FC<{
 	const { connection: solanaConnection } = useConnection();
 
 	const signByEvm = async (message: string) => {
-		const walletClient = await getWalletClient();
+		const walletClient = await getWalletClient(wagmiConfig);
 		const signature = await walletClient?.signMessage({ message });
 		return signature;
 	};
@@ -149,7 +145,7 @@ export const GeneralWalletProvider: React.FC<{
 		if (!signature) {
 			return undefined;
 		}
-		return ethers.utils.base58.encode(signature);
+		return utils.base58.encode(signature);
 	};
 
 	const getSolanaWalletBalance = async (
@@ -167,13 +163,13 @@ export const GeneralWalletProvider: React.FC<{
 	};
 
 	const handleSingOutAndSignInWithEVM = async () => {
-		await dispatch(signOut());
+		await dispatch(signOut(null));
 		disconnect();
 		openConnectModal();
 	};
 
 	const handleSignOutAndSignInWithSolana = async () => {
-		await dispatch(signOut());
+		await dispatch(signOut(null));
 		disconnect();
 		setVisible(true);
 	};
@@ -379,7 +375,7 @@ export const GeneralWalletProvider: React.FC<{
 
 	const isOnSolana = walletChainType === ChainType.SOLANA;
 	const isOnEVM = walletChainType === ChainType.EVM;
-	const handleSignOutAndShowWelcomModal = async () => {
+	const handleSignOutAndShowWelcomeModal = async () => {
 		await dispatch(signOut(token!));
 		isOnSolana ? solanaWalletDisconnect() : ethereumWalletDisconnect();
 		setTimeout(() => {
@@ -401,7 +397,7 @@ export const GeneralWalletProvider: React.FC<{
 		sendNativeToken,
 		handleSingOutAndSignInWithEVM,
 		handleSignOutAndSignInWithSolana,
-		handleSignOutAndShowWelcomModal,
+		handleSignOutAndShowWelcomeModal,
 		isOnSolana,
 		isOnEVM,
 	};

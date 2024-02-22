@@ -123,6 +123,7 @@ export const CREATE_DONATION = gql`
 		$anonymous: Boolean
 		$referrerId: String
 		$safeTransactionId: String
+		$draftDonationId: Float
 	) {
 		createDonation(
 			transactionId: $transactionId
@@ -136,6 +137,7 @@ export const CREATE_DONATION = gql`
 			anonymous: $anonymous
 			referrerId: $referrerId
 			safeTransactionId: $safeTransactionId
+			draftDonationId: $draftDonationId
 		)
 	}
 `;
@@ -165,5 +167,31 @@ export const FETCH_QF_ROUND_HISTORY = gql`
 				matchingPool
 			}
 		}
+	}
+`;
+
+export const CREATE_DRAFT_DONATION = gql`
+	mutation (
+		$networkId: Float!
+		$amount: Float!
+		$token: String!
+		$projectId: Float!
+		$tokenAddress: String
+		$toAddress: String
+		$anonymous: Boolean
+		$referrerId: String
+		$safeTransactionId: String
+	) {
+		createDraftDonation(
+			networkId: $networkId
+			amount: $amount
+			token: $token
+			projectId: $projectId
+			toAddress: $toAddress
+			tokenAddress: $tokenAddress
+			anonymous: $anonymous
+			referrerId: $referrerId
+			safeTransactionId: $safeTransactionId
+		)
 	}
 `;

@@ -67,7 +67,7 @@ const ListContainer = styled.div`
 	padding: 10px 20px;
 	border-radius: 8px;
 	cursor: pointer;
-	:hover {
+	&:hover {
 		background: #f5f5f5;
 	}
 `;

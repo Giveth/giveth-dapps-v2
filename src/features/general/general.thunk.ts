@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { backendGQLRequest } from '@/helpers/requests';
-import { FETCH_MAIN_CATEGORIES } from './genera.queries';
+import { FETCH_MAIN_CATEGORIES } from './general.queries';
 import { FETCH_QF_ROUNDS_QUERY } from '@/apollo/gql/gqlQF';
 
 export const fetchMainCategories = createAsyncThunk(

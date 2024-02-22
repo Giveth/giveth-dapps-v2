@@ -11,7 +11,7 @@ import {
 	Subline,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -26,7 +26,7 @@ interface ILockInfo {
 }
 
 const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { apr } =
 		useStakingPool(

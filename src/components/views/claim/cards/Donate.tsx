@@ -45,7 +45,7 @@ const DonatePoolCard = styled(PoolCard)`
 
 const DonateCardContainer = styled(Card)`
 	padding-right: 154px;
-	::before {
+	&::before {
 		content: '';
 		background-image: url('/images/donate.png');
 		position: absolute;
@@ -57,7 +57,7 @@ const DonateCardContainer = styled(Card)`
 	}
 	@media only screen and (max-width: 1360px) {
 		padding-right: 112px;
-		::before {
+		&::before {
 			width: 240px;
 			background-size: contain;
 			background-repeat: no-repeat;
@@ -66,7 +66,7 @@ const DonateCardContainer = styled(Card)`
 	@media only screen and (max-width: 1360px) {
 		@media only screen and (max-width: 1120px) {
 			padding: 8px;
-			::before {
+			&::before {
 				background-image: none;
 			}
 		}

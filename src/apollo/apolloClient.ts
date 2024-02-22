@@ -5,7 +5,7 @@ import { RetryLink } from '@apollo/client/link/retry';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import gql from 'graphql-tag';
-import { createUploadLink } from 'apollo-upload-client';
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import merge from 'deepmerge';
 import isEqual from 'lodash.isequal';
 import { isSSRMode } from '@/lib/helpers';
@@ -119,9 +119,11 @@ function createApolloClient() {
 	});
 
 	const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
-		if (graphQLErrors)
-			graphQLErrors.forEach(({ message, locations, path }) => {
-				console.log(`[GraphQL error]: ${message}`, { locations, path });
+		if (graphQLErrors) {
+			console.log('operation', operation);
+			graphQLErrors.forEach(err => {
+				console.log('err', JSON.stringify(err));
+				const { message, locations, path } = err;
 				if (message.toLowerCase().includes('authentication required')) {
 					console.log(Date.now(), 'sign out from graphQL');
 					//   removes token and user from store
@@ -131,6 +133,7 @@ function createApolloClient() {
 					});
 				}
 			});
+		}
 		if (networkError) console.log(`[Network error]: ${networkError}`);
 		const { response } = operation.getContext();
 

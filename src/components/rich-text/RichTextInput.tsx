@@ -254,7 +254,7 @@ const ReactQuillStyled = styled(ReactQuill)<{
 		border-width: 2px;
 		border-top-color: transparent;
 	}
-	:focus-within {
+	&:focus-within {
 		> div:first-of-type {
 			border-color: ${brandColors.giv[600]};
 		}

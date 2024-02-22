@@ -56,7 +56,7 @@ export const ContractRow = styled(Flex)`
 export const CopyWrapper = styled.div`
 	color: ${brandColors.cyan[500]};
 	cursor: pointer;
-	:hover {
+	&:hover {
 		color: ${brandColors.cyan[300]};
 	}
 `;

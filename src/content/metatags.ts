@@ -109,3 +109,31 @@ export const nftMetatags = {
 	image: 'https://giveth.mypinata.cloud/ipfs/QmULaTJR5KHZeaDQ26p1ALcwAKgMcZGqVqGejPwbcmRwYc',
 	url: 'https://giveth.io/nft',
 };
+
+export const generalOnboardingMetaTags = {
+	title: 'Giveth Onboarding | Intro',
+	desc: 'Learn how to use the Giveth platform like a pro with this onboarding guide!',
+	image: 'https://giveth.mypinata.cloud/ipfs/QmX2242gXzRp5tHWGkJu5L5VbgWD6Fu4NDbLunBhCKBEtY/General%20banner.svg',
+	url: 'https://giveth.io/onboarding',
+};
+
+export const projectOnboardingMetaTags = {
+	title: 'Giveth Onboarding | Projects',
+	desc: 'Learn how to manage your Giveth project like a pro with this onboarding guide!',
+	image: 'https://giveth.mypinata.cloud/ipfs/QmX2242gXzRp5tHWGkJu5L5VbgWD6Fu4NDbLunBhCKBEtY/project%20banner.svg',
+	url: 'https://giveth.io/onboarding/projects',
+};
+
+export const donorOnboardingMetaTags = {
+	title: ' Giveth Onboarding | Donors',
+	desc: 'Learn how to use the Giveth platform like a pro with this onboarding guide!',
+	image: 'https://giveth.mypinata.cloud/ipfs/QmX2242gXzRp5tHWGkJu5L5VbgWD6Fu4NDbLunBhCKBEtY/Donate%20banner.svg',
+	url: 'https://giveth.io/onboarding/donors',
+};
+
+export const giveconomyOnboardingMetaTags = {
+	title: 'Giveth Onboarding | GIVeconomy',
+	desc: 'Learn how to use the GIVeconomy like a pro with this onboarding guide!',
+	image: 'https://giveth.mypinata.cloud/ipfs/QmX2242gXzRp5tHWGkJu5L5VbgWD6Fu4NDbLunBhCKBEtY/GIVecon%20banner.svg',
+	url: 'https://giveth.io/onboarding/giveconomy',
+};

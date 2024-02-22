@@ -7,6 +7,7 @@ import {
 	polygon,
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { type Chain } from 'viem';
 import {
 	ChainType,
 	EnvConfig,
@@ -94,7 +95,8 @@ const EVM_CHAINS = [
 	optimismGoerli,
 	celoAlfajores,
 	classic,
-];
+] as readonly [Chain, ...Chain[]];
+
 const NON_EVM_CHAINS: NonEVMChain[] = [];
 if (isSolanaEnabled) {
 	NON_EVM_CHAINS.push(SOLANA_NETWORK);
@@ -141,7 +143,7 @@ const config: EnvConfig = {
 		GIV_TOKEN_ADDRESS: '0xA2470F25bb8b53Bd3924C7AC0C68d32BF2aBd5be',
 		GIV_BUY_LINK:
 			'https://app.uniswap.org/#/swap?outputCurrency=0x29434A25abd94AE882aA883eea81585Aaa5b078D',
-		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0', // TODO: GOERLI ?
+		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		WETH_TOKEN_ADDRESS: '0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6',
 		TOKEN_DISTRO_ADDRESS: '0x4358c99abFe7A9983B6c96785b8870b5412C5B4B',
 

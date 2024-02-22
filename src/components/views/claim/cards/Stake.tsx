@@ -36,7 +36,7 @@ import { WeiPerEther } from '@/lib/constants/constants';
 import { InputWithUnit } from '@/components/input/InputWithUnit';
 
 const InvestCardContainer = styled(Card)`
-	::before {
+	&::before {
 		content: '';
 		background-image: url('/images/earn.png');
 		position: absolute;

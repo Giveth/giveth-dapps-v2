@@ -59,6 +59,7 @@ export interface ICreateDonation {
 	anonymous?: boolean;
 	chainvineReferred?: string | null;
 	symbol: string;
+	draftDonationId?: number;
 	setFailedModalType: (type: EDonationFailedType) => void;
 }
 

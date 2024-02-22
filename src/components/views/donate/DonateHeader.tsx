@@ -2,13 +2,11 @@ import Image from 'next/image';
 import { FC } from 'react';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
-import { useAccount, useNetwork } from 'wagmi';
-import { useWeb3Modal } from '@web3modal/wagmi/react';
 import Link from 'next/link';
 import { Caption, B, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
-import { useAppSelector } from '@/features/hooks';
+import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
 import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
@@ -21,6 +19,8 @@ import { UserButtonWithMenu } from '@/components/menu/UserButtonWithMenu';
 import Routes from '@/lib/constants/Routes';
 import { useDonateData } from '@/context/donate.context';
 import { useShowHiderByScroll } from '@/hooks/useShowHiderByScroll';
+import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -30,17 +30,17 @@ export interface IHeader {
 export const DonateHeader: FC<IHeader> = () => {
 	const theme = useAppSelector(state => state.general.theme);
 	const { formatMessage } = useIntl();
-	const { address } = useAccount();
-	const { chain } = useNetwork();
+	const { walletAddress } = useGeneralWallet();
+	const dispatch = useAppDispatch();
 	const router = useRouter();
-	const { open: openConnectModal } = useWeb3Modal();
+
 	const { project } = useDonateData();
 	const showHeader = useShowHiderByScroll();
-	const chainId = chain?.id;
+
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
 	return (
-		<StyledHeader alignItems='center' theme={theme} show={showHeader}>
+		<StyledHeader alignItems='center' themeState={theme} show={showHeader}>
 			<Flex alignItems='center' gap='16px'>
 				<Link href={Routes.Project + '/' + project.slug}>
 					<Logo>
@@ -59,7 +59,7 @@ export const DonateHeader: FC<IHeader> = () => {
 			</Flex>
 			<FlexSpacer />
 			<Flex gap='8px'>
-				{address && chainId ? (
+				{walletAddress ? (
 					<UserButtonWithMenu
 						isHeaderShowing={showHeader}
 						theme={theme}
@@ -73,7 +73,7 @@ export const DonateHeader: FC<IHeader> = () => {
 								? 'component.button.connect_wallet'
 								: 'component.button.sign_in',
 						})}
-						onClick={() => openConnectModal?.()}
+						onClick={() => dispatch(setShowWelcomeModal(true))}
 					/>
 				)}
 			</Flex>

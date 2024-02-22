@@ -1,4 +1,4 @@
-import { type Address } from 'wagmi';
+import { Address } from 'viem';
 import { ChainType } from '@/types/config';
 import {
 	ICategory,

@@ -7,7 +7,7 @@ import {
 	Container,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import config from '@/configuration';
 import {
 	SimplePoolStakingConfig,
@@ -29,7 +29,7 @@ import { getNowUnixMS } from '@/helpers/time';
 import { TWO_WEEK } from '@/lib/constants/constants';
 import StakingPoolCard from '@/components/cards/StakingCards/BaseStakingCard/BaseStakingCard';
 import { RegenStreamSection } from '@/components/givfarm/RegenStreamSection';
-import ToggleSwitch from '@/components/styled-components/Switch';
+import ToggleSwitch from '@/components/ToggleSwitch';
 import { getNetworkConfig } from '@/helpers/givpower';
 
 const renderPool = (
@@ -88,7 +88,7 @@ const renderPools = (chainId?: number, showArchivedPools?: boolean) => {
 
 export const GIVfarmBottom = () => {
 	const { formatMessage } = useIntl();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const [showArchivedPools, setShowArchivedPools] = useState(false);
 
@@ -153,8 +153,8 @@ export const GIVfarmBottom = () => {
 						label={formatMessage({
 							id: 'label.switch_to_archive_cards',
 						})}
-						checked={showArchivedPools}
-						setStateChange={setShowArchivedPools}
+						isOn={showArchivedPools}
+						toggleOnOff={setShowArchivedPools}
 					/>
 				</GIVfarmToolBoxRow>
 				<PoolRow>{renderPools(chainId, showArchivedPools)}</PoolRow>

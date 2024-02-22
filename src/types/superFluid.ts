@@ -1,4 +1,4 @@
-import { type Address } from 'wagmi';
+import { type Address } from 'viem';
 
 export type IToken = {
 	id: Address;
@@ -23,4 +23,13 @@ export interface ISuperfluidStream {
 	};
 	token: ISuperToken;
 	currentFlowRate: string;
+}
+
+export interface IStream {
+	id: string;
+	token: IToken;
+}
+
+export interface IProjectStreamsData {
+	streams: IStream[];
 }

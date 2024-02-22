@@ -3,16 +3,17 @@ import unescape from 'lodash/unescape';
 
 // import { keccak256 } from '@ethersproject/keccak256';
 
-import { getContract } from 'wagmi/actions';
+import { erc20Abi } from 'viem';
 import {
 	writeContract,
 	sendTransaction as wagmiSendTransaction,
+	readContract,
 } from '@wagmi/core';
 
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
-import { type Address, erc20ABI } from 'wagmi';
-import { Chain, parseEther, parseUnits } from 'viem';
+// import { type Address, erc20Abi } from 'wagmi';
+import { Address, Chain, parseEther, parseUnits } from 'viem';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { getRequest } from '@/helpers/requests';
@@ -21,6 +22,7 @@ import { gToast, ToastType } from '@/components/toasts';
 import config, { isProduction } from '@/configuration';
 import { AddressZero } from './constants/constants';
 import { ChainType, NonEVMChain } from '@/types/config';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 declare let window: any;
 interface TransactionParams {
@@ -206,13 +208,11 @@ export const formatDate = (date: Date, locale?: string) => {
 };
 
 export const smallFormatDate = (date: Date, locale?: string) => {
-	return date
-		.toLocaleString(locale || 'en-US', {
-			day: 'numeric',
-			year: 'numeric',
-			month: 'short',
-		})
-		.replace(/,/g, '');
+	return date.toLocaleString(locale || 'en-US', {
+		day: 'numeric',
+		year: 'numeric',
+		month: 'short',
+	});
 };
 
 export const isSSRMode = typeof window === 'undefined';
@@ -354,28 +354,30 @@ async function handleErc20Transfer(
 	params: TransactionParams,
 	contractAddress: Address,
 ): Promise<Address> {
-	const contract = getContract({
+	const baseProps = {
 		address: contractAddress,
-		abi: erc20ABI,
+		abi: erc20Abi,
+	};
+	const decimals = await readContract(wagmiConfig, {
+		...baseProps,
+		functionName: 'decimals',
 	});
-	const decimals = await contract.read.decimals();
 	const value = parseUnits(params.value, decimals);
-	const write = await writeContract({
-		address: contractAddress,
-		abi: erc20ABI,
+	const hash = await writeContract(wagmiConfig, {
+		...baseProps,
 		functionName: 'transfer',
 		args: [params.to, value],
 		// @ts-ignore -- needed for safe txs
 		value: 0n,
 	});
-	return write.hash;
+	return hash;
 }
 
 // Handles the transfer for ETH, returning the transaction hash.
 async function handleEthTransfer(params: TransactionParams): Promise<Address> {
 	const value = parseEther(params.value);
 
-	const { hash } = await wagmiSendTransaction({
+	const hash = await wagmiSendTransaction(wagmiConfig, {
 		to: params.to,
 		value: value,
 		data: '0x',

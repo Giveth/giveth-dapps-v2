@@ -109,6 +109,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 					projectDonationsSqrtRootSum,
 					allProjectsSum,
 					matchingPool,
+					selectedQF.maximumReward,
 				)
 			: qfRoundHistory
 				? qfRoundHistory.matchingFund !== null
@@ -118,6 +119,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 								.projectDonationsSqrtRootSum,
 							qfRoundHistory.estimatedMatching.allProjectsSum,
 							qfRoundHistory.estimatedMatching.matchingPool,
+							selectedQF.maximumReward,
 						)
 				: 0
 		: 0;
@@ -224,11 +226,13 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 											<EstimatedMatchingTransaction>
 												<BlockExplorerLink
 													as='a'
-													href={`${config
-														.EVM_NETWORKS_CONFIG[
-														+qfRoundHistory.distributedFundNetwork!
-													]?.blockExplorers?.default
-														.url}
+													href={`${
+														config
+															.EVM_NETWORKS_CONFIG[
+															+qfRoundHistory.distributedFundNetwork!
+														]?.blockExplorers
+															?.default.url
+													}
 			/tx/${qfRoundHistory?.distributedFundTxHash}`}
 													target='_blank'
 													size='Big'

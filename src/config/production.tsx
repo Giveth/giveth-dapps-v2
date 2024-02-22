@@ -5,9 +5,10 @@ import {
 	mainnet,
 	optimism,
 	polygon,
-} from 'wagmi/chains';
+} from '@wagmi/core/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import React from 'react';
+import { type Chain } from 'viem';
 import {
 	ChainType,
 	EnvConfig,
@@ -50,7 +51,15 @@ const SOLANA_NETWORK: NonEVMChain = {
 		},
 	},
 };
-const EVM_CHAINS = [mainnet, gnosis, polygon, optimism, celo, classic];
+const EVM_CHAINS = [
+	mainnet,
+	gnosis,
+	polygon,
+	optimism,
+	celo,
+	classic,
+] as readonly [Chain, ...Chain[]];
+
 const NON_EVM_CHAINS: NonEVMChain[] = [];
 if (isSolanaEnabled) {
 	NON_EVM_CHAINS.push(SOLANA_NETWORK);
@@ -107,7 +116,7 @@ const config: EnvConfig = {
 
 		GIV_TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
 		GIV_BUY_LINK: 'https://swap.giveth.io/#/1/swap/ETH/GIV',
-		tokenAddressOnUniswapV2: '0x900db999074d9277c5da2a43f252d74366230da0',
+		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		WETH_TOKEN_ADDRESS: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
 		TOKEN_DISTRO_ADDRESS: '0x87dE995F6744B75bBe0255A973081142aDb61f4d',
 		// GIV: {

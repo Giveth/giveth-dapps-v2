@@ -15,6 +15,7 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
@@ -26,12 +27,9 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Flex } from '../styled-components/Flex';
 import { ProjectCardUserName } from './ProjectCardUserName';
-import {
-	calculateTotalEstimatedMatching,
-	getActiveRound,
-	hasActiveRound,
-} from '@/helpers/qf';
+import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
 import { formatDonation } from '@/helpers/number';
+import { RoundNotStartedModal } from './RoundNotStartedModal';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -40,6 +38,7 @@ const SIDE_PADDING = '26px';
 interface IProjectCard {
 	project: IProject;
 	className?: string;
+	order?: number;
 }
 
 const ProjectCard = (props: IProjectCard) => {
@@ -62,25 +61,40 @@ const ProjectCard = (props: IProjectCard) => {
 		estimatedMatching,
 	} = project;
 	const [isHover, setIsHover] = useState(false);
-
+	const [showHintModal, setShowHintModal] = useState(false);
+	const [destination, setDestination] = useState('');
 	const orgLabel = organization?.label;
 	const isForeignOrg =
 		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
 	const name = adminUser?.name;
 	const { formatMessage, formatRelativeTime, locale } = useIntl();
+	const router = useRouter();
 
-	const isRoundActive = hasActiveRound(qfRounds);
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
-	const activeRound = getActiveRound(qfRounds);
-	const hasFooter = isRoundActive || verified;
+	const activeQFRound = getActiveRound(qfRounds);
+	const hasFooter = activeQFRound || verified;
+
+	const projectLink = slugToProjectView(slug);
+	const donateLink = slugToProjectDonate(slug);
+
+	// Show hint modal if the user clicks on the card and the round is not started
+	const handleClick = (e: any) => {
+		if (router.route === '/qf/[slug]') {
+			if (activeQFRound) return;
+			e.preventDefault();
+			e.stopPropagation();
+			setShowHintModal(true);
+		}
+	};
 
 	return (
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 			className={className}
+			order={props.order}
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges project={project} />
@@ -88,7 +102,13 @@ const ProjectCard = (props: IProjectCard) => {
 					organization={orgLabel}
 					isHover={isHover}
 				/>
-				<Link href={slugToProjectView(slug)}>
+				<Link
+					href={projectLink}
+					onClick={e => {
+						setDestination(projectLink);
+						handleClick(e);
+					}}
+				>
 					<ProjectCardImage image={image} />
 				</Link>
 			</ImagePlaceholder>
@@ -113,7 +133,13 @@ const ProjectCard = (props: IProjectCard) => {
 							formatMessage({ id: 'label.just_now' }),
 						)}
 					</LastUpdatedContainer>
-					<Link href={slugToProjectView(slug)}>
+					<Link
+						href={projectLink}
+						onClick={e => {
+							setDestination(projectLink);
+							handleClick(e);
+						}}
+					>
 						<Title weight={700} isHover={isHover}>
 							{title}
 						</Title>
@@ -125,20 +151,26 @@ const ProjectCard = (props: IProjectCard) => {
 					slug={slug}
 					isForeignOrg={isForeignOrg}
 				/>
-				<Link href={slugToProjectView(slug)}>
+				<Link
+					href={projectLink}
+					onClick={e => {
+						setDestination(projectLink);
+						handleClick(e);
+					}}
+				>
 					<Description>{descriptionSummary}</Description>
 					<PaddedRow justifyContent='space-between'>
 						<Flex flexDirection='column' gap='2px'>
 							<PriceText>
 								{formatDonation(
-									(isRoundActive
+									(activeQFRound
 										? sumDonationValueUsdForActiveQfRound
 										: sumDonationValueUsd) || 0,
 									'$',
 									locale,
 								)}
 							</PriceText>
-							{isRoundActive ? (
+							{activeQFRound ? (
 								<AmountRaisedText>
 									{formatMessage({
 										id: 'label.amount_raised_in_this_round',
@@ -160,7 +192,7 @@ const ProjectCard = (props: IProjectCard) => {
 								</LightSubline>
 								<Subline style={{ display: 'inline-block' }}>
 									&nbsp;
-									{isRoundActive
+									{activeQFRound
 										? countUniqueDonorsForActiveQfRound
 										: countUniqueDonors}
 									&nbsp;
@@ -171,7 +203,7 @@ const ProjectCard = (props: IProjectCard) => {
 											id: 'label.contributors',
 										},
 										{
-											count: isRoundActive
+											count: activeQFRound
 												? countUniqueDonorsForActiveQfRound
 												: countUniqueDonors,
 										},
@@ -179,7 +211,7 @@ const ProjectCard = (props: IProjectCard) => {
 								</LightSubline>
 							</div>
 						</Flex>
-						{isRoundActive ? (
+						{activeQFRound && (
 							<Flex flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
 									+
@@ -188,6 +220,7 @@ const ProjectCard = (props: IProjectCard) => {
 											projectDonationsSqrtRootSum,
 											allProjectsSum,
 											matchingPool,
+											activeQFRound?.maximumReward,
 										),
 										'$',
 										locale,
@@ -200,11 +233,17 @@ const ProjectCard = (props: IProjectCard) => {
 									})}
 								</LightSubline>
 							</Flex>
-						) : null}
+						)}
 					</PaddedRow>
 				</Link>
 				{hasFooter && (
-					<Link href={slugToProjectView(slug)}>
+					<Link
+						href={projectLink}
+						onClick={e => {
+							setDestination(projectLink);
+							handleClick(e);
+						}}
+					>
 						<Hr />
 						<PaddedRow justifyContent='space-between'>
 							<Flex gap='16px'>
@@ -220,8 +259,8 @@ const ProjectCard = (props: IProjectCard) => {
 										</VerifiedText>
 									</Flex>
 								)}
-								{isRoundActive && (
-									<QFBadge>{activeRound?.name}</QFBadge>
+								{activeQFRound && (
+									<QFBadge>{activeQFRound?.name}</QFBadge>
 								)}
 							</Flex>
 							{/* {verified && (
@@ -244,7 +283,13 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				)}
 				<ActionButtons>
-					<Link href={slugToProjectDonate(slug)}>
+					<Link
+						href={donateLink}
+						onClick={e => {
+							setDestination(donateLink);
+							handleClick(e);
+						}}
+					>
 						<CustomizedDonateButton
 							linkType='primary'
 							size='small'
@@ -254,6 +299,13 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				</ActionButtons>
 			</CardBody>
+			{showHintModal && qfRounds && (
+				<RoundNotStartedModal
+					setShowModal={setShowHintModal}
+					destination={destination}
+					qfRounds={qfRounds}
+				/>
+			)}
 		</Wrapper>
 		// </Link>
 	);
@@ -366,7 +418,7 @@ const ImagePlaceholder = styled.div`
 	overflow: hidden;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ order?: number }>`
 	position: relative;
 	width: 100%;
 	border-radius: ${cardRadius};
@@ -375,6 +427,7 @@ const Wrapper = styled.div`
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
 	height: 536px;
+	order: ${props => props.order};
 	${mediaQueries.laptopS} {
 		height: 472px;
 	}
@@ -395,7 +448,7 @@ export const PaddedRow = styled(Flex)`
 export const StyledPaddedRow = styled(PaddedRow)`
 	margin-bottom: 16px;
 	margin-top: 2px;
-	& > a span:hover {
+	& > a span&:hover {
 		color: ${brandColors.pinky[500]} !important;
 	}
 	&:hover #pfp-avatar {

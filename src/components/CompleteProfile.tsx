@@ -66,7 +66,7 @@ const IconXContainer = styled(FlexCenter)`
 `;
 
 const ButtonTexty = styled(Button)`
-	:hover {
+	&:hover {
 		background: transparent;
 		color: ${brandColors.deep[200]};
 	}

@@ -8,7 +8,7 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Modal } from '../Modal';
 import { Flex } from '../../styled-components/Flex';
 import { StakingPoolImages } from '../../StakingPoolImages';
@@ -79,7 +79,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 	);
 	const userGIVLocked = sdh.getUserGIVLockedBalance();
 	const { stakedAmount } = useStakingPool(poolStakingConfig);
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { title, type, LM_ADDRESS } =
 		poolStakingConfig as SimplePoolStakingConfig;

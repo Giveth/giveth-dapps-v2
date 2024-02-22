@@ -17,7 +17,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { formatUnits } from 'viem';
-import { useAccount, useBalance, useNetwork } from 'wagmi';
+import { useAccount, useBalance } from 'wagmi';
 import Slider from 'rc-slider';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
@@ -62,7 +62,7 @@ export const RecurringDonationCard = () => {
 
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const { project, selectedToken, tokenStreams } = useDonateData();
 
 	const {
@@ -75,8 +75,8 @@ export const RecurringDonationCard = () => {
 				? undefined
 				: selectedToken?.token.id,
 		address: address,
-		watch: true,
-		cacheTime: 5_000,
+		// watch: true,
+		// cacheTime: 5_000,
 	});
 
 	const isGivethProject = Number(project.id!) === config.GIVETH_PROJECT_ID;

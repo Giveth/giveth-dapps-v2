@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchMainCategories, fetchQFRounds } from './general.thunk';
 import { IMainCategory, IQFRound } from '@/apollo/types/types';
+import { QF_SPECIFIC_CATEGORIES } from '@/configuration';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export enum ETheme {
@@ -45,7 +46,10 @@ export const GeneralSlice = createSlice({
 	},
 	extraReducers: builder => {
 		builder.addCase(fetchMainCategories.fulfilled, (state, action) => {
-			state.mainCategories = action.payload.data.mainCategories;
+			state.mainCategories = action.payload.data.mainCategories.filter(
+				(mainCategory: IMainCategory) =>
+					!QF_SPECIFIC_CATEGORIES.some(c => c === mainCategory.slug),
+			);
 		});
 		builder.addCase(fetchQFRounds.fulfilled, (state, action) => {
 			state.qfRounds = action.payload.data.qfRounds;

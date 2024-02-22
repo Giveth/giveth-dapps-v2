@@ -10,7 +10,7 @@ import {
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 import { captureException } from '@sentry/nextjs';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { WriteContractReturnType } from 'viem';
 import { Modal } from './Modal';
 import {
@@ -83,7 +83,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 	const givTokenDistroBalance = sdh.getGIVTokenDistroBalance();
 	const givPrice = useAppSelector(state => state.price.givPrice);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { address } = useAccount();
 

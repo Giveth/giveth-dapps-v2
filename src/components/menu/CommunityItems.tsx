@@ -51,8 +51,8 @@ export const CommunityItem: FC<ICommunityItemProps> = ({ item }) => {
 	const { formatMessage } = useIntl();
 
 	return (
-		<Item theme={theme}>
-			<ItemTitle theme={theme}>
+		<Item themeState={theme}>
+			<ItemTitle themeState={theme}>
 				{formatMessage({ id: item.title })}
 			</ItemTitle>
 			<ItemRow>

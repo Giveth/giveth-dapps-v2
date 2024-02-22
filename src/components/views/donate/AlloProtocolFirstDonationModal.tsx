@@ -6,19 +6,19 @@ import {
 	P,
 	brandColors,
 } from '@giveth/ui-design-system';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
-import { WriteContractResult } from '@wagmi/core';
-import { waitForTransaction } from '@wagmi/core';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { useIntl } from 'react-intl';
+import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
+import { Address } from 'viem';
+import { wagmiConfig } from '@/wagmiConfigs';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import config from '@/configuration';
-import useCreateAnchorContract from '@/hooks/useCreateAnchorContract';
 import { CREATE_ANCHOR_CONTRACT_ADDRESS_QUERY } from '@/apollo/gql/gqlSuperfluid';
 import { client } from '@/apollo/apolloClient';
 import { useDonateData } from '@/context/donate.context';
 import { IModal } from '@/types/common';
-
+import createProfileABI from '@/artifacts/createProfile.json';
 interface IAlloProtocolModal extends IModal {
 	onModalCompletion: () => void;
 }
@@ -42,11 +42,11 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 	onModalCompletion,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { chain } = useNetwork();
+	const { chain, address } = useAccount();
 	const [isLoading, setIsLoading] = useState(false);
-	const [txResult, setTxResult] = useState<WriteContractResult>();
+	const [txResult, setTxResult] = useState<Address>();
 
-	const { switchNetwork } = useSwitchNetwork();
+	const { switchChain } = useSwitchChain();
 	const { project, fetchProject } = useDonateData();
 	const { formatMessage } = useIntl();
 	const updatedCloseModal = () => {
@@ -61,23 +61,33 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 	const isOnOptimism = chain
 		? chain.id === config.OPTIMISM_NETWORK_NUMBER
 		: false;
-	const { writeAsync } = useCreateAnchorContract({
-		adminUser: project?.adminUser,
-		id: project?.id,
-		slug: project?.slug!,
-	});
 
 	const handleButtonClick = async () => {
 		if (!isOnOptimism) {
-			switchNetwork?.(config.OPTIMISM_NETWORK_NUMBER);
+			switchChain?.({ chainId: config.OPTIMISM_NETWORK_NUMBER });
 		} else {
 			try {
 				setIsLoading(true);
-				const tx = await writeAsync?.();
-				setTxResult(tx);
-				if (tx?.hash) {
-					const data = await waitForTransaction({
-						hash: tx.hash,
+				const hash = await writeContract(wagmiConfig, {
+					address: config.OPTIMISM_CONFIG.anchorRegistryAddress,
+					functionName: 'createProfile',
+					abi: createProfileABI.abi,
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					args: [
+						+project?.id!, // project id
+						project?.slug!,
+						{
+							protocol: 1,
+							pointer: '',
+						},
+						project?.adminUser.walletAddress, //admin user wallet address
+						[],
+					],
+				});
+				setTxResult(hash);
+				if (hash) {
+					const data = await waitForTransactionReceipt(wagmiConfig, {
+						hash: hash,
 						chainId: config.OPTIMISM_NETWORK_NUMBER,
 					});
 
@@ -91,16 +101,15 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 							projectId: Number(project.id),
 							networkId: config.OPTIMISM_NETWORK_NUMBER,
 							address: contractAddress,
-							txHash: tx.hash,
+							txHash: hash,
 						},
 					});
-				}
-				if (tx?.hash) {
 					await fetchProject();
 					onModalCompletion();
 				}
 				setShowModal(false); // Close the modal
 			} catch (error) {
+				console.log('error', error);
 			} finally {
 				setIsLoading(false);
 			}

@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useMemo, useState } from 'react';
-import { P } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Modal } from '../Modal';
 import { StakingPoolImages } from '../../StakingPoolImages';
 import { approveERC20tokenTransfer, stakeTokens } from '@/lib/stakingPool';
@@ -12,7 +11,7 @@ import {
 } from '../ConfirmSubmit';
 import { waitForTransaction } from '@/lib/transaction';
 import { StakeState } from '@/lib/staking';
-import ToggleSwitch from '../../styled-components/Switch';
+import ToggleSwitch from '@/components/ToggleSwitch';
 import { IModal } from '@/types/common';
 import {
 	CancelButton,
@@ -72,7 +71,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	const [stakeState, setStakeState] = useState<StakeState>(
 		StakeState.APPROVE,
 	);
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { address } = useAccount();
 	const { notStakedAmount: maxAmount } = useStakingPool(poolStakingConfig);
@@ -147,10 +146,11 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	};
 
 	const onStake = async () => {
-		if (!chainId) return;
+		if (!chainId || !address) return;
 		setStakeState(StakeState.STAKING);
 		try {
 			const txResponse = await stakeTokens(
+				address,
 				amount,
 				POOL_ADDRESS,
 				LM_ADDRESS,
@@ -217,7 +217,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 							{!onlyApproveMode && (
 								<ToggleContainer>
 									<ToggleSwitch
-										checked={permit}
+										isOn={permit}
 										disabled={
 											!(
 												stakeState ===
@@ -225,9 +225,11 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 												stakeState === StakeState.STAKE
 											)
 										}
-										setStateChange={handlePermit}
+										toggleOnOff={handlePermit}
+										label={`${
+											permit ? 'Permit' : 'Approve'
+										} mode`}
 									/>
-									<P>{permit ? 'Permit' : 'Approve'} mode</P>
 								</ToggleContainer>
 							)}
 							{(stakeState === StakeState.APPROVE ||

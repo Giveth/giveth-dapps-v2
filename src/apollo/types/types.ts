@@ -1,3 +1,4 @@
+import { Address } from 'viem';
 import {
 	EDonationStatus,
 	EDonationType,
@@ -29,7 +30,7 @@ export interface IEstimatedMatching {
 }
 
 export interface IAnchorContractData {
-	address: string;
+	address: Address;
 	isActive: boolean;
 }
 
@@ -419,6 +420,7 @@ export interface IUsersPFPTokens {
 }
 
 export interface IQFRound {
+	slug: string;
 	id: string;
 	name: string;
 	isActive: boolean;
@@ -426,6 +428,7 @@ export interface IQFRound {
 	endDate: string;
 	minimumPassportScore: number;
 	eligibleNetworks: number[];
+	maximumReward: number;
 }
 
 export interface IGetQfRoundHistory {

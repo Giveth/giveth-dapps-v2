@@ -167,7 +167,7 @@ const TokenPicker = (props: {
 				...baseStyles,
 				width: '100%',
 				background: isSelected ? neutralColors.gray[200] : 'white',
-				':hover': {
+				'&:hover': {
 					background: neutralColors.gray[200],
 				},
 				color: neutralColors.gray[900],

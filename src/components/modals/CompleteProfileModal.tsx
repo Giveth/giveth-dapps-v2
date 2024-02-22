@@ -97,7 +97,7 @@ const SkipButton = styled(Button)`
 	margin: 0 auto 0;
 	background: transparent;
 	color: ${brandColors.deep[100]};
-	:hover {
+	&:hover {
 		background: transparent;
 		color: ${brandColors.deep[200]};
 	}
