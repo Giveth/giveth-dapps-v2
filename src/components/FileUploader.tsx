@@ -179,13 +179,13 @@ const FileUploader: FC<IFileUploader> = ({
 								quality={100}
 							/>
 							<UploadInfoRow
-								flexDirection='column'
-								justifyContent='space-between'
+								$flexDirection='column'
+								$justifyContent='space-between'
 							>
 								<Subline>{file.name}</Subline>
 								{file.status ===
 									EFileUploadingStatus.UPLOADED && (
-									<Flex alignItems='center'>
+									<Flex $alignItems='center'>
 										<SublineBold>
 											{formatMessage({
 												id: 'label.uplodaded',
@@ -215,7 +215,7 @@ const FileUploader: FC<IFileUploader> = ({
 								)}
 								{file.status ===
 									EFileUploadingStatus.FAILED && (
-									<Flex justifyContent='space-between'>
+									<Flex $justifyContent='space-between'>
 										<SublineBold>
 											{formatMessage({
 												id: 'label.failed',
@@ -237,11 +237,11 @@ const FileUploader: FC<IFileUploader> = ({
 								quality={100}
 							/>
 							<UploadInfoRow
-								flexDirection='column'
-								justifyContent='space-between'
+								$flexDirection='column'
+								$justifyContent='space-between'
 							>
 								<Subline>{`Attachment ${idx + 1}`}</Subline>
-								<Flex alignItems='center'>
+								<Flex $alignItems='center'>
 									<SublineBold>
 										{formatMessage({
 											id: 'label.uploaded',
