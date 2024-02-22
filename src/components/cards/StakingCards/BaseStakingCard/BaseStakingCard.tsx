@@ -76,7 +76,7 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							isGIVpower={isGIVpower}
 							notif={notif}
 						/>
-						<SPTitle alignItems='center' gap='16px'>
+						<SPTitle $alignItems='center' gap='16px'>
 							<StakingPoolImages title={title} icon={icon} />
 							<div>
 								<StakingPoolLabel weight={900}>
