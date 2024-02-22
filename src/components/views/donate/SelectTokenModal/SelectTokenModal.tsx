@@ -206,7 +206,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				)}
 			</Wrapper>
 			<GIVbackWrapper>
-				<Flex gap='8px' alignItems='center'>
+				<Flex gap='8px' $alignItems='center'>
 					<IconGIVBack size={24} color={brandColors.giv[500]} />
 					<SublineBold>
 						{formatMessage({
