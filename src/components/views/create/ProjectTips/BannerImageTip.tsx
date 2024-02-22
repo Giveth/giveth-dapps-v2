@@ -7,7 +7,7 @@ import { Flex } from '@/components/styled-components/Flex';
 const BannerImageTip = () => {
 	const { formatMessage } = useIntl();
 	return (
-		<Flex flexDirection='column' gap='16px'>
+		<Flex $flexDirection='column' gap='16px'>
 			<TipListItem>
 				<P>
 					{formatMessage({
