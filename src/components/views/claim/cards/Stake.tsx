@@ -185,15 +185,18 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 					{APR ? `${formatEthHelper(APR)}% APR` : ' ? '}
 				</Desc>
 			</StakeHeader>
-			<APRRow alignItems={'flex-start'} justifyContent={'space-between'}>
+			<APRRow
+				$alignItems={'flex-start'}
+				$justifyContent={'space-between'}
+			>
 				<ImpactCard>
 					<H5 as='h2' weight={700}>
 						See how much you could earn
 					</H5>
 					<div>
 						<Flex
-							alignItems={'center'}
-							justifyContent={'space-between'}
+							$alignItems={'center'}
+							$justifyContent={'space-between'}
 						>
 							<ImpactCardLabel>If you deposit</ImpactCardLabel>
 							<MaxStakeGIV
@@ -222,7 +225,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 					<PoolCardTitle>If you stake for 1 month:</PoolCardTitle>
 					<PoolCard>
 						<PoolItems>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>APR</PoolItem>
 								<PoolItemBold>
 									<Image
@@ -234,13 +237,13 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 									{formatEthHelper(APR ? APR : Zero)}%
 								</PoolItemBold>
 							</Flex>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>Claimable</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(potentialClaim)} GIV
 								</PoolItemBold>
 							</Flex>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>Streaming</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(earnEstimate)} GIV
