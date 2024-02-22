@@ -83,7 +83,7 @@ export const Dropdown: FC<IDropdownProps> = props => {
 			ref={containerRef}
 			onClick={() => setIsOpen(_open => !_open)}
 		>
-			<Controller justifyContent='space-between'>
+			<Controller $justifyContent='space-between'>
 				<GLink size='Big'>{label}</GLink>
 				<IconWrapper>
 					{isOpen ? <IconChevronUp24 /> : <IconChevronDown24 />}
