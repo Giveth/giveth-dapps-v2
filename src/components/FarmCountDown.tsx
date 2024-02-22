@@ -25,9 +25,9 @@ const FarmCountDown: FC<IFarmCountDown> = ({ startTime, setStarted }) => {
 	}, []);
 	return (
 		<FarmCountDownContainer
-			flexDirection='column'
-			justifyContent='center'
-			alignItems='center'
+			$flexDirection='column'
+			$justifyContent='center'
+			$alignItems='center'
 		>
 			<Subline>Coming soon</Subline>
 			<Timer>
