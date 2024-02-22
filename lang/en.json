@@ -90,6 +90,7 @@
 	"giveconomy": "GIVeconomy",
 	"giveth": "Giveth",
 	"grassroots": "Grassroots",
+	"component.create_project.low_score": "Your project score is below the minimum score of 50. add more detail to your project to proceed",
 	"health-care": "Health Care",
 	"housing": "Housing",
 	"inclusion": "Inclusion",

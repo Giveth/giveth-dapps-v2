@@ -5,6 +5,7 @@
 	"animals": "Animals",
 	"art": "Art",
 	"bipoc-comomunities": "Comunitats BIPOC",
+	"component.create_project.low_score": "La puntuació del teu projecte està per sota de la puntuació mínima de 50. Afegeix més detalls al teu projecte per procedir",
 	"children-health": "Salut Infantil",
 	"climate-action": "Acció climàtica",
 	"component.already_donated.incorrect_estimate": "You have already donated to this project so the estimated matching will be incorrect.",
