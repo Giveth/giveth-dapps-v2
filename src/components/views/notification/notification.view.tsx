@@ -134,8 +134,8 @@ function NotificationView() {
 				<IconContainer>
 					<IconNotificationOutline32 />
 				</IconContainer>
-				<NotificationDesc flexDirection='column'>
-					<Flex justifyContent='space-between'>
+				<NotificationDesc $flexDirection='column'>
+					<Flex $justifyContent='space-between'>
 						<H5 weight={700}>
 							{formatMessage({ id: 'label.notification_center' })}
 						</H5>
@@ -153,9 +153,9 @@ function NotificationView() {
 				</NotificationDesc>
 			</Flex>
 			<Flex
-				justifyContent='space-between'
-				alignItems={isMobile ? 'stretch' : 'center'}
-				flexDirection={isMobile ? 'column' : 'row'}
+				$justifyContent='space-between'
+				$alignItems={isMobile ? 'stretch' : 'center'}
+				$flexDirection={isMobile ? 'column' : 'row'}
 			>
 				<TabsContainer>
 					<NotifisTabItem
