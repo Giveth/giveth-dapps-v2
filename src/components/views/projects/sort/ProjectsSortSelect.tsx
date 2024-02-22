@@ -114,8 +114,8 @@ const ProjectsSortSelect = () => {
 	return (
 		<Flex
 			gap='8px'
-			alignItems={isMobile ? 'stretch' : 'center'}
-			flexDirection={isMobile ? 'column' : 'row'}
+			$alignItems={isMobile ? 'stretch' : 'center'}
+			$flexDirection={isMobile ? 'column' : 'row'}
 		>
 			<SortingLabel htmlFor='sorting'>
 				{formatMessage({ id: 'label.sort_by' })}
