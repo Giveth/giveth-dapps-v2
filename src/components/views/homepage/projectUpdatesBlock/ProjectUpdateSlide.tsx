@@ -92,7 +92,7 @@ export const ProjectUpdateSlide: FC<IProjectUpdateSlideProps> = ({
 								__html: update?.content || '',
 							}}
 						/>
-						<Flex justifyContent='flex-end'>
+						<Flex $justifyContent='flex-end'>
 							<Link
 								href={`${Routes.Project}/${project.slug}?tab=${EProjectPageTabs.UPDATES}`}
 							>
