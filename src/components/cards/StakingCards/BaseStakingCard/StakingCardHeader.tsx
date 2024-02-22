@@ -35,7 +35,7 @@ export const StakingCardHeader: FC<IStakingCardHeaderProps> = ({
 	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
 
 	return (
-		<StakingPoolExchangeRow gap='4px' alignItems='center'>
+		<StakingPoolExchangeRow gap='4px' $alignItems='center'>
 			<StakingPoolExchange styleType='Small'>
 				{regenStreamType
 					? 'REGENFARM'
