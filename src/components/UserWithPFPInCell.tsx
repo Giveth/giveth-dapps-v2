@@ -21,7 +21,7 @@ export const UserWithPFPInCell: FC<IUserWithPFPInCell> = ({ user }) => {
 		shortenAddress(user?.walletAddress?.toLowerCase()) ||
 		'\u200C';
 	return pfpToken ? (
-		<Flex gap='12px' alignItems='center'>
+		<Flex gap='12px' $alignItems='center'>
 			<StyledPFP pfpToken={pfpToken} />
 			<Link href={userProfileLink}>{name}</Link>
 		</Flex>
