@@ -181,7 +181,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 					<ModifyInfoToast />
 				</>
 			) : (
-				<Flex flexDirection='column' gap='16px'>
+				<Flex $flexDirection='column' gap='16px'>
 					<DepositSteps modifyTokenState={step} />
 					<Item
 						title='Deposit into your stream balance'
