@@ -54,7 +54,7 @@ const DesktopImages = () => {
 
 const MobileImages = () => {
 	return (
-		<MobileImagesContainer flexDirection='column'>
+		<MobileImagesContainer $flexDirection='column'>
 			<Image
 				src={'/images/nft/pfp-o-1.png'}
 				width={300}
@@ -82,9 +82,9 @@ const WhatAreGivers = () => {
 
 	return (
 		<SectionContainer
-			justifyContent='center'
-			alignItems='center'
-			flexDirection='column'
+			$justifyContent='center'
+			$alignItems='center'
+			$flexDirection='column'
 			gap='24px'
 		>
 			<Container>
