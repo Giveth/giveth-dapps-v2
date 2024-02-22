@@ -252,8 +252,8 @@ export const ConnectCard: FC<IClaimViewCardProps> = ({ index }) => {
 					giveDropState !== GiveDropStateType.Claimed && (
 						<>
 							<ConnectRow
-								alignItems={'center'}
-								justifyContent={'space-between'}
+								$alignItems={'center'}
+								$justifyContent={'space-between'}
 							>
 								<WalletDisplayer>
 									<ConnectButton
