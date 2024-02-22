@@ -42,7 +42,7 @@ export const APRModal: FC<IAPRModalProps> = ({
 		>
 			<APRModalContainer>
 				<DescContainer>
-					<AlertRow alignItems='flex-end'>
+					<AlertRow $alignItems='flex-end'>
 						<Image
 							width={24}
 							height={24}
