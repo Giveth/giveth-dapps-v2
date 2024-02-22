@@ -199,11 +199,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				}
 			}
 
-			const projectOpWalletAddress = project?.addresses?.find(
-				address => address.networkId === config.OPTIMISM_CONFIG.id,
-			)?.address;
+			const projectAnchorContract = project?.anchorContracts[0]?.address;
 
-			if (!projectOpWalletAddress) {
+			if (!projectAnchorContract) {
 				throw new Error('Project wallet address not found');
 			}
 
@@ -214,7 +212,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			const options = {
 				sender: address,
-				receiver: projectOpWalletAddress, // should change with anchor contract address
+				receiver: projectAnchorContract,
 				flowRate: _flowRate.toString(),
 			};
 
@@ -225,11 +223,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			operations.push(projectFlowOp);
 
 			if (!isUpdating && donationToGiveth > 0) {
-				const givethOpWalletAddress = project?.givethAddresses?.find(
-					address => address.networkId === config.OPTIMISM_CONFIG.id,
-				)?.address;
+				const givethAnchorContract =
+					config.OPTIMISM_CONFIG.GIVETH_ANCHOR_CONTRACT_ADDRESS;
 
-				if (!givethOpWalletAddress) {
+				if (!givethAnchorContract) {
 					throw new Error('Giveth wallet address not found');
 				}
 
@@ -243,7 +240,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					tokenStreams[_superToken.id].find(
 						stream =>
 							stream.receiver.id.toLowerCase() ===
-							givethOpWalletAddress.toLowerCase(),
+							givethAnchorContract.toLowerCase(),
 					);
 
 				if (oldStream) {
@@ -252,7 +249,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 					const givethFlowOp = superToken.updateFlow({
 						sender: address,
-						receiver: givethOpWalletAddress, // should change with anchor contract address
+						receiver: givethAnchorContract, // should change with anchor contract address
 						flowRate: givethFlowRate.toString(),
 					});
 
@@ -260,7 +257,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				} else {
 					const givethFlowOp = superToken.createFlow({
 						sender: address,
-						receiver: givethOpWalletAddress, // should change with anchor contract address
+						receiver: givethAnchorContract, // should change with anchor contract address
 						flowRate: _newFlowRate.toString(),
 					});
 
