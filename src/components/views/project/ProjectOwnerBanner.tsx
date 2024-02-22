@@ -4,7 +4,7 @@ import { Flex } from '@/components/styled-components/Flex';
 
 const ProjectOwnerBanner = () => {
 	return (
-		<Wrapper gap='16px' alignItems='center'>
+		<Wrapper gap='16px' $alignItems='center'>
 			<IconEye16 />
 			<Caption>
 				As the project owner, only you can see your project in this view
