@@ -207,8 +207,8 @@ export const MintCard = () => {
 	return (
 		<>
 			<MintCardContainer>
-				<InputWrapper gap='8px' flexDirection='column'>
-					<Flex justifyContent='space-between'>
+				<InputWrapper gap='8px' $flexDirection='column'>
+					<Flex $justifyContent='space-between'>
 						<GLink size='Small'>Amount of NFTs to mint</GLink>
 						<MaxLink
 							size='Small'
@@ -242,8 +242,8 @@ export const MintCard = () => {
 					</InputHint>
 					<ErrorPlaceHolder>{errorMsg}</ErrorPlaceHolder>
 				</InputWrapper>
-				<InfoBox gap='16px' flexDirection='column'>
-					<Flex justifyContent='space-between'>
+				<InfoBox gap='16px' $flexDirection='column'>
+					<Flex $justifyContent='space-between'>
 						<InfoBoxTitle>Max Mint Amount</InfoBoxTitle>
 						<InfoBoxValue>
 							{pfpData && balance !== undefined && isOnEVM
@@ -251,7 +251,7 @@ export const MintCard = () => {
 								: '-'}
 						</InfoBoxValue>
 					</Flex>
-					<Flex justifyContent='space-between'>
+					<Flex $justifyContent='space-between'>
 						<InfoBoxTitle>Mint price per NFT</InfoBoxTitle>
 						<InfoBoxValue>
 							{pfpData?.price
