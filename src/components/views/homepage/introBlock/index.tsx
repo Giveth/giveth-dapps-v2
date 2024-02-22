@@ -34,7 +34,7 @@ const IntroBlock = () => {
 			<ContainerStyled>
 				<IntroContainer>
 					<TopSectionContainer
-						justifyContent='space-around'
+						$justifyContent='space-around'
 						gap='32px'
 					>
 						<IntroTitle>
@@ -89,7 +89,7 @@ const IntroBlock = () => {
 							<Circle />
 						</CircleContainer>
 					</TopSectionContainer>
-					<IntroCards justifyContent='space-between' gap='24px'>
+					<IntroCards $justifyContent='space-between' gap='24px'>
 						<IntroCard
 							Icon={
 								<IconVerifiedBadge32
