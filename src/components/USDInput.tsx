@@ -51,7 +51,7 @@ export const USDInput: FC<IAmountInput> = ({
 
 	return (
 		<>
-			<InputLabelRow justifyContent='space-between'>
+			<InputLabelRow $justifyContent='space-between'>
 				<InputLabel>
 					<InputLabelText>
 						{' '}
