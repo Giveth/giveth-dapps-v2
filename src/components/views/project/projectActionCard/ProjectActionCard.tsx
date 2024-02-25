@@ -1,8 +1,8 @@
 import { mediaQueries, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { Flex } from '@giveth/ui-design-system';
 import { ProjectStats } from './ProjectStats';
 import { AdminActions } from './AdminActions';
-import { Flex } from '@/components/styled-components/Flex';
 import { useProjectContext } from '@/context/project.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
