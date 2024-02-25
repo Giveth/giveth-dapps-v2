@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import useDetectDevice from '@/hooks/useDetectDevice';
 
 interface IVerticalNumberedSteps {
