@@ -162,7 +162,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 												closeModal();
 											}
 										}}
-										isSelected={_chainId === networkId}
+										$isSelected={_chainId === networkId}
 										key={_chainId}
 										$baseTheme={theme}
 									>
