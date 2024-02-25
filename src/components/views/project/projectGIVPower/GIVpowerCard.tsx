@@ -13,7 +13,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { CurrentRank } from '@/components/GIVpowerRank';
 import { useProjectContext } from '@/context/project.context';
