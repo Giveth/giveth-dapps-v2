@@ -90,7 +90,11 @@ export const NotificationButtonWithMenu: FC<IHeaderButtonProps> = ({
 
 	return (
 		<MenuAndButtonContainer {...props}>
-			<NotificationsButton outline $baseTheme={theme} isHover={showMenu}>
+			<NotificationsButton
+				$outline
+				$baseTheme={theme}
+				$isHover={showMenu}
+			>
 				<HeaderNotificationButton theme={theme} />
 				<CoverLine $baseTheme={theme} className='cover-line' />
 			</NotificationsButton>
