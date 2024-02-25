@@ -8,7 +8,7 @@ import {
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
 import { useDonateData } from '@/context/donate.context';
 import { getActiveRound } from '@/helpers/qf';
