@@ -15,7 +15,7 @@ import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { Flex } from './styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import Routes from '@/lib/constants/Routes';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
