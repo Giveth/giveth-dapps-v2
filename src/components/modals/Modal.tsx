@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import Scrollbars from 'react-custom-scrollbars';
 
+import { FlexCenter } from '@giveth/ui-design-system';
 import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
@@ -12,7 +13,6 @@ import { ETheme } from '@/features/general/general.slice';
 import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface ModalWrapperProps {
 	fullScreen?: boolean;
