@@ -12,10 +12,10 @@ import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import { useFormContext } from 'react-hook-form';
 
+import { FlexCenter } from '@giveth/ui-design-system';
 import { InputContainer } from '../Create.sc';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { OurImages } from '@/lib/constants/constants';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import ImageUploader from '@/components/ImageUploader';
 import ExternalLink from '@/components/ExternalLink';
 import useUpload from '@/hooks/useUpload';
