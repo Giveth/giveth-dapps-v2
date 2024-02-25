@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { FC, useRef } from 'react';
 import { mediaQueries } from '@giveth/ui-design-system';
+import { FlexCenter } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import IconMail from '/public/images/icons/mail.svg';
 import { useIsIFrameLoaded } from '@/hooks/useIsIFrameLoaded';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { WrappedSpinner } from '../Spinner';
 
 const SubscribeNewsletter: FC<IModal> = ({ setShowModal }) => {
