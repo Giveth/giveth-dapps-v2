@@ -5,8 +5,8 @@ import {
 	Button,
 	GLink,
 } from '@giveth/ui-design-system';
+import { Flex } from '@giveth/ui-design-system';
 import { zIndex } from '@/lib/constants/constants';
-import { Flex } from '@/components/styled-components/Flex';
 import { Button as CButton } from '@/components/styled-components/Button';
 import { IHeader } from './Header';
 import { mediaQueries } from '@/lib/constants/constants';
@@ -15,13 +15,14 @@ import { ETheme } from '@/features/general/general.slice';
 
 interface IStyledHeader extends IHeader {
 	$baseTheme?: ETheme;
+	$show?: boolean;
 }
 
 export const StyledHeader = styled(Flex)<IStyledHeader>`
 	position: fixed;
 	left: 0;
 	right: 0;
-	top: ${props => (props.show ? 0 : '-100px')};
+	top: ${props => (props.$show ? 0 : '-100px')};
 	z-index: ${zIndex.HEADER};
 	transition: top 0.3s ease;
 	padding: 16px 24px;
