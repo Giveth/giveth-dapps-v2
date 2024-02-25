@@ -12,7 +12,7 @@ import {
 import styled from 'styled-components';
 import { Col, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import InfoBadge from '@/components/badges/InfoBadge';
@@ -153,7 +153,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					{isDraft && (
 						<DraftIndicator>
 							<InfoBadge />
-							<Caption medium>
+							<Caption $medium>
 								{formatMessage({
 									id: 'page.project.preview_hint',
 								})}
