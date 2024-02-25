@@ -7,6 +7,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_PROJECT_DONATIONS } from '@/apollo/gql/gqlDonations';
 import { IDonation, IQFRound } from '@/apollo/types/types';
@@ -33,7 +34,6 @@ import { getChainName } from '@/lib/network';
 import { formatDonation } from '@/helpers/number';
 import { Spinner } from '@/components/Spinner';
 import { NoDonation } from './NoDonation';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 
 const itemPerPage = 10;
 
