@@ -1,8 +1,8 @@
 import { P } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import { Flex } from '@giveth/ui-design-system';
 import { TipLine, TipListItem } from './common.styles';
-import { Flex } from '@/components/styled-components/Flex';
 
 const AddressesTip = () => {
 	const { formatMessage } = useIntl();
