@@ -8,8 +8,8 @@ import React, { FC } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { FlexCenter } from '@giveth/ui-design-system';
 import { EPassportState } from '@/hooks/usePassport';
-import { FlexCenter } from './styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
 
 interface IButtonProps {
