@@ -86,7 +86,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 						<B>{getChainName(networkId, chainType)}</B>
 						{networkId === chainId && (
 							<SelectedNetwork
-								styleType='Small'
+								$styleType='Small'
 								$baseTheme={theme}
 							>
 								{formatMessage({ id: 'label.selected' })}
@@ -99,7 +99,9 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 	);
 };
 
-export const SelectedNetwork = styled(Overline)`
+export const SelectedNetwork = styled(Overline)<{
+	$baseTheme: ETheme;
+}>`
 	color: ${props =>
 		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[100]
