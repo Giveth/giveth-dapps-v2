@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { P, B, neutralColors } from '@giveth/ui-design-system';
 import { formatUnits } from 'viem';
 import BigNumber from 'bignumber.js';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { IToken } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
 
