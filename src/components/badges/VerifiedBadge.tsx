@@ -1,14 +1,14 @@
 import { IconVerifiedBadge, Overline } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { FlexCenter } from '../styled-components/Flex';
+import { FlexCenter } from '@giveth/ui-design-system';
 
 export const VerifiedBadge = () => {
 	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
 			<IconVerifiedBadge />
-			<TextBadge styleType='Small'>
+			<TextBadge $styleType='Small'>
 				{formatMessage({ id: 'label.verified' })}
 			</TextBadge>
 		</Wrapper>
