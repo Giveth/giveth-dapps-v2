@@ -51,7 +51,7 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 
 	return (
 		<MenuAndButtonContainer {...props}>
-			<BalanceButton outline $baseTheme={theme} isHover={showMenu}>
+			<BalanceButton $outline $baseTheme={theme} $isHover={showMenu}>
 				<HeaderRewardButton />
 				<CoverLine $baseTheme={theme} className='cover-line' />
 			</BalanceButton>
