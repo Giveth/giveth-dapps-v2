@@ -16,12 +16,12 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useEffect, useState } from 'react';
+import { Flex } from '@giveth/ui-design-system';
 import config from '@/configuration';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectWalletAddress from '@/components/views/project/projectDonations/ProjectWalletAddress';
 import { useProjectContext } from '@/context/project.context';
 import { calculateTotalEstimatedMatching } from '@/helpers/qf';
-import { Flex } from '@/components/styled-components/Flex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_QF_ROUND_HISTORY } from '@/apollo/gql/gqlDonations';
 import { IGetQfRoundHistory, IQFRound } from '@/apollo/types/types';
