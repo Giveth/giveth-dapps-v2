@@ -9,7 +9,7 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { IProjectUpdateWithProject } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
