@@ -2,9 +2,9 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Container } from '@giveth/ui-design-system';
+import { Flex } from '@giveth/ui-design-system';
 import { BlockTitle } from '../common';
 import { LatestUpdateCard } from './LatestUpdateCard';
-import { Flex } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IProjectUpdateWithProject } from '@/apollo/types/types';
 
