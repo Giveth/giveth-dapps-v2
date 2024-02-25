@@ -1,6 +1,6 @@
 import { brandColors, B, P, Caption } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from '../styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 
 export const FlowrateRow = styled(Flex)`
 	align-items: center;
