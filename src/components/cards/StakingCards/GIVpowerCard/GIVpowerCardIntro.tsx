@@ -7,6 +7,8 @@ import {
 	neutralColors,
 	brandColors,
 	ButtonLink,
+	FlexSpacer,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -18,7 +20,6 @@ import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import Routes from '@/lib/constants/Routes';
 import { LockupDetailsModal } from '@/components/modals/LockupDetailsModal';
 import TotalGIVpowerBox from '@/components/modals/StakeLock/TotalGIVpowerBox';
-import { FlexSpacer, Flex } from '@/components/styled-components/Flex';
 import { StakeCardState } from '../BaseStakingCard/BaseStakingCard';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import config from '@/configuration';
