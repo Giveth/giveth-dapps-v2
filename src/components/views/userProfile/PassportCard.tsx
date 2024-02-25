@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { B, H3, P, neutralColors } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { Flex } from '@giveth/ui-design-system';
 import { ContributeCardBox } from '@/components/ContributeCard.sc';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
-import { Flex } from '@/components/styled-components/Flex';
 import { PassportButton } from '@/components/PassportButton';
 
 export const PassportCard = () => {
