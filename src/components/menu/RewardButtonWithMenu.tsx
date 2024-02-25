@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
+import { FlexSpacer } from '@giveth/ui-design-system';
 import { formatWeiHelper } from '@/helpers/number';
 import {
 	MenuAndButtonContainer,
@@ -18,7 +19,6 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
-import { FlexSpacer } from '../styled-components/Flex';
 import { RewardItems } from './RewardItems';
 import { MenuContainer } from './Menu.sc';
 import { ItemsProvider } from '@/context/Items.context';
