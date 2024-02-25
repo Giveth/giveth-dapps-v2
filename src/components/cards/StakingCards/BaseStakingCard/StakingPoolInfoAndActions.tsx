@@ -9,9 +9,9 @@ import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import FarmCountDown from '@/components/FarmCountDown';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { FlexCenter, Flex } from '@/components/styled-components/Flex';
 import { avgAPR } from '@/helpers/givpower';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import {
