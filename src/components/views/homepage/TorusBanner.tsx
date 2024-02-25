@@ -7,9 +7,9 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useState } from 'react';
+import { Flex } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
-import { Flex } from '@/components/styled-components/Flex';
 import StorageLabel from '@/lib/localStorage';
 
 const TorusBanner = () => {
@@ -25,7 +25,7 @@ const TorusBanner = () => {
 			<Left>
 				<IconAlertTriangleFilled16 color={semanticColors.golden[700]} />
 				<div>
-					<Caption medium>
+					<Caption $medium>
 						{formatMessage({ id: 'label.torus_banner_title' })}
 					</Caption>
 					<Caption>
