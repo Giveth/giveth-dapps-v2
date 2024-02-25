@@ -1,11 +1,11 @@
 import { FC, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { Col, Row } from '@giveth/ui-design-system';
+import { Flex } from '@giveth/ui-design-system';
 import GIVPowerTable from './GIVPowerTable';
 import NoBoost from '@/components/views/project/projectGIVPower/NoBoost';
 import { IPowerBoosting } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
-import { Flex } from '@/components/styled-components/Flex';
 import { useProjectContext } from '@/context/project.context';
 import { GIVpowerCard } from './GIVpowerCard';
 import { WrappedSpinner } from '@/components/Spinner';
