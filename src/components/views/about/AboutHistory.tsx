@@ -4,11 +4,11 @@ import { useIntl } from 'react-intl';
 import {
 	brandColors,
 	ButtonLink,
+	FlexCenter,
 	H3,
 	H4,
 	Lead,
 } from '@giveth/ui-design-system';
-import { FlexCenter } from '../../styled-components/Flex';
 import links from '@/lib/constants/links';
 
 const AboutHistory = () => {
