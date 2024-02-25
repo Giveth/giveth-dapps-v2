@@ -7,7 +7,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { useProjectContext } from '@/context/project.context';
 import ProjectBadge from './ProjectBadge';
 import { hasActiveRound } from '@/helpers/qf';
