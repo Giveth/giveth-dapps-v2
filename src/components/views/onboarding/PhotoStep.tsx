@@ -2,12 +2,12 @@ import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { Lead } from '@giveth/ui-design-system';
 import Image from 'next/image';
+import { FlexCenter } from '@giveth/ui-design-system';
 import { IStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { SetProfilePic } from '@/components/setProfilePic/SetProfilePic';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { PROFILE_PHOTO_PLACEHOLDER } from '@/lib/constants/constants';
 
 const PhotoStep: FC<IStep> = ({ setStep }) => {
