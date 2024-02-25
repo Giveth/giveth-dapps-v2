@@ -4,9 +4,9 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
+import { FlexCenter } from '@giveth/ui-design-system';
 import Input from '@/components/Input';
 import IconEnter from '../../../../public/images/icons/enter.svg';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { useProjectsContext } from '@/context/projects.context';
 import useFocus from '@/hooks/useFocus';
 
