@@ -1,6 +1,6 @@
 import { Col, H1, H2, mediaQueries } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 
 export const BannerContainer = styled.div`
 	position: relative;
