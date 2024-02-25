@@ -7,7 +7,7 @@ import {
 	OutlineButton,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 
 export const StakeModalContainer = styled.div`
