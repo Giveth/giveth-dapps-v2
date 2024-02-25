@@ -12,11 +12,11 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Dispatch, SetStateAction, type FC } from 'react';
 import { type GetBalanceReturnType } from '@wagmi/core';
+import { Flex } from '@giveth/ui-design-system';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Spinner } from '@/components/Spinner';
-import { Flex } from '@/components/styled-components/Flex';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { IToken } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
@@ -44,7 +44,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 	return (
 		<TopUpSection $flexDirection='column' gap='8px'>
 			<Flex gap='8px' $alignItems='center'>
-				<Caption medium>
+				<Caption $medium>
 					{formatMessage({
 						id: titleLabel,
 					})}
