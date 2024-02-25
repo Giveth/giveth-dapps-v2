@@ -11,7 +11,7 @@ import {
 import styled from 'styled-components';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { smallFormatDate } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { getUnlockDate } from '@/helpers/givpower';
@@ -82,14 +82,14 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 			<MidRoundToast>
 				{round > 0 ? (
 					<>
-						<ToastTitle medium>
+						<ToastTitle $medium>
 							{formatMessage({ id: 'label.mid_round_lock' })}
 						</ToastTitle>
 						<ToastDesc>
 							{formatMessage({
 								id: 'label.your_tokens_will_be_locked_for_the_remainder',
 							})}{' '}
-							<ToastRound as='span' medium>
+							<ToastRound as='span' $medium>
 								{round > 1
 									? formatMessage(
 											{
