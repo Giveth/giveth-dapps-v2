@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { H6, IconBulbOutline24, neutralColors } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import DefaultTip from './DefaultTip';
 import TitleTip from './TitleTip';
 import DescriptionTip from './DescriptionTip';
