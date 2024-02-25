@@ -94,7 +94,7 @@ const ChangeNetworkModalContainer = styled.div`
 	}
 `;
 
-const Title = styled(H4)`
+const Title = styled(H4)<{ $baseTheme: ETheme }>`
 	margin: 18px 0 24px;
 	color: ${props =>
 		props.$baseTheme === ETheme.Dark ? 'white' : brandColors.giv[700]};
