@@ -16,6 +16,7 @@ import { useIntl } from 'react-intl';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
+import { Flex } from '@giveth/ui-design-system';
 import {
 	NavigationWrapper,
 	PaginationWrapper,
@@ -23,7 +24,6 @@ import {
 } from '@/components/styled-components/SwiperPagination';
 import 'swiper/css';
 
-import { Flex } from '@/components/styled-components/Flex';
 import { BigArc } from '@/components/styled-components/Arc';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useDonateData } from '@/context/donate.context';
