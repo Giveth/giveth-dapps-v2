@@ -5,9 +5,11 @@ import {
 	mainnet,
 	optimism,
 	polygon,
-} from 'wagmi/chains';
+	arbitrum,
+} from '@wagmi/core/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import React from 'react';
+import { type Chain } from 'viem';
 import {
 	ChainType,
 	EnvConfig,
@@ -23,6 +25,7 @@ import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconCelo } from '@/components/Icons/Celo';
 import { IconClassic } from '@/components/Icons/Classic';
 import IconSolana from '@/components/Icons/Solana';
+import IconArbitrum from '@/components/Icons/Arbitrum';
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
@@ -35,6 +38,7 @@ const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
+const ARBITRUM_NETWORK_NUMBER = 42161;
 const CLASSIC_NETWORK_NUMBER = 61;
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
@@ -50,7 +54,16 @@ const SOLANA_NETWORK: NonEVMChain = {
 		},
 	},
 };
-const EVM_CHAINS = [mainnet, gnosis, polygon, optimism, celo, classic];
+const EVM_CHAINS = [
+	mainnet,
+	gnosis,
+	polygon,
+	optimism,
+	celo,
+	arbitrum,
+	classic,
+] as readonly [Chain, ...Chain[]];
+
 const NON_EVM_CHAINS: NonEVMChain[] = [];
 if (isSolanaEnabled) {
 	NON_EVM_CHAINS.push(SOLANA_NETWORK);
@@ -84,6 +97,7 @@ const config: EnvConfig = {
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
+	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 
 	GARDEN_LINK:
@@ -526,6 +540,16 @@ const config: EnvConfig = {
 		subgraphAddress: '',
 		coingeckoChainName: 'celo',
 		chainLogo: (logoSize = 24) => <IconCelo size={logoSize} />,
+	},
+	ARBITRUM_CONFIG: {
+		...arbitrum,
+		chainType: ChainType.EVM,
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		subgraphAddress: '',
+		coingeckoChainName: 'arbitrum',
+		chainLogo: (logoSize = 24) => <IconArbitrum size={logoSize} />,
 	},
 	CLASSIC_CONFIG: {
 		...classic,

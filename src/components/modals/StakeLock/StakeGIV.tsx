@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { ButtonLink, H5, IconExternalLink } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Modal } from '../Modal';
 import {
 	approveERC20tokenTransfer,
@@ -77,7 +77,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 		StakeState.APPROVE,
 	);
 	const { address } = useAccount();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const { notStakedAmount: _maxAmount } = useStakingPool(poolStakingConfig);
 	const maxAmount = _maxAmount || 0n;

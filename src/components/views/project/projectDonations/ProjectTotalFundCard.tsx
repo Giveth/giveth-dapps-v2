@@ -226,11 +226,13 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 											<EstimatedMatchingTransaction>
 												<BlockExplorerLink
 													as='a'
-													href={`${config
-														.EVM_NETWORKS_CONFIG[
-														+qfRoundHistory.distributedFundNetwork!
-													]?.blockExplorers?.default
-														.url}
+													href={`${
+														config
+															.EVM_NETWORKS_CONFIG[
+															+qfRoundHistory.distributedFundNetwork!
+														]?.blockExplorers
+															?.default.url
+													}
 			/tx/${qfRoundHistory?.distributedFundTxHash}`}
 													target='_blank'
 													size='Big'

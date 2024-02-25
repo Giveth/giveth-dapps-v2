@@ -117,7 +117,7 @@ export const Bar = styled.div<IBarProps>`
 
 	margin: 24px 0 8px;
 
-	::after {
+	&::after {
 		content: ' ';
 		width: ${props => props.percentage}%;
 		left: 0;

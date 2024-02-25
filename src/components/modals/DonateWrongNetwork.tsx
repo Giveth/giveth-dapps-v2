@@ -13,7 +13,8 @@ import {
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Chain, useSwitchNetwork } from 'wagmi';
+import { useSwitchChain } from 'wagmi';
+import { Chain } from 'viem';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
@@ -38,6 +39,7 @@ const networks = [
 	config.GNOSIS_CONFIG,
 	config.POLYGON_CONFIG,
 	config.CELO_CONFIG,
+	config.ARBITRUM_CONFIG,
 	config.OPTIMISM_CONFIG,
 	config.CLASSIC_CONFIG,
 	config.SOLANA_CONFIG,
@@ -49,7 +51,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	const { formatMessage } = useIntl();
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
-	const { switchNetwork } = useSwitchNetwork();
+	const { switchChain } = useSwitchChain();
 	const isSafeEnv = useIsSafeEnvironment();
 
 	const {
@@ -61,13 +63,12 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 	} = useGeneralWallet();
 
 	const { slug } = router.query;
-	const eligibleNetworks = networks.filter(
-		network =>
-			acceptedChains?.some(acceptedChain =>
-				acceptedChain.chainType === ChainType.SOLANA
-					? acceptedChain.chainType === network.chainType
-					: acceptedChain.networkId === network.id,
-			),
+	const eligibleNetworks = networks.filter(network =>
+		acceptedChains?.some(acceptedChain =>
+			acceptedChain.chainType === ChainType.SOLANA
+				? acceptedChain.chainType === network.chainType
+				: acceptedChain.networkId === network.id,
+		),
 	);
 
 	const networkId = (chain as Chain)?.id;
@@ -155,13 +156,15 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 											) {
 												await handleSingOutAndSignInWithEVM();
 											} else {
-												switchNetwork?.(_chainId);
+												switchChain?.({
+													chainId: _chainId,
+												});
 												closeModal();
 											}
 										}}
 										isSelected={_chainId === networkId}
 										key={_chainId}
-										theme={theme}
+										themeState={theme}
 									>
 										<NetworkLogo
 											chainId={_chainId}
@@ -172,7 +175,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 										{_chainId === networkId && (
 											<SelectedNetwork
 												styleType='Small'
-												theme={theme}
+												themeState={theme}
 											>
 												{formatMessage({
 													id: 'label.selected',

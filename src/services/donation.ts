@@ -64,6 +64,7 @@ const createDonation = async (props: IOnTxHash) => {
 		nonce,
 		chainvineReferred,
 		safeTransactionId,
+		draftDonationId,
 	} = props;
 	const { address, symbol } = token;
 	let donationId = 0;
@@ -82,6 +83,7 @@ const createDonation = async (props: IOnTxHash) => {
 				anonymous,
 				referrerId: chainvineReferred,
 				safeTransactionId,
+				draftDonationId,
 			},
 		});
 		donationId = data.createDonation;

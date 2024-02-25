@@ -1,9 +1,10 @@
 import { captureException } from '@sentry/nextjs';
-import { getContract, getWalletClient, signTypedData } from 'wagmi/actions';
-import { erc20ABI } from 'wagmi';
+import { signTypedData } from 'wagmi/actions';
+import { Abi, erc20Abi } from 'viem';
 import { WriteContractReturnType, hexToSignature } from 'viem';
-import { type Address } from 'wagmi';
+import { type Address } from 'viem';
 import BigNumber from 'bignumber.js';
+import { readContract, readContracts, writeContract } from '@wagmi/core';
 import {
 	BalancerPoolStakingConfig,
 	ICHIPoolStakingConfig,
@@ -28,6 +29,8 @@ import { ISubgraphState } from '@/features/subgraph/subgraph.types';
 import { SubgraphDataHelper } from '@/lib/subgraph/subgraphDataHelper';
 import { E18, MaxUint256 } from './constants/constants';
 import { Zero } from '@/helpers/number';
+import { wagmiConfig } from '@/wagmiConfigs';
+import { getReadContractResult } from './contracts';
 
 const { abi: LM_ABI } = LM_Json;
 const { abi: GP_ABI } = GP_Json;
@@ -50,15 +53,26 @@ const getUnipoolInfo = async (
 		rewardRate = unipoolHelper.rewardRate;
 	} else {
 		try {
-			const lmContract = getContract({
+			const baseProps = {
 				address: lmAddress,
-				abi: LM_ABI,
+				abi: LM_ABI as Abi,
 				chainId,
+			};
+			const results = await readContracts(wagmiConfig, {
+				contracts: [
+					{
+						...baseProps,
+						functionName: 'totalSupply',
+					},
+					{
+						...baseProps,
+						functionName: 'rewardRate',
+					},
+				],
 			});
-			const [_totalSupply, _rewardRate] = await Promise.all([
-				lmContract.read.totalSupply(),
-				lmContract.read.rewardRate(),
-			]);
+			const [_totalSupply, _rewardRate] = results.map(res =>
+				getReadContractResult(res),
+			);
 			totalSupply = _totalSupply as bigint;
 			rewardRate = _rewardRate as bigint;
 		} catch (error) {
@@ -182,32 +196,47 @@ const getBalancerPoolStakingAPR = async (
 		balancerPoolStakingConfig;
 	const tokenAddress = config.EVM_NETWORKS_CONFIG[chainId]?.GIV_TOKEN_ADDRESS;
 	if (!tokenAddress) return { effectiveAPR: Zero };
-
-	const weightedPoolContract = getContract({
-		address: POOL_ADDRESS,
-		abi: BAL_WEIGHTED_POOL_ABI,
-		chainId,
-	});
-
-	const vaultContract = getContract({
-		address: VAULT_ADDRESS,
-		abi: BAL_VAULT_ABI,
-		chainId,
-	});
-
-	interface PoolTokens {
-		balances: Array<bigint>;
-		tokens: Array<string>;
-	}
 	let farmAPR = null;
 
 	try {
+		const weightedPoolContract = {
+			address: POOL_ADDRESS,
+			abi: BAL_WEIGHTED_POOL_ABI as Abi,
+			chainId,
+		};
+
+		const vaultContract = {
+			address: VAULT_ADDRESS,
+			abi: BAL_VAULT_ABI as Abi,
+			chainId,
+		};
+		interface PoolTokens {
+			balances: Array<bigint>;
+			tokens: Array<string>;
+		}
+		const results = await readContracts(wagmiConfig, {
+			contracts: [
+				{
+					...vaultContract,
+					functionName: 'getPoolTokens',
+					args: [POOL_ID],
+				},
+				{
+					...weightedPoolContract,
+					functionName: 'totalSupply',
+				},
+				{
+					...weightedPoolContract,
+					functionName: 'getNormalizedWeights',
+				},
+			],
+		});
 		const [_poolTokens, _poolTotalSupply, _poolNormalizedWeights] =
-			(await Promise.all([
-				vaultContract.read.getPoolTokens([POOL_ID]),
-				weightedPoolContract.read.totalSupply(),
-				weightedPoolContract.read.getNormalizedWeights(),
-			])) as [PoolTokens, bigint, Array<bigint>];
+			results.map(res => getReadContractResult(res)) as [
+				PoolTokens,
+				bigint,
+				Array<bigint>,
+			];
 
 		const { totalSupply, rewardRate } = await getUnipoolInfo(
 			unipool,
@@ -268,19 +297,32 @@ const getSimplePoolStakingAPR = async (
 		? streamConfig.rewardTokenAddress
 		: givTokenAddress;
 
-	const poolContract = getContract({
-		address: POOL_ADDRESS,
-		abi: UNI_ABI,
-		chainId,
-	});
-
 	let farmAPR = null;
 	try {
-		const [_reserves, _token0, _poolTotalSupply] = (await Promise.all([
-			poolContract.read.getReserves(),
-			poolContract.read.token0(),
-			poolContract.read.totalSupply(),
-		])) as [[bigint, bigint, number], Address, bigint];
+		const poolContractInfo = {
+			address: POOL_ADDRESS,
+			abi: UNI_ABI as Abi,
+			chainId,
+		};
+		const results = await readContracts(wagmiConfig, {
+			contracts: [
+				{
+					...poolContractInfo,
+					functionName: 'getReserves',
+				},
+				{
+					...poolContractInfo,
+					functionName: 'token0',
+				},
+				{
+					...poolContractInfo,
+					functionName: 'totalSupply',
+				},
+			],
+		});
+		const [_reserves, _token0, _poolTotalSupply] = results.map(res =>
+			getReadContractResult(res),
+		) as [[bigint, bigint, number], Address, bigint];
 
 		const { totalSupply, rewardRate } = await getUnipoolInfo(
 			unipoolHelper,
@@ -371,14 +413,27 @@ const permitTokens = async (
 	lmAddress: string,
 	amount: bigint,
 ) => {
-	const poolContract = getContract({
+	const poolContractInfo = {
 		address: poolAddress,
-		abi: UNI_ABI,
+		abi: UNI_ABI as Abi,
 		chainId,
+	};
+
+	const results = await readContracts(wagmiConfig, {
+		contracts: [
+			{ ...poolContractInfo, functionName: 'name' },
+			{
+				...poolContractInfo,
+				functionName: 'nonces',
+				args: [walletAddress],
+			},
+		],
 	});
 
+	const [name, nonce] = results.map(res => getReadContractResult(res));
+
 	const domain = {
-		name: (await poolContract.read.name()) as string,
+		name,
 		version: '1',
 		chainId: chainId,
 		verifyingContract: poolAddress,
@@ -400,11 +455,11 @@ const permitTokens = async (
 		owner: walletAddress,
 		spender: lmAddress,
 		value: amount,
-		nonce: await poolContract.read.nonces([walletAddress]),
+		nonce,
 		deadline: MaxUint256,
 	} as const;
 
-	const hexSignature = await signTypedData({
+	const hexSignature = await signTypedData(wagmiConfig, {
 		domain,
 		message,
 		primaryType: 'Permit',
@@ -412,9 +467,7 @@ const permitTokens = async (
 	});
 
 	const signature = hexToSignature(hexSignature);
-
-	const walletClient = await getWalletClient({ chainId });
-	return await walletClient?.writeContract({
+	return await writeContract(wagmiConfig, {
 		address: poolAddress,
 		abi: UNI_ABI,
 		functionName: 'permit',
@@ -427,7 +480,6 @@ const permitTokens = async (
 			signature.r,
 			signature.s,
 		],
-		// @ts-ignore -- needed for safe txs
 		value: 0n,
 	});
 };
@@ -442,24 +494,21 @@ export const approveERC20tokenTransfer = async (
 ): Promise<boolean> => {
 	if (amount === 0n) return false;
 
-	const tokenContract = getContract({
+	const allowance = await readContract(wagmiConfig, {
 		address: tokenAddress,
-		abi: erc20ABI,
+		abi: erc20Abi,
+		functionName: 'allowance',
+		args: [ownerAddress, spenderAddress],
 	});
-
-	const allowance = await tokenContract.read.allowance([
-		ownerAddress,
-		spenderAddress,
-	]);
 
 	if (amount <= allowance) return true;
 
 	try {
-		const walletClient = await getWalletClient({ chainId });
 		if (allowance > 0n) {
-			const tx = await walletClient?.writeContract({
+			const tx = await writeContract(wagmiConfig, {
 				address: tokenAddress,
-				abi: erc20ABI,
+				abi: erc20Abi,
+				chainId,
 				functionName: 'approve',
 				args: [spenderAddress, 0n],
 				// @ts-ignore -- needed for safe txs
@@ -472,9 +521,10 @@ export const approveERC20tokenTransfer = async (
 			}
 		}
 
-		const txResponse = await walletClient?.writeContract({
+		const txResponse = await writeContract(wagmiConfig, {
 			address: tokenAddress,
-			abi: erc20ABI,
+			abi: erc20Abi,
+			chainId,
 			functionName: 'approve',
 			args: [spenderAddress, amount],
 			// @ts-ignore -- needed for safe txs
@@ -499,19 +549,13 @@ export const wrapToken = async (
 	chainId: number,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
-
 	try {
-		return await walletClient?.writeContract({
+		return await writeContract(wagmiConfig, {
 			address: gardenAddress,
 			abi: TOKEN_MANAGER_ABI,
+			chainId,
 			functionName: 'wrap',
 			args: [amount],
-			// @ts-ignore -- needed for safe txs
 			value: 0n,
 		});
 	} catch (error) {
@@ -530,19 +574,13 @@ export const stakeGIV = async (
 	chainId: number,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
-
 	try {
-		return await walletClient?.writeContract({
+		return await writeContract(wagmiConfig, {
 			address: lmAddress,
 			abi: UNIPOOL_GIVPOWER_ABI,
+			chainId,
 			functionName: 'stake',
 			args: [amount],
-			// @ts-ignore -- needed for safe txs
 			value: 0n,
 		});
 	} catch (error) {
@@ -561,16 +599,11 @@ export const unwrapToken = async (
 	chainId: number,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
-
 	try {
-		return await walletClient?.writeContract({
+		return await writeContract(wagmiConfig, {
 			address: gardenAddress,
 			abi: TOKEN_MANAGER_ABI,
+			chainId,
 			functionName: 'unwrap',
 			args: [amount],
 			// @ts-ignore -- needed for safe txs
@@ -587,6 +620,7 @@ export const unwrapToken = async (
 };
 
 export const stakeTokens = async (
+	walletAddress: Address,
 	amount: bigint,
 	poolAddress: Address,
 	lmAddress: Address,
@@ -594,13 +628,7 @@ export const stakeTokens = async (
 	permit: boolean,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
 
-	const walletAddress = walletClient.account.address;
 	try {
 		if (permit) {
 			const rawPermitCall = await permitTokens(
@@ -610,21 +638,19 @@ export const stakeTokens = async (
 				lmAddress,
 				amount,
 			);
-			return await walletClient.writeContract({
+			return await writeContract(wagmiConfig, {
 				address: lmAddress,
 				abi: LM_ABI,
 				functionName: 'stakeWithPermit',
 				args: [amount, rawPermitCall],
-				// @ts-ignore -- needed for safe txs
 				value: 0n,
 			});
 		} else {
-			return await walletClient.writeContract({
+			return await writeContract(wagmiConfig, {
 				address: lmAddress,
 				abi: LM_ABI,
 				functionName: 'stake',
 				args: [amount],
-				// @ts-ignore -- needed for safe txs
 				value: 0n,
 			});
 		}
@@ -643,18 +669,12 @@ export const harvestTokens = async (
 	lmAddress: Address,
 	chainId: number,
 ): Promise<WriteContractReturnType | undefined> => {
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
-
 	try {
-		return await walletClient.writeContract({
+		return await writeContract(wagmiConfig, {
 			address: lmAddress,
 			abi: LM_ABI,
+			chainId,
 			functionName: 'getReward',
-			// @ts-ignore -- needed for safe txs
 			value: 0n,
 		});
 	} catch (error) {
@@ -673,19 +693,13 @@ export const withdrawTokens = async (
 	chainId: number,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
-
 	try {
-		return await walletClient.writeContract({
+		return await writeContract(wagmiConfig, {
 			address: lmAddress,
 			abi: LM_ABI,
+			chainId,
 			functionName: 'withdraw',
 			args: [amount],
-			// @ts-ignore -- needed for safe txs
 			value: 0n,
 		});
 	} catch (e) {
@@ -705,18 +719,13 @@ export const lockToken = async (
 	chainId: number,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
-	const walletClient = await getWalletClient({ chainId });
-	if (!walletClient) {
-		console.error('Wallet client is null');
-		return;
-	}
 	try {
-		return await walletClient?.writeContract({
+		return await writeContract(wagmiConfig, {
 			address: contractAddress,
 			abi: GP_ABI,
+			chainId,
 			functionName: 'lock',
 			args: [amount, round],
-			// @ts-ignore -- needed for safe txs
 			value: 0n,
 		});
 	} catch (error) {
@@ -744,12 +753,13 @@ export const getGIVpowerOnChain = async (
 			console.error('GIVpower contract address is null');
 			return;
 		}
-		const givpowerContract = getContract({
+		return (await readContract(wagmiConfig, {
 			address: contractAddress,
 			abi: GP_ABI,
 			chainId,
-		});
-		return (await givpowerContract.read.balanceOf([account])) as bigint;
+			functionName: 'balanceOf',
+			args: [account],
+		})) as bigint;
 	} catch (error) {
 		console.log('Error on get total GIVpower:', error);
 		captureException(error, {

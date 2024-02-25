@@ -147,7 +147,7 @@ export const IntroIcon = styled.div`
 	cursor: pointer;
 	color: ${brandColors.deep[100]};
 	transition: color 0.3s ease;
-	:hover {
+	&:hover {
 		color: ${neutralColors.gray[100]};
 	}
 `;

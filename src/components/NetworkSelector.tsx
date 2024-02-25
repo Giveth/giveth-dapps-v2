@@ -9,7 +9,7 @@ import {
 	brandColors,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
+import { useAccount, useSwitchChain } from 'wagmi';
 import Select, {
 	type CSSObjectWithLabel,
 	ControlProps,
@@ -39,6 +39,7 @@ const _options = [
 	{ network: config.OPTIMISM_CONFIG, active: true },
 	{ network: config.CLASSIC_CONFIG, active: true },
 	{ network: config.CELO_CONFIG, active: false },
+	{ network: config.ARBITRUM_CONFIG, active: false },
 ];
 
 const options = _options.map(o => ({
@@ -179,16 +180,16 @@ export const NetworkSelector = () => {
 		config.MAINNET_NETWORK_NUMBER,
 	);
 
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
-	const { switchNetwork } = useSwitchNetwork();
+	const { switchChain } = useSwitchChain();
 	const isSafeEnv = useIsSafeEnvironment();
 
 	const handleChangeNetwork = async (networkNumber: number) => {
 		setTargetNetwork(networkNumber);
 		if (chainId !== networkNumber) {
-			if (switchNetwork) {
-				switchNetwork(networkNumber);
+			if (switchChain) {
+				switchChain({ chainId: networkNumber });
 			} else {
 				setShowChangeNetworkModal(true);
 			}

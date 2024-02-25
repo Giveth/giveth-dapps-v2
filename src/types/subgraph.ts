@@ -1,4 +1,4 @@
-import { type Address } from 'wagmi';
+import { type Address } from 'viem';
 import { IUser } from '@/apollo/types/types';
 
 export interface ITokenAllocation {

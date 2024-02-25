@@ -1,11 +1,13 @@
 import { Dispatch, SetStateAction } from 'react';
 import { captureException } from '@sentry/nextjs';
-import { getContract, getWalletClient } from 'wagmi/actions';
 import { WriteContractReturnType } from 'viem';
+import { readContract } from '@wagmi/core';
+import { writeContract } from '@wagmi/core';
 import { LiquidityPosition } from '@/types/nfts';
 import { uniswapV3Config } from './contracts';
 import { StakeState } from '@/lib/staking';
 import UNISWAP_V3_STAKER_ABI from '@/artifacts/uniswap_v3_staker.json';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 export const transfer = async (
 	tokenId: number | undefined,
@@ -203,10 +205,10 @@ export const claim = async (
 	if (!walletAddress || !currentIncentive.key) return;
 
 	try {
-		const walletClient = await getWalletClient({ chainId: chainId });
-		const tx = walletClient?.writeContract({
+		const tx = writeContract(wagmiConfig, {
 			address: uniswapV3Config.UNISWAP_V3_STAKER,
 			abi: UNISWAP_V3_STAKER_ABI,
+			chainId,
 			functionName: 'claimReward',
 			args: [currentIncentive.key[0] as string, walletAddress, 0],
 			// @ts-ignore -- needed for safe txs
@@ -230,10 +232,10 @@ export const stake = async (
 ) => {
 	if (!tokenId || !walletAddress || !currentIncentive.key) return;
 	try {
-		const walletClient = await getWalletClient({ chainId: chainId });
-		const tx = walletClient?.writeContract({
+		const tx = writeContract(wagmiConfig, {
 			address: uniswapV3Config.UNISWAP_V3_STAKER,
 			abi: UNISWAP_V3_STAKER_ABI,
+			chainId,
 			functionName: 'stakeToken',
 			args: [currentIncentive.key, tokenId],
 			// @ts-ignore -- needed for safe txs
@@ -253,15 +255,12 @@ export const getReward = async (
 	tokenId: number,
 	currentIncentiveKey?: (string | number)[] | null,
 ): Promise<bigint> => {
-	const uniswapV3StakerContract = getContract({
+	const reward = await readContract(wagmiConfig, {
 		address: uniswapV3Config.UNISWAP_V3_STAKER,
 		abi: UNISWAP_V3_STAKER_ABI,
+		functionName: 'getRewardInfo',
+		args: [currentIncentiveKey, tokenId],
 	});
-
-	const reward = await uniswapV3StakerContract.read.getRewardInfo([
-		currentIncentiveKey,
-		tokenId,
-	]);
 
 	return (reward as bigint) || 0n;
 };

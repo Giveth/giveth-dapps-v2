@@ -1,6 +1,6 @@
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { ISuperToken } from './superFluid';
-import type { Address, Chain } from 'wagmi';
+import type { Address, Chain } from 'viem';
 
 export enum StakingPlatform {
 	GIVETH = 'Staking',
@@ -215,7 +215,7 @@ export interface NonEVMNetworkConfig extends NonEVMChain {
 }
 
 export interface EnvConfig {
-	EVM_CHAINS: Chain[];
+	EVM_CHAINS: readonly [Chain, ...Chain[]];
 	CHAINS: (Chain | NonEVMChain)[];
 	GIVETH_PROJECT_ID: number;
 	MAINNET_NETWORK_NUMBER: number;
@@ -223,12 +223,14 @@ export interface EnvConfig {
 	POLYGON_NETWORK_NUMBER: number;
 	OPTIMISM_NETWORK_NUMBER: number;
 	CELO_NETWORK_NUMBER: number;
+	ARBITRUM_NETWORK_NUMBER: number;
 	CLASSIC_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	GNOSIS_CONFIG: GnosisNetworkConfig;
 	POLYGON_CONFIG: NetworkConfig;
 	OPTIMISM_CONFIG: OptimismNetworkConfig;
 	CELO_CONFIG: NetworkConfig;
+	ARBITRUM_CONFIG: NetworkConfig;
 	CLASSIC_CONFIG: NetworkConfig;
 	GARDEN_LINK: string;
 	BACKEND_LINK: string;

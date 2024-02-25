@@ -5,7 +5,10 @@ import { ChainType, GlobalConfig, NonEVMNetworkConfig } from './types/config';
 export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
 const envConfig = isProduction ? production : development;
+
 const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
+export const isProjectScoringActive =
+	process.env.NEXT_PUBLIC_PROJECT_SCORING === 'true';
 export const isRecurringActive =
 	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true';
 
@@ -19,6 +22,7 @@ const EVM_NETWORKS_CONFIG = {
 	[envConfig.POLYGON_NETWORK_NUMBER]: envConfig.POLYGON_CONFIG,
 	[envConfig.OPTIMISM_NETWORK_NUMBER]: envConfig.OPTIMISM_CONFIG,
 	[envConfig.CELO_NETWORK_NUMBER]: envConfig.CELO_CONFIG,
+	[envConfig.ARBITRUM_NETWORK_NUMBER]: envConfig.ARBITRUM_CONFIG,
 	[envConfig.CLASSIC_NETWORK_NUMBER]: envConfig.CLASSIC_CONFIG,
 };
 

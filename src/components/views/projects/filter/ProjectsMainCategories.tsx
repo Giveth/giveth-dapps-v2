@@ -9,12 +9,17 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Routes from '@/lib/constants/Routes';
 import { useProjectsContext } from '@/context/projects.context';
+import { useAppSelector } from '@/features/hooks';
 
 function ProjectsMainCategories() {
-	const { isQF, mainCategories } = useProjectsContext();
-	const projectsRoute = (isQF ? Routes.QFProjects : Routes.Projects) + '/';
+	const { isQF } = useProjectsContext();
+	const mainCategories = useAppSelector(
+		state => state.general.mainCategories,
+	);
 	const { query } = useRouter();
 	const { formatMessage } = useIntl();
+
+	const projectsRoute = (isQF ? Routes.QFProjects : Routes.Projects) + '/';
 
 	const handleIsSelected = (categorySlug: string) => {
 		if (!query?.slug) {
@@ -78,7 +83,7 @@ const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
 		!props.isSelected ? neutralColors.gray[300] : brandColors.giv[600]};
 	color: ${props => (!props.isSelected ? 'black' : 'white')};
 	padding: 16px;
-	:hover {
+	&:hover {
 		background: ${neutralColors.gray[400]};
 		transition:
 			background-color 300ms linear,

@@ -52,7 +52,7 @@ const Pagination = (props: IPagination) => {
 	return (
 		<PaginationRow>
 			<PaginationItem
-				theme={theme}
+				themeState={theme}
 				onClick={() => {
 					if (currentPage > 0) setPage(page => page - 1);
 				}}
@@ -64,7 +64,7 @@ const Pagination = (props: IPagination) => {
 				return (
 					<PaginationItem
 						key={id}
-						theme={theme}
+						themeState={theme}
 						onClick={() => {
 							if (!isNaN(+p)) setPage(+p - 1);
 						}}
@@ -75,7 +75,7 @@ const Pagination = (props: IPagination) => {
 				);
 			})}
 			<PaginationItem
-				theme={theme}
+				themeState={theme}
 				onClick={() => {
 					if (currentPage + 1 < pageCount) setPage(page => page + 1);
 				}}
@@ -95,19 +95,20 @@ const PaginationRow = styled(FlexCenter)`
 interface IPaginationItem {
 	disable?: boolean;
 	isActive?: boolean;
+	themeState: ETheme;
 }
 
 const PaginationItem = styled(Caption)<IPaginationItem>`
 	${props =>
 		props.disable
 			? css`
-					color: ${props.theme === ETheme.Dark
+					color: ${props.themeState === ETheme.Dark
 						? neutralColors.gray[700]
 						: neutralColors.gray[500]};
 				`
 			: css`
 					cursor: pointer;
-					color: ${props.theme === ETheme.Dark
+					color: ${props.themeState === ETheme.Dark
 						? neutralColors.gray[100]
 						: neutralColors.gray[900]};
 				`};

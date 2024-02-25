@@ -5,8 +5,10 @@ import {
 	goerli,
 	optimismGoerli,
 	polygon,
+	arbitrumSepolia,
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import { type Chain } from 'viem';
 import {
 	ChainType,
 	EnvConfig,
@@ -22,6 +24,7 @@ import { IconGnosisChain } from '@/components/Icons/GnosisChain';
 import { IconEthereum } from '@/components/Icons/Eth';
 import { IconUnknown } from '@/components/Icons/Unknown';
 import IconSolana from '@/components/Icons/Solana';
+import IconArbitrum from '@/components/Icons/Arbitrum';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -49,6 +52,7 @@ const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 420;
 const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
+const ARBITRUM_NETWORK_NUMBER = 421614;
 
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
@@ -93,8 +97,10 @@ const EVM_CHAINS = [
 	gnosis,
 	optimismGoerli,
 	celoAlfajores,
+	arbitrumSepolia,
 	classic,
-];
+] as readonly [Chain, ...Chain[]];
+
 const NON_EVM_CHAINS: NonEVMChain[] = [];
 if (isSolanaEnabled) {
 	NON_EVM_CHAINS.push(SOLANA_NETWORK);
@@ -117,6 +123,7 @@ const config: EnvConfig = {
 	POLYGON_NETWORK_NUMBER: POLYGON_NETWORK_NUMBER,
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
+	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 
 	GARDEN_LINK:
@@ -412,6 +419,16 @@ const config: EnvConfig = {
 		},
 		coingeckoChainName: 'celo',
 		chainLogo: (logoSize?: number) => <IconCelo size={logoSize} />,
+	},
+
+	ARBITRUM_CONFIG: {
+		...arbitrumSepolia,
+		chainType: ChainType.EVM,
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		coingeckoChainName: 'arbitrum',
+		chainLogo: (logoSize?: number) => <IconArbitrum size={logoSize} />,
 	},
 
 	CLASSIC_CONFIG: {

@@ -7,24 +7,33 @@ import { useFormContext } from 'react-hook-form';
 
 import { InputContainer, Label } from './Create.sc';
 import { GoodProjectDescription } from '@/components/modals/GoodProjectDescription';
-import { EInputs } from '@/components/views/create/CreateProject';
+import { WrappedSpinner } from '@/components/Spinner';
+import { ECreateProjectSections, EInputs } from './types';
 
 const RichTextInput = dynamic(
 	() => import('@/components/rich-text/RichTextInput'),
 	{
 		ssr: false,
+		loading: () => <WrappedSpinner size={500} />,
 	},
 );
 
 const DESCRIPTION_MIN_LIMIT = 1200;
 
-const DescriptionInput = () => {
+interface IDescriptionInputProps {
+	setActiveProjectSection: (section: ECreateProjectSections) => void;
+}
+
+const DescriptionInput = ({
+	setActiveProjectSection,
+}: IDescriptionInputProps) => {
 	const {
 		getValues,
 		setValue,
 		formState: { errors },
 		setError,
 		clearErrors,
+		getFieldState,
 	} = useFormContext();
 	const { formatMessage } = useIntl();
 
@@ -39,7 +48,9 @@ const DescriptionInput = () => {
 	};
 
 	const setHasLimitError = (hasLimitError: boolean) => {
+		const oldError = getFieldState(EInputs.description)?.error;
 		if (hasLimitError) {
+			if (oldError) return;
 			setError(
 				EInputs.description,
 				{
@@ -49,6 +60,7 @@ const DescriptionInput = () => {
 				{ shouldFocus: true },
 			);
 		} else {
+			if (!oldError) return;
 			clearErrors(EInputs.description);
 		}
 	};
@@ -72,7 +84,11 @@ const DescriptionInput = () => {
 					})}
 				</span>
 			</CaptionContainer>
-			<InputContainer>
+			<InputContainer
+				onMouseOver={() =>
+					setActiveProjectSection(ECreateProjectSections.description)
+				}
+			>
 				<Label>{formatMessage({ id: 'label.project_story' })}</Label>
 				<RichTextInput
 					style={TextInputStyle}

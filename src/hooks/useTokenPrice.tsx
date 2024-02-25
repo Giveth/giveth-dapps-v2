@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
-import { type Address, useNetwork } from 'wagmi';
+import { useAccount } from 'wagmi';
+import { Address } from 'viem';
 import {
 	fetchETCPrice,
 	fetchPrice,
@@ -34,7 +35,7 @@ interface ITokenPrice {
 export const useTokenPrice = (token?: ITokenPrice) => {
 	const [tokenPrice, setTokenPrice] = useState<number>();
 	const { walletChainType } = useGeneralWallet();
-	const { chain } = useNetwork();
+	const { chain } = useAccount();
 	const chainId = chain?.id;
 	const givPrice = useAppSelector(state => state.price.givPrice);
 	const givTokenPrice = new BigNumber(givPrice).toNumber();
