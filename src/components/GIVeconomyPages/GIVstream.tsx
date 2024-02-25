@@ -18,6 +18,7 @@ import {
 import { useIntl } from 'react-intl';
 import { Container, Row, Col } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
+import { Flex } from '@giveth/ui-design-system';
 import {
 	Bar,
 	FlowRateRow,
@@ -62,7 +63,6 @@ import { HarvestAllModal } from '../modals/HarvestAll';
 import { ITokenAllocation } from '@/types/subgraph';
 import { IconGIV } from '../Icons/GIV';
 import { givEconomySupportedNetworks } from '@/lib/constants/constants';
-import { Flex } from '../styled-components/Flex';
 import Pagination from '../Pagination';
 import GivEconomyProjectCards from '../cards/GivEconomyProjectCards';
 import { useAppSelector } from '@/features/hooks';
@@ -104,7 +104,7 @@ export const TabGIVstreamTop = () => {
 		<>
 			<GIVstreamTopContainer>
 				<GIVstreamTopInnerContainer>
-					<Row style={{ $alignItems: 'flex-end' }}>
+					<Row style={{ alignItems: 'flex-end' }}>
 						<TitleCol xs={12} sm={7} xl={8}>
 							<Flex $alignItems='baseline' gap='16px'>
 								<GSTitle>GIVstream</GSTitle>
