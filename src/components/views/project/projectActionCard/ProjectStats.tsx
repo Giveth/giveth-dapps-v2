@@ -2,7 +2,7 @@ import { IconHelpFilled16, P, Subline } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { useProjectContext } from '@/context/project.context';
 import StatusBadge from './StatusBadge';
