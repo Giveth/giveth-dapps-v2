@@ -35,7 +35,6 @@ export const GuidelinesCard = () => {
 };
 
 const GuidelinesCardWrapper = styled(Flex)`
-	max-width: 380px;
 	user-select: none;
 	height: 87px;
 	align-items: center;
