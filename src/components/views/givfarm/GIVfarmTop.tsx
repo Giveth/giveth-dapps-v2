@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Col, IconGIVFarm, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import config from '@/configuration';
 
 import {
@@ -41,7 +41,7 @@ export const GIVfarmTop = () => {
 	return (
 		<GIVfarmTopContainer>
 			<TopInnerContainer>
-				<Row style={{ $alignItems: 'flex-end' }}>
+				<Row style={{ alignItems: 'flex-end' }}>
 					<Col xs={12} sm={7} xl={8}>
 						<Flex $alignItems='baseline' gap='16px'>
 							<Title>GIVfarm</Title>
