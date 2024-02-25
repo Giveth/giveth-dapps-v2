@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
+import { Flex } from '@giveth/ui-design-system';
 import { formatWeiHelper } from '@/helpers/number';
-import { Flex } from '../styled-components/Flex';
 import { BaseInput } from '../input/BaseInput';
 
 export interface IAmountInput {
