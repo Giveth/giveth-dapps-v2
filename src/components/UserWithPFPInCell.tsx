@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { Flex } from '@giveth/ui-design-system';
 import { IAdminUser } from '@/apollo/types/types';
 import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
-import { Flex } from '@/components/styled-components/Flex';
 import { shortenAddress } from '@/lib/helpers';
 import { PFP } from './PFP';
 import { addressToUserView } from '@/lib/routeCreators';
