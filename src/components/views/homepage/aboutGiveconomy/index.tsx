@@ -12,7 +12,7 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Container } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 
 interface CustomBtn {
