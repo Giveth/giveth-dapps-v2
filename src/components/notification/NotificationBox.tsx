@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { brandColors, Caption, neutralColors } from '@giveth/ui-design-system';
 import { FC, useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex } from '../styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import {
 	convertRawDataToHTML,
 	convertBackendIconsToComponents,
@@ -68,7 +68,7 @@ export const NotificationBox: FC<INotificationBox> = ({
 				<ConvertedTextContainer>
 					{convertRawDataToHTML(notification)}
 				</ConvertedTextContainer>
-				<NotificationTime medium>
+				<NotificationTime $medium>
 					{formatMessage(
 						{ id: 'label.duration_ago' },
 						{
