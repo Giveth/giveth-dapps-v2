@@ -2,6 +2,7 @@ import {
 	B,
 	brandColors,
 	Caption,
+	Flex,
 	GLink,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -11,7 +12,6 @@ import { useIntl } from 'react-intl';
 import Link from 'next/link';
 
 import { useAppSelector } from '@/features/hooks';
-import { Flex } from '../styled-components/Flex';
 import { HighlightSection } from './common';
 import { Item } from './Item';
 import Routes from '@/lib/constants/Routes';
@@ -67,7 +67,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 	return (
 		<>
 			<HighlightSection $baseTheme={theme}>
-				<Label medium>
+				<Label $medium>
 					{formatMessage({ id: 'label.explore_by' })}
 				</Label>
 				<ExploreByRow
@@ -95,8 +95,8 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				</ExploreByRow>
 			</HighlightSection>
 			<NormalSection inSidebar={inSidebar}>
-				<Label medium>{formatMessage({ id: 'label.category' })}</Label>
-				<CategoriesGrid inSidebar={inSidebar} $baseTheme={theme}>
+				<Label $medium>{formatMessage({ id: 'label.category' })}</Label>
+				<CategoriesGrid $inSidebar={inSidebar} $baseTheme={theme}>
 					{mainCategories.map((category, idx) => (
 						<Link
 							key={idx}
@@ -136,10 +136,10 @@ const NormalSection = styled.div<{ inSidebar?: boolean }>`
 	border-radius: 16px;
 `;
 
-const CategoriesGrid = styled.div<{ inSidebar?: boolean; $baseTheme: ETheme }>`
+const CategoriesGrid = styled.div<{ $inSidebar?: boolean; $baseTheme: ETheme }>`
 	display: grid;
 	grid-template: ${props =>
-		props.inSidebar ? 'auto' : 'auto auto auto auto / auto auto auto'};
+		props.$inSidebar ? 'auto' : 'auto auto auto auto / auto auto auto'};
 	margin-top: 8px;
 `;
 
