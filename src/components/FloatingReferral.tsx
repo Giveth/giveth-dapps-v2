@@ -12,12 +12,11 @@ import {
 	mediaQueries,
 	deviceSize,
 } from '@giveth/ui-design-system';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { FlexCenter } from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 import useMediaQuery from '@/hooks/useMediaQuery';
-
 interface IFloatingReferral {
 	projectHref?: string;
 }
