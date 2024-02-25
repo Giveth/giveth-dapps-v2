@@ -2,7 +2,7 @@ import { Caption, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC } from 'react';
 import { formatUnits } from 'viem';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { IToken } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
 import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
@@ -39,11 +39,11 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 			<InfoWrapper $flexDirection='column' $alignItems='flex-start'>
 				<TopRow $justifyContent='space-between'>
 					<Flex gap='4px'>
-						<Caption medium>{token.symbol}</Caption>
+						<Caption $medium>{token.symbol}</Caption>
 						<GrayCaption>{token.name}</GrayCaption>
 					</Flex>
 					<Balance gap='4px'>
-						<Caption medium>
+						<Caption $medium>
 							{balance !== undefined
 								? limitFraction(
 										formatUnits(balance, token.decimals),
@@ -52,7 +52,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 								: '--'}
 						</Caption>
 						{token.isSuperToken && (
-							<GrayCaption medium>{token.symbol}</GrayCaption>
+							<GrayCaption $medium>{token.symbol}</GrayCaption>
 						)}
 					</Balance>
 				</TopRow>
