@@ -49,7 +49,7 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 };
 
 const StyledCover = styled(Cover)`
-	align-items: flex-end;
+	align-items: flex-end !important;
 `;
 
 const IconWrapper = styled.div`
