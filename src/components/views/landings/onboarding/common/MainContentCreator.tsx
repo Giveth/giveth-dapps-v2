@@ -7,6 +7,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
+import { FlexCenter } from '@giveth/ui-design-system';
 import { OnboardingWrapper } from '@/components/views/landings/onboarding/common/common.styled';
 import Plus from '@/components/particles/Plus';
 import Wave from '@/components/particles/Wave';
@@ -14,7 +15,6 @@ import VerticalNumberedStepsAlt, {
 	IStepsArray,
 } from '@/components/VerticalNumberedStepsAlt';
 import ExternalLink from '@/components/ExternalLink';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import QuarterCircle from '@/components/particles/QuarterCircle';
 
 interface IMainContentCreator {
