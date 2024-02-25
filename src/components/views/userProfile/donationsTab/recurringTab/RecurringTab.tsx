@@ -1,4 +1,4 @@
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { ActiveProjectsSection } from './ActiveProjectsSection';
 import { ActiveStreamsSection } from './ActiveStreamsSection';
 
