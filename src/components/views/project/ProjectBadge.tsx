@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { SublineBold, neutralColors } from '@giveth/ui-design-system';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { FlexCenter } from '@giveth/ui-design-system';
 
 interface IProjectBadgeProps {
 	badgeText: string;
