@@ -47,7 +47,6 @@ export const StakePoolInfoContainer = styled.div`
 `;
 
 export const Details = styled(Flex)`
-	flex-direction: column;
 	gap: 16px;
 `;
 
