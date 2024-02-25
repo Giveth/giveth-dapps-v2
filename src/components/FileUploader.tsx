@@ -12,8 +12,9 @@ import {
 	neutralColors,
 	brandColors,
 	IconImage,
+	FlexSpacer,
 } from '@giveth/ui-design-system';
-import { Flex, FlexSpacer } from './styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { showToastError } from '@/lib/helpers';
 import { client } from '@/apollo/apolloClient';
 import { UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
