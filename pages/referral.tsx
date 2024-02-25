@@ -1,5 +1,5 @@
-import GIVferralView from '@/components/views/GIVferral.view';
+import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 
 export default function GIVferralRoute() {
-	return <GIVferralView />;
+	return <ErrorsIndex statusCode='404' />;
 }

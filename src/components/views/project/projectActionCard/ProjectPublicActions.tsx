@@ -18,7 +18,6 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import ShareModal from '@/components/modals/ShareModal';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
-import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 import { EContentType } from '@/lib/constants/shareContent';
 import { useProjectContext } from '@/context/project.context';
 import { Flex } from '@/components/styled-components/Flex';
@@ -179,22 +178,13 @@ export const ProjectPublicActions = () => {
 					size='small'
 				/>
 			</BadgeWrapper>
-			{showModal &&
-				slug &&
-				(verified ? (
-					<ShareRewardedModal
-						contentType={EContentType.thisProject}
-						setShowModal={setShowShareModal}
-						projectHref={slug}
-						projectTitle={project.title}
-					/>
-				) : (
-					<ShareModal
-						contentType={EContentType.thisProject}
-						setShowModal={setShowShareModal}
-						projectHref={slug}
-					/>
-				))}
+			{showModal && slug && (
+				<ShareModal
+					contentType={EContentType.thisProject}
+					setShowModal={setShowShareModal}
+					projectHref={slug}
+				/>
+			)}
 		</ProjectPublicActionsWrapper>
 	);
 };
