@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { H1, neutralColors, SemiTitle } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
+import { FlexCenter } from '@giveth/ui-design-system';
 import { IMainCategory } from '@/apollo/types/types';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 
 interface IProjectsBanner {
