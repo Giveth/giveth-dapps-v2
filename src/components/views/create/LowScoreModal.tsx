@@ -1,10 +1,9 @@
 import React, { FC } from 'react';
-import { Button, IconNetwork32, P } from '@giveth/ui-design-system';
+import { Button, Flex, IconNetwork32, P } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { IModal } from '@/types/common';
-import { Flex } from '@/components/styled-components/Flex';
 
 interface ISwitchNetworkModal extends IModal {
 	onSubmit: any;
@@ -35,7 +34,7 @@ export const LowScoreModal: FC<ISwitchNetworkModal> = ({
 				<P>
 					Are you sure you want to continue publishing your project?
 				</P>
-				<Flex flexDirection='column' gap='8px'>
+				<Flex $flexDirection='column' gap='8px'>
 					<StyledButton
 						label='Yes, Publish My Project'
 						buttonType='primary'

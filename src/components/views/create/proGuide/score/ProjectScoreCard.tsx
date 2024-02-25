@@ -5,13 +5,12 @@ import {
 	type Dispatch,
 	type SetStateAction,
 } from 'react';
-import { H6, P } from '@giveth/ui-design-system';
+import { Flex, H6, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { UseFormGetFieldState } from 'react-hook-form';
 import { useIntl } from 'react-intl';
 import { Card } from '../common.sc';
-import { Flex } from '@/components/styled-components/Flex';
 import { ScoreBox } from './ScoreBox';
 import { ImprovementTips } from './ImprovementTips';
 import { EInputs, TInputs } from '../../types';
