@@ -193,6 +193,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const onSubmit = async (formData: TInputs) => {
 		setIsLoading(true);
 		if (
+			isProjectScoringActive &&
 			quality === EQualityState.MEDIUM &&
 			!publishOnMediumQuality.current
 		) {
