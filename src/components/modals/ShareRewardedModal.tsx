@@ -22,9 +22,9 @@ import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import GiftIcon from '../../../public/images/icons/gift.svg';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
