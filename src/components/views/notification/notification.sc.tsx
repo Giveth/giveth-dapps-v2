@@ -1,8 +1,8 @@
 import { Button, Container, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { TabItem } from '@/components/styled-components/Tabs';
 
 export const NotificationContainer = styled(Container)`
