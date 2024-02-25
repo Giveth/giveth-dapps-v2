@@ -9,7 +9,7 @@ import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAccount } from 'wagmi';
-import { Flex } from '../styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import config from '@/configuration';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { formatWeiHelper } from '@/helpers/number';
@@ -121,7 +121,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>
-					<Caption medium>{networkName}</Caption>
+					<Caption $medium>{networkName}</Caption>
 					{!isSafeEnv && (
 						<ItemAction
 							size='Small'
@@ -170,7 +170,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 						{formatMessage({ id: 'label.from' })} GIVstream
 					</ItemTitle>
 					<Flex gap='4px'>
-						<PartAmount medium>
+						<PartAmount $medium>
 							{formatWeiHelper(givStreamLiquidPart.toString())}
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
@@ -186,7 +186,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 						GIVfarm & GIVgarden
 					</ItemTitle>
 					<Flex gap='4px'>
-						<PartAmount medium>
+						<PartAmount $medium>
 							{formatWeiHelper(farmsLiquidPart.toString())}
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
@@ -202,7 +202,7 @@ export const RewardItems: FC<IRewardItemsProps> = ({
 						GIVbacks
 					</ItemTitle>
 					<Flex gap='4px'>
-						<PartAmount medium>
+						<PartAmount $medium>
 							{formatWeiHelper(givbackLiquidPart)}
 						</PartAmount>
 						<PartUnit>GIV</PartUnit>
