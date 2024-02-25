@@ -8,8 +8,8 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { Flex } from '@giveth/ui-design-system';
 import { useProjectContext } from '@/context/project.context';
-import { Flex } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { EProjectPageTabs } from './ProjectIndex';
 import { Shadow } from '@/components/styled-components/Shadow';
