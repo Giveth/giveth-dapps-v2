@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { Col, Row } from '@giveth/ui-design-system';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { Flex } from '../styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import {
 	GIVpowerTopContainer,
 	Title,
@@ -79,7 +79,7 @@ export function TabPowerTop() {
 	return (
 		<GIVpowerTopContainer>
 			<GIVpowerContainer>
-				<Row style={{ $alignItems: 'flex-end' }}>
+				<Row style={{ alignItems: 'flex-end' }}>
 					<Col xs={12} sm={8}>
 						<Flex $alignItems='baseline' gap='16px'>
 							<Title>GIVpower</Title>
@@ -120,7 +120,7 @@ export function TabPowerTop() {
 									</GivAmount>
 									<BoostLinkContainer>
 										{hasZeroGivPower && (
-											<CaptionStyled medium>
+											<CaptionStyled $medium>
 												{formatMessage({
 													id: 'label.stake_giv_to_get_givpower',
 												})}
