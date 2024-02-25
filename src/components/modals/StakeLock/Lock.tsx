@@ -12,6 +12,7 @@ import { captureException } from '@sentry/nextjs';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
+import { Flex } from '@giveth/ui-design-system';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
@@ -29,7 +30,6 @@ import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { Flex } from '@/components/styled-components/Flex';
 import links from '@/lib/constants/links';
 import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
