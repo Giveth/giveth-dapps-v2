@@ -17,8 +17,8 @@ import {
 } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
+import { Flex } from '@giveth/ui-design-system';
 import { ETheme } from '@/features/general/general.slice';
-import { Flex } from './styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 import useFocus from '@/hooks/useFocus';
 
