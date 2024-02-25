@@ -20,7 +20,7 @@ const GIVeconomyTab: FC = () => {
 				<Flex gap='16px' $justifyContent='space-between'>
 					{giveconomyTabs.map((tab, idx) => (
 						<Link key={idx} href={tab.href}>
-							<Label size='Big' isActive={asPath === tab.href}>
+							<Label size='Big' $isActive={asPath === tab.href}>
 								{tab.label}
 							</Label>
 						</Link>
@@ -32,7 +32,7 @@ const GIVeconomyTab: FC = () => {
 };
 
 interface ILabelProps {
-	isActive: boolean;
+	$isActive: boolean;
 }
 
 const Label = styled(GLink)<ILabelProps>`
@@ -40,9 +40,9 @@ const Label = styled(GLink)<ILabelProps>`
 	padding: 12px;
 	text-align: center;
 	color: ${props =>
-		props.isActive ? neutralColors.gray[100] : brandColors.deep[100]};
+		props.$isActive ? neutralColors.gray[100] : brandColors.deep[100]};
 	background-color: ${props =>
-		props.isActive ? brandColors.giv[600] : 'unset'};
+		props.$isActive ? brandColors.giv[600] : 'unset'};
 	border: 1px solid ${brandColors.giv[600]};
 	box-sizing: border-box;
 	border-radius: 54px;
