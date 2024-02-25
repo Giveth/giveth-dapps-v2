@@ -94,7 +94,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 					)}
 				</ExploreByRow>
 			</HighlightSection>
-			<NormalSection inSidebar={inSidebar}>
+			<NormalSection $inSidebar={inSidebar}>
 				<Label $medium>{formatMessage({ id: 'label.category' })}</Label>
 				<CategoriesGrid $inSidebar={inSidebar} $baseTheme={theme}>
 					{mainCategories.map((category, idx) => (
@@ -130,7 +130,7 @@ const ExploreItem = styled(Item)`
 	}
 `;
 
-const NormalSection = styled.div<{ inSidebar?: boolean }>`
+const NormalSection = styled.div<{ $inSidebar?: boolean }>`
 	margin-top: 16px;
 	padding: 8px 8px 0;
 	border-radius: 16px;
