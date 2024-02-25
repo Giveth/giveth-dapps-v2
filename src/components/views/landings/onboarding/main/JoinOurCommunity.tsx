@@ -9,9 +9,9 @@ import {
 	IconYoutube,
 	Lead,
 } from '@giveth/ui-design-system';
+import { Flex } from '@giveth/ui-design-system';
 import { OnboardingWrapper } from '@/components/views/landings/onboarding/common/common.styled';
 import { Bullets } from '@/components/styled-components/Bullets';
-import { Flex } from '@/components/styled-components/Flex';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 
