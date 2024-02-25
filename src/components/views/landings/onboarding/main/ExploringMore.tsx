@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { H3, mediaQueries, neutralColors } from '@giveth/ui-design-system';
+import { FlexCenter } from '@giveth/ui-design-system';
 import { OnboardingWrapper } from '@/components/views/landings/onboarding/common/common.styled';
 import OnboardingCard from '@/components/OnboardingCard';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import {
 	donorCard,
 	projectOwnerCard,
