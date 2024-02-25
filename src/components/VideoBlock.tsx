@@ -1,7 +1,7 @@
 import { useState, useRef, FC } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { FlexCenter } from '@giveth/ui-design-system';
 
 interface ITabOverviewVideo {
 	src: string;
