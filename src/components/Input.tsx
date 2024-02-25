@@ -14,9 +14,9 @@ import React, {
 	useRef,
 } from 'react';
 import styled, { css } from 'styled-components';
+import { FlexCenter } from '@giveth/ui-design-system';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 import InputStyled from './styled-components/Input';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { getTextWidth } from '@/helpers/text';
 import {
 	inputSizeToFontSize,
@@ -32,7 +32,6 @@ import type {
 	RegisterOptions,
 	UseFormRegister,
 } from 'react-hook-form';
-
 export enum InputSize {
 	SMALL,
 	MEDIUM,
