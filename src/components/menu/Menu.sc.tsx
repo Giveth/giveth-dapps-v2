@@ -1,8 +1,8 @@
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { Flex } from '@giveth/ui-design-system';
 import { ETheme } from '@/features/general/general.slice';
 import { Shadow } from '../styled-components/Shadow';
-import { Flex } from '../styled-components/Flex';
 
 interface IMenuContainerProps {
 	isAnimating?: boolean;
