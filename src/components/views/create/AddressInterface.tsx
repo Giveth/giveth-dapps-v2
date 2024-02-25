@@ -1,6 +1,6 @@
 import { useFormContext } from 'react-hook-form';
 import { useIntl } from 'react-intl';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
 	B,
 	Button,
@@ -32,6 +32,10 @@ interface IAddressInterfaceProps extends IChainType {
 	onButtonClick?: () => void;
 	anchorContractData?: IAnchorContractData;
 	isEditMode?: boolean;
+}
+
+interface IconContainerProps {
+	disabled?: boolean;
 }
 
 const AddressInterface = ({
@@ -116,7 +120,7 @@ const AddressInterface = ({
 							<IconWithTooltip
 								direction='top'
 								icon={
-									<IconContainer>
+									<IconContainer disabled>
 										<IconTrash24
 											color={neutralColors.gray[600]}
 										/>
@@ -243,15 +247,20 @@ const AddressContainer = styled.div<{ hasAddress: boolean }>`
 	overflow-x: auto;
 `;
 
-const IconContainer = styled(FlexCenter)`
+const IconContainer = styled(FlexCenter)<IconContainerProps>`
 	height: 50px;
 	width: 50px;
 	border-radius: 50%;
 	cursor: pointer;
 	transition: background-color 0.2s ease-in-out;
-	&:hover {
-		background-color: ${neutralColors.gray[300]};
-	}
+
+	${props =>
+		!props.disabled &&
+		css`
+			&:hover {
+				background-color: ${neutralColors.gray[300]};
+			}
+		`}
 `;
 
 const AlloProtocolContainer = styled.div`
