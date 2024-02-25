@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useAccount } from 'wagmi';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { formatWeiHelper } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
 import { WrappedSpinner } from '@/components/Spinner';
