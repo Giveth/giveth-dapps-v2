@@ -1,8 +1,7 @@
-import { IconLink, neutralColors } from '@giveth/ui-design-system';
-import { FC } from 'react';
+import { FlexCenter, IconLink, neutralColors } from '@giveth/ui-design-system';
+import { type FC } from 'react';
 import styled from 'styled-components';
 import Input from '@/components/Input';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { RemoveIcon } from '@/components/views/verification/Common';
 
 interface IProps {
