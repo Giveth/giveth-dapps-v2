@@ -10,8 +10,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Chain } from 'viem';
+import { FlexCenter } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { useDonateData } from '@/context/donate.context';
 import ExternalLink from '@/components/ExternalLink';
 
