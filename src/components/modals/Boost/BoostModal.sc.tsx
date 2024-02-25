@@ -11,8 +11,8 @@ import {
 } from '@giveth/ui-design-system';
 import Slider from 'rc-slider';
 import styled, { css } from 'styled-components';
+import { Flex } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Flex } from '@/components/styled-components/Flex';
 import { EBoostModalState } from './BoostModal';
 
 interface IBoostModalContainerProps {
