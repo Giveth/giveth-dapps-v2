@@ -14,8 +14,8 @@ import {
 
 import { useIntl } from 'react-intl';
 import { Row, Col } from '@giveth/ui-design-system';
+import { Flex } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
-import { Flex } from '@/components/styled-components/Flex';
 import { isUserRegistered } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
