@@ -3,7 +3,7 @@ import { brandColors, Button, H6 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { ButtonStyled } from './Common.sc';
 import Input from '@/components/Input';
 import { ContentSeparator, BtnContainer } from './Common.sc';
