@@ -8,8 +8,8 @@ import {
 	SublineBold,
 } from '@giveth/ui-design-system';
 
+import { Flex } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
-import { Flex } from '../styled-components/Flex';
 import { IModal } from '@/types/common';
 import { mediaQueries } from '@/lib/constants/constants';
 import { RegenStreamConfig, StreamType } from '@/types/config';
