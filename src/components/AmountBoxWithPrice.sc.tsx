@@ -1,6 +1,11 @@
-import { brandColors, Title, neutralColors, P } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Title,
+	neutralColors,
+	P,
+	Flex,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from './styled-components/Flex';
 
 export const AmountBoxWithPriceContainer = styled(Flex)`
 	background-color: ${brandColors.giv[500]}66;
