@@ -160,20 +160,6 @@ export const AdminActions = () => {
 							setShowModal={setShowShareModal}
 							projectHref={slug}
 						/>
-						// (verified ? (
-						// 	<ShareRewardedModal
-						// 		contentType={EContentType.thisProject}
-						// 		setShowModal={setShowShareModal}
-						// 		projectHref={slug}
-						// 		projectTitle={project.title}
-						// 	/>
-						// ) : (
-						// 	<ShareModal
-						// 		contentType={EContentType.thisProject}
-						// 		setShowModal={setShowShareModal}
-						// 		projectHref={slug}
-						// 	/>
-						// ))}
 					)}
 				</MobileActionsModal>
 			)}
