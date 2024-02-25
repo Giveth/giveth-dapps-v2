@@ -2,7 +2,7 @@ import { B, P, brandColors, neutralColors } from '@giveth/ui-design-system';
 import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useEffect } from 'react';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { limitFraction } from '@/helpers/number';
 import { TokenIcon } from '../../donate/TokenIcon/TokenIcon';
 import { ITokenWithBalance } from '@/hooks/useProjectClaimableDonations';
