@@ -1,12 +1,13 @@
 import {
 	brandColors,
+	Flex,
+	FlexCenter,
 	GLink,
 	IconCheck,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import type { FC } from 'react';
+import { type FC } from 'react';
 
 interface ICheckBox {
 	onChange: (e: boolean) => void;
