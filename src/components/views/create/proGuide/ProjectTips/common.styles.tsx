@@ -1,7 +1,7 @@
 import { brandColors, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-export const TipListItem = styled.div`
+export const TipListItem = styled.div<{ color?: any }>`
 	padding-left: 30px; // Include the space for the custom bullet
 	font-size: 18px;
 	line-height: 1.5;
@@ -18,9 +18,9 @@ export const TipListItem = styled.div`
 		height: 5px;
 		width: 5px;
 		max-width: 100%;
-		background-color: ${brandColors.giv[500]};
+		background-color: ${props => (props.color || brandColors.giv)[500]};
 		border-radius: 50%;
-		box-shadow: 0 0 0 3px ${brandColors.giv[100]};
+		box-shadow: 0 0 0 3px ${props => (props.color || brandColors.giv)[100]};
 	}
 `;
 

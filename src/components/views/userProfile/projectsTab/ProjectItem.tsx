@@ -49,7 +49,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 							)}
 						</Flex>
 					</Subline>
-					<Link href={`project/${project.slug}`}>
+					<Link href={`/project/${project.slug}`}>
 						<H2>{project.title}</H2>
 					</Link>
 				</div>
@@ -85,7 +85,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 							<VerificationBadge
 								isVerified={project?.verified}
 								verificationStatus={
-									project?.verificationFormStatus
+									project.projectVerificationForm?.status
 								}
 							/>
 						</div>

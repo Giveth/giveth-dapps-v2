@@ -19,7 +19,6 @@ import { capitalizeAllWords } from '@/lib/helpers';
 import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
 import { idToProjectEdit } from '@/lib/routeCreators';
 import ShareModal from '@/components/modals/ShareModal';
-import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 import { EContentType } from '@/lib/constants/shareContent';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
@@ -83,7 +82,7 @@ export const AdminActions = () => {
 		},
 		{
 			label: formatMessage({
-				id: verified ? 'label.share_and_get_rewarded' : 'label.share',
+				id: 'label.share',
 			}),
 			type: OptionType.ITEM,
 			icon: <IconShare16 />,
@@ -116,21 +115,13 @@ export const AdminActions = () => {
 					projectId={projectData?.id}
 				/>
 			)}
-			{showShareModal &&
-				(verified ? (
-					<ShareRewardedModal
-						contentType={EContentType.thisProject}
-						setShowModal={setShowShareModal}
-						projectHref={slug}
-						projectTitle={project.title}
-					/>
-				) : (
-					<ShareModal
-						contentType={EContentType.thisProject}
-						setShowModal={setShowShareModal}
-						projectHref={slug}
-					/>
-				))}
+			{showShareModal && (
+				<ShareModal
+					contentType={EContentType.thisProject}
+					setShowModal={setShowShareModal}
+					projectHref={slug}
+				/>
+			)}
 		</Wrapper>
 	) : (
 		<MobileWrapper
@@ -163,21 +154,13 @@ export const AdminActions = () => {
 							projectId={projectData?.id}
 						/>
 					)}
-					{showShareModal &&
-						(verified ? (
-							<ShareRewardedModal
-								contentType={EContentType.thisProject}
-								setShowModal={setShowShareModal}
-								projectHref={slug}
-								projectTitle={project.title}
-							/>
-						) : (
-							<ShareModal
-								contentType={EContentType.thisProject}
-								setShowModal={setShowShareModal}
-								projectHref={slug}
-							/>
-						))}
+					{showShareModal && (
+						<ShareModal
+							contentType={EContentType.thisProject}
+							setShowModal={setShowShareModal}
+							projectHref={slug}
+						/>
+					)}
 				</MobileActionsModal>
 			)}
 		</MobileWrapper>

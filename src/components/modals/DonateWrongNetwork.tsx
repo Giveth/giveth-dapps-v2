@@ -39,6 +39,7 @@ const networks = [
 	config.GNOSIS_CONFIG,
 	config.POLYGON_CONFIG,
 	config.CELO_CONFIG,
+	config.ARBITRUM_CONFIG,
 	config.OPTIMISM_CONFIG,
 	config.CLASSIC_CONFIG,
 	config.SOLANA_CONFIG,

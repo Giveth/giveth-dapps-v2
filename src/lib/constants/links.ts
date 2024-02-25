@@ -67,6 +67,7 @@ const links = {
 	MULTISIG_GUIDE: DOCS + 'dapps/multisigs',
 	ACROSS_BRIDGE:
 		'https://across.to?ref=0x9cd1E4A6b3361abcCC90C7F8E788ac246d194303',
+	ALLO_PROTOCOL: 'https://docs.allo.gitcoin.co/',
 };
 
 if (!isProduction) {

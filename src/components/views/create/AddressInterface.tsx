@@ -25,6 +25,7 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { IAnchorContractData } from '@/apollo/types/types';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { EInputs } from './types';
+import links from '@/lib/constants/links';
 
 interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
@@ -56,6 +57,11 @@ const AddressInterface = ({
 
 	const hasAddress = !!walletAddress;
 	const hasAnchorContract = !!anchorContractData?.isActive;
+	const hasOptimismAddress = !!findAddressByChain(
+		value,
+		config.OPTIMISM_NETWORK_NUMBER,
+		chainType,
+	);
 
 	return (
 		<Container>
@@ -130,6 +136,12 @@ const AddressInterface = ({
 										1,
 									);
 									setValue(inputName, _addresses);
+									if (isOptimism) {
+										setValue(
+											EInputs.alloProtocolRegistry,
+											false,
+										);
+									}
 								}}
 							>
 								<IconTrash24 />
@@ -150,15 +162,26 @@ const AddressInterface = ({
 												id: 'label.set_up_profile_on_the_allo_protocol_registry',
 											})}
 								</B>
-								<P>
+								<div>
+									<CustomP>
+										{hasAnchorContract && isEditMode
+											? formatMessage({
+													id: 'label.your_project_is_set_up_to_receive_recurring_donations',
+												})
+											: formatMessage({
+													id: 'label.do_you_want_this_project_to_be_setup_to_receive_recurring_donations',
+												})}
+									</CustomP>
+									<CustomLink
+										href={links.ALLO_PROTOCOL}
+										target='_blank'
+									>
+										Allo Protocol
+									</CustomLink>
 									{hasAnchorContract && isEditMode
-										? formatMessage({
-												id: 'label.your_project_is_set_up_to_receive_recurring_donations',
-											})
-										: formatMessage({
-												id: 'label.do_you_want_this_project_to_be_setup_to_receive_recurring_donations',
-											})}
-								</P>
+										? '.'
+										: '?'}
+								</div>
 							</div>
 							{hasAnchorContract && isEditMode ? (
 								<IconCheckContainer>
@@ -167,13 +190,15 @@ const AddressInterface = ({
 							) : (
 								<ToggleSwitch
 									isOn={alloProtocolRegistry}
-									toggleOnOff={() =>
+									toggleOnOff={() => {
+										if (!hasOptimismAddress) return;
 										setValue(
 											EInputs.alloProtocolRegistry,
 											!alloProtocolRegistry,
-										)
-									}
+										);
+									}}
 									label=''
+									disabled={!hasOptimismAddress}
 								/>
 							)}
 						</Flex>
@@ -239,6 +264,16 @@ const IconCheckContainer = styled(FlexCenter)`
 	border-radius: 50px;
 	background-color: ${semanticColors.jade[500]};
 	padding: 5px;
+`;
+
+const CustomP = styled(P)`
+	display: inline;
+`;
+
+const CustomLink = styled.a`
+	color: ${brandColors.giv[500]};
+	text-decoration: none;
+	cursor: pointer;
 `;
 
 export default AddressInterface;

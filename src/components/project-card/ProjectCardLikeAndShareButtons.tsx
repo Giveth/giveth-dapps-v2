@@ -7,12 +7,11 @@ import {
 	IconShare16,
 	neutralColors,
 	Subline,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { Flex } from '@giveth/ui-design-system';
-import ShareModalAndGetReward from '../modals/ShareRewardedModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { isSSRMode, showToastError } from '@/lib/helpers';
 import { IProject } from '@/apollo/types/types';
@@ -126,20 +125,14 @@ const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
 
 	return (
 		<>
-			{showShare &&
-				(verified ? (
-					<ShareModalAndGetReward
-						contentType={EContentType.thisProject}
-						setShowModal={setShowShare}
-						projectHref={slug}
-					/>
-				) : (
-					<ShareModal
-						setShowModal={setShowShare}
-						projectHref={slug}
-						contentType={EContentType.thisProject}
-					/>
-				))}
+			{showShare && (
+				<ShareModal
+					setShowModal={setShowShare}
+					projectHref={slug}
+					contentType={EContentType.thisProject}
+				/>
+			)}
+
 			<BadgeWrapper>
 				<Flex gap='6px'>
 					{verified && (

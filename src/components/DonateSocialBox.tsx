@@ -7,7 +7,6 @@ import useDetectDevice from '@/hooks/useDetectDevice';
 import { IProject } from '@/apollo/types/types';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
-import ShareRewardModal from '@/components/modals/ShareRewardedModal';
 import ShareModal from '@/components/modals/ShareModal';
 
 interface ISocialBox {
@@ -26,21 +25,13 @@ const DonateSocialBox: FC<ISocialBox> = props => {
 
 	return (
 		<Social isDonateFooter={isDonateFooter}>
-			{showModal &&
-				slug &&
-				(verified ? (
-					<ShareRewardModal
-						contentType={EContentType.thisProject}
-						setShowModal={setShowModal}
-						projectHref={slug}
-					/>
-				) : (
-					<ShareModal
-						contentType={EContentType.thisProject}
-						setShowModal={setShowModal}
-						projectHref={slug}
-					/>
-				))}
+			{showModal && slug && (
+				<ShareModal
+					contentType={EContentType.thisProject}
+					setShowModal={setShowModal}
+					projectHref={slug}
+				/>
+			)}
 			<BLead>
 				{isDonateFooter
 					? formatMessage({ id: 'label.cant_donate' })
