@@ -13,6 +13,7 @@ import {
 import { useIntl } from 'react-intl';
 
 import { formatEther } from 'viem';
+import { Flex } from '@giveth/ui-design-system';
 import {
 	APRRow,
 	ArrowButton,
@@ -34,7 +35,6 @@ import { IClaimViewCardProps } from '@/components/views/claim/Claim.view';
 import useClaim from '@/context/claim.context';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { WeiPerEther } from '@/lib/constants/constants';
 import { InputWithUnit } from '@/components/input/InputWithUnit';
