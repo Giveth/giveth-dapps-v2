@@ -7,9 +7,9 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
+import { FlexCenter } from '@giveth/ui-design-system';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 
 const AlreadyRegistered = () => {
