@@ -9,6 +9,7 @@ import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
+import { Flex } from '@giveth/ui-design-system';
 import links from '@/lib/constants/links';
 import SocialBox from '@/components/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
@@ -23,7 +24,6 @@ import QFToast from '@/components/views/donate/QFToast';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { getActiveRound } from '@/helpers/qf';
-import { Flex } from '@/components/styled-components/Flex';
 import { DonationInfo } from './DonationInfo';
 
 export const SuccessView: FC = () => {
