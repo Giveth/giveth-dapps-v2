@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { H2, H4, mediaQueries, neutralColors } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { OnboardingHeaderWrapper } from '@/components/views/landings/onboarding/common/common.styled';
 
 interface IProps {
