@@ -24,8 +24,8 @@ import Select, {
 	type CSSObjectWithLabel,
 } from 'react-select';
 
+import { FlexCenter } from '@giveth/ui-design-system';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { TokenIcon } from './TokenIcon/TokenIcon';
