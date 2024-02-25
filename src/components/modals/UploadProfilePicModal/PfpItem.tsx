@@ -8,8 +8,8 @@ import {
 	neutralColors,
 	P,
 } from '@giveth/ui-design-system';
+import { FlexCenter } from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { convertIPFSToHTTPS } from '@/helpers/url';
 
 interface IPfpItemProps {
