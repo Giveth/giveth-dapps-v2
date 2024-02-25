@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { GLink, IconSearch24 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { Flex } from '@giveth/ui-design-system';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { Flex } from '../styled-components/Flex';
 import { SidebarParentItem } from './SidebarItem';
 
 import { ProjectsItems } from '../menu/ProjectsItems';
