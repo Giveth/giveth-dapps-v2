@@ -2,8 +2,8 @@ import { brandColors, IconX24, neutralColors } from '@giveth/ui-design-system';
 import React, { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled, { css } from 'styled-components';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { zIndex } from '@/lib/constants/constants';
-import { Flex, FlexCenter } from '../styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
