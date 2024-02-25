@@ -74,7 +74,7 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 							switchChain?.({ chainId: networkId });
 							closeModal();
 						}}
-						isSelected={networkId === chainId}
+						$isSelected={networkId === chainId}
 						key={networkId}
 						$baseTheme={theme}
 					>
@@ -118,7 +118,7 @@ export const SelectedNetwork = styled(Overline)<{
 `;
 
 export const NetworkItem = styled.div<{
-	isSelected: boolean;
+	$isSelected: boolean;
 	$baseTheme: ETheme;
 }>`
 	position: relative;
@@ -136,8 +136,7 @@ export const NetworkItem = styled.div<{
 				: neutralColors.gray[200]};
 	}
 	border: 1px solid
-		${({ isSelected }) =>
-			isSelected ? brandColors.giv[500] : 'transparent'};
+		${props => (props.$isSelected ? brandColors.giv[500] : 'transparent')};
 `;
 
 const Wrapper = styled.div`
