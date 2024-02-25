@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { Caption, B, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
+import { Flex, FlexSpacer } from '@giveth/ui-design-system';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
@@ -53,7 +53,7 @@ export const DonateHeader: FC<IHeader> = () => {
 					</Logo>
 				</Link>
 				<Flex $flexDirection='column' gap='4px'>
-					<StyledCaption medium>Donating to</StyledCaption>
+					<StyledCaption $medium>Donating to</StyledCaption>
 					<B>{project.title}</B>
 				</Flex>
 			</Flex>
