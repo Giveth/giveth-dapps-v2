@@ -12,8 +12,8 @@ import {
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { Flex } from '@giveth/ui-design-system';
 import { IconGIV } from './Icons/GIV';
-import { Flex } from './styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
@@ -93,7 +93,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 							<CardTitle>{title}</CardTitle>
 							<ChainInfo $alignItems='center'>
 								<NetworkLogo chainId={network} logoSize={16} />
-								<ChainName styleType='Small'>
+								<ChainName $styleType='Small'>
 									{getChainName(network)}
 								</ChainName>
 							</ChainInfo>
