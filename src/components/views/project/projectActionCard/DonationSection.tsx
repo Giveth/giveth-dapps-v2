@@ -13,7 +13,7 @@ import {
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { type FC } from 'react';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { formatDonation } from '@/helpers/number';
@@ -43,7 +43,7 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 						{formatMessage({
 							id: 'label.raised_from',
 						})}
-						<Caption medium>
+						<Caption $medium>
 							{projectData?.countUniqueDonors}
 						</Caption>
 						{formatMessage(
