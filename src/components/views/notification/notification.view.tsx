@@ -8,6 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import {
 	NotificationContainer,
 	IconContainer,
@@ -25,7 +26,6 @@ import {
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowFooter } from '@/features/general/general.slice';
 import { NotificationBox } from '@/components/notification/NotificationBox';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
 import {
