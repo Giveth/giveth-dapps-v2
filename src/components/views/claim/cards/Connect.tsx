@@ -5,11 +5,11 @@ import { useIntl } from 'react-intl';
 import { GLink, H2, Lead, brandColors, Button } from '@giveth/ui-design-system';
 import { useAccount, useDisconnect } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { Flex } from '@giveth/ui-design-system';
 import { ArrowButton, Card } from './common';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
 import { formatWeiHelper } from '@/helpers/number';
 import Routes from '@/lib/constants/Routes';
-import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
 
 interface IConnectCardContainerProps {
