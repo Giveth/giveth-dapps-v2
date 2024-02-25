@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { type FC } from 'react';
 import { formatUnits } from 'viem';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
 import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
@@ -56,12 +56,12 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			>
 				<Row $justifyContent='space-between'>
 					<Symbol>
-						<Caption medium>{stream[0].token.symbol}</Caption>
+						<Caption $medium>{stream[0].token.symbol}</Caption>
 						<GrayCaption>{stream[0].token.name}</GrayCaption>
 					</Symbol>
 					<Balance gap='4px'>
 						<GrayCaption>Stream Balance</GrayCaption>
-						<Caption medium>
+						<Caption $medium>
 							{balance !== undefined
 								? limitFraction(
 										formatUnits(
@@ -72,7 +72,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 									)
 								: '--'}
 						</Caption>
-						<Caption medium>{stream[0].token.symbol}</Caption>
+						<Caption $medium>{stream[0].token.symbol}</Caption>
 					</Balance>
 				</Row>
 				{totalFlowRate !== undefined && (
@@ -83,7 +83,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 									id: 'label.stream_runs_out_in',
 								})}
 							</GrayCaption>
-							<Caption medium>
+							<Caption $medium>
 								{remainingMonths.toString()}
 							</Caption>
 							<Caption>
@@ -99,7 +99,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 						</Flex>
 						<Flex gap='4px'>
 							<GrayCaption>Funding</GrayCaption>
-							<Caption medium>{stream.length}</Caption>
+							<Caption $medium>{stream.length}</Caption>
 							<GrayCaption>
 								{formatMessage(
 									{ id: 'label.funding_count_projects' },
