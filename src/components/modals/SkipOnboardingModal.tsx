@@ -9,7 +9,7 @@ import {
 import styled from 'styled-components';
 import { FC } from 'react';
 import { useRouter } from 'next/router';
-import { Flex } from '../styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
