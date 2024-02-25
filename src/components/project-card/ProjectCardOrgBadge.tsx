@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { neutralColors, Overline } from '@giveth/ui-design-system';
 
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { ORGANIZATION } from '@/lib/constants/organizations';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 
 interface IProjectCardOrgBadge {
