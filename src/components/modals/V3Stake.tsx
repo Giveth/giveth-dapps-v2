@@ -10,9 +10,9 @@ import {
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useAccount } from 'wagmi';
+import { Flex } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { CancelButton, HarvestButton, HelpRow } from './HarvestAll.sc';
-import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import V3StakingCard from '../cards/StakingCards/PositionCard/PositionCard';
