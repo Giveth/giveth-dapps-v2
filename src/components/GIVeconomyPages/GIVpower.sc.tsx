@@ -13,10 +13,10 @@ import {
 	P,
 	QuoteText,
 } from '@giveth/ui-design-system';
+import { Flex } from '@giveth/ui-design-system';
 import { BottomContainer, MobileD1, TopContainer } from './commons';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Arc } from '../styled-components/Arc';
-import { Flex } from '../styled-components/Flex';
 
 export const GIVpowerContainer = styled(Container)`
 	padding: 16px;
