@@ -28,8 +28,8 @@ const ToggleSwitch: FC<IToggleButton> = ({
 			className={className}
 		>
 			<InputStyled checked={isOn} type='checkbox' />
-			<Switch isOn={isOn}>
-				<Bullet isOn={isOn} />
+			<Switch $isOn={isOn}>
+				<Bullet $isOn={isOn} />
 			</Switch>
 			<Caption>{label}</Caption>
 		</Container>
@@ -42,19 +42,19 @@ const InputStyled = styled.input`
 	height: 0;
 `;
 
-const Bullet = styled.div<{ isOn: boolean }>`
+const Bullet = styled.div<{ $isOn: boolean }>`
 	position: absolute;
 	border-radius: 50%;
 	width: 14px;
 	height: 14px;
 	background-color: ${brandColors.pinky[200]};
 	border: 3px solid white;
-	left: ${props => (props.isOn ? '15px' : '1px')};
+	left: ${props => (props.$isOn ? '15px' : '1px')};
 	transition: left 0.2s ease-in-out;
 	top: 1px;
 `;
 
-const Switch = styled.span<{ isOn: boolean }>`
+const Switch = styled.span<{ $isOn: boolean }>`
 	position: relative;
 	width: 30px;
 	height: 16px;
@@ -64,7 +64,7 @@ const Switch = styled.span<{ isOn: boolean }>`
 	border-radius: 50px;
 	cursor: pointer;
 	background-color: ${props =>
-		props.isOn ? brandColors.pinky[500] : neutralColors.gray[700]};
+		props.$isOn ? brandColors.pinky[500] : neutralColors.gray[700]};
 	transition: background-color 0.3s ease-in-out;
 `;
 
