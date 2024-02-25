@@ -7,6 +7,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { FlexSpacer } from '@giveth/ui-design-system';
 import {
 	MenuAndButtonContainer,
 	CoverLine,
@@ -21,7 +22,6 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
-import { FlexSpacer } from '../styled-components/Flex';
 import { MenuContainer, NotificationMenuWrapper } from './Menu.sc';
 import { ItemsProvider } from '@/context/Items.context';
 import { ETheme } from '@/features/general/general.slice';
@@ -156,7 +156,7 @@ const HeaderNotificationButton: FC<IHeaderNotificationButtonProps> = ({
 		<NotificationsIconContainer>
 			{totalUnreadNotifications > 0 && (
 				<NotificationsButtonCircle>
-					<Overline styleType='Small'>
+					<Overline $styleType='Small'>
 						{totalUnreadNotifications}
 					</Overline>
 				</NotificationsButtonCircle>
