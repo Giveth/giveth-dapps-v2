@@ -65,8 +65,8 @@ const GetStarted = () => {
 						position: 'relative',
 						display: 'none',
 						height: '100%',
-						$alignItems: 'center',
-						$justifyContent: 'center',
+						alignItems: 'center',
+						justifyContent: 'center',
 					}}
 				>
 					<div
