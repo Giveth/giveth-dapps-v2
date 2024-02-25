@@ -7,9 +7,9 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { FlexCenter } from '@giveth/ui-design-system';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import AutoSave from '@/components/AutoSave';
 
 const HeaderSection = () => {
