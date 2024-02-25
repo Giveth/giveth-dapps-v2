@@ -1,7 +1,6 @@
-import { brandColors, H4, Lead } from '@giveth/ui-design-system';
+import { brandColors, Flex, H4, Lead } from '@giveth/ui-design-system';
 import React, { FC, ReactNode } from 'react';
 import styled from 'styled-components';
-import { Flex } from './styled-components/Flex';
 
 interface IDataBoxProps {
 	title: string;
