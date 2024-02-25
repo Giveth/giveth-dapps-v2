@@ -16,6 +16,7 @@ import { useRouter } from 'next/router';
 
 import { useConnect, useAccount } from 'wagmi';
 import { Address } from 'viem';
+import { Flex } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { ETheme } from '@/features/general/general.slice';
@@ -28,7 +29,6 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { EModalEvents } from '@/hooks/useModalCallback';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { Dropdown } from './ExpirationDropdown';
-import { Flex } from '../styled-components/Flex';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { createSwisMessage } from '@/lib/authentication';
 import { ISolanaSignToGetToken } from '@/features/user/user.types';
