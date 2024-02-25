@@ -11,7 +11,7 @@ import {
 import styled from 'styled-components';
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex } from '../styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import links from '@/lib/constants/links';
 import { IModal } from '@/types/common';
