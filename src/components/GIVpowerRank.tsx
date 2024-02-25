@@ -10,8 +10,8 @@ import {
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled, { css } from 'styled-components';
+import { Flex } from '@giveth/ui-design-system';
 import { IProjectPower } from '@/apollo/types/types';
-import { Flex } from './styled-components/Flex';
 import { useProjectContext } from '@/context/project.context';
 
 interface IGIVpowerRank {
