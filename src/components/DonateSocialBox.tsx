@@ -1,12 +1,11 @@
 import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Lead, neutralColors } from '@giveth/ui-design-system';
+import { Flex, Lead, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useProjectContext } from '@/context/project.context';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { IProject } from '@/apollo/types/types';
 import { EContentType } from '@/lib/constants/shareContent';
-import { Flex } from '@/components/styled-components/Flex';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import ShareRewardModal from '@/components/modals/ShareRewardedModal';
 import ShareModal from '@/components/modals/ShareModal';
