@@ -6,7 +6,7 @@ import {
 	OutlineButton,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
 
