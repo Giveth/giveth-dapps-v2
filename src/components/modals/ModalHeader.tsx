@@ -30,7 +30,7 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 	return !hiddenHeader ? (
 		<ModalHeaderRow
 			$justifyContent={position === 'center' ? 'center' : 'flex-start'}
-			hasContent={!!icon || !!title}
+			$hasContent={!!icon || !!title}
 			color={color}
 		>
 			{!!backButtonCallback ? (
@@ -60,10 +60,10 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 
 export const ModalHeaderRow = styled(Flex)<{
 	color?: string;
-	hasContent: boolean;
+	$hasContent: boolean;
 }>`
 	gap: 14px;
-	min-height: ${props => (props.hasContent ? '48px' : '36px')};
+	min-height: ${props => (props.$hasContent ? '48px' : '36px')};
 	padding: 24px 24px 8px;
 	position: relative;
 	align-items: center;
