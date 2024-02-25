@@ -17,8 +17,8 @@ import {
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import {
 	PassportBannerData,
