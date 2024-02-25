@@ -9,6 +9,7 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
+import { Flex } from '@giveth/ui-design-system';
 import ProjectCardImage from './ProjectCardImage';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
@@ -20,7 +21,6 @@ import { addressToUserView, slugToProjectView } from '@/lib/routeCreators';
 import { VerifiedBadge } from '@/components/badges/VerifiedBadge';
 import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
 import { PFP } from '../PFP';
-import { Flex } from '../styled-components/Flex';
 
 interface IProjectCard {
 	project: IProject;
