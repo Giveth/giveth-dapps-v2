@@ -9,7 +9,7 @@ import Consensys from '/public/images/icons/impactQuests/Consensys.svg';
 import DogeClaren from '/public/images/icons/impactQuests/dogeClaren.png';
 import ETHDenver from '/public/images/icons/impactQuests/ETHDenver.png';
 import Image from 'next/image';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { FlexCenter } from '@giveth/ui-design-system';
 
 const Partners = () => {
 	return (
