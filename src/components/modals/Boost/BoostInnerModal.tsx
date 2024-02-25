@@ -14,9 +14,9 @@ import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 
+import { Flex } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { LockInfoTooltip } from '../StakeLock/LockInfo';
-import { Flex } from '@/components/styled-components/Flex';
 import 'rc-slider/assets/index.css';
 import { formatWeiHelper } from '@/helpers/number';
 import Routes from '@/lib/constants/Routes';
