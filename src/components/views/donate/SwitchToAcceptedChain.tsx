@@ -40,7 +40,7 @@ const SwitchToAcceptedChain: FC<ISwitchToAcceptedChain> = ({
 	// Assuming getNetworkNames is updated to handle INetworkIdWithChain array
 	return (
 		<NetworkToast>
-			<Caption medium>
+			<Caption $medium>
 				{formatMessage({
 					id: 'label.this_project_only_accept_on',
 				})}{' '}
