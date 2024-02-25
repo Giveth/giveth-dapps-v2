@@ -72,7 +72,7 @@ export const GIVeconomyItems = () => {
 					</ItemRow>
 				</Item>
 			</Link>
-			<LabelStyle medium>
+			<LabelStyle $medium>
 				{formatMessage({ id: 'page.projects.title.explore' })}
 			</LabelStyle>
 			{giveconomyItems.map((item, idx) => (
