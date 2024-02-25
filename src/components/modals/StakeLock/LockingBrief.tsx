@@ -1,6 +1,6 @@
 import { brandColors, H5 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { formatWeiHelper } from '@/helpers/number';
 import { smallFormatDate } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
