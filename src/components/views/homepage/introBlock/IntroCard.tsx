@@ -7,7 +7,7 @@ import {
 } from '@giveth/ui-design-system';
 import React, { ReactElement } from 'react';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 import ExternalLink from '@/components/ExternalLink';
 
