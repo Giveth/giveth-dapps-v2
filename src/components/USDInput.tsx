@@ -5,9 +5,9 @@ import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
 import { parseUnits } from 'viem';
+import { Flex } from '@giveth/ui-design-system';
 import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig } from '@/types/config';
-import { Flex } from './styled-components/Flex';
 
 interface IAmountInput {
 	maxAmount: bigint;
