@@ -2,10 +2,10 @@ import { P, brandColors, neutralColors } from '@giveth/ui-design-system';
 import { type FC, useState, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
+import { Flex } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
-import { Flex } from '@/components/styled-components/Flex';
 import { DepositSuperToken } from './DepositSuperToken';
 import { WithDrawSuperToken } from './WithDrawSuperToken';
 import { ISuperToken, ISuperfluidStream, IToken } from '@/types/superFluid';
@@ -158,7 +158,7 @@ interface ITapProps {
 	active: boolean;
 }
 
-const Tab = styled(P)`
+const Tab = styled(P)<ITapProps>`
 	cursor: pointer;
 	color: ${neutralColors.gray[700]};
 	padding: 8px 16px;
@@ -166,8 +166,8 @@ const Tab = styled(P)`
 	&:hover {
 		color: ${neutralColors.gray[900]};
 	}
-	${({ active }: ITapProps) =>
-		active &&
+	${props =>
+		props.active &&
 		css`
 			background-color: ${neutralColors.gray[200]};
 			color: ${brandColors.pinky[500]};
