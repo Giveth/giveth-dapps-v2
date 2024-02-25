@@ -18,6 +18,7 @@ import styled, { css } from 'styled-components';
 import BigNumber from 'bignumber.js';
 import Link from 'next/link';
 
+import { Flex } from '@giveth/ui-design-system';
 import {
 	RowWrapper,
 	TableCell,
@@ -25,7 +26,6 @@ import {
 	TableHeader,
 } from '@/components/styled-components/Table';
 import { formatWeiHelper } from '@/helpers/number';
-import { Flex } from '@/components/styled-components/Flex';
 import Input, { InputSize } from '@/components/Input';
 import SortIcon from '@/components/SortIcon';
 import { IPowerBoosting } from '@/apollo/types/types';
