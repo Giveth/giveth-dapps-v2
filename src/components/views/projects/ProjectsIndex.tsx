@@ -25,7 +25,6 @@ import { useProjectsContext } from '@/context/projects.context';
 
 import { FlexCenter } from '@/components/styled-components/Flex';
 import { ProjectsMiddleBanner } from './MiddleBanners/ProjectsMiddleBanner';
-import FloatingButtonReferral from '@/components/FloatingReferral';
 import { ActiveQFProjectsBanner } from './qfBanner/ActiveQFProjectsBanner';
 import { PassportBanner } from '@/components/PassportBanner';
 import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
@@ -234,7 +233,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 								/>
 							))}
 						</ProjectsContainer>
-						<FloatingButtonReferral />
+						{/* <FloatingButtonReferral /> */}
 					</ProjectsWrapper>
 				) : isQF && !activeRound ? (
 					<QFNoResultBanner />
