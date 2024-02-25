@@ -8,7 +8,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
 
 export interface IStepsArray {
