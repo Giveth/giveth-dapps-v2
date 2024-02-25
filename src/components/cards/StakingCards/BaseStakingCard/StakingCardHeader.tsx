@@ -5,8 +5,8 @@ import {
 } from '@giveth/ui-design-system';
 import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useIntl } from 'react-intl';
+import { FlexSpacer } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { FlexSpacer } from '@/components/styled-components/Flex';
 import { PoolStakingConfig, RegenPoolStakingConfig } from '@/types/config';
 import { StakeCardState } from './BaseStakingCard';
 import {
@@ -36,7 +36,7 @@ export const StakingCardHeader: FC<IStakingCardHeaderProps> = ({
 
 	return (
 		<StakingPoolExchangeRow gap='4px' $alignItems='center'>
-			<StakingPoolExchange styleType='Small'>
+			<StakingPoolExchange $styleType='Small'>
 				{regenStreamType
 					? 'REGENFARM'
 					: isGIVpower
