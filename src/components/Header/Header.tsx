@@ -10,7 +10,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
-import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
+import { Flex, FlexSpacer } from '@giveth/ui-design-system';
 import {
 	ConnectButton,
 	HeaderLinks,
@@ -142,7 +142,11 @@ const Header: FC<IHeader> = () => {
 	};
 
 	return (
-		<StyledHeader $alignItems='center' $baseTheme={theme} show={showHeader}>
+		<StyledHeader
+			$alignItems='center'
+			$baseTheme={theme}
+			$show={showHeader}
+		>
 			<Flex>
 				{showBackBtn ? (
 					<Logo onClick={handleBack}>
