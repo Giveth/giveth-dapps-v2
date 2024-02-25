@@ -186,7 +186,7 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	return (
 		<StakePoolInfoContainer>
 			{started ? (
-				<Details>
+				<Details $flexDirection='column'>
 					<Flex $justifyContent='space-between'>
 						<FlexCenter gap='8px'>
 							<DetailLabel>APR</DetailLabel>
