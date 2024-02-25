@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { brandColors, neutralColors, P } from '@giveth/ui-design-system';
 import { FC } from 'react';
-import { Flex } from './styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 
 interface IToggleButton {
 	isOn: boolean;
