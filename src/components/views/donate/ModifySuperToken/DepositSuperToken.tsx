@@ -3,7 +3,7 @@ import { Button } from '@giveth/ui-design-system';
 import { useAccount, useBalance } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { Framework } from '@superfluid-finance/sdk-core';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { AddressZero } from '@/lib/constants/constants';
 import { ModifyInfoToast } from './ModifyInfoToast';
