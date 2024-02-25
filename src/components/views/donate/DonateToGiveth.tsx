@@ -10,8 +10,8 @@ import {
 import styled from 'styled-components';
 import { ChangeEvent, FC } from 'react';
 import { useIntl } from 'react-intl';
+import { Flex } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { Flex } from '@/components/styled-components/Flex';
 import Input, { InputSize } from '@/components/Input';
 import { InputSuffix } from '@/components/styled-components/Input';
 import CheckBox from '@/components/Checkbox';
@@ -45,7 +45,7 @@ const DonateToGiveth: FC<IDonateToGiveth> = ({
 	return (
 		<Container>
 			<Flex $alignItems='center' gap='4px'>
-				<Caption medium>{title}</Caption>
+				<Caption $medium>{title}</Caption>
 				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
 					<TooltipContainer>
 						{formatMessage({ id: 'label.support_giveth_with' })}
