@@ -8,7 +8,7 @@ import {
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Flex } from './styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 
 const GIVeconomyTab: FC = () => {
