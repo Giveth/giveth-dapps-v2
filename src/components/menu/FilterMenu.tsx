@@ -55,6 +55,10 @@ const fundsFilter = [
 		label: 'Ethereum Classic',
 		value: EProjectsFilter.ACCEPT_FUND_ON_ETC,
 	},
+	{
+		label: 'Arbitrum',
+		value: EProjectsFilter.ACCEPT_FUND_ON_ARBITRUM,
+	},
 ];
 
 if (config.ENABLE_SOLANA) {
