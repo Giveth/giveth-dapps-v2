@@ -42,7 +42,7 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 				{isOpen ? <IconChevronUp32 /> : <IconChevronDown32 />}
 			</TitleRow>
 			<AnimatedDiv
-				maxHeight={isOpen ? maxHeight : '0px'}
+				$maxHeight={isOpen ? maxHeight : '0px'}
 				ref={contentRef}
 			>
 				{fieldsScores.DESCRIPTION === 0 && (
@@ -95,10 +95,10 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 	);
 };
 
-const AnimatedDiv = styled.div<{ maxHeight: string }>`
+const AnimatedDiv = styled.div<{ $maxHeight: string }>`
 	overflow: hidden;
 	transition: max-height 0.5s ease;
-	max-height: ${props => props.maxHeight};
+	max-height: ${props => props.$maxHeight};
 	padding-top: 8px;
 `;
 
