@@ -8,8 +8,8 @@ import {
 } from '@giveth/ui-design-system';
 import toast, { ToastPosition } from 'react-hot-toast';
 import styled from 'styled-components';
+import { Flex } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Flex } from '../styled-components/Flex';
 
 export enum ToastType {
 	INFO_PRIMARY,
@@ -70,7 +70,7 @@ export const gToast = (message: string, options: IToast) => {
 				<LeftIconContainer>{toastIcon(type)}</LeftIconContainer>
 			)}
 			<Content>
-				{title && <Caption medium>{title}</Caption>}
+				{title && <Caption $medium>{title}</Caption>}
 				<Caption>{message}</Caption>
 			</Content>
 			<Spacer />
