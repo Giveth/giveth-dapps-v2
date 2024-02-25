@@ -6,11 +6,11 @@ import { useMutation } from '@apollo/client';
 import { Button, brandColors } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useForm } from 'react-hook-form';
+import { FlexCenter } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { client } from '@/apollo/apolloClient';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { IUser } from '@/apollo/types/types';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { gToast, ToastType } from '../toasts';
 import {
 	PROFILE_PHOTO_PLACEHOLDER,
