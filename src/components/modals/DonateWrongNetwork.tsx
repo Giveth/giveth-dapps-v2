@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useSwitchChain } from 'wagmi';
 import { Chain } from 'viem';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
@@ -24,7 +25,6 @@ import config from '@/configuration';
 import NetworkLogo from '../NetworkLogo';
 import { NetworkItem, SelectedNetwork } from './SwitchNetwork';
 import { useAppSelector } from '@/features/hooks';
-import { Flex, FlexCenter } from '../styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
@@ -173,7 +173,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 										<B>{network.name}</B>
 										{_chainId === networkId && (
 											<SelectedNetwork
-												styleType='Small'
+												$styleType='Small'
 												$baseTheme={theme}
 											>
 												{formatMessage({
