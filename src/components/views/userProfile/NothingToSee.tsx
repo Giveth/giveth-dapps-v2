@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { Lead, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { FlexCenter } from '@giveth/ui-design-system';
 
 interface IEmptyBox {
 	title: string;
