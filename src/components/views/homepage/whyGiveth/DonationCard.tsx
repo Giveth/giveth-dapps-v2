@@ -6,7 +6,7 @@ import {
 	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { shortenAddress } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ExternalLink from '@/components/ExternalLink';
