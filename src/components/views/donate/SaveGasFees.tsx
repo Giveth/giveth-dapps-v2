@@ -3,8 +3,8 @@ import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
+import { Flex } from '@giveth/ui-design-system';
 import config from '@/configuration';
-import { Flex } from '@/components/styled-components/Flex';
 import {
 	NetworkToast,
 	SwitchCaption,
@@ -32,7 +32,7 @@ const SaveGasFees: FC<{ acceptedChains: INetworkIdWithChain[] }> = ({
 		<NetworkToast $justifyContent='space-between'>
 			<Flex $alignItems='center' gap='9px'>
 				<IconGasStation />
-				<Caption medium>
+				<Caption $medium>
 					{formatMessage({
 						id: 'label.save_on_gas_fees',
 					})}
