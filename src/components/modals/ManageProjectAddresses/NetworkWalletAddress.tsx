@@ -9,8 +9,8 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Chain } from 'viem';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { IWalletAddress } from '@/apollo/types/types';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
 import { getChainName } from '@/lib/network';
 import { NonEVMChain } from '@/types/config';
