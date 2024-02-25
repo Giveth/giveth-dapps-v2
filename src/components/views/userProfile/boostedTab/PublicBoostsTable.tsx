@@ -4,13 +4,13 @@ import styled from 'styled-components';
 
 import Link from 'next/link';
 import BigNumber from 'bignumber.js';
+import { Flex } from '@giveth/ui-design-system';
 import {
 	RowWrapper,
 	TableCell,
 	TableFooter,
 	TableHeader,
 } from '@/components/styled-components/Table';
-import { Flex } from '@/components/styled-components/Flex';
 import SortIcon from '@/components/SortIcon';
 import { IPowerBoosting } from '@/apollo/types/types';
 import {
