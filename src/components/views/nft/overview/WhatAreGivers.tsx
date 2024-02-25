@@ -2,7 +2,7 @@ import { Container, QuoteText } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { OvalVerticalGradient } from '../common.styles';
 import { mediaQueries } from '@/lib/constants/constants';
 
