@@ -15,7 +15,7 @@ import { useAppSelector } from '@/features/hooks';
 import useDetectDevice from '@/hooks/useDetectDevice';
 
 interface ModalWrapperProps {
-	fullScreen?: boolean;
+	$fullScreen?: boolean;
 	$baseTheme?: ETheme;
 }
 
@@ -87,12 +87,12 @@ export const Modal: FC<IModal> = ({
 
 	return createPortal(
 		<Background
-			isAnimating={isAnimating}
+			$isAnimating={isAnimating}
 			onClick={e => e.stopPropagation()}
 		>
 			{!doNotCloseOnClickOutside && <Surrounding onClick={closeModal} />}
 			<ModalWrapper
-				fullScreen={fullScreen}
+				$fullScreen={fullScreen}
 				$baseTheme={customTheme || theme}
 				className={className}
 			>
@@ -128,7 +128,7 @@ const Surrounding = styled.div`
 	height: 100%;
 `;
 
-const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
+const Background = styled(FlexCenter)<{ $isAnimating: boolean }>`
 	width: 100%;
 	height: 100%;
 	background: ${brandColors.giv[900]}b3;
@@ -136,7 +136,7 @@ const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
 	top: 0;
 	left: 0;
 	z-index: ${zIndex.MODAL};
-	opacity: ${props => (props.isAnimating ? 0 : 1)};
+	opacity: ${props => (props.$isAnimating ? 0 : 1)};
 	transition: opacity 0.3s ease;
 `;
 
@@ -156,12 +156,12 @@ const ModalWrapper = styled.div<ModalWrapperProps>`
 	height: 100%;
 	width: 100%;
 	${mediaQueries.tablet} {
-		border-radius: ${props => (props.fullScreen ? 0 : '8px')};
+		border-radius: ${props => (props.$fullScreen ? 0 : '8px')};
 		box-shadow: 0 3px 20px
 			${props =>
 				props.$baseTheme === ETheme.Dark ? '#00000026' : '#21203c'};
-		max-height: ${props => (props.fullScreen ? 'none' : '90vh')};
-		width: ${props => (props.fullScreen ? '100%' : 'auto')};
-		height: ${props => (props.fullScreen ? '100%' : 'auto')};
+		max-height: ${props => (props.$fullScreen ? 'none' : '90vh')};
+		width: ${props => (props.$fullScreen ? '100%' : 'auto')};
+		height: ${props => (props.$fullScreen ? '100%' : 'auto')};
 	}
 `;
