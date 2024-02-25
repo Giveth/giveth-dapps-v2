@@ -11,10 +11,10 @@ import {
 import styled, { css } from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
+import { Flex } from '@giveth/ui-design-system';
 import ShareModalAndGetReward from '../modals/ShareRewardedModal';
 import { likeProject, unlikeProject } from '@/lib/reaction';
 import { isSSRMode, showToastError } from '@/lib/helpers';
-import { Flex } from '../styled-components/Flex';
 import { IProject } from '@/apollo/types/types';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
@@ -148,7 +148,7 @@ const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
 						</BadgeButton>
 					)}
 					<BadgeButton
-						isLoading={likeLoading}
+						$isLoading={likeLoading}
 						onClick={likeLoading ? undefined : checkSignInThenLike}
 					>
 						{Number(totalReactions) > 0 && (
@@ -180,7 +180,7 @@ const ProjectCardLikeAndShareButtons: FC<IProjectCardLikeAndShareButtons> = ({
 };
 
 interface IBadgeButton {
-	isLoading?: boolean;
+	$isLoading?: boolean;
 }
 
 const BadgeButton = styled(Flex)<IBadgeButton>`
@@ -212,7 +212,7 @@ const BadgeButton = styled(Flex)<IBadgeButton>`
 		background-color: #ffffff;
 	}
 	${props =>
-		props.isLoading
+		props.$isLoading
 			? css`
 					&::before {
 						content: '';
