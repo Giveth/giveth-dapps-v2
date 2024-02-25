@@ -8,9 +8,8 @@ import {
 	ButtonText,
 	IconHeartFilled,
 } from '@giveth/ui-design-system';
+import { FlexCenter } from '@giveth/ui-design-system';
 import { Shadow } from '../styled-components/Shadow';
-import { FlexCenter } from '@/components/styled-components/Flex';
-
 const ShareLikeBadge = (props: {
 	type: 'share' | 'like' | 'reward';
 	active?: boolean;
