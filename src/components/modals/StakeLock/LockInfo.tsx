@@ -13,7 +13,7 @@ import {
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import { useStakingPool } from '@/hooks/useStakingPool';
@@ -56,7 +56,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 				</MultiPlyValue>
 			</Flex>
 			<LockInfoRow $justifyContent='space-between'>
-				<LockInfoRowTitle medium>
+				<LockInfoRowTitle $medium>
 					APR
 					<LockInfoRowHelp>
 						<IconWithTooltip
@@ -82,7 +82,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 				</LockInfoRowValue>
 			</LockInfoRow>
 			<LockInfoRow $justifyContent='space-between'>
-				<LockInfoRowTitle medium>
+				<LockInfoRowTitle $medium>
 					GIVpower
 					<LockInfoRowHelp>
 						<IconWithTooltip
