@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { brandColors } from '@giveth/ui-design-system';
 import { Basic } from 'unsplash-js/dist/methods/photos/types';
 import { useIntl } from 'react-intl';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { FlexCenter } from '@giveth/ui-design-system';
 
 interface IImageResults {
 	images: Basic[];
