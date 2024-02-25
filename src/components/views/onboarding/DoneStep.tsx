@@ -12,8 +12,8 @@ import {
 import React from 'react';
 import { Col, Row } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
+import { Flex } from '@giveth/ui-design-system';
 import { OnboardStep } from './common';
-import { Flex } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
