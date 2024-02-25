@@ -58,7 +58,7 @@ export const Logo = styled.span<ILogo>`
 `;
 
 interface IHeaderButtonProps {
-	isHover: boolean;
+	$isHover: boolean;
 	$baseTheme?: ETheme;
 }
 
@@ -83,7 +83,7 @@ export const HeaderButton = styled(CButton)<IHeaderButtonProps>`
 			? Shadow.Dark[500]
 			: Shadow.Neutral[500]};
 	${props =>
-		props.isHover
+		props.$isHover
 			? css<{ $baseTheme?: ETheme }>`
 					background-color: ${props =>
 						props.$baseTheme === ETheme.Dark
