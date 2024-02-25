@@ -12,11 +12,11 @@ import styled from 'styled-components';
 import { FC } from 'react';
 import { useAccount } from 'wagmi';
 import { Address } from 'viem';
+import { Flex } from '@giveth/ui-design-system';
 import config from '@/configuration';
 import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
 import { AddTokenButton } from '../AddTokenButton';
-import { Flex } from '../styled-components/Flex';
 import LottieControl from '@/components/LottieControl';
 import { WrappedSpinner } from '../Spinner';
 
