@@ -5,8 +5,8 @@ import {
 	brandColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import { FlexCenter } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
-import { FlexCenter } from '../styled-components/Flex';
 import { CustomH5 } from './SetProfilePic';
 
 export const NoPFP = () => {
