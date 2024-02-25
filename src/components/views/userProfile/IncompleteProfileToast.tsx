@@ -27,7 +27,7 @@ const IncompleteProfileToast = ({ close }: IIncompleteToast) => {
 			<IncompleteProfile>
 				<IconAlertTriangleFilled16 color={brandColors.mustard[700]} />
 				<div>
-					<Caption medium>
+					<Caption $medium>
 						{formatMessage({
 							id: 'label.your_profile_is_incomplete',
 						})}
