@@ -1,6 +1,6 @@
 import { P, brandColors, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from './Flex';
+import { Flex } from '@giveth/ui-design-system';
 
 export interface ITab {
 	active: boolean;
