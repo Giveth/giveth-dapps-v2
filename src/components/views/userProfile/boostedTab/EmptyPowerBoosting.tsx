@@ -3,7 +3,7 @@ import { ButtonLink, neutralColors, QuoteText } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { FC } from 'react';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { FlexCenter } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
 import { useAppSelector } from '@/features/hooks';
 import { getTotalGIVpower } from '@/helpers/givpower';
