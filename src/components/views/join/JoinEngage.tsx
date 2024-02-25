@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 
 import { Container } from '@giveth/ui-design-system';
+import { FlexCenter } from '@giveth/ui-design-system';
 import Card from '@/components/GeneralCard';
 import YellowFlower from '/public/images/yellow_flower.svg';
 import BlueFlower from '/public/images/blue_flower.svg';
@@ -16,7 +17,6 @@ import twitter_icon from '/public/images/twitter_icon.svg';
 import youtube_icon from '/public/images/youtube_icon.svg';
 import docs_icon from '/public/images/docsIconLarge.svg';
 import links from '@/lib/constants/links';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { ButtonStyled } from '@/components/GeneralCard.sc';
 import GetUpdates from '@/components/GetUpdates';
 
