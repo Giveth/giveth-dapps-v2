@@ -13,9 +13,9 @@ import {
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import config, { isRecurringActive } from '@/configuration';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { getChainName } from '@/lib/network';
