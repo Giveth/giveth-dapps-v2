@@ -9,10 +9,10 @@ import {
 } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
+import { FlexCenter } from '@giveth/ui-design-system';
 import Divider from '@/components/Divider';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { IDonationProject } from '@/apollo/types/types';
 import {
 	calculateEstimatedMatchingWithDonationAmount,
@@ -54,7 +54,7 @@ const EstimatedMatchingToast = ({
 		<Wrapper>
 			<Upper>
 				<FlexCenter gap='4px'>
-					<Caption medium>
+					<Caption $medium>
 						{formatMessage({
 							id: 'page.donate.matching_toast.upper',
 						})}
