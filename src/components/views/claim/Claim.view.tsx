@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
+import { Flex } from '@giveth/ui-design-system';
 import config from '@/configuration';
 import ClaimCard from '@/components/views/claim/cards/Claim';
 import { CongratulationsCard } from '@/components/views/claim/cards/Congratulations';
@@ -9,7 +10,6 @@ import { DonateCard } from '@/components/views/claim/cards/Donate';
 import { StreamCard } from '@/components/views/claim/cards/Stream';
 import GovernCard from '@/components/views/claim/cards/Govern';
 import InvestCard from '@/components/views/claim/cards/Stake';
-import { Flex } from '@/components/styled-components/Flex';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
 
 const stepsTitle = ['Connect', 'Donate', 'Govern', 'Stake', 'Stream', 'Claim'];
