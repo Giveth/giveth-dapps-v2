@@ -2,9 +2,9 @@ import { B, Button, P, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
+import { Flex } from '@giveth/ui-design-system';
 import { IProject } from '@/apollo/types/types';
 import { Modal } from '@/components/modals/Modal';
-import { Flex } from '@/components/styled-components/Flex';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
