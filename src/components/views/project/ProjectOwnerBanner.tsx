@@ -1,6 +1,6 @@
 import { Caption, IconEye16, semanticColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 
 const ProjectOwnerBanner = () => {
 	return (
