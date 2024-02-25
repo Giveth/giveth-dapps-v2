@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { FlexCenter } from '@giveth/ui-design-system';
 import { mediaQueries, searchSuggestions } from '@/lib/constants/constants';
 import { IMainCategory } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
