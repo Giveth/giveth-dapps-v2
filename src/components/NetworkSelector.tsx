@@ -18,7 +18,7 @@ import Select, {
 	StylesConfig,
 	components,
 } from 'react-select';
-import { Flex } from './styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { ChangeNetworkModal } from './modals/ChangeNetwork';
 import config from '../configuration';
 import { NetworkConfig } from '@/types/config';
