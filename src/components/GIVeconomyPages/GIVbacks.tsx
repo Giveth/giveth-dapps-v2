@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { Col, Container, Row } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
-import { Flex } from '../styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import {
 	GIVbacksTopContainer,
 	GIVbacksBottomContainer,
@@ -76,7 +76,7 @@ export const TabGIVbacksTop = () => {
 		<>
 			<GIVbacksTopContainer>
 				<TopInnerContainer>
-					<Row style={{ $alignItems: 'flex-end' }}>
+					<Row style={{ alignItems: 'flex-end' }}>
 						<Col xs={12} sm={7} xl={8}>
 							<Flex $alignItems='baseline' gap='16px'>
 								<GBTitle>GIVbacks</GBTitle>
