@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { brandColors, P } from '@giveth/ui-design-system';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { FlexCenter } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
-
 const FundraisingBanner = () => {
 	return (
 		<Wrapper>
