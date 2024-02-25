@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 
+import { FlexCenter } from '@giveth/ui-design-system';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
@@ -23,7 +24,6 @@ import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
 
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { ProjectsMiddleBanner } from './MiddleBanners/ProjectsMiddleBanner';
 import FloatingButtonReferral from '@/components/FloatingReferral';
 import { ActiveQFProjectsBanner } from './qfBanner/ActiveQFProjectsBanner';
