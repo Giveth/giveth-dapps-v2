@@ -13,8 +13,8 @@ import {
 } from '@giveth/ui-design-system';
 
 import { captureException } from '@sentry/nextjs';
+import { Flex } from '@giveth/ui-design-system';
 import { LiquidityPosition } from '@/types/nfts';
-import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '../../../IconWithToolTip';
 import { Pending } from '../../../modals/HarvestAll.sc';
 import { IconEthereum } from '../../../Icons/Eth';
