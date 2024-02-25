@@ -3,6 +3,7 @@ import { Col, P, Row, neutralColors } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
 import styled, { css } from 'styled-components';
+import { Flex } from '@giveth/ui-design-system';
 import { IUserProfileView } from '../UserProfile.view';
 
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
@@ -11,7 +12,6 @@ import { useProfileContext } from '@/context/profile.context';
 import { OneTimeTab } from './oneTimeTab/OneTimeTab';
 import { RecurringTab } from './recurringTab/RecurringTab';
 import { isRecurringActive } from '@/configuration';
-import { Flex } from '@/components/styled-components/Flex';
 
 enum ETab {
 	OneTime,
