@@ -31,7 +31,7 @@ export const NotificationItems: FC<INotificationMenuProps> = ({
 
 	return (
 		<>
-			<NotificationsTitle styleType='Small'>
+			<NotificationsTitle $styleType='Small'>
 				{formatMessage({ id: 'label.notifications' })}
 			</NotificationsTitle>
 			{notifications?.length > 0 ? (
