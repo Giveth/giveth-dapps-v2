@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { brandColors } from '@giveth/ui-design-system';
 import { FC } from 'react';
-import { FlexCenter } from './styled-components/Flex';
+import { FlexCenter } from '@giveth/ui-design-system';
 
 interface IColor {
 	color?: string;
