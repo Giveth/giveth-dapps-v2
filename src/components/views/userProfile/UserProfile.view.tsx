@@ -13,6 +13,7 @@ import {
 	IconExternalLink16,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
+import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import config from '@/configuration';
 
 import {
@@ -21,7 +22,6 @@ import {
 } from '@/lib/constants/constants';
 import ProfileContributes from './ProfileContributes';
 import EditUserModal from '@/components/modals/EditUserModal';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import {
 	formatWalletLink,
 	isUserRegistered,
