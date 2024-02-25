@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { useAccount } from 'wagmi';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex } from '@giveth/ui-design-system';
 import { getGIVConfig, getGIVpowerLink } from '@/helpers/givpower';
 
 const GetMoreGIVpowerBanner = () => {
