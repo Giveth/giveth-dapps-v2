@@ -6,12 +6,12 @@ import {
 	Subline,
 	IconExternalLink16,
 } from '@giveth/ui-design-system';
+import { FlexCenter } from '@giveth/ui-design-system';
 import { IconWithTooltip } from './IconWithToolTip';
 import { IGiverPFPToken } from '@/apollo/types/types';
 import ExternalLink from './ExternalLink';
 import Routes from '@/lib/constants/Routes';
 // import config from '@/configuration';
-import { FlexCenter } from './styled-components/Flex';
 import { convertIPFSToHTTPS } from '@/helpers/url';
 
 export enum EPFPSize {
