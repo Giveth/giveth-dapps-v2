@@ -13,13 +13,13 @@ import {
 	IconInstagram24,
 	IconXSocial,
 	IconRedit,
+	Container,
+	Flex,
 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Container } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/lib/constants/constants';
