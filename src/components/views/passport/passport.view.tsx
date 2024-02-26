@@ -129,7 +129,7 @@ export const PassportView = () => {
 								</>
 							)}
 							<StyledPassportBannerWrapper
-								bgColor={PassportBannerData[passportState].bg}
+								$bgColor={PassportBannerData[passportState].bg}
 							>
 								{PassportBannerData[passportState].icon}
 								<P>
