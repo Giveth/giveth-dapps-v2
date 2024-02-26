@@ -10,11 +10,12 @@ import {
 	OutlineButton,
 	IButtonProps,
 	P,
+	Row,
+	Col,
+	Flex,
 } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
-import { Row, Col } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
 import { mediaQueries } from '@/lib/constants/constants';
