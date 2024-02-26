@@ -3,10 +3,10 @@ import {
 	IconAlertCircle16,
 	Caption,
 	IconCheckCircleFilled16,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { ClaimTransactionState } from './type';
 
 interface IClaimWithdrawalStatusProps {
