@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { connect } from '@wagmi/core';
-import { signMessage } from '@wagmi/core';
-import { backendGQLRequest } from '@/helpers/requests';
+import { connect, signMessage } from '@wagmi/core';
+import { backendGQLRequest, postRequest } from '@/helpers/requests';
 import {
 	GET_USER_BY_ADDRESS,
 	REGISTER_ON_CHAINVINE,
@@ -14,7 +13,6 @@ import {
 	ISolanaSignToGetToken,
 } from './user.types';
 import { RootState } from '../store';
-import { postRequest } from '@/helpers/requests';
 import config from '@/configuration';
 import StorageLabel from '@/lib/localStorage';
 import { getTokens } from '@/helpers/user';
