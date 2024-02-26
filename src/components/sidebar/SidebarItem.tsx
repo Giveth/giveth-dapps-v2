@@ -3,10 +3,10 @@ import {
 	GLink,
 	IconChevronDown24,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import { ReactNode, FC, useState } from 'react';
 import styled from 'styled-components';
-import { Flex } from '@giveth/ui-design-system';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppSelector } from '@/features/hooks';
 
