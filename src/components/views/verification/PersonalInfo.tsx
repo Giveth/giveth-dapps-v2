@@ -1,12 +1,10 @@
 import { useIntl } from 'react-intl';
-import { brandColors, Button, H6 } from '@giveth/ui-design-system';
+import { brandColors, Button, H6, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Flex } from '@giveth/ui-design-system';
-import { ButtonStyled } from './Common.sc';
+import { ButtonStyled, ContentSeparator, BtnContainer } from './Common.sc';
 import Input from '@/components/Input';
-import { ContentSeparator, BtnContainer } from './Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import {
