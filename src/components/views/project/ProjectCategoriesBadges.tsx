@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { neutralColors, SublineBold } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
+import { neutralColors, SublineBold, Flex } from '@giveth/ui-design-system';
 import ProjectBadge from './ProjectBadge';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ICategory } from '@/apollo/types/types';
