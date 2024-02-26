@@ -1,9 +1,8 @@
 import { useState, type FC } from 'react';
 import { useAccount, useBalance } from 'wagmi';
-import { Button } from '@giveth/ui-design-system';
+import { Button, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Framework } from '@superfluid-finance/sdk-core';
-import { Flex } from '@giveth/ui-design-system';
 import { ModifyInfoToast } from './ModifyInfoToast';
 import { ModifySection } from './ModifySection';
 import { StreamInfo } from './StreamInfo';
