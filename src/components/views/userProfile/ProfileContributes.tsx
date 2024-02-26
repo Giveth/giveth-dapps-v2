@@ -1,12 +1,16 @@
 import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { brandColors, neutralColors, P } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	neutralColors,
+	P,
+	Container,
+	Flex,
+} from '@giveth/ui-design-system';
 import Link from 'next/link';
 
 import { useIntl } from 'react-intl';
-import { Container } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
 import ProfileDonationsTab from './donationsTab/ProfileDonationsTab';
 import ProfileLikedTab from './ProfileLikedTab';
 import ProfileProjectsTab from './projectsTab/ProfileProjectsTab';
