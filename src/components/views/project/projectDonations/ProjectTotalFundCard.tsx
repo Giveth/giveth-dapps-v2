@@ -13,10 +13,10 @@ import {
 	semanticColors,
 	Subline,
 	SublineBold,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useEffect, useState } from 'react';
-import { Flex } from '@giveth/ui-design-system';
 import config from '@/configuration';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectWalletAddress from '@/components/views/project/projectDonations/ProjectWalletAddress';
