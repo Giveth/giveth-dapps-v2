@@ -3,11 +3,11 @@ import {
 	neutralColors,
 	P,
 	SublineBold,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
