@@ -221,8 +221,8 @@ export const SetProfilePic = ({
 									))}
 								</PFPItemsContainer>
 								<SelectedPFPContainerWrapper
-									isOpen={!!selectedPFP}
-									divheight={sectionHeight}
+									$isOpen={!!selectedPFP}
+									$divheight={sectionHeight}
 									ref={attributeSectionRef}
 								>
 									{selectedPFP && (
@@ -402,10 +402,10 @@ const AttributesWrapper = styled(Flex)`
 `;
 
 const SelectedPFPContainerWrapper = styled.div<{
-	isOpen: boolean;
-	divheight: number;
+	$isOpen: boolean;
+	$divheight: number;
 }>`
-	height: ${props => (props.isOpen ? props.divheight + 'px' : '0px')};
+	height: ${props => (props.$isOpen ? props.$divheight + 'px' : '0px')};
 	transition: height 0.3s ease-in-out;
 `;
 
