@@ -6,13 +6,13 @@ import {
 	P,
 	QuoteText,
 	semanticColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { Address } from 'viem';
 import { readContract } from '@wagmi/core';
-import { Flex } from '@giveth/ui-design-system';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
