@@ -125,6 +125,8 @@ export interface ICreateRecurringDonation {
 	projectId: number;
 	chainId: number;
 	txHash: string;
+	symbol: string;
+	amount: bigint;
 	anonymous?: boolean;
 }
 
@@ -132,6 +134,8 @@ export const createRecurringDonation = async ({
 	chainId,
 	txHash,
 	projectId,
+	amount,
+	symbol,
 	anonymous,
 }: ICreateRecurringDonation) => {
 	let donationId = 0;
@@ -140,13 +144,17 @@ export const createRecurringDonation = async ({
 		const { data } = await client.mutate({
 			mutation: CREATE_RECURRING_DONATION,
 			variables: {
-				txHash,
-				networkId: chainId,
 				projectId,
+				networkId: chainId,
+				txHash,
+				amount,
+				currency: symbol,
+				interval: 'month',
 				anonymous,
 			},
 		});
 		donationId = data.createDonation;
+		console.log('donationId', donationId);
 	} catch (error) {
 		captureException(error, {
 			tags: {
