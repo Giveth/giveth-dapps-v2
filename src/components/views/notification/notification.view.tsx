@@ -160,20 +160,20 @@ function NotificationView() {
 			>
 				<TabsContainer>
 					<NotifisTabItem
-						active={tab === ENotificationTabs.ALL}
+						$active={tab === ENotificationTabs.ALL}
 						onClick={() => handleChangeTab(ENotificationTabs.ALL)}
 					>
 						{formatMessage({ id: 'label.all_fem' })}
 						{totalUnreadNotifications !== 0 && (
 							<TabItemCount
-								active={tab === ENotificationTabs.ALL}
+								$active={tab === ENotificationTabs.ALL}
 							>
 								{totalUnreadNotifications}
 							</TabItemCount>
 						)}
 					</NotifisTabItem>
 					<NotifisTabItem
-						active={tab === ENotificationTabs.GENERAL}
+						$active={tab === ENotificationTabs.GENERAL}
 						onClick={() =>
 							handleChangeTab(ENotificationTabs.GENERAL)
 						}
@@ -181,14 +181,14 @@ function NotificationView() {
 						{formatMessage({ id: 'general' })}
 						{general !== 0 && (
 							<TabItemCount
-								active={tab === ENotificationTabs.GENERAL}
+								$active={tab === ENotificationTabs.GENERAL}
 							>
 								{general}
 							</TabItemCount>
 						)}
 					</NotifisTabItem>
 					<NotifisTabItem
-						active={tab === ENotificationTabs.PROJECTS}
+						$active={tab === ENotificationTabs.PROJECTS}
 						onClick={() =>
 							handleChangeTab(ENotificationTabs.PROJECTS)
 						}
@@ -196,14 +196,14 @@ function NotificationView() {
 						{formatMessage({ id: 'label.my_projects' })}
 						{projectsRelated !== 0 && (
 							<TabItemCount
-								active={tab === ENotificationTabs.PROJECTS}
+								$active={tab === ENotificationTabs.PROJECTS}
 							>
 								{projectsRelated}
 							</TabItemCount>
 						)}
 					</NotifisTabItem>
 					<NotifisTabItem
-						active={tab === ENotificationTabs.SUPPORTED}
+						$active={tab === ENotificationTabs.SUPPORTED}
 						onClick={() =>
 							handleChangeTab(ENotificationTabs.SUPPORTED)
 						}
@@ -211,14 +211,14 @@ function NotificationView() {
 						{formatMessage({ id: 'label.supported_projects' })}
 						{supportedProjects !== 0 && (
 							<TabItemCount
-								active={tab === ENotificationTabs.SUPPORTED}
+								$active={tab === ENotificationTabs.SUPPORTED}
 							>
 								{supportedProjects}
 							</TabItemCount>
 						)}
 					</NotifisTabItem>
 					<NotifisTabItem
-						active={tab === ENotificationTabs.GIVECONOMY}
+						$active={tab === ENotificationTabs.GIVECONOMY}
 						onClick={() =>
 							handleChangeTab(ENotificationTabs.GIVECONOMY)
 						}
@@ -226,7 +226,7 @@ function NotificationView() {
 						{formatMessage({ id: 'label.rewards' })}
 						{givEconomyRelated !== 0 && (
 							<TabItemCount
-								active={tab === ENotificationTabs.GIVECONOMY}
+								$active={tab === ENotificationTabs.GIVECONOMY}
 							>
 								{givEconomyRelated}
 							</TabItemCount>
