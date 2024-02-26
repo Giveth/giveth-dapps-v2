@@ -2,10 +2,10 @@ import {
 	IconHelpFilled,
 	brandColors,
 	IconHelpFilled16,
+	FlexSpacer,
 } from '@giveth/ui-design-system';
 import { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useIntl } from 'react-intl';
-import { FlexSpacer } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { PoolStakingConfig, RegenPoolStakingConfig } from '@/types/config';
 import { StakeCardState } from './BaseStakingCard';
