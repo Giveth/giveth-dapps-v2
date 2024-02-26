@@ -1,9 +1,8 @@
 import { FC, useState } from 'react';
 import styled from 'styled-components';
-import { H2, Lead } from '@giveth/ui-design-system';
+import { H2, Lead, Flex } from '@giveth/ui-design-system';
 import { useConnect, useAccount } from 'wagmi';
 import { WriteContractReturnType } from 'viem';
-import { Flex } from '@giveth/ui-design-system';
 import { Button } from '../../../styled-components/Button';
 import { Card, Header, PreviousArrowButton } from './common';
 import { IClaimViewCardProps } from '../Claim.view';
