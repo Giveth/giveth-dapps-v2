@@ -4,11 +4,11 @@ import {
 	IconInfoFilled16,
 	OutlineButton,
 	P,
+	Flex,
 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Flex } from '@giveth/ui-design-system';
 import { Cover } from './common';
 
 interface IArchiveCoverProps {
