@@ -12,11 +12,11 @@ import {
 	// IconRocketInSpace16,
 	IconVerifiedBadge16,
 	H5,
+	Flex,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
-import { Flex } from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
