@@ -1,9 +1,8 @@
 import { FC } from 'react';
-import { Lead, semanticColors } from '@giveth/ui-design-system';
+import { Lead, semanticColors, FlexCenter } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
-import { FlexCenter } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IModal } from '@/types/common';
