@@ -43,7 +43,7 @@ export const Badge: FC<IBadge> = ({ label, status, showBullet, className }) => {
 	return (
 		<BadgeContainer
 			className={className}
-			mainColor={badgeStatusToColor(status)}
+			$mainColor={badgeStatusToColor(status)}
 		>
 			{showBullet && <BulletPoint>&bull;</BulletPoint>}
 			<SublineBold>{label}</SublineBold>
@@ -52,17 +52,19 @@ export const Badge: FC<IBadge> = ({ label, status, showBullet, className }) => {
 };
 
 interface IBadgeContainer {
-	mainColor: any;
+	$mainColor: any;
 }
 
 const BadgeContainer = styled.span<IBadgeContainer>`
 	display: flex;
 	flex-shrink: 0;
 	align-items: center;
-	color: ${({ mainColor }) =>
-		mainColor[mainColor === brandColors.giv ? 500 : 700]} !important;
-	background: ${props => props.mainColor[100]};
-	border: 2px solid ${props => props.mainColor[300]};
+	color: ${props =>
+		props.$mainColor[
+			props.$mainColor === brandColors.giv ? 500 : 700
+		]} !important;
+	background: ${props => props.$mainColor[100]};
+	border: 2px solid ${props => props.$mainColor[300]};
 	border-radius: 50px;
 	padding: 2px 8px;
 	height: 24px;
