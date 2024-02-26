@@ -1,10 +1,9 @@
-import { H5, brandColors, neutralColors } from '@giveth/ui-design-system';
+import { H5, brandColors, neutralColors, Flex } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
 
 import Link from 'next/link';
 import BigNumber from 'bignumber.js';
-import { Flex } from '@giveth/ui-design-system';
 import {
 	RowWrapper,
 	TableCell,
