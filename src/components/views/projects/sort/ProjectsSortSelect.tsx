@@ -159,7 +159,7 @@ const Option: ComponentType<OptionProps<ISelectedSort>> = props => {
 	return (
 		<components.Option {...props}>
 			<OptionContainer>
-				<RowContainer textColor={color}>
+				<RowContainer $textColor={color}>
 					{Icon}
 					<Caption>{label}</Caption>
 				</RowContainer>
@@ -215,14 +215,14 @@ const selectStyles: StylesConfig = {
 };
 
 interface IRowContainer {
-	textColor: string;
+	$textColor: string;
 }
 
 const RowContainer = styled.div<IRowContainer>`
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	color: ${props => props.textColor};
+	color: ${props => props.$textColor};
 	> :first-child {
 		flex-shrink: 0;
 	}
