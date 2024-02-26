@@ -4,7 +4,7 @@
 	"extends": [
 		"next/core-web-vitals",
 		"plugin:@next/next/recommended",
-		"plugin:prettier/recommended"
+		"plugin:prettier/recommended",
 	],
 	"rules": {
 		"react/no-unescaped-entities": "warn",
@@ -17,9 +17,9 @@
 					["internal", "parent", "sibling"],
 					"index",
 					"object",
-					"type"
-				]
-			}
+					"type",
+				],
+			},
 		],
 		"unused-imports/no-unused-imports": "error",
 		"unused-imports/no-unused-vars": [
@@ -28,20 +28,21 @@
 				"vars": "all",
 				"varsIgnorePattern": "^_",
 				"args": "after-used",
-				"argsIgnorePattern": "^_"
-			}
+				"argsIgnorePattern": "^_",
+			},
 		],
 		"prettier/prettier": [
 			"error",
 			{
-				"endOfLine": "auto"
-			}
+				"endOfLine": "auto",
+			},
 		],
-		"import/named": "error"
+		"import/named": "error",
+		"import/no-duplicates": ["error", { "considerQueryString": true }],
 	},
 	"settings": {
 		"import/resolver": {
-			"typescript": {}
-		}
-	}
+			"typescript": {},
+		},
+	},
 }
