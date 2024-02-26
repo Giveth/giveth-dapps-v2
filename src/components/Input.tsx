@@ -4,6 +4,7 @@ import {
 	neutralColors,
 	semanticColors,
 	SublineBold,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import React, {
 	forwardRef,
@@ -14,7 +15,6 @@ import React, {
 	useRef,
 } from 'react';
 import styled, { css } from 'styled-components';
-import { FlexCenter } from '@giveth/ui-design-system';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 import InputStyled from './styled-components/Input';
 import { getTextWidth } from '@/helpers/text';
