@@ -1,9 +1,8 @@
-import { neutralColors, Caption } from '@giveth/ui-design-system';
+import { neutralColors, Caption, FlexCenter } from '@giveth/ui-design-system';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 
-import { FlexCenter } from '@giveth/ui-design-system';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
