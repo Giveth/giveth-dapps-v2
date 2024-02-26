@@ -3,9 +3,9 @@ import {
 	neutralColors,
 	P,
 	brandColors,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FlexCenter } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
 import { CustomH5 } from './SetProfilePic';
 
