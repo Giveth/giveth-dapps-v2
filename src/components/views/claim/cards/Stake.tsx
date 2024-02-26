@@ -2,9 +2,8 @@ import { FC, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
-import { H2, H5, Lead } from '@giveth/ui-design-system';
+import { H2, H5, Lead, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import {
 	APRRow,
 	ArrowButton,
