@@ -184,7 +184,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 							</IconWithTooltip>
 						</Flex>
 					</RegenStreamInfoRow>
-					<Bar percentage={percentage} />
+					<Bar $percentage={percentage} />
 					<PercentageRow $justifyContent='space-between'>
 						<B>{percentage?.toFixed(2)}%</B>
 						<B>100%</B>
