@@ -1,7 +1,6 @@
-import { P } from '@giveth/ui-design-system';
+import { P, Flex } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { TipListItem } from './common.styles';
 
 const MapTip = () => {
