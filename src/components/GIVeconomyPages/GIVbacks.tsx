@@ -4,12 +4,14 @@ import {
 	IconGIVBack,
 	P,
 	brandColors,
+	Col,
+	Container,
+	Row,
+	Flex,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
-import { Col, Container, Row } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import {
 	GIVbacksTopContainer,
 	GIVbacksBottomContainer,
