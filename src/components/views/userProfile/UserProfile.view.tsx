@@ -11,9 +11,10 @@ import {
 	neutralColors,
 	Container,
 	IconExternalLink16,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import config from '@/configuration';
 
 import {
@@ -33,8 +34,7 @@ import IncompleteProfileToast from '@/components/views/userProfile/IncompletePro
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
 import UploadProfilePicModal from '@/components/modals/UploadProfilePicModal/UploadProfilePicModal';
-import { ProfileModal } from '@/lib/constants/Routes';
-import Routes from '@/lib/constants/Routes';
+import Routes, { ProfileModal } from '@/lib/constants/Routes';
 import { removeQueryParamAndRedirect } from '@/helpers/url';
 import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
 import { EPFPSize, PFP } from '@/components/PFP';
