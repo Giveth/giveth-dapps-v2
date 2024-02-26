@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { H2, Lead } from '@giveth/ui-design-system';
+import { H2, Lead, Container, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
-import { Container } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import useClaim from '@/context/claim.context';
 import { formatWeiHelper } from '@/helpers/number';
 import SparkleBurstAnimation from '@/animations/sparkle-burst.json';
