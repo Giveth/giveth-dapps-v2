@@ -165,7 +165,7 @@ const SocialProfile = () => {
 					</ButtonRow> */}
 					<ButtonRow>
 						<ButtonSocial
-							color='#0077B5'
+							$color='#0077B5'
 							onClick={() => {
 								handleSocialSubmit(
 									'twitter',
@@ -267,12 +267,12 @@ const ButtonsSection = styled.div`
 	}
 `;
 
-const ButtonSocial = styled(FlexCenter)<{ color?: string }>`
+const ButtonSocial = styled(FlexCenter)<{ $color?: string }>`
 	border-radius: 48px;
 	background: white;
 	height: 48px;
 	box-shadow: ${Shadow.Giv[400]};
-	color: ${props => props.color || 'inherit'};
+	color: ${props => props.$color || 'inherit'};
 	font-size: 12px;
 	font-weight: 700;
 	gap: 9px;
