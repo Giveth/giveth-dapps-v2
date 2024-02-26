@@ -10,12 +10,12 @@ import {
 	semanticColors,
 	IconDonation16,
 	SublineBold,
+	Flex,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { Flex } from '@giveth/ui-design-system';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import ShareModal from '@/components/modals/ShareModal';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
