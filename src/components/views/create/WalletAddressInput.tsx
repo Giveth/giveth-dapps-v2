@@ -7,12 +7,13 @@ import {
 	mediaQueries,
 	neutralColors,
 	semanticColors,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
 import { Address, isAddress } from 'viem';
 import { useAccount } from 'wagmi';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { compareAddresses, findAddressByChain } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import Input, { InputSize } from '@/components/Input';
