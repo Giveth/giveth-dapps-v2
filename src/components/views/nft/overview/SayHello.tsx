@@ -6,11 +6,11 @@ import {
 	Container,
 	D3,
 	QuoteText,
+	Flex,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { OvalHorizontalGradient, OvalVerticalGradient } from '../common.styles';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/lib/constants/constants';
