@@ -12,13 +12,13 @@ import {
 	OutlineButton,
 	semanticColors,
 	Subline,
+	Flex,
 } from '@giveth/ui-design-system';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import BigNumber from 'bignumber.js';
 import Link from 'next/link';
 
-import { Flex } from '@giveth/ui-design-system';
 import {
 	RowWrapper,
 	TableCell,
