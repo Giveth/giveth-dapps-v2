@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { H6, IconChevronLeft32, IconX } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
+import { H6, IconChevronLeft32, IconX, Flex } from '@giveth/ui-design-system';
 
 export type ModalHeaderTitlePosition = 'center' | 'left';
 
