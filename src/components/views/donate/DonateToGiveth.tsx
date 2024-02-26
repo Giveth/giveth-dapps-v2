@@ -56,7 +56,7 @@ const DonateToGiveth: FC<IDonateToGiveth> = ({
 				<Options>
 					{givethDonationOptions.map(option => (
 						<OptionWrapper
-							isSelected={donationToGiveth === option}
+							$isSelected={donationToGiveth === option}
 							key={option}
 							onClick={() => setDonationToGiveth(option)}
 						>
@@ -69,7 +69,7 @@ const DonateToGiveth: FC<IDonateToGiveth> = ({
 					onChange={handleChange}
 					size={InputSize.SMALL}
 					suffix={
-						<Percentage inputSize={InputSize.SMALL}>%</Percentage>
+						<Percentage $inputSize={InputSize.SMALL}>%</Percentage>
 					}
 				/>
 			</UserInput>
@@ -110,11 +110,11 @@ const Percentage = styled(InputSuffix)`
 	user-select: none;
 `;
 
-const OptionWrapper = styled(GLink)<{ isSelected: boolean }>`
+const OptionWrapper = styled(GLink)<{ $isSelected: boolean }>`
 	background: ${props =>
-		props.isSelected ? brandColors.giv[100] : brandColors.giv[50]};
+		props.$isSelected ? brandColors.giv[100] : brandColors.giv[50]};
 	border: 1px solid
-		${props => (props.isSelected ? brandColors.giv[500] : 'transparent')};
+		${props => (props.$isSelected ? brandColors.giv[500] : 'transparent')};
 	border-radius: 54px;
 	width: 48px;
 	height: 32px;
