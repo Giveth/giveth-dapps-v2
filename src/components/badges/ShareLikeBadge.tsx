@@ -7,8 +7,8 @@ import {
 	IconHeartOutline,
 	ButtonText,
 	IconHeartFilled,
+	FlexCenter,
 } from '@giveth/ui-design-system';
-import { FlexCenter } from '@giveth/ui-design-system';
 import { Shadow } from '../styled-components/Shadow';
 const ShareLikeBadge = (props: {
 	type: 'share' | 'like' | 'reward';
