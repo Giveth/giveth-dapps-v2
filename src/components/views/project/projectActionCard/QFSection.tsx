@@ -11,11 +11,11 @@ import {
 	IconChevronRight16,
 	IconHelpFilled16,
 	deviceSize,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { type FC } from 'react';
-import { Flex } from '@giveth/ui-design-system';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import {
