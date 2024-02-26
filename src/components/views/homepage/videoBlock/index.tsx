@@ -5,14 +5,14 @@ import {
 	H4,
 	IconChevronRight24,
 	neutralColors,
+	Container,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { Container } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
 import {
 	VideoContainer,
 	VideoOverlay,
