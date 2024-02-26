@@ -7,6 +7,7 @@ import {
 	IconPointerLeft,
 	IconPointerRight,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -15,7 +16,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper as SwiperClass } from 'swiper/types';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { client } from '@/apollo/apolloClient';
 import { SIMILAR_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
