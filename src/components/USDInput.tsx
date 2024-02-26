@@ -1,11 +1,15 @@
-import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
+import {
+	GLink,
+	neutralColors,
+	brandColors,
+	Flex,
+} from '@giveth/ui-design-system';
 import { FC, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
 import { parseUnits } from 'viem';
-import { Flex } from '@giveth/ui-design-system';
 import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig } from '@/types/config';
 
