@@ -1,9 +1,8 @@
-import { Caption, IconGasStation } from '@giveth/ui-design-system';
+import { Caption, IconGasStation, Flex } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import config from '@/configuration';
 import {
 	NetworkToast,
