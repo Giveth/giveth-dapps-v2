@@ -126,14 +126,14 @@ const Categories = styled(FlexCenter)`
 	}
 `;
 
-const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
+const MainCategoryItem = styled.div<{ $isSelected?: boolean }>`
 	cursor: pointer;
 	min-width: 400px;
 	border-radius: 50px;
 	font-size: 17px;
 	background: ${props =>
-		!props.isSelected ? neutralColors.gray[300] : brandColors.giv[600]};
-	color: ${props => (!props.isSelected ? 'black' : 'white')};
+		!props.$isSelected ? neutralColors.gray[300] : brandColors.giv[600]};
+	color: ${props => (!props.$isSelected ? 'black' : 'white')};
 	padding: 16px;
 	&:hover {
 		color: white;
