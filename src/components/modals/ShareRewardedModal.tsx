@@ -17,19 +17,20 @@ import {
 	IconAlertTriangleOutline,
 	mediaQueries,
 	IconXSocial,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import GiftIcon from '../../../public/images/icons/gift.svg';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
 import { fullPath } from '@/lib/helpers';
-import { useAppSelector } from '@/features/hooks';
+import { useAppSelector, useAppDispatch } from '@/features/hooks';
 import { startChainvineReferral } from '@/features/user/user.thunks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
@@ -37,7 +38,6 @@ import {
 	ESocialType,
 	shareContentCreator,
 } from '@/lib/constants/shareContent';
-import { useAppDispatch } from '@/features/hooks';
 import Routes from '@/lib/constants/Routes';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
