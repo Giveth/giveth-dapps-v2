@@ -228,7 +228,7 @@ export const MintCard = () => {
 						type='number'
 						value={qtyNFT}
 						onChange={onChangeHandler}
-						hasError={!!errorMsg}
+						$hasError={!!errorMsg}
 					/>
 					<InputHint>
 						{pfpData?.totalSupply
@@ -325,18 +325,18 @@ const InputWrapper = styled(Flex)`
 `;
 
 interface IStyledInput {
-	hasError: boolean;
+	$hasError: boolean;
 }
 
 const StyledInput = styled(P)<IStyledInput>`
 	padding: 15px 16px;
 	width: 100%;
 	color: ${props =>
-		props.hasError ? semanticColors.punch[500] : brandColors.giv[200]};
+		props.$hasError ? semanticColors.punch[500] : brandColors.giv[200]};
 	background-color: ${brandColors.giv[700]};
 	border: 1px solid
 		${props =>
-			props.hasError ? semanticColors.punch[500] : brandColors.giv[500]};
+			props.$hasError ? semanticColors.punch[500] : brandColors.giv[500]};
 	border-radius: 8px;
 	&::-webkit-inner-spin-button {
 		-webkit-appearance: none;
