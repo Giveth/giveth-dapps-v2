@@ -2,12 +2,11 @@ import { FC, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
-import { H2, H5, Lead } from '@giveth/ui-design-system';
+import { H2, H5, Lead, Flex } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import { formatEther } from 'viem';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import {
 	APRRow,
 	ArrowButton,
