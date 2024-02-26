@@ -57,9 +57,9 @@ export const NextRank: FC<IGIVpowerNextRank> = ({
 			: 0;
 
 	return isBoostingsLoading ? (
-		<NextRankContainer state={0} isLoading={true}></NextRankContainer>
+		<NextRankContainer $state={0} $isLoading={true}></NextRankContainer>
 	) : (
-		<NextRankContainer state={goingUp} $alignItems='baseline' gap='4px'>
+		<NextRankContainer $state={goingUp} $alignItems='baseline' gap='4px'>
 			{goingUp === 0 ? (
 				''
 			) : goingUp > 0 ? (
@@ -97,15 +97,17 @@ export const CurrentRank: FC<ICurrentRank> = ({
 
 const RankContainer = styled(Flex)``;
 interface ILoading {
-	state: number;
-	isLoading?: boolean;
+	$state: number;
+	$isLoading?: boolean;
 }
 
 const NextRankContainer = styled(RankContainer)<ILoading>`
 	color: ${props =>
-		props.state > 0 ? semanticColors.punch[700] : semanticColors.jade[700]};
+		props.$state > 0
+			? semanticColors.punch[700]
+			: semanticColors.jade[700]};
 	${props =>
-		props.isLoading
+		props.$isLoading
 			? css`
 					display: inline-block;
 					position: relative;
