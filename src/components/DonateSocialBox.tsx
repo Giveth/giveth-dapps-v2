@@ -24,7 +24,7 @@ const DonateSocialBox: FC<ISocialBox> = props => {
 	const { isActive } = useProjectContext();
 
 	return (
-		<Social isDonateFooter={isDonateFooter}>
+		<Social $isDonateFooter={isDonateFooter}>
 			{showModal && slug && (
 				<ShareModal
 					contentType={EContentType.thisProject}
@@ -57,12 +57,12 @@ const BLead = styled(Lead)`
 	z-index: 2;
 `;
 
-const Social = styled.div<{ isDonateFooter?: boolean }>`
+const Social = styled.div<{ $isDonateFooter?: boolean }>`
 	z-index: 1;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin: ${props => (props.isDonateFooter ? '32px 0' : '50px 0')};
+	margin: ${props => (props.$isDonateFooter ? '32px 0' : '50px 0')};
 	color: ${neutralColors.gray[900]};
 	align-items: center;
 `;
