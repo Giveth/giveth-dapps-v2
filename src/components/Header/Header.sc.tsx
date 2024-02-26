@@ -4,12 +4,11 @@ import {
 	brandColors,
 	Button,
 	GLink,
+	Flex,
 } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
-import { zIndex } from '@/lib/constants/constants';
+import { zIndex, mediaQueries } from '@/lib/constants/constants';
 import { Button as CButton } from '@/components/styled-components/Button';
 import { IHeader } from './Header';
-import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { ETheme } from '@/features/general/general.slice';
 
