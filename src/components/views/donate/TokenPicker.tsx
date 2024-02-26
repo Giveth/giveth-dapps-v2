@@ -11,6 +11,7 @@ import {
 	IconCaretDown,
 	IconSearch,
 	IconX,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -24,7 +25,6 @@ import Select, {
 	type CSSObjectWithLabel,
 } from 'react-select';
 
-import { FlexCenter } from '@giveth/ui-design-system';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
 import { Shadow } from '@/components/styled-components/Shadow';
 import useDetectDevice from '@/hooks/useDetectDevice';
