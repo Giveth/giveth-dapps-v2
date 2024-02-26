@@ -1,7 +1,11 @@
-import { mediaQueries, neutralColors, Subline } from '@giveth/ui-design-system';
+import {
+	mediaQueries,
+	neutralColors,
+	Subline,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { getAddress } from 'viem';
-import { FlexCenter } from '@giveth/ui-design-system';
 import NetworkLogo from '@/components/NetworkLogo';
 import { ChainType } from '@/types/config';
 
