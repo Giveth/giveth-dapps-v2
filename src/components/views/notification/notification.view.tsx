@@ -5,10 +5,11 @@ import {
 	Lead,
 	neutralColors,
 	OutlineButton,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import {
 	NotificationContainer,
 	IconContainer,
