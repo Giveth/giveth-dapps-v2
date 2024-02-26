@@ -49,7 +49,7 @@ export const NotifisTabItem = styled(TabItem)`
 	color: ${neutralColors.gray[900]};
 	user-select: none;
 	${props =>
-		props.active &&
+		props.$active &&
 		`
 		background: ${neutralColors.gray[300]};
 		box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
