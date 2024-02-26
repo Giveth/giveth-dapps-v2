@@ -7,9 +7,9 @@ import {
 	neutralColors,
 	P,
 	semanticColors,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { FlexCenter } from '@giveth/ui-design-system';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import Routes from '@/lib/constants/Routes';
 import InternalLink from '@/components/InternalLink';
