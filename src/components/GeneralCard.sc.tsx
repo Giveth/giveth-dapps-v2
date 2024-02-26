@@ -1,7 +1,13 @@
-import { P, Button, H4, brandColors } from '@giveth/ui-design-system';
+import {
+	P,
+	Button,
+	H4,
+	brandColors,
+	Flex,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Shadow } from './styled-components/Shadow';
 
