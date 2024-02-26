@@ -8,10 +8,11 @@ import {
 	IconChevronRight32,
 	neutralColors,
 	P,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { IProject, IProjectUpdate } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import { mediaQueries } from '@/lib/constants/constants';
