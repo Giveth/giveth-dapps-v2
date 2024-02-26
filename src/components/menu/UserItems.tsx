@@ -1,11 +1,10 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import { useIntl } from 'react-intl';
-import { B, GLink } from '@giveth/ui-design-system';
+import { B, GLink, FlexCenter } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
 import { useAccount } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { FlexCenter } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 import { isUserRegistered, shortenAddress } from '@/lib/helpers';
