@@ -188,7 +188,7 @@ const Wrapper = styled.div`
 	order: 1;
 	margin-bottom: 16px;
 	${mediaQueries.tablet} {
-		margin-bottom: unset;
+		margin-bottom: 5px;
 		order: unset;
 	}
 `;
