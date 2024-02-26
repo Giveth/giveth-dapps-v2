@@ -1,7 +1,12 @@
-import { B, P, brandColors, neutralColors } from '@giveth/ui-design-system';
+import {
+	B,
+	P,
+	brandColors,
+	neutralColors,
+	Flex,
+} from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
-import { Flex } from '@giveth/ui-design-system';
 
 interface IAttributeItem {
 	heading: string;
