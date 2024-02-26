@@ -1,11 +1,15 @@
 import { FC, useEffect, useState } from 'react';
-import { Button, IconDonation32, mediaQueries } from '@giveth/ui-design-system';
+import {
+	Button,
+	IconDonation32,
+	mediaQueries,
+	Flex,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Framework, type Operation } from '@superfluid-finance/sdk-core';
 import { useAccount } from 'wagmi';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
-import { Flex } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
