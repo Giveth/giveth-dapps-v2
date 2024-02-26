@@ -6,10 +6,10 @@ import {
 	IconUnlock16,
 	B,
 	P,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import { Modal } from '../Modal';
 import { StakingPoolImages } from '../../StakingPoolImages';
 import { unwrapToken, withdrawTokens } from '@/lib/stakingPool';
