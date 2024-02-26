@@ -4,14 +4,13 @@ import {
 	ButtonText,
 	IconX,
 	neutralColors,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { forwardRef } from 'react';
 import { useRouter } from 'next/router';
-import { FlexCenter } from '@giveth/ui-design-system';
-import { mediaQueries } from '@/lib/constants/constants';
-import { zIndex } from '@/lib/constants/constants';
+import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import CheckBox from '@/components/Checkbox';
 import config from '@/configuration';
 import { ISuperToken } from '@/types/superFluid';
