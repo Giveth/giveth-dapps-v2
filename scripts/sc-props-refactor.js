@@ -8,7 +8,7 @@ module.exports = function (fileInfo, api) {
 		.forEach(path => {
 			if (
 				j.MemberExpression.check(path.node.tag) &&
-				path.node.tag.object.name === 'styled'
+				path.node.tag.call.name === 'styled'
 			) {
 				// Existing code to modify expressions
 				path.node.quasi.expressions.forEach(expression => {
