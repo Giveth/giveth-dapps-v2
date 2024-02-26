@@ -1,9 +1,8 @@
-import { Caption, neutralColors } from '@giveth/ui-design-system';
+import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
 import { type FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { type GetBalanceReturnType } from '@wagmi/core';
-import { Flex } from '@giveth/ui-design-system';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { limitFraction } from '@/helpers/number';
 import { ISuperToken, ISuperfluidStream } from '@/types/superFluid';
