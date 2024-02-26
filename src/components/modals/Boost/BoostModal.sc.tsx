@@ -16,7 +16,7 @@ import { mediaQueries } from '@/lib/constants/constants';
 import { EBoostModalState } from './BoostModal';
 
 interface IBoostModalContainerProps {
-	state: EBoostModalState;
+	$state: EBoostModalState;
 }
 
 export const BoostModalContainer = styled.div<IBoostModalContainerProps>`
@@ -26,12 +26,12 @@ export const BoostModalContainer = styled.div<IBoostModalContainerProps>`
 		height 0.2s ease;
 	${mediaQueries.tablet} {
 		width: ${props =>
-			props.state === EBoostModalState.BOOSTED ? 716 : 480}px;
+			props.$state === EBoostModalState.BOOSTED ? 716 : 480}px;
 	}
 	padding: ${props =>
-		props.state === EBoostModalState.BOOSTING ? '24px' : '0 24px 24px'};
+		props.$state === EBoostModalState.BOOSTING ? '24px' : '0 24px 24px'};
 	${props =>
-		props.state === EBoostModalState.BOOSTED
+		props.$state === EBoostModalState.BOOSTED
 			? css`
 					background-image: url('/images/backgrounds/rocket.png');
 					background-repeat: no-repeat;
@@ -163,12 +163,12 @@ export const SliderTooltip = styled(Subline)`
 `;
 
 interface SliderDescProps {
-	isChanged: boolean;
+	$isChanged: boolean;
 }
 
 export const SliderDesc = styled(H5)<SliderDescProps>`
 	color: ${props =>
-		props.isChanged ? brandColors.giv[500] : neutralColors.gray[700]};
+		props.$isChanged ? brandColors.giv[500] : neutralColors.gray[700]};
 `;
 
 export const ConfirmButton = styled(Button)`
