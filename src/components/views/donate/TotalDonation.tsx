@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { Caption, neutralColors } from '@giveth/ui-design-system';
+import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { formatPrice } from '@/lib/helpers';
 import { calcDonationShare } from '@/components/views/donate/helpers';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
