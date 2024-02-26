@@ -224,7 +224,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 					)
 				)}
 				<HowItWorksDiv
-					topBorder={
+					$topBorder={
 						error ? false : isSignedIn && chainvineId ? false : true
 					}
 				>
@@ -351,13 +351,13 @@ const SocialButtonContainer = styled(FlexCenter)`
 	border-radius: 48px;
 `;
 
-const HowItWorksDiv = styled(Flex)<{ topBorder: boolean }>`
+const HowItWorksDiv = styled(Flex)<{ $topBorder: boolean }>`
 	width: 100%;
 	flex-direction: column;
-	padding: ${props => (props.topBorder ? '24px 0 0 0' : '0')};
-	margin: ${props => (props.topBorder ? '24px 0 0 0' : '0')};
+	padding: ${props => (props.$topBorder ? '24px 0 0 0' : '0')};
+	margin: ${props => (props.$topBorder ? '24px 0 0 0' : '0')};
 	border-top: ${props =>
-		props.topBorder ? `1px solid ${neutralColors.gray[300]}` : null};
+		props.$topBorder ? `1px solid ${neutralColors.gray[300]}` : null};
 	color: ${neutralColors.gray[800]};
 	font-weight: 400;
 	font-size: 14px;
