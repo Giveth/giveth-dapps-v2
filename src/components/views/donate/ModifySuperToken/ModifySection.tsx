@@ -7,12 +7,12 @@ import {
 	neutralColors,
 	brandColors,
 	semanticColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Dispatch, SetStateAction, type FC } from 'react';
 import { type GetBalanceReturnType } from '@wagmi/core';
-import { Flex } from '@giveth/ui-design-system';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
