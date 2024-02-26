@@ -14,12 +14,12 @@ import {
 	mediaQueries,
 	P,
 	Subline,
+	Flex,
 } from '@giveth/ui-design-system';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import { durationToString } from '@/lib/helpers';
 import { Bar, GsPTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
