@@ -1,6 +1,10 @@
 import styled from 'styled-components';
-import { brandColors, Caption, neutralColors } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Caption,
+	neutralColors,
+	Flex,
+} from '@giveth/ui-design-system';
 
 export const NetworkToast = styled(Flex)`
 	gap: 10px;
