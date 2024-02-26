@@ -85,6 +85,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 						})}
 					</Title>
 					<Amount weight={700}>
+						1
 						{formatDonation(
 							sumDonationValueUsdForActiveQfRound || 0,
 							'$',
