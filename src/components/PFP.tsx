@@ -5,8 +5,8 @@ import {
 	brandColors,
 	Subline,
 	IconExternalLink16,
+	FlexCenter,
 } from '@giveth/ui-design-system';
-import { FlexCenter } from '@giveth/ui-design-system';
 import { IconWithTooltip } from './IconWithToolTip';
 import { IGiverPFPToken } from '@/apollo/types/types';
 import ExternalLink from './ExternalLink';
