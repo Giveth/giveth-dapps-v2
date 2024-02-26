@@ -8,11 +8,11 @@ import {
 	IconGIVStream,
 	Button,
 	IconHelpFilled24,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { IconGIV } from './Icons/GIV';
 import { formatWeiHelper } from '@/helpers/number';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
