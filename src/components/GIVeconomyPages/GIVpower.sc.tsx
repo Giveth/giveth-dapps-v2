@@ -12,8 +12,8 @@ import {
 	OutlineLinkButton,
 	P,
 	QuoteText,
+	Flex,
 } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
 import { BottomContainer, MobileD1, TopContainer } from './commons';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Arc } from '../styled-components/Arc';
