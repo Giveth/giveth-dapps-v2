@@ -6,11 +6,11 @@ import {
 	brandColors,
 	mediaQueries,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useState, type FC, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
