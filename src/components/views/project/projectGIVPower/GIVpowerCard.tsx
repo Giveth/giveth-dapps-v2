@@ -9,15 +9,14 @@ import {
 	Subline,
 	mediaQueries,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { CurrentRank } from '@/components/GIVpowerRank';
+import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
 import { useProjectContext } from '@/context/project.context';
-import { NextRank } from '@/components/GIVpowerRank';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { getNowUnixMS } from '@/helpers/time';
 import { smallFormatDate } from '@/lib/helpers';
