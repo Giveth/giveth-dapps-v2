@@ -143,14 +143,14 @@ export const SetProfilePic = ({
 		</Wrapper>
 	) : (
 		<>
-			<CustomWrapper isOnboarding={isOnboarding}>
+			<CustomWrapper $isOnboarding={isOnboarding}>
 				<Flex gap='16px'>
 					{tabs.map(i => (
 						<TabItem
 							onClick={() => setActiveTab(i.id)}
 							className={activeTab === i.id ? 'active' : ''}
 							key={i.id}
-							active={activeTab === i.id}
+							$active={activeTab === i.id}
 						>
 							{i.title}
 						</TabItem>
@@ -434,9 +434,9 @@ const HideInDesktop = styled.div`
 	}
 `;
 
-const CustomWrapper = styled(Wrapper)<{ isOnboarding: boolean }>`
+const CustomWrapper = styled(Wrapper)<{ $isOnboarding: boolean }>`
 	${mediaQueries.tablet} {
-		max-height: ${props => (props.isOnboarding ? '' : '640px')};
+		max-height: ${props => (props.$isOnboarding ? '' : '640px')};
 		overflow-y: auto;
 	}
 `;
