@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { neutralColors } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
+import { neutralColors, Flex } from '@giveth/ui-design-system';
 
 export const Wrapper = styled(Flex)`
 	flex-direction: column;
