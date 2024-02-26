@@ -5,11 +5,13 @@ import {
 	IconChevronRight,
 	mediaQueries,
 	neutralColors,
+	Col,
+	Container,
+	Row,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Col, Container, Row } from '@giveth/ui-design-system';
-import { FlexCenter } from '@giveth/ui-design-system';
 import { IMediumBlogPost } from '@/apollo/types/types';
 import BlogCard from '@/components/BlogCard';
 import ExternalLink from '@/components/ExternalLink';
