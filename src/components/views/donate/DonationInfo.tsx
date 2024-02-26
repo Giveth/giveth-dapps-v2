@@ -4,13 +4,13 @@ import {
 	ButtonLink,
 	IconExternalLink24,
 	brandColors,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Chain } from 'viem';
-import { FlexCenter } from '@giveth/ui-design-system';
 import Routes from '@/lib/constants/Routes';
 import { useDonateData } from '@/context/donate.context';
 import ExternalLink from '@/components/ExternalLink';
