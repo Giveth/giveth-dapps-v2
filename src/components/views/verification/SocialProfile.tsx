@@ -7,12 +7,13 @@ import {
 	Lead,
 	neutralColors,
 	P,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
 import LinkedinIcon from '/public/images/icons/social/linkedin.svg';
