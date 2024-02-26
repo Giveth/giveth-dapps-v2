@@ -13,11 +13,12 @@ import {
 	Row,
 	brandColors,
 	neutralColors,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import {
