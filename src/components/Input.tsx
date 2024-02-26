@@ -153,9 +153,9 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 					</LeftIconWrapper>
 				)}
 				<InputStyled
-					validation={validationStatus}
-					inputSize={size}
-					hasLeftIcon={!!LeftIcon}
+					$validation={validationStatus}
+					$inputSize={size}
+					$hasLeftIcon={!!LeftIcon}
 					disabled={disabled}
 					maxLength={maxLength}
 					value={value}
