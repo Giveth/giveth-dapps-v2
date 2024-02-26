@@ -8,11 +8,12 @@ import {
 	IconExternalLink,
 	OutlineButton,
 	mediaQueries,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
 import Link from 'next/link';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import Routes from '@/lib/constants/Routes';
 import { IModal } from '@/types/common';
