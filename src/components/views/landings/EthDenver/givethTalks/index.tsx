@@ -6,11 +6,13 @@ import {
 	Lead,
 	mediaQueries,
 	neutralColors,
+	Col,
+	Container,
+	Row,
+	Flex,
 } from '@giveth/ui-design-system';
 import CalendarWhite from '/public/images/calendar-white.svg';
 import Image from 'next/image';
-import { Col, Container, Row } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
 import CalendarItem from '@/components/views/landings/EthDenver/givethTalks/CalendarItem';
 
 const GivethTalks = () => {
