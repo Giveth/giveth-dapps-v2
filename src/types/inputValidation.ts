@@ -6,5 +6,5 @@ export enum EInputValidation {
 }
 
 export interface IInputValidation {
-	validation: EInputValidation;
+	$validation: EInputValidation;
 }
