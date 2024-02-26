@@ -3,12 +3,12 @@ import {
 	neutralColors,
 	Subline,
 	SublineBold,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC, useState, Dispatch, SetStateAction } from 'react';
 import { useIntl } from 'react-intl';
 import { Chain } from 'viem';
-import { Flex } from '@giveth/ui-design-system';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '../Modal';
 import { mediaQueries } from '@/lib/constants/constants';
