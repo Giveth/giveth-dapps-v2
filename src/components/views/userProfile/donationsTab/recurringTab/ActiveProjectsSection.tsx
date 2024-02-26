@@ -1,7 +1,6 @@
-import { H5, neutralColors } from '@giveth/ui-design-system';
+import { H5, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useState } from 'react';
-import { Flex } from '@giveth/ui-design-system';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { RecurringDonationFiltersButton } from './RecurringDonationFiltersButton';
 
