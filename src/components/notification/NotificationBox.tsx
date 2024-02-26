@@ -1,8 +1,12 @@
 import styled from 'styled-components';
-import { brandColors, Caption, neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Caption,
+	neutralColors,
+	Flex,
+} from '@giveth/ui-design-system';
 import { FC, useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import {
 	convertRawDataToHTML,
 	convertBackendIconsToComponents,
