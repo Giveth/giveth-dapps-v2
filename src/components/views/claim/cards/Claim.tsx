@@ -105,7 +105,7 @@ const ClaimCard: FC<IClaimViewCardProps> = ({ index }) => {
 				<Flex $alignItems={'center'} $justifyContent={'center'}>
 					{/* <ClaimButton secondary onClick={onClaim}> */}
 					<ClaimButton
-						secondary
+						$secondary
 						onClick={() => {
 							openHarvestModal();
 						}}
