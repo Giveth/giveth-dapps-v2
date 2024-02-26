@@ -6,12 +6,12 @@ import {
 	P,
 	Subline,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { Flex } from '@giveth/ui-design-system';
 import { IProject } from '@/apollo/types/types';
 import { smallFormatDate } from '@/lib/helpers';
 import { ManageProjectAddressesModal } from '@/components/modals/ManageProjectAddresses/ManageProjectAddressesModal';
