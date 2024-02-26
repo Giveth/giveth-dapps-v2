@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { brandColors, OutlineButton } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	OutlineButton,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 
-import { FlexCenter } from '@giveth/ui-design-system';
 import ProjectCard from '@/components/project-card/ProjectCard';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered, showToastError } from '@/lib/helpers';
