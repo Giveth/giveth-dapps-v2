@@ -9,13 +9,14 @@ import {
 	P,
 	neutralColors,
 	ButtonText,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useSwitchChain } from 'wagmi';
 import { Chain } from 'viem';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
