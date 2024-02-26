@@ -1,6 +1,11 @@
-import { Button, Container, neutralColors } from '@giveth/ui-design-system';
+import {
+	Button,
+	Container,
+	neutralColors,
+	Flex,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 
 import { TabItem } from '@/components/styled-components/Tabs';
