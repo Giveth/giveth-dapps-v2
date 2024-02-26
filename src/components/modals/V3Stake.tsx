@@ -6,11 +6,11 @@ import {
 	H4,
 	neutralColors,
 	Overline,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { CancelButton, HarvestButton, HelpRow } from './HarvestAll.sc';
 import { PoolStakingConfig } from '@/types/config';
