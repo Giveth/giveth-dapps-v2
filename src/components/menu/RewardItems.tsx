@@ -3,13 +3,13 @@ import {
 	IconForward16,
 	IconHelpFilled16,
 	OutlineLinkButton,
+	Flex,
 } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import config from '@/configuration';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { formatWeiHelper } from '@/helpers/number';
