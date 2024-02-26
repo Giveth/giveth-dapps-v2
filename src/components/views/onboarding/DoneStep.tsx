@@ -8,11 +8,12 @@ import {
 	neutralColors,
 	OutlineButton,
 	P,
+	Col,
+	Row,
+	Flex,
 } from '@giveth/ui-design-system';
 import React from 'react';
-import { Col, Row } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import { OnboardStep } from './common';
 import Routes from '@/lib/constants/Routes';
 import { isUserRegistered } from '@/lib/helpers';
