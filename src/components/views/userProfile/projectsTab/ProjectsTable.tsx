@@ -2,12 +2,12 @@ import {
 	brandColors,
 	neutralColors,
 	IconHeartFilled,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { FlexCenter } from '@giveth/ui-design-system';
 import { EOrderBy, IOrder } from '../UserProfile.view';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { formatUSD, smallFormatDate } from '@/lib/helpers';
