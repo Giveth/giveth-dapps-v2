@@ -7,12 +7,15 @@ import {
 	IconX16,
 	Lead,
 	neutralColors,
+	Col,
+	Container,
+	Row,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
-import { Col, Container, Row } from '@giveth/ui-design-system';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
