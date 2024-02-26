@@ -12,11 +12,11 @@ interface IFormProgress {
 }
 
 const FormProgress = ({ progress, steps }: IFormProgress) => (
-	<ProgressContainer steps={steps.length}>
+	<ProgressContainer $steps={steps.length}>
 		{steps.map((step, index) => (
 			<ProgressIcon
 				key={`form-progress-${index}`}
-				done={progress > index - 1}
+				$done={progress > index - 1}
 			>
 				<ProgressLabel>{step}</ProgressLabel>
 				<ProgressDot>{index + 1}</ProgressDot>
@@ -26,15 +26,15 @@ const FormProgress = ({ progress, steps }: IFormProgress) => (
 	</ProgressContainer>
 );
 
-const ProgressContainer = styled.div<{ steps: number }>`
+const ProgressContainer = styled.div<{ $steps: number }>`
 	display: grid;
-	grid-template-columns: repeat(${props => props.steps}, 1fr);
+	grid-template-columns: repeat(${props => props.$steps}, 1fr);
 	justify-content: space-around;
 	align-items: center;
 `;
 
-const ProgressIcon = styled.div<{ done: boolean }>`
-	opacity: ${props => (props.done ? '1' : '0.5')};
+const ProgressIcon = styled.div<{ $done: boolean }>`
+	opacity: ${props => (props.$done ? '1' : '0.5')};
 	z-index: 1;
 `;
 
