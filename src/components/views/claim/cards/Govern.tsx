@@ -178,7 +178,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	}, [stacked, gnosisValues]);
 
 	return (
-		<GovernCardContainer activeIndex={step} index={index}>
+		<GovernCardContainer $activeIndex={step} $index={index}>
 			<BeeImage>
 				<Image
 					src='/images/bee1.svg'
