@@ -9,11 +9,11 @@ import {
 	Lead,
 	IconHelpFilled16,
 	mediaQueries,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
 import { formatEther } from 'viem';
-import { Flex } from '@giveth/ui-design-system';
 import {
 	APRRow,
 	ArrowButton,
