@@ -14,6 +14,7 @@ import {
 	IconIncrease16,
 	semanticColors,
 	Caption,
+	Flex,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -27,7 +28,6 @@ import Select, {
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { useProjectsContext } from '@/context/projects.context';
