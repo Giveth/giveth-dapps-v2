@@ -10,8 +10,8 @@ import {
 	Button,
 	OutlineButton,
 	Subline,
+	Flex,
 } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
 
 export const StakingPoolContainer = styled.div`
 	height: 542px;
