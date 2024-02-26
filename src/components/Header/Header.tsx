@@ -7,10 +7,11 @@ import {
 	GLink,
 	IconMenu24,
 	IconSearch24,
+	Flex,
+	FlexSpacer,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
-import { Flex, FlexSpacer } from '@giveth/ui-design-system';
 import {
 	ConnectButton,
 	HeaderLinks,
@@ -23,7 +24,11 @@ import {
 	GLinkNoWrap,
 	SearchButton,
 } from './Header.sc';
-import { isSSRMode, isUserRegistered } from '@/lib/helpers';
+import {
+	isSSRMode,
+	isUserRegistered,
+	isGIVeconomyRoute as checkIsGIVeconomyRoute,
+} from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
@@ -45,7 +50,6 @@ import { UserButtonWithMenu } from '../menu/UserButtonWithMenu';
 import { NotificationButtonWithMenu } from '../menu/NotificationButtonWithMenu';
 import { HomeSidebar } from '../sidebar/HomeSidebar';
 import { ItemsProvider } from '@/context/Items.context';
-import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import { CommunityMenu } from '../menu/CommunityMenu';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import config from '@/configuration';
