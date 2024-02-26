@@ -63,7 +63,7 @@ const ProjectCard = (props: IProjectCard) => {
 			{!isNew && (
 				<BadgeContainer>{verified && <VerifiedBadge />}</BadgeContainer>
 			)}
-			<CardBody isNew={isNew}>
+			<CardBody $isNew={isNew}>
 				<InternalLink href={slugToProjectView(slug)}>
 					<Title>{title}</Title>
 				</InternalLink>
@@ -116,8 +116,8 @@ const Description = styled(P)`
 	margin-top: 8px;
 `;
 
-const CardBody = styled.div<{ isNew?: boolean }>`
-	margin: ${props => (props.isNew ? '50px 24px 0' : '50px 0 0')};
+const CardBody = styled.div<{ $isNew?: boolean }>`
+	margin: ${props => (props.$isNew ? '50px 24px 0' : '50px 0 0')};
 	text-align: left;
 `;
 
