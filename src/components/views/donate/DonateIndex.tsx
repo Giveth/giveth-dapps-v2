@@ -9,9 +9,9 @@ import {
 	Row,
 	semanticColors,
 	SublineBold,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { BigArc } from '@/components/styled-components/Arc';
 import SocialBox from '../../DonateSocialBox';
 import NiceBanner from './NiceBanner';
