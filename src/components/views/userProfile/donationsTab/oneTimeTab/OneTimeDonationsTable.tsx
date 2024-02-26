@@ -42,7 +42,7 @@ const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
 }) => {
 	const { formatMessage, locale } = useIntl();
 	return (
-		<DonationTableContainer myAccount={myAccount}>
+		<DonationTableContainer $myAccount={myAccount}>
 			<TableHeader onClick={() => changeOrder(EOrderBy.CreationDate)}>
 				{formatMessage({ id: 'label.donated_at' })}
 				<SortIcon order={order} title={EOrderBy.CreationDate} />
@@ -132,10 +132,10 @@ const DonationTableCell = styled(TableCell)<{ bold?: boolean }>`
 	font-weight: ${props => (props.bold ? 500 : 400)};
 `;
 
-const DonationTableContainer = styled.div<{ myAccount?: boolean }>`
+const DonationTableContainer = styled.div<{ $myAccount?: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
-		props.myAccount
+		props.$myAccount
 			? '1fr 4fr 1fr 1.5fr 1fr 1fr'
 			: '1fr 4fr 1.5fr 1fr 1fr'};
 	overflow: auto;
