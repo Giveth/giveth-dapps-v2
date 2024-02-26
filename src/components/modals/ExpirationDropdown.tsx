@@ -25,7 +25,7 @@ const DropdownButton = styled.button`
 	cursor: pointer;
 `;
 
-const DropdownContent = styled.div<{ show: boolean }>`
+const DropdownContent = styled.div<{ $show: boolean }>`
 	display: ${props => (props.$show ? 'block' : 'none')};
 	position: absolute;
 	background-color: #f9f9f9;
@@ -90,7 +90,7 @@ export const Dropdown: FC<DropdownProps> = ({
 					{isOpen ? <IconChevronUp24 /> : <IconChevronDown24 />}
 				</IconWrapper>
 			</DropdownButton>
-			<DropdownContent show={isOpen} ref={dropdownRef}>
+			<DropdownContent $show={isOpen} ref={dropdownRef}>
 				{items.map((item, index) => (
 					<DropdownItem
 						onClick={() => {
