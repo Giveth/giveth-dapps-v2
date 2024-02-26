@@ -7,10 +7,10 @@ import {
 	IconRocketInSpace16,
 	H4,
 	H2,
+	Flex,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled, { css } from 'styled-components';
-import { Flex } from '@giveth/ui-design-system';
 import { IProjectPower } from '@/apollo/types/types';
 import { useProjectContext } from '@/context/project.context';
 
