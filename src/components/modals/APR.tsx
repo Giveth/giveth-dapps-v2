@@ -6,9 +6,9 @@ import {
 	neutralColors,
 	Subline,
 	SublineBold,
+	Flex,
 } from '@giveth/ui-design-system';
 
-import { Flex } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { mediaQueries } from '@/lib/constants/constants';
