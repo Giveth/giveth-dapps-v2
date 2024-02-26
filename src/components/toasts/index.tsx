@@ -5,10 +5,10 @@ import {
 	semanticColors,
 	ButtonText,
 	IconCheckCircleFilled16,
+	Flex,
 } from '@giveth/ui-design-system';
 import toast, { ToastPosition } from 'react-hot-toast';
 import styled from 'styled-components';
-import { Flex } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 
 export enum ToastType {
