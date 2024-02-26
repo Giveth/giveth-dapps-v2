@@ -11,8 +11,8 @@ import {
 	neutralColors,
 	mediaQueries,
 	deviceSize,
+	FlexCenter,
 } from '@giveth/ui-design-system';
-import { FlexCenter } from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
