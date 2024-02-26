@@ -37,7 +37,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 		<Wrapper
 			gap='16px'
 			$alignItems='flex-start'
-			disabled={disable}
+			$disabled={disable}
 			onClick={() => {
 				if (disable) return;
 				onClick();
@@ -116,12 +116,12 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 };
 
 interface IWrapper {
-	disabled?: boolean;
+	$disabled?: boolean;
 }
 
 const Wrapper = styled(Flex)<IWrapper>`
 	padding: 4px 8px;
-	cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+	cursor: ${props => (props.$disabled ? 'not-allowed' : 'pointer')};
 	&:hover {
 		background: ${neutralColors.gray[200]};
 	}
