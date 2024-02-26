@@ -6,11 +6,11 @@ import {
 	IconArrowLeft,
 	IconExternalLink,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
-import { Flex } from '@giveth/ui-design-system';
 import { IntroCardConfig } from '@/types/config';
 import { getSymbolIconWithName } from '../../StakingPoolImages';
 import { StakeCardState } from './BaseStakingCard/BaseStakingCard';
