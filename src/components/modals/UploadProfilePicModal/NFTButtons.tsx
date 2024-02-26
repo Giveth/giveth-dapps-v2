@@ -1,8 +1,7 @@
-import { Button, mediaQueries } from '@giveth/ui-design-system';
+import { Button, mediaQueries, Flex } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { IGiverPFPToken } from '@/apollo/types/types';
 
 export interface INFTButtons {
