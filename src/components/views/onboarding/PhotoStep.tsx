@@ -1,8 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
-import { Lead } from '@giveth/ui-design-system';
+import { Lead, FlexCenter } from '@giveth/ui-design-system';
 import Image from 'next/image';
-import { FlexCenter } from '@giveth/ui-design-system';
 import { IStep } from './common';
 import { OnboardSteps } from './Onboarding.view';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
