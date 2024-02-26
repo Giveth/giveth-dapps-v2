@@ -141,7 +141,7 @@ const ImageInput: FC<ImageInputProps> = ({
 					))}
 					<div>
 						<Separator />
-						<RemoveBox isActive={!!image} onClick={removeImage}>
+						<RemoveBox $isActive={!!image} onClick={removeImage}>
 							<IconTrash size={24} />
 							<div>{formatMessage({ id: 'label.remove' })}</div>
 						</RemoveBox>
@@ -206,18 +206,20 @@ const ColorBox = styled.div`
 	cursor: pointer;
 `;
 
-const RemoveBox = styled(FlexCenter)<{ isActive: boolean }>`
+const RemoveBox = styled(FlexCenter)<{ $isActive: boolean }>`
 	width: 80px;
 	height: 80px;
 	border: 2px solid
 		${props =>
-			props.isActive ? neutralColors.gray[700] : neutralColors.gray[500]};
+			props.$isActive
+				? neutralColors.gray[700]
+				: neutralColors.gray[500]};
 	border-radius: 8px;
 	background-color: transparent;
-	cursor: ${props => props.isActive && 'pointer'};
+	cursor: ${props => props.$isActive && 'pointer'};
 	flex-direction: column;
 	color: ${props =>
-		props.isActive ? neutralColors.gray[700] : neutralColors.gray[500]};
+		props.$isActive ? neutralColors.gray[700] : neutralColors.gray[500]};
 	text-transform: uppercase;
 	> :first-child {
 		color: inherit;
