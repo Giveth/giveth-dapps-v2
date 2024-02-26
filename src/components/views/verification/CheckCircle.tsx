@@ -1,6 +1,9 @@
-import { IconCheck, semanticColors } from '@giveth/ui-design-system';
+import {
+	IconCheck,
+	semanticColors,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FlexCenter } from '@giveth/ui-design-system';
 
 const CheckCircle = () => {
 	return (
