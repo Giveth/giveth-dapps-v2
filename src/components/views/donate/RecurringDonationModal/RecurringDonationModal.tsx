@@ -266,13 +266,18 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 			const batchOp = sf.batchCall(operations);
 			const tx = await batchOp.exec(signer);
+			let donationId = 0;
 			try {
 				const backendRes = await createRecurringDonation({
 					projectId: +project.id,
 					anonymous,
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
 					txHash: tx.hash,
+					amount,
+					symbol: selectedToken.token.symbol,
 				});
+				console.log('backendRes', backendRes);
+				// donationId = backendRes.createRecurringDonation.id;
 			} catch (error) {
 				console.log('error', error);
 			}
