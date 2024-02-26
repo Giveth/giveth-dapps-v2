@@ -9,11 +9,11 @@ import {
 	mediaQueries,
 	neutralColors,
 	Subline,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';
-import { Flex } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import { useStakingPool } from '@/hooks/useStakingPool';
