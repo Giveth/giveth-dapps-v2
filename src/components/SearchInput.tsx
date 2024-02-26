@@ -6,6 +6,7 @@ import {
 	IconSearch24,
 	IconX24,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import {
 	Dispatch,
@@ -17,7 +18,6 @@ import {
 } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppSelector } from '@/features/hooks';
 import useFocus from '@/hooks/useFocus';
