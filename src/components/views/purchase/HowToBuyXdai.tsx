@@ -8,6 +8,7 @@ import {
 	Lead,
 	Button,
 	IconChevronRight,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
@@ -16,7 +17,6 @@ import { useIntl } from 'react-intl';
 import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperClass } from 'swiper/types';
-import { Flex } from '@giveth/ui-design-system';
 import {
 	NavigationWrapper,
 	PaginationWrapper,
