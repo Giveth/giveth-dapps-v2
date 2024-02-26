@@ -65,7 +65,7 @@ export const gToast = (message: string, options: IToast) => {
 		duration,
 	} = options;
 	const toastID = toast.custom(
-		<ToastContainer {...options}>
+		<ToastContainer $type={options.type}>
 			{direction === ToastDirection.LEFT && (
 				<LeftIconContainer>{toastIcon(type)}</LeftIconContainer>
 			)}
@@ -98,13 +98,13 @@ export const gToast = (message: string, options: IToast) => {
 	);
 };
 
-const ToastContainer = styled(Flex)<IToast>`
+const ToastContainer = styled(Flex)<{ $type?: ToastType }>`
 	min-width: 250px;
 	padding: 16px;
 	gap: 16px;
 	align-items: center;
 	color: ${props => {
-		switch (props.type) {
+		switch (props.$type) {
 			case ToastType.INFO_PRIMARY:
 			case ToastType.INFO_SECONDARY:
 				return semanticColors.blueSky[700];
@@ -121,7 +121,7 @@ const ToastContainer = styled(Flex)<IToast>`
 		}
 	}};
 	background-color: ${props => {
-		switch (props.type) {
+		switch (props.$type) {
 			case ToastType.INFO_PRIMARY:
 				return semanticColors.blueSky[100];
 			case ToastType.INFO_SECONDARY:
@@ -140,7 +140,7 @@ const ToastContainer = styled(Flex)<IToast>`
 	}};
 	border: 1px solid
 		${props => {
-			switch (props.type) {
+			switch (props.$type) {
 				case ToastType.INFO_PRIMARY:
 					return semanticColors.blueSky[700];
 				case ToastType.INFO_SECONDARY:
