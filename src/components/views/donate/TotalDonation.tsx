@@ -38,7 +38,7 @@ const TotalDonation: FC<ITotalDonation> = props => {
 	);
 
 	return (
-		<Container isActive={isActive}>
+		<Container $isActive={isActive}>
 			<TableRow>
 				<Caption>
 					{formatMessage({ id: 'label.donating_to' })}
@@ -99,9 +99,9 @@ const TableRow = styled(FlexStyled)`
 	padding: 0 8px;
 `;
 
-const Container = styled.div<{ isActive?: boolean }>`
+const Container = styled.div<{ $isActive?: boolean }>`
 	margin-bottom: 16px;
-	opacity: ${props => (props.isActive ? 1 : 0.5)};
+	opacity: ${props => (props.$isActive ? 1 : 0.5)};
 	b {
 		font-weight: 500;
 	}
