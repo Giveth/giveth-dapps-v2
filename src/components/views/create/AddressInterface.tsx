@@ -12,8 +12,9 @@ import {
 	brandColors,
 	neutralColors,
 	semanticColors,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
 import config, { isRecurringActive } from '@/configuration';
