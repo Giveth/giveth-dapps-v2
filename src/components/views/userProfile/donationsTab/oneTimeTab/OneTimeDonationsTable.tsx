@@ -126,10 +126,10 @@ const DonationRowWrapper = styled(RowWrapper)`
 	}
 `;
 
-const DonationTableCell = styled(TableCell)<{ bold?: boolean }>`
+const DonationTableCell = styled(TableCell)<{ $bold?: boolean }>`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
-	font-weight: ${props => (props.bold ? 500 : 400)};
+	font-weight: ${props => (props.$bold ? 500 : 400)};
 `;
 
 const DonationTableContainer = styled.div<{ $myAccount?: boolean }>`
