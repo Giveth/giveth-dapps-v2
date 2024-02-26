@@ -9,12 +9,12 @@ import {
 	Lead,
 	neutralColors,
 	P,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 
-import { Flex } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { LockInfoTooltip } from '../StakeLock/LockInfo';
 import 'rc-slider/assets/index.css';
