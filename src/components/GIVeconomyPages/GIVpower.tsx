@@ -9,12 +9,13 @@ import {
 	H1,
 	Caption,
 	Title as TitleBase,
+	Col,
+	Row,
+	Flex,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
-import { Col, Row } from '@giveth/ui-design-system';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { Flex } from '@giveth/ui-design-system';
 import {
 	GIVpowerTopContainer,
 	Title,
