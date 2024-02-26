@@ -4,12 +4,12 @@ import {
 	H6,
 	OutlineButton,
 	P,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import links from '@/lib/constants/links';
 import SocialBox from '@/components/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
