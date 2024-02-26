@@ -1,6 +1,5 @@
-import { mediaQueries, neutralColors } from '@giveth/ui-design-system';
+import { mediaQueries, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from '@giveth/ui-design-system';
 import { ProjectStats } from './ProjectStats';
 import { AdminActions } from './AdminActions';
 import { useProjectContext } from '@/context/project.context';
