@@ -3,12 +3,12 @@ import {
 	brandColors,
 	mediaQueries,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
-import { Flex } from '@giveth/ui-design-system';
 import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
 import DonationCard from '@/components/views/homepage/whyGiveth/DonationCard';
 import { thousandsSeparator } from '@/lib/helpers';
