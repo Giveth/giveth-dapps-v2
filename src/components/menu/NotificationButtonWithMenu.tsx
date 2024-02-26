@@ -4,10 +4,10 @@ import {
 	IconNotificationFilled16,
 	neutralColors,
 	Overline,
+	FlexSpacer,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { FlexSpacer } from '@giveth/ui-design-system';
 import {
 	MenuAndButtonContainer,
 	CoverLine,
