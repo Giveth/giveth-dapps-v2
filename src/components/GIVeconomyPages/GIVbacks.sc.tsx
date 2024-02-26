@@ -11,8 +11,8 @@ import {
 	neutralColors,
 	Title,
 	ButtonLink,
+	Flex,
 } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
 import {
 	BottomContainer,
 	EnhancedRewardCard,
