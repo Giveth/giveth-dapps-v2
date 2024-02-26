@@ -8,6 +8,8 @@ import {
 	IconVerifiedBadge32,
 	Lead,
 	neutralColors,
+	Container,
+	Flex,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
@@ -15,8 +17,6 @@ import { useIntl } from 'react-intl';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Container } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
 import IntroCard from './IntroCard';
 import introBanner from '/public/images/banners/introBanner.svg';
 import { mediaQueries } from '@/lib/constants/constants';
