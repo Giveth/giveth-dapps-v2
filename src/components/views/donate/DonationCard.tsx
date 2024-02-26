@@ -1,8 +1,13 @@
-import { B, P, neutralColors } from '@giveth/ui-design-system';
+import {
+	B,
+	P,
+	neutralColors,
+	Flex,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './RecurringDonationCard';
 import CryptoDonation from './CryptoDonation';
