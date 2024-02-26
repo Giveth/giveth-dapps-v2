@@ -250,7 +250,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 					</Actions>
 				)}
 			</Header>
-			<Table hasLastCol={!!myAccount && mode === ETableNode.VIEWING}>
+			<Table $hasLastCol={!!myAccount && mode === ETableNode.VIEWING}>
 				<TableHeader>Projects</TableHeader>
 				<TableHeader
 					onClick={() => {
@@ -448,10 +448,10 @@ const Actions = styled(Flex)`
 	overflow: auto;
 `;
 
-const Table = styled.div<{ hasLastCol: boolean }>`
+const Table = styled.div<{ $hasLastCol: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
-		props.hasLastCol ? '3.5fr 1.5fr 1fr 0.3fr' : '4fr 1.5fr 0.6fr'};
+		props.$hasLastCol ? '3.5fr 1.5fr 1fr 0.3fr' : '4fr 1.5fr 0.6fr'};
 	min-width: 700px;
 `;
 
