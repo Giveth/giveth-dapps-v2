@@ -14,11 +14,13 @@ import {
 	IconPraise24,
 	IconSpark,
 	P,
+	Container,
+	Row,
+	Col,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Container, Row, Col } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import {
 	Bar,
 	FlowRateRow,
