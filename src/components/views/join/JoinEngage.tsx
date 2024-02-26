@@ -1,10 +1,14 @@
 import Image from 'next/image';
-import { Lead, brandColors, H2 } from '@giveth/ui-design-system';
+import {
+	Lead,
+	brandColors,
+	H2,
+	Container,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 
-import { Container } from '@giveth/ui-design-system';
-import { FlexCenter } from '@giveth/ui-design-system';
 import Card from '@/components/GeneralCard';
 import YellowFlower from '/public/images/yellow_flower.svg';
 import BlueFlower from '/public/images/blue_flower.svg';
