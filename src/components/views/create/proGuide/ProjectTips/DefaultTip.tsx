@@ -1,9 +1,8 @@
-import { H6, P, brandColors } from '@giveth/ui-design-system';
+import { H6, P, brandColors, Flex } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import styled from 'styled-components';
-import { Flex } from '@giveth/ui-design-system';
 import { TipListItem } from './common.styles';
 import Routes from '@/lib/constants/Routes';
 
