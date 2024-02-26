@@ -1,8 +1,7 @@
 import Image from 'next/image';
-import { brandColors, H4 } from '@giveth/ui-design-system';
+import { brandColors, H4, FlexCenter } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
-import { FlexCenter } from '@giveth/ui-design-system';
 import { Spinner } from '@/components/Spinner';
 interface IProps {
 	isLoading?: boolean;
