@@ -1,7 +1,6 @@
 import React, { FC, ReactNode } from 'react';
-import { brandColors, neutralColors } from '@giveth/ui-design-system';
+import { brandColors, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from '@giveth/ui-design-system';
 import { useItemsContext } from '@/context/Items.context';
 import { ETheme } from '@/features/general/general.slice';
 
