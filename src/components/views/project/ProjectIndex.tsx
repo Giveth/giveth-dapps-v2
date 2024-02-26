@@ -244,7 +244,7 @@ const ContinueCreationButton = styled(Button)`
 `;
 
 const MobileContainer = styled.div<{ hasActiveRound: boolean }>`
-	padding: ${props => (props.hasActiveRound ? '0 26px 26px 26px' : '0 26px')};
+	padding: ${props => (props.$hasActiveRound ? '0 26px 26px 26px' : '0 26px')};
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 16px;
 `;
