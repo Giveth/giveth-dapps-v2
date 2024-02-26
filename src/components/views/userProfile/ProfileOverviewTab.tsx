@@ -222,7 +222,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 				))
 			)}
 			{myAccount && (
-				<AccountHero leftAlign={title === _sections.donate.title}>
+				<AccountHero $leftAlign={title === _sections.donate.title}>
 					<H1>{title}</H1>
 					<QuoteText>{subtitle}</QuoteText>
 					<Buttons>
@@ -244,7 +244,7 @@ const ProfileOverviewTab: FC<IUserProfileView> = () => {
 	);
 };
 
-const AccountHero = styled.div<{ leftAlign: boolean }>`
+const AccountHero = styled.div<{ $leftAlign: boolean }>`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
@@ -254,8 +254,8 @@ const AccountHero = styled.div<{ leftAlign: boolean }>`
 	border-radius: 8px;
 	color: ${brandColors.giv[500]};
 	padding: 0 15px;
-	align-items: ${props => (props.leftAlign ? 'flex-start' : 'center')};
-	text-align: ${props => (props.leftAlign ? 'left' : 'center')};
+	align-items: ${props => (props.$leftAlign ? 'flex-start' : 'center')};
+	text-align: ${props => (props.$leftAlign ? 'left' : 'center')};
 	justify-content: center;
 	> h1 {
 		font-weight: bold;
