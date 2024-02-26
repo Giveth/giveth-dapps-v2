@@ -100,6 +100,7 @@ const selectCustomStyles: StylesConfig = {
 			margin: '4px auto',
 			borderRadius: '8px',
 			color: 'black',
+
 			backgroundColor: isSelected
 				? neutralColors.gray[300]
 				: isFocused
