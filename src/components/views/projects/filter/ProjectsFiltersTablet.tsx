@@ -1,8 +1,7 @@
-import { IconDots, IconX } from '@giveth/ui-design-system';
+import { IconDots, IconX, Flex } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/dist/client/router';
-import { Flex } from '@giveth/ui-design-system';
 import ProjectsSearchTablet from '@/components/views/projects/ProjectsSearchTablet';
 import ProjectsFiltersSwiper from '@/components/views/projects/filter/ProjectsFiltersSwiper';
 import {
