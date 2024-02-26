@@ -6,8 +6,7 @@ import {
 import { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import Scrollbars from 'react-custom-scrollbars';
-
+import { Scrollbars } from 'rc-scrollbars';
 import {
 	ModalHeader,
 	ModalHeaderTitlePosition,

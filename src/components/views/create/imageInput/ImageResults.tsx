@@ -1,4 +1,4 @@
-import Scrollbars from 'react-custom-scrollbars';
+import Scrollbars from 'rc-scrollbars';
 import Image from 'next/image';
 import React, { FC } from 'react';
 import styled from 'styled-components';
