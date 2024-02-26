@@ -6,11 +6,11 @@ import {
 	mediaQueries,
 	neutralColors,
 	Subline,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { ChangeEvent, FC } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import Input, { InputSize } from '@/components/Input';
 import { InputSuffix } from '@/components/styled-components/Input';
