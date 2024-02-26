@@ -7,11 +7,11 @@ import {
 	brandColors,
 	Caption,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { smallFormatDate } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { getUnlockDate } from '@/helpers/givpower';
