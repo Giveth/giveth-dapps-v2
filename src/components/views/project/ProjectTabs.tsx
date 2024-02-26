@@ -4,11 +4,11 @@ import {
 	P,
 	neutralColors,
 	mediaQueries,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { Flex } from '@giveth/ui-design-system';
 import { useProjectContext } from '@/context/project.context';
 import Routes from '@/lib/constants/Routes';
 import { EProjectPageTabs } from './ProjectIndex';
