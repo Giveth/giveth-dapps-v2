@@ -1,9 +1,8 @@
 import { type FC, useState } from 'react';
-import { Col, P, Row, neutralColors } from '@giveth/ui-design-system';
+import { Col, P, Row, neutralColors, Flex } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
 import styled, { css } from 'styled-components';
-import { Flex } from '@giveth/ui-design-system';
 import { IUserProfileView } from '../UserProfile.view';
 
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
