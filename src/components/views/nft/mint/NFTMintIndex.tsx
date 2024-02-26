@@ -8,13 +8,15 @@ import {
 	D3,
 	Lead,
 	mediaQueries,
+	Col,
+	Container,
+	Row,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
-import { Col, Container, Row } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import { OvalVerticalGradient, OvalHorizontalGradient } from '../common.styles';
 import { MintCard } from '@/components/cards/MintCard';
 import config from '@/configuration';
