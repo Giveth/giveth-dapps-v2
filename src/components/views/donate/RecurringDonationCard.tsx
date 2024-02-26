@@ -13,6 +13,7 @@ import {
 	brandColors,
 	neutralColors,
 	semanticColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -22,7 +23,6 @@ import Slider from 'rc-slider';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
-import { Flex } from '@giveth/ui-design-system';
 import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
