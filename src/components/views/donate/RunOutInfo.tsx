@@ -1,7 +1,6 @@
-import { P, B, neutralColors } from '@giveth/ui-design-system';
+import { P, B, neutralColors, Flex } from '@giveth/ui-design-system';
 import { type FC } from 'react';
 import styled from 'styled-components';
-import { Flex } from '@giveth/ui-design-system';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { formatDate } from '@/lib/helpers';
 
