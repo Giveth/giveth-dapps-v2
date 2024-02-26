@@ -90,6 +90,7 @@ const ProjectCard = (props: IProjectCard) => {
 	};
 
 	return (
+		// </Link>
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
@@ -305,7 +306,6 @@ const ProjectCard = (props: IProjectCard) => {
 				/>
 			)}
 		</Wrapper>
-		// </Link>
 	);
 };
 
