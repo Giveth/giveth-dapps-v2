@@ -4,10 +4,10 @@ import {
 	IconAlertTriangleFilled16,
 	IconXCircle,
 	semanticColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useState } from 'react';
-import { Flex } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';
 import StorageLabel from '@/lib/localStorage';
