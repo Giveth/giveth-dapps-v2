@@ -9,11 +9,11 @@ import {
 	neutralColors,
 	semanticColors,
 	mediaQueries,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
 import { Navigation } from 'swiper/modules';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { useProjectContext } from '@/context/project.context';
 import 'swiper/css';
 import 'swiper/css/navigation';
