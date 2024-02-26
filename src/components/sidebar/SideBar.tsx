@@ -60,16 +60,16 @@ export const SideBar: FC<ISideBar> = ({
 
 	return createPortal(
 		<Background
-			isAnimating={isAnimating}
+			$isAnimating={isAnimating}
 			onClick={e => {
 				e.stopPropagation();
 				close();
 			}}
 		>
 			<SidebarContainer
-				isAnimating={isAnimating}
+				$isAnimating={isAnimating}
 				$baseTheme={theme}
-				direction={direction}
+				$direction={direction}
 				onClick={e => {
 					e.stopPropagation();
 				}}
@@ -77,7 +77,7 @@ export const SideBar: FC<ISideBar> = ({
 				<HeaderContainer direction={direction}>
 					<HeaderWrapper>{header && header}</HeaderWrapper>
 					{showClose && (
-						<CloseWrapper onClick={close} direction={direction}>
+						<CloseWrapper onClick={close} $direction={direction}>
 							<IconX24 />
 						</CloseWrapper>
 					)}
@@ -89,7 +89,7 @@ export const SideBar: FC<ISideBar> = ({
 	);
 };
 
-const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
+const Background = styled(FlexCenter)<{ $isAnimating: boolean }>`
 	width: 100%;
 	height: 100%;
 	background: ${brandColors.giv[900]}b3;
@@ -98,13 +98,13 @@ const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
 	left: 0;
 	z-index: ${zIndex.MODAL};
 	opacity: 0;
-	opacity: ${props => (props.isAnimating ? 1 : 0)};
+	opacity: ${props => (props.$isAnimating ? 1 : 0)};
 	transition: opacity 0.3s ease;
 `;
 
 const SidebarContainer = styled.div<{
-	isAnimating: boolean;
-	direction: ESideBarDirection;
+	$isAnimating: boolean;
+	$direction: ESideBarDirection;
 	$baseTheme?: ETheme;
 }>`
 	width: 353px;
@@ -124,10 +124,10 @@ const SidebarContainer = styled.div<{
 			: neutralColors.gray[900]};
 	${props => {
 		const key =
-			props.direction === ESideBarDirection.Left ? 'left' : 'right';
-		return css<{ isAnimating: boolean }>`
+			props.$direction === ESideBarDirection.Left ? 'left' : 'right';
+		return css<{ $isAnimating: boolean }>`
 			${key}: 0;
-			${key}: ${props => (props.isAnimating ? 0 : '-353px')};
+			${key}: ${props => (props.$isAnimating ? 0 : '-353px')};
 			transition: ${key} 0.3s ease;
 		`;
 	}};
@@ -146,7 +146,7 @@ const HeaderWrapper = styled(Flex)`
 	flex: 1;
 `;
 
-const CloseWrapper = styled.div<{ direction: ESideBarDirection }>`
+const CloseWrapper = styled.div<{ $direction: ESideBarDirection }>`
 	padding: 12px;
 	cursor: pointer;
 `;
