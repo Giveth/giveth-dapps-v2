@@ -2,10 +2,16 @@ import { FC, useEffect, useState } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { GLink, H2, Lead, brandColors, Button } from '@giveth/ui-design-system';
+import {
+	GLink,
+	H2,
+	Lead,
+	brandColors,
+	Button,
+	Flex,
+} from '@giveth/ui-design-system';
 import { useAccount, useDisconnect } from 'wagmi';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { Flex } from '@giveth/ui-design-system';
 import { ArrowButton, Card } from './common';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
 import { formatWeiHelper } from '@/helpers/number';
