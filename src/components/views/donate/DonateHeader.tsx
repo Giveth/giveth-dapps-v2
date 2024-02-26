@@ -3,9 +3,14 @@ import { FC } from 'react';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { Caption, B, neutralColors } from '@giveth/ui-design-system';
+import {
+	Caption,
+	B,
+	neutralColors,
+	Flex,
+	FlexSpacer,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex, FlexSpacer } from '@giveth/ui-design-system';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
