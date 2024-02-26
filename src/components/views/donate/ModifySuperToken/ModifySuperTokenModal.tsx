@@ -1,8 +1,7 @@
-import { P, brandColors, neutralColors } from '@giveth/ui-design-system';
+import { P, brandColors, neutralColors, Flex } from '@giveth/ui-design-system';
 import { type FC, useState, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
