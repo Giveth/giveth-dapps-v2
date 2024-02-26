@@ -24,10 +24,13 @@ export const Steps: FC<IStepsProps> = ({ steps, activeStep }) => {
 		<StepsContainer $baseTheme={theme}>
 			{steps.map((step, index) => (
 				<Step key={index}>
-					<StepTitle disable={index > activeStep} $baseTheme={theme}>
+					<StepTitle $disable={index > activeStep} $baseTheme={theme}>
 						{formatMessage({ id: step })}
 					</StepTitle>
-					<StepNumber disable={index > activeStep} $baseTheme={theme}>
+					<StepNumber
+						$disable={index > activeStep}
+						$baseTheme={theme}
+					>
 						{index + 1}
 					</StepNumber>
 				</Step>
@@ -80,14 +83,14 @@ const Step = styled(Flex)`
 `;
 
 interface IStepState {
-	disable?: boolean;
+	$disable?: boolean;
 	$baseTheme?: ETheme;
 }
 
 const StepTitle = styled(P)<IStepState>`
 	margin-bottom: 8px;
 	color: ${props =>
-		props.disable
+		props.$disable
 			? props.$baseTheme === ETheme.Dark
 				? brandColors.giv[300]
 				: brandColors.giv[200]
@@ -97,7 +100,7 @@ const StepTitle = styled(P)<IStepState>`
 `;
 const StepNumber = styled(SublineBold)<IStepState>`
 	color: ${props =>
-		props.disable
+		props.$disable
 			? props.$baseTheme === ETheme.Dark
 				? brandColors.giv[200]
 				: neutralColors.gray[100]
@@ -105,14 +108,14 @@ const StepNumber = styled(SublineBold)<IStepState>`
 				? brandColors.giv['000']
 				: neutralColors.gray[100]};
 	background-color: ${props =>
-		props.disable
+		props.$disable
 			? props.$baseTheme === ETheme.Dark
 				? brandColors.giv[500]
 				: brandColors.giv[200]
 			: brandColors.giv[500]};
 	border: 3px solid
 		${props =>
-			props.disable
+			props.$disable
 				? props.$baseTheme === ETheme.Dark
 					? brandColors.giv[300]
 					: brandColors.giv[100]
