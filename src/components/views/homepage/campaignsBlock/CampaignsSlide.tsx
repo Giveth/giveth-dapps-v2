@@ -70,7 +70,7 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 						</StyledVideo>
 						<VideoOverlay
 							onClick={handleVideoClick}
-							hidden={isPlaying}
+							$hidden={isPlaying}
 						>
 							<Image
 								src='/images/video_play.svg'
