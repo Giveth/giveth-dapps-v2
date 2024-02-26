@@ -5,6 +5,7 @@ import {
 	brandColors,
 	mediaQueries,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
@@ -12,7 +13,6 @@ import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { Flex } from '@giveth/ui-design-system';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
 
 export const QFRoundStats = () => {
