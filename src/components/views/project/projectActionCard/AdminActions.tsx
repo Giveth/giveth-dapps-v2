@@ -6,12 +6,13 @@ import {
 	IconVerifiedBadge16,
 	mediaQueries,
 	neutralColors,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { useProjectContext } from '@/context/project.context';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
