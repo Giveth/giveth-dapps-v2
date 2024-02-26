@@ -15,12 +15,12 @@ import {
 	IconHelpFilled16,
 	Lead,
 	P,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 import { captureException } from '@sentry/nextjs';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 import { formatWeiHelper } from '@/helpers/number';
