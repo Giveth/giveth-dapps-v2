@@ -7,12 +7,12 @@ import {
 	IconTrash,
 	neutralColors,
 	Subline,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import { useFormContext } from 'react-hook-form';
 
-import { FlexCenter } from '@giveth/ui-design-system';
 import { InputContainer } from '../Create.sc';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { OurImages } from '@/lib/constants/constants';
