@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { B, H5, neutralColors } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
+import { B, H5, neutralColors, Flex } from '@giveth/ui-design-system';
 import { useUserStreams } from '@/hooks/useUserStreams';
 import { StreamRow } from './StreamRow';
 
