@@ -6,10 +6,10 @@ import {
 	neutralColors,
 	semanticColors,
 	Subline,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
-import { FlexCenter } from '@giveth/ui-design-system';
 import Divider from '@/components/Divider';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
