@@ -5,11 +5,11 @@ import {
 	neutralColors,
 	brandColors,
 	H6,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { Flex } from '@giveth/ui-design-system';
 import ProjectCardImage from './ProjectCardImage';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
