@@ -4,16 +4,15 @@ import {
 	ButtonText,
 	IconX,
 	neutralColors,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { forwardRef } from 'react';
 import { useRouter } from 'next/router';
-import { FlexCenter } from '@giveth/ui-design-system';
-import { mediaQueries } from '@/lib/constants/constants';
+import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
-import { zIndex } from '@/lib/constants/constants';
 import { EProjectsFilter } from '@/apollo/types/types';
 import config from '@/configuration';
 import { PinkyColoredNumber } from '../styled-components/PinkyColoredNumber';
