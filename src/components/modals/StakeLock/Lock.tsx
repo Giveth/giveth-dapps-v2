@@ -5,6 +5,7 @@ import {
 	IconRocketInSpace32,
 	P,
 	semanticColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
@@ -12,7 +13,6 @@ import { captureException } from '@sentry/nextjs';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import { IModal } from '@/types/common';
 import { Modal } from '../Modal';
 import {
