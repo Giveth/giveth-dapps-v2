@@ -4,10 +4,11 @@ import {
 	H3,
 	IconChevronRight32,
 	neutralColors,
+	Col,
+	Row,
 } from '@giveth/ui-design-system';
 import ImpactTrackImg from '/public/images/ETHDenver-Impact-mentorship.png';
 import Image from 'next/image';
-import { Col, Row } from '@giveth/ui-design-system';
 import links from '@/lib/constants/links';
 import ExternalLink from '@/components/ExternalLink';
 
