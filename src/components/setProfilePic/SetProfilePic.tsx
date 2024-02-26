@@ -5,13 +5,13 @@ import {
 	H6,
 	IconExternalLink16,
 	mediaQueries,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { isAddress } from 'viem';
-import { Flex } from '@giveth/ui-design-system';
 import useUpload from '@/hooks/useUpload';
 import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
