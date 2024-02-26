@@ -11,12 +11,12 @@ import {
 	Lead,
 	neutralColors,
 	IconExternalLink16,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
 import { useConnect, useAccount } from 'wagmi';
 import { Address } from 'viem';
-import { Flex } from '@giveth/ui-design-system';
 import { Modal } from '@/components/modals/Modal';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 import { ETheme } from '@/features/general/general.slice';
