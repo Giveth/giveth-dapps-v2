@@ -12,11 +12,11 @@ import {
 	Lead,
 	neutralColors,
 	OutlineButton,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { FC } from 'react';
 
-import { FlexCenter } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import FacebookIcon from '../../../public/images/social-fb.svg';
 import LinkedinIcon from '../../../public/images/social-linkedin.svg';
