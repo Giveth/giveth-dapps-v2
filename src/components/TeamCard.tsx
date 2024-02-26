@@ -1,9 +1,13 @@
 import Image from 'next/image';
 import githubIcon from '/public/images/github_purple.svg';
 import twitterIcon from '/public/images/twitter_purple.svg';
-import { brandColors, H5, Overline } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	H5,
+	Overline,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FlexCenter } from '@giveth/ui-design-system';
 
 interface IMember {
 	name: string;
