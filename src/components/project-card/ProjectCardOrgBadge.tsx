@@ -1,9 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { neutralColors, Overline } from '@giveth/ui-design-system';
+import {
+	neutralColors,
+	Overline,
+	Flex,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
 
