@@ -270,7 +270,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							label={formatMessage({
 								id: 'component.button.create_project',
 							})}
-							transparent
+							$transparent
 						/>
 					</>
 				)}
@@ -283,10 +283,10 @@ const Loader = styled.div`
 	margin: 20px auto;
 `;
 
-const StyledButton = styled(OutlineButton)<{ transparent?: boolean }>`
+const StyledButton = styled(OutlineButton)<{ $transparent?: boolean }>`
 	color: ${brandColors.pinky[500]};
 	border-color: ${props =>
-		props.transparent ? 'transparent' : brandColors.pinky[500]};
+		props.$transparent ? 'transparent' : brandColors.pinky[500]};
 	margin: 16px auto;
 	padding: 22px 80px;
 
