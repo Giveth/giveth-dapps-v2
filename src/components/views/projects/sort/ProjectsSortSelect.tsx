@@ -195,6 +195,7 @@ const selectStyles: StylesConfig = {
 			border: 'none',
 			borderRadius: '8px',
 			minWidth: '230px',
+
 			'&:hover': {
 				borderColor: 'transparent',
 			},
