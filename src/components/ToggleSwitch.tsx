@@ -23,7 +23,7 @@ const ToggleSwitch: FC<IToggleButton> = ({
 	return (
 		<Container
 			onClick={handleClick}
-			disabled={disabled}
+			$disabled={disabled}
 			className={className}
 		>
 			<InputStyled checked={isOn} type='checkbox' />
@@ -71,11 +71,11 @@ const Caption = styled(P)`
 	color: ${neutralColors.gray[800]};
 `;
 
-const Container = styled(Flex)<{ disabled?: boolean }>`
+const Container = styled(Flex)<{ $disabled?: boolean }>`
 	gap: 8px;
 	align-items: center;
 	cursor: pointer;
-	opacity: ${props => (props.disabled ? 0.3 : 1)};
+	opacity: ${props => (props.$disabled ? 0.3 : 1)};
 `;
 
 export default ToggleSwitch;
