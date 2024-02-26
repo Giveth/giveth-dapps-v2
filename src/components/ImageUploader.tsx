@@ -10,9 +10,10 @@ import {
 	P,
 	Subline,
 	SublineBold,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { DropzoneState } from 'react-dropzone';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import ProgressBar from '@/components/ProgressBar';
 
 interface IImageUploader {
