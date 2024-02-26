@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
-import { QuoteText, brandColors } from '@giveth/ui-design-system';
-import { Row } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
+import { QuoteText, brandColors, Row, Flex } from '@giveth/ui-design-system';
 import {
 	BottomContainer,
 	EnhancedRewardCard,
