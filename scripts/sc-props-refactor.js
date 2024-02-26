@@ -10,16 +10,12 @@ module.exports = function (fileInfo, api) {
 				j.MemberExpression.check(path.node.tag) &&
 				path.node.tag.object.name === 'styled'
 			) {
+				// Existing code to modify expressions
 				path.node.quasi.expressions.forEach(expression => {
 					if (
 						expression.type === 'ArrowFunctionExpression' &&
 						expression.body.type === 'ConditionalExpression'
 					) {
-						console.log(
-							'ArrowFunction with ConditionalExpression found',
-						);
-
-						// Check and update the test part of the conditional expression
 						let testExpression = expression.body.test;
 						if (
 							testExpression.type === 'MemberExpression' &&
@@ -34,8 +30,6 @@ module.exports = function (fileInfo, api) {
 								testExpression.property.name,
 							);
 						}
-
-						// Additional checks can be added here for consequent and alternate parts if needed
 					}
 				});
 			}
