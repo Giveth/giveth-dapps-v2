@@ -17,7 +17,7 @@ export const ScoreBox: FC<IScoreBoxProps> = ({ score, color }) => {
 				<Score color={color}>{score}</Score>
 				{score !== 100 && <Hundred>100</Hundred>}
 			</Flex>
-			<Bar color={color} score={score} />
+			<Bar $color={color} $score={score} />
 		</Wrapper>
 	);
 };
@@ -45,10 +45,10 @@ const Hundred = styled(BaseNumber)`
 	color: ${semanticColors.jade[500]};
 `;
 
-const Bar = styled.div<{ score: number; color: string }>`
+const Bar = styled.div<{ $score: number; $color: string }>`
 	background: ${semanticColors.jade[500]};
 	background-image: ${props =>
-		`linear-gradient(to right, ${props.color} ${props.score}%, ${neutralColors.gray[200]} ${props.score}%)`};
+		`linear-gradient(to right, ${props.$color} ${props.$score}%, ${neutralColors.gray[200]} ${props.$score}%)`};
 	height: 8px;
 	width: 100%;
 	border-radius: 8px;
