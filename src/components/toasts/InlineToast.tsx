@@ -6,11 +6,11 @@ import {
 	IconCheckCircleFilled,
 	IconHelpFilled16,
 	semanticColors,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { FlexCenter } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
 export enum EToastType {
 	Error = 'error',
