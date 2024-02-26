@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Col, IconGIVFarm, Row } from '@giveth/ui-design-system';
+import { Col, IconGIVFarm, Row, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
-import { Flex } from '@giveth/ui-design-system';
 import config from '@/configuration';
 
 import {
