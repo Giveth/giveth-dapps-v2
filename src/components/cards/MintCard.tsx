@@ -6,6 +6,7 @@ import {
 	mediaQueries,
 	P,
 	semanticColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -14,7 +15,6 @@ import { erc20Abi, Abi, Address } from 'viem';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { readContracts, readContract } from '@wagmi/core';
-import { Flex } from '@giveth/ui-design-system';
 import { MintModal } from '../modals/Mint/MintModal';
 import { formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
