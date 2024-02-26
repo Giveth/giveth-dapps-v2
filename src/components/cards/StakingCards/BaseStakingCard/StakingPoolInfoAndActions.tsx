@@ -4,12 +4,13 @@ import {
 	brandColors,
 	IconHelpFilled,
 	IconExternalLink,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
-import { Flex, FlexCenter } from '@giveth/ui-design-system';
 import FarmCountDown from '@/components/FarmCountDown';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { avgAPR } from '@/helpers/givpower';
