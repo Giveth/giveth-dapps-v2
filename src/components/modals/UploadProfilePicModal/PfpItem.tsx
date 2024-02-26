@@ -7,8 +7,8 @@ import {
 	IconCheck16,
 	neutralColors,
 	P,
+	FlexCenter,
 } from '@giveth/ui-design-system';
-import { FlexCenter } from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { convertIPFSToHTTPS } from '@/helpers/url';
 
