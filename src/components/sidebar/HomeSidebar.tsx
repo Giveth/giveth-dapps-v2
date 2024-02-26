@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { GLink, IconSearch24 } from '@giveth/ui-design-system';
+import { GLink, IconSearch24, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { Flex } from '@giveth/ui-design-system';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { SidebarParentItem } from './SidebarItem';
 
