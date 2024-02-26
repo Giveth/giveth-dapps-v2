@@ -63,7 +63,7 @@ const ProjectCardOrgBadge = ({
 			) : isProjectView ? (
 				<ProjectViewContainer>{content}</ProjectViewContainer>
 			) : (
-				<HomeViewContainer isHover={isHover}>
+				<HomeViewContainer $isHover={isHover}>
 					{content}
 				</HomeViewContainer>
 			)}
@@ -79,7 +79,7 @@ const ImageContainer = styled.div`
 	}
 `;
 
-const HomeViewContainer = styled(FlexCenter)<{ isHover: boolean }>`
+const HomeViewContainer = styled(FlexCenter)<{ $isHover: boolean }>`
 	z-index: 2;
 	height: 36px;
 	background-color: ${neutralColors.gray[200]};
@@ -90,7 +90,7 @@ const HomeViewContainer = styled(FlexCenter)<{ isHover: boolean }>`
 	transition: bottom 0.3s ease;
 	border-top-right-radius: 12px;
 	${mediaQueries.laptopS} {
-		bottom: ${props => (props.isHover ? '167px' : '89px')};
+		bottom: ${props => (props.$isHover ? '167px' : '89px')};
 	}
 `;
 
