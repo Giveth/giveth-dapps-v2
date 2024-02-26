@@ -8,10 +8,10 @@ import {
 	Button,
 	GLink,
 	ButtonLink,
+	Flex,
 } from '@giveth/ui-design-system';
 import Slider from 'rc-slider';
 import styled, { css } from 'styled-components';
-import { Flex } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 import { EBoostModalState } from './BoostModal';
 
