@@ -8,6 +8,7 @@ import {
 	IconNetwork24,
 	brandColors,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useAccount, useSwitchChain } from 'wagmi';
 import Select, {
@@ -18,7 +19,6 @@ import Select, {
 	StylesConfig,
 	components,
 } from 'react-select';
-import { Flex } from '@giveth/ui-design-system';
 import { ChangeNetworkModal } from './modals/ChangeNetwork';
 import config from '../configuration';
 import { NetworkConfig } from '@/types/config';
