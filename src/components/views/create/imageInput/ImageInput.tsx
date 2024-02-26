@@ -90,13 +90,13 @@ const ImageInput: FC<ImageInputProps> = ({
 			<Tabs>
 				<Tab
 					onClick={() => setIsUploadTab(true)}
-					isActive={isUploadTab}
+					$isActive={isUploadTab}
 				>
 					{formatMessage({ id: 'label.upload_cover_image' })}
 				</Tab>
 				<Tab
 					onClick={() => setIsUploadTab(false)}
-					isActive={!isUploadTab}
+					$isActive={!isUploadTab}
 				>
 					{formatMessage({ id: 'label.search_for_photos' })}
 				</Tab>
@@ -162,14 +162,14 @@ const Attributes = styled(Subline)`
 	}
 `;
 
-const Tab = styled.div<{ isActive: boolean }>`
+const Tab = styled.div<{ $isActive: boolean }>`
 	cursor: pointer;
 	padding: 8px 32px;
-	background: ${props => (props.isActive ? 'white' : 'transparent')};
+	background: ${props => (props.$isActive ? 'white' : 'transparent')};
 	border-radius: 54px;
-	box-shadow: ${props => props.isActive && Shadow.Neutral[400]};
+	box-shadow: ${props => props.$isActive && Shadow.Neutral[400]};
 	color: ${props =>
-		props.isActive ? brandColors.deep[600] : brandColors.pinky[500]};
+		props.$isActive ? brandColors.deep[600] : brandColors.pinky[500]};
 `;
 
 const Tabs = styled.div`
