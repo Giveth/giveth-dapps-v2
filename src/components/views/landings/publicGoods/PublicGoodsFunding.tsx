@@ -1,7 +1,12 @@
 import Image from 'next/image';
 import styled from 'styled-components';
-import { Button, H4, Lead, semanticColors } from '@giveth/ui-design-system';
-import { FlexCenter } from '@giveth/ui-design-system';
+import {
+	Button,
+	H4,
+	Lead,
+	semanticColors,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import {
 	PublicGoodsOuterWrapper,
 	PublicGoodsWrapper,
