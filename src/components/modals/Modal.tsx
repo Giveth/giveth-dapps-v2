@@ -1,10 +1,13 @@
-import { brandColors, neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	neutralColors,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import Scrollbars from 'react-custom-scrollbars';
 
-import { FlexCenter } from '@giveth/ui-design-system';
 import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
