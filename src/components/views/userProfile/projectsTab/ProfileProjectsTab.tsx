@@ -1,10 +1,8 @@
-import { neutralColors } from '@giveth/ui-design-system';
+import { neutralColors, Col, Row, Flex } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
-import { Col, Row } from '@giveth/ui-design-system';
-import { Flex } from '@giveth/ui-design-system';
 import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
