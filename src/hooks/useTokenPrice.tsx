@@ -3,12 +3,10 @@ import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { Address } from 'viem';
 import {
-	fetchETCPrice,
 	fetchPrice,
-	fetchSolanaPrice,
+	fetchPriceWithCoingeckoId,
 	fetchVelodromePrice,
 } from '@/services/token';
-import { fetchEthPrice } from '@/features/price/price.services';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
@@ -30,6 +28,7 @@ interface ITokenPrice {
 	id?: Address | string;
 	mainnetAddress?: Address;
 	isStableCoin?: boolean;
+	coingeckoId?: string;
 }
 
 export const useTokenPrice = (token?: ITokenPrice) => {
@@ -56,18 +55,12 @@ export const useTokenPrice = (token?: ITokenPrice) => {
 				const mpETHAddress =
 					'0x819845b60a192167ed1139040b4f8eca31834f27';
 				setTokenPrice((await fetchVelodromePrice(mpETHAddress)) || 0);
-			} else if (token?.symbol === 'SOL') {
-				setTokenPrice((await fetchSolanaPrice()) || 0);
-			} else if (token?.symbol === ethereumChain.nativeCurrency.symbol) {
-				const ethPrice = await fetchEthPrice();
-				setTokenPrice(ethPrice || 0);
+			} else if (token?.coingeckoId) {
+				setTokenPrice(
+					(await fetchPriceWithCoingeckoId(token.coingeckoId)) || 0,
+				);
 			} else if (token?.address || token?.id) {
 				// ETC is not supported by coingecko with contract address, so we should use this function to fetch the price
-				if (token.symbol === 'ETC') {
-					const fetchedETCPrice = await fetchETCPrice();
-					setTokenPrice(fetchedETCPrice || 0);
-					return;
-				}
 				let tokenAddress = token.address || token.id;
 				// Coingecko doesn't have these tokens in Gnosis Chain, so fetching price from ethereum
 				if (!isMainnet && token.mainnetAddress) {
