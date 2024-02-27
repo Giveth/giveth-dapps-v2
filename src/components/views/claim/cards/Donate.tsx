@@ -139,7 +139,7 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 	}, [donation, givTokenDistroHelper]);
 
 	return (
-		<DonateCardContainer activeIndex={step} index={index}>
+		<DonateCardContainer $activeIndex={step} $index={index}>
 			<DonateHeader>
 				<Title>Donate &amp; get GIV back</Title>
 				<Desc>

@@ -24,7 +24,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 		<Wrapper
 			gap='16px'
 			$alignItems='center'
-			disabled={disable}
+			$disabled={disable}
 			onClick={() => {
 				if (disable) return;
 				onClick();
@@ -61,12 +61,12 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 };
 
 interface IWrapper {
-	disabled?: boolean;
+	$disabled?: boolean;
 }
 
 const Wrapper = styled(Flex)<IWrapper>`
 	padding: 4px 8px;
-	cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+	cursor: ${props => (props.$disabled ? 'not-allowed' : 'pointer')};
 	&:hover {
 		background: ${neutralColors.gray[200]};
 	}

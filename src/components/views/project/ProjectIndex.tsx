@@ -138,7 +138,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							</MobileActionsContainer>
 						)}
 						{isMobile && (
-							<MobileContainer hasActiveRound={hasActiveQFRound}>
+							<MobileContainer $hasActiveRound={hasActiveQFRound}>
 								{hasActiveQFRound ? (
 									<QFSection />
 								) : (
@@ -243,8 +243,9 @@ const ContinueCreationButton = styled(Button)`
 	align-self: flex-end;
 `;
 
-const MobileContainer = styled.div<{ hasActiveRound: boolean }>`
-	padding: ${props => (props.hasActiveRound ? '0 26px 26px 26px' : '0 26px')};
+const MobileContainer = styled.div<{ $hasActiveRound: boolean }>`
+	padding: ${props =>
+		props.$hasActiveRound ? '0 26px 26px 26px' : '0 26px'};
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 16px;
 `;

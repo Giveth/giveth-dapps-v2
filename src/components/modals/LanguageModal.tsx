@@ -41,7 +41,7 @@ export const LanguageModal: FC<IModal> = ({ setShowModal }) => {
 				{availableLanguages.map(locale => (
 					<Option
 						key={locale}
-						isCurrentLocale={locale === currentLocale}
+						$isCurrentLocale={locale === currentLocale}
 						onClick={() => {
 							localStorage.setItem(StorageLabel.LOCALE, locale);
 							if (locale === currentLocale)
@@ -80,7 +80,7 @@ const Languages = styled.div`
 	margin: 24px;
 `;
 
-const Option = styled.div<{ isCurrentLocale?: boolean; $isDark?: boolean }>`
+const Option = styled.div<{ $isCurrentLocale?: boolean; $isDark?: boolean }>`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -90,7 +90,7 @@ const Option = styled.div<{ isCurrentLocale?: boolean; $isDark?: boolean }>`
 	cursor: pointer;
 
 	background: ${props =>
-		props.isCurrentLocale
+		props.$isCurrentLocale
 			? props.$isDark
 				? brandColors.giv[500]
 				: neutralColors.gray[200]

@@ -18,7 +18,7 @@ const RadioButton: FC<IProps> = props => {
 
 	return (
 		<Container onClick={toggleRadio}>
-			<RadioCircle isSmall={small} isSelected={isSelected}>
+			<RadioCircle $isSmall={small} $isSelected={isSelected}>
 				{isSelected && <RadioSelected />}
 			</RadioCircle>
 			<div>
@@ -29,7 +29,7 @@ const RadioButton: FC<IProps> = props => {
 				>
 					{title}
 				</RadioTitle>
-				<RadioSubtitle isSelected={isSelected}>
+				<RadioSubtitle $isSelected={isSelected}>
 					{subtitle}
 				</RadioSubtitle>
 			</div>
@@ -45,15 +45,15 @@ const RadioSelected = styled.div`
 	border: 3px solid white;
 `;
 
-const RadioCircle = styled.div<{ isSmall?: boolean; isSelected: boolean }>`
-	width: ${props => (props.isSmall ? '20px' : '24px')};
-	height: ${props => (props.isSmall ? '20px' : '24px')};
+const RadioCircle = styled.div<{ $isSmall?: boolean; $isSelected: boolean }>`
+	width: ${props => (props.$isSmall ? '20px' : '24px')};
+	height: ${props => (props.$isSmall ? '20px' : '24px')};
 	border-radius: 50%;
 	flex-shrink: 0;
-	margin-right: ${props => (props.isSmall ? '6px' : '16px')};
+	margin-right: ${props => (props.$isSmall ? '6px' : '16px')};
 	border: 2px solid
 		${props =>
-			props.isSelected
+			props.$isSelected
 				? neutralColors.gray[900]
 				: neutralColors.gray[700]};
 	background: transparent;
@@ -81,10 +81,10 @@ const RadioTitle = styled.div<{
 			: neutralColors.gray[600]};
 `;
 
-const RadioSubtitle = styled(Subline)<{ isSelected: boolean }>`
+const RadioSubtitle = styled(Subline)<{ $isSelected: boolean }>`
 	user-select: none;
 	color: ${props =>
-		props.isSelected ? brandColors.deep[900] : neutralColors.gray[600]};
+		props.$isSelected ? brandColors.deep[900] : neutralColors.gray[600]};
 `;
 
 export default RadioButton;

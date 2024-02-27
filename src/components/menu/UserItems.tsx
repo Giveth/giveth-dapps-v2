@@ -89,7 +89,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 							chainType={walletChainType}
 							logoSize={16}
 						/>
-						<NetworkName width={isOnSolana ? '120px' : '90px'}>
+						<NetworkName $width={isOnSolana ? '120px' : '90px'}>
 							{chainName}
 						</NetworkName>
 					</FlexCenter>

@@ -282,7 +282,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				</Flex>
 			</InfoPart>
 			<DescToast
-				hasError={
+				$hasError={
 					boostedProjectsCount !== 0 &&
 					!isOnlyBoostedProjectIsThisProject &&
 					percentage === 100
@@ -341,7 +341,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 							value={percentage}
 						/>
 					</SliderWrapper>
-					<SliderDesc isChanged={isChanged} weight={700}>
+					<SliderDesc $isChanged={isChanged} weight={700}>
 						{isChanged
 							? `~${
 									percentage > 0

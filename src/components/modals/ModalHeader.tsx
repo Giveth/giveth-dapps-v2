@@ -35,7 +35,7 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 			{!!backButtonCallback ? (
 				<IconWrapper
 					onClick={backButtonCallback}
-					clickable={!!backButtonCallback}
+					$clickable={!!backButtonCallback}
 				>
 					<IconChevronLeft32 />
 				</IconWrapper>
@@ -82,10 +82,10 @@ const CloseModalPlaceHolder = styled.div`
 `;
 
 interface IIconWrapper {
-	clickable?: boolean;
+	$clickable?: boolean;
 }
 
 const IconWrapper = styled.div<IIconWrapper>`
 	height: 32px;
-	${props => props.clickable && 'cursor: pointer;'}
+	${props => props.$clickable && 'cursor: pointer;'}
 `;

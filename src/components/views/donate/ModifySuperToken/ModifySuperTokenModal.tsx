@@ -117,7 +117,7 @@ const ModifySuperTokenInnerModal: FC<
 							onClick={() => {
 								setTab(value);
 							}}
-							active={tab === value}
+							$active={tab === value}
 						>
 							{label}
 						</Tab>
@@ -154,7 +154,7 @@ const Tabs = styled(Flex)`
 `;
 
 interface ITapProps {
-	active: boolean;
+	$active: boolean;
 }
 
 const Tab = styled(P)<ITapProps>`
@@ -166,7 +166,7 @@ const Tab = styled(P)<ITapProps>`
 		color: ${neutralColors.gray[900]};
 	}
 	${props =>
-		props.active &&
+		props.$active &&
 		css`
 			background-color: ${neutralColors.gray[200]};
 			color: ${brandColors.pinky[500]};

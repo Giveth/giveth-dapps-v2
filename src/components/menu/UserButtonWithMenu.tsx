@@ -69,7 +69,7 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 				<CoverLine $baseTheme={theme} className='cover-line' />
 			</WalletButton>
 			{menuCondition && (
-				<MenuContainer isAnimating={showMenu} $baseTheme={theme}>
+				<MenuContainer $isAnimating={showMenu} $baseTheme={theme}>
 					<ItemsProvider close={closeMenu}>
 						<UserItems
 							setQueueRoute={setQueueRoute}

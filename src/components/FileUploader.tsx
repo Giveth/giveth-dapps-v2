@@ -224,7 +224,7 @@ const FileUploader: FC<IFileUploader> = ({
 										</SublineBold>
 									</Flex>
 								)}
-								<UplaodBar status={file.status} />
+								<UplaodBar $status={file.status} />
 							</UploadInfoRow>
 						</UploadContainer>
 					))
@@ -259,7 +259,7 @@ const FileUploader: FC<IFileUploader> = ({
 									</GLink>
 								</Flex>
 								<UplaodBar
-									status={EFileUploadingStatus.UPLOADED}
+									$status={EFileUploadingStatus.UPLOADED}
 								/>
 							</UploadInfoRow>
 						</UploadContainer>
@@ -318,14 +318,14 @@ const move = keyframes`
 	}
 `;
 
-const UplaodBar = styled.div<{ status?: EFileUploadingStatus }>`
+const UplaodBar = styled.div<{ $status?: EFileUploadingStatus }>`
 	width: 100%;
 	height: 4px;
 	border-radius: 2px;
 	position: relative;
 	overflow: hidden;
 	${props => {
-		switch (props.status) {
+		switch (props.$status) {
 			case EFileUploadingStatus.UPLOADING:
 				return css`
 					background-color: ${neutralColors.gray[400]};

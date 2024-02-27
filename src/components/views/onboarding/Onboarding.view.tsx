@@ -82,12 +82,12 @@ const OnboardHeader: FC<IOnboard> = ({ step }) => {
 	return (
 		<OnboardHeaderContainer>
 			<OnboardHeading weight={700}>Complete your profile</OnboardHeading>
-			<OnboardProgressbar step={step} />
+			<OnboardProgressbar $step={step} />
 			<OnboardProgressbarLabels>
 				{StatesLabel.map((label, idx) => (
 					<OnboardProgressbarLabel
 						key={idx}
-						status={
+						$status={
 							idx > step
 								? LabelStatus.NEXT
 								: idx === 0
@@ -112,7 +112,7 @@ const OnboardHeaderContainer = styled.div`
 	padding-bottom: 68px;
 `;
 
-const OnboardProgressbar = styled.div<IOnboard>`
+const OnboardProgressbar = styled.div<{ $step: OnboardSteps }>`
 	background: ${brandColors.giv[100]};
 	height: 6px;
 	border-radius: 12px;
@@ -124,7 +124,7 @@ const OnboardProgressbar = styled.div<IOnboard>`
 		position: absolute;
 		left: 0;
 		width: ${props => {
-			switch (props.step) {
+			switch (props.$step) {
 				case OnboardSteps.INFO:
 					return '33.34%';
 				case OnboardSteps.PHOTO:
@@ -148,7 +148,7 @@ const OnboardProgressbarLabels = styled.div`
 `;
 
 interface IOnboardProgressbarLabel {
-	status: LabelStatus;
+	$status: LabelStatus;
 }
 
 const OnboardProgressbarLabel = styled(B)<IOnboardProgressbarLabel>`
@@ -160,7 +160,7 @@ const OnboardProgressbarLabel = styled(B)<IOnboardProgressbarLabel>`
 		text-align: right;
 	}
 	color: ${props => {
-		switch (props.status) {
+		switch (props.$status) {
 			case LabelStatus.PREV:
 				return `${brandColors.deep[900]}66`;
 			case LabelStatus.ACTIVE:

@@ -35,11 +35,11 @@ const DescriptionInput: FC<InputType> = ({
 	return (
 		<>
 			<TextArea
-				validation={validationStatus}
+				$validation={validationStatus}
 				{...register(registerName, registerOptions)}
 				{...rest}
 			/>
-			<ErrorMessage validation={validationStatus}>
+			<ErrorMessage $validation={validationStatus}>
 				{error?.message || ' '}
 			</ErrorMessage>
 		</>
@@ -49,7 +49,7 @@ const DescriptionInput: FC<InputType> = ({
 const ErrorMessage = styled(GLink)<IInputValidation>`
 	padding-top: 4px;
 	color: ${props => {
-		switch (props.validation) {
+		switch (props.$validation) {
 			case EInputValidation.NORMAL:
 				return neutralColors.gray[900];
 			case EInputValidation.WARNING:

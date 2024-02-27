@@ -5,7 +5,7 @@ import { Bullets } from '@/components/styled-components/Bullets';
 const DeactivatingContent = () => (
 	<Lead>
 		Before deactivating your project, be aware that:
-		<Bullets image='/images/bullets/bullet_orange.svg'>
+		<Bullets $image='/images/bullets/bullet_orange.svg'>
 			{bulletPointsText.map((text, index) => (
 				<li key={`bullet-point-${index}`}>{text}</li>
 			))}

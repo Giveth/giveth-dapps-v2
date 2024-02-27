@@ -57,7 +57,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					<FlowRateTooltip>PlaceHolder</FlowRateTooltip>
 				</IconWithTooltip>
 			</Flex>
-			<InputWrapper hasError={!!error}>
+			<InputWrapper $hasError={!!error}>
 				<SelectTokenWrapper
 					$alignItems='center'
 					$justifyContent='space-between'
@@ -104,13 +104,13 @@ const SelectTokenWrapper = styled(Flex)`
 `;
 
 interface IInputWrapper {
-	hasError: boolean;
+	$hasError: boolean;
 }
 
 const InputWrapper = styled(Flex)<IInputWrapper>`
 	border: 2px solid
 		${props =>
-			props.hasError
+			props.$hasError
 				? semanticColors.punch[300]
 				: neutralColors.gray[300]};
 	border-radius: 8px;

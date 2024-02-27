@@ -100,7 +100,7 @@ export const NotificationButtonWithMenu: FC<IHeaderButtonProps> = ({
 			</NotificationsButton>
 			{NOTIFICATION_ENABLED && menuCondition && (
 				<NotificationMenuContainer
-					isAnimating={showMenu}
+					$isAnimating={showMenu}
 					$baseTheme={theme}
 				>
 					<NotificationMenuWrapper>

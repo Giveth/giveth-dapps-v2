@@ -67,7 +67,7 @@ export default function EmailVerificationIndex() {
 
 	return (
 		<VerificationContainer>
-			<VerificationCard background={imageAddress}>
+			<VerificationCard $background={imageAddress}>
 				<ContentSelector status={status} />
 				<div color={brandColors.giv[500]}></div>
 			</VerificationCard>

@@ -113,7 +113,7 @@ export const PassportView = () => {
 												: '--'}
 										</H3>
 									</InfoRow>
-									<InfoRow gray>
+									<InfoRow $gray>
 										<P>
 											{formatMessage({
 												id: 'label.required_score',
@@ -129,7 +129,7 @@ export const PassportView = () => {
 								</>
 							)}
 							<StyledPassportBannerWrapper
-								bgColor={PassportBannerData[passportState].bg}
+								$bgColor={PassportBannerData[passportState].bg}
 							>
 								{PassportBannerData[passportState].icon}
 								<P>
@@ -219,13 +219,13 @@ const InfoBox = styled(Flex)`
 `;
 
 interface IInfoRowProps {
-	gray?: boolean;
+	$gray?: boolean;
 }
 
 const InfoRow = styled(Flex)<IInfoRowProps>`
 	justify-content: space-between;
 	align-items: center;
-	color: ${props => props.gray && neutralColors.gray[700]};
+	color: ${props => props.$gray && neutralColors.gray[700]};
 `;
 
 const HowBox = styled(Flex)`

@@ -143,14 +143,14 @@ export const SetProfilePic = ({
 		</Wrapper>
 	) : (
 		<>
-			<CustomWrapper isOnboarding={isOnboarding}>
+			<CustomWrapper $isOnboarding={isOnboarding}>
 				<Flex gap='16px'>
 					{tabs.map(i => (
 						<TabItem
 							onClick={() => setActiveTab(i.id)}
 							className={activeTab === i.id ? 'active' : ''}
 							key={i.id}
-							active={activeTab === i.id}
+							$active={activeTab === i.id}
 						>
 							{i.title}
 						</TabItem>
@@ -221,8 +221,8 @@ export const SetProfilePic = ({
 									))}
 								</PFPItemsContainer>
 								<SelectedPFPContainerWrapper
-									isOpen={!!selectedPFP}
-									divheight={sectionHeight}
+									$isOpen={!!selectedPFP}
+									$divheight={sectionHeight}
 									ref={attributeSectionRef}
 								>
 									{selectedPFP && (
@@ -402,10 +402,10 @@ const AttributesWrapper = styled(Flex)`
 `;
 
 const SelectedPFPContainerWrapper = styled.div<{
-	isOpen: boolean;
-	divheight: number;
+	$isOpen: boolean;
+	$divheight: number;
 }>`
-	height: ${props => (props.isOpen ? props.divheight + 'px' : '0px')};
+	height: ${props => (props.$isOpen ? props.$divheight + 'px' : '0px')};
 	transition: height 0.3s ease-in-out;
 `;
 
@@ -434,9 +434,9 @@ const HideInDesktop = styled.div`
 	}
 `;
 
-const CustomWrapper = styled(Wrapper)<{ isOnboarding: boolean }>`
+const CustomWrapper = styled(Wrapper)<{ $isOnboarding: boolean }>`
 	${mediaQueries.tablet} {
-		max-height: ${props => (props.isOnboarding ? '' : '640px')};
+		max-height: ${props => (props.$isOnboarding ? '' : '640px')};
 		overflow-y: auto;
 	}
 `;

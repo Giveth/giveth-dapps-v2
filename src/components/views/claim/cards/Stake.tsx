@@ -175,7 +175,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	}, [mainnetValues, gnosisValues]);
 
 	return (
-		<InvestCardContainer activeIndex={step} index={index}>
+		<InvestCardContainer $activeIndex={step} $index={index}>
 			<StakeHeader>
 				<Title as='h1'>Grow your Rewards</Title>
 				<Desc>

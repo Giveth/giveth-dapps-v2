@@ -56,12 +56,10 @@ const NFTsButtonsContainer = styled(Flex)`
 	}
 `;
 
-const TextButton = styled(Button)<{ color?: string }>`
-	color: ${props => props.color};
+const TextButton = styled(Button)`
 	text-transform: uppercase;
 
 	&:hover {
 		background-color: transparent;
-		color: ${props => props.color};
 	}
 `;

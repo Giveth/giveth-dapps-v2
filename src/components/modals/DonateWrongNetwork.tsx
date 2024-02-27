@@ -94,7 +94,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 			hiddenClose
 			headerTitlePosition='left'
 		>
-			<CustomHr margin='24px' />
+			<CustomHr $margin='24px' />
 			<ModalContainer>
 				<Lead>
 					{formatMessage(
@@ -190,7 +190,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 					</>
 				)}
 				<br />
-				<CustomHr margin='0' />
+				<CustomHr $margin='0' />
 				<FlexCenter direction='column'>
 					<FooterText>{formatMessage({ id: 'label.or' })}</FooterText>
 					<Link href={`${Routes.Project}/${slug}`}>
@@ -217,9 +217,9 @@ const ModalContainer = styled.div`
 	}
 `;
 
-const CustomHr = styled.hr<{ margin: string }>`
-	margin-left: ${props => props.margin};
-	margin-right: ${props => props.margin};
+const CustomHr = styled.hr<{ $margin: string }>`
+	margin-left: ${props => props.$margin};
+	margin-right: ${props => props.$margin};
 	border: 1px solid ${neutralColors.gray[400]};
 `;
 

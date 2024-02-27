@@ -55,7 +55,7 @@ const Pagination = (props: IPagination) => {
 				onClick={() => {
 					if (currentPage > 0) setPage(page => page - 1);
 				}}
-				disable={currentPage == 0}
+				$disable={currentPage == 0}
 			>
 				{`<  ${formatMessage({ id: 'label.prev' })}`}
 			</PaginationItem>
@@ -67,7 +67,7 @@ const Pagination = (props: IPagination) => {
 						onClick={() => {
 							if (!isNaN(+p)) setPage(+p - 1);
 						}}
-						isActive={+p - 1 === currentPage}
+						$isActive={+p - 1 === currentPage}
 					>
 						{p}
 					</PaginationItem>
@@ -78,7 +78,7 @@ const Pagination = (props: IPagination) => {
 				onClick={() => {
 					if (currentPage + 1 < pageCount) setPage(page => page + 1);
 				}}
-				disable={currentPage + 1 >= pageCount}
+				$disable={currentPage + 1 >= pageCount}
 			>
 				{`${formatMessage({ id: 'label.next' })}  >`}
 			</PaginationItem>
@@ -92,14 +92,14 @@ const PaginationRow = styled(FlexCenter)`
 `;
 
 interface IPaginationItem {
-	disable?: boolean;
-	isActive?: boolean;
+	$disable?: boolean;
+	$isActive?: boolean;
 	$baseTheme: ETheme;
 }
 
 const PaginationItem = styled(Caption)<IPaginationItem>`
 	${props =>
-		props.disable
+		props.$disable
 			? css`
 					color: ${props.$baseTheme === ETheme.Dark
 						? neutralColors.gray[700]
@@ -111,7 +111,7 @@ const PaginationItem = styled(Caption)<IPaginationItem>`
 						? neutralColors.gray[100]
 						: neutralColors.gray[900]};
 				`};
-	${props => (props.isActive ? `font-weight: bold;` : '')};
+	${props => props.$isActive && `font-weight: bold;`};
 `;
 
 export default Pagination;

@@ -30,7 +30,7 @@ export const ArchiveCover: FC<IArchiveCoverProps> = ({
 					<IconInfoFilled16 color={brandColors.giv['000']} />
 				</ArchiveModalIcon>
 				<Flex $flexDirection='column' $justifyContent='space-evenly'>
-					<ArchiveModalText weight={700}>
+					<ArchiveModalText $weight={700}>
 						{formatMessage({
 							id: 'component.archive_cover.archived',
 						})}
@@ -91,8 +91,8 @@ const ArchiveModal = styled.div`
 	padding: 16px;
 `;
 
-const ArchiveModalText = styled(P)<{ weight?: number }>`
-	font-weight: ${props => (props.weight ? props.weight : 400)};
+const ArchiveModalText = styled(P)<{ $weight?: number }>`
+	font-weight: ${props => props.$weight || 400};
 `;
 
 const ArchiveModalLink = styled(GLink)``;

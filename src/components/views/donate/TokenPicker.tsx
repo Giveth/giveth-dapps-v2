@@ -167,9 +167,11 @@ const TokenPicker = (props: {
 				...baseStyles,
 				width: '100%',
 				background: isSelected ? neutralColors.gray[200] : 'white',
+
 				'&:hover': {
 					background: neutralColors.gray[200],
 				},
+
 				color: neutralColors.gray[900],
 				padding: '8px 16px',
 				borderRadius: '8px',
@@ -227,9 +229,9 @@ const TokenPicker = (props: {
 			{isOpen && isMobile && <OverLay />}
 			<TargetContainer
 				onClick={toggleOpen}
-				isOpen={isOpen}
-				isMobile={isMobile}
-				disabled={disabled}
+				$isOpen={isOpen}
+				$isMobile={isMobile}
+				$disabled={disabled}
 			>
 				<TokenContainer>
 					{selectedToken && (
@@ -349,9 +351,9 @@ const OverLay = styled.div`
 `;
 
 interface ITokenPicker {
-	isOpen: boolean;
-	isMobile?: boolean | null;
-	disabled?: boolean;
+	$isOpen: boolean;
+	$isMobile?: boolean | null;
+	$disabled?: boolean;
 }
 
 const TargetContainer = styled.div<ITokenPicker>`
@@ -363,13 +365,13 @@ const TargetContainer = styled.div<ITokenPicker>`
 	border-right: 2px solid ${neutralColors.gray[300]};
 	border-radius: 8px 0 0 8px;
 	padding: 14px 16px;
-	color: ${props => props.disabled && neutralColors.gray[600]};
+	color: ${props => props.$disabled && neutralColors.gray[600]};
 	background: ${props =>
-		props.disabled
+		props.$disabled
 			? neutralColors.gray[200]
-			: props.isOpen && props.isMobile
+			: props.$isOpen && props.$isMobile
 				? 'rgba(79, 87, 106, 0.1)'
-				: props.isOpen
+				: props.$isOpen
 					? neutralColors.gray[200]
 					: 'transparent'};
 `;

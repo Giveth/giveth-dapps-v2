@@ -74,6 +74,7 @@
 		"wagmi": "^2.5.7"
 	},
 	"devDependencies": {
+		"@babel/preset-typescript": "^7.23.3",
 		"@next/bundle-analyzer": "^14.1.0",
 		"@testing-library/cypress": "^10.0.1",
 		"@testing-library/jest-dom": "^6.4.2",

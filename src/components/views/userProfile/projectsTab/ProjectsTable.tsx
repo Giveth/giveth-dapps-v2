@@ -87,7 +87,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 							<ProjectTableCell>
 								<StatusBadge status={status!} />
 							</ProjectTableCell>
-							<ProjectTableCell bold>
+							<ProjectTableCell $bold>
 								<ProjectTitle>
 									{isCancelled ? (
 										<div>{project.title}</div>
@@ -112,7 +112,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 							<ProjectTableCell>
 								{project.totalReactions}
 							</ProjectTableCell>
-							<ProjectTableCell bold>
+							<ProjectTableCell $bold>
 								{formatUSD(project.totalDonations)} USD
 							</ProjectTableCell>
 							<ProjectTableCell>
@@ -159,11 +159,11 @@ const ProjectsTableHeader = styled(TableHeader)`
 	}
 `;
 
-const ProjectTableCell = styled(TableCell)<{ bold?: boolean }>`
+const ProjectTableCell = styled(TableCell)<{ $bold?: boolean }>`
 	width: 100%;
 	min-height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
-	font-weight: ${props => (props.bold ? 500 : 400)};
+	font-weight: ${props => (props.$bold ? 500 : 400)};
 `;
 
 const ProjectsRowWrapper = styled(RowWrapper)`

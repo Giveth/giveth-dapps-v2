@@ -66,7 +66,7 @@ const FloatingButtonReferral: FC<IFloatingReferral> = props => {
 	return (
 		<>
 			{!isMobile ? (
-				<FloatingContainer isOpen={isOpen}>
+				<FloatingContainer $isOpen={isOpen}>
 					{isOpen && (
 						<Message>
 							<Body>
@@ -95,10 +95,10 @@ const FloatingButtonReferral: FC<IFloatingReferral> = props => {
 							/>
 						</Message>
 					)}
-					<ButtonContainer isOpen={isOpen}>
+					<ButtonContainer $isOpen={isOpen}>
 						<FloatingButton
 							onClick={handleClick}
-							isOpen={isOpen}
+							$isOpen={isOpen}
 							// label={formatMessage({ id: 'label.refer_your_friends' })}
 						>
 							{formatMessage({
@@ -153,10 +153,10 @@ const FloatingButtonReferral: FC<IFloatingReferral> = props => {
 									size='small'
 								/>
 							</Message>
-							<ButtonContainer isOpen={isOpen}>
+							<ButtonContainer $isOpen={isOpen}>
 								<FloatingButton
 									onClick={handleClick}
-									isOpen={isOpen}
+									$isOpen={isOpen}
 								>
 									{formatMessage({
 										id: 'label.refer_your_friends',
@@ -176,7 +176,7 @@ const FloatingButtonReferral: FC<IFloatingReferral> = props => {
 							</ButtonContainer>
 						</>
 					) : (
-						<FloatingButton onClick={handleClick} isOpen={isOpen}>
+						<FloatingButton onClick={handleClick} $isOpen={isOpen}>
 							{formatMessage({
 								id: 'label.refer_your_friends',
 							})}
@@ -215,13 +215,13 @@ const fadeIn = keyframes`
   }
 `;
 
-const FloatingContainer = styled(FlexCenter)<{ isOpen: boolean }>`
+const FloatingContainer = styled(FlexCenter)<{ $isOpen: boolean }>`
 	display: none;
 	position: fixed;
 	bottom: 2rem;
 	left: 2rem;
-	padding: ${({ isOpen }) => (isOpen ? ' 6px 0' : '0')};
-	width: ${({ isOpen }) => (isOpen ? '331px' : '271px')};
+	padding: ${props => (props.$isOpen ? ' 6px 0' : '0')};
+	width: ${props => (props.$isOpen ? '331px' : '271px')};
 	z-index: 20;
 	justify-content: center;
 	border-radius: 12px;
@@ -230,7 +230,7 @@ const FloatingContainer = styled(FlexCenter)<{ isOpen: boolean }>`
 		display: block;
 	}
 	box-shadow: ${props =>
-		props.isOpen ? ` ${Shadow.Giv[400]} !important` : 'none'};
+		props.$isOpen ? ` ${Shadow.Giv[400]} !important` : 'none'};
 	transition: width 0.3s ease-in-out;
 `;
 
@@ -246,17 +246,17 @@ const FloatingMobileContainer = styled.div<{ isOpen: boolean; show: boolean }>`
 	height: ${({ isOpen, show }) => (!show ? 0 : isOpen ? '220px' : '56px')};
 	overflow-y: auto;
 `;
-const FloatingButton = styled.button<{ isOpen: boolean }>`
+const FloatingButton = styled.button<{ $isOpen: boolean }>`
 	background-color: white;
 	text-transform: capitalize;
 	border: none;
-	width: ${({ isOpen }) => (isOpen ? '331px' : '271px')};
+	width: ${props => (props.$isOpen ? '331px' : '271px')};
 	height: 46px;
 	align-items: center;
 	padding: 18px 24px;
 	cursor: pointer;
-	color: ${({ isOpen }) =>
-		isOpen ? neutralColors.gray[800] : brandColors.pinky[500]};
+	color: ${props =>
+		props.$isOpen ? neutralColors.gray[800] : brandColors.pinky[500]};
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 150%;
@@ -264,7 +264,7 @@ const FloatingButton = styled.button<{ isOpen: boolean }>`
 	justify-content: space-between;
 	z-index: 4 !important;
 	position: relative;
-	border-radius: ${({ isOpen }) => (!isOpen ? '12px' : '0')};
+	border-radius: ${props => (!props.$isOpen ? '12px' : '0')};
 	border-top-left-radius: 12px;
 	border-top-right-radius: 12px;
 	z-index: 21;
@@ -279,18 +279,18 @@ const FloatingButton = styled.button<{ isOpen: boolean }>`
 	}
 `;
 
-const ButtonContainer = styled.div<{ isOpen: boolean }>`
+const ButtonContainer = styled.div<{ $isOpen: boolean }>`
 	display: flex;
 	flex-direction: column-reverse;
-	transform: ${({ isOpen }) =>
-		isOpen ? 'translateY(-290%)' : 'translateY(0)'};
+	transform: ${props =>
+		props.$isOpen ? 'translateY(-290%)' : 'translateY(0)'};
 	transition: transform 0.3s ease-in-out;
 	* {
 		background: white !important;
 		box-shadow: none !important;
 	}
-	box-shadow: ${({ isOpen }) =>
-		isOpen ? 'none' : `${Shadow.Giv[400]} !important`};
+	box-shadow: ${props =>
+		props.$isOpen ? 'none' : `${Shadow.Giv[400]} !important`};
 
 	border-radius: 12px;
 `;

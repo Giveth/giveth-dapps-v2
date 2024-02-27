@@ -84,7 +84,7 @@ const VideoBlock = () => {
 							</video>
 							<VideoOverlay
 								onClick={handleVideoClick}
-								hidden={isPlaying}
+								$hidden={isPlaying}
 							>
 								<Image
 									src='/images/video_play.svg'

@@ -11,18 +11,22 @@ const selectCustomStyles: StylesConfig = {
 		({
 			...baseStyles,
 			maxWidth: '520px',
+
 			borderColor: selectProps.hasError
 				? semanticColors.punch[500]
 				: neutralColors.gray[300],
+
 			borderWidth: '2px',
 			borderRadius: '8px',
 			boxShadow: 'none',
 			padding: '8px',
 			background: isDisabled ? `${neutralColors.gray[300]}` : 'initial',
+
 			'&:hover': {
 				borderColor: `${neutralColors.gray[300]}`,
 				boxShadow: `${Shadow.Neutral[400]}`,
 			},
+
 			'&:focus-within': {
 				borderColor: `${brandColors.giv[600]}`,
 			},

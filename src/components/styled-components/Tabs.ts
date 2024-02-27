@@ -2,7 +2,7 @@ import { P, brandColors, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 export interface ITab {
-	active: boolean;
+	$active: boolean;
 }
 
 export const TabsContainer = styled(Flex)`
@@ -19,9 +19,9 @@ export const TabItem = styled(P)<ITab>`
 	white-space: nowrap;
 	cursor: pointer;
 	color: ${(props: ITab) =>
-		props.active ? brandColors.deep[600] : brandColors.pinky[500]};
+		props.$active ? brandColors.deep[600] : brandColors.pinky[500]};
 	${props =>
-		props.active &&
+		props.$active &&
 		`
 		background: ${neutralColors.gray[100]};
 		box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);

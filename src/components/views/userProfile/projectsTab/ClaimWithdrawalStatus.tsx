@@ -33,7 +33,7 @@ export const ClaimWithdrawalStatus = ({
 
 	if (status === ClaimTransactionState.NOT_STARTED) return;
 	return (
-		<Container status={status}>
+		<Container $status={status}>
 			<Flex gap='16px' $alignItems='center'>
 				{status === ClaimTransactionState.SUCCESS ? (
 					<IconCheckCircleFilled16 />
@@ -46,7 +46,7 @@ export const ClaimWithdrawalStatus = ({
 	);
 };
 
-const Container = styled(Caption)<IClaimWithdrawalStatusProps>`
+const Container = styled(Caption)<{ $status: ClaimTransactionState }>`
 	display: flex;
 	gap: 4px;
 	align-items: center;
@@ -56,7 +56,7 @@ const Container = styled(Caption)<IClaimWithdrawalStatusProps>`
 	margin-bottom: 16px;
 	border: 1px solid
 		${props => {
-			switch (props.status) {
+			switch (props.$status) {
 				case ClaimTransactionState.SUCCESS:
 					return semanticColors.jade[500];
 				case ClaimTransactionState.PENDING:
@@ -64,7 +64,7 @@ const Container = styled(Caption)<IClaimWithdrawalStatusProps>`
 			}
 		}};
 	color: ${props => {
-		switch (props.status) {
+		switch (props.$status) {
 			case ClaimTransactionState.SUCCESS:
 				return semanticColors.jade[500];
 			case ClaimTransactionState.PENDING:
@@ -72,7 +72,7 @@ const Container = styled(Caption)<IClaimWithdrawalStatusProps>`
 		}
 	}};
 	background: ${props => {
-		switch (props.status) {
+		switch (props.$status) {
 			case ClaimTransactionState.SUCCESS:
 				return semanticColors.jade[100];
 			case ClaimTransactionState.PENDING:

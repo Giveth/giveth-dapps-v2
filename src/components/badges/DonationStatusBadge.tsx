@@ -15,7 +15,7 @@ const DonationStatus: FC<IDonationStatus> = ({ status }) => {
 	let _status: string = status;
 	if (status === EDonationStatus.VERIFIED) _status = 'success';
 	return (
-		<Container status={status}>
+		<Container $status={status}>
 			{status === EDonationStatus.PENDING && <Bullet />}
 			{_status}
 		</Container>
@@ -29,7 +29,7 @@ const Bullet = styled.div`
 	background: ${neutralColors.gray[700]};
 `;
 
-const Container = styled(SublineBold)<IDonationStatus>`
+const Container = styled(SublineBold)<{ $status: EDonationStatus }>`
 	display: flex;
 	gap: 4px;
 	align-items: center;
@@ -38,7 +38,7 @@ const Container = styled(SublineBold)<IDonationStatus>`
 	padding: 2px 8px;
 	border: 2px solid
 		${props => {
-			switch (props.status) {
+			switch (props.$status) {
 				case EDonationStatus.VERIFIED:
 					return semanticColors.jade[300];
 				case EDonationStatus.PENDING:
@@ -48,7 +48,7 @@ const Container = styled(SublineBold)<IDonationStatus>`
 			}
 		}};
 	color: ${props => {
-		switch (props.status) {
+		switch (props.$status) {
 			case EDonationStatus.VERIFIED:
 				return neutralColors.gray[700];
 			case EDonationStatus.PENDING:
@@ -58,7 +58,7 @@ const Container = styled(SublineBold)<IDonationStatus>`
 		}
 	}};
 	background: ${props => {
-		switch (props.status) {
+		switch (props.$status) {
 			case EDonationStatus.VERIFIED:
 				return semanticColors.jade[100];
 			case EDonationStatus.PENDING:

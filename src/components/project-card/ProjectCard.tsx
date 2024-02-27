@@ -90,11 +90,12 @@ const ProjectCard = (props: IProjectCard) => {
 	};
 
 	return (
+		// </Link>
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 			className={className}
-			order={props.order}
+			$order={props.order}
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges project={project} />
@@ -292,7 +293,7 @@ const ProjectCard = (props: IProjectCard) => {
 							linkType='primary'
 							size='small'
 							label={formatMessage({ id: 'label.donate' })}
-							isHover={isHover}
+							$isHover={isHover}
 						/>
 					</Link>
 				</ActionButtons>
@@ -305,7 +306,6 @@ const ProjectCard = (props: IProjectCard) => {
 				/>
 			)}
 		</Wrapper>
-		// </Link>
 	);
 };
 
@@ -313,9 +313,9 @@ const DonateButton = styled(ButtonLink)`
 	flex: 1;
 `;
 
-const CustomizedDonateButton = styled(DonateButton)<{ isHover: boolean }>`
+const CustomizedDonateButton = styled(DonateButton)<{ $isHover: boolean }>`
 	${mediaQueries.laptopS} {
-		opacity: ${props => (props.isHover ? '1' : '0')};
+		opacity: ${props => (props.$isHover ? '1' : '0')};
 		transition: opacity 0.3s ease-in-out;
 	}
 `;
@@ -416,7 +416,7 @@ const ImagePlaceholder = styled.div`
 	overflow: hidden;
 `;
 
-const Wrapper = styled.div<{ order?: number }>`
+const Wrapper = styled.div<{ $order?: number }>`
 	position: relative;
 	width: 100%;
 	border-radius: ${cardRadius};
@@ -425,7 +425,7 @@ const Wrapper = styled.div<{ order?: number }>`
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
 	height: 536px;
-	order: ${props => props.order};
+	order: ${props => props.$order};
 	${mediaQueries.laptopS} {
 		height: 472px;
 	}

@@ -325,7 +325,7 @@ export const GIVstreamProgress: FC<IGIVstreamProgressProps> = ({
 						remainTime}
 				</P>
 			</GsPTitleRow>
-			<Bar percentage={percentage} />
+			<Bar $percentage={percentage} />
 			<PercentageRow $justifyContent='space-between'>
 				<B>{percentage?.toFixed(2)}%</B>
 				<B>100%</B>

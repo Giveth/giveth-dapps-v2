@@ -49,7 +49,7 @@ const ProjectCard = (props: IProjectCard) => {
 	);
 
 	return (
-		<Wrapper isNew={isNew}>
+		<Wrapper $isNew={isNew}>
 			<ImagePlaceholder>
 				<Link href={slugToProjectView(slug)}>
 					<ProjectCardImage image={image} />
@@ -63,7 +63,7 @@ const ProjectCard = (props: IProjectCard) => {
 			{!isNew && (
 				<BadgeContainer>{verified && <VerifiedBadge />}</BadgeContainer>
 			)}
-			<CardBody isNew={isNew}>
+			<CardBody $isNew={isNew}>
 				<InternalLink href={slugToProjectView(slug)}>
 					<Title>{title}</Title>
 				</InternalLink>
@@ -116,8 +116,8 @@ const Description = styled(P)`
 	margin-top: 8px;
 `;
 
-const CardBody = styled.div<{ isNew?: boolean }>`
-	margin: ${props => (props.isNew ? '50px 24px 0' : '50px 0 0')};
+const CardBody = styled.div<{ $isNew?: boolean }>`
+	margin: ${props => (props.$isNew ? '50px 24px 0' : '50px 0 0')};
 	text-align: left;
 `;
 
@@ -142,7 +142,7 @@ const ImagePlaceholder = styled.div`
 	border-radius: 16px;
 `;
 
-const Wrapper = styled.div<{ isNew?: boolean }>`
+const Wrapper = styled.div<{ $isNew?: boolean }>`
 	position: relative;
 	height: 430px;
 	max-width: 440px;
@@ -150,8 +150,8 @@ const Wrapper = styled.div<{ isNew?: boolean }>`
 	border-radius: 12px;
 	margin-top: 0;
 	z-index: 0;
-	background: ${props => props.isNew && 'white'};
-	box-shadow: ${props => props.isNew && Shadow.Dark[500]};
+	background: ${props => props.$isNew && 'white'};
+	box-shadow: ${props => props.$isNew && Shadow.Dark[500]};
 	${mediaQueries.mobileL} {
 		width: 100%;
 	}

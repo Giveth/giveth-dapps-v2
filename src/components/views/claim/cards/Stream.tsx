@@ -115,7 +115,7 @@ export const StreamCard: FC<IClaimViewCardProps> = ({ index }) => {
 	}, [givTokenDistroHelper]);
 
 	return (
-		<StreamCardContainer activeIndex={step} index={index}>
+		<StreamCardContainer $activeIndex={step} $index={index}>
 			<StreamHeader>
 				<Title as='h1'>Enjoy a continuous flow of GIV</Title>
 

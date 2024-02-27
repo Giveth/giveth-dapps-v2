@@ -4,7 +4,7 @@ import { ETheme } from '@/features/general/general.slice';
 import { Shadow } from '../styled-components/Shadow';
 
 interface IMenuContainerProps {
-	isAnimating?: boolean;
+	$isAnimating?: boolean;
 	$baseTheme?: ETheme;
 }
 
@@ -32,7 +32,7 @@ export const MenuContainer = styled(Flex)<IMenuContainerProps>`
 		props.$baseTheme === ETheme.Dark
 			? neutralColors.gray[100]
 			: neutralColors.gray[900]};
-	opacity: ${props => (props.isAnimating ? 1 : 0)};
+	opacity: ${props => (props.$isAnimating ? 1 : 0)};
 	transition: opacity 0.3s ease;
 `;
 

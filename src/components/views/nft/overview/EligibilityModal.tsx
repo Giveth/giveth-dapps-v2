@@ -66,7 +66,6 @@ const EligibilityModal = ({ isSuccess, setShowModal }: IEligibilityModal) => {
 					/>
 				</CustomizedLink>
 			)}
-
 			<br />
 			<br />
 		</Modal>

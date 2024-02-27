@@ -61,7 +61,7 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 						$alignItems='center'
 						gap='4px'
 						onClick={() => setSelectedQF(null)}
-						isSelected={selectedQF === null}
+						$isSelected={selectedQF === null}
 					>
 						{selectedQF === null ? (
 							<B>
@@ -82,8 +82,8 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 								$alignItems='center'
 								gap='4px'
 								onClick={() => setSelectedQF(round)}
-								isSelected={isSelected}
-								isActive={round.isActive}
+								$isSelected={isSelected}
+								$isActive={round.isActive}
 							>
 								{isSelected ? (
 									<B>{round.name}</B>
@@ -104,8 +104,8 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 };
 
 interface ITabItemProps {
-	isSelected?: boolean;
-	isActive?: boolean;
+	$isSelected?: boolean;
+	$isActive?: boolean;
 }
 
 const QfNavigationWrapper = styled(NavigationWrapper)`
@@ -129,7 +129,7 @@ const TabItem = styled(Flex)<ITabItemProps>`
 		background: ${neutralColors.gray[200]};
 	}
 	${props =>
-		props.isSelected &&
+		props.$isSelected &&
 		css`
 			background: ${neutralColors.gray[300]};
 		`}
