@@ -380,7 +380,7 @@ const config: EnvConfig = {
 		},
 		uniswapV2Subgraph: '',
 		superFluidSubgraph:
-			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-goerli',
+			'https://optimism-sepolia.subgraph.x.superfluid.dev/',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
