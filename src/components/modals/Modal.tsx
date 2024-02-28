@@ -6,7 +6,7 @@ import {
 import { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-
+import { Scrollbars } from 'rc-scrollbars';
 import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
@@ -108,7 +108,16 @@ export const Modal: FC<IModal> = ({
 					position={headerTitlePosition}
 					color={headerColor}
 				/>
-				{children}
+				<Scrollbars
+					renderTrackHorizontal={props => (
+						<div {...props} style={{ display: 'none' }} />
+					)}
+					{...(fullScreen || isMobile
+						? {}
+						: ScrollBarsNotFullScreenProps)}
+				>
+					{children}
+				</Scrollbars>
 			</ModalWrapper>
 		</Background>,
 		el.current,
