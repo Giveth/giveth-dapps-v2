@@ -35,7 +35,7 @@ interface IAddressInterfaceProps extends IChainType {
 }
 
 interface IconContainerProps {
-	disabled?: boolean;
+	$disabled?: boolean;
 }
 
 const AddressInterface = ({
@@ -120,7 +120,7 @@ const AddressInterface = ({
 							<IconWithTooltip
 								direction='top'
 								icon={
-									<IconContainer disabled>
+									<IconContainer $disabled>
 										<IconTrash24
 											color={neutralColors.gray[600]}
 										/>
@@ -255,7 +255,7 @@ const IconContainer = styled(FlexCenter)<IconContainerProps>`
 	transition: background-color 0.2s ease-in-out;
 
 	${props =>
-		!props.disabled &&
+		!props.$disabled &&
 		css`
 			&:hover {
 				background-color: ${neutralColors.gray[300]};
