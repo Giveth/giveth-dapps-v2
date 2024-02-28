@@ -380,17 +380,17 @@ const config: EnvConfig = {
 		},
 		uniswapV2Subgraph: '',
 		superFluidSubgraph:
-			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-goerli',
+			'https://optimism-sepolia.subgraph.x.superfluid.dev/',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
 					decimals: 18,
-					id: '0xc916ce4025cb479d9ba9d798a80094a449667f5d',
+					id: OPTIMISM_GIV_TOKEN_ADDRESS,
 					name: 'Giveth',
 					symbol: 'GIV',
 				},
 				decimals: 18,
-				id: '0x34cf77c14f39c81adbdad922af538f05633fa07e',
+				id: '0xdfd824f6928b9776c031f7ead948090e2824ce8b',
 				name: 'fake Super Giveth Token',
 				symbol: 'fGIVx',
 				isSuperToken: true,
@@ -403,7 +403,7 @@ const config: EnvConfig = {
 					id: '0x0000000000000000000000000000000000000000',
 				},
 				decimals: 18,
-				id: '0xe01f8743677da897f4e7de9073b57bf034fc2433',
+				id: '0x0043d7c85c8b96a49a72a92c0b48cdc4720437d7',
 				name: 'Super ETH',
 				symbol: 'ETHx',
 				isSuperToken: true,
