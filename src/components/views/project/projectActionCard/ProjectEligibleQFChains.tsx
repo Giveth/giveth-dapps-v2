@@ -31,7 +31,7 @@ const ProjectEligibleQFChains = () => {
 
 const Container = styled.div`
 	border-radius: 8px;
-	padding: 16px 8px;
+	padding: 16px 0;
 `;
 
 const MakeDonationDescription = styled(Caption)`

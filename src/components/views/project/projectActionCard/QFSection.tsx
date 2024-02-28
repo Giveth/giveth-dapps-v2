@@ -36,8 +36,12 @@ interface IQFSectionProps {
 
 const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	const { formatMessage, locale } = useIntl();
-	const { qfRounds, estimatedMatching, sumDonationValueUsdForActiveQfRound } =
-		projectData || {};
+	const {
+		qfRounds,
+		estimatedMatching,
+		sumDonationValueUsdForActiveQfRound,
+		sumDonationValueUsd,
+	} = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 	const { projectDonationsSqrtRootSum, matchingPool, allProjectsSum } =
 		estimatedMatching ?? {};
@@ -46,17 +50,18 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	const EstimatedMatchingSection = () => (
 		<Flex $flexDirection='column' gap='4px'>
 			<EstimatedMatchingPrice>
-				{formatDonation(
-					calculateTotalEstimatedMatching(
-						projectDonationsSqrtRootSum,
-						allProjectsSum,
-						matchingPool,
-						activeRound?.maximumReward,
-					),
-					'$',
-					locale,
-					true,
-				)}
+				{'+ ' +
+					formatDonation(
+						calculateTotalEstimatedMatching(
+							projectDonationsSqrtRootSum,
+							allProjectsSum,
+							matchingPool,
+							activeRound?.maximumReward,
+						),
+						'$',
+						locale,
+						true,
+					)}
 			</EstimatedMatchingPrice>
 			<Flex $alignItems='center' gap='4px'>
 				<LightCaption>
@@ -81,8 +86,14 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 					{isMobile && <br />}
 					<Title>
 						{formatMessage({
-							id: 'label.amount_raised_in_this_round',
+							id: 'label.total_raised',
 						})}
+						{' ' +
+							formatDonation(
+								sumDonationValueUsd || 0,
+								'$',
+								locale,
+							)}
 					</Title>
 					<Amount weight={700}>
 						1
@@ -107,6 +118,16 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 								count: projectData?.countUniqueDonorsForActiveQfRound,
 							},
 						)}
+						{' ' +
+							formatMessage({
+								id: 'label.in',
+							}) +
+							' '}
+						<b>
+							{formatMessage({
+								id: 'label.this_round',
+							})}
+						</b>
 					</Description>
 					<TabletEstimatedMatchingContainer>
 						<EstimatedMatchingSection />
@@ -250,9 +271,14 @@ const Amount = styled(H3)`
 const Description = styled(Caption)`
 	color: ${neutralColors.gray[700]};
 	margin-bottom: 24px;
+	white-space: nowrap;
 	& > div {
 		color: ${neutralColors.gray[900]};
 		display: inline;
+	}
+	> b {
+		font-weight: 500;
+		color: ${neutralColors.gray[900]};
 	}
 `;
 
