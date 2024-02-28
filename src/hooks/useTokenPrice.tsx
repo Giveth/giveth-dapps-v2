@@ -2,11 +2,7 @@ import BigNumber from 'bignumber.js';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { Address } from 'viem';
-import {
-	fetchPrice,
-	fetchPriceWithCoingeckoId,
-	fetchVelodromePrice,
-} from '@/services/token';
+import { fetchPrice, fetchPriceWithCoingeckoId } from '@/services/token';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
@@ -50,11 +46,6 @@ export const useTokenPrice = (token?: ITokenPrice) => {
 				setTokenPrice(1);
 			} else if (token?.symbol === 'GIV') {
 				setTokenPrice(givTokenPrice || 0);
-			} else if (token?.symbol?.toUpperCase() === 'MPETH') {
-				// Burning the address here as we can only fetch the price of the token from optimism
-				const mpETHAddress =
-					'0x819845b60a192167ed1139040b4f8eca31834f27';
-				setTokenPrice((await fetchVelodromePrice(mpETHAddress)) || 0);
 			} else if (token?.coingeckoId) {
 				setTokenPrice(
 					(await fetchPriceWithCoingeckoId(token.coingeckoId)) || 0,
