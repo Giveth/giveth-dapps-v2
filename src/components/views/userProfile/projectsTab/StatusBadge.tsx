@@ -37,20 +37,20 @@ const StatusBadge = (props: { status: EProjectStatus }) => {
 	}
 
 	return (
-		<Container color={color} backgroundColor={backgroundColor}>
+		<Container $color={color} $backgroundColor={backgroundColor}>
 			{title}
 		</Container>
 	);
 };
 
 const Container = styled(SublineBold)<{
-	backgroundColor: string;
-	color: string;
+	$backgroundColor: string;
+	$color: string;
 }>`
 	border-radius: 4px;
 	padding: 2px 8px;
-	color: ${props => props.color};
-	background-color: ${props => props.backgroundColor};
+	color: ${props => props.$color};
+	background-color: ${props => props.$backgroundColor};
 `;
 
 export default StatusBadge;

@@ -6,6 +6,8 @@ import {
 	IconVerifiedBadge16,
 	mediaQueries,
 	neutralColors,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -21,7 +23,6 @@ import ShareModal from '@/components/modals/ShareModal';
 import { EContentType } from '@/lib/constants/shareContent';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { EVerificationStatus } from '@/apollo/types/types';
@@ -138,7 +139,7 @@ export const AdminActions = () => {
 							onClick={option.cb}
 						>
 							<Flex gap='8px'>
-								<Flex alignItems='center'>{option.icon}</Flex>
+								<Flex $alignItems='center'>{option.icon}</Flex>
 								<div>{option.label}</div>
 							</Flex>
 						</MobileActionModalItem>

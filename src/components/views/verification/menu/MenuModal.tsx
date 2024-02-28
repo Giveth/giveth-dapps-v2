@@ -34,7 +34,7 @@ const MenuModal: FC<IModal> = ({ setShowModal }) => {
 				{menuList.map((i, index) => (
 					<MenuItem
 						onClick={() => handleClick(index)}
-						active={step === index}
+						$active={step === index}
 						key={i}
 					>
 						{formatMessage({ id: i })}
@@ -50,11 +50,11 @@ const Container = styled.div`
 	text-align: left;
 `;
 
-const MenuItem = styled(B)<{ active: boolean }>`
+const MenuItem = styled(B)<{ $active: boolean }>`
 	margin-bottom: 28px;
 	cursor: pointer;
 	color: ${props =>
-		props.active ? neutralColors.gray[900] : neutralColors.gray[700]};
+		props.$active ? neutralColors.gray[900] : neutralColors.gray[700]};
 `;
 
 export default MenuModal;

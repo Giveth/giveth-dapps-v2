@@ -2,6 +2,7 @@ import {
 	B,
 	brandColors,
 	Caption,
+	Flex,
 	GLink,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -11,7 +12,6 @@ import { useIntl } from 'react-intl';
 import Link from 'next/link';
 
 import { useAppSelector } from '@/features/hooks';
-import { Flex } from '../styled-components/Flex';
 import { HighlightSection } from './common';
 import { Item } from './Item';
 import Routes from '@/lib/constants/Routes';
@@ -66,17 +66,17 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 
 	return (
 		<>
-			<HighlightSection themeState={theme}>
-				<Label medium>
+			<HighlightSection $baseTheme={theme}>
+				<Label $medium>
 					{formatMessage({ id: 'label.explore_by' })}
 				</Label>
 				<ExploreByRow
 					gap='16px'
-					flexDirection={inSidebar ? 'column' : undefined}
+					$flexDirection={inSidebar ? 'column' : undefined}
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={explore.url}>
-							<ExploreItem themeState={theme} isHighlighted>
+							<ExploreItem $baseTheme={theme} isHighlighted>
 								<B>{formatMessage({ id: explore.label })}</B>
 							</ExploreItem>
 						</Link>
@@ -85,7 +85,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 						<Link href={QFItem.url}>
 							<ExploreItem
 								className='qf-item'
-								themeState={theme}
+								$baseTheme={theme}
 								isHighlighted
 							>
 								<B>{formatMessage({ id: QFItem.label })}</B>
@@ -94,15 +94,15 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 					)}
 				</ExploreByRow>
 			</HighlightSection>
-			<NormalSection inSidebar={inSidebar}>
-				<Label medium>{formatMessage({ id: 'label.category' })}</Label>
-				<CategoriesGrid inSidebar={inSidebar} themeState={theme}>
+			<NormalSection $inSidebar={inSidebar}>
+				<Label $medium>{formatMessage({ id: 'label.category' })}</Label>
+				<CategoriesGrid $inSidebar={inSidebar} $baseTheme={theme}>
 					{mainCategories.map((category, idx) => (
 						<Link
 							key={idx}
 							href={`${Routes.Projects}/${category.slug}`}
 						>
-							<CategoryItem themeState={theme}>
+							<CategoryItem $baseTheme={theme}>
 								<GLink size='Big'>
 									{formatMessage({
 										id: 'projects_' + category.slug,
@@ -130,25 +130,25 @@ const ExploreItem = styled(Item)`
 	}
 `;
 
-const NormalSection = styled.div<{ inSidebar?: boolean }>`
+const NormalSection = styled.div<{ $inSidebar?: boolean }>`
 	margin-top: 16px;
 	padding: 8px 8px 0;
 	border-radius: 16px;
 `;
 
-const CategoriesGrid = styled.div<{ inSidebar?: boolean; themeState: ETheme }>`
+const CategoriesGrid = styled.div<{ $inSidebar?: boolean; $baseTheme: ETheme }>`
 	display: grid;
 	grid-template: ${props =>
-		props.inSidebar ? 'auto' : 'auto auto auto auto / auto auto auto'};
+		props.$inSidebar ? 'auto' : 'auto auto auto auto / auto auto auto'};
 	margin-top: 8px;
 `;
 
-const CategoryItem = styled(Item)<{ themeState: ETheme }>`
+const CategoryItem = styled(Item)<{ $baseTheme: ETheme }>`
 	padding: 8px;
 	&:hover {
 		background: transparent;
-		color: ${({ themeState }) =>
-			themeState === ETheme.Dark
+		color: ${({ $baseTheme }) =>
+			$baseTheme === ETheme.Dark
 				? brandColors.giv[200]
 				: brandColors.giv[500]};
 	}

@@ -1,10 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { H6, neutralColors } from '@giveth/ui-design-system';
+import { H6, neutralColors, Col, Row } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useForm } from 'react-hook-form';
-import { Col, Row } from '@giveth/ui-design-system';
 import { UPDATE_USER } from '@/apollo/gql/gqlUser';
 import { SkipOnboardingModal } from '@/components/modals/SkipOnboardingModal';
 import { gToast, ToastType } from '@/components/toasts';

@@ -1,8 +1,7 @@
-import { Button, mediaQueries } from '@giveth/ui-design-system';
+import { Button, mediaQueries, Flex } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
 import { IGiverPFPToken } from '@/apollo/types/types';
 
 export interface INFTButtons {
@@ -22,8 +21,8 @@ const NFTButtons = ({
 
 	return (
 		<NFTsButtonsContainer
-			flexDirection='row'
-			justifyContent='space-between'
+			$flexDirection='row'
+			$justifyContent='space-between'
 		>
 			<Button
 				buttonType='secondary'
@@ -57,12 +56,10 @@ const NFTsButtonsContainer = styled(Flex)`
 	}
 `;
 
-const TextButton = styled(Button)<{ color?: string }>`
-	color: ${props => props.color};
+const TextButton = styled(Button)`
 	text-transform: uppercase;
 
 	&:hover {
 		background-color: transparent;
-		color: ${props => props.color};
 	}
 `;

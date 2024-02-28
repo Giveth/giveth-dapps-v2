@@ -14,7 +14,7 @@ function ProjectsSubCategories() {
 			{subCategories.map(subCategory => (
 				<SwiperSlide key={subCategory.value} style={{ width: 'auto' }}>
 					<SubCategoryItem
-						isSelected={variables?.category === subCategory.name}
+						$isSelected={variables?.category === subCategory.name}
 						onClick={() => {
 							const updatedQuery = {
 								...router.query,
@@ -34,11 +34,11 @@ function ProjectsSubCategories() {
 	) : null;
 }
 
-const SubCategoryItem = styled.div<{ isSelected?: boolean }>`
+const SubCategoryItem = styled.div<{ $isSelected?: boolean }>`
 	text-transform: capitalize;
 	user-select: none;
 	padding: 0 12px 8px 12px;
-	border-bottom: ${props => (props.isSelected ? '2px solid black' : 'none')};
+	border-bottom: ${props => (props.$isSelected ? '2px solid black' : 'none')};
 	cursor: pointer;
 `;
 

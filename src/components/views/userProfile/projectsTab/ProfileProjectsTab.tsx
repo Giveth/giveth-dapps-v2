@@ -1,9 +1,8 @@
-import { neutralColors } from '@giveth/ui-design-system';
+import { neutralColors, Col, Row, Flex } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { useIntl } from 'react-intl';
-import { Col, Row } from '@giveth/ui-design-system';
 import { IUserProfileView, EOrderBy, IOrder } from '../UserProfile.view';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import NothingToSee from '@/components/views/userProfile/NothingToSee';
@@ -13,7 +12,6 @@ import { IUserProjects } from '@/apollo/types/gqlTypes';
 import { IProject } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import ProjectCard from '@/components/project-card/ProjectCard';
-import { Flex } from '@/components/styled-components/Flex';
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { ProjectsContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
@@ -117,7 +115,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 					</NothingWrapper>
 				) : myAccount ? (
 					isRecurringActive ? (
-						<Flex flexDirection='column' gap='18px'>
+						<Flex $flexDirection='column' gap='18px'>
 							{projects.map(project => (
 								<ProjectItem
 									key={project.id}

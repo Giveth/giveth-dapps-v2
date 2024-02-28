@@ -12,6 +12,7 @@ import {
 	OutlineButton,
 	semanticColors,
 	Subline,
+	Flex,
 } from '@giveth/ui-design-system';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
@@ -25,7 +26,6 @@ import {
 	TableHeader,
 } from '@/components/styled-components/Table';
 import { formatWeiHelper } from '@/helpers/number';
-import { Flex } from '@/components/styled-components/Flex';
 import Input, { InputSize } from '@/components/Input';
 import SortIcon from '@/components/SortIcon';
 import { IPowerBoosting } from '@/apollo/types/types';
@@ -203,7 +203,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 
 	return (
 		<>
-			<Header justifyContent='space-between' flexWrap gap='16px'>
+			<Header $justifyContent='space-between' $flexWrap gap='16px'>
 				<H5 weight={700}>GIVpower Summary</H5>
 				{myAccount && (
 					<Actions gap='8px'>
@@ -250,7 +250,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 					</Actions>
 				)}
 			</Header>
-			<Table hasLastCol={!!myAccount && mode === ETableNode.VIEWING}>
+			<Table $hasLastCol={!!myAccount && mode === ETableNode.VIEWING}>
 				<TableHeader>Projects</TableHeader>
 				<TableHeader
 					onClick={() => {
@@ -272,9 +272,9 @@ const BoostsTable: FC<IBoostsTable> = ({
 					return (
 						<BoostsRowWrapper
 							key={boost.project.id}
-							hasError={myAccount && !boost.project.verified}
+							$hasError={myAccount && !boost.project.verified}
 						>
-							<BoostsTableCell bold>
+							<BoostsTableCell $bold>
 								<Link
 									href={slugToProjectView(boost.project.slug)}
 								>
@@ -288,7 +288,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 										.dividedBy(100),
 								)}
 							</BoostsTableCell>
-							<BoostsTableCell bold>
+							<BoostsTableCell $bold>
 								{mode === ETableNode.VIEWING ? (
 									`${boost.percentage}%`
 								) : (
@@ -363,7 +363,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 										}
 										suffix={
 											<Percentage
-												inputSize={InputSize.SMALL}
+												$inputSize={InputSize.SMALL}
 											>
 												%
 											</Percentage>
@@ -412,7 +412,7 @@ const BoostsTable: FC<IBoostsTable> = ({
 				})}
 				<TableFooter>Total GIVpower</TableFooter>
 				<TableFooter></TableFooter>
-				<CustomTableFooter isExceed={isExceed}>
+				<CustomTableFooter $isExceed={isExceed}>
 					{sum}%
 					{isExceed && (
 						<ExceedError>You can’t exceed 100%</ExceedError>
@@ -448,27 +448,27 @@ const Actions = styled(Flex)`
 	overflow: auto;
 `;
 
-const Table = styled.div<{ hasLastCol: boolean }>`
+const Table = styled.div<{ $hasLastCol: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
-		props.hasLastCol ? '3.5fr 1.5fr 1fr 0.3fr' : '4fr 1.5fr 0.6fr'};
+		props.$hasLastCol ? '3.5fr 1.5fr 1fr 0.3fr' : '4fr 1.5fr 0.6fr'};
 	min-width: 700px;
 `;
 
-const BoostsTableCell = styled(TableCell)<{ bold?: boolean }>`
+const BoostsTableCell = styled(TableCell)<{ $bold?: boolean }>`
 	width: 100%;
 	min-height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
-	font-weight: ${props => (props.bold ? 500 : 400)};
+	font-weight: ${props => (props.$bold ? 500 : 400)};
 	line-height: unset;
 `;
 
 interface IBoostsRowWrapper {
-	hasError?: boolean;
+	$hasError?: boolean;
 }
 
 const BoostsRowWrapper = styled(RowWrapper)<IBoostsRowWrapper>`
-	color: ${props => (props.hasError ? semanticColors.punch[500] : '')};
+	color: ${props => (props.$hasError ? semanticColors.punch[500] : '')};
 	&:hover > div {
 		background-color: ${neutralColors.gray[300]};
 		color: ${brandColors.pinky[500]};
@@ -488,14 +488,14 @@ const IconWrapper = styled.div`
 `;
 
 interface ICustomTableFooter {
-	isExceed: boolean;
+	$isExceed: boolean;
 }
 
 const CustomTableFooter = styled(TableFooter)<ICustomTableFooter>`
 	/* grid-column-start: 3; */
 	/* grid-column-end: 5; */
 	${props =>
-		props.isExceed
+		props.$isExceed
 			? css`
 					color: ${semanticColors.punch[500]};
 				`

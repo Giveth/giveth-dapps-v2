@@ -5,8 +5,9 @@ import {
 	neutralColors,
 	OutlineButton,
 	semanticColors,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { mediaQueries } from '@/lib/constants/constants';
 
@@ -33,7 +34,7 @@ export const VerificationContainer = styled(Flex)`
 	padding: 132px 0 48px;
 `;
 
-export const VerificationCard = styled(Flex)<{ background: string }>`
+export const VerificationCard = styled(Flex)<{ $background: string }>`
 	border-radius: 16px;
 	padding: 100px 8px;
 	align-items: center;
@@ -52,7 +53,7 @@ export const VerificationCard = styled(Flex)<{ background: string }>`
 		position: absolute;
 		bottom: 0;
 		left: 0;
-		background-image: url(${props => props.background});
+		background-image: url(${props => props.$background});
 		background-position: bottom;
 		height: 375px;
 		width: 100%;

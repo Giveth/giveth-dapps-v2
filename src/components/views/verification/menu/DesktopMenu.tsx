@@ -1,7 +1,6 @@
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { B, neutralColors } from '@giveth/ui-design-system';
-import { Col } from '@giveth/ui-design-system';
+import { B, neutralColors, Col } from '@giveth/ui-design-system';
 import CheckCircle from '@/components/views/verification/CheckCircle';
 import { Shadow } from '@/components/styled-components/Shadow';
 import menuList from '@/components/views/verification/menu/menuList';
@@ -21,15 +20,15 @@ const DesktopMenu = () => {
 			<MenuTitle>
 				{formatMessage({ id: 'label.verified_status_for' })}
 			</MenuTitle>
-			<MenuTitle isActive>{title}</MenuTitle>
+			<MenuTitle $isActive>{title}</MenuTitle>
 			<StepsProgressBar />
 			{menuList.map((item, index) => {
 				const isClickable =
 					!!lastStepIndex && index <= lastStepIndex + 1;
 				return (
 					<MenuTitle
-						hover={isClickable}
-						isActive={index <= step}
+						$hover={isClickable}
+						$isActive={index <= step}
 						key={item}
 						onClick={() => isClickable && setStep(index)}
 					>
@@ -44,13 +43,13 @@ const DesktopMenu = () => {
 	);
 };
 
-const MenuTitle = styled(B)<{ isActive?: boolean; hover?: boolean }>`
+const MenuTitle = styled(B)<{ $isActive?: boolean; $hover?: boolean }>`
 	display: flex;
 	gap: 10px;
 	margin-bottom: 24px;
-	cursor: ${props => (props.hover ? 'pointer' : 'default')};
+	cursor: ${props => (props.$hover ? 'pointer' : 'default')};
 	color: ${props =>
-		props.isActive ? neutralColors.gray[900] : neutralColors.gray[700]};
+		props.$isActive ? neutralColors.gray[900] : neutralColors.gray[700]};
 `;
 
 const MenuSection = styled(Col)`

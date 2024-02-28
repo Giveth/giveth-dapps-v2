@@ -1,8 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { WriteContractReturnType } from 'viem';
-import { readContract } from '@wagmi/core';
-import { writeContract } from '@wagmi/core';
+import { readContract, writeContract } from '@wagmi/core';
 import { LiquidityPosition } from '@/types/nfts';
 import { uniswapV3Config } from './contracts';
 import { StakeState } from '@/lib/staking';

@@ -1,9 +1,8 @@
-import { Caption, neutralColors } from '@giveth/ui-design-system';
+import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC } from 'react';
 import { formatUnits } from 'viem';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
 import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
@@ -37,8 +36,8 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 	return (
 		<Wrapper
 			gap='16px'
-			alignItems='flex-start'
-			disabled={disable}
+			$alignItems='flex-start'
+			$disabled={disable}
 			onClick={() => {
 				if (disable) return;
 				onClick();
@@ -50,18 +49,18 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 				size={32}
 			/>
 			<InfoWrapper
-				flexDirection='column'
-				alignItems='flex-start'
+				$flexDirection='column'
+				$alignItems='flex-start'
 				gap='8px'
 			>
-				<Row justifyContent='space-between'>
+				<Row $justifyContent='space-between'>
 					<Symbol>
-						<Caption medium>{stream[0].token.symbol}</Caption>
+						<Caption $medium>{stream[0].token.symbol}</Caption>
 						<GrayCaption>{stream[0].token.name}</GrayCaption>
 					</Symbol>
 					<Balance gap='4px'>
 						<GrayCaption>Stream Balance</GrayCaption>
-						<Caption medium>
+						<Caption $medium>
 							{balance !== undefined
 								? limitFraction(
 										formatUnits(
@@ -72,18 +71,18 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 									)
 								: '--'}
 						</Caption>
-						<Caption medium>{stream[0].token.symbol}</Caption>
+						<Caption $medium>{stream[0].token.symbol}</Caption>
 					</Balance>
 				</Row>
 				{totalFlowRate !== undefined && (
-					<Row justifyContent='space-between'>
+					<Row $justifyContent='space-between'>
 						<Flex gap='4px'>
 							<GrayCaption>
 								{formatMessage({
 									id: 'label.stream_runs_out_in',
 								})}
 							</GrayCaption>
-							<Caption medium>
+							<Caption $medium>
 								{remainingMonths.toString()}
 							</Caption>
 							<Caption>
@@ -99,7 +98,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 						</Flex>
 						<Flex gap='4px'>
 							<GrayCaption>Funding</GrayCaption>
-							<Caption medium>{stream.length}</Caption>
+							<Caption $medium>{stream.length}</Caption>
 							<GrayCaption>
 								{formatMessage(
 									{ id: 'label.funding_count_projects' },
@@ -117,12 +116,12 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 };
 
 interface IWrapper {
-	disabled?: boolean;
+	$disabled?: boolean;
 }
 
 const Wrapper = styled(Flex)<IWrapper>`
 	padding: 4px 8px;
-	cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+	cursor: ${props => (props.$disabled ? 'not-allowed' : 'pointer')};
 	&:hover {
 		background: ${neutralColors.gray[200]};
 	}

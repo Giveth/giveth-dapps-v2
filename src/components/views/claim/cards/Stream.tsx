@@ -2,14 +2,13 @@ import { useState, FC, useEffect } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { H2, Lead, H5 } from '@giveth/ui-design-system';
+import { H2, Lead, H5, Flex } from '@giveth/ui-design-system';
 import { ArrowButton, Card, PreviousArrowButton } from './common';
 
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { formatWeiHelper } from '@/helpers/number';
 import { durationToString } from '@/lib/helpers';
 import useClaim from '@/context/claim.context';
-import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
 
 const StreamCardContainer = styled(Card)`
@@ -116,7 +115,7 @@ export const StreamCard: FC<IClaimViewCardProps> = ({ index }) => {
 	}, [givTokenDistroHelper]);
 
 	return (
-		<StreamCardContainer activeIndex={step} index={index}>
+		<StreamCardContainer $activeIndex={step} $index={index}>
 			<StreamHeader>
 				<Title as='h1'>Enjoy a continuous flow of GIV</Title>
 
@@ -126,14 +125,14 @@ export const StreamCard: FC<IClaimViewCardProps> = ({ index }) => {
 					the GIVeconomy grows, so does your GIV!
 				</Desc>
 			</StreamHeader>
-			<StreamRow alignItems={'center'}>
-				<StreamContainer flexDirection='column'>
+			<StreamRow $alignItems={'center'}>
+				<StreamContainer $flexDirection='column'>
 					<H5 as='h2' weight={700}>
 						Your flowrate
 					</H5>
 					<StreamSubtitle>Time remaining: {remain}</StreamSubtitle>
 				</StreamContainer>
-				<StreamValueContainer alignItems={'center'}>
+				<StreamValueContainer $alignItems={'center'}>
 					<Image
 						src='/images/icons/thunder.svg'
 						height='56'

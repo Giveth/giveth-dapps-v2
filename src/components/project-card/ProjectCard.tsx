@@ -12,6 +12,7 @@ import {
 	// IconRocketInSpace16,
 	IconVerifiedBadge16,
 	H5,
+	Flex,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
@@ -25,7 +26,6 @@ import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { ORGANIZATION } from '@/lib/constants/organizations';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Flex } from '../styled-components/Flex';
 import { ProjectCardUserName } from './ProjectCardUserName';
 import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
 import { formatDonation } from '@/helpers/number';
@@ -90,11 +90,12 @@ const ProjectCard = (props: IProjectCard) => {
 	};
 
 	return (
+		// </Link>
 		<Wrapper
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 			className={className}
-			order={props.order}
+			$order={props.order}
 		>
 			<ImagePlaceholder>
 				<ProjectCardBadges project={project} />
@@ -113,19 +114,19 @@ const ProjectCard = (props: IProjectCard) => {
 				</Link>
 			</ImagePlaceholder>
 			<CardBody
-				isHover={
+				$isHover={
 					isHover
 						? hasFooter
 							? ECardBodyHover.FULL
 							: ECardBodyHover.HALF
 						: ECardBodyHover.NONE
 				}
-				isOtherOrganization={
+				$isOtherOrganization={
 					orgLabel && orgLabel !== ORGANIZATION.giveth
 				}
 			>
 				<TitleWrapper>
-					<LastUpdatedContainer isHover={isHover}>
+					<LastUpdatedContainer $isHover={isHover}>
 						{formatMessage({ id: 'label.last_updated' })}:
 						{timeFromNow(
 							updatedAt,
@@ -140,9 +141,7 @@ const ProjectCard = (props: IProjectCard) => {
 							handleClick(e);
 						}}
 					>
-						<Title weight={700} isHover={isHover}>
-							{title}
-						</Title>
+						<Title weight={700}>{title}</Title>
 					</Link>
 				</TitleWrapper>
 				<ProjectCardUserName
@@ -159,8 +158,8 @@ const ProjectCard = (props: IProjectCard) => {
 					}}
 				>
 					<Description>{descriptionSummary}</Description>
-					<PaddedRow justifyContent='space-between'>
-						<Flex flexDirection='column' gap='2px'>
+					<PaddedRow $justifyContent='space-between'>
+						<Flex $flexDirection='column' gap='2px'>
 							<PriceText>
 								{formatDonation(
 									(activeQFRound
@@ -212,7 +211,7 @@ const ProjectCard = (props: IProjectCard) => {
 							</div>
 						</Flex>
 						{activeQFRound && (
-							<Flex flexDirection='column' gap='6px'>
+							<Flex $flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
 									+
 									{formatDonation(
@@ -245,10 +244,10 @@ const ProjectCard = (props: IProjectCard) => {
 						}}
 					>
 						<Hr />
-						<PaddedRow justifyContent='space-between'>
+						<PaddedRow $justifyContent='space-between'>
 							<Flex gap='16px'>
 								{verified && (
-									<Flex alignItems='center' gap='4px'>
+									<Flex $alignItems='center' gap='4px'>
 										<IconVerifiedBadge16
 											color={semanticColors.jade[500]}
 										/>
@@ -266,7 +265,7 @@ const ProjectCard = (props: IProjectCard) => {
 							{/* {verified && (
 								<GivpowerRankContainer
 									gap='8px'
-									alignItems='center'
+									$alignItems='center'
 								>
 									<IconRocketInSpace16
 										color={neutralColors.gray[700]}
@@ -294,7 +293,7 @@ const ProjectCard = (props: IProjectCard) => {
 							linkType='primary'
 							size='small'
 							label={formatMessage({ id: 'label.donate' })}
-							isHover={isHover}
+							$isHover={isHover}
 						/>
 					</Link>
 				</ActionButtons>
@@ -307,7 +306,6 @@ const ProjectCard = (props: IProjectCard) => {
 				/>
 			)}
 		</Wrapper>
-		// </Link>
 	);
 };
 
@@ -315,9 +313,9 @@ const DonateButton = styled(ButtonLink)`
 	flex: 1;
 `;
 
-const CustomizedDonateButton = styled(DonateButton)<{ isHover: boolean }>`
+const CustomizedDonateButton = styled(DonateButton)<{ $isHover: boolean }>`
 	${mediaQueries.laptopS} {
-		opacity: ${props => (props.isHover ? '1' : '0')};
+		opacity: ${props => (props.$isHover ? '1' : '0')};
 		transition: opacity 0.3s ease-in-out;
 	}
 `;
@@ -338,7 +336,7 @@ const VerifiedText = styled(Subline)`
 	color: ${semanticColors.jade[500]};
 `;
 
-const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
+const LastUpdatedContainer = styled(Subline)<{ $isHover?: boolean }>`
 	position: absolute;
 	bottom: 30px;
 	background-color: ${neutralColors.gray[300]};
@@ -348,7 +346,7 @@ const LastUpdatedContainer = styled(Subline)<{ isHover?: boolean }>`
 	${mediaQueries.laptopS} {
 		transition: opacity 0.3s ease-in-out;
 		display: inline;
-		opacity: ${props => (props.isHover ? 1 : 0)};
+		opacity: ${props => (props.$isHover ? 1 : 0)};
 	}
 `;
 
@@ -373,8 +371,8 @@ enum ECardBodyHover {
 }
 
 interface ICardBody {
-	isOtherOrganization?: boolean | '';
-	isHover: ECardBodyHover;
+	$isOtherOrganization?: boolean | '';
+	$isHover: ECardBodyHover;
 }
 
 const CardBody = styled.div<ICardBody>`
@@ -385,12 +383,12 @@ const CardBody = styled.div<ICardBody>`
 	background-color: ${neutralColors.gray[100]};
 	transition: top 0.3s ease;
 	border-radius: ${props =>
-		props.isOtherOrganization ? '0 12px 12px 12px' : '12px'};
+		props.$isOtherOrganization ? '0 12px 12px 12px' : '12px'};
 	${mediaQueries.laptopS} {
 		top: ${props =>
-			props.isHover == ECardBodyHover.FULL
+			props.$isHover == ECardBodyHover.FULL
 				? '59px'
-				: props.isHover == ECardBodyHover.HALF
+				: props.$isHover == ECardBodyHover.HALF
 					? '104px'
 					: '137px'};
 	}
@@ -401,7 +399,7 @@ const TitleWrapper = styled.div`
 	position: relative;
 `;
 
-const Title = styled(H6)<{ isHover?: boolean }>`
+const Title = styled(H6)`
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -418,7 +416,7 @@ const ImagePlaceholder = styled.div`
 	overflow: hidden;
 `;
 
-const Wrapper = styled.div<{ order?: number }>`
+const Wrapper = styled.div<{ $order?: number }>`
 	position: relative;
 	width: 100%;
 	border-radius: ${cardRadius};
@@ -427,7 +425,7 @@ const Wrapper = styled.div<{ order?: number }>`
 	overflow: hidden;
 	box-shadow: ${Shadow.Neutral[400]};
 	height: 536px;
-	order: ${props => props.order};
+	order: ${props => props.$order};
 	${mediaQueries.laptopS} {
 		height: 472px;
 	}

@@ -1,7 +1,6 @@
-import { H3, Lead, mediaQueries } from '@giveth/ui-design-system';
+import { H3, Lead, mediaQueries, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Arc } from '@/components/styled-components/Arc';
-import { Flex } from '@/components/styled-components/Flex';
 
 export const Box = styled(Flex)`
 	position: relative;

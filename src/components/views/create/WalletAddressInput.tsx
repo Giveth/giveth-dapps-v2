@@ -7,6 +7,8 @@ import {
 	mediaQueries,
 	neutralColors,
 	semanticColors,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useFormContext } from 'react-hook-form';
@@ -17,7 +19,6 @@ import { useAppSelector } from '@/features/hooks';
 import Input, { InputSize } from '@/components/Input';
 import { gqlAddressValidation } from '@/components/views/create/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { getAddressFromENS, isAddressENS, isSolanaAddress } from '@/lib/wallet';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import useDelay from '@/hooks/useDelay';

@@ -5,9 +5,9 @@ import {
 	brandColors,
 	H5,
 	OutlineButton,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 
 export const StakeModalContainer = styled.div`

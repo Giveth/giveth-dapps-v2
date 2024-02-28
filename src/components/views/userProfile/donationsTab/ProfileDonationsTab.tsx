@@ -1,5 +1,5 @@
 import { type FC, useState } from 'react';
-import { Col, P, Row, neutralColors } from '@giveth/ui-design-system';
+import { Col, P, Row, neutralColors, Flex } from '@giveth/ui-design-system';
 
 import { useIntl } from 'react-intl';
 import styled, { css } from 'styled-components';
@@ -11,7 +11,6 @@ import { useProfileContext } from '@/context/profile.context';
 import { OneTimeTab } from './oneTimeTab/OneTimeTab';
 import { RecurringTab } from './recurringTab/RecurringTab';
 import { isRecurringActive } from '@/configuration';
-import { Flex } from '@/components/styled-components/Flex';
 
 enum ETab {
 	OneTime,

@@ -9,6 +9,7 @@ import {
 	Lead,
 	neutralColors,
 	P,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useState, useEffect } from 'react';
 import { useIntl } from 'react-intl';
@@ -16,7 +17,6 @@ import Link from 'next/link';
 
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { LockInfoTooltip } from '../StakeLock/LockInfo';
-import { Flex } from '@/components/styled-components/Flex';
 import 'rc-slider/assets/index.css';
 import { formatWeiHelper } from '@/helpers/number';
 import Routes from '@/lib/constants/Routes';
@@ -241,7 +241,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 	return (
 		<>
 			<InfoPart>
-				<TotalGIVpowerRow alignItems='baseline' gap='12px'>
+				<TotalGIVpowerRow $alignItems='baseline' gap='12px'>
 					<H6>{formatMessage({ id: 'label.total_givpower' })}</H6>
 					<GIVpowerValue weight={700}>
 						{formatWeiHelper(totalGIVpower)}
@@ -259,8 +259,8 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 						</GIVpowerHelp>
 					</GIVpowerValue>
 				</TotalGIVpowerRow>
-				<Flex justifyContent='space-between'>
-					<Flex alignItems='baseline' gap='4px'>
+				<Flex $justifyContent='space-between'>
+					<Flex $alignItems='baseline' gap='4px'>
 						<P>{formatMessage({ id: 'label.boosted_projects' })}</P>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
@@ -282,7 +282,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 				</Flex>
 			</InfoPart>
 			<DescToast
-				hasError={
+				$hasError={
 					boostedProjectsCount !== 0 &&
 					!isOnlyBoostedProjectIsThisProject &&
 					percentage === 100
@@ -341,7 +341,7 @@ const BoostInnerModal: FC<IInnerBoostModalProps> = ({
 							value={percentage}
 						/>
 					</SliderWrapper>
-					<SliderDesc isChanged={isChanged} weight={700}>
+					<SliderDesc $isChanged={isChanged} weight={700}>
 						{isChanged
 							? `~${
 									percentage > 0

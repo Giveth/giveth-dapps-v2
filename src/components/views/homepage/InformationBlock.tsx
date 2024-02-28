@@ -6,10 +6,10 @@ import {
 	Lead,
 	neutralColors,
 	semanticColors,
+	Container,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
-import { Container } from '@giveth/ui-design-system';
 import TrazadoPinkIcon from 'public/images/particles/trazado-pink.svg';
 import TrazadoGivIcon from 'public/images/particles/trazado-giv.svg';
 import ExternalLink from '@/components/ExternalLink';

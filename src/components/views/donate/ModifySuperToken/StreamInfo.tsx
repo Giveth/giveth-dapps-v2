@@ -1,11 +1,10 @@
-import { Caption, neutralColors } from '@giveth/ui-design-system';
+import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
 import { type FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { type GetBalanceReturnType } from '@wagmi/core';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { limitFraction } from '@/helpers/number';
-import { Flex } from '@/components/styled-components/Flex';
 import { ISuperToken, ISuperfluidStream } from '@/types/superFluid';
 
 interface IStreamInfoProps {
@@ -34,18 +33,18 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 
 	return (
 		<StreamSection>
-			<Flex alignItems='center' justifyContent='space-between'>
-				<Caption medium>
+			<Flex $alignItems='center' $justifyContent='space-between'>
+				<Caption $medium>
 					{formatMessage({
 						id: 'label.stream_balance',
 					})}
 				</Caption>
-				<StreamBalanceInfo medium>
+				<StreamBalanceInfo $medium>
 					{limitFraction(SuperTokenBalance?.formatted || '0')}{' '}
 					{superToken?.symbol}
 				</StreamBalanceInfo>
 			</Flex>
-			<Flex alignItems='center' justifyContent='space-between'>
+			<Flex $alignItems='center' $justifyContent='space-between'>
 				<Caption>
 					{formatMessage({
 						id: 'label.balance_runs_out_in',

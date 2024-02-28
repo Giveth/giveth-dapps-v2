@@ -1,6 +1,12 @@
 import styled from 'styled-components';
-import { H3, H4, neutralColors, Lead, Button } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
+import {
+	H3,
+	H4,
+	neutralColors,
+	Lead,
+	Button,
+	Flex,
+} from '@giveth/ui-design-system';
 import KeyAspectsSVG from '@/components/views/landings/refi/KeyAspectsSVG';
 import { mediaQueries } from '@/lib/constants/constants';
 import Divider from '@/components/Divider';

@@ -1,7 +1,6 @@
 import { type FC } from 'react';
 import styled from 'styled-components';
-import { neutralColors, semanticColors } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
+import { Flex, neutralColors, semanticColors } from '@giveth/ui-design-system';
 
 interface IScoreBoxProps {
 	score: number;
@@ -12,13 +11,13 @@ export const ScoreBox: FC<IScoreBoxProps> = ({ score, color }) => {
 	return (
 		<Wrapper>
 			<Flex
-				justifyContent={score === 100 ? 'center' : 'space-between'}
-				alignItems='flex-end'
+				$justifyContent={score === 100 ? 'center' : 'space-between'}
+				$alignItems='flex-end'
 			>
 				<Score color={color}>{score}</Score>
 				{score !== 100 && <Hundred>100</Hundred>}
 			</Flex>
-			<Bar color={color} score={score} />
+			<Bar $color={color} $score={score} />
 		</Wrapper>
 	);
 };
@@ -46,10 +45,10 @@ const Hundred = styled(BaseNumber)`
 	color: ${semanticColors.jade[500]};
 `;
 
-const Bar = styled.div<{ score: number; color: string }>`
+const Bar = styled.div<{ $score: number; $color: string }>`
 	background: ${semanticColors.jade[500]};
 	background-image: ${props =>
-		`linear-gradient(to right, ${props.color} ${props.score}%, ${neutralColors.gray[200]} ${props.score}%)`};
+		`linear-gradient(to right, ${props.$color} ${props.$score}%, ${neutralColors.gray[200]} ${props.$score}%)`};
 	height: 8px;
 	width: 100%;
 	border-radius: 8px;

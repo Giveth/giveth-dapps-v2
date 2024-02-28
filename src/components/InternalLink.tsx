@@ -14,13 +14,13 @@ const InternalLink = (props: {
 	if (disabled) return <span>{title || children}</span>;
 	return (
 		<Link href={href}>
-			<Styled color={color}>{title || children}</Styled>
+			<Styled $color={color}>{title || children}</Styled>
 		</Link>
 	);
 };
 
-const Styled = styled(GLink)`
-	color: ${props => props.color || 'inherit'};
+const Styled = styled(GLink)<{ $color?: string }>`
+	color: ${props => props.$color || 'inherit'};
 	font-size: inherit;
 `;
 

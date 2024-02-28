@@ -11,6 +11,7 @@ import {
 	Lead,
 	neutralColors,
 	IconExternalLink16,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
@@ -28,7 +29,6 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { EModalEvents } from '@/hooks/useModalCallback';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { Dropdown } from './ExpirationDropdown';
-import { Flex } from '../styled-components/Flex';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { createSwisMessage } from '@/lib/authentication';
 import { ISolanaSignToGetToken } from '@/features/user/user.types';
@@ -199,7 +199,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 				)}
 
 				{multisigLastStep && !currentMultisigSession ? (
-					<Flex flexDirection='column'>
+					<Flex $flexDirection='column'>
 						<Description>
 							You will be redirected to the Multisig transaction
 							that requires signatures. You can safely close that
@@ -222,7 +222,7 @@ export const SignWithWalletModal: FC<IProps> = ({
 				) : (
 					multisigLastStep &&
 					currentMultisigSession && (
-						<Flex flexDirection='column'>
+						<Flex $flexDirection='column'>
 							<Description>
 								You'll need to execute the pending Multisig tx
 								to complete your log-in to Giveth & proceed to

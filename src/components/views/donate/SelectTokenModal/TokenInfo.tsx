@@ -1,8 +1,7 @@
-import { Caption, neutralColors } from '@giveth/ui-design-system';
+import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC } from 'react';
 import { formatUnits } from 'viem';
-import { Flex } from '@/components/styled-components/Flex';
 import { IToken } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
 import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
@@ -24,8 +23,8 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 	return (
 		<Wrapper
 			gap='16px'
-			alignItems='center'
-			disabled={disable}
+			$alignItems='center'
+			$disabled={disable}
 			onClick={() => {
 				if (disable) return;
 				onClick();
@@ -36,14 +35,14 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 				symbol={token.symbol}
 				size={32}
 			/>
-			<InfoWrapper flexDirection='column' alignItems='flex-start'>
-				<TopRow justifyContent='space-between'>
+			<InfoWrapper $flexDirection='column' $alignItems='flex-start'>
+				<TopRow $justifyContent='space-between'>
 					<Flex gap='4px'>
-						<Caption medium>{token.symbol}</Caption>
+						<Caption $medium>{token.symbol}</Caption>
 						<GrayCaption>{token.name}</GrayCaption>
 					</Flex>
 					<Balance gap='4px'>
-						<Caption medium>
+						<Caption $medium>
 							{balance !== undefined
 								? limitFraction(
 										formatUnits(balance, token.decimals),
@@ -52,7 +51,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 								: '--'}
 						</Caption>
 						{token.isSuperToken && (
-							<GrayCaption medium>{token.symbol}</GrayCaption>
+							<GrayCaption $medium>{token.symbol}</GrayCaption>
 						)}
 					</Balance>
 				</TopRow>
@@ -62,12 +61,12 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 };
 
 interface IWrapper {
-	disabled?: boolean;
+	$disabled?: boolean;
 }
 
 const Wrapper = styled(Flex)<IWrapper>`
 	padding: 4px 8px;
-	cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+	cursor: ${props => (props.$disabled ? 'not-allowed' : 'pointer')};
 	&:hover {
 		background: ${neutralColors.gray[200]};
 	}

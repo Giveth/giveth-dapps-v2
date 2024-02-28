@@ -12,12 +12,9 @@ import {
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 import { mediaQueries } from '@/lib/constants/constants';
-import routes from '@/lib/constants/Routes';
-import { useDonateData } from '@/context/donate.context';
 import Routes from '@/lib/constants/Routes';
 
 const PurchaseXDAI: FC = () => {
-	const { project } = useDonateData();
 	const router = useRouter();
 	const { formatMessage } = useIntl();
 
@@ -39,7 +36,7 @@ const PurchaseXDAI: FC = () => {
 						as='a'
 						rel='noopener noreferrer'
 						target='_blank'
-						href={`${routes.HowToBuyXdai}?slug=${query.slug}`}
+						href={`${Routes.HowToBuyXdai}?slug=${query.slug}`}
 					>
 						<span>
 							{formatMessage({ id: 'label.see_how_it_works' })}{' '}

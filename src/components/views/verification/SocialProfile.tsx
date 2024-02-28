@@ -7,12 +7,13 @@ import {
 	Lead,
 	neutralColors,
 	P,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import DiscordIcon from '/public/images/icons/social/discord.svg';
 import LinkedinIcon from '/public/images/icons/social/linkedin.svg';
@@ -164,7 +165,7 @@ const SocialProfile = () => {
 					</ButtonRow> */}
 					<ButtonRow>
 						<ButtonSocial
-							color='#0077B5'
+							$color='#0077B5'
 							onClick={() => {
 								handleSocialSubmit(
 									'twitter',
@@ -266,12 +267,12 @@ const ButtonsSection = styled.div`
 	}
 `;
 
-const ButtonSocial = styled(FlexCenter)<{ color?: string }>`
+const ButtonSocial = styled(FlexCenter)<{ $color?: string }>`
 	border-radius: 48px;
 	background: white;
 	height: 48px;
 	box-shadow: ${Shadow.Giv[400]};
-	color: ${props => props.color || 'inherit'};
+	color: ${props => props.$color || 'inherit'};
 	font-size: 12px;
 	font-weight: 700;
 	gap: 9px;

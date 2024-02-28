@@ -26,7 +26,7 @@ export const VerificationStatusReport = () => {
 		: '';
 
 	return (
-		<VerificationCard background={background}>
+		<VerificationCard $background={background}>
 			{!status && <LoadingVerification />}
 			{status === EVerificationStatus.SUBMITTED && <Submitted />}
 			{status === EVerificationStatus.VERIFIED && <Verified />}

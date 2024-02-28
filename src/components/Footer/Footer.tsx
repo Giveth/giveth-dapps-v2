@@ -13,16 +13,16 @@ import {
 	IconInstagram24,
 	IconXSocial,
 	IconRedit,
+	Container,
+	Flex,
 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Container } from '@giveth/ui-design-system';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Flex } from '@/components/styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 import { LanguageModal } from '../modals/LanguageModal';
@@ -42,7 +42,7 @@ const Footer = () => {
 				<LanguageModal setShowModal={setShowLanguageModal} />
 			)}
 			<ContainerStyled>
-				<LeftContainer flexWrap>
+				<LeftContainer $flexWrap>
 					<LinkColumn>
 						<Link href={Routes.Home}>
 							<LinkItem color={textColor}>
@@ -152,13 +152,13 @@ const Footer = () => {
 						</ExternalLink>
 					</SocialContainer>
 					<SupportUs>
-						<Caption medium>
+						<Caption $medium>
 							{formatMessage({
 								id: 'component.title.support_us',
 							})}
 						</Caption>
 						<Link href={links.SUPPORT_US}>
-							<CaptionRed medium>
+							<CaptionRed $medium>
 								&nbsp;
 								{formatMessage({
 									id: 'component.title.with_your_donation',
@@ -169,7 +169,7 @@ const Footer = () => {
 				</RightContainer>
 			</ContainerStyled>
 			<Language
-				isDark={isDark}
+				$isDark={isDark}
 				onClick={() => setShowLanguageModal(true)}
 			>
 				<Image
@@ -253,7 +253,7 @@ const CaptionRed = styled(Caption)`
 	color: ${brandColors.pinky[500]};
 `;
 
-const Language = styled.div<{ isDark?: boolean }>`
+const Language = styled.div<{ $isDark?: boolean }>`
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-end;
@@ -263,7 +263,7 @@ const Language = styled.div<{ isDark?: boolean }>`
 	padding: 24px 48px;
 
 	color: ${props =>
-		props.isDark ? brandColors.deep[100] : neutralColors.gray[800]};
+		props.$isDark ? brandColors.deep[100] : neutralColors.gray[800]};
 	${mediaQueries.laptopS} {
 		margin: 16px 0 32px 0;
 	}

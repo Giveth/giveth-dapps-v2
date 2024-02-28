@@ -7,10 +7,9 @@ import {
 	IconHeartOutline,
 	ButtonText,
 	IconHeartFilled,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { Shadow } from '../styled-components/Shadow';
-import { FlexCenter } from '@/components/styled-components/Flex';
-
 const ShareLikeBadge = (props: {
 	type: 'share' | 'like' | 'reward';
 	active?: boolean;
@@ -43,7 +42,7 @@ const ShareLikeBadge = (props: {
 		<Wrapper isSimple={isSimple} onClick={onClick}>
 			{icon}
 			{!isSimple && (
-				<BadgeText size='small' fromDonate={fromDonate}>
+				<BadgeText size='small' $fromDonate={fromDonate}>
 					{text}
 				</BadgeText>
 			)}
@@ -65,10 +64,10 @@ const Wrapper = styled(FlexCenter)<{ isSimple?: boolean | null }>`
 	min-width: fit-content;
 `;
 
-const BadgeText = styled(ButtonText)<{ fromDonate?: boolean | null }>`
+const BadgeText = styled(ButtonText)<{ $fromDonate?: boolean | null }>`
 	color: ${props =>
-		props.fromDonate ? brandColors.pinky[500] : neutralColors.gray[700]};
-	text-transform: ${props => (props.fromDonate ? 'none' : 'uppercase')};
+		props.$fromDonate ? brandColors.pinky[500] : neutralColors.gray[700]};
+	text-transform: ${props => (props.$fromDonate ? 'none' : 'uppercase')};
 	margin: 0 auto;
 `;
 

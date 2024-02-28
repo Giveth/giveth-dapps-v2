@@ -9,15 +9,14 @@ import {
 	Subline,
 	mediaQueries,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { CurrentRank } from '@/components/GIVpowerRank';
+import { CurrentRank, NextRank } from '@/components/GIVpowerRank';
 import { useProjectContext } from '@/context/project.context';
-import { NextRank } from '@/components/GIVpowerRank';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { getNowUnixMS } from '@/helpers/time';
 import { smallFormatDate } from '@/lib/helpers';
@@ -52,7 +51,7 @@ export const GIVpowerCard = () => {
 
 	return (
 		<GIVpowerCardWrapper>
-			<Flex gap='8px' alignItems='center'>
+			<Flex gap='8px' $alignItems='center'>
 				<IconRocketInSpace24 />
 				<Subline>
 					{formatMessage({
@@ -90,7 +89,7 @@ export const GIVpowerCard = () => {
 				</Flex>
 			</CurrentRankSection>
 			<NextRankSection>
-				<Flex alignItems='center' justifyContent='space-between'>
+				<Flex $alignItems='center' $justifyContent='space-between'>
 					<P>
 						{formatMessage({
 							id: 'label.projected_rank',

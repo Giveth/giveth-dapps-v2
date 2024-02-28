@@ -3,9 +3,14 @@ import { FC } from 'react';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { Caption, B, neutralColors } from '@giveth/ui-design-system';
+import {
+	Caption,
+	B,
+	neutralColors,
+	Flex,
+	FlexSpacer,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
@@ -40,8 +45,8 @@ export const DonateHeader: FC<IHeader> = () => {
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
 	return (
-		<StyledHeader alignItems='center' themeState={theme} show={showHeader}>
-			<Flex alignItems='center' gap='16px'>
+		<StyledHeader $alignItems='center' $baseTheme={theme} show={showHeader}>
+			<Flex $alignItems='center' gap='16px'>
 				<Link href={Routes.Project + '/' + project.slug}>
 					<Logo>
 						<Image
@@ -52,8 +57,8 @@ export const DonateHeader: FC<IHeader> = () => {
 						/>
 					</Logo>
 				</Link>
-				<Flex flexDirection='column' gap='4px'>
-					<StyledCaption medium>Donating to</StyledCaption>
+				<Flex $flexDirection='column' gap='4px'>
+					<StyledCaption $medium>Donating to</StyledCaption>
 					<B>{project.title}</B>
 				</Flex>
 			</Flex>

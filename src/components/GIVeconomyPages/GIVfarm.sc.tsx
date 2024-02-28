@@ -1,14 +1,12 @@
 import styled from 'styled-components';
 
-import { QuoteText, brandColors } from '@giveth/ui-design-system';
-import { Row } from '@giveth/ui-design-system';
+import { QuoteText, brandColors, Row, Flex } from '@giveth/ui-design-system';
 import {
 	BottomContainer,
 	EnhancedRewardCard,
 	MobileD1,
 	TopContainer,
 } from './commons';
-import { Flex } from '../styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 
 export const GIVfarmTopContainer = styled(TopContainer)`

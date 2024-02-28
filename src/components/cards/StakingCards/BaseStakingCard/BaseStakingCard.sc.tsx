@@ -10,8 +10,8 @@ import {
 	Button,
 	OutlineButton,
 	Subline,
+	Flex,
 } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
 
 export const StakingPoolContainer = styled.div`
 	height: 542px;
@@ -47,7 +47,6 @@ export const StakePoolInfoContainer = styled.div`
 `;
 
 export const Details = styled(Flex)`
-	flex-direction: column;
 	gap: 16px;
 `;
 

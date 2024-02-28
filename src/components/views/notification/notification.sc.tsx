@@ -1,8 +1,13 @@
-import { Button, Container, neutralColors } from '@giveth/ui-design-system';
+import {
+	Button,
+	Container,
+	neutralColors,
+	Flex,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { mediaQueries } from '@/lib/constants/constants';
 
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { TabItem } from '@/components/styled-components/Tabs';
 
 export const NotificationContainer = styled(Container)`
@@ -44,7 +49,7 @@ export const NotifisTabItem = styled(TabItem)`
 	color: ${neutralColors.gray[900]};
 	user-select: none;
 	${props =>
-		props.active &&
+		props.$active &&
 		`
 		background: ${neutralColors.gray[300]};
 		box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);

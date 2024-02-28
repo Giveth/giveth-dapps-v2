@@ -1,9 +1,14 @@
-import { B, P, neutralColors } from '@giveth/ui-design-system';
+import {
+	B,
+	P,
+	neutralColors,
+	Flex,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { RecurringDonationCard } from './RecurringDonationCard';
 import CryptoDonation from './CryptoDonation';
 import config, { isRecurringActive } from '@/configuration';
@@ -36,7 +41,7 @@ export const DonationCard = () => {
 			</Title>
 			<Flex>
 				<Tab
-					selected={tab === ETabs.ONE_TIME}
+					$selected={tab === ETabs.ONE_TIME}
 					onClick={() => setTab(ETabs.ONE_TIME)}
 				>
 					{formatMessage({
@@ -45,7 +50,7 @@ export const DonationCard = () => {
 				</Tab>
 				{hasOpAddress ? (
 					<Tab
-						selected={tab === ETabs.RECURRING}
+						$selected={tab === ETabs.RECURRING}
 						onClick={() => setTab(ETabs.RECURRING)}
 					>
 						{formatMessage({
@@ -106,10 +111,6 @@ const Title = styled(B)`
 	text-align: left;
 `;
 
-interface ITab {
-	selected?: boolean;
-}
-
 const BaseTab = styled(P)`
 	padding: 8px 12px;
 	border-bottom: 1px solid;
@@ -119,10 +120,14 @@ const BaseTab = styled(P)`
 	user-select: none;
 `;
 
+interface ITab {
+	$selected?: boolean;
+}
+
 const Tab = styled(BaseTab)<ITab>`
 	cursor: pointer;
 	${props =>
-		props.selected &&
+		props.$selected &&
 		css`
 			font-weight: 500;
 			color: ${neutralColors.gray[900]};

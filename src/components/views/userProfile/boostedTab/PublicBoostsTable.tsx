@@ -1,4 +1,4 @@
-import { H5, brandColors, neutralColors } from '@giveth/ui-design-system';
+import { H5, brandColors, neutralColors, Flex } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled from 'styled-components';
 
@@ -10,7 +10,6 @@ import {
 	TableFooter,
 	TableHeader,
 } from '@/components/styled-components/Table';
-import { Flex } from '@/components/styled-components/Flex';
 import SortIcon from '@/components/SortIcon';
 import { IPowerBoosting } from '@/apollo/types/types';
 import {
@@ -35,7 +34,7 @@ export const PublicBoostsTable: FC<IBoostsTable> = ({
 }) => {
 	return (
 		<>
-			<Header justifyContent='space-between' flexWrap gap='16px'>
+			<Header $justifyContent='space-between' $flexWrap gap='16px'>
 				<H5 weight={700}>GIVpower Summary</H5>
 			</Header>
 			<Table>
@@ -55,7 +54,7 @@ export const PublicBoostsTable: FC<IBoostsTable> = ({
 				{boosts?.map(boost => {
 					return (
 						<BoostsRowWrapper key={boost.project.id}>
-							<BoostsTableCell bold>
+							<BoostsTableCell $bold>
 								<Link
 									href={slugToProjectView(boost.project.slug)}
 								>
@@ -69,7 +68,7 @@ export const PublicBoostsTable: FC<IBoostsTable> = ({
 										.dividedBy(100),
 								)}
 							</BoostsTableCell>
-							<BoostsTableCell bold>
+							<BoostsTableCell $bold>
 								{boost.percentage}%
 							</BoostsTableCell>
 						</BoostsRowWrapper>
@@ -93,11 +92,11 @@ const Table = styled.div`
 	min-width: 700px;
 `;
 
-const BoostsTableCell = styled(TableCell)<{ bold?: boolean }>`
+const BoostsTableCell = styled(TableCell)<{ $bold?: boolean }>`
 	width: 100%;
 	min-height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
-	font-weight: ${props => (props.bold ? 500 : 400)};
+	font-weight: ${props => (props.$bold ? 500 : 400)};
 	line-height: unset;
 `;
 

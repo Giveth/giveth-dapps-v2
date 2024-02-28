@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { neutralColors, SemiTitle } from '@giveth/ui-design-system';
+import { neutralColors, SemiTitle, Col, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Col, Row } from '@giveth/ui-design-system';
 import CheckBox from '@/components/Checkbox';
 import { ICategory, IMainCategory } from '@/apollo/types/types';
 import { maxSelectedCategory } from '@/lib/constants/Categories';

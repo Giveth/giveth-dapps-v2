@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction } from 'react';
 import { useIntl } from 'react-intl';
-import { B, GLink } from '@giveth/ui-design-system';
+import { B, GLink, FlexCenter } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 
 import { useAccount } from 'wagmi';
@@ -20,11 +20,9 @@ import {
 	NetworkName,
 } from './common';
 import { Item } from './Item';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
 import StorageLabel from '@/lib/localStorage';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-
 interface IUserItemsProps {
 	setSignWithWallet: Dispatch<SetStateAction<boolean>>;
 	setQueueRoute: Dispatch<SetStateAction<string>>;
@@ -72,16 +70,16 @@ export const UserItems: FC<IUserItemsProps> = ({
 
 	return (
 		<>
-			<Item themeState={theme}>
-				<ItemTitle themeState={theme}>
+			<Item $baseTheme={theme}>
+				<ItemTitle $baseTheme={theme}>
 					{formatMessage({ id: 'label.wallet' })}
 				</ItemTitle>
 				<ItemRow>
 					<B>{shortenAddress(walletAddress)}</B>
 				</ItemRow>
 			</Item>
-			<Item themeState={theme}>
-				<ItemTitle themeState={theme}>
+			<Item $baseTheme={theme}>
+				<ItemTitle $baseTheme={theme}>
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
 				<ItemRow>
@@ -91,7 +89,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 							chainType={walletChainType}
 							logoSize={16}
 						/>
-						<NetworkName width={isOnSolana ? '120px' : '90px'}>
+						<NetworkName $width={isOnSolana ? '120px' : '90px'}>
 							{chainName}
 						</NetworkName>
 					</FlexCenter>
@@ -113,7 +111,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 				<Item
 					key={i.title}
 					onClick={() => goRoute(i)}
-					themeState={theme}
+					$baseTheme={theme}
 				>
 					<GLink size='Big'>{formatMessage({ id: i.title })}</GLink>
 				</Item>
@@ -125,7 +123,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 						localStorage.removeItem(StorageLabel.WALLET);
 						disconnect();
 					}}
-					themeState={theme}
+					$baseTheme={theme}
 				>
 					<GLink size='Big'>
 						{formatMessage({ id: 'label.sign_out' })}

@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { GLink, IconSearch24 } from '@giveth/ui-design-system';
+import { GLink, IconSearch24, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import { Flex } from '../styled-components/Flex';
 import { SidebarParentItem } from './SidebarItem';
 
 import { ProjectsItems } from '../menu/ProjectsItems';
@@ -22,7 +21,7 @@ export const HomeSidebar = () => {
 	return (
 		<HomeSidebarContainer>
 			<Link href='/'>
-				<Item themeState={theme}>
+				<Item $baseTheme={theme}>
 					<GLink size='Big'>
 						{formatMessage({ id: 'label.home' })}
 					</GLink>
@@ -47,11 +46,11 @@ export const HomeSidebar = () => {
 			</SidebarParentItem>
 
 			<SearchButton
-				themeState={theme}
+				$baseTheme={theme}
 				isHighlighted
 				onClick={() => dispatch(setShowSearchModal(true))}
 			>
-				<Flex alignItems='center' justifyContent='space-between'>
+				<Flex $alignItems='center' $justifyContent='space-between'>
 					<GLink size='Big'>
 						{formatMessage({ id: 'label.search' })}
 					</GLink>

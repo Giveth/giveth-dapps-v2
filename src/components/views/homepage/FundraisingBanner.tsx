@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import Image from 'next/image';
-import { brandColors, P } from '@giveth/ui-design-system';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { brandColors, P, FlexCenter } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
 import GitcoinLogo from 'public/images/gitcoin-grants.png';
 

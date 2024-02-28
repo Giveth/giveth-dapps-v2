@@ -8,11 +8,11 @@ import {
 	IconGIVBack,
 	IconRocketInSpace,
 	IconFarm,
+	Container,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Container } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 
 interface CustomBtn {
@@ -43,7 +43,7 @@ const AboutGiveconomy = () => {
 			<Container>
 				<CustomFlex>
 					<Section>
-						<Content flexDirection='column' gap='40px'>
+						<Content $flexDirection='column' gap='40px'>
 							<TitleBox>
 								<Title>
 									{formatMessage({
@@ -83,7 +83,7 @@ const AboutGiveconomy = () => {
 						</ImageBox>
 					</Section>
 					<ReverseSection>
-						<Content flexDirection='column' gap='24px'>
+						<Content $flexDirection='column' gap='24px'>
 							<TitleBox>
 								<Title>
 									{formatMessage({
@@ -120,7 +120,7 @@ const AboutGiveconomy = () => {
 						</ImageBox>
 					</ReverseSection>
 					<Section>
-						<Content flexDirection='column' gap='24px'>
+						<Content $flexDirection='column' gap='24px'>
 							<TitleBox>
 								<Title>
 									{formatMessage({

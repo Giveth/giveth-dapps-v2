@@ -7,11 +7,11 @@ import {
 	brandColors,
 	Caption,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
 import { smallFormatDate } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
 import { getUnlockDate } from '@/helpers/givpower';
@@ -32,7 +32,7 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (
 		<>
-			<Flex justifyContent='space-between'>
+			<Flex $justifyContent='space-between'>
 				<SliderLabel>
 					<P>
 						{formatMessage({ id: 'label.rounds_to_lock' })}: &nbsp;
@@ -82,14 +82,14 @@ const LockSlider: FC<ILockSlider> = ({ round, setRound }) => {
 			<MidRoundToast>
 				{round > 0 ? (
 					<>
-						<ToastTitle medium>
+						<ToastTitle $medium>
 							{formatMessage({ id: 'label.mid_round_lock' })}
 						</ToastTitle>
 						<ToastDesc>
 							{formatMessage({
 								id: 'label.your_tokens_will_be_locked_for_the_remainder',
 							})}{' '}
-							<ToastRound as='span' medium>
+							<ToastRound as='span' $medium>
 								{round > 1
 									? formatMessage(
 											{

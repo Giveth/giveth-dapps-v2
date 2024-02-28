@@ -5,7 +5,7 @@ import { Box, BigArc, Title, Caption } from './common.sc';
 export const QFProjectsMiddleBanner = () => {
 	const { formatMessage } = useIntl();
 	return (
-		<Box flexDirection='column' gap='23px'>
+		<Box $flexDirection='column' gap='23px'>
 			<BigArc color={semanticColors.jade[200]} />
 			<Title weight={700} color={semanticColors.jade[700]}>
 				{formatMessage({

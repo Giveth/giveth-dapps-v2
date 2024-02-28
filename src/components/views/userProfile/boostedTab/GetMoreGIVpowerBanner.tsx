@@ -5,12 +5,12 @@ import {
 	mediaQueries,
 	OutlineLinkButton,
 	QuoteText,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import { useAccount } from 'wagmi';
-import { Flex } from '@/components/styled-components/Flex';
 import { getGIVConfig, getGIVpowerLink } from '@/helpers/givpower';
 
 const GetMoreGIVpowerBanner = () => {
@@ -30,7 +30,7 @@ const GetMoreGIVpowerBanner = () => {
 				})}
 				.
 			</QuoteText>
-			<Actions gap='16px' flexWrap>
+			<Actions gap='16px' $flexWrap>
 				<Link href={getGIVpowerLink(chainId)}>
 					<ButtonLink
 						label={formatMessage({ id: 'label.stake_giv' })}

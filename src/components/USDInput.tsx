@@ -1,4 +1,9 @@
-import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
+import {
+	GLink,
+	neutralColors,
+	brandColors,
+	Flex,
+} from '@giveth/ui-design-system';
 import { FC, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -7,7 +12,6 @@ import BigNumber from 'bignumber.js';
 import { parseUnits } from 'viem';
 import { formatWeiHelper } from '@/helpers/number';
 import { PoolStakingConfig } from '@/types/config';
-import { Flex } from './styled-components/Flex';
 
 interface IAmountInput {
 	maxAmount: bigint;
@@ -51,7 +55,7 @@ export const USDInput: FC<IAmountInput> = ({
 
 	return (
 		<>
-			<InputLabelRow justifyContent='space-between'>
+			<InputLabelRow $justifyContent='space-between'>
 				<InputLabel>
 					<InputLabelText>
 						{' '}

@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
-import { H1, IconGIVGarden } from '@giveth/ui-design-system';
+import {
+	H1,
+	IconGIVGarden,
+	Col,
+	Container,
+	Row,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Col, Container, Row } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
 import {
 	GardenTopContainer,

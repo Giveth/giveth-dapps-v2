@@ -1,5 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import { Button, IconDonation32, mediaQueries } from '@giveth/ui-design-system';
+import {
+	Button,
+	IconDonation32,
+	mediaQueries,
+	Flex,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Framework, type Operation } from '@superfluid-finance/sdk-core';
 import { useAccount } from 'wagmi';
@@ -8,7 +13,6 @@ import BigNumber from 'bignumber.js';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
-import { Flex } from '@/components/styled-components/Flex';
 import { useDonateData } from '@/context/donate.context';
 import { Item } from './Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
@@ -312,7 +316,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	return (
 		<Wrapper>
 			<DonateSteps donateState={step} />
-			<Items flexDirection='column' gap='16px'>
+			<Items $flexDirection='column' gap='16px'>
 				{!selectedToken?.token.isSuperToken && (
 					<Item
 						title='Deposit into your stream balance'

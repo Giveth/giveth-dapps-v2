@@ -1,10 +1,9 @@
-import { B, Button, P, neutralColors } from '@giveth/ui-design-system';
+import { B, Button, P, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { IProject } from '@/apollo/types/types';
 import { Modal } from '@/components/modals/Modal';
-import { Flex } from '@/components/styled-components/Flex';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
@@ -64,7 +63,7 @@ const ClaimRecurringDonationModal = ({
 				) : balances.length === 0 ? (
 					<P>You have no streams yet!</P>
 				) : (
-					<Flex flexDirection='column' gap='32px'>
+					<Flex $flexDirection='column' gap='32px'>
 						{balances.map(tokenWithBalance => (
 							<ClaimRecurringItem
 								key={tokenWithBalance.token.symbol}
@@ -78,7 +77,7 @@ const ClaimRecurringDonationModal = ({
 							/>
 						))}
 						<TotalAmountContainer>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<B>Total amount claimable </B>
 								<B>~ {sumAllTokensUsd} USD</B>
 							</Flex>

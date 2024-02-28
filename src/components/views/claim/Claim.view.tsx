@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
+import { Flex } from '@giveth/ui-design-system';
 import config from '@/configuration';
 import ClaimCard from '@/components/views/claim/cards/Claim';
 import { CongratulationsCard } from '@/components/views/claim/cards/Congratulations';
@@ -9,7 +10,6 @@ import { DonateCard } from '@/components/views/claim/cards/Donate';
 import { StreamCard } from '@/components/views/claim/cards/Stream';
 import GovernCard from '@/components/views/claim/cards/Govern';
 import InvestCard from '@/components/views/claim/cards/Stake';
-import { Flex } from '@/components/styled-components/Flex';
 import useClaim, { GiveDropStateType } from '@/context/claim.context';
 
 const stepsTitle = ['Connect', 'Donate', 'Govern', 'Stake', 'Stream', 'Claim'];
@@ -19,8 +19,8 @@ const Steps = styled(Flex)`
 `;
 
 interface IStepTitleProps {
-	isActive: boolean;
-	disabled?: boolean;
+	$isActive: boolean;
+	$disabled?: boolean;
 }
 
 const StepTitle = styled.div<IStepTitleProps>`
@@ -30,11 +30,11 @@ const StepTitle = styled.div<IStepTitleProps>`
 	font-weight: 400;
 	line-height: 19px;
 	color: #2fc8e0;
-	opacity: ${props => (props.isActive ? 1 : 0.2)};
+	opacity: ${props => (props.$isActive ? 1 : 0.2)};
 	position: relative;
 	padding: 8px 0;
 	margin: 4px;
-	cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+	cursor: ${props => (props.$disabled ? 'not-allowed' : 'pointer')};
 	&::before {
 		content: '';
 		position: absolute;
@@ -57,9 +57,9 @@ interface IStepProps {
 const Step: FC<IStepProps> = ({ title, isActive, onClick, disabled }) => {
 	return (
 		<StepTitle
-			isActive={isActive}
+			$isActive={isActive}
 			onClick={disabled ? undefined : onClick}
-			disabled={disabled}
+			$disabled={disabled}
 		>
 			{title}
 		</StepTitle>
@@ -104,7 +104,7 @@ const ClaimView = () => {
 						chainId === 0
 					}
 				>
-					<Steps justifyContent='center' alignItems='center'>
+					<Steps $justifyContent='center' $alignItems='center'>
 						{stepsTitle.map((title, idx) => (
 							<Step
 								title={title}

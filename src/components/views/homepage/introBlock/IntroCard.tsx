@@ -4,10 +4,10 @@ import {
 	IconChevronRight24,
 	neutralColors,
 	P,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { ReactElement } from 'react';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 import ExternalLink from '@/components/ExternalLink';
 
@@ -27,8 +27,8 @@ const IntroCard = ({
 	description,
 }: IntroCardProps) => {
 	return (
-		<IntroCardContainer flexDirection='column' gap='16px'>
-			<IconAndTitleContainer gap='16px' alignItems='center'>
+		<IntroCardContainer $flexDirection='column' gap='16px'>
+			<IconAndTitleContainer gap='16px' $alignItems='center'>
 				{Icon}
 				<H5 weight={700}>{title}</H5>
 			</IconAndTitleContainer>

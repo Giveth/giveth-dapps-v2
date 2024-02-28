@@ -6,12 +6,12 @@ import {
 	mediaQueries,
 	neutralColors,
 	Subline,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { ChangeEvent, FC } from 'react';
 import { useIntl } from 'react-intl';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { Flex } from '@/components/styled-components/Flex';
 import Input, { InputSize } from '@/components/Input';
 import { InputSuffix } from '@/components/styled-components/Input';
 import CheckBox from '@/components/Checkbox';
@@ -44,8 +44,8 @@ const DonateToGiveth: FC<IDonateToGiveth> = ({
 
 	return (
 		<Container>
-			<Flex alignItems='center' gap='4px'>
-				<Caption medium>{title}</Caption>
+			<Flex $alignItems='center' gap='4px'>
+				<Caption $medium>{title}</Caption>
 				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
 					<TooltipContainer>
 						{formatMessage({ id: 'label.support_giveth_with' })}
@@ -56,7 +56,7 @@ const DonateToGiveth: FC<IDonateToGiveth> = ({
 				<Options>
 					{givethDonationOptions.map(option => (
 						<OptionWrapper
-							isSelected={donationToGiveth === option}
+							$isSelected={donationToGiveth === option}
 							key={option}
 							onClick={() => setDonationToGiveth(option)}
 						>
@@ -69,7 +69,7 @@ const DonateToGiveth: FC<IDonateToGiveth> = ({
 					onChange={handleChange}
 					size={InputSize.SMALL}
 					suffix={
-						<Percentage inputSize={InputSize.SMALL}>%</Percentage>
+						<Percentage $inputSize={InputSize.SMALL}>%</Percentage>
 					}
 				/>
 			</UserInput>
@@ -110,11 +110,11 @@ const Percentage = styled(InputSuffix)`
 	user-select: none;
 `;
 
-const OptionWrapper = styled(GLink)<{ isSelected: boolean }>`
+const OptionWrapper = styled(GLink)<{ $isSelected: boolean }>`
 	background: ${props =>
-		props.isSelected ? brandColors.giv[100] : brandColors.giv[50]};
+		props.$isSelected ? brandColors.giv[100] : brandColors.giv[50]};
 	border: 1px solid
-		${props => (props.isSelected ? brandColors.giv[500] : 'transparent')};
+		${props => (props.$isSelected ? brandColors.giv[500] : 'transparent')};
 	border-radius: 54px;
 	width: 48px;
 	height: 32px;

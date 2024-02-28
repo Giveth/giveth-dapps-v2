@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { H2, Lead } from '@giveth/ui-design-system';
+import { H2, Lead, Container, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
-import { Container } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
 import useClaim from '@/context/claim.context';
 import { formatWeiHelper } from '@/helpers/number';
@@ -12,7 +11,6 @@ import SparkleAnimation from '@/animations/sparkle.json';
 import BlowingAnimation from '@/animations/blowing.json';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { AddTokenButton } from '@/components/AddTokenButton';
-import { Flex } from '@/components/styled-components/Flex';
 import { Button } from '@/components/styled-components/Button';
 import LottieControl from '@/components/LottieControl';
 import ExternalLink from '@/components/ExternalLink';

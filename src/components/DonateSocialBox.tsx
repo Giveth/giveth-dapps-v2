@@ -1,12 +1,11 @@
 import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Lead, neutralColors } from '@giveth/ui-design-system';
+import { Flex, Lead, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useProjectContext } from '@/context/project.context';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { IProject } from '@/apollo/types/types';
 import { EContentType } from '@/lib/constants/shareContent';
-import { Flex } from '@/components/styled-components/Flex';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import ShareModal from '@/components/modals/ShareModal';
 
@@ -25,7 +24,7 @@ const DonateSocialBox: FC<ISocialBox> = props => {
 	const { isActive } = useProjectContext();
 
 	return (
-		<Social isDonateFooter={isDonateFooter}>
+		<Social $isDonateFooter={isDonateFooter}>
 			{showModal && slug && (
 				<ShareModal
 					contentType={EContentType.thisProject}
@@ -58,12 +57,12 @@ const BLead = styled(Lead)`
 	z-index: 2;
 `;
 
-const Social = styled.div<{ isDonateFooter?: boolean }>`
+const Social = styled.div<{ $isDonateFooter?: boolean }>`
 	z-index: 1;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin: ${props => (props.isDonateFooter ? '32px 0' : '50px 0')};
+	margin: ${props => (props.$isDonateFooter ? '32px 0' : '50px 0')};
 	color: ${neutralColors.gray[900]};
 	align-items: center;
 `;

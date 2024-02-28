@@ -4,11 +4,11 @@ import {
 	IconInfoFilled16,
 	OutlineButton,
 	P,
+	Flex,
 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
 import { Cover } from './common';
 
 interface IArchiveCoverProps {
@@ -29,8 +29,8 @@ export const ArchiveCover: FC<IArchiveCoverProps> = ({
 				<ArchiveModalIcon>
 					<IconInfoFilled16 color={brandColors.giv['000']} />
 				</ArchiveModalIcon>
-				<Flex flexDirection='column' justifyContent='space-evenly'>
-					<ArchiveModalText weight={700}>
+				<Flex $flexDirection='column' $justifyContent='space-evenly'>
+					<ArchiveModalText $weight={700}>
 						{formatMessage({
 							id: 'component.archive_cover.archived',
 						})}
@@ -91,8 +91,8 @@ const ArchiveModal = styled.div`
 	padding: 16px;
 `;
 
-const ArchiveModalText = styled(P)<{ weight?: number }>`
-	font-weight: ${props => (props.weight ? props.weight : 400)};
+const ArchiveModalText = styled(P)<{ $weight?: number }>`
+	font-weight: ${props => props.$weight || 400};
 `;
 
 const ArchiveModalLink = styled(GLink)``;

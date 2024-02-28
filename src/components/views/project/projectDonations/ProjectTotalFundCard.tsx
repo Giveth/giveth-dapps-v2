@@ -13,6 +13,7 @@ import {
 	semanticColors,
 	Subline,
 	SublineBold,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useEffect, useState } from 'react';
@@ -21,7 +22,6 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectWalletAddress from '@/components/views/project/projectDonations/ProjectWalletAddress';
 import { useProjectContext } from '@/context/project.context';
 import { calculateTotalEstimatedMatching } from '@/helpers/qf';
-import { Flex } from '@/components/styled-components/Flex';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_QF_ROUND_HISTORY } from '@/apollo/gql/gqlDonations';
 import { IGetQfRoundHistory, IQFRound } from '@/apollo/types/types';
@@ -183,7 +183,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 							{notDistributedFund ? (
 								<NotDistributedFundContainer>
 									<EstimatedMatchingSection>
-										<Flex flexDirection='column' gap='8px'>
+										<Flex $flexDirection='column' gap='8px'>
 											<H6 weight={700}>
 												{formatMessage({
 													id: 'label.matching_funds_coming_soon',
@@ -203,8 +203,8 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 									</EstimatedMatchingSection>
 								</NotDistributedFundContainer>
 							) : (
-								<EstimatedMatchingSection flexDirection='column'>
-									<Flex justifyContent='space-between'>
+								<EstimatedMatchingSection $flexDirection='column'>
+									<Flex $justifyContent='space-between'>
 										<EstimatedMatchingPrice>
 											+{' '}
 											{formatDonation(

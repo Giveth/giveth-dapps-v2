@@ -74,9 +74,9 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 							switchChain?.({ chainId: networkId });
 							closeModal();
 						}}
-						isSelected={networkId === chainId}
+						$isSelected={networkId === chainId}
 						key={networkId}
-						themeState={theme}
+						$baseTheme={theme}
 					>
 						<NetworkLogo
 							chainId={networkId}
@@ -86,8 +86,8 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 						<B>{getChainName(networkId, chainType)}</B>
 						{networkId === chainId && (
 							<SelectedNetwork
-								styleType='Small'
-								themeState={theme}
+								$styleType='Small'
+								$baseTheme={theme}
 							>
 								{formatMessage({ id: 'label.selected' })}
 							</SelectedNetwork>
@@ -99,16 +99,18 @@ const SwitchNetwork: FC<ISwitchNetworkModal> = ({
 	);
 };
 
-export const SelectedNetwork = styled(Overline)`
+export const SelectedNetwork = styled(Overline)<{
+	$baseTheme: ETheme;
+}>`
 	color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[100]
 			: brandColors.giv[500]};
 	position: absolute;
 	top: -8px;
 	left: 10px;
 	background: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	padding: 0 3px;
@@ -116,8 +118,8 @@ export const SelectedNetwork = styled(Overline)`
 `;
 
 export const NetworkItem = styled.div<{
-	isSelected: boolean;
-	themeState: ETheme;
+	$isSelected: boolean;
+	$baseTheme: ETheme;
 }>`
 	position: relative;
 	padding: 8px;
@@ -129,13 +131,12 @@ export const NetworkItem = styled.div<{
 	gap: 16px;
 	&:hover {
 		background-color: ${props =>
-			props.themeState === ETheme.Dark
+			props.$baseTheme === ETheme.Dark
 				? brandColors.giv[700]
 				: neutralColors.gray[200]};
 	}
 	border: 1px solid
-		${({ isSelected }) =>
-			isSelected ? brandColors.giv[500] : 'transparent'};
+		${props => (props.$isSelected ? brandColors.giv[500] : 'transparent')};
 `;
 
 const Wrapper = styled.div`

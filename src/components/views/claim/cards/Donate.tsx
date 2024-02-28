@@ -9,6 +9,7 @@ import {
 	Lead,
 	IconHelpFilled16,
 	mediaQueries,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 
@@ -34,7 +35,6 @@ import { IClaimViewCardProps } from '@/components/views/claim/Claim.view';
 import useClaim from '@/context/claim.context';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { WeiPerEther } from '@/lib/constants/constants';
 import { InputWithUnit } from '@/components/input/InputWithUnit';
@@ -139,7 +139,7 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 	}, [donation, givTokenDistroHelper]);
 
 	return (
-		<DonateCardContainer activeIndex={step} index={index}>
+		<DonateCardContainer $activeIndex={step} $index={index}>
 			<DonateHeader>
 				<Title>Donate &amp; get GIV back</Title>
 				<Desc>
@@ -148,14 +148,14 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 					by Giveth with GIV!
 				</Desc>
 			</DonateHeader>
-			<APRRow alignItems={'center'} justifyContent={'space-between'}>
+			<APRRow $alignItems={'center'} $justifyContent={'space-between'}>
 				<ImpactCard>
 					<H5 as='h2' weight={700}>
 						If you donate your GIVdrop
 					</H5>
 					<div>
-						<Flex justifyContent={'space-between'}>
-							<Flex gap='4px' alignItems='center'>
+						<Flex $justifyContent={'space-between'}>
+							<Flex gap='4px' $alignItems='center'>
 								<ImpactCardLabel>Your donation</ImpactCardLabel>
 								<IconWithTooltip
 									icon={<IconHelpFilled16 />}
@@ -188,13 +188,13 @@ export const DonateCard: FC<IClaimViewCardProps> = ({ index }) => {
 				<PoolCardContainer>
 					<DonatePoolCard>
 						<PoolItems>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>GIVbacks</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(potentialClaim)} GIV
 								</PoolItemBold>
 							</Flex>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>Streaming</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(earnEstimate)} GIV

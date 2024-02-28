@@ -8,7 +8,7 @@ import { GIVeconomyItems } from './GIVeconomyItems';
 export const GIVeconomyMenu = () => {
 	const theme = useAppSelector(state => state.general.theme);
 	return (
-		<MenuContainer themeState={theme}>
+		<MenuContainer $baseTheme={theme}>
 			<GIVeconomyItems />
 		</MenuContainer>
 	);

@@ -1,8 +1,7 @@
-import { Container, QuoteText } from '@giveth/ui-design-system';
+import { Container, QuoteText, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
 import { OvalVerticalGradient } from '../common.styles';
 import { mediaQueries } from '@/lib/constants/constants';
 
@@ -54,7 +53,7 @@ const DesktopImages = () => {
 
 const MobileImages = () => {
 	return (
-		<MobileImagesContainer flexDirection='column'>
+		<MobileImagesContainer $flexDirection='column'>
 			<Image
 				src={'/images/nft/pfp-o-1.png'}
 				width={300}
@@ -82,9 +81,9 @@ const WhatAreGivers = () => {
 
 	return (
 		<SectionContainer
-			justifyContent='center'
-			alignItems='center'
-			flexDirection='column'
+			$justifyContent='center'
+			$alignItems='center'
+			$flexDirection='column'
 			gap='24px'
 		>
 			<Container>

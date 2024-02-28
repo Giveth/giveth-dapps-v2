@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 import Head from 'next/head';
 import GIVBacksIndex from '@/components/views/landings/GIVBacks';
 

@@ -8,6 +8,7 @@ import {
 	Lead,
 	Button,
 	IconChevronRight,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
@@ -23,7 +24,6 @@ import {
 } from '@/components/styled-components/SwiperPagination';
 import 'swiper/css';
 
-import { Flex } from '@/components/styled-components/Flex';
 import { BigArc } from '@/components/styled-components/Arc';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { useDonateData } from '@/context/donate.context';

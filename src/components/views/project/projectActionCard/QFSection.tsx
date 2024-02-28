@@ -11,11 +11,11 @@ import {
 	IconChevronRight16,
 	IconHelpFilled16,
 	deviceSize,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { type FC } from 'react';
-import { Flex } from '@/components/styled-components/Flex';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import {
@@ -44,7 +44,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 
 	const activeRound = getActiveRound(qfRounds);
 	const EstimatedMatchingSection = () => (
-		<Flex flexDirection='column' gap='4px'>
+		<Flex $flexDirection='column' gap='4px'>
 			<EstimatedMatchingPrice>
 				{formatDonation(
 					calculateTotalEstimatedMatching(
@@ -58,7 +58,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 					true,
 				)}
 			</EstimatedMatchingPrice>
-			<Flex alignItems='center' gap='4px'>
+			<Flex $alignItems='center' gap='4px'>
 				<LightCaption>
 					{formatMessage({ id: 'label.estimated_matching' })}
 				</LightCaption>
@@ -85,6 +85,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 						})}
 					</Title>
 					<Amount weight={700}>
+						1
 						{formatDonation(
 							sumDonationValueUsdForActiveQfRound || 0,
 							'$',
@@ -95,7 +96,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 						{formatMessage({
 							id: 'label.raised_from',
 						})}
-						<Caption medium>
+						<Caption $medium>
 							{projectData?.countUniqueDonorsForActiveQfRound}
 						</Caption>
 						{formatMessage(
@@ -129,7 +130,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 			</DefaultEstimatedMatchingContainer>
 
 			<ChartContainer>
-				<Flex justifyContent='space-between'>
+				<Flex $justifyContent='space-between'>
 					<LightSubline>
 						{formatMessage({
 							id: 'label.contribution',
@@ -142,8 +143,8 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 					</GreenSubline>
 				</Flex>
 				<ContributionsContainer>
-					<Flex flexDirection='column' gap='4px'>
-						<FlexSameSize justifyContent='space-between'>
+					<Flex $flexDirection='column' gap='4px'>
+						<FlexSameSize $justifyContent='space-between'>
 							<Subline>1 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
@@ -163,7 +164,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
-						<FlexSameSize justifyContent='space-between'>
+						<FlexSameSize $justifyContent='space-between'>
 							<Subline>10 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
@@ -183,7 +184,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
-						<FlexSameSize justifyContent='space-between'>
+						<FlexSameSize $justifyContent='space-between'>
 							<Subline>100 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
@@ -203,7 +204,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
-						{/* <Flex justifyContent='space-between'>
+						{/* <Flex $justifyContent='space-between'>
 							<LightSubline>Last updated: 3h ago</LightSubline>
 							<LightSubline>|</LightSubline>
 							<LightSubline>Next update in: 3 min</LightSubline>
@@ -214,7 +215,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 							referrerPolicy='no-referrer'
 							rel='noreferrer'
 						>
-							<LearnLink alignItems='center' gap='2px'>
+							<LearnLink $alignItems='center' gap='2px'>
 								<Subline>
 									{formatMessage({
 										id: 'label.how_it_works?',

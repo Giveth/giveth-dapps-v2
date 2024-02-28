@@ -1,8 +1,12 @@
 import styled from 'styled-components';
-import { brandColors, Caption, neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	Caption,
+	neutralColors,
+	Flex,
+} from '@giveth/ui-design-system';
 import { FC, useEffect, useRef } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex } from '../styled-components/Flex';
 import {
 	convertRawDataToHTML,
 	convertBackendIconsToComponents,
@@ -52,11 +56,11 @@ export const NotificationBox: FC<INotificationBox> = ({
 	return (
 		<NotificationBoxContainer
 			gap='16px'
-			isShort={short}
+			$isShort={short}
 			ref={NotifRef}
 			role='notification'
 		>
-			{!notification.isRead && <UnreadCircle isShort={short} />}
+			{!notification.isRead && <UnreadCircle $isShort={short} />}
 			{!short && (
 				<IconContainer>
 					{convertBackendIconsToComponents(
@@ -68,7 +72,7 @@ export const NotificationBox: FC<INotificationBox> = ({
 				<ConvertedTextContainer>
 					{convertRawDataToHTML(notification)}
 				</ConvertedTextContainer>
-				<NotificationTime medium>
+				<NotificationTime $medium>
 					{formatMessage(
 						{ id: 'label.duration_ago' },
 						{
@@ -87,9 +91,9 @@ export const NotificationBox: FC<INotificationBox> = ({
 	);
 };
 
-const NotificationBoxContainer = styled(Flex)<{ isShort: boolean }>`
+const NotificationBoxContainer = styled(Flex)<{ $isShort: boolean }>`
 	position: relative;
-	padding: ${props => (!props.isShort ? '24px 0' : '4px')};
+	padding: ${props => (!props.$isShort ? '24px 0' : '4px')};
 `;
 
 const IconContainer = styled(Flex)`
@@ -101,10 +105,10 @@ const IconContainer = styled(Flex)`
 	border-radius: 50%;
 `;
 
-const UnreadCircle = styled.div<{ isShort: boolean }>`
+const UnreadCircle = styled.div<{ $isShort: boolean }>`
 	position: absolute;
-	top: ${props => (!props.isShort ? '10px' : '0')};
-	left: ${props => (!props.isShort ? '10px' : '-5px')};
+	top: ${props => (!props.$isShort ? '10px' : '0')};
+	left: ${props => (!props.$isShort ? '10px' : '-5px')};
 	height: 8px;
 	width: 8px;
 	background-color: ${brandColors.pinky[500]};

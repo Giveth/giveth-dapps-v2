@@ -1,10 +1,14 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { H1, neutralColors, SemiTitle } from '@giveth/ui-design-system';
+import {
+	H1,
+	neutralColors,
+	SemiTitle,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { IMainCategory } from '@/apollo/types/types';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 
 interface IProjectsBanner {

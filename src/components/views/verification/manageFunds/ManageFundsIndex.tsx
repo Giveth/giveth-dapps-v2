@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import AddAddressModal from '@/components/views/verification/manageFunds/AddAddressModal';
 import UserAddress from '@/components/views/verification/manageFunds/UserAddress';
-import { ContentSeparator, BtnContainer } from '../Common.sc';
+import { ContentSeparator, BtnContainer, OutlineStyled } from '../Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import {
@@ -15,7 +15,6 @@ import {
 } from '@/apollo/types/types';
 import { client } from '@/apollo/apolloClient';
 import { showToastError } from '@/lib/helpers';
-import { OutlineStyled } from '../Common.sc';
 import DescriptionInput from '@/components/DescriptionInput';
 import { requiredOptions } from '@/lib/constants/regex';
 import { ChainType } from '@/types/config';

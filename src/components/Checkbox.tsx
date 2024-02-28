@@ -1,12 +1,13 @@
 import {
 	brandColors,
+	Flex,
+	FlexCenter,
 	GLink,
 	IconCheck,
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
-import type { FC } from 'react';
+import { type FC } from 'react';
 
 interface ICheckBox {
 	onChange: (e: boolean) => void;
@@ -28,10 +29,10 @@ const CheckBox: FC<ICheckBox> = ({
 	return (
 		<Wrapper
 			onClick={() => !disabled && onChange(!checked)}
-			disabled={disabled}
-			checked={checked}
-			size={size}
-			alignItems='center'
+			$disabled={disabled}
+			$checked={checked}
+			$size={size}
+			$alignItems='center'
 		>
 			<FlexCenter>
 				{checked && <IconCheck size={size} color='white' />}
@@ -42,31 +43,33 @@ const CheckBox: FC<ICheckBox> = ({
 };
 
 const Wrapper = styled(Flex)<{
-	size: number;
-	disabled?: boolean;
-	checked?: boolean;
+	$size: number;
+	$disabled?: boolean;
+	$checked?: boolean;
 }>`
-	cursor: ${props => (props.disabled ? '' : 'pointer')};
+	cursor: ${props => (props.$disabled ? '' : 'pointer')};
 	user-select: none;
 	color: ${props =>
-		props.disabled ? neutralColors.gray[600] : neutralColors.gray[800]};
+		props.$disabled ? neutralColors.gray[600] : neutralColors.gray[800]};
 	> div:first-child {
 		border-color: ${props =>
-			props.disabled ? neutralColors.gray[400] : neutralColors.gray[900]};
+			props.$disabled
+				? neutralColors.gray[400]
+				: neutralColors.gray[900]};
 		border-style: solid;
 		flex-shrink: 0;
-		width: ${props => `${props.size}px`};
-		height: ${props => `${props.size}px`};
+		width: ${props => `${props.$size}px`};
+		height: ${props => `${props.$size}px`};
 		background-color: ${props =>
-			props.disabled && props.checked
+			props.$disabled && props.$checked
 				? neutralColors.gray[400]
-				: props.checked
+				: props.$checked
 					? brandColors.deep[900]
 					: 'transparent'};
 		transition: background-color 0.3s ease;
 	}
 	${props => {
-		switch (props.size) {
+		switch (props.$size) {
 			case 12:
 				return css`
 					gap: 10px;

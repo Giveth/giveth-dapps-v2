@@ -1,8 +1,13 @@
 import styled from 'styled-components';
-import { H2, mediaQueries, neutralColors } from '@giveth/ui-design-system';
+import {
+	H2,
+	mediaQueries,
+	neutralColors,
+	Flex,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import { OnboardingWrapper } from '@/components/views/landings/onboarding/common/common.styled';
 import OnboardingCard, { IOnboardingCard } from '@/components/OnboardingCard';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 
 interface IWhatElse {
 	cards: IOnboardingCard[];

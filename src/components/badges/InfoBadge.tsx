@@ -1,5 +1,5 @@
+import { FlexCenter } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { FlexCenter } from '../styled-components/Flex';
 
 const InfoBadge = () => {
 	return (

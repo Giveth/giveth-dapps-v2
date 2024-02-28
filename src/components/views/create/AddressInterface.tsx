@@ -12,10 +12,11 @@ import {
 	brandColors,
 	neutralColors,
 	semanticColors,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import config, { isRecurringActive } from '@/configuration';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { getChainName } from '@/lib/network';
@@ -66,7 +67,7 @@ const AddressInterface = ({
 	return (
 		<Container>
 			<TopContainer>
-				<Flex justifyContent='space-between'>
+				<Flex $justifyContent='space-between'>
 					<Flex gap='8px'>
 						<ChainIconShadow>
 							<NetworkLogo
@@ -104,11 +105,11 @@ const AddressInterface = ({
 					</GLink>
 				)}
 				<Flex
-					justifyContent='space-between'
-					alignItems='center'
+					$justifyContent='space-between'
+					$alignItems='center'
 					gap='8px'
 				>
-					<AddressContainer hasAddress={hasAddress}>
+					<AddressContainer $hasAddress={hasAddress}>
 						{hasAddress ? walletAddress : 'No address added yet!'}
 					</AddressContainer>
 					{hasAddress &&
@@ -231,14 +232,14 @@ const MiddleContainer = styled.div`
 	padding: 24px 0;
 `;
 
-const AddressContainer = styled.div<{ hasAddress: boolean }>`
+const AddressContainer = styled.div<{ $hasAddress: boolean }>`
 	width: 100%;
 	border: 2px solid ${neutralColors.gray[300]};
 	background-color: ${props =>
-		props.hasAddress ? neutralColors.gray[100] : neutralColors.gray[300]};
+		props.$hasAddress ? neutralColors.gray[100] : neutralColors.gray[300]};
 	border-radius: 8px;
 	color: ${props =>
-		props.hasAddress ? neutralColors.gray[900] : neutralColors.gray[500]};
+		props.$hasAddress ? neutralColors.gray[900] : neutralColors.gray[500]};
 	padding: 16px;
 	overflow-x: auto;
 `;

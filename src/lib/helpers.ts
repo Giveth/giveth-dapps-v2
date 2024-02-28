@@ -1,9 +1,5 @@
 // eslint-disable-next-line import/named
 import unescape from 'lodash/unescape';
-
-// import { keccak256 } from '@ethersproject/keccak256';
-
-import { erc20Abi } from 'viem';
 import {
 	writeContract,
 	sendTransaction as wagmiSendTransaction,
@@ -13,7 +9,7 @@ import {
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 // import { type Address, erc20Abi } from 'wagmi';
-import { Address, Chain, parseEther, parseUnits } from 'viem';
+import { Address, Chain, parseEther, parseUnits, erc20Abi } from 'viem';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { getRequest } from '@/helpers/requests';

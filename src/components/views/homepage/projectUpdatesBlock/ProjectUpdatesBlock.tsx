@@ -4,9 +4,13 @@ import { Swiper as SwiperType } from 'swiper/types';
 import 'swiper/css';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { IconPointerLeft, IconPointerRight } from '@giveth/ui-design-system';
+import {
+	IconPointerLeft,
+	IconPointerRight,
+	Container,
+	Row,
+} from '@giveth/ui-design-system';
 import { Navigation, Pagination } from 'swiper/modules';
-import { Container, Row } from '@giveth/ui-design-system';
 import { IProject } from '@/apollo/types/types';
 import { ProjectUpdateSlide } from './ProjectUpdateSlide';
 import { BlockHeader, BlockTitle } from '../common';

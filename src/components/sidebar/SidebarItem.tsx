@@ -3,11 +3,11 @@ import {
 	GLink,
 	IconChevronDown24,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import { ReactNode, FC, useState } from 'react';
 import styled from 'styled-components';
 import { ETheme } from '@/features/general/general.slice';
-import { Flex } from '../styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 
 interface ISidebarItem {
@@ -29,16 +29,16 @@ export const SidebarParentItem: FC<ISidebarItemProps> = ({
 	const theme = useAppSelector(state => state.general.theme);
 
 	return (
-		<Flex flexDirection='column'>
+		<Flex $flexDirection='column'>
 			<ItemWrapper
-				justifyContent='space-between'
+				$justifyContent='space-between'
 				onClick={() => setShowChildren(s => !s)}
 			>
 				<GLink size='Big'>{item.title}</GLink>
 				{children && <IconChevronDown24 />}
 			</ItemWrapper>
 			{showChildren && children && (
-				<ChildrenWrapper themeState={theme}>{children}</ChildrenWrapper>
+				<ChildrenWrapper $baseTheme={theme}>{children}</ChildrenWrapper>
 			)}
 		</Flex>
 	);
@@ -49,11 +49,11 @@ const ItemWrapper = styled(Flex)`
 	padding: 12px 16px;
 `;
 
-const ChildrenWrapper = styled.div<{ themeState?: ETheme }>`
+const ChildrenWrapper = styled.div<{ $baseTheme?: ETheme }>`
 	padding: 12px 0;
 	border-bottom: 1px solid
 		${props =>
-			props.themeState === ETheme.Dark
+			props.$baseTheme === ETheme.Dark
 				? brandColors.giv[500]
 				: neutralColors.gray[400]};
 `;

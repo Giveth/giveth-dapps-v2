@@ -4,11 +4,11 @@ import {
 	IconInfoFilled16,
 	brandColors,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
 import SwitchNetwork from '@/components/modals/SwitchNetwork';
 import { useDonateData } from '@/context/donate.context';
 import { getActiveRound } from '@/helpers/qf';
@@ -39,7 +39,7 @@ const DonateQFEligibleNetworks = () => {
 	return (
 		<Container>
 			<MakeDonationTitle>
-				<Flex alignItems='center' gap='4px'>
+				<Flex $alignItems='center' gap='4px'>
 					<IconInfoFilled16 />
 					{formatMessage({
 						id: 'label.make_your_donation_eligible_for_matching',
@@ -51,7 +51,7 @@ const DonateQFEligibleNetworks = () => {
 				&nbsp;<BoldCaption>{chainsString}</BoldCaption>&nbsp;
 				{formatMessage({ id: 'label.are_eligible_to_be_matched' })}
 			</MakeDonationDescription>
-			<ActionsRow justifyContent='flex-start' alignItems='center'>
+			<ActionsRow $justifyContent='flex-start' $alignItems='center'>
 				<StyledCaption onClick={() => setShowModal(true)}>
 					{formatMessage({ id: 'label.switch_network' })}
 				</StyledCaption>

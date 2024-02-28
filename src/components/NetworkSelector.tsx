@@ -8,6 +8,7 @@ import {
 	IconNetwork24,
 	brandColors,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useAccount, useSwitchChain } from 'wagmi';
 import Select, {
@@ -18,7 +19,6 @@ import Select, {
 	StylesConfig,
 	components,
 } from 'react-select';
-import { Flex } from './styled-components/Flex';
 import { ChangeNetworkModal } from './modals/ChangeNetwork';
 import config from '../configuration';
 import { NetworkConfig } from '@/types/config';
@@ -64,11 +64,11 @@ const Option: ComponentType<OptionProps<ISelected>> = props => {
 	return (
 		<components.Option {...props}>
 			{isSelected || isDisabled ? (
-				<Flex gap='4px' flexDirection='column'>
+				<Flex gap='4px' $flexDirection='column'>
 					<SelectedTitle>
 						{isSelected ? 'Selected' : 'Coming soon'}
 					</SelectedTitle>
-					<Flex gap='8px' alignItems='center'>
+					<Flex gap='8px' $alignItems='center'>
 						<IconWrapper>
 							<NetworkLogo chainId={value} logoSize={16} />
 						</IconWrapper>
@@ -76,7 +76,7 @@ const Option: ComponentType<OptionProps<ISelected>> = props => {
 					</Flex>
 				</Flex>
 			) : (
-				<Flex gap='8px' alignItems='center'>
+				<Flex gap='8px' $alignItems='center'>
 					<IconWrapper>
 						<NetworkLogo chainId={value} logoSize={16} />
 					</IconWrapper>
@@ -119,6 +119,7 @@ const selectStyles: StylesConfig = {
 			border: 'none',
 			borderRadius: '32px',
 			minWidth: '220px',
+
 			'&:hover': {
 				borderColor: 'transparent',
 			},

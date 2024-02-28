@@ -13,6 +13,7 @@ import {
 	brandColors,
 	neutralColors,
 	semanticColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -23,7 +24,6 @@ import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
-import { Flex } from '@/components/styled-components/Flex';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { SelectTokenModal } from './SelectTokenModal/SelectTokenModal';
@@ -172,9 +172,9 @@ export const RecurringDonationCard = () => {
 						id: 'label.creating_a_monthly_recurring_donation',
 					})}
 				</RecurringSectionTitle>
-				<Flex flexDirection='column' gap='8px'>
-					<Flex gap='8px' alignItems='center'>
-						<Caption medium>
+				<Flex $flexDirection='column' gap='8px'>
+					<Flex gap='8px' $alignItems='center'>
+						<Caption $medium>
 							{formatMessage({ id: 'label.stream_balance' })}
 						</Caption>
 						<IconWithTooltip
@@ -187,12 +187,12 @@ export const RecurringDonationCard = () => {
 					</Flex>
 					<InputWrapper>
 						<SelectTokenWrapper
-							alignItems='center'
-							justifyContent='space-between'
+							$alignItems='center'
+							$justifyContent='space-between'
 							onClick={() => setShowSelectTokenModal(true)}
 						>
 							{selectedToken ? (
-								<Flex gap='8px' alignItems='center'>
+								<Flex gap='8px' $alignItems='center'>
 									<TokenIcon
 										symbol={
 											underlyingToken
@@ -257,7 +257,11 @@ export const RecurringDonationCard = () => {
 						message='You already have a recurring donation to this project with this token.'
 					/>
 				) : (
-					<Flex flexDirection='column' gap='8px' alignItems='stretch'>
+					<Flex
+						$flexDirection='column'
+						gap='8px'
+						$alignItems='stretch'
+					>
 						<Caption>
 							{formatMessage({
 								id: 'label.amount_to_donate_monthly',
@@ -289,17 +293,17 @@ export const RecurringDonationCard = () => {
 								disabled={amount === 0n}
 							/>
 						</SliderWrapper>
-						<Flex justifyContent='space-between'>
+						<Flex $justifyContent='space-between'>
 							<Flex gap='4px'>
 								<Caption>
 									{formatMessage({
 										id: 'label.donating_to',
 									})}
 								</Caption>
-								<Caption medium>{project.title}</Caption>
+								<Caption $medium>{project.title}</Caption>
 							</Flex>
 							<Flex gap='4px'>
-								<Caption medium>
+								<Caption $medium>
 									{amount !== 0n && percentage !== 0
 										? limitFraction(
 												formatUnits(
@@ -310,7 +314,7 @@ export const RecurringDonationCard = () => {
 											)
 										: 0}
 								</Caption>
-								<Caption medium>
+								<Caption $medium>
 									{selectedToken?.token.symbol}
 								</Caption>
 								<Caption>
@@ -318,7 +322,7 @@ export const RecurringDonationCard = () => {
 								</Caption>
 							</Flex>
 						</Flex>
-						<Flex justifyContent='space-between' gap='4px'>
+						<Flex $justifyContent='space-between' gap='4px'>
 							<Flex gap='4px'>
 								<Caption>
 									{formatMessage({
@@ -327,7 +331,7 @@ export const RecurringDonationCard = () => {
 								</Caption>
 								{selectedToken?.token.isSuperToken && (
 									<Flex gap='4px'>
-										<Caption medium>
+										<Caption $medium>
 											{streamRunOutInMonth.toString()}
 										</Caption>
 										<Caption>
@@ -344,7 +348,7 @@ export const RecurringDonationCard = () => {
 							{selectedToken?.token.isSuperToken ? (
 								<TopUpStream
 									gap='4px'
-									alignItems='center'
+									$alignItems='center'
 									onClick={() => setShowTopUpModal(true)}
 								>
 									<Caption>
@@ -356,7 +360,7 @@ export const RecurringDonationCard = () => {
 								</TopUpStream>
 							) : (
 								<Flex gap='4px'>
-									<Caption medium>
+									<Caption $medium>
 										{streamRunOutInMonth.toString()}
 									</Caption>
 									<Caption>
@@ -371,7 +375,7 @@ export const RecurringDonationCard = () => {
 							)}
 						</Flex>
 						{tokenStream?.length > 0 && (
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<Caption>
 									{formatMessage(
 										{
@@ -382,8 +386,8 @@ export const RecurringDonationCard = () => {
 										},
 									)}
 								</Caption>
-								<Flex gap='4px' alignItems='center'>
-									<Caption medium>
+								<Flex gap='4px' $alignItems='center'>
+									<Caption $medium>
 										{formatMessage({
 											id: 'label.manage_recurring_donations',
 										})}
@@ -419,9 +423,9 @@ export const RecurringDonationCard = () => {
 				<>
 					{!isGivethProject && (
 						<GivethSection
-							flexDirection='column'
+							$flexDirection='column'
 							gap='8px'
-							alignItems='stretch'
+							$alignItems='stretch'
 						>
 							<DonateToGiveth
 								setDonationToGiveth={e => {
@@ -433,8 +437,8 @@ export const RecurringDonationCard = () => {
 						</GivethSection>
 					)}
 					<DonatesInfoSection>
-						<Flex flexDirection='column' gap='8px'>
-							<Flex justifyContent='space-between'>
+						<Flex $flexDirection='column' gap='8px'>
+							<Flex $justifyContent='space-between'>
 								<Caption>
 									{formatMessage({ id: 'label.donation_to' })}{' '}
 									<b>{project.title}</b>
@@ -459,7 +463,7 @@ export const RecurringDonationCard = () => {
 									</Caption>
 								</Flex>
 							</Flex>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<Caption>
 									{formatMessage(
 										{ id: 'label.donating_percentage_to' },
@@ -491,14 +495,14 @@ export const RecurringDonationCard = () => {
 									</Caption>
 								</Flex>
 							</Flex>
-							<Flex justifyContent='space-between'>
-								<Caption medium>
+							<Flex $justifyContent='space-between'>
+								<Caption $medium>
 									{formatMessage({
 										id: 'label.your_total_donation',
 									})}
 								</Caption>
 								<Flex gap='4px'>
-									<Caption medium>
+									<Caption $medium>
 										{amount !== 0n && percentage !== 0
 											? limitFraction(
 													formatUnits(
@@ -509,10 +513,10 @@ export const RecurringDonationCard = () => {
 												)
 											: 0}
 									</Caption>
-									<Caption medium>
+									<Caption $medium>
 										{selectedToken?.token.symbol}
 									</Caption>
-									<Caption medium>
+									<Caption $medium>
 										{formatMessage({ id: 'label.monthly' })}
 									</Caption>
 								</Flex>

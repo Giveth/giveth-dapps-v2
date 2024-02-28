@@ -1,9 +1,14 @@
-import { brandColors, IconX24, neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	IconX24,
+	neutralColors,
+	Flex,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import React, { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled, { css } from 'styled-components';
 import { zIndex } from '@/lib/constants/constants';
-import { Flex, FlexCenter } from '../styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
@@ -55,16 +60,16 @@ export const SideBar: FC<ISideBar> = ({
 
 	return createPortal(
 		<Background
-			isAnimating={isAnimating}
+			$isAnimating={isAnimating}
 			onClick={e => {
 				e.stopPropagation();
 				close();
 			}}
 		>
 			<SidebarContainer
-				isAnimating={isAnimating}
-				themeState={theme}
-				direction={direction}
+				$isAnimating={isAnimating}
+				$baseTheme={theme}
+				$direction={direction}
 				onClick={e => {
 					e.stopPropagation();
 				}}
@@ -72,7 +77,7 @@ export const SideBar: FC<ISideBar> = ({
 				<HeaderContainer direction={direction}>
 					<HeaderWrapper>{header && header}</HeaderWrapper>
 					{showClose && (
-						<CloseWrapper onClick={close} direction={direction}>
+						<CloseWrapper onClick={close} $direction={direction}>
 							<IconX24 />
 						</CloseWrapper>
 					)}
@@ -84,7 +89,7 @@ export const SideBar: FC<ISideBar> = ({
 	);
 };
 
-const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
+const Background = styled(FlexCenter)<{ $isAnimating: boolean }>`
 	width: 100%;
 	height: 100%;
 	background: ${brandColors.giv[900]}b3;
@@ -93,14 +98,14 @@ const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
 	left: 0;
 	z-index: ${zIndex.MODAL};
 	opacity: 0;
-	opacity: ${props => (props.isAnimating ? 1 : 0)};
+	opacity: ${props => (props.$isAnimating ? 1 : 0)};
 	transition: opacity 0.3s ease;
 `;
 
 const SidebarContainer = styled.div<{
-	isAnimating: boolean;
-	direction: ESideBarDirection;
-	themeState?: ETheme;
+	$isAnimating: boolean;
+	$direction: ESideBarDirection;
+	$baseTheme?: ETheme;
 }>`
 	width: 353px;
 	height: 100%;
@@ -110,19 +115,19 @@ const SidebarContainer = styled.div<{
 	top: 0;
 	z-index: ${zIndex.MODAL};
 	background-color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? neutralColors.gray[100]
 			: neutralColors.gray[900]};
 	${props => {
 		const key =
-			props.direction === ESideBarDirection.Left ? 'left' : 'right';
-		return css<{ isAnimating: boolean }>`
+			props.$direction === ESideBarDirection.Left ? 'left' : 'right';
+		return css<{ $isAnimating: boolean }>`
 			${key}: 0;
-			${key}: ${props => (props.isAnimating ? 0 : '-353px')};
+			${key}: ${props => (props.$isAnimating ? 0 : '-353px')};
 			transition: ${key} 0.3s ease;
 		`;
 	}};
@@ -141,7 +146,7 @@ const HeaderWrapper = styled(Flex)`
 	flex: 1;
 `;
 
-const CloseWrapper = styled.div<{ direction: ESideBarDirection }>`
+const CloseWrapper = styled.div<{ $direction: ESideBarDirection }>`
 	padding: 12px;
 	cursor: pointer;
 `;
