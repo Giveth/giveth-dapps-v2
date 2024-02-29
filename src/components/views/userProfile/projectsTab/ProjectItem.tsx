@@ -61,7 +61,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 				/>
 			</Flex>
 			<HorizontalDivider />
-			<Flex $justifyContent='space-between'>
+			<Flex $justifyContent='space-between' gap='8px'>
 				<ProjectStatusesContainer $flexDirection='column' gap='16px'>
 					<Flex $justifyContent='space-between'>
 						<P>{formatMessage({ id: 'label.project_status' })}</P>
@@ -97,7 +97,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 							})}
 						</div>
 						<div>
-							<ProjectQFStatus project={project} />
+							<ProjectQFStatus project={project} showRoundName />
 						</div>
 					</Flex>
 				</ProjectStatusesContainer>
