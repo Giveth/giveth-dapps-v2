@@ -34,6 +34,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 				showGiveBack
 				symbol={token.symbol}
 				size={32}
+				isSuperToken
 			/>
 			<InfoWrapper $flexDirection='column' $alignItems='flex-start'>
 				<TopRow $justifyContent='space-between'>
