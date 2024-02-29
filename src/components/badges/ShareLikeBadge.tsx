@@ -39,7 +39,7 @@ const ShareLikeBadge = (props: {
 	);
 
 	return (
-		<Wrapper isSimple={isSimple} onClick={onClick}>
+		<Wrapper onClick={onClick}>
 			{icon}
 			{!isSimple && (
 				<BadgeText size='small' $fromDonate={fromDonate}>
@@ -50,7 +50,7 @@ const ShareLikeBadge = (props: {
 	);
 };
 
-const Wrapper = styled(FlexCenter)<{ isSimple?: boolean | null }>`
+const Wrapper = styled(FlexCenter)`
 	height: 48px;
 	gap: 6px;
 	display: flex;
