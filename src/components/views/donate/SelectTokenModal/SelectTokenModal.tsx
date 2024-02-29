@@ -6,6 +6,7 @@ import {
 	brandColors,
 	mediaQueries,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useState, type FC, useEffect } from 'react';
 import { useAccount } from 'wagmi';
@@ -13,7 +14,6 @@ import { useIntl } from 'react-intl';
 import { IModal } from '@/types/common';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { TokenInfo } from './TokenInfo';
 import { fetchBalance } from '@/services/token';
@@ -127,7 +127,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	return (
 		<>
 			<Wrapper>
-				<Title medium>
+				<Title $medium>
 					{formatMessage({ id: 'label.stream_balances' })}
 				</Title>
 				{Object.keys(tokenStreams).map(tokenId => {
@@ -173,7 +173,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						/>
 					),
 				)}
-				<Title medium>
+				<Title $medium>
 					{formatMessage({ id: 'label.eligible_tokens' })}
 				</Title>
 				{tokens.length > 0 ? (
@@ -206,7 +206,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				)}
 			</Wrapper>
 			<GIVbackWrapper>
-				<Flex gap='8px' alignItems='center'>
+				<Flex gap='8px' $alignItems='center'>
 					<IconGIVBack size={24} color={brandColors.giv[500]} />
 					<SublineBold>
 						{formatMessage({

@@ -11,11 +11,11 @@ import {
 	IconChevronRight16,
 	IconHelpFilled16,
 	deviceSize,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { type FC } from 'react';
-import { Flex } from '@/components/styled-components/Flex';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import {
@@ -36,29 +36,34 @@ interface IQFSectionProps {
 
 const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	const { formatMessage, locale } = useIntl();
-	const { qfRounds, estimatedMatching, sumDonationValueUsdForActiveQfRound } =
-		projectData || {};
+	const {
+		qfRounds,
+		estimatedMatching,
+		sumDonationValueUsdForActiveQfRound,
+		sumDonationValueUsd,
+	} = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
 	const { projectDonationsSqrtRootSum, matchingPool, allProjectsSum } =
 		estimatedMatching ?? {};
 
 	const activeRound = getActiveRound(qfRounds);
 	const EstimatedMatchingSection = () => (
-		<Flex flexDirection='column' gap='4px'>
+		<Flex $flexDirection='column' gap='4px'>
 			<EstimatedMatchingPrice>
-				{formatDonation(
-					calculateTotalEstimatedMatching(
-						projectDonationsSqrtRootSum,
-						allProjectsSum,
-						matchingPool,
-						activeRound?.maximumReward,
-					),
-					'$',
-					locale,
-					true,
-				)}
+				{'+ ' +
+					formatDonation(
+						calculateTotalEstimatedMatching(
+							projectDonationsSqrtRootSum,
+							allProjectsSum,
+							matchingPool,
+							activeRound?.maximumReward,
+						),
+						'$',
+						locale,
+						true,
+					)}
 			</EstimatedMatchingPrice>
-			<Flex alignItems='center' gap='4px'>
+			<Flex $alignItems='center' gap='4px'>
 				<LightCaption>
 					{formatMessage({ id: 'label.estimated_matching' })}
 				</LightCaption>
@@ -81,10 +86,17 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 					{isMobile && <br />}
 					<Title>
 						{formatMessage({
-							id: 'label.amount_raised_in_this_round',
+							id: 'label.total_raised',
 						})}
+						{' ' +
+							formatDonation(
+								sumDonationValueUsd || 0,
+								'$',
+								locale,
+							)}
 					</Title>
 					<Amount weight={700}>
+						1
 						{formatDonation(
 							sumDonationValueUsdForActiveQfRound || 0,
 							'$',
@@ -95,7 +107,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 						{formatMessage({
 							id: 'label.raised_from',
 						})}
-						<Caption medium>
+						<Caption $medium>
 							{projectData?.countUniqueDonorsForActiveQfRound}
 						</Caption>
 						{formatMessage(
@@ -106,6 +118,16 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 								count: projectData?.countUniqueDonorsForActiveQfRound,
 							},
 						)}
+						{' ' +
+							formatMessage({
+								id: 'label.in',
+							}) +
+							' '}
+						<b>
+							{formatMessage({
+								id: 'label.this_round',
+							})}
+						</b>
 					</Description>
 					<TabletEstimatedMatchingContainer>
 						<EstimatedMatchingSection />
@@ -129,7 +151,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 			</DefaultEstimatedMatchingContainer>
 
 			<ChartContainer>
-				<Flex justifyContent='space-between'>
+				<Flex $justifyContent='space-between'>
 					<LightSubline>
 						{formatMessage({
 							id: 'label.contribution',
@@ -142,8 +164,8 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 					</GreenSubline>
 				</Flex>
 				<ContributionsContainer>
-					<Flex flexDirection='column' gap='4px'>
-						<FlexSameSize justifyContent='space-between'>
+					<Flex $flexDirection='column' gap='4px'>
+						<FlexSameSize $justifyContent='space-between'>
 							<Subline>1 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
@@ -163,7 +185,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
-						<FlexSameSize justifyContent='space-between'>
+						<FlexSameSize $justifyContent='space-between'>
 							<Subline>10 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
@@ -183,7 +205,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
-						<FlexSameSize justifyContent='space-between'>
+						<FlexSameSize $justifyContent='space-between'>
 							<Subline>100 DAI</Subline>
 							<IconArrowRight16 color={brandColors.cyan[500]} />
 							<EndAlignedSubline>
@@ -203,7 +225,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 								&nbsp; DAI
 							</EndAlignedSubline>
 						</FlexSameSize>
-						{/* <Flex justifyContent='space-between'>
+						{/* <Flex $justifyContent='space-between'>
 							<LightSubline>Last updated: 3h ago</LightSubline>
 							<LightSubline>|</LightSubline>
 							<LightSubline>Next update in: 3 min</LightSubline>
@@ -214,7 +236,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 							referrerPolicy='no-referrer'
 							rel='noreferrer'
 						>
-							<LearnLink alignItems='center' gap='2px'>
+							<LearnLink $alignItems='center' gap='2px'>
 								<Subline>
 									{formatMessage({
 										id: 'label.how_it_works?',
@@ -249,9 +271,14 @@ const Amount = styled(H3)`
 const Description = styled(Caption)`
 	color: ${neutralColors.gray[700]};
 	margin-bottom: 24px;
+	white-space: nowrap;
 	& > div {
 		color: ${neutralColors.gray[900]};
 		display: inline;
+	}
+	> b {
+		font-weight: 500;
+		color: ${neutralColors.gray[900]};
 	}
 `;
 

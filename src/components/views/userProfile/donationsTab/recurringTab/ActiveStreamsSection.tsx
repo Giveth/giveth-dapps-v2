@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-import { B, H5, neutralColors } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
+import { B, H5, neutralColors, Flex } from '@giveth/ui-design-system';
 import { useUserStreams } from '@/hooks/useUserStreams';
 import { StreamRow } from './StreamRow';
 
@@ -43,10 +42,10 @@ const Wrapper = styled(Flex)`
 	border-radius: 12px;
 `;
 
-const DonationTableContainer = styled.div<{ myAccount?: boolean }>`
+const DonationTableContainer = styled.div<{ $myAccount?: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
-		props.myAccount
+		props.$myAccount
 			? '1fr 4fr 1fr 1.5fr 1fr 1fr'
 			: 'auto auto auto auto auto'};
 	overflow: auto;

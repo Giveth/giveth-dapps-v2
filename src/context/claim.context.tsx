@@ -6,8 +6,8 @@ import {
 	useEffect,
 	useContext,
 	SetStateAction,
+	Dispatch,
 } from 'react';
-import { Dispatch } from 'react';
 import { useAccount } from 'wagmi';
 import config from '@/configuration';
 import { fetchAirDropClaimData, hasClaimedAirDrop } from '@/lib/claim';

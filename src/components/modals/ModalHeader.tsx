@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import { H6, IconChevronLeft32, IconX } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
+import { H6, IconChevronLeft32, IconX, Flex } from '@giveth/ui-design-system';
 
 export type ModalHeaderTitlePosition = 'center' | 'left';
 
@@ -29,14 +28,14 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 }) => {
 	return !hiddenHeader ? (
 		<ModalHeaderRow
-			justifyContent={position === 'center' ? 'center' : 'flex-start'}
-			hasContent={!!icon || !!title}
+			$justifyContent={position === 'center' ? 'center' : 'flex-start'}
+			$hasContent={!!icon || !!title}
 			color={color}
 		>
 			{!!backButtonCallback ? (
 				<IconWrapper
 					onClick={backButtonCallback}
-					clickable={!!backButtonCallback}
+					$clickable={!!backButtonCallback}
 				>
 					<IconChevronLeft32 />
 				</IconWrapper>
@@ -60,10 +59,10 @@ export const ModalHeader: React.FC<IModalHeader> = ({
 
 export const ModalHeaderRow = styled(Flex)<{
 	color?: string;
-	hasContent: boolean;
+	$hasContent: boolean;
 }>`
 	gap: 14px;
-	min-height: ${props => (props.hasContent ? '48px' : '36px')};
+	min-height: ${props => (props.$hasContent ? '48px' : '36px')};
 	padding: 24px 24px 8px;
 	position: relative;
 	align-items: center;
@@ -83,10 +82,10 @@ const CloseModalPlaceHolder = styled.div`
 `;
 
 interface IIconWrapper {
-	clickable?: boolean;
+	$clickable?: boolean;
 }
 
 const IconWrapper = styled.div<IIconWrapper>`
 	height: 32px;
-	${props => props.clickable && 'cursor: pointer;'}
+	${props => props.$clickable && 'cursor: pointer;'}
 `;

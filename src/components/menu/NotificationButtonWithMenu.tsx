@@ -4,6 +4,7 @@ import {
 	IconNotificationFilled16,
 	neutralColors,
 	Overline,
+	FlexSpacer,
 } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
@@ -21,7 +22,6 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
-import { FlexSpacer } from '../styled-components/Flex';
 import { MenuContainer, NotificationMenuWrapper } from './Menu.sc';
 import { ItemsProvider } from '@/context/Items.context';
 import { ETheme } from '@/features/general/general.slice';
@@ -90,14 +90,18 @@ export const NotificationButtonWithMenu: FC<IHeaderButtonProps> = ({
 
 	return (
 		<MenuAndButtonContainer {...props}>
-			<NotificationsButton outline themeState={theme} isHover={showMenu}>
+			<NotificationsButton
+				$outline
+				$baseTheme={theme}
+				$isHover={showMenu}
+			>
 				<HeaderNotificationButton theme={theme} />
-				<CoverLine themeState={theme} className='cover-line' />
+				<CoverLine $baseTheme={theme} className='cover-line' />
 			</NotificationsButton>
 			{NOTIFICATION_ENABLED && menuCondition && (
 				<NotificationMenuContainer
-					isAnimating={showMenu}
-					themeState={theme}
+					$isAnimating={showMenu}
+					$baseTheme={theme}
 				>
 					<NotificationMenuWrapper>
 						<ItemsProvider close={closeMenu}>
@@ -156,7 +160,7 @@ const HeaderNotificationButton: FC<IHeaderNotificationButtonProps> = ({
 		<NotificationsIconContainer>
 			{totalUnreadNotifications > 0 && (
 				<NotificationsButtonCircle>
-					<Overline styleType='Small'>
+					<Overline $styleType='Small'>
 						{totalUnreadNotifications}
 					</Overline>
 				</NotificationsButtonCircle>

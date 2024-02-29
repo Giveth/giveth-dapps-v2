@@ -1,6 +1,6 @@
 import { useFormContext } from 'react-hook-form';
 import { useIntl } from 'react-intl';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
 	B,
 	Button,
@@ -12,10 +12,11 @@ import {
 	brandColors,
 	neutralColors,
 	semanticColors,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import config, { isRecurringActive } from '@/configuration';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { getChainName } from '@/lib/network';
@@ -25,12 +26,17 @@ import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { IAnchorContractData } from '@/apollo/types/types';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { EInputs } from './types';
+import links from '@/lib/constants/links';
 
 interface IAddressInterfaceProps extends IChainType {
 	networkId: number;
 	onButtonClick?: () => void;
 	anchorContractData?: IAnchorContractData;
 	isEditMode?: boolean;
+}
+
+interface IconContainerProps {
+	$disabled?: boolean;
 }
 
 const AddressInterface = ({
@@ -56,11 +62,16 @@ const AddressInterface = ({
 
 	const hasAddress = !!walletAddress;
 	const hasAnchorContract = !!anchorContractData?.isActive;
+	const hasOptimismAddress = !!findAddressByChain(
+		value,
+		config.OPTIMISM_NETWORK_NUMBER,
+		chainType,
+	);
 
 	return (
 		<Container>
 			<TopContainer>
-				<Flex justifyContent='space-between'>
+				<Flex $justifyContent='space-between'>
 					<Flex gap='8px'>
 						<ChainIconShadow>
 							<NetworkLogo
@@ -98,11 +109,11 @@ const AddressInterface = ({
 					</GLink>
 				)}
 				<Flex
-					justifyContent='space-between'
-					alignItems='center'
+					$justifyContent='space-between'
+					$alignItems='center'
 					gap='8px'
 				>
-					<AddressContainer hasAddress={hasAddress}>
+					<AddressContainer $hasAddress={hasAddress}>
 						{hasAddress ? walletAddress : 'No address added yet!'}
 					</AddressContainer>
 					{hasAddress &&
@@ -110,7 +121,7 @@ const AddressInterface = ({
 							<IconWithTooltip
 								direction='top'
 								icon={
-									<IconContainer>
+									<IconContainer $disabled>
 										<IconTrash24
 											color={neutralColors.gray[600]}
 										/>
@@ -130,6 +141,12 @@ const AddressInterface = ({
 										1,
 									);
 									setValue(inputName, _addresses);
+									if (isOptimism) {
+										setValue(
+											EInputs.alloProtocolRegistry,
+											false,
+										);
+									}
 								}}
 							>
 								<IconTrash24 />
@@ -150,15 +167,26 @@ const AddressInterface = ({
 												id: 'label.set_up_profile_on_the_allo_protocol_registry',
 											})}
 								</B>
-								<P>
+								<div>
+									<CustomP>
+										{hasAnchorContract && isEditMode
+											? formatMessage({
+													id: 'label.your_project_is_set_up_to_receive_recurring_donations',
+												})
+											: formatMessage({
+													id: 'label.do_you_want_this_project_to_be_setup_to_receive_recurring_donations',
+												})}
+									</CustomP>
+									<CustomLink
+										href={links.ALLO_PROTOCOL}
+										target='_blank'
+									>
+										Allo Protocol
+									</CustomLink>
 									{hasAnchorContract && isEditMode
-										? formatMessage({
-												id: 'label.your_project_is_set_up_to_receive_recurring_donations',
-											})
-										: formatMessage({
-												id: 'label.do_you_want_this_project_to_be_setup_to_receive_recurring_donations',
-											})}
-								</P>
+										? '.'
+										: '?'}
+								</div>
 							</div>
 							{hasAnchorContract && isEditMode ? (
 								<IconCheckContainer>
@@ -167,13 +195,15 @@ const AddressInterface = ({
 							) : (
 								<ToggleSwitch
 									isOn={alloProtocolRegistry}
-									toggleOnOff={() =>
+									toggleOnOff={() => {
+										if (!hasOptimismAddress) return;
 										setValue(
 											EInputs.alloProtocolRegistry,
 											!alloProtocolRegistry,
-										)
-									}
+										);
+									}}
 									label=''
+									disabled={!hasOptimismAddress}
 								/>
 							)}
 						</Flex>
@@ -206,27 +236,32 @@ const MiddleContainer = styled.div`
 	padding: 24px 0;
 `;
 
-const AddressContainer = styled.div<{ hasAddress: boolean }>`
+const AddressContainer = styled.div<{ $hasAddress: boolean }>`
 	width: 100%;
 	border: 2px solid ${neutralColors.gray[300]};
 	background-color: ${props =>
-		props.hasAddress ? neutralColors.gray[100] : neutralColors.gray[300]};
+		props.$hasAddress ? neutralColors.gray[100] : neutralColors.gray[300]};
 	border-radius: 8px;
 	color: ${props =>
-		props.hasAddress ? neutralColors.gray[900] : neutralColors.gray[500]};
+		props.$hasAddress ? neutralColors.gray[900] : neutralColors.gray[500]};
 	padding: 16px;
 	overflow-x: auto;
 `;
 
-const IconContainer = styled(FlexCenter)`
+const IconContainer = styled(FlexCenter)<IconContainerProps>`
 	height: 50px;
 	width: 50px;
 	border-radius: 50%;
 	cursor: pointer;
 	transition: background-color 0.2s ease-in-out;
-	&:hover {
-		background-color: ${neutralColors.gray[300]};
-	}
+
+	${props =>
+		!props.$disabled &&
+		css`
+			&:hover {
+				background-color: ${neutralColors.gray[300]};
+			}
+		`}
 `;
 
 const AlloProtocolContainer = styled.div`
@@ -239,6 +274,16 @@ const IconCheckContainer = styled(FlexCenter)`
 	border-radius: 50px;
 	background-color: ${semanticColors.jade[500]};
 	padding: 5px;
+`;
+
+const CustomP = styled(P)`
+	display: inline;
+`;
+
+const CustomLink = styled.a`
+	color: ${brandColors.giv[500]};
+	text-decoration: none;
+	cursor: pointer;
 `;
 
 export default AddressInterface;

@@ -10,12 +10,12 @@ import {
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import {
+	Flex,
 	GLink,
 	IconChevronDown24,
 	IconChevronUp24,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { Flex } from './styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
 import { zIndex } from '@/lib/constants/constants';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
@@ -83,7 +83,7 @@ export const Dropdown: FC<IDropdownProps> = props => {
 			ref={containerRef}
 			onClick={() => setIsOpen(_open => !_open)}
 		>
-			<Controller justifyContent='space-between'>
+			<Controller $justifyContent='space-between'>
 				<GLink size='Big'>{label}</GLink>
 				<IconWrapper>
 					{isOpen ? <IconChevronUp24 /> : <IconChevronDown24 />}

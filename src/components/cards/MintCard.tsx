@@ -6,6 +6,7 @@ import {
 	mediaQueries,
 	P,
 	semanticColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -15,7 +16,6 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useAccount, useSwitchChain } from 'wagmi';
 import { readContracts, readContract } from '@wagmi/core';
 import { MintModal } from '../modals/Mint/MintModal';
-import { Flex } from '../styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
@@ -207,8 +207,8 @@ export const MintCard = () => {
 	return (
 		<>
 			<MintCardContainer>
-				<InputWrapper gap='8px' flexDirection='column'>
-					<Flex justifyContent='space-between'>
+				<InputWrapper gap='8px' $flexDirection='column'>
+					<Flex $justifyContent='space-between'>
 						<GLink size='Small'>Amount of NFTs to mint</GLink>
 						<MaxLink
 							size='Small'
@@ -228,7 +228,7 @@ export const MintCard = () => {
 						type='number'
 						value={qtyNFT}
 						onChange={onChangeHandler}
-						hasError={!!errorMsg}
+						$hasError={!!errorMsg}
 					/>
 					<InputHint>
 						{pfpData?.totalSupply
@@ -242,8 +242,8 @@ export const MintCard = () => {
 					</InputHint>
 					<ErrorPlaceHolder>{errorMsg}</ErrorPlaceHolder>
 				</InputWrapper>
-				<InfoBox gap='16px' flexDirection='column'>
-					<Flex justifyContent='space-between'>
+				<InfoBox gap='16px' $flexDirection='column'>
+					<Flex $justifyContent='space-between'>
 						<InfoBoxTitle>Max Mint Amount</InfoBoxTitle>
 						<InfoBoxValue>
 							{pfpData && balance !== undefined && isOnEVM
@@ -251,7 +251,7 @@ export const MintCard = () => {
 								: '-'}
 						</InfoBoxValue>
 					</Flex>
-					<Flex justifyContent='space-between'>
+					<Flex $justifyContent='space-between'>
 						<InfoBoxTitle>Mint price per NFT</InfoBoxTitle>
 						<InfoBoxValue>
 							{pfpData?.price
@@ -325,18 +325,18 @@ const InputWrapper = styled(Flex)`
 `;
 
 interface IStyledInput {
-	hasError: boolean;
+	$hasError: boolean;
 }
 
 const StyledInput = styled(P)<IStyledInput>`
 	padding: 15px 16px;
 	width: 100%;
 	color: ${props =>
-		props.hasError ? semanticColors.punch[500] : brandColors.giv[200]};
+		props.$hasError ? semanticColors.punch[500] : brandColors.giv[200]};
 	background-color: ${brandColors.giv[700]};
 	border: 1px solid
 		${props =>
-			props.hasError ? semanticColors.punch[500] : brandColors.giv[500]};
+			props.$hasError ? semanticColors.punch[500] : brandColors.giv[500]};
 	border-radius: 8px;
 	&::-webkit-inner-spin-button {
 		-webkit-appearance: none;

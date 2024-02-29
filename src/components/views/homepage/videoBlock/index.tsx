@@ -5,14 +5,14 @@ import {
 	H4,
 	IconChevronRight24,
 	neutralColors,
+	Container,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
-import { Container } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
 import {
 	VideoContainer,
 	VideoOverlay,
@@ -47,8 +47,8 @@ const VideoBlock = () => {
 	return (
 		<SectionContainer>
 			<Container>
-				<CustomFlex alignItems='center'>
-					<Flex flexDirection='column' gap='24px'>
+				<CustomFlex $alignItems='center'>
+					<Flex $flexDirection='column' gap='24px'>
 						<H2 weight={700}>
 							{formatMessage({ id: 'label.what_is_giveth' })}
 						</H2>
@@ -84,7 +84,7 @@ const VideoBlock = () => {
 							</video>
 							<VideoOverlay
 								onClick={handleVideoClick}
-								hidden={isPlaying}
+								$hidden={isPlaying}
 							>
 								<Image
 									src='/images/video_play.svg'

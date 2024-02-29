@@ -1,5 +1,5 @@
+import { Flex } from '@giveth/ui-design-system';
 import ProjectsSearchTablet from '@/components/views/projects/ProjectsSearchTablet';
-import { Flex } from '@/components/styled-components/Flex';
 import ProjectsSubCategories from '@/components/views/projects/ProjectsSubCategories';
 import ProjectsFiltersSwiper from '@/components/views/projects/filter/ProjectsFiltersSwiper';
 import { StyledLine } from '@/components/views/projects/common.styled';
@@ -14,7 +14,7 @@ const ProjectsFiltersMobile = () => {
 			<ProjectsFiltersSwiper />
 			{!isQF && <StyledLine />}
 			{!isQF && <ProjectsSubCategories />}
-			<Flex alignItems='center' gap='16px'>
+			<Flex $alignItems='center' gap='16px'>
 				<ProjectsSearchTablet />
 				<ProjectsFiltersButton />
 			</Flex>

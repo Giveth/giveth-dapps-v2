@@ -6,11 +6,11 @@ import {
 	semanticColors,
 	IconLink,
 	mediaQueries,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { FC, useState } from 'react';
-import { Flex } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { isSSRMode } from '@/lib/helpers';
 
@@ -49,13 +49,13 @@ const CopyLink: FC<ICopyLink> = ({ url }) => {
 						: formatMessage({ id: 'label.copy_link' })
 				}
 				onClick={() => !isCopied && handleCopy()}
-				isCopied={isCopied}
+				$isCopied={isCopied}
 			/>
 		</DashedWrapper>
 	);
 };
 
-const CustomButton = styled(Button)<{ isCopied: boolean }>`
+const CustomButton = styled(Button)<{ $isCopied: boolean }>`
 	font-weight: 700;
 	margin-left: 16px;
 	width: 123px;
@@ -64,12 +64,12 @@ const CustomButton = styled(Button)<{ isCopied: boolean }>`
 	flex-grow: 0;
 	box-shadow: ${Shadow.Giv[400]};
 	color: ${props =>
-		props.isCopied ? brandColors.pinky[300] : brandColors.pinky[500]};
+		props.$isCopied ? brandColors.pinky[300] : brandColors.pinky[500]};
 
 	&:hover {
 		background: transparent;
 		color: ${props =>
-			props.isCopied ? brandColors.pinky[300] : brandColors.pinky[500]};
+			props.$isCopied ? brandColors.pinky[300] : brandColors.pinky[500]};
 	}
 	* {
 		text-transform: capitalize !important;

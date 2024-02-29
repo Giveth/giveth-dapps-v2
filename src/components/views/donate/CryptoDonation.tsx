@@ -66,11 +66,6 @@ import { wagmiConfig } from '@/wagmiConfigs';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
-interface IInputBox {
-	error: boolean;
-	focused: boolean;
-}
-
 const CryptoDonation: FC = () => {
 	const {
 		chain,
@@ -450,7 +445,10 @@ const CryptoDonation: FC = () => {
 					/>
 				)}
 				<SaveGasFees acceptedChains={acceptedChains} />
-				<SearchContainer error={amountError} focused={inputBoxFocused}>
+				<SearchContainer
+					$error={amountError}
+					$focused={inputBoxFocused}
+				>
 					<DropdownContainer>
 						<TokenPicker
 							tokenList={erc20List}
@@ -618,15 +616,20 @@ const AvText = styled(GLink)`
 	}
 `;
 
+interface IInputBox {
+	$error: boolean;
+	$focused: boolean;
+}
+
 const SearchContainer = styled.div<IInputBox>`
 	display: flex;
 	border: 2px solid
 		${props =>
-			props.error === true
+			props.$error === true
 				? semanticColors.punch[500]
 				: neutralColors.gray[300]};
 	border-radius: 8px;
-	box-shadow: ${props => props.focused && Shadow.Neutral[500]};
+	box-shadow: ${props => props.$focused && Shadow.Neutral[500]};
 	&:hover {
 		box-shadow: ${Shadow.Neutral[500]};
 	}

@@ -1,8 +1,7 @@
-import { mediaQueries, neutralColors } from '@giveth/ui-design-system';
+import { mediaQueries, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { ProjectStats } from './ProjectStats';
 import { AdminActions } from './AdminActions';
-import { Flex } from '@/components/styled-components/Flex';
 import { useProjectContext } from '@/context/project.context';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
@@ -24,8 +23,8 @@ export const ProjectActionCard = () => {
 
 	return (
 		<ProjectActionCardWrapper
-			flexDirection='column'
-			justifyContent='space-between'
+			$flexDirection='column'
+			$justifyContent='space-between'
 		>
 			<ProjectActionInnerCard />
 		</ProjectActionCardWrapper>
@@ -33,9 +32,9 @@ export const ProjectActionCard = () => {
 };
 
 const ProjectActionInnerCard = () => {
-	const { isAdmin, hasActiveQFRound, isDraft } = useProjectContext();
+	const { isAdmin, hasActiveQFRound, isDraft, projectData } =
+		useProjectContext();
 	const isMobile = !useMediaQuery(device.tablet);
-	const { projectData } = useProjectContext();
 
 	return (
 		<>

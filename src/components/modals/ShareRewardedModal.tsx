@@ -17,6 +17,8 @@ import {
 	IconAlertTriangleOutline,
 	mediaQueries,
 	IconXSocial,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -24,12 +26,11 @@ import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Modal } from './Modal';
 import GiftIcon from '../../../public/images/icons/gift.svg';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
 import { fullPath } from '@/lib/helpers';
-import { useAppSelector } from '@/features/hooks';
+import { useAppSelector, useAppDispatch } from '@/features/hooks';
 import { startChainvineReferral } from '@/features/user/user.thunks';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
@@ -37,7 +38,6 @@ import {
 	ESocialType,
 	shareContentCreator,
 } from '@/lib/constants/shareContent';
-import { useAppDispatch } from '@/features/hooks';
 import Routes from '@/lib/constants/Routes';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
@@ -224,7 +224,7 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 					)
 				)}
 				<HowItWorksDiv
-					topBorder={
+					$topBorder={
 						error ? false : isSignedIn && chainvineId ? false : true
 					}
 				>
@@ -351,13 +351,13 @@ const SocialButtonContainer = styled(FlexCenter)`
 	border-radius: 48px;
 `;
 
-const HowItWorksDiv = styled(Flex)<{ topBorder: boolean }>`
+const HowItWorksDiv = styled(Flex)<{ $topBorder: boolean }>`
 	width: 100%;
 	flex-direction: column;
-	padding: ${props => (props.topBorder ? '24px 0 0 0' : '0')};
-	margin: ${props => (props.topBorder ? '24px 0 0 0' : '0')};
+	padding: ${props => (props.$topBorder ? '24px 0 0 0' : '0')};
+	margin: ${props => (props.$topBorder ? '24px 0 0 0' : '0')};
 	border-top: ${props =>
-		props.topBorder ? `1px solid ${neutralColors.gray[300]}` : null};
+		props.$topBorder ? `1px solid ${neutralColors.gray[300]}` : null};
 	color: ${neutralColors.gray[800]};
 	font-weight: 400;
 	font-size: 14px;

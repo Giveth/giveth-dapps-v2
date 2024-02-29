@@ -4,6 +4,7 @@ import {
 	H6,
 	OutlineButton,
 	P,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -23,7 +24,6 @@ import QFToast from '@/components/views/donate/QFToast';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { getActiveRound } from '@/helpers/qf';
-import { Flex } from '@/components/styled-components/Flex';
 import { DonationInfo } from './DonationInfo';
 
 export const SuccessView: FC = () => {

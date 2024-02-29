@@ -56,7 +56,7 @@ const BoostModal: FC<IBoostModalProps> = ({ setShowModal, projectId }) => {
 			headerTitle={title()}
 			headerIcon={<IconRocketInSpace32 />}
 		>
-			<BoostModalContainer state={state} data-testid='boost-modal'>
+			<BoostModalContainer $state={state} data-testid='boost-modal'>
 				{state === EBoostModalState.BOOSTING ||
 				state === EBoostModalState.LIMIT_EXCEEDED ? (
 					<BoostInnerModal

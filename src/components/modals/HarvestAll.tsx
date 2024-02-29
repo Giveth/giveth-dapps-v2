@@ -15,6 +15,7 @@ import {
 	IconHelpFilled16,
 	Lead,
 	P,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
@@ -61,7 +62,6 @@ import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
 import { LiquidityPosition } from '@/types/nfts';
-import { Flex } from '../styled-components/Flex';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { getPoolIconWithName } from '@/helpers/platform';
@@ -320,7 +320,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 										regenStreamConfig?.rewardTokenSymbol
 									}
 								/>
-								<HelpRow alignItems='baseline' flexWrap>
+								<HelpRow $alignItems='baseline' $flexWrap>
 									<Caption>
 										{formatMessage({
 											id: 'label.your_new',

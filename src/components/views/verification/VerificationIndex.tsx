@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { Col, Row } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
+import { Col, Row, Flex } from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ContentSelector from '@/components/views/verification/ContentSelector';
 import HintModal from '@/components/views/verification/HintModal';

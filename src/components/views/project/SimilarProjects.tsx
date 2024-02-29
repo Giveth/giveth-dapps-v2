@@ -7,6 +7,7 @@ import {
 	IconPointerLeft,
 	IconPointerRight,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -19,7 +20,6 @@ import { client } from '@/apollo/apolloClient';
 import { SIMILAR_PROJECTS } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
 import ProjectCard from '@/components/project-card/ProjectCard';
-import { Flex } from '@/components/styled-components/Flex';
 import { showToastError } from '@/lib/helpers';
 import { ISuggestedProjectsGQL } from '@/apollo/types/gqlTypes';
 import useDetectDevice from '@/hooks/useDetectDevice';

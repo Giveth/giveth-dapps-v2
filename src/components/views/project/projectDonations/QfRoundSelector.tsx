@@ -9,6 +9,7 @@ import {
 	neutralColors,
 	semanticColors,
 	mediaQueries,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
 import { Navigation } from 'swiper/modules';
@@ -16,7 +17,6 @@ import { useIntl } from 'react-intl';
 import { useProjectContext } from '@/context/project.context';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { Flex } from '@/components/styled-components/Flex';
 import { IQFRound } from '@/apollo/types/types';
 import { NavigationWrapper } from '@/components/styled-components/SwiperPagination';
 interface IQfRoundSelectorProps {
@@ -58,10 +58,10 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 			>
 				<SwiperSlide style={{ width: 'auto' }}>
 					<TabItem
-						alignItems='center'
+						$alignItems='center'
 						gap='4px'
 						onClick={() => setSelectedQF(null)}
-						isSelected={selectedQF === null}
+						$isSelected={selectedQF === null}
 					>
 						{selectedQF === null ? (
 							<B>
@@ -79,11 +79,11 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 					return (
 						<SwiperSlide key={index} style={{ width: 'auto' }}>
 							<TabItem
-								alignItems='center'
+								$alignItems='center'
 								gap='4px'
 								onClick={() => setSelectedQF(round)}
-								isSelected={isSelected}
-								isActive={round.isActive}
+								$isSelected={isSelected}
+								$isActive={round.isActive}
 							>
 								{isSelected ? (
 									<B>{round.name}</B>
@@ -104,8 +104,8 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 };
 
 interface ITabItemProps {
-	isSelected?: boolean;
-	isActive?: boolean;
+	$isSelected?: boolean;
+	$isActive?: boolean;
 }
 
 const QfNavigationWrapper = styled(NavigationWrapper)`
@@ -129,7 +129,7 @@ const TabItem = styled(Flex)<ITabItemProps>`
 		background: ${neutralColors.gray[200]};
 	}
 	${props =>
-		props.isSelected &&
+		props.$isSelected &&
 		css`
 			background: ${neutralColors.gray[300]};
 		`}

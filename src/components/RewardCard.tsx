@@ -8,12 +8,12 @@ import {
 	IconGIVStream,
 	Button,
 	IconHelpFilled24,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { FC, MouseEventHandler, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { IconGIV } from './Icons/GIV';
-import { Flex } from './styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
@@ -89,16 +89,16 @@ export const RewardCard: FC<IRewardCardProps> = ({
 					/>
 				) : (
 					<>
-						<CardHeader justifyContent='space-between' gap='4px'>
+						<CardHeader $justifyContent='space-between' gap='4px'>
 							<CardTitle>{title}</CardTitle>
-							<ChainInfo alignItems='center'>
+							<ChainInfo $alignItems='center'>
 								<NetworkLogo chainId={network} logoSize={16} />
-								<ChainName styleType='Small'>
+								<ChainName $styleType='Small'>
 									{getChainName(network)}
 								</ChainName>
 							</ChainInfo>
 						</CardHeader>
-						<AmountInfo alignItems='center' gap='8px'>
+						<AmountInfo $alignItems='center' gap='8px'>
 							<IconGIV size={32} />
 							<Title>
 								{formatWeiHelper(liquidAmount.toString())}
@@ -108,7 +108,7 @@ export const RewardCard: FC<IRewardCardProps> = ({
 						<Converted>
 							~${formatWeiHelper(usdAmount.toString())}
 						</Converted>
-						<RateInfo alignItems='center' gap='8px'>
+						<RateInfo $alignItems='center' gap='8px'>
 							<IconGIVStream size={24} />
 							<P>{formatWeiHelper(stream.toString())}</P>
 							<RateUnit>

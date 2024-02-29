@@ -12,8 +12,7 @@ import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
 import { ITokenStreams } from '@/context/donate.context';
 import { gqlRequest } from '@/helpers/requests';
 import { ISuperfluidStream } from '@/types/superFluid';
-import config from '@/configuration';
-import { SENTRY_URGENT } from '@/configuration';
+import config, { SENTRY_URGENT } from '@/configuration';
 import { CREATE_RECURRING_DONATION } from '@/apollo/gql/gqlSuperfluid';
 
 const SAVE_DONATION_ITERATIONS = 5;

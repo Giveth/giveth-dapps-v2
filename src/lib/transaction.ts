@@ -1,6 +1,5 @@
 import SafeAppsSDK, { TransactionStatus } from '@safe-global/safe-apps-sdk';
-import { waitForTransactionReceipt } from '@wagmi/core';
-import { getTransaction } from '@wagmi/core';
+import { waitForTransactionReceipt, getTransaction } from '@wagmi/core';
 import { Address } from 'viem';
 import { Connection } from '@solana/web3.js';
 import { wagmiConfig } from '@/wagmiConfigs';

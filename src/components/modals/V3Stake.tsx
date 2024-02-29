@@ -6,13 +6,13 @@ import {
 	H4,
 	neutralColors,
 	Overline,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { captureException } from '@sentry/nextjs';
 import { useAccount } from 'wagmi';
 import { Modal } from './Modal';
 import { CancelButton, HarvestButton, HelpRow } from './HarvestAll.sc';
-import { Flex } from '../styled-components/Flex';
 import { PoolStakingConfig } from '@/types/config';
 import { StakingPoolImages } from '../StakingPoolImages';
 import V3StakingCard from '../cards/StakingCards/PositionCard/PositionCard';
@@ -138,7 +138,7 @@ export const V3StakeModal: FC<IV3StakeModalProps> = ({
 					stakeStatus === StakeState.CONFIRMING ||
 					stakeStatus === StakeState.UNSTAKING ||
 					stakeStatus === StakeState.CONFIRM_UNSTAKE) && (
-					<StakeModalTitle alignItems='center'>
+					<StakeModalTitle $alignItems='center'>
 						<StakingPoolImages title={title} icon={icon} />
 						<StakeModalTitleText weight={700}>
 							{title}

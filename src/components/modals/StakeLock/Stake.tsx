@@ -195,7 +195,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 				stakeState !== StakeState.CONFIRMED &&
 				stakeState !== StakeState.ERROR && (
 					<>
-						<StakeModalTitle alignItems='center'>
+						<StakeModalTitle $alignItems='center'>
 							<StakingPoolImages title={title} />
 							<StakeModalTitleText weight={700}>
 								Stake

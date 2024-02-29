@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
+import { FlexSpacer } from '@giveth/ui-design-system';
 import { formatWeiHelper } from '@/helpers/number';
 import {
 	MenuAndButtonContainer,
@@ -18,7 +19,6 @@ import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { useDelayedState } from '@/hooks/useDelayedState';
 import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
-import { FlexSpacer } from '../styled-components/Flex';
 import { RewardItems } from './RewardItems';
 import { MenuContainer } from './Menu.sc';
 import { ItemsProvider } from '@/context/Items.context';
@@ -51,12 +51,12 @@ export const RewardButtonWithMenu: FC<IRewardButtonWithMenuProps> = ({
 
 	return (
 		<MenuAndButtonContainer {...props}>
-			<BalanceButton outline themeState={theme} isHover={showMenu}>
+			<BalanceButton $outline $baseTheme={theme} $isHover={showMenu}>
 				<HeaderRewardButton />
-				<CoverLine themeState={theme} className='cover-line' />
+				<CoverLine $baseTheme={theme} className='cover-line' />
 			</BalanceButton>
 			{menuCondition && (
-				<MenuContainer isAnimating={showMenu} themeState={theme}>
+				<MenuContainer $isAnimating={showMenu} $baseTheme={theme}>
 					<ItemsProvider close={closeMenu}>
 						<RewardItems
 							showWhatIsGIVstreamModal={showRewardMenuModal}

@@ -1,6 +1,10 @@
-import { H4, mediaQueries, neutralColors } from '@giveth/ui-design-system';
+import {
+	H4,
+	mediaQueries,
+	neutralColors,
+	Flex,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
 
 export const BlockTitle = styled(H4)`
 	color: ${neutralColors.gray[600]};

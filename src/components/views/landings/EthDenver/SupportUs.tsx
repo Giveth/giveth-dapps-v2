@@ -4,8 +4,8 @@ import {
 	H4,
 	IconChevronRight32,
 	neutralColors,
+	Container,
 } from '@giveth/ui-design-system';
-import { Container } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
 
 const SupportUs = () => {

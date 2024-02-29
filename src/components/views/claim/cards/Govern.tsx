@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
-import { H2, H5, Lead } from '@giveth/ui-design-system';
+import { H2, H5, Lead, Flex } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
 import { formatEther } from 'viem';
@@ -32,7 +32,6 @@ import { APR } from '@/types/poolInfo';
 import useClaim from '@/context/claim.context';
 import { useAppSelector } from '@/features/hooks';
 import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
-import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
 import { WeiPerEther } from '@/lib/constants/constants';
 import { InputWithUnit } from '@/components/input/InputWithUnit';
@@ -179,7 +178,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 	}, [stacked, gnosisValues]);
 
 	return (
-		<GovernCardContainer activeIndex={step} index={index}>
+		<GovernCardContainer $activeIndex={step} $index={index}>
 			<BeeImage>
 				<Image
 					src='/images/bee1.svg'
@@ -203,7 +202,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 					})}
 				</Desc>
 			</GovernHeader>
-			<APRRow alignItems={'center'} justifyContent={'flex-end'}>
+			<APRRow $alignItems={'center'} $justifyContent={'flex-end'}>
 				<ImpactCard>
 					<H5 as='h2' weight={700}>
 						{formatMessage({
@@ -212,8 +211,8 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 					</H5>
 					<div>
 						<Flex
-							alignItems={'center'}
-							justifyContent={'space-between'}
+							$alignItems={'center'}
+							$justifyContent={'space-between'}
 						>
 							<ImpactCardLabel>
 								{formatMessage({
@@ -246,7 +245,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 					</PoolCardTitle>
 					<PoolCard>
 						<PoolItems>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>APR</PoolItem>
 								<PoolItemBold>
 									<Image
@@ -261,7 +260,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 									%
 								</PoolItemBold>
 							</Flex>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>
 									{formatMessage({ id: 'label.claimable' })}
 								</PoolItem>
@@ -269,7 +268,7 @@ const GovernCard: FC<IClaimViewCardProps> = ({ index }) => {
 									{formatWeiHelper(potentialClaim)} GIV
 								</PoolItemBold>
 							</Flex>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>
 									{formatMessage({ id: 'label.streaming' })}
 								</PoolItem>

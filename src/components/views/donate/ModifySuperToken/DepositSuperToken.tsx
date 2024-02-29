@@ -1,9 +1,8 @@
 import { useState, type FC, useEffect } from 'react';
-import { Button } from '@giveth/ui-design-system';
+import { Button, Flex } from '@giveth/ui-design-system';
 import { useAccount, useBalance } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { Framework } from '@superfluid-finance/sdk-core';
-import { Flex } from '@/components/styled-components/Flex';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { AddressZero } from '@/lib/constants/constants';
 import { ModifyInfoToast } from './ModifyInfoToast';
@@ -181,7 +180,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 					<ModifyInfoToast />
 				</>
 			) : (
-				<Flex flexDirection='column' gap='16px'>
+				<Flex $flexDirection='column' gap='16px'>
 					<DepositSteps modifyTokenState={step} />
 					<Item
 						title='Deposit into your stream balance'

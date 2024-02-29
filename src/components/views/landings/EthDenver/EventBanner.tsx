@@ -1,10 +1,9 @@
-import { brandColors, H1, H5 } from '@giveth/ui-design-system';
+import { brandColors, H1, H5, Container } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import ETHDenverIcon from '/public/images/ETHDenver_2023.png';
 import SporkWhaleIcon from '/public/images/ETHDenver-spork-whale.png';
 import GoldSporkIcon from '/public/images/ETHDenver-gold-sporke.png';
 import Image from 'next/image';
-import { Container } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 
 const EventBanner = () => {

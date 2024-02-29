@@ -9,6 +9,8 @@ import {
 	P,
 	neutralColors,
 	ButtonText,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
@@ -24,7 +26,6 @@ import config from '@/configuration';
 import NetworkLogo from '../NetworkLogo';
 import { NetworkItem, SelectedNetwork } from './SwitchNetwork';
 import { useAppSelector } from '@/features/hooks';
-import { Flex, FlexCenter } from '../styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import { ChainType } from '@/types/config';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
@@ -39,6 +40,7 @@ const networks = [
 	config.GNOSIS_CONFIG,
 	config.POLYGON_CONFIG,
 	config.CELO_CONFIG,
+	config.ARBITRUM_CONFIG,
 	config.OPTIMISM_CONFIG,
 	config.CLASSIC_CONFIG,
 	config.SOLANA_CONFIG,
@@ -92,7 +94,7 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 			hiddenClose
 			headerTitlePosition='left'
 		>
-			<CustomHr margin='24px' />
+			<CustomHr $margin='24px' />
 			<ModalContainer>
 				<Lead>
 					{formatMessage(
@@ -161,9 +163,9 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 												closeModal();
 											}
 										}}
-										isSelected={_chainId === networkId}
+										$isSelected={_chainId === networkId}
 										key={_chainId}
-										themeState={theme}
+										$baseTheme={theme}
 									>
 										<NetworkLogo
 											chainId={_chainId}
@@ -173,8 +175,8 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 										<B>{network.name}</B>
 										{_chainId === networkId && (
 											<SelectedNetwork
-												styleType='Small'
-												themeState={theme}
+												$styleType='Small'
+												$baseTheme={theme}
 											>
 												{formatMessage({
 													id: 'label.selected',
@@ -188,11 +190,11 @@ export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {
 					</>
 				)}
 				<br />
-				<CustomHr margin='0' />
+				<CustomHr $margin='0' />
 				<FlexCenter direction='column'>
 					<FooterText>{formatMessage({ id: 'label.or' })}</FooterText>
 					<Link href={`${Routes.Project}/${slug}`}>
-						<Flex gap='12px' alignItems='center'>
+						<Flex gap='12px' $alignItems='center'>
 							<IconBackward24 color={brandColors.giv[500]} />
 							<BackButton>
 								{formatMessage({
@@ -215,9 +217,9 @@ const ModalContainer = styled.div`
 	}
 `;
 
-const CustomHr = styled.hr<{ margin: string }>`
-	margin-left: ${props => props.margin};
-	margin-right: ${props => props.margin};
+const CustomHr = styled.hr<{ $margin: string }>`
+	margin-left: ${props => props.$margin};
+	margin-right: ${props => props.$margin};
 	border: 1px solid ${neutralColors.gray[400]};
 `;
 

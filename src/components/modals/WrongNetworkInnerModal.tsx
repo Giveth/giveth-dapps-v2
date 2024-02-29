@@ -1,8 +1,7 @@
-import { P, brandColors } from '@giveth/ui-design-system';
+import { P, brandColors, Button } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Button } from '@giveth/ui-design-system';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { mediaQueries } from '@/lib/constants/constants';
 import { jointItems } from '@/helpers/text';

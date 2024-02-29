@@ -1,8 +1,7 @@
-import { Button, neutralColors } from '@giveth/ui-design-system';
+import { Button, neutralColors, Col, Row } from '@giveth/ui-design-system';
 import { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 
-import { Col, Row } from '@giveth/ui-design-system';
 import { OnboardSteps } from './Onboarding.view';
 
 export const OnboardStep = styled(Col)`

@@ -40,14 +40,14 @@ const SocialBox: FC<ISocialBox> = props => {
 	const projectUrl = fullPath(slugToProjectView(slug));
 
 	return (
-		<Social isDonateFooter={isDonateFooter}>
+		<Social $isDonateFooter={isDonateFooter}>
 			<BLead>
 				{isDonateFooter
 					? formatMessage({ id: 'label.cant_donate' })
 					: formatMessage({ id: 'label.share_this' })}
 			</BLead>
 			<SocialItems>
-				<SocialItem isDonateFooter={isDonateFooter}>
+				<SocialItem $isDonateFooter={isDonateFooter}>
 					<TwitterShareButton
 						title={shareTitleTwitter}
 						url={projectUrl || ''}
@@ -56,7 +56,7 @@ const SocialBox: FC<ISocialBox> = props => {
 						<IconXSocial24 />
 					</TwitterShareButton>
 				</SocialItem>
-				<SocialItem isDonateFooter={isDonateFooter}>
+				<SocialItem $isDonateFooter={isDonateFooter}>
 					<LinkedinShareButton
 						title={shareTitleFacebookAndLinkedin}
 						summary={description}
@@ -70,7 +70,7 @@ const SocialBox: FC<ISocialBox> = props => {
 						/>
 					</LinkedinShareButton>
 				</SocialItem>
-				<SocialItem isDonateFooter={isDonateFooter}>
+				<SocialItem $isDonateFooter={isDonateFooter}>
 					<FacebookShareButton
 						url={projectUrl || ''}
 						hashtag='#Giveth'
@@ -95,12 +95,12 @@ const BLead = styled(Lead)`
 	z-index: 2;
 `;
 
-const Social = styled.div<{ isDonateFooter?: boolean }>`
+const Social = styled.div<{ $isDonateFooter?: boolean }>`
 	z-index: 1;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	margin: ${props => (props.isDonateFooter ? '18px 0' : '50px 0')};
+	margin: ${props => (props.$isDonateFooter ? '18px 0' : '50px 0')};
 	color: ${neutralColors.gray[900]};
 	align-items: center;
 `;
@@ -112,11 +112,11 @@ const SocialItems = styled.div`
 	justify-content: center;
 	margin: 8px 0 0 0;
 `;
-const SocialItem = styled.div<{ isDonateFooter?: boolean }>`
+const SocialItem = styled.div<{ $isDonateFooter?: boolean }>`
 	cursor: pointer;
 	border-radius: 8px;
-	padding: ${props => (props.isDonateFooter ? `0 12px` : '0 6px')};
-	margin: ${props => (props.isDonateFooter ? '0' : '0 12px')};
+	padding: ${props => (props.$isDonateFooter ? `0 12px` : '0 6px')};
+	margin: ${props => (props.$isDonateFooter ? '0' : '0 12px')};
 `;
 
 export default SocialBox;

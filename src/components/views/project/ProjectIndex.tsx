@@ -8,11 +8,12 @@ import {
 	neutralColors,
 	semanticColors,
 	Button,
+	Col,
+	Row,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Col, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import InfoBadge from '@/components/badges/InfoBadge';
@@ -129,7 +130,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						<ProjectHeader />
 						{isMobile && isAdmin && (
 							<MobileActionsContainer
-								flexDirection='column'
+								$flexDirection='column'
 								gap='24px'
 							>
 								<ProjectStats />
@@ -137,9 +138,9 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							</MobileActionsContainer>
 						)}
 						{isMobile && (
-							<MobileContainer hasActiveRound={hasActiveQFRound}>
+							<MobileContainer $hasActiveRound={hasActiveQFRound}>
 								{hasActiveQFRound ? (
-									<QFSection />
+									<QFSection projectData={projectData} />
 								) : (
 									<DonateSection />
 								)}
@@ -153,7 +154,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					{isDraft && (
 						<DraftIndicator>
 							<InfoBadge />
-							<Caption medium>
+							<Caption $medium>
 								{formatMessage({
 									id: 'page.project.preview_hint',
 								})}
@@ -186,7 +187,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					{activeTab === 2 && <ProjectDonations />}
 					{activeTab === 3 && <ProjectGIVPowerIndex />}
 					{isDraft && (
-						<Flex justifyContent='flex-end'>
+						<Flex $justifyContent='flex-end'>
 							<ContinueCreationButton
 								label={formatMessage({
 									id: 'label.continue_creation',
@@ -242,8 +243,9 @@ const ContinueCreationButton = styled(Button)`
 	align-self: flex-end;
 `;
 
-const MobileContainer = styled.div<{ hasActiveRound: boolean }>`
-	padding: ${props => (props.hasActiveRound ? '0 26px 26px 26px' : '0 26px')};
+const MobileContainer = styled.div<{ $hasActiveRound: boolean }>`
+	padding: ${props =>
+		props.$hasActiveRound ? '0 26px 26px 26px' : '0 26px'};
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 16px;
 `;

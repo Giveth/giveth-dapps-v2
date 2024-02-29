@@ -4,16 +4,15 @@ import {
 	ButtonText,
 	IconX,
 	neutralColors,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { forwardRef } from 'react';
 import { useRouter } from 'next/router';
-import { mediaQueries } from '@/lib/constants/constants';
-import { FlexCenter } from '../styled-components/Flex';
+import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
-import { zIndex } from '@/lib/constants/constants';
 import { EProjectsFilter } from '@/apollo/types/types';
 import config from '@/configuration';
 import { PinkyColoredNumber } from '../styled-components/PinkyColoredNumber';
@@ -54,6 +53,10 @@ const fundsFilter = [
 	{
 		label: 'Ethereum Classic',
 		value: EProjectsFilter.ACCEPT_FUND_ON_ETC,
+	},
+	{
+		label: 'Arbitrum',
+		value: EProjectsFilter.ACCEPT_FUND_ON_ARBITRUM,
 	},
 ];
 

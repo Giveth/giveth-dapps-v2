@@ -64,7 +64,7 @@ function ProjectsMainCategories() {
 						}}
 					>
 						<MainCategoryItem
-							isSelected={handleIsSelected(category.slug)}
+							$isSelected={handleIsSelected(category.slug)}
 						>
 							{formatMessage({ id: 'projects_' + category.slug })}
 						</MainCategoryItem>
@@ -75,13 +75,13 @@ function ProjectsMainCategories() {
 	);
 }
 
-const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
+const MainCategoryItem = styled.div<{ $isSelected?: boolean }>`
 	min-width: 57px;
 	cursor: pointer;
 	border-radius: 50px;
 	background: ${props =>
-		!props.isSelected ? neutralColors.gray[300] : brandColors.giv[600]};
-	color: ${props => (!props.isSelected ? 'black' : 'white')};
+		!props.$isSelected ? neutralColors.gray[300] : brandColors.giv[600]};
+	color: ${props => (!props.$isSelected ? 'black' : 'white')};
 	padding: 16px;
 	&:hover {
 		background: ${neutralColors.gray[400]};

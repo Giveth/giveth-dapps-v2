@@ -98,13 +98,13 @@ export const GIVfarmBottom = () => {
 		<GIVfarmBottomContainer>
 			<Container>
 				<GIVfarmToolBoxRow
-					alignItems='center'
+					$alignItems='center'
 					gap='24px'
-					flexWrap
-					justifyContent='space-between'
+					$flexWrap
+					$justifyContent='space-between'
 				>
 					<NetworkSelector />
-					<ExtLinkRow alignItems='center'>
+					<ExtLinkRow $alignItems='center'>
 						<GLink
 							as='a'
 							size='Big'
@@ -120,7 +120,7 @@ export const GIVfarmBottom = () => {
 						</GLink>
 						<IconExternalLink />
 					</ExtLinkRow>
-					<ExtLinkRow alignItems='center'>
+					<ExtLinkRow $alignItems='center'>
 						<GLink
 							as='a'
 							size='Big'

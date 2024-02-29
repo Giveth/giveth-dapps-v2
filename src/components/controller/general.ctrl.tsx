@@ -40,20 +40,20 @@ const GeneralController = () => {
 		}
 	}, [router, address, isWalletActive, chainId]);
 
-	return <GlobalStyle themeState={theme} />;
+	return <GlobalStyle $baseTheme={theme} />;
 };
 
-const GlobalStyle = createGlobalStyle<{ themeState?: ETheme }>`
+const GlobalStyle = createGlobalStyle<{ $baseTheme?: ETheme }>`
   :root {
 	${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? css`
 					--bgColor: ${brandColors.giv[900]} !important;
 					--color: white !important;
 					--scrollColor: ${brandColors.giv[400]} !important;
 					--scrollHoverColor: ${brandColors.giv[700]} !important;
 				`
-			: props.themeState === ETheme.Light
+			: props.$baseTheme === ETheme.Light
 				? css`
 						--bgColor: ${neutralColors.gray[200]} !important;
 						--color: ${neutralColors.gray[900]} !important;

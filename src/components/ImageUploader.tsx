@@ -10,9 +10,10 @@ import {
 	P,
 	Subline,
 	SublineBold,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { DropzoneState } from 'react-dropzone';
-import { Flex, FlexCenter } from './styled-components/Flex';
 import ProgressBar from '@/components/ProgressBar';
 
 interface IImageUploader {
@@ -57,10 +58,10 @@ const ImageUploader: FC<IImageUploader> = props => {
 			{file && (url || isUploading) && (
 				<UploadContainer>
 					<UploadInfoRow
-						flexDirection='column'
-						justifyContent='space-between'
+						$flexDirection='column'
+						$justifyContent='space-between'
 					>
-						<Flex justifyContent='space-between'>
+						<Flex $justifyContent='space-between'>
 							<Subline>
 								<span>{file.name + ' '}</span>
 								{!url && <span>({progress}%)</span>}
@@ -77,7 +78,7 @@ const ImageUploader: FC<IImageUploader> = props => {
 							)}
 						</Flex>
 						{url && (
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<SublineBold>
 									{formatMessage({ id: 'label.uploaded' })}
 								</SublineBold>

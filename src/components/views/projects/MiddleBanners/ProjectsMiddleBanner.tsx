@@ -5,7 +5,7 @@ import { Box, BigArc, Title, Caption } from './common.sc';
 export const ProjectsMiddleBanner = () => {
 	const { formatMessage } = useIntl();
 	return (
-		<Box flexDirection='column' gap='23px'>
+		<Box $flexDirection='column' gap='23px'>
 			<BigArc color={brandColors.giv[100]} />
 			<Title weight={700} color={brandColors.giv[500]}>
 				{formatMessage({

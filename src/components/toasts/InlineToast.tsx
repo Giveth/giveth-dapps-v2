@@ -6,13 +6,12 @@ import {
 	IconCheckCircleFilled,
 	IconHelpFilled16,
 	semanticColors,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import ExternalLink from '@/components/ExternalLink';
-import { FlexCenter } from '@/components/styled-components/Flex';
-
 export enum EToastType {
 	Error = 'error',
 	Warning = 'warning',
@@ -73,12 +72,12 @@ const InlineToast: FC<IProps> = props => {
 			{!noIcon && <IconContainer>{colorType.icon}</IconContainer>}
 			<Text>
 				<div>
-					{title && <Title medium>{title}</Title>}
+					{title && <Title $medium>{title}</Title>}
 					<Caption>{message}</Caption>
 				</div>
 				{link && (
 					<ExternalLink color={colorType.color} href={link}>
-						<Caption medium>
+						<Caption $medium>
 							{linkText ||
 								formatMessage({ id: 'label.learn_more' })}
 						</Caption>

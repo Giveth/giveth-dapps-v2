@@ -224,12 +224,14 @@ export interface EnvConfig {
 	POLYGON_NETWORK_NUMBER: number;
 	OPTIMISM_NETWORK_NUMBER: number;
 	CELO_NETWORK_NUMBER: number;
+	ARBITRUM_NETWORK_NUMBER: number;
 	CLASSIC_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	GNOSIS_CONFIG: GnosisNetworkConfig;
 	POLYGON_CONFIG: NetworkConfig;
 	OPTIMISM_CONFIG: OptimismNetworkConfig;
 	CELO_CONFIG: NetworkConfig;
+	ARBITRUM_CONFIG: NetworkConfig;
 	CLASSIC_CONFIG: NetworkConfig;
 	GARDEN_LINK: string;
 	BACKEND_LINK: string;

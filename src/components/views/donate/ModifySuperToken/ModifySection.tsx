@@ -7,6 +7,7 @@ import {
 	neutralColors,
 	brandColors,
 	semanticColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -16,7 +17,6 @@ import { AmountInput } from '@/components/AmountInput/AmountInput';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Spinner } from '@/components/Spinner';
-import { Flex } from '@/components/styled-components/Flex';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { IToken } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
@@ -42,9 +42,9 @@ export const ModifySection: FC<IModifySectionProps> = ({
 	const { formatMessage } = useIntl();
 
 	return (
-		<TopUpSection flexDirection='column' gap='8px'>
-			<Flex gap='8px' alignItems='center'>
-				<Caption medium>
+		<TopUpSection $flexDirection='column' gap='8px'>
+			<Flex gap='8px' $alignItems='center'>
+				<Caption $medium>
 					{formatMessage({
 						id: titleLabel,
 					})}
@@ -57,12 +57,12 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					<FlowRateTooltip>PlaceHolder</FlowRateTooltip>
 				</IconWithTooltip>
 			</Flex>
-			<InputWrapper hasError={!!error}>
+			<InputWrapper $hasError={!!error}>
 				<SelectTokenWrapper
-					alignItems='center'
-					justifyContent='space-between'
+					$alignItems='center'
+					$justifyContent='space-between'
 				>
-					<Flex gap='8px' alignItems='center'>
+					<Flex gap='8px' $alignItems='center'>
 						<TokenIcon
 							symbol={
 								token?.isSuperToken
@@ -104,13 +104,13 @@ const SelectTokenWrapper = styled(Flex)`
 `;
 
 interface IInputWrapper {
-	hasError: boolean;
+	$hasError: boolean;
 }
 
 const InputWrapper = styled(Flex)<IInputWrapper>`
 	border: 2px solid
 		${props =>
-			props.hasError
+			props.$hasError
 				? semanticColors.punch[300]
 				: neutralColors.gray[300]};
 	border-radius: 8px;

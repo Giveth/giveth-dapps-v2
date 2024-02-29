@@ -8,15 +8,15 @@ import {
 	Button,
 	GLink,
 	ButtonLink,
+	Flex,
 } from '@giveth/ui-design-system';
 import Slider from 'rc-slider';
 import styled, { css } from 'styled-components';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Flex } from '@/components/styled-components/Flex';
 import { EBoostModalState } from './BoostModal';
 
 interface IBoostModalContainerProps {
-	state: EBoostModalState;
+	$state: EBoostModalState;
 }
 
 export const BoostModalContainer = styled.div<IBoostModalContainerProps>`
@@ -26,12 +26,12 @@ export const BoostModalContainer = styled.div<IBoostModalContainerProps>`
 		height 0.2s ease;
 	${mediaQueries.tablet} {
 		width: ${props =>
-			props.state === EBoostModalState.BOOSTED ? 716 : 480}px;
+			props.$state === EBoostModalState.BOOSTED ? 716 : 480}px;
 	}
 	padding: ${props =>
-		props.state === EBoostModalState.BOOSTING ? '24px' : '0 24px 24px'};
+		props.$state === EBoostModalState.BOOSTING ? '24px' : '0 24px 24px'};
 	${props =>
-		props.state === EBoostModalState.BOOSTED
+		props.$state === EBoostModalState.BOOSTED
 			? css`
 					background-image: url('/images/backgrounds/rocket.png');
 					background-repeat: no-repeat;
@@ -71,22 +71,22 @@ export const ColoredRocketIcon = styled.div`
 `;
 
 interface IDescToast {
-	hasError?: boolean;
+	$hasError?: boolean;
 }
 
 export const DescToast = styled.div<IDescToast>`
 	padding: 16px;
 	border: 1px solid
 		${props =>
-			props.hasError
+			props.$hasError
 				? semanticColors.punch[700]
 				: semanticColors.blueSky[700]};
 	background-color: ${props =>
-		props.hasError
+		props.$hasError
 			? semanticColors.punch[100]
 			: semanticColors.blueSky[100]};
 	color: ${props =>
-		props.hasError
+		props.$hasError
 			? semanticColors.punch[700]
 			: semanticColors.blueSky[700]};
 	border-radius: 8px;
@@ -163,12 +163,12 @@ export const SliderTooltip = styled(Subline)`
 `;
 
 interface SliderDescProps {
-	isChanged: boolean;
+	$isChanged: boolean;
 }
 
 export const SliderDesc = styled(H5)<SliderDescProps>`
 	color: ${props =>
-		props.isChanged ? brandColors.giv[500] : neutralColors.gray[700]};
+		props.$isChanged ? brandColors.giv[500] : neutralColors.gray[700]};
 `;
 
 export const ConfirmButton = styled(Button)`

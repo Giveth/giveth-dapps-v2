@@ -1,6 +1,5 @@
-import { H5, mediaQueries } from '@giveth/ui-design-system';
+import { H5, mediaQueries, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from './Flex';
 import { Shadow } from './Shadow';
 
 export const PaginationWrapper = styled(H5)`

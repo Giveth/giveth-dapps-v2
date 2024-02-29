@@ -4,6 +4,7 @@ import {
 	H3,
 	Lead,
 	mediaQueries,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
@@ -14,7 +15,6 @@ import VerticalNumberedStepsAlt, {
 	IStepsArray,
 } from '@/components/VerticalNumberedStepsAlt';
 import ExternalLink from '@/components/ExternalLink';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import QuarterCircle from '@/components/particles/QuarterCircle';
 
 interface IMainContentCreator {

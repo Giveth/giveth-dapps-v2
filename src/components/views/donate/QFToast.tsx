@@ -7,10 +7,10 @@ import {
 	neutralColors,
 	P,
 	semanticColors,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import Routes from '@/lib/constants/Routes';
 import InternalLink from '@/components/InternalLink';
 
@@ -73,7 +73,7 @@ const QFToast = () => {
 
 	return (
 		<Wrapper color={color}>
-			<Title medium color={color}>
+			<Title $medium color={color}>
 				{!isEligible && <IconPassport24 />}
 				{title}
 			</Title>

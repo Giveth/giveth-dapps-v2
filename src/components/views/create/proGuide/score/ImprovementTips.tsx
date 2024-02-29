@@ -1,6 +1,7 @@
 import { type FC } from 'react';
 import styled from 'styled-components';
 import {
+	Flex,
 	H6,
 	IconChevronDown32,
 	IconChevronUp32,
@@ -8,7 +9,6 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import useAnimatedHeight from '@/hooks/useAnimatedHeight';
-import { Flex } from '@/components/styled-components/Flex';
 import { infoMap, ScoreState, EScoreType } from './scoreHelpers';
 import { TipListItem } from '../ProjectTips/common.styles';
 
@@ -34,15 +34,15 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 	return (
 		<div>
 			<TitleRow
-				justifyContent='space-between'
+				$justifyContent='space-between'
 				onClick={toggleOpen}
-				alignItems='center'
+				$alignItems='center'
 			>
 				<H6 weight={700}>{formatMessage({ id: info.title })}</H6>
 				{isOpen ? <IconChevronUp32 /> : <IconChevronDown32 />}
 			</TitleRow>
 			<AnimatedDiv
-				maxHeight={isOpen ? maxHeight : '0px'}
+				$maxHeight={isOpen ? maxHeight : '0px'}
 				ref={contentRef}
 			>
 				{fieldsScores.DESCRIPTION === 0 && (
@@ -95,10 +95,10 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 	);
 };
 
-const AnimatedDiv = styled.div<{ maxHeight: string }>`
+const AnimatedDiv = styled.div<{ $maxHeight: string }>`
 	overflow: hidden;
 	transition: max-height 0.5s ease;
-	max-height: ${props => props.maxHeight};
+	max-height: ${props => props.$maxHeight};
 	padding-top: 8px;
 `;
 

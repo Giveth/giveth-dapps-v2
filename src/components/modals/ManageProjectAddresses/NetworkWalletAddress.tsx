@@ -6,11 +6,12 @@ import {
 	IconChevronRight16,
 	neutralColors,
 	Subline,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Chain } from 'viem';
 import { IWalletAddress } from '@/apollo/types/types';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
 import { getChainName } from '@/lib/network';
 import { NonEVMChain } from '@/types/config';
@@ -30,9 +31,9 @@ export const NetworkWalletAddress: FC<INetworkWalletAddress> = ({
 	const chainType = 'chainType' in chain ? chain.chainType : undefined;
 	const walletAddress = findAddressByChain(addresses, chain.id, chainType);
 	return (
-		<Wrapper flexDirection='column'>
+		<Wrapper $flexDirection='column'>
 			{/* <StyledBadge label='wow' status={EBadgeStatus.SUCCESS} /> */}
-			<Flex justifyContent='space-between'>
+			<Flex $justifyContent='space-between'>
 				<FlexCenter gap='8px'>
 					<NetworkLogo
 						chainId={chain.id}

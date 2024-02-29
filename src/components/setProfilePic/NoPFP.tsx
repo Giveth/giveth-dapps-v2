@@ -3,10 +3,10 @@ import {
 	neutralColors,
 	P,
 	brandColors,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Routes from '@/lib/constants/Routes';
-import { FlexCenter } from '../styled-components/Flex';
 import { CustomH5 } from './SetProfilePic';
 
 export const NoPFP = () => {

@@ -96,8 +96,8 @@ const ProjectActions = (props: IProjectActions) => {
 		<Actions
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
-			isOpen={isHover}
-			isCancelled={isCancelled}
+			$isOpen={isHover}
+			$isCancelled={isCancelled}
 		>
 			{isCancelled ? (
 				<CancelledWrapper>CANCELLED</CancelledWrapper>
@@ -114,8 +114,8 @@ const ProjectActions = (props: IProjectActions) => {
 		<ActionsOld
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
-			isOpen={isHover}
-			isCancelled={isCancelled}
+			$isOpen={isHover}
+			$isCancelled={isCancelled}
 			size='Big'
 		>
 			{isCancelled ? (
@@ -136,17 +136,17 @@ const CancelledWrapper = styled.div`
 	padding: 4px 16px;
 `;
 
-const Actions = styled.div<{ isCancelled: boolean; isOpen: boolean }>`
-	cursor: ${props => (props.isCancelled ? 'default' : 'pointer')};
+const Actions = styled.div<{ $isCancelled: boolean; $isOpen: boolean }>`
+	cursor: ${props => (props.$isCancelled ? 'default' : 'pointer')};
 	background-color: ${neutralColors.gray[200]};
 	border-radius: 8px;
 	padding: 8px 10px;
 `;
 
-const ActionsOld = styled(GLink)<{ isCancelled: boolean; isOpen: boolean }>`
+const ActionsOld = styled(GLink)<{ $isCancelled: boolean; $isOpen: boolean }>`
 	color: ${props =>
-		props.isCancelled ? neutralColors.gray[500] : neutralColors.gray[900]};
-	cursor: ${props => (props.isCancelled ? 'default' : 'pointer')};
+		props.$isCancelled ? neutralColors.gray[500] : neutralColors.gray[900]};
+	cursor: ${props => (props.$isCancelled ? 'default' : 'pointer')};
 `;
 
 export default ProjectActions;

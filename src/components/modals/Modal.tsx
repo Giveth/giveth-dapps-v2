@@ -1,9 +1,12 @@
-import { brandColors, neutralColors } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	neutralColors,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import { FC, ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
-import Scrollbars from 'react-custom-scrollbars';
-
+import { Scrollbars } from 'rc-scrollbars';
 import {
 	ModalHeader,
 	ModalHeaderTitlePosition,
@@ -12,11 +15,10 @@ import { ETheme } from '@/features/general/general.slice';
 import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import { useAppSelector } from '@/features/hooks';
 import useDetectDevice from '@/hooks/useDetectDevice';
-import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface ModalWrapperProps {
-	fullScreen?: boolean;
-	themeState?: ETheme;
+	$fullScreen?: boolean;
+	$baseTheme?: ETheme;
 }
 
 interface IModal {
@@ -87,13 +89,13 @@ export const Modal: FC<IModal> = ({
 
 	return createPortal(
 		<Background
-			isAnimating={isAnimating}
+			$isAnimating={isAnimating}
 			onClick={e => e.stopPropagation()}
 		>
 			{!doNotCloseOnClickOutside && <Surrounding onClick={closeModal} />}
 			<ModalWrapper
-				fullScreen={fullScreen}
-				themeState={customTheme || theme}
+				$fullScreen={fullScreen}
+				$baseTheme={customTheme || theme}
 				className={className}
 			>
 				<ModalHeader
@@ -128,7 +130,7 @@ const Surrounding = styled.div`
 	height: 100%;
 `;
 
-const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
+const Background = styled(FlexCenter)<{ $isAnimating: boolean }>`
 	width: 100%;
 	height: 100%;
 	background: ${brandColors.giv[900]}b3;
@@ -136,17 +138,17 @@ const Background = styled(FlexCenter)<{ isAnimating: boolean }>`
 	top: 0;
 	left: 0;
 	z-index: ${zIndex.MODAL};
-	opacity: ${props => (props.isAnimating ? 0 : 1)};
+	opacity: ${props => (props.$isAnimating ? 0 : 1)};
 	transition: opacity 0.3s ease;
 `;
 
 const ModalWrapper = styled.div<ModalWrapperProps>`
 	background-color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? neutralColors.gray[100]
 			: brandColors.deep[900]};
 	position: relative;
@@ -156,12 +158,12 @@ const ModalWrapper = styled.div<ModalWrapperProps>`
 	height: 100%;
 	width: 100%;
 	${mediaQueries.tablet} {
-		border-radius: ${props => (props.fullScreen ? 0 : '8px')};
+		border-radius: ${props => (props.$fullScreen ? 0 : '8px')};
 		box-shadow: 0 3px 20px
 			${props =>
-				props.themeState === ETheme.Dark ? '#00000026' : '#21203c'};
-		max-height: ${props => (props.fullScreen ? 'none' : '90vh')};
-		width: ${props => (props.fullScreen ? '100%' : 'auto')};
-		height: ${props => (props.fullScreen ? '100%' : 'auto')};
+				props.$baseTheme === ETheme.Dark ? '#00000026' : '#21203c'};
+		max-height: ${props => (props.$fullScreen ? 'none' : '90vh')};
+		width: ${props => (props.$fullScreen ? '100%' : 'auto')};
+		height: ${props => (props.$fullScreen ? '100%' : 'auto')};
 	}
 `;

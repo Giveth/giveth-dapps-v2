@@ -213,7 +213,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 					<HarvestBoxes>
 						{givdropAmount > 0n && (
 							<>
-								{/* <HelpRow alignItems='center'>
+								{/* <HelpRow $alignItems='center'>
 									<B>Claimable from GIVdrop</B>
 								</HelpRow> */}
 								<AmountBoxWithPrice
@@ -226,12 +226,12 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 										),
 									)}
 								/>
-								<HelpRow alignItems='center'>
+								<HelpRow $alignItems='center'>
 									<Caption>
 										Your initial GIVstream flowrate
 									</Caption>
 								</HelpRow>
-								<RateRow alignItems='center'>
+								<RateRow $alignItems='center'>
 									<IconGIVStream size={24} />
 									<GIVRate>
 										{formatWeiHelper(givDropStream)}
@@ -245,7 +245,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 						)}
 						{BigInt(givTokenDistroBalance.givback) > 0 && (
 							<>
-								<HelpRow alignItems='center'>
+								<HelpRow $alignItems='center'>
 									<B>Claimable from GIVbacks</B>
 								</HelpRow>
 								<AmountBoxWithPrice
@@ -258,7 +258,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 										),
 									)}
 								/>
-								<HelpRow alignItems='center'>
+								<HelpRow $alignItems='center'>
 									<Caption>
 										Added to your GIVstream flowrate
 									</Caption>
@@ -276,7 +276,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 										</TooltipContent>
 									</IconWithTooltip>
 								</HelpRow>
-								<RateRow alignItems='center'>
+								<RateRow $alignItems='center'>
 									<IconGIVStream size={24} />
 									<GIVRate>
 										{formatWeiHelper(givBackStream)}
@@ -290,7 +290,7 @@ export const GIVdropHarvestModal: FC<IGIVdropHarvestModal> = ({
 						)}
 						{givdropAmount > 0n && (
 							<>
-								<HelpRow alignItems='center'>
+								<HelpRow $alignItems='center'>
 									<B>Claimable from GIVstream</B>
 								</HelpRow>
 								<AmountBoxWithPrice

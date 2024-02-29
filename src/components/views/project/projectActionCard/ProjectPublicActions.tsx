@@ -10,6 +10,7 @@ import {
 	semanticColors,
 	IconDonation16,
 	SublineBold,
+	Flex,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
@@ -18,10 +19,8 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import ShareModal from '@/components/modals/ShareModal';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
-import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 import { EContentType } from '@/lib/constants/shareContent';
 import { useProjectContext } from '@/context/project.context';
-import { Flex } from '@/components/styled-components/Flex';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { isSSRMode, showToastError } from '@/lib/helpers';
 import { useModalCallback } from '@/hooks/useModalCallback';
@@ -179,22 +178,13 @@ export const ProjectPublicActions = () => {
 					size='small'
 				/>
 			</BadgeWrapper>
-			{showModal &&
-				slug &&
-				(verified ? (
-					<ShareRewardedModal
-						contentType={EContentType.thisProject}
-						setShowModal={setShowShareModal}
-						projectHref={slug}
-						projectTitle={project.title}
-					/>
-				) : (
-					<ShareModal
-						contentType={EContentType.thisProject}
-						setShowModal={setShowShareModal}
-						projectHref={slug}
-					/>
-				))}
+			{showModal && slug && (
+				<ShareModal
+					contentType={EContentType.thisProject}
+					setShowModal={setShowShareModal}
+					projectHref={slug}
+				/>
+			)}
 		</ProjectPublicActionsWrapper>
 	);
 };

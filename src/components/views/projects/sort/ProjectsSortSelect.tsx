@@ -14,6 +14,7 @@ import {
 	IconIncrease16,
 	semanticColors,
 	Caption,
+	Flex,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -30,7 +31,6 @@ import { useIntl } from 'react-intl';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { useProjectsContext } from '@/context/projects.context';
-import { Flex } from '@/components/styled-components/Flex';
 import useDetectDevice from '@/hooks/useDetectDevice';
 
 export interface ISelectedSort {
@@ -114,8 +114,8 @@ const ProjectsSortSelect = () => {
 	return (
 		<Flex
 			gap='8px'
-			alignItems={isMobile ? 'stretch' : 'center'}
-			flexDirection={isMobile ? 'column' : 'row'}
+			$alignItems={isMobile ? 'stretch' : 'center'}
+			$flexDirection={isMobile ? 'column' : 'row'}
 		>
 			<SortingLabel htmlFor='sorting'>
 				{formatMessage({ id: 'label.sort_by' })}
@@ -159,7 +159,7 @@ const Option: ComponentType<OptionProps<ISelectedSort>> = props => {
 	return (
 		<components.Option {...props}>
 			<OptionContainer>
-				<RowContainer textColor={color}>
+				<RowContainer $textColor={color}>
 					{Icon}
 					<Caption>{label}</Caption>
 				</RowContainer>
@@ -195,6 +195,7 @@ const selectStyles: StylesConfig = {
 			border: 'none',
 			borderRadius: '8px',
 			minWidth: '230px',
+
 			'&:hover': {
 				borderColor: 'transparent',
 			},
@@ -214,14 +215,14 @@ const selectStyles: StylesConfig = {
 };
 
 interface IRowContainer {
-	textColor: string;
+	$textColor: string;
 }
 
 const RowContainer = styled.div<IRowContainer>`
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	color: ${props => props.textColor};
+	color: ${props => props.$textColor};
 	> :first-child {
 		flex-shrink: 0;
 	}

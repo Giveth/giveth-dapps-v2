@@ -1,8 +1,14 @@
-import { P, Button, H4, brandColors } from '@giveth/ui-design-system';
+import {
+	P,
+	Button,
+	H4,
+	brandColors,
+	Flex,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
 import { mediaQueries } from '@/lib/constants/constants';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
 
 export const ButtonStyled = styled(Button)`
@@ -31,10 +37,9 @@ export const Title = styled(H4)`
 	font-weight: 700;
 `;
 
-export const Caption = styled(P)`
+export const Caption = styled(P)<{ $fullWidth?: boolean }>`
 	max-width: calc(100vw - 72px);
-	width: ${(props: { fullWidth?: boolean }) =>
-		props.fullWidth ? '100%' : 'auto'};
+	width: ${props => (props.$fullWidth ? '100%' : 'auto')};
 `;
 
 export const TitleSection = styled.div`
@@ -43,7 +48,7 @@ export const TitleSection = styled.div`
 	text-align: center;
 `;
 
-export const HorizontalTitleSection = styled.div<{ fullWidth?: boolean }>`
+export const HorizontalTitleSection = styled.div<{ $fullWidth?: boolean }>`
 	display: flex;
 	flex-direction: column;
 	max-width: calc(100vw - 72px);
@@ -51,7 +56,7 @@ export const HorizontalTitleSection = styled.div<{ fullWidth?: boolean }>`
 	${mediaQueries.tablet} {
 		text-align: left;
 		padding: 0 15px 0 70px;
-		width: ${props => (props.fullWidth ? '100%' : '485px')};
+		width: ${props => (props.$fullWidth ? '100%' : '485px')};
 	}
 `;
 

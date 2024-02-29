@@ -1,9 +1,8 @@
 import { type FC } from 'react';
-import { deviceSize } from '@giveth/ui-design-system';
+import { Flex, deviceSize } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import ProjectTip, { type IProjectTipProps } from './ProjectTips/ProjectTip';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import { Flex } from '@/components/styled-components/Flex';
 import {
 	type IProjectScoreCardProps,
 	ProjectScoreCard,

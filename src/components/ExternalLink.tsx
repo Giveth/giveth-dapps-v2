@@ -14,13 +14,13 @@ const ExternalLink = (props: {
 	return (
 		<StyledLink
 			className={className}
-			fullWidth={fullWidth}
+			$fullWidth={fullWidth}
 			href={href}
 			rel='noopener noreferrer'
 			target='_blank'
 		>
 			{title ? (
-				<StyledGLink color={color}>{title}</StyledGLink>
+				<StyledGLink $color={color}>{title}</StyledGLink>
 			) : (
 				children
 			)}
@@ -28,12 +28,12 @@ const ExternalLink = (props: {
 	);
 };
 
-const StyledGLink = styled(GLink)`
-	color: ${props => props.color || 'inherit'};
+const StyledGLink = styled(GLink)<{ $color?: string }>`
+	color: ${props => props.$color || 'inherit'};
 	font-size: inherit;
 `;
-const StyledLink = styled.a<{ fullWidth?: boolean }>`
-	display: ${props => (props.fullWidth ? 'block' : 'inline-block')};
+const StyledLink = styled.a<{ $fullWidth?: boolean }>`
+	display: ${props => (props.$fullWidth ? 'block' : 'inline-block')};
 `;
 
 export default ExternalLink;

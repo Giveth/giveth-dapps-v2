@@ -22,7 +22,7 @@ export const TextArea = styled.textarea<ITextareaProps>`
 	resize: none;
 	border: 2px solid
 		${props => {
-			switch (props.validation) {
+			switch (props.$validation) {
 				case EInputValidation.NORMAL:
 					return neutralColors.gray[300];
 				case EInputValidation.WARNING:
@@ -44,7 +44,7 @@ export const TextArea = styled.textarea<ITextareaProps>`
 	&:focus {
 		border: 2px solid
 			${props => {
-				switch (props.validation) {
+				switch (props.$validation) {
 					case EInputValidation.NORMAL:
 						return brandColors.giv[600];
 					case EInputValidation.WARNING:

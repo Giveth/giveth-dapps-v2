@@ -4,6 +4,7 @@ import {
 	neutralColors,
 	semanticColors,
 	SublineBold,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import React, {
 	forwardRef,
@@ -16,7 +17,6 @@ import React, {
 import styled, { css } from 'styled-components';
 import { EInputValidation, IInputValidation } from '@/types/inputValidation';
 import InputStyled from './styled-components/Input';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { getTextWidth } from '@/helpers/text';
 import {
 	inputSizeToFontSize,
@@ -32,7 +32,6 @@ import type {
 	RegisterOptions,
 	UseFormRegister,
 } from 'react-hook-form';
-
 export enum InputSize {
 	SMALL,
 	MEDIUM,
@@ -40,8 +39,8 @@ export enum InputSize {
 }
 
 interface IInputLabelProps {
-	required?: boolean;
-	disabled?: boolean;
+	$required?: boolean;
+	$disabled?: boolean;
 }
 
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
@@ -139,9 +138,9 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 			{label && (
 				<label htmlFor={id}>
 					<InputLabel
-						disabled={disabled}
+						$disabled={disabled}
 						size={InputSizeToLinkSize(size)}
-						required={Boolean(registerOptions.required)}
+						$required={Boolean(registerOptions.required)}
 					>
 						{label}
 					</InputLabel>
@@ -149,14 +148,14 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 			)}
 			<InputWrapper>
 				{LeftIcon && (
-					<LeftIconWrapper inputSize={size}>
+					<LeftIconWrapper $inputSize={size}>
 						{LeftIcon}
 					</LeftIconWrapper>
 				)}
 				<InputStyled
-					validation={validationStatus}
-					inputSize={size}
-					hasLeftIcon={!!LeftIcon}
+					$validation={validationStatus}
+					$inputSize={size}
+					$hasLeftIcon={!!LeftIcon}
 					disabled={disabled}
 					maxLength={maxLength}
 					value={value}
@@ -188,7 +187,7 @@ const Input = forwardRef<HTMLInputElement, InputType>((props, inputRef) => {
 			</InputWrapper>
 			{error?.message ? (
 				<InputValidation
-					validation={validationStatus}
+					$validation={validationStatus}
 					size={InputSizeToLinkSize(size)}
 				>
 					{error.message as string}
@@ -232,10 +231,10 @@ const InputContainer = styled.div`
 const InputLabel = styled(GLink)<IInputLabelProps>`
 	padding-bottom: 4px;
 	color: ${props =>
-		props.disabled ? neutralColors.gray[600] : neutralColors.gray[900]};
+		props.$disabled ? neutralColors.gray[600] : neutralColors.gray[900]};
 	&::after {
 		content: '*';
-		display: ${props => (props.required ? 'inline-block' : 'none')};
+		display: ${props => (props.$required ? 'inline-block' : 'none')};
 		padding: 0 4px;
 		color: ${semanticColors.punch[500]};
 	}
@@ -251,7 +250,7 @@ const InputValidation = styled(GLink)<IInputValidation>`
 	padding-top: 4px;
 	display: block;
 	color: ${props => {
-		switch (props.validation) {
+		switch (props.$validation) {
 			case EInputValidation.NORMAL:
 				return neutralColors.gray[900];
 			case EInputValidation.WARNING:
@@ -272,7 +271,7 @@ const InputWrapper = styled.div`
 `;
 
 interface IInputWrapper {
-	inputSize: InputSize;
+	$inputSize: InputSize;
 }
 
 const LeftIconWrapper = styled.div<IInputWrapper>`
@@ -284,7 +283,7 @@ const LeftIconWrapper = styled.div<IInputWrapper>`
 	left: 0;
 	overflow: hidden;
 	${props => {
-		switch (props.inputSize) {
+		switch (props.$inputSize) {
 			case InputSize.SMALL:
 				return css`
 					width: 28px;

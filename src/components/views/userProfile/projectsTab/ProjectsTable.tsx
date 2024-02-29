@@ -2,6 +2,7 @@ import {
 	brandColors,
 	neutralColors,
 	IconHeartFilled,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
@@ -10,7 +11,6 @@ import Link from 'next/link';
 import { EOrderBy, IOrder } from '../UserProfile.view';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { formatUSD, smallFormatDate } from '@/lib/helpers';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import ListingBadge from '@/components/ListingBadge';
 import StatusBadge from '@/components/views/userProfile/projectsTab/StatusBadge';
 import SortIcon from '@/components/SortIcon';
@@ -87,7 +87,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 							<ProjectTableCell>
 								<StatusBadge status={status!} />
 							</ProjectTableCell>
-							<ProjectTableCell bold>
+							<ProjectTableCell $bold>
 								<ProjectTitle>
 									{isCancelled ? (
 										<div>{project.title}</div>
@@ -112,7 +112,7 @@ const ProjectsTable: FC<IProjectsTable> = ({
 							<ProjectTableCell>
 								{project.totalReactions}
 							</ProjectTableCell>
-							<ProjectTableCell bold>
+							<ProjectTableCell $bold>
 								{formatUSD(project.totalDonations)} USD
 							</ProjectTableCell>
 							<ProjectTableCell>
@@ -159,11 +159,11 @@ const ProjectsTableHeader = styled(TableHeader)`
 	}
 `;
 
-const ProjectTableCell = styled(TableCell)<{ bold?: boolean }>`
+const ProjectTableCell = styled(TableCell)<{ $bold?: boolean }>`
 	width: 100%;
 	min-height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
-	font-weight: ${props => (props.bold ? 500 : 400)};
+	font-weight: ${props => (props.$bold ? 500 : 400)};
 `;
 
 const ProjectsRowWrapper = styled(RowWrapper)`

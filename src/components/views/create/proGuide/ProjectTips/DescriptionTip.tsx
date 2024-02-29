@@ -1,10 +1,9 @@
-import { P, brandColors } from '@giveth/ui-design-system';
+import { P, brandColors, Flex } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { TipLine, TipListItem } from './common.styles';
-import { Flex } from '@/components/styled-components/Flex';
 import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 
@@ -12,7 +11,7 @@ const DescriptionTip = () => {
 	const { formatMessage } = useIntl();
 	return (
 		<div>
-			<Flex flexDirection='column' gap='16px'>
+			<Flex $flexDirection='column' gap='16px'>
 				<TipListItem>
 					<P>
 						{formatMessage({

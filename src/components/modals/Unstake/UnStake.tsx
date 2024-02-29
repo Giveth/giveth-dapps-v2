@@ -6,11 +6,11 @@ import {
 	IconUnlock16,
 	B,
 	P,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
 import { Modal } from '../Modal';
-import { Flex } from '../../styled-components/Flex';
 import { StakingPoolImages } from '../../StakingPoolImages';
 import { unwrapToken, withdrawTokens } from '@/lib/stakingPool';
 import {
@@ -121,7 +121,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 				{(unStakeState === StakeState.UNSTAKE ||
 					unStakeState === StakeState.UNSTAKING) && (
 					<>
-						<UnStakeModalTitle alignItems='center'>
+						<UnStakeModalTitle $alignItems='center'>
 							<StakingPoolImages title={title} />
 							<UnStakeModalTitleText weight={700}>
 								Unstake
@@ -137,11 +137,14 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 							{isGIVpower && (
 								<>
 									<LockInfoContainer
-										flexDirection='column'
+										$flexDirection='column'
 										gap='8px'
 									>
-										<Flex justifyContent='space-between'>
-											<Flex gap='4px' alignItems='center'>
+										<Flex $justifyContent='space-between'>
+											<Flex
+												gap='4px'
+												$alignItems='center'
+											>
 												<IconUnlock16 />
 												<P>Available to unstake</P>
 											</Flex>
@@ -151,7 +154,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 												)}
 											</B>
 										</Flex>
-										<TotalStakedRow justifyContent='space-between'>
+										<TotalStakedRow $justifyContent='space-between'>
 											<P>Total staked</P>
 											<B>
 												{formatWeiHelper(

@@ -1,9 +1,8 @@
 import { type FC } from 'react';
 import styled from 'styled-components';
-import { P, B, neutralColors } from '@giveth/ui-design-system';
+import { P, B, neutralColors, Flex } from '@giveth/ui-design-system';
 import { formatUnits } from 'viem';
 import BigNumber from 'bignumber.js';
-import { Flex } from '@/components/styled-components/Flex';
 import { IToken } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
 
@@ -18,7 +17,7 @@ export const Item: FC<IItemProps> = ({ title, amount, price, token }) => {
 	return (
 		<Wrapper gap='4px'>
 			<IconWrapper></IconWrapper>
-			<Flex flexDirection='column' gap='4px'>
+			<Flex $flexDirection='column' gap='4px'>
 				<Title>{title}</Title>
 				<Flex gap='4px'>
 					<B>

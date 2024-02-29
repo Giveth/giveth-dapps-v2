@@ -1,8 +1,14 @@
-import { B, Container, H3, neutralColors } from '@giveth/ui-design-system';
+import {
+	B,
+	Container,
+	H3,
+	neutralColors,
+	Flex,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 import The_Commons_Stack from '/public/images/partnerships/CSlogo.svg';
 import Gitcoin from '/public/images/partnerships/Gitcoin.svg';
@@ -43,7 +49,7 @@ const HomePartners = () => {
 					<CustomHeading weight={700}>
 						{formatMessage({ id: 'label.proud_of_our_partners' })}
 					</CustomHeading>
-					<CustomFlex justifyContent='space-around'>
+					<CustomFlex $justifyContent='space-around'>
 						{PartnersArray.map(partner => (
 							<FlexCenter
 								direction='column'

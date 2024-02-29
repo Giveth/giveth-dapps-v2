@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { brandColors, OutlineButton } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	OutlineButton,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
@@ -23,9 +27,7 @@ import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
 
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { ProjectsMiddleBanner } from './MiddleBanners/ProjectsMiddleBanner';
-import FloatingButtonReferral from '@/components/FloatingReferral';
 import { ActiveQFProjectsBanner } from './qfBanner/ActiveQFProjectsBanner';
 import { PassportBanner } from '@/components/PassportBanner';
 import { QFProjectsMiddleBanner } from './MiddleBanners/QFMiddleBanner';
@@ -234,7 +236,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 								/>
 							))}
 						</ProjectsContainer>
-						<FloatingButtonReferral />
+						{/* <FloatingButtonReferral /> */}
 					</ProjectsWrapper>
 				) : isQF && !activeRound ? (
 					<QFNoResultBanner />
@@ -268,7 +270,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							label={formatMessage({
 								id: 'component.button.create_project',
 							})}
-							transparent
+							$transparent
 						/>
 					</>
 				)}
@@ -281,10 +283,10 @@ const Loader = styled.div`
 	margin: 20px auto;
 `;
 
-const StyledButton = styled(OutlineButton)<{ transparent?: boolean }>`
+const StyledButton = styled(OutlineButton)<{ $transparent?: boolean }>`
 	color: ${brandColors.pinky[500]};
 	border-color: ${props =>
-		props.transparent ? 'transparent' : brandColors.pinky[500]};
+		props.$transparent ? 'transparent' : brandColors.pinky[500]};
 	margin: 16px auto;
 	padding: 22px 80px;
 

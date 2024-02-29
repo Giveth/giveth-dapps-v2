@@ -1,8 +1,7 @@
 import styled from 'styled-components';
-import { Caption, neutralColors } from '@giveth/ui-design-system';
+import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
 import { formatPrice } from '@/lib/helpers';
 import { calcDonationShare } from '@/components/views/donate/helpers';
 import { IProjectAcceptedToken } from '@/apollo/types/gqlTypes';
@@ -39,7 +38,7 @@ const TotalDonation: FC<ITotalDonation> = props => {
 	);
 
 	return (
-		<Container isActive={isActive}>
+		<Container $isActive={isActive}>
 			<TableRow>
 				<Caption>
 					{formatMessage({ id: 'label.donating_to' })}
@@ -65,11 +64,11 @@ const TotalDonation: FC<ITotalDonation> = props => {
 				)}
 			</TableRow>
 			<Total>
-				<Caption medium>
+				<Caption $medium>
 					{formatMessage({ id: 'label.your_total_donation' })}
 				</Caption>
 				{isActive && (
-					<Caption medium>
+					<Caption $medium>
 						{formatPrice(projectDonation + givethDonation) +
 							' ' +
 							symbol}
@@ -100,9 +99,9 @@ const TableRow = styled(FlexStyled)`
 	padding: 0 8px;
 `;
 
-const Container = styled.div<{ isActive?: boolean }>`
+const Container = styled.div<{ $isActive?: boolean }>`
 	margin-bottom: 16px;
-	opacity: ${props => (props.isActive ? 1 : 0.5)};
+	opacity: ${props => (props.$isActive ? 1 : 0.5)};
 	b {
 		font-weight: 500;
 	}

@@ -7,12 +7,11 @@ import {
 	Lead,
 	mediaQueries,
 	neutralColors,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { Shadow } from '@/components/styled-components/Shadow';
 import Divider from '@/components/Divider';
 import ExternalLink from '@/components/ExternalLink';
-import { FlexCenter } from '@/components/styled-components/Flex';
-
 export interface IOnboardingCard {
 	icon: JSX.Element;
 	title: string;

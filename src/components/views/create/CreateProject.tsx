@@ -39,7 +39,10 @@ import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView, slugToSuccessView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
-import config, { isRecurringActive } from '@/configuration';
+import config, {
+	isProjectScoringActive,
+	isRecurringActive,
+} from '@/configuration';
 import { setShowFooter } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
@@ -54,6 +57,7 @@ import { ProGuide } from './proGuide/ProGuide';
 import { EQualityState } from './proGuide/score/scoreHelpers';
 import { LowScoreModal } from './LowScoreModal';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
+import { GuidelinesCard } from './GuideLinesCard';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -189,6 +193,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const onSubmit = async (formData: TInputs) => {
 		setIsLoading(true);
 		if (
+			isProjectScoringActive &&
 			quality === EQualityState.MEDIUM &&
 			!publishOnMediumQuality.current
 		) {
@@ -446,7 +451,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 										}
 									/>
 								)}
-								{quality === EQualityState.LOW ? (
+								{isProjectScoringActive &&
+								quality === EQualityState.LOW ? (
 									<IconWithTooltip
 										icon={
 											<Button
@@ -504,12 +510,16 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					</FormProvider>
 				</Col>
 				<Col lg={4} md={12}>
-					<ProGuide
-						activeSection={activeProjectSection}
-						formData={data}
-						getFieldState={getFieldState}
-						setQuality={setQuality}
-					/>
+					{isProjectScoringActive ? (
+						<ProGuide
+							activeSection={activeProjectSection}
+							formData={data}
+							getFieldState={getFieldState}
+							setQuality={setQuality}
+						/>
+					) : (
+						<GuidelinesCard />
+					)}
 				</Col>
 			</Row>
 			{showAlloProtocolModal && addedProjectState && (

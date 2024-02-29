@@ -6,6 +6,7 @@ import {
 	IconSearch24,
 	IconX24,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import {
 	Dispatch,
@@ -18,7 +19,6 @@ import {
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { ETheme } from '@/features/general/general.slice';
-import { Flex } from './styled-components/Flex';
 import { useAppSelector } from '@/features/hooks';
 import useFocus from '@/hooks/useFocus';
 
@@ -53,7 +53,7 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 					placeholder={formatMessage({
 						id: 'label.search_for_project',
 					})}
-					themeState={theme}
+					$baseTheme={theme}
 					value={value}
 					ref={inputRef}
 				/>
@@ -72,7 +72,7 @@ export const SearchInput: FC<ISearchInputProps> = ({ setTerm, className }) => {
 					</IconWrapper>
 				)}
 			</InputContainer>
-			<HintRow themeState={theme}>
+			<HintRow $baseTheme={theme}>
 				{value.length > 0 ? (
 					value.length > 2 ? (
 						<>
@@ -107,14 +107,14 @@ const InputContainer = styled(Flex)`
 	position: relative;
 `;
 
-const StyledInput = styled(ButtonText)<{ themeState?: ETheme }>`
+const StyledInput = styled(ButtonText)<{ $baseTheme?: ETheme }>`
 	border: none;
 	background-color: inherit;
 	flex: 1;
 	padding: 16px 48px 16px 24px;
 	border-radius: 30px;
 	${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? css`
 					background-color: ${brandColors.giv[600]};
 					border: 1px solid ${brandColors.giv[500]};
@@ -145,7 +145,7 @@ const IconRemoveWrapper = styled(IconWrapper)`
 	cursor: pointer;
 `;
 
-const HintRow = styled(Flex)<{ themeState?: ETheme }>`
+const HintRow = styled(Flex)<{ $baseTheme?: ETheme }>`
 	height: 24px;
 	align-items: center;
 	justify-content: flex-end;
@@ -153,7 +153,7 @@ const HintRow = styled(Flex)<{ themeState?: ETheme }>`
 	margin-top: 4px;
 	padding: 4px;
 	color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[300]
 			: neutralColors.gray[600]};
 `;

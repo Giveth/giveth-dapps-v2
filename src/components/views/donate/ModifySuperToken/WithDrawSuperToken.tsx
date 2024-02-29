@@ -1,6 +1,6 @@
 import { useState, type FC } from 'react';
 import { useAccount, useBalance } from 'wagmi';
-import { Button } from '@giveth/ui-design-system';
+import { Button, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Framework } from '@superfluid-finance/sdk-core';
 import { ModifyInfoToast } from './ModifyInfoToast';
@@ -12,7 +12,6 @@ import { actionButtonLabel, EModifySuperTokenSteps } from './common';
 import { ModifyWrapper, Wrapper } from './common.sc';
 import config from '@/configuration';
 import { showToastError } from '@/lib/helpers';
-import { Flex } from '@/components/styled-components/Flex';
 import { Item } from '../RecurringDonationModal/Item';
 import { RunOutInfo } from '../RunOutInfo';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
@@ -149,7 +148,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 					<ModifyInfoToast />
 				</>
 			) : (
-				<Flex flexDirection='column' gap='16px'>
+				<Flex $flexDirection='column' gap='16px'>
 					<Item
 						title='Withdraw from this stream balance'
 						amount={amount}

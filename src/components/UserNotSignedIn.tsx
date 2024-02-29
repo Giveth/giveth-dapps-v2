@@ -5,15 +5,14 @@ import {
 	Container,
 	H4,
 	IconAlertTriangleOutline,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { Shadow } from '@/components/styled-components/Shadow';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowSignWithWallet } from '@/features/modal/modal.slice';
-
 const UserNotSignedIn = () => {
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();

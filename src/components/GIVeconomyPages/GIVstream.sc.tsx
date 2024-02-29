@@ -11,8 +11,9 @@ import {
 	neutralColors,
 	Subline,
 	ButtonLink,
+	Col,
+	Flex,
 } from '@giveth/ui-design-system';
-import { Col } from '@giveth/ui-design-system';
 import {
 	TopContainer,
 	TopInnerContainer,
@@ -20,7 +21,6 @@ import {
 	EnhancedRewardCard,
 	MobileD1,
 } from './commons';
-import { Flex } from '../styled-components/Flex';
 import { DataBox } from '../DataBox';
 import { mediaQueries } from '@/lib/constants/constants';
 
@@ -103,7 +103,7 @@ export const GsPTooltip = styled(Subline)`
 	width: 240px;
 `;
 interface IBarProps {
-	percentage: number;
+	$percentage: number;
 }
 export const Bar = styled.div<IBarProps>`
 	height: 12px;
@@ -119,7 +119,7 @@ export const Bar = styled.div<IBarProps>`
 
 	&::after {
 		content: ' ';
-		width: ${props => props.percentage}%;
+		width: ${props => props.$percentage}%;
 		left: 0;
 		top: 0;
 		height: 12px;

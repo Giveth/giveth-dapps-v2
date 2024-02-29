@@ -6,6 +6,8 @@ import {
 	IconVerifiedBadge16,
 	mediaQueries,
 	neutralColors,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -18,11 +20,9 @@ import { capitalizeAllWords } from '@/lib/helpers';
 import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
 import { idToProjectEdit } from '@/lib/routeCreators';
 import ShareModal from '@/components/modals/ShareModal';
-import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 import { EContentType } from '@/lib/constants/shareContent';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { EVerificationStatus } from '@/apollo/types/types';
@@ -83,7 +83,7 @@ export const AdminActions = () => {
 		},
 		{
 			label: formatMessage({
-				id: verified ? 'label.share_and_get_rewarded' : 'label.share',
+				id: 'label.share',
 			}),
 			type: OptionType.ITEM,
 			icon: <IconShare16 />,
@@ -116,21 +116,13 @@ export const AdminActions = () => {
 					projectId={projectData?.id}
 				/>
 			)}
-			{showShareModal &&
-				(verified ? (
-					<ShareRewardedModal
-						contentType={EContentType.thisProject}
-						setShowModal={setShowShareModal}
-						projectHref={slug}
-						projectTitle={project.title}
-					/>
-				) : (
-					<ShareModal
-						contentType={EContentType.thisProject}
-						setShowModal={setShowShareModal}
-						projectHref={slug}
-					/>
-				))}
+			{showShareModal && (
+				<ShareModal
+					contentType={EContentType.thisProject}
+					setShowModal={setShowShareModal}
+					projectHref={slug}
+				/>
+			)}
 		</Wrapper>
 	) : (
 		<MobileWrapper
@@ -147,7 +139,7 @@ export const AdminActions = () => {
 							onClick={option.cb}
 						>
 							<Flex gap='8px'>
-								<Flex alignItems='center'>{option.icon}</Flex>
+								<Flex $alignItems='center'>{option.icon}</Flex>
 								<div>{option.label}</div>
 							</Flex>
 						</MobileActionModalItem>
@@ -163,21 +155,13 @@ export const AdminActions = () => {
 							projectId={projectData?.id}
 						/>
 					)}
-					{showShareModal &&
-						(verified ? (
-							<ShareRewardedModal
-								contentType={EContentType.thisProject}
-								setShowModal={setShowShareModal}
-								projectHref={slug}
-								projectTitle={project.title}
-							/>
-						) : (
-							<ShareModal
-								contentType={EContentType.thisProject}
-								setShowModal={setShowShareModal}
-								projectHref={slug}
-							/>
-						))}
+					{showShareModal && (
+						<ShareModal
+							contentType={EContentType.thisProject}
+							setShowModal={setShowShareModal}
+							projectHref={slug}
+						/>
+					)}
 				</MobileActionsModal>
 			)}
 		</MobileWrapper>
@@ -205,7 +189,7 @@ const Wrapper = styled.div`
 	order: 1;
 	margin-bottom: 16px;
 	${mediaQueries.tablet} {
-		margin-bottom: unset;
+		margin-bottom: 5px;
 		order: unset;
 	}
 `;

@@ -6,6 +6,7 @@ import {
 	P,
 	QuoteText,
 	semanticColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
@@ -15,7 +16,6 @@ import { readContract } from '@wagmi/core';
 import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
 import config from '@/configuration';
 import { getAddressFromENS, isAddressENS } from '@/lib/wallet';
-import { Flex } from '@/components/styled-components/Flex';
 import EligibilityModal from './EligibilityModal';
 import { wagmiConfig } from '@/wagmiConfigs';
 
@@ -85,7 +85,7 @@ const CheckEligibility = () => {
 				Check here to verify your eligibility
 			</CustomQuote>
 			<InputContainer>
-				<Flex flexDirection='column' gap='8px'>
+				<Flex $flexDirection='column' gap='8px'>
 					<StyledInput
 						as='input'
 						placeholder='Input your wallet address here'

@@ -140,7 +140,7 @@ export default function Milestones() {
 										? new Date(field.value)
 										: undefined
 								}
-								onChange={date =>
+								onChange={(date: Date) =>
 									field.onChange(date?.toString())
 								}
 								dateFormat='MM/yyyy'

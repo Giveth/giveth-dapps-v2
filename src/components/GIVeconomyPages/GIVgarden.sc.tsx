@@ -8,8 +8,8 @@ import {
 	DataBlock,
 	brandColors,
 	GLink,
+	Row,
 } from '@giveth/ui-design-system';
-import { Row } from '@giveth/ui-design-system';
 import {
 	TopContainer,
 	BottomContainer,

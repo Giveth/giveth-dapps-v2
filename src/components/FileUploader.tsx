@@ -12,8 +12,9 @@ import {
 	neutralColors,
 	brandColors,
 	IconImage,
+	FlexSpacer,
+	Flex,
 } from '@giveth/ui-design-system';
-import { Flex, FlexSpacer } from './styled-components/Flex';
 import { showToastError } from '@/lib/helpers';
 import { client } from '@/apollo/apolloClient';
 import { UPLOAD_PROFILE_PHOTO } from '@/apollo/gql/gqlUser';
@@ -179,13 +180,13 @@ const FileUploader: FC<IFileUploader> = ({
 								quality={100}
 							/>
 							<UploadInfoRow
-								flexDirection='column'
-								justifyContent='space-between'
+								$flexDirection='column'
+								$justifyContent='space-between'
 							>
 								<Subline>{file.name}</Subline>
 								{file.status ===
 									EFileUploadingStatus.UPLOADED && (
-									<Flex alignItems='center'>
+									<Flex $alignItems='center'>
 										<SublineBold>
 											{formatMessage({
 												id: 'label.uplodaded',
@@ -215,7 +216,7 @@ const FileUploader: FC<IFileUploader> = ({
 								)}
 								{file.status ===
 									EFileUploadingStatus.FAILED && (
-									<Flex justifyContent='space-between'>
+									<Flex $justifyContent='space-between'>
 										<SublineBold>
 											{formatMessage({
 												id: 'label.failed',
@@ -223,7 +224,7 @@ const FileUploader: FC<IFileUploader> = ({
 										</SublineBold>
 									</Flex>
 								)}
-								<UplaodBar status={file.status} />
+								<UplaodBar $status={file.status} />
 							</UploadInfoRow>
 						</UploadContainer>
 					))
@@ -237,11 +238,11 @@ const FileUploader: FC<IFileUploader> = ({
 								quality={100}
 							/>
 							<UploadInfoRow
-								flexDirection='column'
-								justifyContent='space-between'
+								$flexDirection='column'
+								$justifyContent='space-between'
 							>
 								<Subline>{`Attachment ${idx + 1}`}</Subline>
-								<Flex alignItems='center'>
+								<Flex $alignItems='center'>
 									<SublineBold>
 										{formatMessage({
 											id: 'label.uploaded',
@@ -258,7 +259,7 @@ const FileUploader: FC<IFileUploader> = ({
 									</GLink>
 								</Flex>
 								<UplaodBar
-									status={EFileUploadingStatus.UPLOADED}
+									$status={EFileUploadingStatus.UPLOADED}
 								/>
 							</UploadInfoRow>
 						</UploadContainer>
@@ -317,14 +318,14 @@ const move = keyframes`
 	}
 `;
 
-const UplaodBar = styled.div<{ status?: EFileUploadingStatus }>`
+const UplaodBar = styled.div<{ $status?: EFileUploadingStatus }>`
 	width: 100%;
 	height: 4px;
 	border-radius: 2px;
 	position: relative;
 	overflow: hidden;
 	${props => {
-		switch (props.status) {
+		switch (props.$status) {
 			case EFileUploadingStatus.UPLOADING:
 				return css`
 					background-color: ${neutralColors.gray[400]};

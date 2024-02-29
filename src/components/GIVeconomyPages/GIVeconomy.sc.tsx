@@ -103,8 +103,8 @@ export const VideoContainer = styled.div`
 	cursor: pointer;
 `;
 
-export const VideoOverlay = styled.div<{ hidden: boolean }>`
-	display: ${props => (props.hidden ? 'none' : 'flex')};
+export const VideoOverlay = styled.div<{ $hidden: boolean }>`
+	display: ${props => (props.$hidden ? 'none' : 'flex')};
 	justify-content: center;
 	align-items: center;
 	left: 0px;

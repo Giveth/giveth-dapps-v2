@@ -5,6 +5,8 @@ import {
 	brandColors,
 	IconExternalLink,
 	neutralColors,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { client } from '@/apollo/apolloClient';
@@ -33,7 +35,6 @@ import { getChainName } from '@/lib/network';
 import { formatDonation } from '@/helpers/number';
 import { Spinner } from '@/components/Spinner';
 import { NoDonation } from './NoDonation';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 
 const itemPerPage = 10;
 
@@ -135,7 +136,7 @@ const ProjectDonationTable = ({ selectedQF }: IProjectDonationTable) => {
 	return (
 		<Wrapper>
 			<DonationTableWrapper>
-				<DonationTableContainer isAdmin={isAdmin}>
+				<DonationTableContainer $isAdmin={isAdmin}>
 					<TableHeader
 						onClick={() =>
 							orderChangeHandler(EOrderBy.CreationDate)
@@ -276,12 +277,12 @@ const DonationTableWrapper = styled.div`
 	max-width: calc(100vw - 32px);
 `;
 
-const DonationTableContainer = styled.div<{ isAdmin?: boolean }>`
+const DonationTableContainer = styled.div<{ $isAdmin?: boolean }>`
 	margin-top: 12px;
 	display: grid;
 	width: 100%;
 	grid-template-columns: ${props =>
-		props.isAdmin
+		props.$isAdmin
 			? '1fr 2fr 0.8fr 1.5fr 1.4fr 1fr'
 			: '1fr 2fr 1.5fr 1.1fr 1fr'};
 	min-width: 800px;

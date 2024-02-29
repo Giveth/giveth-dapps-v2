@@ -9,6 +9,7 @@ import {
 	Row,
 	semanticColors,
 	SublineBold,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { BigArc } from '@/components/styled-components/Arc';
@@ -20,7 +21,6 @@ import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useDonateData } from '@/context/donate.context';
 import { EContentType } from '@/lib/constants/shareContent';
 import { PassportBanner } from '@/components/PassportBanner';
-import { Flex } from '@/components/styled-components/Flex';
 import { useAlreadyDonatedToProject } from '@/hooks/useAlreadyDonatedToProject';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch } from '@/features/hooks';

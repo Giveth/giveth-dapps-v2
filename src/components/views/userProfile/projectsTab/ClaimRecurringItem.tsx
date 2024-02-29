@@ -1,8 +1,13 @@
-import { B, P, brandColors, neutralColors } from '@giveth/ui-design-system';
+import {
+	B,
+	P,
+	brandColors,
+	neutralColors,
+	Flex,
+} from '@giveth/ui-design-system';
 import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useEffect } from 'react';
-import { Flex } from '@/components/styled-components/Flex';
 import { limitFraction } from '@/helpers/number';
 import { TokenIcon } from '../../donate/TokenIcon/TokenIcon';
 import { ITokenWithBalance } from '@/hooks/useProjectClaimableDonations';
@@ -36,11 +41,11 @@ export const ClaimRecurringItem = ({
 
 	return (
 		<ItemContainer
-			justifyContent='space-between'
-			alignItems='center'
+			$justifyContent='space-between'
+			$alignItems='center'
 			key={tokenWithBalance.token.symbol}
 		>
-			<Flex alignItems='center'>
+			<Flex $alignItems='center'>
 				<TokenIcon
 					symbol={tokenWithBalance.token.underlyingToken?.symbol!}
 				/>

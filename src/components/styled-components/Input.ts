@@ -20,17 +20,17 @@ import {
 } from '@/helpers/styledComponents';
 
 interface IInputField {
-	inputSize?: InputSize; // Default is 'LARGE'
-	hasLeftIcon?: boolean;
-	validation?: EInputValidation;
+	$inputSize?: InputSize; // Default is 'LARGE'
+	$hasLeftIcon?: boolean;
+	$validation?: EInputValidation;
 }
 
 const Input = styled.input<IInputField>`
 	width: 100%;
-	height: ${props => `${inputSizeToHeight(props.inputSize)}px`};
+	height: ${props => `${inputSizeToHeight(props.$inputSize)}px`};
 	border: 2px solid
 		${props => {
-			switch (props.validation) {
+			switch (props.$validation) {
 				case EInputValidation.NORMAL:
 					return neutralColors.gray[300];
 				case EInputValidation.WARNING:
@@ -45,7 +45,7 @@ const Input = styled.input<IInputField>`
 		}};
 	border-radius: 8px;
 	padding: ${props => {
-		switch (props.inputSize) {
+		switch (props.$inputSize) {
 			case InputSize.SMALL:
 				return `${INPUT_VERTICAL_PADDING_SMALL}px ${INPUT_HORIZONTAL_PADDING_SMALL}px`;
 			case InputSize.MEDIUM:
@@ -58,12 +58,12 @@ const Input = styled.input<IInputField>`
 	}};
 	padding-left: ${props => {
 		return `${inputSizeToPaddingLeft(
-			props.inputSize,
-			props.hasLeftIcon,
+			props.$inputSize,
+			props.$hasLeftIcon,
 		)}px`;
 	}};
 	padding-right: ${props => props.maxLength && '72px'};
-	font-size: ${props => `${inputSizeToFontSize(props.inputSize)}px`};
+	font-size: ${props => `${inputSizeToFontSize(props.$inputSize)}px`};
 	line-height: 150%;
 	font-family: 'Red Hat Text', sans-serif;
 	caret-color: ${brandColors.giv[300]};
@@ -71,7 +71,7 @@ const Input = styled.input<IInputField>`
 	&:focus {
 		border: 2px solid
 			${props => {
-				switch (props.validation) {
+				switch (props.$validation) {
 					case EInputValidation.NORMAL:
 						return brandColors.giv[600];
 					case EInputValidation.WARNING:
@@ -96,11 +96,11 @@ const Input = styled.input<IInputField>`
 	}
 `;
 interface IInputSuffixProps {
-	inputSize: InputSize;
+	$inputSize: InputSize;
 }
 
 export const InputSuffix = styled.span<IInputSuffixProps>`
-	font-size: ${props => `${inputSizeToFontSize(props.inputSize)}px`};
+	font-size: ${props => `${inputSizeToFontSize(props.$inputSize)}px`};
 	line-height: 150%;
 	padding: 0 4px;
 	position: absolute;
