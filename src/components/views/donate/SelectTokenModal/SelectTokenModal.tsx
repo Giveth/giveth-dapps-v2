@@ -174,7 +174,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 					),
 				)}
 				<Title $medium>
-					{formatMessage({ id: 'label.eligible_tokens' })}
+					{formatMessage({ id: 'label.superfluid_eligible_tokens' })}
 				</Title>
 				{tokens.length > 0 ? (
 					tokens.map(token => (

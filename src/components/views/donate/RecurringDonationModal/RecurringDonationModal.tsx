@@ -340,7 +340,11 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					/>
 				)}
 			</Items>
-			<RunOutInfo amount={amount} totalPerMonth={totalPerMonth} />
+			<RunOutInfo
+				amount={amount}
+				totalPerMonth={totalPerMonth}
+				symbol={selectedToken?.token.symbol || ''}
+			/>
 			<ActionButton
 				label={formatMessage({ id: buttonLabel[step] })}
 				onClick={handleAction}
