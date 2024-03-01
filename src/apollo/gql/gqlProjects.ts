@@ -593,6 +593,10 @@ export const CREATE_PROJECT = gql`
 				name
 				value
 			}
+			socialMedia {
+				type
+				link
+			}
 		}
 	}
 `;
@@ -621,6 +625,10 @@ export const UPDATE_PROJECT = gql`
 			categories {
 				name
 				value
+			}
+			socialMedia {
+				type
+				link
 			}
 		}
 	}
