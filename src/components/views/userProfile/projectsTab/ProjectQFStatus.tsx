@@ -12,7 +12,10 @@ interface IProjectQFStatus {
 	showRoundName?: boolean;
 }
 
-const ProjectQFStatus = ({ project, showRoundName }: IProjectQFStatus) => {
+const ProjectQFStatus = ({
+	project,
+	showRoundName = false,
+}: IProjectQFStatus) => {
 	const { qfRounds } = project;
 	const isRoundActive = hasActiveRound(qfRounds);
 	const activeRound = getActiveRound(qfRounds);
