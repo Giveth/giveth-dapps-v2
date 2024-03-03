@@ -1,6 +1,6 @@
 // import transakSDK from '@transak/transak-sdk'
 import { captureException } from '@sentry/nextjs';
-import { Address } from 'viem';
+import { Address, formatUnits } from 'viem';
 import {
 	CREATE_DONATION,
 	UPDATE_DONATION_STATUS,
@@ -11,7 +11,7 @@ import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
 import { ITokenStreams } from '@/context/donate.context';
 import { gqlRequest } from '@/helpers/requests';
-import { ISuperfluidStream } from '@/types/superFluid';
+import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import config, { SENTRY_URGENT } from '@/configuration';
 import { CREATE_RECURRING_DONATION } from '@/apollo/gql/gqlSuperfluid';
 
@@ -124,7 +124,7 @@ export interface ICreateRecurringDonation {
 	projectId: number;
 	chainId: number;
 	txHash: string;
-	symbol: string;
+	superToken: IToken;
 	amount: bigint;
 	anonymous?: boolean;
 }
@@ -134,11 +134,12 @@ export const createRecurringDonation = async ({
 	txHash,
 	projectId,
 	amount,
-	symbol,
+	superToken,
 	anonymous,
 }: ICreateRecurringDonation) => {
 	let donationId = 0;
-
+	const _amount = parseInt(formatUnits(amount, superToken.decimals));
+	console.log('_amount', _amount);
 	try {
 		const { data } = await client.mutate({
 			mutation: CREATE_RECURRING_DONATION,
@@ -146,8 +147,8 @@ export const createRecurringDonation = async ({
 				projectId,
 				networkId: chainId,
 				txHash,
-				amount,
-				currency: symbol,
+				amount: _amount,
+				currency: superToken.symbol,
 				interval: 'month',
 				anonymous,
 			},

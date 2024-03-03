@@ -19,7 +19,7 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { showToastError } from '@/lib/helpers';
 import { DonateSteps } from './DonateSteps';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
-import config from '@/configuration';
+import config, { isProduction } from '@/configuration';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { RunOutInfo } from '../RunOutInfo';
@@ -175,10 +175,16 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					_superToken = sp;
 				}
 			}
-			const sf = await Framework.create({
+
+			const _options = {
 				chainId: config.OPTIMISM_CONFIG.id,
 				provider: provider,
-			});
+				resolverAddress: isProduction
+					? undefined
+					: '0x554c06487bEc8c890A0345eb05a5292C1b1017Bd',
+			};
+			console.log('_options', _options);
+			const sf = await Framework.create(_options);
 
 			// EThx is not a Wrapper Super Token and should load separately
 			let superToken;
@@ -190,6 +196,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			const operations: Operation[] = [];
 
+			// Upgrade the token to super token
 			if (!isUpdating && !selectedToken.token.isSuperToken) {
 				const upgradeOperation = await superToken.upgrade({
 					amount: amount.toString(),
@@ -272,13 +279,14 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			const tx = await batchOp.exec(signer);
 			let donationId = 0;
 			try {
+				console.log('tx', tx);
 				const backendRes = await createRecurringDonation({
 					projectId: +project.id,
 					anonymous,
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
 					txHash: tx.hash,
 					amount,
-					symbol: selectedToken.token.symbol,
+					superToken: _superToken,
 				});
 				console.log('backendRes', backendRes);
 				// donationId = backendRes.createRecurringDonation.id;
