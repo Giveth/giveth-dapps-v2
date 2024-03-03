@@ -93,7 +93,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 					<Flex $justifyContent='space-between'>
 						<div>
 							{formatMessage({
-								id: 'label.quadratic_funding',
+								id: 'label.qf_eligibility',
 							})}
 						</div>
 						<div>
