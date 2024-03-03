@@ -285,7 +285,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					anonymous,
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
 					txHash: tx.hash,
-					amount,
+					flowRate: _flowRate,
 					superToken: _superToken,
 				});
 				console.log('backendRes', backendRes);

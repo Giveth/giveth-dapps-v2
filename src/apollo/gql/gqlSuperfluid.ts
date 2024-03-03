@@ -5,8 +5,7 @@ export const CREATE_RECURRING_DONATION = gql`
 		$projectId: Int!
 		$networkId: Int!
 		$txHash: String!
-		$interval: String!
-		$amount: Int!
+		$flowRate: String!
 		$currency: String!
 	) {
 		createRecurringDonation(

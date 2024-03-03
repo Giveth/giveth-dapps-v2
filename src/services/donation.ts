@@ -1,6 +1,6 @@
 // import transakSDK from '@transak/transak-sdk'
 import { captureException } from '@sentry/nextjs';
-import { Address, formatUnits } from 'viem';
+import { Address } from 'viem';
 import {
 	CREATE_DONATION,
 	UPDATE_DONATION_STATUS,
@@ -125,7 +125,7 @@ export interface ICreateRecurringDonation {
 	chainId: number;
 	txHash: string;
 	superToken: IToken;
-	amount: bigint;
+	flowRate: bigint;
 	anonymous?: boolean;
 }
 
@@ -133,13 +133,11 @@ export const createRecurringDonation = async ({
 	chainId,
 	txHash,
 	projectId,
-	amount,
+	flowRate,
 	superToken,
 	anonymous,
 }: ICreateRecurringDonation) => {
 	let donationId = 0;
-	const _amount = parseInt(formatUnits(amount, superToken.decimals));
-	console.log('_amount', _amount);
 	try {
 		const { data } = await client.mutate({
 			mutation: CREATE_RECURRING_DONATION,
@@ -147,9 +145,8 @@ export const createRecurringDonation = async ({
 				projectId,
 				networkId: chainId,
 				txHash,
-				amount: _amount,
+				flowRate: flowRate,
 				currency: superToken.symbol,
-				interval: 'month',
 				anonymous,
 			},
 		});
