@@ -152,6 +152,10 @@ export const FETCH_PROJECT_BY_SLUG = isRecurringActive
 						networkId
 						chainType
 					}
+					socialMedia {
+						type
+						link
+					}
 					totalProjectUpdates
 					creationDate
 					reaction {
@@ -259,6 +263,10 @@ export const FETCH_PROJECT_BY_SLUG = isRecurringActive
 						networkId
 						chainType
 					}
+					socialMedia {
+						type
+						link
+					}
 					totalProjectUpdates
 					creationDate
 					reaction {
@@ -357,6 +365,10 @@ export const FETCH_PROJECT_BY_ID = isRecurringActive
 						networkId
 						chainType
 					}
+					socialMedia {
+						type
+						link
+					}
 					impactLocation
 					categories {
 						name
@@ -388,6 +400,10 @@ export const FETCH_PROJECT_BY_ID = isRecurringActive
 						isRecipient
 						networkId
 						chainType
+					}
+					socialMedia {
+						type
+						link
 					}
 					impactLocation
 					categories {
