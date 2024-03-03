@@ -1,27 +1,10 @@
 import BigNumber from 'bignumber.js';
 import config from '@/configuration';
-import { getRequest, gqlRequest } from '@/helpers/requests';
+import { gqlRequest } from '@/helpers/requests';
 import {
 	FETCH_MAINNET_TOKEN_PRICE,
 	FETCH_GNOSIS_TOKEN_PRICE,
 } from './price.queries';
-
-export const fetchEthPrice = async (): Promise<number> => {
-	try {
-		const res = await getRequest(
-			'https://api.coingecko.com/api/v3/simple/price',
-			undefined,
-			{
-				ids: 'ethereum',
-				vs_currencies: 'usd',
-			},
-		);
-		return res?.ethereum?.usd;
-	} catch (error) {
-		console.log(error);
-		return 0;
-	}
-};
 
 export const fetchMainnetTokenPrice = async (
 	tokenId: string,

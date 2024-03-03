@@ -50,61 +50,18 @@ export const fetchBalance = async (
 	}
 };
 
-export const fetchETCPrice = async () => {
+export const fetchPriceWithCoingeckoId = async (coingeckoId: string) => {
 	try {
 		const res = await fetch(
-			'https://api.coingecko.com/api/v3/simple/price?ids=ethereum-classic&vs_currencies=usd',
+			`https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoId}&vs_currencies=usd`,
 		);
 		const data = await res.json();
-		return parseFloat(data['ethereum-classic'].usd);
+		return parseFloat(data[coingeckoId].usd);
 	} catch (error) {
 		captureException(error, {
 			tags: {
 				section: 'fetchPrice',
 			},
 		});
-	}
-};
-
-export const fetchSolanaPrice = async () => {
-	try {
-		const res = await fetch(
-			'https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd',
-		);
-		const data = await res.json();
-		return parseFloat(data.solana.usd);
-	} catch (error) {
-		captureException(error, {
-			tags: {
-				section: 'fetchPrice',
-			},
-		});
-	}
-};
-
-export const fetchVelodromePrice = async (tokenAddress?: string) => {
-	try {
-		const apiUrl = `/api/velodromeFetchPrice?tokenAddress=${
-			tokenAddress || ''
-		}`;
-		const res = await fetch(apiUrl, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-		const data = await res.json();
-		console.log('VelodromePrice', data);
-		return parseFloat(data?.price);
-	} catch (error) {
-		captureException(error, {
-			tags: {
-				section: 'fetchVelodromePrice',
-			},
-		});
-		console.error(
-			'Failed to fetch price from Velodrome via /api/velodromeFetchPrice',
-			error,
-		);
 	}
 };
