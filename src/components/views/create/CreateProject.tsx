@@ -51,7 +51,6 @@ import AddressInterface from './AddressInterface';
 import { ChainType, NonEVMChain } from '@/types/config';
 import StorageLabel from '@/lib/localStorage';
 import AlloProtocolModal from './AlloProtocol/AlloProtocolModal';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { ECreateProjectSections, TInputs, EInputs } from './types';
 import { ProGuide } from './proGuide/ProGuide';
 import { EQualityState } from './proGuide/score/scoreHelpers';
@@ -147,13 +146,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	});
 
 	const { handleSubmit, setValue, watch, getFieldState } = formMethods;
-	const onAddressesVisible = () =>
-		setActiveProjectSection(ECreateProjectSections.addresses);
-	const delay = 500; // Delay in milliseconds
-	const addressesRef = useIntersectionObserver(onAddressesVisible, {
-		threshold: 0.3,
-		delay,
-	});
 
 	const data = watch();
 	const {
@@ -331,7 +323,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		<Container>
 			<Row>
 				<Col lg={8} md={12}>
-					<Title>
+					<Title
+						onMouseEnter={() =>
+							setActiveProjectSection(
+								ECreateProjectSections.default,
+							)
+						}
+					>
 						{isEditMode
 							? formatMessage({ id: 'label.project_details' })
 							: formatMessage({ id: 'label.create_a_project' })}
@@ -377,7 +375,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									id: 'label.you_can_set_a_custom_ethereum_address',
 								})}
 							</CaptionContainer>
-							<div ref={addressesRef}>
+							<div
+								onMouseEnter={() => {
+									setActiveProjectSection(
+										ECreateProjectSections.addresses,
+									);
+								}}
+							>
 								{ALL_CHAINS.map(chain => (
 									<AddressInterface
 										key={chain.id}
@@ -410,7 +414,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 											id: 'label.lets_publish',
 										})}
 							</PublishTitle>
-							<PublishList>
+							<PublishList
+								onMouseEnter={() =>
+									setActiveProjectSection(
+										ECreateProjectSections.default,
+									)
+								}
+							>
 								<li>
 									{isEditMode
 										? formatMessage({
