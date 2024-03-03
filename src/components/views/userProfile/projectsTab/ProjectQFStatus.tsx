@@ -9,9 +9,13 @@ import { getActiveRound, hasActiveRound } from '@/helpers/qf';
 
 interface IProjectQFStatus {
 	project: IProject;
+	showRoundName?: boolean;
 }
 
-const ProjectQFStatus = ({ project }: IProjectQFStatus) => {
+const ProjectQFStatus = ({
+	project,
+	showRoundName = false,
+}: IProjectQFStatus) => {
 	const { qfRounds } = project;
 	const isRoundActive = hasActiveRound(qfRounds);
 	const activeRound = getActiveRound(qfRounds);
@@ -20,9 +24,13 @@ const ProjectQFStatus = ({ project }: IProjectQFStatus) => {
 		? `Eligible for QF round #${activeRound?.id}`
 		: 'Not eligible';
 
+	const roundNameText = isRoundActive ? activeRound?.name : 'Not eligible';
+
 	return (
 		<StatusBadge isRoundActive={isRoundActive}>
-			<SublineBold>{handleQFTermsText}</SublineBold>
+			<SublineBold>
+				{showRoundName ? roundNameText : handleQFTermsText}
+			</SublineBold>
 		</StatusBadge>
 	);
 };
