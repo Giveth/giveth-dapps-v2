@@ -275,8 +275,13 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					operations.push(givethFlowOp);
 				}
 			}
-			const batchOp = sf.batchCall(operations);
-			const tx = await batchOp.exec(signer);
+			let tx;
+			if (operations.length === 1) {
+				tx = await operations[0].exec(signer);
+			} else {
+				const batchOp = sf.batchCall(operations);
+				tx = await batchOp.exec(signer);
+			}
 			let donationId = 0;
 			try {
 				console.log('tx', tx);
