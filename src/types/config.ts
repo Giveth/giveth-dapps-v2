@@ -232,7 +232,6 @@ export interface EnvConfig {
 	CELO_CONFIG: NetworkConfig;
 	ARBITRUM_CONFIG: NetworkConfig;
 	CLASSIC_CONFIG: NetworkConfig;
-	GARDEN_LINK: string;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
