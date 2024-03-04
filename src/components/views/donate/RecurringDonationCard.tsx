@@ -21,6 +21,7 @@ import { formatUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import Slider from 'rc-slider';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
 import { AddressZero, ONE_MONTH_SECONDS } from '@/lib/constants/constants';
@@ -43,6 +44,37 @@ import { WrongNetworkLayer } from './WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 import { limitFraction } from '@/helpers/number';
 import AlloProtocolFirstDonationModal from './AlloProtocolFirstDonationModal';
+import links from '@/lib/constants/links';
+
+// These two functions are used to make the slider more user friendly by mapping the slider's value to a new range.
+/**
+ * The mapValue function takes a value from the slider (0 to 100) and maps it to a new range.
+ * If the slider value is between 0 and 90, it maps it to a range of 0 to 50.
+ * If the slider value is between 90 and 100, it maps it to a range of 50 to 100.
+ * This makes the first 90% of the slider represent 0-50% of the range, and the last 10% represent 50-100%.
+ */
+function mapValue(value: number) {
+	if (value <= 90) {
+		return value * (50 / 90);
+	} else {
+		return 50 + (value - 90) * (50 / 10);
+	}
+}
+
+/**
+ * The mapValueInverse function does the opposite of mapValue.
+ * It takes a value from the range (0 to 100) and maps it back to the slider's range.
+ * If the value is between 0 and 50, it maps it to a range of 0 to 90.
+ * If the value is between 50 and 100, it maps it to a range of 90 to 100.
+ * This is used to set the slider's position based on the value from the range.
+ */
+function mapValueInverse(value: number) {
+	if (value <= 50) {
+		return value * (90 / 50);
+	} else {
+		return 90 + (value - 50) * (10 / 50);
+	}
+}
 
 export const RecurringDonationCard = () => {
 	const [amount, setAmount] = useState(0n);
@@ -158,20 +190,31 @@ export const RecurringDonationCard = () => {
 			<Title weight={700}>
 				{formatMessage({ id: 'label.make_a_recurring_donation_with' })}
 				<a href='https://www.superfluid.finance/' target='_blank'>
-					SuperFluid
+					Superfluid
 				</a>
 			</Title>
 			<Desc>
 				{formatMessage({
-					id: 'label.provide_continuous_funding_by_streaming_your_donations_over_time',
-				})}
+					id: 'label.recurring_donation_card_subheader_1',
+				})}{' '}
+				<br />
+				<br />
+				{formatMessage({
+					id: 'label.recurring_donation_card_subheader_2',
+				})}{' '}
+				<LearnMore href={links.RECURRING_DONATION_DOCS} target='_blank'>
+					{formatMessage({
+						id: 'label.learn_more',
+					})}
+					{'.'}
+				</LearnMore>
 			</Desc>
 			<RecurringSection>
-				<RecurringSectionTitle>
+				{/* <RecurringSectionTitle>
 					{formatMessage({
 						id: 'label.creating_a_monthly_recurring_donation',
 					})}
-				</RecurringSectionTitle>
+				</RecurringSectionTitle> */}
 				<Flex $flexDirection='column' gap='8px'>
 					<Flex gap='8px' $alignItems='center'>
 						<Caption $medium>
@@ -182,7 +225,11 @@ export const RecurringDonationCard = () => {
 							direction='right'
 							align='bottom'
 						>
-							<FlowRateTooltip>PlaceHolder</FlowRateTooltip>
+							<FlowRateTooltip>
+								{formatMessage({
+									id: 'tooltip.flowrate',
+								})}
+							</FlowRateTooltip>
 						</IconWithTooltip>
 					</Flex>
 					<InputWrapper>
@@ -287,9 +334,9 @@ export const RecurringDonationCard = () => {
 									const _value = Array.isArray(value)
 										? value[0]
 										: value;
-									setPercentage(_value);
+									setPercentage(mapValue(_value));
 								}}
-								value={percentage}
+								value={mapValueInverse(percentage)}
 								disabled={amount === 0n}
 							/>
 						</SliderWrapper>
@@ -586,6 +633,10 @@ const Title = styled(H6)`
 	}
 `;
 
+const LearnMore = styled(Link)`
+	color: ${brandColors.pinky[500]};
+`;
+
 const Desc = styled(Caption)`
 	background-color: ${neutralColors.gray[200]};
 	padding: 8px;
@@ -604,12 +655,12 @@ const RecurringSection = styled(Flex)`
 	text-align: left;
 `;
 
-const RecurringSectionTitle = styled(B)`
-	width: 100%;
-	padding-bottom: 8px;
-	border-bottom: 1px solid ${neutralColors.gray[300]};
-	text-align: left;
-`;
+// const RecurringSectionTitle = styled(B)`
+// 	width: 100%;
+// 	padding-bottom: 8px;
+// 	border-bottom: 1px solid ${neutralColors.gray[300]};
+// 	text-align: left;
+// `;
 
 const SelectTokenWrapper = styled(Flex)`
 	cursor: pointer;
