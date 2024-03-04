@@ -740,6 +740,7 @@ export const PROJECT_ACCEPTED_TOKENS = gql`
 			isGivbackEligible
 			order
 			isStableCoin
+			coingeckoId
 		}
 	}
 `;

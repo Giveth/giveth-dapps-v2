@@ -90,6 +90,7 @@ export interface IProjectAcceptedToken {
 	order: number;
 	chainType?: ChainType;
 	isStableCoin?: boolean;
+	coingeckoId?: string;
 }
 
 export interface IFetchGivethProjectGQL {
