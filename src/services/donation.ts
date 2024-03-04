@@ -145,7 +145,7 @@ export const createRecurringDonation = async ({
 				projectId,
 				networkId: chainId,
 				txHash,
-				flowRate: flowRate,
+				flowRate: flowRate.toString(),
 				currency: superToken.symbol,
 				anonymous,
 			},
