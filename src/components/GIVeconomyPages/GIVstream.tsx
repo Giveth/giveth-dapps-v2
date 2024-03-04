@@ -8,7 +8,6 @@ import {
 	H6,
 	IconGIVBack,
 	IconGIVFarm,
-	IconGIVGarden,
 	IconGIVStream,
 	IconHelpFilled16,
 	IconPraise24,
@@ -349,13 +348,6 @@ const convertSourceTypeToIcon = (distributor: string) => {
 				<Flex gap='16px'>
 					<IconGIVFarm size={24} color={brandColors.mustard[500]} />
 					<P>{` GIVfarm`}</P>
-				</Flex>
-			);
-		case 'gardenpool':
-			return (
-				<Flex gap='16px'>
-					<IconGIVGarden size={24} color={brandColors.mustard[500]} />
-					<P>{` GIVgarden`}</P>
 				</Flex>
 			);
 		case 'givdrop':
