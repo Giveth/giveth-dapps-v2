@@ -6,10 +6,6 @@ export const giveconomyTabs = [
 		href: Routes.GIVeconomy,
 	},
 	{
-		label: 'GIVgarden',
-		href: Routes.GIVgarden,
-	},
-	{
 		label: 'GIVfarm',
 		href: Routes.GIVfarm,
 	},

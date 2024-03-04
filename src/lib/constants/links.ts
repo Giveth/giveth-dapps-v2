@@ -34,7 +34,6 @@ const links = {
 	GIVSTREAM_DOCS: DOCS + 'giveconomy/givstream',
 	GIVBACK_DOC: DOCS + 'giveconomy/givbacks',
 	GIVPOWER_DOC: DOCS + 'giveconomy/givpower',
-	GIVGARDEN_DOC: DOCS + 'giveconomy/givgarden',
 	GIVDROP_DOC,
 	CLAIM_GIVDROP_DOC: GIVDROP_DOC + '#claiming-your-givdrop',
 	NICE_DOC: DOCS + 'giveconomy/niceToken',
