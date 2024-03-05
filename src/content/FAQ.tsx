@@ -447,10 +447,10 @@ const faqContent = (formatMessage: any) => {
 								.
 							</li>
 							<li>
-								<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.three' />{' '}
+								<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.four' />{' '}
 								<ExternalLink
-									href={Routes.GIVfarm}
-									title='GIVfarm'
+									href={Routes.GIVpower}
+									title='GIVpower'
 								/>
 								.
 							</li>
