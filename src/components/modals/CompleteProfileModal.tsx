@@ -32,7 +32,7 @@ export const CompleteProfileModal: FC<IModal> = ({ setShowModal }) => {
 		<Modal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			headerIcon={<IconProfile />}
+			headerIcon={<IconProfile size={32} />}
 			headerTitle={formatMessage({ id: 'label.complete_your_profile' })}
 			headerTitlePosition='left'
 		>
@@ -42,6 +42,18 @@ export const CompleteProfileModal: FC<IModal> = ({ setShowModal }) => {
 						id: 'label.now_its_time_to_complete_your_profile',
 					})}
 				</Title>
+				<div>
+					{formatMessage({
+						id: 'label.completing_your_profile',
+					})}
+				</div>
+				<br />
+				<div>
+					{formatMessage({
+						id: 'label.ready_to_level_up',
+					})}
+				</div>
+				<br />
 				<div>
 					{formatMessage({
 						id: 'label.with_a_complete_profile_you_can',
