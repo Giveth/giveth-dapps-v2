@@ -29,7 +29,7 @@ const Wrapper = styled.div`
 	max-width: 1180px;
 	padding: 120px 30px;
 	margin: 0 auto;
-    color: ${neutralColors.gray[900]}};
+	color: ${neutralColors.gray[900]};
 	> *:first-child {
 		margin-bottom: 16px;
 	}
