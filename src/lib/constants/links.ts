@@ -49,6 +49,7 @@ const links = {
 	MAKE_TRACEABLE_DOCS: DOCS + 'dapps/makeTraceableProject',
 	VERIFICATION_DOCS: DOCS + 'dapps/projectVerification',
 	CANCELLED_PROJECTS_DOCS: DOCS + 'dapps/listedUnlisted/#cancelled-projects',
+	RECURRING_DONATION_DOCS: DOCS + 'dapps/recurringDonation',
 	Torus_MM_DOCS: DOCS + 'dapps/importTorusMM/',
 	TRACE: 'https://trace.giveth.io/',
 	SWAG: 'https://swag.giveth.io/',

@@ -326,21 +326,27 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					/>
 				)}
 				<Item
-					title={`Donate Monthly to ${project.title}`}
+					title={`Donate to ${project.title}`}
+					subtext={'per month'}
 					amount={projectPerMonth}
 					price={tokenPrice}
 					token={selectedToken?.token!}
 				/>
 				{donationToGiveth > 0 && (
 					<Item
-						title='Donate Monthly to the Giveth DAO'
+						title='Donate to the Giveth DAO'
+						subtext={'per month'}
 						amount={givethPerMonth}
 						price={tokenPrice}
 						token={selectedToken?.token!}
 					/>
 				)}
 			</Items>
-			<RunOutInfo amount={amount} totalPerMonth={totalPerMonth} />
+			<RunOutInfo
+				amount={amount}
+				totalPerMonth={totalPerMonth}
+				symbol={selectedToken?.token.symbol || ''}
+			/>
 			<ActionButton
 				label={formatMessage({ id: buttonLabel[step] })}
 				onClick={handleAction}

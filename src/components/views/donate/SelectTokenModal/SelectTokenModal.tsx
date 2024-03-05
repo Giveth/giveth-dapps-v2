@@ -7,6 +7,7 @@ import {
 	mediaQueries,
 	neutralColors,
 	Flex,
+	P,
 } from '@giveth/ui-design-system';
 import { useState, type FC, useEffect } from 'react';
 import { useAccount } from 'wagmi';
@@ -130,6 +131,11 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				<Title $medium>
 					{formatMessage({ id: 'label.stream_balances' })}
 				</Title>
+				<TitleSubheader>
+					{formatMessage({
+						id: 'label.stream_balances_description',
+					})}
+				</TitleSubheader>
 				{Object.keys(tokenStreams).map(tokenId => {
 					const token = allTokens.find(
 						token => token.id === tokenId,
@@ -174,8 +180,13 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 					),
 				)}
 				<Title $medium>
-					{formatMessage({ id: 'label.eligible_tokens' })}
+					{formatMessage({ id: 'label.superfluid_eligible_tokens' })}
 				</Title>
+				<TitleSubheader>
+					{formatMessage({
+						id: 'label.superfluid_eligible_tokens_description',
+					})}
+				</TitleSubheader>
 				{tokens.length > 0 ? (
 					tokens.map(token => (
 						<TokenInfo
@@ -230,9 +241,16 @@ const Wrapper = styled(Flex)`
 
 const Title = styled(Caption)`
 	text-align: left;
-	padding-bottom: 4px;
+	padding-bottom: 1px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	color: ${neutralColors.gray[700]};
+`;
+
+const TitleSubheader = styled(P)`
+	text-align: left;
+	font-size: 0.75rem;
+	font-style: italic;
+	color: ${neutralColors.gray[800]};
 `;
 
 const GIVbackWrapper = styled.div`
