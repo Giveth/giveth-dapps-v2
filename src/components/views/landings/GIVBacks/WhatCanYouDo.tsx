@@ -9,6 +9,7 @@ import {
 import { OrderedBullets } from '@/components/styled-components/Bullets';
 import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
+import links from '@/lib/constants/links';
 
 const WhatCanYouDo = () => {
 	return (
@@ -21,12 +22,12 @@ const WhatCanYouDo = () => {
 			</H5>
 			<OrderedBullets>
 				<li>
-					<b>Shape the future of GIVeconomy in the GIVgarden:</b> The
-					GIV tokens you earn can be used in the{' '}
+					<b>Shape the future of GIVeconomy in with Voting Power:</b>{' '}
+					The GIV tokens you earn can be used in the{' '}
 					<ExternalLink
+						href={links.GIVERNANCE_VOTING}
 						color={brandColors.pinky[500]}
-						href={Routes.GIVgarden}
-						title='GIVgarden'
+						title='GIVernance Voting'
 					/>
 					. Here you can participate in shaping the future of the
 					GIVeconomy by voting on various proposals that resonate with

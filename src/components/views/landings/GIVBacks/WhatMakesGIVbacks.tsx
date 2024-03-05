@@ -17,7 +17,7 @@ const WhatMakesGIVbacks = () => {
 						create societal value, but also earns you GIV tokens.
 						When you donate to verified projects you qualify to
 						receive GIV tokens. Through GIVbacks, GIV empowers
-						donors with governance rights via the GIVgarden.
+						donors with governance rights.
 					</li>
 					<li>
 						<b>A groundbreaking approach to donations</b>
