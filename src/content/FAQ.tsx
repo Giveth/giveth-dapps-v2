@@ -566,9 +566,10 @@ const faqContent = (formatMessage: any) => {
 						/>{' '}
 						<FormattedMessage id='page.faq.how_do_i_get_involved_in_governance.content.two' />{' '}
 						<ExternalLink
-							href={Routes.GIVgarden}
-							title='GIVgarden'
-						/>{' '}
+							href={links.GIVERNANCE_VOTING}
+							title='GIVernance Voting'
+						/>
+						.{' '}
 						<FormattedMessage id='page.faq.how_do_i_get_involved_in_governance.content.three' />{' '}
 						<ExternalLink
 							href={links.DISCOURSE}
@@ -685,15 +686,8 @@ const faqContent = (formatMessage: any) => {
 						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.one' />{' '}
 						<ExternalLink href={Routes.GIVbacks} title='GIVbacks' />
 						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.two' />{' '}
-						<ExternalLink
-							href={Routes.GIVgarden}
-							title='GIVgarden'
-						/>
+						<ExternalLink href={Routes.GIVpower} title='GIVpower' />{' '}
 						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.three' />{' '}
-						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />{' '}
-						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.four' />{' '}
-						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />{' '}
-						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.five' />
 					</>
 				),
 			},
