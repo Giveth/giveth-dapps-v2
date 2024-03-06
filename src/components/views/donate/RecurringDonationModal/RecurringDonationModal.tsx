@@ -10,6 +10,7 @@ import { Framework, type Operation } from '@superfluid-finance/sdk-core';
 import { useAccount } from 'wagmi';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
+import { formatUnits } from 'viem';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -131,7 +132,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	}, [selectedToken, setStep]);
 
 	const onApprove = async () => {
-		console.log('amount', amount);
+		console.log(
+			'amount',
+			formatUnits(amount, selectedToken?.token.decimals || 18),
+		);
 		setStep(EDonationSteps.APPROVING);
 		if (!address || !selectedToken) return;
 		const superToken = findSuperTokenByTokenAddress(selectedToken.token.id);
@@ -158,6 +162,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	const onDonate = async () => {
 		setStep(EDonationSteps.DONATING);
 		try {
+			const projectAnchorContract = project?.anchorContracts[0]?.address;
+			if (!projectAnchorContract) {
+				throw new Error('Project anchor address not found');
+			}
 			if (!address || !selectedToken) {
 				throw new Error('address not found');
 			}
@@ -209,8 +217,6 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					operations.push(upgradeOperation);
 				}
 			}
-
-			const projectAnchorContract = project?.anchorContracts[0]?.address;
 
 			if (!projectAnchorContract) {
 				throw new Error('Project wallet address not found');

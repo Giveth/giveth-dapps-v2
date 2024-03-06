@@ -149,9 +149,8 @@ export const RecurringDonationCard = () => {
 		? semanticColors.punch
 		: brandColors.giv;
 
-	const hasAnchorContract = project.anchorContracts[0]?.isActive;
-
 	const handleDonate = () => {
+		const hasAnchorContract = project.anchorContracts[0]?.isActive;
 		if (!hasAnchorContract) {
 			setShowAlloProtocolModal(true);
 		} else {
