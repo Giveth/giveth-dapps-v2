@@ -34,7 +34,7 @@ export const HighlightSection = styled.div<{ $baseTheme?: ETheme }>`
 `;
 
 interface IItemTitle {
-	upperCase?: boolean;
+	$upperCase?: boolean;
 	$baseTheme?: ETheme;
 }
 
@@ -43,7 +43,7 @@ export const ItemTitle = styled(Overline)<IItemTitle>`
 		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[300]
 			: neutralColors.gray[800]};
-	text-transform: ${props => (props.upperCase ? 'uppercase' : 'none')};
+	text-transform: ${props => (props.$upperCase ? 'uppercase' : 'none')};
 `;
 
 export const ItemRow = styled(Flex)`
