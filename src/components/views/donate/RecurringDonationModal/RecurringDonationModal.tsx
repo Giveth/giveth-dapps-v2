@@ -233,6 +233,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			operations.push(projectFlowOp);
 
+			let givethOldStream;
+			let givethFlowRate = 0n;
 			if (!isUpdating && donationToGiveth > 0) {
 				const givethAnchorContract =
 					config.OPTIMISM_CONFIG.GIVETH_ANCHOR_CONTRACT_ADDRESS;
@@ -246,7 +248,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					100n /
 					ONE_MONTH_SECONDS;
 
-				const oldStream =
+				givethOldStream =
 					tokenStreams[_superToken.id] &&
 					tokenStreams[_superToken.id].find(
 						stream =>
@@ -254,24 +256,23 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 							givethAnchorContract.toLowerCase(),
 					);
 
-				if (oldStream) {
-					const givethFlowRate =
-						_newFlowRate + BigInt(oldStream.currentFlowRate);
+				if (givethOldStream) {
+					givethFlowRate =
+						_newFlowRate + BigInt(givethOldStream.currentFlowRate);
 
 					const givethFlowOp = superToken.updateFlow({
 						sender: address,
 						receiver: givethAnchorContract, // should change with anchor contract address
 						flowRate: givethFlowRate.toString(),
 					});
-
 					operations.push(givethFlowOp);
 				} else {
+					givethFlowRate = _newFlowRate;
 					const givethFlowOp = superToken.createFlow({
 						sender: address,
 						receiver: givethAnchorContract, // should change with anchor contract address
 						flowRate: _newFlowRate.toString(),
 					});
-
 					operations.push(givethFlowOp);
 				}
 			}
@@ -282,21 +283,54 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				const batchOp = sf.batchCall(operations);
 				tx = await batchOp.exec(signer);
 			}
+
 			let donationId = 0;
+			// saving project donation to backend
 			try {
-				console.log('tx', tx);
-				const backendRes = await createRecurringDonation({
-					projectId: +project.id,
-					anonymous,
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
-					txHash: tx.hash,
-					flowRate: _flowRate,
-					superToken: _superToken,
-				});
-				console.log('backendRes', backendRes);
-				// donationId = backendRes.createRecurringDonation.id;
+				if (isUpdating) {
+					console.log(
+						'Updating project donation is not implemented yet',
+					);
+				} else {
+					console.log('tx', tx);
+					const projectBackendRes = await createRecurringDonation({
+						projectId: +project.id,
+						anonymous,
+						chainId: config.OPTIMISM_NETWORK_NUMBER,
+						txHash: tx.hash,
+						flowRate: _flowRate,
+						superToken: _superToken,
+					});
+					console.log('backendRes', projectBackendRes);
+					// donationId = backendRes.createRecurringDonation.id;
+				}
 			} catch (error) {
 				console.log('error', error);
+			}
+
+			// saving giveth donation to backend
+			if (!isUpdating && donationToGiveth > 0) {
+				if (givethOldStream) {
+					console.log(
+						'Updating giveth donation is not implemented yet',
+					);
+				} else {
+					try {
+						console.log('tx', tx);
+						const givethBackendRes = await createRecurringDonation({
+							projectId: config.GIVETH_PROJECT_ID,
+							anonymous,
+							chainId: config.OPTIMISM_NETWORK_NUMBER,
+							txHash: tx.hash,
+							flowRate: givethFlowRate,
+							superToken: _superToken,
+						});
+						console.log('givethBackendRes', givethBackendRes);
+						// donationId = backendRes.createRecurringDonation.id;
+					} catch (error) {
+						console.log('error', error);
+					}
+				}
 			}
 
 			const res = await tx.wait();
