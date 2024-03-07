@@ -16,6 +16,7 @@ import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { TInputs } from './types';
 import Input from '@/components/Input';
+import { validators } from '@/lib/constants/regex';
 
 const socialMediasArray = [
 	{
@@ -101,7 +102,7 @@ const SocialMedias = () => {
 									// 		e.target.value,
 									// 	);
 									// }}
-									// // registerOptions={validators.facebook}
+									registerOptions={validators.facebook}
 									error={
 										errors[socialMedia.name.toLowerCase()]
 									}
