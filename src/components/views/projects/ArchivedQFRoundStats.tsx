@@ -15,7 +15,7 @@ import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
 
-export const QFRoundStats = () => {
+export const ArchivedQFRoundStats = () => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const { data } = useQuery(FETCH_QF_ROUND_STATS, {
