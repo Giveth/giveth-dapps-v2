@@ -174,6 +174,24 @@ export interface IProjectEdition {
 	anchorContracts?: IAnchorContractData[];
 }
 
+export enum EProjectSocialMediaType {
+	FACEBOOK = 'FACEBOOK',
+	X = 'X',
+	INSTAGRAM = 'INSTAGRAM',
+	YOUTUBE = 'YOUTUBE',
+	LINKEDIN = 'LINKEDIN',
+	REDDIT = 'REDDIT',
+	DISCORD = 'DISCORD',
+	FARCASTER = 'FARCASTER',
+	LENS = 'LENS',
+	WEBSITE = 'WEBSITE',
+}
+
+export interface IProjectSocialMedia {
+	type: EProjectSocialMediaType;
+	link: string;
+}
+
 export interface IProjectCreation {
 	title: string;
 	description: string;
@@ -184,6 +202,7 @@ export interface IProjectCreation {
 	addresses?: IWalletAddress[];
 	image?: string;
 	isDraft?: boolean;
+	socialMedia?: IProjectSocialMedia[];
 }
 
 export interface IUser {
