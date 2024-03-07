@@ -63,13 +63,11 @@ const socialMediasArray = [
 const SocialMedias = () => {
 	const {
 		register,
-		handleSubmit,
 		formState: { errors, dirtyFields, isSubmitting },
-		control,
-		setValue,
 		watch,
 	} = useForm<TInputs>();
-
+	console.log('watch', watch('facebook'));
+	console.log('Errors', errors);
 	return (
 		<Container>
 			<H5>Social Media Links</H5>
@@ -93,7 +91,20 @@ const SocialMedias = () => {
 								<Input
 									placeholder='Enter Link'
 									register={register}
-									registerName={socialMedia.name.toLowerCase()}
+									registerName={
+										// EInputs[socialMedia.name.toLowerCase()]
+										socialMedia.name.toLowerCase()
+									}
+									// onChange={e => {
+									// 	setValue(
+									// 		socialMedia.name.toLowerCase(),
+									// 		e.target.value,
+									// 	);
+									// }}
+									// // registerOptions={validators.facebook}
+									error={
+										errors[socialMedia.name.toLowerCase()]
+									}
 								/>
 							</InputContainer>
 						</Flex>

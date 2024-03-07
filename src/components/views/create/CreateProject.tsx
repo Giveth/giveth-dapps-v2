@@ -144,7 +144,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.addresses]: isEditMode
 				? activeAddresses
 				: storageAddresses,
-			[EInputs.facebook]: '',
 		},
 	});
 
@@ -167,8 +166,17 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		addresses: watchAddresses,
 		alloProtocolRegistry: watchAlloProtocolRegistry,
 		facebook: watchFacebook,
+		twitter: watchTwitter,
+		instagram: watchInstagram,
+		youtube: watchYoutube,
+		linkedin: watchLinkedIn,
+		reddit: watchReddit,
+		discord: watchDiscord,
+		farcaster: watchFarcaster,
+		lens: watchLens,
+		website: watchWebsite,
 	} = data;
-	console.log('watchFacebook', watchFacebook);
+
 	useEffect(() => {
 		if (isEditMode) return;
 		localStorage.setItem(
@@ -194,7 +202,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	};
 
 	const onSubmit = async (formData: TInputs) => {
-		setIsLoading(true);
+		console.log('formData', formData);
+		return;
+		// setIsLoading(true);
 		if (
 			isProjectScoringActive &&
 			quality === EQualityState.MEDIUM &&
@@ -339,7 +349,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					<FormProvider {...formMethods}>
 						<form
 							onSubmit={handleSubmit(onSubmit, onError)}
-							onSubmitCapture={() => setIsLoading(true)}
+							// onSubmitCapture={() => setIsLoading(true)}
 							id='hook-form'
 						>
 							<NameInput
