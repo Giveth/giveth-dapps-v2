@@ -1,8 +1,4 @@
-import {
-	ICategory,
-	IProjectSocialMedia,
-	IWalletAddress,
-} from '@/apollo/types/types';
+import { ICategory, IWalletAddress } from '@/apollo/types/types';
 
 export enum EInputs {
 	name = 'name',
@@ -13,7 +9,16 @@ export enum EInputs {
 	draft = 'draft',
 	addresses = 'addresses',
 	alloProtocolRegistry = 'alloProtocolRegistry',
-	socialMediaAddresses = 'socialMediaAddresses',
+	facebook = 'facebook',
+	twitter = 'twitter',
+	instagram = 'instagram',
+	youtube = 'instagram',
+	linkedIn = 'instagram',
+	reddit = 'instagram',
+	discord = 'discord',
+	farcaster = 'farcaster',
+	lens = 'lens',
+	website = 'website',
 }
 
 export enum ECreateProjectSections {
@@ -35,5 +40,14 @@ export type TInputs = {
 	[EInputs.draft]?: boolean;
 	[EInputs.alloProtocolRegistry]?: boolean;
 	[EInputs.addresses]: IWalletAddress[];
-	[EInputs.socialMediaAddresses]: IProjectSocialMedia[];
+	[EInputs.facebook]?: string;
+	[EInputs.twitter]?: string;
+	[EInputs.instagram]?: string;
+	[EInputs.youtube]?: string;
+	[EInputs.linkedIn]?: string;
+	[EInputs.reddit]?: string;
+	[EInputs.discord]?: string;
+	[EInputs.farcaster]?: string;
+	[EInputs.lens]?: string;
+	[EInputs.website]?: string;
 };

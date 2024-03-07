@@ -91,8 +91,9 @@ const SocialMedias = () => {
 							</Flex>
 							<InputContainer>
 								<Input
-									error={errors.root}
 									placeholder='Enter Link'
+									register={register}
+									registerName={socialMedia.name.toLowerCase()}
 								/>
 							</InputContainer>
 						</Flex>

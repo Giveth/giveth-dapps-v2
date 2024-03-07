@@ -144,7 +144,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.addresses]: isEditMode
 				? activeAddresses
 				: storageAddresses,
-			[EInputs.socialMediaAddresses]: [],
+			[EInputs.facebook]: '',
 		},
 	});
 
@@ -166,8 +166,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		impactLocation: watchImpactLocation,
 		addresses: watchAddresses,
 		alloProtocolRegistry: watchAlloProtocolRegistry,
+		facebook: watchFacebook,
 	} = data;
-
+	console.log('watchFacebook', watchFacebook);
 	useEffect(() => {
 		if (isEditMode) return;
 		localStorage.setItem(
