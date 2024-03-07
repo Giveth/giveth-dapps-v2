@@ -58,6 +58,7 @@ import { EQualityState } from './proGuide/score/scoreHelpers';
 import { LowScoreModal } from './LowScoreModal';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { GuidelinesCard } from './GuideLinesCard';
+import SocialMedias from './SocialMedias';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -143,6 +144,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.addresses]: isEditMode
 				? activeAddresses
 				: storageAddresses,
+			[EInputs.socialMediaAddresses]: [],
 		},
 	});
 
@@ -350,6 +352,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									setActiveProjectSection
 								}
 							/>
+							<SocialMedias />
 							<CategoryInput
 								setActiveProjectSection={
 									setActiveProjectSection
