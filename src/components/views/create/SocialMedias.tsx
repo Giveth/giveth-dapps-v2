@@ -90,7 +90,10 @@ const SocialMedias = () => {
 								<P>{socialMedia.name}</P>
 							</Flex>
 							<InputContainer>
-								<Input error={errors.root} />
+								<Input
+									error={errors.root}
+									placeholder='Enter Link'
+								/>
 							</InputContainer>
 						</Flex>
 					))}
