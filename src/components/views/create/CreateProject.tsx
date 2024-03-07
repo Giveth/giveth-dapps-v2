@@ -58,7 +58,7 @@ import { EQualityState } from './proGuide/score/scoreHelpers';
 import { LowScoreModal } from './LowScoreModal';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { GuidelinesCard } from './GuideLinesCard';
-import SocialMedias from './SocialMedias';
+import SocialMedias from './SocialMediaBox/SocialMedias';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -144,6 +144,16 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.addresses]: isEditMode
 				? activeAddresses
 				: storageAddresses,
+			[EInputs.facebook]: '',
+			[EInputs.twitter]: '',
+			[EInputs.instagram]: '',
+			[EInputs.youtube]: '',
+			[EInputs.linkedIn]: '',
+			[EInputs.reddit]: '',
+			[EInputs.discord]: '',
+			[EInputs.farcaster]: '',
+			[EInputs.lens]: '',
+			[EInputs.website]: '',
 		},
 	});
 
@@ -191,6 +201,16 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchImpactLocation,
 		watchAddresses,
 		watchAlloProtocolRegistry,
+		watchFacebook,
+		watchTwitter,
+		watchInstagram,
+		watchYoutube,
+		watchLinkedIn,
+		watchReddit,
+		watchDiscord,
+		watchFarcaster,
+		watchLens,
+		watchWebsite,
 	]);
 	const hasOptimismAddress = watchAddresses.some(
 		address => config.OPTIMISM_NETWORK_NUMBER === address.networkId,
@@ -201,9 +221,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		}
 	};
 
-	const onSubmit = async (formData: TInputs) => {
+	const onLog = (formData: TInputs) => {
 		console.log('formData', formData);
-		return;
+	};
+
+	const onSubmit = async (formData: TInputs) => {
 		// setIsLoading(true);
 		if (
 			isProjectScoringActive &&
@@ -348,7 +370,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					</Title>
 					<FormProvider {...formMethods}>
 						<form
-							onSubmit={handleSubmit(onSubmit, onError)}
+							onSubmit={handleSubmit(onLog, onError)}
 							// onSubmitCapture={() => setIsLoading(true)}
 							id='hook-form'
 						>

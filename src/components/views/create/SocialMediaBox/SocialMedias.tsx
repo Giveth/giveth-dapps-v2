@@ -13,62 +13,63 @@ import {
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
-import { useForm } from 'react-hook-form';
-import { TInputs } from './types';
-import Input from '@/components/Input';
-import { validators } from '@/lib/constants/regex';
+import { EInputs } from '../types';
+import SocialMediaInput from './SocialMediaInput';
 
-const socialMediasArray = [
+export const socialMediasArray = [
 	{
 		name: 'Facebook',
+		type: EInputs.facebook,
 		icon: <IconFacebook24 />,
 	},
 	{
 		name: 'Twitter',
+		type: EInputs.twitter,
 		icon: <IconX24 />,
 	},
 	{
 		name: 'Instagram',
+		type: EInputs.instagram,
 		icon: <IconInstagram24 />,
 	},
 	{
 		name: 'YouTube',
+		type: EInputs.youtube,
 		icon: <IconYoutube />,
 	},
 	{
 		name: 'LinkedIn',
+		type: EInputs.linkedIn,
 		icon: <IconLinkedin24 />,
 	},
 	{
 		name: 'Reddit',
+		type: EInputs.reddit,
 		icon: <IconLinkedin24 />,
 	},
 	{
 		name: 'Discord',
+		type: EInputs.discord,
 		icon: <IconDiscord24 />,
 	},
 	{
 		name: 'Farcaster',
+		type: EInputs.farcaster,
 		icon: <IconLinkedin24 />,
 	},
 	{
 		name: 'Lens',
+		type: EInputs.lens,
 		icon: <IconLinkedin24 />,
 	},
 	{
 		name: 'Website',
+		type: EInputs.website,
 		icon: <IconLinkedin24 />,
 	},
 ];
 
 const SocialMedias = () => {
-	const {
-		register,
-		formState: { errors, dirtyFields, isSubmitting },
-		watch,
-	} = useForm<TInputs>();
-	console.log('watch', watch('facebook'));
-	console.log('Errors', errors);
 	return (
 		<Container>
 			<H5>Social Media Links</H5>
@@ -89,23 +90,8 @@ const SocialMedias = () => {
 								<P>{socialMedia.name}</P>
 							</Flex>
 							<InputContainer>
-								<Input
-									placeholder='Enter Link'
-									register={register}
-									registerName={
-										// EInputs[socialMedia.name.toLowerCase()]
-										socialMedia.name.toLowerCase()
-									}
-									// onChange={e => {
-									// 	setValue(
-									// 		socialMedia.name.toLowerCase(),
-									// 		e.target.value,
-									// 	);
-									// }}
-									registerOptions={validators.facebook}
-									error={
-										errors[socialMedia.name.toLowerCase()]
-									}
+								<SocialMediaInput
+									registerName={socialMedia.type}
 								/>
 							</InputContainer>
 						</Flex>
