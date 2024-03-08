@@ -360,7 +360,7 @@ const config: EnvConfig = {
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
-			'https://api.studio.thegraph.com/query/8787/giveconomy-optimism-sepolia/version/latest',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-sepolia',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
 			'https://app.uniswap.org/#/swap?chain=optimism&outputCurrency=0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',

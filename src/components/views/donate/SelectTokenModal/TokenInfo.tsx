@@ -17,7 +17,6 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 	token,
 	balance,
 	disable,
-
 	onClick,
 }) => {
 	return (
@@ -34,6 +33,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 				showGiveBack
 				symbol={token.symbol}
 				size={32}
+				isSuperToken={!!token.isSuperToken}
 			/>
 			<InfoWrapper $flexDirection='column' $alignItems='flex-start'>
 				<TopRow $justifyContent='space-between'>
