@@ -622,7 +622,9 @@ export const RecurringDonationCard = () => {
 			{showRecurringDonationModal && (
 				<RecurringDonationModal
 					setShowModal={setShowRecurringDonationModal}
-					donationToGiveth={isGivethProject ? 0 : donationToGiveth}
+					donationToGiveth={
+						isGivethProject || isUpdating ? 0 : donationToGiveth
+					}
 					amount={amount}
 					percentage={percentage}
 					isUpdating={isUpdating}
