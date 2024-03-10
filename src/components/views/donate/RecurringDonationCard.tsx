@@ -160,7 +160,12 @@ export const RecurringDonationCard = () => {
 
 	useEffect(() => {
 		try {
-			if (!selectedToken || !selectedToken.balance) return;
+			if (
+				!selectedToken ||
+				!selectedToken.balance ||
+				!project.anchorContracts
+			)
+				return;
 			const _userStreamOnSelectedToken = findUserStreamOnSelectedToken(
 				address,
 				project,
