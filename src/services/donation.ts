@@ -153,8 +153,9 @@ export const createRecurringDonation = async ({
 				anonymous,
 			},
 		});
-		donationId = data.createDonation;
+		donationId = data.createRecurringDonation;
 		console.log('donationId', donationId);
+		return donationId;
 	} catch (error) {
 		captureException(error, {
 			tags: {
@@ -186,8 +187,9 @@ export const updateRecurringDonation = async (
 				anonymous,
 			},
 		});
-		donationId = data.createDonation;
+		donationId = data.updateRecurringDonation;
 		console.log('donationId', donationId);
+		return donationId;
 	} catch (error: any) {
 		//handle the case where the recurring donation does not exist on db but it exists on the chain
 		if (error?.message.toLowerCase() === 'recurring donation not found.') {
