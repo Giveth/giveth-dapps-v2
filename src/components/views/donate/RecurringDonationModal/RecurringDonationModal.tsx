@@ -27,7 +27,10 @@ import { RunOutInfo } from '../RunOutInfo';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { ChainType } from '@/types/config';
-import { createRecurringDonation } from '@/services/donation';
+import {
+	createRecurringDonation,
+	updateRecurringDonation,
+} from '@/services/donation';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
@@ -293,21 +296,30 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			let donationId = 0;
 			// saving project donation to backend
 			try {
+				const projectDonationInfo = {
+					projectId: +project.id,
+					anonymous,
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					txHash: tx.hash,
+					flowRate: _flowRate,
+					superToken: _superToken,
+				};
 				if (isUpdating) {
+					console.log('Start Update Project Donation Info');
+					const projectBackendRes =
+						await updateRecurringDonation(projectDonationInfo);
 					console.log(
-						'Updating project donation is not implemented yet',
+						'Project Donation Update Info',
+						projectBackendRes,
 					);
 				} else {
-					console.log('tx', tx);
-					const projectBackendRes = await createRecurringDonation({
-						projectId: +project.id,
-						anonymous,
-						chainId: config.OPTIMISM_NETWORK_NUMBER,
-						txHash: tx.hash,
-						flowRate: _flowRate,
-						superToken: _superToken,
-					});
-					console.log('backendRes', projectBackendRes);
+					console.log('Start Creating Project Donation Info');
+					const projectBackendRes =
+						await createRecurringDonation(projectDonationInfo);
+					console.log(
+						'Giveth Donation Create Info',
+						projectBackendRes,
+					);
 					// donationId = backendRes.createRecurringDonation.id;
 				}
 			} catch (error) {
@@ -316,22 +328,31 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			// saving giveth donation to backend
 			if (!isUpdating && donationToGiveth > 0) {
+				const givethDonationInfo = {
+					projectId: config.GIVETH_PROJECT_ID,
+					anonymous,
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					txHash: tx.hash,
+					flowRate: givethFlowRate,
+					superToken: _superToken,
+				};
 				if (givethOldStream) {
+					console.log('Start Update Giveth Donation Info');
+					const givethBackendRes =
+						await updateRecurringDonation(givethDonationInfo);
 					console.log(
-						'Updating giveth donation is not implemented yet',
+						'Giveth Donation Update Info',
+						givethBackendRes,
 					);
 				} else {
 					try {
-						console.log('tx', tx);
-						const givethBackendRes = await createRecurringDonation({
-							projectId: config.GIVETH_PROJECT_ID,
-							anonymous,
-							chainId: config.OPTIMISM_NETWORK_NUMBER,
-							txHash: tx.hash,
-							flowRate: givethFlowRate,
-							superToken: _superToken,
-						});
-						console.log('givethBackendRes', givethBackendRes);
+						console.log('Start Creating Giveth Donation Info');
+						const givethBackendRes =
+							await createRecurringDonation(givethDonationInfo);
+						console.log(
+							'Giveth Donation Create Info',
+							givethBackendRes,
+						);
 						// donationId = backendRes.createRecurringDonation.id;
 					} catch (error) {
 						console.log('error', error);
