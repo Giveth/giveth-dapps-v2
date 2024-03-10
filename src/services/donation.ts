@@ -13,7 +13,10 @@ import { ITokenStreams } from '@/context/donate.context';
 import { gqlRequest } from '@/helpers/requests';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import config, { SENTRY_URGENT } from '@/configuration';
-import { CREATE_RECURRING_DONATION } from '@/apollo/gql/gqlSuperfluid';
+import {
+	CREATE_RECURRING_DONATION,
+	UPDATE_RECURRING_DONATION,
+} from '@/apollo/gql/gqlSuperfluid';
 
 const SAVE_DONATION_ITERATIONS = 5;
 
@@ -159,6 +162,42 @@ export const createRecurringDonation = async ({
 			},
 		});
 		console.log('createRecurringDonation error: ', error);
+		throw error;
+	}
+
+	return donationId;
+};
+
+export const updateRecurringDonation = async ({
+	chainId,
+	txHash,
+	projectId,
+	flowRate,
+	superToken,
+	anonymous,
+}: ICreateRecurringDonation) => {
+	let donationId = 0;
+	try {
+		const { data } = await client.mutate({
+			mutation: UPDATE_RECURRING_DONATION,
+			variables: {
+				projectId,
+				networkId: chainId,
+				txHash,
+				flowRate: flowRate.toString(),
+				currency: superToken.symbol,
+				anonymous,
+			},
+		});
+		donationId = data.createDonation;
+		console.log('donationId', donationId);
+	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('updateRecurringDonation error: ', error);
 		throw error;
 	}
 
