@@ -149,7 +149,7 @@ export const createRecurringDonation = async ({
 				networkId: chainId,
 				txHash,
 				flowRate: flowRate.toString(),
-				currency: superToken.symbol,
+				currency: superToken.underlyingToken?.symbol || 'ETH',
 				anonymous,
 			},
 		});
@@ -168,15 +168,12 @@ export const createRecurringDonation = async ({
 	return donationId;
 };
 
-export const updateRecurringDonation = async ({
-	chainId,
-	txHash,
-	projectId,
-	flowRate,
-	superToken,
-	anonymous,
-}: ICreateRecurringDonation) => {
+export const updateRecurringDonation = async (
+	props: ICreateRecurringDonation,
+) => {
 	let donationId = 0;
+	const { chainId, txHash, projectId, flowRate, superToken, anonymous } =
+		props;
 	try {
 		const { data } = await client.mutate({
 			mutation: UPDATE_RECURRING_DONATION,
@@ -185,13 +182,17 @@ export const updateRecurringDonation = async ({
 				networkId: chainId,
 				txHash,
 				flowRate: flowRate.toString(),
-				currency: superToken.symbol,
+				currency: superToken.underlyingToken?.symbol || 'ETH',
 				anonymous,
 			},
 		});
 		donationId = data.createDonation;
 		console.log('donationId', donationId);
-	} catch (error) {
+	} catch (error: any) {
+		//handle the case where the recurring donation does not exist on db but it exists on the chain
+		if (error?.message.toLowerCase() === 'recurring donation not found.') {
+			return createRecurringDonation(props);
+		}
 		captureException(error, {
 			tags: {
 				section: SENTRY_URGENT,
