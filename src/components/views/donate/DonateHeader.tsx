@@ -23,7 +23,7 @@ import {
 import { UserButtonWithMenu } from '@/components/menu/UserButtonWithMenu';
 import Routes from '@/lib/constants/Routes';
 import { useDonateData } from '@/context/donate.context';
-import { useShowHiderByScroll } from '@/hooks/useShowHiderByScroll';
+import { EScrollDir, useScrollDetection } from '@/hooks/useScrollDetection';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { setShowWelcomeModal } from '@/features/modal/modal.slice';
 
@@ -40,7 +40,7 @@ export const DonateHeader: FC<IHeader> = () => {
 	const router = useRouter();
 
 	const { project } = useDonateData();
-	const showHeader = useShowHiderByScroll();
+	const scrollDir = useScrollDetection();
 
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
@@ -48,7 +48,7 @@ export const DonateHeader: FC<IHeader> = () => {
 		<StyledHeader
 			$alignItems='center'
 			$baseTheme={theme}
-			$show={showHeader}
+			$show={scrollDir !== EScrollDir.Down}
 		>
 			<Flex $alignItems='center' gap='16px'>
 				<Link href={Routes.Project + '/' + project.slug}>
@@ -70,7 +70,7 @@ export const DonateHeader: FC<IHeader> = () => {
 			<Flex gap='8px'>
 				{walletAddress ? (
 					<UserButtonWithMenu
-						isHeaderShowing={showHeader}
+						isHeaderShowing={scrollDir !== EScrollDir.Down}
 						theme={theme}
 					/>
 				) : (

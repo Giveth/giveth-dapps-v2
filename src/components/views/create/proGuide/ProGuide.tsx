@@ -7,6 +7,7 @@ import {
 	type IProjectScoreCardProps,
 	ProjectScoreCard,
 } from './score/ProjectScoreCard';
+import { EScrollDir, useScrollDetection } from '@/hooks/useScrollDetection';
 
 interface IProGuideProps extends IProjectTipProps, IProjectScoreCardProps {}
 
@@ -17,8 +18,9 @@ export const ProGuide: FC<IProGuideProps> = ({
 	setQuality,
 }) => {
 	const isLaptopL = useMediaQuery(`(min-width: ${deviceSize.laptopL}px)`);
+	const scrollDir = useScrollDetection();
 	return isLaptopL ? (
-		<Wrapper>
+		<Wrapper $show={scrollDir !== EScrollDir.Down}>
 			<ProjectTip activeSection={activeSection} />
 			<ProjectScoreCard
 				formData={formData}
@@ -29,10 +31,12 @@ export const ProGuide: FC<IProGuideProps> = ({
 	) : null;
 };
 
-const Wrapper = styled(Flex)`
+const Wrapper = styled(Flex)<{ $show: boolean }>`
 	flex-direction: column;
 	position: sticky;
-	top: 100px;
+	top: ${props => (props.$show ? '100px' : '10px')};
 	margin-top: 80px;
 	gap: 24px;
+	max-height: calc(100vh - ${props => (props.$show ? '100px' : '10px')});
+	overflow-y: auto;
 `;
