@@ -6,13 +6,14 @@ import {
 	neutralColors,
 	Flex,
 	FlexCenter,
+	IconExternalLink,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
 import { client } from '@/apollo/apolloClient';
 import { IAdminUser, IDonation } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
-import { smallFormatDate } from '@/lib/helpers';
+import { formatTxLink, smallFormatDate } from '@/lib/helpers';
 import { EDirection } from '@/apollo/types/gqlEnums';
 import SortIcon from '@/components/SortIcon';
 import {
@@ -27,6 +28,8 @@ import { Spinner } from '@/components/Spinner';
 import { NoDonation } from './NoDonation';
 import { FETCH_RECURRING_DONATIONS_BY_PROJECTID } from '@/apollo/gql/gqlProjects';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
+import ExternalLink from '@/components/ExternalLink';
+import { ChainType } from '@/types/config';
 
 const itemPerPage = 10;
 
@@ -224,22 +227,9 @@ const ProjectRecurringDonationTable = () => {
 											),
 										)}
 									</B>
-									<Currency>{donation.currency}</Currency>
-									{/* {!donation.anonymous && (
-										<ExternalLink
-											href={formatTxLink({
-												networkId:
-													donation.transactionNetworkId,
-												txHash: donation.transactionId,
-												chainType: donation.chainType,
-											})}
-										>
-											<IconExternalLink
-												size={16}
-												color={brandColors.pinky[500]}
-											/>
-										</ExternalLink>
-									)} */}
+									<Currency>
+										{donation.currency} Monthly
+									</Currency>
 								</DonationTableCell>
 								<DonationTableCell>
 									{donation.totalUsdStreamed &&
@@ -249,6 +239,20 @@ const ProjectRecurringDonationTable = () => {
 											locale,
 										)}
 									<Currency>{donation.currency}</Currency>
+									{!donation.anonymous && (
+										<ExternalLink
+											href={formatTxLink({
+												networkId: donation.networkId,
+												txHash: donation.txHash,
+												chainType: ChainType.EVM,
+											})}
+										>
+											<IconExternalLink
+												size={16}
+												color={brandColors.pinky[500]}
+											/>
+										</ExternalLink>
+									)}
 								</DonationTableCell>
 								<DonationTableCell>
 									{donation.totalUsdStreamed &&
@@ -286,12 +290,12 @@ const Wrapper = styled(Flex)`
 	gap: 16px;
 `;
 
-const NetworkName = styled.div`
-	width: 80%;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow: hidden;
-`;
+// const NetworkName = styled.div`
+// 	width: 80%;
+// 	text-overflow: ellipsis;
+// 	white-space: nowrap;
+// 	overflow: hidden;
+// `;
 
 const DonationTableWrapper = styled.div`
 	display: block;
@@ -303,7 +307,7 @@ const DonationTableContainer = styled.div<{ $isAdmin?: boolean }>`
 	margin-top: 12px;
 	display: grid;
 	width: 100%;
-	grid-template-columns: 1fr 1.2fr 1.1fr 1fr 1fr;
+	grid-template-columns: 1fr 1.2fr 1.4fr 1fr 1fr;
 	min-width: 800px;
 `;
 
