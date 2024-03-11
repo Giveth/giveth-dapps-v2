@@ -185,7 +185,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const onSubmit = async (formData: TInputs) => {
 		setIsLoading(true);
-		console.log('watchDraft', watchDraft);
 		if (
 			isProjectScoringActive &&
 			!watchDraft &&
@@ -460,10 +459,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 										loading={isLoading}
 										icon={<IconExternalLink size={16} />}
 										type='submit'
-										onClick={() => {
-											setValue(EInputs.draft, true);
-											console.log('draft', true);
-										}}
+										onClick={() =>
+											setValue(EInputs.draft, true)
+										}
 									/>
 								)}
 								{isProjectScoringActive &&
