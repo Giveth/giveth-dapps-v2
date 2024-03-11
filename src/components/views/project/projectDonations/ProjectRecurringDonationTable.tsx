@@ -21,14 +21,11 @@ import {
 	TableHeader,
 } from '@/components/styled-components/Table';
 import { useProjectContext } from '@/context/project.context';
-import NetworkLogo from '@/components/NetworkLogo';
 import { UserWithPFPInCell } from '../../../UserWithPFPInCell';
-import { getChainName } from '@/lib/network';
 import { formatDonation } from '@/helpers/number';
 import { Spinner } from '@/components/Spinner';
 import { NoDonation } from './NoDonation';
 import { FETCH_RECURRING_DONATIONS_BY_PROJECTID } from '@/apollo/gql/gqlProjects';
-import { ChainType } from '@/types/config';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 
 const itemPerPage = 10;
@@ -161,9 +158,9 @@ const ProjectRecurringDonationTable = () => {
 						</LeftPadding>
 					</TableHeader>
 
-					<TableHeader>
+					{/* <TableHeader>
 						{formatMessage({ id: 'label.network' })}
-					</TableHeader>
+					</TableHeader> */}
 					<TableHeader
 					// onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
 					>
@@ -204,7 +201,7 @@ const ProjectRecurringDonationTable = () => {
 										/>
 									)}
 								</DonationTableCell>
-								<DonationTableCell>
+								{/* <DonationTableCell>
 									<NetworkLogo
 										logoSize={24}
 										chainId={donation.networkId}
@@ -216,7 +213,7 @@ const ProjectRecurringDonationTable = () => {
 											ChainType.EVM,
 										)}
 									</NetworkName>
-								</DonationTableCell>
+								</DonationTableCell> */}
 								<DonationTableCell>
 									<B>
 										{formatDonation(
@@ -306,7 +303,7 @@ const DonationTableContainer = styled.div<{ $isAdmin?: boolean }>`
 	margin-top: 12px;
 	display: grid;
 	width: 100%;
-	grid-template-columns: 1fr 1.2fr 1.2fr 1.1fr 1fr 1fr;
+	grid-template-columns: 1fr 1.2fr 1.1fr 1fr 1fr;
 	min-width: 800px;
 `;
 
