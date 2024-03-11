@@ -6,7 +6,7 @@ import ToggleSwitch from '@/components/ToggleSwitch';
 import { RecurringDonationFiltersButton } from './RecurringDonationFiltersButton';
 import { client } from '@/apollo/apolloClient';
 import { EDirection, EDonationStatus } from '@/apollo/types/gqlEnums';
-import { IWalletDonation } from '@/apollo/types/types';
+import { IWalletRecurringDonation } from '@/apollo/types/types';
 import { useProfileContext } from '@/context/profile.context';
 import { FETCH_USER_RECURRING_DONATIONS } from '@/apollo/gql/gqlUser';
 import DonationTable from '@/components/views/userProfile/donationsTab/recurringTab/RecurringDonationsTable';
@@ -26,7 +26,7 @@ export interface IOrder {
 export const ActiveProjectsSection = () => {
 	const [showArchive, setShowArchive] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [donations, setDonations] = useState<IWalletDonation[]>([]);
+	const [donations, setDonations] = useState<IWalletRecurringDonation[]>([]);
 	const [totalDonations, setTotalDonations] = useState<number>(0);
 	const [page, setPage] = useState(0);
 	const [order, setOrder] = useState<IOrder>({

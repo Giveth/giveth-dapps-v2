@@ -7,6 +7,7 @@ import {
 	IProjectUpdate,
 	IWalletAddress,
 	IWalletDonation,
+	IWalletRecurringDonation,
 } from './types';
 
 export interface IFetchAllProjects {
@@ -46,7 +47,7 @@ export interface IUserDonations {
 }
 
 export interface IUserRecurringDonations {
-	recurringDonations: IWalletDonation[];
+	recurringDonations: IWalletRecurringDonation[];
 	totalCount: number;
 }
 
