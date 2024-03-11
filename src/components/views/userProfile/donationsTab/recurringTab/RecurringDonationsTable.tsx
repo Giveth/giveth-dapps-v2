@@ -4,27 +4,25 @@ import styled from 'styled-components';
 import {
 	B,
 	brandColors,
-	IconExternalLink,
 	IconLink24,
 	neutralColors,
+	P,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { smallFormatDate, formatTxLink } from '@/lib/helpers';
+import { smallFormatDate } from '@/lib/helpers';
 import { slugToProjectView } from '@/lib/routeCreators';
-import ExternalLink from '@/components/ExternalLink';
-import { IWalletDonation } from '@/apollo/types/types';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
 import {
 	RowWrapper,
 	TableCell,
 	TableHeader,
 } from '@/components/styled-components/Table';
-import { Badge, EBadgeStatus } from '@/components/Badge';
 import { formatDonation } from '@/helpers/number';
 import { ERecurringDonationSortField, IOrder } from './ActiveProjectsSection';
+import { IWalletRecurringDonation } from '@/apollo/types/types';
 
 interface RecurringDonationTable {
-	donations: IWalletDonation[];
+	donations: IWalletRecurringDonation[];
 	order: IOrder;
 	changeOrder: (orderBy: ERecurringDonationSortField) => void;
 	myAccount?: boolean;
@@ -92,34 +90,13 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 					)}
 					<DonationTableCell>
 						<B>{formatDonation(donation.flowRate)}</B>
+						<Currency>{donation.currency} monthly</Currency>
+					</DonationTableCell>
+					<DonationTableCell>
+						{donation.totalDonated}
 						<Currency>{donation.currency}</Currency>
-						<ExternalLink
-							href={formatTxLink({
-								networkId: donation.transactionNetworkId,
-								txHash: donation.transactionId,
-								chainType: donation.chainType,
-							})}
-						>
-							<IconExternalLink
-								size={16}
-								color={brandColors.pinky[500]}
-							/>
-						</ExternalLink>
 					</DonationTableCell>
-					<DonationTableCell>
-						{donation.valueUsd &&
-							formatDonation(donation.valueUsd, '$', locale)}
-					</DonationTableCell>
-					<DonationTableCell>
-						{donation.qfRound ? (
-							<Badge
-								status={EBadgeStatus.GIVETH}
-								label={donation.qfRound.name}
-							/>
-						) : (
-							<Badge status={EBadgeStatus.DEFAULT} label='--' />
-						)}
-					</DonationTableCell>
+					<DonationTableCell></DonationTableCell>
 					<DonationTableCell></DonationTableCell>
 				</DonationRowWrapper>
 			))}
@@ -127,8 +104,10 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 	);
 };
 
-const Currency = styled.div`
+const Currency = styled(P)`
 	color: ${neutralColors.gray[600]};
+	white-space: nowrap;
+	text-overflow: ellipsis;
 `;
 
 const DonationRowWrapper = styled(RowWrapper)`
@@ -149,8 +128,8 @@ const DonationTableContainer = styled.div<{ $myAccount?: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
 		props.$myAccount
-			? '1fr 4fr 1fr 1.5fr 1fr 1fr 1fr '
-			: '1fr 4fr 1.5fr 1fr 1fr '};
+			? '1fr 3fr 1fr 2fr 1fr 1fr 1fr '
+			: '1fr 3fr 1.5fr 1fr 1fr '};
 	overflow: auto;
 	min-width: 900px;
 	margin: 0 10px;
