@@ -9,6 +9,7 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { formatUnits } from 'viem';
 import { smallFormatDate } from '@/lib/helpers';
 import { slugToProjectView } from '@/lib/routeCreators';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
@@ -17,9 +18,9 @@ import {
 	TableCell,
 	TableHeader,
 } from '@/components/styled-components/Table';
-import { formatDonation } from '@/helpers/number';
 import { ERecurringDonationSortField, IOrder } from './ActiveProjectsSection';
 import { IWalletRecurringDonation } from '@/apollo/types/types';
+import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 
 interface RecurringDonationTable {
 	donations: IWalletRecurringDonation[];
@@ -89,7 +90,12 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 						</DonationTableCell>
 					)}
 					<DonationTableCell>
-						<B>{formatDonation(donation.flowRate)}</B>
+						<B>
+							{formatUnits(
+								BigInt(donation.flowRate) * ONE_MONTH_SECONDS,
+								18,
+							)}
+						</B>
 						<Currency>{donation.currency} monthly</Currency>
 					</DonationTableCell>
 					<DonationTableCell>
@@ -128,8 +134,8 @@ const DonationTableContainer = styled.div<{ $myAccount?: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
 		props.$myAccount
-			? '1fr 3fr 1fr 2fr 1fr 1fr 1fr '
-			: '1fr 3fr 1.5fr 1fr 1fr '};
+			? '1fr 2fr 1fr 2fr 1fr 1fr 1fr '
+			: '1fr 2fr 1.5fr 1fr 1fr '};
 	overflow: auto;
 	min-width: 900px;
 	margin: 0 10px;
