@@ -45,6 +45,11 @@ export interface IUserDonations {
 	totalCount: number;
 }
 
+export interface IUserRecurringDonations {
+	recurringDonations: IWalletDonation[];
+	totalCount: number;
+}
+
 export interface IUserLikedProjects {
 	projects: IProject[];
 	totalCount: number;
