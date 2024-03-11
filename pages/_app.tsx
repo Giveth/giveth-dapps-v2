@@ -43,7 +43,7 @@ import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import { SolanaProvider } from '@/providers/solanaWalletProvider';
 import type { AppProps } from 'next/app';
 
-if (isProduction) {
+if (!isProduction) {
 	// Adds messages only in a dev environment
 	loadDevMessages();
 	loadErrorMessages();
