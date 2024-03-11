@@ -379,6 +379,8 @@ const config: EnvConfig = {
 			unit: 'GIV',
 		},
 		uniswapV2Subgraph: '',
+		GIVETH_ANCHOR_CONTRACT_ADDRESS:
+			'0xb15c8df1a742636a78b0a2ca9dff87c37693862a',
 		superFluidSubgraph:
 			'https://optimism-sepolia.subgraph.x.superfluid.dev/',
 		SUPER_FLUID_TOKENS: [

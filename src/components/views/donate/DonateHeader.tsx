@@ -48,7 +48,7 @@ export const DonateHeader: FC<IHeader> = () => {
 		<StyledHeader
 			$alignItems='center'
 			$baseTheme={theme}
-			show={scrollDir !== EScrollDir.Down}
+			$show={scrollDir !== EScrollDir.Down}
 		>
 			<Flex $alignItems='center' gap='16px'>
 				<Link href={Routes.Project + '/' + project.slug}>

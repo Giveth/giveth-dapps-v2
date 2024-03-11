@@ -11,8 +11,12 @@ import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
 import { ITokenStreams } from '@/context/donate.context';
 import { gqlRequest } from '@/helpers/requests';
-import { ISuperfluidStream } from '@/types/superFluid';
+import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import config, { SENTRY_URGENT } from '@/configuration';
+import {
+	CREATE_RECURRING_DONATION,
+	UPDATE_RECURRING_DONATION,
+} from '@/apollo/gql/gqlSuperfluid';
 
 const SAVE_DONATION_ITERATIONS = 5;
 
@@ -117,4 +121,88 @@ export const fetchUserStreams = async (address: Address) => {
 		_tokenStreams[stream.token.id].push(stream);
 	});
 	return _tokenStreams;
+};
+
+export interface ICreateRecurringDonation {
+	projectId: number;
+	chainId: number;
+	txHash: string;
+	superToken: IToken;
+	flowRate: bigint;
+	anonymous?: boolean;
+}
+
+export const createRecurringDonation = async ({
+	chainId,
+	txHash,
+	projectId,
+	flowRate,
+	superToken,
+	anonymous,
+}: ICreateRecurringDonation) => {
+	let donationId = 0;
+	try {
+		const { data } = await client.mutate({
+			mutation: CREATE_RECURRING_DONATION,
+			variables: {
+				projectId,
+				networkId: chainId,
+				txHash,
+				flowRate: flowRate.toString(),
+				currency: superToken.underlyingToken?.symbol || 'ETH',
+				anonymous,
+			},
+		});
+		donationId = data.createRecurringDonation;
+		console.log('donationId', donationId);
+		return donationId;
+	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('createRecurringDonation error: ', error);
+		throw error;
+	}
+
+	return donationId;
+};
+
+export const updateRecurringDonation = async (
+	props: ICreateRecurringDonation,
+) => {
+	let donationId = 0;
+	const { chainId, txHash, projectId, flowRate, superToken, anonymous } =
+		props;
+	try {
+		const { data } = await client.mutate({
+			mutation: UPDATE_RECURRING_DONATION,
+			variables: {
+				projectId,
+				networkId: chainId,
+				txHash,
+				flowRate: flowRate.toString(),
+				currency: superToken.underlyingToken?.symbol || 'ETH',
+				anonymous,
+			},
+		});
+		donationId = data.updateRecurringDonation;
+		console.log('donationId', donationId);
+		return donationId;
+	} catch (error: any) {
+		//handle the case where the recurring donation does not exist on db but it exists on the chain
+		if (error?.message.toLowerCase() === 'recurring donation not found.') {
+			return createRecurringDonation(props);
+		}
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('updateRecurringDonation error: ', error);
+		throw error;
+	}
+
+	return donationId;
 };

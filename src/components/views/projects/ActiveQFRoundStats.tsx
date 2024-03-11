@@ -1,59 +1,73 @@
 import {
-	H3,
-	H4,
-	P,
 	brandColors,
 	mediaQueries,
-	neutralColors,
 	Flex,
+	H5,
+	neutralColors,
+	Caption,
+	B,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-import Image from 'next/image';
 import { useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
+import { useProjectsContext } from '@/context/projects.context';
+import { formatDate } from '@/lib/helpers';
 
-export const QFRoundStats = () => {
+export const ActiveQFRoundStats = () => {
 	const { formatMessage } = useIntl();
-	const router = useRouter();
+	const { qfRounds } = useProjectsContext();
+	const activeRound = qfRounds.find(round => round.isActive);
 	const { data } = useQuery(FETCH_QF_ROUND_STATS, {
-		variables: { slug: router.query.slug },
+		variables: { slug: activeRound?.slug },
 	});
 
 	return (
 		<Wrapper>
-			<Smile src='/images/arc3.svg' width={70} height={100} alt='arc' />
-			<Plus src='/images/plus.svg' width={30} height={30} alt='arc' />
-			<Arc src='/images/arc.svg' width={30} height={30} alt='arc' />
-			<H3 weight={700}>Round Stats</H3>
+			<Title weight={700}>{activeRound?.name} Metrics</Title>
 			<InfoSection>
 				<ItemContainer>
-					<ItemTitle>
+					<ItemTitle weight={700}>
 						{formatMessage({ id: 'label.matching_pool' })}
 					</ItemTitle>
-					<ItemValue>
+					<ItemValue weight={500}>
 						{data?.qfRoundStats?.matchingPool || '--'}&nbsp;DAI
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
-					<ItemTitle>
+					<ItemTitle weight={700}>
 						{formatMessage({ id: 'label.donations' })}
 					</ItemTitle>
-					<ItemValue>
+					<ItemValue weight={500}>
 						$&nbsp;
 						{data?.qfRoundStats?.allDonationsUsdValue || '--'}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
-					<ItemTitle>
+					<ItemTitle weight={700}>
 						{formatMessage({ id: 'label.number_of_unique_donors' })}
 					</ItemTitle>
-					<ItemValue>
+					<ItemValue weight={500}>
 						{data?.qfRoundStats?.uniqueDonors || '--'}
 					</ItemValue>
 				</ItemContainer>
+				<Flex $flexDirection='column'>
+					<Caption color={neutralColors.gray[700]}>
+						Round started
+					</Caption>
+					<B>
+						{activeRound?.endDate
+							? formatDate(new Date(activeRound.beginDate))
+							: '--'}
+					</B>
+					<Caption color={neutralColors.gray[700]}>Ends on</Caption>
+					<B>
+						{activeRound?.endDate
+							? formatDate(new Date(activeRound.endDate))
+							: '--'}
+					</B>
+				</Flex>
 			</InfoSection>
 		</Wrapper>
 	);
@@ -61,23 +75,25 @@ export const QFRoundStats = () => {
 
 const Wrapper = styled.div`
 	margin-top: 40px;
-	padding: 40px;
-	background-color: ${neutralColors.gray[100]};
 	border-radius: 16px;
-	color: ${brandColors.giv[500]};
-	text-align: center;
+	color: ${brandColors.deep[900]};
+	text-align: left;
 	position: relative;
 	overflow: hidden;
+`;
+
+const Title = styled(H5)`
+	margin-bottom: 40px;
 `;
 
 const InfoSection = styled(Flex)`
 	flex-direction: column;
 	margin-top: 40px;
-	padding: 40px;
-	background-color: ${brandColors.giv[100]};
+	padding: 24px;
+	background-color: ${neutralColors.gray[100]};
 	border-radius: 16px;
 	gap: 16px;
-	justify-content: space-around;
+	justify-content: space-between;
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
@@ -85,24 +101,8 @@ const InfoSection = styled(Flex)`
 
 const ItemContainer = styled.div``;
 
-const ItemTitle = styled(P)``;
-
-const ItemValue = styled(H4)``;
-
-const BaseImage = styled(Image)`
-	position: absolute;
+const ItemTitle = styled(H5)`
+	margin-bottom: 8px;
 `;
 
-const Smile = styled(BaseImage)`
-	right: -20px;
-`;
-
-const Plus = styled(BaseImage)`
-	top: 20px;
-	left: 30%;
-`;
-
-const Arc = styled(BaseImage)`
-	top: 60px;
-	left: 6%;
-`;
+const ItemValue = styled(H5)``;
