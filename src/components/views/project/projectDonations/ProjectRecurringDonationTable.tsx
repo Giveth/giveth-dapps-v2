@@ -13,11 +13,7 @@ import { client } from '@/apollo/apolloClient';
 import { IDonation } from '@/apollo/types/types';
 import Pagination from '@/components/Pagination';
 import { smallFormatDate, compareAddresses, formatTxLink } from '@/lib/helpers';
-import {
-	EDirection,
-	EDonationStatus,
-	EDonationType,
-} from '@/apollo/types/gqlEnums';
+import { EDirection, EDonationType } from '@/apollo/types/gqlEnums';
 import ExternalLink from '@/components/ExternalLink';
 import SortIcon from '@/components/SortIcon';
 import { useAppSelector } from '@/features/hooks';
@@ -101,7 +97,6 @@ const ProjectRecurringDonationTable = () => {
 					take: itemPerPage,
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },
-					status: isAdmin ? null : EDonationStatus.VERIFIED,
 				},
 			});
 			console.log('projectRecurringDonations', projectRecurringDonations);
