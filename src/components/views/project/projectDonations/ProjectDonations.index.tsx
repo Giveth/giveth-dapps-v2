@@ -5,21 +5,29 @@ import ProjectTotalFundCard from './ProjectTotalFundCard';
 import ProjectDonationTable from './ProjectDonationTable';
 import { QfRoundSelector } from './QfRoundSelector';
 import { IQFRound } from '@/apollo/types/types';
+import ProjectRecurringDonationTable from './ProjectRecurringDonationTable';
 
 const ProjectDonationsIndex = () => {
 	const [selectedQF, setSelectedQF] = useState<IQFRound | null>(null);
+	const [isRecurringSelected, setIsRecurringSelected] = useState(false);
 	return (
 		<>
 			<QfRoundSelector
 				selectedQF={selectedQF}
 				setSelectedQF={setSelectedQF}
+				isRecurringSelected={isRecurringSelected}
+				setIsRecurringSelected={setIsRecurringSelected}
 			/>
 			<StyledRow>
 				<Col lg={4}>
 					<ProjectTotalFundCard selectedQF={selectedQF} />
 				</Col>
 				<Col lg={8}>
-					<ProjectDonationTable selectedQF={selectedQF} />
+					{!isRecurringSelected ? (
+						<ProjectDonationTable selectedQF={selectedQF} />
+					) : (
+						<ProjectRecurringDonationTable />
+					)}
 				</Col>
 			</StyledRow>
 		</>
