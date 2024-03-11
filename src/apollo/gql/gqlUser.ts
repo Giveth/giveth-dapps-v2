@@ -114,7 +114,7 @@ export const FETCH_USER_DONATIONS = gql`
 `;
 
 export const FETCH_USER_RECURRING_DONATIONS = gql`
-	query fetchRecurringDonationsByUserIdQuery(
+	query fetchRecurringDonationsByUserId(
 		$take: Int
 		$skip: Int
 		$status: String

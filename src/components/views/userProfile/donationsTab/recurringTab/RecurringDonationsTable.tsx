@@ -13,11 +13,6 @@ import { smallFormatDate, formatTxLink } from '@/lib/helpers';
 import { slugToProjectView } from '@/lib/routeCreators';
 import ExternalLink from '@/components/ExternalLink';
 import { IWalletDonation } from '@/apollo/types/types';
-import {
-	EOrderBy,
-	IOrder,
-} from '@/components/views/userProfile/UserProfile.view';
-import SortIcon from '@/components/SortIcon';
 import DonationStatus from '@/components/badges/DonationStatusBadge';
 import {
 	RowWrapper,
@@ -26,11 +21,12 @@ import {
 } from '@/components/styled-components/Table';
 import { Badge, EBadgeStatus } from '@/components/Badge';
 import { formatDonation } from '@/helpers/number';
+import { ERecurringDonationSortField, IOrder } from './ActiveProjectsSection';
 
 interface RecurringDonationTable {
 	donations: IWalletDonation[];
 	order: IOrder;
-	changeOrder: (orderBy: EOrderBy) => void;
+	changeOrder: (orderBy: ERecurringDonationSortField) => void;
 	myAccount?: boolean;
 }
 
@@ -43,9 +39,16 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 	const { formatMessage, locale } = useIntl();
 	return (
 		<DonationTableContainer $myAccount={myAccount}>
-			<TableHeader onClick={() => changeOrder(EOrderBy.CreationDate)}>
+			<TableHeader
+				onClick={() =>
+					changeOrder(ERecurringDonationSortField.createdAt)
+				}
+			>
 				{formatMessage({ id: 'label.donated_at' })}
-				<SortIcon order={order} title={EOrderBy.CreationDate} />
+				{/* <SortIcon
+					order={order}
+					title={ERecurringDonationSortField.createdAt}
+				/> */}
 			</TableHeader>
 			<TableHeader>{formatMessage({ id: 'label.project' })}</TableHeader>
 			{myAccount && (
@@ -53,13 +56,19 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 					{formatMessage({ id: 'label.status' })}
 				</TableHeader>
 			)}
-			<TableHeader onClick={() => changeOrder(EOrderBy.TokenAmount)}>
+			<TableHeader
+				onClick={() =>
+					changeOrder(ERecurringDonationSortField.flowRate)
+				}
+			>
 				{formatMessage({ id: 'label.amount' })}
-				<SortIcon order={order} title={EOrderBy.TokenAmount} />
+				{/* <SortIcon
+					order={order}
+					title={ERecurringDonationSortField.flowRate}
+				/> */}
 			</TableHeader>
-			<TableHeader onClick={() => changeOrder(EOrderBy.UsdAmount)}>
+			<TableHeader>
 				{formatMessage({ id: 'label.usd_value' })}
-				<SortIcon order={order} title={EOrderBy.UsdAmount} />
 			</TableHeader>
 			<TableHeader>QF Round</TableHeader>
 			{donations.map(donation => (
