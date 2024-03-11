@@ -380,7 +380,7 @@ const config: EnvConfig = {
 		},
 		uniswapV2Subgraph: '',
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
-			'0xb15c8df1a742636a78b0a2ca9dff87c37693862a',
+			'0x503055e1f8b99c60a51c479a60b233976617bc7a',
 		superFluidSubgraph:
 			'https://optimism-sepolia.subgraph.x.superfluid.dev/',
 		SUPER_FLUID_TOKENS: [
