@@ -98,6 +98,7 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 						$alignItems='center'
 						gap='4px'
 						onClick={() => {
+							setSelectedQF(null);
 							setIsRecurringSelected(true);
 						}}
 						$isSelected={isRecurringSelected === true}
