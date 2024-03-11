@@ -44,7 +44,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 					changeOrder(ERecurringDonationSortField.createdAt)
 				}
 			>
-				{formatMessage({ id: 'label.donated_at' })}
+				{formatMessage({ id: 'label.donating_since' })}
 				{/* <SortIcon
 					order={order}
 					title={ERecurringDonationSortField.createdAt}
@@ -61,16 +61,19 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 					changeOrder(ERecurringDonationSortField.flowRate)
 				}
 			>
-				{formatMessage({ id: 'label.amount' })}
+				{formatMessage({ id: 'label.flow_rate' })}
 				{/* <SortIcon
 					order={order}
 					title={ERecurringDonationSortField.flowRate}
 				/> */}
 			</TableHeader>
 			<TableHeader>
-				{formatMessage({ id: 'label.usd_value' })}
+				{formatMessage({ id: 'label.total_donated' })}
 			</TableHeader>
-			<TableHeader>QF Round</TableHeader>
+			<TableHeader>
+				{formatMessage({ id: 'label.runs_out_in' })}
+			</TableHeader>
+			<TableHeader>{formatMessage({ id: 'label.actions' })}</TableHeader>
 			{donations.map(donation => (
 				<DonationRowWrapper key={donation.id}>
 					<DonationTableCell>
@@ -88,7 +91,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 						</DonationTableCell>
 					)}
 					<DonationTableCell>
-						<B>{formatDonation(donation.amount)}</B>
+						<B>{formatDonation(donation.flowRate)}</B>
 						<Currency>{donation.currency}</Currency>
 						<ExternalLink
 							href={formatTxLink({
@@ -117,6 +120,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 							<Badge status={EBadgeStatus.DEFAULT} label='--' />
 						)}
 					</DonationTableCell>
+					<DonationTableCell></DonationTableCell>
 				</DonationRowWrapper>
 			))}
 		</DonationTableContainer>
@@ -145,8 +149,8 @@ const DonationTableContainer = styled.div<{ $myAccount?: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
 		props.$myAccount
-			? '1fr 4fr 1fr 1.5fr 1fr 1fr'
-			: '1fr 4fr 1.5fr 1fr 1fr'};
+			? '1fr 4fr 1fr 1.5fr 1fr 1fr 1fr '
+			: '1fr 4fr 1.5fr 1fr 1fr '};
 	overflow: auto;
 	min-width: 900px;
 	margin: 0 10px;
