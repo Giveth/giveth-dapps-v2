@@ -134,15 +134,14 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 				id
 				txHash
 				networkId
-				amount
+				flowRate
 				currency
 				anonymous
 				status
-				donor {
+				project {
 					id
-					walletAddress
-					firstName
-					email
+					title
+					slug
 				}
 				createdAt
 			}
