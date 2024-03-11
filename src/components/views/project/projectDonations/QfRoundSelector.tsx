@@ -22,11 +22,15 @@ import { NavigationWrapper } from '@/components/styled-components/SwiperPaginati
 interface IQfRoundSelectorProps {
 	selectedQF: IQFRound | null;
 	setSelectedQF: Dispatch<SetStateAction<IQFRound | null>>;
+	isRecurringSelected: boolean;
+	setIsRecurringSelected: Dispatch<SetStateAction<boolean>>;
 }
 
 export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 	selectedQF,
 	setSelectedQF,
+	isRecurringSelected,
+	setIsRecurringSelected,
 }) => {
 	const { formatMessage } = useIntl();
 	const { projectData } = useProjectContext();
@@ -71,6 +75,20 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 							<P>
 								{formatMessage({ id: 'label.all_donations' })}
 							</P>
+						)}
+					</TabItem>
+				</SwiperSlide>
+				<SwiperSlide style={{ width: 'auto' }}>
+					<TabItem
+						$alignItems='center'
+						gap='4px'
+						onClick={() => setIsRecurringSelected(true)}
+						$isSelected={isRecurringSelected === true}
+					>
+						{selectedQF === null ? (
+							<B>Recurring Donations</B>
+						) : (
+							<P>Recurring Donations</P>
 						)}
 					</TabItem>
 				</SwiperSlide>
