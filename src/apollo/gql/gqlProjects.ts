@@ -822,6 +822,9 @@ export const FETCH_RECURRING_DONATIONS_BY_PROJECTID = gql`
 				currency
 				anonymous
 				status
+				amountStreamed
+				totalUsdStreamed
+				flowRate
 				donor {
 					id
 					walletAddress
