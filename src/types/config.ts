@@ -182,6 +182,7 @@ export interface OptimismNetworkConfig extends NetworkConfig {
 	GIV_BUY_LINK: string;
 	superFluidSubgraph: string;
 	SUPER_FLUID_TOKENS: Array<ISuperToken>;
+	GIVETH_ANCHOR_CONTRACT_ADDRESS: Address;
 }
 
 interface MicroservicesConfig {

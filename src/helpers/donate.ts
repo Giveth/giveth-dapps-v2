@@ -27,9 +27,7 @@ export const findUserStreamOnSelectedToken = (
 		!selectedSuperToken.token.isSuperToken
 	)
 		return;
-	const projectOpAddress = project.addresses?.find(
-		address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
-	)?.address;
+	const projectOpAddress = project.anchorContracts[0]?.address;
 	if (!projectOpAddress) return;
 	const tokenStream = tokenStreams[selectedSuperToken.token.id];
 	if (!tokenStream) return;

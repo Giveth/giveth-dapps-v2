@@ -10,6 +10,7 @@ import { Framework, type Operation } from '@superfluid-finance/sdk-core';
 import { useAccount } from 'wagmi';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
+import { formatUnits } from 'viem';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -19,19 +20,24 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { showToastError } from '@/lib/helpers';
 import { DonateSteps } from './DonateSteps';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
-import config from '@/configuration';
+import config, { isProduction } from '@/configuration';
 import { findSuperTokenByTokenAddress } from '@/helpers/donate';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { RunOutInfo } from '../RunOutInfo';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { ChainType } from '@/types/config';
+import {
+	createRecurringDonation,
+	updateRecurringDonation,
+} from '@/services/donation';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
 	amount: bigint;
 	percentage: number;
 	isUpdating?: boolean;
+	anonymous: boolean;
 }
 
 export enum EDonationSteps {
@@ -109,6 +115,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	donationToGiveth,
 	setShowModal,
 	isUpdating,
+	anonymous,
 }) => {
 	const { project, selectedToken, tokenStreams, setSuccessDonation } =
 		useDonateData();
@@ -128,7 +135,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	}, [selectedToken, setStep]);
 
 	const onApprove = async () => {
-		console.log('amount', amount);
+		console.log(
+			'amount',
+			formatUnits(amount, selectedToken?.token.decimals || 18),
+		);
 		setStep(EDonationSteps.APPROVING);
 		if (!address || !selectedToken) return;
 		const superToken = findSuperTokenByTokenAddress(selectedToken.token.id);
@@ -155,6 +165,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	const onDonate = async () => {
 		setStep(EDonationSteps.DONATING);
 		try {
+			const projectAnchorContract = project?.anchorContracts[0]?.address;
+			if (!projectAnchorContract) {
+				throw new Error('Project anchor address not found');
+			}
 			if (!address || !selectedToken) {
 				throw new Error('address not found');
 			}
@@ -172,10 +186,16 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					_superToken = sp;
 				}
 			}
-			const sf = await Framework.create({
+
+			const _options = {
 				chainId: config.OPTIMISM_CONFIG.id,
 				provider: provider,
-			});
+				resolverAddress: isProduction
+					? undefined
+					: '0x554c06487bEc8c890A0345eb05a5292C1b1017Bd',
+			};
+			console.log('_options', _options);
+			const sf = await Framework.create(_options);
 
 			// EThx is not a Wrapper Super Token and should load separately
 			let superToken;
@@ -187,6 +207,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			const operations: Operation[] = [];
 
+			// Upgrade the token to super token
 			if (!isUpdating && !selectedToken.token.isSuperToken) {
 				const upgradeOperation = await superToken.upgrade({
 					amount: amount.toString(),
@@ -200,11 +221,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				}
 			}
 
-			const projectOpWalletAddress = project?.addresses?.find(
-				address => address.networkId === config.OPTIMISM_CONFIG.id,
-			)?.address;
-
-			if (!projectOpWalletAddress) {
+			if (!projectAnchorContract) {
 				throw new Error('Project wallet address not found');
 			}
 
@@ -215,7 +232,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			const options = {
 				sender: address,
-				receiver: projectOpWalletAddress, // should change with anchor contract address
+				receiver: projectAnchorContract,
 				flowRate: _flowRate.toString(),
 			};
 
@@ -225,12 +242,13 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			operations.push(projectFlowOp);
 
+			let givethOldStream;
+			let givethFlowRate = 0n;
 			if (!isUpdating && donationToGiveth > 0) {
-				const givethOpWalletAddress = project?.givethAddresses?.find(
-					address => address.networkId === config.OPTIMISM_CONFIG.id,
-				)?.address;
+				const givethAnchorContract =
+					config.OPTIMISM_CONFIG.GIVETH_ANCHOR_CONTRACT_ADDRESS;
 
-				if (!givethOpWalletAddress) {
+				if (!givethAnchorContract) {
 					throw new Error('Giveth wallet address not found');
 				}
 
@@ -239,37 +257,109 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					100n /
 					ONE_MONTH_SECONDS;
 
-				const oldStream =
+				givethOldStream =
 					tokenStreams[_superToken.id] &&
 					tokenStreams[_superToken.id].find(
 						stream =>
 							stream.receiver.id.toLowerCase() ===
-							givethOpWalletAddress.toLowerCase(),
+							givethAnchorContract.toLowerCase(),
 					);
 
-				if (oldStream) {
-					const givethFlowRate =
-						_newFlowRate + BigInt(oldStream.currentFlowRate);
+				if (givethOldStream) {
+					givethFlowRate =
+						_newFlowRate + BigInt(givethOldStream.currentFlowRate);
 
 					const givethFlowOp = superToken.updateFlow({
 						sender: address,
-						receiver: givethOpWalletAddress, // should change with anchor contract address
+						receiver: givethAnchorContract, // should change with anchor contract address
 						flowRate: givethFlowRate.toString(),
 					});
-
 					operations.push(givethFlowOp);
 				} else {
+					givethFlowRate = _newFlowRate;
 					const givethFlowOp = superToken.createFlow({
 						sender: address,
-						receiver: givethOpWalletAddress, // should change with anchor contract address
+						receiver: givethAnchorContract, // should change with anchor contract address
 						flowRate: _newFlowRate.toString(),
 					});
-
 					operations.push(givethFlowOp);
 				}
 			}
-			const batchOp = sf.batchCall(operations);
-			const tx = await batchOp.exec(signer);
+			let tx;
+			if (operations.length === 1) {
+				tx = await operations[0].exec(signer);
+			} else {
+				const batchOp = sf.batchCall(operations);
+				tx = await batchOp.exec(signer);
+			}
+
+			let donationId = 0;
+			// saving project donation to backend
+			try {
+				const projectDonationInfo = {
+					projectId: +project.id,
+					anonymous,
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					txHash: tx.hash,
+					flowRate: _flowRate,
+					superToken: _superToken,
+				};
+				if (isUpdating) {
+					console.log('Start Update Project Donation Info');
+					const projectBackendRes =
+						await updateRecurringDonation(projectDonationInfo);
+					console.log(
+						'Project Donation Update Info',
+						projectBackendRes,
+					);
+				} else {
+					console.log('Start Creating Project Donation Info');
+					const projectBackendRes =
+						await createRecurringDonation(projectDonationInfo);
+					console.log(
+						'Giveth Donation Create Info',
+						projectBackendRes,
+					);
+					// donationId = backendRes.createRecurringDonation.id;
+				}
+			} catch (error) {
+				console.log('error', error);
+			}
+
+			// saving giveth donation to backend
+			if (!isUpdating && donationToGiveth > 0) {
+				const givethDonationInfo = {
+					projectId: config.GIVETH_PROJECT_ID,
+					anonymous,
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					txHash: tx.hash,
+					flowRate: givethFlowRate,
+					superToken: _superToken,
+				};
+				if (givethOldStream) {
+					console.log('Start Update Giveth Donation Info');
+					const givethBackendRes =
+						await updateRecurringDonation(givethDonationInfo);
+					console.log(
+						'Giveth Donation Update Info',
+						givethBackendRes,
+					);
+				} else {
+					try {
+						console.log('Start Creating Giveth Donation Info');
+						const givethBackendRes =
+							await createRecurringDonation(givethDonationInfo);
+						console.log(
+							'Giveth Donation Create Info',
+							givethBackendRes,
+						);
+						// donationId = backendRes.createRecurringDonation.id;
+					} catch (error) {
+						console.log('error', error);
+					}
+				}
+			}
+
 			const res = await tx.wait();
 			if (!res.status) {
 				throw new Error('Transaction failed');
