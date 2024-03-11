@@ -113,6 +113,44 @@ export const FETCH_USER_DONATIONS = gql`
 	}
 `;
 
+export const FETCH_USER_RECURRING_DONATIONS = gql`
+	query fetchRecurringDonationsByUserIdQuery(
+		$take: Int
+		$skip: Int
+		$status: String
+		$orderBy: RecurringDonationSortBy
+		$finished: Boolean
+		$userId: Int!
+	) {
+		recurringDonationsByUserId(
+			take: $take
+			skip: $skip
+			orderBy: $orderBy
+			userId: $userId
+			status: $status
+			finished: $finished
+		) {
+			recurringDonations {
+				id
+				txHash
+				networkId
+				amount
+				currency
+				anonymous
+				status
+				donor {
+					id
+					walletAddress
+					firstName
+					email
+				}
+				createdAt
+			}
+			totalCount
+		}
+	}
+`;
+
 export const UPLOAD_PROFILE_PHOTO = gql`
 	mutation ($fileUpload: FileUploadInputType!) {
 		upload(fileUpload: $fileUpload)
