@@ -7,16 +7,27 @@ import { QfRoundSelector } from './QfRoundSelector';
 import { IQFRound } from '@/apollo/types/types';
 import ProjectRecurringDonationTable from './ProjectRecurringDonationTable';
 
+export interface ProjectDonationSwiperState {
+	selectedQF: IQFRound | null;
+	isRecurringSelected: boolean;
+}
+
 const ProjectDonationsIndex = () => {
-	const [selectedQF, setSelectedQF] = useState<IQFRound | null>(null);
-	const [isRecurringSelected, setIsRecurringSelected] = useState(false);
+	const [projectDonationSwiperState, setProjectDonationSwiperState] =
+		useState<ProjectDonationSwiperState>({
+			selectedQF: null,
+			isRecurringSelected: false,
+		});
+
+	const { selectedQF, isRecurringSelected } = projectDonationSwiperState;
+
+	console.log('SelectedQF', selectedQF);
+
 	return (
 		<>
 			<QfRoundSelector
-				selectedQF={selectedQF}
-				setSelectedQF={setSelectedQF}
-				isRecurringSelected={isRecurringSelected}
-				setIsRecurringSelected={setIsRecurringSelected}
+				projectDonationSwiperState={projectDonationSwiperState}
+				setProjectDonationSwiperState={setProjectDonationSwiperState}
 			/>
 			<StyledRow>
 				<Col lg={4}>
