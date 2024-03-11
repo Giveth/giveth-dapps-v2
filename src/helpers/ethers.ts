@@ -1,6 +1,12 @@
 import { type Config, getClient, getConnectorClient } from '@wagmi/core';
 import { providers } from 'ethers';
-import type { Account, Chain, Client, Transport } from 'viem';
+import {
+	parseUnits,
+	type Account,
+	type Chain,
+	type Client,
+	type Transport,
+} from 'viem';
 
 export function clientToProvider(client: Client<Transport, Chain>) {
 	const { chain, transport } = client;
@@ -34,6 +40,7 @@ export function clientToSigner(client: Client<Transport, Chain, Account>) {
 		chainId: chain.id,
 		name: chain.name,
 		ensAddress: chain.contracts?.ensRegistry?.address,
+		gasLimit: parseUnits('1', 18),
 	};
 	const provider = new providers.Web3Provider(transport, network);
 	const signer = provider.getSigner(account.address);
