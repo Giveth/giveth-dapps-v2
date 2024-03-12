@@ -39,9 +39,10 @@ const AddressContainer = styled(FlexCenter)`
 	background: ${neutralColors.gray[200]};
 	border-radius: 16px;
 	padding: 4px 8px;
-	width: fit-content;
-	gap: 16px;
+	width: 100%;
+	gap: 10px;
 	flex-wrap: wrap;
+	justify-content: space-between;
 	${mediaQueries.mobileL} {
 		flex-wrap: nowrap;
 	}
