@@ -31,6 +31,7 @@ import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import ExternalLink from '@/components/ExternalLink';
 import { ChainType } from '@/types/config';
 import NetworkLogo from '@/components/NetworkLogo';
+import { EOrderBy } from '../../userProfile/UserProfile.view';
 
 const itemPerPage = 10;
 
@@ -167,10 +168,14 @@ const ProjectRecurringDonationTable = () => {
 						{formatMessage({ id: 'label.network' })}
 					</TableHeader>
 					<TableHeader
-					// onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
+						onClick={() =>
+							orderChangeHandler(
+								RecurringDonationSortField.flowRate,
+							)
+						}
 					>
 						{formatMessage({ id: 'label.amount' })}
-						{/* <SortIcon order={order} title={EOrderBy.TokenAmount} /> */}
+						<SortIcon order={order} title={EOrderBy.TokenAmount} />
 					</TableHeader>
 					<TableHeader
 					// onClick={() => orderChangeHandler(EOrderBy.UsdAmount)}
