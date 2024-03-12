@@ -241,7 +241,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				: superToken.createFlow(options);
 
 			operations.push(projectFlowOp);
-
+			let isDonatingToGiveth = false;
 			let givethOldStream;
 			let givethFlowRate = 0n;
 			if (!isUpdating && donationToGiveth > 0) {
@@ -349,6 +349,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 						console.log('Start Creating Giveth Donation Info');
 						const givethBackendRes =
 							await createRecurringDonation(givethDonationInfo);
+						if (givethBackendRes) isDonatingToGiveth = true;
 						console.log(
 							'Giveth Donation Create Info',
 							givethBackendRes,
@@ -366,9 +367,18 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 			setStep(EDonationSteps.SUBMITTED);
 			if (tx.hash) {
-				setSuccessDonation({
-					txHash: [{ txHash: tx.hash, chainType: ChainType.EVM }],
-				});
+				if (isDonatingToGiveth) {
+					setSuccessDonation({
+						txHash: [
+							{ txHash: tx.hash, chainType: ChainType.EVM },
+							{ txHash: tx.hash, chainType: ChainType.EVM },
+						],
+					});
+				} else {
+					setSuccessDonation({
+						txHash: [{ txHash: tx.hash, chainType: ChainType.EVM }],
+					});
+				}
 			}
 		} catch (error: any) {
 			setStep(EDonationSteps.DONATE);
