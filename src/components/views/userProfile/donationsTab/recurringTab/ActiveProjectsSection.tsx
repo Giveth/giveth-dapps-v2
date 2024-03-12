@@ -11,6 +11,7 @@ import { useProfileContext } from '@/context/profile.context';
 import { FETCH_USER_RECURRING_DONATIONS } from '@/apollo/gql/gqlUser';
 import DonationTable from '@/components/views/userProfile/donationsTab/recurringTab/RecurringDonationsTable';
 import { IUserRecurringDonations } from '@/apollo/types/gqlTypes';
+import Pagination from '@/components/Pagination';
 
 const itemPerPage = 10;
 
@@ -96,6 +97,12 @@ export const ActiveProjectsSection = () => {
 				order={order}
 				changeOrder={changeOrder}
 				myAccount={myAccount}
+			/>
+			<Pagination
+				currentPage={page}
+				totalCount={totalDonations}
+				setPage={setPage}
+				itemPerPage={itemPerPage}
 			/>
 		</Wrapper>
 	);
