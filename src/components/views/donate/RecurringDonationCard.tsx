@@ -586,6 +586,7 @@ export const RecurringDonationCard = () => {
 							tokenBalance === undefined ||
 							amount === 0n ||
 							percentage === 0 ||
+							isTotalStreamExceed ||
 							amount > tokenBalance
 						}
 					/>
