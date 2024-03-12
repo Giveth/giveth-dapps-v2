@@ -83,7 +83,9 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 								})}
 							</GrayCaption>
 							<Caption $medium>
-								{remainingMonths.toString()}
+								{remainingMonths > 1n
+									? remainingMonths.toString()
+									: '< 1'}
 							</Caption>
 							<Caption>
 								{formatMessage(
@@ -91,7 +93,10 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 										id: 'label.months',
 									},
 									{
-										count: remainingMonths.toString(),
+										count:
+											remainingMonths > 1n
+												? remainingMonths.toString()
+												: '1',
 									},
 								)}
 							</Caption>
