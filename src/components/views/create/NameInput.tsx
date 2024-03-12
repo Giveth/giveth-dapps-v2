@@ -75,7 +75,7 @@ const NameInput: FC<IProps> = ({ preTitle, setActiveProjectSection }) => {
 					validate: titleValidation,
 				}}
 				error={formErrors[EInputs.name]}
-				onMouseOver={() =>
+				onMouseEnter={() =>
 					setActiveProjectSection(ECreateProjectSections.name)
 				}
 			/>

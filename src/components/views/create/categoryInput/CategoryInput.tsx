@@ -13,7 +13,6 @@ import { ICategory } from '@/apollo/types/types';
 import { InputContainer } from '@/components/views/create/Create.sc';
 import MainCategoryItem from '@/components/views/create/categoryInput/MainCategoryItem';
 import { useAppSelector } from '@/features/hooks';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { ECreateProjectSections, EInputs } from '../types';
 
 interface ICategoriesInputProps {
@@ -27,10 +26,6 @@ const CategoryInput = ({ setActiveProjectSection }: ICategoriesInputProps) => {
 	const [selectedCategories, setSelectedCategories] = useState<ICategory[]>(
 		getValues(EInputs.categories),
 	);
-	const onVisible = () =>
-		setActiveProjectSection(ECreateProjectSections.categories);
-	const delay = 500; // Delay in milliseconds
-	const ref = useIntersectionObserver(onVisible, { threshold: 0.25, delay });
 
 	const allCategories = useAppSelector(state => state.general.mainCategories);
 
@@ -40,7 +35,11 @@ const CategoryInput = ({ setActiveProjectSection }: ICategoriesInputProps) => {
 	};
 
 	return (
-		<InputContainer ref={ref}>
+		<InputContainer
+			onMouseEnter={() =>
+				setActiveProjectSection(ECreateProjectSections.categories)
+			}
+		>
 			<H5>{formatMessage({ id: 'label.please_select_a_category' })}</H5>
 			<CaptionContainer>
 				{formatMessage({ id: 'label.you_can_choose_up_to' })}{' '}
