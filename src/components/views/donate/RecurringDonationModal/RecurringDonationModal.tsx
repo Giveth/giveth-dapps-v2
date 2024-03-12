@@ -194,7 +194,6 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					? undefined
 					: '0x554c06487bEc8c890A0345eb05a5292C1b1017Bd',
 			};
-			console.log('_options', _options);
 			const sf = await Framework.create(_options);
 
 			// EThx is not a Wrapper Super Token and should load separately

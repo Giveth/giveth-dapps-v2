@@ -12,7 +12,7 @@ import { Item } from '../RecurringDonationModal/Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { RunOutInfo } from '../RunOutInfo';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
-import config from '@/configuration';
+import config, { isProduction } from '@/configuration';
 import { showToastError } from '@/lib/helpers';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { StreamInfo } from './StreamInfo';
@@ -110,10 +110,14 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			if (!provider || !signer)
 				throw new Error('Provider or signer not found');
 
-			const sf = await Framework.create({
+			const _options = {
 				chainId: config.OPTIMISM_CONFIG.id,
 				provider: provider,
-			});
+				resolverAddress: isProduction
+					? undefined
+					: '0x554c06487bEc8c890A0345eb05a5292C1b1017Bd',
+			};
+			const sf = await Framework.create(_options);
 
 			// EThx is not a Wrapper Super Token and should load separately
 			let superTokenAsset;
