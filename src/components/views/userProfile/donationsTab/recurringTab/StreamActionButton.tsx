@@ -9,7 +9,6 @@ import {
 import styled from 'styled-components';
 import { type FC, useState } from 'react';
 import { useIntl } from 'react-intl';
-import router from 'next/router';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
@@ -31,28 +30,26 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	const options: IOption[] = finished
 		? [
 				{
-					label: formatMessage({ id: 'label.view_project' }),
+					label: formatMessage({ id: 'label.modify_flow_rate' }),
 					icon: <IconEye16 />,
-					cb: () => router.push('/'),
 				},
 				{
-					label: formatMessage({ id: 'label.add_update' }),
+					label: formatMessage({
+						id: 'label.end_recurring_donation',
+					}),
 					icon: <IconUpdate16 />,
-					cb: () => router.push('/'),
 				},
 			]
 		: [
 				{
-					label: formatMessage({ id: 'label.edit_project' }),
+					label: formatMessage({ id: 'label.start_new_donation' }),
 					icon: <IconEdit16 />,
-					cb: () => router.push('/'),
 				},
 				{
 					label: capitalizeAllWords(
-						formatMessage({ id: 'label.manage_addresses' }),
+						formatMessage({ id: 'label.archive_donation' }),
 					),
 					icon: <IconWalletOutline16 />,
-					cb: () => {},
 				},
 			];
 
