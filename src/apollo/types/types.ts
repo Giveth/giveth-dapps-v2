@@ -281,6 +281,7 @@ export interface IWalletRecurringDonation {
 	currency: string;
 	totalDonated: string;
 	networkId: number;
+	finished: boolean;
 }
 
 export interface IMediumBlogPost {

@@ -143,6 +143,7 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 					title
 					slug
 				}
+				finished
 				createdAt
 			}
 			totalCount
