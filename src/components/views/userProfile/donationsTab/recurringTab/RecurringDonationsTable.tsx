@@ -24,6 +24,7 @@ import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import NetworkLogo from '@/components/NetworkLogo';
 import SortIcon from '@/components/SortIcon';
 import { limitFraction } from '@/helpers/number';
+import { StreamActionButton } from './StreamActionButton';
 
 interface RecurringDonationTable {
 	donations: IWalletRecurringDonation[];
@@ -109,13 +110,14 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 						{donation.totalDonated || 0}
 						<Currency>{donation.currency}</Currency>
 					</DonationTableCell>
-
 					{myAccount && (
 						<DonationTableCell>
 							<DonationStatus status={donation.status} />
 						</DonationTableCell>
 					)}
-					<DonationTableCell></DonationTableCell>
+					<DonationTableCell>
+						<StreamActionButton finished={donation.finished} />
+					</DonationTableCell>
 				</DonationRowWrapper>
 			))}
 		</DonationTableContainer>
