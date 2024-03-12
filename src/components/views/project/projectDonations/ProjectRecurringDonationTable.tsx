@@ -152,7 +152,7 @@ const ProjectRecurringDonationTable = () => {
 							)
 						}
 					>
-						{formatMessage({ id: 'label.donated_at' })}
+						{formatMessage({ id: 'label.since' })}
 						<SortIcon
 							order={order}
 							title={RecurringDonationSortField.createdAt}

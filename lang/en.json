@@ -357,6 +357,7 @@
 	"label.featured_projects": "Featured Projects",
 	"label.fill_in_your_credit_card_info": "Fill in your credit card information and then click 'BUY XDAI'.",
 	"label.filters": "Filters",
+	"label.finalized": "Finalized",
 	"label.find_awesome_projects_on_giveth": "Find awesome projects on Giveth",
 	"label.finish": "Finish",
 	"label.fireup_your_community_to_use_givpower": "Fire up your community to use GIVpower to improve your rank.",
@@ -829,6 +830,7 @@
 	"label.sign_out": "Sign out",
 	"label.sign_wallet": "Sign Wallet",
 	"label.similar_projects": "Similar projects",
+	"label.since": "Since",
 	"label.since_this_is_your_first_time_boosting": "Since this is your first time boosting a project, 100% of your GIVpower will be allocated to it.",
 	"label.singular.round_count": "{round} round",
 	"label.skip_for_now": "Skip for now",
@@ -1540,6 +1542,5 @@
 	"tooltip.flowrate": "Recurring donations are taken out of your Stream Balance. Deposit tokens & maintain your balance to enable recurring donations.",
 	"ubi": "UBI",
 	"water-and-sanitation": "Water & Sanitation",
-	"withdraw_confirmed": "Withdraw confirmed",
-	"label.finalized": "Finalized"
+	"withdraw_confirmed": "Withdraw confirmed"
 }
