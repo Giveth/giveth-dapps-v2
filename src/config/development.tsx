@@ -126,9 +126,6 @@ const config: EnvConfig = {
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 
-	GARDEN_LINK:
-		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
-
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
 		...goerli,

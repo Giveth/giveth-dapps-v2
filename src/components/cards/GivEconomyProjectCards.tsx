@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { Row, Col } from '@giveth/ui-design-system';
-import Routes from '@/lib/constants/Routes';
-import config from '@/configuration';
+import Routes, { profileTabs } from '@/lib/constants/Routes';
 import {
 	IGsDataBox,
 	GsButton,
@@ -35,20 +34,19 @@ const GivEconomyProjectCards = () => {
 			</Col>
 			<Col xs={12} sm={6} md={4}>
 				<IGsDataBox
-					title='GIVgarden'
+					title='GIVpower'
 					button={
 						<GsButton
 							isExternal
-							label={formatMessage({ id: 'label.see_proposals' })}
+							label={formatMessage({ id: 'label.see_boosts' })}
 							linkType='primary'
 							size='medium'
-							href={config.GARDEN_LINK}
-							target='_blank'
+							href={`${Routes.MyAccount}/${profileTabs.givpower}`}
 						/>
 					}
 				>
 					{formatMessage({
-						id: 'label.the_givgarden_is_the_descentralized_gov_platform',
+						id: 'label.lock_giv_to_earn_rewards',
 					})}
 				</IGsDataBox>
 			</Col>

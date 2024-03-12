@@ -34,7 +34,6 @@ const links = {
 	GIVSTREAM_DOCS: DOCS + 'giveconomy/givstream',
 	GIVBACK_DOC: DOCS + 'giveconomy/givbacks',
 	GIVPOWER_DOC: DOCS + 'giveconomy/givpower',
-	GIVGARDEN_DOC: DOCS + 'giveconomy/givgarden',
 	GIVDROP_DOC,
 	CLAIM_GIVDROP_DOC: GIVDROP_DOC + '#claiming-your-givdrop',
 	NICE_DOC: DOCS + 'giveconomy/niceToken',
@@ -69,6 +68,7 @@ const links = {
 	ACROSS_BRIDGE:
 		'https://across.to?ref=0x9cd1E4A6b3361abcCC90C7F8E788ac246d194303',
 	ALLO_PROTOCOL: 'https://docs.allo.gitcoin.co/',
+	GIVERNANCE_VOTING: 'https://snapshot.org/#/giv.eth',
 };
 
 if (!isProduction) {

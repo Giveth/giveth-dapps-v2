@@ -1,12 +1,5 @@
 import styled from 'styled-components';
-import {
-	H1,
-	QuoteText,
-	DataBlock,
-	brandColors,
-	ButtonLink,
-} from '@giveth/ui-design-system';
-import { device, mediaQueries } from '@/lib/constants/constants';
+import { H1, QuoteText, DataBlock, ButtonLink } from '@giveth/ui-design-system';
 
 export const TopSpacer = styled.div`
 	height: 24px;
@@ -21,55 +14,12 @@ export const OverviewBottomContainer = styled.div`
 	margin-top: 100px;
 `;
 
-export const VoteCardButton = styled(ButtonLink)`
-	width: 221px;
-	margin-top: 36px;
-	margin-bottom: 36px;
-	${mediaQueries.tablet} {
-		width: 300px;
-	}
-`;
-
 export const TabTitle = styled(H1)`
 	margin-bottom: 40px;
 `;
 
 export const TabDesc = styled(QuoteText)`
 	margin-bottom: 50px;
-`;
-
-export const VoteCard = styled.div`
-	background-color: #3c14c5;
-	padding: 141px 16px 106px;
-	background-image: url('/images/backgrounds/giv-outline.svg');
-	border-radius: 8px;
-	min-height: 480px;
-	margin: 100px 0 45px;
-	position: relative;
-	&::before {
-		content: url('/images/pie1.png');
-		position: absolute;
-		top: 0;
-		right: 0;
-	}
-	&::after {
-		content: url('/images/pie2.png');
-		position: absolute;
-		bottom: -4px;
-		left: 0;
-	}
-	@media ${device.laptopS} {
-		padding: 100px 50px 146px;
-	}
-	@media ${device.laptopL} {
-		padding: 100px 64px 146px;
-	}
-	@media ${device.desktop} {
-		padding: 100px 64px 146px;
-	}
-`;
-export const VoteCardTitle = styled(H1)`
-	margin-bottom: 22px;
 `;
 
 export const DataBlockWithMargin = styled(DataBlock)`
@@ -84,10 +34,6 @@ export const DataBlockButton = styled(ButtonLink)`
 	padding: 24px 48px;
 	width: max-content;
 	min-width: 300px;
-`;
-
-export const VoteCardQuote = styled(QuoteText)`
-	color: ${brandColors.giv[200]};
 `;
 
 export const VideoContainer = styled.div`
