@@ -26,13 +26,6 @@ export const givstreamMetatags = {
 	url: 'https://giveth.io/givstream',
 };
 
-export const givgardenMetatags = {
-	title: 'GIVgarden: Have your say in Giveth governance',
-	desc: 'We need your help to shape the future of Giving! With the power of Conviction Voting, use your GIV to vote to allocate funding to community proposals.',
-	image: 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
-	url: 'https://giveth.io/givgarden',
-};
-
 export const givpowerMetatags = {
 	title: 'GIVpower: Boost Projects with GIVpower',
 	desc: 'With GIVpower, you can support verified projects, while earning rewards on your GIV.',

@@ -11,7 +11,7 @@ export const ActiveStreamsSection = () => {
 			<DonationTableContainer>
 				<TableHeaderRow>
 					<TableHeader>
-						<B>Current stream Balance</B>{' '}
+						<B>Current stream Balance</B>
 					</TableHeader>
 					<TableHeader>
 						<B>Total Recurring Donations</B>

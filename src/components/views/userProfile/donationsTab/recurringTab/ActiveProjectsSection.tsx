@@ -1,11 +1,84 @@
 import { H5, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useIntl } from 'react-intl';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { RecurringDonationFiltersButton } from './RecurringDonationFiltersButton';
+import { client } from '@/apollo/apolloClient';
+import { EDirection, EDonationStatus } from '@/apollo/types/gqlEnums';
+import { IWalletRecurringDonation } from '@/apollo/types/types';
+import { useProfileContext } from '@/context/profile.context';
+import { FETCH_USER_RECURRING_DONATIONS } from '@/apollo/gql/gqlUser';
+import DonationTable from '@/components/views/userProfile/donationsTab/recurringTab/RecurringDonationsTable';
+import { IUserRecurringDonations } from '@/apollo/types/gqlTypes';
+import Pagination from '@/components/Pagination';
+
+const itemPerPage = 10;
+
+export enum ERecurringDonationSortField {
+	createdAt = 'createdAt',
+	flowRate = 'flowRate',
+}
+export interface IOrder {
+	by: ERecurringDonationSortField;
+	direction: EDirection;
+}
 
 export const ActiveProjectsSection = () => {
 	const [showArchive, setShowArchive] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [donations, setDonations] = useState<IWalletRecurringDonation[]>([]);
+	const [totalDonations, setTotalDonations] = useState<number>(0);
+	const [page, setPage] = useState(0);
+	const [order, setOrder] = useState<IOrder>({
+		by: ERecurringDonationSortField.createdAt,
+		direction: EDirection.DESC,
+	});
+	const { myAccount, user } = useProfileContext();
+	const { formatMessage } = useIntl();
+
+	const changeOrder = (orderBy: ERecurringDonationSortField) => {
+		if (orderBy === order.by) {
+			setOrder({
+				by: orderBy,
+				direction:
+					order.direction === EDirection.ASC
+						? EDirection.DESC
+						: EDirection.ASC,
+			});
+		} else {
+			setOrder({
+				by: orderBy,
+				direction: EDirection.DESC,
+			});
+		}
+	};
+
+	useEffect(() => {
+		if (!user) return;
+		const fetchUserDonations = async () => {
+			setLoading(true);
+			const { data: userDonations } = await client.query({
+				query: FETCH_USER_RECURRING_DONATIONS,
+				variables: {
+					userId: parseFloat(user.id || '') || -1,
+					take: itemPerPage,
+					skip: page * itemPerPage,
+					orderBy: { field: order.by, direction: order.direction },
+					status: !myAccount ? EDonationStatus.VERIFIED : null,
+					finished: showArchive,
+				},
+			});
+			setLoading(false);
+			if (userDonations?.recurringDonationsByUserId) {
+				const recurringDonationsByUserId: IUserRecurringDonations =
+					userDonations.recurringDonationsByUserId;
+				setDonations(recurringDonationsByUserId.recurringDonations);
+				setTotalDonations(recurringDonationsByUserId.totalCount);
+			}
+		};
+		fetchUserDonations().then();
+	}, [user, page, order.by, order.direction, myAccount, showArchive]);
 	return (
 		<Wrapper>
 			<Flex $justifyContent='space-between'>
@@ -19,6 +92,18 @@ export const ActiveProjectsSection = () => {
 					<RecurringDonationFiltersButton />
 				</Flex>
 			</Flex>
+			<DonationTable
+				donations={donations}
+				order={order}
+				changeOrder={changeOrder}
+				myAccount={myAccount}
+			/>
+			<Pagination
+				currentPage={page}
+				totalCount={totalDonations}
+				setPage={setPage}
+				itemPerPage={itemPerPage}
+			/>
 		</Wrapper>
 	);
 };

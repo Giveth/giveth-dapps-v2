@@ -22,11 +22,6 @@ export const giveconomyItems = [
 		href: Routes.GIVeconomy,
 	},
 	{
-		title: 'label.governance',
-		label: 'GIVgarden',
-		href: Routes.GIVgarden,
-	},
-	{
 		title: 'label.earn_with_liquidity',
 		label: 'GIVfarm',
 		href: Routes.GIVfarm,

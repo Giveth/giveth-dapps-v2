@@ -126,9 +126,6 @@ const config: EnvConfig = {
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 
-	GARDEN_LINK:
-		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
-
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
 		...goerli,
@@ -380,7 +377,7 @@ const config: EnvConfig = {
 		},
 		uniswapV2Subgraph: '',
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
-			'0xb15c8df1a742636a78b0a2ca9dff87c37693862a',
+			'0x503055e1f8b99c60a51c479a60b233976617bc7a',
 		superFluidSubgraph:
 			'https://optimism-sepolia.subgraph.x.superfluid.dev/',
 		SUPER_FLUID_TOKENS: [

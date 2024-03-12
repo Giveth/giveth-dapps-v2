@@ -4,13 +4,9 @@ import { Col, Container, Row } from '@giveth/ui-design-system';
 import { useAccount } from 'wagmi';
 import {
 	OverviewBottomContainer,
-	VoteCard,
-	VoteCardButton,
-	VoteCardTitle,
 	TabDesc,
 	TabTitle,
 	DataBlockWithMargin,
-	VoteCardQuote,
 	DataBlockButton,
 	TopSpacer,
 } from './GIVeconomy.sc';
@@ -118,27 +114,6 @@ export const TabOverview = () => {
 				src='/video/givpower.mp4'
 				poster='/video/giv-giv-giv.jpg'
 			/>
-			<Container>
-				<VoteCard>
-					<VoteCardTitle weight={900}>
-						{formatMessage({ id: 'label.vote_in_giveth_dao' })}
-					</VoteCardTitle>
-					<VoteCardQuote size='small'>
-						{formatMessage({
-							id: 'label.use_giv_to_vote',
-						})}
-					</VoteCardQuote>
-					<VoteCardButton
-						isExternal
-						label={formatMessage({
-							id: 'label.see_proposals',
-						})}
-						linkType='primary'
-						href={config.GARDEN_LINK}
-						size='large'
-					/>
-				</VoteCard>
-			</Container>
 		</>
 	);
 };

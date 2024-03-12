@@ -27,12 +27,13 @@ export const findUserStreamOnSelectedToken = (
 		!selectedSuperToken.token.isSuperToken
 	)
 		return;
-	const projectOpAddress = project.anchorContracts[0]?.address;
-	if (!projectOpAddress) return;
+	const projectAnchorAddress = project.anchorContracts[0]?.address;
+	if (!projectAnchorAddress) return;
 	const tokenStream = tokenStreams[selectedSuperToken.token.id];
 	if (!tokenStream) return;
 	return tokenStream.find(
 		stream =>
-			stream.receiver.id.toLowerCase() === projectOpAddress.toLowerCase(),
+			stream.receiver.id.toLowerCase() ===
+			projectAnchorAddress.toLowerCase(),
 	);
 };

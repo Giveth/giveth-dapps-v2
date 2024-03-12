@@ -29,6 +29,16 @@ interface IAlloProtocolModal extends IModal {
 	addedProjectState: IProject;
 }
 
+function generateRandomNonce(): number {
+	const min: number = 100;
+	const max: number = 999999999999999;
+
+	// Generate a random number between min (inclusive) and max (exclusive)
+	const nonce: number = Math.floor(Math.random() * (max - min + 1)) + min;
+
+	return nonce;
+}
+
 const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	setShowModal,
 	addedProjectState,
@@ -76,8 +86,8 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 					abi: createProfileABI.abi,
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
 					args: [
-						+addedProjectState?.id!, // project id
-						addedProjectState?.slug!,
+						generateRandomNonce(), //nonce
+						addedProjectState?.id!,
 						{
 							protocol: 1,
 							pointer: '',
