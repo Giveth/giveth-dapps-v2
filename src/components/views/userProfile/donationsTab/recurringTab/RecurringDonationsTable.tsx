@@ -22,6 +22,7 @@ import { ERecurringDonationSortField, IOrder } from './ActiveProjectsSection';
 import { IWalletRecurringDonation } from '@/apollo/types/types';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import NetworkLogo from '@/components/NetworkLogo';
+import SortIcon from '@/components/SortIcon';
 
 interface RecurringDonationTable {
 	donations: IWalletRecurringDonation[];
@@ -46,10 +47,10 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 				}
 			>
 				{formatMessage({ id: 'label.donating_since' })}
-				{/* <SortIcon
+				<SortIcon
 					order={order}
 					title={ERecurringDonationSortField.createdAt}
-				/> */}
+				/>
 			</TableHeader>
 			<TableHeader>{formatMessage({ id: 'label.project' })}</TableHeader>
 			<TableHeader>{formatMessage({ id: 'label.network' })}</TableHeader>
@@ -59,10 +60,10 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 				}
 			>
 				{formatMessage({ id: 'label.flow_rate' })}
-				{/* <SortIcon
+				<SortIcon
 					order={order}
 					title={ERecurringDonationSortField.flowRate}
-				/> */}
+				/>
 			</TableHeader>
 			<TableHeader>
 				{formatMessage({ id: 'label.total_donated' })}

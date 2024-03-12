@@ -19,7 +19,7 @@ export enum ERecurringDonationSortField {
 	flowRate = 'flowRate',
 }
 export interface IOrder {
-	field: ERecurringDonationSortField;
+	by: ERecurringDonationSortField;
 	direction: EDirection;
 }
 
@@ -30,16 +30,16 @@ export const ActiveProjectsSection = () => {
 	const [totalDonations, setTotalDonations] = useState<number>(0);
 	const [page, setPage] = useState(0);
 	const [order, setOrder] = useState<IOrder>({
-		field: ERecurringDonationSortField.createdAt,
+		by: ERecurringDonationSortField.createdAt,
 		direction: EDirection.DESC,
 	});
 	const { myAccount, user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
 	const changeOrder = (orderBy: ERecurringDonationSortField) => {
-		if (orderBy === order.field) {
+		if (orderBy === order.by) {
 			setOrder({
-				field: orderBy,
+				by: orderBy,
 				direction:
 					order.direction === EDirection.ASC
 						? EDirection.DESC
@@ -47,7 +47,7 @@ export const ActiveProjectsSection = () => {
 			});
 		} else {
 			setOrder({
-				field: orderBy,
+				by: orderBy,
 				direction: EDirection.DESC,
 			});
 		}
@@ -63,7 +63,7 @@ export const ActiveProjectsSection = () => {
 					userId: parseFloat(user.id || '') || -1,
 					take: itemPerPage,
 					skip: page * itemPerPage,
-					orderBy: order,
+					orderBy: { field: order.by, direction: order.direction },
 					status: !myAccount ? EDonationStatus.VERIFIED : null,
 					finished: showArchive,
 				},
@@ -77,7 +77,7 @@ export const ActiveProjectsSection = () => {
 			}
 		};
 		fetchUserDonations().then();
-	}, [user, page, order.field, order.direction, myAccount, showArchive]);
+	}, [user, page, order.by, order.direction, myAccount, showArchive]);
 	return (
 		<Wrapper>
 			<Flex $justifyContent='space-between'>
