@@ -30,6 +30,7 @@ import { FETCH_RECURRING_DONATIONS_BY_PROJECTID } from '@/apollo/gql/gqlProjects
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import ExternalLink from '@/components/ExternalLink';
 import { ChainType } from '@/types/config';
+import NetworkLogo from '@/components/NetworkLogo';
 
 const itemPerPage = 10;
 
@@ -65,6 +66,7 @@ interface IRecurringDonation {
 	flowRate: string;
 	donor: IAdminUser;
 	createdAt: string;
+	finished: boolean;
 }
 
 const ProjectRecurringDonationTable = () => {
@@ -161,9 +163,9 @@ const ProjectRecurringDonationTable = () => {
 						</LeftPadding>
 					</TableHeader>
 
-					{/* <TableHeader>
+					<TableHeader>
 						{formatMessage({ id: 'label.network' })}
-					</TableHeader> */}
+					</TableHeader>
 					<TableHeader
 					// onClick={() => orderChangeHandler(EOrderBy.TokenAmount)}
 					>
@@ -173,7 +175,7 @@ const ProjectRecurringDonationTable = () => {
 					<TableHeader
 					// onClick={() => orderChangeHandler(EOrderBy.UsdAmount)}
 					>
-						Total Donated
+						{formatMessage({ id: 'label.total_donated' })}
 						{/* <SortIcon order={order} title={EOrderBy.UsdAmount} /> */}
 					</TableHeader>
 					<TableHeader
@@ -204,35 +206,39 @@ const ProjectRecurringDonationTable = () => {
 										/>
 									)}
 								</DonationTableCell>
-								{/* <DonationTableCell>
+								<DonationTableCell>
 									<NetworkLogo
 										logoSize={24}
 										chainId={donation.networkId}
 										chainType={ChainType.EVM}
 									/>
-									<NetworkName>
-										{getChainName(
-											donation.networkId,
-											ChainType.EVM,
-										)}
-									</NetworkName>
-								</DonationTableCell> */}
-								<DonationTableCell>
-									<B>
-										{formatDonation(
-											formatUnits(
-												BigInt(donation.flowRate) *
-													ONE_MONTH_SECONDS,
-												18,
-											),
-										)}
-									</B>
-									<Currency>
-										{donation.currency} Monthly
-									</Currency>
 								</DonationTableCell>
 								<DonationTableCell>
-									{donation.totalUsdStreamed &&
+									<B>
+										{donation.finished
+											? formatMessage({
+													id: 'label.finalized',
+												})
+											: formatDonation(
+													formatUnits(
+														BigInt(
+															donation.flowRate,
+														) * ONE_MONTH_SECONDS,
+														18,
+													),
+												)}
+									</B>
+									{!donation.finished && (
+										<Currency>
+											{donation.currency}{' '}
+											{formatMessage({
+												id: 'label.monthly',
+											})}
+										</Currency>
+									)}
+								</DonationTableCell>
+								<DonationTableCell>
+									{donation.amountStreamed &&
 										formatDonation(
 											donation.amountStreamed,
 											'$',
@@ -307,7 +313,7 @@ const DonationTableContainer = styled.div<{ $isAdmin?: boolean }>`
 	margin-top: 12px;
 	display: grid;
 	width: 100%;
-	grid-template-columns: 1fr 1.2fr 1.4fr 1fr 1fr;
+	grid-template-columns: 1fr 1.2fr 0.7fr 1.4fr 1fr 1fr;
 	min-width: 800px;
 `;
 
