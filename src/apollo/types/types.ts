@@ -280,6 +280,7 @@ export interface IWalletRecurringDonation {
 	flowRate: string;
 	currency: string;
 	totalDonated: string;
+	networkId: number;
 }
 
 export interface IMediumBlogPost {

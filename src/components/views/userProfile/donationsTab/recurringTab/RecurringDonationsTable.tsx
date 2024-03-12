@@ -21,6 +21,7 @@ import {
 import { ERecurringDonationSortField, IOrder } from './ActiveProjectsSection';
 import { IWalletRecurringDonation } from '@/apollo/types/types';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
+import NetworkLogo from '@/components/NetworkLogo';
 
 interface RecurringDonationTable {
 	donations: IWalletRecurringDonation[];
@@ -36,6 +37,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 	myAccount,
 }) => {
 	const { formatMessage, locale } = useIntl();
+
 	return (
 		<DonationTableContainer $myAccount={myAccount}>
 			<TableHeader
@@ -50,11 +52,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 				/> */}
 			</TableHeader>
 			<TableHeader>{formatMessage({ id: 'label.project' })}</TableHeader>
-			{myAccount && (
-				<TableHeader>
-					{formatMessage({ id: 'label.status' })}
-				</TableHeader>
-			)}
+			<TableHeader>{formatMessage({ id: 'label.network' })}</TableHeader>
 			<TableHeader
 				onClick={() =>
 					changeOrder(ERecurringDonationSortField.flowRate)
@@ -69,9 +67,12 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 			<TableHeader>
 				{formatMessage({ id: 'label.total_donated' })}
 			</TableHeader>
-			<TableHeader>
-				{formatMessage({ id: 'label.runs_out_in' })}
-			</TableHeader>
+
+			{myAccount && (
+				<TableHeader>
+					{formatMessage({ id: 'label.status' })}
+				</TableHeader>
+			)}
 			<TableHeader>{formatMessage({ id: 'label.actions' })}</TableHeader>
 			{donations.map(donation => (
 				<DonationRowWrapper key={donation.id}>
@@ -84,11 +85,12 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 							<IconLink24 />
 						</ProjectTitleCell>
 					</Link>
-					{myAccount && (
-						<DonationTableCell>
-							<DonationStatus status={donation.status} />
-						</DonationTableCell>
-					)}
+					<DonationTableCell>
+						<NetworkLogo
+							chainId={donation.networkId}
+							logoSize={32}
+						/>
+					</DonationTableCell>
 					<DonationTableCell>
 						<B>
 							{formatUnits(
@@ -96,13 +98,18 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 								18,
 							)}
 						</B>
-						<Currency>{donation.currency} monthly</Currency>
+						<Currency>{donation.currency} /mo</Currency>
 					</DonationTableCell>
 					<DonationTableCell>
-						{donation.totalDonated}
+						{donation.totalDonated || 0}
 						<Currency>{donation.currency}</Currency>
 					</DonationTableCell>
-					<DonationTableCell></DonationTableCell>
+
+					{myAccount && (
+						<DonationTableCell>
+							<DonationStatus status={donation.status} />
+						</DonationTableCell>
+					)}
 					<DonationTableCell></DonationTableCell>
 				</DonationRowWrapper>
 			))}
