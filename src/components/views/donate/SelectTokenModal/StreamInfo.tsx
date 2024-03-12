@@ -101,9 +101,9 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 							<Caption $medium>{stream.length}</Caption>
 							<GrayCaption>
 								{formatMessage(
-									{ id: 'label.funding_count_projects' },
+									{ id: 'label.number_projects' },
 									{
-										count: stream.length.toString(),
+										count: 'stream.length.toString()',
 									},
 								)}
 							</GrayCaption>
