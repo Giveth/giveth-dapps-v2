@@ -83,7 +83,9 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 								})}
 							</GrayCaption>
 							<Caption $medium>
-								{remainingMonths.toString()}
+								{remainingMonths.toString() !== '0'
+									? remainingMonths.toString()
+									: '<1'}
 							</Caption>
 							<Caption>
 								{formatMessage(
@@ -97,8 +99,6 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 							</Caption>
 						</Flex>
 						<Flex gap='4px'>
-							<GrayCaption>Funding</GrayCaption>
-							<Caption $medium>{stream.length}</Caption>
 							<GrayCaption>
 								{formatMessage(
 									{ id: 'label.funding_count_projects' },
