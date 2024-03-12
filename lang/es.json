@@ -1164,7 +1164,7 @@
 	"label.you_havent_liked_any_projects_yet": "¡Todavía no has dado like a ningún proyecto!",
 	"label.you_have_already_boosted_20_projects": "Ya has boosteado el máximo de 20 proyectos!",
 	"label.you_have_no_notifications": "No tienes notificaciones",
-	"label.you_have_stream_on_all_tokens": "Tienes transmisión en todos los tokens",
+	"label.you_have_super_token_for_all_tokens": "Tienes un super token para todos los tokens",
 	"label.you_have_successfuly_claimed": "Has reclamado con éxito",
 	"label.you_must_select_at_least_one_address": "Debes seleccionar al menos una dirección",
 	"label.you_need_to_authorize_your_wallet": "Necesitas autorizar tu billetera para habillitar su uso en Giveth.",
@@ -1536,7 +1536,7 @@
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "Esta estimación se basa en las donaciones realizadas hasta ahora en esta ronda de financiamiento cuadrático y no tiene en cuenta el análisis de fraude. El monto real de fondos complementarios puede variar.",
 	"tooltip.donation.matching_polygon": "Esta estimación representa los fondos de contrapartida que recibiría este proyecto si la ronda se cerrara ahora, ignorando el análisis de fraude y el proceso de asignación especial para los 100 mejores de Jokerace.",
-	"tooltip.flowrate": "Las donaciones recurrentes se toman de tu Saldo de Transmisión. Deposita tokens y mantén tu saldo para habilitar las donaciones recurrentes.",	
+	"tooltip.flowrate": "Las donaciones recurrentes se toman de tu Saldo de Transmisión. Deposita tokens y mantén tu saldo para habilitar las donaciones recurrentes.",
 	"ubi": "UBI",
 	"water-and-sanitation": "Agua & Saneamiento"
 }
