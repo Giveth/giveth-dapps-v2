@@ -64,16 +64,11 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 			return;
 		}
 
-		// Filter out tokens that already have a stream
-		const projectOpAddress = project.addresses?.find(
-			address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
-		)?.address;
-
 		const filteredTokens = allTokens.filter(token => {
 			return !tokenStreams[token.id]?.find(
 				stream =>
 					stream.receiver.id.toLowerCase() ===
-					projectOpAddress?.toLowerCase(),
+					project.anchorContracts[0].address.toLowerCase(),
 			);
 		});
 
