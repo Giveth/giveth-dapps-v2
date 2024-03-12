@@ -17,16 +17,19 @@ import { useIntl } from 'react-intl';
 import { useProjectContext } from '@/context/project.context';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { IQFRound } from '@/apollo/types/types';
 import { NavigationWrapper } from '@/components/styled-components/SwiperPagination';
+import { ProjectDonationSwiperState } from './ProjectDonations.index';
+import { IQFRound } from '@/apollo/types/types';
 interface IQfRoundSelectorProps {
-	selectedQF: IQFRound | null;
-	setSelectedQF: Dispatch<SetStateAction<IQFRound | null>>;
+	projectDonationSwiperState: ProjectDonationSwiperState;
+	setProjectDonationSwiperState: Dispatch<
+		SetStateAction<ProjectDonationSwiperState>
+	>;
 }
 
 export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
-	selectedQF,
-	setSelectedQF,
+	projectDonationSwiperState,
+	setProjectDonationSwiperState,
 }) => {
 	const { formatMessage } = useIntl();
 	const { projectData } = useProjectContext();
@@ -37,6 +40,16 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 		projectData?.qfRounds?.sort(
 			(a, b) => Number(b.isActive) - Number(a.isActive),
 		) || [];
+
+	const isRecurringSelected = projectDonationSwiperState.isRecurringSelected;
+	const selectedQF = projectDonationSwiperState.selectedQF;
+	const setSelectedQF = (selectedQF: IQFRound | null) =>
+		setProjectDonationSwiperState(prev => ({ ...prev, selectedQF }));
+	const setIsRecurringSelected = (isRecurringSelected: boolean) =>
+		setProjectDonationSwiperState(prev => ({
+			...prev,
+			isRecurringSelected,
+		}));
 
 	return (
 		<Flex gap='8px'>
@@ -60,10 +73,16 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 					<TabItem
 						$alignItems='center'
 						gap='4px'
-						onClick={() => setSelectedQF(null)}
-						$isSelected={selectedQF === null}
+						onClick={() => {
+							setIsRecurringSelected(false);
+							setSelectedQF(null);
+						}}
+						$isSelected={
+							selectedQF === null && isRecurringSelected === false
+						}
 					>
-						{selectedQF === null ? (
+						{selectedQF === null &&
+						isRecurringSelected === false ? (
 							<B>
 								{formatMessage({ id: 'label.all_donations' })}
 							</B>
@@ -74,6 +93,24 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 						)}
 					</TabItem>
 				</SwiperSlide>
+				<SwiperSlide style={{ width: 'auto' }}>
+					<TabItem
+						$alignItems='center'
+						gap='4px'
+						onClick={() => {
+							setSelectedQF(null);
+							setIsRecurringSelected(true);
+						}}
+						$isSelected={isRecurringSelected === true}
+					>
+						{(projectDonationSwiperState.selectedQF === null) ===
+						null ? (
+							<B>Recurring Donations</B>
+						) : (
+							<P>Recurring Donations</P>
+						)}
+					</TabItem>
+				</SwiperSlide>
 				{sortedRounds.map((round, index) => {
 					const isSelected = selectedQF?.id === round.id;
 					return (
@@ -81,7 +118,10 @@ export const QfRoundSelector: FC<IQfRoundSelectorProps> = ({
 							<TabItem
 								$alignItems='center'
 								gap='4px'
-								onClick={() => setSelectedQF(round)}
+								onClick={() => {
+									setIsRecurringSelected(false);
+									setSelectedQF(round);
+								}}
 								$isSelected={isSelected}
 								$isActive={round.isActive}
 							>
