@@ -23,6 +23,7 @@ import { IWalletRecurringDonation } from '@/apollo/types/types';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import NetworkLogo from '@/components/NetworkLogo';
 import SortIcon from '@/components/SortIcon';
+import { limitFraction } from '@/helpers/number';
 
 interface RecurringDonationTable {
 	donations: IWalletRecurringDonation[];
@@ -94,9 +95,12 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 					</DonationTableCell>
 					<DonationTableCell>
 						<B>
-							{formatUnits(
-								BigInt(donation.flowRate) * ONE_MONTH_SECONDS,
-								18,
+							{limitFraction(
+								formatUnits(
+									BigInt(donation.flowRate) *
+										ONE_MONTH_SECONDS,
+									18,
+								),
 							)}
 						</B>
 						<Currency>{donation.currency} /mo</Currency>
