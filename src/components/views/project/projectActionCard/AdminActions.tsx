@@ -8,6 +8,7 @@ import {
 	neutralColors,
 	Flex,
 	FlexCenter,
+	IconArrowDownCircle16,
 } from '@giveth/ui-design-system';
 import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -26,6 +27,8 @@ import { device } from '@/lib/constants/constants';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { EVerificationStatus } from '@/apollo/types/types';
+import ClaimRecurringDonationModal from '../../userProfile/projectsTab/ClaimRecurringDonationModal';
+import config, { isRecurringActive } from '@/configuration';
 
 interface IMobileActionsModalProps {
 	setShowModal: (value: boolean) => void;
@@ -37,8 +40,10 @@ export const AdminActions = () => {
 	const [deactivateModal, setDeactivateModal] = useState(false);
 	const [showShareModal, setShowShareModal] = useState(false);
 	const [showMobileActionsModal, setShowMobileActionsModal] = useState(false);
+	const [showClaimModal, setShowClaimModal] = useState(false);
 	const { projectData, isActive, activateProject } = useProjectContext();
 	const project = projectData!;
+
 	const { slug, verified, verificationFormStatus } = project;
 	const { formatMessage } = useIntl();
 	const router = useRouter();
@@ -48,6 +53,11 @@ export const AdminActions = () => {
 		verificationFormStatus === EVerificationStatus.SUBMITTED ||
 		verificationFormStatus === EVerificationStatus.REJECTED ||
 		!isActive;
+
+	const optimismAddress = project.addresses?.find(
+		address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
+	)?.address;
+	const hasOptimismAddress = optimismAddress !== undefined;
 
 	const options: IOption[] = [
 		{
@@ -92,6 +102,18 @@ export const AdminActions = () => {
 		},
 	];
 
+	const recurringDonationOption: IOption = {
+		label: 'Claim Recurring donation',
+		icon: <IconArrowDownCircle16 />,
+		cb: () => {
+			setShowClaimModal && setShowClaimModal(true);
+		},
+	};
+
+	isRecurringActive &&
+		hasOptimismAddress &&
+		options.push(recurringDonationOption);
+
 	const dropdownStyle = {
 		padding: '10px 16px',
 		background: neutralColors.gray[300],
@@ -121,6 +143,12 @@ export const AdminActions = () => {
 					contentType={EContentType.thisProject}
 					setShowModal={setShowShareModal}
 					projectHref={slug}
+				/>
+			)}
+			{showClaimModal && (
+				<ClaimRecurringDonationModal
+					setShowModal={setShowClaimModal}
+					project={project}
 				/>
 			)}
 		</Wrapper>
@@ -163,6 +191,12 @@ export const AdminActions = () => {
 						/>
 					)}
 				</MobileActionsModal>
+			)}
+			{showClaimModal && (
+				<ClaimRecurringDonationModal
+					setShowModal={setShowClaimModal}
+					project={project}
+				/>
 			)}
 		</MobileWrapper>
 	);
