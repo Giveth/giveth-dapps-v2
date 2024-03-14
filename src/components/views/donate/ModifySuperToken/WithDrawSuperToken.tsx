@@ -142,6 +142,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 									? 'invalid_amount'
 									: undefined
 							}
+							minRemainingBalance={minRemainingBalance}
 						/>
 						<StreamInfo
 							tokenStreams={tokenStreams}
