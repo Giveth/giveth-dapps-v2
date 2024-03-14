@@ -111,7 +111,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 						<CheckBox
 							label='Active'
 							onChange={e => {
-								setStatusFilters(s => [e, s[1]]);
+								setStatusFilters(s => [e, s[1] || false]);
 								handleClose();
 							}}
 							checked={statusFilters[0]}
@@ -122,7 +122,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 						<CheckBox
 							label='Ended'
 							onChange={e => {
-								setStatusFilters(s => [s[0], e]);
+								setStatusFilters(s => [s[0] || false, e]);
 								handleClose();
 							}}
 							checked={statusFilters[1]}
