@@ -14,6 +14,7 @@ import {
 	Subline,
 	SublineBold,
 	Flex,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useEffect, useState } from 'react';
@@ -285,6 +286,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 const BottomSection = styled.div`
 	color: ${neutralColors.gray[700]};
 	margin-top: 40px;
+	width: max-content;
 `;
 
 const NoDonation = styled(H4)`
@@ -292,11 +294,16 @@ const NoDonation = styled(H4)`
 `;
 
 const Wrapper = styled.div`
-	padding: 24px;
+	padding: 10px;
+	margin: 0 -15px;
 	background: white;
 	border-radius: 16px;
 	box-shadow: ${Shadow.Neutral[400]};
 	overflow: hidden;
+	${mediaQueries.mobileL} {
+		padding: 20px;
+		margin: unset;
+	}
 `;
 
 const UpperSection = styled.div`

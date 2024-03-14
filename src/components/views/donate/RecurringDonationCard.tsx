@@ -39,10 +39,12 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { findUserStreamOnSelectedToken } from '@/helpers/donate';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { showToastError } from '@/lib/helpers';
-import config from '@/configuration';
+import config, { isRecurringActive } from '@/configuration';
 import { WrongNetworkLayer } from './WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 import { limitFraction } from '@/helpers/number';
+import CheckBox from '@/components/Checkbox';
+import { CheckBoxContainer } from './CryptoDonation';
 import AlloProtocolFirstDonationModal from './AlloProtocolFirstDonationModal';
 import links from '@/lib/constants/links';
 
@@ -81,6 +83,7 @@ export const RecurringDonationCard = () => {
 	const [isUpdating, setIsUpdating] = useState(false);
 	const [percentage, setPercentage] = useState(0);
 	const [donationToGiveth, setDonationToGiveth] = useState(5);
+	const [anonymous, setAnonymous] = useState<boolean>(false);
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
 	const [showTopUpModal, setShowTopUpModal] = useState(false);
 	const [showRecurringDonationModal, setShowRecurringDonationModal] =
@@ -146,9 +149,8 @@ export const RecurringDonationCard = () => {
 		? semanticColors.punch
 		: brandColors.giv;
 
-	const hasAnchorContract = project.anchorContracts[0]?.isActive;
-
 	const handleDonate = () => {
+		const hasAnchorContract = project.anchorContracts[0]?.isActive;
 		if (!hasAnchorContract) {
 			setShowAlloProtocolModal(true);
 		} else {
@@ -158,7 +160,12 @@ export const RecurringDonationCard = () => {
 
 	useEffect(() => {
 		try {
-			if (!selectedToken || !selectedToken.balance) return;
+			if (
+				!selectedToken ||
+				!selectedToken.balance ||
+				!project.anchorContracts
+			)
+				return;
 			const _userStreamOnSelectedToken = findUserStreamOnSelectedToken(
 				address,
 				project,
@@ -455,6 +462,7 @@ export const RecurringDonationCard = () => {
 							selectedToken === undefined ||
 							tokenBalance === undefined ||
 							amount === 0n ||
+							isTotalStreamExceed ||
 							amount > tokenBalance
 						}
 					/>
@@ -578,6 +586,7 @@ export const RecurringDonationCard = () => {
 							tokenBalance === undefined ||
 							amount === 0n ||
 							percentage === 0 ||
+							isTotalStreamExceed ||
 							amount > tokenBalance
 						}
 					/>
@@ -592,6 +601,25 @@ export const RecurringDonationCard = () => {
 					alt='Superfluid logo'
 				/>
 			</Flex>
+			<CheckBoxContainer>
+				<CheckBox
+					label={formatMessage({
+						id: isRecurringActive
+							? 'label.make_it_anonymous'
+							: 'label.donate_privately',
+					})}
+					checked={anonymous}
+					onChange={() => setAnonymous(!anonymous)}
+					size={14}
+				/>
+				<div>
+					{formatMessage({
+						id: isRecurringActive
+							? 'component.tooltip.donate_anonymously'
+							: 'component.tooltip.donate_privately',
+					})}
+				</div>
+			</CheckBoxContainer>
 			{showSelectTokenModal && (
 				<SelectTokenModal setShowModal={setShowSelectTokenModal} />
 			)}
@@ -601,10 +629,13 @@ export const RecurringDonationCard = () => {
 			{showRecurringDonationModal && (
 				<RecurringDonationModal
 					setShowModal={setShowRecurringDonationModal}
-					donationToGiveth={isGivethProject ? 0 : donationToGiveth}
+					donationToGiveth={
+						isGivethProject || isUpdating ? 0 : donationToGiveth
+					}
 					amount={amount}
 					percentage={percentage}
 					isUpdating={isUpdating}
+					anonymous={anonymous}
 				/>
 			)}
 			{showTopUpModal && selectedToken && (

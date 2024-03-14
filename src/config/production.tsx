@@ -100,9 +100,6 @@ const config: EnvConfig = {
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 
-	GARDEN_LINK:
-		'https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98',
-
 	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
 		...mainnet,
@@ -460,6 +457,8 @@ const config: EnvConfig = {
 			description: '100% GIV',
 			unit: 'GIV',
 		},
+		GIVETH_ANCHOR_CONTRACT_ADDRESS:
+			'0xb15c8df1a742636a78b0a2ca9dff87c37693862a',
 		superFluidSubgraph:
 			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet',
 		SUPER_FLUID_TOKENS: [

@@ -126,9 +126,6 @@ const config: EnvConfig = {
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 
-	GARDEN_LINK:
-		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
-
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
 		...goerli,
@@ -360,7 +357,7 @@ const config: EnvConfig = {
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
-			'https://api.studio.thegraph.com/query/8787/giveconomy-optimism-sepolia/version/latest',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-sepolia',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
 			'https://app.uniswap.org/#/swap?chain=optimism&outputCurrency=0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
@@ -379,6 +376,8 @@ const config: EnvConfig = {
 			unit: 'GIV',
 		},
 		uniswapV2Subgraph: '',
+		GIVETH_ANCHOR_CONTRACT_ADDRESS:
+			'0x503055e1f8b99c60a51c479a60b233976617bc7a',
 		superFluidSubgraph:
 			'https://optimism-sepolia.subgraph.x.superfluid.dev/',
 		SUPER_FLUID_TOKENS: [
@@ -392,7 +391,7 @@ const config: EnvConfig = {
 				decimals: 18,
 				id: '0xdfd824f6928b9776c031f7ead948090e2824ce8b',
 				name: 'fake Super Giveth Token',
-				symbol: 'fGIVx',
+				symbol: 'GIVx',
 				isSuperToken: true,
 			},
 			{

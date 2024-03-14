@@ -48,7 +48,6 @@ const Routes = {
 	Notifications,
 	NotificationsSettings: Notifications + '/settings',
 	GIVeconomy: '/giveconomy',
-	GIVgarden: '/givgarden',
 	GIVfarm: '/givfarm',
 	GIVstream,
 	GIVstream_FlowRate: GIVstream + '#flowRate',

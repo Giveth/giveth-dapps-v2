@@ -11,6 +11,7 @@ import {
 	Col,
 	Row,
 	Flex,
+	deviceSize,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -167,7 +168,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 				<ProjectTabs activeTab={activeTab} slug={slug} />
 			)}
 			<BodyWrapper>
-				<Container>
+				<ContainerStyled>
 					{!isActive && !isDraft && (
 						<InlineToast
 							type={EToastType.Warning}
@@ -202,13 +203,21 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							/>
 						</Flex>
 					)}
-				</Container>
+				</ContainerStyled>
 
 				<SimilarProjects slug={slug} />
 			</BodyWrapper>
 		</Wrapper>
 	);
 };
+
+const ContainerStyled = styled(Container)`
+	@media (min-width: ${deviceSize.laptopL}px) and (max-width: ${deviceSize.desktop}px) {
+		padding-left: 0;
+		padding-right: 0;
+		width: 1250px;
+	}
+`;
 
 const DraftIndicator = styled.div`
 	color: ${semanticColors.blueSky[600]};

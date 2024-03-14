@@ -54,7 +54,7 @@ import { CommunityMenu } from '../menu/CommunityMenu';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import config from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import { useShowHiderByScroll } from '@/hooks/useShowHiderByScroll';
+import { EScrollDir, useScrollDetection } from '@/hooks/useScrollDetection';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -87,7 +87,7 @@ const Header: FC<IHeader> = () => {
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const isMobile = useMediaQuery(device.mobileL);
-	const showHeader = useShowHiderByScroll();
+	const scrollDir = useScrollDetection();
 
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
@@ -149,7 +149,7 @@ const Header: FC<IHeader> = () => {
 		<StyledHeader
 			$alignItems='center'
 			$baseTheme={theme}
-			$show={showHeader}
+			$show={scrollDir !== EScrollDir.Down}
 		>
 			<Flex>
 				{showBackBtn ? (
@@ -188,21 +188,21 @@ const Header: FC<IHeader> = () => {
 				<HeaderLinks $baseTheme={theme}>
 					<LinkWithMenu
 						title={formatMessage({ id: 'label.projects' })}
-						isHeaderShowing={showHeader}
+						isHeaderShowing={scrollDir !== EScrollDir.Down}
 						href={Routes.AllProjects}
 					>
 						<ProjectsMenu />
 					</LinkWithMenu>
 					<LinkWithMenu
 						title='GIVeconomy'
-						isHeaderShowing={showHeader}
+						isHeaderShowing={scrollDir !== EScrollDir.Down}
 						href={Routes.GIVeconomy}
 					>
 						<GIVeconomyMenu />
 					</LinkWithMenu>
 					<LinkWithMenu
 						title={formatMessage({ id: 'label.community' })}
-						isHeaderShowing={showHeader}
+						isHeaderShowing={scrollDir !== EScrollDir.Down}
 						href={Routes.Join}
 					>
 						<CommunityMenu />
@@ -242,17 +242,17 @@ const Header: FC<IHeader> = () => {
 				{walletAddress ? (
 					<>
 						<NotificationButtonWithMenu
-							isHeaderShowing={showHeader}
+							isHeaderShowing={scrollDir !== EScrollDir.Down}
 							theme={theme}
 						/>
 						{networkHasGIV && (
 							<RewardButtonWithMenu
-								isHeaderShowing={showHeader}
+								isHeaderShowing={scrollDir !== EScrollDir.Down}
 								theme={theme}
 							/>
 						)}
 						<UserButtonWithMenu
-							isHeaderShowing={showHeader}
+							isHeaderShowing={scrollDir !== EScrollDir.Down}
 							theme={theme}
 						/>
 					</>

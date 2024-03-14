@@ -795,3 +795,48 @@ export const FETCH_MAIN_CATEGORIES = gql`
 		}
 	}
 `;
+
+export const FETCH_RECURRING_DONATIONS_BY_PROJECTID = gql`
+	query (
+		$take: Int
+		$skip: Int
+		$projectId: Int!
+		$searchTerm: String
+		$status: String
+		$finished: Boolean
+		$orderBy: RecurringDonationSortBy
+	) {
+		recurringDonationsByProjectId(
+			take: $take
+			skip: $skip
+			projectId: $projectId
+			searchTerm: $searchTerm
+			status: $status
+			finished: $finished
+			orderBy: $orderBy
+		) {
+			recurringDonations {
+				id
+				txHash
+				networkId
+				currency
+				anonymous
+				status
+				amountStreamed
+				totalUsdStreamed
+				flowRate
+				txHash
+				finished
+				donor {
+					id
+					walletAddress
+					firstName
+					email
+					avatar
+				}
+				createdAt
+			}
+			totalCount
+		}
+	}
+`;

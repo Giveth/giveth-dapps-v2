@@ -182,6 +182,7 @@ export interface OptimismNetworkConfig extends NetworkConfig {
 	GIV_BUY_LINK: string;
 	superFluidSubgraph: string;
 	SUPER_FLUID_TOKENS: Array<ISuperToken>;
+	GIVETH_ANCHOR_CONTRACT_ADDRESS: Address;
 }
 
 interface MicroservicesConfig {
@@ -232,7 +233,6 @@ export interface EnvConfig {
 	CELO_CONFIG: NetworkConfig;
 	ARBITRUM_CONFIG: NetworkConfig;
 	CLASSIC_CONFIG: NetworkConfig;
-	GARDEN_LINK: string;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;

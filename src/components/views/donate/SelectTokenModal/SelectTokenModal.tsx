@@ -45,7 +45,7 @@ export interface IBalances {
 	[key: string]: bigint;
 }
 
-const allTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
+const superTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
 
 const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 	setShowModal,
@@ -64,21 +64,6 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 			return;
 		}
 
-		// Filter out tokens that already have a stream
-		const projectOpAddress = project.addresses?.find(
-			address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
-		)?.address;
-
-		const filteredTokens = allTokens.filter(token => {
-			return !tokenStreams[token.id]?.find(
-				stream =>
-					stream.receiver.id.toLowerCase() ===
-					projectOpAddress?.toLowerCase(),
-			);
-		});
-
-		setTokens(filteredTokens);
-
 		// A helper function to fetch balance for a single token
 		const fetchTokenBalance = async (token: IToken) => {
 			try {
@@ -95,7 +80,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 
 		// Initiate all balance fetches concurrently
 		const fetchAllBalances = async () => {
-			const _allTokens = allTokens.reduce((acc, token) => {
+			const _allTokens = superTokens.reduce((acc, token) => {
 				acc.push(token);
 				acc.push(token.underlyingToken);
 				return acc;
@@ -117,6 +102,12 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				return acc;
 			}, {} as IBalances);
 
+			const filteredTokens = superTokens.filter(
+				token => !(newBalances[token.symbol] > 0n),
+			);
+
+			setTokens(filteredTokens);
+
 			// Update the state with the new balances
 			setBalances(newBalances);
 		};
@@ -137,7 +128,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 					})}
 				</TitleSubheader>
 				{Object.keys(tokenStreams).map(tokenId => {
-					const token = allTokens.find(
+					const token = superTokens.find(
 						token => token.id === tokenId,
 					) as IToken;
 					return (
@@ -159,7 +150,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 						/>
 					);
 				})}
-				{allTokens.map(token =>
+				{superTokens.map(token =>
 					tokenStreams[token.id] ? null : (
 						<TokenInfo
 							key={token.symbol}
@@ -211,7 +202,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 				) : (
 					<Caption>
 						{formatMessage({
-							id: 'label.you_have_stream_on_all_tokens',
+							id: 'label.you_have_super_token_for_all_tokens',
 						})}
 					</Caption>
 				)}

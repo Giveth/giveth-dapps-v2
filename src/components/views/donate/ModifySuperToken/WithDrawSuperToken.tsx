@@ -10,7 +10,7 @@ import { IModifySuperTokenInnerModalProps } from './ModifySuperTokenModal';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { actionButtonLabel, EModifySuperTokenSteps } from './common';
 import { ModifyWrapper, Wrapper } from './common.sc';
-import config from '@/configuration';
+import config, { isProduction } from '@/configuration';
 import { showToastError } from '@/lib/helpers';
 import { Item } from '../RecurringDonationModal/Item';
 import { RunOutInfo } from '../RunOutInfo';
@@ -70,10 +70,14 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 			if (!provider || !signer)
 				throw new Error('Provider or signer not found');
 
-			const sf = await Framework.create({
+			const _options = {
 				chainId: config.OPTIMISM_CONFIG.id,
 				provider: provider,
-			});
+				resolverAddress: isProduction
+					? undefined
+					: '0x554c06487bEc8c890A0345eb05a5292C1b1017Bd',
+			};
+			const sf = await Framework.create(_options);
 
 			// EThx is not a Wrapper Super Token and should load separately
 			let superTokenAsset;

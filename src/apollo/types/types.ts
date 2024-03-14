@@ -272,6 +272,18 @@ export interface IWalletDonation extends IDonation {
 	valueUsd: number;
 }
 
+export interface IWalletRecurringDonation {
+	id: string;
+	createdAt: string;
+	project: IProject;
+	status: EDonationStatus;
+	flowRate: string;
+	currency: string;
+	totalDonated: string;
+	networkId: number;
+	finished: boolean;
+}
+
 export interface IMediumBlogPost {
 	title: string;
 	author: string;

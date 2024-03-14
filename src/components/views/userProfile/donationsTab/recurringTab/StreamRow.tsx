@@ -62,10 +62,16 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 			</TableCell>
 			<TableCell>{tokenStream.length}</TableCell>
 			<TableCell>
-				{runOutMonth.toString()}
-				{formatMessage(
-					{ id: 'label.months' },
-					{ count: runOutMonth.toString() },
+				{runOutMonth < 1 ? (
+					' < 1 Month '
+				) : (
+					<>
+						{runOutMonth.toString()}
+						{formatMessage(
+							{ id: 'label.months' },
+							{ count: runOutMonth.toString() },
+						)}
+					</>
 				)}
 			</TableCell>
 			<TableCell>

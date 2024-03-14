@@ -19,7 +19,6 @@ import { OurImages } from '@/lib/constants/constants';
 import ImageUploader from '@/components/ImageUploader';
 import ExternalLink from '@/components/ExternalLink';
 import useUpload from '@/hooks/useUpload';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { ECreateProjectSections, EInputs } from '../types';
 
 const ImageSearch = dynamic(() => import('./ImageSearch'), {
@@ -49,11 +48,6 @@ const ImageInput: FC<ImageInputProps> = ({
 	const [isUploadTab, setIsUploadTab] = useState(true);
 	const [attributes, setAttributes] = useState({ name: '', username: '' });
 
-	const onVisible = () =>
-		setActiveProjectSection(ECreateProjectSections.image);
-	const delay = 500; // Delay in milliseconds
-	const ref = useIntersectionObserver(onVisible, { threshold: 0.8, delay });
-
 	const handleSetImage = (img: string) => {
 		setImage(img);
 		setValue(EInputs.image, img);
@@ -77,7 +71,11 @@ const ImageInput: FC<ImageInputProps> = ({
 	};
 
 	return (
-		<div ref={ref}>
+		<div
+			onMouseEnter={() =>
+				setActiveProjectSection(ECreateProjectSections.image)
+			}
+		>
 			<H5>
 				{formatMessage({ id: 'label.add_an_image_to_your_project' })}
 			</H5>

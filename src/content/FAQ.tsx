@@ -158,16 +158,6 @@ const faqContent = (formatMessage: any) => {
 								<FormattedMessage id='page.faq.where_can_i_see_how_giveth_spends.content.two' />
 							</li>
 							<li>
-								<a
-									href='https://gardens.1hive.org/#/xdai/garden/0xb25f0ee2d26461e2b5b3d3ddafe197a0da677b98'
-									target='_blank'
-									rel='noopener noreferrer'
-								>
-									<b>GIVgarden</b>
-								</a>{' '}
-								<FormattedMessage id='page.faq.where_can_i_see_how_giveth_spends.content.three' />
-							</li>
-							<li>
 								<FormattedMessage id='page.faq.where_can_i_see_how_giveth_spends.content.four' />{' '}
 								<a
 									href='https://gnosis-safe.io/app/eth:0xf924fF0f192f0c7c073161e0d62CE7635114e74f/balances'
@@ -457,18 +447,10 @@ const faqContent = (formatMessage: any) => {
 								.
 							</li>
 							<li>
-								<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.three' />{' '}
-								<ExternalLink
-									href={Routes.GIVfarm}
-									title='GIVfarm'
-								/>
-								.
-							</li>
-							<li>
 								<FormattedMessage id='page.faq.how_can_i_get_more_giv.content.four' />{' '}
 								<ExternalLink
-									href={Routes.GIVgarden}
-									title='GIVgarden'
+									href={Routes.GIVpower}
+									title='GIVpower'
 								/>
 								.
 							</li>
@@ -584,9 +566,10 @@ const faqContent = (formatMessage: any) => {
 						/>{' '}
 						<FormattedMessage id='page.faq.how_do_i_get_involved_in_governance.content.two' />{' '}
 						<ExternalLink
-							href={Routes.GIVgarden}
-							title='GIVgarden'
-						/>{' '}
+							href={links.GIVERNANCE_VOTING}
+							title='GIVernance Voting'
+						/>
+						.{' '}
 						<FormattedMessage id='page.faq.how_do_i_get_involved_in_governance.content.three' />{' '}
 						<ExternalLink
 							href={links.DISCOURSE}
@@ -630,11 +613,7 @@ const faqContent = (formatMessage: any) => {
 				answer: (
 					<>
 						<FormattedMessage id='page.faq.i_earned_givbacks_but_my_balance_is_zero.content.one' />{' '}
-						<ExternalLink
-							href={Routes.GIVgarden}
-							title='GIVgarden'
-						/>
-						, <ExternalLink href={Routes.GIVfarm} title='GIVfarm' />
+						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />
 						, <FormattedMessage id='label.or' />{' '}
 						<ExternalLink
 							href={Routes.GIVstream}
@@ -643,34 +622,6 @@ const faqContent = (formatMessage: any) => {
 						<FormattedMessage id='page.faq.i_earned_givbacks_but_my_balance_is_zero.content.two' />{' '}
 						<ExternalLink href={Routes.GIVbacks} title='GIVbacks' />{' '}
 						<FormattedMessage id='page.faq.i_earned_givbacks_but_my_balance_is_zero.content.three' />
-					</>
-				),
-			},
-			{
-				question: 'page.faq.what_is_the_givgarden',
-				answer: (
-					<>
-						<FormattedMessage id='label.the.two' />{' '}
-						<ExternalLink
-							href={Routes.GIVgarden}
-							title='GIVgarden'
-						/>{' '}
-						<FormattedMessage id='page.faq.what_is_the_givgarden.content.one' />{' '}
-						<a
-							href='https://1hive.gitbook.io/gardens/'
-							target='_blank'
-							rel='noreferrer'
-						>
-							<FormattedMessage id='page.faq.what_is_the_givgarden.content.two' />
-						</a>
-						<FormattedMessage id='page.faq.what_is_the_givgarden.content.three' />{' '}
-						<ExternalLink
-							href={links.GIVGARDEN_DOC}
-							title={
-								<FormattedMessage id='label.givgarden_documentation' />
-							}
-						/>
-						.
 					</>
 				),
 			},
@@ -722,12 +673,6 @@ const faqContent = (formatMessage: any) => {
 								id: 'label.donate_to_verified_projects',
 							})}
 						/>
-						<FormattedMessage id='page.faq.why_is_there_a_givstream.content.two' />{' '}
-						<ExternalLink
-							href={Routes.GIVgarden}
-							title='GIVgarden'
-						/>
-						{'  '}
 						<FormattedMessage id='page.faq.why_is_there_a_givstream.content.three' />{' '}
 						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />.{' '}
 						<FormattedMessage id='page.faq.why_is_there_a_givstream.content.four' />
@@ -741,15 +686,8 @@ const faqContent = (formatMessage: any) => {
 						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.one' />{' '}
 						<ExternalLink href={Routes.GIVbacks} title='GIVbacks' />
 						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.two' />{' '}
-						<ExternalLink
-							href={Routes.GIVgarden}
-							title='GIVgarden'
-						/>
+						<ExternalLink href={Routes.GIVpower} title='GIVpower' />{' '}
 						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.three' />{' '}
-						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />{' '}
-						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.four' />{' '}
-						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />{' '}
-						<FormattedMessage id='page.faq.how_do_i_get_a_givstream.content.five' />
 					</>
 				),
 			},
@@ -764,11 +702,6 @@ const faqContent = (formatMessage: any) => {
 						/>{' '}
 						<FormattedMessage id='page.faq.can_i_speed_up_my_givstream.content.two' />{' '}
 						<ExternalLink href={Routes.GIVbacks} title='GIVbacks' />
-						, <FormattedMessage id='label.the' />{' '}
-						<ExternalLink
-							href={Routes.GIVgarden}
-							title='GIVgarden'
-						/>
 						, <FormattedMessage id='label.or' />{' '}
 						<FormattedMessage id='label.the' />{' '}
 						<ExternalLink href={Routes.GIVfarm} title='GIVfarm' />.{' '}
