@@ -14,7 +14,7 @@ import { IUserRecurringDonations } from '@/apollo/types/gqlTypes';
 import Pagination from '@/components/Pagination';
 import { WrappedSpinner } from '@/components/Spinner';
 import NothingToSee from '../../NothingToSee';
-import { NothingWrapper } from '../oneTimeTab/OneTimeTab';
+import { NothingWrapper, StyledWrappedSpinner } from '../oneTimeTab/OneTimeTab';
 
 const itemPerPage = 10;
 
@@ -150,15 +150,6 @@ export const ActiveProjectsSection = () => {
 		</Wrapper>
 	);
 };
-
-const StyledWrappedSpinner = styled.div`
-	position: absolute !important;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: ${neutralColors.gray[100]}aa;
-`;
 
 const DonationTableWrapper = styled.div`
 	position: relative;

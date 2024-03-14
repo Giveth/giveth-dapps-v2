@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { neutralColors } from '@giveth/ui-design-system';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_USER_DONATIONS } from '@/apollo/gql/gqlUser';
 import { EDirection, EDonationStatus } from '@/apollo/types/gqlEnums';
@@ -95,7 +96,11 @@ export const OneTimeTab = () => {
 						myAccount={myAccount}
 					/>
 				)}
-				{loading && <WrappedSpinner size={250} />}
+				{loading && (
+					<StyledWrappedSpinner>
+						<WrappedSpinner size={250} />
+					</StyledWrappedSpinner>
+				)}
 			</DonationTableWrapper>
 			<Pagination
 				currentPage={page}
@@ -111,6 +116,15 @@ const DonationTableWrapper = styled.div`
 	position: relative;
 	overflow: auto;
 	margin-bottom: 40px;
+`;
+
+export const StyledWrappedSpinner = styled.div`
+	position: absolute !important;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: ${neutralColors.gray[100]}aa;
 `;
 
 export const NothingWrapper = styled.div`
