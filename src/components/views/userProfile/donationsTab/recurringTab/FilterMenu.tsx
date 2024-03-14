@@ -18,19 +18,42 @@ import config from '@/configuration';
 import { ISuperToken } from '@/types/superFluid';
 import { PinkyColoredNumber } from '@/components/styled-components/PinkyColoredNumber';
 import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
+import { IRecurringDonationFiltersButtonProps } from './RecurringDonationFiltersButton';
 
-interface IFilterMenuProps {
+interface IFilterMenuProps extends IRecurringDonationFiltersButtonProps {
 	handleClose: (e?: any) => void;
 	isOpen?: boolean;
 }
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
-	({ handleClose, isOpen }, ref) => {
+	(
+		{
+			handleClose,
+			isOpen,
+			statusFilters,
+			setStatusFilters,
+			tokenFilters,
+			setTokenFilters,
+		},
+		ref,
+	) => {
 		const { formatMessage } = useIntl();
 		const count = 0;
 		const router = useRouter();
 
 		const handleSelectFilter = (e: boolean, filter: ISuperToken) => {
+			if (e) {
+				setTokenFilters([
+					...tokenFilters,
+					filter.underlyingToken.symbol,
+				]);
+			} else {
+				setTokenFilters(
+					tokenFilters.filter(
+						f => f !== filter.underlyingToken.symbol,
+					),
+				);
+			}
 			handleClose();
 		};
 
@@ -71,11 +94,9 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 								onChange={e => {
 									handleSelectFilter(e, token);
 								}}
-								checked={
-									false
-									// variables?.filters?.includes(token.id) ??
-									// false
-								}
+								checked={tokenFilters.includes(
+									token.underlyingToken.symbol,
+								)}
 								size={14}
 							>
 								<Flex $alignItems='center' gap='4px'>
@@ -92,18 +113,15 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					))}
 				</Section>
 				<Section>
-					<B>{formatMessage({ id: 'label.States' })}</B>
+					<B>{formatMessage({ id: 'label.state' })}</B>
 					<FeatureItem>
 						<CheckBox
 							label='Active'
 							onChange={e => {
-								// handleSelectFilter(e, token);
+								setStatusFilters(s => [e, s[1]]);
+								handleClose();
 							}}
-							checked={
-								false
-								// variables?.filters?.includes(token.id) ??
-								// false
-							}
+							checked={statusFilters[0]}
 							size={14}
 						/>
 					</FeatureItem>
@@ -111,13 +129,10 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 						<CheckBox
 							label='Ended'
 							onChange={e => {
-								// handleSelectFilter(e, token);
+								setStatusFilters(s => [s[0], e]);
+								handleClose();
 							}}
-							checked={
-								false
-								// variables?.filters?.includes(token.id) ??
-								// false
-							}
+							checked={statusFilters[1]}
 							size={14}
 						/>
 					</FeatureItem>

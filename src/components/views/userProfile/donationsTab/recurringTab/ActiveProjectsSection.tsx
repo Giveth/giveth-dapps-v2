@@ -34,6 +34,8 @@ export const ActiveProjectsSection = () => {
 		by: ERecurringDonationSortField.createdAt,
 		direction: EDirection.DESC,
 	});
+	const [tokenFilters, setTokenFilters] = useState([] as string[]);
+	const [statusFilters, setStatusFilters] = useState([] as boolean[]);
 	const { myAccount, user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
@@ -66,7 +68,8 @@ export const ActiveProjectsSection = () => {
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },
 					status: !myAccount ? EDonationStatus.VERIFIED : null,
-					finishStatus: [true, false],
+					finishStatus: statusFilters,
+					filteredTokens: tokenFilters,
 				},
 			});
 			setLoading(false);
@@ -89,7 +92,12 @@ export const ActiveProjectsSection = () => {
 						label='Switch to Archive Donations'
 						toggleOnOff={() => setShowArchive(archive => !archive)}
 					/>
-					<RecurringDonationFiltersButton />
+					<RecurringDonationFiltersButton
+						statusFilters={statusFilters}
+						setStatusFilters={setStatusFilters}
+						tokenFilters={tokenFilters}
+						setTokenFilters={setTokenFilters}
+					/>
 				</Flex>
 			</Flex>
 			<DonationTable
