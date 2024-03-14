@@ -5,6 +5,8 @@ import {
 	IconX,
 	neutralColors,
 	FlexCenter,
+	GLink,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -15,6 +17,7 @@ import CheckBox from '@/components/Checkbox';
 import config from '@/configuration';
 import { ISuperToken } from '@/types/superFluid';
 import { PinkyColoredNumber } from '@/components/styled-components/PinkyColoredNumber';
+import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
 
 interface IFilterMenuProps {
 	handleClose: (e?: any) => void;
@@ -65,7 +68,6 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					{config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.map(token => (
 						<FeatureItem key={token.id}>
 							<CheckBox
-								label={token.underlyingToken.name}
 								onChange={e => {
 									handleSelectFilter(e, token);
 								}}
@@ -75,7 +77,17 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 									// false
 								}
 								size={14}
-							/>
+							>
+								<Flex $alignItems='center' gap='4px'>
+									<TokenIcon
+										symbol={token.underlyingToken.symbol}
+										size={16}
+									/>
+									<GLink size='Medium'>
+										{token.underlyingToken.name}
+									</GLink>
+								</Flex>
+							</CheckBox>
 						</FeatureItem>
 					))}
 				</Section>
