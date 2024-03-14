@@ -65,7 +65,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					{config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.map(token => (
 						<FeatureItem key={token.id}>
 							<CheckBox
-								label={token.name}
+								label={token.underlyingToken.name}
 								onChange={e => {
 									handleSelectFilter(e, token);
 								}}
@@ -78,6 +78,37 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 							/>
 						</FeatureItem>
 					))}
+				</Section>
+				<Section>
+					<B>{formatMessage({ id: 'label.States' })}</B>
+					<FeatureItem>
+						<CheckBox
+							label='Active'
+							onChange={e => {
+								// handleSelectFilter(e, token);
+							}}
+							checked={
+								false
+								// variables?.filters?.includes(token.id) ??
+								// false
+							}
+							size={14}
+						/>
+					</FeatureItem>
+					<FeatureItem>
+						<CheckBox
+							label='Ended'
+							onChange={e => {
+								// handleSelectFilter(e, token);
+							}}
+							checked={
+								false
+								// variables?.filters?.includes(token.id) ??
+								// false
+							}
+							size={14}
+						/>
+					</FeatureItem>
 				</Section>
 				<ButtonStyled
 					onClick={clearFilters}

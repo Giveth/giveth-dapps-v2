@@ -66,7 +66,7 @@ export const ActiveProjectsSection = () => {
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },
 					status: !myAccount ? EDonationStatus.VERIFIED : null,
-					finished: showArchive,
+					finishStatus: [true, false],
 				},
 			});
 			setLoading(false);
