@@ -113,7 +113,7 @@ const DonationTableWrapper = styled.div`
 	margin-bottom: 40px;
 `;
 
-const NothingWrapper = styled.div`
+export const NothingWrapper = styled.div`
 	position: relative;
 	padding: 100px 0;
 `;
