@@ -25,9 +25,11 @@ import {
 	UPDATE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
 import {
+	EProjectSocialMediaType,
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
+	IProjectSocialMedia,
 } from '@/apollo/types/types';
 import {
 	CategoryInput,
@@ -214,14 +216,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		}
 	};
 
-	const onLog = (formData: TInputs) => {
-		console.log('formData', formData);
-	};
-
 	const onSubmit = async (formData: TInputs) => {
 		console.log('formData', formData);
-		return;
-		// setIsLoading(true);
+		setIsLoading(true);
 		if (
 			isProjectScoringActive &&
 			!watchDraft &&
@@ -233,6 +230,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			return;
 		}
 		try {
+			// Extracting the relevant fields from formData
 			const {
 				addresses,
 				name,
@@ -241,8 +239,34 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				impactLocation,
 				image,
 				draft,
+				facebook,
+				twitter,
+				instagram,
+				youtube,
+				linkedin,
+				reddit,
+				discord,
+				farcaster,
+				lens,
+				website,
 			} = formData;
 
+			// Transforming the social media fields into the required structure
+			const socialMedia = [
+				{ type: EProjectSocialMediaType.FACEBOOK, link: facebook },
+				{ type: EProjectSocialMediaType.X, link: twitter },
+				{ type: EProjectSocialMediaType.INSTAGRAM, link: instagram },
+				{ type: EProjectSocialMediaType.YOUTUBE, link: youtube },
+				{ type: EProjectSocialMediaType.LINKEDIN, link: linkedin },
+				{ type: EProjectSocialMediaType.REDDIT, link: reddit },
+				{ type: EProjectSocialMediaType.DISCORD, link: discord },
+				{ type: EProjectSocialMediaType.FARCASTER, link: farcaster },
+				{ type: EProjectSocialMediaType.LENS, link: lens },
+				{ type: EProjectSocialMediaType.WEBSITE, link: website },
+			].filter(
+				social => social.link && social.link !== '',
+			) as IProjectSocialMedia[]; // Filtering out empty links
+			console.log('Social Media', socialMedia);
 			if (addresses.length === 0) {
 				showToastError(
 					formatMessage({ id: 'label.recipient_addresses_cant' }),
@@ -260,8 +284,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				addresses,
 				image,
 				isDraft: draft,
+				socialMedia,
 			};
-
+			console.log('Project Data', projectData);
 			const addedProject = isEditMode
 				? await editProjectMutation({
 						variables: {
@@ -372,8 +397,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					</Title>
 					<FormProvider {...formMethods}>
 						<form
-							onSubmit={handleSubmit(onLog, onError)}
-							// onSubmitCapture={() => setIsLoading(true)}
+							onSubmit={handleSubmit(onSubmit, onError)}
+							onSubmitCapture={() => setIsLoading(true)}
 							id='hook-form'
 						>
 							<NameInput
