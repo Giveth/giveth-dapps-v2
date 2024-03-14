@@ -147,7 +147,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.twitter]: '',
 			[EInputs.instagram]: '',
 			[EInputs.youtube]: '',
-			[EInputs.linkedIn]: '',
+			[EInputs.linkedin]: '',
 			[EInputs.reddit]: '',
 			[EInputs.discord]: '',
 			[EInputs.farcaster]: '',
@@ -219,6 +219,8 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	};
 
 	const onSubmit = async (formData: TInputs) => {
+		console.log('formData', formData);
+		return;
 		// setIsLoading(true);
 		if (
 			isProjectScoringActive &&

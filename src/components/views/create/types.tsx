@@ -13,7 +13,7 @@ export enum EInputs {
 	twitter = 'twitter',
 	instagram = 'instagram',
 	youtube = 'youtube',
-	linkedIn = 'linkedin',
+	linkedin = 'linkedin',
 	reddit = 'reddit',
 	discord = 'discord',
 	farcaster = 'farcaster',
@@ -44,7 +44,7 @@ export type TInputs = {
 	[EInputs.twitter]?: string;
 	[EInputs.instagram]?: string;
 	[EInputs.youtube]?: string;
-	[EInputs.linkedIn]?: string;
+	[EInputs.linkedin]?: string;
 	[EInputs.reddit]?: string;
 	[EInputs.discord]?: string;
 	[EInputs.farcaster]?: string;
