@@ -30,6 +30,7 @@ interface IClaimWithdrawalModal extends IModal {
 	transactionState: ClaimTransactionState;
 	setTransactionState: (state: ClaimTransactionState) => void;
 	balanceInUsd: number;
+	refetch: () => Promise<void>;
 }
 
 const contents = {
@@ -58,6 +59,7 @@ const ClaimWithdrawalModal = ({
 	transactionState,
 	setTransactionState,
 	balanceInUsd,
+	refetch,
 }: IClaimWithdrawalModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const [txHash, setTxHash] = useState<Address>();
@@ -97,6 +99,7 @@ const ClaimWithdrawalModal = ({
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
 				});
 				setTransactionState(ClaimTransactionState.SUCCESS);
+				refetch();
 			}
 		} catch (error) {
 			setTransactionState(ClaimTransactionState.NOT_STARTED);
