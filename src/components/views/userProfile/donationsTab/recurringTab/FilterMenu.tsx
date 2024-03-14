@@ -11,7 +11,6 @@ import {
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { forwardRef } from 'react';
-import { useRouter } from 'next/router';
 import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import CheckBox from '@/components/Checkbox';
 import config from '@/configuration';
@@ -38,8 +37,8 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		ref,
 	) => {
 		const { formatMessage } = useIntl();
-		const count = 0;
-		const router = useRouter();
+		const count =
+			tokenFilters.length + statusFilters.filter(Boolean).length;
 
 		const handleSelectFilter = (e: boolean, filter: ISuperToken) => {
 			if (e) {
@@ -58,15 +57,9 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 		};
 
 		const clearFilters = () => {
-			const updatedQuery = {
-				...router.query,
-			};
-			delete updatedQuery.filter;
-			delete updatedQuery.campaign;
-			router.push({
-				pathname: router.pathname,
-				query: updatedQuery,
-			});
+			setTokenFilters([]);
+			setStatusFilters([]);
+			handleClose();
 		};
 
 		return (
