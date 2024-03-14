@@ -33,7 +33,8 @@ export const RecurringDonationFiltersButton: FC<
 
 	const filterMenuRef = useRef<HTMLDivElement>(null);
 
-	const count = 0;
+	const count =
+		props.tokenFilters.length + props.statusFilters.filter(Boolean).length;
 
 	useOnClickOutside(
 		() => setIsFilterOpen(false),
