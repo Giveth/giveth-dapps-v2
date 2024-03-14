@@ -4,9 +4,15 @@ import Input from '@/components/Input';
 import { EInputs } from '../types';
 interface IProps {
 	registerName: EInputs;
+	validator?: {
+		pattern?: {
+			value: RegExp;
+			message: string;
+		};
+	};
 }
 
-const SocialMediaInput: FC<IProps> = ({ registerName }) => {
+const SocialMediaInput: FC<IProps> = ({ registerName, validator }) => {
 	const {
 		register,
 		formState: { errors: formErrors },
@@ -21,8 +27,9 @@ const SocialMediaInput: FC<IProps> = ({ registerName }) => {
 				value={inputValue}
 				register={register}
 				registerName={registerName}
-				// registerOptions={validators[registerName] }
-				// error={formErrors[EInputs[registerName]]}
+				registerOptions={validator}
+				error={formErrors[EInputs[registerName]]}
+				placeholder='https://'
 			/>
 			<br />
 		</>

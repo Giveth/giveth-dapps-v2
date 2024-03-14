@@ -15,57 +15,68 @@ import React from 'react';
 import styled from 'styled-components';
 import { EInputs } from '../types';
 import SocialMediaInput from './SocialMediaInput';
+import { validators } from '@/lib/constants/regex';
 
 export const socialMediasArray = [
 	{
 		name: 'Facebook',
 		type: EInputs.facebook,
 		icon: <IconFacebook24 />,
+		validator: validators.facebook,
 	},
 	{
 		name: 'Twitter',
 		type: EInputs.twitter,
 		icon: <IconX24 />,
+		validator: validators.twitter,
 	},
 	{
 		name: 'Instagram',
 		type: EInputs.instagram,
 		icon: <IconInstagram24 />,
+		validator: validators.instagram,
 	},
 	{
 		name: 'YouTube',
 		type: EInputs.youtube,
 		icon: <IconYoutube />,
+		validator: validators.youtube,
 	},
 	{
 		name: 'LinkedIn',
-		type: EInputs.linkedIn,
+		type: EInputs.linkedin,
 		icon: <IconLinkedin24 />,
+		validator: validators.linkedin,
 	},
 	{
 		name: 'Reddit',
 		type: EInputs.reddit,
 		icon: <IconLinkedin24 />,
+		validator: validators.reddit,
 	},
 	{
 		name: 'Discord',
 		type: EInputs.discord,
 		icon: <IconDiscord24 />,
+		validator: validators.discord,
 	},
 	{
 		name: 'Farcaster',
 		type: EInputs.farcaster,
 		icon: <IconLinkedin24 />,
+		validators: validators.farcaster,
 	},
 	{
 		name: 'Lens',
 		type: EInputs.lens,
 		icon: <IconLinkedin24 />,
+		validators: validators.lens,
 	},
 	{
 		name: 'Website',
 		type: EInputs.website,
 		icon: <IconLinkedin24 />,
+		validators: validators.website,
 	},
 ];
 
@@ -92,6 +103,7 @@ const SocialMedias = () => {
 							<InputContainer>
 								<SocialMediaInput
 									registerName={socialMedia.type}
+									validator={socialMedia.validator}
 								/>
 							</InputContainer>
 						</Flex>
