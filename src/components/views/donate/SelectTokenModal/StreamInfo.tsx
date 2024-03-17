@@ -12,6 +12,7 @@ interface IStreamInfoProps {
 	balance: bigint;
 	disable: boolean;
 	onClick: () => void;
+	isSuperToken: boolean;
 }
 
 export const StreamInfo: FC<IStreamInfoProps> = ({
@@ -19,6 +20,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 	balance,
 	disable,
 	onClick,
+	isSuperToken,
 }) => {
 	const { formatMessage } = useIntl();
 
@@ -47,6 +49,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 				showGiveBack
 				symbol={underlyingToken ? underlyingToken.symbol : 'ETH'}
 				size={32}
+				isSuperToken={isSuperToken}
 			/>
 			<InfoWrapper
 				$flexDirection='column'
