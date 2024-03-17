@@ -53,15 +53,10 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	const dropdownStyle = {
 		padding: '4px 16px',
 		borderRadius: '8px',
-		background: isHover ? 'white' : '',
 	};
 
 	return (
-		<Actions
-			onMouseEnter={() => setIsHover(true)}
-			onMouseLeave={() => setIsHover(false)}
-			$isOpen={isHover}
-		>
+		<Actions $isOpen={isHover}>
 			<Dropdown
 				style={dropdownStyle}
 				label=''
@@ -76,4 +71,7 @@ const Actions = styled.div<{ $isOpen: boolean }>`
 	cursor: pointer;
 	border-radius: 8px;
 	padding: 8px 10px;
+	:hover {
+		background-color: white;
+	}
 `;
