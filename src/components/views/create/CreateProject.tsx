@@ -108,6 +108,16 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		impactLocation: storageImpactLocation,
 		image: storageImage,
 		alloProtocolRegistry: storageAlloProtocolRegistry,
+		facebook: storageFacebook,
+		twitter: storageTwitter,
+		instagram: storageInstagram,
+		youtube: storageYoutube,
+		linkedin: storageLinkedin,
+		reddit: storageReddit,
+		discord: storageDiscord,
+		farcaster: storageFarcaster,
+		lens: storageLens,
+		website: storageWebsite,
 	} = storageProjectData || {};
 	const storageAddresses =
 		storageProjectData?.addresses instanceof Array
@@ -145,16 +155,16 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.addresses]: isEditMode
 				? activeAddresses
 				: storageAddresses,
-			[EInputs.facebook]: '',
-			[EInputs.twitter]: '',
-			[EInputs.instagram]: '',
-			[EInputs.youtube]: '',
-			[EInputs.linkedin]: '',
-			[EInputs.reddit]: '',
-			[EInputs.discord]: '',
-			[EInputs.farcaster]: '',
-			[EInputs.lens]: '',
-			[EInputs.website]: '',
+			[EInputs.facebook]: storageFacebook || '',
+			[EInputs.twitter]: storageTwitter || '',
+			[EInputs.instagram]: storageInstagram || '',
+			[EInputs.youtube]: storageYoutube || '',
+			[EInputs.linkedin]: storageLinkedin || '',
+			[EInputs.reddit]: storageReddit || '',
+			[EInputs.discord]: storageDiscord || '',
+			[EInputs.farcaster]: storageFarcaster || '',
+			[EInputs.lens]: storageLens || '',
+			[EInputs.website]: storageWebsite || '',
 		},
 	});
 
