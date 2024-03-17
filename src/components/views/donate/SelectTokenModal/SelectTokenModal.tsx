@@ -147,6 +147,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 								});
 								setShowModal(false);
 							}}
+							isSuperToken={!!token.isSuperToken}
 						/>
 					);
 				})}
