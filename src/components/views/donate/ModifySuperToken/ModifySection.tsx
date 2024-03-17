@@ -13,13 +13,14 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Dispatch, SetStateAction, type FC } from 'react';
 import { type GetBalanceReturnType } from '@wagmi/core';
+import { formatUnits } from 'viem';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { Spinner } from '@/components/Spinner';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { IToken } from '@/types/superFluid';
-import { limitFraction } from '@/helpers/number';
+import { truncateToDecimalPlaces } from '@/lib/helpers';
 
 interface IModifySectionProps {
 	titleLabel: string;
@@ -29,6 +30,7 @@ interface IModifySectionProps {
 	refetch: any;
 	isRefetching: boolean;
 	error?: string;
+	minRemainingBalance?: bigint;
 }
 export const ModifySection: FC<IModifySectionProps> = ({
 	titleLabel,
@@ -38,6 +40,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 	refetch,
 	isRefetching,
 	error,
+	minRemainingBalance = 0n,
 }) => {
 	const { formatMessage } = useIntl();
 
@@ -85,7 +88,16 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					{formatMessage({
 						id: 'label.available',
 					})}
-					: {limitFraction(balance?.formatted || '0')}
+					:{' '}
+					{balance
+						? truncateToDecimalPlaces(
+								formatUnits(
+									balance.value - minRemainingBalance,
+									balance.decimals,
+								),
+								6,
+							)
+						: '--'}
 				</GLink>
 				<IconWrapper onClick={() => !isRefetching && refetch()}>
 					{isRefetching ? <Spinner size={16} /> : <IconRefresh16 />}
