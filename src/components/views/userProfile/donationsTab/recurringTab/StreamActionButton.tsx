@@ -30,18 +30,6 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	const options: IOption[] = finished
 		? [
 				{
-					label: formatMessage({ id: 'label.modify_flow_rate' }),
-					icon: <IconEye16 />,
-				},
-				{
-					label: formatMessage({
-						id: 'label.end_recurring_donation',
-					}),
-					icon: <IconUpdate16 />,
-				},
-			]
-		: [
-				{
 					label: formatMessage({ id: 'label.start_new_donation' }),
 					icon: <IconEdit16 />,
 				},
@@ -50,6 +38,18 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 						formatMessage({ id: 'label.archive_donation' }),
 					),
 					icon: <IconWalletOutline16 />,
+				},
+			]
+		: [
+				{
+					label: formatMessage({ id: 'label.modify_flow_rate' }),
+					icon: <IconEye16 />,
+				},
+				{
+					label: formatMessage({
+						id: 'label.end_recurring_donation',
+					}),
+					icon: <IconUpdate16 />,
 				},
 			];
 
