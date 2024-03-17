@@ -172,6 +172,7 @@ export interface IProjectEdition {
 	};
 	slug: string;
 	anchorContracts?: IAnchorContractData[];
+	socialMedia: IProjectSocialMedia[];
 }
 
 export enum EProjectSocialMediaType {
