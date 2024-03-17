@@ -29,7 +29,7 @@ const ClaimRecurringDonationModal = ({
 	project,
 }: IClaimRecurringDonationModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { balances, isLoading } = useProjectClaimableDonations(
+	const { balances, isLoading, refetch } = useProjectClaimableDonations(
 		project?.anchorContracts && project.anchorContracts[0]?.address,
 	);
 	const [showClaimWithdrawalModal, setShowClaimWithdrawalModal] =
@@ -107,6 +107,7 @@ const ClaimRecurringDonationModal = ({
 						anchorContractAddress={anchorContractAddress}
 						transactionState={transactionState}
 						setTransactionState={setTransactionState}
+						refetch={refetch}
 						balanceInUsd={
 							allTokensUsd[
 								selectedStream.token.underlyingToken?.symbol!
