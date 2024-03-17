@@ -7,25 +7,34 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import styled, { css } from 'styled-components';
-import { type FC } from 'react';
+import { ReactElement } from 'react';
 
-interface ICheckBox {
+interface ICheckBoxBase {
 	onChange: (e: boolean) => void;
-	label: string;
 	checked?: boolean;
 	disabled?: boolean;
 	size?: 12 | 14 | 16 | 18 | 20 | 24 | 32;
-	labelSize?: 'Tiny' | 'Small' | 'Medium' | 'Big';
 }
 
-const CheckBox: FC<ICheckBox> = ({
-	onChange,
-	checked,
-	label,
-	disabled,
-	size = 24,
-	labelSize = 'Big',
-}) => {
+interface ICheckBoxWithLabel extends ICheckBoxBase {
+	label: string;
+	labelSize?: 'Tiny' | 'Small' | 'Medium' | 'Big';
+	children?: never;
+}
+
+interface ICheckBoxWithChildren extends ICheckBoxBase {
+	children: ReactElement;
+	label?: never;
+}
+
+type ICheckBox = ICheckBoxWithLabel | ICheckBoxWithChildren;
+
+// CheckBox component
+const CheckBox: React.FC<ICheckBox> = props => {
+	const { onChange, checked = false, disabled = false, size = 16 } = props;
+	const isLabelPresent = 'label' in props && typeof props.label === 'string';
+	const labelSize = isLabelPresent ? props.labelSize || 'Medium' : undefined;
+
 	return (
 		<Wrapper
 			onClick={() => !disabled && onChange(!checked)}
@@ -37,7 +46,11 @@ const CheckBox: FC<ICheckBox> = ({
 			<FlexCenter>
 				{checked && <IconCheck size={size} color='white' />}
 			</FlexCenter>
-			<GLink size={labelSize}>{label}</GLink>
+			{isLabelPresent ? (
+				<GLink size={labelSize}>{props.label}</GLink>
+			) : (
+				props.children
+			)}
 		</Wrapper>
 	);
 };

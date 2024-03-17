@@ -119,8 +119,9 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 		$skip: Int
 		$status: String
 		$orderBy: RecurringDonationSortBy
-		$finished: Boolean
+		$finishStatus: [Boolean!]
 		$userId: Int!
+		$filteredTokens: [String!]
 	) {
 		recurringDonationsByUserId(
 			take: $take
@@ -128,7 +129,8 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 			orderBy: $orderBy
 			userId: $userId
 			status: $status
-			finished: $finished
+			finishStatus: $finishStatus
+			filteredTokens: $filteredTokens
 		) {
 			recurringDonations {
 				id

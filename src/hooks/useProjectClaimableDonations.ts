@@ -1,13 +1,8 @@
-import { type Address } from 'viem';
-import { useEffect, useState } from 'react';
-import { BigNumber } from 'ethers';
-import { IStream, IToken } from '@/types/superFluid';
+import { useCallback, useEffect, useState } from 'react';
+import { Address } from 'viem';
+import { IToken } from '@/types/superFluid';
 import config from '@/configuration';
 import { fetchBalance } from '@/services/token';
-
-export interface IStreamWithBalance extends IStream {
-	balance: BigNumber;
-}
 
 export interface ITokenWithBalance {
 	token: IToken;
@@ -19,13 +14,11 @@ const allTokens = config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS;
 export const useProjectClaimableDonations = (
 	anchorContractAddress?: Address,
 ) => {
-	const [isLoading, setIsLoading] = useState(false); // Add isLoading state
+	const [isLoading, setIsLoading] = useState(false);
 	const [balances, setBalances] = useState<ITokenWithBalance[]>([]);
 
-	useEffect(() => {
-		const fetchTokenBalance = async (
-			token: IToken,
-		): Promise<ITokenWithBalance | null> => {
+	const fetchTokenBalance = useCallback(
+		async (token: IToken): Promise<ITokenWithBalance | null> => {
 			if (!anchorContractAddress) return null;
 			try {
 				const balance = await fetchBalance(
@@ -35,37 +28,42 @@ export const useProjectClaimableDonations = (
 				if (balance) {
 					return {
 						token,
-						balance: balance, // Convert balance to BigNumber
+						balance: balance,
 					};
 				}
 				return null;
 			} catch (error) {
+				console.error('Error fetching token balance:', error);
 				return null;
 			}
-		};
+		},
+		[anchorContractAddress],
+	);
 
-		// Initiate all balance fetches concurrently
-		const fetchAllTokensBalances = async () => {
-			try {
-				setIsLoading(true);
-				const _allTokensWithBalance = allTokens.map(token => {
-					return fetchTokenBalance(token);
-				});
-				const results = await Promise.all(_allTokensWithBalance);
-				// Filter out null values
-				const filteredResults = results.filter(
-					result => result !== null && result.balance !== 0n,
-				) as ITokenWithBalance[];
-				setBalances(filteredResults);
-			} catch (error) {
-			} finally {
-				setIsLoading(false);
-			}
-		};
-
+	const fetchAllTokensBalances = useCallback(async () => {
 		if (!anchorContractAddress) return;
-		fetchAllTokensBalances();
-	}, []);
+		try {
+			setIsLoading(true);
+			const tokenBalancesPromises = allTokens.map(token =>
+				fetchTokenBalance(token),
+			);
+			const results = await Promise.all(tokenBalancesPromises);
+			const filteredResults = results.filter(
+				result => result !== null && result.balance !== 0n,
+			) as ITokenWithBalance[];
+			setBalances(filteredResults);
+		} catch (error) {
+			console.error('Error fetching all tokens balances:', error);
+		} finally {
+			setIsLoading(false);
+		}
+	}, [fetchTokenBalance, anchorContractAddress]);
 
-	return { isLoading, balances };
+	// Initial fetch
+	useEffect(() => {
+		fetchAllTokensBalances();
+	}, [fetchAllTokensBalances]);
+
+	// Return isLoading, balances, and the refetch function
+	return { isLoading, balances, refetch: fetchAllTokensBalances };
 };
