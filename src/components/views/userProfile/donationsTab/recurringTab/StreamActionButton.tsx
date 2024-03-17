@@ -1,18 +1,14 @@
 import {
-	GLink,
 	IconEdit16,
 	IconEye16,
 	IconUpdate16,
 	IconWalletOutline16,
-	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
-import { isRecurringActive } from '@/configuration';
 
 interface IStreamActionButtonProps {
 	finished: boolean;
@@ -21,7 +17,7 @@ interface IStreamActionButtonProps {
 export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	finished,
 }) => {
-	const isCancelled = status === EProjectStatus.CANCEL;
+	const [showModify, setshowModify] = useState(false);
 
 	const { formatMessage } = useIntl();
 
@@ -44,6 +40,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 				{
 					label: formatMessage({ id: 'label.modify_flow_rate' }),
 					icon: <IconEye16 />,
+					cb: () => {},
 				},
 				{
 					label: formatMessage({
@@ -59,58 +56,24 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 		background: isHover ? 'white' : '',
 	};
 
-	return isRecurringActive ? (
+	return (
 		<Actions
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 			$isOpen={isHover}
-			$isCancelled={isCancelled}
 		>
-			{isCancelled ? (
-				<CancelledWrapper>CANCELLED</CancelledWrapper>
-			) : (
-				<Dropdown
-					style={dropdownStyle}
-					label=''
-					options={options}
-					stickToRight
-				/>
-			)}
+			<Dropdown
+				style={dropdownStyle}
+				label=''
+				options={options}
+				stickToRight
+			/>
 		</Actions>
-	) : (
-		<ActionsOld
-			onMouseEnter={() => setIsHover(true)}
-			onMouseLeave={() => setIsHover(false)}
-			$isOpen={isHover}
-			$isCancelled={isCancelled}
-			size='Big'
-		>
-			{isCancelled ? (
-				<CancelledWrapper>CANCELLED</CancelledWrapper>
-			) : (
-				<Dropdown
-					style={dropdownStyle}
-					label='Actions'
-					options={options}
-					stickToRight
-				/>
-			)}
-		</ActionsOld>
 	);
 };
 
-const CancelledWrapper = styled.div`
-	padding: 4px 16px;
-`;
-
-const Actions = styled.div<{ $isCancelled: boolean; $isOpen: boolean }>`
-	cursor: ${props => (props.$isCancelled ? 'default' : 'pointer')};
+const Actions = styled.div<{ $isOpen: boolean }>`
+	cursor: pointer;
 	border-radius: 8px;
 	padding: 8px 10px;
-`;
-
-const ActionsOld = styled(GLink)<{ $isCancelled: boolean; $isOpen: boolean }>`
-	color: ${props =>
-		props.$isCancelled ? neutralColors.gray[500] : neutralColors.gray[900]};
-	cursor: ${props => (props.$isCancelled ? 'default' : 'pointer')};
 `;
