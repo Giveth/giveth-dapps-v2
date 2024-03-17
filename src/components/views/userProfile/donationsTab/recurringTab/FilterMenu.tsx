@@ -5,42 +5,61 @@ import {
 	IconX,
 	neutralColors,
 	FlexCenter,
+	GLink,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { forwardRef } from 'react';
-import { useRouter } from 'next/router';
 import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import CheckBox from '@/components/Checkbox';
 import config from '@/configuration';
 import { ISuperToken } from '@/types/superFluid';
 import { PinkyColoredNumber } from '@/components/styled-components/PinkyColoredNumber';
+import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
+import { IRecurringDonationFiltersButtonProps } from './RecurringDonationFiltersButton';
 
-interface IFilterMenuProps {
+interface IFilterMenuProps extends IRecurringDonationFiltersButtonProps {
 	handleClose: (e?: any) => void;
 	isOpen?: boolean;
 }
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
-	({ handleClose, isOpen }, ref) => {
+	(
+		{
+			handleClose,
+			isOpen,
+			statusFilters,
+			setStatusFilters,
+			tokenFilters,
+			setTokenFilters,
+		},
+		ref,
+	) => {
 		const { formatMessage } = useIntl();
-		const count = 0;
-		const router = useRouter();
+		const count =
+			tokenFilters.length + statusFilters.filter(Boolean).length;
 
 		const handleSelectFilter = (e: boolean, filter: ISuperToken) => {
+			if (e) {
+				setTokenFilters([
+					...tokenFilters,
+					filter.underlyingToken.symbol,
+				]);
+			} else {
+				setTokenFilters(
+					tokenFilters.filter(
+						f => f !== filter.underlyingToken.symbol,
+					),
+				);
+			}
 			handleClose();
 		};
 
 		const clearFilters = () => {
-			const updatedQuery = {
-				...router.query,
-			};
-			delete updatedQuery.filter;
-			delete updatedQuery.campaign;
-			router.push({
-				pathname: router.pathname,
-				query: updatedQuery,
-			});
+			setTokenFilters([]);
+			setStatusFilters([]);
+			handleClose();
 		};
 
 		return (
@@ -65,19 +84,51 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 					{config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.map(token => (
 						<FeatureItem key={token.id}>
 							<CheckBox
-								label={token.name}
 								onChange={e => {
 									handleSelectFilter(e, token);
 								}}
-								checked={
-									false
-									// variables?.filters?.includes(token.id) ??
-									// false
-								}
+								checked={tokenFilters.includes(
+									token.underlyingToken.symbol,
+								)}
 								size={14}
-							/>
+							>
+								<Flex $alignItems='center' gap='4px'>
+									<TokenIcon
+										symbol={token.underlyingToken.symbol}
+										size={16}
+									/>
+									<GLink size='Medium'>
+										{token.underlyingToken.name}
+									</GLink>
+								</Flex>
+							</CheckBox>
 						</FeatureItem>
 					))}
+				</Section>
+				<Section>
+					<B>{formatMessage({ id: 'label.state' })}</B>
+					<FeatureItem>
+						<CheckBox
+							label='Active'
+							onChange={e => {
+								setStatusFilters(s => [e, s[1] || false]);
+								handleClose();
+							}}
+							checked={statusFilters[0]}
+							size={14}
+						/>
+					</FeatureItem>
+					<FeatureItem>
+						<CheckBox
+							label='Ended'
+							onChange={e => {
+								setStatusFilters(s => [s[0] || false, e]);
+								handleClose();
+							}}
+							checked={statusFilters[1]}
+							size={14}
+						/>
+					</FeatureItem>
 				</Section>
 				<ButtonStyled
 					onClick={clearFilters}

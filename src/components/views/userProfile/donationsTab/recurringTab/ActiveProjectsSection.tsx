@@ -12,6 +12,9 @@ import { FETCH_USER_RECURRING_DONATIONS } from '@/apollo/gql/gqlUser';
 import DonationTable from '@/components/views/userProfile/donationsTab/recurringTab/RecurringDonationsTable';
 import { IUserRecurringDonations } from '@/apollo/types/gqlTypes';
 import Pagination from '@/components/Pagination';
+import { WrappedSpinner } from '@/components/Spinner';
+import NothingToSee from '../../NothingToSee';
+import { NothingWrapper, StyledWrappedSpinner } from '../oneTimeTab/OneTimeTab';
 
 const itemPerPage = 10;
 
@@ -34,6 +37,8 @@ export const ActiveProjectsSection = () => {
 		by: ERecurringDonationSortField.createdAt,
 		direction: EDirection.DESC,
 	});
+	const [tokenFilters, setTokenFilters] = useState([] as string[]);
+	const [statusFilters, setStatusFilters] = useState([] as boolean[]);
 	const { myAccount, user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
@@ -66,7 +71,8 @@ export const ActiveProjectsSection = () => {
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },
 					status: !myAccount ? EDonationStatus.VERIFIED : null,
-					finished: showArchive,
+					finishStatus: statusFilters,
+					filteredTokens: tokenFilters,
 				},
 			});
 			setLoading(false);
@@ -78,7 +84,16 @@ export const ActiveProjectsSection = () => {
 			}
 		};
 		fetchUserDonations().then();
-	}, [user, page, order.by, order.direction, myAccount, showArchive]);
+	}, [
+		user,
+		page,
+		order.by,
+		order.direction,
+		myAccount,
+		showArchive,
+		statusFilters,
+		tokenFilters,
+	]);
 	return (
 		<Wrapper>
 			<Flex $justifyContent='space-between'>
@@ -89,15 +104,43 @@ export const ActiveProjectsSection = () => {
 						label='Switch to Archive Donations'
 						toggleOnOff={() => setShowArchive(archive => !archive)}
 					/>
-					<RecurringDonationFiltersButton />
+					<RecurringDonationFiltersButton
+						statusFilters={statusFilters}
+						setStatusFilters={setStatusFilters}
+						tokenFilters={tokenFilters}
+						setTokenFilters={setTokenFilters}
+					/>
 				</Flex>
 			</Flex>
-			<DonationTable
-				donations={donations}
-				order={order}
-				changeOrder={changeOrder}
-				myAccount={myAccount}
-			/>
+			<DonationTableWrapper>
+				{!loading && totalDonations === 0 ? (
+					<NothingWrapper>
+						<NothingToSee
+							title={`${
+								myAccount
+									? formatMessage({
+											id: 'label.you_havent_donated_to_any_projects_yet',
+										})
+									: formatMessage({
+											id: 'label.this_user_hasnt_donated_to_any_project_yet',
+										})
+							}`}
+						/>
+					</NothingWrapper>
+				) : (
+					<DonationTable
+						donations={donations}
+						order={order}
+						changeOrder={changeOrder}
+						myAccount={myAccount}
+					/>
+				)}
+				{loading && (
+					<StyledWrappedSpinner>
+						<WrappedSpinner size={250} />
+					</StyledWrappedSpinner>
+				)}
+			</DonationTableWrapper>
 			<Pagination
 				currentPage={page}
 				totalCount={totalDonations}
@@ -107,6 +150,12 @@ export const ActiveProjectsSection = () => {
 		</Wrapper>
 	);
 };
+
+const DonationTableWrapper = styled.div`
+	position: relative;
+	overflow: auto;
+	margin-bottom: 40px;
+`;
 
 const Wrapper = styled(Flex)`
 	flex-direction: column;
