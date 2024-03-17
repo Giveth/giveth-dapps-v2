@@ -101,6 +101,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const { title, description, categories, impactLocation, image, addresses } =
 		project || {};
+
+	const findSocialMedia = (type: EProjectSocialMediaType) => {
+		return project?.socialMedia?.find(
+			(socialMedia: IProjectSocialMedia) => socialMedia.type === type,
+		);
+	};
+
 	const {
 		name: storageTitle,
 		description: storageDescription,
@@ -155,16 +162,46 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.addresses]: isEditMode
 				? activeAddresses
 				: storageAddresses,
-			[EInputs.facebook]: storageFacebook || '',
-			[EInputs.twitter]: storageTwitter || '',
-			[EInputs.instagram]: storageInstagram || '',
-			[EInputs.youtube]: storageYoutube || '',
-			[EInputs.linkedin]: storageLinkedin || '',
-			[EInputs.reddit]: storageReddit || '',
-			[EInputs.discord]: storageDiscord || '',
-			[EInputs.farcaster]: storageFarcaster || '',
-			[EInputs.lens]: storageLens || '',
-			[EInputs.website]: storageWebsite || '',
+			[EInputs.facebook]:
+				findSocialMedia(EProjectSocialMediaType.FACEBOOK)?.link ||
+				storageFacebook ||
+				'',
+			[EInputs.twitter]:
+				findSocialMedia(EProjectSocialMediaType.X)?.link ||
+				storageTwitter ||
+				'',
+			[EInputs.instagram]:
+				findSocialMedia(EProjectSocialMediaType.INSTAGRAM)?.link ||
+				storageInstagram ||
+				'',
+			[EInputs.youtube]:
+				findSocialMedia(EProjectSocialMediaType.YOUTUBE)?.link ||
+				storageYoutube ||
+				'',
+			[EInputs.linkedin]:
+				findSocialMedia(EProjectSocialMediaType.LINKEDIN)?.link ||
+				storageLinkedin ||
+				'',
+			[EInputs.reddit]:
+				findSocialMedia(EProjectSocialMediaType.REDDIT)?.link ||
+				storageReddit ||
+				'',
+			[EInputs.discord]:
+				findSocialMedia(EProjectSocialMediaType.DISCORD)?.link ||
+				storageDiscord ||
+				'',
+			[EInputs.farcaster]:
+				findSocialMedia(EProjectSocialMediaType.FARCASTER)?.link ||
+				storageFarcaster ||
+				'',
+			[EInputs.lens]:
+				findSocialMedia(EProjectSocialMediaType.LENS)?.link ||
+				storageLens ||
+				'',
+			[EInputs.website]:
+				findSocialMedia(EProjectSocialMediaType.WEBSITE)?.link ||
+				storageWebsite ||
+				'',
 		},
 	});
 
