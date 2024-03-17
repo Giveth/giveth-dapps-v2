@@ -1305,10 +1305,10 @@
     "@solana/wallet-adapter-base" "^0.9.17"
     bs58 "^5.0.0"
 
-"@giveth/ui-design-system@^1.11.23":
-  version "1.11.23"
-  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.23.tgz#536328da62f8a929fbd4a5f02160f07a65aa408a"
-  integrity sha512-GzlEGVTe1fBKKVrMNzt3T4vXucm21TDOY4OZrRlDzLewR3xRbVSF6H2pMfT5ndN5McTcvTi4+HCnXKwbGOB3Dg==
+"@giveth/ui-design-system@^1.11.24":
+  version "1.11.24"
+  resolved "https://registry.yarnpkg.com/@giveth/ui-design-system/-/ui-design-system-1.11.24.tgz#28ec85ba744f6a63bf6ed2ef18d94dae65cd45e5"
+  integrity sha512-F1Hqt7tVf/xPkG3O5o4zmPWoSFDUDBLYU3NsklbMyty8uc6ebYX3PoQ7e0ZSvX5nzMlS1mMEehjfLX0ZIppWxw==
   dependencies:
     next "14.1.0"
     react "^18"
