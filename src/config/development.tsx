@@ -391,7 +391,7 @@ const config: EnvConfig = {
 				decimals: 18,
 				id: '0xdfd824f6928b9776c031f7ead948090e2824ce8b',
 				name: 'fake Super Giveth Token',
-				symbol: 'fGIVx',
+				symbol: 'GIVx',
 				isSuperToken: true,
 			},
 			{
