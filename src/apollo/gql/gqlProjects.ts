@@ -830,7 +830,7 @@ export const FETCH_RECURRING_DONATIONS_BY_PROJECTID = gql`
 				donor {
 					id
 					walletAddress
-					firstName
+					name
 					email
 					avatar
 				}
