@@ -13,7 +13,6 @@ import {
 	IconX16,
 	IconYoutube,
 	P,
-	neutralColors,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
@@ -86,13 +85,13 @@ export const socialMediasArray = [
 
 const SocialMedias = () => {
 	return (
-		<Container>
+		<div>
 			<H5>Social Media Links</H5>
 			<StyledCaption>
 				Add your project’s social media links (optional)
 			</StyledCaption>
 			<SocialsContainer>
-				<Flex $flexDirection='column' gap='8px'>
+				<Flex $flexDirection='column'>
 					{socialMediasArray.map((socialMedia, index) => (
 						<Flex
 							key={index}
@@ -100,10 +99,13 @@ const SocialMedias = () => {
 							gap='8px'
 							$alignItems='center'
 						>
-							<Flex gap='4px' $alignItems='center'>
+							<IconAndNameContainer
+								gap='4px'
+								$alignItems='center'
+							>
 								{socialMedia.icon}
 								<P>{socialMedia.name}</P>
-							</Flex>
+							</IconAndNameContainer>
 							<InputContainer>
 								<SocialMediaInput
 									registerName={socialMedia.type}
@@ -114,15 +116,15 @@ const SocialMedias = () => {
 					))}
 				</Flex>
 			</SocialsContainer>
-		</Container>
+		</div>
 	);
 };
 
-const Container = styled.div`
-	background-color: ${neutralColors.gray[100]};
+const IconAndNameContainer = styled(Flex)`
+	margin-top: -40px;
 `;
 
-const SocialsContainer = styled(Container)`
+const SocialsContainer = styled.div`
 	padding: 24px;
 `;
 
