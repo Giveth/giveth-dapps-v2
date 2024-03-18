@@ -116,7 +116,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		image: storageImage,
 		alloProtocolRegistry: storageAlloProtocolRegistry,
 		facebook: storageFacebook,
-		twitter: storageTwitter,
+		x: storageX,
 		instagram: storageInstagram,
 		youtube: storageYoutube,
 		linkedin: storageLinkedin,
@@ -166,9 +166,9 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				findSocialMedia(EProjectSocialMediaType.FACEBOOK)?.link ||
 				storageFacebook ||
 				'',
-			[EInputs.twitter]:
+			[EInputs.x]:
 				findSocialMedia(EProjectSocialMediaType.X)?.link ||
-				storageTwitter ||
+				storageX ||
 				'',
 			[EInputs.instagram]:
 				findSocialMedia(EProjectSocialMediaType.INSTAGRAM)?.link ||
@@ -217,7 +217,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		addresses: watchAddresses,
 		alloProtocolRegistry: watchAlloProtocolRegistry,
 		facebook: watchFacebook,
-		twitter: watchTwitter,
+		x: watchX,
 		instagram: watchInstagram,
 		youtube: watchYoutube,
 		linkedin: watchLinkedIn,
@@ -244,7 +244,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchAddresses,
 		watchAlloProtocolRegistry,
 		watchFacebook,
-		watchTwitter,
+		watchX,
 		watchInstagram,
 		watchYoutube,
 		watchLinkedIn,
@@ -287,7 +287,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				image,
 				draft,
 				facebook,
-				twitter,
+				x,
 				instagram,
 				youtube,
 				linkedin,
@@ -301,7 +301,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			// Transforming the social media fields into the required structure
 			const socialMedia = [
 				{ type: EProjectSocialMediaType.FACEBOOK, link: facebook },
-				{ type: EProjectSocialMediaType.X, link: twitter },
+				{ type: EProjectSocialMediaType.X, link: x },
 				{ type: EProjectSocialMediaType.INSTAGRAM, link: instagram },
 				{ type: EProjectSocialMediaType.YOUTUBE, link: youtube },
 				{ type: EProjectSocialMediaType.LINKEDIN, link: linkedin },
