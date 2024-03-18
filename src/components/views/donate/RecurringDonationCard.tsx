@@ -225,7 +225,9 @@ export const RecurringDonationCard = () => {
 				<Flex $flexDirection='column' gap='8px'>
 					<Flex gap='8px' $alignItems='center'>
 						<Caption $medium>
-							{formatMessage({ id: 'label.stream_balance' })}
+							{formatMessage({
+								id: 'label.deposit_token_use_balance',
+							})}
 						</Caption>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
@@ -693,16 +695,16 @@ const RecurringSection = styled(Flex)`
 // 	text-align: left;
 // `;
 
-const SelectTokenWrapper = styled(Flex)`
+export const SelectTokenWrapper = styled(Flex)`
 	cursor: pointer;
 	gap: 16px;
 `;
 
-const SelectTokenPlaceHolder = styled(B)`
+export const SelectTokenPlaceHolder = styled(B)`
 	white-space: nowrap;
 `;
 
-const InputWrapper = styled(Flex)`
+export const InputWrapper = styled(Flex)`
 	border: 2px solid ${neutralColors.gray[300]};
 	border-radius: 8px;
 	overflow: hidden;
@@ -727,7 +729,7 @@ const Input = styled(AmountInput)`
 	}
 `;
 
-const IconWrapper = styled.div`
+export const IconWrapper = styled.div`
 	cursor: pointer;
 	color: ${brandColors.giv[500]};
 `;
