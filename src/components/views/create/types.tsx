@@ -10,7 +10,7 @@ export enum EInputs {
 	addresses = 'addresses',
 	alloProtocolRegistry = 'alloProtocolRegistry',
 	facebook = 'facebook',
-	twitter = 'twitter',
+	x = 'x',
 	instagram = 'instagram',
 	youtube = 'youtube',
 	linkedin = 'linkedin',
@@ -41,7 +41,7 @@ export type TInputs = {
 	[EInputs.alloProtocolRegistry]?: boolean;
 	[EInputs.addresses]: IWalletAddress[];
 	[EInputs.facebook]?: string;
-	[EInputs.twitter]?: string;
+	[EInputs.x]?: string;
 	[EInputs.instagram]?: string;
 	[EInputs.youtube]?: string;
 	[EInputs.linkedin]?: string;

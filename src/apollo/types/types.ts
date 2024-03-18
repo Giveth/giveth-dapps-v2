@@ -83,6 +83,7 @@ export interface IProject {
 	qfRounds?: IQFRound[];
 	campaigns?: ICampaign[];
 	anchorContracts: IAnchorContractData[];
+	socialMedia: IProjectSocialMedia[];
 }
 
 export interface IDonationProject extends IProject {
