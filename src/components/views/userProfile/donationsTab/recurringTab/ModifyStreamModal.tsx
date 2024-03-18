@@ -141,107 +141,106 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 	}, [balance?.value, donation.project.anchorContracts, tokenStream]);
 
 	return (
-		<Wrapper>
-			<Flex $flexDirection='column' gap='8px'>
-				<Flex gap='8px' $alignItems='center'>
-					<Caption $medium>
-						{formatMessage({ id: 'label.stream_balance' })}
-					</Caption>
-					<IconWithTooltip
-						icon={<IconHelpFilled16 />}
-						direction='right'
-						align='bottom'
-					>
-						<FlowRateTooltip>
-							{formatMessage({
-								id: 'tooltip.flowrate',
-							})}
-						</FlowRateTooltip>
-					</IconWithTooltip>
-				</Flex>
-				<TokenInfoWrapper>
-					<TokenSymbol gap='8px' $alignItems='center'>
-						<TokenIcon
-							symbol={superToken?.underlyingToken.symbol}
-							size={24}
-						/>
-						<B>{superToken?.underlyingToken.symbol}</B>
-					</TokenSymbol>
-					<TokenBalance>
-						{limitFraction(
-							formatUnits(
-								balance?.value || 0n,
-								balance?.decimals || 18,
-							),
-						)}
-						&nbsp;
-						{superToken?.symbol}
-					</TokenBalance>
-				</TokenInfoWrapper>
-				<Flex $flexDirection='column' gap='8px' $alignItems='stretch'>
-					<Caption>
+		<Wrapper $flexDirection='column' gap='8px'>
+			<Flex gap='8px' $alignItems='center'>
+				<Caption $medium>
+					{formatMessage({ id: 'label.stream_balance' })}
+				</Caption>
+				<IconWithTooltip
+					icon={<IconHelpFilled16 />}
+					direction='right'
+					align='bottom'
+				>
+					<FlowRateTooltip>
 						{formatMessage({
-							id: 'label.amount_to_donate_monthly',
+							id: 'tooltip.flowrate',
 						})}
-					</Caption>
-					<SliderWrapper>
-						<StyledSlider
-							min={0}
-							max={100}
-							step={0.1}
-							styles={{
-								rail: { backgroundColor: sliderColor[200] },
-								track: {
-									backgroundColor: sliderColor[500],
-								},
-								handle: {
-									backgroundColor: sliderColor[500],
-									border: `3px solid ${sliderColor[200]}`,
-									opacity: 1,
-								},
-							}}
-							onChange={(value: any) => {
-								const _value = Array.isArray(value)
-									? value[0]
-									: value;
-								setPercentage(mapValue(_value));
-							}}
-							value={mapValueInverse(percentage)}
-						/>
-					</SliderWrapper>
-					<Flex $justifyContent='space-between'>
-						<Flex gap='4px'>
-							<Caption>
-								{formatMessage({
-									id: 'label.donating_to',
-								})}
-							</Caption>
-							<Caption $medium>{donation.project.title}</Caption>
-						</Flex>
-						<Flex gap='4px'>
-							<Caption $medium>
-								{balance?.value !== 0n && percentage !== 0
-									? limitFraction(
-											formatUnits(
-												totalPerMonth,
-												superToken?.decimals || 18,
-											),
-										)
-									: 0}
-							</Caption>
-							<Caption $medium>{superToken?.symbol}</Caption>
-							<Caption>
-								{formatMessage({ id: 'label.per_month' })}
-							</Caption>
-						</Flex>
+					</FlowRateTooltip>
+				</IconWithTooltip>
+			</Flex>
+			<TokenInfoWrapper>
+				<TokenSymbol gap='8px' $alignItems='center'>
+					<TokenIcon
+						symbol={superToken?.underlyingToken.symbol}
+						size={24}
+					/>
+					<B>{superToken?.underlyingToken.symbol}</B>
+				</TokenSymbol>
+				<TokenBalance>
+					{limitFraction(
+						formatUnits(
+							balance?.value || 0n,
+							balance?.decimals || 18,
+						),
+					)}
+					&nbsp;
+					{superToken?.symbol}
+				</TokenBalance>
+			</TokenInfoWrapper>
+			<Flex $flexDirection='column' gap='8px' $alignItems='stretch'>
+				<Caption>
+					{formatMessage({
+						id: 'label.amount_to_donate_monthly',
+					})}
+				</Caption>
+				<SliderWrapper>
+					<StyledSlider
+						min={0}
+						max={100}
+						step={0.1}
+						styles={{
+							rail: { backgroundColor: sliderColor[200] },
+							track: {
+								backgroundColor: sliderColor[500],
+							},
+							handle: {
+								backgroundColor: sliderColor[500],
+								border: `3px solid ${sliderColor[200]}`,
+								opacity: 1,
+							},
+						}}
+						onChange={(value: any) => {
+							const _value = Array.isArray(value)
+								? value[0]
+								: value;
+							setPercentage(mapValue(_value));
+						}}
+						value={mapValueInverse(percentage)}
+					/>
+				</SliderWrapper>
+				<Flex $justifyContent='space-between'>
+					<Flex gap='4px'>
+						<Caption>
+							{formatMessage({
+								id: 'label.donating_to',
+							})}
+						</Caption>
+						<Caption $medium>{donation.project.title}</Caption>
 					</Flex>
+					<Flex gap='4px'>
+						<Caption $medium>
+							{balance?.value !== 0n && percentage !== 0
+								? limitFraction(
+										formatUnits(
+											totalPerMonth,
+											superToken?.decimals || 18,
+										),
+									)
+								: 0}
+						</Caption>
+						<Caption $medium>{superToken?.symbol}</Caption>
+						<Caption>
+							{formatMessage({ id: 'label.per_month' })}
+						</Caption>
+					</Flex>
+				</Flex>
+				<StreamInfo gap='16px'>
 					<Flex $justifyContent='space-between' gap='4px'>
 						<Caption>
 							{formatMessage({
 								id: 'label.stream_balance_runs_out_in',
 							})}
 						</Caption>
-
 						<Flex gap='4px'>
 							<Caption $medium>
 								{streamRunOutInMonth.toString()}
@@ -268,22 +267,22 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 							)}
 						</OtherStreamsInfo>
 					)}
-					<InlineToast
-						type={EToastType.Info}
-						message='Modifying your active recurring donations will affect when your stream balance runs out.'
-					/>
-				</Flex>
-				<ActionButton
-					label={formatMessage({ id: 'label.confirm' })}
-					onClick={() => {}}
-					disabled={
-						balance?.value === undefined ||
-						balance?.value === 0n ||
-						isTotalStreamExceed ||
-						percentage === 0
-					}
+				</StreamInfo>
+				<InlineToast
+					type={EToastType.Info}
+					message='Modifying your active recurring donations will affect when your stream balance runs out.'
 				/>
 			</Flex>
+			<ActionButton
+				label={formatMessage({ id: 'label.confirm' })}
+				onClick={() => {}}
+				disabled={
+					balance?.value === undefined ||
+					balance?.value === 0n ||
+					isTotalStreamExceed ||
+					percentage === 0
+				}
+			/>
 		</Wrapper>
 	);
 };
@@ -334,4 +333,9 @@ const OtherStreamsInfo = styled(Caption)`
 
 const ActionButton = styled(Button)`
 	width: 100%;
+`;
+
+const StreamInfo = styled(Flex)`
+	flex-direction: column;
+	margin-top: 16px;
 `;
