@@ -2,7 +2,6 @@ import {
 	B,
 	Caption,
 	Flex,
-	IconChevronRight16,
 	IconDonation32,
 	IconHelpFilled16,
 	brandColors,
@@ -26,12 +25,12 @@ import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
 import config from '@/configuration';
 import { limitFraction } from '@/helpers/number';
-import { ITokenStreams } from '@/context/donate.context';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import {
 	mapValue,
 	mapValueInverse,
 } from '@/components/views/donate/RecurringDonationCard';
+import { useUserStreams } from '@/hooks/useUserStreams';
 
 interface IModifyStreamModalProps extends IModal {
 	donation: IWalletRecurringDonation;
@@ -59,7 +58,6 @@ export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 };
 
 const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
-	const [amount, setAmount] = useState(0n);
 	const [percentage, setPercentage] = useState(0);
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
@@ -78,22 +76,28 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 	});
 	const totalPerMonth =
 		BigInt(
-			new BigNumber((amount || 0n).toString())
+			new BigNumber((balance?.value || 0n).toString())
 				.multipliedBy(percentage)
 				.toFixed(0),
 		) / 100n;
 	const totalPerSec = totalPerMonth / ONE_MONTH_SECONDS;
-	const projectPerMonth = totalPerMonth;
-	const tokenStreams = [] as unknown as ITokenStreams;
+	const tokenStreams = useUserStreams();
 	const tokenStream = tokenStreams[superToken?.id || ''];
 	const totalStreamPerSec =
-		tokenStream?.reduce(
-			(acc, stream) => acc + BigInt(stream.currentFlowRate),
-			totalPerSec,
-		) || totalPerSec;
+		tokenStream
+			?.filter(
+				ts =>
+					donation.project.anchorContracts?.length > 0 &&
+					ts.receiver.id !==
+						donation.project.anchorContracts[0]?.address,
+			)
+			.reduce(
+				(acc, stream) => acc + BigInt(stream.currentFlowRate),
+				totalPerSec,
+			) || totalPerSec;
 	const streamRunOutInMonth =
 		totalStreamPerSec > 0
-			? amount / totalStreamPerSec / ONE_MONTH_SECONDS
+			? (balance?.value || 0n) / totalStreamPerSec / ONE_MONTH_SECONDS
 			: 0n;
 	const isTotalStreamExceed =
 		streamRunOutInMonth < 1n && totalStreamPerSec > 0;
@@ -101,7 +105,13 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 		? semanticColors.punch
 		: brandColors.giv;
 
-	console.log('superToken', superToken, balance);
+	console.log(
+		'superToken',
+		superToken,
+		balance,
+		tokenStream,
+		totalStreamPerSec,
+	);
 	return (
 		<Wrapper>
 			<Flex $flexDirection='column' gap='8px'>
@@ -169,7 +179,6 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 								setPercentage(mapValue(_value));
 							}}
 							value={mapValueInverse(percentage)}
-							disabled={amount === 0n}
 						/>
 					</SliderWrapper>
 					<Flex $justifyContent='space-between'>
@@ -183,7 +192,7 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 						</Flex>
 						<Flex gap='4px'>
 							<Caption $medium>
-								{amount !== 0n && percentage !== 0
+								{balance?.value !== 0n && percentage !== 0
 									? limitFraction(
 											formatUnits(
 												totalPerMonth,
@@ -199,49 +208,37 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 						</Flex>
 					</Flex>
 					<Flex $justifyContent='space-between' gap='4px'>
-						<Flex gap='4px'>
-							<Caption>
-								{formatMessage({
-									id: 'label.stream_balance_runs_out_in',
-								})}
-							</Caption>
+						<Caption>
+							{formatMessage({
+								id: 'label.stream_balance_runs_out_in',
+							})}
+						</Caption>
 
-							<Flex gap='4px'>
-								<Caption $medium>
-									{streamRunOutInMonth.toString()}
-								</Caption>
-								<Caption>
-									{formatMessage(
-										{ id: 'label.months' },
-										{
-											count: streamRunOutInMonth.toString(),
-										},
-									)}
-								</Caption>
-							</Flex>
-						</Flex>
-					</Flex>
-					{tokenStream?.length > 0 && (
-						<Flex $justifyContent='space-between'>
+						<Flex gap='4px'>
+							<Caption $medium>
+								{streamRunOutInMonth.toString()}
+							</Caption>
 							<Caption>
 								{formatMessage(
+									{ id: 'label.months' },
 									{
-										id: 'label.you_are_supporting_other_projects_with_this_stream',
-									},
-									{
-										count: tokenStream.length - 1,
+										count: streamRunOutInMonth.toString(),
 									},
 								)}
 							</Caption>
-							<Flex gap='4px' $alignItems='center'>
-								<Caption $medium>
-									{formatMessage({
-										id: 'label.manage_recurring_donations',
-									})}
-								</Caption>
-								<IconChevronRight16 />
-							</Flex>
 						</Flex>
+					</Flex>
+					{tokenStream?.length > 0 && (
+						<OtherStreamsInfo>
+							{formatMessage(
+								{
+									id: 'label.you_are_supporting_other_projects_with_this_stream',
+								},
+								{
+									count: tokenStream.length - 1,
+								},
+							)}
+						</OtherStreamsInfo>
 					)}
 				</Flex>
 			</Flex>
@@ -286,3 +283,9 @@ const SliderWrapper = styled.div`
 `;
 
 const StyledSlider = styled(Slider)``;
+
+const OtherStreamsInfo = styled(Caption)`
+	padding: 8px;
+	border-radius: 8px;
+	background: var(--Neutral-Gray-200, #f7f7f9);
+`;
