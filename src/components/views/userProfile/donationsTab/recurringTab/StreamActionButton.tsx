@@ -9,6 +9,7 @@ import { type FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
+import { ModifyStreamModal } from './ModifyStreamModal';
 
 interface IStreamActionButtonProps {
 	finished: boolean;
@@ -17,11 +18,9 @@ interface IStreamActionButtonProps {
 export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	finished,
 }) => {
-	const [showModify, setshowModify] = useState(false);
+	const [showModify, setShowModify] = useState(false);
 
 	const { formatMessage } = useIntl();
-
-	const [isHover, setIsHover] = useState(false);
 
 	const options: IOption[] = finished
 		? [
@@ -40,7 +39,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 				{
 					label: formatMessage({ id: 'label.modify_flow_rate' }),
 					icon: <IconEye16 />,
-					cb: () => {},
+					cb: () => setShowModify(true),
 				},
 				{
 					label: formatMessage({
@@ -56,18 +55,19 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	};
 
 	return (
-		<Actions $isOpen={isHover}>
+		<Actions>
 			<Dropdown
 				style={dropdownStyle}
 				label=''
 				options={options}
 				stickToRight
 			/>
+			{showModify && <ModifyStreamModal setShowModal={setShowModify} />}
 		</Actions>
 	);
 };
 
-const Actions = styled.div<{ $isOpen: boolean }>`
+const Actions = styled.div`
 	cursor: pointer;
 	border-radius: 8px;
 	padding: 8px 10px;
