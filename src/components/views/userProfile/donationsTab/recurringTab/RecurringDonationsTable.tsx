@@ -116,7 +116,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 						</DonationTableCell>
 					)}
 					<DonationTableCell>
-						<StreamActionButton finished={donation.finished} />
+						<StreamActionButton donation={donation} />
 					</DonationTableCell>
 				</DonationRowWrapper>
 			))}

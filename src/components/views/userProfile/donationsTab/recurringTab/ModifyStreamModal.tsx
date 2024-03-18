@@ -4,8 +4,11 @@ import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
+import { IWalletRecurringDonation } from '@/apollo/types/types';
 
-interface IModifyStreamModalProps extends IModal {}
+interface IModifyStreamModalProps extends IModal {
+	donation: IWalletRecurringDonation;
+}
 
 export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 	...props
@@ -29,6 +32,7 @@ export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 	);
 };
 
-const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = () => {
+const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
+	console.log('donation', donation);
 	return <div>ModifyStreamInnerModal</div>;
 };

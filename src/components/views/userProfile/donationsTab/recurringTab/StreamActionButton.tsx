@@ -10,19 +10,20 @@ import { useIntl } from 'react-intl';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
 import { ModifyStreamModal } from './ModifyStreamModal';
+import { IWalletRecurringDonation } from '@/apollo/types/types';
 
 interface IStreamActionButtonProps {
-	finished: boolean;
+	donation: IWalletRecurringDonation;
 }
 
 export const StreamActionButton: FC<IStreamActionButtonProps> = ({
-	finished,
+	donation,
 }) => {
 	const [showModify, setShowModify] = useState(false);
 
 	const { formatMessage } = useIntl();
 
-	const options: IOption[] = finished
+	const options: IOption[] = donation.finished
 		? [
 				{
 					label: formatMessage({ id: 'label.start_new_donation' }),
@@ -62,7 +63,12 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 				options={options}
 				stickToRight
 			/>
-			{showModify && <ModifyStreamModal setShowModal={setShowModify} />}
+			{showModify && (
+				<ModifyStreamModal
+					setShowModal={setShowModify}
+					donation={donation}
+				/>
+			)}
 		</Actions>
 	);
 };
