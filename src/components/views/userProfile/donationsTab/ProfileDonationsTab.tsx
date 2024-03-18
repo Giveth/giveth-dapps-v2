@@ -64,7 +64,7 @@ const ProfileDonationsTab: FC<IUserProfileView> = () => {
 								key={id}
 								onClick={() => setTab(id)}
 								className={`tab ${tab === id ? 'active' : ''}`}
-								isActive={tab === id}
+								$isActive={tab === id}
 							>
 								{formatMessage({ id: label })}
 							</Tab>
@@ -86,7 +86,7 @@ const Tabs = styled(Flex)`
 `;
 
 interface ITab {
-	isActive: boolean;
+	$isActive: boolean;
 }
 
 const Tab = styled(P)<ITab>`
@@ -94,8 +94,8 @@ const Tab = styled(P)<ITab>`
 	border-radius: 48px;
 	cursor: pointer;
 	transition: background-color 0.2s ease-in-out;
-	${({ isActive }) =>
-		isActive &&
+	${({ $isActive }) =>
+		$isActive &&
 		css`
 			background-color: ${neutralColors.gray[100]};
 			box-shadow: 0px 3px 20px 0px rgba(212, 218, 238, 0.4);
