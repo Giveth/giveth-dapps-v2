@@ -273,7 +273,8 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 					disabled={
 						balance?.value === undefined ||
 						balance?.value === 0n ||
-						isTotalStreamExceed
+						isTotalStreamExceed ||
+						percentage === 0
 					}
 				/>
 			</Flex>
