@@ -7,6 +7,7 @@
 	"bipoc-comomunities": "Comunitats BIPOC",
 	"children-health": "Salut Infantil",
 	"climate-action": "Acció climàtica",
+	"label.modify_recurring_donation_amount": "Modifica l'import de la donació recurrent",
 	"label.state": "Estat",
 	"component.already_donated.incorrect_estimate": "You have already donated to this project so the estimated matching will be incorrect.",
 	"component.already_donated.once_more": "Already Donated! Donate once more",

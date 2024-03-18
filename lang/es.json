@@ -8,6 +8,7 @@
 	"children-health": "Salud de los niños",
 	"climate-action": "Acción Climática",
 	"label.state": "Estado",
+	"label.modify_recurring_donation_amount": "Modificar la cantidad de donación recurrente",
 	"component.already_donated.incorrect_estimate": "Ya has donado a este proyecto, por lo que la estimación de monto complementado será incorrecta.",
 	"component.already_donated.once_more": "¡Ya has donado! Dona una vez más",
 	"component.archive_cover.archived": "ARCHIVADO",
