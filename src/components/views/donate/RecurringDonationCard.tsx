@@ -388,7 +388,7 @@ export const RecurringDonationCard = () => {
 							<Flex gap='4px'>
 								<Caption>
 									{formatMessage({
-										id: 'label.stream_balance_runs_out_in',
+										id: 'label.top_up_your_stream_balance_within',
 									})}
 								</Caption>
 								{selectedToken?.token.isSuperToken && (
