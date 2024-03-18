@@ -55,7 +55,7 @@ import links from '@/lib/constants/links';
  * If the slider value is between 90 and 100, it maps it to a range of 50 to 100.
  * This makes the first 90% of the slider represent 0-50% of the range, and the last 10% represent 50-100%.
  */
-function mapValue(value: number) {
+export function mapValue(value: number) {
 	if (value <= 90) {
 		return value * (50 / 90);
 	} else {
@@ -70,7 +70,7 @@ function mapValue(value: number) {
  * If the value is between 50 and 100, it maps it to a range of 90 to 100.
  * This is used to set the slider's position based on the value from the range.
  */
-function mapValueInverse(value: number) {
+export function mapValueInverse(value: number) {
 	if (value <= 50) {
 		return value * (90 / 50);
 	} else {
@@ -328,16 +328,16 @@ export const RecurringDonationCard = () => {
 								min={0}
 								max={100}
 								step={0.1}
-								railStyle={{
-									backgroundColor: sliderColor[200],
-								}}
-								trackStyle={{
-									backgroundColor: sliderColor[500],
-								}}
-								handleStyle={{
-									backgroundColor: sliderColor[500],
-									border: `3px solid ${sliderColor[200]}`,
-									opacity: 1,
+								styles={{
+									rail: { backgroundColor: sliderColor[200] },
+									track: {
+										backgroundColor: sliderColor[500],
+									},
+									handle: {
+										backgroundColor: sliderColor[500],
+										border: `3px solid ${sliderColor[200]}`,
+										opacity: 1,
+									},
 								}}
 								onChange={(value: any) => {
 									const _value = Array.isArray(value)
