@@ -1,5 +1,6 @@
 import {
 	B,
+	Button,
 	Caption,
 	Flex,
 	IconDonation32,
@@ -31,6 +32,7 @@ import {
 	mapValueInverse,
 } from '@/components/views/donate/RecurringDonationCard';
 import { useUserStreams } from '@/hooks/useUserStreams';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 interface IModifyStreamModalProps extends IModal {
 	donation: IWalletRecurringDonation;
@@ -105,13 +107,6 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 		? semanticColors.punch
 		: brandColors.giv;
 
-	console.log(
-		'superToken',
-		superToken,
-		balance,
-		tokenStream,
-		totalStreamPerSec,
-	);
 	return (
 		<Wrapper>
 			<Flex $flexDirection='column' gap='8px'>
@@ -240,7 +235,20 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 							)}
 						</OtherStreamsInfo>
 					)}
+					<InlineToast
+						type={EToastType.Info}
+						message='Modifying your active recurring donations will affect when your stream balance runs out.'
+					/>
 				</Flex>
+				<ActionButton
+					label={formatMessage({ id: 'label.confirm' })}
+					onClick={() => {}}
+					disabled={
+						balance?.value === undefined ||
+						balance?.value === 0n ||
+						isTotalStreamExceed
+					}
+				/>
 			</Flex>
 		</Wrapper>
 	);
@@ -288,4 +296,8 @@ const OtherStreamsInfo = styled(Caption)`
 	padding: 8px;
 	border-radius: 8px;
 	background: var(--Neutral-Gray-200, #f7f7f9);
+`;
+
+const ActionButton = styled(Button)`
+	width: 100%;
 `;
