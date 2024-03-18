@@ -5,6 +5,7 @@ import {
 	Flex,
 	IconDonation32,
 	IconHelpFilled16,
+	P,
 	brandColors,
 	mediaQueries,
 	neutralColors,
@@ -17,6 +18,7 @@ import { useAccount, useBalance } from 'wagmi';
 import { formatUnits } from 'viem';
 import Slider from 'rc-slider';
 import BigNumber from 'bignumber.js';
+import Image from 'next/image';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -283,6 +285,15 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 					percentage === 0
 				}
 			/>
+			<SuperfluidLogoContainer gap='16px'>
+				<P>{formatMessage({ id: 'label.streams_powered_by' })}</P>
+				<Image
+					src='/images/logo/superfluid-logo.svg'
+					width={120}
+					height={30}
+					alt='Superfluid logo'
+				/>
+			</SuperfluidLogoContainer>
 		</Wrapper>
 	);
 };
@@ -296,7 +307,7 @@ const Wrapper = styled(Flex)`
 	width: 100%;
 	padding: 16px 24px 24px 24px;
 	${mediaQueries.tablet} {
-		width: 630px;
+		width: 430px;
 	}
 `;
 
@@ -338,4 +349,8 @@ const ActionButton = styled(Button)`
 const StreamInfo = styled(Flex)`
 	flex-direction: column;
 	margin-top: 16px;
+`;
+
+const SuperfluidLogoContainer = styled(Flex)`
+	margin-top: 32px;
 `;
