@@ -10,7 +10,7 @@ import {
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { useAccount, useBalance } from 'wagmi';
@@ -33,6 +33,12 @@ import {
 } from '@/components/views/donate/RecurringDonationCard';
 import { useUserStreams } from '@/hooks/useUserStreams';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { ISuperfluidStream } from '@/types/superFluid';
+
+interface IGeneralInfo {
+	projectStream?: ISuperfluidStream;
+	otherStreamsTotalFlowRate: bigint;
+}
 
 interface IModifyStreamModalProps extends IModal {
 	donation: IWalletRecurringDonation;
@@ -61,10 +67,12 @@ export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 
 const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 	const [percentage, setPercentage] = useState(0);
+	const [info, setInfo] = useState<IGeneralInfo>({
+		otherStreamsTotalFlowRate: 0n,
+	});
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
 
-	console.log('donation', donation);
 	const superToken = useMemo(
 		() =>
 			config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
@@ -85,18 +93,8 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 	const totalPerSec = totalPerMonth / ONE_MONTH_SECONDS;
 	const tokenStreams = useUserStreams();
 	const tokenStream = tokenStreams[superToken?.id || ''];
-	const totalStreamPerSec =
-		tokenStream
-			?.filter(
-				ts =>
-					donation.project.anchorContracts?.length > 0 &&
-					ts.receiver.id !==
-						donation.project.anchorContracts[0]?.address,
-			)
-			.reduce(
-				(acc, stream) => acc + BigInt(stream.currentFlowRate),
-				totalPerSec,
-			) || totalPerSec;
+
+	const totalStreamPerSec = totalPerSec + info.otherStreamsTotalFlowRate;
 	const streamRunOutInMonth =
 		totalStreamPerSec > 0
 			? (balance?.value || 0n) / totalStreamPerSec / ONE_MONTH_SECONDS
@@ -106,6 +104,35 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 	const sliderColor = isTotalStreamExceed
 		? semanticColors.punch
 		: brandColors.giv;
+
+	useEffect(() => {
+		if (!tokenStream || tokenStream.length === 0 || !balance?.value) return;
+		const _streamInfo: IGeneralInfo = {
+			otherStreamsTotalFlowRate: 0n,
+		};
+		for (let i = 0; i < tokenStream.length; i++) {
+			const ts = tokenStream[i];
+			if (
+				ts.receiver.id === donation.project.anchorContracts[0]?.address
+			) {
+				_streamInfo.projectStream = ts;
+				const _percentage = BigNumber(
+					(
+						BigInt(ts.currentFlowRate) *
+						ONE_MONTH_SECONDS *
+						100n
+					).toString(),
+				).dividedBy(balance?.value.toString());
+				setPercentage(parseFloat(_percentage.toString()));
+			} else {
+				_streamInfo.otherStreamsTotalFlowRate += BigInt(
+					ts.currentFlowRate,
+				);
+			}
+		}
+
+		setInfo(_streamInfo);
+	}, [balance?.value, donation.project.anchorContracts, tokenStream]);
 
 	return (
 		<Wrapper>
