@@ -106,7 +106,13 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 		: brandColors.giv;
 
 	useEffect(() => {
-		if (!tokenStream || tokenStream.length === 0 || !balance?.value) return;
+		if (
+			!tokenStream ||
+			tokenStream.length === 0 ||
+			!balance?.value ||
+			percentage > 0 // don't manipulate percentage if it's already set
+		)
+			return;
 		const _streamInfo: IGeneralInfo = {
 			otherStreamsTotalFlowRate: 0n,
 		};
