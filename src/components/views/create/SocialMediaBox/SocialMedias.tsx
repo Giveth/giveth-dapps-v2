@@ -24,61 +24,61 @@ export const socialMediasArray = [
 	{
 		name: 'Facebook',
 		type: EInputs.facebook,
-		icon: <IconFacebook18 />,
+		icon: IconFacebook18,
 		validator: validators.facebook,
 	},
 	{
 		name: 'Twitter',
-		type: EInputs.twitter,
-		icon: <IconX16 />,
+		type: EInputs.x,
+		icon: IconX16,
 		validator: validators.twitter,
 	},
 	{
 		name: 'Instagram',
 		type: EInputs.instagram,
-		icon: <IconInstagram18 />,
+		icon: IconInstagram18,
 		validator: validators.instagram,
 	},
 	{
 		name: 'YouTube',
 		type: EInputs.youtube,
-		icon: <IconYoutube />,
+		icon: IconYoutube,
 		validator: validators.youtube,
 	},
 	{
 		name: 'LinkedIn',
 		type: EInputs.linkedin,
-		icon: <IconLinkedin18 />,
+		icon: IconLinkedin18,
 		validator: validators.linkedin,
 	},
 	{
 		name: 'Reddit',
 		type: EInputs.reddit,
-		icon: <IconRedit />,
+		icon: IconRedit,
 		validator: validators.reddit,
 	},
 	{
 		name: 'Discord',
 		type: EInputs.discord,
-		icon: <IconDiscord18 />,
+		icon: IconDiscord18,
 		validator: validators.discord,
 	},
 	{
 		name: 'Farcaster',
 		type: EInputs.farcaster,
-		icon: <IconFaracaster />,
+		icon: IconFaracaster,
 		validators: validators.farcaster,
 	},
 	{
 		name: 'Lens',
 		type: EInputs.lens,
-		icon: <IconLens />,
+		icon: IconLens,
 		validators: validators.lens,
 	},
 	{
 		name: 'Website',
 		type: EInputs.website,
-		icon: <IconWorld16 />,
+		icon: IconWorld16,
 		validators: validators.website,
 	},
 ];
@@ -92,28 +92,31 @@ const SocialMedias = () => {
 			</StyledCaption>
 			<SocialsContainer>
 				<Flex $flexDirection='column'>
-					{socialMediasArray.map((socialMedia, index) => (
-						<Flex
-							key={index}
-							$justifyContent='space-between' // Adjust justification to start
-							gap='8px'
-							$alignItems='center'
-						>
-							<IconAndNameContainer
-								gap='4px'
+					{socialMediasArray.map((socialMedia, index) => {
+						const Icon = socialMedia.icon;
+						return (
+							<Flex
+								key={index}
+								$justifyContent='space-between' // Adjust justification to start
+								gap='8px'
 								$alignItems='center'
 							>
-								{socialMedia.icon}
-								<P>{socialMedia.name}</P>
-							</IconAndNameContainer>
-							<InputContainer>
-								<SocialMediaInput
-									registerName={socialMedia.type}
-									validator={socialMedia.validator}
-								/>
-							</InputContainer>
-						</Flex>
-					))}
+								<IconAndNameContainer
+									gap='4px'
+									$alignItems='center'
+								>
+									<Icon />
+									<P>{socialMedia.name}</P>
+								</IconAndNameContainer>
+								<InputContainer>
+									<SocialMediaInput
+										registerName={socialMedia.type}
+										validator={socialMedia.validator}
+									/>
+								</InputContainer>
+							</Flex>
+						);
+					})}
 				</Flex>
 			</SocialsContainer>
 		</div>
