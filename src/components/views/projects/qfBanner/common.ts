@@ -25,7 +25,7 @@ export const StyledCol = styled(Col)`
 	text-align: center;
 	align-items: center;
 	padding-top: 40px;
-	color: #6241d6;
+	color: #ffffff;
 `;
 
 export const Title = styled(H1)`
@@ -43,7 +43,7 @@ export const Desc = styled(Flex)`
 	justify-content: center;
 	gap: 8px;
 	padding: 9px 20px;
-	background: #ceff1a;
+	background: #b377ff;
 	margin-top: 12px;
 	margin-bottom: 32px;
 `;
