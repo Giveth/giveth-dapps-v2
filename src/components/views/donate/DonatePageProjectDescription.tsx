@@ -10,67 +10,53 @@ import {
 	brandColors,
 	mediaQueries,
 	Flex,
+	H5,
+	Lead,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { type FC } from 'react';
-import useMediaQuery from '@/hooks/useMediaQuery';
-import { device } from '@/lib/constants/constants';
+import Link from 'next/link';
 import { formatDonation } from '@/helpers/number';
 import { IProject } from '@/apollo/types/types';
+import { VerifiedBadge } from '@/components/badges/VerifiedBadge';
+import { slugToProjectView } from '@/lib/routeCreators';
 
-interface IDonateSectionProps {
+interface IDonatePageProjectDescriptionProps {
 	projectData?: IProject;
 }
 
-export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
+export const DonatePageProjectDescription: FC<
+	IDonatePageProjectDescriptionProps
+> = ({ projectData }) => {
 	const { formatMessage, locale } = useIntl();
-	const { sumDonationValueUsd } = projectData || {};
-	const isMobile = !useMediaQuery(device.tablet);
+	const { sumDonationValueUsd, slug, title, descriptionSummary } =
+		projectData || {};
+	const projectLink = slugToProjectView(slug!);
 
 	return (
-		<DonationSectionWrapper gap='24px'>
-			{sumDonationValueUsd && sumDonationValueUsd !== 0 ? (
-				<DonateInfo>
-					{isMobile && <br />}
-					<Title>
-						{formatMessage({ id: 'label.total_amount_raised' })}
-					</Title>
-					<Amount weight={700}>
-						{formatDonation(sumDonationValueUsd || 0, '$', locale)}
-					</Amount>
-					<Description>
-						{formatMessage({
-							id: 'label.raised_from',
-						})}
-						<Caption $medium>
-							{projectData?.countUniqueDonors}
-						</Caption>
-						{formatMessage(
-							{
-								id: 'label.contributors',
-							},
-							{
-								count: projectData?.countUniqueDonors,
-							},
-						)}
-					</Description>
-				</DonateInfo>
-			) : (
-				<DonateInfo>
-					<NoFund weight={700}>
-						{formatMessage({
-							id: 'label.donate_first_lead_the_way',
-						})}
-					</NoFund>
-				</DonateInfo>
+		<DonationSectionWrapper gap='16px'>
+			{projectData?.verified && (
+				<Flex>
+					<VerifiedBadge />
+				</Flex>
 			)}
+			<Link href={projectLink}>
+				<CustomH5>{title}</CustomH5>
+			</Link>
+			<CustomLead>{projectData?.adminUser.name}</CustomLead>
+			<P>
+				{formatMessage({ id: 'label.raised' })}:{' '}
+				{formatDonation(sumDonationValueUsd || 0, '$', locale)}
+			</P>
+			<DescriptionSummary>{descriptionSummary}</DescriptionSummary>
 			<DonateDescription $flexDirection='column' gap='8px'>
 				<B>
 					{formatMessage({
 						id: 'component.donation_section.100_to_the_project',
 					})}
 				</B>
+				<B></B>
 				<P>
 					{formatMessage({
 						id: 'component.donation_section.desc',
@@ -95,6 +81,21 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 		</DonationSectionWrapper>
 	);
 };
+
+const CustomH5 = styled(H5)`
+	font-weight: 700;
+`;
+
+const CustomLead = styled(Lead)`
+	color: ${brandColors.pinky[500]};
+`;
+
+const DescriptionSummary = styled(P)`
+	max-height: 75px;
+	overflow: hidden;
+	color: ${neutralColors.gray[800]};
+	margin-bottom: 16px;
+`;
 
 const Title = styled(Subline)`
 	display: inline-block;
