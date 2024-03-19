@@ -25,7 +25,7 @@
 	"component.button.tweet_this": "Tweeteja-ho",
 	"component.button.your_email_address": "La teva adreça de correu electrònic",
 	"component.create_project.low_score": "La puntuació del teu projecte està per sota de la puntuació mínima de 50, afegeix més detalls al teu projecte per procedir",
-	"component.donation_section.100_to_the_project": "100% goes to the project.",
+	"component.donation_section.100_to_the_project": "100% goes to the project always.",
 	"component.donation_section.desc": "Every donation is peer-to-peer, with no fees and no middlemen.",
 	"component.donation_section.learn_zero_fee": "Learn about our zero-fee policy",
 	"component.givback_eligible.desc": "Quan doneu a projectes verificats, qualifiqueu per rebre tokens GIV. A través dels GIVbacks, GIV capacita els donants amb drets de governança a través del GIVgarden.",
