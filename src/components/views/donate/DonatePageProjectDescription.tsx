@@ -1,9 +1,6 @@
 import {
 	Subline,
-	H3,
-	H4,
 	neutralColors,
-	Caption,
 	B,
 	P,
 	IconChevronRight16,
@@ -97,28 +94,6 @@ const DescriptionSummary = styled(P)`
 	margin-bottom: 16px;
 `;
 
-const Title = styled(Subline)`
-	display: inline-block;
-	margin-bottom: 8px;
-	color: ${neutralColors.gray[700]};
-	background-color: ${neutralColors.gray[200]};
-	border-radius: 4px;
-	padding: 2px 4px;
-`;
-
-const Amount = styled(H3)`
-	margin-bottom: 4px;
-`;
-
-const Description = styled(Caption)`
-	color: ${neutralColors.gray[700]};
-	margin-bottom: 24px;
-	& > div {
-		color: ${neutralColors.gray[900]};
-		display: inline;
-	}
-`;
-
 const DonationSectionWrapper = styled(Flex)`
 	justify-content: space-between;
 	flex-direction: column;
@@ -128,15 +103,6 @@ const DonationSectionWrapper = styled(Flex)`
 	${mediaQueries.laptopS} {
 		flex-direction: column;
 	}
-`;
-
-const DonateInfo = styled.div`
-	height: 130px;
-`;
-
-const NoFund = styled(H4)`
-	color: ${neutralColors.gray[800]};
-	margin-top: 16px;
 `;
 
 const DonateDescription = styled(Flex)`
