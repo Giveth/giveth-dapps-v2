@@ -125,6 +125,13 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 		SuperTokenBalance === undefined ||
 		amount > SuperTokenBalance.value - minRemainingBalance;
 
+	/// this one needs some thought - we should allow for a buffer of 10 seconds in the balance we show to the user
+	// - this might prevent them from trying to withdraw more than they have
+	const modifiedValue =
+		SuperTokenBalance !== undefined
+			? SuperTokenBalance.value - totalStreamPerSec * BigInt(10)
+			: 0n;
+
 	return (
 		<Wrapper>
 			{step === EModifySuperTokenSteps.MODIFY ? (
@@ -134,6 +141,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 							titleLabel='label.withdraw_from_stream_balance'
 							setAmount={setAmount}
 							token={superToken}
+							// try to put in modified value in place of SuperTokenBalance.value
 							balance={SuperTokenBalance}
 							refetch={refetch}
 							isRefetching={isRefetching}
@@ -143,11 +151,14 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 									: undefined
 							}
 							minRemainingBalance={minRemainingBalance}
+							tooltipText='tooltip.withdraw_stream_balance'
 						/>
 						<StreamInfo
 							tokenStreams={tokenStreams}
 							superToken={superToken}
 							SuperTokenBalance={SuperTokenBalance}
+							inputAmount={amount}
+							type='withdraw'
 						/>
 					</ModifyWrapper>
 					<ModifyInfoToast />

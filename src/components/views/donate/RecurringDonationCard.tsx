@@ -225,7 +225,9 @@ export const RecurringDonationCard = () => {
 				<Flex $flexDirection='column' gap='8px'>
 					<Flex gap='8px' $alignItems='center'>
 						<Caption $medium>
-							{formatMessage({ id: 'label.stream_balance' })}
+							{formatMessage({
+								id: 'label.deposit_or_stream_balance',
+							})}
 						</Caption>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}

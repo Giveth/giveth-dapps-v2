@@ -7,20 +7,20 @@ export const ActiveStreamsSection = () => {
 	const tokenStream = useUserStreams();
 	return (
 		<Wrapper>
-			<H5 weight={900}>My Active Streams</H5>
+			<H5 weight={900}>Streamable Token Balances</H5>
 			<DonationTableContainer>
 				<TableHeaderRow>
 					<TableHeader>
-						<B>Current stream Balance</B>
+						<B>Current Balance</B>
 					</TableHeader>
 					<TableHeader>
-						<B>Total Recurring Donations</B>
+						<B>Streaming at a Rate of</B>
 					</TableHeader>
 					<TableHeader>
-						<B>Projects</B>
+						<B>Supporting</B>
 					</TableHeader>
 					<TableHeader>
-						<B>Runs out in</B>
+						<B>Top-up before</B>
 					</TableHeader>
 					<TableHeader>
 						<B>Actions</B>

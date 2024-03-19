@@ -174,11 +174,14 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 							balance={balance}
 							refetch={refetch}
 							isRefetching={isRefetching}
+							tooltipText='tooltip.deposit_stream_balance'
 						/>
 						<StreamInfo
 							tokenStreams={tokenStreams}
 							superToken={superToken}
 							SuperTokenBalance={SuperTokenBalance}
+							inputAmount={amount}
+							type='deposit'
 						/>
 					</ModifyWrapper>
 					<ModifyInfoToast />
