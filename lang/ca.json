@@ -1547,6 +1547,8 @@
 	"sustainable-cities-and-communities": "Ciutats i comunitats sostenibles",
 	"tech": "Tecnologia",
 	"testfilter": "testfilter",
+	"toast.modify_stream_balance": "Dipositar o retirar tokens del vostre saldo de transmissió afectarà quan aviat necessitareu recarregar.",
+	"toast.warning_stream_balance": "Retirar una gran part del vostre saldo de transmissió pot fer que les vostres donacions recurrents actives en aquest token acabin inesperadament.",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"tooltip.donation.matching_polygon": "Aquesta estimació representa els fons coincidents que rebria aquest projecte si la ronda es tanqués ara, ignorant l'anàlisi del frau i el procés d'assignació especial per als 100 millors de Jokerace.",
 	"tooltip.flowrate": "Les donacions recurrents es prenen del teu Saldo de Transmissió. Diposita tokens i mantén el teu saldo per habilitar les donacions recurrents.",

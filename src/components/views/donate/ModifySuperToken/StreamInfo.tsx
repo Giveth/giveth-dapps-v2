@@ -1,6 +1,6 @@
 import { formatEther } from 'viem';
 import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
-import { type FC } from 'react';
+import { Dispatch, SetStateAction, type FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { type GetBalanceReturnType } from '@wagmi/core';
@@ -14,6 +14,7 @@ interface IStreamInfoProps {
 	SuperTokenBalance?: GetBalanceReturnType;
 	inputAmount?: bigint;
 	type?: string;
+	setIsWarning?: Dispatch<SetStateAction<boolean>>;
 }
 
 export const StreamInfo: FC<IStreamInfoProps> = ({
@@ -22,6 +23,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 	SuperTokenBalance,
 	inputAmount,
 	type,
+	setIsWarning,
 }) => {
 	inputAmount == null && (inputAmount = 0n);
 	const { formatMessage } = useIntl();
@@ -39,6 +41,11 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 		SuperTokenBalance.value > 0n
 			? estimatedBalance / totalStreamPerSec / ONE_MONTH_SECONDS
 			: 0n;
+	if (streamRunOutInMonth <= 0n && setIsWarning) {
+		setIsWarning(true);
+	} else if (setIsWarning) {
+		setIsWarning(false);
+	}
 	return (
 		<StreamSection>
 			<Flex $alignItems='center' $justifyContent='space-between'>

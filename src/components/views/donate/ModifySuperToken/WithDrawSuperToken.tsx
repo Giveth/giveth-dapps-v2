@@ -18,6 +18,7 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
+import { EToastType } from '@/components/toasts/InlineToast';
 
 interface IWithDrawSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	token?: IToken;
@@ -36,6 +37,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 	const { address } = useAccount();
 	const { formatMessage } = useIntl();
 	const tokenPrice = useTokenPrice(token);
+	const [isWarning, setIsWarning] = useState(false);
 
 	const {
 		data: SuperTokenBalance,
@@ -159,9 +161,14 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 							SuperTokenBalance={SuperTokenBalance}
 							inputAmount={amount}
 							type='withdraw'
+							setIsWarning={setIsWarning}
 						/>
 					</ModifyWrapper>
-					<ModifyInfoToast />
+					{isWarning == true ? (
+						<ModifyInfoToast toastType={EToastType.Warning} />
+					) : (
+						<ModifyInfoToast toastType={EToastType.Info} />
+					)}
 				</>
 			) : (
 				<Flex $flexDirection='column' gap='16px'>

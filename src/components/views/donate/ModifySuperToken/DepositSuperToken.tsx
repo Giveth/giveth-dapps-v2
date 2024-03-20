@@ -21,6 +21,7 @@ import { ModifyWrapper, Wrapper } from './common.sc';
 import { EModifySuperTokenSteps, actionButtonLabel } from './common';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
+import { EToastType } from '@/components/toasts/InlineToast';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	token?: IToken;
@@ -184,7 +185,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 							type='deposit'
 						/>
 					</ModifyWrapper>
-					<ModifyInfoToast />
+					<ModifyInfoToast toastType={EToastType.Info} />
 				</>
 			) : (
 				<Flex $flexDirection='column' gap='16px'>
