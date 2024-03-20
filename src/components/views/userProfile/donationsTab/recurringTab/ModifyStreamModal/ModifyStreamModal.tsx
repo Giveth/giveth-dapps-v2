@@ -19,8 +19,9 @@ export enum EDonationSteps {
 }
 
 export interface IModifyDonationInfo {
-	amount: bigint;
-	totalPerMonth: bigint;
+	superTokenBalance: bigint;
+	flowRatePerMonth: bigint;
+	streamFlowRatePerMonth: bigint;
 	token: IToken;
 }
 
@@ -67,8 +68,9 @@ export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 				<UpdateStreamInnerModal
 					step={step}
 					setStep={setStep}
-					amount={modifyInfo?.amount!}
-					totalPerMonth={modifyInfo?.totalPerMonth!}
+					superTokenBalance={modifyInfo?.superTokenBalance!}
+					flowRatePerMonth={modifyInfo?.flowRatePerMonth!}
+					streamFlowRatePerMonth={modifyInfo?.streamFlowRatePerMonth!}
 					token={modifyInfo?.token!}
 					{...props}
 				/>

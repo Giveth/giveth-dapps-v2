@@ -62,29 +62,45 @@ export const ModifyStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
 
+	// Get the balance of the super token
 	const { data: balance } = useBalance({
 		token: superToken.id,
 		address,
 	});
-	const totalPerMonth =
+
+	// Calculate the total amount to donate per month
+	const flowRatePerMonth =
 		BigInt(
 			new BigNumber((balance?.value || 0n).toString())
 				.multipliedBy(percentage)
 				.toFixed(0),
 		) / 100n;
-	const totalPerSec = totalPerMonth / ONE_MONTH_SECONDS;
-	const tokenStream = tokenStreams[superToken.id || ''];
 
-	const totalStreamPerSec = totalPerSec + info.otherStreamsTotalFlowRate;
+	// Calculate the flow rate per second
+	const flowRatePerSec = flowRatePerMonth / ONE_MONTH_SECONDS;
+
+	// Calculate the total stream per second
+	const totalStreamPerSec = flowRatePerSec + info.otherStreamsTotalFlowRate;
+
+	// Calculate the total stream per month
+	const totalStreamPerMonth = totalStreamPerSec * ONE_MONTH_SECONDS;
+
+	// Calculate the stream run out in month
 	const streamRunOutInMonth =
 		totalStreamPerSec > 0
-			? (balance?.value || 0n) / totalStreamPerSec / ONE_MONTH_SECONDS
+			? (balance?.value || 0n) / totalStreamPerMonth
 			: 0n;
+
+	// Check if the total stream exceed
 	const isTotalStreamExceed =
 		streamRunOutInMonth < 1n && totalStreamPerSec > 0;
+
+	// Calculate the color of the slider
 	const sliderColor = isTotalStreamExceed
 		? semanticColors.punch
 		: brandColors.giv;
+
+	const tokenStream = tokenStreams[superToken.id || ''];
 
 	useEffect(() => {
 		if (
@@ -203,7 +219,7 @@ export const ModifyStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 							{balance?.value !== 0n && percentage !== 0
 								? limitFraction(
 										formatUnits(
-											totalPerMonth,
+											flowRatePerMonth,
 											superToken?.decimals || 18,
 										),
 									)
@@ -258,8 +274,9 @@ export const ModifyStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 				label={formatMessage({ id: 'label.confirm' })}
 				onClick={() => {
 					setModifyInfo({
-						amount: totalPerMonth,
-						totalPerMonth,
+						flowRatePerMonth: flowRatePerMonth,
+						streamFlowRatePerMonth: totalStreamPerMonth,
+						superTokenBalance: balance?.value!,
 						token: superToken,
 					});
 					setStep(EDonationSteps.CONFIRM);
