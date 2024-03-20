@@ -1552,7 +1552,7 @@
 	"tooltip.donation.matching_polygon": "Esta estimación representa los fondos de contrapartida que recibiría este proyecto si la ronda se cerrara ahora, ignorando el análisis de fraude y el proceso de asignación especial para los 100 mejores de Jokerace.",
 	"tooltip.flowrate": "Las donaciones recurrentes se toman de tu Saldo de Transmisión. Deposita tokens y mantén tu saldo para habilitar las donaciones recurrentes.",
 	"tooltip.deposit_stream_balance": "Depositar tokens aumentará tu saldo de transmisión y, por lo tanto, extenderá la duración de tus donaciones recurrentes activas.",
-	"tooltip.withdraw_stream_balance" : "Retirar tokens disminuirá tu saldo de transmisión y, por lo tanto, acortará la duración de tus donaciones recurrentes activas.",
+	"tooltip.withdraw_stream_balance" : "Si tiene donaciones recurrentes activas, su saldo disponible para retirar será ligeramente menor que su saldo actual.",
 	"ubi": "UBI",
 	"water-and-sanitation": "Agua & Saneamiento",
 	"withdraw_confirmed": "Retiro confirmado"

@@ -2,6 +2,7 @@ import { useState, type FC } from 'react';
 import { useAccount, useBalance } from 'wagmi';
 import { Button, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { GetBalanceReturnType } from 'wagmi/actions';
 import { Framework } from '@superfluid-finance/sdk-core';
 import { ModifyInfoToast } from './ModifyInfoToast';
 import { ModifySection } from './ModifySection';
@@ -127,12 +128,17 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 		SuperTokenBalance === undefined ||
 		amount > SuperTokenBalance.value - minRemainingBalance;
 
-	/// this one needs some thought - we should allow for a buffer of 10 seconds in the balance we show to the user
-	// - this might prevent them from trying to withdraw more than they have
-	const modifiedValue =
-		SuperTokenBalance !== undefined
-			? SuperTokenBalance.value - totalStreamPerSec * BigInt(10)
-			: 0n;
+	/// this one needs some thought - we should allow for a buffer of 40 seconds (or more) in the balance we show to the user
+	// - this might prevent them from trying to withdraw more than they have and getting an error
+	// if the users totalStreamPerSec is 0, then we should allow them to withdraw the full balance
+	let modifiedValue: GetBalanceReturnType | undefined = SuperTokenBalance;
+	console.log('SuperTokenBalance', SuperTokenBalance);
+	if (SuperTokenBalance !== undefined && totalStreamPerSec > 0) {
+		modifiedValue = {
+			...SuperTokenBalance,
+			value: SuperTokenBalance.value - totalStreamPerSec * BigInt(60),
+		};
+	}
 
 	return (
 		<Wrapper>
@@ -144,8 +150,8 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 							setAmount={setAmount}
 							token={superToken}
 							// try to put in modified value in place of SuperTokenBalance.value
-							balance={SuperTokenBalance}
 							refetch={refetch}
+							balance={modifiedValue}
 							isRefetching={isRefetching}
 							error={
 								amount !== 0n && isInvalidAmount
