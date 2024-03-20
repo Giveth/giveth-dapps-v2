@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
+import { useIntl } from 'react-intl';
 import { EDonationSteps, IModifyStreamModalProps } from './ModifyStreamModal';
-import { Wrapper } from './ModifyStreamInnerModal';
+import { ActionButton, Wrapper } from './ModifyStreamInnerModal';
 import { Item } from '@/components/views/donate/RecurringDonationModal/Item';
 import { IToken } from '@/types/superFluid';
 import { RunOutInfo } from '@/components/views/donate/RunOutInfo';
@@ -22,6 +23,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	amount,
 	totalPerMonth,
 }) => {
+	const { formatMessage } = useIntl();
 	const tokenPrice = useTokenPrice(token);
 	return (
 		<Wrapper>
@@ -36,6 +38,12 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 				amount={amount}
 				totalPerMonth={totalPerMonth}
 				symbol={token.symbol || ''}
+			/>
+			<ActionButton
+				label={formatMessage({ id: 'label.confirm' })}
+				onClick={() => {
+					setStep(EDonationSteps.DONATING);
+				}}
 			/>
 		</Wrapper>
 	);

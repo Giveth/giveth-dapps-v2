@@ -328,7 +328,7 @@ const OtherStreamsInfo = styled(Caption)`
 	background: var(--Neutral-Gray-200, #f7f7f9);
 `;
 
-const ActionButton = styled(Button)`
+export const ActionButton = styled(Button)`
 	width: 100%;
 `;
 
