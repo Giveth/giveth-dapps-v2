@@ -10,7 +10,7 @@ import {
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { FC, useEffect, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { useAccount, useBalance } from 'wagmi';
@@ -30,12 +30,17 @@ import {
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import { ITokenStreams } from '@/context/donate.context';
-import { EDonationSteps, IModifyStreamModalProps } from './ModifyStreamModal';
+import {
+	EDonationSteps,
+	IModifyDonationInfo,
+	IModifyStreamModalProps,
+} from './ModifyStreamModal';
 
 interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	setStep: (step: EDonationSteps) => void;
 	superToken: IToken;
 	tokenStreams: ITokenStreams;
+	setModifyInfo: Dispatch<SetStateAction<IModifyDonationInfo | undefined>>;
 }
 
 interface IGeneralInfo {
@@ -48,6 +53,7 @@ export const ModifyStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	superToken,
 	setStep,
 	tokenStreams,
+	setModifyInfo,
 }) => {
 	const [percentage, setPercentage] = useState(0);
 	const [info, setInfo] = useState<IGeneralInfo>({
@@ -250,7 +256,14 @@ export const ModifyStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			</Flex>
 			<ActionButton
 				label={formatMessage({ id: 'label.confirm' })}
-				onClick={() => setStep(EDonationSteps.CONFIRM)}
+				onClick={() => {
+					setModifyInfo({
+						amount: totalPerMonth,
+						totalPerMonth,
+						token: superToken,
+					});
+					setStep(EDonationSteps.CONFIRM);
+				}}
 				disabled={
 					balance?.value === undefined ||
 					balance?.value === 0n ||
@@ -271,7 +284,7 @@ export const ModifyStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	);
 };
 
-const Wrapper = styled(Flex)`
+export const Wrapper = styled(Flex)`
 	text-align: left;
 	flex-direction: column;
 	align-items: stretch;

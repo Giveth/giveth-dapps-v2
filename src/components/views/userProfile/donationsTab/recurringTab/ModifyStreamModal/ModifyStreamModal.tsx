@@ -9,12 +9,19 @@ import config from '@/configuration';
 import { useUserStreams } from '@/hooks/useUserStreams';
 import { ModifyStreamInnerModal } from './ModifyStreamInnerModal';
 import { UpdateStreamInnerModal } from './UpdateStreamInnerModal';
+import { IToken } from '@/types/superFluid';
 
 export enum EDonationSteps {
 	MODIFY,
 	CONFIRM,
 	DONATING,
 	SUCCESS,
+}
+
+export interface IModifyDonationInfo {
+	amount: bigint;
+	totalPerMonth: bigint;
+	token: IToken;
 }
 
 export interface IModifyStreamModalProps extends IModal {
@@ -25,6 +32,7 @@ export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 	...props
 }) => {
 	const [step, setStep] = useState(EDonationSteps.MODIFY);
+	const [modifyInfo, setModifyInfo] = useState<IModifyDonationInfo>();
 	const { isAnimating, closeModal } = useModalAnimation(props.setShowModal);
 	const { formatMessage } = useIntl();
 	const tokenStreams = useUserStreams();
@@ -53,9 +61,17 @@ export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 					setStep={setStep}
 					tokenStreams={tokenStreams}
 					superToken={superToken!}
+					setModifyInfo={setModifyInfo}
 				/>
 			) : (
-				<UpdateStreamInnerModal />
+				<UpdateStreamInnerModal
+					step={step}
+					setStep={setStep}
+					amount={modifyInfo?.amount!}
+					totalPerMonth={modifyInfo?.totalPerMonth!}
+					token={modifyInfo?.token!}
+					{...props}
+				/>
 			)}
 		</Modal>
 	);
