@@ -9,7 +9,7 @@ import { type FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
-import { ModifyStreamModal } from './ModifyStreamModal';
+import { ModifyStreamModal } from './ModifyStreamModal/ModifyStreamModal';
 import { IWalletRecurringDonation } from '@/apollo/types/types';
 
 interface IStreamActionButtonProps {

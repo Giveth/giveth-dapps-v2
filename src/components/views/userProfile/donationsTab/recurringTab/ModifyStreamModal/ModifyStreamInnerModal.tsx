@@ -3,7 +3,6 @@ import {
 	Button,
 	Caption,
 	Flex,
-	IconDonation32,
 	IconHelpFilled16,
 	P,
 	brandColors,
@@ -11,7 +10,7 @@ import {
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { useAccount, useBalance } from 'wagmi';
@@ -19,55 +18,37 @@ import { formatUnits } from 'viem';
 import Slider from 'rc-slider';
 import BigNumber from 'bignumber.js';
 import Image from 'next/image';
-import { Modal } from '@/components/modals/Modal';
-import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { IModal } from '@/types/common';
-import { IWalletRecurringDonation } from '@/apollo/types/types';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
-import config from '@/configuration';
 import { limitFraction } from '@/helpers/number';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import {
 	mapValue,
 	mapValueInverse,
 } from '@/components/views/donate/RecurringDonationCard';
-import { useUserStreams } from '@/hooks/useUserStreams';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import { ISuperfluidStream } from '@/types/superFluid';
+import { ISuperfluidStream, IToken } from '@/types/superFluid';
+import { ITokenStreams } from '@/context/donate.context';
+import { EDonationSteps, IModifyStreamModalProps } from './ModifyStreamModal';
+
+interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
+	setStep: (step: EDonationSteps) => void;
+	superToken: IToken;
+	tokenStreams: ITokenStreams;
+}
 
 interface IGeneralInfo {
 	projectStream?: ISuperfluidStream;
 	otherStreamsTotalFlowRate: bigint;
 }
 
-interface IModifyStreamModalProps extends IModal {
-	donation: IWalletRecurringDonation;
-}
-
-export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
-	...props
+export const ModifyStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
+	donation,
+	superToken,
+	setStep,
+	tokenStreams,
 }) => {
-	const { isAnimating, closeModal } = useModalAnimation(props.setShowModal);
-	const { formatMessage } = useIntl();
-
-	return (
-		<Modal
-			closeModal={closeModal}
-			isAnimating={isAnimating}
-			headerTitle={formatMessage({
-				id: 'label.modify_recurring_donation_amount',
-			})}
-			headerTitlePosition='left'
-			headerIcon={<IconDonation32 />}
-		>
-			<ModifyStreamInnerModal {...props} />
-		</Modal>
-	);
-};
-
-const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 	const [percentage, setPercentage] = useState(0);
 	const [info, setInfo] = useState<IGeneralInfo>({
 		otherStreamsTotalFlowRate: 0n,
@@ -75,15 +56,8 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
 
-	const superToken = useMemo(
-		() =>
-			config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
-				s => s.underlyingToken.symbol === donation.currency,
-			),
-		[donation.currency],
-	);
 	const { data: balance } = useBalance({
-		token: superToken?.id,
+		token: superToken.id,
 		address,
 	});
 	const totalPerMonth =
@@ -93,8 +67,7 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 				.toFixed(0),
 		) / 100n;
 	const totalPerSec = totalPerMonth / ONE_MONTH_SECONDS;
-	const tokenStreams = useUserStreams();
-	const tokenStream = tokenStreams[superToken?.id || ''];
+	const tokenStream = tokenStreams[superToken.id || ''];
 
 	const totalStreamPerSec = totalPerSec + info.otherStreamsTotalFlowRate;
 	const streamRunOutInMonth =
@@ -163,10 +136,10 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 			<TokenInfoWrapper>
 				<TokenSymbol gap='8px' $alignItems='center'>
 					<TokenIcon
-						symbol={superToken?.underlyingToken.symbol}
+						symbol={superToken.underlyingToken?.symbol}
 						size={24}
 					/>
-					<B>{superToken?.underlyingToken.symbol}</B>
+					<B>{superToken.underlyingToken?.symbol}</B>
 				</TokenSymbol>
 				<TokenBalance>
 					{limitFraction(
@@ -277,7 +250,7 @@ const ModifyStreamInnerModal: FC<IModifyStreamModalProps> = ({ donation }) => {
 			</Flex>
 			<ActionButton
 				label={formatMessage({ id: 'label.confirm' })}
-				onClick={() => {}}
+				onClick={() => setStep(EDonationSteps.CONFIRM)}
 				disabled={
 					balance?.value === undefined ||
 					balance?.value === 0n ||
