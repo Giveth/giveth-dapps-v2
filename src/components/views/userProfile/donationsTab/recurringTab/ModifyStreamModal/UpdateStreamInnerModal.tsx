@@ -1,18 +1,28 @@
 import React, { FC } from 'react';
 import { useIntl } from 'react-intl';
+import { useAccount } from 'wagmi';
+import { Framework } from '@superfluid-finance/sdk-core';
+
 import { EDonationSteps, IModifyStreamModalProps } from './ModifyStreamModal';
 import { ActionButton, Wrapper } from './ModifyStreamInnerModal';
 import { Item } from '@/components/views/donate/RecurringDonationModal/Item';
 import { IToken } from '@/types/superFluid';
 import { RunOutInfo } from '@/components/views/donate/RunOutInfo';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
+import config, { isProduction } from '@/configuration';
+import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
+import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
+import { showToastError } from '@/lib/helpers';
+import { updateRecurringDonation } from '@/services/donation';
+import { wagmiConfig } from '@/wagmiConfigs';
 
 interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	step: EDonationSteps;
 	setStep: (step: EDonationSteps) => void;
 	token: IToken;
-	amount: bigint;
-	totalPerMonth: bigint;
+	superTokenBalance: bigint;
+	flowRatePerMonth: bigint;
+	streamFlowRatePerMonth: bigint;
 }
 
 export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
@@ -20,23 +30,107 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	step,
 	setStep,
 	token,
-	amount,
-	totalPerMonth,
+	superTokenBalance,
+	flowRatePerMonth,
+	streamFlowRatePerMonth,
 }) => {
 	const { formatMessage } = useIntl();
 	const tokenPrice = useTokenPrice(token);
+	const { address } = useAccount();
+
+	const onDonate = async () => {
+		setStep(EDonationSteps.DONATING);
+		try {
+			const projectAnchorContract =
+				donation.project.anchorContracts[0]?.address;
+			if (!projectAnchorContract) {
+				throw new Error('Project anchor address not found');
+			}
+			if (!address || !token) {
+				throw new Error('address not found');
+			}
+			const provider = await getEthersProvider(wagmiConfig);
+			const signer = await getEthersSigner(wagmiConfig);
+
+			if (!provider || !signer)
+				throw new Error('Provider or signer not found');
+
+			const _options = {
+				chainId: config.OPTIMISM_CONFIG.id,
+				provider: provider,
+				resolverAddress: isProduction
+					? undefined
+					: '0x554c06487bEc8c890A0345eb05a5292C1b1017Bd',
+			};
+			const sf = await Framework.create(_options);
+
+			// EThx is not a Wrapper Super Token and should load separately
+			let superToken;
+			if (token.symbol === 'ETHx') {
+				superToken = await sf.loadNativeAssetSuperToken(token.id);
+			} else {
+				superToken = await sf.loadWrapperSuperToken(token.id);
+			}
+
+			const _flowRatePerSec = flowRatePerMonth / ONE_MONTH_SECONDS;
+
+			const options = {
+				sender: address,
+				receiver: projectAnchorContract,
+				flowRate: _flowRatePerSec.toString(),
+			};
+
+			let projectFlowOp = superToken.updateFlow(options);
+
+			const tx = await projectFlowOp.exec(signer);
+
+			let donationId = 0;
+			// saving project donation to backend
+			try {
+				const projectDonationInfo = {
+					projectId: +donation.project.id,
+					anonymous: donation.anonymous,
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					txHash: tx.hash,
+					flowRate: _flowRatePerSec,
+					superToken: token,
+				};
+				console.log('Start Update Project Donation Info');
+				const projectBackendRes =
+					await updateRecurringDonation(projectDonationInfo);
+				console.log('Project Donation Update Info', projectBackendRes);
+			} catch (error) {
+				console.log('error', error);
+			}
+
+			const res = await tx.wait();
+			if (!res.status) {
+				throw new Error('Transaction failed');
+			}
+			setStep(EDonationSteps.SUCCESS);
+			if (tx.hash) {
+			}
+		} catch (error: any) {
+			setStep(EDonationSteps.CONFIRM);
+			if (error?.code !== 'ACTION_REJECTED') {
+				showToastError(error);
+			}
+			console.log('Error on recurring donation', { error });
+		}
+	};
+
 	return (
 		<Wrapper>
 			<Item
 				title={`Donate to ${donation.project.title}`}
 				subtext={'per month'}
-				amount={amount}
+				amount={flowRatePerMonth}
 				price={tokenPrice}
 				token={token}
 			/>
 			<RunOutInfo
-				amount={amount}
-				totalPerMonth={totalPerMonth}
+				superTokenBalance={superTokenBalance}
+				streamFlowRatePerMonth={streamFlowRatePerMonth}
 				symbol={token.symbol || ''}
 			/>
 			<ActionButton
