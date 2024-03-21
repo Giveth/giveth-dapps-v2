@@ -27,6 +27,7 @@ export interface IModifyDonationInfo {
 
 export interface IModifyStreamModalProps extends IModal {
 	donation: IWalletRecurringDonation;
+	refetch: () => void;
 }
 
 export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({

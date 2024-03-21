@@ -37,6 +37,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	flowRatePerMonth,
 	streamFlowRatePerMonth,
 	setShowModal,
+	refetch,
 }) => {
 	const [tx, setTx] = useState('');
 	const { formatMessage } = useIntl();
@@ -105,6 +106,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 				const projectBackendRes =
 					await updateRecurringDonation(projectDonationInfo);
 				console.log('Project Donation Update Info', projectBackendRes);
+				refetch();
 			} catch (error) {
 				console.log('error', error);
 			}
@@ -173,7 +175,9 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 					{tx && <TXLink tx={tx} />}
 					<ActionButton
 						label={formatMessage({ id: 'label.done' })}
-						onClick={() => setShowModal(false)}
+						onClick={() => {
+							setShowModal(false);
+						}}
 					/>
 				</>
 			) : null}

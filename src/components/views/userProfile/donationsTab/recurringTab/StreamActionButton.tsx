@@ -14,10 +14,12 @@ import { IWalletRecurringDonation } from '@/apollo/types/types';
 
 interface IStreamActionButtonProps {
 	donation: IWalletRecurringDonation;
+	refetch: () => void;
 }
 
 export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	donation,
+	refetch,
 }) => {
 	const [showModify, setShowModify] = useState(false);
 
@@ -67,6 +69,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 				<ModifyStreamModal
 					setShowModal={setShowModify}
 					donation={donation}
+					refetch={refetch}
 				/>
 			)}
 		</Actions>
