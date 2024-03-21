@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
 import { Framework } from '@superfluid-finance/sdk-core';
 
+import { GLink } from '@giveth/ui-design-system';
 import { EDonationSteps, IModifyStreamModalProps } from './ModifyStreamModal';
 import { ActionButton, Wrapper } from './ModifyStreamInnerModal';
 import { Item } from '@/components/views/donate/RecurringDonationModal/Item';
@@ -12,10 +13,11 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import config, { isProduction } from '@/configuration';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
-import { showToastError } from '@/lib/helpers';
+import { formatTxLink, showToastError } from '@/lib/helpers';
 import { updateRecurringDonation } from '@/services/donation';
 import { wagmiConfig } from '@/wagmiConfigs';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import { ChainType } from '@/types/config';
 
 interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	step: EDonationSteps;
@@ -36,6 +38,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	streamFlowRatePerMonth,
 	setShowModal,
 }) => {
+	const [tx, setTx] = useState('');
 	const { formatMessage } = useIntl();
 	const tokenPrice = useTokenPrice(token);
 	const { address } = useAccount();
@@ -85,6 +88,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			let projectFlowOp = superToken.updateFlow(options);
 
 			const tx = await projectFlowOp.exec(signer);
+			setTx(tx.hash);
 
 			let donationId = 0;
 			// saving project donation to backend
@@ -153,6 +157,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 						type={EToastType.Info}
 						message='Your recurring donation to the Giveth community of Makers is being processed.'
 					/>
+					{tx && <TXLink tx={tx} />}
 				</>
 			) : step === EDonationSteps.SUCCESS ? (
 				<>
@@ -166,8 +171,31 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 						type={EToastType.Success}
 						message='Your recurring donation to the Giveth community of Makers is now active!'
 					/>
+					{tx && <TXLink tx={tx} />}
 				</>
 			) : null}
 		</Wrapper>
+	);
+};
+
+interface ITXLinkProps {
+	tx: string;
+}
+
+const TXLink: FC<ITXLinkProps> = ({ tx }) => {
+	const { formatMessage } = useIntl();
+	return (
+		<GLink
+			as='a'
+			href={formatTxLink({
+				txHash: tx,
+				chainType: ChainType.EVM,
+				networkId: config.OPTIMISM_NETWORK_NUMBER,
+			})}
+			target='_blank'
+			rel='noreferrer'
+		>
+			{formatMessage({ id: 'label.view_on_block_explorer' })}
+		</GLink>
 	);
 };
