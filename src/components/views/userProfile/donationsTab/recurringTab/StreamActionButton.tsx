@@ -75,7 +75,13 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 					refetch={refetch}
 				/>
 			)}
-			{showEnd && <EndStreamModal setShowModal={setShowEnd} />}
+			{showEnd && (
+				<EndStreamModal
+					setShowModal={setShowEnd}
+					donation={donation}
+					refetch={refetch}
+				/>
+			)}
 		</Actions>
 	);
 };
