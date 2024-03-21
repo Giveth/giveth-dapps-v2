@@ -140,12 +140,17 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 				symbol={token.symbol || ''}
 			/>
 			{step === EDonationSteps.CONFIRM ? (
-				<ActionButton
-					label={formatMessage({ id: 'label.confirm' })}
-					onClick={() => {
-						onDonate();
-					}}
-				/>
+				<>
+					<ActionButton
+						label={formatMessage({ id: 'label.confirm' })}
+						onClick={() => onDonate()}
+					/>
+					<ActionButton
+						label={formatMessage({ id: 'label.edit' })}
+						onClick={() => setStep(EDonationSteps.MODIFY)}
+						buttonType='texty-gray'
+					/>
+				</>
 			) : step === EDonationSteps.DONATING ? (
 				<>
 					<StyledToast
@@ -168,9 +173,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 					{tx && <TXLink tx={tx} />}
 					<ActionButton
 						label={formatMessage({ id: 'label.done' })}
-						onClick={() => {
-							setShowModal(false);
-						}}
+						onClick={() => setShowModal(false)}
 					/>
 				</>
 			) : null}
