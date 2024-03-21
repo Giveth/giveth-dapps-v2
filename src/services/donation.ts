@@ -17,6 +17,7 @@ import {
 	CREATE_RECURRING_DONATION,
 	UPDATE_RECURRING_DONATION,
 } from '@/apollo/gql/gqlSuperfluid';
+import { RECURRING_DONATION_STATUS } from '@/apollo/types/types';
 
 const SAVE_DONATION_ITERATIONS = 5;
 
@@ -225,6 +226,7 @@ export const endRecurringDonation = async (props: IEndRecurringDonation) => {
 				networkId: chainId,
 				txHash,
 				currency: superToken.underlyingToken?.symbol || 'ETH',
+				status: RECURRING_DONATION_STATUS.ENDED,
 			},
 		});
 		donationId = data.updateRecurringDonation;
