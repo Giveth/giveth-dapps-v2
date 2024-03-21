@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
 import { Framework } from '@superfluid-finance/sdk-core';
 
-import { GLink } from '@giveth/ui-design-system';
+import styled from 'styled-components';
 import { EDonationSteps, IModifyStreamModalProps } from './ModifyStreamModal';
 import { ActionButton, Wrapper } from './ModifyStreamInnerModal';
 import { Item } from '@/components/views/donate/RecurringDonationModal/Item';
@@ -13,11 +13,11 @@ import { useTokenPrice } from '@/hooks/useTokenPrice';
 import config, { isProduction } from '@/configuration';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
-import { formatTxLink, showToastError } from '@/lib/helpers';
+import { showToastError } from '@/lib/helpers';
 import { updateRecurringDonation } from '@/services/donation';
 import { wagmiConfig } from '@/wagmiConfigs';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import { ChainType } from '@/types/config';
+import { TXLink } from './TXLink';
 
 interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	step: EDonationSteps;
@@ -148,54 +148,36 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 				/>
 			) : step === EDonationSteps.DONATING ? (
 				<>
+					<StyledToast
+						type={EToastType.Info}
+						message='Your recurring donation to the Giveth community of Makers is being processed.'
+					/>
+					{tx && <TXLink tx={tx} />}
 					<ActionButton
 						label={formatMessage({ id: 'label.donating' })}
 						disabled={true}
 						loading={true}
 					/>
-					<InlineToast
-						type={EToastType.Info}
-						message='Your recurring donation to the Giveth community of Makers is being processed.'
-					/>
-					{tx && <TXLink tx={tx} />}
 				</>
 			) : step === EDonationSteps.SUCCESS ? (
 				<>
+					<StyledToast
+						type={EToastType.Success}
+						message='Your recurring donation to the Giveth community of Makers is now active!'
+					/>
+					{tx && <TXLink tx={tx} />}
 					<ActionButton
 						label={formatMessage({ id: 'label.done' })}
 						onClick={() => {
 							setShowModal(false);
 						}}
 					/>
-					<InlineToast
-						type={EToastType.Success}
-						message='Your recurring donation to the Giveth community of Makers is now active!'
-					/>
-					{tx && <TXLink tx={tx} />}
 				</>
 			) : null}
 		</Wrapper>
 	);
 };
 
-interface ITXLinkProps {
-	tx: string;
-}
-
-const TXLink: FC<ITXLinkProps> = ({ tx }) => {
-	const { formatMessage } = useIntl();
-	return (
-		<GLink
-			as='a'
-			href={formatTxLink({
-				txHash: tx,
-				chainType: ChainType.EVM,
-				networkId: config.OPTIMISM_NETWORK_NUMBER,
-			})}
-			target='_blank'
-			rel='noreferrer'
-		>
-			{formatMessage({ id: 'label.view_on_block_explorer' })}
-		</GLink>
-	);
-};
+const StyledToast = styled(InlineToast)`
+	margin: 0;
+`;
