@@ -474,3 +474,12 @@ export interface IGetQfRoundHistory {
 	uniqueDonors: number;
 	estimatedMatching: IEstimatedMatching;
 }
+
+export enum RECURRING_DONATION_STATUS {
+	PENDING = 'pending',
+	VERIFIED = 'verified',
+	ENDED = 'ended',
+	FAILED = 'failed',
+	ARCHIVED = 'archived',
+	ACTIVE = 'active',
+}
