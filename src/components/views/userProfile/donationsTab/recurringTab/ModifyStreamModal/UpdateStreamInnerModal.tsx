@@ -15,6 +15,7 @@ import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { showToastError } from '@/lib/helpers';
 import { updateRecurringDonation } from '@/services/donation';
 import { wagmiConfig } from '@/wagmiConfigs';
+import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 
 interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	step: EDonationSteps;
@@ -33,6 +34,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	superTokenBalance,
 	flowRatePerMonth,
 	streamFlowRatePerMonth,
+	setShowModal,
 }) => {
 	const { formatMessage } = useIntl();
 	const tokenPrice = useTokenPrice(token);
@@ -64,7 +66,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			};
 			const sf = await Framework.create(_options);
 
-			// EThx is not a Wrapper Super Token and should load separately
+			// ETHx is not a Wrapper Super Token and should load separately
 			let superToken;
 			if (token.symbol === 'ETHx') {
 				superToken = await sf.loadNativeAssetSuperToken(token.id);
@@ -133,12 +135,39 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 				streamFlowRatePerMonth={streamFlowRatePerMonth}
 				symbol={token.symbol || ''}
 			/>
-			<ActionButton
-				label={formatMessage({ id: 'label.confirm' })}
-				onClick={() => {
-					setStep(EDonationSteps.DONATING);
-				}}
-			/>
+			{step === EDonationSteps.CONFIRM ? (
+				<ActionButton
+					label={formatMessage({ id: 'label.confirm' })}
+					onClick={() => {
+						onDonate();
+					}}
+				/>
+			) : step === EDonationSteps.DONATING ? (
+				<>
+					<ActionButton
+						label={formatMessage({ id: 'label.donating' })}
+						disabled={true}
+						loading={true}
+					/>
+					<InlineToast
+						type={EToastType.Info}
+						message='Your recurring donation to the Giveth community of Makers is being processed.'
+					/>
+				</>
+			) : step === EDonationSteps.SUCCESS ? (
+				<>
+					<ActionButton
+						label={formatMessage({ id: 'label.done' })}
+						onClick={() => {
+							setShowModal(false);
+						}}
+					/>
+					<InlineToast
+						type={EToastType.Success}
+						message='Your recurring donation to the Giveth community of Makers is now active!'
+					/>
+				</>
+			) : null}
 		</Wrapper>
 	);
 };
