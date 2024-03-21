@@ -28,7 +28,7 @@ export interface IOrder {
 }
 
 export const ActiveProjectsSection = () => {
-	const [, setTrigger] = useState(false);
+	const [trigger, setTrigger] = useState(false);
 	const [showArchive, setShowArchive] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [donations, setDonations] = useState<IWalletRecurringDonation[]>([]);
@@ -94,6 +94,7 @@ export const ActiveProjectsSection = () => {
 		showArchive,
 		statusFilters,
 		tokenFilters,
+		trigger,
 	]);
 	return (
 		<Wrapper>
