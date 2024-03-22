@@ -191,6 +191,10 @@ export const RecurringDonationCard = () => {
 			showToastError(error);
 		}
 	}, [selectedToken, address, project, tokenStreams]);
+	console.log(
+		formatUnits(totalStreamPerSec * ONE_MONTH_SECONDS, 18),
+		'totalStreamPerSec',
+	);
 
 	return (
 		<>
@@ -431,26 +435,48 @@ export const RecurringDonationCard = () => {
 							)}
 						</Flex>
 						{tokenStream?.length > 0 && (
-							<Flex $justifyContent='space-between'>
-								<Caption>
-									{formatMessage(
-										{
-											id: 'label.you_are_supporting_other_projects_with_this_stream',
-										},
-										{
-											count: tokenStream.length - 1,
-										},
-									)}
-								</Caption>
-								<Flex gap='4px' $alignItems='center'>
-									<Caption $medium>
-										{formatMessage({
-											id: 'label.manage_recurring_donations',
-										})}
+							<>
+								<Flex $justifyContent='space-between'>
+									<Caption>
+										{formatMessage(
+											{
+												id: 'label.you_are_supporting_other_projects_with_this_stream',
+											},
+											{
+												count: tokenStream.length - 1,
+											},
+										)}{' '}
 									</Caption>
-									<IconChevronRight16 />
+									<Flex gap='4px' $alignItems='center'>
+										<Caption $medium>
+											{formatMessage({
+												id: 'label.manage_recurring_donations',
+											})}
+										</Caption>
+										<IconChevronRight16 />
+									</Flex>
 								</Flex>
-							</Flex>
+
+								<Caption>
+									{formatMessage({
+										id: 'label.you_will_donate_total',
+									})}{' '}
+									<TotalMonthlyStream>
+										{limitFraction(
+											formatUnits(
+												totalStreamPerSec *
+													ONE_MONTH_SECONDS,
+												selectedToken?.token.decimals ||
+													18,
+											),
+										)}{' '}
+										{selectedToken?.token.symbol}
+									</TotalMonthlyStream>{' '}
+									{formatMessage({
+										id: 'label.monthly_across_all_projects',
+									})}
+								</Caption>
+							</>
 						)}
 					</Flex>
 				)}
@@ -770,4 +796,8 @@ const TopUpStream = styled(Flex)`
 		color: ${brandColors.pinky[700]};
 	}
 	transition: color 0.2s ease-in-out;
+`;
+
+const TotalMonthlyStream = styled.b`
+	color: ${semanticColors.jade[500]};
 `;
