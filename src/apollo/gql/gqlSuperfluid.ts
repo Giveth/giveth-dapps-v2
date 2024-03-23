@@ -46,10 +46,11 @@ export const UPDATE_RECURRING_DONATION = gql`
 	mutation updateRecurringDonationQuery(
 		$projectId: Int!
 		$networkId: Int!
-		$txHash: String!
-		$flowRate: String!
 		$currency: String!
-		$anonymous: Boolean!
+		$txHash: String
+		$flowRate: String
+		$anonymous: Boolean
+		$status: String
 	) {
 		updateRecurringDonationParams(
 			projectId: $projectId
@@ -58,12 +59,14 @@ export const UPDATE_RECURRING_DONATION = gql`
 			anonymous: $anonymous
 			flowRate: $flowRate
 			currency: $currency
+			status: $status
 		) {
 			txHash
 			networkId
 			currency
 			flowRate
 			anonymous
+			status
 		}
 	}
 `;

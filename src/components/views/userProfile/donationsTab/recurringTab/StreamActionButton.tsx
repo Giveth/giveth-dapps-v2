@@ -11,6 +11,7 @@ import { Dropdown, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
 import { ModifyStreamModal } from './ModifyStreamModal/ModifyStreamModal';
 import { IWalletRecurringDonation } from '@/apollo/types/types';
+import { EndStreamModal } from './EndStreamModal';
 
 interface IStreamActionButtonProps {
 	donation: IWalletRecurringDonation;
@@ -22,6 +23,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	refetch,
 }) => {
 	const [showModify, setShowModify] = useState(false);
+	const [showEnd, setShowEnd] = useState(false);
 
 	const { formatMessage } = useIntl();
 
@@ -49,6 +51,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 						id: 'label.end_recurring_donation',
 					}),
 					icon: <IconUpdate16 />,
+					cb: () => setShowEnd(true),
 				},
 			];
 
@@ -68,6 +71,13 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 			{showModify && (
 				<ModifyStreamModal
 					setShowModal={setShowModify}
+					donation={donation}
+					refetch={refetch}
+				/>
+			)}
+			{showEnd && (
+				<EndStreamModal
+					setShowModal={setShowEnd}
 					donation={donation}
 					refetch={refetch}
 				/>
