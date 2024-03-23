@@ -161,8 +161,10 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 						token={token!}
 					/>
 					<RunOutInfo
-						amount={(SuperTokenBalance?.value || 0n) - amount}
-						totalPerMonth={totalPerMonth}
+						superTokenBalance={
+							(SuperTokenBalance?.value || 0n) - amount
+						}
+						streamFlowRatePerMonth={totalPerMonth}
 						symbol={token?.symbol || ''}
 					/>
 				</Flex>

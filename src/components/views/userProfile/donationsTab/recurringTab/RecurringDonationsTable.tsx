@@ -31,6 +31,7 @@ interface RecurringDonationTable {
 	order: IOrder;
 	changeOrder: (orderBy: ERecurringDonationSortField) => void;
 	myAccount?: boolean;
+	refetch: () => void;
 }
 
 const RecurringDonationTable: FC<RecurringDonationTable> = ({
@@ -38,6 +39,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 	order,
 	changeOrder,
 	myAccount,
+	refetch,
 }) => {
 	const { formatMessage, locale } = useIntl();
 
@@ -72,11 +74,16 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 			</TableHeader>
 
 			{myAccount && (
-				<TableHeader>
-					{formatMessage({ id: 'label.status' })}
-				</TableHeader>
+				<>
+					<TableHeader>
+						{formatMessage({ id: 'label.status' })}
+					</TableHeader>
+					<TableHeader>
+						{formatMessage({ id: 'label.actions' })}
+					</TableHeader>
+				</>
 			)}
-			<TableHeader>{formatMessage({ id: 'label.actions' })}</TableHeader>
+
 			{donations.map(donation => (
 				<DonationRowWrapper key={donation.id}>
 					<DonationTableCell>
@@ -111,13 +118,18 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 						<Currency>{donation.currency}</Currency>
 					</DonationTableCell>
 					{myAccount && (
-						<DonationTableCell>
-							<DonationStatus status={donation.status} />
-						</DonationTableCell>
+						<>
+							<DonationTableCell>
+								<DonationStatus status={donation.status} />
+							</DonationTableCell>
+							<DonationTableCell>
+								<StreamActionButton
+									donation={donation}
+									refetch={refetch}
+								/>
+							</DonationTableCell>
+						</>
 					)}
-					<DonationTableCell>
-						<StreamActionButton finished={donation.finished} />
-					</DonationTableCell>
 				</DonationRowWrapper>
 			))}
 		</DonationTableContainer>

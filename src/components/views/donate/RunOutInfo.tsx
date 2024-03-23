@@ -6,22 +6,23 @@ import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { smallFormatDate } from '@/lib/helpers';
 
 interface IRunOutInfoProps {
-	amount: bigint;
-	totalPerMonth: bigint;
+	superTokenBalance: bigint;
+	streamFlowRatePerMonth: bigint;
 	symbol: string;
 }
 
 export const RunOutInfo: FC<IRunOutInfoProps> = ({
-	amount,
-	totalPerMonth,
+	superTokenBalance,
+	streamFlowRatePerMonth,
 	symbol,
 }) => {
 	const { formatMessage } = useIntl();
-	const totalPerSecond = totalPerMonth / ONE_MONTH_SECONDS;
+	const totalPerSecond = streamFlowRatePerMonth / ONE_MONTH_SECONDS;
 	const secondsUntilRunOut =
-		totalPerSecond > 0 ? amount / totalPerSecond : 0n;
+		totalPerSecond > 0 ? superTokenBalance / totalPerSecond : 0n;
 	const date = new Date();
 	date.setSeconds(date.getSeconds() + Number(secondsUntilRunOut.toString()));
+
 	return (
 		<RunOutSection>
 			<P>

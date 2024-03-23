@@ -26,7 +26,7 @@ const ToggleSwitch: FC<IToggleButton> = ({
 			$disabled={disabled}
 			className={className}
 		>
-			<InputStyled checked={isOn} type='checkbox' />
+			<InputStyled checked={isOn} type='checkbox' onChange={() => {}} />
 			<Switch $isOn={isOn}>
 				<Bullet $isOn={isOn} />
 			</Switch>
