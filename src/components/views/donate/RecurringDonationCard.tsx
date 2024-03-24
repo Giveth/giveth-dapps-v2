@@ -36,7 +36,7 @@ import 'rc-slider/assets/index.css';
 import DonateToGiveth from './DonateToGiveth';
 import { Spinner } from '@/components/Spinner';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import { findUserStreamOnSelectedToken } from '@/helpers/donate';
+import { findUserActiveStreamOnSelectedToken } from '@/helpers/donate';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { showToastError } from '@/lib/helpers';
 import config, { isRecurringActive } from '@/configuration';
@@ -172,12 +172,18 @@ export const RecurringDonationCard = () => {
 				!project.anchorContracts
 			)
 				return;
-			const _userStreamOnSelectedToken = findUserStreamOnSelectedToken(
-				address,
-				project,
-				tokenStreams,
-				selectedToken,
+			const _userStreamOnSelectedToken =
+				findUserActiveStreamOnSelectedToken(
+					address,
+					project,
+					tokenStreams,
+					selectedToken,
+				);
+			console.log(
+				'_userStreamOnSelectedToken',
+				_userStreamOnSelectedToken,
 			);
+
 			if (_userStreamOnSelectedToken) {
 				setUserStreamOnSelectedToken(_userStreamOnSelectedToken);
 				const _percentage = BigNumber(
