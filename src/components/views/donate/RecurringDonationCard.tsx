@@ -172,6 +172,7 @@ export const RecurringDonationCard = () => {
 				!project.anchorContracts
 			)
 				return;
+
 			const _userStreamOnSelectedToken =
 				findUserActiveStreamOnSelectedToken(
 					address,
@@ -179,10 +180,6 @@ export const RecurringDonationCard = () => {
 					tokenStreams,
 					selectedToken,
 				);
-			console.log(
-				'_userStreamOnSelectedToken',
-				_userStreamOnSelectedToken,
-			);
 
 			if (_userStreamOnSelectedToken) {
 				setUserStreamOnSelectedToken(_userStreamOnSelectedToken);
