@@ -40,6 +40,9 @@ interface IProjectCard {
 	className?: string;
 	order?: number;
 }
+interface IPaddedRowProps {
+	sidePadding?: string;
+}
 
 const ProjectCard = (props: IProjectCard) => {
 	const { project, className } = props;
@@ -439,8 +442,8 @@ const GivpowerRankContainer = styled(Flex)`
 	margin-left: auto;
 `;
 
-export const PaddedRow = styled(Flex)`
-	padding: 0 ${SIDE_PADDING};
+export const PaddedRow = styled(Flex)<IPaddedRowProps>`
+	padding: 0 ${props => props.sidePadding || SIDE_PADDING};
 `;
 
 export const StyledPaddedRow = styled(PaddedRow)`

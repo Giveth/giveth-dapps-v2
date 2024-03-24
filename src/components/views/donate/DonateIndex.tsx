@@ -28,7 +28,6 @@ import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
 import { DonationCard } from './DonationCard';
 import { SuccessView } from './SuccessView';
-import { DonateSection } from '../project/projectActionCard/DonationSection';
 import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
 import CryptoDonation from './CryptoDonation';
@@ -36,6 +35,7 @@ import ProjectCardSelector from '@/components/views/donate/ProjectCardSelector';
 import { DonationInfo } from './DonationInfo';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { isRecurringActive } from '@/configuration';
+import { DonatePageProjectDescription } from './DonatePageProjectDescription';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -92,7 +92,9 @@ const DonateIndex: FC = () => {
 							{!isMobile && hasActiveQFRound ? (
 								<QFSection projectData={project} />
 							) : (
-								<DonateSection projectData={project} />
+								<DonatePageProjectDescription
+									projectData={project}
+								/>
 							)}
 						</InfoWrapper>
 					</Col>

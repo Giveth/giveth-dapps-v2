@@ -13,6 +13,7 @@ interface IProjectCardUserName {
 	slug: string;
 	isForeignOrg?: boolean;
 	name?: string;
+	sidePadding?: string;
 }
 
 export const ProjectCardUserName: FC<IProjectCardUserName> = ({
@@ -20,6 +21,7 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 	slug,
 	isForeignOrg,
 	name,
+	sidePadding,
 }) => {
 	const pfpToken = useGiverPFPToken(
 		adminUser?.walletAddress,
@@ -28,7 +30,7 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 
 	return (
 		<UserNameContainer>
-			<StyledPaddedRow>
+			<StyledPaddedRow sidePadding={sidePadding}>
 				{adminUser?.name && !isForeignOrg && (
 					<Link
 						href={addressToUserView(

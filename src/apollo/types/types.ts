@@ -282,6 +282,7 @@ export interface IWalletRecurringDonation {
 	totalDonated: string;
 	networkId: number;
 	finished: boolean;
+	anonymous: boolean;
 }
 
 export interface IMediumBlogPost {
@@ -472,4 +473,13 @@ export interface IGetQfRoundHistory {
 	raisedFundInUsd: number;
 	uniqueDonors: number;
 	estimatedMatching: IEstimatedMatching;
+}
+
+export enum RECURRING_DONATION_STATUS {
+	PENDING = 'pending',
+	VERIFIED = 'verified',
+	ENDED = 'ended',
+	FAILED = 'failed',
+	ARCHIVED = 'archived',
+	ACTIVE = 'active',
 }
