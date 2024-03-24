@@ -55,7 +55,7 @@ import links from '@/lib/constants/links';
  * If the slider value is between 90 and 100, it maps it to a range of 50 to 100.
  * This makes the first 90% of the slider represent 0-50% of the range, and the last 10% represent 50-100%.
  */
-function mapValue(value: number) {
+export function mapValue(value: number) {
 	if (value <= 90) {
 		return value * (50 / 90);
 	} else {
@@ -70,7 +70,7 @@ function mapValue(value: number) {
  * If the value is between 50 and 100, it maps it to a range of 90 to 100.
  * This is used to set the slider's position based on the value from the range.
  */
-function mapValueInverse(value: number) {
+export function mapValueInverse(value: number) {
 	if (value <= 50) {
 		return value * (90 / 50);
 	} else {
@@ -135,10 +135,16 @@ export const RecurringDonationCard = () => {
 	const tokenBalance = balance?.value;
 	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
 	const totalStreamPerSec =
-		tokenStream?.reduce(
-			(acc, stream) => acc + BigInt(stream.currentFlowRate),
-			totalPerSec,
-		) || totalPerSec;
+		tokenStream
+			?.filter(
+				ts =>
+					project.anchorContracts?.length > 0 &&
+					ts.receiver.id !== project.anchorContracts[0]?.address,
+			)
+			.reduce(
+				(acc, stream) => acc + BigInt(stream.currentFlowRate),
+				totalPerSec,
+			) || totalPerSec;
 	const streamRunOutInMonth =
 		totalStreamPerSec > 0
 			? amount / totalStreamPerSec / ONE_MONTH_SECONDS
@@ -225,7 +231,9 @@ export const RecurringDonationCard = () => {
 				<Flex $flexDirection='column' gap='8px'>
 					<Flex gap='8px' $alignItems='center'>
 						<Caption $medium>
-							{formatMessage({ id: 'label.stream_balance' })}
+							{formatMessage({
+								id: 'label.deposit_token_use_balance',
+							})}
 						</Caption>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
@@ -326,16 +334,16 @@ export const RecurringDonationCard = () => {
 								min={0}
 								max={100}
 								step={0.1}
-								railStyle={{
-									backgroundColor: sliderColor[200],
-								}}
-								trackStyle={{
-									backgroundColor: sliderColor[500],
-								}}
-								handleStyle={{
-									backgroundColor: sliderColor[500],
-									border: `3px solid ${sliderColor[200]}`,
-									opacity: 1,
+								styles={{
+									rail: { backgroundColor: sliderColor[200] },
+									track: {
+										backgroundColor: sliderColor[500],
+									},
+									handle: {
+										backgroundColor: sliderColor[500],
+										border: `3px solid ${sliderColor[200]}`,
+										opacity: 1,
+									},
 								}}
 								onChange={(value: any) => {
 									const _value = Array.isArray(value)
@@ -380,7 +388,7 @@ export const RecurringDonationCard = () => {
 							<Flex gap='4px'>
 								<Caption>
 									{formatMessage({
-										id: 'label.stream_balance_runs_out_in',
+										id: 'label.top_up_your_stream_balance_within',
 									})}
 								</Caption>
 								{selectedToken?.token.isSuperToken && (
@@ -693,16 +701,16 @@ const RecurringSection = styled(Flex)`
 // 	text-align: left;
 // `;
 
-const SelectTokenWrapper = styled(Flex)`
+export const SelectTokenWrapper = styled(Flex)`
 	cursor: pointer;
 	gap: 16px;
 `;
 
-const SelectTokenPlaceHolder = styled(B)`
+export const SelectTokenPlaceHolder = styled(B)`
 	white-space: nowrap;
 `;
 
-const InputWrapper = styled(Flex)`
+export const InputWrapper = styled(Flex)`
 	border: 2px solid ${neutralColors.gray[300]};
 	border-radius: 8px;
 	overflow: hidden;
@@ -727,7 +735,7 @@ const Input = styled(AmountInput)`
 	}
 `;
 
-const IconWrapper = styled.div`
+export const IconWrapper = styled.div`
 	cursor: pointer;
 	color: ${brandColors.giv[500]};
 `;

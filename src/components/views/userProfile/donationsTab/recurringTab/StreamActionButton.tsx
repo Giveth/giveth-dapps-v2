@@ -1,46 +1,34 @@
 import {
-	GLink,
 	IconEdit16,
 	IconEye16,
 	IconUpdate16,
 	IconWalletOutline16,
-	neutralColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
-import { isRecurringActive } from '@/configuration';
+import { ModifyStreamModal } from './ModifyStreamModal/ModifyStreamModal';
+import { IWalletRecurringDonation } from '@/apollo/types/types';
+import { EndStreamModal } from './EndStreamModal';
 
 interface IStreamActionButtonProps {
-	finished: boolean;
+	donation: IWalletRecurringDonation;
+	refetch: () => void;
 }
 
 export const StreamActionButton: FC<IStreamActionButtonProps> = ({
-	finished,
+	donation,
+	refetch,
 }) => {
-	const isCancelled = status === EProjectStatus.CANCEL;
+	const [showModify, setShowModify] = useState(false);
+	const [showEnd, setShowEnd] = useState(false);
 
 	const { formatMessage } = useIntl();
 
-	const [isHover, setIsHover] = useState(false);
-
-	const options: IOption[] = finished
+	const options: IOption[] = donation.finished
 		? [
-				{
-					label: formatMessage({ id: 'label.modify_flow_rate' }),
-					icon: <IconEye16 />,
-				},
-				{
-					label: formatMessage({
-						id: 'label.end_recurring_donation',
-					}),
-					icon: <IconUpdate16 />,
-				},
-			]
-		: [
 				{
 					label: formatMessage({ id: 'label.start_new_donation' }),
 					icon: <IconEdit16 />,
@@ -51,66 +39,58 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 					),
 					icon: <IconWalletOutline16 />,
 				},
+			]
+		: [
+				{
+					label: formatMessage({ id: 'label.modify_flow_rate' }),
+					icon: <IconEye16 />,
+					cb: () => setShowModify(true),
+				},
+				{
+					label: formatMessage({
+						id: 'label.end_recurring_donation',
+					}),
+					icon: <IconUpdate16 />,
+					cb: () => setShowEnd(true),
+				},
 			];
 
 	const dropdownStyle = {
 		padding: '4px 16px',
 		borderRadius: '8px',
-		background: isHover ? 'white' : '',
 	};
 
-	return isRecurringActive ? (
-		<Actions
-			onMouseEnter={() => setIsHover(true)}
-			onMouseLeave={() => setIsHover(false)}
-			$isOpen={isHover}
-			$isCancelled={isCancelled}
-		>
-			{isCancelled ? (
-				<CancelledWrapper>CANCELLED</CancelledWrapper>
-			) : (
-				<Dropdown
-					style={dropdownStyle}
-					label=''
-					options={options}
-					stickToRight
+	return (
+		<Actions>
+			<Dropdown
+				style={dropdownStyle}
+				label=''
+				options={options}
+				stickToRight
+			/>
+			{showModify && (
+				<ModifyStreamModal
+					setShowModal={setShowModify}
+					donation={donation}
+					refetch={refetch}
+				/>
+			)}
+			{showEnd && (
+				<EndStreamModal
+					setShowModal={setShowEnd}
+					donation={donation}
+					refetch={refetch}
 				/>
 			)}
 		</Actions>
-	) : (
-		<ActionsOld
-			onMouseEnter={() => setIsHover(true)}
-			onMouseLeave={() => setIsHover(false)}
-			$isOpen={isHover}
-			$isCancelled={isCancelled}
-			size='Big'
-		>
-			{isCancelled ? (
-				<CancelledWrapper>CANCELLED</CancelledWrapper>
-			) : (
-				<Dropdown
-					style={dropdownStyle}
-					label='Actions'
-					options={options}
-					stickToRight
-				/>
-			)}
-		</ActionsOld>
 	);
 };
 
-const CancelledWrapper = styled.div`
-	padding: 4px 16px;
-`;
-
-const Actions = styled.div<{ $isCancelled: boolean; $isOpen: boolean }>`
-	cursor: ${props => (props.$isCancelled ? 'default' : 'pointer')};
+const Actions = styled.div`
+	cursor: pointer;
 	border-radius: 8px;
 	padding: 8px 10px;
-`;
-
-const ActionsOld = styled(GLink)<{ $isCancelled: boolean; $isOpen: boolean }>`
-	color: ${props =>
-		props.$isCancelled ? neutralColors.gray[500] : neutralColors.gray[900]};
-	cursor: ${props => (props.$isCancelled ? 'default' : 'pointer')};
+	:hover {
+		background-color: white;
+	}
 `;

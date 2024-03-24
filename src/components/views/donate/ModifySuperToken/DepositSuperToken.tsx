@@ -193,8 +193,10 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 						token={token!}
 					/>
 					<RunOutInfo
-						amount={amount + (SuperTokenBalance?.value || 0n)}
-						totalPerMonth={0n}
+						superTokenBalance={
+							amount + (SuperTokenBalance?.value || 0n)
+						}
+						streamFlowRatePerMonth={0n}
 						symbol={token?.symbol || ''}
 					/>
 				</Flex>
