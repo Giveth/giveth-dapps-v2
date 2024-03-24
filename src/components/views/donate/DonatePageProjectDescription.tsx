@@ -8,7 +8,6 @@ import {
 	mediaQueries,
 	Flex,
 	H5,
-	Lead,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -18,6 +17,8 @@ import { formatDonation } from '@/helpers/number';
 import { IProject } from '@/apollo/types/types';
 import { VerifiedBadge } from '@/components/badges/VerifiedBadge';
 import { slugToProjectView } from '@/lib/routeCreators';
+import { ProjectCardUserName } from '@/components/project-card/ProjectCardUserName';
+import { ORGANIZATION } from '@/lib/constants/organizations';
 
 interface IDonatePageProjectDescriptionProps {
 	projectData?: IProject;
@@ -27,8 +28,19 @@ export const DonatePageProjectDescription: FC<
 	IDonatePageProjectDescriptionProps
 > = ({ projectData }) => {
 	const { formatMessage, locale } = useIntl();
-	const { sumDonationValueUsd, slug, title, descriptionSummary } =
-		projectData || {};
+	const {
+		sumDonationValueUsd,
+		slug,
+		title,
+		descriptionSummary,
+		adminUser,
+		organization,
+	} = projectData || {};
+
+	const orgLabel = organization?.label;
+	const isForeignOrg =
+		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
+
 	const projectLink = slugToProjectView(slug!);
 
 	return (
@@ -41,7 +53,13 @@ export const DonatePageProjectDescription: FC<
 			<Link href={projectLink}>
 				<CustomH5>{title}</CustomH5>
 			</Link>
-			<CustomLead>{projectData?.adminUser.name}</CustomLead>
+			<ProjectCardUserName
+				name={adminUser?.name}
+				adminUser={adminUser!}
+				slug={slug!}
+				isForeignOrg={isForeignOrg}
+				sidePadding='0'
+			/>
 			<P>
 				{formatMessage({ id: 'label.raised' })}:{' '}
 				{formatDonation(sumDonationValueUsd || 0, '$', locale)}
@@ -81,10 +99,6 @@ export const DonatePageProjectDescription: FC<
 
 const CustomH5 = styled(H5)`
 	font-weight: 700;
-`;
-
-const CustomLead = styled(Lead)`
-	color: ${brandColors.pinky[500]};
 `;
 
 const DescriptionSummary = styled(P)`
