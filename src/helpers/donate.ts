@@ -12,7 +12,7 @@ export const findSuperTokenByTokenAddress = (tokenAddress: Address) => {
 	);
 };
 
-export const findUserStreamOnSelectedToken = (
+export const findUserActiveStreamOnSelectedToken = (
 	address?: Address,
 	project?: IProject,
 	tokenStreams?: ITokenStreams,
@@ -34,6 +34,7 @@ export const findUserStreamOnSelectedToken = (
 	return tokenStream.find(
 		stream =>
 			stream.receiver.id.toLowerCase() ===
-			projectAnchorAddress.toLowerCase(),
+				projectAnchorAddress.toLowerCase() &&
+			stream.currentFlowRate !== '0',
 	);
 };
