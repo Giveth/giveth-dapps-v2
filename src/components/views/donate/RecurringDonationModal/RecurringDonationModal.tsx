@@ -442,8 +442,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				)}
 			</Items>
 			<RunOutInfo
-				amount={amount}
-				totalPerMonth={totalPerMonth}
+				superTokenBalance={amount}
+				streamFlowRatePerMonth={totalPerMonth}
 				symbol={selectedToken?.token.symbol || ''}
 			/>
 			<ActionButton

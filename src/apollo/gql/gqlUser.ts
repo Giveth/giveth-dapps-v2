@@ -144,6 +144,10 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 					id
 					title
 					slug
+					anchorContracts {
+						address
+						isActive
+					}
 				}
 				finished
 				createdAt

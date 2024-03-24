@@ -36,7 +36,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			<Flex $alignItems='center' $justifyContent='space-between'>
 				<Caption $medium>
 					{formatMessage({
-						id: 'label.stream_balance',
+						id: 'label.deposit_token_use_balance',
 					})}
 				</Caption>
 				<StreamBalanceInfo $medium>
