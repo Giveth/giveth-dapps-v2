@@ -71,12 +71,6 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 						id: 'component.donation_section.100_to_the_project',
 					})}
 				</B>
-				<B>
-					{formatMessage({
-						id: 'label.always',
-					})}
-					.
-				</B>
 				<P>
 					{formatMessage({
 						id: 'component.donation_section.desc',
