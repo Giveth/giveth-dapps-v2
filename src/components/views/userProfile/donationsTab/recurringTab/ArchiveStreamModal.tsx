@@ -1,6 +1,6 @@
 import {
 	Flex,
-	H3,
+	H4,
 	IconAlertTriangleOutline32,
 	Lead,
 	mediaQueries,
@@ -66,7 +66,7 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 				mutation: UPDATE_RECURRING_DONATION,
 				variables: {
 					projectId: +donation.project.id,
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					networkId: config.OPTIMISM_NETWORK_NUMBER,
 					currency: donation.currency,
 				},
 			});
@@ -105,11 +105,11 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 		</Wrapper>
 	) : (
 		<Wrapper>
-			<H3 weight={700}>
+			<StyledH4 weight={700}>
 				{formatMessage({
 					id: 'component.archive_stream_modal.archived_title',
 				})}
-			</H3>
+			</StyledH4>
 			<ActionButton
 				label={formatMessage({ id: 'label.done' })}
 				onClick={() => {
@@ -131,4 +131,8 @@ const Wrapper = styled(Flex)`
 	${mediaQueries.tablet} {
 		width: 530px;
 	}
+`;
+
+const StyledH4 = styled(H4)`
+	text-align: center;
 `;
