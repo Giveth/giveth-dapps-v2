@@ -21,6 +21,7 @@ import { ModifyWrapper, Wrapper } from './common.sc';
 import { EModifySuperTokenSteps, actionButtonLabel } from './common';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
+import { EToastType } from '@/components/toasts/InlineToast';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	token?: IToken;
@@ -174,14 +175,17 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 							balance={balance}
 							refetch={refetch}
 							isRefetching={isRefetching}
+							tooltipText='tooltip.deposit_stream_balance'
 						/>
 						<StreamInfo
 							tokenStreams={tokenStreams}
 							superToken={superToken}
 							SuperTokenBalance={SuperTokenBalance}
+							inputAmount={amount}
+							type='deposit'
 						/>
 					</ModifyWrapper>
-					<ModifyInfoToast />
+					<ModifyInfoToast toastType={EToastType.Info} />
 				</>
 			) : (
 				<Flex $flexDirection='column' gap='16px'>
