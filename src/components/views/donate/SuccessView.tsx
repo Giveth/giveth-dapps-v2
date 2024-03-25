@@ -130,7 +130,6 @@ export const SuccessView: FC = () => {
 								contentType={EContentType.justDonated}
 							/>
 						</SocialBoxWrapper>
-						{/* {isRecurringActive && <DonationInfo />} */}
 					</RightSectionWrapper>
 				</Col>
 			</Row>
