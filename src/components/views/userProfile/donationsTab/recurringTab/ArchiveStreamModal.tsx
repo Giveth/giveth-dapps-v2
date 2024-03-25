@@ -8,12 +8,14 @@ import {
 import { useIntl } from 'react-intl';
 import { useState, type FC } from 'react';
 import styled from 'styled-components';
-import { useAccount } from 'wagmi';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { ActionButton } from './ModifyStreamModal/ModifyStreamInnerModal';
 import { IWalletRecurringDonation } from '@/apollo/types/types';
+import config from '@/configuration';
+import { UPDATE_RECURRING_DONATION } from '@/apollo/gql/gqlSuperfluid';
+import { client } from '@/apollo/apolloClient';
 
 enum EArchiveStreamSteps {
 	CONFIRM,
@@ -56,11 +58,24 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 }) => {
 	const [step, setStep] = useState(EArchiveStreamSteps.CONFIRM);
 	const { formatMessage } = useIntl();
-	const { address } = useAccount();
 
-	const onArchive = () => {
+	const onArchive = async () => {
 		setStep(EArchiveStreamSteps.ARCHIVING);
-		setStep(EArchiveStreamSteps.SUCCESS);
+		try {
+			const { data } = await client.mutate({
+				mutation: UPDATE_RECURRING_DONATION,
+				variables: {
+					projectId: +donation.project.id,
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					currency: donation.currency,
+				},
+			});
+			console.log('data', data);
+			refetch();
+			setStep(EArchiveStreamSteps.SUCCESS);
+		} catch (error) {
+			setStep(EArchiveStreamSteps.CONFIRM);
+		}
 	};
 
 	return step === EArchiveStreamSteps.CONFIRM ||
