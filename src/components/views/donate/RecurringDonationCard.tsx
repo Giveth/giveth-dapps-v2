@@ -176,7 +176,7 @@ export const RecurringDonationCard = () => {
 			const _userStreamOnSelectedToken =
 				findUserActiveStreamOnSelectedToken(
 					address,
-					project,
+					project.anchorContracts[0]?.address,
 					tokenStreams,
 					selectedToken,
 				);
@@ -193,13 +193,13 @@ export const RecurringDonationCard = () => {
 				setPercentage(parseFloat(_percentage.toString()));
 			} else {
 				setUserStreamOnSelectedToken(undefined);
-				setPercentage(0);
-				setIsUpdating(false);
+				//Please don't make percentage zero here, it will reset the slider to 0
 			}
 		} catch (error) {
 			showToastError(error);
 		}
-	}, [selectedToken, address, project, tokenStreams]);
+	}, [selectedToken, address, tokenStreams, project.anchorContracts]);
+
 	console.log(
 		formatUnits(totalStreamPerSec * ONE_MONTH_SECONDS, 18),
 		'totalStreamPerSec',

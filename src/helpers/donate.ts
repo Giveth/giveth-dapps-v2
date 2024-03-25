@@ -1,6 +1,5 @@
 import { Address } from 'viem';
 import config from '@/configuration';
-import { IProject } from '@/apollo/types/types';
 import {
 	type ITokenStreams,
 	type ISelectTokenWithBalance,
@@ -14,21 +13,19 @@ export const findSuperTokenByTokenAddress = (tokenAddress: Address) => {
 
 export const findUserActiveStreamOnSelectedToken = (
 	address?: Address,
-	project?: IProject,
+	projectAnchorAddress?: string,
 	tokenStreams?: ITokenStreams,
 	selectedSuperToken?: ISelectTokenWithBalance,
 ) => {
 	console.log('address', address);
 	if (
 		!address ||
-		!project ||
+		!projectAnchorAddress ||
 		!tokenStreams ||
 		!selectedSuperToken ||
 		!selectedSuperToken.token.isSuperToken
 	)
 		return;
-	const projectAnchorAddress = project.anchorContracts[0]?.address;
-	if (!projectAnchorAddress) return;
 	const tokenStream = tokenStreams[selectedSuperToken.token.id];
 	if (!tokenStream) return;
 	return tokenStream.find(
