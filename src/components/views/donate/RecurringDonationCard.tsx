@@ -193,6 +193,7 @@ export const RecurringDonationCard = () => {
 				setPercentage(parseFloat(_percentage.toString()));
 			} else {
 				setUserStreamOnSelectedToken(undefined);
+				//Please don't make percentage zero here, it will reset the slider to 0
 			}
 		} catch (error) {
 			showToastError(error);
