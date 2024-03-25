@@ -14,6 +14,7 @@ import { ModifyStreamModal } from './ModifyStreamModal/ModifyStreamModal';
 import { IWalletRecurringDonation } from '@/apollo/types/types';
 import { EndStreamModal } from './EndStreamModal';
 import { slugToProjectDonate } from '@/lib/routeCreators';
+import { ArchiveStreamModal } from './ArchiveStreamModal';
 
 interface IStreamActionButtonProps {
 	donation: IWalletRecurringDonation;
@@ -85,6 +86,13 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 			{showEnd && (
 				<EndStreamModal
 					setShowModal={setShowEnd}
+					donation={donation}
+					refetch={refetch}
+				/>
+			)}
+			{showArchive && (
+				<ArchiveStreamModal
+					setShowModal={setShowArchive}
 					donation={donation}
 					refetch={refetch}
 				/>
