@@ -22,7 +22,7 @@ const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
 	return (
 		<TxLink>
 			<span>Donation to {title + ' '}</span>
-			<CustomLink
+			<Link
 				href={formatTxLink({
 					txHash,
 					networkId: (chain as Chain)?.id,
@@ -31,7 +31,7 @@ const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
 				target='_blank'
 			>
 				View the transaction
-			</CustomLink>
+			</Link>
 			<IconExternalLink24 />
 		</TxLink>
 	);
@@ -86,5 +86,3 @@ const TxLink = styled(Lead)`
 		color: ${neutralColors.gray[700]};
 	}
 `;
-
-const CustomLink = styled(Link)``;
