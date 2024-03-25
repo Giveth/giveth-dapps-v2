@@ -12,7 +12,10 @@ import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { ActionButton } from './ModifyStreamModal/ModifyStreamInnerModal';
-import { IWalletRecurringDonation } from '@/apollo/types/types';
+import {
+	IWalletRecurringDonation,
+	RECURRING_DONATION_STATUS,
+} from '@/apollo/types/types';
 import config from '@/configuration';
 import { UPDATE_RECURRING_DONATION } from '@/apollo/gql/gqlSuperfluid';
 import { client } from '@/apollo/apolloClient';
@@ -68,6 +71,7 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 					projectId: +donation.project.id,
 					networkId: config.OPTIMISM_NETWORK_NUMBER,
 					currency: donation.currency,
+					status: RECURRING_DONATION_STATUS.ARCHIVED,
 				},
 			});
 			console.log('data', data);
