@@ -13,7 +13,6 @@ import { useIntl } from 'react-intl';
 import { Chain } from 'viem';
 import Routes from '@/lib/constants/Routes';
 import { useDonateData } from '@/context/donate.context';
-import ExternalLink from '@/components/ExternalLink';
 
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { formatTxLink } from '@/lib/helpers';
@@ -23,14 +22,16 @@ const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
 	return (
 		<TxLink>
 			<span>Donation to {title + ' '}</span>
-			<ExternalLink
+			<CustomLink
 				href={formatTxLink({
 					txHash,
 					networkId: (chain as Chain)?.id,
 					chainType: walletChainType || undefined,
 				})}
-				title='View the transaction'
-			/>
+				target='_blank'
+			>
+				View the transaction
+			</CustomLink>
 			<IconExternalLink24 />
 		</TxLink>
 	);
@@ -85,3 +86,5 @@ const TxLink = styled(Lead)`
 		color: ${neutralColors.gray[700]};
 	}
 `;
+
+const CustomLink = styled(Link)``;
