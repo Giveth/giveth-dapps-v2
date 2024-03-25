@@ -1,6 +1,8 @@
 import {
 	Flex,
+	H3,
 	IconAlertTriangleOutline32,
+	P,
 	mediaQueries,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
@@ -139,7 +141,9 @@ const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 		<Wrapper>
 			<InlineToast
 				type={EToastType.Error}
-				message='You’re about to end an active recurring donation. This project will no longer benefit from your continuous support. Are you sure? '
+				message={formatMessage({
+					id: 'component.end_stream_modal.confirm_question',
+				})}
 			/>
 			<Flex gap='16px'>
 				<ActionButton
@@ -158,10 +162,21 @@ const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 		</Wrapper>
 	) : (
 		<Wrapper>
-			<InlineToast
-				type={EToastType.Success}
-				message='Your recurring donation to the Giveth community of Makers is now inactive.'
-			/>
+			<H3 weight={700}>
+				{formatMessage({
+					id: 'component.end_stream_modal.ended_title',
+				})}
+			</H3>
+			<P>
+				{formatMessage(
+					{
+						id: 'component.end_stream_modal.ended_description',
+					},
+					{
+						name: donation.project.title,
+					},
+				)}
+			</P>
 			<ActionButton
 				label={formatMessage({ id: 'label.done' })}
 				onClick={() => {
