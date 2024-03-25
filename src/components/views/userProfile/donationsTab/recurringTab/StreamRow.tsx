@@ -60,7 +60,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 					&nbsp;monthly
 				</P>
 			</TableCell>
-			<TableCell>{tokenStream.length}</TableCell>
+			<TableCell>{tokenStream.length} Projects</TableCell>
 			<TableCell>
 				{runOutMonth < 1 ? (
 					' < 1 Month '
@@ -76,7 +76,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 			</TableCell>
 			<TableCell>
 				<ModifyButton onClick={() => setShowModifyModal(true)}>
-					Modify stream balance
+					Deposit/Withdraw
 				</ModifyButton>
 			</TableCell>
 			{showModifyModal && (

@@ -99,7 +99,7 @@ export const ActiveProjectsSection = () => {
 	return (
 		<Wrapper>
 			<Flex $justifyContent='space-between'>
-				<H5 weight={900}>Active projects</H5>
+				<H5 weight={900}>Recurring Donations</H5>
 				<Flex gap='24px'>
 					<StyledToggleSwitch
 						isOn={showArchive}

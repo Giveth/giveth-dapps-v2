@@ -160,8 +160,8 @@ const DonationTableContainer = styled.div<{ $myAccount?: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
 		props.$myAccount
-			? '1fr 2fr 1fr 2fr 1fr 1fr 1fr '
-			: '1fr 2fr 1.5fr 1fr 1fr '};
+			? '1.5fr 2fr 1fr 1.7fr 1.2fr 1fr 1fr '
+			: '1.5fr 2fr 1.5fr 1fr 1fr '};
 	overflow: auto;
 	min-width: 900px;
 	margin: 0 10px;
