@@ -243,3 +243,39 @@ export const endRecurringDonation = async (props: IEndRecurringDonation) => {
 
 	return donationId;
 };
+
+export interface IArchiveRecurringDonation {
+	projectId: number;
+	chainId: number;
+	superToken: IToken;
+}
+
+export const archiveRecurringDonation = async (
+	props: IArchiveRecurringDonation,
+) => {
+	let donationId = 0;
+	const { chainId, projectId, superToken } = props;
+	try {
+		const { data } = await client.mutate({
+			mutation: UPDATE_RECURRING_DONATION,
+			variables: {
+				projectId,
+				networkId: chainId,
+				currency: superToken.underlyingToken?.symbol || 'ETH',
+				status: RECURRING_DONATION_STATUS.ARCHIVED,
+			},
+		});
+		donationId = data.updateRecurringDonation;
+		return donationId;
+	} catch (error: any) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('archiveRecurringDonation error: ', error);
+		throw error;
+	}
+
+	return donationId;
+};
