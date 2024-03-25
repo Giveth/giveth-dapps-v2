@@ -47,36 +47,41 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		estimatedMatching ?? {};
 
 	const activeRound = getActiveRound(qfRounds);
-	const EstimatedMatchingSection = () => (
-		<Flex $flexDirection='column' gap='4px'>
-			<EstimatedMatchingPrice>
-				{'+ ' +
-					formatDonation(
-						calculateTotalEstimatedMatching(
-							projectDonationsSqrtRootSum,
-							allProjectsSum,
-							matchingPool,
-							activeRound?.maximumReward,
-						),
-						'$',
-						locale,
-						true,
-					)}
-			</EstimatedMatchingPrice>
-			<Flex $alignItems='center' gap='4px'>
-				<LightCaption>
-					{formatMessage({ id: 'label.estimated_matching' })}
-				</LightCaption>
-				<IconWithTooltip icon={<IconHelpFilled16 />} direction='top'>
-					<TooltipContent>
-						{formatMessage({
-							id: 'component.qf-section.tooltip_polygon',
-						})}
-					</TooltipContent>
-				</IconWithTooltip>
-			</Flex>
-		</Flex>
+	const totalEstimatedMatching = calculateTotalEstimatedMatching(
+		projectDonationsSqrtRootSum,
+		allProjectsSum,
+		matchingPool,
+		activeRound?.maximumReward,
 	);
+	const EstimatedMatchingSection = () =>
+		totalEstimatedMatching !== 0 ? (
+			<Flex $flexDirection='column' gap='4px'>
+				<EstimatedMatchingPrice>
+					{'+ ' +
+						formatDonation(
+							totalEstimatedMatching,
+							'$',
+							locale,
+							true,
+						)}
+				</EstimatedMatchingPrice>
+				<Flex $alignItems='center' gap='4px'>
+					<LightCaption>
+						{formatMessage({ id: 'label.estimated_matching' })}
+					</LightCaption>
+					<IconWithTooltip
+						icon={<IconHelpFilled16 />}
+						direction='top'
+					>
+						<TooltipContent>
+							{formatMessage({
+								id: 'component.qf-section.tooltip_polygon',
+							})}
+						</TooltipContent>
+					</IconWithTooltip>
+				</Flex>
+			</Flex>
+		) : null;
 
 	return (
 		<DonationSectionWrapper gap='24px'>
@@ -133,7 +138,18 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 					</TabletEstimatedMatchingContainer>
 				</DonateInfo>
 			) : (
-				<DonateInfo>
+				<div>
+					<Title>
+						{formatMessage({
+							id: 'label.total_raised',
+						})}
+						{' ' +
+							formatDonation(
+								sumDonationValueUsd || 0,
+								'$',
+								locale,
+							)}
+					</Title>
 					<NoFund weight={700}>
 						{formatMessage({
 							id: 'label.donate_first_lead_the_way',
@@ -143,7 +159,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 					<TabletEstimatedMatchingContainer>
 						<EstimatedMatchingSection />
 					</TabletEstimatedMatchingContainer>
-				</DonateInfo>
+				</div>
 			)}
 			<DefaultEstimatedMatchingContainer>
 				<EstimatedMatchingSection />
@@ -298,7 +314,6 @@ const DonateInfo = styled.div`
 
 const NoFund = styled(H4)`
 	color: ${neutralColors.gray[800]};
-	margin-top: 16px;
 `;
 
 const EstimatedMatchingPrice = styled(H4)`
