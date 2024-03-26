@@ -138,9 +138,15 @@ export const RecurringDonationCard = () => {
 	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
 
 	// otherStreamsPerSec is the total flow rate of all streams except the one to the project
-	const otherStreamsPerSec = tokenStream
-		?.filter(ts => ts.receiver.id !== project.anchorContracts[0]?.address)
-		.reduce((acc, stream) => acc + BigInt(stream.currentFlowRate), 0n);
+	const otherStreamsPerSec =
+		tokenStream
+			?.filter(
+				ts => ts.receiver.id !== project.anchorContracts[0]?.address,
+			)
+			.reduce(
+				(acc, stream) => acc + BigInt(stream.currentFlowRate),
+				0n,
+			) || 0n;
 	const totalStreamPerSec = totalPerSec + otherStreamsPerSec;
 	const totalStreamPerMonth = totalStreamPerSec * ONE_MONTH_SECONDS;
 	const streamRunOutInMonth =
