@@ -23,20 +23,11 @@ import { client } from '@/apollo/apolloClient';
 import { extractContractAddressFromString } from '../../donate/AlloProtocolFirstDonationModal';
 import { wagmiConfig } from '@/wagmiConfigs';
 import createProfileABI from '@/artifacts/createProfile.json';
+import { generateRandomNonce } from '@/lib/helpers';
 
 interface IAlloProtocolModal extends IModal {
 	project?: IProjectEdition; //If undefined, it means we are in create mode
 	addedProjectState: IProject;
-}
-
-function generateRandomNonce(): number {
-	const min: number = 100;
-	const max: number = 999999999999999;
-
-	// Generate a random number between min (inclusive) and max (exclusive)
-	const nonce: number = Math.floor(Math.random() * (max - min + 1)) + min;
-
-	return nonce;
 }
 
 const AlloProtocolModal: FC<IAlloProtocolModal> = ({

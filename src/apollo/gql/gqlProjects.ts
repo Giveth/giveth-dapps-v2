@@ -804,7 +804,7 @@ export const FETCH_RECURRING_DONATIONS_BY_PROJECTID = gql`
 		$projectId: Int!
 		$searchTerm: String
 		$status: String
-		$finished: Boolean
+		$finishStatus: [Boolean!]
 		$orderBy: RecurringDonationSortBy
 	) {
 		recurringDonationsByProjectId(
@@ -813,7 +813,7 @@ export const FETCH_RECURRING_DONATIONS_BY_PROJECTID = gql`
 			projectId: $projectId
 			searchTerm: $searchTerm
 			status: $status
-			finished: $finished
+			finishStatus: $finishStatus
 			orderBy: $orderBy
 		) {
 			recurringDonations {
@@ -827,7 +827,6 @@ export const FETCH_RECURRING_DONATIONS_BY_PROJECTID = gql`
 				totalUsdStreamed
 				flowRate
 				txHash
-				finished
 				donor {
 					id
 					walletAddress

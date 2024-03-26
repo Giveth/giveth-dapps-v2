@@ -98,7 +98,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 										size={16}
 									/>
 									<GLink size='Medium'>
-										{token.underlyingToken.name}
+										{token.underlyingToken.symbol}
 									</GLink>
 								</Flex>
 							</CheckBox>

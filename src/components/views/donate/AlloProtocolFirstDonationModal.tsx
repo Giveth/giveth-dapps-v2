@@ -19,6 +19,7 @@ import { client } from '@/apollo/apolloClient';
 import { useDonateData } from '@/context/donate.context';
 import { IModal } from '@/types/common';
 import createProfileABI from '@/artifacts/createProfile.json';
+import { generateRandomNonce } from '@/lib/helpers';
 interface IAlloProtocolModal extends IModal {
 	onModalCompletion: () => void;
 }
@@ -42,7 +43,7 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 	onModalCompletion,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { chain, address } = useAccount();
+	const { chain } = useAccount();
 	const [isLoading, setIsLoading] = useState(false);
 	const [txResult, setTxResult] = useState<Address>();
 
@@ -74,8 +75,8 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 					abi: createProfileABI.abi,
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
 					args: [
-						+project?.id!, // project id
-						project?.slug!,
+						generateRandomNonce(), //nonce
+						project?.id!,
 						{
 							protocol: 1,
 							pointer: '',

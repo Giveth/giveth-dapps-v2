@@ -31,6 +31,7 @@ interface IModifySectionProps {
 	isRefetching: boolean;
 	error?: string;
 	minRemainingBalance?: bigint;
+	tooltipText?: string;
 }
 export const ModifySection: FC<IModifySectionProps> = ({
 	titleLabel,
@@ -41,6 +42,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 	isRefetching,
 	error,
 	minRemainingBalance = 0n,
+	tooltipText,
 }) => {
 	const { formatMessage } = useIntl();
 
@@ -57,7 +59,11 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					direction='right'
 					align='bottom'
 				>
-					<FlowRateTooltip>PlaceHolder</FlowRateTooltip>
+					<FlowRateTooltip>
+						{formatMessage({
+							id: tooltipText,
+						})}
+					</FlowRateTooltip>
 				</IconWithTooltip>
 			</Flex>
 			<InputWrapper $hasError={!!error}>

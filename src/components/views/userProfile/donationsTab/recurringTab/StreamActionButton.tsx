@@ -7,11 +7,14 @@ import {
 import styled from 'styled-components';
 import { type FC, useState } from 'react';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
 import { ModifyStreamModal } from './ModifyStreamModal/ModifyStreamModal';
 import { IWalletRecurringDonation } from '@/apollo/types/types';
 import { EndStreamModal } from './EndStreamModal';
+import { slugToProjectDonate } from '@/lib/routeCreators';
+import { ArchiveStreamModal } from './ArchiveStreamModal';
 
 interface IStreamActionButtonProps {
 	donation: IWalletRecurringDonation;
@@ -24,20 +27,25 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 }) => {
 	const [showModify, setShowModify] = useState(false);
 	const [showEnd, setShowEnd] = useState(false);
+	const [showArchive, setShowArchive] = useState(false);
 
 	const { formatMessage } = useIntl();
+	const router = useRouter();
 
 	const options: IOption[] = donation.finished
 		? [
 				{
 					label: formatMessage({ id: 'label.start_new_donation' }),
 					icon: <IconEdit16 />,
+					cb: () =>
+						router.push(slugToProjectDonate(donation.project.slug)),
 				},
 				{
 					label: capitalizeAllWords(
 						formatMessage({ id: 'label.archive_donation' }),
 					),
 					icon: <IconWalletOutline16 />,
+					cb: () => setShowArchive(true),
 				},
 			]
 		: [
@@ -78,6 +86,13 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 			{showEnd && (
 				<EndStreamModal
 					setShowModal={setShowEnd}
+					donation={donation}
+					refetch={refetch}
+				/>
+			)}
+			{showArchive && (
+				<ArchiveStreamModal
+					setShowModal={setShowArchive}
 					donation={donation}
 					refetch={refetch}
 				/>

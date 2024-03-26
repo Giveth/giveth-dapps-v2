@@ -36,7 +36,7 @@ import 'rc-slider/assets/index.css';
 import DonateToGiveth from './DonateToGiveth';
 import { Spinner } from '@/components/Spinner';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import { findUserStreamOnSelectedToken } from '@/helpers/donate';
+import { findUserActiveStreamOnSelectedToken } from '@/helpers/donate';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { showToastError } from '@/lib/helpers';
 import config, { isRecurringActive } from '@/configuration';
@@ -172,12 +172,15 @@ export const RecurringDonationCard = () => {
 				!project.anchorContracts
 			)
 				return;
-			const _userStreamOnSelectedToken = findUserStreamOnSelectedToken(
-				address,
-				project,
-				tokenStreams,
-				selectedToken,
-			);
+
+			const _userStreamOnSelectedToken =
+				findUserActiveStreamOnSelectedToken(
+					address,
+					project.anchorContracts[0]?.address,
+					tokenStreams,
+					selectedToken.token,
+				);
+
 			if (_userStreamOnSelectedToken) {
 				setUserStreamOnSelectedToken(_userStreamOnSelectedToken);
 				const _percentage = BigNumber(
@@ -190,13 +193,17 @@ export const RecurringDonationCard = () => {
 				setPercentage(parseFloat(_percentage.toString()));
 			} else {
 				setUserStreamOnSelectedToken(undefined);
-				setPercentage(0);
-				setIsUpdating(false);
+				//Please don't make percentage zero here, it will reset the slider to 0
 			}
 		} catch (error) {
 			showToastError(error);
 		}
-	}, [selectedToken, address, project, tokenStreams]);
+	}, [selectedToken, address, tokenStreams, project.anchorContracts]);
+
+	console.log(
+		formatUnits(totalStreamPerSec * ONE_MONTH_SECONDS, 18),
+		'totalStreamPerSec',
+	);
 
 	return (
 		<>
@@ -232,7 +239,7 @@ export const RecurringDonationCard = () => {
 					<Flex gap='8px' $alignItems='center'>
 						<Caption $medium>
 							{formatMessage({
-								id: 'label.deposit_token_use_balance',
+								id: 'label.deposit_or_stream_balance',
 							})}
 						</Caption>
 						<IconWithTooltip
@@ -437,26 +444,48 @@ export const RecurringDonationCard = () => {
 							)}
 						</Flex>
 						{tokenStream?.length > 0 && (
-							<Flex $justifyContent='space-between'>
-								<Caption>
-									{formatMessage(
-										{
-											id: 'label.you_are_supporting_other_projects_with_this_stream',
-										},
-										{
-											count: tokenStream.length - 1,
-										},
-									)}
-								</Caption>
-								<Flex gap='4px' $alignItems='center'>
-									<Caption $medium>
-										{formatMessage({
-											id: 'label.manage_recurring_donations',
-										})}
+							<>
+								<Flex $justifyContent='space-between'>
+									<Caption>
+										{formatMessage(
+											{
+												id: 'label.you_are_supporting_other_projects_with_this_stream',
+											},
+											{
+												count: tokenStream.length - 1,
+											},
+										)}{' '}
 									</Caption>
-									<IconChevronRight16 />
+									<Flex gap='4px' $alignItems='center'>
+										<Caption $medium>
+											{formatMessage({
+												id: 'label.manage_recurring_donations',
+											})}
+										</Caption>
+										<IconChevronRight16 />
+									</Flex>
 								</Flex>
-							</Flex>
+
+								<Caption>
+									{formatMessage({
+										id: 'label.you_will_donate_total',
+									})}{' '}
+									<TotalMonthlyStream>
+										{limitFraction(
+											formatUnits(
+												totalStreamPerSec *
+													ONE_MONTH_SECONDS,
+												selectedToken?.token.decimals ||
+													18,
+											),
+										)}{' '}
+										{selectedToken?.token.symbol}
+									</TotalMonthlyStream>{' '}
+									{formatMessage({
+										id: 'label.monthly_across_all_projects',
+									})}
+								</Caption>
+							</>
 						)}
 					</Flex>
 				)}
@@ -776,4 +805,8 @@ const TopUpStream = styled(Flex)`
 		color: ${brandColors.pinky[700]};
 	}
 	transition: color 0.2s ease-in-out;
+`;
+
+const TotalMonthlyStream = styled.b`
+	color: ${semanticColors.jade[500]};
 `;

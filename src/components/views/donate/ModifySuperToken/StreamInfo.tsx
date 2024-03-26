@@ -1,5 +1,6 @@
+import { formatEther } from 'viem';
 import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
-import { type FC } from 'react';
+import { Dispatch, SetStateAction, type FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { type GetBalanceReturnType } from '@wagmi/core';
@@ -11,36 +12,52 @@ interface IStreamInfoProps {
 	tokenStreams: ISuperfluidStream[];
 	superToken?: ISuperToken;
 	SuperTokenBalance?: GetBalanceReturnType;
+	inputAmount?: bigint;
+	type?: string;
+	setIsWarning?: Dispatch<SetStateAction<boolean>>;
 }
 
 export const StreamInfo: FC<IStreamInfoProps> = ({
 	tokenStreams,
 	superToken,
 	SuperTokenBalance,
+	inputAmount,
+	type,
+	setIsWarning,
 }) => {
+	inputAmount == null && (inputAmount = 0n);
 	const { formatMessage } = useIntl();
 	const totalStreamPerSec =
 		tokenStreams?.reduce(
 			(acc, stream) => acc + BigInt(stream.currentFlowRate),
 			0n,
 		) || 0n;
+	const estimatedBalance =
+		(SuperTokenBalance?.value || 0n) +
+		(type == 'withdraw' ? -BigInt(inputAmount) : BigInt(inputAmount));
 	const streamRunOutInMonth =
 		SuperTokenBalance !== undefined &&
 		totalStreamPerSec > 0 &&
 		SuperTokenBalance.value > 0n
-			? SuperTokenBalance.value / totalStreamPerSec / ONE_MONTH_SECONDS
+			? estimatedBalance / totalStreamPerSec / ONE_MONTH_SECONDS
 			: 0n;
-
+	if (streamRunOutInMonth <= 0n && setIsWarning) {
+		setIsWarning(true);
+	} else if (setIsWarning) {
+		setIsWarning(false);
+	}
 	return (
 		<StreamSection>
 			<Flex $alignItems='center' $justifyContent='space-between'>
 				<Caption $medium>
 					{formatMessage({
-						id: 'label.deposit_token_use_balance',
+						id: 'label.new_stream_balance',
 					})}
 				</Caption>
 				<StreamBalanceInfo $medium>
-					{limitFraction(SuperTokenBalance?.formatted || '0')}{' '}
+					{estimatedBalance < 0n
+						? '0'
+						: limitFraction(formatEther(estimatedBalance))}{' '}
 					{superToken?.symbol}
 				</StreamBalanceInfo>
 			</Flex>
@@ -50,7 +67,9 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 						id: 'label.balance_runs_out_in',
 					})}{' '}
 					<strong>
-						{streamRunOutInMonth.toString()}{' '}
+						{streamRunOutInMonth < 0n
+							? '0'
+							: streamRunOutInMonth.toString()}{' '}
 						{formatMessage(
 							{
 								id: 'label.months',
@@ -65,7 +84,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 					{formatMessage({ id: 'label.funding' })}{' '}
 					<strong>{tokenStreams.length}</strong>{' '}
 					{formatMessage(
-						{ id: 'label.project' },
+						{ id: 'label.projects_count' },
 						{
 							count: tokenStreams.length,
 						},
