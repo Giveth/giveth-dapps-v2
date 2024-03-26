@@ -11,7 +11,10 @@ import { useRouter } from 'next/router';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
 import { ModifyStreamModal } from './ModifyStreamModal/ModifyStreamModal';
-import { IWalletRecurringDonation } from '@/apollo/types/types';
+import {
+	IWalletRecurringDonation,
+	ERecurringDonationStatus,
+} from '@/apollo/types/types';
 import { EndStreamModal } from './EndStreamModal';
 import { slugToProjectDonate } from '@/lib/routeCreators';
 import { ArchiveStreamModal } from './ArchiveStreamModal';
@@ -32,43 +35,52 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 
-	const options: IOption[] = donation.finished
-		? [
-				{
-					label: formatMessage({ id: 'label.start_new_donation' }),
-					icon: <IconEdit16 />,
-					cb: () =>
-						router.push(slugToProjectDonate(donation.project.slug)),
-				},
-				{
-					label: capitalizeAllWords(
-						formatMessage({ id: 'label.archive_donation' }),
-					),
-					icon: <IconWalletOutline16 />,
-					cb: () => setShowArchive(true),
-				},
-			]
-		: [
-				{
-					label: formatMessage({ id: 'label.modify_flow_rate' }),
-					icon: <IconEye16 />,
-					cb: () => setShowModify(true),
-				},
-				{
-					label: formatMessage({
-						id: 'label.end_recurring_donation',
-					}),
-					icon: <IconUpdate16 />,
-					cb: () => setShowEnd(true),
-				},
-			];
+	const options: IOption[] =
+		donation.status === ERecurringDonationStatus.ACTIVE
+			? [
+					{
+						label: formatMessage({
+							id: 'label.modify_flow_rate',
+						}),
+						icon: <IconEye16 />,
+						cb: () => setShowModify(true),
+					},
+					{
+						label: formatMessage({
+							id: 'label.end_recurring_donation',
+						}),
+						icon: <IconUpdate16 />,
+						cb: () => setShowEnd(true),
+					},
+				]
+			: donation.status === ERecurringDonationStatus.ENDED
+				? [
+						{
+							label: formatMessage({
+								id: 'label.start_new_donation',
+							}),
+							icon: <IconEdit16 />,
+							cb: () =>
+								router.push(
+									slugToProjectDonate(donation.project.slug),
+								),
+						},
+						{
+							label: capitalizeAllWords(
+								formatMessage({ id: 'label.archive_donation' }),
+							),
+							icon: <IconWalletOutline16 />,
+							cb: () => setShowArchive(true),
+						},
+					]
+				: [];
 
 	const dropdownStyle = {
 		padding: '4px 16px',
 		borderRadius: '8px',
 	};
 
-	return (
+	return options.length > 0 ? (
 		<Actions>
 			<Dropdown
 				style={dropdownStyle}
@@ -98,7 +110,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 				/>
 			)}
 		</Actions>
-	);
+	) : null;
 };
 
 const Actions = styled.div`
