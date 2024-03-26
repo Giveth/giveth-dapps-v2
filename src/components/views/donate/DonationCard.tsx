@@ -8,6 +8,7 @@ import {
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './RecurringDonationCard';
 import CryptoDonation from './CryptoDonation';
@@ -22,7 +23,11 @@ enum ETabs {
 }
 
 export const DonationCard = () => {
-	const [tab, setTab] = useState(ETabs.ONE_TIME);
+	const router = useRouter();
+	const defaultTab =
+		router.query.tab === 'recurring' ? ETabs.RECURRING : ETabs.ONE_TIME;
+
+	const [tab, setTab] = useState(defaultTab);
 	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
 
@@ -34,6 +39,7 @@ export const DonationCard = () => {
 				address.chainType === ChainType.EVM &&
 				address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 		);
+
 	return (
 		<DonationCardWrapper>
 			<Title>
