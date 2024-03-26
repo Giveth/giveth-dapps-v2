@@ -63,6 +63,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 							cb: () =>
 								router.push(
 									slugToProjectDonate(donation.project.slug),
+									{ query: { tab: 'recurring' } },
 								),
 						},
 						{
