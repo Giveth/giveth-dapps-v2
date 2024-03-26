@@ -243,10 +243,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				: superToken.createFlow(options);
 
 			operations.push(projectFlowOp);
-			let isDonatingToGiveth = false;
+			const isDonatingToGiveth = !isUpdating && donationToGiveth > 0;
 			let givethOldStream;
 			let givethFlowRate = 0n;
-			if (!isUpdating && donationToGiveth > 0) {
+			if (isDonatingToGiveth) {
 				const givethAnchorContract =
 					config.OPTIMISM_CONFIG.GIVETH_ANCHOR_CONTRACT_ADDRESS;
 
@@ -328,7 +328,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 
 			// saving giveth donation to backend
-			if (!isUpdating && donationToGiveth > 0) {
+			if (isDonatingToGiveth) {
 				const givethDonationInfo = {
 					projectId: config.GIVETH_PROJECT_ID,
 					anonymous,
@@ -350,7 +350,6 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 						console.log('Start Creating Giveth Donation Info');
 						const givethBackendRes =
 							await createRecurringDonation(givethDonationInfo);
-						if (givethBackendRes) isDonatingToGiveth = true;
 						console.log(
 							'Giveth Donation Create Info',
 							givethBackendRes,
