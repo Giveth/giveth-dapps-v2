@@ -653,3 +653,12 @@ export const getLocaleFromIP = async () => {
 		return undefined;
 	}
 };
+export function generateRandomNonce(): number {
+	const min: number = 100;
+	const max: number = 999999999999999;
+
+	// Generate a random number between min (inclusive) and max (exclusive)
+	const nonce: number = Math.floor(Math.random() * (max - min + 1)) + min;
+
+	return nonce;
+}
