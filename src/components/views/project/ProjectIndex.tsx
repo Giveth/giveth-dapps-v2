@@ -39,6 +39,7 @@ import { ProjectStats } from './projectActionCard/ProjectStats';
 import { AdminActions } from './projectActionCard/AdminActions';
 import ProjectOwnerBanner from './ProjectOwnerBanner';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import ProjectSocials from './ProjectSocials';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -178,6 +179,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					{activeTab === 0 && (
 						<>
 							<RichTextViewer content={description} />
+							<Separator />
+							<ProjectSocials />
 							<Separator />
 							<ProjectCategoriesBadges
 								categories={categories || []}
