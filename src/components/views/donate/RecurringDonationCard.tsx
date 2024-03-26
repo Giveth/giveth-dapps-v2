@@ -128,23 +128,16 @@ export const RecurringDonationCard = () => {
 				.multipliedBy(percentage)
 				.toFixed(0),
 		) / 100n;
-	const totalPerSec = totalPerMonth / ONE_MONTH_SECONDS;
+	const totalPerSec = totalPerMonth / ONE_MONTH_SECONDS; //Giveth+Project
 	const projectPerMonth =
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
 	const tokenBalance = balance?.value;
 	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
-	const totalStreamPerSec =
-		tokenStream
-			?.filter(
-				ts =>
-					project.anchorContracts?.length > 0 &&
-					ts.receiver.id !== project.anchorContracts[0]?.address,
-			)
-			.reduce(
-				(acc, stream) => acc + BigInt(stream.currentFlowRate),
-				totalPerSec,
-			) || totalPerSec;
+	const otherStreamsPerSec = tokenStream
+		?.filter(ts => ts.receiver.id !== project.anchorContracts[0]?.address)
+		.reduce((acc, stream) => acc + BigInt(stream.currentFlowRate), 0n);
+	const totalStreamPerSec = totalPerSec + otherStreamsPerSec;
 	const streamRunOutInMonth =
 		totalStreamPerSec > 0
 			? amount / totalStreamPerSec / ONE_MONTH_SECONDS
