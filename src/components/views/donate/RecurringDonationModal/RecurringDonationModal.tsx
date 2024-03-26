@@ -324,7 +324,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					const projectBackendRes =
 						await createRecurringDonation(projectDonationInfo);
 					console.log(
-						'Giveth Donation Create Info',
+						'Project Donation Create Info',
 						projectBackendRes,
 					);
 					// donationId = backendRes.createRecurringDonation.id;
