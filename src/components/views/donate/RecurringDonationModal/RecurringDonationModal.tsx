@@ -244,6 +244,12 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			operations.push(projectFlowOp);
 			const isDonatingToGiveth = !isUpdating && donationToGiveth > 0;
+			console.log(
+				'isDonatingToGiveth',
+				isDonatingToGiveth,
+				isUpdating,
+				donationToGiveth > 0,
+			);
 			let givethOldStream;
 			let givethFlowRate = 0n;
 			if (isDonatingToGiveth) {
