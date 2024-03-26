@@ -178,7 +178,7 @@ export const RecurringDonationCard = () => {
 					address,
 					project.anchorContracts[0]?.address,
 					tokenStreams,
-					selectedToken,
+					selectedToken.token,
 				);
 
 			if (_userStreamOnSelectedToken) {

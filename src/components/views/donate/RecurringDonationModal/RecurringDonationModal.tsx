@@ -21,7 +21,10 @@ import { showToastError } from '@/lib/helpers';
 import { DonateSteps } from './DonateSteps';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config, { isProduction } from '@/configuration';
-import { findSuperTokenByTokenAddress } from '@/helpers/donate';
+import {
+	findSuperTokenByTokenAddress,
+	findUserActiveStreamOnSelectedToken,
+} from '@/helpers/donate';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { RunOutInfo } from '../RunOutInfo';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
@@ -256,13 +259,12 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					100n /
 					ONE_MONTH_SECONDS;
 
-				givethOldStream =
-					tokenStreams[_superToken.id] &&
-					tokenStreams[_superToken.id].find(
-						stream =>
-							stream.receiver.id.toLowerCase() ===
-							givethAnchorContract.toLowerCase(),
-					);
+				givethOldStream = findUserActiveStreamOnSelectedToken(
+					address,
+					givethAnchorContract,
+					tokenStreams,
+					_superToken,
+				);
 
 				if (givethOldStream) {
 					givethFlowRate =
@@ -270,7 +272,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 					const givethFlowOp = superToken.updateFlow({
 						sender: address,
-						receiver: givethAnchorContract, // should change with anchor contract address
+						receiver: givethAnchorContract,
 						flowRate: givethFlowRate.toString(),
 					});
 					operations.push(givethFlowOp);
@@ -278,7 +280,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					givethFlowRate = _newFlowRate;
 					const givethFlowOp = superToken.createFlow({
 						sender: address,
-						receiver: givethAnchorContract, // should change with anchor contract address
+						receiver: givethAnchorContract,
 						flowRate: _newFlowRate.toString(),
 					});
 					operations.push(givethFlowOp);
