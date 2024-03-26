@@ -128,27 +128,23 @@ export const RecurringDonationCard = () => {
 				.multipliedBy(percentage)
 				.toFixed(0),
 		) / 100n;
+
+	// total means project + giveth
 	const totalPerSec = totalPerMonth / ONE_MONTH_SECONDS;
 	const projectPerMonth =
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
 	const tokenBalance = balance?.value;
 	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
-	const totalStreamPerSec =
-		tokenStream
-			?.filter(
-				ts =>
-					project.anchorContracts?.length > 0 &&
-					ts.receiver.id !== project.anchorContracts[0]?.address,
-			)
-			.reduce(
-				(acc, stream) => acc + BigInt(stream.currentFlowRate),
-				totalPerSec,
-			) || totalPerSec;
+
+	// otherStreamsPerSec is the total flow rate of all streams except the one to the project
+	const otherStreamsPerSec = tokenStream
+		?.filter(ts => ts.receiver.id !== project.anchorContracts[0]?.address)
+		.reduce((acc, stream) => acc + BigInt(stream.currentFlowRate), 0n);
+	const totalStreamPerSec = totalPerSec + otherStreamsPerSec;
+	const totalStreamPerMonth = totalStreamPerSec * ONE_MONTH_SECONDS;
 	const streamRunOutInMonth =
-		totalStreamPerSec > 0
-			? amount / totalStreamPerSec / ONE_MONTH_SECONDS
-			: 0n;
+		totalStreamPerSec > 0 ? amount / totalStreamPerMonth : 0n;
 	const isTotalStreamExceed =
 		streamRunOutInMonth < 1n && totalStreamPerSec > 0;
 	const sliderColor = isTotalStreamExceed
