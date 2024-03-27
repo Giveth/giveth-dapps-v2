@@ -1,9 +1,7 @@
 import { Address } from 'viem';
 import config from '@/configuration';
-import {
-	type ITokenStreams,
-	type ISelectTokenWithBalance,
-} from '@/context/donate.context';
+import { type ITokenStreams } from '@/context/donate.context';
+import { IToken } from '@/types/superFluid';
 
 export const findSuperTokenByTokenAddress = (tokenAddress: Address) => {
 	return config.OPTIMISM_CONFIG.SUPER_FLUID_TOKENS.find(
@@ -15,18 +13,18 @@ export const findUserActiveStreamOnSelectedToken = (
 	address?: Address,
 	projectAnchorAddress?: string,
 	tokenStreams?: ITokenStreams,
-	selectedSuperToken?: ISelectTokenWithBalance,
+	superToken?: IToken,
 ) => {
 	console.log('address', address);
 	if (
 		!address ||
 		!projectAnchorAddress ||
 		!tokenStreams ||
-		!selectedSuperToken ||
-		!selectedSuperToken.token.isSuperToken
+		!superToken ||
+		!superToken.isSuperToken
 	)
 		return;
-	const tokenStream = tokenStreams[selectedSuperToken.token.id];
+	const tokenStream = tokenStreams[superToken.id];
 	if (!tokenStream) return;
 	return tokenStream.find(
 		stream =>
