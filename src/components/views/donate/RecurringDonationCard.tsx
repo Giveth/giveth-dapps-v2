@@ -47,6 +47,7 @@ import CheckBox from '@/components/Checkbox';
 import { CheckBoxContainer } from './CryptoDonation';
 import AlloProtocolFirstDonationModal from './AlloProtocolFirstDonationModal';
 import links from '@/lib/constants/links';
+import Routes from '@/lib/constants/Routes';
 
 // These two functions are used to make the slider more user friendly by mapping the slider's value to a new range.
 /**
@@ -458,14 +459,20 @@ export const RecurringDonationCard = () => {
 											},
 										)}{' '}
 									</Caption>
-									<Flex gap='4px' $alignItems='center'>
-										<Caption $medium>
-											{formatMessage({
-												id: 'label.manage_recurring_donations',
-											})}
-										</Caption>
-										<IconChevronRight16 />
-									</Flex>
+									<a
+										href={Routes.MyRecurringDonations}
+										target='_blank'
+										rel='noopener noreferrer'
+									>
+										<Flex gap='4px' $alignItems='center'>
+											<Caption $medium>
+												{formatMessage({
+													id: 'label.manage_recurring_donations',
+												})}
+											</Caption>
+											<IconChevronRight16 />
+										</Flex>
+									</a>
 								</Flex>
 
 								<Caption>
