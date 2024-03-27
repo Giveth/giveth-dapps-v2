@@ -47,6 +47,8 @@ import CheckBox from '@/components/Checkbox';
 import { CheckBoxContainer } from './CryptoDonation';
 import AlloProtocolFirstDonationModal from './AlloProtocolFirstDonationModal';
 import links from '@/lib/constants/links';
+import { useModalCallback } from '@/hooks/useModalCallback';
+import { useAppSelector } from '@/features/hooks';
 
 // These two functions are used to make the slider more user friendly by mapping the slider's value to a new range.
 /**
@@ -96,6 +98,13 @@ export const RecurringDonationCard = () => {
 	const { address } = useAccount();
 	const { chain } = useAccount();
 	const { project, selectedToken, tokenStreams } = useDonateData();
+	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
+	const { modalCallback: signInThenDonate } = useModalCallback(() =>
+		setShowRecurringDonationModal(true),
+	);
+	const { modalCallback: signInThenCreateAllo } = useModalCallback(() =>
+		setShowAlloProtocolModal(true),
+	);
 
 	const {
 		data: balance,
@@ -159,10 +168,18 @@ export const RecurringDonationCard = () => {
 
 	const handleDonate = () => {
 		const hasAnchorContract = project.anchorContracts[0]?.isActive;
-		if (!hasAnchorContract) {
-			setShowAlloProtocolModal(true);
+		if (hasAnchorContract) {
+			if (isSignedIn) {
+				setShowRecurringDonationModal(true);
+			} else {
+				signInThenDonate();
+			}
 		} else {
-			setShowRecurringDonationModal(true);
+			if (isSignedIn) {
+				setShowAlloProtocolModal(true);
+			} else {
+				signInThenCreateAllo();
+			}
 		}
 	};
 
