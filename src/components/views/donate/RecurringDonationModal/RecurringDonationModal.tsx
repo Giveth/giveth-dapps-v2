@@ -21,7 +21,10 @@ import { showToastError } from '@/lib/helpers';
 import { DonateSteps } from './DonateSteps';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config, { isProduction } from '@/configuration';
-import { findSuperTokenByTokenAddress } from '@/helpers/donate';
+import {
+	findSuperTokenByTokenAddress,
+	findUserActiveStreamOnSelectedToken,
+} from '@/helpers/donate';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { RunOutInfo } from '../RunOutInfo';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
@@ -240,10 +243,16 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				: superToken.createFlow(options);
 
 			operations.push(projectFlowOp);
-			let isDonatingToGiveth = false;
+			const isDonatingToGiveth = !isUpdating && donationToGiveth > 0;
+			console.log(
+				'isDonatingToGiveth',
+				isDonatingToGiveth,
+				isUpdating,
+				donationToGiveth > 0,
+			);
 			let givethOldStream;
 			let givethFlowRate = 0n;
-			if (!isUpdating && donationToGiveth > 0) {
+			if (isDonatingToGiveth) {
 				const givethAnchorContract =
 					config.OPTIMISM_CONFIG.GIVETH_ANCHOR_CONTRACT_ADDRESS;
 
@@ -256,13 +265,12 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					100n /
 					ONE_MONTH_SECONDS;
 
-				givethOldStream =
-					tokenStreams[_superToken.id] &&
-					tokenStreams[_superToken.id].find(
-						stream =>
-							stream.receiver.id.toLowerCase() ===
-							givethAnchorContract.toLowerCase(),
-					);
+				givethOldStream = findUserActiveStreamOnSelectedToken(
+					address,
+					givethAnchorContract,
+					tokenStreams,
+					_superToken,
+				);
 
 				if (givethOldStream) {
 					givethFlowRate =
@@ -270,7 +278,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 					const givethFlowOp = superToken.updateFlow({
 						sender: address,
-						receiver: givethAnchorContract, // should change with anchor contract address
+						receiver: givethAnchorContract,
 						flowRate: givethFlowRate.toString(),
 					});
 					operations.push(givethFlowOp);
@@ -278,7 +286,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					givethFlowRate = _newFlowRate;
 					const givethFlowOp = superToken.createFlow({
 						sender: address,
-						receiver: givethAnchorContract, // should change with anchor contract address
+						receiver: givethAnchorContract,
 						flowRate: _newFlowRate.toString(),
 					});
 					operations.push(givethFlowOp);
@@ -316,7 +324,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					const projectBackendRes =
 						await createRecurringDonation(projectDonationInfo);
 					console.log(
-						'Giveth Donation Create Info',
+						'Project Donation Create Info',
 						projectBackendRes,
 					);
 					// donationId = backendRes.createRecurringDonation.id;
@@ -326,7 +334,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 
 			// saving giveth donation to backend
-			if (!isUpdating && donationToGiveth > 0) {
+			if (isDonatingToGiveth) {
 				const givethDonationInfo = {
 					projectId: config.GIVETH_PROJECT_ID,
 					anonymous,
@@ -348,7 +356,6 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 						console.log('Start Creating Giveth Donation Info');
 						const givethBackendRes =
 							await createRecurringDonation(givethDonationInfo);
-						if (givethBackendRes) isDonatingToGiveth = true;
 						console.log(
 							'Giveth Donation Create Info',
 							givethBackendRes,

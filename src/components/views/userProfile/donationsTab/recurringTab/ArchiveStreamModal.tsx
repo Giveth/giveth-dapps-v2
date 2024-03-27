@@ -14,7 +14,7 @@ import { IModal } from '@/types/common';
 import { ActionButton } from './ModifyStreamModal/ModifyStreamInnerModal';
 import {
 	IWalletRecurringDonation,
-	RECURRING_DONATION_STATUS,
+	ERecurringDonationStatus,
 } from '@/apollo/types/types';
 import config from '@/configuration';
 import { UPDATE_RECURRING_DONATION } from '@/apollo/gql/gqlSuperfluid';
@@ -71,7 +71,7 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 					projectId: +donation.project.id,
 					networkId: config.OPTIMISM_NETWORK_NUMBER,
 					currency: donation.currency,
-					status: RECURRING_DONATION_STATUS.ARCHIVED,
+					status: ERecurringDonationStatus.ARCHIVED,
 				},
 			});
 			console.log('data', data);

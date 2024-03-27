@@ -17,8 +17,6 @@ import ProfileProjectsTab from './projectsTab/ProfileProjectsTab';
 import ProfileOverviewTab from './ProfileOverviewTab';
 import { IUserProfileView } from './UserProfile.view';
 import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
-import { profileTabs } from '@/lib/constants/Routes';
-import { removeQueryParam } from '@/helpers/url';
 import { PublicProfileBoostedTab } from './boostedTab/PublicProfileBoostedTab';
 import { useProfileContext } from '@/context/profile.context';
 
@@ -53,6 +51,7 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 				setTab(EProfile.PROJECTS);
 				break;
 			case 'donations':
+			case 'recurring-donations':
 				setTab(EProfile.DONATIONS);
 				break;
 			case 'liked':
@@ -63,16 +62,28 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 		}
 	}, [router?.query?.tab]);
 
-	const pathname = removeQueryParam(router.asPath, ['tab'], true);
+	const baseQuery = myAccount ? {} : { address: router.query.address };
+
 	return (
 		<Container>
 			<ProfileTabsContainer>
-				<Link href={pathname + profileTabs.overview}>
+				<Link
+					href={{
+						query: {
+							tab: 'overview',
+							...baseQuery,
+						},
+					}}
+				>
 					<ProfileTab $active={tab === EProfile.OVERVIEW}>
 						{formatMessage({ id: 'label.overview' })}
 					</ProfileTab>
 				</Link>
-				<Link href={pathname + profileTabs.givpower}>
+				<Link
+					href={{
+						query: { tab: 'givpower', ...baseQuery },
+					}}
+				>
 					<ProfileTab $active={tab === EProfile.GIVPOWER}>
 						{`${
 							myAccount
@@ -86,7 +97,11 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 						)}
 					</ProfileTab>
 				</Link>
-				<Link href={pathname + profileTabs.projects}>
+				<Link
+					href={{
+						query: { tab: 'projects', ...baseQuery },
+					}}
+				>
 					<ProfileTab $active={tab === EProfile.PROJECTS}>
 						{`${
 							myAccount
@@ -100,7 +115,11 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 						)}
 					</ProfileTab>
 				</Link>
-				<Link href={pathname + profileTabs.donations}>
+				<Link
+					href={{
+						query: { tab: 'donations', ...baseQuery },
+					}}
+				>
 					<ProfileTab $active={tab === EProfile.DONATIONS}>
 						{`${
 							myAccount
@@ -116,7 +135,11 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 						)}
 					</ProfileTab>
 				</Link>
-				<Link href={pathname + profileTabs.likedProjects}>
+				<Link
+					href={{
+						query: { tab: 'liked', ...baseQuery },
+					}}
+				>
 					<ProfileTab
 						$active={tab === EProfile.LIKED}
 						onClick={() => setTab(EProfile.LIKED)}

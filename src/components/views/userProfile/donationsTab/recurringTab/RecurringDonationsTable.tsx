@@ -12,7 +12,6 @@ import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
 import { smallFormatDate } from '@/lib/helpers';
 import { slugToProjectView } from '@/lib/routeCreators';
-import DonationStatus from '@/components/badges/DonationStatusBadge';
 import {
 	RowWrapper,
 	TableCell,
@@ -25,6 +24,7 @@ import NetworkLogo from '@/components/NetworkLogo';
 import SortIcon from '@/components/SortIcon';
 import { limitFraction } from '@/helpers/number';
 import { StreamActionButton } from './StreamActionButton';
+import RecurringDonationStatusBadge from '@/components/badges/RecurringDonationStatusBadge';
 
 interface RecurringDonationTable {
 	donations: IWalletRecurringDonation[];
@@ -120,7 +120,9 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 					{myAccount && (
 						<>
 							<DonationTableCell>
-								<DonationStatus status={donation.status} />
+								<RecurringDonationStatusBadge
+									status={donation.status}
+								/>
 							</DonationTableCell>
 							<DonationTableCell>
 								<StreamActionButton
