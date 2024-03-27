@@ -1,10 +1,10 @@
 import { type FC, useState } from 'react';
 import { Col, P, Row, neutralColors, Flex } from '@giveth/ui-design-system';
-
 import { useIntl } from 'react-intl';
 import styled, { css } from 'styled-components';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { IUserProfileView } from '../UserProfile.view';
-
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { DonateContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
@@ -13,23 +13,30 @@ import { RecurringTab } from './recurringTab/RecurringTab';
 import { isRecurringActive } from '@/configuration';
 
 enum ETab {
-	OneTime,
-	Recurring,
+	ONE_TIME,
+	RECURRING,
 }
 
 const tabs = [
 	{
-		id: ETab.OneTime,
+		id: ETab.ONE_TIME,
 		label: 'label.one_time_donation',
+		query: 'donations',
 	},
 	{
-		id: ETab.Recurring,
+		id: ETab.RECURRING,
 		label: 'label.recurring_donation',
+		query: 'recurring-donations',
 	},
 ];
 
 const ProfileDonationsTab: FC<IUserProfileView> = () => {
-	const [tab, setTab] = useState(ETab.Recurring);
+	const router = useRouter();
+	const [tab, setTab] = useState(
+		router.query.tab === 'recurring-donations'
+			? ETab.RECURRING
+			: ETab.ONE_TIME,
+	);
 	const { myAccount, user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
@@ -59,19 +66,27 @@ const ProfileDonationsTab: FC<IUserProfileView> = () => {
 			{isRecurringActive ? (
 				<>
 					<Tabs>
-						{tabs.map(({ id, label }) => (
-							<Tab
+						{tabs.map(({ id, label, query }) => (
+							<Link
 								key={id}
-								onClick={() => setTab(id)}
-								className={`tab ${tab === id ? 'active' : ''}`}
-								$isActive={tab === id}
+								href={{
+									query: { ...router.query, tab: query },
+								}}
+								shallow={true}
+								scroll={false}
 							>
-								{formatMessage({ id: label })}
-							</Tab>
+								<Tab
+									onClick={() => setTab(id)}
+									className={`tab ${tab === id ? 'active' : ''}`}
+									$isActive={tab === id}
+								>
+									{formatMessage({ id: label })}
+								</Tab>
+							</Link>
 						))}
 					</Tabs>
-					{tab === ETab.OneTime && <OneTimeTab />}
-					{tab === ETab.Recurring && <RecurringTab />}
+					{tab === ETab.ONE_TIME && <OneTimeTab />}
+					{tab === ETab.RECURRING && <RecurringTab />}
 				</>
 			) : (
 				<OneTimeTab />

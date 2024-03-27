@@ -69,7 +69,6 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 			<ProfileTabsContainer>
 				<Link
 					href={{
-						pathname: router.pathname,
 						query: {
 							tab: 'overview',
 							...baseQuery,
@@ -82,7 +81,6 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 				</Link>
 				<Link
 					href={{
-						pathname: router.pathname,
 						query: { tab: 'givpower', ...baseQuery },
 					}}
 				>
@@ -101,7 +99,6 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 				</Link>
 				<Link
 					href={{
-						pathname: router.pathname,
 						query: { tab: 'projects', ...baseQuery },
 					}}
 				>
@@ -120,7 +117,6 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 				</Link>
 				<Link
 					href={{
-						pathname: router.pathname,
 						query: { tab: 'donations', ...baseQuery },
 					}}
 				>
@@ -141,7 +137,6 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 				</Link>
 				<Link
 					href={{
-						pathname: router.pathname,
 						query: { tab: 'liked', ...baseQuery },
 					}}
 				>
