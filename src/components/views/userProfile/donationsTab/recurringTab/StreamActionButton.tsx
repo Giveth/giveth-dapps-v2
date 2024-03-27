@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { type FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
 import { ModifyStreamModal } from './ModifyStreamModal/ModifyStreamModal';
@@ -18,6 +19,7 @@ import {
 import { EndStreamModal } from './EndStreamModal';
 import { slugToProjectDonate } from '@/lib/routeCreators';
 import { ArchiveStreamModal } from './ArchiveStreamModal';
+import config from '@/configuration';
 
 interface IStreamActionButtonProps {
 	donation: IWalletRecurringDonation;
@@ -31,6 +33,10 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	const [showModify, setShowModify] = useState(false);
 	const [showEnd, setShowEnd] = useState(false);
 	const [showArchive, setShowArchive] = useState(false);
+	const { chain } = useAccount();
+	const { switchChain } = useSwitchChain();
+
+	const chainId = chain?.id;
 
 	const { formatMessage } = useIntl();
 	const router = useRouter();
@@ -82,7 +88,15 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	};
 
 	return options.length > 0 ? (
-		<Actions>
+		<Actions
+			onClick={() => {
+				if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
+					switchChain?.({
+						chainId: config.OPTIMISM_NETWORK_NUMBER,
+					});
+				}
+			}}
+		>
 			<Dropdown
 				style={dropdownStyle}
 				label=''

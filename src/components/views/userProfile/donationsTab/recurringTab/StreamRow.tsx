@@ -85,9 +85,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 						}
 					}}
 				>
-					{chainId !== config.OPTIMISM_NETWORK_NUMBER
-						? `Switch to ${config.OPTIMISM_CONFIG.name}`
-						: 'Deposit/Withdraw'}
+					Deposit/Withdraw
 				</ModifyButton>
 			</TableCell>
 			{showModifyModal && (
