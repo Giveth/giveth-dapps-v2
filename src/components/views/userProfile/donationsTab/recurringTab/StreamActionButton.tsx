@@ -17,9 +17,9 @@ import {
 	ERecurringDonationStatus,
 } from '@/apollo/types/types';
 import { EndStreamModal } from './EndStreamModal';
-import { slugToProjectDonate } from '@/lib/routeCreators';
 import { ArchiveStreamModal } from './ArchiveStreamModal';
 import config from '@/configuration';
+import { slugToProjectDonate } from '@/lib/routeCreators';
 
 interface IStreamActionButtonProps {
 	donation: IWalletRecurringDonation;
@@ -68,8 +68,8 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 							icon: <IconEdit16 />,
 							cb: () =>
 								router.push(
-									slugToProjectDonate(donation.project.slug),
-									{ query: { tab: 'recurring' } },
+									slugToProjectDonate(donation.project.slug) +
+										'?tab=recurring',
 								),
 						},
 						{
