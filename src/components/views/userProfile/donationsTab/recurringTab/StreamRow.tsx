@@ -2,7 +2,7 @@ import { useState, type FC } from 'react';
 import styled from 'styled-components';
 import { P, brandColors, semanticColors } from '@giveth/ui-design-system';
 import { formatUnits } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
+import { useAccount, useBalance, useSwitchChain } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { TokenIcon } from '@/components/views/donate/TokenIcon/TokenIcon';
 import { TableCell } from './ActiveStreamsSection';
@@ -18,14 +18,13 @@ interface IStreamRowProps {
 
 export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 	const [showModifyModal, setShowModifyModal] = useState(false);
-	const { address } = useAccount();
+	const { address, chain } = useAccount();
+	const { switchChain } = useSwitchChain();
+
+	const chainId = chain?.id;
 	const { formatMessage } = useIntl();
 
-	const {
-		data: balance,
-		refetch,
-		isRefetching,
-	} = useBalance({
+	const { data: balance, refetch } = useBalance({
 		token: tokenStream[0].token.id,
 		address: address,
 		chainId: config.OPTIMISM_NETWORK_NUMBER,
@@ -75,7 +74,17 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 				)}
 			</TableCell>
 			<TableCell>
-				<ModifyButton onClick={() => setShowModifyModal(true)}>
+				<ModifyButton
+					onClick={() => {
+						if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
+							switchChain?.({
+								chainId: config.OPTIMISM_NETWORK_NUMBER,
+							});
+						} else {
+							setShowModifyModal(true);
+						}
+					}}
+				>
 					Deposit/Withdraw
 				</ModifyButton>
 			</TableCell>
