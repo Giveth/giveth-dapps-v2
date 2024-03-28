@@ -7,18 +7,10 @@ import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
 import {
 	BannerContainer,
-	ImgTopRight,
-	ImgBottomRight,
-	ImgTopLeft,
-	ImgBottomLeft,
 	StyledCol,
 	Name,
 	Desc,
 	Title,
-	ImgBottomLeft1,
-	ImgMiddleRight,
-	ImgTopMiddle,
-	ImgTopRight1,
 	Sponsor,
 } from './common';
 
@@ -87,46 +79,6 @@ export const ActiveQFProjectsBanner = () => {
 				style={{ objectFit: 'cover' }}
 				fill
 				alt='QF Banner'
-			/>
-			<ImgMiddleRight
-				src={'/images/banners/qf-round/mr.svg'}
-				style={{ objectFit: 'cover' }}
-				alt='Middle Right'
-			/>
-			<ImgTopRight
-				src={'/images/banners/qf-round/tr1.svg'}
-				style={{ objectFit: 'cover' }}
-				alt='QF OP'
-			/>
-			<ImgTopRight1
-				src={'/images/banners/qf-round/tr2.svg'}
-				style={{ objectFit: 'cover' }}
-				alt='QF OP'
-			/>
-			<ImgTopMiddle
-				src={'/images/banners/qf-round/tm.svg'}
-				style={{ objectFit: 'cover' }}
-				alt='QF OP'
-			/>
-			<ImgBottomRight
-				src={'/images/banners/qf-round/br.svg'}
-				style={{ objectFit: 'cover' }}
-				alt='QF OP'
-			/>
-			<ImgTopLeft
-				src={'/images/banners/qf-round/tl.svg'}
-				style={{ objectFit: 'cover' }}
-				alt='QF OP'
-			/>
-			<ImgBottomLeft
-				src={'/images/banners/qf-round/bl1.svg'}
-				style={{ objectFit: 'cover' }}
-				alt='QF OP'
-			/>
-			<ImgBottomLeft1
-				src={'/images/banners/qf-round/bl2.svg'}
-				style={{ objectFit: 'cover' }}
-				alt='QF OP'
 			/>
 			<Container>
 				<Row>
