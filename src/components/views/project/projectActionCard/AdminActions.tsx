@@ -14,6 +14,7 @@ import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { useProjectContext } from '@/context/project.context';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
@@ -48,6 +49,10 @@ export const AdminActions = () => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const isMobile = !useMediaQuery(device.tablet);
+	const { chain } = useAccount();
+	const { switchChain } = useSwitchChain();
+	const chainId = chain?.id;
+
 	const isVerificationDisabled =
 		verified ||
 		verificationFormStatus === EVerificationStatus.SUBMITTED ||
@@ -106,7 +111,13 @@ export const AdminActions = () => {
 		label: 'Claim Recurring donation',
 		icon: <IconArrowDownCircle16 />,
 		cb: () => {
-			setShowClaimModal && setShowClaimModal(true);
+			if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
+				switchChain({
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+				});
+			} else {
+				setShowClaimModal && setShowClaimModal(true);
+			}
 		},
 	};
 
