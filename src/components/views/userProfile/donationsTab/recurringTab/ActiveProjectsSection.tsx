@@ -30,6 +30,11 @@ export interface IOrder {
 	direction: EDirection;
 }
 
+export interface IFinishStatus {
+	active: boolean;
+	ended: boolean;
+}
+
 export const ActiveProjectsSection = () => {
 	const [trigger, setTrigger] = useState(false);
 	const [showArchive, setShowArchive] = useState(false);
@@ -42,7 +47,10 @@ export const ActiveProjectsSection = () => {
 		direction: EDirection.DESC,
 	});
 	const [tokenFilters, setTokenFilters] = useState([] as string[]);
-	const [statusFilters, setStatusFilters] = useState([] as boolean[]);
+	const [statusFilters, setStatusFilters] = useState<IFinishStatus>({
+		active: false,
+		ended: false,
+	});
 	const { myAccount, user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
