@@ -63,7 +63,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 					changeOrder(ERecurringDonationSortField.flowRate)
 				}
 			>
-				{formatMessage({ id: 'label.flow_rate' })}
+				{formatMessage({ id: 'label.amount' })}
 				<SortIcon
 					order={order}
 					title={ERecurringDonationSortField.flowRate}
