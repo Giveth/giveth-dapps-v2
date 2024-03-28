@@ -119,7 +119,7 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 		$skip: Int
 		$status: String
 		$orderBy: RecurringDonationSortBy
-		$finishStatus: [Boolean!]
+		$finishStatus: FinishStatus
 		$userId: Int!
 		$filteredTokens: [String!]
 	) {

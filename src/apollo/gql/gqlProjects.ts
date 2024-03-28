@@ -804,7 +804,7 @@ export const FETCH_RECURRING_DONATIONS_BY_PROJECTID = gql`
 		$projectId: Int!
 		$searchTerm: String
 		$status: String
-		$finishStatus: [Boolean!]
+		$finishStatus: FinishStatus
 		$orderBy: RecurringDonationSortBy
 	) {
 		recurringDonationsByProjectId(

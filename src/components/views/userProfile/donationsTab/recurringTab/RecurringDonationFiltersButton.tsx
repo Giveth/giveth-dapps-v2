@@ -15,12 +15,13 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { Relative } from '@/components/styled-components/Position';
 import { FilterMenu } from './FilterMenu';
 import { PinkyColoredNumber } from '@/components/styled-components/PinkyColoredNumber';
+import { IFinishStatus } from './ActiveProjectsSection';
 
 export interface IRecurringDonationFiltersButtonProps {
 	tokenFilters: string[];
 	setTokenFilters: Dispatch<SetStateAction<string[]>>;
-	statusFilters: boolean[];
-	setStatusFilters: Dispatch<SetStateAction<boolean[]>>;
+	statusFilters: IFinishStatus;
+	setStatusFilters: Dispatch<SetStateAction<IFinishStatus>>;
 }
 
 export const RecurringDonationFiltersButton: FC<
@@ -34,7 +35,8 @@ export const RecurringDonationFiltersButton: FC<
 	const filterMenuRef = useRef<HTMLDivElement>(null);
 
 	const count =
-		props.tokenFilters.length + props.statusFilters.filter(Boolean).length;
+		props.tokenFilters.length +
+		Object.values(props.statusFilters).filter(Boolean).length;
 
 	useOnClickOutside(
 		() => setIsFilterOpen(false),
