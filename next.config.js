@@ -85,7 +85,7 @@ const moduleExports = withBundleAnalyzer({
 			},
 			{
 				source: '/QuadraticForce',
-				destination: '/assets/GivethQF.Marketing.pdf',
+				destination: '/assets/Giveth_Report_QF_2024.this.one.pdf',
 				permanent: false,
 			},
 			{
