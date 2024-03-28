@@ -38,7 +38,8 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	) => {
 		const { formatMessage } = useIntl();
 		const count =
-			tokenFilters.length + statusFilters.filter(Boolean).length;
+			tokenFilters.length +
+			Object.values(statusFilters).filter(Boolean).length;
 
 		const handleSelectFilter = (e: boolean, filter: ISuperToken) => {
 			if (e) {
@@ -58,7 +59,7 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 
 		const clearFilters = () => {
 			setTokenFilters([]);
-			setStatusFilters([]);
+			setStatusFilters({ active: false, ended: false });
 			handleClose();
 		};
 
@@ -111,10 +112,12 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 						<CheckBox
 							label='Active'
 							onChange={e => {
-								setStatusFilters(s => [e, s[1] || false]);
+								setStatusFilters(s => {
+									return { ...s, active: e };
+								});
 								handleClose();
 							}}
-							checked={statusFilters[0]}
+							checked={statusFilters.active}
 							size={14}
 						/>
 					</FeatureItem>
@@ -122,10 +125,12 @@ export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 						<CheckBox
 							label='Ended'
 							onChange={e => {
-								setStatusFilters(s => [s[0] || false, e]);
+								setStatusFilters(s => {
+									return { ...s, ended: e };
+								});
 								handleClose();
 							}}
-							checked={statusFilters[1]}
+							checked={statusFilters.ended}
 							size={14}
 						/>
 					</FeatureItem>
