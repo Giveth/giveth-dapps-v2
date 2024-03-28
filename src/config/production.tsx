@@ -474,6 +474,7 @@ const config: EnvConfig = {
 				name: 'Super Optimism',
 				symbol: 'OPx',
 				isSuperToken: true,
+				coingeckoId: 'optimism',
 			},
 			{
 				underlyingToken: {
@@ -487,6 +488,7 @@ const config: EnvConfig = {
 				name: 'Super ETH',
 				symbol: 'ETHx',
 				isSuperToken: true,
+				coingeckoId: 'ethereum',
 			},
 			{
 				underlyingToken: {
@@ -500,6 +502,7 @@ const config: EnvConfig = {
 				name: 'Super Giveth Token',
 				symbol: 'GIVx',
 				isSuperToken: true,
+				coingeckoId: 'giveth',
 			},
 			{
 				underlyingToken: {
@@ -513,6 +516,7 @@ const config: EnvConfig = {
 				name: 'Super Dai Stablecoin',
 				symbol: 'DAIx',
 				isSuperToken: true,
+				coingeckoId: 'dai',
 			},
 			{
 				underlyingToken: {
@@ -526,6 +530,7 @@ const config: EnvConfig = {
 				name: 'Super USD Coin',
 				symbol: 'USDCx',
 				isSuperToken: true,
+				coingeckoId: 'usd-coin',
 			},
 		],
 	},
