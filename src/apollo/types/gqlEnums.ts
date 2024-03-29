@@ -20,6 +20,7 @@ export enum EProjectsSortBy {
 	GIVPOWER = 'GIVPower',
 	INSTANT_BOOSTING = 'InstantBoosting',
 	ActiveQfRoundRaisedFunds = 'ActiveQfRoundRaisedFunds',
+	EstimatedMatching = 'EstimatedMatching',
 }
 
 export enum EProjectStatus {

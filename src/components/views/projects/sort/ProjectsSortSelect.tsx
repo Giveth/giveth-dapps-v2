@@ -87,12 +87,22 @@ const ProjectsSortSelect = () => {
 	];
 
 	isQF &&
-		sortByOptions.splice(sortByOptions.length - 1, 0, {
-			label: formatMessage({ id: 'label.amount_raised_in_qf' }),
-			value: EProjectsSortBy.ActiveQfRoundRaisedFunds,
-			icon: <IconIncrease16 />,
-			color: semanticColors.jade[700],
-		});
+		sortByOptions.splice(
+			sortByOptions.length - 1,
+			0,
+			{
+				label: formatMessage({ id: 'label.amount_raised_in_qf' }),
+				value: EProjectsSortBy.ActiveQfRoundRaisedFunds,
+				icon: <IconIncrease16 />,
+				color: semanticColors.jade[700],
+			},
+			{
+				label: formatMessage({ id: 'label.estimated_matching' }),
+				value: EProjectsSortBy.EstimatedMatching,
+				icon: <IconIncrease16 />,
+				color: semanticColors.jade[700],
+			},
+		);
 
 	const [value, setValue] = useState(sortByOptions[0]);
 	const { isMobile } = useDetectDevice();
