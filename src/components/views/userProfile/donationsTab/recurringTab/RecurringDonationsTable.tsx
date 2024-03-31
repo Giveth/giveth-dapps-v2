@@ -122,6 +122,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 							<DonationTableCell>
 								<RecurringDonationStatusBadge
 									status={donation.status}
+									isArchived={donation.isArchived}
 								/>
 							</DonationTableCell>
 							<DonationTableCell>
