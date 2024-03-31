@@ -130,7 +130,7 @@ const ProjectRecurringDonationTable = () => {
 		};
 		fetchProjectRecurringDonations();
 	}, [page, order.by, order.direction, id]);
-
+	console.log('pageRecurringDonations', pageRecurringDonations);
 	if (loading)
 		return (
 			<LoadingWrapper>
@@ -223,7 +223,7 @@ const ProjectRecurringDonationTable = () => {
 									<B>
 										{donation.status === 'ended'
 											? formatMessage({
-													id: 'label.finalized',
+													id: 'label.donation_finalized',
 												})
 											: formatDonation(
 													formatUnits(
@@ -234,7 +234,7 @@ const ProjectRecurringDonationTable = () => {
 													),
 												)}
 									</B>
-									{!donation.finished && (
+									{donation.status !== 'ended' && (
 										<Currency>
 											{donation.currency}{' '}
 											{formatMessage({

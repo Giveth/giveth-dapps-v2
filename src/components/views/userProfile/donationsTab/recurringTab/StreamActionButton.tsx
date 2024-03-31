@@ -46,7 +46,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 			? [
 					{
 						label: formatMessage({
-							id: 'label.modify_flow_rate',
+							id: 'label.modify_recurring_donation',
 						}),
 						icon: <IconEye16 />,
 						cb: () => setShowModify(true),
