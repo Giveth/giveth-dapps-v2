@@ -61,6 +61,7 @@ export const UPDATE_RECURRING_DONATION = gql`
 			currency: $currency
 			status: $status
 		) {
+			id
 			txHash
 			networkId
 			currency

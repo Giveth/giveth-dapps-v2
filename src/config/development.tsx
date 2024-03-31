@@ -393,6 +393,7 @@ const config: EnvConfig = {
 				name: 'fake Super Giveth Token',
 				symbol: 'GIVx',
 				isSuperToken: true,
+				coingeckoId: 'giveth',
 			},
 			{
 				underlyingToken: {
@@ -406,6 +407,7 @@ const config: EnvConfig = {
 				name: 'Super ETH',
 				symbol: 'ETHx',
 				isSuperToken: true,
+				coingeckoId: 'ethereum',
 			},
 		],
 	},

@@ -8,13 +8,18 @@ import styled from 'styled-components';
 import { type FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
 import { ModifyStreamModal } from './ModifyStreamModal/ModifyStreamModal';
-import { IWalletRecurringDonation } from '@/apollo/types/types';
+import {
+	IWalletRecurringDonation,
+	ERecurringDonationStatus,
+} from '@/apollo/types/types';
 import { EndStreamModal } from './EndStreamModal';
 import { slugToProjectDonate } from '@/lib/routeCreators';
 import { ArchiveStreamModal } from './ArchiveStreamModal';
+import config from '@/configuration';
 
 interface IStreamActionButtonProps {
 	donation: IWalletRecurringDonation;
@@ -28,48 +33,70 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	const [showModify, setShowModify] = useState(false);
 	const [showEnd, setShowEnd] = useState(false);
 	const [showArchive, setShowArchive] = useState(false);
+	const { chain } = useAccount();
+	const { switchChain } = useSwitchChain();
+
+	const chainId = chain?.id;
 
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 
-	const options: IOption[] = donation.finished
-		? [
-				{
-					label: formatMessage({ id: 'label.start_new_donation' }),
-					icon: <IconEdit16 />,
-					cb: () =>
-						router.push(slugToProjectDonate(donation.project.slug)),
-				},
-				{
-					label: capitalizeAllWords(
-						formatMessage({ id: 'label.archive_donation' }),
-					),
-					icon: <IconWalletOutline16 />,
-					cb: () => setShowArchive(true),
-				},
-			]
-		: [
-				{
-					label: formatMessage({ id: 'label.modify_flow_rate' }),
-					icon: <IconEye16 />,
-					cb: () => setShowModify(true),
-				},
-				{
-					label: formatMessage({
-						id: 'label.end_recurring_donation',
-					}),
-					icon: <IconUpdate16 />,
-					cb: () => setShowEnd(true),
-				},
-			];
+	const options: IOption[] =
+		donation.status === ERecurringDonationStatus.ACTIVE
+			? [
+					{
+						label: formatMessage({
+							id: 'label.modify_flow_rate',
+						}),
+						icon: <IconEye16 />,
+						cb: () => setShowModify(true),
+					},
+					{
+						label: formatMessage({
+							id: 'label.end_recurring_donation',
+						}),
+						icon: <IconUpdate16 />,
+						cb: () => setShowEnd(true),
+					},
+				]
+			: donation.status === ERecurringDonationStatus.ENDED
+				? [
+						{
+							label: formatMessage({
+								id: 'label.start_new_donation',
+							}),
+							icon: <IconEdit16 />,
+							cb: () =>
+								router.push(
+									slugToProjectDonate(donation.project.slug),
+									{ query: { tab: 'recurring' } },
+								),
+						},
+						{
+							label: capitalizeAllWords(
+								formatMessage({ id: 'label.archive_donation' }),
+							),
+							icon: <IconWalletOutline16 />,
+							cb: () => setShowArchive(true),
+						},
+					]
+				: [];
 
 	const dropdownStyle = {
 		padding: '4px 16px',
 		borderRadius: '8px',
 	};
 
-	return (
-		<Actions>
+	return options.length > 0 ? (
+		<Actions
+			onClick={() => {
+				if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
+					switchChain?.({
+						chainId: config.OPTIMISM_NETWORK_NUMBER,
+					});
+				}
+			}}
+		>
 			<Dropdown
 				style={dropdownStyle}
 				label=''
@@ -98,7 +125,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 				/>
 			)}
 		</Actions>
-	);
+	) : null;
 };
 
 const Actions = styled.div`

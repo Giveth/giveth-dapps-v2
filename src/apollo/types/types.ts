@@ -278,7 +278,7 @@ export interface IWalletRecurringDonation {
 	id: string;
 	createdAt: string;
 	project: IProject;
-	status: EDonationStatus;
+	status: ERecurringDonationStatus;
 	flowRate: string;
 	currency: string;
 	totalDonated: string;
@@ -477,7 +477,7 @@ export interface IGetQfRoundHistory {
 	estimatedMatching: IEstimatedMatching;
 }
 
-export enum RECURRING_DONATION_STATUS {
+export enum ERecurringDonationStatus {
 	PENDING = 'pending',
 	VERIFIED = 'verified',
 	ENDED = 'ended',

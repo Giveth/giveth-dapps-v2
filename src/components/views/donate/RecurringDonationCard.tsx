@@ -47,6 +47,9 @@ import CheckBox from '@/components/Checkbox';
 import { CheckBoxContainer } from './CryptoDonation';
 import AlloProtocolFirstDonationModal from './AlloProtocolFirstDonationModal';
 import links from '@/lib/constants/links';
+import Routes from '@/lib/constants/Routes';
+import { useModalCallback } from '@/hooks/useModalCallback';
+import { useAppSelector } from '@/features/hooks';
 
 // These two functions are used to make the slider more user friendly by mapping the slider's value to a new range.
 /**
@@ -96,6 +99,13 @@ export const RecurringDonationCard = () => {
 	const { address } = useAccount();
 	const { chain } = useAccount();
 	const { project, selectedToken, tokenStreams } = useDonateData();
+	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
+	const { modalCallback: signInThenDonate } = useModalCallback(() =>
+		setShowRecurringDonationModal(true),
+	);
+	const { modalCallback: signInThenCreateAllo } = useModalCallback(() =>
+		setShowAlloProtocolModal(true),
+	);
 
 	const {
 		data: balance,
@@ -128,27 +138,29 @@ export const RecurringDonationCard = () => {
 				.multipliedBy(percentage)
 				.toFixed(0),
 		) / 100n;
+
+	// total means project + giveth
 	const totalPerSec = totalPerMonth / ONE_MONTH_SECONDS;
 	const projectPerMonth =
 		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
 	const givethPerMonth = totalPerMonth - projectPerMonth;
 	const tokenBalance = balance?.value;
 	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
-	const totalStreamPerSec =
+
+	// otherStreamsPerSec is the total flow rate of all streams except the one to the project
+	const otherStreamsPerSec =
 		tokenStream
 			?.filter(
-				ts =>
-					project.anchorContracts?.length > 0 &&
-					ts.receiver.id !== project.anchorContracts[0]?.address,
+				ts => ts.receiver.id !== project.anchorContracts[0]?.address,
 			)
 			.reduce(
 				(acc, stream) => acc + BigInt(stream.currentFlowRate),
-				totalPerSec,
-			) || totalPerSec;
+				0n,
+			) || 0n;
+	const totalStreamPerSec = totalPerSec + otherStreamsPerSec;
+	const totalStreamPerMonth = totalStreamPerSec * ONE_MONTH_SECONDS;
 	const streamRunOutInMonth =
-		totalStreamPerSec > 0
-			? amount / totalStreamPerSec / ONE_MONTH_SECONDS
-			: 0n;
+		totalStreamPerSec > 0 ? amount / totalStreamPerMonth : 0n;
 	const isTotalStreamExceed =
 		streamRunOutInMonth < 1n && totalStreamPerSec > 0;
 	const sliderColor = isTotalStreamExceed
@@ -157,10 +169,18 @@ export const RecurringDonationCard = () => {
 
 	const handleDonate = () => {
 		const hasAnchorContract = project.anchorContracts[0]?.isActive;
-		if (!hasAnchorContract) {
-			setShowAlloProtocolModal(true);
+		if (hasAnchorContract) {
+			if (isSignedIn) {
+				setShowRecurringDonationModal(true);
+			} else {
+				signInThenDonate();
+			}
 		} else {
-			setShowRecurringDonationModal(true);
+			if (isSignedIn) {
+				setShowAlloProtocolModal(true);
+			} else {
+				signInThenCreateAllo();
+			}
 		}
 	};
 
@@ -456,14 +476,20 @@ export const RecurringDonationCard = () => {
 											},
 										)}{' '}
 									</Caption>
-									<Flex gap='4px' $alignItems='center'>
-										<Caption $medium>
-											{formatMessage({
-												id: 'label.manage_recurring_donations',
-											})}
-										</Caption>
-										<IconChevronRight16 />
-									</Flex>
+									<a
+										href={Routes.MyRecurringDonations}
+										target='_blank'
+										rel='noopener noreferrer'
+									>
+										<Flex gap='4px' $alignItems='center'>
+											<Caption $medium>
+												{formatMessage({
+													id: 'label.manage_recurring_donations',
+												})}
+											</Caption>
+											<IconChevronRight16 />
+										</Flex>
+									</a>
 								</Flex>
 
 								<Caption>

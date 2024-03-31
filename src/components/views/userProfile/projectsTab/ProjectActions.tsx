@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
 import router from 'next/router';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
@@ -43,6 +44,10 @@ const ProjectActions = (props: IProjectActions) => {
 		address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 	)?.address;
 	const hasOptimismAddress = optimismAddress !== undefined;
+
+	const { chain } = useAccount();
+	const { switchChain } = useSwitchChain();
+	const chainId = chain?.id;
 
 	const options: IOption[] = [
 		{
@@ -77,8 +82,14 @@ const ProjectActions = (props: IProjectActions) => {
 		label: 'Claim Recurring donation',
 		icon: <IconArrowDownCircle16 />,
 		cb: () => {
-			setSelectedProject(project);
-			setShowClaimModal && setShowClaimModal(true);
+			if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
+				switchChain({
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+				});
+			} else {
+				setSelectedProject(project);
+				setShowClaimModal && setShowClaimModal(true);
+			}
 		},
 	};
 
