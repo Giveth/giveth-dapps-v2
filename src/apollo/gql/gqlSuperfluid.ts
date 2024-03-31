@@ -68,6 +68,7 @@ export const UPDATE_RECURRING_DONATION = gql`
 			flowRate
 			anonymous
 			status
+			isArchived
 		}
 	}
 `;
