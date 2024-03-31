@@ -6,10 +6,12 @@ import {
 	semanticColors,
 	SublineBold,
 } from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
 import { ERecurringDonationStatus } from '@/apollo/types/types';
 
 interface IRecurringDonationStatus {
 	status: ERecurringDonationStatus;
+	isArchived?: boolean;
 }
 
 const mapStatusToColor = {
@@ -17,14 +19,21 @@ const mapStatusToColor = {
 	[ERecurringDonationStatus.VERIFIED]: semanticColors.jade,
 	[ERecurringDonationStatus.ENDED]: semanticColors.golden,
 	[ERecurringDonationStatus.FAILED]: semanticColors.punch,
-	[ERecurringDonationStatus.ARCHIVED]: neutralColors.gray,
 	[ERecurringDonationStatus.ACTIVE]: brandColors.giv,
 };
 
 const RecurringDonationStatusBadge: FC<IRecurringDonationStatus> = ({
 	status,
+	isArchived,
 }) => {
-	return <Container $color={mapStatusToColor[status]}>{status}</Container>;
+	const { formatMessage } = useIntl();
+	return isArchived ? (
+		<Container $color={neutralColors.gray}>
+			{formatMessage({ id: 'label.archived' })}
+		</Container>
+	) : (
+		<Container $color={mapStatusToColor[status]}>{status}</Container>
+	);
 };
 
 const Container = styled(SublineBold)<{ $color: any }>`
