@@ -1565,7 +1565,6 @@
 	"toast.warning_stream_balance": "Retirar una gran part del vostre saldo de transmissió pot fer que les vostres donacions recurrents actives en aquest token acabin inesperadament.",
 	"tooltip.deposit_stream_balance": "Dipositar tokens augmentarà el teu saldo de transmissió i, per tant, allargarà la durada de les teves donacions recurrents actives.",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
-	"tooltip.donation.matching_polygon": "Aquesta estimació representa els fons coincidents que rebria aquest projecte si la ronda es tanqués ara, ignorant l'anàlisi del frau i el procés d'assignació especial per als 100 millors de Jokerace.",
 	"tooltip.flowrate": "Les donacions recurrents es prenen del teu Saldo de Transmissió. Diposita tokens i mantén el teu saldo per habilitar les donacions recurrents.",
 	"tooltip.withdraw_stream_balance": "Si teniu donacions recurrents actives, el vostre saldo disponible per retirar serà lleugerament inferior al vostre saldo actual.",
 	"ubi": "Renta bàsica",
