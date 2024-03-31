@@ -1565,7 +1565,6 @@
 	"toast.warning_stream_balance": "Withdrawing a large portion of your Stream Balance may cause your active recurring donations in that token to end unexpectedly.",
 	"tooltip.deposit_stream_balance": "Depositing tokens will increase your stream balance and thus extend the duration of your active recurring donations.",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
-	"tooltip.donation.matching_polygon": "This estimate represents the matching funds this project would receive if the round closed now, ignoring the fraud analysis and special allocation process for Jokerace's top 100.",
 	"tooltip.flowrate": "Recurring donations are taken out of your Stream Balance. Deposit tokens & maintain your balance to enable recurring donations.",
 	"tooltip.withdraw_stream_balance": "If you have active recurring donations your available stream balance to withdraw will be slightly less than your actual balance.",
 	"ubi": "UBI",
