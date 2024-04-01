@@ -1,10 +1,15 @@
 import styled from 'styled-components';
 import { B, H5, neutralColors, Flex } from '@giveth/ui-design-system';
-import { useUserStreams } from '@/hooks/useUserStreams';
+import { type FC } from 'react';
 import { StreamRow } from './StreamRow';
 
-export const ActiveStreamsSection = () => {
-	const tokenStream = useUserStreams();
+interface ITokenStreams {
+	tokenStreams?: ITokenStreams;
+}
+
+export const ActiveStreamsSection: FC<ITokenStreams> = ({
+	tokenStreams = {},
+}) => {
 	return (
 		<Wrapper>
 			<H5 weight={900}>Streamable Token Balances</H5>
@@ -26,7 +31,7 @@ export const ActiveStreamsSection = () => {
 						<B>Actions</B>
 					</TableHeader>
 				</TableHeaderRow>
-				{Object.entries(tokenStream).map(([key, value]) => (
+				{Object.entries(tokenStreams).map(([key, value]) => (
 					<StreamRow key={key} tokenStream={value} />
 				))}
 			</DonationTableContainer>
