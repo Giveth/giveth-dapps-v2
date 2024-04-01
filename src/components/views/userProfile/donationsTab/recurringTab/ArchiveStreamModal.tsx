@@ -32,11 +32,19 @@ export const ArchiveStreamModal: FC<IArchiveStreamModalProps> = ({
 	...props
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(props.setShowModal);
+	const [step, setStep] = useState(EArchiveStreamSteps.CONFIRM);
 	const { formatMessage } = useIntl();
-
+	const handleCloseModal = () => {
+		if (step === EArchiveStreamSteps.SUCCESS) {
+			props.refetch();
+			closeModal();
+		} else {
+			closeModal();
+		}
+	};
 	return (
 		<Modal
-			closeModal={closeModal}
+			closeModal={handleCloseModal}
 			isAnimating={isAnimating}
 			headerTitle={formatMessage({
 				id: 'label.archive_stream',
@@ -44,19 +52,23 @@ export const ArchiveStreamModal: FC<IArchiveStreamModalProps> = ({
 			headerTitlePosition='left'
 			headerIcon={<IconAlertTriangleOutline32 />}
 		>
-			<ArchiveStreamInnerModal {...props} />
+			<ArchiveStreamInnerModal step={step} setStep={setStep} {...props} />
 		</Modal>
 	);
 };
 
-interface IArchiveStreamInnerModalProps extends IArchiveStreamModalProps {}
+interface IArchiveStreamInnerModalProps extends IArchiveStreamModalProps {
+	step: EArchiveStreamSteps;
+	setStep: (step: EArchiveStreamSteps) => void;
+}
 
 const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 	setShowModal,
 	donation,
 	refetch,
+	step,
+	setStep,
 }) => {
-	const [step, setStep] = useState(EArchiveStreamSteps.CONFIRM);
 	const { formatMessage } = useIntl();
 
 	const onArchive = async () => {
@@ -72,7 +84,6 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 				},
 			});
 			console.log('data', data);
-			refetch();
 			setStep(EArchiveStreamSteps.SUCCESS);
 		} catch (error) {
 			setStep(EArchiveStreamSteps.CONFIRM);
@@ -114,6 +125,7 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 			<ActionButton
 				label={formatMessage({ id: 'label.done' })}
 				onClick={() => {
+					refetch();
 					setShowModal(false);
 				}}
 			/>
