@@ -1,6 +1,6 @@
 import {
+	B,
 	Flex,
-	H3,
 	IconAlertTriangleOutline32,
 	P,
 	mediaQueries,
@@ -162,11 +162,11 @@ const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 		</Wrapper>
 	) : (
 		<Wrapper>
-			<H3 weight={700}>
+			<CenteredB>
 				{formatMessage({
 					id: 'component.end_stream_modal.ended_title',
 				})}
-			</H3>
+			</CenteredB>
 			<P>
 				{formatMessage(
 					{
@@ -198,4 +198,8 @@ const Wrapper = styled(Flex)`
 	${mediaQueries.tablet} {
 		width: 530px;
 	}
+`;
+
+const CenteredB = styled(B)`
+	text-align: center;
 `;

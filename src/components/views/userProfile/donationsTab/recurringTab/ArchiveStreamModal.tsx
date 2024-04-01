@@ -1,6 +1,6 @@
 import {
+	B,
 	Flex,
-	H4,
 	IconAlertTriangleOutline32,
 	Lead,
 	mediaQueries,
@@ -106,11 +106,11 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 		</Wrapper>
 	) : (
 		<Wrapper>
-			<StyledH4 weight={700}>
+			<CenteredB>
 				{formatMessage({
 					id: 'component.archive_stream_modal.archived_title',
 				})}
-			</StyledH4>
+			</CenteredB>
 			<ActionButton
 				label={formatMessage({ id: 'label.done' })}
 				onClick={() => {
@@ -134,6 +134,6 @@ const Wrapper = styled(Flex)`
 	}
 `;
 
-const StyledH4 = styled(H4)`
+const CenteredB = styled(B)`
 	text-align: center;
 `;
