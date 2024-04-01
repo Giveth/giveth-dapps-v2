@@ -57,7 +57,7 @@ export const UPDATE_RECURRING_DONATION = gql`
 	) {
 		updateRecurringDonationParams(
 			projectId: $projectId
-			networkId: $networkIdf
+			networkId: $networkId
 			txHash: $txHash
 			anonymous: $anonymous
 			flowRate: $flowRate
