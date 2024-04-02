@@ -18,6 +18,7 @@ import { updateRecurringDonation } from '@/services/donation';
 import { wagmiConfig } from '@/wagmiConfigs';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { TXLink } from './TXLink';
+import { useProfileDonateTabData } from '../ProfileDonateTab.context';
 
 interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	step: EDonationSteps;
@@ -43,6 +44,9 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	const { formatMessage } = useIntl();
 	const tokenPrice = useTokenPrice(token);
 	const { address } = useAccount();
+	const { refetchTokenStream } = useProfileDonateTabData();
+
+	console.log('refetchTokenStream', refetchTokenStream);
 
 	const onDonate = async () => {
 		setStep(EDonationSteps.DONATING);
@@ -112,9 +116,11 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			}
 
 			const res = await tx.wait();
+
 			if (!res.status) {
 				throw new Error('Transaction failed');
 			}
+			refetchTokenStream();
 			setStep(EDonationSteps.SUCCESS);
 			if (tx.hash) {
 			}
