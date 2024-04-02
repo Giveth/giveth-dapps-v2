@@ -36,7 +36,10 @@ import 'rc-slider/assets/index.css';
 import DonateToGiveth from './DonateToGiveth';
 import { Spinner } from '@/components/Spinner';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
-import { findUserActiveStreamOnSelectedToken } from '@/helpers/donate';
+import {
+	countActiveStreams,
+	findUserActiveStreamOnSelectedToken,
+} from '@/helpers/donate';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { showToastError } from '@/lib/helpers';
 import config, { isRecurringActive } from '@/configuration';
@@ -472,7 +475,9 @@ export const RecurringDonationCard = () => {
 												id: 'label.you_are_supporting_other_projects_with_this_stream',
 											},
 											{
-												count: tokenStream.length - 1,
+												count: countActiveStreams(
+													tokenStream,
+												),
 											},
 										)}{' '}
 									</Caption>
