@@ -35,6 +35,7 @@ import {
 	IModifyDonationInfo,
 	IModifyStreamModalProps,
 } from './ModifyStreamModal';
+import { countActiveStreams } from '@/helpers/donate';
 
 interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	setStep: (step: EDonationSteps) => void;
@@ -259,7 +260,7 @@ export const ModifyStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 									id: 'label.you_are_supporting_other_projects_with_this_stream',
 								},
 								{
-									count: tokenStream.length - 1,
+									count: countActiveStreams(tokenStream),
 								},
 							)}
 						</OtherStreamsInfo>

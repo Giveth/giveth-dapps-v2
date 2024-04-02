@@ -6,6 +6,7 @@ import { useIntl } from 'react-intl';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
 import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
+import { countActiveStreams } from '@/helpers/donate';
 
 interface IStreamInfoProps {
 	stream: ISuperfluidStream[];
@@ -34,6 +35,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			: 0n;
 
 	const underlyingToken = stream[0].token.underlyingToken;
+	const activeStreamCount = countActiveStreams(stream);
 
 	return (
 		<Wrapper
@@ -106,12 +108,12 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 						</Flex>
 						<Flex gap='4px'>
 							<GrayCaption>Funding</GrayCaption>
-							<Caption $medium>{stream.length}</Caption>
+							<Caption $medium>{activeStreamCount}</Caption>
 							<GrayCaption>
 								{formatMessage(
 									{ id: 'label.number_projects' },
 									{
-										count: 'stream.length.toString()',
+										count: activeStreamCount,
 									},
 								)}
 							</GrayCaption>
