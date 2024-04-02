@@ -2,14 +2,10 @@ import styled from 'styled-components';
 import { B, H5, neutralColors, Flex } from '@giveth/ui-design-system';
 import { type FC } from 'react';
 import { StreamRow } from './StreamRow';
+import { useProfileDonateTabData } from './ProfileDonateTab.context';
 
-interface ITokenStreams {
-	tokenStreams?: ITokenStreams;
-}
-
-export const ActiveStreamsSection: FC<ITokenStreams> = ({
-	tokenStreams = {},
-}) => {
+export const ActiveStreamsSection: FC = () => {
+	const { tokenStreams } = useProfileDonateTabData();
 	return (
 		<Wrapper>
 			<H5 weight={900}>Streamable Token Balances</H5>
