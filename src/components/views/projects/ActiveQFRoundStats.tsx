@@ -32,7 +32,7 @@ export const ActiveQFRoundStats = () => {
 						{formatMessage({ id: 'label.matching_pool' })}
 					</ItemTitle>
 					<ItemValue weight={500}>
-						{data?.qfRoundStats?.matchingPool || '--'}&nbsp;DAI
+						{data?.qfRoundStats?.matchingPool || '--'}&nbsp;$
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
