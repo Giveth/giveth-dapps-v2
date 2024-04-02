@@ -21,6 +21,8 @@ export interface IAmountInput {
 	showMax?: boolean;
 	balanceUnit?: string;
 	showPercentage?: boolean;
+	displayAmount?: string;
+	setDisplayAmount?: Dispatch<SetStateAction<string>>;
 }
 
 export const AmountInput: FC<IAmountInput> = ({
@@ -31,10 +33,23 @@ export const AmountInput: FC<IAmountInput> = ({
 	disabled = false,
 	showMax = false,
 	showPercentage = false,
+	displayAmount: externalDisplayAmount = undefined,
+	setDisplayAmount: externalSetDisplayAmount = undefined,
 }) => {
 	const { formatMessage } = useIntl();
-	const [displayAmount, setDisplayAmount] = useState('');
+	const [internalDisplayAmount, internalSetDisplayAmount] = useState('');
 	const [activeStep, setActiveStep] = useState(0);
+
+	// Determine which displayAmount and setDisplayAmount to use
+	const displayAmount =
+		externalDisplayAmount !== undefined
+			? externalDisplayAmount
+			: internalDisplayAmount;
+
+	const setDisplayAmount =
+		externalSetDisplayAmount !== undefined
+			? externalSetDisplayAmount
+			: internalSetDisplayAmount;
 
 	const setAmountPercentage = useCallback(
 		(percentage: number): void => {
