@@ -9,6 +9,7 @@ export const useUserStreams = () => {
 
 	const fetchUserStreamsData = useCallback(async () => {
 		if (!address) return;
+		console.log('Fetching token streams');
 		const _tokenStreams = await fetchUserStreams(address);
 		setTokenStreams(_tokenStreams);
 	}, [address]); // `address` is a dependency here
