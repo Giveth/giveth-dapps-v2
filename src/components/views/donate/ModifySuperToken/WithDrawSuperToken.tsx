@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl';
 import { GetBalanceReturnType } from 'wagmi/actions';
 import { Framework } from '@superfluid-finance/sdk-core';
 import { ModifyInfoToast } from './ModifyInfoToast';
-import { ModifySection } from './ModifySection';
+import { EModifySectionPlace, ModifySection } from './ModifySection';
 import { StreamInfo } from './StreamInfo';
 import { IModifySuperTokenInnerModalProps } from './ModifySuperTokenModal';
 import { ISuperToken, IToken } from '@/types/superFluid';
@@ -160,6 +160,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 							}
 							minRemainingBalance={minRemainingBalance}
 							tooltipText='tooltip.withdraw_stream_balance'
+							modifySectionPlace={EModifySectionPlace.WITHDRAW}
 						/>
 						<StreamInfo
 							tokenStreams={tokenStreams}
