@@ -1,15 +1,15 @@
 import {
+	IconArchive16,
 	IconEdit16,
-	IconEye16,
-	IconUpdate16,
-	IconWalletOutline16,
+	IconTrash16,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
-import { Dropdown, IOption } from '@/components/Dropdown';
+import { Dropdown, EOptionType, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
 import { ModifyStreamModal } from './ModifyStreamModal/ModifyStreamModal';
 import {
@@ -48,15 +48,19 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 						label: formatMessage({
 							id: 'label.modify_recurring_donation',
 						}),
-						icon: <IconEye16 />,
+						icon: <IconEdit16 />,
 						cb: () => setShowModify(true),
+					},
+					{
+						type: EOptionType.SEPARATOR,
 					},
 					{
 						label: formatMessage({
 							id: 'label.end_recurring_donation',
 						}),
-						icon: <IconUpdate16 />,
+						icon: <IconTrash16 />,
 						cb: () => setShowEnd(true),
+						color: semanticColors.punch['500'],
 					},
 				]
 			: donation.status === ERecurringDonationStatus.ENDED
@@ -73,11 +77,15 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 								),
 						},
 						{
+							type: EOptionType.SEPARATOR,
+						},
+						{
 							label: capitalizeAllWords(
 								formatMessage({ id: 'label.archive_donation' }),
 							),
-							icon: <IconWalletOutline16 />,
+							icon: <IconArchive16 />,
 							cb: () => setShowArchive(true),
+							color: semanticColors.golden['500'],
 						},
 					]
 				: [];
