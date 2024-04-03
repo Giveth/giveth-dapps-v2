@@ -25,6 +25,7 @@ interface IDropdownProps {
 	options: IOption[];
 	style?: any;
 	stickToRight?: boolean;
+	color?: string;
 }
 
 export enum OptionType {
@@ -38,10 +39,16 @@ export interface IOption {
 	icon?: ReactNode;
 	cb?: any;
 	isHidden?: boolean;
+	color?: string;
 }
 
-export const Dropdown: FC<IDropdownProps> = props => {
-	const { label, options, style, stickToRight } = props;
+export const Dropdown: FC<IDropdownProps> = ({
+	label,
+	options,
+	style,
+	stickToRight,
+	color,
+}) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -98,6 +105,7 @@ export const Dropdown: FC<IDropdownProps> = props => {
 									key={option.label}
 									option={option}
 									setIsOpen={setIsOpen}
+									color={color}
 								/>
 							),
 						)}
@@ -111,6 +119,7 @@ export const Dropdown: FC<IDropdownProps> = props => {
 interface IOptionProps {
 	option: IOption;
 	setIsOpen: Dispatch<SetStateAction<boolean>>;
+	color?: string;
 }
 
 const Option: FC<IOptionProps> = ({ option, setIsOpen }) => {
@@ -121,6 +130,7 @@ const Option: FC<IOptionProps> = ({ option, setIsOpen }) => {
 				setIsOpen(false);
 			}}
 			gap='8px'
+			$color={option.color}
 		>
 			{option.icon && option.icon}
 			{option.label}
@@ -153,12 +163,17 @@ const OptionsWrapper = styled.div`
 	box-shadow: ${Shadow.Neutral[400]};
 `;
 
-const OptionWrapper = styled(Flex)`
+interface IOptionsWrapperProps {
+	$color?: string;
+}
+
+const OptionWrapper = styled(Flex)<IOptionsWrapperProps>`
 	padding: 8px 16px;
 	border-radius: 8px;
 	margin-bottom: 8px;
 	align-items: center;
 	cursor: pointer;
+	color: ${({ $color }) => $color || neutralColors.gray[900]};
 	&:hover {
 		background-color: ${neutralColors.gray[200]};
 	}
