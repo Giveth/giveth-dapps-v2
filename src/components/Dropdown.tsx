@@ -28,14 +28,14 @@ interface IDropdownProps {
 	color?: string;
 }
 
-export enum OptionType {
+export enum EOptionType {
 	ITEM,
 	SEPARATOR,
 }
 
 export interface IOption {
-	type?: OptionType;
-	label: string;
+	type?: EOptionType;
+	label?: string;
 	icon?: ReactNode;
 	cb?: any;
 	isHidden?: boolean;
@@ -123,7 +123,9 @@ interface IOptionProps {
 }
 
 const Option: FC<IOptionProps> = ({ option, setIsOpen }) => {
-	return (
+	return option.type === EOptionType.SEPARATOR ? (
+		<StyledHr />
+	) : (
 		<OptionWrapper
 			onClick={() => {
 				option.cb && option.cb();
@@ -177,4 +179,11 @@ const OptionWrapper = styled(Flex)<IOptionsWrapperProps>`
 	&:hover {
 		background-color: ${neutralColors.gray[200]};
 	}
+`;
+
+const StyledHr = styled.hr`
+	border: none;
+	border-top: 1px solid ${neutralColors.gray[300]};
+	width: 100%;
+	margin: 8px 0;
 `;
