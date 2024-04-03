@@ -30,7 +30,7 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 
 	return (
 		<UserNameContainer>
-			<StyledPaddedRow sidePadding={sidePadding}>
+			<StyledPaddedRow $sidePadding={sidePadding}>
 				{adminUser?.name && !isForeignOrg && (
 					<Link
 						href={addressToUserView(
