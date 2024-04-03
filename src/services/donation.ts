@@ -16,6 +16,7 @@ import config, { SENTRY_URGENT } from '@/configuration';
 import {
 	CREATE_RECURRING_DONATION,
 	UPDATE_RECURRING_DONATION,
+	UPDATE_RECURRING_DONATION_STATUS,
 } from '@/apollo/gql/gqlSuperfluid';
 import { ERecurringDonationStatus } from '@/apollo/types/types';
 
@@ -154,7 +155,7 @@ export const createRecurringDonation = async ({
 				anonymous,
 			},
 		});
-		donationId = data.createRecurringDonation;
+		donationId = data.createRecurringDonation.id;
 		console.log('donationId', donationId);
 		return donationId;
 	} catch (error) {
@@ -186,7 +187,7 @@ export const updateRecurringDonation = async (
 				anonymous,
 			},
 		});
-		donationId = data.updateRecurringDonationParams;
+		donationId = data.updateRecurringDonationParams.id;
 		console.log('donationId', donationId);
 		return donationId;
 	} catch (error: any) {
@@ -225,7 +226,7 @@ export const endRecurringDonation = async (props: IEndRecurringDonation) => {
 				status: ERecurringDonationStatus.ENDED,
 			},
 		});
-		donationId = data.updateRecurringDonationParams;
+		donationId = data.updateRecurringDonationParams.id;
 		return donationId;
 	} catch (error: any) {
 		captureException(error, {
@@ -234,6 +235,30 @@ export const endRecurringDonation = async (props: IEndRecurringDonation) => {
 			},
 		});
 		console.log('endRecurringDonation error: ', error);
+		throw error;
+	}
+};
+
+export const updateRecurringDonationStatus = async (
+	donationId: number,
+	status: ERecurringDonationStatus,
+) => {
+	try {
+		const { data } = await client.mutate({
+			mutation: UPDATE_RECURRING_DONATION_STATUS,
+			variables: {
+				donationId,
+				status,
+			},
+		});
+		return data.updateRecurringDonationStatus.id;
+	} catch (error: any) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('updateRecurringDonationStatus error: ', error);
 		throw error;
 	}
 };
