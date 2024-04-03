@@ -1,8 +1,7 @@
 import {
+	IconArchive16,
 	IconEdit16,
-	IconEye16,
-	IconUpdate16,
-	IconWalletOutline16,
+	IconTrash16,
 	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -49,7 +48,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 						label: formatMessage({
 							id: 'label.modify_recurring_donation',
 						}),
-						icon: <IconEye16 />,
+						icon: <IconEdit16 />,
 						cb: () => setShowModify(true),
 					},
 					{
@@ -59,7 +58,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 						label: formatMessage({
 							id: 'label.end_recurring_donation',
 						}),
-						icon: <IconUpdate16 />,
+						icon: <IconTrash16 />,
 						cb: () => setShowEnd(true),
 						color: semanticColors.punch['500'],
 					},
@@ -84,7 +83,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 							label: capitalizeAllWords(
 								formatMessage({ id: 'label.archive_donation' }),
 							),
-							icon: <IconWalletOutline16 />,
+							icon: <IconArchive16 />,
 							cb: () => setShowArchive(true),
 							color: semanticColors.golden['500'],
 						},
