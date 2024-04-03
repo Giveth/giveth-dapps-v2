@@ -82,7 +82,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		setProjectData(data.projectBySlug);
 	}, [project.slug]);
 
-	const tokenStreams = useUserStreams();
+	const { tokenStreams } = useUserStreams();
 
 	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
 

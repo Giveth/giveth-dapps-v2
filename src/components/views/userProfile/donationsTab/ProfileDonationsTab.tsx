@@ -11,6 +11,7 @@ import { useProfileContext } from '@/context/profile.context';
 import { OneTimeTab } from './oneTimeTab/OneTimeTab';
 import { RecurringTab } from './recurringTab/RecurringTab';
 import { isRecurringActive } from '@/configuration';
+import { ProfileDonateTabProvider } from './recurringTab/ProfileDonateTab.context';
 
 enum ETab {
 	ONE_TIME,
@@ -43,55 +44,57 @@ const ProfileDonationsTab: FC<IUserProfileView> = () => {
 	const userName = user?.name || 'Unknown';
 
 	return (
-		<UserProfileTab>
-			{!myAccount && (
-				<Row>
-					<Col lg={6}>
-						<DonateContributeCard />
-					</Col>
-				</Row>
-			)}
-			{!myAccount && (
-				<UserContributeTitle weight={700}>
-					{formatMessage(
-						{
-							id: 'label.user_donations',
-						},
-						{
-							userName,
-						},
-					)}
-				</UserContributeTitle>
-			)}
-			{isRecurringActive ? (
-				<>
-					<Tabs>
-						{tabs.map(({ id, label, query }) => (
-							<Link
-								key={id}
-								href={{
-									query: { ...router.query, tab: query },
-								}}
-								shallow={true}
-								scroll={false}
-							>
-								<Tab
-									onClick={() => setTab(id)}
-									className={`tab ${tab === id ? 'active' : ''}`}
-									$isActive={tab === id}
+		<ProfileDonateTabProvider>
+			<UserProfileTab>
+				{!myAccount && (
+					<Row>
+						<Col lg={6}>
+							<DonateContributeCard />
+						</Col>
+					</Row>
+				)}
+				{!myAccount && (
+					<UserContributeTitle weight={700}>
+						{formatMessage(
+							{
+								id: 'label.user_donations',
+							},
+							{
+								userName,
+							},
+						)}
+					</UserContributeTitle>
+				)}
+				{isRecurringActive ? (
+					<>
+						<Tabs>
+							{tabs.map(({ id, label, query }) => (
+								<Link
+									key={id}
+									href={{
+										query: { ...router.query, tab: query },
+									}}
+									shallow={true}
+									scroll={false}
 								>
-									{formatMessage({ id: label })}
-								</Tab>
-							</Link>
-						))}
-					</Tabs>
-					{tab === ETab.ONE_TIME && <OneTimeTab />}
-					{tab === ETab.RECURRING && <RecurringTab />}
-				</>
-			) : (
-				<OneTimeTab />
-			)}
-		</UserProfileTab>
+									<Tab
+										onClick={() => setTab(id)}
+										className={`tab ${tab === id ? 'active' : ''}`}
+										$isActive={tab === id}
+									>
+										{formatMessage({ id: label })}
+									</Tab>
+								</Link>
+							))}
+						</Tabs>
+						{tab === ETab.ONE_TIME && <OneTimeTab />}
+						{tab === ETab.RECURRING && <RecurringTab />}
+					</>
+				) : (
+					<OneTimeTab />
+				)}
+			</UserProfileTab>
+		</ProfileDonateTabProvider>
 	);
 };
 

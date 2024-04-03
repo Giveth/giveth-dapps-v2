@@ -279,10 +279,11 @@ export interface IWalletRecurringDonation {
 	status: ERecurringDonationStatus;
 	flowRate: string;
 	currency: string;
-	totalDonated: string;
+	amountStreamed: string;
 	networkId: number;
 	finished: boolean;
 	anonymous: boolean;
+	isArchived: boolean;
 }
 
 export interface IMediumBlogPost {
@@ -480,6 +481,5 @@ export enum ERecurringDonationStatus {
 	VERIFIED = 'verified',
 	ENDED = 'ended',
 	FAILED = 'failed',
-	ARCHIVED = 'archived',
 	ACTIVE = 'active',
 }

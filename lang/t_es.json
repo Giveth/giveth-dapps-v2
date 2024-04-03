@@ -137,6 +137,5 @@
 	"refi": "Refi",
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "Esta estimación se basa en las donaciones realizadas hasta ahora en esta ronda de financiación cuadrática y no está considerando el análisis de fraude. La cantidad de igualación real puede variar.",
-	"tooltip.donation.matching_polygon": "Esta estimación representa los fondos de contrapartida que recibiría este proyecto si la ronda se cerrara ahora, ignorando el análisis de fraude y el proceso de asignación especial para los 100 mejores de Jokerace.",
 	"ubi": "RBI"
 }

@@ -37,7 +37,7 @@ export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 	const [modifyInfo, setModifyInfo] = useState<IModifyDonationInfo>();
 	const { isAnimating, closeModal } = useModalAnimation(props.setShowModal);
 	const { formatMessage } = useIntl();
-	const tokenStreams = useUserStreams();
+	const { tokenStreams } = useUserStreams();
 
 	const superToken = useMemo(
 		() =>

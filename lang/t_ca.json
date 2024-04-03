@@ -171,5 +171,4 @@
 	"refi": "Refi",
 	"testfilter": "testfilter",
 	"tooltip.donation.matching": "Aquesta estimació es basa en les donacions fetes fins ara aquesta ronda de finançament quadràtic i no està considerant l'anàlisi de frau. La quantitat real de coincidència pot variar.",
-	"tooltip.donation.matching_polygon": "Aquesta estimació representa els fons coincidents que rebria aquest projecte si la ronda es tanqués ara, ignorant l'anàlisi del frau i el procés d'assignació especial per als 100 millors de Jokerace."
 }

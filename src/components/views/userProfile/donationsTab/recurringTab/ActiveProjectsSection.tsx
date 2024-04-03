@@ -6,10 +6,7 @@ import ToggleSwitch from '@/components/ToggleSwitch';
 import { RecurringDonationFiltersButton } from './RecurringDonationFiltersButton';
 import { client } from '@/apollo/apolloClient';
 import { EDirection } from '@/apollo/types/gqlEnums';
-import {
-	ERecurringDonationStatus,
-	IWalletRecurringDonation,
-} from '@/apollo/types/types';
+import { IWalletRecurringDonation } from '@/apollo/types/types';
 import { useProfileContext } from '@/context/profile.context';
 import { FETCH_USER_RECURRING_DONATIONS } from '@/apollo/gql/gqlUser';
 import DonationTable from '@/components/views/userProfile/donationsTab/recurringTab/RecurringDonationsTable';
@@ -82,13 +79,9 @@ export const ActiveProjectsSection = () => {
 					take: itemPerPage,
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },
-					status: !myAccount
-						? ERecurringDonationStatus.ACTIVE
-						: showArchive
-							? ERecurringDonationStatus.ARCHIVED
-							: null,
 					finishStatus: statusFilters,
 					filteredTokens: tokenFilters,
+					includeArchived: showArchive,
 				},
 			});
 			setLoading(false);

@@ -1,6 +1,6 @@
 import {
+	B,
 	Flex,
-	H4,
 	IconAlertTriangleOutline32,
 	Lead,
 	mediaQueries,
@@ -12,10 +12,7 @@ import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
 import { ActionButton } from './ModifyStreamModal/ModifyStreamInnerModal';
-import {
-	IWalletRecurringDonation,
-	ERecurringDonationStatus,
-} from '@/apollo/types/types';
+import { IWalletRecurringDonation } from '@/apollo/types/types';
 import config from '@/configuration';
 import { UPDATE_RECURRING_DONATION } from '@/apollo/gql/gqlSuperfluid';
 import { client } from '@/apollo/apolloClient';
@@ -35,11 +32,19 @@ export const ArchiveStreamModal: FC<IArchiveStreamModalProps> = ({
 	...props
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(props.setShowModal);
+	const [step, setStep] = useState(EArchiveStreamSteps.CONFIRM);
 	const { formatMessage } = useIntl();
-
+	const handleCloseModal = () => {
+		if (step === EArchiveStreamSteps.SUCCESS) {
+			props.refetch();
+			closeModal();
+		} else {
+			closeModal();
+		}
+	};
 	return (
 		<Modal
-			closeModal={closeModal}
+			closeModal={handleCloseModal}
 			isAnimating={isAnimating}
 			headerTitle={formatMessage({
 				id: 'label.archive_stream',
@@ -47,19 +52,23 @@ export const ArchiveStreamModal: FC<IArchiveStreamModalProps> = ({
 			headerTitlePosition='left'
 			headerIcon={<IconAlertTriangleOutline32 />}
 		>
-			<ArchiveStreamInnerModal {...props} />
+			<ArchiveStreamInnerModal step={step} setStep={setStep} {...props} />
 		</Modal>
 	);
 };
 
-interface IArchiveStreamInnerModalProps extends IArchiveStreamModalProps {}
+interface IArchiveStreamInnerModalProps extends IArchiveStreamModalProps {
+	step: EArchiveStreamSteps;
+	setStep: (step: EArchiveStreamSteps) => void;
+}
 
 const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 	setShowModal,
 	donation,
 	refetch,
+	step,
+	setStep,
 }) => {
-	const [step, setStep] = useState(EArchiveStreamSteps.CONFIRM);
 	const { formatMessage } = useIntl();
 
 	const onArchive = async () => {
@@ -71,11 +80,10 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 					projectId: +donation.project.id,
 					networkId: config.OPTIMISM_NETWORK_NUMBER,
 					currency: donation.currency,
-					status: ERecurringDonationStatus.ARCHIVED,
+					isArchived: true,
 				},
 			});
 			console.log('data', data);
-			refetch();
 			setStep(EArchiveStreamSteps.SUCCESS);
 		} catch (error) {
 			setStep(EArchiveStreamSteps.CONFIRM);
@@ -109,14 +117,15 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 		</Wrapper>
 	) : (
 		<Wrapper>
-			<StyledH4 weight={700}>
+			<CenteredB>
 				{formatMessage({
 					id: 'component.archive_stream_modal.archived_title',
 				})}
-			</StyledH4>
+			</CenteredB>
 			<ActionButton
 				label={formatMessage({ id: 'label.done' })}
 				onClick={() => {
+					refetch();
 					setShowModal(false);
 				}}
 			/>
@@ -137,6 +146,6 @@ const Wrapper = styled(Flex)`
 	}
 `;
 
-const StyledH4 = styled(H4)`
+const CenteredB = styled(B)`
 	text-align: center;
 `;

@@ -34,7 +34,7 @@ export const ArchivedQFRoundStats = () => {
 						{formatMessage({ id: 'label.matching_pool' })}
 					</ItemTitle>
 					<ItemValue>
-						{data?.qfRoundStats?.matchingPool || '--'}&nbsp;DAI
+						{data?.qfRoundStats?.matchingPool || '--'}&nbsp;$
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>

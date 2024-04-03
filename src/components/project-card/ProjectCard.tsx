@@ -13,6 +13,7 @@ import {
 	IconVerifiedBadge16,
 	H5,
 	Flex,
+	IconHelpFilled16,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
@@ -21,7 +22,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import ProjectCardBadges from './ProjectCardLikeAndShareButtons';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
 import { IProject } from '@/apollo/types/types';
-import { timeFromNow } from '@/lib/helpers';
+import { thousandsSeparator, timeFromNow } from '@/lib/helpers';
 import ProjectCardImage from './ProjectCardImage';
 import { slugToProjectDonate, slugToProjectView } from '@/lib/routeCreators';
 import { ORGANIZATION } from '@/lib/constants/organizations';
@@ -30,6 +31,8 @@ import { ProjectCardUserName } from './ProjectCardUserName';
 import { calculateTotalEstimatedMatching, getActiveRound } from '@/helpers/qf';
 import { formatDonation } from '@/helpers/number';
 import { RoundNotStartedModal } from './RoundNotStartedModal';
+import { TooltipContent } from '@/components/modals/HarvestAll.sc';
+import { IconWithTooltip } from '@/components/IconWithToolTip';
 
 const cardRadius = '12px';
 const imgHeight = '226px';
@@ -59,7 +62,6 @@ const ProjectCard = (props: IProjectCard) => {
 		verified,
 		// projectPower,
 		countUniqueDonors,
-		countUniqueDonorsForActiveQfRound,
 		qfRounds,
 		estimatedMatching,
 	} = project;
@@ -162,7 +164,7 @@ const ProjectCard = (props: IProjectCard) => {
 				>
 					<Description>{descriptionSummary}</Description>
 					<PaddedRow $justifyContent='space-between'>
-						<Flex $flexDirection='column' gap='2px'>
+						<Flex $flexDirection='column' gap='4px'>
 							<PriceText>
 								{formatDonation(
 									(activeQFRound
@@ -173,11 +175,25 @@ const ProjectCard = (props: IProjectCard) => {
 								)}
 							</PriceText>
 							{activeQFRound ? (
-								<AmountRaisedText>
-									{formatMessage({
-										id: 'label.amount_raised_in_this_round',
-									})}
-								</AmountRaisedText>
+								<>
+									<Subline color={neutralColors.gray[700]}>
+										{formatMessage({
+											id: 'label.amount_raised_in_this_round',
+										})}
+									</Subline>
+									<AmountRaisedText>
+										{formatMessage({
+											id: 'label.total_raised',
+										}) + ' '}
+										<span>
+											{formatDonation(
+												sumDonationValueUsd || 0,
+												'$',
+												locale,
+											)}
+										</span>
+									</AmountRaisedText>
+								</>
 							) : (
 								<AmountRaisedText>
 									{formatMessage({
@@ -186,54 +202,68 @@ const ProjectCard = (props: IProjectCard) => {
 								</AmountRaisedText>
 							)}
 
-							<div>
-								<LightSubline>
-									{formatMessage({
-										id: 'label.raised_from',
-									})}{' '}
-								</LightSubline>
-								<Subline style={{ display: 'inline-block' }}>
-									&nbsp;
-									{activeQFRound
-										? countUniqueDonorsForActiveQfRound
-										: countUniqueDonors}
-									&nbsp;
-								</Subline>
-								<LightSubline>
-									{formatMessage(
-										{
-											id: 'label.contributors',
-										},
-										{
-											count: activeQFRound
-												? countUniqueDonorsForActiveQfRound
-												: countUniqueDonors,
-										},
-									)}
-								</LightSubline>
-							</div>
+							{!activeQFRound && (
+								<div>
+									<LightSubline>
+										{formatMessage({
+											id: 'label.raised_from',
+										})}{' '}
+									</LightSubline>
+									<Subline
+										style={{ display: 'inline-block' }}
+									>
+										&nbsp;
+										{countUniqueDonors}
+										&nbsp;
+									</Subline>
+									<LightSubline>
+										{formatMessage(
+											{
+												id: 'label.contributors',
+											},
+											{
+												count: countUniqueDonors,
+											},
+										)}
+									</LightSubline>
+								</div>
+							)}
 						</Flex>
 						{activeQFRound && (
 							<Flex $flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
 									+
-									{formatDonation(
-										calculateTotalEstimatedMatching(
-											projectDonationsSqrtRootSum,
-											allProjectsSum,
-											matchingPool,
-											activeQFRound?.maximumReward,
+									{thousandsSeparator(
+										formatDonation(
+											calculateTotalEstimatedMatching(
+												projectDonationsSqrtRootSum,
+												allProjectsSum,
+												matchingPool,
+												activeQFRound?.maximumReward,
+											),
+											'$',
+											locale,
+											true,
 										),
-										'$',
-										locale,
-										true,
 									)}
 								</EstimatedMatchingPrice>
-								<LightSubline>
-									{formatMessage({
-										id: 'label.estimated_matching',
-									})}
-								</LightSubline>
+								<EstimatedMatching>
+									<span>
+										{formatMessage({
+											id: 'label.estimated_matching',
+										})}
+									</span>
+									<IconWithTooltip
+										icon={<IconHelpFilled16 />}
+										direction='top'
+									>
+										<TooltipContent>
+											{formatMessage({
+												id: 'component.qf-section.tooltip_polygon',
+											})}
+										</TooltipContent>
+									</IconWithTooltip>
+								</EstimatedMatching>
 							</Flex>
 						)}
 					</PaddedRow>
@@ -332,6 +362,15 @@ const PriceText = styled(H5)`
 const LightSubline = styled(Subline)`
 	display: inline-block;
 	color: ${neutralColors.gray[700]};
+`;
+
+const EstimatedMatching = styled(Subline)`
+	display: flex;
+	gap: 5px;
+	color: ${neutralColors.gray[700]};
+	> *:last-child {
+		margin-top: 2px;
+	}
 `;
 
 const VerifiedText = styled(Subline)`
@@ -472,6 +511,10 @@ const AmountRaisedText = styled(Subline)`
 	background-color: ${neutralColors.gray[300]};
 	padding: 2px 8px;
 	border-radius: 4px;
+	width: fit-content;
+	> span {
+		font-weight: 500;
+	}
 `;
 
 const QFBadge = styled(Subline)`
