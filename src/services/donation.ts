@@ -166,8 +166,6 @@ export const createRecurringDonation = async ({
 		console.log('createRecurringDonation error: ', error);
 		throw error;
 	}
-
-	return donationId;
 };
 
 export const updateRecurringDonation = async (
@@ -188,7 +186,7 @@ export const updateRecurringDonation = async (
 				anonymous,
 			},
 		});
-		donationId = data.updateRecurringDonation;
+		donationId = data.updateRecurringDonationParams;
 		console.log('donationId', donationId);
 		return donationId;
 	} catch (error: any) {
@@ -204,8 +202,6 @@ export const updateRecurringDonation = async (
 		console.log('updateRecurringDonation error: ', error);
 		throw error;
 	}
-
-	return donationId;
 };
 
 export interface IEndRecurringDonation {
@@ -229,7 +225,7 @@ export const endRecurringDonation = async (props: IEndRecurringDonation) => {
 				status: ERecurringDonationStatus.ENDED,
 			},
 		});
-		donationId = data.updateRecurringDonation;
+		donationId = data.updateRecurringDonationParams;
 		return donationId;
 	} catch (error: any) {
 		captureException(error, {
@@ -240,6 +236,4 @@ export const endRecurringDonation = async (props: IEndRecurringDonation) => {
 		console.log('endRecurringDonation error: ', error);
 		throw error;
 	}
-
-	return donationId;
 };
