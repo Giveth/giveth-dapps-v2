@@ -3,6 +3,7 @@ import {
 	IconEye16,
 	IconUpdate16,
 	IconWalletOutline16,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { type FC, useState } from 'react';
@@ -57,6 +58,7 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 						}),
 						icon: <IconUpdate16 />,
 						cb: () => setShowEnd(true),
+						color: semanticColors.punch['500'],
 					},
 				]
 			: donation.status === ERecurringDonationStatus.ENDED
@@ -72,12 +74,14 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 										'?tab=recurring',
 								),
 						},
+
 						{
 							label: capitalizeAllWords(
 								formatMessage({ id: 'label.archive_donation' }),
 							),
 							icon: <IconWalletOutline16 />,
 							cb: () => setShowArchive(true),
+							color: semanticColors.golden['500'],
 						},
 					]
 				: [];
