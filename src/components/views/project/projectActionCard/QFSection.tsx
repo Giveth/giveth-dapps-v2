@@ -16,6 +16,8 @@ import {
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { type FC } from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import {
@@ -29,6 +31,10 @@ import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { formatDonation } from '@/helpers/number';
 import ProjectEligibleQFChains from './ProjectEligibleQFChains';
 import { IProject } from '@/apollo/types/types';
+import { ProjectCardUserName } from '@/components/project-card/ProjectCardUserName';
+import { CustomH5 } from '@/components/setProfilePic/SetProfilePic';
+import { ORGANIZATION } from '@/lib/constants/organizations';
+import { slugToProjectView } from '@/lib/routeCreators';
 
 interface IQFSectionProps {
 	projectData?: IProject;
@@ -41,11 +47,18 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		estimatedMatching,
 		sumDonationValueUsdForActiveQfRound,
 		sumDonationValueUsd,
+		adminUser,
+		slug,
+		organization,
+		title: projectTitle,
 	} = projectData || {};
 	const isMobile = !useMediaQuery(device.tablet);
+	const router = useRouter();
+	const isOnDonatePage = router.pathname.includes('/donate');
+	console.log('isOnDonatePage', isOnDonatePage);
+
 	const { projectDonationsSqrtRootSum, matchingPool, allProjectsSum } =
 		estimatedMatching ?? {};
-
 	const activeRound = getActiveRound(qfRounds);
 	const totalEstimatedMatching = calculateTotalEstimatedMatching(
 		projectDonationsSqrtRootSum,
@@ -53,6 +66,13 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		matchingPool,
 		activeRound?.maximumReward,
 	);
+
+	const projectLink = slugToProjectView(slug!);
+
+	const orgLabel = organization?.label;
+	const isForeignOrg =
+		orgLabel !== ORGANIZATION.trace && orgLabel !== ORGANIZATION.giveth;
+
 	const EstimatedMatchingSection = () =>
 		totalEstimatedMatching !== 0 ? (
 			<Flex $flexDirection='column' gap='4px'>
@@ -84,22 +104,38 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		) : null;
 
 	return (
-		<DonationSectionWrapper gap='24px'>
+		<DonationSectionWrapper gap={isOnDonatePage ? '8px' : '24px'}>
+			{isOnDonatePage && (
+				<>
+					<Link href={projectLink}>
+						<CustomH5>{projectTitle}</CustomH5>
+					</Link>
+					<ProjectCardUserName
+						name={adminUser?.name}
+						adminUser={adminUser!}
+						slug={slug!}
+						isForeignOrg={isForeignOrg}
+						sidePadding='0'
+					/>
+				</>
+			)}
 			{sumDonationValueUsdForActiveQfRound &&
 			sumDonationValueUsdForActiveQfRound !== 0 ? (
 				<DonateInfo>
 					{isMobile && <br />}
-					<Title>
-						{formatMessage({
-							id: 'label.total_raised',
-						})}
-						{' ' +
-							formatDonation(
-								sumDonationValueUsd || 0,
-								'$',
-								locale,
-							)}
-					</Title>
+					{!isOnDonatePage && (
+						<Title>
+							{formatMessage({
+								id: 'label.total_raised',
+							})}
+							{' ' +
+								formatDonation(
+									sumDonationValueUsd || 0,
+									'$',
+									locale,
+								)}
+						</Title>
+					)}
 					<Amount weight={700}>
 						{formatDonation(
 							sumDonationValueUsdForActiveQfRound || 0,
@@ -139,17 +175,19 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 				</DonateInfo>
 			) : (
 				<div>
-					<Title>
-						{formatMessage({
-							id: 'label.total_raised',
-						})}
-						{' ' +
-							formatDonation(
-								sumDonationValueUsd || 0,
-								'$',
-								locale,
-							)}
-					</Title>
+					{!isOnDonatePage && (
+						<Title>
+							{formatMessage({
+								id: 'label.total_raised',
+							})}
+							{' ' +
+								formatDonation(
+									sumDonationValueUsd || 0,
+									'$',
+									locale,
+								)}
+						</Title>
+					)}
 					<NoFund weight={700}>
 						{formatMessage({
 							id: 'label.donate_first_lead_the_way',
@@ -165,105 +203,113 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 				<EstimatedMatchingSection />
 			</DefaultEstimatedMatchingContainer>
 
-			<ChartContainer>
-				<Flex $justifyContent='space-between'>
-					<LightSubline>
-						{formatMessage({
-							id: 'label.contribution',
-						})}
-					</LightSubline>
-					<GreenSubline>
-						{formatMessage({
-							id: 'label.matching',
-						})}
-					</GreenSubline>
-				</Flex>
-				<ContributionsContainer>
-					<Flex $flexDirection='column' gap='4px'>
-						<FlexSameSize $justifyContent='space-between'>
-							<Subline>1 DAI</Subline>
-							<IconArrowRight16 color={brandColors.cyan[500]} />
-							<EndAlignedSubline>
-								+{' '}
-								{formatDonation(
-									calculateEstimatedMatchingWithDonationAmount(
-										1,
-										projectDonationsSqrtRootSum,
-										allProjectsSum,
-										matchingPool,
-										activeRound?.maximumReward,
-									),
-									'',
-									locale,
-									true,
-								)}
-								&nbsp; DAI
-							</EndAlignedSubline>
-						</FlexSameSize>
-						<FlexSameSize $justifyContent='space-between'>
-							<Subline>10 DAI</Subline>
-							<IconArrowRight16 color={brandColors.cyan[500]} />
-							<EndAlignedSubline>
-								+{' '}
-								{formatDonation(
-									calculateEstimatedMatchingWithDonationAmount(
-										10,
-										projectDonationsSqrtRootSum,
-										allProjectsSum,
-										matchingPool,
-										activeRound?.maximumReward,
-									),
-									'',
-									locale,
-									true,
-								)}
-								&nbsp; DAI
-							</EndAlignedSubline>
-						</FlexSameSize>
-						<FlexSameSize $justifyContent='space-between'>
-							<Subline>100 DAI</Subline>
-							<IconArrowRight16 color={brandColors.cyan[500]} />
-							<EndAlignedSubline>
-								+{' '}
-								{formatDonation(
-									calculateEstimatedMatchingWithDonationAmount(
-										100,
-										projectDonationsSqrtRootSum,
-										allProjectsSum,
-										matchingPool,
-										activeRound?.maximumReward,
-									),
-									'',
-									locale,
-									true,
-								)}
-								&nbsp; DAI
-							</EndAlignedSubline>
-						</FlexSameSize>
-						{/* <Flex $justifyContent='space-between'>
+			{!isOnDonatePage && (
+				<ChartContainer>
+					<Flex $justifyContent='space-between'>
+						<LightSubline>
+							{formatMessage({
+								id: 'label.contribution',
+							})}
+						</LightSubline>
+						<GreenSubline>
+							{formatMessage({
+								id: 'label.matching',
+							})}
+						</GreenSubline>
+					</Flex>
+					<ContributionsContainer>
+						<Flex $flexDirection='column' gap='4px'>
+							<FlexSameSize $justifyContent='space-between'>
+								<Subline>1 DAI</Subline>
+								<IconArrowRight16
+									color={brandColors.cyan[500]}
+								/>
+								<EndAlignedSubline>
+									+{' '}
+									{formatDonation(
+										calculateEstimatedMatchingWithDonationAmount(
+											1,
+											projectDonationsSqrtRootSum,
+											allProjectsSum,
+											matchingPool,
+											activeRound?.maximumReward,
+										),
+										'',
+										locale,
+										true,
+									)}
+									&nbsp; DAI
+								</EndAlignedSubline>
+							</FlexSameSize>
+							<FlexSameSize $justifyContent='space-between'>
+								<Subline>10 DAI</Subline>
+								<IconArrowRight16
+									color={brandColors.cyan[500]}
+								/>
+								<EndAlignedSubline>
+									+{' '}
+									{formatDonation(
+										calculateEstimatedMatchingWithDonationAmount(
+											10,
+											projectDonationsSqrtRootSum,
+											allProjectsSum,
+											matchingPool,
+											activeRound?.maximumReward,
+										),
+										'',
+										locale,
+										true,
+									)}
+									&nbsp; DAI
+								</EndAlignedSubline>
+							</FlexSameSize>
+							<FlexSameSize $justifyContent='space-between'>
+								<Subline>100 DAI</Subline>
+								<IconArrowRight16
+									color={brandColors.cyan[500]}
+								/>
+								<EndAlignedSubline>
+									+{' '}
+									{formatDonation(
+										calculateEstimatedMatchingWithDonationAmount(
+											100,
+											projectDonationsSqrtRootSum,
+											allProjectsSum,
+											matchingPool,
+											activeRound?.maximumReward,
+										),
+										'',
+										locale,
+										true,
+									)}
+									&nbsp; DAI
+								</EndAlignedSubline>
+							</FlexSameSize>
+							{/* <Flex $justifyContent='space-between'>
 							<LightSubline>Last updated: 3h ago</LightSubline>
 							<LightSubline>|</LightSubline>
 							<LightSubline>Next update in: 3 min</LightSubline>
 						</Flex> */}
-						<a
-							href={links.QF_DOC}
-							target='_blank'
-							referrerPolicy='no-referrer'
-							rel='noreferrer'
-						>
-							<LearnLink $alignItems='center' gap='2px'>
-								<Subline>
-									{formatMessage({
-										id: 'label.how_it_works?',
-									})}
-								</Subline>
-								<IconChevronRight16 />
-							</LearnLink>
-						</a>
-					</Flex>
-				</ContributionsContainer>
-				<ProjectEligibleQFChains />
-			</ChartContainer>
+							<a
+								href={links.QF_DOC}
+								target='_blank'
+								referrerPolicy='no-referrer'
+								rel='noreferrer'
+							>
+								<LearnLink $alignItems='center' gap='2px'>
+									<Subline>
+										{formatMessage({
+											id: 'label.how_it_works?',
+										})}
+									</Subline>
+									<IconChevronRight16 />
+								</LearnLink>
+							</a>
+						</Flex>
+					</ContributionsContainer>
+					<ProjectEligibleQFChains />
+				</ChartContainer>
+			)}
 		</DonationSectionWrapper>
 	);
 };
