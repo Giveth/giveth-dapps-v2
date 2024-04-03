@@ -122,6 +122,7 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 		$finishStatus: FinishStatus
 		$userId: Int!
 		$filteredTokens: [String!]
+		$includeArchived: Boolean
 	) {
 		recurringDonationsByUserId(
 			take: $take
@@ -131,6 +132,7 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 			status: $status
 			finishStatus: $finishStatus
 			filteredTokens: $filteredTokens
+			includeArchived: $includeArchived
 		) {
 			recurringDonations {
 				id
@@ -140,6 +142,8 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 				currency
 				anonymous
 				status
+				isArchived
+				amountStreamed
 				project {
 					id
 					title

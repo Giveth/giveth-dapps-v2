@@ -53,7 +53,7 @@ const EstimatedMatchingToast = ({
 	return (
 		<Wrapper>
 			<Upper>
-				<FlexCenter gap='4px'>
+				<EstimatedMatching>
 					<Caption $medium>
 						{formatMessage({
 							id: 'page.donate.matching_toast.upper',
@@ -69,11 +69,11 @@ const EstimatedMatchingToast = ({
 					>
 						<TooltipContent>
 							{formatMessage({
-								id: 'tooltip.donation.matching_polygon',
+								id: 'component.qf-section.tooltip_polygon',
 							})}
 						</TooltipContent>
 					</IconWithTooltip>
-				</FlexCenter>
+				</EstimatedMatching>
 				<B>{formatDonation(esMatching, '', locale, true)}</B>
 			</Upper>
 			<Divider />
@@ -83,6 +83,13 @@ const EstimatedMatchingToast = ({
 		</Wrapper>
 	);
 };
+
+const EstimatedMatching = styled(FlexCenter)`
+	gap: 4px;
+	> *:last-child {
+		margin-top: 3px;
+	}
+`;
 
 const Bottom = styled(Subline)`
 	color: ${neutralColors.gray['800']};

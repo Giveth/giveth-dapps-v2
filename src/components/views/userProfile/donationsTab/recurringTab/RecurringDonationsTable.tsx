@@ -63,7 +63,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 					changeOrder(ERecurringDonationSortField.flowRate)
 				}
 			>
-				{formatMessage({ id: 'label.flow_rate' })}
+				{formatMessage({ id: 'label.amount' })}
 				<SortIcon
 					order={order}
 					title={ERecurringDonationSortField.flowRate}
@@ -114,7 +114,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 						<Currency>{donation.currency} /mo</Currency>
 					</DonationTableCell>
 					<DonationTableCell>
-						{donation.totalDonated || 0}
+						{donation.amountStreamed || 0}
 						<Currency>{donation.currency}</Currency>
 					</DonationTableCell>
 					{myAccount && (
@@ -122,6 +122,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 							<DonationTableCell>
 								<RecurringDonationStatusBadge
 									status={donation.status}
+									isArchived={donation.isArchived}
 								/>
 							</DonationTableCell>
 							<DonationTableCell>

@@ -11,6 +11,7 @@ import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { limitFraction } from '@/helpers/number';
 import { ModifySuperTokenModal } from '@/components/views/donate/ModifySuperToken/ModifySuperTokenModal';
 import config from '@/configuration';
+import { countActiveStreams } from '@/helpers/donate';
 
 interface IStreamRowProps {
 	tokenStream: ISuperfluidStream[];
@@ -20,9 +21,9 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 	const [showModifyModal, setShowModifyModal] = useState(false);
 	const { address, chain } = useAccount();
 	const { switchChain } = useSwitchChain();
+	const { formatMessage } = useIntl();
 
 	const chainId = chain?.id;
-	const { formatMessage } = useIntl();
 
 	const { data: balance, refetch } = useBalance({
 		token: tokenStream[0].token.id,
@@ -41,6 +42,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 	const monthlyFlowRate = totalFlowRate * ONE_MONTH_SECONDS;
 	const { symbol, decimals } = tokenStream[0].token;
 	const runOutMonth = balance?.value ? balance?.value / monthlyFlowRate : 0n;
+	const activeStreamCount = countActiveStreams(tokenStream);
 
 	return (
 		<RowWrapper>
@@ -59,7 +61,16 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 					&nbsp;monthly
 				</P>
 			</TableCell>
-			<TableCell>{tokenStream.length} Projects</TableCell>
+			<TableCell>
+				{activeStreamCount}
+				&nbsp;
+				{formatMessage(
+					{ id: 'label.number_projects' },
+					{
+						count: activeStreamCount,
+					},
+				)}
+			</TableCell>
 			<TableCell>
 				{runOutMonth < 1 ? (
 					' < 1 Month '

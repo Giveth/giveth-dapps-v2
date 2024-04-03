@@ -7,6 +7,7 @@ export const CREATE_RECURRING_DONATION = gql`
 		$txHash: String!
 		$flowRate: String!
 		$currency: String!
+		$anonymous: Boolean
 	) {
 		createRecurringDonation(
 			projectId: $projectId
@@ -14,6 +15,7 @@ export const CREATE_RECURRING_DONATION = gql`
 			txHash: $txHash
 			flowRate: $flowRate
 			currency: $currency
+			anonymous: $anonymous
 		) {
 			id
 			txHash
@@ -50,6 +52,7 @@ export const UPDATE_RECURRING_DONATION = gql`
 		$txHash: String
 		$flowRate: String
 		$anonymous: Boolean
+		$isArchived: Boolean
 		$status: String
 	) {
 		updateRecurringDonationParams(
@@ -59,6 +62,7 @@ export const UPDATE_RECURRING_DONATION = gql`
 			anonymous: $anonymous
 			flowRate: $flowRate
 			currency: $currency
+			isArchived: $isArchived
 			status: $status
 		) {
 			id
@@ -68,6 +72,7 @@ export const UPDATE_RECURRING_DONATION = gql`
 			flowRate
 			anonymous
 			status
+			isArchived
 		}
 	}
 `;
