@@ -48,7 +48,7 @@ export const NoDonation: FC<INoDonation> = ({ selectedQF }) => {
 						<H1>in This Round</H1>
 					)}
 					{isActive ? (
-						<Link href={destination}>
+						<Link href={destination} onClick={e => handleClick(e)}>
 							<DonateButton
 								linkType='primary'
 								label={formatMessage({ id: 'label.donate' })}
@@ -63,11 +63,11 @@ export const NoDonation: FC<INoDonation> = ({ selectedQF }) => {
 					)}
 				</>
 			)}
-			{showHintModal && qfRounds && (
+			{showHintModal && selectedQF && (
 				<RoundNotStartedModal
 					setShowModal={setShowHintModal}
 					destination={destination}
-					qfRounds={qfRounds}
+					qfRound={selectedQF}
 				/>
 			)}
 		</Wrapper>
