@@ -78,7 +78,7 @@ const ProjectCard = (props: IProjectCard) => {
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
-	const { activeStartedRound } = getActiveRound(qfRounds);
+	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
 	const hasFooter = activeStartedRound || verified;
 
 	const projectLink = slugToProjectView(slug);
@@ -317,11 +317,11 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				</ActionButtons>
 			</CardBody>
-			{showHintModal && qfRounds && (
+			{showHintModal && activeQFRound && (
 				<RoundNotStartedModal
 					setShowModal={setShowHintModal}
 					destination={destination}
-					qfRounds={qfRounds}
+					qfRound={activeQFRound}
 				/>
 			)}
 		</Wrapper>
