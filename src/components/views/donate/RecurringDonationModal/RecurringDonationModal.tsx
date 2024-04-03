@@ -369,7 +369,6 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 
 			const res = await tx.wait();
-			console.log('res', res);
 			if (res.status) {
 				try {
 					if (projectDonationId) {
