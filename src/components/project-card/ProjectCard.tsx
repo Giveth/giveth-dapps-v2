@@ -295,22 +295,6 @@ const ProjectCard = (props: IProjectCard) => {
 									<QFBadge>{activeQFRound?.name}</QFBadge>
 								)}
 							</Flex>
-							{/* {verified && (
-								<GivpowerRankContainer
-									gap='8px'
-									$alignItems='center'
-								>
-									<IconRocketInSpace16
-										color={neutralColors.gray[700]}
-									/>
-									<B>
-										{projectPower?.powerRank &&
-										projectPower?.totalPower !== 0
-											? `#${projectPower.powerRank}`
-											: '--'}
-									</B>
-								</GivpowerRankContainer>
-							)} */}
 						</PaddedRow>
 					</Link>
 				)}
