@@ -19,7 +19,7 @@ import { useProjectContext } from '@/context/project.context';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
 import { capitalizeAllWords } from '@/lib/helpers';
-import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
+import { Dropdown, IOption, EOptionType } from '@/components/Dropdown';
 import { idToProjectEdit } from '@/lib/routeCreators';
 import ShareModal from '@/components/modals/ShareModal';
 import { EContentType } from '@/lib/constants/shareContent';
@@ -69,7 +69,7 @@ export const AdminActions = () => {
 			label: formatMessage({
 				id: 'label.edit_project',
 			}),
-			type: OptionType.ITEM,
+			type: EOptionType.ITEM,
 			icon: <IconEdit16 />,
 			cb: () => router.push(idToProjectEdit(projectData?.id || '')),
 		},
@@ -79,7 +79,7 @@ export const AdminActions = () => {
 					id: 'label.verify_your_project',
 				}),
 			),
-			type: OptionType.ITEM,
+			type: EOptionType.ITEM,
 			icon: <IconVerifiedBadge16 />,
 			cb: () => setShowVerificationModal(true),
 			isHidden: isVerificationDisabled,
@@ -92,7 +92,7 @@ export const AdminActions = () => {
 						: 'label.activate_project',
 				}),
 			),
-			type: OptionType.ITEM,
+			type: EOptionType.ITEM,
 			icon: <IconArchiving size={16} />,
 			cb: () => (isActive ? setDeactivateModal(true) : activateProject()),
 		},
@@ -100,7 +100,7 @@ export const AdminActions = () => {
 			label: formatMessage({
 				id: 'label.share',
 			}),
-			type: OptionType.ITEM,
+			type: EOptionType.ITEM,
 			icon: <IconShare16 />,
 			cb: () => setShowShareModal(true),
 			isHidden: !isActive,
