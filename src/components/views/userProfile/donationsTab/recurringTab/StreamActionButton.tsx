@@ -10,7 +10,7 @@ import { type FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
-import { Dropdown, IOption } from '@/components/Dropdown';
+import { Dropdown, EOptionType, IOption } from '@/components/Dropdown';
 import { capitalizeAllWords } from '@/lib/helpers';
 import { ModifyStreamModal } from './ModifyStreamModal/ModifyStreamModal';
 import {
@@ -53,6 +53,9 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 						cb: () => setShowModify(true),
 					},
 					{
+						type: EOptionType.SEPARATOR,
+					},
+					{
 						label: formatMessage({
 							id: 'label.end_recurring_donation',
 						}),
@@ -74,7 +77,9 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 										'?tab=recurring',
 								),
 						},
-
+						{
+							type: EOptionType.SEPARATOR,
+						},
 						{
 							label: capitalizeAllWords(
 								formatMessage({ id: 'label.archive_donation' }),
