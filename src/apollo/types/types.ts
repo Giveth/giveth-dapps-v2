@@ -279,7 +279,7 @@ export interface IWalletRecurringDonation {
 	status: ERecurringDonationStatus;
 	flowRate: string;
 	currency: string;
-	totalDonated: string;
+	amountStreamed: string;
 	networkId: number;
 	finished: boolean;
 	anonymous: boolean;
