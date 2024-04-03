@@ -237,10 +237,11 @@ export const RecurringDonationCard = () => {
 				</a>
 			</Title>
 			<Desc>
-				{formatMessage({
-					id: 'label.recurring_donation_card_subheader_1',
-				})}{' '}
-				<br />
+				<B>
+					{formatMessage({
+						id: 'label.recurring_donation_card_subheader_1',
+					})}{' '}
+				</B>
 				<br />
 				{formatMessage({
 					id: 'label.recurring_donation_card_subheader_2',
