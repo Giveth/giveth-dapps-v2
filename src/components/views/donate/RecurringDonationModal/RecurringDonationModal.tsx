@@ -343,16 +343,16 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					flowRate: givethFlowRate,
 					superToken: _superToken,
 				};
-				if (givethOldStream) {
-					console.log('Start Update Giveth Donation Info');
-					const givethBackendRes =
-						await updateRecurringDonation(givethDonationInfo);
-					console.log(
-						'Giveth Donation Update Info',
-						givethBackendRes,
-					);
-				} else {
-					try {
+				try {
+					if (givethOldStream) {
+						console.log('Start Update Giveth Donation Info');
+						const givethBackendRes =
+							await updateRecurringDonation(givethDonationInfo);
+						console.log(
+							'Giveth Donation Update Info',
+							givethBackendRes,
+						);
+					} else {
 						console.log('Start Creating Giveth Donation Info');
 						const givethBackendRes =
 							await createRecurringDonation(givethDonationInfo);
@@ -361,13 +361,14 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 							givethBackendRes,
 						);
 						// donationId = backendRes.createRecurringDonation.id;
-					} catch (error) {
-						console.log('error', error);
 					}
+				} catch (error) {
+					console.log('error', error);
 				}
 			}
 
 			const res = await tx.wait();
+			console.log('res', res);
 			if (!res.status) {
 				throw new Error('Transaction failed');
 			}
