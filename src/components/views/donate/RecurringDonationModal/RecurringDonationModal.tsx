@@ -33,8 +33,10 @@ import { ChainType } from '@/types/config';
 import {
 	createRecurringDonation,
 	updateRecurringDonation,
+	updateRecurringDonationStatus,
 } from '@/services/donation';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
+import { ERecurringDonationStatus } from '@/apollo/types/types';
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
 	amount: bigint;
@@ -300,8 +302,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				tx = await batchOp.exec(signer);
 			}
 
-			let donationId = 0;
 			// saving project donation to backend
+			let projectDonationId = 0;
 			try {
 				const projectDonationInfo = {
 					projectId: +project.id,
@@ -313,27 +315,27 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				};
 				if (isUpdating) {
 					console.log('Start Update Project Donation Info');
-					const projectBackendRes =
+					projectDonationId =
 						await updateRecurringDonation(projectDonationInfo);
 					console.log(
 						'Project Donation Update Info',
-						projectBackendRes,
+						projectDonationId,
 					);
 				} else {
 					console.log('Start Creating Project Donation Info');
-					const projectBackendRes =
+					projectDonationId =
 						await createRecurringDonation(projectDonationInfo);
 					console.log(
 						'Project Donation Create Info',
-						projectBackendRes,
+						projectDonationId,
 					);
-					// donationId = backendRes.createRecurringDonation.id;
 				}
 			} catch (error) {
-				console.log('error', error);
+				showToastError(error);
 			}
 
 			// saving giveth donation to backend
+			let givethDonationId = 0;
 			if (isDonatingToGiveth) {
 				const givethDonationInfo = {
 					projectId: config.GIVETH_PROJECT_ID,
@@ -346,30 +348,57 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				try {
 					if (givethOldStream) {
 						console.log('Start Update Giveth Donation Info');
-						const givethBackendRes =
+						givethDonationId =
 							await updateRecurringDonation(givethDonationInfo);
 						console.log(
 							'Giveth Donation Update Info',
-							givethBackendRes,
+							givethDonationId,
 						);
 					} else {
 						console.log('Start Creating Giveth Donation Info');
-						const givethBackendRes =
+						givethDonationId =
 							await createRecurringDonation(givethDonationInfo);
 						console.log(
 							'Giveth Donation Create Info',
-							givethBackendRes,
+							givethDonationId,
 						);
-						// donationId = backendRes.createRecurringDonation.id;
 					}
 				} catch (error) {
-					console.log('error', error);
+					showToastError(error);
 				}
 			}
 
 			const res = await tx.wait();
 			console.log('res', res);
-			if (!res.status) {
+			if (res.status) {
+				try {
+					if (projectDonationId) {
+						updateRecurringDonationStatus(
+							projectDonationId,
+							ERecurringDonationStatus.ACTIVE,
+						);
+					}
+					if (isDonatingToGiveth && givethDonationId) {
+						updateRecurringDonationStatus(
+							givethDonationId,
+							ERecurringDonationStatus.ACTIVE,
+						);
+					}
+				} catch (error) {
+					if (projectDonationId) {
+						updateRecurringDonationStatus(
+							projectDonationId,
+							ERecurringDonationStatus.FAILED,
+						);
+					}
+					if (isDonatingToGiveth && givethDonationId) {
+						updateRecurringDonationStatus(
+							givethDonationId,
+							ERecurringDonationStatus.FAILED,
+						);
+					}
+				}
+			} else {
 				throw new Error('Transaction failed');
 			}
 			setStep(EDonationSteps.SUBMITTED);
