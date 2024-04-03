@@ -76,3 +76,18 @@ export const UPDATE_RECURRING_DONATION = gql`
 		}
 	}
 `;
+
+export const UPDATE_RECURRING_DONATION_STATUS = gql`
+	mutation updateRecurringDonationStatus(
+		$status: String
+		$donationId: Float!
+	) {
+		updateRecurringDonationStatus(
+			status: $status
+			donationId: $donationId
+		) {
+			id
+			status
+		}
+	}
+`;
