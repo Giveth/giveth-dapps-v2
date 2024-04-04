@@ -15,6 +15,7 @@ import {
 	Caption,
 	Flex,
 	IconPublish16,
+	IconEstimated16,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -103,7 +104,7 @@ const ProjectsSortSelect = () => {
 			{
 				label: formatMessage({ id: 'label.estimated_matching' }),
 				value: EProjectsSortBy.EstimatedMatching,
-				icon: <IconIncrease16 />,
+				icon: <IconEstimated16 />,
 				color: semanticColors.jade[500],
 			},
 		);
