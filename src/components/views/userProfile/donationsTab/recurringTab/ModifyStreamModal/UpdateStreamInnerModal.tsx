@@ -116,7 +116,9 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			if (!res.status) {
 				throw new Error('Transaction failed');
 			}
-			refetchTokenStream();
+			setTimeout(() => {
+				refetchTokenStream();
+			}, 2000); // make sure that the superfluid subgraph is synced
 			setStep(EDonationSteps.SUCCESS);
 			if (tx.hash) {
 			}
