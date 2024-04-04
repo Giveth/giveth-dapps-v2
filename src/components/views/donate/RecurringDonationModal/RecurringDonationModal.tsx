@@ -295,11 +295,12 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				}
 			}
 			let tx;
-			if (operations.length === 1) {
-				tx = await operations[0].exec(signer);
-			} else {
+			const isBatch = operations.length > 1;
+			if (isBatch) {
 				const batchOp = sf.batchCall(operations);
 				tx = await batchOp.exec(signer);
+			} else {
+				tx = await operations[0].exec(signer);
 			}
 
 			// saving project donation to backend
@@ -312,6 +313,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					txHash: tx.hash,
 					flowRate: _flowRate,
 					superToken: _superToken,
+					isBatch,
 				};
 				if (isUpdating) {
 					console.log('Start Update Project Donation Info');
@@ -344,6 +346,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					txHash: tx.hash,
 					flowRate: givethFlowRate,
 					superToken: _superToken,
+					isBatch,
 				};
 				try {
 					if (givethOldStream) {
