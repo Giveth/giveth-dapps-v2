@@ -108,19 +108,23 @@ export const ActiveProjectsSection = () => {
 		<Wrapper>
 			<Flex $justifyContent='space-between'>
 				<H5 weight={900}>Recurring Donations</H5>
-				<Flex gap='24px'>
-					<StyledToggleSwitch
-						isOn={showArchive}
-						label='Switch to Archive Donations'
-						toggleOnOff={() => setShowArchive(archive => !archive)}
-					/>
-					<RecurringDonationFiltersButton
-						statusFilters={statusFilters}
-						setStatusFilters={setStatusFilters}
-						tokenFilters={tokenFilters}
-						setTokenFilters={setTokenFilters}
-					/>
-				</Flex>
+				{myAccount && (
+					<Flex gap='24px'>
+						<StyledToggleSwitch
+							isOn={showArchive}
+							label='Switch to Archive Donations'
+							toggleOnOff={() =>
+								setShowArchive(archive => !archive)
+							}
+						/>
+						<RecurringDonationFiltersButton
+							statusFilters={statusFilters}
+							setStatusFilters={setStatusFilters}
+							tokenFilters={tokenFilters}
+							setTokenFilters={setTokenFilters}
+						/>
+					</Flex>
+				)}
 			</Flex>
 			<DonationTableWrapper>
 				{!loading && totalDonations === 0 ? (
