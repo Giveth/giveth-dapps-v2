@@ -14,11 +14,15 @@ import config, { isProduction } from '@/configuration';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { showToastError } from '@/lib/helpers';
-import { updateRecurringDonation } from '@/services/donation';
+import {
+	updateRecurringDonation,
+	updateRecurringDonationStatus,
+} from '@/services/donation';
 import { wagmiConfig } from '@/wagmiConfigs';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { TXLink } from './TXLink';
 import { useProfileDonateTabData } from '../ProfileDonateTab.context';
+import { ERecurringDonationStatus } from '@/apollo/types/types';
 
 interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	step: EDonationSteps;
@@ -92,7 +96,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			const tx = await projectFlowOp.exec(signer);
 			setTx(tx.hash);
 
-			let donationId = 0;
+			let projectDonationId = 0;
 			// saving project donation to backend
 			try {
 				const projectDonationInfo = {
@@ -104,16 +108,37 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 					superToken: token,
 				};
 				console.log('Start Update Project Donation Info');
-				const projectBackendRes =
+				projectDonationId =
 					await updateRecurringDonation(projectDonationInfo);
-				console.log('Project Donation Update Info', projectBackendRes);
+				console.log('Project Donation Update Info', projectDonationId);
 			} catch (error) {
-				console.log('error', error);
+				showToastError(error);
 			}
 
 			const res = await tx.wait();
 
-			if (!res.status) {
+			if (res.status) {
+				if (projectDonationId) {
+					try {
+						await updateRecurringDonationStatus(
+							projectDonationId,
+							ERecurringDonationStatus.VERIFIED,
+						);
+					} catch (error) {
+						showToastError(error);
+					}
+				}
+			} else {
+				try {
+					if (projectDonationId) {
+						await updateRecurringDonationStatus(
+							projectDonationId,
+							ERecurringDonationStatus.FAILED,
+						);
+					}
+				} catch (error) {
+					showToastError(error);
+				}
 				throw new Error('Transaction failed');
 			}
 			refetchTokenStream();

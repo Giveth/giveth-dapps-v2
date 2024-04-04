@@ -387,6 +387,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 						);
 					}
 				} catch (error) {
+					showToastError(error);
+				}
+			} else {
+				try {
 					if (projectDonationId) {
 						updateRecurringDonationStatus(
 							projectDonationId,
@@ -399,8 +403,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 							ERecurringDonationStatus.FAILED,
 						);
 					}
+				} catch (error) {
+					showToastError(error);
 				}
-			} else {
 				throw new Error('Transaction failed');
 			}
 			setStep(EDonationSteps.SUBMITTED);
