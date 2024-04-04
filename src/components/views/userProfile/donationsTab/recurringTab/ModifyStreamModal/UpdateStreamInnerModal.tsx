@@ -38,15 +38,12 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	flowRatePerMonth,
 	streamFlowRatePerMonth,
 	setShowModal,
-	refetch,
 }) => {
 	const [tx, setTx] = useState('');
 	const { formatMessage } = useIntl();
 	const tokenPrice = useTokenPrice(token);
 	const { address } = useAccount();
 	const { refetchTokenStream } = useProfileDonateTabData();
-
-	console.log('refetchTokenStream', refetchTokenStream);
 
 	const onDonate = async () => {
 		setStep(EDonationSteps.DONATING);
@@ -110,7 +107,6 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 				const projectBackendRes =
 					await updateRecurringDonation(projectDonationInfo);
 				console.log('Project Donation Update Info', projectBackendRes);
-				refetch();
 			} catch (error) {
 				console.log('error', error);
 			}
