@@ -10,7 +10,7 @@ import {
 	IconLinkedin18,
 	IconRedit,
 	IconWorld16,
-	IconX16,
+	IconXSocial18,
 	IconYoutube,
 	P,
 } from '@giveth/ui-design-system';
@@ -30,7 +30,7 @@ export const socialMediasArray = [
 	{
 		name: 'Twitter',
 		type: EInputs.x,
-		icon: IconX16,
+		icon: IconXSocial18,
 		validator: validators.twitter,
 	},
 	{
