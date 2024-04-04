@@ -16,7 +16,7 @@ import config, { isProduction } from '@/configuration';
 import { showToastError } from '@/lib/helpers';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { StreamInfo } from './StreamInfo';
-import { ModifySection } from './ModifySection';
+import { EModifySectionPlace, ModifySection } from './ModifySection';
 import { ModifyWrapper, Wrapper } from './common.sc';
 import { EModifySuperTokenSteps, actionButtonLabel } from './common';
 import { wagmiConfig } from '@/wagmiConfigs';
@@ -176,6 +176,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 							refetch={refetch}
 							isRefetching={isRefetching}
 							tooltipText='tooltip.deposit_stream_balance'
+							modifySectionPlace={EModifySectionPlace.DEPOSIT}
 						/>
 						<StreamInfo
 							tokenStreams={tokenStreams}

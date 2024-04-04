@@ -11,7 +11,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Dispatch, SetStateAction, type FC } from 'react';
+import { Dispatch, SetStateAction, useState, type FC } from 'react';
 import { type GetBalanceReturnType } from '@wagmi/core';
 import { formatUnits } from 'viem';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
@@ -21,6 +21,11 @@ import { Spinner } from '@/components/Spinner';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { IToken } from '@/types/superFluid';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
+
+export enum EModifySectionPlace {
+	DEPOSIT = 'deposit',
+	WITHDRAW = 'withdraw',
+}
 
 interface IModifySectionProps {
 	titleLabel: string;
@@ -32,6 +37,7 @@ interface IModifySectionProps {
 	error?: string;
 	minRemainingBalance?: bigint;
 	tooltipText?: string;
+	modifySectionPlace: EModifySectionPlace;
 }
 export const ModifySection: FC<IModifySectionProps> = ({
 	titleLabel,
@@ -43,8 +49,28 @@ export const ModifySection: FC<IModifySectionProps> = ({
 	error,
 	minRemainingBalance = 0n,
 	tooltipText,
+	modifySectionPlace,
 }) => {
 	const { formatMessage } = useIntl();
+	const [displayAmount, setDisplayAmount] = useState('');
+	const ProperGlink =
+		modifySectionPlace === EModifySectionPlace.DEPOSIT
+			? CustomGLink
+			: GLink;
+
+	const handleSetMaxAmount = () => {
+		if (balance && balance.value !== undefined) {
+			const maxAmountDisplay = truncateToDecimalPlaces(
+				formatUnits(
+					balance.value - minRemainingBalance,
+					balance.decimals,
+				),
+				6,
+			).toString(); // Convert your balance value to string properly
+			setDisplayAmount(maxAmountDisplay); // Update the display amount
+			setAmount(balance.value); // Set the amount to the balance value
+		}
+	};
 
 	return (
 		<TopUpSection $flexDirection='column' gap='8px'>
@@ -87,10 +113,26 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					setAmount={setAmount}
 					disabled={token === undefined}
 					decimals={token?.decimals}
+					displayAmount={
+						modifySectionPlace === EModifySectionPlace.DEPOSIT
+							? displayAmount
+							: undefined
+					}
+					setDisplayAmount={
+						modifySectionPlace === EModifySectionPlace.DEPOSIT
+							? setDisplayAmount
+							: undefined
+					}
 				/>
 			</InputWrapper>
 			<Flex gap='4px'>
-				<GLink size='Small'>
+				<ProperGlink
+					size='Small'
+					onClick={() =>
+						modifySectionPlace === EModifySectionPlace.DEPOSIT &&
+						handleSetMaxAmount()
+					}
+				>
 					{formatMessage({
 						id: 'label.available',
 					})}
@@ -104,7 +146,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 								6,
 							)
 						: '--'}
-				</GLink>
+				</ProperGlink>
 				<IconWrapper onClick={() => !isRefetching && refetch()}>
 					{isRefetching ? <Spinner size={16} /> : <IconRefresh16 />}
 				</IconWrapper>
@@ -149,6 +191,13 @@ const Input = styled(AmountInput)`
 		line-height: 150%; /* 24px */
 		width: 100%;
 		padding: 13px 16px;
+	}
+`;
+
+const CustomGLink = styled(GLink)`
+	&&:hover {
+		cursor: pointer;
+		text-decoration: underline;
 	}
 `;
 

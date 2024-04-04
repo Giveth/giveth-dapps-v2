@@ -116,96 +116,129 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 		fetchAllBalances();
 	}, [address, project.addresses, tokenStreams]); // Dependency array includes address to refetch if it changes
 
+	const isAllSuperTokenBalancesAreZero = superTokens.every(({ symbol }) => {
+		return balances[symbol] === 0n;
+	});
+
+	const isAllSuperTokenBalancesAreZeroAndNoTokenStreams =
+		isAllSuperTokenBalancesAreZero &&
+		Object.keys(tokenStreams).length === 0;
+
+	const isUserHasBalanceForAllSuperTokens = superTokens.every(
+		({ symbol }) => {
+			return balances[symbol] !== undefined && balances[symbol] > 0n;
+		},
+	);
+
 	return (
 		<>
 			<Wrapper>
-				<Title $medium>
-					{formatMessage({ id: 'label.stream_balances' })}
-				</Title>
-				<TitleSubheader>
-					{formatMessage({
-						id: 'label.stream_balances_description',
-					})}
-				</TitleSubheader>
-				{Object.keys(tokenStreams).map(tokenId => {
-					const token = superTokens.find(
-						token => token.id === tokenId,
-					) as IToken;
-					return (
-						<StreamInfo
-							key={tokenId}
-							stream={tokenStreams[tokenId]}
-							balance={balances[token.symbol]}
-							disable={
-								!balances[token.symbol] ||
-								balances[token.symbol] === 0n
-							}
-							onClick={() => {
-								setSelectedToken({
-									token,
-									balance: balances[token.symbol],
-								});
-								setShowModal(false);
-							}}
-							isSuperToken={!!token.isSuperToken}
-						/>
-					);
-				})}
-				{superTokens.map(token =>
-					tokenStreams[token.id] ? null : (
-						<TokenInfo
-							key={token.symbol}
-							token={token}
-							balance={balances[token.symbol]}
-							disable={
-								!balances[token.symbol] ||
-								balances[token.symbol] === 0n
-							}
-							onClick={() => {
-								setSelectedToken({
-									token,
-									balance: balances[token.symbol],
-								});
-								setShowModal(false);
-							}}
-						/>
-					),
-				)}
-				<Title $medium>
-					{formatMessage({ id: 'label.superfluid_eligible_tokens' })}
-				</Title>
-				<TitleSubheader>
-					{formatMessage({
-						id: 'label.superfluid_eligible_tokens_description',
-					})}
-				</TitleSubheader>
-				{tokens.length > 0 ? (
-					tokens.map(token => (
-						<TokenInfo
-							key={token.underlyingToken.symbol}
-							token={token.underlyingToken}
-							balance={balances[token.underlyingToken.symbol]}
-							disable={
-								balances[token.underlyingToken.symbol] ===
-									undefined ||
-								balances[token.underlyingToken.symbol] === 0n
-							}
-							onClick={() => {
-								setSelectedToken({
-									token: token.underlyingToken,
-									balance:
-										balances[token.underlyingToken.symbol],
-								});
-								setShowModal(false);
-							}}
-						/>
-					))
-				) : (
-					<Caption>
-						{formatMessage({
-							id: 'label.you_have_super_token_for_all_tokens',
+				{!isAllSuperTokenBalancesAreZeroAndNoTokenStreams && (
+					<>
+						<Title $medium>
+							{formatMessage({ id: 'label.stream_balances' })}
+						</Title>
+						<TitleSubheader>
+							{formatMessage({
+								id: 'label.stream_balances_description',
+							})}
+						</TitleSubheader>
+						{Object.keys(tokenStreams).map(tokenId => {
+							const token = superTokens.find(
+								token => token.id === tokenId,
+							) as IToken;
+							return (
+								<StreamInfo
+									key={tokenId}
+									stream={tokenStreams[tokenId]}
+									balance={balances[token.symbol]}
+									disable={
+										!balances[token.symbol] ||
+										balances[token.symbol] === 0n
+									}
+									onClick={() => {
+										setSelectedToken({
+											token,
+											balance: balances[token.symbol],
+										});
+										setShowModal(false);
+									}}
+									isSuperToken={!!token.isSuperToken}
+								/>
+							);
 						})}
-					</Caption>
+						{superTokens.map(token =>
+							tokenStreams[token.id] ||
+							balances[token.symbol] === 0n ? null : (
+								<TokenInfo
+									key={token.symbol}
+									token={token}
+									balance={balances[token.symbol]}
+									disable={
+										!balances[token.symbol] ||
+										balances[token.symbol] === 0n
+									}
+									onClick={() => {
+										setSelectedToken({
+											token,
+											balance: balances[token.symbol],
+										});
+										setShowModal(false);
+									}}
+								/>
+							),
+						)}
+					</>
+				)}
+
+				{!isUserHasBalanceForAllSuperTokens && (
+					<>
+						<Title $medium>
+							{formatMessage({
+								id: 'label.superfluid_eligible_tokens',
+							})}
+						</Title>
+						<TitleSubheader>
+							{formatMessage({
+								id: 'label.superfluid_eligible_tokens_description',
+							})}
+						</TitleSubheader>
+						{tokens.length > 0 ? (
+							tokens.map(token => (
+								<TokenInfo
+									key={token.underlyingToken.symbol}
+									token={token.underlyingToken}
+									balance={
+										balances[token.underlyingToken.symbol]
+									}
+									disable={
+										balances[
+											token.underlyingToken.symbol
+										] === undefined ||
+										balances[
+											token.underlyingToken.symbol
+										] === 0n
+									}
+									onClick={() => {
+										setSelectedToken({
+											token: token.underlyingToken,
+											balance:
+												balances[
+													token.underlyingToken.symbol
+												],
+										});
+										setShowModal(false);
+									}}
+								/>
+							))
+						) : (
+							<Caption>
+								{formatMessage({
+									id: 'label.you_have_super_token_for_all_tokens',
+								})}
+							</Caption>
+						)}
+					</>
 				)}
 			</Wrapper>
 			<GIVbackWrapper>
