@@ -47,9 +47,16 @@ export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 		[props.donation.currency],
 	);
 
+	const handleCloseModal = () => {
+		if (step === EDonationSteps.SUCCESS) {
+			props.refetch();
+		}
+		closeModal();
+	};
+
 	return (
 		<Modal
-			closeModal={closeModal}
+			closeModal={handleCloseModal}
 			isAnimating={isAnimating}
 			headerTitle={formatMessage({
 				id: 'label.modify_recurring_donation_amount',

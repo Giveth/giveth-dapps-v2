@@ -37,10 +37,8 @@ export const ArchiveStreamModal: FC<IArchiveStreamModalProps> = ({
 	const handleCloseModal = () => {
 		if (step === EArchiveStreamSteps.SUCCESS) {
 			props.refetch();
-			closeModal();
-		} else {
-			closeModal();
 		}
+		closeModal();
 	};
 	return (
 		<Modal
