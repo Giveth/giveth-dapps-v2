@@ -36,10 +36,14 @@ export interface IEndStreamModalProps extends IModal {
 export const EndStreamModal: FC<IEndStreamModalProps> = ({ ...props }) => {
 	const { isAnimating, closeModal } = useModalAnimation(props.setShowModal);
 	const { formatMessage } = useIntl();
+	const handleCloseModal = () => {
+		props.refetch();
+		closeModal();
+	};
 
 	return (
 		<Modal
-			closeModal={closeModal}
+			closeModal={handleCloseModal}
 			isAnimating={isAnimating}
 			headerTitle={formatMessage({
 				id: 'label.end_recurring_donation',
@@ -57,7 +61,6 @@ interface IEndStreamInnerModalProps extends IEndStreamModalProps {}
 const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 	setShowModal,
 	donation,
-	refetch,
 }) => {
 	const [step, setStep] = useState(EEndStreamSteps.CONFIRM);
 	const { formatMessage } = useIntl();
@@ -117,7 +120,6 @@ const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 				};
 				const projectBackendRes = await endRecurringDonation(info);
 				console.log('Project Donation End Info', projectBackendRes);
-				refetch();
 			} catch (error) {
 				showToastError(error);
 			}
