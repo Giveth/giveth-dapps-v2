@@ -19,9 +19,11 @@ const QFModal: FC<IProps> = ({ setShowModal, donateWithoutMatching }) => {
 	const { formatMessage } = useIntl();
 	const { switchChain } = useSwitchChain();
 	const { project } = useDonateData();
-	const activeRound = getActiveRound(project.qfRounds);
-	const roundName = activeRound?.name;
-	const eligibleChainName = getChainName(activeRound?.eligibleNetworks[0]);
+	const { activeStartedRound } = getActiveRound(project.qfRounds);
+	const roundName = activeStartedRound?.name;
+	const eligibleChainName = getChainName(
+		activeStartedRound?.eligibleNetworks[0],
+	);
 
 	return (
 		<Modal
@@ -47,9 +49,9 @@ const QFModal: FC<IProps> = ({ setShowModal, donateWithoutMatching }) => {
 					label={formatMessage({ id: 'label.switch_network' })}
 					onClick={() => {
 						switchChain &&
-							activeRound?.eligibleNetworks[0] &&
+							activeStartedRound?.eligibleNetworks[0] &&
 							switchChain({
-								chainId: activeRound.eligibleNetworks[0],
+								chainId: activeStartedRound.eligibleNetworks[0],
 							});
 						closeModal();
 					}}

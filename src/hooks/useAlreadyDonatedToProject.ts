@@ -11,15 +11,15 @@ export const useAlreadyDonatedToProject = (project?: IProject) => {
 
 	useEffect(() => {
 		if (!userData?.id || !project?.id) return;
-		const activeRound = getActiveRound(project?.qfRounds);
-		if (!activeRound) return;
+		const { activeStartedRound } = getActiveRound(project?.qfRounds);
+		if (!activeStartedRound) return;
 		const doesAlreadyDonated = async () => {
 			try {
 				const { data } = await client.query({
 					query: FETCH_DOES_DONATED_PROJECT_IN_ROUND,
 					variables: {
 						projectId: Number(project.id),
-						qfRoundId: Number(activeRound.id),
+						qfRoundId: Number(activeStartedRound.id),
 						userId: Number(userData.id),
 					},
 					fetchPolicy: 'no-cache',
