@@ -62,7 +62,9 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 		}
 	}, [router?.query?.tab]);
 
-	const baseQuery = myAccount ? {} : { address: router.query.address };
+	const baseQuery = router.route.startsWith('/account')
+		? {}
+		: { address: router.query.address };
 
 	return (
 		<Container>
