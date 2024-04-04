@@ -43,9 +43,6 @@ interface IProjectCard {
 	className?: string;
 	order?: number;
 }
-interface IPaddedRowProps {
-	sidePadding?: string;
-}
 
 const ProjectCard = (props: IProjectCard) => {
 	const { project, className } = props;
@@ -78,8 +75,8 @@ const ProjectCard = (props: IProjectCard) => {
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
-	const activeQFRound = getActiveRound(qfRounds);
-	const hasFooter = activeQFRound || verified;
+	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
+	const hasFooter = activeStartedRound || verified;
 
 	const projectLink = slugToProjectView(slug);
 	const donateLink = slugToProjectDonate(slug);
@@ -87,7 +84,7 @@ const ProjectCard = (props: IProjectCard) => {
 	// Show hint modal if the user clicks on the card and the round is not started
 	const handleClick = (e: any) => {
 		if (router.route === '/qf/[slug]') {
-			if (activeQFRound) return;
+			if (activeStartedRound) return;
 			e.preventDefault();
 			e.stopPropagation();
 			setShowHintModal(true);
@@ -167,14 +164,14 @@ const ProjectCard = (props: IProjectCard) => {
 						<Flex $flexDirection='column' gap='4px'>
 							<PriceText>
 								{formatDonation(
-									(activeQFRound
+									(activeStartedRound
 										? sumDonationValueUsdForActiveQfRound
 										: sumDonationValueUsd) || 0,
 									'$',
 									locale,
 								)}
 							</PriceText>
-							{activeQFRound ? (
+							{activeStartedRound ? (
 								<>
 									<Subline color={neutralColors.gray[700]}>
 										{formatMessage({
@@ -202,7 +199,7 @@ const ProjectCard = (props: IProjectCard) => {
 								</AmountRaisedText>
 							)}
 
-							{!activeQFRound && (
+							{!activeStartedRound && (
 								<div>
 									<LightSubline>
 										{formatMessage({
@@ -229,7 +226,7 @@ const ProjectCard = (props: IProjectCard) => {
 								</div>
 							)}
 						</Flex>
-						{activeQFRound && (
+						{activeStartedRound && (
 							<Flex $flexDirection='column' gap='6px'>
 								<EstimatedMatchingPrice>
 									+
@@ -239,7 +236,7 @@ const ProjectCard = (props: IProjectCard) => {
 												projectDonationsSqrtRootSum,
 												allProjectsSum,
 												matchingPool,
-												activeQFRound?.maximumReward,
+												activeStartedRound?.maximumReward,
 											),
 											'$',
 											locale,
@@ -291,26 +288,12 @@ const ProjectCard = (props: IProjectCard) => {
 										</VerifiedText>
 									</Flex>
 								)}
-								{activeQFRound && (
-									<QFBadge>{activeQFRound?.name}</QFBadge>
+								{activeStartedRound && (
+									<QFBadge>
+										{activeStartedRound?.name}
+									</QFBadge>
 								)}
 							</Flex>
-							{/* {verified && (
-								<GivpowerRankContainer
-									gap='8px'
-									$alignItems='center'
-								>
-									<IconRocketInSpace16
-										color={neutralColors.gray[700]}
-									/>
-									<B>
-										{projectPower?.powerRank &&
-										projectPower?.totalPower !== 0
-											? `#${projectPower.powerRank}`
-											: '--'}
-									</B>
-								</GivpowerRankContainer>
-							)} */}
 						</PaddedRow>
 					</Link>
 				)}
@@ -331,11 +314,11 @@ const ProjectCard = (props: IProjectCard) => {
 					</Link>
 				</ActionButtons>
 			</CardBody>
-			{showHintModal && qfRounds && (
+			{showHintModal && activeQFRound && (
 				<RoundNotStartedModal
 					setShowModal={setShowHintModal}
 					destination={destination}
-					qfRounds={qfRounds}
+					qfRound={activeQFRound}
 				/>
 			)}
 		</Wrapper>
@@ -473,16 +456,12 @@ const Wrapper = styled.div<{ $order?: number }>`
 	}
 `;
 
-const GivpowerRankContainer = styled(Flex)`
-	padding: 2px 8px;
-	background-color: ${neutralColors.gray[300]};
-	color: ${neutralColors.gray[800]};
-	border-radius: 8px;
-	margin-left: auto;
-`;
+interface IPaddedRowProps {
+	$sidePadding?: string;
+}
 
 export const PaddedRow = styled(Flex)<IPaddedRowProps>`
-	padding: 0 ${props => props.sidePadding || SIDE_PADDING};
+	padding: 0 ${props => props.$sidePadding || SIDE_PADDING};
 `;
 
 export const StyledPaddedRow = styled(PaddedRow)`

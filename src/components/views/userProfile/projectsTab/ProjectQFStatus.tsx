@@ -18,13 +18,15 @@ const ProjectQFStatus = ({
 }: IProjectQFStatus) => {
 	const { qfRounds } = project;
 	const isRoundActive = hasActiveRound(qfRounds);
-	const activeRound = getActiveRound(qfRounds);
+	const { activeStartedRound } = getActiveRound(qfRounds);
 
 	const handleQFTermsText = isRoundActive
-		? `Eligible for QF round #${activeRound?.id}`
+		? `Eligible for QF round #${activeStartedRound?.id}`
 		: 'Not eligible';
 
-	const roundNameText = isRoundActive ? activeRound?.name : 'Not eligible';
+	const roundNameText = isRoundActive
+		? activeStartedRound?.name
+		: 'Not eligible';
 
 	return (
 		<StatusBadge isRoundActive={isRoundActive}>

@@ -99,10 +99,10 @@ export const Dropdown: FC<IDropdownProps> = ({
 			{isOpen &&
 				createPortal(
 					<OptionsWrapper style={dropdownStyle} ref={dropdownRef}>
-						{options.map(option =>
+						{options.map((option, idx) =>
 							option.isHidden ? null : (
 								<Option
-									key={option.label}
+									key={idx}
 									option={option}
 									setIsOpen={setIsOpen}
 									color={color}

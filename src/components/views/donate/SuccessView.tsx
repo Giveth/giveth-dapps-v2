@@ -61,10 +61,10 @@ export const SuccessView: FC = () => {
 		)
 	);
 
-	const activeRound = getActiveRound(project.qfRounds);
+	const { activeStartedRound } = getActiveRound(project.qfRounds);
 
 	const isOnEligibleNetworks =
-		networkId && activeRound?.eligibleNetworks?.includes(networkId);
+		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
 
 	useEffect(() => {
 		client
