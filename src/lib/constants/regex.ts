@@ -11,6 +11,7 @@ export const regexList = {
 	linkedin:
 		/^(http(s)?:\/\/)?([\w]+\.)?linkedin\.com\/(pub|in|profile|company)/,
 	youtube: /^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/,
+	reddit: /^(http(s)?:\/\/)?(www\.)?reddit\.com\/r\/[\w\.\_\-]+\/?$/,
 	tooShort: /^.{3,}$/,
 	mediumBlogBanner: /<img[^>]+src="(.*?)"/,
 };
@@ -62,6 +63,30 @@ export const validators = {
 		pattern: {
 			value: regexList.youtube,
 			message: 'Invalid youtube URL',
+		},
+	},
+	reddit: {
+		pattern: {
+			value: regexList.reddit,
+			message: 'Invalid reddit URL',
+		},
+	},
+	farcaster: {
+		pattern: {
+			value: regexList.website,
+			message: 'Invalid reddit URL',
+		},
+	},
+	lens: {
+		pattern: {
+			value: regexList.website,
+			message: 'Invalid reddit URL',
+		},
+	},
+	discord: {
+		pattern: {
+			value: regexList.website,
+			message: 'Invalid discord URL',
 		},
 	},
 };
