@@ -8,6 +8,7 @@ export const CREATE_RECURRING_DONATION = gql`
 		$flowRate: String!
 		$currency: String!
 		$anonymous: Boolean
+		$isBatch: Boolean
 	) {
 		createRecurringDonation(
 			projectId: $projectId
@@ -16,6 +17,7 @@ export const CREATE_RECURRING_DONATION = gql`
 			flowRate: $flowRate
 			currency: $currency
 			anonymous: $anonymous
+			isBatch: $isBatch
 		) {
 			id
 			txHash
