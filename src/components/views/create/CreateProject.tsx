@@ -25,9 +25,11 @@ import {
 	UPDATE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
 import {
+	EProjectSocialMediaType,
 	IProject,
 	IProjectCreation,
 	IProjectEdition,
+	IProjectSocialMedia,
 } from '@/apollo/types/types';
 import {
 	CategoryInput,
@@ -57,6 +59,7 @@ import { EQualityState } from './proGuide/score/scoreHelpers';
 import { LowScoreModal } from './LowScoreModal';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { GuidelinesCard } from './GuideLinesCard';
+import SocialMedias from './SocialMediaBox/SocialMedias';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -98,6 +101,13 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	const { title, description, categories, impactLocation, image, addresses } =
 		project || {};
+
+	const findSocialMedia = (type: EProjectSocialMediaType) => {
+		return project?.socialMedia?.find(
+			(socialMedia: IProjectSocialMedia) => socialMedia.type === type,
+		);
+	};
+
 	const {
 		name: storageTitle,
 		description: storageDescription,
@@ -105,6 +115,16 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		impactLocation: storageImpactLocation,
 		image: storageImage,
 		alloProtocolRegistry: storageAlloProtocolRegistry,
+		facebook: storageFacebook,
+		x: storageX,
+		instagram: storageInstagram,
+		youtube: storageYoutube,
+		linkedin: storageLinkedin,
+		reddit: storageReddit,
+		discord: storageDiscord,
+		farcaster: storageFarcaster,
+		lens: storageLens,
+		website: storageWebsite,
 	} = storageProjectData || {};
 	const storageAddresses =
 		storageProjectData?.addresses instanceof Array
@@ -142,6 +162,46 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			[EInputs.addresses]: isEditMode
 				? activeAddresses
 				: storageAddresses,
+			[EInputs.facebook]:
+				findSocialMedia(EProjectSocialMediaType.FACEBOOK)?.link ||
+				storageFacebook ||
+				'',
+			[EInputs.x]:
+				findSocialMedia(EProjectSocialMediaType.X)?.link ||
+				storageX ||
+				'',
+			[EInputs.instagram]:
+				findSocialMedia(EProjectSocialMediaType.INSTAGRAM)?.link ||
+				storageInstagram ||
+				'',
+			[EInputs.youtube]:
+				findSocialMedia(EProjectSocialMediaType.YOUTUBE)?.link ||
+				storageYoutube ||
+				'',
+			[EInputs.linkedin]:
+				findSocialMedia(EProjectSocialMediaType.LINKEDIN)?.link ||
+				storageLinkedin ||
+				'',
+			[EInputs.reddit]:
+				findSocialMedia(EProjectSocialMediaType.REDDIT)?.link ||
+				storageReddit ||
+				'',
+			[EInputs.discord]:
+				findSocialMedia(EProjectSocialMediaType.DISCORD)?.link ||
+				storageDiscord ||
+				'',
+			[EInputs.farcaster]:
+				findSocialMedia(EProjectSocialMediaType.FARCASTER)?.link ||
+				storageFarcaster ||
+				'',
+			[EInputs.lens]:
+				findSocialMedia(EProjectSocialMediaType.LENS)?.link ||
+				storageLens ||
+				'',
+			[EInputs.website]:
+				findSocialMedia(EProjectSocialMediaType.WEBSITE)?.link ||
+				storageWebsite ||
+				'',
 		},
 	});
 
@@ -156,6 +216,16 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		impactLocation: watchImpactLocation,
 		addresses: watchAddresses,
 		alloProtocolRegistry: watchAlloProtocolRegistry,
+		facebook: watchFacebook,
+		x: watchX,
+		instagram: watchInstagram,
+		youtube: watchYoutube,
+		linkedin: watchLinkedIn,
+		reddit: watchReddit,
+		discord: watchDiscord,
+		farcaster: watchFarcaster,
+		lens: watchLens,
+		website: watchWebsite,
 		draft: watchDraft,
 	} = data;
 
@@ -173,6 +243,16 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchImpactLocation,
 		watchAddresses,
 		watchAlloProtocolRegistry,
+		watchFacebook,
+		watchX,
+		watchInstagram,
+		watchYoutube,
+		watchLinkedIn,
+		watchReddit,
+		watchDiscord,
+		watchFarcaster,
+		watchLens,
+		watchWebsite,
 	]);
 	const hasOptimismAddress = watchAddresses.some(
 		address => config.OPTIMISM_NETWORK_NUMBER === address.networkId,
@@ -196,6 +276,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			return;
 		}
 		try {
+			// Extracting the relevant fields from formData
 			const {
 				addresses,
 				name,
@@ -204,7 +285,33 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				impactLocation,
 				image,
 				draft,
+				facebook,
+				x,
+				instagram,
+				youtube,
+				linkedin,
+				reddit,
+				discord,
+				farcaster,
+				lens,
+				website,
 			} = formData;
+
+			// Transforming the social media fields into the required structure
+			const socialMedia = [
+				{ type: EProjectSocialMediaType.FACEBOOK, link: facebook },
+				{ type: EProjectSocialMediaType.X, link: x },
+				{ type: EProjectSocialMediaType.INSTAGRAM, link: instagram },
+				{ type: EProjectSocialMediaType.YOUTUBE, link: youtube },
+				{ type: EProjectSocialMediaType.LINKEDIN, link: linkedin },
+				{ type: EProjectSocialMediaType.REDDIT, link: reddit },
+				{ type: EProjectSocialMediaType.DISCORD, link: discord },
+				{ type: EProjectSocialMediaType.FARCASTER, link: farcaster },
+				{ type: EProjectSocialMediaType.LENS, link: lens },
+				{ type: EProjectSocialMediaType.WEBSITE, link: website },
+			].filter(
+				social => social.link && social.link !== '',
+			) as IProjectSocialMedia[]; // Filtering out empty links
 
 			if (addresses.length === 0) {
 				showToastError(
@@ -223,6 +330,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				addresses,
 				image,
 				isDraft: draft,
+				socialMedia,
 			};
 
 			const addedProject = isEditMode
@@ -350,6 +458,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 									setActiveProjectSection
 								}
 							/>
+							<SocialMedias />
 							<CategoryInput
 								setActiveProjectSection={
 									setActiveProjectSection

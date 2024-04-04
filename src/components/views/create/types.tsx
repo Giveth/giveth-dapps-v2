@@ -9,6 +9,16 @@ export enum EInputs {
 	draft = 'draft',
 	addresses = 'addresses',
 	alloProtocolRegistry = 'alloProtocolRegistry',
+	facebook = 'facebook',
+	x = 'x',
+	instagram = 'instagram',
+	youtube = 'youtube',
+	linkedin = 'linkedin',
+	reddit = 'reddit',
+	discord = 'discord',
+	farcaster = 'farcaster',
+	lens = 'lens',
+	website = 'website',
 }
 
 export enum ECreateProjectSections {
@@ -30,4 +40,14 @@ export type TInputs = {
 	[EInputs.draft]?: boolean;
 	[EInputs.alloProtocolRegistry]?: boolean;
 	[EInputs.addresses]: IWalletAddress[];
+	[EInputs.facebook]?: string;
+	[EInputs.x]?: string;
+	[EInputs.instagram]?: string;
+	[EInputs.youtube]?: string;
+	[EInputs.linkedin]?: string;
+	[EInputs.reddit]?: string;
+	[EInputs.discord]?: string;
+	[EInputs.farcaster]?: string;
+	[EInputs.lens]?: string;
+	[EInputs.website]?: string;
 };
