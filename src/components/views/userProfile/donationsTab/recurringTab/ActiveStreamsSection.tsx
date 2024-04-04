@@ -1,8 +1,17 @@
 import styled from 'styled-components';
-import { B, H5, neutralColors, Flex } from '@giveth/ui-design-system';
+import {
+	B,
+	H5,
+	neutralColors,
+	Flex,
+	IconInfoOutline24,
+	P,
+	brandColors,
+} from '@giveth/ui-design-system';
 import { type FC } from 'react';
 import { StreamRow } from './StreamRow';
 import { useProfileDonateTabData } from './ProfileDonateTab.context';
+import links from '@/lib/constants/links';
 
 export const ActiveStreamsSection: FC = () => {
 	const { tokenStreams } = useProfileDonateTabData();
@@ -31,6 +40,25 @@ export const ActiveStreamsSection: FC = () => {
 					<StreamRow key={key} tokenStream={value} />
 				))}
 			</DonationTableContainer>
+			<StyledHr />
+			<Flex gap='8px'>
+				<IconInfoOutline24 />
+				<Desc>
+					We retrieve data from the superfluid app to guarantee the
+					precision of your balance, flow rate, and end time. If you
+					notice discrepancies such as a higher total flow rate or
+					number of projects than what is displayed in the recurring
+					donation table, please verify them on the{' '}
+					<a
+						href={links.SUPERFLUID_DASHBOARD}
+						target='_blank'
+						rel='noopener noreferrer'
+					>
+						Superfluid dashboard
+					</a>{' '}
+					.
+				</Desc>
+			</Flex>
 		</Wrapper>
 	);
 };
@@ -71,4 +99,22 @@ export const TableCell = styled(Flex)`
 
 const TableHeader = styled(TableCell)`
 	background-color: ${neutralColors.gray[200]};
+`;
+
+const StyledHr = styled.hr`
+	border: none;
+	border-top: 1px solid ${neutralColors.gray[300]};
+	width: 100%;
+	margin: 8px 0;
+`;
+
+const Desc = styled(P)`
+	color: ${neutralColors.gray[800]};
+	& > a {
+		color: ${brandColors.giv[500]};
+		transition: color 0.2s ease-in-out;
+		&:hover {
+			color: ${brandColors.giv[700]};
+		}
+	}
 `;
