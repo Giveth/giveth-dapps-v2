@@ -46,7 +46,7 @@ export const ActiveProjectsSection = () => {
 	const [tokenFilters, setTokenFilters] = useState([] as string[]);
 	const { myAccount, user } = useProfileContext();
 	const [statusFilters, setStatusFilters] = useState<IFinishStatus>({
-		active: myAccount ? true : false,
+		active: myAccount ? false : true,
 		ended: false,
 	});
 	const { formatMessage } = useIntl();
