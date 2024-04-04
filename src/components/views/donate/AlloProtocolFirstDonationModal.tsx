@@ -9,7 +9,7 @@ import {
 import { useAccount, useSwitchChain } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
-import { Address } from 'viem';
+import { Address, isAddress } from 'viem';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -19,7 +19,7 @@ import { client } from '@/apollo/apolloClient';
 import { useDonateData } from '@/context/donate.context';
 import { IModal } from '@/types/common';
 import createProfileABI from '@/artifacts/createProfile.json';
-import { generateRandomNonce } from '@/lib/helpers';
+import { generateRandomNonce, showToastError } from '@/lib/helpers';
 interface IAlloProtocolModal extends IModal {
 	onModalCompletion: () => void;
 }
@@ -69,6 +69,12 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 		} else {
 			try {
 				setIsLoading(true);
+				if (
+					!project?.adminUser.walletAddress ||
+					!isAddress(project?.adminUser.walletAddress)
+				) {
+					throw new Error('Invalid Project Admin Address');
+				}
 				const hash = await writeContract(wagmiConfig, {
 					address: config.OPTIMISM_CONFIG.anchorRegistryAddress,
 					functionName: 'createProfile',
@@ -110,7 +116,7 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 				}
 				setShowModal(false); // Close the modal
 			} catch (error) {
-				console.log('error', error);
+				showToastError(error);
 			} finally {
 				setIsLoading(false);
 			}
