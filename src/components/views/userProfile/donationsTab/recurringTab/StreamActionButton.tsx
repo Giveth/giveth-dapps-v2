@@ -41,8 +41,8 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 
-	const options: IOption[] =
-		donation.status === ERecurringDonationStatus.ACTIVE
+	const options: IOption[] = !donation.isArchived
+		? donation.status === ERecurringDonationStatus.ACTIVE
 			? [
 					{
 						label: formatMessage({
@@ -88,7 +88,8 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 							color: semanticColors.golden['500'],
 						},
 					]
-				: [];
+				: []
+		: [];
 
 	const dropdownStyle = {
 		padding: '4px 16px',
