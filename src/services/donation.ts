@@ -132,6 +132,7 @@ export interface ICreateRecurringDonation {
 	superToken: IToken;
 	flowRate: bigint;
 	anonymous?: boolean;
+	isBatch?: boolean;
 }
 
 export const createRecurringDonation = async ({
@@ -141,6 +142,7 @@ export const createRecurringDonation = async ({
 	flowRate,
 	superToken,
 	anonymous,
+	isBatch,
 }: ICreateRecurringDonation) => {
 	let donationId = 0;
 	try {
@@ -153,6 +155,7 @@ export const createRecurringDonation = async ({
 				flowRate: flowRate.toString(),
 				currency: superToken.underlyingToken?.symbol || 'ETH',
 				anonymous,
+				isBatch,
 			},
 		});
 		donationId = data.createRecurringDonation.id;
