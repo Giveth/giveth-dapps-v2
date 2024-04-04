@@ -4,7 +4,6 @@ import {
 	H5,
 	neutralColors,
 	Flex,
-	IconInfoOutline24,
 	P,
 	brandColors,
 } from '@giveth/ui-design-system';
@@ -18,6 +17,21 @@ export const ActiveStreamsSection: FC = () => {
 	return (
 		<Wrapper>
 			<H5 weight={900}>Streamable Token Balances</H5>
+			<Desc>
+				Your Active streams provides a complete listing of the active
+				stream from all projects you're involved in with Superfluid.
+				Differences might occur in the active streams, flow rates, and
+				duration when compared to just your active Giveth projects. For
+				detailed information, check your{' '}
+				<a
+					href={links.SUPERFLUID_DASHBOARD}
+					target='_blank'
+					rel='noopener noreferrer'
+				>
+					Superfluid Dashboard
+				</a>{' '}
+				.
+			</Desc>
 			<DonationTableContainer>
 				<TableHeaderRow>
 					<TableHeader>
@@ -40,25 +54,6 @@ export const ActiveStreamsSection: FC = () => {
 					<StreamRow key={key} tokenStream={value} />
 				))}
 			</DonationTableContainer>
-			<StyledHr />
-			<Flex gap='8px'>
-				<IconInfoOutline24 />
-				<Desc>
-					We retrieve data from the superfluid app to guarantee the
-					precision of your balance, flow rate, and end time. If you
-					notice discrepancies such as a higher total flow rate or
-					number of projects than what is displayed in the recurring
-					donation table, please verify them on the{' '}
-					<a
-						href={links.SUPERFLUID_DASHBOARD}
-						target='_blank'
-						rel='noopener noreferrer'
-					>
-						Superfluid dashboard
-					</a>{' '}
-					.
-				</Desc>
-			</Flex>
 		</Wrapper>
 	);
 };
@@ -101,18 +96,15 @@ const TableHeader = styled(TableCell)`
 	background-color: ${neutralColors.gray[200]};
 `;
 
-const StyledHr = styled.hr`
-	border: none;
-	border-top: 1px solid ${neutralColors.gray[300]};
-	width: 100%;
-	margin: 8px 0;
-`;
-
 const Desc = styled(P)`
+	padding: 8px;
+	border-radius: 8px;
+	background: ${neutralColors.gray[200]};
 	color: ${neutralColors.gray[800]};
 	& > a {
 		color: ${brandColors.giv[500]};
 		transition: color 0.2s ease-in-out;
+		font-weight: 500;
 		&:hover {
 			color: ${brandColors.giv[700]};
 		}
