@@ -43,9 +43,6 @@ interface IProjectCard {
 	className?: string;
 	order?: number;
 }
-interface IPaddedRowProps {
-	sidePadding?: string;
-}
 
 const ProjectCard = (props: IProjectCard) => {
 	const { project, className } = props;
@@ -459,16 +456,12 @@ const Wrapper = styled.div<{ $order?: number }>`
 	}
 `;
 
-const GivpowerRankContainer = styled(Flex)`
-	padding: 2px 8px;
-	background-color: ${neutralColors.gray[300]};
-	color: ${neutralColors.gray[800]};
-	border-radius: 8px;
-	margin-left: auto;
-`;
+interface IPaddedRowProps {
+	$sidePadding?: string;
+}
 
 export const PaddedRow = styled(Flex)<IPaddedRowProps>`
-	padding: 0 ${props => props.sidePadding || SIDE_PADDING};
+	padding: 0 ${props => props.$sidePadding || SIDE_PADDING};
 `;
 
 export const StyledPaddedRow = styled(PaddedRow)`

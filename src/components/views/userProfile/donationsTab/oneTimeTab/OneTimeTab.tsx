@@ -125,6 +125,7 @@ export const StyledWrappedSpinner = styled.div`
 	right: 0;
 	bottom: 0;
 	background-color: ${neutralColors.gray[100]}aa;
+	min-height: 250px;
 `;
 
 export const NothingWrapper = styled.div`
