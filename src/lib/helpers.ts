@@ -292,7 +292,10 @@ export const htmlToText = (text?: string) => {
 };
 
 export const capitalizeFirstLetter = (string: string) => {
-	return string.charAt(0).toUpperCase() + string.slice(1);
+	return (
+		string.toLowerCase().charAt(0).toUpperCase() +
+		string.toLowerCase().slice(1)
+	);
 };
 
 export const capitalizeAllWords = (string: string) => {
