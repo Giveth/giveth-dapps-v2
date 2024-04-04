@@ -264,7 +264,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	};
 
 	const onSubmit = async (formData: TInputs) => {
-		console.log('formData', formData);
 		setIsLoading(true);
 		if (
 			isProjectScoringActive &&
@@ -313,7 +312,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			].filter(
 				social => social.link && social.link !== '',
 			) as IProjectSocialMedia[]; // Filtering out empty links
-			console.log('Social Media', socialMedia);
+
 			if (addresses.length === 0) {
 				showToastError(
 					formatMessage({ id: 'label.recipient_addresses_cant' }),
@@ -333,7 +332,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				isDraft: draft,
 				socialMedia,
 			};
-			console.log('Project Data', projectData);
+
 			const addedProject = isEditMode
 				? await editProjectMutation({
 						variables: {
