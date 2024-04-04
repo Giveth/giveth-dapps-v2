@@ -44,11 +44,11 @@ export const ActiveProjectsSection = () => {
 		direction: EDirection.DESC,
 	});
 	const [tokenFilters, setTokenFilters] = useState([] as string[]);
+	const { myAccount, user } = useProfileContext();
 	const [statusFilters, setStatusFilters] = useState<IFinishStatus>({
-		active: false,
+		active: myAccount ? false : true,
 		ended: false,
 	});
-	const { myAccount, user } = useProfileContext();
 	const { formatMessage } = useIntl();
 
 	const changeOrder = (orderBy: ERecurringDonationSortField) => {
