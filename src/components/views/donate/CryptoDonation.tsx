@@ -127,11 +127,11 @@ const CryptoDonation: FC = () => {
 	const tokenSymbol = selectedToken?.symbol;
 	const tokenDecimals = selectedToken?.decimals || 18;
 	const projectIsGivBackEligible = !!verified;
-	const activeRound = getActiveRound(project.qfRounds);
+	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const networkId = (chain as Chain)?.id;
 
 	const isOnEligibleNetworks =
-		networkId && activeRound?.eligibleNetworks?.includes(networkId);
+		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
 
 	useEffect(() => {
 		if (

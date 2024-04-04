@@ -12,19 +12,18 @@ import { formatDate } from '@/lib/helpers';
 
 interface IRoundNotStartedModalProps extends IModal {
 	destination: string;
-	qfRounds: IQFRound[];
+	qfRound: IQFRound;
 }
 
 export const RoundNotStartedModal: FC<IRoundNotStartedModalProps> = ({
 	setShowModal,
 	destination,
-	qfRounds,
+	qfRound,
 }) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 
-	const activeRound = qfRounds.find(r => r.isActive);
-	const beginDate = activeRound?.beginDate;
-	const name = activeRound?.name;
+	const beginDate = qfRound?.beginDate;
+	const name = qfRound?.name;
 
 	return (
 		<Modal

@@ -46,12 +46,12 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	const { projectDonationsSqrtRootSum, matchingPool, allProjectsSum } =
 		estimatedMatching ?? {};
 
-	const activeRound = getActiveRound(qfRounds);
+	const { activeStartedRound } = getActiveRound(qfRounds);
 	const totalEstimatedMatching = calculateTotalEstimatedMatching(
 		projectDonationsSqrtRootSum,
 		allProjectsSum,
 		matchingPool,
-		activeRound?.maximumReward,
+		activeStartedRound?.maximumReward,
 	);
 	const EstimatedMatchingSection = () =>
 		totalEstimatedMatching !== 0 ? (
@@ -191,7 +191,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 										projectDonationsSqrtRootSum,
 										allProjectsSum,
 										matchingPool,
-										activeRound?.maximumReward,
+										activeStartedRound?.maximumReward,
 									),
 									'',
 									locale,
@@ -211,7 +211,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 										projectDonationsSqrtRootSum,
 										allProjectsSum,
 										matchingPool,
-										activeRound?.maximumReward,
+										activeStartedRound?.maximumReward,
 									),
 									'',
 									locale,
@@ -231,7 +231,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 										projectDonationsSqrtRootSum,
 										allProjectsSum,
 										matchingPool,
-										activeRound?.maximumReward,
+										activeStartedRound?.maximumReward,
 									),
 									'',
 									locale,

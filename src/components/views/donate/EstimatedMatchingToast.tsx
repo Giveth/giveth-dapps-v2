@@ -40,14 +40,14 @@ const EstimatedMatchingToast = ({
 
 	const tokenPrice = useTokenPrice(token);
 
-	const activeRound = getActiveRound(qfRounds);
+	const { activeStartedRound } = getActiveRound(qfRounds);
 
 	const esMatching = calculateEstimatedMatchingWithDonationAmount(
 		(tokenPrice || 0) * (amountTyped || 0),
 		projectDonationsSqrtRootSum,
 		allProjectsSum,
 		matchingPool,
-		activeRound?.maximumReward,
+		activeStartedRound?.maximumReward,
 	);
 
 	return (

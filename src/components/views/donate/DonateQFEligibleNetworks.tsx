@@ -21,18 +21,17 @@ const DonateQFEligibleNetworks = () => {
 	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
 
-	const activeRound = getActiveRound(project.qfRounds);
+	const { activeStartedRound } = getActiveRound(project.qfRounds);
 
-	const eligibleChainNames = activeRound?.eligibleNetworks.map(network =>
-		getChainName(network),
+	const eligibleChainNames = activeStartedRound?.eligibleNetworks.map(
+		network => getChainName(network),
 	);
 
-	const eligibleNetworksWithChainType = activeRound?.eligibleNetworks.map(
-		network => ({
+	const eligibleNetworksWithChainType =
+		activeStartedRound?.eligibleNetworks.map(network => ({
 			networkId: network,
 			chainType: ChainType.EVM,
-		}),
-	);
+		}));
 
 	const chainsString = eligibleChainNames?.join(' & ');
 
