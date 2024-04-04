@@ -20,19 +20,8 @@ const socialMediaColor: { [key: string]: string } = {
 	website: '#2EA096',
 };
 
-const socialMediaIdFinder = (socialMediaUrl: string) => {
-	try {
-		const url = new URL(socialMediaUrl);
-		const id = url.pathname.split('/').pop();
-		if (id) {
-			return '@' + id;
-		} else {
-			return socialMediaUrl.replace('https://', '');
-		}
-	} catch (error) {
-		console.error('Invalid URL');
-		return null;
-	}
+const removeHttpsFromUrl = (socialMediaUrl: string) => {
+	return socialMediaUrl.replace('https://', '');
 };
 
 const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
@@ -63,7 +52,7 @@ const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
 							],
 						}}
 					>
-						{socialMediaIdFinder(socialMedia.link)}
+						{removeHttpsFromUrl(socialMedia.link)}
 					</B>
 				</Flex>
 			</SocialItemContainer>
