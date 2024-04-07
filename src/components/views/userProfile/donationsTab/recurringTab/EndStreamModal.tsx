@@ -36,8 +36,10 @@ export interface IEndStreamModalProps extends IModal {
 export const EndStreamModal: FC<IEndStreamModalProps> = ({ ...props }) => {
 	const { isAnimating, closeModal } = useModalAnimation(props.setShowModal);
 	const { formatMessage } = useIntl();
-	const handleCloseModal = () => {
-		props.refetch();
+	const handleCloseModal = (refetch?: boolean) => {
+		if (refetch) {
+			props.refetch();
+		}
 		closeModal();
 	};
 
@@ -51,15 +53,17 @@ export const EndStreamModal: FC<IEndStreamModalProps> = ({ ...props }) => {
 			headerTitlePosition='left'
 			headerIcon={<IconAlertTriangleOutline32 />}
 		>
-			<EndStreamInnerModal {...props} />
+			<EndStreamInnerModal {...props} closeModal={handleCloseModal} />
 		</Modal>
 	);
 };
 
-interface IEndStreamInnerModalProps extends IEndStreamModalProps {}
+interface IEndStreamInnerModalProps extends IEndStreamModalProps {
+	closeModal: (refetch?: boolean) => void;
+}
 
 const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
-	setShowModal,
+	closeModal,
 	donation,
 }) => {
 	const [step, setStep] = useState(EEndStreamSteps.CONFIRM);
@@ -150,7 +154,7 @@ const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 			<Flex gap='16px'>
 				<ActionButton
 					label={formatMessage({ id: 'label.cancel' })}
-					onClick={() => setShowModal(false)}
+					onClick={() => closeModal(false)}
 					buttonType='texty-gray'
 					disabled={step === EEndStreamSteps.ENDING}
 				/>
@@ -181,9 +185,7 @@ const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 			</P>
 			<ActionButton
 				label={formatMessage({ id: 'label.done' })}
-				onClick={() => {
-					setShowModal(false);
-				}}
+				onClick={() => closeModal(true)}
 			/>
 		</Wrapper>
 	);

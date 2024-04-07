@@ -50,7 +50,12 @@ export const ArchiveStreamModal: FC<IArchiveStreamModalProps> = ({
 			headerTitlePosition='left'
 			headerIcon={<IconAlertTriangleOutline32 />}
 		>
-			<ArchiveStreamInnerModal step={step} setStep={setStep} {...props} />
+			<ArchiveStreamInnerModal
+				step={step}
+				setStep={setStep}
+				{...props}
+				closeModal={handleCloseModal}
+			/>
 		</Modal>
 	);
 };
@@ -58,12 +63,12 @@ export const ArchiveStreamModal: FC<IArchiveStreamModalProps> = ({
 interface IArchiveStreamInnerModalProps extends IArchiveStreamModalProps {
 	step: EArchiveStreamSteps;
 	setStep: (step: EArchiveStreamSteps) => void;
+	closeModal: () => void;
 }
 
 const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
-	setShowModal,
+	closeModal,
 	donation,
-	refetch,
 	step,
 	setStep,
 }) => {
@@ -99,7 +104,7 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 			<Flex gap='16px'>
 				<ActionButton
 					label={formatMessage({ id: 'label.cancel' })}
-					onClick={() => setShowModal(false)}
+					onClick={() => closeModal}
 					buttonType='texty-gray'
 					disabled={step === EArchiveStreamSteps.ARCHIVING}
 				/>
@@ -122,10 +127,7 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 			</CenteredB>
 			<ActionButton
 				label={formatMessage({ id: 'label.done' })}
-				onClick={() => {
-					refetch();
-					setShowModal(false);
-				}}
+				onClick={() => closeModal()}
 			/>
 		</Wrapper>
 	);

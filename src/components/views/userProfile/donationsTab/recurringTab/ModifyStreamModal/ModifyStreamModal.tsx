@@ -80,6 +80,7 @@ export const ModifyStreamModal: FC<IModifyStreamModalProps> = ({
 					flowRatePerMonth={modifyInfo?.flowRatePerMonth!}
 					streamFlowRatePerMonth={modifyInfo?.streamFlowRatePerMonth!}
 					token={modifyInfo?.token!}
+					closeModal={handleCloseModal}
 					{...props}
 				/>
 			)}

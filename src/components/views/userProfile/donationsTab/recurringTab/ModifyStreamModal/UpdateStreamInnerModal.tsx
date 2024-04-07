@@ -31,6 +31,7 @@ interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	superTokenBalance: bigint;
 	flowRatePerMonth: bigint;
 	streamFlowRatePerMonth: bigint;
+	closeModal: () => void;
 }
 
 export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
@@ -41,7 +42,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	superTokenBalance,
 	flowRatePerMonth,
 	streamFlowRatePerMonth,
-	setShowModal,
+	closeModal,
 }) => {
 	const [tx, setTx] = useState('');
 	const { formatMessage } = useIntl();
@@ -205,7 +206,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 					<ActionButton
 						label={formatMessage({ id: 'label.done' })}
 						onClick={() => {
-							setShowModal(false);
+							closeModal();
 						}}
 					/>
 				</>
