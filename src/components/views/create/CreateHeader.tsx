@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { Dispatch, FC, SetStateAction, useEffect, useReducer } from 'react';
 import Link from 'next/link';
-import { B, Button, Flex, FlexSpacer } from '@giveth/ui-design-system';
+import { B, Flex, FlexSpacer } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { UseFormGetFieldState } from 'react-hook-form';
 import { useAppSelector } from '@/features/hooks';
@@ -20,6 +20,7 @@ import {
 } from './proGuide/score/scoreHelpers';
 import { EInputs, TInputs } from './types';
 import { ScoreBoxSmall } from './proGuide/score/ScoreBoxSmall';
+import { ScoreButton } from './proGuide/score/ScoreButton';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -35,9 +36,7 @@ export const CreateHeader: FC<IHeader> = ({
 	setQuality,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
-
 	const scrollDir = useScrollDetection();
-
 	const [fieldsScores, dispatch] = useReducer<
 		React.Reducer<ScoreState, ScoreAction>
 	>(calculateScore, initialState);
@@ -118,7 +117,7 @@ export const CreateHeader: FC<IHeader> = ({
 					score={fieldsScores.totalScore}
 					color={infoMap[fieldsScores.quality].scoreColor}
 				/>
-				<Button label='Create' buttonType='texty-primary' />
+				<ScoreButton fieldsScores={fieldsScores} />
 			</Flex>
 		</StyledHeader>
 	);
