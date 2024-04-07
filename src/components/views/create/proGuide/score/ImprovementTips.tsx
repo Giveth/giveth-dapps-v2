@@ -1,14 +1,7 @@
 import { type FC } from 'react';
 import styled from 'styled-components';
-import {
-	Flex,
-	H6,
-	IconChevronDown32,
-	IconChevronUp32,
-	P,
-} from '@giveth/ui-design-system';
+import { Flex, H6, P } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import useAnimatedHeight from '@/hooks/useAnimatedHeight';
 import { infoMap, ScoreState, EScoreType } from './scoreHelpers';
 import { TipListItem } from '../ProjectTips/common.styles';
 
@@ -29,22 +22,13 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const info = infoMap[fieldsScores.quality];
-	const { isOpen, toggleOpen, maxHeight, contentRef } = useAnimatedHeight();
 	const bulletColor = info.bulletColor;
 	return (
 		<div>
-			<TitleRow
-				$justifyContent='space-between'
-				onClick={toggleOpen}
-				$alignItems='center'
-			>
+			<TitleRow $justifyContent='space-between' $alignItems='center'>
 				<H6 weight={700}>{formatMessage({ id: info.title })}</H6>
-				{isOpen ? <IconChevronUp32 /> : <IconChevronDown32 />}
 			</TitleRow>
-			<AnimatedDiv
-				$maxHeight={isOpen ? maxHeight : '0px'}
-				ref={contentRef}
-			>
+			<AnimatedDiv>
 				{fieldsScores.DESCRIPTION === 0 && (
 					<TipListItem color={bulletColor}>
 						<P>
@@ -95,10 +79,9 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 	);
 };
 
-const AnimatedDiv = styled.div<{ $maxHeight: string }>`
+const AnimatedDiv = styled.div`
 	overflow: hidden;
 	transition: max-height 0.5s ease;
-	max-height: ${props => props.$maxHeight};
 	padding-top: 8px;
 `;
 
