@@ -48,10 +48,10 @@ const ScoreInnerModal: FC<IScoreInnerModalProps> = ({
 
 	return (
 		<Wrapper>
-			<MainTip>
+			<P>
 				{formatMessage({ id: infoMap[fieldsScores.quality].mainTip })}
-			</MainTip>
-			<ScoreBox
+			</P>
+			<StyledScoreBox
 				score={fieldsScores.totalScore}
 				color={infoMap[fieldsScores.quality].scoreColor}
 			/>
@@ -63,6 +63,7 @@ const ScoreInnerModal: FC<IScoreInnerModalProps> = ({
 				onClick={() => {
 					setShowModal(false);
 				}}
+				buttonType='texty-primary'
 			/>
 		</Wrapper>
 	);
@@ -75,15 +76,17 @@ const Wrapper = styled(Flex)`
 	justify-content: stretch;
 	gap: 16px;
 	width: 100%;
-	padding: 16px 24px 24px 24px;
+	padding: 24px;
 	${mediaQueries.tablet} {
 		width: 530px;
 	}
 `;
-const MainTip = styled(P)`
-	/* text-align: center; */
+
+const StyledScoreBox = styled(ScoreBox)`
+	padding: 0 40px;
 `;
 
 const ActionButton = styled(Button)`
+	margin-top: 40px;
 	width: 100%;
 `;
