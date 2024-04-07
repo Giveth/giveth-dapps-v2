@@ -432,7 +432,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	return (
 		<>
 			<CreateHeader />
-			<Container>
+			<StyledContainer>
 				<Row>
 					<Col lg={8} md={12}>
 						<Title
@@ -672,10 +672,14 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						onSubmit={handleSubmit(onSubmit, onError)}
 					/>
 				)}
-			</Container>
+			</StyledContainer>
 		</>
 	);
 };
+
+const StyledContainer = styled(Container)`
+	margin-top: 136px;
+`;
 
 const CaptionContainer = styled(Caption)`
 	margin-top: 8px;
