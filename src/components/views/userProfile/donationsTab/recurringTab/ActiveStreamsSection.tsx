@@ -1,14 +1,37 @@
 import styled from 'styled-components';
-import { B, H5, neutralColors, Flex } from '@giveth/ui-design-system';
+import {
+	B,
+	H5,
+	neutralColors,
+	Flex,
+	P,
+	brandColors,
+} from '@giveth/ui-design-system';
 import { type FC } from 'react';
 import { StreamRow } from './StreamRow';
 import { useProfileDonateTabData } from './ProfileDonateTab.context';
+import links from '@/lib/constants/links';
 
 export const ActiveStreamsSection: FC = () => {
 	const { tokenStreams } = useProfileDonateTabData();
 	return (
 		<Wrapper>
 			<H5 weight={900}>Streamable Token Balances</H5>
+			<Desc>
+				Your Active streams provides a complete listing of the active
+				stream from all projects you're involved in with Superfluid.
+				Differences might occur in the active streams, flow rates, and
+				duration when compared to just your active Giveth projects. For
+				detailed information, check your{' '}
+				<a
+					href={links.SUPERFLUID_DASHBOARD}
+					target='_blank'
+					rel='noopener noreferrer'
+				>
+					Superfluid Dashboard
+				</a>{' '}
+				.
+			</Desc>
 			<DonationTableContainer>
 				<TableHeaderRow>
 					<TableHeader>
@@ -71,4 +94,19 @@ export const TableCell = styled(Flex)`
 
 const TableHeader = styled(TableCell)`
 	background-color: ${neutralColors.gray[200]};
+`;
+
+const Desc = styled(P)`
+	padding: 8px;
+	border-radius: 8px;
+	background: ${neutralColors.gray[200]};
+	color: ${neutralColors.gray[800]};
+	& > a {
+		color: ${brandColors.giv[500]};
+		transition: color 0.2s ease-in-out;
+		font-weight: 500;
+		&:hover {
+			color: ${brandColors.giv[700]};
+		}
+	}
 `;
