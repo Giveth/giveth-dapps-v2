@@ -16,8 +16,10 @@ import {
 	initialState,
 	EScoreType,
 	EQualityState,
+	infoMap,
 } from './proGuide/score/scoreHelpers';
 import { EInputs, TInputs } from './types';
+import { ScoreBoxSmall } from './proGuide/score/ScoreBoxSmall';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -103,6 +105,10 @@ export const CreateHeader: FC<IHeader> = ({
 			</Flex>
 			<FlexSpacer />
 			<Flex $alignItems='center' gap='16px'>
+				<ScoreBoxSmall
+					score={fieldsScores.totalScore}
+					color={infoMap[fieldsScores.quality].scoreColor}
+				/>
 				<Button label='Create' buttonType='texty-primary' />
 			</Flex>
 		</StyledHeader>
