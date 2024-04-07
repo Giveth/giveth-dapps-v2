@@ -107,6 +107,7 @@ export function calculateScore(
 	// Compute total score
 	newState.totalScore =
 		newState[EScoreType.DESCRIPTION] +
+		newState[EScoreType.SOCIAL_MEDIA] +
 		newState[EScoreType.CATEGORIES] +
 		newState[EScoreType.LOCATION] +
 		newState[EScoreType.IMAGE] +
