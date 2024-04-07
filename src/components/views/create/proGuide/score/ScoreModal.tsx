@@ -2,7 +2,7 @@ import {
 	Button,
 	Flex,
 	H6,
-	IconAlertTriangleOutline32,
+	IconHelpOutline32,
 	P,
 	mediaQueries,
 } from '@giveth/ui-design-system';
@@ -30,10 +30,10 @@ export const ScoreModal: FC<IScoreModalProps> = ({ ...props }) => {
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitle={formatMessage({
-				id: 'label.end_recurring_donation',
+				id: infoMap[props.fieldsScores.quality].title,
 			})}
 			headerTitlePosition='left'
-			headerIcon={<IconAlertTriangleOutline32 />}
+			headerIcon={<IconHelpOutline32 />}
 		>
 			<ScoreInnerModal {...props} />
 		</Modal>
