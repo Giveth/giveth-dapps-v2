@@ -1,22 +1,35 @@
 import { Button } from '@giveth/ui-design-system';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { ScoreState, infoMap } from './scoreHelpers';
+import { ScoreModal } from './ScoreModal';
 
 interface IScoreButtonProps {
 	fieldsScores: ScoreState;
 }
 
 export const ScoreButton: FC<IScoreButtonProps> = ({ fieldsScores }) => {
+	const [showScoreModal, setShowScoreModal] = useState(false);
 	const { formatMessage } = useIntl();
 
 	return (
-		<StyledButton
-			label={formatMessage({ id: infoMap[fieldsScores.quality].title })}
-			buttonType='texty-primary'
-		/>
+		<>
+			<StyledButton
+				label={formatMessage({
+					id: infoMap[fieldsScores.quality].title,
+				})}
+				buttonType='texty-primary'
+				onClick={() => setShowScoreModal(true)}
+			/>
+			{showScoreModal && (
+				<ScoreModal
+					setShowModal={setShowScoreModal}
+					fieldsScores={fieldsScores}
+				/>
+			)}
+		</>
 	);
 };
 
