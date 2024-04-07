@@ -1,0 +1,100 @@
+import {
+	Button,
+	Flex,
+	H6,
+	IconAlertTriangleOutline32,
+	P,
+	mediaQueries,
+} from '@giveth/ui-design-system';
+import { useIntl } from 'react-intl';
+import { type FC } from 'react';
+import styled from 'styled-components';
+import Image from 'next/image';
+import { Modal } from '@/components/modals/Modal';
+import { useModalAnimation } from '@/hooks/useModalAnimation';
+import { IModal } from '@/types/common';
+import { ImprovementTips } from './ImprovementTips';
+import { ScoreBox } from './ScoreBox';
+import { ScoreState, infoMap } from './scoreHelpers';
+
+export interface IScoreModalProps extends IModal {
+	fieldsScores: ScoreState;
+}
+
+export const ScoreModal: FC<IScoreModalProps> = ({ ...props }) => {
+	const { isAnimating, closeModal } = useModalAnimation(props.setShowModal);
+	const { formatMessage } = useIntl();
+
+	return (
+		<Modal
+			closeModal={closeModal}
+			isAnimating={isAnimating}
+			headerTitle={formatMessage({
+				id: 'label.end_recurring_donation',
+			})}
+			headerTitlePosition='left'
+			headerIcon={<IconAlertTriangleOutline32 />}
+		>
+			<ScoreInnerModal {...props} />
+		</Modal>
+	);
+};
+
+interface IScoreInnerModalProps extends IScoreModalProps {}
+
+const ScoreInnerModal: FC<IScoreInnerModalProps> = ({
+	fieldsScores,
+	setShowModal,
+}) => {
+	const { formatMessage } = useIntl();
+
+	return (
+		<Wrapper>
+			<Flex gap='16px'>
+				<Image
+					src={'/images/score.svg'}
+					alt='score'
+					width={32}
+					height={32}
+				/>
+				<H6 weight={700}>Your Project Score</H6>
+			</Flex>
+			<ScoreBox
+				score={fieldsScores.totalScore}
+				color={infoMap[fieldsScores.quality].scoreColor}
+			/>
+			<MainTip>
+				{formatMessage({ id: infoMap[fieldsScores.quality].mainTip })}
+			</MainTip>
+			{fieldsScores.totalScore < 100 && (
+				<ImprovementTips fieldsScores={fieldsScores} />
+			)}
+			<ActionButton
+				label={formatMessage({ id: 'label.got_it' })}
+				onClick={() => {
+					setShowModal(false);
+				}}
+			/>
+		</Wrapper>
+	);
+};
+
+const Wrapper = styled(Flex)`
+	text-align: left;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: stretch;
+	gap: 16px;
+	width: 100%;
+	padding: 16px 24px 24px 24px;
+	${mediaQueries.tablet} {
+		width: 530px;
+	}
+`;
+const MainTip = styled(P)`
+	text-align: center;
+`;
+
+const ActionButton = styled(Button)`
+	width: 100%;
+`;
