@@ -158,7 +158,7 @@ export const createRecurringDonation = async ({
 				isBatch,
 			},
 		});
-		donationId = data.createRecurringDonation.id;
+		donationId = parseInt(data.createRecurringDonation.id);
 		console.log('donationId', donationId);
 		return donationId;
 	} catch (error) {
@@ -190,7 +190,7 @@ export const updateRecurringDonation = async (
 				anonymous,
 			},
 		});
-		donationId = data.updateRecurringDonationParams.id;
+		donationId = parseInt(data.updateRecurringDonationParams.id);
 		console.log('donationId', donationId);
 		return donationId;
 	} catch (error: any) {
@@ -229,7 +229,7 @@ export const endRecurringDonation = async (props: IEndRecurringDonation) => {
 				status: ERecurringDonationStatus.ENDED,
 			},
 		});
-		donationId = data.updateRecurringDonationParams.id;
+		donationId = parseInt(data.updateRecurringDonationParams.id);
 		return donationId;
 	} catch (error: any) {
 		captureException(error, {
@@ -254,7 +254,7 @@ export const updateRecurringDonationStatus = async (
 				status,
 			},
 		});
-		return data.updateRecurringDonationStatus.id;
+		return parseInt(data.updateRecurringDonationStatus.id);
 	} catch (error: any) {
 		captureException(error, {
 			tags: {
