@@ -51,6 +51,62 @@ export const CreateHeader: FC<IHeader> = ({
 		dispatch({ type: EScoreType.DESCRIPTION, payload: descriptionInvalid });
 	}, [descriptionInvalid]);
 
+	// SocialMedia score
+	useEffect(() => {
+		const facebookInvalid = getFieldState(EInputs.facebook).invalid;
+		if (!facebookInvalid && formData.facebook) {
+			return dispatch({ type: EScoreType.SOCIAL_MEDIA, payload: 1 });
+		}
+		const xInvalid = getFieldState(EInputs.x).invalid;
+		if (!xInvalid && formData.x) {
+			return dispatch({ type: EScoreType.SOCIAL_MEDIA, payload: 1 });
+		}
+		const instagramInvalid = getFieldState(EInputs.instagram).invalid;
+		if (!instagramInvalid && formData.instagram) {
+			return dispatch({ type: EScoreType.SOCIAL_MEDIA, payload: 1 });
+		}
+		const youtubeInvalid = getFieldState(EInputs.youtube).invalid;
+		if (!youtubeInvalid && formData.youtube) {
+			return dispatch({ type: EScoreType.SOCIAL_MEDIA, payload: 1 });
+		}
+		const linkedinInvalid = getFieldState(EInputs.linkedin).invalid;
+		if (!linkedinInvalid && formData.linkedin) {
+			return dispatch({ type: EScoreType.SOCIAL_MEDIA, payload: 1 });
+		}
+		const redditInvalid = getFieldState(EInputs.reddit).invalid;
+		if (!redditInvalid && formData.reddit) {
+			return dispatch({ type: EScoreType.SOCIAL_MEDIA, payload: 1 });
+		}
+		const discordInvalid = getFieldState(EInputs.discord).invalid;
+		if (!discordInvalid && formData.discord) {
+			return dispatch({ type: EScoreType.SOCIAL_MEDIA, payload: 1 });
+		}
+		const farcasterInvalid = getFieldState(EInputs.farcaster).invalid;
+		if (!farcasterInvalid && formData.farcaster) {
+			return dispatch({ type: EScoreType.SOCIAL_MEDIA, payload: 1 });
+		}
+		const lensInvalid = getFieldState(EInputs.lens).invalid;
+		if (!lensInvalid && formData.lens) {
+			return dispatch({ type: EScoreType.SOCIAL_MEDIA, payload: 1 });
+		}
+		const websiteInvalid = getFieldState(EInputs.website).invalid;
+		if (!websiteInvalid && formData.website) {
+			return dispatch({ type: EScoreType.SOCIAL_MEDIA, payload: 1 });
+		}
+		dispatch({ type: EScoreType.SOCIAL_MEDIA, payload: 0 });
+	}, [
+		formData.facebook,
+		formData.x,
+		formData.instagram,
+		formData.youtube,
+		formData.linkedin,
+		formData.reddit,
+		formData.discord,
+		formData.farcaster,
+		formData.lens,
+		formData.website,
+	]);
+
 	// Categories score
 	useEffect(() => {
 		dispatch({ type: EScoreType.CATEGORIES, payload: formData.categories });
