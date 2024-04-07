@@ -1,7 +1,6 @@
 import {
 	Button,
 	Flex,
-	H6,
 	IconHelpOutline32,
 	P,
 	mediaQueries,
@@ -9,7 +8,6 @@ import {
 import { useIntl } from 'react-intl';
 import { type FC } from 'react';
 import styled from 'styled-components';
-import Image from 'next/image';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
@@ -50,15 +48,6 @@ const ScoreInnerModal: FC<IScoreInnerModalProps> = ({
 
 	return (
 		<Wrapper>
-			<Flex gap='16px'>
-				<Image
-					src={'/images/score.svg'}
-					alt='score'
-					width={32}
-					height={32}
-				/>
-				<H6 weight={700}>Your Project Score</H6>
-			</Flex>
 			<ScoreBox
 				score={fieldsScores.totalScore}
 				color={infoMap[fieldsScores.quality].scoreColor}
