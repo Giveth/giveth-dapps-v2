@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import styled from 'styled-components';
-import { Flex, H6, P } from '@giveth/ui-design-system';
+import { H6, P } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { infoMap, ScoreState, EScoreType } from './scoreHelpers';
 import { TipListItem } from '../ProjectTips/common.styles';
@@ -25,9 +25,7 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 	const bulletColor = info.bulletColor;
 	return (
 		<div>
-			<TitleRow $justifyContent='space-between' $alignItems='center'>
-				<H6 weight={700}>{formatMessage({ id: info.title })}</H6>
-			</TitleRow>
+			<H6 weight={700}>{formatMessage({ id: info.title })}</H6>
 			<AnimatedDiv>
 				{fieldsScores.DESCRIPTION === 0 && (
 					<TipListItem color={bulletColor}>
@@ -83,8 +81,4 @@ const AnimatedDiv = styled.div`
 	overflow: hidden;
 	transition: max-height 0.5s ease;
 	padding-top: 8px;
-`;
-
-const TitleRow = styled(Flex)`
-	cursor: pointer;
 `;

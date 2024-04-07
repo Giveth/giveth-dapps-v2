@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { Dispatch, FC, SetStateAction, useEffect, useReducer } from 'react';
 import Link from 'next/link';
 import { B, Flex, FlexSpacer } from '@giveth/ui-design-system';
-import { useIntl } from 'react-intl';
 import { UseFormGetFieldState } from 'react-hook-form';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
@@ -40,7 +39,6 @@ export const CreateHeader: FC<IHeader> = ({
 	const [fieldsScores, dispatch] = useReducer<
 		React.Reducer<ScoreState, ScoreAction>
 	>(calculateScore, initialState);
-	const { formatMessage } = useIntl();
 
 	useEffect(() => {
 		setQuality(fieldsScores.quality);
@@ -103,15 +101,17 @@ export const CreateHeader: FC<IHeader> = ({
 				</Link>
 			</Flex>
 			<FlexSpacer />
-			<Flex $alignItems='center' gap='24px'>
-				<Flex gap='8px'>
-					<Image
-						src={'/images/score.svg'}
-						alt='score'
-						width={24}
-						height={24}
-					/>
-					<B>Project Score</B>
+			<Flex $alignItems='center' gap='40px'>
+				<Flex $alignItems='center' gap='24px'>
+					<Flex gap='8px'>
+						<Image
+							src={'/images/score.svg'}
+							alt='score'
+							width={24}
+							height={24}
+						/>
+						<B>Project Score</B>
+					</Flex>
 				</Flex>
 				<ScoreBoxSmall
 					score={fieldsScores.totalScore}

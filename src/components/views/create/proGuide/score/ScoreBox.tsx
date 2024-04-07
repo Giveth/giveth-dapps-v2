@@ -47,7 +47,7 @@ const Bar = styled.div<{ $score: number; $color: string }>`
 	background: ${semanticColors.jade[500]};
 	background-image: ${props =>
 		`linear-gradient(to right, ${props.$color} ${props.$score}%, ${neutralColors.gray[200]} ${props.$score}%)`};
-	height: 8px;
+	height: 4px;
 	width: 100%;
-	border-radius: 8px;
+	border-radius: 4px;
 `;

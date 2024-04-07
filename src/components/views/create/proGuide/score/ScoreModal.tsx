@@ -51,10 +51,12 @@ const ScoreInnerModal: FC<IScoreInnerModalProps> = ({
 			<P>
 				{formatMessage({ id: infoMap[fieldsScores.quality].mainTip })}
 			</P>
-			<StyledScoreBox
-				score={fieldsScores.totalScore}
-				color={infoMap[fieldsScores.quality].scoreColor}
-			/>
+			<ScoreBoxWrapper>
+				<ScoreBox
+					score={fieldsScores.totalScore}
+					color={infoMap[fieldsScores.quality].scoreColor}
+				/>
+			</ScoreBoxWrapper>
 			{fieldsScores.totalScore < 100 && (
 				<ImprovementTips fieldsScores={fieldsScores} />
 			)}
@@ -82,7 +84,7 @@ const Wrapper = styled(Flex)`
 	}
 `;
 
-const StyledScoreBox = styled(ScoreBox)`
+const ScoreBoxWrapper = styled.div`
 	padding: 0 40px;
 `;
 
