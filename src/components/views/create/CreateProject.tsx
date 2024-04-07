@@ -651,12 +651,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 					</Col>
 					<Col lg={4} md={12}>
 						{isProjectScoringActive ? (
-							<ProGuide
-								activeSection={activeProjectSection}
-								formData={data}
-								getFieldState={getFieldState}
-								setQuality={setQuality}
-							/>
+							<ProGuide activeSection={activeProjectSection} />
 						) : (
 							<GuidelinesCard />
 						)}
