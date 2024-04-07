@@ -45,7 +45,7 @@ import config, {
 	isProjectScoringActive,
 	isRecurringActive,
 } from '@/configuration';
-import { setShowFooter } from '@/features/general/general.slice';
+import { setShowFooter, setShowHeader } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
@@ -85,6 +85,15 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const publishOnMediumQuality = useRef(false);
+
+	useEffect(() => {
+		dispatch(setShowHeader(false));
+		dispatch(setShowFooter(false));
+		return () => {
+			dispatch(setShowHeader(true));
+			dispatch(setShowFooter(true));
+		};
+	}, [dispatch]);
 
 	const isEditMode = !!project;
 
@@ -418,13 +427,6 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 		}
 	};
-
-	useEffect(() => {
-		dispatch(setShowFooter(false));
-		return () => {
-			dispatch(setShowFooter(true));
-		};
-	}, []);
 
 	return (
 		<Container>
