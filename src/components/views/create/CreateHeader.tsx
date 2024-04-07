@@ -7,7 +7,6 @@ import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
 import { StyledHeader, Logo } from '@/components/Header/Header.sc';
-import { EScrollDir, useScrollDetection } from '@/hooks/useScrollDetection';
 import {
 	ScoreState,
 	ScoreAction,
@@ -35,7 +34,6 @@ export const CreateHeader: FC<IHeader> = ({
 	setQuality,
 }) => {
 	const theme = useAppSelector(state => state.general.theme);
-	const scrollDir = useScrollDetection();
 	const [fieldsScores, dispatch] = useReducer<
 		React.Reducer<ScoreState, ScoreAction>
 	>(calculateScore, initialState);
@@ -139,11 +137,7 @@ export const CreateHeader: FC<IHeader> = ({
 	}, [formData.description]);
 
 	return (
-		<StyledHeader
-			$alignItems='center'
-			$baseTheme={theme}
-			$show={scrollDir !== EScrollDir.Down}
-		>
+		<StyledHeader $alignItems='center' $baseTheme={theme} $show={true}>
 			<Flex $alignItems='center' gap='16px'>
 				<Link href={'/'}>
 					<Logo>
