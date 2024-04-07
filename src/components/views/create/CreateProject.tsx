@@ -431,7 +431,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 
 	return (
 		<>
-			<CreateHeader />
+			<CreateHeader
+				formData={data}
+				getFieldState={getFieldState}
+				setQuality={setQuality}
+			/>
 			<StyledContainer>
 				<Row>
 					<Col lg={8} md={12}>
