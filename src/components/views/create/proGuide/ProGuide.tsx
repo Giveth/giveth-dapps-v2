@@ -3,30 +3,16 @@ import { Flex, deviceSize } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import ProjectTip, { type IProjectTipProps } from './ProjectTips/ProjectTip';
 import useMediaQuery from '@/hooks/useMediaQuery';
-import {
-	type IProjectScoreCardProps,
-	ProjectScoreCard,
-} from './score/ProjectScoreCard';
 import { EScrollDir, useScrollDetection } from '@/hooks/useScrollDetection';
 
-interface IProGuideProps extends IProjectTipProps, IProjectScoreCardProps {}
+interface IProGuideProps extends IProjectTipProps {}
 
-export const ProGuide: FC<IProGuideProps> = ({
-	activeSection,
-	formData,
-	getFieldState,
-	setQuality,
-}) => {
+export const ProGuide: FC<IProGuideProps> = ({ activeSection }) => {
 	const isLaptopL = useMediaQuery(`(min-width: ${deviceSize.laptopL}px)`);
 	const scrollDir = useScrollDetection();
 	return isLaptopL ? (
 		<Wrapper $show={scrollDir !== EScrollDir.Down}>
 			<ProjectTip activeSection={activeSection} />
-			<ProjectScoreCard
-				formData={formData}
-				getFieldState={getFieldState}
-				setQuality={setQuality}
-			/>
 		</Wrapper>
 	) : null;
 };

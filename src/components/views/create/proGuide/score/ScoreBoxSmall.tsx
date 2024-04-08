@@ -2,8 +2,9 @@ import { type FC } from 'react';
 import styled from 'styled-components';
 import {
 	Flex,
-	H1,
 	H5,
+	H6,
+	mediaQueries,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -13,7 +14,7 @@ interface IScoreBoxProps {
 	color: string;
 }
 
-export const ScoreBox: FC<IScoreBoxProps> = ({ score, color }) => {
+export const ScoreBoxSmall: FC<IScoreBoxProps> = ({ score, color }) => {
 	return (
 		<Wrapper>
 			<Flex
@@ -32,14 +33,18 @@ export const ScoreBox: FC<IScoreBoxProps> = ({ score, color }) => {
 
 const Wrapper = styled(Flex)`
 	flex-direction: column;
-	gap: 24px;
+	gap: 8px;
+	width: 100%;
+	${mediaQueries.tablet} {
+		width: 255px;
+	}
 `;
 
-const Score = styled(H1)<{ color: string }>`
+const Score = styled(H5)<{ color: string }>`
 	color: ${props => props.color};
 `;
 
-const Hundred = styled(H5)`
+const Hundred = styled(H6)`
 	color: ${semanticColors.jade[500]};
 `;
 

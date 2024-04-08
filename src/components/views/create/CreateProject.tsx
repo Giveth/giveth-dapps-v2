@@ -45,7 +45,7 @@ import config, {
 	isProjectScoringActive,
 	isRecurringActive,
 } from '@/configuration';
-import { setShowFooter } from '@/features/general/general.slice';
+import { setShowFooter, setShowHeader } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
 import CreateProjectAddAddressModal from './CreateProjectAddAddressModal';
@@ -60,6 +60,7 @@ import { LowScoreModal } from './LowScoreModal';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { GuidelinesCard } from './GuideLinesCard';
 import SocialMedias from './SocialMediaBox/SocialMedias';
+import { CreateHeader } from './CreateHeader';
 
 const ALL_CHAINS = config.CHAINS;
 
@@ -85,6 +86,15 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const publishOnMediumQuality = useRef(false);
+
+	useEffect(() => {
+		dispatch(setShowHeader(false));
+		dispatch(setShowFooter(false));
+		return () => {
+			dispatch(setShowHeader(true));
+			dispatch(setShowFooter(true));
+		};
+	}, [dispatch]);
 
 	const isEditMode = !!project;
 
@@ -419,248 +429,256 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		}
 	};
 
-	useEffect(() => {
-		dispatch(setShowFooter(false));
-		return () => {
-			dispatch(setShowFooter(true));
-		};
-	}, []);
-
 	return (
-		<Container>
-			<Row>
-				<Col lg={8} md={12}>
-					<Title
-						onMouseEnter={() =>
-							setActiveProjectSection(
-								ECreateProjectSections.default,
-							)
-						}
-					>
-						{isEditMode
-							? formatMessage({ id: 'label.project_details' })
-							: formatMessage({ id: 'label.create_a_project' })}
-					</Title>
-					<FormProvider {...formMethods}>
-						<form
-							onSubmit={handleSubmit(onSubmit, onError)}
-							onSubmitCapture={() => setIsLoading(true)}
-							id='hook-form'
+		<>
+			<CreateHeader
+				formData={data}
+				getFieldState={getFieldState}
+				setQuality={setQuality}
+			/>
+			<StyledContainer>
+				<Row>
+					<Col lg={8} md={12}>
+						<Title
+							onMouseEnter={() =>
+								setActiveProjectSection(
+									ECreateProjectSections.default,
+								)
+							}
 						>
-							<NameInput
-								setActiveProjectSection={
-									setActiveProjectSection
-								}
-								preTitle={title}
-							/>
-							<DescriptionInput
-								setActiveProjectSection={
-									setActiveProjectSection
-								}
-							/>
-							<SocialMedias />
-							<CategoryInput
-								setActiveProjectSection={
-									setActiveProjectSection
-								}
-							/>
-							<LocationIndex
-								setActiveProjectSection={
-									setActiveProjectSection
-								}
-							/>
-							<ImageInput
-								setIsLoading={setIsLoading}
-								setActiveProjectSection={
-									setActiveProjectSection
-								}
-							/>
-							<H5>
-								{formatMessage({ id: 'label.receiving_funds' })}
-							</H5>
-							<CaptionContainer>
-								{formatMessage({
-									id: 'label.you_can_set_a_custom_ethereum_address',
-								})}
-							</CaptionContainer>
-							<div
-								onMouseEnter={() => {
-									setActiveProjectSection(
-										ECreateProjectSections.addresses,
-									);
-								}}
+							{isEditMode
+								? formatMessage({ id: 'label.project_details' })
+								: formatMessage({
+										id: 'label.create_a_project',
+									})}
+						</Title>
+						<FormProvider {...formMethods}>
+							<form
+								onSubmit={handleSubmit(onSubmit, onError)}
+								onSubmitCapture={() => setIsLoading(true)}
+								id='hook-form'
 							>
-								{ALL_CHAINS.map(chain => (
-									<AddressInterface
-										key={chain.id}
-										networkId={chain.id}
-										chainType={
-											(chain as NonEVMChain).chainType
-										}
-										onButtonClick={() => {
-											setAddressModalChainType(
-												(chain as NonEVMChain)
-													.chainType,
-											);
-											setAddressModalChainId(chain.id);
-										}}
-										isEditMode={isEditMode}
-										anchorContractData={
-											(project?.anchorContracts &&
-												project?.anchorContracts[0]) ??
-											undefined
-										}
-									/>
-								))}
-							</div>
-							<PublishTitle>
-								{isEditMode
-									? formatMessage({
-											id: 'label.publish_edited_project',
-										})
-									: formatMessage({
-											id: 'label.lets_publish',
-										})}
-							</PublishTitle>
-							<PublishList
-								onMouseEnter={() =>
-									setActiveProjectSection(
-										ECreateProjectSections.default,
-									)
-								}
-							>
-								<li>
+								<NameInput
+									setActiveProjectSection={
+										setActiveProjectSection
+									}
+									preTitle={title}
+								/>
+								<DescriptionInput
+									setActiveProjectSection={
+										setActiveProjectSection
+									}
+								/>
+								<SocialMedias />
+								<CategoryInput
+									setActiveProjectSection={
+										setActiveProjectSection
+									}
+								/>
+								<LocationIndex
+									setActiveProjectSection={
+										setActiveProjectSection
+									}
+								/>
+								<ImageInput
+									setIsLoading={setIsLoading}
+									setActiveProjectSection={
+										setActiveProjectSection
+									}
+								/>
+								<H5>
+									{formatMessage({
+										id: 'label.receiving_funds',
+									})}
+								</H5>
+								<CaptionContainer>
+									{formatMessage({
+										id: 'label.you_can_set_a_custom_ethereum_address',
+									})}
+								</CaptionContainer>
+								<div
+									onMouseEnter={() => {
+										setActiveProjectSection(
+											ECreateProjectSections.addresses,
+										);
+									}}
+								>
+									{ALL_CHAINS.map(chain => (
+										<AddressInterface
+											key={chain.id}
+											networkId={chain.id}
+											chainType={
+												(chain as NonEVMChain).chainType
+											}
+											onButtonClick={() => {
+												setAddressModalChainType(
+													(chain as NonEVMChain)
+														.chainType,
+												);
+												setAddressModalChainId(
+													chain.id,
+												);
+											}}
+											isEditMode={isEditMode}
+											anchorContractData={
+												(project?.anchorContracts &&
+													project
+														?.anchorContracts[0]) ??
+												undefined
+											}
+										/>
+									))}
+								</div>
+								<PublishTitle>
 									{isEditMode
 										? formatMessage({
-												id: 'label.edited_projects',
+												id: 'label.publish_edited_project',
 											})
 										: formatMessage({
-												id: 'label.newly_published_projects',
-											})}{' '}
-									{formatMessage({
-										id: 'label.will_be_unlisted_until',
-									})}
-									{isEditMode &&
-										` ${formatMessage({
-											id: 'label.again',
-										})}`}
-									.
-								</li>
-								<li>
-									{formatMessage({
-										id: 'label.you_can_still_access_your_project_from_your_account',
-									})}
-								</li>
-								<li>
-									{formatMessage({
-										id: 'label.youll_receive_an_email_from_us_once_its_listed',
-									})}
-								</li>
-							</PublishList>
-							<Buttons>
-								{(!isEditMode || isDraft) && (
-									<OutlineButton
-										label={formatMessage({
-											id: 'label.preview',
-										})}
-										buttonType='primary'
-										disabled={isLoading}
-										loading={isLoading}
-										icon={<IconExternalLink size={16} />}
-										type='submit'
-										onClick={() =>
-											setValue(EInputs.draft, true)
-										}
-									/>
-								)}
-								{isProjectScoringActive &&
-								quality === EQualityState.LOW ? (
-									<IconWithTooltip
-										icon={
-											<Button
-												label={formatMessage({
-													id: 'label.publish',
-												})}
-												buttonType='primary'
-												disabled={true}
-											/>
-										}
-										direction='top'
-									>
-										<TooltipWrapper>
-											{formatMessage({
-												id: 'component.create_project.low_score',
+												id: 'label.lets_publish',
 											})}
-										</TooltipWrapper>
-									</IconWithTooltip>
-								) : (
-									<Button
+								</PublishTitle>
+								<PublishList
+									onMouseEnter={() =>
+										setActiveProjectSection(
+											ECreateProjectSections.default,
+										)
+									}
+								>
+									<li>
+										{isEditMode
+											? formatMessage({
+													id: 'label.edited_projects',
+												})
+											: formatMessage({
+													id: 'label.newly_published_projects',
+												})}{' '}
+										{formatMessage({
+											id: 'label.will_be_unlisted_until',
+										})}
+										{isEditMode &&
+											` ${formatMessage({
+												id: 'label.again',
+											})}`}
+										.
+									</li>
+									<li>
+										{formatMessage({
+											id: 'label.you_can_still_access_your_project_from_your_account',
+										})}
+									</li>
+									<li>
+										{formatMessage({
+											id: 'label.youll_receive_an_email_from_us_once_its_listed',
+										})}
+									</li>
+								</PublishList>
+								<Buttons>
+									{(!isEditMode || isDraft) && (
+										<OutlineButton
+											label={formatMessage({
+												id: 'label.preview',
+											})}
+											buttonType='primary'
+											disabled={isLoading}
+											loading={isLoading}
+											icon={
+												<IconExternalLink size={16} />
+											}
+											type='submit'
+											onClick={() =>
+												setValue(EInputs.draft, true)
+											}
+										/>
+									)}
+									{isProjectScoringActive &&
+									quality === EQualityState.LOW ? (
+										<IconWithTooltip
+											icon={
+												<Button
+													label={formatMessage({
+														id: 'label.publish',
+													})}
+													buttonType='primary'
+													disabled={true}
+												/>
+											}
+											direction='top'
+										>
+											<TooltipWrapper>
+												{formatMessage({
+													id: 'component.create_project.low_score',
+												})}
+											</TooltipWrapper>
+										</IconWithTooltip>
+									) : (
+										<Button
+											label={formatMessage({
+												id: 'label.publish',
+											})}
+											buttonType='primary'
+											type='submit'
+											disabled={isLoading}
+											loading={isLoading}
+										/>
+									)}
+									<OutlineButton
+										onClick={handleCancel}
 										label={formatMessage({
-											id: 'label.publish',
+											id: 'label.cancel',
 										})}
 										buttonType='primary'
-										type='submit'
 										disabled={isLoading}
-										loading={isLoading}
+									/>
+								</Buttons>
+								{addressModalChainId !== undefined && (
+									<CreateProjectAddAddressModal
+										networkId={addressModalChainId}
+										chainType={addressModalChainType}
+										userAddresses={userUniqueAddresses}
+										setShowModal={() => {
+											setAddressModalChainId(undefined);
+											setAddressModalChainType(undefined);
+										}}
+										onSubmit={() => {
+											setAddressModalChainId(undefined);
+											setAddressModalChainType(undefined);
+										}}
 									/>
 								)}
-								<OutlineButton
-									onClick={handleCancel}
-									label={formatMessage({
-										id: 'label.cancel',
-									})}
-									buttonType='primary'
-									disabled={isLoading}
-								/>
-							</Buttons>
-							{addressModalChainId !== undefined && (
-								<CreateProjectAddAddressModal
-									networkId={addressModalChainId}
-									chainType={addressModalChainType}
-									userAddresses={userUniqueAddresses}
-									setShowModal={() => {
-										setAddressModalChainId(undefined);
-										setAddressModalChainType(undefined);
-									}}
-									onSubmit={() => {
-										setAddressModalChainId(undefined);
-										setAddressModalChainType(undefined);
-									}}
-								/>
-							)}
-						</form>
-					</FormProvider>
-				</Col>
-				<Col lg={4} md={12}>
-					{isProjectScoringActive ? (
-						<ProGuide
-							activeSection={activeProjectSection}
-							formData={data}
-							getFieldState={getFieldState}
-							setQuality={setQuality}
-						/>
-					) : (
-						<GuidelinesCard />
-					)}
-				</Col>
-			</Row>
-			{showAlloProtocolModal && addedProjectState && (
-				<AlloProtocolModal
-					setShowModal={setShowAlloProtocolModal}
-					addedProjectState={addedProjectState}
-					project={project}
-				/>
-			)}
-			{showLowScoreModal && (
-				<LowScoreModal
-					setShowModal={setShowLowScoreModal}
-					publishOnMediumQuality={publishOnMediumQuality}
-					onSubmit={handleSubmit(onSubmit, onError)}
-				/>
-			)}
-		</Container>
+							</form>
+						</FormProvider>
+					</Col>
+					<Col lg={4} md={12}>
+						{isProjectScoringActive ? (
+							<ProGuide activeSection={activeProjectSection} />
+						) : (
+							<GuidelinesCard />
+						)}
+					</Col>
+				</Row>
+				{showAlloProtocolModal && addedProjectState && (
+					<AlloProtocolModal
+						setShowModal={setShowAlloProtocolModal}
+						addedProjectState={addedProjectState}
+						project={project}
+					/>
+				)}
+				{showLowScoreModal && (
+					<LowScoreModal
+						setShowModal={setShowLowScoreModal}
+						publishOnMediumQuality={publishOnMediumQuality}
+						onSubmit={handleSubmit(onSubmit, onError)}
+					/>
+				)}
+			</StyledContainer>
+		</>
 	);
 };
+
+const StyledContainer = styled(Container)`
+	margin-top: 136px;
+`;
 
 const CaptionContainer = styled(Caption)`
 	margin-top: 8px;
