@@ -114,7 +114,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 						<Currency>{donation.currency} /mo</Currency>
 					</DonationTableCell>
 					<DonationTableCell>
-						{donation.amountStreamed || 0}
+						{limitFraction(donation.amountStreamed, 10, true) || 0}
 						<Currency>{donation.currency}</Currency>
 					</DonationTableCell>
 					{myAccount && (
