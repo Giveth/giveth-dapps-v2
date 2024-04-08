@@ -72,8 +72,10 @@ export const StreamActionButton: FC<IStreamActionButtonProps> = ({
 							icon: <IconEdit16 />,
 							cb: () =>
 								router.push(
-									slugToProjectDonate(donation.project.slug) +
-										'?tab=recurring',
+									slugToProjectDonate(
+										donation.project.slug,
+										true,
+									),
 								),
 						},
 						{

@@ -11,9 +11,10 @@ import { RoundNotStartedModal } from '@/components/project-card/RoundNotStartedM
 
 interface INoDonation {
 	selectedQF: IQFRound | null;
+	recurring?: boolean;
 }
 
-export const NoDonation: FC<INoDonation> = ({ selectedQF }) => {
+export const NoDonation: FC<INoDonation> = ({ selectedQF, recurring }) => {
 	const [showHintModal, setShowHintModal] = useState(false);
 
 	const { formatMessage } = useIntl();
@@ -24,7 +25,7 @@ export const NoDonation: FC<INoDonation> = ({ selectedQF }) => {
 		: 0;
 	const now = getNowUnixMS();
 	const isRoundStarted = now > _startDate;
-	const destination = slugToProjectDonate(slug || '');
+	const destination = slugToProjectDonate(slug || '', recurring);
 
 	// Show hint modal if the user clicks on the card and the round is not started
 	const handleClick = (e: any) => {
