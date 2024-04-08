@@ -14,9 +14,9 @@ import {
 	IconYoutube,
 	P,
 } from '@giveth/ui-design-system';
-import React from 'react';
+import { type FC } from 'react';
 import styled from 'styled-components';
-import { EInputs } from '../types';
+import { ECreateProjectSections, EInputs } from '../types';
 import SocialMediaInput from './SocialMediaInput';
 import { validators } from '@/lib/constants/regex';
 
@@ -83,9 +83,17 @@ export const socialMediasArray = [
 	},
 ];
 
-const SocialMedias = () => {
+interface ISocialMediaProps {
+	setActiveProjectSection: (section: ECreateProjectSections) => void;
+}
+
+const SocialMedias: FC<ISocialMediaProps> = ({ setActiveProjectSection }) => {
 	return (
-		<div>
+		<div
+			onMouseEnter={() =>
+				setActiveProjectSection(ECreateProjectSections.socialMedia)
+			}
+		>
 			<H5>Social Media Links</H5>
 			<StyledCaption>
 				Add your project’s social media links (optional)
