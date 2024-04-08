@@ -140,7 +140,7 @@ const ProjectRecurringDonationTable = () => {
 
 	//TODO: Show meaningful message when there is no donation
 	if (pageRecurringDonations?.totalCount === 0)
-		return <NoDonation selectedQF={null} />;
+		return <NoDonation selectedQF={null} recurring={true} />;
 
 	return (
 		<Wrapper>

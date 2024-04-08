@@ -46,7 +46,7 @@ export const ActiveProjectsSection = () => {
 	const [tokenFilters, setTokenFilters] = useState([] as string[]);
 	const { myAccount, user } = useProfileContext();
 	const [statusFilters, setStatusFilters] = useState<IFinishStatus>({
-		active: myAccount ? false : true,
+		active: false,
 		ended: false,
 	});
 	const { formatMessage } = useIntl();
@@ -72,6 +72,14 @@ export const ActiveProjectsSection = () => {
 		if (!user) return;
 		const fetchUserDonations = async () => {
 			setLoading(true);
+			const _statusFilters = {
+				active: statusFilters.active,
+				ended: statusFilters.ended,
+			};
+			if (!myAccount) {
+				_statusFilters.active = true;
+				_statusFilters.ended = false;
+			}
 			const { data: userDonations } = await client.query({
 				query: FETCH_USER_RECURRING_DONATIONS,
 				variables: {
@@ -79,7 +87,7 @@ export const ActiveProjectsSection = () => {
 					take: itemPerPage,
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },
-					finishStatus: statusFilters,
+					finishStatus: _statusFilters,
 					filteredTokens: tokenFilters,
 					includeArchived: showArchive,
 				},
