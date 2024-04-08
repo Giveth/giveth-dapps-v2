@@ -1,4 +1,8 @@
-import { Button } from '@giveth/ui-design-system';
+import {
+	Button,
+	IconHelpOutline32,
+	mediaQueries,
+} from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -22,7 +26,9 @@ export const ScoreButton: FC<IScoreButtonProps> = ({ fieldsScores }) => {
 				})}
 				buttonType='texty-primary'
 				onClick={() => setShowScoreModal(true)}
+				icon={<IconHelpOutline32 />}
 			/>
+
 			{showScoreModal && (
 				<ScoreModal
 					setShowModal={setShowScoreModal}
@@ -38,5 +44,17 @@ const StyledButton = styled(Button)`
 	transition: box-shadow 0.2s ease-in-out;
 	&:hover {
 		box-shadow: ${Shadow.Neutral[500]};
+	}
+	& > span {
+		display: none;
+	}
+
+	${mediaQueries.laptopS} {
+		& > span {
+			display: block;
+		}
+		& > svg {
+			display: none;
+		}
 	}
 `;
