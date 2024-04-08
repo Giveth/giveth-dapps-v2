@@ -48,7 +48,16 @@ export const DonationCard = () => {
 			<Flex>
 				<Tab
 					$selected={tab === ETabs.ONE_TIME}
-					onClick={() => setTab(ETabs.ONE_TIME)}
+					onClick={() => {
+						setTab(ETabs.ONE_TIME);
+						router.push(
+							{
+								query: { ...router.query, tab: 'on-time' },
+							},
+							undefined,
+							{ shallow: true },
+						);
+					}}
 				>
 					{formatMessage({
 						id: 'label.one_time_donation',
@@ -57,7 +66,19 @@ export const DonationCard = () => {
 				{hasOpAddress ? (
 					<Tab
 						$selected={tab === ETabs.RECURRING}
-						onClick={() => setTab(ETabs.RECURRING)}
+						onClick={() => {
+							setTab(ETabs.RECURRING);
+							router.push(
+								{
+									query: {
+										...router.query,
+										tab: 'recurring',
+									},
+								},
+								undefined,
+								{ shallow: true },
+							);
+						}}
 					>
 						{formatMessage({
 							id: 'label.recurring_donation',
