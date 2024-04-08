@@ -163,17 +163,15 @@ export const CreateHeader: FC<IHeader> = ({
 			</BackButton>
 			<FlexSpacer />
 			<Flex $alignItems='center' gap='40px'>
-				<Flex $alignItems='center' gap='24px'>
-					<Flex gap='8px'>
-						<Image
-							src={'/images/score.svg'}
-							alt='score'
-							width={24}
-							height={24}
-						/>
-						<B>Project Score</B>
-					</Flex>
-				</Flex>
+				<TitleWrapper gap='8px'>
+					<Image
+						src={'/images/score.svg'}
+						alt='score'
+						width={24}
+						height={24}
+					/>
+					<B>Project Score</B>
+				</TitleWrapper>
 				<ScoreBoxSmall
 					score={fieldsScores.totalScore}
 					color={infoMap[fieldsScores.quality].scoreColor}
@@ -188,5 +186,12 @@ const BackButton = styled(Flex)`
 	display: none;
 	${mediaQueries.tablet} {
 		display: flex;
+	}
+`;
+
+const TitleWrapper = styled(Flex)`
+	flex-direction: column;
+	${mediaQueries.tablet} {
+		flex-direction: row;
 	}
 `;
