@@ -1,8 +1,9 @@
 import Image from 'next/image';
 import { Dispatch, FC, SetStateAction, useEffect, useReducer } from 'react';
 import Link from 'next/link';
-import { B, Flex, FlexSpacer } from '@giveth/ui-design-system';
+import { B, Flex, FlexSpacer, mediaQueries } from '@giveth/ui-design-system';
 import { UseFormGetFieldState } from 'react-hook-form';
+import styled from 'styled-components';
 import { useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
 
@@ -148,7 +149,7 @@ export const CreateHeader: FC<IHeader> = ({
 
 	return (
 		<StyledHeader $alignItems='center' $baseTheme={theme} $show={true}>
-			<Flex $alignItems='center' gap='16px'>
+			<BackButton>
 				<Link href={'/'}>
 					<Logo>
 						<Image
@@ -159,7 +160,7 @@ export const CreateHeader: FC<IHeader> = ({
 						/>
 					</Logo>
 				</Link>
-			</Flex>
+			</BackButton>
 			<FlexSpacer />
 			<Flex $alignItems='center' gap='40px'>
 				<Flex $alignItems='center' gap='24px'>
@@ -182,3 +183,10 @@ export const CreateHeader: FC<IHeader> = ({
 		</StyledHeader>
 	);
 };
+
+const BackButton = styled(Flex)`
+	display: none;
+	${mediaQueries.tablet} {
+		display: flex;
+	}
+`;
