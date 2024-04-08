@@ -4,6 +4,7 @@ import {
 	Flex,
 	H5,
 	H6,
+	mediaQueries,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -33,7 +34,10 @@ export const ScoreBoxSmall: FC<IScoreBoxProps> = ({ score, color }) => {
 const Wrapper = styled(Flex)`
 	flex-direction: column;
 	gap: 8px;
-	width: 255px;
+	width: 100%;
+	${mediaQueries.tablet} {
+		width: 255px;
+	}
 `;
 
 const Score = styled(H5)<{ color: string }>`

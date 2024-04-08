@@ -161,23 +161,25 @@ export const CreateHeader: FC<IHeader> = ({
 					</Logo>
 				</Link>
 			</BackButton>
-			<FlexSpacer />
-			<Flex $alignItems='center' gap='40px'>
-				<TitleWrapper gap='8px'>
-					<Image
-						src={'/images/score.svg'}
-						alt='score'
-						width={24}
-						height={24}
+			<StyledFlexSpacer />
+			<TotalWrapper $alignItems='center' gap='40px'>
+				<InfoWrapper $alignItems='center'>
+					<Flex gap='8px'>
+						<Image
+							src={'/images/score.svg'}
+							alt='score'
+							width={24}
+							height={24}
+						/>
+						<B>Project Score</B>
+					</Flex>
+					<ScoreBoxSmall
+						score={fieldsScores.totalScore}
+						color={infoMap[fieldsScores.quality].scoreColor}
 					/>
-					<B>Project Score</B>
-				</TitleWrapper>
-				<ScoreBoxSmall
-					score={fieldsScores.totalScore}
-					color={infoMap[fieldsScores.quality].scoreColor}
-				/>
+				</InfoWrapper>
 				<ScoreButton fieldsScores={fieldsScores} />
-			</Flex>
+			</TotalWrapper>
 		</StyledHeader>
 	);
 };
@@ -189,9 +191,25 @@ const BackButton = styled(Flex)`
 	}
 `;
 
-const TitleWrapper = styled(Flex)`
+const StyledFlexSpacer = styled(FlexSpacer)`
+	display: none;
+	${mediaQueries.tablet} {
+		display: flex;
+	}
+`;
+
+const TotalWrapper = styled(Flex)`
+	flex: 1;
+`;
+
+const InfoWrapper = styled(Flex)`
+	flex: 1;
 	flex-direction: column;
+	gap: 4px;
+	align-items: flex-start;
 	${mediaQueries.tablet} {
 		flex-direction: row;
+		gap: 24px;
+		align-items: center;
 	}
 `;
