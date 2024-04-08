@@ -8,8 +8,8 @@ export const slugToSuccessView = (slug: string) => {
 	return Routes.Success + '/' + slug;
 };
 
-export const slugToProjectDonate = (slug: string) => {
-	return Routes.Donate + '/' + slug;
+export const slugToProjectDonate = (slug: string, recurring = false) => {
+	return Routes.Donate + '/' + slug + (recurring ? '?tab=recurring' : '');
 };
 
 export const idToProjectEdit = (id?: string) => {
