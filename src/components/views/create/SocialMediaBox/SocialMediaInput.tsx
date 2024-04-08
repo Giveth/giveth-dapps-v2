@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import Input from '@/components/Input';
 import { EInputs } from '../types';
@@ -17,9 +17,13 @@ const SocialMediaInput: FC<IProps> = ({ registerName, validator }) => {
 		register,
 		formState: { errors: formErrors },
 		watch,
+		trigger,
 	} = useFormContext();
 
 	const inputValue = watch(registerName);
+	useEffect(() => {
+		trigger(registerName);
+	}, [registerName, trigger]);
 
 	return (
 		<>
