@@ -29,6 +29,11 @@ const contentMap = {
 		component: <DescriptionTip />,
 	},
 
+	[ECreateProjectSections.socialMedia]: {
+		title: 'Social Media Links',
+		component: <></>,
+	},
+
 	[ECreateProjectSections.categories]: {
 		title: 'Choose the Right Category',
 		component: <CategoryTip />,
