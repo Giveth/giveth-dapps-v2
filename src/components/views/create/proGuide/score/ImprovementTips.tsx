@@ -24,6 +24,7 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 	const { formatMessage } = useIntl();
 	const info = infoMap[fieldsScores.quality];
 	const bulletColor = info.bulletColor;
+
 	return (
 		<div>
 			<H6 weight={700}>{formatMessage({ id: info.title })}</H6>
