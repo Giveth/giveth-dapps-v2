@@ -25,6 +25,7 @@ export enum ECreateProjectSections {
 	default = 'default',
 	name = 'name',
 	description = 'description',
+	socialMedia = 'socialMedia',
 	categories = 'categories',
 	location = 'location',
 	image = 'image',
