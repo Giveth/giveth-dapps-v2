@@ -178,7 +178,10 @@ export const ProjectProvider = ({
 			})
 			.then((res: IDonationsByProjectIdGQL) => {
 				const donationsByProjectId = res.data.donationsByProjectId;
-				setTotalDonationsCount(donationsByProjectId.totalCount);
+				setTotalDonationsCount(
+					donationsByProjectId.totalCount +
+						donationsByProjectId.recurringDonationsCount,
+				);
 			})
 			.catch((error: unknown) => {
 				showToastError(error);
