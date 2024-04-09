@@ -97,6 +97,7 @@ const TR = styled.div`
 	}
 	& > div:last-child {
 		padding-right: 16px;
+		padding-top: 8px;
 	}
 	&:hover {
 		& > div {
