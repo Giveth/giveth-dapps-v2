@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { type FC } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
+import Routes from '@/lib/constants/Routes';
 
 export enum EQFPageStatus {
 	ACTIVE = 'label.active_round',
@@ -20,12 +21,12 @@ export const QFHeader: FC<IQFHeaderProps> = ({ status }) => {
 		<Container>
 			<Wrapper>
 				<Flex gap='24px'>
-					<Link href='/qf'>
+					<Link href={Routes.AllQFProjects}>
 						<Item active={status === EQFPageStatus.ACTIVE}>
 							{formatMessage({ id: EQFPageStatus.ACTIVE })}
 						</Item>
 					</Link>
-					<Link href='/qf-archive'>
+					<Link href={Routes.QFArchived}>
 						<Item active={status === EQFPageStatus.ARCHIVED}>
 							{formatMessage({ id: EQFPageStatus.ARCHIVED })}
 						</Item>
