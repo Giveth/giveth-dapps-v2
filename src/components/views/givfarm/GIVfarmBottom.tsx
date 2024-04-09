@@ -160,7 +160,12 @@ export const GIVfarmBottom = () => {
 				</GIVfarmToolBoxRow>
 				<PoolRow>
 					{renderPools(chainId, showArchivedPools)}
-					<Col sm={6} lg={4} key='staking_together_card'>
+					<Col
+						sm={6}
+						lg={4}
+						key='staking_together_card'
+						style={{ alignSelf: 'flex-start' }}
+					>
 						<StakeTogetherCard />
 					</Col>
 				</PoolRow>
