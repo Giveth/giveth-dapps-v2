@@ -117,7 +117,7 @@ const config: EnvConfig = {
 		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
 
 		GIV_TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
-		GIV_BUY_LINK: 'https://swap.giveth.io/#/1/swap/ETH/GIV',
+		GIV_BUY_LINK: 'https://swap.cow.fi/#/1/swap/ETH/GIV',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		WETH_TOKEN_ADDRESS: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
 		TOKEN_DISTRO_ADDRESS: '0x87dE995F6744B75bBe0255A973081142aDb61f4d',
@@ -287,7 +287,7 @@ const config: EnvConfig = {
 		chainLogo: (logoSize = 24) => <IconGnosisChain size={logoSize} />,
 
 		GIV_TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
-		GIV_BUY_LINK: 'https://swap.giveth.io/#/100/swap/XDAI/GIV',
+		GIV_BUY_LINK: 'https://swap.cow.fi/#/100/swap/XDAI/GIV',
 		gGIV_TOKEN_ADDRESS: '0xfFBAbEb49be77E5254333d5fdfF72920B989425f',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xFad63adEFb8203F7605F25f6a921c8bf45604A5e',
@@ -302,16 +302,8 @@ const config: EnvConfig = {
 			title: 'GIV',
 			description: '100% GIV',
 			unit: 'GIV',
+			BUY_LINK: 'https://swap.cow.fi/#/100/swap/WXDAI/GIV',
 		},
-
-		// GIV: {
-		// 	network: GNOSIS_NETWORK_NUMBER,
-		// 	LM_ADDRESS: '0xD93d3bDBa18ebcB3317a57119ea44ed2Cf41C2F2',
-		// 	GARDEN_ADDRESS: '0x24f2d06446af8d6e89febc205e7936a602a87b60',
-		// 	BUY_LINK:
-		// 		'https://app.honeyswap.org/#/swap?outputCurrency=0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
-		// 	platformTitle: 'GIVPOWER',
-		// },
 
 		pools: [
 			{
@@ -456,6 +448,8 @@ const config: EnvConfig = {
 			title: 'GIV',
 			description: '100% GIV',
 			unit: 'GIV',
+			BUY_LINK:
+				'https://velodrome.finance/swap?from=eth&to=0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
 		},
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
 			'0xb15c8df1a742636a78b0a2ca9dff87c37693862a',
