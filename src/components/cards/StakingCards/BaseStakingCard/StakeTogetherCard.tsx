@@ -9,9 +9,11 @@ import {
 import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
+import { useIntl } from 'react-intl';
 import links from '@/lib/constants/links';
 
 export const StakeTogetherCard = () => {
+	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
 			<Image
@@ -20,12 +22,10 @@ export const StakeTogetherCard = () => {
 				width={248}
 				height={41}
 			/>
-			<H6 weight={700}>Want to stake ETH & support public goods?</H6>
-			<P>
-				Join the Giveth Ethereum Staking pool. Stake ETH for stpETH,
-				earn a passive interest & support top-boosted projects on with
-				part of the rewards.
-			</P>
+			<H6 weight={700}>
+				{formatMessage({ id: 'component.stake_together.title' })}
+			</H6>
+			<P>{formatMessage({ id: 'component.stake_together.desc' })}</P>
 			<StyledLink
 				label='Go to Stake Together'
 				href={links.STAKE_TOGETHER}
