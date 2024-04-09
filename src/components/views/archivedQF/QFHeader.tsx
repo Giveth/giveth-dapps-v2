@@ -1,4 +1,5 @@
 import { Container, Flex, H6, neutralColors } from '@giveth/ui-design-system';
+import Link from 'next/link';
 import { type FC } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -19,12 +20,16 @@ export const QFHeader: FC<IQFHeaderProps> = ({ status }) => {
 		<Container>
 			<Wrapper>
 				<Flex gap='24px'>
-					<Item active={status === EQFPageStatus.ACTIVE}>
-						{formatMessage({ id: EQFPageStatus.ACTIVE })}
-					</Item>
-					<Item active={status === EQFPageStatus.ARCHIVED}>
-						{formatMessage({ id: EQFPageStatus.ARCHIVED })}
-					</Item>
+					<Link href='/qf'>
+						<Item active={status === EQFPageStatus.ACTIVE}>
+							{formatMessage({ id: EQFPageStatus.ACTIVE })}
+						</Item>
+					</Link>
+					<Link href='/qf-archive'>
+						<Item active={status === EQFPageStatus.ARCHIVED}>
+							{formatMessage({ id: EQFPageStatus.ARCHIVED })}
+						</Item>
+					</Link>
 				</Flex>
 			</Wrapper>
 		</Container>
