@@ -1,4 +1,4 @@
-import { Flex, brandColors } from '@giveth/ui-design-system';
+import { Flex, H6, P, brandColors } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
@@ -12,6 +12,12 @@ export const StakeTogetherCard = () => {
 				width={248}
 				height={41}
 			/>
+			<H6 weight={700}>Want to stake ETH & support public goods?</H6>
+			<P>
+				Join the Giveth Ethereum Staking pool. Stake ETH for stpETH,
+				earn a passive interest & support top-boosted projects on with
+				part of the rewards.
+			</P>
 		</Wrapper>
 	);
 };
