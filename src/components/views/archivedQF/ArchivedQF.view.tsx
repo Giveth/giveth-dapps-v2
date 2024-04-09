@@ -1,15 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Container, Flex } from '@giveth/ui-design-system';
 import { ArchivedQFBanner } from './ArchivedQFBanner';
 import { EQFPageStatus, QFHeader } from './QFHeader';
+import { client } from '@/apollo/apolloClient';
+import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
+import { IArchivedQFRound } from '@/apollo/types/types';
+import { ArchivedQFRoundsTable } from './ArchivedQFRoundsTable';
 
 export const ArchivedQFView = () => {
+	const [archivedQFRounds, setArchivedQFRounds] = useState<
+		IArchivedQFRound[]
+	>([]);
+	useEffect(() => {
+		const fetchQFRounds = async () => {
+			const {
+				data: { qfRounds },
+			} = await client.query({
+				query: FETCH_QF_ROUNDS,
+				fetchPolicy: 'network-only',
+				variables: {},
+			});
+			setArchivedQFRounds(qfRounds);
+		};
+		fetchQFRounds();
+	}, []);
 	return (
 		<Wrapper>
 			<ArchivedQFBanner />
 			<Container>
 				<QFHeader status={EQFPageStatus.ARCHIVED} />
+				<ArchivedQFRoundsTable archivedQFRounds={archivedQFRounds} />
 			</Container>
 		</Wrapper>
 	);
