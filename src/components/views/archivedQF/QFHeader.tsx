@@ -37,6 +37,10 @@ const Item = styled(H6)<{ active: boolean }>`
 	border-bottom-color: ${neutralColors.gray[500]};
 	border-bottom-style: solid;
 	border-bottom-width: ${({ active }) => (active ? '4px' : '0')};
+	transition: border-bottom-width 0.1s ease-in-out;
+	&:hover {
+		border-bottom-width: 4px;
+	}
 `;
 
 const Wrapper = styled(Flex)`
