@@ -1,9 +1,9 @@
-import { ArchivedQFView } from '@/components/views/archivedQF/ArchivedQF.view';
+import { ArchivedQFRoundsView } from '@/components/views/archivedQFRounds/ArchivedQFRounds.view';
 
 const ArchivedQFPageRoute = () => {
 	return (
 		<div>
-			<ArchivedQFView />
+			<ArchivedQFRoundsView />
 		</div>
 	);
 };

@@ -36,7 +36,7 @@ import { SortContainer } from './sort/SortContainer';
 import { ArchivedQFRoundStats } from './ArchivedQFRoundStats';
 import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
-import { EQFPageStatus, QFHeader } from '../archivedQF/QFHeader';
+import { EQFPageStatus, QFHeader } from '../archivedQFRounds/QFHeader';
 
 export interface IProjectsView {
 	projects: IProject[];

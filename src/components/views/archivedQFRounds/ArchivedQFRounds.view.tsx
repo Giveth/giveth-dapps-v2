@@ -8,7 +8,7 @@ import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { IArchivedQFRound } from '@/apollo/types/types';
 import { ArchivedQFRoundsTable } from './ArchivedQFRoundsTable';
 
-export const ArchivedQFView = () => {
+export const ArchivedQFRoundsView = () => {
 	const [archivedQFRounds, setArchivedQFRounds] = useState<
 		IArchivedQFRound[]
 	>([]);
@@ -30,7 +30,9 @@ export const ArchivedQFView = () => {
 			<ArchivedQFBanner />
 			<Container>
 				<QFHeader status={EQFPageStatus.ARCHIVED} />
-				<ArchivedQFRoundsTable archivedQFRounds={archivedQFRounds} />
+				<ArchivedQFRoundsTable
+					archivedQFRounds={archivedQFRounds.slice(0, 5)}
+				/>
 			</Container>
 		</Wrapper>
 	);
