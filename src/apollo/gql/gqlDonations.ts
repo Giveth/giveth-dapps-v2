@@ -38,6 +38,7 @@ export const FETCH_PROJECT_DONATIONS_COUNT = gql`
 			status: $status
 		) {
 			totalCount
+			recurringDonationsCount
 		}
 	}
 `;
