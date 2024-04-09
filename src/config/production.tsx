@@ -451,6 +451,8 @@ const config: EnvConfig = {
 			title: 'GIV',
 			description: '100% GIV',
 			unit: 'GIV',
+			BUY_LINK:
+				'https://velodrome.finance/swap?from=eth&to=0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
 		},
 		superFluidSubgraph:
 			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet',
