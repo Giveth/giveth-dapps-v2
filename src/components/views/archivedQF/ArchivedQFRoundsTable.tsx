@@ -1,13 +1,17 @@
 import { type FC } from 'react';
 import styled from 'styled-components';
 import {
+	ButtonLink,
 	GLink,
 	P,
 	mediaQueries,
 	neutralColors,
 } from '@giveth/ui-design-system';
+import Link from 'next/link';
 import { IArchivedQFRound } from '@/apollo/types/types';
 import { formatDate } from '@/lib/helpers';
+import { Shadow } from '@/components/styled-components/Shadow';
+import Routes from '@/lib/constants/Routes';
 
 interface ArchivedQFRoundsTableProps {
 	archivedQFRounds: IArchivedQFRound[];
@@ -35,7 +39,15 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 					<P>{round.uniqueDonors}</P>
 					<P>{formatDate(new Date(round.beginDate))}</P>
 					<P>{formatDate(new Date(round.endDate))}</P>
-					<P></P>
+					<P>
+						<Link href={Routes.QFArchived + '/' + round.slug}>
+							<SeeProjectsLink
+								label='see projects'
+								linkType='texty-gray'
+								size='small'
+							/>
+						</Link>
+					</P>
 				</TR>
 			))}
 		</Table>
@@ -44,7 +56,7 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 
 const Table = styled.div`
 	display: grid;
-	grid-template-columns: 2fr 1fr 1fr 1fr 2fr 2fr 120px;
+	grid-template-columns: 2fr 1fr 1fr 1fr 2fr 2fr 140px;
 	overflow: auto;
 	min-width: 900px;
 	padding: 24px;
@@ -91,4 +103,10 @@ const TR = styled.div`
 			background-color: ${neutralColors.gray[200]};
 		}
 	}
+`;
+
+const SeeProjectsLink = styled(ButtonLink)`
+	padding: 8px 16px;
+	box-shadow: ${Shadow.Neutral[500]};
+	display: inline-block;
 `;
