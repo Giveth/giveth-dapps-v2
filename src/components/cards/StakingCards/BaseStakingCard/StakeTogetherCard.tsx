@@ -1,4 +1,11 @@
-import { Flex, H6, P, brandColors } from '@giveth/ui-design-system';
+import {
+	ButtonLink,
+	Flex,
+	H6,
+	IconExternalLink16,
+	P,
+	brandColors,
+} from '@giveth/ui-design-system';
 import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
@@ -18,6 +25,14 @@ export const StakeTogetherCard = () => {
 				earn a passive interest & support top-boosted projects on with
 				part of the rewards.
 			</P>
+			<StyledLink
+				label='Go to Stake Together'
+				href='/'
+				isExternal={true}
+				target='_blank'
+				rel='noopener noreferrer'
+				icon={<IconExternalLink16 />}
+			/>
 		</Wrapper>
 	);
 };
@@ -30,4 +45,8 @@ const Wrapper = styled(Flex)`
 	border-radius: 8px;
 	background-color: ${brandColors.giv[800]};
 	position: relative;
+`;
+
+const StyledLink = styled(ButtonLink)`
+	width: 100%;
 `;
