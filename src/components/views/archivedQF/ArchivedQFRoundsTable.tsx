@@ -7,6 +7,7 @@ import {
 	neutralColors,
 } from '@giveth/ui-design-system';
 import { IArchivedQFRound } from '@/apollo/types/types';
+import { formatDate } from '@/lib/helpers';
 
 interface ArchivedQFRoundsTableProps {
 	archivedQFRounds: IArchivedQFRound[];
@@ -32,8 +33,8 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 					<P>{round.matchingFund}</P>
 					<P>{round.raisedFundInUsd}</P>
 					<P>{round.uniqueDonors}</P>
-					<P>{round.beginDate}</P>
-					<P>{round.endDate}</P>
+					<P>{formatDate(new Date(round.beginDate))}</P>
+					<P>{formatDate(new Date(round.endDate))}</P>
 					<P></P>
 				</TR>
 			))}
