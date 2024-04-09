@@ -63,6 +63,7 @@ const TH = styled.div`
 	& > span {
 		padding: 16px 0;
 		background-color: ${neutralColors.gray[200]};
+		margin-bottom: 16px;
 	}
 	& > span:last-child {
 		padding-right: 16px;
@@ -79,5 +80,14 @@ const TR = styled.div`
 	& > div {
 		padding: 16px 0;
 		border-bottom: 1px solid ${neutralColors.gray[300]};
+		margin-bottom: 16px;
+	}
+	& > div:last-child {
+		padding-right: 16px;
+	}
+	&:hover {
+		& > div {
+			background-color: ${neutralColors.gray[200]};
+		}
 	}
 `;
