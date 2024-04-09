@@ -9,6 +9,7 @@ import {
 import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
+import links from '@/lib/constants/links';
 
 export const StakeTogetherCard = () => {
 	return (
@@ -27,7 +28,7 @@ export const StakeTogetherCard = () => {
 			</P>
 			<StyledLink
 				label='Go to Stake Together'
-				href='/'
+				href={links.STAKE_TOGETHER}
 				isExternal={true}
 				target='_blank'
 				rel='noopener noreferrer'
