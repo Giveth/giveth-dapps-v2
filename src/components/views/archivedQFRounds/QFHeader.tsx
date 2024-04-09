@@ -4,6 +4,7 @@ import { type FC } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Routes from '@/lib/constants/Routes';
+import { ArchivedQFRoundsSort } from './ArchivedQFRoundsSort';
 
 export enum EQFPageStatus {
 	ACTIVE = 'label.active_round',
@@ -31,6 +32,7 @@ export const QFHeader: FC<IQFHeaderProps> = ({ status }) => {
 					</Item>
 				</Link>
 			</Flex>
+			<ArchivedQFRoundsSort />
 		</Wrapper>
 	);
 };
@@ -49,4 +51,5 @@ const Item = styled(H6)<{ active: boolean }>`
 
 const Wrapper = styled(Flex)`
 	margin-bottom: 24px;
+	justify-content: space-between;
 `;
