@@ -1,4 +1,4 @@
-import { Container, Flex, H6, neutralColors } from '@giveth/ui-design-system';
+import { Flex, H6, neutralColors } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { type FC } from 'react';
 import { useIntl } from 'react-intl';
@@ -18,22 +18,20 @@ export const QFHeader: FC<IQFHeaderProps> = ({ status }) => {
 	const { formatMessage } = useIntl();
 
 	return (
-		<Container>
-			<Wrapper>
-				<Flex gap='24px'>
-					<Link href={Routes.AllQFProjects}>
-						<Item active={status === EQFPageStatus.ACTIVE}>
-							{formatMessage({ id: EQFPageStatus.ACTIVE })}
-						</Item>
-					</Link>
-					<Link href={Routes.QFArchived}>
-						<Item active={status === EQFPageStatus.ARCHIVED}>
-							{formatMessage({ id: EQFPageStatus.ARCHIVED })}
-						</Item>
-					</Link>
-				</Flex>
-			</Wrapper>
-		</Container>
+		<Wrapper>
+			<Flex gap='24px'>
+				<Link href={Routes.AllQFProjects}>
+					<Item active={status === EQFPageStatus.ACTIVE}>
+						{formatMessage({ id: EQFPageStatus.ACTIVE })}
+					</Item>
+				</Link>
+				<Link href={Routes.QFArchived}>
+					<Item active={status === EQFPageStatus.ARCHIVED}>
+						{formatMessage({ id: EQFPageStatus.ARCHIVED })}
+					</Item>
+				</Link>
+			</Flex>
+		</Wrapper>
 	);
 };
 

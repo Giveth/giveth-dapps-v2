@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Flex } from '@giveth/ui-design-system';
+import { Container, Flex } from '@giveth/ui-design-system';
 import { ArchivedQFBanner } from './ArchivedQFBanner';
 import { EQFPageStatus, QFHeader } from './QFHeader';
 
@@ -8,7 +8,9 @@ export const ArchivedQFView = () => {
 	return (
 		<Wrapper>
 			<ArchivedQFBanner />
-			<QFHeader status={EQFPageStatus.ARCHIVED} />
+			<Container>
+				<QFHeader status={EQFPageStatus.ARCHIVED} />
+			</Container>
 		</Wrapper>
 	);
 };

@@ -207,7 +207,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 				<>
 					<PassportBanner />
 					<ActiveQFProjectsBanner />
-					<QFHeader status={EQFPageStatus.ACTIVE} />
 				</>
 			) : isArchivedQF ? (
 				<ArchivedQFProjectsBanner />
@@ -215,7 +214,12 @@ const ProjectsIndex = (props: IProjectsView) => {
 				<ProjectsBanner mainCategory={selectedMainCategory} />
 			)}
 			<Wrapper>
-				{isQF && <ActiveQFRoundStats />}
+				{isQF && (
+					<>
+						<QFHeader status={EQFPageStatus.ACTIVE} />
+						<ActiveQFRoundStats />
+					</>
+				)}
 				{isArchivedQF ? <ArchivedQFRoundStats /> : <FilterContainer />}
 				<SortingContainer>
 					<SortContainer totalCount={totalCount} />
