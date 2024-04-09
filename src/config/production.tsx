@@ -305,16 +305,8 @@ const config: EnvConfig = {
 			title: 'GIV',
 			description: '100% GIV',
 			unit: 'GIV',
+			BUY_LINK: 'https://swap.cow.fi/#/100/swap/WXDAI/GIV',
 		},
-
-		// GIV: {
-		// 	network: GNOSIS_NETWORK_NUMBER,
-		// 	LM_ADDRESS: '0xD93d3bDBa18ebcB3317a57119ea44ed2Cf41C2F2',
-		// 	GARDEN_ADDRESS: '0x24f2d06446af8d6e89febc205e7936a602a87b60',
-		// 	BUY_LINK:
-		// 		'https://app.honeyswap.org/#/swap?outputCurrency=0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
-		// 	platformTitle: 'GIVPOWER',
-		// },
 
 		pools: [
 			{
