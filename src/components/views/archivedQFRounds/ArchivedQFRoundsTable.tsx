@@ -21,38 +21,44 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 	archivedQFRounds,
 }) => {
 	return (
-		<Table>
-			<TH>
-				<GLink size='Big'>Funding Round</GLink>
-				<GLink size='Big'>Matching Pool</GLink>
-				<GLink size='Big'>Total Donations</GLink>
-				<GLink size='Big'>Unique Donors</GLink>
-				<GLink size='Big'>Round started</GLink>
-				<GLink size='Big'>Round Ended</GLink>
-				<GLink size='Big'></GLink>
-			</TH>
-			{archivedQFRounds.map((round, index) => (
-				<TR key={round.id}>
-					<P>{round.name}</P>
-					<P>{round.matchingFund}</P>
-					<P>{round.raisedFundInUsd}</P>
-					<P>{round.uniqueDonors}</P>
-					<P>{formatDate(new Date(round.beginDate))}</P>
-					<P>{formatDate(new Date(round.endDate))}</P>
-					<P>
-						<Link href={Routes.QFArchived + '/' + round.slug}>
-							<SeeProjectsLink
-								label='see projects'
-								linkType='texty-gray'
-								size='small'
-							/>
-						</Link>
-					</P>
-				</TR>
-			))}
-		</Table>
+		<Wrapper>
+			<Table>
+				<TH>
+					<GLink size='Big'>Funding Round</GLink>
+					<GLink size='Big'>Matching Pool</GLink>
+					<GLink size='Big'>Total Donations</GLink>
+					<GLink size='Big'>Unique Donors</GLink>
+					<GLink size='Big'>Round started</GLink>
+					<GLink size='Big'>Round Ended</GLink>
+					<GLink size='Big'></GLink>
+				</TH>
+				{archivedQFRounds.map((round, index) => (
+					<TR key={round.id}>
+						<P>{round.name}</P>
+						<P>{round.matchingFund}</P>
+						<P>{round.raisedFundInUsd}</P>
+						<P>{round.uniqueDonors}</P>
+						<P>{formatDate(new Date(round.beginDate))}</P>
+						<P>{formatDate(new Date(round.endDate))}</P>
+						<P>
+							<Link href={Routes.QFArchived + '/' + round.slug}>
+								<SeeProjectsLink
+									label='see projects'
+									linkType='texty-gray'
+									size='small'
+								/>
+							</Link>
+						</P>
+					</TR>
+				))}
+			</Table>
+		</Wrapper>
 	);
 };
+
+const Wrapper = styled.div`
+	overflow-x: auto;
+`;
 
 const Table = styled.div`
 	display: grid;
