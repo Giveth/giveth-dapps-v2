@@ -70,6 +70,8 @@ const links = {
 	ALLO_PROTOCOL: 'https://docs.allo.gitcoin.co/',
 	GIVERNANCE_VOTING: 'https://snapshot.org/#/giv.eth',
 	SUPERFLUID_DASHBOARD: 'https://app.superfluid.finance/',
+	STAKE_TOGETHER:
+		'https://app.staketogether.org/brl/ethereum/project/deposit/0xf102fe6d6cf7f98c7c4ca45eb082caaaaa951d52',
 };
 
 if (!isProduction) {

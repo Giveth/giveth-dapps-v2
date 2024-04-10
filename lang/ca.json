@@ -68,6 +68,8 @@
 	"component.score.medium.title": "Què més pots fer?",
 	"component.score.perfect.tip": "Una puntuació perfecta! Només recorda actualitzar regularment el teu projecte per continuar rebent donacions.",
 	"component.score.perfect.title": "Gran feina",
+	"component.stake_together.desc": "Uneix-te a la piscina de Staking d'Ethereum de Giveth. Fes staking d'ETH per stpETH, guanya un interès passiu i dona suport als projectes més potenciats amb una part de les recompenses.",
+	"component.stake_together.title": "Vols fer staking d'ETH i donar suport a béns públics?",
 	"component.title.about_us": "Sobre Nosaltres",
 	"component.title.commons_stack": "Commons Stack",
 	"component.title.docs": "Documentació",
