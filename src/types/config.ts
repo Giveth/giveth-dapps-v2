@@ -44,7 +44,6 @@ export interface SimplePoolStakingConfig {
 	type: StakingType;
 	LM_ADDRESS: Address;
 	GARDEN_ADDRESS?: Address;
-	BUY_LINK?: string;
 	farmStartTimeMS?: number;
 	farmEndTimeMS?: number;
 	icon?: string;
