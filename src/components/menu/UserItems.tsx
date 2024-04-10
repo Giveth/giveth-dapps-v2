@@ -70,7 +70,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 
 	return (
 		<>
-			<Item $baseTheme={theme}>
+			<Item baseTheme={theme}>
 				<ItemTitle $baseTheme={theme}>
 					{formatMessage({ id: 'label.wallet' })}
 				</ItemTitle>
@@ -78,7 +78,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 					<B>{shortenAddress(walletAddress)}</B>
 				</ItemRow>
 			</Item>
-			<Item $baseTheme={theme}>
+			<Item baseTheme={theme}>
 				<ItemTitle $baseTheme={theme}>
 					{formatMessage({ id: 'label.network' })}
 				</ItemTitle>
@@ -111,7 +111,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 				<Item
 					key={i.title}
 					onClick={() => goRoute(i)}
-					$baseTheme={theme}
+					baseTheme={theme}
 				>
 					<GLink size='Big'>{formatMessage({ id: i.title })}</GLink>
 				</Item>
@@ -123,7 +123,7 @@ export const UserItems: FC<IUserItemsProps> = ({
 						localStorage.removeItem(StorageLabel.WALLET);
 						disconnect();
 					}}
-					$baseTheme={theme}
+					baseTheme={theme}
 				>
 					<GLink size='Big'>
 						{formatMessage({ id: 'label.sign_out' })}

@@ -76,7 +76,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 				>
 					{projectsItems.explore.map((explore, idx) => (
 						<Link key={idx} href={explore.url}>
-							<ExploreItem $baseTheme={theme} isHighlighted>
+							<ExploreItem baseTheme={theme} isHighlighted>
 								<B>{formatMessage({ id: explore.label })}</B>
 							</ExploreItem>
 						</Link>
@@ -85,7 +85,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 						<Link href={QFItem.url}>
 							<ExploreItem
 								className='qf-item'
-								$baseTheme={theme}
+								baseTheme={theme}
 								isHighlighted
 							>
 								<B>{formatMessage({ id: QFItem.label })}</B>
@@ -102,7 +102,7 @@ export const ProjectsItems: FC<IProjectsItems> = ({ inSidebar = false }) => {
 							key={idx}
 							href={`${Routes.Projects}/${category.slug}`}
 						>
-							<CategoryItem $baseTheme={theme}>
+							<CategoryItem $theme={theme}>
 								<GLink size='Big'>
 									{formatMessage({
 										id: 'projects_' + category.slug,
@@ -143,12 +143,12 @@ const CategoriesGrid = styled.div<{ $inSidebar?: boolean; $baseTheme: ETheme }>`
 	margin-top: 8px;
 `;
 
-const CategoryItem = styled(Item)<{ $baseTheme: ETheme }>`
+const CategoryItem = styled(Item)<{ $theme: ETheme }>`
 	padding: 8px;
 	&:hover {
 		background: transparent;
-		color: ${({ $baseTheme }) =>
-			$baseTheme === ETheme.Dark
+		color: ${({ $theme }) =>
+			$theme === ETheme.Dark
 				? brandColors.giv[200]
 				: brandColors.giv[500]};
 	}
