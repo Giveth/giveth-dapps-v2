@@ -41,7 +41,10 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 	);
 	const monthlyFlowRate = totalFlowRate * ONE_MONTH_SECONDS;
 	const { symbol, decimals } = tokenStream[0].token;
-	const runOutMonth = balance?.value ? balance?.value / monthlyFlowRate : 0n;
+	const runOutMonth =
+		monthlyFlowRate > 0 && balance?.value
+			? balance?.value / monthlyFlowRate
+			: 0n;
 	const activeStreamCount = countActiveStreams(tokenStream);
 
 	return (
