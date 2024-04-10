@@ -469,7 +469,11 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 										setActiveProjectSection
 									}
 								/>
-								<SocialMedias />
+								<SocialMedias
+									setActiveProjectSection={
+										setActiveProjectSection
+									}
+								/>
 								<CategoryInput
 									setActiveProjectSection={
 										setActiveProjectSection
