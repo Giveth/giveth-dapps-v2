@@ -8,6 +8,7 @@ import MapTip from './MapTip';
 import AddressesTip from './AddressesTip';
 import { ECreateProjectSections } from '../../types';
 import { Card } from '../common.sc';
+import SocialMediaTip from './SocialMediaTip';
 
 export interface IProjectTipProps {
 	activeSection: ECreateProjectSections;
@@ -31,7 +32,7 @@ const contentMap = {
 
 	[ECreateProjectSections.socialMedia]: {
 		title: 'Social Media Links',
-		component: <></>,
+		component: <SocialMediaTip />,
 	},
 
 	[ECreateProjectSections.categories]: {
