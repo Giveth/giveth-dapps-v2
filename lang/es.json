@@ -54,6 +54,10 @@
 	"component.project-stats.listing.tooltip": "Si un proyecto está listado, se incluye en la página de Proyectos y se puede encontrar utilizando nuestras funciones de búsqueda y filtrado. Los proyectos no listados solo se pueden encontrar a través de enlaces directos.",
 	"component.project-stats.status.tooltip": "El estado de los proyectos se refiere a si el proyecto está activo y recaudando fondos, desactivado, cancelado o en fase de borrador.",
 	"component.project-stats.verification.tooltip": "Los proyectos verificados han sido revisados por nuestro equipo y se ha determinado que proporcionan un bien público, con un historial de impacto y reputación en juego.",
+	"component.pro_guide.tips.address.item1": "Verifica dos veces que tu dirección de billetera sea correcta para no perder tus donaciones.",
+	"component.pro_guide.tips.address.item2": "Usa una dirección de recepción específicamente para tu proyecto (en lugar de usar una dirección que utilizas para otras actividades en cadena). Esto mejora la transparencia y la contabilidad.",
+	"component.pro_guide.tips.address.item3": "Agregar una dirección de destinatario en múltiples cadenas aumentará tu exposición a posibles donantes.",
+	"component.pro_guide.tips.address.item4": "Puedes actualizar tus direcciones de destinatario en cualquier momento.",
 	"component.pro_guide.tips.social_media.item1": "Agregar tus cuentas de redes sociales permite a tus donantes y comunidad conectarse contigo y saber en qué estás trabajando.",
 	"component.pro_guide.tips.social_media.item2": "Tus cuentas estarán vinculadas desde la página de tu proyecto en Giveth.",
 	"component.pro_guide.tips.social_media.item3": "Giveth podría usar tus identificadores de redes sociales para contactarte o etiquetarte en publicaciones para apoyar tu recaudación de fondos.",
@@ -1114,6 +1118,7 @@
 	"label.withdraw": "Retirar",
 	"label.withdrawal_confirmed": "Retiro confirmado",
 	"label.withdrawing": "Retirando",
+	"label.withdraw_confirmed": "Retiro confirmado",
 	"label.withdraw_from_stream_balance": "Retirar del saldo de la transmisión",
 	"label.with_a_complete_profile_you_can": "Con un perfil completo podrás:",
 	"label.with_givpower_you_can_support_projects": "Con GIVpower, puedes apoyar los proyectos en los que crees sin sacrificios!",
@@ -1570,6 +1575,5 @@
 	"tooltip.flowrate": "Las donaciones recurrentes se toman de tu Saldo de Transmisión. Deposita tokens y mantén tu saldo para habilitar las donaciones recurrentes.",
 	"tooltip.withdraw_stream_balance": "Si tiene donaciones recurrentes activas, su saldo disponible para retirar será ligeramente menor que su saldo actual.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Agua & Saneamiento",
-	"label.withdraw_confirmed": "Retiro confirmado"
+	"water-and-sanitation": "Agua & Saneamiento"
 }

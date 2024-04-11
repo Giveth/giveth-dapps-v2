@@ -54,6 +54,10 @@
 	"component.project-stats.listing.tooltip": "If a project is listed, it is included on the Projects page, and can be found using our search and filter functions. Unlisted projects can only be found via direct link.",
 	"component.project-stats.status.tooltip": "Projects status refers to if the project is active and raising funds, deactivated, canceled or in draft phase.",
 	"component.project-stats.verification.tooltip": "Verified projects have been reviewed by our team and found to be providing a public good, with a history of impact and reputation at stake.",
+	"component.pro_guide.tips.address.item1": "Double-check that your wallet address is correct so you don't lose your donations.",
+	"component.pro_guide.tips.address.item2": "Use a receiving address specifically for your project (rather than using an address that you use for other on-chain activity). This improves transparency & accounting.",
+	"component.pro_guide.tips.address.item3": "Adding a recipient address on multiple chains will increase your exposure to potential donors.",
+	"component.pro_guide.tips.address.item4": "You can update your recipient addresses at any time.",
 	"component.pro_guide.tips.social_media.item1": "Adding your social media accounts allows your donors and community to connect with you and learn what you are up to!",
 	"component.pro_guide.tips.social_media.item2": "our accounts will be linked to from your project's page on Giveth.",
 	"component.pro_guide.tips.social_media.item3": "Giveth might use your social media handles to contact you or tag you on posts to support your fundraising.",
@@ -1114,6 +1118,7 @@
 	"label.withdraw": "Withdraw",
 	"label.withdrawal_confirmed": "Withdrawal confirmed",
 	"label.withdrawing": "Withdrawing",
+	"label.withdraw_confirmed": "Withdraw confirmed",
 	"label.withdraw_from_stream_balance": "Withdraw from stream balance",
 	"label.with_a_complete_profile_you_can": "With a complete profile you can:",
 	"label.with_givpower_you_can_support_projects": "With GIVpower, you can support the projects you believe in, without sacrificing!",
@@ -1570,6 +1575,5 @@
 	"tooltip.flowrate": "Recurring donations are taken out of your Stream Balance. Deposit tokens & maintain your balance to enable recurring donations.",
 	"tooltip.withdraw_stream_balance": "If you have active recurring donations your available stream balance to withdraw will be slightly less than your actual balance.",
 	"ubi": "UBI",
-	"water-and-sanitation": "Water & Sanitation",
-	"label.withdraw_confirmed": "Withdraw confirmed"
+	"water-and-sanitation": "Water & Sanitation"
 }

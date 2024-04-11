@@ -54,6 +54,10 @@
 	"component.project-stats.listing.tooltip": "If a project is listed, it is included on the Projects page, and can be found using our search and filter functions. Unlisted projects can only be found via direct link.",
 	"component.project-stats.status.tooltip": "Projects status refers to if the project is active and raising funds, deactivated, canceled or in draft phase.",
 	"component.project-stats.verification.tooltip": "Verified projects have been reviewed by our team and found to be providing a public good, with a history of impact and reputation at stake.",
+	"component.pro_guide.tips.address.item1": "Comproveu dues vegades que la vostra adreça de moneder sigui correcta per no perdre les vostres donacions.",
+	"component.pro_guide.tips.address.item2": "Utilitzeu una adreça de recepció específicament per al vostre projecte (en lloc d'usar una adreça que feu servir per a altres activitats en cadena). Això millora la transparència i la comptabilitat.",
+	"component.pro_guide.tips.address.item3": "Afegir una adreça de destinatari en diverses cadenes augmentarà la vostra exposició a possibles donants.",
+	"component.pro_guide.tips.address.item4": "Podeu actualitzar les vostres adreces de destinatari en qualsevol moment.",
 	"component.pro_guide.tips.social_media.item1": "Afegir els teus comptes de xarxes socials permet als teus donants i comunitat connectar-se amb tu i saber què estàs fent!",
 	"component.pro_guide.tips.social_media.item2": "Els teus comptes estaran enllaçats des de la pàgina del teu projecte a Giveth.",
 	"component.pro_guide.tips.social_media.item3": "Giveth podria utilitzar els teus noms d'usuari a les xarxes socials per contactar-te o etiquetar-te en publicacions per suportar la teva recaptació de fons.",
@@ -1114,6 +1118,7 @@
 	"label.withdraw": "Reemborsament",
 	"label.withdrawal_confirmed": "Reemborsament confirmat",
 	"label.withdrawing": "Reemborsament",
+	"label.withdraw_confirmed": "Retirada confirmada",
 	"label.withdraw_from_stream_balance": "Retirar del Saldo de Transmissió",
 	"label.with_a_complete_profile_you_can": "Amb un perfil complet pots:",
 	"label.with_givpower_you_can_support_projects": "Amb el GIVpower, pots suportar els projectes en els que creus sense fer sacrificis!",
@@ -1570,6 +1575,5 @@
 	"tooltip.flowrate": "Les donacions recurrents es prenen del teu Saldo de Transmissió. Diposita tokens i mantén el teu saldo per habilitar les donacions recurrents.",
 	"tooltip.withdraw_stream_balance": "Si teniu donacions recurrents actives, el vostre saldo disponible per retirar serà lleugerament inferior al vostre saldo actual.",
 	"ubi": "Renta bàsica",
-	"water-and-sanitation": "Aigua i Sanejament",
-	"label.withdraw_confirmed": "Retirada confirmada"
+	"water-and-sanitation": "Aigua i Sanejament"
 }
