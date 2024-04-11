@@ -32,7 +32,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 	tokenStreams,
 	step,
 	setStep,
-	setShowModal,
+	closeModal,
 }) => {
 	const [amount, setAmount] = useState(0n);
 	const { address } = useAccount();
@@ -119,7 +119,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 		} else if (step === EModifySuperTokenSteps.WITHDRAW) {
 			onWithdraw();
 		} else if (step === EModifySuperTokenSteps.WITHDRAW_CONFIRMED) {
-			setShowModal(false);
+			closeModal();
 		}
 	};
 

@@ -47,9 +47,14 @@ export const ModifySuperTokenModal: FC<IModifySuperTokenModalProps> = ({
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
+	const _closeModal = () => {
+		props.refreshBalance();
+		closeModal();
+	};
+
 	return (
 		<Modal
-			closeModal={closeModal}
+			closeModal={_closeModal}
 			isAnimating={isAnimating}
 			headerTitle={formatMessage({ id: headerTitleGenerator(step) })}
 			headerTitlePosition='left'
@@ -58,6 +63,7 @@ export const ModifySuperTokenModal: FC<IModifySuperTokenModalProps> = ({
 				setShowModal={setShowModal}
 				step={step}
 				setStep={setStep}
+				closeModal={_closeModal}
 				{...props}
 			/>
 		</Modal>
@@ -68,6 +74,7 @@ export interface IModifySuperTokenInnerModalProps
 	extends IModifySuperTokenModalProps {
 	step: EModifySuperTokenSteps;
 	setStep: (step: EModifySuperTokenSteps) => void;
+	closeModal: () => void;
 }
 
 enum EModifyTabs {
