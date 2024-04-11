@@ -30,12 +30,9 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 		token: tokenStream[0].token.id,
 		address: address,
 		chainId: config.OPTIMISM_NETWORK_NUMBER,
-		// watch: true,
-		// cacheTime: 5_000,
 	});
 
 	const token = findTokenByAddress(tokenStream[0].token.id);
-	console.log('token1', token);
 	const underlyingSymbol = token?.underlyingToken?.symbol || '';
 	const totalFlowRate = tokenStream.reduce(
 		(acc, curr) => acc + BigInt(curr.currentFlowRate),

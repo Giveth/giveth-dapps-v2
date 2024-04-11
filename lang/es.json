@@ -1575,5 +1575,5 @@
 	"tooltip.withdraw_stream_balance": "Si tiene donaciones recurrentes activas, su saldo disponible para retirar será ligeramente menor que su saldo actual.",
 	"ubi": "UBI",
 	"water-and-sanitation": "Agua & Saneamiento",
-	"withdraw_confirmed": "Retiro confirmado"
+	"label.withdraw_confirmed": "Retiro confirmado"
 }
