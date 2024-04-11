@@ -8,6 +8,7 @@ import {
 import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useEffect } from 'react';
+import { formatUnits } from 'viem';
 import { formatDonation, limitFraction } from '@/helpers/number';
 import { TokenIcon } from '../../donate/TokenIcon/TokenIcon';
 import { ITokenWithBalance } from '@/hooks/useProjectClaimableDonations';
@@ -35,7 +36,7 @@ export const ClaimRecurringItem = ({
 			const tokenValueInUsd =
 				price *
 					parseFloat(
-						utils.formatUnits(
+						formatUnits(
 							tokenWithBalance.balance,
 							tokenWithBalance.token.decimals,
 						),
