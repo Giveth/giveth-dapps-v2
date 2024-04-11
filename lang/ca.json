@@ -1575,5 +1575,5 @@
 	"tooltip.withdraw_stream_balance": "Si teniu donacions recurrents actives, el vostre saldo disponible per retirar serà lleugerament inferior al vostre saldo actual.",
 	"ubi": "Renta bàsica",
 	"water-and-sanitation": "Aigua i Sanejament",
-	"withdraw_confirmed": "Retirada confirmada"
+	"label.withdraw_confirmed": "Retirada confirmada"
 }
