@@ -7,6 +7,7 @@ import { ISuperfluidStream } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
 import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
 import { countActiveStreams } from '@/helpers/donate';
+import { findTokenByAddress } from '@/helpers/superfluid';
 
 interface IStreamInfoProps {
 	stream: ISuperfluidStream[];
@@ -34,7 +35,8 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			? balance / totalFlowRate / 2628000n
 			: 0n;
 
-	const underlyingToken = stream[0].token.underlyingToken;
+	const token = findTokenByAddress(stream[0].token.id);
+	const underlyingToken = token?.underlyingToken;
 	const activeStreamCount = countActiveStreams(stream);
 
 	return (
@@ -49,7 +51,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 		>
 			<TokenIconWithGIVBack
 				showGiveBack
-				symbol={underlyingToken ? underlyingToken.symbol : 'ETH'}
+				symbol={underlyingToken?.symbol}
 				size={32}
 				isSuperToken={isSuperToken}
 			/>

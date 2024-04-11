@@ -21,6 +21,7 @@ import { Spinner } from '@/components/Spinner';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { IToken } from '@/types/superFluid';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
+import { findTokenByAddress } from '@/helpers/superfluid';
 
 export enum EModifySectionPlace {
 	DEPOSIT = 'deposit',
@@ -72,6 +73,8 @@ export const ModifySection: FC<IModifySectionProps> = ({
 		}
 	};
 
+	const _token = findTokenByAddress(token?.id);
+
 	return (
 		<TopUpSection $flexDirection='column' gap='8px'>
 			<Flex gap='8px' $alignItems='center'>
@@ -100,9 +103,9 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					<Flex gap='8px' $alignItems='center'>
 						<TokenIcon
 							symbol={
-								token?.isSuperToken
-									? token.underlyingToken?.symbol
-									: token?.symbol
+								_token?.isSuperToken
+									? _token?.underlyingToken.symbol
+									: _token?.symbol
 							}
 							size={24}
 						/>

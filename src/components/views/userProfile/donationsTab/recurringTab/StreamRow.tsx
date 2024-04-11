@@ -12,6 +12,7 @@ import { limitFraction } from '@/helpers/number';
 import { ModifySuperTokenModal } from '@/components/views/donate/ModifySuperToken/ModifySuperTokenModal';
 import config from '@/configuration';
 import { countActiveStreams } from '@/helpers/donate';
+import { findTokenByAddress } from '@/helpers/superfluid';
 
 interface IStreamRowProps {
 	tokenStream: ISuperfluidStream[];
@@ -33,8 +34,9 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 		// cacheTime: 5_000,
 	});
 
-	const underlyingSymbol =
-		tokenStream[0].token.underlyingToken?.symbol || 'ETH';
+	const token = findTokenByAddress(tokenStream[0].token.id);
+	console.log('token1', token);
+	const underlyingSymbol = token?.underlyingToken?.symbol || '';
 	const totalFlowRate = tokenStream.reduce(
 		(acc, curr) => acc + BigInt(curr.currentFlowRate),
 		0n,
