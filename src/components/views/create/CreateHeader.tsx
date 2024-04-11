@@ -46,8 +46,18 @@ export const CreateHeader: FC<IHeader> = ({
 	// Description score
 	const descriptionInvalid = getFieldState(EInputs.description).invalid;
 	useEffect(() => {
-		console.log('descriptionError', descriptionInvalid);
-		dispatch({ type: EScoreType.DESCRIPTION, payload: descriptionInvalid });
+		// if the description is empty it's content is '<p><br></p>'
+		if (formData.description === '<p><br></p>') {
+			dispatch({
+				type: EScoreType.DESCRIPTION,
+				payload: true,
+			});
+		} else {
+			dispatch({
+				type: EScoreType.DESCRIPTION,
+				payload: descriptionInvalid,
+			});
+		}
 	}, [descriptionInvalid]);
 
 	// SocialMedia score
