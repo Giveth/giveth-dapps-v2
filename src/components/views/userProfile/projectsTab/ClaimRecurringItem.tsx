@@ -7,7 +7,7 @@ import {
 } from '@giveth/ui-design-system';
 import { utils } from 'ethers';
 import styled from 'styled-components';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { formatDonation, limitFraction } from '@/helpers/number';
 import { TokenIcon } from '../../donate/TokenIcon/TokenIcon';
 import { ITokenWithBalance } from '@/hooks/useProjectClaimableDonations';
@@ -30,29 +30,22 @@ export const ClaimRecurringItem = ({
 	const symbol = tokenWithBalance.token.underlyingToken?.symbol!;
 	const price = useTokenPrice(tokenWithBalance.token);
 
-	const tokenValueInUsd = useMemo(() => {
-		if (price !== undefined) {
-			return (
-				price *
-				parseFloat(
-					utils.formatUnits(
-						tokenWithBalance.balance,
-						tokenWithBalance.token.decimals,
-					),
-				)
-			);
-		}
-		return 0;
-	}, [price, tokenWithBalance.balance]);
-
 	useEffect(() => {
 		if (price !== undefined) {
+			const tokenValueInUsd =
+				price *
+					parseFloat(
+						utils.formatUnits(
+							tokenWithBalance.balance,
+							tokenWithBalance.token.decimals,
+						),
+					) || 0;
 			setAllTokensUsd({
 				...allTokensUsd,
 				[symbol]: tokenValueInUsd!,
 			});
 		}
-	}, [price, tokenValueInUsd]);
+	}, [price]);
 
 	return (
 		<ItemContainer
@@ -75,7 +68,7 @@ export const ClaimRecurringItem = ({
 						6,
 					)} 
                     ${tokenWithBalance.token.underlyingToken?.symbol} ~
-                    ${formatDonation(tokenValueInUsd)}
+                    ${formatDonation(allTokensUsd[symbol]!)}
                     USD
                 `}
 				</B>
