@@ -89,6 +89,18 @@ export const validators = {
 			message: 'Invalid discord URL',
 		},
 	},
+	telegram: {
+		pattern: {
+			value: regexList.website,
+			message: 'Invalid telegram URL',
+		},
+	},
+	whatsapp: {
+		pattern: {
+			value: regexList.website,
+			message: 'Invalid whatsapp URL',
+		},
+	},
 };
 
 export const requiredOptions = {

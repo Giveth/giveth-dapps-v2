@@ -3,11 +3,8 @@ import { useEffect, useState } from 'react';
 import {
 	Button,
 	H6,
-	IconFacebook,
-	IconInstagram,
+	IconDiscord,
 	IconLink,
-	IconLinkedin,
-	IconYoutube,
 	neutralColors,
 	P,
 	IconInfoFilled,
@@ -15,7 +12,7 @@ import {
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { requiredOptions, validators } from '@/lib/constants/regex';
+import { validators } from '@/lib/constants/regex';
 
 import Input from '@/components/Input';
 import { BtnContainer, ContentSeparator, OutlineStyled } from '../Common.sc';
@@ -165,25 +162,6 @@ export default function ProjectContactIndex() {
 							buttonType='primary'
 						/>
 					)}
-					<SocialLinkInfo>
-						{formatMessage({
-							id: 'label.in_order_to_ensure_that_you_are_a_representative',
-						})}
-					</SocialLinkInfo>
-					<br />
-					<Input
-						label={formatMessage({
-							id: 'label.link_to_your_giveth_project',
-						})}
-						placeholder='https://'
-						LeftIcon={<IconLink color={neutralColors.gray[600]} />}
-						error={errors['SocialLink']}
-						register={register}
-						registerName='SocialLink'
-						registerOptions={isDraft ? requiredOptions.website : {}}
-						disabled={!isDraft}
-					/>
-
 					<div>
 						<ContentSeparator />
 						<BtnContainer>
@@ -219,23 +197,15 @@ const mainSocialsInputs = [
 		icon: <IconXSocial color={neutralColors.gray[600]} />,
 	},
 	{
-		type: EMainSocials.Facebook,
-		icon: <IconFacebook color={neutralColors.gray[600]} />,
+		type: EMainSocials.Discord,
+		icon: <IconDiscord color={neutralColors.gray[600]} />,
 	},
 	{
-		type: EMainSocials.LinkedIn,
-		icon: <IconLinkedin color={neutralColors.gray[600]} />,
+		type: EMainSocials.Telegram,
+		icon: <IconLink color={neutralColors.gray[600]} />,
 	},
 	{
-		type: EMainSocials.Instagram,
-		icon: <IconInstagram color={neutralColors.gray[600]} />,
-	},
-	{
-		type: EMainSocials.YouTube,
-		icon: <IconYoutube color={neutralColors.gray[600]} />,
-	},
-	{
-		type: EMainSocials.Website,
+		type: EMainSocials.WhatsApp,
 		icon: <IconLink color={neutralColors.gray[600]} />,
 	},
 ];
@@ -267,8 +237,4 @@ const FormContainer = styled.form`
 	> :last-child {
 		max-width: 100%;
 	}
-`;
-
-const SocialLinkInfo = styled(P)`
-	max-width: fit-content;
 `;
