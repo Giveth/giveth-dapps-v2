@@ -47,6 +47,7 @@ export const CreateHeader: FC<IHeader> = ({
 	const descriptionInvalid = getFieldState(EInputs.description).invalid;
 	useEffect(() => {
 		// if the description is empty it's content is '<p><br></p>'
+		console.log('formData.description', formData.description);
 		if (formData.description === '<p><br></p>') {
 			dispatch({
 				type: EScoreType.DESCRIPTION,
