@@ -31,6 +31,7 @@ import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { ChainType } from '@/types/config';
 import {
+	createDraftRecurringDonation,
 	createRecurringDonation,
 	updateRecurringDonation,
 	updateRecurringDonationStatus,
@@ -295,10 +296,23 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				}
 			}
 
-			// Save Draft Donation
-
 			let tx;
 			const isBatch = operations.length > 1;
+
+			const projectDraftDonationInfo = {
+				projectId: +project.id,
+				anonymous,
+				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				flowRate: _flowRate,
+				superToken: _superToken,
+				isBatch,
+			};
+
+			// Save Draft Donation
+			const draftDonationId = await createDraftRecurringDonation(
+				projectDraftDonationInfo,
+			);
+
 			if (isBatch) {
 				const batchOp = sf.batchCall(operations);
 				tx = await batchOp.exec(signer);
@@ -310,13 +324,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			let projectDonationId = 0;
 			try {
 				const projectDonationInfo = {
-					projectId: +project.id,
-					anonymous,
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					...projectDraftDonationInfo,
 					txHash: tx.hash,
-					flowRate: _flowRate,
-					superToken: _superToken,
-					isBatch,
+					draftDonationId,
 				};
 				if (isUpdating) {
 					console.log('Start Update Project Donation Info');
