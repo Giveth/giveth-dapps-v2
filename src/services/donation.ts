@@ -14,6 +14,7 @@ import { gqlRequest } from '@/helpers/requests';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import config, { SENTRY_URGENT } from '@/configuration';
 import {
+	CREATE_DRAFT_RECURRING_DONATION,
 	CREATE_RECURRING_DONATION,
 	UPDATE_RECURRING_DONATION,
 	UPDATE_RECURRING_DONATION_STATUS,
@@ -134,6 +135,41 @@ export interface ICreateRecurringDonation {
 	anonymous?: boolean;
 	isBatch?: boolean;
 }
+
+export const createDraftRecurringDonation = async ({
+	chainId,
+	projectId,
+	flowRate,
+	superToken,
+	anonymous,
+	isBatch,
+}: ICreateRecurringDonation) => {
+	let donationId = 0;
+	try {
+		const { data } = await client.mutate({
+			mutation: CREATE_DRAFT_RECURRING_DONATION,
+			variables: {
+				projectId,
+				networkId: chainId,
+				flowRate: flowRate.toString(),
+				currency: superToken.underlyingToken?.symbol || 'ETH',
+				anonymous,
+				isBatch,
+			},
+		});
+		donationId = parseInt(data.createRecurringDonation.id);
+		console.log('donationId', donationId);
+		return donationId;
+	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('createDraftRecurringDonation error: ', error);
+		throw error;
+	}
+};
 
 export const createRecurringDonation = async ({
 	chainId,
