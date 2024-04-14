@@ -83,6 +83,7 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 			const { data } = await client.mutate({
 				mutation: UPDATE_RECURRING_DONATION,
 				variables: {
+					id: donation.id,
 					projectId: +donation.project.id,
 					networkId: config.OPTIMISM_NETWORK_NUMBER,
 					currency: donation.currency,
