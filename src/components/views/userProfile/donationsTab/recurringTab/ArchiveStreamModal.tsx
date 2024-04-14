@@ -74,6 +74,8 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 
+	console.log('donation', donation);
+
 	const onArchive = async () => {
 		setStep(EArchiveStreamSteps.ARCHIVING);
 		try {
