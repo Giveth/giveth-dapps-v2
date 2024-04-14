@@ -294,6 +294,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					operations.push(givethFlowOp);
 				}
 			}
+
+			// Save Draft Donation
+
 			let tx;
 			const isBatch = operations.length > 1;
 			if (isBatch) {
