@@ -1,5 +1,25 @@
 import { gql } from '@apollo/client';
 
+export const CREATE_DRAFT_RECURRING_DONATION = gql`
+	mutation createDraftRecurringDonation(
+		$networkId: Float!
+		$currency: String!
+		$projectId: Float!
+		$anonymous: Boolean
+		$isBatch: Boolean
+		$flowRate: String!
+	) {
+		createDraftRecurringDonation(
+			networkId: $networkId
+			currency: $currency
+			projectId: $projectId
+			anonymous: $anonymous
+			isBatch: $isBatch
+			flowRate: $flowRate
+		)
+	}
+`;
+
 export const CREATE_RECURRING_DONATION = gql`
 	mutation CreateRecurringDonation(
 		$projectId: Int!
