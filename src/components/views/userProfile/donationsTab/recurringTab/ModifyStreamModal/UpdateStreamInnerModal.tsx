@@ -15,6 +15,7 @@ import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { showToastError } from '@/lib/helpers';
 import {
+	createDraftRecurringDonation,
 	updateRecurringDonation,
 	updateRecurringDonationStatus,
 } from '@/services/donation';
@@ -94,6 +95,18 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 
 			let projectFlowOp = superToken.updateFlow(options);
 
+			const projectDraftDonationInfo = {
+				projectId: +donation.project.id,
+				anonymous: donation.anonymous,
+				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				flowRate: _flowRatePerSec,
+				superToken: token,
+			};
+
+			const projectDraftDonationId = await createDraftRecurringDonation(
+				projectDraftDonationInfo,
+			);
+
 			const tx = await projectFlowOp.exec(signer);
 			setTx(tx.hash);
 
@@ -101,12 +114,9 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			// saving project donation to backend
 			try {
 				const projectDonationInfo = {
-					projectId: +donation.project.id,
-					anonymous: donation.anonymous,
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					...projectDraftDonationInfo,
 					txHash: tx.hash,
-					flowRate: _flowRatePerSec,
-					superToken: token,
+					draftDonationId: projectDraftDonationId,
 				};
 				console.log('Start Update Project Donation Info');
 				projectDonationId =
