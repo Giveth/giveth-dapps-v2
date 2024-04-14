@@ -309,9 +309,24 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			};
 
 			// Save Draft Donation
-			const draftDonationId = await createDraftRecurringDonation(
+			const projectDraftDonationId = await createDraftRecurringDonation(
 				projectDraftDonationInfo,
 			);
+
+			const givethDraftDonationInfo = {
+				projectId: config.GIVETH_PROJECT_ID,
+				anonymous,
+				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				flowRate: givethFlowRate,
+				superToken: _superToken,
+				isBatch,
+			};
+			let givethDraftDonationId = 0;
+			if (isDonatingToGiveth) {
+				givethDraftDonationId = await createDraftRecurringDonation(
+					givethDraftDonationInfo,
+				);
+			}
 
 			if (isBatch) {
 				const batchOp = sf.batchCall(operations);
@@ -326,7 +341,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				const projectDonationInfo = {
 					...projectDraftDonationInfo,
 					txHash: tx.hash,
-					draftDonationId,
+					draftDonationId: projectDraftDonationId,
 				};
 				if (isUpdating) {
 					console.log('Start Update Project Donation Info');
@@ -353,13 +368,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			let givethDonationId = 0;
 			if (isDonatingToGiveth) {
 				const givethDonationInfo = {
-					projectId: config.GIVETH_PROJECT_ID,
-					anonymous,
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					...givethDraftDonationInfo,
 					txHash: tx.hash,
-					flowRate: givethFlowRate,
-					superToken: _superToken,
-					isBatch,
+					draftDonationId: givethDraftDonationId,
 				};
 				try {
 					if (givethOldStream) {
