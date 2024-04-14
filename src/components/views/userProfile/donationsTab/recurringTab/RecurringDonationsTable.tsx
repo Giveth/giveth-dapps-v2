@@ -91,7 +91,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 					</DonationTableCell>
 					<Link href={slugToProjectView(donation.project.slug)}>
 						<ProjectTitleCell>
-							<B>{donation.project.title}</B>
+							<P>{donation.id}</P>/<B>{donation.project.title}</B>
 							<IconLink24 />
 						</ProjectTitleCell>
 					</Link>
