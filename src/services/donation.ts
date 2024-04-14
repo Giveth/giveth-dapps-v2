@@ -126,10 +126,9 @@ export const fetchUserStreams = async (address: Address) => {
 	return _tokenStreams;
 };
 
-export interface ICreateRecurringDonation {
+interface ICreateRecurringDonationBase {
 	projectId: number;
 	chainId: number;
-	txHash: string;
 	superToken: IToken;
 	flowRate: bigint;
 	anonymous?: boolean;
@@ -143,7 +142,7 @@ export const createDraftRecurringDonation = async ({
 	superToken,
 	anonymous,
 	isBatch,
-}: ICreateRecurringDonation) => {
+}: ICreateRecurringDonationBase) => {
 	let donationId = 0;
 	try {
 		const { data } = await client.mutate({
@@ -170,6 +169,11 @@ export const createDraftRecurringDonation = async ({
 		throw error;
 	}
 };
+
+export interface ICreateRecurringDonation extends ICreateRecurringDonationBase {
+	draftDonationId: number;
+	txHash: string;
+}
 
 export const createRecurringDonation = async ({
 	chainId,
