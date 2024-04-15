@@ -31,7 +31,7 @@ const contentMap = {
 	},
 
 	[ECreateProjectSections.socialMedia]: {
-		title: 'Social Media Links',
+		title: 'Get Connected!',
 		component: <SocialMediaTip />,
 	},
 
