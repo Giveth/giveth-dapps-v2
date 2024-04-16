@@ -24,6 +24,11 @@ export const communityItems = [
 		label: 'label.our_mission',
 		href: Routes.AboutUs + '#mission',
 	},
+	{
+		title: 'label.learn_the_basics',
+		label: 'label.onboarding_guide',
+		href: Routes.Onboarding,
+	},
 ];
 
 export const CommunityItems = () => {

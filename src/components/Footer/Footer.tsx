@@ -106,6 +106,13 @@ const Footer = () => {
 								})}
 							</LinkItem>
 						</Link>
+						<Link href={Routes.Onboarding}>
+							<LinkItem color={textColor}>
+								{formatMessage({
+									id: 'component.title.onboarding_guide',
+								})}
+							</LinkItem>
+						</Link>
 					</LinkColumn>
 					<LinkColumn>
 						<Link href={Routes.Partnerships}>
