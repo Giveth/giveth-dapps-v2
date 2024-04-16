@@ -74,7 +74,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 				)}
 			</TableCell>
 			<TableCell>
-				{runOutMonth === 0n ? (
+				{totalFlowRate === 0n ? (
 					'--'
 				) : runOutMonth < 1 ? (
 					' < 1 Month '
