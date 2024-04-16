@@ -115,7 +115,7 @@ const ProjectRecurringDonationTable = () => {
 					take: itemPerPage,
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },
-					finishStatus: { active: true, ended: false },
+					finishStatus: { active: false, ended: false },
 				},
 			});
 			console.log(

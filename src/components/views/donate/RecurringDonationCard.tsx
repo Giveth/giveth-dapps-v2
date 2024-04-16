@@ -85,10 +85,14 @@ export function mapValueInverse(value: number) {
 }
 
 export const RecurringDonationCard = () => {
+	const { project, selectedToken, tokenStreams } = useDonateData();
+	const isGivethProject = Number(project.id!) === config.GIVETH_PROJECT_ID;
 	const [amount, setAmount] = useState(0n);
 	const [isUpdating, setIsUpdating] = useState(false);
 	const [percentage, setPercentage] = useState(0);
-	const [donationToGiveth, setDonationToGiveth] = useState(5);
+	const [donationToGiveth, setDonationToGiveth] = useState(
+		isGivethProject ? 0 : 5,
+	);
 	const [anonymous, setAnonymous] = useState<boolean>(false);
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
 	const [showTopUpModal, setShowTopUpModal] = useState(false);
@@ -101,7 +105,6 @@ export const RecurringDonationCard = () => {
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
 	const { chain } = useAccount();
-	const { project, selectedToken, tokenStreams } = useDonateData();
 	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowRecurringDonationModal(true),
@@ -123,8 +126,6 @@ export const RecurringDonationCard = () => {
 		// watch: true,
 		// cacheTime: 5_000,
 	});
-
-	const isGivethProject = Number(project.id!) === config.GIVETH_PROJECT_ID;
 
 	useEffect(() => {
 		if (!selectedToken || !balance) return;
@@ -588,38 +589,44 @@ export const RecurringDonationCard = () => {
 									</Caption>
 								</Flex>
 							</Flex>
-							<Flex $justifyContent='space-between'>
-								<Caption>
-									{formatMessage(
-										{ id: 'label.donating_percentage_to' },
-										{
-											percentage: (
-												<b>{donationToGiveth}%</b>
-											),
-										},
-									)}
-									<b>Giveth</b>
-								</Caption>
-								<Flex gap='4px'>
+							{!isGivethProject && (
+								<Flex $justifyContent='space-between'>
 									<Caption>
-										{amount !== 0n && percentage !== 0
-											? limitFraction(
-													formatUnits(
-														givethPerMonth,
-														selectedToken?.token
-															.decimals || 18,
-													),
-												)
-											: 0}
+										{formatMessage(
+											{
+												id: 'label.donating_percentage_to',
+											},
+											{
+												percentage: (
+													<b>{donationToGiveth}%</b>
+												),
+											},
+										)}
+										<b>Giveth</b>
 									</Caption>
-									<Caption>
-										{selectedToken?.token.symbol}
-									</Caption>
-									<Caption>
-										{formatMessage({ id: 'label.monthly' })}
-									</Caption>
+									<Flex gap='4px'>
+										<Caption>
+											{amount !== 0n && percentage !== 0
+												? limitFraction(
+														formatUnits(
+															givethPerMonth,
+															selectedToken?.token
+																.decimals || 18,
+														),
+													)
+												: 0}
+										</Caption>
+										<Caption>
+											{selectedToken?.token.symbol}
+										</Caption>
+										<Caption>
+											{formatMessage({
+												id: 'label.monthly',
+											})}
+										</Caption>
+									</Flex>
 								</Flex>
-							</Flex>
+							)}
 							<Flex $justifyContent='space-between'>
 								<Caption $medium>
 									{formatMessage({

@@ -7,6 +7,7 @@ import { type GetBalanceReturnType } from '@wagmi/core';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { limitFraction } from '@/helpers/number';
 import { ISuperToken, ISuperfluidStream } from '@/types/superFluid';
+import { countActiveStreams } from '@/helpers/donate';
 
 interface IStreamInfoProps {
 	tokenStreams: ISuperfluidStream[];
@@ -46,6 +47,8 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 	} else if (setIsWarning) {
 		setIsWarning(false);
 	}
+	const activeStreamsCount = countActiveStreams(tokenStreams);
+
 	return (
 		<StreamSection>
 			<Flex $alignItems='center' $justifyContent='space-between'>
@@ -66,27 +69,31 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 					{formatMessage({
 						id: 'label.balance_runs_out_in',
 					})}{' '}
-					<strong>
-						{streamRunOutInMonth < 0n
-							? '0'
-							: streamRunOutInMonth.toString()}{' '}
-						{formatMessage(
-							{
-								id: 'label.months',
-							},
-							{
-								count: streamRunOutInMonth.toString(),
-							},
-						)}
-					</strong>
+					{totalStreamPerSec > 0 ? (
+						<strong>
+							{streamRunOutInMonth < 0n
+								? '0'
+								: streamRunOutInMonth.toString()}{' '}
+							{formatMessage(
+								{
+									id: 'label.months',
+								},
+								{
+									count: streamRunOutInMonth.toString(),
+								},
+							)}
+						</strong>
+					) : (
+						'--'
+					)}
 				</Caption>
 				<Caption>
 					{formatMessage({ id: 'label.funding' })}{' '}
-					<strong>{tokenStreams.length}</strong>{' '}
+					<strong>{activeStreamsCount}</strong>{' '}
 					{formatMessage(
 						{ id: 'label.projects_count' },
 						{
-							count: tokenStreams.length,
+							count: activeStreamsCount,
 						},
 					)}
 				</Caption>
