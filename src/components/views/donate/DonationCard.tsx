@@ -9,6 +9,7 @@ import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
+import { isAddress } from 'viem';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './RecurringDonationCard';
 import CryptoDonation from './CryptoDonation';
@@ -40,6 +41,10 @@ export const DonationCard = () => {
 				address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 		);
 
+	const isOwnerOnEVM =
+		project?.adminUser.walletAddress &&
+		isAddress(project.adminUser.walletAddress);
+
 	return (
 		<DonationCardWrapper>
 			<Title>
@@ -63,7 +68,7 @@ export const DonationCard = () => {
 						id: 'label.one_time_donation',
 					})}
 				</Tab>
-				{hasOpAddress ? (
+				{hasOpAddress && isOwnerOnEVM ? (
 					<Tab
 						$selected={tab === ETabs.RECURRING}
 						onClick={() => {
