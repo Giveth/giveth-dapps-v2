@@ -3,7 +3,6 @@ import {
 	Flex,
 	IconAlertTriangleOutline32,
 	Lead,
-	P,
 	mediaQueries,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
@@ -75,8 +74,6 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 
-	console.log('donation', donation);
-
 	const onArchive = async () => {
 		setStep(EArchiveStreamSteps.ARCHIVING);
 		try {
@@ -100,7 +97,6 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 	return step === EArchiveStreamSteps.CONFIRM ||
 		step === EArchiveStreamSteps.ARCHIVING ? (
 		<Wrapper>
-			<P>{donation.id}</P>
 			<Lead>
 				{formatMessage({
 					id: 'component.archive_stream_modal.confirm_question',
