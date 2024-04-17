@@ -16,6 +16,7 @@ import config, { SENTRY_URGENT } from '@/configuration';
 import {
 	CREATE_RECURRING_DONATION,
 	UPDATE_RECURRING_DONATION,
+	UPDATE_RECURRING_DONATION_BY_ID,
 	UPDATE_RECURRING_DONATION_STATUS,
 } from '@/apollo/gql/gqlSuperfluid';
 import { ERecurringDonationStatus } from '@/apollo/types/types';
@@ -133,6 +134,7 @@ export interface ICreateRecurringDonation {
 	flowRate: bigint;
 	anonymous?: boolean;
 	isBatch?: boolean;
+	recurringDonationId?: number;
 }
 
 export const createRecurringDonation = async ({
@@ -176,12 +178,22 @@ export const updateRecurringDonation = async (
 	props: ICreateRecurringDonation,
 ) => {
 	let donationId = 0;
-	const { chainId, txHash, projectId, flowRate, superToken, anonymous } =
-		props;
+	const {
+		recurringDonationId,
+		chainId,
+		txHash,
+		projectId,
+		flowRate,
+		superToken,
+		anonymous,
+	} = props;
 	try {
 		const { data } = await client.mutate({
-			mutation: UPDATE_RECURRING_DONATION,
+			mutation: recurringDonationId
+				? UPDATE_RECURRING_DONATION_BY_ID
+				: UPDATE_RECURRING_DONATION,
 			variables: {
+				recurringDonationId,
 				projectId,
 				networkId: chainId,
 				txHash,
