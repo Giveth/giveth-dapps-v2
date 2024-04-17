@@ -80,7 +80,7 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 			const { data } = await client.mutate({
 				mutation: UPDATE_RECURRING_DONATION_BY_ID,
 				variables: {
-					recurringDonationId: donation.id,
+					recurringDonationId: +donation.id,
 					projectId: +donation.project.id,
 					networkId: config.OPTIMISM_NETWORK_NUMBER,
 					currency: donation.currency,
@@ -141,7 +141,7 @@ const Wrapper = styled(Flex)`
 	justify-content: stretch;
 	gap: 16px;
 	width: 100%;
-	padding: 16px 24px 24px 24px;
+	padding: 24px;
 	${mediaQueries.tablet} {
 		width: 530px;
 	}
