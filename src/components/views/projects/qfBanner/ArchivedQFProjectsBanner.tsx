@@ -1,4 +1,4 @@
-import { Container, Row } from '@giveth/ui-design-system';
+import { Container, H2, Row } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
@@ -9,7 +9,6 @@ import {
 	ImgTopLeft,
 	ImgBottomLeft,
 	StyledCol,
-	Name,
 	Title,
 } from './common';
 import { useProjectsContext } from '@/context/projects.context';
@@ -54,7 +53,7 @@ export const ArchivedQFProjectsBanner = () => {
 						<Title weight={700}>
 							{formatMessage({ id: 'label.quadratic_funding' })}
 						</Title>
-						<Name>{round ? round.name : null}</Name>
+						<H2>{round ? round.name : null}</H2>
 					</StyledCol>
 				</Row>
 			</Container>
