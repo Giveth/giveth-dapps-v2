@@ -101,6 +101,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			// saving project donation to backend
 			try {
 				const projectDonationInfo = {
+					recurringDonationId: donation.id,
 					projectId: +donation.project.id,
 					anonymous: donation.anonymous,
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
