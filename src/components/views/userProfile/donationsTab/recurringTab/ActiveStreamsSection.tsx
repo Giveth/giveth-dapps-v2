@@ -8,21 +8,25 @@ import {
 	brandColors,
 } from '@giveth/ui-design-system';
 import { type FC } from 'react';
+import { useIntl } from 'react-intl';
 import { StreamRow } from './StreamRow';
 import { useProfileDonateTabData } from './ProfileDonateTab.context';
 import links from '@/lib/constants/links';
 
 export const ActiveStreamsSection: FC = () => {
 	const { tokenStreams } = useProfileDonateTabData();
+	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
-			<H5 weight={900}>Streamable Token Balances</H5>
+			<H5 weight={900}>
+				{formatMessage({
+					id: 'label.stream_balances',
+				})}
+			</H5>
 			<Desc>
-				Your Active streams provides a complete listing of the active
-				stream from all projects you're involved in with Superfluid.
-				Differences might occur in the active streams, flow rates, and
-				duration when compared to just your active Giveth projects. For
-				detailed information, check your{' '}
+				{formatMessage({
+					id: 'label.active_streams_subheader',
+				})}{' '}
 				<a
 					href={links.SUPERFLUID_DASHBOARD}
 					target='_blank'
@@ -35,19 +39,39 @@ export const ActiveStreamsSection: FC = () => {
 			<DonationTableContainer>
 				<TableHeaderRow>
 					<TableHeader>
-						<B>Current Balance</B>
+						<B>
+							{formatMessage({
+								id: 'label.current_balance',
+							})}
+						</B>
 					</TableHeader>
 					<TableHeader>
-						<B>Streaming at a Rate of</B>
+						<B>
+							{formatMessage({
+								id: 'label.streaming_at_rate_of',
+							})}
+						</B>
 					</TableHeader>
 					<TableHeader>
-						<B>Supporting</B>
+						<B>
+							{formatMessage({
+								id: 'label.supporting',
+							})}
+						</B>
 					</TableHeader>
 					<TableHeader>
-						<B>Top-up before</B>
+						<B>
+							{formatMessage({
+								id: 'label.top_up_before',
+							})}
+						</B>
 					</TableHeader>
 					<TableHeader>
-						<B>Actions</B>
+						<B>
+							{formatMessage({
+								id: 'label.actions',
+							})}
+						</B>
 					</TableHeader>
 				</TableHeaderRow>
 				{Object.entries(tokenStreams).map(([key, value]) => (
