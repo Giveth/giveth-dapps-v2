@@ -134,7 +134,6 @@ export interface ICreateRecurringDonation {
 	flowRate: bigint;
 	anonymous?: boolean;
 	isBatch?: boolean;
-	recurringDonationId?: number;
 }
 
 export const createRecurringDonation = async ({
@@ -174,8 +173,12 @@ export const createRecurringDonation = async ({
 	}
 };
 
+export interface IUpdateRecurringDonation extends ICreateRecurringDonation {
+	recurringDonationId?: string;
+}
+
 export const updateRecurringDonation = async (
-	props: ICreateRecurringDonation,
+	props: IUpdateRecurringDonation,
 ) => {
 	let donationId = 0;
 	const {
@@ -188,12 +191,15 @@ export const updateRecurringDonation = async (
 		anonymous,
 	} = props;
 	try {
+		const _recurringDonationId = recurringDonationId
+			? parseInt(recurringDonationId)
+			: undefined;
 		const { data } = await client.mutate({
 			mutation: recurringDonationId
 				? UPDATE_RECURRING_DONATION_BY_ID
 				: UPDATE_RECURRING_DONATION,
 			variables: {
-				recurringDonationId,
+				recurringDonationId: _recurringDonationId,
 				projectId,
 				networkId: chainId,
 				txHash,
@@ -202,7 +208,10 @@ export const updateRecurringDonation = async (
 				anonymous,
 			},
 		});
-		donationId = parseInt(data.updateRecurringDonationParams.id);
+		const id = recurringDonationId
+			? data.updateRecurringDonationParamsById.id
+			: data.updateRecurringDonationParams.id;
+		donationId = parseInt(id);
 		console.log('donationId', donationId);
 		return donationId;
 	} catch (error: any) {
