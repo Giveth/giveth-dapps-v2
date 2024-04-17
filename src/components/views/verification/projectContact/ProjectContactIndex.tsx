@@ -4,8 +4,9 @@ import {
 	Button,
 	H6,
 	IconDiscord,
-	IconLink,
 	neutralColors,
+	IconTelegram,
+	IconWhatsApp,
 	P,
 	IconInfoFilled,
 	IconXSocial,
@@ -128,7 +129,11 @@ export default function ProjectContactIndex() {
 						<Input
 							label={i.type}
 							key={i.type}
-							placeholder='https://'
+							placeholder={
+								i.type === EMainSocials.WhatsApp
+									? '+1234567890'
+									: 'https://'
+							}
 							LeftIcon={i.icon}
 							error={errors[i.type]}
 							register={register}
@@ -202,11 +207,11 @@ const mainSocialsInputs = [
 	},
 	{
 		type: EMainSocials.Telegram,
-		icon: <IconLink color={neutralColors.gray[600]} />,
+		icon: <IconTelegram color={neutralColors.gray[600]} />,
 	},
 	{
 		type: EMainSocials.WhatsApp,
-		icon: <IconLink color={neutralColors.gray[600]} />,
+		icon: <IconWhatsApp color={neutralColors.gray[600]} />,
 	},
 ];
 
