@@ -1,6 +1,12 @@
-import { Col, H1, H2, mediaQueries } from '@giveth/ui-design-system';
+import {
+	Col,
+	H1,
+	mediaQueries,
+	Flex,
+	brandColors,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
+import Image from 'next/image';
 
 export const BannerContainer = styled.div`
 	position: relative;
@@ -32,18 +38,15 @@ export const Title = styled(H1)`
 	margin-top: 32px;
 `;
 
-export const Name = styled(H2)``;
-
 export const Desc = styled(Flex)`
 	width: fit-content;
-
-	border: 2px solid #6241d6;
-	border-radius: 20px;
+	border: 2px solid white;
+	border-radius: 27px;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
 	padding: 9px 20px;
-	background: #b377ff;
+	background: ${brandColors.giv[400]};
 	margin-top: 12px;
 	margin-bottom: 32px;
 `;
@@ -127,11 +130,11 @@ export const ImgBottomLeft1 = styled(ImgBase)`
 	}
 `;
 
-export const Sponsor = styled(ImgBase)`
-	width: 332px;
-
-	${mediaQueries.laptopS} {
-		right: 60px;
-		margin-top: 60px;
+export const Sponsor = styled(Image)`
+	width: 119px;
+	height: 125px;
+	${mediaQueries.tablet} {
+		width: 179px;
+		height: 188px;
 	}
 `;
