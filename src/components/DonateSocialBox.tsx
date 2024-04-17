@@ -1,13 +1,22 @@
 import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex, Lead, neutralColors } from '@giveth/ui-design-system';
+import {
+	Flex,
+	Lead,
+	neutralColors,
+	brandColors,
+	Subline,
+	IconChevronRight16,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import Link from 'next/link';
 import { useProjectContext } from '@/context/project.context';
 import useDetectDevice from '@/hooks/useDetectDevice';
 import { IProject } from '@/apollo/types/types';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import ShareModal from '@/components/modals/ShareModal';
+import Routes from '@/lib/constants/Routes';
 
 interface ISocialBox {
 	project: IProject;
@@ -46,6 +55,21 @@ const DonateSocialBox: FC<ISocialBox> = props => {
 					fromDonate={true}
 				/>
 			</BadgeWrapper>
+
+			<Link href={Routes.Onboarding + '/donors'}>
+				<LearnLink
+					$alignItems='center'
+					$justifyContent='center'
+					gap='2px'
+				>
+					<Subline>
+						{formatMessage({
+							id: 'label.learn_more_about_donating_on_giveth',
+						})}
+					</Subline>
+					<IconChevronRight16 />
+				</LearnLink>
+			</Link>
 		</Social>
 	);
 };
@@ -71,6 +95,14 @@ const BadgeWrapper = styled(Flex)`
 	margin-top: 16px;
 	justify-content: space-between;
 	gap: 8px;
+`;
+
+const LearnLink = styled(Flex)`
+	color: ${brandColors.pinky[500]};
+	margin-top: 20px;
+	&:hover {
+		color: ${brandColors.pinky[700]};
+	}
 `;
 
 export default DonateSocialBox;
