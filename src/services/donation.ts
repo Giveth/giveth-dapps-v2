@@ -139,7 +139,7 @@ interface ICreateRecurringDonationBase {
 export interface ICreateDraftRecurringDonation
 	extends ICreateRecurringDonationBase {
 	isForUpdate?: boolean;
-	recurringDonationId?: number;
+	recurringDonationId?: string;
 }
 
 export const createDraftRecurringDonation = async ({
