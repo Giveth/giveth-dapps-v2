@@ -135,6 +135,12 @@ interface ICreateRecurringDonationBase {
 	isBatch?: boolean;
 }
 
+export interface ICreateDraftRecurringDonation
+	extends ICreateRecurringDonationBase {
+	isForUpdate?: boolean;
+	recurringDonationId?: number;
+}
+
 export const createDraftRecurringDonation = async ({
 	chainId,
 	projectId,
@@ -142,8 +148,8 @@ export const createDraftRecurringDonation = async ({
 	superToken,
 	anonymous,
 	isBatch,
-}: ICreateRecurringDonationBase) => {
-	let donationId = 0;
+}: ICreateDraftRecurringDonation) => {
+	let draftDonationId = 0;
 	try {
 		const { data } = await client.mutate({
 			mutation: CREATE_DRAFT_RECURRING_DONATION,
@@ -156,9 +162,9 @@ export const createDraftRecurringDonation = async ({
 				isBatch,
 			},
 		});
-		donationId = parseInt(data.createRecurringDonation.id);
-		console.log('donationId', donationId);
-		return donationId;
+		draftDonationId = parseInt(data.createDraftRecurringDonation.id);
+		console.log('draftDonationId', draftDonationId);
+		return draftDonationId;
 	} catch (error) {
 		captureException(error, {
 			tags: {
