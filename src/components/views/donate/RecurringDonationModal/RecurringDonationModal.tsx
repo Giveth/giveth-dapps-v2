@@ -31,6 +31,7 @@ import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { ChainType } from '@/types/config';
 import {
+	ICreateDraftRecurringDonation,
 	createDraftRecurringDonation,
 	createRecurringDonation,
 	updateRecurringDonation,
@@ -299,13 +300,14 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			let tx;
 			const isBatch = operations.length > 1;
 
-			const projectDraftDonationInfo = {
+			const projectDraftDonationInfo: ICreateDraftRecurringDonation = {
 				projectId: +project.id,
 				anonymous,
 				chainId: config.OPTIMISM_NETWORK_NUMBER,
 				flowRate: _flowRate,
 				superToken: _superToken,
 				isBatch,
+				isForUpdate: isUpdating,
 			};
 
 			// Save Draft Donation
@@ -313,13 +315,14 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				projectDraftDonationInfo,
 			);
 
-			const givethDraftDonationInfo = {
+			const givethDraftDonationInfo: ICreateDraftRecurringDonation = {
 				projectId: config.GIVETH_PROJECT_ID,
 				anonymous,
 				chainId: config.OPTIMISM_NETWORK_NUMBER,
 				flowRate: givethFlowRate,
 				superToken: _superToken,
 				isBatch,
+				isForUpdate: isUpdating,
 			};
 			let givethDraftDonationId = 0;
 			if (isDonatingToGiveth) {
