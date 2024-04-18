@@ -18,7 +18,7 @@
 	},
 	"dependencies": {
 		"@apollo/client": "^3.9.3",
-		"@giveth/ui-design-system": "^1.11.26",
+		"@giveth/ui-design-system": "^1.11.20",
 		"@reduxjs/toolkit": "^2.1.0",
 		"@safe-global/api-kit": "^2.1.0",
 		"@segment/snippet": "^4.15.3",
