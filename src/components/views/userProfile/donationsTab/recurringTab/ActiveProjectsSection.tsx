@@ -81,7 +81,7 @@ export const ActiveProjectsSection = () => {
 					orderBy: { field: order.by, direction: order.direction },
 					finishStatus: statusFilters,
 					filteredTokens: tokenFilters,
-					includeArchived: showArchive,
+					includeArchived: myAccount ? showArchive : true,
 				},
 			});
 			setLoading(false);
