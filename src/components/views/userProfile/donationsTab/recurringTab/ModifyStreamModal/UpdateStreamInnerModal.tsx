@@ -15,6 +15,7 @@ import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { showToastError } from '@/lib/helpers';
 import {
+	ICreateDraftRecurringDonation,
 	createDraftRecurringDonation,
 	updateRecurringDonation,
 	updateRecurringDonationStatus,
@@ -95,12 +96,14 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 
 			let projectFlowOp = superToken.updateFlow(options);
 
-			const projectDraftDonationInfo = {
+			const projectDraftDonationInfo: ICreateDraftRecurringDonation = {
+				recurringDonationId: +donation.id,
 				projectId: +donation.project.id,
 				anonymous: donation.anonymous,
 				chainId: config.OPTIMISM_NETWORK_NUMBER,
 				flowRate: _flowRatePerSec,
 				superToken: token,
+				isForUpdate: true,
 			};
 
 			const projectDraftDonationId = await createDraftRecurringDonation(
