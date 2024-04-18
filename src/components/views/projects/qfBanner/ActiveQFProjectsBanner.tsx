@@ -1,4 +1,4 @@
-import { B, Lead, Container, Row, H2, Flex } from '@giveth/ui-design-system';
+import { B, Lead, Container, Row, H2 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -6,6 +6,7 @@ import { useProjectsContext } from '@/context/projects.context';
 import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
 import { BannerContainer, StyledCol, Desc, Title, Sponsor } from './common';
+import { Flex } from '@/components/styled-components/Flex';
 
 enum ERoundStatus {
 	LOADING,
