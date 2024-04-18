@@ -1,18 +1,12 @@
-import { B, Lead, Container, Row } from '@giveth/ui-design-system';
+import { B, Lead, Container, Row, H2 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useProjectsContext } from '@/context/projects.context';
 import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
-import {
-	BannerContainer,
-	StyledCol,
-	Name,
-	Desc,
-	Title,
-	Sponsor,
-} from './common';
+import { BannerContainer, StyledCol, Desc, Title, Sponsor } from './common';
+import { Flex } from '@/components/styled-components/Flex';
 
 enum ERoundStatus {
 	LOADING,
@@ -84,9 +78,11 @@ export const ActiveQFProjectsBanner = () => {
 				<Row>
 					<StyledCol xs={12} md={6}>
 						<Title weight={700}>
-							{formatMessage({ id: 'label.quadratic_funding' })}
+							{activeRound ? activeRound.name : null}
 						</Title>
-						<Name>{activeRound ? activeRound.name : null}</Name>
+						<H2>
+							{formatMessage({ id: 'label.quadratic_funding' })}
+						</H2>
 						{(state === ERoundStatus.NOT_STARTED ||
 							state === ERoundStatus.RUNNING) && (
 							<Desc>
@@ -106,15 +102,40 @@ export const ActiveQFProjectsBanner = () => {
 							</Desc>
 						)}
 					</StyledCol>
-					<StyledCol xs={12} md={6}>
-						<Sponsor
-							src={'/images/banners/qf-round/sponsor.svg'}
-							style={{ objectFit: 'contain' }}
-							alt='QF Banner'
-						/>
+					<StyledCol
+						xs={12}
+						md={6}
+						style={{ justifyContent: 'center' }}
+					>
+						<Flex>
+							{sponsors.map(s => (
+								<Sponsor
+									key={s.title}
+									src={s.image}
+									alt={s.title}
+									width={179}
+									height={188}
+								/>
+							))}
+						</Flex>
 					</StyledCol>
 				</Row>
 			</Container>
 		</BannerContainer>
 	);
 };
+
+const sponsors = [
+	{
+		title: '@PublicNouns',
+		image: '/images/banners/qf-round/sponsor1.svg',
+	},
+	{
+		title: '@OctantApp',
+		image: '/images/banners/qf-round/sponsor2.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor3.svg',
+	},
+];

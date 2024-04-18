@@ -36,8 +36,8 @@ const QFProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		<ProjectsProvider
 			mainCategories={mainCategories}
 			selectedMainCategory={selectedMainCategory}
-			isQF={true}
 			qfRounds={qfRounds}
+			isQF
 		>
 			<GeneralMetatags info={projectsMetatags} />
 			<ProjectsIndex projects={projects} totalCount={totalCount} />
