@@ -10,7 +10,7 @@ const FundraisingBanner = () => {
 		<Wrapper>
 			<P>
 				<b>Got $GLM?</b> The allocation window is open for Octant Epoch
-				4, allocate your staking rewards to Giveth to support our
+				3, allocate your staking rewards to Giveth to support our
 				growth!
 			</P>
 			{/* <Image
