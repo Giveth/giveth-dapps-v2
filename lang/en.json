@@ -1579,6 +1579,8 @@
 	"testfilter": "testfilter",
 	"toast.modify_stream_balance": "Depositing or withdrawing tokens from your stream balance will affect how soon you need to top-up by.",
 	"toast.warning_stream_balance": "Withdrawing a large portion of your Stream Balance may cause your active recurring donations in that token to end unexpectedly.",
+	"toast.deposit_to_your_stream_balance_was_successful": "Deposit to your Stream Balance was successful.",
+	"toast.withdrawal_from_your_stream_balance_was_successful": "Withdrawal from your Stream Balance was successful.",
 	"tooltip.deposit_stream_balance": "Depositing tokens will increase your stream balance and thus extend the duration of your active recurring donations.",
 	"tooltip.donation.matching": "This estimation is based on the donations made so far this quadratic funding round and is not considering fraud analysis. Actual matching amount vary.",
 	"tooltip.flowrate": "Recurring donations are taken out of your Stream Balance. Deposit tokens & maintain your balance to enable recurring donations.",

@@ -206,6 +206,12 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 					/>
 				</Flex>
 			)}
+			{step === EModifySuperTokenSteps.DEPOSIT_CONFIRMED && (
+				<ModifyInfoToast
+					toastType={EToastType.Success}
+					withdrawalType='deposit'
+				/>
+			)}
 			<Button
 				label={formatMessage({ id: actionButtonLabel[step] })}
 				disabled={

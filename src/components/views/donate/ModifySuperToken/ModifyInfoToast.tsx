@@ -7,13 +7,17 @@ import links from '@/lib/constants/links';
 
 interface IModifyInfoToastProps {
 	toastType: EToastType;
+	withdrawalType?: 'deposit' | 'withdraw';
 }
 
 interface IMessage {
 	text: string;
 }
 
-export const ModifyInfoToast: FC<IModifyInfoToastProps> = ({ toastType }) => {
+export const ModifyInfoToast: FC<IModifyInfoToastProps> = ({
+	toastType,
+	withdrawalType,
+}) => {
 	const { formatMessage } = useIntl();
 
 	if (toastType === EToastType.Warning) {
@@ -26,6 +30,18 @@ export const ModifyInfoToast: FC<IModifyInfoToastProps> = ({ toastType }) => {
 						})}
 					/>
 				}
+				type={toastType}
+			></InfoToast>
+		);
+	} else if (toastType === EToastType.Success) {
+		return (
+			<InfoToast
+				message={formatMessage({
+					id:
+						withdrawalType === 'withdraw'
+							? 'toast.withdrawal_from_your_stream_balance_was_successful'
+							: 'toast.deposit_to_your_stream_balance_was_successful',
+				})}
 				type={toastType}
 			></InfoToast>
 		);
