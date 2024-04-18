@@ -806,6 +806,7 @@ export const FETCH_RECURRING_DONATIONS_BY_PROJECTID = gql`
 		$status: String
 		$finishStatus: FinishStatus
 		$orderBy: RecurringDonationSortBy
+		$includeArchived: Boolean
 	) {
 		recurringDonationsByProjectId(
 			take: $take
@@ -815,6 +816,7 @@ export const FETCH_RECURRING_DONATIONS_BY_PROJECTID = gql`
 			status: $status
 			finishStatus: $finishStatus
 			orderBy: $orderBy
+			includeArchived: $includeArchived
 		) {
 			recurringDonations {
 				id

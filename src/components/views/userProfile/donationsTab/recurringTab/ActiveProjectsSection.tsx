@@ -72,14 +72,6 @@ export const ActiveProjectsSection = () => {
 		if (!user) return;
 		const fetchUserDonations = async () => {
 			setLoading(true);
-			const _statusFilters = {
-				active: statusFilters.active,
-				ended: statusFilters.ended,
-			};
-			if (!myAccount) {
-				_statusFilters.active = true;
-				_statusFilters.ended = false;
-			}
 			const { data: userDonations } = await client.query({
 				query: FETCH_USER_RECURRING_DONATIONS,
 				variables: {
@@ -87,9 +79,9 @@ export const ActiveProjectsSection = () => {
 					take: itemPerPage,
 					skip: page * itemPerPage,
 					orderBy: { field: order.by, direction: order.direction },
-					finishStatus: _statusFilters,
+					finishStatus: statusFilters,
 					filteredTokens: tokenFilters,
-					includeArchived: showArchive,
+					includeArchived: myAccount ? showArchive : true,
 				},
 			});
 			setLoading(false);

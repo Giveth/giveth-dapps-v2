@@ -97,7 +97,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			let projectFlowOp = superToken.updateFlow(options);
 
 			const projectDraftDonationInfo: ICreateDraftRecurringDonation = {
-				recurringDonationId: +donation.id,
+				recurringDonationId: donation.id,
 				projectId: +donation.project.id,
 				anonymous: donation.anonymous,
 				chainId: config.OPTIMISM_NETWORK_NUMBER,

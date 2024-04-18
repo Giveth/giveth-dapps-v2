@@ -103,6 +103,41 @@ export const UPDATE_RECURRING_DONATION = gql`
 	}
 `;
 
+export const UPDATE_RECURRING_DONATION_BY_ID = gql`
+	mutation updateRecurringDonationQueryById(
+		$recurringDonationId: Int!
+		$projectId: Int!
+		$networkId: Int!
+		$currency: String!
+		$txHash: String
+		$flowRate: String
+		$anonymous: Boolean
+		$isArchived: Boolean
+		$status: String
+	) {
+		updateRecurringDonationParamsById(
+			recurringDonationId: $recurringDonationId
+			projectId: $projectId
+			networkId: $networkId
+			currency: $currency
+			txHash: $txHash
+			anonymous: $anonymous
+			flowRate: $flowRate
+			status: $status
+			isArchived: $isArchived
+		) {
+			id
+			txHash
+			networkId
+			currency
+			flowRate
+			anonymous
+			status
+			isArchived
+		}
+	}
+`;
+
 export const UPDATE_RECURRING_DONATION_STATUS = gql`
 	mutation updateRecurringDonationStatus(
 		$status: String

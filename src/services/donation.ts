@@ -17,6 +17,7 @@ import {
 	CREATE_DRAFT_RECURRING_DONATION,
 	CREATE_RECURRING_DONATION,
 	UPDATE_RECURRING_DONATION,
+	UPDATE_RECURRING_DONATION_BY_ID,
 	UPDATE_RECURRING_DONATION_STATUS,
 } from '@/apollo/gql/gqlSuperfluid';
 import { ERecurringDonationStatus } from '@/apollo/types/types';
@@ -218,16 +219,33 @@ export const createRecurringDonation = async ({
 	}
 };
 
+export interface IUpdateRecurringDonation extends ICreateRecurringDonation {
+	recurringDonationId?: string;
+}
+
 export const updateRecurringDonation = async (
-	props: ICreateRecurringDonation,
+	props: IUpdateRecurringDonation,
 ) => {
 	let donationId = 0;
-	const { chainId, txHash, projectId, flowRate, superToken, anonymous } =
-		props;
+	const {
+		recurringDonationId,
+		chainId,
+		txHash,
+		projectId,
+		flowRate,
+		superToken,
+		anonymous,
+	} = props;
 	try {
+		const _recurringDonationId = recurringDonationId
+			? parseInt(recurringDonationId)
+			: undefined;
 		const { data } = await client.mutate({
-			mutation: UPDATE_RECURRING_DONATION,
+			mutation: recurringDonationId
+				? UPDATE_RECURRING_DONATION_BY_ID
+				: UPDATE_RECURRING_DONATION,
 			variables: {
+				recurringDonationId: _recurringDonationId,
 				projectId,
 				networkId: chainId,
 				txHash,
@@ -236,7 +254,10 @@ export const updateRecurringDonation = async (
 				anonymous,
 			},
 		});
-		donationId = parseInt(data.updateRecurringDonationParams.id);
+		const id = recurringDonationId
+			? data.updateRecurringDonationParamsById.id
+			: data.updateRecurringDonationParams.id;
+		donationId = parseInt(id);
 		console.log('donationId', donationId);
 		return donationId;
 	} catch (error: any) {

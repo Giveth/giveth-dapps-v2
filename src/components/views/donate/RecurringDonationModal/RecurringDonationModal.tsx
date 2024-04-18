@@ -404,13 +404,13 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					if (projectDonationId) {
 						updateRecurringDonationStatus(
 							projectDonationId,
-							ERecurringDonationStatus.ACTIVE,
+							ERecurringDonationStatus.VERIFIED,
 						);
 					}
 					if (isDonatingToGiveth && givethDonationId) {
 						updateRecurringDonationStatus(
 							givethDonationId,
-							ERecurringDonationStatus.ACTIVE,
+							ERecurringDonationStatus.VERIFIED,
 						);
 					}
 				} catch (error) {

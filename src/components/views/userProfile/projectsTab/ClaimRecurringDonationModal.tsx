@@ -15,6 +15,7 @@ import { WrappedSpinner } from '@/components/Spinner';
 import ClaimWithdrawalModal from './ClaimWithdrawalModal';
 import { ClaimRecurringItem } from './ClaimRecurringItem';
 import { ClaimTransactionState } from './type';
+import { formatDonation } from '@/helpers/number';
 
 interface IClaimRecurringDonationModal extends IModal {
 	project: IProject;
@@ -79,7 +80,7 @@ const ClaimRecurringDonationModal = ({
 						<TotalAmountContainer>
 							<Flex $justifyContent='space-between'>
 								<B>Total amount claimable </B>
-								<B>~ {sumAllTokensUsd} USD</B>
+								<B>~ {formatDonation(sumAllTokensUsd)} USD</B>
 							</Flex>
 						</TotalAmountContainer>
 						<Button

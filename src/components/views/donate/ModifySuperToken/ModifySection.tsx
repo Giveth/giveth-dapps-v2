@@ -59,13 +59,12 @@ export const ModifySection: FC<IModifySectionProps> = ({
 			? CustomGLink
 			: GLink;
 
+	const maxAmount = balance?.value ? balance.value - minRemainingBalance : 0n;
+
 	const handleSetMaxAmount = () => {
 		if (balance && balance.value !== undefined) {
 			const maxAmountDisplay = truncateToDecimalPlaces(
-				formatUnits(
-					balance.value - minRemainingBalance,
-					balance.decimals,
-				),
+				formatUnits(maxAmount > 0n ? maxAmount : 0n, balance.decimals),
 				6,
 			).toString(); // Convert your balance value to string properly
 			setDisplayAmount(maxAmountDisplay); // Update the display amount

@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { utils } from 'ethers';
 import { ITokenWithBalance } from '@/hooks/useProjectClaimableDonations';
-import { limitFraction } from '@/helpers/number';
+import { formatDonation, limitFraction } from '@/helpers/number';
 
 interface IClaimWithdrawalItem {
 	projectName: string;
@@ -25,7 +25,7 @@ const ClaimWithdrawalItem = ({
 					6,
 				)} ${
 					stream.token.underlyingToken?.symbol
-				} ~ ${balanceInUsd} USD`}
+				} ~ ${formatDonation(balanceInUsd)} USD`}
 			</B>
 		</Container>
 	);
