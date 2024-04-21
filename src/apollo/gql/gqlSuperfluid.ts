@@ -25,7 +25,7 @@ export const CREATE_DRAFT_RECURRING_DONATION = gql`
 `;
 
 export const CREATE_RECURRING_DONATION = gql`
-	mutation CreateRecurringDonation(
+	mutation createRecurringDonation(
 		$projectId: Int!
 		$networkId: Int!
 		$txHash: String!

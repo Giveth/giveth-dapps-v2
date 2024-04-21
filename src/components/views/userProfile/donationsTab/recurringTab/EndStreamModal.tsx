@@ -117,6 +117,7 @@ const EndStreamInnerModal: FC<IEndStreamInnerModalProps> = ({
 
 			try {
 				const info = {
+					recurringDonationId: parseInt(donation.id),
 					projectId: +donation.project.id,
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
 					txHash: tx.hash,

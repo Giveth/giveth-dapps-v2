@@ -303,7 +303,7 @@ export const endRecurringDonation = async ({
 				status: ERecurringDonationStatus.ENDED,
 			},
 		});
-		donationUpdateId = parseInt(data.updateRecurringDonationParams.id);
+		donationUpdateId = parseInt(data.updateRecurringDonationParamsById.id);
 		return donationUpdateId;
 	} catch (error: any) {
 		captureException(error, {
