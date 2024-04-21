@@ -149,6 +149,7 @@ export const createDraftRecurringDonation = async ({
 	superToken,
 	anonymous,
 	isBatch,
+	isForUpdate,
 }: ICreateDraftRecurringDonation) => {
 	let draftDonationId = 0;
 	try {
@@ -161,6 +162,7 @@ export const createDraftRecurringDonation = async ({
 				currency: superToken.underlyingToken?.symbol || 'ETH',
 				anonymous,
 				isBatch,
+				isForUpdate,
 			},
 		});
 		draftDonationId = parseInt(data.createDraftRecurringDonation);
