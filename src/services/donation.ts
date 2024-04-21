@@ -163,7 +163,7 @@ export const createDraftRecurringDonation = async ({
 				isBatch,
 			},
 		});
-		draftDonationId = parseInt(data.createDraftRecurringDonation.id);
+		draftDonationId = parseInt(data.createDraftRecurringDonation);
 		console.log('draftDonationId', draftDonationId);
 		return draftDonationId;
 	} catch (error) {
