@@ -1,25 +1,24 @@
 import styled from 'styled-components';
-import Image from 'next/image';
 import { brandColors, P, FlexCenter } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
-import GitcoinLogo from 'public/images/gitcoin-grants.png';
 
 const FundraisingBanner = () => {
 	return (
 		<Wrapper>
 			<P>
-				Support Giveth's growth by donating to us on the Glo Dollar x
-				Arbitrum DAO round on Gitcoin.
+				<b>Got $GLM?</b> The allocation window is open for Octant Epoch
+				3, allocate your staking rewards to Giveth to support our
+				growth!
 			</P>
-			<Image
+			{/* <Image
 				src={GitcoinLogo}
 				alt='Gitcoin Grants'
 				width={24}
 				height={24}
-			/>
+			/> */}
 			<PStyled>
-				<ExternalLink href='https://explorer.gitcoin.co/#/round/42161/0xc5262fc451a72f68f83563e30126d9c1d5d77659/0xc5262fc451a72f68f83563e30126d9c1d5d77659-12'>
-					<Purple> Click here to view our grant. </Purple>
+				<ExternalLink href='https://octant.app/project/3/0x6e8873085530406995170Da467010565968C7C62'>
+					<Purple>View our project. </Purple>
 				</ExternalLink>
 			</PStyled>
 		</Wrapper>
