@@ -276,19 +276,26 @@ export const updateRecurringDonation = async (
 };
 
 export interface IEndRecurringDonation {
+	recurringDonationId: number;
 	projectId: number;
 	chainId: number;
 	txHash: string;
 	superToken: IToken;
 }
 
-export const endRecurringDonation = async (props: IEndRecurringDonation) => {
-	let donationId = 0;
-	const { chainId, txHash, projectId, superToken } = props;
+export const endRecurringDonation = async ({
+	chainId,
+	txHash,
+	projectId,
+	superToken,
+	recurringDonationId,
+}: IEndRecurringDonation) => {
+	let donationUpdateId = 0;
 	try {
 		const { data } = await client.mutate({
-			mutation: UPDATE_RECURRING_DONATION,
+			mutation: UPDATE_RECURRING_DONATION_BY_ID,
 			variables: {
+				recurringDonationId,
 				projectId,
 				networkId: chainId,
 				txHash,
@@ -296,8 +303,8 @@ export const endRecurringDonation = async (props: IEndRecurringDonation) => {
 				status: ERecurringDonationStatus.ENDED,
 			},
 		});
-		donationId = parseInt(data.updateRecurringDonationParams.id);
-		return donationId;
+		donationUpdateId = parseInt(data.updateRecurringDonationParams.id);
+		return donationUpdateId;
 	} catch (error: any) {
 		captureException(error, {
 			tags: {
