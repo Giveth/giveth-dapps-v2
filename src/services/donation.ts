@@ -14,6 +14,7 @@ import { gqlRequest } from '@/helpers/requests';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import config, { SENTRY_URGENT } from '@/configuration';
 import {
+	CREATE_DRAFT_RECURRING_DONATION,
 	CREATE_RECURRING_DONATION,
 	UPDATE_RECURRING_DONATION,
 	UPDATE_RECURRING_DONATION_BY_ID,
@@ -126,14 +127,59 @@ export const fetchUserStreams = async (address: Address) => {
 	return _tokenStreams;
 };
 
-export interface ICreateRecurringDonation {
+interface ICreateRecurringDonationBase {
 	projectId: number;
 	chainId: number;
-	txHash: string;
 	superToken: IToken;
 	flowRate: bigint;
 	anonymous?: boolean;
 	isBatch?: boolean;
+}
+
+export interface ICreateDraftRecurringDonation
+	extends ICreateRecurringDonationBase {
+	isForUpdate?: boolean;
+	recurringDonationId?: string;
+}
+
+export const createDraftRecurringDonation = async ({
+	chainId,
+	projectId,
+	flowRate,
+	superToken,
+	anonymous,
+	isBatch,
+}: ICreateDraftRecurringDonation) => {
+	let draftDonationId = 0;
+	try {
+		const { data } = await client.mutate({
+			mutation: CREATE_DRAFT_RECURRING_DONATION,
+			variables: {
+				projectId,
+				networkId: chainId,
+				flowRate: flowRate.toString(),
+				currency: superToken.underlyingToken?.symbol || 'ETH',
+				anonymous,
+				isBatch,
+			},
+		});
+		draftDonationId = parseInt(data.createDraftRecurringDonation);
+		console.log('draftDonationId', draftDonationId);
+		return draftDonationId;
+	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('createDraftRecurringDonation error: ', error);
+		throw error;
+	}
+};
+
+export interface ICreateRecurringDonation extends ICreateRecurringDonationBase {
+	draftDonationId: number;
+	txHash: string;
 }
 
 export const createRecurringDonation = async ({
@@ -230,19 +276,26 @@ export const updateRecurringDonation = async (
 };
 
 export interface IEndRecurringDonation {
+	recurringDonationId: number;
 	projectId: number;
 	chainId: number;
 	txHash: string;
 	superToken: IToken;
 }
 
-export const endRecurringDonation = async (props: IEndRecurringDonation) => {
-	let donationId = 0;
-	const { chainId, txHash, projectId, superToken } = props;
+export const endRecurringDonation = async ({
+	chainId,
+	txHash,
+	projectId,
+	superToken,
+	recurringDonationId,
+}: IEndRecurringDonation) => {
+	let donationUpdateId = 0;
 	try {
 		const { data } = await client.mutate({
-			mutation: UPDATE_RECURRING_DONATION,
+			mutation: UPDATE_RECURRING_DONATION_BY_ID,
 			variables: {
+				recurringDonationId,
 				projectId,
 				networkId: chainId,
 				txHash,
@@ -250,8 +303,8 @@ export const endRecurringDonation = async (props: IEndRecurringDonation) => {
 				status: ERecurringDonationStatus.ENDED,
 			},
 		});
-		donationId = parseInt(data.updateRecurringDonationParams.id);
-		return donationId;
+		donationUpdateId = parseInt(data.updateRecurringDonationParamsById.id);
+		return donationUpdateId;
 	} catch (error: any) {
 		captureException(error, {
 			tags: {

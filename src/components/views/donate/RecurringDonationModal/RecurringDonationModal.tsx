@@ -31,6 +31,8 @@ import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { ChainType } from '@/types/config';
 import {
+	ICreateDraftRecurringDonation,
+	createDraftRecurringDonation,
 	createRecurringDonation,
 	updateRecurringDonation,
 	updateRecurringDonationStatus,
@@ -294,8 +296,41 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					operations.push(givethFlowOp);
 				}
 			}
+
 			let tx;
 			const isBatch = operations.length > 1;
+
+			const projectDraftDonationInfo: ICreateDraftRecurringDonation = {
+				projectId: +project.id,
+				anonymous,
+				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				flowRate: _flowRate,
+				superToken: _superToken,
+				isBatch,
+				isForUpdate: isUpdating,
+			};
+
+			// Save Draft Donation
+			const projectDraftDonationId = await createDraftRecurringDonation(
+				projectDraftDonationInfo,
+			);
+
+			const givethDraftDonationInfo: ICreateDraftRecurringDonation = {
+				projectId: config.GIVETH_PROJECT_ID,
+				anonymous,
+				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				flowRate: givethFlowRate,
+				superToken: _superToken,
+				isBatch,
+				isForUpdate: isUpdating,
+			};
+			let givethDraftDonationId = 0;
+			if (isDonatingToGiveth) {
+				givethDraftDonationId = await createDraftRecurringDonation(
+					givethDraftDonationInfo,
+				);
+			}
+
 			if (isBatch) {
 				const batchOp = sf.batchCall(operations);
 				tx = await batchOp.exec(signer);
@@ -307,13 +342,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			let projectDonationId = 0;
 			try {
 				const projectDonationInfo = {
-					projectId: +project.id,
-					anonymous,
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					...projectDraftDonationInfo,
 					txHash: tx.hash,
-					flowRate: _flowRate,
-					superToken: _superToken,
-					isBatch,
+					draftDonationId: projectDraftDonationId,
 				};
 				if (isUpdating) {
 					console.log('Start Update Project Donation Info');
@@ -340,13 +371,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			let givethDonationId = 0;
 			if (isDonatingToGiveth) {
 				const givethDonationInfo = {
-					projectId: config.GIVETH_PROJECT_ID,
-					anonymous,
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					...givethDraftDonationInfo,
 					txHash: tx.hash,
-					flowRate: givethFlowRate,
-					superToken: _superToken,
-					isBatch,
+					draftDonationId: givethDraftDonationId,
 				};
 				try {
 					if (givethOldStream) {
