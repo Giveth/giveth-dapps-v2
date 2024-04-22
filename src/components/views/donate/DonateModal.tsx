@@ -152,7 +152,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 
 		setTimeout(() => {
 			closeModal();
-			setSuccessDonation({ txHash: txHashArray, givBackEligible });
+			setSuccessDonation({
+				txHash: txHashArray,
+				givBackEligible,
+			});
 		}, 4000);
 	};
 

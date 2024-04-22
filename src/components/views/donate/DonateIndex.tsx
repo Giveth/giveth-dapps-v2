@@ -41,7 +41,7 @@ import { DonatePageProjectDescription } from './DonatePageProjectDescription';
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isMobile } = useDetectDevice();
-	const { project, isSuccessDonation, hasActiveQFRound } = useDonateData();
+	const { project, successDonation, hasActiveQFRound } = useDonateData();
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
@@ -58,60 +58,62 @@ const DonateIndex: FC = () => {
 
 	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
 
-	return isRecurringActive && isSuccessDonation ? (
-		<>
-			<DonateHeader />
-			<DonateContainer>
-				<SuccessView />
-			</DonateContainer>
-		</>
-	) : isRecurringActive ? (
-		<>
-			<DonateHeader />
-			{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
-				<PassportBanner />
-			)}
-			<DonateContainer>
-				{/* <PurchaseXDAI /> */}
-				{alreadyDonated && isRecurringTab && (
-					<AlreadyDonatedWrapper>
-						<IconDonation24 />
-						<SublineBold>
-							{formatMessage({
-								id: 'component.already_donated.incorrect_estimate',
-							})}
-						</SublineBold>
-					</AlreadyDonatedWrapper>
+	return isRecurringActive ? (
+		successDonation ? (
+			<>
+				<DonateHeader />
+				<DonateContainer>
+					<SuccessView />
+				</DonateContainer>
+			</>
+		) : (
+			<>
+				<DonateHeader />
+				{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
+					<PassportBanner />
 				)}
-				<NiceBanner />
-				<Row>
-					<Col xs={12} lg={6}>
-						<DonationCard />
-					</Col>
-					<Col xs={12} lg={6}>
-						<InfoWrapper>
-							<ImageWrapper>
-								<ProjectCardImage image={project.image} />
-							</ImageWrapper>
-							{!isMobile && hasActiveQFRound ? (
-								<QFSection projectData={project} />
-							) : (
-								<DonatePageProjectDescription
-									projectData={project}
-								/>
-							)}
-						</InfoWrapper>
-					</Col>
-				</Row>
-				{!isMobile && (
-					<SocialBox
-						contentType={EContentType.thisProject}
-						project={project}
-						isDonateFooter
-					/>
-				)}
-			</DonateContainer>
-		</>
+				<DonateContainer>
+					{/* <PurchaseXDAI /> */}
+					{alreadyDonated && isRecurringTab && (
+						<AlreadyDonatedWrapper>
+							<IconDonation24 />
+							<SublineBold>
+								{formatMessage({
+									id: 'component.already_donated.incorrect_estimate',
+								})}
+							</SublineBold>
+						</AlreadyDonatedWrapper>
+					)}
+					<NiceBanner />
+					<Row>
+						<Col xs={12} lg={6}>
+							<DonationCard />
+						</Col>
+						<Col xs={12} lg={6}>
+							<InfoWrapper>
+								<ImageWrapper>
+									<ProjectCardImage image={project.image} />
+								</ImageWrapper>
+								{!isMobile && hasActiveQFRound ? (
+									<QFSection projectData={project} />
+								) : (
+									<DonatePageProjectDescription
+										projectData={project}
+									/>
+								)}
+							</InfoWrapper>
+						</Col>
+					</Row>
+					{!isMobile && (
+						<SocialBox
+							contentType={EContentType.thisProject}
+							project={project}
+							isDonateFooter
+						/>
+					)}
+				</DonateContainer>
+			</>
+		)
 	) : (
 		<>
 			<BigArc />
@@ -133,14 +135,10 @@ const DonateIndex: FC = () => {
 				<Sections>
 					<ProjectCardSelector />
 					<Right>
-						{isSuccessDonation ? (
-							<SuccessView />
-						) : (
-							<CryptoDonation />
-						)}
+						{successDonation ? <SuccessView /> : <CryptoDonation />}
 					</Right>
 				</Sections>
-				{isSuccessDonation && <DonationInfo />}
+				{successDonation && <DonationInfo />}
 				{!isMobile && (
 					<SocialBox
 						contentType={EContentType.thisProject}
