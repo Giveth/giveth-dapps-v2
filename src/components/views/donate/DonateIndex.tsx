@@ -93,7 +93,9 @@ const DonateIndex: FC = () => {
 							<ImageWrapper>
 								<ProjectCardImage image={project.image} />
 							</ImageWrapper>
-							{!isMobile && hasActiveQFRound ? (
+							{!isMobile &&
+							!isRecurringTab &&
+							hasActiveQFRound ? (
 								<QFSection projectData={project} />
 							) : (
 								<DonatePageProjectDescription
