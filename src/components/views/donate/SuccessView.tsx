@@ -146,7 +146,7 @@ const Wrapper = styled(Flex)`
 `;
 
 const SocialBoxWrapper = styled.div`
-	margin: -50px 0;
+	margin: 0 0 -50px;
 `;
 
 const GiverH4 = styled(H4)`
