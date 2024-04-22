@@ -279,7 +279,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 			}
 		} catch (error: any) {
 			setState(
-				error?.code === 4001
+				error?.cause.code === 4001
 					? HarvestStates.HARVEST
 					: HarvestStates.ERROR,
 			);
