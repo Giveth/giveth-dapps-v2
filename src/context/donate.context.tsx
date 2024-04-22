@@ -23,7 +23,7 @@ export interface TxHashWithChainType {
 interface ISuccessDonation {
 	txHash: TxHashWithChainType[];
 	givBackEligible?: boolean;
-	includedInQF?: boolean;
+	excludeFromQF?: boolean;
 }
 
 interface IDonateContext {
