@@ -21,16 +21,16 @@ export const TokenIconWithGIVBack: FC<ITokenIconWithGIVBackProps> = ({
 	isSuperToken = false,
 	...props
 }) => {
-	return showGiveBack ? (
+	return (
 		<TokenIconWrapper $isSuperToken={isSuperToken}>
 			<TokenIcon {...props} />
 			{isSuperToken && <SecondGreenDot />}
-			<GIVBackBadge>
-				<IconGIVBack16 size={16} color={brandColors.giv[500]} />
-			</GIVBackBadge>
+			{showGiveBack && (
+				<GIVBackBadge>
+					<IconGIVBack16 size={16} color={brandColors.giv[500]} />
+				</GIVBackBadge>
+			)}
 		</TokenIconWrapper>
-	) : (
-		<TokenIcon {...props} />
 	);
 };
 

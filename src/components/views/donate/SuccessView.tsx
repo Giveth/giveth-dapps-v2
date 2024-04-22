@@ -33,8 +33,12 @@ import { DonationInfo } from './DonationInfo';
 
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
-	const { isSuccessDonation, hasActiveQFRound, project } = useDonateData();
-	const { givBackEligible, txHash = [] } = isSuccessDonation || {};
+	const { successDonation, hasActiveQFRound, project } = useDonateData();
+	const {
+		givBackEligible,
+		txHash = [],
+		excludeFromQF,
+	} = successDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 	const isSafeEnv = useIsSafeEnvironment();
 	const [givethSlug, setGivethSlug] = useState<string>('');
@@ -86,7 +90,10 @@ export const SuccessView: FC = () => {
 						<ImageWrapper>
 							<ProjectCardImage image={project.image} />
 						</ImageWrapper>
-						<DonatePageProjectDescription projectData={project} />
+						<DonatePageProjectDescription
+							projectData={project}
+							showRaised={false}
+						/>
 					</InfoWrapper>
 				</Col>
 				<Col xs={12} lg={6}>
@@ -120,7 +127,8 @@ export const SuccessView: FC = () => {
 								<br />
 							</>
 						)}
-						{!isSafeEnv &&
+						{!excludeFromQF &&
+							!isSafeEnv &&
 							hasActiveQFRound &&
 							passportState !== EPassportState.LOADING &&
 							isOnEligibleNetworks && <QFToast />}
@@ -146,7 +154,7 @@ const Wrapper = styled(Flex)`
 `;
 
 const SocialBoxWrapper = styled.div`
-	margin: -50px 0;
+	margin: 0 0 -50px;
 `;
 
 const GiverH4 = styled(H4)`

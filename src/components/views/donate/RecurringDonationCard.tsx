@@ -123,8 +123,6 @@ export const RecurringDonationCard = () => {
 				? undefined
 				: selectedToken?.token.id,
 		address: address,
-		// watch: true,
-		// cacheTime: 5_000,
 	});
 
 	useEffect(() => {
@@ -172,6 +170,7 @@ export const RecurringDonationCard = () => {
 		: brandColors.giv;
 
 	const handleDonate = () => {
+		console.log('isSignedIn', isSignedIn);
 		const hasAnchorContract = project.anchorContracts[0]?.isActive;
 		if (hasAnchorContract) {
 			if (isSignedIn) {
@@ -224,10 +223,13 @@ export const RecurringDonationCard = () => {
 		}
 	}, [selectedToken, address, tokenStreams, project.anchorContracts]);
 
-	console.log(
-		formatUnits(totalStreamPerSec * ONE_MONTH_SECONDS, 18),
-		'totalStreamPerSec',
-	);
+	const isFormInvalid =
+		selectedToken === undefined ||
+		tokenBalance === undefined ||
+		amount === 0n ||
+		percentage === 0 ||
+		isTotalStreamExceed ||
+		amount > tokenBalance;
 
 	return (
 		<>
@@ -255,11 +257,6 @@ export const RecurringDonationCard = () => {
 				</LearnMore>
 			</Desc>
 			<RecurringSection>
-				{/* <RecurringSectionTitle>
-					{formatMessage({
-						id: 'label.creating_a_monthly_recurring_donation',
-					})}
-				</RecurringSectionTitle> */}
 				<Flex $flexDirection='column' gap='8px'>
 					<Flex gap='8px' $alignItems='center'>
 						<Caption $medium>
@@ -528,14 +525,7 @@ export const RecurringDonationCard = () => {
 					<ActionButton
 						label={formatMessage({ id: 'label.confirm' })}
 						onClick={handleDonate}
-						disabled={
-							selectedToken === undefined ||
-							tokenBalance === undefined ||
-							amount === 0n ||
-							isTotalStreamExceed ||
-							amount > tokenBalance ||
-							percentage === 0
-						}
+						disabled={isFormInvalid}
 					/>
 				) : (
 					<ActionButton
@@ -658,14 +648,7 @@ export const RecurringDonationCard = () => {
 					<ActionButton
 						label={formatMessage({ id: 'label.donate' })}
 						onClick={handleDonate}
-						disabled={
-							selectedToken === undefined ||
-							tokenBalance === undefined ||
-							amount === 0n ||
-							percentage === 0 ||
-							isTotalStreamExceed ||
-							amount > tokenBalance
-						}
+						disabled={isFormInvalid}
 					/>
 				</>
 			)}

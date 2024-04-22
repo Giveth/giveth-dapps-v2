@@ -141,7 +141,7 @@ export const userSlice = createSlice({
 			.addCase(countReferralClick.fulfilled, state => {
 				state.isLoading = false;
 			})
-			//We want it to call when fullfilled and rejected
+			//We want it to call when fulfilled and rejected
 			.addCase(signOut.pending, state => {
 				signOutUser(state);
 			});
