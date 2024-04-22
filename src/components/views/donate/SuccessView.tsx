@@ -33,8 +33,8 @@ import { DonationInfo } from './DonationInfo';
 
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
-	const { isSuccessDonation, hasActiveQFRound, project } = useDonateData();
-	const { givBackEligible, txHash = [] } = isSuccessDonation || {};
+	const { successDonation, hasActiveQFRound, project } = useDonateData();
+	const { givBackEligible, txHash = [] } = successDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 	const isSafeEnv = useIsSafeEnvironment();
 	const [givethSlug, setGivethSlug] = useState<string>('');

@@ -40,7 +40,7 @@ import { DonatePageProjectDescription } from './DonatePageProjectDescription';
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isMobile } = useDetectDevice();
-	const { project, isSuccessDonation, hasActiveQFRound } = useDonateData();
+	const { project, successDonation, hasActiveQFRound } = useDonateData();
 	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
@@ -54,7 +54,7 @@ const DonateIndex: FC = () => {
 		};
 	}, [dispatch]);
 
-	return isRecurringActive && isSuccessDonation ? (
+	return isRecurringActive && successDonation ? (
 		<>
 			<DonateHeader />
 			<DonateContainer>
@@ -129,14 +129,10 @@ const DonateIndex: FC = () => {
 				<Sections>
 					<ProjectCardSelector />
 					<Right>
-						{isSuccessDonation ? (
-							<SuccessView />
-						) : (
-							<CryptoDonation />
-						)}
+						{successDonation ? <SuccessView /> : <CryptoDonation />}
 					</Right>
 				</Sections>
-				{isSuccessDonation && <DonationInfo />}
+				{successDonation && <DonationInfo />}
 				{!isMobile && (
 					<SocialBox
 						contentType={EContentType.thisProject}
