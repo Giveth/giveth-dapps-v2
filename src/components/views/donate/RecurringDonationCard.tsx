@@ -170,6 +170,7 @@ export const RecurringDonationCard = () => {
 		: brandColors.giv;
 
 	const handleDonate = () => {
+		console.log('isSignedIn', isSignedIn);
 		const hasAnchorContract = project.anchorContracts[0]?.isActive;
 		if (hasAnchorContract) {
 			if (isSignedIn) {
