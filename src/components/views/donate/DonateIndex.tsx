@@ -56,6 +56,8 @@ const DonateIndex: FC = () => {
 		};
 	}, [dispatch]);
 
+	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
+
 	return isRecurringActive && isSuccessDonation ? (
 		<>
 			<DonateHeader />
@@ -71,17 +73,16 @@ const DonateIndex: FC = () => {
 			)}
 			<DonateContainer>
 				{/* <PurchaseXDAI /> */}
-				{alreadyDonated &&
-					router.query.tab?.toString() !== ETabs.RECURRING && (
-						<AlreadyDonatedWrapper>
-							<IconDonation24 />
-							<SublineBold>
-								{formatMessage({
-									id: 'component.already_donated.incorrect_estimate',
-								})}
-							</SublineBold>
-						</AlreadyDonatedWrapper>
-					)}
+				{alreadyDonated && isRecurringTab && (
+					<AlreadyDonatedWrapper>
+						<IconDonation24 />
+						<SublineBold>
+							{formatMessage({
+								id: 'component.already_donated.incorrect_estimate',
+							})}
+						</SublineBold>
+					</AlreadyDonatedWrapper>
+				)}
 				<NiceBanner />
 				<Row>
 					<Col xs={12} lg={6}>
