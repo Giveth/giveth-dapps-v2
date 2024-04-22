@@ -12,6 +12,7 @@ import {
 	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { BigArc } from '@/components/styled-components/Arc';
 import SocialBox from '../../DonateSocialBox';
 import NiceBanner from './NiceBanner';
@@ -26,7 +27,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
-import { DonationCard } from './DonationCard';
+import { DonationCard, ETabs } from './DonationCard';
 import { SuccessView } from './SuccessView';
 import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
@@ -45,6 +46,7 @@ const DonateIndex: FC = () => {
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
 	const { isOnSolana } = useGeneralWallet();
+	const router = useRouter();
 
 	useEffect(() => {
 		if (!isRecurringActive) return;
@@ -54,60 +56,64 @@ const DonateIndex: FC = () => {
 		};
 	}, [dispatch]);
 
-	return isRecurringActive && successDonation ? (
-		<>
-			<DonateHeader />
-			<DonateContainer>
-				<SuccessView />
-			</DonateContainer>
-		</>
-	) : isRecurringActive ? (
-		<>
-			<DonateHeader />
-			{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
-				<PassportBanner />
-			)}
-			<DonateContainer>
-				{/* <PurchaseXDAI /> */}
-				{alreadyDonated && (
-					<AlreadyDonatedWrapper>
-						<IconDonation24 />
-						<SublineBold>
-							{formatMessage({
-								id: 'component.already_donated.incorrect_estimate',
-							})}
-						</SublineBold>
-					</AlreadyDonatedWrapper>
+	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
+
+	return isRecurringActive ? (
+		successDonation ? (
+			<>
+				<DonateHeader />
+				<DonateContainer>
+					<SuccessView />
+				</DonateContainer>
+			</>
+		) : (
+			<>
+				<DonateHeader />
+				{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
+					<PassportBanner />
 				)}
-				<NiceBanner />
-				<Row>
-					<Col xs={12} lg={6}>
-						<DonationCard />
-					</Col>
-					<Col xs={12} lg={6}>
-						<InfoWrapper>
-							<ImageWrapper>
-								<ProjectCardImage image={project.image} />
-							</ImageWrapper>
-							{!isMobile && hasActiveQFRound ? (
-								<QFSection projectData={project} />
-							) : (
-								<DonatePageProjectDescription
-									projectData={project}
-								/>
-							)}
-						</InfoWrapper>
-					</Col>
-				</Row>
-				{!isMobile && (
-					<SocialBox
-						contentType={EContentType.thisProject}
-						project={project}
-						isDonateFooter
-					/>
-				)}
-			</DonateContainer>
-		</>
+				<DonateContainer>
+					{/* <PurchaseXDAI /> */}
+					{alreadyDonated && isRecurringTab && (
+						<AlreadyDonatedWrapper>
+							<IconDonation24 />
+							<SublineBold>
+								{formatMessage({
+									id: 'component.already_donated.incorrect_estimate',
+								})}
+							</SublineBold>
+						</AlreadyDonatedWrapper>
+					)}
+					<NiceBanner />
+					<Row>
+						<Col xs={12} lg={6}>
+							<DonationCard />
+						</Col>
+						<Col xs={12} lg={6}>
+							<InfoWrapper>
+								<ImageWrapper>
+									<ProjectCardImage image={project.image} />
+								</ImageWrapper>
+								{!isMobile && hasActiveQFRound ? (
+									<QFSection projectData={project} />
+								) : (
+									<DonatePageProjectDescription
+										projectData={project}
+									/>
+								)}
+							</InfoWrapper>
+						</Col>
+					</Row>
+					{!isMobile && (
+						<SocialBox
+							contentType={EContentType.thisProject}
+							project={project}
+							isDonateFooter
+						/>
+					)}
+				</DonateContainer>
+			</>
+		)
 	) : (
 		<>
 			<BigArc />

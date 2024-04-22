@@ -18,17 +18,16 @@ import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 
-enum ETabs {
-	ONE_TIME,
-	RECURRING,
+export enum ETabs {
+	ONE_TIME = 'on-time',
+	RECURRING = 'recurring',
 }
 
 export const DonationCard = () => {
 	const router = useRouter();
-	const defaultTab =
-		router.query.tab === 'recurring' ? ETabs.RECURRING : ETabs.ONE_TIME;
-
-	const [tab, setTab] = useState(defaultTab);
+	const [tab, setTab] = useState(
+		router.query.tab === ETabs.RECURRING ? ETabs.RECURRING : ETabs.ONE_TIME,
+	);
 	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
 
@@ -57,7 +56,7 @@ export const DonationCard = () => {
 						setTab(ETabs.ONE_TIME);
 						router.push(
 							{
-								query: { ...router.query, tab: 'on-time' },
+								query: { ...router.query, tab: ETabs.ONE_TIME },
 							},
 							undefined,
 							{ shallow: true },
@@ -77,7 +76,7 @@ export const DonationCard = () => {
 								{
 									query: {
 										...router.query,
-										tab: 'recurring',
+										tab: ETabs.RECURRING,
 									},
 								},
 								undefined,
