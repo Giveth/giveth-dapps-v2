@@ -36,7 +36,7 @@ interface IModifySectionProps {
 	refetch: any;
 	isRefetching: boolean;
 	error?: string;
-	minRemainingBalance?: bigint;
+	maxAmount: bigint;
 	tooltipText?: string;
 	modifySectionPlace: EModifySectionPlace;
 }
@@ -49,7 +49,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 	refetch,
 	isRefetching,
 	error,
-	minRemainingBalance = 0n,
+	maxAmount,
 	tooltipText,
 	modifySectionPlace,
 }) => {
@@ -59,7 +59,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 	const handleSetMaxAmount = () => {
 		if (!balance || !balance.value) return; // If balance is not available, return
 		const maxAmountDisplay = truncateToDecimalPlaces(
-			formatUnits(balance.value, balance.decimals),
+			formatUnits(maxAmount, balance.decimals),
 			6,
 		).toString(); // Convert your balance value to string properly
 		setDisplayAmount(maxAmountDisplay); // Update the display amount
@@ -131,10 +131,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					{formatMessage({ id: 'label.available' })}:
 					{balance
 						? truncateToDecimalPlaces(
-								formatUnits(
-									balance.value - minRemainingBalance,
-									balance.decimals,
-								),
+								formatUnits(maxAmount, balance.decimals),
 								6,
 							)
 						: '--'}

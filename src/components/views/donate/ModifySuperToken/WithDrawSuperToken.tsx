@@ -123,10 +123,11 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 		}
 	};
 
+	const maxAmount = SuperTokenBalance
+		? SuperTokenBalance.value - minRemainingBalance
+		: 0n;
 	const isInvalidAmount =
-		amount <= 0 ||
-		SuperTokenBalance === undefined ||
-		amount > SuperTokenBalance.value - minRemainingBalance;
+		amount <= 0 || SuperTokenBalance === undefined || amount > maxAmount;
 
 	/// this one needs some thought - we should allow for a buffer of 40 seconds (or more) in the balance we show to the user
 	// - this might prevent them from trying to withdraw more than they have and getting an error
@@ -158,7 +159,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 									? 'invalid_amount'
 									: undefined
 							}
-							minRemainingBalance={minRemainingBalance}
+							maxAmount={maxAmount > 0n ? maxAmount : 0n}
 							tooltipText='tooltip.withdraw_stream_balance'
 							modifySectionPlace={EModifySectionPlace.WITHDRAW}
 						/>
