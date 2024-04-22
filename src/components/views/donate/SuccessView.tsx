@@ -34,7 +34,11 @@ import { DonationInfo } from './DonationInfo';
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
 	const { successDonation, hasActiveQFRound, project } = useDonateData();
-	const { givBackEligible, txHash = [] } = successDonation || {};
+	const {
+		givBackEligible,
+		txHash = [],
+		excludeFromQF,
+	} = successDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 	const isSafeEnv = useIsSafeEnvironment();
 	const [givethSlug, setGivethSlug] = useState<string>('');
@@ -120,7 +124,8 @@ export const SuccessView: FC = () => {
 								<br />
 							</>
 						)}
-						{!isSafeEnv &&
+						{!excludeFromQF &&
+							!isSafeEnv &&
 							hasActiveQFRound &&
 							passportState !== EPassportState.LOADING &&
 							isOnEligibleNetworks && <QFToast />}
