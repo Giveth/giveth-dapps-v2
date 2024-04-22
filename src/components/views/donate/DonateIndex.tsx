@@ -42,12 +42,11 @@ const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isMobile } = useDetectDevice();
 	const { project, isSuccessDonation, hasActiveQFRound } = useDonateData();
-	let alreadyDonated = useAlreadyDonatedToProject(project);
+	const alreadyDonated = useAlreadyDonatedToProject(project);
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
 	const { isOnSolana } = useGeneralWallet();
 	const router = useRouter();
-	alreadyDonated = true;
 
 	useEffect(() => {
 		if (!isRecurringActive) return;
