@@ -11,7 +11,7 @@ const YourApp = () => {
 		<div>
 			<w3m-button />
 			<div>
-				<button onClick={() => {}}>Test Button1</button>
+				<button onClick={() => {}}>Test Button</button>
 			</div>
 			{failedModalType && (
 				<FailedDonation
