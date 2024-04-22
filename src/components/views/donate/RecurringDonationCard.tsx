@@ -229,6 +229,14 @@ export const RecurringDonationCard = () => {
 		'totalStreamPerSec',
 	);
 
+	const isFormInvalid =
+		selectedToken === undefined ||
+		tokenBalance === undefined ||
+		amount === 0n ||
+		percentage === 0 ||
+		isTotalStreamExceed ||
+		amount > tokenBalance;
+
 	return (
 		<>
 			<Title weight={700}>
@@ -528,14 +536,7 @@ export const RecurringDonationCard = () => {
 					<ActionButton
 						label={formatMessage({ id: 'label.confirm' })}
 						onClick={handleDonate}
-						disabled={
-							selectedToken === undefined ||
-							tokenBalance === undefined ||
-							amount === 0n ||
-							isTotalStreamExceed ||
-							amount > tokenBalance ||
-							percentage === 0
-						}
+						disabled={isFormInvalid}
 					/>
 				) : (
 					<ActionButton
@@ -658,14 +659,7 @@ export const RecurringDonationCard = () => {
 					<ActionButton
 						label={formatMessage({ id: 'label.donate' })}
 						onClick={handleDonate}
-						disabled={
-							selectedToken === undefined ||
-							tokenBalance === undefined ||
-							amount === 0n ||
-							percentage === 0 ||
-							isTotalStreamExceed ||
-							amount > tokenBalance
-						}
+						disabled={isFormInvalid}
 					/>
 				</>
 			)}
