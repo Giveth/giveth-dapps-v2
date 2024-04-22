@@ -21,8 +21,6 @@ const ProjectDonationsIndex = () => {
 
 	const { selectedQF, isRecurringSelected } = projectDonationSwiperState;
 
-	console.log('SelectedQF', selectedQF);
-
 	return (
 		<>
 			<QfRoundSelector
