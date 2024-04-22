@@ -123,8 +123,6 @@ export const RecurringDonationCard = () => {
 				? undefined
 				: selectedToken?.token.id,
 		address: address,
-		// watch: true,
-		// cacheTime: 5_000,
 	});
 
 	useEffect(() => {
@@ -258,11 +256,6 @@ export const RecurringDonationCard = () => {
 				</LearnMore>
 			</Desc>
 			<RecurringSection>
-				{/* <RecurringSectionTitle>
-					{formatMessage({
-						id: 'label.creating_a_monthly_recurring_donation',
-					})}
-				</RecurringSectionTitle> */}
 				<Flex $flexDirection='column' gap='8px'>
 					<Flex gap='8px' $alignItems='center'>
 						<Caption $medium>
