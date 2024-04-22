@@ -224,11 +224,6 @@ export const RecurringDonationCard = () => {
 		}
 	}, [selectedToken, address, tokenStreams, project.anchorContracts]);
 
-	console.log(
-		formatUnits(totalStreamPerSec * ONE_MONTH_SECONDS, 18),
-		'totalStreamPerSec',
-	);
-
 	const isFormInvalid =
 		selectedToken === undefined ||
 		tokenBalance === undefined ||
