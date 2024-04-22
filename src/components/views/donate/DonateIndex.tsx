@@ -74,7 +74,7 @@ const DonateIndex: FC = () => {
 				)}
 				<DonateContainer>
 					{/* <PurchaseXDAI /> */}
-					{alreadyDonated && isRecurringTab && (
+					{alreadyDonated && !isRecurringTab && (
 						<AlreadyDonatedWrapper>
 							<IconDonation24 />
 							<SublineBold>
