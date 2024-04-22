@@ -12,6 +12,7 @@ import {
 	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { BigArc } from '@/components/styled-components/Arc';
 import SocialBox from '../../DonateSocialBox';
 import NiceBanner from './NiceBanner';
@@ -26,7 +27,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
-import { DonationCard } from './DonationCard';
+import { DonationCard, ETabs } from './DonationCard';
 import { SuccessView } from './SuccessView';
 import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
@@ -41,10 +42,12 @@ const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
 	const { isMobile } = useDetectDevice();
 	const { project, isSuccessDonation, hasActiveQFRound } = useDonateData();
-	const alreadyDonated = useAlreadyDonatedToProject(project);
+	let alreadyDonated = useAlreadyDonatedToProject(project);
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
 	const { isOnSolana } = useGeneralWallet();
+	const router = useRouter();
+	alreadyDonated = true;
 
 	useEffect(() => {
 		if (!isRecurringActive) return;
@@ -69,16 +72,17 @@ const DonateIndex: FC = () => {
 			)}
 			<DonateContainer>
 				{/* <PurchaseXDAI /> */}
-				{alreadyDonated && (
-					<AlreadyDonatedWrapper>
-						<IconDonation24 />
-						<SublineBold>
-							{formatMessage({
-								id: 'component.already_donated.incorrect_estimate',
-							})}
-						</SublineBold>
-					</AlreadyDonatedWrapper>
-				)}
+				{alreadyDonated &&
+					router.query.tab?.toString() !== ETabs.RECURRING && (
+						<AlreadyDonatedWrapper>
+							<IconDonation24 />
+							<SublineBold>
+								{formatMessage({
+									id: 'component.already_donated.incorrect_estimate',
+								})}
+							</SublineBold>
+						</AlreadyDonatedWrapper>
+					)}
 				<NiceBanner />
 				<Row>
 					<Col xs={12} lg={6}>
