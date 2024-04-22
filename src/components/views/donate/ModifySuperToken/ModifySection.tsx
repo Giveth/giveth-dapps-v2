@@ -40,6 +40,7 @@ interface IModifySectionProps {
 	tooltipText?: string;
 	modifySectionPlace: EModifySectionPlace;
 }
+
 export const ModifySection: FC<IModifySectionProps> = ({
 	titleLabel,
 	token,
@@ -54,43 +55,34 @@ export const ModifySection: FC<IModifySectionProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const [displayAmount, setDisplayAmount] = useState('');
+
+	const handleSetMaxAmount = () => {
+		if (!balance || !balance.value) return; // If balance is not available, return
+		const maxAmountDisplay = truncateToDecimalPlaces(
+			formatUnits(balance.value, balance.decimals),
+			6,
+		).toString(); // Convert your balance value to string properly
+		setDisplayAmount(maxAmountDisplay); // Update the display amount
+		setAmount(balance.value); // Set the amount to the balance value
+	};
+
+	const _token = findTokenByAddress(token?.id);
 	const ProperGlink =
 		modifySectionPlace === EModifySectionPlace.DEPOSIT
 			? CustomGLink
 			: GLink;
 
-	const maxAmount = balance?.value ? balance.value - minRemainingBalance : 0n;
-
-	const handleSetMaxAmount = () => {
-		if (balance && balance.value !== undefined) {
-			const maxAmountDisplay = truncateToDecimalPlaces(
-				formatUnits(maxAmount > 0n ? maxAmount : 0n, balance.decimals),
-				6,
-			).toString(); // Convert your balance value to string properly
-			setDisplayAmount(maxAmountDisplay); // Update the display amount
-			setAmount(balance.value); // Set the amount to the balance value
-		}
-	};
-
-	const _token = findTokenByAddress(token?.id);
-
 	return (
 		<TopUpSection $flexDirection='column' gap='8px'>
 			<Flex gap='8px' $alignItems='center'>
-				<Caption $medium>
-					{formatMessage({
-						id: titleLabel,
-					})}
-				</Caption>
+				<Caption $medium>{formatMessage({ id: titleLabel })}</Caption>
 				<IconWithTooltip
 					icon={<IconHelpFilled16 />}
 					direction='right'
 					align='bottom'
 				>
 					<FlowRateTooltip>
-						{formatMessage({
-							id: tooltipText,
-						})}
+						{formatMessage({ id: tooltipText })}
 					</FlowRateTooltip>
 				</IconWithTooltip>
 			</Flex>
@@ -113,7 +105,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 				</SelectTokenWrapper>
 				<Input
 					setAmount={setAmount}
-					disabled={token === undefined}
+					disabled={!token}
 					decimals={token?.decimals}
 					displayAmount={
 						modifySectionPlace === EModifySectionPlace.DEPOSIT
@@ -130,15 +122,13 @@ export const ModifySection: FC<IModifySectionProps> = ({
 			<Flex gap='4px'>
 				<ProperGlink
 					size='Small'
-					onClick={() =>
-						modifySectionPlace === EModifySectionPlace.DEPOSIT &&
-						handleSetMaxAmount()
+					onClick={
+						modifySectionPlace === EModifySectionPlace.DEPOSIT
+							? handleSetMaxAmount
+							: undefined
 					}
 				>
-					{formatMessage({
-						id: 'label.available',
-					})}
-					:{' '}
+					{formatMessage({ id: 'label.available' })}:
 					{balance
 						? truncateToDecimalPlaces(
 								formatUnits(
@@ -157,6 +147,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 	);
 };
 
+// Styled Components
 const TopUpSection = styled(Flex)``;
 
 const SelectTokenWrapper = styled(Flex)`
@@ -164,12 +155,7 @@ const SelectTokenWrapper = styled(Flex)`
 	gap: 16px;
 	padding: 13px 16px;
 `;
-
-interface IInputWrapper {
-	$hasError: boolean;
-}
-
-const InputWrapper = styled(Flex)<IInputWrapper>`
+const InputWrapper = styled(Flex)<{ $hasError: boolean }>`
 	border: 2px solid
 		${props =>
 			props.$hasError
