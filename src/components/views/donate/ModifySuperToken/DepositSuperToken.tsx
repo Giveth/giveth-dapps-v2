@@ -177,6 +177,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 							isRefetching={isRefetching}
 							tooltipText='tooltip.deposit_stream_balance'
 							modifySectionPlace={EModifySectionPlace.DEPOSIT}
+							maxAmount={balance?.value || 0n}
 						/>
 						<StreamInfo
 							tokenStreams={tokenStreams}
