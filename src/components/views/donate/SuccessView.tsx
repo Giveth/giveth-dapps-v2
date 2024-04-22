@@ -90,7 +90,10 @@ export const SuccessView: FC = () => {
 						<ImageWrapper>
 							<ProjectCardImage image={project.image} />
 						</ImageWrapper>
-						<DonatePageProjectDescription projectData={project} />
+						<DonatePageProjectDescription
+							projectData={project}
+							showRaised={false}
+						/>
 					</InfoWrapper>
 				</Col>
 				<Col xs={12} lg={6}>
