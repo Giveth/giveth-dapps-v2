@@ -12,6 +12,7 @@ import {
 	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
 import { BigArc } from '@/components/styled-components/Arc';
 import SocialBox from '../../DonateSocialBox';
 import NiceBanner from './NiceBanner';
@@ -26,7 +27,7 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowHeader } from '@/features/general/general.slice';
 import { DonateHeader } from './DonateHeader';
-import { DonationCard } from './DonationCard';
+import { DonationCard, ETabs } from './DonationCard';
 import { SuccessView } from './SuccessView';
 import QFSection from '../project/projectActionCard/QFSection';
 import ProjectCardImage from '@/components/project-card/ProjectCardImage';
@@ -45,6 +46,7 @@ const DonateIndex: FC = () => {
 	const dispatch = useAppDispatch();
 	const isSafeEnv = useIsSafeEnvironment();
 	const { isOnSolana } = useGeneralWallet();
+	const router = useRouter();
 
 	useEffect(() => {
 		if (!isRecurringActive) return;
@@ -53,6 +55,8 @@ const DonateIndex: FC = () => {
 			dispatch(setShowHeader(true));
 		};
 	}, [dispatch]);
+
+	const isRecurringTab = router.query.tab?.toString() === ETabs.RECURRING;
 
 	return isRecurringActive && isSuccessDonation ? (
 		<>
@@ -69,7 +73,7 @@ const DonateIndex: FC = () => {
 			)}
 			<DonateContainer>
 				{/* <PurchaseXDAI /> */}
-				{alreadyDonated && (
+				{alreadyDonated && isRecurringTab && (
 					<AlreadyDonatedWrapper>
 						<IconDonation24 />
 						<SublineBold>
