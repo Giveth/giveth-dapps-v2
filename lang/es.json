@@ -1579,6 +1579,8 @@
 	"testfilter": "testfilter",
 	"toast.modify_stream_balance": "Depositar o retirar tokens de su saldo de transmisión afectará cuán pronto necesitará recargar.",
 	"toast.warning_stream_balance": "Retirar una gran parte de su saldo de tokens transmisibles afectará dramáticamente cuándo terminarán sus donaciones recurrentes activas en ese token.",
+	"toast.deposit_to_your_stream_balance_was_successful": "El ingreso en su Saldo de Stream se ha realizado correctamente.",
+	"toast.withdrawal_from_your_stream_balance_was_successful": "La retirada de su Saldo de Stream se ha realizado correctamente.",
 	"tooltip.deposit_stream_balance": "Depositar tokens aumentará tu saldo de transmisión y, por lo tanto, extenderá la duración de tus donaciones recurrentes activas.",
 	"tooltip.donation.matching": "Esta estimación se basa en las donaciones realizadas hasta ahora en esta ronda de financiamiento cuadrático y no tiene en cuenta el análisis de fraude. El monto real de fondos complementarios puede variar.",
 	"tooltip.flowrate": "Las donaciones recurrentes se toman de tu Saldo de Transmisión. Deposita tokens y mantén tu saldo para habilitar las donaciones recurrentes.",

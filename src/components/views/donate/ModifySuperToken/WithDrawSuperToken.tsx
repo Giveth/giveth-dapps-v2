@@ -195,6 +195,12 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 					/>
 				</Flex>
 			)}
+			{step === EModifySuperTokenSteps.WITHDRAW_CONFIRMED && (
+				<ModifyInfoToast
+					toastType={EToastType.Success}
+					withdrawalType='withdraw'
+				/>
+			)}
 			<Button
 				label={formatMessage({ id: actionButtonLabel[step] })}
 				disabled={
