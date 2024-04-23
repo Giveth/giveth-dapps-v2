@@ -86,12 +86,6 @@ const ProjectCard = (props: IProjectCard) => {
 					</div>
 				)}
 				<Description>{htmlToText(description)}</Description>
-				{!isNew && (
-					<BodyCaption>
-						{formatMessage({ id: 'label.raised' })}: $
-						{totalDonations?.toLocaleString()}
-					</BodyCaption>
-				)}
 			</CardBody>
 		</Wrapper>
 	);
