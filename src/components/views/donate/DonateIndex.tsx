@@ -37,6 +37,7 @@ import { DonationInfo } from './DonationInfo';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { isRecurringActive } from '@/configuration';
 import { DonatePageProjectDescription } from './DonatePageProjectDescription';
+import { OldSuccessView } from './OldSuccessView';
 
 const DonateIndex: FC = () => {
 	const { formatMessage } = useIntl();
@@ -137,7 +138,11 @@ const DonateIndex: FC = () => {
 				<Sections>
 					<ProjectCardSelector />
 					<Right>
-						{successDonation ? <SuccessView /> : <CryptoDonation />}
+						{successDonation ? (
+							<OldSuccessView />
+						) : (
+							<CryptoDonation />
+						)}
 					</Right>
 				</Sections>
 				{successDonation && <DonationInfo />}
