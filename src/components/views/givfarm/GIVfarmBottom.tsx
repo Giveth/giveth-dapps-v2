@@ -31,6 +31,7 @@ import StakingPoolCard from '@/components/cards/StakingCards/BaseStakingCard/Bas
 import { RegenStreamSection } from '@/components/givfarm/RegenStreamSection';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { getNetworkConfig } from '@/helpers/givpower';
+import { StakeTogetherCard } from '@/components/cards/StakingCards/BaseStakingCard/StakeTogetherCard';
 
 const renderPool = (
 	pool: SimplePoolStakingConfig | UniswapV3PoolStakingConfig,
@@ -98,13 +99,13 @@ export const GIVfarmBottom = () => {
 		<GIVfarmBottomContainer>
 			<Container>
 				<GIVfarmToolBoxRow
-					alignItems='center'
+					$alignItems='center'
 					gap='24px'
-					flexWrap
-					justifyContent='space-between'
+					$flexWrap
+					$justifyContent='space-between'
 				>
 					<NetworkSelector />
-					<ExtLinkRow alignItems='center'>
+					<ExtLinkRow $alignItems='center'>
 						<GLink
 							as='a'
 							size='Big'
@@ -120,7 +121,7 @@ export const GIVfarmBottom = () => {
 						</GLink>
 						<IconExternalLink />
 					</ExtLinkRow>
-					<ExtLinkRow alignItems='center'>
+					<ExtLinkRow $alignItems='center'>
 						<GLink
 							as='a'
 							size='Big'
@@ -157,7 +158,17 @@ export const GIVfarmBottom = () => {
 						toggleOnOff={setShowArchivedPools}
 					/>
 				</GIVfarmToolBoxRow>
-				<PoolRow>{renderPools(chainId, showArchivedPools)}</PoolRow>
+				<PoolRow>
+					{renderPools(chainId, showArchivedPools)}
+					<Col
+						sm={6}
+						lg={4}
+						key='staking_together_card'
+						style={{ alignSelf: 'flex-start' }}
+					>
+						<StakeTogetherCard />
+					</Col>
+				</PoolRow>
 				<RegenStreamSection showArchivedPools={showArchivedPools} />
 				<DaoCard />
 			</Container>

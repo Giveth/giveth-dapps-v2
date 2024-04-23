@@ -9,11 +9,11 @@ import {
 	mediaQueries,
 	neutralColors,
 	Subline,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';
-import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';
 import { useStakingPool } from '@/hooks/useStakingPool';
@@ -38,7 +38,7 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 
 	return (
 		<LockInfoContainer>
-			<Flex alignItems='baseline' gap='12px'>
+			<Flex $alignItems='baseline' gap='12px'>
 				<LockInfoTitle>Your multiplier</LockInfoTitle>
 				<MultiPlyValue weight={700}>
 					x{multipler.toFixed(2)}
@@ -55,8 +55,8 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 					</MultiPlyHelp>
 				</MultiPlyValue>
 			</Flex>
-			<LockInfoRow justifyContent='space-between'>
-				<LockInfoRowTitle medium>
+			<LockInfoRow $justifyContent='space-between'>
+				<LockInfoRowTitle $medium>
 					APR
 					<LockInfoRowHelp>
 						<IconWithTooltip
@@ -81,8 +81,8 @@ const LockInfo: FC<ILockInfo> = ({ round, amount }) => {
 					</LockInfoRowSpark>
 				</LockInfoRowValue>
 			</LockInfoRow>
-			<LockInfoRow justifyContent='space-between'>
-				<LockInfoRowTitle medium>
+			<LockInfoRow $justifyContent='space-between'>
+				<LockInfoRowTitle $medium>
 					GIVpower
 					<LockInfoRowHelp>
 						<IconWithTooltip

@@ -1,9 +1,13 @@
-import { brandColors, neutralColors, Lead } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	neutralColors,
+	Lead,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { mediaQueries, searchSuggestions } from '@/lib/constants/constants';
 import { IMainCategory } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
@@ -122,14 +126,14 @@ const Categories = styled(FlexCenter)`
 	}
 `;
 
-const MainCategoryItem = styled.div<{ isSelected?: boolean }>`
+const MainCategoryItem = styled.div<{ $isSelected?: boolean }>`
 	cursor: pointer;
 	min-width: 400px;
 	border-radius: 50px;
 	font-size: 17px;
 	background: ${props =>
-		!props.isSelected ? neutralColors.gray[300] : brandColors.giv[600]};
-	color: ${props => (!props.isSelected ? 'black' : 'white')};
+		!props.$isSelected ? neutralColors.gray[300] : brandColors.giv[600]};
+	color: ${props => (!props.$isSelected ? 'black' : 'white')};
 	padding: 16px;
 	&:hover {
 		color: white;

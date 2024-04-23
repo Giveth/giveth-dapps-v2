@@ -5,6 +5,7 @@ import {
 	IconRocketInSpace32,
 	P,
 	semanticColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import { FC, useState } from 'react';
 import styled from 'styled-components';
@@ -29,7 +30,6 @@ import { lockToken } from '@/lib/stakingPool';
 import config from '@/configuration';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { Flex } from '@/components/styled-components/Flex';
 import links from '@/lib/constants/links';
 import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
@@ -139,7 +139,7 @@ const LockModal: FC<ILockModalProps> = ({
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}
 							/>
-							<Flex gap='4px' alignItems='center'>
+							<Flex gap='4px' $alignItems='center'>
 								<SectionTitle weight={700}>
 									{formatMessage({ id: 'label.rounds' })}
 								</SectionTitle>

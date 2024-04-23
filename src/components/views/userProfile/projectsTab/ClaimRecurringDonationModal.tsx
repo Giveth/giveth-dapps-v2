@@ -1,10 +1,9 @@
-import { B, Button, P, neutralColors } from '@giveth/ui-design-system';
+import { B, Button, P, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { IProject } from '@/apollo/types/types';
 import { Modal } from '@/components/modals/Modal';
-import { Flex } from '@/components/styled-components/Flex';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import {
@@ -16,6 +15,7 @@ import { WrappedSpinner } from '@/components/Spinner';
 import ClaimWithdrawalModal from './ClaimWithdrawalModal';
 import { ClaimRecurringItem } from './ClaimRecurringItem';
 import { ClaimTransactionState } from './type';
+import { formatDonation } from '@/helpers/number';
 
 interface IClaimRecurringDonationModal extends IModal {
 	project: IProject;
@@ -30,7 +30,7 @@ const ClaimRecurringDonationModal = ({
 	project,
 }: IClaimRecurringDonationModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
-	const { balances, isLoading } = useProjectClaimableDonations(
+	const { balances, isLoading, refetch } = useProjectClaimableDonations(
 		project?.anchorContracts && project.anchorContracts[0]?.address,
 	);
 	const [showClaimWithdrawalModal, setShowClaimWithdrawalModal] =
@@ -64,7 +64,7 @@ const ClaimRecurringDonationModal = ({
 				) : balances.length === 0 ? (
 					<P>You have no streams yet!</P>
 				) : (
-					<Flex flexDirection='column' gap='32px'>
+					<Flex $flexDirection='column' gap='32px'>
 						{balances.map(tokenWithBalance => (
 							<ClaimRecurringItem
 								key={tokenWithBalance.token.symbol}
@@ -78,9 +78,9 @@ const ClaimRecurringDonationModal = ({
 							/>
 						))}
 						<TotalAmountContainer>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<B>Total amount claimable </B>
-								<B>~ {sumAllTokensUsd} USD</B>
+								<B>~ {formatDonation(sumAllTokensUsd)} USD</B>
 							</Flex>
 						</TotalAmountContainer>
 						<Button
@@ -108,6 +108,7 @@ const ClaimRecurringDonationModal = ({
 						anchorContractAddress={anchorContractAddress}
 						transactionState={transactionState}
 						setTransactionState={setTransactionState}
+						refetch={refetch}
 						balanceInUsd={
 							allTokensUsd[
 								selectedStream.token.underlyingToken?.symbol!

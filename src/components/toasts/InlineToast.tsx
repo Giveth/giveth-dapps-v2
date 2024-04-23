@@ -6,13 +6,12 @@ import {
 	IconCheckCircleFilled,
 	IconHelpFilled16,
 	semanticColors,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import ExternalLink from '@/components/ExternalLink';
-import { FlexCenter } from '@/components/styled-components/Flex';
-
 export enum EToastType {
 	Error = 'error',
 	Warning = 'warning',
@@ -68,17 +67,17 @@ const InlineToast: FC<IProps> = props => {
 	return (
 		<Container
 			className={`${props.className} ${isHidden ? 'fadeOut' : 'fadeIn'}`}
-			colorType={colorType}
+			$colorType={colorType}
 		>
 			{!noIcon && <IconContainer>{colorType.icon}</IconContainer>}
 			<Text>
 				<div>
-					{title && <Title medium>{title}</Title>}
+					{title && <Title $medium>{title}</Title>}
 					<Caption>{message}</Caption>
 				</div>
 				{link && (
 					<ExternalLink color={colorType.color} href={link}>
-						<Caption medium>
+						<Caption $medium>
 							{linkText ||
 								formatMessage({ id: 'label.learn_more' })}
 						</Caption>
@@ -105,16 +104,16 @@ const Text = styled.div`
 	width: 100%;
 `;
 
-const Container = styled.div<{ colorType: IColorType }>`
+const Container = styled.div<{ $colorType: IColorType }>`
 	display: flex;
 	gap: 16px;
 	text-align: left;
 	padding: 16px;
-	background: ${({ colorType }) => colorType.backgroundColor};
+	background: ${({ $colorType }) => $colorType.backgroundColor};
 	border-radius: 8px;
-	border: 1px solid ${({ colorType }) => colorType.color};
+	border: 1px solid ${({ $colorType }) => $colorType.color};
 	margin: 24px 0;
-	color: ${({ colorType }) => colorType.color};
+	color: ${({ $colorType }) => $colorType.color};
 	word-break: break-word;
 	> svg:first-child,
 	a {

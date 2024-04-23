@@ -8,11 +8,12 @@ import {
 	IconExternalLink,
 	OutlineButton,
 	mediaQueries,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
 import Link from 'next/link';
-import { Flex, FlexCenter } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import Routes from '@/lib/constants/Routes';
 import { IModal } from '@/types/common';
@@ -47,7 +48,7 @@ export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 
 	return (
 		<Modal closeModal={closeModalWithCb} isAnimating={isAnimating}>
-			<WhatIsStreamContainer themeState={theme}>
+			<WhatIsStreamContainer $baseTheme={theme}>
 				<TitleRow>
 					<IconGIVStream size={24} />
 					<Title>
@@ -85,7 +86,7 @@ export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 					<LinksRow>
 						<Link href={Routes.GIVstream}>
 							<GLink onClick={closeModalWithCb}>
-								<Flex justifyContent='center'>
+								<Flex $justifyContent='center'>
 									View Your {rewardTokenSymbol}stream{' '}
 									<IconExternalLink
 										size={16}
@@ -106,10 +107,10 @@ export const WhatIsStreamModal: FC<IWhatIsStreamModal> = ({
 	);
 };
 
-const WhatIsStreamContainer = styled.div<{ themeState: ETheme }>`
+const WhatIsStreamContainer = styled.div<{ $baseTheme: ETheme }>`
 	padding: 24px 24px 24px;
 	background-image: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? `url('/images/stream1.svg')`
 			: `url('/images/stream2.svg')`};
 	background-repeat: no-repeat;

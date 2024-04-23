@@ -6,10 +6,11 @@ import {
 	IconInfoFilled16,
 	brandColors,
 	neutralColors,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useSwitchChain } from 'wagmi';
 import { useIntl } from 'react-intl';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 
@@ -22,7 +23,7 @@ export const WrongNetworkLayer = () => {
 		<Overlay>
 			<Toast>
 				<Header>
-					<Title gap='4px' alignItems='center'>
+					<Title gap='4px' $alignItems='center'>
 						<IconInfoFilled16 />
 						<Caption>
 							{formatMessage({

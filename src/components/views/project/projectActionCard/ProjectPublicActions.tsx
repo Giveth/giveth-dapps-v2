@@ -10,6 +10,7 @@ import {
 	semanticColors,
 	IconDonation16,
 	SublineBold,
+	Flex,
 } from '@giveth/ui-design-system';
 import { captureException } from '@sentry/nextjs';
 import { useIntl } from 'react-intl';
@@ -20,7 +21,6 @@ import ShareModal from '@/components/modals/ShareModal';
 import ShareLikeBadge from '@/components/badges/ShareLikeBadge';
 import { EContentType } from '@/lib/constants/shareContent';
 import { useProjectContext } from '@/context/project.context';
-import { Flex } from '@/components/styled-components/Flex';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { isSSRMode, showToastError } from '@/lib/helpers';
 import { useModalCallback } from '@/hooks/useModalCallback';

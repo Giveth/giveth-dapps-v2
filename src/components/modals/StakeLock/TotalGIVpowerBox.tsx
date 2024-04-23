@@ -3,12 +3,12 @@ import {
 	H5,
 	H6,
 	IconRocketInSpace32,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { useAccount } from 'wagmi';
-import { Flex } from '@/components/styled-components/Flex';
 import { formatWeiHelper } from '@/helpers/number';
 import { useAppSelector } from '@/features/hooks';
 import { WrappedSpinner } from '@/components/Spinner';
@@ -56,9 +56,9 @@ const TotalGIVpowerBox = () => {
 				<>
 					<H6>You have</H6>
 					<BoxRow
-						alignItems='baseline'
+						$alignItems='baseline'
 						gap='8px'
-						justifyContent='center'
+						$justifyContent='center'
 					>
 						<IconWrapper>
 							<IconRocketInSpace32 />

@@ -5,13 +5,13 @@ import {
 	brandColors,
 	Subline,
 	IconExternalLink16,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { IconWithTooltip } from './IconWithToolTip';
 import { IGiverPFPToken } from '@/apollo/types/types';
 import ExternalLink from './ExternalLink';
 import Routes from '@/lib/constants/Routes';
 // import config from '@/configuration';
-import { FlexCenter } from './styled-components/Flex';
 import { convertIPFSToHTTPS } from '@/helpers/url';
 
 export enum EPFPSize {
@@ -38,7 +38,7 @@ export const PFP: FC<IPFPProps> = ({
 					src={convertIPFSToHTTPS(pfpToken.imageIpfs)}
 					width={size === EPFPSize.LARGE ? 180 : 28}
 					height={size === EPFPSize.LARGE ? 180 : 28}
-					pfpsize={size}
+					$pfpSize={size}
 					alt=''
 					id='pfp-avatar'
 				/>
@@ -67,7 +67,7 @@ export const PFP: FC<IPFPProps> = ({
 };
 
 interface IStyledImageProps {
-	pfpsize?: EPFPSize;
+	$pfpSize?: EPFPSize;
 }
 
 const StyledImage = styled(Image)<IStyledImageProps>`
@@ -82,7 +82,7 @@ const StyledImage = styled(Image)<IStyledImageProps>`
 	}
 
 	${props =>
-		props.pfpsize === EPFPSize.LARGE &&
+		props.$pfpSize === EPFPSize.LARGE &&
 		css`
 			border: 0.2754px solid ${brandColors.mustard[500]};
 			box-shadow: 0px 1.15778px 6.9467px 1.73668px #e1458d;

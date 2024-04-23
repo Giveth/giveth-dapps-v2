@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
+import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev';
 import { WagmiProvider } from 'wagmi';
 import { projectId, wagmiConfig } from '@/wagmiConfigs';
 import { useApollo } from '@/apollo/apolloClient';
@@ -37,11 +38,16 @@ import {
 import { GeneralWalletProvider } from '@/providers/generalWalletProvider';
 import GIVeconomyTab from '@/components/GIVeconomyTab';
 import { zIndex } from '@/lib/constants/constants';
-import configuration from '@/configuration';
+import configuration, { isProduction } from '@/configuration';
 import MaintenanceIndex from '@/components/views/Errors/MaintenanceIndex';
 import { SolanaProvider } from '@/providers/solanaWalletProvider';
 import type { AppProps } from 'next/app';
-import '../styles/globals.css';
+
+if (!isProduction) {
+	// Adds messages only in a dev environment
+	loadDevMessages();
+	loadErrorMessages();
+}
 
 declare global {
 	interface Window {
@@ -75,8 +81,6 @@ function renderSnippet() {
 
 	return snippet.min(opts);
 }
-
-const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
 const RenderComponent = ({ Component, pageProps }: any) => {
 	useSafeAutoConnect();

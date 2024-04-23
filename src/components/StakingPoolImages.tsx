@@ -50,7 +50,7 @@ export const StakingPoolImages: FC<IStakingPoolImagesProps> = ({
 	const currencies = icon ? [icon] : title.split(' / ');
 
 	return (
-		<StakingPoolImagesContainer lenght={currencies.length}>
+		<StakingPoolImagesContainer $length={currencies.length}>
 			{currencies.map((currency, idx) => (
 				<div key={idx}>{getSymbolIconWithName(currency)}</div>
 			))}
@@ -59,14 +59,14 @@ export const StakingPoolImages: FC<IStakingPoolImagesProps> = ({
 };
 
 interface IStakingPoolImagesContainerProps {
-	lenght: number;
+	$length: number;
 }
 
 const StakingPoolImagesContainer = styled.div<IStakingPoolImagesContainerProps>`
 	padding-left: 27px;
 	padding-right: 31px;
 	height: 56px;
-	width: ${props => (props.lenght == 1 ? 72 : 105)}px;
+	width: ${props => (props.$length == 1 ? 72 : 105)}px;
 	background: ${brandColors.giv[700]};
 	position: relative;
 	border-radius: 0 28px 28px 0;
@@ -75,7 +75,7 @@ const StakingPoolImagesContainer = styled.div<IStakingPoolImagesContainerProps>`
 		right: 38px;
 		top: 8px;
 		z-index: 1;
-		:last-child {
+		&:last-child {
 			z-index: 0;
 			right: 7px;
 		}

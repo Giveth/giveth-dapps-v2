@@ -146,11 +146,16 @@ export const FETCH_PROJECT_BY_SLUG = isRecurringActive
 					verified
 					totalDonations
 					description
+					descriptionSummary
 					addresses {
 						address
 						isRecipient
 						networkId
 						chainType
+					}
+					socialMedia {
+						type
+						link
 					}
 					totalProjectUpdates
 					creationDate
@@ -259,6 +264,10 @@ export const FETCH_PROJECT_BY_SLUG = isRecurringActive
 						networkId
 						chainType
 					}
+					socialMedia {
+						type
+						link
+					}
 					totalProjectUpdates
 					creationDate
 					reaction {
@@ -357,6 +366,10 @@ export const FETCH_PROJECT_BY_ID = isRecurringActive
 						networkId
 						chainType
 					}
+					socialMedia {
+						type
+						link
+					}
 					impactLocation
 					categories {
 						name
@@ -388,6 +401,10 @@ export const FETCH_PROJECT_BY_ID = isRecurringActive
 						isRecipient
 						networkId
 						chainType
+					}
+					socialMedia {
+						type
+						link
 					}
 					impactLocation
 					categories {
@@ -593,6 +610,10 @@ export const CREATE_PROJECT = gql`
 				name
 				value
 			}
+			socialMedia {
+				type
+				link
+			}
 		}
 	}
 `;
@@ -621,6 +642,10 @@ export const UPDATE_PROJECT = gql`
 			categories {
 				name
 				value
+			}
+			socialMedia {
+				type
+				link
 			}
 		}
 	}
@@ -768,6 +793,52 @@ export const FETCH_MAIN_CATEGORIES = gql`
 				value
 				isActive
 			}
+		}
+	}
+`;
+
+export const FETCH_RECURRING_DONATIONS_BY_PROJECTID = gql`
+	query (
+		$take: Int
+		$skip: Int
+		$projectId: Int!
+		$searchTerm: String
+		$status: String
+		$finishStatus: FinishStatus
+		$orderBy: RecurringDonationSortBy
+		$includeArchived: Boolean
+	) {
+		recurringDonationsByProjectId(
+			take: $take
+			skip: $skip
+			projectId: $projectId
+			searchTerm: $searchTerm
+			status: $status
+			finishStatus: $finishStatus
+			orderBy: $orderBy
+			includeArchived: $includeArchived
+		) {
+			recurringDonations {
+				id
+				txHash
+				networkId
+				currency
+				anonymous
+				status
+				amountStreamed
+				totalUsdStreamed
+				flowRate
+				txHash
+				donor {
+					id
+					walletAddress
+					name
+					email
+					avatar
+				}
+				createdAt
+			}
+			totalCount
 		}
 	}
 `;

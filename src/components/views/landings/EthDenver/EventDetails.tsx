@@ -7,11 +7,13 @@ import {
 	IconChevronRight32,
 	Lead,
 	neutralColors,
+	Col,
+	Container,
+	Row,
 } from '@giveth/ui-design-system';
 import DiscordIcon from '/public/images/ETHDenver-discord.svg';
 import MapImage from '/public/images/ETHDenver-map.png';
 import Image from 'next/image';
-import { Col, Container, Row } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
 import ExternalLink from '@/components/ExternalLink';
 import links from '@/lib/constants/links';

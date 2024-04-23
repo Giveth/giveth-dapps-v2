@@ -7,11 +7,11 @@ import {
 	IconExternalLink,
 	OutlineButton,
 	IconGIVBack,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
-import { Flex } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import links from '@/lib/constants/links';
 import { IModal } from '@/types/common';
@@ -24,7 +24,7 @@ export const GIVBackExplainModal: FC<IModal> = ({ setShowModal }) => {
 	return (
 		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<GIVBackExplainContainer>
-				<TitleRow alignItems='center' justifyContent='center'>
+				<TitleRow $alignItems='center' $justifyContent='center'>
 					<IconGIVBack size={24} />
 					<Title>
 						{formatMessage({
@@ -37,14 +37,14 @@ export const GIVBackExplainModal: FC<IModal> = ({ setShowModal }) => {
 						id: 'label.givbacks_rewards_corresponding_to_the_current_round',
 					})}
 				</Desc>
-				<LinksRow alignItems='center' justifyContent='center'>
+				<LinksRow $alignItems='center' $justifyContent='center'>
 					<GLink
 						onClick={closeModal}
 						as='a'
 						target='_blank'
 						href={links.GIVBACK_DOC}
 					>
-						<LinksRow justifyContent='center'>
+						<LinksRow $justifyContent='center'>
 							{formatMessage({
 								id: 'label.read_more',
 							})}

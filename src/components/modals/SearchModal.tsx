@@ -7,15 +7,18 @@ import {
 	IconX16,
 	Lead,
 	neutralColors,
+	Col,
+	Container,
+	Row,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
-import { Col, Container, Row } from '@giveth/ui-design-system';
 import { Modal } from './Modal';
 import { IModal } from '@/types/common';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
-import { Flex, FlexCenter } from '../styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 import { ETheme } from '@/features/general/general.slice';
 import { useAppSelector } from '@/features/hooks';
@@ -131,12 +134,12 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 		<StyledModal
 			closeModal={closeModal}
 			isAnimating={isAnimating}
-			themeState={theme}
+			$baseTheme={theme}
 			fullScreen
 			hiddenClose
 		>
 			<SearchModalContainer>
-				<CloseModal themeState={theme} onClick={closeModal}>
+				<CloseModal $baseTheme={theme} onClick={closeModal}>
 					<ButtonText>
 						{formatMessage({ id: 'label.close' })}
 					</ButtonText>
@@ -153,7 +156,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 				<Row>
 					<Col xs={12} sm={3}>
 						<Columns>
-							<Title size='large' themeState={theme}>
+							<Title size='large' $baseTheme={theme}>
 								{formatMessage({ id: 'label.quick_links' })}
 							</Title>
 							{quickLinks.map((item, idx) => (
@@ -162,7 +165,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 									href={Routes.Projects + item.query}
 								>
 									<Item
-										themeState={theme}
+										$baseTheme={theme}
 										onClick={closeModal}
 									>
 										{item.title}
@@ -173,7 +176,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 					</Col>
 					<Col xs={12} sm={6}>
 						<Columns>
-							<Title size='large' themeState={theme}>
+							<Title size='large' $baseTheme={theme}>
 								{formatMessage({
 									id: 'label.featured_projects',
 								})}
@@ -188,7 +191,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 										}
 									>
 										<Item
-											themeState={theme}
+											$baseTheme={theme}
 											onClick={closeModal}
 										>
 											{project.title}
@@ -199,7 +202,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 					</Col>
 					<Col xs={12} sm={3}>
 						<Columns>
-							<Title size='large' themeState={theme}>
+							<Title size='large' $baseTheme={theme}>
 								{formatMessage({
 									id: 'label.popular_categories',
 								})}
@@ -210,7 +213,7 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 									href={Routes.Projects + '/' + category.slug}
 								>
 									<Item
-										themeState={theme}
+										$baseTheme={theme}
 										onClick={closeModal}
 									>
 										{formatMessage({ id: category.slug })}
@@ -225,21 +228,21 @@ export const SearchModal: FC<IModal> = ({ setShowModal }) => {
 	);
 };
 
-const StyledModal = styled(Modal)<{ themeState?: ETheme }>`
+const StyledModal = styled(Modal)<{ $baseTheme?: ETheme }>`
 	background-color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[800]
 			: neutralColors.gray[200]};
 `;
 
-const CloseModal = styled(FlexCenter)<{ themeState?: ETheme }>`
+const CloseModal = styled(FlexCenter)<{ $baseTheme?: ETheme }>`
 	position: absolute;
 	top: 16px;
 	left: 32px;
 	gap: 8px;
 	padding: 12px 16px;
 	background-color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[700]
 			: neutralColors.gray[100]};
 	border-radius: 50px;
@@ -271,17 +274,17 @@ const SearchBox = styled(Flex)`
 	margin: 0 auto 80px;
 `;
 
-const Title = styled(Lead)<{ themeState?: ETheme }>`
+const Title = styled(Lead)<{ $baseTheme?: ETheme }>`
 	margin-bottom: 16px;
 	color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[200]
 			: neutralColors.gray[700]};
 `;
 
-const Item = styled(Lead)<{ themeState?: ETheme }>`
+const Item = styled(Lead)<{ $baseTheme?: ETheme }>`
 	color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? neutralColors.gray[100]
 			: neutralColors.gray[900]};
 `;

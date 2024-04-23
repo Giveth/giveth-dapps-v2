@@ -7,6 +7,7 @@ import {
 	IconTrash,
 	neutralColors,
 	Subline,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
@@ -15,11 +16,9 @@ import { useFormContext } from 'react-hook-form';
 import { InputContainer } from '../Create.sc';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { OurImages } from '@/lib/constants/constants';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import ImageUploader from '@/components/ImageUploader';
 import ExternalLink from '@/components/ExternalLink';
 import useUpload from '@/hooks/useUpload';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import { ECreateProjectSections, EInputs } from '../types';
 
 const ImageSearch = dynamic(() => import('./ImageSearch'), {
@@ -49,11 +48,6 @@ const ImageInput: FC<ImageInputProps> = ({
 	const [isUploadTab, setIsUploadTab] = useState(true);
 	const [attributes, setAttributes] = useState({ name: '', username: '' });
 
-	const onVisible = () =>
-		setActiveProjectSection(ECreateProjectSections.image);
-	const delay = 500; // Delay in milliseconds
-	const ref = useIntersectionObserver(onVisible, { threshold: 0.8, delay });
-
 	const handleSetImage = (img: string) => {
 		setImage(img);
 		setValue(EInputs.image, img);
@@ -77,7 +71,11 @@ const ImageInput: FC<ImageInputProps> = ({
 	};
 
 	return (
-		<div ref={ref}>
+		<div
+			onMouseEnter={() =>
+				setActiveProjectSection(ECreateProjectSections.image)
+			}
+		>
 			<H5>
 				{formatMessage({ id: 'label.add_an_image_to_your_project' })}
 			</H5>
@@ -90,13 +88,13 @@ const ImageInput: FC<ImageInputProps> = ({
 			<Tabs>
 				<Tab
 					onClick={() => setIsUploadTab(true)}
-					isActive={isUploadTab}
+					$isActive={isUploadTab}
 				>
 					{formatMessage({ id: 'label.upload_cover_image' })}
 				</Tab>
 				<Tab
 					onClick={() => setIsUploadTab(false)}
-					isActive={!isUploadTab}
+					$isActive={!isUploadTab}
 				>
 					{formatMessage({ id: 'label.search_for_photos' })}
 				</Tab>
@@ -141,7 +139,7 @@ const ImageInput: FC<ImageInputProps> = ({
 					))}
 					<div>
 						<Separator />
-						<RemoveBox isActive={!!image} onClick={removeImage}>
+						<RemoveBox $isActive={!!image} onClick={removeImage}>
 							<IconTrash size={24} />
 							<div>{formatMessage({ id: 'label.remove' })}</div>
 						</RemoveBox>
@@ -162,14 +160,14 @@ const Attributes = styled(Subline)`
 	}
 `;
 
-const Tab = styled.div<{ isActive: boolean }>`
+const Tab = styled.div<{ $isActive: boolean }>`
 	cursor: pointer;
 	padding: 8px 32px;
-	background: ${props => (props.isActive ? 'white' : 'transparent')};
+	background: ${props => (props.$isActive ? 'white' : 'transparent')};
 	border-radius: 54px;
-	box-shadow: ${props => props.isActive && Shadow.Neutral[400]};
+	box-shadow: ${props => props.$isActive && Shadow.Neutral[400]};
 	color: ${props =>
-		props.isActive ? brandColors.deep[600] : brandColors.pinky[500]};
+		props.$isActive ? brandColors.deep[600] : brandColors.pinky[500]};
 `;
 
 const Tabs = styled.div`
@@ -206,18 +204,20 @@ const ColorBox = styled.div`
 	cursor: pointer;
 `;
 
-const RemoveBox = styled(FlexCenter)<{ isActive: boolean }>`
+const RemoveBox = styled(FlexCenter)<{ $isActive: boolean }>`
 	width: 80px;
 	height: 80px;
 	border: 2px solid
 		${props =>
-			props.isActive ? neutralColors.gray[700] : neutralColors.gray[500]};
+			props.$isActive
+				? neutralColors.gray[700]
+				: neutralColors.gray[500]};
 	border-radius: 8px;
 	background-color: transparent;
-	cursor: ${props => props.isActive && 'pointer'};
+	cursor: ${props => props.$isActive && 'pointer'};
 	flex-direction: column;
 	color: ${props =>
-		props.isActive ? neutralColors.gray[700] : neutralColors.gray[500]};
+		props.$isActive ? neutralColors.gray[700] : neutralColors.gray[500]};
 	text-transform: uppercase;
 	> :first-child {
 		color: inherit;

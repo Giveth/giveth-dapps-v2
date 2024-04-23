@@ -1,8 +1,12 @@
-import { H5, mediaQueries, neutralColors } from '@giveth/ui-design-system';
+import {
+	H5,
+	mediaQueries,
+	neutralColors,
+	Flex,
+} from '@giveth/ui-design-system';
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
 import ProjectsSortSelect from './ProjectsSortSelect';
 
 interface ISortContainerProps {

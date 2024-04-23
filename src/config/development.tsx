@@ -3,7 +3,7 @@ import {
 	celoAlfajores,
 	gnosis,
 	goerli,
-	optimismGoerli,
+	optimismSepolia,
 	polygon,
 	arbitrumSepolia,
 } from 'wagmi/chains';
@@ -42,14 +42,14 @@ const AUTH_BASE_ROUTE =
 const SEPT_8TH_2022 = 1662595200000;
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
-const OPTIMISM_GIV_TOKEN_ADDRESS = '0xc916Ce4025Cb479d9BA9D798A80094a449667F5D';
+const OPTIMISM_GIV_TOKEN_ADDRESS = '0x2f2c819210191750F2E11F7CfC5664a0eB4fd5e6';
 
 const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
 
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
-const OPTIMISM_NETWORK_NUMBER = 420;
+const OPTIMISM_NETWORK_NUMBER = 11155420;
 const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
 const ARBITRUM_NETWORK_NUMBER = 421614;
@@ -95,7 +95,7 @@ const EVM_CHAINS = [
 	polygon,
 	goerli,
 	gnosis,
-	optimismGoerli,
+	optimismSepolia,
 	celoAlfajores,
 	arbitrumSepolia,
 	classic,
@@ -125,9 +125,6 @@ const config: EnvConfig = {
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
-
-	GARDEN_LINK:
-		'https://gardens-staging.1hive.org/#/xdai/garden/0x16388d99199a74810fc572049b3d4d657e7d5deb',
 
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
@@ -353,24 +350,24 @@ const config: EnvConfig = {
 	},
 
 	OPTIMISM_CONFIG: {
-		...optimismGoerli,
+		...optimismSepolia,
 		chainType: ChainType.EVM,
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-staging',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-sepolia',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
 			'https://app.uniswap.org/#/swap?chain=optimism&outputCurrency=0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
-		TOKEN_DISTRO_ADDRESS: '0x8D2cBce8ea0256bFFBa6fa4bf7CEC46a1d9b43f6',
+		TOKEN_DISTRO_ADDRESS: '0x301C739CF6bfb6B47A74878BdEB13f92F13Ae5E7',
 		coingeckoChainName: 'optimistic-ethereum',
 		chainLogo: (logoSize?: number) => <IconOptimism size={logoSize} />,
 		GIVPOWER: {
 			network: OPTIMISM_NETWORK_NUMBER,
-			LM_ADDRESS: '0x632AC305ed88817480d12155A7F1244cC182C298',
+			LM_ADDRESS: '0xE6836325B13819CF38f030108255A5213491A725',
 			POOL_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 			type: StakingType.GIV_UNIPOOL_LM,
 			platform: StakingPlatform.GIVETH,
@@ -379,21 +376,24 @@ const config: EnvConfig = {
 			unit: 'GIV',
 		},
 		uniswapV2Subgraph: '',
+		GIVETH_ANCHOR_CONTRACT_ADDRESS:
+			'0x503055e1f8b99c60a51c479a60b233976617bc7a',
 		superFluidSubgraph:
-			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-goerli',
+			'https://optimism-sepolia.subgraph.x.superfluid.dev/',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
 					decimals: 18,
-					id: '0xc916ce4025cb479d9ba9d798a80094a449667f5d',
+					id: OPTIMISM_GIV_TOKEN_ADDRESS,
 					name: 'Giveth',
 					symbol: 'GIV',
 				},
 				decimals: 18,
-				id: '0x34cf77c14f39c81adbdad922af538f05633fa07e',
+				id: '0xdfd824f6928b9776c031f7ead948090e2824ce8b',
 				name: 'fake Super Giveth Token',
-				symbol: 'fGIVx',
+				symbol: 'GIVx',
 				isSuperToken: true,
+				coingeckoId: 'giveth',
 			},
 			{
 				underlyingToken: {
@@ -403,10 +403,11 @@ const config: EnvConfig = {
 					id: '0x0000000000000000000000000000000000000000',
 				},
 				decimals: 18,
-				id: '0xe01f8743677da897f4e7de9073b57bf034fc2433',
+				id: '0x0043d7c85c8b96a49a72a92c0b48cdc4720437d7',
 				name: 'Super ETH',
 				symbol: 'ETHx',
 				isSuperToken: true,
+				coingeckoId: 'ethereum',
 			},
 		],
 	},

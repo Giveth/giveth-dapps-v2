@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { B, H3, neutralColors } from '@giveth/ui-design-system';
+import { B, H3, neutralColors, FlexCenter } from '@giveth/ui-design-system';
 import Hedera from '/public/images/icons/impactQuests/hedera.png';
 import Keepkey from '/public/images/icons/impactQuests/keepkey.png';
 import WorkDAO from '/public/images/icons/impactQuests/workdao.png';
@@ -9,7 +9,6 @@ import Consensys from '/public/images/icons/impactQuests/Consensys.svg';
 import DogeClaren from '/public/images/icons/impactQuests/dogeClaren.png';
 import ETHDenver from '/public/images/icons/impactQuests/ETHDenver.png';
 import Image from 'next/image';
-import { FlexCenter } from '@/components/styled-components/Flex';
 
 const Partners = () => {
 	return (

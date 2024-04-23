@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
+import { FlexSpacer } from '@giveth/ui-design-system';
 import { shortenAddress } from '@/lib/helpers';
 import {
 	MenuAndButtonContainer,
@@ -23,7 +24,6 @@ import { PROFILE_PHOTO_PLACEHOLDER, device } from '@/lib/constants/constants';
 import { SideBar, ESideBarDirection } from '../sidebar/SideBar';
 import { MenuContainer } from './Menu.sc';
 import { UserItems } from './UserItems';
-import { FlexSpacer } from '../styled-components/Flex';
 import { ItemsProvider } from '@/context/Items.context';
 import { SignWithWalletModal } from '../modals/SignWithWalletModal';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
@@ -64,12 +64,12 @@ export const UserButtonWithMenu: FC<IUserButtonWithMenuProps> = ({
 
 	return (
 		<MenuAndButtonContainer {...props}>
-			<WalletButton outline themeState={theme} isHover={showMenu}>
+			<WalletButton $outline $baseTheme={theme} $isHover={showMenu}>
 				<HeaderUserButton />
-				<CoverLine themeState={theme} className='cover-line' />
+				<CoverLine $baseTheme={theme} className='cover-line' />
 			</WalletButton>
 			{menuCondition && (
-				<MenuContainer isAnimating={showMenu} themeState={theme}>
+				<MenuContainer $isAnimating={showMenu} $baseTheme={theme}>
 					<ItemsProvider close={closeMenu}>
 						<UserItems
 							setQueueRoute={setQueueRoute}

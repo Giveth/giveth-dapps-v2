@@ -1,4 +1,11 @@
-import { MouseEvent, useRef, useState } from 'react';
+import {
+	Dispatch,
+	FC,
+	MouseEvent,
+	SetStateAction,
+	useRef,
+	useState,
+} from 'react';
 import { useIntl } from 'react-intl';
 import { IconOptions16, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
@@ -8,8 +15,18 @@ import { Shadow } from '@/components/styled-components/Shadow';
 import { Relative } from '@/components/styled-components/Position';
 import { FilterMenu } from './FilterMenu';
 import { PinkyColoredNumber } from '@/components/styled-components/PinkyColoredNumber';
+import { IFinishStatus } from './ActiveProjectsSection';
 
-export const RecurringDonationFiltersButton = () => {
+export interface IRecurringDonationFiltersButtonProps {
+	tokenFilters: string[];
+	setTokenFilters: Dispatch<SetStateAction<string[]>>;
+	statusFilters: IFinishStatus;
+	setStatusFilters: Dispatch<SetStateAction<IFinishStatus>>;
+}
+
+export const RecurringDonationFiltersButton: FC<
+	IRecurringDonationFiltersButtonProps
+> = props => {
 	const { formatMessage } = useIntl();
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -17,7 +34,9 @@ export const RecurringDonationFiltersButton = () => {
 
 	const filterMenuRef = useRef<HTMLDivElement>(null);
 
-	const count = 0;
+	const count =
+		props.tokenFilters.length +
+		Object.values(props.statusFilters).filter(Boolean).length;
 
 	useOnClickOutside(
 		() => setIsFilterOpen(false),
@@ -41,6 +60,7 @@ export const RecurringDonationFiltersButton = () => {
 			</FiltersButton>
 			{(delayedIsFilterOpen || isFilterOpen) && (
 				<FilterMenu
+					{...props}
 					isOpen={isFilterOpen}
 					handleClose={handleFilterClose}
 					ref={filterMenuRef}

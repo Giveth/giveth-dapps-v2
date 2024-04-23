@@ -5,9 +5,9 @@ import { QF_SPECIFIC_CATEGORIES } from '@/configuration';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export enum ETheme {
-	NOT_INITIATED,
+	NOT_INITIATED = 0,
 	Light = 1,
-	Dark,
+	Dark = 2,
 }
 
 const initialState = {

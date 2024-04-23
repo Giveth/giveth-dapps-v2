@@ -1,8 +1,7 @@
-import { IconHelpFilled16, P, Subline } from '@giveth/ui-design-system';
+import { IconHelpFilled16, P, Subline, Flex } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 import { useProjectContext } from '@/context/project.context';
 import StatusBadge from './StatusBadge';
@@ -15,9 +14,9 @@ export const ProjectStats = () => {
 
 	return (
 		<div>
-			<Flex flexDirection='column' gap='24px'>
-				<StatRow justifyContent='space-between'>
-					<Flex alignItems='center' gap='4px'>
+			<Flex $flexDirection='column' gap='24px'>
+				<StatRow $justifyContent='space-between'>
+					<Flex $alignItems='center' gap='4px'>
 						<P>{formatMessage({ id: 'label.project_status' })}</P>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
@@ -32,8 +31,8 @@ export const ProjectStats = () => {
 					</Flex>
 					<StatusBadge status={projectData?.status.name} />
 				</StatRow>
-				<StatRow justifyContent='space-between'>
-					<Flex alignItems='center' gap='4px'>
+				<StatRow $justifyContent='space-between'>
+					<Flex $alignItems='center' gap='4px'>
 						<P>{formatMessage({ id: 'label.listing' })}</P>
 						<IconWithTooltip
 							icon={<IconHelpFilled16 />}
@@ -50,10 +49,10 @@ export const ProjectStats = () => {
 				</StatRow>
 				<StatRow
 					gap='5px'
-					justifyContent='space-between'
-					alignItems='center'
+					$justifyContent='space-between'
+					$alignItems='center'
 				>
-					<Flex alignItems='center' gap='4px'>
+					<Flex $alignItems='center' gap='4px'>
 						<P>
 							{formatMessage({ id: 'label.verification_status' })}
 						</P>

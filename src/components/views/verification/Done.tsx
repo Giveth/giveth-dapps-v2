@@ -70,7 +70,7 @@ const Done = () => {
 					</Submitted>
 					<Line />
 					<Waiting
-						isActive={[
+						$isActive={[
 							EVerificationStatus.DRAFT,
 							EVerificationStatus.SUBMITTED,
 							EVerificationStatus.REJECTED,
@@ -88,7 +88,7 @@ const Done = () => {
 						)}
 					</Waiting>
 					<Line />
-					<Voila isActive={status === EVerificationStatus.VERIFIED}>
+					<Voila $isActive={status === EVerificationStatus.VERIFIED}>
 						{formatMessage({ id: 'label.voila_verified_badge' })}
 					</Voila>
 					{status === EVerificationStatus.VERIFIED && <CheckCircle />}
@@ -103,21 +103,21 @@ const Line = styled.div`
 	width: 20px;
 `;
 
-const Voila = styled.div<{ isActive: boolean }>`
+const Voila = styled.div<{ $isActive: boolean }>`
 	display: flex;
 	gap: 10px;
 	align-items: center;
 	/* color: ${neutralColors.gray[700]}; */
 	color: ${props =>
-		props.isActive ? neutralColors.gray[900] : neutralColors.gray[700]};
+		props.$isActive ? neutralColors.gray[900] : neutralColors.gray[700]};
 `;
 
-const Waiting = styled.div<{ isActive: boolean }>`
+const Waiting = styled.div<{ $isActive: boolean }>`
 	display: flex;
 	gap: 10px;
 	align-items: center;
 	color: ${props =>
-		props.isActive ? brandColors.giv[500] : neutralColors.gray[900]};
+		props.$isActive ? brandColors.giv[500] : neutralColors.gray[900]};
 `;
 
 const Submitted = styled.div`

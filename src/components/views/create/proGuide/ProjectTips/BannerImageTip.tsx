@@ -1,13 +1,12 @@
-import { P } from '@giveth/ui-design-system';
+import { P, Flex } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import { TipLine, TipListItem } from './common.styles';
-import { Flex } from '@/components/styled-components/Flex';
 
 const BannerImageTip = () => {
 	const { formatMessage } = useIntl();
 	return (
-		<Flex flexDirection='column' gap='16px'>
+		<Flex $flexDirection='column' gap='16px'>
 			<TipListItem>
 				<P>
 					{formatMessage({

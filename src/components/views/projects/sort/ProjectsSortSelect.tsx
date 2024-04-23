@@ -8,12 +8,14 @@ import {
 	IconHeartOutline16,
 	IconDonation16,
 	neutralColors,
-	IconFast16,
 	IconFlash16,
 	IconRocketInSpace16,
 	IconIncrease16,
 	semanticColors,
 	Caption,
+	Flex,
+	IconPublish16,
+	IconEstimated16,
 } from '@giveth/ui-design-system';
 import Select, {
 	components,
@@ -23,15 +25,14 @@ import Select, {
 	ControlProps,
 	type CSSObjectWithLabel,
 } from 'react-select';
-
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useIntl } from 'react-intl';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import selectCustomStyles from '@/lib/constants/selectCustomStyles';
 import { useProjectsContext } from '@/context/projects.context';
-import { Flex } from '@/components/styled-components/Flex';
 import useDetectDevice from '@/hooks/useDetectDevice';
+import { capitalizeFirstLetter } from '@/lib/helpers';
 
 export interface ISelectedSort {
 	icon: ReactElement;
@@ -75,24 +76,38 @@ const ProjectsSortSelect = () => {
 			icon: <IconHeartOutline16 />,
 		},
 		{
-			label: formatMessage({ id: 'label.amount_raised_all_time' }),
+			label: capitalizeFirstLetter(
+				formatMessage({ id: 'label.amount_raised_all_time' }),
+			),
 			value: EProjectsSortBy.MOST_FUNDED,
 			icon: <IconDonation16 />,
 		},
 		{
-			label: formatMessage({ id: 'label.recently_updated' }),
+			label: capitalizeFirstLetter(
+				formatMessage({ id: 'label.recently_updated' }),
+			),
 			value: EProjectsSortBy.RECENTLY_UPDATED,
-			icon: <IconFast16 />,
+			icon: <IconPublish16 />,
 		},
 	];
 
 	isQF &&
-		sortByOptions.splice(sortByOptions.length - 1, 0, {
-			label: formatMessage({ id: 'label.amount_raised_in_qf' }),
-			value: EProjectsSortBy.ActiveQfRoundRaisedFunds,
-			icon: <IconIncrease16 />,
-			color: semanticColors.jade[700],
-		});
+		sortByOptions.splice(
+			sortByOptions.length - 1,
+			0,
+			{
+				label: formatMessage({ id: 'label.amount_raised_in_qf' }),
+				value: EProjectsSortBy.ActiveQfRoundRaisedFunds,
+				icon: <IconIncrease16 />,
+				color: semanticColors.jade[500],
+			},
+			{
+				label: formatMessage({ id: 'label.estimated_matching' }),
+				value: EProjectsSortBy.EstimatedMatching,
+				icon: <IconEstimated16 />,
+				color: semanticColors.jade[500],
+			},
+		);
 
 	const [value, setValue] = useState(sortByOptions[0]);
 	const { isMobile } = useDetectDevice();
@@ -114,8 +129,8 @@ const ProjectsSortSelect = () => {
 	return (
 		<Flex
 			gap='8px'
-			alignItems={isMobile ? 'stretch' : 'center'}
-			flexDirection={isMobile ? 'column' : 'row'}
+			$alignItems={isMobile ? 'stretch' : 'center'}
+			$flexDirection={isMobile ? 'column' : 'row'}
 		>
 			<SortingLabel htmlFor='sorting'>
 				{formatMessage({ id: 'label.sort_by' })}
@@ -159,7 +174,7 @@ const Option: ComponentType<OptionProps<ISelectedSort>> = props => {
 	return (
 		<components.Option {...props}>
 			<OptionContainer>
-				<RowContainer textColor={color}>
+				<RowContainer $textColor={color}>
 					{Icon}
 					<Caption>{label}</Caption>
 				</RowContainer>
@@ -195,6 +210,7 @@ const selectStyles: StylesConfig = {
 			border: 'none',
 			borderRadius: '8px',
 			minWidth: '230px',
+
 			'&:hover': {
 				borderColor: 'transparent',
 			},
@@ -214,14 +230,14 @@ const selectStyles: StylesConfig = {
 };
 
 interface IRowContainer {
-	textColor: string;
+	$textColor: string;
 }
 
 const RowContainer = styled.div<IRowContainer>`
 	display: flex;
 	align-items: center;
 	gap: 8px;
-	color: ${props => props.textColor};
+	color: ${props => props.$textColor};
 	> :first-child {
 		flex-shrink: 0;
 	}

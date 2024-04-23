@@ -7,10 +7,11 @@ import {
 	GLink,
 	IconMenu24,
 	IconSearch24,
+	Flex,
+	FlexSpacer,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
-import { Flex, FlexSpacer } from '@/components/styled-components/Flex';
 import {
 	ConnectButton,
 	HeaderLinks,
@@ -23,7 +24,11 @@ import {
 	GLinkNoWrap,
 	SearchButton,
 } from './Header.sc';
-import { isSSRMode, isUserRegistered } from '@/lib/helpers';
+import {
+	isSSRMode,
+	isUserRegistered,
+	isGIVeconomyRoute as checkIsGIVeconomyRoute,
+} from '@/lib/helpers';
 import Routes from '@/lib/constants/Routes';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { ETheme } from '@/features/general/general.slice';
@@ -45,12 +50,11 @@ import { UserButtonWithMenu } from '../menu/UserButtonWithMenu';
 import { NotificationButtonWithMenu } from '../menu/NotificationButtonWithMenu';
 import { HomeSidebar } from '../sidebar/HomeSidebar';
 import { ItemsProvider } from '@/context/Items.context';
-import { isGIVeconomyRoute as checkIsGIVeconomyRoute } from '@/lib/helpers';
 import { CommunityMenu } from '../menu/CommunityMenu';
 import { useNavigationInfo } from '@/hooks/useNavigationInfo';
 import config from '@/configuration';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
-import { useShowHiderByScroll } from '@/hooks/useShowHiderByScroll';
+import { EScrollDir, useScrollDetection } from '@/hooks/useScrollDetection';
 
 export interface IHeader {
 	theme?: ETheme;
@@ -83,7 +87,7 @@ const Header: FC<IHeader> = () => {
 	const { formatMessage } = useIntl();
 	const isDesktop = useMediaQuery(device.laptopL);
 	const isMobile = useMediaQuery(device.mobileL);
-	const showHeader = useShowHiderByScroll();
+	const scrollDir = useScrollDetection();
 
 	const isGIVeconomyRoute = checkIsGIVeconomyRoute(router.route);
 
@@ -142,7 +146,11 @@ const Header: FC<IHeader> = () => {
 	};
 
 	return (
-		<StyledHeader alignItems='center' themeState={theme} show={showHeader}>
+		<StyledHeader
+			$alignItems='center'
+			$baseTheme={theme}
+			$show={scrollDir !== EScrollDir.Down}
+		>
 			<Flex>
 				{showBackBtn ? (
 					<Logo onClick={handleBack}>
@@ -154,7 +162,7 @@ const Header: FC<IHeader> = () => {
 						/>
 					</Logo>
 				) : (
-					<Flex gap='24px' alignItems='center'>
+					<Flex gap='24px' $alignItems='center'>
 						{isMobile && (
 							<Link href={Routes.Home}>
 								<Logo>
@@ -177,33 +185,33 @@ const Header: FC<IHeader> = () => {
 				)}
 			</Flex>
 			{isDesktop && !showBackBtn && (
-				<HeaderLinks themeState={theme}>
+				<HeaderLinks $baseTheme={theme}>
 					<LinkWithMenu
 						title={formatMessage({ id: 'label.projects' })}
-						isHeaderShowing={showHeader}
+						isHeaderShowing={scrollDir !== EScrollDir.Down}
 						href={Routes.AllProjects}
 					>
 						<ProjectsMenu />
 					</LinkWithMenu>
 					<LinkWithMenu
 						title='GIVeconomy'
-						isHeaderShowing={showHeader}
+						isHeaderShowing={scrollDir !== EScrollDir.Down}
 						href={Routes.GIVeconomy}
 					>
 						<GIVeconomyMenu />
 					</LinkWithMenu>
 					<LinkWithMenu
 						title={formatMessage({ id: 'label.community' })}
-						isHeaderShowing={showHeader}
+						isHeaderShowing={scrollDir !== EScrollDir.Down}
 						href={Routes.Join}
 					>
 						<CommunityMenu />
 					</LinkWithMenu>
 					<SearchButton
-						themeState={theme}
+						$baseTheme={theme}
 						onClick={() => dispatch(setShowSearchModal(true))}
 					>
-						<Flex alignItems='center' gap='16px'>
+						<Flex $alignItems='center' gap='16px'>
 							<GLinkNoWrap size='Big'>
 								{formatMessage({ id: 'label.search_projects' })}
 							</GLinkNoWrap>
@@ -214,7 +222,7 @@ const Header: FC<IHeader> = () => {
 			)}
 			<FlexSpacer />
 			<Flex gap='8px'>
-				<LargeCreateProject isTexty={isProjectPage}>
+				<LargeCreateProject $isTexty={isProjectPage}>
 					<Button
 						label={formatMessage({
 							id: 'component.button.create_project',
@@ -234,17 +242,17 @@ const Header: FC<IHeader> = () => {
 				{walletAddress ? (
 					<>
 						<NotificationButtonWithMenu
-							isHeaderShowing={showHeader}
+							isHeaderShowing={scrollDir !== EScrollDir.Down}
 							theme={theme}
 						/>
 						{networkHasGIV && (
 							<RewardButtonWithMenu
-								isHeaderShowing={showHeader}
+								isHeaderShowing={scrollDir !== EScrollDir.Down}
 								theme={theme}
 							/>
 						)}
 						<UserButtonWithMenu
-							isHeaderShowing={showHeader}
+							isHeaderShowing={scrollDir !== EScrollDir.Down}
 							theme={theme}
 						/>
 					</>

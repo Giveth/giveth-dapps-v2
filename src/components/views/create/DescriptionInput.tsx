@@ -66,7 +66,11 @@ const DescriptionInput = ({
 	};
 
 	return (
-		<>
+		<div
+			onMouseEnter={() =>
+				setActiveProjectSection(ECreateProjectSections.description)
+			}
+		>
 			{showModal && (
 				<GoodProjectDescription
 					setShowModal={val => setShowModal(val)}
@@ -84,11 +88,7 @@ const DescriptionInput = ({
 					})}
 				</span>
 			</CaptionContainer>
-			<InputContainer
-				onMouseOver={() =>
-					setActiveProjectSection(ECreateProjectSections.description)
-				}
-			>
+			<InputContainer>
 				<Label>{formatMessage({ id: 'label.project_story' })}</Label>
 				<RichTextInput
 					style={TextInputStyle}
@@ -100,7 +100,7 @@ const DescriptionInput = ({
 					error={errors[EInputs.description]?.message}
 				/>
 			</InputContainer>
-		</>
+		</div>
 	);
 };
 

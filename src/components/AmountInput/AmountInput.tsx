@@ -1,11 +1,15 @@
-import { GLink, neutralColors, brandColors } from '@giveth/ui-design-system';
+import {
+	GLink,
+	neutralColors,
+	brandColors,
+	Flex,
+} from '@giveth/ui-design-system';
 import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
 import BigNumber from 'bignumber.js';
 import { formatWeiHelper } from '@/helpers/number';
-import { Flex } from '../styled-components/Flex';
 import { BaseInput } from '../input/BaseInput';
 
 export interface IAmountInput {
@@ -17,6 +21,8 @@ export interface IAmountInput {
 	showMax?: boolean;
 	balanceUnit?: string;
 	showPercentage?: boolean;
+	displayAmount?: string;
+	setDisplayAmount?: Dispatch<SetStateAction<string>>;
 }
 
 export const AmountInput: FC<IAmountInput> = ({
@@ -27,10 +33,23 @@ export const AmountInput: FC<IAmountInput> = ({
 	disabled = false,
 	showMax = false,
 	showPercentage = false,
+	displayAmount: externalDisplayAmount = undefined,
+	setDisplayAmount: externalSetDisplayAmount = undefined,
 }) => {
 	const { formatMessage } = useIntl();
-	const [displayAmount, setDisplayAmount] = useState('');
+	const [internalDisplayAmount, internalSetDisplayAmount] = useState('');
 	const [activeStep, setActiveStep] = useState(0);
+
+	// Determine which displayAmount and setDisplayAmount to use
+	const displayAmount =
+		externalDisplayAmount !== undefined
+			? externalDisplayAmount
+			: internalDisplayAmount;
+
+	const setDisplayAmount =
+		externalSetDisplayAmount !== undefined
+			? externalSetDisplayAmount
+			: internalSetDisplayAmount;
 
 	const setAmountPercentage = useCallback(
 		(percentage: number): void => {
@@ -86,7 +105,7 @@ export const AmountInput: FC<IAmountInput> = ({
 	return (
 		<div className={className}>
 			{showMax && maxAmount !== undefined && (
-				<InputLabelRow justifyContent='space-between' id='max-row'>
+				<InputLabelRow $justifyContent='space-between' id='max-row'>
 					<InputLabel>
 						<InputLabelText>
 							{formatMessage({ id: 'label.available' })}:{' '}
@@ -122,7 +141,7 @@ export const AmountInput: FC<IAmountInput> = ({
 							setAmountPercentage(25);
 							setActiveStep(25);
 						}}
-						active={activeStep === 25}
+						$active={activeStep === 25}
 					>
 						25%
 					</Step>
@@ -132,7 +151,7 @@ export const AmountInput: FC<IAmountInput> = ({
 							setAmountPercentage(50);
 							setActiveStep(50);
 						}}
-						active={activeStep === 50}
+						$active={activeStep === 50}
 					>
 						50%
 					</Step>
@@ -142,7 +161,7 @@ export const AmountInput: FC<IAmountInput> = ({
 							setAmountPercentage(75);
 							setActiveStep(75);
 						}}
-						active={activeStep === 75}
+						$active={activeStep === 75}
 					>
 						75%
 					</Step>
@@ -152,7 +171,7 @@ export const AmountInput: FC<IAmountInput> = ({
 							setAmountPercentage(100);
 							setActiveStep(100);
 						}}
-						active={activeStep === 100}
+						$active={activeStep === 100}
 					>
 						100%
 					</Step>
@@ -181,12 +200,12 @@ const PercentageRow = styled(Flex)`
 	gap: 8px;
 `;
 
-const Step = styled(GLink)<{ active: boolean }>`
+const Step = styled(GLink)<{ $active: boolean }>`
 	padding: 8px 16px;
 	color: ${props =>
-		props.active ? neutralColors.gray[100] : brandColors.deep[100]};
+		props.$active ? neutralColors.gray[100] : brandColors.deep[100]};
 	background: ${props =>
-		props.active ? brandColors.cyan[500] : brandColors.giv[700]};
+		props.$active ? brandColors.cyan[500] : brandColors.giv[700]};
 	border-radius: 54px;
 	cursor: pointer;
 	user-select: none;

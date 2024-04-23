@@ -10,12 +10,12 @@ import {
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import {
+	Flex,
 	GLink,
 	IconChevronDown24,
 	IconChevronUp24,
 	neutralColors,
 } from '@giveth/ui-design-system';
-import { Flex } from './styled-components/Flex';
 import { Shadow } from './styled-components/Shadow';
 import { zIndex } from '@/lib/constants/constants';
 import { useOnClickOutside } from '@/hooks/useOnClickOutside';
@@ -25,23 +25,30 @@ interface IDropdownProps {
 	options: IOption[];
 	style?: any;
 	stickToRight?: boolean;
+	color?: string;
 }
 
-export enum OptionType {
+export enum EOptionType {
 	ITEM,
 	SEPARATOR,
 }
 
 export interface IOption {
-	type?: OptionType;
-	label: string;
+	type?: EOptionType;
+	label?: string;
 	icon?: ReactNode;
 	cb?: any;
 	isHidden?: boolean;
+	color?: string;
 }
 
-export const Dropdown: FC<IDropdownProps> = props => {
-	const { label, options, style, stickToRight } = props;
+export const Dropdown: FC<IDropdownProps> = ({
+	label,
+	options,
+	style,
+	stickToRight,
+	color,
+}) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -83,7 +90,7 @@ export const Dropdown: FC<IDropdownProps> = props => {
 			ref={containerRef}
 			onClick={() => setIsOpen(_open => !_open)}
 		>
-			<Controller justifyContent='space-between'>
+			<Controller $justifyContent='space-between'>
 				<GLink size='Big'>{label}</GLink>
 				<IconWrapper>
 					{isOpen ? <IconChevronUp24 /> : <IconChevronDown24 />}
@@ -92,12 +99,13 @@ export const Dropdown: FC<IDropdownProps> = props => {
 			{isOpen &&
 				createPortal(
 					<OptionsWrapper style={dropdownStyle} ref={dropdownRef}>
-						{options.map(option =>
+						{options.map((option, idx) =>
 							option.isHidden ? null : (
 								<Option
-									key={option.label}
+									key={idx}
 									option={option}
 									setIsOpen={setIsOpen}
+									color={color}
 								/>
 							),
 						)}
@@ -111,16 +119,20 @@ export const Dropdown: FC<IDropdownProps> = props => {
 interface IOptionProps {
 	option: IOption;
 	setIsOpen: Dispatch<SetStateAction<boolean>>;
+	color?: string;
 }
 
 const Option: FC<IOptionProps> = ({ option, setIsOpen }) => {
-	return (
+	return option.type === EOptionType.SEPARATOR ? (
+		<StyledHr />
+	) : (
 		<OptionWrapper
 			onClick={() => {
 				option.cb && option.cb();
 				setIsOpen(false);
 			}}
 			gap='8px'
+			$color={option.color}
 		>
 			{option.icon && option.icon}
 			{option.label}
@@ -153,13 +165,25 @@ const OptionsWrapper = styled.div`
 	box-shadow: ${Shadow.Neutral[400]};
 `;
 
-const OptionWrapper = styled(Flex)`
+interface IOptionsWrapperProps {
+	$color?: string;
+}
+
+const OptionWrapper = styled(Flex)<IOptionsWrapperProps>`
 	padding: 8px 16px;
 	border-radius: 8px;
 	margin-bottom: 8px;
 	align-items: center;
 	cursor: pointer;
+	color: ${({ $color }) => $color || neutralColors.gray[900]};
 	&:hover {
 		background-color: ${neutralColors.gray[200]};
 	}
+`;
+
+const StyledHr = styled.hr`
+	border: none;
+	border-top: 1px solid ${neutralColors.gray[300]};
+	width: 100%;
+	margin: 8px 0;
 `;

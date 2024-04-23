@@ -1,7 +1,12 @@
-import { B, P, brandColors, neutralColors } from '@giveth/ui-design-system';
+import {
+	B,
+	P,
+	brandColors,
+	neutralColors,
+	Flex,
+} from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
-import { Flex } from '../styled-components/Flex';
 
 interface IAttributeItem {
 	heading: string;
@@ -13,8 +18,8 @@ const AttributeItem = ({ heading, subtitle }: IAttributeItem) => {
 
 	return (
 		<Container
-			isOnboard={isOnboardingPage}
-			flexDirection='column'
+			$isOnboard={isOnboardingPage}
+			$flexDirection='column'
 			gap='8px'
 		>
 			<Heading>{heading}</Heading>
@@ -25,10 +30,10 @@ const AttributeItem = ({ heading, subtitle }: IAttributeItem) => {
 
 export default AttributeItem;
 
-const Container = styled(Flex)<{ isOnboard: boolean }>`
+const Container = styled(Flex)<{ $isOnboard: boolean }>`
 	width: 240px;
 	background-color: ${props =>
-		props.isOnboard ? neutralColors.gray[100] : neutralColors.gray[200]};
+		props.$isOnboard ? neutralColors.gray[100] : neutralColors.gray[200]};
 	border-radius: 8px;
 	padding: 8px 16px;
 	box-shadow: 0px 10px 15px -12px rgba(0, 0, 0, 0.1);

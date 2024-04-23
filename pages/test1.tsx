@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
-import { IconHelpFilled16 } from '@giveth/ui-design-system';
+import { IconHelpFilled16, Container } from '@giveth/ui-design-system';
 import { FC, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 
-import { Container } from '@giveth/ui-design-system';
 import { gToast, ToastType } from '@/components/toasts';
 import { FlowRateTooltip } from '@/components/GIVeconomyPages/GIVstream.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';

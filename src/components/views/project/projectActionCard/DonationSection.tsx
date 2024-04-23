@@ -9,11 +9,11 @@ import {
 	IconChevronRight16,
 	brandColors,
 	mediaQueries,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { type FC } from 'react';
-import { Flex } from '@/components/styled-components/Flex';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
 import { formatDonation } from '@/helpers/number';
@@ -43,7 +43,7 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 						{formatMessage({
 							id: 'label.raised_from',
 						})}
-						<Caption medium>
+						<Caption $medium>
 							{projectData?.countUniqueDonors}
 						</Caption>
 						{formatMessage(
@@ -65,17 +65,11 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 					</NoFund>
 				</DonateInfo>
 			)}
-			<DonateDescription flexDirection='column' gap='8px'>
+			<DonateDescription $flexDirection='column' gap='8px'>
 				<B>
 					{formatMessage({
 						id: 'component.donation_section.100_to_the_project',
 					})}
-				</B>
-				<B>
-					{formatMessage({
-						id: 'label.always',
-					})}
-					.
 				</B>
 				<P>
 					{formatMessage({
@@ -88,7 +82,7 @@ export const DonateSection: FC<IDonateSectionProps> = ({ projectData }) => {
 					referrerPolicy='no-referrer'
 					rel='noreferrer'
 				>
-					<LearnLink alignItems='center' gap='2px'>
+					<LearnLink $alignItems='center' gap='2px'>
 						<Subline>
 							{formatMessage({
 								id: 'component.donation_section.learn_zero_fee',

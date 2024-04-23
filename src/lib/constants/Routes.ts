@@ -9,6 +9,7 @@ export const profileTabs = {
 	likedProjects: '?tab=liked',
 	projects: '?tab=projects',
 	donations: '?tab=donations',
+	recurringDonations: '?tab=recurring-donations',
 	boosted: '?tab=givpower',
 };
 
@@ -37,6 +38,7 @@ const Routes = {
 	MyAccount,
 	MyProjects: MyAccount + profileTabs.projects,
 	MyDonations: MyAccount + profileTabs.donations,
+	MyRecurringDonations: MyAccount + profileTabs.recurringDonations,
 	MyBoostedProjects: MyAccount + profileTabs.boosted,
 	MyAccountSetPfp: MyAccount + `?modal=${ProfileModal.PFPModal}`,
 	Onboard: '/onboard',
@@ -48,7 +50,6 @@ const Routes = {
 	Notifications,
 	NotificationsSettings: Notifications + '/settings',
 	GIVeconomy: '/giveconomy',
-	GIVgarden: '/givgarden',
 	GIVfarm: '/givfarm',
 	GIVstream,
 	GIVstream_FlowRate: GIVstream + '#flowRate',

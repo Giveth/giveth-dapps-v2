@@ -1,11 +1,10 @@
-import Scrollbars from 'react-custom-scrollbars';
+import Scrollbars from 'rc-scrollbars';
 import Image from 'next/image';
 import React, { FC } from 'react';
 import styled from 'styled-components';
-import { brandColors } from '@giveth/ui-design-system';
+import { brandColors, FlexCenter } from '@giveth/ui-design-system';
 import { Basic } from 'unsplash-js/dist/methods/photos/types';
 import { useIntl } from 'react-intl';
-import { FlexCenter } from '@/components/styled-components/Flex';
 
 interface IImageResults {
 	images: Basic[];

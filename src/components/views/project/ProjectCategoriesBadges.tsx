@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { neutralColors, SublineBold } from '@giveth/ui-design-system';
+import { neutralColors, SublineBold, Flex } from '@giveth/ui-design-system';
 import ProjectBadge from './ProjectBadge';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Flex } from '@/components/styled-components/Flex';
 import { ICategory } from '@/apollo/types/types';
 
 interface ICategoryBadges {

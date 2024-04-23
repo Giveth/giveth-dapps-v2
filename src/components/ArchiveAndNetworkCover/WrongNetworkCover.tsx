@@ -1,10 +1,9 @@
 import { FC } from 'react';
-import { Caption, IconAlertCircle16 } from '@giveth/ui-design-system';
+import { Caption, Flex, IconAlertCircle16 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
 import { Cover } from './common';
-import { Flex } from '../styled-components/Flex';
 import { getChainName } from '@/lib/network';
 
 interface IWrongNetworkCoverProps {
@@ -26,7 +25,7 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 					<IconAlertCircle16 />
 				</IconWrapper>
 				{chainId !== undefined ? (
-					<Content medium>
+					<Content $medium>
 						{formatMessage(
 							{
 								id: 'label.wrong_network',
@@ -38,7 +37,7 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 						)}
 					</Content>
 				) : (
-					<Content medium>
+					<Content $medium>
 						{formatMessage({
 							id: 'label.please_connect_your_wallet',
 						})}
@@ -50,7 +49,7 @@ export const WrongNetworkCover: FC<IWrongNetworkCoverProps> = ({
 };
 
 const StyledCover = styled(Cover)`
-	align-items: flex-end;
+	align-items: flex-end !important;
 `;
 
 const IconWrapper = styled.div`

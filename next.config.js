@@ -63,6 +63,11 @@ const moduleExports = withBundleAnalyzer({
 	redirects: () => {
 		return [
 			{
+				source: '/user',
+				destination: '/account',
+				permanent: true,
+			},
+			{
 				source: '/donate',
 				destination: '/projects',
 				permanent: false,

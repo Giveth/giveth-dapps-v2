@@ -3,12 +3,12 @@ import {
 	brandColors,
 	mediaQueries,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC, useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
-import { Flex } from '@/components/styled-components/Flex';
 import StatsCard from '@/components/views/homepage/whyGiveth/StatsCard';
 import DonationCard from '@/components/views/homepage/whyGiveth/DonationCard';
 import { thousandsSeparator } from '@/lib/helpers';
@@ -84,7 +84,7 @@ const WhyGiveth: FC<IWhyGivethProps> = props => {
 				<Line />
 				<DonationCardWrapper>
 					<DonationCardContainer
-						width={animationWidth}
+						$width={animationWidth}
 						ref={donationCardsRef}
 					>
 						{nonZeroDonations.map(i => (
@@ -195,8 +195,8 @@ const DonationCardWrapper = styled.div`
 	overflow: hidden;
 `;
 
-const DonationCardContainer = styled(Flex)<{ width?: number }>`
-	animation: moveSlideshow ${props => (props.width || 1000) / 100}s linear
+const DonationCardContainer = styled(Flex)<{ $width?: number }>`
+	animation: moveSlideshow ${props => (props.$width || 1000) / 100}s linear
 		infinite;
 	width: max-content;
 	&:hover {
@@ -207,7 +207,7 @@ const DonationCardContainer = styled(Flex)<{ width?: number }>`
 			transform: translateX(0);
 		}
 		100% {
-			transform: translateX(-${props => props.width}px);
+			transform: translateX(-${props => props.$width}px);
 		}
 	}
 `;

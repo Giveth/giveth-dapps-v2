@@ -1,9 +1,16 @@
-import { B, P, neutralColors } from '@giveth/ui-design-system';
+import {
+	B,
+	P,
+	neutralColors,
+	Flex,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useRouter } from 'next/router';
+import { isAddress } from 'viem';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { RecurringDonationCard } from './RecurringDonationCard';
 import CryptoDonation from './CryptoDonation';
 import config, { isRecurringActive } from '@/configuration';
@@ -11,13 +18,16 @@ import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 
-enum ETabs {
-	ONE_TIME,
-	RECURRING,
+export enum ETabs {
+	ONE_TIME = 'on-time',
+	RECURRING = 'recurring',
 }
 
 export const DonationCard = () => {
-	const [tab, setTab] = useState(ETabs.ONE_TIME);
+	const router = useRouter();
+	const [tab, setTab] = useState(
+		router.query.tab === ETabs.RECURRING ? ETabs.RECURRING : ETabs.ONE_TIME,
+	);
 	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
 
@@ -29,6 +39,11 @@ export const DonationCard = () => {
 				address.chainType === ChainType.EVM &&
 				address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 		);
+
+	const isOwnerOnEVM =
+		project?.adminUser.walletAddress &&
+		isAddress(project.adminUser.walletAddress);
+
 	return (
 		<DonationCardWrapper>
 			<Title>
@@ -36,17 +51,38 @@ export const DonationCard = () => {
 			</Title>
 			<Flex>
 				<Tab
-					selected={tab === ETabs.ONE_TIME}
-					onClick={() => setTab(ETabs.ONE_TIME)}
+					$selected={tab === ETabs.ONE_TIME}
+					onClick={() => {
+						setTab(ETabs.ONE_TIME);
+						router.push(
+							{
+								query: { ...router.query, tab: ETabs.ONE_TIME },
+							},
+							undefined,
+							{ shallow: true },
+						);
+					}}
 				>
 					{formatMessage({
 						id: 'label.one_time_donation',
 					})}
 				</Tab>
-				{hasOpAddress ? (
+				{hasOpAddress && isOwnerOnEVM ? (
 					<Tab
-						selected={tab === ETabs.RECURRING}
-						onClick={() => setTab(ETabs.RECURRING)}
+						$selected={tab === ETabs.RECURRING}
+						onClick={() => {
+							setTab(ETabs.RECURRING);
+							router.push(
+								{
+									query: {
+										...router.query,
+										tab: ETabs.RECURRING,
+									},
+								},
+								undefined,
+								{ shallow: true },
+							);
+						}}
 					>
 						{formatMessage({
 							id: 'label.recurring_donation',
@@ -99,16 +135,13 @@ export const DonationCardWrapper = styled(Flex)`
 	box-shadow: ${Shadow.Neutral[400]};
 	align-items: stretch;
 	height: 100%;
+	text-align: left;
 `;
 
 const Title = styled(B)`
 	color: ${neutralColors.gray[800]};
 	text-align: left;
 `;
-
-interface ITab {
-	selected?: boolean;
-}
 
 const BaseTab = styled(P)`
 	padding: 8px 12px;
@@ -119,10 +152,14 @@ const BaseTab = styled(P)`
 	user-select: none;
 `;
 
+interface ITab {
+	$selected?: boolean;
+}
+
 const Tab = styled(BaseTab)<ITab>`
 	cursor: pointer;
 	${props =>
-		props.selected &&
+		props.$selected &&
 		css`
 			font-weight: 500;
 			color: ${neutralColors.gray[900]};

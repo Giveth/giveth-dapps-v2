@@ -1,13 +1,12 @@
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
-import { H6, mediaQueries } from '@giveth/ui-design-system';
+import { Flex, H6, mediaQueries } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import LightBulbIcon from '../../../../public/images/icons/lightbulb.svg';
 import Routes from '@/lib/constants/Routes';
 import { Shadow } from '@/components/styled-components/Shadow';
-import { Flex } from '@/components/styled-components/Flex';
 import { ProjectGuidelineModal } from '@/components/modals/ProjectGuidelineModal';
 
 export const GuidelinesCard = () => {

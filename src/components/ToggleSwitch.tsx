@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { brandColors, neutralColors, P } from '@giveth/ui-design-system';
+import { brandColors, neutralColors, P, Flex } from '@giveth/ui-design-system';
 import { FC } from 'react';
-import { Flex } from './styled-components/Flex';
 
 interface IToggleButton {
 	isOn: boolean;
@@ -24,12 +23,12 @@ const ToggleSwitch: FC<IToggleButton> = ({
 	return (
 		<Container
 			onClick={handleClick}
-			disabled={disabled}
+			$disabled={disabled}
 			className={className}
 		>
-			<InputStyled checked={isOn} type='checkbox' />
-			<Switch isOn={isOn}>
-				<Bullet isOn={isOn} />
+			<InputStyled checked={isOn} type='checkbox' onChange={() => {}} />
+			<Switch $isOn={isOn}>
+				<Bullet $isOn={isOn} />
 			</Switch>
 			<Caption>{label}</Caption>
 		</Container>
@@ -42,19 +41,19 @@ const InputStyled = styled.input`
 	height: 0;
 `;
 
-const Bullet = styled.div<{ isOn: boolean }>`
+const Bullet = styled.div<{ $isOn: boolean }>`
 	position: absolute;
 	border-radius: 50%;
 	width: 14px;
 	height: 14px;
 	background-color: ${brandColors.pinky[200]};
 	border: 3px solid white;
-	left: ${props => (props.isOn ? '15px' : '1px')};
+	left: ${props => (props.$isOn ? '15px' : '1px')};
 	transition: left 0.2s ease-in-out;
 	top: 1px;
 `;
 
-const Switch = styled.span<{ isOn: boolean }>`
+const Switch = styled.span<{ $isOn: boolean }>`
 	position: relative;
 	width: 30px;
 	height: 16px;
@@ -64,7 +63,7 @@ const Switch = styled.span<{ isOn: boolean }>`
 	border-radius: 50px;
 	cursor: pointer;
 	background-color: ${props =>
-		props.isOn ? brandColors.pinky[500] : neutralColors.gray[700]};
+		props.$isOn ? brandColors.pinky[500] : neutralColors.gray[700]};
 	transition: background-color 0.3s ease-in-out;
 `;
 
@@ -72,11 +71,11 @@ const Caption = styled(P)`
 	color: ${neutralColors.gray[800]};
 `;
 
-const Container = styled(Flex)<{ disabled?: boolean }>`
+const Container = styled(Flex)<{ $disabled?: boolean }>`
 	gap: 8px;
 	align-items: center;
 	cursor: pointer;
-	opacity: ${props => (props.disabled ? 0.3 : 1)};
+	opacity: ${props => (props.$disabled ? 0.3 : 1)};
 `;
 
 export default ToggleSwitch;

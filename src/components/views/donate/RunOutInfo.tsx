@@ -1,26 +1,45 @@
-import { P, B, neutralColors } from '@giveth/ui-design-system';
+import { P, B, neutralColors, Flex } from '@giveth/ui-design-system';
 import { type FC } from 'react';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
+import { useIntl } from 'react-intl';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
-import { formatDate } from '@/lib/helpers';
+import { smallFormatDate } from '@/lib/helpers';
 
 interface IRunOutInfoProps {
-	amount: bigint;
-	totalPerMonth: bigint;
+	superTokenBalance: bigint;
+	streamFlowRatePerMonth: bigint;
+	symbol: string;
 }
 
-export const RunOutInfo: FC<IRunOutInfoProps> = ({ amount, totalPerMonth }) => {
-	const totalPerSecond = totalPerMonth / ONE_MONTH_SECONDS;
+export const RunOutInfo: FC<IRunOutInfoProps> = ({
+	superTokenBalance,
+	streamFlowRatePerMonth,
+	symbol,
+}) => {
+	const { formatMessage } = useIntl();
+	const totalPerSecond = streamFlowRatePerMonth / ONE_MONTH_SECONDS;
 	const secondsUntilRunOut =
-		totalPerSecond > 0 ? amount / totalPerSecond : 0n;
+		totalPerSecond > 0 ? superTokenBalance / totalPerSecond : 0n;
 	const date = new Date();
 	date.setSeconds(date.getSeconds() + Number(secondsUntilRunOut.toString()));
+
 	return (
 		<RunOutSection>
-			<P>Your stream balance will run out funds on </P>
-			<B>{formatDate(date)}</B>
-			<P>Top-up before then!</P>
+			<P>
+				{formatMessage({
+					id: 'label.your_stream_balance',
+				})}{' '}
+				{symbol}{' '}
+				{formatMessage({
+					id: 'label.runout_info',
+				})}
+			</P>
+			<B>{smallFormatDate(date)}</B>
+			<P>
+				{formatMessage({
+					id: 'label.runout_info_topup',
+				})}
+			</P>
 		</RunOutSection>
 	);
 };

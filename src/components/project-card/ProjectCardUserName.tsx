@@ -1,10 +1,9 @@
 import { FC } from 'react';
-import { brandColors, GLink } from '@giveth/ui-design-system';
+import { brandColors, Flex, GLink } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { addressToUserView, slugToProjectView } from '@/lib/routeCreators';
 import { IAdminUser } from '@/apollo/types/types';
-import { Flex } from '../styled-components/Flex';
 import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
 import { PFP } from '../PFP';
 import { StyledPaddedRow } from './ProjectCard';
@@ -14,6 +13,7 @@ interface IProjectCardUserName {
 	slug: string;
 	isForeignOrg?: boolean;
 	name?: string;
+	sidePadding?: string;
 }
 
 export const ProjectCardUserName: FC<IProjectCardUserName> = ({
@@ -21,6 +21,7 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 	slug,
 	isForeignOrg,
 	name,
+	sidePadding,
 }) => {
 	const pfpToken = useGiverPFPToken(
 		adminUser?.walletAddress,
@@ -29,7 +30,7 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 
 	return (
 		<UserNameContainer>
-			<StyledPaddedRow>
+			<StyledPaddedRow $sidePadding={sidePadding}>
 				{adminUser?.name && !isForeignOrg && (
 					<Link
 						href={addressToUserView(
@@ -37,9 +38,9 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 						)}
 					>
 						{pfpToken ? (
-							<Flex gap='8px' alignItems='center'>
+							<Flex gap='8px' $alignItems='center'>
 								<PFP pfpToken={pfpToken} />
-								<Author bold size='Big'>
+								<Author $bold size='Big'>
 									{name || '\u200C'}
 								</Author>
 							</Flex>
@@ -59,13 +60,13 @@ export const ProjectCardUserName: FC<IProjectCardUserName> = ({
 };
 
 interface IAuthor {
-	bold?: boolean;
+	$bold?: boolean;
 }
 
 const Author = styled(GLink)<IAuthor>`
 	color: ${brandColors.pinky[500]};
 	display: block;
-	font-weight: ${props => (props.bold ? 500 : 400)};
+	font-weight: ${props => (props.$bold ? 500 : 400)};
 `;
 
 const UserNameContainer = styled.div`

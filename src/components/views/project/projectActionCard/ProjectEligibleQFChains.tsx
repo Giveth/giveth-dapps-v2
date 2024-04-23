@@ -10,10 +10,10 @@ const ProjectEligibleQFChains = () => {
 	const { projectData } = useProjectContext();
 	const { formatMessage } = useIntl();
 
-	const activeRound = getActiveRound(projectData?.qfRounds);
+	const { activeStartedRound } = getActiveRound(projectData?.qfRounds);
 
-	const eligibleChainNames = activeRound?.eligibleNetworks.map(network =>
-		getChainName(network),
+	const eligibleChainNames = activeStartedRound?.eligibleNetworks.map(
+		network => getChainName(network),
 	);
 
 	const chainsString = eligibleChainNames?.join(' & ');
@@ -31,7 +31,7 @@ const ProjectEligibleQFChains = () => {
 
 const Container = styled.div`
 	border-radius: 8px;
-	padding: 16px 8px;
+	padding: 16px 0;
 `;
 
 const MakeDonationDescription = styled(Caption)`

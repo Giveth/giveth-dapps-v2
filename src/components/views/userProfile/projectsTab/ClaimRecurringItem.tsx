@@ -1,9 +1,15 @@
-import { B, P, brandColors, neutralColors } from '@giveth/ui-design-system';
+import {
+	B,
+	P,
+	brandColors,
+	neutralColors,
+	Flex,
+} from '@giveth/ui-design-system';
 import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useEffect } from 'react';
-import { Flex } from '@/components/styled-components/Flex';
-import { limitFraction } from '@/helpers/number';
+import { formatUnits } from 'viem';
+import { formatDonation, limitFraction } from '@/helpers/number';
 import { TokenIcon } from '../../donate/TokenIcon/TokenIcon';
 import { ITokenWithBalance } from '@/hooks/useProjectClaimableDonations';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
@@ -27,20 +33,28 @@ export const ClaimRecurringItem = ({
 
 	useEffect(() => {
 		if (price !== undefined) {
+			const tokenValueInUsd =
+				price *
+					parseFloat(
+						formatUnits(
+							tokenWithBalance.balance,
+							tokenWithBalance.token.decimals,
+						),
+					) || 0;
 			setAllTokensUsd({
 				...allTokensUsd,
-				[symbol]: price,
+				[symbol]: tokenValueInUsd!,
 			});
 		}
 	}, [price]);
 
 	return (
 		<ItemContainer
-			justifyContent='space-between'
-			alignItems='center'
+			$justifyContent='space-between'
+			$alignItems='center'
 			key={tokenWithBalance.token.symbol}
 		>
-			<Flex alignItems='center'>
+			<Flex $alignItems='center'>
 				<TokenIcon
 					symbol={tokenWithBalance.token.underlyingToken?.symbol!}
 				/>
@@ -55,7 +69,7 @@ export const ClaimRecurringItem = ({
 						6,
 					)} 
                     ${tokenWithBalance.token.underlyingToken?.symbol} ~
-                    ${price ?? 0}
+                    ${formatDonation(allTokensUsd[symbol]!)}
                     USD
                 `}
 				</B>

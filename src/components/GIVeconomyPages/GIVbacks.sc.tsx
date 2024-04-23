@@ -11,6 +11,7 @@ import {
 	neutralColors,
 	Title,
 	ButtonLink,
+	Flex,
 } from '@giveth/ui-design-system';
 import {
 	BottomContainer,
@@ -18,7 +19,6 @@ import {
 	MobileD1,
 	TopContainer,
 } from './commons';
-import { Flex } from '../styled-components/Flex';
 import { mediaQueries } from '@/lib/constants/constants';
 
 export const GIVbacksTopContainer = styled(TopContainer)`

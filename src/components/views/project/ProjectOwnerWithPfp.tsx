@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
-import { neutralColors, Lead } from '@giveth/ui-design-system';
+import { neutralColors, Lead, Flex } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import styled from 'styled-components';
 import { addressToUserView } from '@/lib/routeCreators';
 import { IAdminUser } from '@/apollo/types/types';
 import { useGiverPFPToken } from '@/hooks/useGiverPFPToken';
-import { Flex } from '@/components/styled-components/Flex';
 import { shortenAddress } from '@/lib/helpers';
 import { PFP } from '@/components/PFP';
 
@@ -22,7 +21,7 @@ export const ProjectOwnerWithPfp: FC<IProjectOwnerWithPfpProps> = ({
 	return (
 		<Link href={addressToUserView(user?.walletAddress?.toLowerCase())}>
 			{pfpToken ? (
-				<Flex gap='8px' alignItems='center'>
+				<Flex gap='8px' $alignItems='center'>
 					<StyledPFP pfpToken={pfpToken} />
 					<Author>{name || '\u200C'}</Author>
 				</Flex>

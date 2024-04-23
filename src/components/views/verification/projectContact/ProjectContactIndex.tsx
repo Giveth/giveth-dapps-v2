@@ -3,22 +3,20 @@ import { useEffect, useState } from 'react';
 import {
 	Button,
 	H6,
-	IconFacebook,
-	IconInstagram,
-	IconLink,
-	IconLinkedin,
-	IconYoutube,
+	IconDiscord,
 	neutralColors,
+	IconTelegram,
+	IconWhatsApp,
 	P,
 	IconInfoFilled,
 	IconXSocial,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { requiredOptions } from '@/lib/constants/regex';
+import { validators } from '@/lib/constants/regex';
 
 import Input from '@/components/Input';
-import { BtnContainer, ContentSeparator } from '../Common.sc';
+import { BtnContainer, ContentSeparator, OutlineStyled } from '../Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { client } from '@/apollo/apolloClient';
@@ -26,8 +24,6 @@ import { EVerificationSteps, IProjectContact } from '@/apollo/types/types';
 import AddSocialModal from '@/components/views/verification/projectContact/AddSocialModal';
 import { EMainSocials, IMainSocials } from './common.types';
 import { OtherInput } from '@/components/views/verification/projectContact/common';
-import { validators } from '@/lib/constants/regex';
-import { OutlineStyled } from '@/components/views/verification/Common.sc';
 
 export default function ProjectContactIndex() {
 	const { verificationData, setVerificationData, setStep, isDraft } =
@@ -133,7 +129,11 @@ export default function ProjectContactIndex() {
 						<Input
 							label={i.type}
 							key={i.type}
-							placeholder='https://'
+							placeholder={
+								i.type === EMainSocials.WhatsApp
+									? '+1234567890'
+									: 'https://'
+							}
 							LeftIcon={i.icon}
 							error={errors[i.type]}
 							register={register}
@@ -167,25 +167,6 @@ export default function ProjectContactIndex() {
 							buttonType='primary'
 						/>
 					)}
-					<SocialLinkInfo>
-						{formatMessage({
-							id: 'label.in_order_to_ensure_that_you_are_a_representative',
-						})}
-					</SocialLinkInfo>
-					<br />
-					<Input
-						label={formatMessage({
-							id: 'label.link_to_your_giveth_project',
-						})}
-						placeholder='https://'
-						LeftIcon={<IconLink color={neutralColors.gray[600]} />}
-						error={errors['SocialLink']}
-						register={register}
-						registerName='SocialLink'
-						registerOptions={isDraft ? requiredOptions.website : {}}
-						disabled={!isDraft}
-					/>
-
 					<div>
 						<ContentSeparator />
 						<BtnContainer>
@@ -221,24 +202,16 @@ const mainSocialsInputs = [
 		icon: <IconXSocial color={neutralColors.gray[600]} />,
 	},
 	{
-		type: EMainSocials.Facebook,
-		icon: <IconFacebook color={neutralColors.gray[600]} />,
+		type: EMainSocials.Discord,
+		icon: <IconDiscord color={neutralColors.gray[600]} />,
 	},
 	{
-		type: EMainSocials.LinkedIn,
-		icon: <IconLinkedin color={neutralColors.gray[600]} />,
+		type: EMainSocials.Telegram,
+		icon: <IconTelegram color={neutralColors.gray[600]} />,
 	},
 	{
-		type: EMainSocials.Instagram,
-		icon: <IconInstagram color={neutralColors.gray[600]} />,
-	},
-	{
-		type: EMainSocials.YouTube,
-		icon: <IconYoutube color={neutralColors.gray[600]} />,
-	},
-	{
-		type: EMainSocials.Website,
-		icon: <IconLink color={neutralColors.gray[600]} />,
+		type: EMainSocials.WhatsApp,
+		icon: <IconWhatsApp color={neutralColors.gray[600]} />,
 	},
 ];
 
@@ -269,8 +242,4 @@ const FormContainer = styled.form`
 	> :last-child {
 		max-width: 100%;
 	}
-`;
-
-const SocialLinkInfo = styled(P)`
-	max-width: fit-content;
 `;

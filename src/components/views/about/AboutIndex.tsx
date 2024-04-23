@@ -11,10 +11,10 @@ import {
 	neutralColors,
 	D3,
 	ButtonLink,
+	Container,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 
-import { Container } from '@giveth/ui-design-system';
 import links from '@/lib/constants/links';
 import { mediaQueries } from '@/lib/constants/constants';
 import Routes from '@/lib/constants/Routes';

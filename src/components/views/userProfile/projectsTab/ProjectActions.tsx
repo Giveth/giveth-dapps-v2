@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
 import router from 'next/router';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
@@ -43,6 +44,10 @@ const ProjectActions = (props: IProjectActions) => {
 		address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 	)?.address;
 	const hasOptimismAddress = optimismAddress !== undefined;
+
+	const { chain } = useAccount();
+	const { switchChain } = useSwitchChain();
+	const chainId = chain?.id;
 
 	const options: IOption[] = [
 		{
@@ -77,8 +82,14 @@ const ProjectActions = (props: IProjectActions) => {
 		label: 'Claim Recurring donation',
 		icon: <IconArrowDownCircle16 />,
 		cb: () => {
-			setSelectedProject(project);
-			setShowClaimModal && setShowClaimModal(true);
+			if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
+				switchChain({
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+				});
+			} else {
+				setSelectedProject(project);
+				setShowClaimModal && setShowClaimModal(true);
+			}
 		},
 	};
 
@@ -96,8 +107,8 @@ const ProjectActions = (props: IProjectActions) => {
 		<Actions
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
-			isOpen={isHover}
-			isCancelled={isCancelled}
+			$isOpen={isHover}
+			$isCancelled={isCancelled}
 		>
 			{isCancelled ? (
 				<CancelledWrapper>CANCELLED</CancelledWrapper>
@@ -114,8 +125,8 @@ const ProjectActions = (props: IProjectActions) => {
 		<ActionsOld
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
-			isOpen={isHover}
-			isCancelled={isCancelled}
+			$isOpen={isHover}
+			$isCancelled={isCancelled}
 			size='Big'
 		>
 			{isCancelled ? (
@@ -136,17 +147,17 @@ const CancelledWrapper = styled.div`
 	padding: 4px 16px;
 `;
 
-const Actions = styled.div<{ isCancelled: boolean; isOpen: boolean }>`
-	cursor: ${props => (props.isCancelled ? 'default' : 'pointer')};
+const Actions = styled.div<{ $isCancelled: boolean; $isOpen: boolean }>`
+	cursor: ${props => (props.$isCancelled ? 'default' : 'pointer')};
 	background-color: ${neutralColors.gray[200]};
 	border-radius: 8px;
 	padding: 8px 10px;
 `;
 
-const ActionsOld = styled(GLink)<{ isCancelled: boolean; isOpen: boolean }>`
+const ActionsOld = styled(GLink)<{ $isCancelled: boolean; $isOpen: boolean }>`
 	color: ${props =>
-		props.isCancelled ? neutralColors.gray[500] : neutralColors.gray[900]};
-	cursor: ${props => (props.isCancelled ? 'default' : 'pointer')};
+		props.$isCancelled ? neutralColors.gray[500] : neutralColors.gray[900]};
+	cursor: ${props => (props.$isCancelled ? 'default' : 'pointer')};
 `;
 
 export default ProjectActions;

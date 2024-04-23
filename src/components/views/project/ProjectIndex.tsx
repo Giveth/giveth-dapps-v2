@@ -8,11 +8,13 @@ import {
 	neutralColors,
 	semanticColors,
 	Button,
+	Col,
+	Row,
+	Flex,
+	deviceSize,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Col, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { Flex } from '@/components/styled-components/Flex';
 import ProjectHeader from './ProjectHeader';
 import ProjectTabs from './ProjectTabs';
 import InfoBadge from '@/components/badges/InfoBadge';
@@ -37,6 +39,7 @@ import { ProjectStats } from './projectActionCard/ProjectStats';
 import { AdminActions } from './projectActionCard/AdminActions';
 import ProjectOwnerBanner from './ProjectOwnerBanner';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
+import ProjectSocials from './ProjectSocials';
 
 const ProjectDonations = dynamic(
 	() => import('./projectDonations/ProjectDonations.index'),
@@ -129,7 +132,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						<ProjectHeader />
 						{isMobile && isAdmin && (
 							<MobileActionsContainer
-								flexDirection='column'
+								$flexDirection='column'
 								gap='24px'
 							>
 								<ProjectStats />
@@ -137,9 +140,9 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							</MobileActionsContainer>
 						)}
 						{isMobile && (
-							<MobileContainer hasActiveRound={hasActiveQFRound}>
+							<MobileContainer $hasActiveRound={hasActiveQFRound}>
 								{hasActiveQFRound ? (
-									<QFSection />
+									<QFSection projectData={projectData} />
 								) : (
 									<DonateSection />
 								)}
@@ -153,7 +156,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					{isDraft && (
 						<DraftIndicator>
 							<InfoBadge />
-							<Caption medium>
+							<Caption $medium>
 								{formatMessage({
 									id: 'page.project.preview_hint',
 								})}
@@ -166,7 +169,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 				<ProjectTabs activeTab={activeTab} slug={slug} />
 			)}
 			<BodyWrapper>
-				<Container>
+				<ContainerStyled>
 					{!isActive && !isDraft && (
 						<InlineToast
 							type={EToastType.Warning}
@@ -177,6 +180,8 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 						<>
 							<RichTextViewer content={description} />
 							<Separator />
+							<ProjectSocials />
+							<Separator />
 							<ProjectCategoriesBadges
 								categories={categories || []}
 							/>
@@ -186,7 +191,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					{activeTab === 2 && <ProjectDonations />}
 					{activeTab === 3 && <ProjectGIVPowerIndex />}
 					{isDraft && (
-						<Flex justifyContent='flex-end'>
+						<Flex $justifyContent='flex-end'>
 							<ContinueCreationButton
 								label={formatMessage({
 									id: 'label.continue_creation',
@@ -201,13 +206,21 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 							/>
 						</Flex>
 					)}
-				</Container>
+				</ContainerStyled>
 
 				<SimilarProjects slug={slug} />
 			</BodyWrapper>
 		</Wrapper>
 	);
 };
+
+const ContainerStyled = styled(Container)`
+	@media (min-width: ${deviceSize.laptopL}px) and (max-width: ${deviceSize.desktop}px) {
+		padding-left: 0;
+		padding-right: 0;
+		width: 1250px;
+	}
+`;
 
 const DraftIndicator = styled.div`
 	color: ${semanticColors.blueSky[600]};
@@ -242,8 +255,9 @@ const ContinueCreationButton = styled(Button)`
 	align-self: flex-end;
 `;
 
-const MobileContainer = styled.div<{ hasActiveRound: boolean }>`
-	padding: ${props => (props.hasActiveRound ? '0 26px 26px 26px' : '0 26px')};
+const MobileContainer = styled.div<{ $hasActiveRound: boolean }>`
+	padding: ${props =>
+		props.$hasActiveRound ? '0 26px 26px 26px' : '0 26px'};
 	background-color: ${neutralColors.gray[100]};
 	border-radius: 16px;
 `;

@@ -40,7 +40,7 @@ const AddSocialModal: FC<IProps> = ({ setShowModal, addSocial }) => {
 				<Input
 					label='Social media title'
 					registerName='name'
-					placeholder='Discord'
+					placeholder='Facebook'
 					register={register}
 					registerOptions={{
 						...requiredOptions.name,

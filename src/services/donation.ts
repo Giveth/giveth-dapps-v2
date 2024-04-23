@@ -11,9 +11,16 @@ import { EDonationStatus } from '@/apollo/types/gqlEnums';
 import { FETCH_USER_STREAMS } from '@/apollo/gql/gqlUser';
 import { ITokenStreams } from '@/context/donate.context';
 import { gqlRequest } from '@/helpers/requests';
-import { ISuperfluidStream } from '@/types/superFluid';
-import config from '@/configuration';
-import { SENTRY_URGENT } from '@/configuration';
+import { ISuperfluidStream, IToken } from '@/types/superFluid';
+import config, { SENTRY_URGENT } from '@/configuration';
+import {
+	CREATE_DRAFT_RECURRING_DONATION,
+	CREATE_RECURRING_DONATION,
+	UPDATE_RECURRING_DONATION,
+	UPDATE_RECURRING_DONATION_BY_ID,
+	UPDATE_RECURRING_DONATION_STATUS,
+} from '@/apollo/gql/gqlSuperfluid';
+import { ERecurringDonationStatus } from '@/apollo/types/types';
 
 const SAVE_DONATION_ITERATIONS = 5;
 
@@ -118,4 +125,219 @@ export const fetchUserStreams = async (address: Address) => {
 		_tokenStreams[stream.token.id].push(stream);
 	});
 	return _tokenStreams;
+};
+
+interface ICreateRecurringDonationBase {
+	projectId: number;
+	chainId: number;
+	superToken: IToken;
+	flowRate: bigint;
+	anonymous?: boolean;
+	isBatch?: boolean;
+}
+
+export interface ICreateDraftRecurringDonation
+	extends ICreateRecurringDonationBase {
+	isForUpdate?: boolean;
+	recurringDonationId?: string;
+}
+
+export const createDraftRecurringDonation = async ({
+	chainId,
+	projectId,
+	flowRate,
+	superToken,
+	anonymous,
+	isBatch,
+	isForUpdate,
+}: ICreateDraftRecurringDonation) => {
+	let draftDonationId = 0;
+	try {
+		const { data } = await client.mutate({
+			mutation: CREATE_DRAFT_RECURRING_DONATION,
+			variables: {
+				projectId,
+				networkId: chainId,
+				flowRate: flowRate.toString(),
+				currency: superToken.underlyingToken?.symbol || 'ETH',
+				anonymous,
+				isBatch,
+				isForUpdate,
+			},
+		});
+		draftDonationId = parseInt(data.createDraftRecurringDonation);
+		console.log('draftDonationId', draftDonationId);
+		return draftDonationId;
+	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('createDraftRecurringDonation error: ', error);
+		throw error;
+	}
+};
+
+export interface ICreateRecurringDonation extends ICreateRecurringDonationBase {
+	draftDonationId: number;
+	txHash: string;
+}
+
+export const createRecurringDonation = async ({
+	chainId,
+	txHash,
+	projectId,
+	flowRate,
+	superToken,
+	anonymous,
+	isBatch,
+}: ICreateRecurringDonation) => {
+	let donationId = 0;
+	try {
+		const { data } = await client.mutate({
+			mutation: CREATE_RECURRING_DONATION,
+			variables: {
+				projectId,
+				networkId: chainId,
+				txHash,
+				flowRate: flowRate.toString(),
+				currency: superToken.underlyingToken?.symbol || 'ETH',
+				anonymous,
+				isBatch,
+			},
+		});
+		donationId = parseInt(data.createRecurringDonation.id);
+		console.log('donationId', donationId);
+		return donationId;
+	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('createRecurringDonation error: ', error);
+		throw error;
+	}
+};
+
+export interface IUpdateRecurringDonation extends ICreateRecurringDonation {
+	recurringDonationId?: string;
+}
+
+export const updateRecurringDonation = async (
+	props: IUpdateRecurringDonation,
+) => {
+	let donationId = 0;
+	const {
+		recurringDonationId,
+		chainId,
+		txHash,
+		projectId,
+		flowRate,
+		superToken,
+		anonymous,
+	} = props;
+	try {
+		const _recurringDonationId = recurringDonationId
+			? parseInt(recurringDonationId)
+			: undefined;
+		const { data } = await client.mutate({
+			mutation: recurringDonationId
+				? UPDATE_RECURRING_DONATION_BY_ID
+				: UPDATE_RECURRING_DONATION,
+			variables: {
+				recurringDonationId: _recurringDonationId,
+				projectId,
+				networkId: chainId,
+				txHash,
+				flowRate: flowRate.toString(),
+				currency: superToken.underlyingToken?.symbol || 'ETH',
+				anonymous,
+			},
+		});
+		const id = recurringDonationId
+			? data.updateRecurringDonationParamsById.id
+			: data.updateRecurringDonationParams.id;
+		donationId = parseInt(id);
+		console.log('donationId', donationId);
+		return donationId;
+	} catch (error: any) {
+		//handle the case where the recurring donation does not exist on db but it exists on the chain
+		if (error?.message.toLowerCase() === 'recurring donation not found.') {
+			return createRecurringDonation(props);
+		}
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('updateRecurringDonation error: ', error);
+		throw error;
+	}
+};
+
+export interface IEndRecurringDonation {
+	recurringDonationId: number;
+	projectId: number;
+	chainId: number;
+	txHash: string;
+	superToken: IToken;
+}
+
+export const endRecurringDonation = async ({
+	chainId,
+	txHash,
+	projectId,
+	superToken,
+	recurringDonationId,
+}: IEndRecurringDonation) => {
+	let donationUpdateId = 0;
+	try {
+		const { data } = await client.mutate({
+			mutation: UPDATE_RECURRING_DONATION_BY_ID,
+			variables: {
+				recurringDonationId,
+				projectId,
+				networkId: chainId,
+				txHash,
+				currency: superToken.underlyingToken?.symbol || 'ETH',
+				status: ERecurringDonationStatus.ENDED,
+			},
+		});
+		donationUpdateId = parseInt(data.updateRecurringDonationParamsById.id);
+		return donationUpdateId;
+	} catch (error: any) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('endRecurringDonation error: ', error);
+		throw error;
+	}
+};
+
+export const updateRecurringDonationStatus = async (
+	donationId: number,
+	status: ERecurringDonationStatus,
+) => {
+	try {
+		const { data } = await client.mutate({
+			mutation: UPDATE_RECURRING_DONATION_STATUS,
+			variables: {
+				donationId,
+				status,
+			},
+		});
+		return parseInt(data.updateRecurringDonationStatus.id);
+	} catch (error: any) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('updateRecurringDonationStatus error: ', error);
+		throw error;
+	}
 };

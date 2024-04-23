@@ -20,10 +20,6 @@ import { Bullets } from '@/components/styled-components/Bullets';
 import ExternalLink from '@/components/ExternalLink';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 
-interface IText {
-	isDark?: boolean;
-}
-
 export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	const theme = useAppSelector(state => state.general.theme);
 	const router = useRouter();
@@ -42,12 +38,12 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 			headerTitlePosition='left'
 		>
 			<Container>
-				<Title isDark={theme === ETheme.Dark}>
+				<Title $isDark={theme === ETheme.Dark}>
 					<FormattedMessage id='page.home.bigscreen.title' />
 				</Title>
 				<LeadTitle>You can use Giveth to:</LeadTitle>
 				<Bullets>
-					<Paragraph isDark={theme === ETheme.Dark}>
+					<Paragraph $isDark={theme === ETheme.Dark}>
 						Donate to awesome for-good{' '}
 						<ExternalLink
 							href={Routes.AllProjects}
@@ -56,7 +52,7 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 						/>
 						.
 					</Paragraph>
-					<Paragraph isDark={theme === ETheme.Dark}>
+					<Paragraph $isDark={theme === ETheme.Dark}>
 						<ExternalLink
 							href={Routes.CreateProject}
 							title='Create a project '
@@ -64,7 +60,7 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 						/>
 						&amp; start raising funds for your cause.
 					</Paragraph>
-					<Paragraph isDark={theme === ETheme.Dark}>
+					<Paragraph $isDark={theme === ETheme.Dark}>
 						Earn GIV from{' '}
 						<ExternalLink
 							href={Routes.GIVbacks}
@@ -79,7 +75,7 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 						/>
 						.
 					</Paragraph>
-					<Paragraph isDark={theme === ETheme.Dark}>
+					<Paragraph $isDark={theme === ETheme.Dark}>
 						Earn a yield by staking tokens in the{' '}
 						<ExternalLink
 							href={Routes.GIVfarm}
@@ -111,8 +107,12 @@ export const FirstWelcomeModal: FC<IModal> = ({ setShowModal }) => {
 	);
 };
 
-const Title = styled(H5)`
-	color: ${(prop: IText) => (prop.isDark ? 'white' : brandColors.deep[900])};
+interface IText {
+	$isDark?: boolean;
+}
+
+const Title = styled(H5)<IText>`
+	color: ${(prop: IText) => (prop.$isDark ? 'white' : brandColors.deep[900])};
 	font-weight: 700;
 	margin-bottom: 24px;
 `;
@@ -139,7 +139,7 @@ const Container = styled.div`
 	padding: 26px 33px;
 `;
 
-const Paragraph = styled.li<{ isDark?: boolean }>`
-	color: ${(prop: IText) => (prop.isDark ? 'white' : brandColors.deep[900])};
+const Paragraph = styled.li<IText>`
+	color: ${(prop: IText) => (prop.$isDark ? 'white' : brandColors.deep[900])};
 	font-size: 20px;
 `;

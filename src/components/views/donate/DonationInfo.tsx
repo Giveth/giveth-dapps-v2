@@ -4,6 +4,7 @@ import {
 	ButtonLink,
 	IconExternalLink24,
 	brandColors,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import React from 'react';
@@ -11,9 +12,7 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Chain } from 'viem';
 import Routes from '@/lib/constants/Routes';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { useDonateData } from '@/context/donate.context';
-import ExternalLink from '@/components/ExternalLink';
 
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { formatTxLink } from '@/lib/helpers';
@@ -23,14 +22,16 @@ const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
 	return (
 		<TxLink>
 			<span>Donation to {title + ' '}</span>
-			<ExternalLink
+			<Link
 				href={formatTxLink({
 					txHash,
 					networkId: (chain as Chain)?.id,
 					chainType: walletChainType || undefined,
 				})}
-				title='View the transaction'
-			/>
+				target='_blank'
+			>
+				View the transaction
+			</Link>
 			<IconExternalLink24 />
 		</TxLink>
 	);
@@ -38,8 +39,8 @@ const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
 
 export const DonationInfo = () => {
 	const { formatMessage } = useIntl();
-	const { isSuccessDonation, project } = useDonateData();
-	const { txHash = [] } = isSuccessDonation || {};
+	const { successDonation, project } = useDonateData();
+	const { txHash = [] } = successDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 
 	return (
@@ -68,6 +69,7 @@ const Options = styled(FlexCenter)`
 	flex-direction: column;
 	width: 100%;
 	padding: 40px 20px 0;
+	position: relative;
 `;
 
 const ProjectsButton = styled(ButtonLink)`

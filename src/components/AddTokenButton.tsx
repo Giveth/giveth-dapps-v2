@@ -1,10 +1,9 @@
-import { brandColors, P } from '@giveth/ui-design-system';
+import { brandColors, Flex, P } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAccount } from 'wagmi';
 import { Address } from 'viem';
-import { Flex } from './styled-components/Flex';
 import { addToken } from '@/lib/metamask';
 
 interface IAddGIVTokenButton {

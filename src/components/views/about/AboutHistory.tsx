@@ -4,11 +4,11 @@ import { useIntl } from 'react-intl';
 import {
 	brandColors,
 	ButtonLink,
+	FlexCenter,
 	H3,
 	H4,
 	Lead,
 } from '@giveth/ui-design-system';
-import { FlexCenter } from '../../styled-components/Flex';
 import links from '@/lib/constants/links';
 
 const AboutHistory = () => {
@@ -60,7 +60,7 @@ const AboutHistory = () => {
 				{sliderContent.map((elem, index) => (
 					<SliderTextSection
 						key={`slider-content-${index}`}
-						active={sliderSection === index}
+						$active={sliderSection === index}
 					>
 						<Title>{formatMessage({ id: elem.title })}</Title>
 						<Lead>{elem.body}</Lead>
@@ -71,7 +71,7 @@ const AboutHistory = () => {
 					{sliderContent.map((elem, index) => (
 						<SliderButton
 							key={`slider-button-${index}`}
-							active={sliderSection === index}
+							$active={sliderSection === index}
 							onClick={() => setSliderSection(index)}
 						/>
 					))}
@@ -81,14 +81,14 @@ const AboutHistory = () => {
 	);
 };
 
-const SliderButton = styled.div<{ active: boolean }>`
+const SliderButton = styled.div<{ $active: boolean }>`
 	border-radius: 50%;
 	width: 23px;
 	height: 23px;
 	cursor: pointer;
 	border: 2px solid ${brandColors.giv[500]};
 	background: ${props =>
-		props.active ? brandColors.giv[500] : 'transparent'};
+		props.$active ? brandColors.giv[500] : 'transparent'};
 `;
 
 const SliderButtons = styled(FlexCenter)`
@@ -96,8 +96,8 @@ const SliderButtons = styled(FlexCenter)`
 	margin: 66px auto 0 auto;
 `;
 
-const SliderTextSection = styled.div<{ active: boolean }>`
-	display: ${props => (props.active ? 'flex' : 'none')};
+const SliderTextSection = styled.div<{ $active: boolean }>`
+	display: ${props => (props.$active ? 'flex' : 'none')};
 	flex-direction: column;
 	place-items: center;
 	min-height: 390px;

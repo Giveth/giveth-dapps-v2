@@ -1,33 +1,80 @@
 import styled from 'styled-components';
-import { B, H5, neutralColors } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
-import { useUserStreams } from '@/hooks/useUserStreams';
+import {
+	B,
+	H5,
+	neutralColors,
+	Flex,
+	P,
+	brandColors,
+} from '@giveth/ui-design-system';
+import { type FC } from 'react';
+import { useIntl } from 'react-intl';
 import { StreamRow } from './StreamRow';
+import { useProfileDonateTabData } from './ProfileDonateTab.context';
+import links from '@/lib/constants/links';
 
-export const ActiveStreamsSection = () => {
-	const tokenStream = useUserStreams();
+export const ActiveStreamsSection: FC = () => {
+	const { tokenStreams } = useProfileDonateTabData();
+	const { formatMessage } = useIntl();
 	return (
 		<Wrapper>
-			<H5 weight={900}>My Active Streams</H5>
+			<H5 weight={900}>
+				{formatMessage({
+					id: 'label.stream_balances',
+				})}
+			</H5>
+			<Desc>
+				{formatMessage({
+					id: 'label.active_streams_subheader',
+				})}{' '}
+				<a
+					href={links.SUPERFLUID_DASHBOARD}
+					target='_blank'
+					rel='noopener noreferrer'
+				>
+					Superfluid Dashboard
+				</a>{' '}
+				.
+			</Desc>
 			<DonationTableContainer>
 				<TableHeaderRow>
 					<TableHeader>
-						<B>Current stream Balance</B>{' '}
+						<B>
+							{formatMessage({
+								id: 'label.current_balance',
+							})}
+						</B>
 					</TableHeader>
 					<TableHeader>
-						<B>Total Recurring Donations</B>
+						<B>
+							{formatMessage({
+								id: 'label.streaming_at_rate_of',
+							})}
+						</B>
 					</TableHeader>
 					<TableHeader>
-						<B>Projects</B>
+						<B>
+							{formatMessage({
+								id: 'label.supporting',
+							})}
+						</B>
 					</TableHeader>
 					<TableHeader>
-						<B>Runs out in</B>
+						<B>
+							{formatMessage({
+								id: 'label.top_up_before',
+							})}
+						</B>
 					</TableHeader>
 					<TableHeader>
-						<B>Actions</B>
+						<B>
+							{formatMessage({
+								id: 'label.actions',
+							})}
+						</B>
 					</TableHeader>
 				</TableHeaderRow>
-				{Object.entries(tokenStream).map(([key, value]) => (
+				{Object.entries(tokenStreams).map(([key, value]) => (
 					<StreamRow key={key} tokenStream={value} />
 				))}
 			</DonationTableContainer>
@@ -43,10 +90,10 @@ const Wrapper = styled(Flex)`
 	border-radius: 12px;
 `;
 
-const DonationTableContainer = styled.div<{ myAccount?: boolean }>`
+const DonationTableContainer = styled.div<{ $myAccount?: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
-		props.myAccount
+		props.$myAccount
 			? '1fr 4fr 1fr 1.5fr 1fr 1fr'
 			: 'auto auto auto auto auto'};
 	overflow: auto;
@@ -71,4 +118,19 @@ export const TableCell = styled(Flex)`
 
 const TableHeader = styled(TableCell)`
 	background-color: ${neutralColors.gray[200]};
+`;
+
+const Desc = styled(P)`
+	padding: 8px;
+	border-radius: 8px;
+	background: ${neutralColors.gray[200]};
+	color: ${neutralColors.gray[800]};
+	& > a {
+		color: ${brandColors.giv[500]};
+		transition: color 0.2s ease-in-out;
+		font-weight: 500;
+		&:hover {
+			color: ${brandColors.giv[700]};
+		}
+	}
 `;

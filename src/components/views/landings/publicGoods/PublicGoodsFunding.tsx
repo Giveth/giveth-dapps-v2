@@ -1,6 +1,12 @@
 import Image from 'next/image';
 import styled from 'styled-components';
-import { Button, H4, Lead, semanticColors } from '@giveth/ui-design-system';
+import {
+	Button,
+	H4,
+	Lead,
+	semanticColors,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import {
 	PublicGoodsOuterWrapper,
 	PublicGoodsWrapper,
@@ -8,7 +14,6 @@ import {
 import QFImg from 'public/images/public-goods-in-crypto-and-web3/QF.png';
 import ExternalLink from '@/components/ExternalLink';
 import Routes from '@/lib/constants/Routes';
-import { FlexCenter } from '@/components/styled-components/Flex';
 
 const PublicGoodsFunding = () => {
 	return (

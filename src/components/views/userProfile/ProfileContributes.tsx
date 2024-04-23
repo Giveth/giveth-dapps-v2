@@ -1,20 +1,22 @@
 import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { brandColors, neutralColors, P } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	neutralColors,
+	P,
+	Container,
+	Flex,
+} from '@giveth/ui-design-system';
 import Link from 'next/link';
 
 import { useIntl } from 'react-intl';
-import { Container } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
 import ProfileDonationsTab from './donationsTab/ProfileDonationsTab';
 import ProfileLikedTab from './ProfileLikedTab';
 import ProfileProjectsTab from './projectsTab/ProfileProjectsTab';
 import ProfileOverviewTab from './ProfileOverviewTab';
 import { IUserProfileView } from './UserProfile.view';
 import { ProfileBoostedTab } from './boostedTab/ProfileBoostedTab';
-import { profileTabs } from '@/lib/constants/Routes';
-import { removeQueryParam } from '@/helpers/url';
 import { PublicProfileBoostedTab } from './boostedTab/PublicProfileBoostedTab';
 import { useProfileContext } from '@/context/profile.context';
 
@@ -27,7 +29,7 @@ enum EProfile {
 }
 
 interface ITab {
-	active: boolean;
+	$active: boolean;
 }
 
 const ProfileContributes: FC<IUserProfileView> = () => {
@@ -49,6 +51,7 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 				setTab(EProfile.PROJECTS);
 				break;
 			case 'donations':
+			case 'recurring-donations':
 				setTab(EProfile.DONATIONS);
 				break;
 			case 'liked':
@@ -59,45 +62,67 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 		}
 	}, [router?.query?.tab]);
 
-	const pathname = removeQueryParam(router.asPath, ['tab'], true);
+	const baseQuery = router.route.startsWith('/account')
+		? {}
+		: { address: router.query.address };
+
 	return (
 		<Container>
 			<ProfileTabsContainer>
-				<Link href={pathname + profileTabs.overview}>
-					<ProfileTab active={tab === EProfile.OVERVIEW}>
+				<Link
+					href={{
+						query: {
+							tab: 'overview',
+							...baseQuery,
+						},
+					}}
+				>
+					<ProfileTab $active={tab === EProfile.OVERVIEW}>
 						{formatMessage({ id: 'label.overview' })}
 					</ProfileTab>
 				</Link>
-				<Link href={pathname + profileTabs.givpower}>
-					<ProfileTab active={tab === EProfile.GIVPOWER}>
+				<Link
+					href={{
+						query: { tab: 'givpower', ...baseQuery },
+					}}
+				>
+					<ProfileTab $active={tab === EProfile.GIVPOWER}>
 						{`${
 							myAccount
 								? formatMessage({ id: 'label.my_givpower' })
 								: 'GIVpower'
 						}`}
 						{myAccount && user?.boostedProjectsCount !== 0 && (
-							<Count active={tab === EProfile.GIVPOWER}>
+							<Count $active={tab === EProfile.GIVPOWER}>
 								{user?.boostedProjectsCount}
 							</Count>
 						)}
 					</ProfileTab>
 				</Link>
-				<Link href={pathname + profileTabs.projects}>
-					<ProfileTab active={tab === EProfile.PROJECTS}>
+				<Link
+					href={{
+						query: { tab: 'projects', ...baseQuery },
+					}}
+				>
+					<ProfileTab $active={tab === EProfile.PROJECTS}>
 						{`${
 							myAccount
 								? formatMessage({ id: 'label.my_projects' })
 								: formatMessage({ id: 'label.projects' })
 						}`}
 						{myAccount && user?.projectsCount != 0 && (
-							<Count active={tab === EProfile.PROJECTS}>
+							<Count $active={tab === EProfile.PROJECTS}>
 								{user?.projectsCount}
 							</Count>
 						)}
 					</ProfileTab>
 				</Link>
-				<Link href={pathname + profileTabs.donations}>
-					<ProfileTab active={tab === EProfile.DONATIONS}>
+				<Link
+					href={{
+						query: { tab: 'donations', ...baseQuery },
+					}}
+				>
+					<ProfileTab $active={tab === EProfile.DONATIONS}>
 						{`${
 							myAccount
 								? formatMessage({
@@ -106,20 +131,24 @@ const ProfileContributes: FC<IUserProfileView> = () => {
 								: formatMessage({ id: 'label.donations' })
 						}`}
 						{myAccount && user?.donationsCount != 0 && (
-							<Count active={tab === EProfile.DONATIONS}>
+							<Count $active={tab === EProfile.DONATIONS}>
 								{user?.donationsCount}
 							</Count>
 						)}
 					</ProfileTab>
 				</Link>
-				<Link href={pathname + profileTabs.likedProjects}>
+				<Link
+					href={{
+						query: { tab: 'liked', ...baseQuery },
+					}}
+				>
 					<ProfileTab
-						active={tab === EProfile.LIKED}
+						$active={tab === EProfile.LIKED}
 						onClick={() => setTab(EProfile.LIKED)}
 					>
 						{formatMessage({ id: 'label.liked_projects' })}
 						{myAccount && !!user?.likedProjectsCount && (
-							<Count active={tab === EProfile.LIKED}>
+							<Count $active={tab === EProfile.LIKED}>
 								{user?.likedProjectsCount}
 							</Count>
 						)}
@@ -154,9 +183,9 @@ const ProfileTab = styled(P)<ITab>`
 	white-space: nowrap;
 	cursor: pointer;
 	color: ${(props: ITab) =>
-		props.active ? brandColors.deep[600] : brandColors.pinky[500]};
+		props.$active ? brandColors.deep[600] : brandColors.pinky[500]};
 	${props =>
-		props.active &&
+		props.$active &&
 		`
 		background: ${neutralColors.gray[100]};
 		box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
@@ -166,7 +195,7 @@ const ProfileTab = styled(P)<ITab>`
 
 const Count = styled.div<ITab>`
 	background-color: ${(props: ITab) =>
-		props.active ? neutralColors.gray[500] : brandColors.pinky[500]};
+		props.$active ? neutralColors.gray[500] : brandColors.pinky[500]};
 	color: white;
 	width: 24px;
 	height: 24px;

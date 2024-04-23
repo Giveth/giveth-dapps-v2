@@ -8,11 +8,10 @@ import {
 	Caption,
 	Subline,
 	B,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { mediaQueries } from '@/lib/constants/constants';
-
-import { Flex } from '../styled-components/Flex';
 
 export const HarvestAllModalContainer = styled.div`
 	width: 100%;

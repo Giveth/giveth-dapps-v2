@@ -9,12 +9,13 @@ import {
 	Caption,
 	IconHelpFilled,
 	P,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
 import { smallFormatDate } from '@/lib/helpers';
-import { Flex, FlexCenter } from '../styled-components/Flex';
 import { Modal } from './Modal';
 import { IconWithTooltip } from '../IconWithToolTip';
 import { formatEthHelper, formatWeiHelper } from '@/helpers/number';

@@ -1,7 +1,7 @@
 import { useState, useRef, FC } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
-import { FlexCenter } from '@/components/styled-components/Flex';
+import { FlexCenter } from '@giveth/ui-design-system';
 
 interface ITabOverviewVideo {
 	src: string;
@@ -41,7 +41,7 @@ export const VideoBlock: FC<ITabOverviewVideo> = ({ src, poster }) => {
 			>
 				<source src={src} type='video/mp4' />
 			</video>
-			<VideoOverlay onClick={handleVideoClick} hidden={isPlaying}>
+			<VideoOverlay onClick={handleVideoClick} $hidden={isPlaying}>
 				<Image
 					src='/images/video_play.svg'
 					width='90'
@@ -64,8 +64,8 @@ export const VideoContainer = styled(FlexCenter)`
 	cursor: pointer;
 `;
 
-export const VideoOverlay = styled.div<{ hidden: boolean }>`
-	display: ${props => (props.hidden ? 'none' : 'flex')};
+export const VideoOverlay = styled.div<{ $hidden: boolean }>`
+	display: ${props => (props.$hidden ? 'none' : 'flex')};
 	justify-content: center;
 	align-items: center;
 	left: 0;

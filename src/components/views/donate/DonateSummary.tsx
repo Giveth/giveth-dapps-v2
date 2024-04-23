@@ -1,8 +1,7 @@
 import { FC } from 'react';
 import styled from 'styled-components';
-import { B, H5 } from '@giveth/ui-design-system';
+import { B, H5, FlexCenter } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { formatPrice, formatUSD } from '@/lib/helpers';
 
 interface IProps {

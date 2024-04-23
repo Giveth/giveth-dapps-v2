@@ -191,13 +191,13 @@ const AddAddressModal: FC<IProps> = ({
 
 const Buttons = styled.div`
 	margin-top: 80px;
-	> :last-child {
+	& > :last-child {
 		margin-top: 10px;
 		&:hover {
 			background-color: transparent;
 		}
 	}
-	> * {
+	& > * {
 		width: 100%;
 	}
 `;

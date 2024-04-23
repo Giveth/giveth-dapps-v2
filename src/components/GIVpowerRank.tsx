@@ -7,11 +7,11 @@ import {
 	IconRocketInSpace16,
 	H4,
 	H2,
+	Flex,
 } from '@giveth/ui-design-system';
 import { FC } from 'react';
 import styled, { css } from 'styled-components';
 import { IProjectPower } from '@/apollo/types/types';
-import { Flex } from './styled-components/Flex';
 import { useProjectContext } from '@/context/project.context';
 
 interface IGIVpowerRank {
@@ -57,9 +57,9 @@ export const NextRank: FC<IGIVpowerNextRank> = ({
 			: 0;
 
 	return isBoostingsLoading ? (
-		<NextRankContainer state={0} isLoading={true}></NextRankContainer>
+		<NextRankContainer $state={0} $isLoading={true}></NextRankContainer>
 	) : (
-		<NextRankContainer state={goingUp} alignItems='baseline' gap='4px'>
+		<NextRankContainer $state={goingUp} $alignItems='baseline' gap='4px'>
 			{goingUp === 0 ? (
 				''
 			) : goingUp > 0 ? (
@@ -84,7 +84,7 @@ export const CurrentRank: FC<ICurrentRank> = ({
 	const content =
 		projectPower?.totalPower === 0 ? '--' : `#${projectPower?.powerRank}`;
 	return (
-		<RankContainer alignItems='baseline' gap='4px'>
+		<RankContainer $alignItems='baseline' gap='4px'>
 			{projectPower?.totalPower === 0 && <IconRocketInSpace32 />}
 			{size === 'big' ? (
 				<H2 weight={700}>{content}</H2>
@@ -97,15 +97,17 @@ export const CurrentRank: FC<ICurrentRank> = ({
 
 const RankContainer = styled(Flex)``;
 interface ILoading {
-	state: number;
-	isLoading?: boolean;
+	$state: number;
+	$isLoading?: boolean;
 }
 
 const NextRankContainer = styled(RankContainer)<ILoading>`
 	color: ${props =>
-		props.state > 0 ? semanticColors.punch[700] : semanticColors.jade[700]};
+		props.$state > 0
+			? semanticColors.punch[700]
+			: semanticColors.jade[700]};
 	${props =>
-		props.isLoading
+		props.$isLoading
 			? css`
 					display: inline-block;
 					position: relative;

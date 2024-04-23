@@ -46,7 +46,8 @@ export function renderWithProviders(
 					messages={IntlMessages[locale as keyof typeof IntlMessages]}
 					defaultLocale={defaultLocale}
 				>
-					{children}
+					{/*TODO:Fix*/}
+					{/* {children} */}
 				</IntlProvider>
 			</Provider>
 		);

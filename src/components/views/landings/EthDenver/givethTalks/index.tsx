@@ -6,12 +6,14 @@ import {
 	Lead,
 	mediaQueries,
 	neutralColors,
+	Col,
+	Container,
+	Row,
+	Flex,
 } from '@giveth/ui-design-system';
 import CalendarWhite from '/public/images/calendar-white.svg';
 import Image from 'next/image';
-import { Col, Container, Row } from '@giveth/ui-design-system';
 import CalendarItem from '@/components/views/landings/EthDenver/givethTalks/CalendarItem';
-import { Flex } from '@/components/styled-components/Flex';
 
 const GivethTalks = () => {
 	return (
@@ -44,7 +46,7 @@ const GivethTalks = () => {
 					</a>
 				</Talks>
 				<Calendar xs={12} md={6} xl={8}>
-					<Flex flexDirection='column' gap='40px'>
+					<Flex $flexDirection='column' gap='40px'>
 						<CalendarItem
 							title='Combating the Metacrisis'
 							lecturer='Griff Green'

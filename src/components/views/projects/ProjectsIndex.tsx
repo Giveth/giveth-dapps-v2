@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import { brandColors, OutlineButton } from '@giveth/ui-design-system';
+import {
+	brandColors,
+	OutlineButton,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
@@ -23,7 +27,6 @@ import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
 import { useProjectsContext } from '@/context/projects.context';
 
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { ProjectsMiddleBanner } from './MiddleBanners/ProjectsMiddleBanner';
 import { ActiveQFProjectsBanner } from './qfBanner/ActiveQFProjectsBanner';
 import { PassportBanner } from '@/components/PassportBanner';
@@ -33,8 +36,9 @@ import { Spinner } from '@/components/Spinner';
 import { getMainCategorySlug } from '@/helpers/projects';
 import { FilterContainer } from './filter/FilterContainer';
 import { SortContainer } from './sort/SortContainer';
-import { QFRoundStats } from './QFRoundStats';
+import { ArchivedQFRoundStats } from './ArchivedQFRoundStats';
 import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
+import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -212,7 +216,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 				<ProjectsBanner mainCategory={selectedMainCategory} />
 			)}
 			<Wrapper>
-				{isArchivedQF ? <QFRoundStats /> : <FilterContainer />}
+				{isQF && <ActiveQFRoundStats />}
+				{isArchivedQF ? <ArchivedQFRoundStats /> : <FilterContainer />}
 				<SortingContainer>
 					<SortContainer totalCount={totalCount} />
 				</SortingContainer>
@@ -267,7 +272,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							label={formatMessage({
 								id: 'component.button.create_project',
 							})}
-							transparent
+							$transparent
 						/>
 					</>
 				)}
@@ -280,10 +285,10 @@ const Loader = styled.div`
 	margin: 20px auto;
 `;
 
-const StyledButton = styled(OutlineButton)<{ transparent?: boolean }>`
+const StyledButton = styled(OutlineButton)<{ $transparent?: boolean }>`
 	color: ${brandColors.pinky[500]};
 	border-color: ${props =>
-		props.transparent ? 'transparent' : brandColors.pinky[500]};
+		props.$transparent ? 'transparent' : brandColors.pinky[500]};
 	margin: 16px auto;
 	padding: 22px 80px;
 

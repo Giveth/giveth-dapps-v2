@@ -1,11 +1,10 @@
-import { P, brandColors, neutralColors } from '@giveth/ui-design-system';
+import { P, brandColors, neutralColors, Flex } from '@giveth/ui-design-system';
 import { type FC, useState, useMemo } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
-import { Flex } from '@/components/styled-components/Flex';
 import { DepositSuperToken } from './DepositSuperToken';
 import { WithDrawSuperToken } from './WithDrawSuperToken';
 import { ISuperToken, ISuperfluidStream, IToken } from '@/types/superFluid';
@@ -48,9 +47,14 @@ export const ModifySuperTokenModal: FC<IModifySuperTokenModalProps> = ({
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
 
+	const _closeModal = () => {
+		props.refreshBalance();
+		closeModal();
+	};
+
 	return (
 		<Modal
-			closeModal={closeModal}
+			closeModal={_closeModal}
 			isAnimating={isAnimating}
 			headerTitle={formatMessage({ id: headerTitleGenerator(step) })}
 			headerTitlePosition='left'
@@ -59,6 +63,7 @@ export const ModifySuperTokenModal: FC<IModifySuperTokenModalProps> = ({
 				setShowModal={setShowModal}
 				step={step}
 				setStep={setStep}
+				closeModal={_closeModal}
 				{...props}
 			/>
 		</Modal>
@@ -69,6 +74,7 @@ export interface IModifySuperTokenInnerModalProps
 	extends IModifySuperTokenModalProps {
 	step: EModifySuperTokenSteps;
 	setStep: (step: EModifySuperTokenSteps) => void;
+	closeModal: () => void;
 }
 
 enum EModifyTabs {
@@ -118,7 +124,7 @@ const ModifySuperTokenInnerModal: FC<
 							onClick={() => {
 								setTab(value);
 							}}
-							active={tab === value}
+							$active={tab === value}
 						>
 							{label}
 						</Tab>
@@ -155,10 +161,10 @@ const Tabs = styled(Flex)`
 `;
 
 interface ITapProps {
-	active: boolean;
+	$active: boolean;
 }
 
-const Tab = styled(P)`
+const Tab = styled(P)<ITapProps>`
 	cursor: pointer;
 	color: ${neutralColors.gray[700]};
 	padding: 8px 16px;
@@ -166,8 +172,8 @@ const Tab = styled(P)`
 	&:hover {
 		color: ${neutralColors.gray[900]};
 	}
-	${({ active }: ITapProps) =>
-		active &&
+	${props =>
+		props.$active &&
 		css`
 			background-color: ${neutralColors.gray[200]};
 			color: ${brandColors.pinky[500]};

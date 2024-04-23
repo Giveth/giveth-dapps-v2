@@ -6,25 +6,30 @@ import {
 	IconVerifiedBadge16,
 	mediaQueries,
 	neutralColors,
+	Flex,
+	FlexCenter,
+	IconArrowDownCircle16,
 } from '@giveth/ui-design-system';
 import React, { FC, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { useAccount, useSwitchChain } from 'wagmi';
 import { useProjectContext } from '@/context/project.context';
 import { VerificationModal } from '@/components/modals/VerificationModal';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
 import { capitalizeAllWords } from '@/lib/helpers';
-import { Dropdown, IOption, OptionType } from '@/components/Dropdown';
+import { Dropdown, IOption, EOptionType } from '@/components/Dropdown';
 import { idToProjectEdit } from '@/lib/routeCreators';
 import ShareModal from '@/components/modals/ShareModal';
 import { EContentType } from '@/lib/constants/shareContent';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { device } from '@/lib/constants/constants';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { EVerificationStatus } from '@/apollo/types/types';
+import ClaimRecurringDonationModal from '../../userProfile/projectsTab/ClaimRecurringDonationModal';
+import config, { isRecurringActive } from '@/configuration';
 
 interface IMobileActionsModalProps {
 	setShowModal: (value: boolean) => void;
@@ -36,24 +41,35 @@ export const AdminActions = () => {
 	const [deactivateModal, setDeactivateModal] = useState(false);
 	const [showShareModal, setShowShareModal] = useState(false);
 	const [showMobileActionsModal, setShowMobileActionsModal] = useState(false);
+	const [showClaimModal, setShowClaimModal] = useState(false);
 	const { projectData, isActive, activateProject } = useProjectContext();
 	const project = projectData!;
+
 	const { slug, verified, verificationFormStatus } = project;
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const isMobile = !useMediaQuery(device.tablet);
+	const { chain } = useAccount();
+	const { switchChain } = useSwitchChain();
+	const chainId = chain?.id;
+
 	const isVerificationDisabled =
 		verified ||
 		verificationFormStatus === EVerificationStatus.SUBMITTED ||
 		verificationFormStatus === EVerificationStatus.REJECTED ||
 		!isActive;
 
+	const optimismAddress = project.addresses?.find(
+		address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
+	)?.address;
+	const hasOptimismAddress = optimismAddress !== undefined;
+
 	const options: IOption[] = [
 		{
 			label: formatMessage({
 				id: 'label.edit_project',
 			}),
-			type: OptionType.ITEM,
+			type: EOptionType.ITEM,
 			icon: <IconEdit16 />,
 			cb: () => router.push(idToProjectEdit(projectData?.id || '')),
 		},
@@ -63,7 +79,7 @@ export const AdminActions = () => {
 					id: 'label.verify_your_project',
 				}),
 			),
-			type: OptionType.ITEM,
+			type: EOptionType.ITEM,
 			icon: <IconVerifiedBadge16 />,
 			cb: () => setShowVerificationModal(true),
 			isHidden: isVerificationDisabled,
@@ -76,7 +92,7 @@ export const AdminActions = () => {
 						: 'label.activate_project',
 				}),
 			),
-			type: OptionType.ITEM,
+			type: EOptionType.ITEM,
 			icon: <IconArchiving size={16} />,
 			cb: () => (isActive ? setDeactivateModal(true) : activateProject()),
 		},
@@ -84,12 +100,30 @@ export const AdminActions = () => {
 			label: formatMessage({
 				id: 'label.share',
 			}),
-			type: OptionType.ITEM,
+			type: EOptionType.ITEM,
 			icon: <IconShare16 />,
 			cb: () => setShowShareModal(true),
 			isHidden: !isActive,
 		},
 	];
+
+	const recurringDonationOption: IOption = {
+		label: 'Claim Recurring donation',
+		icon: <IconArrowDownCircle16 />,
+		cb: () => {
+			if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
+				switchChain({
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+				});
+			} else {
+				setShowClaimModal && setShowClaimModal(true);
+			}
+		},
+	};
+
+	isRecurringActive &&
+		hasOptimismAddress &&
+		options.push(recurringDonationOption);
 
 	const dropdownStyle = {
 		padding: '10px 16px',
@@ -122,6 +156,12 @@ export const AdminActions = () => {
 					projectHref={slug}
 				/>
 			)}
+			{showClaimModal && (
+				<ClaimRecurringDonationModal
+					setShowModal={setShowClaimModal}
+					project={project}
+				/>
+			)}
 		</Wrapper>
 	) : (
 		<MobileWrapper
@@ -138,7 +178,7 @@ export const AdminActions = () => {
 							onClick={option.cb}
 						>
 							<Flex gap='8px'>
-								<Flex alignItems='center'>{option.icon}</Flex>
+								<Flex $alignItems='center'>{option.icon}</Flex>
 								<div>{option.label}</div>
 							</Flex>
 						</MobileActionModalItem>
@@ -162,6 +202,12 @@ export const AdminActions = () => {
 						/>
 					)}
 				</MobileActionsModal>
+			)}
+			{showClaimModal && (
+				<ClaimRecurringDonationModal
+					setShowModal={setShowClaimModal}
+					project={project}
+				/>
 			)}
 		</MobileWrapper>
 	);
@@ -188,7 +234,7 @@ const Wrapper = styled.div`
 	order: 1;
 	margin-bottom: 16px;
 	${mediaQueries.tablet} {
-		margin-bottom: unset;
+		margin-bottom: 5px;
 		order: unset;
 	}
 `;

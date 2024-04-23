@@ -5,6 +5,7 @@ import {
 	H6,
 	IconExternalLink16,
 	mediaQueries,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -16,7 +17,6 @@ import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import ImageUploader from '../ImageUploader';
 import PfpItem from '../modals/UploadProfilePicModal/PfpItem';
-import { Flex } from '../styled-components/Flex';
 import { TabItem } from '../styled-components/Tabs';
 import { IGiverPFPToken } from '@/apollo/types/types';
 import { gqlRequest } from '@/helpers/requests';
@@ -143,21 +143,21 @@ export const SetProfilePic = ({
 		</Wrapper>
 	) : (
 		<>
-			<CustomWrapper isOnboarding={isOnboarding}>
+			<CustomWrapper $isOnboarding={isOnboarding}>
 				<Flex gap='16px'>
 					{tabs.map(i => (
 						<TabItem
 							onClick={() => setActiveTab(i.id)}
 							className={activeTab === i.id ? 'active' : ''}
 							key={i.id}
-							active={activeTab === i.id}
+							$active={activeTab === i.id}
 						>
 							{i.title}
 						</TabItem>
 					))}
 				</Flex>
 				{activeTab === EProfilePicTab.UPLOAD && (
-					<Flex flexDirection='column' gap='36px'>
+					<Flex $flexDirection='column' gap='36px'>
 						<ImageUploader {...useUploadProps} />
 						{isOnboarding ? (
 							<OnboardButtons
@@ -176,8 +176,8 @@ export const SetProfilePic = ({
 							/>
 						) : (
 							<Flex
-								flexDirection='row'
-								justifyContent='space-between'
+								$flexDirection='row'
+								$justifyContent='space-between'
 							>
 								<Button
 									buttonType='secondary'
@@ -204,7 +204,7 @@ export const SetProfilePic = ({
 				{activeTab === EProfilePicTab.PFP && (
 					<>
 						{pfpData && pfpData.length > 0 ? (
-							<Flex flexDirection='column' gap='30px'>
+							<Flex $flexDirection='column' gap='30px'>
 								<CustomH5>Your Givers PFP NFTs</CustomH5>
 								<PFPItemsContainer gap='25px'>
 									{pfpData?.map(pfp => (
@@ -221,13 +221,13 @@ export const SetProfilePic = ({
 									))}
 								</PFPItemsContainer>
 								<SelectedPFPContainerWrapper
-									isOpen={!!selectedPFP}
-									divheight={sectionHeight}
+									$isOpen={!!selectedPFP}
+									$divheight={sectionHeight}
 									ref={attributeSectionRef}
 								>
 									{selectedPFP && (
 										<AttributesWrapper
-											flexDirection='column'
+											$flexDirection='column'
 											gap='16px'
 										>
 											<H6>
@@ -236,14 +236,14 @@ export const SetProfilePic = ({
 											</H6>
 											<SelectedPFPContainer
 												gap='16px'
-												flexWrap
+												$flexWrap
 											>
 												<AttributeItems
 													id={selectedPFP.tokenId}
 												/>
 											</SelectedPFPContainer>
 											<Flex
-												flexDirection='column'
+												$flexDirection='column'
 												gap='8px'
 											>
 												<CustomLink
@@ -299,10 +299,10 @@ export const SetProfilePic = ({
 								)}
 							</Flex>
 						) : (
-							<Flex flexDirection='column' alignItems='stretch'>
+							<Flex $flexDirection='column' $alignItems='stretch'>
 								<NoPFP />
 								<br />
-								<Flex justifyContent='space-between'>
+								<Flex $justifyContent='space-between'>
 									<Link
 										href={Routes.NFT}
 										style={{
@@ -402,10 +402,10 @@ const AttributesWrapper = styled(Flex)`
 `;
 
 const SelectedPFPContainerWrapper = styled.div<{
-	isOpen: boolean;
-	divheight: number;
+	$isOpen: boolean;
+	$divheight: number;
 }>`
-	height: ${props => (props.isOpen ? props.divheight + 'px' : '0px')};
+	height: ${props => (props.$isOpen ? props.$divheight + 'px' : '0px')};
 	transition: height 0.3s ease-in-out;
 `;
 
@@ -434,9 +434,9 @@ const HideInDesktop = styled.div`
 	}
 `;
 
-const CustomWrapper = styled(Wrapper)<{ isOnboarding: boolean }>`
+const CustomWrapper = styled(Wrapper)<{ $isOnboarding: boolean }>`
 	${mediaQueries.tablet} {
-		max-height: ${props => (props.isOnboarding ? '' : '640px')};
+		max-height: ${props => (props.$isOnboarding ? '' : '640px')};
 		overflow-y: auto;
 	}
 `;

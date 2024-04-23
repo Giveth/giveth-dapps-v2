@@ -6,12 +6,13 @@ import {
 	H4,
 	IconChevronRight32,
 	neutralColors,
+	Col,
+	Row,
 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { useIntl } from 'react-intl';
-import { Col, Row } from '@giveth/ui-design-system';
 import { ICampaign } from '@/apollo/types/types';
 import { VideoContainer, VideoOverlay } from '@/components/VideoBlock';
 import { campaignLinkGenerator } from '@/helpers/url';
@@ -69,7 +70,7 @@ export const CampaignsSlide: FC<ICampaignsSlideProps> = ({ campaign }) => {
 						</StyledVideo>
 						<VideoOverlay
 							onClick={handleVideoClick}
-							hidden={isPlaying}
+							$hidden={isPlaying}
 						>
 							<Image
 								src='/images/video_play.svg'

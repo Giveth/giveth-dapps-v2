@@ -1,16 +1,18 @@
 import {
 	brandColors,
 	H4,
-	H6,
 	OutlineButton,
 	P,
+	Flex,
+	Col,
+	Row,
+	neutralColors,
+	H6,
 } from '@giveth/ui-design-system';
 import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
-import links from '@/lib/constants/links';
-import SocialBox from '@/components/SocialBox';
 import ExternalLink from '@/components/ExternalLink';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
@@ -18,18 +20,25 @@ import config, { isRecurringActive } from '@/configuration';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
-import { EContentType } from '@/lib/constants/shareContent';
-import QFToast from '@/components/views/donate/QFToast';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import { getActiveRound } from '@/helpers/qf';
-import { Flex } from '@/components/styled-components/Flex';
+import ProjectCardImage from '@/components/project-card/ProjectCardImage';
+import { DonatePageProjectDescription } from './DonatePageProjectDescription';
+import SocialBox from '@/components/SocialBox';
+import links from '@/lib/constants/links';
+import { EContentType } from '@/lib/constants/shareContent';
+import QFToast from './QFToast';
 import { DonationInfo } from './DonationInfo';
 
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
-	const { isSuccessDonation, hasActiveQFRound, project } = useDonateData();
-	const { givBackEligible, txHash = [] } = isSuccessDonation || {};
+	const { successDonation, hasActiveQFRound, project } = useDonateData();
+	const {
+		givBackEligible,
+		txHash = [],
+		excludeFromQF,
+	} = successDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 	const isSafeEnv = useIsSafeEnvironment();
 	const [givethSlug, setGivethSlug] = useState<string>('');
@@ -56,10 +65,10 @@ export const SuccessView: FC = () => {
 		)
 	);
 
-	const activeRound = getActiveRound(project.qfRounds);
+	const { activeStartedRound } = getActiveRound(project.qfRounds);
 
 	const isOnEligibleNetworks =
-		networkId && activeRound?.eligibleNetworks?.includes(networkId);
+		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
 
 	useEffect(() => {
 		client
@@ -75,50 +84,77 @@ export const SuccessView: FC = () => {
 
 	return (
 		<Wrapper>
-			<GiverH4 weight={700}>
-				{formatMessage({ id: 'label.youre_giver_now' })}
-			</GiverH4>
-			<SuccessMessage>{message}</SuccessMessage>
-			{givBackEligible && (
-				<GivBackContainer>
-					<H6>
-						{formatMessage({
-							id: 'label.youre_eligible_for_givbacks',
-						})}
-					</H6>
-					<P>
-						{formatMessage({
-							id: 'label.givback_distributed_after_round',
-						})}
-					</P>
-					<ExternalLink href={links.GIVBACK_DOC}>
-						<LearnButton size='small' label='LEARN MORE' />
-					</ExternalLink>
-				</GivBackContainer>
-			)}
-			{!isSafeEnv &&
-				hasActiveQFRound &&
-				passportState !== EPassportState.LOADING &&
-				isOnEligibleNetworks && <QFToast />}
-			<SocialBoxWrapper>
-				<SocialBox
-					project={project}
-					contentType={EContentType.justDonated}
-				/>
-			</SocialBoxWrapper>
+			<Row>
+				<Col xs={12} lg={6}>
+					<InfoWrapper>
+						<ImageWrapper>
+							<ProjectCardImage image={project.image} />
+						</ImageWrapper>
+						<DonatePageProjectDescription
+							projectData={project}
+							showRaised={false}
+						/>
+					</InfoWrapper>
+				</Col>
+				<Col xs={12} lg={6}>
+					<RightSectionWrapper>
+						<GiverH4 weight={700}>
+							{formatMessage({ id: 'label.youre_giver_now' })}
+						</GiverH4>
+						<br />
+						<SuccessMessage>{message}</SuccessMessage>
+						<br />
+						{givBackEligible && (
+							<>
+								<GivBackContainer>
+									<H6>
+										{formatMessage({
+											id: 'label.youre_eligible_for_givbacks',
+										})}
+									</H6>
+									<P>
+										{formatMessage({
+											id: 'label.givback_distributed_after_round',
+										})}
+									</P>
+									<ExternalLink href={links.GIVBACK_DOC}>
+										<LearnButton
+											size='small'
+											label='LEARN MORE'
+										/>
+									</ExternalLink>
+								</GivBackContainer>
+								<br />
+							</>
+						)}
+						{!excludeFromQF &&
+							!isSafeEnv &&
+							hasActiveQFRound &&
+							passportState !== EPassportState.LOADING &&
+							isOnEligibleNetworks && <QFToast />}
+						<SocialBoxWrapper>
+							<SocialBox
+								project={project}
+								contentType={EContentType.justDonated}
+							/>
+						</SocialBoxWrapper>
+					</RightSectionWrapper>
+				</Col>
+			</Row>
 			{isRecurringActive && <DonationInfo />}
 		</Wrapper>
 	);
 };
 
 const Wrapper = styled(Flex)`
+	position: relative;
 	flex-direction: column;
 	gap: 24px;
 	align-items: center;
 `;
 
 const SocialBoxWrapper = styled.div`
-	margin: -50px 0;
+	margin: 0 0 -50px;
 `;
 
 const GiverH4 = styled(H4)`
@@ -154,4 +190,27 @@ const GivBackContainer = styled.div`
 		font-weight: bold;
 		margin: 0 0 8px 0;
 	}
+`;
+
+const InfoWrapper = styled.div`
+	background-color: ${neutralColors.gray[100]};
+	padding: 24px;
+	border-radius: 16px;
+	height: 100%;
+	text-align: left;
+`;
+
+const ImageWrapper = styled.div`
+	position: relative;
+	width: 100%;
+	height: 231px;
+	margin-bottom: 24px;
+	border-radius: 8px;
+	overflow: hidden;
+`;
+
+const RightSectionWrapper = styled.div`
+	background-color: ${neutralColors.gray[100]};
+	padding: 32px;
+	border-radius: 16px;
 `;

@@ -65,6 +65,7 @@ export const formatDonation = (
 export function limitFraction(
 	numberStr: string,
 	maxDecimals: number = config.DONATE_TOKEN_PRECISION,
+	trim: boolean = false,
 ): string {
 	let number = parseFloat(numberStr);
 
@@ -78,5 +79,13 @@ export function limitFraction(
 		return `<${smallestRepresentable.toFixed(maxDecimals)}`;
 	}
 
-	return number.toFixed(maxDecimals);
+	let formattedNumber = number.toFixed(maxDecimals);
+
+	// If trim is true, remove trailing zeros after the decimal point, and also the decimal point if it becomes unnecessary.
+	if (trim) {
+		// Regex to remove trailing zeros and decimal point if necessary
+		formattedNumber = formattedNumber.replace(/\.?0+$/, '');
+	}
+
+	return formattedNumber;
 }

@@ -1,6 +1,12 @@
 import styled from 'styled-components';
-import { brandColors, H5, Lead, neutralColors } from '@giveth/ui-design-system';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
+import {
+	brandColors,
+	H5,
+	Lead,
+	neutralColors,
+	Flex,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import useDetectDevice from '@/hooks/useDetectDevice';
 
 interface IVerticalNumberedSteps {
@@ -49,7 +55,7 @@ const MobileVersion = ({ inputArray }: IVerticalNumberedSteps) => {
 		<>
 			{inputArray.map((i, index) => (
 				<MobileRow key={i.title}>
-					<Flex gap='16px' alignItems='center'>
+					<Flex gap='16px' $alignItems='center'>
 						<Number>{index + 1}</Number>
 						<H5 weight={700}>{i.title}</H5>
 					</Flex>

@@ -1,24 +1,30 @@
 import { type FC } from 'react';
 import styled from 'styled-components';
-import { P, B, neutralColors } from '@giveth/ui-design-system';
+import { P, B, neutralColors, Flex } from '@giveth/ui-design-system';
 import { formatUnits } from 'viem';
 import BigNumber from 'bignumber.js';
-import { Flex } from '@/components/styled-components/Flex';
 import { IToken } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
 
 interface IItemProps {
 	title: string;
+	subtext?: string;
 	amount: bigint;
 	price?: number;
 	token: IToken;
 }
 
-export const Item: FC<IItemProps> = ({ title, amount, price, token }) => {
+export const Item: FC<IItemProps> = ({
+	title,
+	amount,
+	price,
+	token,
+	subtext,
+}) => {
 	return (
 		<Wrapper gap='4px'>
 			<IconWrapper></IconWrapper>
-			<Flex flexDirection='column' gap='4px'>
+			<Flex $flexDirection='column' gap='4px'>
 				<Title>{title}</Title>
 				<Flex gap='4px'>
 					<B>
@@ -27,11 +33,12 @@ export const Item: FC<IItemProps> = ({ title, amount, price, token }) => {
 								amount,
 								token.underlyingToken?.decimals || 18,
 							),
-						)}
+						).replace(/\.?0+$/, '')}
 						&nbsp;{token.symbol}
 					</B>
-					<B>~</B>
-					<P>
+					{subtext}
+					<UsdValue>
+						~
 						{price !== undefined &&
 							limitFraction(
 								formatUnits(
@@ -45,7 +52,7 @@ export const Item: FC<IItemProps> = ({ title, amount, price, token }) => {
 								2,
 							)}
 						&nbsp;USD
-					</P>
+					</UsdValue>
 				</Flex>
 			</Flex>
 		</Wrapper>
@@ -68,4 +75,10 @@ const Title = styled(P)`
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	text-align: left;
+`;
+
+const UsdValue = styled(P)`
+	font-size: 0.8rem;
+	margin-top: 2px;
 `;

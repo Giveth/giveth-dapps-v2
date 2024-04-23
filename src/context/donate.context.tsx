@@ -23,12 +23,13 @@ export interface TxHashWithChainType {
 interface ISuccessDonation {
 	txHash: TxHashWithChainType[];
 	givBackEligible?: boolean;
+	excludeFromQF?: boolean;
 }
 
 interface IDonateContext {
 	hasActiveQFRound?: boolean;
 	project: IDonationProject;
-	isSuccessDonation?: ISuccessDonation;
+	successDonation?: ISuccessDonation;
 	tokenStreams: ITokenStreams;
 	setSuccessDonation: (successDonation?: ISuccessDonation) => void;
 	selectedToken?: ISelectTokenWithBalance;
@@ -68,8 +69,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 	const [selectedToken, setSelectedToken] = useState<
 		ISelectTokenWithBalance | undefined
 	>();
-	const [isSuccessDonation, setSuccessDonation] =
-		useState<ISuccessDonation>();
+	const [successDonation, setSuccessDonation] = useState<ISuccessDonation>();
 	const [projectData, setProjectData] = useState<IDonationProject>(project);
 
 	const fetchProject = useCallback(async () => {
@@ -82,7 +82,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 		setProjectData(data.projectBySlug);
 	}, [project.slug]);
 
-	const tokenStreams = useUserStreams();
+	const { tokenStreams } = useUserStreams();
 
 	const hasActiveQFRound = hasActiveRound(project?.qfRounds);
 
@@ -91,7 +91,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 			value={{
 				hasActiveQFRound,
 				project: projectData,
-				isSuccessDonation,
+				successDonation,
 				setSuccessDonation,
 				selectedToken,
 				setSelectedToken,

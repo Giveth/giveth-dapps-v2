@@ -34,7 +34,6 @@ const links = {
 	GIVSTREAM_DOCS: DOCS + 'giveconomy/givstream',
 	GIVBACK_DOC: DOCS + 'giveconomy/givbacks',
 	GIVPOWER_DOC: DOCS + 'giveconomy/givpower',
-	GIVGARDEN_DOC: DOCS + 'giveconomy/givgarden',
 	GIVDROP_DOC,
 	CLAIM_GIVDROP_DOC: GIVDROP_DOC + '#claiming-your-givdrop',
 	NICE_DOC: DOCS + 'giveconomy/niceToken',
@@ -50,6 +49,7 @@ const links = {
 	MAKE_TRACEABLE_DOCS: DOCS + 'dapps/makeTraceableProject',
 	VERIFICATION_DOCS: DOCS + 'dapps/projectVerification',
 	CANCELLED_PROJECTS_DOCS: DOCS + 'dapps/listedUnlisted/#cancelled-projects',
+	RECURRING_DONATION_DOCS: DOCS + 'dapps/recurringDonation',
 	Torus_MM_DOCS: DOCS + 'dapps/importTorusMM/',
 	TRACE: 'https://trace.giveth.io/',
 	SWAG: 'https://swag.giveth.io/',
@@ -68,6 +68,10 @@ const links = {
 	ACROSS_BRIDGE:
 		'https://across.to?ref=0x9cd1E4A6b3361abcCC90C7F8E788ac246d194303',
 	ALLO_PROTOCOL: 'https://docs.allo.gitcoin.co/',
+	GIVERNANCE_VOTING: 'https://snapshot.org/#/giv.eth',
+	SUPERFLUID_DASHBOARD: 'https://app.superfluid.finance/',
+	STAKE_TOGETHER:
+		'https://app.staketogether.org/brl/ethereum/project/deposit/0xf102fe6d6cf7f98c7c4ca45eb082caaaaa951d52',
 };
 
 if (!isProduction) {

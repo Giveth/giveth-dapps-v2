@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { getEnsAddress } from '@wagmi/core';
-import { useAccount } from 'wagmi';
+import { useAccount, useWaitForTransactionReceipt } from 'wagmi';
 import { Address } from 'viem';
-import { useWaitForTransactionReceipt } from 'wagmi';
 import { sendEvmTransaction } from '@/lib/helpers';
 import { EDonationFailedType } from '@/components/modals/FailedDonation';
 import { EDonationStatus } from '@/apollo/types/gqlEnums';

@@ -42,7 +42,6 @@ export const FarmProvider: FC<IFarmProvider> = ({ children }) => {
 
 	const setChainInfo = useCallback(
 		(network: number, key: string, value: bigint) => {
-			console.log('network', network, key, value);
 			const chainInfo = chainsInfo[network] || {};
 			const totalInfo =
 				(chainInfo.totalInfo || 0n) - (chainInfo[key] || 0n) + value;

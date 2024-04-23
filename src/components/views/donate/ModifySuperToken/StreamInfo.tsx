@@ -1,74 +1,99 @@
-import { Caption, neutralColors } from '@giveth/ui-design-system';
-import { type FC } from 'react';
+import { formatEther } from 'viem';
+import { Caption, neutralColors, Flex } from '@giveth/ui-design-system';
+import { Dispatch, SetStateAction, type FC } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { type GetBalanceReturnType } from '@wagmi/core';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { limitFraction } from '@/helpers/number';
-import { Flex } from '@/components/styled-components/Flex';
 import { ISuperToken, ISuperfluidStream } from '@/types/superFluid';
+import { countActiveStreams } from '@/helpers/donate';
 
 interface IStreamInfoProps {
 	tokenStreams: ISuperfluidStream[];
 	superToken?: ISuperToken;
 	SuperTokenBalance?: GetBalanceReturnType;
+	inputAmount?: bigint;
+	type?: string;
+	setIsWarning?: Dispatch<SetStateAction<boolean>>;
 }
 
 export const StreamInfo: FC<IStreamInfoProps> = ({
 	tokenStreams,
 	superToken,
 	SuperTokenBalance,
+	inputAmount,
+	type,
+	setIsWarning,
 }) => {
+	inputAmount == null && (inputAmount = 0n);
 	const { formatMessage } = useIntl();
 	const totalStreamPerSec =
 		tokenStreams?.reduce(
 			(acc, stream) => acc + BigInt(stream.currentFlowRate),
 			0n,
 		) || 0n;
+	const estimatedBalance =
+		(SuperTokenBalance?.value || 0n) +
+		(type == 'withdraw' ? -BigInt(inputAmount) : BigInt(inputAmount));
 	const streamRunOutInMonth =
 		SuperTokenBalance !== undefined &&
 		totalStreamPerSec > 0 &&
 		SuperTokenBalance.value > 0n
-			? SuperTokenBalance.value / totalStreamPerSec / ONE_MONTH_SECONDS
+			? estimatedBalance / totalStreamPerSec / ONE_MONTH_SECONDS
 			: 0n;
+	if (streamRunOutInMonth <= 0n && setIsWarning) {
+		setIsWarning(true);
+	} else if (setIsWarning) {
+		setIsWarning(false);
+	}
+	const activeStreamsCount = countActiveStreams(tokenStreams);
 
 	return (
 		<StreamSection>
-			<Flex alignItems='center' justifyContent='space-between'>
-				<Caption medium>
+			<Flex $alignItems='center' $justifyContent='space-between'>
+				<Caption $medium>
 					{formatMessage({
-						id: 'label.stream_balance',
+						id: 'label.new_stream_balance',
 					})}
 				</Caption>
-				<StreamBalanceInfo medium>
-					{limitFraction(SuperTokenBalance?.formatted || '0')}{' '}
+				<StreamBalanceInfo $medium>
+					{estimatedBalance < 0n
+						? '0'
+						: limitFraction(formatEther(estimatedBalance))}{' '}
 					{superToken?.symbol}
 				</StreamBalanceInfo>
 			</Flex>
-			<Flex alignItems='center' justifyContent='space-between'>
+			<Flex $alignItems='center' $justifyContent='space-between'>
 				<Caption>
 					{formatMessage({
 						id: 'label.balance_runs_out_in',
 					})}{' '}
-					<strong>
-						{streamRunOutInMonth.toString()}{' '}
-						{formatMessage(
-							{
-								id: 'label.months',
-							},
-							{
-								count: streamRunOutInMonth.toString(),
-							},
-						)}
-					</strong>
+					{totalStreamPerSec > 0 ? (
+						<strong>
+							{streamRunOutInMonth < 0n
+								? '0'
+								: streamRunOutInMonth.toString()}{' '}
+							{formatMessage(
+								{
+									id: 'label.months',
+								},
+								{
+									count: streamRunOutInMonth.toString(),
+								},
+							)}
+						</strong>
+					) : (
+						'--'
+					)}
 				</Caption>
 				<Caption>
 					{formatMessage({ id: 'label.funding' })}{' '}
-					<strong>{tokenStreams.length}</strong>{' '}
+					<strong>{activeStreamsCount}</strong>{' '}
 					{formatMessage(
-						{ id: 'label.project' },
+						{ id: 'label.projects_count' },
 						{
-							count: tokenStreams.length,
+							count: activeStreamsCount,
 						},
 					)}
 				</Caption>

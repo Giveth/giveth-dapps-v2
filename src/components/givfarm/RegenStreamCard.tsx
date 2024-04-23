@@ -14,6 +14,7 @@ import {
 	mediaQueries,
 	P,
 	Subline,
+	Flex,
 } from '@giveth/ui-design-system';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
@@ -26,7 +27,6 @@ import { RegenStreamConfig, StreamType } from '@/types/config';
 import { formatWeiHelper } from '@/helpers/number';
 import { IconFox } from '@/components/Icons/Fox';
 import { IconCult } from '@/components/Icons/Cult';
-import { Flex } from '../styled-components/Flex';
 import { HarvestAllModal } from '../modals/HarvestAll';
 import { useAppSelector } from '@/features/hooks';
 import config from '@/configuration';
@@ -136,8 +136,8 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 		<Wrapper>
 			<Title>{title}</Title>
 			<RegenStreamContainer>
-				<InfoContainer flexDirection='column'>
-					<HeaderRow justifyContent='space-between' flexWrap>
+				<InfoContainer $flexDirection='column'>
+					<HeaderRow $justifyContent='space-between' $flexWrap>
 						<Flex gap='8px' style={{ position: 'relative' }}>
 							{icon}
 							<H5>{rewardTokenSymbol} Flowrate</H5>{' '}
@@ -154,7 +154,7 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 						</RateRow>
 					</HeaderRow>
 					<RegenStreamInfoRow>
-						<Flex alignItems='flex-end' gap='6px'>
+						<Flex $alignItems='flex-end' gap='6px'>
 							<H6>
 								{formatMessage(
 									{
@@ -184,8 +184,8 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 							</IconWithTooltip>
 						</Flex>
 					</RegenStreamInfoRow>
-					<Bar percentage={percentage} />
-					<PercentageRow justifyContent='space-between'>
+					<Bar $percentage={percentage} />
+					<PercentageRow $justifyContent='space-between'>
 						<B>{percentage?.toFixed(2)}%</B>
 						<B>100%</B>
 					</PercentageRow>
@@ -196,12 +196,12 @@ export const RegenStreamCard: FC<RegenStreamProps> = ({ streamConfig }) => {
 				</InfoContainer>
 				<Separator />
 				<HarvestContainer
-					flexWrap
+					$flexWrap
 					gap='24px'
-					justifyContent='space-between'
+					$justifyContent='space-between'
 				>
 					<div>
-						<AmountInfo alignItems='flex-end' gap='4px'>
+						<AmountInfo $alignItems='flex-end' gap='4px'>
 							{getStreamIconWithType(type, 24)}
 							<Amount>
 								{formatWeiHelper(rewardLiquidPart.toString())}

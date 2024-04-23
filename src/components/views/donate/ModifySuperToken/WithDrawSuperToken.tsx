@@ -1,24 +1,25 @@
 import { useState, type FC } from 'react';
 import { useAccount, useBalance } from 'wagmi';
-import { Button } from '@giveth/ui-design-system';
+import { Button, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import { GetBalanceReturnType } from 'wagmi/actions';
 import { Framework } from '@superfluid-finance/sdk-core';
 import { ModifyInfoToast } from './ModifyInfoToast';
-import { ModifySection } from './ModifySection';
+import { EModifySectionPlace, ModifySection } from './ModifySection';
 import { StreamInfo } from './StreamInfo';
 import { IModifySuperTokenInnerModalProps } from './ModifySuperTokenModal';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { actionButtonLabel, EModifySuperTokenSteps } from './common';
 import { ModifyWrapper, Wrapper } from './common.sc';
-import config from '@/configuration';
+import config, { isProduction } from '@/configuration';
 import { showToastError } from '@/lib/helpers';
-import { Flex } from '@/components/styled-components/Flex';
 import { Item } from '../RecurringDonationModal/Item';
 import { RunOutInfo } from '../RunOutInfo';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
+import { EToastType } from '@/components/toasts/InlineToast';
 
 interface IWithDrawSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	token?: IToken;
@@ -31,12 +32,13 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 	tokenStreams,
 	step,
 	setStep,
-	setShowModal,
+	closeModal,
 }) => {
 	const [amount, setAmount] = useState(0n);
 	const { address } = useAccount();
 	const { formatMessage } = useIntl();
 	const tokenPrice = useTokenPrice(token);
+	const [isWarning, setIsWarning] = useState(false);
 
 	const {
 		data: SuperTokenBalance,
@@ -71,10 +73,14 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 			if (!provider || !signer)
 				throw new Error('Provider or signer not found');
 
-			const sf = await Framework.create({
+			const _options = {
 				chainId: config.OPTIMISM_CONFIG.id,
 				provider: provider,
-			});
+				resolverAddress: isProduction
+					? undefined
+					: '0x554c06487bEc8c890A0345eb05a5292C1b1017Bd',
+			};
+			const sf = await Framework.create(_options);
 
 			// EThx is not a Wrapper Super Token and should load separately
 			let superTokenAsset;
@@ -113,14 +119,27 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 		} else if (step === EModifySuperTokenSteps.WITHDRAW) {
 			onWithdraw();
 		} else if (step === EModifySuperTokenSteps.WITHDRAW_CONFIRMED) {
-			setShowModal(false);
+			closeModal();
 		}
 	};
 
+	const maxAmount = SuperTokenBalance
+		? SuperTokenBalance.value - minRemainingBalance
+		: 0n;
 	const isInvalidAmount =
-		amount <= 0 ||
-		SuperTokenBalance === undefined ||
-		amount > SuperTokenBalance.value - minRemainingBalance;
+		amount <= 0 || SuperTokenBalance === undefined || amount > maxAmount;
+
+	/// this one needs some thought - we should allow for a buffer of 40 seconds (or more) in the balance we show to the user
+	// - this might prevent them from trying to withdraw more than they have and getting an error
+	// if the users totalStreamPerSec is 0, then we should allow them to withdraw the full balance
+	let modifiedValue: GetBalanceReturnType | undefined = SuperTokenBalance;
+	console.log('SuperTokenBalance', SuperTokenBalance);
+	if (SuperTokenBalance !== undefined && totalStreamPerSec > 0) {
+		modifiedValue = {
+			...SuperTokenBalance,
+			value: SuperTokenBalance.value - totalStreamPerSec * BigInt(60),
+		};
+	}
 
 	return (
 		<Wrapper>
@@ -131,25 +150,36 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 							titleLabel='label.withdraw_from_stream_balance'
 							setAmount={setAmount}
 							token={superToken}
-							balance={SuperTokenBalance}
+							// try to put in modified value in place of SuperTokenBalance.value
 							refetch={refetch}
+							balance={modifiedValue}
 							isRefetching={isRefetching}
 							error={
 								amount !== 0n && isInvalidAmount
 									? 'invalid_amount'
 									: undefined
 							}
+							maxAmount={maxAmount > 0n ? maxAmount : 0n}
+							tooltipText='tooltip.withdraw_stream_balance'
+							modifySectionPlace={EModifySectionPlace.WITHDRAW}
 						/>
 						<StreamInfo
 							tokenStreams={tokenStreams}
 							superToken={superToken}
 							SuperTokenBalance={SuperTokenBalance}
+							inputAmount={amount}
+							type='withdraw'
+							setIsWarning={setIsWarning}
 						/>
 					</ModifyWrapper>
-					<ModifyInfoToast />
+					{isWarning == true ? (
+						<ModifyInfoToast toastType={EToastType.Warning} />
+					) : (
+						<ModifyInfoToast toastType={EToastType.Info} />
+					)}
 				</>
 			) : (
-				<Flex flexDirection='column' gap='16px'>
+				<Flex $flexDirection='column' gap='16px'>
 					<Item
 						title='Withdraw from this stream balance'
 						amount={amount}
@@ -157,8 +187,11 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 						token={token!}
 					/>
 					<RunOutInfo
-						amount={(SuperTokenBalance?.value || 0n) - amount}
-						totalPerMonth={totalPerMonth}
+						superTokenBalance={
+							(SuperTokenBalance?.value || 0n) - amount
+						}
+						streamFlowRatePerMonth={totalPerMonth}
+						symbol={token?.symbol || ''}
 					/>
 				</Flex>
 			)}

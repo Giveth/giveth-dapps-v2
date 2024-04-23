@@ -4,6 +4,7 @@ import {
 	brandColors,
 	ButtonText,
 	Caption,
+	Flex,
 	H5,
 	neutralColors,
 	P,
@@ -11,7 +12,6 @@ import {
 import { useIntl } from 'react-intl';
 import ExternalLink from '@/components/ExternalLink';
 import { htmlToText } from '@/lib/helpers';
-import { Flex } from '@/components/styled-components/Flex';
 
 interface IBlogCard {
 	title: string;

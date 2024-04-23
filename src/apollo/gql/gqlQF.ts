@@ -29,7 +29,7 @@ export const FETCH_DOES_DONATED_PROJECT_IN_ROUND = gql`
 `;
 
 export const FETCH_QF_ROUND_STATS = gql`
-	query ($slug: String!) {
+	query fetchQfRoundStats($slug: String!) {
 		qfRoundStats(slug: $slug) {
 			uniqueDonors
 			allDonationsUsdValue

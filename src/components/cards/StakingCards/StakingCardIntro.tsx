@@ -6,13 +6,13 @@ import {
 	IconArrowLeft,
 	IconExternalLink,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Dispatch, FC, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { IntroCardConfig } from '@/types/config';
 import { getSymbolIconWithName } from '../../StakingPoolImages';
-import { Flex } from '../../styled-components/Flex';
 import { StakeCardState } from './BaseStakingCard/BaseStakingCard';
 
 interface IStakingCardIntro {
@@ -40,8 +40,8 @@ const StakingCardIntro: FC<IStakingCardIntro> = ({
 				<H6 weight={700}>{introCard?.title}</H6>
 			</HeaderRow>
 			<ContentWrapper
-				flexDirection='column'
-				justifyContent='space-between'
+				$flexDirection='column'
+				$justifyContent='space-between'
 			>
 				<Description>{introCard?.description}</Description>
 				<LearnMoreButton

@@ -4,50 +4,46 @@ import {
 	GLink,
 	neutralColors,
 	Overline,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { ETheme } from '@/features/general/general.slice';
 import { Shadow } from '../styled-components/Shadow';
-import { Flex } from '../styled-components/Flex';
 
-interface NetworkNameProps {
-	width?: string;
-}
-
-export const BaseMenuContainer = styled.div<{ themeState?: ETheme }>`
+export const BaseMenuContainer = styled.div<{ $baseTheme?: ETheme }>`
 	padding: 16px;
 	background-color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[600]
 			: neutralColors.gray[100]};
 	border-radius: 16px;
 	box-shadow: ${Shadow.Dark[500]};
 	color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? neutralColors.gray[100]
 			: neutralColors.gray[900]};
 `;
 
-export const HighlightSection = styled.div<{ themeState?: ETheme }>`
+export const HighlightSection = styled.div<{ $baseTheme?: ETheme }>`
 	padding: 16px 8px;
 	background-color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[500]
 			: neutralColors.gray[200]};
 	border-radius: 16px;
 `;
 
 interface IItemTitle {
-	upperCase?: boolean;
-	themeState?: ETheme;
+	$upperCase?: boolean;
+	$baseTheme?: ETheme;
 }
 
 export const ItemTitle = styled(Overline)<IItemTitle>`
 	color: ${props =>
-		props.themeState === ETheme.Dark
+		props.$baseTheme === ETheme.Dark
 			? brandColors.giv[300]
 			: neutralColors.gray[800]};
-	text-transform: ${props => (props.upperCase ? 'uppercase' : 'none')};
+	text-transform: ${props => (props.$upperCase ? 'uppercase' : 'none')};
 `;
 
 export const ItemRow = styled(Flex)`
@@ -55,11 +51,15 @@ export const ItemRow = styled(Flex)`
 	align-items: center;
 `;
 
+interface NetworkNameProps {
+	$width?: string;
+}
+
 export const NetworkName = styled(B)<NetworkNameProps>`
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
-	width: ${props => props.width || '90px'};
+	width: ${props => props.$width || '90px'};
 `;
 
 export const ItemAction = styled(GLink)`

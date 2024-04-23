@@ -16,9 +16,10 @@ import {
 	IconFacebook,
 	IconShare,
 	IconXSocial,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { mediaQueries } from '@/lib/constants/constants';
-import { Flex, FlexCenter } from '../styled-components/Flex';
 import { EContentType } from '@/lib/constants/shareContent';
 import ShareRewardedModal from '@/components/modals/ShareRewardedModal';
 

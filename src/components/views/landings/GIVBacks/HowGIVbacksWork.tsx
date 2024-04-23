@@ -37,16 +37,15 @@ const HowGIVbacksWork = () => {
 				<li>
 					<b>Earn GIV Tokens:</b> After your donation, Giveth rewards
 					you with GIV tokens as a thank you for your generosity.
-					These tokens aren't just a reward, they're a representation
-					of your contribution to the GIVeconomy. Part will be liquid,
-					and part will be added to your{' '}
+					These tokens aren’t just rewards; they're your voice in the
 					<ExternalLink
-						href={links.GIVSTREAM_DOCS}
+						href={links.GIVERNANCE_VOTING}
 						color={brandColors.pinky[500]}
-						title='GIVstream'
-					/>{' '}
-					(streamed to you over a period of time), which will grow
-					until 2026.
+						title='GIVernance Voting'
+					/>
+					, allowing you to influence which proposals get funded,
+					thereby shaping the GIVeconomy's future. Through GIVbacks,
+					GIV empowers donors with governance rights.
 				</li>
 				<li>
 					<b>When Do Your Receive Your GIVbacks?:</b> Every two weeks,

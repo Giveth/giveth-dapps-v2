@@ -1,6 +1,5 @@
-import { neutralColors } from '@giveth/ui-design-system';
+import { Flex, neutralColors } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { Flex } from '@/components/styled-components/Flex';
 
 export const Card = styled(Flex)`
 	flex-direction: column;

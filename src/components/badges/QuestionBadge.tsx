@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FlexCenter } from '../styled-components/Flex';
+import { FlexCenter } from '@giveth/ui-design-system';
 
 const QuestionBadge = () => {
 	return (

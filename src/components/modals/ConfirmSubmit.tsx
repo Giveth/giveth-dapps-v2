@@ -7,6 +7,7 @@ import {
 	H6,
 	IconExternalLink,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
@@ -16,7 +17,6 @@ import config from '@/configuration';
 import TikAnimation from '@/animations/tik.json';
 import ErrorAnimation from '@/animations/error.json';
 import { AddTokenButton } from '../AddTokenButton';
-import { Flex } from '../styled-components/Flex';
 import LottieControl from '@/components/LottieControl';
 import { WrappedSpinner } from '../Spinner';
 
@@ -46,7 +46,7 @@ export const SubmittedInnerModal: FC<IConfirmSubmitProps> = ({
 			<Title>{title}</Title>
 			<WrappedSpinner size={200} />
 			<TxSubmit weight={700}>{txHash && 'Transaction pending'}</TxSubmit>
-			<AddTokenRow alignItems={'center'} justifyContent={'center'}>
+			<AddTokenRow $alignItems={'center'} $justifyContent={'center'}>
 				<AddTokenButton
 					chainId={chainId}
 					tokenSymbol={rewardTokenSymbol}
@@ -95,7 +95,7 @@ export const ConfirmedInnerModal: FC<IConfirmSubmitProps> = ({
 			/>
 			<TxConfirm weight={700}>Transaction confirmed!</TxConfirm>
 			<Info>It may take a few minutes for the UI to update</Info>
-			<AddTokenRow alignItems={'center'} justifyContent={'center'}>
+			<AddTokenRow $alignItems={'center'} $justifyContent={'center'}>
 				<AddTokenButton
 					chainId={chainId}
 					tokenSymbol={rewardTokenSymbol}
@@ -187,6 +187,7 @@ const TxSubmit = styled(H6)`
 const TxFailed = styled(H5)`
 	color: ${neutralColors.gray[100]};
 	margin-top: 18px;
+	margin-bottom: 24px;
 `;
 
 const TxConfirm = styled(H5)`

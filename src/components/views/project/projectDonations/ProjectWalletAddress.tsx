@@ -1,7 +1,11 @@
-import { mediaQueries, neutralColors, Subline } from '@giveth/ui-design-system';
+import {
+	mediaQueries,
+	neutralColors,
+	Subline,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { getAddress } from 'viem';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import NetworkLogo from '@/components/NetworkLogo';
 import { ChainType } from '@/types/config';
 
@@ -35,9 +39,10 @@ const AddressContainer = styled(FlexCenter)`
 	background: ${neutralColors.gray[200]};
 	border-radius: 16px;
 	padding: 4px 8px;
-	width: fit-content;
-	gap: 16px;
+	width: 100%;
+	gap: 10px;
 	flex-wrap: wrap;
+	justify-content: space-between;
 	${mediaQueries.mobileL} {
 		flex-wrap: nowrap;
 	}

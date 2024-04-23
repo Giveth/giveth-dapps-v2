@@ -6,13 +6,13 @@ import {
 	neutralColors,
 	semanticColors,
 	Subline,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import { useIntl } from 'react-intl';
 import Divider from '@/components/Divider';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { IDonationProject } from '@/apollo/types/types';
 import {
 	calculateEstimatedMatchingWithDonationAmount,
@@ -40,21 +40,21 @@ const EstimatedMatchingToast = ({
 
 	const tokenPrice = useTokenPrice(token);
 
-	const activeRound = getActiveRound(qfRounds);
+	const { activeStartedRound } = getActiveRound(qfRounds);
 
 	const esMatching = calculateEstimatedMatchingWithDonationAmount(
 		(tokenPrice || 0) * (amountTyped || 0),
 		projectDonationsSqrtRootSum,
 		allProjectsSum,
 		matchingPool,
-		activeRound?.maximumReward,
+		activeStartedRound?.maximumReward,
 	);
 
 	return (
 		<Wrapper>
 			<Upper>
-				<FlexCenter gap='4px'>
-					<Caption medium>
+				<EstimatedMatching>
+					<Caption $medium>
 						{formatMessage({
 							id: 'page.donate.matching_toast.upper',
 						})}
@@ -69,11 +69,11 @@ const EstimatedMatchingToast = ({
 					>
 						<TooltipContent>
 							{formatMessage({
-								id: 'tooltip.donation.matching_polygon',
+								id: 'component.qf-section.tooltip_polygon',
 							})}
 						</TooltipContent>
 					</IconWithTooltip>
-				</FlexCenter>
+				</EstimatedMatching>
 				<B>{formatDonation(esMatching, '', locale, true)}</B>
 			</Upper>
 			<Divider />
@@ -83,6 +83,13 @@ const EstimatedMatchingToast = ({
 		</Wrapper>
 	);
 };
+
+const EstimatedMatching = styled(FlexCenter)`
+	gap: 4px;
+	> *:last-child {
+		margin-top: 3px;
+	}
+`;
 
 const Bottom = styled(Subline)`
 	color: ${neutralColors.gray['800']};

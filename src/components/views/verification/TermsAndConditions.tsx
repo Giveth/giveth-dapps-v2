@@ -1,9 +1,14 @@
 import { useIntl } from 'react-intl';
-import { Button, H6, Lead, semanticColors } from '@giveth/ui-design-system';
+import {
+	Button,
+	H6,
+	Lead,
+	semanticColors,
+	FlexCenter,
+} from '@giveth/ui-design-system';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import CheckBox from '@/components/Checkbox';
-import { FlexCenter } from '@/components/styled-components/Flex';
 import { Relative } from '@/components/styled-components/Position';
 import { ContentSeparator, BtnContainer } from './Common.sc';
 import { useVerificationData } from '@/context/verification.context';

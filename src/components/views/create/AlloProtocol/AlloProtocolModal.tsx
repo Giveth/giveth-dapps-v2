@@ -23,6 +23,7 @@ import { client } from '@/apollo/apolloClient';
 import { extractContractAddressFromString } from '../../donate/AlloProtocolFirstDonationModal';
 import { wagmiConfig } from '@/wagmiConfigs';
 import createProfileABI from '@/artifacts/createProfile.json';
+import { generateRandomNonce } from '@/lib/helpers';
 
 interface IAlloProtocolModal extends IModal {
 	project?: IProjectEdition; //If undefined, it means we are in create mode
@@ -76,8 +77,8 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 					abi: createProfileABI.abi,
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
 					args: [
-						+addedProjectState?.id!, // project id
-						addedProjectState?.slug!,
+						generateRandomNonce(), //nonce
+						addedProjectState?.id!,
 						{
 							protocol: 1,
 							pointer: '',

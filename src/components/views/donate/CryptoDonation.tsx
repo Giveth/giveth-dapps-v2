@@ -66,11 +66,6 @@ import { wagmiConfig } from '@/wagmiConfigs';
 
 const POLL_DELAY_TOKENS = config.SUBGRAPH_POLLING_INTERVAL;
 
-interface IInputBox {
-	error: boolean;
-	focused: boolean;
-}
-
 const CryptoDonation: FC = () => {
 	const {
 		chain,
@@ -132,11 +127,11 @@ const CryptoDonation: FC = () => {
 	const tokenSymbol = selectedToken?.symbol;
 	const tokenDecimals = selectedToken?.decimals || 18;
 	const projectIsGivBackEligible = !!verified;
-	const activeRound = getActiveRound(project.qfRounds);
+	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const networkId = (chain as Chain)?.id;
 
 	const isOnEligibleNetworks =
-		networkId && activeRound?.eligibleNetworks?.includes(networkId);
+		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
 
 	useEffect(() => {
 		if (
@@ -450,7 +445,10 @@ const CryptoDonation: FC = () => {
 					/>
 				)}
 				<SaveGasFees acceptedChains={acceptedChains} />
-				<SearchContainer error={amountError} focused={inputBoxFocused}>
+				<SearchContainer
+					$error={amountError}
+					$focused={inputBoxFocused}
+				>
 					<DropdownContainer>
 						<TokenPicker
 							tokenList={erc20List}
@@ -566,14 +564,20 @@ const CryptoDonation: FC = () => {
 			)}
 			<CheckBoxContainer>
 				<CheckBox
-					label={formatMessage({ id: 'label.donate_privately' })}
+					label={formatMessage({
+						id: isRecurringActive
+							? 'label.make_it_anonymous'
+							: 'label.donate_privately',
+					})}
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
 					size={14}
 				/>
 				<div>
 					{formatMessage({
-						id: 'component.tooltip.donate_privately',
+						id: isRecurringActive
+							? 'component.tooltip.donate_anonymously'
+							: 'component.tooltip.donate_privately',
 					})}
 				</div>
 			</CheckBoxContainer>
@@ -612,15 +616,20 @@ const AvText = styled(GLink)`
 	}
 `;
 
+interface IInputBox {
+	$error: boolean;
+	$focused: boolean;
+}
+
 const SearchContainer = styled.div<IInputBox>`
 	display: flex;
 	border: 2px solid
 		${props =>
-			props.error === true
+			props.$error === true
 				? semanticColors.punch[500]
 				: neutralColors.gray[300]};
 	border-radius: 8px;
-	box-shadow: ${props => props.focused && Shadow.Neutral[500]};
+	box-shadow: ${props => props.$focused && Shadow.Neutral[500]};
 	&:hover {
 		box-shadow: ${Shadow.Neutral[500]};
 	}
@@ -643,7 +652,7 @@ const MainButton = styled(Button)`
 	text-transform: uppercase;
 `;
 
-const CheckBoxContainer = styled.div`
+export const CheckBoxContainer = styled.div`
 	margin-top: 16px;
 	> div:nth-child(2) {
 		color: ${neutralColors.gray[900]};

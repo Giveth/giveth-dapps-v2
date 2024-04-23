@@ -1,14 +1,7 @@
 import { type FC } from 'react';
 import styled from 'styled-components';
-import {
-	H6,
-	IconChevronDown32,
-	IconChevronUp32,
-	P,
-} from '@giveth/ui-design-system';
+import { H6, P } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import useAnimatedHeight from '@/hooks/useAnimatedHeight';
-import { Flex } from '@/components/styled-components/Flex';
 import { infoMap, ScoreState, EScoreType } from './scoreHelpers';
 import { TipListItem } from '../ProjectTips/common.styles';
 
@@ -19,6 +12,7 @@ interface IImprovementTipsProps {
 const tipMap = {
 	[EScoreType.DESCRIPTION]: 'component.improve_tip.desc',
 	[EScoreType.DESC_MEDIA]: 'component.improve_tip.desc_media',
+	[EScoreType.SOCIAL_MEDIA]: 'component.improve_tip.social_media',
 	[EScoreType.CATEGORIES]: 'component.improve_tip.categories',
 	[EScoreType.LOCATION]: 'component.improve_tip.location',
 	[EScoreType.IMAGE]: 'component.improve_tip.image',
@@ -29,22 +23,12 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 }) => {
 	const { formatMessage } = useIntl();
 	const info = infoMap[fieldsScores.quality];
-	const { isOpen, toggleOpen, maxHeight, contentRef } = useAnimatedHeight();
 	const bulletColor = info.bulletColor;
+
 	return (
 		<div>
-			<TitleRow
-				justifyContent='space-between'
-				onClick={toggleOpen}
-				alignItems='center'
-			>
-				<H6 weight={700}>{formatMessage({ id: info.title })}</H6>
-				{isOpen ? <IconChevronUp32 /> : <IconChevronDown32 />}
-			</TitleRow>
-			<AnimatedDiv
-				maxHeight={isOpen ? maxHeight : '0px'}
-				ref={contentRef}
-			>
+			<H6 weight={700}>{formatMessage({ id: info.title })}</H6>
+			<AnimatedDiv>
 				{fieldsScores.DESCRIPTION === 0 && (
 					<TipListItem color={bulletColor}>
 						<P>
@@ -59,6 +43,15 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 						<P>
 							{formatMessage({
 								id: tipMap[EScoreType.DESC_MEDIA],
+							})}
+						</P>
+					</TipListItem>
+				)}
+				{fieldsScores.SOCIAL_MEDIA === 0 && (
+					<TipListItem color={bulletColor}>
+						<P>
+							{formatMessage({
+								id: tipMap[EScoreType.SOCIAL_MEDIA],
 							})}
 						</P>
 					</TipListItem>
@@ -95,13 +88,8 @@ export const ImprovementTips: FC<IImprovementTipsProps> = ({
 	);
 };
 
-const AnimatedDiv = styled.div<{ maxHeight: string }>`
+const AnimatedDiv = styled.div`
 	overflow: hidden;
 	transition: max-height 0.5s ease;
-	max-height: ${props => props.maxHeight};
 	padding-top: 8px;
-`;
-
-const TitleRow = styled(Flex)`
-	cursor: pointer;
 `;

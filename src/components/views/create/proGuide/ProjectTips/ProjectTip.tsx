@@ -1,5 +1,4 @@
-import { H6, IconBulbOutline32 } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
+import { H6, IconBulbOutline32, Flex } from '@giveth/ui-design-system';
 import DefaultTip from './DefaultTip';
 import TitleTip from './TitleTip';
 import DescriptionTip from './DescriptionTip';
@@ -9,6 +8,7 @@ import MapTip from './MapTip';
 import AddressesTip from './AddressesTip';
 import { ECreateProjectSections } from '../../types';
 import { Card } from '../common.sc';
+import SocialMediaTip from './SocialMediaTip';
 
 export interface IProjectTipProps {
 	activeSection: ECreateProjectSections;
@@ -28,6 +28,11 @@ const contentMap = {
 	[ECreateProjectSections.description]: {
 		title: 'Describing your Project',
 		component: <DescriptionTip />,
+	},
+
+	[ECreateProjectSections.socialMedia]: {
+		title: 'Get Connected!',
+		component: <SocialMediaTip />,
 	},
 
 	[ECreateProjectSections.categories]: {

@@ -3,6 +3,7 @@ import {
 	neutralColors,
 	Subline,
 	SublineBold,
+	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC, useState, Dispatch, SetStateAction } from 'react';
@@ -12,7 +13,6 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '../Modal';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IProject, IWalletAddress } from '@/apollo/types/types';
-import { Flex } from '@/components/styled-components/Flex';
 import config from '@/configuration';
 import { NetworkWalletAddress } from './NetworkWalletAddress';
 import { AddNewAddress } from './AddNewAddress';

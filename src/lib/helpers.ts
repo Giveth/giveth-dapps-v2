@@ -1,9 +1,5 @@
 // eslint-disable-next-line import/named
 import unescape from 'lodash/unescape';
-
-// import { keccak256 } from '@ethersproject/keccak256';
-
-import { erc20Abi } from 'viem';
 import {
 	writeContract,
 	sendTransaction as wagmiSendTransaction,
@@ -13,7 +9,7 @@ import {
 // @ts-ignore
 import { captureException } from '@sentry/nextjs';
 // import { type Address, erc20Abi } from 'wagmi';
-import { Address, Chain, parseEther, parseUnits } from 'viem';
+import { Address, Chain, parseEther, parseUnits, erc20Abi } from 'viem';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { getRequest } from '@/helpers/requests';
@@ -296,7 +292,10 @@ export const htmlToText = (text?: string) => {
 };
 
 export const capitalizeFirstLetter = (string: string) => {
-	return string.charAt(0).toUpperCase() + string.slice(1);
+	return (
+		string.toLowerCase().charAt(0).toUpperCase() +
+		string.toLowerCase().slice(1)
+	);
 };
 
 export const capitalizeAllWords = (string: string) => {
@@ -657,3 +656,12 @@ export const getLocaleFromIP = async () => {
 		return undefined;
 	}
 };
+export function generateRandomNonce(): number {
+	const min: number = 100;
+	const max: number = 999999999999999;
+
+	// Generate a random number between min (inclusive) and max (exclusive)
+	const nonce: number = Math.floor(Math.random() * (max - min + 1)) + min;
+
+	return nonce;
+}

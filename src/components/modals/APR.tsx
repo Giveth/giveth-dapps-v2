@@ -6,10 +6,10 @@ import {
 	neutralColors,
 	Subline,
 	SublineBold,
+	Flex,
 } from '@giveth/ui-design-system';
 
 import { Modal } from './Modal';
-import { Flex } from '../styled-components/Flex';
 import { IModal } from '@/types/common';
 import { mediaQueries } from '@/lib/constants/constants';
 import { RegenStreamConfig, StreamType } from '@/types/config';
@@ -42,7 +42,7 @@ export const APRModal: FC<IAPRModalProps> = ({
 		>
 			<APRModalContainer>
 				<DescContainer>
-					<AlertRow alignItems='flex-end'>
+					<AlertRow $alignItems='flex-end'>
 						<Image
 							width={24}
 							height={24}

@@ -1,9 +1,8 @@
 import { useState, type FC, useEffect } from 'react';
-import { Button } from '@giveth/ui-design-system';
+import { Button, Flex } from '@giveth/ui-design-system';
 import { useAccount, useBalance } from 'wagmi';
 import { useIntl } from 'react-intl';
 import { Framework } from '@superfluid-finance/sdk-core';
-import { Flex } from '@/components/styled-components/Flex';
 import { ISuperToken, IToken } from '@/types/superFluid';
 import { AddressZero } from '@/lib/constants/constants';
 import { ModifyInfoToast } from './ModifyInfoToast';
@@ -13,15 +12,16 @@ import { Item } from '../RecurringDonationModal/Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { RunOutInfo } from '../RunOutInfo';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
-import config from '@/configuration';
+import config, { isProduction } from '@/configuration';
 import { showToastError } from '@/lib/helpers';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { StreamInfo } from './StreamInfo';
-import { ModifySection } from './ModifySection';
+import { EModifySectionPlace, ModifySection } from './ModifySection';
 import { ModifyWrapper, Wrapper } from './common.sc';
 import { EModifySuperTokenSteps, actionButtonLabel } from './common';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
+import { EToastType } from '@/components/toasts/InlineToast';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	token?: IToken;
@@ -34,7 +34,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	tokenStreams,
 	step,
 	setStep,
-	setShowModal,
+	closeModal,
 	refreshBalance,
 }) => {
 	const [amount, setAmount] = useState(0n);
@@ -111,10 +111,14 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 			if (!provider || !signer)
 				throw new Error('Provider or signer not found');
 
-			const sf = await Framework.create({
+			const _options = {
 				chainId: config.OPTIMISM_CONFIG.id,
 				provider: provider,
-			});
+				resolverAddress: isProduction
+					? undefined
+					: '0x554c06487bEc8c890A0345eb05a5292C1b1017Bd',
+			};
+			const sf = await Framework.create(_options);
 
 			// EThx is not a Wrapper Super Token and should load separately
 			let superTokenAsset;
@@ -155,7 +159,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		} else if (step === EModifySuperTokenSteps.DEPOSIT) {
 			onDeposit();
 		} else if (step === EModifySuperTokenSteps.DEPOSIT_CONFIRMED) {
-			setShowModal(false);
+			closeModal();
 		}
 	};
 
@@ -171,17 +175,22 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 							balance={balance}
 							refetch={refetch}
 							isRefetching={isRefetching}
+							tooltipText='tooltip.deposit_stream_balance'
+							modifySectionPlace={EModifySectionPlace.DEPOSIT}
+							maxAmount={balance?.value || 0n}
 						/>
 						<StreamInfo
 							tokenStreams={tokenStreams}
 							superToken={superToken}
 							SuperTokenBalance={SuperTokenBalance}
+							inputAmount={amount}
+							type='deposit'
 						/>
 					</ModifyWrapper>
-					<ModifyInfoToast />
+					<ModifyInfoToast toastType={EToastType.Info} />
 				</>
 			) : (
-				<Flex flexDirection='column' gap='16px'>
+				<Flex $flexDirection='column' gap='16px'>
 					<DepositSteps modifyTokenState={step} />
 					<Item
 						title='Deposit into your stream balance'
@@ -190,8 +199,11 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 						token={token!}
 					/>
 					<RunOutInfo
-						amount={amount + (SuperTokenBalance?.value || 0n)}
-						totalPerMonth={0n}
+						superTokenBalance={
+							amount + (SuperTokenBalance?.value || 0n)
+						}
+						streamFlowRatePerMonth={0n}
+						symbol={token?.symbol || ''}
 					/>
 				</Flex>
 			)}

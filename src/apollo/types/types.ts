@@ -83,6 +83,7 @@ export interface IProject {
 	qfRounds?: IQFRound[];
 	campaigns?: ICampaign[];
 	anchorContracts: IAnchorContractData[];
+	socialMedia: IProjectSocialMedia[];
 }
 
 export interface IDonationProject extends IProject {
@@ -172,6 +173,25 @@ export interface IProjectEdition {
 	};
 	slug: string;
 	anchorContracts?: IAnchorContractData[];
+	socialMedia: IProjectSocialMedia[];
+}
+
+export enum EProjectSocialMediaType {
+	FACEBOOK = 'FACEBOOK',
+	X = 'X',
+	INSTAGRAM = 'INSTAGRAM',
+	YOUTUBE = 'YOUTUBE',
+	LINKEDIN = 'LINKEDIN',
+	REDDIT = 'REDDIT',
+	DISCORD = 'DISCORD',
+	FARCASTER = 'FARCASTER',
+	LENS = 'LENS',
+	WEBSITE = 'WEBSITE',
+}
+
+export interface IProjectSocialMedia {
+	type: EProjectSocialMediaType;
+	link: string;
 }
 
 export interface IProjectCreation {
@@ -184,6 +204,7 @@ export interface IProjectCreation {
 	addresses?: IWalletAddress[];
 	image?: string;
 	isDraft?: boolean;
+	socialMedia?: IProjectSocialMedia[];
 }
 
 export interface IUser {
@@ -251,6 +272,20 @@ export interface IWalletDonation extends IDonation {
 	project: IProject;
 	valueEth: number;
 	valueUsd: number;
+}
+
+export interface IWalletRecurringDonation {
+	id: string;
+	createdAt: string;
+	project: IProject;
+	status: ERecurringDonationStatus;
+	flowRate: string;
+	currency: string;
+	amountStreamed: string;
+	networkId: number;
+	finished: boolean;
+	anonymous: boolean;
+	isArchived: boolean;
 }
 
 export interface IMediumBlogPost {
@@ -441,4 +476,12 @@ export interface IGetQfRoundHistory {
 	raisedFundInUsd: number;
 	uniqueDonors: number;
 	estimatedMatching: IEstimatedMatching;
+}
+
+export enum ERecurringDonationStatus {
+	PENDING = 'pending',
+	VERIFIED = 'verified',
+	ENDED = 'ended',
+	FAILED = 'failed',
+	ACTIVE = 'active',
 }

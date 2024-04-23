@@ -1,10 +1,7 @@
 import Image from 'next/image';
-import { brandColors, D3 } from '@giveth/ui-design-system';
+import { brandColors, Container, D3 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
-
-// import SearchBox from '../SearchBox';
-import { Container } from '@giveth/ui-design-system';
 import Accordion from '../Accordion';
 import _faqContent from '@/content/FAQ';
 import { Arc } from '@/components/styled-components/Arc';

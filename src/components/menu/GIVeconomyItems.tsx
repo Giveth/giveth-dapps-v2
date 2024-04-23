@@ -22,11 +22,6 @@ export const giveconomyItems = [
 		href: Routes.GIVeconomy,
 	},
 	{
-		title: 'label.governance',
-		label: 'GIVgarden',
-		href: Routes.GIVgarden,
-	},
-	{
 		title: 'label.earn_with_liquidity',
 		label: 'GIVfarm',
 		href: Routes.GIVfarm,
@@ -55,8 +50,8 @@ export const GIVeconomyItems = () => {
 	return (
 		<>
 			<Link href={Routes.GIVfarm}>
-				<Item isHighlighted themeState={theme}>
-					<ItemTitle themeState={theme}>
+				<Item isHighlighted baseTheme={theme}>
+					<ItemTitle $baseTheme={theme}>
 						{formatMessage({ id: 'label.use_your_giv' })}
 					</ItemTitle>
 					<ItemRow>
@@ -72,13 +67,13 @@ export const GIVeconomyItems = () => {
 					</ItemRow>
 				</Item>
 			</Link>
-			<LabelStyle medium>
+			<LabelStyle $medium>
 				{formatMessage({ id: 'page.projects.title.explore' })}
 			</LabelStyle>
 			{giveconomyItems.map((item, idx) => (
 				<Link key={idx} href={item.href}>
-					<Item themeState={theme}>
-						<ItemTitle themeState={theme}>
+					<Item baseTheme={theme}>
+						<ItemTitle $baseTheme={theme}>
 							{formatMessage({ id: item.title })}
 						</ItemTitle>
 						<ItemRow>

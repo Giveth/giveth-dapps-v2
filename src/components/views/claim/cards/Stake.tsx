@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
-import { H2, H5, Lead } from '@giveth/ui-design-system';
+import { H2, H5, Lead, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import {
 	APRRow,
@@ -30,7 +30,6 @@ import useGIVTokenDistroHelper from '@/hooks/useGIVTokenDistroHelper';
 import { useAppSelector } from '@/features/hooks';
 import { SimplePoolStakingConfig, StakingType } from '@/types/config';
 import { getNowUnixMS } from '@/helpers/time';
-import { Flex } from '@/components/styled-components/Flex';
 import { IClaimViewCardProps } from '../Claim.view';
 import { WeiPerEther } from '@/lib/constants/constants';
 import { InputWithUnit } from '@/components/input/InputWithUnit';
@@ -176,7 +175,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 	}, [mainnetValues, gnosisValues]);
 
 	return (
-		<InvestCardContainer activeIndex={step} index={index}>
+		<InvestCardContainer $activeIndex={step} $index={index}>
 			<StakeHeader>
 				<Title as='h1'>Grow your Rewards</Title>
 				<Desc>
@@ -185,15 +184,18 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 					{APR ? `${formatEthHelper(APR)}% APR` : ' ? '}
 				</Desc>
 			</StakeHeader>
-			<APRRow alignItems={'flex-start'} justifyContent={'space-between'}>
+			<APRRow
+				$alignItems={'flex-start'}
+				$justifyContent={'space-between'}
+			>
 				<ImpactCard>
 					<H5 as='h2' weight={700}>
 						See how much you could earn
 					</H5>
 					<div>
 						<Flex
-							alignItems={'center'}
-							justifyContent={'space-between'}
+							$alignItems={'center'}
+							$justifyContent={'space-between'}
 						>
 							<ImpactCardLabel>If you deposit</ImpactCardLabel>
 							<MaxStakeGIV
@@ -222,7 +224,7 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 					<PoolCardTitle>If you stake for 1 month:</PoolCardTitle>
 					<PoolCard>
 						<PoolItems>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>APR</PoolItem>
 								<PoolItemBold>
 									<Image
@@ -234,13 +236,13 @@ const InvestCard: FC<IClaimViewCardProps> = ({ index }) => {
 									{formatEthHelper(APR ? APR : Zero)}%
 								</PoolItemBold>
 							</Flex>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>Claimable</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(potentialClaim)} GIV
 								</PoolItemBold>
 							</Flex>
-							<Flex justifyContent='space-between'>
+							<Flex $justifyContent='space-between'>
 								<PoolItem>Streaming</PoolItem>
 								<PoolItemBold>
 									{formatWeiHelper(earnEstimate)} GIV

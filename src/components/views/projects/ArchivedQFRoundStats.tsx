@@ -5,6 +5,7 @@ import {
 	brandColors,
 	mediaQueries,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import React from 'react';
 import styled from 'styled-components';
@@ -12,10 +13,9 @@ import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { Flex } from '@/components/styled-components/Flex';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
 
-export const QFRoundStats = () => {
+export const ArchivedQFRoundStats = () => {
 	const { formatMessage } = useIntl();
 	const router = useRouter();
 	const { data } = useQuery(FETCH_QF_ROUND_STATS, {
@@ -34,7 +34,7 @@ export const QFRoundStats = () => {
 						{formatMessage({ id: 'label.matching_pool' })}
 					</ItemTitle>
 					<ItemValue>
-						{data?.qfRoundStats?.matchingPool || '--'}&nbsp;DAI
+						{data?.qfRoundStats?.matchingPool || '--'}&nbsp;$
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>

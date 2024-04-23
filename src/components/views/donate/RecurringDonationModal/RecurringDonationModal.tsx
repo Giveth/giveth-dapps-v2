@@ -1,33 +1,50 @@
 import { FC, useEffect, useState } from 'react';
-import { Button, IconDonation32, mediaQueries } from '@giveth/ui-design-system';
+import {
+	Button,
+	IconDonation32,
+	mediaQueries,
+	Flex,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { Framework, type Operation } from '@superfluid-finance/sdk-core';
 import { useAccount } from 'wagmi';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
+import { formatUnits } from 'viem';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { IModal } from '@/types/common';
-import { Flex } from '@/components/styled-components/Flex';
 import { useDonateData } from '@/context/donate.context';
 import { Item } from './Item';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { showToastError } from '@/lib/helpers';
 import { DonateSteps } from './DonateSteps';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
-import config from '@/configuration';
-import { findSuperTokenByTokenAddress } from '@/helpers/donate';
+import config, { isProduction } from '@/configuration';
+import {
+	findSuperTokenByTokenAddress,
+	findUserActiveStreamOnSelectedToken,
+} from '@/helpers/donate';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { RunOutInfo } from '../RunOutInfo';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { ChainType } from '@/types/config';
+import {
+	ICreateDraftRecurringDonation,
+	createDraftRecurringDonation,
+	createRecurringDonation,
+	updateRecurringDonation,
+	updateRecurringDonationStatus,
+} from '@/services/donation';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
+import { ERecurringDonationStatus } from '@/apollo/types/types';
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
 	amount: bigint;
 	percentage: number;
 	isUpdating?: boolean;
+	anonymous: boolean;
 }
 
 export enum EDonationSteps {
@@ -105,6 +122,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	donationToGiveth,
 	setShowModal,
 	isUpdating,
+	anonymous,
 }) => {
 	const { project, selectedToken, tokenStreams, setSuccessDonation } =
 		useDonateData();
@@ -124,7 +142,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	}, [selectedToken, setStep]);
 
 	const onApprove = async () => {
-		console.log('amount', amount);
+		console.log(
+			'amount',
+			formatUnits(amount, selectedToken?.token.decimals || 18),
+		);
 		setStep(EDonationSteps.APPROVING);
 		if (!address || !selectedToken) return;
 		const superToken = findSuperTokenByTokenAddress(selectedToken.token.id);
@@ -151,6 +172,10 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	const onDonate = async () => {
 		setStep(EDonationSteps.DONATING);
 		try {
+			const projectAnchorContract = project?.anchorContracts[0]?.address;
+			if (!projectAnchorContract) {
+				throw new Error('Project anchor address not found');
+			}
 			if (!address || !selectedToken) {
 				throw new Error('address not found');
 			}
@@ -168,10 +193,15 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					_superToken = sp;
 				}
 			}
-			const sf = await Framework.create({
+
+			const _options = {
 				chainId: config.OPTIMISM_CONFIG.id,
 				provider: provider,
-			});
+				resolverAddress: isProduction
+					? undefined
+					: '0x554c06487bEc8c890A0345eb05a5292C1b1017Bd',
+			};
+			const sf = await Framework.create(_options);
 
 			// EThx is not a Wrapper Super Token and should load separately
 			let superToken;
@@ -183,6 +213,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			const operations: Operation[] = [];
 
+			// Upgrade the token to super token
 			if (!isUpdating && !selectedToken.token.isSuperToken) {
 				const upgradeOperation = await superToken.upgrade({
 					amount: amount.toString(),
@@ -196,11 +227,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				}
 			}
 
-			const projectOpWalletAddress = project?.addresses?.find(
-				address => address.networkId === config.OPTIMISM_CONFIG.id,
-			)?.address;
-
-			if (!projectOpWalletAddress) {
+			if (!projectAnchorContract) {
 				throw new Error('Project wallet address not found');
 			}
 
@@ -211,7 +238,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 
 			const options = {
 				sender: address,
-				receiver: projectOpWalletAddress, // should change with anchor contract address
+				receiver: projectAnchorContract,
 				flowRate: _flowRate.toString(),
 			};
 
@@ -220,13 +247,20 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				: superToken.createFlow(options);
 
 			operations.push(projectFlowOp);
+			const isDonatingToGiveth = !isUpdating && donationToGiveth > 0;
+			console.log(
+				'isDonatingToGiveth',
+				isDonatingToGiveth,
+				isUpdating,
+				donationToGiveth > 0,
+			);
+			let givethOldStream;
+			let givethFlowRate = 0n;
+			if (isDonatingToGiveth) {
+				const givethAnchorContract =
+					config.OPTIMISM_CONFIG.GIVETH_ANCHOR_CONTRACT_ADDRESS;
 
-			if (!isUpdating && donationToGiveth > 0) {
-				const givethOpWalletAddress = project?.givethAddresses?.find(
-					address => address.networkId === config.OPTIMISM_CONFIG.id,
-				)?.address;
-
-				if (!givethOpWalletAddress) {
+				if (!givethAnchorContract) {
 					throw new Error('Giveth wallet address not found');
 				}
 
@@ -235,46 +269,188 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					100n /
 					ONE_MONTH_SECONDS;
 
-				const oldStream =
-					tokenStreams[_superToken.id] &&
-					tokenStreams[_superToken.id].find(
-						stream =>
-							stream.receiver.id.toLowerCase() ===
-							givethOpWalletAddress.toLowerCase(),
-					);
+				givethOldStream = findUserActiveStreamOnSelectedToken(
+					address,
+					givethAnchorContract,
+					tokenStreams,
+					_superToken,
+				);
 
-				if (oldStream) {
-					const givethFlowRate =
-						_newFlowRate + BigInt(oldStream.currentFlowRate);
+				if (givethOldStream) {
+					givethFlowRate =
+						_newFlowRate + BigInt(givethOldStream.currentFlowRate);
 
 					const givethFlowOp = superToken.updateFlow({
 						sender: address,
-						receiver: givethOpWalletAddress, // should change with anchor contract address
+						receiver: givethAnchorContract,
 						flowRate: givethFlowRate.toString(),
 					});
-
 					operations.push(givethFlowOp);
 				} else {
+					givethFlowRate = _newFlowRate;
 					const givethFlowOp = superToken.createFlow({
 						sender: address,
-						receiver: givethOpWalletAddress, // should change with anchor contract address
+						receiver: givethAnchorContract,
 						flowRate: _newFlowRate.toString(),
 					});
-
 					operations.push(givethFlowOp);
 				}
 			}
-			const batchOp = sf.batchCall(operations);
-			const tx = await batchOp.exec(signer);
+
+			let tx;
+			const isBatch = operations.length > 1;
+
+			const projectDraftDonationInfo: ICreateDraftRecurringDonation = {
+				projectId: +project.id,
+				anonymous,
+				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				flowRate: _flowRate,
+				superToken: _superToken,
+				isBatch,
+				isForUpdate: isUpdating,
+			};
+
+			// Save Draft Donation
+			const projectDraftDonationId = await createDraftRecurringDonation(
+				projectDraftDonationInfo,
+			);
+
+			const givethDraftDonationInfo: ICreateDraftRecurringDonation = {
+				projectId: config.GIVETH_PROJECT_ID,
+				anonymous,
+				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				flowRate: givethFlowRate,
+				superToken: _superToken,
+				isBatch,
+				isForUpdate: isUpdating,
+			};
+			let givethDraftDonationId = 0;
+			if (isDonatingToGiveth) {
+				givethDraftDonationId = await createDraftRecurringDonation(
+					givethDraftDonationInfo,
+				);
+			}
+
+			if (isBatch) {
+				const batchOp = sf.batchCall(operations);
+				tx = await batchOp.exec(signer);
+			} else {
+				tx = await operations[0].exec(signer);
+			}
+
+			// saving project donation to backend
+			let projectDonationId = 0;
+			try {
+				const projectDonationInfo = {
+					...projectDraftDonationInfo,
+					txHash: tx.hash,
+					draftDonationId: projectDraftDonationId,
+				};
+				if (isUpdating) {
+					console.log('Start Update Project Donation Info');
+					projectDonationId =
+						await updateRecurringDonation(projectDonationInfo);
+					console.log(
+						'Project Donation Update Info',
+						projectDonationId,
+					);
+				} else {
+					console.log('Start Creating Project Donation Info');
+					projectDonationId =
+						await createRecurringDonation(projectDonationInfo);
+					console.log(
+						'Project Donation Create Info',
+						projectDonationId,
+					);
+				}
+			} catch (error) {
+				showToastError(error);
+			}
+
+			// saving giveth donation to backend
+			let givethDonationId = 0;
+			if (isDonatingToGiveth) {
+				const givethDonationInfo = {
+					...givethDraftDonationInfo,
+					txHash: tx.hash,
+					draftDonationId: givethDraftDonationId,
+				};
+				try {
+					if (givethOldStream) {
+						console.log('Start Update Giveth Donation Info');
+						givethDonationId =
+							await updateRecurringDonation(givethDonationInfo);
+						console.log(
+							'Giveth Donation Update Info',
+							givethDonationId,
+						);
+					} else {
+						console.log('Start Creating Giveth Donation Info');
+						givethDonationId =
+							await createRecurringDonation(givethDonationInfo);
+						console.log(
+							'Giveth Donation Create Info',
+							givethDonationId,
+						);
+					}
+				} catch (error) {
+					showToastError(error);
+				}
+			}
+
 			const res = await tx.wait();
-			if (!res.status) {
+			if (res.status) {
+				try {
+					if (projectDonationId) {
+						updateRecurringDonationStatus(
+							projectDonationId,
+							ERecurringDonationStatus.VERIFIED,
+						);
+					}
+					if (isDonatingToGiveth && givethDonationId) {
+						updateRecurringDonationStatus(
+							givethDonationId,
+							ERecurringDonationStatus.VERIFIED,
+						);
+					}
+				} catch (error) {
+					showToastError(error);
+				}
+			} else {
+				try {
+					if (projectDonationId) {
+						updateRecurringDonationStatus(
+							projectDonationId,
+							ERecurringDonationStatus.FAILED,
+						);
+					}
+					if (isDonatingToGiveth && givethDonationId) {
+						updateRecurringDonationStatus(
+							givethDonationId,
+							ERecurringDonationStatus.FAILED,
+						);
+					}
+				} catch (error) {
+					showToastError(error);
+				}
 				throw new Error('Transaction failed');
 			}
 			setStep(EDonationSteps.SUBMITTED);
 			if (tx.hash) {
-				setSuccessDonation({
-					txHash: [{ txHash: tx.hash, chainType: ChainType.EVM }],
-				});
+				if (isDonatingToGiveth) {
+					setSuccessDonation({
+						txHash: [
+							{ txHash: tx.hash, chainType: ChainType.EVM },
+							{ txHash: tx.hash, chainType: ChainType.EVM },
+						],
+						excludeFromQF: true,
+					});
+				} else {
+					setSuccessDonation({
+						txHash: [{ txHash: tx.hash, chainType: ChainType.EVM }],
+						excludeFromQF: true,
+					});
+				}
 			}
 		} catch (error: any) {
 			setStep(EDonationSteps.DONATE);
@@ -312,7 +488,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	return (
 		<Wrapper>
 			<DonateSteps donateState={step} />
-			<Items flexDirection='column' gap='16px'>
+			<Items $flexDirection='column' gap='16px'>
 				{!selectedToken?.token.isSuperToken && (
 					<Item
 						title='Deposit into your stream balance'
@@ -322,21 +498,27 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 					/>
 				)}
 				<Item
-					title={`Donate Monthly to ${project.title}`}
+					title={`Donate to ${project.title}`}
+					subtext={'per month'}
 					amount={projectPerMonth}
 					price={tokenPrice}
 					token={selectedToken?.token!}
 				/>
 				{donationToGiveth > 0 && (
 					<Item
-						title='Donate Monthly to the Giveth DAO'
+						title='Donate to the Giveth DAO'
+						subtext={'per month'}
 						amount={givethPerMonth}
 						price={tokenPrice}
 						token={selectedToken?.token!}
 					/>
 				)}
 			</Items>
-			<RunOutInfo amount={amount} totalPerMonth={totalPerMonth} />
+			<RunOutInfo
+				superTokenBalance={amount}
+				streamFlowRatePerMonth={totalPerMonth}
+				symbol={selectedToken?.token.symbol || ''}
+			/>
 			<ActionButton
 				label={formatMessage({ id: buttonLabel[step] })}
 				onClick={handleAction}

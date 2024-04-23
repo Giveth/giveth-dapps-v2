@@ -5,6 +5,8 @@ import {
 	Lead,
 	neutralColors,
 	OutlineButton,
+	Flex,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -25,7 +27,6 @@ import {
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowFooter } from '@/features/general/general.slice';
 import { NotificationBox } from '@/components/notification/NotificationBox';
-import { Flex, FlexCenter } from '@/components/styled-components/Flex';
 import InternalLink from '@/components/InternalLink';
 import Routes from '@/lib/constants/Routes';
 import {
@@ -134,8 +135,8 @@ function NotificationView() {
 				<IconContainer>
 					<IconNotificationOutline32 />
 				</IconContainer>
-				<NotificationDesc flexDirection='column'>
-					<Flex justifyContent='space-between'>
+				<NotificationDesc $flexDirection='column'>
+					<Flex $justifyContent='space-between'>
 						<H5 weight={700}>
 							{formatMessage({ id: 'label.notification_center' })}
 						</H5>
@@ -153,26 +154,26 @@ function NotificationView() {
 				</NotificationDesc>
 			</Flex>
 			<Flex
-				justifyContent='space-between'
-				alignItems={isMobile ? 'stretch' : 'center'}
-				flexDirection={isMobile ? 'column' : 'row'}
+				$justifyContent='space-between'
+				$alignItems={isMobile ? 'stretch' : 'center'}
+				$flexDirection={isMobile ? 'column' : 'row'}
 			>
 				<TabsContainer>
 					<NotifisTabItem
-						active={tab === ENotificationTabs.ALL}
+						$active={tab === ENotificationTabs.ALL}
 						onClick={() => handleChangeTab(ENotificationTabs.ALL)}
 					>
 						{formatMessage({ id: 'label.all_fem' })}
 						{totalUnreadNotifications !== 0 && (
 							<TabItemCount
-								active={tab === ENotificationTabs.ALL}
+								$active={tab === ENotificationTabs.ALL}
 							>
 								{totalUnreadNotifications}
 							</TabItemCount>
 						)}
 					</NotifisTabItem>
 					<NotifisTabItem
-						active={tab === ENotificationTabs.GENERAL}
+						$active={tab === ENotificationTabs.GENERAL}
 						onClick={() =>
 							handleChangeTab(ENotificationTabs.GENERAL)
 						}
@@ -180,14 +181,14 @@ function NotificationView() {
 						{formatMessage({ id: 'general' })}
 						{general !== 0 && (
 							<TabItemCount
-								active={tab === ENotificationTabs.GENERAL}
+								$active={tab === ENotificationTabs.GENERAL}
 							>
 								{general}
 							</TabItemCount>
 						)}
 					</NotifisTabItem>
 					<NotifisTabItem
-						active={tab === ENotificationTabs.PROJECTS}
+						$active={tab === ENotificationTabs.PROJECTS}
 						onClick={() =>
 							handleChangeTab(ENotificationTabs.PROJECTS)
 						}
@@ -195,14 +196,14 @@ function NotificationView() {
 						{formatMessage({ id: 'label.my_projects' })}
 						{projectsRelated !== 0 && (
 							<TabItemCount
-								active={tab === ENotificationTabs.PROJECTS}
+								$active={tab === ENotificationTabs.PROJECTS}
 							>
 								{projectsRelated}
 							</TabItemCount>
 						)}
 					</NotifisTabItem>
 					<NotifisTabItem
-						active={tab === ENotificationTabs.SUPPORTED}
+						$active={tab === ENotificationTabs.SUPPORTED}
 						onClick={() =>
 							handleChangeTab(ENotificationTabs.SUPPORTED)
 						}
@@ -210,14 +211,14 @@ function NotificationView() {
 						{formatMessage({ id: 'label.supported_projects' })}
 						{supportedProjects !== 0 && (
 							<TabItemCount
-								active={tab === ENotificationTabs.SUPPORTED}
+								$active={tab === ENotificationTabs.SUPPORTED}
 							>
 								{supportedProjects}
 							</TabItemCount>
 						)}
 					</NotifisTabItem>
 					<NotifisTabItem
-						active={tab === ENotificationTabs.GIVECONOMY}
+						$active={tab === ENotificationTabs.GIVECONOMY}
 						onClick={() =>
 							handleChangeTab(ENotificationTabs.GIVECONOMY)
 						}
@@ -225,7 +226,7 @@ function NotificationView() {
 						{formatMessage({ id: 'label.rewards' })}
 						{givEconomyRelated !== 0 && (
 							<TabItemCount
-								active={tab === ENotificationTabs.GIVECONOMY}
+								$active={tab === ENotificationTabs.GIVECONOMY}
 							>
 								{givEconomyRelated}
 							</TabItemCount>

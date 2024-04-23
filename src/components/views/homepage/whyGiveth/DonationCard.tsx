@@ -5,8 +5,8 @@ import {
 	IconArrowRight,
 	mediaQueries,
 	neutralColors,
+	Flex,
 } from '@giveth/ui-design-system';
-import { Flex } from '@/components/styled-components/Flex';
 import { shortenAddress } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import ExternalLink from '@/components/ExternalLink';

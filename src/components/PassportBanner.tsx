@@ -10,12 +10,12 @@ import {
 	brandColors,
 	mediaQueries,
 	semanticColors,
+	Flex,
 } from '@giveth/ui-design-system';
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
-import { Flex } from './styled-components/Flex';
 import { EPassportState, usePassport } from '@/hooks/usePassport';
 import Routes from '@/lib/constants/Routes';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
@@ -135,8 +135,8 @@ export const PassportBanner = () => {
 	const { isOnSolana, handleSingOutAndSignInWithEVM } = useGeneralWallet();
 
 	return !isOnSolana ? (
-		<PassportBannerWrapper bgColor={PassportBannerData[passportState].bg}>
-			<Flex gap='8px' alignItems='center'>
+		<PassportBannerWrapper $bgColor={PassportBannerData[passportState].bg}>
+			<Flex gap='8px' $alignItems='center'>
 				<IconWrapper>
 					{PassportBannerData[passportState].icon}
 				</IconWrapper>
@@ -207,7 +207,7 @@ export const PassportBanner = () => {
 			)}
 		</PassportBannerWrapper>
 	) : (
-		<PassportBannerWrapper bgColor={PassportBannerData[passportState].bg}>
+		<PassportBannerWrapper $bgColor={PassportBannerData[passportState].bg}>
 			<P>
 				{formatMessage({
 					id: 'label.to_activate_your_gitcoin_passport',
@@ -223,12 +223,12 @@ export const PassportBanner = () => {
 };
 
 interface IPassportBannerWrapperProps {
-	bgColor: EPBGState;
+	$bgColor: EPBGState;
 }
 
 export const PassportBannerWrapper = styled(Flex)<IPassportBannerWrapperProps>`
 	flex-direction: column;
-	background-color: ${props => bgColor[props.bgColor]};
+	background-color: ${props => bgColor[props.$bgColor]};
 	padding: 16px;
 	align-items: center;
 	justify-content: center;
