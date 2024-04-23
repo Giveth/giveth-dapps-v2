@@ -69,6 +69,7 @@ const Options = styled(FlexCenter)`
 	flex-direction: column;
 	width: 100%;
 	padding: 40px 20px 0;
+	position: relative;
 `;
 
 const ProjectsButton = styled(ButtonLink)`
