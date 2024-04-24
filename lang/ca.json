@@ -870,6 +870,8 @@
 	"label.singular.round_count": "{round} ronda",
 	"label.skip_for_now": "Omet per ara",
 	"label.social_profiles": "Perfils socials",
+	"label.social_find_us_on": "Troba'ns a les xarxes socials",
+	"label.social_warning": "Giveth NO verifica els enllaços de xarxes socials publicats pels projectes, feu clic sota el vostre propi criteri!",
 	"label.something_went_wrong": "Alguna cosa ha anat malament!",
 	"label.some_or_all_of_your_staked_giv_is_locked": "Part o la totalitat del teu GIV en staking està bloquejat. Feu clic a 'Detalls del GIV bloquejat' per obtenir més informació.",
 	"label.sorry_this_projet_doesnt_support_your_current_net": "Ho sentim, aquest projecte no admet la teva xarxa actual.",

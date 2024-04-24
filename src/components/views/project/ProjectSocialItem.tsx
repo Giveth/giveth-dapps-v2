@@ -20,10 +20,9 @@ const socialMediaColor: { [key: string]: string } = {
 	website: '#2EA096',
 };
 
-const removeHttpsFromUrl = (socialMediaUrl: string) => {
-	return socialMediaUrl.replace('https://', '');
+const removeHttpsAndWwwFromUrl = (socialMediaUrl: string) => {
+	return socialMediaUrl.replace('https://', '').replace('www.', '');
 };
-
 const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
 	const item = socialMediasArray.find(item => {
 		return item.type.toLocaleLowerCase() === socialMedia.type.toLowerCase();
@@ -52,7 +51,7 @@ const ProjectSocialItem = ({ socialMedia }: IProjectSocialMediaItem) => {
 							],
 						}}
 					>
-						{removeHttpsFromUrl(socialMedia.link)}
+						{removeHttpsAndWwwFromUrl(socialMedia.link)}
 					</B>
 				</Flex>
 			</SocialItemContainer>

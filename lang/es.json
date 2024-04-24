@@ -870,6 +870,8 @@
 	"label.singular.round_count": "{round} ronda",
 	"label.skip_for_now": "Ignorar por ahora",
 	"label.social_profiles": "Perfiles Sociales",
+	"label.social_find_us_on": "Encuéntranos en las redes sociales",
+	"label.social_warning": "Giveth NO verifica los enlaces de redes sociales publicados por los proyectos, haga clic bajo su propio criterio!",
 	"label.something_went_wrong": "¡Algo salió mal!",
 	"label.some_or_all_of_your_staked_giv_is_locked": "Parte o la totalidad de su GIV en staking está bloqueado. Haga clic en \"Detalles del GIV bloqueado\" para obtener más información.",
 	"label.sorry_this_projet_doesnt_support_your_current_net": "Lo sentimos, este proyecto no admite tu red actual.",
