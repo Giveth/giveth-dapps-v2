@@ -46,12 +46,12 @@ const contents = {
 	[ClaimTransactionState.DOWNGRADING_TO_ETH]: {
 		title: 'label.claim_recurring_donation',
 		icon: <IconWalletApprove32 />,
-		buttonText: 'label.withdrawing',
+		buttonText: 'label.downgrading_to_eth',
 	},
 	[ClaimTransactionState.TRANSFERRING_ETH]: {
 		title: 'label.claim_recurring_donation',
 		icon: <IconWalletApprove32 />,
-		buttonText: 'label.withdrawing',
+		buttonText: 'label.sending_eth_to_project_op_address',
 	},
 	[ClaimTransactionState.SUCCESS]: {
 		title: 'label.claim_successful',
