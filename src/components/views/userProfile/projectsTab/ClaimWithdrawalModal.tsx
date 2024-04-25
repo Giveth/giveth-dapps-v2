@@ -73,15 +73,28 @@ const ClaimWithdrawalModal = ({
 	const [loading, setLoading] = useState(false);
 
 	const handleConfirm = async () => {
+		const isEthx = selectedStream.token.symbol.toLowerCase() === 'ethx';
+		console.log('isETHx', isEthx);
 		try {
-			const encodedDowngradeTo = encodeFunctionData({
-				abi: superTokenABI.abi,
-				functionName: 'downgradeTo',
-				args: [optimismAddress, +selectedStream.balance.toString()],
-			});
-
 			setLoading(true);
 
+			const encodedDowngradeTo = isEthx
+				? encodeFunctionData({
+						abi: superTokenABI.abi,
+						functionName: 'downgrade',
+						args: [+selectedStream.balance.toString()],
+					})
+				: encodeFunctionData({
+						abi: superTokenABI.abi,
+						functionName: 'downgradeTo',
+						args: [
+							optimismAddress,
+							+selectedStream.balance.toString(),
+						],
+					});
+
+			// Execute the anchor contract
+			console.log('Start execute downgrading on Anchor contract');
 			const tx = await writeContract(wagmiConfig, {
 				abi: anchorContractABI.abi,
 				address: anchorContractAddress,
@@ -91,6 +104,22 @@ const ClaimWithdrawalModal = ({
 			});
 
 			setTransactionState(ClaimTransactionState.PENDING);
+
+			// Transfer ETH to the project op address
+			if (isEthx) {
+				console.log('Start transfer ETH to project op address');
+				const transferEthTx = await writeContract(wagmiConfig, {
+					abi: anchorContractABI.abi,
+					address: anchorContractAddress,
+					functionName: 'execute',
+					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					args: [
+						optimismAddress,
+						+selectedStream.balance.toString(),
+						'',
+					],
+				});
+			}
 
 			if (tx) {
 				setTxHash(tx);
@@ -102,6 +131,8 @@ const ClaimWithdrawalModal = ({
 				refetch();
 			}
 		} catch (error) {
+			console.error(error);
+			console.log('anchorContractAddress', anchorContractAddress);
 			setTransactionState(ClaimTransactionState.NOT_STARTED);
 		} finally {
 			setLoading(false);
