@@ -17,6 +17,7 @@ import ClaimWithdrawalItem from './ClaimWithdrawalItem';
 import { IProject } from '@/apollo/types/types';
 import config from '@/configuration';
 import superTokenABI from '@/artifacts/superToken.json';
+import ISETH from '@/artifacts/ISETH.json';
 import anchorContractABI from '@/artifacts/anchorContract.json';
 import { ClaimWithdrawalStatus } from './ClaimWithdrawalStatus';
 import { formatTxLink } from '@/lib/helpers';
@@ -70,18 +71,19 @@ const ClaimWithdrawalModal = ({
 		address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 	)?.address;
 
+	console.log('anchorContractAddress', anchorContractAddress);
+
 	const [loading, setLoading] = useState(false);
 
 	const handleConfirm = async () => {
-		const isEthx = selectedStream.token.symbol.toLowerCase() === 'ethx';
-		console.log('isETHx', isEthx);
 		try {
+			const isEthx = selectedStream.token.symbol.toLowerCase() === 'ethx';
+			console.log('isETHx', isEthx);
 			setLoading(true);
-
 			const encodedDowngradeTo = isEthx
 				? encodeFunctionData({
-						abi: superTokenABI.abi,
-						functionName: 'downgrade',
+						abi: ISETH.abi,
+						functionName: 'downgradeToETH',
 						args: [+selectedStream.balance.toString()],
 					})
 				: encodeFunctionData({
@@ -105,28 +107,34 @@ const ClaimWithdrawalModal = ({
 
 			setTransactionState(ClaimTransactionState.PENDING);
 
-			// Transfer ETH to the project op address
-			if (isEthx) {
-				console.log('Start transfer ETH to project op address');
-				const transferEthTx = await writeContract(wagmiConfig, {
-					abi: anchorContractABI.abi,
-					address: anchorContractAddress,
-					functionName: 'execute',
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
-					args: [
-						optimismAddress,
-						+selectedStream.balance.toString(),
-						'',
-					],
-				});
-			}
-
 			if (tx) {
 				setTxHash(tx);
 				await waitForTransactionReceipt(wagmiConfig, {
 					hash: tx,
 					chainId: config.OPTIMISM_NETWORK_NUMBER,
 				});
+				// Transfer ETH to the project op address
+				if (isEthx) {
+					console.log('Start transfer ETH to project op address');
+					const transferEthTx = await writeContract(wagmiConfig, {
+						abi: anchorContractABI.abi,
+						address: anchorContractAddress,
+						functionName: 'execute',
+						chainId: config.OPTIMISM_NETWORK_NUMBER,
+						args: [
+							optimismAddress,
+							+selectedStream.balance.toString(),
+							'',
+						],
+					});
+					console.log('transferEthTx', transferEthTx);
+					if (transferEthTx) {
+						await waitForTransactionReceipt(wagmiConfig, {
+							hash: transferEthTx,
+							chainId: config.OPTIMISM_NETWORK_NUMBER,
+						});
+					}
+				}
 				setTransactionState(ClaimTransactionState.SUCCESS);
 				refetch();
 			}
