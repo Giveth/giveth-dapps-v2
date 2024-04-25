@@ -34,12 +34,12 @@ interface IClaimWithdrawalModal extends IModal {
 
 const contents = {
 	[ClaimTransactionState.NOT_STARTED]: {
-		title: 'label.claim_recurring_donaiton',
+		title: 'label.claim_recurring_donation',
 		icon: <IconDonation32 />,
 		buttonText: 'label.confirm',
 	},
 	[ClaimTransactionState.PENDING]: {
-		title: 'label.claim_recurring_donaiton',
+		title: 'label.claim_recurring_donation',
 		icon: <IconWalletApprove32 />,
 		buttonText: 'label.withdrawing',
 	},
