@@ -29,7 +29,7 @@ const ProjectQFStatus = ({
 		: 'Not eligible';
 
 	return (
-		<StatusBadge isRoundActive={isRoundActive}>
+		<StatusBadge $isRoundActive={isRoundActive}>
 			<SublineBold>
 				{showRoundName ? roundNameText : handleQFTermsText}
 			</SublineBold>
@@ -49,15 +49,15 @@ const getColor = (isRoundActive: boolean) => {
 	return isRoundActive ? brandColors.giv[700] : neutralColors.gray[700];
 };
 
-const StatusBadge = styled.div<{ isRoundActive: boolean }>`
+const StatusBadge = styled.div<{ $isRoundActive: boolean }>`
 	border-radius: 50px;
 	padding: 2px 8px;
 	border-width: 2px;
 	border-style: solid;
-	background-color: ${({ isRoundActive }) =>
-		getBackgroundColor(isRoundActive)};
-	border-color: ${({ isRoundActive }) => getBorderColor(isRoundActive)};
-	color: ${({ isRoundActive }) => getColor(isRoundActive)};
+	background-color: ${({ $isRoundActive }) =>
+		getBackgroundColor($isRoundActive)};
+	border-color: ${({ $isRoundActive }) => getBorderColor($isRoundActive)};
+	color: ${({ $isRoundActive }) => getColor($isRoundActive)};
 `;
 
 export default ProjectQFStatus;

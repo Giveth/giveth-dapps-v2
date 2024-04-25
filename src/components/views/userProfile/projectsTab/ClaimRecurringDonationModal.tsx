@@ -1,4 +1,4 @@
-import { B, Button, P, neutralColors, Flex } from '@giveth/ui-design-system';
+import { B, P, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
@@ -14,7 +14,6 @@ import {
 import { WrappedSpinner } from '@/components/Spinner';
 import ClaimWithdrawalModal from './ClaimWithdrawalModal';
 import { ClaimRecurringItem } from './ClaimRecurringItem';
-import { ClaimTransactionState } from './type';
 import { formatDonation } from '@/helpers/number';
 
 interface IClaimRecurringDonationModal extends IModal {
@@ -37,8 +36,6 @@ const ClaimRecurringDonationModal = ({
 		useState(false);
 	const [selectedStream, setSelectedStream] = useState<ITokenWithBalance>();
 	const [allTokensUsd, setAllTokensUsd] = useState<IAllTokensUsd>({});
-	const [transactionState, setTransactionState] =
-		useState<ClaimTransactionState>(ClaimTransactionState.NOT_STARTED);
 
 	const anchorContractAddress = project.anchorContracts[0]?.address;
 
@@ -56,7 +53,6 @@ const ClaimRecurringDonationModal = ({
 			isAnimating={isAnimating}
 			headerTitle='Claimable Donations'
 			headerTitlePosition='left'
-			hiddenClose
 		>
 			<ModalContainer>
 				{isLoading ? (
@@ -83,11 +79,6 @@ const ClaimRecurringDonationModal = ({
 								<B>~ {formatDonation(sumAllTokensUsd)} USD</B>
 							</Flex>
 						</TotalAmountContainer>
-						<Button
-							label='Cancel'
-							buttonType='texty-gray'
-							onClick={() => setShowModal(false)}
-						/>
 					</Flex>
 				)}
 
@@ -106,8 +97,6 @@ const ClaimRecurringDonationModal = ({
 						selectedStream={selectedStream}
 						project={project}
 						anchorContractAddress={anchorContractAddress}
-						transactionState={transactionState}
-						setTransactionState={setTransactionState}
 						refetch={refetch}
 						balanceInUsd={
 							allTokensUsd[
