@@ -1,4 +1,4 @@
-import { B, Button, P, neutralColors, Flex } from '@giveth/ui-design-system';
+import { B, P, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
@@ -53,7 +53,6 @@ const ClaimRecurringDonationModal = ({
 			isAnimating={isAnimating}
 			headerTitle='Claimable Donations'
 			headerTitlePosition='left'
-			hiddenClose
 		>
 			<ModalContainer>
 				{isLoading ? (
@@ -80,11 +79,6 @@ const ClaimRecurringDonationModal = ({
 								<B>~ {formatDonation(sumAllTokensUsd)} USD</B>
 							</Flex>
 						</TotalAmountContainer>
-						<Button
-							label='Cancel'
-							buttonType='texty-gray'
-							onClick={() => setShowModal(false)}
-						/>
 					</Flex>
 				)}
 

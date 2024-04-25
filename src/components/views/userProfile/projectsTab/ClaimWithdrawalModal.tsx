@@ -154,7 +154,8 @@ const ClaimWithdrawalModal = ({
 			})}
 			headerTitlePosition='left'
 			headerIcon={contents[transactionState].icon}
-			hiddenClose
+			doNotCloseOnClickOutside={loading}
+			hiddenClose={loading}
 		>
 			<ModalContainer>
 				<ClaimWithdrawalItem
