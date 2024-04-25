@@ -28,8 +28,6 @@ interface IClaimWithdrawalModal extends IModal {
 	selectedStream: ITokenWithBalance;
 	project: IProject;
 	anchorContractAddress: Address;
-	transactionState: ClaimTransactionState;
-	setTransactionState: (state: ClaimTransactionState) => void;
 	balanceInUsd: number;
 	refetch: () => Promise<void>;
 }
@@ -57,12 +55,12 @@ const ClaimWithdrawalModal = ({
 	selectedStream,
 	project,
 	anchorContractAddress,
-	transactionState,
-	setTransactionState,
 	balanceInUsd,
 	refetch,
 }: IClaimWithdrawalModal) => {
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
+	const [transactionState, setTransactionState] =
+		useState<ClaimTransactionState>(ClaimTransactionState.NOT_STARTED);
 	const [txHash, setTxHash] = useState<Address>();
 	const { formatMessage } = useIntl();
 

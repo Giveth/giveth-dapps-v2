@@ -14,7 +14,6 @@ import {
 import { WrappedSpinner } from '@/components/Spinner';
 import ClaimWithdrawalModal from './ClaimWithdrawalModal';
 import { ClaimRecurringItem } from './ClaimRecurringItem';
-import { ClaimTransactionState } from './type';
 import { formatDonation } from '@/helpers/number';
 
 interface IClaimRecurringDonationModal extends IModal {
@@ -37,8 +36,6 @@ const ClaimRecurringDonationModal = ({
 		useState(false);
 	const [selectedStream, setSelectedStream] = useState<ITokenWithBalance>();
 	const [allTokensUsd, setAllTokensUsd] = useState<IAllTokensUsd>({});
-	const [transactionState, setTransactionState] =
-		useState<ClaimTransactionState>(ClaimTransactionState.NOT_STARTED);
 
 	const anchorContractAddress = project.anchorContracts[0]?.address;
 
@@ -106,8 +103,6 @@ const ClaimRecurringDonationModal = ({
 						selectedStream={selectedStream}
 						project={project}
 						anchorContractAddress={anchorContractAddress}
-						transactionState={transactionState}
-						setTransactionState={setTransactionState}
 						refetch={refetch}
 						balanceInUsd={
 							allTokensUsd[
