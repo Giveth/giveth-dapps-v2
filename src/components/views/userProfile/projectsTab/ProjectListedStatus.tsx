@@ -12,7 +12,7 @@ const ProjectListedStatus = ({ project }: IProjectListedStatus) => {
 	const handleListedText = listed ? 'Listed' : 'Not Listed';
 
 	return (
-		<StatusBadge isListed={listed}>
+		<StatusBadge $isListed={listed}>
 			<SublineBold>{handleListedText}</SublineBold>
 		</StatusBadge>
 	);
@@ -30,14 +30,14 @@ const getColor = (isListed: boolean) => {
 	return isListed ? semanticColors.jade[700] : semanticColors.punch[700];
 };
 
-const StatusBadge = styled.div<{ isListed: boolean }>`
+const StatusBadge = styled.div<{ $isListed: boolean }>`
 	border-radius: 50px;
 	padding: 2px 8px;
 	border-width: 2px;
 	border-style: solid;
-	background-color: ${({ isListed }) => getBackgroundColor(isListed)};
-	border-color: ${({ isListed }) => getBorderColor(isListed)};
-	color: ${({ isListed }) => getColor(isListed)};
+	background-color: ${({ $isListed }) => getBackgroundColor($isListed)};
+	border-color: ${({ $isListed }) => getBorderColor($isListed)};
+	color: ${({ $isListed }) => getColor($isListed)};
 `;
 
 export default ProjectListedStatus;
