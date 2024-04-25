@@ -38,7 +38,17 @@ const contents = {
 		icon: <IconDonation32 />,
 		buttonText: 'label.confirm',
 	},
-	[ClaimTransactionState.PENDING]: {
+	[ClaimTransactionState.WITHDRAWING]: {
+		title: 'label.claim_recurring_donation',
+		icon: <IconWalletApprove32 />,
+		buttonText: 'label.withdrawing',
+	},
+	[ClaimTransactionState.DOWNGRADING_TO_ETH]: {
+		title: 'label.claim_recurring_donation',
+		icon: <IconWalletApprove32 />,
+		buttonText: 'label.withdrawing',
+	},
+	[ClaimTransactionState.TRANSFERRING_ETH]: {
 		title: 'label.claim_recurring_donation',
 		icon: <IconWalletApprove32 />,
 		buttonText: 'label.withdrawing',
@@ -69,16 +79,12 @@ const ClaimWithdrawalModal = ({
 		address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 	)?.address;
 
-	console.log('anchorContractAddress', anchorContractAddress);
-
-	const [loading, setLoading] = useState(false);
-
 	const handleConfirm = async () => {
+		console.log('anchorContractAddress', anchorContractAddress);
 		try {
-			const isEthx = selectedStream.token.symbol.toLowerCase() === 'ethx';
-			console.log('isETHx', isEthx);
-			setLoading(true);
-			const encodedDowngradeTo = isEthx
+			const isETHx = selectedStream.token.symbol.toLowerCase() === 'ethx';
+			console.log('isETHx', isETHx);
+			const encodedDowngradeTo = isETHx
 				? encodeFunctionData({
 						abi: ISETH.abi,
 						functionName: 'downgradeToETH',
@@ -93,6 +99,12 @@ const ClaimWithdrawalModal = ({
 						],
 					});
 
+			setTransactionState(
+				isETHx
+					? ClaimTransactionState.DOWNGRADING_TO_ETH
+					: ClaimTransactionState.WITHDRAWING,
+			);
+
 			// Execute the anchor contract
 			console.log('Start execute downgrading on Anchor contract');
 			const tx = await writeContract(wagmiConfig, {
@@ -103,17 +115,25 @@ const ClaimWithdrawalModal = ({
 				args: [selectedStream.token.id, '', encodedDowngradeTo],
 			});
 
-			setTransactionState(ClaimTransactionState.PENDING);
-
 			if (tx) {
 				setTxHash(tx);
-				await waitForTransactionReceipt(wagmiConfig, {
-					hash: tx,
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
-				});
+				const withdrawRes = await waitForTransactionReceipt(
+					wagmiConfig,
+					{
+						hash: tx,
+						chainId: config.OPTIMISM_NETWORK_NUMBER,
+					},
+				);
+
+				setTransactionState(
+					isETHx
+						? ClaimTransactionState.TRANSFERRING_ETH
+						: ClaimTransactionState.SUCCESS,
+				);
+
 				// Transfer ETH to the project op address
-				if (isEthx) {
-					console.log('Start transfer ETH to project op address');
+				if (isETHx) {
+					console.log("Start transfer ETH to project's op address");
 					const transferEthTx = await writeContract(wagmiConfig, {
 						abi: anchorContractABI.abi,
 						address: anchorContractAddress,
@@ -132,18 +152,22 @@ const ClaimWithdrawalModal = ({
 							chainId: config.OPTIMISM_NETWORK_NUMBER,
 						});
 					}
+					setTransactionState(ClaimTransactionState.SUCCESS);
 				}
-				setTransactionState(ClaimTransactionState.SUCCESS);
+
 				refetch();
 			}
 		} catch (error) {
 			console.error(error);
 			console.log('anchorContractAddress', anchorContractAddress);
 			setTransactionState(ClaimTransactionState.NOT_STARTED);
-		} finally {
-			setLoading(false);
 		}
 	};
+
+	const isLoading =
+		transactionState === ClaimTransactionState.WITHDRAWING ||
+		transactionState === ClaimTransactionState.DOWNGRADING_TO_ETH ||
+		transactionState === ClaimTransactionState.TRANSFERRING_ETH;
 
 	return (
 		<Modal
@@ -154,8 +178,8 @@ const ClaimWithdrawalModal = ({
 			})}
 			headerTitlePosition='left'
 			headerIcon={contents[transactionState].icon}
-			doNotCloseOnClickOutside={loading}
-			hiddenClose={loading}
+			doNotCloseOnClickOutside={isLoading}
+			hiddenClose={isLoading}
 		>
 			<ModalContainer>
 				<ClaimWithdrawalItem
@@ -191,8 +215,8 @@ const ClaimWithdrawalModal = ({
 							: handleConfirm
 					}
 					style={{ width: '100%' }}
-					loading={loading}
-					disabled={loading}
+					loading={isLoading}
+					disabled={isLoading}
 				/>
 			</ModalContainer>
 		</Modal>
