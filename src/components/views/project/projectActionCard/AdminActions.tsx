@@ -108,7 +108,9 @@ export const AdminActions = () => {
 	];
 
 	const recurringDonationOption: IOption = {
-		label: 'Claim Recurring donation',
+		label: formatMessage({
+			id: 'label.claim_recurring_donation',
+		}),
 		icon: <IconArrowDownCircle16 />,
 		cb: () => {
 			if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {

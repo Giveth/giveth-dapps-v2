@@ -191,7 +191,9 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 				</>
 			) : (
 				<Flex $flexDirection='column' gap='16px'>
-					<DepositSteps modifyTokenState={step} />
+					{superToken?.symbol !== 'ETHx' && (
+						<DepositSteps modifyTokenState={step} />
+					)}
 					<Item
 						title='Deposit into your stream balance'
 						amount={amount}

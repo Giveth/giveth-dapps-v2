@@ -22,7 +22,7 @@ export const ClaimWithdrawalStatus = ({
 		switch (status) {
 			case ClaimTransactionState.SUCCESS:
 				return formatMessage({
-					id: 'label.your_withdrawal_from_this_stream_balance_was_successful',
+					id: 'label.claim_successful',
 				});
 			case ClaimTransactionState.WITHDRAWING:
 				return formatMessage({

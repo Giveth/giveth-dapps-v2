@@ -415,25 +415,35 @@ export const RecurringDonationCard = () => {
 						</Flex>
 						<Flex $justifyContent='space-between' gap='4px'>
 							<Flex gap='4px'>
-								<Caption>
-									{formatMessage({
-										id: 'label.top_up_your_stream_balance_within',
-									})}
-								</Caption>
-								{selectedToken?.token.isSuperToken && (
-									<Flex gap='4px'>
-										<Caption $medium>
-											{streamRunOutInMonth.toString()}
-										</Caption>
+								{isTotalStreamExceed ? (
+									<Caption>
+										{formatMessage({
+											id: 'label.not_enough_stream_balance',
+										})}
+									</Caption>
+								) : (
+									<>
 										<Caption>
-											{formatMessage(
-												{ id: 'label.months' },
-												{
-													count: streamRunOutInMonth.toString(),
-												},
-											)}
+											{formatMessage({
+												id: 'label.top_up_your_stream_balance_within',
+											})}
 										</Caption>
-									</Flex>
+										{selectedToken?.token.isSuperToken && (
+											<Flex gap='4px'>
+												<Caption $medium>
+													{streamRunOutInMonth.toString()}
+												</Caption>
+												<Caption>
+													{formatMessage(
+														{ id: 'label.months' },
+														{
+															count: streamRunOutInMonth.toString(),
+														},
+													)}
+												</Caption>
+											</Flex>
+										)}
+									</>
 								)}
 							</Flex>
 							{selectedToken?.token.isSuperToken ? (
@@ -495,26 +505,27 @@ export const RecurringDonationCard = () => {
 										</Flex>
 									</a>
 								</Flex>
-
-								<Caption>
-									{formatMessage({
-										id: 'label.you_will_donate_total',
-									})}{' '}
-									<TotalMonthlyStream>
-										{limitFraction(
-											formatUnits(
-												totalStreamPerSec *
-													ONE_MONTH_SECONDS,
-												selectedToken?.token.decimals ||
-													18,
-											),
-										)}{' '}
-										{selectedToken?.token.symbol}
-									</TotalMonthlyStream>{' '}
-									{formatMessage({
-										id: 'label.monthly_across_all_projects',
-									})}
-								</Caption>
+								{!isTotalStreamExceed && (
+									<Caption>
+										{formatMessage({
+											id: 'label.you_will_donate_total',
+										})}{' '}
+										<TotalMonthlyStream>
+											{limitFraction(
+												formatUnits(
+													totalStreamPerSec *
+														ONE_MONTH_SECONDS,
+													selectedToken?.token
+														.decimals || 18,
+												),
+											)}{' '}
+											{selectedToken?.token.symbol}
+										</TotalMonthlyStream>{' '}
+										{formatMessage({
+											id: 'label.monthly_across_all_projects',
+										})}
+									</Caption>
+								)}
 							</>
 						)}
 					</Flex>
