@@ -50,13 +50,15 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 		<RowWrapper>
 			<TableCell>
 				<TokenIcon symbol={underlyingSymbol} />
-				<P>{limitFraction(balance?.formatted || '0')}</P>
+				<P>{parseFloat(limitFraction(balance?.formatted || '0'))}</P>
 				<P>{symbol}</P>
 			</TableCell>
 			<TableCell>
 				<P color={semanticColors.jade[500]}>
-					{limitFraction(
-						formatUnits(monthlyFlowRate || 0n, decimals),
+					{parseFloat(
+						limitFraction(
+							formatUnits(monthlyFlowRate || 0n, decimals),
+						),
 					)}
 					&nbsp;
 					{underlyingSymbol}

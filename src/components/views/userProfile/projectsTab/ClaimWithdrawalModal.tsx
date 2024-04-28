@@ -4,6 +4,7 @@ import {
 	IconDonation32,
 	IconWalletApprove32,
 	brandColors,
+	P,
 } from '@giveth/ui-design-system';
 import { Address, encodeFunctionData } from 'viem';
 import { useState } from 'react';
@@ -79,10 +80,10 @@ const ClaimWithdrawalModal = ({
 		address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 	)?.address;
 
+	const isETHx = selectedStream.token.symbol.toLowerCase() === 'ethx';
 	const handleConfirm = async () => {
 		console.log('anchorContractAddress', anchorContractAddress);
 		try {
-			const isETHx = selectedStream.token.symbol.toLowerCase() === 'ethx';
 			console.log('isETHx', isETHx);
 			const encodedDowngradeTo = isETHx
 				? encodeFunctionData({
@@ -182,6 +183,16 @@ const ClaimWithdrawalModal = ({
 			hiddenClose={isLoading}
 		>
 			<ModalContainer>
+				{isETHx && (
+					<TransactionWarning>
+						You'll need to sign two transactions to withdraw ETH to
+						your recipient address.{' '}
+						<b>
+							DO NOT CLOSE THIS WINDOW UNTIL BOTH TRANSACTIONS
+							FINISH.
+						</b>
+					</TransactionWarning>
+				)}
 				<ClaimWithdrawalItem
 					projectName={projectName}
 					stream={selectedStream}
@@ -236,6 +247,10 @@ const CustomLink = styled.a`
 	display: inline-block;
 	color: ${brandColors.pinky[500]};
 	cursor: pointer;
+	padding-bottom: 16px;
+`;
+
+const TransactionWarning = styled(P)`
 	padding-bottom: 16px;
 `;
 
