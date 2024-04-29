@@ -70,8 +70,10 @@ const links = {
 	ALLO_PROTOCOL: 'https://docs.allo.gitcoin.co/',
 	GIVERNANCE_VOTING: 'https://snapshot.org/#/giv.eth',
 	SUPERFLUID_DASHBOARD: 'https://app.superfluid.finance/',
-	STAKE_TOGETHER:
-		'https://app.staketogether.org/brl/ethereum/project/deposit/0xf102fe6d6cf7f98c7c4ca45eb082caaaaa951d52',
+	STAKE_TOGETHER_MAINNET:
+		'https://app.staketogether.org/en/usd/ethereum/product/staking/eth-staking?projectAddress=0xf102fe6d6cf7f98c7c4ca45eb082caaaaa951d52',
+	STAKE_TOGETHER_OPTIMISM:
+		'https://app.staketogether.org/en/usd/optimism/product/staking/eth-restaking?projectAddress=0x93E79499b00a2fdAAC38e6005B0ad8E88b177346',
 };
 
 if (!isProduction) {
