@@ -1,6 +1,7 @@
 import styled from 'styled-components';
-import { Col, Row, mediaQueries } from '@giveth/ui-design-system';
+import { Col, Row, mediaQueries, Caption } from '@giveth/ui-design-system';
 import { useState } from 'react';
+import { useIntl } from 'react-intl';
 import ProjectTotalFundCard from './ProjectTotalFundCard';
 import ProjectDonationTable from './ProjectDonationTable';
 import { QfRoundSelector } from './QfRoundSelector';
@@ -18,7 +19,7 @@ const ProjectDonationsIndex = () => {
 			selectedQF: null,
 			isRecurringSelected: false,
 		});
-
+	const { formatMessage } = useIntl();
 	const { selectedQF, isRecurringSelected } = projectDonationSwiperState;
 
 	return (
@@ -35,7 +36,14 @@ const ProjectDonationsIndex = () => {
 					{!isRecurringSelected ? (
 						<ProjectDonationTable selectedQF={selectedQF} />
 					) : (
-						<ProjectRecurringDonationTable />
+						<>
+							<InfoCaption>
+								{formatMessage({
+									id: 'label.recurring_donation_updated_hours',
+								})}
+							</InfoCaption>
+							<ProjectRecurringDonationTable />
+						</>
 					)}
 				</Col>
 			</StyledRow>
@@ -49,6 +57,11 @@ const StyledRow = styled(Row)`
 		flex-direction: row-reverse;
 		align-items: stretch !important;
 	}
+`;
+
+const InfoCaption = styled(Caption)`
+	margin: 5px 0 5px 0;
+	font-style: italic;
 `;
 
 export default ProjectDonationsIndex;

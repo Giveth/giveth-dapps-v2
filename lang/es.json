@@ -785,6 +785,7 @@
 	"label.recurring_donations_currently_only_available_on_optimism": "Las donaciones recurrentes actualmente solo están disponibles en Optimism",
 	"label.recurring_donation_card_subheader_1": "Transmite tus donaciones con el tiempo para proporcionar financiamiento continuo.",
 	"label.recurring_donation_card_subheader_2": "Decide la cantidad de tokens a depositar en tu saldo de transmisión, o utiliza tu(s) saldo(s) de transmisión existente(s). Establece el monto de la donación mensual en tokens y comienza a transmitir.",
+	"label.recurring_donation_updated_hours": "Las cantidades de las donaciones recurrentes se actualizan cada 24 horas.",
 	"label.refer_a_friend": "Referir a un amigo, ganar tokens $GIV por cada donación.",
 	"label.refer_your_friends": "Refiere a tus amigos",
 	"label.refer_your_friends_and_earn_giv": "Refiere a tus amigos y gana GIV",
