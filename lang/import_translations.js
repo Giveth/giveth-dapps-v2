@@ -1,20 +1,20 @@
 const fs = require('fs');
 
 // Read the JSON file
-const caTrJsonData = fs.readFileSync('nt_ca.json');
-const ca_tr = JSON.parse(caTrJsonData);
+const esTrJsonData = fs.readFileSync('nt_es.json');
+const es_tr = JSON.parse(esTrJsonData);
 
-const caJsonData = fs.readFileSync('ca.json');
-const ca = JSON.parse(caJsonData);
+const esJsonData = fs.readFileSync('es.json');
+const es = JSON.parse(esJsonData);
 
 function importTranslatedKeys() {
-	for (let key in ca_tr) {
-		if (ca_tr.hasOwnProperty(key)) {
-			ca[key] = ca_tr[key];
+	for (let key in es_tr) {
+		if (es_tr.hasOwnProperty(key)) {
+			es[key] = es_tr[key];
 		}
 	}
 
-	return ca;
+	return es;
 }
 
 function save(obj, name) {
@@ -26,4 +26,4 @@ function save(obj, name) {
 
 const imported = importTranslatedKeys();
 
-save(imported, 'ca.json');
+save(imported, 'es.json');
