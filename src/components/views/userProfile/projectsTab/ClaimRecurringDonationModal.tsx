@@ -15,6 +15,7 @@ import { WrappedSpinner } from '@/components/Spinner';
 import ClaimWithdrawalModal from './ClaimWithdrawalModal';
 import { ClaimRecurringItem } from './ClaimRecurringItem';
 import { formatDonation } from '@/helpers/number';
+import { findAnchorContractAddress } from '@/helpers/superfluid';
 
 interface IClaimRecurringDonationModal extends IModal {
 	project: IProject;
@@ -28,16 +29,17 @@ const ClaimRecurringDonationModal = ({
 	setShowModal,
 	project,
 }: IClaimRecurringDonationModal) => {
+	const anchorContractAddress = findAnchorContractAddress(
+		project?.anchorContracts,
+	);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { balances, isLoading, refetch } = useProjectClaimableDonations(
-		project?.anchorContracts && project.anchorContracts[0]?.address,
+		anchorContractAddress,
 	);
 	const [showClaimWithdrawalModal, setShowClaimWithdrawalModal] =
 		useState(false);
 	const [selectedStream, setSelectedStream] = useState<ITokenWithBalance>();
 	const [allTokensUsd, setAllTokensUsd] = useState<IAllTokensUsd>({});
-
-	const anchorContractAddress = project.anchorContracts[0]?.address;
 
 	const sumAllTokensUsd = useMemo(() => {
 		let sum = 0;
@@ -91,20 +93,23 @@ const ClaimRecurringDonationModal = ({
 						alt='Superfluid logo'
 					/>
 				</SuperfluidLogoContainer>
-				{showClaimWithdrawalModal && selectedStream && (
-					<ClaimWithdrawalModal
-						setShowModal={setShowClaimWithdrawalModal}
-						selectedStream={selectedStream}
-						project={project}
-						anchorContractAddress={anchorContractAddress}
-						refetch={refetch}
-						balanceInUsd={
-							allTokensUsd[
-								selectedStream.token.underlyingToken?.symbol!
-							]
-						}
-					/>
-				)}
+				{showClaimWithdrawalModal &&
+					selectedStream &&
+					anchorContractAddress && (
+						<ClaimWithdrawalModal
+							setShowModal={setShowClaimWithdrawalModal}
+							selectedStream={selectedStream}
+							project={project}
+							anchorContractAddress={anchorContractAddress}
+							refetch={refetch}
+							balanceInUsd={
+								allTokensUsd[
+									selectedStream.token.underlyingToken
+										?.symbol!
+								]
+							}
+						/>
+					)}
 			</ModalContainer>
 		</Modal>
 	);

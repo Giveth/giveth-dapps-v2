@@ -25,6 +25,7 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { TXLink } from './TXLink';
 import { useProfileDonateTabData } from '../ProfileDonateTab.context';
 import { ERecurringDonationStatus } from '@/apollo/types/types';
+import { findAnchorContractAddress } from '@/helpers/superfluid';
 
 interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	step: EDonationSteps;
@@ -55,8 +56,9 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	const onDonate = async () => {
 		setStep(EDonationSteps.DONATING);
 		try {
-			const projectAnchorContract =
-				donation.project.anchorContracts[0]?.address;
+			const projectAnchorContract = findAnchorContractAddress(
+				donation.project.anchorContracts,
+			);
 			if (!projectAnchorContract) {
 				throw new Error('Project anchor address not found');
 			}
