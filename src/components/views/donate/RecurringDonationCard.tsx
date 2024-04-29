@@ -328,7 +328,13 @@ export const RecurringDonationCard = () => {
 									{formatMessage({
 										id: 'label.available',
 									})}
-									: {limitFraction(balance?.formatted)}
+									:{' '}
+									{limitFraction(
+										formatUnits(
+											balance.value,
+											balance.decimals,
+										),
+									)}
 								</GLink>
 								<IconWrapper
 									onClick={() => !isRefetching && refetch()}
