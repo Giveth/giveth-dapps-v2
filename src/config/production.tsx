@@ -449,7 +449,7 @@ const config: EnvConfig = {
 			unit: 'GIV',
 		},
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
-			'0xb15c8df1a742636a78b0a2ca9dff87c37693862a',
+			'0x5430757bc19c87ec562e4660e56af6cac324b50a',
 		superFluidSubgraph:
 			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet',
 		SUPER_FLUID_TOKENS: [

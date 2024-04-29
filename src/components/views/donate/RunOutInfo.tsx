@@ -22,24 +22,29 @@ export const RunOutInfo: FC<IRunOutInfoProps> = ({
 		totalPerSecond > 0 ? superTokenBalance / totalPerSecond : 0n;
 	const date = new Date();
 	date.setSeconds(date.getSeconds() + Number(secondsUntilRunOut.toString()));
-
+	const hasActiveStreams = Number(secondsUntilRunOut.toString()) > 0n;
 	return (
 		<RunOutSection>
-			<P>
-				{formatMessage({
-					id: 'label.your_stream_balance',
-				})}{' '}
-				{symbol}{' '}
-				{formatMessage({
-					id: 'label.runout_info',
-				})}
-			</P>
-			<B>{smallFormatDate(date)}</B>
-			<P>
-				{formatMessage({
-					id: 'label.runout_info_topup',
-				})}
-			</P>
+			{hasActiveStreams ? (
+				<>
+					<P>
+						{formatMessage({
+							id: 'label.your_stream_balance',
+						})}{' '}
+						{symbol}{' '}
+						{formatMessage({
+							id: 'label.runout_info',
+						})}
+					</P>
+					<B>{smallFormatDate(date)}</B>
+					<P>
+						{formatMessage({
+							id: 'label.runout_info_topup',
+						})}
+					</P>
+				</>
+			) : // Specify what to render when hasActiveStreams is false
+			null}
 		</RunOutSection>
 	);
 };

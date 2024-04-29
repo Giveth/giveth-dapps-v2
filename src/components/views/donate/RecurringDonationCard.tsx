@@ -15,7 +15,7 @@ import {
 	semanticColors,
 	Flex,
 } from '@giveth/ui-design-system';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { formatUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
@@ -53,6 +53,7 @@ import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { useAppSelector } from '@/features/hooks';
+import { findAnchorContractAddress } from '@/helpers/superfluid';
 
 // These two functions are used to make the slider more user friendly by mapping the slider's value to a new range.
 /**
@@ -149,12 +150,15 @@ export const RecurringDonationCard = () => {
 	const tokenBalance = balance?.value;
 	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
 
+	const anchorContractAddress = useMemo(
+		() => findAnchorContractAddress(project.anchorContracts),
+		[project.anchorContracts],
+	);
+
 	// otherStreamsPerSec is the total flow rate of all streams except the one to the project
 	const otherStreamsPerSec =
 		tokenStream
-			?.filter(
-				ts => ts.receiver.id !== project.anchorContracts[0]?.address,
-			)
+			?.filter(ts => ts.receiver.id !== anchorContractAddress)
 			.reduce(
 				(acc, stream) => acc + BigInt(stream.currentFlowRate),
 				0n,
@@ -171,8 +175,7 @@ export const RecurringDonationCard = () => {
 
 	const handleDonate = () => {
 		console.log('isSignedIn', isSignedIn);
-		const hasAnchorContract = project.anchorContracts[0]?.isActive;
-		if (hasAnchorContract) {
+		if (anchorContractAddress) {
 			if (isSignedIn) {
 				setShowRecurringDonationModal(true);
 			} else {
@@ -192,14 +195,14 @@ export const RecurringDonationCard = () => {
 			if (
 				!selectedToken ||
 				!selectedToken.balance ||
-				!project.anchorContracts
+				!anchorContractAddress
 			)
 				return;
 
 			const _userStreamOnSelectedToken =
 				findUserActiveStreamOnSelectedToken(
 					address,
-					project.anchorContracts[0]?.address,
+					anchorContractAddress,
 					tokenStreams,
 					selectedToken.token,
 				);
@@ -221,7 +224,7 @@ export const RecurringDonationCard = () => {
 		} catch (error) {
 			showToastError(error);
 		}
-	}, [selectedToken, address, tokenStreams, project.anchorContracts]);
+	}, [selectedToken, address, tokenStreams, anchorContractAddress]);
 
 	const isFormInvalid =
 		selectedToken === undefined ||
@@ -328,7 +331,13 @@ export const RecurringDonationCard = () => {
 									{formatMessage({
 										id: 'label.available',
 									})}
-									: {limitFraction(balance?.formatted)}
+									:{' '}
+									{limitFraction(
+										formatUnits(
+											balance.value,
+											balance.decimals,
+										),
+									)}
 								</GLink>
 								<IconWrapper
 									onClick={() => !isRefetching && refetch()}
@@ -415,25 +424,35 @@ export const RecurringDonationCard = () => {
 						</Flex>
 						<Flex $justifyContent='space-between' gap='4px'>
 							<Flex gap='4px'>
-								<Caption>
-									{formatMessage({
-										id: 'label.top_up_your_stream_balance_within',
-									})}
-								</Caption>
-								{selectedToken?.token.isSuperToken && (
-									<Flex gap='4px'>
-										<Caption $medium>
-											{streamRunOutInMonth.toString()}
-										</Caption>
+								{isTotalStreamExceed ? (
+									<Caption>
+										{formatMessage({
+											id: 'label.not_enough_stream_balance',
+										})}
+									</Caption>
+								) : (
+									<>
 										<Caption>
-											{formatMessage(
-												{ id: 'label.months' },
-												{
-													count: streamRunOutInMonth.toString(),
-												},
-											)}
+											{formatMessage({
+												id: 'label.top_up_your_stream_balance_within',
+											})}
 										</Caption>
-									</Flex>
+										{selectedToken?.token.isSuperToken && (
+											<Flex gap='4px'>
+												<Caption $medium>
+													{streamRunOutInMonth.toString()}
+												</Caption>
+												<Caption>
+													{formatMessage(
+														{ id: 'label.months' },
+														{
+															count: streamRunOutInMonth.toString(),
+														},
+													)}
+												</Caption>
+											</Flex>
+										)}
+									</>
 								)}
 							</Flex>
 							{selectedToken?.token.isSuperToken ? (
@@ -495,26 +514,27 @@ export const RecurringDonationCard = () => {
 										</Flex>
 									</a>
 								</Flex>
-
-								<Caption>
-									{formatMessage({
-										id: 'label.you_will_donate_total',
-									})}{' '}
-									<TotalMonthlyStream>
-										{limitFraction(
-											formatUnits(
-												totalStreamPerSec *
-													ONE_MONTH_SECONDS,
-												selectedToken?.token.decimals ||
-													18,
-											),
-										)}{' '}
-										{selectedToken?.token.symbol}
-									</TotalMonthlyStream>{' '}
-									{formatMessage({
-										id: 'label.monthly_across_all_projects',
-									})}
-								</Caption>
+								{!isTotalStreamExceed && (
+									<Caption>
+										{formatMessage({
+											id: 'label.you_will_donate_total',
+										})}{' '}
+										<TotalMonthlyStream>
+											{limitFraction(
+												formatUnits(
+													totalStreamPerSec *
+														ONE_MONTH_SECONDS,
+													selectedToken?.token
+														.decimals || 18,
+												),
+											)}{' '}
+											{selectedToken?.token.symbol}
+										</TotalMonthlyStream>{' '}
+										{formatMessage({
+											id: 'label.monthly_across_all_projects',
+										})}
+									</Caption>
+								)}
 							</>
 						)}
 					</Flex>

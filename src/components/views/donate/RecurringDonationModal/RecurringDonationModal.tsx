@@ -39,6 +39,7 @@ import {
 } from '@/services/donation';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { ERecurringDonationStatus } from '@/apollo/types/types';
+import { findAnchorContractAddress } from '@/helpers/superfluid';
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
 	amount: bigint;
@@ -172,7 +173,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	const onDonate = async () => {
 		setStep(EDonationSteps.DONATING);
 		try {
-			const projectAnchorContract = project?.anchorContracts[0]?.address;
+			const projectAnchorContract = findAnchorContractAddress(
+				project?.anchorContracts,
+			);
 			if (!projectAnchorContract) {
 				throw new Error('Project anchor address not found');
 			}

@@ -191,7 +191,9 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 				</>
 			) : (
 				<Flex $flexDirection='column' gap='16px'>
-					<DepositSteps modifyTokenState={step} />
+					{superToken?.symbol !== 'ETHx' && (
+						<DepositSteps modifyTokenState={step} />
+					)}
 					<Item
 						title='Deposit into your stream balance'
 						amount={amount}
@@ -206,6 +208,12 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 						symbol={token?.symbol || ''}
 					/>
 				</Flex>
+			)}
+			{step === EModifySuperTokenSteps.DEPOSIT_CONFIRMED && (
+				<ModifyInfoToast
+					toastType={EToastType.Success}
+					withdrawalType='deposit'
+				/>
 			)}
 			<Button
 				label={formatMessage({ id: actionButtonLabel[step] })}
