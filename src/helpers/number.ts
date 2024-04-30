@@ -81,7 +81,7 @@ export function limitFraction(
 	}
 
 	let formattedNumber = truncateToDecimalPlaces(
-		numberStr,
+		numberStr.toString(),
 		maxDecimals,
 	).toString();
 
