@@ -132,7 +132,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					{balance
 						? truncateToDecimalPlaces(
 								formatUnits(maxAmount, balance.decimals),
-								6,
+								balance.decimals / 3,
 							)
 						: '--'}
 				</ProperGlink>
