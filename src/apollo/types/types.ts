@@ -466,6 +466,8 @@ export interface IQFRound {
 	minimumPassportScore: number;
 	eligibleNetworks: number[];
 	maximumReward: number;
+	bannerBgImage: string;
+	sponsorsImgs: string[];
 }
 
 export interface IGetQfRoundHistory {

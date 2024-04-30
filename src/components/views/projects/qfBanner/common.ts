@@ -138,3 +138,14 @@ export const Sponsor = styled(Image)`
 		height: 188px;
 	}
 `;
+
+export const StyledColArch = styled(Col)`
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1;
+	min-height: 300px;
+	text-align: center;
+	color: #ffffff;
+`;
