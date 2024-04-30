@@ -41,7 +41,7 @@ import {
 	findUserActiveStreamOnSelectedToken,
 } from '@/helpers/donate';
 import { ISuperfluidStream } from '@/types/superFluid';
-import { showToastError } from '@/lib/helpers';
+import { showToastError, truncateToDecimalPlaces } from '@/lib/helpers';
 import config, { isRecurringActive } from '@/configuration';
 import { WrongNetworkLayer } from './WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
@@ -332,11 +332,12 @@ export const RecurringDonationCard = () => {
 										id: 'label.available',
 									})}
 									:{' '}
-									{limitFraction(
+									{truncateToDecimalPlaces(
 										formatUnits(
 											balance.value,
 											balance.decimals,
 										),
+										balance.decimals / 3,
 									)}
 								</GLink>
 								<IconWrapper
