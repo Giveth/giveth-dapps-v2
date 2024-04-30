@@ -20,6 +20,7 @@ import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { EToastType } from '@/components/toasts/InlineToast';
+import { ensureCorrectNetwork } from '@/helpers/network';
 
 interface IWithDrawSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	token?: IToken;
@@ -59,6 +60,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 	const onWithdraw = async () => {
 		setStep(EModifySuperTokenSteps.WITHDRAWING);
 		try {
+			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
 			if (!address) {
 				throw new Error('address not found1');
 			}
