@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { formatEther } from 'viem';
 import config from '@/configuration';
+import { truncateToDecimalPlaces } from '@/lib/helpers';
 
 export const Zero = new BigNumber(0);
 
@@ -79,7 +80,10 @@ export function limitFraction(
 		return `<${smallestRepresentable.toFixed(maxDecimals)}`;
 	}
 
-	let formattedNumber = number.toFixed(maxDecimals);
+	let formattedNumber = truncateToDecimalPlaces(
+		numberStr,
+		maxDecimals,
+	).toString();
 
 	// If trim is true, remove trailing zeros after the decimal point, and also the decimal point if it becomes unnecessary.
 	if (trim) {
