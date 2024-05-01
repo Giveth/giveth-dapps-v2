@@ -30,6 +30,7 @@ import links from '@/lib/constants/links';
 import { EContentType } from '@/lib/constants/shareContent';
 import QFToast from './QFToast';
 import { DonationInfo } from './DonationInfo';
+import { ManageRecurringDonation } from './ManageRecurringDonation';
 
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
@@ -38,6 +39,7 @@ export const SuccessView: FC = () => {
 		givBackEligible,
 		txHash = [],
 		excludeFromQF,
+		isRecurring,
 	} = successDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 	const isSafeEnv = useIsSafeEnvironment();
@@ -134,6 +136,7 @@ export const SuccessView: FC = () => {
 							hasActiveQFRound &&
 							passportState !== EPassportState.LOADING &&
 							isOnEligibleNetworks && <QFToast />}
+						{isRecurring && <ManageRecurringDonation />}
 						<SocialBoxWrapper>
 							<SocialBox
 								project={project}
