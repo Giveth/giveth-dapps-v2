@@ -6,9 +6,6 @@ export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
 const envConfig = isProduction ? production : development;
 
-export const isRecurringActive =
-	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true';
-
 export const SENTRY_URGENT = 'urgent';
 
 export const QF_SPECIFIC_CATEGORIES = ['polygon'];
