@@ -5,7 +5,6 @@ import {
 	brandColors,
 	Button,
 	GLink,
-	H4,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -27,7 +26,7 @@ import {
 } from '@/lib/constants/constants';
 import { InsufficientFundModal } from '@/components/modals/InsufficientFund';
 import GeminiModal from './GeminiModal';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import TokenPicker from './TokenPicker';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
@@ -402,11 +401,6 @@ const CryptoDonation: FC = () => {
 
 	return (
 		<MainContainer>
-			{!isRecurringActive && (
-				<H4Styled weight={700}>
-					{formatMessage({ id: 'page.donate.title' })}
-				</H4Styled>
-			)}
 			{showQFModal && (
 				<QFModal
 					donateWithoutMatching={donateWithoutMatching}
@@ -565,9 +559,7 @@ const CryptoDonation: FC = () => {
 			<CheckBoxContainer>
 				<CheckBox
 					label={formatMessage({
-						id: isRecurringActive
-							? 'label.make_it_anonymous'
-							: 'label.donate_privately',
+						id: 'label.make_it_anonymous',
 					})}
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
@@ -575,19 +567,13 @@ const CryptoDonation: FC = () => {
 				/>
 				<div>
 					{formatMessage({
-						id: isRecurringActive
-							? 'component.tooltip.donate_anonymously'
-							: 'component.tooltip.donate_privately',
+						id: 'component.tooltip.donate_anonymously',
 					})}
 				</div>
 			</CheckBoxContainer>
 		</MainContainer>
 	);
 };
-
-const H4Styled = styled(H4)`
-	margin-bottom: 30px;
-`;
 
 const EmptySpace = styled.div`
 	margin-top: 70px;
