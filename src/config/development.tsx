@@ -99,8 +99,7 @@ const EVM_CHAINS = [
 	classic,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [];
-NON_EVM_CHAINS.push(SOLANA_NETWORK);
+const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
