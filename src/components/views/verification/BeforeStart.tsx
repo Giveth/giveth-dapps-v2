@@ -1,10 +1,12 @@
 import { useIntl } from 'react-intl';
-import { Button, H6, Lead } from '@giveth/ui-design-system';
+import { Button, H6, Lead, brandColors } from '@giveth/ui-design-system';
 import { useRouter } from 'next/router';
+import styled from 'styled-components';
 import { ContentSeparator, BtnContainer } from './Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { client } from '@/apollo/apolloClient';
 import { CREATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
+import Routes from '@/lib/constants/Routes';
 
 const BeforeStart = () => {
 	const { verificationData, setVerificationData, setStep } =
@@ -12,7 +14,9 @@ const BeforeStart = () => {
 	const router = useRouter();
 	const { slug } = router.query;
 	const { formatMessage } = useIntl();
-
+	const projectSlug =
+		Routes.Project + '/' + verificationData?.project?.id + '/edit';
+	console.log('project edit slug', projectSlug);
 	const saveStep = () => {
 		async function sendReq() {
 			const { data } = await client.mutate({
@@ -22,7 +26,6 @@ const BeforeStart = () => {
 			setVerificationData(data.createProjectVerificationForm);
 			setStep(1);
 		}
-
 		if (verificationData?.id) {
 			setStep(1);
 		} else {
@@ -41,6 +44,20 @@ const BeforeStart = () => {
 					{formatMessage({
 						id: 'page.verification.before_you_start.one',
 					})}
+					<br />
+					<br />
+					{formatMessage({
+						id: 'page.verification.update_your_project_social',
+					})}{' '}
+					<EditProjectLink
+						href={projectSlug}
+						target='_blank'
+						rel='noopener noreferrer'
+					>
+						{formatMessage({
+							id: 'page.verification.click_to_edit',
+						})}{' '}
+					</EditProjectLink>
 					<br />
 					<br />
 					{formatMessage({
@@ -79,5 +96,9 @@ const BeforeStart = () => {
 		</>
 	);
 };
+
+const EditProjectLink = styled.a`
+	color: ${brandColors.pinky[500]};
+`;
 
 export default BeforeStart;
