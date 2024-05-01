@@ -72,16 +72,20 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 					})}{' '}
 					{totalStreamPerSec > 0 ? (
 						<strong>
-							{streamRunOutInMonth < 0n
-								? '0'
-								: streamRunOutInMonth.toString()}{' '}
-							{formatMessage(
-								{
-									id: 'label.months',
-								},
-								{
-									count: streamRunOutInMonth.toString(),
-								},
+							{streamRunOutInMonth < 1n ? (
+								' < 1 Month '
+							) : (
+								<>
+									{streamRunOutInMonth.toString()}{' '}
+									{formatMessage(
+										{
+											id: 'label.months',
+										},
+										{
+											count: streamRunOutInMonth.toString(),
+										},
+									)}
+								</>
 							)}
 						</strong>
 					) : (

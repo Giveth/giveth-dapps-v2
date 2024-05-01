@@ -25,6 +25,7 @@ import { formatTxLink } from '@/lib/helpers';
 import { ChainType } from '@/types/config';
 import { ClaimTransactionState } from './type';
 import { wagmiConfig } from '@/wagmiConfigs';
+import { ensureCorrectNetwork } from '@/helpers/network';
 interface IClaimWithdrawalModal extends IModal {
 	selectedStream: ITokenWithBalance;
 	project: IProject;
@@ -85,6 +86,7 @@ const ClaimWithdrawalModal = ({
 		console.log('anchorContractAddress', anchorContractAddress);
 		try {
 			console.log('isETHx', isETHx);
+			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
 			const encodedDowngradeTo = isETHx
 				? encodeFunctionData({
 						abi: ISETH.abi,

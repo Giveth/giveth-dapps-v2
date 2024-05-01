@@ -24,6 +24,7 @@ interface ISuccessDonation {
 	txHash: TxHashWithChainType[];
 	givBackEligible?: boolean;
 	excludeFromQF?: boolean;
+	isRecurring?: boolean;
 }
 
 interface IDonateContext {

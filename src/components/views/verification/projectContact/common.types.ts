@@ -3,6 +3,7 @@ export enum EMainSocials {
 	Discord = 'Discord',
 	Telegram = 'Telegram',
 	WhatsApp = 'WhatsApp',
+	SocialLink = 'SocialLink',
 }
 
 export interface IMainSocials {
@@ -10,4 +11,5 @@ export interface IMainSocials {
 	[EMainSocials.Discord]: string;
 	[EMainSocials.Telegram]: string;
 	[EMainSocials.WhatsApp]: string;
+	[EMainSocials.SocialLink]: string;
 }

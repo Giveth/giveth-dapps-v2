@@ -7,12 +7,12 @@ export type IToken = {
 	decimals: number;
 	isSuperToken?: boolean;
 	underlyingToken?: IToken;
+	coingeckoId: string;
 };
 
 export interface ISuperToken extends IToken {
 	underlyingToken: IToken;
 	isSuperToken: boolean;
-	coingeckoId: string;
 }
 
 export interface ISuperfluidStream {
