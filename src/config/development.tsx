@@ -44,8 +44,6 @@ const SEPT_8TH_2022 = 1662595200000;
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x2f2c819210191750F2E11F7CfC5664a0eB4fd5e6';
 
-const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
-
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
@@ -102,9 +100,7 @@ const EVM_CHAINS = [
 ] as readonly [Chain, ...Chain[]];
 
 const NON_EVM_CHAINS: NonEVMChain[] = [];
-if (isSolanaEnabled) {
-	NON_EVM_CHAINS.push(SOLANA_NETWORK);
-}
+NON_EVM_CHAINS.push(SOLANA_NETWORK);
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
