@@ -8,7 +8,7 @@ import links from '@/lib/constants/links';
 export const ManageRecurringDonation = () => {
 	return (
 		<Box>
-			<H5 weight={700}>Managing your recurring donations</H5>
+			<Title weight={700}>Managing your recurring donations</Title>
 			<br />
 			<P>
 				You can modify or delete your recurring donation as well as
@@ -28,6 +28,10 @@ export const ManageRecurringDonation = () => {
 		</Box>
 	);
 };
+
+const Title = styled(H5)`
+	color: ${brandColors.deep[800]};
+`;
 
 const Box = styled.div`
 	padding: 16px;
