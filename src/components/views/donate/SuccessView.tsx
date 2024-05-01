@@ -30,6 +30,7 @@ import links from '@/lib/constants/links';
 import { EContentType } from '@/lib/constants/shareContent';
 import QFToast from './QFToast';
 import { DonationInfo } from './DonationInfo';
+import { ManageRecurringDonation } from './ManageRecurringDonation';
 
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
@@ -38,6 +39,7 @@ export const SuccessView: FC = () => {
 		givBackEligible,
 		txHash = [],
 		excludeFromQF,
+		isRecurring,
 	} = successDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 	const isSafeEnv = useIsSafeEnvironment();
@@ -98,11 +100,13 @@ export const SuccessView: FC = () => {
 				</Col>
 				<Col xs={12} lg={6}>
 					<RightSectionWrapper>
-						<GiverH4 weight={700}>
-							{formatMessage({ id: 'label.youre_giver_now' })}
-						</GiverH4>
-						<br />
-						<SuccessMessage>{message}</SuccessMessage>
+						<div>
+							<GiverH4 weight={700}>
+								{formatMessage({ id: 'label.youre_giver_now' })}
+							</GiverH4>
+							<br />
+							<SuccessMessage>{message}</SuccessMessage>
+						</div>
 						<br />
 						{givBackEligible && (
 							<>
@@ -132,6 +136,7 @@ export const SuccessView: FC = () => {
 							hasActiveQFRound &&
 							passportState !== EPassportState.LOADING &&
 							isOnEligibleNetworks && <QFToast />}
+						{isRecurring && <ManageRecurringDonation />}
 						<SocialBoxWrapper>
 							<SocialBox
 								project={project}
@@ -209,8 +214,11 @@ const ImageWrapper = styled.div`
 	overflow: hidden;
 `;
 
-const RightSectionWrapper = styled.div`
+const RightSectionWrapper = styled(Flex)`
+	flex-direction: column;
+	justify-content: center;
 	background-color: ${neutralColors.gray[100]};
 	padding: 32px;
 	border-radius: 16px;
+	height: 100%;
 `;
