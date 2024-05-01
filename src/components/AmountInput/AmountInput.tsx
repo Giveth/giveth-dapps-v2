@@ -47,7 +47,6 @@ export const AmountInput: FC<IAmountInput> = ({
 	const [displayAmount, setDisplayAmount] = useState('');
 
 	useEffect(() => {
-		console.log('amount', amount);
 		if (!amount) return;
 		const _displayAmount = truncateToDecimalPlaces(
 			formatUnits(amount, decimals),

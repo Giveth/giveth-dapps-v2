@@ -59,10 +59,8 @@ export const ModifySection: FC<IModifySectionProps> = ({
 
 	const handleSetMaxAmount = () => {
 		if (!balance || !balance.value) return; // If balance is not available, return
-		console.log('balance.value', balance.value);
 		setAmount(balance.value); // Set the amount to the balance value
 	};
-	console.log('amount1', amount);
 
 	const _token = findTokenByAddress(token?.id);
 	const ProperGlink =
