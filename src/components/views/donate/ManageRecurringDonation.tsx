@@ -2,6 +2,8 @@ import { H5, P, brandColors } from '@giveth/ui-design-system';
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
+import Routes from '@/lib/constants/Routes';
+import links from '@/lib/constants/links';
 
 export const ManageRecurringDonation = () => {
 	return (
@@ -11,11 +13,17 @@ export const ManageRecurringDonation = () => {
 			<P>
 				You can modify or delete your recurring donation as well as
 				top-up funds to your stream balance from the 
-				<Link href={'/'}>Recurring Donations page</Link> .
+				<Link href={Routes.MyRecurringDonations}>
+					Recurring Donations page
+				</Link>
+				.
 			</P>
 			<P>
 				To learn more about how recurring donations work, visit our{' '}
-				<Link href={'/'}>documentation article</Link> .
+				<a href={links.RECURRING_DONATION_DOCS}>
+					documentation article
+				</a>
+				 .
 			</P>
 		</Box>
 	);
