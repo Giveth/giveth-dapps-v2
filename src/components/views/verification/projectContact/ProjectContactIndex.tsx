@@ -117,7 +117,7 @@ export default function ProjectContactIndex() {
 					<IconInfoFilled color={neutralColors.gray[900]} />
 					<PInline>
 						{formatMessage({
-							id: 'label.please_provide_links_to_any_social_media',
+							id: 'label.project_owner_contact_text',
 						})}
 					</PInline>
 				</InfoWrapper>
