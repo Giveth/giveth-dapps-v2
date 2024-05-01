@@ -16,7 +16,6 @@ const BeforeStart = () => {
 	const { formatMessage } = useIntl();
 	const projectSlug =
 		Routes.Project + '/' + verificationData?.project?.id + '/edit';
-	console.log('project edit slug', projectSlug);
 	const saveStep = () => {
 		async function sendReq() {
 			const { data } = await client.mutate({
