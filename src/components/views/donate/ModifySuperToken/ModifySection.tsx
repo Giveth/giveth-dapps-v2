@@ -11,7 +11,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Dispatch, SetStateAction, useState, type FC } from 'react';
+import { Dispatch, SetStateAction, type FC } from 'react';
 import { type GetBalanceReturnType } from '@wagmi/core';
 import { formatUnits } from 'viem';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
@@ -31,6 +31,7 @@ export enum EModifySectionPlace {
 interface IModifySectionProps {
 	titleLabel: string;
 	token?: IToken;
+	amount: bigint;
 	setAmount: Dispatch<SetStateAction<bigint>>;
 	balance?: GetBalanceReturnType;
 	refetch: any;
@@ -44,6 +45,7 @@ interface IModifySectionProps {
 export const ModifySection: FC<IModifySectionProps> = ({
 	titleLabel,
 	token,
+	amount,
 	setAmount,
 	balance,
 	refetch,
@@ -54,15 +56,9 @@ export const ModifySection: FC<IModifySectionProps> = ({
 	modifySectionPlace,
 }) => {
 	const { formatMessage } = useIntl();
-	const [displayAmount, setDisplayAmount] = useState('');
 
 	const handleSetMaxAmount = () => {
 		if (!balance || !balance.value) return; // If balance is not available, return
-		const maxAmountDisplay = truncateToDecimalPlaces(
-			formatUnits(maxAmount, balance.decimals),
-			6,
-		).toString(); // Convert your balance value to string properly
-		setDisplayAmount(maxAmountDisplay); // Update the display amount
 		setAmount(balance.value); // Set the amount to the balance value
 	};
 
@@ -104,19 +100,10 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					</Flex>
 				</SelectTokenWrapper>
 				<Input
+					amount={amount}
 					setAmount={setAmount}
 					disabled={!token}
 					decimals={token?.decimals}
-					displayAmount={
-						modifySectionPlace === EModifySectionPlace.DEPOSIT
-							? displayAmount
-							: undefined
-					}
-					setDisplayAmount={
-						modifySectionPlace === EModifySectionPlace.DEPOSIT
-							? setDisplayAmount
-							: undefined
-					}
 				/>
 			</InputWrapper>
 			<Flex gap='4px'>

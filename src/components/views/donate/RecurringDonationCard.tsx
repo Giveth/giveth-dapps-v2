@@ -317,6 +317,7 @@ export const RecurringDonationCard = () => {
 							</p>
 						) : (
 							<Input
+								amount={amount}
 								setAmount={setAmount}
 								disabled={selectedToken === undefined}
 								decimals={selectedToken?.token.decimals}
@@ -327,7 +328,10 @@ export const RecurringDonationCard = () => {
 						selectedToken !== undefined &&
 						balance !== undefined && (
 							<Flex gap='4px'>
-								<GLink size='Small'>
+								<GLinkStyled
+									size='Small'
+									onClick={() => setAmount(balance.value)}
+								>
 									{formatMessage({
 										id: 'label.available',
 									})}
@@ -339,7 +343,7 @@ export const RecurringDonationCard = () => {
 										),
 										balance.decimals / 3,
 									)}
-								</GLink>
+								</GLinkStyled>
 								<IconWrapper
 									onClick={() => !isRefetching && refetch()}
 								>
@@ -811,6 +815,13 @@ const Input = styled(AmountInput)`
 export const IconWrapper = styled.div`
 	cursor: pointer;
 	color: ${brandColors.giv[500]};
+`;
+
+const GLinkStyled = styled(GLink)`
+	&&:hover {
+		cursor: pointer;
+		text-decoration: underline;
+	}
 `;
 
 const SliderWrapper = styled.div`
