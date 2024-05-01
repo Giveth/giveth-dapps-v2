@@ -259,7 +259,6 @@ export interface GlobalConfig extends EnvConfig {
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
 	GOOGLE_MAPS_API_KEY: string | undefined;
-	ENABLE_SOLANA: boolean;
 }
 
 export enum ChainType {
