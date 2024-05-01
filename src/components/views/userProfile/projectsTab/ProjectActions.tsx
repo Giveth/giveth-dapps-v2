@@ -17,7 +17,7 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { capitalizeAllWords } from '@/lib/helpers';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 
 interface IProjectActions {
@@ -95,17 +95,15 @@ const ProjectActions = (props: IProjectActions) => {
 		},
 	};
 
-	isRecurringActive &&
-		anchorContractAddress &&
-		options.push(recurringDonationOption);
+	anchorContractAddress && options.push(recurringDonationOption);
 
 	const dropdownStyle = {
 		padding: '4px 16px',
 		borderRadius: '8px',
-		background: isHover && !isRecurringActive ? 'white' : '',
+		background: '',
 	};
 
-	return isRecurringActive ? (
+	return (
 		<Actions
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
@@ -123,25 +121,6 @@ const ProjectActions = (props: IProjectActions) => {
 				/>
 			)}
 		</Actions>
-	) : (
-		<ActionsOld
-			onMouseEnter={() => setIsHover(true)}
-			onMouseLeave={() => setIsHover(false)}
-			$isOpen={isHover}
-			$isCancelled={isCancelled}
-			size='Big'
-		>
-			{isCancelled ? (
-				<CancelledWrapper>CANCELLED</CancelledWrapper>
-			) : (
-				<Dropdown
-					style={dropdownStyle}
-					label='Actions'
-					options={options}
-					stickToRight
-				/>
-			)}
-		</ActionsOld>
 	);
 };
 
