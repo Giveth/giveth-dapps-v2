@@ -352,7 +352,7 @@ export const GeneralWalletProvider: React.FC<{
 	}, [visible]);
 
 	const openWalletConnectModal = () => {
-		if (config.ENABLE_SOLANA && !isGIVeconomyRoute) {
+		if (!isGIVeconomyRoute) {
 			dispatch(setShowWelcomeModal(true));
 		} else {
 			openConnectModal();
