@@ -32,7 +32,7 @@ export const ActiveQFRoundStats = () => {
 						{formatMessage({ id: 'label.matching_pool' })}
 					</ItemTitle>
 					<ItemValue weight={500}>
-						{data?.qfRoundStats?.matchingPool || '--'}&nbsp;$
+						${data?.qfRoundStats?.matchingPool || ' --'}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
@@ -40,8 +40,7 @@ export const ActiveQFRoundStats = () => {
 						{formatMessage({ id: 'label.donations' })}
 					</ItemTitle>
 					<ItemValue weight={500}>
-						$&nbsp;
-						{data?.qfRoundStats?.allDonationsUsdValue || '--'}
+						${data?.qfRoundStats?.allDonationsUsdValue || ' --'}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
@@ -54,14 +53,14 @@ export const ActiveQFRoundStats = () => {
 				</ItemContainer>
 				<Flex $flexDirection='column'>
 					<Caption color={neutralColors.gray[700]}>
-						Round started
+						Round start
 					</Caption>
 					<B>
 						{activeRound?.endDate
 							? formatDate(new Date(activeRound.beginDate))
 							: '--'}
 					</B>
-					<Caption color={neutralColors.gray[700]}>Ends on</Caption>
+					<Caption color={neutralColors.gray[700]}>Round end</Caption>
 					<B>
 						{activeRound?.endDate
 							? formatDate(new Date(activeRound.endDate))
