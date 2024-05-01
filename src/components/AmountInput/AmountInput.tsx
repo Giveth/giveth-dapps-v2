@@ -8,9 +8,10 @@ import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
-import BigNumber from 'bignumber.js';
+import { formatUnits, parseUnits } from 'viem';
 import { formatWeiHelper } from '@/helpers/number';
 import { BaseInput } from '../input/BaseInput';
+import { truncateToDecimalPlaces } from '@/lib/helpers';
 
 export interface IAmountInput {
 	setAmount: Dispatch<SetStateAction<bigint>>;
@@ -21,8 +22,6 @@ export interface IAmountInput {
 	showMax?: boolean;
 	balanceUnit?: string;
 	showPercentage?: boolean;
-	displayAmount?: string;
-	setDisplayAmount?: Dispatch<SetStateAction<string>>;
 }
 
 export const AmountInput: FC<IAmountInput> = ({
@@ -33,42 +32,24 @@ export const AmountInput: FC<IAmountInput> = ({
 	disabled = false,
 	showMax = false,
 	showPercentage = false,
-	displayAmount: externalDisplayAmount = undefined,
-	setDisplayAmount: externalSetDisplayAmount = undefined,
 }) => {
 	const { formatMessage } = useIntl();
-	const [internalDisplayAmount, internalSetDisplayAmount] = useState('');
 	const [activeStep, setActiveStep] = useState(0);
-
-	// Determine which displayAmount and setDisplayAmount to use
-	const displayAmount =
-		externalDisplayAmount !== undefined
-			? externalDisplayAmount
-			: internalDisplayAmount;
-
-	const setDisplayAmount =
-		externalSetDisplayAmount !== undefined
-			? externalSetDisplayAmount
-			: internalSetDisplayAmount;
+	const [displayAmount, setDisplayAmount] = useState('');
 
 	const setAmountPercentage = useCallback(
 		(percentage: number): void => {
 			if (!maxAmount) return;
-			const newAmount = new BigNumber(maxAmount.toString())
-				.multipliedBy(percentage)
-				.div(100)
-				.toFixed(0);
-			const _displayAmount = formatWeiHelper(newAmount, 6, false);
-			setDisplayAmount(_displayAmount);
-			setAmount(
+			const newAmount =
 				percentage === 100
 					? maxAmount
-					: BigInt(
-							new BigNumber(_displayAmount)
-								.multipliedBy(10 ** decimals)
-								.toFixed(0),
-						),
-			);
+					: (maxAmount * BigInt(percentage)) / 100n;
+			const _displayAmount = truncateToDecimalPlaces(
+				formatUnits(newAmount, decimals),
+				decimals / 3,
+			).toString();
+			setDisplayAmount(_displayAmount);
+			setAmount(newAmount);
 		},
 		[decimals, maxAmount, setAmount],
 	);
@@ -76,16 +57,13 @@ export const AmountInput: FC<IAmountInput> = ({
 	const onUserInput = useCallback(
 		(value: string) => {
 			const [, _decimals] = value.split('.');
-			if (_decimals?.length > 6) {
-				return;
-			}
+			if (_decimals?.length > 6) return;
 			setDisplayAmount(value);
 			setActiveStep(0);
-			let valueBn = new BigNumber(0);
 
 			try {
-				valueBn = new BigNumber(value).multipliedBy(10 ** decimals);
-				setAmount(BigInt(valueBn.toFixed(0)));
+				let valueBn = parseUnits(value, decimals);
+				setAmount(valueBn);
 			} catch (error) {
 				setAmount(0n);
 				console.debug(
