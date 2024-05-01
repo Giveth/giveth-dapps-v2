@@ -188,6 +188,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 										})}
 									</SectionTitle>
 									<StakingAmountInput
+										amount={amount}
 										setAmount={setAmount}
 										maxAmount={maxAmount}
 										poolStakingConfig={poolStakingConfig}

@@ -20,6 +20,7 @@ import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { EToastType } from '@/components/toasts/InlineToast';
+import { ensureCorrectNetwork } from '@/helpers/network';
 
 interface IWithDrawSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	token?: IToken;
@@ -59,6 +60,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 	const onWithdraw = async () => {
 		setStep(EModifySuperTokenSteps.WITHDRAWING);
 		try {
+			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
 			if (!address) {
 				throw new Error('address not found1');
 			}
@@ -123,10 +125,11 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 		}
 	};
 
+	const maxAmount = SuperTokenBalance
+		? SuperTokenBalance.value - minRemainingBalance
+		: 0n;
 	const isInvalidAmount =
-		amount <= 0 ||
-		SuperTokenBalance === undefined ||
-		amount > SuperTokenBalance.value - minRemainingBalance;
+		amount <= 0 || SuperTokenBalance === undefined || amount > maxAmount;
 
 	/// this one needs some thought - we should allow for a buffer of 40 seconds (or more) in the balance we show to the user
 	// - this might prevent them from trying to withdraw more than they have and getting an error
@@ -147,6 +150,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 					<ModifyWrapper>
 						<ModifySection
 							titleLabel='label.withdraw_from_stream_balance'
+							amount={amount}
 							setAmount={setAmount}
 							token={superToken}
 							// try to put in modified value in place of SuperTokenBalance.value
@@ -158,7 +162,7 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 									? 'invalid_amount'
 									: undefined
 							}
-							minRemainingBalance={minRemainingBalance}
+							maxAmount={maxAmount > 0n ? maxAmount : 0n}
 							tooltipText='tooltip.withdraw_stream_balance'
 							modifySectionPlace={EModifySectionPlace.WITHDRAW}
 						/>
@@ -193,6 +197,12 @@ export const WithDrawSuperToken: FC<IWithDrawSuperTokenProps> = ({
 						symbol={token?.symbol || ''}
 					/>
 				</Flex>
+			)}
+			{step === EModifySuperTokenSteps.WITHDRAW_CONFIRMED && (
+				<ModifyInfoToast
+					toastType={EToastType.Success}
+					withdrawalType='withdraw'
+				/>
 			)}
 			<Button
 				label={formatMessage({ id: actionButtonLabel[step] })}

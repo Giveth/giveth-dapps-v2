@@ -50,7 +50,13 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 		<RowWrapper>
 			<TableCell>
 				<TokenIcon symbol={underlyingSymbol} />
-				<P>{limitFraction(balance?.formatted || '0')}</P>
+				<P>
+					{balance && balance.value
+						? limitFraction(
+								formatUnits(balance.value, balance.decimals),
+							)
+						: '0'}
+				</P>
 				<P>{symbol}</P>
 			</TableCell>
 			<TableCell>
@@ -74,7 +80,7 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 				)}
 			</TableCell>
 			<TableCell>
-				{runOutMonth === 0n ? (
+				{totalFlowRate === 0n ? (
 					'--'
 				) : runOutMonth < 1 ? (
 					' < 1 Month '

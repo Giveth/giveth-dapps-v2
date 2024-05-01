@@ -10,10 +10,13 @@ import Image from 'next/image';
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import { useAccount } from 'wagmi';
 import links from '@/lib/constants/links';
+import config from '@/configuration';
 
 export const StakeTogetherCard = () => {
 	const { formatMessage } = useIntl();
+	const { chain } = useAccount();
 	return (
 		<Wrapper>
 			<Image
@@ -28,7 +31,11 @@ export const StakeTogetherCard = () => {
 			<P>{formatMessage({ id: 'component.stake_together.desc' })}</P>
 			<StyledLink
 				label='Go to Stake Together'
-				href={links.STAKE_TOGETHER}
+				href={
+					chain?.id === config.MAINNET_NETWORK_NUMBER
+						? links.STAKE_TOGETHER_MAINNET
+						: links.STAKE_TOGETHER_OPTIMISM
+				}
 				isExternal={true}
 				target='_blank'
 				rel='noopener noreferrer'

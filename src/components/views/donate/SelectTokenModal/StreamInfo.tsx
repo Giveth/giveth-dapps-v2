@@ -50,7 +50,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			}}
 		>
 			<TokenIconWithGIVBack
-				showGiveBack
+				showGiveBack={false}
 				symbol={underlyingToken?.symbol}
 				size={32}
 				isSuperToken={isSuperToken}
@@ -89,24 +89,30 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 									id: 'label.stream_runs_out_in',
 								})}
 							</GrayCaption>
-							<Caption $medium>
-								{remainingMonths > 1n
-									? remainingMonths.toString()
-									: '< 1'}
-							</Caption>
-							<Caption>
-								{formatMessage(
-									{
-										id: 'label.months',
-									},
-									{
-										count:
-											remainingMonths > 1n
-												? remainingMonths.toString()
-												: '1',
-									},
-								)}
-							</Caption>
+							{totalFlowRate === 0n ? (
+								'--'
+							) : (
+								<>
+									<Caption $medium>
+										{remainingMonths > 1n
+											? remainingMonths.toString()
+											: '< 1'}
+									</Caption>
+									<Caption>
+										{formatMessage(
+											{
+												id: 'label.months',
+											},
+											{
+												count:
+													remainingMonths > 1n
+														? remainingMonths.toString()
+														: '1',
+											},
+										)}
+									</Caption>
+								</>
+							)}
 						</Flex>
 						<Flex gap='4px'>
 							<GrayCaption>Funding</GrayCaption>

@@ -1,7 +1,31 @@
 import { gql } from '@apollo/client';
 
+export const CREATE_DRAFT_RECURRING_DONATION = gql`
+	mutation createDraftRecurringDonation(
+		$networkId: Float!
+		$currency: String!
+		$projectId: Float!
+		$recurringDonationId: Float
+		$anonymous: Boolean
+		$isBatch: Boolean
+		$isForUpdate: Boolean
+		$flowRate: String!
+	) {
+		createDraftRecurringDonation(
+			networkId: $networkId
+			currency: $currency
+			recurringDonationId: $recurringDonationId
+			projectId: $projectId
+			anonymous: $anonymous
+			isBatch: $isBatch
+			isForUpdate: $isForUpdate
+			flowRate: $flowRate
+		)
+	}
+`;
+
 export const CREATE_RECURRING_DONATION = gql`
-	mutation CreateRecurringDonation(
+	mutation createRecurringDonation(
 		$projectId: Int!
 		$networkId: Int!
 		$txHash: String!
@@ -66,6 +90,41 @@ export const UPDATE_RECURRING_DONATION = gql`
 			currency: $currency
 			isArchived: $isArchived
 			status: $status
+		) {
+			id
+			txHash
+			networkId
+			currency
+			flowRate
+			anonymous
+			status
+			isArchived
+		}
+	}
+`;
+
+export const UPDATE_RECURRING_DONATION_BY_ID = gql`
+	mutation updateRecurringDonationQueryById(
+		$recurringDonationId: Int!
+		$projectId: Int!
+		$networkId: Int!
+		$currency: String!
+		$txHash: String
+		$flowRate: String
+		$anonymous: Boolean
+		$isArchived: Boolean
+		$status: String
+	) {
+		updateRecurringDonationParamsById(
+			recurringDonationId: $recurringDonationId
+			projectId: $projectId
+			networkId: $networkId
+			currency: $currency
+			txHash: $txHash
+			anonymous: $anonymous
+			flowRate: $flowRate
+			status: $status
+			isArchived: $isArchived
 		) {
 			id
 			txHash

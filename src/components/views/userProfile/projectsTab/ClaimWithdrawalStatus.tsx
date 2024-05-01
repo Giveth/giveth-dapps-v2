@@ -22,9 +22,17 @@ export const ClaimWithdrawalStatus = ({
 		switch (status) {
 			case ClaimTransactionState.SUCCESS:
 				return formatMessage({
-					id: 'label.your_withdrawal_from_this_stream_balance_was_successful',
+					id: 'label.claim_successful',
 				});
-			case ClaimTransactionState.PENDING:
+			case ClaimTransactionState.WITHDRAWING:
+				return formatMessage({
+					id: 'label.your_withdrawal_from_this_stream_balance_is_being_processed',
+				});
+			case ClaimTransactionState.DOWNGRADING_TO_ETH:
+				return formatMessage({
+					id: 'label.your_withdrawal_from_this_stream_balance_is_being_processed',
+				});
+			case ClaimTransactionState.TRANSFERRING_ETH:
 				return formatMessage({
 					id: 'label.your_withdrawal_from_this_stream_balance_is_being_processed',
 				});
@@ -59,7 +67,9 @@ const Container = styled(Caption)<{ $status: ClaimTransactionState }>`
 			switch (props.$status) {
 				case ClaimTransactionState.SUCCESS:
 					return semanticColors.jade[500];
-				case ClaimTransactionState.PENDING:
+				case ClaimTransactionState.WITHDRAWING:
+				case ClaimTransactionState.DOWNGRADING_TO_ETH:
+				case ClaimTransactionState.TRANSFERRING_ETH:
 					return semanticColors.blueSky[400];
 			}
 		}};
@@ -67,7 +77,9 @@ const Container = styled(Caption)<{ $status: ClaimTransactionState }>`
 		switch (props.$status) {
 			case ClaimTransactionState.SUCCESS:
 				return semanticColors.jade[500];
-			case ClaimTransactionState.PENDING:
+			case ClaimTransactionState.WITHDRAWING:
+			case ClaimTransactionState.DOWNGRADING_TO_ETH:
+			case ClaimTransactionState.TRANSFERRING_ETH:
 				return semanticColors.blueSky[500];
 		}
 	}};
@@ -75,7 +87,9 @@ const Container = styled(Caption)<{ $status: ClaimTransactionState }>`
 		switch (props.$status) {
 			case ClaimTransactionState.SUCCESS:
 				return semanticColors.jade[100];
-			case ClaimTransactionState.PENDING:
+			case ClaimTransactionState.WITHDRAWING:
+			case ClaimTransactionState.DOWNGRADING_TO_ETH:
+			case ClaimTransactionState.TRANSFERRING_ETH:
 				return semanticColors.blueSky[100];
 		}
 	}};

@@ -30,7 +30,7 @@ export const TokenInfo: FC<ITokenInfoProps> = ({
 			}}
 		>
 			<TokenIconWithGIVBack
-				showGiveBack
+				showGiveBack={false}
 				symbol={
 					token.isSuperToken
 						? token.underlyingToken?.symbol

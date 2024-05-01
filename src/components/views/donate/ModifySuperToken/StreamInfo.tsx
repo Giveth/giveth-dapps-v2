@@ -42,7 +42,8 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 		SuperTokenBalance.value > 0n
 			? estimatedBalance / totalStreamPerSec / ONE_MONTH_SECONDS
 			: 0n;
-	if (streamRunOutInMonth <= 0n && setIsWarning) {
+
+	if (streamRunOutInMonth < 1n && totalStreamPerSec > 0 && setIsWarning) {
 		setIsWarning(true);
 	} else if (setIsWarning) {
 		setIsWarning(false);
@@ -71,16 +72,20 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 					})}{' '}
 					{totalStreamPerSec > 0 ? (
 						<strong>
-							{streamRunOutInMonth < 0n
-								? '0'
-								: streamRunOutInMonth.toString()}{' '}
-							{formatMessage(
-								{
-									id: 'label.months',
-								},
-								{
-									count: streamRunOutInMonth.toString(),
-								},
+							{streamRunOutInMonth < 1n ? (
+								' < 1 Month '
+							) : (
+								<>
+									{streamRunOutInMonth.toString()}{' '}
+									{formatMessage(
+										{
+											id: 'label.months',
+										},
+										{
+											count: streamRunOutInMonth.toString(),
+										},
+									)}
+								</>
 							)}
 						</strong>
 					) : (

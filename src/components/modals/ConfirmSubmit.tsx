@@ -187,6 +187,7 @@ const TxSubmit = styled(H6)`
 const TxFailed = styled(H5)`
 	color: ${neutralColors.gray[100]};
 	margin-top: 18px;
+	margin-bottom: 24px;
 `;
 
 const TxConfirm = styled(H5)`

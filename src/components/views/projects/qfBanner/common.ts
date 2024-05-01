@@ -1,5 +1,13 @@
-import { Col, H1, H2, mediaQueries, Flex } from '@giveth/ui-design-system';
+import {
+	Col,
+	H1,
+	mediaQueries,
+	Flex,
+	brandColors,
+	deviceSize,
+} from '@giveth/ui-design-system';
 import styled from 'styled-components';
+import Image from 'next/image';
 
 export const BannerContainer = styled.div`
 	position: relative;
@@ -27,22 +35,35 @@ export const StyledCol = styled(Col)`
 	color: #ffffff;
 `;
 
+export const ActiveStyledCol = styled(Col)`
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	z-index: 1;
+	min-height: 300px;
+	padding-top: 40px;
+	color: #ffffff;
+
+	@media (max-width: 1350px) {
+		width: 100% !important;
+		align-items: center;
+	}
+`;
+
 export const Title = styled(H1)`
 	margin-top: 32px;
 `;
 
-export const Name = styled(H2)``;
-
 export const Desc = styled(Flex)`
 	width: fit-content;
-
-	border: 2px solid #6241d6;
-	border-radius: 20px;
+	border: 2px solid white;
+	border-radius: 27px;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
 	padding: 9px 20px;
-	background: #b377ff;
+	background: ${brandColors.giv[400]};
 	margin-top: 12px;
 	margin-bottom: 32px;
 `;
@@ -126,11 +147,36 @@ export const ImgBottomLeft1 = styled(ImgBase)`
 	}
 `;
 
-export const Sponsor = styled(ImgBase)`
-	width: 332px;
+export const Sponsor = styled(Image)`
+	width: 119px;
+	height: 125px;
+	${mediaQueries.tablet} {
+		width: 179px;
+		height: 188px;
+	}
+	@media (max-width: 477px) {
+		width: 90px;
+		height: 95px;
+	}
+	@media (max-width: ${deviceSize.mobileM + 'px'}) {
+		width: 75px;
+		height: 79px;
+	}
+`;
 
-	${mediaQueries.laptopS} {
-		right: 60px;
-		margin-top: 60px;
+export const SmallerSponsor = styled(Image)`
+	width: 80px;
+	height: 80px;
+	${mediaQueries.tablet} {
+		width: 120px;
+		height: 120px;
+	}
+	@media (max-width: 477px) {
+		width: 60px;
+		height: 60px;
+	}
+	@media (max-width: ${deviceSize.mobileM + 'px'}) {
+		width: 50px;
+		height: 50px;
 	}
 `;

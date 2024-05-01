@@ -28,7 +28,10 @@ export const ScoreModal: FC<IScoreModalProps> = ({ ...props }) => {
 			closeModal={closeModal}
 			isAnimating={isAnimating}
 			headerTitle={formatMessage({
-				id: infoMap[props.fieldsScores.quality].title,
+				id:
+					props.fieldsScores.totalScore < 100
+						? 'component.score.not_perfect.title'
+						: infoMap[props.fieldsScores.quality].title,
 			})}
 			headerTitlePosition='left'
 			headerIcon={<IconHelpOutline32 />}
