@@ -4,7 +4,14 @@ import {
 	brandColors,
 	Flex,
 } from '@giveth/ui-design-system';
-import { FC, useState, useCallback, Dispatch, SetStateAction } from 'react';
+import {
+	FC,
+	useState,
+	useCallback,
+	Dispatch,
+	SetStateAction,
+	useEffect,
+} from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { captureException } from '@sentry/nextjs';
@@ -14,6 +21,7 @@ import { BaseInput } from '../input/BaseInput';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
 
 export interface IAmountInput {
+	amount: bigint;
 	setAmount: Dispatch<SetStateAction<bigint>>;
 	decimals?: number;
 	className?: string;
@@ -25,6 +33,7 @@ export interface IAmountInput {
 }
 
 export const AmountInput: FC<IAmountInput> = ({
+	amount,
 	maxAmount,
 	setAmount,
 	className,
@@ -37,6 +46,16 @@ export const AmountInput: FC<IAmountInput> = ({
 	const [activeStep, setActiveStep] = useState(0);
 	const [displayAmount, setDisplayAmount] = useState('');
 
+	useEffect(() => {
+		console.log('amount', amount);
+		if (!amount) return;
+		const _displayAmount = truncateToDecimalPlaces(
+			formatUnits(amount, decimals),
+			decimals / 3,
+		).toString();
+		setDisplayAmount(_displayAmount);
+	}, [amount, decimals]);
+
 	const setAmountPercentage = useCallback(
 		(percentage: number): void => {
 			if (!maxAmount) return;
@@ -44,14 +63,10 @@ export const AmountInput: FC<IAmountInput> = ({
 				percentage === 100
 					? maxAmount
 					: (maxAmount * BigInt(percentage)) / 100n;
-			const _displayAmount = truncateToDecimalPlaces(
-				formatUnits(newAmount, decimals),
-				decimals / 3,
-			).toString();
-			setDisplayAmount(_displayAmount);
+
 			setAmount(newAmount);
 		},
-		[decimals, maxAmount, setAmount],
+		[maxAmount, setAmount],
 	);
 
 	const onUserInput = useCallback(
