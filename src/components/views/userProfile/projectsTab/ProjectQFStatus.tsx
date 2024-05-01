@@ -24,9 +24,7 @@ const ProjectQFStatus = ({
 		? `Eligible for QF round #${activeStartedRound?.id}`
 		: 'Not eligible';
 
-	const roundNameText = isRoundActive
-		? activeStartedRound?.name
-		: 'Not eligible';
+	const roundNameText = isRoundActive ? activeStartedRound?.name : 'None';
 
 	return (
 		<StatusBadge $isRoundActive={isRoundActive}>
