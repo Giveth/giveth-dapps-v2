@@ -4,6 +4,7 @@ import {
 	mediaQueries,
 	Flex,
 	brandColors,
+	deviceSize,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
@@ -32,6 +33,22 @@ export const StyledCol = styled(Col)`
 	align-items: center;
 	padding-top: 40px;
 	color: #ffffff;
+`;
+
+export const ActiveStyledCol = styled(Col)`
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	z-index: 1;
+	min-height: 300px;
+	padding-top: 40px;
+	color: #ffffff;
+
+	@media (max-width: 1350px) {
+		width: 100% !important;
+		align-items: center;
+	}
 `;
 
 export const Title = styled(H1)`
@@ -136,5 +153,30 @@ export const Sponsor = styled(Image)`
 	${mediaQueries.tablet} {
 		width: 179px;
 		height: 188px;
+	}
+	@media (max-width: 477px) {
+		width: 90px;
+		height: 95px;
+	}
+	@media (max-width: ${deviceSize.mobileM + 'px'}) {
+		width: 75px;
+		height: 79px;
+	}
+`;
+
+export const SmallerSponsor = styled(Image)`
+	width: 80px;
+	height: 80px;
+	${mediaQueries.tablet} {
+		width: 120px;
+		height: 120px;
+	}
+	@media (max-width: 477px) {
+		width: 60px;
+		height: 60px;
+	}
+	@media (max-width: ${deviceSize.mobileM + 'px'}) {
+		width: 50px;
+		height: 50px;
 	}
 `;

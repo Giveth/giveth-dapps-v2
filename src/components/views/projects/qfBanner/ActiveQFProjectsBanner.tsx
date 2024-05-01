@@ -5,7 +5,14 @@ import { useState, useEffect } from 'react';
 import { useProjectsContext } from '@/context/projects.context';
 import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
-import { BannerContainer, StyledCol, Desc, Title, Sponsor } from './common';
+import {
+	BannerContainer,
+	ActiveStyledCol,
+	Desc,
+	Title,
+	Sponsor,
+	SmallerSponsor,
+} from './common';
 
 enum ERoundStatus {
 	LOADING,
@@ -75,7 +82,7 @@ export const ActiveQFProjectsBanner = () => {
 			/>
 			<Container>
 				<Row>
-					<StyledCol xs={12} md={6}>
+					<ActiveStyledCol xs={12} md={6}>
 						<Title weight={700}>
 							{activeRound ? activeRound.name : null}
 						</Title>
@@ -100,12 +107,23 @@ export const ActiveQFProjectsBanner = () => {
 								</B>
 							</Desc>
 						)}
-					</StyledCol>
-					<StyledCol
+					</ActiveStyledCol>
+					<ActiveStyledCol
 						xs={12}
 						md={6}
-						style={{ justifyContent: 'center' }}
+						style={{ alignItems: 'center' }}
 					>
+						<Flex>
+							{topSponsors.map(s => (
+								<SmallerSponsor
+									key={s.title}
+									src={s.image}
+									alt={s.title}
+									width={120}
+									height={120}
+								/>
+							))}
+						</Flex>
 						<Flex>
 							{sponsors.map(s => (
 								<Sponsor
@@ -117,7 +135,18 @@ export const ActiveQFProjectsBanner = () => {
 								/>
 							))}
 						</Flex>
-					</StyledCol>
+						<Flex>
+							{bottomSponsors.map(s => (
+								<SmallerSponsor
+									key={s.title}
+									src={s.image}
+									alt={s.title}
+									width={120}
+									height={120}
+								/>
+							))}
+						</Flex>
+					</ActiveStyledCol>
 				</Row>
 			</Container>
 		</BannerContainer>
@@ -135,6 +164,52 @@ const sponsors = [
 	},
 	{
 		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor4.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor5.svg',
+	},
+];
+
+const topSponsors = [
+	{
+		title: '@PublicNouns',
 		image: '/images/banners/qf-round/sponsor3.svg',
+	},
+	{
+		title: '@OctantApp',
+		image: '/images/banners/qf-round/sponsor6.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor7.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor8.svg',
+	},
+];
+
+const bottomSponsors = [
+	{
+		title: '@PublicNouns',
+		image: '/images/banners/qf-round/sponsor9.svg',
+	},
+	{
+		title: '@OctantApp',
+		image: '/images/banners/qf-round/sponsor10.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor11.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor12.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor13.svg',
 	},
 ];
