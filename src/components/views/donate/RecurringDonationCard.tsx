@@ -317,6 +317,7 @@ export const RecurringDonationCard = () => {
 							</p>
 						) : (
 							<Input
+								amount={amount}
 								setAmount={setAmount}
 								disabled={selectedToken === undefined}
 								decimals={selectedToken?.token.decimals}
