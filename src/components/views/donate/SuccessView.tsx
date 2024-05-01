@@ -98,11 +98,13 @@ export const SuccessView: FC = () => {
 				</Col>
 				<Col xs={12} lg={6}>
 					<RightSectionWrapper>
-						<GiverH4 weight={700}>
-							{formatMessage({ id: 'label.youre_giver_now' })}
-						</GiverH4>
-						<br />
-						<SuccessMessage>{message}</SuccessMessage>
+						<div>
+							<GiverH4 weight={700}>
+								{formatMessage({ id: 'label.youre_giver_now' })}
+							</GiverH4>
+							<br />
+							<SuccessMessage>{message}</SuccessMessage>
+						</div>
 						<br />
 						{givBackEligible && (
 							<>
@@ -209,8 +211,11 @@ const ImageWrapper = styled.div`
 	overflow: hidden;
 `;
 
-const RightSectionWrapper = styled.div`
+const RightSectionWrapper = styled(Flex)`
+	flex-direction: column;
+	justify-content: center;
 	background-color: ${neutralColors.gray[100]};
 	padding: 32px;
 	border-radius: 16px;
+	height: 100%;
 `;
