@@ -79,6 +79,7 @@ const InfoStep: FC<IStep> = ({ setStep }) => {
 			const { data: response } = await updateUser({
 				variables: {
 					...formData,
+					newUser: true,
 				},
 			});
 			if (response.updateUser) {
