@@ -20,7 +20,7 @@ export const ManageRecurringDonation = () => {
 			</P>
 			<P>
 				To learn more about how recurring donations work, visit our{' '}
-				<a href={links.RECURRING_DONATION_DOCS}>
+				<a href={links.RECURRING_DONATION_DOCS} target='_blank'>
 					documentation article
 				</a>
 				 .
