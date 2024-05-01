@@ -22,6 +22,7 @@ import { EModifySuperTokenSteps, actionButtonLabel } from './common';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { EToastType } from '@/components/toasts/InlineToast';
+import { ensureCorrectNetwork } from '@/helpers/network';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	token?: IToken;
@@ -73,8 +74,9 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	const onApprove = async () => {
 		console.log('Approve', amount, address, superToken, token);
 		if (!address || !superToken || !token) return;
-		setStep(EModifySuperTokenSteps.APPROVING);
 		try {
+			setStep(EModifySuperTokenSteps.APPROVING);
+			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
 			const approve = await approveERC20tokenTransfer(
 				amount,
 				address,
@@ -95,8 +97,9 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	};
 
 	const onDeposit = async () => {
-		setStep(EModifySuperTokenSteps.DEPOSITING);
 		try {
+			setStep(EModifySuperTokenSteps.DEPOSITING);
+			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
 			if (!address) {
 				throw new Error('address not found1');
 			}

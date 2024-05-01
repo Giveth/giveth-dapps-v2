@@ -26,6 +26,7 @@ import { TXLink } from './TXLink';
 import { useProfileDonateTabData } from '../ProfileDonateTab.context';
 import { ERecurringDonationStatus } from '@/apollo/types/types';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
+import { ensureCorrectNetwork } from '@/helpers/network';
 
 interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	step: EDonationSteps;
@@ -56,6 +57,7 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	const onDonate = async () => {
 		setStep(EDonationSteps.DONATING);
 		try {
+			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
 			const projectAnchorContract = findAnchorContractAddress(
 				donation.project.anchorContracts,
 			);
