@@ -574,6 +574,7 @@
 	"label.liked_projects": "Liked Projects",
 	"label.likes": "Likes",
 	"label.link_to_your_giveth_project": "Link to your Giveth project on your social media",
+	"label.project_social_link": "Project Social Link",
 	"label.liquid_giv_that_has_already_flowed": "Liquid GIV that has already flowed out of the GIVstream",
 	"label.liquid_reward_token_that_has_flowed": "Liquid {rewardTokenSymbol} that has already flowed out of the {rewardTokenSymbol}stream",
 	"label.listing": "Listing",

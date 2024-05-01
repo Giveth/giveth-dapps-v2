@@ -574,6 +574,7 @@
 	"label.liked_projects": "Projectes Favorits",
 	"label.likes": "Favorits",
 	"label.link_to_your_giveth_project": "Enllaç al teu projecte de Giveth a les teves xarxes socials",
+	"label.project_social_link": "Enllaç Social del Projecte",
 	"label.liquid_giv_that_has_already_flowed": "GIV líquid que ja ha fluït del GIVstream",
 	"label.liquid_reward_token_that_has_flowed": "{rewardTokenSymbol} líquid que ha fluït del {rewardTokenSymbol}stream",
 	"label.listing": "Llistat",
