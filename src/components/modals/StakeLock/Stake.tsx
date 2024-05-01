@@ -204,6 +204,7 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 						<StakeInnerModalContainer>
 							<StakeSteps stakeState={stakeState} />
 							<StakingAmountInput
+								amount={amount}
 								setAmount={setAmount}
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}

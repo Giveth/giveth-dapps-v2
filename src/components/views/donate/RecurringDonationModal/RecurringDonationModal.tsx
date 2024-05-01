@@ -40,6 +40,7 @@ import {
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { ERecurringDonationStatus } from '@/apollo/types/types';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
+import { ensureCorrectNetwork } from '@/helpers/network';
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
 	amount: bigint;
@@ -143,15 +144,18 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	}, [selectedToken, setStep]);
 
 	const onApprove = async () => {
-		console.log(
-			'amount',
-			formatUnits(amount, selectedToken?.token.decimals || 18),
-		);
-		setStep(EDonationSteps.APPROVING);
-		if (!address || !selectedToken) return;
-		const superToken = findSuperTokenByTokenAddress(selectedToken.token.id);
-		if (!superToken) return;
 		try {
+			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			console.log(
+				'amount',
+				formatUnits(amount, selectedToken?.token.decimals || 18),
+			);
+			setStep(EDonationSteps.APPROVING);
+			if (!address || !selectedToken) return;
+			const superToken = findSuperTokenByTokenAddress(
+				selectedToken.token.id,
+			);
+			if (!superToken) throw new Error('SuperToken not found');
 			const approve = await approveERC20tokenTransfer(
 				amount,
 				address,
@@ -171,8 +175,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	};
 
 	const onDonate = async () => {
-		setStep(EDonationSteps.DONATING);
 		try {
+			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			setStep(EDonationSteps.DONATING);
 			const projectAnchorContract = findAnchorContractAddress(
 				project?.anchorContracts,
 			);
@@ -334,6 +339,8 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				);
 			}
 
+			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+
 			if (isBatch) {
 				const batchOp = sf.batchCall(operations);
 				tx = await batchOp.exec(signer);
@@ -447,11 +454,13 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 							{ txHash: tx.hash, chainType: ChainType.EVM },
 						],
 						excludeFromQF: true,
+						isRecurring: true,
 					});
 				} else {
 					setSuccessDonation({
 						txHash: [{ txHash: tx.hash, chainType: ChainType.EVM }],
 						excludeFromQF: true,
+						isRecurring: true,
 					});
 				}
 			}
