@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { neutralColors } from '@giveth/ui-design-system';
 import OnboardingHeader from '@/components/views/landings/onboarding/common/Header';
 import MainContentCreator from '@/components/views/landings/onboarding/common/MainContentCreator';
