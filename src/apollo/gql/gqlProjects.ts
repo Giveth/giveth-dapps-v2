@@ -17,6 +17,9 @@ export const PROJECT_CORE_FIELDS = gql`
 			beginDate
 			endDate
 			maximumReward
+			allocatedTokenSymbol
+			allocatedFundUSDPreferred
+			allocatedFundUSD
 		}
 	}
 `;
@@ -219,6 +222,9 @@ export const FETCH_PROJECT_BY_SLUG = isRecurringActive
 						endDate
 						eligibleNetworks
 						maximumReward
+						allocatedTokenSymbol
+						allocatedFundUSDPreferred
+						allocatedFundUSD
 					}
 					campaigns {
 						id
