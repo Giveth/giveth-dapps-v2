@@ -48,6 +48,12 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 	const { allProjectsSum, matchingPool, projectDonationsSqrtRootSum } =
 		estimatedMatching || {};
 
+	const {
+		allocatedFundUSDPreferred,
+		allocatedFundUSD,
+		allocatedTokenSymbol,
+	} = selectedQF || {};
+
 	const selectedQFData = qfRounds?.find(round => round.id === selectedQF?.id);
 
 	const notDistributedFund =
@@ -109,7 +115,7 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 			? calculateTotalEstimatedMatching(
 					projectDonationsSqrtRootSum,
 					allProjectsSum,
-					matchingPool,
+					allocatedFundUSDPreferred ? allocatedFundUSD : matchingPool,
 					selectedQF.maximumReward,
 				)
 			: qfRoundHistory
@@ -210,10 +216,14 @@ const ProjectTotalFundCard = ({ selectedQF }: IProjectTotalFundCardProps) => {
 											+{' '}
 											{formatDonation(
 												matchFund,
-												'$',
+												allocatedFundUSDPreferred
+													? '$'
+													: '',
 												locale,
 												!!selectedQFData?.isActive,
-											)}
+											)}{' '}
+											{!allocatedFundUSDPreferred &&
+												allocatedTokenSymbol}
 										</EstimatedMatchingPrice>
 										<EstimatedMatchingText>
 											{selectedQFData?.isActive
