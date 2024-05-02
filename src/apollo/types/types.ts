@@ -466,6 +466,10 @@ export interface IQFRound {
 	minimumPassportScore: number;
 	eligibleNetworks: number[];
 	maximumReward: number;
+	allocatedFundUSD: number;
+	allocatedFundUSDPreferred: boolean;
+	allocatedTokenSymbol: string;
+	allocatedTokenChainId: number;
 }
 
 export interface IGetQfRoundHistory {
