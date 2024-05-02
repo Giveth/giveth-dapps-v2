@@ -62,7 +62,7 @@
 	"component.pro_guide.tips.social_media.item2": "our accounts will be linked to from your project's page on Giveth.",
 	"component.pro_guide.tips.social_media.item3": "Giveth might use your social media handles to contact you or tag you on posts to support your fundraising.",
 	"component.qf-section.tooltip": "This estimation is the matching funds that this project would get if the round ended now, disregarding fraud analysis.",
-	"component.qf-section.tooltip_polygon": "This estimate represents the matching funds this project would receive if the round closed now, ignoring the fraud analysis and special allocation process for Jokerace's top 100.",
+	"component.qf-section.tooltip_polygon": "This estimate represents the matching funds this project would receive if the round closed now, ignoring the fraud analysis.",
 	"component.qf_middle_banner.desc": "With QF, the number of donors matters more than the amout donated. Donate to participating projects in the round and get your donations matched with the power of quadratic funding!",
 	"component.qf_middle_banner.title": "Quadratic Funding",
 	"component.regenstream_card.harvest_caption": "Use the Harvest button to claim liquid rewards from this RegenStream",

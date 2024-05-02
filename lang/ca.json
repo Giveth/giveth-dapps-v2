@@ -62,7 +62,7 @@
 	"component.pro_guide.tips.social_media.item2": "Els teus comptes estaran enllaçats des de la pàgina del teu projecte a Giveth.",
 	"component.pro_guide.tips.social_media.item3": "Giveth podria utilitzar els teus noms d'usuari a les xarxes socials per contactar-te o etiquetar-te en publicacions per suportar la teva recaptació de fons.",
 	"component.qf-section.tooltip": "Aquesta estimació és els fons d'emparellament que aquest projecte rebrà si la ronda acabés ara, sense tenir en compte l'anàlisi de frau.",
-	"component.qf-section.tooltip_polygon": "Aquesta estimació representa els fons coincidents que rebria aquest projecte si la ronda es tanqués ara, ignorant l'anàlisi del frau i el procés d'assignació especial per als 100 millors de Jokerace.",
+	"component.qf-section.tooltip_polygon": "Aquesta estimació representa els fons coincidents que rebria aquest projecte si la ronda es tanqués ara, ignorant l'anàlisi del frau.",
 	"component.qf_middle_banner.desc": " Amb FQ, el nombre de donants compta més que la quantitat donada. Dona als projectes participants en la ronda i aconsegueix que les teves donacions siguin emparellades amb el poder del finançament quadràtic!",
 	"component.qf_middle_banner.title": "Finançament Quadràtic",
 	"component.regenstream_card.harvest_caption": "Utilitza el botó de Recollida per reclamar recompenses líquides d'aquest RegenStream",

@@ -62,7 +62,7 @@
 	"component.pro_guide.tips.social_media.item2": "Tus cuentas estarán vinculadas desde la página de tu proyecto en Giveth.",
 	"component.pro_guide.tips.social_media.item3": "Giveth podría usar tus identificadores de redes sociales para contactarte o etiquetarte en publicaciones para apoyar tu recaudación de fondos.",
 	"component.qf-section.tooltip": "Esta estimación es la cantidad de fondos complementarios que este proyecto recibiría si la ronda terminara ahora, sin tener en cuenta el análisis de fraude.",
-	"component.qf-section.tooltip_polygon": "Esta estimación representa los fondos de contrapartida que recibiría este proyecto si la ronda se cerrara ahora, ignorando el análisis de fraude y el proceso de asignación especial para los 100 mejores de Jokerace.",
+	"component.qf-section.tooltip_polygon": "Esta estimación representa los fondos de contrapartida que recibiría este proyecto si la ronda se cerrara ahora, ignorando el análisis de fraude.",
 	"component.qf_middle_banner.desc": "Con FC, el número de donantes importa más que la cantidad donada. ¡Dona a los proyectos participantes en la ronda y obtén tus donaciones emparejadas con el poder de la financiación cuadrática!",
 	"component.qf_middle_banner.title": "Financiación Cuadrática",
 	"component.regenstream_card.harvest_caption": "Utiliza el botón de Cosecha para reclamar recompensas líquidas de este RegenStream",
