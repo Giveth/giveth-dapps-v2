@@ -466,7 +466,7 @@ export const RecurringDonationCard = () => {
 									$alignItems='center'
 									onClick={() => setShowTopUpModal(true)}
 								>
-									<Caption>
+									<Caption $medium>
 										{formatMessage({
 											id: 'label.top_up_stream_balance',
 										})}
@@ -509,12 +509,12 @@ export const RecurringDonationCard = () => {
 										target='_blank'
 										rel='noopener noreferrer'
 									>
-										<Flex gap='4px' $alignItems='center'>
-											<Caption $medium>
+										<Flex gap='3px' $alignItems='center'>
+											<ManageCaption $medium>
 												{formatMessage({
 													id: 'label.manage_recurring_donations',
 												})}
-											</Caption>
+											</ManageCaption>
 											<IconChevronRight16 />
 										</Flex>
 									</a>
@@ -864,4 +864,8 @@ const TopUpStream = styled(Flex)`
 
 const TotalMonthlyStream = styled.b`
 	color: ${semanticColors.jade[500]};
+`;
+
+const ManageCaption = styled(Caption)`
+	color: ${brandColors.giv[500]};
 `;

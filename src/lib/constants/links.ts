@@ -23,7 +23,7 @@ const links = {
 	GIVBACK_TOKENS_FORUM: DISCOURSE + 't/givbacks-token-list/253',
 	GITHUB: 'https://github.com/Giveth/',
 	TELEGRAM: 'https://t.me/Givethio',
-	MEDIUM: 'https://medium.com/giveth/',
+	MEDIUM: 'https://blog.giveth.io',
 	TWITTER: 'https://twitter.com/giveth',
 	YOUTUBE: 'https://www.youtube.com/givethio',
 	REDDIT: 'https://reddit.com/r/giveth',
