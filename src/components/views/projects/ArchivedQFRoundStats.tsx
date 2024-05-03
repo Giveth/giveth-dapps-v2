@@ -14,6 +14,7 @@ import Image from 'next/image';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
+import { formatUSD } from '@/lib/helpers';
 
 export const ArchivedQFRoundStats = () => {
 	const { formatMessage } = useIntl();
@@ -42,7 +43,9 @@ export const ArchivedQFRoundStats = () => {
 						{formatMessage({ id: 'label.donations' })}
 					</ItemTitle>
 					<ItemValue>
-						${data?.qfRoundStats?.allDonationsUsdValue || ' --'}
+						$
+						{formatUSD(data?.qfRoundStats?.allDonationsUsdValue) ||
+							' --'}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
