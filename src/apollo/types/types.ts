@@ -466,6 +466,7 @@ export interface IQFRound {
 	minimumPassportScore: number;
 	eligibleNetworks: number[];
 	maximumReward: number;
+	allocatedFund: number;
 	allocatedFundUSD: number;
 	allocatedFundUSDPreferred: boolean;
 	allocatedTokenSymbol: string;
