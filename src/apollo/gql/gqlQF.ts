@@ -38,6 +38,12 @@ export const FETCH_QF_ROUND_STATS = gql`
 			uniqueDonors
 			allDonationsUsdValue
 			matchingPool
+			qfRound {
+				allocatedFund
+				allocatedFundUSD
+				allocatedFundUSDPreferred
+				allocatedTokenSymbol
+			}
 		}
 	}
 `;
