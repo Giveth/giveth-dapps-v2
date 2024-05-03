@@ -10,6 +10,10 @@ export const FETCH_QF_ROUNDS_QUERY = `
 			beginDate
 			endDate
 			minimumPassportScore
+			allocatedFund
+			allocatedFundUSD
+			allocatedFundUSDPreferred
+			allocatedTokenSymbol
 		}
 	}
 `;
