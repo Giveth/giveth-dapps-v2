@@ -14,7 +14,7 @@ import Image from 'next/image';
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
-import { formatUSD } from '@/lib/helpers';
+import { formatUSD, thousandsSeparator } from '@/lib/helpers';
 
 export const ArchivedQFRoundStats = () => {
 	const { formatMessage } = useIntl();
@@ -22,6 +22,14 @@ export const ArchivedQFRoundStats = () => {
 	const { data } = useQuery(FETCH_QF_ROUND_STATS, {
 		variables: { slug: router.query.slug },
 	});
+	const { qfRoundStats } = data || {};
+	const { qfRound, uniqueDonors, allDonationsUsdValue } = qfRoundStats || {};
+	const {
+		allocatedFund,
+		allocatedFundUSD,
+		allocatedFundUSDPreferred,
+		allocatedTokenSymbol,
+	} = qfRound || {};
 
 	return (
 		<Wrapper>
@@ -35,7 +43,13 @@ export const ArchivedQFRoundStats = () => {
 						{formatMessage({ id: 'label.matching_pool' })}
 					</ItemTitle>
 					<ItemValue>
-						${data?.qfRoundStats?.matchingPool || ' --'}
+						{allocatedFundUSDPreferred && '$'}
+						{thousandsSeparator(
+							allocatedFundUSDPreferred
+								? allocatedFundUSD
+								: allocatedFund,
+						) || ' --'}{' '}
+						{!allocatedFundUSDPreferred && allocatedTokenSymbol}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
@@ -43,18 +57,14 @@ export const ArchivedQFRoundStats = () => {
 						{formatMessage({ id: 'label.donations' })}
 					</ItemTitle>
 					<ItemValue>
-						$
-						{formatUSD(data?.qfRoundStats?.allDonationsUsdValue) ||
-							' --'}
+						${formatUSD(allDonationsUsdValue) || ' --'}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
 					<ItemTitle>
 						{formatMessage({ id: 'label.number_of_unique_donors' })}
 					</ItemTitle>
-					<ItemValue>
-						{data?.qfRoundStats?.uniqueDonors || '--'}
-					</ItemValue>
+					<ItemValue>{uniqueDonors || '--'}</ItemValue>
 				</ItemContainer>
 			</InfoSection>
 		</Wrapper>
