@@ -13,7 +13,7 @@ import { useIntl } from 'react-intl';
 import { useQuery } from '@apollo/client';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
 import { useProjectsContext } from '@/context/projects.context';
-import { formatDate, thousandsSeparator } from '@/lib/helpers';
+import { formatDate, formatUSD, thousandsSeparator } from '@/lib/helpers';
 
 export const ActiveQFRoundStats = () => {
 	const { formatMessage } = useIntl();
@@ -52,7 +52,9 @@ export const ActiveQFRoundStats = () => {
 						{formatMessage({ id: 'label.donations' })}
 					</ItemTitle>
 					<ItemValue weight={500}>
-						${data?.qfRoundStats?.allDonationsUsdValue || ' --'}
+						$
+						{formatUSD(data?.qfRoundStats?.allDonationsUsdValue) ||
+							' --'}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
