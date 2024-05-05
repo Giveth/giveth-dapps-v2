@@ -42,7 +42,7 @@ import {
 } from '@/helpers/donate';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { showToastError, truncateToDecimalPlaces } from '@/lib/helpers';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import { WrongNetworkLayer } from './WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 import { limitFraction } from '@/helpers/number';
@@ -466,7 +466,7 @@ export const RecurringDonationCard = () => {
 									$alignItems='center'
 									onClick={() => setShowTopUpModal(true)}
 								>
-									<Caption>
+									<Caption $medium>
 										{formatMessage({
 											id: 'label.top_up_stream_balance',
 										})}
@@ -509,12 +509,12 @@ export const RecurringDonationCard = () => {
 										target='_blank'
 										rel='noopener noreferrer'
 									>
-										<Flex gap='4px' $alignItems='center'>
-											<Caption $medium>
+										<Flex gap='3px' $alignItems='center'>
+											<ManageCaption $medium>
 												{formatMessage({
 													id: 'label.manage_recurring_donations',
 												})}
-											</Caption>
+											</ManageCaption>
 											<IconChevronRight16 />
 										</Flex>
 									</a>
@@ -689,9 +689,7 @@ export const RecurringDonationCard = () => {
 			<CheckBoxContainer>
 				<CheckBox
 					label={formatMessage({
-						id: isRecurringActive
-							? 'label.make_it_anonymous'
-							: 'label.donate_privately',
+						id: 'label.make_it_anonymous',
 					})}
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
@@ -699,9 +697,7 @@ export const RecurringDonationCard = () => {
 				/>
 				<div>
 					{formatMessage({
-						id: isRecurringActive
-							? 'component.tooltip.donate_anonymously'
-							: 'component.tooltip.donate_privately',
+						id: 'component.tooltip.donate_anonymously',
 					})}
 				</div>
 			</CheckBoxContainer>
@@ -864,4 +860,8 @@ const TopUpStream = styled(Flex)`
 
 const TotalMonthlyStream = styled.b`
 	color: ${semanticColors.jade[500]};
+`;
+
+const ManageCaption = styled(Caption)`
+	color: ${brandColors.giv[500]};
 `;

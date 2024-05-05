@@ -12,6 +12,8 @@ export const FETCH_QF_ROUNDS_QUERY = `
 			minimumPassportScore
 			title
 			description
+			bannerBgImage
+			sponsorsImgs
 		}
 	}
 `;

@@ -468,6 +468,8 @@ export interface IQFRound {
 	maximumReward: number;
 	title: string;
 	description: string;
+	bannerBgImage: string;
+	sponsorsImgs: string[];
 }
 
 export interface IGetQfRoundHistory {
