@@ -16,7 +16,7 @@ import { useAccount } from 'wagmi';
 import ExternalLink from '@/components/ExternalLink';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
@@ -146,7 +146,7 @@ export const SuccessView: FC = () => {
 					</RightSectionWrapper>
 				</Col>
 			</Row>
-			{isRecurringActive && <DonationInfo />}
+			<DonationInfo />
 		</Wrapper>
 	);
 };
