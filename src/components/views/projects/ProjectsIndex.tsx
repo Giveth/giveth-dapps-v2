@@ -39,6 +39,7 @@ import { SortContainer } from './sort/SortContainer';
 import { ArchivedQFRoundStats } from './ArchivedQFRoundStats';
 import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
+import useMediaQuery from '@/hooks/useMediaQuery';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -59,6 +60,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
 	const [totalCount, setTotalCount] = useState(_totalCount);
+	const isMobile = useMediaQuery(`(max-width: ${deviceSize.tablet - 1}px)`);
 
 	const dispatch = useAppDispatch();
 
@@ -211,7 +213,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<ActiveQFProjectsBanner />
 				</>
 			) : isArchivedQF ? (
-				<ArchivedQFProjectsBanner />
+				!isMobile && <ArchivedQFProjectsBanner />
 			) : (
 				<ProjectsBanner mainCategory={selectedMainCategory} />
 			)}
