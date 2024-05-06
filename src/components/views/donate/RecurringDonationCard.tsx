@@ -42,7 +42,7 @@ import {
 } from '@/helpers/donate';
 import { ISuperfluidStream } from '@/types/superFluid';
 import { showToastError, truncateToDecimalPlaces } from '@/lib/helpers';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import { WrongNetworkLayer } from './WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 import { limitFraction } from '@/helpers/number';
@@ -689,9 +689,7 @@ export const RecurringDonationCard = () => {
 			<CheckBoxContainer>
 				<CheckBox
 					label={formatMessage({
-						id: isRecurringActive
-							? 'label.make_it_anonymous'
-							: 'label.donate_privately',
+						id: 'label.make_it_anonymous',
 					})}
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
@@ -699,9 +697,7 @@ export const RecurringDonationCard = () => {
 				/>
 				<div>
 					{formatMessage({
-						id: isRecurringActive
-							? 'component.tooltip.donate_anonymously'
-							: 'component.tooltip.donate_privately',
+						id: 'component.tooltip.donate_anonymously',
 					})}
 				</div>
 			</CheckBoxContainer>

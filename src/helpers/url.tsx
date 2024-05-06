@@ -6,7 +6,6 @@ import {
 	ICampaign,
 } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
-import config from '@/configuration';
 
 export function campaignLinkGenerator(campaign: ICampaign) {
 	if (
@@ -74,13 +73,10 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 					);
 					break;
 				case ECampaignFilterField.AcceptFundOnSolana:
-					//Check feature flag
-					if (config.ENABLE_SOLANA) {
-						params.append(
-							'filter',
-							EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
-						);
-					}
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
+					);
 					break;
 				default:
 					break;

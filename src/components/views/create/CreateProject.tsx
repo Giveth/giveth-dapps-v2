@@ -41,7 +41,7 @@ import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView, slugToSuccessView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import { setShowFooter, setShowHeader } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
@@ -351,11 +351,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						},
 					});
 
-			if (
-				watchAlloProtocolRegistry &&
-				hasOptimismAddress &&
-				isRecurringActive
-			) {
+			if (watchAlloProtocolRegistry && hasOptimismAddress) {
 				!isEditMode
 					? setAddedProjectState(addedProject.data?.createProject)
 					: setAddedProjectState(addedProject.data?.updateProject);
@@ -374,12 +370,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			if (addedProject) {
 				// Success
 
-				if (
-					watchAlloProtocolRegistry &&
-					hasOptimismAddress &&
-					isRecurringActive &&
-					!draft
-				) {
+				if (watchAlloProtocolRegistry && hasOptimismAddress && !draft) {
 					setShowAlloProtocolModal(true);
 					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 				} else {

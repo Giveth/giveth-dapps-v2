@@ -29,7 +29,7 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { EVerificationStatus } from '@/apollo/types/types';
 import ClaimRecurringDonationModal from '../../userProfile/projectsTab/ClaimRecurringDonationModal';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 
 interface IMobileActionsModalProps {
@@ -123,9 +123,7 @@ export const AdminActions = () => {
 		},
 	};
 
-	isRecurringActive &&
-		anchorContractAddress &&
-		options.push(recurringDonationOption);
+	anchorContractAddress && options.push(recurringDonationOption);
 
 	const dropdownStyle = {
 		padding: '10px 16px',
