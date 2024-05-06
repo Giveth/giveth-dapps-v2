@@ -10,6 +10,8 @@ export const FETCH_QF_ROUNDS_QUERY = `
 			beginDate
 			endDate
 			minimumPassportScore
+			title
+			description
 			bannerBgImage
 			sponsorsImgs
 			allocatedFund
