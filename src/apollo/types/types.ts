@@ -468,6 +468,11 @@ export interface IQFRound {
 	maximumReward: number;
 	bannerBgImage: string;
 	sponsorsImgs: string[];
+	allocatedFund: number;
+	allocatedFundUSD: number;
+	allocatedFundUSDPreferred: boolean;
+	allocatedTokenSymbol: string;
+	allocatedTokenChainId: number;
 }
 
 export interface IGetQfRoundHistory {

@@ -12,6 +12,10 @@ export const FETCH_QF_ROUNDS_QUERY = `
 			minimumPassportScore
 			bannerBgImage
 			sponsorsImgs
+			allocatedFund
+			allocatedFundUSD
+			allocatedFundUSDPreferred
+			allocatedTokenSymbol
 		}
 	}
 `;
@@ -36,6 +40,12 @@ export const FETCH_QF_ROUND_STATS = gql`
 			uniqueDonors
 			allDonationsUsdValue
 			matchingPool
+			qfRound {
+				allocatedFund
+				allocatedFundUSD
+				allocatedFundUSDPreferred
+				allocatedTokenSymbol
+			}
 		}
 	}
 `;
