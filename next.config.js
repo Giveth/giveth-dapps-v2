@@ -22,6 +22,7 @@ const moduleExports = withBundleAnalyzer({
 			{ protocol: 'https', port: '', hostname: 'giveth.mypinata.cloud' },
 			{ protocol: 'https', port: '', hostname: 'static.tgbwidget.com' },
 			{ protocol: 'https', port: '', hostname: 'images.unsplash.com' },
+			{ protocol: 'https', port: '', hostname: 'unicorn.mypinata.cloud' },
 			{
 				protocol: 'https',
 				port: '',
