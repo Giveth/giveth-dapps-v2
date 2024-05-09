@@ -35,7 +35,7 @@ const QFProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		<ProjectsProvider
 			mainCategories={mainCategories}
 			selectedMainCategory={selectedMainCategory}
-			isQF={false}
+			isQF={true}
 			isArchivedQF={true}
 			qfRounds={qfRounds}
 		>
