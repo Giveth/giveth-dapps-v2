@@ -934,7 +934,7 @@
 	"label.subscribe_to_our_newsletter.desc": "¡Suscríbete a nuestro newsletter para recibir las últimas noticias, actualizaciones y oportunidades directamente a tu mail!",
 	"label.successful": "exitoso",
 	"label.suggested_image_size": "Tamaño de imagen sugerido:",
-	"label.suggested_image_size_min": "Tamaño minimo de imagen sugerido de 600px de ancho. Máximo 4Mb de peso.",
+	"label.suggested_image_size_min": "Tamaño de imagen sugerido: 960px de ancho por 600px de alto. El tamaño máximo de la imagen es de 4MB.",
 	"label.superfluid_eligible_tokens": "Tokens Depositables",
 	"label.superfluid_eligible_tokens_description": "Deposita un token desde tu billetera en tu Saldo de Transmisión para financiar tus donaciones recurrentes.",
 	"label.support": "Soporte",
