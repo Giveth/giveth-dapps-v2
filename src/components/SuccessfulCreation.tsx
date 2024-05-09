@@ -54,36 +54,27 @@ const SuccessfulCreation = (props: IProps) => {
 	return (
 		<Wrapper>
 			<ContainerStyled>
-				<div
+				<BGImg
+					src='/images/arc2.svg'
+					alt='image project creation'
+					width={202}
+					height={273}
 					style={{
-						position: 'absolute',
 						top: 0,
 						right: 20,
-						overflow: 'hidden',
 					}}
-				>
-					<BGImg
-						src='/images/arc2.svg'
-						alt='image project creation'
-						layout='fill'
-						objectFit='contain'
-					/>
-				</div>
-				<div
+				/>
+
+				<BGImg
+					src='/images/arc3.svg'
+					alt='image project creation'
+					width={274}
+					height={256}
 					style={{
-						position: 'fixed',
-						// bottom: 0,
-						// left: 20,
-						overflow: 'hidden',
+						bottom: 0,
+						left: 20,
 					}}
-				>
-				</div>
-					<BGImg
-						src='/images/arc3.svg'
-						alt='image project creation'
-						layout='fill'
-						objectFit='contain'
-					/>
+				/>
 				<Row>
 					<Left xs={12} md={6}>
 						<ProjectCard project={project} isNew />
@@ -148,14 +139,6 @@ const Wrapper = styled.div`
 const ContainerStyled = styled(Container)`
 	text-align: center;
 	padding-top: 114px;
-	> img:first-child {
-		top: 0;
-		right: 20px;
-	}
-	> img:nth-child(2) {
-		bottom: 0;
-		left: 20px;
-	}
 `;
 const Left = styled(Col)`
 	z-index: 1;

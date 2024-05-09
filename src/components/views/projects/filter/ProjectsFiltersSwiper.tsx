@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Image from 'next/image';
 import ProjectsMainCategories from '@/components/views/projects/filter/ProjectsMainCategories';
 import { mediaQueries } from '@/lib/constants/constants';
 import { IconContainer } from '@/components/views/projects/common.styled';
@@ -7,11 +8,21 @@ const ProjectsFiltersSwiper = () => {
 	return (
 		<Container className='fadeIn'>
 			<PrevIcon id='prevIcon'>
-				<img src={'/images/caret_right.svg'} alt='caret right' />
+				<Image
+					src={'/images/caret_right.svg'}
+					alt='caret right'
+					width={5}
+					height={10}
+				/>
 			</PrevIcon>
 			<ProjectsMainCategories />
 			<NextIcon id='nextIcon'>
-				<img src={'/images/caret_right.svg'} alt='caret right' />
+				<Image
+					src={'/images/caret_right.svg'}
+					alt='caret right'
+					width={5}
+					height={10}
+				/>{' '}
 			</NextIcon>
 		</Container>
 	);

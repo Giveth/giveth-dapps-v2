@@ -27,6 +27,11 @@ const moduleExports = withBundleAnalyzer({
 			{
 				protocol: 'https',
 				port: '',
+				hostname: 'lh3.googleusercontent.com',
+			},
+			{
+				protocol: 'https',
+				port: '',
 				hostname: 'd2m0e1zy3fwxmp.cloudfront.net',
 			}, // temporal for CHANGE default image
 			{ protocol: 'https', port: '', hostname: 'i.imgur.com' },

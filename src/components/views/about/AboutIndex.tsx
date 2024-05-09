@@ -39,11 +39,10 @@ const AboutIndex = () => {
 		<>
 			<Upper>
 				<TeamImageWrapper>
-					<Image
+					<img
 						src={'/images/giveth-team-new.webp'}
 						alt='giveth team'
-						objectFit='contain'
-						fill
+						style={{ width: '100%' }}
 					/>
 				</TeamImageWrapper>
 				<Container>
@@ -128,10 +127,6 @@ const AboutIndex = () => {
 
 const TeamImageWrapper = styled.div`
 	margin-top: 120px;
-	position: relative;
-	width: 100%;
-	height: auto;
-	overflow: hidden;
 `;
 
 const TabContent = styled.div`
