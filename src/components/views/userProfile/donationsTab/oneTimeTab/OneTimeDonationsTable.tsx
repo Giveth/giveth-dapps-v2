@@ -26,6 +26,8 @@ import {
 } from '@/components/styled-components/Table';
 import { Badge, EBadgeStatus } from '@/components/Badge';
 import { formatDonation } from '@/helpers/number';
+import NetworkLogo from '@/components/NetworkLogo';
+import { getChainName } from '@/lib/network';
 
 interface OneTimeDonationTable {
 	donations: IWalletDonation[];
@@ -53,6 +55,7 @@ const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
 					{formatMessage({ id: 'label.status' })}
 				</TableHeader>
 			)}
+			<TableHeader>{formatMessage({ id: 'label.network' })}</TableHeader>
 			<TableHeader onClick={() => changeOrder(EOrderBy.TokenAmount)}>
 				{formatMessage({ id: 'label.amount' })}
 				<SortIcon order={order} title={EOrderBy.TokenAmount} />
@@ -78,6 +81,19 @@ const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
 							<DonationStatus status={donation.status} />
 						</DonationTableCell>
 					)}
+					<DonationTableCell>
+						<NetworkLogo
+							logoSize={24}
+							chainId={donation.transactionNetworkId}
+							chainType={donation.chainType}
+						/>
+						<NetworkName>
+							{getChainName(
+								donation.transactionNetworkId,
+								donation.chainType,
+							)}
+						</NetworkName>
+					</DonationTableCell>
 					<DonationTableCell>
 						<B>{formatDonation(donation.amount)}</B>
 						<Currency>{donation.currency}</Currency>
@@ -136,8 +152,8 @@ const DonationTableContainer = styled.div<{ $myAccount?: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
 		props.$myAccount
-			? '1fr 4fr 1fr 1.5fr 1fr 1fr'
-			: '1fr 4fr 1.5fr 1fr 1fr'};
+			? '1fr 4fr 1fr 1.5fr 1fr 1fr 1fr'
+			: '1fr 4fr 1.5fr 1fr 1fr 1fr'};
 	overflow: auto;
 	min-width: 900px;
 	margin: 0 10px;
@@ -151,6 +167,13 @@ const ProjectTitleCell = styled(DonationTableCell)`
 	&:hover > svg {
 		display: block;
 	}
+`;
+
+const NetworkName = styled.div`
+	width: 80%;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 `;
 
 export default OneTimeDonationTable;
