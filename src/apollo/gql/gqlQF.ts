@@ -69,6 +69,7 @@ export const FETCH_ARCHIVED_QF_ROUNDS = gql`
 			endDate
 			totalDonations
 			uniqueDonors
+			# allocatedTokenSymbol
 		}
 	}
 `;

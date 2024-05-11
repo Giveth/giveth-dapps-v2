@@ -9,18 +9,6 @@ import {
 } from 'react';
 import { EQFRoundsSortBy } from '@/apollo/types/gqlEnums';
 
-export enum EQfArchivedRoundsSort {
-	allocatedFund = 'allocatedFund',
-	totalDonations = 'totalDonations',
-	uniqueDonors = 'uniqueDonors',
-	beginDate = 'beginDate',
-}
-
-export enum EOrderDirection {
-	ASC = 'ASC',
-	DESC = 'DESC',
-}
-
 interface IProviderProps {
 	children: ReactNode;
 }
