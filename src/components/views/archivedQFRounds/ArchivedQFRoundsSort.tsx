@@ -16,6 +16,7 @@ import {
 	DropdownIndicator,
 } from '../projects/sort/ProjectsSortSelect';
 import { EQFRoundsSortBy } from '@/apollo/types/gqlEnums';
+import { useArchivedQFRounds } from './archivedQfRounds.context';
 
 export interface IArchivedQFRoundsSort {
 	icon: ReactElement;
@@ -26,15 +27,16 @@ export interface IArchivedQFRoundsSort {
 
 export const ArchivedQFRoundsSort = () => {
 	const { formatMessage } = useIntl();
+	const { orderBy, setOrderBy } = useArchivedQFRounds();
 
 	let sortByOptions: IArchivedQFRoundsSort[] = [
 		{
-			label: formatMessage({ id: 'label.givpower' }),
+			label: formatMessage({ id: 'label.matching_pool' }),
 			value: EQFRoundsSortBy.MATCHING_POOL,
 			icon: <IconDonation16 />,
 		},
 		{
-			label: formatMessage({ id: 'label.rank' }),
+			label: formatMessage({ id: 'label.number_of_unique_donors' }),
 			value: EQFRoundsSortBy.UNIQUE_DONORS,
 			icon: <IconAdminNotif16 />,
 		},
@@ -62,7 +64,7 @@ export const ArchivedQFRoundsSort = () => {
 					Control: (props: any) => <Control {...props} />,
 				}}
 				onChange={(e: any) => {
-					console.log('e', e);
+					setOrderBy(e.value);
 				}}
 				options={sortByOptions}
 				styles={selectStyles}
@@ -71,6 +73,7 @@ export const ArchivedQFRoundsSort = () => {
 				isClearable={false}
 				isSearchable={false}
 				isMulti={false}
+				value={sortByOptions.filter(option => option.value === orderBy)}
 			/>
 		</Flex>
 	);
