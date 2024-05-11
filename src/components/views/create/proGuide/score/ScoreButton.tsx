@@ -20,14 +20,19 @@ export const ScoreButton: FC<IScoreButtonProps> = ({ fieldsScores }) => {
 
 	return (
 		<>
-			<StyledButton
-				label={formatMessage({
-					id: infoMap[fieldsScores.quality].title,
-				})}
-				buttonType='texty-primary'
-				onClick={() => setShowScoreModal(true)}
-				icon={<IconHelpOutline32 />}
-			/>
+			<>
+				<StyledButton
+					label={formatMessage({
+						id:
+							fieldsScores.totalScore < 100
+								? 'component.score.not_perfect.title'
+								: infoMap[fieldsScores.quality].title,
+					})}
+					buttonType='texty-primary'
+					onClick={() => setShowScoreModal(true)}
+					icon={<IconHelpOutline32 />}
+				/>
+			</>
 
 			{showScoreModal && (
 				<ScoreModal

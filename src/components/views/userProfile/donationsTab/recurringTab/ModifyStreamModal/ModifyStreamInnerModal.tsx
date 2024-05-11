@@ -36,6 +36,7 @@ import {
 	IModifyStreamModalProps,
 } from './ModifyStreamModal';
 import { countActiveStreams } from '@/helpers/donate';
+import { findAnchorContractAddress } from '@/helpers/superfluid';
 
 interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	setStep: (step: EDonationSteps) => void;
@@ -114,11 +115,12 @@ export const ModifyStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 		const _streamInfo: IGeneralInfo = {
 			otherStreamsTotalFlowRate: 0n,
 		};
+		const anchorContractAddress = findAnchorContractAddress(
+			donation.project.anchorContracts,
+		);
 		for (let i = 0; i < tokenStream.length; i++) {
 			const ts = tokenStream[i];
-			if (
-				ts.receiver.id === donation.project.anchorContracts[0]?.address
-			) {
+			if (ts.receiver.id === anchorContractAddress) {
 				_streamInfo.projectStream = ts;
 				const _percentage = BigNumber(
 					(

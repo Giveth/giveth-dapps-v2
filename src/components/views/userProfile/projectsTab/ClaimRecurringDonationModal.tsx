@@ -1,4 +1,4 @@
-import { B, Button, P, neutralColors, Flex } from '@giveth/ui-design-system';
+import { B, P, neutralColors, Flex } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
@@ -14,7 +14,8 @@ import {
 import { WrappedSpinner } from '@/components/Spinner';
 import ClaimWithdrawalModal from './ClaimWithdrawalModal';
 import { ClaimRecurringItem } from './ClaimRecurringItem';
-import { ClaimTransactionState } from './type';
+import { formatDonation } from '@/helpers/number';
+import { findAnchorContractAddress } from '@/helpers/superfluid';
 
 interface IClaimRecurringDonationModal extends IModal {
 	project: IProject;
@@ -28,18 +29,17 @@ const ClaimRecurringDonationModal = ({
 	setShowModal,
 	project,
 }: IClaimRecurringDonationModal) => {
+	const anchorContractAddress = findAnchorContractAddress(
+		project?.anchorContracts,
+	);
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { balances, isLoading, refetch } = useProjectClaimableDonations(
-		project?.anchorContracts && project.anchorContracts[0]?.address,
+		anchorContractAddress,
 	);
 	const [showClaimWithdrawalModal, setShowClaimWithdrawalModal] =
 		useState(false);
 	const [selectedStream, setSelectedStream] = useState<ITokenWithBalance>();
 	const [allTokensUsd, setAllTokensUsd] = useState<IAllTokensUsd>({});
-	const [transactionState, setTransactionState] =
-		useState<ClaimTransactionState>(ClaimTransactionState.NOT_STARTED);
-
-	const anchorContractAddress = project.anchorContracts[0]?.address;
 
 	const sumAllTokensUsd = useMemo(() => {
 		let sum = 0;
@@ -55,7 +55,6 @@ const ClaimRecurringDonationModal = ({
 			isAnimating={isAnimating}
 			headerTitle='Claimable Donations'
 			headerTitlePosition='left'
-			hiddenClose
 		>
 			<ModalContainer>
 				{isLoading ? (
@@ -79,14 +78,9 @@ const ClaimRecurringDonationModal = ({
 						<TotalAmountContainer>
 							<Flex $justifyContent='space-between'>
 								<B>Total amount claimable </B>
-								<B>~ {sumAllTokensUsd} USD</B>
+								<B>~ {formatDonation(sumAllTokensUsd)} USD</B>
 							</Flex>
 						</TotalAmountContainer>
-						<Button
-							label='Cancel'
-							buttonType='texty-gray'
-							onClick={() => setShowModal(false)}
-						/>
 					</Flex>
 				)}
 
@@ -99,22 +93,23 @@ const ClaimRecurringDonationModal = ({
 						alt='Superfluid logo'
 					/>
 				</SuperfluidLogoContainer>
-				{showClaimWithdrawalModal && selectedStream && (
-					<ClaimWithdrawalModal
-						setShowModal={setShowClaimWithdrawalModal}
-						selectedStream={selectedStream}
-						project={project}
-						anchorContractAddress={anchorContractAddress}
-						transactionState={transactionState}
-						setTransactionState={setTransactionState}
-						refetch={refetch}
-						balanceInUsd={
-							allTokensUsd[
-								selectedStream.token.underlyingToken?.symbol!
-							]
-						}
-					/>
-				)}
+				{showClaimWithdrawalModal &&
+					selectedStream &&
+					anchorContractAddress && (
+						<ClaimWithdrawalModal
+							setShowModal={setShowClaimWithdrawalModal}
+							selectedStream={selectedStream}
+							project={project}
+							anchorContractAddress={anchorContractAddress}
+							refetch={refetch}
+							balanceInUsd={
+								allTokensUsd[
+									selectedStream.token.underlyingToken
+										?.symbol!
+								]
+							}
+						/>
+					)}
 			</ModalContainer>
 		</Modal>
 	);

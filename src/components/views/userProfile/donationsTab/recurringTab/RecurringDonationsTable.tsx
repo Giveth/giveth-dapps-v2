@@ -18,7 +18,10 @@ import {
 	TableHeader,
 } from '@/components/styled-components/Table';
 import { ERecurringDonationSortField, IOrder } from './ActiveProjectsSection';
-import { IWalletRecurringDonation } from '@/apollo/types/types';
+import {
+	ERecurringDonationStatus,
+	IWalletRecurringDonation,
+} from '@/apollo/types/types';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import NetworkLogo from '@/components/NetworkLogo';
 import SortIcon from '@/components/SortIcon';
@@ -101,18 +104,29 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 							logoSize={32}
 						/>
 					</DonationTableCell>
-					<DonationTableCell>
-						<B>
-							{limitFraction(
-								formatUnits(
-									BigInt(donation.flowRate) *
-										ONE_MONTH_SECONDS,
-									18,
-								),
-							)}
-						</B>
-						<Currency>{donation.currency} /mo</Currency>
-					</DonationTableCell>
+					{!myAccount &&
+					donation.status === ERecurringDonationStatus.ENDED ? (
+						<DonationTableCell>
+							<B>
+								{formatMessage({
+									id: 'label.donation_finalized',
+								})}
+							</B>
+						</DonationTableCell>
+					) : (
+						<DonationTableCell>
+							<B>
+								{limitFraction(
+									formatUnits(
+										BigInt(donation.flowRate) *
+											ONE_MONTH_SECONDS,
+										18,
+									),
+								)}
+							</B>
+							<Currency>{donation.currency} /mo</Currency>
+						</DonationTableCell>
+					)}
 					<DonationTableCell>
 						{limitFraction(donation.amountStreamed, 10, true) || 0}
 						<Currency>{donation.currency}</Currency>

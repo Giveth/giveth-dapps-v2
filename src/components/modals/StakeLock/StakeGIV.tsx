@@ -30,6 +30,7 @@ import config from '@/configuration';
 import { useStakingPool } from '@/hooks/useStakingPool';
 import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput';
 import { StakeSteps } from './StakeSteps';
+import { getGIVConfig } from '@/helpers/givpower';
 import type {
 	PoolStakingConfig,
 	SimplePoolStakingConfig,
@@ -187,6 +188,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 										})}
 									</SectionTitle>
 									<StakingAmountInput
+										amount={amount}
 										setAmount={setAmount}
 										maxAmount={maxAmount}
 										poolStakingConfig={poolStakingConfig}
@@ -219,7 +221,11 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 										})}
 										linkType='texty'
 										size='small'
-										href={poolStakingConfig.BUY_LINK}
+										href={
+											getGIVConfig(
+												poolStakingConfig.network,
+											).GIV_BUY_LINK
+										}
 										target='_blank'
 										icon={<IconExternalLink size={16} />}
 									/>

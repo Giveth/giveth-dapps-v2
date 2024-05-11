@@ -1,33 +1,27 @@
-import {
-	B,
-	P,
-	neutralColors,
-	Flex,
-	FlexCenter,
-} from '@giveth/ui-design-system';
+import { B, P, neutralColors, Flex } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
+import { isAddress } from 'viem';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './RecurringDonationCard';
 import CryptoDonation from './CryptoDonation';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
 
-enum ETabs {
-	ONE_TIME,
-	RECURRING,
+export enum ETabs {
+	ONE_TIME = 'on-time',
+	RECURRING = 'recurring',
 }
 
 export const DonationCard = () => {
 	const router = useRouter();
-	const defaultTab =
-		router.query.tab === 'recurring' ? ETabs.RECURRING : ETabs.ONE_TIME;
-
-	const [tab, setTab] = useState(defaultTab);
+	const [tab, setTab] = useState(
+		router.query.tab === ETabs.RECURRING ? ETabs.RECURRING : ETabs.ONE_TIME,
+	);
 	const { project } = useDonateData();
 	const { formatMessage } = useIntl();
 
@@ -39,6 +33,10 @@ export const DonationCard = () => {
 				address.chainType === ChainType.EVM &&
 				address.networkId === config.OPTIMISM_NETWORK_NUMBER,
 		);
+
+	const isOwnerOnEVM =
+		project?.adminUser.walletAddress &&
+		isAddress(project.adminUser.walletAddress);
 
 	return (
 		<DonationCardWrapper>
@@ -52,7 +50,7 @@ export const DonationCard = () => {
 						setTab(ETabs.ONE_TIME);
 						router.push(
 							{
-								query: { ...router.query, tab: 'on-time' },
+								query: { ...router.query, tab: ETabs.ONE_TIME },
 							},
 							undefined,
 							{ shallow: true },
@@ -63,7 +61,7 @@ export const DonationCard = () => {
 						id: 'label.one_time_donation',
 					})}
 				</Tab>
-				{hasOpAddress ? (
+				{hasOpAddress && isOwnerOnEVM ? (
 					<Tab
 						$selected={tab === ETabs.RECURRING}
 						onClick={() => {
@@ -72,7 +70,7 @@ export const DonationCard = () => {
 								{
 									query: {
 										...router.query,
-										tab: 'recurring',
+										tab: ETabs.RECURRING,
 									},
 								},
 								undefined,
@@ -106,16 +104,7 @@ export const DonationCard = () => {
 			</Flex>
 			<TabWrapper>
 				{tab === ETabs.ONE_TIME && <CryptoDonation />}
-				{tab === ETabs.RECURRING &&
-					(isRecurringActive ? (
-						<RecurringDonationCard />
-					) : (
-						<FlexCenter>
-							{formatMessage({
-								id: 'label.this_feature_will_be_available_soon',
-							})}
-						</FlexCenter>
-					))}
+				{tab === ETabs.RECURRING && <RecurringDonationCard />}
 			</TabWrapper>
 		</DonationCardWrapper>
 	);

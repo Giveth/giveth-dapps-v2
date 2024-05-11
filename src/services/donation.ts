@@ -14,8 +14,10 @@ import { gqlRequest } from '@/helpers/requests';
 import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import config, { SENTRY_URGENT } from '@/configuration';
 import {
+	CREATE_DRAFT_RECURRING_DONATION,
 	CREATE_RECURRING_DONATION,
 	UPDATE_RECURRING_DONATION,
+	UPDATE_RECURRING_DONATION_BY_ID,
 	UPDATE_RECURRING_DONATION_STATUS,
 } from '@/apollo/gql/gqlSuperfluid';
 import { ERecurringDonationStatus } from '@/apollo/types/types';
@@ -125,14 +127,61 @@ export const fetchUserStreams = async (address: Address) => {
 	return _tokenStreams;
 };
 
-export interface ICreateRecurringDonation {
+interface ICreateRecurringDonationBase {
 	projectId: number;
 	chainId: number;
-	txHash: string;
 	superToken: IToken;
 	flowRate: bigint;
 	anonymous?: boolean;
 	isBatch?: boolean;
+}
+
+export interface ICreateDraftRecurringDonation
+	extends ICreateRecurringDonationBase {
+	isForUpdate?: boolean;
+	recurringDonationId?: string;
+}
+
+export const createDraftRecurringDonation = async ({
+	chainId,
+	projectId,
+	flowRate,
+	superToken,
+	anonymous,
+	isBatch,
+	isForUpdate,
+}: ICreateDraftRecurringDonation) => {
+	let draftDonationId = 0;
+	try {
+		const { data } = await client.mutate({
+			mutation: CREATE_DRAFT_RECURRING_DONATION,
+			variables: {
+				projectId,
+				networkId: chainId,
+				flowRate: flowRate.toString(),
+				currency: superToken.underlyingToken?.symbol || 'ETH',
+				anonymous,
+				isBatch,
+				isForUpdate,
+			},
+		});
+		draftDonationId = parseInt(data.createDraftRecurringDonation);
+		console.log('draftDonationId', draftDonationId);
+		return draftDonationId;
+	} catch (error) {
+		captureException(error, {
+			tags: {
+				section: SENTRY_URGENT,
+			},
+		});
+		console.log('createDraftRecurringDonation error: ', error);
+		throw error;
+	}
+};
+
+export interface ICreateRecurringDonation extends ICreateRecurringDonationBase {
+	draftDonationId: number;
+	txHash: string;
 }
 
 export const createRecurringDonation = async ({
@@ -172,16 +221,33 @@ export const createRecurringDonation = async ({
 	}
 };
 
+export interface IUpdateRecurringDonation extends ICreateRecurringDonation {
+	recurringDonationId?: string;
+}
+
 export const updateRecurringDonation = async (
-	props: ICreateRecurringDonation,
+	props: IUpdateRecurringDonation,
 ) => {
 	let donationId = 0;
-	const { chainId, txHash, projectId, flowRate, superToken, anonymous } =
-		props;
+	const {
+		recurringDonationId,
+		chainId,
+		txHash,
+		projectId,
+		flowRate,
+		superToken,
+		anonymous,
+	} = props;
 	try {
+		const _recurringDonationId = recurringDonationId
+			? parseInt(recurringDonationId)
+			: undefined;
 		const { data } = await client.mutate({
-			mutation: UPDATE_RECURRING_DONATION,
+			mutation: recurringDonationId
+				? UPDATE_RECURRING_DONATION_BY_ID
+				: UPDATE_RECURRING_DONATION,
 			variables: {
+				recurringDonationId: _recurringDonationId,
 				projectId,
 				networkId: chainId,
 				txHash,
@@ -190,7 +256,10 @@ export const updateRecurringDonation = async (
 				anonymous,
 			},
 		});
-		donationId = parseInt(data.updateRecurringDonationParams.id);
+		const id = recurringDonationId
+			? data.updateRecurringDonationParamsById.id
+			: data.updateRecurringDonationParams.id;
+		donationId = parseInt(id);
 		console.log('donationId', donationId);
 		return donationId;
 	} catch (error: any) {
@@ -209,19 +278,26 @@ export const updateRecurringDonation = async (
 };
 
 export interface IEndRecurringDonation {
+	recurringDonationId: number;
 	projectId: number;
 	chainId: number;
 	txHash: string;
 	superToken: IToken;
 }
 
-export const endRecurringDonation = async (props: IEndRecurringDonation) => {
-	let donationId = 0;
-	const { chainId, txHash, projectId, superToken } = props;
+export const endRecurringDonation = async ({
+	chainId,
+	txHash,
+	projectId,
+	superToken,
+	recurringDonationId,
+}: IEndRecurringDonation) => {
+	let donationUpdateId = 0;
 	try {
 		const { data } = await client.mutate({
-			mutation: UPDATE_RECURRING_DONATION,
+			mutation: UPDATE_RECURRING_DONATION_BY_ID,
 			variables: {
+				recurringDonationId,
 				projectId,
 				networkId: chainId,
 				txHash,
@@ -229,8 +305,8 @@ export const endRecurringDonation = async (props: IEndRecurringDonation) => {
 				status: ERecurringDonationStatus.ENDED,
 			},
 		});
-		donationId = parseInt(data.updateRecurringDonationParams.id);
-		return donationId;
+		donationUpdateId = parseInt(data.updateRecurringDonationParamsById.id);
+		return donationUpdateId;
 	} catch (error: any) {
 		captureException(error, {
 			tags: {

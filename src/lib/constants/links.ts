@@ -23,7 +23,7 @@ const links = {
 	GIVBACK_TOKENS_FORUM: DISCOURSE + 't/givbacks-token-list/253',
 	GITHUB: 'https://github.com/Giveth/',
 	TELEGRAM: 'https://t.me/Givethio',
-	MEDIUM: 'https://medium.com/giveth/',
+	MEDIUM: 'https://blog.giveth.io',
 	TWITTER: 'https://twitter.com/giveth',
 	YOUTUBE: 'https://www.youtube.com/givethio',
 	REDDIT: 'https://reddit.com/r/giveth',
@@ -70,6 +70,10 @@ const links = {
 	ALLO_PROTOCOL: 'https://docs.allo.gitcoin.co/',
 	GIVERNANCE_VOTING: 'https://snapshot.org/#/giv.eth',
 	SUPERFLUID_DASHBOARD: 'https://app.superfluid.finance/',
+	STAKE_TOGETHER_MAINNET:
+		'https://app.staketogether.org/en/usd/ethereum/product/staking/eth-staking?projectAddress=0xf102fe6d6cf7f98c7c4ca45eb082caaaaa951d52',
+	STAKE_TOGETHER_OPTIMISM:
+		'https://app.staketogether.org/en/usd/optimism/product/staking/eth-restaking?projectAddress=0x93E79499b00a2fdAAC38e6005B0ad8E88b177346',
 };
 
 if (!isProduction) {

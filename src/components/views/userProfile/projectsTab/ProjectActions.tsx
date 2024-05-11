@@ -17,7 +17,8 @@ import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
 import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
 import { capitalizeAllWords } from '@/lib/helpers';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
+import { findAnchorContractAddress } from '@/helpers/superfluid';
 
 interface IProjectActions {
 	project: IProject;
@@ -40,10 +41,9 @@ const ProjectActions = (props: IProjectActions) => {
 
 	const [isHover, setIsHover] = useState(false);
 
-	const optimismAddress = project.addresses?.find(
-		address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
-	)?.address;
-	const hasOptimismAddress = optimismAddress !== undefined;
+	const anchorContractAddress = findAnchorContractAddress(
+		project.anchorContracts,
+	);
 
 	const { chain } = useAccount();
 	const { switchChain } = useSwitchChain();
@@ -79,7 +79,9 @@ const ProjectActions = (props: IProjectActions) => {
 	];
 
 	const recurringDonationOption: IOption = {
-		label: 'Claim Recurring donation',
+		label: formatMessage({
+			id: 'label.claim_recurring_donation',
+		}),
 		icon: <IconArrowDownCircle16 />,
 		cb: () => {
 			if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
@@ -93,17 +95,15 @@ const ProjectActions = (props: IProjectActions) => {
 		},
 	};
 
-	isRecurringActive &&
-		hasOptimismAddress &&
-		options.push(recurringDonationOption);
+	anchorContractAddress && options.push(recurringDonationOption);
 
 	const dropdownStyle = {
 		padding: '4px 16px',
 		borderRadius: '8px',
-		background: isHover && !isRecurringActive ? 'white' : '',
+		background: '',
 	};
 
-	return isRecurringActive ? (
+	return (
 		<Actions
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
@@ -121,25 +121,6 @@ const ProjectActions = (props: IProjectActions) => {
 				/>
 			)}
 		</Actions>
-	) : (
-		<ActionsOld
-			onMouseEnter={() => setIsHover(true)}
-			onMouseLeave={() => setIsHover(false)}
-			$isOpen={isHover}
-			$isCancelled={isCancelled}
-			size='Big'
-		>
-			{isCancelled ? (
-				<CancelledWrapper>CANCELLED</CancelledWrapper>
-			) : (
-				<Dropdown
-					style={dropdownStyle}
-					label='Actions'
-					options={options}
-					stickToRight
-				/>
-			)}
-		</ActionsOld>
 	);
 };
 

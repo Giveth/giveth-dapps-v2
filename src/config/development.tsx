@@ -44,8 +44,6 @@ const SEPT_8TH_2022 = 1662595200000;
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x2f2c819210191750F2E11F7CfC5664a0eB4fd5e6';
 
-const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
-
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
@@ -101,10 +99,7 @@ const EVM_CHAINS = [
 	classic,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [];
-if (isSolanaEnabled) {
-	NON_EVM_CHAINS.push(SOLANA_NETWORK);
-}
+const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -387,6 +382,7 @@ const config: EnvConfig = {
 					id: OPTIMISM_GIV_TOKEN_ADDRESS,
 					name: 'Giveth',
 					symbol: 'GIV',
+					coingeckoId: 'giveth',
 				},
 				decimals: 18,
 				id: '0xdfd824f6928b9776c031f7ead948090e2824ce8b',
@@ -401,6 +397,7 @@ const config: EnvConfig = {
 					symbol: 'ETH',
 					decimals: 18,
 					id: '0x0000000000000000000000000000000000000000',
+					coingeckoId: 'ethereum',
 				},
 				decimals: 18,
 				id: '0x0043d7c85c8b96a49a72a92c0b48cdc4720437d7',

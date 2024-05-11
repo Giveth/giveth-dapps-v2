@@ -13,12 +13,18 @@ import { useIntl } from 'react-intl';
 import { useQuery } from '@apollo/client';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
 import { useProjectsContext } from '@/context/projects.context';
-import { formatDate } from '@/lib/helpers';
+import { formatDate, formatUSD, thousandsSeparator } from '@/lib/helpers';
 
 export const ActiveQFRoundStats = () => {
 	const { formatMessage } = useIntl();
 	const { qfRounds } = useProjectsContext();
 	const activeRound = qfRounds.find(round => round.isActive);
+	const {
+		allocatedFundUSD,
+		allocatedFundUSDPreferred,
+		allocatedTokenSymbol,
+		allocatedFund,
+	} = activeRound || {};
 	const { data } = useQuery(FETCH_QF_ROUND_STATS, {
 		variables: { slug: activeRound?.slug },
 	});
@@ -32,7 +38,13 @@ export const ActiveQFRoundStats = () => {
 						{formatMessage({ id: 'label.matching_pool' })}
 					</ItemTitle>
 					<ItemValue weight={500}>
-						{data?.qfRoundStats?.matchingPool || '--'}&nbsp;$
+						{allocatedFundUSDPreferred && '$'}
+						{thousandsSeparator(
+							allocatedFundUSDPreferred
+								? allocatedFundUSD
+								: allocatedFund,
+						) || ' --'}{' '}
+						{!allocatedFundUSDPreferred && allocatedTokenSymbol}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
@@ -40,8 +52,9 @@ export const ActiveQFRoundStats = () => {
 						{formatMessage({ id: 'label.donations' })}
 					</ItemTitle>
 					<ItemValue weight={500}>
-						$&nbsp;
-						{data?.qfRoundStats?.allDonationsUsdValue || '--'}
+						$
+						{formatUSD(data?.qfRoundStats?.allDonationsUsdValue) ||
+							' --'}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
@@ -54,14 +67,14 @@ export const ActiveQFRoundStats = () => {
 				</ItemContainer>
 				<Flex $flexDirection='column'>
 					<Caption color={neutralColors.gray[700]}>
-						Round started
+						Round start
 					</Caption>
 					<B>
 						{activeRound?.endDate
 							? formatDate(new Date(activeRound.beginDate))
 							: '--'}
 					</B>
-					<Caption color={neutralColors.gray[700]}>Ends on</Caption>
+					<Caption color={neutralColors.gray[700]}>Round end</Caption>
 					<B>
 						{activeRound?.endDate
 							? formatDate(new Date(activeRound.endDate))

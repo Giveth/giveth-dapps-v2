@@ -30,8 +30,6 @@ import IconArbitrum from '@/components/Icons/Arbitrum';
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
 
-const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
-
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
 const GNOSIS_NETWORK_NUMBER = 100; // xDAI
@@ -64,10 +62,7 @@ const EVM_CHAINS = [
 	classic,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [];
-if (isSolanaEnabled) {
-	NON_EVM_CHAINS.push(SOLANA_NETWORK);
-}
+const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
@@ -117,7 +112,7 @@ const config: EnvConfig = {
 		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
 
 		GIV_TOKEN_ADDRESS: '0x900db999074d9277c5da2a43f252d74366230da0',
-		GIV_BUY_LINK: 'https://swap.giveth.io/#/1/swap/ETH/GIV',
+		GIV_BUY_LINK: 'https://swap.cow.fi/#/1/swap/ETH/GIV',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		WETH_TOKEN_ADDRESS: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
 		TOKEN_DISTRO_ADDRESS: '0x87dE995F6744B75bBe0255A973081142aDb61f4d',
@@ -287,7 +282,7 @@ const config: EnvConfig = {
 		chainLogo: (logoSize = 24) => <IconGnosisChain size={logoSize} />,
 
 		GIV_TOKEN_ADDRESS: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
-		GIV_BUY_LINK: 'https://swap.giveth.io/#/100/swap/XDAI/GIV',
+		GIV_BUY_LINK: 'https://swap.cow.fi/#/100/swap/WXDAI/GIV',
 		gGIV_TOKEN_ADDRESS: '0xfFBAbEb49be77E5254333d5fdfF72920B989425f',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		MERKLE_ADDRESS: '0xFad63adEFb8203F7605F25f6a921c8bf45604A5e',
@@ -303,15 +298,6 @@ const config: EnvConfig = {
 			description: '100% GIV',
 			unit: 'GIV',
 		},
-
-		// GIV: {
-		// 	network: GNOSIS_NETWORK_NUMBER,
-		// 	LM_ADDRESS: '0xD93d3bDBa18ebcB3317a57119ea44ed2Cf41C2F2',
-		// 	GARDEN_ADDRESS: '0x24f2d06446af8d6e89febc205e7936a602a87b60',
-		// 	BUY_LINK:
-		// 		'https://app.honeyswap.org/#/swap?outputCurrency=0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
-		// 	platformTitle: 'GIVPOWER',
-		// },
 
 		pools: [
 			{
@@ -441,7 +427,7 @@ const config: EnvConfig = {
 			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
-			'https://app.uniswap.org/#/swap?chain=optimism&outputCurrency=0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98',
+			'https://velodrome.finance/swap?from=eth&to=0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
 		tokenAddressOnUniswapV2: '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75',
 		TOKEN_DISTRO_ADDRESS: '0xe3ac7b3e6b4065f4765d76fdc215606483bf3bd1',
 		uniswapV2Subgraph: '',
@@ -458,7 +444,7 @@ const config: EnvConfig = {
 			unit: 'GIV',
 		},
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
-			'0xb15c8df1a742636a78b0a2ca9dff87c37693862a',
+			'0x5430757bc19c87ec562e4660e56af6cac324b50a',
 		superFluidSubgraph:
 			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet',
 		SUPER_FLUID_TOKENS: [
@@ -468,6 +454,7 @@ const config: EnvConfig = {
 					id: '0x4200000000000000000000000000000000000042',
 					name: 'Optimism',
 					symbol: 'OP',
+					coingeckoId: 'optimism',
 				},
 				decimals: 18,
 				id: '0x1828bff08bd244f7990eddcd9b19cc654b33cdb4',
@@ -482,6 +469,7 @@ const config: EnvConfig = {
 					symbol: 'ETH',
 					decimals: 18,
 					id: '0x0000000000000000000000000000000000000000',
+					coingeckoId: 'ethereum',
 				},
 				decimals: 18,
 				id: '0x4ac8bd1bdae47beef2d1c6aa62229509b962aa0d',
@@ -496,6 +484,7 @@ const config: EnvConfig = {
 					id: '0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
 					name: 'Giveth Token',
 					symbol: 'GIV',
+					coingeckoId: 'giveth',
 				},
 				decimals: 18,
 				id: '0x4cab5b9930210e2edc6a905b9c75d615872a1a7e',
@@ -510,6 +499,7 @@ const config: EnvConfig = {
 					id: '0xda10009cbd5d07dd0cecc66161fc93d7c9000da1',
 					name: 'Dai Stablecoin',
 					symbol: 'DAI',
+					coingeckoId: 'dai',
 				},
 				decimals: 18,
 				id: '0x7d342726b69c28d942ad8bfe6ac81b972349d524',
@@ -524,6 +514,7 @@ const config: EnvConfig = {
 					id: '0x7f5c764cbc14f9669b88837ca1490cca17c31607',
 					name: 'USD Coin',
 					symbol: 'USDC',
+					coingeckoId: 'usd-coin',
 				},
 				decimals: 18,
 				id: '0x8430f084b939208e2eded1584889c9a66b90562f',

@@ -130,6 +130,7 @@ const UnStakeInnerModal: FC<IUnStakeModalProps> = ({
 
 						<InnerModal>
 							<StakingAmountInput
+								amount={amount}
 								setAmount={setAmount}
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}

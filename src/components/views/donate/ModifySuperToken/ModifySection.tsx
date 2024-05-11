@@ -11,7 +11,7 @@ import {
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
-import { Dispatch, SetStateAction, useState, type FC } from 'react';
+import { Dispatch, SetStateAction, type FC } from 'react';
 import { type GetBalanceReturnType } from '@wagmi/core';
 import { formatUnits } from 'viem';
 import { AmountInput } from '@/components/AmountInput/AmountInput';
@@ -21,6 +21,7 @@ import { Spinner } from '@/components/Spinner';
 import { TokenIcon } from '../TokenIcon/TokenIcon';
 import { IToken } from '@/types/superFluid';
 import { truncateToDecimalPlaces } from '@/lib/helpers';
+import { findTokenByAddress } from '@/helpers/superfluid';
 
 export enum EModifySectionPlace {
 	DEPOSIT = 'deposit',
@@ -30,65 +31,54 @@ export enum EModifySectionPlace {
 interface IModifySectionProps {
 	titleLabel: string;
 	token?: IToken;
+	amount: bigint;
 	setAmount: Dispatch<SetStateAction<bigint>>;
 	balance?: GetBalanceReturnType;
 	refetch: any;
 	isRefetching: boolean;
 	error?: string;
-	minRemainingBalance?: bigint;
+	maxAmount: bigint;
 	tooltipText?: string;
 	modifySectionPlace: EModifySectionPlace;
 }
+
 export const ModifySection: FC<IModifySectionProps> = ({
 	titleLabel,
 	token,
+	amount,
 	setAmount,
 	balance,
 	refetch,
 	isRefetching,
 	error,
-	minRemainingBalance = 0n,
+	maxAmount,
 	tooltipText,
 	modifySectionPlace,
 }) => {
 	const { formatMessage } = useIntl();
-	const [displayAmount, setDisplayAmount] = useState('');
+
+	const handleSetMaxAmount = () => {
+		if (!balance || !balance.value) return; // If balance is not available, return
+		setAmount(balance.value); // Set the amount to the balance value
+	};
+
+	const _token = findTokenByAddress(token?.id);
 	const ProperGlink =
 		modifySectionPlace === EModifySectionPlace.DEPOSIT
 			? CustomGLink
 			: GLink;
 
-	const handleSetMaxAmount = () => {
-		if (balance && balance.value !== undefined) {
-			const maxAmountDisplay = truncateToDecimalPlaces(
-				formatUnits(
-					balance.value - minRemainingBalance,
-					balance.decimals,
-				),
-				6,
-			).toString(); // Convert your balance value to string properly
-			setDisplayAmount(maxAmountDisplay); // Update the display amount
-			setAmount(balance.value); // Set the amount to the balance value
-		}
-	};
-
 	return (
 		<TopUpSection $flexDirection='column' gap='8px'>
 			<Flex gap='8px' $alignItems='center'>
-				<Caption $medium>
-					{formatMessage({
-						id: titleLabel,
-					})}
-				</Caption>
+				<Caption $medium>{formatMessage({ id: titleLabel })}</Caption>
 				<IconWithTooltip
 					icon={<IconHelpFilled16 />}
 					direction='right'
 					align='bottom'
 				>
 					<FlowRateTooltip>
-						{formatMessage({
-							id: tooltipText,
-						})}
+						{formatMessage({ id: tooltipText })}
 					</FlowRateTooltip>
 				</IconWithTooltip>
 			</Flex>
@@ -100,9 +90,9 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					<Flex gap='8px' $alignItems='center'>
 						<TokenIcon
 							symbol={
-								token?.isSuperToken
-									? token.underlyingToken?.symbol
-									: token?.symbol
+								_token?.isSuperToken
+									? _token?.underlyingToken.symbol
+									: _token?.symbol
 							}
 							size={24}
 						/>
@@ -110,40 +100,26 @@ export const ModifySection: FC<IModifySectionProps> = ({
 					</Flex>
 				</SelectTokenWrapper>
 				<Input
+					amount={amount}
 					setAmount={setAmount}
-					disabled={token === undefined}
+					disabled={!token}
 					decimals={token?.decimals}
-					displayAmount={
-						modifySectionPlace === EModifySectionPlace.DEPOSIT
-							? displayAmount
-							: undefined
-					}
-					setDisplayAmount={
-						modifySectionPlace === EModifySectionPlace.DEPOSIT
-							? setDisplayAmount
-							: undefined
-					}
 				/>
 			</InputWrapper>
 			<Flex gap='4px'>
 				<ProperGlink
 					size='Small'
-					onClick={() =>
-						modifySectionPlace === EModifySectionPlace.DEPOSIT &&
-						handleSetMaxAmount()
+					onClick={
+						modifySectionPlace === EModifySectionPlace.DEPOSIT
+							? handleSetMaxAmount
+							: undefined
 					}
 				>
-					{formatMessage({
-						id: 'label.available',
-					})}
-					:{' '}
+					{formatMessage({ id: 'label.available' })}:
 					{balance
 						? truncateToDecimalPlaces(
-								formatUnits(
-									balance.value - minRemainingBalance,
-									balance.decimals,
-								),
-								6,
+								formatUnits(maxAmount, balance.decimals),
+								balance.decimals / 3,
 							)
 						: '--'}
 				</ProperGlink>
@@ -155,6 +131,7 @@ export const ModifySection: FC<IModifySectionProps> = ({
 	);
 };
 
+// Styled Components
 const TopUpSection = styled(Flex)``;
 
 const SelectTokenWrapper = styled(Flex)`
@@ -162,12 +139,7 @@ const SelectTokenWrapper = styled(Flex)`
 	gap: 16px;
 	padding: 13px 16px;
 `;
-
-interface IInputWrapper {
-	$hasError: boolean;
-}
-
-const InputWrapper = styled(Flex)<IInputWrapper>`
+const InputWrapper = styled(Flex)<{ $hasError: boolean }>`
 	border: 2px solid
 		${props =>
 			props.$hasError

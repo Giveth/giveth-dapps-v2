@@ -22,6 +22,7 @@ import { EModifySuperTokenSteps, actionButtonLabel } from './common';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { EToastType } from '@/components/toasts/InlineToast';
+import { ensureCorrectNetwork } from '@/helpers/network';
 
 interface IDepositSuperTokenProps extends IModifySuperTokenInnerModalProps {
 	token?: IToken;
@@ -34,7 +35,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	tokenStreams,
 	step,
 	setStep,
-	setShowModal,
+	closeModal,
 	refreshBalance,
 }) => {
 	const [amount, setAmount] = useState(0n);
@@ -73,8 +74,9 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	const onApprove = async () => {
 		console.log('Approve', amount, address, superToken, token);
 		if (!address || !superToken || !token) return;
-		setStep(EModifySuperTokenSteps.APPROVING);
 		try {
+			setStep(EModifySuperTokenSteps.APPROVING);
+			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
 			const approve = await approveERC20tokenTransfer(
 				amount,
 				address,
@@ -95,8 +97,9 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 	};
 
 	const onDeposit = async () => {
-		setStep(EModifySuperTokenSteps.DEPOSITING);
 		try {
+			setStep(EModifySuperTokenSteps.DEPOSITING);
+			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
 			if (!address) {
 				throw new Error('address not found1');
 			}
@@ -159,7 +162,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 		} else if (step === EModifySuperTokenSteps.DEPOSIT) {
 			onDeposit();
 		} else if (step === EModifySuperTokenSteps.DEPOSIT_CONFIRMED) {
-			setShowModal(false);
+			closeModal();
 		}
 	};
 
@@ -170,6 +173,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 					<ModifyWrapper>
 						<ModifySection
 							titleLabel='label.top_up_stream_balance'
+							amount={amount}
 							setAmount={setAmount}
 							token={token}
 							balance={balance}
@@ -177,6 +181,7 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 							isRefetching={isRefetching}
 							tooltipText='tooltip.deposit_stream_balance'
 							modifySectionPlace={EModifySectionPlace.DEPOSIT}
+							maxAmount={balance?.value || 0n}
 						/>
 						<StreamInfo
 							tokenStreams={tokenStreams}
@@ -190,7 +195,9 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 				</>
 			) : (
 				<Flex $flexDirection='column' gap='16px'>
-					<DepositSteps modifyTokenState={step} />
+					{superToken?.symbol !== 'ETHx' && (
+						<DepositSteps modifyTokenState={step} />
+					)}
 					<Item
 						title='Deposit into your stream balance'
 						amount={amount}
@@ -205,6 +212,12 @@ export const DepositSuperToken: FC<IDepositSuperTokenProps> = ({
 						symbol={token?.symbol || ''}
 					/>
 				</Flex>
+			)}
+			{step === EModifySuperTokenSteps.DEPOSIT_CONFIRMED && (
+				<ModifyInfoToast
+					toastType={EToastType.Success}
+					withdrawalType='deposit'
+				/>
 			)}
 			<Button
 				label={formatMessage({ id: actionButtonLabel[step] })}

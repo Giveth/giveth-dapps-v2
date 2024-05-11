@@ -6,12 +6,6 @@ export const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
 
 const envConfig = isProduction ? production : development;
 
-const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
-export const isProjectScoringActive =
-	process.env.NEXT_PUBLIC_PROJECT_SCORING === 'true';
-export const isRecurringActive =
-	process.env.NEXT_PUBLIC_RECURRING_DONATION === 'true';
-
 export const SENTRY_URGENT = 'urgent';
 
 export const QF_SPECIFIC_CATEGORIES = ['polygon'];
@@ -28,9 +22,7 @@ const EVM_NETWORKS_CONFIG = {
 
 const NON_EVM_NETWORKS_CONFIG: { [key: string]: NonEVMNetworkConfig } = {};
 
-if (isSolanaEnabled) {
-	NON_EVM_NETWORKS_CONFIG[ChainType.SOLANA] = envConfig.SOLANA_CONFIG;
-}
+NON_EVM_NETWORKS_CONFIG[ChainType.SOLANA] = envConfig.SOLANA_CONFIG;
 
 const config: GlobalConfig = {
 	TOKEN_NAME: 'DRGIV',
@@ -49,7 +41,6 @@ const config: GlobalConfig = {
 	INFURA_API_KEY: process.env.NEXT_PUBLIC_INFURA_API_KEY,
 	BLOCKNATIVE_DAPP_ID: process.env.BLOCKNATIVE_DAPP_ID,
 	GOOGLE_MAPS_API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
-	ENABLE_SOLANA: isSolanaEnabled,
 };
 
 export default config;

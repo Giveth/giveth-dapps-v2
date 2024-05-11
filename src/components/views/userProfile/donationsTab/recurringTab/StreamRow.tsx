@@ -12,6 +12,7 @@ import { limitFraction } from '@/helpers/number';
 import { ModifySuperTokenModal } from '@/components/views/donate/ModifySuperToken/ModifySuperTokenModal';
 import config from '@/configuration';
 import { countActiveStreams } from '@/helpers/donate';
+import { findTokenByAddress } from '@/helpers/superfluid';
 
 interface IStreamRowProps {
 	tokenStream: ISuperfluidStream[];
@@ -29,26 +30,33 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 		token: tokenStream[0].token.id,
 		address: address,
 		chainId: config.OPTIMISM_NETWORK_NUMBER,
-		// watch: true,
-		// cacheTime: 5_000,
 	});
 
-	const underlyingSymbol =
-		tokenStream[0].token.underlyingToken?.symbol || 'ETH';
+	const token = findTokenByAddress(tokenStream[0].token.id);
+	const underlyingSymbol = token?.underlyingToken?.symbol || '';
 	const totalFlowRate = tokenStream.reduce(
 		(acc, curr) => acc + BigInt(curr.currentFlowRate),
 		0n,
 	);
 	const monthlyFlowRate = totalFlowRate * ONE_MONTH_SECONDS;
 	const { symbol, decimals } = tokenStream[0].token;
-	const runOutMonth = balance?.value ? balance?.value / monthlyFlowRate : 0n;
+	const runOutMonth =
+		monthlyFlowRate > 0 && balance?.value
+			? balance?.value / monthlyFlowRate
+			: 0n;
 	const activeStreamCount = countActiveStreams(tokenStream);
 
 	return (
 		<RowWrapper>
 			<TableCell>
 				<TokenIcon symbol={underlyingSymbol} />
-				<P>{limitFraction(balance?.formatted || '0')}</P>
+				<P>
+					{balance && balance.value
+						? limitFraction(
+								formatUnits(balance.value, balance.decimals),
+							)
+						: '0'}
+				</P>
 				<P>{symbol}</P>
 			</TableCell>
 			<TableCell>
@@ -72,7 +80,9 @@ export const StreamRow: FC<IStreamRowProps> = ({ tokenStream }) => {
 				)}
 			</TableCell>
 			<TableCell>
-				{runOutMonth < 1 ? (
+				{totalFlowRate === 0n ? (
+					'--'
+				) : runOutMonth < 1 ? (
 					' < 1 Month '
 				) : (
 					<>

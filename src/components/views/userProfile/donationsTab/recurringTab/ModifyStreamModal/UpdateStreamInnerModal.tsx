@@ -15,6 +15,8 @@ import { getEthersProvider, getEthersSigner } from '@/helpers/ethers';
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import { showToastError } from '@/lib/helpers';
 import {
+	ICreateDraftRecurringDonation,
+	createDraftRecurringDonation,
 	updateRecurringDonation,
 	updateRecurringDonationStatus,
 } from '@/services/donation';
@@ -23,6 +25,8 @@ import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
 import { TXLink } from './TXLink';
 import { useProfileDonateTabData } from '../ProfileDonateTab.context';
 import { ERecurringDonationStatus } from '@/apollo/types/types';
+import { findAnchorContractAddress } from '@/helpers/superfluid';
+import { ensureCorrectNetwork } from '@/helpers/network';
 
 interface IModifyStreamInnerModalProps extends IModifyStreamModalProps {
 	step: EDonationSteps;
@@ -53,8 +57,10 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 	const onDonate = async () => {
 		setStep(EDonationSteps.DONATING);
 		try {
-			const projectAnchorContract =
-				donation.project.anchorContracts[0]?.address;
+			await ensureCorrectNetwork(config.OPTIMISM_NETWORK_NUMBER);
+			const projectAnchorContract = findAnchorContractAddress(
+				donation.project.anchorContracts,
+			);
 			if (!projectAnchorContract) {
 				throw new Error('Project anchor address not found');
 			}
@@ -94,6 +100,20 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 
 			let projectFlowOp = superToken.updateFlow(options);
 
+			const projectDraftDonationInfo: ICreateDraftRecurringDonation = {
+				recurringDonationId: donation.id,
+				projectId: +donation.project.id,
+				anonymous: donation.anonymous,
+				chainId: config.OPTIMISM_NETWORK_NUMBER,
+				flowRate: _flowRatePerSec,
+				superToken: token,
+				isForUpdate: true,
+			};
+
+			const projectDraftDonationId = await createDraftRecurringDonation(
+				projectDraftDonationInfo,
+			);
+
 			const tx = await projectFlowOp.exec(signer);
 			setTx(tx.hash);
 
@@ -101,12 +121,9 @@ export const UpdateStreamInnerModal: FC<IModifyStreamInnerModalProps> = ({
 			// saving project donation to backend
 			try {
 				const projectDonationInfo = {
-					projectId: +donation.project.id,
-					anonymous: donation.anonymous,
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
+					...projectDraftDonationInfo,
 					txHash: tx.hash,
-					flowRate: _flowRatePerSec,
-					superToken: token,
+					draftDonationId: projectDraftDonationId,
 				};
 				console.log('Start Update Project Donation Info');
 				projectDonationId =

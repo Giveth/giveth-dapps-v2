@@ -1,4 +1,4 @@
-import { B, Lead, Container, Row } from '@giveth/ui-design-system';
+import { B, Lead, Container, Row, H2, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -7,11 +7,11 @@ import { getNowUnixMS } from '@/helpers/time';
 import { durationToString } from '@/lib/helpers';
 import {
 	BannerContainer,
-	StyledCol,
-	Name,
+	ActiveStyledCol,
 	Desc,
 	Title,
 	Sponsor,
+	SmallerSponsor,
 } from './common';
 
 enum ERoundStatus {
@@ -82,11 +82,13 @@ export const ActiveQFProjectsBanner = () => {
 			/>
 			<Container>
 				<Row>
-					<StyledCol xs={12} md={6}>
+					<ActiveStyledCol xs={12} md={6}>
 						<Title weight={700}>
-							{formatMessage({ id: 'label.quadratic_funding' })}
+							{activeRound ? activeRound.name : null}
 						</Title>
-						<Name>{activeRound ? activeRound.name : null}</Name>
+						<H2>
+							{formatMessage({ id: 'label.quadratic_funding' })}
+						</H2>
 						{(state === ERoundStatus.NOT_STARTED ||
 							state === ERoundStatus.RUNNING) && (
 							<Desc>
@@ -105,16 +107,109 @@ export const ActiveQFProjectsBanner = () => {
 								</B>
 							</Desc>
 						)}
-					</StyledCol>
-					<StyledCol xs={12} md={6}>
-						<Sponsor
-							src={'/images/banners/qf-round/sponsor.svg'}
-							style={{ objectFit: 'contain' }}
-							alt='QF Banner'
-						/>
-					</StyledCol>
+					</ActiveStyledCol>
+					<ActiveStyledCol
+						xs={12}
+						md={6}
+						style={{ alignItems: 'center' }}
+					>
+						<Flex>
+							{topSponsors.map(s => (
+								<SmallerSponsor
+									key={s.title}
+									src={s.image}
+									alt={s.title}
+									width={120}
+									height={120}
+								/>
+							))}
+						</Flex>
+						<Flex>
+							{sponsors.map(s => (
+								<Sponsor
+									key={s.title}
+									src={s.image}
+									alt={s.title}
+									width={179}
+									height={188}
+								/>
+							))}
+						</Flex>
+						<Flex>
+							{bottomSponsors.map(s => (
+								<SmallerSponsor
+									key={s.title}
+									src={s.image}
+									alt={s.title}
+									width={120}
+									height={120}
+								/>
+							))}
+						</Flex>
+					</ActiveStyledCol>
 				</Row>
 			</Container>
 		</BannerContainer>
 	);
 };
+
+const sponsors = [
+	{
+		title: '@PublicNouns',
+		image: '/images/banners/qf-round/sponsor1.svg',
+	},
+	{
+		title: '@OctantApp',
+		image: '/images/banners/qf-round/sponsor2.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor4.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor5.svg',
+	},
+];
+
+const topSponsors = [
+	{
+		title: '@PublicNouns',
+		image: '/images/banners/qf-round/sponsor3.svg',
+	},
+	{
+		title: '@OctantApp',
+		image: '/images/banners/qf-round/sponsor6.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor7.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor8.svg',
+	},
+];
+
+const bottomSponsors = [
+	{
+		title: '@PublicNouns',
+		image: '/images/banners/qf-round/sponsor9.svg',
+	},
+	{
+		title: '@OctantApp',
+		image: '/images/banners/qf-round/sponsor10.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor11.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor12.svg',
+	},
+	{
+		title: '@Arbitrum',
+		image: '/images/banners/qf-round/sponsor13.svg',
+	},
+];

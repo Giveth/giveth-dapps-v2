@@ -1,19 +1,15 @@
 export enum EMainSocials {
 	Twitter = 'X (Twitter)',
-	Facebook = 'Facebook',
-	Instagram = 'Instagram',
-	YouTube = 'YouTube',
-	LinkedIn = 'Linkedin',
-	Website = 'Website',
+	Discord = 'Discord',
+	Telegram = 'Telegram',
+	WhatsApp = 'WhatsApp',
 	SocialLink = 'SocialLink',
 }
 
 export interface IMainSocials {
 	[EMainSocials.Twitter]: string;
-	[EMainSocials.Facebook]: string;
-	[EMainSocials.Instagram]: string;
-	[EMainSocials.YouTube]: string;
-	[EMainSocials.LinkedIn]: string;
-	[EMainSocials.Website]: string;
+	[EMainSocials.Discord]: string;
+	[EMainSocials.Telegram]: string;
+	[EMainSocials.WhatsApp]: string;
 	[EMainSocials.SocialLink]: string;
 }

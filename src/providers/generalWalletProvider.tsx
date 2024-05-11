@@ -21,7 +21,7 @@ import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import { useWalletModal } from '@solana/wallet-adapter-react-ui';
-import { Chain } from 'viem';
+import { Chain, formatUnits } from 'viem';
 import { utils } from 'ethers';
 import { getChainName } from '@/lib/network';
 import config from '@/configuration';
@@ -248,7 +248,14 @@ export const GeneralWalletProvider: React.FC<{
 	useEffect(() => {
 		switch (walletChainType) {
 			case ChainType.EVM:
-				setBalance(nonFormattedEvBalance?.data?.formatted || undefined);
+				setBalance(
+					nonFormattedEvBalance.data?.value
+						? formatUnits(
+								nonFormattedEvBalance.data?.value,
+								nonFormattedEvBalance.data?.decimals,
+							)
+						: undefined,
+				);
 				break;
 			case ChainType.SOLANA:
 				setBalance(solanaBalance?.toString());
@@ -345,7 +352,7 @@ export const GeneralWalletProvider: React.FC<{
 	}, [visible]);
 
 	const openWalletConnectModal = () => {
-		if (config.ENABLE_SOLANA && !isGIVeconomyRoute) {
+		if (!isGIVeconomyRoute) {
 			dispatch(setShowWelcomeModal(true));
 		} else {
 			openConnectModal();

@@ -22,11 +22,12 @@ import { ORGANIZATION } from '@/lib/constants/organizations';
 
 interface IDonatePageProjectDescriptionProps {
 	projectData?: IProject;
+	showRaised?: boolean;
 }
 
 export const DonatePageProjectDescription: FC<
 	IDonatePageProjectDescriptionProps
-> = ({ projectData }) => {
+> = ({ projectData, showRaised = true }) => {
 	const { formatMessage, locale } = useIntl();
 	const {
 		sumDonationValueUsd,
@@ -60,10 +61,12 @@ export const DonatePageProjectDescription: FC<
 				isForeignOrg={isForeignOrg}
 				sidePadding='0'
 			/>
-			<P>
-				{formatMessage({ id: 'label.raised' })}:{' '}
-				{formatDonation(sumDonationValueUsd || 0, '$', locale)}
-			</P>
+			{showRaised && (
+				<P>
+					{formatMessage({ id: 'label.raised' })}:{' '}
+					{formatDonation(sumDonationValueUsd || 0, '$', locale)}
+				</P>
+			)}
 			<DescriptionSummary>{descriptionSummary}</DescriptionSummary>
 			<DonateDescription $flexDirection='column' gap='8px'>
 				<B>

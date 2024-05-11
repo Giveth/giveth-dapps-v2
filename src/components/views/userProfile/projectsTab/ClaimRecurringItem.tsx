@@ -8,7 +8,8 @@ import {
 import { utils } from 'ethers';
 import styled from 'styled-components';
 import { useEffect } from 'react';
-import { limitFraction } from '@/helpers/number';
+import { formatUnits } from 'viem';
+import { formatDonation, limitFraction } from '@/helpers/number';
 import { TokenIcon } from '../../donate/TokenIcon/TokenIcon';
 import { ITokenWithBalance } from '@/hooks/useProjectClaimableDonations';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
@@ -32,9 +33,17 @@ export const ClaimRecurringItem = ({
 
 	useEffect(() => {
 		if (price !== undefined) {
+			const tokenValueInUsd =
+				price *
+					parseFloat(
+						formatUnits(
+							tokenWithBalance.balance,
+							tokenWithBalance.token.decimals,
+						),
+					) || 0;
 			setAllTokensUsd({
 				...allTokensUsd,
-				[symbol]: price,
+				[symbol]: tokenValueInUsd!,
 			});
 		}
 	}, [price]);
@@ -60,7 +69,7 @@ export const ClaimRecurringItem = ({
 						6,
 					)} 
                     ${tokenWithBalance.token.underlyingToken?.symbol} ~
-                    ${price ?? 0}
+                    ${formatDonation(allTokensUsd[symbol]!)}
                     USD
                 `}
 				</B>

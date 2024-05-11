@@ -15,7 +15,7 @@ import {
 	semanticColors,
 	Flex,
 } from '@giveth/ui-design-system';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { formatUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
@@ -41,8 +41,8 @@ import {
 	findUserActiveStreamOnSelectedToken,
 } from '@/helpers/donate';
 import { ISuperfluidStream } from '@/types/superFluid';
-import { showToastError } from '@/lib/helpers';
-import config, { isRecurringActive } from '@/configuration';
+import { showToastError, truncateToDecimalPlaces } from '@/lib/helpers';
+import config from '@/configuration';
 import { WrongNetworkLayer } from './WrongNetworkLayer';
 import { ModifySuperTokenModal } from './ModifySuperToken/ModifySuperTokenModal';
 import { limitFraction } from '@/helpers/number';
@@ -53,6 +53,7 @@ import links from '@/lib/constants/links';
 import Routes from '@/lib/constants/Routes';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { useAppSelector } from '@/features/hooks';
+import { findAnchorContractAddress } from '@/helpers/superfluid';
 
 // These two functions are used to make the slider more user friendly by mapping the slider's value to a new range.
 /**
@@ -85,10 +86,14 @@ export function mapValueInverse(value: number) {
 }
 
 export const RecurringDonationCard = () => {
+	const { project, selectedToken, tokenStreams } = useDonateData();
+	const isGivethProject = Number(project.id!) === config.GIVETH_PROJECT_ID;
 	const [amount, setAmount] = useState(0n);
 	const [isUpdating, setIsUpdating] = useState(false);
 	const [percentage, setPercentage] = useState(0);
-	const [donationToGiveth, setDonationToGiveth] = useState(5);
+	const [donationToGiveth, setDonationToGiveth] = useState(
+		isGivethProject ? 0 : 5,
+	);
 	const [anonymous, setAnonymous] = useState<boolean>(false);
 	const [showSelectTokenModal, setShowSelectTokenModal] = useState(false);
 	const [showTopUpModal, setShowTopUpModal] = useState(false);
@@ -101,7 +106,6 @@ export const RecurringDonationCard = () => {
 	const { formatMessage } = useIntl();
 	const { address } = useAccount();
 	const { chain } = useAccount();
-	const { project, selectedToken, tokenStreams } = useDonateData();
 	const isSignedIn = useAppSelector(state => state.user.isSignedIn);
 	const { modalCallback: signInThenDonate } = useModalCallback(() =>
 		setShowRecurringDonationModal(true),
@@ -120,11 +124,7 @@ export const RecurringDonationCard = () => {
 				? undefined
 				: selectedToken?.token.id,
 		address: address,
-		// watch: true,
-		// cacheTime: 5_000,
 	});
-
-	const isGivethProject = Number(project.id!) === config.GIVETH_PROJECT_ID;
 
 	useEffect(() => {
 		if (!selectedToken || !balance) return;
@@ -150,12 +150,15 @@ export const RecurringDonationCard = () => {
 	const tokenBalance = balance?.value;
 	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
 
+	const anchorContractAddress = useMemo(
+		() => findAnchorContractAddress(project.anchorContracts),
+		[project.anchorContracts],
+	);
+
 	// otherStreamsPerSec is the total flow rate of all streams except the one to the project
 	const otherStreamsPerSec =
 		tokenStream
-			?.filter(
-				ts => ts.receiver.id !== project.anchorContracts[0]?.address,
-			)
+			?.filter(ts => ts.receiver.id !== anchorContractAddress)
 			.reduce(
 				(acc, stream) => acc + BigInt(stream.currentFlowRate),
 				0n,
@@ -171,8 +174,8 @@ export const RecurringDonationCard = () => {
 		: brandColors.giv;
 
 	const handleDonate = () => {
-		const hasAnchorContract = project.anchorContracts[0]?.isActive;
-		if (hasAnchorContract) {
+		console.log('isSignedIn', isSignedIn);
+		if (anchorContractAddress) {
 			if (isSignedIn) {
 				setShowRecurringDonationModal(true);
 			} else {
@@ -192,14 +195,14 @@ export const RecurringDonationCard = () => {
 			if (
 				!selectedToken ||
 				!selectedToken.balance ||
-				!project.anchorContracts
+				!anchorContractAddress
 			)
 				return;
 
 			const _userStreamOnSelectedToken =
 				findUserActiveStreamOnSelectedToken(
 					address,
-					project.anchorContracts[0]?.address,
+					anchorContractAddress,
 					tokenStreams,
 					selectedToken.token,
 				);
@@ -221,12 +224,15 @@ export const RecurringDonationCard = () => {
 		} catch (error) {
 			showToastError(error);
 		}
-	}, [selectedToken, address, tokenStreams, project.anchorContracts]);
+	}, [selectedToken, address, tokenStreams, anchorContractAddress]);
 
-	console.log(
-		formatUnits(totalStreamPerSec * ONE_MONTH_SECONDS, 18),
-		'totalStreamPerSec',
-	);
+	const isFormInvalid =
+		selectedToken === undefined ||
+		tokenBalance === undefined ||
+		amount === 0n ||
+		percentage === 0 ||
+		isTotalStreamExceed ||
+		amount > tokenBalance;
 
 	return (
 		<>
@@ -254,11 +260,6 @@ export const RecurringDonationCard = () => {
 				</LearnMore>
 			</Desc>
 			<RecurringSection>
-				{/* <RecurringSectionTitle>
-					{formatMessage({
-						id: 'label.creating_a_monthly_recurring_donation',
-					})}
-				</RecurringSectionTitle> */}
 				<Flex $flexDirection='column' gap='8px'>
 					<Flex gap='8px' $alignItems='center'>
 						<Caption $medium>
@@ -316,6 +317,7 @@ export const RecurringDonationCard = () => {
 							</p>
 						) : (
 							<Input
+								amount={amount}
 								setAmount={setAmount}
 								disabled={selectedToken === undefined}
 								decimals={selectedToken?.token.decimals}
@@ -326,12 +328,22 @@ export const RecurringDonationCard = () => {
 						selectedToken !== undefined &&
 						balance !== undefined && (
 							<Flex gap='4px'>
-								<GLink size='Small'>
+								<GLinkStyled
+									size='Small'
+									onClick={() => setAmount(balance.value)}
+								>
 									{formatMessage({
 										id: 'label.available',
 									})}
-									: {limitFraction(balance?.formatted)}
-								</GLink>
+									:{' '}
+									{truncateToDecimalPlaces(
+										formatUnits(
+											balance.value,
+											balance.decimals,
+										),
+										balance.decimals / 3,
+									)}
+								</GLinkStyled>
 								<IconWrapper
 									onClick={() => !isRefetching && refetch()}
 								>
@@ -417,25 +429,35 @@ export const RecurringDonationCard = () => {
 						</Flex>
 						<Flex $justifyContent='space-between' gap='4px'>
 							<Flex gap='4px'>
-								<Caption>
-									{formatMessage({
-										id: 'label.top_up_your_stream_balance_within',
-									})}
-								</Caption>
-								{selectedToken?.token.isSuperToken && (
-									<Flex gap='4px'>
-										<Caption $medium>
-											{streamRunOutInMonth.toString()}
-										</Caption>
+								{isTotalStreamExceed ? (
+									<Caption>
+										{formatMessage({
+											id: 'label.not_enough_stream_balance',
+										})}
+									</Caption>
+								) : (
+									<>
 										<Caption>
-											{formatMessage(
-												{ id: 'label.months' },
-												{
-													count: streamRunOutInMonth.toString(),
-												},
-											)}
+											{formatMessage({
+												id: 'label.top_up_your_stream_balance_within',
+											})}
 										</Caption>
-									</Flex>
+										{selectedToken?.token.isSuperToken && (
+											<Flex gap='4px'>
+												<Caption $medium>
+													{streamRunOutInMonth.toString()}
+												</Caption>
+												<Caption>
+													{formatMessage(
+														{ id: 'label.months' },
+														{
+															count: streamRunOutInMonth.toString(),
+														},
+													)}
+												</Caption>
+											</Flex>
+										)}
+									</>
 								)}
 							</Flex>
 							{selectedToken?.token.isSuperToken ? (
@@ -444,7 +466,7 @@ export const RecurringDonationCard = () => {
 									$alignItems='center'
 									onClick={() => setShowTopUpModal(true)}
 								>
-									<Caption>
+									<Caption $medium>
 										{formatMessage({
 											id: 'label.top_up_stream_balance',
 										})}
@@ -487,36 +509,37 @@ export const RecurringDonationCard = () => {
 										target='_blank'
 										rel='noopener noreferrer'
 									>
-										<Flex gap='4px' $alignItems='center'>
-											<Caption $medium>
+										<Flex gap='3px' $alignItems='center'>
+											<ManageCaption $medium>
 												{formatMessage({
 													id: 'label.manage_recurring_donations',
 												})}
-											</Caption>
+											</ManageCaption>
 											<IconChevronRight16 />
 										</Flex>
 									</a>
 								</Flex>
-
-								<Caption>
-									{formatMessage({
-										id: 'label.you_will_donate_total',
-									})}{' '}
-									<TotalMonthlyStream>
-										{limitFraction(
-											formatUnits(
-												totalStreamPerSec *
-													ONE_MONTH_SECONDS,
-												selectedToken?.token.decimals ||
-													18,
-											),
-										)}{' '}
-										{selectedToken?.token.symbol}
-									</TotalMonthlyStream>{' '}
-									{formatMessage({
-										id: 'label.monthly_across_all_projects',
-									})}
-								</Caption>
+								{!isTotalStreamExceed && (
+									<Caption>
+										{formatMessage({
+											id: 'label.you_will_donate_total',
+										})}{' '}
+										<TotalMonthlyStream>
+											{limitFraction(
+												formatUnits(
+													totalStreamPerSec *
+														ONE_MONTH_SECONDS,
+													selectedToken?.token
+														.decimals || 18,
+												),
+											)}{' '}
+											{selectedToken?.token.symbol}
+										</TotalMonthlyStream>{' '}
+										{formatMessage({
+											id: 'label.monthly_across_all_projects',
+										})}
+									</Caption>
+								)}
 							</>
 						)}
 					</Flex>
@@ -527,14 +550,7 @@ export const RecurringDonationCard = () => {
 					<ActionButton
 						label={formatMessage({ id: 'label.confirm' })}
 						onClick={handleDonate}
-						disabled={
-							selectedToken === undefined ||
-							tokenBalance === undefined ||
-							amount === 0n ||
-							isTotalStreamExceed ||
-							amount > tokenBalance ||
-							percentage === 0
-						}
+						disabled={isFormInvalid}
 					/>
 				) : (
 					<ActionButton
@@ -588,38 +604,44 @@ export const RecurringDonationCard = () => {
 									</Caption>
 								</Flex>
 							</Flex>
-							<Flex $justifyContent='space-between'>
-								<Caption>
-									{formatMessage(
-										{ id: 'label.donating_percentage_to' },
-										{
-											percentage: (
-												<b>{donationToGiveth}%</b>
-											),
-										},
-									)}
-									<b>Giveth</b>
-								</Caption>
-								<Flex gap='4px'>
+							{!isGivethProject && (
+								<Flex $justifyContent='space-between'>
 									<Caption>
-										{amount !== 0n && percentage !== 0
-											? limitFraction(
-													formatUnits(
-														givethPerMonth,
-														selectedToken?.token
-															.decimals || 18,
-													),
-												)
-											: 0}
+										{formatMessage(
+											{
+												id: 'label.donating_percentage_to',
+											},
+											{
+												percentage: (
+													<b>{donationToGiveth}%</b>
+												),
+											},
+										)}
+										<b>Giveth</b>
 									</Caption>
-									<Caption>
-										{selectedToken?.token.symbol}
-									</Caption>
-									<Caption>
-										{formatMessage({ id: 'label.monthly' })}
-									</Caption>
+									<Flex gap='4px'>
+										<Caption>
+											{amount !== 0n && percentage !== 0
+												? limitFraction(
+														formatUnits(
+															givethPerMonth,
+															selectedToken?.token
+																.decimals || 18,
+														),
+													)
+												: 0}
+										</Caption>
+										<Caption>
+											{selectedToken?.token.symbol}
+										</Caption>
+										<Caption>
+											{formatMessage({
+												id: 'label.monthly',
+											})}
+										</Caption>
+									</Flex>
 								</Flex>
-							</Flex>
+							)}
 							<Flex $justifyContent='space-between'>
 								<Caption $medium>
 									{formatMessage({
@@ -651,14 +673,7 @@ export const RecurringDonationCard = () => {
 					<ActionButton
 						label={formatMessage({ id: 'label.donate' })}
 						onClick={handleDonate}
-						disabled={
-							selectedToken === undefined ||
-							tokenBalance === undefined ||
-							amount === 0n ||
-							percentage === 0 ||
-							isTotalStreamExceed ||
-							amount > tokenBalance
-						}
+						disabled={isFormInvalid}
 					/>
 				</>
 			)}
@@ -674,9 +689,7 @@ export const RecurringDonationCard = () => {
 			<CheckBoxContainer>
 				<CheckBox
 					label={formatMessage({
-						id: isRecurringActive
-							? 'label.make_it_anonymous'
-							: 'label.donate_privately',
+						id: 'label.make_it_anonymous',
 					})}
 					checked={anonymous}
 					onChange={() => setAnonymous(!anonymous)}
@@ -684,9 +697,7 @@ export const RecurringDonationCard = () => {
 				/>
 				<div>
 					{formatMessage({
-						id: isRecurringActive
-							? 'component.tooltip.donate_anonymously'
-							: 'component.tooltip.donate_privately',
+						id: 'component.tooltip.donate_anonymously',
 					})}
 				</div>
 			</CheckBoxContainer>
@@ -802,6 +813,13 @@ export const IconWrapper = styled.div`
 	color: ${brandColors.giv[500]};
 `;
 
+const GLinkStyled = styled(GLink)`
+	&&:hover {
+		cursor: pointer;
+		text-decoration: underline;
+	}
+`;
+
 const SliderWrapper = styled.div`
 	width: 100%;
 	position: relative;
@@ -842,4 +860,8 @@ const TopUpStream = styled(Flex)`
 
 const TotalMonthlyStream = styled.b`
 	color: ${semanticColors.jade[500]};
+`;
+
+const ManageCaption = styled(Caption)`
+	color: ${brandColors.giv[500]};
 `;

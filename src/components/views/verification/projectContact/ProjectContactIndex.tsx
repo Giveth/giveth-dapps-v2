@@ -3,12 +3,11 @@ import { useEffect, useState } from 'react';
 import {
 	Button,
 	H6,
-	IconFacebook,
-	IconInstagram,
-	IconLink,
-	IconLinkedin,
-	IconYoutube,
+	IconDiscord,
 	neutralColors,
+	IconTelegram,
+	IconWhatsApp,
+	IconLink,
 	P,
 	IconInfoFilled,
 	IconXSocial,
@@ -18,12 +17,12 @@ import { useForm } from 'react-hook-form';
 import { requiredOptions, validators } from '@/lib/constants/regex';
 
 import Input from '@/components/Input';
-import { BtnContainer, ContentSeparator, OutlineStyled } from '../Common.sc';
+import { BtnContainer, ContentSeparator } from '../Common.sc';
 import { useVerificationData } from '@/context/verification.context';
 import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { client } from '@/apollo/apolloClient';
 import { EVerificationSteps, IProjectContact } from '@/apollo/types/types';
-import AddSocialModal from '@/components/views/verification/projectContact/AddSocialModal';
+// import AddSocialModal from '@/components/views/verification/projectContact/AddSocialModal';
 import { EMainSocials, IMainSocials } from './common.types';
 import { OtherInput } from '@/components/views/verification/projectContact/common';
 
@@ -61,7 +60,6 @@ export default function ProjectContactIndex() {
 		}
 	}, [verificationData]);
 
-	const [showSocialModal, setShowSocialModal] = useState(false);
 	const [isOtherSocialChanged, setIsOtherSocialChanged] = useState(false);
 	const [otherSocials, setOtherSocials] =
 		useState<IProjectContact[]>(findOtherSocials());
@@ -119,7 +117,7 @@ export default function ProjectContactIndex() {
 					<IconInfoFilled color={neutralColors.gray[900]} />
 					<PInline>
 						{formatMessage({
-							id: 'label.please_provide_links_to_any_social_media',
+							id: 'label.project_owner_contact_text',
 						})}
 					</PInline>
 				</InfoWrapper>
@@ -131,7 +129,11 @@ export default function ProjectContactIndex() {
 						<Input
 							label={i.type}
 							key={i.type}
-							placeholder='https://'
+							placeholder={
+								i.type === EMainSocials.WhatsApp
+									? '+1234567890'
+									: 'https://'
+							}
 							LeftIcon={i.icon}
 							error={errors[i.type]}
 							register={register}
@@ -158,13 +160,10 @@ export default function ProjectContactIndex() {
 						/>
 					))}
 					<br />
-					{isDraft && (
-						<OutlineStyled
-							onClick={() => setShowSocialModal(true)}
-							label={formatMessage({ id: 'label.add_other' })}
-							buttonType='primary'
-						/>
-					)}
+					<H6 weight={700}>
+						{formatMessage({ id: 'label.project_social_link' })}
+					</H6>
+					<br />
 					<SocialLinkInfo>
 						{formatMessage({
 							id: 'label.in_order_to_ensure_that_you_are_a_representative',
@@ -183,7 +182,6 @@ export default function ProjectContactIndex() {
 						registerOptions={isDraft ? requiredOptions.website : {}}
 						disabled={!isDraft}
 					/>
-
 					<div>
 						<ContentSeparator />
 						<BtnContainer>
@@ -203,12 +201,6 @@ export default function ProjectContactIndex() {
 					</div>
 				</FormContainer>
 			</div>
-			{showSocialModal && (
-				<AddSocialModal
-					addSocial={addOtherSocial}
-					setShowModal={setShowSocialModal}
-				/>
-			)}
 		</>
 	);
 }
@@ -219,24 +211,16 @@ const mainSocialsInputs = [
 		icon: <IconXSocial color={neutralColors.gray[600]} />,
 	},
 	{
-		type: EMainSocials.Facebook,
-		icon: <IconFacebook color={neutralColors.gray[600]} />,
+		type: EMainSocials.Discord,
+		icon: <IconDiscord color={neutralColors.gray[600]} />,
 	},
 	{
-		type: EMainSocials.LinkedIn,
-		icon: <IconLinkedin color={neutralColors.gray[600]} />,
+		type: EMainSocials.Telegram,
+		icon: <IconTelegram color={neutralColors.gray[600]} />,
 	},
 	{
-		type: EMainSocials.Instagram,
-		icon: <IconInstagram color={neutralColors.gray[600]} />,
-	},
-	{
-		type: EMainSocials.YouTube,
-		icon: <IconYoutube color={neutralColors.gray[600]} />,
-	},
-	{
-		type: EMainSocials.Website,
-		icon: <IconLink color={neutralColors.gray[600]} />,
+		type: EMainSocials.WhatsApp,
+		icon: <IconWhatsApp color={neutralColors.gray[600]} />,
 	},
 ];
 
@@ -271,4 +255,9 @@ const FormContainer = styled.form`
 
 const SocialLinkInfo = styled(P)`
 	max-width: fit-content;
+`;
+
+const socialLinkHeader = styled(H6)`
+	font-weight: 700;
+	margin-bottom: 8px;
 `;

@@ -55,16 +55,20 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	const isMobile = !useMediaQuery(device.tablet);
 	const router = useRouter();
 	const isOnDonatePage = router.pathname.includes('/donate');
-	console.log('isOnDonatePage', isOnDonatePage);
 
 	const { projectDonationsSqrtRootSum, matchingPool, allProjectsSum } =
 		estimatedMatching ?? {};
 
 	const { activeStartedRound } = getActiveRound(qfRounds);
+	const {
+		allocatedFundUSD,
+		allocatedTokenSymbol,
+		allocatedFundUSDPreferred,
+	} = activeStartedRound || {};
 	const totalEstimatedMatching = calculateTotalEstimatedMatching(
 		projectDonationsSqrtRootSum,
 		allProjectsSum,
-		matchingPool,
+		allocatedFundUSDPreferred ? allocatedFundUSD : matchingPool,
 		activeStartedRound?.maximumReward,
 	);
 
@@ -81,10 +85,11 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 					{'+ ' +
 						formatDonation(
 							totalEstimatedMatching,
-							'$',
+							allocatedFundUSDPreferred ? '$' : '',
 							locale,
 							true,
-						)}
+						)}{' '}
+					{allocatedFundUSDPreferred ? '' : allocatedTokenSymbol}
 				</EstimatedMatchingPrice>
 				<Flex $alignItems='center' gap='4px'>
 					<LightCaption>
@@ -221,7 +226,11 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 					<ContributionsContainer>
 						<Flex $flexDirection='column' gap='4px'>
 							<FlexSameSize $justifyContent='space-between'>
-								<Subline>1 DAI</Subline>
+								<Subline>
+									{allocatedFundUSDPreferred && '$'}1{' '}
+									{!allocatedFundUSDPreferred &&
+										allocatedTokenSymbol}
+								</Subline>
 								<IconArrowRight16
 									color={brandColors.cyan[500]}
 								/>
@@ -232,18 +241,25 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 											1,
 											projectDonationsSqrtRootSum,
 											allProjectsSum,
-											matchingPool,
+											allocatedFundUSDPreferred
+												? allocatedFundUSD
+												: matchingPool,
 											activeStartedRound?.maximumReward,
 										),
-										'',
+										allocatedFundUSDPreferred ? '$' : '',
 										locale,
 										true,
-									)}
-									&nbsp; DAI
+									)}{' '}
+									{!allocatedFundUSDPreferred &&
+										allocatedTokenSymbol}
 								</EndAlignedSubline>
 							</FlexSameSize>
 							<FlexSameSize $justifyContent='space-between'>
-								<Subline>10 DAI</Subline>
+								<Subline>
+									{allocatedFundUSDPreferred && '$'}10{' '}
+									{!allocatedFundUSDPreferred &&
+										allocatedTokenSymbol}
+								</Subline>
 								<IconArrowRight16
 									color={brandColors.cyan[500]}
 								/>
@@ -254,18 +270,25 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 											10,
 											projectDonationsSqrtRootSum,
 											allProjectsSum,
-											matchingPool,
+											allocatedFundUSDPreferred
+												? allocatedFundUSD
+												: matchingPool,
 											activeStartedRound?.maximumReward,
 										),
-										'',
+										allocatedFundUSDPreferred ? '$' : '',
 										locale,
 										true,
-									)}
-									&nbsp; DAI
+									)}{' '}
+									{!allocatedFundUSDPreferred &&
+										allocatedTokenSymbol}
 								</EndAlignedSubline>
 							</FlexSameSize>
 							<FlexSameSize $justifyContent='space-between'>
-								<Subline>100 DAI</Subline>
+								<Subline>
+									{allocatedFundUSDPreferred && '$'}100{' '}
+									{!allocatedFundUSDPreferred &&
+										allocatedTokenSymbol}
+								</Subline>
 								<IconArrowRight16
 									color={brandColors.cyan[500]}
 								/>
@@ -276,14 +299,17 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 											100,
 											projectDonationsSqrtRootSum,
 											allProjectsSum,
-											matchingPool,
+											allocatedFundUSDPreferred
+												? allocatedFundUSD
+												: matchingPool,
 											activeStartedRound?.maximumReward,
 										),
-										'',
+										allocatedFundUSDPreferred ? '$' : '',
 										locale,
 										true,
-									)}
-									&nbsp; DAI
+									)}{' '}
+									{!allocatedFundUSDPreferred &&
+										allocatedTokenSymbol}
 								</EndAlignedSubline>
 							</FlexSameSize>
 							{/* <Flex $justifyContent='space-between'>

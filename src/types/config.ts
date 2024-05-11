@@ -44,7 +44,6 @@ export interface SimplePoolStakingConfig {
 	type: StakingType;
 	LM_ADDRESS: Address;
 	GARDEN_ADDRESS?: Address;
-	BUY_LINK?: string;
 	farmStartTimeMS?: number;
 	farmEndTimeMS?: number;
 	icon?: string;
@@ -260,7 +259,6 @@ export interface GlobalConfig extends EnvConfig {
 	INFURA_API_KEY: string | undefined;
 	BLOCKNATIVE_DAPP_ID: string | undefined;
 	GOOGLE_MAPS_API_KEY: string | undefined;
-	ENABLE_SOLANA: boolean;
 }
 
 export enum ChainType {

@@ -135,6 +135,7 @@ const LockModal: FC<ILockModalProps> = ({
 								})}
 							</SectionTitle>
 							<StakingAmountInput
+								amount={amount}
 								setAmount={setAmount}
 								maxAmount={maxAmount}
 								poolStakingConfig={poolStakingConfig}

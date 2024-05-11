@@ -7,6 +7,7 @@ import { ISuperfluidStream } from '@/types/superFluid';
 import { limitFraction } from '@/helpers/number';
 import { TokenIconWithGIVBack } from '../TokenIcon/TokenIconWithGIVBack';
 import { countActiveStreams } from '@/helpers/donate';
+import { findTokenByAddress } from '@/helpers/superfluid';
 
 interface IStreamInfoProps {
 	stream: ISuperfluidStream[];
@@ -34,7 +35,8 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			? balance / totalFlowRate / 2628000n
 			: 0n;
 
-	const underlyingToken = stream[0].token.underlyingToken;
+	const token = findTokenByAddress(stream[0].token.id);
+	const underlyingToken = token?.underlyingToken;
 	const activeStreamCount = countActiveStreams(stream);
 
 	return (
@@ -48,8 +50,8 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			}}
 		>
 			<TokenIconWithGIVBack
-				showGiveBack
-				symbol={underlyingToken ? underlyingToken.symbol : 'ETH'}
+				showGiveBack={false}
+				symbol={underlyingToken?.symbol}
 				size={32}
 				isSuperToken={isSuperToken}
 			/>
@@ -87,24 +89,30 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 									id: 'label.stream_runs_out_in',
 								})}
 							</GrayCaption>
-							<Caption $medium>
-								{remainingMonths > 1n
-									? remainingMonths.toString()
-									: '< 1'}
-							</Caption>
-							<Caption>
-								{formatMessage(
-									{
-										id: 'label.months',
-									},
-									{
-										count:
-											remainingMonths > 1n
-												? remainingMonths.toString()
-												: '1',
-									},
-								)}
-							</Caption>
+							{totalFlowRate === 0n ? (
+								'--'
+							) : (
+								<>
+									<Caption $medium>
+										{remainingMonths > 1n
+											? remainingMonths.toString()
+											: '< 1'}
+									</Caption>
+									<Caption>
+										{formatMessage(
+											{
+												id: 'label.months',
+											},
+											{
+												count:
+													remainingMonths > 1n
+														? remainingMonths.toString()
+														: '1',
+											},
+										)}
+									</Caption>
+								</>
+							)}
 						</Flex>
 						<Flex gap='4px'>
 							<GrayCaption>Funding</GrayCaption>

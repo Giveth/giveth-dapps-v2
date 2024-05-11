@@ -41,12 +41,17 @@ const EstimatedMatchingToast = ({
 	const tokenPrice = useTokenPrice(token);
 
 	const { activeStartedRound } = getActiveRound(qfRounds);
+	const {
+		allocatedFundUSDPreferred,
+		allocatedFundUSD,
+		allocatedTokenSymbol,
+	} = activeStartedRound || {};
 
 	const esMatching = calculateEstimatedMatchingWithDonationAmount(
 		(tokenPrice || 0) * (amountTyped || 0),
 		projectDonationsSqrtRootSum,
 		allProjectsSum,
-		matchingPool,
+		allocatedFundUSDPreferred ? allocatedFundUSD : matchingPool,
 		activeStartedRound?.maximumReward,
 	);
 
@@ -74,7 +79,15 @@ const EstimatedMatchingToast = ({
 						</TooltipContent>
 					</IconWithTooltip>
 				</EstimatedMatching>
-				<B>{formatDonation(esMatching, '', locale, true)}</B>
+				<B>
+					{formatDonation(
+						esMatching,
+						allocatedFundUSDPreferred ? '$' : '',
+						locale,
+						true,
+					)}{' '}
+					{allocatedFundUSDPreferred ? '' : allocatedTokenSymbol}
+				</B>
 			</Upper>
 			<Divider />
 			<Bottom>

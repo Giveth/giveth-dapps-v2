@@ -14,7 +14,7 @@ import { IModal } from '@/types/common';
 import { ActionButton } from './ModifyStreamModal/ModifyStreamInnerModal';
 import { IWalletRecurringDonation } from '@/apollo/types/types';
 import config from '@/configuration';
-import { UPDATE_RECURRING_DONATION } from '@/apollo/gql/gqlSuperfluid';
+import { UPDATE_RECURRING_DONATION_BY_ID } from '@/apollo/gql/gqlSuperfluid';
 import { client } from '@/apollo/apolloClient';
 
 enum EArchiveStreamSteps {
@@ -78,8 +78,9 @@ const ArchiveStreamInnerModal: FC<IArchiveStreamInnerModalProps> = ({
 		setStep(EArchiveStreamSteps.ARCHIVING);
 		try {
 			const { data } = await client.mutate({
-				mutation: UPDATE_RECURRING_DONATION,
+				mutation: UPDATE_RECURRING_DONATION_BY_ID,
 				variables: {
+					recurringDonationId: +donation.id,
 					projectId: +donation.project.id,
 					networkId: config.OPTIMISM_NETWORK_NUMBER,
 					currency: donation.currency,
@@ -140,7 +141,7 @@ const Wrapper = styled(Flex)`
 	justify-content: stretch;
 	gap: 16px;
 	width: 100%;
-	padding: 16px 24px 24px 24px;
+	padding: 24px;
 	${mediaQueries.tablet} {
 		width: 530px;
 	}

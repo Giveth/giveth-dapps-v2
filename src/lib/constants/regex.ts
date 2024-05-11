@@ -14,6 +14,11 @@ export const regexList = {
 	reddit: /^(http(s)?:\/\/)?(www\.)?reddit\.com\/r\/[\w\.\_\-]+\/?$/,
 	tooShort: /^.{3,}$/,
 	mediumBlogBanner: /<img[^>]+src="(.*?)"/,
+	telegram:
+		/(?:https?:\/\/)?(?:www\.)?(?:t(?:elegram)?\.me|me|telegram\.org)\/(?:[a-zA-Z0-9_]{5,32}|joinchat\/[a-zA-Z0-9_]+)/,
+	discord:
+		/(?:https?:\/\/)?(?:www\.)?(?:discord\.gg|discord(?:app)?\.com\/invite)\/[\w-]+/,
+	phone: /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
 };
 
 export const validators = {
@@ -85,8 +90,20 @@ export const validators = {
 	},
 	discord: {
 		pattern: {
-			value: regexList.website,
+			value: regexList.discord,
 			message: 'Invalid discord URL',
+		},
+	},
+	telegram: {
+		pattern: {
+			value: regexList.telegram,
+			message: 'Invalid telegram URL',
+		},
+	},
+	whatsapp: {
+		pattern: {
+			value: regexList.phone,
+			message: 'Invalid phone number',
 		},
 	},
 };

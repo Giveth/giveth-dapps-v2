@@ -5,7 +5,7 @@ import { useItemsContext } from '@/context/Items.context';
 import { ETheme } from '@/features/general/general.slice';
 
 interface IItem {
-	$baseTheme: ETheme;
+	baseTheme?: ETheme;
 	isHighlighted?: boolean;
 	onClick?: Function;
 	children: ReactNode;
@@ -14,7 +14,7 @@ interface IItem {
 
 export const Item: FC<IItem> = ({
 	isHighlighted,
-	$baseTheme,
+	baseTheme,
 	onClick,
 	children,
 	className,
@@ -23,7 +23,7 @@ export const Item: FC<IItem> = ({
 	return (
 		<ItemContainer
 			$isHighlighted={isHighlighted}
-			$baseTheme={$baseTheme}
+			$baseTheme={baseTheme}
 			onClick={() => {
 				close();
 				onClick && onClick();
@@ -37,7 +37,7 @@ export const Item: FC<IItem> = ({
 
 interface IItemContainer {
 	$isHighlighted?: boolean;
-	$baseTheme: ETheme;
+	$baseTheme?: ETheme;
 }
 
 const ItemContainer = styled(Flex)<IItemContainer>`

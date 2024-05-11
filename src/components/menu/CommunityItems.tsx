@@ -24,6 +24,11 @@ export const communityItems = [
 		label: 'label.our_mission',
 		href: Routes.AboutUs + '#mission',
 	},
+	{
+		title: 'label.learn_the_basics',
+		label: 'label.onboarding_guide',
+		href: Routes.Onboarding,
+	},
 ];
 
 export const CommunityItems = () => {
@@ -51,7 +56,7 @@ export const CommunityItem: FC<ICommunityItemProps> = ({ item }) => {
 	const { formatMessage } = useIntl();
 
 	return (
-		<Item $baseTheme={theme}>
+		<Item baseTheme={theme}>
 			<ItemTitle $baseTheme={theme}>
 				{formatMessage({ id: item.title })}
 			</ItemTitle>

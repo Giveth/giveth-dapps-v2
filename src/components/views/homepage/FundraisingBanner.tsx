@@ -2,24 +2,16 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { brandColors, P, FlexCenter } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
-import GitcoinLogo from 'public/images/gitcoin-grants.png';
+import Gitcoin from '/public/images/partnerships/Gitcoin.svg';
 
 const FundraisingBanner = () => {
 	return (
 		<Wrapper>
-			<P>
-				Support Giveth's growth by donating to us on the Glo Dollar x
-				Arbitrum DAO round on Gitcoin.
-			</P>
-			<Image
-				src={GitcoinLogo}
-				alt='Gitcoin Grants'
-				width={24}
-				height={24}
-			/>
+			<P>Support Giveth with a donation in Gitcoin Grants round 20!</P>
+			<Image src={Gitcoin} alt='Gitcoin Grants' width={24} height={24} />
 			<PStyled>
-				<ExternalLink href='https://explorer.gitcoin.co/#/round/42161/0xc5262fc451a72f68f83563e30126d9c1d5d77659/0xc5262fc451a72f68f83563e30126d9c1d5d77659-12'>
-					<Purple> Click here to view our grant. </Purple>
+				<ExternalLink href='https://explorer.gitcoin.co/#/round/42161/25/55'>
+					<Purple>Check out our grant page here.</Purple>
 				</ExternalLink>
 			</PStyled>
 		</Wrapper>

@@ -29,7 +29,8 @@ import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { Modal } from '@/components/modals/Modal';
 import { EVerificationStatus } from '@/apollo/types/types';
 import ClaimRecurringDonationModal from '../../userProfile/projectsTab/ClaimRecurringDonationModal';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
+import { findAnchorContractAddress } from '@/helpers/superfluid';
 
 interface IMobileActionsModalProps {
 	setShowModal: (value: boolean) => void;
@@ -59,10 +60,9 @@ export const AdminActions = () => {
 		verificationFormStatus === EVerificationStatus.REJECTED ||
 		!isActive;
 
-	const optimismAddress = project.addresses?.find(
-		address => address.networkId === config.OPTIMISM_NETWORK_NUMBER,
-	)?.address;
-	const hasOptimismAddress = optimismAddress !== undefined;
+	const anchorContractAddress = findAnchorContractAddress(
+		project.anchorContracts,
+	);
 
 	const options: IOption[] = [
 		{
@@ -108,7 +108,9 @@ export const AdminActions = () => {
 	];
 
 	const recurringDonationOption: IOption = {
-		label: 'Claim Recurring donation',
+		label: formatMessage({
+			id: 'label.claim_recurring_donation',
+		}),
 		icon: <IconArrowDownCircle16 />,
 		cb: () => {
 			if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
@@ -121,9 +123,7 @@ export const AdminActions = () => {
 		},
 	};
 
-	isRecurringActive &&
-		hasOptimismAddress &&
-		options.push(recurringDonationOption);
+	anchorContractAddress && options.push(recurringDonationOption);
 
 	const dropdownStyle = {
 		padding: '10px 16px',

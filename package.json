@@ -1,6 +1,6 @@
 {
 	"name": "givethdapp",
-	"version": "2.23.2",
+	"version": "2.25.1",
 	"private": true,
 	"scripts": {
 		"build": "next build",
@@ -18,7 +18,7 @@
 	},
 	"dependencies": {
 		"@apollo/client": "^3.9.3",
-		"@giveth/ui-design-system": "^1.11.25",
+		"@giveth/ui-design-system": "^1.11.27",
 		"@reduxjs/toolkit": "^2.1.0",
 		"@safe-global/api-kit": "^2.1.0",
 		"@segment/snippet": "^4.15.3",
@@ -70,8 +70,8 @@
 		"styled-components": "^6.1.8",
 		"swiper": "^11.0.6",
 		"unsplash-js": "^7.0.19",
-		"viem": "^2.7.18",
-		"wagmi": "^2.5.7"
+		"viem": "^2.9.28",
+		"wagmi": "^2.6.0"
 	},
 	"devDependencies": {
 		"@babel/preset-typescript": "^7.23.3",

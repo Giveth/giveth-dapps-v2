@@ -39,8 +39,8 @@ const TxRow = ({ txHash, title }: { txHash: string; title?: string }) => {
 
 export const DonationInfo = () => {
 	const { formatMessage } = useIntl();
-	const { isSuccessDonation, project } = useDonateData();
-	const { txHash = [] } = isSuccessDonation || {};
+	const { successDonation, project } = useDonateData();
+	const { txHash = [] } = successDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 
 	return (
@@ -69,6 +69,7 @@ const Options = styled(FlexCenter)`
 	flex-direction: column;
 	width: 100%;
 	padding: 40px 20px 0;
+	position: relative;
 `;
 
 const ProjectsButton = styled(ButtonLink)`

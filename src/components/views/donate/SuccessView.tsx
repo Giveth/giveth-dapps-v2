@@ -16,7 +16,7 @@ import { useAccount } from 'wagmi';
 import ExternalLink from '@/components/ExternalLink';
 import { client } from '@/apollo/apolloClient';
 import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IFetchGivethProjectGQL } from '@/apollo/types/gqlTypes';
 import { useDonateData } from '@/context/donate.context';
@@ -30,11 +30,17 @@ import links from '@/lib/constants/links';
 import { EContentType } from '@/lib/constants/shareContent';
 import QFToast from './QFToast';
 import { DonationInfo } from './DonationInfo';
+import { ManageRecurringDonation } from './ManageRecurringDonation';
 
 export const SuccessView: FC = () => {
 	const { formatMessage } = useIntl();
-	const { isSuccessDonation, hasActiveQFRound, project } = useDonateData();
-	const { givBackEligible, txHash = [] } = isSuccessDonation || {};
+	const { successDonation, hasActiveQFRound, project } = useDonateData();
+	const {
+		givBackEligible,
+		txHash = [],
+		excludeFromQF,
+		isRecurring,
+	} = successDonation || {};
 	const hasMultipleTxs = txHash.length > 1;
 	const isSafeEnv = useIsSafeEnvironment();
 	const [givethSlug, setGivethSlug] = useState<string>('');
@@ -86,16 +92,21 @@ export const SuccessView: FC = () => {
 						<ImageWrapper>
 							<ProjectCardImage image={project.image} />
 						</ImageWrapper>
-						<DonatePageProjectDescription projectData={project} />
+						<DonatePageProjectDescription
+							projectData={project}
+							showRaised={false}
+						/>
 					</InfoWrapper>
 				</Col>
 				<Col xs={12} lg={6}>
 					<RightSectionWrapper>
-						<GiverH4 weight={700}>
-							{formatMessage({ id: 'label.youre_giver_now' })}
-						</GiverH4>
-						<br />
-						<SuccessMessage>{message}</SuccessMessage>
+						<div>
+							<GiverH4 weight={700}>
+								{formatMessage({ id: 'label.youre_giver_now' })}
+							</GiverH4>
+							<br />
+							<SuccessMessage>{message}</SuccessMessage>
+						</div>
 						<br />
 						{givBackEligible && (
 							<>
@@ -120,10 +131,12 @@ export const SuccessView: FC = () => {
 								<br />
 							</>
 						)}
-						{!isSafeEnv &&
+						{!excludeFromQF &&
+							!isSafeEnv &&
 							hasActiveQFRound &&
 							passportState !== EPassportState.LOADING &&
 							isOnEligibleNetworks && <QFToast />}
+						{isRecurring && <ManageRecurringDonation />}
 						<SocialBoxWrapper>
 							<SocialBox
 								project={project}
@@ -133,7 +146,7 @@ export const SuccessView: FC = () => {
 					</RightSectionWrapper>
 				</Col>
 			</Row>
-			{isRecurringActive && <DonationInfo />}
+			<DonationInfo />
 		</Wrapper>
 	);
 };
@@ -146,7 +159,7 @@ const Wrapper = styled(Flex)`
 `;
 
 const SocialBoxWrapper = styled.div`
-	margin: -50px 0;
+	margin: 0 0 -50px;
 `;
 
 const GiverH4 = styled(H4)`
@@ -201,8 +214,11 @@ const ImageWrapper = styled.div`
 	overflow: hidden;
 `;
 
-const RightSectionWrapper = styled.div`
+const RightSectionWrapper = styled(Flex)`
+	flex-direction: column;
+	justify-content: center;
 	background-color: ${neutralColors.gray[100]};
 	padding: 32px;
 	border-radius: 16px;
+	height: 100%;
 `;
