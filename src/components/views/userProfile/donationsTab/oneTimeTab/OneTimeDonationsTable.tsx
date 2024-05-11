@@ -27,7 +27,6 @@ import {
 import { Badge, EBadgeStatus } from '@/components/Badge';
 import { formatDonation } from '@/helpers/number';
 import NetworkLogo from '@/components/NetworkLogo';
-import { getChainName } from '@/lib/network';
 
 interface OneTimeDonationTable {
 	donations: IWalletDonation[];
