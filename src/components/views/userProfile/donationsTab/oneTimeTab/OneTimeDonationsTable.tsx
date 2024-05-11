@@ -87,12 +87,6 @@ const OneTimeDonationTable: FC<OneTimeDonationTable> = ({
 							chainId={donation.transactionNetworkId}
 							chainType={donation.chainType}
 						/>
-						<NetworkName>
-							{getChainName(
-								donation.transactionNetworkId,
-								donation.chainType,
-							)}
-						</NetworkName>
 					</DonationTableCell>
 					<DonationTableCell>
 						<B>{formatDonation(donation.amount)}</B>
@@ -152,8 +146,8 @@ const DonationTableContainer = styled.div<{ $myAccount?: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
 		props.$myAccount
-			? '1fr 4fr 1fr 1.5fr 1fr 1fr 1fr'
-			: '1fr 4fr 1.5fr 1fr 1fr 1fr'};
+			? '1fr 4fr 1fr 0.75fr 1.5fr 1fr 1fr'
+			: '1fr 4fr 0.75fr 1.5fr 1fr 1fr'};
 	overflow: auto;
 	min-width: 900px;
 	margin: 0 10px;
@@ -167,13 +161,6 @@ const ProjectTitleCell = styled(DonationTableCell)`
 	&:hover > svg {
 		display: block;
 	}
-`;
-
-const NetworkName = styled.div`
-	width: 80%;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	overflow: hidden;
 `;
 
 export default OneTimeDonationTable;
