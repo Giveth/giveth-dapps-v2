@@ -478,8 +478,7 @@ export interface IQFRound {
 }
 
 export interface IArchivedQFRound extends IQFRound {
-	matchingFund: number;
-	raisedFundInUsd: number;
+	totalDonations: number;
 	uniqueDonors: number;
 }
 
