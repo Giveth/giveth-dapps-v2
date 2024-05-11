@@ -5,6 +5,7 @@ import {
 	OutlineButton,
 	FlexCenter,
 	Container,
+	deviceSize,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
