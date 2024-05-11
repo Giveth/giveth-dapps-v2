@@ -1,10 +1,11 @@
 import { ArchivedQFRoundsView } from '@/components/views/archivedQFRounds/ArchivedQFRounds.view';
+import { ArchivedQFRoundsProvider } from '@/components/views/archivedQFRounds/archivedQfRounds.context';
 
 const ArchivedQFPageRoute = () => {
 	return (
-		<div>
+		<ArchivedQFRoundsProvider>
 			<ArchivedQFRoundsView />
-		</div>
+		</ArchivedQFRoundsProvider>
 	);
 };
 export default ArchivedQFPageRoute;
