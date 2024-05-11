@@ -35,8 +35,8 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 				{archivedQFRounds.map((round, index) => (
 					<TR key={round.id}>
 						<P>{round.name}</P>
-						<P>{round.matchingFund}</P>
-						<P>{round.raisedFundInUsd}</P>
+						<P>{round.allocatedFund}</P>
+						<P>{round.totalDonations}</P>
 						<P>{round.uniqueDonors}</P>
 						<P>{formatDate(new Date(round.beginDate))}</P>
 						<P>{formatDate(new Date(round.endDate))}</P>
