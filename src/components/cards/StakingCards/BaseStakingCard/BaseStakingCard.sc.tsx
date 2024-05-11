@@ -95,18 +95,6 @@ export const CardDisable = styled.div`
 	background-color: #ffffffa0;
 `;
 
-// we don't use this anymore ??
-// export const Return = styled.img`
-// 	background: transparent;
-// 	width: 50px;
-// 	height: 50px;
-// 	position: absolute;
-// 	cursor: pointer;
-// 	top: 0;
-// 	right: 0;
-// 	padding: 16px;
-// `;
-
 export const OutOfRangeBadgeContianer = styled(Flex)`
 	padding: 3px 7px;
 	background-color: ${brandColors.giv[500]};
@@ -129,13 +117,6 @@ export const AngelVaultTooltip = styled(Subline)`
 export const IconHelpFilledWrapper = styled.div`
 	cursor: pointer;
 `;
-
-// we don't use this anymore ??
-// export const IconGift = styled.img`
-// 	cursor: pointer;
-// 	width: 20px;
-// 	height: 20px;
-// `;
 
 export const GiftTooltip = styled.div`
 	color: ${neutralColors.gray[100]};
