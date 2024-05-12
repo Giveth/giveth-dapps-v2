@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Image from 'next/image';
 
 import {
 	H2,
@@ -112,11 +113,13 @@ export const RoundButton = styled(ButtonLink)`
 
 export const InfoSection = styled.div``;
 
-export const InfoImage = styled.img`
-	height: 103px;
-	width: 216px;
+export const InfoImage = styled(Image)`
 	margin: 0 auto;
 	display: block;
+`;
+
+export const ImageWrapper = styled.div`
+	position: relative;
 `;
 
 export const InfoTitle = styled(H5)`
