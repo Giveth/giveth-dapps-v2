@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next/types';
-import { IMainCategory } from '@/apollo/types/types';
+import { IMainCategory, IQFRound } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
@@ -96,6 +96,16 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				query: FETCH_QF_ROUNDS,
 				fetchPolicy: 'network-only',
 			});
+
+			if (
+				qfRounds.filter((round: IQFRound) => round.slug === slug)
+					.length === 0
+			) {
+				return {
+					notFound: true,
+				};
+			}
+
 			return {
 				props: {
 					projects,

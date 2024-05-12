@@ -229,7 +229,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 							<FilterContainer />
 						</>
 					)
-				) : null}
+				) : (
+					<FilterContainer />
+				)}
 				<SortingContainer>
 					<SortContainer totalCount={totalCount} />
 				</SortingContainer>
