@@ -41,7 +41,7 @@ export interface IProject {
 	image?: string;
 	slug: string;
 	creationDate?: string;
-	admin?: string;
+	adminUserId?: number;
 	description?: string;
 	descriptionSummary?: string;
 	addresses?: IWalletAddress[];
