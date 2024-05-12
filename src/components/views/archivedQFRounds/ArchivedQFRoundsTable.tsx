@@ -12,6 +12,7 @@ import { IArchivedQFRound } from '@/apollo/types/types';
 import { formatDate } from '@/lib/helpers';
 import { Shadow } from '@/components/styled-components/Shadow';
 import Routes from '@/lib/constants/Routes';
+import { formatDonation } from '@/helpers/number';
 
 interface ArchivedQFRoundsTableProps {
 	archivedQFRounds: IArchivedQFRound[];
@@ -36,7 +37,7 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 					<TR key={round.id}>
 						<P>{round.name}</P>
 						<P>{round.allocatedFund}</P>
-						<P>{round.totalDonations}</P>
+						<P>${formatDonation(round.totalDonations) || 0}</P>
 						<P>{round.uniqueDonors}</P>
 						<P>{formatDate(new Date(round.beginDate))}</P>
 						<P>{formatDate(new Date(round.endDate))}</P>
