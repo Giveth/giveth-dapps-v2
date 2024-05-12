@@ -57,7 +57,7 @@ const ProjectCardOrgBadge = ({
 					src={displayImg}
 					alt={organization as string}
 					fill={true}
-					objectFit='cover'
+					objectFit='contain'
 				/>
 			</ImageContainer>
 		</>
@@ -79,7 +79,7 @@ const ProjectCardOrgBadge = ({
 
 const ImageContainer = styled.div`
 	position: relative;
-	width: 100%;
+	width: 100px;
 	height: 100%;
 `;
 
