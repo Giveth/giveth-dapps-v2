@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import Image from 'next/image';
 import {
 	neutralColors,
 	Overline,
@@ -52,7 +53,12 @@ const ProjectCardOrgBadge = ({
 				{formatMessage({ id: 'label.project_by' })}:  
 			</OrganizationText>
 			<ImageContainer>
-				<img src={displayImg} alt={organization} />
+				<Image
+					src={displayImg}
+					alt={organization as string}
+					fill={true}
+					objectFit='cover'
+				/>
 			</ImageContainer>
 		</>
 	);
@@ -72,11 +78,9 @@ const ProjectCardOrgBadge = ({
 };
 
 const ImageContainer = styled.div`
-	max-width: 100px;
-	img {
-		width: 100%;
-		height: auto;
-	}
+	position: relative;
+	width: 100%;
+	height: 100%;
 `;
 
 const HomeViewContainer = styled(FlexCenter)<{ $isHover: boolean }>`

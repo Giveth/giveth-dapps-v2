@@ -935,7 +935,7 @@
 	"label.subscribe_to_our_newsletter.desc": "Subscribe to our newsletter to get the latest news, updates and amazing offers delivered directly straight to your mailbox!",
 	"label.successful": "successful",
 	"label.suggested_image_size": "Suggested image size:",
-	"label.suggested_image_size_min": "Suggested image size: min. 600px width. Max image size is 4MB.",
+	"label.suggested_image_size_min": "Suggested image size: 960px width by 600px height. Max image size is 4MB.",
 	"label.superfluid_eligible_tokens": "Depositable Tokens",
 	"label.superfluid_eligible_tokens_description": "Deposit a token from your wallet into your Stream Balance to fund your recurring donations.",
 	"label.support": "Support",

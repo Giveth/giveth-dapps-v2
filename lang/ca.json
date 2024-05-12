@@ -934,7 +934,7 @@
 	"label.subscribe_to_our_newsletter.desc": "Subscriu-te al nostre newsletter per rebre les últimes notícies, actualitzacions i ofertes increïbles directament al teu correu!",
 	"label.successful": "èxit",
 	"label.suggested_image_size": "Mida d'imatge suggerida:",
-	"label.suggested_image_size_min": "Mida d'imatge suggerida mínima de 600 píxels d'amplada. Mida d'imatge fins a 4 Mb.",
+	"label.suggested_image_size_min": "Mida d'imatge suggerida: 960px d'ample per 600px d'alt. La mida màxima de la imatge és de 4MB.",
 	"label.superfluid_eligible_tokens": "Tokens Dipositables",
 	"label.superfluid_eligible_tokens_description": "Diposita un token des de la teva cartera al teu Saldo de Transmissió per finançar les teves donacions recurrents.",
 	"label.support": "Suport",
