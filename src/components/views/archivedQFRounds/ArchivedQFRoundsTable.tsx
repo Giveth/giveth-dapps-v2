@@ -46,7 +46,7 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 								)}
 							</Flex>
 						</P>
-						<P>${formatDonation(round.totalDonations) || 0}</P>
+						<P>{formatDonation(round.totalDonations, '$') || 0}</P>
 						<P>{round.uniqueDonors}</P>
 						<P>{formatDate(new Date(round.beginDate))}</P>
 						<P>{formatDate(new Date(round.endDate))}</P>
