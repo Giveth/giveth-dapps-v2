@@ -13,7 +13,7 @@ import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { useReferral } from '@/hooks/useReferral';
-import { IProjectsRouteProps, allCategoriesItem } from 'pages/projects/all';
+import { IProjectsRouteProps, allCategoriesItem } from 'pages/projects/[slug]';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
 interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {

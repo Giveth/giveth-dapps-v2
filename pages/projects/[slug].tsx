@@ -40,7 +40,6 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		totalCount,
 		qfRounds,
 	} = props;
-	console.log('props', props);
 
 	return (
 		<ProjectsProvider
@@ -55,7 +54,31 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 	);
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+// This function gets called at build time
+export async function getStaticPaths() {
+	const apolloClient = initializeApollo();
+
+	// Call an external API endpoint to get posts
+	const { data } = await apolloClient.query({
+		query: FETCH_MAIN_CATEGORIES,
+		fetchPolicy: 'no-cache', // Adjust based on your caching policy needs
+	});
+
+	const mainCategories = data.mainCategories as IMainCategory[];
+
+	// Get the paths we want to pre-render based on posts
+	const _paths = mainCategories.map(category => ({
+		params: { slug: category.slug },
+	}));
+
+	const paths = [{ params: { slug: 'all' } }, ..._paths];
+
+	// We'll pre-render only these paths at build time.
+	// { fallback: false } means other routes should 404.
+	return { paths, fallback: false };
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
 	const apolloClient = initializeApollo();
 
 	try {
@@ -68,7 +91,10 @@ export const getStaticProps: GetStaticProps = async () => {
 		// Fetch projects with a predefined sorting
 		const { data: projectsData } = await apolloClient.query({
 			query: FETCH_ALL_PROJECTS,
-			variables: { sortingBy: EProjectsSortBy.INSTANT_BOOSTING },
+			variables: {
+				sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
+				mainCategory: params?.slug,
+			},
 			fetchPolicy: 'no-cache',
 		});
 
@@ -88,7 +114,7 @@ export const getStaticProps: GetStaticProps = async () => {
 				],
 				qfRounds: qfRoundsData.qfRounds,
 			},
-			revalidate: 3600, // Optionally, revalidate at most once per hour
+			revalidate: 300, // Optionally, revalidate at most once per hour
 		};
 	} catch (error) {
 		console.error('Failed to fetch API:', error);
