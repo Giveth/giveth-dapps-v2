@@ -300,6 +300,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				farcaster,
 				lens,
 				website,
+				telegram,
 			} = formData;
 
 			// Transforming the social media fields into the required structure
@@ -314,6 +315,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				{ type: EProjectSocialMediaType.FARCASTER, link: farcaster },
 				{ type: EProjectSocialMediaType.LENS, link: lens },
 				{ type: EProjectSocialMediaType.WEBSITE, link: website },
+				{ type: EProjectSocialMediaType.TELEGRAM, link: telegram },
 			].filter(
 				social => social.link && social.link !== '',
 			) as IProjectSocialMedia[]; // Filtering out empty links
