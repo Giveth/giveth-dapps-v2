@@ -2,6 +2,7 @@ import { type FC } from 'react';
 import styled from 'styled-components';
 import {
 	ButtonLink,
+	Flex,
 	GLink,
 	P,
 	mediaQueries,
@@ -36,7 +37,15 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 				{archivedQFRounds.map((round, index) => (
 					<TR key={round.id}>
 						<P>{round.name}</P>
-						<P>{round.allocatedFund}</P>
+						<P>
+							<Flex gap='1px'>
+								{!round.allocatedTokenSymbol && <span>$</span>}
+								<span>{round.allocatedFund}</span>
+								{round.allocatedTokenSymbol && (
+									<span>{round.allocatedTokenSymbol}</span>
+								)}
+							</Flex>
+						</P>
 						<P>${formatDonation(round.totalDonations) || 0}</P>
 						<P>{round.uniqueDonors}</P>
 						<P>{formatDate(new Date(round.beginDate))}</P>
