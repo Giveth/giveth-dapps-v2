@@ -138,10 +138,20 @@ export const SuccessView: FC = () => {
 							isOnEligibleNetworks && <QFToast />}
 						{isRecurring && <ManageRecurringDonation />}
 						<SocialBoxWrapper>
-							<SocialBox
-								project={project}
-								contentType={EContentType.justDonated}
-							/>
+							{isRecurring && (
+								<SocialBox
+									project={project}
+									contentType={
+										EContentType.justDonatedRecurring
+									}
+								/>
+							)}
+							{!isRecurring && (
+								<SocialBox
+									project={project}
+									contentType={EContentType.justDonated}
+								/>
+							)}
 						</SocialBoxWrapper>
 					</RightSectionWrapper>
 				</Col>
