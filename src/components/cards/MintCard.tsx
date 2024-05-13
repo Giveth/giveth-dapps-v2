@@ -18,12 +18,15 @@ import { readContracts, readContract } from '@wagmi/core';
 import { MintModal } from '../modals/Mint/MintModal';
 import { formatWeiHelper } from '@/helpers/number';
 import config from '@/configuration';
-import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
+import pfpJson from '@/artifacts/pfpGiver.json';
 import { InsufficientFundModal } from '../modals/InsufficientFund';
 import { usePFPMintData } from '@/context/pfpmint.context';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { wagmiConfig } from '@/wagmiConfigs';
 import { getReadContractResult } from '@/lib/contracts';
+
+const { abi: PFP_ABI } = pfpJson;
+
 const MIN_NFT_QTY = 1;
 
 interface IpfpContractData {
