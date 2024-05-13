@@ -26,13 +26,13 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 		<Wrapper>
 			<Table>
 				<TH>
-					<GLink size='Big'>Funding Round</GLink>
-					<GLink size='Big'>Matching Pool</GLink>
-					<GLink size='Big'>Total Donations</GLink>
-					<GLink size='Big'>Unique Donors</GLink>
-					<GLink size='Big'>Round started</GLink>
-					<GLink size='Big'>Round Ended</GLink>
-					<GLink size='Big'></GLink>
+					<StyledGLink size='Big'>Funding Round</StyledGLink>
+					<StyledGLink size='Big'>Matching Pool</StyledGLink>
+					<StyledGLink size='Big'>Total Donations</StyledGLink>
+					<StyledGLink size='Big'>Unique Donors</StyledGLink>
+					<StyledGLink size='Big'>Round started</StyledGLink>
+					<StyledGLink size='Big'>Round Ended</StyledGLink>
+					<StyledGLink size='Big'></StyledGLink>
 				</TH>
 				{archivedQFRounds.map((round, index) => (
 					<TR key={round.id}>
@@ -126,4 +126,10 @@ const SeeProjectsLink = styled(ButtonLink)`
 	padding: 8px 16px;
 	box-shadow: ${Shadow.Neutral[500]};
 	display: inline-block;
+`;
+
+const StyledGLink = styled(GLink)`
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 `;
