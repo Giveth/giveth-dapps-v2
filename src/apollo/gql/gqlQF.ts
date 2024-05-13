@@ -64,12 +64,13 @@ export const FETCH_ARCHIVED_QF_ROUNDS = gql`
 			slug
 			isActive
 			allocatedFund
+			allocatedFundUSD
+			allocatedTokenSymbol
 			eligibleNetworks
 			beginDate
 			endDate
 			totalDonations
 			uniqueDonors
-			# allocatedTokenSymbol
 		}
 	}
 `;
