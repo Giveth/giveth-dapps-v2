@@ -44,8 +44,13 @@ export const ActiveQFRoundStats = () => {
 					</ItemTitle>
 					<ItemValue weight={500}>
 						$
-						{data?.qfRoundStats?.allDonationsUsdValue.toFixed(2) ||
-							' --'}
+						{data?.qfRoundStats?.allDonationsUsdValue.toLocaleString(
+							'en-US',
+							{
+								minimumFractionDigits: 2,
+								maximumFractionDigits: 2,
+							},
+						) || ' --'}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>

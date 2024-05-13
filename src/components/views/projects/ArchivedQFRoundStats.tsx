@@ -34,7 +34,10 @@ export const ArchivedQFRoundStats = () => {
 						{formatMessage({ id: 'label.matching_pool' })}
 					</ItemTitle>
 					<ItemValue>
-						${data?.qfRoundStats?.matchingPool || ' --'}
+						$
+						{(
+							data?.qfRoundStats?.matchingPool || 0
+						).toLocaleString()}{' '}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
@@ -42,7 +45,14 @@ export const ArchivedQFRoundStats = () => {
 						{formatMessage({ id: 'label.donations' })}
 					</ItemTitle>
 					<ItemValue>
-						${data?.qfRoundStats?.allDonationsUsdValue || ' --'}
+						$
+						{data?.qfRoundStats?.allDonationsUsdValue.toLocaleString(
+							'en-US',
+							{
+								minimumFractionDigits: 2,
+								maximumFractionDigits: 2,
+							},
+						) || ' --'}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
