@@ -88,7 +88,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					? filteredProjects.length > 50
 						? BACKEND_QUERY_LIMIT
 						: filteredProjects.length || BACKEND_QUERY_LIMIT
-					: projects.length,
+					: projects.length || BACKEND_QUERY_LIMIT,
 				skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 			};
 
