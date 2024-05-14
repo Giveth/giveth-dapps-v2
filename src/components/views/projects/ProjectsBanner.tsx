@@ -36,6 +36,7 @@ export const ProjectsBanner: FC<IProjectsBanner> = ({ mainCategory }) => {
 				}
 				fill
 				alt={_mainCategory.title}
+				priority
 			/>
 			<Title weight={700}>
 				{formatMessage({ id: `projects_${_mainCategory.slug}` })}
