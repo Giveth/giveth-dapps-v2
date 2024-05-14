@@ -84,6 +84,10 @@ export const SuccessView: FC = () => {
 			);
 	}, []);
 
+	const socialContentType = isRecurring
+		? EContentType.justDonatedRecurring
+		: EContentType.justDonated;
+
 	return (
 		<Wrapper>
 			<Row>
@@ -140,7 +144,7 @@ export const SuccessView: FC = () => {
 						<SocialBoxWrapper>
 							<SocialBox
 								project={project}
-								contentType={EContentType.justDonated}
+								contentType={socialContentType}
 							/>
 						</SocialBoxWrapper>
 					</RightSectionWrapper>
