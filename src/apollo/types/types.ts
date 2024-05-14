@@ -187,6 +187,7 @@ export enum EProjectSocialMediaType {
 	FARCASTER = 'FARCASTER',
 	LENS = 'LENS',
 	WEBSITE = 'WEBSITE',
+	TELEGRAM = 'TELEGRAM',
 }
 
 export interface IProjectSocialMedia {
