@@ -4,6 +4,8 @@ import {
 	brandColors,
 	OutlineButton,
 	FlexCenter,
+	Container,
+	deviceSize,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -17,11 +19,7 @@ import { client } from '@/apollo/apolloClient';
 import { IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import {
-	BACKEND_QUERY_LIMIT,
-	deviceSize,
-	mediaQueries,
-} from '@/lib/constants/constants';
+import { BACKEND_QUERY_LIMIT, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
@@ -335,14 +333,14 @@ export const ProjectsContainer = styled.div`
 	}
 `;
 
-const Wrapper = styled.div`
-	max-width: ${deviceSize.desktop + 'px'};
-	margin: 0 auto;
+const Wrapper = styled(Container)`
 	${mediaQueries.tablet} {
-		padding: 0 33px;
+		padding-top: 33px;
+		padding-bottom: 33px;
 	}
 	${mediaQueries.laptopS} {
-		padding: 0 40px;
+		padding-top: 40px;
+		padding-bottom: 40px;
 	}
 `;
 

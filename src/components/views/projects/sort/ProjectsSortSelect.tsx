@@ -41,7 +41,9 @@ export interface ISelectedSort {
 	color?: string;
 }
 
-const DropdownIndicator: ComponentType<DropdownIndicatorProps> = props => {
+export const DropdownIndicator: ComponentType<
+	DropdownIndicatorProps
+> = props => {
 	return props.selectProps.menuIsOpen ? <IconCaretUp /> : <IconCaretDown />;
 };
 
@@ -165,7 +167,7 @@ const ProjectsSortSelect = () => {
 	);
 };
 
-const Option: ComponentType<OptionProps<ISelectedSort>> = props => {
+export const Option: ComponentType<OptionProps<ISelectedSort>> = props => {
 	const { data } = props;
 	const { label } = data;
 	const Icon = data.icon;
@@ -183,7 +185,7 @@ const Option: ComponentType<OptionProps<ISelectedSort>> = props => {
 	);
 };
 
-const Control: ComponentType<ControlProps<ISelectedSort>> = ({
+export const Control: ComponentType<ControlProps<ISelectedSort>> = ({
 	children,
 	...props
 }) => {
@@ -201,7 +203,7 @@ const Control: ComponentType<ControlProps<ISelectedSort>> = ({
 	);
 };
 
-const selectStyles: StylesConfig = {
+export const selectStyles: StylesConfig = {
 	...selectCustomStyles,
 	container: (baseStyles, props) =>
 		({
@@ -253,7 +255,7 @@ const OptionContainer = styled.div`
 	justify-content: space-between;
 `;
 
-const SortingLabel = styled.label`
+export const SortingLabel = styled.label`
 	color: ${neutralColors.gray[600]};
 `;
 

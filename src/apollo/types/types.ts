@@ -478,6 +478,11 @@ export interface IQFRound {
 	allocatedTokenChainId: number;
 }
 
+export interface IArchivedQFRound extends IQFRound {
+	totalDonations: number;
+	uniqueDonors: number;
+}
+
 export interface IGetQfRoundHistory {
 	distributedFundNetwork: string;
 	distributedFundTxHash: string;
