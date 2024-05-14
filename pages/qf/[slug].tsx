@@ -93,15 +93,22 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 			fetchPolicy: 'no-cache',
 		});
 
+		const updatedMainCategory = [
+			allCategoriesItem,
+			...mainCategoriesData.mainCategories,
+		];
+
+		const selectedMainCategory = updatedMainCategory.find(mainCategory => {
+			return mainCategory.slug === params?.slug;
+		});
+
 		return {
 			props: {
 				projects: projectsData.allProjects.projects,
 				totalCount: projectsData.allProjects.totalCount,
-				mainCategories: [
-					allCategoriesItem,
-					...mainCategoriesData.mainCategories,
-				],
+				mainCategories: updatedMainCategory,
 				qfRounds: qfRoundsData.qfRounds,
+				selectedMainCategory,
 			},
 			revalidate: 300, // Optionally, revalidate at most once per hour
 		};
