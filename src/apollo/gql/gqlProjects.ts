@@ -420,7 +420,7 @@ export const CREATE_PROJECT = gql`
 			id
 			title
 			description
-			admin
+			adminUserId
 			adminUser {
 				name
 				walletAddress
@@ -455,7 +455,7 @@ export const UPDATE_PROJECT = gql`
 			image
 			slug
 			creationDate
-			admin
+			adminUserId
 			adminUser {
 				name
 				walletAddress
@@ -503,7 +503,7 @@ export const ADD_RECIPIENT_ADDRESS_TO_PROJECT = gql`
 			verified
 			slugHistory
 			creationDate
-			admin
+			adminUserId
 			walletAddress
 			impactLocation
 			categories {
