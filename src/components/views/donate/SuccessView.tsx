@@ -84,6 +84,10 @@ export const SuccessView: FC = () => {
 			);
 	}, []);
 
+	const socialContentType = isRecurring
+		? EContentType.justDonatedRecurring
+		: EContentType.justDonated;
+
 	return (
 		<Wrapper>
 			<Row>
@@ -138,20 +142,10 @@ export const SuccessView: FC = () => {
 							isOnEligibleNetworks && <QFToast />}
 						{isRecurring && <ManageRecurringDonation />}
 						<SocialBoxWrapper>
-							{isRecurring && (
-								<SocialBox
-									project={project}
-									contentType={
-										EContentType.justDonatedRecurring
-									}
-								/>
-							)}
-							{!isRecurring && (
-								<SocialBox
-									project={project}
-									contentType={EContentType.justDonated}
-								/>
-							)}
+							<SocialBox
+								project={project}
+								contentType={socialContentType}
+							/>
 						</SocialBoxWrapper>
 					</RightSectionWrapper>
 				</Col>
