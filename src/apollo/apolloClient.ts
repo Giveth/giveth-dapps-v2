@@ -151,7 +151,7 @@ function createApolloClient() {
 
 	return new ApolloClient({
 		ssrMode,
-		link: errorLink.concat(authLink.concat(httpLink.concat(retryLink))),
+		link: ApolloLink.from([errorLink, authLink, retryLink, httpLink]),
 		cache: new InMemoryCache({
 			addTypename: false,
 		}),

@@ -18,7 +18,7 @@ import { formatWeiHelper } from '@/helpers/number';
 import { waitForTransaction } from '@/lib/transaction';
 import { approveERC20tokenTransfer } from '@/lib/stakingPool';
 import config from '@/configuration';
-import { abi as PFP_ABI } from '@/artifacts/pfpGiver.json';
+import pfpJson from '@/artifacts/pfpGiver.json';
 import { EPFPMinSteps, usePFPMintData } from '@/context/pfpmint.context';
 import { MintSteps } from './MintSteps';
 import { wagmiConfig } from '@/wagmiConfigs';
@@ -28,6 +28,8 @@ export enum MintStep {
 	MINT,
 	MINTING,
 }
+
+const { abi: PFP_ABI } = pfpJson;
 
 interface IMintModalProps extends IModal {
 	qty: number;

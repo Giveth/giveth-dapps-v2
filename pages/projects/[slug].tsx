@@ -1,20 +1,16 @@
-import { GetServerSideProps } from 'next/types';
+import { GetStaticProps } from 'next/types';
 import { IMainCategory, IProject, IQFRound } from '@/apollo/types/types';
-import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
-import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 import {
 	FETCH_ALL_PROJECTS,
 	FETCH_MAIN_CATEGORIES,
 } from '@/apollo/gql/gqlProjects';
 import { GeneralMetatags } from '@/components/Metatag';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
-import { useReferral } from '@/hooks/useReferral';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
-import { getMainCategorySlug } from '@/helpers/projects';
-import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
+import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 
 export interface IProjectsRouteProps {
 	projects: IProject[];
@@ -45,8 +41,6 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		qfRounds,
 	} = props;
 
-	useReferral();
-
 	return (
 		<ProjectsProvider
 			mainCategories={mainCategories}
@@ -60,82 +54,79 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 	);
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
+// This function gets called at build time
+export async function getStaticPaths() {
 	const apolloClient = initializeApollo();
-	const { variables, notifyOnNetworkStatusChange } = OPTIONS_HOME_PROJECTS;
+
+	// Call an external API endpoint to get posts
+	const { data } = await apolloClient.query({
+		query: FETCH_MAIN_CATEGORIES,
+		fetchPolicy: 'no-cache', // Adjust based on your caching policy needs
+	});
+
+	const mainCategories = data.mainCategories as IMainCategory[];
+
+	// Get the paths we want to pre-render based on posts
+	const _paths = mainCategories.map(category => ({
+		params: { slug: category.slug },
+	}));
+
+	const paths = [{ params: { slug: 'all' } }, ..._paths];
+
+	// We'll pre-render only these paths at build time.
+	// { fallback: false } means other routes should 404.
+	return { paths, fallback: false };
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+	const apolloClient = initializeApollo();
+	const { variables } = OPTIONS_HOME_PROJECTS;
+
 	try {
-		const { query } = context;
-		const slug = query.slug;
-
-		const {
-			data: { mainCategories },
-		}: {
-			data: { mainCategories: IMainCategory[] };
-		} = await apolloClient.query({
+		// Fetch main categories
+		const { data: mainCategoriesData } = await apolloClient.query({
 			query: FETCH_MAIN_CATEGORIES,
-			fetchPolicy: 'network-only',
+			fetchPolicy: 'no-cache', // Adjust based on your caching policy needs
 		});
 
-		const updatedMainCategory = [allCategoriesItem, ...mainCategories];
+		// Fetch projects with a predefined sorting
+		const { data: projectsData } = await apolloClient.query({
+			query: FETCH_ALL_PROJECTS,
+			variables: {
+				...variables,
+				mainCategory: params?.slug === 'all' ? null : params?.slug,
+			},
+			fetchPolicy: 'no-cache',
+		});
+
+		// Fetch QF rounds
+		const { data: qfRoundsData } = await apolloClient.query({
+			query: FETCH_QF_ROUNDS,
+			fetchPolicy: 'no-cache',
+		});
+
+		const updatedMainCategory = [
+			allCategoriesItem,
+			...mainCategoriesData.mainCategories,
+		];
+
 		const selectedMainCategory = updatedMainCategory.find(mainCategory => {
-			return mainCategory.slug === slug;
+			return mainCategory.slug === params?.slug;
 		});
 
-		if (selectedMainCategory) {
-			const updatedSelectedMainCategory = {
-				...selectedMainCategory,
-				selected: true,
-			};
-			const apolloClient = initializeApollo();
-			const { data } = await apolloClient.query({
-				query: FETCH_ALL_PROJECTS,
-				variables: {
-					...variables,
-					sortingBy: query.sort || EProjectsSortBy.INSTANT_BOOSTING,
-					searchTerm: query.searchTerm,
-					filters: query.filter
-						? Array.isArray(query.filter)
-							? query.filter
-							: [query.filter]
-						: null,
-					campaignSlug: query.campaignSlug,
-					category: query.category,
-					mainCategory: getMainCategorySlug(
-						updatedSelectedMainCategory,
-					),
-					notifyOnNetworkStatusChange,
-				},
-				fetchPolicy: 'network-only',
-			});
-			const { projects, totalCount } = data.allProjects;
-			const {
-				data: { qfRounds },
-			} = await apolloClient.query({
-				query: FETCH_QF_ROUNDS,
-				fetchPolicy: 'network-only',
-			});
-			return {
-				props: {
-					projects,
-					mainCategories: updatedMainCategory,
-					selectedMainCategory: updatedSelectedMainCategory,
-					totalCount,
-					qfRounds,
-				},
-			};
-		}
-		return {
-			notFound: true,
-		};
-	} catch (error: any) {
-		const statusCode = transformGraphQLErrorsToStatusCode(
-			error?.graphQLErrors,
-		);
 		return {
 			props: {
-				errorStatus: statusCode,
+				projects: projectsData.allProjects.projects,
+				totalCount: projectsData.allProjects.totalCount,
+				mainCategories: updatedMainCategory,
+				qfRounds: qfRoundsData.qfRounds,
+				selectedMainCategory,
 			},
+			revalidate: 300, // Optionally, revalidate at most once per hour
 		};
+	} catch (error) {
+		console.error('Failed to fetch API:', error);
+		return { props: { hasError: true } };
 	}
 };
 

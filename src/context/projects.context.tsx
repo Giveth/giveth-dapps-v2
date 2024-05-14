@@ -5,6 +5,7 @@ import {
 	SetStateAction,
 	useContext,
 	useState,
+	useEffect,
 } from 'react';
 import { useRouter } from 'next/router';
 import { EProjectsFilter, IMainCategory, IQFRound } from '@/apollo/types/types';
@@ -21,7 +22,7 @@ interface IVariables {
 }
 
 interface IProjectsContext {
-	variables: IVariables;
+	variables?: IVariables;
 	mainCategories: IMainCategory[];
 	selectedMainCategory?: IMainCategory;
 	qfRounds: IQFRound[];
@@ -30,13 +31,8 @@ interface IProjectsContext {
 	setIsQF: Dispatch<SetStateAction<boolean>>;
 }
 
-const variablesDefaultValue = {
-	sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
-	filters: undefined,
-};
-
 const ProjectsContext = createContext<IProjectsContext>({
-	variables: variablesDefaultValue,
+	variables: undefined,
 	mainCategories: [],
 	qfRounds: [],
 	isQF: false,
@@ -63,42 +59,55 @@ export const ProjectsProvider = (props: {
 		qfRounds,
 	} = props;
 
-	const [_isQF, setIsQF] = useState(isQF);
 	const router = useRouter();
+	const [_isQF, setIsQF] = useState(props.isQF);
+	const [variables, setVariables] = useState<IVariables>();
 
-	let sort = EProjectsSortBy.INSTANT_BOOSTING;
-	const sortValue = router.query.sort as string;
-	if (sortValue) sort = sortMap[sortValue.toLowerCase()];
+	useEffect(() => {
+		if (!router.isReady) return;
+		let sort = EProjectsSortBy.INSTANT_BOOSTING;
+		const sortValue = router.query.sort as string;
+		if (sortValue && sortMap[sortValue.toLowerCase()]) {
+			sort = sortMap[sortValue.toLowerCase()];
+		}
 
-	let filters: EProjectsFilter[] | undefined;
-	if (router.query.filter) {
-		filters = (
-			Array.isArray(router.query.filter)
-				? router.query.filter
-				: [router.query.filter]
-		) as EProjectsFilter[];
-	}
-	if (_isQF) {
-		filters
-			? filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
-			: (filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
-	}
+		let filters: EProjectsFilter[] | undefined;
+		if (router.query.filter) {
+			filters = (
+				Array.isArray(router.query.filter)
+					? router.query.filter
+					: [router.query.filter]
+			) as EProjectsFilter[];
+		}
+		if (_isQF) {
+			filters
+				? filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
+				: (filters = [EProjectsFilter.ACTIVE_QF_ROUND]);
+		}
 
-	let searchTerm = router.query.searchTerm as string;
-	let campaignSlug = router.query.campaign as string;
-	let category = router.query.category as string;
+		let searchTerm = router.query.searchTerm as string;
+		let campaignSlug = router.query.campaign as string;
+		let category = router.query.category as string;
+
+		// After setting initial params based on URL
+		setVariables({
+			sortingBy: sort,
+			searchTerm,
+			filters,
+			campaignSlug,
+			mainCategory: router.query?.slug?.toString(),
+			category,
+		});
+
+		return () => {
+			setVariables(undefined); // Reset on component unmount if needed
+		};
+	}, [_isQF, router.query, router.isReady]);
 
 	return (
 		<ProjectsContext.Provider
 			value={{
-				variables: {
-					sortingBy: sort,
-					searchTerm,
-					filters,
-					campaignSlug,
-					mainCategory: router.query?.slug?.toString(),
-					category,
-				},
+				variables,
 				mainCategories,
 				selectedMainCategory,
 				qfRounds: qfRounds || [],

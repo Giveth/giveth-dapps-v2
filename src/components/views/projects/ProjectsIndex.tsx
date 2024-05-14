@@ -80,12 +80,13 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const fetchProjects = useCallback(
 		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
+			console.log('Fetching-filteredProjects', filteredProjects.length);
 			const variables: IQueries = {
 				limit: userIdChanged
 					? filteredProjects.length > 50
 						? BACKEND_QUERY_LIMIT
-						: filteredProjects.length
-					: projects.length,
+						: filteredProjects.length || BACKEND_QUERY_LIMIT
+					: projects.length || BACKEND_QUERY_LIMIT,
 				skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 			};
 
@@ -95,7 +96,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 			setIsLoading(true);
 			if (
-				contextVariables.mainCategory !== router.query?.slug?.toString()
+				contextVariables?.mainCategory !==
+				router.query?.slug?.toString()
 			)
 				return;
 
@@ -136,9 +138,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 		},
 		[
 			contextVariables,
-			filteredProjects.length,
+			filteredProjects?.length,
 			isArchivedQF,
-			projects.length,
+			projects?.length,
 			router.query.slug,
 			selectedMainCategory,
 			user?.id,
@@ -146,14 +148,52 @@ const ProjectsIndex = (props: IProjectsView) => {
 	);
 
 	useEffect(() => {
+		console.log('Fetching-User?.id', user?.id);
 		pageNum.current = 0;
 		fetchProjects(false, 0, true);
 	}, [user?.id]);
 
 	useEffect(() => {
+		if (!contextVariables) return;
+		console.log('Fetching-campaignSlug', contextVariables.campaignSlug);
 		pageNum.current = 0;
-		fetchProjects(false, 0);
-	}, [contextVariables]);
+		fetchProjects(false, 0, true);
+	}, [contextVariables?.campaignSlug]);
+
+	useEffect(() => {
+		if (!contextVariables) return;
+		console.log('Fetching-mainCategory', contextVariables.mainCategory);
+		pageNum.current = 0;
+		fetchProjects(false, 0, true);
+	}, [contextVariables?.mainCategory]);
+
+	useEffect(() => {
+		if (!contextVariables) return;
+		console.log('Fetching-category', contextVariables.category);
+		pageNum.current = 0;
+		fetchProjects(false, 0, true);
+	}, [contextVariables?.category]);
+
+	useEffect(() => {
+		if (!contextVariables) return;
+		console.log('Fetching-filters', contextVariables.filters);
+		pageNum.current = 0;
+		fetchProjects(false, 0, true);
+	}, [contextVariables?.filters]);
+
+	useEffect(() => {
+		if (!contextVariables) return;
+		console.log('Fetching-searchTerm', contextVariables.searchTerm);
+		pageNum.current = 0;
+		fetchProjects(false, 0, true);
+	}, [contextVariables?.searchTerm]);
+
+	useEffect(() => {
+		if (!contextVariables) return;
+		console.log('Fetching-sortingBy', contextVariables.sortingBy);
+		pageNum.current = 0;
+		fetchProjects(false, 0, true);
+	}, [contextVariables?.sortingBy]);
 
 	const loadMore = useCallback(() => {
 		if (isLoading) return;
