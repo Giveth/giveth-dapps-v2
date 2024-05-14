@@ -7,7 +7,7 @@ import { useProjectsContext } from '@/context/projects.context';
 
 const ProjectsSearchTablet = () => {
 	const { variables } = useProjectsContext();
-	const [searchValue, setSearchValue] = useState(variables.searchTerm);
+	const [searchValue, setSearchValue] = useState(variables?.searchTerm);
 	const router = useRouter();
 
 	const handleSearch = (searchTerm?: string) => {
@@ -34,8 +34,8 @@ const ProjectsSearchTablet = () => {
 	};
 
 	useEffect(() => {
-		setSearchValue(variables.searchTerm);
-	}, [variables.searchTerm]);
+		setSearchValue(variables?.searchTerm);
+	}, [variables?.searchTerm]);
 
 	return (
 		<SearchContainer className='fadeIn'>
@@ -51,7 +51,7 @@ const ProjectsSearchTablet = () => {
 					onChange={e => setSearchValue(e.target.value)}
 				/>
 			</form>
-			{variables.searchTerm ? (
+			{variables?.searchTerm ? (
 				<SearchHint onClick={removeSearch}>
 					<IconX />
 				</SearchHint>

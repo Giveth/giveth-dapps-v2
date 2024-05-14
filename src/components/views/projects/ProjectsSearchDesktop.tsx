@@ -15,7 +15,7 @@ import useFocus from '@/hooks/useFocus';
 
 const ProjectsSearchDesktop = () => {
 	const { variables } = useProjectsContext();
-	const [searchValue, setSearchValue] = useState(variables.searchTerm);
+	const [searchValue, setSearchValue] = useState(variables?.searchTerm);
 	const router = useRouter();
 	const { formatMessage } = useIntl();
 
@@ -46,8 +46,8 @@ const ProjectsSearchDesktop = () => {
 	};
 
 	useEffect(() => {
-		setSearchValue(variables.searchTerm);
-	}, [variables.searchTerm]);
+		setSearchValue(variables?.searchTerm);
+	}, [variables?.searchTerm]);
 
 	return (
 		<SearchContainer className='fadeIn'>
@@ -67,7 +67,7 @@ const ProjectsSearchDesktop = () => {
 					ref={inputRef}
 				/>
 			</form>
-			{variables.searchTerm ? (
+			{variables?.searchTerm ? (
 				<ClearSearch onClick={removeSearch}>
 					{formatMessage({ id: 'label.clear' })}
 				</ClearSearch>
