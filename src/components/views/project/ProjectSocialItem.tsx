@@ -18,6 +18,7 @@ const socialMediaColor: { [key: string]: string } = {
 	reddit: '#FF5700',
 	discord: '#7289DA',
 	website: '#2EA096',
+	telegram: '#26A7DE',
 };
 
 const removeHttpsAndWwwFromUrl = (socialMediaUrl: string) => {
