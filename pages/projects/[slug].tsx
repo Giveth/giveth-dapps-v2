@@ -9,8 +9,8 @@ import { GeneralMetatags } from '@/components/Metatag';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
-import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
+import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
 
 export interface IProjectsRouteProps {
 	projects: IProject[];
@@ -80,6 +80,7 @@ export async function getStaticPaths() {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
 	const apolloClient = initializeApollo();
+	const { variables } = OPTIONS_HOME_PROJECTS;
 
 	try {
 		// Fetch main categories
@@ -92,13 +93,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 		const { data: projectsData } = await apolloClient.query({
 			query: FETCH_ALL_PROJECTS,
 			variables: {
-				sortingBy: EProjectsSortBy.INSTANT_BOOSTING,
-				mainCategory: params?.slug,
+				...variables,
+				mainCategory: params?.slug === 'all' ? null : params?.slug,
 			},
 			fetchPolicy: 'no-cache',
 		});
 
-		// Fetch qualification rounds
+		// Fetch QF rounds
 		const { data: qfRoundsData } = await apolloClient.query({
 			query: FETCH_QF_ROUNDS,
 			fetchPolicy: 'no-cache',
