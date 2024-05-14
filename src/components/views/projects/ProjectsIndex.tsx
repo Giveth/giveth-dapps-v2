@@ -142,7 +142,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 			contextVariables,
 			filteredProjects?.length,
 			isArchivedQF,
-			projects.length,
+			projects?.length,
 			router.query.slug,
 			selectedMainCategory,
 			user?.id,
