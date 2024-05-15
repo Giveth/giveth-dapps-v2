@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { captureException } from '@sentry/nextjs';
 import { useRouter } from 'next/router';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
+import { FETCH_PROJECT_BY_SLUG_SUCCESS } from '@/apollo/gql/gqlProjects';
 import SuccessfulCreation from '@/components/SuccessfulCreation';
 import { ProjectMeta } from '@/components/Metatag';
 import { IProject } from '@/apollo/types/types';
@@ -19,7 +19,7 @@ const SuccessRoute = () => {
 			setIsLoading(true);
 			try {
 				const { data } = await client.query({
-					query: FETCH_PROJECT_BY_SLUG,
+					query: FETCH_PROJECT_BY_SLUG_SUCCESS,
 					variables: { slug },
 					fetchPolicy: 'no-cache',
 				});
