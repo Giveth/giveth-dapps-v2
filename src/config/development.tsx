@@ -174,7 +174,6 @@ const config: EnvConfig = {
 				unit: 'LP',
 			},
 		],
-		v3Pools: [],
 		regenPools: [],
 		uniswapV2Subgraph:
 			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
