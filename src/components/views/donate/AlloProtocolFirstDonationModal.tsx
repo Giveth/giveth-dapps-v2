@@ -128,37 +128,27 @@ const AlloProtocolFirstDonationModal: FC<IAlloProtocolModal> = ({
 			closeModal={updatedCloseModal}
 			isAnimating={isAnimating}
 			headerIcon={<IconBulbOutline32 />}
-			headerTitle='Set up Allo Protocol Registry'
+			headerTitle='Recurring Donation Setup'
 			headerTitlePosition='left'
 		>
 			<Container>
 				<P>
-					{formatMessage({ id: 'label.guess_what_you_are_awsome' })}{' '}
+					{formatMessage({
+						id: 'label.you_are_the_first_donor_to_make_a_recurring_donation_to_this_project',
+					})}{' '}
 				</P>
-				<br />
-				<ItemContainer>
-					<P>
-						{formatMessage({
-							id: 'label.you_are_the_first_donor_to_make_a_recurring_donation_to_this_project',
-						})}{' '}
-					</P>
-					<Ellipse />
-				</ItemContainer>
-				<br />
-				<ItemContainer>
-					<P>
-						{formatMessage({
-							id: 'label.there_will_be_one_extra_transaction_you_need_to_sign_to',
-						})}{' '}
-						<span
-							style={{ whiteSpace: 'nowrap', display: 'inline' }}
-						>
-							Optimism
-						</span>
-						.
-					</P>
-					<Ellipse />
-				</ItemContainer>
+				<Ellipse />
+				<br />F
+				<P>
+					{formatMessage({
+						id: 'label.there_will_be_one_extra_transaction_you_need_to_sign_to',
+					})}{' '}
+					<span style={{ whiteSpace: 'nowrap', display: 'inline' }}>
+						Optimism
+					</span>
+					.
+				</P>
+				<Ellipse />
 				<br />
 				<CustomButton
 					label={
