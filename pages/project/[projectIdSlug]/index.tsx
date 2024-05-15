@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
+import { FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT } from '@/apollo/gql/gqlProjects';
 
 import { useReferral } from '@/hooks/useReferral';
 import ProjectIndex from '@/components/views/project/ProjectIndex';
@@ -25,7 +25,7 @@ export async function getServerSideProps(props: {
 		const slug = decodeURI(query.projectIdSlug).replace(/\s/g, '');
 
 		const { data } = await client.query({
-			query: FETCH_PROJECT_BY_SLUG,
+			query: FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
 			variables: { slug },
 			fetchPolicy: 'no-cache',
 		});
