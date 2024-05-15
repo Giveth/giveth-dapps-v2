@@ -14,11 +14,11 @@ const socialMediaColor: { [key: string]: string } = {
 	x: '#26A7DE',
 	instagram: '#8668FC',
 	youtube: '#C4302B',
-	linkedin: '#26A7DE',
+	linkedin: '#165FFA',
 	reddit: '#FF5700',
 	discord: '#7289DA',
 	website: '#2EA096',
-	telegram: '#26A7DE',
+	telegram: '#229ED9',
 };
 
 const removeHttpsAndWwwFromUrl = (socialMediaUrl: string) => {
