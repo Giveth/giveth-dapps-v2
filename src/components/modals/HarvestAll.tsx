@@ -25,7 +25,6 @@ import { Modal } from './Modal';
 import { PoolStakingConfig, RegenStreamConfig } from '@/types/config';
 import { formatWeiHelper } from '@/helpers/number';
 import { harvestTokens } from '@/lib/stakingPool';
-import { claimUnstakeStake } from '@/lib/stakingNFT';
 import { waitForTransaction } from '@/lib/transaction';
 import {
 	ConfirmedInnerModal,
@@ -61,7 +60,6 @@ import { IconWithTooltip } from '../IconWithToolTip';
 import { AmountBoxWithPrice } from '@/components/AmountBoxWithPrice';
 import { IModal } from '@/types/common';
 import { useAppSelector } from '@/features/hooks';
-import { LiquidityPosition } from '@/types/nfts';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
 import { getPoolIconWithName } from '@/helpers/platform';
@@ -73,7 +71,6 @@ interface IHarvestAllInnerModalProps {
 	title: string;
 	poolStakingConfig?: PoolStakingConfig;
 	regenStreamConfig?: RegenStreamConfig;
-	stakedPositions?: LiquidityPosition[];
 	currentIncentive?: {
 		key?: (string | number)[] | null | undefined;
 	};
@@ -94,7 +91,6 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 	setShowModal,
 	poolStakingConfig,
 	regenStreamConfig,
-	stakedPositions,
 	currentIncentive,
 }) => {
 	const [state, setState] = useState<HarvestStates>(HarvestStates.HARVEST);
@@ -208,54 +204,24 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 		try {
 			if (!chainId) return;
 			if (poolStakingConfig) {
-				if (
-					poolStakingConfig.hasOwnProperty(
-						'NFT_POSITIONS_MANAGER_ADDRESS',
-					)
-				) {
-					if (!currentIncentive || !stakedPositions) return;
-					//NFT Harvest
-					const txResponse = await claimUnstakeStake(
-						address,
-						chainId,
-						currentIncentive,
-						stakedPositions,
+				// LP Harvest
+				const txResponse = await harvestTokens(
+					poolStakingConfig.LM_ADDRESS,
+					chainId,
+				);
+				if (txResponse) {
+					setState(HarvestStates.SUBMITTED);
+					setTxHash(txResponse);
+					const { status } = await waitForTransaction(
+						txResponse,
+						isSafeEnv,
 					);
-					if (txResponse) {
-						const { status } = await waitForTransaction(
-							txResponse,
-							isSafeEnv,
-						);
-						setState(
-							status
-								? HarvestStates.CONFIRMED
-								: HarvestStates.ERROR,
-						);
-					} else {
-						setState(HarvestStates.HARVEST);
-					}
-				} else {
-					// LP Harvest
-					const txResponse = await harvestTokens(
-						poolStakingConfig.LM_ADDRESS,
-						chainId,
-					);
-					if (txResponse) {
-						setState(HarvestStates.SUBMITTED);
-						setTxHash(txResponse);
-						const { status } = await waitForTransaction(
-							txResponse,
-							isSafeEnv,
-						);
 
-						setState(
-							status
-								? HarvestStates.CONFIRMED
-								: HarvestStates.ERROR,
-						);
-					} else {
-						setState(HarvestStates.HARVEST);
-					}
+					setState(
+						status ? HarvestStates.CONFIRMED : HarvestStates.ERROR,
+					);
+				} else {
+					setState(HarvestStates.HARVEST);
 				}
 			} else {
 				const txResponse = await claimReward(

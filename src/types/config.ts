@@ -62,19 +62,6 @@ export interface ICHIPoolStakingConfig extends SimplePoolStakingConfig {
 	platform: StakingPlatform.ICHI;
 }
 
-export interface UniswapV3PoolStakingConfig
-	extends Omit<SimplePoolStakingConfig, 'LM_ADDRESS' | 'POOL_ADDRESS'> {
-	INCENTIVE_START_TIME: number;
-	INCENTIVE_END_TIME: number;
-	INCENTIVE_REWARD_AMOUNT: number;
-	NFT_POSITIONS_MANAGER_ADDRESS: string;
-	UNISWAP_V3_STAKER: Address;
-	STAKING_REWARDS_CONTRACT: string;
-	REWARD_TOKEN: string;
-	UNISWAP_V3_LP_POOL: string;
-	INCENTIVE_REFUNDEE_ADDRESS: string;
-	infinitePositionId?: number;
-}
 export interface BalancerPoolStakingConfig extends SimplePoolStakingConfig {
 	VAULT_ADDRESS: Address;
 	POOL_ID: string;
@@ -119,7 +106,6 @@ export interface NetworkConfig extends Chain {
 		| BalancerPoolStakingConfig
 		| ICHIPoolStakingConfig
 	>;
-	v3Pools?: Array<UniswapV3PoolStakingConfig>;
 	regenPools?: RegenPoolStakingConfig[];
 	regenStreams?: RegenStreamConfig[];
 	GIV_TOKEN_ADDRESS?: Address;
@@ -148,7 +134,6 @@ export interface MainnetNetworkConfig extends NetworkConfig {
 		| BalancerPoolStakingConfig
 		| ICHIPoolStakingConfig
 	>;
-	v3Pools: Array<UniswapV3PoolStakingConfig>;
 	regenPools: RegenPoolStakingConfig[];
 	regenStreams: RegenStreamConfig[];
 	GIV_TOKEN_ADDRESS: Address;

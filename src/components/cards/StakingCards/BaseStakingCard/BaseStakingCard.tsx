@@ -19,7 +19,6 @@ import { StakingCardHeader } from './StakingCardHeader';
 import { getNowUnixMS } from '@/helpers/time';
 import { StakingPoolInfoAndActions } from './StakingPoolInfoAndActions';
 import { ArchiveAndNetworkCover } from '@/components/ArchiveAndNetworkCover/ArchiveAndNetworkCover';
-import type { LiquidityPosition } from '@/types/nfts';
 
 export enum StakeCardState {
 	NORMAL,
@@ -30,8 +29,6 @@ export enum StakeCardState {
 interface IBaseStakingCardProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
 	notif?: ReactNode;
-	stakedPositions?: LiquidityPosition[];
-	unstakedPositions?: LiquidityPosition[];
 	currentIncentive?: {
 		key?: (string | number)[] | null | undefined;
 	};
@@ -40,8 +37,6 @@ interface IBaseStakingCardProps {
 const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 	poolStakingConfig,
 	notif,
-	stakedPositions,
-	unstakedPositions,
 	currentIncentive,
 }) => {
 	const [state, setState] = useState(StakeCardState.NORMAL);
@@ -91,8 +86,6 @@ const BaseStakingCard: FC<IBaseStakingCardProps> = ({
 							poolStakingConfig={poolStakingConfig}
 							isDiscontinued={isDiscontinued}
 							isGIVpower={isGIVpower}
-							stakedPositions={stakedPositions}
-							unstakedPositions={unstakedPositions}
 							currentIncentive={currentIncentive}
 						/>
 					</>
