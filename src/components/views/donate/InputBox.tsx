@@ -34,7 +34,7 @@ const InputBox: FC<IInputBox> = ({
 	}, []);
 
 	return (
-		<Box>
+		<Box className={className}>
 			<Wrapper>
 				<Input
 					id='input-box'
