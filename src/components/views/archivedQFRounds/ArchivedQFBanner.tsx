@@ -5,7 +5,7 @@ export const ArchivedQFBanner = () => {
 	return (
 		<BannerContainer>
 			<Image
-				src={'/images/banners/qfBanner.svg'}
+				src={'/images/banners/qf-banner.svg'}
 				style={{ objectFit: 'cover' }}
 				fill
 				alt='QF Banner'
