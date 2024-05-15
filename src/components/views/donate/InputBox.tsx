@@ -15,6 +15,7 @@ interface IInputBox {
 	error?: boolean;
 	onFocus: (i: boolean) => void;
 	disabled?: boolean;
+	className?: string;
 }
 
 const InputBox: FC<IInputBox> = ({
@@ -23,6 +24,7 @@ const InputBox: FC<IInputBox> = ({
 	error,
 	onFocus,
 	disabled,
+	className,
 }) => {
 	const { formatMessage } = useIntl();
 	const [inputRef, setFocus] = useFocus();

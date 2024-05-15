@@ -54,6 +54,7 @@ import Routes from '@/lib/constants/Routes';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { useAppSelector } from '@/features/hooks';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
+import InputBox from './InputBox';
 
 // These two functions are used to make the slider more user friendly by mapping the slider's value to a new range.
 /**
@@ -372,7 +373,7 @@ export const RecurringDonationCard = () => {
 								id: 'label.amount_to_donate_monthly',
 							})}
 						</Caption>
-						<SliderWrapper>
+						<Flex gap='4px' $alignItems='center'>
 							<StyledSlider
 								min={0}
 								max={100}
@@ -397,7 +398,25 @@ export const RecurringDonationCard = () => {
 								value={mapValueInverse(percentage)}
 								disabled={amount === 0n}
 							/>
-						</SliderWrapper>
+							<InputSlider
+								value={
+									totalPerMonth !== 0n && percentage !== 0
+										? Number(
+												limitFraction(
+													formatUnits(
+														totalPerMonth,
+														selectedToken?.token
+															.decimals || 18,
+													),
+												),
+											)
+										: 0
+								}
+								onFocus={() => {}}
+								onChange={() => {}}
+								disabled={selectedToken === undefined}
+							/>
+						</Flex>
 						<Flex $justifyContent='space-between'>
 							<Flex gap='4px'>
 								<Caption>
@@ -820,12 +839,32 @@ const GLinkStyled = styled(GLink)`
 	}
 `;
 
-const SliderWrapper = styled.div`
-	width: 100%;
-	position: relative;
-`;
+// const SliderWrapper = styled.div`
+// 	width: 100%;
+// 	position: relative;
+// `;
 
 const StyledSlider = styled(Slider)``;
+
+const InputSlider = styled(InputBox)`
+	width: 100%;
+	border-left: 20px solid ${neutralColors.gray[300]} !important;
+	background: red !important;
+	padding: 20px;
+	#input-box {
+		display: none;
+		border: none;
+		flex: 1;
+		font-family: Red Hat Text;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: 150%; /* 24px */
+		width: 100%;
+		border-left: 20px solid ${neutralColors.gray[500]};
+		background-color: ${neutralColors.gray[100]};
+	}
+`;
 
 const GivethSection = styled(Flex)`
 	flex-direction: column;
