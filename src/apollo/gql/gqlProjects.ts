@@ -97,7 +97,103 @@ export const FETCH_ALL_PROJECTS = gql`
 	}
 `;
 
-export const FETCH_PROJECT_BY_SLUG = gql`
+export const FETCH_PROJECT_BY_SLUG_VERIFICATION = gql`
+	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
+		projectBySlug(
+			slug: $slug
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			status {
+				name
+			}
+			adminUser {
+				walletAddress
+			}
+		}
+	}
+`;
+
+export const FETCH_PROJECT_BY_SLUG_SUCCESS = gql`
+	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
+		projectBySlug(
+			slug: $slug
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			id
+			title
+			image
+			slug
+			descriptionSummary
+			adminUser {
+				id
+				name
+				walletAddress
+				avatar
+			}
+		}
+	}
+`;
+
+export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
+	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
+		projectBySlug(
+			slug: $slug
+			connectedWalletUserId: $connectedWalletUserId
+		) {
+			id
+			title
+			image
+			slug
+			descriptionSummary
+			verified
+			sumDonationValueUsd
+			sumDonationValueUsdForActiveQfRound
+			countUniqueDonorsForActiveQfRound
+			adminUser {
+				id
+				name
+				walletAddress
+				avatar
+			}
+			organization {
+				label
+				supportCustomTokens
+			}
+			addresses {
+				address
+				isRecipient
+				networkId
+				chainType
+			}
+			status {
+				name
+			}
+			estimatedMatching {
+				projectDonationsSqrtRootSum
+				allProjectsSum
+				matchingPool
+			}
+			qfRounds {
+				id
+				name
+				isActive
+				beginDate
+				endDate
+				eligibleNetworks
+				maximumReward
+				allocatedTokenSymbol
+				allocatedFundUSDPreferred
+				allocatedFundUSD
+			}
+			anchorContracts {
+				address
+				isActive
+			}
+		}
+	}
+`;
+
+export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 	query ProjectBySlug($slug: String!, $connectedWalletUserId: Int) {
 		projectBySlug(
 			slug: $slug
@@ -111,7 +207,6 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 			verified
 			totalDonations
 			description
-			descriptionSummary
 			addresses {
 				address
 				isRecipient
@@ -151,9 +246,6 @@ export const FETCH_PROJECT_BY_SLUG = gql`
 				name
 				label
 				supportCustomTokens
-			}
-			projectVerificationForm {
-				status
 			}
 			verificationFormStatus
 			projectPower {
