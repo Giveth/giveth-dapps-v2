@@ -8,7 +8,6 @@ import {
 	Flex,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import ProjectCardImage from './ProjectCardImage';
 import ProjectCardOrgBadge from './ProjectCardOrgBadge';
@@ -36,13 +35,11 @@ const ProjectCard = (props: IProjectCard) => {
 		verified,
 		adminUser,
 		slug,
-		totalDonations,
 		organization,
 	} = project;
 
 	const { name, walletAddress } = adminUser || {};
 	const orgLabel = organization?.label;
-	const { formatMessage } = useIntl();
 	const pfpToken = useGiverPFPToken(
 		adminUser?.walletAddress,
 		adminUser?.avatar,
