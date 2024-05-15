@@ -218,17 +218,13 @@ const ProjectsIndex = (props: IProjectsView) => {
 				<ProjectsBanner mainCategory={selectedMainCategory} />
 			)}
 			<Wrapper>
-				{isQF ? (
-					isArchivedQF ? (
-						<ArchivedQFRoundStats />
-					) : (
-						<>
-							<ActiveQFRoundStats />
-							<FilterContainer />
-						</>
-					)
+				{isArchivedQF ? (
+					<ArchivedQFRoundStats />
 				) : (
-					<FilterContainer />
+					<>
+						{isQF && <ActiveQFRoundStats />}
+						<FilterContainer />
+					</>
 				)}
 				<SortingContainer>
 					<SortContainer totalCount={totalCount} />
