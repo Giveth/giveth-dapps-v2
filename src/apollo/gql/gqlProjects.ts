@@ -283,19 +283,6 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			campaigns {
 				id
 				title
-				# description
-				# type
-				# photo
-				# video
-				# videoPreview
-				# slug
-				# isActive
-				# order
-				# landingLink
-				# filterFields
-				# sortingField
-				# createdAt
-				# updatedAt
 			}
 			anchorContracts {
 				address
