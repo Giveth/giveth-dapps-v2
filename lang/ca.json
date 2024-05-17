@@ -789,6 +789,7 @@
 	"label.recurring_donation_card_subheader_1": "Transmeteu les vostres donacions al llarg del temps per proporcionar finançament continu.",
 	"label.recurring_donation_card_subheader_2": "Decideix la quantitat de tokens a dipositar en el teu saldo de transmissió, o utilitza el/els teu(s) saldo(s) de transmissió existent(s). Estableix l'import de la donació mensual en tokens i comença a transmetre.",
 	"label.recurring_donation_updated_hours": "Les quantitats de les donacions recurrents s'actualitzen cada 24 hores.",
+	"label.recurring_donation_maximum": "Aquest és el màxim que podeu donar mensualment, recarregueu el vostre saldo de reproducció per donar més!",
 	"label.refer_a_friend": "Recomana un amic, guanya tokens $GIV per cada donació.",
 	"label.refer_your_friends": "Recomana els teus amics",
 	"label.refer_your_friends_and_earn_giv": "Recomana els teus amics i guanya GIV quan donin",

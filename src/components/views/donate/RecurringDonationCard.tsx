@@ -54,7 +54,6 @@ import Routes from '@/lib/constants/Routes';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { useAppSelector } from '@/features/hooks';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
-import InputBox from './InputBox';
 
 // These two functions are used to make the slider more user friendly by mapping the slider's value to a new range.
 /**
@@ -398,76 +397,36 @@ export const RecurringDonationCard = () => {
 								value={mapValueInverse(percentage)}
 								disabled={amount === 0n}
 							/>
-							<InputSlider>
-								<InputBox
-									value={
-										totalPerMonth !== 0n && percentage !== 0
-											? Number(
-													limitFraction(
-														formatUnits(
-															totalPerMonth,
-															selectedToken?.token
-																.decimals || 18,
-														),
-													),
-												)
-											: 0
-									}
-									onFocus={() => {}}
-									onChange={value => {
-										const numericValue =
-											value === null ||
-											value === undefined
-												? 0
-												: parseFloat(value.toString());
-										console.log(typeof value);
-										console.log({ value });
-										console.log(typeof numericValue);
-										console.log({ numericValue });
-
-										const _value = parseUnits(
-											numericValue.toString(),
-											selectedToken?.token.decimals || 18,
-										);
-
-										console.log(typeof _value);
-										console.log(
-											Number(
-												limitFraction(
-													formatUnits(
-														amount,
-														selectedToken?.token
-															.decimals || 18,
-													),
-												),
-											),
-										);
-
-										const percentage =
-											(numericValue /
-												Number(
-													limitFraction(
-														formatUnits(
-															amount,
-															selectedToken?.token
-																.decimals || 18,
-														),
-													),
-												)) *
-											100;
-
-										console.log({ _value });
-										console.log({ percentage });
-
-										setPercentage(mapValue(percentage));
-
-									}}
-									disabled={selectedToken === undefined}
-								/>
-							</InputSlider>
+							<InputSlider
+								amount={totalPerMonth}
+								// setAmount={setAmount}
+								maxAmount={amount}
+								decimals={selectedToken?.token.decimals || 18}
+								setAmount={value => {
+									console.log({ value });
+									console.log({ totalPerMonth });
+									BigInt(totalPerMonth);
+									const percentage =
+										amount === 0n
+											? 0
+											: (BigInt(value.toString()) *
+													BigInt(100)) /
+												BigInt(amount);
+									console.log({ percentage });
+									console.log(Number(percentage));
+									setPercentage(mapValue(Number(percentage)));
+								}}
+								disabled={selectedToken === undefined}
+								className={percentage > 100 ? 'error' : ''}
+							/>
 						</Flex>
-						<div>Total per month: {totalPerMonth.toString()}</div>
-						<div>Total amount: {amount.toString()}</div>
+						{percentage > 100 && (
+							<RecurringMessage>
+								{formatMessage({
+									id: 'label.recurring_donation_maximum',
+								})}
+							</RecurringMessage>
+						)}
 						<Flex $justifyContent='space-between'>
 							<Flex gap='4px'>
 								<Caption>
@@ -878,6 +837,14 @@ const Input = styled(AmountInput)`
 	}
 `;
 
+const RecurringMessage = styled(P)`
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 18px;
+	color: #e6492d;
+`;
+
 export const IconWrapper = styled.div`
 	cursor: pointer;
 	color: ${brandColors.giv[500]};
@@ -890,36 +857,19 @@ const GLinkStyled = styled(GLink)`
 	}
 `;
 
-// const SliderWrapper = styled.div`
-// 	width: 100%;
-// 	position: relative;
-// `;
-
 const StyledSlider = styled(Slider)``;
 
-const InputSlider = styled.div`
+const InputSlider = styled(AmountInput)`
 	width: 27%;
-	border: 2px solid ${neutralColors.gray[300]} !important;
+	border: 2px solid ${neutralColors.gray[300]};
 	border-radius: 8px;
-	div {
-		padding: 5px;
-		height: auto;
+	padding: 2px;
+	#amount-input {
+		width: 100%;
 	}
-	div #input-box {
-		padding: 0px;
+	&&.error {
+		border-color: #e6492d;
 	}
-	// #input-box {
-	// 	border: none;
-	// 	flex: 1;
-	// 	font-family: Red Hat Text;
-	// 	font-size: 16px;
-	// 	font-style: normal;
-	// 	font-weight: 500;
-	// 	line-height: 150%; /* 24px */
-	// 	width: 100%;
-	// 	border-left: 20px solid ${neutralColors.gray[500]};
-	// 	background-color: ${neutralColors.gray[100]};
-	// }
 `;
 
 const GivethSection = styled(Flex)`
