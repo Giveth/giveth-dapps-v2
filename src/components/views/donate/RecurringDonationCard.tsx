@@ -17,7 +17,7 @@ import {
 } from '@giveth/ui-design-system';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { formatUnits } from 'viem';
+import { formatUnits, parseUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import Slider from 'rc-slider';
 import Image from 'next/image';
@@ -398,25 +398,76 @@ export const RecurringDonationCard = () => {
 								value={mapValueInverse(percentage)}
 								disabled={amount === 0n}
 							/>
-							<InputSlider
-								value={
-									totalPerMonth !== 0n && percentage !== 0
-										? Number(
+							<InputSlider>
+								<InputBox
+									value={
+										totalPerMonth !== 0n && percentage !== 0
+											? Number(
+													limitFraction(
+														formatUnits(
+															totalPerMonth,
+															selectedToken?.token
+																.decimals || 18,
+														),
+													),
+												)
+											: 0
+									}
+									onFocus={() => {}}
+									onChange={value => {
+										const numericValue =
+											value === null ||
+											value === undefined
+												? 0
+												: parseFloat(value.toString());
+										console.log(typeof value);
+										console.log({ value });
+										console.log(typeof numericValue);
+										console.log({ numericValue });
+
+										const _value = parseUnits(
+											numericValue.toString(),
+											selectedToken?.token.decimals || 18,
+										);
+
+										console.log(typeof _value);
+										console.log(
+											Number(
 												limitFraction(
 													formatUnits(
-														totalPerMonth,
+														amount,
 														selectedToken?.token
 															.decimals || 18,
 													),
 												),
-											)
-										: 0
-								}
-								onFocus={() => {}}
-								onChange={() => {}}
-								disabled={selectedToken === undefined}
-							/>
+											),
+										);
+
+										const percentage =
+											(numericValue /
+												Number(
+													limitFraction(
+														formatUnits(
+															amount,
+															selectedToken?.token
+																.decimals || 18,
+														),
+													),
+												)) *
+											100;
+
+										console.log({ _value });
+										console.log({ percentage });
+
+										setPercentage(mapValue(percentage));
+
+									}}
+									disabled={selectedToken === undefined}
+								/>
+							</InputSlider>
 						</Flex>
+						<div>Total per month: {totalPerMonth.toString()}</div>
+						<div>Total amount: {amount.toString()}</div>
 						<Flex $justifyContent='space-between'>
 							<Flex gap='4px'>
 								<Caption>
@@ -846,24 +897,29 @@ const GLinkStyled = styled(GLink)`
 
 const StyledSlider = styled(Slider)``;
 
-const InputSlider = styled(InputBox)`
-	width: 100%;
-	border-left: 20px solid ${neutralColors.gray[300]} !important;
-	background: red !important;
-	padding: 20px;
-	#input-box {
-		display: none;
-		border: none;
-		flex: 1;
-		font-family: Red Hat Text;
-		font-size: 16px;
-		font-style: normal;
-		font-weight: 500;
-		line-height: 150%; /* 24px */
-		width: 100%;
-		border-left: 20px solid ${neutralColors.gray[500]};
-		background-color: ${neutralColors.gray[100]};
+const InputSlider = styled.div`
+	width: 27%;
+	border: 2px solid ${neutralColors.gray[300]} !important;
+	border-radius: 8px;
+	div {
+		padding: 5px;
+		height: auto;
 	}
+	div #input-box {
+		padding: 0px;
+	}
+	// #input-box {
+	// 	border: none;
+	// 	flex: 1;
+	// 	font-family: Red Hat Text;
+	// 	font-size: 16px;
+	// 	font-style: normal;
+	// 	font-weight: 500;
+	// 	line-height: 150%; /* 24px */
+	// 	width: 100%;
+	// 	border-left: 20px solid ${neutralColors.gray[500]};
+	// 	background-color: ${neutralColors.gray[100]};
+	// }
 `;
 
 const GivethSection = styled(Flex)`
