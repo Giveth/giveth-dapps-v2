@@ -1,18 +1,26 @@
 import styled from 'styled-components';
 import Image from 'next/image';
-import { brandColors, P, FlexCenter } from '@giveth/ui-design-system';
+import { brandColors, FlexCenter } from '@giveth/ui-design-system';
 import ExternalLink from '@/components/ExternalLink';
-import Gitcoin from '/public/images/partnerships/Gitcoin.svg';
+import Regen from '/public/images/regen-token.png';
 
 const FundraisingBanner = () => {
 	return (
 		<Wrapper>
-			<P>Support Giveth with a donation in Gitcoin Grants round 20!</P>
-			<Image src={Gitcoin} alt='Gitcoin Grants' width={24} height={24} />
 			<PStyled>
-				<ExternalLink href='https://explorer.gitcoin.co/#/round/42161/25/55'>
-					<Purple>Check out our grant page here.</Purple>
-				</ExternalLink>
+				<>The Giveth website is experiencing high traffic due to the </>
+				<>
+					<ExternalLink href='https://paragraph.xyz/@regen/introducing-regen'>
+						<Purple>$REGEN token announcement.</Purple>
+					</ExternalLink>
+					<ImageStyled
+						src={Regen}
+						alt='Gitcoin Grants'
+						width={24}
+						height={24}
+					/>
+				</>
+				<>You may experience slow loading times, we're working on it.</>
 			</PStyled>
 		</Wrapper>
 	);
@@ -21,10 +29,19 @@ const FundraisingBanner = () => {
 const PStyled = styled.div`
 	display: flex;
 	gap: 4px;
+	@media (max-width: 768px) {
+		flex-direction: column;
+	}
 `;
 
 const Purple = styled.div`
 	color: ${brandColors.giv[500]};
+`;
+
+const ImageStyled = styled(Image)`
+	@media (max-width: 768px) {
+		display: none;
+	}
 `;
 
 const Wrapper = styled(FlexCenter)`
@@ -32,7 +49,7 @@ const Wrapper = styled(FlexCenter)`
 	padding: 16px;
 	text-align: center;
 	gap: 4px;
-	background: ${brandColors.giv[100]};
+	background: ${brandColors.mustard[300]};
 	z-index: 99;
 	position: sticky;
 `;
