@@ -1,29 +1,40 @@
 import { H5, P, brandColors } from '@giveth/ui-design-system';
 import Link from 'next/link';
+import { useIntl } from 'react-intl';
 import React from 'react';
 import styled from 'styled-components';
 import Routes from '@/lib/constants/Routes';
 import links from '@/lib/constants/links';
 
 export const ManageRecurringDonation = () => {
+	const { formatMessage } = useIntl();
 	return (
 		<Box>
-			<Title weight={700}>Managing your recurring donations</Title>
+			<Title weight={700}>
+				{formatMessage({
+					id: 'label.managing_your_recurring_donations',
+				})}
+			</Title>
 			<br />
 			<P>
-				You can modify or delete your recurring donation as well as
-				top-up funds to your stream balance from the 
+				{formatMessage({
+					id: 'label.successfull_recurring_donation_1',
+				})}
 				<Link href={Routes.MyRecurringDonations}>
-					Recurring Donations page
+					{formatMessage({
+						id: 'label.recurring_dontion_page',
+					})}
 				</Link>
 				.
 			</P>
 			<P>
-				To learn more about how recurring donations work, visit our{' '}
+				{formatMessage({
+					id: 'label.successfull_recurring_donation_2',
+				})}{' '}
 				<a href={links.RECURRING_DONATION_DOCS} target='_blank'>
-					documentation article
+					{formatMessage({ id: 'label.documentation' })}
 				</a>
-				 .
+				.
 			</P>
 		</Box>
 	);
