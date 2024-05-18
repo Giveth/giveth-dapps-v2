@@ -602,7 +602,7 @@ const faqContent = (formatMessage: any) => {
 							target='_blank'
 							rel='noreferrer'
 						>
-							<FormattedMessage id='label.this_form' />
+							<FormattedMessage id='label.this_documentation' />
 						</a>
 						.
 					</>

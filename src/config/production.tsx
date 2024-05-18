@@ -107,7 +107,7 @@ const config: EnvConfig = {
 		},
 
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet?source=giveth',
 		coingeckoChainName: 'ethereum',
 		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
 
@@ -225,7 +225,7 @@ const config: EnvConfig = {
 			},
 		],
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
 		regenStreams: [
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -251,7 +251,7 @@ const config: EnvConfig = {
 		},
 
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai?source=giveth',
 		coingeckoChainName: 'xdai',
 		chainLogo: (logoSize = 24) => <IconGnosisChain size={logoSize} />,
 
@@ -361,7 +361,7 @@ const config: EnvConfig = {
 		],
 
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2',
+			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
 
 		regenStreams: [
 			{
@@ -398,7 +398,7 @@ const config: EnvConfig = {
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet?source=giveth',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
 			'https://velodrome.finance/swap?from=eth&to=0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
@@ -420,7 +420,7 @@ const config: EnvConfig = {
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
 			'0x5430757bc19c87ec562e4660e56af6cac324b50a',
 		superFluidSubgraph:
-			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet',
+			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet?source=giveth',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {

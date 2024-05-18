@@ -99,10 +99,12 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 						</ProjectTitleCell>
 					</Link>
 					<DonationTableCell>
-						<NetworkLogo
-							chainId={donation.networkId}
-							logoSize={32}
-						/>
+						<NetworkLogoWrapper>
+							<NetworkLogo
+								chainId={donation.networkId}
+								logoSize={32}
+							/>
+						</NetworkLogoWrapper>
 					</DonationTableCell>
 					{!myAccount &&
 					donation.status === ERecurringDonationStatus.ENDED ? (
@@ -171,6 +173,10 @@ const DonationTableCell = styled(TableCell)<{ $bold?: boolean }>`
 	height: 60px;
 	border-bottom: 1px solid ${neutralColors.gray[300]};
 	font-weight: ${props => (props.$bold ? 500 : 400)};
+`;
+
+const NetworkLogoWrapper = styled.div`
+	margin-left: 5px;
 `;
 
 const DonationTableContainer = styled.div<{ $myAccount?: boolean }>`

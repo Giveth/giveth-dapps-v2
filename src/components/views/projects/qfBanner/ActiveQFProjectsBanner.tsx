@@ -75,7 +75,10 @@ export const ActiveQFProjectsBanner = () => {
 	return (
 		<BannerContainer>
 			<Image
-				src={'/images/banners/qf-round/bg.svg'}
+				src={
+					activeRound?.bannerBgImage ||
+					'/images/banners/qf-round/bg.svg'
+				}
 				style={{ objectFit: 'cover' }}
 				fill
 				alt='QF Banner'
@@ -163,53 +166,53 @@ const sponsors = [
 		image: '/images/banners/qf-round/sponsor2.svg',
 	},
 	{
-		title: '@Arbitrum',
+		title: '@GMX_IO',
 		image: '/images/banners/qf-round/sponsor4.svg',
 	},
 	{
-		title: '@Arbitrum',
+		title: '@Gains_Network_io',
 		image: '/images/banners/qf-round/sponsor5.svg',
 	},
 ];
 
 const topSponsors = [
 	{
-		title: '@PublicNouns',
+		title: '@Arbitrum',
 		image: '/images/banners/qf-round/sponsor3.svg',
 	},
 	{
-		title: '@OctantApp',
+		title: '@GloDollar',
 		image: '/images/banners/qf-round/sponsor6.svg',
 	},
 	{
-		title: '@Arbitrum',
+		title: '@LottoPGF',
 		image: '/images/banners/qf-round/sponsor7.svg',
 	},
 	{
-		title: '@Arbitrum',
+		title: '@Open_Dollar',
 		image: '/images/banners/qf-round/sponsor8.svg',
 	},
 ];
 
 const bottomSponsors = [
 	{
-		title: '@PublicNouns',
+		title: '@PremiaFinance',
 		image: '/images/banners/qf-round/sponsor9.svg',
 	},
 	{
-		title: '@OctantApp',
+		title: '@MuxProtocol',
 		image: '/images/banners/qf-round/sponsor10.svg',
 	},
 	{
-		title: '@Arbitrum',
+		title: '@_WOOFI',
 		image: '/images/banners/qf-round/sponsor11.svg',
 	},
 	{
-		title: '@Arbitrum',
+		title: '@Rage_Trade',
 		image: '/images/banners/qf-round/sponsor12.svg',
 	},
 	{
-		title: '@Arbitrum',
+		title: '@BreederDodo',
 		image: '/images/banners/qf-round/sponsor13.svg',
 	},
 ];

@@ -164,7 +164,7 @@ const AddressInterface = ({
 												id: 'label.allo_protocol_registry_set_up',
 											})
 										: formatMessage({
-												id: 'label.set_up_profile_on_the_allo_protocol_registry',
+												id: 'label.enable_recurring_donations',
 											})}
 								</B>
 								<div>
@@ -178,14 +178,14 @@ const AddressInterface = ({
 												})}
 									</CustomP>
 									<CustomLink
-										href={links.ALLO_PROTOCOL}
+										href={links.RECURRING_DONATION_DOCS}
 										target='_blank'
 									>
-										Allo Protocol
+										{formatMessage({
+											id: 'label.learn_more_recurring_donations',
+										})}
 									</CustomLink>
-									{hasAnchorContract && isEditMode
-										? '.'
-										: '?'}
+									.
 								</div>
 							</div>
 							{hasAnchorContract && isEditMode ? (

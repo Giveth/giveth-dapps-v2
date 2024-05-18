@@ -18,12 +18,12 @@ export const QFProjectsMiddleBanner = () => {
 		<Box $flexDirection='column' gap='23px'>
 			<BigArc color={semanticColors.jade[200]} />
 			<Title weight={700} color={semanticColors.jade[700]}>
-				{round
+				{round && round.title
 					? round.title
 					: formatMessage({ id: 'component.qf_middle_banner.title' })}
 			</Title>
 			<Caption>
-				{round
+				{round && round.description
 					? round.description
 					: formatMessage({ id: 'component.qf_middle_banner.desc' })}
 			</Caption>
