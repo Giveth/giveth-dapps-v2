@@ -86,7 +86,12 @@ const moduleExports = withBundleAnalyzer({
 			},
 			{
 				source: '/qf',
-				destination: '/qf/all',
+				destination: '/projects/all',
+				permanent: true,
+			},
+			{
+				source: '/qf/all',
+				destination: '/projects/all',
 				permanent: true,
 			},
 			{
