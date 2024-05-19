@@ -25,7 +25,7 @@ interface ISocialBox {
 
 const SocialBox: FC<ISocialBox> = props => {
 	const { project, contentType, isDonateFooter } = props;
-	const { description, slug } = project;
+	const { descriptionSummary, slug } = project;
 	const { formatMessage } = useIntl();
 
 	const shareTitleTwitter = shareContentCreator(
@@ -59,7 +59,7 @@ const SocialBox: FC<ISocialBox> = props => {
 				<SocialItem $isDonateFooter={isDonateFooter}>
 					<LinkedinShareButton
 						title={shareTitleFacebookAndLinkedin}
-						summary={description}
+						summary={descriptionSummary}
 						url={projectUrl || ''}
 					>
 						<Image

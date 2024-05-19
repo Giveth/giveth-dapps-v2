@@ -6,7 +6,7 @@ import { captureException } from '@sentry/nextjs';
 import { IDonationProject } from '@/apollo/types/types';
 import {
 	FETCH_GIVETH_PROJECT_BY_ID,
-	FETCH_PROJECT_BY_SLUG,
+	FETCH_PROJECT_BY_SLUG_DONATION,
 } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { ProjectMeta } from '@/components/Metatag';
@@ -47,7 +47,7 @@ export const getServerSideProps: GetServerSideProps = async props => {
 		const { query } = props;
 		const slug = decodeURI(query.slug as string).replace(/\s/g, '');
 		const { data } = await client.query({
-			query: FETCH_PROJECT_BY_SLUG,
+			query: FETCH_PROJECT_BY_SLUG_DONATION,
 			variables: { slug },
 			fetchPolicy: 'no-cache',
 		});

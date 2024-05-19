@@ -14,7 +14,7 @@ import { ISuperfluidStream, IToken } from '@/types/superFluid';
 import { ChainType } from '@/types/config';
 import { useUserStreams } from '@/hooks/useUserStreams';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
+import { FETCH_PROJECT_BY_SLUG_DONATION } from '@/apollo/gql/gqlProjects';
 
 export interface TxHashWithChainType {
 	txHash: string;
@@ -75,7 +75,7 @@ export const DonateProvider: FC<IProviderProps> = ({ children, project }) => {
 
 	const fetchProject = useCallback(async () => {
 		const { data } = (await client.query({
-			query: FETCH_PROJECT_BY_SLUG,
+			query: FETCH_PROJECT_BY_SLUG_DONATION,
 			variables: { slug: project.slug },
 			fetchPolicy: 'no-cache',
 		})) as { data: { projectBySlug: IDonationProject } };

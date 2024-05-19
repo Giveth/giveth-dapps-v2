@@ -12,7 +12,7 @@ import UserNotSignedIn from '@/components/UserNotSignedIn';
 import { compareAddresses, isUserRegistered } from '@/lib/helpers';
 import CompleteProfile from '@/components/CompleteProfile';
 import { client } from '@/apollo/apolloClient';
-import { FETCH_PROJECT_BY_SLUG } from '@/apollo/gql/gqlProjects';
+import { FETCH_PROJECT_BY_SLUG_VERIFICATION } from '@/apollo/gql/gqlProjects';
 import { IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import NotAvailableHandler from '@/components/NotAvailableHandler';
@@ -45,7 +45,7 @@ const VerificationRoute = () => {
 		setIsCancelled(false);
 		client
 			.query({
-				query: FETCH_PROJECT_BY_SLUG,
+				query: FETCH_PROJECT_BY_SLUG_VERIFICATION,
 				variables: {
 					slug,
 					connectedWalletUserId: Number(userData?.id),
