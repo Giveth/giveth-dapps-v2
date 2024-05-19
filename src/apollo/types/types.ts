@@ -85,10 +85,6 @@ export interface IProject {
 	socialMedia: IProjectSocialMedia[];
 }
 
-export interface IDonationProject extends IProject {
-	givethAddresses: IWalletAddress[];
-}
-
 export enum EProjectsFilter {
 	ACCEPT_GIV = 'AcceptGiv',
 	VERIFIED = 'Verified',
