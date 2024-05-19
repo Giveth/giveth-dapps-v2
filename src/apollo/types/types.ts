@@ -57,7 +57,6 @@ export interface IProject {
 	donations: {
 		id?: string;
 	}[];
-	users: IUser[];
 	totalDonations?: number;
 	totalProjectUpdates?: number;
 	status: {
