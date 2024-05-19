@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
 	brandColors,
@@ -6,6 +6,7 @@ import {
 	Lead,
 	neutralColors,
 	Button,
+	FlexCenter,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { Chain } from 'viem';
@@ -32,10 +33,12 @@ import { TxHashWithChainType, useDonateData } from '@/context/donate.context';
 import { useCreateEvmDonation } from '@/hooks/useCreateEvmDonation';
 import { useGeneralWallet } from '@/providers/generalWalletProvider';
 import { ChainType } from '@/types/config';
-import { IWalletAddress } from '@/apollo/types/types';
+import { IProject, IWalletAddress } from '@/apollo/types/types';
 import { useCreateSolanaDonation } from '@/hooks/useCreateSolanaDonation';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 import { calcDonationShare } from '@/components/views/donate/helpers';
+import { Spinner } from '@/components/Spinner';
+import { FETCH_GIVETH_PROJECT_BY_ID } from '@/apollo/gql/gqlProjects';
 
 interface IDonateModalProps extends IModal {
 	token: IProjectAcceptedToken;
@@ -85,13 +88,35 @@ const DonateModal: FC<IDonateModalProps> = props => {
 	const [donating, setDonating] = useState(false);
 	const [secondTxStatus, setSecondTxStatus] = useState<EToastType>();
 	const [processFinished, setProcessFinished] = useState(false);
+	const [isLoadingGivethAddress, setIsLoadingGivethAddress] =
+		useState(isDonatingToGiveth);
+	const [givethProject, setGivethProject] = useState<IProject>();
 	const [failedModalType, setFailedModalType] =
 		useState<EDonationFailedType>();
+
+	useEffect(() => {
+		const fetchGivethProject = async () => {
+			try {
+				const { data } = await client.query({
+					query: FETCH_GIVETH_PROJECT_BY_ID,
+					variables: { id: config.GIVETH_PROJECT_ID },
+					fetchPolicy: 'no-cache',
+				});
+				setGivethProject(data.projectById);
+				setIsLoadingGivethAddress(false);
+			} catch (e) {
+				setIsLoadingGivethAddress(false);
+				showToastError('Failed to fetch Giveth wallet address');
+				console.log('Failed to fetch Giveth wallet address', e);
+			}
+		};
+		if (isLoadingGivethAddress) fetchGivethProject().then();
+	}, []);
 
 	const tokenPrice = useTokenPrice(token);
 
 	const chainvineReferred = getWithExpiry(StorageLabel.CHAINVINEREFERRED);
-	const { title, addresses, givethAddresses } = project || {};
+	const { title, addresses } = project || {};
 
 	const projectWalletAddress = findMatchingWalletAddress(
 		addresses,
@@ -228,6 +253,13 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			chainType: token.chainType,
 		});
 	};
+
+	if (isLoadingGivethAddress)
+		return (
+			<Loading>
+				<Spinner />
+			</Loading>
+		);
 
 	return (
 		<>
@@ -380,6 +412,18 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		</>
 	);
 };
+
+const Loading = styled(FlexCenter)`
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	height: 100%;
+	width: 100%;
+	background-color: gray;
+	transition: opacity 0.3s ease-in-out;
+	opacity: 0.9;
+`;
 
 const findMatchingWalletAddress = (
 	addresses: IWalletAddress[] = [],
