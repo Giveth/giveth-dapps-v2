@@ -33,7 +33,7 @@ export const Item: FC<IItemProps> = ({
 								amount,
 								token.underlyingToken?.decimals || 18,
 							),
-						).replace(/\.?0+$/, '')}
+						)}
 						&nbsp;{token.symbol}
 					</B>
 					{subtext}

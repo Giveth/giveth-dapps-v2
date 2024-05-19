@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
+import Image from 'next/image';
 import {
 	brandColors,
 	GLink,
@@ -33,7 +34,12 @@ const ImageUploader: FC<IImageUploader> = props => {
 		<>
 			{url ? (
 				<ShowingImage>
-					<img src={url} alt='uploaded image' width='100%' />
+					<Image
+						src={url}
+						alt='uploaded image'
+						layout='fill'
+						objectFit='cover'
+					/>
 				</ShowingImage>
 			) : (
 				<DropZone {...getRootProps()}>
@@ -99,9 +105,8 @@ const ImageUploader: FC<IImageUploader> = props => {
 };
 
 const ShowingImage = styled.div`
-	> img {
-		border-radius: 8px;
-	}
+	position: relative;
+	border-radius: 8px;
 `;
 
 const DropZone = styled(FlexCenter)`

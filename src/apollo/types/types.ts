@@ -41,7 +41,7 @@ export interface IProject {
 	image?: string;
 	slug: string;
 	creationDate?: string;
-	admin?: string;
+	adminUserId?: number;
 	description?: string;
 	descriptionSummary?: string;
 	addresses?: IWalletAddress[];
@@ -186,6 +186,7 @@ export enum EProjectSocialMediaType {
 	FARCASTER = 'FARCASTER',
 	LENS = 'LENS',
 	WEBSITE = 'WEBSITE',
+	TELEGRAM = 'TELEGRAM',
 }
 
 export interface IProjectSocialMedia {
@@ -474,6 +475,11 @@ export interface IQFRound {
 	allocatedFundUSDPreferred: boolean;
 	allocatedTokenSymbol: string;
 	allocatedTokenChainId: number;
+}
+
+export interface IArchivedQFRound extends IQFRound {
+	totalDonations: number;
+	uniqueDonors: number;
 }
 
 export interface IGetQfRoundHistory {

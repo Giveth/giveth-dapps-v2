@@ -144,7 +144,7 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 								{hasActiveQFRound ? (
 									<QFSection projectData={projectData} />
 								) : (
-									<DonateSection />
+									<DonateSection projectData={projectData} />
 								)}
 							</MobileContainer>
 						)}

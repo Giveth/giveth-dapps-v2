@@ -78,7 +78,7 @@ export const ProjectsProvider = (props: {
 				: [router.query.filter]
 		) as EProjectsFilter[];
 	}
-	if (_isQF) {
+	if (_isQF && !isArchivedQF) {
 		filters
 			? filters.push(EProjectsFilter.ACTIVE_QF_ROUND)
 			: (filters = [EProjectsFilter.ACTIVE_QF_ROUND]);

@@ -108,7 +108,6 @@ export class SubgraphQueryBuilder {
 	};
 
 	private static getUniswapPositionsQuery = (address?: string): string => {
-		const uniswapConfig = config.MAINNET_CONFIG.v3Pools[0];
 		const userPositionsQuery = `
 		${
 			address
@@ -145,28 +144,6 @@ export class SubgraphQueryBuilder {
 			staker
 		}
 		`;
-
-		if (uniswapConfig?.infinitePositionId) {
-			return (
-				userPositionsQuery +
-				`infinitePositionRewardInfo: uniswapInfinitePosition(id: ${uniswapConfig.infinitePositionId}) {
-    			id
-    			lastRewardAmount
-  				lastUpdateTimeStamp
-  			}
-  			infinitePositionInfo: uniswapPosition(id: ${uniswapConfig.infinitePositionId}) {
-					tokenId
-					token0
-					token1
-					liquidity
-					tickLower
-					tickUpper
-					staked
-					staker
-  			}
-			`
-			);
-		}
 
 		return userPositionsQuery;
 	};

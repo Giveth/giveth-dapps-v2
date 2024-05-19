@@ -131,6 +131,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		farcaster: storageFarcaster,
 		lens: storageLens,
 		website: storageWebsite,
+		telegram: storageTelegram,
 	} = storageProjectData || {};
 	const storageAddresses =
 		storageProjectData?.addresses instanceof Array
@@ -208,6 +209,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				findSocialMedia(EProjectSocialMediaType.WEBSITE)?.link ||
 				storageWebsite ||
 				'',
+			[EInputs.telegram]:
+				findSocialMedia(EProjectSocialMediaType.TELEGRAM)?.link ||
+				storageTelegram ||
+				'',
 		},
 	});
 
@@ -233,6 +238,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		lens: watchLens,
 		website: watchWebsite,
 		draft: watchDraft,
+		telegram: watchTelegram,
 	} = data;
 
 	useEffect(() => {
@@ -259,6 +265,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchFarcaster,
 		watchLens,
 		watchWebsite,
+		watchTelegram,
 	]);
 	const hasOptimismAddress = watchAddresses.some(
 		address => config.OPTIMISM_NETWORK_NUMBER === address.networkId,
@@ -300,6 +307,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				farcaster,
 				lens,
 				website,
+				telegram,
 			} = formData;
 
 			// Transforming the social media fields into the required structure
@@ -314,6 +322,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				{ type: EProjectSocialMediaType.FARCASTER, link: farcaster },
 				{ type: EProjectSocialMediaType.LENS, link: lens },
 				{ type: EProjectSocialMediaType.WEBSITE, link: website },
+				{ type: EProjectSocialMediaType.TELEGRAM, link: telegram },
 			].filter(
 				social => social.link && social.link !== '',
 			) as IProjectSocialMedia[]; // Filtering out empty links

@@ -10,6 +10,7 @@ import {
 	Row,
 } from '@giveth/ui-design-system';
 import Link from 'next/link';
+import Image from 'next/image';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import ProjectCard from '@/components/project-card/ProjectCardAlt';
@@ -53,8 +54,27 @@ const SuccessfulCreation = (props: IProps) => {
 	return (
 		<Wrapper>
 			<ContainerStyled>
-				<BGImg src='/images/arc2.svg' />
-				<BGImg src='/images/arc3.svg' />
+				<BGImg
+					src='/images/arc2.svg'
+					alt='image project creation'
+					width={202}
+					height={273}
+					style={{
+						top: 0,
+						right: 20,
+					}}
+				/>
+
+				<BGImg
+					src='/images/arc3.svg'
+					alt='image project creation'
+					width={274}
+					height={256}
+					style={{
+						bottom: 0,
+						left: 20,
+					}}
+				/>
 				<Row>
 					<Left xs={12} md={6}>
 						<ProjectCard project={project} isNew />
@@ -110,7 +130,7 @@ const GiverH4 = styled(H2)`
 	font-weight: 700;
 	margin-bottom: 24px;
 `;
-const BGImg = styled.img`
+const BGImg = styled(Image)`
 	position: absolute;
 `;
 const Wrapper = styled.div`
@@ -119,14 +139,6 @@ const Wrapper = styled.div`
 const ContainerStyled = styled(Container)`
 	text-align: center;
 	padding-top: 114px;
-	> img:first-child {
-		top: 0;
-		right: 20px;
-	}
-	> img:nth-child(2) {
-		bottom: 0;
-		left: 20px;
-	}
 `;
 const Left = styled(Col)`
 	z-index: 1;

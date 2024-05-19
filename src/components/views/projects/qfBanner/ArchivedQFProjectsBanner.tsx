@@ -97,10 +97,7 @@ export const ArchivedQFProjectsBanner = () => {
 									id: 'label.quadratic_funding',
 								})}
 							</H1>
-							<H2>
-								{round ? round.name : null}{' '}
-								{islaptopS ? 'Tablet' : 'Desktop'}
-							</H2>
+							<H2>{round ? round.name : null}</H2>
 						</StyledColArch>
 					</Row>
 				</BannnerTitleContainer>

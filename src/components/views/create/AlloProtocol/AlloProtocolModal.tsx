@@ -7,6 +7,7 @@ import {
 	brandColors,
 } from '@giveth/ui-design-system';
 import { useAccount, useSwitchChain } from 'wagmi';
+import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { writeContract, waitForTransactionReceipt } from '@wagmi/core';
 import { Address } from 'viem';
@@ -41,7 +42,7 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 	const [txResult, setTxResult] = useState<Address>();
 	const router = useRouter();
 	const { switchChain } = useSwitchChain();
-
+	const { formatMessage } = useIntl();
 	const isDraft =
 		project?.status.name === EProjectStatus.DRAFT ||
 		addedProjectState.status?.name === EProjectStatus.DRAFT;
@@ -135,40 +136,28 @@ const AlloProtocolModal: FC<IAlloProtocolModal> = ({
 			closeModal={updatedCloseModal}
 			isAnimating={isAnimating}
 			headerIcon={<IconBulbOutline32 />}
-			headerTitle='Set up Allo Protocol Registry'
+			headerTitle='Recurring Donation Setup'
 			headerTitlePosition='left'
 		>
 			<Container>
 				{/* {isOnOptimism ? 'On Optimism' : 'Not On Optimism'}
 				{addedProjectState.id} */}
 				<P>
-					Your project has now been created, next you will need to
-					sign a transaction to register it to Allo Protocol on
-					Optimism.
+					{formatMessage({
+						id: 'label.recurring_donation_setup_1',
+					})}
 				</P>
 				<br />
-				<ItemContainer>
-					<P>
-						Your project will be included in a shared registry of
-						public goods projects with Gitcoin and others. You will
-						also set up your project to receive recurring donations.
-					</P>
-					<Ellipse />
-				</ItemContainer>
-				<br />
-				<ItemContainer>
-					<P>
-						There will be one extra transaction you need to sign to
-						enable recurring donations for this project on{' '}
-						<span
-							style={{ whiteSpace: 'nowrap', display: 'inline' }}
-						>
-							Optimism
-						</span>
-						.
-					</P>
-					<Ellipse />
-				</ItemContainer>
+				<P>
+					{formatMessage({
+						id: 'label.recurring_donation_setup_2',
+					})}
+					<span style={{ whiteSpace: 'nowrap', display: 'inline' }}>
+						Optimism
+					</span>
+					.
+				</P>
+				<Ellipse />
 				<br />
 				<CustomButton
 					label={isOnOptimism ? 'Confirm' : 'Switch To Optimism'}

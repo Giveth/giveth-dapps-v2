@@ -19,6 +19,7 @@ export enum EInputs {
 	farcaster = 'farcaster',
 	lens = 'lens',
 	website = 'website',
+	telegram = 'telegram',
 }
 
 export enum ECreateProjectSections {
@@ -51,4 +52,5 @@ export type TInputs = {
 	[EInputs.farcaster]?: string;
 	[EInputs.lens]?: string;
 	[EInputs.website]?: string;
+	[EInputs.telegram]?: string;
 };

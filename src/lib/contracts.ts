@@ -1,12 +1,8 @@
 import { captureException } from '@sentry/nextjs';
 import { readContracts } from '@wagmi/core';
 import { Address, erc20Abi } from 'viem';
-import config from '@/configuration';
 import { MAX_TOKEN_ORDER } from './constants/tokens';
 import { wagmiConfig } from '@/wagmiConfigs';
-
-const mainnetConfig = config.MAINNET_CONFIG;
-export const uniswapV3Config = mainnetConfig.v3Pools[0];
 
 interface IERC20Info {
 	contractAddress: Address;
