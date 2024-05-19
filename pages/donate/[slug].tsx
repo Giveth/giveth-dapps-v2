@@ -3,22 +3,18 @@ import { GetServerSideProps } from 'next/types';
 import Head from 'next/head';
 import { captureException } from '@sentry/nextjs';
 
-import { IDonationProject } from '@/apollo/types/types';
-import {
-	FETCH_GIVETH_PROJECT_BY_ID,
-	FETCH_PROJECT_BY_SLUG_DONATION,
-} from '@/apollo/gql/gqlProjects';
+import { IProject } from '@/apollo/types/types';
+import { FETCH_PROJECT_BY_SLUG_DONATION } from '@/apollo/gql/gqlProjects';
 import { client } from '@/apollo/apolloClient';
 import { ProjectMeta } from '@/components/Metatag';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
-import config from '@/configuration';
 import { DonateProvider } from '@/context/donate.context';
 import DonateIndex from '@/components/views/donate/DonateIndex';
 import { useAppDispatch } from '@/features/hooks';
 import { setShowFooter } from '@/features/general/general.slice';
 
 export interface IDonateRouteProps {
-	project: IDonationProject;
+	project: IProject;
 }
 
 const DonateRoute: FC<IDonateRouteProps> = ({ project }) => {
@@ -51,19 +47,9 @@ export const getServerSideProps: GetServerSideProps = async props => {
 			variables: { slug },
 			fetchPolicy: 'no-cache',
 		});
-		const { data: givethProjectData } = await client.query({
-			query: FETCH_GIVETH_PROJECT_BY_ID,
-			variables: { id: config.GIVETH_PROJECT_ID },
-			fetchPolicy: 'no-cache',
-		});
-
-		const project = {
-			...data.projectBySlug,
-			givethAddresses: givethProjectData.projectById.addresses,
-		};
 		return {
 			props: {
-				project,
+				project: data.projectBySlug,
 			},
 		};
 	} catch (error: any) {
