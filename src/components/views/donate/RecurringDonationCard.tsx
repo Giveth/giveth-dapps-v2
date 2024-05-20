@@ -17,7 +17,7 @@ import {
 } from '@giveth/ui-design-system';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { formatUnits, parseUnits } from 'viem';
+import { formatUnits } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import Slider from 'rc-slider';
 import Image from 'next/image';
@@ -89,8 +89,8 @@ export const RecurringDonationCard = () => {
 	const { project, selectedToken, tokenStreams } = useDonateData();
 	const isGivethProject = Number(project.id!) === config.GIVETH_PROJECT_ID;
 	const [amount, setAmount] = useState(0n);
+	const [perMonthAmount, setPerMonthAmount] = useState(0n);
 	const [isUpdating, setIsUpdating] = useState(false);
-	const [percentage, setPercentage] = useState(0);
 	const [donationToGiveth, setDonationToGiveth] = useState(
 		isGivethProject ? 0 : 5,
 	);
@@ -135,18 +135,11 @@ export const RecurringDonationCard = () => {
 
 	const underlyingToken = selectedToken?.token.underlyingToken;
 
-	const totalPerMonth =
-		BigInt(
-			new BigNumber((amount || 0n).toString())
-				.multipliedBy(percentage)
-				.toFixed(0),
-		) / 100n;
-
 	// total means project + giveth
-	const totalPerSec = totalPerMonth / ONE_MONTH_SECONDS;
+	const totalPerSec = perMonthAmount / ONE_MONTH_SECONDS;
 	const projectPerMonth =
-		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
-	const givethPerMonth = totalPerMonth - projectPerMonth;
+		(perMonthAmount * BigInt(100 - donationToGiveth)) / 100n;
+	const givethPerMonth = perMonthAmount - projectPerMonth;
 	const tokenBalance = balance?.value;
 	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
 
@@ -209,14 +202,11 @@ export const RecurringDonationCard = () => {
 
 			if (_userStreamOnSelectedToken) {
 				setUserStreamOnSelectedToken(_userStreamOnSelectedToken);
-				const _percentage = BigNumber(
-					(
-						BigInt(_userStreamOnSelectedToken.currentFlowRate) *
-						ONE_MONTH_SECONDS *
-						100n
-					).toString(),
-				).dividedBy(selectedToken.balance.toString());
-				setPercentage(parseFloat(_percentage.toString()));
+				// setPercentage(parseFloat(_percentage.toString()));
+				setPerMonthAmount(
+					BigInt(_userStreamOnSelectedToken.currentFlowRate) *
+						ONE_MONTH_SECONDS,
+				);
 			} else {
 				setUserStreamOnSelectedToken(undefined);
 				//Please don't make percentage zero here, it will reset the slider to 0
@@ -230,9 +220,13 @@ export const RecurringDonationCard = () => {
 		selectedToken === undefined ||
 		tokenBalance === undefined ||
 		amount === 0n ||
-		percentage === 0 ||
+		perMonthAmount === 0n ||
 		isTotalStreamExceed ||
 		amount > tokenBalance;
+
+	const percentage = amount
+		? Number((perMonthAmount * 1000n) / amount) / 10
+		: 0;
 
 	return (
 		<>
@@ -372,7 +366,7 @@ export const RecurringDonationCard = () => {
 								id: 'label.amount_to_donate_monthly',
 							})}
 						</Caption>
-						<Flex gap='4px' $alignItems='center'>
+						<Flex gap='16px' $alignItems='center'>
 							<StyledSlider
 								min={0}
 								max={100}
@@ -389,38 +383,40 @@ export const RecurringDonationCard = () => {
 									},
 								}}
 								onChange={(value: any) => {
-									const _value = Array.isArray(value)
-										? value[0]
-										: value;
-									setPercentage(mapValue(_value));
+									const _value = value as number;
+									const _percentage = mapValue(_value);
+									const _perMonthAmount =
+										BigInt(
+											new BigNumber(
+												(amount || 0n).toString(),
+											)
+												.multipliedBy(_percentage)
+												.toFixed(0),
+										) / 100n;
+									console.log(
+										'_perMonthAmount',
+										_perMonthAmount,
+										_value,
+										_percentage,
+									);
+									setPerMonthAmount(_perMonthAmount);
+									// setPercentage(mapValue(_value));
 								}}
-								value={mapValueInverse(percentage)}
+								value={mapValueInverse(percentage.valueOf())}
 								disabled={amount === 0n}
 							/>
 							<InputSlider
-								amount={totalPerMonth}
-								// setAmount={setAmount}
+								amount={perMonthAmount}
+								setAmount={setPerMonthAmount}
 								maxAmount={amount}
 								decimals={selectedToken?.token.decimals || 18}
-								setAmount={value => {
-									console.log({ value });
-									console.log({ totalPerMonth });
-									BigInt(totalPerMonth);
-									const percentage =
-										amount === 0n
-											? 0
-											: (BigInt(value.toString()) *
-													BigInt(100)) /
-												BigInt(amount);
-									console.log({ percentage });
-									console.log(Number(percentage));
-									setPercentage(mapValue(Number(percentage)));
-								}}
 								disabled={selectedToken === undefined}
-								className={percentage > 100 ? 'error' : ''}
+								className={
+									perMonthAmount > amount ? 'error' : ''
+								}
 							/>
 						</Flex>
-						{percentage > 100 && (
+						{perMonthAmount > amount && (
 							<RecurringMessage>
 								{formatMessage({
 									id: 'label.recurring_donation_maximum',
@@ -438,10 +434,10 @@ export const RecurringDonationCard = () => {
 							</Flex>
 							<Flex gap='4px'>
 								<Caption $medium>
-									{amount !== 0n && percentage !== 0
+									{amount !== 0n && perMonthAmount !== 0n
 										? limitFraction(
 												formatUnits(
-													totalPerMonth,
+													perMonthAmount,
 													selectedToken?.token
 														.decimals || 18,
 												),
@@ -615,7 +611,7 @@ export const RecurringDonationCard = () => {
 								</Caption>
 								<Flex gap='4px'>
 									<Caption>
-										{amount !== 0n && percentage !== 0
+										{amount !== 0n && perMonthAmount !== 0n
 											? limitFraction(
 													formatUnits(
 														projectPerMonth,
@@ -650,7 +646,8 @@ export const RecurringDonationCard = () => {
 									</Caption>
 									<Flex gap='4px'>
 										<Caption>
-											{amount !== 0n && percentage !== 0
+											{amount !== 0n &&
+											perMonthAmount !== 0n
 												? limitFraction(
 														formatUnits(
 															givethPerMonth,
@@ -679,10 +676,10 @@ export const RecurringDonationCard = () => {
 								</Caption>
 								<Flex gap='4px'>
 									<Caption $medium>
-										{amount !== 0n && percentage !== 0
+										{amount !== 0n && perMonthAmount !== 0n
 											? limitFraction(
 													formatUnits(
-														totalPerMonth,
+														perMonthAmount,
 														selectedToken?.token
 															.decimals || 18,
 													),
@@ -743,7 +740,7 @@ export const RecurringDonationCard = () => {
 						isGivethProject || isUpdating ? 0 : donationToGiveth
 					}
 					amount={amount}
-					percentage={percentage}
+					percentage={10}
 					isUpdating={isUpdating}
 					anonymous={anonymous}
 				/>
