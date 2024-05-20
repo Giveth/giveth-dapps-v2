@@ -9,7 +9,6 @@ import styled from 'styled-components';
 import { Framework, type Operation } from '@superfluid-finance/sdk-core';
 import { useAccount } from 'wagmi';
 import { useIntl } from 'react-intl';
-import BigNumber from 'bignumber.js';
 import { formatUnits } from 'viem';
 import { Modal } from '@/components/modals/Modal';
 import { useModalAnimation } from '@/hooks/useModalAnimation';
@@ -44,7 +43,7 @@ import { ensureCorrectNetwork } from '@/helpers/network';
 interface IRecurringDonationModalProps extends IModal {
 	donationToGiveth: number;
 	amount: bigint;
-	percentage: number;
+	perMonthAmount: bigint;
 	isUpdating?: boolean;
 	anonymous: boolean;
 }
@@ -120,7 +119,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 	step,
 	setStep,
 	amount,
-	percentage,
+	perMonthAmount,
 	donationToGiveth,
 	setShowModal,
 	isUpdating,
@@ -240,7 +239,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			}
 
 			const _flowRate =
-				(totalPerMonth * BigInt(100 - donationToGiveth)) /
+				(perMonthAmount * BigInt(100 - donationToGiveth)) /
 				100n /
 				ONE_MONTH_SECONDS;
 
@@ -273,7 +272,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 				}
 
 				const _newFlowRate =
-					(totalPerMonth * BigInt(donationToGiveth)) /
+					(perMonthAmount * BigInt(donationToGiveth)) /
 					100n /
 					ONE_MONTH_SECONDS;
 
@@ -489,15 +488,9 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 		}
 	};
 
-	const totalPerMonth =
-		BigInt(
-			new BigNumber((amount || 0n).toString())
-				.multipliedBy(percentage)
-				.toFixed(0),
-		) / 100n;
 	const projectPerMonth =
-		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
-	const givethPerMonth = totalPerMonth - projectPerMonth;
+		(perMonthAmount * BigInt(100 - donationToGiveth)) / 100n;
+	const givethPerMonth = perMonthAmount - projectPerMonth;
 
 	return (
 		<Wrapper>
@@ -530,7 +523,7 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 			</Items>
 			<RunOutInfo
 				superTokenBalance={amount}
-				streamFlowRatePerMonth={totalPerMonth}
+				streamFlowRatePerMonth={perMonthAmount}
 				symbol={selectedToken?.token.symbol || ''}
 			/>
 			<ActionButton

@@ -202,14 +202,12 @@ export const RecurringDonationCard = () => {
 
 			if (_userStreamOnSelectedToken) {
 				setUserStreamOnSelectedToken(_userStreamOnSelectedToken);
-				// setPercentage(parseFloat(_percentage.toString()));
 				setPerMonthAmount(
 					BigInt(_userStreamOnSelectedToken.currentFlowRate) *
 						ONE_MONTH_SECONDS,
 				);
 			} else {
 				setUserStreamOnSelectedToken(undefined);
-				//Please don't make percentage zero here, it will reset the slider to 0
 			}
 		} catch (error) {
 			showToastError(error);
@@ -400,7 +398,6 @@ export const RecurringDonationCard = () => {
 										_percentage,
 									);
 									setPerMonthAmount(_perMonthAmount);
-									// setPercentage(mapValue(_value));
 								}}
 								value={mapValueInverse(percentage.valueOf())}
 								disabled={amount === 0n}
@@ -740,7 +737,7 @@ export const RecurringDonationCard = () => {
 						isGivethProject || isUpdating ? 0 : donationToGiveth
 					}
 					amount={amount}
-					percentage={10}
+					perMonthAmount={perMonthAmount}
 					isUpdating={isUpdating}
 					anonymous={anonymous}
 				/>
