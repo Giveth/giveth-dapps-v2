@@ -92,13 +92,8 @@ const moduleExports = withBundleAnalyzer({
 			},
 			{
 				source: '/qf',
-				destination: '/projects/all',
-				permanent: false,
-			},
-			{
-				source: '/qf/all',
-				destination: '/projects/all',
-				permanent: false,
+				destination: '/qf/all',
+				permanent: true,
 			},
 			{
 				source: '/QuadraticForce',
