@@ -857,8 +857,14 @@ const InputSlider = styled(AmountInput)`
 	width: 27%;
 	border: 2px solid ${neutralColors.gray[300]};
 	border-radius: 8px;
-	padding: 2px;
+	padding: 4px;
 	#amount-input {
+		border: none;
+		flex: 1;
+		font-family: Red Hat Text;
+		font-size: 16px;
+		font-style: normal;
+		line-height: 150%; /* 24px */
 		width: 100%;
 	}
 	&&.error {
