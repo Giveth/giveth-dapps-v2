@@ -66,6 +66,8 @@ export const IntlMessages = {
 
 const defaultLocale = process.env.defaultLocale;
 
+console.log('defaultLocale', defaultLocale);
+
 function renderSnippet() {
 	const opts = {
 		apiKey:
@@ -134,6 +136,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 		const asyncFunc = async () => {
 			const storageLocale = localStorage.getItem(StorageLabel.LOCALE);
 			const navigatorLocale = getLocaleFromNavigator();
+			console.log('navigatorLocale', navigatorLocale);
 			let ipLocale;
 			if (!storageLocale) {
 				ipLocale = await getLocaleFromIP();
