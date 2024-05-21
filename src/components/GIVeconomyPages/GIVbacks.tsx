@@ -28,6 +28,7 @@ import {
 	RoundButton,
 	InfoSection,
 	InfoImage,
+	ImageWrapper,
 	InfoTitle,
 	InfoDesc,
 	GivAllocated,
@@ -316,7 +317,15 @@ export const TabGIVbacksBottom = () => {
 						</Col>
 						<Col xs={12} md={4}>
 							<InfoSection>
-								<InfoImage src='/images/hands.svg' />
+								<ImageWrapper>
+									<InfoImage
+										src='/images/hands.svg'
+										alt='hands image'
+										width={216}
+										height={103}
+										objectFit='cover'
+									/>
+								</ImageWrapper>
 								<InfoTitle weight={700}>
 									{formatMessage({
 										id: 'label.when_you_giv_you_get_giv_back',

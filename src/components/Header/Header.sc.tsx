@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import Image from 'next/image';
 import {
 	neutralColors,
 	brandColors,
@@ -173,7 +174,7 @@ export const WBNetwork = styled(GLink)`
 	overflow: hidden;
 `;
 
-export const HBPic = styled.img`
+export const HBPic = styled(Image)`
 	border-radius: 24px;
 `;
 

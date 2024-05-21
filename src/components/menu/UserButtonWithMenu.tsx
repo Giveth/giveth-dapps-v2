@@ -130,8 +130,8 @@ const HeaderUserButton = ({}) => {
 			<HBPic
 				src={userData?.avatar || PROFILE_PHOTO_PLACEHOLDER}
 				alt='Profile Pic'
-				width={'24px'}
-				height={'24px'}
+				width={24}
+				height={24}
 			/>
 			<WBInfo>
 				<UserName size='Medium'>

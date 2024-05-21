@@ -9,10 +9,7 @@ import {
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
 import config from '@/configuration';
-import {
-	SimplePoolStakingConfig,
-	UniswapV3PoolStakingConfig,
-} from '@/types/config';
+import { SimplePoolStakingConfig } from '@/types/config';
 import {
 	PoolRow,
 	ContractRow,
@@ -33,10 +30,7 @@ import ToggleSwitch from '@/components/ToggleSwitch';
 import { getNetworkConfig } from '@/helpers/givpower';
 import { StakeTogetherCard } from '@/components/cards/StakingCards/BaseStakingCard/StakeTogetherCard';
 
-const renderPool = (
-	pool: SimplePoolStakingConfig | UniswapV3PoolStakingConfig,
-	id: number,
-) => (
+const renderPool = (pool: SimplePoolStakingConfig, id: number) => (
 	<Col sm={6} lg={4} key={`staking_pool_card_${pool.network}_${id}`}>
 		<StakingPoolCard poolStakingConfig={pool as SimplePoolStakingConfig} />
 	</Col>

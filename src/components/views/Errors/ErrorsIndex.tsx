@@ -57,11 +57,17 @@ const ErrorsIndex = ({ statusCode }: IErrorProps) => {
 			<ArcMustardBottom />
 			<CustomBigWarningImage
 				src='/images/icons/warning.svg'
+				alt='big warning image'
 				loading='lazy'
+				width={220}
+				height={220}
 			/>
 			<CustomSmallWarningImage
 				src='/images/icons/warning.svg'
 				loading='lazy'
+				alt='small warning image'
+				width={120}
+				height={120}
 			/>
 			<TextContainer>
 				<Image

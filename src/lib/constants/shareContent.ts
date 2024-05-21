@@ -2,6 +2,7 @@ export enum EContentType {
 	thisProject = 'thisProject',
 	ourProject = 'ourProject',
 	justDonated = 'justDonated',
+	justDonatedRecurring = 'justDonatedRecurring',
 }
 
 export enum ESocialType {
@@ -23,6 +24,8 @@ export const shareContentCreator = (
 	} else if (contentType === EContentType.ourProject) {
 		message = `Our project is raising funds in crypto on ${socialHandle}! 💜
 100% of every donation goes directly to our wallet to help us make an impact. Check out our project here 👇\n\n`;
+	} else if (contentType === EContentType.justDonatedRecurring) {
+		message = `I just started a recurring donation to this awesome project on ${socialHandle} with @Superfluid_HQ using @optimism. Read about their impact or support them here:\n\n`;
 	} else {
 		message = `I just donated to this awesome project on ${socialHandle}! 💜 Read about their impact or support them here:\n\n`;
 	}

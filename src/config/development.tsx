@@ -44,8 +44,6 @@ const SEPT_8TH_2022 = 1662595200000;
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x83a8eea6427985C523a0c4d9d3E62C051B6580d3';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x2f2c819210191750F2E11F7CfC5664a0eB4fd5e6';
 
-const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
-
 const MAINNET_NETWORK_NUMBER = 5; // Goerli
 const GNOSIS_NETWORK_NUMBER = 100; // xDAI
 const POLYGON_NETWORK_NUMBER = 137;
@@ -101,10 +99,7 @@ const EVM_CHAINS = [
 	classic,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [];
-if (isSolanaEnabled) {
-	NON_EVM_CHAINS.push(SOLANA_NETWORK);
-}
+const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
 
 const config: EnvConfig = {
 	GIVETH_PROJECT_ID: 1,
@@ -138,7 +133,7 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		subgraphAddress:
-			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-goerli/1.5.0',
+			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-goerli/1.5.0?source=giveth',
 		coingeckoChainName: 'ethereum',
 		chainLogo: (logoSize?: number) => <IconEthereum size={logoSize} />,
 
@@ -179,10 +174,9 @@ const config: EnvConfig = {
 				unit: 'LP',
 			},
 		],
-		v3Pools: [],
 		regenPools: [],
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
 		regenStreams: [],
 	},
 
@@ -195,7 +189,7 @@ const config: EnvConfig = {
 		},
 
 		subgraphAddress:
-			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-gnosischain/1.5.1',
+			'https://api.studio.thegraph.com/query/40764/giveconomy-staging-gnosischain/1.5.1?source=giveth',
 		coingeckoChainName: 'xdai',
 		chainLogo: (logoSize?: number) => <IconGnosisChain size={logoSize} />,
 
@@ -307,7 +301,7 @@ const config: EnvConfig = {
 		],
 
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2',
+			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
 
 		regenStreams: [
 			{
@@ -357,7 +351,7 @@ const config: EnvConfig = {
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-sepolia',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-optim-sepolia?source=giveth',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
 			'https://app.uniswap.org/#/swap?chain=optimism&outputCurrency=0xc916Ce4025Cb479d9BA9D798A80094a449667F5D',
@@ -379,7 +373,7 @@ const config: EnvConfig = {
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
 			'0x503055e1f8b99c60a51c479a60b233976617bc7a',
 		superFluidSubgraph:
-			'https://optimism-sepolia.subgraph.x.superfluid.dev/',
+			'https://optimism-sepolia.subgraph.x.superfluid.dev/?source=giveth',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {

@@ -23,6 +23,13 @@ export enum EProjectsSortBy {
 	EstimatedMatching = 'EstimatedMatching',
 }
 
+export enum EQFRoundsSortBy {
+	MATCHING_POOL = 'MatchingPool',
+	UNIQUE_DONORS = 'UniqueDonors',
+	NEWEST = 'Newest',
+	OLDEST = 'Oldest',
+}
+
 export enum EProjectStatus {
 	DRAFT = 'drafted',
 	ACTIVE = 'activate',

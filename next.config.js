@@ -10,6 +10,8 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 var pjson = require('./package.json');
 const generateRobotsTxt = require('./scripts/generate-robots-txt');
 
+const isProduction = process.env.NEXT_PUBLIC_ENV === 'production';
+
 const defaultLocale = 'en';
 const locales = ['ca', 'en', 'es'];
 
@@ -23,6 +25,12 @@ const moduleExports = withBundleAnalyzer({
 			{ protocol: 'https', port: '', hostname: 'static.tgbwidget.com' },
 			{ protocol: 'https', port: '', hostname: 'images.unsplash.com' },
 			{ protocol: 'https', port: '', hostname: 'unicorn.mypinata.cloud' },
+			{ protocol: 'https', port: '', hostname: 'images.ctfassets.net' },
+			{
+				protocol: 'https',
+				port: '',
+				hostname: 'lh3.googleusercontent.com',
+			},
 			{
 				protocol: 'https',
 				port: '',
@@ -62,7 +70,7 @@ const moduleExports = withBundleAnalyzer({
 		// },
 	},
 	redirects: () => {
-		return [
+		const redirects = [
 			{
 				source: '/user',
 				destination: '/account',
@@ -85,16 +93,6 @@ const moduleExports = withBundleAnalyzer({
 				permanent: true,
 			},
 			{
-				source: '/qf',
-				destination: '/projects/all',
-				permanent: false,
-			},
-			{
-				source: '/qf/all',
-				destination: '/projects/all',
-				permanent: false,
-			},
-			{
 				source: '/QuadraticForce',
 				destination: '/assets/Giveth_Report_QF_2024.this.one.pdf',
 				permanent: false,
@@ -106,6 +104,29 @@ const moduleExports = withBundleAnalyzer({
 				permanent: false,
 			},
 		];
+
+		if (isProduction) {
+			redirects.push(
+				{
+					source: '/qf',
+					destination: '/projects/all',
+					permanent: false,
+				},
+				{
+					source: '/qf/all',
+					destination: '/projects/all',
+					permanent: false,
+				},
+			);
+		} else {
+			redirects.push({
+				source: '/qf',
+				destination: '/qf/all',
+				permanent: false,
+			});
+		}
+
+		return redirects;
 	},
 	webpack: (config, { isServer, dev }) => {
 		if (isServer && !dev) {

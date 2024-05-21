@@ -51,8 +51,20 @@ const MaintenanceIndex = () => {
 			</Head>
 			<ArcMustardTop />
 			<ArcMustardBottom />
-			<CustomGearImage src='/images/icons/gear.svg' loading='lazy' />
-			<CustomGearsImage src='/images/icons/gears.svg' loading='lazy' />
+			<CustomGearImage
+				src='/images/icons/gear.svg'
+				loading='lazy'
+				alt='gear image'
+				width={120}
+				height={120}
+			/>
+			<CustomGearsImage
+				src='/images/icons/gears.svg'
+				loading='lazy'
+				alt='gears image'
+				width={160}
+				height={160}
+			/>
 			<TextContainer>
 				<Image
 					src='/images/icons/warning_mustard.svg'

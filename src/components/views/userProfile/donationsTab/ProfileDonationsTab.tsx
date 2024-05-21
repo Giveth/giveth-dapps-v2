@@ -10,7 +10,6 @@ import { DonateContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
 import { OneTimeTab } from './oneTimeTab/OneTimeTab';
 import { RecurringTab } from './recurringTab/RecurringTab';
-import { isRecurringActive } from '@/configuration';
 import { ProfileDonateTabProvider } from './recurringTab/ProfileDonateTab.context';
 
 enum ETab {
@@ -65,34 +64,28 @@ const ProfileDonationsTab: FC<IUserProfileView> = () => {
 						)}
 					</UserContributeTitle>
 				)}
-				{isRecurringActive ? (
-					<>
-						<Tabs>
-							{tabs.map(({ id, label, query }) => (
-								<Link
-									key={id}
-									href={{
-										query: { ...router.query, tab: query },
-									}}
-									shallow={true}
-									scroll={false}
-								>
-									<Tab
-										onClick={() => setTab(id)}
-										className={`tab ${tab === id ? 'active' : ''}`}
-										$isActive={tab === id}
-									>
-										{formatMessage({ id: label })}
-									</Tab>
-								</Link>
-							))}
-						</Tabs>
-						{tab === ETab.ONE_TIME && <OneTimeTab />}
-						{tab === ETab.RECURRING && <RecurringTab />}
-					</>
-				) : (
-					<OneTimeTab />
-				)}
+				<Tabs>
+					{tabs.map(({ id, label, query }) => (
+						<Link
+							key={id}
+							href={{
+								query: { ...router.query, tab: query },
+							}}
+							shallow={true}
+							scroll={false}
+						>
+							<Tab
+								onClick={() => setTab(id)}
+								className={`tab ${tab === id ? 'active' : ''}`}
+								$isActive={tab === id}
+							>
+								{formatMessage({ id: label })}
+							</Tab>
+						</Link>
+					))}
+				</Tabs>
+				{tab === ETab.ONE_TIME && <OneTimeTab />}
+				{tab === ETab.RECURRING && <RecurringTab />}
 			</UserProfileTab>
 		</ProfileDonateTabProvider>
 	);

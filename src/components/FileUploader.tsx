@@ -141,7 +141,12 @@ const FileUploader: FC<IFileUploader> = ({
 			files[0].status === EFileUploadingStatus.UPLOADED &&
 			files[0].type.includes('image') ? (
 				<ShowingImage>
-					<img src={files[0].url} alt='uploaded image' width='100%' />
+					<Image
+						src={files[0].url as string}
+						alt='uploaded image'
+						layout='fill'
+						objectFit='cover'
+					/>
 				</ShowingImage>
 			) : (
 				<DropZone {...getRootProps()}>
@@ -269,9 +274,8 @@ const FileUploader: FC<IFileUploader> = ({
 };
 
 const ShowingImage = styled.div`
-	> img {
-		border-radius: 8px;
-	}
+	position: relative;
+	border-radius: 8px;
 `;
 
 const DropZone = styled.div`

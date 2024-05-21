@@ -455,12 +455,14 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 						],
 						excludeFromQF: true,
 						isRecurring: true,
+						givBackEligible: true,
 					});
 				} else {
 					setSuccessDonation({
 						txHash: [{ txHash: tx.hash, chainType: ChainType.EVM }],
 						excludeFromQF: true,
 						isRecurring: true,
+						givBackEligible: true,
 					});
 				}
 			}

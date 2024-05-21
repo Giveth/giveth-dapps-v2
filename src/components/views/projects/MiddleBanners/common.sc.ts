@@ -29,6 +29,7 @@ interface IColor {
 
 export const Title = styled(H3)<IColor>`
 	color: ${props => props.color};
+	position: relative;
 	z-index: 1;
 `;
 
@@ -45,5 +46,6 @@ export const BigArc = styled(Arc)<IColor>`
 `;
 
 export const Caption = styled(Lead)`
+	position: relative;
 	z-index: 1;
 `;

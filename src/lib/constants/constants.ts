@@ -1,13 +1,6 @@
 import { brandColors, semanticColors } from '@giveth/ui-design-system';
 import config from '@/configuration';
 
-export const NFT_POSITIONS_MANAGER_ADDRESS: Record<string, string> = {
-	4: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
-	42: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
-	1: '0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
-	100: '',
-};
-
 export const WETH: Record<string, string> = {
 	42: '0xd0a1e359811322d97991e03f863a0c30c2cf029c',
 	4: '0xc778417E063141139Fce010982780140Aa0cD5Ab',

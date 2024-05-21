@@ -78,6 +78,12 @@ const ProjectCard = (props: IProjectCard) => {
 	const { activeStartedRound, activeQFRound } = getActiveRound(qfRounds);
 	const hasFooter = activeStartedRound || verified;
 
+	const {
+		allocatedFundUSDPreferred,
+		allocatedFundUSD,
+		allocatedTokenSymbol,
+	} = activeQFRound || {};
+
 	const projectLink = slugToProjectView(slug);
 	const donateLink = slugToProjectDonate(slug);
 
@@ -235,14 +241,20 @@ const ProjectCard = (props: IProjectCard) => {
 											calculateTotalEstimatedMatching(
 												projectDonationsSqrtRootSum,
 												allProjectsSum,
-												matchingPool,
+												allocatedFundUSDPreferred
+													? allocatedFundUSD
+													: matchingPool,
 												activeStartedRound?.maximumReward,
 											),
-											'$',
+											allocatedFundUSDPreferred
+												? '$'
+												: '',
 											locale,
 											true,
 										),
-									)}
+									)}{' '}
+									{!allocatedFundUSDPreferred &&
+										allocatedTokenSymbol}
 								</EstimatedMatchingPrice>
 								<EstimatedMatching>
 									<span>

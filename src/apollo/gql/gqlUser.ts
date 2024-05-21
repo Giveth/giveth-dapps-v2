@@ -175,6 +175,7 @@ export const UPDATE_USER = gql`
 		$lastName: String
 		$firstName: String
 		$avatar: String
+		$newUser: Boolean
 	) {
 		updateUser(
 			url: $url
@@ -183,6 +184,7 @@ export const UPDATE_USER = gql`
 			firstName: $firstName
 			lastName: $lastName
 			avatar: $avatar
+			newUser: $newUser
 		)
 	}
 `;

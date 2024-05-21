@@ -1,6 +1,6 @@
 export const homeMetatags = {
-	title: 'Giveth: Welcome to the Future of Giving',
-	desc: 'Get rewarded for giving to for-good projects with zero added fees. Donate crypto directly to thousands of for-good projects, nonprofits & charities!',
+	title: 'Giveth: Future of Giving with Zero-Fee Crypto Donation',
+	desc: 'Get rewarded for crypto donations to for-good projects with zero added fees and accepting crypto donations. Donate crypto directly to thousands of nonprofits & charities!',
 	image: 'https://giveth.mypinata.cloud/ipfs/QmQ9sfdevs9vS7czBXBfDaRRPhU8a6T5gXxF3NDGSnQe1c',
 	url: 'https://giveth.io/',
 };
