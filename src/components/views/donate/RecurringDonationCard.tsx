@@ -167,7 +167,6 @@ export const RecurringDonationCard = () => {
 		: brandColors.giv;
 
 	const handleDonate = () => {
-		console.log('isSignedIn', isSignedIn);
 		if (anchorContractAddress) {
 			if (isSignedIn) {
 				setShowRecurringDonationModal(true);
@@ -391,12 +390,6 @@ export const RecurringDonationCard = () => {
 												.multipliedBy(_percentage)
 												.toFixed(0),
 										) / 100n;
-									console.log(
-										'_perMonthAmount',
-										_perMonthAmount,
-										_value,
-										_percentage,
-									);
 									setPerMonthAmount(_perMonthAmount);
 								}}
 								value={mapValueInverse(percentage.valueOf())}
