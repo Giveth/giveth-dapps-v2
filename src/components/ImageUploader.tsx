@@ -107,6 +107,9 @@ const ImageUploader: FC<IImageUploader> = props => {
 const ShowingImage = styled.div`
 	position: relative;
 	border-radius: 8px;
+	img {
+		position: unset !important;
+	}
 `;
 
 const DropZone = styled(FlexCenter)`
