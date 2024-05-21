@@ -17,7 +17,7 @@ import {
 } from '@giveth/ui-design-system';
 import NetworkLogo from '@/components/NetworkLogo';
 import { Shadow } from '@/components/styled-components/Shadow';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import ToggleSwitch from '@/components/ToggleSwitch';
 import { getChainName } from '@/lib/network';
 import { IChainType } from '@/types/config';
@@ -153,7 +153,7 @@ const AddressInterface = ({
 							</IconContainer>
 						))}
 				</Flex>
-				{isOptimism && isRecurringActive && isOnEVM && (
+				{isOptimism && isOnEVM && (
 					// Render this section only on Optimism
 					<AlloProtocolContainer>
 						<Flex>

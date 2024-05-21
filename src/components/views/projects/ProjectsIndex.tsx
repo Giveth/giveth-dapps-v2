@@ -4,6 +4,8 @@ import {
 	brandColors,
 	OutlineButton,
 	FlexCenter,
+	Container,
+	deviceSize,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -17,11 +19,7 @@ import { client } from '@/apollo/apolloClient';
 import { IProject } from '@/apollo/types/types';
 import { IFetchAllProjects } from '@/apollo/types/gqlTypes';
 import ProjectsNoResults from '@/components/views/projects/ProjectsNoResults';
-import {
-	BACKEND_QUERY_LIMIT,
-	deviceSize,
-	mediaQueries,
-} from '@/lib/constants/constants';
+import { BACKEND_QUERY_LIMIT, mediaQueries } from '@/lib/constants/constants';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowCompleteProfile } from '@/features/modal/modal.slice';
 import { ProjectsBanner } from './ProjectsBanner';
@@ -39,6 +37,7 @@ import { SortContainer } from './sort/SortContainer';
 import { ArchivedQFRoundStats } from './ArchivedQFRoundStats';
 import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
+import useMediaQuery from '@/hooks/useMediaQuery';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -59,6 +58,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
 	const [totalCount, setTotalCount] = useState(_totalCount);
+	const isMobile = useMediaQuery(`(max-width: ${deviceSize.tablet - 1}px)`);
 
 	const dispatch = useAppDispatch();
 
@@ -208,16 +208,24 @@ const ProjectsIndex = (props: IProjectsView) => {
 			{isQF ? (
 				<>
 					<PassportBanner />
-					<ActiveQFProjectsBanner />
+					{isArchivedQF ? (
+						!isMobile && <ArchivedQFProjectsBanner />
+					) : (
+						<ActiveQFProjectsBanner />
+					)}
 				</>
-			) : isArchivedQF ? (
-				<ArchivedQFProjectsBanner />
 			) : (
 				<ProjectsBanner mainCategory={selectedMainCategory} />
 			)}
 			<Wrapper>
-				{isQF && <ActiveQFRoundStats />}
-				{isArchivedQF ? <ArchivedQFRoundStats /> : <FilterContainer />}
+				{isArchivedQF ? (
+					<ArchivedQFRoundStats />
+				) : (
+					<>
+						{isQF && <ActiveQFRoundStats />}
+						<FilterContainer />
+					</>
+				)}
 				<SortingContainer>
 					<SortContainer totalCount={totalCount} />
 				</SortingContainer>
@@ -321,14 +329,14 @@ export const ProjectsContainer = styled.div`
 	}
 `;
 
-const Wrapper = styled.div`
-	max-width: ${deviceSize.desktop + 'px'};
-	margin: 0 auto;
+const Wrapper = styled(Container)`
 	${mediaQueries.tablet} {
-		padding: 0 33px;
+		padding-top: 33px;
+		padding-bottom: 33px;
 	}
 	${mediaQueries.laptopS} {
-		padding: 0 40px;
+		padding-top: 40px;
+		padding-bottom: 40px;
 	}
 `;
 

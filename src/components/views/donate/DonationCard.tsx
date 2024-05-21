@@ -1,10 +1,4 @@
-import {
-	B,
-	P,
-	neutralColors,
-	Flex,
-	FlexCenter,
-} from '@giveth/ui-design-system';
+import { B, P, neutralColors, Flex } from '@giveth/ui-design-system';
 import { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -13,7 +7,7 @@ import { isAddress } from 'viem';
 import { Shadow } from '@/components/styled-components/Shadow';
 import { RecurringDonationCard } from './RecurringDonationCard';
 import CryptoDonation from './CryptoDonation';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import { useDonateData } from '@/context/donate.context';
 import { ChainType } from '@/types/config';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
@@ -110,16 +104,7 @@ export const DonationCard = () => {
 			</Flex>
 			<TabWrapper>
 				{tab === ETabs.ONE_TIME && <CryptoDonation />}
-				{tab === ETabs.RECURRING &&
-					(isRecurringActive ? (
-						<RecurringDonationCard />
-					) : (
-						<FlexCenter>
-							{formatMessage({
-								id: 'label.this_feature_will_be_available_soon',
-							})}
-						</FlexCenter>
-					))}
+				{tab === ETabs.RECURRING && <RecurringDonationCard />}
 			</TabWrapper>
 		</DonationCardWrapper>
 	);

@@ -4,6 +4,7 @@ import {
 	H5,
 	IconDiscord18,
 	IconFacebook18,
+	IconTelegram,
 	IconFaracaster,
 	IconInstagram18,
 	IconLens,
@@ -34,22 +35,28 @@ export const socialMediasArray = [
 		validator: validators.twitter,
 	},
 	{
-		name: 'Instagram',
-		type: EInputs.instagram,
-		icon: IconInstagram18,
-		validator: validators.instagram,
-	},
-	{
-		name: 'YouTube',
-		type: EInputs.youtube,
-		icon: IconYoutube,
-		validator: validators.youtube,
-	},
-	{
 		name: 'LinkedIn',
 		type: EInputs.linkedin,
 		icon: IconLinkedin18,
 		validator: validators.linkedin,
+	},
+	{
+		name: 'Discord',
+		type: EInputs.discord,
+		icon: IconDiscord18,
+		validator: validators.discord,
+	},
+	{
+		name: 'Telegram',
+		type: EInputs.telegram,
+		icon: IconTelegram,
+		validator: validators.telegram,
+	},
+	{
+		name: 'Instagram',
+		type: EInputs.instagram,
+		icon: IconInstagram18,
+		validator: validators.instagram,
 	},
 	{
 		name: 'Reddit',
@@ -58,10 +65,10 @@ export const socialMediasArray = [
 		validator: validators.reddit,
 	},
 	{
-		name: 'Discord',
-		type: EInputs.discord,
-		icon: IconDiscord18,
-		validator: validators.discord,
+		name: 'YouTube',
+		type: EInputs.youtube,
+		icon: IconYoutube,
+		validator: validators.youtube,
 	},
 	{
 		name: 'Farcaster',

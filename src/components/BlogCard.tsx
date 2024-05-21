@@ -10,6 +10,7 @@ import {
 	P,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
+import Image from 'next/image';
 import ExternalLink from '@/components/ExternalLink';
 import { htmlToText } from '@/lib/helpers';
 
@@ -39,7 +40,12 @@ const BlogCard: FC<IBlogCard> = props => {
 		<Wrapper>
 			<div>
 				<ImageWrapper>
-					<img width='100%' height={170} src={image} alt={title} />
+					<Image
+						src={image}
+						alt={title}
+						layout='fill'
+						objectFit='cover'
+					/>
 				</ImageWrapper>
 				<ExternalLink href={link}>
 					<Title weight={700}>{htmlToText(title)}</Title>
@@ -91,9 +97,7 @@ const ImageWrapper = styled.div`
 	height: 170px;
 	width: 100%;
 	overflow: hidden;
-	> img {
-		object-fit: cover;
-	}
+	position: relative;
 `;
 
 const Wrapper = styled(Flex)`

@@ -13,12 +13,18 @@ import { useIntl } from 'react-intl';
 import { useQuery } from '@apollo/client';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
 import { useProjectsContext } from '@/context/projects.context';
-import { formatDate } from '@/lib/helpers';
+import { formatDate, formatUSD, thousandsSeparator } from '@/lib/helpers';
 
 export const ActiveQFRoundStats = () => {
 	const { formatMessage } = useIntl();
 	const { qfRounds } = useProjectsContext();
 	const activeRound = qfRounds.find(round => round.isActive);
+	const {
+		allocatedFundUSD,
+		allocatedFundUSDPreferred,
+		allocatedTokenSymbol,
+		allocatedFund,
+	} = activeRound || {};
 	const { data } = useQuery(FETCH_QF_ROUND_STATS, {
 		variables: { slug: activeRound?.slug },
 	});
@@ -32,10 +38,13 @@ export const ActiveQFRoundStats = () => {
 						{formatMessage({ id: 'label.matching_pool' })}
 					</ItemTitle>
 					<ItemValue weight={500}>
-						$
-						{(
-							data?.qfRoundStats?.matchingPool || 0
-						).toLocaleString()}{' '}
+						{allocatedFundUSDPreferred && '$'}
+						{thousandsSeparator(
+							allocatedFundUSDPreferred
+								? allocatedFundUSD
+								: allocatedFund,
+						) || ' --'}{' '}
+						{!allocatedFundUSDPreferred && allocatedTokenSymbol}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>
@@ -44,13 +53,8 @@ export const ActiveQFRoundStats = () => {
 					</ItemTitle>
 					<ItemValue weight={500}>
 						$
-						{data?.qfRoundStats?.allDonationsUsdValue.toLocaleString(
-							'en-US',
-							{
-								minimumFractionDigits: 2,
-								maximumFractionDigits: 2,
-							},
-						) || ' --'}
+						{formatUSD(data?.qfRoundStats?.allDonationsUsdValue) ||
+							' --'}
 					</ItemValue>
 				</ItemContainer>
 				<ItemContainer>

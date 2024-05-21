@@ -23,7 +23,7 @@ const TeamCard = (props: { member: IMember }) => {
 		<Wrapper>
 			<Purple />
 			<ImageContainer>
-				<img src={image} alt={name} width='100%' />
+				<Image src={image} alt={name} fill={true} objectFit='cover' />
 			</ImageContainer>
 			<Name>{name}</Name>
 			<Overline color={brandColors.giv[800]}>{title}</Overline>
@@ -62,6 +62,7 @@ const ImageContainer = styled.div`
 	width: 180px;
 	height: 180px;
 	overflow: hidden;
+	position: relative;
 	border-radius: 50%;
 	margin: -140px auto 0 auto;
 `;

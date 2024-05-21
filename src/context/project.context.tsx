@@ -28,7 +28,7 @@ import {
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import {
 	ACTIVATE_PROJECT,
-	FETCH_PROJECT_BY_SLUG,
+	FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
 } from '@/apollo/gql/gqlProjects';
 import { IDonationsByProjectIdGQL } from '@/apollo/types/gqlTypes';
 import { FETCH_PROJECT_DONATIONS_COUNT } from '@/apollo/gql/gqlDonations';
@@ -114,7 +114,7 @@ export const ProjectProvider = ({
 		setIsLoading(true);
 		client
 			.query({
-				query: FETCH_PROJECT_BY_SLUG,
+				query: FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT,
 				variables: { slug, connectedWalletUserId: Number(user?.id) },
 				fetchPolicy: 'network-only',
 			})

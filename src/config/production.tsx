@@ -30,8 +30,6 @@ import IconArbitrum from '@/components/Icons/Arbitrum';
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
 
-const isSolanaEnabled = process.env.NEXT_PUBLIC_ENABLE_SOLANA === 'true';
-
 const SEPT_8TH_2022 = 1662595200000;
 const MAINNET_NETWORK_NUMBER = 1; // Mainnet
 const GNOSIS_NETWORK_NUMBER = 100; // xDAI
@@ -64,10 +62,7 @@ const EVM_CHAINS = [
 	classic,
 ] as readonly [Chain, ...Chain[]];
 
-const NON_EVM_CHAINS: NonEVMChain[] = [];
-if (isSolanaEnabled) {
-	NON_EVM_CHAINS.push(SOLANA_NETWORK);
-}
+const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE || 'https://mainnet.serve.giveth.io';
@@ -112,7 +107,7 @@ const config: EnvConfig = {
 		},
 
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet?source=giveth',
 		coingeckoChainName: 'ethereum',
 		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
 
@@ -186,32 +181,6 @@ const config: EnvConfig = {
 				farmEndTimeMS: 1660946400000,
 			},
 		],
-		v3Pools: [
-			// {
-			// 	network: MAINNET_NETWORK_NUMBER,
-			// 	INCENTIVE_START_TIME: 1640361600,
-			// 	INCENTIVE_END_TIME: 1656086400,
-			// 	INCENTIVE_REWARD_AMOUNT: 10000000,
-			// 	NFT_POSITIONS_MANAGER_ADDRESS:
-			// 		'0xC36442b4a4522E871399CD717aBDD847Ab11FE88',
-			// 	UNISWAP_V3_STAKER: '0x1f98407aaB862CdDeF78Ed252D6f557aA5b0f00d',
-			// 	STAKING_REWARDS_CONTRACT:
-			// 		'0x79A7CAD3Ac4554C133dCaaa9Bc3319385Eb7FD5D',
-			// 	REWARD_TOKEN: '0x3115e5aAa3D6f742d09fbB649150dfE285a9c2A3',
-			// 	UNISWAP_V3_LP_POOL:
-			// 		'0xc763b6b3d0f75167db95daa6a0a0d75dd467c4e1',
-			// 	INCENTIVE_REFUNDEE_ADDRESS:
-			// 		'0x34d27210cC319EC5281bDc4DC2ad8FbcF4EAEAEB',
-			// 	type: StakingType.UNISWAPV3_ETH_GIV,
-			// 	platform: StakingPlatform.UNISWAP,
-			// 	title: 'GIV / ETH',
-			// 	description: '0.3% tier only',
-			// 	provideLiquidityLink: `https://app.uniswap.org/#/add/ETH/0x900dB999074d9277c5DA2A43F252D74366230DA0/3000`,
-			// 	unit: 'NFT',
-			// 	infinitePositionId: 193935,
-			// 	farmEndTimeMS: 1660946400000,
-			// },
-		],
 		regenPools: [
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -256,7 +225,7 @@ const config: EnvConfig = {
 			},
 		],
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
 		regenStreams: [
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -282,7 +251,7 @@ const config: EnvConfig = {
 		},
 
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai?source=giveth',
 		coingeckoChainName: 'xdai',
 		chainLogo: (logoSize = 24) => <IconGnosisChain size={logoSize} />,
 
@@ -392,7 +361,7 @@ const config: EnvConfig = {
 		],
 
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2',
+			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
 
 		regenStreams: [
 			{
@@ -429,7 +398,7 @@ const config: EnvConfig = {
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
 		subgraphAddress:
-			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet',
+			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet?source=giveth',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
 			'https://velodrome.finance/swap?from=eth&to=0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
@@ -451,7 +420,7 @@ const config: EnvConfig = {
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
 			'0x5430757bc19c87ec562e4660e56af6cac324b50a',
 		superFluidSubgraph:
-			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet',
+			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet?source=giveth',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {

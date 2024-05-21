@@ -41,7 +41,7 @@ import { showToastError } from '@/lib/helpers';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { slugToProjectView, slugToSuccessView } from '@/lib/routeCreators';
 import { client } from '@/apollo/apolloClient';
-import config, { isRecurringActive } from '@/configuration';
+import config from '@/configuration';
 import { setShowFooter, setShowHeader } from '@/features/general/general.slice';
 import { useAppDispatch } from '@/features/hooks';
 import NameInput from '@/components/views/create/NameInput';
@@ -131,6 +131,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		farcaster: storageFarcaster,
 		lens: storageLens,
 		website: storageWebsite,
+		telegram: storageTelegram,
 	} = storageProjectData || {};
 	const storageAddresses =
 		storageProjectData?.addresses instanceof Array
@@ -208,6 +209,10 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				findSocialMedia(EProjectSocialMediaType.WEBSITE)?.link ||
 				storageWebsite ||
 				'',
+			[EInputs.telegram]:
+				findSocialMedia(EProjectSocialMediaType.TELEGRAM)?.link ||
+				storageTelegram ||
+				'',
 		},
 	});
 
@@ -233,6 +238,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		lens: watchLens,
 		website: watchWebsite,
 		draft: watchDraft,
+		telegram: watchTelegram,
 	} = data;
 
 	useEffect(() => {
@@ -259,6 +265,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		watchFarcaster,
 		watchLens,
 		watchWebsite,
+		watchTelegram,
 	]);
 	const hasOptimismAddress = watchAddresses.some(
 		address => config.OPTIMISM_NETWORK_NUMBER === address.networkId,
@@ -300,6 +307,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				farcaster,
 				lens,
 				website,
+				telegram,
 			} = formData;
 
 			// Transforming the social media fields into the required structure
@@ -314,6 +322,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 				{ type: EProjectSocialMediaType.FARCASTER, link: farcaster },
 				{ type: EProjectSocialMediaType.LENS, link: lens },
 				{ type: EProjectSocialMediaType.WEBSITE, link: website },
+				{ type: EProjectSocialMediaType.TELEGRAM, link: telegram },
 			].filter(
 				social => social.link && social.link !== '',
 			) as IProjectSocialMedia[]; // Filtering out empty links
@@ -351,11 +360,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 						},
 					});
 
-			if (
-				watchAlloProtocolRegistry &&
-				hasOptimismAddress &&
-				isRecurringActive
-			) {
+			if (watchAlloProtocolRegistry && hasOptimismAddress) {
 				!isEditMode
 					? setAddedProjectState(addedProject.data?.createProject)
 					: setAddedProjectState(addedProject.data?.updateProject);
@@ -374,12 +379,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 			if (addedProject) {
 				// Success
 
-				if (
-					watchAlloProtocolRegistry &&
-					hasOptimismAddress &&
-					isRecurringActive &&
-					!draft
-				) {
+				if (watchAlloProtocolRegistry && hasOptimismAddress && !draft) {
 					setShowAlloProtocolModal(true);
 					localStorage.removeItem(StorageLabel.CREATE_PROJECT_FORM);
 				} else {

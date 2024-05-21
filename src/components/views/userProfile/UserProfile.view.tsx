@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
+import Image from 'next/image';
 
 import {
 	brandColors,
@@ -140,9 +141,9 @@ const UserProfileView: FC<IUserProfileView> = () => {
 						) : (
 							<StyledImage
 								src={user?.avatar || PROFILE_PHOTO_PLACEHOLDER}
+								alt={user?.name as string}
 								width={180}
 								height={180}
-								alt={user?.name}
 							/>
 						)}
 						<UserInfoRow>
@@ -241,7 +242,7 @@ const UserInfo = styled(FlexCenter)`
 	}
 `;
 
-const StyledImage = styled.img`
+const StyledImage = styled(Image)`
 	border-radius: 16px;
 `;
 

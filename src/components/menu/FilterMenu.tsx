@@ -14,7 +14,6 @@ import { mediaQueries, zIndex } from '@/lib/constants/constants';
 import CheckBox from '../Checkbox';
 import { useProjectsContext } from '@/context/projects.context';
 import { EProjectsFilter } from '@/apollo/types/types';
-import config from '@/configuration';
 import { PinkyColoredNumber } from '../styled-components/PinkyColoredNumber';
 
 interface IFilterMenuProps {
@@ -60,12 +59,10 @@ const fundsFilter = [
 	},
 ];
 
-if (config.ENABLE_SOLANA) {
-	fundsFilter.push({
-		label: 'Solana',
-		value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
-	});
-}
+fundsFilter.push({
+	label: 'Solana',
+	value: EProjectsFilter.ACCEPT_FUND_ON_SOLANA,
+});
 
 export const FilterMenu = forwardRef<HTMLDivElement, IFilterMenuProps>(
 	({ handleClose, isOpen }, ref) => {

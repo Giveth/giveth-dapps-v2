@@ -15,9 +15,7 @@ import ProjectCard from '@/components/project-card/ProjectCard';
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { ProjectsContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
-import ProjectsTable from './ProjectsTable';
 import ProjectItem from './ProjectItem';
-import { isRecurringActive } from '@/configuration';
 
 const itemPerPage = 10;
 
@@ -114,26 +112,15 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 						/>
 					</NothingWrapper>
 				) : myAccount ? (
-					isRecurringActive ? (
-						<Flex $flexDirection='column' gap='18px'>
-							{projects.map(project => (
-								<ProjectItem
-									key={project.id}
-									project={project}
-									setProjects={setProjects}
-								/>
-							))}
-						</Flex>
-					) : (
-						<ProjectsTableWrapper>
-							<ProjectsTable
-								projects={projects}
-								changeOrder={changeOrder}
-								order={order}
+					<Flex $flexDirection='column' gap='18px'>
+						{projects.map(project => (
+							<ProjectItem
+								key={project.id}
+								project={project}
 								setProjects={setProjects}
 							/>
-						</ProjectsTableWrapper>
-					)
+						))}
+					</Flex>
 				) : (
 					<Row>
 						{projects.map(project => (

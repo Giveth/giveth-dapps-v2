@@ -8,6 +8,7 @@ import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
 import { useAppSelector } from '@/features/hooks';
+import { useProjectsContext } from '@/context/projects.context';
 
 export enum EPassportState {
 	LOADING,
@@ -38,6 +39,8 @@ const initialInfo = {
 
 export const usePassport = () => {
 	const { address } = useAccount();
+	const { isArchivedQF } = useProjectsContext();
+
 	const [info, setInfo] = useState<IPassportAndStateInfo>(initialInfo);
 	const { userData: user, isUserFullFilled } = useAppSelector(
 		state => state.user,
@@ -49,6 +52,13 @@ export const usePassport = () => {
 			if (isSafeEnv) {
 				return setInfo({
 					passportState: EPassportState.NOT_AVAILABLE_FOR_GSAFE,
+					passportScore: null,
+					currentRound: null,
+				});
+			}
+			if (isArchivedQF) {
+				return setInfo({
+					passportState: EPassportState.ENDED,
 					passportScore: null,
 					currentRound: null,
 				});

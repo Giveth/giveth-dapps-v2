@@ -50,7 +50,7 @@ export const StreamInfo: FC<IStreamInfoProps> = ({
 			}}
 		>
 			<TokenIconWithGIVBack
-				showGiveBack={false}
+				showGiveBack
 				symbol={underlyingToken?.symbol}
 				size={32}
 				isSuperToken={isSuperToken}

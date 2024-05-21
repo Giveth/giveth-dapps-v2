@@ -21,11 +21,9 @@ export const SocialContainer = styled.div`
 	}
 `;
 
-export const CustomBigWarningImage = styled.img`
+export const CustomBigWarningImage = styled(Image)`
 	opacity: 0.3;
 	position: absolute;
-	width: 220px;
-	height: 220px;
 	top: 100px;
 	left: -70px;
 	display: none;
@@ -35,11 +33,9 @@ export const CustomBigWarningImage = styled.img`
 	}
 `;
 
-export const CustomSmallWarningImage = styled.img`
+export const CustomSmallWarningImage = styled(Image)`
 	opacity: 0.3;
 	position: absolute;
-	width: 120px;
-	height: 120px;
 	bottom: 100px;
 	right: 70px;
 	display: none;
@@ -49,11 +45,9 @@ export const CustomSmallWarningImage = styled.img`
 	}
 `;
 
-export const CustomGearImage = styled.img`
+export const CustomGearImage = styled(Image)`
 	opacity: 0.6;
 	position: absolute;
-	width: 120px;
-	height: 120px;
 	top: 70px;
 	left: -30px;
 	display: none;
@@ -63,11 +57,9 @@ export const CustomGearImage = styled.img`
 	}
 `;
 
-export const CustomGearsImage = styled.img`
+export const CustomGearsImage = styled(Image)`
 	opacity: 0.6;
 	position: absolute;
-	width: 160px;
-	height: 160px;
 	bottom: 70px;
 	right: -30px;
 	display: none;

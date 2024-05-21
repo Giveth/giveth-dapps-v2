@@ -124,16 +124,6 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 							locale,
 						)}
 					</Flex>
-					{/* add this part when the backend has calculated {isRecurringActive && (
-						<Flex $justifyContent='space-between'>
-							<P>
-								<Flex $alignItems='center' gap='6px'>
-									Claim Recurring Donations
-								</Flex>
-							</P>
-							<div>{project.sumDonationValueUsd}</div>
-						</Flex>
-					)} */}
 				</ProjectStatusesContainer>
 			</Flex>
 			{showAddressModal && selectedProject && (

@@ -50,7 +50,6 @@ import config from '@/configuration';
 import Routes from '@/lib/constants/Routes';
 import { UnStakeModal } from '@/components/modals/Unstake/UnStake';
 import { HarvestAllModal } from '@/components/modals/HarvestAll';
-import { LiquidityPosition } from '@/types/nfts';
 import LockModal from '@/components/modals/StakeLock/Lock';
 import { WhatIsStreamModal } from '@/components/modals/WhatIsStream';
 import { LockupDetailsModal } from '@/components/modals/LockupDetailsModal';
@@ -60,8 +59,6 @@ interface IStakingPoolInfoAndActionsProps {
 	poolStakingConfig: PoolStakingConfig | RegenPoolStakingConfig;
 	isDiscontinued: boolean;
 	isGIVpower: boolean;
-	stakedPositions?: LiquidityPosition[];
-	unstakedPositions?: LiquidityPosition[];
 	currentIncentive?: {
 		key?: (string | number)[] | null | undefined;
 	};
@@ -71,8 +68,6 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 	poolStakingConfig,
 	isDiscontinued,
 	isGIVpower,
-	stakedPositions,
-	unstakedPositions,
 	currentIncentive,
 }) => {
 	const [started, setStarted] = useState(true);
@@ -502,7 +497,6 @@ export const StakingPoolInfoAndActions: FC<IStakingPoolInfoAndActionsProps> = ({
 					setShowModal={setShowHarvestModal}
 					poolStakingConfig={poolStakingConfig}
 					regenStreamConfig={regenStreamConfig}
-					stakedPositions={stakedPositions}
 					currentIncentive={currentIncentive}
 				/>
 			)}
