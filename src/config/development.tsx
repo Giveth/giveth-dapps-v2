@@ -6,6 +6,7 @@ import {
 	optimismSepolia,
 	polygon,
 	arbitrumSepolia,
+	baseSepolia,
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { type Chain } from 'viem';
@@ -51,6 +52,7 @@ const OPTIMISM_NETWORK_NUMBER = 11155420;
 const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
 const ARBITRUM_NETWORK_NUMBER = 421614;
+const BASE_NETWORK_NUMBER = 84532;
 
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
@@ -96,6 +98,7 @@ const EVM_CHAINS = [
 	optimismSepolia,
 	celoAlfajores,
 	arbitrumSepolia,
+	baseSepolia,
 	classic,
 ] as readonly [Chain, ...Chain[]];
 
@@ -120,6 +123,7 @@ const config: EnvConfig = {
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
+	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
@@ -426,6 +430,17 @@ const config: EnvConfig = {
 		},
 		coingeckoChainName: 'arbitrum',
 		chainLogo: (logoSize?: number) => <IconArbitrum size={logoSize} />,
+	},
+
+	BASE_CONFIG: {
+		...baseSepolia,
+		chainType: ChainType.EVM,
+		coingeckoChainName: 'base',
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		//TODO: should change the icon
+		chainLogo: (logoSize?: number) => <IconUnknown size={logoSize} />,
 	},
 
 	CLASSIC_CONFIG: {
