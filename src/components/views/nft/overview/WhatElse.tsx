@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import ExternalLink from '@/components/ExternalLink';
 import { OvalHorizontalGradient, OvalVerticalGradient } from '../common.styles';
+import links from '@/lib/constants/links';
 
 const WhatElse = () => {
 	const { formatMessage } = useIntl();
@@ -21,32 +22,23 @@ const WhatElse = () => {
 					<Col sm={12} lg={6}>
 						<HeaderTitle>
 							{formatMessage({
-								id: 'label.get_your_giveth_name',
+								id: 'label.become_project_nominator',
 							})}
 						</HeaderTitle>
 						<Lead>
 							{formatMessage({
 								id: 'label.givers_pfp_holders',
 							})}
-							<code>.giveth</code>{' '}
-							{formatMessage({
-								id: 'label.domain_name_at',
-							})}{' '}
-							<code>griff.giveth</code>){' '}
-							{formatMessage({
-								id: 'label.on_gnosis_and',
-							})}
 							<p>
-								{formatMessage({
-									id: 'label.already_a_giver',
-								})}{' '}
-								<DocLink href='https://giveth.punk.domains/#/'>
+								<DocLink href={links.TWITTER}>
 									{formatMessage({
-										id: 'label.register_your',
-									})}{' '}
-									<code>.giveth</code>{' '}
-									{formatMessage({ id: 'label.name' })}
+										id: 'label.keep_eye_on_twitter',
+									})}
+									{'  '}
 								</DocLink>
+								{formatMessage({
+									id: 'label.to_know_next_givers_round',
+								})}{' '}
 							</p>
 						</Lead>
 					</Col>
