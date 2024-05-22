@@ -11,7 +11,6 @@ import { captureException } from '@sentry/nextjs';
 // import { type Address, erc20Abi } from 'wagmi';
 import { Address, Chain, parseEther, parseUnits, erc20Abi } from 'viem';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import getConfig from 'next/config';
 import { giveconomyTabs } from '@/lib/constants/Tabs';
 import { getRequest } from '@/helpers/requests';
 import { IUser, IWalletAddress } from '@/apollo/types/types';
@@ -28,7 +27,6 @@ interface TransactionParams {
 }
 
 const defaultLocale = process.env.i18n;
-console.log('defaultLocale', defaultLocale); // 'en-US'
 const locales = process.env.locales;
 
 export const fullPath = (path: string) => `${config.FRONTEND_LINK}${path}`;
@@ -638,12 +636,9 @@ export const matchLocaleToSystemLocals = (locale: string) => {
 		'do',
 	];
 	const lowercaseLocale = locale.toLowerCase();
-	console.log('lowercaseLocale', lowercaseLocale);
 	const isSpanish = spanishSpeakingCountryCodes.includes(lowercaseLocale);
-	console.log('isSpanish', isSpanish);
 	const _locale = isSpanish ? 'es' : lowercaseLocale;
 	const isValidLocale = locales?.includes(_locale);
-	console.log('isValidLocale', isValidLocale);
 	return isValidLocale ? _locale : undefined;
 };
 
