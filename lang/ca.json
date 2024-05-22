@@ -794,6 +794,7 @@
 	"label.recurring_donation_setup_1": "El vostre projecte ha estat creat, a continuació necessitareu signar una transacció per habilitar-lo per rebre donacions recurrents.",
 	"label.recurring_donation_setup_2": "Se us demanarà que signeu una transacció que executarà la configuració a ",
 	"label.recurring_donation_updated_hours": "Les quantitats de les donacions recurrents s'actualitzen cada 24 hores.",
+	"label.recurring_donation_maximum": "Aquest és el màxim que podeu donar mensualment, recarregueu el vostre saldo de reproducció per donar més!",
 	"label.refer_a_friend": "Recomana un amic, guanya tokens $GIV per cada donació.",
 	"label.refer_your_friends": "Recomana els teus amics",
 	"label.refer_your_friends_and_earn_giv": "Recomana els teus amics i guanya GIV quan donin",

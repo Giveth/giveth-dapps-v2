@@ -794,6 +794,7 @@
 	"label.recurring_donation_setup_1": "Su proyecto ha sido creado, a continuación necesitará firmar una transacción para habilitarlo para recibir donaciones recurrentes.",
 	"label.recurring_donation_setup_2": "Se le pedirá que firme una transacción que ejecutará la configuración en ",
 	"label.recurring_donation_updated_hours": "Las cantidades de las donaciones recurrentes se actualizan cada 24 horas.",
+	"label.recurring_donation_maximum": "Este es el máximo que puedes donar mensualmente. ¡Recarga tu saldo de transmisión para donar más!",
 	"label.refer_a_friend": "Referir a un amigo, ganar tokens $GIV por cada donación.",
 	"label.refer_your_friends": "Refiere a tus amigos",
 	"label.refer_your_friends_and_earn_giv": "Refiere a tus amigos y gana GIV",

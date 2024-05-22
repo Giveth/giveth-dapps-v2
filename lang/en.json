@@ -795,6 +795,7 @@
 	"label.recurring_donation_setup_1": "Your project has now been created, next you will need to sign a transaction to enable it to receive recurring donations.",
 	"label.recurring_donation_setup_2": "You'll be prompted to sign a transaction which will execute the setup on ",
 	"label.recurring_donation_updated_hours": "Recurring donation amounts are updated every 24 hours.",
+	"label.recurring_donation_maximum": "This is the maximum you can donate monthly, top-up your stream balance to donate more!",
 	"label.refer_a_friend": "Refer a friend, earn $GIV tokens for every donation.",
 	"label.refer_your_friends": "Refer your friends",
 	"label.refer_your_friends_and_earn_giv": "Refer your friends and earn GIV when they donate",
