@@ -66,8 +66,6 @@ export const IntlMessages = {
 
 const defaultLocale = process.env.defaultLocale;
 
-console.log('defaultLocale', defaultLocale);
-
 function renderSnippet() {
 	const opts = {
 		apiKey:
