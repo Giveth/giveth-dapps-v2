@@ -139,6 +139,10 @@ const moduleExports = withBundleAnalyzer({
 		defaultLocale,
 		localeDetection: false,
 	},
+	env: {
+		locales,
+		defaultLocale,
+	},
 	headers: () => {
 		return [
 			{
