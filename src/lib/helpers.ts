@@ -26,7 +26,7 @@ interface TransactionParams {
 	value: string;
 }
 
-const defaultLocale = process.env.i18n;
+const defaultLocale = process.env.defaultLocale;
 const locales = process.env.locales;
 
 export const fullPath = (path: string) => `${config.FRONTEND_LINK}${path}`;
