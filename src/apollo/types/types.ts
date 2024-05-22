@@ -99,6 +99,7 @@ export enum EProjectsFilter {
 	ACCEPT_FUND_ON_POLYGON = 'AcceptFundOnPolygon',
 	ACCEPT_FUND_ON_CELO = 'AcceptFundOnCelo',
 	ACCEPT_FUND_ON_ARBITRUM = 'AcceptFundOnArbitrum',
+	ACCEPT_FUND_ON_BASE = 'AcceptFundOnBase',
 	ACCEPT_FUND_ON_OPTIMISM = 'AcceptFundOnOptimism',
 	ACCEPT_FUND_ON_ETC = 'AcceptFundOnETC',
 	ACCEPT_FUND_ON_SOLANA = 'AcceptFundOnSolana',
@@ -122,6 +123,7 @@ export enum ECampaignFilterField {
 	AcceptFundOnPolygon = 'acceptFundOnPolygon',
 	AcceptFundOnCelo = 'acceptFundOnCelo',
 	AcceptFundOnArbitrum = 'acceptFundOnArbitrum',
+	AcceptFundOnBase = 'acceptFundOnBase',
 	AcceptFundOnOptimism = 'acceptFundOnOptimism',
 	AcceptFundOnSolana = 'acceptFundOnSolana',
 }

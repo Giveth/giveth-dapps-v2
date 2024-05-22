@@ -25,7 +25,7 @@ import { IconPolygon } from '@/components/Icons/Polygon';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconCelo } from '@/components/Icons/Celo';
 import { IconClassic } from '@/components/Icons/Classic';
-import { IconUnknown } from '@/components/Icons/Unknown';
+import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconArbitrum from '@/components/Icons/Arbitrum';
 
@@ -533,8 +533,7 @@ const config: EnvConfig = {
 		},
 		subgraphAddress: '',
 		coingeckoChainName: 'base',
-		//TODO: should change the icon
-		chainLogo: (logoSize = 24) => <IconUnknown size={logoSize} />,
+		chainLogo: (logoSize = 24) => <IconBase size={logoSize} />,
 	},
 	CLASSIC_CONFIG: {
 		...classic,
