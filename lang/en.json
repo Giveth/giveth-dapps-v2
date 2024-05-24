@@ -759,6 +759,8 @@
 	"label.project_status": "Project status",
 	"label.project_story": "Project story",
 	"label.project_verification": "Project Verification",
+	"label.project_verify": "Verify Project",
+	"label.project_verify_resume": "Resume Verification",
 	"label.proud_of_our_partners": "Proud of our partners",
 	"label.provide_liquidity": "Provide Liquidity",
 	"label.providing_location_details_makes_a_personal_connection_with": "Providing location details makes a personal connection with people in your area.",

@@ -758,6 +758,8 @@
 	"label.project_status": "Estado del Proyecto",
 	"label.project_story": "Historia del proyecto",
 	"label.project_verification": "Verificación del proyecto",
+	"label.project_verify": "Verificar proyecto",
+	"label.project_verify_resume": "Reanudar la verificación",
 	"label.proud_of_our_partners": "Orgullosos de nuestros socios",
 	"label.provide_liquidity": "Proveer Liquidez",
 	"label.providing_location_details_makes_a_personal_connection_with": "Proporcionar detalles de ubicación crea una conexión personal con personas de tu área.",

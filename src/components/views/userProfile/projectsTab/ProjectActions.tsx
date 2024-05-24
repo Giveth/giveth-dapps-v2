@@ -1,9 +1,12 @@
 import {
+	brandColors,
 	GLink,
+	IconArchiving,
 	IconArrowDownCircle16,
 	IconEdit16,
 	IconEye16,
 	IconUpdate16,
+	IconVerifiedBadge16,
 	IconWalletOutline16,
 	neutralColors,
 } from '@giveth/ui-design-system';
@@ -12,13 +15,19 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
 import router from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
-import { IProject } from '@/apollo/types/types';
+import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
-import { idToProjectEdit, slugToProjectView } from '@/lib/routeCreators';
+import {
+	idToProjectEdit,
+	slugToProjectView,
+	slugToVerification,
+} from '@/lib/routeCreators';
 import { capitalizeAllWords } from '@/lib/helpers';
 import config from '@/configuration';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
+import { useProjectContext } from '@/context/project.context';
+import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
 
 interface IProjectActions {
 	project: IProject;
@@ -28,6 +37,9 @@ interface IProjectActions {
 }
 
 const ProjectActions = (props: IProjectActions) => {
+	const { projectData, isActive, activateProject } = useProjectContext();
+	const [deactivateModal, setDeactivateModal] = useState(false);
+
 	const {
 		project,
 		setSelectedProject,
@@ -76,7 +88,39 @@ const ProjectActions = (props: IProjectActions) => {
 				setShowAddressModal(true);
 			},
 		},
+		{
+			label: capitalizeAllWords(
+				formatMessage({
+					id: isActive
+						? 'label.deactivate_project'
+						: 'label.activate_project',
+				}),
+			),
+			icon: <IconArchiving />,
+			cb: () => (isActive ? setDeactivateModal(true) : activateProject()),
+		},
 	];
+
+	// Add action if project need verification or verification is partially done
+	if (
+		project.projectVerificationForm?.status === EVerificationStatus.DRAFT ||
+		!project.verified
+	) {
+		options.push({
+			label: formatMessage({
+				id:
+					!project.verified &&
+					project.projectVerificationForm?.status !==
+						EVerificationStatus.DRAFT
+						? 'label.project_verify'
+						: 'label.project_verify_resume',
+			}),
+			icon: <IconVerifiedBadge16 />,
+			cb: () =>
+				router.push(slugToVerification(project.slug) + '?tab=verify'),
+			color: brandColors.giv[500],
+		});
+	}
 
 	const recurringDonationOption: IOption = {
 		label: formatMessage({
@@ -113,12 +157,20 @@ const ProjectActions = (props: IProjectActions) => {
 			{isCancelled ? (
 				<CancelledWrapper>CANCELLED</CancelledWrapper>
 			) : (
-				<Dropdown
-					style={dropdownStyle}
-					label='Actions'
-					options={options}
-					stickToRight
-				/>
+				<>
+					<Dropdown
+						style={dropdownStyle}
+						label='Actions'
+						options={options}
+						stickToRight
+					/>
+					{deactivateModal && (
+						<DeactivateProjectModal
+							setShowModal={setDeactivateModal}
+							projectId={project?.id}
+						/>
+					)}
+				</>
 			)}
 		</Actions>
 	);
