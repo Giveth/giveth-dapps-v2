@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-	celoAlfajores,
-	gnosis,
-	goerli,
-	optimismSepolia,
-	polygon,
-	arbitrumSepolia,
+	celoAlfajores as celoAlfajoresDefault,
+	gnosis as gnosisDefault,
+	goerli as goerliDefault,
+	optimismSepolia as optimismSepoliaDefault,
+	polygon as polygonDefault,
+	arbitrumSepolia as arbitrumSepoliaDefault,
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { type Chain } from 'viem';
@@ -25,6 +25,8 @@ import { IconEthereum } from '@/components/Icons/Eth';
 import { IconUnknown } from '@/components/Icons/Unknown';
 import IconSolana from '@/components/Icons/Solana';
 import IconArbitrum from '@/components/Icons/Arbitrum';
+
+import { updateBlockExplorers } from './utils';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -67,7 +69,7 @@ const SOLANA_NETWORK: NonEVMChain = {
 	},
 };
 
-const classic = {
+const classicDefault = {
 	id: 63,
 	name: 'Ethereum Classic Mordor',
 	network: 'mordor',
@@ -80,14 +82,16 @@ const classic = {
 		default: { http: ['https://rpc.mordor.etccooperative.org'] },
 		public: { http: ['https://rpc.mordor.etccooperative.org'] },
 	},
-	blockExplorers: {
-		default: {
-			name: 'Blockscout',
-			url: 'https://etc-mordor.blockscout.com',
-		},
-	},
 	subgraphAddress: 'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
 };
+
+const classic = updateBlockExplorers(classicDefault);
+const polygon = updateBlockExplorers(polygonDefault);
+const goerli = updateBlockExplorers(goerliDefault);
+const gnosis = updateBlockExplorers(gnosisDefault);
+const optimismSepolia = updateBlockExplorers(optimismSepoliaDefault);
+const celoAlfajores = updateBlockExplorers(celoAlfajoresDefault);
+const arbitrumSepolia = updateBlockExplorers(arbitrumSepoliaDefault);
 
 const EVM_CHAINS = [
 	polygon,

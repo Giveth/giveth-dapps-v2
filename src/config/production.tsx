@@ -1,11 +1,11 @@
 import {
-	celo,
-	classic,
-	gnosis,
-	mainnet,
-	optimism,
-	polygon,
-	arbitrum,
+	celo as celoDefault,
+	classic as classicDefault,
+	gnosis as gnosisDefault,
+	mainnet as mainnetDefault,
+	optimism as optimismDefault,
+	polygon as polygonDefault,
+	arbitrum as arbitrumDefault,
 } from '@wagmi/core/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import React from 'react';
@@ -26,6 +26,8 @@ import { IconCelo } from '@/components/Icons/Celo';
 import { IconClassic } from '@/components/Icons/Classic';
 import IconSolana from '@/components/Icons/Solana';
 import IconArbitrum from '@/components/Icons/Arbitrum';
+
+import { updateBlockExplorers } from './utils';
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
@@ -52,6 +54,15 @@ const SOLANA_NETWORK: NonEVMChain = {
 		},
 	},
 };
+
+const mainnet = updateBlockExplorers(mainnetDefault);
+const gnosis = updateBlockExplorers(gnosisDefault);
+const polygon = updateBlockExplorers(polygonDefault);
+const optimism = updateBlockExplorers(optimismDefault);
+const celo = updateBlockExplorers(celoDefault);
+const arbitrum = updateBlockExplorers(arbitrumDefault);
+const classic = updateBlockExplorers(classicDefault);
+
 const EVM_CHAINS = [
 	mainnet,
 	gnosis,
