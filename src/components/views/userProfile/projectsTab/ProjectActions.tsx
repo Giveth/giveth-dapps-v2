@@ -15,6 +15,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
 import router from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
+import { captureException } from '@sentry/nextjs';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
@@ -23,21 +24,22 @@ import {
 	slugToProjectView,
 	slugToVerification,
 } from '@/lib/routeCreators';
-import { capitalizeAllWords } from '@/lib/helpers';
+import { capitalizeAllWords, showToastError } from '@/lib/helpers';
 import config from '@/configuration';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
-import { useProjectContext } from '@/context/project.context';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
+import { client } from '@/apollo/apolloClient';
+import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 
 interface IProjectActions {
 	project: IProject;
 	setSelectedProject: Dispatch<SetStateAction<IProject | undefined>>;
 	setShowAddressModal: Dispatch<SetStateAction<boolean>>;
 	setShowClaimModal?: Dispatch<SetStateAction<boolean>>;
+	setProjects: Dispatch<SetStateAction<IProject[]>>;
 }
 
 const ProjectActions = (props: IProjectActions) => {
-	const { projectData, isActive, activateProject } = useProjectContext();
 	const [deactivateModal, setDeactivateModal] = useState(false);
 
 	const {
@@ -45,9 +47,14 @@ const ProjectActions = (props: IProjectActions) => {
 		setSelectedProject,
 		setShowAddressModal,
 		setShowClaimModal,
+		setProjects,
 	} = props;
 	const status = project.status.name;
 	const isCancelled = status === EProjectStatus.CANCEL;
+	const isActive = status === EProjectStatus.ACTIVE;
+	const projectId = project?.id;
+
+	const [activeProject, setActiveProject] = useState(isActive);
 
 	const { formatMessage } = useIntl();
 
@@ -60,6 +67,38 @@ const ProjectActions = (props: IProjectActions) => {
 	const { chain } = useAccount();
 	const { switchChain } = useSwitchChain();
 	const chainId = chain?.id;
+
+	const activateProject = async () => {
+		setActiveProject(true);
+		try {
+			await client.mutate({
+				mutation: ACTIVATE_PROJECT,
+				variables: { projectId: Number(projectId || '') },
+			});
+		} catch (e) {
+			showToastError(e);
+			captureException(e, {
+				tags: {
+					section: 'handleProjectStatus',
+				},
+			});
+		}
+
+		setProjects((currentProjects: IProject[]) => {
+			return currentProjects.map(project => {
+				if (project.id === projectId) {
+					return {
+						...project,
+						status: {
+							id: '5',
+							name: EProjectStatus.ACTIVE,
+						},
+					};
+				}
+				return project;
+			});
+		});
+	};
 
 	const options: IOption[] = [
 		{
@@ -76,7 +115,7 @@ const ProjectActions = (props: IProjectActions) => {
 		{
 			label: formatMessage({ id: 'label.edit_project' }),
 			icon: <IconEdit16 />,
-			cb: () => router.push(idToProjectEdit(project?.id)),
+			cb: () => router.push(idToProjectEdit(projectId)),
 		},
 		{
 			label: capitalizeAllWords(
@@ -91,13 +130,14 @@ const ProjectActions = (props: IProjectActions) => {
 		{
 			label: capitalizeAllWords(
 				formatMessage({
-					id: isActive
+					id: activeProject
 						? 'label.deactivate_project'
 						: 'label.activate_project',
 				}),
 			),
 			icon: <IconArchiving />,
-			cb: () => (isActive ? setDeactivateModal(true) : activateProject()),
+			cb: () =>
+				activeProject ? setDeactivateModal(true) : activateProject(),
 		},
 	];
 
@@ -167,7 +207,7 @@ const ProjectActions = (props: IProjectActions) => {
 					{deactivateModal && (
 						<DeactivateProjectModal
 							setShowModal={setDeactivateModal}
-							projectId={project?.id}
+							projectId={projectId}
 						/>
 					)}
 				</>

@@ -58,6 +58,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 					setShowAddressModal={setShowAddressModal}
 					project={project}
 					setShowClaimModal={setShowClaimModal}
+					setProjects={setProjects}
 				/>
 			</Flex>
 			<HorizontalDivider />
