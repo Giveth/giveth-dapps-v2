@@ -100,7 +100,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				const { data } = await client.query({
 					query: FETCH_GIVETH_PROJECT_BY_ID,
 					variables: { id: config.GIVETH_PROJECT_ID },
-					fetchPolicy: 'no-cache',
+					fetchPolicy: 'cache-first',
 				});
 				setGivethProject(data.projectById);
 				setIsLoadingGivethAddress(false);
@@ -108,6 +108,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				setIsLoadingGivethAddress(false);
 				showToastError('Failed to fetch Giveth wallet address');
 				console.log('Failed to fetch Giveth wallet address', e);
+				closeModal();
 			}
 		};
 		if (isDonatingToGiveth) fetchGivethProject().then();
