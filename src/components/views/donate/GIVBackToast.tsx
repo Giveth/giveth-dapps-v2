@@ -4,18 +4,19 @@ import { useIntl } from 'react-intl';
 import links from '@/lib/constants/links';
 import ExternalLink from '@/components/ExternalLink';
 import InlineToast, { EToastType } from '@/components/toasts/InlineToast';
+import usePurpleList from '@/hooks/usePurpleList';
 
 const GIVBackToast = (props: {
 	projectEligible?: boolean;
 	tokenEligible?: boolean;
-	userEligible?: boolean;
 	className?: string;
 }) => {
-	const { projectEligible, tokenEligible, userEligible, className } = props;
+	const { projectEligible, tokenEligible, className } = props;
+	const isPurpleListed = usePurpleList();
 	const { formatMessage } = useIntl();
 	let message: JSX.Element | string,
 		type = EToastType.Warning;
-	if (!userEligible) {
+	if (isPurpleListed) {
 		message = formatMessage({
 			id: 'label.your_current_wallet_is_associated_with_a_giveth_project',
 		});

@@ -55,7 +55,6 @@ import { useModalCallback } from '@/hooks/useModalCallback';
 import { useAppSelector } from '@/features/hooks';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 import GIVBackToast from './GIVBackToast';
-import usePurpleList from '@/hooks/usePurpleList';
 
 // These two functions are used to make the slider more user friendly by mapping the slider's value to a new range.
 /**
@@ -169,7 +168,6 @@ export const RecurringDonationCard = () => {
 		: brandColors.giv;
 
 	const projectIsGivBackEligible = !!project.verified;
-	const isPurpleListed = usePurpleList();
 
 	const handleDonate = () => {
 		if (anchorContractAddress) {
@@ -569,7 +567,6 @@ export const RecurringDonationCard = () => {
 				<GIVBackToastStyled
 					projectEligible={projectIsGivBackEligible}
 					tokenEligible={true}
-					userEligible={!isPurpleListed}
 				/>
 			)}
 			{userStreamOnSelectedToken ? (
