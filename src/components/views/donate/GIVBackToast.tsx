@@ -9,8 +9,9 @@ const GIVBackToast = (props: {
 	projectEligible?: boolean;
 	tokenEligible?: boolean;
 	userEligible?: boolean;
+	className?: string;
 }) => {
-	const { projectEligible, tokenEligible, userEligible } = props;
+	const { projectEligible, tokenEligible, userEligible, className } = props;
 	const { formatMessage } = useIntl();
 	let message: JSX.Element | string,
 		type = EToastType.Warning;
@@ -43,7 +44,7 @@ const GIVBackToast = (props: {
 	}
 
 	return (
-		<ToastContainer>
+		<ToastContainer className={className}>
 			<InlineToast
 				noIcon
 				type={type}
