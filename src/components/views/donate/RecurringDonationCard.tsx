@@ -89,8 +89,8 @@ export const RecurringDonationCard = () => {
 	const { project, selectedToken, tokenStreams } = useDonateData();
 	const isGivethProject = Number(project.id!) === config.GIVETH_PROJECT_ID;
 	const [amount, setAmount] = useState(0n);
+	const [perMonthAmount, setPerMonthAmount] = useState(0n);
 	const [isUpdating, setIsUpdating] = useState(false);
-	const [percentage, setPercentage] = useState(0);
 	const [donationToGiveth, setDonationToGiveth] = useState(
 		isGivethProject ? 0 : 5,
 	);
@@ -135,18 +135,11 @@ export const RecurringDonationCard = () => {
 
 	const underlyingToken = selectedToken?.token.underlyingToken;
 
-	const totalPerMonth =
-		BigInt(
-			new BigNumber((amount || 0n).toString())
-				.multipliedBy(percentage)
-				.toFixed(0),
-		) / 100n;
-
 	// total means project + giveth
-	const totalPerSec = totalPerMonth / ONE_MONTH_SECONDS;
+	const totalPerSec = perMonthAmount / ONE_MONTH_SECONDS;
 	const projectPerMonth =
-		(totalPerMonth * BigInt(100 - donationToGiveth)) / 100n;
-	const givethPerMonth = totalPerMonth - projectPerMonth;
+		(perMonthAmount * BigInt(100 - donationToGiveth)) / 100n;
+	const givethPerMonth = perMonthAmount - projectPerMonth;
 	const tokenBalance = balance?.value;
 	const tokenStream = tokenStreams[selectedToken?.token.id || ''];
 
@@ -174,7 +167,6 @@ export const RecurringDonationCard = () => {
 		: brandColors.giv;
 
 	const handleDonate = () => {
-		console.log('isSignedIn', isSignedIn);
 		if (anchorContractAddress) {
 			if (isSignedIn) {
 				setShowRecurringDonationModal(true);
@@ -209,17 +201,12 @@ export const RecurringDonationCard = () => {
 
 			if (_userStreamOnSelectedToken) {
 				setUserStreamOnSelectedToken(_userStreamOnSelectedToken);
-				const _percentage = BigNumber(
-					(
-						BigInt(_userStreamOnSelectedToken.currentFlowRate) *
-						ONE_MONTH_SECONDS *
-						100n
-					).toString(),
-				).dividedBy(selectedToken.balance.toString());
-				setPercentage(parseFloat(_percentage.toString()));
+				setPerMonthAmount(
+					BigInt(_userStreamOnSelectedToken.currentFlowRate) *
+						ONE_MONTH_SECONDS,
+				);
 			} else {
 				setUserStreamOnSelectedToken(undefined);
-				//Please don't make percentage zero here, it will reset the slider to 0
 			}
 		} catch (error) {
 			showToastError(error);
@@ -230,9 +217,13 @@ export const RecurringDonationCard = () => {
 		selectedToken === undefined ||
 		tokenBalance === undefined ||
 		amount === 0n ||
-		percentage === 0 ||
+		perMonthAmount === 0n ||
 		isTotalStreamExceed ||
 		amount > tokenBalance;
+
+	const percentage = amount
+		? Number((perMonthAmount * 1000n) / amount) / 10
+		: 0;
 
 	return (
 		<>
@@ -372,7 +363,7 @@ export const RecurringDonationCard = () => {
 								id: 'label.amount_to_donate_monthly',
 							})}
 						</Caption>
-						<SliderWrapper>
+						<Flex gap='16px' $alignItems='center'>
 							<StyledSlider
 								min={0}
 								max={100}
@@ -389,15 +380,39 @@ export const RecurringDonationCard = () => {
 									},
 								}}
 								onChange={(value: any) => {
-									const _value = Array.isArray(value)
-										? value[0]
-										: value;
-									setPercentage(mapValue(_value));
+									const _value = value as number;
+									const _percentage = mapValue(_value);
+									const _perMonthAmount =
+										BigInt(
+											new BigNumber(
+												(amount || 0n).toString(),
+											)
+												.multipliedBy(_percentage)
+												.toFixed(0),
+										) / 100n;
+									setPerMonthAmount(_perMonthAmount);
 								}}
-								value={mapValueInverse(percentage)}
+								value={mapValueInverse(percentage.valueOf())}
 								disabled={amount === 0n}
 							/>
-						</SliderWrapper>
+							<InputSlider
+								amount={perMonthAmount}
+								setAmount={setPerMonthAmount}
+								maxAmount={amount}
+								decimals={selectedToken?.token.decimals || 18}
+								disabled={selectedToken === undefined}
+								className={
+									perMonthAmount > amount ? 'error' : ''
+								}
+							/>
+						</Flex>
+						{perMonthAmount > amount && (
+							<RecurringMessage>
+								{formatMessage({
+									id: 'label.recurring_donation_maximum',
+								})}
+							</RecurringMessage>
+						)}
 						<Flex $justifyContent='space-between'>
 							<Flex gap='4px'>
 								<Caption>
@@ -409,10 +424,10 @@ export const RecurringDonationCard = () => {
 							</Flex>
 							<Flex gap='4px'>
 								<Caption $medium>
-									{amount !== 0n && percentage !== 0
+									{amount !== 0n && perMonthAmount !== 0n
 										? limitFraction(
 												formatUnits(
-													totalPerMonth,
+													perMonthAmount,
 													selectedToken?.token
 														.decimals || 18,
 												),
@@ -586,7 +601,7 @@ export const RecurringDonationCard = () => {
 								</Caption>
 								<Flex gap='4px'>
 									<Caption>
-										{amount !== 0n && percentage !== 0
+										{amount !== 0n && perMonthAmount !== 0n
 											? limitFraction(
 													formatUnits(
 														projectPerMonth,
@@ -621,7 +636,8 @@ export const RecurringDonationCard = () => {
 									</Caption>
 									<Flex gap='4px'>
 										<Caption>
-											{amount !== 0n && percentage !== 0
+											{amount !== 0n &&
+											perMonthAmount !== 0n
 												? limitFraction(
 														formatUnits(
 															givethPerMonth,
@@ -650,10 +666,10 @@ export const RecurringDonationCard = () => {
 								</Caption>
 								<Flex gap='4px'>
 									<Caption $medium>
-										{amount !== 0n && percentage !== 0
+										{amount !== 0n && perMonthAmount !== 0n
 											? limitFraction(
 													formatUnits(
-														totalPerMonth,
+														perMonthAmount,
 														selectedToken?.token
 															.decimals || 18,
 													),
@@ -714,7 +730,7 @@ export const RecurringDonationCard = () => {
 						isGivethProject || isUpdating ? 0 : donationToGiveth
 					}
 					amount={amount}
-					percentage={percentage}
+					perMonthAmount={perMonthAmount}
 					isUpdating={isUpdating}
 					anonymous={anonymous}
 				/>
@@ -808,6 +824,14 @@ const Input = styled(AmountInput)`
 	}
 `;
 
+const RecurringMessage = styled(P)`
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 18px;
+	color: #e6492d;
+`;
+
 export const IconWrapper = styled.div`
 	cursor: pointer;
 	color: ${brandColors.giv[500]};
@@ -820,12 +844,26 @@ const GLinkStyled = styled(GLink)`
 	}
 `;
 
-const SliderWrapper = styled.div`
-	width: 100%;
-	position: relative;
-`;
-
 const StyledSlider = styled(Slider)``;
+
+const InputSlider = styled(AmountInput)`
+	width: 27%;
+	border: 2px solid ${neutralColors.gray[300]};
+	border-radius: 8px;
+	padding: 4px;
+	#amount-input {
+		border: none;
+		flex: 1;
+		font-family: Red Hat Text;
+		font-size: 16px;
+		font-style: normal;
+		line-height: 150%; /* 24px */
+		width: 100%;
+	}
+	&&.error {
+		border-color: #e6492d;
+	}
+`;
 
 const GivethSection = styled(Flex)`
 	flex-direction: column;

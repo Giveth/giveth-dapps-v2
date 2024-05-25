@@ -21,8 +21,11 @@ const QFModal: FC<IProps> = ({ setShowModal, donateWithoutMatching }) => {
 	const { project } = useDonateData();
 	const { activeStartedRound } = getActiveRound(project.qfRounds);
 	const roundName = activeStartedRound?.name;
-	const eligibleChainName = getChainName(
-		activeStartedRound?.eligibleNetworks[0],
+
+	const eligibleChainName = activeStartedRound?.eligibleNetworks.map(
+		network => {
+			return getChainName(network);
+		},
 	);
 
 	return (
@@ -39,7 +42,7 @@ const QFModal: FC<IProps> = ({ setShowModal, donateWithoutMatching }) => {
 					{formatMessage({
 						id: 'label.your_donation_can_qualify_for_matching_1',
 					})}
-					<span> {eligibleChainName} </span>
+					<span> {eligibleChainName?.join(' & ')} </span>
 					{formatMessage({
 						id: 'label.your_donation_can_qualify_for_matching_2',
 					})}

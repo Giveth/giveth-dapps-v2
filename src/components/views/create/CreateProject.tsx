@@ -274,6 +274,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 		if (errors[EInputs.description]) {
 			document?.getElementById('project_description')?.scrollIntoView();
 		}
+		setIsLoading(false);
 	};
 
 	const onSubmit = async (formData: TInputs) => {
@@ -598,7 +599,7 @@ const CreateProject: FC<ICreateProjectProps> = ({ project }) => {
 														id: 'label.publish',
 													})}
 													buttonType='primary'
-													disabled={true}
+													disabled
 												/>
 											}
 											direction='top'
