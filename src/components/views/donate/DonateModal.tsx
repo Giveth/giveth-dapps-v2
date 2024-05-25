@@ -110,7 +110,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				console.log('Failed to fetch Giveth wallet address', e);
 			}
 		};
-		if (isLoadingGivethAddress) fetchGivethProject().then();
+		if (isDonatingToGiveth) fetchGivethProject().then();
 	}, []);
 
 	const tokenPrice = useTokenPrice(token);
