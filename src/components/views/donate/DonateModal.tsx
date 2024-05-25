@@ -123,11 +123,13 @@ const DonateModal: FC<IDonateModalProps> = props => {
 		chainId,
 		walletChainType,
 	);
-	const givethWalletAddress = findMatchingWalletAddress(
-		givethAddresses,
-		chainId,
-		walletChainType,
-	);
+	const givethWalletAddress = () => {
+		return findMatchingWalletAddress(
+			givethProject?.addresses,
+			chainId,
+			walletChainType,
+		);
+	};
 
 	const { projectDonation, givethDonation } = calcDonationShare(
 		amount,
@@ -191,7 +193,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			token,
 			setFailedModalType,
 		};
-		if (!projectWalletAddress || !givethWalletAddress) {
+		if (!projectWalletAddress || !givethWalletAddress()) {
 			setDonating(false);
 			return showToastError(
 				`${
@@ -217,7 +219,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 				if (isDonatingToGiveth) {
 					createSecondDonation({
 						...txProps,
-						walletAddress: givethWalletAddress,
+						walletAddress: givethWalletAddress()!,
 						amount: givethDonation,
 						projectId: config.GIVETH_PROJECT_ID,
 						setFailedModalType,
