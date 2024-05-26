@@ -175,6 +175,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const activeRound = qfRounds.find(round => round.isActive);
 
+	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeRound);
+
 	useEffect(() => {
 		const handleObserver = (entities: any) => {
 			if (!isInfiniteScrolling.current) return;
@@ -224,13 +226,15 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<ArchivedQFRoundStats />
 				) : (
 					<>
-						{isQF && <ActiveQFRoundStats />}
-						<FilterContainer />
+						{isQF && activeRound && <ActiveQFRoundStats />}
+						{onProjectsPageOrActiveQFPage && <FilterContainer />}
 					</>
 				)}
-				<SortingContainer>
-					<SortContainer totalCount={totalCount} />
-				</SortingContainer>
+				{onProjectsPageOrActiveQFPage && (
+					<SortingContainer>
+						<SortContainer totalCount={totalCount} />
+					</SortingContainer>
+				)}
 				{isLoading && <Loader className='dot-flashing' />}
 				{filteredProjects?.length > 0 ? (
 					<ProjectsWrapper>
