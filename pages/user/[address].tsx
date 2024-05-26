@@ -20,7 +20,6 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 	const { isSignedIn, userData } = useAppSelector(state => state.user);
 	useReferral();
 
-	// When user is not found, GQL doesn't return any error. After backend is fixed, this can be deleted.
 	if (!user) {
 		return <ErrorsIndex statusCode='404' />;
 	}
@@ -29,13 +28,16 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 		user.walletAddress?.toLowerCase() ===
 		userData?.walletAddress?.toLowerCase();
 
+	const userName =
+		user.name ||
+		`${user.firstName || ''} ${user.lastName || ''}`.trim() ||
+		user.walletAddress?.substring(0, 8) + '...';
+
 	return (
 		<>
 			<GeneralMetatags
 				info={{
-					title: `Giveth | ${
-						user.name || `${user.firstName} ${user.lastName}`
-					} User Profile`,
+					title: `Giveth | ${userName} User Profile`,
 					desc: 'See the donations, projects & other public information about this user.',
 					image:
 						user.avatar || 'https://i.ibb.co/HTbdCdd/Thumbnail.png',
