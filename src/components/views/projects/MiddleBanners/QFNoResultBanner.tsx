@@ -3,6 +3,7 @@ import {
 	Flex,
 	Lead,
 	OutlineLinkButton,
+	mediaQueries,
 	neutralColors,
 	semanticColors,
 } from '@giveth/ui-design-system';
@@ -28,7 +29,7 @@ export const QFNoResultBanner = () => {
 					id: 'label.support_upcoming_qf_round',
 				})}
 			</Caption>
-			<Flex gap='24px' $alignItems='center'>
+			<Actions>
 				<Link href={links.GIVETH_MATCHING}>
 					<DonateButton
 						label={formatMessage({
@@ -48,7 +49,7 @@ export const QFNoResultBanner = () => {
 						linkType='primary'
 					/>
 				</Link>
-			</Flex>
+			</Actions>
 		</StyledBox>
 	);
 };
@@ -56,6 +57,15 @@ export const QFNoResultBanner = () => {
 const StyledBox = styled(Box)`
 	margin-top: 96px;
 	margin-bottom: 96px;
+`;
+
+const Actions = styled(Flex)`
+	gap: 24px;
+	flex-direction: column;
+	align-items: center;
+	${mediaQueries.laptopS} {
+		flex-direction: row;
+	}
 `;
 
 const DonateButton = styled(ButtonLink)`
