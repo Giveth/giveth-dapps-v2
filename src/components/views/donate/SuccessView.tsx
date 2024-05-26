@@ -73,6 +73,7 @@ export const SuccessView: FC = () => {
 		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
 
 	useEffect(() => {
+		if (!hasMultipleTxs) return;
 		client
 			.query({
 				query: FETCH_GIVETH_PROJECT_BY_ID,
