@@ -11,6 +11,7 @@ import { FETCH_ARCHIVED_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { useArchivedQFRounds } from './archivedQfRounds.context';
 import { EQFRoundsSortBy } from '@/apollo/types/gqlEnums';
 import { showToastError } from '@/lib/helpers';
+import { WrappedSpinner } from '@/components/Spinner';
 
 enum EQfArchivedRoundsSort {
 	allocatedFund = 'allocatedFund',
@@ -59,7 +60,6 @@ export const ArchivedQFRoundsView = () => {
 				default:
 					break;
 			}
-			let _qfArchivedRounds: IArchivedQFRound[] = [];
 			try {
 				const {
 					data: { qfArchivedRounds },
@@ -109,6 +109,9 @@ export const ArchivedQFRoundsView = () => {
 				<ArchivedQFRoundsTable
 					archivedQFRounds={archivedQFRounds.slice(0, 5)}
 				/>
+				{archivedQFRounds.length == 0 && loading && (
+					<WrappedSpinner size={100} />
+				)}
 			</Container>
 			<ArchivedQFRoundsMiddleBanner />
 			<Container>
@@ -119,13 +122,15 @@ export const ArchivedQFRoundsView = () => {
 					)}
 				/>
 			</Container>
-			{hasMore && (
+			{archivedQFRounds.length > 0 && loading ? (
+				<WrappedSpinner size={100} />
+			) : hasMore ? (
 				<LoadMoreButton
 					buttonType='texty-primary'
 					onClick={loadMore}
 					label='Load More'
 				/>
-			)}
+			) : null}
 		</Wrapper>
 	);
 };
