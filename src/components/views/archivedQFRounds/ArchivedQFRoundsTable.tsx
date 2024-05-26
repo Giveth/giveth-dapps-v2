@@ -28,10 +28,9 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 				<TH>
 					<StyledGLink size='Big'>Funding Round</StyledGLink>
 					<StyledGLink size='Big'>Matching Pool</StyledGLink>
-					<StyledGLink size='Big'>Total Donations</StyledGLink>
+					<StyledGLink size='Big'>Donations (USD value)</StyledGLink>
 					<StyledGLink size='Big'>Unique Donors</StyledGLink>
-					<StyledGLink size='Big'>Round started</StyledGLink>
-					<StyledGLink size='Big'>Round Ended</StyledGLink>
+					<StyledGLink size='Big'>Round Duration</StyledGLink>
 					<StyledGLink size='Big'></StyledGLink>
 				</TH>
 				{archivedQFRounds.map((round, index) => (
@@ -48,8 +47,10 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 						</P>
 						<P>{formatDonation(round.totalDonations, '$') || 0}</P>
 						<P>{round.uniqueDonors}</P>
-						<P>{formatDate(new Date(round.beginDate))}</P>
-						<P>{formatDate(new Date(round.endDate))}</P>
+						<Flex $flexDirection='column'>
+							<P>{formatDate(new Date(round.beginDate))}</P>
+							<P>{formatDate(new Date(round.endDate))}</P>
+						</Flex>
 						<P>
 							<Link href={Routes.QFArchived + '/' + round.slug}>
 								<SeeProjectsLink
@@ -72,7 +73,7 @@ const Wrapper = styled.div`
 
 const Table = styled.div`
 	display: grid;
-	grid-template-columns: 2fr 1fr 1fr 1fr 2fr 2fr 140px;
+	grid-template-columns: 2fr 1fr 1.5fr 1fr 1.5fr 140px;
 	overflow: auto;
 	min-width: 900px;
 	padding: 24px;
@@ -86,16 +87,14 @@ const Table = styled.div`
 const TH = styled.div`
 	display: contents;
 	& > span:first-child {
-		padding-left: 16px;
 		border-radius: 16px 0 0 16px;
 	}
 	& > span {
-		padding: 16px 0;
+		padding: 16px;
 		background-color: ${neutralColors.gray[200]};
 		margin-bottom: 16px;
 	}
 	& > span:last-child {
-		padding-right: 16px;
 		border-radius: 0 16px 16px 0;
 	}
 `;
@@ -107,7 +106,7 @@ const TR = styled.div`
 		padding-left: 8px;
 	}
 	& > div {
-		padding: 16px 0;
+		padding: 16px;
 		border-bottom: 1px solid ${neutralColors.gray[300]};
 		margin-bottom: 16px;
 	}
