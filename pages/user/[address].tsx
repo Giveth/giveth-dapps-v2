@@ -11,6 +11,7 @@ import ErrorsIndex from '@/components/views/Errors/ErrorsIndex';
 import { ProfileProvider } from '@/context/profile.context';
 import { useAppSelector } from '@/features/hooks';
 import { useReferral } from '@/hooks/useReferral';
+import { getUserName } from '@/helpers/user';
 
 interface IUserRouteProps {
 	user?: IUser;
@@ -28,10 +29,7 @@ const UserRoute: FC<IUserRouteProps> = ({ user }) => {
 		user.walletAddress?.toLowerCase() ===
 		userData?.walletAddress?.toLowerCase();
 
-	const userName =
-		user.name ||
-		`${user.firstName || ''} ${user.lastName || ''}`.trim() ||
-		user.walletAddress?.substring(0, 8) + '...';
+	const userName = getUserName(user, true);
 
 	return (
 		<>
