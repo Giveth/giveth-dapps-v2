@@ -75,6 +75,9 @@ export const ArchivedQFRoundsView = () => {
 						},
 					},
 				});
+				if (qfArchivedRounds.length < ITEMS_PER_PAGE) {
+					setHasMore(false);
+				}
 				setArchivedQFRounds(prev => {
 					return isLoadMore
 						? [...prev, ...qfArchivedRounds]
