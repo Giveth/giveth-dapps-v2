@@ -25,6 +25,7 @@ interface IProjectActions {
 	setSelectedProject: Dispatch<SetStateAction<IProject | undefined>>;
 	setShowAddressModal: Dispatch<SetStateAction<boolean>>;
 	setShowClaimModal?: Dispatch<SetStateAction<boolean>>;
+	className?: string;
 }
 
 const ProjectActions = (props: IProjectActions) => {
@@ -33,6 +34,7 @@ const ProjectActions = (props: IProjectActions) => {
 		setSelectedProject,
 		setShowAddressModal,
 		setShowClaimModal,
+		className,
 	} = props;
 	const status = project.status.name;
 	const isCancelled = status === EProjectStatus.CANCEL;
@@ -109,6 +111,7 @@ const ProjectActions = (props: IProjectActions) => {
 			onMouseLeave={() => setIsHover(false)}
 			$isOpen={isHover}
 			$isCancelled={isCancelled}
+			className={className}
 		>
 			{isCancelled ? (
 				<CancelledWrapper>CANCELLED</CancelledWrapper>
