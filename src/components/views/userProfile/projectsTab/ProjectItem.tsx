@@ -7,6 +7,7 @@ import {
 	Subline,
 	neutralColors,
 	Flex,
+	mediaQueries,
 } from '@giveth/ui-design-system';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
@@ -36,7 +37,11 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 
 	return (
 		<ProjectContainer>
-			<Flex $justifyContent='space-between' $alignItems='center'>
+			<ProjectInfoContainer
+				$justifyContent='space-between'
+				$alignItems='center'
+				gap='24px'
+			>
 				<div>
 					<Subline>
 						<Flex $alignItems='center'>
@@ -53,15 +58,15 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 						<H2>{project.title}</H2>
 					</Link>
 				</div>
-				<ProjectActions
+				<StyledProjectActions
 					setSelectedProject={setSelectedProject}
 					setShowAddressModal={setShowAddressModal}
 					project={project}
 					setShowClaimModal={setShowClaimModal}
 				/>
-			</Flex>
+			</ProjectInfoContainer>
 			<HorizontalDivider />
-			<Flex $justifyContent='space-between' gap='8px'>
+			<ProjectInfoContainer $justifyContent='space-between' gap='8px'>
 				<ProjectStatusesContainer $flexDirection='column' gap='16px'>
 					<Flex $justifyContent='space-between'>
 						<P>{formatMessage({ id: 'label.project_status' })}</P>
@@ -125,7 +130,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 						)}
 					</Flex>
 				</ProjectStatusesContainer>
-			</Flex>
+			</ProjectInfoContainer>
 			{showAddressModal && selectedProject && (
 				<ManageProjectAddressesModal
 					project={selectedProject}
@@ -148,9 +153,20 @@ const ProjectContainer = styled.div`
 	background-color: ${neutralColors.gray[100]};
 `;
 
+const StyledProjectActions = styled(ProjectActions)`
+	width: 100%;
+`;
+
 const HorizontalDivider = styled.hr`
 	border: 1px solid ${neutralColors.gray[300]};
 	margin: 24px 0;
+`;
+
+const ProjectInfoContainer = styled(Flex)`
+	flex-direction: column;
+	${mediaQueries.tablet} {
+		flex-direction: row;
+	}
 `;
 
 const ProjectStatusesContainer = styled(Flex)`
