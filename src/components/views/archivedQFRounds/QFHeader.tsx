@@ -1,39 +1,33 @@
 import { Flex, H6, neutralColors } from '@giveth/ui-design-system';
 import Link from 'next/link';
-import { type FC } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
 import Routes from '@/lib/constants/Routes';
-import { ArchivedQFRoundsSort } from './ArchivedQFRoundsSort';
 
-export enum EQFPageStatus {
+enum EQFPageStatus {
 	ACTIVE = 'label.active_round',
 	ARCHIVED = 'label.archived_rounds',
 }
 
-interface IQFHeaderProps {
-	status: EQFPageStatus;
-}
-
-export const QFHeader: FC<IQFHeaderProps> = ({ status }) => {
+export const QFHeader = () => {
 	const { formatMessage } = useIntl();
+	const { pathname } = useRouter();
+	const isArchivedPath = pathname.startsWith(Routes.QFArchived);
 
 	return (
-		<Wrapper>
-			<Flex gap='24px'>
-				<Link href={Routes.AllQFProjects}>
-					<Item active={status === EQFPageStatus.ACTIVE}>
-						{formatMessage({ id: EQFPageStatus.ACTIVE })}
-					</Item>
-				</Link>
-				<Link href={Routes.QFArchived}>
-					<Item active={status === EQFPageStatus.ARCHIVED}>
-						{formatMessage({ id: EQFPageStatus.ARCHIVED })}
-					</Item>
-				</Link>
-			</Flex>
-			<ArchivedQFRoundsSort />
-		</Wrapper>
+		<Flex gap='24px'>
+			<Link href={Routes.AllQFProjects}>
+				<Item active={!isArchivedPath}>
+					{formatMessage({ id: EQFPageStatus.ACTIVE })}
+				</Item>
+			</Link>
+			<Link href={Routes.QFArchived}>
+				<Item active={isArchivedPath}>
+					{formatMessage({ id: EQFPageStatus.ARCHIVED })}
+				</Item>
+			</Link>
+		</Flex>
 	);
 };
 
@@ -47,9 +41,4 @@ const Item = styled(H6)<{ active: boolean }>`
 	&:hover {
 		border-bottom-width: 4px;
 	}
-`;
-
-const Wrapper = styled(Flex)`
-	margin-bottom: 24px;
-	justify-content: space-between;
 `;

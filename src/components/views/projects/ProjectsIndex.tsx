@@ -38,6 +38,7 @@ import { ArchivedQFRoundStats } from './ArchivedQFRoundStats';
 import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
+import { QFHeader } from '@/components/views/archivedQFRounds/QFHeader';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -218,6 +219,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				<ProjectsBanner mainCategory={selectedMainCategory} />
 			)}
 			<Wrapper>
+				{isQF && <QFHeader />}
 				{isArchivedQF ? (
 					<ArchivedQFRoundStats />
 				) : (
