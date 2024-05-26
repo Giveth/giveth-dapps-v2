@@ -91,6 +91,7 @@ const CryptoDonation: FC = () => {
 	const { supportCustomTokens, label: orgLabel } = organization || {};
 	const isActive = status?.name === EProjectStatus.ACTIVE;
 	const noDonationSplit = Number(projectId!) === config.GIVETH_PROJECT_ID;
+
 	const [selectedToken, setSelectedToken] = useState<IProjectAcceptedToken>();
 	const [selectedTokenBalance, setSelectedTokenBalance] = useState(0n);
 	const [customInput, setCustomInput] = useState<any>();
