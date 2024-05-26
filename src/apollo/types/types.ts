@@ -278,6 +278,7 @@ export interface IWalletRecurringDonation {
 	flowRate: string;
 	currency: string;
 	amountStreamed: string;
+	totalUsdStreamed: string;
 	networkId: number;
 	finished: boolean;
 	anonymous: boolean;

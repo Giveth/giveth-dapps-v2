@@ -54,6 +54,7 @@ import Routes from '@/lib/constants/Routes';
 import { useModalCallback } from '@/hooks/useModalCallback';
 import { useAppSelector } from '@/features/hooks';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
+import GIVBackToast from './GIVBackToast';
 
 // These two functions are used to make the slider more user friendly by mapping the slider's value to a new range.
 /**
@@ -165,6 +166,8 @@ export const RecurringDonationCard = () => {
 	const sliderColor = isTotalStreamExceed
 		? semanticColors.punch
 		: brandColors.giv;
+
+	const projectIsGivBackEligible = !!project.verified;
 
 	const handleDonate = () => {
 		if (anchorContractAddress) {
@@ -560,6 +563,12 @@ export const RecurringDonationCard = () => {
 					</Flex>
 				)}
 			</RecurringSection>
+			{selectedToken && (
+				<GIVBackToastStyled
+					projectEligible={projectIsGivBackEligible}
+					tokenEligible={true}
+				/>
+			)}
 			{userStreamOnSelectedToken ? (
 				isUpdating ? (
 					<ActionButton
@@ -783,13 +792,6 @@ const RecurringSection = styled(Flex)`
 	text-align: left;
 `;
 
-// const RecurringSectionTitle = styled(B)`
-// 	width: 100%;
-// 	padding-bottom: 8px;
-// 	border-bottom: 1px solid ${neutralColors.gray[300]};
-// 	text-align: left;
-// `;
-
 export const SelectTokenWrapper = styled(Flex)`
 	cursor: pointer;
 	gap: 16px;
@@ -902,4 +904,12 @@ const TotalMonthlyStream = styled.b`
 
 const ManageCaption = styled(Caption)`
 	color: ${brandColors.giv[500]};
+`;
+
+const GIVBackToastStyled = styled(GIVBackToast)`
+	margin: 0;
+	width: 100%;
+	& > div {
+		margin: 0;
+	}
 `;
