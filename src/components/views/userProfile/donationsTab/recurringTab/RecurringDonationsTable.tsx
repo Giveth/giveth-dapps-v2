@@ -7,6 +7,7 @@ import {
 	IconLink24,
 	neutralColors,
 	P,
+	semanticColors,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { formatUnits } from 'viem';
@@ -25,7 +26,7 @@ import {
 import { ONE_MONTH_SECONDS } from '@/lib/constants/constants';
 import NetworkLogo from '@/components/NetworkLogo';
 import SortIcon from '@/components/SortIcon';
-import { limitFraction } from '@/helpers/number';
+import { formatDonation, limitFraction } from '@/helpers/number';
 import { StreamActionButton } from './StreamActionButton';
 import RecurringDonationStatusBadge from '@/components/badges/RecurringDonationStatusBadge';
 
@@ -75,6 +76,9 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 			<TableHeader>
 				{formatMessage({ id: 'label.total_donated' })}
 			</TableHeader>
+			<TableHeader>
+				{formatMessage({ id: 'label.usd_value' })}
+			</TableHeader>
 
 			{myAccount && (
 				<>
@@ -117,7 +121,7 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 						</DonationTableCell>
 					) : (
 						<DonationTableCell>
-							<B>
+							<B color={semanticColors.jade[500]}>
 								{limitFraction(
 									formatUnits(
 										BigInt(donation.flowRate) *
@@ -130,8 +134,14 @@ const RecurringDonationTable: FC<RecurringDonationTable> = ({
 						</DonationTableCell>
 					)}
 					<DonationTableCell>
-						{limitFraction(donation.amountStreamed, 10, true) || 0}
+						<B>
+							{limitFraction(donation.amountStreamed, 10, true) ||
+								0}
+						</B>
 						<Currency>{donation.currency}</Currency>
+					</DonationTableCell>
+					<DonationTableCell>
+						{formatDonation(donation.totalUsdStreamed, '$') || 0}
 					</DonationTableCell>
 					{myAccount && (
 						<>
@@ -183,8 +193,8 @@ const DonationTableContainer = styled.div<{ $myAccount?: boolean }>`
 	display: grid;
 	grid-template-columns: ${props =>
 		props.$myAccount
-			? '1.5fr 2fr 1fr 1.7fr 1.2fr 1fr 1fr'
-			: '1fr 2fr .5fr 1fr 1fr'};
+			? '1.5fr 2fr 1fr 1.7fr 1.2fr 1fr 1fr 1fr'
+			: '1fr 2fr .5fr 1fr 1fr 1fr'};
 	overflow: auto;
 	min-width: 900px;
 	margin: 0 10px;
