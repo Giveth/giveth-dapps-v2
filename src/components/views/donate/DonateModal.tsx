@@ -194,12 +194,10 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			token,
 			setFailedModalType,
 		};
-		if (!projectWalletAddress || !givethWalletAddress()) {
+		if (!projectWalletAddress) {
 			setDonating(false);
 			return showToastError(
-				`${
-					!projectWalletAddress ? 'Project' : 'Giveth'
-				} wallet address for the destination network doesn't exist`,
+				"Project wallet address for the destination network doesn't exist",
 			);
 		}
 		createFirstDonation({
