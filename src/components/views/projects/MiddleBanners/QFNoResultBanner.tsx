@@ -1,9 +1,17 @@
-import { ButtonLink, semanticColors } from '@giveth/ui-design-system';
+import {
+	ButtonLink,
+	Flex,
+	Lead,
+	OutlineLinkButton,
+	neutralColors,
+	semanticColors,
+} from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import Link from 'next/link';
 import { Box, BigArc, Title, Caption } from './common.sc';
 import links from '@/lib/constants/links';
+import Routes from '@/lib/constants/Routes';
 
 export const QFNoResultBanner = () => {
 	const { formatMessage } = useIntl();
@@ -20,15 +28,27 @@ export const QFNoResultBanner = () => {
 					id: 'label.support_upcoming_qf_round',
 				})}
 			</Caption>
-			<Link href={links.GIVETH_MATCHING}>
-				<DonateButton
-					label={formatMessage({
-						id: 'label.donate',
-					})}
-					size='large'
-					linkType='primary'
-				/>
-			</Link>
+			<Flex gap='24px' $alignItems='center'>
+				<Link href={links.GIVETH_MATCHING}>
+					<DonateButton
+						label={formatMessage({
+							id: 'label.donate',
+						})}
+						size='large'
+						linkType='primary'
+					/>
+				</Link>
+				<Lead color={neutralColors.gray[800]}>or</Lead>
+				<Link href={Routes.Projects}>
+					<ExploreButton
+						label={formatMessage({
+							id: 'label.explore_projects',
+						})}
+						size='large'
+						linkType='primary'
+					/>
+				</Link>
+			</Flex>
 		</StyledBox>
 	);
 };
@@ -39,5 +59,9 @@ const StyledBox = styled(Box)`
 `;
 
 const DonateButton = styled(ButtonLink)`
-	max-width: 300px;
+	min-width: 300px;
+`;
+
+const ExploreButton = styled(OutlineLinkButton)`
+	min-width: 300px;
 `;
