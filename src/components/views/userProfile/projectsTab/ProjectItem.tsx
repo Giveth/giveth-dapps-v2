@@ -155,6 +155,9 @@ const ProjectContainer = styled.div`
 
 const StyledProjectActions = styled(ProjectActions)`
 	width: 100%;
+	${mediaQueries.tablet} {
+		width: unset;
+	}
 `;
 
 const HorizontalDivider = styled.hr`
