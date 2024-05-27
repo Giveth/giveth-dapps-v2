@@ -47,7 +47,6 @@ import { getERC20Info } from '@/lib/contracts';
 import GIVBackToast from '@/components/views/donate/GIVBackToast';
 import { DonateWrongNetwork } from '@/components/modals/DonateWrongNetwork';
 import { useAppDispatch, useAppSelector } from '@/features/hooks';
-import usePurpleList from '@/hooks/usePurpleList';
 import DonateToGiveth from '@/components/views/donate/DonateToGiveth';
 import TotalDonation from '@/components/views/donate/TotalDonation';
 import SaveGasFees from '@/components/views/donate/SaveGasFees';
@@ -76,8 +75,6 @@ const CryptoDonation: FC = () => {
 	const { connection: solanaConnection } = useConnection();
 	const { formatMessage } = useIntl();
 	const { isSignedIn } = useAppSelector(state => state.user);
-
-	const isPurpleListed = usePurpleList();
 
 	const { project, hasActiveQFRound } = useDonateData();
 	const dispatch = useAppDispatch();
@@ -518,7 +515,6 @@ const CryptoDonation: FC = () => {
 				<GIVBackToast
 					projectEligible={projectIsGivBackEligible}
 					tokenEligible={tokenIsGivBackEligible}
-					userEligible={!isPurpleListed}
 				/>
 			)}
 			{!noDonationSplit ? (

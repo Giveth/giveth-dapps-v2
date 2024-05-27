@@ -16,6 +16,7 @@ import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { ProjectsContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
 import ProjectItem from './ProjectItem';
+import { getUserName } from '@/helpers/user';
 
 const itemPerPage = 10;
 
@@ -30,7 +31,7 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 	});
 	const { user, myAccount } = useProfileContext();
 	const { formatMessage } = useIntl();
-	const userName = user?.name || 'Unknown';
+	const userName = getUserName(user);
 
 	const changeOrder = (orderBy: EOrderBy) => {
 		if (orderBy === order.by) {
