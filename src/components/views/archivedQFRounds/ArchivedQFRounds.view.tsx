@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Container, Flex, OutlineButton } from '@giveth/ui-design-system';
-import { ArchivedQFBanner } from './ArchivedQFBanner';
 import { QFHeader } from './QFHeader';
 import { client } from '@/apollo/apolloClient';
 import { IArchivedQFRound } from '@/apollo/types/types';
@@ -13,6 +12,7 @@ import { EQFRoundsSortBy } from '@/apollo/types/gqlEnums';
 import { showToastError } from '@/lib/helpers';
 import { WrappedSpinner } from '@/components/Spinner';
 import { ArchivedQFRoundsSort } from './ArchivedQFRoundsSort';
+import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 
 enum EQfArchivedRoundsSort {
 	allocatedFund = 'allocatedFund',
@@ -104,7 +104,7 @@ export const ArchivedQFRoundsView = () => {
 
 	return (
 		<Wrapper>
-			<ArchivedQFBanner />
+			<DefaultQFBanner />
 			<Container>
 				<HeaderWrapper gap='24px' $justifyContent='space-between'>
 					<QFHeader />

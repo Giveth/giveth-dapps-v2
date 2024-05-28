@@ -39,6 +39,7 @@ import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { QFHeader } from '@/components/views/archivedQFRounds/QFHeader';
+import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -213,8 +214,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<PassportBanner />
 					{isArchivedQF ? (
 						!isMobile && <ArchivedQFProjectsBanner />
-					) : (
+					) : activeRound ? (
 						<ActiveQFProjectsBanner />
+					) : (
+						<DefaultQFBanner />
 					)}
 				</>
 			) : (
