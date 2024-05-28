@@ -6,6 +6,7 @@ import {
 	optimism,
 	polygon,
 	arbitrum,
+	base,
 } from '@wagmi/core/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import React from 'react';
@@ -24,6 +25,7 @@ import { IconPolygon } from '@/components/Icons/Polygon';
 import { IconOptimism } from '@/components/Icons/Optimism';
 import { IconCelo } from '@/components/Icons/Celo';
 import { IconClassic } from '@/components/Icons/Classic';
+import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconArbitrum from '@/components/Icons/Arbitrum';
 
@@ -37,6 +39,7 @@ const POLYGON_NETWORK_NUMBER = 137;
 const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
 const ARBITRUM_NETWORK_NUMBER = 42161;
+const BASE_NETWORK_NUMBER = 8453;
 const CLASSIC_NETWORK_NUMBER = 61;
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
@@ -60,6 +63,7 @@ const EVM_CHAINS = [
 	celo,
 	arbitrum,
 	classic,
+	base,
 ] as readonly [Chain, ...Chain[]];
 
 const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
@@ -93,6 +97,7 @@ const config: EnvConfig = {
 	OPTIMISM_NETWORK_NUMBER: OPTIMISM_NETWORK_NUMBER,
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
+	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://rarible.com/',
@@ -519,6 +524,16 @@ const config: EnvConfig = {
 		subgraphAddress: '',
 		coingeckoChainName: 'arbitrum',
 		chainLogo: (logoSize = 24) => <IconArbitrum size={logoSize} />,
+	},
+	BASE_CONFIG: {
+		...base,
+		chainType: ChainType.EVM,
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		subgraphAddress: '',
+		coingeckoChainName: 'base',
+		chainLogo: (logoSize = 24) => <IconBase size={logoSize} />,
 	},
 	CLASSIC_CONFIG: {
 		...classic,
