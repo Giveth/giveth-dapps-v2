@@ -105,7 +105,7 @@ export const SuccessView: FC = () => {
 				<Col xs={12} lg={6}>
 					<RightSectionWrapper>
 						<div>
-							<GiverH4 weight={700}>
+							<GiverH4 id='donation-success' weight={700}>
 								{formatMessage({ id: 'label.youre_giver_now' })}
 							</GiverH4>
 							<br />
