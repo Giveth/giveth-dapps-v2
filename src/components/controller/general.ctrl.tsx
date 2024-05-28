@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/features/hooks';
 import { setShowWalletModal } from '@/features/modal/modal.slice';
 import {
 	fetchMainCategories,
-	fetchQFRounds,
+	fetchActiveQFRounds,
 } from '@/features/general/general.thunk';
 
 const GeneralController = () => {
@@ -22,7 +22,7 @@ const GeneralController = () => {
 
 	useEffect(() => {
 		dispatch(fetchMainCategories());
-		dispatch(fetchQFRounds());
+		dispatch(fetchActiveQFRounds());
 	}, [dispatch]);
 
 	useEffect(() => {
