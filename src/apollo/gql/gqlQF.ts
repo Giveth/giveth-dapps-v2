@@ -1,8 +1,11 @@
 import { gql } from '@apollo/client';
 
 export const FETCH_QF_ROUNDS_QUERY = `
-	query FetchQFRounds {
-		qfRounds {
+	query FetchQFRounds (
+		$slug: String,
+		$activeOnly: Boolean,
+	) {
+		qfRounds(slug: $slug, activeOnly: $activeOnly) {
 			id
 			slug
 			name
