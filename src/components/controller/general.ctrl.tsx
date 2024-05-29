@@ -23,7 +23,7 @@ const GeneralController = () => {
 	useEffect(() => {
 		dispatch(fetchMainCategories());
 		dispatch(fetchActiveQFRounds());
-	}, [dispatch]);
+	}, []);
 
 	useEffect(() => {
 		if (!router) return;
