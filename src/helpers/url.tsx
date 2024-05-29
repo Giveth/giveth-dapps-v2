@@ -66,6 +66,12 @@ export function campaignLinkGenerator(campaign: ICampaign) {
 						EProjectsFilter.ACCEPT_FUND_ON_ARBITRUM,
 					);
 					break;
+				case ECampaignFilterField.AcceptFundOnBase:
+					params.append(
+						'filter',
+						EProjectsFilter.ACCEPT_FUND_ON_BASE,
+					);
+					break;
 				case ECampaignFilterField.AcceptFundOnOptimism:
 					params.append(
 						'filter',

@@ -38,6 +38,8 @@ import { ArchivedQFRoundStats } from './ArchivedQFRoundStats';
 import { ArchivedQFProjectsBanner } from './qfBanner/ArchivedQFProjectsBanner';
 import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
+import { QFHeader } from '@/components/views/archivedQFRounds/QFHeader';
+import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -172,6 +174,8 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const showLoadMore =
 		totalCount > filteredProjects?.length && !isInfiniteScrolling.current;
 
+	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeQFRound);
+
 	useEffect(() => {
 		const handleObserver = (entities: any) => {
 			if (!isInfiniteScrolling.current) return;
@@ -208,25 +212,30 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<PassportBanner />
 					{isArchivedQF ? (
 						!isMobile && <ArchivedQFProjectsBanner />
-					) : (
+					) : activeQFRound ? (
 						<ActiveQFProjectsBanner />
+					) : (
+						<DefaultQFBanner />
 					)}
 				</>
 			) : (
 				<ProjectsBanner mainCategory={selectedMainCategory} />
 			)}
 			<Wrapper>
+				{isQF && <QFHeader />}
 				{isArchivedQF ? (
 					<ArchivedQFRoundStats />
 				) : (
 					<>
-						{isQF && <ActiveQFRoundStats />}
-						<FilterContainer />
+						{isQF && activeQFRound && <ActiveQFRoundStats />}
+						{onProjectsPageOrActiveQFPage && <FilterContainer />}
 					</>
 				)}
-				<SortingContainer>
-					<SortContainer totalCount={totalCount} />
-				</SortingContainer>
+				{onProjectsPageOrActiveQFPage && (
+					<SortingContainer>
+						<SortContainer totalCount={totalCount} />
+					</SortingContainer>
+				)}
 				{isLoading && <Loader className='dot-flashing' />}
 				{filteredProjects?.length > 0 ? (
 					<ProjectsWrapper>

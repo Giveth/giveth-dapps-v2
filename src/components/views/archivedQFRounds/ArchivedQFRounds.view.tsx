@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Container, Flex, OutlineButton } from '@giveth/ui-design-system';
-import { ArchivedQFBanner } from './ArchivedQFBanner';
-import { EQFPageStatus, QFHeader } from './QFHeader';
+import { QFHeader } from './QFHeader';
 import { client } from '@/apollo/apolloClient';
 import { IArchivedQFRound } from '@/apollo/types/types';
 import { ArchivedQFRoundsTable } from './ArchivedQFRoundsTable';
@@ -12,6 +11,8 @@ import { useArchivedQFRounds } from './archivedQfRounds.context';
 import { EQFRoundsSortBy } from '@/apollo/types/gqlEnums';
 import { showToastError } from '@/lib/helpers';
 import { WrappedSpinner } from '@/components/Spinner';
+import { ArchivedQFRoundsSort } from './ArchivedQFRoundsSort';
+import { DefaultQFBanner } from '@/components/DefaultQFBanner';
 
 enum EQfArchivedRoundsSort {
 	allocatedFund = 'allocatedFund',
@@ -103,9 +104,13 @@ export const ArchivedQFRoundsView = () => {
 
 	return (
 		<Wrapper>
-			<ArchivedQFBanner />
+			<DefaultQFBanner />
 			<Container>
-				<QFHeader status={EQFPageStatus.ARCHIVED} />
+				<HeaderWrapper gap='24px' $justifyContent='space-between'>
+					<QFHeader />
+					<ArchivedQFRoundsSort />
+				</HeaderWrapper>
+
 				<ArchivedQFRoundsTable
 					archivedQFRounds={archivedQFRounds.slice(0, 5)}
 				/>
@@ -138,6 +143,10 @@ export const ArchivedQFRoundsView = () => {
 const Wrapper = styled(Flex)`
 	flex-direction: column;
 	gap: 40px;
+`;
+
+const HeaderWrapper = styled(Flex)`
+	margin-bottom: 24px;
 `;
 
 const LoadMoreButton = styled(OutlineButton)`

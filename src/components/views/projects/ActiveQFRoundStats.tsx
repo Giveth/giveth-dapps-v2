@@ -8,17 +8,20 @@ import {
 	B,
 } from '@giveth/ui-design-system';
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useQuery } from '@apollo/client';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
 import { formatDate, formatUSD, thousandsSeparator } from '@/lib/helpers';
 import { useAppSelector } from '@/features/hooks';
+import { getActiveRound } from '@/helpers/qf';
 
 export const ActiveQFRoundStats = () => {
 	const { formatMessage } = useIntl();
 	const { activeQFRound } = useAppSelector(state => state.general);
 
+	const { qfRounds } = useProjectsContext();
+	const { activeQFRound, activeStartedRound } = getActiveRound(qfRounds);
 	const {
 		allocatedFundUSD,
 		allocatedFundUSDPreferred,
@@ -32,7 +35,7 @@ export const ActiveQFRoundStats = () => {
 	return (
 		<Wrapper>
 			<Title weight={700}>{activeQFRound?.name} Metrics</Title>
-			<InfoSection>
+			<InfoSection $started={!!activeStartedRound}>
 				<ItemContainer>
 					<ItemTitle weight={700}>
 						{formatMessage({ id: 'label.matching_pool' })}
@@ -47,24 +50,31 @@ export const ActiveQFRoundStats = () => {
 						{!allocatedFundUSDPreferred && allocatedTokenSymbol}
 					</ItemValue>
 				</ItemContainer>
-				<ItemContainer>
-					<ItemTitle weight={700}>
-						{formatMessage({ id: 'label.donations' })}
-					</ItemTitle>
-					<ItemValue weight={500}>
-						$
-						{formatUSD(data?.qfRoundStats?.allDonationsUsdValue) ||
-							' --'}
-					</ItemValue>
-				</ItemContainer>
-				<ItemContainer>
-					<ItemTitle weight={700}>
-						{formatMessage({ id: 'label.number_of_unique_donors' })}
-					</ItemTitle>
-					<ItemValue weight={500}>
-						{data?.qfRoundStats?.uniqueDonors || '--'}
-					</ItemValue>
-				</ItemContainer>
+				{activeStartedRound && (
+					<ItemContainer>
+						<ItemTitle weight={700}>
+							{formatMessage({ id: 'label.donations' })}
+						</ItemTitle>
+						<ItemValue weight={500}>
+							$
+							{formatUSD(
+								data?.qfRoundStats?.allDonationsUsdValue,
+							) || ' --'}
+						</ItemValue>
+					</ItemContainer>
+				)}
+				{activeStartedRound && (
+					<ItemContainer>
+						<ItemTitle weight={700}>
+							{formatMessage({
+								id: 'label.number_of_unique_donors',
+							})}
+						</ItemTitle>
+						<ItemValue weight={500}>
+							{data?.qfRoundStats?.uniqueDonors || '--'}
+						</ItemValue>
+					</ItemContainer>
+				)}
 				<Flex $flexDirection='column'>
 					<Caption color={neutralColors.gray[700]}>
 						Round start
@@ -99,7 +109,7 @@ const Title = styled(H5)`
 	margin-bottom: 40px;
 `;
 
-const InfoSection = styled(Flex)`
+const InfoSection = styled(Flex)<{ $started: boolean }>`
 	flex-direction: column;
 	margin-top: 40px;
 	padding: 24px;
@@ -110,6 +120,13 @@ const InfoSection = styled(Flex)`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
+	${props =>
+		!props.$started &&
+		css`
+			justify-content: flex-start;
+			gap: 64px;
+			width: fit-content;
+		`}
 `;
 
 const ItemContainer = styled.div``;
