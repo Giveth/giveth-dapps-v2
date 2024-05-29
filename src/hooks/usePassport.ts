@@ -130,7 +130,7 @@ export const usePassport = () => {
 				});
 			}
 		},
-		[],
+		[activeQFRound],
 	);
 
 	const refreshScore = useCallback(async () => {
