@@ -12,26 +12,26 @@ import styled from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useQuery } from '@apollo/client';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
-import { useProjectsContext } from '@/context/projects.context';
 import { formatDate, formatUSD, thousandsSeparator } from '@/lib/helpers';
+import { useAppSelector } from '@/features/hooks';
 
 export const ActiveQFRoundStats = () => {
 	const { formatMessage } = useIntl();
-	const { qfRounds } = useProjectsContext();
-	const activeRound = qfRounds.find(round => round.isActive);
+	const { activeQFRound } = useAppSelector(state => state.general);
+
 	const {
 		allocatedFundUSD,
 		allocatedFundUSDPreferred,
 		allocatedTokenSymbol,
 		allocatedFund,
-	} = activeRound || {};
+	} = activeQFRound || {};
 	const { data } = useQuery(FETCH_QF_ROUND_STATS, {
-		variables: { slug: activeRound?.slug },
+		variables: { slug: activeQFRound?.slug },
 	});
 
 	return (
 		<Wrapper>
-			<Title weight={700}>{activeRound?.name} Metrics</Title>
+			<Title weight={700}>{activeQFRound?.name} Metrics</Title>
 			<InfoSection>
 				<ItemContainer>
 					<ItemTitle weight={700}>
@@ -70,14 +70,14 @@ export const ActiveQFRoundStats = () => {
 						Round start
 					</Caption>
 					<B>
-						{activeRound?.endDate
-							? formatDate(new Date(activeRound.beginDate))
+						{activeQFRound?.endDate
+							? formatDate(new Date(activeQFRound.beginDate))
 							: '--'}
 					</B>
 					<Caption color={neutralColors.gray[700]}>Round end</Caption>
 					<B>
-						{activeRound?.endDate
-							? formatDate(new Date(activeRound.endDate))
+						{activeQFRound?.endDate
+							? formatDate(new Date(activeQFRound.endDate))
 							: '--'}
 					</B>
 				</Flex>
