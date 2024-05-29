@@ -2,8 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { getPassports } from '@/helpers/passport';
 import { connectPassport, fetchPassportScore } from '@/services/passport';
-import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
-import { client } from '@/apollo/apolloClient';
 import { IPassportInfo, IQFRound } from '@/apollo/types/types';
 import { getNowUnixMS } from '@/helpers/time';
 import { useIsSafeEnvironment } from '@/hooks/useSafeAutoConnect';
@@ -45,6 +43,7 @@ export const usePassport = () => {
 	const { userData: user, isUserFullFilled } = useAppSelector(
 		state => state.user,
 	);
+	const { activeQFRound } = useAppSelector(state => state.general);
 	const isSafeEnv = useIsSafeEnvironment();
 
 	const updateState = useCallback(
@@ -69,68 +68,58 @@ export const usePassport = () => {
 				currentRound: null,
 			});
 			try {
-				const {
-					data: { qfRounds },
-				} = await client.query({
-					query: FETCH_QF_ROUNDS,
-					fetchPolicy: 'network-only',
-				});
-
 				// setScore(refreshUserScores);
-				if (!qfRounds && !refreshUserScores) {
+				if (!refreshUserScores) {
 					return setInfo({
 						passportState: EPassportState.INVALID,
 						passportScore: null,
 						currentRound: null,
 					});
 				}
-				const currentRound = (qfRounds as IQFRound[]).find(
-					round => round.isActive,
-				);
-				if (!currentRound) {
+				if (!activeQFRound) {
 					return setInfo({
 						passportState: EPassportState.NOT_ACTIVE_ROUND,
 						passportScore: refreshUserScores.passportScore,
 						currentRound: null,
 					});
 				} else if (
-					getNowUnixMS() < new Date(currentRound.beginDate).getTime()
+					getNowUnixMS() < new Date(activeQFRound.beginDate).getTime()
 				) {
 					return setInfo({
 						passportState: EPassportState.NOT_STARTED,
 						passportScore: refreshUserScores.passportScore,
-						currentRound: currentRound,
+						currentRound: activeQFRound,
 					});
 				} else if (
-					getNowUnixMS() > new Date(currentRound.endDate).getTime()
+					getNowUnixMS() > new Date(activeQFRound.endDate).getTime()
 				) {
 					return setInfo({
 						passportState: EPassportState.ENDED,
 						passportScore: refreshUserScores.passportScore,
-						currentRound: currentRound,
+						currentRound: activeQFRound,
 					});
 				}
 				if (refreshUserScores.passportScore === null) {
 					return setInfo({
 						passportState: EPassportState.NOT_CREATED,
 						passportScore: null,
-						currentRound: currentRound,
+						currentRound: activeQFRound,
 					});
 				}
 				if (
 					refreshUserScores.passportScore <
-					currentRound.minimumPassportScore
+					activeQFRound.minimumPassportScore
 				) {
 					return setInfo({
 						passportState: EPassportState.NOT_ELIGIBLE,
 						passportScore: refreshUserScores.passportScore,
-						currentRound: currentRound,
+						currentRound: activeQFRound,
 					});
 				} else {
 					return setInfo({
 						passportState: EPassportState.ELIGIBLE,
 						passportScore: refreshUserScores.passportScore,
-						currentRound: currentRound,
+						currentRound: activeQFRound,
 					});
 				}
 			} catch (error) {
