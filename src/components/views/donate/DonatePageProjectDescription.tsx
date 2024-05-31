@@ -30,7 +30,7 @@ export const DonatePageProjectDescription: FC<
 > = ({ projectData, showRaised = true }) => {
 	const { formatMessage, locale } = useIntl();
 	const {
-		sumDonationValueUsd,
+		totalDonations,
 		slug,
 		title,
 		descriptionSummary,
@@ -64,7 +64,7 @@ export const DonatePageProjectDescription: FC<
 			{showRaised && (
 				<P>
 					{formatMessage({ id: 'label.raised' })}:{' '}
-					{formatDonation(sumDonationValueUsd || 0, '$', locale)}
+					{formatDonation(totalDonations || 0, '$', locale)}
 				</P>
 			)}
 			<DescriptionSummary>{descriptionSummary}</DescriptionSummary>

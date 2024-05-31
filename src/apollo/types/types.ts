@@ -77,7 +77,6 @@ export interface IProject {
 	countUniqueDonors?: number;
 	countUniqueDonorsForActiveQfRound?: number;
 	estimatedMatching: IEstimatedMatching;
-	sumDonationValueUsd?: number;
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
 	campaigns?: ICampaign[];
