@@ -10,9 +10,9 @@ export const fetchMainCategories = createAsyncThunk(
 	},
 );
 
-export const fetchQFRounds = createAsyncThunk(
+export const fetchActiveQFRounds = createAsyncThunk(
 	'general/fetchQFRounds',
 	async () => {
-		return backendGQLRequest(FETCH_QF_ROUNDS_QUERY);
+		return backendGQLRequest(FETCH_QF_ROUNDS_QUERY, { activeOnly: true });
 	},
 );

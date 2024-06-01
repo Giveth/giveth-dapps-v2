@@ -11,7 +11,6 @@ import { GeneralMetatags } from '@/components/Metatag';
 import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
-import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { useReferral } from '@/hooks/useReferral';
 import { IProjectsRouteProps, allCategoriesItem } from 'pages/projects/[slug]';
 import { getMainCategorySlug } from '@/helpers/projects';
@@ -22,13 +21,8 @@ interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
 }
 
 const QFProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
-	const {
-		projects,
-		mainCategories,
-		selectedMainCategory,
-		totalCount,
-		qfRounds,
-	} = props;
+	const { projects, mainCategories, selectedMainCategory, totalCount } =
+		props;
 
 	useReferral();
 
@@ -36,7 +30,6 @@ const QFProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 		<ProjectsProvider
 			mainCategories={mainCategories}
 			selectedMainCategory={selectedMainCategory}
-			qfRounds={qfRounds}
 			isQF
 		>
 			<GeneralMetatags info={projectsMetatags} />
@@ -100,19 +93,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				fetchPolicy: 'network-only',
 			});
 			const { projects, totalCount } = data.allProjects;
-			const {
-				data: { qfRounds },
-			} = await apolloClient.query({
-				query: FETCH_QF_ROUNDS,
-				fetchPolicy: 'network-only',
-			});
 			return {
 				props: {
 					projects,
 					mainCategories: updatedMainCategory,
 					selectedMainCategory: updatedSelectedMainCategory,
 					totalCount,
-					qfRounds,
 				},
 			};
 		}

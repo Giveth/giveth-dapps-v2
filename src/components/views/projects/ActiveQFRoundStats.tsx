@@ -12,14 +12,15 @@ import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useQuery } from '@apollo/client';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
-import { useProjectsContext } from '@/context/projects.context';
 import { formatDate, formatUSD, thousandsSeparator } from '@/lib/helpers';
-import { getActiveRound } from '@/helpers/qf';
+import { useAppSelector } from '@/features/hooks';
+import { hasRoundStarted } from '@/helpers/qf';
 
 export const ActiveQFRoundStats = () => {
 	const { formatMessage } = useIntl();
-	const { qfRounds } = useProjectsContext();
-	const { activeQFRound, activeStartedRound } = getActiveRound(qfRounds);
+	const { activeQFRound } = useAppSelector(state => state.general);
+
+	const isRoundStarted = hasRoundStarted(activeQFRound);
 	const {
 		allocatedFundUSD,
 		allocatedFundUSDPreferred,
@@ -33,7 +34,7 @@ export const ActiveQFRoundStats = () => {
 	return (
 		<Wrapper>
 			<Title weight={700}>{activeQFRound?.name} Metrics</Title>
-			<InfoSection $started={!!activeStartedRound}>
+			<InfoSection $started={isRoundStarted}>
 				<ItemContainer>
 					<ItemTitle weight={700}>
 						{formatMessage({ id: 'label.matching_pool' })}
@@ -48,7 +49,7 @@ export const ActiveQFRoundStats = () => {
 						{!allocatedFundUSDPreferred && allocatedTokenSymbol}
 					</ItemValue>
 				</ItemContainer>
-				{activeStartedRound && (
+				{isRoundStarted && (
 					<ItemContainer>
 						<ItemTitle weight={700}>
 							{formatMessage({ id: 'label.donations' })}
@@ -61,7 +62,7 @@ export const ActiveQFRoundStats = () => {
 						</ItemValue>
 					</ItemContainer>
 				)}
-				{activeStartedRound && (
+				{isRoundStarted && (
 					<ItemContainer>
 						<ItemTitle weight={700}>
 							{formatMessage({

@@ -56,6 +56,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
 	const user = useAppSelector(state => state.user.userData);
+	const { activeQFRound } = useAppSelector(state => state.general);
 	const [isLoading, setIsLoading] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
@@ -70,7 +71,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 		selectedMainCategory,
 		isQF,
 		isArchivedQF,
-		qfRounds,
 	} = useProjectsContext();
 
 	const router = useRouter();
@@ -174,9 +174,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const showLoadMore =
 		totalCount > filteredProjects?.length && !isInfiniteScrolling.current;
 
-	const activeRound = qfRounds.find(round => round.isActive);
-
-	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeRound);
+	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeQFRound);
 
 	useEffect(() => {
 		const handleObserver = (entities: any) => {
@@ -214,7 +212,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<PassportBanner />
 					{isArchivedQF ? (
 						!isMobile && <ArchivedQFProjectsBanner />
-					) : activeRound ? (
+					) : activeQFRound ? (
 						<ActiveQFProjectsBanner />
 					) : (
 						<DefaultQFBanner />
@@ -229,7 +227,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<ArchivedQFRoundStats />
 				) : (
 					<>
-						{isQF && activeRound && <ActiveQFRoundStats />}
+						{isQF && activeQFRound && <ActiveQFRoundStats />}
 						{onProjectsPageOrActiveQFPage && <FilterContainer />}
 					</>
 				)}
@@ -257,7 +255,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 						</ProjectsContainer>
 						{/* <FloatingButtonReferral /> */}
 					</ProjectsWrapper>
-				) : isQF && !activeRound ? (
+				) : isQF && !activeQFRound ? (
 					<QFNoResultBanner />
 				) : (
 					<ProjectsNoResults mainCategories={mainCategories} />

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchMainCategories, fetchQFRounds } from './general.thunk';
+import { fetchMainCategories, fetchActiveQFRounds } from './general.thunk';
 import { IMainCategory, IQFRound } from '@/apollo/types/types';
 import { QF_SPECIFIC_CATEGORIES } from '@/configuration';
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -51,10 +51,9 @@ export const GeneralSlice = createSlice({
 					!QF_SPECIFIC_CATEGORIES.some(c => c === mainCategory.slug),
 			);
 		});
-		builder.addCase(fetchQFRounds.fulfilled, (state, action) => {
-			state.qfRounds = action.payload.data.qfRounds;
-			state.activeQFRound =
-				state.qfRounds.find(round => round.isActive) || null;
+		builder.addCase(fetchActiveQFRounds.fulfilled, (state, action) => {
+			const qfRounds = action.payload.data.qfRounds;
+			state.activeQFRound = qfRounds ? qfRounds[0] : null;
 		});
 	},
 });
