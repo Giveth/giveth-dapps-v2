@@ -35,10 +35,18 @@ import {
 interface IShareModal extends IModal {
 	projectHref: string;
 	contentType: EContentType;
+	shareTitle?: string | undefined;
+	shareDescription?: string | undefined;
 }
 
 const ShareModal: FC<IShareModal> = props => {
-	const { projectHref, setShowModal, contentType } = props;
+	const {
+		projectHref,
+		setShowModal,
+		contentType,
+		shareTitle,
+		shareDescription,
+	} = props;
 	const url = fullPath(slugToProjectView(projectHref));
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
@@ -52,6 +60,16 @@ const ShareModal: FC<IShareModal> = props => {
 		ESocialType.facebook,
 	);
 
+	const shareModalTitle =
+		shareTitle != undefined
+			? formatMessage({ id: shareTitle })
+			: formatMessage({ id: 'label.share_this' });
+
+	const shareModalDesciption =
+		shareDescription != undefined
+			? formatMessage({ id: shareDescription })
+			: null;
+
 	return (
 		<Modal
 			closeModal={closeModal}
@@ -61,9 +79,10 @@ const ShareModal: FC<IShareModal> = props => {
 			headerTitlePosition='left'
 		>
 			<Container>
-				<Subtitle weight={700}>
-					{formatMessage({ id: 'label.share_this' })}!
-				</Subtitle>
+				<Subtitle weight={700}>{shareModalTitle}!</Subtitle>
+				{shareModalDesciption && (
+					<Description>{shareModalDesciption}</Description>
+				)}
 				<FlexCenter gap={'16px'}>
 					<SocialButtonContainer>
 						<TwitterShareButton
@@ -120,6 +139,12 @@ const Container = styled.div`
 const Subtitle = styled(H5)`
 	color: ${brandColors.deep[900]};
 	margin-bottom: 32px;
+`;
+
+const Description = styled(H5)`
+	color: ${brandColors.deep[900]};
+	margin-bottom: 42px;
+	white-space: pre-line;
 `;
 
 const SocialButtonContainer = styled(FlexCenter)`

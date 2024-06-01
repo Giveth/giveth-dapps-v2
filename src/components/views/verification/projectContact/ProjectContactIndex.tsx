@@ -218,9 +218,11 @@ export default function ProjectContactIndex() {
 			</div>
 			{showModal && slug && (
 				<ShareModal
-					contentType={EContentType.thisProject}
+					contentType={EContentType.verifyProject}
 					setShowModal={setShowShareModal}
 					projectHref={slug}
+					shareTitle='label.share_your'
+					shareDescription='label.share_your_desc'
 				/>
 			)}
 		</>
