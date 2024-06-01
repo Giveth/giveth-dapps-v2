@@ -73,11 +73,12 @@ export const SuccessView: FC = () => {
 		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
 
 	useEffect(() => {
+		if (!hasMultipleTxs) return;
 		client
 			.query({
 				query: FETCH_GIVETH_PROJECT_BY_ID,
 				variables: { id: config.GIVETH_PROJECT_ID },
-				fetchPolicy: 'no-cache',
+				fetchPolicy: 'cache-first',
 			})
 			.then((res: IFetchGivethProjectGQL) =>
 				setGivethSlug(res.data.projectById.slug),
