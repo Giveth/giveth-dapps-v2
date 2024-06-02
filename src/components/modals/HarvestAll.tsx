@@ -9,13 +9,13 @@ import React, {
 import {
 	brandColors,
 	Caption,
-	IconGIVBack,
 	IconGIVFarm,
 	IconGIVStream,
 	IconHelpFilled16,
 	Lead,
 	P,
 	Flex,
+	IconGIVBack24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import BigNumber from 'bignumber.js';
@@ -409,7 +409,7 @@ export const HarvestAllModal: FC<IHarvestAllModalProps> = ({
 								<BreakdownRow>
 									<BreakdownTitle>
 										<BreakdownIcon>
-											<IconGIVBack size={24} />
+											<IconGIVBack24 />
 										</BreakdownIcon>
 										<P>GIVbacks</P>
 									</BreakdownTitle>

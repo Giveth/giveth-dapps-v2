@@ -6,8 +6,8 @@ import {
 	brandColors,
 	IconExternalLink,
 	OutlineButton,
-	IconGIVBack,
 	Flex,
+	IconGIVBack24,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { FC } from 'react';
@@ -25,7 +25,7 @@ export const GIVBackExplainModal: FC<IModal> = ({ setShowModal }) => {
 		<Modal closeModal={closeModal} isAnimating={isAnimating}>
 			<GIVBackExplainContainer>
 				<TitleRow $alignItems='center' $justifyContent='center'>
-					<IconGIVBack size={24} />
+					<IconGIVBack24 />
 					<Title>
 						{formatMessage({
 							id: 'label.why_dont_i_have_givbacks',

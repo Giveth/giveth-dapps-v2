@@ -27,7 +27,7 @@ export const TokenIconWithGIVBack: FC<ITokenIconWithGIVBackProps> = ({
 			{isSuperToken && <SecondGreenDot />}
 			{showGiveBack && (
 				<GIVBackBadge>
-					<IconGIVBack16 size={16} color={brandColors.giv[500]} />
+					<IconGIVBack16 color={brandColors.giv[500]} />
 				</GIVBackBadge>
 			)}
 		</TokenIconWrapper>

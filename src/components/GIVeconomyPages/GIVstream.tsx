@@ -6,7 +6,6 @@ import {
 	H1,
 	H3,
 	H6,
-	IconGIVBack,
 	IconGIVFarm,
 	IconGIVStream,
 	IconHelpFilled16,
@@ -17,6 +16,7 @@ import {
 	Row,
 	Col,
 	Flex,
+	IconGIVBack24,
 } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import { useAccount } from 'wagmi';
@@ -338,7 +338,7 @@ const convertSourceTypeToIcon = (distributor: string) => {
 		case 'givback':
 			return (
 				<Flex gap='16px'>
-					<IconGIVBack size={24} color={brandColors.mustard[500]} />
+					<IconGIVBack24 color={brandColors.mustard[500]} />
 					<P>{` GIVbacks`}</P>
 				</Flex>
 			);
