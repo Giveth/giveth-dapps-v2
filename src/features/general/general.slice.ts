@@ -52,7 +52,7 @@ export const GeneralSlice = createSlice({
 			);
 		});
 		builder.addCase(fetchActiveQFRounds.fulfilled, (state, action) => {
-			const qfRounds = action.payload.data.qfRounds;
+			const qfRounds = action.payload;
 			state.activeQFRound = qfRounds ? qfRounds[0] : null;
 		});
 	},
