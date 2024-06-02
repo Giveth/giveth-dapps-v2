@@ -10,7 +10,6 @@ export const fetchMainCategories = createAsyncThunk(
 			data: { mainCategories },
 		} = await client.query({
 			query: FETCH_MAIN_CATEGORIES,
-			variables: { activeOnly: true },
 			fetchPolicy: 'no-cache',
 		});
 		return mainCategories;
