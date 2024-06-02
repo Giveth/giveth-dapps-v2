@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createWeb3Modal } from '@web3modal/wagmi/react';
 import Head from 'next/head';
 import { IntlProvider } from 'react-intl';
@@ -8,7 +8,6 @@ import { ApolloProvider } from '@apollo/client';
 import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
-import { cookies } from 'next/headers';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
@@ -107,9 +106,22 @@ function MyApp({ Component, pageProps }: AppProps) {
 	const { pathname, asPath, query } = router;
 	const locale = router ? router.locale : defaultLocale;
 	const apolloClient = useApollo(pageProps);
+
+	// read bypass value from local storage for skipping maintenance mode only if maintenance mode is enabled inside ENV file4
+	const [isBypassingMaintenance, setIsBypassingMaintenance] =
+		useState<boolean>(false);
+
+	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			const bypass = localStorage.getItem('bypassMaintenance') === 'true';
+			setIsBypassingMaintenance(bypass);
+		}
+	}, []);
+
+	// enable maintenance mode only if it is enabled inside ENV file and user has not bypassed it
 	const isMaintenanceMode =
 		process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true' &&
-		!cookies().get?.('bypassMaintenance');
+		!isBypassingMaintenance;
 
 	useEffect(() => {
 		const handleStart = (url: string) => {

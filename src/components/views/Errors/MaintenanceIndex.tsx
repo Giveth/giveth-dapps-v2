@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 import Link from 'next/link';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import links from '@/lib/constants/links';
 import givFontLogo from '/public/images/icons/giv_font_logo.svg';
 import twitter from '/public/images/icons/twitter.svg';
@@ -30,6 +31,7 @@ import { useAppDispatch } from '@/features/hooks';
 const MaintenanceIndex = () => {
 	const dispatch = useAppDispatch();
 	const { formatMessage } = useIntl();
+	const router = useRouter();
 
 	const {
 		TWITTER: twitterLink,
@@ -43,6 +45,13 @@ const MaintenanceIndex = () => {
 			dispatch(showHeaderFooter());
 		};
 	}, [dispatch]);
+
+	// you can bypass maintenance mode by setting bypassMaintenance to true in local storage or
+	// by clicking on transparent button in top left corner
+	const bypassMaintenance = () => {
+		localStorage.setItem('bypassMaintenance', JSON.stringify(true));
+		router.reload();
+	};
 
 	return (
 		<ErrorContainer>
@@ -130,6 +139,20 @@ const MaintenanceIndex = () => {
 					/>
 				</a>
 			</SocialContainer>
+			<button
+				onClick={bypassMaintenance}
+				style={{
+					position: 'absolute',
+					top: '10px',
+					left: '10px',
+					width: '50px',
+					height: '50px',
+					background: 'transparent',
+					border: 'none',
+					cursor: 'pointer',
+					zIndex: 1000,
+				}}
+			/>
 		</ErrorContainer>
 	);
 };
