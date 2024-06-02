@@ -8,6 +8,7 @@ import { ApolloProvider } from '@apollo/client';
 import NProgress from 'nprogress';
 import * as snippet from '@segment/snippet';
 import { useRouter } from 'next/router';
+import { cookies } from 'next/headers';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import Script from 'next/script';
@@ -106,7 +107,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 	const { pathname, asPath, query } = router;
 	const locale = router ? router.locale : defaultLocale;
 	const apolloClient = useApollo(pageProps);
-	const isMaintenanceMode = process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true';
+	const isMaintenanceMode =
+		process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true' &&
+		!cookies().get?.('bypassMaintenance');
 
 	useEffect(() => {
 		const handleStart = (url: string) => {
