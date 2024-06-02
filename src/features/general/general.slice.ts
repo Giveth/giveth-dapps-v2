@@ -46,7 +46,7 @@ export const GeneralSlice = createSlice({
 	},
 	extraReducers: builder => {
 		builder.addCase(fetchMainCategories.fulfilled, (state, action) => {
-			state.mainCategories = action.payload.data.mainCategories.filter(
+			state.mainCategories = action.payload.filter(
 				(mainCategory: IMainCategory) =>
 					!QF_SPECIFIC_CATEGORIES.some(c => c === mainCategory.slug),
 			);

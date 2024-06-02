@@ -1,13 +1,19 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { backendGQLRequest } from '@/helpers/requests';
 import { FETCH_QF_ROUNDS_QUERY } from '@/apollo/gql/gqlQF';
-import { FETCH_MAIN_CATEGORIES } from './general.queries';
 import { client } from '@/apollo/apolloClient';
+import { FETCH_MAIN_CATEGORIES } from '@/apollo/gql/gqlProjects';
 
 export const fetchMainCategories = createAsyncThunk(
 	'general/fetchMainCategories',
 	async () => {
-		return backendGQLRequest(FETCH_MAIN_CATEGORIES);
+		const {
+			data: { mainCategories },
+		} = await client.query({
+			query: FETCH_MAIN_CATEGORIES,
+			variables: { activeOnly: true },
+			fetchPolicy: 'no-cache',
+		});
+		return mainCategories;
 	},
 );
 
