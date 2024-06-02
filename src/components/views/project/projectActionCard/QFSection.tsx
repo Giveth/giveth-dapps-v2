@@ -46,7 +46,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 		qfRounds,
 		estimatedMatching,
 		sumDonationValueUsdForActiveQfRound,
-		sumDonationValueUsd,
+		totalDonations,
 		adminUser,
 		slug,
 		organization,
@@ -136,7 +136,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 							})}
 							{' ' +
 								formatDonation(
-									sumDonationValueUsd || 0,
+									totalDonations || 0,
 									'$',
 									locale,
 								)}
@@ -188,7 +188,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 							})}
 							{' ' +
 								formatDonation(
-									sumDonationValueUsd || 0,
+									totalDonations || 0,
 									'$',
 									locale,
 								)}
