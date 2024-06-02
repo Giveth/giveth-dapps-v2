@@ -67,7 +67,6 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const {
 		variables: contextVariables,
-		mainCategories,
 		selectedMainCategory,
 		isQF,
 		isArchivedQF,
@@ -112,7 +111,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							: getMainCategorySlug(selectedMainCategory),
 						qfRoundSlug: isArchivedQF ? router.query.slug : null,
 					},
-					fetchPolicy: 'network-only',
+					fetchPolicy: 'no-cache',
 				})
 				.then((res: { data: { allProjects: IFetchAllProjects } }) => {
 					const data = res.data?.allProjects?.projects;
@@ -219,7 +218,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					)}
 				</>
 			) : (
-				<ProjectsBanner mainCategory={selectedMainCategory} />
+				<ProjectsBanner />
 			)}
 			<Wrapper>
 				{isQF && <QFHeader />}
@@ -258,7 +257,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 				) : isQF && !activeQFRound ? (
 					<QFNoResultBanner />
 				) : (
-					<ProjectsNoResults mainCategories={mainCategories} />
+					<ProjectsNoResults />
 				)}
 				{totalCount > filteredProjects?.length && (
 					<div ref={lastElementRef} />
