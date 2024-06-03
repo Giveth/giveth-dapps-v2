@@ -111,7 +111,9 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 
-		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_MAINNET!,
+		subgraphAddress:
+			process.env.NEXT_PUBLIC_SUBGRAPH_MAINNET ||
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-mainnet?source=giveth',
 		coingeckoChainName: 'ethereum',
 		chainLogo: (logoSize = 24) => <IconEthereum size={logoSize} />,
 
@@ -254,7 +256,9 @@ const config: EnvConfig = {
 			maxPriorityFeePerGas: (1e9).toString(),
 		},
 
-		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_GNOSIS!,
+		subgraphAddress:
+			process.env.NEXT_PUBLIC_SUBGRAPH_GNOSIS ||
+			'https://api.thegraph.com/subgraphs/name/giveth/giveth-economy-second-xdai?source=giveth',
 		coingeckoChainName: 'xdai',
 		chainLogo: (logoSize = 24) => <IconGnosisChain size={logoSize} />,
 
@@ -400,7 +404,9 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		anchorRegistryAddress: '0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3',
-		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_OPTIMISM!,
+		subgraphAddress:
+			process.env.NEXT_PUBLIC_SUBGRAPH_OPTIMISM ||
+			'https://api.thegraph.com/subgraphs/name/giveth/giveconomy-optimism-mainnet?source=giveth',
 		GIV_TOKEN_ADDRESS: OPTIMISM_GIV_TOKEN_ADDRESS,
 		GIV_BUY_LINK:
 			'https://velodrome.finance/swap?from=eth&to=0x528cdc92eab044e1e39fe43b9514bfdab4412b98',
@@ -538,7 +544,9 @@ const config: EnvConfig = {
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
-		subgraphAddress: process.env.NEXT_PUBLIC_SUBGRAPH_CLASSIC,
+		subgraphAddress:
+			process.env.NEXT_PUBLIC_SUBGRAPH_CLASSIC ||
+			'http://167.172.97.150:8000/subgraphs/name/giveth/etc',
 		coingeckoChainName: 'ethereum-classic',
 		chainLogo: (logoSize = 24) => <IconClassic size={logoSize} />,
 	},
