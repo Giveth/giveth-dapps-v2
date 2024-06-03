@@ -40,6 +40,7 @@ import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { QFHeader } from '@/components/views/archivedQFRounds/QFHeader';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
+import NotAvailable from '@/components/NotAvailable';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -56,8 +57,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
 	const user = useAppSelector(state => state.user.userData);
-	const { activeQFRound } = useAppSelector(state => state.general);
+	const { activeQFRound, mainCategories } = useAppSelector(
+		state => state.general,
+	);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isNotFound, setIsNotFound] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
 	const [totalCount, setTotalCount] = useState(_totalCount);
@@ -197,6 +201,19 @@ const ProjectsIndex = (props: IProjectsView) => {
 			}
 		};
 	}, [loadMore]);
+
+	useEffect(() => {
+		if (
+			mainCategories.length > 0 &&
+			!selectedMainCategory &&
+			!isArchivedQF
+		) {
+			setIsNotFound(true);
+		}
+	}, [selectedMainCategory, mainCategories.length]);
+
+	if (isNotFound)
+		return <NotAvailable description='Oops! Page Not Found...' />;
 
 	return (
 		<>
