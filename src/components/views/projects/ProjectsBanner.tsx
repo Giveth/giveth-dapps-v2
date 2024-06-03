@@ -64,4 +64,8 @@ const Desc = styled(SemiTitle)`
 	z-index: 1;
 	color: ${neutralColors.gray[100]};
 	text-transform: uppercase;
+	max-width: 800px;
+	text-align: center;
+	line-height: 30px;
+	padding: 0 30px;
 `;
