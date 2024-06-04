@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
-export const FETCH_QF_ROUNDS_QUERY = `
-	query FetchQFRounds {
-		qfRounds {
+export const FETCH_QF_ROUNDS_QUERY = gql`
+	query FetchQFRounds($slug: String, $activeOnly: Boolean) {
+		qfRounds(slug: $slug, activeOnly: $activeOnly) {
 			id
 			slug
 			name
@@ -20,10 +20,6 @@ export const FETCH_QF_ROUNDS_QUERY = `
 			allocatedTokenSymbol
 		}
 	}
-`;
-
-export const FETCH_QF_ROUNDS = gql`
-	${FETCH_QF_ROUNDS_QUERY}
 `;
 
 export const FETCH_DOES_DONATED_PROJECT_IN_ROUND = gql`

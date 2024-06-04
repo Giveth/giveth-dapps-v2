@@ -24,7 +24,7 @@ interface IProjectsContext {
 	variables: IVariables;
 	mainCategories: IMainCategory[];
 	selectedMainCategory?: IMainCategory;
-	qfRounds: IQFRound[];
+	archivedQFRound?: IQFRound;
 	isQF: boolean;
 	isArchivedQF?: boolean;
 	setIsQF: Dispatch<SetStateAction<boolean>>;
@@ -38,7 +38,6 @@ const variablesDefaultValue = {
 const ProjectsContext = createContext<IProjectsContext>({
 	variables: variablesDefaultValue,
 	mainCategories: [],
-	qfRounds: [],
 	isQF: false,
 	isArchivedQF: false,
 	setIsQF: () => console.log('setIsQF not initialed yet!'),
@@ -50,7 +49,7 @@ export const ProjectsProvider = (props: {
 	children: ReactNode;
 	mainCategories: IMainCategory[];
 	selectedMainCategory?: IMainCategory;
-	qfRounds: IQFRound[];
+	archivedQFRound?: IQFRound;
 	isQF: boolean;
 	isArchivedQF?: boolean;
 }) => {
@@ -60,7 +59,7 @@ export const ProjectsProvider = (props: {
 		selectedMainCategory,
 		isQF,
 		isArchivedQF,
-		qfRounds,
+		archivedQFRound,
 	} = props;
 
 	const [_isQF, setIsQF] = useState(isQF);
@@ -101,9 +100,9 @@ export const ProjectsProvider = (props: {
 				},
 				mainCategories,
 				selectedMainCategory,
-				qfRounds: qfRounds || [],
 				isQF: _isQF || false,
 				isArchivedQF: isArchivedQF || false,
+				archivedQFRound,
 				setIsQF,
 			}}
 		>

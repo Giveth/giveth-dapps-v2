@@ -1,18 +1,14 @@
 import { semanticColors } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
-import { useRouter } from 'next/router';
 import { Box, BigArc, Title, Caption } from './common.sc';
+import { useAppSelector } from '@/features/hooks';
 import { useProjectsContext } from '@/context/projects.context';
 
 export const QFProjectsMiddleBanner = () => {
-	const router = useRouter();
 	const { formatMessage } = useIntl();
-
-	const { qfRounds, isArchivedQF } = useProjectsContext();
-	const round = qfRounds.find(round => {
-		if (isArchivedQF) return round.slug === router.query.slug;
-		else return round.isActive;
-	});
+	const { activeQFRound } = useAppSelector(state => state.general);
+	const { archivedQFRound } = useProjectsContext();
+	const round = archivedQFRound || activeQFRound;
 
 	return (
 		<Box $flexDirection='column' gap='23px'>

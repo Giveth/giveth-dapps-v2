@@ -44,6 +44,7 @@ const networks = [
 	config.OPTIMISM_CONFIG,
 	config.CLASSIC_CONFIG,
 	config.SOLANA_CONFIG,
+	config.BASE_CONFIG,
 ];
 
 export const DonateWrongNetwork: FC<IDonateWrongNetwork> = props => {

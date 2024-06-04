@@ -1,7 +1,6 @@
 import { Container, H2, Row, H1 } from '@giveth/ui-design-system';
 import Image from 'next/image';
 import { useIntl } from 'react-intl';
-import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { BannerContainer, StyledColArch } from './common';
 import { useProjectsContext } from '@/context/projects.context';
@@ -14,9 +13,7 @@ type TImgDimensionsMap = {
 
 export const ArchivedQFProjectsBanner = () => {
 	const { formatMessage } = useIntl();
-	const { query } = useRouter();
-	const { qfRounds } = useProjectsContext();
-	const round = qfRounds.find(round => round.slug === query.slug);
+	const { archivedQFRound: round } = useProjectsContext();
 	const sponsorsLength = round?.sponsorsImgs?.length ?? 0;
 	const imgDimensionsMap: TImgDimensionsMap = {
 		1: { desktop: 300, tablet: 260, gridColumns: 1 },

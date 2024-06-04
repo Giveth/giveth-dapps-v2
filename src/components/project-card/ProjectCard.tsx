@@ -52,7 +52,7 @@ const ProjectCard = (props: IProjectCard) => {
 		image,
 		slug,
 		adminUser,
-		sumDonationValueUsd,
+		totalDonations,
 		sumDonationValueUsdForActiveQfRound,
 		updatedAt,
 		organization,
@@ -172,7 +172,7 @@ const ProjectCard = (props: IProjectCard) => {
 								{formatDonation(
 									(activeStartedRound
 										? sumDonationValueUsdForActiveQfRound
-										: sumDonationValueUsd) || 0,
+										: totalDonations) || 0,
 									'$',
 									locale,
 								)}
@@ -190,7 +190,7 @@ const ProjectCard = (props: IProjectCard) => {
 										}) + ' '}
 										<span>
 											{formatDonation(
-												sumDonationValueUsd || 0,
+												totalDonations || 0,
 												'$',
 												locale,
 											)}

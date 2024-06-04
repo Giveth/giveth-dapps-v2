@@ -248,7 +248,7 @@ const ProjectRecurringDonationTable = () => {
 									{donation.amountStreamed &&
 										formatDonation(
 											donation.amountStreamed,
-											'$',
+											'',
 											locale,
 										)}
 									<Currency>{donation.currency}</Currency>

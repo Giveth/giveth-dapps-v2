@@ -36,7 +36,7 @@ const BoostedInnerModal: FC<IBoostedModalProps> = ({
 					animationData={CongratsAnimation}
 				/>
 			</ConfettiContainer>
-			<BoostedTitle>
+			<BoostedTitle id='project-boosted'>
 				{formatMessage({ id: 'label.project_boosted' })}
 			</BoostedTitle>
 			<Desc>

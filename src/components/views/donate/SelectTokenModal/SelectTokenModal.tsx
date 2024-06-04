@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import {
 	Caption,
-	IconGIVBack,
 	SublineBold,
 	brandColors,
 	mediaQueries,
 	neutralColors,
 	Flex,
 	P,
+	IconGIVBack24,
 } from '@giveth/ui-design-system';
 import { useState, type FC, useEffect } from 'react';
 import { useAccount } from 'wagmi';
@@ -243,7 +243,7 @@ const SelectTokenInnerModal: FC<ISelectTokenModalProps> = ({
 			</Wrapper>
 			<GIVbackWrapper>
 				<Flex gap='8px' $alignItems='center'>
-					<IconGIVBack size={24} color={brandColors.giv[500]} />
+					<IconGIVBack24 color={brandColors.giv[500]} />
 					<SublineBold>
 						{formatMessage({
 							id: 'label.givbacks_eligible_tokens',

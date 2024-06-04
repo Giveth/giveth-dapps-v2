@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next/types';
-import { IMainCategory, IProject, IQFRound } from '@/apollo/types/types';
+import { IMainCategory, IProject } from '@/apollo/types/types';
 import { transformGraphQLErrorsToStatusCode } from '@/helpers/requests';
 import { initializeApollo } from '@/apollo/apolloClient';
 import { OPTIONS_HOME_PROJECTS } from '@/apollo/gql/gqlOptions';
@@ -12,7 +12,6 @@ import ProjectsIndex from '@/components/views/projects/ProjectsIndex';
 import { useReferral } from '@/hooks/useReferral';
 import { projectsMetatags } from '@/content/metatags';
 import { ProjectsProvider } from '@/context/projects.context';
-import { FETCH_QF_ROUNDS } from '@/apollo/gql/gqlQF';
 import { getMainCategorySlug } from '@/helpers/projects';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 
@@ -20,7 +19,6 @@ export interface IProjectsRouteProps {
 	projects: IProject[];
 	totalCount: number;
 	mainCategories: IMainCategory[];
-	qfRounds: IQFRound[];
 }
 
 export const allCategoriesItem = {
@@ -37,13 +35,8 @@ interface IProjectsCategoriesRouteProps extends IProjectsRouteProps {
 }
 
 const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
-	const {
-		projects,
-		mainCategories,
-		selectedMainCategory,
-		totalCount,
-		qfRounds,
-	} = props;
+	const { projects, mainCategories, selectedMainCategory, totalCount } =
+		props;
 
 	useReferral();
 
@@ -52,7 +45,6 @@ const ProjectsCategoriesRoute = (props: IProjectsCategoriesRouteProps) => {
 			mainCategories={mainCategories}
 			selectedMainCategory={selectedMainCategory}
 			isQF={false}
-			qfRounds={qfRounds}
 		>
 			<GeneralMetatags info={projectsMetatags} />
 			<ProjectsIndex projects={projects} totalCount={totalCount} />
@@ -108,19 +100,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
 				fetchPolicy: 'network-only',
 			});
 			const { projects, totalCount } = data.allProjects;
-			const {
-				data: { qfRounds },
-			} = await apolloClient.query({
-				query: FETCH_QF_ROUNDS,
-				fetchPolicy: 'network-only',
-			});
 			return {
 				props: {
 					projects,
 					mainCategories: updatedMainCategory,
 					selectedMainCategory: updatedSelectedMainCategory,
 					totalCount,
-					qfRounds,
 				},
 			};
 		}

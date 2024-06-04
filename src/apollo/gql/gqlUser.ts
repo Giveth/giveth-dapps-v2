@@ -144,6 +144,7 @@ export const FETCH_USER_RECURRING_DONATIONS = gql`
 				status
 				isArchived
 				amountStreamed
+				totalUsdStreamed
 				project {
 					id
 					title

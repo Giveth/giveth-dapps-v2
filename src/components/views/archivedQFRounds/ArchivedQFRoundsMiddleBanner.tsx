@@ -11,12 +11,12 @@ export const ArchivedQFRoundsMiddleBanner = () => {
 			<Container>
 				<Title weight={700} color={semanticColors.jade[700]}>
 					{formatMessage({
-						id: 'component.qf_middle_banner.title',
+						id: 'label.archived_qf_rounds',
 					})}
 				</Title>
 				<Caption>
 					{formatMessage({
-						id: 'component.qf_middle_banner.desc',
+						id: 'component.archived_qf_middle_banner.desc',
 					})}
 				</Caption>
 			</Container>
