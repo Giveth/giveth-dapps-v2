@@ -60,6 +60,7 @@ const Container = styled.div`
 	display: flex;
 	height: 200px;
 	align-items: center;
+	margin-top: 10px;
 	background: white;
 	box-shadow: 0 3px 20px rgba(212, 218, 238, 0.4);
 	border-radius: 16px;

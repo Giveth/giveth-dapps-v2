@@ -54,18 +54,13 @@ const DonateIndex: FC = () => {
 	return successDonation ? (
 		<>
 			<DonateHeader />
-			<SuccessContainer>
+			<DonateContainer>
 				<SuccessView />
-			</SuccessContainer>
+			</DonateContainer>
 		</>
 	) : (
 		<>
 			<DonateHeader />
-			{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
-				<PassportWrapper>
-					<PassportBanner />
-				</PassportWrapper>
-			)}
 			<DonateContainer>
 				{/* <PurchaseXDAI /> */}
 				{alreadyDonated && !isRecurringTab && (
@@ -77,6 +72,9 @@ const DonateIndex: FC = () => {
 							})}
 						</SublineBold>
 					</AlreadyDonatedWrapper>
+				)}
+				{!isSafeEnv && hasActiveQFRound && !isOnSolana && (
+					<PassportBanner />
 				)}
 				<NiceBanner />
 				<Row>
@@ -127,16 +125,9 @@ const AlreadyDonatedWrapper = styled(Flex)`
 	align-items: center;
 `;
 
-const SuccessContainer = styled(Container)`
-	text-align: center;
-	padding-top: 110px;
-	padding-bottom: 64px;
-	position: relative;
-`;
-
 const DonateContainer = styled(Container)`
 	text-align: center;
-	padding-top: 20px;
+	padding-top: 110px;
 	padding-bottom: 64px;
 	position: relative;
 `;
