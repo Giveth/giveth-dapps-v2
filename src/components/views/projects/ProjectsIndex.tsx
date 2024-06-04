@@ -157,10 +157,22 @@ const ProjectsIndex = (props: IProjectsView) => {
 		fetchProjects(false, 0);
 	}, [contextVariables]);
 
+	// Handle back button navigation
+	useEffect(() => {
+		console.log('projects', router);
+		const storedPage = localStorage.getItem('lastViewedPage');
+		if (storedPage) {
+			for (let i = 0; i < Number(storedPage); i++) {
+				// fetchProjects(false, i);
+			}
+		}
+	}, [router, fetchProjects]);
+
 	const loadMore = useCallback(() => {
 		if (isLoading) return;
 		fetchProjects(true, pageNum.current + 1);
 		pageNum.current = pageNum.current + 1;
+		localStorage.setItem('lastViewedPage', pageNum.current.toString());
 	}, [fetchProjects, isLoading]);
 
 	const handleCreateButton = () => {
