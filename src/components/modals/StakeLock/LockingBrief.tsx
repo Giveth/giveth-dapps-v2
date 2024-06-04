@@ -23,7 +23,9 @@ const LockingBrief: FC<ILockingBrief> = ({
 	const unlockDate = new Date(getUnlockDate(givpowerInfo, round));
 	return (
 		<BriefContainer>
-			<H5>{`You ${onLocking ? 'are locking' : 'locked'} `}</H5>
+			<H5
+				id={`${onLocking ? 'givpower-locking' : 'givpower-locked'}`}
+			>{`You ${onLocking ? 'are locking' : 'locked'} `}</H5>
 			<H5White weight={700}>
 				{formatWeiHelper(amount.toString())} GIV
 			</H5White>

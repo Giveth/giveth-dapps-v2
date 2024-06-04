@@ -125,7 +125,6 @@ const UserProfileView: FC<IUserProfileView> = () => {
 				<H5>{formatMessage({ id: 'label.please_sign_in' })}</H5>
 			</NoUserContainer>
 		);
-
 	return (
 		<>
 			<ProfileHeader>
@@ -194,22 +193,28 @@ const UserProfileView: FC<IUserProfileView> = () => {
 										</GLink>
 									</RaribleLinkContainer>
 								) : (
-									<RaribleLinkContainer>
-										<a
-											href={
-												config.RARIBLE_ADDRESS +
-												'token/' +
-												pfpToken?.id.replace('-', ':')
-											}
-											target='_blank'
-											rel='noreferrer'
-										>
-											<GLink>
-												View this Givers PFP on Rarible{' '}
-												<IconExternalLink16 />
-											</GLink>
-										</a>
-									</RaribleLinkContainer>
+									pfpToken && (
+										<RaribleLinkContainer>
+											<a
+												href={
+													config.RARIBLE_ADDRESS +
+													'token/' +
+													pfpToken?.id.replace(
+														'-',
+														':',
+													)
+												}
+												target='_blank'
+												rel='noreferrer'
+											>
+												<GLink>
+													View this Givers PFP on
+													Rarible{' '}
+													<IconExternalLink16 />
+												</GLink>
+											</a>
+										</RaribleLinkContainer>
+									)
 								))}
 						</UserInfoRow>
 					</UserInfo>

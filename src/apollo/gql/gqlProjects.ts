@@ -48,7 +48,6 @@ export const PROJECT_CARD_FIELDS = gql`
 			round
 		}
 		sumDonationValueUsdForActiveQfRound
-		sumDonationValueUsd
 		countUniqueDonorsForActiveQfRound
 		countUniqueDonors
 		estimatedMatching {
@@ -147,7 +146,6 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			slug
 			descriptionSummary
 			verified
-			sumDonationValueUsd
 			sumDonationValueUsdForActiveQfRound
 			countUniqueDonorsForActiveQfRound
 			adminUser {
@@ -261,7 +259,6 @@ export const FETCH_PROJECT_BY_SLUG_SINGLE_PROJECT = gql`
 			}
 			givbackFactor
 			sumDonationValueUsdForActiveQfRound
-			sumDonationValueUsd
 			countUniqueDonorsForActiveQfRound
 			countUniqueDonors
 			estimatedMatching {

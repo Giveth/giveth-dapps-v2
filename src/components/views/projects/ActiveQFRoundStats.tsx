@@ -8,31 +8,33 @@ import {
 	B,
 } from '@giveth/ui-design-system';
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useIntl } from 'react-intl';
 import { useQuery } from '@apollo/client';
 import { FETCH_QF_ROUND_STATS } from '@/apollo/gql/gqlQF';
-import { useProjectsContext } from '@/context/projects.context';
 import { formatDate, formatUSD, thousandsSeparator } from '@/lib/helpers';
+import { useAppSelector } from '@/features/hooks';
+import { hasRoundStarted } from '@/helpers/qf';
 
 export const ActiveQFRoundStats = () => {
 	const { formatMessage } = useIntl();
-	const { qfRounds } = useProjectsContext();
-	const activeRound = qfRounds.find(round => round.isActive);
+	const { activeQFRound } = useAppSelector(state => state.general);
+
+	const isRoundStarted = hasRoundStarted(activeQFRound);
 	const {
 		allocatedFundUSD,
 		allocatedFundUSDPreferred,
 		allocatedTokenSymbol,
 		allocatedFund,
-	} = activeRound || {};
+	} = activeQFRound || {};
 	const { data } = useQuery(FETCH_QF_ROUND_STATS, {
-		variables: { slug: activeRound?.slug },
+		variables: { slug: activeQFRound?.slug },
 	});
 
 	return (
 		<Wrapper>
-			<Title weight={700}>{activeRound?.name} Metrics</Title>
-			<InfoSection>
+			<Title weight={700}>{activeQFRound?.name} Metrics</Title>
+			<InfoSection $started={isRoundStarted}>
 				<ItemContainer>
 					<ItemTitle weight={700}>
 						{formatMessage({ id: 'label.matching_pool' })}
@@ -47,37 +49,44 @@ export const ActiveQFRoundStats = () => {
 						{!allocatedFundUSDPreferred && allocatedTokenSymbol}
 					</ItemValue>
 				</ItemContainer>
-				<ItemContainer>
-					<ItemTitle weight={700}>
-						{formatMessage({ id: 'label.donations' })}
-					</ItemTitle>
-					<ItemValue weight={500}>
-						$
-						{formatUSD(data?.qfRoundStats?.allDonationsUsdValue) ||
-							' --'}
-					</ItemValue>
-				</ItemContainer>
-				<ItemContainer>
-					<ItemTitle weight={700}>
-						{formatMessage({ id: 'label.number_of_unique_donors' })}
-					</ItemTitle>
-					<ItemValue weight={500}>
-						{data?.qfRoundStats?.uniqueDonors || '--'}
-					</ItemValue>
-				</ItemContainer>
+				{isRoundStarted && (
+					<ItemContainer>
+						<ItemTitle weight={700}>
+							{formatMessage({ id: 'label.donations' })}
+						</ItemTitle>
+						<ItemValue weight={500}>
+							$
+							{formatUSD(
+								data?.qfRoundStats?.allDonationsUsdValue,
+							) || ' --'}
+						</ItemValue>
+					</ItemContainer>
+				)}
+				{isRoundStarted && (
+					<ItemContainer>
+						<ItemTitle weight={700}>
+							{formatMessage({
+								id: 'label.number_of_unique_donors',
+							})}
+						</ItemTitle>
+						<ItemValue weight={500}>
+							{data?.qfRoundStats?.uniqueDonors || '--'}
+						</ItemValue>
+					</ItemContainer>
+				)}
 				<Flex $flexDirection='column'>
 					<Caption color={neutralColors.gray[700]}>
 						Round start
 					</Caption>
 					<B>
-						{activeRound?.endDate
-							? formatDate(new Date(activeRound.beginDate))
+						{activeQFRound?.endDate
+							? formatDate(new Date(activeQFRound.beginDate))
 							: '--'}
 					</B>
 					<Caption color={neutralColors.gray[700]}>Round end</Caption>
 					<B>
-						{activeRound?.endDate
-							? formatDate(new Date(activeRound.endDate))
+						{activeQFRound?.endDate
+							? formatDate(new Date(activeQFRound.endDate))
 							: '--'}
 					</B>
 				</Flex>
@@ -99,7 +108,7 @@ const Title = styled(H5)`
 	margin-bottom: 40px;
 `;
 
-const InfoSection = styled(Flex)`
+const InfoSection = styled(Flex)<{ $started: boolean }>`
 	flex-direction: column;
 	margin-top: 40px;
 	padding: 24px;
@@ -110,6 +119,13 @@ const InfoSection = styled(Flex)`
 	${mediaQueries.tablet} {
 		flex-direction: row;
 	}
+	${props =>
+		!props.$started &&
+		css`
+			justify-content: flex-start;
+			gap: 64px;
+			width: fit-content;
+		`}
 `;
 
 const ItemContainer = styled.div``;

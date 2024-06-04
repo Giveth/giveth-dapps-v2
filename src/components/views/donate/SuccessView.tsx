@@ -73,11 +73,12 @@ export const SuccessView: FC = () => {
 		networkId && activeStartedRound?.eligibleNetworks?.includes(networkId);
 
 	useEffect(() => {
+		if (!hasMultipleTxs) return;
 		client
 			.query({
 				query: FETCH_GIVETH_PROJECT_BY_ID,
 				variables: { id: config.GIVETH_PROJECT_ID },
-				fetchPolicy: 'no-cache',
+				fetchPolicy: 'cache-first',
 			})
 			.then((res: IFetchGivethProjectGQL) =>
 				setGivethSlug(res.data.projectById.slug),
@@ -105,7 +106,7 @@ export const SuccessView: FC = () => {
 				<Col xs={12} lg={6}>
 					<RightSectionWrapper>
 						<div>
-							<GiverH4 weight={700}>
+							<GiverH4 id='donation-success' weight={700}>
 								{formatMessage({ id: 'label.youre_giver_now' })}
 							</GiverH4>
 							<br />

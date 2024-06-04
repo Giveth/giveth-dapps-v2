@@ -13,7 +13,7 @@ import { useIntl } from 'react-intl';
 import Divider from '@/components/Divider';
 import { TooltipContent } from '@/components/modals/HarvestAll.sc';
 import { IconWithTooltip } from '@/components/IconWithToolTip';
-import { IDonationProject } from '@/apollo/types/types';
+import { IProject } from '@/apollo/types/types';
 import {
 	calculateEstimatedMatchingWithDonationAmount,
 	getActiveRound,
@@ -23,7 +23,7 @@ import { formatDonation } from '@/helpers/number';
 import { useTokenPrice } from '@/hooks/useTokenPrice';
 
 interface IEstimatedMatchingToast {
-	projectData: IDonationProject;
+	projectData: IProject;
 	token?: IProjectAcceptedToken;
 	amountTyped?: number;
 }
