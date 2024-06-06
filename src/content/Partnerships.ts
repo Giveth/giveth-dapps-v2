@@ -30,6 +30,7 @@ import Gnosis_Chain from '/public/images/partnerships/Gnosis_Chain.svg';
 import Crypto_Currency from '/public/images/partnerships/cryptocurrency-jobs.svg';
 import GatewayFM from '/public/images/partnerships/gatewayfm_logo.svg';
 import BlossomLabs from '/public/images/partnerships/BlossomLabsLogo.svg';
+import GloDollar from '/public/images/partnerships/GloDollarLogo.svg';
 
 export interface IPartner {
 	icon: any;
@@ -110,6 +111,12 @@ export const PartnershipArray: IPartner[] = [
 		title: 'gateway.fm',
 		description: 'page.partnerships.gatewayfm',
 		link: 'https://gateway.fm/',
+	},
+	{
+		icon: GloDollar,
+		title: 'Glo Dollar',
+		description: 'page.partnerships.glodollar',
+		link: 'https://discord.gg/PUrBVdzzN5',
 	},
 	{
 		icon: Governauts,
