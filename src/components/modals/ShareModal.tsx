@@ -60,15 +60,13 @@ const ShareModal: FC<IShareModal> = props => {
 		ESocialType.facebook,
 	);
 
-	const shareModalTitle =
-		shareTitle != undefined
-			? formatMessage({ id: shareTitle })
-			: formatMessage({ id: 'label.share_this' });
+	const shareModalTitle = formatMessage({
+		id: shareTitle || 'label.share_this',
+	});
 
-	const shareModalDesciption =
-		shareDescription != undefined
-			? formatMessage({ id: shareDescription })
-			: null;
+	const shareModalDesciption = shareDescription
+		? formatMessage({ id: shareDescription })
+		: null;
 
 	return (
 		<Modal
