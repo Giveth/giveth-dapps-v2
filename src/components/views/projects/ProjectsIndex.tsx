@@ -84,13 +84,20 @@ const ProjectsIndex = (props: IProjectsView) => {
 	router?.events?.on('routeChangeStart', () => setIsLoading(true));
 
 	const fetchProjects = useCallback(
-		(isLoadMore?: boolean, loadNum?: number, userIdChanged = false) => {
+		(
+			isLoadMore?: boolean,
+			loadNum?: number,
+			userIdChanged = false,
+			customLimit = 0,
+		) => {
+			const queryLimit = customLimit || projects.length;
+
 			const variables: IQueries = {
 				limit: userIdChanged
 					? filteredProjects.length > 50
 						? BACKEND_QUERY_LIMIT
 						: filteredProjects.length
-					: projects.length,
+					: queryLimit,
 				skip: userIdChanged ? 0 : projects.length * (loadNum || 0),
 			};
 
@@ -160,22 +167,30 @@ const ProjectsIndex = (props: IProjectsView) => {
 		fetchProjects(false, 0);
 	}, [contextVariables]);
 
-	// Handle back button navigation
-	useEffect(() => {
-		console.log('projects', router);
-		const storedPage = localStorage.getItem('lastViewedPage');
-		if (storedPage) {
-			for (let i = 0; i < Number(storedPage); i++) {
-				// fetchProjects(false, i);
-			}
-		}
-	}, [router, fetchProjects]);
-
 	const loadMore = useCallback(() => {
 		if (isLoading) return;
 		fetchProjects(true, pageNum.current + 1);
 		pageNum.current = pageNum.current + 1;
 		localStorage.setItem('lastViewedPage', pageNum.current.toString());
+	}, [fetchProjects, isLoading]);
+
+	// Handle back button navigation
+
+	useEffect(() => {
+		const storedPage = localStorage.getItem('lastViewedPage');
+		const lastVisitedProject =
+			localStorage.getItem('lastViewedProject') ?? null;
+		if (
+			storedPage &&
+			Number(storedPage) > 0 &&
+			pageNum.current <= Number(storedPage) &&
+			lastVisitedProject != null &&
+			!isLoading
+		) {
+			localStorage.removeItem('lastViewedProject');
+			const limit = parseInt(storedPage) * 15;
+			fetchProjects(false, 0, false, limit);
+		}
 	}, [fetchProjects, isLoading]);
 
 	const handleCreateButton = () => {

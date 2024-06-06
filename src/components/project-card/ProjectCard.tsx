@@ -122,6 +122,7 @@ const ProjectCard = (props: IProjectCard) => {
 				</Link>
 			</ImagePlaceholder>
 			<CardBody
+				id={`project-card-body-${slug}`}
 				$isHover={
 					isHover
 						? hasFooter
