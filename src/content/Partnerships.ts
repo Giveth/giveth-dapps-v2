@@ -116,7 +116,7 @@ export const PartnershipArray: IPartner[] = [
 		icon: GloDollar,
 		title: 'Glo Dollar',
 		description: 'page.partnerships.glodollar',
-		link: 'https://discord.gg/PUrBVdzzN5',
+		link: 'https://www.glodollar.org/',
 	},
 	{
 		icon: Governauts,
