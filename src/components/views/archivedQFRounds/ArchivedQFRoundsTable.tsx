@@ -33,7 +33,7 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 					<StyledGLink size='Big'>Round Duration</StyledGLink>
 					<StyledGLink size='Big'></StyledGLink>
 				</TH>
-				{archivedQFRounds.map((round, index) => (
+				{archivedQFRounds.map(round => (
 					<TR key={round.id}>
 						<P>{round.name}</P>
 						<P>
@@ -46,7 +46,13 @@ export const ArchivedQFRoundsTable: FC<ArchivedQFRoundsTableProps> = ({
 							</Flex>
 						</P>
 						<P>{formatDonation(round.totalDonations, '$') || 0}</P>
-						<P>{round.uniqueDonors}</P>
+						<P>
+							{round.isDataAnalysisDone ? (
+								round.uniqueDonors
+							) : (
+								<AnalysisStatus>Pending</AnalysisStatus>
+							)}
+						</P>
 						<Flex $flexDirection='column'>
 							<P>{formatDate(new Date(round.beginDate))}</P>
 							<P>{formatDate(new Date(round.endDate))}</P>
@@ -131,4 +137,8 @@ const StyledGLink = styled(GLink)`
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
+`;
+
+const AnalysisStatus = styled(P)`
+	color: ${neutralColors.gray[600]};
 `;
