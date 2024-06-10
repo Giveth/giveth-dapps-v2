@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchMainCategories, fetchQFRounds } from './general.thunk';
+import { fetchMainCategoriesAndActiveQFRound } from './general.thunk';
 import { IMainCategory, IQFRound } from '@/apollo/types/types';
 import { QF_SPECIFIC_CATEGORIES } from '@/configuration';
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -45,17 +45,19 @@ export const GeneralSlice = createSlice({
 		},
 	},
 	extraReducers: builder => {
-		builder.addCase(fetchMainCategories.fulfilled, (state, action) => {
-			state.mainCategories = action.payload.data.mainCategories.filter(
-				(mainCategory: IMainCategory) =>
-					!QF_SPECIFIC_CATEGORIES.some(c => c === mainCategory.slug),
-			);
-		});
-		builder.addCase(fetchQFRounds.fulfilled, (state, action) => {
-			state.qfRounds = action.payload.data.qfRounds;
-			state.activeQFRound =
-				state.qfRounds.find(round => round.isActive) || null;
-		});
+		builder.addCase(
+			fetchMainCategoriesAndActiveQFRound.fulfilled,
+			(state, action) => {
+				const { mainCategories, qfRounds } = action.payload;
+				state.mainCategories = mainCategories.filter(
+					(mainCategory: IMainCategory) =>
+						!QF_SPECIFIC_CATEGORIES.some(
+							c => c === mainCategory.slug,
+						),
+				);
+				state.activeQFRound = qfRounds ? qfRounds[0] : null;
+			},
+		);
 	},
 });
 

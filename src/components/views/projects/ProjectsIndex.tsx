@@ -40,6 +40,7 @@ import { ActiveQFRoundStats } from './ActiveQFRoundStats';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import { QFHeader } from '@/components/views/archivedQFRounds/QFHeader';
 import { DefaultQFBanner } from '@/components/DefaultQFBanner';
+import NotAvailable from '@/components/NotAvailable';
 
 export interface IProjectsView {
 	projects: IProject[];
@@ -56,7 +57,11 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const { formatMessage } = useIntl();
 	const { projects, totalCount: _totalCount } = props;
 	const user = useAppSelector(state => state.user.userData);
+	const { activeQFRound, mainCategories } = useAppSelector(
+		state => state.general,
+	);
 	const [isLoading, setIsLoading] = useState(false);
+	const [isNotFound, setIsNotFound] = useState(false);
 	const [filteredProjects, setFilteredProjects] =
 		useState<IProject[]>(projects);
 	const [totalCount, setTotalCount] = useState(_totalCount);
@@ -66,11 +71,9 @@ const ProjectsIndex = (props: IProjectsView) => {
 
 	const {
 		variables: contextVariables,
-		mainCategories,
 		selectedMainCategory,
 		isQF,
 		isArchivedQF,
-		qfRounds,
 	} = useProjectsContext();
 
 	const router = useRouter();
@@ -112,7 +115,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 							: getMainCategorySlug(selectedMainCategory),
 						qfRoundSlug: isArchivedQF ? router.query.slug : null,
 					},
-					fetchPolicy: 'network-only',
+					fetchPolicy: 'no-cache',
 				})
 				.then((res: { data: { allProjects: IFetchAllProjects } }) => {
 					const data = res.data?.allProjects?.projects;
@@ -174,9 +177,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 	const showLoadMore =
 		totalCount > filteredProjects?.length && !isInfiniteScrolling.current;
 
-	const activeRound = qfRounds.find(round => round.isActive);
-
-	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeRound);
+	const onProjectsPageOrActiveQFPage = !isQF || (isQF && activeQFRound);
 
 	useEffect(() => {
 		const handleObserver = (entities: any) => {
@@ -201,6 +202,19 @@ const ProjectsIndex = (props: IProjectsView) => {
 		};
 	}, [loadMore]);
 
+	useEffect(() => {
+		if (
+			mainCategories.length > 0 &&
+			!selectedMainCategory &&
+			!isArchivedQF
+		) {
+			setIsNotFound(true);
+		}
+	}, [selectedMainCategory, mainCategories.length]);
+
+	if (isNotFound)
+		return <NotAvailable description='Oops! Page Not Found...' />;
+
 	return (
 		<>
 			{isLoading && (
@@ -214,14 +228,14 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<PassportBanner />
 					{isArchivedQF ? (
 						!isMobile && <ArchivedQFProjectsBanner />
-					) : activeRound ? (
+					) : activeQFRound ? (
 						<ActiveQFProjectsBanner />
 					) : (
 						<DefaultQFBanner />
 					)}
 				</>
 			) : (
-				<ProjectsBanner mainCategory={selectedMainCategory} />
+				<ProjectsBanner />
 			)}
 			<Wrapper>
 				{isQF && <QFHeader />}
@@ -229,7 +243,7 @@ const ProjectsIndex = (props: IProjectsView) => {
 					<ArchivedQFRoundStats />
 				) : (
 					<>
-						{isQF && activeRound && <ActiveQFRoundStats />}
+						{isQF && activeQFRound && <ActiveQFRoundStats />}
 						{onProjectsPageOrActiveQFPage && <FilterContainer />}
 					</>
 				)}
@@ -257,10 +271,10 @@ const ProjectsIndex = (props: IProjectsView) => {
 						</ProjectsContainer>
 						{/* <FloatingButtonReferral /> */}
 					</ProjectsWrapper>
-				) : isQF && !activeRound ? (
+				) : isQF && !activeQFRound ? (
 					<QFNoResultBanner />
 				) : (
-					<ProjectsNoResults mainCategories={mainCategories} />
+					<ProjectsNoResults />
 				)}
 				{totalCount > filteredProjects?.length && (
 					<div ref={lastElementRef} />

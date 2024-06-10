@@ -5,11 +5,11 @@ import {
 	Lead,
 	neutralColors,
 	IconChevronRight16,
-	IconGIVBack,
 	IconRocketInSpace,
 	IconFarm,
 	Container,
 	Flex,
+	IconGIVBack64,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
 import { useIntl } from 'react-intl';
@@ -51,8 +51,7 @@ const AboutGiveconomy = () => {
 									})}
 								</Title>
 								<Icon>
-									<IconGIVBack
-										size={64}
+									<IconGIVBack64
 										color={neutralColors.gray[900]}
 									/>
 								</Icon>

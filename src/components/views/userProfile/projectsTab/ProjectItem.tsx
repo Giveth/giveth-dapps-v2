@@ -124,7 +124,7 @@ const ProjectItem = ({ project, setProjects }: IProjectItem) => {
 							</Flex>
 						</P>
 						{formatDonation(
-							project.sumDonationValueUsd || 0,
+							project.totalDonations || 0,
 							'$',
 							locale,
 						)}

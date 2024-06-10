@@ -77,16 +77,11 @@ export interface IProject {
 	countUniqueDonors?: number;
 	countUniqueDonorsForActiveQfRound?: number;
 	estimatedMatching: IEstimatedMatching;
-	sumDonationValueUsd?: number;
 	sumDonationValueUsdForActiveQfRound?: number;
 	qfRounds?: IQFRound[];
 	campaigns?: ICampaign[];
 	anchorContracts: IAnchorContractData[];
 	socialMedia: IProjectSocialMedia[];
-}
-
-export interface IDonationProject extends IProject {
-	givethAddresses: IWalletAddress[];
 }
 
 export enum EProjectsFilter {
