@@ -412,76 +412,85 @@ export const permitTokens = async (
 	lmAddress: string,
 	amount: bigint,
 ) => {
-	const poolContractInfo = {
-		address: poolAddress,
-		abi: UNI_ABI as Abi,
-		chainId,
-	};
+	try {
+		const poolContractInfo = {
+			address: poolAddress,
+			abi: UNI_ABI as Abi,
+			chainId,
+		};
 
-	const results = await readContracts(wagmiConfig, {
-		contracts: [
-			{ ...poolContractInfo, functionName: 'name' },
-			{
-				...poolContractInfo,
-				functionName: 'nonces',
-				args: [walletAddress],
+		const results = await readContracts(wagmiConfig, {
+			contracts: [
+				{ ...poolContractInfo, functionName: 'name' },
+				{
+					...poolContractInfo,
+					functionName: 'nonces',
+					args: [walletAddress],
+				},
+			],
+		});
+
+		const [name, nonce] = results.map(res => getReadContractResult(res));
+
+		const domain = {
+			name,
+			version: '1',
+			chainId: chainId,
+			verifyingContract: poolAddress,
+		} as const;
+
+		// The named list of all type definitions
+		const types = {
+			Permit: [
+				{ name: 'owner', type: 'address' },
+				{ name: 'spender', type: 'address' },
+				{ name: 'value', type: 'uint256' },
+				{ name: 'nonce', type: 'uint256' },
+				{ name: 'deadline', type: 'uint256' },
+			],
+		};
+
+		// The data to sign
+		const message = {
+			owner: walletAddress,
+			spender: lmAddress,
+			value: amount,
+			nonce,
+			deadline: MaxUint256,
+		} as const;
+
+		const hexSignature = await signTypedData(wagmiConfig, {
+			domain,
+			message,
+			primaryType: 'Permit',
+			types,
+		});
+		const signature = parseSignature(hexSignature);
+		const tx = await writeContract(wagmiConfig, {
+			address: poolAddress,
+			abi: UNI_ABI,
+			functionName: 'permit',
+			args: [
+				walletAddress,
+				lmAddress,
+				amount,
+				MaxUint256,
+				signature.v,
+				signature.r,
+				signature.s,
+			],
+			value: 0n,
+		});
+		const res = await waitForTransaction(tx);
+		return res;
+	} catch (error) {
+		console.error('Error on permitTokens:', error);
+		captureException(error, {
+			tags: {
+				section: 'permitTokens',
 			},
-		],
-	});
-
-	const [name, nonce] = results.map(res => getReadContractResult(res));
-
-	const domain = {
-		name,
-		version: '1',
-		chainId: chainId,
-		verifyingContract: poolAddress,
-	} as const;
-
-	// The named list of all type definitions
-	const types = {
-		Permit: [
-			{ name: 'owner', type: 'address' },
-			{ name: 'spender', type: 'address' },
-			{ name: 'value', type: 'uint256' },
-			{ name: 'nonce', type: 'uint256' },
-			{ name: 'deadline', type: 'uint256' },
-		],
-	};
-
-	// The data to sign
-	const message = {
-		owner: walletAddress,
-		spender: lmAddress,
-		value: amount,
-		nonce,
-		deadline: MaxUint256,
-	} as const;
-
-	const hexSignature = await signTypedData(wagmiConfig, {
-		domain,
-		message,
-		primaryType: 'Permit',
-		types,
-	});
-	const signature = parseSignature(hexSignature);
-	const tx = await writeContract(wagmiConfig, {
-		address: poolAddress,
-		abi: UNI_ABI,
-		functionName: 'permit',
-		args: [
-			walletAddress,
-			lmAddress,
-			amount,
-			MaxUint256,
-			signature.v,
-			signature.r,
-			signature.s,
-		],
-		value: 0n,
-	});
-	const res = await waitForTransaction(tx);
-	return res;
+		});
+	}
 };
 
 export const approveERC20tokenTransfer = async (
