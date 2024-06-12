@@ -184,7 +184,7 @@ const config: EnvConfig = {
 		],
 		regenPools: [],
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
+			process.env.uniswapV2Subgraph ||'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
 		regenStreams: [],
 	},
 
@@ -310,7 +310,7 @@ const config: EnvConfig = {
 		],
 
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
+			process.env.honeyswapV2Subgraph || 'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
 
 		regenStreams: [
 			{
@@ -383,7 +383,7 @@ const config: EnvConfig = {
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
 			'0x503055e1f8b99c60a51c479a60b233976617bc7a',
 		superFluidSubgraph:
-			'https://optimism-sepolia.subgraph.x.superfluid.dev/?source=giveth',
+			process.env.superFluidSubgraph || 'https://optimism-sepolia.subgraph.x.superfluid.dev/?source=giveth',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {

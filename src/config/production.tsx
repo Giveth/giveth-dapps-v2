@@ -231,7 +231,7 @@ const config: EnvConfig = {
 			},
 		],
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
+			process.env.uniswapV2Subgraph || 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2?source=giveth',
 		regenStreams: [
 			{
 				network: MAINNET_NETWORK_NUMBER,
@@ -368,7 +368,7 @@ const config: EnvConfig = {
 		],
 
 		uniswapV2Subgraph:
-			'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
+			process.env.honeyswapV2Subgraph || 'https://api.thegraph.com/subgraphs/name/1hive/honeyswap-v2?source=giveth',
 
 		regenStreams: [
 			{
@@ -428,7 +428,7 @@ const config: EnvConfig = {
 		GIVETH_ANCHOR_CONTRACT_ADDRESS:
 			'0x5430757bc19c87ec562e4660e56af6cac324b50a',
 		superFluidSubgraph:
-			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet?source=giveth',
+			process.env.superFluidSubgraph || 'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet?source=giveth',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
