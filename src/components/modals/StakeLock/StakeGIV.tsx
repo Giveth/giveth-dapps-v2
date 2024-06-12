@@ -6,6 +6,7 @@ import { useAccount } from 'wagmi';
 import { Modal } from '../Modal';
 import {
 	approveERC20tokenTransfer,
+	permitTokens,
 	stakeGIV,
 	wrapToken,
 } from '@/lib/stakingPool';
@@ -74,6 +75,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	setShowModal,
 }) => {
 	const { formatMessage } = useIntl();
+	const [permit, setPermit] = useState<boolean>(false);
 	const [amount, setAmount] = useState(0n);
 	const [txHash, setTxHash] = useState('');
 	const [stakeState, setStakeState] = useState<StakeState>(
@@ -85,7 +87,6 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	const { notStakedAmount: _maxAmount } = useStakingPool(poolStakingConfig);
 	const maxAmount = _maxAmount || 0n;
 	const isSafeEnv = useIsSafeEnvironment();
-
 	const { POOL_ADDRESS, LM_ADDRESS, type } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
@@ -156,9 +157,21 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	};
 
 	const onStake = async () => {
-		if (!chainId) return;
+		if (!chainId || !address) return;
 		setStakeState(StakeState.WRAPPING);
 		try {
+			if (permit) {
+				const permitSignature = await permitTokens(
+					chainId,
+					address,
+					poolStakingConfig.POOL_ADDRESS,
+					poolStakingConfig.LM_ADDRESS,
+					amount,
+				);
+				if (!permitSignature)
+					throw new Error('Permit signature failed');
+			}
+
 			const txResponse = await stakeGIV(
 				amount,
 				poolStakingConfig.LM_ADDRESS,
