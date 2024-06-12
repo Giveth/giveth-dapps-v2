@@ -3,7 +3,11 @@ import { captureException } from '@sentry/nextjs';
 import { useAccount } from 'wagmi';
 import { Modal } from '../Modal';
 import { StakingPoolImages } from '../../StakingPoolImages';
-import { approveERC20tokenTransfer, stakeTokens } from '@/lib/stakingPool';
+import {
+	approveERC20tokenTransfer,
+	permitTokens,
+	stakeTokens,
+} from '@/lib/stakingPool';
 import {
 	ConfirmedInnerModal,
 	ErrorInnerModal,
@@ -149,14 +153,18 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 		if (!chainId || !address) return;
 		setStakeState(StakeState.STAKING);
 		try {
-			const txResponse = await stakeTokens(
-				address,
-				amount,
-				POOL_ADDRESS,
-				LM_ADDRESS,
-				chainId,
-				permit,
-			);
+			if (permit) {
+				const permitSignature = await permitTokens(
+					chainId,
+					address,
+					poolStakingConfig.POOL_ADDRESS,
+					poolStakingConfig.LM_ADDRESS,
+					amount,
+				);
+				if (!permitSignature)
+					throw new Error('Permit signature failed');
+			}
+			const txResponse = await stakeTokens(amount, LM_ADDRESS, chainId);
 			if (txResponse) {
 				setTxHash(txResponse);
 				setStakeState(StakeState.CONFIRMING);
