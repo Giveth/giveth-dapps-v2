@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/nextjs';
 import { signTypedData } from 'wagmi/actions';
-import { Abi, erc20Abi, WriteContractReturnType, hexToSignature } from 'viem';
+import { Abi, erc20Abi, WriteContractReturnType, parseSignature } from 'viem';
 import { type Address } from 'viem';
 import BigNumber from 'bignumber.js';
 import { readContract, readContracts, writeContract } from '@wagmi/core';
@@ -405,7 +405,7 @@ export const getUserStakeInfo = (
 	};
 };
 
-const permitTokens = async (
+export const permitTokens = async (
 	chainId: number,
 	walletAddress: Address,
 	poolAddress: Address,
@@ -464,9 +464,8 @@ const permitTokens = async (
 		primaryType: 'Permit',
 		types,
 	});
-
-	const signature = hexToSignature(hexSignature);
-	return await writeContract(wagmiConfig, {
+	const signature = parseSignature(hexSignature);
+	const tx = await writeContract(wagmiConfig, {
 		address: poolAddress,
 		abi: UNI_ABI,
 		functionName: 'permit',
@@ -481,6 +480,8 @@ const permitTokens = async (
 		],
 		value: 0n,
 	});
+	const res = await waitForTransaction(tx);
+	return res;
 };
 
 export const approveERC20tokenTransfer = async (
@@ -619,40 +620,21 @@ export const unwrapToken = async (
 };
 
 export const stakeTokens = async (
-	walletAddress: Address,
 	amount: bigint,
-	poolAddress: Address,
 	lmAddress: Address,
 	chainId: number,
-	permit: boolean,
 ): Promise<WriteContractReturnType | undefined> => {
 	if (amount === 0n) return;
 
 	try {
-		if (permit) {
-			const rawPermitCall = await permitTokens(
-				chainId,
-				walletAddress,
-				poolAddress,
-				lmAddress,
-				amount,
-			);
-			return await writeContract(wagmiConfig, {
-				address: lmAddress,
-				abi: LM_ABI,
-				functionName: 'stakeWithPermit',
-				args: [amount, rawPermitCall],
-				value: 0n,
-			});
-		} else {
-			return await writeContract(wagmiConfig, {
-				address: lmAddress,
-				abi: LM_ABI,
-				functionName: 'stake',
-				args: [amount],
-				value: 0n,
-			});
-		}
+		return await writeContract(wagmiConfig, {
+			address: lmAddress,
+			chainId,
+			abi: LM_ABI,
+			functionName: 'stake',
+			args: [amount],
+			value: 0n,
+		});
 	} catch (e) {
 		console.error('Error on staking:', e);
 		captureException(e, {
