@@ -13,6 +13,6 @@ export const FETCH_MAINNET_TOKEN_PRICE = `query FetchMainnetTokenPrice($tokenId:
 
 export const FETCH_GNOSIS_TOKEN_PRICE = `query FetchGnosisTokenPrice($id: String!){
 	token(id: $id) {
-		derivedETH
+		derivedNativeCurrency
 	}
   }`;
