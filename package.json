@@ -79,7 +79,6 @@
 		"@testing-library/jest-dom": "^6.4.2",
 		"@testing-library/react": "^14.2.1",
 		"@types/apollo-upload-client": "^18.0.0",
-		"@types/axios": "^0.14.0",
 		"@types/extract-files": "^13.0.1",
 		"@types/jest": "^29.5.12",
 		"@types/jest-axe": "^3.5.9",
