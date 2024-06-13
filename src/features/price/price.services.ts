@@ -17,9 +17,12 @@ export const fetchMainnetTokenPrice = async (
 		query,
 		variables,
 	};
+	const myHeaders = new Headers();
+	myHeaders.append('content-type', 'application/json');
 	const res = await fetch(config.MAINNET_CONFIG.uniswapV2Subgraph, {
 		method: 'POST',
 		body: JSON.stringify(body),
+		headers: myHeaders,
 	});
 	const data = await res.json();
 	const tokenEthPrice = new BigNumber(data?.data?.token.derivedETH);
