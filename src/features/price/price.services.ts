@@ -43,10 +43,19 @@ export const fetchGnosisTokenPrice = async (
 		query,
 		variables,
 	};
-	const res = await fetch(subgraph, {
+
+	const myHeaders = new Headers();
+	myHeaders.append('content-type', 'application/json');
+
+	const requestOptions: RequestInit = {
 		method: 'POST',
 		body: JSON.stringify(body),
-	});
+		headers: myHeaders,
+	};
+	const res = await fetch(
+		config.GNOSIS_CONFIG.uniswapV2Subgraph!,
+		requestOptions,
+	);
 	const data = await res.json();
 	return data?.data?.token?.derivedNativeCurrency || '0';
 };
