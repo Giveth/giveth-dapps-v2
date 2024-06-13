@@ -48,5 +48,5 @@ export const fetchGnosisTokenPrice = async (
 		body: JSON.stringify(body),
 	});
 	const data = await res.json();
-	return data?.data?.token?.derivedETH || '0';
+	return data?.data?.token?.derivedNativeCurrency || '0';
 };
