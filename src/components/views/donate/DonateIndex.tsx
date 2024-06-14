@@ -110,10 +110,6 @@ const DonateIndex: FC = () => {
 	);
 };
 
-const PassportWrapper = styled.div`
-	margin-top: 100px;
-`;
-
 const AlreadyDonatedWrapper = styled(Flex)`
 	margin-bottom: 16px;
 	padding: 12px 16px;
