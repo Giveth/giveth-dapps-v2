@@ -107,7 +107,7 @@ const DonateModal: FC<IDonateModalProps> = props => {
 			} catch (e) {
 				setIsLoadingGivethAddress(false);
 				showToastError('Failed to fetch Giveth wallet address');
-				console.log('Failed to fetch Giveth wallet address', e);
+				console.error('Failed to fetch Giveth wallet address', e);
 				closeModal();
 			}
 		};

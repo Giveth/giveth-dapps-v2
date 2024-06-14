@@ -38,7 +38,7 @@ export const ProfileProvider = (props: {
 				]);
 				setBalance(res[user.walletAddress!]);
 			} catch (error) {
-				console.log('error on getGIVpowerBalanceByAddress', { error });
+				console.error('error on getGIVpowerBalanceByAddress', { error });
 			}
 		};
 		if (!myAccount) fetchTotal();

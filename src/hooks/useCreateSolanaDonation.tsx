@@ -105,7 +105,7 @@ export const useCreateSolanaDonation = () => {
 				setFailedModalType(EDonationFailedType.NOT_SAVED);
 			}
 		} catch (error) {
-			console.log('Error sending transaction', { error });
+			console.error('Error sending transaction', { error });
 		}
 	};
 
