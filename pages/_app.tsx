@@ -78,7 +78,7 @@ function renderSnippet() {
 	if (process.env.NEXT_PUBLIC_ENV === 'development') {
 		return snippet.max(opts);
 	}
-	if (process.env.NEXT_PUBLIC_ENV === "production") {
+	if (process.env.NEXT_PUBLIC_ENV === 'production') {
 		console.log = function () {};
 	}
 
