@@ -2,14 +2,18 @@ import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { B, neutralColors, Col } from '@giveth/ui-design-system';
 import CheckCircle from '@/components/views/verification/CheckCircle';
+import WarningCircle from '@/components/views/verification/WarningCircle';
 import { Shadow } from '@/components/styled-components/Shadow';
 import menuList from '@/components/views/verification/menu/menuList';
 import { useVerificationData } from '@/context/verification.context';
 import { StepsProgressBar } from '@/components/views/verification/Common';
 import { findStepByName } from '@/lib/verification';
+import { checkVerificationStep } from '@/helpers/projects';
 
 const DesktopMenu = () => {
 	const { step, setStep, verificationData } = useVerificationData();
+	console.log({ step });
+	console.log({ verificationData });
 	const { project, lastStep } = verificationData || {};
 	const { title } = project || {};
 	const lastStepIndex = findStepByName(lastStep);
@@ -23,19 +27,24 @@ const DesktopMenu = () => {
 			<MenuTitle $isActive>{title}</MenuTitle>
 			<StepsProgressBar />
 			{menuList.map((item, index) => {
-				const isClickable =
-					!!lastStepIndex && index <= lastStepIndex + 1;
+				const isClickable = index != 8; // Do not enable click on last step "Done"
+				const IconCheck = checkVerificationStep(
+					item.slug,
+					verificationData,
+				) ? (
+					<CheckCircle />
+				) : (
+					<WarningCircle />
+				);
 				return (
 					<MenuTitle
 						$hover={isClickable}
-						$isActive={index <= step}
-						key={item}
+						$isActive={index == step}
+						key={item.slug}
 						onClick={() => isClickable && setStep(index)}
 					>
-						{formatMessage({ id: item })}
-						{(index <= lastStepIndex || step === 8) && (
-							<CheckCircle />
-						)}
+						{formatMessage({ id: item.label })}
+						{IconCheck}
 					</MenuTitle>
 				);
 			})}

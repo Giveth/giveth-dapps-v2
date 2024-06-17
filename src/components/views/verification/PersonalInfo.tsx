@@ -103,13 +103,13 @@ const PersonalInfo = () => {
 		}
 	};
 	function handleNext() {
-		if (!verificationData?.emailConfirmed) {
-			showToastError(
-				formatMessage({ id: 'label.please_confirm_your_email' }),
-			);
-		} else {
-			setStep(2);
-		}
+		// if (!verificationData?.emailConfirmed) {
+		showToastError(
+			formatMessage({ id: 'label.please_confirm_your_email' }),
+		);
+		// } else {
+		setStep(2);
+		// }
 	}
 
 	useEffect(() => {
