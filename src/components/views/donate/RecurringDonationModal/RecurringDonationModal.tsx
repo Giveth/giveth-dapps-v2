@@ -452,16 +452,16 @@ const RecurringDonationInnerModal: FC<IRecurringDonationInnerModalProps> = ({
 							{ txHash: tx.hash, chainType: ChainType.EVM },
 							{ txHash: tx.hash, chainType: ChainType.EVM },
 						],
-						excludeFromQF: false,
 						isRecurring: true,
 						givBackEligible: true,
+						chainId: config.OPTIMISM_NETWORK_NUMBER,
 					});
 				} else {
 					setSuccessDonation({
 						txHash: [{ txHash: tx.hash, chainType: ChainType.EVM }],
-						excludeFromQF: false,
 						isRecurring: true,
 						givBackEligible: true,
+						chainId: config.OPTIMISM_NETWORK_NUMBER,
 					});
 				}
 			}
