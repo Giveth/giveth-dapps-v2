@@ -84,38 +84,6 @@ const StakeInnerModal: FC<IStakeModalProps> = ({
 	const { title, LM_ADDRESS, POOL_ADDRESS, platform } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
-	// useEffect(() => {
-	// 	library?.on('block', async () => {
-	// 		const amountNumber = ethers.BigNumber.from(amount);
-	// 		if (
-	// 			amountNumber.gt(ethers.constants.Zero) &&
-	// 			stakeState === StakeState.APPROVING
-	// 		) {
-	// 			const signer = library.getSigner();
-	// 			const userAddress = await signer.getAddress();
-	// 			const tokenContract = new Contract(
-	// 				POOL_ADDRESS,
-	// 				ERC20_ABI,
-	// 				signer,
-	// 			) as ERC20;
-	// 			const allowance: BigNumber = await tokenContract.allowance(
-	// 				userAddress,
-	// 				LM_ADDRESS,
-	// 			);
-	// 			const amountNumber = ethers.BigNumber.from(amount);
-	// 			const allowanceNumber = ethers.BigNumber.from(
-	// 				allowance.toString(),
-	// 			);
-	// 			if (amountNumber.lte(allowanceNumber)) {
-	// 				setStakeState(StakeState.STAKE);
-	// 			}
-	// 		}
-	// 	});
-	// 	return () => {
-	// 		library.removeAllListeners('block');
-	// 	};
-	// }, [library, amount, stakeState]);
-
 	const onlyApproveMode = useMemo(
 		() => platform === StakingPlatform.ICHI,
 		[platform],
