@@ -34,6 +34,8 @@ import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput'
 import { StakeSteps } from './StakeSteps';
 import { getGIVConfig } from '@/helpers/givpower';
 import {
+	RegenPoolStakingConfig,
+	StakingType,
 	type PoolStakingConfig,
 	type SimplePoolStakingConfig,
 } from '@/types/config';
@@ -88,8 +90,20 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	const { notStakedAmount: _maxAmount } = useStakingPool(poolStakingConfig);
 	const maxAmount = _maxAmount || 0n;
 	const isSafeEnv = useIsSafeEnvironment();
-	const { POOL_ADDRESS, LM_ADDRESS, network } =
+	const { POOL_ADDRESS, LM_ADDRESS, network, type } =
 		poolStakingConfig as SimplePoolStakingConfig;
+	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
+
+	const isGIVpower =
+		type === StakingType.GIV_GARDEN_LM ||
+		type === StakingType.GIV_UNIPOOL_LM;
+
+	// preffix property for heading elements used by analytics
+	const idPropertyPreffix = regenStreamType
+		? 'regenfarm'
+		: isGIVpower
+			? 'givpower'
+			: '';
 
 	useEffect(() => {
 		// If the user isn't on the Gnosis network, they can permit the staking contract to spend their GIV
@@ -283,7 +297,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 								stakeState === StakeState.WRAPPING) && (
 								<>
 									<BriefContainer>
-										<H5 id='givpower-staking'>
+										<H5 id={`${idPropertyPreffix}-staking`}>
 											{formatMessage({
 												id: 'label.you_are_staking',
 											})}
@@ -334,7 +348,9 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 				<StakeInnerModalContainer>
 					<BriefContainer>
 						<H5>Successful!</H5>
-						<H5White id='givpower-staked'>You have staked</H5White>
+						<H5White id={`${idPropertyPreffix}-staked`}>
+							You have staked
+						</H5White>
 						<H5White weight={700}>
 							{formatWeiHelper(amount.toString())} GIV
 						</H5White>
