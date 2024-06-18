@@ -17,7 +17,7 @@ import { UPDATE_PROJECT_VERIFICATION } from '@/apollo/gql/gqlVerification';
 import { EVerificationStatus, EVerificationSteps } from '@/apollo/types/types';
 import { showToastError } from '@/lib/helpers';
 import menuList from './menu/menuList';
-import { checkVerificationStep } from '@/helpers/projects';
+import { checkAllVerificationsSteps } from '@/helpers/projects';
 
 export default function TermsAndConditions() {
 	const [loading, setLoading] = useState(false);
@@ -25,6 +25,9 @@ export default function TermsAndConditions() {
 
 	const { verificationData, setVerificationData, setStep, isDraft } =
 		useVerificationData();
+
+	console.log({ verificationData });
+
 	const [accepted, setAccepted] = useState(
 		verificationData?.isTermAndConditionsAccepted || false,
 	);
@@ -70,7 +73,7 @@ export default function TermsAndConditions() {
 	const handleFinish = () => {
 		if (accepted) {
 			handleNext();
-			setStep(8);
+			// setStep(8);
 		}
 	};
 
@@ -78,15 +81,11 @@ export default function TermsAndConditions() {
 	 * Check have user submited all data needed for verification
 	 */
 	useEffect(() => {
-		const checkedArray = menuList.map((item, index) => {
-			if (index !== 8) {
-				return checkVerificationStep(item.slug, verificationData);
-			}
-			return true;
-		});
-
 		// Check if all elements are true
-		const allChecked = checkedArray.every(Boolean);
+		const allChecked = checkAllVerificationsSteps(
+			menuList,
+			verificationData,
+		);
 		setAllChecked(allChecked);
 	}, [verificationData]);
 

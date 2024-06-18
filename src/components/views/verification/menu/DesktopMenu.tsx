@@ -27,7 +27,8 @@ const DesktopMenu = () => {
 			<MenuTitle $isActive>{title}</MenuTitle>
 			<StepsProgressBar />
 			{menuList.map((item, index) => {
-				const isClickable = index != 8; // Do not enable click on last step "Done"
+				let isClickable = index != 8; // Do not enable click on last step "Done"
+				isClickable = lastStep == undefined ? false : isClickable; // user first time came to verification steps
 				const IconCheck = checkVerificationStep(
 					item.slug,
 					verificationData,

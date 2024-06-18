@@ -46,6 +46,7 @@ export function checkVerificationStep(
 			return (
 				verificationData !== undefined &&
 				verificationData.socialProfiles !== undefined &&
+				verificationData.projectRegistry !== null &&
 				verificationData.socialProfiles.length > 0
 			);
 		case EVerificationSteps.PROJECT_REGISTRY:
@@ -76,4 +77,27 @@ export function checkVerificationStep(
 		default:
 			return false;
 	}
+}
+
+/**
+ * Check if all steps are completed
+ *
+ * @param menuList array
+ * @param verificationData type of IProjectVerification
+ * @returns boolean
+ * */
+export function checkAllVerificationsSteps(
+	menuList: Array<{ label: string; slug: string }>,
+	verificationData: IProjectVerification | undefined,
+) {
+	const checkedArray = menuList.map((item, index) => {
+		// skip last step
+		if (index !== 8) {
+			return checkVerificationStep(item.slug, verificationData);
+		}
+		return true;
+	});
+
+	// Check if all elements are true
+	return checkedArray.every(Boolean);
 }
