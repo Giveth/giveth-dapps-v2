@@ -478,6 +478,7 @@ export interface IQFRound {
 export interface IArchivedQFRound extends IQFRound {
 	totalDonations: number;
 	uniqueDonors: number;
+	isDataAnalysisDone: boolean;
 }
 
 export interface IGetQfRoundHistory {

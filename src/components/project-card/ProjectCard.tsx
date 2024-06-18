@@ -311,6 +311,7 @@ const ProjectCard = (props: IProjectCard) => {
 				)}
 				<ActionButtons>
 					<Link
+						id='Donate_Card'
 						href={donateLink}
 						onClick={e => {
 							setDestination(donateLink);

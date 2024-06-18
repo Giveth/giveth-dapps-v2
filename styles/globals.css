@@ -290,3 +290,7 @@ a {
 	  transform: rotate(360deg);
 	}
   }
+
+  wcm-modal{
+	display: none;
+  }

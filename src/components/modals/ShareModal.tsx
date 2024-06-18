@@ -35,10 +35,18 @@ import {
 interface IShareModal extends IModal {
 	projectHref: string;
 	contentType: EContentType;
+	shareTitle?: string | undefined;
+	shareDescription?: string | undefined;
 }
 
 const ShareModal: FC<IShareModal> = props => {
-	const { projectHref, setShowModal, contentType } = props;
+	const {
+		projectHref,
+		setShowModal,
+		contentType,
+		shareTitle,
+		shareDescription,
+	} = props;
 	const url = fullPath(slugToProjectView(projectHref));
 	const { isAnimating, closeModal } = useModalAnimation(setShowModal);
 	const { formatMessage } = useIntl();
@@ -52,6 +60,14 @@ const ShareModal: FC<IShareModal> = props => {
 		ESocialType.facebook,
 	);
 
+	const shareModalTitle = formatMessage({
+		id: shareTitle || 'label.share_this',
+	});
+
+	const shareModalDesciption = shareDescription
+		? formatMessage({ id: shareDescription })
+		: null;
+
 	return (
 		<Modal
 			closeModal={closeModal}
@@ -61,9 +77,10 @@ const ShareModal: FC<IShareModal> = props => {
 			headerTitlePosition='left'
 		>
 			<Container>
-				<Subtitle weight={700}>
-					{formatMessage({ id: 'label.share_this' })}!
-				</Subtitle>
+				<Subtitle weight={700}>{shareModalTitle}!</Subtitle>
+				{shareModalDesciption && (
+					<Description>{shareModalDesciption}</Description>
+				)}
 				<FlexCenter gap={'16px'}>
 					<SocialButtonContainer>
 						<TwitterShareButton
@@ -79,12 +96,22 @@ const ShareModal: FC<IShareModal> = props => {
 							title={shareTitleFacebookAndLinkedin}
 							url={url}
 						>
-							<Image src={LinkedinIcon} alt='linkedin icon' />
+							<Image
+								src={LinkedinIcon}
+								alt='linkedin icon'
+								width={41}
+								height={41}
+							/>
 						</LinkedinShareButton>
 					</SocialButtonContainer>
 					<SocialButtonContainer>
 						<FacebookShareButton hashtag='#giveth' url={url}>
-							<Image src={FacebookIcon} alt='facebook icon' />
+							<Image
+								src={FacebookIcon}
+								alt='facebook icon'
+								width={41}
+								height={41}
+							/>
 						</FacebookShareButton>
 					</SocialButtonContainer>
 				</FlexCenter>
@@ -110,6 +137,12 @@ const Container = styled.div`
 const Subtitle = styled(H5)`
 	color: ${brandColors.deep[900]};
 	margin-bottom: 32px;
+`;
+
+const Description = styled(H5)`
+	color: ${brandColors.deep[900]};
+	margin-bottom: 42px;
+	white-space: pre-line;
 `;
 
 const SocialButtonContainer = styled(FlexCenter)`

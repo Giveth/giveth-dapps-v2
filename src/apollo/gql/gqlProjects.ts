@@ -686,19 +686,23 @@ export const SIMILAR_PROJECTS = gql`
 	}
 `;
 
+export const MAIN_CATEGORIES_QUERY = `
+	mainCategories {
+		title
+		banner
+		slug
+		description
+		categories {
+			name
+			value
+			isActive
+		}
+	}
+`;
+
 export const FETCH_MAIN_CATEGORIES = gql`
 	query {
-		mainCategories {
-			title
-			banner
-			slug
-			description
-			categories {
-				name
-				value
-				isActive
-			}
-		}
+		${MAIN_CATEGORIES_QUERY}
 	}
 `;
 

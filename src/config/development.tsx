@@ -386,7 +386,7 @@ const config: EnvConfig = {
 			'0x503055e1f8b99c60a51c479a60b233976617bc7a',
 		superFluidSubgraph:
 			process.env.NEXT_PUBLIC_SUBGRAPH_SUPER_FLUID ||
-			'https://optimism-sepolia.subgraph.x.superfluid.dev/?source=giveth',
+			'https://subgraph-endpoints.superfluid.dev/optimism-sepolia/protocol-v1',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {

@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import { EProjectsFilter, IMainCategory, IQFRound } from '@/apollo/types/types';
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
 import { sortMap } from '@/helpers/projects';
+import { useAppSelector } from '@/features/hooks';
 
 interface IVariables {
 	sortingBy?: EProjectsSortBy;
@@ -45,25 +46,33 @@ const ProjectsContext = createContext<IProjectsContext>({
 
 ProjectsContext.displayName = 'ProjectsContext';
 
+const allCategoriesItem = {
+	title: 'All',
+	description: '',
+	banner: '',
+	slug: 'all',
+	categories: [],
+	selected: false,
+};
+
 export const ProjectsProvider = (props: {
 	children: ReactNode;
-	mainCategories: IMainCategory[];
-	selectedMainCategory?: IMainCategory;
 	archivedQFRound?: IQFRound;
-	isQF: boolean;
+	isQF?: boolean;
 	isArchivedQF?: boolean;
 }) => {
-	const {
-		children,
-		mainCategories,
-		selectedMainCategory,
-		isQF,
-		isArchivedQF,
-		archivedQFRound,
-	} = props;
+	const { children, isQF, isArchivedQF, archivedQFRound } = props;
+	const mainCategories = useAppSelector(
+		state => state.general.mainCategories,
+	);
 
-	const [_isQF, setIsQF] = useState(isQF);
 	const router = useRouter();
+	const updatedMainCategory = [allCategoriesItem, ...mainCategories];
+	const selectedMainCategory = updatedMainCategory.find(
+		mainCategory => mainCategory.slug === router.query?.slug,
+	);
+
+	const [_isQF, setIsQF] = useState(!!isQF);
 
 	let sort = EProjectsSortBy.INSTANT_BOOSTING;
 	const sortValue = router.query.sort as string;

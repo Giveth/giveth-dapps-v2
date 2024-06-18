@@ -1,7 +1,6 @@
 import { EProjectsSortBy } from '@/apollo/types/gqlEnums';
-import { IMainCategory } from '@/apollo/types/types';
 
-export const getMainCategorySlug = (category?: IMainCategory) =>
+export const getMainCategorySlug = (category?: { slug: string }) =>
 	category?.slug === 'all' ? undefined : category?.slug;
 
 export const sortMap = {

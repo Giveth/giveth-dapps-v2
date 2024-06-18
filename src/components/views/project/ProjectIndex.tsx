@@ -179,8 +179,12 @@ const ProjectIndex: FC<IProjectBySlug> = () => {
 					{activeTab === 0 && (
 						<>
 							<RichTextViewer content={description} />
-							<Separator />
-							<ProjectSocials />
+							{projectData?.socialMedia?.length !== 0 && (
+								<>
+									<Separator />
+									<ProjectSocials />
+								</>
+							)}
 							<Separator />
 							<ProjectCategoriesBadges
 								categories={categories || []}

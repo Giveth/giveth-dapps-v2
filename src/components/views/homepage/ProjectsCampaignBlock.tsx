@@ -66,7 +66,10 @@ const ProjectsCampaignBlock: FC<IProjectsCampaignBlockProps> = ({
 				<BottomSection>
 					<Title>
 						<H1 weight={700}>{campaign.title}</H1>
-						<Link href={campaignLinkGenerator(campaign) || ''}>
+						<Link
+							id='Explore_Row'
+							href={campaignLinkGenerator(campaign) || ''}
+						>
 							<Button
 								buttonType='texty-primary'
 								label={formatMessage({

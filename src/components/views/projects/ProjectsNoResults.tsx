@@ -9,11 +9,14 @@ import Link from 'next/link';
 import { useIntl } from 'react-intl';
 import { useRouter } from 'next/router';
 import { mediaQueries, searchSuggestions } from '@/lib/constants/constants';
-import { IMainCategory } from '@/apollo/types/types';
 import Routes from '@/lib/constants/Routes';
 import { useProjectsContext } from '@/context/projects.context';
+import { useAppSelector } from '@/features/hooks';
 
-const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
+const ProjectsNoResults = () => {
+	const mainCategories = useAppSelector(
+		state => state.general.mainCategories,
+	);
 	const { formatMessage } = useIntl();
 	const { isQF } = useProjectsContext();
 	const router = useRouter();
@@ -62,7 +65,7 @@ const ProjectsNoResults = (props: { mainCategories: IMainCategory[] }) => {
 						})}
 					</GrayLead>
 					<Categories>
-						{props.mainCategories.map((category, index) => {
+						{mainCategories?.map((category, index) => {
 							return (
 								<Link
 									key={`category-${index}`}
