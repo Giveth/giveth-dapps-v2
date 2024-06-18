@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { captureException } from '@sentry/nextjs';
 import { ButtonLink, H5, IconExternalLink } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
@@ -21,6 +21,7 @@ import {
 	StyledOutlineButton,
 	SectionTitle,
 	StyledButton,
+	ToggleContainer,
 } from './StakeLock.sc';
 import { BriefContainer, H5White } from './LockingBrief';
 import { formatWeiHelper } from '@/helpers/number';
@@ -33,11 +34,10 @@ import { StakingAmountInput } from '@/components/AmountInput/StakingAmountInput'
 import { StakeSteps } from './StakeSteps';
 import { getGIVConfig } from '@/helpers/givpower';
 import {
-	RegenPoolStakingConfig,
-	StakingType,
 	type PoolStakingConfig,
 	type SimplePoolStakingConfig,
 } from '@/types/config';
+import ToggleSwitch from '@/components/ToggleSwitch';
 
 interface IStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
@@ -87,21 +87,16 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	const { notStakedAmount: _maxAmount } = useStakingPool(poolStakingConfig);
 	const maxAmount = _maxAmount || 0n;
 	const isSafeEnv = useIsSafeEnvironment();
-	const { POOL_ADDRESS, LM_ADDRESS, type } =
+	const { POOL_ADDRESS, LM_ADDRESS, network } =
 		poolStakingConfig as SimplePoolStakingConfig;
 
-	const { regenStreamType } = poolStakingConfig as RegenPoolStakingConfig;
-
-	const isGIVpower =
-		type === StakingType.GIV_GARDEN_LM ||
-		type === StakingType.GIV_UNIPOOL_LM;
-
-	// preffix property for heading elements used by analytics
-	const idPropertyPreffix = regenStreamType
-		? 'regenfarm'
-		: isGIVpower
-			? 'givpower'
-			: '';
+	useEffect(() => {
+		// If the user isn't on the Gnosis network, they can permit the staking contract to spend their GIV
+		if (network !== config.GNOSIS_NETWORK_NUMBER) {
+			setPermit(true);
+			setStakeState(StakeState.WRAP);
+		}
+	}, [network]);
 
 	const onApprove = async () => {
 		if (amount === 0n) return;
@@ -200,6 +195,15 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 		}
 	};
 
+	const handlePermit = () => {
+		if (permit) {
+			setPermit(false);
+			setStakeState(StakeState.APPROVE);
+		} else {
+			setPermit(true);
+			setStakeState(StakeState.STAKE);
+		}
+	};
 	return (
 		<StakeModalContainer>
 			{stakeState !== StakeState.CONFIRMED &&
@@ -224,6 +228,24 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 											stakeState === StakeState.APPROVING
 										}
 									/>
+									{network !==
+										config.GNOSIS_NETWORK_NUMBER && (
+										<ToggleContainer>
+											<ToggleSwitch
+												isOn={permit}
+												disabled={
+													stakeState !==
+													StakeState.APPROVE
+												}
+												toggleOnOff={handlePermit}
+												label={`${
+													permit
+														? 'Permit'
+														: 'Approve'
+												} mode`}
+											/>
+										</ToggleContainer>
+									)}
 									<StyledOutlineButton
 										label={formatMessage({
 											id:
@@ -264,7 +286,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 								stakeState === StakeState.WRAPPING) && (
 								<>
 									<BriefContainer>
-										<H5 id={`${idPropertyPreffix}-staking`}>
+										<H5 id='givpower-staking'>
 											{formatMessage({
 												id: 'label.you_are_staking',
 											})}
@@ -315,9 +337,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 				<StakeInnerModalContainer>
 					<BriefContainer>
 						<H5>Successful!</H5>
-						<H5White id={`${idPropertyPreffix}-staked`}>
-							You have staked
-						</H5White>
+						<H5White id='givpower-staked'>You have staked</H5White>
 						<H5White weight={700}>
 							{formatWeiHelper(amount.toString())} GIV
 						</H5White>
