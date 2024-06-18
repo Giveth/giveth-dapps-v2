@@ -219,6 +219,7 @@ export interface EnvConfig {
 	ARBITRUM_CONFIG: NetworkConfig;
 	BASE_CONFIG: NetworkConfig;
 	CLASSIC_CONFIG: NetworkConfig;
+	POLYGON_ZKEVM_CONFIG: NetworkConfig;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;

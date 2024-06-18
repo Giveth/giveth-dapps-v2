@@ -7,6 +7,7 @@ import {
 	polygon,
 	arbitrumSepolia,
 	baseSepolia,
+	polygonZkEvmCardona,
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { type Chain } from 'viem';
@@ -27,6 +28,7 @@ import { IconUnknown } from '@/components/Icons/Unknown';
 import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconArbitrum from '@/components/Icons/Arbitrum';
+import { IconPolygonZkEvm } from '@/components/Icons/PolygonZkEvm';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -466,6 +468,14 @@ const config: EnvConfig = {
 		...SOLANA_NETWORK,
 		coingeckoChainName: 'solana',
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
+	},
+
+	POLYGON_ZKEVM_CONFIG: {
+		...polygonZkEvmCardona,
+		chainType: ChainType.EVM,
+		coingeckoChainName: 'polygon-pos',
+		chainLogo: (logoSize?: number) => <IconPolygonZkEvm size={logoSize} />,
+		gasPreference: {},
 	},
 };
 

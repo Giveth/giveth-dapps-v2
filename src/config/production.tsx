@@ -7,6 +7,7 @@ import {
 	polygon,
 	arbitrum,
 	base,
+	polygonZkEvm,
 } from '@wagmi/core/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import React from 'react';
@@ -28,6 +29,7 @@ import { IconClassic } from '@/components/Icons/Classic';
 import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconArbitrum from '@/components/Icons/Arbitrum';
+import { IconPolygonZkEvm } from '@/components/Icons/PolygonZkEvm';
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
@@ -557,6 +559,13 @@ const config: EnvConfig = {
 		...SOLANA_NETWORK,
 		coingeckoChainName: 'solana',
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
+	},
+	POLYGON_ZKEVM_CONFIG: {
+		...polygonZkEvm,
+		chainType: ChainType.EVM,
+		coingeckoChainName: 'polygon-pos',
+		chainLogo: (logoSize?: number) => <IconPolygonZkEvm size={logoSize} />,
+		gasPreference: {},
 	},
 };
 
