@@ -56,6 +56,7 @@ const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
 const ARBITRUM_NETWORK_NUMBER = 421614;
 const BASE_NETWORK_NUMBER = 84532;
+const POLYGON_ZKEVM_NETWORK_NUMBER = polygonZkEvmCardona.id;
 
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
@@ -105,6 +106,7 @@ const EVM_CHAINS = [
 	arbitrumSepolia,
 	baseSepolia,
 	classic,
+	polygonZkEvmCardona,
 ] as readonly [Chain, ...Chain[]];
 
 const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
@@ -129,6 +131,7 @@ const config: EnvConfig = {
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
+	POLYGON_ZKEVM_NETWORK_NUMBER: POLYGON_ZKEVM_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
