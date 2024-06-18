@@ -38,6 +38,7 @@ import {
 	type SimplePoolStakingConfig,
 } from '@/types/config';
 import ToggleSwitch from '@/components/ToggleSwitch';
+import { showToastError } from '@/lib/helpers';
 
 interface IStakeInnerModalProps {
 	poolStakingConfig: PoolStakingConfig;
@@ -98,24 +99,36 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 		}
 	}, [network]);
 
-	const onApprove = async () => {
-		if (amount === 0n) return;
+	const onApprovePermit = async () => {
+		if (!chainId || !address || amount === 0n) return;
 		setStakeState(StakeState.APPROVING);
-
-		const isApproved = await approveERC20tokenTransfer(
-			amount,
-			address!,
-			poolStakingConfig.network === config.GNOSIS_NETWORK_NUMBER
-				? poolStakingConfig.GARDEN_ADDRESS!
-				: LM_ADDRESS!,
-			POOL_ADDRESS,
-			chainId!,
-			isSafeEnv,
-		);
-
-		if (isApproved) {
+		try {
+			if (permit) {
+				const permitSignature = await permitTokens(
+					chainId,
+					address,
+					poolStakingConfig.POOL_ADDRESS,
+					poolStakingConfig.LM_ADDRESS,
+					amount,
+				);
+				if (!permitSignature)
+					throw new Error('Permit signature failed');
+			} else {
+				const isApproved = await approveERC20tokenTransfer(
+					amount,
+					address!,
+					poolStakingConfig.network === config.GNOSIS_NETWORK_NUMBER
+						? poolStakingConfig.GARDEN_ADDRESS!
+						: LM_ADDRESS!,
+					POOL_ADDRESS,
+					chainId!,
+					isSafeEnv,
+				);
+				if (!isApproved) throw new Error('Approval failed');
+			}
 			setStakeState(StakeState.WRAP);
-		} else {
+		} catch (error) {
+			showToastError(error);
 			setStakeState(StakeState.APPROVE);
 		}
 	};
@@ -155,18 +168,6 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 		if (!chainId || !address) return;
 		setStakeState(StakeState.WRAPPING);
 		try {
-			if (permit) {
-				const permitSignature = await permitTokens(
-					chainId,
-					address,
-					poolStakingConfig.POOL_ADDRESS,
-					poolStakingConfig.LM_ADDRESS,
-					amount,
-				);
-				if (!permitSignature)
-					throw new Error('Permit signature failed');
-			}
-
 			const txResponse = await stakeGIV(
 				amount,
 				poolStakingConfig.LM_ADDRESS,
@@ -193,10 +194,6 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 				},
 			});
 		}
-	};
-
-	const handlePermit = () => {
-		setPermit(!permit);
 	};
 
 	return (
@@ -231,7 +228,9 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 										<ToggleContainer>
 											<ToggleSwitch
 												isOn={permit}
-												toggleOnOff={handlePermit}
+												toggleOnOff={() => {
+													setPermit(!permit);
+												}}
 												label={`${
 													permit
 														? 'Permit'
@@ -252,7 +251,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 														? 'label.permitting'
 														: 'label.approve_pending',
 										})}
-										onClick={onApprove}
+										onClick={onApprovePermit}
 										disabled={
 											amount === 0n ||
 											maxAmount < amount ||
