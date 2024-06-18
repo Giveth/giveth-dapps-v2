@@ -710,6 +710,8 @@
 	"label.passport.no_active_round": "There is no active round!",
 	"label.passport.round_starts_on": "The next round starts on {data}",
 	"label.passport_score": "Passport Score",
+	"label.permit": "Permit",
+	"label.permitting": "Permitting",
 	"label.personal_info": "Personal info",
 	"label.personal_social_media": "Personal Social Media",
 	"label.per_month": "per Month",

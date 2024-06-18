@@ -710,6 +710,8 @@
 	"label.passport.no_active_round": "¡No hay una ronda activa!",
 	"label.passport.round_starts_on": "La ronda comienza el {date}",
 	"label.passport_score": "Puntuación del Pasaporte",
+	"label.permit": "Permitir",
+	"label.permitting": "Permitiendo",
 	"label.personal_info": "Información Personal",
 	"label.personal_social_media": "Redes Sociales personales",
 	"label.per_month": "por Mes",

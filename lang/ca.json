@@ -710,6 +710,8 @@
 	"label.passport.no_active_round": "No hi ha cap ronda activa!",
 	"label.passport.round_starts_on": "La pròxima ronda comença el {data}",
 	"label.passport_score": "Puntuació del Passport",
+	"label.permit": "Permetre",
+	"label.permitting": "Permetent",
 	"label.personal_info": "Informació personal",
 	"label.personal_social_media": "Xarxes socials personals",
 	"label.per_month": "per Mes",

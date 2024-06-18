@@ -94,7 +94,7 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 		// If the user isn't on the Gnosis network, they can permit the staking contract to spend their GIV
 		if (network !== config.GNOSIS_NETWORK_NUMBER) {
 			setPermit(true);
-			setStakeState(StakeState.WRAP);
+			setStakeState(StakeState.APPROVE);
 		}
 	}, [network]);
 
@@ -196,21 +196,19 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 	};
 
 	const handlePermit = () => {
-		if (permit) {
-			setPermit(false);
-			setStakeState(StakeState.APPROVE);
-		} else {
-			setPermit(true);
-			setStakeState(StakeState.STAKE);
-		}
+		setPermit(!permit);
 	};
+
 	return (
 		<StakeModalContainer>
 			{stakeState !== StakeState.CONFIRMED &&
 				stakeState !== StakeState.ERROR && (
 					<>
 						<StakeInnerModalContainer>
-							<StakeSteps stakeState={stakeState} />
+							<StakeSteps
+								stakeState={stakeState}
+								permit={permit}
+							/>
 							{(stakeState === StakeState.APPROVE ||
 								stakeState === StakeState.APPROVING) && (
 								<>
@@ -233,10 +231,6 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 										<ToggleContainer>
 											<ToggleSwitch
 												isOn={permit}
-												disabled={
-													stakeState !==
-													StakeState.APPROVE
-												}
 												toggleOnOff={handlePermit}
 												label={`${
 													permit
@@ -251,8 +245,12 @@ const StakeGIVInnerModal: FC<IStakeModalProps> = ({
 											id:
 												stakeState ===
 												StakeState.APPROVE
-													? 'label.approve'
-													: 'label.approve_pending',
+													? permit
+														? 'label.permit'
+														: 'label.approve'
+													: permit
+														? 'label.permitting'
+														: 'label.approve_pending',
 										})}
 										onClick={onApprove}
 										disabled={
