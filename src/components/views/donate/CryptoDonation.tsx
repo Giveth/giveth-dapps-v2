@@ -539,6 +539,7 @@ const CryptoDonation: FC = () => {
 			)}
 			{isConnected && (
 				<MainButton
+					id='Donate_Final'
 					label={formatMessage({ id: 'label.donate' })}
 					disabled={donationDisabled}
 					size='medium'

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createWeb3Modal } from '@web3modal/wagmi/react';
 import Head from 'next/head';
 import { IntlProvider } from 'react-intl';
@@ -106,7 +106,22 @@ function MyApp({ Component, pageProps }: AppProps) {
 	const { pathname, asPath, query } = router;
 	const locale = router ? router.locale : defaultLocale;
 	const apolloClient = useApollo(pageProps);
-	const isMaintenanceMode = process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true';
+
+	// read bypass value from local storage for skipping maintenance mode only if maintenance mode is enabled inside ENV file4
+	const [isBypassingMaintenance, setIsBypassingMaintenance] =
+		useState<boolean>(false);
+
+	useEffect(() => {
+		if (typeof window !== 'undefined') {
+			const bypass = localStorage.getItem('bypassMaintenance') === 'true';
+			setIsBypassingMaintenance(bypass);
+		}
+	}, []);
+
+	// enable maintenance mode only if it is enabled inside ENV file and user has not bypassed it
+	const isMaintenanceMode =
+		process.env.NEXT_PUBLIC_IS_MAINTENANCE === 'true' &&
+		!isBypassingMaintenance;
 
 	useEffect(() => {
 		const handleStart = (url: string) => {
