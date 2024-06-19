@@ -550,7 +550,7 @@ const config: EnvConfig = {
 	ZKEVM_CONFIG: {
 		...polygonZkEvm,
 		chainType: ChainType.EVM,
-		coingeckoChainName: 'zkevm',
+		coingeckoChainName: 'polygon-zkevm',
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},

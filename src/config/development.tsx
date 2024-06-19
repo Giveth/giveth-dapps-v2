@@ -461,7 +461,7 @@ const config: EnvConfig = {
 	ZKEVM_CONFIG: {
 		...polygonZkEvmCardona,
 		chainType: ChainType.EVM,
-		coingeckoChainName: 'zkevm',
+		coingeckoChainName: 'polygon-zkevm',
 		gasPreference: {
 			// Keep it empty for automatic configuration
 		},
@@ -485,7 +485,7 @@ const config: EnvConfig = {
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
 	},
 
-	POLYGON_ZKEVM_CONFIG: {
+	ZKEVM_CONFIG: {
 		...polygonZkEvmCardona,
 		chainType: ChainType.EVM,
 		coingeckoChainName: 'polygon-pos',
