@@ -50,8 +50,10 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 		maximumReward,
 	} = activeStartedRound || {};
 
+	const amountInUsd = (tokenPrice || 0) * (amountTyped || 0);
+
 	const esMatching = calculateEstimatedMatchingWithDonationAmount(
-		(tokenPrice || 0) * (amountTyped || 0),
+		amountInUsd,
 		projectDonationsSqrtRootSum,
 		allProjectsSum,
 		allocatedFundUSDPreferred ? allocatedFundUSD : matchingPool,
@@ -60,7 +62,7 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 
 	const isAboveMinValidUsdValue =
 		minimumValidUsdValue != null
-			? amountTyped && amountTyped >= minimumValidUsdValue
+			? amountInUsd >= minimumValidUsdValue
 			: true;
 
 	const borderColor = isAboveMinValidUsdValue
