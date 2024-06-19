@@ -7,6 +7,7 @@ import {
 	polygon,
 	arbitrumSepolia,
 	baseSepolia,
+	polygonZkEvmCardona,
 } from 'wagmi/chains';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { type Chain } from 'viem';
@@ -26,6 +27,7 @@ import { IconEthereum } from '@/components/Icons/Eth';
 import { IconUnknown } from '@/components/Icons/Unknown';
 import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
+import IconZKEVM from '@/components/Icons/ZKEVM';
 import IconArbitrum from '@/components/Icons/Arbitrum';
 
 const BASE_ROUTE =
@@ -54,6 +56,7 @@ const CELO_NETWORK_NUMBER = 44787;
 const CLASSIC_NETWORK_NUMBER = 63;
 const ARBITRUM_NETWORK_NUMBER = 421614;
 const BASE_NETWORK_NUMBER = 84532;
+const ZKEVM_NETWORK_NUMBER = 2442;
 
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
@@ -102,6 +105,7 @@ const EVM_CHAINS = [
 	celoAlfajores,
 	arbitrumSepolia,
 	baseSepolia,
+	polygonZkEvmCardona,
 	classic,
 ] as readonly [Chain, ...Chain[]];
 
@@ -127,6 +131,7 @@ const config: EnvConfig = {
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
 	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
+	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
 
 	RARIBLE_ADDRESS: 'https://testnet.rarible.com/',
 	MAINNET_CONFIG: {
@@ -449,6 +454,16 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 		chainLogo: (logoSize?: number) => <IconBase size={logoSize} />,
+	},
+
+	ZKEVM_CONFIG: {
+		...polygonZkEvmCardona,
+		chainType: ChainType.EVM,
+		coingeckoChainName: 'zkevm',
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
 	},
 
 	CLASSIC_CONFIG: {
