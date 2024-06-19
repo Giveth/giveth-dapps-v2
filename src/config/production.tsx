@@ -577,7 +577,7 @@ const config: EnvConfig = {
 		...polygonZkEvm,
 		chainType: ChainType.EVM,
 		coingeckoChainName: 'polygon-pos',
-		chainLogo: (logoSize?: number) => <IconPolygonZkEvm size={logoSize} />,
+		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
 		gasPreference: {},
 	},
 };
