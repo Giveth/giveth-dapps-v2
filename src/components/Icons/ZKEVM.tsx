@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import Image from 'next/image';
 import { ICurrencyIconProps } from './type';
 
-const IconBase: FC<ICurrencyIconProps> = ({ size = 16 }) => {
+const IconZKEVM: FC<ICurrencyIconProps> = ({ size = 16 }) => {
 	return (
 		<Image
 			src={'/images/currencies/zkevm/16.svg'}
@@ -14,4 +14,4 @@ const IconBase: FC<ICurrencyIconProps> = ({ size = 16 }) => {
 	);
 };
 
-export default IconBase;
+export default IconZKEVM;

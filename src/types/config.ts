@@ -210,9 +210,8 @@ export interface EnvConfig {
 	CELO_NETWORK_NUMBER: number;
 	ARBITRUM_NETWORK_NUMBER: number;
 	BASE_NETWORK_NUMBER: number;
-	ZKEVM_NETWORK_NUMBER: number;
 	CLASSIC_NETWORK_NUMBER: number;
-	POLYGON_ZKEVM_NETWORK_NUMBER: number;
+	ZKEVM_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	GNOSIS_CONFIG: GnosisNetworkConfig;
 	POLYGON_CONFIG: NetworkConfig;
@@ -222,7 +221,6 @@ export interface EnvConfig {
 	BASE_CONFIG: NetworkConfig;
 	ZKEVM_CONFIG: NetworkConfig;
 	CLASSIC_CONFIG: NetworkConfig;
-	POLYGON_ZKEVM_CONFIG: NetworkConfig;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;

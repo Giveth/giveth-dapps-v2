@@ -103,7 +103,6 @@ const config: EnvConfig = {
 	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
 	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
-	POLYGON_ZKEVM_NETWORK_NUMBER: polygonZkEvm.id,
 
 	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
@@ -572,13 +571,6 @@ const config: EnvConfig = {
 		...SOLANA_NETWORK,
 		coingeckoChainName: 'solana',
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
-	},
-	POLYGON_ZKEVM_CONFIG: {
-		...polygonZkEvm,
-		chainType: ChainType.EVM,
-		coingeckoChainName: 'polygon-pos',
-		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
-		gasPreference: {},
 	},
 };
 

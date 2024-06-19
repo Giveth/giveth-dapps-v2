@@ -5,7 +5,7 @@ import { ICurrencyIconProps } from './type';
 export const IconPolygonZkEvm: FC<ICurrencyIconProps> = ({ size = 16 }) => {
 	return (
 		<Image
-			src='/images/currencies/polygon-zkevm/16.svg'
+			src='/images/currencies/zkevm/16.svg'
 			alt='polygon'
 			width={size}
 			height={size}

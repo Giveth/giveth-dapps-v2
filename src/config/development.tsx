@@ -29,7 +29,6 @@ import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconZKEVM from '@/components/Icons/ZKEVM';
 import IconArbitrum from '@/components/Icons/Arbitrum';
-import { IconPolygonZkEvm } from '@/components/Icons/PolygonZkEvm';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -106,7 +105,6 @@ const EVM_CHAINS = [
 	celoAlfajores,
 	arbitrumSepolia,
 	baseSepolia,
-	polygonZkEvmCardona,
 	classic,
 	polygonZkEvmCardona,
 ] as readonly [Chain, ...Chain[]];
@@ -483,14 +481,6 @@ const config: EnvConfig = {
 		...SOLANA_NETWORK,
 		coingeckoChainName: 'solana',
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
-	},
-
-	ZKEVM_CONFIG: {
-		...polygonZkEvmCardona,
-		chainType: ChainType.EVM,
-		coingeckoChainName: 'polygon-pos',
-		chainLogo: (logoSize?: number) => <IconPolygonZkEvm size={logoSize} />,
-		gasPreference: {},
 	},
 };
 
