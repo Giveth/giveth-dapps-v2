@@ -211,6 +211,7 @@ export interface EnvConfig {
 	ARBITRUM_NETWORK_NUMBER: number;
 	BASE_NETWORK_NUMBER: number;
 	CLASSIC_NETWORK_NUMBER: number;
+	POLYGON_ZKEVM_NETWORK_NUMBER: number;
 	MAINNET_CONFIG: MainnetNetworkConfig;
 	GNOSIS_CONFIG: GnosisNetworkConfig;
 	POLYGON_CONFIG: NetworkConfig;
@@ -219,6 +220,7 @@ export interface EnvConfig {
 	ARBITRUM_CONFIG: NetworkConfig;
 	BASE_CONFIG: NetworkConfig;
 	CLASSIC_CONFIG: NetworkConfig;
+	POLYGON_ZKEVM_CONFIG: NetworkConfig;
 	BACKEND_LINK: string;
 	FRONTEND_LINK: string;
 	MICROSERVICES: MicroservicesConfig;
