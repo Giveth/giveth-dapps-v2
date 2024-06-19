@@ -29,6 +29,7 @@ import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconZKEVM from '@/components/Icons/ZKEVM';
 import IconArbitrum from '@/components/Icons/Arbitrum';
+import { IconPolygonZkEvm } from '@/components/Icons/PolygonZkEvm';
 
 const BASE_ROUTE =
 	process.env.NEXT_PUBLIC_BASE_ROUTE ||
@@ -107,6 +108,7 @@ const EVM_CHAINS = [
 	baseSepolia,
 	polygonZkEvmCardona,
 	classic,
+	polygonZkEvmCardona,
 ] as readonly [Chain, ...Chain[]];
 
 const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];
@@ -391,7 +393,7 @@ const config: EnvConfig = {
 			'0x503055e1f8b99c60a51c479a60b233976617bc7a',
 		superFluidSubgraph:
 			process.env.NEXT_PUBLIC_SUBGRAPH_SUPER_FLUID ||
-			'https://optimism-sepolia.subgraph.x.superfluid.dev/?source=giveth',
+			'https://subgraph-endpoints.superfluid.dev/optimism-sepolia/protocol-v1',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
@@ -481,6 +483,14 @@ const config: EnvConfig = {
 		...SOLANA_NETWORK,
 		coingeckoChainName: 'solana',
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
+	},
+
+	POLYGON_ZKEVM_CONFIG: {
+		...polygonZkEvmCardona,
+		chainType: ChainType.EVM,
+		coingeckoChainName: 'polygon-pos',
+		chainLogo: (logoSize?: number) => <IconPolygonZkEvm size={logoSize} />,
+		gasPreference: {},
 	},
 };
 

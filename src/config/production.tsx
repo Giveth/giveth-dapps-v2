@@ -103,6 +103,7 @@ const config: EnvConfig = {
 	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
 	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
+	POLYGON_ZKEVM_NETWORK_NUMBER: polygonZkEvm.id,
 
 	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
@@ -435,7 +436,7 @@ const config: EnvConfig = {
 			'0x5430757bc19c87ec562e4660e56af6cac324b50a',
 		superFluidSubgraph:
 			process.env.NEXT_PUBLIC_SUBGRAPH_SUPER_FLUID ||
-			'https://api.thegraph.com/subgraphs/name/superfluid-finance/protocol-v1-optimism-mainnet?source=giveth',
+			'https://subgraph-endpoints.superfluid.dev/optimism-mainnet/protocol-v1',
 		SUPER_FLUID_TOKENS: [
 			{
 				underlyingToken: {
@@ -571,6 +572,13 @@ const config: EnvConfig = {
 		...SOLANA_NETWORK,
 		coingeckoChainName: 'solana',
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
+	},
+	POLYGON_ZKEVM_CONFIG: {
+		...polygonZkEvm,
+		chainType: ChainType.EVM,
+		coingeckoChainName: 'polygon-pos',
+		chainLogo: (logoSize?: number) => <IconPolygonZkEvm size={logoSize} />,
+		gasPreference: {},
 	},
 };
 
