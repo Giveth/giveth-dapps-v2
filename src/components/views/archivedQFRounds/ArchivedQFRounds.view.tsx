@@ -25,6 +25,11 @@ enum EOrderDirection {
 	DESC = 'DESC',
 }
 
+interface HeaderWrapperProps {
+	$gap: string;
+	$justifyContent: string;
+}
+
 const ITEMS_PER_PAGE = 10;
 
 export const ArchivedQFRoundsView = () => {
@@ -105,7 +110,7 @@ export const ArchivedQFRoundsView = () => {
 		<Wrapper>
 			<DefaultQFBanner />
 			<Container>
-				<HeaderWrapper gap='24px' $justifyContent='space-between'>
+				<HeaderWrapper $gap='24px' $justifyContent='space-between'>
 					<QFHeader />
 					<ArchivedQFRoundsSort />
 				</HeaderWrapper>
@@ -133,8 +138,9 @@ const Wrapper = styled(Flex)`
 	gap: 40px;
 `;
 
-const HeaderWrapper = styled(Flex)`
+const HeaderWrapper = styled(Flex)<HeaderWrapperProps>`
 	margin-bottom: 24px;
+	gap: ${props => props.$gap};
 `;
 
 const LoadMoreButton = styled(OutlineButton)`
