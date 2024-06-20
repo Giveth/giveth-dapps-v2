@@ -475,6 +475,7 @@ export interface IQFRound {
 	allocatedFundUSDPreferred: boolean;
 	allocatedTokenSymbol: string;
 	allocatedTokenChainId: number;
+	minimumValidUsdValue?: number;
 }
 
 export interface IArchivedQFRound extends IQFRound {

@@ -146,6 +146,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 			slug
 			descriptionSummary
 			verified
+			totalDonations
 			sumDonationValueUsdForActiveQfRound
 			countUniqueDonorsForActiveQfRound
 			adminUser {
@@ -183,6 +184,7 @@ export const FETCH_PROJECT_BY_SLUG_DONATION = gql`
 				allocatedTokenSymbol
 				allocatedFundUSDPreferred
 				allocatedFundUSD
+				minimumValidUsdValue
 			}
 			anchorContracts {
 				address
