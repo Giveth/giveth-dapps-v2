@@ -19,7 +19,7 @@ const EVM_NETWORKS_CONFIG = {
 	[envConfig.ARBITRUM_NETWORK_NUMBER]: envConfig.ARBITRUM_CONFIG,
 	[envConfig.BASE_NETWORK_NUMBER]: envConfig.BASE_CONFIG,
 	[envConfig.CLASSIC_NETWORK_NUMBER]: envConfig.CLASSIC_CONFIG,
-	[envConfig.POLYGON_ZKEVM_NETWORK_NUMBER]: envConfig.POLYGON_ZKEVM_CONFIG,
+	[envConfig.ZKEVM_NETWORK_NUMBER]: envConfig.ZKEVM_CONFIG,
 };
 
 const NON_EVM_NETWORKS_CONFIG: { [key: string]: NonEVMNetworkConfig } = {};

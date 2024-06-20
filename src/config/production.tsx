@@ -29,7 +29,7 @@ import { IconClassic } from '@/components/Icons/Classic';
 import IconBase from '@/components/Icons/Base';
 import IconSolana from '@/components/Icons/Solana';
 import IconArbitrum from '@/components/Icons/Arbitrum';
-import { IconPolygonZkEvm } from '@/components/Icons/PolygonZkEvm';
+import IconZKEVM from '@/components/Icons/ZKEVM';
 
 const GNOSIS_GIV_TOKEN_ADDRESS = '0x4f4F9b8D5B4d0Dc10506e5551B0513B61fD59e75';
 const OPTIMISM_GIV_TOKEN_ADDRESS = '0x528CDc92eAB044E1E39FE43B9514bfdAB4412B98';
@@ -42,6 +42,7 @@ const OPTIMISM_NETWORK_NUMBER = 10;
 const CELO_NETWORK_NUMBER = 42220;
 const ARBITRUM_NETWORK_NUMBER = 42161;
 const BASE_NETWORK_NUMBER = 8453;
+const ZKEVM_NETWORK_NUMBER = 1101;
 const CLASSIC_NETWORK_NUMBER = 61;
 const SOLANA_NETWORK: NonEVMChain = {
 	id: 0,
@@ -100,8 +101,8 @@ const config: EnvConfig = {
 	CELO_NETWORK_NUMBER: CELO_NETWORK_NUMBER,
 	ARBITRUM_NETWORK_NUMBER: ARBITRUM_NETWORK_NUMBER,
 	BASE_NETWORK_NUMBER: BASE_NETWORK_NUMBER,
+	ZKEVM_NETWORK_NUMBER: ZKEVM_NETWORK_NUMBER,
 	CLASSIC_NETWORK_NUMBER: CLASSIC_NETWORK_NUMBER,
-	POLYGON_ZKEVM_NETWORK_NUMBER: polygonZkEvm.id,
 
 	RARIBLE_ADDRESS: 'https://rarible.com/',
 	MAINNET_CONFIG: {
@@ -544,6 +545,16 @@ const config: EnvConfig = {
 		coingeckoChainName: 'base',
 		chainLogo: (logoSize = 24) => <IconBase size={logoSize} />,
 	},
+
+	ZKEVM_CONFIG: {
+		...polygonZkEvm,
+		chainType: ChainType.EVM,
+		coingeckoChainName: 'polygon-zkevm',
+		gasPreference: {
+			// Keep it empty for automatic configuration
+		},
+		chainLogo: (logoSize?: number) => <IconZKEVM size={logoSize} />,
+	},
 	CLASSIC_CONFIG: {
 		...classic,
 		chainType: ChainType.EVM,
@@ -560,13 +571,6 @@ const config: EnvConfig = {
 		...SOLANA_NETWORK,
 		coingeckoChainName: 'solana',
 		chainLogo: (logoSize?: number) => <IconSolana size={logoSize} />,
-	},
-	POLYGON_ZKEVM_CONFIG: {
-		...polygonZkEvm,
-		chainType: ChainType.EVM,
-		coingeckoChainName: 'polygon-pos',
-		chainLogo: (logoSize?: number) => <IconPolygonZkEvm size={logoSize} />,
-		gasPreference: {},
 	},
 };
 

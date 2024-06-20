@@ -36,7 +36,7 @@ export interface ISelected {
 const _options = [
 	{ network: config.GNOSIS_CONFIG, active: true },
 	{ network: config.OPTIMISM_CONFIG, active: true },
-	{ network: config.POLYGON_ZKEVM_CONFIG, active: false },
+	{ network: config.ZKEVM_CONFIG, active: true },
 ];
 
 const options = _options.map(o => ({
