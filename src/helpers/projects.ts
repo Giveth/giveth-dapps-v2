@@ -91,12 +91,14 @@ export function checkAllVerificationsSteps(
 	verificationData: IProjectVerification | undefined,
 ) {
 	const checkedArray = menuList.map((item, index) => {
-		// skip last step
-		if (index !== 8) {
+		// skip "social profiles" and last step "done"
+		if (index !== 8 && index !== 2) {
 			return checkVerificationStep(item.slug, verificationData);
 		}
 		return true;
 	});
+
+	console.log({ checkedArray });
 
 	// Check if all elements are true
 	return checkedArray.every(Boolean);

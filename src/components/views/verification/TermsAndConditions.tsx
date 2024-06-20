@@ -27,7 +27,6 @@ export default function TermsAndConditions() {
 		useVerificationData();
 
 	console.log({ verificationData });
-
 	const [accepted, setAccepted] = useState(
 		verificationData?.isTermAndConditionsAccepted || false,
 	);
@@ -39,16 +38,21 @@ export default function TermsAndConditions() {
 				? {
 						...prevState,
 						status: EVerificationStatus.DRAFT,
+						isTermAndConditionsAccepted: true,
 					}
 				: undefined,
 		);
 	};
 
-	const handleAccepted = () => {
-		setAccepted(prevState => !prevState);
-		updateVerificationState();
+	// Handle when checkbox is confirmed
+	const handleAccepted = (newCheckedState: boolean) => {
+		setAccepted(newCheckedState);
+		if (newCheckedState) {
+			handleNext();
+		}
 	};
 
+	// Save term and condition accept data to database
 	const handleNext = async () => {
 		try {
 			setLoading(true);
@@ -58,7 +62,7 @@ export default function TermsAndConditions() {
 					projectVerificationUpdateInput: {
 						projectVerificationId: Number(verificationData?.id),
 						step: EVerificationSteps.TERM_AND_CONDITION,
-						isTermAndConditionsAccepted: accepted,
+						isTermAndConditionsAccepted: true,
 					},
 				},
 			});
@@ -70,24 +74,23 @@ export default function TermsAndConditions() {
 		}
 	};
 
+	// Handle when user click on finish button
 	const handleFinish = () => {
-		if (accepted) {
-			handleNext();
-			// setStep(8);
+		if (accepted && allChecked) {
+			setStep(8);
 		}
 	};
 
-	/**
-	 * Check have user submited all data needed for verification
-	 */
+	// Check have user submited all data needed for verification
 	useEffect(() => {
+		console.log('effect');
 		// Check if all elements are true
-		const allChecked = checkAllVerificationsSteps(
+		const allCheckedSteps = checkAllVerificationsSteps(
 			menuList,
 			verificationData,
 		);
-		setAllChecked(allChecked);
-	}, [verificationData]);
+		setAllChecked(allCheckedSteps);
+	}, [verificationData, accepted]);
 
 	return (
 		<>

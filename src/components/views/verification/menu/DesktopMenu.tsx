@@ -11,8 +11,7 @@ import { findStepByName } from '@/lib/verification';
 import { checkVerificationStep } from '@/helpers/projects';
 
 const DesktopMenu = () => {
-	const { step, setStep, verificationData } = useVerificationData();
-	console.log({ step });
+	const { step, setStep, verificationData, isDraft } = useVerificationData();
 	console.log({ verificationData });
 	const { project, lastStep } = verificationData || {};
 	const { title } = project || {};
@@ -28,7 +27,7 @@ const DesktopMenu = () => {
 			<StepsProgressBar />
 			{menuList.map((item, index) => {
 				let isClickable = index != 8; // Do not enable click on last step "Done"
-				isClickable = lastStep == undefined ? false : isClickable; // user first time came to verification steps
+				isClickable = !isDraft ? false : isClickable; // user first time came to verification steps
 				const IconCheck = checkVerificationStep(
 					item.slug,
 					verificationData,
