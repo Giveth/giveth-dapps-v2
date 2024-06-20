@@ -16,6 +16,7 @@ import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { ProjectsContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
 import ProjectItem from './ProjectItem';
+import { ProjectProvider } from '@/context/project.context';
 
 const itemPerPage = 10;
 
@@ -114,18 +115,21 @@ const ProfileProjectsTab: FC<IUserProfileView> = () => {
 				) : myAccount ? (
 					<Flex $flexDirection='column' gap='18px'>
 						{projects.map(project => (
-							<ProjectItem
-								key={project.id}
-								project={project}
-								setProjects={setProjects}
-							/>
+							<ProjectProvider key={project.id} project={project}>
+								<ProjectItem
+									project={project}
+									setProjects={setProjects}
+								/>
+							</ProjectProvider>
 						))}
 					</Flex>
 				) : (
 					<Row>
 						{projects.map(project => (
 							<Col key={project.id} md={6} lg={4}>
-								<ProjectCard project={project} />
+								<ProjectProvider project={project}>
+									<ProjectCard project={project} />
+								</ProjectProvider>
 							</Col>
 						))}
 					</Row>
