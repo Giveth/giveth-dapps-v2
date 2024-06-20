@@ -1,4 +1,4 @@
-import { B, Lead, Container, Row, H2, Flex } from '@giveth/ui-design-system';
+import { B, Lead, Container, Row, Flex } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -88,9 +88,9 @@ export const ActiveQFProjectsBanner = () => {
 						<Title weight={700}>
 							{activeQFRound ? activeQFRound.name : null}
 						</Title>
-						<H2>
-							{formatMessage({ id: 'label.quadratic_funding' })}
-						</H2>
+						{/*<H2>*/}
+						{/*	{formatMessage({ id: 'label.quadratic_funding' })}*/}
+						{/*</H2>*/}
 						{(state === ERoundStatus.NOT_STARTED ||
 							state === ERoundStatus.RUNNING) && (
 							<Desc>
@@ -115,17 +115,17 @@ export const ActiveQFProjectsBanner = () => {
 						md={6}
 						style={{ alignItems: 'center' }}
 					>
-						<Flex>
-							{topSponsors.map(s => (
-								<SmallerSponsor
-									key={s.title}
-									src={s.image}
-									alt={s.title}
-									width={120}
-									height={120}
-								/>
-							))}
-						</Flex>
+						{/*<Flex>*/}
+						{/*	{topSponsors.map(s => (*/}
+						{/*		<SmallerSponsor*/}
+						{/*			key={s.title}*/}
+						{/*			src={s.image}*/}
+						{/*			alt={s.title}*/}
+						{/*			width={120}*/}
+						{/*			height={120}*/}
+						{/*		/>*/}
+						{/*	))}*/}
+						{/*</Flex>*/}
 						<Flex>
 							{sponsors.map(s => (
 								<Sponsor
@@ -157,20 +157,16 @@ export const ActiveQFProjectsBanner = () => {
 
 const sponsors = [
 	{
-		title: '@PublicNouns',
-		image: '/images/banners/qf-round/sponsor1.svg',
+		title: '@climate_program',
+		image: '/images/banners/qf-round/climate_program.svg',
 	},
 	{
-		title: '@OctantApp',
-		image: '/images/banners/qf-round/sponsor2.svg',
+		title: '@celo',
+		image: '/images/banners/qf-round/celo.svg',
 	},
 	{
-		title: '@GMX_IO',
-		image: '/images/banners/qf-round/sponsor4.svg',
-	},
-	{
-		title: '@Gains_Network_io',
-		image: '/images/banners/qf-round/sponsor5.svg',
+		title: '@realMaskNetwork',
+		image: '/images/banners/qf-round/realMaskNetwork.svg',
 	},
 ];
 
@@ -195,23 +191,11 @@ const topSponsors = [
 
 const bottomSponsors = [
 	{
-		title: '@PremiaFinance',
-		image: '/images/banners/qf-round/sponsor9.svg',
+		title: '@Glodollar',
+		image: '/images/banners/qf-round/Glodollar.svg',
 	},
 	{
-		title: '@MuxProtocol',
-		image: '/images/banners/qf-round/sponsor10.svg',
-	},
-	{
-		title: '@_WOOFI',
-		image: '/images/banners/qf-round/sponsor11.svg',
-	},
-	{
-		title: '@Rage_Trade',
-		image: '/images/banners/qf-round/sponsor12.svg',
-	},
-	{
-		title: '@BreederDodo',
-		image: '/images/banners/qf-round/sponsor13.svg',
+		title: '@OctantApp',
+		image: '/images/banners/qf-round/OctantApp.svg',
 	},
 ];
