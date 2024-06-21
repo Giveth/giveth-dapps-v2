@@ -1253,7 +1253,7 @@
 	"page.about_us.desc.one": "Giveth és una comunitat centrada en la construcció del Futur de les Donacions utilitzant la tecnologia blockchain. La nostra intenció és donar suport i recompensar la finançament de béns públics creant accés obert, transparent i gratuït a les oportunitats de finançament innovadores en l'ecosistema d'Ethereum.",
 	"page.about_us.desc.two": "Giveth està construint una cultura de donació que capacita i recompensa als qui donen, als projectes, a la societat i al món. El nostre objectiu és inspirar la nostra comunitat a participar en un ecosistema de suport col·lectiu, d'abundància i de creació de valor. Comproveu el nostre",
 	"page.donate.bank_fees": "Comissions Bancàries",
-	"page.donate.matching_toast.bottom_valid": "Els fons d'emparellament s'enviaran al projecte seleccionat després que acabi la ronda.",
+	"page.donate.matching_toast.bottom_valid": "Els fons de finançament es destinaran al projecte seleccionat després que acabi la ronda. Dona a més projectes per rebre més finançament!",
 	"page.donate.matching_toast.bottom_invalid_p1": "Només donacions de més de",
 	"page.donate.matching_toast.bottom_invalid_p2": "són elegibles per a l'aparellament.",
 	"page.donate.matching_toast.upper_valid": "Emparellament estimat",

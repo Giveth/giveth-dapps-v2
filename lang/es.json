@@ -1253,7 +1253,7 @@
 	"page.about_us.desc.one": "Giveth es una comunidad enfocada en construir el Futuro de las Donaciones utilizando la tecnología blockchain. Nuestra intención es apoyar y recompensar la financiación de bienes públicos creando un acceso abierto, transparente y gratuito a las oportunidades de financiación innovadoras en el ecosistema de Ethereum.",
 	"page.about_us.desc.two": "Giveth está construyendo una cultura de donación que empodera y recompensa a los que donan, a los proyectos, a la sociedad y al mundo. Nuestro objetivo es inspirar a nuestra comunidad a participar en un ecosistema de apoyo colectivo, de abundancia y creación de valor. Echa un vistazo a nuestro",
 	"page.donate.bank_fees": "Comisiones Bancarias",
-	"page.donate.matching_toast.bottom_valid": "Los fondos complementarios se enviarán al proyecto seleccionado después de que termine la ronda.",
+	"page.donate.matching_toast.bottom_valid": "Los fondos de emparejamiento se enviarán al proyecto seleccionado después de que termine la ronda. ¡Dona a más proyectos para recibir un mayor emparejamiento!",
 	"page.donate.matching_toast.bottom_invalid_p1": "Sólo las donaciones superiores a",
 	"page.donate.matching_toast.bottom_invalid_p2": "son subvencionables.",
 	"page.donate.matching_toast.upper_valid": "Estimado del monto complementado",
