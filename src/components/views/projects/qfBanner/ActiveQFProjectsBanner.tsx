@@ -1,4 +1,4 @@
-import { B, Lead, Container, Row, Flex } from '@giveth/ui-design-system';
+import { B, Lead, Container, Row } from '@giveth/ui-design-system';
 import { useIntl } from 'react-intl';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -11,6 +11,8 @@ import {
 	Title,
 	Sponsor,
 	SmallerSponsor,
+	BottomSponsors,
+	MiddleSponsors,
 } from './common';
 import { useAppSelector } from '@/features/hooks';
 
@@ -126,7 +128,7 @@ export const ActiveQFProjectsBanner = () => {
 						{/*		/>*/}
 						{/*	))}*/}
 						{/*</Flex>*/}
-						<Flex>
+						<MiddleSponsors>
 							{sponsors.map(s => (
 								<Sponsor
 									key={s.title}
@@ -136,8 +138,8 @@ export const ActiveQFProjectsBanner = () => {
 									height={188}
 								/>
 							))}
-						</Flex>
-						<Flex>
+						</MiddleSponsors>
+						<BottomSponsors>
 							{bottomSponsors.map(s => (
 								<SmallerSponsor
 									key={s.title}
@@ -147,7 +149,7 @@ export const ActiveQFProjectsBanner = () => {
 									height={120}
 								/>
 							))}
-						</Flex>
+						</BottomSponsors>
 					</ActiveStyledCol>
 				</Row>
 			</Container>
@@ -197,5 +199,9 @@ const bottomSponsors = [
 	{
 		title: '@OctantApp',
 		image: '/images/banners/qf-round/OctantApp.svg',
+	},
+	{
+		title: '@RegenToken',
+		image: '/images/banners/qf-round/regenToken.svg',
 	},
 ];
