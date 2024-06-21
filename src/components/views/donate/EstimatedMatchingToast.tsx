@@ -86,7 +86,7 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 	) => {
 		return (
 			formatDonation(amount, currency, locale, true) +
-			(currency ? '' : ' ' + allocatedTokenSymbol)
+			(currency ? '' : ` ${allocatedTokenSymbol}`)
 		);
 	};
 

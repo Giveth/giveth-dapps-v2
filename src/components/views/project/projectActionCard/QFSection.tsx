@@ -85,7 +85,7 @@ const QFSection: FC<IQFSectionProps> = ({ projectData }) => {
 	) => {
 		return (
 			formatDonation(amount, currency, locale, true) +
-			(currency ? '' : ' ' + allocatedTokenSymbol)
+			(currency ? '' : ` ${allocatedTokenSymbol}`)
 		);
 	};
 
