@@ -111,7 +111,7 @@
 	"label.your_transactions_have_been_submitted": "Tus transacciones han sido enviadas",
 	"label.you_can_view_them_on_a_blockchain_explorer_here": "Puedes verlas en un explorador de blockchain aquí:",
 	"other_desc": " ",
-	"page.donate.matching_toast.bottom_valid": "Los fondos de igualación se enviarán al proyecto seleccionado después de que termine la ronda.",
+	"page.donate.matching_toast.bottom_valid": "Los fondos de emparejamiento se enviarán al proyecto seleccionado después de que termine la ronda. ¡Dona a más proyectos para recibir un mayor emparejamiento!",
 	"page.donate.matching_toast.upper_valid": "Igualación estimada",
 	"page.donate.passport_toast.description.eligible": "¡Tu donación es elegible para ser igualada! Después de la",
 	"page.donate.passport_toast.description.eligible_2": ", todas las donaciones serán revisadas para la protección contra fraudes y los fondos de igualación serán enviados a los proyectos. Mantente atento a las notificaciones :)",
