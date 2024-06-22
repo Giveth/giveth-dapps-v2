@@ -26,6 +26,7 @@ import { useIntl } from 'react-intl';
 import { useWeb3Modal } from '@web3modal/wagmi/react';
 import { Modal } from './Modal';
 import GiftIcon from '../../../public/images/icons/gift.svg';
+import Warpcast from '../../../public/images/icons/social-warpcast.svg';
 import { slugToProjectView } from '@/lib/routeCreators';
 import { IModal } from '@/types/common';
 import CopyLink from '@/components/CopyLink';
@@ -270,6 +271,20 @@ const ShareRewardedModal: FC<IShareRewardedModal> = props => {
 										})}
 									</SocialButtonContainer>
 								</FacebookShareButton>
+								<Link
+									href={`https://warpcast.com/~/compose?embeds[]=${url}&text=${shareTitleTwitter}`}
+									target='_blank'
+								>
+									<Image
+										src={Warpcast}
+										alt='warpcast icon'
+										width={25}
+										height={25}
+									/>
+									{formatMessage({
+										id: 'label.share_on_farcaster',
+									})}
+								</Link>
 							</SocialDiv>
 						</div>
 					)}
