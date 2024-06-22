@@ -15,7 +15,6 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
 import router from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
-// import { captureException } from '@sentry/nextjs';
 import { EVerificationStatus, IProject } from '@/apollo/types/types';
 import { EProjectStatus } from '@/apollo/types/gqlEnums';
 import { Dropdown, IOption } from '@/components/Dropdown';
@@ -28,8 +27,6 @@ import { capitalizeAllWords } from '@/lib/helpers';
 import config from '@/configuration';
 import { findAnchorContractAddress } from '@/helpers/superfluid';
 import DeactivateProjectModal from '@/components/modals/deactivateProject/DeactivateProjectIndex';
-// import { client } from '@/apollo/apolloClient';
-// import { ACTIVATE_PROJECT } from '@/apollo/gql/gqlProjects';
 import { useProjectContext } from '@/context/project.context';
 
 interface IProjectActions {

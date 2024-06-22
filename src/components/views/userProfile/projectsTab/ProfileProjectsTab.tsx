@@ -15,8 +15,8 @@ import ProjectCard from '@/components/project-card/ProjectCard';
 import { UserContributeTitle, UserProfileTab } from '../common.sc';
 import { ProjectsContributeCard } from '@/components/ContributeCard';
 import { useProfileContext } from '@/context/profile.context';
-import ProjectItem from './ProjectItem';
 import { ProjectProvider } from '@/context/project.context';
+import ProjectItem from './ProjectItem';
 
 const itemPerPage = 10;
 
