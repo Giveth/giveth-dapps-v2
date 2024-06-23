@@ -10,7 +10,7 @@ import {
 	semanticColors,
 } from '@giveth/ui-design-system';
 import styled from 'styled-components';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, type FC, SetStateAction, useState } from 'react';
 import { useIntl } from 'react-intl';
 import router from 'next/router';
 import { useAccount, useSwitchChain } from 'wagmi';
@@ -27,23 +27,23 @@ interface IProjectActions {
 	setSelectedProject: Dispatch<SetStateAction<IProject | undefined>>;
 	setShowAddressModal: Dispatch<SetStateAction<boolean>>;
 	setShowClaimModal?: Dispatch<SetStateAction<boolean>>;
+	setShowDeleteModal: Dispatch<SetStateAction<boolean>>;
 	className?: string;
 }
 
-const ProjectActions = (props: IProjectActions) => {
-	const {
-		project,
-		setSelectedProject,
-		setShowAddressModal,
-		setShowClaimModal,
-		className,
-	} = props;
-	const status = project.status.name;
-	const isCancelled = status === EProjectStatus.CANCEL;
-
+const ProjectActions: FC<IProjectActions> = ({
+	project,
+	setSelectedProject,
+	setShowAddressModal,
+	setShowClaimModal,
+	setShowDeleteModal,
+	className,
+}) => {
+	const [isHover, setIsHover] = useState(false);
 	const { formatMessage } = useIntl();
 
-	const [isHover, setIsHover] = useState(false);
+	const status = project.status.name;
+	const isCancelled = status === EProjectStatus.CANCEL;
 
 	const anchorContractAddress = findAnchorContractAddress(
 		project.anchorContracts,
@@ -82,34 +82,37 @@ const ProjectActions = (props: IProjectActions) => {
 		},
 	];
 
-	const recurringDonationOption: IOption = {
-		label: formatMessage({
-			id: 'label.claim_recurring_donation',
-		}),
-		icon: <IconArrowDownCircle16 />,
-		cb: () => {
-			if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
-				switchChain({
-					chainId: config.OPTIMISM_NETWORK_NUMBER,
-				});
-			} else {
-				setSelectedProject(project);
-				setShowClaimModal && setShowClaimModal(true);
-			}
-		},
-	};
-
-	const deleteProjectOption: IOption = {
-		label: formatMessage({
-			id: 'label.delete_project',
-		}),
-		icon: <IconTrash16 />,
-		color: semanticColors.punch[500],
-		cb: () => {},
-	};
-
-	if (anchorContractAddress) options.push(recurringDonationOption);
+	if (anchorContractAddress) {
+		const recurringDonationOption: IOption = {
+			label: formatMessage({
+				id: 'label.claim_recurring_donation',
+			}),
+			icon: <IconArrowDownCircle16 />,
+			cb: () => {
+				if (chainId !== config.OPTIMISM_NETWORK_NUMBER) {
+					switchChain({
+						chainId: config.OPTIMISM_NETWORK_NUMBER,
+					});
+				} else {
+					setSelectedProject(project);
+					setShowClaimModal && setShowClaimModal(true);
+				}
+			},
+		};
+		options.push(recurringDonationOption);
+	}
 	if (project.status.name === EProjectStatus.DRAFT) {
+		const deleteProjectOption: IOption = {
+			label: formatMessage({
+				id: 'label.delete_project',
+			}),
+			icon: <IconTrash16 />,
+			color: semanticColors.punch[500],
+			cb: () => {
+				setSelectedProject(project);
+				setShowDeleteModal(true);
+			},
+		};
 		options.push({ type: EOptionType.SEPARATOR });
 		options.push(deleteProjectOption);
 	}
