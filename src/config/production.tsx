@@ -67,6 +67,7 @@ const EVM_CHAINS = [
 	arbitrum,
 	classic,
 	base,
+	polygonZkEvm,
 ] as readonly [Chain, ...Chain[]];
 
 const NON_EVM_CHAINS: NonEVMChain[] = [SOLANA_NETWORK];

@@ -476,7 +476,6 @@ const config: EnvConfig = {
 			// Keep it empty for automatic configuration
 		},
 	},
-
 	SOLANA_CONFIG: {
 		...SOLANA_NETWORK,
 		coingeckoChainName: 'solana',
