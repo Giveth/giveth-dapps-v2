@@ -182,7 +182,9 @@ const ProjectInfoContainer = styled(Flex)`
 `;
 
 const ProjectStatusesContainer = styled(Flex)`
-	width: 330px;
+	${mediaQueries.tablet} {
+		width: 330px;
+	}
 `;
 
 export default ProjectItem;
