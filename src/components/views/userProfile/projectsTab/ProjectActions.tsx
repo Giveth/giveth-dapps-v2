@@ -108,12 +108,11 @@ const ProjectActions = (props: IProjectActions) => {
 		cb: () => {},
 	};
 
-	anchorContractAddress && options.push(recurringDonationOption);
-	project.status.name === EProjectStatus.DRAFT &&
-		options.push({
-			type: EOptionType.SEPARATOR,
-		}) &&
+	if (anchorContractAddress) options.push(recurringDonationOption);
+	if (project.status.name === EProjectStatus.DRAFT) {
+		options.push({ type: EOptionType.SEPARATOR });
 		options.push(deleteProjectOption);
+	}
 
 	const dropdownStyle = {
 		padding: '4px 16px',
