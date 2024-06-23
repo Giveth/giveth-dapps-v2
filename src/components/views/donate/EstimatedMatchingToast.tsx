@@ -79,13 +79,30 @@ const EstimatedMatchingToast: React.FC<IEstimatedMatchingToast> = ({
 		<IconAlertTriangleFilled color={textColor} />
 	);
 
+	const formatWithCurrency = (
+		amount: number,
+		currency: string,
+		locale: string,
+	) => {
+		return (
+			formatDonation(amount, currency, locale, true) +
+			(currency ? '' : ` ${allocatedTokenSymbol}`)
+		);
+	};
+
+	const getEstimatedMatchingRange = (esMatching: number) => {
+		if (esMatching >= 1) {
+			return `${formatWithCurrency((esMatching * 30) / 100, allocatedFundUSDPreferred ? '$' : '', locale)} - ${formatWithCurrency(esMatching, allocatedFundUSDPreferred ? '$' : '', locale)}`;
+		}
+		return formatWithCurrency(
+			esMatching,
+			allocatedFundUSDPreferred ? '$' : '',
+			locale,
+		);
+	};
+
 	const formattedDonation = isAboveMinValidUsdValue
-		? formatDonation(
-				esMatching,
-				allocatedFundUSDPreferred ? '$' : '',
-				locale,
-				true,
-			) + (allocatedFundUSDPreferred ? '' : ' ' + allocatedTokenSymbol)
+		? getEstimatedMatchingRange(esMatching)
 		: '---';
 
 	const bottomText = isAboveMinValidUsdValue
